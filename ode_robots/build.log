@@ -1,0 +1,109 @@
+/Applications/Xcode-beta.app/Contents/Developer/usr/bin/make library
+/Applications/Xcode-beta.app/Contents/Developer/usr/bin/make BUILD_DIR=build_opt CFGOPTS=--opt STRIP="yes" library
+/Applications/Xcode-beta.app/Contents/Developer/usr/bin/make BUILD_DIR=build_dbg CFGOPTS=--dbg library
+g++ -c -Wall -pipe -fpic  -I. -Iinclude -Iinclude/ode_robots -I/Users/jerry/lpzrobots_mac/selforg/include -std=c++11 -pthread -I/opt/local/include -I/opt/homebrew/include -I/usr/local/include -I/opt/local/include -I/opt/homebrew/include -I/opt/homebrew/Cellar/gsl/2.8/include -DNOCONFIGURATOR -pthread -std=c++11 -Wno-write-strings -I/usr/X11R6/include -I/opt/homebrew/Cellar/ode/0.16.6/include -DdDOUBLE -I/opt/local/include -I/opt/homebrew/include -I/usr/local/include -I/opt/local/include -I/opt/homebrew/include -g -O  -o "build/./odeconfig.o" "odeconfig.cpp"
+g++ -c -Wall -pipe -fpic  -I. -Iinclude -Iinclude/ode_robots -I/Users/jerry/lpzrobots_mac/selforg/include -std=c++11 -pthread -I/opt/local/include -I/opt/homebrew/include -DNDEBUG -I/usr/local/include -I/opt/local/include -I/opt/homebrew/include -I/opt/homebrew/Cellar/gsl/2.8/include -DNOCONFIGURATOR -pthread -std=c++11 -Wno-write-strings -I/usr/X11R6/include -I/opt/homebrew/Cellar/ode/0.16.6/include -DdDOUBLE -I/opt/local/include -I/opt/homebrew/include -DNDEBUG -I/usr/local/include -I/opt/local/include -I/opt/homebrew/include -O3  -o "build_opt/./odeconfig.o" "odeconfig.cpp"
+g++ -c -Wall -pipe -fpic  -I. -Iinclude -Iinclude/ode_robots -I/Users/jerry/lpzrobots_mac/selforg/include -std=c++11 -pthread -I/opt/local/include -I/opt/homebrew/include -g -I/usr/local/include -I/opt/local/include -I/opt/homebrew/include -I/opt/homebrew/Cellar/gsl/2.8/include -DNOCONFIGURATOR -pthread -std=c++11 -Wno-write-strings -I/usr/X11R6/include -I/opt/homebrew/Cellar/ode/0.16.6/include -DdDOUBLE -I/opt/local/include -I/opt/homebrew/include -I/usr/local/include -I/opt/local/include -I/opt/homebrew/include -g  -o "build_dbg/./odeconfig.o" "odeconfig.cpp"
+In file included from odeconfig.cpp:23:
+In file included from ./odeconfig.h:28:
+include/ode_robots/odehandle.h:30:10: fatal error: 'ode-dbl/common.h' file not found
+   30 | #include <ode-dbl/common.h>
+      |          ^~~~~~~~~~~~~~~~~~
+1 error generated.
+In file included from odeconfig.cpp:23:
+In file included from ./odeconfig.h:28:
+include/ode_robots/odehandle.h:30:10: fatal error: 'ode-dbl/common.h' file not found
+   30 | #include <ode-dbl/common.h>
+      |          ^~~~~~~~~~~~~~~~~~
+1 error generated.
+make[1]: *** [build_opt/./odeconfig.o] Error 1
+In file included from odeconfig.cpp:23:
+In file included from ./odeconfig.h:28:
+include/ode_robots/odehandle.h:30:10: fatal error: 'ode-dbl/common.h' file not found
+   30 | #include <ode-dbl/common.h>
+      |          ^~~~~~~~~~~~~~~~~~
+1 error generated.
+make[1]: *** [build_dbg/./odeconfig.o] Error 1
+g++ -c -Wall -pipe -fpic  -I. -Iinclude -Iinclude/ode_robots -I/Users/jerry/lpzrobots_mac/selforg/include -std=c++11 -pthread -I/opt/local/include -I/opt/homebrew/include -I/usr/local/include -I/opt/local/include -I/opt/homebrew/include -I/opt/homebrew/Cellar/gsl/2.8/include -DNOCONFIGURATOR -pthread -std=c++11 -Wno-write-strings -I/usr/X11R6/include -I/opt/homebrew/Cellar/ode/0.16.6/include -DdDOUBLE -I/opt/local/include -I/opt/homebrew/include -I/usr/local/include -I/opt/local/include -I/opt/homebrew/include -g -O  -o "build/./simulation.o" "simulation.cpp"
+make[1]: *** [build/./odeconfig.o] Error 1
+g++ -c -Wall -pipe -fpic  -I. -Iinclude -Iinclude/ode_robots -I/Users/jerry/lpzrobots_mac/selforg/include -std=c++11 -pthread -I/opt/local/include -I/opt/homebrew/include -I/usr/local/include -I/opt/local/include -I/opt/homebrew/include -I/opt/homebrew/Cellar/gsl/2.8/include -DNOCONFIGURATOR -pthread -std=c++11 -Wno-write-strings -I/usr/X11R6/include -I/opt/homebrew/Cellar/ode/0.16.6/include -DdDOUBLE -I/opt/local/include -I/opt/homebrew/include -I/usr/local/include -I/opt/local/include -I/opt/homebrew/include -g -O  -o "build/agents/odeagent.o" "agents/odeagent.cpp"
+g++ -c -Wall -pipe -fpic  -I. -Iinclude -Iinclude/ode_robots -I/Users/jerry/lpzrobots_mac/selforg/include -std=c++11 -pthread -I/opt/local/include -I/opt/homebrew/include -DNDEBUG -I/usr/local/include -I/opt/local/include -I/opt/homebrew/include -I/opt/homebrew/Cellar/gsl/2.8/include -DNOCONFIGURATOR -pthread -std=c++11 -Wno-write-strings -I/usr/X11R6/include -I/opt/homebrew/Cellar/ode/0.16.6/include -DdDOUBLE -I/opt/local/include -I/opt/homebrew/include -DNDEBUG -I/usr/local/include -I/opt/local/include -I/opt/homebrew/include -O3  -o "build_opt/./simulation.o" "simulation.cpp"
+g++ -c -Wall -pipe -fpic  -I. -Iinclude -Iinclude/ode_robots -I/Users/jerry/lpzrobots_mac/selforg/include -std=c++11 -pthread -I/opt/local/include -I/opt/homebrew/include -g -I/usr/local/include -I/opt/local/include -I/opt/homebrew/include -I/opt/homebrew/Cellar/gsl/2.8/include -DNOCONFIGURATOR -pthread -std=c++11 -Wno-write-strings -I/usr/X11R6/include -I/opt/homebrew/Cellar/ode/0.16.6/include -DdDOUBLE -I/opt/local/include -I/opt/homebrew/include -I/usr/local/include -I/opt/local/include -I/opt/homebrew/include -g  -o "build_dbg/./simulation.o" "simulation.cpp"
+In file included from agents/odeagent.cpp:25:
+In file included from agents/odeagent.h:27:
+/Users/jerry/lpzrobots_mac/selforg/include/selforg/agent.h:72:16: warning: 'Agent::init' hides overloaded virtual function [-Woverloaded-virtual]
+   72 |   virtual bool init(AbstractController* controller, AbstractRobot* robot,
+      |                ^
+/Users/jerry/lpzrobots_mac/selforg/include/selforg/wiredcontroller.h:78:16: note: hidden overloaded virtual function 'WiredController::init' declared here: different number of parameters (7 vs 4)
+   78 |   virtual bool init(AbstractController* controller, AbstractWiring* wiring,
+      |                ^
+In file included from agents/odeagent.cpp:25:
+In file included from agents/odeagent.h:27:
+/Users/jerry/lpzrobots_mac/selforg/include/selforg/agent.h:81:16: warning: 'Agent::step' hides overloaded virtual function [-Woverloaded-virtual]
+   81 |   virtual void step(double noise, double time=-1);
+      |                ^
+/Users/jerry/lpzrobots_mac/selforg/include/selforg/wiredcontroller.h:96:16: note: hidden overloaded virtual function 'WiredController::step' declared here: different number of parameters (6 vs 2)
+   96 |   virtual void step(const sensor* sensors, int sensornumber,
+      |                ^
+In file included from agents/odeagent.cpp:25:
+In file included from agents/odeagent.h:29:
+In file included from include/ode_robots/oderobot.h:32:
+include/ode_robots/odehandle.h:30:10: fatal error: 'ode-dbl/common.h' file not found
+   30 | #include <ode-dbl/common.h>
+      |          ^~~~~~~~~~~~~~~~~~
+In file included from simulation.cpp:36:
+In file included from ./simulation.h:28:
+include/ode_robots/base.h:27:10: fatal error: 'ode-dbl/ode.h' file not found
+   27 | #include <ode-dbl/ode.h>
+      |          ^~~~~~~~~~~~~~~
+In file included from simulation.cpp:36:
+In file included from ./simulation.h:28:
+include/ode_robots/base.h:27:10: fatal error: 'ode-dbl/ode.h' file not found
+   27 | #include <ode-dbl/ode.h>
+      |          ^~~~~~~~~~~~~~~
+In file included from simulation.cpp:36:
+In file included from ./simulation.h:28:
+include/ode_robots/base.h:27:10: fatal error: 'ode-dbl/ode.h' file not found
+   27 | #include <ode-dbl/ode.h>
+      |          ^~~~~~~~~~~~~~~
+2 warnings and 1 error generated.
+make[1]: *** [build/agents/odeagent.o] Error 1
+1 error generated.
+make[1]: *** [build_opt/./simulation.o] Error 1
+1 error generated.
+1 error generated.
+make[1]: *** [build_dbg/./simulation.o] Error 1
+g++ -c -Wall -pipe -fpic  -I. -Iinclude -Iinclude/ode_robots -I/Users/jerry/lpzrobots_mac/selforg/include -std=c++11 -pthread -I/opt/local/include -I/opt/homebrew/include -DNDEBUG -I/usr/local/include -I/opt/local/include -I/opt/homebrew/include -I/opt/homebrew/Cellar/gsl/2.8/include -DNOCONFIGURATOR -pthread -std=c++11 -Wno-write-strings -I/usr/X11R6/include -I/opt/homebrew/Cellar/ode/0.16.6/include -DdDOUBLE -I/opt/local/include -I/opt/homebrew/include -DNDEBUG -I/usr/local/include -I/opt/local/include -I/opt/homebrew/include -O3  -o "build_opt/agents/odeagent.o" "agents/odeagent.cpp"
+g++ -c -Wall -pipe -fpic  -I. -Iinclude -Iinclude/ode_robots -I/Users/jerry/lpzrobots_mac/selforg/include -std=c++11 -pthread -I/opt/local/include -I/opt/homebrew/include -I/usr/local/include -I/opt/local/include -I/opt/homebrew/include -I/opt/homebrew/Cellar/gsl/2.8/include -DNOCONFIGURATOR -pthread -std=c++11 -Wno-write-strings -I/usr/X11R6/include -I/opt/homebrew/Cellar/ode/0.16.6/include -DdDOUBLE -I/opt/local/include -I/opt/homebrew/include -I/usr/local/include -I/opt/local/include -I/opt/homebrew/include -g -O  -o "build/utils/console.o" "utils/console.cpp"
+make[1]: *** [build/./simulation.o] Error 1
+g++ -c -Wall -pipe -fpic  -I. -Iinclude -Iinclude/ode_robots -I/Users/jerry/lpzrobots_mac/selforg/include -std=c++11 -pthread -I/opt/local/include -I/opt/homebrew/include -g -I/usr/local/include -I/opt/local/include -I/opt/homebrew/include -I/opt/homebrew/Cellar/gsl/2.8/include -DNOCONFIGURATOR -pthread -std=c++11 -Wno-write-strings -I/usr/X11R6/include -I/opt/homebrew/Cellar/ode/0.16.6/include -DdDOUBLE -I/opt/local/include -I/opt/homebrew/include -I/usr/local/include -I/opt/local/include -I/opt/homebrew/include -g  -o "build_dbg/agents/odeagent.o" "agents/odeagent.cpp"
+g++ -c -Wall -pipe -fpic  -I. -Iinclude -Iinclude/ode_robots -I/Users/jerry/lpzrobots_mac/selforg/include -std=c++11 -pthread -I/opt/local/include -I/opt/homebrew/include -I/usr/local/include -I/opt/local/include -I/opt/homebrew/include -I/opt/homebrew/Cellar/gsl/2.8/include -DNOCONFIGURATOR -pthread -std=c++11 -Wno-write-strings -I/usr/X11R6/include -I/opt/homebrew/Cellar/ode/0.16.6/include -DdDOUBLE -I/opt/local/include -I/opt/homebrew/include -I/usr/local/include -I/opt/local/include -I/opt/homebrew/include -g -O  -o "build/utils/globaldata.o" "utils/globaldata.cpp"
+In file included from agents/odeagent.cpp:25:
+In file included from agents/odeagent.h:27:
+/Users/jerry/lpzrobots_mac/selforg/include/selforg/agent.h:72:16: warning: 'Agent::init' hides overloaded virtual function [-Woverloaded-virtual]
+   72 |   virtual bool init(AbstractController* controller, AbstractRobot* robot,
+      |                ^
+/Users/jerry/lpzrobots_mac/selforg/include/selforg/wiredcontroller.h:78:16: note: hidden overloaded virtual function 'WiredController::init' declared here: different number of parameters (7 vs 4)
+   78 |   virtual bool init(AbstractController* controller, AbstractWiring* wiring,
+      |                ^
+In file included from agents/odeagent.cpp:25:
+In file included from agents/odeagent.h:27:
+/Users/jerry/lpzrobots_mac/selforg/include/selforg/agent.h:81:16: warning: 'Agent::step' hides overloaded virtual function [-Woverloaded-virtual]
+   81 |   virtual void step(double noise, double time=-1);
+      |                ^
+/Users/jerry/lpzrobots_mac/selforg/include/selforg/wiredcontroller.h:96:16: note: hidden overloaded virtual function 'WiredController::step' declared here: different number of parameters (6 vs 2)
+   96 |   virtual void step(const sensor* sensors, int sensornumber,
+      |                ^
+In file included from agents/odeagent.cpp:25:
+In file included from agents/odeagent.h:29:
+In file included from include/ode_robots/oderobot.h:32:
+include/ode_robots/odehandle.h:30:10: fatal error: 'ode-dbl/common.h' file not found
+   30 | #include <ode-dbl/common.h>
+      |          ^~~~~~~~~~~~~~~~~~
+In file included from utils/console.cpp:42:
+In file included from utils/globaldata.h:29:
+utils/odehandle.h:30:10: fatal error: 'ode-dbl/common.h' file not found
+   30 | #include <ode-dbl/common.h>
+      |          ^~~~~~~~~~~~~~~~~~
+2 warnings and 1 error generated.
+make[1]: *** [build_opt/agents/odeagent.o] Error 1

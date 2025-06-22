@@ -1,0 +1,87 @@
+/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ -c -pipe -stdlib=libc++ -O2 -std=gnu++11  -arch arm64 -isysroot /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk -mmacosx-version-min=10.13 -Wall -Wextra -fPIC -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB -I. -I. -Isrc -Isrc/Channel -Isrc/InputFilter -Isrc/InputReader -Isrc/tools -Isrc/visualisations -I/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtOpenGL.framework/Headers -I/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtWidgets.framework/Headers -I/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtGui.framework/Headers -I/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtXml.framework/Headers -I/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers -I. -I/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/System/Library/Frameworks/OpenGL.framework/Headers -I/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/System/Library/Frameworks/AGL.framework/Headers/ -I/opt/homebrew/Cellar/qt@5/5.15.16_2/mkspecs/macx-clang -F/opt/homebrew/Cellar/qt@5/5.15.16_2/lib -o AbstractRobotGUI.o src/AbstractRobotGUI.cpp
+/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ -c -pipe -stdlib=libc++ -O2 -std=gnu++11  -arch arm64 -isysroot /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk -mmacosx-version-min=10.13 -Wall -Wextra -fPIC -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB -I. -I. -Isrc -Isrc/Channel -Isrc/InputFilter -Isrc/InputReader -Isrc/tools -Isrc/visualisations -I/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtOpenGL.framework/Headers -I/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtWidgets.framework/Headers -I/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtGui.framework/Headers -I/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtXml.framework/Headers -I/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers -I. -I/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/System/Library/Frameworks/OpenGL.framework/Headers -I/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/System/Library/Frameworks/AGL.framework/Headers/ -I/opt/homebrew/Cellar/qt@5/5.15.16_2/mkspecs/macx-clang -F/opt/homebrew/Cellar/qt@5/5.15.16_2/lib -o ColorPalette.o src/ColorPalette.cpp
+In file included from src/ColorPalette.cpp:26:
+In file included from src/ColorPalette.h:33:
+src/Channel/MatrixPlotChannel.h:51:24: warning: 'MatrixPlotChannel::getValue' hides overloaded virtual function [-Woverloaded-virtual]
+   51 |         virtual double getValue(int row, int column);
+      |                        ^
+src/Channel/AbstractPlotChannel.h:15:18: note: hidden overloaded virtual function 'AbstractPlotChannel::getValue' declared here: different number of parameters (0 vs 2)
+   15 |   virtual double getValue()       { return channelValue; }
+      |                  ^
+In file included from src/ColorPalette.cpp:26:
+In file included from src/ColorPalette.h:34:
+src/ScaleFunction.h:32:30: error: base class has incomplete type
+   32 | class ScaleFunction : public QWidget{
+      |                       ~~~~~~~^~~~~~~
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qmetatype.h:1486:7: note: forward declaration of 'QWidget'
+ 1486 | class QWidget;
+      |       ^
+In file included from src/ColorPalette.cpp:26:
+In file included from src/ColorPalette.h:34:
+src/ScaleFunction.h:53:3: error: unknown type name 'QLineEdit'
+   53 |   QLineEdit *baseEdit;
+      |   ^
+src/ScaleFunction.h:54:3: error: unknown type name 'QLineEdit'
+   54 |   QLineEdit *mulEdit;
+      |   ^
+src/ScaleFunction.h:55:3: error: unknown type name 'QLineEdit'
+   55 |   QLineEdit *nEdit;
+      |   ^
+src/ScaleFunction.h:56:3: error: unknown type name 'QComboBox'
+   56 |   QComboBox *funcBox;
+      |   ^
+src/ScaleFunction.h:57:3: error: unknown type name 'QVBoxLayout'
+   57 |   QVBoxLayout* vlayout;
+      |   ^
+src/ScaleFunction.h:58:3: error: unknown type name 'QHBoxLayout'
+   58 |   QHBoxLayout* hlayout;
+      |   ^
+src/ScaleFunction.h:59:3: error: unknown type name 'QLabel'
+   59 |   QLabel* mLabel;
+      |   ^
+src/ScaleFunction.h:60:3: error: unknown type name 'QLabel'
+   60 |   QLabel* bLabel;
+      |   ^
+src/ScaleFunction.h:61:3: error: unknown type name 'QLabel'
+   61 |   QLabel* nLabel;
+      |   ^
+In file included from src/ColorPalette.cpp:26:
+src/ColorPalette.h:52:29: error: base class has incomplete type
+   52 | class ColorPalette : public QWidget{
+      |                      ~~~~~~~^~~~~~~
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qmetatype.h:1486:7: note: forward declaration of 'QWidget'
+ 1486 | class QWidget;
+      |       ^
+In file included from src/ColorPalette.cpp:26:
+src/ColorPalette.h:99:3: error: unknown type name 'QListWidget'
+   99 |   QListWidget *stopList;
+      |   ^
+src/ColorPalette.h:100:3: error: unknown type name 'QPushButton'
+  100 |   QPushButton *add;
+      |   ^
+src/ColorPalette.h:101:3: error: unknown type name 'QPushButton'
+  101 |   QPushButton *remove;
+      |   ^
+src/ColorPalette.h:103:3: error: unknown type name 'QLineEdit'
+  103 |   QLineEdit *minEdit;
+      |   ^
+src/ColorPalette.h:104:3: error: unknown type name 'QLineEdit'
+  104 |   QLineEdit *maxEdit;
+      |   ^
+In file included from src/ColorPalette.cpp:27:
+src/ListEntity.h:32:27: error: base class has incomplete type
+   32 | class ListEntity : public QWidget{
+      |                    ~~~~~~~^~~~~~~
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qmetatype.h:1486:7: note: forward declaration of 'QWidget'
+ 1486 | class QWidget;
+      |       ^
+In file included from src/ColorPalette.cpp:27:
+src/ListEntity.h:43:5: error: unknown type name 'QPushButton'
+   43 |     QPushButton* button;
+      |     ^
+src/ListEntity.h:44:5: error: unknown type name 'QDoubleSpinBox'
+   44 |     QDoubleSpinBox* posEdit;
+      |     ^
+fatal error: too many errors emitted, stopping now [-ferror-limit=]
+1 warning and 20 errors generated.
+make: *** [ColorPalette.o] Error 1

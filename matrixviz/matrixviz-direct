@@ -1,0 +1,12 @@
+#!/bin/bash
+# Direct launch script bypassing the wrapper chain for debugging
+
+# Set required environment
+export QT_PLUGIN_PATH=/opt/homebrew/opt/qt@5/plugins
+export QT_ENABLE_HIGHDPI_SCALING=1
+export QT_AUTO_SCREEN_SCALE_FACTOR=1
+export QT_MAC_WANTS_LAYER=1
+export LPZROBOTS_HOME=/Users/jerry/lpzrobots_mac
+
+# Launch the binary directly
+/Users/jerry/lpzrobots_mac/matrixviz/bin/matrixviz.app/Contents/MacOS/matrixviz "$@"

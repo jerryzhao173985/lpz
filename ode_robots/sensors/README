@@ -1,0 +1,16 @@
+/** \file
+ * This file is used for the doxygen documentation. 
+ */
+
+/**
+\dir sensors
+
+All sensors should be placed in this folder.
+Up to now there is an abstract class for Ray-based sensors called \ref lpzrobots::RaySensor and
+one child implementing an infrared sensor (\ref lpzrobots::IRSensor).
+
+The \ref lpzrobots::RaySensorBank allows a common administration of a set of ray sensors.
+
+
+*/ 
+ 

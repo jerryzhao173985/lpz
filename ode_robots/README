@@ -1,0 +1,257 @@
+/** \file 
+ * This file is used for the doxygen documentation. 
+ */
+
+/**
+\dir ode_robots
+
+
+The ode_robots directory provides all the stuff necessary for
+ simulations with the physics engine ODE (http://ode.org).
+
+\par Simulation Environment
+
+The class \ref lpzrobots::OdeConfig "OdeConfig" holds the configurable parameters of the simulation environment
+like \ref lpzrobots::OdeConfig::gravity "gravity", 
+\ref lpzrobots::OdeConfig::simStepSize "simStepSize", 
+\ref lpzrobots::OdeConfig::realTimeFactor "realTimeFactor" and so on.\n
+In the class \ref lpzrobots::Simulation "Simulation" you find the functions 
+ to overload like 
+\ref lpzrobots::Simulation::start "start" and \ref lpzrobots::Simulation::end "end" 
+ which have to be overloaded by all simulations.
+Additionally you can overload functions like  
+\ref lpzrobots::Simulation::command "command" to react on keystrokes, 
+\ref lpzrobots::Simulation::config "config" for configuration purposes (rarely required) and some more.
+
+\par Simulation objects and more
+
+The things inside the simulation environment (and some additional stuff) is inside 
+the following subdirectories
+- \ref ode_robots_simulations "simulations":
+	ready to use simulations
+- \ref ode_robots/agents "agents":
+ 	structure to build a "complete" agent (consisting of a controller, 
+	a robot and the wiring in between), different wirings
+- \ref ode_robots/robots "robots":
+	our robots,creatures, vehicles or whatever you would like to call 
+	them are in this directory
+- \ref ode_robots/osg "osg primitives":
+	many classes for the osg and ode integration. 
+	It provides Primitives and Joints of which robots and obstacles can be assembled, 
+          and further helpful things to deal with OSG
+- \ref ode_robots/motors "motors":
+	a few additional motors (PID servos)
+- \ref ode_robots/sensors "sensors":
+	up to now an infrared-sensor and a sensor-bank is available
+- \ref ode_robots/obstacles "obstacles":
+	passive obstacles like different kinds of playgrounds, a sphere and usage of terrains
+- \ref ode_robots/utils "utils":
+	all the little things that make life easier
+- \ref ode_robots/ode_patches "ode_patches": OBSOLETE! 
+	our patches for ODE 0.5 and drawstuff
+- \ref ode_robots/textures "textures":
+	our textures used in the simulations and a program for calculating heigt-maps
+
+\par How to start your own simulation
+
+To start a new project it is recommended to copy one of the existing simulations from <tt>ode_robots/simulations/</tt> e.g. one of the "template" folders.
+To easy the procedure use
+the createNewSimulation.sh script in the simulations directory:\n
+<tt> $> ./createNewSimulation.sh template_dir newsimname </tt>\n
+where \p template_dir is the template directory you wish to copy and \p newsimname is the
+name of the new simulation you wish to create. This takes care of your installation type
+ and other things like possible superficial CVS information.
+
+Example:
+\verbatim
+cd ode_robots/simulations
+./createNewSimulation.sh template_onerobot mysimulation
+\endverbatim
+For user-type installation you probably want to put the simulation in a separate directory, that means:
+\verbatim
+./createNewSimulation.sh template_onerobot ~/path/to/simulations/mysimulation
+\endverbatim
+
+Now you can adjust the simulation as you like.
+A simple make in the simulation directory should be enough. 
+In case your simulation code consists of other files than main.cpp, 
+ please add them to FILES in the Makefile.conf in the simulation directory.
+ You also have to run <tt>make depend</tt> afterwards!
+
+If you insert a new file to the simulation framework, 
+such as a new obstacle, robot or similar you DON'T need to add them anyvery. 
+Every *.cpp file in the directories specified in Makefile.conf is
+compiled and included in the library libode_robots.a. 
+In case you add a new directory with source files, 
+which should be included in the lib, then add it to Makefile.conf.
+In any case run a <tt>make</tt> in the lpzrobots directory, 
+ this creates the neccessary dependency information to ensure a proper build.
+
+\par How to add a new robot or obstacle or controller to your simulation
+- Locate a similar object in the simulator. You find this under: \p ode_robots/robots, \p ode_robots/obstacles, and \p selforg/controller
+- copy the .h and .cpp file to you simulation folder, e. g. \p nimm4.cpp and \p  nimm4.h
+- rename it to whatever you like, say <tt>myrobot.cpp</tt>, <tt>myrobot.h</tt>
+- modify the code so that the class has the new name, e. g. \p MyRobot
+- change include directives to have a <tt> \<ode_robots/ \></tt> style. 
+\verbatim
+#include <ode_robots/primitives.h>
+\endverbatim
+- add "myrobot" to the Makefile.conf FILES variable
+- run <tt> make depend </tt>
+- ready to use the stuff in your simulation (use #include "myrobot.h")
+
+\par Collision control and Materials
+\ref ode_robots_collisionhandling "Read more here"
+
+
+*/
+
+/**
+\page ode_robots_simulations ODE-Robots Simulations
+
+The simulations directory (<tt>ode_robots/simulations</tt>) contains different simulations 
+ mostly originated from our work on the self-organization of behavior.
+
+You can just go into one directory, type \p make and after successful compilation \p start
+to start a simulation. \n
+For convenience you should start with one of the template directories like template_sphererobot.
+Both the simulation file \ref ode_robots/examples/template_sphererobot/main.cpp "main.cpp"
+ of the template_sphererobot simulation and robot definitions in  \ref sphererobot3masses.cpp are really good 
+commented and therfore recommended as first example. You can easy find them by clicking 
+on the tab  "Examples" at the top of the page.\n
+For creating your own simulation just type:\n
+<tt> $> ./createNewSimulation.sh template_sphererobot my_sim</tt>\n
+to create the directory \p my_sim, adapt it to your needs, run \p make and \p start and it should work.
+*/
+
+/**
+\page ode_robots_collisionhandling ODE-Robots Collision handling
+Since version 0.4 the collision handling was redesigned significantly. It has the following features:
+
+ - Material properties for each object (\ref lpzrobots::Substance "Substance")
+ - No user specific collision code necessary
+ - Automatic ignorance of collisions between connected bodies
+ - User defined ignorance pairs
+ - fine grain callback functions on collisions possible (\ref lpzrobots::Substance "Substance")
+
+\par How to set material properties
+Modify \ref lpzrobots::Substance "Substance" in your local \ref lpzrobots::OdeHandle "OdeHandle", e.g.
+\verbatim
+odeHandle.substance.toRubber(20);
+// create Primitive with odeHandle
+Primitive* box = new Box(1,1,1);
+box->init(odeHandle, ...);
+\endverbatim
+would change the substance to a soft rubber. Once you have created a Primitive you can change
+ its properties in the same way:
+\verbatim
+box.substance.toMetal(0.6);
+\endverbatim
+
+\par How to disable collisions between two primitives
+\verbatim
+odeHandle.addIgnoredPair(p1,p2);
+// and to remove
+odeHandle.removeIgnoredPair(p1,p2);
+\endverbatim
+This mechanism is used internally for primitives that are connected by joints. 
+So in most cases you don't have to worry about that.
+
+\par How to disable collisions within an entire space
+When you create the space with
+\verbatim
+  odeHandle.createNewSimpleSpace(parentspace,true/false);
+\endverbatim
+you can set the flag to true to ignore all internal collisions.
+Alternatively you can change this for an existing space with:
+\verbatim
+odeHandle.addIgnoredSpace(spaceID);
+// and to remove
+odeHandle.removeIgnoredSpace(spaceID);
+\endverbatim
+
+*/
+
+/**
+\page ode_robots_colors Colors and Color Alias Sets
+
+Since 0.7 we support color palettes and schemas in ode_robots. 
+
+\par The basic idea is simple: 
+We have a list of colors (loaded from gimp palette files)
+ that carry a name. We have alias names for these colors to allow some abstraction.
+Aliases may point to different colors depending on the alias-set.
+See \ref lpzrobots::ColorSchema for the implementation and \ref lpzrobots::OsgHandle for the access.
+
+\par Example:
+Assume we have colors: Red, Green, Blue. An alias may be called groundcolor pointing to Green. So far so good. 
+Now we can define for each alias a color for different color sets.
+Let's say we define alias robot1 that points to Red in set 0 and to Blue in set 1.
+
+In the implementation of a robot we simply use the color robot1, but we can
+ change the default color set (in the \ref lpzrobots::OsgHandle) 
+ such that the robot magically becomes blue.
+
+\par Files:
+For an example palette file check:
+ode_robots/osg/data/colors/DefaultColors.gpl
+
+The default color-set file is located at:
+ode_robots/osg/data/colors/DefaultColorsSchema.txt
+
+The format is
+\verbatim
+# comment
+AliasName  ColorName [Set]
+...
+\endverbatim
+where ColorName cannot refer to another alias and Set is optional (0 by default)
+
+BTW: By providing your own alias files you can tune the colors of your simulation without recompiling it. The files are searched relative to the folders: data/, PREFIX/share/lpzrobots/data, and if the variable ODE_ROBOTS_DATA exists, then also there.
+
+There is a big palette file called RGB_full.gpl that contains the colors
+ from a book called "Farbwelten" from www.CleverPrinting.de. 
+It is great resource for colors but it is unfortunatelly in German, 
+ so most of the color names are in german too. 
+
+\par Handling:
+If a alias is accessed and there is no color found for the current alias-set then the 
+ color refered to in the set 0 is used. If this also does not exist then the default color is used.
+
+
+If you want to change the colors in your simulation you can load a different color-alias-set. See for instance UrbanColorSchema.txt, UrbanExtraColors.gpl in the colors folder.
+You need to register them with your simulation in the constructor with 
+    \ref lpzrobots::Simulation::addPaletteFile and \ref lpzrobots::Simulation::addColorAliasFile. An example is given in ode_robots/simulations/zoo/main.cpp.
+You may load them later as well, but the colors used for the environment will not be affected this way.
+
+
+*/
+
+
+/**
+\page ode_robots_operators Robot Operators/Manipulators
+
+\par Introduction
+In robot simulations there is sometimes the necessity to watch the robots and help them, 
+ when they got stuck. 
+For example a legged robot may have fallen over, and you wish to automatically flip it back over again.
+So in a way we need a simulated human operator. 
+ 
+\par Implementation
+The base class/interface is defined by \ref lpzrobots::Operator where you also find the
+ inherited Operators (\ref lpzrobots::LimitOrientationOperator and \ref lpzrobots::LiftUpOperator)
+An Operator is registed to an \ref lpzrobots::OdeAgent and is called every simulation step.
+ In case it takes actions it is also visualized by a yellow sphere.
+
+\ref ode_robots/simulations/hexapod/main
+*/
+
+
+/**
+\example template_sphererobot/main.cpp  
+ Simple example for a simulation of one spherical robot (ode_robots/examples/template_sphererobot/main.cpp). 
+*/
+
+ 
+
+

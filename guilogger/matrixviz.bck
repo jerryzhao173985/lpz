@@ -1,0 +1,5 @@
+#!/bin/bash
+# Wrapper script for matrixviz
+
+# Execute the matrixviz wrapper script with all arguments
+exec /Users/jerry/lpzrobots_mac/matrixviz/matrixviz "$@"

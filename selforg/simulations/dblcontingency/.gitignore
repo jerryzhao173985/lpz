@@ -1,0 +1,5 @@
+Makefile.depend
+dblcon
+Makefile
+*.log
+guilogger.cfg

@@ -1,0 +1,7 @@
+#!/bin/sh
+
+PREFIX=$HOME/
+
+trap "" SIGINT
+
+java -cp ${PREFIX}lib/soundMan SoundMan $@

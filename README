@@ -1,0 +1,198 @@
+/** \file
+ * This file is used for the doxygen documentation. 
+ */
+
+
+/** \mainpage Documentation of lpzrobots
+\par Organization:
+	Max Planck Institute for Intelligent Systems
+	Max-Planck-Ring 4, 72076 Tübingen, Germany\n
+	Dr. Georg Martius & Prof. Dr.  Ralf Der \n
+        \n
+	University Leipzig \n
+	Institute for Computer Science  \n
+	Dept. Intelligent Systems \n
+	Prof. Dr. Ralf Der & Frank Güttler \n
+
+
+\par People:
+Georg Martius, Ralf Der, Frank Hesse, Frank Güttler, Jörn Hoffmann\n
+Former Contributors: Antonia Siegert, Marcel Kretschmann, Dominic Schneider, Claus Stadler
+ 
+\section General
+
+This is a collection of algorithms, simulations, and tools 
+developed by the Robotics Group for Self-Organization of Control
+(http://robot.informatik.uni-leipzig.de).\n
+It consists of the following directories (click for details):
+  - \ref selforg : controllers together with a small framework for using them,
+	developed in the robotic group of Leipzig university
+	yielding at self-organized behavior for various kinds of machines. 
+  - \ref ode_robots : physics simulator based on ODE 
+	(Open Dynamics Engine, see http://www.ode.org). 
+	This includes such as robots, obstacles, utilities, 
+         stuff for visualization with OSG 
+        (OpenSceneGraph, see http://www.openscenegraph.org) and so on.
+  - \ref guilogger : application that coordinates multiple gnuplot 
+	windows and allows for an interactive display of data that is sent per pipe from another   - \ref matrixvix : application for interactive display of changing matrix and vector data
+  - \ref configurator : a library implementing a GUI to change the parameters interactively
+        which is otherwise done on the console
+  - \ref ga_tools : genetic algorithms framework that can be used to together with 
+        ode_robots or for independent simulations (not well maintained)
+program 
+  - \ref opende : directory with a snapshot of the open dynamics engine (release 0.11.1)
+                  renamed to ode-dbl in order to avoid conflicts with packaged single
+                  precision versions. It contains the capsule-box collision bugfix 
+                  which is upstream (in svn)
+                  (please follow the link for installation hints)
+
+\section Inst Installation \& Startup
+
+You have two different ways to get the simulator to work. 
+- A) Install a package for your distribution.
+     This is the quick 'n' easy way if you have root permissions,  see \ref InstA.
+- B) Download the source tar ball and compile the simulator yourself, see \ref InstB
+
+\subsection InstA Way A: Package installation
+\subsubsection Ubuntu
+  A package repository is hosted at
+  https://launchpad.net/~georg-martius/+archive/lpzrobots \n
+  Do on a terminal (or read the link: "read about installing" on that page):
+\verbatim
+sudo add-apt-repository ppa:georg-martius/lpzrobots
+sudo apt-get update
+\endverbatim
+Then you can install <tt>lpzrobots</tt> as any other package do:
+\verbatim
+sudo apt-get install guilogger lpzrobots-oderobots
+\endverbatim
+This will automatically install all other dependencies.
+
+That's it!
+
+Now you can copy the sample simulations from
+  <tt>/usr/share/lpzrobots/</tt> to your home directory and 
+  continue reading in section \ref RunExample.
+
+\subsubsection Other debian based systems (deb)
+There is an install makefile located here: 
+http://robot.informatik.uni-leipzig.de/software/packages/deb/install_deb_source.makefile .
+Save it on you disk in an empty directory and run on the console
+\verbatim
+su -c apt-get install make
+make -f install_deb_source.makefile
+\endverbatim
+That will download the newest packages, compile them and install it.
+If something fails you can also redo parts of the process, see "make -f install_deb_source.makefile help".
+
+The packages are: guilogger, matrixviz, ode-dbl, lpzrobots-selforg, and lpzrobots-oderobots
+You can uninstall them later using the package manager (apt-get or synaptics)
+
+\subsubsection Alternatively: Creating your own packages
+You can do it step by step as follows:
+Download all files from http://robot.informatik.uni-leipzig.de/software/packages/deb/current/ \n
+Then do
+\verbatim
+# here you should not be root
+ dpkg-source -x guilogger-0.*.dsc
+ cd guilogger-0.* 
+ dpkg-buildpackage -rfakeroot -b -uc
+ cd ../
+# become root (e.g. with su or sudo -s)
+ dpkg -i guilogger-0.*.deb
+\endverbatim
+This you have to repeat for each package (e.g. replace guilogger by ode-dbl, lpzrobots-selforg, and lpzrobots-oderobots)
+
+\subsection InstB Way B: Installation from source
+\subsubsection Linux
+ Check the <tt>Dependencies</tt> file for required packages.
+
+\subsubsection MAC
+ We recommend to install the ODE and OSG via macports (http://www.macports.org)
+ (after installation of macports type on a console 
+ <tt>sudo port install osg OpenSceneGraph</tt>) and see the <tt>Dependencies</tt> file.
+ We will update the mac-related install procedures soon.
+
+\subsubsection Instructions
+
+- Download the source tar ball from 
+  http://robot.informatik.uni-leipzig.de/software/current .
+- Unpack file (<tt>tar -xvzf lpzrobots*.tar</tt>).
+- Change into <tt> lpzrobots </tt> directory
+- Call <tt> make help</tt> to get a help display and continue with
+  <b><tt> make all</tt></b>. This will do everything. The first time you call it
+  it will configure your build (you can reconfigure later with make conf).
+  The following modules are compiled:
+	- \ref matrixviz (not strictly necessary, only for displaying neuronal network parameters online) 
+	- \ref guilogger (not strictly necessary, only for displaying parameters online (recommended)) 
+	- \ref configurator library (not strictly necessary, only for changing parameters conveniently)
+    	- Please note, that the make call will not fail if either of them failed to compile, because they are optional. You can type <tt> make guilogger </tt> and <tt> make matrixviz </tt> to compile them separately.
+	- \ref selforg
+	- \ref opende (our ode version with double precision) (required)
+	- \ref ode_robots
+	- \ref ga_tools 
+  - if you do it step by step as display with <tt>make help</tt> 
+     you need to use <tt>sudo make xxxx</tt> if the installation is into a system directory. (make all will do use it automatically if required). Note that the <tt>PATH</tt> variable needs to contain the PREFIX<tt>/bin</tt> (as checked by the configuration process). If you have multiple lpzrobots installations make sure the prefix for the current lpzrobots comes first in the <tt>PATH</tt> variable
+
+- Now you are done with the installation and you can try a sample simulation see next section.
+
+\subsection RunExample Run example Simulations
+- Simulations are located in <tt>ode_robots/simulations/</tt>,<tt>ode_robots/examples/</tt>, and <tt>selforg/simulations/</tt>. This folders you can find in the lpzrobots tar files or if installed on your system under <tt>/usr/share/lpzrobots</tt>or<tt>/usr/local/share/lpzrobots</tt>. In the latter case copy the simulations to your home directory first.
+- To start a simulation go into a simulation directory. 
+- Call <tt>make</tt> to compile it.
+- You can start the simulation by <tt>./start</tt>.
+- For example when you want to start the template_sphererobot simulation type:
+\verbatim
+cd ode_robots/simulations/template_sphererobot
+./start 
+\endverbatim
+- for optimization you can also use <tt>make opt</tt> which produces and <tt>start_opt</tt>. This is recommended to use after testing the code. 
+- The following command line options are available 
+  (type ./start -h for a full list of options): \n
+\verbatim
+Usage: ./start [-g [interval]] [-f [interval]] [-r seed] [-x WxH] [-fs]
+                 [-pause] [-shadow N] [-noshadow] [-drawboundings] [-simtime [min]] [-threads N]
+                 [-odethread] [-osgthread] [-savecfg]
+        -g interval     use guilogger (default interval 1)
+        -f interval     write logging file (default interval 5)
+        -m interval     use matrixviz (default interval 10)
+        -s "-disc|ampl|freq val"        use soundMan
+        -r seed         random number seed
+        -x WxH          * window size of width(W) x height(H) is used (default 640x480)
+        -fs             fullscreen mode
+        -pause          start in pause mode
+        -nographics             start without any graphics
+        -noshadow       disables shadows and shaders (same as -shadow 0)
+        -shadow [0..5]]         * sets the type of the shadow to be used
+                        0: no shadow, 1: ShadowVolume, 2: ShadowTextue, 3: ParallelSplitShadowMap
+                        4: SoftShadowMap, 5: ShadowMap (default)
+        -shadowsize size        * sets the size of the shadow texture (default 2048)
+        -drawboundings  enables the drawing of the bounding shapes of the meshes
+        -simtime min    limited simulation time in minutes
+        -savecfg        safe the configuration file with the values given by the cmd line
+        -threads N      number of threads to use (default is the number of processors)
+        -odethread      * if given the ODE runs in its own thread. -> Sensors are delayed by 1
+        -osgthread      * if given the OSG runs in its own thread (recommended)
+        * this parameter can be set in the configuration file ~/.lpzrobots/ode_robots.cfg
+\endverbatim
+- On some machine the program crashed right away because of graphic card incompatibilities,
+  try: <tt>./start -noshadow</tt>
+- Have a look at the console after starting the program, 
+  there you will find some further information for the usage of the program.
+- E. g. with Ctrl+C (on the terminal) you get a interactive console interface 
+  which can be used to modify  parameters on the fly.
+- For starting your own simulation see paragraph "How to Start Your Own Simulation" 
+  in \ref ode_robots.
+- For a well documented examples of a main.cpp of a simulation and a robot .cpp file click 
+  the tab "Examples" at the top of this page.
+
+
+\section Documentation
+
+- This manual can be found at http://robot.informatik.uni-leipzig.de/software
+- More information on the used self-organization algorithm is available at  
+  http://robot.informatik.uni-leipzig.de/research
+- The original ODE documentation can be found at http://opende.sourceforge.net/wiki/index.php/Main_Page
+- The OSG documentation can be found at http://www.openscenegraph.org/projects/osg/wiki/Support
+
+*/

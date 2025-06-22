@@ -1,0 +1,38 @@
+Source: ode-dbl
+Section: devel
+Priority: optional
+Maintainer: Georg Martius <georg.martius@web.de>
+Build-Depends: debhelper (>= 7), quilt, docbook-to-man, automake | automaken,
+ libtool,
+ libglu1-mesa-dev | libglu-dev, libgl1-mesa-dev | libgl-dev
+Standards-Version: 3.8.4
+Homepage: http://www.ode.org/
+
+Package: libode-dbl
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Open Dynamics Engine - runtime library (double precision)
+ ODE is a free, industrial quality library for simulating articulated rigid
+ body dynamics - for example ground vehicles, legged creatures, and moving
+ objects in VR environments. It is fast, flexible, robust and platform
+ independent, with advanced joints, contact with friction, and built-in
+ collision detection.
+ .
+ This package provides the shared libraries.
+
+Package: libode-dbl-dev
+Section: libdevel
+Architecture: any
+Depends: libode-dbl (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Provides: libode0-dbl-dev
+Description: Open Dynamics Engine - development files in double precision
+ ODE is a free, industrial quality library for simulating articulated rigid
+ body dynamics - for example ground vehicles, legged creatures, and moving
+ objects in VR environments. It is fast, flexible, robust and platform
+ independent, with advanced joints, contact with friction, and built-in
+ collision detection.
+ .
+ This package provides the header files and static libraries built with
+ double precision.
+

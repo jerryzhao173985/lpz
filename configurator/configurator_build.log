@@ -1,0 +1,281 @@
+/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ -c -pipe -stdlib=libc++ -Wno-deprecated -Wno-unused-parameter -std=c++11 -O2  -arch arm64 -isysroot /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk -mmacosx-version-min=10.13 -Wall -Wextra -fPIC -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB -I. -I. -Isrc/qconfigurable -I../selforg/include -Iinclude/configurator -I/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtWidgets.framework/Headers -I/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtGui.framework/Headers -I/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtXml.framework/Headers -I/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers -Imoc -I/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/System/Library/Frameworks/OpenGL.framework/Headers -I/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/System/Library/Frameworks/AGL.framework/Headers/ -I/opt/homebrew/Cellar/qt@5/5.15.16_2/mkspecs/macx-clang -F/opt/homebrew/Cellar/qt@5/5.15.16_2/lib -o obj/QExtAction.o src/QExtAction.cpp
+In file included from src/QExtAction.cpp:42:
+In file included from src/QExtAction.h:46:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtWidgets.framework/Headers/QAction:1:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtWidgets.framework/Headers/qaction.h:43:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtWidgets.framework/Headers/qtwidgetsglobal.h:43:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtGui.framework/Headers/qtguiglobal.h:43:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qglobal.h:45:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/type_traits:528:
+./version:1:1: error: expected unqualified-id
+    1 | 0.1
+      | ^
+In file included from src/QExtAction.cpp:42:
+In file included from src/QExtAction.h:46:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtWidgets.framework/Headers/QAction:1:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtWidgets.framework/Headers/qaction.h:43:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtWidgets.framework/Headers/qtwidgetsglobal.h:43:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtGui.framework/Headers/qtguiglobal.h:43:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qglobal.h:47:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/utility:282:
+./version:1:1: error: expected unqualified-id
+    1 | 0.1
+      | ^
+In file included from src/QExtAction.cpp:42:
+In file included from src/QExtAction.h:46:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtWidgets.framework/Headers/QAction:1:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtWidgets.framework/Headers/qaction.h:43:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtWidgets.framework/Headers/qtwidgetsglobal.h:43:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtGui.framework/Headers/qtguiglobal.h:43:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qglobal.h:47:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/utility:287:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/compare:171:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/cmath:319:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/__math/hypot.h:21:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/limits:119:
+./version:1:1: error: expected unqualified-id
+    1 | 0.1
+      | ^
+In file included from src/QExtAction.cpp:42:
+In file included from src/QExtAction.h:46:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtWidgets.framework/Headers/QAction:1:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtWidgets.framework/Headers/qaction.h:43:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtWidgets.framework/Headers/qtwidgetsglobal.h:43:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtGui.framework/Headers/qtguiglobal.h:43:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qglobal.h:47:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/utility:287:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/compare:171:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/cmath:328:
+./version:1:1: error: expected unqualified-id
+    1 | 0.1
+      | ^
+In file included from src/QExtAction.cpp:42:
+In file included from src/QExtAction.h:46:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtWidgets.framework/Headers/QAction:1:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtWidgets.framework/Headers/qaction.h:43:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtWidgets.framework/Headers/qtwidgetsglobal.h:43:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtGui.framework/Headers/qtguiglobal.h:43:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qglobal.h:47:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/utility:288:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/initializer_list:50:
+./version:1:1: error: expected unqualified-id
+    1 | 0.1
+      | ^
+In file included from src/QExtAction.cpp:42:
+In file included from src/QExtAction.h:46:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtWidgets.framework/Headers/QAction:1:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtWidgets.framework/Headers/qaction.h:43:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtWidgets.framework/Headers/qtwidgetsglobal.h:43:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtGui.framework/Headers/qtguiglobal.h:43:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qglobal.h:47:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/utility:309:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/iosfwd:121:
+./version:1:1: error: expected unqualified-id
+    1 | 0.1
+      | ^
+In file included from src/QExtAction.cpp:42:
+In file included from src/QExtAction.h:46:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtWidgets.framework/Headers/QAction:1:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtWidgets.framework/Headers/qaction.h:43:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtWidgets.framework/Headers/qtwidgetsglobal.h:43:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtGui.framework/Headers/qtguiglobal.h:43:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qglobal.h:142:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/algorithm:1854:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/__algorithm/for_each.h:16:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/__ranges/movable_box.h:21:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/optional:232:
+./version:1:1: error: expected unqualified-id
+    1 | 0.1
+      | ^
+In file included from src/QExtAction.cpp:42:
+In file included from src/QExtAction.h:46:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtWidgets.framework/Headers/QAction:1:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtWidgets.framework/Headers/qaction.h:43:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtWidgets.framework/Headers/qtwidgetsglobal.h:43:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtGui.framework/Headers/qtguiglobal.h:43:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qglobal.h:142:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/algorithm:1854:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/__algorithm/for_each.h:16:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/__ranges/movable_box.h:21:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/optional:1296:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/atomic:605:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/__atomic/aliases.h:12:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/__atomic/atomic.h:12:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/__atomic/atomic_sync.h:15:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/__chrono/duration.h:21:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/ratio:91:
+./version:1:1: error: expected unqualified-id
+    1 | 0.1
+      | ^
+In file included from src/QExtAction.cpp:42:
+In file included from src/QExtAction.h:46:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtWidgets.framework/Headers/QAction:1:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtWidgets.framework/Headers/qaction.h:43:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtWidgets.framework/Headers/qtwidgetsglobal.h:43:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtGui.framework/Headers/qtguiglobal.h:43:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qglobal.h:142:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/algorithm:1854:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/__algorithm/for_each.h:16:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/__ranges/movable_box.h:21:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/optional:1296:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/atomic:617:
+./version:1:1: error: expected unqualified-id
+    1 | 0.1
+      | ^
+In file included from src/QExtAction.cpp:42:
+In file included from src/QExtAction.h:46:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtWidgets.framework/Headers/QAction:1:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtWidgets.framework/Headers/qaction.h:43:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtWidgets.framework/Headers/qtwidgetsglobal.h:43:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtGui.framework/Headers/qtguiglobal.h:43:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qglobal.h:142:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/algorithm:1854:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/__algorithm/for_each.h:16:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/__ranges/movable_box.h:21:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/optional:1300:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/iterator:732:
+./version:1:1: error: expected unqualified-id
+    1 | 0.1
+      | ^
+In file included from src/QExtAction.cpp:42:
+In file included from src/QExtAction.h:46:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtWidgets.framework/Headers/QAction:1:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtWidgets.framework/Headers/qaction.h:43:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtWidgets.framework/Headers/qtwidgetsglobal.h:43:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtGui.framework/Headers/qtguiglobal.h:43:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qglobal.h:142:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/algorithm:1854:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/__algorithm/for_each.h:16:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/__ranges/movable_box.h:21:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/optional:1300:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/iterator:745:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/variant:272:
+./version:1:1: error: expected unqualified-id
+    1 | 0.1
+      | ^
+In file included from src/QExtAction.cpp:42:
+In file included from src/QExtAction.h:46:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtWidgets.framework/Headers/QAction:1:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtWidgets.framework/Headers/qaction.h:43:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtWidgets.framework/Headers/qtwidgetsglobal.h:43:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtGui.framework/Headers/qtguiglobal.h:43:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qglobal.h:142:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/algorithm:1854:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/__algorithm/for_each.h:16:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/__ranges/movable_box.h:21:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/optional:1300:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/iterator:745:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/variant:1634:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/exception:84:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/__exception/exception_ptr.h:19:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/typeinfo:69:
+./version:1:1: error: expected unqualified-id
+    1 | 0.1
+      | ^
+In file included from src/QExtAction.cpp:42:
+In file included from src/QExtAction.h:46:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtWidgets.framework/Headers/QAction:1:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtWidgets.framework/Headers/qaction.h:43:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtWidgets.framework/Headers/qtwidgetsglobal.h:43:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtGui.framework/Headers/qtguiglobal.h:43:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qglobal.h:142:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/algorithm:1854:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/__algorithm/for_each.h:16:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/__ranges/movable_box.h:21:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/optional:1300:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/iterator:745:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/variant:1634:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/exception:88:
+./version:1:1: error: expected unqualified-id
+    1 | 0.1
+      | ^
+In file included from src/QExtAction.cpp:42:
+In file included from src/QExtAction.h:46:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtWidgets.framework/Headers/QAction:1:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtWidgets.framework/Headers/qaction.h:43:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtWidgets.framework/Headers/qtwidgetsglobal.h:43:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtGui.framework/Headers/qtguiglobal.h:43:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qglobal.h:142:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/algorithm:1854:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/__algorithm/for_each.h:16:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/__ranges/movable_box.h:21:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/optional:1300:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/iterator:745:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/variant:1634:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/exception:97:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/new:112:
+./version:1:1: error: expected unqualified-id
+    1 | 0.1
+      | ^
+In file included from src/QExtAction.cpp:42:
+In file included from src/QExtAction.h:46:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtWidgets.framework/Headers/QAction:1:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtWidgets.framework/Headers/qaction.h:43:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtWidgets.framework/Headers/qtwidgetsglobal.h:43:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtGui.framework/Headers/qtguiglobal.h:43:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qglobal.h:142:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/algorithm:1854:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/__algorithm/for_each.h:16:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/__ranges/movable_box.h:21:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/optional:1300:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/iterator:745:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/variant:1635:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/tuple:270:
+./version:1:1: error: expected unqualified-id
+    1 | 0.1
+      | ^
+In file included from src/QExtAction.cpp:42:
+In file included from src/QExtAction.h:46:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtWidgets.framework/Headers/QAction:1:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtWidgets.framework/Headers/qaction.h:43:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtWidgets.framework/Headers/qtwidgetsglobal.h:43:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtGui.framework/Headers/qtguiglobal.h:43:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qglobal.h:142:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/algorithm:1854:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/__algorithm/for_each.h:16:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/__ranges/movable_box.h:21:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/optional:1302:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/memory:975:
+./version:1:1: error: expected unqualified-id
+    1 | 0.1
+      | ^
+In file included from src/QExtAction.cpp:42:
+In file included from src/QExtAction.h:46:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtWidgets.framework/Headers/QAction:1:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtWidgets.framework/Headers/qaction.h:43:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtWidgets.framework/Headers/qtwidgetsglobal.h:43:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtGui.framework/Headers/qtguiglobal.h:43:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qglobal.h:142:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/algorithm:2033:
+./version:1:1: error: expected unqualified-id
+    1 | 0.1
+      | ^
+In file included from src/QExtAction.cpp:42:
+In file included from src/QExtAction.h:46:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtWidgets.framework/Headers/QAction:1:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtWidgets.framework/Headers/qaction.h:43:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtWidgets.framework/Headers/qtwidgetsglobal.h:43:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtGui.framework/Headers/qtguiglobal.h:43:
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qglobal.h:570:78: error: unknown type name 'qint8'; did you mean 'quint8'?
+  570 | template <>    struct QIntegerForSize<1> { typedef quint8  Unsigned; typedef qint8  Signed; };
+      |                                                                              ^~~~~
+      |                                                                              quint8
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qglobal.h:234:23: note: 'quint8' declared here
+  234 | typedef unsigned char quint8;      /* 8 bit unsigned */
+      |                       ^
+In file included from src/QExtAction.cpp:42:
+In file included from src/QExtAction.h:46:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtWidgets.framework/Headers/QAction:1:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtWidgets.framework/Headers/qaction.h:43:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtWidgets.framework/Headers/qtwidgetsglobal.h:43:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtGui.framework/Headers/qtguiglobal.h:43:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qglobal.h:1310:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qglobalstatic.h:102:
+In file included from /opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qmutex.h:48:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/c++/v1/chrono:1027:
+./version:1:1: error: expected unqualified-id
+    1 | 0.1
+      | ^
+fatal error: too many errors emitted, stopping now [-ferror-limit=]
+20 errors generated.
+make: *** [obj/QExtAction.o] Error 1

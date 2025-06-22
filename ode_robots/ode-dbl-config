@@ -1,0 +1,2 @@
+#!/bin/sh
+exec /Users/jerry/lpzrobots_mac/opende/ode-dbl-config "$@"

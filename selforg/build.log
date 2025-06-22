@@ -1,0 +1,840 @@
+g++ -c -Wall -pipe -fpic -I./. -I./controller -I./wirings -I./utils -I./matrix -I./statistictools -I./statistictools/measure -I./statistictools/dataanalysation -Iinclude -Iinclude/selforg -std=c++11 -pthread -I/opt/local/include -I/opt/homebrew/include -I/usr/local/include -I/opt/local/include -I/opt/homebrew/include -I/opt/homebrew/Cellar/gsl/2.8/include -DNOCONFIGURATOR -g -O  -o "build/controller/controllernet.o" "controller/controllernet.cpp"
+g++ -c -Wall -pipe -fpic -I./. -I./controller -I./wirings -I./utils -I./matrix -I./statistictools -I./statistictools/measure -I./statistictools/dataanalysation -Iinclude -Iinclude/selforg -std=c++11 -pthread -I/opt/local/include -I/opt/homebrew/include -I/usr/local/include -I/opt/local/include -I/opt/homebrew/include -I/opt/homebrew/Cellar/gsl/2.8/include -DNOCONFIGURATOR -g -O  -o "build/controller/crossmotorcoupling.o" "controller/crossmotorcoupling.cpp"
+g++ -c -Wall -pipe -fpic -I./. -I./controller -I./wirings -I./utils -I./matrix -I./statistictools -I./statistictools/measure -I./statistictools/dataanalysation -Iinclude -Iinclude/selforg -std=c++11 -pthread -I/opt/local/include -I/opt/homebrew/include -I/usr/local/include -I/opt/local/include -I/opt/homebrew/include -I/opt/homebrew/Cellar/gsl/2.8/include -DNOCONFIGURATOR -g -O  -o "build/controller/dep.o" "controller/dep.cpp"
+g++ -c -Wall -pipe -fpic -I./. -I./controller -I./wirings -I./utils -I./matrix -I./statistictools -I./statistictools/measure -I./statistictools/dataanalysation -Iinclude -Iinclude/selforg -std=c++11 -pthread -I/opt/local/include -I/opt/homebrew/include -I/usr/local/include -I/opt/local/include -I/opt/homebrew/include -I/opt/homebrew/Cellar/gsl/2.8/include -DNOCONFIGURATOR -g -O  -o "build/controller/derbigcontroller.o" "controller/derbigcontroller.cpp"
+In file included from controller/controllernet.cpp:25:
+In file included from controller/controllernet.h:29:
+In file included from controller/feedforwardnn.h:27:
+In file included from controller/invertablemodel.h:28:
+In file included from controller/abstractmodel.h:28:
+./utils/configurable.h:122:34: warning: 'unary_function<Configurable *, bool>' is deprecated [-Wdeprecated-declarations]
+  122 |     struct matchId : public std::unary_function<Configurable*, bool>
+      |                                  ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/unary_function.h:23:29: note: 'unary_function<Configurable *, bool>' has been explicitly marked deprecated here
+   23 | struct _LIBCPP_TEMPLATE_VIS _LIBCPP_DEPRECATED_IN_CXX11 unary_function {
+      |                             ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:725:41: note: expanded from macro '_LIBCPP_DEPRECATED_IN_CXX11'
+  725 | #    define _LIBCPP_DEPRECATED_IN_CXX11 _LIBCPP_DEPRECATED
+      |                                         ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:710:49: note: expanded from macro '_LIBCPP_DEPRECATED'
+  710 | #      define _LIBCPP_DEPRECATED __attribute__((__deprecated__))
+      |                                                 ^
+In file included from controller/controllernet.cpp:25:
+In file included from controller/controllernet.h:29:
+In file included from controller/feedforwardnn.h:27:
+In file included from controller/invertablemodel.h:28:
+In file included from controller/abstractmodel.h:30:
+./utils/inspectable.h:91:34: warning: 'unary_function<Inspectable::ILayer, bool>' is deprecated [-Wdeprecated-declarations]
+   91 |   struct matchName : public std::unary_function<ILayer, bool> {
+      |                                  ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/unary_function.h:23:29: note: 'unary_function<Inspectable::ILayer, bool>' has been explicitly marked deprecated here
+   23 | struct _LIBCPP_TEMPLATE_VIS _LIBCPP_DEPRECATED_IN_CXX11 unary_function {
+      |                             ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:725:41: note: expanded from macro '_LIBCPP_DEPRECATED_IN_CXX11'
+  725 | #    define _LIBCPP_DEPRECATED_IN_CXX11 _LIBCPP_DEPRECATED
+      |                                         ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:710:49: note: expanded from macro '_LIBCPP_DEPRECATED'
+  710 | #      define _LIBCPP_DEPRECATED __attribute__((__deprecated__))
+      |                                                 ^
+In file included from controller/crossmotorcoupling.cpp:21:
+In file included from controller/crossmotorcoupling.h:24:
+In file included from controller/abstractcontrolleradapter.h:27:
+In file included from controller/abstractcontroller.h:30:
+./utils/configurable.h:122:34: warning: 'unary_function<Configurable *, bool>' is deprecated [-Wdeprecated-declarations]
+  122 |     struct matchId : public std::unary_function<Configurable*, bool>
+      |                                  ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/unary_function.h:23:29: note: 'unary_function<Configurable *, bool>' has been explicitly marked deprecated here
+   23 | struct _LIBCPP_TEMPLATE_VIS _LIBCPP_DEPRECATED_IN_CXX11 unary_function {
+      |                             ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:725:41: note: expanded from macro '_LIBCPP_DEPRECATED_IN_CXX11'
+  725 | #    define _LIBCPP_DEPRECATED_IN_CXX11 _LIBCPP_DEPRECATED
+      |                                         ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:710:49: note: expanded from macro '_LIBCPP_DEPRECATED'
+  710 | #      define _LIBCPP_DEPRECATED __attribute__((__deprecated__))
+      |                                                 ^
+In file included from controller/crossmotorcoupling.cpp:21:
+In file included from controller/crossmotorcoupling.h:24:
+In file included from controller/abstractcontrolleradapter.h:27:
+In file included from controller/abstractcontroller.h:31:
+./utils/inspectable.h:91:34: warning: 'unary_function<Inspectable::ILayer, bool>' is deprecated [-Wdeprecated-declarations]
+   91 |   struct matchName : public std::unary_function<ILayer, bool> {
+      |                                  ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/unary_function.h:23:29: note: 'unary_function<Inspectable::ILayer, bool>' has been explicitly marked deprecated here
+   23 | struct _LIBCPP_TEMPLATE_VIS _LIBCPP_DEPRECATED_IN_CXX11 unary_function {
+      |                             ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:725:41: note: expanded from macro '_LIBCPP_DEPRECATED_IN_CXX11'
+  725 | #    define _LIBCPP_DEPRECATED_IN_CXX11 _LIBCPP_DEPRECATED
+      |                                         ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:710:49: note: expanded from macro '_LIBCPP_DEPRECATED'
+  710 | #      define _LIBCPP_DEPRECATED __attribute__((__deprecated__))
+      |                                                 ^
+In file included from controller/dep.cpp:23:
+In file included from controller/dep.h:24:
+In file included from include/selforg/abstractcontroller.h:30:
+include/selforg/configurable.h:122:34: warning: 'unary_function<Configurable *, bool>' is deprecated [-Wdeprecated-declarations]
+  122 |     struct matchId : public std::unary_function<Configurable*, bool>
+      |                                  ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/unary_function.h:23:29: note: 'unary_function<Configurable *, bool>' has been explicitly marked deprecated here
+   23 | struct _LIBCPP_TEMPLATE_VIS _LIBCPP_DEPRECATED_IN_CXX11 unary_function {
+      |                             ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:725:41: note: expanded from macro '_LIBCPP_DEPRECATED_IN_CXX11'
+  725 | #    define _LIBCPP_DEPRECATED_IN_CXX11 _LIBCPP_DEPRECATED
+      |                                         ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:710:49: note: expanded from macro '_LIBCPP_DEPRECATED'
+  710 | #      define _LIBCPP_DEPRECATED __attribute__((__deprecated__))
+      |                                                 ^
+In file included from controller/crossmotorcoupling.cpp:21:
+controller/crossmotorcoupling.h:59:7: warning: explicitly assigning value of variable of type 'Teachable *' to itself [-Wself-assign]
+   59 |     t2=t2; // this is to avoid a "unused variable" in -DNDEBUG mode
+      |     ~~^~~
+In file included from controller/dep.cpp:23:
+In file included from controller/dep.h:24:
+In file included from include/selforg/abstractcontroller.h:31:
+include/selforg/inspectable.h:91:34: warning: 'unary_function<Inspectable::ILayer, bool>' is deprecated [-Wdeprecated-declarations]
+   91 |   struct matchName : public std::unary_function<ILayer, bool> {
+      |                                  ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/unary_function.h:23:29: note: 'unary_function<Inspectable::ILayer, bool>' has been explicitly marked deprecated here
+   23 | struct _LIBCPP_TEMPLATE_VIS _LIBCPP_DEPRECATED_IN_CXX11 unary_function {
+      |                             ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:725:41: note: expanded from macro '_LIBCPP_DEPRECATED_IN_CXX11'
+  725 | #    define _LIBCPP_DEPRECATED_IN_CXX11 _LIBCPP_DEPRECATED
+      |                                         ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:710:49: note: expanded from macro '_LIBCPP_DEPRECATED'
+  710 | #      define _LIBCPP_DEPRECATED __attribute__((__deprecated__))
+      |                                                 ^
+In file included from controller/derbigcontroller.cpp:20:
+In file included from controller/derbigcontroller.h:22:
+In file included from controller/invertmotorcontroller.h:24:
+In file included from controller/homeokinbase.h:23:
+In file included from controller/abstractcontroller.h:30:
+./utils/configurable.h:122:34: warning: 'unary_function<Configurable *, bool>' is deprecated [-Wdeprecated-declarations]
+  122 |     struct matchId : public std::unary_function<Configurable*, bool>
+      |                                  ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/unary_function.h:23:29: note: 'unary_function<Configurable *, bool>' has been explicitly marked deprecated here
+   23 | struct _LIBCPP_TEMPLATE_VIS _LIBCPP_DEPRECATED_IN_CXX11 unary_function {
+      |                             ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:725:41: note: expanded from macro '_LIBCPP_DEPRECATED_IN_CXX11'
+  725 | #    define _LIBCPP_DEPRECATED_IN_CXX11 _LIBCPP_DEPRECATED
+      |                                         ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:710:49: note: expanded from macro '_LIBCPP_DEPRECATED'
+  710 | #      define _LIBCPP_DEPRECATED __attribute__((__deprecated__))
+      |                                                 ^
+In file included from controller/derbigcontroller.cpp:20:
+In file included from controller/derbigcontroller.h:22:
+In file included from controller/invertmotorcontroller.h:24:
+In file included from controller/homeokinbase.h:23:
+In file included from controller/abstractcontroller.h:31:
+./utils/inspectable.h:91:34: warning: 'unary_function<Inspectable::ILayer, bool>' is deprecated [-Wdeprecated-declarations]
+   91 |   struct matchName : public std::unary_function<ILayer, bool> {
+      |                                  ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/unary_function.h:23:29: note: 'unary_function<Inspectable::ILayer, bool>' has been explicitly marked deprecated here
+   23 | struct _LIBCPP_TEMPLATE_VIS _LIBCPP_DEPRECATED_IN_CXX11 unary_function {
+      |                             ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:725:41: note: expanded from macro '_LIBCPP_DEPRECATED_IN_CXX11'
+  725 | #    define _LIBCPP_DEPRECATED_IN_CXX11 _LIBCPP_DEPRECATED
+      |                                         ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:710:49: note: expanded from macro '_LIBCPP_DEPRECATED'
+  710 | #      define _LIBCPP_DEPRECATED __attribute__((__deprecated__))
+      |                                                 ^
+2 warnings generated.
+3 warnings generated.
+g++ -c -Wall -pipe -fpic -I./. -I./controller -I./wirings -I./utils -I./matrix -I./statistictools -I./statistictools/measure -I./statistictools/dataanalysation -Iinclude -Iinclude/selforg -std=c++11 -pthread -I/opt/local/include -I/opt/homebrew/include -I/usr/local/include -I/opt/local/include -I/opt/homebrew/include -I/opt/homebrew/Cellar/gsl/2.8/include -DNOCONFIGURATOR -g -O  -o "build/controller/dercontroller.o" "controller/dercontroller.cpp"
+g++ -c -Wall -pipe -fpic -I./. -I./controller -I./wirings -I./utils -I./matrix -I./statistictools -I./statistictools/measure -I./statistictools/dataanalysation -Iinclude -Iinclude/selforg -std=c++11 -pthread -I/opt/local/include -I/opt/homebrew/include -I/usr/local/include -I/opt/local/include -I/opt/homebrew/include -I/opt/homebrew/Cellar/gsl/2.8/include -DNOCONFIGURATOR -g -O  -o "build/controller/derinf.o" "controller/derinf.cpp"
+2 warnings generated.
+g++ -c -Wall -pipe -fpic -I./. -I./controller -I./wirings -I./utils -I./matrix -I./statistictools -I./statistictools/measure -I./statistictools/dataanalysation -Iinclude -Iinclude/selforg -std=c++11 -pthread -I/opt/local/include -I/opt/homebrew/include -I/usr/local/include -I/opt/local/include -I/opt/homebrew/include -I/opt/homebrew/Cellar/gsl/2.8/include -DNOCONFIGURATOR -g -O  -o "build/controller/derlininvert.o" "controller/derlininvert.cpp"
+2 warnings generated.
+In file included from controller/dercontroller.cpp:25:
+In file included from controller/dercontroller.h:27:
+In file included from controller/invertmotorcontroller.h:24:
+In file included from controller/homeokinbase.h:23:
+In file included from controller/abstractcontroller.h:30:
+./utils/configurable.h:122:34: warning: 'unary_function<Configurable *, bool>' is deprecated [-Wdeprecated-declarations]
+  122 |     struct matchId : public std::unary_function<Configurable*, bool>
+      |                                  ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/unary_function.h:23:29: note: 'unary_function<Configurable *, bool>' has been explicitly marked deprecated here
+   23 | struct _LIBCPP_TEMPLATE_VIS _LIBCPP_DEPRECATED_IN_CXX11 unary_function {
+      |                             ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:725:41: note: expanded from macro '_LIBCPP_DEPRECATED_IN_CXX11'
+  725 | #    define _LIBCPP_DEPRECATED_IN_CXX11 _LIBCPP_DEPRECATED
+      |                                         ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:710:49: note: expanded from macro '_LIBCPP_DEPRECATED'
+  710 | #      define _LIBCPP_DEPRECATED __attribute__((__deprecated__))
+      |                                                 ^
+In file included from controller/dercontroller.cpp:25:
+In file included from controller/dercontroller.h:27:
+In file included from controller/invertmotorcontroller.h:24:
+In file included from controller/homeokinbase.h:23:
+In file included from controller/abstractcontroller.h:31:
+./utils/inspectable.h:91:34: warning: 'unary_function<Inspectable::ILayer, bool>' is deprecated [-Wdeprecated-declarations]
+   91 |   struct matchName : public std::unary_function<ILayer, bool> {
+      |                                  ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/unary_function.h:23:29: note: 'unary_function<Inspectable::ILayer, bool>' has been explicitly marked deprecated here
+   23 | struct _LIBCPP_TEMPLATE_VIS _LIBCPP_DEPRECATED_IN_CXX11 unary_function {
+      |                             ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:725:41: note: expanded from macro '_LIBCPP_DEPRECATED_IN_CXX11'
+  725 | #    define _LIBCPP_DEPRECATED_IN_CXX11 _LIBCPP_DEPRECATED
+      |                                         ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:710:49: note: expanded from macro '_LIBCPP_DEPRECATED'
+  710 | #      define _LIBCPP_DEPRECATED __attribute__((__deprecated__))
+      |                                                 ^
+g++ -c -Wall -pipe -fpic -I./. -I./controller -I./wirings -I./utils -I./matrix -I./statistictools -I./statistictools/measure -I./statistictools/dataanalysation -Iinclude -Iinclude/selforg -std=c++11 -pthread -I/opt/local/include -I/opt/homebrew/include -I/usr/local/include -I/opt/local/include -I/opt/homebrew/include -I/opt/homebrew/Cellar/gsl/2.8/include -DNOCONFIGURATOR -g -O  -o "build/controller/derlinunivers.o" "controller/derlinunivers.cpp"
+In file included from controller/derinf.cpp:20:
+In file included from controller/derinf.h:22:
+In file included from controller/invertmotorcontroller.h:24:
+In file included from controller/homeokinbase.h:23:
+In file included from controller/abstractcontroller.h:30:
+./utils/configurable.h:122:34: warning: 'unary_function<Configurable *, bool>' is deprecated [-Wdeprecated-declarations]
+  122 |     struct matchId : public std::unary_function<Configurable*, bool>
+      |                                  ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/unary_function.h:23:29: note: 'unary_function<Configurable *, bool>' has been explicitly marked deprecated here
+   23 | struct _LIBCPP_TEMPLATE_VIS _LIBCPP_DEPRECATED_IN_CXX11 unary_function {
+      |                             ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:725:41: note: expanded from macro '_LIBCPP_DEPRECATED_IN_CXX11'
+  725 | #    define _LIBCPP_DEPRECATED_IN_CXX11 _LIBCPP_DEPRECATED
+      |                                         ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:710:49: note: expanded from macro '_LIBCPP_DEPRECATED'
+  710 | #      define _LIBCPP_DEPRECATED __attribute__((__deprecated__))
+      |                                                 ^
+In file included from controller/derinf.cpp:20:
+In file included from controller/derinf.h:22:
+In file included from controller/invertmotorcontroller.h:24:
+In file included from controller/homeokinbase.h:23:
+In file included from controller/abstractcontroller.h:31:
+./utils/inspectable.h:91:34: warning: 'unary_function<Inspectable::ILayer, bool>' is deprecated [-Wdeprecated-declarations]
+   91 |   struct matchName : public std::unary_function<ILayer, bool> {
+      |                                  ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/unary_function.h:23:29: note: 'unary_function<Inspectable::ILayer, bool>' has been explicitly marked deprecated here
+   23 | struct _LIBCPP_TEMPLATE_VIS _LIBCPP_DEPRECATED_IN_CXX11 unary_function {
+      |                             ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:725:41: note: expanded from macro '_LIBCPP_DEPRECATED_IN_CXX11'
+  725 | #    define _LIBCPP_DEPRECATED_IN_CXX11 _LIBCPP_DEPRECATED
+      |                                         ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:710:49: note: expanded from macro '_LIBCPP_DEPRECATED'
+  710 | #      define _LIBCPP_DEPRECATED __attribute__((__deprecated__))
+      |                                                 ^
+In file included from controller/derlininvert.cpp:20:
+In file included from controller/derlininvert.h:22:
+In file included from controller/invertmotorcontroller.h:24:
+In file included from controller/homeokinbase.h:23:
+In file included from controller/abstractcontroller.h:30:
+./utils/configurable.h:122:34: warning: 'unary_function<Configurable *, bool>' is deprecated [-Wdeprecated-declarations]
+  122 |     struct matchId : public std::unary_function<Configurable*, bool>
+      |                                  ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/unary_function.h:23:29: note: 'unary_function<Configurable *, bool>' has been explicitly marked deprecated here
+   23 | struct _LIBCPP_TEMPLATE_VIS _LIBCPP_DEPRECATED_IN_CXX11 unary_function {
+      |                             ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:725:41: note: expanded from macro '_LIBCPP_DEPRECATED_IN_CXX11'
+  725 | #    define _LIBCPP_DEPRECATED_IN_CXX11 _LIBCPP_DEPRECATED
+      |                                         ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:710:49: note: expanded from macro '_LIBCPP_DEPRECATED'
+  710 | #      define _LIBCPP_DEPRECATED __attribute__((__deprecated__))
+      |                                                 ^
+In file included from controller/derlininvert.cpp:20:
+In file included from controller/derlininvert.h:22:
+In file included from controller/invertmotorcontroller.h:24:
+In file included from controller/homeokinbase.h:23:
+In file included from controller/abstractcontroller.h:31:
+./utils/inspectable.h:91:34: warning: 'unary_function<Inspectable::ILayer, bool>' is deprecated [-Wdeprecated-declarations]
+   91 |   struct matchName : public std::unary_function<ILayer, bool> {
+      |                                  ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/unary_function.h:23:29: note: 'unary_function<Inspectable::ILayer, bool>' has been explicitly marked deprecated here
+   23 | struct _LIBCPP_TEMPLATE_VIS _LIBCPP_DEPRECATED_IN_CXX11 unary_function {
+      |                             ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:725:41: note: expanded from macro '_LIBCPP_DEPRECATED_IN_CXX11'
+  725 | #    define _LIBCPP_DEPRECATED_IN_CXX11 _LIBCPP_DEPRECATED
+      |                                         ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:710:49: note: expanded from macro '_LIBCPP_DEPRECATED'
+  710 | #      define _LIBCPP_DEPRECATED __attribute__((__deprecated__))
+      |                                                 ^
+2 warnings generated.
+In file included from controller/derlinunivers.cpp:27:
+In file included from controller/derlinunivers.h:50:
+In file included from controller/abstractcontroller.h:30:
+./utils/configurable.h:122:34: warning: 'unary_function<Configurable *, bool>' is deprecated [-Wdeprecated-declarations]
+  122 |     struct matchId : public std::unary_function<Configurable*, bool>
+      |                                  ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/unary_function.h:23:29: note: 'unary_function<Configurable *, bool>' has been explicitly marked deprecated here
+   23 | struct _LIBCPP_TEMPLATE_VIS _LIBCPP_DEPRECATED_IN_CXX11 unary_function {
+      |                             ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:725:41: note: expanded from macro '_LIBCPP_DEPRECATED_IN_CXX11'
+  725 | #    define _LIBCPP_DEPRECATED_IN_CXX11 _LIBCPP_DEPRECATED
+      |                                         ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:710:49: note: expanded from macro '_LIBCPP_DEPRECATED'
+  710 | #      define _LIBCPP_DEPRECATED __attribute__((__deprecated__))
+      |                                                 ^
+In file included from controller/derlinunivers.cpp:27:
+In file included from controller/derlinunivers.h:50:
+In file included from controller/abstractcontroller.h:31:
+./utils/inspectable.h:91:34: warning: 'unary_function<Inspectable::ILayer, bool>' is deprecated [-Wdeprecated-declarations]
+   91 |   struct matchName : public std::unary_function<ILayer, bool> {
+      |                                  ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/unary_function.h:23:29: note: 'unary_function<Inspectable::ILayer, bool>' has been explicitly marked deprecated here
+   23 | struct _LIBCPP_TEMPLATE_VIS _LIBCPP_DEPRECATED_IN_CXX11 unary_function {
+      |                             ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:725:41: note: expanded from macro '_LIBCPP_DEPRECATED_IN_CXX11'
+  725 | #    define _LIBCPP_DEPRECATED_IN_CXX11 _LIBCPP_DEPRECATED
+      |                                         ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:710:49: note: expanded from macro '_LIBCPP_DEPRECATED'
+  710 | #      define _LIBCPP_DEPRECATED __attribute__((__deprecated__))
+      |                                                 ^
+g++ -c -Wall -pipe -fpic -I./. -I./controller -I./wirings -I./utils -I./matrix -I./statistictools -I./statistictools/measure -I./statistictools/dataanalysation -Iinclude -Iinclude/selforg -std=c++11 -pthread -I/opt/local/include -I/opt/homebrew/include -I/usr/local/include -I/opt/local/include -I/opt/homebrew/include -I/opt/homebrew/Cellar/gsl/2.8/include -DNOCONFIGURATOR -g -O  -o "build/controller/derpseudosensor.o" "controller/derpseudosensor.cpp"
+2 warnings generated.
+g++ -c -Wall -pipe -fpic -I./. -I./controller -I./wirings -I./utils -I./matrix -I./statistictools -I./statistictools/measure -I./statistictools/dataanalysation -Iinclude -Iinclude/selforg -std=c++11 -pthread -I/opt/local/include -I/opt/homebrew/include -I/usr/local/include -I/opt/local/include -I/opt/homebrew/include -I/opt/homebrew/Cellar/gsl/2.8/include -DNOCONFIGURATOR -g -O  -o "build/controller/discretecontrolleradapter.o" "controller/discretecontrolleradapter.cpp"
+2 warnings generated.
+2 warnings generated.
+g++ -c -Wall -pipe -fpic -I./. -I./controller -I./wirings -I./utils -I./matrix -I./statistictools -I./statistictools/measure -I./statistictools/dataanalysation -Iinclude -Iinclude/selforg -std=c++11 -pthread -I/opt/local/include -I/opt/homebrew/include -I/usr/local/include -I/opt/local/include -I/opt/homebrew/include -I/opt/homebrew/Cellar/gsl/2.8/include -DNOCONFIGURATOR -g -O  -o "build/controller/elman.o" "controller/elman.cpp"
+In file included from controller/derpseudosensor.cpp:20:
+In file included from controller/derpseudosensor.h:22:
+In file included from controller/invertmotorcontroller.h:24:
+In file included from controller/homeokinbase.h:23:
+In file included from controller/abstractcontroller.h:30:
+./utils/configurable.h:122:34: warning: 'unary_function<Configurable *, bool>' is deprecated [-Wdeprecated-declarations]
+  122 |     struct matchId : public std::unary_function<Configurable*, bool>
+      |                                  ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/unary_function.h:23:29: note: 'unary_function<Configurable *, bool>' has been explicitly marked deprecated here
+   23 | struct _LIBCPP_TEMPLATE_VIS _LIBCPP_DEPRECATED_IN_CXX11 unary_function {
+      |                             ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:725:41: note: expanded from macro '_LIBCPP_DEPRECATED_IN_CXX11'
+  725 | #    define _LIBCPP_DEPRECATED_IN_CXX11 _LIBCPP_DEPRECATED
+      |                                         ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:710:49: note: expanded from macro '_LIBCPP_DEPRECATED'
+  710 | #      define _LIBCPP_DEPRECATED __attribute__((__deprecated__))
+      |                                                 ^
+In file included from controller/derpseudosensor.cpp:20:
+In file included from controller/derpseudosensor.h:22:
+In file included from controller/invertmotorcontroller.h:24:
+In file included from controller/homeokinbase.h:23:
+In file included from controller/abstractcontroller.h:31:
+./utils/inspectable.h:91:34: warning: 'unary_function<Inspectable::ILayer, bool>' is deprecated [-Wdeprecated-declarations]
+   91 |   struct matchName : public std::unary_function<ILayer, bool> {
+      |                                  ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/unary_function.h:23:29: note: 'unary_function<Inspectable::ILayer, bool>' has been explicitly marked deprecated here
+   23 | struct _LIBCPP_TEMPLATE_VIS _LIBCPP_DEPRECATED_IN_CXX11 unary_function {
+      |                             ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:725:41: note: expanded from macro '_LIBCPP_DEPRECATED_IN_CXX11'
+  725 | #    define _LIBCPP_DEPRECATED_IN_CXX11 _LIBCPP_DEPRECATED
+      |                                         ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:710:49: note: expanded from macro '_LIBCPP_DEPRECATED'
+  710 | #      define _LIBCPP_DEPRECATED __attribute__((__deprecated__))
+      |                                                 ^
+In file included from controller/discretecontrolleradapter.cpp:44:
+In file included from controller/discretecontrolleradapter.h:27:
+In file included from controller/abstractcontrolleradapter.h:27:
+In file included from controller/abstractcontroller.h:30:
+./utils/configurable.h:122:34: warning: 'unary_function<Configurable *, bool>' is deprecated [-Wdeprecated-declarations]
+  122 |     struct matchId : public std::unary_function<Configurable*, bool>
+      |                                  ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/unary_function.h:23:29: note: 'unary_function<Configurable *, bool>' has been explicitly marked deprecated here
+   23 | struct _LIBCPP_TEMPLATE_VIS _LIBCPP_DEPRECATED_IN_CXX11 unary_function {
+      |                             ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:725:41: note: expanded from macro '_LIBCPP_DEPRECATED_IN_CXX11'
+  725 | #    define _LIBCPP_DEPRECATED_IN_CXX11 _LIBCPP_DEPRECATED
+      |                                         ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:710:49: note: expanded from macro '_LIBCPP_DEPRECATED'
+  710 | #      define _LIBCPP_DEPRECATED __attribute__((__deprecated__))
+      |                                                 ^
+In file included from controller/discretecontrolleradapter.cpp:44:
+In file included from controller/discretecontrolleradapter.h:27:
+In file included from controller/abstractcontrolleradapter.h:27:
+In file included from controller/abstractcontroller.h:31:
+./utils/inspectable.h:91:34: warning: 'unary_function<Inspectable::ILayer, bool>' is deprecated [-Wdeprecated-declarations]
+   91 |   struct matchName : public std::unary_function<ILayer, bool> {
+      |                                  ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/unary_function.h:23:29: note: 'unary_function<Inspectable::ILayer, bool>' has been explicitly marked deprecated here
+   23 | struct _LIBCPP_TEMPLATE_VIS _LIBCPP_DEPRECATED_IN_CXX11 unary_function {
+      |                             ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:725:41: note: expanded from macro '_LIBCPP_DEPRECATED_IN_CXX11'
+  725 | #    define _LIBCPP_DEPRECATED_IN_CXX11 _LIBCPP_DEPRECATED
+      |                                         ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:710:49: note: expanded from macro '_LIBCPP_DEPRECATED'
+  710 | #      define _LIBCPP_DEPRECATED __attribute__((__deprecated__))
+      |                                                 ^
+g++ -c -Wall -pipe -fpic -I./. -I./controller -I./wirings -I./utils -I./matrix -I./statistictools -I./statistictools/measure -I./statistictools/dataanalysation -Iinclude -Iinclude/selforg -std=c++11 -pthread -I/opt/local/include -I/opt/homebrew/include -I/usr/local/include -I/opt/local/include -I/opt/homebrew/include -I/opt/homebrew/Cellar/gsl/2.8/include -DNOCONFIGURATOR -g -O  -o "build/controller/esn.o" "controller/esn.cpp"
+In file included from controller/elman.cpp:25:
+In file included from controller/elman.h:29:
+In file included from controller/multilayerffnn.h:29:
+In file included from controller/feedforwardnn.h:27:
+In file included from controller/invertablemodel.h:28:
+In file included from controller/abstractmodel.h:28:
+./utils/configurable.h:122:34: warning: 'unary_function<Configurable *, bool>' is deprecated [-Wdeprecated-declarations]
+  122 |     struct matchId : public std::unary_function<Configurable*, bool>
+      |                                  ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/unary_function.h:23:29: note: 'unary_function<Configurable *, bool>' has been explicitly marked deprecated here
+   23 | struct _LIBCPP_TEMPLATE_VIS _LIBCPP_DEPRECATED_IN_CXX11 unary_function {
+      |                             ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:725:41: note: expanded from macro '_LIBCPP_DEPRECATED_IN_CXX11'
+  725 | #    define _LIBCPP_DEPRECATED_IN_CXX11 _LIBCPP_DEPRECATED
+      |                                         ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:710:49: note: expanded from macro '_LIBCPP_DEPRECATED'
+  710 | #      define _LIBCPP_DEPRECATED __attribute__((__deprecated__))
+      |                                                 ^
+In file included from controller/elman.cpp:25:
+In file included from controller/elman.h:29:
+In file included from controller/multilayerffnn.h:29:
+In file included from controller/feedforwardnn.h:27:
+In file included from controller/invertablemodel.h:28:
+In file included from controller/abstractmodel.h:30:
+./utils/inspectable.h:91:34: warning: 'unary_function<Inspectable::ILayer, bool>' is deprecated [-Wdeprecated-declarations]
+   91 |   struct matchName : public std::unary_function<ILayer, bool> {
+      |                                  ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/unary_function.h:23:29: note: 'unary_function<Inspectable::ILayer, bool>' has been explicitly marked deprecated here
+   23 | struct _LIBCPP_TEMPLATE_VIS _LIBCPP_DEPRECATED_IN_CXX11 unary_function {
+      |                             ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:725:41: note: expanded from macro '_LIBCPP_DEPRECATED_IN_CXX11'
+  725 | #    define _LIBCPP_DEPRECATED_IN_CXX11 _LIBCPP_DEPRECATED
+      |                                         ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:710:49: note: expanded from macro '_LIBCPP_DEPRECATED'
+  710 | #      define _LIBCPP_DEPRECATED __attribute__((__deprecated__))
+      |                                                 ^
+2 warnings generated.
+g++ -c -Wall -pipe -fpic -I./. -I./controller -I./wirings -I./utils -I./matrix -I./statistictools -I./statistictools/measure -I./statistictools/dataanalysation -Iinclude -Iinclude/selforg -std=c++11 -pthread -I/opt/local/include -I/opt/homebrew/include -I/usr/local/include -I/opt/local/include -I/opt/homebrew/include -I/opt/homebrew/Cellar/gsl/2.8/include -DNOCONFIGURATOR -g -O  -o "build/controller/ffnncontroller.o" "controller/ffnncontroller.cpp"
+In file included from controller/esn.cpp:25:
+In file included from controller/esn.h:30:
+In file included from include/selforg/invertablemodel.h:28:
+In file included from include/selforg/abstractmodel.h:28:
+include/selforg/configurable.h:122:34: warning: 'unary_function<Configurable *, bool>' is deprecated [-Wdeprecated-declarations]
+  122 |     struct matchId : public std::unary_function<Configurable*, bool>
+      |                                  ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/unary_function.h:23:29: note: 'unary_function<Configurable *, bool>' has been explicitly marked deprecated here
+   23 | struct _LIBCPP_TEMPLATE_VIS _LIBCPP_DEPRECATED_IN_CXX11 unary_function {
+      |                             ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:725:41: note: expanded from macro '_LIBCPP_DEPRECATED_IN_CXX11'
+  725 | #    define _LIBCPP_DEPRECATED_IN_CXX11 _LIBCPP_DEPRECATED
+      |                                         ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:710:49: note: expanded from macro '_LIBCPP_DEPRECATED'
+  710 | #      define _LIBCPP_DEPRECATED __attribute__((__deprecated__))
+      |                                                 ^
+In file included from controller/esn.cpp:25:
+In file included from controller/esn.h:30:
+In file included from include/selforg/invertablemodel.h:28:
+In file included from include/selforg/abstractmodel.h:30:
+include/selforg/inspectable.h:91:34: warning: 'unary_function<Inspectable::ILayer, bool>' is deprecated [-Wdeprecated-declarations]
+   91 |   struct matchName : public std::unary_function<ILayer, bool> {
+      |                                  ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/unary_function.h:23:29: note: 'unary_function<Inspectable::ILayer, bool>' has been explicitly marked deprecated here
+   23 | struct _LIBCPP_TEMPLATE_VIS _LIBCPP_DEPRECATED_IN_CXX11 unary_function {
+      |                             ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:725:41: note: expanded from macro '_LIBCPP_DEPRECATED_IN_CXX11'
+  725 | #    define _LIBCPP_DEPRECATED_IN_CXX11 _LIBCPP_DEPRECATED
+      |                                         ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:710:49: note: expanded from macro '_LIBCPP_DEPRECATED'
+  710 | #      define _LIBCPP_DEPRECATED __attribute__((__deprecated__))
+      |                                                 ^
+2 warnings generated.
+2 warnings generated.
+g++ -c -Wall -pipe -fpic -I./. -I./controller -I./wirings -I./utils -I./matrix -I./statistictools -I./statistictools/measure -I./statistictools/dataanalysation -Iinclude -Iinclude/selforg -std=c++11 -pthread -I/opt/local/include -I/opt/homebrew/include -I/usr/local/include -I/opt/local/include -I/opt/homebrew/include -I/opt/homebrew/Cellar/gsl/2.8/include -DNOCONFIGURATOR -g -O  -o "build/controller/invertmotorbigmodel.o" "controller/invertmotorbigmodel.cpp"
+g++ -c -Wall -pipe -fpic -I./. -I./controller -I./wirings -I./utils -I./matrix -I./statistictools -I./statistictools/measure -I./statistictools/dataanalysation -Iinclude -Iinclude/selforg -std=c++11 -pthread -I/opt/local/include -I/opt/homebrew/include -I/usr/local/include -I/opt/local/include -I/opt/homebrew/include -I/opt/homebrew/Cellar/gsl/2.8/include -DNOCONFIGURATOR -g -O  -o "build/controller/invertmotornstep.o" "controller/invertmotornstep.cpp"
+2 warnings generated.
+In file included from controller/ffnncontroller.cpp:1:
+In file included from controller/ffnncontroller.h:22:
+In file included from controller/abstractcontroller.h:30:
+./utils/configurable.h:122:34: warning: 'unary_function<Configurable *, bool>' is deprecated [-Wdeprecated-declarations]
+  122 |     struct matchId : public std::unary_function<Configurable*, bool>
+      |                                  ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/unary_function.h:23:29: note: 'unary_function<Configurable *, bool>' has been explicitly marked deprecated here
+   23 | struct _LIBCPP_TEMPLATE_VIS _LIBCPP_DEPRECATED_IN_CXX11 unary_function {
+      |                             ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:725:41: note: expanded from macro '_LIBCPP_DEPRECATED_IN_CXX11'
+  725 | #    define _LIBCPP_DEPRECATED_IN_CXX11 _LIBCPP_DEPRECATED
+      |                                         ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:710:49: note: expanded from macro '_LIBCPP_DEPRECATED'
+  710 | #      define _LIBCPP_DEPRECATED __attribute__((__deprecated__))
+      |                                                 ^
+In file included from controller/ffnncontroller.cpp:1:
+In file included from controller/ffnncontroller.h:22:
+In file included from controller/abstractcontroller.h:31:
+./utils/inspectable.h:91:34: warning: 'unary_function<Inspectable::ILayer, bool>' is deprecated [-Wdeprecated-declarations]
+   91 |   struct matchName : public std::unary_function<ILayer, bool> {
+      |                                  ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/unary_function.h:23:29: note: 'unary_function<Inspectable::ILayer, bool>' has been explicitly marked deprecated here
+   23 | struct _LIBCPP_TEMPLATE_VIS _LIBCPP_DEPRECATED_IN_CXX11 unary_function {
+      |                             ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:725:41: note: expanded from macro '_LIBCPP_DEPRECATED_IN_CXX11'
+  725 | #    define _LIBCPP_DEPRECATED_IN_CXX11 _LIBCPP_DEPRECATED
+      |                                         ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:710:49: note: expanded from macro '_LIBCPP_DEPRECATED'
+  710 | #      define _LIBCPP_DEPRECATED __attribute__((__deprecated__))
+      |                                                 ^
+g++ -c -Wall -pipe -fpic -I./. -I./controller -I./wirings -I./utils -I./matrix -I./statistictools -I./statistictools/measure -I./statistictools/dataanalysation -Iinclude -Iinclude/selforg -std=c++11 -pthread -I/opt/local/include -I/opt/homebrew/include -I/usr/local/include -I/opt/local/include -I/opt/homebrew/include -I/opt/homebrew/Cellar/gsl/2.8/include -DNOCONFIGURATOR -g -O  -o "build/controller/invertmotorspace.o" "controller/invertmotorspace.cpp"
+In file included from controller/invertmotorbigmodel.cpp:21:
+In file included from controller/invertmotorbigmodel.h:23:
+In file included from controller/invertmotorcontroller.h:24:
+In file included from controller/homeokinbase.h:23:
+In file included from controller/abstractcontroller.h:30:
+./utils/configurable.h:122:34: warning: 'unary_function<Configurable *, bool>' is deprecated [-Wdeprecated-declarations]
+  122 |     struct matchId : public std::unary_function<Configurable*, bool>
+      |                                  ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/unary_function.h:23:29: note: 'unary_function<Configurable *, bool>' has been explicitly marked deprecated here
+   23 | struct _LIBCPP_TEMPLATE_VIS _LIBCPP_DEPRECATED_IN_CXX11 unary_function {
+      |                             ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:725:41: note: expanded from macro '_LIBCPP_DEPRECATED_IN_CXX11'
+  725 | #    define _LIBCPP_DEPRECATED_IN_CXX11 _LIBCPP_DEPRECATED
+      |                                         ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:710:49: note: expanded from macro '_LIBCPP_DEPRECATED'
+  710 | #      define _LIBCPP_DEPRECATED __attribute__((__deprecated__))
+      |                                                 ^
+In file included from controller/invertmotorbigmodel.cpp:21:
+In file included from controller/invertmotorbigmodel.h:23:
+In file included from controller/invertmotorcontroller.h:24:
+In file included from controller/homeokinbase.h:23:
+In file included from controller/abstractcontroller.h:31:
+./utils/inspectable.h:91:34: warning: 'unary_function<Inspectable::ILayer, bool>' is deprecated [-Wdeprecated-declarations]
+   91 |   struct matchName : public std::unary_function<ILayer, bool> {
+      |                                  ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/unary_function.h:23:29: note: 'unary_function<Inspectable::ILayer, bool>' has been explicitly marked deprecated here
+   23 | struct _LIBCPP_TEMPLATE_VIS _LIBCPP_DEPRECATED_IN_CXX11 unary_function {
+      |                             ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:725:41: note: expanded from macro '_LIBCPP_DEPRECATED_IN_CXX11'
+  725 | #    define _LIBCPP_DEPRECATED_IN_CXX11 _LIBCPP_DEPRECATED
+      |                                         ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:710:49: note: expanded from macro '_LIBCPP_DEPRECATED'
+  710 | #      define _LIBCPP_DEPRECATED __attribute__((__deprecated__))
+      |                                                 ^
+2 warnings generated.
+In file included from controller/invertmotornstep.cpp:21:
+In file included from controller/invertmotornstep.h:23:
+In file included from controller/invertmotorcontroller.h:24:
+In file included from controller/homeokinbase.h:23:
+In file included from controller/abstractcontroller.h:30:
+./utils/configurable.h:122:34: warning: 'unary_function<Configurable *, bool>' is deprecated [-Wdeprecated-declarations]
+  122 |     struct matchId : public std::unary_function<Configurable*, bool>
+      |                                  ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/unary_function.h:23:29: note: 'unary_function<Configurable *, bool>' has been explicitly marked deprecated here
+   23 | struct _LIBCPP_TEMPLATE_VIS _LIBCPP_DEPRECATED_IN_CXX11 unary_function {
+      |                             ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:725:41: note: expanded from macro '_LIBCPP_DEPRECATED_IN_CXX11'
+  725 | #    define _LIBCPP_DEPRECATED_IN_CXX11 _LIBCPP_DEPRECATED
+      |                                         ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:710:49: note: expanded from macro '_LIBCPP_DEPRECATED'
+  710 | #      define _LIBCPP_DEPRECATED __attribute__((__deprecated__))
+      |                                                 ^
+In file included from controller/invertmotornstep.cpp:21:
+In file included from controller/invertmotornstep.h:23:
+In file included from controller/invertmotorcontroller.h:24:
+In file included from controller/homeokinbase.h:23:
+In file included from controller/abstractcontroller.h:31:
+./utils/inspectable.h:91:34: warning: 'unary_function<Inspectable::ILayer, bool>' is deprecated [-Wdeprecated-declarations]
+   91 |   struct matchName : public std::unary_function<ILayer, bool> {
+      |                                  ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/unary_function.h:23:29: note: 'unary_function<Inspectable::ILayer, bool>' has been explicitly marked deprecated here
+   23 | struct _LIBCPP_TEMPLATE_VIS _LIBCPP_DEPRECATED_IN_CXX11 unary_function {
+      |                             ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:725:41: note: expanded from macro '_LIBCPP_DEPRECATED_IN_CXX11'
+  725 | #    define _LIBCPP_DEPRECATED_IN_CXX11 _LIBCPP_DEPRECATED
+      |                                         ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:710:49: note: expanded from macro '_LIBCPP_DEPRECATED'
+  710 | #      define _LIBCPP_DEPRECATED __attribute__((__deprecated__))
+      |                                                 ^
+In file included from controller/invertmotorspace.cpp:20:
+In file included from controller/invertmotorspace.h:22:
+In file included from controller/invertmotorcontroller.h:24:
+In file included from controller/homeokinbase.h:23:
+In file included from controller/abstractcontroller.h:30:
+./utils/configurable.h:122:34: warning: 'unary_function<Configurable *, bool>' is deprecated [-Wdeprecated-declarations]
+  122 |     struct matchId : public std::unary_function<Configurable*, bool>
+      |                                  ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/unary_function.h:23:29: note: 'unary_function<Configurable *, bool>' has been explicitly marked deprecated here
+   23 | struct _LIBCPP_TEMPLATE_VIS _LIBCPP_DEPRECATED_IN_CXX11 unary_function {
+      |                             ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:725:41: note: expanded from macro '_LIBCPP_DEPRECATED_IN_CXX11'
+  725 | #    define _LIBCPP_DEPRECATED_IN_CXX11 _LIBCPP_DEPRECATED
+      |                                         ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:710:49: note: expanded from macro '_LIBCPP_DEPRECATED'
+  710 | #      define _LIBCPP_DEPRECATED __attribute__((__deprecated__))
+      |                                                 ^
+g++ -c -Wall -pipe -fpic -I./. -I./controller -I./wirings -I./utils -I./matrix -I./statistictools -I./statistictools/measure -I./statistictools/dataanalysation -Iinclude -Iinclude/selforg -std=c++11 -pthread -I/opt/local/include -I/opt/homebrew/include -I/usr/local/include -I/opt/local/include -I/opt/homebrew/include -I/opt/homebrew/Cellar/gsl/2.8/include -DNOCONFIGURATOR -g -O  -o "build/controller/invertnchannelcontroller.o" "controller/invertnchannelcontroller.cpp"
+In file included from controller/invertmotorspace.cpp:20:
+In file included from controller/invertmotorspace.h:22:
+In file included from controller/invertmotorcontroller.h:24:
+In file included from controller/homeokinbase.h:23:
+In file included from controller/abstractcontroller.h:31:
+./utils/inspectable.h:91:34: warning: 'unary_function<Inspectable::ILayer, bool>' is deprecated [-Wdeprecated-declarations]
+   91 |   struct matchName : public std::unary_function<ILayer, bool> {
+      |                                  ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/unary_function.h:23:29: note: 'unary_function<Inspectable::ILayer, bool>' has been explicitly marked deprecated here
+   23 | struct _LIBCPP_TEMPLATE_VIS _LIBCPP_DEPRECATED_IN_CXX11 unary_function {
+      |                             ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:725:41: note: expanded from macro '_LIBCPP_DEPRECATED_IN_CXX11'
+  725 | #    define _LIBCPP_DEPRECATED_IN_CXX11 _LIBCPP_DEPRECATED
+      |                                         ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:710:49: note: expanded from macro '_LIBCPP_DEPRECATED'
+  710 | #      define _LIBCPP_DEPRECATED __attribute__((__deprecated__))
+      |                                                 ^
+2 warnings generated.
+g++ -c -Wall -pipe -fpic -I./. -I./controller -I./wirings -I./utils -I./matrix -I./statistictools -I./statistictools/measure -I./statistictools/dataanalysation -Iinclude -Iinclude/selforg -std=c++11 -pthread -I/opt/local/include -I/opt/homebrew/include -I/usr/local/include -I/opt/local/include -I/opt/homebrew/include -I/opt/homebrew/Cellar/gsl/2.8/include -DNOCONFIGURATOR -g -O  -o "build/controller/layer.o" "controller/layer.cpp"
+2 warnings generated.
+In file included from controller/invertnchannelcontroller.cpp:21:
+In file included from ./utils/controller_misc.h:34:
+./utils/inspectable.h:91:34: warning: 'unary_function<Inspectable::ILayer, bool>' is deprecated [-Wdeprecated-declarations]
+   91 |   struct matchName : public std::unary_function<ILayer, bool> {
+      |                                  ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/unary_function.h:23:29: note: 'unary_function<Inspectable::ILayer, bool>' has been explicitly marked deprecated here
+   23 | struct _LIBCPP_TEMPLATE_VIS _LIBCPP_DEPRECATED_IN_CXX11 unary_function {
+      |                             ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:725:41: note: expanded from macro '_LIBCPP_DEPRECATED_IN_CXX11'
+  725 | #    define _LIBCPP_DEPRECATED_IN_CXX11 _LIBCPP_DEPRECATED
+      |                                         ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:710:49: note: expanded from macro '_LIBCPP_DEPRECATED'
+  710 | #      define _LIBCPP_DEPRECATED __attribute__((__deprecated__))
+      |                                                 ^
+In file included from controller/invertnchannelcontroller.cpp:22:
+In file included from controller/invertnchannelcontroller.h:23:
+In file included from controller/invertcontroller.h:23:
+In file included from controller/abstractcontroller.h:30:
+./utils/configurable.h:122:34: warning: 'unary_function<Configurable *, bool>' is deprecated [-Wdeprecated-declarations]
+  122 |     struct matchId : public std::unary_function<Configurable*, bool>
+      |                                  ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/unary_function.h:23:29: note: 'unary_function<Configurable *, bool>' has been explicitly marked deprecated here
+   23 | struct _LIBCPP_TEMPLATE_VIS _LIBCPP_DEPRECATED_IN_CXX11 unary_function {
+      |                             ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:725:41: note: expanded from macro '_LIBCPP_DEPRECATED_IN_CXX11'
+  725 | #    define _LIBCPP_DEPRECATED_IN_CXX11 _LIBCPP_DEPRECATED
+      |                                         ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:710:49: note: expanded from macro '_LIBCPP_DEPRECATED'
+  710 | #      define _LIBCPP_DEPRECATED __attribute__((__deprecated__))
+      |                                                 ^
+2 warnings generated.
+g++ -c -Wall -pipe -fpic -I./. -I./controller -I./wirings -I./utils -I./matrix -I./statistictools -I./statistictools/measure -I./statistictools/dataanalysation -Iinclude -Iinclude/selforg -std=c++11 -pthread -I/opt/local/include -I/opt/homebrew/include -I/usr/local/include -I/opt/local/include -I/opt/homebrew/include -I/opt/homebrew/Cellar/gsl/2.8/include -DNOCONFIGURATOR -g -O  -o "build/controller/measureadapter.o" "controller/measureadapter.cpp"
+g++ -c -Wall -pipe -fpic -I./. -I./controller -I./wirings -I./utils -I./matrix -I./statistictools -I./statistictools/measure -I./statistictools/dataanalysation -Iinclude -Iinclude/selforg -std=c++11 -pthread -I/opt/local/include -I/opt/homebrew/include -I/usr/local/include -I/opt/local/include -I/opt/homebrew/include -I/opt/homebrew/Cellar/gsl/2.8/include -DNOCONFIGURATOR -g -O  -o "build/controller/modelwithmemoryadapter.o" "controller/modelwithmemoryadapter.cpp"
+In file included from controller/layer.cpp:25:
+In file included from controller/layer.h:29:
+In file included from controller/feedforwardnn.h:27:
+In file included from controller/invertablemodel.h:28:
+In file included from controller/abstractmodel.h:28:
+./utils/configurable.h:122:34: warning: 'unary_function<Configurable *, bool>' is deprecated [-Wdeprecated-declarations]
+  122 |     struct matchId : public std::unary_function<Configurable*, bool>
+      |                                  ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/unary_function.h:23:29: note: 'unary_function<Configurable *, bool>' has been explicitly marked deprecated here
+   23 | struct _LIBCPP_TEMPLATE_VIS _LIBCPP_DEPRECATED_IN_CXX11 unary_function {
+      |                             ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:725:41: note: expanded from macro '_LIBCPP_DEPRECATED_IN_CXX11'
+  725 | #    define _LIBCPP_DEPRECATED_IN_CXX11 _LIBCPP_DEPRECATED
+      |                                         ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:710:49: note: expanded from macro '_LIBCPP_DEPRECATED'
+  710 | #      define _LIBCPP_DEPRECATED __attribute__((__deprecated__))
+      |                                                 ^
+In file included from controller/layer.cpp:25:
+In file included from controller/layer.h:29:
+In file included from controller/feedforwardnn.h:27:
+In file included from controller/invertablemodel.h:28:
+In file included from controller/abstractmodel.h:30:
+./utils/inspectable.h:91:34: warning: 'unary_function<Inspectable::ILayer, bool>' is deprecated [-Wdeprecated-declarations]
+   91 |   struct matchName : public std::unary_function<ILayer, bool> {
+      |                                  ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/unary_function.h:23:29: note: 'unary_function<Inspectable::ILayer, bool>' has been explicitly marked deprecated here
+   23 | struct _LIBCPP_TEMPLATE_VIS _LIBCPP_DEPRECATED_IN_CXX11 unary_function {
+      |                             ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:725:41: note: expanded from macro '_LIBCPP_DEPRECATED_IN_CXX11'
+  725 | #    define _LIBCPP_DEPRECATED_IN_CXX11 _LIBCPP_DEPRECATED
+      |                                         ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:710:49: note: expanded from macro '_LIBCPP_DEPRECATED'
+  710 | #      define _LIBCPP_DEPRECATED __attribute__((__deprecated__))
+      |                                                 ^
+2 warnings generated.
+g++ -c -Wall -pipe -fpic -I./. -I./controller -I./wirings -I./utils -I./matrix -I./statistictools -I./statistictools/measure -I./statistictools/dataanalysation -Iinclude -Iinclude/selforg -std=c++11 -pthread -I/opt/local/include -I/opt/homebrew/include -I/usr/local/include -I/opt/local/include -I/opt/homebrew/include -I/opt/homebrew/Cellar/gsl/2.8/include -DNOCONFIGURATOR -g -O  -o "build/controller/motorbabbler.o" "controller/motorbabbler.cpp"
+2 warnings generated.
+In file included from controller/measureadapter.cpp:24:
+In file included from controller/measureadapter.h:27:
+In file included from controller/abstractcontrolleradapter.h:27:
+In file included from controller/abstractcontroller.h:30:
+./utils/configurable.h:122:34: warning: 'unary_function<Configurable *, bool>' is deprecated [-Wdeprecated-declarations]
+  122 |     struct matchId : public std::unary_function<Configurable*, bool>
+      |                                  ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/unary_function.h:23:29: note: 'unary_function<Configurable *, bool>' has been explicitly marked deprecated here
+   23 | struct _LIBCPP_TEMPLATE_VIS _LIBCPP_DEPRECATED_IN_CXX11 unary_function {
+      |                             ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:725:41: note: expanded from macro '_LIBCPP_DEPRECATED_IN_CXX11'
+  725 | #    define _LIBCPP_DEPRECATED_IN_CXX11 _LIBCPP_DEPRECATED
+      |                                         ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:710:49: note: expanded from macro '_LIBCPP_DEPRECATED'
+  710 | #      define _LIBCPP_DEPRECATED __attribute__((__deprecated__))
+      |                                                 ^
+In file included from controller/measureadapter.cpp:24:
+In file included from controller/measureadapter.h:27:
+In file included from controller/abstractcontrolleradapter.h:27:
+In file included from controller/abstractcontroller.h:31:
+./utils/inspectable.h:91:34: warning: 'unary_function<Inspectable::ILayer, bool>' is deprecated [-Wdeprecated-declarations]
+   91 |   struct matchName : public std::unary_function<ILayer, bool> {
+      |                                  ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/unary_function.h:23:29: note: 'unary_function<Inspectable::ILayer, bool>' has been explicitly marked deprecated here
+   23 | struct _LIBCPP_TEMPLATE_VIS _LIBCPP_DEPRECATED_IN_CXX11 unary_function {
+      |                             ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:725:41: note: expanded from macro '_LIBCPP_DEPRECATED_IN_CXX11'
+  725 | #    define _LIBCPP_DEPRECATED_IN_CXX11 _LIBCPP_DEPRECATED
+      |                                         ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:710:49: note: expanded from macro '_LIBCPP_DEPRECATED'
+  710 | #      define _LIBCPP_DEPRECATED __attribute__((__deprecated__))
+      |                                                 ^
+In file included from controller/modelwithmemoryadapter.cpp:25:
+In file included from controller/modelwithmemoryadapter.h:29:
+In file included from controller/invertablemodel.h:28:
+In file included from controller/abstractmodel.h:28:
+./utils/configurable.h:122:34: warning: 'unary_function<Configurable *, bool>' is deprecated [-Wdeprecated-declarations]
+  122 |     struct matchId : public std::unary_function<Configurable*, bool>
+      |                                  ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/unary_function.h:23:29: note: 'unary_function<Configurable *, bool>' has been explicitly marked deprecated here
+   23 | struct _LIBCPP_TEMPLATE_VIS _LIBCPP_DEPRECATED_IN_CXX11 unary_function {
+      |                             ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:725:41: note: expanded from macro '_LIBCPP_DEPRECATED_IN_CXX11'
+  725 | #    define _LIBCPP_DEPRECATED_IN_CXX11 _LIBCPP_DEPRECATED
+      |                                         ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:710:49: note: expanded from macro '_LIBCPP_DEPRECATED'
+  710 | #      define _LIBCPP_DEPRECATED __attribute__((__deprecated__))
+      |                                                 ^
+In file included from controller/measureadapter.cpp:24:
+In file included from controller/measureadapter.h:29:
+In file included from ./statistictools/statistictools.h:39:
+./statistictools/dataanalysation/templatevalueanalysation.h:184:17: error: use of undeclared identifier '__gnu_cxx'
+  184 |                 __gnu_cxx::__normal_iterator<type*,std::vector<type,std::allocator<type> > > iter;
+      |                 ^
+./statistictools/dataanalysation/templatevalueanalysation.h:184:46: error: 'type' does not refer to a value
+  184 |                 __gnu_cxx::__normal_iterator<type*,std::vector<type,std::allocator<type> > > iter;
+      |                                              ^
+./statistictools/dataanalysation/templatevalueanalysation.h:152:8: note: declared here
+  152 | <class type,                                                                                                                        //data type of the calculation
+      |        ^
+./statistictools/dataanalysation/templatevalueanalysation.h:184:51: error: expected expression
+  184 |                 __gnu_cxx::__normal_iterator<type*,std::vector<type,std::allocator<type> > > iter;
+      |                                                   ^
+In file included from controller/modelwithmemoryadapter.cpp:25:
+In file included from controller/modelwithmemoryadapter.h:29:
+In file included from controller/invertablemodel.h:28:
+In file included from controller/abstractmodel.h:30:
+./utils/inspectable.h:91:34: warning: 'unary_function<Inspectable::ILayer, bool>' is deprecated [-Wdeprecated-declarations]
+   91 |   struct matchName : public std::unary_function<ILayer, bool> {
+      |                                  ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/unary_function.h:23:29: note: 'unary_function<Inspectable::ILayer, bool>' has been explicitly marked deprecated here
+   23 | struct _LIBCPP_TEMPLATE_VIS _LIBCPP_DEPRECATED_IN_CXX11 unary_function {
+      |                             ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:725:41: note: expanded from macro '_LIBCPP_DEPRECATED_IN_CXX11'
+  725 | #    define _LIBCPP_DEPRECATED_IN_CXX11 _LIBCPP_DEPRECATED
+      |                                         ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:710:49: note: expanded from macro '_LIBCPP_DEPRECATED'
+  710 | #      define _LIBCPP_DEPRECATED __attribute__((__deprecated__))
+      |                                                 ^
+./statistictools/dataanalysation/templatevalueanalysation.h:186:21: error: use of undeclared identifier 'iter'
+  186 |                 for(iter = m_vector.begin(); iter != m_vector.end(); iter++) {
+      |                     ^
+./statistictools/dataanalysation/templatevalueanalysation.h:186:46: error: use of undeclared identifier 'iter'
+  186 |                 for(iter = m_vector.begin(); iter != m_vector.end(); iter++) {
+      |                                              ^
+./statistictools/dataanalysation/templatevalueanalysation.h:186:70: error: use of undeclared identifier 'iter'
+  186 |                 for(iter = m_vector.begin(); iter != m_vector.end(); iter++) {
+      |                                                                      ^
+./statistictools/dataanalysation/templatevalueanalysation.h:187:41: error: use of undeclared identifier 'iter'
+  187 |                         avg = add(avg,(*iter));                                                                                                                                //for all elements in the set add it to the average.
+      |                                         ^
+./statistictools/dataanalysation/templatevalueanalysation.h:205:17: error: use of undeclared identifier '__gnu_cxx'
+  205 |                 __gnu_cxx::__normal_iterator<type*,std::vector<type,std::allocator<type> > > iter = m_vector.begin();
+      |                 ^
+./statistictools/dataanalysation/templatevalueanalysation.h:205:46: error: 'type' does not refer to a value
+  205 |                 __gnu_cxx::__normal_iterator<type*,std::vector<type,std::allocator<type> > > iter = m_vector.begin();
+      |                                              ^
+./statistictools/dataanalysation/templatevalueanalysation.h:152:8: note: declared here
+  152 | <class type,                                                                                                                        //data type of the calculation
+      |        ^
+./statistictools/dataanalysation/templatevalueanalysation.h:205:51: error: expected expression
+  205 |                 __gnu_cxx::__normal_iterator<type*,std::vector<type,std::allocator<type> > > iter = m_vector.begin();
+      |                                                   ^
+./statistictools/dataanalysation/templatevalueanalysation.h:207:21: error: use of undeclared identifier 'iter'
+  207 |                 for(iter++; iter != m_vector.end(); iter++) {
+      |                     ^
+./statistictools/dataanalysation/templatevalueanalysation.h:207:29: error: use of undeclared identifier 'iter'
+  207 |                 for(iter++; iter != m_vector.end(); iter++) {
+      |                             ^
+./statistictools/dataanalysation/templatevalueanalysation.h:207:53: error: use of undeclared identifier 'iter'
+  207 |                 for(iter++; iter != m_vector.end(); iter++) {
+      |                                                     ^
+./statistictools/dataanalysation/templatevalueanalysation.h:208:36: error: use of undeclared identifier 'iter'
+  208 |                         if(lower((*iter),min))                //if a element lower than min, so reset the min to the lower value.
+      |                                    ^
+./statistictools/dataanalysation/templatevalueanalysation.h:209:39: error: use of undeclared identifier 'iter'
+  209 |                                 min=(*iter);
+      |                                       ^
+./statistictools/dataanalysation/templatevalueanalysation.h:223:17: error: use of undeclared identifier '__gnu_cxx'
+  223 |                 __gnu_cxx::__normal_iterator<type*,std::vector<type,std::allocator<type> > > iter = m_vector.begin();
+      |                 ^
+./statistictools/dataanalysation/templatevalueanalysation.h:223:46: error: 'type' does not refer to a value
+  223 |                 __gnu_cxx::__normal_iterator<type*,std::vector<type,std::allocator<type> > > iter = m_vector.begin();
+      |                                              ^
+./statistictools/dataanalysation/templatevalueanalysation.h:152:8: note: declared here
+  152 | <class type,                                                                                                                        //data type of the calculation
+      |        ^
+./statistictools/dataanalysation/templatevalueanalysation.h:223:51: error: expected expression
+  223 |                 __gnu_cxx::__normal_iterator<type*,std::vector<type,std::allocator<type> > > iter = m_vector.begin();
+      |                                                   ^
+./statistictools/dataanalysation/templatevalueanalysation.h:225:21: error: use of undeclared identifier 'iter'
+  225 |                 for(iter++; iter != m_vector.end(); iter++) {
+      |                     ^
+fatal error: too many errors emitted, stopping now [-ferror-limit=]
+g++ -c -Wall -pipe -fpic -I./. -I./controller -I./wirings -I./utils -I./matrix -I./statistictools -I./statistictools/measure -I./statistictools/dataanalysation -Iinclude -Iinclude/selforg -std=c++11 -pthread -I/opt/local/include -I/opt/homebrew/include -I/usr/local/include -I/opt/local/include -I/opt/homebrew/include -I/opt/homebrew/Cellar/gsl/2.8/include -DNOCONFIGURATOR -g -O  -o "build/controller/multilayerffnn.o" "controller/multilayerffnn.cpp"
+2 warnings and 20 errors generated.
+make: *** [build/controller/measureadapter.o] Error 1
+make: *** Waiting for unfinished jobs....
+In file included from controller/motorbabbler.cpp:28:
+In file included from controller/motorbabbler.h:28:
+In file included from controller/abstractcontroller.h:30:
+./utils/configurable.h:122:34: warning: 'unary_function<Configurable *, bool>' is deprecated [-Wdeprecated-declarations]
+  122 |     struct matchId : public std::unary_function<Configurable*, bool>
+      |                                  ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/unary_function.h:23:29: note: 'unary_function<Configurable *, bool>' has been explicitly marked deprecated here
+   23 | struct _LIBCPP_TEMPLATE_VIS _LIBCPP_DEPRECATED_IN_CXX11 unary_function {
+      |                             ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:725:41: note: expanded from macro '_LIBCPP_DEPRECATED_IN_CXX11'
+  725 | #    define _LIBCPP_DEPRECATED_IN_CXX11 _LIBCPP_DEPRECATED
+      |                                         ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:710:49: note: expanded from macro '_LIBCPP_DEPRECATED'
+  710 | #      define _LIBCPP_DEPRECATED __attribute__((__deprecated__))
+      |                                                 ^
+In file included from controller/motorbabbler.cpp:28:
+In file included from controller/motorbabbler.h:28:
+In file included from controller/abstractcontroller.h:31:
+./utils/inspectable.h:91:34: warning: 'unary_function<Inspectable::ILayer, bool>' is deprecated [-Wdeprecated-declarations]
+   91 |   struct matchName : public std::unary_function<ILayer, bool> {
+      |                                  ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/unary_function.h:23:29: note: 'unary_function<Inspectable::ILayer, bool>' has been explicitly marked deprecated here
+   23 | struct _LIBCPP_TEMPLATE_VIS _LIBCPP_DEPRECATED_IN_CXX11 unary_function {
+      |                             ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:725:41: note: expanded from macro '_LIBCPP_DEPRECATED_IN_CXX11'
+  725 | #    define _LIBCPP_DEPRECATED_IN_CXX11 _LIBCPP_DEPRECATED
+      |                                         ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:710:49: note: expanded from macro '_LIBCPP_DEPRECATED'
+  710 | #      define _LIBCPP_DEPRECATED __attribute__((__deprecated__))
+      |                                                 ^
+2 warnings generated.
+In file included from controller/multilayerffnn.cpp:25:
+In file included from controller/multilayerffnn.h:29:
+In file included from controller/feedforwardnn.h:27:
+In file included from controller/invertablemodel.h:28:
+In file included from controller/abstractmodel.h:28:
+./utils/configurable.h:122:34: warning: 'unary_function<Configurable *, bool>' is deprecated [-Wdeprecated-declarations]
+  122 |     struct matchId : public std::unary_function<Configurable*, bool>
+      |                                  ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/unary_function.h:23:29: note: 'unary_function<Configurable *, bool>' has been explicitly marked deprecated here
+   23 | struct _LIBCPP_TEMPLATE_VIS _LIBCPP_DEPRECATED_IN_CXX11 unary_function {
+      |                             ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:725:41: note: expanded from macro '_LIBCPP_DEPRECATED_IN_CXX11'
+  725 | #    define _LIBCPP_DEPRECATED_IN_CXX11 _LIBCPP_DEPRECATED
+      |                                         ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:710:49: note: expanded from macro '_LIBCPP_DEPRECATED'
+  710 | #      define _LIBCPP_DEPRECATED __attribute__((__deprecated__))
+      |                                                 ^
+In file included from controller/multilayerffnn.cpp:25:
+In file included from controller/multilayerffnn.h:29:
+In file included from controller/feedforwardnn.h:27:
+In file included from controller/invertablemodel.h:28:
+In file included from controller/abstractmodel.h:30:
+./utils/inspectable.h:91:34: warning: 'unary_function<Inspectable::ILayer, bool>' is deprecated [-Wdeprecated-declarations]
+   91 |   struct matchName : public std::unary_function<ILayer, bool> {
+      |                                  ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/unary_function.h:23:29: note: 'unary_function<Inspectable::ILayer, bool>' has been explicitly marked deprecated here
+   23 | struct _LIBCPP_TEMPLATE_VIS _LIBCPP_DEPRECATED_IN_CXX11 unary_function {
+      |                             ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:725:41: note: expanded from macro '_LIBCPP_DEPRECATED_IN_CXX11'
+  725 | #    define _LIBCPP_DEPRECATED_IN_CXX11 _LIBCPP_DEPRECATED
+      |                                         ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__config:710:49: note: expanded from macro '_LIBCPP_DEPRECATED'
+  710 | #      define _LIBCPP_DEPRECATED __attribute__((__deprecated__))
+      |                                                 ^
+2 warnings generated.
+2 warnings generated.

@@ -1,0 +1,8 @@
+Makefile.depend
+*.a
+*.so
+build_opt
+build
+build_dbg
+TAGS
+selforg-config

@@ -1,0 +1,538 @@
+cd src/ && ( test -e Makefile || /opt/homebrew/opt/qt@5/bin/qmake -o Makefile /Users/jerry/lpzrobots_mac/guilogger/src/src.pro ) && /Applications/Xcode-beta.app/Contents/Developer/usr/bin/make -f Makefile 
+Project WARNING: Qt has only been tested with version 13 of the platform SDK, you're using 26.
+Project WARNING: This is an unsupported configuration. You may experience build issues, and by using
+Project WARNING: the 26.0 SDK you are opting in to new features that Qt has not been prepared for.
+Project WARNING: Please downgrade the SDK you use to build your app to version 13, or configure
+Project WARNING: with CONFIG+=sdk_no_version_check when running qmake to silence this warning.
+/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ -c -pipe -stdlib=libc++ -g -std=gnu++11  -arch arm64 -isysroot /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk -mmacosx-version-min=10.13 -Wall -Wextra -fPIC -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I. -I/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtWidgets.framework/Headers -I/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtGui.framework/Headers -I/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers -I. -I/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/System/Library/Frameworks/OpenGL.framework/Headers -I/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/System/Library/Frameworks/AGL.framework/Headers/ -I/opt/homebrew/Cellar/qt@5/5.15.16_2/mkspecs/macx-clang -F/opt/homebrew/Cellar/qt@5/5.15.16_2/lib -o guilogger.o guilogger.cpp
+/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ -c -pipe -stdlib=libc++ -g -std=gnu++11  -arch arm64 -isysroot /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk -mmacosx-version-min=10.13 -Wall -Wextra -fPIC -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I. -I/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtWidgets.framework/Headers -I/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtGui.framework/Headers -I/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers -I. -I/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/System/Library/Frameworks/OpenGL.framework/Headers -I/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/System/Library/Frameworks/AGL.framework/Headers/ -I/opt/homebrew/Cellar/qt@5/5.15.16_2/mkspecs/macx-clang -F/opt/homebrew/Cellar/qt@5/5.15.16_2/lib -o main.o main.cpp
+/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ -c -pipe -stdlib=libc++ -g -std=gnu++11  -arch arm64 -isysroot /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk -mmacosx-version-min=10.13 -Wall -Wextra -fPIC -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I. -I/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtWidgets.framework/Headers -I/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtGui.framework/Headers -I/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers -I. -I/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/System/Library/Frameworks/OpenGL.framework/Headers -I/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/System/Library/Frameworks/AGL.framework/Headers/ -I/opt/homebrew/Cellar/qt@5/5.15.16_2/mkspecs/macx-clang -F/opt/homebrew/Cellar/qt@5/5.15.16_2/lib -o gnuplot.o gnuplot.cpp
+/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ -c -pipe -stdlib=libc++ -g -std=gnu++11  -arch arm64 -isysroot /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk -mmacosx-version-min=10.13 -Wall -Wextra -fPIC -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I. -I/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtWidgets.framework/Headers -I/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtGui.framework/Headers -I/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers -I. -I/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/System/Library/Frameworks/OpenGL.framework/Headers -I/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/System/Library/Frameworks/AGL.framework/Headers/ -I/opt/homebrew/Cellar/qt@5/5.15.16_2/mkspecs/macx-clang -F/opt/homebrew/Cellar/qt@5/5.15.16_2/lib -o filelogger.o filelogger.cpp
+In file included from gnuplot.cpp:2:
+In file included from ./gnuplot.h:12:
+In file included from ./plotinfo.h:36:
+./channeldata.h:66:9: warning: 'QLinkedList<int>' is deprecated: Use std::list instead [-Wdeprecated-declarations]
+   66 | typedef QLinkedList<int> IndexList;
+      |         ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qlinkedlist.h:92:7: note: 'QLinkedList<int>' has been explicitly marked deprecated here
+   92 | class QT_DEPRECATED_VERSION_X_5_15("Use std::list instead") QLinkedList
+      |       ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qglobal.h:376:45: note: expanded from macro 'QT_DEPRECATED_VERSION_X_5_15'
+  376 | # define QT_DEPRECATED_VERSION_X_5_15(text) QT_DEPRECATED_X(text)
+      |                                             ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qglobal.h:294:33: note: expanded from macro 'QT_DEPRECATED_X'
+  294 | #  define QT_DEPRECATED_X(text) Q_DECL_DEPRECATED_X(text)
+      |                                 ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qcompilerdetection.h:689:55: note: expanded from macro 'Q_DECL_DEPRECATED_X'
+  689 | #    define Q_DECL_DEPRECATED_X(text) __attribute__ ((__deprecated__(text)))
+      |                                                       ^
+In file included from gnuplot.cpp:2:
+In file included from ./gnuplot.h:12:
+In file included from ./plotinfo.h:36:
+./channeldata.h:106:29: warning: 'IndexList' is deprecated: Use std::list instead [-Wdeprecated-declarations]
+  106 |   ChannelVals getData(const IndexList& channels, int i) const;
+      |                             ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qlinkedlist.h:92:7: note: 'QLinkedList<int>' has been explicitly marked deprecated here
+   92 | class QT_DEPRECATED_VERSION_X_5_15("Use std::list instead") QLinkedList
+      |       ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qglobal.h:376:45: note: expanded from macro 'QT_DEPRECATED_VERSION_X_5_15'
+  376 | # define QT_DEPRECATED_VERSION_X_5_15(text) QT_DEPRECATED_X(text)
+      |                                             ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qglobal.h:294:33: note: expanded from macro 'QT_DEPRECATED_X'
+  294 | #  define QT_DEPRECATED_X(text) Q_DECL_DEPRECATED_X(text)
+      |                                 ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qcompilerdetection.h:689:55: note: expanded from macro 'Q_DECL_DEPRECATED_X'
+  689 | #    define Q_DECL_DEPRECATED_X(text) __attribute__ ((__deprecated__(text)))
+      |                                                       ^
+In file included from gnuplot.cpp:2:
+In file included from ./gnuplot.h:12:
+In file included from ./plotinfo.h:36:
+./channeldata.h:114:41: warning: 'IndexList' is deprecated: Use std::list instead [-Wdeprecated-declarations]
+  114 |   QVector<ChannelVals> getHistory(const IndexList& channels, int history = 0) const;
+      |                                         ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qlinkedlist.h:92:7: note: 'QLinkedList<int>' has been explicitly marked deprecated here
+   92 | class QT_DEPRECATED_VERSION_X_5_15("Use std::list instead") QLinkedList
+      |       ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qglobal.h:376:45: note: expanded from macro 'QT_DEPRECATED_VERSION_X_5_15'
+  376 | # define QT_DEPRECATED_VERSION_X_5_15(text) QT_DEPRECATED_X(text)
+      |                                             ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qglobal.h:294:33: note: expanded from macro 'QT_DEPRECATED_X'
+  294 | #  define QT_DEPRECATED_X(text) Q_DECL_DEPRECATED_X(text)
+      |                                 ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qcompilerdetection.h:689:55: note: expanded from macro 'Q_DECL_DEPRECATED_X'
+  689 | #    define Q_DECL_DEPRECATED_X(text) __attribute__ ((__deprecated__(text)))
+      |                                                       ^
+In file included from gnuplot.cpp:2:
+In file included from ./gnuplot.h:12:
+./plotinfo.h:92:9: warning: 'QLinkedList<int>' is deprecated: Use std::list instead [-Wdeprecated-declarations]
+   92 |   const QLinkedList<int> getVisibleChannels() const { return visiblechannels; }
+      |         ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qlinkedlist.h:92:7: note: 'QLinkedList<int>' has been explicitly marked deprecated here
+   92 | class QT_DEPRECATED_VERSION_X_5_15("Use std::list instead") QLinkedList
+      |       ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qglobal.h:376:45: note: expanded from macro 'QT_DEPRECATED_VERSION_X_5_15'
+  376 | # define QT_DEPRECATED_VERSION_X_5_15(text) QT_DEPRECATED_X(text)
+      |                                             ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qglobal.h:294:33: note: expanded from macro 'QT_DEPRECATED_X'
+  294 | #  define QT_DEPRECATED_X(text) Q_DECL_DEPRECATED_X(text)
+      |                                 ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qcompilerdetection.h:689:55: note: expanded from macro 'Q_DECL_DEPRECATED_X'
+  689 | #    define Q_DECL_DEPRECATED_X(text) __attribute__ ((__deprecated__(text)))
+      |                                                       ^
+In file included from gnuplot.cpp:2:
+In file included from ./gnuplot.h:12:
+./plotinfo.h:107:3: warning: 'QLinkedList<int>' is deprecated: Use std::list instead [-Wdeprecated-declarations]
+  107 |   QLinkedList<int> visiblechannels; // TODO: convert to a map
+      |   ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qlinkedlist.h:92:7: note: 'QLinkedList<int>' has been explicitly marked deprecated here
+   92 | class QT_DEPRECATED_VERSION_X_5_15("Use std::list instead") QLinkedList
+      |       ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qglobal.h:376:45: note: expanded from macro 'QT_DEPRECATED_VERSION_X_5_15'
+  376 | # define QT_DEPRECATED_VERSION_X_5_15(text) QT_DEPRECATED_X(text)
+      |                                             ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qglobal.h:294:33: note: expanded from macro 'QT_DEPRECATED_X'
+  294 | #  define QT_DEPRECATED_X(text) Q_DECL_DEPRECATED_X(text)
+      |                                 ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qcompilerdetection.h:689:55: note: expanded from macro 'Q_DECL_DEPRECATED_X'
+  689 | #    define Q_DECL_DEPRECATED_X(text) __attribute__ ((__deprecated__(text)))
+      |                                                       ^
+gnuplot.cpp:28:83: error: no member named 'latin1' in 'QString'
+   28 |     sprintf(cmd, "%s -geometry %ix%i -noraise >/dev/null 2>/dev/null", gnuplotcmd.latin1(), w, h);
+      |                                                                        ~~~~~~~~~~ ^
+gnuplot.cpp:30:89: error: no member named 'latin1' in 'QString'
+   30 |     sprintf(cmd, "%s -geometry %ix%i+%i+%i -noraise >/dev/null 2>/dev/null", gnuplotcmd.latin1(), w, h, x, y);
+      |                                                                              ~~~~~~~~~~ ^
+gnuplot.cpp:51:27: error: no member named 'latin1' in 'QString'
+   51 |   fprintf(pipe,"%s\n",cmd.latin1());
+      |                       ~~~ ^
+gnuplot.cpp:67:9: warning: 'QLinkedList<int>' is deprecated: Use std::list instead [-Wdeprecated-declarations]
+   67 |   const QLinkedList<int>& vc = plotInfo->getVisibleChannels();
+      |         ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qlinkedlist.h:92:7: note: 'QLinkedList<int>' has been explicitly marked deprecated here
+   92 | class QT_DEPRECATED_VERSION_X_5_15("Use std::list instead") QLinkedList
+      |       ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qglobal.h:376:45: note: expanded from macro 'QT_DEPRECATED_VERSION_X_5_15'
+  376 | # define QT_DEPRECATED_VERSION_X_5_15(text) QT_DEPRECATED_X(text)
+      |                                             ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qglobal.h:294:33: note: expanded from macro 'QT_DEPRECATED_X'
+  294 | #  define QT_DEPRECATED_X(text) Q_DECL_DEPRECATED_X(text)
+      |                                 ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qcompilerdetection.h:689:55: note: expanded from macro 'Q_DECL_DEPRECATED_X'
+  689 | #    define Q_DECL_DEPRECATED_X(text) __attribute__ ((__deprecated__(text)))
+      |                                                       ^
+gnuplot.cpp:77:12: warning: 'QLinkedList<int>' is deprecated: Use std::list instead [-Wdeprecated-declarations]
+   77 |   FOREACHC(QLinkedList<int>, vc, i){    
+      |            ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qlinkedlist.h:92:7: note: 'QLinkedList<int>' has been explicitly marked deprecated here
+   92 | class QT_DEPRECATED_VERSION_X_5_15("Use std::list instead") QLinkedList
+      |       ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qglobal.h:376:45: note: expanded from macro 'QT_DEPRECATED_VERSION_X_5_15'
+  376 | # define QT_DEPRECATED_VERSION_X_5_15(text) QT_DEPRECATED_X(text)
+      |                                             ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qglobal.h:294:33: note: expanded from macro 'QT_DEPRECATED_X'
+  294 | #  define QT_DEPRECATED_X(text) Q_DECL_DEPRECATED_X(text)
+      |                                 ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qcompilerdetection.h:689:55: note: expanded from macro 'Q_DECL_DEPRECATED_X'
+  689 | #    define Q_DECL_DEPRECATED_X(text) __attribute__ ((__deprecated__(text)))
+      |                                                       ^
+gnuplot.cpp:94:8: warning: logical not is only applied to the left hand side of this comparison [-Wlogical-not-parentheses]
+   94 |     if(!plotInfo->getChannelInfos()[*i].style != PS_DEFAULT) 
+      |        ^                                      ~~
+gnuplot.cpp:94:8: note: add parentheses after the '!' to evaluate the comparison first
+   94 |     if(!plotInfo->getChannelInfos()[*i].style != PS_DEFAULT) 
+      |        ^                                                   
+      |         (                                                  )
+gnuplot.cpp:94:8: note: add parentheses around left hand side expression to silence this warning
+   94 |     if(!plotInfo->getChannelInfos()[*i].style != PS_DEFAULT) 
+      |        ^
+      |        (                                     )
+gnuplot.cpp:110:9: warning: 'QLinkedList<int>' is deprecated: Use std::list instead [-Wdeprecated-declarations]
+  110 |   const QLinkedList<int>& vc = plotInfo->getVisibleChannels();
+      |         ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qlinkedlist.h:92:7: note: 'QLinkedList<int>' has been explicitly marked deprecated here
+   92 | class QT_DEPRECATED_VERSION_X_5_15("Use std::list instead") QLinkedList
+      |       ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qglobal.h:376:45: note: expanded from macro 'QT_DEPRECATED_VERSION_X_5_15'
+  376 | # define QT_DEPRECATED_VERSION_X_5_15(text) QT_DEPRECATED_X(text)
+      |                                             ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qglobal.h:294:33: note: expanded from macro 'QT_DEPRECATED_X'
+  294 | #  define QT_DEPRECATED_X(text) Q_DECL_DEPRECATED_X(text)
+      |                                 ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qcompilerdetection.h:689:55: note: expanded from macro 'Q_DECL_DEPRECATED_X'
+  689 | #    define Q_DECL_DEPRECATED_X(text) __attribute__ ((__deprecated__(text)))
+      |                                                       ^
+gnuplot.cpp:113:35: error: no member named 'latin1' in 'QString'
+  113 |   fprintf(pipe, "%s\n", plotCmd().latin1());    
+      |                         ~~~~~~~~~ ^
+gnuplot.cpp:116:5: warning: 'QLinkedList<int>' is deprecated: Use std::list instead [-Wdeprecated-declarations]
+  116 |     QLinkedList<int> visibles(vc);
+      |     ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qlinkedlist.h:92:7: note: 'QLinkedList<int>' has been explicitly marked deprecated here
+   92 | class QT_DEPRECATED_VERSION_X_5_15("Use std::list instead") QLinkedList
+      |       ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qglobal.h:376:45: note: expanded from macro 'QT_DEPRECATED_VERSION_X_5_15'
+  376 | # define QT_DEPRECATED_VERSION_X_5_15(text) QT_DEPRECATED_X(text)
+      |                                             ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qglobal.h:294:33: note: expanded from macro 'QT_DEPRECATED_X'
+  294 | #  define QT_DEPRECATED_X(text) Q_DECL_DEPRECATED_X(text)
+      |                                 ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qcompilerdetection.h:689:55: note: expanded from macro 'Q_DECL_DEPRECATED_X'
+  689 | #    define Q_DECL_DEPRECATED_X(text) __attribute__ ((__deprecated__(text)))
+      |                                                       ^
+filelogger.cpp:31:10: error: use of undeclared identifier 'FALSE'
+   31 |     log= FALSE;
+      |          ^
+filelogger.cpp:49:31: error: no member named 'latin1' in 'QString'
+   49 |     instream = fopen(filename.latin1(),"w+");
+      |                      ~~~~~~~~ ^
+filelogger.cpp:50:42: error: no member named 'latin1' in 'QString'
+   50 |     printf("Open Logfile: %s\n",filename.latin1());
+      |                                 ~~~~~~~~ ^
+filelogger.cpp:63:41: error: no member named 'latin1' in 'QString'
+   63 |       fprintf(instream, "%s", datablock.latin1());
+      |                               ~~~~~~~~~ ^
+10 warnings and 4 errors generated.
+make[1]: *** [gnuplot.o] Error 1
+make[1]: *** Waiting for unfinished jobs....
+4 errors generated.
+make[1]: *** [filelogger.o] Error 1
+In file included from main.cpp:31:
+In file included from ./guilogger.h:60:
+In file included from ./gnuplot.h:12:
+In file included from ./plotinfo.h:36:
+./channeldata.h:66:9: warning: 'QLinkedList<int>' is deprecated: Use std::list instead [-Wdeprecated-declarations]
+   66 | typedef QLinkedList<int> IndexList;
+      |         ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qlinkedlist.h:92:7: note: 'QLinkedList<int>' has been explicitly marked deprecated here
+   92 | class QT_DEPRECATED_VERSION_X_5_15("Use std::list instead") QLinkedList
+      |       ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qglobal.h:376:45: note: expanded from macro 'QT_DEPRECATED_VERSION_X_5_15'
+  376 | # define QT_DEPRECATED_VERSION_X_5_15(text) QT_DEPRECATED_X(text)
+      |                                             ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qglobal.h:294:33: note: expanded from macro 'QT_DEPRECATED_X'
+  294 | #  define QT_DEPRECATED_X(text) Q_DECL_DEPRECATED_X(text)
+      |                                 ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qcompilerdetection.h:689:55: note: expanded from macro 'Q_DECL_DEPRECATED_X'
+  689 | #    define Q_DECL_DEPRECATED_X(text) __attribute__ ((__deprecated__(text)))
+      |                                                       ^
+In file included from main.cpp:31:
+In file included from ./guilogger.h:60:
+In file included from ./gnuplot.h:12:
+In file included from ./plotinfo.h:36:
+./channeldata.h:106:29: warning: 'IndexList' is deprecated: Use std::list instead [-Wdeprecated-declarations]
+  106 |   ChannelVals getData(const IndexList& channels, int i) const;
+      |                             ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qlinkedlist.h:92:7: note: 'QLinkedList<int>' has been explicitly marked deprecated here
+   92 | class QT_DEPRECATED_VERSION_X_5_15("Use std::list instead") QLinkedList
+      |       ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qglobal.h:376:45: note: expanded from macro 'QT_DEPRECATED_VERSION_X_5_15'
+  376 | # define QT_DEPRECATED_VERSION_X_5_15(text) QT_DEPRECATED_X(text)
+      |                                             ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qglobal.h:294:33: note: expanded from macro 'QT_DEPRECATED_X'
+  294 | #  define QT_DEPRECATED_X(text) Q_DECL_DEPRECATED_X(text)
+      |                                 ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qcompilerdetection.h:689:55: note: expanded from macro 'Q_DECL_DEPRECATED_X'
+  689 | #    define Q_DECL_DEPRECATED_X(text) __attribute__ ((__deprecated__(text)))
+      |                                                       ^
+In file included from main.cpp:31:
+In file included from ./guilogger.h:60:
+In file included from ./gnuplot.h:12:
+In file included from ./plotinfo.h:36:
+./channeldata.h:114:41: warning: 'IndexList' is deprecated: Use std::list instead [-Wdeprecated-declarations]
+  114 |   QVector<ChannelVals> getHistory(const IndexList& channels, int history = 0) const;
+      |                                         ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qlinkedlist.h:92:7: note: 'QLinkedList<int>' has been explicitly marked deprecated here
+   92 | class QT_DEPRECATED_VERSION_X_5_15("Use std::list instead") QLinkedList
+      |       ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qglobal.h:376:45: note: expanded from macro 'QT_DEPRECATED_VERSION_X_5_15'
+  376 | # define QT_DEPRECATED_VERSION_X_5_15(text) QT_DEPRECATED_X(text)
+      |                                             ^In file included from guilogger.cpp:25:
+In file included from ./guilogger.h:60:
+In file included from ./gnuplot.h:12:
+In file included from ./plotinfo.h:36:
+./channeldata.h:66:9: warning: 'QLinkedList<int>' is deprecated: Use std::list instead [-Wdeprecated-declarations]
+   66 | typedef QLinkedList<int> IndexList;
+      |         ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qlinkedlist.h:92:7: note: 'QLinkedList<int>' has been explicitly marked deprecated here
+   92 | class QT_DEPRECATED_VERSION_X_5_15("Use std::list instead") QLinkedList
+      |       ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qglobal.h:376:45: note: expanded from macro 'QT_DEPRECATED_VERSION_X_5_15'
+  376 | # define QT_DEPRECATED_VERSION_X_5_15(text) QT_DEPRECATED_X(text)
+      |                                             ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qglobal.h:294:33: note: expanded from macro 'QT_DEPRECATED_X'
+  294 | #  define QT_DEPRECATED_X(text) Q_DECL_DEPRECATED_X(text)
+      |                                 ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qcompilerdetection.h:689:55: note: expanded from macro 'Q_DECL_DEPRECATED_X'
+  689 | #    define Q_DECL_DEPRECATED_X(text) __attribute__ ((__deprecated__(text)))
+      |                                                       ^
+In file included from guilogger.cpp:25:
+In file included from ./guilogger.h:60:
+In file included from ./gnuplot.h:12:
+In file included from ./plotinfo.h:36:
+./channeldata.h:106:29: warning: 'IndexList' is deprecated: Use std::list instead [-Wdeprecated-declarations]
+  106 |   ChannelVals getData(const IndexList& channels, int i) const;
+      |                             ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qlinkedlist.h:92:7: note: 'QLinkedList<int>' has been explicitly marked deprecated here
+   92 | class QT_DEPRECATED_VERSION_X_5_15("Use std::list instead") QLinkedList
+      |       ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qglobal.h:376:45: note: expanded from macro 'QT_DEPRECATED_VERSION_X_5_15'
+  376 | # define QT_DEPRECATED_VERSION_X_5_15(text) QT_DEPRECATED_X(text)
+      |                                             ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qglobal.h:294:33: note: expanded from macro 'QT_DEPRECATED_X'
+  294 | #  define QT_DEPRECATED_X(text) Q_DECL_DEPRECATED_X(text)
+      |                                 ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qcompilerdetection.h:689:55: note: expanded from macro 'Q_DECL_DEPRECATED_X'
+  689 | #    define Q_DECL_DEPRECATED_X(text) __attribute__ ((__deprecated__(text)))
+      |                                                       ^
+In file included from guilogger.cpp:25:
+In file included from ./guilogger.h:60:
+In file included from ./gnuplot.h:12:
+In file included from ./plotinfo.h:36:
+./channeldata.h:114:41: warning: 'IndexList' is deprecated: Use std::list instead [-Wdeprecated-declarations]
+  114 |   QVector<ChannelVals> getHistory(const IndexList& channels, int history = 0) const;
+      |                                         ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qlinkedlist.h:92:7: note: 'QLinkedList<int>' has been explicitly marked deprecated here
+   92 | class QT_DEPRECATED_VERSION_X_5_15("Use std::list instead") QLinkedList
+      |       ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qglobal.h:376:45: note: expanded from macro 'QT_DEPRECATED_VERSION_X_5_15'
+  376 | # define QT_DEPRECATED_VERSION_X_5_15(text) QT_DEPRECATED_X(text)
+      |                                             ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qglobal.h:294:33: note: expanded from macro 'QT_DEPRECATED_X'
+  294 | #  define QT_DEPRECATED_X(text) Q_DECL_DEPRECATED_X(text)
+      |                                 ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qcompilerdetection.h:689:55: note: expanded from macro 'Q_DECL_DEPRECATED_X'
+  689 | #    define Q_DECL_DEPRECATED_X(text) __attribute__ ((__deprecated__(text)))
+      |                                                       ^
+In file included from guilogger.cpp:25:
+In file included from ./guilogger.h:60:
+In file included from ./gnuplot.h:12:
+./plotinfo.h:92:9: warning: 'QLinkedList<int>' is deprecated: Use std::list instead [-Wdeprecated-declarations]
+   92 |   const QLinkedList<int> getVisibleChannels() const { return visiblechannels; }
+      |         ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qlinkedlist.h:92:7: note: 'QLinkedList<int>' has been explicitly marked deprecated here
+   92 | class QT_DEPRECATED_VERSION_X_5_15("Use std::list instead") QLinkedList
+      |       ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qglobal.h:376:45: note: expanded from macro 'QT_DEPRECATED_VERSION_X_5_15'
+  376 | # define QT_DEPRECATED_VERSION_X_5_15(text) QT_DEPRECATED_X(text)
+      |                                             ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qglobal.h:294:33: note: expanded from macro 'QT_DEPRECATED_X'
+  294 | #  define QT_DEPRECATED_X(text) Q_DECL_DEPRECATED_X(text)
+      |                                 ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qcompilerdetection.h:689:55: note: expanded from macro 'Q_DECL_DEPRECATED_X'
+  689 | #    define Q_DECL_DEPRECATED_X(text) __attribute__ ((__deprecated__(text)))
+      |                                                       ^
+In file included from guilogger.cpp:25:
+In file included from ./guilogger.h:60:
+In file included from ./gnuplot.h:12:
+./plotinfo.h:107:3: warning: 'QLinkedList<int>' is deprecated: Use std::list instead [-Wdeprecated-declarations]
+  107 |   QLinkedList<int> visiblechannels; // TODO: convert to a map
+      |   ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qlinkedlist.h:92:7: note: 'QLinkedList<int>' has been explicitly marked deprecated here
+   92 | class QT_DEPRECATED_VERSION_X_5_15("Use std::list instead") QLinkedList
+      |       ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qglobal.h:376:45: note: expanded from macro 'QT_DEPRECATED_VERSION_X_5_15'
+  376 | # define QT_DEPRECATED_VERSION_X_5_15(text) QT_DEPRECATED_X(text)
+      |                                             ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qglobal.h:294:33: note: expanded from macro 'QT_DEPRECATED_X'
+  294 | #  define QT_DEPRECATED_X(text) Q_DECL_DEPRECATED_X(text)
+      |                                 ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qcompilerdetection.h:689:55: note: expanded from macro 'Q_DECL_DEPRECATED_X'
+  689 | #    define Q_DECL_DEPRECATED_X(text) __attribute__ ((__deprecated__(text)))
+      |                                                       ^
+
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qglobal.h:294:33: note: expanded from macro 'QT_DEPRECATED_X'
+  294 | #  define QT_DEPRECATED_X(text) Q_DECL_DEPRECATED_X(text)
+      |                                 ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qcompilerdetection.h:689:55: note: expanded from macro 'Q_DECL_DEPRECATED_X'
+  689 | #    define Q_DECL_DEPRECATED_X(text) __attribute__ ((__deprecated__(text)))
+      |                                                       ^
+In file included from guilogger.cpp:25:
+In file included from ./guilogger.h:63:
+./commlineparser.h:53:12: error: use of undeclared identifier 'FALSE'
+   53 |     logg = FALSE;
+      |            ^
+./commlineparser.h:54:12: error: use of undeclared identifier 'FALSE'
+   54 |     help = FALSE;
+      |            ^
+./commlineparser.h:56:15: error: use of undeclared identifier 'FALSE'
+   56 |     mpparse = FALSE;
+      |               ^
+./commlineparser.h:100:15: error: use of undeclared identifier 'TRUE'
+  100 |     mpparse = TRUE;
+      |               ^
+In file included from guilogger.cpp:25:
+./guilogger.h:116:3: warning: 'QLinkedList<QString>' is deprecated: Use std::list instead [-Wdeprecated-declarations]
+  116 |   QLinkedList<QString> inputbuffer;
+      |   ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qlinkedlist.h:92:7: note: 'QLinkedList<QString>' has been explicitly marked deprecated here
+   92 | class QT_DEPRECATED_VERSION_X_5_15("Use std::list instead") QLinkedList
+      |       ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qglobal.h:376:45: note: expanded from macro 'QT_DEPRECATED_VERSION_X_5_15'
+  376 | # define QT_DEPRECATED_VERSION_X_5_15(text) QT_DEPRECATED_X(text)
+      |                                             ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qglobal.h:294:33: note: expanded from macro 'QT_DEPRECATED_X'
+  294 | #  define QT_DEPRECATED_X(text) Q_DECL_DEPRECATED_X(text)
+      |                                 ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qcompilerdetection.h:689:55: note: expanded from macro 'Q_DECL_DEPRECATED_X'
+  689 | #    define Q_DECL_DEPRECATED_X(text) __attribute__ ((__deprecated__(text)))
+      |                                                       ^
+In file included from main.cpp:31:
+In file included from ./guilogger.h:60:
+In file included from ./gnuplot.h:12:
+./plotinfo.h:92:9: warning: 'QLinkedList<int>' is deprecated: Use std::list instead [-Wdeprecated-declarations]
+   92 |   const QLinkedList<int> getVisibleChannels() const { return visiblechannels; }
+      |         ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qlinkedlist.h:92:7: note: 'QLinkedList<int>' has been explicitly marked deprecated here
+   92 | class QT_DEPRECATED_VERSION_X_5_15("Use std::list instead") QLinkedList
+      |       ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qglobal.h:376:45: note: expanded from macro 'QT_DEPRECATED_VERSION_X_5_15'
+  376 | # define QT_DEPRECATED_VERSION_X_5_15(text) QT_DEPRECATED_X(text)
+      |                                             ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qglobal.h:294:33: note: expanded from macro 'QT_DEPRECATED_X'
+  294 | #  define QT_DEPRECATED_X(text) Q_DECL_DEPRECATED_X(text)
+      |                                 ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qcompilerdetection.h:689:55: note: expanded from macro 'Q_DECL_DEPRECATED_X'
+  689 | #    define Q_DECL_DEPRECATED_X(text) __attribute__ ((__deprecated__(text)))
+      |                                                       ^
+In file included from main.cpp:31:
+In file included from ./guilogger.h:60:
+In file included from ./gnuplot.h:12:
+./plotinfo.h:107:3: warning: 'QLinkedList<int>' is deprecated: Use std::list instead [-Wdeprecated-declarations]
+  107 |   QLinkedList<int> visiblechannels; // TODO: convert to a map
+      |   ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qlinkedlist.h:92:7: note: 'QLinkedList<int>' has been explicitly marked deprecated here
+   92 | class QT_DEPRECATED_VERSION_X_5_15("Use std::list instead") QLinkedList
+      |       ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qglobal.h:376:45: note: expanded from macro 'QT_DEPRECATED_VERSION_X_5_15'
+  376 | # define QT_DEPRECATED_VERSION_X_5_15(text) QT_DEPRECATED_X(text)
+      |                                             ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qglobal.h:294:33: note: expanded from macro 'QT_DEPRECATED_X'
+  294 | #  define QT_DEPRECATED_X(text) Q_DECL_DEPRECATED_X(text)
+      |                                 ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qcompilerdetection.h:689:55: note: expanded from macro 'Q_DECL_DEPRECATED_X'
+  689 | #    define Q_DECL_DEPRECATED_X(text) __attribute__ ((__deprecated__(text)))
+      |                                                       ^
+In file included from main.cpp:31:
+In file included from ./guilogger.h:63:
+./commlineparser.h:53:12: error: use of undeclared identifier 'FALSE'
+   53 |     logg = FALSE;
+      |            ^
+./commlineparser.h:54:12: error: use of undeclared identifier 'FALSE'
+   54 |     help = FALSE;
+      |            ^
+./commlineparser.h:56:15: error: use of undeclared identifier 'FALSE'
+   56 |     mpparse = FALSE;
+      |               ^
+./commlineparser.h:100:15: error: use of undeclared identifier 'TRUE'
+  100 |     mpparse = TRUE;
+      |               ^
+In file included from main.cpp:31:
+./guilogger.h:116:3: warning: 'QLinkedList<QString>' is deprecated: Use std::list instead [-Wdeprecated-declarations]
+  116 |   QLinkedList<QString> inputbuffer;
+      |   ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qlinkedlist.h:92:7: note: 'QLinkedList<QString>' has been explicitly marked deprecated here
+   92 | class QT_DEPRECATED_VERSION_X_5_15("Use std::list instead") QLinkedList
+      |       ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qglobal.h:376:45: note: expanded from macro 'QT_DEPRECATED_VERSION_X_5_15'
+  376 | # define QT_DEPRECATED_VERSION_X_5_15(text) QT_DEPRECATED_X(text)
+      |                                             ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qglobal.h:294:33: note: expanded from macro 'QT_DEPRECATED_X'
+  294 | #  define QT_DEPRECATED_X(text) Q_DECL_DEPRECATED_X(text)
+      |                                 ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qcompilerdetection.h:689:55: note: expanded from macro 'Q_DECL_DEPRECATED_X'
+  689 | #    define Q_DECL_DEPRECATED_X(text) __attribute__ ((__deprecated__(text)))
+      |                                                       ^
+In file included from main.cpp:33:
+./qserialreader.h:45:54: error: no member named 'latin1' in 'QString'
+   45 |     void setComPort(QString port){ this->port = port.latin1(); };   /// set com port
+      |                                                 ~~~~ ^
+main.cpp:96:33: warning: 'screenGeometry' is deprecated: Use QGuiApplication::screens() [-Wdeprecated-declarations]
+   96 |       screenRect = a.desktop()->screenGeometry();
+      |                                 ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtWidgets.framework/Headers/qdesktopwidget.h:79:5: note: 'screenGeometry' has been explicitly marked deprecated here
+   79 |     QT_DEPRECATED_X("Use QGuiApplication::screens()") const QRect screenGeometry(int screen = -1) const;
+      |     ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qglobal.h:294:33: note: expanded from macro 'QT_DEPRECATED_X'
+  294 | #  define QT_DEPRECATED_X(text) Q_DECL_DEPRECATED_X(text)
+      |                                 ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qcompilerdetection.h:689:55: note: expanded from macro 'Q_DECL_DEPRECATED_X'
+  689 | #    define Q_DECL_DEPRECATED_X(text) __attribute__ ((__deprecated__(text)))
+      |                                                       ^
+main.cpp:104:86: error: no member named 'latin1' in 'QString'
+  104 |         printf("Guilogger: Using serial port %s as source.\n", qserial->getComPort().latin1());
+      |                                                                ~~~~~~~~~~~~~~~~~~~~~ ^
+main.cpp:117:17: error: no matching function for call to 'fopen'
+  117 |       FILE* f = fopen(params.getFile(),"r");
+      |                 ^~~~~
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/usr/include/_stdio.h:243:7: note: candidate function not viable: no known conversion from 'QString' to 'const char *' for 1st argument
+  243 | FILE    *fopen(const char * __restrict __filename, const char * __restrict __mode) __DARWIN_ALIAS_STARTING(__MAC_10_6, __IPHONE_2_0, __DARWIN_ALIAS(fopen));
+      |          ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+main.cpp:137:23: error: use of undeclared identifier 'TRUE'
+  137 |     {   fl.setLogging(TRUE);
+      |                       ^
+main.cpp:144:9: error: no member named 'setCaption' in 'GuiLogger'
+  144 |     gl->setCaption( "GUI Logger" );
+      |     ~~  ^
+7 warnings and 9 errors generated.
+make[1]: *** [main.o] Error 1
+In file included from guilogger.cpp:37:
+./quickmp.h:584:75: warning: cast to 'void *' from smaller integer type 'unsigned int' [-Wint-to-void-pointer-cast]
+  584 |                                         &threadAttributes, threadRoutine, (void*)threadIndex);
+      |                                                                           ^~~~~~~~~~~~~~~~~~
+guilogger.cpp:344:24: error: no member named 'remove' in 'QList<IniSection *>'
+  344 |       cfgFile.sections.remove();  // remove current item, iterator++
+      |       ~~~~~~~~~~~~~~~~ ^
+guilogger.cpp:345:34: error: no member named 'current' in 'QList<IniSection *>'
+  345 |       section = cfgFile.sections.current();
+      |                 ~~~~~~~~~~~~~~~~ ^
+guilogger.cpp:348:24: error: no member named 'remove' in 'QList<IniSection *>'
+  348 |       cfgFile.sections.remove();  // remove current item, iterator++
+      |       ~~~~~~~~~~~~~~~~ ^
+guilogger.cpp:349:34: error: no member named 'current' in 'QList<IniSection *>'
+  349 |       section = cfgFile.sections.current();
+      |                 ~~~~~~~~~~~~~~~~ ^
+guilogger.cpp:351:34: error: no member named 'next' in 'QList<IniSection *>'
+  351 |       section = cfgFile.sections.next();
+      |                 ~~~~~~~~~~~~~~~~ ^
+guilogger.cpp:420:16: warning: 'QLinkedList<int>' is deprecated: Use std::list instead [-Wdeprecated-declarations]
+  420 |       FOREACHC(QLinkedList<int>, plotInfos[i]->getVisibleChannels(), c){
+      |                ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qlinkedlist.h:92:7: note: 'QLinkedList<int>' has been explicitly marked deprecated here
+   92 | class QT_DEPRECATED_VERSION_X_5_15("Use std::list instead") QLinkedList
+      |       ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qglobal.h:376:45: note: expanded from macro 'QT_DEPRECATED_VERSION_X_5_15'
+  376 | # define QT_DEPRECATED_VERSION_X_5_15(text) QT_DEPRECATED_X(text)
+      |                                             ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qglobal.h:294:33: note: expanded from macro 'QT_DEPRECATED_X'
+  294 | #  define QT_DEPRECATED_X(text) Q_DECL_DEPRECATED_X(text)
+      |                                 ^
+/opt/homebrew/Cellar/qt@5/5.15.16_2/lib/QtCore.framework/Headers/qcompilerdetection.h:689:55: note: expanded from macro 'Q_DECL_DEPRECATED_X'
+  689 | #    define Q_DECL_DEPRECATED_X(text) __attribute__ ((__deprecated__(text)))
+      |                                                       ^
+guilogger.cpp:473:84: error: no member named 'next' in 'QList<IniSection *>'
+  473 |   for(section = cfgFile.sections.first(); section != 0; section = cfgFile.sections.next()) {
+      |                                                                   ~~~~~~~~~~~~~~~~ ^
+guilogger.cpp:476:68: error: no member named 'next' in 'QList<IniVar *>'
+  476 |       for(var = section->vars.first(); var!=0; var = section->vars.next())
+      |                                                      ~~~~~~~~~~~~~ ^
+guilogger.cpp:494:26: error: no member named 'latin1' in 'QString'
+  494 |             if(sscanf(qv.latin1(),"%ix%i",&x,&y)==2)
+      |                       ~~ ^
+guilogger.cpp:498:26: error: no member named 'latin1' in 'QString'
+  498 |             if(sscanf(qv.latin1(),"%i %i",&w,&h)==2)
+      |                       ~~ ^
+guilogger.cpp:558:78: error: no member named 'next' in 'QList<IniVar *>'
+  558 |     for(var = GNUplotsection.vars.first(); var!=0; var = GNUplotsection.vars.next()) {
+      |                                                          ~~~~~~~~~~~~~~~~~~~ ^
+guilogger.cpp:562:37: error: no member named 'latin1' in 'QString'
+  562 |           plotWindows[k].command(qv.latin1());
+      |                                  ~~ ^
+guilogger.cpp:612:7: warning: unused parameter 'parallelForLoopThreadIndexUniqueSymbol' [-Wunused-parameter]
+  612 |       QMP_PARALLEL_FOR(i,0,plotwindows){
+      |       ^
+./quickmp.h:76:44: note: expanded from macro 'QMP_PARALLEL_FOR'
+   76 |                         const unsigned int parallelForLoopThreadIndexUniqueSymbol, \
+      |                                            ^
+9 warnings and 15 errors generated.
+make[1]: *** [guilogger.o] Error 1
+make: *** [sub-src-make_first] Error 2

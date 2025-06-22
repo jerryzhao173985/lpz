@@ -1,0 +1,3 @@
+bin
+Makefile
+moc_*.cpp

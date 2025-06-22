@@ -1,0 +1,5 @@
+Makefile
+start*
+Makefile.depend
+*.log
+guilogger.cfg
