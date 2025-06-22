@@ -28,7 +28,7 @@
 
 #include <QFile>
 #include <QString>
-#include <QLinkedList>
+#include <list>
 #include <QMutex>
 #include <QObject>
 #include <iostream>
@@ -73,9 +73,9 @@ protected:
 private:
   AbstractPipeReader* apr;
   typedef std::list<double> buffer_t;
-  QLinkedList<buffer_t> input_buffer;
+  std::list<buffer_t> input_buffer;
   QMutex mutex;
-//   QLinkedList<std::string> *channelList;
+//   std::list<std::string> *channelList;
 };
 
 

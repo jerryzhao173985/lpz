@@ -8,7 +8,6 @@
 #ifndef VECTORPLOTVISUALISATION_H_
 #define VECTORPLOTVISUALISATION_H_
 #include "AbstractVisualisation.h"
-#include <qgl.h> 
 
 class VectorPlotVisualisation: public AbstractVisualisation {
   Q_OBJECT

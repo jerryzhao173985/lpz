@@ -27,6 +27,10 @@ ifdef(`MAC',
 ,
 `define(`LINUXORMAC', $1)'
 )
+ifdef(`MAC_ARM64',
+`define(`LINUXORMAC', $2) define(`ARM64FLAGS', `-arch arm64')',
+`define(`ARM64FLAGS', `')'
+)
 ifdef(`NOGSL', `define(`GSL', $2)',`define(`GSL', $1)')
 COMMENT(`change quote syntax to [[string]]')
 changequote([[,]])
@@ -40,7 +44,7 @@ rpath=DEVORUSER([[-Wl,-rpath,$srcprefix]],[[-Wl,-rpath,$prefix/lib]])
 LIBBASE=selforg
 
 ## use -pg for profiling
-CBASEFLAGS="-std=c++11 -pthread LINUXORMAC( ,-I/opt/local/include -I/opt/homebrew/include)"
+CBASEFLAGS="-std=c++17 -pthread ARM64FLAGS LINUXORMAC( ,-I/opt/local/include -I/opt/homebrew/include)"
 CPPFLAGS="$CBASEFLAGS"
 INTERNFLAGS="-g -O"
 LIBS="-lm -lreadline -lncurses -lpthread"

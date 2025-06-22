@@ -213,8 +213,8 @@ void BarVisualisation::mouseMoveEvent ( QMouseEvent *event ){
 }
 
 void BarVisualisation::wheelEvent(QWheelEvent * event){
-  if(debug) cout << event->delta() << endl;
-  zoom += ((event->delta() / 120) * 0.1);
+  if(debug) cout << event->angleDelta().y() << endl;
+  zoom += ((event->angleDelta().y() / 120) * 0.1);
   if ( zoom < 0.) zoom = 0.;
   update();
   event->accept();

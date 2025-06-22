@@ -77,7 +77,11 @@ ${BUILD_DIR}/%.o: %.cpp
 	$(CXX) -c $(CPPFLAGS) $(CFLAGS) -o "$@" "$<"
 
 $(SHAREDLIB): Makefile.depend $(OFILES)
-	$(CXX) -shared -Wl,-soname,`basename $(SHAREDLIB)` -o $(SHAREDLIB) $(OFILES)
+	@if [ `uname` = "Darwin" ]; then \
+		$(CXX) -dynamiclib -o $(SHAREDLIB) $(OFILES) -L/opt/homebrew/Cellar/gsl/2.8/lib -lgsl -lgslcblas -lm -lreadline -lncurses -lpthread; \
+	else \
+		$(CXX) -shared -Wl,-soname,`basename $(SHAREDLIB)` -o $(SHAREDLIB) $(OFILES) -L/opt/homebrew/Cellar/gsl/2.8/lib -lgsl -lgslcblas -lm -lreadline -lncurses -lpthread; \
+	fi
 
 
 install_scripts:

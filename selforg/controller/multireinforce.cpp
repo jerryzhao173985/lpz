@@ -434,7 +434,7 @@ list<string> MultiReinforce::createFileList(const char* filestem, int n){
   list<string> fs;
   for(int i=0; i< n; i++){
     char fname[256];
-    sprintf(fname,"%s_%02i.net", filestem, i);
+    snprintf(fname, sizeof(fname), "%s_%02i.net", filestem, i);
     fs.push_back(string(fname));
   }
   return fs;

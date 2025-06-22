@@ -19,8 +19,15 @@ fi
 prefix="/usr/local"
 srcprefix=$DIRNAME
 system=LINUX
+# Detect macOS and architecture
+if [ "$(uname)" = "Darwin" ]; then
+    system=MAC
+    if [ "$(uname -m)" = "arm64" ]; then
+        system=MAC_ARM64
+    fi
+fi
 type=USER
-version=`cat $DIRNAME/VERSION`;
+version=`cat $DIRNAME/VERSION 2>/dev/null || echo "0.8.0"`;
 package=ode_robots
 
 if test $# -eq 0; then

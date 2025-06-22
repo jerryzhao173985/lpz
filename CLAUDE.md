@@ -55,22 +55,68 @@ LPZRobots is a comprehensive C++ robotics simulation framework focused on self-o
 - Update to modern STL containers, STL templates etc
 - Use structured bindings where appropriate
 
-## Build Commands (Current System)
+## Build System Architecture
 
-### Initial Setup and Full Build
+### Overview
+LPZRobots uses a sophisticated hierarchical build system based on:
+- **GNU Make**: Orchestrates the overall build process
+- **m4 Macro Processor**: Generates platform-specific configuration scripts
+- **Autoconf/Automake**: Used by opende component
+- **qmake**: Used by Qt-based GUI tools (guilogger, matrixviz, configurator)
+
+### Configuration System (m4-based)
+
+The build system uses m4 macro files to generate platform-specific configuration scripts:
+
+1. **Main Configuration**: `make conf` triggers:
+   ```bash
+   # createMakefile.conf.sh asks for:
+   - Installation prefix (e.g., /usr/local or $HOME)
+   - Installation type (USER or DEVEL)
+   # Then calls configure for each component
+   ```
+
+2. **Component Configuration**: Each component has:
+   - `configure` script: Processes command-line options
+   - `*-config.m4` template: m4 template for generating config script
+   - `*-config` output: Generated script providing compiler/linker flags
+
+3. **Platform Detection in m4**:
+   ```m4
+   # Example from selforg-config.m4:
+   ifdef(`MAC', `define(`LINUXORMAC', $2)', `define(`LINUXORMAC', $1)')
+   # Usage: LINUXORMAC(linux_value, mac_value)
+   ```
+
+### Build Commands (Current System)
+
+#### Initial Setup and Full Build
 ```bash
+make conf           # Configure installation (only needed once)
 make all            # Configure and build everything (utils, selforg, ode, ode_robots, ga_tools)
+                   # Automatically uses sudo if needed for system directories
 ```
 
-### Individual Component Builds
+#### Individual Component Builds
 ```bash
 make selforg        # Build self-organizing controllers library
-make ode_robots     # Build robot simulation library
+make ode_robots     # Build robot simulation library  
+make ode            # Build ODE physics engine (double precision)
 make utils          # Build utility tools (guilogger, matrixviz)
 make ga_tools       # Build genetic algorithms tools
+make configurator   # Build parameter configuration GUI
 ```
 
-### Building and Running Simulations
+#### Installation Commands
+```bash
+make install_selforg     # Install selforg library and headers
+make install_ode_robots  # Install ode_robots library
+make install_ode         # Install customized ODE (libode_dbl)
+make install_utils       # Install GUI tools and scripts
+make install_ga_tools    # Install GA tools
+```
+
+#### Building and Running Simulations
 ```bash
 # Create new simulation from template
 cd ode_robots/simulations
@@ -87,13 +133,14 @@ make opt            # Optimized build
 ./start_opt         # Run optimized version
 ```
 
-### Development Commands
+#### Development Commands
 ```bash
 make clean          # Remove object files
 make clean-all      # Clean everything including libraries
 make doc            # Generate Doxygen documentation
 make tags           # Generate TAGS for code navigation
 make todo           # Show TODOs in source code
+make uninstall      # Remove all installed files
 ```
 
 ## Architecture Overview
@@ -202,62 +249,208 @@ class MySimulation : public Simulation {
 - Use `./start -pause` to start simulation paused
 - Check `~/.lpzrobots/` for log files and configurations
 
+## Dependency Management
+
+### Required Dependencies
+
+#### Core Dependencies
+- **C++ Compiler**: clang++ (macOS) or g++ (Linux) with C++17 support
+- **OpenGL**: For 3D visualization
+- **readline**: For console interaction
+- **ncurses**: For terminal UI
+- **pthread**: Threading support
+
+#### Component-Specific Dependencies
+
+1. **opende (Physics Engine)**:
+   - autoconf/automake/libtool
+   - No external physics dependencies (self-contained)
+
+2. **ode_robots (Simulation Framework)**:
+   - OpenSceneGraph 3.x (OSG) - 3D graphics
+   - ODE physics (via opende)
+   - GLUT/OpenGL
+
+3. **GUI Tools (guilogger, matrixviz, configurator)**:
+   - Qt5 (Core, Gui, Widgets, OpenGL, XML modules)
+   - GLU library
+   - gnuplot (for guilogger)
+
+4. **selforg (Controllers)**:
+   - GSL (GNU Scientific Library) - optional
+   - No GUI dependencies
+
+### Dependency Detection
+
+The build system detects dependencies through:
+
+1. **Configure Scripts**: Each component's `configure` script checks for dependencies
+2. **m4 Macros**: Platform-specific library paths are handled in *-config.m4 files
+3. **pkg-config**: Not used - custom detection scripts instead
+
+Example dependency check (from selforg/configure):
+```bash
+# Test for GSL
+if test -z "$GSL" && ! type gsl-config; then
+    GSL=-DNOGSL
+    echo "disabled GSL because \"gsl-config\" is not in PATH"
+fi
+```
+
+### macOS-Specific Paths
+
+The system checks multiple paths for macOS:
+```bash
+# MacPorts (old Intel Macs)
+/opt/local/include
+/opt/local/lib
+
+# Homebrew (ARM64 Macs)  
+/opt/homebrew/include
+/opt/homebrew/lib
+```
+
 ## Migration Guidelines
 
-**The original build system is well-constructed and carefully designed for each component. Our migration strategy must:**
+### Build System Enhancement Strategy
 
-1. **Improve the existing system** as much as possible where necessary and fit
-2. **Improve compatibility** where necessary for:
-   - macOS ARM64 compatibility
-   - macOS framework library/ package compatibility
-   - Qt5/C++17 requirements
-3. **Document every change** with clear justification in directory updates/ or logs/
-4. **Test that original functionality** remains intact
+**The original build system is well-constructed and carefully designed. Our migration must:**
 
-### Strategy
+1. **Preserve the hierarchical make structure** - It enables independent component builds
+2. **Enhance the m4 configuration system** - Add ARM64/Qt5 detection without rewriting
+3. **Maintain backward compatibility** - Linux builds must continue to work
+4. **Document all changes** - Clear rationale for every modification
 
-- Make the hierarchical system works well
-- Make sophisticated configuration robust / flexible / easy on macOS
-- Each component's build independence
-- Installation paths: PREFIX-based installation system
-- Dependency detection: Existing scripts for finding libraries
-- Note make those libraries either static or dynamic as per best practice in macOS
+### Platform Detection Updates
 
-#### What Must Have Changed:
-1. **Platform Detection**:
+#### 1. ARM64 Detection (Already implemented in opende)
+```bash
+# In configure.in:
+arm64* | aarch64* )
+    cpu64=yes
+    arm64=yes
+    AC_DEFINE(ARM64_SYSTEM,1,[ARM64 system])
+;;
+```
+
+#### 2. Update m4 Macros for ARM64
+```m4
+# Add to *-config.m4 files:
+ifdef(`ARM64',
+  `define(`ARCH_FLAGS', '-arch arm64')
+   define(`NEON_FLAGS', '-march=armv8-a+simd')',
+  `define(`ARCH_FLAGS', '')')
+```
+
+#### 3. Library Path Updates
+```bash
+# In selforg-config.m4 and similar:
+CBASEFLAGS="-std=c++17 -pthread LINUXORMAC(-I/usr/include,-I/opt/local/include -I/opt/homebrew/include)"
+```
+
+### C++17 Migration Patterns
+
+#### 1. Replace deprecated features
+```cpp
+// Old: std::unary_function (deprecated)
+template<typename T>
+struct MyFunc : std::unary_function<T, bool> { ... };
+
+// New: Define types directly
+template<typename T>
+struct MyFunc {
+    using argument_type = T;
+    using result_type = bool;
+    ...
+};
+```
+
+#### 2. Use modern STL features
+```cpp
+// Use std::optional for nullable values
+std::optional<Matrix> getJacobian() const;
+
+// Use structured bindings
+auto [sensors, motors] = robot->getSensorMotorInfo();
+
+// Use std::filesystem (when available)
+#if __cpp_lib_filesystem
+    namespace fs = std::filesystem;
+#endif
+```
+
+### Qt5 Migration Guidelines
+
+#### 1. Update .pro files
+```qmake
+# Old Qt4
+QT += core gui
+
+# New Qt5
+QT += core gui widgets
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+```
+
+#### 2. Update includes
+```cpp
+// Qt4
+#include <QtGui>
+
+// Qt5
+#include <QtWidgets>
+#include <QtGui>
+#include <QtCore>
+```
+
+#### 3. Replace deprecated Qt classes
+```cpp
+// QGLWidget → QOpenGLWidget
+// toAscii() → toLatin1()
+// QRegExp → QRegularExpression (where appropriate)
+```
+
+### Component-Specific Migration
+
+#### opende (Physics Engine)
+- ✅ ARM64 detection already added
+- TODO: Replace deprecated macOS frameworks (Carbon → Cocoa)
+- TODO: Update for modern OpenGL context creation
+
+#### selforg (Core Library)
+- TODO: Add ARM64 SIMD optimizations for matrix operations
+- TODO: Update QuickMP threading to std::thread
+- TODO: C++17 modernization of controller interfaces
+
+#### ode_robots (Simulation Framework)
+- TODO: Evaluate OpenSceneGraph alternatives (OSG may need updates)
+- TODO: Modernize shadow rendering system
+- TODO: Update resource loading for .osg mesh files
+
+#### GUI Tools
+- ✅ guilogger: Already using Qt5
+- ✅ matrixviz: Already using Qt5  
+- TODO: configurator: Complete Qt5 migration
+- TODO: Fix platform-specific keyboard shortcuts
+
+### Testing Requirements
+
+1. **Build Testing**:
    ```bash
-   # Add to existing configure scripts
-   arm64* | aarch64* )  # New ARM64 detection
-     # Keep existing logic, add ARM64 flags
+   # After each change:
+   make clean
+   make all
+   # Test on both Linux and macOS ARM64
    ```
 
-2. **Library Paths**:
-   ```bash
-   # Update files to support both:
-   MACINCLUDE="-I/opt/local/include -I/opt/homebrew/include"  # Add homebrew
-   ```
+2. **Component Testing**:
+   - Each component must build independently
+   - Run example simulations
+   - Verify GUI tools launch correctly
 
-3. **Qt Detection**:
-   - QT5 library and correct efficient usage for performance and utilization
-
-4. **Compiler Flags**:
-   - Add `-std=c++17` alongside existing flags
-   - Keep optimization levels and warning flags
-   - Make sure COmpiler warnings are solved propely
-
-5. **For Platform Code**:
-   - Add platform detection
-   - Use `#ifdef __APPLE__` for macOS-specific code
-   - Add `__arm64__` or `__aarch64__` checks
-
-### When Making Changes
-
-1. **Study the original first**: Understand why it was designed this way as a complete software
-2. **Continously revise your plan**: Understand in-depth or new knowledge for improvement
-3. **Simplification & Clarity**: Make the robot simulator package clear and simplify redudant code/file structure
-4. **Preserve consistent functionality**: Original behavior must remain intact
-5. **Document rationale**: Every change needs clear justification
-6. **Systerm Enhancement**: Must enhance system in crucial ways
+3. **Performance Testing**:
+   - Matrix operations benchmark
+   - Physics simulation frame rate
+   - Memory usage profiling
 
 ### Build System Strengths 
 
@@ -521,22 +714,187 @@ make all
 # Test on macOS ARM64
 ```
 
+## Implementation Examples
+
+### Example: Adding ARM64 Support to a Component
+
+1. **Update configure script**:
+```bash
+# In component/configure
+if [ `uname -m` = "arm64" ]; then
+    system=MAC_ARM64
+    ARCH_FLAGS="-arch arm64"
+fi
+```
+
+2. **Update m4 configuration**:
+```m4
+# In component-config.m4
+ifdef(`MAC_ARM64',
+  `define(`ARCH_FLAGS', '-arch arm64')
+   define(`INCLUDES', '-I/opt/homebrew/include')')
+```
+
+3. **Update C++ code for platform detection**:
+```cpp
+#ifdef __APPLE__
+  #ifdef __arm64__
+    // ARM64-specific code
+    #include <Accelerate/Accelerate.h>
+  #endif
+#endif
+```
+
+### Example: Modernizing a Controller Class
+
+```cpp
+// Old C++11 style
+class MyController : public AbstractController {
+    paramval eps;
+    Matrix C;
+public:
+    MyController() : eps(0.1) {}
+    
+    virtual void init(int sensornumber, int motornumber, 
+                     RandGen* randGen = 0) override {
+        C.set(motornumber, sensornumber);
+    }
+};
+
+// Modern C++17 style
+class MyController : public AbstractController {
+    paramval eps{0.1};  // In-class initialization
+    Matrix C;
+    
+public:
+    MyController() = default;  // Defaulted constructor
+    
+    void init(int sensornumber, int motornumber, 
+              RandGen* randGen = nullptr) override {
+        C.set(motornumber, sensornumber);
+    }
+    
+    // Use structured bindings
+    auto getSensorMotorInfo() const {
+        return std::make_tuple(sensornumber, motornumber);
+    }
+};
+```
+
+### Example: Qt5 Widget Migration
+
+```cpp
+// Qt4 code
+#include <QtGui>
+class MyWidget : public QWidget {
+    Q_OBJECT
+public:
+    MyWidget(QWidget* parent = 0) : QWidget(parent) {
+        QPushButton* button = new QPushButton("Click", this);
+        connect(button, SIGNAL(clicked()), this, SLOT(onClicked()));
+    }
+};
+
+// Qt5 code
+#include <QtWidgets>
+#include <QPushButton>
+class MyWidget : public QWidget {
+    Q_OBJECT
+public:
+    MyWidget(QWidget* parent = nullptr) : QWidget(parent) {
+        QPushButton* button = new QPushButton("Click", this);
+        // Modern connect syntax
+        connect(button, &QPushButton::clicked, 
+                this, &MyWidget::onClicked);
+    }
+};
+```
+
+## Troubleshooting Guide
+
+### Build Errors
+
+#### "Cannot find -lode_dbl"
+```bash
+# Solution: Install ODE first
+make ode
+sudo make install_ode
+# Then rebuild component
+```
+
+#### "Qt5 not found"
+```bash
+# macOS with Homebrew:
+brew install qt@5
+export PATH="/opt/homebrew/opt/qt@5/bin:$PATH"
+# Re-run configuration
+make conf
+```
+
+#### "OSG headers not found"
+```bash
+# Install OpenSceneGraph
+brew install open-scene-graph  # macOS
+# or
+sudo apt-get install libopenscenegraph-dev  # Ubuntu
+```
+
+### Runtime Issues
+
+#### Segfault on startup
+```bash
+# Try disabling shadows
+./start -noshadow
+
+# Check for missing libraries
+otool -L ./start  # macOS
+ldd ./start       # Linux
+```
+
+#### GUI tools not launching
+```bash
+# Check Qt plugin path
+export QT_PLUGIN_PATH=/opt/homebrew/opt/qt@5/plugins
+
+# Debug Qt issues
+export QT_DEBUG_PLUGINS=1
+./guilogger
+```
+
+#### Performance issues
+```bash
+# Use optimized build
+make opt
+./start_opt
+
+# Disable threading initially
+./start -threads 1
+```
+
 ## Known Issues and Workarounds
 
 ### Graphics Issues
-- If crash on startup: use `-noshadow`
-- Shadow rendering removed from recent OSG versions
-- Some .osg mesh files may need conversion
+- **Shadow crash**: Use `-noshadow` flag (shadow rendering issues with modern OSG)
+- **Black screen**: Check OpenGL version compatibility
+- **Missing textures**: Verify texture files in ode_robots/textures/
 
 ### Build Issues
-- Configure scripts may fail on ARM64: manually set flags
-- Qt3Support missing on newer systems: must migrate code
-- OpenSceneGraph ARM64 builds may need patches
+- **ARM64 detection fails**: Manually set in Makefile.conf:
+  ```make
+  ARCH_FLAGS = -arch arm64
+  ```
+- **Qt3Support missing**: Code must be migrated to Qt5 (no workaround)
+- **OSG version mismatch**: Use OSG 3.4.x or newer for ARM64
+
+### macOS-Specific Issues
+- **Keyboard shortcuts**: Ctrl+M intercepted by terminal, use Ctrl+V for matrixviz
+- **App permissions**: Grant terminal/IDE camera/microphone access if needed
+- **Rosetta warnings**: Ensure native ARM64 builds with `file` command
 
 ### Performance Issues
-- Thread affinity on ARM64 needs tuning
-- Memory bandwidth limitations on unified memory
-- Power efficiency vs performance trade-offs
+- **Thread affinity**: Let macOS handle thread scheduling (don't force affinity)
+- **Memory pressure**: Reduce simulation complexity or use optimized builds
+- **GPU throttling**: Ensure adequate cooling on Apple Silicon
 
 ## Build System Analysis Notes
 
@@ -557,3 +915,88 @@ make all
 5. **Uninstall support**: Clean removal of all components
 
 The enhancement and refactoring for the lpzrobot software package should enhance this system, not replace it. Think of it as adding Enhanced ARM64 Qt5 CMake C++ extensive support to an already excellent build and compiled robotic simulator.
+
+## Quick Start Guide for macOS ARM64
+
+### Prerequisites Installation
+```bash
+# Install Xcode Command Line Tools
+xcode-select --install
+
+# Install Homebrew (if not already installed)
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# Install dependencies
+brew install qt@5 open-scene-graph gsl readline gnuplot
+brew install autoconf automake libtool  # For opende
+
+# Set up environment
+echo 'export PATH="/opt/homebrew/opt/qt@5/bin:$PATH"' >> ~/.zshrc
+source ~/.zshrc
+```
+
+### Build Steps
+```bash
+# 1. Configure installation
+make conf
+# Choose installation directory (e.g., /Users/yourname/lpzrobots)
+# Choose 'u' for user installation
+
+# 2. Build everything
+make all
+
+# 3. Test with a simulation
+cd ode_robots/simulations/template_sphererobot
+make
+./start -noshadow  # Use -noshadow to avoid graphics issues
+```
+
+### Verification
+```bash
+# Check that binaries are native ARM64
+file $(which guilogger)  # Should show "arm64"
+file selforg/libselforg.a  # Should show "ar archive"
+```
+
+## Important Implementation Notes
+
+### File Organization
+- **Configuration files**: Component-level configure scripts and *-config.m4 templates
+- **Build outputs**: Libraries in component directories, installed to PREFIX/lib
+- **Headers**: Installed to PREFIX/include/component_name
+- **Simulations**: User simulations in separate directories with own Makefiles
+
+### Code Style Guidelines
+- Use spaces, not tabs (4-space indentation)
+- Follow existing naming conventions (camelCase for methods, underscore for members)
+- Document public APIs with Doxygen comments
+- Keep platform-specific code isolated with #ifdef guards
+
+### Version Control
+- Test changes on both Linux and macOS before committing
+- Document migration changes in commit messages
+- Keep build system changes separate from code modernization
+
+### Performance Considerations
+- Matrix operations are performance-critical (consider SIMD optimizations)
+- Physics timestep affects both accuracy and performance
+- GUI updates can be throttled for better performance
+
+## Migration Progress Tracking
+
+Use git branches for different aspects of migration:
+- `feature/arm64-build`: Build system ARM64 support
+- `feature/qt5-migration`: Qt5 updates for GUI tools
+- `feature/cpp17-modernization`: C++17 language updates
+- `feature/osg-updates`: OpenSceneGraph compatibility
+
+Each component can be migrated independently following the patterns documented above.
+
+# important-instruction-reminders
+Do what has been asked; nothing more, nothing less.
+NEVER create files unless they're absolutely necessary for achieving your goal.
+ALWAYS prefer editing an existing file to creating a new one.
+NEVER proactively create documentation files (*.md) or README files. Only create documentation files if explicitly requested by the User.
+
+      
+      IMPORTANT: this context may or may not be relevant to your tasks. You should not respond to this context or otherwise consider it in your response unless it is highly relevant to your task. Most of the time, it is not relevant.

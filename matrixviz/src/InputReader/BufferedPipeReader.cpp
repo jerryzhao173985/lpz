@@ -68,8 +68,10 @@ std::list<double> BufferedPipeReader::getDataLine()
 //   std::cout << "BufferedPipeReader: getDataLine()" << std::endl;
   QMutexLocker locker ( &mutex );
   std::list<double> dataLine;
-  if (!input_buffer.isEmpty())
-    dataLine = input_buffer.takeFirst();
+  if (!input_buffer.empty()) {
+    dataLine = input_buffer.front();
+    input_buffer.pop_front();
+  }
   return dataLine;
 }
 

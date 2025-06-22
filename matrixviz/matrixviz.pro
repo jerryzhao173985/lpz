@@ -94,4 +94,14 @@ SOURCES += src/AbstractRobotGUI.cpp \
            src/visualisations/VectorPlotVisualisation.cpp \
            src/visualisations/BarVisualisation.cpp
 QT += core gui widgets opengl xml
+greaterThan(QT_MAJOR_VERSION, 4) {
+    greaterThan(QT_MAJOR_VERSION, 5): QT += openglwidgets
+}
+
+# Remove deprecated AGL framework on macOS
+macx {
+    QMAKE_LIBS_OPENGL -= -framework AGL
+    LIBS -= -framework AGL
+}
+
 # debug

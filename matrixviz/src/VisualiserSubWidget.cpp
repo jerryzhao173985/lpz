@@ -63,7 +63,7 @@ VisualiserSubWidget::VisualiserSubWidget(MatrixPlotChannel *channel, int x, int 
     resize(width,heigt);
       move(x, y);
   }
-  if( cPFilePath != "" && cPFilePath != 0)
+  if( !cPFilePath.isEmpty())
       colorPalette->loadStopListFromFile(cPFilePath);
   connect (this, SIGNAL(sendQuit()), colorPalette, SLOT(close()));
 }
@@ -119,14 +119,13 @@ void VisualiserSubWidget::captureFrame(long idx, QString directory){
   //std::cout << "capture frame " << idx << " " << directory.toStdString() << std::endl;
   // directory and filename generation:
   QString channelname = QString(matrixChannel->getChannelName().c_str());
-  QString framename;
-  framename.sprintf("frame_%06ld.jpg", idx);
+  QString framename = QString("frame_%1.jpg").arg(idx, 6, 10, QChar('0'));
   QDir dir(directory + "/" + srcName + "/" + channelname);
   if (!dir.exists()) {
     dir.mkpath(".");
   }
   QString fileName = dir.path() + "/" + framename;
-  QPixmap pixmap = QPixmap::grabWidget ( this, 0, menuBar->height()-1 );
+  QPixmap pixmap = this->grab(QRect(0, menuBar->height()-1, width(), height() - menuBar->height()+1));
   if(!pixmap.save(fileName,0,90)){
     std::cerr << "could not write to file " << fileName.toStdString() << endl;
   };

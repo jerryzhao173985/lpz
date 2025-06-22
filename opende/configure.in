@@ -454,7 +454,13 @@ echo "  Demos enabled:           $enable_demos"
 echo "  Use OPCODE:              $opcode"
 echo "  Use GIMPACT:             $gimpact"
 echo "  Is target a Pentium:     $pentium"
-echo "  Is target x86-64:        $cpu64"
+if test x$arm64 = xyes; then
+  echo "  Is target ARM64:         yes"
+elif test x$cpu64 = xyes; then
+  echo "  Is target x86-64:        yes"
+else
+  echo "  Is target 32-bit:        yes"
+fi
 echo "  Use old opcode trimesh collider: $old_trimesh"
 echo "  TLS for global data:     $use_ou"
 echo "  Enable debug error check: $asserts"

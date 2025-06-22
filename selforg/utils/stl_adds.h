@@ -88,8 +88,10 @@ namespace std {
 
 
   template <class T>
-  struct join : public unary_function<T, void>
+  struct join
   {
+    using argument_type = T;
+    using result_type = void;
     join(const T& delimit) : delimit(delimit), count(0) {}
     void operator() (const T& s) {
       if(count==0){

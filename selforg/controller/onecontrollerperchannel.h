@@ -52,7 +52,9 @@
     Make sure you initialize the OneControllerPerChannel with sufficiently many initial controller.
 
 */
-struct ControllerGenerator : public std::unary_function< int,  AbstractController*> {
+struct ControllerGenerator {
+  using argument_type = int;
+  using result_type = AbstractController*;
   virtual ~ControllerGenerator(){}
   virtual AbstractController* operator()( int index) = 0;
 };

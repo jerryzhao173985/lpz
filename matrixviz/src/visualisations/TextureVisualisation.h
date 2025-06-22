@@ -28,7 +28,6 @@
 
 
 #include "AbstractVisualisation.h"
-#include <qgl.h> //"/usr/include/qt4/QtOpenGL/QGLWidget"
 //#include "../ColorPalette.h"
 //#include "../Channel/VectorPlotChannel.h"
 

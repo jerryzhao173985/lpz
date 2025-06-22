@@ -31,7 +31,10 @@
     First parameter is the index
     and the second parameter is the length (or number of sensors).
 */
-struct select_predicate : public std::binary_function< int,  int, bool> {
+struct select_predicate {
+  using first_argument_type = int;
+  using second_argument_type = int;
+  using result_type = bool;
   virtual ~select_predicate(){}
   virtual bool operator()( int index,  int len) { return true; }
 };

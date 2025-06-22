@@ -64,6 +64,10 @@ public:
    */
   virtual ~Agent();
 
+  // Bring base class methods into scope to avoid hiding
+  using WiredController::init;
+  using WiredController::step;
+
   /** initializes the object with the given controller, robot and wiring
       and initializes the output options.
       It is also possible to provide a random seed,

@@ -56,7 +56,7 @@ public:
     //  also moves the pointer for the other vtable (tricky!)
     // That is why we need dynamic_cast here
     Teachable* t2 = dynamic_cast<Teachable*>(controller);    
-    t2=t2; // this is to avoid a "unused variable" in -DNDEBUG mode
+    (void)t2; // this is to avoid a "unused variable" in -DNDEBUG mode
     assert((void*)t2==(void*)teachable);
   }
 

@@ -28,6 +28,10 @@ ifdef(`MAC',
 ,
 `define(`LINUXORMAC', $1)'
 )
+ifdef(`MAC_ARM64',
+`define(`LINUXORMAC', $2) define(`ARM64FLAGS', `-arch arm64')',
+`define(`ARM64FLAGS', `')'
+)
 COMMENT(`change quote syntax to [[string]]')
 changequote([[,]])
 
@@ -47,7 +51,7 @@ else #Todo print error to stderr
 fi
 
 ## use -pg for profiling
-CBASEFLAGS="-pthread -std=c++11 -Wno-write-strings -I/usr/X11R6/include $ODEFLAGS LINUXORMAC( ,-I/opt/local/include -I/opt/homebrew/include)"
+CBASEFLAGS="-pthread -std=c++17 -Wno-write-strings ARM64FLAGS -I/usr/X11R6/include $ODEFLAGS LINUXORMAC( ,-I/opt/local/include -I/opt/homebrew/include)"
 CPPFLAGS="$CBASEFLAGS"
 INTERNFLAGS="-g -O"
 LIBS="-lm -losgShadow -losgText -losgUtil -losgViewer -losgGA -losgDB -lOpenThreads -losg -lGL -lGLU -lglut -lpthread"

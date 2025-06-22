@@ -27,6 +27,7 @@
 #include "ListEntity.h"
 #include <math.h>
 #include <iostream>
+#include <algorithm>
 #include <QtGui>
 #include <QtXml/QDomDocument>
 #include <QtXml/QDomElement>
@@ -249,7 +250,7 @@ void ColorPalette::updateList(){
   //  I do no delete the QTWidgets because this causes crashes.
   //  You deleted them from a signal that they called themselves, this is quite a problem.
 
-  qSort(stops); // sort the list
+  std::sort(stops.begin(), stops.end()); // sort the list
 
   if ( debug) cout << "stoplist update" << endl;
   for(int i = 0; i < stops.size(); i++){
