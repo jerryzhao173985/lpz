@@ -54,15 +54,15 @@ public:
   /** constructor. PlotOption as output setting.
       noisefactor is used to set the relative noise strength of this agent
    */
-  Agent(const PlotOption& plotOption = PlotOption(NoPlot), double noisefactor = 1, const iparamkey& name = "Agent", const paramkey& revision = "$ID");
+  explicit Agent(const PlotOption& plotOption = PlotOption(NoPlot), double noisefactor = 1, const iparamkey& name = "Agent", const paramkey& revision = "$ID");
   /** constructor. A list of PlotOption can given.
       noisefactor is used to set the relative noise strength of this agent
    */
-  Agent(const std::list<PlotOption>& plotOptions, double noisefactor = 1, const iparamkey& name = "Agent", const paramkey& revision = "$ID");
+  explicit Agent(const std::list<PlotOption>& plotOptions, double noisefactor = 1, const iparamkey& name = "Agent", const paramkey& revision = "$ID");
 
   /** destructor
    */
-  virtual ~Agent();
+  virtual ~Agent() override;
 
   // Bring base class methods into scope to avoid hiding
   using WiredController::init;
@@ -111,7 +111,7 @@ protected:
   RandGen randGen; // random generator for this agent
 
   TrackRobot trackrobot;
-  int t; // access to this variable is needed from OdeAgent
+  // int t; // removed - already defined in parent class WiredController
 
 
 };

@@ -32,18 +32,14 @@ namespace lpzrobots
 {
 
   OdeHandle::OdeHandle()
+    : time(nullptr), ignoredPairs(0), spaces(0), ignoredSpaces(nullptr)
   {
-    ignoredPairs        = 0;
-    spaces              = 0;
   }
 
   OdeHandle::OdeHandle(  dWorldID _world, dSpaceID _space, dJointGroupID _jointGroup )
+    : world(_world), space(_space), jointGroup(_jointGroup),
+      time(nullptr), ignoredPairs(0), spaces(0), ignoredSpaces(nullptr)
   {
-    world               = _world;
-    space               = _space;
-    jointGroup          = _jointGroup;
-    ignoredPairs        = 0;
-    spaces              = 0;
   }
 
   void OdeHandle::destroySpaces()

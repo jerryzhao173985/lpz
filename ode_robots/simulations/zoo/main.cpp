@@ -70,7 +70,9 @@ struct ControlGen : public ControllerGenerator {
 };
 
 // predicate that matches agents that have the same name prefix
-struct agent_match_prefix : public unary_function<const OdeAgent*, bool> {
+struct agent_match_prefix {
+    using argument_type = const OdeAgent*;
+    using result_type = bool;
     agent_match_prefix(string nameprefix)
       : nameprefix(nameprefix) {
       len=nameprefix.length();

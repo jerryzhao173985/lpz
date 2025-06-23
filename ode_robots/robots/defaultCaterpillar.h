@@ -95,16 +95,16 @@ public:
     return conf;
   }
 
-  virtual ~DefaultCaterPillar();
+  virtual ~DefaultCaterPillar() override;
 
 
   /** sets the pose of the vehicle
       @param pose desired 4x4 pose matrix
   */
-  virtual void placeIntern(const osg::Matrix& pose);
+  virtual void placeIntern(const osg::Matrix& pose) override;
 
   /// update all primitives and joints
-  virtual void update();
+  virtual void update() override;
 
   /**
    *Reads the actual motor commands from an array,
@@ -113,7 +113,7 @@ public:
    *@param motors pointer to the array, motor values are scaled to [-1,1]
    *@param motornumber length of the motor array
    **/
-  virtual void setMotorsIntern( const double* motors, int motornumber ) = 0;
+  virtual void setMotorsIntern( const double* motors, int motornumber )  override = 0;
 
   /**
    *Writes the sensor values to an array in the memory.
@@ -121,24 +121,24 @@ public:
    *@param sensornumber length of the sensor array
    *@return number of actually written sensors
    **/
-  virtual int getSensorsIntern( sensor* sensors, int sensornumber ) = 0;
+  virtual int getSensorsIntern( sensor* sensors, int sensornumber )  override = 0;
 
   /** returns number of sensors
    */
-  virtual int getSensorNumberIntern() = 0;
+  virtual int getSensorNumberIntern()  override = 0;
 
   /** returns number of motors
    */
-  virtual int getMotorNumberIntern() = 0;
+  virtual int getMotorNumberIntern()  override = 0;
 
   /** returns a vector with the positions of all segments of the robot
       @param poslist vector of positions (of all robot segments)
       @return length of the list
   */
-  virtual int getSegmentsPosition(std::vector<Position> &poslist);
+  virtual int getSegmentsPosition(std::vector<Position> &poslist) override;
 
     /******** CONFIGURABLE ***********/
-    virtual void notifyOnChange(const paramkey& key);
+    virtual void notifyOnChange(const paramkey& key) override;
 
   /** the main object of the robot, which is used for position and speed tracking */
   virtual Primitive* getMainPrimitive() const {
@@ -153,8 +153,8 @@ protected:
   /** creates vehicle at desired pose
       @param pose 4x4 pose matrix
   */
-  virtual void create(const osg::Matrix& pose);
-  virtual void destroy();
+  virtual void create(const osg::Matrix& pose) override;
+  virtual void destroy() override;
 };
 
 }

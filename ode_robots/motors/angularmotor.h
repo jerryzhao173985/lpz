@@ -39,10 +39,10 @@ namespace lpzrobots {
     AngularMotor(const OdeHandle& odeHandle, Joint* joint);
 
     // destroys the AMotor
-    virtual ~AngularMotor ();
+    virtual ~AngularMotor () override;
 
     /// returns the number of Axis of this Motor
-    virtual int getNumberOfAxes() const= 0;
+    virtual int getNumberOfAxes() const override = 0;
 
     // --- Sensor interface ---
     virtual void init(Primitive* own, Joint* joint = 0) override ;
@@ -72,31 +72,31 @@ namespace lpzrobots {
     /** sets the desired speed of the motor at the given axis.
         @param velocity Desired motor velocity (this will be an angular or linear velocity).
     */
-    virtual void set(int axisNumber, double velocity) = 0;
+    virtual void set(int axisNumber, double velocity)  override = 0;
     /** returns the speed (PositionRate) at the given axis, or zero if the axis is out of range*/
-    virtual double get(int axisNumber) const = 0;
+    virtual double get(int axisNumber) const  override = 0;
 
     /**  sets the maximal force the motor has
      */
-    virtual void setPower(double power) = 0;
+    virtual void setPower(double power)  override = 0;
 
     /// return the maximal force
-    virtual double getPower();
+    virtual double getPower() override;
 
     /// returns the joint to which this motor is attached
     virtual Joint* getJoint() { return joint; };
 
     //sets the parameter for a motor
-    virtual void setParam(int parameter, double value);
+    virtual void setParam(int parameter, double value) override;
 
     /// return the ODE joint parameter (see ODE manual)
-    virtual double getParam(int parameter);
+    virtual double getParam(int parameter) override;
 
     /// sets factor for velocity
-    virtual void setVelovityFactor(double factor);
+    virtual void setVelovityFactor(double factor) override;
 
     /// retuns factor for velocity
-    virtual double getVelovityFactor(double factor);
+    virtual double getVelovityFactor(double factor) override;
 
   protected:
     dJointID motor;
@@ -126,13 +126,13 @@ namespace lpzrobots {
         @param axisNumber is ignored because have only one axis
         @param velocity Desired motor velocity (this will be an angular or linear velocity).
     */
-    virtual void set(int axisNumber, double velocity);
+    virtual void set(int axisNumber, double velocity) override;
     /** returns the speed (PositionRate) at the given axis, or zero if the axis is out of range
         @param axisNumber is ignored because have only one axis
      */
     virtual double get(int axisNumber) const override  ;
 
-    virtual void setPower(double power);
+    virtual void setPower(double power) override;
   protected:
     double power;
   };
@@ -157,14 +157,14 @@ namespace lpzrobots {
         @param axisNumber either 0 or 1
         @param velocity Desired motor velocity (this will be an angular or linear velocity).
     */
-    virtual void set(int axisNumber, double velocity);
+    virtual void set(int axisNumber, double velocity) override;
     virtual double get(int axisNumber) const override  ;
 
-    virtual void setPower(double power);
-    virtual void setPower(double power1, double power2);
+    virtual void setPower(double power) override;
+    virtual void setPower(double power1, double power2) override;
 
     /// return the maximal force
-    virtual double getPower2();
+    virtual double getPower2() override;
   protected:
     double power1;
     double power2;
@@ -194,13 +194,13 @@ namespace lpzrobots {
         @param axisNumber either 0 or 1
         @param velocity Desired motor velocity (this will be an angular or linear velocity).
     */
-    virtual void set(int axisNumber, double velocity);
+    virtual void set(int axisNumber, double velocity) override;
     /** returns the speed (PositionRate) at the given axis, or zero if the axis is out of range*/
     virtual double get(int axisNumber) const override ;
 
     /**  sets the maximal force the motor has
      */
-    virtual void setPower(double power);
+    virtual void setPower(double power) override;
   protected:
     Axis axis1;
     Axis axis3;
@@ -230,14 +230,14 @@ namespace lpzrobots {
     /** sets the desired speed of the motor at the given axis.
         @param velocity Desired motor velocity (this will be an angular or linear velocity).
     */
-    virtual void set(int axisNumber, double velocity);
+    virtual void set(int axisNumber, double velocity) override;
     /** returns the speed (PositionRate) at the given axis, or zero if the axis is out of range
         The problem is, that we don't have actual information available.
         So we return the last set position!.
      */
     virtual double get(int axisNumber) const override ;
 
-    virtual void setPower(double power);
+    virtual void setPower(double power) override;
   protected:
     std::list<std::pair<double, Axis > > axis;
   };

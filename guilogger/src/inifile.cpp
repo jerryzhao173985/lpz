@@ -264,7 +264,7 @@ IniSection *IniFile::addSection(QString name)
 void IniFile::delSection(IniSection* _section)
 {   sections.removeAll(_section);
     delete _section;
-    _section = NULL;
+    // _section = NULL; // Parameter assignment has no effect
 }
 
 
@@ -369,7 +369,7 @@ bool IniSection::getVar( IniVar& _var, QString _name){
 void IniSection::delVar(IniVar* _var)
 {    vars.removeAll(_var);
      delete _var;
-     _var = NULL;
+     // _var = NULL; // Parameter assignment has no effect
 }
 
 

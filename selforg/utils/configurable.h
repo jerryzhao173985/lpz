@@ -26,6 +26,7 @@
 
 #include <iostream>
 #include <cstdlib>
+#include <optional>
 
 #include <limits>
 #include <list>
@@ -135,15 +136,13 @@ class Configurable : public BackCaller
         }
     };
 
-    Configurable()
+    Configurable() : id(rand()), parent(nullptr)
     {
-      id = rand();
     }
     /// intialise with name and revision (use "$ID$")
     Configurable(const std::string& name, const std::string& revision) :
-      name(name), revision(revision)
+      id(rand()), name(name), revision(revision), parent(nullptr)
     {
-      id = rand();
     }
 
 //   Configurable(const Configurable& copy)
@@ -290,6 +289,11 @@ class Configurable : public BackCaller
      or 0 (+ error message to stderr) if unknown.
      */
     virtual paramval getParam(const paramkey& key, bool traverseChildren = true) const;
+
+    /** C++17: returns the value of the requested parameter using std::optional
+     * @return optional containing the value if found, empty optional otherwise
+     */
+    virtual std::optional<paramval> getParamOpt(const paramkey& key, bool traverseChildren = true) const;
 
     /**
      * Returns if the requested parameter is part of the configurable or their children

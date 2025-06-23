@@ -36,33 +36,33 @@
 class InvertMotorSpace : public InvertMotorController {
 
 public:
-  InvertMotorSpace(int buffersize, double cInit = 0.1 , bool someInternalParams = true);
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
+  explicit InvertMotorSpace(int buffersize, double cInit = 0.1 , bool someInternalParams = true);
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override;
 
   virtual ~InvertMotorSpace();
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
-  virtual int getSensorNumber() const { return number_sensors; }
+  virtual int getSensorNumber() const  override{ return number_sensors; }
   /// returns the mumber of motors the controller was initialised with or 0 if not initialised
-  virtual int getMotorNumber() const  { return number_motors; }
+  virtual int getMotorNumber() const   override{ return number_motors; }
 
   /// performs one step (includes learning).
   /// Calulates motor commands from sensor inputs.
-  virtual void step(const sensor* , int number_sensors, motor* , int number_motors);
+virtual void step(const sensor* , int number_sensors, motor* , int number_motors) override;
 
   /// performs one step without learning. Calulates motor commands from sensor inputs.
   virtual void stepNoLearning(const sensor* , int number_sensors,
-                              motor* , int number_motors);
+                              motor* , int number_motors) override;
 
   /**** STOREABLE ****/
   /** stores the controller values to a given file (binary).  */
-  virtual bool store(FILE* f) const;
+virtual bool store(FILE* f) const override;
   /** loads the controller values from a given file (binary). */
-  virtual bool restore(FILE* f);
+virtual bool restore(FILE* f) override;
 
   // inspectable interface
-  virtual std::list<ILayer> getStructuralLayers() const;
-  virtual std::list<IConnection> getStructuralConnections() const;
+virtual std::list<ILayer> getStructuralLayers() const override;
+virtual std::list<IConnection> getStructuralConnections() const override;
 
 
 protected:

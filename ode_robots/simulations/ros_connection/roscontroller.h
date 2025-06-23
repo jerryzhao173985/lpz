@@ -40,17 +40,17 @@ public:
    */
   ROSController(const std::string& name);
 
-  virtual ~ROSController();
+  virtual ~ROSController() override;
 
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
 
   virtual int getSensorNumber() const {return number_sensors;}
   virtual int getMotorNumber() const {return number_motors;}
 
   virtual void step(const sensor* sensors, int sensornumber,
-                    motor* motors, int motornumber);
+                    motor* motors, int motornumber) override;
   virtual void stepNoLearning(const sensor* , int number_sensors,
-                              motor* , int number_motors);
+                              motor* , int number_motors) override;
 
   void motorsCallback(const std_msgs::Float64MultiArray::ConstPtr& motormsg);
 

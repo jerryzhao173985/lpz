@@ -55,7 +55,7 @@ public:
 
   /** destructor
    */
-  virtual ~DerivativeWiring();
+  virtual ~DerivativeWiring() override;
 
   /** Providing default configuration for DerivativeWiring with first derivative.
       No smoothing and no scaling. ( as static method )
@@ -86,18 +86,18 @@ public:
     return c;
   };
 
-  virtual void reset();
+  virtual void reset() override;
 
 protected:
 
-  virtual bool initIntern();
+  virtual bool initIntern() override;
 
   virtual bool wireSensorsIntern(const sensor* rsensors, int rsensornumber,
                                  sensor* csensors, int csensornumber,
-                                 double noise);
+                                 double noise) override;
 
   virtual bool wireMotorsIntern(motor* rmotors, int rmotornumber,
-                                const motor* cmotors, int cmotornumber);
+                                const motor* cmotors, int cmotornumber) override;
 
 protected:
   /** Calculate the first derivative of the sensorvalues given by the robot

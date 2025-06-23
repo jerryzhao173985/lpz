@@ -77,17 +77,17 @@ public:
    * call first AbstractControllerAdapter::init(sensornumber,motornumber)
    * if you overwrite this method
    */
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0){
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override{
     controller->init(sensornumber,motornumber);
   }
 
   /** @return Number of sensors the controller
       was initialised with or 0 if not initialised */
-  virtual int getSensorNumber() const { return controller->getSensorNumber();}
+  virtual int getSensorNumber() const  override{ return controller->getSensorNumber();}
 
   /** @return Number of motors the controller
       was initialised with or 0 if not initialised */
-  virtual int getMotorNumber() const {  return controller->getMotorNumber();}
+  virtual int getMotorNumber() const  override{  return controller->getMotorNumber();}
 
   /** performs one step (includes learning).
       Calculates motor commands from sensor inputs.
@@ -97,7 +97,7 @@ public:
       @param motornumber length of the provided motor array
   */
   virtual void step(const sensor* sensors, int sensornumber,
-                    motor* motors, int motornumber) {
+                    motor* motors, int motornumber)  override {
     controller->step(sensors, sensornumber, motors,  motornumber);
   }
 
@@ -105,7 +105,7 @@ public:
       @see step
   */
   virtual void stepNoLearning(const sensor* sensors , int sensornumber,
-                              motor* motors, int motornumber) {
+                              motor* motors, int motornumber)  override {
     controller->stepNoLearning(sensors,sensornumber,motors,motornumber);
   }
 
@@ -139,12 +139,12 @@ public:
 
   /********* STORABLE INTERFACE ******/
   /// @see Storable
-  virtual bool store(FILE* f) const {
+virtual bool store(FILE* f) const  override {
     return controller->store(f);
   }
 
   /// @see Storable
-  virtual bool restore(FILE* f) {
+virtual bool restore(FILE* f)  override {
     return controller->restore(f);
   }
 

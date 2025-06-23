@@ -17,18 +17,18 @@
 class XMLPassiveObject: public lpzrobots::AbstractObstacle, public XMLObject {
 public:
         XMLPassiveObject(XERCESC::DOMNode* passiveObjectNode, XMLParserEngine& xmlEngine);
-        virtual ~XMLPassiveObject();
+        virtual ~XMLPassiveObject() override;
 
           /**
            * sets position of the obstacle and creates/recreates obstacle if necessary
            */
-          virtual void setPose(const osg::Matrix& pose);
+          virtual void setPose(const osg::Matrix& pose) override;
 
           /// return the "main" primitive of the obtactle. The meaning of "main" is arbitrary
-          virtual lpzrobots::Primitive* getMainPrimitive() const;
+          virtual lpzrobots::Primitive* getMainPrimitive() const override;
 
           /// overload this function to create the obstactle. All primitives should go into the list "obst"
-          virtual void create();
+          virtual void create() override;
 
 protected:
           XERCESC::DOMNode* passiveObjectNode;

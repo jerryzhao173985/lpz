@@ -38,7 +38,7 @@
 namespace lpzrobots {
 
   RobotCameraManager::Overlay::Overlay(const Camera::CameraImage& image) :
-    camImg(image), texture(0),overlay(0) {
+    camImg(image), texture(0), overlay(0), overlayW(0), overlayH(0), overlayX(0), overlayY(0) {
   }
 
   RobotCameraManager::Overlay::~Overlay(){
@@ -48,11 +48,10 @@ namespace lpzrobots {
 
   RobotCameraManager::RobotCameraManager(int windowWidth, int windowHeight)
     : enabled(true), scale(1.0),
-      windowWidth(windowWidth), windowHeight(windowHeight)
+      windowWidth(windowWidth), windowHeight(windowHeight),
+      display(new osg::Group()),
+      offscreen(new osg::Group())
   {
-    // create nodes
-    display = new osg::Group();
-    offscreen = new osg::Group();
   }
 
   void RobotCameraManager::addCamera(Camera* cam){

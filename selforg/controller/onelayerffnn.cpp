@@ -47,7 +47,7 @@ bool OneLayerFFNN::store(FILE* f) const {
 
 bool OneLayerFFNN::restore(FILE* f){
         char buffer[128];
-        if(fscanf(f,"%s\n", buffer) != 1) return false;
+        if(fscanf(f,"%127s\n", buffer) != 1) return false;
         eps = atof(buffer);
         if(!weights.restore(f)) return false;
         if(!bias.restore(f)) return false;

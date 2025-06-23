@@ -55,6 +55,10 @@ bool FeedbackWiring::initIntern(){
   }
 
   motors    = (motor*)  malloc(sizeof(motor)  * this->cmotornumber);
+  if(motors == nullptr) {
+    fprintf(stderr, "FeedbackWiring: memory allocation failed\n");
+    exit(1);
+  }
   memset(motors,0,sizeof(motor)  * this->cmotornumber);
 
   int feedbacknumber = ((mode & Motor) != 0)*rmotornumber + vmotornumber;
@@ -126,7 +130,7 @@ Inspectable::iparamkeylist FeedbackWiring::getInternalParamNames() const {
   iparamkeylist l=AbstractWiring::getInternalParamNames();
   char buffer[32];
   for(int i = 0; i < cmotornumber - rsensornumber; i++){
-    sprintf(buffer,"yv[%d]", i);
+    snprintf(buffer, sizeof(buffer), "yv[%d]", i);
     l += std::string(buffer);
   }
   return l;

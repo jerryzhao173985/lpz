@@ -77,7 +77,7 @@ namespace lpzrobots {
     Sphererobot ( const OdeHandle& odeHandle, const OsgHandle& osgHandle,
                   const SphererobotConf& conf, const std::string& name );
 
-    virtual ~Sphererobot();
+    virtual ~Sphererobot() override;
 
     static SphererobotConf getDefaultConf(){
       SphererobotConf c;
@@ -93,12 +93,12 @@ namespace lpzrobots {
     }
 
     /// update the subcomponents
-    virtual void update();
+    virtual void update() override;
 
     /** sets the pose of the vehicle
         @param pose desired 4x4 pose matrix
     */
-    virtual void placeIntern(const osg::Matrix& pose);
+    virtual void placeIntern(const osg::Matrix& pose) override;
 
     /**
      *Writes the sensor values to an array in the memory.
@@ -106,7 +106,7 @@ namespace lpzrobots {
      *@param sensornumber length of the sensor array
      *@return number of actually written sensors
      **/
-    virtual int getSensorsIntern( double* sensors, int sensornumber );
+    virtual int getSensorsIntern( double* sensors, int sensornumber ) override;
 
     /**
      *Reads the actual motor commands from an array, an sets all motors of the snake to this values.
@@ -114,23 +114,23 @@ namespace lpzrobots {
      *@param motors pointer to the array, motor values are scaled to [-1,1]
      *@param motornumber length of the motor array
      **/
-    virtual void setMotorsIntern( const double* motors, int motornumber );
+    virtual void setMotorsIntern( const double* motors, int motornumber ) override;
 
     /**
      *Returns the number of motors used by the snake.
      *@return number of motors
      **/
-    virtual int getMotorNumberIntern();
+    virtual int getMotorNumberIntern() override;
 
     /**
      *Returns the number of sensors used by the robot.
      *@return number of sensors
      **/
-    virtual int getSensorNumberIntern();
+    virtual int getSensorNumberIntern() override;
 
     /** returns a vector with the positions of all segments of the robot
     */
-    virtual int getSegmentsPosition(std::vector<Position> &poslist);
+    virtual int getSegmentsPosition(std::vector<Position> &poslist) override;
 
     /** the main object of the robot, which is used for position and speed tracking */
     virtual Primitive* getMainPrimitive() const { return object[Base]; }
@@ -139,8 +139,8 @@ namespace lpzrobots {
     /** creates vehicle at desired pose
         @param pose 4x4 pose matrix
     */
-    virtual void create(const osg::Matrix& pose);
-    virtual void destroy();
+    virtual void create(const osg::Matrix& pose) override;
+    virtual void destroy() override;
 
 
 

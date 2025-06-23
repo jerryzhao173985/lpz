@@ -6,7 +6,7 @@
 
 
 /// INPUT / Output Data selectors
-typedef matrix::Matrix (*DataFunc)(const std::vector<matrix::Matrix>& data, int time);
+using DataFunc = matrix::Matrix (*)(const std::vector<matrix::Matrix>& data, int time);
 
 matrix::Matrix tm1(const std::vector<matrix::Matrix>& data, int time){
   assert(time>0);

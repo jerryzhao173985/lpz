@@ -1,0 +1,420 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<results version="2">
+    <cppcheck version="2.17.1"/>
+    <errors>
+        <error id="noExplicitConstructor" severity="style" msg="Class &apos;AbstractPlotChannel&apos; has a constructor with 1 argument that is not explicit." verbose="Class &apos;AbstractPlotChannel&apos; has a constructor with 1 argument that is not explicit. Such, so called &quot;Converting constructors&quot;, should in general be explicit for type safety reasons as that prevents unintended implicit conversions." cwe="398" file0="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/AxesPlotChannel.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/AbstractPlotChannel.h" line="10" column="3"/>
+            <symbol>AbstractPlotChannel</symbol>
+        </error>
+        <error id="noExplicitConstructor" severity="style" msg="Class &apos;AxesPlotChannel&apos; has a constructor with 1 argument that is not explicit." verbose="Class &apos;AxesPlotChannel&apos; has a constructor with 1 argument that is not explicit. Such, so called &quot;Converting constructors&quot;, should in general be explicit for type safety reasons as that prevents unintended implicit conversions." cwe="398" file0="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/AxesPlotChannel.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/AxesPlotChannel.h" line="11" column="3"/>
+            <symbol>AxesPlotChannel</symbol>
+        </error>
+        <error id="passedByValue" severity="performance" msg="Function parameter &apos;name&apos; should be passed by const reference." verbose="Parameter &apos;name&apos; is passed by value. It could be passed as a const reference which is usually faster and recommended in C++." cwe="398" file0="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/AxesPlotChannel.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/AxesPlotChannel.cpp" line="4" column="46" info="Function parameter &apos;name&apos; should be passed by const reference."/>
+            <symbol>name</symbol>
+        </error>
+        <error id="noExplicitConstructor" severity="style" msg="Class &apos;DefaultPlotChannel&apos; has a constructor with 1 argument that is not explicit." verbose="Class &apos;DefaultPlotChannel&apos; has a constructor with 1 argument that is not explicit. Such, so called &quot;Converting constructors&quot;, should in general be explicit for type safety reasons as that prevents unintended implicit conversions." cwe="398" file0="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/DefaultPlotChannel.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/DefaultPlotChannel.h" line="11" column="3"/>
+            <symbol>DefaultPlotChannel</symbol>
+        </error>
+        <error id="passedByValue" severity="performance" msg="Function parameter &apos;name&apos; should be passed by const reference." verbose="Parameter &apos;name&apos; is passed by value. It could be passed as a const reference which is usually faster and recommended in C++." cwe="398" file0="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/DefaultPlotChannel.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/DefaultPlotChannel.cpp" line="4" column="52" info="Function parameter &apos;name&apos; should be passed by const reference."/>
+            <symbol>name</symbol>
+        </error>
+        <error id="missingInclude" severity="information" msg="Include file: &quot;tools/stl_adds.h&quot; not found." verbose="Include file: &quot;tools/stl_adds.h&quot; not found.">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/GroupPlotChannel.cpp" line="26" column="0"/>
+        </error>
+        <error id="noExplicitConstructor" severity="style" msg="Class &apos;GroupPlotChannel&apos; has a constructor with 1 argument that is not explicit." verbose="Class &apos;GroupPlotChannel&apos; has a constructor with 1 argument that is not explicit. Such, so called &quot;Converting constructors&quot;, should in general be explicit for type safety reasons as that prevents unintended implicit conversions." cwe="398" file0="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/GroupPlotChannel.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/GroupPlotChannel.h" line="33" column="9"/>
+            <symbol>GroupPlotChannel</symbol>
+        </error>
+        <error id="passedByValue" severity="performance" msg="Function parameter &apos;name&apos; should be passed by const reference." verbose="Parameter &apos;name&apos; is passed by value. It could be passed as a const reference which is usually faster and recommended in C++." cwe="398" file0="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/GroupPlotChannel.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/GroupPlotChannel.cpp" line="32" column="43" info="Function parameter &apos;name&apos; should be passed by const reference."/>
+            <symbol>name</symbol>
+        </error>
+        <error id="noExplicitConstructor" severity="style" msg="Class &apos;IRPlotChannel&apos; has a constructor with 1 argument that is not explicit." verbose="Class &apos;IRPlotChannel&apos; has a constructor with 1 argument that is not explicit. Such, so called &quot;Converting constructors&quot;, should in general be explicit for type safety reasons as that prevents unintended implicit conversions." cwe="398" file0="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/IRPlotChannel.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/IRPlotChannel.h" line="10" column="3"/>
+            <symbol>IRPlotChannel</symbol>
+        </error>
+        <error id="passedByValue" severity="performance" msg="Function parameter &apos;name&apos; should be passed by const reference." verbose="Parameter &apos;name&apos; is passed by value. It could be passed as a const reference which is usually faster and recommended in C++." cwe="398" file0="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/IRPlotChannel.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/IRPlotChannel.cpp" line="5" column="42" info="Function parameter &apos;name&apos; should be passed by const reference."/>
+            <symbol>name</symbol>
+        </error>
+        <error id="noExplicitConstructor" severity="style" msg="Class &apos;MatrixElementPlotChannel&apos; has a constructor with 1 argument that is not explicit." verbose="Class &apos;MatrixElementPlotChannel&apos; has a constructor with 1 argument that is not explicit. Such, so called &quot;Converting constructors&quot;, should in general be explicit for type safety reasons as that prevents unintended implicit conversions." cwe="398" file0="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/MatrixElementPlotChannel.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/MatrixElementPlotChannel.h" line="36" column="9"/>
+            <symbol>MatrixElementPlotChannel</symbol>
+        </error>
+        <error id="passedByValue" severity="performance" msg="Function parameter &apos;name&apos; should be passed by const reference." verbose="Parameter &apos;name&apos; is passed by value. It could be passed as a const reference which is usually faster and recommended in C++." cwe="398" file0="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/MatrixElementPlotChannel.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/MatrixElementPlotChannel.cpp" line="30" column="59" info="Function parameter &apos;name&apos; should be passed by const reference."/>
+            <symbol>name</symbol>
+        </error>
+        <error id="missingInclude" severity="information" msg="Include file: &quot;cassert&quot; not found." verbose="Include file: &quot;cassert&quot; not found.">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/MatrixPlotChannel.cpp" line="28" column="0"/>
+        </error>
+        <error id="noExplicitConstructor" severity="style" msg="Class &apos;MatrixPlotChannel&apos; has a constructor with 1 argument that is not explicit." verbose="Class &apos;MatrixPlotChannel&apos; has a constructor with 1 argument that is not explicit. Such, so called &quot;Converting constructors&quot;, should in general be explicit for type safety reasons as that prevents unintended implicit conversions." cwe="398" file0="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/MatrixPlotChannel.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/MatrixPlotChannel.h" line="41" column="9"/>
+            <symbol>MatrixPlotChannel</symbol>
+        </error>
+        <error id="missingOverride" severity="style" msg="The destructor &apos;~MatrixPlotChannel&apos; overrides a destructor in a base class but is not marked with a &apos;override&apos; specifier." verbose="The destructor &apos;~MatrixPlotChannel&apos; overrides a destructor in a base class but is not marked with a &apos;override&apos; specifier." file0="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/MatrixPlotChannel.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/MatrixPlotChannel.h" line="42" column="18" info="Destructor in derived class"/>
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/GroupPlotChannel.h" line="34" column="18" info="Virtual destructor in base class"/>
+            <symbol>~MatrixPlotChannel</symbol>
+        </error>
+        <error id="passedByValue" severity="performance" msg="Function parameter &apos;name&apos; should be passed by const reference." verbose="Parameter &apos;name&apos; is passed by value. It could be passed as a const reference which is usually faster and recommended in C++." cwe="398" file0="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/MatrixPlotChannel.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/MatrixPlotChannel.cpp" line="32" column="45" info="Function parameter &apos;name&apos; should be passed by const reference."/>
+            <symbol>name</symbol>
+        </error>
+        <error id="noExplicitConstructor" severity="style" msg="Class &apos;MotorCurrentPlotChannel&apos; has a constructor with 1 argument that is not explicit." verbose="Class &apos;MotorCurrentPlotChannel&apos; has a constructor with 1 argument that is not explicit. Such, so called &quot;Converting constructors&quot;, should in general be explicit for type safety reasons as that prevents unintended implicit conversions." cwe="398" file0="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/MotorCurrentPlotChannel.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/MotorCurrentPlotChannel.h" line="11" column="3"/>
+            <symbol>MotorCurrentPlotChannel</symbol>
+        </error>
+        <error id="passedByValue" severity="performance" msg="Function parameter &apos;name&apos; should be passed by const reference." verbose="Parameter &apos;name&apos; is passed by value. It could be passed as a const reference which is usually faster and recommended in C++." cwe="398" file0="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/MotorCurrentPlotChannel.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/MotorCurrentPlotChannel.cpp" line="4" column="62" info="Function parameter &apos;name&apos; should be passed by const reference."/>
+            <symbol>name</symbol>
+        </error>
+        <error id="noExplicitConstructor" severity="style" msg="Class &apos;MotorSpeedPlotChannel&apos; has a constructor with 1 argument that is not explicit." verbose="Class &apos;MotorSpeedPlotChannel&apos; has a constructor with 1 argument that is not explicit. Such, so called &quot;Converting constructors&quot;, should in general be explicit for type safety reasons as that prevents unintended implicit conversions." cwe="398" file0="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/MotorSpeedPlotChannel.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/MotorSpeedPlotChannel.h" line="11" column="3"/>
+            <symbol>MotorSpeedPlotChannel</symbol>
+        </error>
+        <error id="passedByValue" severity="performance" msg="Function parameter &apos;name&apos; should be passed by const reference." verbose="Parameter &apos;name&apos; is passed by value. It could be passed as a const reference which is usually faster and recommended in C++." cwe="398" file0="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/MotorSpeedPlotChannel.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/MotorSpeedPlotChannel.cpp" line="6" column="58" info="Function parameter &apos;name&apos; should be passed by const reference."/>
+            <symbol>name</symbol>
+        </error>
+        <error id="noExplicitConstructor" severity="style" msg="Class &apos;TiltPlotChannel&apos; has a constructor with 1 argument that is not explicit." verbose="Class &apos;TiltPlotChannel&apos; has a constructor with 1 argument that is not explicit. Such, so called &quot;Converting constructors&quot;, should in general be explicit for type safety reasons as that prevents unintended implicit conversions." cwe="398" file0="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/TiltPlotChannel.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/TiltPlotChannel.h" line="11" column="3"/>
+            <symbol>TiltPlotChannel</symbol>
+        </error>
+        <error id="passedByValue" severity="performance" msg="Function parameter &apos;name&apos; should be passed by const reference." verbose="Parameter &apos;name&apos; is passed by value. It could be passed as a const reference which is usually faster and recommended in C++." cwe="398" file0="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/TiltPlotChannel.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/TiltPlotChannel.cpp" line="5" column="46" info="Function parameter &apos;name&apos; should be passed by const reference."/>
+            <symbol>name</symbol>
+        </error>
+        <error id="noExplicitConstructor" severity="style" msg="Class &apos;TimeStampPlotChannel&apos; has a constructor with 1 argument that is not explicit." verbose="Class &apos;TimeStampPlotChannel&apos; has a constructor with 1 argument that is not explicit. Such, so called &quot;Converting constructors&quot;, should in general be explicit for type safety reasons as that prevents unintended implicit conversions." cwe="398" file0="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/TimeStampPlotChannel.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/TimeStampPlotChannel.h" line="11" column="3"/>
+            <symbol>TimeStampPlotChannel</symbol>
+        </error>
+        <error id="passedByValue" severity="performance" msg="Function parameter &apos;name&apos; should be passed by const reference." verbose="Parameter &apos;name&apos; is passed by value. It could be passed as a const reference which is usually faster and recommended in C++." cwe="398" file0="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/TimeStampPlotChannel.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/TimeStampPlotChannel.cpp" line="4" column="56" info="Function parameter &apos;name&apos; should be passed by const reference."/>
+            <symbol>name</symbol>
+        </error>
+        <error id="noExplicitConstructor" severity="style" msg="Class &apos;VectorElementPlotChannel&apos; has a constructor with 1 argument that is not explicit." verbose="Class &apos;VectorElementPlotChannel&apos; has a constructor with 1 argument that is not explicit. Such, so called &quot;Converting constructors&quot;, should in general be explicit for type safety reasons as that prevents unintended implicit conversions." cwe="398" file0="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/VectorElementPlotChannel.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/VectorElementPlotChannel.h" line="36" column="3"/>
+            <symbol>VectorElementPlotChannel</symbol>
+        </error>
+        <error id="missingOverride" severity="style" msg="The function &apos;setValue&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." verbose="The function &apos;setValue&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." file0="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/VectorElementPlotChannel.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/VectorElementPlotChannel.h" line="39" column="8" info="Function in derived class"/>
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/AbstractPlotChannel.h" line="13" column="16" info="Virtual function in base class"/>
+            <symbol>setValue</symbol>
+        </error>
+        <error id="missingOverride" severity="style" msg="The function &apos;getValue&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." verbose="The function &apos;getValue&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." file0="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/VectorElementPlotChannel.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/VectorElementPlotChannel.h" line="40" column="10" info="Function in derived class"/>
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/AbstractPlotChannel.h" line="15" column="18" info="Virtual function in base class"/>
+            <symbol>getValue</symbol>
+        </error>
+        <error id="passedByValue" severity="performance" msg="Function parameter &apos;name&apos; should be passed by const reference." verbose="Parameter &apos;name&apos; is passed by value. It could be passed as a const reference which is usually faster and recommended in C++." cwe="398" file0="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/VectorElementPlotChannel.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/VectorElementPlotChannel.cpp" line="31" column="59" info="Function parameter &apos;name&apos; should be passed by const reference."/>
+            <symbol>name</symbol>
+        </error>
+        <error id="missingInclude" severity="information" msg="Include file: &quot;cassert&quot; not found." verbose="Include file: &quot;cassert&quot; not found.">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/VectorPlotChannel.cpp" line="27" column="0"/>
+        </error>
+        <error id="noExplicitConstructor" severity="style" msg="Class &apos;VectorPlotChannel&apos; has a constructor with 1 argument that is not explicit." verbose="Class &apos;VectorPlotChannel&apos; has a constructor with 1 argument that is not explicit. Such, so called &quot;Converting constructors&quot;, should in general be explicit for type safety reasons as that prevents unintended implicit conversions." cwe="398" file0="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/VectorPlotChannel.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/VectorPlotChannel.h" line="37" column="3"/>
+            <symbol>VectorPlotChannel</symbol>
+        </error>
+        <error id="missingOverride" severity="style" msg="The destructor &apos;~VectorPlotChannel&apos; overrides a destructor in a base class but is not marked with a &apos;override&apos; specifier." verbose="The destructor &apos;~VectorPlotChannel&apos; overrides a destructor in a base class but is not marked with a &apos;override&apos; specifier." file0="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/VectorPlotChannel.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/VectorPlotChannel.h" line="38" column="12" info="Destructor in derived class"/>
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/MatrixPlotChannel.h" line="42" column="18" info="Virtual destructor in base class"/>
+            <symbol>~VectorPlotChannel</symbol>
+        </error>
+        <error id="missingOverride" severity="style" msg="The function &apos;getDimension&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." verbose="The function &apos;getDimension&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." file0="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/VectorPlotChannel.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/VectorPlotChannel.h" line="40" column="15" info="Function in derived class"/>
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/MatrixPlotChannel.h" line="49" column="21" info="Virtual function in base class"/>
+            <symbol>getDimension</symbol>
+        </error>
+        <error id="missingOverride" severity="style" msg="The function &apos;getValue&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." verbose="The function &apos;getValue&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." file0="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/VectorPlotChannel.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/VectorPlotChannel.h" line="42" column="18" info="Function in derived class"/>
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/MatrixPlotChannel.h" line="51" column="24" info="Virtual function in base class"/>
+            <symbol>getValue</symbol>
+        </error>
+        <error id="passedByValue" severity="performance" msg="Function parameter &apos;name&apos; should be passed by const reference." verbose="Parameter &apos;name&apos; is passed by value. It could be passed as a const reference which is usually faster and recommended in C++." cwe="398" file0="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/VectorPlotChannel.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/VectorPlotChannel.cpp" line="32" column="45" info="Function parameter &apos;name&apos; should be passed by const reference."/>
+            <symbol>name</symbol>
+        </error>
+        <error id="postfixOperator" severity="performance" msg="Prefer prefix ++/-- operators for non-primitive types." verbose="Prefix ++/-- operators should be preferred for non-primitive types. Pre-increment/decrement can be more efficient than post-increment/decrement. Post-increment/decrement usually involves keeping a copy of the previous value around and adds a little extra code." cwe="398" file0="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/VectorPlotChannel.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/Channel/VectorPlotChannel.cpp" line="71" column="102"/>
+        </error>
+        <error id="missingInclude" severity="information" msg="Include file: &quot;MatrixPlotChannel.h&quot; not found." verbose="Include file: &quot;MatrixPlotChannel.h&quot; not found.">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/ColorPalette.h" line="38" column="0"/>
+        </error>
+        <error id="preprocessorErrorDirective" severity="error" msg="#error &quot;Unable to determine byte order!&quot;" verbose="#error &quot;Unable to determine byte order!&quot;">
+            <location file="/opt/homebrew/include/QtCore/qprocessordetection.h" line="368" column="0"/>
+        </error>
+        <error id="missingInclude" severity="information" msg="Include file: &quot;MatrixPlotChannel.h&quot; not found." verbose="Include file: &quot;MatrixPlotChannel.h&quot; not found.">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/InputFilter/MatrixPipeFilter.h" line="31" column="0"/>
+        </error>
+        <error id="missingInclude" severity="information" msg="Include file: &quot;MatrixElementPlotChannel.h&quot; not found." verbose="Include file: &quot;MatrixElementPlotChannel.h&quot; not found.">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/InputFilter/MatrixPipeFilter.h" line="32" column="0"/>
+        </error>
+        <error id="missingInclude" severity="information" msg="Include file: &quot;VectorPlotChannel.h&quot; not found." verbose="Include file: &quot;VectorPlotChannel.h&quot; not found.">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/InputFilter/MatrixPipeFilter.h" line="33" column="0"/>
+        </error>
+        <error id="missingInclude" severity="information" msg="Include file: &quot;VectorElementPlotChannel.h&quot; not found." verbose="Include file: &quot;VectorElementPlotChannel.h&quot; not found.">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/InputFilter/MatrixPipeFilter.h" line="34" column="0"/>
+        </error>
+        <error id="missingInclude" severity="information" msg="Include file: &quot;AbstractPipeReader.h&quot; not found." verbose="Include file: &quot;AbstractPipeReader.h&quot; not found.">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/InputFilter/AbstractPipeFilter.h" line="8" column="0"/>
+        </error>
+        <error id="missingInclude" severity="information" msg="Include file: &quot;AbstractPlotChannel.h&quot; not found." verbose="Include file: &quot;AbstractPlotChannel.h&quot; not found.">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/InputFilter/AbstractPipeFilter.h" line="9" column="0"/>
+        </error>
+        <error id="missingInclude" severity="information" msg="Include file: &quot;TimeStampPlotChannel.h&quot; not found." verbose="Include file: &quot;TimeStampPlotChannel.h&quot; not found.">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/InputFilter/AbstractPipeFilter.h" line="10" column="0"/>
+        </error>
+        <error id="missingInclude" severity="information" msg="Include file: &quot;sensortypes.h&quot; not found." verbose="Include file: &quot;sensortypes.h&quot; not found.">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/InputFilter/AbstractPipeFilter.h" line="12" column="0"/>
+        </error>
+        <error id="missingInclude" severity="information" msg="Include file: &quot;DefaultPlotChannel.h&quot; not found." verbose="Include file: &quot;DefaultPlotChannel.h&quot; not found.">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/InputFilter/MatrixPipeFilter.cpp" line="28" column="0"/>
+        </error>
+        <error id="normalCheckLevelMaxBranches" severity="information" msg="Limiting analysis of branches. Use --check-level=exhaustive to analyze all branches." verbose="Limiting analysis of branches. Use --check-level=exhaustive to analyze all branches." file0="/Users/jerry/lpzrobot_mac/matrixviz/src/InputReader/SimplePipeReader.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/InputReader/SimplePipeReader.cpp" line="0" column="0"/>
+        </error>
+        <error id="noExplicitConstructor" severity="style" msg="Class &apos;SimplePipeReader&apos; has a constructor with 1 argument that is not explicit." verbose="Class &apos;SimplePipeReader&apos; has a constructor with 1 argument that is not explicit. Such, so called &quot;Converting constructors&quot;, should in general be explicit for type safety reasons as that prevents unintended implicit conversions." cwe="398" file0="/Users/jerry/lpzrobot_mac/matrixviz/src/InputReader/SimplePipeReader.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/InputReader/SimplePipeReader.h" line="15" column="3"/>
+            <symbol>SimplePipeReader</symbol>
+        </error>
+        <error id="missingOverride" severity="style" msg="The function &apos;run&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." verbose="The function &apos;run&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." file0="/Users/jerry/lpzrobot_mac/matrixviz/src/InputReader/SimplePipeReader.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/InputReader/SimplePipeReader.h" line="18" column="16" info="Function in derived class"/>
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/InputReader/AbstractPipeReader.h" line="23" column="16" info="Virtual function in base class"/>
+            <symbol>run</symbol>
+        </error>
+        <error id="missingOverride" severity="style" msg="The function &apos;readyForData&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." verbose="The function &apos;readyForData&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." file0="/Users/jerry/lpzrobot_mac/matrixviz/src/InputReader/SimplePipeReader.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/InputReader/SimplePipeReader.h" line="21" column="16" info="Function in derived class"/>
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/InputReader/AbstractPipeReader.h" line="33" column="16" info="Virtual function in base class"/>
+            <symbol>readyForData</symbol>
+        </error>
+        <error id="missingOverride" severity="style" msg="The function &apos;goReadData&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." verbose="The function &apos;goReadData&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." file0="/Users/jerry/lpzrobot_mac/matrixviz/src/InputReader/SimplePipeReader.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/InputReader/SimplePipeReader.h" line="23" column="16" info="Function in derived class"/>
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/InputReader/AbstractPipeReader.h" line="35" column="16" info="Virtual function in base class"/>
+            <symbol>goReadData</symbol>
+        </error>
+        <error id="missingOverride" severity="style" msg="The function &apos;waitUntilGo&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." verbose="The function &apos;waitUntilGo&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." file0="/Users/jerry/lpzrobot_mac/matrixviz/src/InputReader/SimplePipeReader.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/InputReader/SimplePipeReader.h" line="24" column="16" info="Function in derived class"/>
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/InputReader/AbstractPipeReader.h" line="37" column="16" info="Virtual function in base class"/>
+            <symbol>waitUntilGo</symbol>
+        </error>
+        <error id="missingOverride" severity="style" msg="The function &apos;getChannelLine&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." verbose="The function &apos;getChannelLine&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." file0="/Users/jerry/lpzrobot_mac/matrixviz/src/InputReader/SimplePipeReader.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/InputReader/SimplePipeReader.h" line="27" column="34" info="Function in derived class"/>
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/InputReader/AbstractPipeReader.h" line="25" column="34" info="Virtual function in base class"/>
+            <symbol>getChannelLine</symbol>
+        </error>
+        <error id="missingOverride" severity="style" msg="The function &apos;getDescriptionLine&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." verbose="The function &apos;getDescriptionLine&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." file0="/Users/jerry/lpzrobot_mac/matrixviz/src/InputReader/SimplePipeReader.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/InputReader/SimplePipeReader.h" line="29" column="34" info="Function in derived class"/>
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/InputReader/AbstractPipeReader.h" line="28" column="34" info="Virtual function in base class"/>
+            <symbol>getDescriptionLine</symbol>
+        </error>
+        <error id="missingOverride" severity="style" msg="The function &apos;getDataLine&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." verbose="The function &apos;getDataLine&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." file0="/Users/jerry/lpzrobot_mac/matrixviz/src/InputReader/SimplePipeReader.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/InputReader/SimplePipeReader.h" line="31" column="29" info="Function in derived class"/>
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/InputReader/AbstractPipeReader.h" line="30" column="29" info="Virtual function in base class"/>
+            <symbol>getDataLine</symbol>
+        </error>
+        <error id="shadowFunction" severity="style" msg="Local variable &apos;captureFrame&apos; shadows outer function" verbose="Local variable &apos;captureFrame&apos; shadows outer function" cwe="398" file0="/Users/jerry/lpzrobot_mac/matrixviz/src/InputReader/SimplePipeReader.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/InputReader/SimplePipeReader.cpp" line="48" column="16" info="Shadow variable"/>
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/InputReader/SimplePipeReader.h" line="37" column="8" info="Shadowed declaration"/>
+            <symbol>captureFrame</symbol>
+        </error>
+        <error id="shadowFunction" severity="style" msg="Local variable &apos;sourceName&apos; shadows outer function" verbose="Local variable &apos;sourceName&apos; shadows outer function" cwe="398" file0="/Users/jerry/lpzrobot_mac/matrixviz/src/InputReader/SimplePipeReader.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/InputReader/SimplePipeReader.cpp" line="53" column="12" info="Shadow variable"/>
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/InputReader/SimplePipeReader.h" line="38" column="8" info="Shadowed declaration"/>
+            <symbol>sourceName</symbol>
+        </error>
+        <error id="unreadVariable" severity="style" msg="Variable &apos;closing&apos; is assigned a value that is never used." verbose="Variable &apos;closing&apos; is assigned a value that is never used." cwe="563" file0="/Users/jerry/lpzrobot_mac/matrixviz/src/InputReader/SimplePipeReader.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/InputReader/SimplePipeReader.cpp" line="35" column="15"/>
+            <symbol>closing</symbol>
+        </error>
+        <error id="missingInclude" severity="information" msg="Include file: &quot;MatrixPipeFilter.h&quot; not found." verbose="Include file: &quot;MatrixPipeFilter.h&quot; not found.">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/MatrixVisualizer.h" line="31" column="0"/>
+        </error>
+        <error id="missingInclude" severity="information" msg="Include file: &quot;SimplePipeReader.h&quot; not found." verbose="Include file: &quot;SimplePipeReader.h&quot; not found.">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/MatrixVisualizer.h" line="33" column="0"/>
+        </error>
+        <error id="missingInclude" severity="information" msg="Include file: &quot;MatrixPlotChannel.h&quot; not found." verbose="Include file: &quot;MatrixPlotChannel.h&quot; not found.">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/AbstractVisualisation.h" line="31" column="0"/>
+        </error>
+        <error id="missingInclude" severity="information" msg="Include file: &quot;VectorPlotChannel.h&quot; not found." verbose="Include file: &quot;VectorPlotChannel.h&quot; not found.">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/AbstractVisualisation.h" line="32" column="0"/>
+        </error>
+        <error id="missingInclude" severity="information" msg="Include file: &quot;ColorPalette.h&quot; not found." verbose="Include file: &quot;ColorPalette.h&quot; not found.">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/AbstractVisualisation.h" line="33" column="0"/>
+        </error>
+        <error id="missingInclude" severity="information" msg="Include file: &quot;AbstractPlotChannel.h&quot; not found." verbose="Include file: &quot;AbstractPlotChannel.h&quot; not found.">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/AbstractRobotSubWidget.h" line="34" column="0"/>
+        </error>
+        <error id="missingInclude" severity="information" msg="Include file: &quot;MatrixElementPlotChannel.h&quot; not found." verbose="Include file: &quot;MatrixElementPlotChannel.h&quot; not found.">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/MatrixVisualizer.h" line="36" column="0"/>
+        </error>
+        <error id="missingInclude" severity="information" msg="Include file: &quot;MatrixPlotChannel.h&quot; not found." verbose="Include file: &quot;MatrixPlotChannel.h&quot; not found.">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/MatrixVisualizer.h" line="37" column="0"/>
+        </error>
+        <error id="missingInclude" severity="information" msg="Include file: &quot;VectorElementPlotChannel.h&quot; not found." verbose="Include file: &quot;VectorElementPlotChannel.h&quot; not found.">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/MatrixVisualizer.h" line="38" column="0"/>
+        </error>
+        <error id="missingInclude" severity="information" msg="Include file: &quot;VectorPlotChannel.h&quot; not found." verbose="Include file: &quot;VectorPlotChannel.h&quot; not found.">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/MatrixVisualizer.h" line="39" column="0"/>
+        </error>
+        <error id="missingInclude" severity="information" msg="Include file: &quot;TextureVisualisation.h&quot; not found." verbose="Include file: &quot;TextureVisualisation.h&quot; not found.">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/VisualiserSubWidget.cpp" line="27" column="0"/>
+        </error>
+        <error id="missingInclude" severity="information" msg="Include file: &quot;LandscapeVisualisation.h&quot; not found." verbose="Include file: &quot;LandscapeVisualisation.h&quot; not found.">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/VisualiserSubWidget.cpp" line="28" column="0"/>
+        </error>
+        <error id="missingInclude" severity="information" msg="Include file: &quot;BarVisualisation.h&quot; not found." verbose="Include file: &quot;BarVisualisation.h&quot; not found.">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/VisualiserSubWidget.cpp" line="29" column="0"/>
+        </error>
+        <error id="missingInclude" severity="information" msg="Include file: &quot;VectorPlotVisualisation.h&quot; not found." verbose="Include file: &quot;VectorPlotVisualisation.h&quot; not found.">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/VisualiserSubWidget.cpp" line="30" column="0"/>
+        </error>
+        <error id="missingInclude" severity="information" msg="Include file: &quot;math.h&quot; not found." verbose="Include file: &quot;math.h&quot; not found.">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/BarVisualisation.cpp" line="26" column="0"/>
+        </error>
+        <error id="uninitMemberVar" severity="warning" msg="Member variable &apos;BarVisualisation::visMode&apos; is not initialized in the constructor." verbose="Member variable &apos;BarVisualisation::visMode&apos; is not initialized in the constructor. Member variables of native types, pointers, or references are left uninitialized when the class is instantiated. That may cause bugs or undefined behavior." cwe="398" file0="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/BarVisualisation.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/BarVisualisation.cpp" line="33" column="19"/>
+            <symbol>BarVisualisation::visMode</symbol>
+        </error>
+        <error id="uninitMemberVar" severity="warning" msg="Member variable &apos;BarVisualisation::inputMode&apos; is not initialized in the constructor." verbose="Member variable &apos;BarVisualisation::inputMode&apos; is not initialized in the constructor. Member variables of native types, pointers, or references are left uninitialized when the class is instantiated. That may cause bugs or undefined behavior." cwe="398" file0="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/BarVisualisation.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/BarVisualisation.cpp" line="33" column="19"/>
+            <symbol>BarVisualisation::inputMode</symbol>
+        </error>
+        <error id="uninitMemberVar" severity="warning" msg="Member variable &apos;BarVisualisation::mouseX&apos; is not initialized in the constructor." verbose="Member variable &apos;BarVisualisation::mouseX&apos; is not initialized in the constructor. Member variables of native types, pointers, or references are left uninitialized when the class is instantiated. That may cause bugs or undefined behavior." cwe="398" file0="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/BarVisualisation.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/BarVisualisation.cpp" line="33" column="19"/>
+            <symbol>BarVisualisation::mouseX</symbol>
+        </error>
+        <error id="uninitMemberVar" severity="warning" msg="Member variable &apos;BarVisualisation::mouseY&apos; is not initialized in the constructor." verbose="Member variable &apos;BarVisualisation::mouseY&apos; is not initialized in the constructor. Member variables of native types, pointers, or references are left uninitialized when the class is instantiated. That may cause bugs or undefined behavior." cwe="398" file0="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/BarVisualisation.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/BarVisualisation.cpp" line="33" column="19"/>
+            <symbol>BarVisualisation::mouseY</symbol>
+        </error>
+        <error id="missingOverride" severity="style" msg="The destructor &apos;~BarVisualisation&apos; overrides a destructor in a base class but is not marked with a &apos;override&apos; specifier." verbose="The destructor &apos;~BarVisualisation&apos; overrides a destructor in a base class but is not marked with a &apos;override&apos; specifier." file0="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/BarVisualisation.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/BarVisualisation.h" line="38" column="5" info="Destructor in derived class"/>
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/AbstractVisualisation.h" line="46" column="12" info="Virtual destructor in base class"/>
+            <symbol>~BarVisualisation</symbol>
+        </error>
+        <error id="missingOverride" severity="style" msg="The function &apos;initializeGL&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." verbose="The function &apos;initializeGL&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." file0="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/BarVisualisation.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/BarVisualisation.h" line="42" column="9" info="Function in derived class"/>
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/AbstractVisualisation.h" line="54" column="16" info="Virtual function in base class"/>
+            <symbol>initializeGL</symbol>
+        </error>
+        <error id="missingOverride" severity="style" msg="The function &apos;resizeGL&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." verbose="The function &apos;resizeGL&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." file0="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/BarVisualisation.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/BarVisualisation.h" line="43" column="9" info="Function in derived class"/>
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/AbstractVisualisation.h" line="55" column="16" info="Virtual function in base class"/>
+            <symbol>resizeGL</symbol>
+        </error>
+        <error id="missingOverride" severity="style" msg="The function &apos;paintGL&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." verbose="The function &apos;paintGL&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." file0="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/BarVisualisation.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/BarVisualisation.h" line="44" column="9" info="Function in derived class"/>
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/AbstractVisualisation.h" line="56" column="16" info="Virtual function in base class"/>
+            <symbol>paintGL</symbol>
+        </error>
+        <error id="missingInclude" severity="information" msg="Include file: &quot;math.h&quot; not found." verbose="Include file: &quot;math.h&quot; not found.">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/LandscapeVisualisation.cpp" line="26" column="0"/>
+        </error>
+        <error id="uninitMemberVar" severity="warning" msg="Member variable &apos;LandscapeVisualisation::mouseX&apos; is not initialized in the constructor." verbose="Member variable &apos;LandscapeVisualisation::mouseX&apos; is not initialized in the constructor. Member variables of native types, pointers, or references are left uninitialized when the class is instantiated. That may cause bugs or undefined behavior." cwe="398" file0="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/LandscapeVisualisation.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/LandscapeVisualisation.cpp" line="33" column="25"/>
+            <symbol>LandscapeVisualisation::mouseX</symbol>
+        </error>
+        <error id="uninitMemberVar" severity="warning" msg="Member variable &apos;LandscapeVisualisation::mouseY&apos; is not initialized in the constructor." verbose="Member variable &apos;LandscapeVisualisation::mouseY&apos; is not initialized in the constructor. Member variables of native types, pointers, or references are left uninitialized when the class is instantiated. That may cause bugs or undefined behavior." cwe="398" file0="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/LandscapeVisualisation.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/LandscapeVisualisation.cpp" line="33" column="25"/>
+            <symbol>LandscapeVisualisation::mouseY</symbol>
+        </error>
+        <error id="missingOverride" severity="style" msg="The destructor &apos;~LandscapeVisualisation&apos; overrides a destructor in a base class but is not marked with a &apos;override&apos; specifier." verbose="The destructor &apos;~LandscapeVisualisation&apos; overrides a destructor in a base class but is not marked with a &apos;override&apos; specifier." file0="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/LandscapeVisualisation.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/LandscapeVisualisation.h" line="44" column="5" info="Destructor in derived class"/>
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/AbstractVisualisation.h" line="46" column="12" info="Virtual destructor in base class"/>
+            <symbol>~LandscapeVisualisation</symbol>
+        </error>
+        <error id="missingOverride" severity="style" msg="The function &apos;initializeGL&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." verbose="The function &apos;initializeGL&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." file0="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/LandscapeVisualisation.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/LandscapeVisualisation.h" line="48" column="9" info="Function in derived class"/>
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/AbstractVisualisation.h" line="54" column="16" info="Virtual function in base class"/>
+            <symbol>initializeGL</symbol>
+        </error>
+        <error id="missingOverride" severity="style" msg="The function &apos;resizeGL&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." verbose="The function &apos;resizeGL&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." file0="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/LandscapeVisualisation.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/LandscapeVisualisation.h" line="49" column="9" info="Function in derived class"/>
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/AbstractVisualisation.h" line="55" column="16" info="Virtual function in base class"/>
+            <symbol>resizeGL</symbol>
+        </error>
+        <error id="missingOverride" severity="style" msg="The function &apos;paintGL&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." verbose="The function &apos;paintGL&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." file0="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/LandscapeVisualisation.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/LandscapeVisualisation.h" line="50" column="9" info="Function in derived class"/>
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/AbstractVisualisation.h" line="56" column="16" info="Virtual function in base class"/>
+            <symbol>paintGL</symbol>
+        </error>
+        <error id="variableScope" severity="style" msg="The scope of the variable &apos;p11&apos; can be reduced." verbose="The scope of the variable &apos;p11&apos; can be reduced. Warning: Be careful when fixing this message, especially when there are inner loops. Here is an example where cppcheck will write that the scope for &apos;i&apos; can be reduced:\012void f(int x)\012{\012    int i = 0;\012    if (x) {\012        // it&apos;s safe to move &apos;int i = 0;&apos; here\012        for (int n = 0; n &lt; 10; ++n) {\012            // it is possible but not safe to move &apos;int i = 0;&apos; here\012            do_something(&amp;i);\012        }\012    }\012}\012When you see this message it is always safe to reduce the variable scope 1 level." cwe="398" file0="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/LandscapeVisualisation.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/LandscapeVisualisation.cpp" line="101" column="33"/>
+            <symbol>p11</symbol>
+        </error>
+        <error id="constParameterReference" severity="style" msg="Parameter &apos;v1&apos; can be declared as reference to const" verbose="Parameter &apos;v1&apos; can be declared as reference to const" cwe="398" file0="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/LandscapeVisualisation.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/LandscapeVisualisation.cpp" line="255" column="50" info="Parameter &apos;v1&apos; can be declared as reference to const"/>
+            <symbol>v1</symbol>
+        </error>
+        <error id="constParameterReference" severity="style" msg="Parameter &apos;v2&apos; can be declared as reference to const" verbose="Parameter &apos;v2&apos; can be declared as reference to const" cwe="398" file0="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/LandscapeVisualisation.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/LandscapeVisualisation.cpp" line="255" column="62" info="Parameter &apos;v2&apos; can be declared as reference to const"/>
+            <symbol>v2</symbol>
+        </error>
+        <error id="constParameterReference" severity="style" msg="Parameter &apos;v3&apos; can be declared as reference to const" verbose="Parameter &apos;v3&apos; can be declared as reference to const" cwe="398" file0="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/LandscapeVisualisation.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/LandscapeVisualisation.cpp" line="255" column="74" info="Parameter &apos;v3&apos; can be declared as reference to const"/>
+            <symbol>v3</symbol>
+        </error>
+        <error id="constParameterReference" severity="style" msg="Parameter &apos;v1&apos; can be declared as reference to const" verbose="Parameter &apos;v1&apos; can be declared as reference to const" cwe="398" file0="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/LandscapeVisualisation.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/LandscapeVisualisation.cpp" line="276" column="57" info="Parameter &apos;v1&apos; can be declared as reference to const"/>
+            <symbol>v1</symbol>
+        </error>
+        <error id="constParameterReference" severity="style" msg="Parameter &apos;v2&apos; can be declared as reference to const" verbose="Parameter &apos;v2&apos; can be declared as reference to const" cwe="398" file0="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/LandscapeVisualisation.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/LandscapeVisualisation.cpp" line="276" column="69" info="Parameter &apos;v2&apos; can be declared as reference to const"/>
+            <symbol>v2</symbol>
+        </error>
+        <error id="missingInclude" severity="information" msg="Include file: &quot;math.h&quot; not found." verbose="Include file: &quot;math.h&quot; not found.">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/TextureVisualisation.cpp" line="27" column="0"/>
+        </error>
+        <error id="missingOverride" severity="style" msg="The destructor &apos;~TextureVisualisation&apos; overrides a destructor in a base class but is not marked with a &apos;override&apos; specifier." verbose="The destructor &apos;~TextureVisualisation&apos; overrides a destructor in a base class but is not marked with a &apos;override&apos; specifier." file0="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/TextureVisualisation.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/TextureVisualisation.h" line="40" column="12" info="Destructor in derived class"/>
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/AbstractVisualisation.h" line="46" column="12" info="Virtual destructor in base class"/>
+            <symbol>~TextureVisualisation</symbol>
+        </error>
+        <error id="missingOverride" severity="style" msg="The function &apos;initializeGL&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." verbose="The function &apos;initializeGL&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." file0="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/TextureVisualisation.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/TextureVisualisation.h" line="45" column="8" info="Function in derived class"/>
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/AbstractVisualisation.h" line="54" column="16" info="Virtual function in base class"/>
+            <symbol>initializeGL</symbol>
+        </error>
+        <error id="missingOverride" severity="style" msg="The function &apos;resizeGL&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." verbose="The function &apos;resizeGL&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." file0="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/TextureVisualisation.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/TextureVisualisation.h" line="46" column="8" info="Function in derived class"/>
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/AbstractVisualisation.h" line="55" column="16" info="Virtual function in base class"/>
+            <symbol>resizeGL</symbol>
+        </error>
+        <error id="missingOverride" severity="style" msg="The function &apos;paintGL&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." verbose="The function &apos;paintGL&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." file0="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/TextureVisualisation.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/TextureVisualisation.h" line="47" column="8" info="Function in derived class"/>
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/AbstractVisualisation.h" line="56" column="16" info="Virtual function in base class"/>
+            <symbol>paintGL</symbol>
+        </error>
+        <error id="missingInclude" severity="information" msg="Include file: &quot;math.h&quot; not found." verbose="Include file: &quot;math.h&quot; not found.">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/VectorPlotVisualisation.cpp" line="9" column="0"/>
+        </error>
+        <error id="missingOverride" severity="style" msg="The destructor &apos;~VectorPlotVisualisation&apos; overrides a destructor in a base class but is not marked with a &apos;override&apos; specifier." verbose="The destructor &apos;~VectorPlotVisualisation&apos; overrides a destructor in a base class but is not marked with a &apos;override&apos; specifier." file0="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/VectorPlotVisualisation.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/VectorPlotVisualisation.h" line="18" column="12" info="Destructor in derived class"/>
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/AbstractVisualisation.h" line="46" column="12" info="Virtual destructor in base class"/>
+            <symbol>~VectorPlotVisualisation</symbol>
+        </error>
+        <error id="missingOverride" severity="style" msg="The function &apos;initializeGL&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." verbose="The function &apos;initializeGL&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." file0="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/VectorPlotVisualisation.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/VectorPlotVisualisation.h" line="23" column="8" info="Function in derived class"/>
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/AbstractVisualisation.h" line="54" column="16" info="Virtual function in base class"/>
+            <symbol>initializeGL</symbol>
+        </error>
+        <error id="missingOverride" severity="style" msg="The function &apos;resizeGL&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." verbose="The function &apos;resizeGL&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." file0="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/VectorPlotVisualisation.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/VectorPlotVisualisation.h" line="24" column="8" info="Function in derived class"/>
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/AbstractVisualisation.h" line="55" column="16" info="Virtual function in base class"/>
+            <symbol>resizeGL</symbol>
+        </error>
+        <error id="missingOverride" severity="style" msg="The function &apos;paintGL&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." verbose="The function &apos;paintGL&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." file0="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/VectorPlotVisualisation.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/VectorPlotVisualisation.h" line="25" column="8" info="Function in derived class"/>
+            <location file="/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/AbstractVisualisation.h" line="56" column="16" info="Virtual function in base class"/>
+            <symbol>paintGL</symbol>
+        </error>
+        <error id="checkersReport" severity="information" msg="Active checkers: There was critical errors (use --checkers-report=&lt;filename&gt; to see details)" verbose="Active checkers: There was critical errors (use --checkers-report=&lt;filename&gt; to see details)"/>
+    </errors>
+</results>

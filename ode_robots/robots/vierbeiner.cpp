@@ -43,7 +43,10 @@ namespace lpzrobots {
   // - give handle for ODE and OSG stuff
   VierBeiner::VierBeiner(const OdeHandle& odeHandle, const OsgHandle& osgHandle,
            const VierBeinerConf& c, const std::string& name)
-    : OdeRobot(odeHandle, osgHandle, name, "0.7"), conf(c)
+    : OdeRobot(odeHandle, osgHandle, name, "0.7"), conf(c),
+      trunk(nullptr), headtrans(nullptr), bigboxtransform(nullptr), neck(nullptr),
+      tail(nullptr), eye_r_trans(nullptr), eye_l_trans(nullptr),
+      ear_l_trans(nullptr), ear_r_trans(nullptr), mouth_trans(nullptr)
   {
     // robot is not created till now
     created=false;

@@ -43,7 +43,7 @@ public:
   */
   MultiLayerFFNN(double eps, const std::vector<Layer>& layers, bool useBypass=false,
                  bool someInternalParams=true);
-  virtual ~MultiLayerFFNN(){ }
+  virtual ~MultiLayerFFNN() override{ }
 
   /** initialisation of the network with the given number of input and output units.
       The dimensionality of the ouputlayer is automatically adjusted.
@@ -52,16 +52,16 @@ public:
       @param randGen pointer to random generator, if 0 an new one is used
    */
   virtual void init(unsigned int inputDim, unsigned  int outputDim,
-                    double unit_map = 0.0, RandGen* randGen = 0);
+                    double unit_map = 0.0, RandGen* randGen = nullptr) override;
 
   /// passive processing of the input
-  virtual const matrix::Matrix process (const matrix::Matrix& input);
+  virtual const matrix::Matrix process (const matrix::Matrix& input) override;
 
   /** performs learning and returns the network output before learning
       (process should be called before) */
   virtual const matrix::Matrix learn (const matrix::Matrix& input,
                                       const matrix::Matrix& nom_output,
-                                      double learnRateFactor = 1);
+                                      double learnRateFactor = 1) override;
 
   /** response matrix of neural network at given input
 
@@ -71,7 +71,7 @@ public:
   \f$ G'\f$ is a diagonal matrix with \f$ G'_ii = g'_i \f$ as values on the diagonal.
   ATTENTION: input is ignored! use process before!
   */
-  virtual const matrix::Matrix response(const matrix::Matrix& input) const;
+  virtual const matrix::Matrix response(const matrix::Matrix& input) const override;
 
   /** calculates the input shift v to a given output shift xsi via pseudo inversion.
 
@@ -80,15 +80,15 @@ public:
       The result is a vector of dimension inputdim.
       ATTENTION: input is ignored! use process before!
    */
-  virtual const matrix::Matrix inversion(const matrix::Matrix& input, const matrix::Matrix& xsi) const;
+  virtual const matrix::Matrix inversion(const matrix::Matrix& input, const matrix::Matrix& xsi) const override;
 
 
   /// returns the number of input neurons
-  virtual unsigned int getInputDim() const {
+  virtual unsigned int getInputDim() const override {
     return weights[0].getN();
   }
   /// returns the number of output neurons
-  virtual unsigned int getOutputDim() const {
+  virtual unsigned int getOutputDim() const override {
     return (weights.rbegin())->getM();
   }
 
@@ -99,7 +99,7 @@ public:
   }
 
   /// damps the weights and the biases by multiplying (1-damping)
-  virtual void damp(double damping);
+  virtual void damp(double damping) override;
 
   // total number of layers (1 means no hidden units)
   virtual unsigned int getLayerNum() const {
@@ -144,19 +144,19 @@ public:
 
   /**************  STOREABLE **********************************/
   /// stores the layer binary into file stream
-  bool store(FILE* f) const;
+  bool store(FILE* f) const override;
   /// restores the layer binary from file stream
-  bool restore(FILE* f);
+  bool restore(FILE* f) override;
 
 
   /// writes the layer ASCII into file stream (not in the storable interface)
   bool write(FILE* f) const;
 
   /************** Inspectable **********************************/
-  virtual iparamkeylist getInternalParamNames() const;
-  virtual iparamvallist getInternalParams() const;
-  virtual ilayerlist getStructuralLayers() const;
-  virtual iconnectionlist getStructuralConnections() const;
+  virtual iparamkeylist getInternalParamNames() const override;
+  virtual iparamvallist getInternalParams() const override;
+  virtual ilayerlist getStructuralLayers() const override;
+  virtual iconnectionlist getStructuralConnections() const override;
 
 
   virtual void setSomeInternalParams(bool someInternalParams){

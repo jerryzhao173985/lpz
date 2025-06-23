@@ -44,7 +44,7 @@ DEP::DEP(const DEPConf& conf)
   addParameterDef("learningrule",  (int*)(&this->conf.learningRule),
                   false,              std::string("which learning rule to use: ") +
                   std::accumulate(conf.LearningRuleNames.begin(),conf.LearningRuleNames.end(),
-                                  std::string(),[](std::string a, std::pair<DEPConf::LearningRule,std::string> lr){return a + itos((int)lr.first) + ": " + lr.second + ", ";}));
+                                  std::string(),[](const std::string& a, std::pair<DEPConf::LearningRule,std::string> lr){return a + itos((int)(lr.first)) + ": " + lr.second + ", ";}));
   addParameterDef("timedist", &timedist, 1,     0,10, "time distance of product terms in learning rule");
   addParameterDef("synboost", &synboost, 5,     0,1,  "booster for synapses during motor signal creation");
   addParameterDef("urate", &urate, .1,          0,5,  "update rate ");
@@ -80,7 +80,8 @@ DEP::~DEP(){
 
 
 void DEP::init(int sensornumber, int motornumber, RandGen* randGen){
-  if(!randGen) randGen = new RandGen(); // this gives a small memory leak
+  RandGen* rg = randGen;
+  if(!rg) rg = new RandGen(); // this gives a small memory leak
 
 
   number_sensors= sensornumber;
@@ -252,8 +253,8 @@ void DEP::learnController(){
   if(conf.calcEigenvalues){
     if(calcEVInterval!=0 && (t%calcEVInterval==0)){
       Matrix EVImag;
-      const Matrix& L=A*C;
-      eigenValuesVectors(L, eigenvaluesLRe, eigenvaluesLIm, eigenvectors, EVImag);
+      const Matrix& L_local=A*C;
+      eigenValuesVectors(L_local, eigenvaluesLRe, eigenvaluesLIm, eigenvectors, EVImag);
       toPositiveSignEigenVectors(eigenvectors, EVImag);
       scaleEigenVectorsWithValue(eigenvaluesLRe, eigenvaluesLIm, eigenvectors, EVImag);
     }

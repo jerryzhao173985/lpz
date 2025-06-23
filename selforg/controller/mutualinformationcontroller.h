@@ -50,7 +50,7 @@ public:
    * @param maxSensorValue is the maximum value the sensors can become
    *
    */
-  MutualInformationController(int sensorIntervalCount, double minSensorValue=-1, double maxSensorValue=1, bool showF =false, bool showP =false, bool showXsiF = false);
+  explicit MutualInformationController(int sensorIntervalCount, double minSensorValue=-1, double maxSensorValue=1, bool showF =false, bool showP =false, bool showXsiF = false);
   virtual ~MutualInformationController() {};
 
   virtual double& getMI(int index) {
@@ -97,15 +97,15 @@ public:
    * call first AbstractControllerAdapter::init(sensornumber,motornumber)
    * if you overwrite this method
    */
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
 
   /** @return Number of sensors the controller
       was initialised with or 0 if not initialised */
-  virtual int getSensorNumber() const { return sensorNumber; }
+  virtual int getSensorNumber() const  override{ return sensorNumber; }
 
   /** @return Number of motors the controller
       was initialised with or 0 if not initialised */
-  virtual int getMotorNumber() const { return motorNumber; }
+  virtual int getMotorNumber() const  override{ return motorNumber; }
 
   /** performs one step (includes learning).
       Calculates motor commands from sensor inputs.
@@ -115,13 +115,13 @@ public:
   @param motornumber length of the provided motor array
   */
   virtual void step(const sensor* sensors, int sensornumber,
-                    motor* motors, int motornumber);
+                    motor* motors, int motornumber) override;
 
   /** performs one step without learning.
   @see step
   */
   virtual void stepNoLearning(const sensor* sensors , int sensornumber,
-                              motor* motors, int motornumber);
+                              motor* motors, int motornumber) override;
 
   /****************************************************************************/
   /*        END methods of AbstractController                                   */
@@ -153,11 +153,11 @@ public:
 
   /** stores the object to the given file stream (binary).
   */
-  virtual bool store(FILE* f) const { return true; }
+  virtual bool store(FILE* f) const override { return true; }
 
   /** loads the object from the given file stream (binary).
   */
-  virtual bool restore(FILE* f) { return true; }
+  virtual bool restore(FILE* f) override { return true; }
 
   /****************************************************************************/
   /*        END methods of Storeable                                                      */

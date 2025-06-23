@@ -322,7 +322,7 @@ public:
     if ((this->convTest0->getValue()==1.0)&&(this->convTest1->getValue()==1.0)) {
       FILE* file;
       char filename[256];
-      sprintf(filename, "MI_C_%f.log", this->cInit);
+      snprintf(filename, sizeof(filename), "MI_C_%f.log", this->cInit);
 
       file = fopen(filename,"w");
 

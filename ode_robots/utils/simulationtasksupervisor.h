@@ -120,12 +120,12 @@ namespace lpzrobots
     /**
      * Runs all generated SimulationTasks.
      */
-    virtual void runSimTasks(int* argc, char** argv);
+    virtual void runSimTasks(int* argc, char** argv) override;
 
     /**
      * Sets a suffix to be appended to the window name to identify your simTask
      */
-    virtual void setSimTaskNameSuffix(std::string name);
+    virtual void setSimTaskNameSuffix(std::string name) override;
 
   protected:
 

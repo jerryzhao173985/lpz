@@ -318,7 +318,7 @@ namespace lpzrobots {
     assert(created);
     // robot must exist
     assert(motornumber==getMotorNumber());
-    for (MotorMap::iterator it = servos.begin(); it != servos.end(); it++) {
+    for (MotorMap::iterator it = servos.begin(); it != servos.end(); ++it) {
       MotorName const name = it->first;
       OneAxisServo * const servo = it->second;
       //We multiple with -1 to map to real hexapod
@@ -1125,7 +1125,7 @@ namespace lpzrobots {
         speedsensor = 0;
       }
 
-      for (MotorMap::iterator it = servos.begin(); it != servos.end(); it++) {
+      for (MotorMap::iterator it = servos.begin(); it != servos.end(); ++it) {
         if (it->second)
           delete (it->second);
       }

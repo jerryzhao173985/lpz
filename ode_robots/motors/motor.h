@@ -43,7 +43,7 @@ namespace lpzrobots {
     virtual void init(Primitive* own, Joint* joint = 0)=0;
 
     /// return the dimensionality of this motor
-    virtual int getMotorNumber() const =0;
+    virtual int getMotorNumber() const  override;
 
     /** returns a list of motor names  (@see SensorMotorNaming how to change the names) */
     virtual std::list<SensorMotorInfo> getMotorInfos() const {
@@ -52,13 +52,13 @@ namespace lpzrobots {
 
     /** performs the actions, This is usually called in
         doInternalStuff() from the robot */
-    virtual bool act(GlobalData& globaldata) = 0;
+    virtual bool act(GlobalData& globaldata)  override = 0;
 
     /** sends the action commands to the motor.
         It returns the number of used values. (should be equal to
         getMotorNumber)
      */
-    virtual int set(const motor* values, int length) = 0;
+    virtual int set(const motor* values, int length)  override = 0;
   };
 }
 

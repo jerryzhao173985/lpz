@@ -72,7 +72,7 @@ class use_java_controller : public AbstractController
                 static int anzahl_Java_controller;
 
 
-                use_java_controller ( const char* port_controller = "4444", const char* port_internalParams = NULL, const char* name = "defaultRobot" );
+                explicit use_java_controller ( const char* port_controller = "4444", const char* port_internalParams = nullptr, const char* name = "defaultRobot" );
 
 
                 static void addController(){use_java_controller::anzahl_Java_controller++;}
@@ -83,16 +83,16 @@ class use_java_controller : public AbstractController
                 /** initialisation of the controller with the given sensor/ motornumber
                     Must be called before use.
                 */
-  virtual void init ( int sensornumber, int motornumber, RandGen* randgen = 0);
+  virtual void init ( int sensornumber, int motornumber, RandGen* randgen = nullptr) override;
 
                 /** @return Number of sensors the controller was initialised
                     with or 0 if not initialised */
-                virtual int getSensorNumber() const {return number_sensors;}
+                virtual int getSensorNumber() const  override{return number_sensors;}
 
 
                 /** @return Number of motors the controller was initialised
                     with or 0 if not initialised */
-                virtual int getMotorNumber() const {return number_motors;}
+                virtual int getMotorNumber() const  override{return number_motors;}
 
                 /** performs one step (includes learning).
                     Calculates motor commands from sensor inputs.
@@ -102,12 +102,12 @@ class use_java_controller : public AbstractController
                     @param motornumber length of the provided motor array
                 */
                 virtual void step ( const sensor* sensors, int sensornumber,
-                                    motor* motors, int motornumber );
+                                    motor* motors, int motornumber ) override;
                 /** performs one step without learning.
                     @see step
                 */
                 virtual void stepNoLearning ( const sensor* , int number_sensors,
-                                              motor* , int number_motors );
+                                              motor* , int number_motors ) override;
 
                 /**
                   * Methode verschickt message an Java-controller
@@ -121,23 +121,27 @@ class use_java_controller : public AbstractController
                 * executed once when guilogger or neuronvis or file logger is started to get the names of the
                 inspectable parameters (names should be sent from java-controller and returned)
                 */
-                virtual std::list<iparamkey> getInternalParamNames() const;
+                virtual std::list<iparamkey> getInternalParamNames() const override;
                 /**
                 * executed every step when guilogger or neuronvis or file logger is active to get the values of the
                 inspectable parameters (values should be sent from java-controller and returned)
                 */
 
-                virtual std::list<iparamval> getInternalParams() const;
+                virtual std::list<iparamval> getInternalParams() const override;
 
+                // Bring base class methods into scope
+                using Configurable::getParam;
+                using Configurable::setParam;
+                
                 // next three described in cpp-file
                 virtual paramval getParam ( const paramkey& key ) const;
                 virtual bool setParam ( const paramkey& key, paramval val );
-                virtual paramlist getParamList() const ;
+                virtual paramlist getParamList() const override;
 
 
 
-                virtual bool store   ( FILE* f ) const { return true;};  // FIXME: store Parameter
-                virtual bool restore ( FILE* f )       { return true;};  // FIXME: restore Parameter
+                virtual bool store   ( FILE* f ) const override { return true;};  // FIXME: store Parameter
+                virtual bool restore ( FILE* f ) override { return true;};  // FIXME: restore Parameter
 
 
         protected:

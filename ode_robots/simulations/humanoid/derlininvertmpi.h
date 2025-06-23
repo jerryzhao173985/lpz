@@ -105,9 +105,9 @@ class DerLinInvertMPI : public InvertMotorController {
 
 public:
   DerLinInvertMPI(const DerLinInvertMPIConf& conf = getDefaultConf());
-  virtual void init(int sensornumber, int motornumber, RandGen* randg);
+  virtual void init(int sensornumber, int motornumber, RandGen* randg) override;
 
-  virtual ~DerLinInvertMPI();
+  virtual ~DerLinInvertMPI() override;
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
   virtual int getSensorNumber() const { return number_sensors; }
@@ -116,24 +116,24 @@ public:
 
   /// performs one step (includes learning).
   /// Calulates motor commands from sensor inputs.
-  virtual void step(const sensor* , int number_sensors, motor* , int number_motors);
+  virtual void step(const sensor* , int number_sensors, motor* , int number_motors) override;
 
   /// performs one step without learning. Calulates motor commands from sensor inputs.
   virtual void stepNoLearning(const sensor* , int number_sensors,
-                              motor* , int number_motors);
+                              motor* , int number_motors) override;
 
 
   /**************  STOREABLE **********************************/
   /** stores the controller values to a given file. */
-  virtual bool store(FILE* f) const;
+  virtual bool store(FILE* f) const override;
   /** loads the controller values from a given file. */
-  virtual bool restore(FILE* f);
+  virtual bool restore(FILE* f) override;
 
   /************** INSPECTABLE ********************************/
-  virtual iparamkeylist getInternalParamNames() const;
-  virtual iparamvallist getInternalParams() const;
-  virtual ilayerlist getStructuralLayers() const;
-  virtual iconnectionlist getStructuralConnections() const;
+  virtual iparamkeylist getInternalParamNames() const override;
+  virtual iparamvallist getInternalParams() const override;
+  virtual ilayerlist getStructuralLayers() const override;
+  virtual iconnectionlist getStructuralConnections() const override;
 
   /**** TEACHING ****/
   /** The given motor teaching signal is used for this timestep.
@@ -141,13 +141,13 @@ public:
       Please note, that the teaching signal has to be given each timestep
        for a continuous teaching process.
    */
-  virtual void setMotorTeachingSignal(const motor* teaching, int len);
+  virtual void setMotorTeachingSignal(const motor* teaching, int len) override;
 
   /** The given sensor teaching signal (distal learning) is used for this timestep.
       First the belonging motor teachung signal is calculated by the inverse model.
       See setMotorTeachingSignal
    */
-  virtual void setSensorTeachingSignal(const sensor* teaching, int len);
+  virtual void setSensorTeachingSignal(const sensor* teaching, int len) override;
 
 
   static DerLinInvertMPIConf getDefaultConf(){
@@ -252,23 +252,23 @@ protected:
   /// puts the sensors in the ringbuffer, generate controller values and put them in the
   //  ringbuffer as well
   virtual void fillBuffersAndControl(const sensor* x_, int number_sensors,
-                             motor* y_, int number_motors);
+                             motor* y_, int number_motors) override;
 
 /** learn values H,C
     This is the implementation uses a better formula for g^-1 using Mittelwertsatz
     @param delay 0 for no delay and n>0 for n timesteps delay in the SML (s4delay)
 */
-  virtual void learnController(int delay);
+  virtual void learnController(int delay) override;
 
   /// learn conf.model, (and S) using motors y and corresponding sensors x
   //  @param delay 0 for no delay and n>0 for n timesteps delay in the time loop
-  virtual void learnModel(int delay);
+  virtual void learnModel(int delay) override;
 
   /// handles inhibition damping etc.
-  virtual void management();
+  virtual void management() override;
 
   /// returns controller output for given sensor values
-  virtual matrix::Matrix calculateControllerValues(const matrix::Matrix& x_smooth);
+  virtual matrix::Matrix calculateControllerValues(const matrix::Matrix& x_smooth) override;
 
   /** Calculates first and second derivative and returns both in on matrix (above).
       We use simple discrete approximations:
@@ -281,7 +281,7 @@ protected:
 public:
 
   /// calculates the city block distance (abs) norm of the matrix. (abs sum of absolutes / size of matrix)
-     virtual double calcMatrixNorm(const matrix::Matrix& m);
+     virtual double calcMatrixNorm(const matrix::Matrix& m) override;
 
 
 };

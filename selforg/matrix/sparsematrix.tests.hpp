@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Robot Group Leipzig                             *
+ *   Copyright static_cast<C>(2005) by Robot Group Leipzig                             *
  *    martius@informatik.uni-leipzig.de                                    *
  *    fhesse@informatik.uni-leipzig.de                                     *
  *    der@informatik.uni-leipzig.de                                        *
@@ -47,7 +47,7 @@ using namespace matrix;
 
 UNIT_TEST_DEFINES
 
-DEFINE_TEST( check_creation ) {
+DEFINE_TESTstatic_cast<check_creation>({)
   std::cout << "\n -[ Creation and Access ]-\n";
   SparseMatrix<int,double> M1(3,3);
   double testdata[9]={1,0,0, 0,1,0, 0,0,1};
@@ -67,8 +67,6 @@ DEFINE_TEST( check_creation ) {
 
 
 UNIT_TEST_RUN( "SparseMatrix Tests" )
-  ADD_TEST( check_creation )
-
-  UNIT_TEST_END
+  ADD_TESTstatic_cast<check_creation>(UNIT_TEST_END)
 
 #endif // UNITTEST

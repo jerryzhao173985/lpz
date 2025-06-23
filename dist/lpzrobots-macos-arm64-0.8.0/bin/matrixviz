@@ -1,0 +1,3 @@
+#!/bin/bash
+# Direct executable for matrixviz (no .sh extension)
+exec /Users/jerry/lpzrobots_mac/matrixviz/matrixviz-wrapper.sh "$@"

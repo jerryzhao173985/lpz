@@ -48,14 +48,17 @@ public:
    *  @param noise NoiseGenerator that is used for adding noise to sensor values
    */
   AbstractWiring(NoiseGenerator* noise, int plotMode=Controller, const std::string& name = "AbstractWiring")
-    : Inspectable(name), plotMode(plotMode) {
-    rsensornumber = 0;
-    rmotornumber  = 0;
-    csensornumber = 0;
-    cmotornumber  = 0;
-    noiseGenerator = noise;
-    noisevals=0;
-    initialised = false;
+    : Inspectable(name), 
+      plotMode(plotMode),
+      noisevals(0),
+      noisenumber(0),
+      rsensornumber(0),
+      rmotornumber(0),
+      csensornumber(0),
+      cmotornumber(0),
+      noiseGenerator(noise),
+      randGen(nullptr),
+      initialised(false) {
   }
 
   /** destructor

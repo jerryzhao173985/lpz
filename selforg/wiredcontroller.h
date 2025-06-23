@@ -60,11 +60,11 @@ public:
   /** constructor. PlotOption as output setting.
       noisefactor is used to set the relative noise strength of this agent
    */
-  WiredController(const PlotOption& plotOption = PlotOption(NoPlot), double noisefactor = 1, const iparamkey& name = "WiredController", const paramkey& revision = "$ID");
+  explicit WiredController(const PlotOption& plotOption = PlotOption(NoPlot), double noisefactor = 1, const iparamkey& name = "WiredController", const paramkey& revision = "$ID");
   /** constructor. A list of PlotOption can given.
       noisefactor is used to set the relative noise strength of this agent
    */
-  WiredController(const std::list<PlotOption>& plotOptions, double noisefactor = 1, const iparamkey& name = "WiredController", const paramkey& revision = "$ID");
+  explicit WiredController(const std::list<PlotOption>& plotOptions, double noisefactor = 1, const iparamkey& name = "WiredController", const paramkey& revision = "$ID");
 
   /** destructor
    */
@@ -79,7 +79,7 @@ public:
                     int robotsensornumber, int robotmotornumber,
                     const std::list<SensorMotorInfo>& robotSensorInfos,
                     const std::list<SensorMotorInfo>& robotMotorInfos,
-                    RandGen* randGen=0);
+                    RandGen* randGen=nullptr);
 
   /** Performs an step of the controller, which includes
       pushing sensor values through the wiring,

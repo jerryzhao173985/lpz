@@ -48,7 +48,7 @@ namespace lpzrobots {
        */ 
       MotionBlurDrawCallback(GlobalData& global);
       
-      virtual void operator()(osgProducer::OsgSceneHandler &handler, Producer::Camera &camera);
+      virtual void operator()(osgProducer::OsgSceneHandler &handler, Producer::Camera &camera) override;
 
     private:
       bool cleared_;

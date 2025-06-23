@@ -55,7 +55,7 @@ class DiscreteControllerAdapter : public AbstractControllerAdapter
 public:
     DiscreteControllerAdapter(AbstractController* controller, const std::string& name, const std::string& revision);
 
-    virtual ~DiscreteControllerAdapter();
+    virtual ~DiscreteControllerAdapter() override;
 
     /**
     Sets the number of intervals, in which sensor AND motor values are mapped.
@@ -137,17 +137,17 @@ public:
       @param motornumber length of the provided motor array
   */
   virtual void step(const sensor* sensors, int sensornumber,
-                    motor* motors, int motornumber);
+                    motor* motors, int motornumber) override;
   /** performs one step without learning.
       @see step
   */
   virtual void stepNoLearning(const sensor*, int number_sensors,
-                              motor* , int number_motors);
+                              motor* , int number_motors) override;
 
         /**
          * init function
         */
-        virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
+        virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
 
 /***************************************************************************/
 /* END: forwarding methods of AbstractController                           */

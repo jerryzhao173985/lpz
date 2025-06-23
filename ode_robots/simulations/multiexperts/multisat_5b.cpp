@@ -79,15 +79,24 @@ Sat::Sat(MultiLayerFFNN* _net, double _eps){
 
 
 MultiSat::MultiSat( const MultiSatConf& _conf)
-  : AbstractController("MultiSat", "$Id: "), buffersize(_conf.buffersize), conf(_conf)
+  : AbstractController("MultiSat", "$Id: "), 
+    number_sensors(0),
+    number_motors(0),
+    buffersize(_conf.buffersize), 
+    x_buffer(nullptr),
+    xp_buffer(nullptr),
+    y_buffer(nullptr),
+    x_context_buffer(nullptr),
+    winner(0),
+    satControl(false),
+    runcompetefirsttime(true),
+    conf(_conf),
+    initialised(false),
+    t(0),
+    managementInterval(100)
 {
-  runcompetefirsttime=true;
-  managementInterval=100;
-  winner=0;
   companion=1;
-  satControl=false;
-  initialised = false;
-};
+  };
 
 
 MultiSat::~MultiSat()
@@ -476,11 +485,11 @@ bool MultiSat::restore(FILE* f){
     init(2,2);
 
   char buffer[128];
-  if(fscanf(f,"%s\n", buffer) != 1) return false;
+  if(fscanf(f,"%127s\n", buffer) != 1) return false;  // Security fix: added field width limit
   conf.numSats = atoi(buffer);
-  if(fscanf(f,"%s\n", buffer) != 1) return false;
+  if(fscanf(f,"%127s\n", buffer) != 1) return false;  // Security fix: added field width limit
   conf.numContext = atoi(buffer);
-  if(fscanf(f,"%s\n", buffer) != 1) return false;
+  if(fscanf(f,"%127s\n", buffer) != 1) return false;  // Security fix: added field width limit
   conf.numHidden = atoi(buffer);
 
  // we need to use fgets in order to avoid spurious effects with following matrix (binary)
@@ -515,7 +524,7 @@ void MultiSat::storeSats(const char* filestem){
   int i=0;
   FOREACH(vector<Sat>, sats, s){
     char fname[256];
-    sprintf(fname,"%s_%02i.net", filestem, i);
+    snprintf(fname, sizeof(fname),"%s_%02i.net", filestem, i);
     FILE* f=fopen(fname,"wb");
     if(!f){ cerr << "MultiSat::storeSats() error while writing file " << fname << endl;   return;  }
     s->net->store(f);

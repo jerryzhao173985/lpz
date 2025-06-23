@@ -28,14 +28,15 @@
 using namespace std;
 using namespace matrix;
 
-typedef vector<pair<double,int> > rankingvector;
+using rankingvector = vector<pair<double,int> >;
 
 NeuralGas::NeuralGas(const std::string& name,
-    const std::string& revision) : AbstractModel(name, revision) {
-  initialised=false;
-  eps=0.1;
-  lambda=3;
-  t=0;
+    const std::string& revision) : AbstractModel(name, revision),
+    eps(0.1),
+    lambda(3),
+    maxTime(100),
+    t(0),
+    initialised(false) {
 }
 
 NeuralGas::NeuralGas(double lambda, double eps, int maxTime,
@@ -73,7 +74,7 @@ double NeuralGas::activationfunction(double rdfsize, double d){
 }
 
 double ng_print_double(void* f, double d){
-  fprintf((FILE*)f,"%g ",d);
+  fprintf(static_cast<FILE*>(f),"%g ",d);
   return d;
 }
 
@@ -114,8 +115,8 @@ const Matrix NeuralGas::learn (const Matrix& input,
   std::sort(ranking.begin(), ranking.end());
 
   int k=0;
-  double e = (maxTime==0) ? eps*learnRateFactor : eps*exp(-3.0*t/(double)maxTime)*learnRateFactor;
-  double l = (maxTime==0) ? lambda : lambda*exp(-3.0*t/(double)maxTime);
+  double e = (maxTime==0) ? eps*learnRateFactor : eps*exp(-3.0*t/static_cast<double>(maxTime))*learnRateFactor;
+  double l = (maxTime==0) ? lambda : lambda*exp(-3.0*t/static_cast<double>(maxTime));
   FOREACHC(rankingvector , ranking, i){
     double e_l = exp(-k/l) * e;
     if(e_l < e-9) break;
@@ -152,7 +153,7 @@ bool NeuralGas::store(FILE* f) const{
   fprintf(f,"%g\n", lambda);
   fprintf(f,"%i\n", maxTime);
   fprintf(f,"%i\n", t);
-  fprintf(f,"%i\n", getOutputDim());
+  fprintf(f,"%u\n", getOutputDim());
 
   distances.store(f);
   cellsizes.store(f);
@@ -164,15 +165,15 @@ bool NeuralGas::store(FILE* f) const{
 
 bool NeuralGas::restore(FILE* f){
   char buffer[128];
-  if(fscanf(f,"%s\n", buffer) != 1) return false;
+  if(fscanf(f,"%127s\n", buffer) != 1) return false;
   eps = atof(buffer);
-  if(fscanf(f,"%s\n", buffer) != 1) return false;
+  if(fscanf(f,"%127s\n", buffer) != 1) return false;
   lambda = atof(buffer);
-  if(fscanf(f,"%s\n", buffer) != 1) return false;
+  if(fscanf(f,"%127s\n", buffer) != 1) return false;
   maxTime = atoi(buffer);
-  if(fscanf(f,"%s\n", buffer) != 1) return false;
+  if(fscanf(f,"%127s\n", buffer) != 1) return false;
   t = atoi(buffer);
-  if((fgets(buffer,128, f))==NULL) return false; // we need to use fgets in order to avoid spurious effects with following matrix (binary)
+  if((fgets(buffer,128, f))==nullptr) return false; // we need to use fgets in order to avoid spurious effects with following matrix (binary)
   int odim = atoi(buffer);
 
   distances.restore(f);

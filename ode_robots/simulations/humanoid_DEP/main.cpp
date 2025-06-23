@@ -884,7 +884,7 @@ public:
         }
         case 'X':
           env.removeStools(global);
-          for(auto& a: global.agents){
+          for (const auto& a : global.agents){
             a->fixateRobot(global, Skeleton::Left_Foot, 0);
           }
           return true;

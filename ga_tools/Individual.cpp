@@ -78,7 +78,7 @@ std::string Individual::IndividualToString(void)const {
   }
 
   char buffer[128];
-  sprintf(buffer,"% .12lf",getFitnessC());
+  snprintf(buffer, sizeof(buffer), "% .12lf", getFitnessC());
   result += buffer;
 
   return result;

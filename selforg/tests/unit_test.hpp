@@ -168,7 +168,7 @@ inline void print_cputime( double run_time, unsigned long transactions = 0 ) {
   if( transactions == 0 ){
 	printf("%7.3f seconds CPU time\n", run_time );
   }else{
-    printf("(%li x):  %7.3f seconds CPU time\n", transactions, run_time );
+    printf("(%lu x):  %7.3f seconds CPU time\n", transactions, run_time );
     printf("      (%7.3f transactions/second)\n", 
 	   transactions_per_second( run_time, transactions ) );
   }

@@ -56,7 +56,7 @@ std::string Gen::toString(bool onlyValue)const {
   if(!onlyValue) {
     char buffer[128];
 
-    sprintf(buffer, "%i", m_ID);
+    snprintf(buffer, sizeof(buffer), "%i", m_ID);
 
     result += "\"" + getName() + "\",\t" + buffer + ",\t";
   }

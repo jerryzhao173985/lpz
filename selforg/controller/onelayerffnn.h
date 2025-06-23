@@ -12,7 +12,7 @@ public:
      @param eps learning rate
      @param factor_bias learning rate factor for bias learning
   */
-  OneLayerFFNN(double eps,
+  explicit OneLayerFFNN(double eps,
                double factor_bias = 0.1,
                const std::string& name = "OneLayerFFN",
                const std::string& revision = "$Id: onelayerffnn.h,v 1.10 2011/05/30 13:52:54 martius Exp $")
@@ -40,7 +40,7 @@ public:
     addParameter("factor_bias",&this->factor_bias,0,2,"factor for learningrate of bias");
     initialised = false;
   }
-  virtual ~OneLayerFFNN(){ }
+  virtual ~OneLayerFFNN() override{ }
 
   /* initialisation of the network with the given number of input and output units
      @param unit_map defines the approximate response of the network
@@ -48,20 +48,20 @@ public:
      @param randGen pointer to random generator, if 0 an new one is used
   */
   virtual void init(unsigned int inputDim, unsigned  int outputDim,
-                    double unit_map = 0.0, RandGen* randGen = 0);
+                    double unit_map = 0.0, RandGen* randGen = 0) override;
 
-  virtual const matrix::Matrix process (const matrix::Matrix& input);
+  virtual const matrix::Matrix process (const matrix::Matrix& input) override;
 
   virtual const matrix::Matrix learn (const matrix::Matrix& input,
                                       const matrix::Matrix& nom_output,
-                                      double learnRateFactor = 1);
+                                      double learnRateFactor = 1) override;
 
   /// returns the number of input neurons
-  virtual unsigned int getInputDim() const {
+  virtual unsigned int getInputDim() const override {
     return weights.getN();
   }
   /// returns the number of output neurons
-  virtual unsigned int getOutputDim() const {
+  virtual unsigned int getOutputDim() const override {
     return weights.getM();
   }
 
@@ -69,16 +69,16 @@ public:
   virtual const matrix::Matrix& getBias()    const { return bias; }
 
   /// damps the weights and the biases by multiplying (1-damping)
-  virtual void damp(double damping){
+  virtual void damp(double damping) override{
     weights *= (1-damping);
     bias    *= (1-damping);
   }
 
   /**************  STOREABLE **********************************/
   /// stores the layer binary into file stream
-  bool store(FILE* f) const;
+  bool store(FILE* f) const override;
   /// restores the layer binary from file stream
-  bool restore(FILE* f);
+  bool restore(FILE* f) override;
 
 
 private:

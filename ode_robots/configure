@@ -70,7 +70,7 @@ fi
 
 # test for ode-dbl
 if ! type ode-dbl-config; then
-    echo "could not find \"osg-dbl-config\" in PATH" 1>&2;
+    echo "could not find \"ode-dbl-config\" in PATH" 1>&2;
     exit 1;
 fi
 

@@ -19,13 +19,13 @@ namespace lpzrobots {
 
     virtual ~DerivativeSensor() {}
 
-    virtual void init(Primitive* own, Joint* joint = 0);
+    virtual void init(Primitive* own, Joint* joint = 0) override;
 
-    virtual int getSensorNumber() const;
+    virtual int getSensorNumber() const override;
 
-    virtual bool sense(const GlobalData& globaldata);
+    virtual bool sense(const GlobalData& globaldata) override;
 
-    virtual std::list<sensor> getList() const;
+    virtual std::list<sensor> getList() const override;
 
   protected:
     //Current time step of the simulation

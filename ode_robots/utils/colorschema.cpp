@@ -115,13 +115,13 @@ namespace lpzrobots{
       int r,g,b;
       int i=0;
       if(columns==0){
-        while(fscanf(f,"%i %i %i %s\n",&r,&g,&b,s)==4){
+        while(fscanf(f,"%i %i %i %127s\n",&r,&g,&b,s)==4){  // Security fix: added field width limit
           addColor(Color::rgb255(r,g,b), string(s));
           i++;
         }
       }else if(columns==1){
         char s2[1024];
-        while(fscanf(f,"%i %i %i %s %s\n",&r,&g,&b,s,s2)==5){
+        while(fscanf(f,"%i %i %i %127s %127s\n",&r,&g,&b,s,s2)==5){  // Security fix: added field width limit
           addColor(Color::rgb255(r,g,b), string(s));
           addColor(Color::rgb255(r,g,b), string(s2));
           i++;
@@ -149,11 +149,11 @@ namespace lpzrobots{
       char s[1024];
       while(fgets(s,1024,f)) {
         if(s[0]=='#') continue;
-        if(sscanf(s,"%s %s %i\n",alias,name,&alias_set)==3){
+        if(sscanf(s,"%127s %127s %i\n",alias,name,&alias_set)==3){
           if(addAlias(string(alias), string(name), alias_set+alias_set_offset)){
             i++;
           }
-        }else if(sscanf(s,"%s %s\n",alias,name)==2){
+        }else if(sscanf(s,"%127s %127s\n",alias,name)==2){
           if(addAlias(string(alias), string(name), alias_set_offset)){
             i++;
           }
@@ -212,8 +212,10 @@ namespace lpzrobots{
     return (i != colors.end());
   }
 
-  template<class T> struct print_func : public unary_function<T, void>
+  template<class T> struct print_func
   {
+    using argument_type = T;
+    using result_type = void;
     print_func(ostream& out, const string& delimit)
       : os(out), count(0), delimit(delimit) {}
     void operator() (T x) { os << x << delimit; ++count; }

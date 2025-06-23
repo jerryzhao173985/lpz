@@ -29,7 +29,7 @@ template<typename ValueType>
 void FormatToStream(MemoryOutStream& stream, char const* format, ValueType const& value)
 {
     char txt[32];
-    std::sprintf(txt, format, value);
+    std::snprintf(txt, sizeof(txt), format, value);
     stream << txt;
 }
 

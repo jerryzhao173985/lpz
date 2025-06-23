@@ -64,7 +64,7 @@ int main (int argc, char **argv)
       b.write(stdout);
     }
     // also write it in Ascii
-    sprintf(buffer,"%s.ascii",argv[1]);
+    snprintf(buffer, sizeof(buffer),"%s.ascii",argv[1]);
     f = fopen(buffer,"w");
     if(!f){
       fprintf(stderr, "cannot write file: %s\n", buffer);

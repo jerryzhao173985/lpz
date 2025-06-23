@@ -54,7 +54,7 @@ typedef struct DerSimpleConf {
 class DerSimple : public InvertMotorController {
 
 public:
-  DerSimple(const DerSimpleConf& conf = getDefaultConf());
+  explicit DerSimple(const DerSimpleConf& conf = getDefaultConf());
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
 
   virtual ~DerSimple();

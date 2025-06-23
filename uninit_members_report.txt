@@ -1,0 +1,930 @@
+File: selforg/utils/configurable.h:138
+  Class: Configurable
+  Member: 
+  Warning: warning: Member variable 'Configurable::parent' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/utils/configurable.h:143
+  Class: Configurable
+  Member: 
+  Warning: warning: Member variable 'Configurable::parent' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/utils/trackrobots.h:68
+  Class: TrackRobot
+  Member: 
+  Warning: warning: Member variable 'TrackRobot::enabledDuringVideo' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/utils/position.h:34
+  Class: Position
+  Member: 
+  Warning: warning: Member variable 'Position::array' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/utils/position.h:36
+  Class: Position
+  Member: 
+  Warning: warning: Member variable 'Position::array' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/utils/noisegenerator.h:215
+  Class: ColorNormalNoise
+  Member: 
+  Warning: warning: Member variable 'ColorNormalNoise::factor' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/abstractiafcontroller.cpp:25
+  Class: AbstractIAFController
+  Member: 
+  Warning: warning: Member variable 'AbstractIAFController::randG' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/abstractiafcontroller.cpp:25
+  Class: AbstractIAFController
+  Member: 
+  Warning: warning: Member variable 'AbstractIAFController::sensorNumber' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/abstractiafcontroller.cpp:25
+  Class: AbstractIAFController
+  Member: 
+  Warning: warning: Member variable 'AbstractIAFController::motorNumber' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/classicreinforce.cpp:28
+  Class: ClassicReinforce
+  Member: 
+  Warning: warning: Member variable 'ClassicReinforce::number_sensors' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/classicreinforce.cpp:28
+  Class: ClassicReinforce
+  Member: 
+  Warning: warning: Member variable 'ClassicReinforce::number_motors' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/classicreinforce.cpp:28
+  Class: ClassicReinforce
+  Member: 
+  Warning: warning: Member variable 'ClassicReinforce::x_buffer' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/classicreinforce.cpp:28
+  Class: ClassicReinforce
+  Member: 
+  Warning: warning: Member variable 'ClassicReinforce::y_buffer' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/classicreinforce.cpp:28
+  Class: ClassicReinforce
+  Member: 
+  Warning: warning: Member variable 'ClassicReinforce::x_context_buffer' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/classicreinforce.cpp:28
+  Class: ClassicReinforce
+  Member: 
+  Warning: warning: Member variable 'ClassicReinforce::oldaction' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/classicreinforce.cpp:28
+  Class: ClassicReinforce
+  Member: 
+  Warning: warning: Member variable 'ClassicReinforce::state' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/classicreinforce.cpp:28
+  Class: ClassicReinforce
+  Member: 
+  Warning: warning: Member variable 'ClassicReinforce::reward' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/classicreinforce.cpp:28
+  Class: ClassicReinforce
+  Member: 
+  Warning: warning: Member variable 'ClassicReinforce::oldreward' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/classicreinforce.cpp:28
+  Class: ClassicReinforce
+  Member: 
+  Warning: warning: Member variable 'ClassicReinforce::t' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/dercontroller.cpp:32
+  Class: DerController
+  Member: 
+  Warning: warning: Member variable 'DerController::number_sensors' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/dercontroller.cpp:32
+  Class: DerController
+  Member: 
+  Warning: warning: Member variable 'DerController::number_motors' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/dercontroller.cpp:32
+  Class: DerController
+  Member: 
+  Warning: warning: Member variable 'DerController::xsi_norm' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/dercontroller.cpp:32
+  Class: DerController
+  Member: 
+  Warning: warning: Member variable 'DerController::xsi_norm_avg' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/dercontroller.cpp:32
+  Class: DerController
+  Member: 
+  Warning: warning: Member variable 'DerController::pain' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/dercontroller.cpp:32
+  Class: DerController
+  Member: 
+  Warning: warning: Member variable 'DerController::x_buffer' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/dercontroller.cpp:32
+  Class: DerController
+  Member: 
+  Warning: warning: Member variable 'DerController::y_buffer' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/dercontroller.cpp:32
+  Class: DerController
+  Member: 
+  Warning: warning: Member variable 'DerController::eta_buffer' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/derinf.cpp:29
+  Class: DerInf
+  Member: 
+  Warning: warning: Member variable 'DerInf::number_sensors' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/derinf.cpp:29
+  Class: DerInf
+  Member: 
+  Warning: warning: Member variable 'DerInf::number_motors' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/derinf.cpp:29
+  Class: DerInf
+  Member: 
+  Warning: warning: Member variable 'DerInf::xsi_norm' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/derinf.cpp:29
+  Class: DerInf
+  Member: 
+  Warning: warning: Member variable 'DerInf::xsi_norm_avg' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/derinf.cpp:29
+  Class: DerInf
+  Member: 
+  Warning: warning: Member variable 'DerInf::pain' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/derinf.cpp:29
+  Class: DerInf
+  Member: 
+  Warning: warning: Member variable 'DerInf::TLE' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/derinf.cpp:29
+  Class: DerInf
+  Member: 
+  Warning: warning: Member variable 'DerInf::grang1' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/derinf.cpp:29
+  Class: DerInf
+  Member: 
+  Warning: warning: Member variable 'DerInf::grang2' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/derinf.cpp:29
+  Class: DerInf
+  Member: 
+  Warning: warning: Member variable 'DerInf::causal' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/derinf.cpp:29
+  Class: DerInf
+  Member: 
+  Warning: warning: Member variable 'DerInf::causalfactor' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/derinf.cpp:29
+  Class: DerInf
+  Member: 
+  Warning: warning: Member variable 'DerInf::EE' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/derinf.cpp:29
+  Class: DerInf
+  Member: 
+  Warning: warning: Member variable 'DerInf::EE_mean' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/derinf.cpp:29
+  Class: DerInf
+  Member: 
+  Warning: warning: Member variable 'DerInf::EE_sqr' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/derinf.cpp:29
+  Class: DerInf
+  Member: 
+  Warning: warning: Member variable 'DerInf::xsistrength' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/derinf.cpp:29
+  Class: DerInf
+  Member: 
+  Warning: warning: Member variable 'DerInf::x_buffer' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/derinf.cpp:29
+  Class: DerInf
+  Member: 
+  Warning: warning: Member variable 'DerInf::y_buffer' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/derinf.cpp:29
+  Class: DerInf
+  Member: 
+  Warning: warning: Member variable 'DerInf::ysat_buffer' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/derinf.cpp:29
+  Class: DerInf
+  Member: 
+  Warning: warning: Member variable 'DerInf::chi_buffer' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/derinf.cpp:29
+  Class: DerInf
+  Member: 
+  Warning: warning: Member variable 'DerInf::rho_buffer' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/derinf.cpp:29
+  Class: DerInf
+  Member: 
+  Warning: warning: Member variable 'DerInf::eta_buffer' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/derinf.cpp:29
+  Class: DerInf
+  Member: 
+  Warning: warning: Member variable 'DerInf::xsi_buffer' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/derinf.cpp:29
+  Class: DerInf
+  Member: 
+  Warning: warning: Member variable 'DerInf::t_rand' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/derinf.cpp:29
+  Class: DerInf
+  Member: 
+  Warning: warning: Member variable 'DerInf::t_delay' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/derlinunivers.cpp:33
+  Class: DerLinUnivers
+  Member: 
+  Warning: warning: Member variable 'DerLinUnivers::x_buffer' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/derlinunivers.cpp:33
+  Class: DerLinUnivers
+  Member: 
+  Warning: warning: Member variable 'DerLinUnivers::y_buffer' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/derlinunivers.cpp:33
+  Class: DerLinUnivers
+  Member: 
+  Warning: warning: Member variable 'DerLinUnivers::v_buffer' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/discretecontrolleradapter.cpp:49
+  Class: DiscreteControllerAdapter
+  Member: 
+  Warning: warning: Member variable 'DiscreteControllerAdapter::mapToMotorInterval' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/discretecontrolleradapter.cpp:49
+  Class: DiscreteControllerAdapter
+  Member: 
+  Warning: warning: Member variable 'DiscreteControllerAdapter::minMotorRange' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/discretecontrolleradapter.cpp:49
+  Class: DiscreteControllerAdapter
+  Member: 
+  Warning: warning: Member variable 'DiscreteControllerAdapter::maxMotorRange' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/discretecontrolleradapter.cpp:49
+  Class: DiscreteControllerAdapter
+  Member: 
+  Warning: warning: Member variable 'DiscreteControllerAdapter::minSensorRange' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/discretecontrolleradapter.cpp:49
+  Class: DiscreteControllerAdapter
+  Member: 
+  Warning: warning: Member variable 'DiscreteControllerAdapter::maxSensorRange' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/discretecontrolleradapter.cpp:49
+  Class: DiscreteControllerAdapter
+  Member: 
+  Warning: warning: Member variable 'DiscreteControllerAdapter::minMotorValue' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/discretecontrolleradapter.cpp:49
+  Class: DiscreteControllerAdapter
+  Member: 
+  Warning: warning: Member variable 'DiscreteControllerAdapter::maxMotorValue' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/discretecontrolleradapter.cpp:49
+  Class: DiscreteControllerAdapter
+  Member: 
+  Warning: warning: Member variable 'DiscreteControllerAdapter::minSensorValue' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/discretecontrolleradapter.cpp:49
+  Class: DiscreteControllerAdapter
+  Member: 
+  Warning: warning: Member variable 'DiscreteControllerAdapter::maxSensorValue' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/discretecontrolleradapter.cpp:49
+  Class: DiscreteControllerAdapter
+  Member: 
+  Warning: warning: Member variable 'DiscreteControllerAdapter::discreteSensors' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/esn.cpp:35
+  Class: ESN
+  Member: 
+  Warning: warning: Member variable 'ESN::nbInputs' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/esn.cpp:35
+  Class: ESN
+  Member: 
+  Warning: warning: Member variable 'ESN::nbOutputs' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/ffnncontroller.cpp:6
+  Class: FFNNController
+  Member: 
+  Warning: warning: Member variable 'FFNNController::number_motors' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/ffnncontroller.cpp:6
+  Class: FFNNController
+  Member: 
+  Warning: warning: Member variable 'FFNNController::number_sensors' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/ffnncontroller.cpp:6
+  Class: FFNNController
+  Member: 
+  Warning: warning: Member variable 'FFNNController::x_buffer' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/ffnncontroller.cpp:6
+  Class: FFNNController
+  Member: 
+  Warning: warning: Member variable 'FFNNController::y_buffer' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/ffnncontroller.cpp:20
+  Class: FFNNController
+  Member: 
+  Warning: warning: Member variable 'FFNNController::number_motors' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/ffnncontroller.cpp:20
+  Class: FFNNController
+  Member: 
+  Warning: warning: Member variable 'FFNNController::number_sensors' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/ffnncontroller.cpp:20
+  Class: FFNNController
+  Member: 
+  Warning: warning: Member variable 'FFNNController::x_buffer' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/ffnncontroller.cpp:20
+  Class: FFNNController
+  Member: 
+  Warning: warning: Member variable 'FFNNController::y_buffer' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/invertmotornstep.cpp:26
+  Class: InvertMotorNStep
+  Member: 
+  Warning: warning: Member variable 'InvertMotorNStep::number_sensors' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/invertmotornstep.cpp:26
+  Class: InvertMotorNStep
+  Member: 
+  Warning: warning: Member variable 'InvertMotorNStep::number_motors' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/invertmotornstep.cpp:26
+  Class: InvertMotorNStep
+  Member: 
+  Warning: warning: Member variable 'InvertMotorNStep::t_rand' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/invertmotorspace.cpp:25
+  Class: InvertMotorSpace
+  Member: 
+  Warning: warning: Member variable 'InvertMotorSpace::number_sensors' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/invertmotorspace.cpp:25
+  Class: InvertMotorSpace
+  Member: 
+  Warning: warning: Member variable 'InvertMotorSpace::number_motors' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/invertnchannelcontroller.cpp:26
+  Class: InvertNChannelController
+  Member: 
+  Warning: warning: Member variable 'InvertNChannelController::number_channels' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/measureadapter.cpp:27
+  Class: MeasureAdapter
+  Member: 
+  Warning: warning: Member variable 'MeasureAdapter::initialized' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/measureadapter.cpp:27
+  Class: MeasureAdapter
+  Member: 
+  Warning: warning: Member variable 'MeasureAdapter::motorValues' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/measureadapter.cpp:27
+  Class: MeasureAdapter
+  Member: 
+  Warning: warning: Member variable 'MeasureAdapter::sensorValues' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/multireinforce.cpp:33
+  Class: MultiReinforce
+  Member: 
+  Warning: warning: Member variable 'MultiReinforce::number_sensors' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/multireinforce.cpp:33
+  Class: MultiReinforce
+  Member: 
+  Warning: warning: Member variable 'MultiReinforce::number_motors' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/multireinforce.cpp:33
+  Class: MultiReinforce
+  Member: 
+  Warning: warning: Member variable 'MultiReinforce::x_buffer' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/multireinforce.cpp:33
+  Class: MultiReinforce
+  Member: 
+  Warning: warning: Member variable 'MultiReinforce::xp_buffer' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/multireinforce.cpp:33
+  Class: MultiReinforce
+  Member: 
+  Warning: warning: Member variable 'MultiReinforce::y_buffer' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/multireinforce.cpp:33
+  Class: MultiReinforce
+  Member: 
+  Warning: warning: Member variable 'MultiReinforce::x_context_buffer' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/multireinforce.cpp:33
+  Class: MultiReinforce
+  Member: 
+  Warning: warning: Member variable 'MultiReinforce::newaction' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/multireinforce.cpp:33
+  Class: MultiReinforce
+  Member: 
+  Warning: warning: Member variable 'MultiReinforce::oldaction' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/multireinforce.cpp:33
+  Class: MultiReinforce
+  Member: 
+  Warning: warning: Member variable 'MultiReinforce::state' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/multireinforce.cpp:33
+  Class: MultiReinforce
+  Member: 
+  Warning: warning: Member variable 'MultiReinforce::reward' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/multireinforce.cpp:33
+  Class: MultiReinforce
+  Member: 
+  Warning: warning: Member variable 'MultiReinforce::oldreward' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/multireinforce.cpp:33
+  Class: MultiReinforce
+  Member: 
+  Warning: warning: Member variable 'MultiReinforce::phase' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/multireinforce.cpp:33
+  Class: MultiReinforce
+  Member: 
+  Warning: warning: Member variable 'MultiReinforce::phasecnt' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/multireinforce.cpp:33
+  Class: MultiReinforce
+  Member: 
+  Warning: warning: Member variable 'MultiReinforce::t' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/mutualinformationcontroller.cpp:33
+  Class: MutualInformationController
+  Member: 
+  Warning: warning: Member variable 'MutualInformationController::sensorNumber' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/mutualinformationcontroller.cpp:33
+  Class: MutualInformationController
+  Member: 
+  Warning: warning: Member variable 'MutualInformationController::motorNumber' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/mutualinformationcontroller.cpp:33
+  Class: MutualInformationController
+  Member: 
+  Warning: warning: Member variable 'MutualInformationController::oldSensorStates' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/mutualinformationcontroller.cpp:33
+  Class: MutualInformationController
+  Member: 
+  Warning: warning: Member variable 'MutualInformationController::MI' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/mutualinformationcontroller.cpp:33
+  Class: MutualInformationController
+  Member: 
+  Warning: warning: Member variable 'MutualInformationController::H_x' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/mutualinformationcontroller.cpp:33
+  Class: MutualInformationController
+  Member: 
+  Warning: warning: Member variable 'MutualInformationController::H_yx' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/mutualinformationcontroller.cpp:33
+  Class: MutualInformationController
+  Member: 
+  Warning: warning: Member variable 'MutualInformationController::H_Xsi' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/mutualinformationcontroller.cpp:33
+  Class: MutualInformationController
+  Member: 
+  Warning: warning: Member variable 'MutualInformationController::ainit' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/mutualinformationcontroller.cpp:33
+  Class: MutualInformationController
+  Member: 
+  Warning: warning: Member variable 'MutualInformationController::cinit' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/neuralgas.cpp:33
+  Class: NeuralGas
+  Member: 
+  Warning: warning: Member variable 'NeuralGas::maxTime' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/oneactivemultipassivecontroller.cpp:29
+  Class: OneActiveMultiPassiveController
+  Member: 
+  Warning: warning: Member variable 'OneActiveMultiPassiveController::passiveMotors' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/onecontrollerperchannel.cpp:30
+  Class: OneControllerPerChannel
+  Member: 
+  Warning: warning: Member variable 'OneControllerPerChannel::motornumber' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/onecontrollerperchannel.cpp:30
+  Class: OneControllerPerChannel
+  Member: 
+  Warning: warning: Member variable 'OneControllerPerChannel::sensornumber' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/pimax.cpp:24
+  Class: PiMax
+  Member: 
+  Warning: warning: Member variable 'PiMax::number_sensors' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/pimax.cpp:24
+  Class: PiMax
+  Member: 
+  Warning: warning: Member variable 'PiMax::number_motors' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/sinecontroller.cpp:33
+  Class: SineController
+  Member: 
+  Warning: warning: Member variable 'SineController::individual' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/sinecontroller.cpp:118
+  Class: MultiSineController
+  Member: 
+  Warning: warning: Member variable 'MultiSineController::periods' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/sinecontroller.cpp:118
+  Class: MultiSineController
+  Member: 
+  Warning: warning: Member variable 'MultiSineController::phaseShifts' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/sinecontroller.cpp:118
+  Class: MultiSineController
+  Member: 
+  Warning: warning: Member variable 'MultiSineController::amplitudes' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/sinecontroller.cpp:118
+  Class: MultiSineController
+  Member: 
+  Warning: warning: Member variable 'MultiSineController::offsets' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/som.cpp:31
+  Class: SOM
+  Member: 
+  Warning: warning: Member variable 'SOM::rbfsize' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/som.cpp:31
+  Class: SOM
+  Member: 
+  Warning: warning: Member variable 'SOM::size' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/som.cpp:38
+  Class: SOM
+  Member: 
+  Warning: warning: Member variable 'SOM::size' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/soml.cpp:25
+  Class: SoML
+  Member: 
+  Warning: warning: Member variable 'SoML::number_sensors' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/soml.cpp:25
+  Class: SoML
+  Member: 
+  Warning: warning: Member variable 'SoML::number_motors' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/soml.cpp:25
+  Class: SoML
+  Member: 
+  Warning: warning: Member variable 'SoML::numControllerLayer' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/soml.cpp:25
+  Class: SoML
+  Member: 
+  Warning: warning: Member variable 'SoML::E' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/sos.cpp:24
+  Class: Sos
+  Member: 
+  Warning: warning: Member variable 'Sos::number_sensors' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/sos.cpp:24
+  Class: Sos
+  Member: 
+  Warning: warning: Member variable 'Sos::number_motors' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/splitcontrol.cpp:30
+  Class: SplitControl
+  Member: 
+  Warning: warning: Member variable 'SplitControl::motornumber' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/splitcontrol.cpp:30
+  Class: SplitControl
+  Member: 
+  Warning: warning: Member variable 'SplitControl::sensornumber' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/splitcontrol.cpp:30
+  Class: SplitControl
+  Member: 
+  Warning: warning: Member variable 'SplitControl::sensorbuffer' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/splitcontrol.cpp:30
+  Class: SplitControl
+  Member: 
+  Warning: warning: Member variable 'SplitControl::motorbuffer' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/universalcontroller.cpp:33
+  Class: UniversalController
+  Member: 
+  Warning: warning: Member variable 'UniversalController::x_buffer' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/universalcontroller.cpp:33
+  Class: UniversalController
+  Member: 
+  Warning: warning: Member variable 'UniversalController::y_buffer' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/universalcontroller.cpp:33
+  Class: UniversalController
+  Member: 
+  Warning: warning: Member variable 'UniversalController::v_buffer' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/use_java_controller.cpp:37
+  Class: use_java_controller
+  Member: 
+  Warning: warning: Member variable 'use_java_controller::number_sensors' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/use_java_controller.cpp:37
+  Class: use_java_controller
+  Member: 
+  Warning: warning: Member variable 'use_java_controller::number_motors' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/use_java_controller.cpp:37
+  Class: use_java_controller
+  Member: 
+  Warning: warning: Member variable 'use_java_controller::serverOK' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/use_java_controller.cpp:37
+  Class: use_java_controller
+  Member: 
+  Warning: warning: Member variable 'use_java_controller::anz_config_param' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/use_java_controller.cpp:37
+  Class: use_java_controller
+  Member: 
+  Warning: warning: Member variable 'use_java_controller::anz_internal_param' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/use_java_controller.cpp:37
+  Class: use_java_controller
+  Member: 
+  Warning: warning: Member variable 'use_java_controller::can_send' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/use_java_controller.cpp:37
+  Class: use_java_controller
+  Member: 
+  Warning: warning: Member variable 'use_java_controller::isFirst' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/use_java_controller.cpp:37
+  Class: use_java_controller
+  Member: 
+  Warning: warning: Member variable 'use_java_controller::isClosed' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/use_java_controller.cpp:37
+  Class: use_java_controller
+  Member: 
+  Warning: warning: Member variable 'use_java_controller::server_guilogger_isClosed' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/use_java_controller.cpp:37
+  Class: use_java_controller
+  Member: 
+  Warning: warning: Member variable 'use_java_controller::server_controller_isClosed' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/use_java_controller.cpp:37
+  Class: use_java_controller
+  Member: 
+  Warning: warning: Member variable 'use_java_controller::anzahl_closed_Server' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/controller/use_java_controller.cpp:37
+  Class: use_java_controller
+  Member: 
+  Warning: warning: Member variable 'use_java_controller::motor_values_alt' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/simulations/interaction_sims/flocks/main.cpp:59
+  Class: MyRobot
+  Member: 
+  Warning: warning: Member variable 'MyRobot::whatDoISee' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/simulations/interaction_sims/interaction/main.cpp:53
+  Class: MyRobot
+  Member: 
+  Warning: warning: Member variable 'MyRobot::whatDoIFeel' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/simulations/interaction_sims/interaction1D/main.cpp:81
+  Class: MyRobot
+  Member: 
+  Warning: warning: Member variable 'MyRobot::whatDoIFeel' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/simulations/interaction_sims/interaction1D/main.cpp:81
+  Class: MyRobot
+  Member: 
+  Warning: warning: Member variable 'MyRobot::mindist' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/simulations/interaction_sims/interaction1D/main_pos_senor.cpp:63
+  Class: MyRobot
+  Member: 
+  Warning: warning: Member variable 'MyRobot::whatDoIFeel' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/simulations/interaction_sims/interaction1D/main_vision_2agents.cpp:74
+  Class: MyRobot
+  Member: 
+  Warning: warning: Member variable 'MyRobot::whatDoIFeel' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/simulations/interaction_sims/interaction1D/main_vision_2agents.cpp:74
+  Class: MyRobot
+  Member: 
+  Warning: warning: Member variable 'MyRobot::mindist' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/simulations/interaction_sims/interaction1D/main_vision_4objects.cpp:66
+  Class: MyRobot
+  Member: 
+  Warning: warning: Member variable 'MyRobot::whatDoIFeel' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/simulations/interaction_sims/interaction1D/main_vision_bg.cpp:63
+  Class: MyRobot
+  Member: 
+  Warning: warning: Member variable 'MyRobot::whatDoIFeel' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/simulations/interaction_sims/interaction1D/main_visual_motor.cpp:63
+  Class: MyRobot
+  Member: 
+  Warning: warning: Member variable 'MyRobot::whatDoIFeel' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/simulations/interaction_sims/shadoworreal/main.cpp:55
+  Class: MyRobot
+  Member: 
+  Warning: warning: Member variable 'MyRobot::whatDoIFeel' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/simulations/interaction_sims/shadoworreal/main.cpp:55
+  Class: MyRobot
+  Member: 
+  Warning: warning: Member variable 'MyRobot::real_dist' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/simulations/interaction_sims/shadoworreal/main_real_and_shadow.cpp:49
+  Class: MyRobot
+  Member: 
+  Warning: warning: Member variable 'MyRobot::whatDoIFeel' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/simulations/interaction_sims/shadoworreal/main_real_and_shadow_and_static.cpp:49
+  Class: MyRobot
+  Member: 
+  Warning: warning: Member variable 'MyRobot::whatDoIFeel' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/simulations/interaction_sims/shadoworreal/main_real_and_shadow_and_static.cpp:49
+  Class: MyRobot
+  Member: 
+  Warning: warning: Member variable 'MyRobot::real_dist' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/simulations/manipuexperts/main.cpp:43
+  Class: Sim
+  Member: 
+  Warning: warning: Member variable 'Sim::mep' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/simulations/manipuexperts/main.cpp:43
+  Class: Sim
+  Member: 
+  Warning: warning: Member variable 'Sim::data_size' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/simulations/manipuexperts/main.cpp:43
+  Class: Sim
+  Member: 
+  Warning: warning: Member variable 'Sim::t' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/simulations/manipuexperts/multiexpertpair.cpp:34
+  Class: MultiExpertPair
+  Member: 
+  Warning: warning: Member variable 'MultiExpertPair::inputDim' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/simulations/manipuexperts/multiexpertpair.cpp:34
+  Class: MultiExpertPair
+  Member: 
+  Warning: warning: Member variable 'MultiExpertPair::outputDim' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/simulations/manipuexperts/multiexpertsubopt.cpp:36
+  Class: MultiExpertSubopt
+  Member: 
+  Warning: warning: Member variable 'MultiExpertSubopt::inputDim' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/simulations/manipuexperts/multiexpertsubopt.cpp:36
+  Class: MultiExpertSubopt
+  Member: 
+  Warning: warning: Member variable 'MultiExpertSubopt::outputDim' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/simulations/manipuexperts/multiexpertsubopt.cpp:36
+  Class: MultiExpertSubopt
+  Member: 
+  Warning: warning: Member variable 'MultiExpertSubopt::t' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/simulations/spherical_xbee/workstation/main.cpp:36
+  Class: Xbee
+  Member: 
+  Warning: warning: Member variable 'Xbee::numsensors' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/simulations/spherical_xbee/workstation/main.cpp:36
+  Class: Xbee
+  Member: 
+  Warning: warning: Member variable 'Xbee::sensoroffset' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/simulations/spherical_xbee/workstation/main.cpp:36
+  Class: Xbee
+  Member: 
+  Warning: warning: Member variable 'Xbee::nummotors' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/simulations/spherical_xbee/workstation/main.cpp:36
+  Class: Xbee
+  Member: 
+  Warning: warning: Member variable 'Xbee::motoroffset' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/simulations/tcpcommunication/Socket.cpp:73
+  Class: Socket
+  Member: 
+  Warning: warning: Member variable 'Socket::_tcpClientSock' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/statistictools/measure/complexmeasure.cpp:35
+  Class: ComplexMeasure
+  Member: 
+  Warning: warning: Member variable 'ComplexMeasure::fSize' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/statistictools/measure/complexmeasure.cpp:35
+  Class: ComplexMeasure
+  Member: 
+  Warning: warning: Member variable 'ComplexMeasure::historyIndexNumber' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/statistictools/measure/complexmeasure.cpp:35
+  Class: ComplexMeasure
+  Member: 
+  Warning: warning: Member variable 'ComplexMeasure::historyInterval' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/statistictools/measure/trackablemeasure.cpp:29
+  Class: TrackableMeasure
+  Member: 
+  Warning: warning: Member variable 'TrackableMeasure::cmode' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/utils/discretisizer.cpp:28
+  Class: Discretisizer
+  Member: 
+  Warning: warning: Member variable 'Discretisizer::minRange' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/utils/discretisizer.cpp:28
+  Class: Discretisizer
+  Member: 
+  Warning: warning: Member variable 'Discretisizer::maxRange' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/utils/discretisizer.cpp:28
+  Class: Discretisizer
+  Member: 
+  Warning: warning: Member variable 'Discretisizer::minValue' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/utils/discretisizer.cpp:28
+  Class: Discretisizer
+  Member: 
+  Warning: warning: Member variable 'Discretisizer::maxValue' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/utils/discretisizer.cpp:35
+  Class: Discretisizer
+  Member: 
+  Warning: warning: Member variable 'Discretisizer::minValue' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/utils/discretisizer.cpp:35
+  Class: Discretisizer
+  Member: 
+  Warning: warning: Member variable 'Discretisizer::maxValue' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/utils/inspectable.cpp:30
+  Class: Inspectable
+  Member: 
+  Warning: warning: Member variable 'Inspectable::printParentName' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/wirings/abstractwiring.h:50
+  Class: AbstractWiring
+  Member: 
+  Warning: warning: Member variable 'AbstractWiring::noisenumber' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/wirings/abstractwiring.h:50
+  Class: AbstractWiring
+  Member: 
+  Warning: warning: Member variable 'AbstractWiring::randGen' is not initialized in the constructor. [uninitMemberVar]
+
+File: selforg/wirings/derivativewiring.cpp:30
+  Class: DerivativeWiring
+  Member: 
+  Warning: warning: Member variable 'DerivativeWiring::sensorbuffer' is not initialized in the constructor. [uninitMemberVar]
+

@@ -57,7 +57,7 @@ ParameterList divCompPL(const ParameterList& pl1,const ParameterList& pl2){
 void assignPL(ParameterList& pld, const ParameterList& pls){
   ParameterList::const_iterator ps = pls.begin();
   ParameterList::const_iterator __end2=pls.end();
-  for( ParameterList::iterator pd = pld.begin(), __end1=pld.end(); pd!= __end1 && ps!= __end2; pd++ , ps++)
+  for( ParameterList::iterator pd = pld.begin(), __end1=pld.end(); pd!= __end1 && ps!= __end2; ++pd , ++ps)
     *pd = *ps;
 }
 

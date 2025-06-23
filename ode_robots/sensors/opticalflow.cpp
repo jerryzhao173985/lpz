@@ -40,7 +40,8 @@ namespace lpzrobots {
   }
 
   OpticalFlow::OpticalFlow(OpticalFlowConf conf)
-    : conf(conf), fields(0), data(0), cnt(4), avgerror(-1) {
+    : conf(conf), fields(0), data(0), cnt(4), avgerror(-1), 
+      maxShiftX(0), maxShiftY(0), width(0), height(0) {
     num = conf.points.size() * (bool(conf.dims & X) + bool(conf.dims & Y));
     data = new sensor[num];
     memset(data,0,sizeof(sensor)*num);

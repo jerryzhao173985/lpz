@@ -45,7 +45,7 @@ class ComplexMeasure;
 class StatisticTools : public Inspectable, public Callbackable {
 
 public:
-  StatisticTools(const std::string& name = "StatisticTools") : Inspectable(name), beginMeasureCounter(0) { }
+  explicit StatisticTools(const std::string& name = "StatisticTools") : Inspectable(name), beginMeasureCounter(0) { }
 
         /**
          * adds a variable to observe and measure the value

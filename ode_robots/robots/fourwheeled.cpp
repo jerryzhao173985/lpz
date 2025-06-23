@@ -39,7 +39,8 @@ namespace lpzrobots {
 
   FourWheeled::FourWheeled(const OdeHandle& odeHandle, const OsgHandle& osgHandle,
                            FourWheeledConf conf, const std::string& name)
-    : Nimm4(odeHandle, osgHandle, name, conf.size, conf.force, conf.speed, conf.sphereWheels), conf(conf)
+    : Nimm4(odeHandle, osgHandle, name, conf.size, conf.force, conf.speed, conf.sphereWheels), 
+      conf(conf), bumpertrans(nullptr), bumper(nullptr)
   {
     length=conf.size/2.0; // length of body
 

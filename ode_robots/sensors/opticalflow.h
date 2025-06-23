@@ -73,7 +73,7 @@ namespace lpzrobots {
      */
     OpticalFlow(OpticalFlowConf conf = getDefaultConf());
 
-    virtual ~OpticalFlow();
+    virtual ~OpticalFlow() override;
 
     /** calculates default positions for optical flow detection.
         The points are in aranged horizontally in a line at the vertical center.
@@ -93,16 +93,16 @@ namespace lpzrobots {
       return c;
     }
 
-    virtual void intern_init();
+    virtual void intern_init() override;
     
     /// Performs the calculations
-    virtual bool sense(const GlobalData& globaldata);
+    virtual bool sense(const GlobalData& globaldata) override;
     
     virtual int getSensorNumber() const {
       return num;
     };
 
-    virtual int get(sensor* sensors, int length) const;
+    virtual int get(sensor* sensors, int length) const override;
 
 
   protected:

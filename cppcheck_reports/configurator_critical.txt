@@ -1,0 +1,5 @@
+/Users/jerry/lpzrobot_mac/selforg/include/selforg/configurable.h:138: warning: Member variable 'Configurable::parent' is not initialized in the constructor. [uninitMemberVar]
+/Users/jerry/lpzrobot_mac/selforg/include/selforg/configurable.h:143: warning: Member variable 'Configurable::parent' is not initialized in the constructor. [uninitMemberVar]
+/Users/jerry/lpzrobot_mac/selforg/include/selforg/noisegenerator.h:215: warning: Member variable 'ColorNormalNoise::factor' is not initialized in the constructor. [uninitMemberVar]
+/Users/jerry/lpzrobot_mac/selforg/include/selforg/noisegenerator.h:176: warning: If memory allocation fails, then there is a possible null pointer dereference: mean [nullPointerOutOfMemory]
+/Users/jerry/lpzrobot_mac/selforg/include/selforg/noisegenerator.h:228: warning: If memory allocation fails, then there is a possible null pointer dereference: mean [nullPointerOutOfMemory]

@@ -181,7 +181,7 @@ namespace lpzrobots {
     connect(&slider, SIGNAL(valueChanged(int)), this, SLOT(sl_sliderValueChanged(int)));
     connect(&dsBox, SIGNAL(valueChanged(double)), this, SLOT(sl_spinBoxValueChanged(double)));
 
-    setBackgroundRole(QPalette::Background);
+    setBackgroundRole(QPalette::Window);
     setAutoFillBackground(true);
   }
   

@@ -257,23 +257,23 @@ namespace lpzrobots {
     */
     virtual void placeIntern(const osg::Matrix& pose) override;
 
-    virtual int getSensorsIntern(sensor* sensors, int sensornumber);
-    virtual void setMotorsIntern(const motor* motors, int motornumber);
-    virtual int getSensorNumberIntern();
-    virtual int getMotorNumberIntern();
+    virtual int getSensorsIntern(sensor* sensors, int sensornumber) override;
+    virtual void setMotorsIntern(const motor* motors, int motornumber) override;
+    virtual int getSensorNumberIntern() override;
+    virtual int getMotorNumberIntern() override;
 
 
     /******** CONFIGURABLE ***********/
-    virtual void notifyOnChange(const paramkey& key);
+    virtual void notifyOnChange(const paramkey& key) override;
 
     /** the main object of the robot, which is used for position and speed tracking */
     virtual Primitive* getMainPrimitive() const { return objects[Thorax]; } // Trunk_comp
 
     /** returns the position of the head */
-    virtual Position getHeadPosition();
+    virtual Position getHeadPosition() override;
 
     /** returns the position of the trunk */
-    virtual Position getTrunkPosition();
+    virtual Position getTrunkPosition() override;
 
     /// returns a the gripper list
     GripperList& getGrippers();
@@ -284,11 +284,11 @@ namespace lpzrobots {
     /** creates vehicle at desired pose
         @param pose 4x4 pose matrix
     */
-    virtual void create(const osg::Matrix& pose);
+    virtual void create(const osg::Matrix& pose) override;
 
     /** destroys vehicle and space
      */
-    virtual void destroy();
+    virtual void destroy() override;
 
     SkeletonConf conf;
 

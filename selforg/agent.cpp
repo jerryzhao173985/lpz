@@ -68,8 +68,8 @@ bool Agent::init(AbstractController* controller, AbstractRobot* robot,
 
   rsensornumber = robot->getSensorNumber();
   rmotornumber  = robot->getMotorNumber();
-  rsensors      = (sensor*) malloc(sizeof(sensor) * rsensornumber);
-  rmotors       = (motor*)  malloc(sizeof(motor)  * rmotornumber);
+  rsensors      = static_cast<sensor*>(malloc(sizeof(sensor) * rsensornumber));
+  rmotors       = static_cast<motor*>(malloc(sizeof(motor)  * rmotornumber));
   memset(rsensors,0, sizeof(motor)*rsensornumber);
   memset(rmotors,0, sizeof(motor)*rmotornumber);
 

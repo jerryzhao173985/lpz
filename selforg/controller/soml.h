@@ -49,7 +49,7 @@ struct SoMLConf {
 class SoML : public AbstractController {
 
 public:
-  SoML(const SoMLConf& conf = getDefaultConf());
+  explicit SoML(const SoMLConf& conf = getDefaultConf());
 
   static SoMLConf getDefaultConf(){
     SoMLConf c;
@@ -63,7 +63,7 @@ public:
     return c;
   }
 
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr);
 
   virtual ~SoML();
 

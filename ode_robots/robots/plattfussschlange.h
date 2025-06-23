@@ -42,10 +42,10 @@ namespace lpzrobots {
                         const SchlangeConf& conf,
                         const std::string& name);
 
-    virtual ~PlattfussSchlange();
+    virtual ~PlattfussSchlange() override;
 
   private:
-    virtual Primitive* createSegment(int index, const OdeHandle& odeHandle);
+    virtual Primitive* createSegment(int index, const OdeHandle& odeHandle) override;
   };
 
 }

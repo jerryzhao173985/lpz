@@ -211,7 +211,7 @@ namespace matrix {
   }
 
   bool eigenValuesVectors(const Matrix &m, Matrix& vals_real, Matrix& vals_imag,
-                          Matrix& vecs_real, Matrix& vecs_imag){
+                          Matrix& vecs_real, const Matrix& vecs_imag){
     assert("Not implemented!");
     return false;
   }

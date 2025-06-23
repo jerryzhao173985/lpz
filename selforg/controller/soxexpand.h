@@ -46,7 +46,7 @@ struct SoxExpandConf {
 class SoxExpand : public AbstractController {
 
 public:
-  SoxExpand(const SoxExpandConf& conf = getDefaultConf());
+  explicit SoxExpand(const SoxExpandConf& conf = getDefaultConf());
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
 
   virtual ~SoxExpand();

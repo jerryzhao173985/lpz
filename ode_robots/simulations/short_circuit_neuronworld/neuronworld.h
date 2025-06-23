@@ -84,7 +84,7 @@ public:
   }
 
 
-    virtual ~NeuronWorld();
+    virtual ~NeuronWorld() override;
 
     virtual void update() {}
 
@@ -98,13 +98,13 @@ public:
         @param sensornumber length of the sensor array
         @return number of actually written sensors
     */
-    virtual int getSensors(sensor* sensors, int sensornumber);
+    virtual int getSensors(sensor* sensors, int sensornumber) override;
 
     /** sets actual motorcommands
         @param motors motors scaled to [-1,1]
         @param motornumber length of the motor array
     */
-    virtual void setMotors(const motor* motors, int motornumber);
+    virtual void setMotors(const motor* motors, int motornumber) override;
 
     /** returns number of sensors
      */

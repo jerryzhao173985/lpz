@@ -306,7 +306,7 @@ public:
       // no recreation possible at the moment
       std::cerr << "cannot recreate environemnt in the simulation" << std::endl;
       return;
-      // for(auto& o: global.obstacles){
+      // for (const auto& o : global.obstacles){
       //   delete (o);
       // }
       // global.obstacles.clear();

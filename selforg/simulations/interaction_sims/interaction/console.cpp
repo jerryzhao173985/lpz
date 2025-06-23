@@ -69,7 +69,7 @@ COMMAND commands[] = {
   { "show", com_show, "[OBJECTID]: Lists paramters of OBJECTID or of all objects (if no id given)" },
   { "view", com_show, "Synonym for `show'" },
   { "quit", com_quit, "Quit program" },
-  { (char *)NULL, (commandfunc_t)NULL, (char *)NULL }
+  { static_cast<char*>(NULL), (commandfunc_t)NULL, static_cast<char*>(NULL) }
 };
 
 /* Forward declarations. */
@@ -95,7 +95,7 @@ void showParam(const Configurable* config)
 char* dupstr (const char* s){
   char *r;
 
-  r = (char*)malloc (strlen (s) + 1);
+  r = static_cast<char*>(malloc(strlen (s) + 1);
   strcpy (r, s);
   return (r);
 }
@@ -127,7 +127,7 @@ bool handleConsole(GlobalData& globalData){
 
 /* Execute a command line. */
 bool execute_line (GlobalData& globalData, char *line) {
-  register int i;
+  int i;
   COMMAND *command;
   char *word;
 
@@ -164,20 +164,20 @@ bool execute_line (GlobalData& globalData, char *line) {
 /* Look up NAME as the name of a command, and return a pointer to that
    command.  Return a NULL pointer if NAME isn't a command name. */
 COMMAND *find_command (char *name){
-  register int i;
+  int i;
   char *p = strchr(name,'=');
   if(p) return (&commands[0]);
   for (i = 0; commands[i].name; i++)
     if (strcmp (name, commands[i].name) == 0)
       return (&commands[i]);
 
-  return ((COMMAND *)NULL);
+  return (static_cast<COMMAND*>(NULL));
 }
 
 /* Strip whitespace from the start and end of STRING.  Return a pointer
    into STRING. */
 char * stripwhite (char *string){
-  register char *s, *t;
+  char *s, *t;
 
   for (s = string; whitespace (*s); s++)
     ;
@@ -269,7 +269,7 @@ char * command_generator (const char *text, int state) {
     }
 
   /* If no names matched, then return NULL. */
-  return ((char *)NULL);
+  return (static_cast<char*>(NULL));
 }
 
 /* **************************************************************** */
@@ -417,7 +417,7 @@ bool com_quit (GlobalData& globalData, char *, char *){
 /* Print out help for ARG, or for all of the commands if ARG is
    not present. */
 bool com_help (GlobalData& globalData, char* line, char* arg) {
-  register int i;
+  int i;
   int printed = 0;
 
   for (i = 0; commands[i].name; i++)

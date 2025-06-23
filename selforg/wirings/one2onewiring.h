@@ -37,18 +37,18 @@ public:
       @param blind number of blind channels
         (additional sensors and motors coupled directly)
    */
-  One2OneWiring(NoiseGenerator* noise, int plotMode=Controller, int blind=0, const std::string& name = "One2OneWiring");
+  explicit One2OneWiring(NoiseGenerator* noise, int plotMode=Controller, int blind=0, const std::string& name = "One2OneWiring");
 
   /** destructor
    */
-  virtual ~One2OneWiring();
+  virtual ~One2OneWiring() override;
 
 protected:
 
   /** initializes the number of sensors and motors on robot side, calculate
       number of sensors and motors on controller side
    */
-  virtual bool initIntern();
+  virtual bool initIntern() override;
 
   /** Realizes one to one wiring from robot sensors to controller sensors.
       @param rsensors pointer to array of sensorvalues from robot
@@ -59,7 +59,7 @@ protected:
   */
   virtual bool wireSensorsIntern(const sensor* rsensors, int rsensornumber,
                            sensor* csensors, int csensornumber,
-                           double noise);
+                           double noise) override;
 
   /** Realizes one to one wiring from controller motor outputs to robot motors.
       @param rmotors pointer to array of motorvalues for robot
@@ -68,7 +68,7 @@ protected:
       @param cmotornumber number of motorvalues from controller
   */
   virtual bool wireMotorsIntern(motor* rmotors, int rmotornumber,
-                          const motor* cmotors, int cmotornumber);
+                          const motor* cmotors, int cmotornumber) override;
 
 
 protected:

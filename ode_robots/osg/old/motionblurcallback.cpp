@@ -32,7 +32,7 @@
 namespace lpzrobots {
 
     MotionBlurDrawCallback::MotionBlurDrawCallback(GlobalData& global)
-      :    cleared_(false), globalData(global) {}
+      :    cleared_(false), globalData(global), t0_(0.0), persistence_(0.5) {}
 
     void MotionBlurDrawCallback::operator()(osgProducer::OsgSceneHandler &handler, Producer::Camera &camera)
     {

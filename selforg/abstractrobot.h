@@ -52,7 +52,7 @@ public:
     : Configurable(name, revision) {
   };
 
-  virtual ~AbstractRobot(){}
+  virtual ~AbstractRobot() override{}
 
   /** returns actual sensorvalues
       @param sensors sensors scaled to [-1,1]
@@ -75,7 +75,7 @@ public:
   */
   virtual int getMotorNumber()=0;
 
-  virtual std::string getTrackableName() const {return getName();}
+  virtual std::string getTrackableName() const  override{return getName();}
 
   /** returns the information for the sensors.
       The following relation has to hold: getSensorNames().size() == getSensorNumber()

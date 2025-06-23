@@ -63,9 +63,9 @@ void ControllerNet::init(unsigned int inputDim, unsigned  int outputDim,
   z[0].set(layers[0].size, 1);
   gp[0].set(layers[0].size, 1);
   for(unsigned int i = 1; i < layers.size(); i++) {
-    Matrix w(layers[i].size, layers[i-1].size);
-    w=w.mapP(randGen, random_minusone_to_one) * rand  + (w^0)*unit_map;
-    weights[i] = w;
+    Matrix w_init(layers[i].size, layers[i-1].size);
+    w_init=w_init.mapP(randGen, random_minusone_to_one) * rand  + (w_init^0)*unit_map;
+    weights[i] = w_init;
     bias[i].set(layers[i].size, 1);
     y[i].set(layers[i].size, 1);
     z[i].set(layers[i].size, 1);
@@ -109,7 +109,7 @@ const Matrix ControllerNet::processX (const Matrix& input, const Matrix& injecti
                                       unsigned int injectInLayer){
   assert(initialised);
   unsigned int layernum = layers.size();
-  assert(injectInLayer >= 0 && injectInLayer < layernum);
+  assert(injectInLayer < layernum);
   assert((int)injection.getM() == layers[injectInLayer].size && injection.getN() == 1);
   assert(weights.size() == layernum);
   assert(bias.size() == layernum);
@@ -141,8 +141,8 @@ const Matrix ControllerNet::forwardpropagation(const matrix::Matrix& error,
   assert(initialised);
   unsigned int layernum  = layers.size();
 
-  bool errorsgiven = errors != NULL;
-  bool zetasgiven  = zetas  != NULL;
+  bool errorsgiven = errors != nullptr;
+  bool zetasgiven  = zetas  != nullptr;
   if(!errorsgiven) errors = new Matrices(layernum+1);
   else errors->resize(layernum+1);
   if(!zetasgiven)  zetas  = new Matrices(layernum);
@@ -173,8 +173,8 @@ const Matrix ControllerNet::forwardpropagation(const matrix::Matrix& error,
 //   }
 //   unsigned int layernum  = layers.size();
 
-//   bool errorsgiven = errors != NULL;
-//   bool zetasgiven  = zetas  != NULL;
+//   bool errorsgiven = errors != nullptr;
+//   bool zetasgiven  = zetas  != nullptr;
 //   if(!errorsgiven) errors = new Matrices(layernum+1);
 //   else errors->resize(layernum+1);
 //   if(!zetasgiven)  zetas  = new Matrices(layernum);
@@ -199,8 +199,8 @@ const Matrix ControllerNet::forwardprojection(const matrix::Matrix& error,
   assert(initialised);
   unsigned int layernum  = layers.size();
 
-  bool errorsgiven = errors != NULL;
-  bool zetasgiven  = zetas  != NULL;
+  bool errorsgiven = errors != nullptr;
+  bool zetasgiven  = zetas  != nullptr;
   if(!errorsgiven) errors = new Matrices(layernum+1);
   else errors->resize(layernum+1);
   if(!zetasgiven)  zetas  = new Matrices(layernum);
@@ -239,8 +239,8 @@ const Matrix ControllerNet::backpropagation(const Matrix& error,
   assert(initialised);
   int layernum  = (int)layers.size();
 
-  bool errorsgiven = errors != NULL;
-  bool zetasgiven  = zetas  != NULL;
+  bool errorsgiven = errors != nullptr;
+  bool zetasgiven  = zetas  != nullptr;
   if(!errorsgiven) errors = new Matrices(layernum+1);
   else errors->resize(layernum+1);
   if(!zetasgiven)  zetas  = new Matrices(layernum);
@@ -272,8 +272,8 @@ const Matrix ControllerNet::backpropagationX(const Matrix& error,
   if(startWithLayer<0) startWithLayer = layers.size()+startWithLayer;
   assert(startWithLayer>=0 && startWithLayer < layernum);
 
-  bool errorsgiven = errors != NULL;
-  bool zetasgiven  = zetas  != NULL;
+  bool errorsgiven = errors != nullptr;
+  bool zetasgiven  = zetas  != nullptr;
   if(!errorsgiven) errors = new Matrices(layernum+1);
   else errors->resize(layernum+1);
   if(!zetasgiven)  zetas  = new Matrices(layernum);
@@ -305,8 +305,8 @@ const Matrix ControllerNet::backpropagationX(const Matrix& error,
 //     return backprojectionBP(error,errors,zetas);
 //   }
 //   int layernum  = (int)layers.size();
-//   bool errorsgiven = errors != NULL;
-//   bool zetasgiven  = zetas  != NULL;
+//   bool errorsgiven = errors != nullptr;
+//   bool zetasgiven  = zetas  != nullptr;
 //   if(!errorsgiven) errors = new Matrices(layernum+1);
 //   else errors->resize(layernum+1);
 //   if(!zetasgiven)  zetas  = new Matrices(layernum);
@@ -331,8 +331,8 @@ const Matrix ControllerNet::backprojection(const Matrix& error,
                                            Matrices* errors, Matrices* zetas) const {
   assert(initialised);
   int layernum  = (int)layers.size();
-  bool errorsgiven = errors != NULL;
-  bool zetasgiven  = zetas  != NULL;
+  bool errorsgiven = errors != nullptr;
+  bool zetasgiven  = zetas  != nullptr;
   if(!errorsgiven) errors = new Matrices(layernum+1);
   else errors->resize(layernum+1);
   if(!zetasgiven)  zetas  = new Matrices(layernum);
@@ -436,8 +436,8 @@ void ControllerNet::damp(double damping){
 bool ControllerNet::store(FILE* f) const {
         int layernum = layers.size();
         fprintf(f,"%i\n", layernum);
-        for(int i=0; i<layernum; i++){
-                layers[i].store(f);
+        for(const auto& layer : layers){
+                layer.store(f);
         }
         int weightsnum = weights.size();
         fprintf(f,"%i\n#", weightsnum);
@@ -454,8 +454,8 @@ bool ControllerNet::store(FILE* f) const {
 bool ControllerNet::write(FILE* f) const {
         int layernum = layers.size();
         fprintf(f,"%i\n", layernum);
-        for(int i=0; i<layernum; i++){
-                layers[i].store(f);
+        for(const auto& layer : layers){
+                layer.store(f);
         }
         int weightsnum = weights.size();
         fprintf(f,"%i\n#", weightsnum);
@@ -473,7 +473,7 @@ bool ControllerNet::write(FILE* f) const {
 bool ControllerNet::restore(FILE* f){
         unsigned int layernum;
         layers.clear();
-        if(fscanf(f,"%i\n", &layernum) != 1) return false;
+        if(fscanf(f,"%u\n", &layernum) != 1) return false;
         for(unsigned int i=0; i<layernum; i++){
                 Layer l(1);
                 l.restore(f);
@@ -489,7 +489,7 @@ bool ControllerNet::restore(FILE* f){
         unsigned int weightsnum;
         weights.clear();
         bias.clear();
-        if(fscanf(f,"%i\n#", &weightsnum) != 1) return false;
+        if(fscanf(f,"%u\n#", &weightsnum) != 1) return false;
         for(unsigned int i=0; i<weightsnum; i++){
                 Matrix m;
                 if(!m.restore(f)) return false;

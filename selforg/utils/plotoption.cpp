@@ -48,9 +48,9 @@ bool PlotOption::open(){
       t = localtime(&tnow);
       char logfilename[255];
       if (!parameter.empty()){
-        sprintf(logfilename,"%s%s.log", parameter.c_str(), name.c_str());
+        snprintf(logfilename, sizeof(logfilename),"%s%s.log", parameter.c_str(), name.c_str());
       } else{
-        sprintf(logfilename,"%s_%02i-%02i-%02i_%02i-%02i-%02i.log",
+        snprintf(logfilename, sizeof(logfilename),"%s_%02i-%02i-%02i_%02i-%02i-%02i.log",
               name.c_str(), t->tm_year%100, t->tm_mon+1 , t->tm_mday,
                 t->tm_hour, t->tm_min, t->tm_sec);
       }
@@ -62,15 +62,15 @@ bool PlotOption::open(){
     pipe=popen("guilogger -m pipe -l","w");
     break;
   case GuiLogger:
-    sprintf(cmd, "guilogger -m pipe %s", parameter.c_str());
+    snprintf(cmd, sizeof(cmd), "guilogger -m pipe %s", parameter.c_str());
     pipe=popen(cmd,"w");
     break;
   case MatrixViz: {
     // Build command with parameters if provided
     if (!parameter.empty()) {
-      sprintf(cmd, "matrixviz -noCtrlC -novideo %s", parameter.c_str());
+      snprintf(cmd, sizeof(cmd), "matrixviz -noCtrlC -novideo %s", parameter.c_str());
     } else {
-      sprintf(cmd, "matrixviz -noCtrlC -novideo");
+      snprintf(cmd, sizeof(cmd), "matrixviz -noCtrlC -novideo");
     }
     std::cout << "PlotOption: Attempting to launch MatrixViz with command: " << cmd << std::endl;
     std::cout << "PlotOption: Parameter passed: '" << parameter << "'" << std::endl;
@@ -89,10 +89,10 @@ bool PlotOption::open(){
       if (lpzrobots_home) {
         // Try pipe-friendly wrapper first
         if (!parameter.empty()) {
-          sprintf(cmd, "%s/matrixviz/matrixviz-pipe -noCtrlC -novideo %s", 
+          snprintf(cmd, sizeof(cmd), "%s/matrixviz/matrixviz-pipe -noCtrlC -novideo %s", 
                   lpzrobots_home, parameter.c_str());
         } else {
-          sprintf(cmd, "%s/matrixviz/matrixviz-pipe -noCtrlC -novideo", 
+          snprintf(cmd, sizeof(cmd), "%s/matrixviz/matrixviz-pipe -noCtrlC -novideo", 
                   lpzrobots_home);
         }
         std::cerr << "PlotOption: Trying pipe-friendly wrapper: " << cmd << std::endl;
@@ -101,10 +101,10 @@ bool PlotOption::open(){
         if (!pipe) {
           // Try regular wrapper with full path
           if (!parameter.empty()) {
-            sprintf(cmd, "%s/matrixviz/matrixviz -noCtrlC -novideo %s", 
+            snprintf(cmd, sizeof(cmd), "%s/matrixviz/matrixviz -noCtrlC -novideo %s", 
                     lpzrobots_home, parameter.c_str());
           } else {
-            sprintf(cmd, "%s/matrixviz/matrixviz -noCtrlC -novideo", 
+            snprintf(cmd, sizeof(cmd), "%s/matrixviz/matrixviz -noCtrlC -novideo", 
                     lpzrobots_home);
           }
           std::cerr << "PlotOption: Trying regular wrapper: " << cmd << std::endl;
@@ -113,10 +113,10 @@ bool PlotOption::open(){
           if (!pipe) {
             // Also try guilogger directory
             if (!parameter.empty()) {
-              sprintf(cmd, "%s/guilogger/matrixviz -noCtrlC -novideo %s", 
+              snprintf(cmd, sizeof(cmd), "%s/guilogger/matrixviz -noCtrlC -novideo %s", 
                       lpzrobots_home, parameter.c_str());
             } else {
-              sprintf(cmd, "%s/guilogger/matrixviz -noCtrlC -novideo", 
+              snprintf(cmd, sizeof(cmd), "%s/guilogger/matrixviz -noCtrlC -novideo", 
                       lpzrobots_home);
             }
             std::cerr << "PlotOption: Trying guilogger directory: " << cmd << std::endl;
@@ -139,7 +139,7 @@ bool PlotOption::open(){
     else   std::cout << "can't open SphericalRobotGUI-Stream " << std::endl;
     break;
   case SoundMan:
-    sprintf(cmd,"soundMan %s",parameter.c_str());
+    snprintf(cmd, sizeof(cmd),"soundMan %s",parameter.c_str());
     pipe=popen(cmd,"w");
     break;
   default: // and NoPlot
@@ -310,7 +310,7 @@ int PlotOption::printInspectables(const std::list<const Inspectable*>& inspectab
       FOREACHC(Inspectable::iparamvallist, l, i )
       {
         if(cnt >= (int)mask.size() || cnt<0) {
-          fprintf(stderr, "PlotOption: mask to short: %lu <= %i", mask.size(),cnt); // should not happen
+          fprintf(stderr, "PlotOption: mask to short: %zu <= %i", mask.size(),cnt); // should not happen
         }else{
           if(mask[cnt])
             fprintf(pipe, " %f", (*i));

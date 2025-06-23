@@ -183,7 +183,7 @@ namespace lpzrobots {
     void createPolyline(const PolyLine&);
 
   protected:
-    virtual void create();
+    virtual void create() override;
 
   };
 

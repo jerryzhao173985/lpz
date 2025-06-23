@@ -570,7 +570,7 @@ int main(int argc, char **argv) {
   // The prototypes need a name, a random strategy to create random genes and a mutation strategy to mutate existing genes.
   for(int xi = 0; xi<4*numberElements; xi++) {
     char buffer[10];
-    sprintf(buffer,"P%i",xi+1);
+    snprintf(buffer, sizeof(buffer),"P%i",xi+1);
     pro[xi] = SingletonGenAlgAPI::getInstance()->createPrototype(buffer, randomStr, mutStr);
     SingletonGenAlgAPI::getInstance()->insertGenPrototype(pro[xi]);
   }
@@ -634,7 +634,7 @@ int main(int argc, char **argv) {
     // 5. create the SimulationTasks
     // just add another task pool and run this ones
     char buffer[15];
-    sprintf(buffer, "taskpool %i", x);
+    snprintf(buffer, sizeof(buffer), "taskpool %i", x);
     SimulationTaskSupervisor::getInstance()->createSimTasks(individualVectorTemp->size());
     SimulationTaskSupervisor::getInstance()->setSimTaskNameSuffix(buffer);
 

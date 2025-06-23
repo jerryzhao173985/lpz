@@ -765,7 +765,7 @@ public:
           }
           break;
         case 's' :
-          sprintf(file,"QTable%07.1f.matrix",globalData.time);
+          snprintf(file, sizeof(file),"QTable%07.1f.matrix",globalData.time);
           f= fopen(file,"w");
           if(!f) cerr << "cannot open file: " << file << endl;
           else {
@@ -784,7 +784,7 @@ public:
             }
           break;
         case 'c' :
-          sprintf(file,"contour.dat");
+          snprintf(file, sizeof(file),"contour.dat");
           f= fopen(file,"w");
           if(!f) cerr << "cannot open file: " << file << endl;
           else {

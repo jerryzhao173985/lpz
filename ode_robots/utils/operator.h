@@ -68,7 +68,7 @@ namespace lpzrobots {
     /** called every simulation step
         @return what was done with the robot
      */
-    virtual ManipType observe(OdeAgent* agent, GlobalData& global, ManipDescr& descr) = 0;
+    virtual ManipType observe(OdeAgent* agent, GlobalData& global, ManipDescr& descr)  override = 0;
 
   };
 

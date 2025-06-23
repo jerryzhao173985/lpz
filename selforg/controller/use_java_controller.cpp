@@ -6,6 +6,7 @@
 #include "use_java_controller.h"
 #include <unistd.h>
 #include <stdlib.h>
+#include <vector>
 
 
 
@@ -36,16 +37,28 @@ use_java_controller::~use_java_controller()
 */
 use_java_controller::use_java_controller ( const char* port_controller, const char* port_internalParams, const char* name )
   : AbstractController ( "Javacontroller", "$Id: use_java_controller.cpp,Rocco Gwizdziel" ),
-    name(name)
+    name(name),
+    number_sensors(0),
+    number_motors(0),
+    serverOK(false),
+    anz_config_param(0),
+    anz_internal_param(0),
+    can_send(false),
+    isFirst(false),
+    isClosed(false),
+    server_guilogger_isClosed(false),
+    server_controller_isClosed(false),
+    anzahl_closed_Server(0),
+    motor_values_alt(nullptr)
 {
         addController();
         char* port_iP;
         //wenn port_internalParams nicht gesetz dann port_internalParams = port_controller + 1 !
-        if ( port_internalParams == NULL )
+        if ( port_internalParams == nullptr )
         {
-          port_iP = ( char* )  malloc ( 64 * sizeof(char) );
+          port_iP = static_cast<char*>(malloc( 64 * sizeof(char) ));
 
-          sprintf (port_iP,"%d", ( atoi ( port_controller ) +1 ) );
+          snprintf(port_iP, 64,"%d", ( atoi ( port_controller ) +1 ) );
           printf ( "port: %s", port_iP );
         }else{
           port_iP = strdup(port_internalParams);
@@ -74,7 +87,8 @@ use_java_controller::use_java_controller ( const char* port_controller, const ch
         server_internalParams_addr.sin_addr.s_addr = htonl ( INADDR_ANY );
         server_internalParams_addr.sin_port        = htons ( ( unsigned short int ) atol ( port_iP ) );
 
-
+        // Free allocated memory
+        free(port_iP);
 
 
         //Die Sockets an die Socketadress-Strukturen binden
@@ -157,8 +171,8 @@ void use_java_controller::init ( int sensornumber, int motornumber, RandGen* ran
 
         //initialisierung nach java senden
         char *temp_init;
-        temp_init = ( char* )  malloc ( BUFFER_SIZE );
-        sprintf ( temp_init,"I#0#%d#%d#%s\n",sensornumber,motornumber,name);
+        temp_init = static_cast<char*>(malloc( BUFFER_SIZE ));
+        snprintf(temp_init, BUFFER_SIZE,"I#0#%d#%d#%s\n",sensornumber,motornumber,name);
 
         //verschicken
 
@@ -291,7 +305,7 @@ void use_java_controller::init ( int sensornumber, int motornumber, RandGen* ran
 
 
 
-        motor_values_alt = ( double* ) malloc ( motornumber*sizeof ( double ) );
+        motor_values_alt = static_cast<double*>(malloc( motornumber*sizeof ( double ) ));
         for ( int i=0;  i < motornumber; i++ ) {motor_values_alt[i] = 0;}
 
         internal_vallist_alt = std::list<iparamval>();
@@ -326,33 +340,33 @@ void use_java_controller::stepNoLearning ( const sensor* sensors, int number_sen
                 char *temp;
             char *temp1;
 
-            temp =  ( char* )  malloc ( BUFFER_SIZE );
-            temp1 = ( char* )  malloc ( BUFFER_SIZE );
+            temp =  static_cast<char*>(malloc( BUFFER_SIZE ));
+            temp1 = static_cast<char*>(malloc( BUFFER_SIZE ));
 
 
-                sprintf ( temp,"N#%d#%d#%d#",t++,number_sensors,number_motors );
+                snprintf(temp, BUFFER_SIZE,"N#%d#%d#%d#",t++,number_sensors,number_motors );
                 strcpy ( temp1,temp );
 
                 //sammeln der zusendenden daten
                 //sensoren
                 for ( int i= 0; i < number_sensors-1; i++ )
                 {
-                        sprintf ( temp,"%f&",sensors[i] );
+                        snprintf(temp, BUFFER_SIZE,"%f&",sensors[i] );
                         strcat ( temp1,temp );
                 }
-                sprintf ( temp,"%f#",sensors[number_sensors-1] );
+                snprintf(temp, BUFFER_SIZE,"%f#",sensors[number_sensors-1] );
                 strcat ( temp1,temp );
 
                 //motoren
                 for ( int i= 0; i < number_motors-1; i++ )
                 {
-                        sprintf ( temp,"%f&",motors[i] );
+                        snprintf(temp, BUFFER_SIZE,"%f&",motors[i] );
                         strcat ( temp1,temp );
                 }
-                sprintf ( temp,"%f",motors[number_motors-1] );
+                snprintf(temp, BUFFER_SIZE,"%f",motors[number_motors-1] );
                 strcat ( temp1,temp );
 
-                sprintf ( temp,"\n" );
+                snprintf(temp, BUFFER_SIZE,"\n" );
                 strcat ( temp1,temp );
 
         //verschicken
@@ -385,7 +399,7 @@ void use_java_controller::stepNoLearning ( const sensor* sensors, int number_sen
                         can_send = true;
 
                         //speichert motorwerte und im letzten feld anzahl von configParam
-                        char values[number_motors][100];
+                        char (*values)[100] = new char[number_motors][100];
                         //splitten (anhand von #)
                         int m = 0;
                         int counter=2;
@@ -410,6 +424,7 @@ void use_java_controller::stepNoLearning ( const sensor* sensors, int number_sen
 
                         motor_values_alt = motors;
                         isFirst = false;
+                        delete[] values;
 
                 }
                 else
@@ -495,13 +510,11 @@ void use_java_controller::stepNoLearning ( const sensor* sensors, int number_sen
 */
 Configurable::paramval use_java_controller::getParam ( const paramkey& key ) const
 {
-        paramlist::const_iterator i;
-        for ( i=config_param_list.begin(); i != config_param_list.end(); ++i )
+        for (const auto& param : config_param_list)
         {
-
-                if ( ( ( ( pair<paramkey, paramval> ) *i ).first ) == key )
+                if (param.first == key)
                 {
-                        return ( ( ( pair<paramkey, paramval> ) *i ).second );
+                        return param.second;
                 }
         }
 
@@ -519,16 +532,15 @@ bool use_java_controller::setParam ( const paramkey& key, paramval val )
         {
                 //im der paramliste ändern
                 //parameter suchen und val ändern
-                paramlist::const_iterator i;
-                for ( i=config_param_list.begin(); i != config_param_list.end(); ++i )
+                for (const auto& param : config_param_list)
                 {
-                        if ( ( ( ( pair<paramkey, paramval> ) *i ).first ) == key )
+                        if (param.first == key)
                         {
-                                config_param_list.remove ( *i );
-                                config_param_list += pair<paramkey, paramval> ( key, val );
+                                config_param_list.remove(param);
+                                config_param_list += std::make_pair(key, val);
                                 char *temp;
-                                temp = ( char* )  malloc ( BUFFER_SIZE );
-                                sprintf ( temp,"C#%s#%lf\n",key.data(),val );
+                                temp = static_cast<char*>(malloc( BUFFER_SIZE ));
+                                snprintf(temp, BUFFER_SIZE,"C#%s#%lf\n",key.data(),val );
                                 //verschicken
                                 sendToJava ( temp ,false );
                                 free ( temp );

@@ -20,7 +20,7 @@ prefix="/usr/local"
 srcprefix=$DIRNAME
 system=LINUX
 type=USER
-version=`cat $DIRNAME/VERSION`;
+version=`cat $DIRNAME/VERSION 2>/dev/null || echo "0.8.0"`;
 package=ga_tools
 
 if test $# -eq 0; then

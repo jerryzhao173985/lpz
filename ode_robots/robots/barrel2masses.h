@@ -75,7 +75,7 @@ public:
   Barrel2Masses ( const OdeHandle& odeHandle, const OsgHandle& osgHandle,
                        const Sphererobot3MassesConf& conf, const std::string& name, double transparency=0.5 );
 
-  virtual ~Barrel2Masses();
+  virtual ~Barrel2Masses() override;
 
   /** default configuration. It has no sensors.
       Use addSensor(std::make_shared<Sensor>(AxisOrientationSensor(ZProjectionXY)) for example.*/
@@ -102,12 +102,12 @@ public:
     return c;
   }
 
-  virtual int getSensorsIntern( sensor* sensors, int sensornumber );
+  virtual int getSensorsIntern( sensor* sensors, int sensornumber ) override;
 
 protected:
 
   /// The cylinder (main body) lies on the ground, that it is rotating about the z-axis
-  virtual void create(const osg::Matrix& pose);
+  virtual void create(const osg::Matrix& pose) override;
 
 };
 

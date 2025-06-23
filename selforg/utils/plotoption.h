@@ -83,7 +83,7 @@ public:
 
      Note: the argument whichSensor is removed. You can adjust this in the wirings now.
    */
-  PlotOption( PlotMode mode, int interval = 1, std::string parameter=std::string(), std::string filter=std::string())
+  explicit PlotOption( PlotMode mode, int interval = 1, const std::string& parameter=std::string(), const std::string& filter=std::string())
     : pipe(0), interval(interval), mode(mode), parameter(parameter)
   {
     if(!filter.empty()){

@@ -29,7 +29,7 @@
  * Constructor
  */
 DegreeSegment::DegreeSegment(const Position& p,const double& angle)
-  : AbstractTrackSection(p, angle) { // GLOBAL
+  : AbstractTrackSection(p, angle), obstacle_exists(false) { // GLOBAL
   // 2 matrices are calculated, the sum is the matrix to store
   setProperties();
 };
@@ -38,7 +38,7 @@ DegreeSegment::DegreeSegment(const Position& p,const double& angle)
  * Constructor
  */
 DegreeSegment::DegreeSegment(const Matrix& pose)
-  : AbstractTrackSection(pose) { // GOBAL
+  : AbstractTrackSection(pose), obstacle_exists(false) { // GOBAL
   setProperties();
 };
 

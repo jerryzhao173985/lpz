@@ -29,7 +29,7 @@ using namespace std;
 DerBigController::DerBigController( const DerBigControllerConf& conf)
   : InvertMotorController(conf.buffersize, "DerBigController", "$Id$"), conf(conf) {
 
-  assert(conf.model != NULL);
+  assert(conf.model != nullptr);
 
   fantControl = 50;
   fantControlLen = 0;
@@ -247,8 +247,8 @@ void DerBigController::learnController(int delay){
     //    z                    = R * z.map(g) + H + C*xsi; // z is a dynamic itself (not successful)
     // TODO: check delay!!!!!!!!!!!
     const Matrix& x          = x_buffer[(t-s-delay)%buffersize];
-    const Matrix& y          = y_buffer[(t-s-delay)%buffersize];
-    const Matrix& z          = (C * x + H);// * weighting +( R * y + H) * (1 - weighting);
+    // const Matrix& y_local    = y_buffer[(t-s-delay)%buffersize];
+    const Matrix& z          = (C * x + H);// * weighting +( R * y_local + H) * (1 - weighting);
     //  const Matrix shift       = (eta  + v).map(g); /// maybe clip
     // const Matrix shift       = (eta  + v);//.map(g);  //Regularization  changed 07.02.07
       const Matrix g_prime = Matrix::map2(g_s, z,eta);
@@ -336,8 +336,8 @@ void DerBigController::learnController(int delay){
 
 
     if(useTeaching && s==1){
-      const Matrix& y = y_buffer[(t)% buffersize]; // eventuell t-1
-       const Matrix& kappa = y_teaching - y;
+      const Matrix& y_current = y_buffer[(t)% buffersize]; // eventuell t-1
+       const Matrix& kappa = y_teaching - y_current;
       const Matrix g_p     = z.map(g_s);
       const Matrix& delta = ( kappa ).multrowwise(g_p);
         C_updateTeaching += ( delta*(x^T) ) * teacher;// * epsC;
@@ -369,7 +369,7 @@ void DerBigController::learnController(int delay){
    if ( u*u > 1.25 *  q*q)      epsC *=0.95999999999999;
    else {
      C += C_update.mapP(&squashSize, squash) - C* dampC;
-     double H_squashSize = squashSize*2.0;//TEST: H soll sich schneller bewegen können.
+     double H_squashSize = squashSize*2.0;//TEST: H soll sich schneller bewegen knnen.
      H += H_update.mapP(&H_squashSize, squash) - H * dampC; //Test; //Test - H*.001;
      // std::cout <<  "c_up=" << H_update.mapP(&H_squashSize, squash) << std::endl;
 

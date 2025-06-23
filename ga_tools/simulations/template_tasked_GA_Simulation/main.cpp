@@ -528,7 +528,7 @@ int main(int argc, char **argv) {
     // 5. create the SimulationTasks
     // just add another task pool and run this ones
     char buffer[15];
-    sprintf(buffer, "taskpool %i", x);
+    snprintf(buffer, sizeof(buffer), "taskpool %i", x);
     SimulationTaskSupervisor::getInstance()->createSimTasks(individualVectorTemp->size());
     SimulationTaskSupervisor::getInstance()->setSimTaskNameSuffix(buffer);
 

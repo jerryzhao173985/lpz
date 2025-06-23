@@ -122,15 +122,15 @@ public:
 
   /// ABSTRACTCONTROLLER INTERFACE
 
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
 
   virtual int getSensorNumber() const { return sensorNumber; }
 
   virtual int getMotorNumber() const { return motorNumber; }
 
-  virtual void step(const sensor* sensors, int sensornumber, motor* motors, int motornumber);
+  virtual void step(const sensor* sensors, int sensornumber, motor* motors, int motornumber) override;
 
-  virtual void stepNoLearning(const sensor* sensors, int sensornumber, motor* motors, int motornumber);
+  virtual void stepNoLearning(const sensor* sensors, int sensornumber, motor* motors, int motornumber) override;
 
   /// STORABLE INTERFACE
 
@@ -139,7 +139,7 @@ public:
   virtual bool restore(FILE* f) { return true; }
 
   /// CONFIGURABLE INTERFACE
-  virtual bool setParam(const paramkey& key, paramval val, bool traverseChildren=true);
+  virtual bool setParam(const paramkey& key, paramval val, bool traverseChildren=true) override;
 
 protected:
   TristateIAFControllerConf conf;
@@ -160,7 +160,7 @@ protected:
   /**
    * makes a forward step (without any learning)
    */
-  virtual void forwardStep(const sensor* sensors, int number_sensors, motor* motors, int number_motors);
+  virtual void forwardStep(const sensor* sensors, int number_sensors, motor* motors, int number_motors) override;
 
 
 

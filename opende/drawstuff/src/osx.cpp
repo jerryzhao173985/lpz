@@ -131,7 +131,7 @@ static void captureFrame( int num ){
 	unsigned char buffer[windowWidth*windowHeight][3];
 	glReadPixels( 0, 0, windowWidth, windowHeight, GL_RGB, GL_UNSIGNED_BYTE, &buffer );
 	char s[100];
-	sprintf (s,"frame%04d.ppm",num);
+	snprintf(s, sizeof(s),"frame%04d.ppm",num);
 	FILE *f = fopen (s,"wb");
 	if( !f ){
 		dsError( "can't open \"%s\" for writing", s );

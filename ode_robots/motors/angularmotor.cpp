@@ -251,7 +251,7 @@ namespace lpzrobots {
       Setting this to zero (the default value) turns off the motor.
   */
   AngularMotorNAxis::AngularMotorNAxis(const OdeHandle& odeHandle, Joint* joint,
-                                       std::list<std::pair<double, Axis > > axis)
+                                       const std::list<std::pair<double, Axis > >& axis)
     : AngularMotor(odeHandle, joint), axis(axis){
   }
 

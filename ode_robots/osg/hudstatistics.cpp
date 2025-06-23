@@ -146,20 +146,20 @@ HUDStatisticsManager::WindowStatistic* HUDStatisticsManager::getMeasureWS(const 
 
 void HUDStatisticsManager::doOnCallBack(BackCaller* source, BackCaller::CallbackableType /* = BackCaller::DEFAULT_CALLBACKABLE_TYPE */) {
   // go through WindowStatictList and update the graphical text, that should be all!
-  if (statTool->measureStarted())
+  if (statTool->measureStarted()) {
     FOREACHC(std::list<WindowStatistic*>, windowStatisticList, i) {
       char valueBuf[100];
       char printstr[24];
-      sprintf(printstr, ": %%.%if", (*i)->getMeasure()->getDisplayPrecision());
+      snprintf(printstr, sizeof(printstr), ": %%.%if", (*i)->getMeasure()->getDisplayPrecision());
 
-      sprintf(valueBuf,printstr,(*i)->getMeasure()->getValue());
+      snprintf(valueBuf, sizeof(valueBuf),printstr,(*i)->getMeasure()->getValue());
 
       std::string buffer((*i)->getMeasure()->getName());
       buffer.append(valueBuf);
 
       (*i)->getText()->setText(buffer);
     }
-
+  }
 }
 
 }

@@ -587,7 +587,7 @@ namespace lpzrobots {
   }
 
 
-   void QConfigurator::enterEvent(QEvent* event) {
+   void QConfigurator::enterEvent(QEnterEvent* event) {
     event->accept();
     activateWindow();
   }

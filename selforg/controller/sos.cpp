@@ -22,7 +22,8 @@ using namespace matrix;
 using namespace std;
 
 Sos::Sos(double init_feedback_strength)
-  : AbstractController("Sos", "0.6"), init_feedback_strength(init_feedback_strength){
+  : AbstractController("Sos", "0.6"), init_feedback_strength(init_feedback_strength),
+    number_sensors(0), number_motors(0){
 
   t=0;
   addParameterDef("creativity",&creativity,0  ,0 , 1, "creativity term (0: disabled) ");

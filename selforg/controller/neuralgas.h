@@ -35,7 +35,7 @@
 */
 class NeuralGas : public AbstractModel {
 public:
-  NeuralGas(const std::string& name = "NeuralGas", const std::string& revision = "$Id$");
+  explicit NeuralGas(const std::string& name = "NeuralGas", const std::string& revision = "$Id$");
   /** create a som
       @param lambda initial competetive constant for neighborhood learning
       @param eps initial  learning rate
@@ -44,7 +44,7 @@ public:
   NeuralGas(double lambda, double eps, int maxTime,
       const std::string& name="NeuralGas",
       const std::string& revision = "$Id$");
-  virtual ~NeuralGas(){};
+  virtual ~NeuralGas() override{};
 
   /** initialised som
       @param inputDim dimension of input vector
@@ -53,9 +53,9 @@ public:
                if zero then (-1,1) is used otherwise (-unit_map, unit_map) (in all dimensions)
    */
   virtual void init(unsigned int inputDim, unsigned  int outputDim,
-                    double unit_map = 0.0, RandGen* randGen = 0);
+                    double unit_map = 0.0, RandGen* randGen = nullptr) override;
 
-  virtual const matrix::Matrix process (const matrix::Matrix& input);
+  virtual const matrix::Matrix process (const matrix::Matrix& input) override;
 
   /*  performs training. Nominal output is ignored.
       A zero matrix is returned.
@@ -64,16 +64,16 @@ public:
   */
   virtual const matrix::Matrix learn (const matrix::Matrix& input,
                                       const matrix::Matrix& nom_output,
-                                      double learnRateFactor = 1);
+                                      double learnRateFactor = 1) override;
 
-  virtual void damp(double damping) { return;}
+  virtual void damp(double damping)  override{ return;}
 
-  virtual unsigned int getInputDim() const { return weights[0].getM();}
-  virtual unsigned int getOutputDim() const  { return weights.size();}
+  virtual unsigned int getInputDim() const override { return weights[0].getM();}
+  virtual unsigned int getOutputDim() const override { return weights.size();}
 
 
-  virtual bool store(FILE* f) const;
-  virtual bool restore(FILE* f);
+  virtual bool store(FILE* f) const override;
+  virtual bool restore(FILE* f) override;
 
   virtual void printWeights(FILE* f) const;
   virtual void printCellsizes(FILE* f) const;

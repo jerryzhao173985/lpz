@@ -37,7 +37,7 @@ namespace lpzrobots {
   public:
     ShortCircuit(const OdeHandle& odeHandle, const OsgHandle& osgHandle, int sensornumber, int motornumber);
 
-    virtual ~ShortCircuit();
+    virtual ~ShortCircuit() override;
 
 
 
@@ -51,13 +51,13 @@ namespace lpzrobots {
         @param sensornumber length of the sensor array
         @return number of actually written sensors
     */
-    virtual int getSensorsIntern(sensor* sensors, int sensornumber);
+    virtual int getSensorsIntern(sensor* sensors, int sensornumber) override;
 
     /** sets actual motorcommands
         @param motors motors scaled to [-1,1]
         @param motornumber length of the motor array
     */
-    virtual void setMotorsIntern(const double* motors, int motornumber);
+    virtual void setMotorsIntern(const double* motors, int motornumber) override;
 
     /** returns number of sensors
      */

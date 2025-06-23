@@ -78,7 +78,7 @@ namespace lpzrobots {
         (and not from globaldata, if you wish to overwrite them)
     */
     OdeAgent(const GlobalData& globalData, const PlotOptionList& plotOptions, double noisefactor = 1, const std::string& name = "OdeAgent", const std::string& revision = "");
-    virtual ~OdeAgent();
+    virtual ~OdeAgent() override;
 
     /** initializes the object with the given controller, robot and wiring
         and initializes plotoptionengine
@@ -88,7 +88,7 @@ namespace lpzrobots {
       return Agent::init(controller, robot, wiring, seed);
     }
 
-    virtual void step(double noise, double time);
+    virtual void step(double noise, double time) override;
 
     /**
      * Special function for the class Simulation to seperate the step
@@ -97,19 +97,19 @@ namespace lpzrobots {
      * @param noise @see step()
      * @param time @see step()
      */
-    virtual void stepOnlyWiredController(double noise, double time);
+    virtual void stepOnlyWiredController(double noise, double time) override;
 
     /**
      * Special function for the class Simulation to seperate the step
      * of the WiredController (plus TrackRobot) and the setting and getting
      * of the motor- and sensorvalues.
      */
-    virtual void setMotorsGetSensors();
+    virtual void setMotorsGetSensors() override;
 
     /** should be called before step() or stepOnlyWiredController()
         and calls operators and robot->sense()
     */
-    virtual void beforeStep(GlobalData& global);
+    virtual void beforeStep(GlobalData& global) override;
 
     /**
      * Returns a pointer to the robot.
@@ -131,26 +131,26 @@ namespace lpzrobots {
 
     /// adds tracking for individual primitives
     virtual void addTracking(unsigned int primitiveIndex,const TrackRobot& trackrobot,
-                             const Color& color);
-    virtual void setTrackOptions(const TrackRobot& trackrobot);
-    virtual bool stopTracking();
+                             const Color& color) override;
+    virtual void setTrackOptions(const TrackRobot& trackrobot) override;
+    virtual bool stopTracking() override;
 
 
     /****** STOREABLE **********/
-    virtual bool store(FILE* f) const;
-    virtual bool restore(FILE* f);
+    virtual bool store(FILE* f) const override;
+    virtual bool restore(FILE* f) override;
 
 
     /****** OPERATORS *********/
     /// adds an operator to the agent (the operator is deleted on destruction of the agent!)
-    virtual void addOperator(Operator* o, bool addToConfigurable = true );
+    virtual void addOperator(Operator* o, bool addToConfigurable = true ) override;
 
     /** removes the given operator: it is _not_ deleted (memory wise)
         @return true on success
      */
-    virtual bool removeOperator(Operator* o);
+    virtual bool removeOperator(Operator* o) override;
     /// removes (and deletes) all operators
-    virtual void removeOperators();
+    virtual void removeOperators() override;
 
     /** fixates the given primitive of the robot at its current position to the world
         for a certain time.
@@ -158,16 +158,16 @@ namespace lpzrobots {
         @param primitiveID if -1 then the main primitive is used, otherwise the primitive with the given index
         @param time time to fixate in seconds (if ==0 then indefinite)
      */
-    virtual void fixateRobot(GlobalData& global, int primitiveID=-1, double time = 0);
+    virtual void fixateRobot(GlobalData& global, int primitiveID=-1, double time = 0) override;
     /// release the robot in case it is fixated and turns true in this case
-    virtual bool unfixateRobot(GlobalData& global);
+    virtual bool unfixateRobot(GlobalData& global) override;
 
   protected:
 
     /**
      * continues the trace by one segment
      */
-    virtual void trace(GlobalData& global);
+    virtual void trace(GlobalData& global) override;
 
   private:
     void constructor_helper(const GlobalData* globalData);

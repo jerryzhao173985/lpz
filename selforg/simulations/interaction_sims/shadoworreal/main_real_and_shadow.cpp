@@ -47,7 +47,7 @@ Position toEnv(Position pos){
 class MyRobot : public AbstractRobot {
 public:
   MyRobot(const string& name, const Position& initial_pos, double _mass = 1.0)
-    : AbstractRobot(name, "$Id$") {
+    : AbstractRobot(name, "$Id$"), whatDoIFeel(0) {
     motornumber  = 1;
     sensornumber = 2;
     x = new double[sensornumber];
@@ -236,7 +236,7 @@ void printRobots(const list<MyRobot*>& robots){
 }
 
 void reinforce(Agent* a){
-  MyRobot* r = (MyRobot*)a->getRobot();
+  MyRobot* r = static_cast<MyRobot*>(a)->getRobot();
   InvertMotorNStep* c = dynamic_cast<InvertMotorNStep*>(a->getController());
   if(c)
     c->setReinforcement(2*(r->whatDoIFeel != 0));
@@ -325,10 +325,10 @@ int main(int argc, char** argv){
     }
     int drawinterval = 100000;
     if(sleep_){
-      drawinterval = (int)(1000000.0/(25*sleep_));
+      drawinterval = static_cast<int>(1000000.0/(25*sleep_));
       if(sleep_ < 5000 && (t%10)==0)
-        usleep((int)(10*sleep_));
-      else usleep((int)(sleep_));
+        usleep(static_cast<int>(10*sleep_));
+      else usleep(static_cast<int>(sleep_));
     }
     if(t%drawinterval==0)
       printRobots(robots);

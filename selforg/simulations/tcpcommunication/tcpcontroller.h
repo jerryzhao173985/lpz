@@ -46,9 +46,9 @@ public:
    */
   TcpController(const string& robotname, int port = 4000, AbstractController* teacher = 0);
 
-  virtual ~TcpController();
+  virtual ~TcpController() override;
 
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
 
   /** @return Number of sensors the controller was initialised
       with or 0 if not initialised */
@@ -63,14 +63,14 @@ public:
       and waits for motor values to be send to the robot.
   */
   virtual void step(const sensor* sensors, int sensornumber,
-                    motor* motors, int motornumber);
+                    motor* motors, int motornumber) override;
 
   /** performs one step without learning (Not implemented
       for remote controller! we use step instead)
       @see step
   */
   virtual void stepNoLearning(const sensor* , int number_sensors,
-                              motor* , int number_motors);
+                              motor* , int number_motors) override;
 
   /********* STORABLE INTERFACE ******/
   /// @see Storable

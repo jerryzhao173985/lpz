@@ -5,7 +5,17 @@ INCLUDEPATH += . ./src/qconfigurable ../selforg/include ./include/configurator
 LIBS += -lselforg -L../selforg
 #CONFIG += debug
 
-QMAKE_CXXFLAGS += -Wno-deprecated -Wno-unused-parameter -std=c++11
+QMAKE_CXXFLAGS += -Wno-deprecated -Wno-unused-parameter -std=c++17
+
+# macOS specific settings
+macx {
+    # Remove deprecated AGL framework
+    QMAKE_LFLAGS -= -framework AGL
+    LIBS -= -framework AGL
+    
+    # Modern macOS uses Metal/OpenGL via NSOpenGLContext
+    LIBS += -framework OpenGL -framework Cocoa
+}
 
 CONFIG -= lib_bundle
 

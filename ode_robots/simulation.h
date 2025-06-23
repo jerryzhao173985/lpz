@@ -63,7 +63,7 @@ namespace lpzrobots {
     enum CameraMode {Static=0, Follow, TV, Race};
 
     Simulation();
-    virtual ~Simulation();
+    virtual ~Simulation() override;
 
     /** starts the Simulation. Do not overload it.
         This function returns of the simulation is terminated.
@@ -74,7 +74,7 @@ namespace lpzrobots {
     // the following function have to be overloaded.
 
     /// start() is called at the first start of the cycles and should create all the object (obstacles, agents...).
-    virtual void start(const OdeHandle&, const OsgHandle&, GlobalData& globalData) = 0;
+    virtual void start(const OdeHandle&, const OsgHandle&, GlobalData& globalData)  override = 0;
 
     // the following functions have dummy default implementations
 
@@ -86,14 +86,14 @@ namespace lpzrobots {
      * @param globalData
      * @return if the simulation should be restarted; this is false by default
      */
-    virtual bool restart(const OdeHandle&, const OsgHandle&, GlobalData& globalData);
+    virtual bool restart(const OdeHandle&, const OsgHandle&, GlobalData& globalData) override;
 
     /// end() is called at the end and should tidy up
-    virtual void end(GlobalData& globalData);
+    virtual void end(GlobalData& globalData) override;
     /** config() is called when the user presses Ctrl-C
         @return false to exit program, true otherwise
     */
-    virtual bool config(GlobalData& globalData);
+    virtual bool config(GlobalData& globalData) override;
     /** is called if a key was pressed.
         For keycodes see: osgGA::GUIEventAdapter
         @return true if the key was handled
@@ -126,25 +126,25 @@ namespace lpzrobots {
     /** adds a palette file to be loaded at initialization time
         Call this before run()!
      */
-    virtual void addPaletteFile(const std::string& filename, bool verbose = false);
+    virtual void addPaletteFile(const std::string& filename, bool verbose = false) override;
     /** adds a color alias file to be loaded at initialization time
         Call this before run()!
      */
-    virtual void addColorAliasFile(const std::string& filename, bool verbose = false);
+    virtual void addColorAliasFile(const std::string& filename, bool verbose = false) override;
 
-    virtual void odeStep();
+    virtual void odeStep() override;
 
-    virtual void osgStep();
+    virtual void osgStep() override;
 
     virtual void doOnCallBack(BackCaller *src, BackCaller::CallbackableType type=BackCaller::DEFAULT_CALLBACKABLE_TYPE) override;
 
   protected:
     // GUIEventHandler
-    virtual bool handle(const osgGA::GUIEventAdapter& ea,osgGA::GUIActionAdapter&);
-    virtual void getUsage (osg::ApplicationUsage & au) const;
-    virtual bool init(int argc, char** argv);
+    virtual bool handle(const osgGA::GUIEventAdapter& ea,osgGA::GUIActionAdapter&) override;
+    virtual void getUsage (osg::ApplicationUsage & au) const override;
+    virtual bool init(int argc, char** argv) override;
 
-    virtual void updateGraphics(); ///< update the graphics objects
+    virtual void updateGraphics() override; ///< update the graphics objects
 
     /** define the home position and view orientation of the camera.
         view.x is the heading angle in degree. view.y is the tilt angle in degree (nick),
@@ -196,7 +196,7 @@ namespace lpzrobots {
 
   protected:
     /// returns false if the program is to exit
-    virtual bool processCmdLine(int argc, char** argv);
+    virtual bool processCmdLine(int argc, char** argv) override;
     void resetSyncTimer();
     long timeOfDayinMS();
 

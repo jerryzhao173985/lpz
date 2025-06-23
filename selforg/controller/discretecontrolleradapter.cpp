@@ -47,7 +47,18 @@ see AbstractController and all implementing classes.
 using namespace std;
 
 DiscreteControllerAdapter::DiscreteControllerAdapter(AbstractController* controller, const std::string& name, const std::string& revision)
- : AbstractControllerAdapter(controller, name, revision)
+ : AbstractControllerAdapter(controller, name, revision),
+   mapToMotorInterval(false),
+   minMotorRange(0),
+   maxMotorRange(0),
+   minSensorRange(0),
+   maxSensorRange(0),
+   minMotorValue(0),
+   maxMotorValue(0),
+   minSensorValue(0),
+   maxSensorValue(0),
+   discreteSensors(nullptr),
+   firstStep(true)
 {
         // avoid division by zero
         this->sensorIntervalCount=1;
@@ -126,7 +137,7 @@ void DiscreteControllerAdapter::stepNoLearning(const sensor* sensors, int sensor
 
 void DiscreteControllerAdapter::init(int sensornumber, int motornumber, RandGen* randGen) {
   // allocate memory for discreteSensors
-  this->discreteSensors = (sensor*) malloc(sizeof(sensor) * sensornumber);
+  this->discreteSensors = static_cast<sensor*>(malloc(sizeof(sensor) * sensornumber));
   // register sensors as inspectable values
   for (int i=0; i<sensornumber; i++)
     addInspectableValue(string("x_dis[").append(itos(i)).append("]"), &discreteSensors[i], "discretisized sensor value");
@@ -252,7 +263,7 @@ double DiscreteControllerAdapter::discretisizeValue(double valueToDiscretisize, 
 }
 
 double DiscreteControllerAdapter::roundValue(double valueToRound) {
-        return (int)(valueToRound<0?valueToRound-.5:valueToRound+.5);
+        return static_cast<int>(valueToRound<0?valueToRound-.5:valueToRound+.5);
 }
 
 /***************************************************************************/

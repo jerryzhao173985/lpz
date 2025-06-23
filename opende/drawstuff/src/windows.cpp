@@ -44,7 +44,7 @@ static HWND main_window = 0;
 static void errorBox (const char *title, const char *msg, va_list ap)
 {
   char s[1000];
-  vsprintf (s,msg,ap);
+  vsnprintf(s, sizeof(s),msg,ap);
   MessageBox (0,s,title,MB_OK | MB_APPLMODAL | MB_ICONEXCLAMATION);
 }
 
@@ -308,7 +308,7 @@ static HWND GetConsoleHwnd()
   // the console window title to a "unique" value, then find the window
   // that has this title.
   char title[1024];
-  wsprintf (title,"DrawStuff:%d/%d",GetTickCount(),GetCurrentProcessId());
+  wsnprintf(title, sizeof(title),"DrawStuff:%d/%d",GetTickCount(),GetCurrentProcessId());
   SetConsoleTitle (title);
   Sleep(40);			// ensure window title has been updated
   return FindWindow (NULL,title);
@@ -375,7 +375,7 @@ void dsPlatformSimLoop (int window_width, int window_height,
   DWORD style = WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
   AdjustWindowRect (&winrect,style,1);
   char title[100];
-  sprintf (title,"Simulation test environment v%d.%02d",
+  snprintf(title, sizeof(title),"Simulation test environment v%d.%02d",
 	   DS_VERSION >> 8,DS_VERSION & 0xff);
   main_window = CreateWindow ("SimAppClass",title,style,
     winrect.left,winrect.top,winrect.right-winrect.left,winrect.bottom-winrect.top,

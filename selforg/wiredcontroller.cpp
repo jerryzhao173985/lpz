@@ -61,6 +61,11 @@ void WiredController::internInit(){
   motorBabbler = 0;
   motorBabblingSteps = 0;
 
+  rsensornumber = 0;
+  rmotornumber = 0;
+  csensornumber = 0;
+  cmotornumber = 0;
+
   t=1;
   initialised = false;
 }

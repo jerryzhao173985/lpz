@@ -40,7 +40,7 @@ bool Configurable::storeCfg(const char* filenamestem,
   FILE* f;
   setlocale(LC_NUMERIC,"en_US"); // set us type output
 
-  sprintf(name, "%s",filenamestem);
+  snprintf(name, sizeof(name), "%s",filenamestem);
   if(!(f = fopen(name, "w"))) return false;
   FOREACHC(std::list< std::string>,comments,c){
     fprintf(f, "# %s\n", c->c_str());
@@ -55,7 +55,7 @@ bool Configurable::restoreCfg(const char* filenamestem){
   FILE* f;
   setlocale(LC_NUMERIC,"en_US"); // set us type output
 
-  sprintf(name, "%s",filenamestem);
+  snprintf(name, sizeof(name), "%s",filenamestem);
   if(!(f=fopen(name, "r")))
     return false;
   bool rv = parse(f);
@@ -91,6 +91,35 @@ Configurable::paramval Configurable::getParam(const paramkey& key, bool traverse
       }
     }
   }
+}
+
+std::optional<Configurable::paramval> Configurable::getParamOpt(const paramkey& key, bool traverseChildren) const {
+  parammap::const_iterator it = mapOfValues.find(key);
+  if (it != mapOfValues.end()) {
+    return *((*it).second);
+  }
+  
+  // now try to find in map for int values
+  paramintmap::const_iterator intit = mapOfInteger.find(key);
+  if (intit != mapOfInteger.end()) {
+    return static_cast<paramval>(*((*intit).second));
+  }
+  
+  // now try to find in map for boolean values
+  paramboolmap::const_iterator boolit = mapOfBoolean.find(key);
+  if (boolit != mapOfBoolean.end()) {
+    return static_cast<paramval>(*((*boolit).second));
+  }
+  
+  if (traverseChildren) {
+    // search in all configurable children
+    FOREACHC(configurableList, ListOfConfigurableChildren, conf) {
+      if ((*conf)->hasParam(key))
+        return (*conf)->getParamOpt(key);
+    }
+  }
+  
+  return std::nullopt; // C++17: no value found
 }
 
 bool Configurable::hasParam(const paramkey& key, bool traverseChildren) const {
@@ -353,10 +382,9 @@ void Configurable::print(FILE* f, const char* prefix, int columns, bool traverse
   fprintf(f, "%s######\n",pre);
   // print also all registered configurable children
   if (traverseChildren) {
-    char newPrefix[strlen(pre)+2];
-    sprintf(newPrefix,"%s-",pre);
+    std::string newPrefix = std::string(pre) + "-";
     FOREACHC(configurableList, ListOfConfigurableChildren, conf) {
-      (*conf)->print(f, newPrefix, columns, true);
+      (*conf)->print(f, newPrefix.c_str(), columns, true);
     }
   }
 }
@@ -382,21 +410,21 @@ void Configurable::printdescr(FILE* f, const char* prefix,
 
 
 bool Configurable::parse(FILE* f, const char* prefix, bool traverseChildren) {
-  char* buffer = (char*)malloc(sizeof(char)*512);
+  char* buffer = static_cast<char*>(malloc(sizeof(char)*512));
   int preLen= prefix==0 ? 0 : strlen(prefix);
-  char pre[preLen+2];
+  std::string pre;
   bool rv=true;
   if(prefix!=0)
-    strcpy(pre,prefix);
+    pre = prefix;
 
   assert(buffer);
   while (fgets(buffer, 512, f) != 0) {
     char* bufNoPrefix = buffer;
     if(preLen>0){
-      if(strncmp(buffer,pre,preLen)==0)
+      if(strncmp(buffer,pre.c_str(),preLen)==0)
         bufNoPrefix = buffer+preLen;
       else {
-        fprintf(stderr,"could not detect prefix: %s in line: %s\n", pre,buffer);
+        fprintf(stderr,"could not detect prefix: %s in line: %s\n", pre.c_str(),buffer);
         rv=false;
         break;
       }
@@ -413,10 +441,9 @@ bool Configurable::parse(FILE* f, const char* prefix, bool traverseChildren) {
   }
   free(buffer);
   if (traverseChildren) {
-    pre[preLen]='-';
-    pre[preLen+1]=0;
+    std::string childPre = pre + "-";
     FOREACH(configurableList, ListOfConfigurableChildren, conf) {
-      (*conf)->parse(f, pre, true);
+      (*conf)->parse(f, childPre.c_str(), true);
     }
   }else{ // we would need to read all prefixed lines of possible children, if there are any
     // but we do not know when to stop and would read too much

@@ -41,12 +41,12 @@ public:
          * all their variables already!
          * @param list (list<Inspectable*>&) the list
          */
-        InspectableProxy(const std::list<Inspectable*>& list, const iparamkey& name = "InspectableProxy");
+        explicit InspectableProxy(const std::list<Inspectable*>& list, const iparamkey& name = "InspectableProxy");
 
         /**
          * default destructor
          */
-        virtual ~InspectableProxy();
+        virtual ~InspectableProxy() override;
 
         /**
          * this function is for replacing the old list
@@ -65,7 +65,7 @@ private:
          * disable the default constructor
          * @return
          */
-        InspectableProxy(const iparamkey& name = "InspectableProxy");
+        explicit InspectableProxy(const iparamkey& name = "InspectableProxy");
 };
 
 #endif /* INSPECTABLEPROXY_H_ */

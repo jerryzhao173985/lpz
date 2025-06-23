@@ -73,7 +73,7 @@ struct DEPConf {
 class DEP : public AbstractController {
 
 public:
-  DEP(const DEPConf& conf = getDefaultConf());
+  explicit DEP(const DEPConf& conf = getDefaultConf());
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
 
   virtual ~DEP();

@@ -50,7 +50,7 @@ public:
 
   /** destructor
    */
-  //  virtual ~IRInvertWiring();
+  //  virtual ~IRInvertWiring() override;
 
 
   /** Realizes one to one wiring from robot sensors to controller sensors.
@@ -62,7 +62,7 @@ public:
   */
   virtual bool wireSensors(const sensor* rsensors, int rsensornumber,
                            sensor* csensors, int csensornumber,
-                           double noise);
+                           double noise) override;
 
 };
 

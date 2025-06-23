@@ -60,7 +60,7 @@ namespace lpzrobots {
 class XMLParserEngine {
   public:
     XMLParserEngine(lpzrobots::GlobalData& globalData, const lpzrobots::OdeHandle& odeHandle, const lpzrobots::OsgHandle& osgHandle, lpzrobots::XMLSimulation* simulation);
-    virtual ~XMLParserEngine();
+    virtual ~XMLParserEngine() override;
 
     /**
      * Loads the given XML file into the simulation.

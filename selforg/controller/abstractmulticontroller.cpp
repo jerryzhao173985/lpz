@@ -34,7 +34,7 @@ AbstractMultiController::~AbstractMultiController() {
 }
 
 void AbstractMultiController::addPassiveController(AbstractController* passiveController) {
-  if (passiveController != 0) {
+  if (passiveController != nullptr) {
     controllerList.push_back(passiveController);
     addConfigurable(passiveController);
     addInspectable(passiveController);
@@ -45,9 +45,9 @@ void AbstractMultiController::addPassiveController(AbstractController* passiveCo
 void AbstractMultiController::init(int sensornumber, int motornumber, RandGen* randGen /* = 0 */) {
   AbstractControllerAdapter::init(sensornumber, motornumber);
   // init the other controllers
-  for (std::list<AbstractController*>::iterator i = controllerList.begin(); i != controllerList.end(); i++) {
-    if (*i)
-      (*i)->init(sensornumber, motornumber);
+  for (auto* ctrl : controllerList) {
+    if (ctrl)
+      ctrl->init(sensornumber, motornumber);
   }
 }
 
@@ -63,21 +63,8 @@ void AbstractMultiController::init(int sensornumber, int motornumber, RandGen* r
 /*        BEGIN methods of Storeable                                                   */
 /****************************************************************************/
 
-/** stores the object to the given file stream (binary).
- */
-bool AbstractMultiController::store(FILE* f) const {
-  return controller->store(f);
-  // TODO: store the other controllers
-  // and store values from multicontroller itself
-}
-
-/** loads the object from the given file stream (binary).
- */
-bool AbstractMultiController::restore(FILE* f) {
-  return controller->restore(f);
-  // TODO: restore the other controllers
-  // and restore values from multicontroller itself
-}
+// store() and restore() are inherited from AbstractControllerAdapter
+// TODO: extend to store/restore the other controllers and multicontroller values
 
 /****************************************************************************/
 /*        END methods of Storeable                                                      */

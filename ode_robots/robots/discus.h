@@ -109,7 +109,7 @@ protected:
   /// initialises some internal variables
   void init();
 public:
-  virtual ~Discus();
+  virtual ~Discus() override;
 
 
   /// default configuration
@@ -120,6 +120,7 @@ public:
     c.stabdiameter=0.7;
     c.numAxes = 3;
     c.spheremass   = 1;// 0.1
+    c.pendulardiameter = 0.2;
     c.pendularmass  = 0.75;
     c.pendularrange  = 0.20; // range of the slider from center in multiple of diameter [-range,range]
     c.pendularrangeN = 0.25;
@@ -139,28 +140,28 @@ public:
    return c;
   }
 
-  virtual void update();
+  virtual void update() override;
 
-  virtual void placeIntern(const osg::Matrix& pose);
+  virtual void placeIntern(const osg::Matrix& pose) override;
 
-  virtual void doInternalStuff(GlobalData& globalData);
+  virtual void doInternalStuff(GlobalData& globalData) override;
 
   virtual void sense(GlobalData& globalData) override;
 
-  virtual int getSensorsIntern( sensor* sensors, int sensornumber );
+  virtual int getSensorsIntern( sensor* sensors, int sensornumber ) override;
 
-  virtual void setMotorsIntern( const double* motors, int motornumber );
+  virtual void setMotorsIntern( const double* motors, int motornumber ) override;
 
-  virtual int getMotorNumberIntern();
+  virtual int getMotorNumberIntern() override;
 
-  virtual int getSensorNumberIntern();
+  virtual int getSensorNumberIntern() override;
 
   virtual Primitive* getMainPrimitive() const { return object[Base]; }
 
 protected:
 
-  virtual void create(const osg::Matrix& pose);
-  virtual void destroy();
+  virtual void create(const osg::Matrix& pose) override;
+  virtual void destroy() override;
 
 
 };

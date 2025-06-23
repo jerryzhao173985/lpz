@@ -49,9 +49,9 @@ public:
   virtual int getSensorNumber() const {return number_sensors;}
   virtual int getMotorNumber() const {return number_motors;}
   virtual void step(const sensor* sensors, int sensornumber,
-                    motor* motors, int motornumber);
+                    motor* motors, int motornumber) override;
   virtual void stepNoLearning(const sensor* , int number_sensors,
-                              motor* , int number_motors);
+                              motor* , int number_motors) override;
 
   virtual std::list<iparamkey> getInternalParamNames()const  { return std::list<iparamkey>(); }
 

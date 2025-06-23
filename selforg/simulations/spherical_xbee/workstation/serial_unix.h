@@ -36,27 +36,28 @@ protected:
 public:
 
   CSerialThread(const CString& port, int baud, bool test_mode=false)
-    : m_port(port),m_baud(baud), terminated(false), m_is_joined(true), test_mode(test_mode){};
+    : m_port(port), m_baud(baud), terminated(false), m_is_joined(true), test_mode(test_mode),
+      m_is_running(false), fd_in(-1), fd_out(-1), verbose(false), verboseMore(false) {};
   virtual ~CSerialThread(){stopandwait();};
 
-  virtual int sendByte(uint8 c);
-  virtual int getByte();
-  virtual int receiveData(uint8 adr, uint8 *cmd, uint8 *data);
-  virtual void flushInputBuffer(int wait);
+  virtual int sendByte(uint8 c) override;
+  virtual int getByte() override;
+  virtual int receiveData(uint8 adr, uint8 *cmd, uint8 *data) override;
+  virtual void flushInputBuffer(int wait) override;
 
   /**
    * This method writes len bytes of 'raw' data to the slave with the address 'adr'.
    * On success the net number of bytes (len) is returned, otherwise -1.
    */
-  virtual int sendData(uint8 adr, uint8 cmd, uint8 *data, uint8 len);
+  virtual int sendData(uint8 adr, uint8 cmd, uint8 *data, uint8 len) override;
 
   // read sensors and write motors
-  virtual void writeMotors_readSensors() = 0; //const DAT& s) = 0;
+  virtual void writeMotors_readSensors()  = 0; //const DAT& s) = 0;
 
   /// is called in every loop
-  virtual void loopCallback() = 0;
+  virtual void loopCallback()  = 0;
   /// is called at the beginning after initialisation of serial
-  virtual void Initialise() = 0;
+  virtual void Initialise()  = 0;
 
   /// thread is running?
   bool is_running(){return m_is_running;};

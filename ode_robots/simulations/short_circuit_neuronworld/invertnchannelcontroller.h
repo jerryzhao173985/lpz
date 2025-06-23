@@ -97,9 +97,9 @@ public:
   enum ModelNeuronProperties{nobias, bias};
 
   InvertNChannelController(int _buffersize, bool _update_only_1=false, ModelNeuronProperties _model_type=nobias);
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
 
-  virtual ~InvertNChannelController();
+  virtual ~InvertNChannelController() override;
 
   /// returns the name of the object (with version number)
   virtual paramkey getName() const {return name; }
@@ -110,25 +110,25 @@ public:
 
   /// performs one step (includes learning).
   /// Calulates motor commands from sensor inputs.
-  virtual void step(const sensor* , int number_sensors, motor* , int number_motors);
+  virtual void step(const sensor* , int number_sensors, motor* , int number_motors) override;
 
 
   /// performs one step without learning. Calulates motor commands from sensor inputs.
   virtual void stepNoLearning(const sensor* , int number_sensors,
-                              motor* , int number_motors);
+                              motor* , int number_motors) override;
 
 
   /***** STOREABLE ****/
   /** stores the controller values to a given file. */
-  virtual bool store(FILE* f) const;
+  virtual bool store(FILE* f) const override;
   /** loads the controller values from a given file. */
-  virtual bool restore(FILE* f);
+  virtual bool restore(FILE* f) override;
 
   // inspectable interface
-  virtual std::list<iparamkey> getInternalParamNames() const;
-  virtual std::list<iparamval> getInternalParams() const;
-  virtual std::list<ILayer> getStructuralLayers() const;
-  virtual std::list<IConnection> getStructuralConnections() const;
+  virtual std::list<iparamkey> getInternalParamNames() const override;
+  virtual std::list<iparamval> getInternalParams() const override;
+  virtual std::list<ILayer> getStructuralLayers() const override;
+  virtual std::list<IConnection> getStructuralConnections() const override;
 
 
 
@@ -151,20 +151,20 @@ protected:
 
 /*   virtual void iteration(double *column, */
 /*                          double dommy[NUMBER_CHANNELS][NUMBER_CHANNELS], */
-/*                          double *improvment); */
+/*                          double *improvment) override; */
 
-  virtual double calculateE(const matrix::Matrix& x_delay, const matrix::Matrix& y_delay);
+  virtual double calculateE(const matrix::Matrix& x_delay, const matrix::Matrix& y_delay) override;
 
   /// learn values h,C
-  virtual void learn(const matrix::Matrix& x_delay, const matrix::Matrix& y_delay);
+  virtual void learn(const matrix::Matrix& x_delay, const matrix::Matrix& y_delay) override;
 
-  virtual void learnmodel( const matrix::Matrix& y_delay);
+  virtual void learnmodel( const matrix::Matrix& y_delay) override;
 
   /// calculate delayed values
   virtual matrix::Matrix calculateDelayedValues(const matrix::Matrix* buffer,
-                                        unsigned int number_steps_of_delay_);
+                                        unsigned int number_steps_of_delay_) override;
   virtual matrix::Matrix calculateSmoothValues(const matrix::Matrix* buffer,
-                                       unsigned int number_steps_for_averaging_);
+                                       unsigned int number_steps_for_averaging_) override;
 
   matrix::Matrix calculateControllerValues(const matrix::Matrix& x_smooth);
 

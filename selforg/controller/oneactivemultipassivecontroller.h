@@ -36,9 +36,9 @@ class OneActiveMultiPassiveController : public AbstractMultiController {
 public:
 
   /// contructor (hint: use $ID$ for revision)
-        OneActiveMultiPassiveController(AbstractController* controller, const std::string& name = "1ActXPassController", const std::string& revision = "$ID$");
+        explicit OneActiveMultiPassiveController(AbstractController* controller, const std::string& name = "1ActXPassController", const std::string& revision = "$ID$");
 
-        virtual ~OneActiveMultiPassiveController();
+        virtual ~OneActiveMultiPassiveController() override;
 
 /****************************************************************************/
 /*        AbstractMultiController should implement the following classes:                */
@@ -55,7 +55,7 @@ public:
    * call first AbstractMultiController::init(sensornumber,motornumber)
    * if you overwrite this method
    */
-        virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
+        virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
 
 
           /** performs one step (includes learning).
@@ -66,13 +66,13 @@ public:
         @param motornumber length of the provided motor array
   */
         virtual void step(const sensor* sensors, int sensornumber,
-                          motor* motors, int motornumber);
+                          motor* motors, int motornumber) override;
 
   /** performs one step without learning.
         @see step
   */
         virtual void stepNoLearning(const sensor* sensors , int sensornumber,
-                                    motor* motors, int motornumber);
+                                    motor* motors, int motornumber) override;
 
 
 /****************************************************************************/

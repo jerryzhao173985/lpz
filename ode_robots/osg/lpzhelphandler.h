@@ -52,7 +52,7 @@ class LpzHelpHandler : public osgGA::GUIEventHandler
         bool handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAdapter& aa);
 
         /** Get the keyboard and mouse usage of this manipulator.*/
-        virtual void getUsage(osg::ApplicationUsage& usage) const;
+        virtual void getUsage(osg::ApplicationUsage& usage) const override;
 
     protected:
 

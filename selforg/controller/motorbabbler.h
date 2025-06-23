@@ -40,30 +40,30 @@ public:
      @param controlmask bitmask to select channels to control (default all)
      @param function controller function to use
    */
-  MotorBabbler(function func = Sine );
+  explicit MotorBabbler(function func = Sine );
 
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
-  virtual int getSensorNumber() const {return number_sensors;}
-  virtual int getMotorNumber() const {return number_motors;}
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override;
+  virtual int getSensorNumber() const override {return number_sensors;}
+  virtual int getMotorNumber() const override {return number_motors;}
   virtual void step(const sensor* sensors, int sensornumber,
-                    motor* motors, int motornumber){
+                    motor* motors, int motornumber) override {
     stepNoLearning(sensors, sensornumber, motors, motornumber);
   }
   virtual void stepNoLearning(const sensor* , int number_sensors,
-                              motor* , int number_motors);
+                              motor* , int number_motors) override;
 
   // samples a new set of frequencies
   void sampleFrequencies();
 
   /********* STORABLE INTERFACE ******/
   /// @see Storable
-  virtual bool store(FILE* f) const {
+  virtual bool store(FILE* f) const override {
     Configurable::print(f,"");
     return true;
   }
 
   /// @see Storable
-  virtual bool restore(FILE* f) {
+  virtual bool restore(FILE* f) override {
     Configurable::parse(f);
     return true;
   }

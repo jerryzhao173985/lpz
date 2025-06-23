@@ -29,15 +29,15 @@
 
 typedef struct AbstractIAFControllerConf {
   AbstractIAFControllerConf() {
-    thresholdI=(Configurable::paramval*) malloc(sizeof(Configurable::paramval));
-    thresholdO=(Configurable::paramval*) malloc(sizeof(Configurable::paramval));
-    leakI=(Configurable::paramval*) malloc(sizeof(Configurable::paramval));
-    leakO=(Configurable::paramval*) malloc(sizeof(Configurable::paramval));
-    restingPotential=(Configurable::paramval*) malloc(sizeof(Configurable::paramval));
-    wIInitScale=(Configurable::paramval*) malloc(sizeof(Configurable::paramval));
-    wOInitScale=(Configurable::paramval*) malloc(sizeof(Configurable::paramval));
-    numberIAFNeuronsPerInput=(Configurable::paramval*) malloc(sizeof(Configurable::paramval));
-    numberIAFNeuronsPerOutput=(Configurable::paramval*) malloc(sizeof(Configurable::paramval));
+    thresholdI=static_cast<Configurable::paramval*>(malloc(sizeof(Configurable::paramval)));
+    thresholdO=static_cast<Configurable::paramval*>(malloc(sizeof(Configurable::paramval)));
+    leakI=static_cast<Configurable::paramval*>(malloc(sizeof(Configurable::paramval)));
+    leakO=static_cast<Configurable::paramval*>(malloc(sizeof(Configurable::paramval)));
+    restingPotential=static_cast<Configurable::paramval*>(malloc(sizeof(Configurable::paramval)));
+    wIInitScale=static_cast<Configurable::paramval*>(malloc(sizeof(Configurable::paramval)));
+    wOInitScale=static_cast<Configurable::paramval*>(malloc(sizeof(Configurable::paramval)));
+    numberIAFNeuronsPerInput=static_cast<Configurable::paramval*>(malloc(sizeof(Configurable::paramval)));
+    numberIAFNeuronsPerOutput=static_cast<Configurable::paramval*>(malloc(sizeof(Configurable::paramval)));
   }
   ~AbstractIAFControllerConf() {
     /*  if(thresholdI) free(thresholdI);
@@ -69,7 +69,7 @@ typedef struct AbstractIAFControllerConf {
 class AbstractIAFController : public AbstractController {
 
 public:
-  AbstractIAFController(const AbstractIAFControllerConf& conf = getDefaultConf());
+  explicit AbstractIAFController(const AbstractIAFControllerConf& conf = getDefaultConf());
 
   virtual ~AbstractIAFController() {}
 
@@ -92,24 +92,24 @@ public:
 
   /// ABSTRACTCONTROLLER INTERFACE
 
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
 
-  virtual int getSensorNumber() const { return sensorNumber; }
+  virtual int getSensorNumber() const  override{ return sensorNumber; }
 
-  virtual int getMotorNumber() const { return motorNumber; }
+  virtual int getMotorNumber() const  override{ return motorNumber; }
 
-  virtual void step(const sensor* sensors, int sensornumber, motor* motors, int motornumber);
+virtual void step(const sensor* sensors, int sensornumber, motor* motors, int motornumber) override;
 
-  virtual void stepNoLearning(const sensor* sensors, int sensornumber, motor* motors, int motornumber);
+virtual void stepNoLearning(const sensor* sensors, int sensornumber, motor* motors, int motornumber) override;
 
   /// STORABLE INTERFACE
 
-  virtual bool store(FILE* f) const { return true; }
+virtual bool store(FILE* f) const override { return true; }
 
-  virtual bool restore(FILE* f) { return true; }
+virtual bool restore(FILE* f) override { return true; }
 
   /// CONFIGURABLE INTERFACE
-  virtual void notifyOnChange(const paramkey& key);
+virtual void notifyOnChange(const paramkey& key) override;
 
 protected:
   AbstractIAFControllerConf conf;
@@ -145,7 +145,7 @@ protected:
 
   /// returns -1 if probability is to low, otherwise 1 for mapP
   static double toTristateWithProbability(void* r,double x) {
-    RandGen* g = (RandGen*) r;
+    RandGen* g = static_cast<RandGen*>(r);
     if (!g) return 0.;
     double rand = g->rand();
     return x < -rand ? -1. : (x < rand ? 0. : 1.);
@@ -161,7 +161,7 @@ protected:
   /// if >0, damp value is subtracted
   /// and threshold, otherwise 1, for map2
   static double dampToZero(void* r, double x){
-    double damp = *(double*)r;
+    double damp = *static_cast<double*>(r);
     return x < -damp ? x+damp : (x > damp ? x-damp : 0.);
   }
 
@@ -172,14 +172,14 @@ protected:
 
     // returns value if fired==1 (-1 or 1), otherwise x
   static double toValueIfFired(void* r,double x, double fired) {
-    double value = *(double*)r;
+    double value = *static_cast<double*>(r);
     return (fired==1 || fired==-1) ? value : x ;
   }
 
 
   /// returns 0 if probability is to low, otherwise 1 for mapP
   static double toDualStateWithProbability(void* r,double x) {
-    RandGen* g = (RandGen*) r;
+    RandGen* g = static_cast<RandGen*>(r);
     if (!g) return 0.;
     double rand = g->rand();
     return x < rand ? 0. : 1.;

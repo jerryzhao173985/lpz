@@ -396,7 +396,7 @@ bool MultiReinforce::restore(FILE* f){
     init(2,2);
 
   char buffer[128];
-  if(fscanf(f,"%s\n", buffer) != 1) return false;
+  if(fscanf(f,"%127s\n", buffer) != 1) return false;  // Security fix: added field width limit
   conf.numSats = atoi(buffer);
  // we need to use fgets in order to avoid spurious effects with following matrix (binary)
   if((fgets(buffer,128, f))==NULL) return false;
@@ -451,7 +451,7 @@ list<string> MultiReinforce::createFileList(const char* filestem, int n){
   list<string> fs;
   for(int i=0; i< n; i++){
     char fname[256];
-    sprintf(fname,"%s_%02i.net", filestem, i);
+    snprintf(fname, sizeof(fname),"%s_%02i.net", filestem, i);
     fs.push_back(string(fname));
   }
   return fs;

@@ -53,18 +53,18 @@ public:
    * if you want to place the new segment, you must muliplicate:
    * getTransformedEndMatrix()*getPositionMatrix();
    */
-  virtual Matrix getTransformedEndMatrix();
+  virtual Matrix getTransformedEndMatrix() override;
 
 
   /**
    * returns true if the real coordinates lay inside of the segment
    */
-  virtual bool isInside(const Position& p);
+  virtual bool isInside(const Position& p) override;
 
 
-  virtual double getSectionIdValue(const Position& p);
+  virtual double getSectionIdValue(const Position& p) override;
 
-  virtual double getWidthIdValue(const Position& p);
+  virtual double getWidthIdValue(const Position& p) override;
 
 
   /**
@@ -72,27 +72,27 @@ public:
    * here it is the length of the arc
    * formula is: radius * angle;
    */
-  virtual double getLength();
+  virtual double getLength() override;
   
   /**
    * returns the width of the segment,
    */
-  virtual double getWidth();
+  virtual double getWidth() override;
   
   /**
    * sets the width of the segment,
    */
-  virtual void setWidth(double w);
+  virtual void setWidth(double w) override;
   
   
   /**
    * draws the obstacle (4 boxes for the playground)
    */
-  virtual void draw();  
+  virtual void draw() override;  
   
-  virtual void create(dSpaceID space);
+  virtual void create(dSpaceID space) override;
   
-  virtual void destroy();
+  virtual void destroy() override;
   
 protected:
   // this is the length of the segment

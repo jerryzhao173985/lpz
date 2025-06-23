@@ -24,7 +24,35 @@ using namespace matrix;
 using namespace std;
 
 InvertMotorNStep::InvertMotorNStep( const InvertMotorNStepConf& conf)
-    : InvertMotorController(conf.buffersize, "InvertMotorNStep", "$Id$"), conf(conf)
+    : InvertMotorController(conf.buffersize, "InvertMotorNStep", "$Id$"), 
+      number_sensors(0),
+      number_motors(0),
+      BNoiseGen(0),
+      YNoiseGen(0),
+      E_val(0),
+      xsi_norm(0),
+      xsi_norm_avg(0),
+      pain(0),
+      x_buffer(nullptr),
+      y_buffer(nullptr),
+      eta_buffer(nullptr),
+      useTeaching(false),
+      reinforcement(0),
+      reinforcefactor(0),
+      t_rand(0),
+      continuity(0),
+      modelCompliant(0),
+      managementInterval(10),
+      inhibition(0),
+      kwta(2),
+      limitRF(0),
+      dampS(0),
+      dampC(0),
+      activeExplore(0),
+      cfactor(1),
+      cnondiagabs(0),
+      cdiagabs(0),
+      conf(conf)
 {
 
   addParameterDef("inhibition",&inhibition,0);
@@ -40,14 +68,6 @@ InvertMotorNStep::InvertMotorNStep( const InvertMotorNStepConf& conf)
   addParameterDef("cfactor",&cfactor,1);
   addParameterDef("cnondiagabs",&cnondiagabs,0);
   addParameterDef("cdiagabs",&cdiagabs,0);
-
-  managementInterval=10;
-  useTeaching=false;
-  reinforcement=0;
-  E_val=0;
-  reinforcefactor=0;
-  BNoiseGen = 0;
-  YNoiseGen = 0;
 
   x_buffer = 0;
   y_buffer = 0;

@@ -14,7 +14,7 @@ class XMLObject {
 public:
         XMLObject(XMLParserEngine& xmlEngine) : xmlEngine(xmlEngine) {}
 
-        virtual ~XMLObject();
+        virtual ~XMLObject() override;
 
 protected:
         XMLParserEngine& xmlEngine;

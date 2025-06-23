@@ -151,12 +151,12 @@ namespace lpzrobots{
       std::cerr << "Unable to open serial port \"" << port << "\"." << std::endl;
       return;
     }
-    sprintf(command, "\r");
+    snprintf(command, sizeof(command), "\r");
     comm->writeData(command, 1, 6000);        // clear output buffer
     comm->readData(version, 100, 200000);
     usleep(10000);
     
-    sprintf(command, "V\r"); //get embedded softwareversion
+    snprintf(command, sizeof(command), "V\r"); //get embedded softwareversion
     comm->writeData(command, 2, 2000);
     comm->readData(version, 100, 200000);
     usleep(10000);
@@ -165,7 +165,7 @@ namespace lpzrobots{
     
     if(conf.CAM_STATE){//Update CameraParameters	
 	memset(command, 0x0, 20);
-	sprintf(command,"J,%d,%d,%d,%d\r", conf.CAM_TYPE, conf.CAM_WIDTH, conf.CAM_HEIGHT, conf.CAM_ZOOM);
+	snprintf(command, sizeof(command),"J,%d,%d,%d,%d\r", conf.CAM_TYPE, conf.CAM_WIDTH, conf.CAM_HEIGHT, conf.CAM_ZOOM);
 
 	comm->writeData(command, strlen(command), 100000);
 	comm->readData(RxBuffer, 3, 100000);    //response is j\r\n
@@ -231,7 +231,7 @@ namespace lpzrobots{
       //read ACC
       bytes=comm->readData((char*)RxBuffer,12,1000000);
       if(bytes<12){
-	sprintf(msg , "IRs: only %d bytes red", bytes);
+	snprintf(msg, sizeof(msg), "IRs: only %d bytes red", bytes);
 	std::cerr << msg << std::endl;
       }
       else{
@@ -259,7 +259,7 @@ namespace lpzrobots{
        *    //read ACC unfiltered ("a" instead of "A")
        *    bytes=comm->readData((char*)RxBuffer,6,1000000);
        *    if(bytes<6){
-       *      sprintf(msg , "ACC: only %d bytes red", bytes);
+       *      snprintf(msg, sizeof(msg), "ACC: only %d bytes red", bytes);
        *      std::cerr << msg << std::endl;
     }
     else{
@@ -270,7 +270,7 @@ namespace lpzrobots{
     //read PROX
     bytes=comm->readData((char*)RxBuffer,16,1000000);
     if(bytes<16){
-      sprintf(msg , "IRs: only %d bytes red", bytes);
+      snprintf(msg, sizeof(msg), "IRs: only %d bytes red", bytes);
       std::cerr << msg << std::endl;
     }
     else{
@@ -281,7 +281,7 @@ namespace lpzrobots{
     //read GROUND
     bytes=comm->readData((char*)RxBuffer,6,1000000);
     if(bytes<6){
-      sprintf(msg , "IRs: only %d bytes red", bytes);
+      snprintf(msg, sizeof(msg), "IRs: only %d bytes red", bytes);
       std::cerr << msg << std::endl;
     }
     else{
@@ -292,7 +292,7 @@ namespace lpzrobots{
     //read AMBIENT_LIGHT
     bytes=comm->readData((char*)RxBuffer,16,1000000);
     if(bytes<16){
-      sprintf(msg , "IRs: only %d bytes red", bytes);
+      snprintf(msg, sizeof(msg), "IRs: only %d bytes red", bytes);
       std::cerr << msg << std::endl;
     }
     else{
@@ -317,7 +317,7 @@ namespace lpzrobots{
       bytes = comm->readData((char*)micCharBuffer,600,100000);
       //Little Endian
       if(bytes<600){
-          sprintf(msg , "IRs: only %d bytes red", bytes);
+          snprintf(msg, sizeof(msg), "IRs: only %d bytes red", bytes);
           std::cerr << msg << std::endl;
       }
       else{
@@ -350,7 +350,7 @@ namespace lpzrobots{
       bytes = comm->writeData(command,2,6000);
       bytes = comm->readData((char*)camCharBuffer, camPixNum+3, 10000000);
       if(bytes<camPixNum+3){
-	sprintf(msg , "CAM: only %d bytes red", bytes);
+	snprintf(msg, sizeof(msg), "CAM: only %d bytes red", bytes);
 	std::cerr << msg << std::endl;
       }
       else{
@@ -444,7 +444,7 @@ namespace lpzrobots{
         char high_right = (arrMotor[numOfMotor.MOTOR_RIGHT]>>8) & 0xFF;
         char low_right = arrMotor[numOfMotor.MOTOR_RIGHT] & 0xFF;
 
-        sprintf(command, "%c%c%c%c%c%c",-'D', low_left, high_left, low_right, high_right,0);
+        snprintf(command, sizeof(command), "%c%c%c%c%c%c",-'D', low_left, high_left, low_right, high_right,0);
         bytes = comm->writeData(command, 6, 20000);
         usleep(20000);
       }
@@ -455,9 +455,9 @@ namespace lpzrobots{
         arrUpdateMotor[numOfMotor.LED0]=false; //Update reset
         memset(command, 0x0, 20);
         if(arrMotor[numOfMotor.LED0] == 0) {
-          sprintf(command, "%c%c%c%c",-'L', 0, 0, 0);
+          snprintf(command, sizeof(command), "%c%c%c%c",-'L', 0, 0, 0);
         } else {
-          sprintf(command, "%c%c%c%c",-'L', 0, 1, 0);
+          snprintf(command, sizeof(command), "%c%c%c%c",-'L', 0, 1, 0);
         }
         comm->writeData(command, 4, 20000);
         usleep(20000);
@@ -466,9 +466,9 @@ namespace lpzrobots{
         arrUpdateMotor[numOfMotor.LED1]=false; //Update reset
         memset(command, 0x0, 20);
         if(arrMotor[numOfMotor.LED1] == 0) {
-          sprintf(command, "%c%c%c%c",-'L', 1, 0, 0);
+          snprintf(command, sizeof(command), "%c%c%c%c",-'L', 1, 0, 0);
         } else {
-          sprintf(command, "%c%c%c%c",-'L', 1, 1, 0);
+          snprintf(command, sizeof(command), "%c%c%c%c",-'L', 1, 1, 0);
         }
         comm->writeData(command, 4, 20000);
         usleep(20000);
@@ -477,9 +477,9 @@ namespace lpzrobots{
         arrUpdateMotor[numOfMotor.LED2]=false; //Update reset
         memset(command, 0x0, 20);
         if(arrMotor[numOfMotor.LED2] == 0) {
-          sprintf(command, "%c%c%c%c",-'L', 2, 0, 0);
+          snprintf(command, sizeof(command), "%c%c%c%c",-'L', 2, 0, 0);
         } else {
-          sprintf(command, "%c%c%c%c",-'L', 2, 1, 0);
+          snprintf(command, sizeof(command), "%c%c%c%c",-'L', 2, 1, 0);
         }
         comm->writeData(command, 4, 20000);
         usleep(20000);
@@ -488,9 +488,9 @@ namespace lpzrobots{
         arrUpdateMotor[numOfMotor.LED3]=false; //Update reset
         memset(command, 0x0, 20);
         if(arrMotor[numOfMotor.LED3] == 0) {
-          sprintf(command, "%c%c%c%c",-'L', 3, 0, 0);
+          snprintf(command, sizeof(command), "%c%c%c%c",-'L', 3, 0, 0);
         } else {
-          sprintf(command, "%c%c%c%c",-'L', 3, 1, 0);
+          snprintf(command, sizeof(command), "%c%c%c%c",-'L', 3, 1, 0);
         }
         comm->writeData(command, 4, 20000);
         usleep(20000);
@@ -499,9 +499,9 @@ namespace lpzrobots{
         arrUpdateMotor[numOfMotor.LED4]=false; //Update reset
         memset(command, 0x0, 20);
         if(arrMotor[numOfMotor.LED4] == 0) {
-          sprintf(command, "%c%c%c%c",-'L', 4, 0, 0);
+          snprintf(command, sizeof(command), "%c%c%c%c",-'L', 4, 0, 0);
         } else {
-          sprintf(command, "%c%c%c%c",-'L', 4, 1, 0);
+          snprintf(command, sizeof(command), "%c%c%c%c",-'L', 4, 1, 0);
         }
         comm->writeData(command, 4, 20000);
         usleep(20000);
@@ -510,9 +510,9 @@ namespace lpzrobots{
         arrUpdateMotor[numOfMotor.LED5]=false; //Update reset
         memset(command, 0x0, 20);
         if(arrMotor[numOfMotor.LED5] == 0) {
-          sprintf(command, "%c%c%c%c",-'L', 5, 0, 0);
+          snprintf(command, sizeof(command), "%c%c%c%c",-'L', 5, 0, 0);
         } else {
-          sprintf(command, "%c%c%c%c",-'L', 5, 1, 0);
+          snprintf(command, sizeof(command), "%c%c%c%c",-'L', 5, 1, 0);
         }
         comm->writeData(command, 4, 20000);
         usleep(20000);
@@ -521,9 +521,9 @@ namespace lpzrobots{
         arrUpdateMotor[numOfMotor.LED6]=false; //Update reset
         memset(command, 0x0, 20);
         if(arrMotor[numOfMotor.LED6] == 0) {
-          sprintf(command, "%c%c%c%c",-'L', 6, 0, 0);
+          snprintf(command, sizeof(command), "%c%c%c%c",-'L', 6, 0, 0);
         } else {
-          sprintf(command, "%c%c%c%c",-'L', 6, 1, 0);
+          snprintf(command, sizeof(command), "%c%c%c%c",-'L', 6, 1, 0);
         }
         comm->writeData(command, 4, 20000);
         usleep(20000);
@@ -532,9 +532,9 @@ namespace lpzrobots{
         arrUpdateMotor[numOfMotor.LED7]=false; //Update reset
         memset(command, 0x0, 20);
         if(arrMotor[numOfMotor.LED7] == 0) {
-          sprintf(command, "%c%c%c%c",-'L', 7, 0, 0);
+          snprintf(command, sizeof(command), "%c%c%c%c",-'L', 7, 0, 0);
         } else {
-          sprintf(command, "%c%c%c%c",-'L', 7, 1, 0);
+          snprintf(command, sizeof(command), "%c%c%c%c",-'L', 7, 1, 0);
         }
         comm->writeData(command, 4, 20000);
         usleep(20000);
@@ -543,9 +543,9 @@ namespace lpzrobots{
         arrUpdateMotor[numOfMotor.LED_FRONT]=false; //Update reset
         memset(command, 0x0, 20);
         if(arrMotor[numOfMotor.LED_FRONT] == 0) {
-          sprintf(command, "%c%c%c%c",-'L', 9, 0, 0);
+          snprintf(command, sizeof(command), "%c%c%c%c",-'L', 9, 0, 0);
         } else {
-          sprintf(command, "%c%c%c%c",-'L', 9, 1, 0);
+          snprintf(command, sizeof(command), "%c%c%c%c",-'L', 9, 1, 0);
         }
         comm->writeData(command, 4, 20000);
         usleep(20000);
@@ -554,9 +554,9 @@ namespace lpzrobots{
         arrUpdateMotor[numOfMotor.LED_BODY]=false; //Update reset
         memset(command, 0x0, 20);
         if(arrMotor[numOfMotor.LED_BODY] == 0) {
-          sprintf(command, "%c%c%c%c",-'L', 8, 0, 0);
+          snprintf(command, sizeof(command), "%c%c%c%c",-'L', 8, 0, 0);
         } else {
-          sprintf(command, "%c%c%c%c",-'L', 8, 1, 0);
+          snprintf(command, sizeof(command), "%c%c%c%c",-'L', 8, 1, 0);
         }
         comm->writeData(command, 4, 20000);
         usleep(20000);
@@ -565,7 +565,7 @@ namespace lpzrobots{
       //set SOUND
       if(arrUpdateMotor[numOfMotor.SOUND]){
         arrUpdateMotor[numOfMotor.SOUND]=false;
-        sprintf(command, "T,%c\r", (char)(arrMotor[numOfMotor.SOUND]+48));
+        snprintf(command, sizeof(command), "T,%c\r", (char)(arrMotor[numOfMotor.SOUND]+48));
         arrMotor[numOfMotor.SOUND]=0;
 
         comm->writeData(command,4,12000);

@@ -65,11 +65,12 @@ public:
   friend class lpzrobots::TraceDrawer;
 
   /// constructor for no tracking at all
-  TrackRobot(TrackRobotConf conf = getDefaultConf())
-    : conf(conf)
+  explicit TrackRobot(TrackRobotConf conf = getDefaultConf())
+    : conf(conf),
+      enabledDuringVideo(false),
+      file(0),
+      cnt(1)
   {
-    file              = 0;
-    cnt               = 1;
   }
 
   static TrackRobotConf getDefaultConf(){

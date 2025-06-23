@@ -419,17 +419,17 @@ namespace lpzrobots {
       int minutes = int(time)/60;
       int seconds = int(time)%60;
       if (pause) {
-        sprintf(buffer,"Time: %02i:%02i  Speed: %.1fx (paused)",minutes,
+        snprintf(buffer, sizeof(buffer),"Time: %02i:%02i  Speed: %.1fx (paused)",minutes,
                 seconds,realtimefactor);
       } else if (realtimefactor>0){
         if(fabs(truerealtimefactor/realtimefactor-1)<0.15)
-          sprintf(buffer,"Time: %02i:%02i  Speed: %.1fx",minutes,
+          snprintf(buffer, sizeof(buffer),"Time: %02i:%02i  Speed: %.1fx",minutes,
                   seconds,realtimefactor);
         else
-          sprintf(buffer,"Time: %02i:%02i  Speed: %.1fx(%.1fx!)",minutes,
+          snprintf(buffer, sizeof(buffer),"Time: %02i:%02i  Speed: %.1fx(%.1fx!)",minutes,
                   seconds,truerealtimefactor, realtimefactor);
       } else
-        sprintf(buffer,"Time: %02i:%02i  Speed: %.1fx (max)",minutes, seconds,truerealtimefactor);
+        snprintf(buffer, sizeof(buffer),"Time: %02i:%02i  Speed: %.1fx (max)",minutes, seconds,truerealtimefactor);
       timestats->setText(buffer);
     }
   }

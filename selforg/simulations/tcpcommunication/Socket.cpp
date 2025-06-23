@@ -56,7 +56,7 @@ using namespace std;
 
 inline void __printBytes(char c)
 {
-  for(int i = 0; i < 8; i++)
+  for(int i = 0; i < 8; ++i)
   {
     if(0x01 & (c >> i))
     {
@@ -179,7 +179,7 @@ const Socket& Socket::operator<<(const Buffer &b) const
   char buf[b.size() + 1];
   buf[0] = b.label;
 
-  for(unsigned int i = 0; i < b.size(); i++)
+  for(unsigned int i = 0; i < b.size(); ++i)
   {
     buf[1 + i] = b[i];
   }
@@ -210,18 +210,18 @@ const Socket& Socket::operator>>(Buffer &b) const throw(YarsException)
   {
     case __STRING_VALUE:
       recv(_sock, sizeBytes, 4, MSG_WAITALL);
-      for(int i = 0; i < 4; i++) b.push_back(sizeBytes[i]);
+      for(int i = 0; i < 4; ++i) b.push_back(sizeBytes[i]);
       ((Socket*)this)->__coneverToInt(sizeBytes, &size);
       break;
     case __INTEGER_VECTOR:
       recv(_sock, sizeBytes, 4, MSG_WAITALL);
-      for(int i = 0; i < 4; i++) b.push_back(sizeBytes[i]);
+      for(int i = 0; i < 4; ++i) b.push_back(sizeBytes[i]);
       ((Socket*)this)->__coneverToInt(sizeBytes, &size);
       size *= sizeof(int);
       break;
     case __DOUBLE_VECTOR:
       recv(_sock, sizeBytes, 4, MSG_WAITALL);
-      for(int i = 0; i < 4; i++) b.push_back(sizeBytes[i]);
+      for(int i = 0; i < 4; ++i) b.push_back(sizeBytes[i]);
       ((Socket*)this)->__coneverToInt(sizeBytes, &size);
       size *= sizeof(double);
       break;
@@ -239,7 +239,7 @@ const Socket& Socket::operator>>(Buffer &b) const throw(YarsException)
     toread = std::min(size - read, __BUFFER_SIZE);
     r = recv(_sock, buf, toread, MSG_WAITALL);
     read += r;
-    for(int i = 0; i < r; i++)
+    for(int i = 0; i < r; ++i)
     {
       b.push_back(buf[i]);
     }
@@ -340,7 +340,7 @@ const Socket& Socket::operator<<(const std::string& s) const
   b.resize(0);
   b.label = __STRING_VALUE;
   ((Socket*)this)->__writeInteger(&b, (int)s.length());
-  for(unsigned int i = 0; i < s.length(); i++)
+  for(unsigned int i = 0; i < s.length(); ++i)
   {
     b.push_back(s[i]);
   }
@@ -361,7 +361,7 @@ const Socket& Socket::operator>>(std::string& s) const throw(YarsException)
   stringstream oss;
   int size = 0;
   ((Socket*)this)->__readInteger(&size, b, 0);
-  for(unsigned int i = sizeof(int); i < b.size(); i++)
+  for(unsigned int i = sizeof(int); i < b.size(); ++i)
   {
     oss << b[i];
   }
@@ -389,7 +389,7 @@ const Socket& Socket::operator<<(const vector<int>& v) const
   int s = (int)v.size(); 
   ((Socket*)this)->__writeInteger(&b, s);
 
-  for(vector<int>::const_iterator i = v.begin(); i != v.end(); i++)
+  for(vector<int>::const_iterator i = v.begin(); i != v.end(); ++i)
   {
     int value = *i;
     ((Socket*)this)->__writeInteger(&b, value);
@@ -414,7 +414,7 @@ const Socket& Socket::operator>>(vector<int>& v) const throw(YarsException)
 
   ((Socket*)this)->__readInteger(&vectorSize, b, 0);
 
-  for(int i = 0; i < vectorSize; i++)
+  for(int i = 0; i < vectorSize; ++i)
   {
     int value = 0;
     ((Socket*)this)->__readInteger(&value, b, (i+1) * sizeof(int));
@@ -445,7 +445,7 @@ const Socket& Socket::operator<<(const vector<double>& v) const
 
   ((Socket*)this)->__writeInteger(&b, s);
 
-  for(vector<double>::const_iterator i = v.begin(); i != v.end(); i++)
+  for(vector<double>::const_iterator i = v.begin(); i != v.end(); ++i)
   {
     double value = *i;
     ((Socket*)this)->__writeDouble(&b, value);
@@ -471,7 +471,7 @@ const Socket& Socket::operator>>(vector<double>& v) const throw(YarsException)
 
   ((Socket*)this)->__readInteger(&vectorSize, b, 0);
 
-  for(int i = 0; i < vectorSize; i++)
+  for(int i = 0; i < vectorSize; ++i)
   {
     double value = 0;
     ((Socket*)this)->__readDouble(&value, b, i * sizeof(double) + sizeof(int));
@@ -491,7 +491,7 @@ const Socket& Socket::operator>>(vector<double>& v) const throw(YarsException)
 void Socket::__writeDouble(Buffer *b, double d)
 {
   char *x_ptr=reinterpret_cast<char*>(&d); 
-  for(unsigned int count = 0;count < sizeof(double); count++)
+  for(unsigned int count = 0;count < sizeof(double); ++count)
   {
     b->push_back(*(x_ptr+count));
   }
@@ -513,7 +513,7 @@ void Socket::__readDouble(double *d, Buffer b, int startIndex)
 void Socket::__writeInteger(Buffer *b, int i)
 {
   char *x_ptr=reinterpret_cast<char*>(&i); 
-  for(unsigned int count = 0; count < sizeof(int); count++)
+  for(unsigned int count = 0; count < sizeof(int); ++count)
   {
     b->push_back(*(x_ptr+count));
   }

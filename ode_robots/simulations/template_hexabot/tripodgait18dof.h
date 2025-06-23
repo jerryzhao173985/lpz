@@ -55,7 +55,7 @@ class TripodGait18DOF : public AbstractController {
     TripodGait18DOF(const TripodGait18DOFConf& conf = getDefaultConf());
     virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
 
-    virtual ~TripodGait18DOF();
+    virtual ~TripodGait18DOF() override;
 
     /// returns the name of the object (with version number)
     virtual paramkey getName() const {
@@ -75,18 +75,18 @@ class TripodGait18DOF : public AbstractController {
     /// performs one step (includes learning).
     /// Calulates motor commands from sensor inputs.
     virtual void step(const sensor*, int number_sensors, motor*,
-        int number_motors);
+        int number_motors) override;
 
     /// performs one step without learning. Calulates motor commands from sensor
     /// inputs.
     virtual void stepNoLearning(const sensor*, int number_sensors,
-        motor*, int number_motors);
+        motor*, int number_motors) override;
 
     /***** STOREABLE ****/
     /** stores the controller values to a given file. */
-    virtual bool store(FILE* f) const;
+    virtual bool store(FILE* f) const override;
     /** loads the controller values from a given file. */
-    virtual bool restore(FILE* f);
+    virtual bool restore(FILE* f) override;
 
     static TripodGait18DOFConf getDefaultConf() {
       TripodGait18DOFConf c;

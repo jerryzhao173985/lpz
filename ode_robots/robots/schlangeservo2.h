@@ -52,7 +52,7 @@ namespace lpzrobots {
                      const std::string& name,
                      const std::string& revision = "" );
 
-    virtual ~SchlangeServo2();
+    virtual ~SchlangeServo2() override;
 
     /**
      *Reads the actual motor commands from an array,
@@ -61,7 +61,7 @@ namespace lpzrobots {
      *@param motors pointer to the array, motor values are scaled to [-1,1]
      *@param motornumber length of the motor array
      **/
-    virtual void setMotorsIntern( const double* motors, int motornumber );
+    virtual void setMotorsIntern( const double* motors, int motornumber ) override;
 
     /**
      *Writes the sensor values to an array in the memory.
@@ -69,7 +69,7 @@ namespace lpzrobots {
      *@param sensornumber length of the sensor array
      *@return number of actually written sensors
      **/
-    virtual int getSensorsIntern( sensor* sensors, int sensornumber );
+    virtual int getSensorsIntern( sensor* sensors, int sensornumber ) override;
 
     /** returns number of sensors
      */
@@ -80,11 +80,11 @@ namespace lpzrobots {
     virtual int getMotorNumberIntern(){ assert(created); return 2*servos.size(); }
 
     /******** CONFIGURABLE ***********/
-    virtual void notifyOnChange(const paramkey& key);
+    virtual void notifyOnChange(const paramkey& key) override;
 
   private:
-    virtual void create(const osg::Matrix& pose);
-    virtual void destroy();
+    virtual void create(const osg::Matrix& pose) override;
+    virtual void destroy() override;
   };
 
 }

@@ -29,12 +29,17 @@ using namespace std;
 /// constructor
 DerivativeWiring::DerivativeWiring(const DerivativeWiringConf& conf,
                                    NoiseGenerator* noise, const std::string& name)
-  : AbstractWiring::AbstractWiring(noise, Controller, name), conf(conf){
-
-  time     = buffersize;
-  first    = 0;
-  second   = 0;
-  blindMotors = 0;
+  : AbstractWiring::AbstractWiring(noise, Controller, name), 
+    conf(conf),
+    time(buffersize),
+    first(0),
+    second(0),
+    blindMotors(0) {
+  
+  // Initialize sensorbuffer array
+  for(int i = 0; i < buffersize; i++) {
+    sensorbuffer[i] = nullptr;
+  }
   //  this->conf.derivativeScale*= 1/this->conf.eps+0.01;
   // delay    = min(buffersize/2-1, int(0.25/(conf.eps+0.01))+1);
   // make sure that at least id is on.

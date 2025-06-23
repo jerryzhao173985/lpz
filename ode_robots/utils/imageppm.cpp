@@ -67,7 +67,7 @@ static void skipWhiteSpace (const std::string& filename, FILE *f)
 
 
 ImagePPM::ImagePPM ()
-{   image_data = 0;
+  : image_width(0), image_height(0), image_data(0) {
 }
 
 ImagePPM::ImagePPM (int width, int height, unsigned char* data){

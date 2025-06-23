@@ -70,7 +70,7 @@ typedef struct _DerLinUniversConf {
 class DerLinUnivers : public AbstractController {
 public:
 
-  DerLinUnivers(const DerLinUniversConf& conf = getDefaultConf());
+  explicit DerLinUnivers(const DerLinUniversConf& conf = getDefaultConf());
   virtual ~DerLinUnivers();
 
   static DerLinUniversConf getDefaultConf(){
@@ -97,17 +97,17 @@ public:
     return c;
   }
 
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
 
-  virtual int getSensorNumber() const {return number_sensors;}
+  virtual int getSensorNumber() const  override{return number_sensors;}
 
-  virtual int getMotorNumber() const {return number_motors;}
+  virtual int getMotorNumber() const  override{return number_motors;}
 
   virtual void step(const sensor* sensors, int sensornumber,
-                    motor* motors, int motornumber);
+                    motor* motors, int motornumber) override;
 
   virtual void stepNoLearning(const sensor* , int number_sensors,
-                              motor* , int number_motors);
+                              motor* , int number_motors) override;
 
 protected:
   /** puts the sensors in the ringbuffer,
@@ -137,14 +137,14 @@ protected:
 
 public:
   /********* INSPECTABLE INTERFACE ******/
-  virtual std::list<iparamkey> getInternalParamNames() const;
-  virtual std::list<iparamval> getInternalParams() const;
-  virtual ilayerlist getStructuralLayers() const;
-  virtual iconnectionlist getStructuralConnections() const;
+  virtual std::list<iparamkey> getInternalParamNames() const override;
+  virtual std::list<iparamval> getInternalParams() const override;
+  virtual ilayerlist getStructuralLayers() const override;
+  virtual iconnectionlist getStructuralConnections() const override;
 
   /********* STORABLE INTERFACE ******/
-  virtual bool store(FILE* f) const;
-  virtual bool restore(FILE* f);
+  virtual bool store(FILE* f) const override;
+  virtual bool restore(FILE* f) override;
 
 protected:
 

@@ -25,7 +25,7 @@ namespace lpzrobots {
       using Base::osgHandle;
 
       XMLSimulation();
-      virtual ~XMLSimulation();
+      virtual ~XMLSimulation() override;
   };
 
 }

@@ -1,0 +1,54 @@
+# Makefile for matrix library unit tests
+
+CXX = g++
+CXXFLAGS = -std=c++17 -Wall -Wextra -g -O2
+INCLUDES = -I. -I.. -I../.. -I../include -I../utils
+LDFLAGS = 
+
+# AddressSanitizer flags (uncomment to enable)
+# CXXFLAGS += -fsanitize=address -fno-omit-frame-pointer
+# LDFLAGS += -fsanitize=address
+
+# Source files
+TEST_SRC = test_matrix.cpp
+MATRIX_SRC = matrix.cpp
+
+# Object files
+TEST_OBJ = $(TEST_SRC:.cpp=.o)
+MATRIX_OBJ = $(MATRIX_SRC:.cpp=.o)
+
+# Executable
+TEST_EXEC = test_matrix
+
+# Default target
+all: $(TEST_EXEC)
+
+# Build test executable
+$(TEST_EXEC): $(TEST_OBJ) $(MATRIX_OBJ)
+	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
+
+# Compile test object
+test_matrix.o: test_matrix.cpp matrix.h
+	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
+
+# Compile matrix object
+matrix.o: matrix.cpp matrix.h
+	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
+
+# Run tests
+test: $(TEST_EXEC)
+	./$(TEST_EXEC)
+
+# Run with AddressSanitizer
+test-asan: clean
+	$(MAKE) CXXFLAGS="-std=c++17 -Wall -Wextra -g -O1 -fsanitize=address -fno-omit-frame-pointer" LDFLAGS="-fsanitize=address" test
+
+# Run with valgrind (if available on Linux)
+test-valgrind: $(TEST_EXEC)
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./$(TEST_EXEC)
+
+# Clean
+clean:
+	rm -f $(TEST_OBJ) $(MATRIX_OBJ) $(TEST_EXEC) test_matrix.dat
+
+.PHONY: all test test-asan test-valgrind clean

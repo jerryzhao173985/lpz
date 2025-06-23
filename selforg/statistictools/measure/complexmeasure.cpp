@@ -32,10 +32,11 @@
 #include <cstdlib>
 
 
-ComplexMeasure::ComplexMeasure( const char* measureName, ComplexMeasureMode mode, int numberBins ) : AbstractMeasure( measureName ), mode( mode ), numberBins( numberBins ), historyIndexList(0), F(0)
+ComplexMeasure::ComplexMeasure( const char* measureName, ComplexMeasureMode mode, int numberBins ) 
+  : AbstractMeasure( measureName ), mode( mode ), numberBins( numberBins ), 
+    historyIndexList(0), F(0), fSize(0), historyIndexNumber(0), historyInterval(1),
+    historySize(2), historyIndex(-1)
 {
-  historySize=2;
-  historyIndex=-1;
   binNumberHistory = ( int* ) malloc( sizeof( double ) * historySize );
 }
 
@@ -83,7 +84,7 @@ void ComplexMeasure::step()
     FOREACH( std::list<double*>, observedValueList, oValue )
     {
       binNumber += (int) pow( numberBins,valNumber++)* ( *di ) ->getBinNumber( *(*oValue));
-      di++;
+      ++di;
     }
     break;
   }

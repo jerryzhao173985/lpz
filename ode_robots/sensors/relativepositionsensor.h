@@ -43,11 +43,11 @@ namespace lpzrobots {
     RelativePositionSensor(double maxDistance, double exponent, short dimensions = X | Y | Z , bool local_coordinates = false);
     virtual ~RelativePositionSensor() {}
 
-    virtual void init(Primitive* own, Joint* joint = 0);
-    virtual int getSensorNumber() const;
+    virtual void init(Primitive* own, Joint* joint = 0) override;
+    virtual int getSensorNumber() const override;
 
-    virtual bool sense(const GlobalData& globaldata);
-    virtual std::list<sensor> getList() const;
+    virtual bool sense(const GlobalData& globaldata) override;
+    virtual std::list<sensor> getList() const override;
 
     /**
        Sets the reference object we use for relative position measureing.
@@ -55,7 +55,7 @@ namespace lpzrobots {
        This can be another robot an obstacle (light source) and such like
        This must be called before first sense() or get() call.
     */
-    virtual void setReference(Primitive* ref);
+    virtual void setReference(Primitive* ref) override;
 
   private:
     double maxDistance;

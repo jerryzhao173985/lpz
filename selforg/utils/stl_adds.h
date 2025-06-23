@@ -107,7 +107,7 @@ namespace std {
   };
 
   template <typename A, typename E>
-  A reduceList(std::list<E> list, A acc, std::function<A(A,E)> f){
+  A reduceList(const std::list<E>& list, A acc, std::function<A(A,E)> f){
     for (auto i: list){
       acc = f(acc,i);
     }

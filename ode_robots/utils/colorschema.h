@@ -88,7 +88,7 @@ namespace lpzrobots{
          false if color name does not exists or 
                alias names a color and is therefor rejected
     */
-    bool addAlias(const std::string& name, const std::string& alias, int alias_set = 0);
+    bool addAlias(const std::string& alias, const std::string& name, int alias_set = 0);
 
     void setDefaultColor(const Color& c);
     const Color& getDefaultColor() const;

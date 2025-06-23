@@ -92,7 +92,7 @@ public:
 
 
   Primitive ();
-  virtual ~Primitive ();
+  virtual ~Primitive () override;
   /** registers primitive in ODE and OSG.
       @param osgHandle scruct with ODE variables inside (to specify space, world...)
       @param mass Mass of the object in ODE (if withBody = true)
@@ -101,26 +101,26 @@ public:
    */
   virtual void init(const OdeHandle& odeHandle, double mass,
                     const OsgHandle& osgHandle,
-                    char mode = Body | Geom | Draw)  = 0 ;
+                    char mode = Body | Geom | Draw)   override = 0;
 
   /** Updates the OSG nodes with ODE coordinates.
       This function must be overloaded (usually calls setMatrix of OsgPrimitives)
    */
-  virtual void update() =0 ;
+  virtual void update()  override;
 
   /// returns the assoziated osg primitive if there or 0
-  virtual OSGPrimitive* getOSGPrimitive() = 0;
+  virtual OSGPrimitive* getOSGPrimitive()  override = 0;
 
   /// sets the color for the underlaying osgprimitive
-  virtual void setColor(const Color& color);
+  virtual void setColor(const Color& color) override;
 
   /// sets the color using the colorschema of osgHandle
-  virtual void setColor(const std::string& color);
+  virtual void setColor(const std::string& color) override;
 
   /// assigns a texture to the primitive
-  virtual void setTexture(const std::string& filename);
+  virtual void setTexture(const std::string& filename) override;
   /// assigns a texture to the primitive, you can choose if the texture should be repeated
-  virtual void setTexture(const TextureDescr& texture);
+  virtual void setTexture(const TextureDescr& texture) override;
   /** assigns a texture to the x-th surface of the primitive.
       You can choose how often to repeat
       negative values of repeat correspond to length units.
@@ -128,41 +128,41 @@ public:
       rereated. With repeatOnX = -2 the texture would be 2.5 times repeated because the texture is
       made to have the size 2
    */
-  virtual void setTexture(int surface, const TextureDescr& texture);
+  virtual void setTexture(int surface, const TextureDescr& texture) override;
   /// assign a set of texture to the surfaces of the primitive
-  virtual void setTextures(const std::vector<TextureDescr>& textures);
+  virtual void setTextures(const std::vector<TextureDescr>& textures) override;
 
 
   /// set the position of the primitive (orientation is preserved)
-  virtual void setPosition(const Pos& pos);
+  virtual void setPosition(const Pos& pos) override;
   /// set the pose of the primitive
-  virtual void setPose(const Pose& pose);
+  virtual void setPose(const Pose& pose) override;
   /// returns the position
-  virtual Pos getPosition() const;
+  virtual Pos getPosition() const override;
   /// returns the pose
-  virtual Pose getPose() const;
+  virtual Pose getPose() const override;
   /// returns the velocity
-  virtual Pos getVel() const;
+  virtual Pos getVel() const override;
   /// returns the angular velocity
-  virtual Pos getAngularVel() const;
+  virtual Pos getAngularVel() const override;
 
   /** apply a force (in world coordinates) to the primitive and
       returns true if it was possible */
-  virtual bool applyForce(osg::Vec3 force);
+  virtual bool applyForce(osg::Vec3 force) override;
   /** @see applyForce(osg::Vec3) */
-  virtual bool applyForce(double x, double y, double z);
+  virtual bool applyForce(double x, double y, double z) override;
 
   /** apply a torque (in world coordinates) to the primitive and
       returns true if it was possible
    */
-  virtual bool applyTorque(osg::Vec3 torque);
+  virtual bool applyTorque(osg::Vec3 torque) override;
   /** @see applyTorque(osg::Vec3) */
-  virtual bool applyTorque(double x, double y, double z);
+  virtual bool applyTorque(double x, double y, double z) override;
 
   /** sets the mass of the body (uniform)
       if density==true then mass is interpreted as a density
    */
-  virtual void setMass(double mass, bool density = false) = 0;
+  virtual void setMass(double mass, bool density = false)  override = 0;
   /** sets full mass specification
     \param cg center of gravity vector
     \param I  3x3 interia tensor
@@ -217,16 +217,16 @@ public:
   void setSubstance(const Substance& substance);
 
   /* **** storable interface *******/
-  virtual bool store(FILE* f) const;
+  virtual bool store(FILE* f) const override;
 
-  virtual bool restore(FILE* f);
+  virtual bool restore(FILE* f) override;
 
 
 protected:
   /** attaches geom to body (if any) and sets the category bits and collision bitfields.
       assumes: mode & Geom != 0
    */
-  virtual void attachGeomAndSetColliderFlags();
+  virtual void attachGeomAndSetColliderFlags() override;
 
 public:
   Substance substance; // substance description
@@ -248,15 +248,15 @@ protected:
 class Plane : public Primitive {
 public:
   Plane();
-  virtual ~Plane();
+  virtual ~Plane() override;
   virtual void init(const OdeHandle& odeHandle, double mass,
                     const OsgHandle& osgHandle,
-                    char mode = Body | Geom | Draw) ;
+                    char mode = Body | Geom | Draw)  override;
 
-  virtual void update();
-  virtual OSGPrimitive* getOSGPrimitive();
+  virtual void update() override;
+  virtual OSGPrimitive* getOSGPrimitive() override;
 
-  virtual void setMass(double mass, bool density = false);
+  virtual void setMass(double mass, bool density = false) override;
 
 protected:
   OSGPlane* osgplane;
@@ -270,16 +270,16 @@ public:
   Box(float lengthX, float lengthY, float lengthZ);
   Box(const osg::Vec3& dim);
 
-  virtual ~Box();
+  virtual ~Box() override;
 
   virtual void init(const OdeHandle& odeHandle, double mass,
                     const OsgHandle& osgHandle,
-                    char mode = Body | Geom | Draw) ;
+                    char mode = Body | Geom | Draw)  override;
 
-  virtual void update();
-  virtual OSGPrimitive* getOSGPrimitive();
+  virtual void update() override;
+  virtual OSGPrimitive* getOSGPrimitive() override;
 
-  virtual void setMass(double mass, bool density = false);
+  virtual void setMass(double mass, bool density = false) override;
 protected:
   OSGBoxTex* osgbox;
 };
@@ -289,16 +289,16 @@ protected:
 class Sphere : public Primitive {
 public:
   Sphere(float radius);
-  virtual ~Sphere();
+  virtual ~Sphere() override;
 
   virtual void init(const OdeHandle& odeHandle, double mass,
                     const OsgHandle& osgHandle,
-                    char mode = Body | Geom | Draw) ;
+                    char mode = Body | Geom | Draw)  override;
 
-  virtual void update();
-  virtual OSGPrimitive* getOSGPrimitive();
+  virtual void update() override;
+  virtual OSGPrimitive* getOSGPrimitive() override;
 
-  virtual void setMass(double mass, bool density = false);
+  virtual void setMass(double mass, bool density = false) override;
 
 protected:
   OSGSphere* osgsphere;
@@ -308,15 +308,15 @@ protected:
 class Capsule : public Primitive {
 public:
   Capsule(float radius, float height);
-  virtual ~Capsule();
+  virtual ~Capsule() override;
   virtual void init(const OdeHandle& odeHandle, double mass,
                     const OsgHandle& osgHandle,
-                    char mode = Body | Geom | Draw) ;
+                    char mode = Body | Geom | Draw)  override;
 
-  virtual void update();
-  virtual OSGPrimitive* getOSGPrimitive();
+  virtual void update() override;
+  virtual OSGPrimitive* getOSGPrimitive() override;
 
-  virtual void setMass(double mass, bool density = false);
+  virtual void setMass(double mass, bool density = false) override;
 
 protected:
   OSGCapsule* osgcapsule;
@@ -326,15 +326,15 @@ protected:
 class Cylinder : public Primitive {
 public:
   Cylinder(float radius, float height);
-  virtual ~Cylinder();
+  virtual ~Cylinder() override;
   virtual void init(const OdeHandle& odeHandle, double mass,
                     const OsgHandle& osgHandle,
-                    char mode = Body | Geom | Draw) ;
+                    char mode = Body | Geom | Draw)  override;
 
-  virtual void update();
-  virtual OSGPrimitive* getOSGPrimitive();
+  virtual void update() override;
+  virtual OSGPrimitive* getOSGPrimitive() override;
 
-  virtual void setMass(double mass, bool density = false);
+  virtual void setMass(double mass, bool density = false) override;
 protected:
   OSGCylinder* osgcylinder;
 };
@@ -350,16 +350,16 @@ public:
      @param thickness if thickness == 0 then a line is used and not a box
    */
   Ray(double range, float thickness, float length);
-  virtual ~Ray();
+  virtual ~Ray() override;
   virtual void init(const OdeHandle& odeHandle, double mass,
       const OsgHandle& osgHandle,
-      char mode = Geom | Draw) ;
+      char mode = Geom | Draw)  override;
 
   void setLength(float len);
-  virtual void update();
-  virtual OSGPrimitive* getOSGPrimitive();
+  virtual void update() override;
+  virtual OSGPrimitive* getOSGPrimitive() override;
 
-  virtual void setMass(double mass, bool density = false);
+  virtual void setMass(double mass, bool density = false) override;
 protected:
   double range;
   float thickness;
@@ -374,23 +374,23 @@ protected:
 class Mesh : public Primitive {
 public:
   Mesh(const std::string& filename,float scale);
-  virtual ~Mesh();
+  virtual ~Mesh() override;
   virtual void init(const OdeHandle& odeHandle, double mass,
                     const OsgHandle& osgHandle,
-                    char mode = Body | Geom | Draw) ;
-  virtual void update();
-  virtual OSGPrimitive* getOSGPrimitive();
-  virtual float getRadius();
+                    char mode = Body | Geom | Draw)  override;
+  virtual void update() override;
+  virtual OSGPrimitive* getOSGPrimitive() override;
+  virtual float getRadius() override;
 
-  virtual void setMass(double mass, bool density = false);
+  virtual void setMass(double mass, bool density = false) override;
 
   /**
    * Sets the BoundingShape externally (e.g. XMLBoundingShape).
    * Any existing BoundingShape will be deleted.
    */
-  virtual void setBoundingShape(BoundingShape* boundingShape);
+  virtual void setBoundingShape(BoundingShape* boundingShape) override;
 
-  virtual void setPose(const Pose& pose);
+  virtual void setPose(const Pose& pose) override;
 
 protected:
   OSGMesh* osgmesh;
@@ -417,7 +417,7 @@ public:
   Transform(Primitive* parent, Primitive* child, const Pose& pose, bool deleteChild = true);
 
   /// destructor deletes child object // it should be virtual by yuichi
-  virtual ~Transform();
+  virtual ~Transform() override;
 
   /** initialised the transform object. This automatically
       initialises the child geom.
@@ -426,12 +426,12 @@ public:
    */
   virtual void init(const OdeHandle& odeHandle, double mass,
                     const OsgHandle& osgHandle,
-                    char mode = Body | Geom | Draw);
+                    char mode = Body | Geom | Draw) override;
 
-  virtual void update();
-  virtual OSGPrimitive* getOSGPrimitive();
+  virtual void update() override;
+  virtual OSGPrimitive* getOSGPrimitive() override;
 
-  virtual void setMass(double mass, bool density = false);
+  virtual void setMass(double mass, bool density = false) override;
 
   // setting the pose is not supported
   virtual void setPose(const Pose& pose) override {}

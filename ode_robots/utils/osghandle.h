@@ -39,8 +39,8 @@ namespace lpzrobots {
 
   /** Data structure containing some configuration variables for OSG */
   struct OsgConfig {
-    OsgConfig() : normalState(0), transparentState(0), 
-                  shadowType(0), noGraphics(false) {}
+    OsgConfig() : tesselhints{nullptr, nullptr, nullptr}, normalState(0), transparentState(0), 
+                  cs(nullptr), shadowType(0), noGraphics(false) {}
     osg::TessellationHints* tesselhints[3];  
     osg::StateSet* normalState;  
     osg::StateSet* transparentState;  
@@ -53,7 +53,7 @@ namespace lpzrobots {
   struct OsgScene {
     OsgScene() :  root(0), world(0),world_noshadow(0),scene(0),
                   shadowedScene(0), shadowedSceneRoot(0), groundScene(0), 
-                  lightSource(0), worldtransform(0),
+                  hud(nullptr), lightSource(0), worldtransform(0),
                   robotCamManager(0) {}
     osg::Group* root;  // master note (contains world,hud..)
     osg::Group* world; // world note  (contains ground,sky and shadowed scene)

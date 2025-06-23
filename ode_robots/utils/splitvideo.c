@@ -38,18 +38,18 @@ void mencoder(const char* filename, int w, int h){
   int k= getchar();
   switch(k) {
   case '2':
-    sprintf(cmd,"for F in %s*.ppm; do echo \"convert $F\"; convert \"$F\" \"${F%%ppm}sgi\"; rm \"$F\"; done", filename); 
+    snprintf(cmd, sizeof(cmd),"for F in %s*.ppm; do echo \"convert $F\"; convert \"$F\" \"${F%%ppm}sgi\"; rm \"$F\"; done", filename); 
     printf("%s\n", cmd);
     system(cmd);    
-    sprintf(cmd,"mencoder mf://%s*.sgi -mf w=%i:h=%i:fps=%i:type=sgi -ovc lavc -lavcopts vcodec=mpeg2video -oac copy -o %s.mpg", filename, w, h, 25, filename);
+    snprintf(cmd, sizeof(cmd),"mencoder mf://%s*.sgi -mf w=%i:h=%i:fps=%i:type=sgi -ovc lavc -lavcopts vcodec=mpeg2video -oac copy -o %s.mpg", filename, w, h, 25, filename);
     printf("%s\n", cmd);
     system(cmd);
     break;
   case '4':
-    sprintf(cmd,"for F in %s*.ppm; do echo \"convert $F\"; convert \"$F\" \"${F%%ppm}sgi\"; rm \"$F\"; done", filename); 
+    snprintf(cmd, sizeof(cmd),"for F in %s*.ppm; do echo \"convert $F\"; convert \"$F\" \"${F%%ppm}sgi\"; rm \"$F\"; done", filename); 
     printf("%s\n", cmd);
     system(cmd);    
-    sprintf(cmd,"mencoder mf://%s*.sgi -mf w=%i:h=%i:fps=%i:type=sgi -ovc lavc -lavcopts vcodec=mpeg4 -oac copy -o %s.avi -ffourcc DX50", filename, w, h, 25, filename);
+    snprintf(cmd, sizeof(cmd),"mencoder mf://%s*.sgi -mf w=%i:h=%i:fps=%i:type=sgi -ovc lavc -lavcopts vcodec=mpeg4 -oac copy -o %s.avi -ffourcc DX50", filename, w, h, 25, filename);
     printf("%s\n", cmd);
     system(cmd);
     break;
@@ -65,7 +65,7 @@ void mencoder(const char* filename, int w, int h){
   case 'Y':
   case 'y':
     printf("Remove all temporary files\n");    
-    sprintf(cmd,"rm -f %s*.sgi;", filename); 
+    snprintf(cmd, sizeof(cmd),"rm -f %s*.sgi;", filename); 
     system(cmd);    
     break;    
   default: 
@@ -108,7 +108,7 @@ int main(int argc, char *argv[])
      if (retval)
      {
        char outname[128];
-       sprintf(outname, "%s%04d.ppm", fname, framenr);
+       snprintf(outname, sizeof(outname), "%s%04d.ppm", fname, framenr);
        FILE *g=fopen(outname,"wb");
        if(!g) {
 	 fprintf(stderr,"Cannot open file %s for writing", outname);

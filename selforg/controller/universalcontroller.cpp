@@ -31,7 +31,10 @@ using namespace std;
 using namespace matrix;
 
 UniversalController::UniversalController(const UniversalControllerConf& conf)
-  : AbstractController("universalcontroller", "$Id$"), conf(conf) {
+  : AbstractController("universalcontroller", "$Id$"), conf(conf),
+    x_buffer(nullptr),
+    y_buffer(nullptr), 
+    v_buffer(nullptr) {
   t=0;
   addParameterDef("eps",    &eps,    1);
   addParameterDef("epsM",   &epsM,   0.1);

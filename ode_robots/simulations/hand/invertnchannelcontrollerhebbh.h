@@ -74,7 +74,7 @@ public:
   InvertNChannelControllerHebbH(int _buffersize, bool _update_only_1=false, bool inactivate_hebb=false);
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
 
-  virtual ~InvertNChannelControllerHebbH();
+  virtual ~InvertNChannelControllerHebbH() override;
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
   virtual int getSensorNumber() const { return number_all_sensors; }
@@ -82,17 +82,17 @@ public:
 
   /// performs one step (includes learning).
   /// Calulates motor commands from sensor inputs.
-  virtual void step(const sensor* , int number_sensors, motor* , int number_motors);
+  virtual void step(const sensor* , int number_sensors, motor* , int number_motors) override;
 
 
   /// performs one step without learning. Calulates motor commands from sensor inputs.
   //  virtual void stepNoLearning(const sensor* , int number_sensors,
-  //                      motor* , int number_motors);
+  //                      motor* , int number_motors) override;
 
 
   // inspectable interface
-  virtual std::list<iparamkey> getInternalParamNames() const;
-  virtual std::list<iparamval> getInternalParams() const;
+  virtual std::list<iparamkey> getInternalParamNames() const override;
+  virtual std::list<iparamval> getInternalParams() const override;
 
 
 
@@ -161,7 +161,7 @@ protected:
 
   sensor old_sensors[10]; //memory of old sensor values (used for hebbian learning)
 
-  //  virtual matrix::Matrix hebb(matrix::Matrix& xsi, sensor* sensors);
+  //  virtual matrix::Matrix hebb(matrix::Matrix& xsi, sensor* sensors) override;
 
 
   /**
@@ -178,8 +178,8 @@ protected:
   matrix::Matrix predictHebb(const matrix::Matrix& context_sensors);
 
 
-  //  virtual double calculateE_(const matrix::Matrix& x_delay, const matrix::Matrix& y_delay);
-  virtual void learn(const matrix::Matrix& x_delay, const matrix::Matrix& y_delay);
+  //  virtual double calculateE_(const matrix::Matrix& x_delay, const matrix::Matrix& y_delay) override;
+  virtual void learn(const matrix::Matrix& x_delay, const matrix::Matrix& y_delay) override;
 
 };
 

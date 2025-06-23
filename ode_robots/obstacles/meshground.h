@@ -59,12 +59,12 @@ namespace lpzrobots {
      */
     virtual void update(){ };
 
-    virtual void setPose(const osg::Matrix& pose);
+    virtual void setPose(const osg::Matrix& pose) override;
 
 
   protected:
-    virtual void create();
-    virtual void destroy();
+    virtual void create() override;
+    virtual void destroy() override;
 
   protected:
     std::string filename;

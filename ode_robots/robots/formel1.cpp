@@ -50,6 +50,10 @@ namespace lpzrobots {
 
     // robot is not created till now
     created=false;
+    
+    // Initialize arrays
+    for(int i=0; i<5; i++) object[i] = nullptr;
+    for(int i=0; i<4; i++) joint[i] = nullptr;
 
     // choose color (here the color of the "Nimm Zwei" candy is used,
     // where the name of the Nimm2 and Formel1 robots comes from ;-)
@@ -186,7 +190,7 @@ namespace lpzrobots {
     Capsule* cap = new Capsule(width/2, length);
     cap->setTexture("Images/wood.rgb");
     cap->init(odeHandle, cmass, osgHandle);
-    // rotate and place body (here by 90° around the y-axis)
+    // rotate and place body (here by 90ï¿½ around the y-axis)
     cap->setPose(Matrix::rotate(M_PI/2, 0, 1, 0) * pose);
     object[0]=cap;
 
@@ -197,7 +201,7 @@ namespace lpzrobots {
       Sphere* sph = new Sphere(radius);
       sph->setTexture("Images/wood.rgb");
       sph->init(odeHandle, wmass, osgHandle);
-      // rotate and place body (here by 90° around the x-axis)
+      // rotate and place body (here by 90ï¿½ around the x-axis)
       Vec3 wpos = Vec3( ((i-1)/2==0?-1:1)*length/2.0,
                         ((i-1)%2==0?-1:1)*(width*0.5+wheelthickness),
                         -width*0.6+radius );

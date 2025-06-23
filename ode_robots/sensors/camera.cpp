@@ -57,7 +57,7 @@ namespace lpzrobots {
   }    
 
   Camera::Camera( const CameraConf& conf)
-    : conf(conf) {
+    : conf(conf), cam(nullptr), body(nullptr), transform(nullptr), initialized(false) {
     sensorBody1 = 0;
     sensorBody2 = 0;
     ccd = 0;

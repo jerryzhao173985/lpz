@@ -122,13 +122,13 @@ list<Inspectable::iparamkey> store4x4AndDiagonalFieldNames(const Matrix& m, cons
   // 4x4
   for(I i=0; i < smalldimM; i++){
     for(I j=0; j < smalldimN; j++){
-      sprintf(buffer,"%s[%d,%d]",matrixName.c_str(),i,j);
+      snprintf(buffer, sizeof(buffer), "%s[%d,%d]",matrixName.c_str(),i,j);
       l.push_back(string(buffer));
     }
   }
   // diagonal below 4x4
   for(I i=4; i < smallerdim; i++){
-    sprintf(buffer,"%s[%d,%d]",matrixName.c_str(),i,i);
+    snprintf(buffer, sizeof(buffer), "%s[%d,%d]",matrixName.c_str(),i,i);
     l.push_back(string(buffer));
   }
   return l;
@@ -146,14 +146,14 @@ I store4x4AndDiagonalFieldNames(const Matrix& m, const std::string& matrixName,
   for(I i=0; i < smalldimM; i++){
     for(I j=0; j < smalldimN; j++){
       keylist[written] = (char*) malloc(keyLen);
-      sprintf(keylist[written],"%s[%d,%d]",matrixName.c_str(),i,j);
+      snprintf(keylist[written], keyLen, "%s[%d,%d]",matrixName.c_str(),i,j);
       written++;
     }
   }
   // diagonal below 4x4
   for(I i=4; i < smallerdim; i++){
     keylist[written] = (char*) malloc(keyLen);
-    sprintf(keylist[written],"%s[%d,%d]",matrixName.c_str(),i,i);
+    snprintf(keylist[written], keyLen, "%s[%d,%d]",matrixName.c_str(),i,i);
     written++;
   }
   return written;
@@ -167,7 +167,7 @@ list<Inspectable::iparamkey> storeMatrixFieldNames(const Matrix& m, const string
   //  assert(matrixName);
   for(I i=0; i < dimM; i++){
     for(I j=0; j < dimN; j++){
-      sprintf(buffer,"%s[%d,%d]",matrixName.c_str(),i,j);
+      snprintf(buffer, sizeof(buffer), "%s[%d,%d]",matrixName.c_str(),i,j);
       l.push_back(string(buffer));
     }
   }
@@ -179,7 +179,7 @@ list<Inspectable::iparamkey> storeVectorFieldNames(const Matrix& m, const string
   char buffer[32];
   I dimM = m.getM() * m.getN();
   for(I i=0; i < dimM; i++){
-      sprintf(buffer,"%s[%d]",vectorName.c_str(),i);
+      snprintf(buffer, sizeof(buffer), "%s[%d]",vectorName.c_str(),i);
       l.push_back(string(buffer));
   }
   return l;
@@ -196,7 +196,7 @@ I storeMatrixFieldNames(const Matrix& m, const char* matrixName,
   for(I i=0; i < dimM; i++){
     for(I j=0; j < dimN; j++){
       keylist[written] = (char*) malloc(keyLen);
-      sprintf(keylist[written],"%s[%d,%d]",matrixName,i,j);
+      snprintf(keylist[written], keyLen, "%s[%d,%d]",matrixName,i,j);
       written++;
     }
   }
@@ -212,7 +212,7 @@ I storeVectorFieldNames(const Matrix& m, const char* vectorName,
   unsigned char keyLen = strlen(vectorName)+7;
   for(I i=0; i < dimM; i++){
       keylist[written] = (char*) malloc(keyLen);
-      sprintf(keylist[written],"%s[%d]",vectorName,i);
+      snprintf(keylist[written], keyLen, "%s[%d]",vectorName,i);
       written++;
   }
   return written;
@@ -233,9 +233,10 @@ Matrix noiseMatrix(I m, I n, NoiseGenerator& ng,
 RandGen* splitRandGen(RandGen* randGen){
   if(randGen){
     double num = randGen->rand();
-    long int* seed = (long int*)&num;
+    // Convert double to long int for seeding
+    long int seed = static_cast<long int>(num * RAND_MAX);
     RandGen* g = new RandGen();
-    g->init(*seed);
+    g->init(seed);
     return g;
   }else{
     return new RandGen();
@@ -384,7 +385,7 @@ list<Inspectable::iparamkey> getArrayNames(int arraySize,const char* name) {
         std::list<Inspectable::iparamkey> nameList;
         char buffer[32];
         for(int i=0; i < arraySize; i++){
-                sprintf(buffer,"%s[%d]",name,i);
+                snprintf(buffer, sizeof(buffer), "%s[%d]",name,i);
                 nameList.push_back(std::string(buffer));
         }
         return nameList;

@@ -33,12 +33,12 @@ namespace matrix{
   extern const int T;
 
 /// type for matrix indices
-  typedef unsigned int I;
+  using I = unsigned int;
   /// type for matrix elements
-  typedef double D;
+  using D = double;
 
   class Matrix;
-  typedef std::vector<Matrix> Matrices;
+  using Matrices = std::vector<Matrix>;
 
 #define D_Zero 0
 #define D_One 1

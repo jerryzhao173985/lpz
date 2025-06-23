@@ -81,7 +81,7 @@ namespace lpzrobots {
     ForcedSphere ( const OdeHandle& odeHandle, const OsgHandle& osgHandle,
                    const ForcedSphereConf& ForcedSphereConf, const std::string& name);
 
-    virtual ~ForcedSphere();
+    virtual ~ForcedSphere() override;
 
     static ForcedSphereConf getDefaultConf(){
       ForcedSphereConf c;
@@ -94,23 +94,23 @@ namespace lpzrobots {
       return c;
     }
 
-    virtual void update();
+    virtual void update() override;
 
-    virtual void placeIntern(const osg::Matrix& pose);
+    virtual void placeIntern(const osg::Matrix& pose) override;
 
-    virtual void doInternalStuff(GlobalData& globalData);
+    virtual void doInternalStuff(GlobalData& globalData) override;
 
-    virtual int getSensorsIntern( sensor* sensors, int sensornumber );
-    virtual void setMotorsIntern( const double* motors, int motornumber );
-    virtual int getMotorNumberIntern();
-    virtual int getSensorNumberIntern();
+    virtual int getSensorsIntern( sensor* sensors, int sensornumber ) override;
+    virtual void setMotorsIntern( const double* motors, int motornumber ) override;
+    virtual int getMotorNumberIntern() override;
+    virtual int getSensorNumberIntern() override;
 
     virtual Primitive* getMainPrimitive() const { return object[0]; }
 
   protected:
 
-    virtual void create(const osg::Matrix& pose);
-    virtual void destroy();
+    virtual void create(const osg::Matrix& pose) override;
+    virtual void destroy() override;
 
 
   };

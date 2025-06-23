@@ -51,7 +51,7 @@ Position toEnv(Position pos){
 class MyRobot : public AbstractRobot {
 public:
   MyRobot(const string& name, const Position& initial_pos, double _mass = 1.0)
-    : AbstractRobot(name, "$Id$") {
+    : AbstractRobot(name, "$Id$"), whatDoIFeel(0) {
     motornumber  = 2;
     sensornumber = 4;
     x = new double[sensornumber];
@@ -276,7 +276,7 @@ void printRobots(const list<MyRobot*>& robots){
 }
 
 void reinforce(Agent* a){
-  MyRobot* r = (MyRobot*)a->getRobot();
+  MyRobot* r = static_cast<MyRobot*>(a)->getRobot();
   InvertMotorNStep* c = dynamic_cast<InvertMotorNStep*>(a->getController());
   if(c)
     c->setReinforcement(r->getParam("reinf")*(r->whatDoIFeel != 0));

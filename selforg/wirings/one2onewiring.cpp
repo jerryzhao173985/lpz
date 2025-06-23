@@ -46,6 +46,10 @@ bool One2OneWiring::initIntern(){
 
   if(blind){
     blindmotors = (sensor*) malloc(sizeof(sensor)  * blind);
+    if(blindmotors == nullptr) {
+      fprintf(stderr, "One2OneWiring: memory allocation failed\n");
+      exit(1);
+    }
     memset(blindmotors, 0, sizeof(sensor)  * blind);
   }
 

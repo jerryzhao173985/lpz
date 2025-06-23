@@ -51,12 +51,12 @@ namespace lpzrobots {
 
   protected:
 
-    virtual ~CameraManipulatorRace();
+    virtual ~CameraManipulatorRace() override;
 
     /** This handles robot movements, so that the camera movemenent is right affected.
         should be overwritten by new cameramanipulator
     */
-       virtual void calcMovementByAgent();
+       virtual void calcMovementByAgent() override;
 
   };
 }

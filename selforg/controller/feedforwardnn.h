@@ -31,11 +31,11 @@
 #include <cmath>
 
 /// activation function type: input: membrane potential
-typedef double (*ActivationFunction) (double);
+using ActivationFunction = double (*)(double);
 /** inverse of Activation function with respect to some membrane potential
     and a certain output error.
  */
-typedef double (*InvActivationFunction) (double, double);
+using InvActivationFunction = double (*)(double, double);
 
 /// abstract class (interface) for feed forward rate based neural networks
 class FeedForwardNN : public InvertableModel {
@@ -44,10 +44,10 @@ class FeedForwardNN : public InvertableModel {
   //FeedForwardNN() {}
   FeedForwardNN(const std::string& name, const std::string& revision)
     : InvertableModel(name, revision){};
-  virtual ~FeedForwardNN(){};
+  virtual ~FeedForwardNN() override{};
 
   /// damps the weights and the biases by multiplying (1-damping)
-  virtual void damp(double damping) =0 ;
+  virtual void damp(double damping) override =0 ;
 
   /******** Activation functions and there derivative
             and inversion with certain output shift (regularised) */

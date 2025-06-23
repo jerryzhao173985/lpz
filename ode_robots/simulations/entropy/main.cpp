@@ -330,7 +330,7 @@ public:
           //controller->setParam("epsC", 0.001);
           //controller->setParam("epsA", 0.0);
           char cdesc[32];
-          sprintf(cdesc, "c=%f_",cInit);
+          snprintf(cdesc, sizeof(cdesc), "c=%f_",cInit);
           // agent->setTrackOptions(TrackRobot(true,false, false,false,cdesc,10));
           //  hmlist = ma->addSensorComplexMeasure("$H(x)",ENTSLOW,30,1);
           // mimlist = ma->addSensorComplexMeasure("$MI(x)",MI,30,1);
@@ -502,7 +502,7 @@ void runSim(double cinit, int runs, int argc, char **argv,double binit=0.0)
   double h_yx_avg = h_yxsum / ((double)runs);
   FILE* file;
   char filename[256];
-  sprintf(filename, "ent_%f_%f_C.log",cinit,binit);
+  snprintf(filename, sizeof(filename), "ent_%f_%f_C.log",cinit,binit);
   file = fopen(filename,"a");
   fprintf(file,"%f, %f, %f, %f, %f, %f, %f, %f, %f, %f\n",cinit, binit,avg,mi,h_x,h_yx,loc_avg,mi_avg,h_x_avg,h_yx_avg);
   fflush(file);

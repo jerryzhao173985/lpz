@@ -19,7 +19,7 @@ namespace lpzrobots {
   class RangeFinder : public RaySensorBank{
   public:
 
-    RangeFinder(){};
+    RangeFinder() : own(nullptr) {};
 
     virtual void init(Primitive* own, Joint* joint = 0) override;
 
@@ -33,7 +33,7 @@ namespace lpzrobots {
      * @param drawMode: Specifies if rays should be drawn or not (default is drawing rays)
      */
     virtual void registerSensorRange(int numBeams, double startAngle, double endAngle, double maxRange, double height,
-        RaySensor::rayDrawMode drawMode = RaySensor::drawRay);
+        RaySensor::rayDrawMode drawMode = RaySensor::drawRay) override;
 
   protected:
     Primitive* own;

@@ -37,7 +37,7 @@ namespace lpzrobots {
   public:
     RaySensorBank();
 
-    virtual ~RaySensorBank();
+    virtual ~RaySensorBank() override;
 
     virtual void setInitData(const OdeHandle& odeHandle,
                              const OsgHandle& osgHandle,
@@ -64,7 +64,7 @@ namespace lpzrobots {
     */
     virtual unsigned int registerSensor(RaySensor* raysensor, Primitive* body,
                                         const osg::Matrix& pose, float range,
-                                        RaySensor::rayDrawMode drawMode);
+                                        RaySensor::rayDrawMode drawMode) override;
 
 
 
@@ -76,20 +76,20 @@ namespace lpzrobots {
         @param index index of sensor to modify
         @param range new length of the sensor
     */
-    virtual void setRange(unsigned int index, float range);
+    virtual void setRange(unsigned int index, float range) override;
 
     /** set the range of all sensors
         @param range new length of the sensors
     */
-    virtual void setRange(float range);
+    virtual void setRange(float range) override;
 
     /** returns the spaceID of the sensor space
      */
-    virtual dSpaceID getSpaceID();
+    virtual dSpaceID getSpaceID() override;
 
 
     // delete all registered sensors.
-    virtual void clear();
+    virtual void clear() override;
 
     // returns true if initialized
     virtual bool isInitialized() { return initialized;}

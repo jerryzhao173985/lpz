@@ -97,9 +97,9 @@ public:
     return c;
   }
 
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
 
-  virtual ~SeMoXHebMod();
+  virtual ~SeMoXHebMod() override;
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
   virtual int getSensorNumber() const { return number_sensors; }
@@ -108,21 +108,21 @@ public:
 
   /// performs one step (includes learning).
   /// Calulates motor commands from sensor inputs.
-  virtual void step(const sensor* , int number_sensors, motor* , int number_motors);
+  virtual void step(const sensor* , int number_sensors, motor* , int number_motors) override;
 
   /// performs one step without learning. Calulates motor commands from sensor inputs.
   virtual void stepNoLearning(const sensor* , int number_sensors,
-                              motor* , int number_motors);
+                              motor* , int number_motors) override;
 
   /**** STOREABLE ****/
   /** stores the controller values to a given file. */
-  virtual bool store(FILE* f) const;
+  virtual bool store(FILE* f) const override;
   /** loads the controller values from a given file. */
-  virtual bool restore(FILE* f);
+  virtual bool restore(FILE* f) override;
 
   /**** INSPECTABLE ****/
-  virtual std::list<ILayer> getStructuralLayers() const;
-  virtual std::list<IConnection> getStructuralConnections() const;
+  virtual std::list<ILayer> getStructuralLayers() const override;
+  virtual std::list<IConnection> getStructuralConnections() const override;
 
   /**** TEACHABLE ****/
   /** The given motor teaching signal is used for this timestep.
@@ -131,7 +131,7 @@ public:
        for a continuous teaching process.
      @param teaching: matrix with dimensions (motornumber,1)
    */
-  virtual void setMotorTeaching(const matrix::Matrix& teaching);
+  virtual void setMotorTeaching(const matrix::Matrix& teaching) override;
 
   ////// TEST of HEBBIAN Model for teaching
   /** The given sensor teaching signal (distal learning)
@@ -139,11 +139,11 @@ public:
       and then converted to motor error using the hebbian model
      @param teaching: matrix with dimensions (sensornumber,1)
    */
-  virtual void setSensorTeaching(const matrix::Matrix& teaching);
+  virtual void setSensorTeaching(const matrix::Matrix& teaching) override;
   /// returns the last motor values (useful for cross motor coupling)
-  virtual matrix::Matrix getLastMotorValues();
+  virtual matrix::Matrix getLastMotorValues() override;
   /// returns the last sensor values (useful for cross sensor coupling)
-  virtual matrix::Matrix getLastSensorValues();
+  virtual matrix::Matrix getLastSensorValues() override;
 
 
 protected:
@@ -196,28 +196,28 @@ protected:
   /// puts the sensors in the ringbuffer, generate controller values and put them in the
   //  ringbuffer as well
   virtual void fillBuffersAndControl(const sensor* x_, int number_sensors,
-                             motor* y_, int number_motors);
+                             motor* y_, int number_motors) override;
 
   /// calculates xsi for the current time step using the delayed y values
   //  and x delayed by one
   //  @param delay 0 for no delay and n>0 for n timesteps delay in the time loop
-  virtual void calcXsi(int delay);
+  virtual void calcXsi(int delay) override;
 
   /// learn H,C with motors y and corresponding sensors x
-  virtual void learnController();
+  virtual void learnController() override;
 
   /// learn A, (and S) using motors y and corresponding sensors x
   //  @param delay 0 for no delay and n>0 for n timesteps delay in the time loop
-  virtual void learnModel(int delay);
+  virtual void learnModel(int delay) override;
 
   /// calculates the predicted sensor values
-  virtual matrix::Matrix model(const matrix::Matrix* x_buffer, int delay, const matrix::Matrix& y);
+  virtual matrix::Matrix model(const matrix::Matrix* x_buffer, int delay, const matrix::Matrix& y) override;
 
   /// handles inhibition damping etc.
-  virtual void management();
+  virtual void management() override;
 
   /// returns controller output for given sensor values
-  virtual matrix::Matrix calculateControllerValues(const matrix::Matrix& x_smooth);
+  virtual matrix::Matrix calculateControllerValues(const matrix::Matrix& x_smooth) override;
 
 protected:
   static double regularizedInverse(double v);

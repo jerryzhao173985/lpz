@@ -55,7 +55,7 @@ namespace lpzrobots {
     virtual std::list<sensor> getList() const override;
 
     //Directly return value (needed for backward compatibility
-    virtual double getValue();
+    virtual double getValue() override;
 
     /// returns the exponent of the sensor characteritic (default: 1 (linear))
     virtual double getExponent () const { return exponent;}
@@ -68,7 +68,7 @@ namespace lpzrobots {
         An exponential curve is used.
         @see setExponent()
     */
-    virtual double characteritic(double len);
+    virtual double characteritic(double len) override;
 
     double exponent; // exponent of the sensor characteritic
 

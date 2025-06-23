@@ -107,26 +107,26 @@ namespace lpzrobots {
     /**
      * updates the OSG nodes of the vehicle
      */
-    virtual void update();
+    virtual void update() override;
 
 
     /** sets the pose of the vehicle
         @param pose desired pose matrix
     */
-    virtual void place(const osg::Matrix& pose);
+    virtual void place(const osg::Matrix& pose) override;
 
     /** returns actual sensorvalues
         @param sensors sensors scaled to [-1,1]
         @param sensornumber length of the sensor array
         @return number of actually written sensors
     */
-    virtual int getSensors(sensor* sensors, int sensornumber);
+    virtual int getSensors(sensor* sensors, int sensornumber) override;
 
     /** sets actual motorcommands
         @param motors motors scaled to [-1,1]
         @param motornumber length of the motor array
     */
-    virtual void setMotors(const motor* motors, int motornumber);
+    virtual void setMotors(const motor* motors, int motornumber) override;
 
     /** returns number of sensors
      */
@@ -144,7 +144,7 @@ namespace lpzrobots {
         like space-internal collision detection, sensor resets/update etc.
         @param globalData structure that contains global data from the simulation environment
     */
-    virtual void doInternalStuff(GlobalData& globalData);
+    virtual void doInternalStuff(GlobalData& globalData) override;
 
   protected:
     /** the main object of the robot, which is used for position and speed tracking */
@@ -153,11 +153,11 @@ namespace lpzrobots {
     /** creates vehicle at desired pose
         @param pose 4x4 pose matrix
     */
-    virtual void create(const osg::Matrix& pose);
+    virtual void create(const osg::Matrix& pose) override;
 
     /** destroys vehicle and space
      */
-    virtual void destroy();
+    virtual void destroy() override;
 
     OctopusConf conf;
     double legmass;    // leg mass

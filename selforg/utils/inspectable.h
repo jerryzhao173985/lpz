@@ -92,9 +92,9 @@ public:
     typedef ILayer argument_type;
     typedef bool result_type;
     
-    matchName(std::string name) : name(name) {}
+    matchName(const std::string& name) : name(name) {}
     std::string name;
-    bool operator()(ILayer l) { return l.vectorname == name; }
+    bool operator()(const ILayer& l) { return l.vectorname == name; }
   };
 
   typedef std::list<const Inspectable*> inspectableList;
@@ -104,7 +104,7 @@ public:
   /// TYPEDEFS END
 
 
-  Inspectable(const iparamkey& name = "");
+  explicit Inspectable(const iparamkey& name = "");
 
 
   virtual ~Inspectable();
@@ -260,7 +260,7 @@ protected:
 
 private:
   inspectableList listOfInspectableChildren;
-  bool printParentName;
+  // bool printParentName; // unused member
   Inspectable* parent;
 
 

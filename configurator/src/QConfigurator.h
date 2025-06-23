@@ -144,7 +144,7 @@
 #include <QMainWindow>
 #include <QTextEdit>
 #include <QTimer>
-#include <QStyleOptionProgressBarV2>
+#include <QStyleOptionProgressBar>
 #include <qdom.h>
 #include "QExtAction.h"
 #include <QHash>
@@ -169,7 +169,7 @@ namespace lpzrobots {
 
     protected:
       void closeEvent(QCloseEvent *event);
-      void enterEvent(QEvent *event);
+      void enterEvent(QEnterEvent *event);
 
     public slots:
       void sl_textLog(QString s);

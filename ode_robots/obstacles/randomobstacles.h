@@ -80,15 +80,15 @@ namespace lpzrobots {
                     const RandomObstaclesConf& conf = getDefaultConf());
 
   
-    virtual void setPose(const osg::Matrix& pose);
+    virtual void setPose(const osg::Matrix& pose) override;
 
-    virtual Primitive* getMainPrimitive() const;
+    virtual Primitive* getMainPrimitive() const override;
 
     virtual void create(){};
 
-    virtual void remove(bool all = false);
+    virtual void remove(bool all = false) override;
 
-    virtual void spawn(OType type = ORandom , SType subtype = SRandom);
+    virtual void spawn(OType type = ORandom , SType subtype = SRandom) override;
 
   };
 

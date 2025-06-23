@@ -48,7 +48,7 @@ public:
 
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
 
-  virtual ~RandomDyn();
+  virtual ~RandomDyn() override;
 
   static RandomDynConf getDefaultConf(){
     RandomDynConf conf;
@@ -66,27 +66,27 @@ public:
 
   /// performs one step (includes learning).
   /// Calulates motor commands from sensor inputs.
-  virtual void step(const sensor* , int number_sensors, motor* , int number_motors);
+  virtual void step(const sensor* , int number_sensors, motor* , int number_motors) override;
 
   /// performs one step without learning. Calulates motor commands from sensor inputs.
   virtual void stepNoLearning(const sensor* , int number_sensors,
-			      motor* , int number_motors);
+			      motor* , int number_motors) override;
 
   /// called during babbling phase
   virtual void motorBabblingStep(const sensor* , int number_sensors,
-				 const motor* , int number_motors);
+				 const motor* , int number_motors) override;
 
   /***** STOREABLE ****/
   /** stores the controller values to a given file. */
-  virtual bool store(FILE* f) const;
+  virtual bool store(FILE* f) const override;
   /** loads the controller values from a given file. */
-  virtual bool restore(FILE* f);
+  virtual bool restore(FILE* f) override;
 
   /* some direct access functions (unsafe!) */
-  virtual matrix::Matrix getC();
-  virtual void setC(const matrix::Matrix& C);
-  virtual matrix::Matrix geth();
-  virtual void seth(const matrix::Matrix& h);
+  virtual matrix::Matrix getC() override;
+  virtual void setC(const matrix::Matrix& C) override;
+  virtual matrix::Matrix geth() override;
+  virtual void seth(const matrix::Matrix& h) override;
 
 protected:
   unsigned short number_sensors;
@@ -109,7 +109,7 @@ protected:
   paramval sigmah;
   paramval damping;
 
-  virtual void update();
+  virtual void update() override;
 
   /// neuron transfer function
   static double g(double z)

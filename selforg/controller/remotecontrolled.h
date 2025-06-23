@@ -39,7 +39,7 @@ public:
   {
   }
 
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0){
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr){
     number_sensors = sensornumber;
     number_motors  = motornumber;
     x.set(number_sensors,1);

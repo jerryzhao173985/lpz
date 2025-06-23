@@ -46,7 +46,8 @@ namespace lpzrobots {
   // - give handle for ODE and OSG stuff
   Skeleton::Skeleton(const OdeHandle& odeHandle, const OsgHandle& osgHandle,
            SkeletonConf& c, const std::string& name)
-    : OdeRobot(odeHandle, osgHandle, name, "1.2"), Inspectable(name), conf(c)
+    : OdeRobot(odeHandle, osgHandle, name, "1.2"), Inspectable(name), conf(c),
+      pelvisservo(nullptr), backbendindex(0)
   {
     // robot is not created till now
     created=false;
@@ -1114,22 +1115,26 @@ GUIDE adding new sensors
     const Primitive* o = objects[Head_comp];
     // using the Geom has maybe the advantage to get the position of transform objects
     // (e.g. hand of muscledArm)
-    if (o && o->getGeom())
-      return Position(dGeomGetPosition(o->getGeom()));
-    else if(o->getBody())
-      return Position(dBodyGetPosition(o->getBody()));
-    else return Position(0,0,0);
+    if (o) {
+      if (o->getGeom())
+        return Position(dGeomGetPosition(o->getGeom()));
+      else if(o->getBody())
+        return Position(dBodyGetPosition(o->getBody()));
+    }
+    return Position(0,0,0);
   }
 
   Position Skeleton::getTrunkPosition() {
     const Primitive* o = objects[Trunk_comp];
     // using the Geom has maybe the advantage to get the position of transform objects
     // (e.g. hand of muscledArm)
-    if (o && o->getGeom())
-      return Position(dGeomGetPosition(o->getGeom()));
-    else if(o->getBody())
-      return Position(dBodyGetPosition(o->getBody()));
-    else return Position(0,0,0);
+    if (o) {
+      if (o->getGeom())
+        return Position(dGeomGetPosition(o->getGeom()));
+      else if(o->getBody())
+        return Position(dBodyGetPosition(o->getBody()));
+    }
+    return Position(0,0,0);
   }
 
 

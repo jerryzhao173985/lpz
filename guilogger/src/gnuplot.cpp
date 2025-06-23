@@ -24,13 +24,13 @@ bool Gnuplot::open(const QString& gnuplotcmd, int w,int h, int x, int y){
 #if defined(WIN32) || defined(_WIN32) || defined (__WIN32) || defined(__WIN32__) \
         || defined (_WIN64) || defined(__CYGWIN__) || defined(__MINGW32__) || defined(__APPLE__)
   // Windows and macOS don't support -geometry option
-  sprintf(cmd, "%s", gnuplotcmd.toLatin1().constData());
+  snprintf(cmd, sizeof(cmd), "%s", gnuplotcmd.toLatin1().constData());
 #else
   // Linux with X11 supports -geometry
   if(x==-1 || y==-1)
-    sprintf(cmd, "%s -geometry %ix%i -noraise", gnuplotcmd.toLatin1().constData(), w, h);
+    snprintf(cmd, sizeof(cmd), "%s -geometry %ix%i -noraise", gnuplotcmd.toLatin1().constData(), w, h);
   else
-    sprintf(cmd, "%s -geometry %ix%i+%i+%i -noraise", gnuplotcmd.toLatin1().constData(), w, h, x, y);
+    snprintf(cmd, sizeof(cmd), "%s -geometry %ix%i+%i+%i -noraise", gnuplotcmd.toLatin1().constData(), w, h, x, y);
 #endif
   // fprintf(stderr, "Guilogger: Opening gnuplot with command: %s\n", cmd);
   pipe=popen(cmd,"w");
@@ -50,7 +50,7 @@ bool Gnuplot::open(const QString& gnuplotcmd, int w,int h, int x, int y){
   return true;
   //return popen("gnuplot -geometry 400x300","w");
   /*char b[100];
-  sprintf(b,"gnup%i",rand()%1000);
+  snprintf(b, sizeof(b),"gnup%i",rand()%1000);
   return fopen(b,"w");*/
 }
 

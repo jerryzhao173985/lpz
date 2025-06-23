@@ -1,0 +1,4 @@
+/Users/jerry/lpzrobot_mac/guilogger/src/quickmp.h:338: error: #error This development environment does not support pthreads or windows threads [preprocessorErrorDirective]
+/Users/jerry/lpzrobot_mac/guilogger/src/inifile.cpp:267: warning: Assignment of function parameter has no effect outside the function. Did you forget dereferencing it? [uselessAssignmentPtrArg]
+/Users/jerry/lpzrobot_mac/guilogger/src/inifile.cpp:372: warning: Assignment of function parameter has no effect outside the function. Did you forget dereferencing it? [uselessAssignmentPtrArg]
+/Users/jerry/lpzrobot_mac/guilogger/src/qserialreader.cpp:94: error: Common realloc mistake: 's' nulled but not freed upon failure [memleakOnRealloc]

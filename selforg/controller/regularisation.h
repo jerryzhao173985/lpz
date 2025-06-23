@@ -134,7 +134,7 @@ double inline squash(double z)
  
   /// squashing function with adjustable clipping size, to protect against too large weight updates
 double inline squash(void* d, double z) {
-    double size = *((double*)d);
+    double size = *(static_cast<double*>(d));
     return clip(z, -size, size);
   };
 

@@ -51,19 +51,19 @@ namespace lpzrobots {
 
   protected:
 
-    virtual ~CameraManipulatorFollow();
+    virtual ~CameraManipulatorFollow() override;
 
     /** This handles robot movements, so that the camera movemenent is right affected.
         should be overwritten by new cameramanipulator
     */
-    virtual void calcMovementByAgent();
+    virtual void calcMovementByAgent() override;
 
 
     /** Sets the right view and eye if the robot has changed.
         Is called from manageRobots();
         should be overwritten by new cameramanipulator if needed
     */
-        virtual void setHomeViewByAgent();
+        virtual void setHomeViewByAgent() override;
 
 
 

@@ -2,6 +2,8 @@
 #Author:   Georg Martius  <martius@informatik.uni-leipzig.de>
 #Date:     June 2005
 
+# Ensure ode-dbl-config is in PATH
+export PATH := /Users/jerry/lpzrobot_mac/opende:$(PATH)
 
 SELFORGCFG=`if type selforg-config >/dev/null 2>&1; then echo "selforg-config"; elif [ -x ../selforg/selforg-config ]; then echo "../selforg/selforg-config"; else echo "Cannot find selforg-config" 1>&2; fi`
 
@@ -43,12 +45,15 @@ HFILES   := $(filter-out %flymake.h, $(foreach dir,$(dirs),$(find_h_files)))
 UTILS = install_prefix.conf ode_robots-config
 
 # additional inc paths
-INC +=  -I. -Iinclude -Iinclude/ode_robots -I$(shell $(SELFORGCFG) $(CFGOPTS) --srcprefix)/include
+INC +=  -I. -Iinclude -Iinclude/ode_robots -I../selforg -I../selforg/include
 # INC += -include allincludes.h
 
 # use -pg for profiling
 CPPFLAGS = -Wall -pipe -fpic $(INC) $(shell $(SELFORGCFG) $(CFGOPTS) --cflags) \
- $(shell ./ode_robots-config --srcprefix="." $(CFGOPTS) --intern --cflags)
+	$(shell ./ode_robots-config --srcprefix="." $(CFGOPTS) --intern --cflags)
+# Maximum warning flags added by enable_max_warnings.sh
+EXTRA_WARNINGS = -Wall -Wextra -Wpedantic -Wconversion -Wsign-conversion -Wcast-align -Wformat=2 -Wuninitialized -Wunused-function -Wunused-label -Wunused-variable -Wunused-value -Wunused-parameter -Wfloat-equal -Wundef -Wshadow -Wpointer-arith -Wcast-qual -Wwrite-strings -Wmissing-declarations -Wredundant-decls -Woverloaded-virtual -Wsign-promo -Wformat-security -Wnon-virtual-dtor -Wold-style-cast -Wzero-as-null-pointer-constant -Wno-unused-parameter -Wno-sign-conversion
+CPPFLAGS += $(EXTRA_WARNINGS)
 
 # used for single file compilation
 CXX = g++

@@ -44,12 +44,12 @@ namespace lpzrobots {
                  double maxVel=10.0,
                  double jointLimit = 1.3, bool minmaxCheck = true);
 
-    virtual ~OneAxisServo();
+    virtual ~OneAxisServo() override;
 
     /** sets the set point of the servo.
         Position must be between -1 and 1. It is scaled to fit into min, max
     */
-    virtual void set(double pos);
+    virtual void set(double pos) override;
 
     /** returns the position of the joint in the range [-1, 1] (scaled by min, max)*/
     virtual double get() const {
@@ -209,7 +209,7 @@ namespace lpzrobots {
                     double power, double damp=0.05, double maxVel=20,
                     double jointLimit = 1.3);
 
-    virtual ~OneAxisServoVel();
+    virtual ~OneAxisServoVel() override;
 
     virtual void init(Primitive* own, Joint* joint = 0) override {
       if(joint) { assert(joint==this->joint); } // we cannot attach the servo to a new joint
@@ -284,7 +284,7 @@ namespace lpzrobots {
                    double power, double damp=0.05, double maxVel=20,
                    double jointLimit = 1.3);
 
-    virtual ~SliderServoVel();
+    virtual ~SliderServoVel() override;
 
     /** adjusts the power of the servo*/
     virtual void setPower(double _power) override;

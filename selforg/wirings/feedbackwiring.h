@@ -35,7 +35,7 @@
     In order to change the feedback strength after initialisation
     use the following code
     \code
-    matrix::Matrix rs = wiring->getFeedbackRatio();
+    matrix::Matrix rs = wiring->getFeedbackRatio() override;
     double c=ratio;
     rs.toMapP(&c,constant);
     wiring->setFeedbackRatio(rs);
@@ -52,23 +52,23 @@ public:
       @param feedbackratio default ratio used to feed back the output to the input,
          meaning \f[ x_t = 0.1*x_t + 0.9*y_{t-1} \f]
    */
-  FeedbackWiring(NoiseGenerator* noise, Mode mode = Context,double feedbackratio=0.9, const std::string& name = "FeedBackWiring");
-  virtual ~FeedbackWiring();
+  explicit FeedbackWiring(NoiseGenerator* noise, Mode mode = Context,double feedbackratio=0.9, const std::string& name = "FeedBackWiring");
+  virtual ~FeedbackWiring() override;
 
 protected:
-  virtual bool initIntern();
+  virtual bool initIntern() override;
 
   virtual bool wireSensorsIntern(const sensor* rsensors, int rsensornumber,
                                  sensor* csensors, int csensornumber,
-                                 double noise);
+                                 double noise) override;
 
   virtual bool wireMotorsIntern(motor* rmotors, int rmotornumber,
-                                const motor* cmotors, int cmotornumber);
+                                const motor* cmotors, int cmotornumber) override;
 
 public:
 
-  virtual std::list<iparamkey> getInternalParamNames() const;
-  virtual std::list<iparamval> getInternalParams() const;
+  virtual std::list<iparamkey> getInternalParamNames() const override;
+  virtual std::list<iparamval> getInternalParams() const override;
 
   /// return the feedback ratio vector
   virtual matrix::Matrix getFeedbackRatio() const;

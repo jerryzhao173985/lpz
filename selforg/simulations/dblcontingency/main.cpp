@@ -84,20 +84,20 @@ public:
     if(pos.x<-1) pos.x+=2;
 
 //     //  position sensor
-//     for(int i=0; i<sensornumber; i++){
+//     for(int i=0; i<sensornumber; ++i){
 //       x[i] = pos.toArray()[i];
 //     }
     int len=0;
 
     //  speed sensor
-    for(int i=0; i<1; i++){
+    for(int i=0; i<1; ++i){
       x[len] = speed.toArray()[i];
       len++;
       if(len>=sensornumber) return;
     }
     //  sense other agents (distance)
     for(list<const MyRobot*>::iterator i = otherRobots.begin();
-        i!= otherRobots.end(); i++){
+        i!= otherRobots.end(); ++i){
       Position opos = (*i)->getPosition();
       double dist = fabs(pos.x-opos.x);
       x[len] = dist<1 ? dist : 2-dist; // measure always shortest distance
@@ -164,7 +164,7 @@ void printRobots(list<MyRobot*> robots){
   FOREACH(list<MyRobot*>, robots, i) {
     double x = (*i)->getPosition().x;
     line[int((x+1)/2.0*80.0)]='0'+ k;
-    k++;
+    ++k;
   }
 
   printf("\033[1G%s",line);
@@ -174,7 +174,7 @@ void printRobots(list<MyRobot*> robots){
 
 // Helper
 int contains(char **list, int len,  const char *str){
-  for(int i=0; i<len; i++){
+  for(int i=0; i<len; ++i){
     if(strcmp(list[i],str) == 0) return i+1;
   }
   return 0;
@@ -199,7 +199,7 @@ int main(int argc, char** argv){
 
   list<MyRobot*> robots;
 
-  for(int i=0; i<2; i++){
+  for(int i=0; i<2; ++i){
     AbstractController* controller = new PiMax();
     // controller->setParam("s4delay",1.0);
     // controller->setParam("s4avg",2.0);

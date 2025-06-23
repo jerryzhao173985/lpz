@@ -1,0 +1,25 @@
+LPZRobots Static Analysis Summary
+Generated: Sun Jun 22 17:00:14 BST 2025
+
+Component Analysis Results:
+
+=== selforg ===
+Errors: 50
+Warnings: 25
+
+=== ode_robots ===
+Errors: 55
+Warnings: 486
+
+=== matrixviz ===
+Errors: 1
+Warnings: 6
+
+=== guilogger ===
+Errors: 2
+Warnings: 2
+
+=== configurator ===
+Errors: 0
+0
+Warnings: 5

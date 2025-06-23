@@ -680,7 +680,7 @@ namespace lpzrobots {
   }
   ///////////////
   void Hexapod::resetMotorPower(double power){
-    for(auto& i : hipservos){
+    for (const auto& i : hipservos){
       i->setPower1(power);
       i->setPower2(power);
     }
@@ -688,7 +688,7 @@ namespace lpzrobots {
   /////////
   void Hexapod::notifyOnChange(const paramkey& key){
     // we simply set all parameters here
-    for(auto& i : hipservos){
+    for (const auto& i : hipservos){
       i->setPower1(conf.coxaPower);
       i->setPower2(conf.coxaPower);
       i->setDamping1(conf.coxaDamping);
@@ -697,12 +697,12 @@ namespace lpzrobots {
       i->setMinMax2(-conf.coxaJointLimitH,+conf.coxaJointLimitH);
       i->setMaxVel(conf.coxaSpeed);
     }
-    for(auto& i : tebiaservos){
+    for (const auto& i : tebiaservos){
       i->setPower(conf.tebiaPower);
       i->setDamping(conf.tebiaDamping);
       i->setMinMax(-conf.tebiaJointLimit+conf.tebiaOffset,+conf.tebiaJointLimit+conf.tebiaOffset);
     }
-    for(auto& i : tarsussprings){
+    for (const auto& i : tarsussprings){
       i->setPower(conf.tebiaPower);
       i->setDamping(conf.tebiaDamping);
       i->setMinMax(-conf.tebiaJointLimit,+conf.tebiaJointLimit);

@@ -57,8 +57,8 @@ namespace lpzrobots {
 
   public:
     RobotCameraManager(int windowWidth, int windowHeight);
-    virtual void addCamera(Camera* cam);
-    virtual void removeCamera(Camera* cam);
+    virtual void addCamera(Camera* cam) override;
+    virtual void removeCamera(Camera* cam) override;
 
     virtual osg::Group* getDisplay() { return display; }
     virtual osg::Group* getOffScreen()  { return offscreen; }
@@ -66,12 +66,12 @@ namespace lpzrobots {
     /* ** GUIEventHandler interface **/
     virtual bool handle (const osgGA::GUIEventAdapter& ea,
                          osgGA::GUIActionAdapter& aa,
-                         osg::Object* o, osg::NodeVisitor* nv);
-    virtual void getUsage (osg::ApplicationUsage &) const;
+                         osg::Object* o, osg::NodeVisitor* nv) override;
+    virtual void getUsage (osg::ApplicationUsage &) const override;
 
   protected:
 
-    virtual void updateView();
+    virtual void updateView() override;
 
     osg::ref_ptr<osg::Group> display;
     osg::ref_ptr<osg::Group> offscreen;

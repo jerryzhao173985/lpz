@@ -38,8 +38,8 @@ class Inspectable;
 class PlotOptionEngine
 {
 public:
-  PlotOptionEngine(const PlotOption& plotOption);
-  PlotOptionEngine(const std::list<PlotOption>& plotOptions);
+  explicit PlotOptionEngine(const PlotOption& plotOption);
+  explicit PlotOptionEngine(const std::list<PlotOption>& plotOptions);
 
   virtual ~PlotOptionEngine();
 

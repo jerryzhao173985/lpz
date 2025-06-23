@@ -31,7 +31,7 @@ InspectableProxy::InspectableProxy(const iparamkey& name) : Inspectable(name) {
 
 InspectableProxy::InspectableProxy(const std::list<Inspectable*>& list, const iparamkey& name) : Inspectable(name) {
         //add all parameters of the inspectable in the own list.
-        for(std::list<Inspectable*>::const_iterator iter = list.begin(); iter!=list.end(); iter++) {
+        for(std::list<Inspectable*>::const_iterator iter = list.begin(); iter!=list.end(); ++iter) {
                 //m_list.push_back(*iter);
                 std::list<std::string> names = (*iter)->getInternalParamNames();
                 std::list<double const*> values = (*iter)->getInternalParamsPtr();
@@ -41,8 +41,8 @@ InspectableProxy::InspectableProxy(const std::list<Inspectable*>& list, const ip
 
                 for(unsigned int i = 0; i < num; i++) {
                         addInspectableValue(*namesIter,*valuesIter);
-                        namesIter++;
-                        valuesIter++;
+                        ++namesIter;
+                        ++valuesIter;
                 }
         }
 }
@@ -78,7 +78,7 @@ bool InspectableProxy::replaceList(const std::list<Inspectable*>& list) {
         mapOfMatrices.clear();
 
         //add the new parameters
-        for(std::list<Inspectable*>::const_iterator iter = list.begin(); iter!=list.end(); iter++) {
+        for(std::list<Inspectable*>::const_iterator iter = list.begin(); iter!=list.end(); ++iter) {
                 m_list.push_back(*iter);
                 std::list<std::string> names = (*iter)->getInternalParamNames();
                 std::list<double*> values = (*iter)->getInternalParamsPtr();
@@ -88,8 +88,8 @@ bool InspectableProxy::replaceList(const std::list<Inspectable*>& list) {
 
                 for(unsigned int i = 0; i < num; i++) {
                         addInspectableValue(*namesIter,*valuesIter);
-                        namesIter++;
-                        valuesIter++;
+                        ++namesIter;
+                        ++valuesIter;
                 }
         }*/
 
@@ -105,7 +105,7 @@ bool InspectableProxy::replaceList(const std::list<Inspectable*>& list) {
                                         break;
                                 }
                         }
-                        l++;
+                        ++l;
                 }
         }
 

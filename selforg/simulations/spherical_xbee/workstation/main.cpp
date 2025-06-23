@@ -177,7 +177,7 @@ public:
 
 
 
-  virtual void Initialise(){
+  virtual void Initialise() override{
     currentXbee=0;
     sensornumber_new=0;
     motornumber_new=0;
@@ -225,7 +225,7 @@ public:
     return agent;
   }
 
-  virtual void writeMotors_readSensors() {
+  virtual void writeMotors_readSensors()  override{
     int i, len, offset, n;
 
     for(currentXbee=0; currentXbee < xbees.size(); currentXbee++) {
@@ -319,7 +319,7 @@ public:
     realtimeoffset = timeOfDayinMS();
   }
 
-  virtual void loopCallback(){
+  virtual void loopCallback() override{
     /************************** Time Syncronisation ***********************/
     // Time syncronisation of real time and simulations time (not if on capture mode, or pause)
     if(!pause){

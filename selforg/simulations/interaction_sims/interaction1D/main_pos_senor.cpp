@@ -61,7 +61,7 @@ public:
 class MyRobot : public AbstractRobot {
 public:
   MyRobot(const string& name, const Position& initial_pos, double _mass = 1.0)
-    : AbstractRobot(name, "$Id$") {
+    : AbstractRobot(name, "$Id$"), whatDoIFeel(0) {
     motornumber  = 1;
     sensornumber = 3;
     x = new double[sensornumber];

@@ -81,7 +81,7 @@
 #include <QDialogButtonBox>
 #include <QRegion>
 #include <QMessageBox>
-#include <QLinkedList>
+// #include <QLinkedList> // Not used, removed for Qt6 compatibility
 #include <QFileDialog>
 #include <QCoreApplication>
 #include <QTextStream>

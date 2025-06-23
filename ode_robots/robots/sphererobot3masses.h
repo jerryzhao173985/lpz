@@ -105,7 +105,7 @@ protected:
   /// initialises some internal variables
   void init();
 public:
-  virtual ~Sphererobot3Masses();
+  virtual ~Sphererobot3Masses() override;
 
 
   /// default configuration
@@ -113,6 +113,7 @@ public:
     Sphererobot3MassesConf c;
     c.diameter     = 1;
     c.spheremass   = .3;// 0.1
+    c.pendulardiameter = 0.2;
     c.pendularmass  = 1.0;
     c.pendularrange  = 0.20; // range of the slider from center in multiple of diameter [-range,range]
     c.motorpowerfactor  = 100;
@@ -133,30 +134,30 @@ public:
    return c;
   }
 
-  virtual void update();
+  virtual void update() override;
 
-  virtual void placeIntern(const osg::Matrix& pose);
+  virtual void placeIntern(const osg::Matrix& pose) override;
 
-  virtual void doInternalStuff(GlobalData& globalData);
+  virtual void doInternalStuff(GlobalData& globalData) override;
 
   virtual void sense(GlobalData& globalData) override;
 
-  virtual int getSensorsIntern( sensor* sensors, int sensornumber );
+  virtual int getSensorsIntern( sensor* sensors, int sensornumber ) override;
 
-  virtual void setMotorsIntern( const double* motors, int motornumber );
+  virtual void setMotorsIntern( const double* motors, int motornumber ) override;
 
-  virtual int getMotorNumberIntern();
+  virtual int getMotorNumberIntern() override;
 
-  virtual int getSensorNumberIntern();
+  virtual int getSensorNumberIntern() override;
 
   /******** CONFIGURABLE ***********/
-  virtual void notifyOnChange(const paramkey& key);
+  virtual void notifyOnChange(const paramkey& key) override;
 
 
 protected:
 
-  virtual void create(const osg::Matrix& pose);
-  virtual void destroy();
+  virtual void create(const osg::Matrix& pose) override;
+  virtual void destroy() override;
 
 
 };

@@ -57,16 +57,22 @@ bool neighborcmp(const Neighbor& n1, const Neighbor& n2){
 class MyRobot : public AbstractRobot {
 public:
   MyRobot(const string& name, const Position& initial_pos, AbstractController* controller, double _mass = 1.0)
-    : AbstractRobot(name, "$Id$") {
-    this->controller=dynamic_cast<InvertMotorNStep*>(controller);
-
-    motornumber  = 2;
-    sensornumber = 2;
-    x = new double[sensornumber];
-    y = new double[motornumber];
-    pos = initial_pos;
-    speed = Position(0,0,0);
-    t = 0.01;
+    : AbstractRobot(name, "$Id$"), 
+      whatDoISee(0),
+      motornumber(2),
+      sensornumber(2),
+      x(new double[sensornumber]),
+      y(new double[motornumber]),
+      controller(dynamic_cast<InvertMotorNStep*>(controller)),
+      t(0.01),
+      mu(0),
+      mass(0),
+      range(0),
+      num_vision(0),
+      pos(initial_pos),
+      speed(0,0,0) {
+    memset(x, 0, sizeof(double) * sensornumber);
+    memset(y, 0, sizeof(double) * motornumber);
     addParameterDef("mass", &mass, _mass);
     addParameterDef("mu", &mu, 1.5);
     addParameterDef("range", &range, 0.15);

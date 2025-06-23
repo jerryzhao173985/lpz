@@ -41,7 +41,7 @@
  */
 inline std::string doubleToString(double value) {
   char buffer[128];
-  sprintf(buffer,"% .12lf",value);
+  snprintf(buffer, sizeof(buffer),"% .12lf",value);
   return buffer;
 }
 

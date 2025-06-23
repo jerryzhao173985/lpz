@@ -47,7 +47,7 @@ namespace lpzrobots {
      */
     CameraSensor();
 
-    virtual ~CameraSensor();
+    virtual ~CameraSensor() override;
 
     /** sets the initial data structures like the camera.
         The camera will be initialized in init() (don't initialize it before).
@@ -55,37 +55,37 @@ namespace lpzrobots {
         the primitive that is given at init()
      */
     virtual void setInitData(Camera* camera, const OdeHandle& odeHandle,
-                             const OsgHandle& osgHandle, const osg::Matrix& pose);
+                             const OsgHandle& osgHandle, const osg::Matrix& pose) override;
 
     /// changes the relative pose of the camera
-    virtual void setPose(const osg::Matrix& pose);
+    virtual void setPose(const osg::Matrix& pose) override;
 
     /// relative pose of the camera
-    virtual osg::Matrix getPose();
+    virtual osg::Matrix getPose() override;
 
     /// this function initialized the camera (no need to overload) (Sensor interface)
-    virtual void init(Primitive* own, Joint* joint = 0);
+    virtual void init(Primitive* own, Joint* joint = 0) override;
 
     /// overload this function an process the image (use camera->getImage())
-    virtual bool sense(const GlobalData& globaldata) = 0;
+    virtual bool sense(const GlobalData& globaldata)  override = 0;
 
     /// overload this function and return the number of sensor values
-    virtual int getSensorNumber() const = 0;
+    virtual int getSensorNumber() const  override = 0;
 
     /// overload this function and return the sensor values
-    virtual int get(sensor* sensors, int length) const = 0;
+    virtual int get(sensor* sensors, int length) const  override = 0;
 
     /// we update the camera's visual appearance
-    virtual void update();
+    virtual void update() override;
 
     /// this is implemented based on get(sensor*,int)
-    virtual std::list<sensor> getList() const;
+    virtual std::list<sensor> getList() const override;
 
   protected:
     /** overload this function to initialized you data structures.
         Use camera->getImage() to get the image from the camera
     */
-    virtual void intern_init() = 0;
+    virtual void intern_init()  override = 0;
 
 
     Camera* camera;

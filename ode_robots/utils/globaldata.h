@@ -56,9 +56,7 @@ namespace lpzrobots {
    */
   class GlobalData : public GlobalDataBase {
     public:
-      GlobalData() {
-        sim_step = 0;
-        environment = 0;
+      GlobalData() : environment(0), time(0), sim_step(0) {
       }
 
       virtual ~GlobalData() {}
@@ -78,26 +76,26 @@ namespace lpzrobots {
       long int sim_step; ///< time steps since start
 
       /// returns the list of all agents
-      virtual AgentList& getAgents();
+      virtual AgentList& getAgents() override;
 
 
       /// adds a temporary display item with given life duration in sec
-      virtual void addTmpObject(TmpObject* i, double duration);
+      virtual void addTmpObject(TmpObject* i, double duration) override;
 
       /// called by Simulation to initialize tmp objects
       virtual void initializeTmpObjects(const OdeHandle& odeHandle,
-                                        const OsgHandle& osgHandle);
+                                        const OsgHandle& osgHandle) override;
       /// called by Simulation to update tmp objects
-      virtual void updateTmpObjects(const OsgHandle& osgHandle);
+      virtual void updateTmpObjects(const OsgHandle& osgHandle) override;
 
       /** called by Simulation to removes all expired sounds and temporary objects.
           Optionally a time can be specified otherwise the internal time is used.
       */
-      virtual void removeExpiredObjects(double time = -1);
+      virtual void removeExpiredObjects(double time = -1) override;
 
       /** removes a particular temporary display item even if it is not yet expired
           @return true if it was deleted (found) */
-      virtual bool removeTmpObject(TmpObject* i);
+      virtual bool removeTmpObject(TmpObject* i) override;
 
 
     private:

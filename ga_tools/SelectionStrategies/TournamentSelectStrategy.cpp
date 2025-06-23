@@ -100,7 +100,7 @@ void TournamentSelectStrategy::select(Generation* oldGeneration, Generation* new
         }
 
         /*char buffer[1024];
-        sprintf(buffer,"fff_%i.txt",newGeneration->getGenerationNumber());
+        snprintf(buffer, sizeof(buffer), "fff_%i.txt", newGeneration->getGenerationNumber());
         FILE* fff = fopen(buffer,"w");*/
         for(iter=storage.begin();iter!=storage.end();iter++) {                        //transfer the living individual in the new generation
                 newGeneration->addIndividual(*iter);

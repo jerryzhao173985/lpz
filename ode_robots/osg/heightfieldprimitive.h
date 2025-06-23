@@ -37,15 +37,15 @@ namespace lpzrobots {
     HeightField(const std::string& filename, float x_size, float y_size, float height);
     HeightField(osg::HeightField* heightfield, float x_size, float y_size);
 
-    virtual ~HeightField();
+    virtual ~HeightField() override;
     virtual void init(const OdeHandle& odeHandle, double mass,
                       const OsgHandle& osgHandle,
-                      char mode = Body | Geom | Draw) ;
+                      char mode = Body | Geom | Draw)  override;
 
 
-    virtual void setPose(const osg::Matrix& pose);
+    virtual void setPose(const osg::Matrix& pose) override;
 
-    virtual void update();
+    virtual void update() override;
     virtual OSGPrimitive* getOSGPrimitive() { return osgheightfield; }
 
     virtual void setMass(double mass, bool density = false) {}

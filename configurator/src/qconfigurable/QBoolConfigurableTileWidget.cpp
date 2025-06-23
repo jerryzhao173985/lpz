@@ -131,7 +131,7 @@ namespace lpzrobots {
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(sl_execContextMenu(const QPoint &)));
     connect(&cbBool, SIGNAL(stateChanged(int)), this, SLOT(sl_checkStateChanged(int)));
 
-    setBackgroundRole(QPalette::Background);
+    setBackgroundRole(QPalette::Window);
     setAutoFillBackground(true);
   }
   

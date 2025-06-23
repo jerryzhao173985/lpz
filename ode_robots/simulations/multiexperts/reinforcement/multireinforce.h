@@ -85,7 +85,7 @@ public:
   MultiReinforce(const MultiReinforceConf& conf = getDefaultConf());
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
 
-  virtual ~MultiReinforce();
+  virtual ~MultiReinforce() override;
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
   virtual int getSensorNumber() const { return number_sensors; }
@@ -94,11 +94,11 @@ public:
 
   /// performs one step (includes learning).
   /// Calulates motor commands from sensor inputs.
-  virtual void step(const sensor* , int number_sensors, motor* , int number_motors);
+  virtual void step(const sensor* , int number_sensors, motor* , int number_motors) override;
 
   /// performs one step without learning. Calulates motor commands from sensor inputs.
   virtual void stepNoLearning(const sensor* , int number_sensors,
-                              motor* , int number_motors);
+                              motor* , int number_motors) override;
 
   // !!!!!!!!!!!!!!!!!!! MISC STUFF !!!!!!!!
 
@@ -117,22 +117,22 @@ public:
 
 
   /************** CONFIGURABLE ********************************/
-  virtual paramval getParam(const paramkey& key, bool traverseChildren=true) const;
-  virtual bool setParam(const paramkey& key, paramval val, bool traverseChildren=true);
-  virtual paramlist getParamList() const;
+  virtual paramval getParam(const paramkey& key, bool traverseChildren=true) const override;
+  virtual bool setParam(const paramkey& key, paramval val, bool traverseChildren=true) override;
+  virtual paramlist getParamList() const override;
 
 
   /**** STOREABLE ****/
   /** stores the controller values to a given file. */
-  virtual bool store(FILE* f) const;
+  virtual bool store(FILE* f) const override;
   /** loads the controller values from a given file. */
-  virtual bool restore(FILE* f);
+  virtual bool restore(FILE* f) override;
 
   /**** INSPECTABLE ****/
-  virtual std::list<iparamkey> getInternalParamNames() const;
-  virtual std::list<iparamval> getInternalParams() const;
-  virtual std::list<ILayer> getStructuralLayers() const;
-  virtual std::list<IConnection> getStructuralConnections() const;
+  virtual std::list<iparamkey> getInternalParamNames() const override;
+  virtual std::list<iparamval> getInternalParams() const override;
+  virtual std::list<ILayer> getStructuralLayers() const override;
+  virtual std::list<IConnection> getStructuralConnections() const override;
 
   static MultiReinforceConf getDefaultConf(){
     MultiReinforceConf c;
@@ -186,26 +186,26 @@ protected:
   int managementInterval;       ///< interval between subsequent management calls
 
   /// returns number of state, to be overwritten
-  virtual int getStateNumber() = 0;
+  virtual int getStateNumber()  override = 0;
 
   /// returns state, to be overwritten
-  virtual int calcState() = 0;
+  virtual int calcState()  override = 0;
 
   /// returns the reinforcement (reward), to be overwritten
-  virtual double calcReinforcement() = 0;
+  virtual double calcReinforcement()  override = 0;
 
 
   // put new value in ring buffer
   void putInBuffer(matrix::Matrix* buffer, const matrix::Matrix& vec, int delay = 0);
 
   /// puts the sensors in the ringbuffer
-  virtual void fillSensorBuffer(const sensor* x_, int number_sensors);
+  virtual void fillSensorBuffer(const sensor* x_, int number_sensors) override;
   /// puts the motors in the ringbuffer
-  virtual void fillMotorBuffer(const motor* y_, int number_motors);
+  virtual void fillMotorBuffer(const motor* y_, int number_motors) override;
 
 
   /// handles inhibition damping etc.
-  virtual void management();
+  virtual void management() override;
 
   /** Calculates first and second derivative and returns both in on matrix (above).
       We use simple discrete approximations:

@@ -294,6 +294,10 @@ namespace qmp_internal
                 inline ParallelTaskManager();
 
                 inline ~ParallelTaskManager();
+                
+                // Disable copy constructor and assignment operator
+                ParallelTaskManager(const ParallelTaskManager&) = delete;
+                ParallelTaskManager& operator=(const ParallelTaskManager&) = delete;
 
                 /// Deallocates everything, closes threads, and returns the system
                 /// back to its uninitialized state.
@@ -357,15 +361,11 @@ namespace qmp_internal
         struct PlatformThreadObjects
         {
                 PlatformThreadObjects()
+                : barrierEventToggle(false), barrierEvent1(NULL), barrierEvent2(NULL),
+                  threadHandles(NULL), threadIDs(NULL), threads(NULL)
                 {
 #ifdef QMP_USE_WINDOWS_THREADS
-                        barrierEventToggle = false;
-                        barrierEvent1 = NULL;
-                        barrierEvent2 = NULL;
-                        threadHandles = NULL;
-                        threadIDs = NULL;
 #else
-                        threads = NULL;
 #endif
                 }
 

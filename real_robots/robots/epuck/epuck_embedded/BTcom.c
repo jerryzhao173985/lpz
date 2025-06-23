@@ -431,7 +431,7 @@ int main(void) {
 							
 								buffer[i++] = sensext_value[1]&0xff;
 								buffer[i++] = sensext_value[1]>>8;
-//								sprintf(buffer,"w,%u,%u\r\n", sensext_value[0],  sensext_value[1]);
+//								snprintf(buffer, sizeof(buffer),"w,%u,%u\r\n", sensext_value[0],  sensext_value[1]);
 								break;
 							case -2:	// i2c cmps03
 								buffer[i++] = sensext_value[0]&0xff;
@@ -439,12 +439,12 @@ int main(void) {
 							
 								buffer[i++] = sensext_value[1]&0xff;
 								buffer[i++] = sensext_value[1]>>8;
-//								sprintf(buffer,"w,%d,%d\r\n",  sensext_value[0],  sensext_value[1]);	
+//								snprintf(buffer, sizeof(buffer),"w,%d,%d\r\n",  sensext_value[0],  sensext_value[1]);	
 								break;
 							default: //analog (sharp,...)
 								buffer[i++] = (sensext_value[0]&0xff);
 								buffer[i++] = (sensext_value[0]>>8);
-//							sprintf(buffer,"w,%d\r\n",  sensext_value[0]);
+//							snprintf(buffer, sizeof(buffer),"w,%d\r\n",  sensext_value[0]);
 								break;
 						}
 //						uart_send_text(buffer);
@@ -508,10 +508,10 @@ int main(void) {
 				accx=e_get_acc(0);
 				accy=e_get_acc(1);
 				accz=e_get_acc(2);
-				sprintf(buffer,"a,%d,%d,%d\r\n",accx,accy,accz);				
+				snprintf(buffer, sizeof(buffer),"a,%d,%d,%d\r\n",accx,accy,accz);				
 				uart_send_text(buffer);
 			/*	accelero=e_read_acc_spheric();
-				sprintf(buffer,"a,%f,%f,%f\r\n",accelero.acceleration,accelero.orientation,accelero.inclination);				
+				snprintf(buffer, sizeof(buffer),"a,%f,%f,%f\r\n",accelero.acceleration,accelero.orientation,accelero.inclination);				
 				uart_send_text(buffer);*/
 				break;
 			case 'B': // set body led
@@ -521,7 +521,7 @@ int main(void) {
 				break;
 			case 'C': // read selector position
 				selector = SELECTOR0 + 2*SELECTOR1 + 4*SELECTOR2 + 8*SELECTOR3;
-				sprintf(buffer,"c,%d\r\n",selector);
+				snprintf(buffer, sizeof(buffer),"c,%d\r\n",selector);
 				uart_send_text(buffer);
 				break;
 			case 'D': // set motor speed
@@ -531,7 +531,7 @@ int main(void) {
 				uart_send_static_text("d\r\n");
 				break;
 			case 'E': // read motor speed
-				sprintf(buffer,"e,%d,%d\r\n",speedl,speedr);
+				snprintf(buffer, sizeof(buffer),"e,%d,%d\r\n",speedl,speedr);
 				uart_send_text(buffer);
 				break; 
 			case 'F': // set front led
@@ -541,7 +541,7 @@ int main(void) {
 				break;
 #ifdef IR_RECIEVER				
 			case 'G':
-                  sprintf(buffer,"g IR check : 0x%x, address : 0x%x, data : 0x%x\r\n", e_get_check(), e_get_address(), e_get_data());
+                  snprintf(buffer, sizeof(buffer),"g IR check : 0x%x, address : 0x%x, data : 0x%x\r\n", e_get_check(), e_get_address(), e_get_data());
                   uart_send_text(buffer);
                   break;
 #endif
@@ -582,7 +582,7 @@ int main(void) {
 				
 				break;
 			case 'I':  
-				sprintf(buffer,"i,%d,%d,%d,%d,%d\r\n",cam_mode,cam_width,cam_heigth,cam_zoom,cam_size);
+				snprintf(buffer, sizeof(buffer),"i,%d,%d,%d,%d,%d\r\n",cam_mode,cam_width,cam_heigth,cam_zoom,cam_size);
 				uart_send_text(buffer);
 				break;
 			case 'J'://set camera parameter see also cam library
@@ -612,7 +612,7 @@ int main(void) {
 				e_i2cp_enable();
 				for (i=0; i<6; i++)	buffer[i] = e_i2cp_read(0xC0,i);
 				e_i2cp_disable();
-				sprintf(buffer,"m,%d,%d,%d\r\n",
+				snprintf(buffer, sizeof(buffer),"m,%d,%d,%d\r\n",
 				(unsigned int)buffer[1] | ((unsigned int)buffer[0] << 8),
 				(unsigned int)buffer[3] | ((unsigned int)buffer[2] << 8),
 				(unsigned int)buffer[5] | ((unsigned int)buffer[4] << 8));
@@ -622,13 +622,13 @@ int main(void) {
 #endif
 				break;
 			case 'N': // read proximity sensors
-				sprintf(buffer,"n,%d,%d,%d,%d,%d,%d,%d,%d\r\n",
+				snprintf(buffer, sizeof(buffer),"n,%d,%d,%d,%d,%d,%d,%d,%d\r\n",
 				        e_get_calibrated_prox(0),e_get_calibrated_prox(1),e_get_calibrated_prox(2),e_get_calibrated_prox(3),
 				        e_get_calibrated_prox(4),e_get_calibrated_prox(5),e_get_calibrated_prox(6),e_get_calibrated_prox(7));
 				uart_send_text(buffer);
 				break;
 			case 'O': // read ambient light sensors
-				sprintf(buffer,"o,%d,%d,%d,%d,%d,%d,%d,%d\r\n",
+				snprintf(buffer, sizeof(buffer),"o,%d,%d,%d,%d,%d,%d,%d,%d\r\n",
 				        e_get_ambient_light(0),e_get_ambient_light(1),e_get_ambient_light(2),e_get_ambient_light(3),
 				        e_get_ambient_light(4),e_get_ambient_light(5),e_get_ambient_light(6),e_get_ambient_light(7));
 				uart_send_text(buffer);
@@ -640,7 +640,7 @@ int main(void) {
 				uart_send_static_text("p\r\n");
 				break;
 			case 'Q': // read motor position
-				sprintf(buffer,"q,%d,%d\r\n",e_get_steps_left(),e_get_steps_right());
+				snprintf(buffer, sizeof(buffer),"q,%d,%d\r\n",e_get_steps_left(),e_get_steps_right());
 				uart_send_text(buffer);
 				break;
 			case 'R': // reset
@@ -675,7 +675,7 @@ int main(void) {
 				uart_send_static_text("t\r\n");
 				break;
 			case 'U':
-				sprintf(buffer,"u,%d,%d,%d\r\n",e_get_micro_volume(0),e_get_micro_volume(1),e_get_micro_volume(2));
+				snprintf(buffer, sizeof(buffer),"u,%d,%d,%d\r\n",e_get_micro_volume(0),e_get_micro_volume(1),e_get_micro_volume(2));
 				uart_send_text(buffer);
 				break;
 			case 'V': // get version information
@@ -691,13 +691,13 @@ int main(void) {
 						switch (sensext_param[0])
 						{
 							case -1:	//i2c SRFxxx
-								sprintf(buffer,"w,%u,%u\r\n", sensext_value[0],  sensext_value[1]);
+								snprintf(buffer, sizeof(buffer),"w,%u,%u\r\n", sensext_value[0],  sensext_value[1]);
 									break;
 							case -2:	// i2c cmps03
-								sprintf(buffer,"w,%d,%d\r\n",  sensext_value[0],  sensext_value[1]);	
+								snprintf(buffer, sizeof(buffer),"w,%d,%d\r\n",  sensext_value[0],  sensext_value[1]);	
 									break;
 							default: //analog (sharp,...)
-							sprintf(buffer,"w,%d\r\n",  sensext_value[0]);
+							snprintf(buffer, sizeof(buffer),"w,%d\r\n",  sensext_value[0]);
 
 						}
 						uart_send_text(buffer);

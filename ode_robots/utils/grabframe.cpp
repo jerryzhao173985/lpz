@@ -68,7 +68,7 @@ namespace lpzrobots {
 
     //    image->readPixels( 0, 0, w, h, GL_RGB, GL_UNSIGNED_BYTE);
     image->readPixels( 0, 0, (int)vp->width(), (int)vp->height(), GL_RGB, GL_UNSIGNED_BYTE);
-    sprintf(name,"%s/%s_%06ld.jpg", directory.c_str(),filename.c_str(), counter);
+    snprintf(name, sizeof(name),"%s/%s_%06ld.jpg", directory.c_str(),filename.c_str(), counter);
     if(!osgDB::writeImageFile( *(image.get()), name )){
       fprintf(stderr, "VideoStream: Cannot write to file %s\n", name);
       return false;
@@ -101,7 +101,7 @@ namespace lpzrobots {
 // >
 // >
 // > char filename[128];
-// > sprintf( filename, "ScreenCapture/%04d.bmp", _screenCaptureSequence);
+// > snprintf(filename, sizeof(filename), "ScreenCapture/%04d.bmp", _screenCaptureSequence);
 // > osgDB::writeImageFile( *(image.get()), filename );
 // > _screenCaptureSequence++;
 

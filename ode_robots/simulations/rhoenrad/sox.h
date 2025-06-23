@@ -65,9 +65,9 @@ public:
     return c;
   }
 
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
 
-  virtual ~SoX();
+  virtual ~SoX() override;
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
   virtual int getSensorNumber() const { return number_sensors; }
@@ -76,25 +76,25 @@ public:
 
   /// performs one step (includes learning).
   /// Calulates motor commands from sensor inputs.
-  virtual void step(const sensor* , int number_sensors, motor* , int number_motors);
+  virtual void step(const sensor* , int number_sensors, motor* , int number_motors) override;
 
   /// performs one step without learning. Calulates motor commands from sensor inputs.
   virtual void stepNoLearning(const sensor* , int number_sensors,
-                              motor* , int number_motors);
+                              motor* , int number_motors) override;
 
   // motor babbling: learn the basic relations from observed sensors/motors
   virtual void motorBabblingStep(const sensor* , int number_sensors,
-                                 const motor* , int number_motors);
+                                 const motor* , int number_motors) override;
 
 
   /***** STOREABLE ****/
   /** stores the controller values to a given file. */
-  virtual bool store(FILE* f) const;
+  virtual bool store(FILE* f) const override;
   /** loads the controller values from a given file. */
-  virtual bool restore(FILE* f);
+  virtual bool restore(FILE* f) override;
 
   /// returns controller network (to be added to inspectables of agent)
-  virtual ControllerNet* getCNet();
+  virtual ControllerNet* getCNet() override;
 
 protected:
   /// performs control step (activates network and stores results in buffer and y_)
@@ -103,11 +103,11 @@ protected:
   /** learn values model and controller network
       using the current sensors x, the commands y (from last step (or earlier in case of delay))
    */
-  virtual void learn(const matrix::Matrix& x, const matrix::Matrix& y);
+  virtual void learn(const matrix::Matrix& x, const matrix::Matrix& y) override;
 
   /* learns the model using backprop. It uses the current activation,
      the current x and x_tm1 from the buffer */
-  virtual void learnModelBP(double factor);
+  virtual void learnModelBP(double factor) override;
 
 protected:
   unsigned short number_sensors;

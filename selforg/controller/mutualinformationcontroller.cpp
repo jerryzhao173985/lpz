@@ -33,14 +33,23 @@ using namespace std;
 MutualInformationController::MutualInformationController(int sensorIntervalCount, double minSensorValue,
     double maxSensorValue, bool showF, bool showP, bool showXsiF) :
   AbstractController("MutualInformation",
-      "$Id$") {
-  this->sensorIntervalCount = sensorIntervalCount;
-  this->minSensorValue = minSensorValue;
-  this->maxSensorValue = maxSensorValue;
-  this->showF = showF;
-  this->showP = showP;
-  this->showXsiF = showXsiF;
-  t = 0;
+      "$Id$"),
+  sensorNumber(0),
+  motorNumber(0),
+  oldSensorStates(nullptr),
+  MI(0),
+  H_x(0),
+  H_yx(0),
+  H_Xsi(0),
+  ainit(0.1),
+  cinit(0.1),
+  sensorIntervalCount(sensorIntervalCount),
+  minSensorValue(minSensorValue),
+  maxSensorValue(maxSensorValue),
+  showF(showF),
+  showP(showP),
+  showXsiF(showXsiF),
+  t(0) {
   //  if (sensorIntervalCount <= 10) {
   //    this->showF = 1;
   //    this->showP = 1;
@@ -98,13 +107,13 @@ void MutualInformationController::internalInit(int sensornumber, int motornumber
     this->probMatrixList.push_back(P);
   }
   // allocate memory for oldSensors
-  this->oldSensorStates = (double*) malloc(sizeof(double) * sensorNumber);
+  this->oldSensorStates = static_cast<double*>(malloc(sizeof(double) * sensorNumber));
   // allocate memory for MI
-  this->MI = (double*) malloc(sizeof(double) * sensorNumber);
+  this->MI = static_cast<double*>(malloc(sizeof(double) * sensorNumber));
   // allocate memory for H_x
-  this->H_x = (double*) malloc(sizeof(double) * sensorNumber);
+  this->H_x = static_cast<double*>(malloc(sizeof(double) * sensorNumber));
   // allocate memory for H_yx
-  this->H_yx = (double*) malloc(sizeof(double) * sensorNumber);
+  this->H_yx = static_cast<double*>(malloc(sizeof(double) * sensorNumber));
 
   // init them with sensorIntervalCount/2
   // init I and H with 0
@@ -124,7 +133,7 @@ void MutualInformationController::internalInit(int sensornumber, int motornumber
       this->xsiFreqMatrixList.push_back(new matrix::Matrix(sensorIntervalCount + 1, 1));
     }
     // allocate memory for Xsi_x
-    this->H_Xsi = (double*) malloc(sizeof(double) * sensorNumber);
+    this->H_Xsi = static_cast<double*>(malloc(sizeof(double) * sensorNumber));
 
     // init Xsi with 0
     for (int i = 0; i < sensorNumber; i++)
@@ -159,7 +168,7 @@ void MutualInformationController::step(const sensor* sensors, int sensornumber, 
   int i = 0;
 
   list<matrix::Matrix*>::iterator pIt = probMatrixList.begin();
-  for (list<matrix::Matrix*>::iterator freqMatrix = freqMatrixList.begin(); freqMatrix != freqMatrixList.end(); freqMatrix++) {
+  for (list<matrix::Matrix*>::iterator freqMatrix = freqMatrixList.begin(); freqMatrix != freqMatrixList.end(); ++freqMatrix) {
     int state = getState(sensors[i]);
     int oldState = getState(oldSensorStates[i]);
 
@@ -176,12 +185,12 @@ void MutualInformationController::step(const sensor* sensors, int sensornumber, 
     // set probabilities
     for (int row = 0; row <= sensorIntervalCount; row++) {
       for (int col = 0; col <= sensorIntervalCount; col++) {
-        (*pIt)->val(row, col) = (*freqMatrix)->val(row, col) / (double) t;
+        (*pIt)->val(row, col) = (*freqMatrix)->val(row, col) / static_cast<double>(t);
       }
     }
 
     oldSensorStates[i] = sensors[i]; // update old sensor state
-    pIt++;
+    ++pIt;
     i++;
   }
 
@@ -195,7 +204,7 @@ void MutualInformationController::step(const sensor* sensors, int sensornumber, 
   }
   i = 0;
   // store the old sensor state before leaving this method
-  for (list<matrix::Matrix*>::iterator freqMatrix = freqMatrixList.begin(); freqMatrix != freqMatrixList.end(); freqMatrix++) {
+  for (list<matrix::Matrix*>::iterator freqMatrix = freqMatrixList.begin(); freqMatrix != freqMatrixList.end(); ++freqMatrix) {
     oldSensorStates[i] = sensors[i]; // update old sensor state
   }
 
@@ -211,7 +220,7 @@ void MutualInformationController::stepNoLearning(const sensor* sensors, int sens
 
 int MutualInformationController::getState(double sensorValue) {
   // returns the state belonging to the sensor value
-  int state = (int) (((double) (sensorIntervalCount - 1)) * ((sensorValue + 1.0) / 2) + 0.5);
+  int state = static_cast<int>(((double) (sensorIntervalCount - 1)) * ((sensorValue + 1.0) / 2) + 0.5);
   if (state > (sensorIntervalCount - 1))
     return (sensorIntervalCount - 1);
   if (state < 0)
@@ -236,7 +245,7 @@ void MutualInformationController::updateMIs(const sensor* sensors) {
    where n = sensorIntervalCount
    */
   int i = 0;
-  for (list<matrix::Matrix*>::iterator F = freqMatrixList.begin(); F != freqMatrixList.end(); F++) {
+  for (list<matrix::Matrix*>::iterator F = freqMatrixList.begin(); F != freqMatrixList.end(); ++F) {
     int newState = getState(sensors[i]);
     int oldState = this->getState(oldSensorStates[i]);
     // calculate dS
@@ -251,13 +260,13 @@ void MutualInformationController::updateMIs(const sensor* sensors) {
     dS += (((*F)->val(oldState, newState)) + 1) * log(((*F)->val(oldState, newState)) + 1) - (((*F)->val(n, newState))
         + 1) * log(((*F)->val(n, newState)) + 1) - (((*F)->val(oldState, n)) + 1) * log(((*F)->val(oldState, n)) + 1);
     // updateMI with old MI and dS
-    double t = (double) (this->t);
-    double tminus1 = (double) (t - 1);
+    double t_current = static_cast<double>(this->t);
+    double tminus1 = static_cast<double>(t_current - 1);
     if ((this->t) == 1) {
       // log(t-1) is infinite, use more simple formula
-      MI[i] = dS / t + log(t);
+      MI[i] = dS / t_current + log(t_current);
     } else {
-      MI[i] = ((tminus1) * (MI[i] - log(tminus1)) + dS) / t + log(t);
+      MI[i] = ((tminus1) * (MI[i] - log(tminus1)) + dS) / t_current + log(t_current);
     }
 
     /*if (t<=10) {
@@ -273,7 +282,7 @@ void MutualInformationController::updateXsiFreqMatrixList(const sensor* sensors)
   // update sensor frequency and probability matrices
   int i = 0;
   int state;
-  for (list<matrix::Matrix*>::iterator freqMatrix = xsiFreqMatrixList.begin(); freqMatrix != xsiFreqMatrixList.end(); freqMatrix++) {
+  for (list<matrix::Matrix*>::iterator freqMatrix = xsiFreqMatrixList.begin(); freqMatrix != xsiFreqMatrixList.end(); ++freqMatrix) {
     // calculate actual Xsi
     double xsi = sensors[i] - ainit * tanh(cinit * this->oldSensorStates[i]);
     if (t % 2 == 0)
@@ -294,11 +303,11 @@ void MutualInformationController::updateXsiFreqMatrixList(const sensor* sensors)
 
 void MutualInformationController::calculateH_Xsi(double* H_Xsi) {
   int i = 0;
-  for (list<matrix::Matrix*>::iterator F = xsiFreqMatrixList.begin(); F != xsiFreqMatrixList.end(); F++) {
+  for (list<matrix::Matrix*>::iterator F = xsiFreqMatrixList.begin(); F != xsiFreqMatrixList.end(); ++F) {
     H_Xsi[i] = 0.0;
     for (int x = 0; x < sensorIntervalCount; x++) {
       if (((*F)->val(x, 0)) != 0) { // to avoid log(0)
-        double val = ((*F)->val(x, 0) / ((double) t)) * log((*F)->val(x, 0) / ((double) t));
+        double val = ((*F)->val(x, 0) / (static_cast<double>(t))) * log((*F)->val(x, 0) / (static_cast<double>(t)));
         (H_Xsi[i]) -= val;
       }
     }
@@ -308,12 +317,12 @@ void MutualInformationController::calculateH_Xsi(double* H_Xsi) {
 
 void MutualInformationController::calculateH_x(double* H) {
   int i = 0;
-  for (list<matrix::Matrix*>::iterator F = freqMatrixList.begin(); F != freqMatrixList.end(); F++) {
+  for (list<matrix::Matrix*>::iterator F = freqMatrixList.begin(); F != freqMatrixList.end(); ++F) {
     H[i] = 0.0;
     for (int x = 0; x < sensorIntervalCount; x++) {
       if (((*F)->val(x, sensorIntervalCount)) != 0) { // to avoid log(0)
-        double val = ((*F)->val(x, sensorIntervalCount) / ((double) t)) * log((*F)->val(x, sensorIntervalCount)
-            / ((double) t));
+        double val = ((*F)->val(x, sensorIntervalCount) / (static_cast<double>(t))) * log((*F)->val(x, sensorIntervalCount)
+            / (static_cast<double>(t)));
         (H_x[i]) -= val;
       }
     }
@@ -324,13 +333,13 @@ void MutualInformationController::calculateH_x(double* H) {
 void MutualInformationController::calculateH_yx(double* H_yx) {
   //
   int i = 0;
-  for (list<matrix::Matrix*>::iterator F = freqMatrixList.begin(); F != freqMatrixList.end(); F++) {
+  for (list<matrix::Matrix*>::iterator F = freqMatrixList.begin(); F != freqMatrixList.end(); ++F) {
     H_yx[i] = 0.0;
     for (int x = 0; x < sensorIntervalCount; x++) {
       for (int y = 0; y < sensorIntervalCount; y++) {
         if (((*F)->val(x, y)) != 0) {
           double val = (*F)->val(x, y) * log(((*F)->val(x, y)) / ((*F)->val(x, sensorIntervalCount)));
-          (H_yx[i]) -= val / ((double) t);
+          (H_yx[i]) -= val / (static_cast<double>(t));
         }
       }
     }
@@ -349,14 +358,14 @@ void MutualInformationController::calculateMIs(double* MI) {
    old formula update: we use completely F for calculating MI
    */
   int i = 0;
-  for (list<matrix::Matrix*>::iterator F = freqMatrixList.begin(); F != freqMatrixList.end(); F++) {
+  for (list<matrix::Matrix*>::iterator F = freqMatrixList.begin(); F != freqMatrixList.end(); ++F) {
     MI[i] = 0.0;
     for (int x = 0; x < sensorIntervalCount; x++) {
       for (int y = 0; y < sensorIntervalCount; y++) {
         if (((*F)->val(x, y)) != 0) {
-          double val = (*F)->val(x, y) * log(((*F)->val(x, y) * ((double) t)) / ((*F)->val(sensorIntervalCount, y)
+          double val = (*F)->val(x, y) * log(((*F)->val(x, y) * (static_cast<double>(t))) / ((*F)->val(sensorIntervalCount, y)
               * (*F)->val(x, sensorIntervalCount)));
-          (MI[i]) += val / ((double) t);
+          (MI[i]) += val / (static_cast<double>(t));
         }
       }
     }

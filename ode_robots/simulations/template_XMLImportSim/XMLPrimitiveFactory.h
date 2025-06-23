@@ -80,7 +80,7 @@ class XMLPrimitiveFactory {
   public:
     XMLPrimitiveFactory(XMLParserEngine* engine, lpzrobots::GlobalData& globalData,
         const lpzrobots::OdeHandle& odeHandle, const lpzrobots::OsgHandle& osgHandle);
-    virtual ~XMLPrimitiveFactory();
+    virtual ~XMLPrimitiveFactory() override;
 
     /**
      * This method delegates the call to the specialized methods according to

@@ -41,7 +41,9 @@ namespace lpzrobots {
     void createVisual(GlobalData& globalData, double visualSize, Pos visualOffset) const;
 
     /// nice predicate function for finding old sound signals
-    struct older_than : public std::unary_function<const Sound&, bool> {
+    struct older_than {
+      using argument_type = const Sound&;
+      using result_type = bool;
       older_than(double time) : time(time) {}
       double time;
       bool operator()(const Sound& s) { return s.time < time; }

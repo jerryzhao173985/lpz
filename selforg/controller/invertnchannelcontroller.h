@@ -38,37 +38,37 @@
 class InvertNChannelController : public InvertController {
 
 public:
-  InvertNChannelController(int _buffersize, bool _update_only_1=false);
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
+  explicit InvertNChannelController(int _buffersize, bool _update_only_1=false);
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
 
   virtual ~InvertNChannelController();
 
   /// returns the name of the object (with version number)
-  virtual paramkey getName() const {return name; }
+virtual paramkey getName() const override {return name; }
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
-  virtual int getSensorNumber() const { return number_channels; }
+  virtual int getSensorNumber() const  override{ return number_channels; }
   /// returns the mumber of motors the controller was initialised with or 0 if not initialised
-  virtual int getMotorNumber() const  { return number_channels; }
+  virtual int getMotorNumber() const   override{ return number_channels; }
 
   /// performs one step (includes learning).
   /// Calulates motor commands from sensor inputs.
-  virtual void step(const sensor* , int number_sensors, motor* , int number_motors);
+virtual void step(const sensor* , int number_sensors, motor* , int number_motors) override;
 
 
   /// performs one step without learning. Calulates motor commands from sensor inputs.
   virtual void stepNoLearning(const sensor* , int number_sensors,
-                              motor* , int number_motors);
+                              motor* , int number_motors) override;
 
 
   /***** STOREABLE ****/
   /** stores the controller values to a given file. */
-  virtual bool store(FILE* f) const;
+virtual bool store(FILE* f) const override;
   /** loads the controller values from a given file. */
-  virtual bool restore(FILE* f);
+virtual bool restore(FILE* f) override;
 
   // inspectable interface
-  virtual std::list<ILayer> getStructuralLayers() const;
-  virtual std::list<IConnection> getStructuralConnections() const;
+  virtual std::list<ILayer> getStructuralLayers() const override;
+  virtual std::list<IConnection> getStructuralConnections() const override;
 
 
 protected:

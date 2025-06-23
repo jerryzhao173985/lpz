@@ -59,10 +59,10 @@ namespace lpzrobots {
   // - give handle for ODE and OSG stuff
   Hexapod::Hexapod(const OdeHandle& odeHandle, const OsgHandle& osgHandle,
                    const HexapodConf& c, const std::string& name)
-    : OdeRobot(odeHandle, osgHandle, name, "HexaPod 0.9"), Inspectable(name), conf(c)
+    : OdeRobot(odeHandle, osgHandle, name, "HexaPod 0.9"), Inspectable(name), conf(c),
+      t(0), speed(0.0), stabaliserTransform(nullptr), bigboxtransform(nullptr), headtrans(nullptr)
   {
     // robot is not created till now
-    t = 0;
     massOfobject = new dMass();
     getPos1 = true;
     timeCounter = conf.T;

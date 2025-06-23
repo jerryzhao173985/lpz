@@ -37,9 +37,8 @@
 
 
 QSerialReader::QSerialReader( char bt)
-{    port="/dev/ttyS0";
-     baudrate=19200;
-     blockterminator = bt;
+  : port("/dev/ttyS0"), baudrate(19200), blockterminator(bt)
+{
 }
 
 
@@ -91,7 +90,14 @@ void QSerialReader::run()
         if(size > 0 && c=='#') size=0;  // neue Channel Zeile f�ngt mitten drinne irgendwie an
 
         size++;
-        s = (char*) realloc( s, size+1);
+        char* tmp = (char*) realloc( s, size+1);
+        if (tmp == NULL) {
+            free(s);
+            s = NULL;
+            size = 0;
+            continue;
+        }
+        s = tmp;
         s[size-1] = c;
 
         if(c==blockterminator || c==13 || c==10)  // check if we got a line ending
@@ -116,7 +122,8 @@ void QSerialReader::run()
 
 #else
 
-QSerialReader::QSerialReader( char bt) {   }
+QSerialReader::QSerialReader( char bt) 
+  : port("/dev/ttyS0"), baudrate(19200), blockterminator(bt) {   }
 
 
 void QSerialReader::run() {}

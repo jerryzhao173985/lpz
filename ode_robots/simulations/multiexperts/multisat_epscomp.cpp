@@ -40,9 +40,22 @@ Sat::Sat(MultiLayerFFNN* _net, double _eps){
 
 
 MultiSat::MultiSat( const MultiSatConf& _conf) 
-  : AbstractController("MultiSat", "$Id: "), buffersize(_conf.buffersize), conf(_conf)
+  : AbstractController("MultiSat", "$Id: "), 
+    number_sensors(0),
+    number_motors(0),
+    buffersize(_conf.buffersize), 
+    x_buffer(nullptr),
+    xp_buffer(nullptr),
+    y_buffer(nullptr),
+    x_context_buffer(nullptr),
+    winner(0),
+    satControl(false),
+    runcompetefirsttime(true),
+    conf(_conf),
+    initialised(false),
+    t(0),
+    managementInterval(100)
 {
-  initialised = false;
   addParameter("tau", &conf.tau);
 };
 

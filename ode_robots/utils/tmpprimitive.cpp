@@ -113,7 +113,7 @@ namespace lpzrobots {
   TmpJoint::TmpJoint(Joint* p, const Color& color, bool withVisual, double visualSize,
                      bool ignoreColl)
 
-    : joint(p), color(color), withVisual(withVisual), visualSize(visualSize),
+    : joint(p), color(color), alpha(1.0), withVisual(withVisual), visualSize(visualSize),
       ignoreColl(ignoreColl), initialized(false)
   {
     useColorName=false;

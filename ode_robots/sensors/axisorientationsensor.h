@@ -49,12 +49,12 @@ namespace lpzrobots {
     AxisOrientationSensor(Mode mode, short dimensions = X | Y | Z );
     virtual ~AxisOrientationSensor() {}
 
-    virtual void init(Primitive* own, Joint* joint = 0);
-    virtual int getSensorNumber() const;
+    virtual void init(Primitive* own, Joint* joint = 0) override;
+    virtual int getSensorNumber() const override;
 
-    virtual bool sense(const GlobalData& globaldata);
-    virtual std::list<sensor> getList() const;
-    virtual int get(sensor* sensors, int length) const;
+    virtual bool sense(const GlobalData& globaldata) override;
+    virtual std::list<sensor> getList() const override;
+    virtual int get(sensor* sensors, int length) const override;
 
   private:
     Mode mode;

@@ -64,14 +64,14 @@ namespace lpzrobots {
      */
     virtual void update(){ };
 
-    virtual void setPose(const osg::Matrix& pose);
+    virtual void setPose(const osg::Matrix& pose) override;
 
 
     virtual Primitive* getMainPrimitive() const { return 0; }
 
   protected:
-    virtual void create();
-    virtual void destroy();
+    virtual void create() override;
+    virtual void destroy() override;
 
   protected:
     std::string filename;

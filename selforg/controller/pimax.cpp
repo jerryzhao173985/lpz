@@ -23,7 +23,10 @@ using namespace std;
 
 PiMax::PiMax(const PiMaxConf& conf_)
   : AbstractController("PiMax", "1.0"),
-    conf(conf_), t(0)
+    conf(conf_), 
+    number_sensors(0),
+    number_motors(0),
+    t(0)
 {
 
   addParameterDef("metrics", &useMetric, true, "whether to use metrics in gradient space");

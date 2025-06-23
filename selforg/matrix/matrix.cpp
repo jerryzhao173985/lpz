@@ -69,7 +69,7 @@ namespace matrix {
       if ( data )
         free ( data );
 
-      data = ( D* ) malloc ( sizeof ( D ) * buffersize );
+      data = static_cast<D*>( malloc ( sizeof ( D ) * buffersize ) );
       assert ( data );
     }
   }
@@ -89,8 +89,8 @@ namespace matrix {
 #ifdef WIN32
   int bcmp (const void *_a, const void *_b, int count){
     int rtnval = 0;
-    const char* a = (char*) _a;
-    const char* b = (char*) _b;
+    const char* a = static_cast<char*>(_a);
+    const char* b = static_cast<char*>(_b);
     while (count-- > 0) {
       if (*a++ != *b++) {
         rtnval = 1;
@@ -115,8 +115,8 @@ namespace matrix {
 
   Matrix Matrix::rows ( I startindex, I endindex ) const {
     assert(startindex<=endindex);
-    I start = (I)std::min ( ( int ) startindex, (int) m - 1 );
-    I end   = (I)std::max ( ( int ) start, std::min ( ( int ) endindex, (int) m - 1 ) );
+    I start = static_cast<I>(std::min ( static_cast<int>(startindex), static_cast<int>(m) - 1 ));
+    I end   = static_cast<I>(std::max ( static_cast<int>(start), std::min ( static_cast<int>(endindex), static_cast<int>(m) - 1 ) ));
     I k     = end - start + 1;
     if ( k == m ) return *this;
     Matrix result ( k, n );
@@ -177,7 +177,7 @@ namespace matrix {
   }
 
   bool Matrix::write ( FILE* f ) const {
-    fprintf ( f, "MATRIX %i %i\n", m, n );
+    fprintf ( f, "MATRIX %u %u\n", m, n );
     for ( I i = 0; i < m; i++ ) {
       for ( I j = 0; j < n; j++ ) {
         fprintf ( f, "%f ", VAL(i,j) );
@@ -196,7 +196,7 @@ namespace matrix {
     }
     allocate();
     for ( I i = 0; i < m*n; i++ ) {
-      if ( fscanf ( f, "%s ", buffer ) != 1 ) return false;
+      if ( fscanf ( f, "%127s ", buffer ) != 1 ) return false;  // Security fix: added field width limit
       data[i] = atof ( buffer );
     }
     if( fscanf ( f, "\n" ) != 0) return false;
@@ -235,9 +235,9 @@ namespace matrix {
           I len = m * n;
           if ( fread ( data, sizeof ( D ), len, f ) == len ) {
             rval = true;
-          } else fprintf ( stderr, "Matrix::restore: (binary) cannot read matrix data\n" );
+          } else fprintf ( stderr, "Matrix::restore: static_cast<binary>(cannot) read matrix data\n" );
         } else {
-          fprintf ( stderr, "Matrix::restore: (binary) cannot read dimension\n" );
+          fprintf ( stderr, "Matrix::restore: static_cast<binary>(cannot) read dimension\n" );
         }
       }
     }else{
@@ -255,7 +255,11 @@ namespace matrix {
   Matrix& Matrix::toTranspose() {
     assert ( buffersize > 0 );
     if ( m != 1 && n != 1 ) { // if m or n == 1 then no copying is necessary!
-      double* newdata = ( D* ) malloc ( sizeof ( D ) * buffersize );
+      double* newdata = static_cast<double*>(malloc( sizeof ( D ) * buffersize ));
+      if (newdata == nullptr) {
+        fprintf(stderr, "Matrix::toTranspose() memory allocation failed\n");
+        exit(1);
+      }
       for ( I i = 0; i < m; i++ ) {
         for ( I j = 0; j < n; j++ ) {
           newdata[j*m+i] = data[i*n+j];
@@ -564,7 +568,7 @@ namespace matrix {
 
   Matrix& Matrix::toAbove ( const Matrix& a ) {
     assert ( a.n == this->n);
-    data = ( D* ) realloc ( data, sizeof ( D ) * ( this->m * this->n + a.n * a.m ) );
+    data = static_cast<D*>(realloc( data, sizeof ( D ) * ( this->m * this->n + a.n * a.m ) ));
     memcpy ( data + this->m * this->n, a.data, sizeof ( D ) * ( a.n * a.m ) );
     this->m += a.m;
     return *this;
@@ -577,7 +581,7 @@ namespace matrix {
     I oldN= this->n;
     this->n += a.n;
     buffersize=this->m*this->n;
-    data = ( D* ) malloc(sizeof ( D ) * buffersize );
+    data = static_cast<D*>(malloc(sizeof ( D ) * buffersize ));
     assert ( data );
     if ( oldData ) { // copy old values
       for ( I i=0;i<this->m * oldN;i++ ) {
@@ -596,7 +600,7 @@ namespace matrix {
   }
 
   int cmpdouble ( const void* a, const void* b ) {
-    return * ( ( double* ) a ) < * ( ( double* ) b ) ? -1 : ( * ( ( double* ) a ) > * ( ( double* ) b ) ? 1 : 0 );
+    return * ( static_cast<const double*>(a) ) < * ( static_cast<const double*>(b) ) ? -1 : ( * ( static_cast<const double*>(a) ) > * ( static_cast<const double*>(b) ) ? 1 : 0 );
   }
 
   Matrix& Matrix::toSort() {
@@ -743,7 +747,7 @@ namespace matrix {
     // internal allocation
     D* oldData = data;
     I newN = n - numberColumns;
-    data = ( D* ) malloc ( sizeof ( D ) * m * newN );
+    data = static_cast<D*>(malloc( sizeof ( D ) * m * newN ));
     assert ( data );
     if ( oldData ) { // copy old values
       for ( I i=0;i<m;i++ ) {
@@ -889,7 +893,7 @@ namespace matrix {
   bool Matrix::operator == ( const Matrix& c ) const {
     if ( m != c.m || n != c.n ) return false;
     D* p1 = data;
-    D* p2 = c.data;
+    const D* p2 = c.data;
     I len = m * n;
     for ( I i = 0; i < len; i++ ) {
       if ( fabs ( *p1 - *p2 ) > COMPARE_EPS ) {

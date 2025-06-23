@@ -61,16 +61,21 @@ Position toEnv(Position pos){
 class MyRobot : public AbstractRobot {
 public:
   MyRobot(const string& name, const Position& initial_pos, double _mass = 1.0)
-    : AbstractRobot(name, "$Id$") {
-    motornumber  = 2;
-    sensornumber = 2;
-    x = new double[sensornumber];
-    y = new double[motornumber];
+    : AbstractRobot(name, "$Id$"), 
+      whatDoIFeel(0),
+      motornumber(2),
+      sensornumber(2),
+      x(new double[sensornumber]),
+      y(new double[motornumber]),
+      t(0.01),
+      mu(0),
+      mass(0),
+      range(0),
+      sensorscale(0),
+      pos(initial_pos),
+      speed(0,0,0) {
     memset(x,0,sizeof(double)*sensornumber);
     memset(y,0,sizeof(double)*motornumber);
-    pos = initial_pos;
-    speed = Position(0,0,0);
-    t = 0.01;
     addParameterDef("mass", &mass, _mass);
     //    addParameterDef("mu", &mu, 1.5);
     addParameterDef("mu", &mu, 3);

@@ -38,7 +38,7 @@
 class ConfigurableList : public std::vector<Configurable*>, public BackCaller {
   public:
     ConfigurableList();
-    virtual ~ConfigurableList();
+    virtual ~ConfigurableList() override;
 
     /**
      * Indicates that the list has been modified, a Configurable instance was either added or removed.

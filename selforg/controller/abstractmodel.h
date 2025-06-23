@@ -48,13 +48,13 @@ class AbstractModel : public Configurable, public Storeable, public Inspectable 
       @param randGen pointer to random generator, if 0 an new one is used
    */
   virtual void init(unsigned int inputDim, unsigned  int outputDim,
-                    double unit_map = 0.0, RandGen* randGen = 0) = 0;
+                    double unit_map = 0.0, RandGen* randGen = nullptr)  = 0;
 
   /** passive processing of the input
      (this function is not constant since a recurrent network
      for example might change internal states
   */
-  virtual const matrix::Matrix process (const matrix::Matrix& input) = 0;
+  virtual const matrix::Matrix process (const matrix::Matrix& input)  = 0;
 
   /* performs learning and returns the network output before learning.
      Neural networks process the input before. (no need to call process before)
@@ -62,15 +62,15 @@ class AbstractModel : public Configurable, public Storeable, public Inspectable 
   */
   virtual const matrix::Matrix learn (const matrix::Matrix& input,
                                       const matrix::Matrix& nom_output,
-                                      double learnRateFactor = 1) = 0;
+                                      double learnRateFactor = 1)  = 0;
 
   /// damps the weights and the biases by multiplying (1-damping)
-  virtual void damp(double damping) = 0;
+  virtual void damp(double damping)  = 0;
 
   /// returns the number of input neurons
-  virtual unsigned int getInputDim() const = 0;
+  virtual unsigned int getInputDim() const  = 0;
   /// returns the number of output neurons
-  virtual unsigned int getOutputDim() const = 0;
+  virtual unsigned int getOutputDim() const  = 0;
 
 };
 

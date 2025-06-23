@@ -61,9 +61,9 @@ struct PiMaxConf {
 class PiMax : public AbstractController, public Teachable, public Parametrizable {
 
 public:
-  PiMax(const PiMaxConf& conf = getDefaultConf());
+  explicit PiMax(const PiMaxConf& conf = getDefaultConf());
 
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
 
   virtual ~PiMax();
 
@@ -81,28 +81,28 @@ public:
   }
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
-  virtual int getSensorNumber() const { return number_sensors; }
+  virtual int getSensorNumber() const override { return number_sensors; }
   /// returns the mumber of motors the controller was initialised with or 0 if not initialised
-  virtual int getMotorNumber() const  { return number_motors; }
+  virtual int getMotorNumber() const override { return number_motors; }
 
   /// performs one step (includes learning).
   /// Calulates motor commands from sensor inputs.
-  virtual void step(const sensor* , int number_sensors, motor* , int number_motors);
+  virtual void step(const sensor* , int number_sensors, motor* , int number_motors) override;
 
 
   /// performs one step without learning. Calulates motor commands from sensor inputs.
   virtual void stepNoLearning(const sensor* , int number_sensors,
-			      motor* , int number_motors);
+			      motor* , int number_motors) override;
 
   /// called during babbling phase
   virtual void motorBabblingStep(const sensor* , int number_sensors,
-				 const motor* , int number_motors);
+				 const motor* , int number_motors) override;
 
   /***** STOREABLE ****/
   /** stores the controller values to a given file. */
-  virtual bool store(FILE* f) const;
+  virtual bool store(FILE* f) const override;
   /** loads the controller values from a given file. */
-  virtual bool restore(FILE* f);
+  virtual bool restore(FILE* f) override;
 
   /* some direct access functions (unsafe!) */
   virtual matrix::Matrix getA();
@@ -113,10 +113,10 @@ public:
   virtual void seth(const matrix::Matrix& h);
 
   /***** TEACHABLE ****/
-  virtual void setMotorTeaching(const matrix::Matrix& teaching);
-  virtual void setSensorTeaching(const matrix::Matrix& teaching);
-  virtual matrix::Matrix getLastMotorValues();
-  virtual matrix::Matrix getLastSensorValues();
+  virtual void setMotorTeaching(const matrix::Matrix& teaching) override;
+  virtual void setSensorTeaching(const matrix::Matrix& teaching) override;
+  virtual matrix::Matrix getLastMotorValues() override;
+  virtual matrix::Matrix getLastSensorValues() override;
 
   /***** PARAMETRIZABLE ****/
   virtual std::list<matrix::Matrix> getParameters() const override;

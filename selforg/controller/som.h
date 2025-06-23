@@ -35,10 +35,10 @@ The output of the network is  \f$exp(- |x-w_i|^2/rdfsize)\f$ for each neuron.
 */
 class SOM : public AbstractModel {
 public:
-  typedef std::list< std::pair<int,double> > Neighbours;
-  typedef std::vector<std::pair<matrix::Matrix,double> > Neighbourhood;
+  using Neighbours = std::list< std::pair<int,double> >;
+  using Neighbourhood = std::vector<std::pair<matrix::Matrix,double> >;
 
-  SOM(const std::string& name="SOM",
+  explicit SOM(const std::string& name="SOM",
       const std::string& revision = "$Id$");
 
   /** create a som
@@ -47,7 +47,7 @@ public:
   SOM(unsigned int dimensions, double sigma, double eps, double rbfsize,
       const std::string& name="SOM",
       const std::string& revision = "$Id$");
-  virtual ~SOM(){};
+  virtual ~SOM() override{};
 
   /** initialised som
       @param inputDim dimension of input vector
@@ -56,9 +56,9 @@ public:
              uniformly distributed in the inputspace of size (unit_map x unit_map x ...)
    */
   virtual void init(unsigned int inputDim, unsigned  int outputDim,
-                    double unit_map = 0.0, RandGen* randGen = 0);
+                    double unit_map = 0.0, RandGen* randGen = nullptr) override;
 
-  virtual const matrix::Matrix process (const matrix::Matrix& input);
+  virtual const matrix::Matrix process (const matrix::Matrix& input) override;
 
   /*  performs training. Nominal output is ignored.
       A zero-Matrix is returned.
@@ -67,16 +67,16 @@ public:
   */
   virtual const matrix::Matrix learn (const matrix::Matrix& input,
                                       const matrix::Matrix& nom_output,
-                                      double learnRateFactor = 1);
+                                      double learnRateFactor = 1) override;
 
-  virtual void damp(double damping) { return;}
+  virtual void damp(double damping)  override{ return;}
 
-  virtual unsigned int getInputDim() const { return weights[0].getM();}
-  virtual unsigned int getOutputDim() const  { return weights.size();}
+  virtual unsigned int getInputDim() const override { return weights[0].getM();}
+  virtual unsigned int getOutputDim() const override { return weights.size();}
 
 
-  virtual bool store(FILE* f) const;
-  virtual bool restore(FILE* f);
+  virtual bool store(FILE* f) const override;
+  virtual bool restore(FILE* f) override;
 
   virtual void printWeights(FILE* f) const;
 

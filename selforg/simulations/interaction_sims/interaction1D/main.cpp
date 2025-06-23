@@ -48,8 +48,8 @@ char* replay=0;
 double camera(double x){
   // basically a smoothed view at the discrete background array
   double xt = (x+1.0)*bgsize/2;
-  int pl = (int)floor(xt);
-  int ph = (int)ceil(xt);
+  int pl = static_cast<int>(floor)(xt);
+  int ph = static_cast<int>(ceil)(xt);
   double frac = xt-pl;
   return int(((1-frac)*background[pl] + frac*background[ph%bgsize])*20.0-10.0)/10.0;
 //  return background[int(round(xt))%bgsize]*2.0-1;
@@ -79,17 +79,23 @@ public:
 class MyRobot : public AbstractRobot {
 public:
   MyRobot(const string& name, const Position& initial_pos, double _mass = 1.0)
-    : AbstractRobot(name, "$Id$") {
-    //    motornumber  = 2;
-    motornumber  = 1;
-    sensornumber = 2;
-    x = new double[sensornumber];
-    y = new double[motornumber];
+    : AbstractRobot(name, "$Id$"), 
+      whatDoIFeel(0),
+      mindist(0),
+      motornumber(1),
+      sensornumber(2),
+      x(new double[sensornumber]),
+      y(new double[motornumber]),
+      t(0.01),
+      mu(0),
+      mass(0),
+      range(0),
+      sensorscale(0),
+      pos(initial_pos),
+      speed(0,0,0),
+      tactilefunc(tactilebump) {
     memset(x,0,sizeof(double)*sensornumber);
     memset(y,0,sizeof(double)*motornumber);
-    pos = initial_pos;
-    speed = Position(0,0,0);
-    t = 0.01;
     addParameterDef("mass", &mass, _mass);
     //    addParameterDef("mu", &mu, 1.5);
     addParameterDef("mu", &mu, 3);
@@ -98,9 +104,6 @@ public:
 
     addParameter("realtimefactor", &realtimefactor); //  global param. a bit stupid  to do here, but who cares
     addParameter("noise", &noise); //  global param. a bit stupid  to do here, but who cares
-
-    // tactilefunc = tactileupdown;
-    tactilefunc = tactilebump;
   }
 
   ~MyRobot(){
@@ -301,7 +304,7 @@ void printRobots(const list<MyRobot*>& robots){
 }
 
 void reinforce(Agent* a){
-  MyRobot* r = (MyRobot*)a->getRobot();
+  MyRobot* r = static_cast<MyRobot*>(a)->getRobot();
   InvertMotorNStep* c = dynamic_cast<InvertMotorNStep*>(a->getController());
   if(c)
     c->setReinforcement(2*(r->whatDoIFeel != 0));

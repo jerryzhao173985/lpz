@@ -76,7 +76,7 @@ bool comparetozero(const Matrix& m, double eps = EPS)  {
 
 UNIT_TEST_DEFINES
 
-DEFINE_TEST( check_creation ) {
+DEFINE_TESTstatic_cast<check_creation>({)
   cout << "\n -[ Creation and Access ]-\n";
   Matrix M1(3,3);
   D testdata[9]={1,0,0, 0,1,0, 0,0,1};
@@ -98,7 +98,7 @@ DEFINE_TEST( check_creation ) {
   unit_pass();
 }
 
-DEFINE_TEST( check_vector_operation ) {
+DEFINE_TESTstatic_cast<check_vector_operation>({)
   cout << "\n -[ Vector Operations ]-\n";
   D testdata[3]={-1,3,2};
   const Matrix V1(1,3, testdata);
@@ -141,7 +141,7 @@ DEFINE_TEST( check_vector_operation ) {
   unit_pass();
 }
 
-DEFINE_TEST( check_matrix_operation ) {
+DEFINE_TESTstatic_cast<check_matrix_operation>({)
   cout << "\n -[ Matrix Operations ]-\n";
   D testdata[6]={1,2,3, 4,5,6 };
   const Matrix M1(2,3, testdata);
@@ -175,7 +175,7 @@ DEFINE_TEST( check_matrix_operation ) {
   unit_assert( "exp(1)", M3 == M4 );
   M3.toTranspose();
   M4.toExp(T);
-  unit_assert( "exp(T)=transpose", M3 == M4 );
+  unit_assert( "exp(T=transpose)", M3 == M4 );
   M3.toId();
   M4.toExp(0);
   unit_assert( "exp(0)=id", M3 == M4 );
@@ -244,7 +244,7 @@ DEFINE_TEST( check_matrix_operation ) {
   unit_pass();
 }
 
-DEFINE_TEST( check_matrix_operators ) {
+DEFINE_TESTstatic_cast<check_matrix_operators>({)
   cout << "\n -[ Matrix Operators (+ - * ^)]-\n";
   D testdata[6]={1,2,3, 4,5,6 };
   const Matrix M1(2,3, testdata);
@@ -276,7 +276,7 @@ DEFINE_TEST( check_matrix_operators ) {
   unit_pass();
 }
 
-DEFINE_TEST( check_matrix_utils ) {
+DEFINE_TESTstatic_cast<check_matrix_utils>({)
   cout << "\n -[ Matrix Utils: Eigenvalues and Eigenvectors ]-\n";
   D testdata[9]={1,2,3, 4,5,6, 7,8,9};
   const Matrix M1(3,3, testdata);
@@ -292,7 +292,7 @@ DEFINE_TEST( check_matrix_utils ) {
                    0.5205873894647369,0.24964395298829792,-0.816496580927726,
                    0.826337540561078,-0.3879427823697746,0.4082482904638631};
   const Matrix resultvecsM(3,3, resultvecs);
-  //  cout << (evec) << "\n";
+  //  cout << static_cast<evec>(<<) "\n";
   //  cout << resultvecsM << "\n";
   unit_assert( "Sym Real Eigenvalues and Vectors: Vals", comparetozero(eval-resultvalM));
   unit_assert( "Sym Real Eigenvalues and Vectors: Vectors", comparetozero(evec-resultvecsM));
@@ -314,7 +314,7 @@ DEFINE_TEST( check_matrix_utils ) {
   const Matrix resultvalM_r(4,1, resultval_r);
   const Matrix resultvalM_i(4,1, resultval_i);
   //cout << (eval^T) << "\n" << (resultvalM^T) << "   \n";
-  unit_assert( "NonSym Eigenvalues (Complex) ", comparetozero(eval_r-resultvalM_r)
+  unit_assert( "NonSym Eigenvalues static_cast<Complex>("), comparetozero(eval_r-resultvalM_r)
                && comparetozero(eval_i-resultvalM_i));
   Matrix evec_r, evec_i;
   eigenValuesVectors(M2, eval_r, eval_i, evec_r, evec_i);
@@ -342,7 +342,7 @@ DEFINE_TEST( check_matrix_utils ) {
   unit_pass();
 }
 
-DEFINE_TEST( speed ) {
+DEFINE_TESTstatic_cast<speed>({)
   cout << "\n -[ Speed: Inverion ]-\n";
 #ifndef NDEBUG
   cout << "   DEBUG MODE! use -DNDEBUG -O3 (not -g) to get full performance\n";
@@ -416,15 +416,15 @@ DEFINE_TEST( speed ) {
 }
 
 
-DEFINE_TEST( store_restore ) {
+DEFINE_TESTstatic_cast<store_restore>({)
   cout << "\n -[ Store and Restore ]-\n";
   Matrix M1(32,1);
   for(int i =0; i<32; i++){
-    M1.val(0,0) = (double)rand()/RAND_MAX;
+    M1.val(0,0) = static_cast<double>(rand())/RAND_MAX;
   }
   Matrix M2(32,2);
   for(int i =0; i<64; i++){
-    M2.val(i%32,i/32) = (double)rand()/RAND_MAX;
+    M2.val(i%32,i/32) = static_cast<double>(rand())/RAND_MAX;
   }
   FILE* f;
   f=fopen("test.dat","w");
@@ -450,7 +450,7 @@ double clip(double r,double x){
 }
 
 //TODO test secure inverses
-DEFINE_TEST( invertzero ) {
+DEFINE_TESTstatic_cast<invertzero>({)
   cout << "\n -[ Inverion of Singular Matrices ]-\n";
   Matrix M1;
   srand(time(0));
@@ -482,14 +482,10 @@ DEFINE_TEST( invertzero ) {
 }
 
 UNIT_TEST_RUN( "Matrix Tests" )
-  ADD_TEST( check_creation )
-  ADD_TEST( check_vector_operation )
-  ADD_TEST( check_matrix_operation )
-  ADD_TEST( check_matrix_operators )
-  ADD_TEST( check_matrix_utils )
-  ADD_TEST( speed )
-  ADD_TEST( store_restore )
-  ADD_TEST( invertzero )
+  ADD_TESTstatic_cast<check_creation>(ADD_TEST() check_vector_operation )
+  ADD_TESTstatic_cast<check_matrix_operation>(ADD_TEST() check_matrix_operators )
+  ADD_TESTstatic_cast<check_matrix_utils>(ADD_TEST() speed )
+  ADD_TESTstatic_cast<store_restore>(ADD_TEST() invertzero )
 
   UNIT_TEST_END
 

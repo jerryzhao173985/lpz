@@ -66,23 +66,23 @@ public:
     double lifetime;
   } Sat;
 public:
-  MultiExpertSubopt(const MultiExpertSuboptConf& conf = getDefaultConf());
+  explicit MultiExpertSubopt(const MultiExpertSuboptConf& conf = getDefaultConf());
 
-  virtual ~MultiExpertSubopt();
+  virtual ~MultiExpertSubopt() override;
 
   virtual void init(unsigned int inputDim, unsigned  int outputDim,
-                    double unit_map = 0.0, RandGen* randGen = 0);
+                    double unit_map = 0.0, RandGen* randGen = 0) override;
 
   virtual unsigned int getInputDim() const { return inputDim;}
   virtual unsigned int getOutputDim() const  { return outputDim;}
 
   virtual void damp(double damping) {};
 
-  virtual const matrix::Matrix process (const matrix::Matrix& input);
+  virtual const matrix::Matrix process (const matrix::Matrix& input) override;
 
   virtual const matrix::Matrix learn (const matrix::Matrix& input,
                                       const matrix::Matrix& nom_output,
-                                      double learnRateFactor = 1);
+                                      double learnRateFactor = 1) override;
 
   // !!!!!!!!!!!!!!!!!!! MISC STUFF !!!!!!!!
   /** minimum dynamics
@@ -99,22 +99,22 @@ public:
   void restoreSats(const std::list<std::string>& filenames);
 
   /************** CONFIGURABLE ********************************/
-  virtual paramval getParam(const paramkey& key, bool traverseChildren=true) const;
-  virtual bool setParam(const paramkey& key, paramval val, bool traverseChildren=true);
-  virtual paramlist getParamList() const;
+  virtual paramval getParam(const paramkey& key, bool traverseChildren=true) const override;
+  virtual bool setParam(const paramkey& key, paramval val, bool traverseChildren=true) override;
+  virtual paramlist getParamList() const override;
 
 
   /**** STOREABLE ****/
   /** stores the controller values to a given file. */
-  virtual bool store(FILE* f) const;
+  virtual bool store(FILE* f) const override;
   /** loads the controller values from a given file. */
-  virtual bool restore(FILE* f);
+  virtual bool restore(FILE* f) override;
 
   /**** INSPECTABLE ****/
-  virtual std::list<iparamkey> getInternalParamNames() const;
-  virtual std::list<iparamval> getInternalParams() const;
-  virtual std::list<ILayer> getStructuralLayers() const;
-  virtual std::list<IConnection> getStructuralConnections() const;
+  virtual std::list<iparamkey> getInternalParamNames() const override;
+  virtual std::list<iparamval> getInternalParams() const override;
+  virtual std::list<ILayer> getStructuralLayers() const override;
+  virtual std::list<IConnection> getStructuralConnections() const override;
 
   static MultiExpertSuboptConf getDefaultConf(){
     MultiExpertSuboptConf c;

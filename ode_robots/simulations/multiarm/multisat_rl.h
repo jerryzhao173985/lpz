@@ -106,9 +106,9 @@ class MultiSat : public AbstractController {
 
 public:
   MultiSat(const MultiSatConf& conf = getDefaultConf());
-  virtual void init(int sensornumber, int motornumber);
+  virtual void init(int sensornumber, int motornumber) override;
 
-  virtual ~MultiSat();
+  virtual ~MultiSat() override;
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
   virtual int getSensorNumber() const { return number_sensors; }
@@ -117,33 +117,33 @@ public:
 
   /// performs one step (includes learning).
   /// Calulates motor commands from sensor inputs.
-  virtual void step(const sensor* , int number_sensors, motor* , int number_motors);
+  virtual void step(const sensor* , int number_sensors, motor* , int number_motors) override;
 
   /// performs one step without learning. Calulates motor commands from sensor inputs.
   virtual void stepNoLearning(const sensor* , int number_sensors,
-                              motor* , int number_motors);
+                              motor* , int number_motors) override;
 
   /// stores the sat networks into seperate files
   void storeSats(const char* filestem);
 
 
   /************** CONFIGURABLE ********************************/
-  virtual paramval getParam(const paramkey& key, bool traverseChildren=true) const;
-  virtual bool setParam(const paramkey& key, paramval val, bool traverseChildren=true);
-  virtual paramlist getParamList() const;
+  virtual paramval getParam(const paramkey& key, bool traverseChildren=true) const override;
+  virtual bool setParam(const paramkey& key, paramval val, bool traverseChildren=true) override;
+  virtual paramlist getParamList() const override;
 
 
   /**** STOREABLE ****/
   /** stores the controller values to a given file. */
-  virtual bool store(FILE* f) const;
+  virtual bool store(FILE* f) const override;
   /** loads the controller values from a given file. */
-  virtual bool restore(FILE* f);
+  virtual bool restore(FILE* f) override;
 
   /**** INSPECTABLE ****/
-  virtual std::list<iparamkey> getInternalParamNames() const;
-  virtual std::list<iparamval> getInternalParams() const;
-  virtual std::list<ILayer> getStructuralLayers() const;
-  virtual std::list<IConnection> getStructuralConnections() const;
+  virtual std::list<iparamkey> getInternalParamNames() const override;
+  virtual std::list<iparamval> getInternalParams() const override;
+  virtual std::list<ILayer> getStructuralLayers() const override;
+  virtual std::list<IConnection> getStructuralConnections() const override;
 
   static MultiSatConf getDefaultConf(){
     MultiSatConf c;
@@ -211,13 +211,13 @@ protected:
   void putInBuffer(matrix::Matrix* buffer, const matrix::Matrix& vec, int delay = 0);
 
   /// puts the sensors in the ringbuffer
-  virtual void fillSensorBuffer(const sensor* x_, int number_sensors);
+  virtual void fillSensorBuffer(const sensor* x_, int number_sensors) override;
   /// puts the motors in the ringbuffer
-  virtual void fillMotorBuffer(const motor* y_, int number_motors);
+  virtual void fillMotorBuffer(const motor* y_, int number_motors) override;
 
 
   /// handles inhibition damping etc.
-  virtual void management();
+  virtual void management() override;
 
 
 

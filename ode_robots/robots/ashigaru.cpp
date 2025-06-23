@@ -981,12 +981,12 @@ namespace lpzrobots {
           tcJoint(0), ctJoint(0), ftJoint(0), footJoint(0),
           tcServo(0), ctServo(0), ftServo(0),
           footSpring(0), shoulder(0), shoulderBox(0),
-          coxa(0),femur(0),tibia(0),foot(0){
+          coxa(0),femur(0),tibia(0),foot(0),footSphere(0){
   }
 
   // constructor of struct trunk
   Ashigaru::Trunk::Trunk():
-    tPlate{0},tTrans{0}{
+    tPlate{0},tTrans{0},tUpTrans(0){
   }
 
 }

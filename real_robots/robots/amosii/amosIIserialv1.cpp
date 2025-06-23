@@ -112,7 +112,7 @@ int AmosIISerialV1::getSensors(sensor* sensors, int sensornumber){
 	do{
 
 		//Sending "getSensors" command to the board
-		sprintf(serial_msg, "%c%c",comByte,end);
+		snprintf(serial_msg, sizeof(serial_msg), "%c%c",comByte,end);
 
 		wr = write(fd1, serial_msg,sizeof(serial_msg));
 
@@ -407,7 +407,7 @@ void AmosIISerialV1::setMotors(const motor* motors, int motornumber){
 	usleep (10000);//10000);
 	// do some processing for motor commands before sending AMOS sensors
 
-	sprintf(serial_motor, "%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c"
+	snprintf(serial_motor, sizeof(serial_motor), "%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c"
 			,comByte,serialPos[1],serialPos[2],
 			serialPos[3],serialPos[4],serialPos[5],serialPos[6],serialPos[7],serialPos[8],
 			serialPos[9],serialPos[10],serialPos[11],serialPos[12],serialPos[13],serialPos[14],

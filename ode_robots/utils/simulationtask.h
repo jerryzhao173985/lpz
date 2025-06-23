@@ -48,7 +48,7 @@ namespace lpzrobots {
       if(sim!=0)
       {
         char buffer[20];
-        sprintf(buffer,"%i",taskId);
+        snprintf(buffer, sizeof(buffer),"%i",taskId);
         sim->setTaskNameSuffix(std::string(" - ").append(nameSuffix).append(" - ").append(buffer));
         sim->setTaskId(taskId);
         sim->setSimTaskHandle(simTaskHandle);

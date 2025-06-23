@@ -349,7 +349,7 @@ playground->setPosition(osg::Vec3(0,0,0)); // playground positionieren und gener
 // //Test:
 //      FILE* file;
 //      char filename[256];
-//      sprintf(filename, "ent%g_C.log",0.25);
+//      snprintf(filename, sizeof(filename), "ent%g_C.log",0.25);
 //      file = fopen(filename,"a");
 //      fprintf(file, "%f ", globalData.time);
 //      fprintf(file,"%g, %g %g \n", p.x, p.y, p.z);
@@ -361,7 +361,7 @@ playground->setPosition(osg::Vec3(0,0,0)); // playground positionieren und gener
 // all datapoints in one column
 /*     FILE* file;
      char filename[256];
-     sprintf(filename, "summed_path.log");
+     snprintf(filename, sizeof(filename), "summed_path.log");
      file = fopen(filename,"a");
      fprintf(file, "%f ", globalData.time);
      fprintf(file,"%g %g %g %g %g %g    %g \n", 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, summed_path);
@@ -372,7 +372,7 @@ playground->setPosition(osg::Vec3(0,0,0)); // playground positionieren und gener
 
      FILE* file;
      char filename[256];
-     sprintf(filename, "summed_path.log");
+     snprintf(filename, sizeof(filename), "summed_path.log");
      file = fopen(filename,"a");
      fprintf(file,"%g  ", summed_path);
      fflush(file);
@@ -395,7 +395,7 @@ playground->setPosition(osg::Vec3(0,0,0)); // playground positionieren und gener
   void writeInvertNChannelControllerParamsToFile(double _c, double _a, double _h){
     FILE* file;
     char filename[256];
-    sprintf(filename, "init_weights.tmp");
+    snprintf(filename, sizeof(filename), "init_weights.tmp");
     file = fopen(filename,"w+");
 
     matrix::Matrix C;
@@ -427,7 +427,7 @@ playground->setPosition(osg::Vec3(0,0,0)); // playground positionieren und gener
   void writeStaticControllerParamsToFile(double _c, double _h){
     FILE* file;
     char filename[256];
-    sprintf(filename, "init_weights.tmp");
+    snprintf(filename, sizeof(filename), "init_weights.tmp");
     file = fopen(filename,"w+");
 
     matrix::Matrix C;
@@ -454,7 +454,7 @@ playground->setPosition(osg::Vec3(0,0,0)); // playground positionieren und gener
     // load controller parameters from file
     FILE* file;
     char filename[256];
-    sprintf(filename, "init_weights.tmp");
+    snprintf(filename, sizeof(filename), "init_weights.tmp");
     file = fopen(filename,"r");
     controller->restore(file);
     if(file) fclose(file);
@@ -475,7 +475,7 @@ int main (int argc, char **argv)
 
   FILE* filen;
   char filename[256];
-  sprintf(filename, "parameters.log");
+  snprintf(filename, sizeof(filename), "parameters.log");
   filen = fopen(filename,"a");
   fprintf(filen,"#c  h  a \n");
   fflush(filen);
@@ -500,7 +500,7 @@ int main (int argc, char **argv)
         /*if (i==0)*/{
           FILE* filen;
           char filename[256];
-          sprintf(filename, "parameters.log");
+          snprintf(filename, sizeof(filename), "parameters.log");
           filen = fopen(filename,"a");
           //StaticController:
           fprintf(filen,"%g   %g\n", ((double)c)/10.0, ((double)h)/10.0);
@@ -513,7 +513,7 @@ int main (int argc, char **argv)
     }
     FILE* file;
     char filename[256];
-    sprintf(filename, "summed_path.log");
+    snprintf(filename, sizeof(filename), "summed_path.log");
     file = fopen(filename,"a");
     fprintf(file,"\n");
     fflush(file);

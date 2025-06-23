@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<results version="2">
+    <cppcheck version="2.17.1"/>
+    <errors>
+        <error id="missingInclude" severity="information" msg="Include file: &quot;ConfiguratorProxy.h&quot; not found." verbose="Include file: &quot;ConfiguratorProxy.h&quot; not found.">
+            <location file="/Users/jerry/lpzrobot_mac/configurator/src/ConfiguratorProxy.cpp" line="55" column="0"/>
+        </error>
+        <error id="missingInclude" severity="information" msg="Include file: &quot;QConfigurableWidget.h&quot; not found." verbose="Include file: &quot;QConfigurableWidget.h&quot; not found.">
+            <location file="/Users/jerry/lpzrobot_mac/configurator/src/QConfigurator.h" line="155" column="0"/>
+        </error>
+        <error id="missingInclude" severity="information" msg="Include file: &quot;QConfigurableLoadSaveDialog.h&quot; not found." verbose="Include file: &quot;QConfigurableLoadSaveDialog.h&quot; not found.">
+            <location file="/Users/jerry/lpzrobot_mac/configurator/src/QConfigurator.cpp" line="175" column="0"/>
+        </error>
+        <error id="uninitMemberVar" severity="warning" msg="Member variable &apos;Configurable::parent&apos; is not initialized in the constructor." verbose="Member variable &apos;Configurable::parent&apos; is not initialized in the constructor. Member variables of native types, pointers, or references are left uninitialized when the class is instantiated. That may cause bugs or undefined behavior." cwe="398" file0="/Users/jerry/lpzrobot_mac/configurator/testapp/main.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/configurable.h" line="138" column="5"/>
+            <symbol>Configurable::parent</symbol>
+        </error>
+        <error id="uninitMemberVar" severity="warning" msg="Member variable &apos;Configurable::parent&apos; is not initialized in the constructor." verbose="Member variable &apos;Configurable::parent&apos; is not initialized in the constructor. Member variables of native types, pointers, or references are left uninitialized when the class is instantiated. That may cause bugs or undefined behavior." cwe="398" file0="/Users/jerry/lpzrobot_mac/configurator/testapp/main.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/configurable.h" line="143" column="5"/>
+            <symbol>Configurable::parent</symbol>
+        </error>
+        <error id="uninitMemberVar" severity="warning" msg="Member variable &apos;ColorNormalNoise::factor&apos; is not initialized in the constructor." verbose="Member variable &apos;ColorNormalNoise::factor&apos; is not initialized in the constructor. Member variables of native types, pointers, or references are left uninitialized when the class is instantiated. That may cause bugs or undefined behavior." cwe="398" file0="/Users/jerry/lpzrobot_mac/configurator/testapp/main.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/noisegenerator.h" line="215" column="3"/>
+            <symbol>ColorNormalNoise::factor</symbol>
+        </error>
+        <error id="noExplicitConstructor" severity="style" msg="Struct &apos;join&apos; has a constructor with 1 argument that is not explicit." verbose="Struct &apos;join&apos; has a constructor with 1 argument that is not explicit. Such, so called &quot;Converting constructors&quot;, should in general be explicit for type safety reasons as that prevents unintended implicit conversions." cwe="398" file0="/Users/jerry/lpzrobot_mac/configurator/testapp/main.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/stl_adds.h" line="95" column="5"/>
+            <symbol>join</symbol>
+        </error>
+        <error id="noExplicitConstructor" severity="style" msg="Struct &apos;matchId&apos; has a constructor with 1 argument that is not explicit." verbose="Struct &apos;matchId&apos; has a constructor with 1 argument that is not explicit. Such, so called &quot;Converting constructors&quot;, should in general be explicit for type safety reasons as that prevents unintended implicit conversions." cwe="398" file0="/Users/jerry/lpzrobot_mac/configurator/testapp/main.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/configurable.h" line="127" column="9"/>
+            <symbol>matchId</symbol>
+        </error>
+        <error id="noExplicitConstructor" severity="style" msg="Class &apos;Inspectable&apos; has a constructor with 1 argument that is not explicit." verbose="Class &apos;Inspectable&apos; has a constructor with 1 argument that is not explicit. Such, so called &quot;Converting constructors&quot;, should in general be explicit for type safety reasons as that prevents unintended implicit conversions." cwe="398" file0="/Users/jerry/lpzrobot_mac/configurator/testapp/main.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/inspectable.h" line="107" column="3"/>
+            <symbol>Inspectable</symbol>
+        </error>
+        <error id="noExplicitConstructor" severity="style" msg="Struct &apos;matchName&apos; has a constructor with 1 argument that is not explicit." verbose="Struct &apos;matchName&apos; has a constructor with 1 argument that is not explicit. Such, so called &quot;Converting constructors&quot;, should in general be explicit for type safety reasons as that prevents unintended implicit conversions." cwe="398" file0="/Users/jerry/lpzrobot_mac/configurator/testapp/main.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/inspectable.h" line="95" column="5"/>
+            <symbol>matchName</symbol>
+        </error>
+        <error id="noExplicitConstructor" severity="style" msg="Class &apos;SensorMotorInfo&apos; has a constructor with 1 argument that is not explicit." verbose="Class &apos;SensorMotorInfo&apos; has a constructor with 1 argument that is not explicit. Such, so called &quot;Converting constructors&quot;, should in general be explicit for type safety reasons as that prevents unintended implicit conversions." cwe="398" file0="/Users/jerry/lpzrobot_mac/configurator/testapp/main.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/sensormotorinfo.h" line="38" column="3"/>
+            <symbol>SensorMotorInfo</symbol>
+        </error>
+        <error id="noExplicitConstructor" severity="style" msg="Class &apos;ColorUniformNoise&apos; has a constructor with 1 argument that is not explicit." verbose="Class &apos;ColorUniformNoise&apos; has a constructor with 1 argument that is not explicit. Such, so called &quot;Converting constructors&quot;, should in general be explicit for type safety reasons as that prevents unintended implicit conversions." cwe="398" file0="/Users/jerry/lpzrobot_mac/configurator/testapp/main.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/noisegenerator.h" line="165" column="3"/>
+            <symbol>ColorUniformNoise</symbol>
+        </error>
+        <error id="noExplicitConstructor" severity="style" msg="Class &apos;ColorNormalNoise&apos; has a constructor with 1 argument that is not explicit." verbose="Class &apos;ColorNormalNoise&apos; has a constructor with 1 argument that is not explicit. Such, so called &quot;Converting constructors&quot;, should in general be explicit for type safety reasons as that prevents unintended implicit conversions." cwe="398" file0="/Users/jerry/lpzrobot_mac/configurator/testapp/main.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/noisegenerator.h" line="215" column="3"/>
+            <symbol>ColorNormalNoise</symbol>
+        </error>
+        <error id="noExplicitConstructor" severity="style" msg="Class &apos;Sox&apos; has a constructor with 1 argument that is not explicit." verbose="Class &apos;Sox&apos; has a constructor with 1 argument that is not explicit. Such, so called &quot;Converting constructors&quot;, should in general be explicit for type safety reasons as that prevents unintended implicit conversions." cwe="398" file0="/Users/jerry/lpzrobot_mac/configurator/testapp/main.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/sox.h" line="59" column="3"/>
+            <symbol>Sox</symbol>
+        </error>
+        <error id="noExplicitConstructor" severity="style" msg="Class &apos;Sox&apos; has a constructor with 1 argument that is not explicit." verbose="Class &apos;Sox&apos; has a constructor with 1 argument that is not explicit. Such, so called &quot;Converting constructors&quot;, should in general be explicit for type safety reasons as that prevents unintended implicit conversions." cwe="398" file0="/Users/jerry/lpzrobot_mac/configurator/testapp/main.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/sox.h" line="62" column="3"/>
+            <symbol>Sox</symbol>
+        </error>
+        <error id="noExplicitConstructor" severity="style" msg="Class &apos;SoxExpand&apos; has a constructor with 1 argument that is not explicit." verbose="Class &apos;SoxExpand&apos; has a constructor with 1 argument that is not explicit. Such, so called &quot;Converting constructors&quot;, should in general be explicit for type safety reasons as that prevents unintended implicit conversions." cwe="398" file0="/Users/jerry/lpzrobot_mac/configurator/testapp/main.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/soxexpand.h" line="48" column="3"/>
+            <symbol>SoxExpand</symbol>
+        </error>
+        <error id="missingOverride" severity="style" msg="The destructor &apos;~Configurable&apos; overrides a destructor in a base class but is not marked with a &apos;override&apos; specifier." verbose="The destructor &apos;~Configurable&apos; overrides a destructor in a base class but is not marked with a &apos;override&apos; specifier." file0="/Users/jerry/lpzrobot_mac/configurator/testapp/main.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/configurable.h" line="156" column="14" info="Destructor in derived class"/>
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/backcaller.h" line="54" column="14" info="Virtual destructor in base class"/>
+            <symbol>~Configurable</symbol>
+        </error>
+        <error id="missingOverride" severity="style" msg="The destructor &apos;~Matrix&apos; overrides a destructor in a base class but is not marked with a &apos;override&apos; specifier." verbose="The destructor &apos;~Matrix&apos; overrides a destructor in a base class but is not marked with a &apos;override&apos; specifier." file0="/Users/jerry/lpzrobot_mac/configurator/testapp/main.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/matrix.h" line="88" column="6" info="Destructor in derived class"/>
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/storeable.h" line="35" column="12" info="Virtual destructor in base class"/>
+            <symbol>~Matrix</symbol>
+        </error>
+        <error id="missingOverride" severity="style" msg="The function &apos;store&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." verbose="The function &apos;store&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." file0="/Users/jerry/lpzrobot_mac/configurator/testapp/main.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/matrix.h" line="163" column="10" info="Function in derived class"/>
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/storeable.h" line="38" column="16" info="Virtual function in base class"/>
+            <symbol>store</symbol>
+        </error>
+        <error id="missingOverride" severity="style" msg="The function &apos;restore&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." verbose="The function &apos;restore&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." file0="/Users/jerry/lpzrobot_mac/configurator/testapp/main.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/matrix.h" line="168" column="10" info="Function in derived class"/>
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/storeable.h" line="42" column="16" info="Virtual function in base class"/>
+            <symbol>restore</symbol>
+        </error>
+        <error id="missingOverride" severity="style" msg="The destructor &apos;~NoNoise&apos; overrides a destructor in a base class but is not marked with a &apos;override&apos; specifier." verbose="The destructor &apos;~NoNoise&apos; overrides a destructor in a base class but is not marked with a &apos;override&apos; specifier." file0="/Users/jerry/lpzrobot_mac/configurator/testapp/main.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/noisegenerator.h" line="121" column="12" info="Destructor in derived class"/>
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/noisegenerator.h" line="46" column="12" info="Virtual destructor in base class"/>
+            <symbol>~NoNoise</symbol>
+        </error>
+        <error id="missingOverride" severity="style" msg="The function &apos;generate&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." verbose="The function &apos;generate&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." file0="/Users/jerry/lpzrobot_mac/configurator/testapp/main.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/noisegenerator.h" line="122" column="18" info="Function in derived class"/>
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/noisegenerator.h" line="78" column="18" info="Virtual function in base class"/>
+            <symbol>generate</symbol>
+        </error>
+        <error id="missingOverride" severity="style" msg="The destructor &apos;~WhiteUniformNoise&apos; overrides a destructor in a base class but is not marked with a &apos;override&apos; specifier." verbose="The destructor &apos;~WhiteUniformNoise&apos; overrides a destructor in a base class but is not marked with a &apos;override&apos; specifier." file0="/Users/jerry/lpzrobot_mac/configurator/testapp/main.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/noisegenerator.h" line="132" column="12" info="Destructor in derived class"/>
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/noisegenerator.h" line="46" column="12" info="Virtual destructor in base class"/>
+            <symbol>~WhiteUniformNoise</symbol>
+        </error>
+        <error id="missingOverride" severity="style" msg="The function &apos;generate&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." verbose="The function &apos;generate&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." file0="/Users/jerry/lpzrobot_mac/configurator/testapp/main.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/noisegenerator.h" line="133" column="18" info="Function in derived class"/>
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/noisegenerator.h" line="78" column="18" info="Virtual function in base class"/>
+            <symbol>generate</symbol>
+        </error>
+        <error id="missingOverride" severity="style" msg="The destructor &apos;~WhiteNormalNoise&apos; overrides a destructor in a base class but is not marked with a &apos;override&apos; specifier." verbose="The destructor &apos;~WhiteNormalNoise&apos; overrides a destructor in a base class but is not marked with a &apos;override&apos; specifier." file0="/Users/jerry/lpzrobot_mac/configurator/testapp/main.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/noisegenerator.h" line="144" column="12" info="Destructor in derived class"/>
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/noisegenerator.h" line="46" column="12" info="Virtual destructor in base class"/>
+            <symbol>~WhiteNormalNoise</symbol>
+        </error>
+        <error id="missingOverride" severity="style" msg="The function &apos;generate&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." verbose="The function &apos;generate&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." file0="/Users/jerry/lpzrobot_mac/configurator/testapp/main.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/noisegenerator.h" line="145" column="18" info="Function in derived class"/>
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/noisegenerator.h" line="78" column="18" info="Virtual function in base class"/>
+            <symbol>generate</symbol>
+        </error>
+        <error id="missingOverride" severity="style" msg="The destructor &apos;~ColorUniformNoise&apos; overrides a destructor in a base class but is not marked with a &apos;override&apos; specifier." verbose="The destructor &apos;~ColorUniformNoise&apos; overrides a destructor in a base class but is not marked with a &apos;override&apos; specifier." file0="/Users/jerry/lpzrobot_mac/configurator/testapp/main.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/noisegenerator.h" line="171" column="12" info="Destructor in derived class"/>
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/noisegenerator.h" line="46" column="12" info="Virtual destructor in base class"/>
+            <symbol>~ColorUniformNoise</symbol>
+        </error>
+        <error id="missingOverride" severity="style" msg="The function &apos;init&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." verbose="The function &apos;init&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." file0="/Users/jerry/lpzrobot_mac/configurator/testapp/main.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/noisegenerator.h" line="172" column="16" info="Function in derived class"/>
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/noisegenerator.h" line="61" column="16" info="Virtual function in base class"/>
+            <symbol>init</symbol>
+        </error>
+        <error id="missingOverride" severity="style" msg="The function &apos;generate&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." verbose="The function &apos;generate&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." file0="/Users/jerry/lpzrobot_mac/configurator/testapp/main.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/noisegenerator.h" line="180" column="18" info="Function in derived class"/>
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/noisegenerator.h" line="78" column="18" info="Virtual function in base class"/>
+            <symbol>generate</symbol>
+        </error>
+        <error id="missingOverride" severity="style" msg="The function &apos;add&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." verbose="The function &apos;add&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." file0="/Users/jerry/lpzrobot_mac/configurator/testapp/main.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/noisegenerator.h" line="190" column="16" info="Function in derived class"/>
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/noisegenerator.h" line="85" column="16" info="Virtual function in base class"/>
+            <symbol>add</symbol>
+        </error>
+        <error id="missingOverride" severity="style" msg="The destructor &apos;~ColorNormalNoise&apos; overrides a destructor in a base class but is not marked with a &apos;override&apos; specifier." verbose="The destructor &apos;~ColorNormalNoise&apos; overrides a destructor in a base class but is not marked with a &apos;override&apos; specifier." file0="/Users/jerry/lpzrobot_mac/configurator/testapp/main.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/noisegenerator.h" line="222" column="12" info="Destructor in derived class"/>
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/noisegenerator.h" line="144" column="12" info="Virtual destructor in base class"/>
+            <symbol>~ColorNormalNoise</symbol>
+        </error>
+        <error id="missingOverride" severity="style" msg="The function &apos;init&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." verbose="The function &apos;init&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." file0="/Users/jerry/lpzrobot_mac/configurator/testapp/main.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/noisegenerator.h" line="224" column="16" info="Function in derived class"/>
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/noisegenerator.h" line="61" column="16" info="Virtual function in base class"/>
+            <symbol>init</symbol>
+        </error>
+        <error id="missingOverride" severity="style" msg="The function &apos;generate&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." verbose="The function &apos;generate&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." file0="/Users/jerry/lpzrobot_mac/configurator/testapp/main.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/noisegenerator.h" line="232" column="18" info="Function in derived class"/>
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/noisegenerator.h" line="145" column="18" info="Virtual function in base class"/>
+            <symbol>generate</symbol>
+        </error>
+        <error id="missingOverride" severity="style" msg="The function &apos;add&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." verbose="The function &apos;add&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." file0="/Users/jerry/lpzrobot_mac/configurator/testapp/main.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/noisegenerator.h" line="237" column="16" info="Function in derived class"/>
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/noisegenerator.h" line="85" column="16" info="Virtual function in base class"/>
+            <symbol>add</symbol>
+        </error>
+        <error id="missingOverride" severity="style" msg="The destructor &apos;~SineWhiteNoise&apos; overrides a destructor in a base class but is not marked with a &apos;override&apos; specifier." verbose="The destructor &apos;~SineWhiteNoise&apos; overrides a destructor in a base class but is not marked with a &apos;override&apos; specifier." file0="/Users/jerry/lpzrobot_mac/configurator/testapp/main.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/noisegenerator.h" line="275" column="12" info="Destructor in derived class"/>
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/noisegenerator.h" line="46" column="12" info="Virtual destructor in base class"/>
+            <symbol>~SineWhiteNoise</symbol>
+        </error>
+        <error id="missingOverride" severity="style" msg="The function &apos;generate&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." verbose="The function &apos;generate&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." file0="/Users/jerry/lpzrobot_mac/configurator/testapp/main.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/noisegenerator.h" line="277" column="18" info="Function in derived class"/>
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/noisegenerator.h" line="78" column="18" info="Virtual function in base class"/>
+            <symbol>generate</symbol>
+        </error>
+        <error id="missingOverride" severity="style" msg="The function &apos;add&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." verbose="The function &apos;add&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." file0="/Users/jerry/lpzrobot_mac/configurator/testapp/main.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/noisegenerator.h" line="285" column="16" info="Function in derived class"/>
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/noisegenerator.h" line="85" column="16" info="Virtual function in base class"/>
+            <symbol>add</symbol>
+        </error>
+        <error id="missingOverride" severity="style" msg="The function &apos;init&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." verbose="The function &apos;init&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." file0="/Users/jerry/lpzrobot_mac/configurator/testapp/main.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/soxexpand.h" line="49" column="16" info="Function in derived class"/>
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/abstractcontroller.h" line="58" column="16" info="Virtual function in base class"/>
+            <symbol>init</symbol>
+        </error>
+        <error id="missingOverride" severity="style" msg="The function &apos;getSensorNumber&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." verbose="The function &apos;getSensorNumber&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." file0="/Users/jerry/lpzrobot_mac/configurator/testapp/main.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/soxexpand.h" line="61" column="15" info="Function in derived class"/>
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/abstractcontroller.h" line="62" column="15" info="Virtual function in base class"/>
+            <symbol>getSensorNumber</symbol>
+        </error>
+        <error id="missingOverride" severity="style" msg="The function &apos;getMotorNumber&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." verbose="The function &apos;getMotorNumber&apos; overrides a function in a base class but is not marked with a &apos;override&apos; specifier." file0="/Users/jerry/lpzrobot_mac/configurator/testapp/main.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/soxexpand.h" line="63" column="15" info="Function in derived class"/>
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/abstractcontroller.h" line="66" column="15" info="Virtual function in base class"/>
+            <symbol>getMotorNumber</symbol>
+        </error>
+        <error id="nullPointerOutOfMemory" severity="warning" msg="If memory allocation fails, then there is a possible null pointer dereference: mean" verbose="If memory allocation fails, then there is a possible null pointer dereference: mean" cwe="476" file0="/Users/jerry/lpzrobot_mac/configurator/testapp/main.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/noisegenerator.h" line="176" column="9" info="Null pointer dereference"/>
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/noisegenerator.h" line="174" column="12" info="Assignment &apos;mean=(double*)malloc(sizeof(double)*dimension)&apos;, assigned value is 0"/>
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/noisegenerator.h" line="174" column="27" info="Assuming allocation function fails"/>
+            <symbol>mean</symbol>
+        </error>
+        <error id="nullPointerOutOfMemory" severity="warning" msg="If memory allocation fails, then there is a possible null pointer dereference: mean" verbose="If memory allocation fails, then there is a possible null pointer dereference: mean" cwe="476" file0="/Users/jerry/lpzrobot_mac/configurator/testapp/main.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/noisegenerator.h" line="228" column="9" info="Null pointer dereference"/>
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/noisegenerator.h" line="226" column="12" info="Assignment &apos;mean=(double*)malloc(sizeof(double)*dimension)&apos;, assigned value is 0"/>
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/noisegenerator.h" line="226" column="27" info="Assuming allocation function fails"/>
+            <symbol>mean</symbol>
+        </error>
+        <error id="cstyleCast" severity="style" msg="C-style pointer casting" verbose="C-style pointer casting detected. C++ offers four different kinds of casts as replacements: static_cast, const_cast, dynamic_cast and reinterpret_cast. A C-style cast could evaluate to any of those automatically, thus it is considered safer if the programmer explicitly states which kind of cast is expected." cwe="398" file0="/Users/jerry/lpzrobot_mac/configurator/testapp/main.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/noisegenerator.h" line="174" column="12"/>
+        </error>
+        <error id="cstyleCast" severity="style" msg="C-style pointer casting" verbose="C-style pointer casting detected. C++ offers four different kinds of casts as replacements: static_cast, const_cast, dynamic_cast and reinterpret_cast. A C-style cast could evaluate to any of those automatically, thus it is considered safer if the programmer explicitly states which kind of cast is expected." cwe="398" file0="/Users/jerry/lpzrobot_mac/configurator/testapp/main.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/noisegenerator.h" line="226" column="12"/>
+        </error>
+        <error id="passedByValue" severity="performance" msg="Function parameter &apos;list&apos; should be passed by const reference." verbose="Parameter &apos;list&apos; is passed by value. It could be passed as a const reference which is usually faster and recommended in C++." cwe="398" file0="/Users/jerry/lpzrobot_mac/configurator/testapp/main.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/stl_adds.h" line="110" column="29" info="Function parameter &apos;list&apos; should be passed by const reference."/>
+            <symbol>list</symbol>
+        </error>
+        <error id="passedByValue" severity="performance" msg="Function parameter &apos;name&apos; should be passed by const reference." verbose="Parameter &apos;name&apos; is passed by value. It could be passed as a const reference which is usually faster and recommended in C++." cwe="398" file0="/Users/jerry/lpzrobot_mac/configurator/testapp/main.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/inspectable.h" line="95" column="27" info="Function parameter &apos;name&apos; should be passed by const reference."/>
+            <symbol>name</symbol>
+        </error>
+        <error id="passedByValue" severity="performance" msg="Function parameter &apos;l&apos; should be passed by const reference." verbose="Parameter &apos;l&apos; is passed by value. It could be passed as a const reference which is usually faster and recommended in C++." cwe="398" file0="/Users/jerry/lpzrobot_mac/configurator/testapp/main.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/inspectable.h" line="97" column="28" info="Function parameter &apos;l&apos; should be passed by const reference."/>
+            <symbol>l</symbol>
+        </error>
+        <error id="passedByValue" severity="performance" msg="Function parameter &apos;_name&apos; should be passed by const reference." verbose="Parameter &apos;_name&apos; is passed by value. It could be passed as a const reference which is usually faster and recommended in C++." cwe="398" file0="/Users/jerry/lpzrobot_mac/configurator/testapp/main.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/sensormotorinfo.h" line="42" column="3" info="Function parameter &apos;_name&apos; should be passed by const reference."/>
+            <symbol>_name</symbol>
+        </error>
+        <error id="constParameterPointer" severity="style" msg="Parameter &apos;c&apos; can be declared as pointer to const" verbose="Parameter &apos;c&apos; can be declared as pointer to const" cwe="398" file0="/Users/jerry/lpzrobot_mac/configurator/testapp/main.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/configurable.h" line="132" column="39" info="Parameter &apos;c&apos; can be declared as pointer to const"/>
+            <symbol>c</symbol>
+        </error>
+        <error id="useStlAlgorithm" severity="style" msg="Consider using std::transform algorithm instead of a raw loop." verbose="Consider using std::transform algorithm instead of a raw loop." cwe="398" file0="/Users/jerry/lpzrobot_mac/configurator/testapp/main.cpp">
+            <location file="/Users/jerry/lpzrobot_mac/selforg/include/selforg/stl_adds.h" line="121" column="11"/>
+        </error>
+        <error id="checkersReport" severity="information" msg="Active checkers: 168/856 (use --checkers-report=&lt;filename&gt; to see details)" verbose="Active checkers: 168/856 (use --checkers-report=&lt;filename&gt; to see details)"/>
+    </errors>
+</results>

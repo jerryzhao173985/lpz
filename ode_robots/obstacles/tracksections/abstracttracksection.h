@@ -63,30 +63,30 @@ class AbstractTrackSection{
   virtual ~AbstractTrackSection(){}
   
 
-  virtual void create(dSpaceID space) = 0;
+  virtual void create(dSpaceID space)  override = 0;
 
-  virtual void destroy() = 0;
+  virtual void destroy()  override = 0;
 
-  virtual void draw() = 0;
+  virtual void draw()  override = 0;
 
   /**
    * gives the position and rotation(angle) of the segment at the
    * end of the segment so that a new segment could be placed there
    * the result is a matrix
    */
-  virtual Matrix getTransformedEndMatrix() = 0;
+  virtual Matrix getTransformedEndMatrix()  override = 0;
 
   /**
    * returns true if the real coordinates lay inside of the segment
    */
-  virtual bool isInside(const Position& p) = 0;
+  virtual bool isInside(const Position& p)  override = 0;
 
   /**
  * returns a value between 0 and length that tells at which section
  * you are on the segment.
  * returns -1 if no IdValue can be given
  */
-  virtual double getSectionIdValue(const Position& p)=0;
+  virtual double getSectionIdValue(const Position& p) override;
 
 
 /**
@@ -94,7 +94,7 @@ class AbstractTrackSection{
  * you are on the segment, 0 means right and width means left.
  * returns -1 if no WidthValue can be given
  */
-virtual double getWidthIdValue(const Position& p)=0;
+virtual double getWidthIdValue(const Position& p) override;
 
 
 
@@ -103,18 +103,18 @@ virtual double getWidthIdValue(const Position& p)=0;
  * here it is the length of the arc
  * formula is: radius * angle;
  */
- virtual double getLength()=0;
+ virtual double getLength() override;
 
 
 /**
  * returns the width of the segment,
  */
- virtual double getWidth()=0;
+ virtual double getWidth() override;
 
 /**
  * sets the width of the segment,
  */
- virtual void setWidth(double w)=0;
+ virtual void setWidth(double w) override;
 
   Matrix getPoseMatrix(){
     return pos;

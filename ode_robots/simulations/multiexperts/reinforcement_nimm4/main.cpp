@@ -533,7 +533,7 @@ public:
   virtual void end(GlobalData& globalData){
 //     // store controller:
 //     char filename[128];
-//     sprintf(filename,"4Wheel_160min_%2.2f_%2.2f",);
+//     snprintf(filename, sizeof(filename),"4Wheel_160min_%2.2f_%2.2f",);
 //     FILE* f = fopen(filename,"wb");
 //     if(f){
 //       controller->store(f);
@@ -594,7 +594,7 @@ public:
           }
           break;
         case 's' :
-          sprintf(file,"QTable%07.1f.matrix",globalData.time);
+          snprintf(file, sizeof(file),"QTable%07.1f.matrix",globalData.time);
           f= fopen(file,"w");
           if(!f) cerr << "cannot open file: " << file << endl;
           else {
@@ -605,7 +605,7 @@ public:
           return true;
           break;
         case 'c' :
-          sprintf(file,"contour.dat");
+          snprintf(file, sizeof(file),"contour.dat");
           f= fopen(file,"w");
           if(!f) cerr << "cannot open file: " << file << endl;
           else {

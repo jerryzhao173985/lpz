@@ -46,9 +46,9 @@ public:
    * Constructs the MeasureAdapter.
    *
    */
-  MeasureAdapter(AbstractController* controller, const std::string& name = "MeasureAdapter", const std::string& revision = "$ID$");
+  explicit MeasureAdapter(AbstractController* controller, const std::string& name = "MeasureAdapter", const std::string& revision = "$ID$");
 
-  virtual ~MeasureAdapter();
+  virtual ~MeasureAdapter() override;
 
   /**
    * Adds a ComplexMeasure for measuring sensor values. For each
@@ -65,7 +65,7 @@ public:
   * call first AbstractControllerAdapter::init(sensornumber,motornumber)
   * if you overwrite this method
   */
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
 
   /** performs one step (includes learning).
       Calculates motor commands from sensor inputs.
@@ -75,13 +75,13 @@ public:
   @param motornumber length of the provided motor array
   */
   virtual void step(const sensor* sensors, int sensornumber,
-                    motor* motors, int motornumber);
+                    motor* motors, int motornumber) override;
 
   /** performs one step without learning.
   @see step
   */
   virtual void stepNoLearning(const sensor* sensors , int sensornumber,
-                              motor* motors, int motornumber);
+                              motor* motors, int motornumber) override;
 
   /****************************************************************************/
   /*        END methods of AbstractController                                             */

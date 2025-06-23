@@ -1,0 +1,285 @@
+/***************************************************************************
+ *   ARM64 NEON optimizations for matrix operations
+ *   Copyright static_cast<C>(2024)
+ ***************************************************************************/
+
+#include "matrix_neon.h"
+#include "matrix.h"
+#include <cstring>
+
+namespace matrix {
+
+#ifdef __ARM_NEON
+
+void MatrixNEON::mult_neon(const Matrix& a, const Matrix& b, Matrix& result) {
+    const unsigned int M = a.getM();
+    const unsigned int N = b.getN();
+    const unsigned int K = a.getN();
+    
+    // Ensure result matrix has correct dimensions
+    result.set(M, N);
+    
+    const double* A = a.unsafeGetData();
+    const double* B = b.unsafeGetData();
+    double* C = const_cast<Matrix&>(result).unsafeGetData();
+    
+    // Clear result matrix
+    memset(C, 0, M * N * sizeof(double));
+    
+    // Process in 4x4 blocks for optimal NEON usage
+    const unsigned int M4 = M & ~3;
+    const unsigned int N4 = N & ~3;
+    
+    // Main 4x4 block processing
+    for (unsigned int i = 0; i < M4; i += 4) {
+        for (unsigned int j = 0; j < N4; j += 4) {
+            mult_block_4x4_neon(A + i*K, B + j, C + i*N + j, K, N, N, K);
+        }
+        
+        // Handle remaining columns
+        for (unsigned int j = N4; j < N; j++) {
+            float64x2_t sum0 = vdupq_n_f64(0.0);
+            float64x2_t sum1 = vdupq_n_f64(0.0);
+            
+            for (unsigned int k = 0; k < K; k += 2) {
+                if (k + 1 < K) {
+                    float64x2_t a0 = vld1q_f64(A + i*K + k);
+                    float64x2_t a1 = vld1q_f64(A + (i+1)*K + k);
+                    float64x2_t a2 = vld1q_f64(A + (i+2)*K + k);
+                    float64x2_t a3 = vld1q_f64(A + (i+3)*K + k);
+                    
+                    float64x2_t b0 = {B[k*N + j], B[(k+1)*N + j]};
+                    
+                    sum0 = vfmaq_f64(sum0, a0, b0);
+                    sum1 = vfmaq_f64(sum1, a1, b0);
+                    
+                    C[i*N + j] += vaddvq_f64(sum0);
+                    C[(i+1)*N + j] += vaddvq_f64(sum1);
+                    
+                    sum0 = vfmaq_f64(vdupq_n_f64(0.0), a2, b0);
+                    sum1 = vfmaq_f64(vdupq_n_f64(0.0), a3, b0);
+                    
+                    C[(i+2)*N + j] += vaddvq_f64(sum0);
+                    C[(i+3)*N + j] += vaddvq_f64(sum1);
+                } else {
+                    // Handle last element if K is odd
+                    C[i*N + j] += A[i*K + k] * B[k*N + j];
+                    C[(i+1)*N + j] += A[(i+1)*K + k] * B[k*N + j];
+                    C[(i+2)*N + j] += A[(i+2)*K + k] * B[k*N + j];
+                    C[(i+3)*N + j] += A[(i+3)*K + k] * B[k*N + j];
+                }
+            }
+        }
+    }
+    
+    // Handle remaining rows with scalar code
+    for (unsigned int i = M4; i < M; i++) {
+        for (unsigned int j = 0; j < N; j++) {
+            double sum = 0.0;
+            for (unsigned int k = 0; k < K; k++) {
+                sum += A[i*K + k] * B[k*N + j];
+            }
+            C[i*N + j] = sum;
+        }
+    }
+}
+
+void MatrixNEON::mult_block_4x4_neon(
+    const double* a, const double* b, double* c,
+    unsigned int lda, unsigned int ldb, unsigned int ldc,
+    unsigned int k) {
+    
+    // Initialize result accumulators
+    float64x2_t c00 = vdupq_n_f64(0.0), c01 = vdupq_n_f64(0.0);
+    float64x2_t c10 = vdupq_n_f64(0.0), c11 = vdupq_n_f64(0.0);
+    float64x2_t c20 = vdupq_n_f64(0.0), c21 = vdupq_n_f64(0.0);
+    float64x2_t c30 = vdupq_n_f64(0.0), c31 = vdupq_n_f64(0.0);
+    
+    // Process k dimension
+    for (unsigned int p = 0; p < k; p++) {
+        // Load A column
+        float64x2_t a0 = {a[0*lda + p], a[1*lda + p]};
+        float64x2_t a1 = {a[2*lda + p], a[3*lda + p]};
+        
+        // Load B row
+        float64x2_t b0 = vld1q_f64(b + p*ldb + 0);
+        float64x2_t b1 = vld1q_f64(b + p*ldb + 2);
+        
+        // Compute outer product
+        c00 = vfmaq_laneq_f64(c00, b0, a0, 0);
+        c01 = vfmaq_laneq_f64(c01, b1, a0, 0);
+        c10 = vfmaq_laneq_f64(c10, b0, a0, 1);
+        c11 = vfmaq_laneq_f64(c11, b1, a0, 1);
+        c20 = vfmaq_laneq_f64(c20, b0, a1, 0);
+        c21 = vfmaq_laneq_f64(c21, b1, a1, 0);
+        c30 = vfmaq_laneq_f64(c30, b0, a1, 1);
+        c31 = vfmaq_laneq_f64(c31, b1, a1, 1);
+    }
+    
+    // Store results
+    vst1q_f64(c + 0*ldc + 0, vaddq_f64(vld1q_f64(c + 0*ldc + 0), c00));
+    vst1q_f64(c + 0*ldc + 2, vaddq_f64(vld1q_f64(c + 0*ldc + 2), c01));
+    vst1q_f64(c + 1*ldc + 0, vaddq_f64(vld1q_f64(c + 1*ldc + 0), c10));
+    vst1q_f64(c + 1*ldc + 2, vaddq_f64(vld1q_f64(c + 1*ldc + 2), c11));
+    vst1q_f64(c + 2*ldc + 0, vaddq_f64(vld1q_f64(c + 2*ldc + 0), c20));
+    vst1q_f64(c + 2*ldc + 2, vaddq_f64(vld1q_f64(c + 2*ldc + 2), c21));
+    vst1q_f64(c + 3*ldc + 0, vaddq_f64(vld1q_f64(c + 3*ldc + 0), c30));
+    vst1q_f64(c + 3*ldc + 2, vaddq_f64(vld1q_f64(c + 3*ldc + 2), c31));
+}
+
+void MatrixNEON::mult_scalar_neon(const Matrix& a, double scalar, Matrix& result) {
+    const unsigned int size = a.size();
+    result.set(a.getM(), a.getN());
+    
+    const double* src = a.getData();
+    double* dst = result.getData();
+    
+    float64x2_t vscalar = vdupq_n_f64(scalar);
+    
+    // Process 4 elements at a time
+    unsigned int i = 0;
+    for (; i + 3 < size; i += 4) {
+        float64x2_t v0 = vld1q_f64(src + i);
+        float64x2_t v1 = vld1q_f64(src + i + 2);
+        
+        v0 = vmulq_f64(v0, vscalar);
+        v1 = vmulq_f64(v1, vscalar);
+        
+        vst1q_f64(dst + i, v0);
+        vst1q_f64(dst + i + 2, v1);
+    }
+    
+    // Handle remaining elements
+    for (; i < size; i++) {
+        dst[i] = src[i] * scalar;
+    }
+}
+
+void MatrixNEON::add_neon(const Matrix& a, const Matrix& b, Matrix& result) {
+    assert(a.getM() == b.getM() && a.getN() == b.getN());
+    
+    const unsigned int size = a.size();
+    result.set(a.getM(), a.getN());
+    
+    const double* src1 = a.unsafeGetData();
+    const double* src2 = b.unsafeGetData();
+    double* dst = const_cast<Matrix&>(result).unsafeGetData();
+    
+    // Process 4 elements at a time
+    unsigned int i = 0;
+    for (; i + 3 < size; i += 4) {
+        float64x2_t v0a = vld1q_f64(src1 + i);
+        float64x2_t v0b = vld1q_f64(src2 + i);
+        float64x2_t v1a = vld1q_f64(src1 + i + 2);
+        float64x2_t v1b = vld1q_f64(src2 + i + 2);
+        
+        v0a = vaddq_f64(v0a, v0b);
+        v1a = vaddq_f64(v1a, v1b);
+        
+        vst1q_f64(dst + i, v0a);
+        vst1q_f64(dst + i + 2, v1a);
+    }
+    
+    // Handle remaining elements
+    for (; i < size; i++) {
+        dst[i] = src1[i] + src2[i];
+    }
+}
+
+double MatrixNEON::dot_product_neon(const double* a, const double* b, unsigned int size) {
+    float64x2_t sum0 = vdupq_n_f64(0.0);
+    float64x2_t sum1 = vdupq_n_f64(0.0);
+    
+    unsigned int i = 0;
+    // Process 4 elements at a time
+    for (; i + 3 < size; i += 4) {
+        float64x2_t a0 = vld1q_f64(a + i);
+        float64x2_t b0 = vld1q_f64(b + i);
+        float64x2_t a1 = vld1q_f64(a + i + 2);
+        float64x2_t b1 = vld1q_f64(b + i + 2);
+        
+        sum0 = vfmaq_f64(sum0, a0, b0);
+        sum1 = vfmaq_f64(sum1, a1, b1);
+    }
+    
+    // Combine partial sums
+    sum0 = vaddq_f64(sum0, sum1);
+    double result = vaddvq_f64(sum0);
+    
+    // Handle remaining elements
+    for (; i < size; i++) {
+        result += a[i] * b[i];
+    }
+    
+    return result;
+}
+
+double MatrixNEON::norm_sqr_neon(const double* data, unsigned int size) {
+    float64x2_t sum0 = vdupq_n_f64(0.0);
+    float64x2_t sum1 = vdupq_n_f64(0.0);
+    
+    unsigned int i = 0;
+    // Process 4 elements at a time
+    for (; i + 3 < size; i += 4) {
+        float64x2_t v0 = vld1q_f64(data + i);
+        float64x2_t v1 = vld1q_f64(data + i + 2);
+        
+        sum0 = vfmaq_f64(sum0, v0, v0);
+        sum1 = vfmaq_f64(sum1, v1, v1);
+    }
+    
+    // Combine partial sums
+    sum0 = vaddq_f64(sum0, sum1);
+    double result = vaddvq_f64(sum0);
+    
+    // Handle remaining elements
+    for (; i < size; i++) {
+        result += data[i] * data[i];
+    }
+    
+    return result;
+}
+
+void MatrixNEON::transpose_neon(const Matrix& src, Matrix& result) {
+    const unsigned int M = src.getM();
+    const unsigned int N = src.getN();
+    
+    result.set(N, M);
+    
+    const double* S = src.unsafeGetData();
+    double* D = const_cast<Matrix&>(result).unsafeGetData();
+    
+    // Special case for small matrices
+    if (M == 2 && N == 2) {
+        float64x2_t row0 = vld1q_f64(S);
+        float64x2_t row1 = vld1q_f64(S + 2);
+        
+        // Transpose 2x2
+        float64x2_t col0 = vzip1q_f64(row0, row1);
+        float64x2_t col1 = vzip2q_f64(row0, row1);
+        
+        vst1q_f64(D, col0);
+        vst1q_f64(D + 2, col1);
+        return;
+    }
+    
+    // General case - process in blocks for cache efficiency
+    const unsigned int BLOCK = 8;
+    for (unsigned int i = 0; i < M; i += BLOCK) {
+        for (unsigned int j = 0; j < N; j += BLOCK) {
+            // Transpose block
+            unsigned int max_ii = (i + BLOCK < M) ? i + BLOCK : M;
+            unsigned int max_jj = (j + BLOCK < N) ? j + BLOCK : N;
+            
+            for (unsigned int ii = i; ii < max_ii; ii++) {
+                for (unsigned int jj = j; jj < max_jj; jj++) {
+                    D[jj * M + ii] = S[ii * N + jj];
+                }
+            }
+        }
+    }
+}
+
+#endif // __ARM_NEON
+
+} // namespace matrix

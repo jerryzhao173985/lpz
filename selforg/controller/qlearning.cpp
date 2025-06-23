@@ -163,7 +163,7 @@ double QLearning::learn (unsigned int state,
   // Todo: eligibility traces are wrong! see the book of sutton how to do it!
   // learn for previous eligibility steps
   double e_factor = 1; // learning factor for eligibility
-  for(int i=1; i<=eligibility; i++){
+  for(int i=1; i<=eligibility; ++i){
     if(t-i <0) break;
     int a_t     = actions[(t-i)   %ringbuffersize];
     int a_tp1   = actions[(t-i+1) %ringbuffersize];
@@ -214,7 +214,7 @@ int QLearning::valInCrossProd(const std::list<std::pair<int,int> >& vals){
 std::list<int> QLearning::ConfInCrossProd(const std::list<int>& ranges, int val){
   std::list<int> cfg;
 
-  for(std::list<int>::const_reverse_iterator r=ranges.rbegin(); r!=ranges.rend(); r++){
+  for(std::list<int>::const_reverse_iterator r=ranges.rbegin(); r!=ranges.rend(); ++r){
     cfg.push_front(val%*r);
     val/=*r;
   }

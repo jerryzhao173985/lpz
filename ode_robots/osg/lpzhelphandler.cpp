@@ -59,9 +59,9 @@ namespace lpzrobots{
     _applicationUsage(au),
     _keyEventTogglesOnScreenHelp('h'),
     _helpEnabled(false),
-    _initialized(false)
+    _initialized(false),
+    _camera(new osg::Camera)
   {
-    _camera = new osg::Camera;
     _camera->setRenderer(new Renderer(_camera.get()));
     _camera->setRenderOrder(osg::Camera::POST_RENDER, 11);
   }

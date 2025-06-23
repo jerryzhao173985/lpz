@@ -38,7 +38,7 @@ public:
   Sox(double init_feedback_strength = 1.0, bool useExtendedModel=true);
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
 
-  virtual ~Sox();
+  virtual ~Sox() override;
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
   virtual int getSensorNumber() const { return number_sensors; }
@@ -47,30 +47,30 @@ public:
 
   /// performs one step (includes learning).
   /// Calulates motor commands from sensor inputs.
-  virtual void step(const sensor* , int number_sensors, motor* , int number_motors);
+  virtual void step(const sensor* , int number_sensors, motor* , int number_motors) override;
 
 
   /// performs one step without learning. Calulates motor commands from sensor inputs.
   virtual void stepNoLearning(const sensor* , int number_sensors,
-                              motor* , int number_motors);
+                              motor* , int number_motors) override;
 
   /// called during babbling phase
   virtual void motorBabblingStep(const sensor* , int number_sensors,
-                                 const motor* , int number_motors);
+                                 const motor* , int number_motors) override;
 
   /***** STOREABLE ****/
   /** stores the controller values to a given file. */
-  virtual bool store(FILE* f) const;
+  virtual bool store(FILE* f) const override;
   /** loads the controller values from a given file. */
-  virtual bool restore(FILE* f);
+  virtual bool restore(FILE* f) override;
 
   /* some direct access functions (unsafe!) */
-  virtual matrix::Matrix getA();
-  virtual void setA(const matrix::Matrix& A);
-  virtual matrix::Matrix getC();
-  virtual void setC(const matrix::Matrix& C);
-  virtual matrix::Matrix geth();
-  virtual void seth(const matrix::Matrix& h);
+  virtual matrix::Matrix getA() override;
+  virtual void setA(const matrix::Matrix& A) override;
+  virtual matrix::Matrix getC() override;
+  virtual void setC(const matrix::Matrix& C) override;
+  virtual matrix::Matrix geth() override;
+  virtual void seth(const matrix::Matrix& h) override;
 
 protected:
   unsigned short number_sensors;
@@ -120,10 +120,10 @@ protected:
   matrix::Matrix pseudoInvL(const matrix::Matrix& L, const matrix::Matrix& A, const matrix::Matrix& C);
 
   /// learn values model and controller (A,b,C,h)
-  virtual void learn();
+  virtual void learn() override;
 
   /// like learn() but with random input x_t and the same x_{t+1}
-  virtual void dreamingStep();
+  virtual void dreamingStep() override;
 
   /// neuron transfer function
   static double g(double z)

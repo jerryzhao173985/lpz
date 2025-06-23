@@ -84,36 +84,36 @@ namespace lpzrobots {
     /**
      * updates the OSG nodes of the vehicle
      */
-    virtual void update();
+    virtual void update() override;
 
 
     /** sets the pose of the vehicle
         @param pose desired pose matrix
     */
-    virtual void placeIntern(const osg::Matrix& pose);
+    virtual void placeIntern(const osg::Matrix& pose) override;
 
-    virtual int getSensorsIntern(sensor* sensors, int sensornumber);
+    virtual int getSensorsIntern(sensor* sensors, int sensornumber) override;
 
-    virtual void setMotorsIntern(const double* motors, int motornumber);
+    virtual void setMotorsIntern(const double* motors, int motornumber) override;
 
-    virtual int getSensorNumberIntern();
+    virtual int getSensorNumberIntern() override;
 
-    virtual int getMotorNumberIntern();
+    virtual int getMotorNumberIntern() override;
 
-    virtual void doInternalStuff(GlobalData& globalData);
+    virtual void doInternalStuff(GlobalData& globalData) override;
 
     /******** CONFIGURABLE ***********/
-    virtual void notifyOnChange(const paramkey& key);
+    virtual void notifyOnChange(const paramkey& key) override;
 
 
-    virtual int getIRSensorNum();
+    virtual int getIRSensorNum() override;
 
   protected:
-    virtual Primitive* getMainPrimitive() const;
+    virtual Primitive* getMainPrimitive() const override;
 
-    virtual void create(const osg::Matrix& pose);
+    virtual void create(const osg::Matrix& pose) override;
 
-    virtual void destroy();
+    virtual void destroy() override;
 
     RobotChainConf conf;
 

@@ -118,8 +118,8 @@ protected:
 class NoNoise : public NoiseGenerator{
 public:
   NoNoise() {}
-  virtual ~NoNoise(){}
-  virtual double generate() {
+  virtual ~NoNoise() override{}
+  virtual double generate()  override{
     return 0;
   };
 };
@@ -129,8 +129,8 @@ public:
 class WhiteUniformNoise : public NoiseGenerator{
 public:
   WhiteUniformNoise() {}
-  virtual ~WhiteUniformNoise(){}
-  virtual double generate() {
+  virtual ~WhiteUniformNoise() override{}
+  virtual double generate()  override{
     return uniform(-1,1);
   };
 
@@ -141,8 +141,8 @@ public:
 class WhiteNormalNoise : public NoiseGenerator{
 public:
   WhiteNormalNoise(){}
-  virtual ~WhiteNormalNoise(){}
-  virtual double generate() {
+  virtual ~WhiteNormalNoise() override{}
+  virtual double generate()  override{
     double x1=uniform01();
     double x2=uniform01();
     return( (sqrt(-2*log(x1)) *cos(2*M_PI*x2)));
@@ -162,22 +162,26 @@ public:
   /** @param tau time averaging factor (1/window)
       (1: smoothing (white) 0.1: strong color, 0 no noise anymore
   */
-  ColorUniformNoise(double tau=0.05)
+  explicit ColorUniformNoise(double tau=0.05)
     : tau(tau){
     sqrttau = sqrt(tau);
     mean1channel=0.0;
     mean=0;
   }
-  virtual ~ColorUniformNoise(){ if(mean) free(mean);}
-  virtual void init(unsigned int dimension, RandGen* randGen=0){
+  virtual ~ColorUniformNoise() override{ if(mean) free(mean);}
+  virtual void init(unsigned int dimension, RandGen* randGen=0) override{
     NoiseGenerator::init(dimension, randGen);
-    mean = (double*)malloc(sizeof(double) * dimension);
+    mean = static_cast<double*>(malloc(sizeof(double) * dimension));
+    if (!mean) {
+        std::cerr << "ColorUniformNoise: Memory allocation failed\n";
+        exit(1);
+    }
     for (unsigned int i=0; i<dimension; i++){
         mean[i]=0.0;
     }
   }
 
-  virtual double generate() {
+  virtual double generate()  override{
     mean1channel+=  sqrttau *  uniform(-1,  +1) - tau *  mean1channel;
     return(mean1channel);
   }
@@ -187,7 +191,7 @@ public:
       @param min lower bound of interval
       @param max upper bound of interval
    */
-  virtual void add(double *value, double noiseStrength){
+  virtual void add(double *value, double noiseStrength) override{
     for (unsigned int i = 0; i < dimension; i++){
       mean[i]+= sqrttau * uniform(-1,  +1)*noiseStrength - tau *  mean[i];
       value[i]+=mean[i];
@@ -212,29 +216,34 @@ protected:
 /// like ColorUniformNoise but averaging over normal distributed noise instead.
 class ColorNormalNoise : public WhiteNormalNoise{
 public:
-  ColorNormalNoise(double tau=0.05)
-    : tau(tau){
-    sqrttau = sqrt(tau);
-    mean = 0;
-    mean1channel=0.0;
+  explicit ColorNormalNoise(double tau=0.05)
+    : tau(tau),
+      sqrttau(sqrt(tau)),
+      mean(0),
+      mean1channel(0.0),
+      factor(0.0) {
   }
 
-  virtual ~ColorNormalNoise(){if(mean) free(mean);}
+  virtual ~ColorNormalNoise() override{if(mean) free(mean);}
 
-  virtual void init(unsigned int dimension, RandGen* randGen=0){
+  virtual void init(unsigned int dimension, RandGen* randGen=0) override{
     WhiteNormalNoise::init(dimension, randGen);
-    mean = (double*)malloc(sizeof(double) * dimension);
+    mean = static_cast<double*>(malloc(sizeof(double) * dimension));
+    if (!mean) {
+        std::cerr << "ColorNormalNoise: Memory allocation failed\n";
+        exit(1);
+    }
     for (unsigned int i=0; i<dimension; i++){
         mean[i]=0.0;
     }
   }
 
-  virtual double generate() { //double stddev, double meanvalue) {
+  virtual double generate()  override{ //double stddev, double meanvalue) {
     mean1channel += sqrttau * WhiteNormalNoise::generate() - tau*mean1channel;
     return(mean1channel);
   }
 
-  virtual void add(double *value, double noiseStrength) {
+  virtual void add(double *value, double noiseStrength)  override{
     for (unsigned int i = 0; i < dimension; i++){
       mean[i]+=sqrttau * WhiteNormalNoise::generate()*noiseStrength - tau*mean[i];
       value[i]+=mean[i];
@@ -272,9 +281,9 @@ public:
     t=0;
   }
 
-  virtual ~SineWhiteNoise(){}
+  virtual ~SineWhiteNoise() override{}
 
-  virtual double generate() {
+  virtual double generate()  override{
     t ++;
     return (1-amplitude)*uniform(-1,  1) + sin(t*omega)*amplitude;
   }
@@ -282,7 +291,7 @@ public:
   /** adds multidimensional noise to the value field.
       @param value field where noise is added. Must have length dimension (\ref init())
    */
-  virtual void add(double *value, double noiseStrength) { // min, double max){
+  virtual void add(double *value, double noiseStrength)  override{ // min, double max){
 
     for (unsigned int i = 0; i < dimension; i++){
       if(i < channels){

@@ -37,10 +37,10 @@ public:
      @param numPatternsPerStep number of past patterns to learn each step
   */
   ModelWithMemoryAdapter(InvertableModel* model, int memorySize, int numPatternsPerStep);
-  virtual ~ModelWithMemoryAdapter(){ }
+  virtual ~ModelWithMemoryAdapter() override{ }
 
   virtual void init(unsigned int inputDim, unsigned  int outputDim,
-                    double unit_map = 0.0, RandGen* randGen = 0);
+                    double unit_map = 0.0, RandGen* randGen = 0) override;
 
   /**
      learn the input output mapping but also learn mappings from the memory.
@@ -48,29 +48,29 @@ public:
    */
   virtual const matrix::Matrix learn (const matrix::Matrix& input,
                                       const matrix::Matrix& nom_output,
-                                      double learnRateFactor = 1);
+                                      double learnRateFactor = 1) override;
 
   /* ********* Delegations *****************/
 
-  virtual const matrix::Matrix process (const matrix::Matrix& input){
+  virtual const matrix::Matrix process (const matrix::Matrix& input) override {
     return model->process(input);
   }
 
-  virtual const matrix::Matrix response(const matrix::Matrix& input) const{
+  virtual const matrix::Matrix response(const matrix::Matrix& input) const override {
     return model->response(input);
   }
 
   virtual const matrix::Matrix inversion(const matrix::Matrix& input,
-                                         const matrix::Matrix& xsi) const{
+                                         const matrix::Matrix& xsi) const override{
     return model->inversion(input, xsi);
   }
-  virtual unsigned int getInputDim() const {
+  virtual unsigned int getInputDim() const override {
     return model->getInputDim();
   }
-  virtual unsigned int getOutputDim() const {
+  virtual unsigned int getOutputDim() const override {
     return model->getOutputDim();
   }
-  virtual void damp(double damping) { model->damp(damping);}
+  virtual void damp(double damping)  override{ model->damp(damping);}
 
   /* ************** Accessors **********************************/
 
@@ -84,15 +84,15 @@ public:
 
   /* *************  STOREABLE **********************************/
   /// stores the layer binary into file stream
-  bool store(FILE* f) const { return model->store(f);}
+  bool store(FILE* f) const override { return model->store(f);}
   /// restores the layer binary from file stream
-  bool restore(FILE* f){ return model->restore(f);}
+  bool restore(FILE* f) override { return model->restore(f);}
 
   /* ************* Inspectable **********************************/
-  virtual iparamkeylist getInternalParamNames() const { return model->getInternalParamNames();}
-  virtual iparamvallist getInternalParams() const { return model->getInternalParams();}
-  virtual ilayerlist getStructuralLayers() const { return model->getStructuralLayers();}
-  virtual iconnectionlist getStructuralConnections() const {
+  virtual iparamkeylist getInternalParamNames() const override { return model->getInternalParamNames();}
+  virtual iparamvallist getInternalParams() const override { return model->getInternalParams();}
+  virtual ilayerlist getStructuralLayers() const override { return model->getStructuralLayers();}
+  virtual iconnectionlist getStructuralConnections() const override {
     return model->getStructuralConnections();
   }
 

@@ -1,0 +1,7 @@
+/opt/homebrew/include/QtCore/qprocessordetection.h:368: error: #error "Unable to determine byte order!" [preprocessorErrorDirective]
+/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/BarVisualisation.cpp:33: warning: Member variable 'BarVisualisation::visMode' is not initialized in the constructor. [uninitMemberVar]
+/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/BarVisualisation.cpp:33: warning: Member variable 'BarVisualisation::inputMode' is not initialized in the constructor. [uninitMemberVar]
+/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/BarVisualisation.cpp:33: warning: Member variable 'BarVisualisation::mouseX' is not initialized in the constructor. [uninitMemberVar]
+/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/BarVisualisation.cpp:33: warning: Member variable 'BarVisualisation::mouseY' is not initialized in the constructor. [uninitMemberVar]
+/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/LandscapeVisualisation.cpp:33: warning: Member variable 'LandscapeVisualisation::mouseX' is not initialized in the constructor. [uninitMemberVar]
+/Users/jerry/lpzrobot_mac/matrixviz/src/visualisations/LandscapeVisualisation.cpp:33: warning: Member variable 'LandscapeVisualisation::mouseY' is not initialized in the constructor. [uninitMemberVar]

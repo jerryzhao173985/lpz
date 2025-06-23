@@ -29,7 +29,7 @@ using namespace std;
 DerPseudoSensor::DerPseudoSensor( const DerPseudoSensorConf& conf)
   : InvertMotorController(conf.buffersize, "DerPseudoSensor", "$Id$"), conf(conf) {
 
-  assert(conf.model != NULL);
+  assert(conf.model != nullptr);
 
   fantControl = 50;
   fantControlLen = 0;

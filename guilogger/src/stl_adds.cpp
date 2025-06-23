@@ -6,7 +6,7 @@ namespace std {
   
   string itos(int i){
     char str[10];
-    sprintf(str,"%i", i);
+    snprintf(str, sizeof(str),"%i", i);
     return string(str);
   }
 

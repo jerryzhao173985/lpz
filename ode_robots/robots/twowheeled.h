@@ -83,26 +83,26 @@ namespace lpzrobots {
       return conf;
     }
 
-    virtual ~TwoWheeled();
+    virtual ~TwoWheeled() override;
 
-    virtual void update();
+    virtual void update() override;
 
-    virtual int getSensorNumberIntern();
+    virtual int getSensorNumberIntern() override;
 
-    virtual int getSensorsIntern(double* sensors, int sensornumber);
+    virtual int getSensorsIntern(double* sensors, int sensornumber) override;
 
-    virtual void sense(GlobalData& globalData);
+    virtual void sense(GlobalData& globalData) override;
 
 
   protected:
     /** creates vehicle at desired pose
         @param pose 4x4 pose matrix
     */
-    virtual void create(const osg::Matrix& pose);
+    virtual void create(const osg::Matrix& pose) override;
 
     /** destroys vehicle and space
      */
-    virtual void destroy();
+    virtual void destroy() override;
 
     TwoWheeledConf conf;
     CameraSensor* camsensor;

@@ -44,10 +44,13 @@ HFILES   := $(foreach dir,$(dirs),$(find_h_files))
 UTILS = install_prefix.conf
 
 # additional inc paths
-INC +=  -I. -Iinclude -Iinclude/$(PACKAGE) -I$(shell $(SELFORGCFG) $(CFGOPTS) --srcprefix)/include
+INC +=  -I. -Iinclude -Iinclude/$(PACKAGE) -I../selforg -I../selforg/include
 
 # use -pg for profiling
 CPPFLAGS = -Wall -pipe -fpic $(INC) $(shell $(SELFORGCFG) $(CFGOPTS) --cflags) \
+# Maximum warning flags added by enable_max_warnings.sh
+EXTRA_WARNINGS = -Wall -Wextra -Wpedantic -Wconversion -Wsign-conversion -Wcast-align -Wformat=2 -Wuninitialized -Wunused-function -Wunused-label -Wunused-variable -Wunused-value -Wunused-parameter -Wfloat-equal -Wundef -Wshadow -Wpointer-arith -Wcast-qual -Wwrite-strings -Wmissing-declarations -Wredundant-decls -Woverloaded-virtual -Wsign-promo -Wformat-security -Wnon-virtual-dtor -Wold-style-cast -Wzero-as-null-pointer-constant -Wno-unused-parameter -Wno-sign-conversion
+CPPFLAGS += $(EXTRA_WARNINGS)
  $(shell ./$(PACKAGE)-config --srcprefix="." $(CFGOPTS) --intern --cflags)  
 
 # used for single file compilation

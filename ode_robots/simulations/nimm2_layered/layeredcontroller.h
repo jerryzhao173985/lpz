@@ -77,7 +77,7 @@ public:
   LayeredController(int _buffersize, bool _update_only_1=false);
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
 
-  virtual ~LayeredController();
+  virtual ~LayeredController() override;
 
   /// returns the name of the object (with version number)
   virtual paramkey getName() const {return name; }
@@ -88,30 +88,30 @@ public:
 
   /// performs one step (includes learning).
   /// Calulates motor commands from sensor inputs.
-  virtual void step(const sensor* , int number_sensors, motor* , int number_motors);
+  virtual void step(const sensor* , int number_sensors, motor* , int number_motors) override;
 
 
   /// performs one step without learning. Calulates motor commands from sensor inputs.
   virtual void stepNoLearning(const sensor* , int number_sensors,
-                              motor* , int number_motors);
+                              motor* , int number_motors) override;
 
 
   /***** STOREABLE ****/
   /** stores the controller values to a given file. */
-  virtual bool store(FILE* f) const;
+  virtual bool store(FILE* f) const override;
   /** loads the controller values from a given file. */
-  virtual bool restore(FILE* f);
+  virtual bool restore(FILE* f) override;
 
   // inspectable interface
-  virtual std::list<iparamkey> getInternalParamNames() const;
-  virtual std::list<iparamval> getInternalParams() const;
-  virtual std::list<ILayer> getStructuralLayers() const;
-  virtual std::list<IConnection> getStructuralConnections() const;
+  virtual std::list<iparamkey> getInternalParamNames() const override;
+  virtual std::list<iparamval> getInternalParams() const override;
+  virtual std::list<ILayer> getStructuralLayers() const override;
+  virtual std::list<IConnection> getStructuralConnections() const override;
 
 
-  virtual paramval getParam(const paramkey& key, bool raverseChildren=true) const;
-  virtual bool setParam(const paramkey& key, paramval val, bool traverseChildren=true);
-  virtual paramlist getParamList() const;
+  virtual paramval getParam(const paramkey& key, bool raverseChildren=true) const override;
+  virtual bool setParam(const paramkey& key, paramval val, bool traverseChildren=true) override;
+  virtual paramlist getParamList() const override;
 
 protected:
 

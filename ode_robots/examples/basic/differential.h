@@ -93,7 +93,7 @@ namespace lpzrobots{
       /**
        * Destructor
        */
-      virtual ~Differential();
+      virtual ~Differential() override;
 
       /**
        * Place the robot in the desired pose
@@ -105,7 +105,7 @@ namespace lpzrobots{
        * Create the robot in the desired pose
        * @param pose desired 4x4 pose matrix
        */
-      virtual void create(const osg::Matrix& pose);
+      virtual void create(const osg::Matrix& pose) override;
 
   };
 

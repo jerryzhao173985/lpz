@@ -39,7 +39,7 @@ public:
      @param layers Layer description (the input layer is not specified (always linear))
      @param useBypass if true, then a connection from input to output layer is included
   */
-  ControllerNet(const std::vector<Layer>& layers, bool useBypass=false);
+  explicit ControllerNet(const std::vector<Layer>& layers, bool useBypass=false);
   virtual ~ControllerNet(){ }
 
   /** initialisation of the network with the given number of input and output units.

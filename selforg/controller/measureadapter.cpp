@@ -25,7 +25,10 @@
 #include <sstream>
 
 MeasureAdapter::MeasureAdapter(AbstractController* controller, const std::string& name, const std::string& revision ) :
-  AbstractControllerAdapter(controller, name, revision) {
+  AbstractControllerAdapter(controller, name, revision),
+  initialized(false),
+  motorValues(nullptr),
+  sensorValues(nullptr) {
   st = new StatisticTools("MeasureAdapter's ST");
   addCallbackable(st);
   addInspectable(st);
@@ -75,8 +78,8 @@ void MeasureAdapter::init(const int sensornumber, const int motornumber, RandGen
   // call the same method of super class
   AbstractControllerAdapter::init(sensornumber, motornumber, randGen);
   // allocate memory for controlled Motors and sensors
-  this->motorValues = (motor*) malloc(sizeof(motor) * motornumber);
-  this->sensorValues = (sensor*) malloc(sizeof(sensor) * sensornumber);
+  this->motorValues = static_cast<motor*>(malloc(sizeof(motor) * motornumber));
+  this->sensorValues = static_cast<sensor*>(malloc(sizeof(sensor) * sensornumber));
 }
 
 void MeasureAdapter::step(const sensor* sensors, int sensornumber, motor* motors, int motornumber) {

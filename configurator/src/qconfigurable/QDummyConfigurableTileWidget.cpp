@@ -56,7 +56,7 @@ namespace lpzrobots {
     QAbstractConfigurableTileWidget(config, "dummyKEY", tileIndexConfigWidgetMap), name("dummy") {
 
     QString key_name = QString(key.c_str());
-    setBackgroundRole(QPalette::Background);
+    setBackgroundRole(QPalette::Window);
     setAutoFillBackground(false);
   }
 

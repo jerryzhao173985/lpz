@@ -48,14 +48,10 @@ namespace lpzrobots{
   //    OdeRobot(odeHandle, osgHandle), conf(conf)
   Arm::Arm(const OdeHandle& odeHandle, const OsgHandle& osgHandle,
            const ArmConf& conf, const std::string& name):
-    OdeRobot(odeHandle, osgHandle, name, "$Id$"), conf(conf)
+    OdeRobot(odeHandle, osgHandle, name, "$Id$"), conf(conf),
+    factorSensors(1/2.7), // normalization of position w.r.t. arm length (only for endeffector position)
+    created(false)
   {
-    // robot not created up to now
-    created=false;
-
-    parentspace=odeHandle.space;
-
-    factorSensors=1/2.7; // normalization of position w.r.t. arm length (only for endeffector position)
     addParameter("motorPower", &this->conf.motorPower, 0,50);
     addParameterDef("factorSensors", &factorSensors, 1.0/2.7,0,10);
     addParameter("damping", &this->conf.damping, 0,1 );

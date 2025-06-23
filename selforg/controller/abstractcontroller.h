@@ -45,8 +45,8 @@
  */
 class AbstractController : public Configurable, public Inspectable, public Storeable {
 public:
-  typedef double sensor;
-  typedef double motor;
+  using sensor = double;
+  using motor = double;
 
   /// contructor (hint: use $ID$ for revision)
   AbstractController(const std::string& name, const std::string& revision)
@@ -55,7 +55,7 @@ public:
   /** initialisation of the controller with the given sensor/ motornumber
       Must be called before use. The random generator is optional.
   */
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0)= 0;
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr)= 0;
 
   /** @return Number of sensors the controller
       was initialised with or 0 if not initialised */

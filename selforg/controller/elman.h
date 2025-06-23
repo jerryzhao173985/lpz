@@ -69,21 +69,21 @@ public:
     initialised = false;
   }
 
-  virtual ~Elman(){ }
+  virtual ~Elman() override{ }
 
   /// initialisation of the network with the given number of input and output units
   virtual void init(unsigned int inputDim, unsigned  int outputDim,
-                    double unit_map = 0.0, RandGen* randGen = 0);
+                    double unit_map = 0.0, RandGen* randGen = 0) override;
 
   /** passive processing of the input
       (this will be different for every input, since it is a recurrent network)
   */
-  virtual const matrix::Matrix process (const matrix::Matrix& input);
+  virtual const matrix::Matrix process (const matrix::Matrix& input) override;
 
   /// performs learning and returns the network output before learning
   virtual const matrix::Matrix learn (const matrix::Matrix& input,
                                       const matrix::Matrix& nom_output,
-                                      double learnRateFactor = 1);
+                                      double learnRateFactor = 1) override;
 
   /** determines the weight and bias updates
    */
@@ -109,27 +109,27 @@ public:
      virtual const matrix::Matrix response(const matrix::Matrix& input) const;
    */
 
-  void damp(double damping);
+  void damp(double damping) override;
 
   /**************  STOREABLE **********************************/
   /// stores the layer binary into file stream
-  bool store(FILE* f) const;
+  bool store(FILE* f) const override;
   /// restores the layer binary from file stream
-  bool restore(FILE* f);
+  bool restore(FILE* f) override;
 
 
   /************** CONFIGURABLE INTERFACE ************************/
-  virtual paramkey getName() const {
+  virtual paramkey getName() const override {
     return std::string("elmanNN");
   }
 
 
 
   /************** Inspectable INTERFACE ************************/
-  virtual iparamkeylist getInternalParamNames() const;
-  virtual iparamvallist getInternalParams() const;
-  virtual ilayerlist getStructuralLayers() const;
-  virtual iconnectionlist getStructuralConnections() const;
+  virtual iparamkeylist getInternalParamNames() const override;
+  virtual iparamvallist getInternalParams() const override;
+  virtual ilayerlist getStructuralLayers() const override;
+  virtual iconnectionlist getStructuralConnections() const override;
 
 protected:
   matrix::Matrix elmanWeights;

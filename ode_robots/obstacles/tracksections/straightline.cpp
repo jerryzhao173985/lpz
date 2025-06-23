@@ -38,7 +38,7 @@ void StraightLine::setProperties() {
  * Constructor
  */
 StraightLine::StraightLine(const Position& p,const double& angle)
-  : AbstractTrackSection(p,angle) {
+  : AbstractTrackSection(p,angle), isLeft(false), obstacle_exists(false) {
   // 2 matrices are calculated, the sum is the matrix to store
   setProperties();
 };
@@ -47,7 +47,7 @@ StraightLine::StraightLine(const Position& p,const double& angle)
  * Constructor
  */
 StraightLine::StraightLine(const Matrix& pose)
-  : AbstractTrackSection(pose) { 
+  : AbstractTrackSection(pose), isLeft(false), obstacle_exists(false) { 
   setProperties();
 };
 

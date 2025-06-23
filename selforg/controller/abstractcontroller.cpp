@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-2011 LpzRobots development team                    *
+ *   Copyright static_cast<C>(2005)-2011 LpzRobots development team                    *
  *    Georg Martius  <georg dot martius at web dot de>                     *
  *    Frank Guettler <guettler at informatik dot uni-leipzig dot de        *
  *    Frank Hesse    <frank at nld dot ds dot mpg dot de>                  *
@@ -24,67 +24,68 @@
 
 #include "abstractcontroller.h"
 
+#include <iostream>
+#include <list>
+#include <string>
+
 using namespace std;
 
 void AbstractController::sensorInfos(std::list<SensorMotorInfo> sensorInfos) {
-  FOREACHIa(sensorInfos, s, i){
-    sensorIndexMap[s->name] = i;
-    sensorInfoMap[i] = *s;
+  FOREACHIa(sensorInfos, sensor, index) {
+    sensorIndexMap[sensor->name] = index;
+    sensorInfoMap[index] = *sensor;
   }
-};
+}
 
 void AbstractController::motorInfos(std::list<SensorMotorInfo> motorInfos) {
-  FOREACHIa(motorInfos, m, i){
-    motorIndexMap[m->name] = i;
-    motorInfoMap[i] = *m;
-  }
-};
-
-int AbstractController::SIdx(const std::string& name){
-  auto it = sensorIndexMap.find(name);
-  if (it!=sensorIndexMap.end()){
-    return it->second;
-  }else{
-    cerr << "Cannot find Sensor with name \"" << name << "\""
-         << " Possible values are:" << endl;
-    for(auto& i: sensorIndexMap){
-      cerr << i.first << ", ";
-    }
-    cerr << endl;
-    return 0;
+  FOREACHIa(motorInfos, motor, index) {
+    motorIndexMap[motor->name] = index;
+    motorInfoMap[index] = *motor;
   }
 }
 
-int AbstractController::MIdx(const std::string& name){
-  auto it = motorIndexMap.find(name);
-  if (it!=motorIndexMap.end()){
-    return it->second;
-  }else{
-    cerr << "Cannot find Motor with name \"" << name << "\""
-         << " Possible values are:" << endl;
-    for(auto& i: motorIndexMap){
-      cerr << i.first << ", ";
-    }
-    cerr << endl;
-    return 0;
+int AbstractController::SIdx(const std::string& name) {
+  if (auto iter = sensorIndexMap.find(name); iter != sensorIndexMap.end()) {
+    return iter->second;
   }
+
+  cerr << "Cannot find Sensor with name \"" << name << "\""
+       << " Possible values are:" << endl;
+  for (const auto& [sensorName, sensorIndex] : sensorIndexMap) {
+    cerr << sensorName << ", ";
+  }
+  cerr << endl;
+  return 0;
 }
 
-SensorMotorInfo AbstractController::SInfo(int index){
-  auto it = sensorInfoMap.find(index);
-  if (it!=sensorInfoMap.end()){
-    return it->second;
-  }else{
-    cerr << "No info for Sensor with index " << index << "! Out of bounds?"<< endl;
-    return SensorMotorInfo();
-  }}
-
-SensorMotorInfo AbstractController::MInfo(int index){
-  auto it = motorInfoMap.find(index);
-  if (it!=motorInfoMap.end()){
-    return it->second;
-  }else{
-    cerr << "No info for Motor with index " << index << "! Out of bounds?"<< endl;
-    return SensorMotorInfo();
+int AbstractController::MIdx(const std::string& name) {
+  if (auto iter = motorIndexMap.find(name); iter != motorIndexMap.end()) {
+    return iter->second;
   }
+
+  cerr << "Cannot find Motor with name \"" << name << "\""
+       << " Possible values are:" << endl;
+  for (const auto& [motorName, motorIndex] : motorIndexMap) {
+    cerr << motorName << ", ";
+  }
+  cerr << endl;
+  return 0;
+}
+
+SensorMotorInfo AbstractController::SInfo(int index) {
+  if (auto iter = sensorInfoMap.find(index); iter != sensorInfoMap.end()) {
+    return iter->second;
+  }
+
+  cerr << "No info for Sensor with index " << index << "! Out of bounds?" << endl;
+  return SensorMotorInfo();
+}
+
+SensorMotorInfo AbstractController::MInfo(int index) {
+  if (auto iter = motorInfoMap.find(index); iter != motorInfoMap.end()) {
+    return iter->second;
+  }
+
+  cerr << "No info for Motor with index " << index << "! Out of bounds?" << endl;
+  return SensorMotorInfo();
 }

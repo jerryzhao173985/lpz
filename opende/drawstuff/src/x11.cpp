@@ -301,7 +301,7 @@ static void captureFrame (int num)
   fprintf (stderr,"capturing frame %04d\n",num);
 
   char s[100];
-  sprintf (s,"frame/frame%04d.ppm",num);
+  snprintf(s, sizeof(s),"frame/frame%04d.ppm",num);
   FILE *f = fopen (s,"wb");
   if (!f) dsError ("can't open \"%s\" for writing",s);
   fprintf (f,"P6\n%d %d\n255\n",width,height);

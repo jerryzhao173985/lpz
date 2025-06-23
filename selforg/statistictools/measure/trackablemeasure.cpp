@@ -26,7 +26,7 @@
 #include "stl_adds.h"
 
 
-TrackableMeasure::TrackableMeasure(std::list<Trackable*> trackableList,const char* measureName  ,ComplexMeasureMode cmode,std::list<Position> cornerPointList, short dimensions, int numberBins) : ComplexMeasure(measureName,cmode, numberBins) ,trackableList(trackableList)
+TrackableMeasure::TrackableMeasure(const std::list<Trackable*>& trackableList,const char* measureName  ,ComplexMeasureMode cmode,const std::list<Position>& cornerPointList, short dimensions, int numberBins) : ComplexMeasure(measureName,cmode, numberBins) ,trackableList(trackableList), cmode(cmode)
 {
   tmode=POS;
   if (dimensions & X)

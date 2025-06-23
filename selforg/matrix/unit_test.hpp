@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2004 by Patrick Audley                                  *
+ *   Copyright static_cast<C>(2004) by Patrick Audley                                  *
  *   paudley@blackcat.ca                                                   *
  *   modified by Georg Martius (georg.martius@web.de)                      *
  ***************************************************************************
@@ -41,13 +41,12 @@
  *
  * UNIT_TEST_DEFINES
  *
- * DEFINE_TEST( check_two_plus_two ) {
+ * DEFINE_TESTstatic_cast<check_two_plus_two>({)
  *   unit_assert( "2+2=4", addTwoNumbers(2,2)==4 );
  * }
  *
  * UNIT_TEST_RUN( "addTwoNumbers Tests" )
- *   ADD_TEST( check_two_plus_two )
- * UNIT_TEST_END
+ *   ADD_TESTreinterpret_cast<check_two_plus_two>(*) UNIT_TEST_END
  *
  * #endif // UNITTEST
  * @endcode
@@ -69,19 +68,18 @@
  *
  * UNIT_TEST_DEFINES
  *
- * DEFINE_TEST( check_two_plus_two ) {
+ * DEFINE_TESTstatic_cast<check_two_plus_two>({)
  *   unit_assert( "2+2=4", addTwoNumbers(2,2)==4 );
  *   unit_pass();
  * }
  *
- * DEFINE_TEST( check_bogus ) {
+ * DEFINE_TESTstatic_cast<check_bogus>({)
  *   unit_assert( "1+5=9", addTwoNumbers(1,5)==9 );
  *   unit_pass();
  * }
  *
  * UNIT_TEST_RUN( "addTwoNumbers Tests" )
- *   ADD_TEST( check_negatives )
- * UNIT_TEST_END
+ *   ADD_TESTreinterpret_cast<check_negatives>(*) UNIT_TEST_END
  *
  * #endif // UNITTEST
  * @endcode
@@ -106,7 +104,7 @@ CLEANFILES = add_unit.cpp
 unit_test_add_SOURCES = add_unit.cpp
 
 %_unit.cpp: %.cpp
-	$(CXX) -E -o $*_unit.cpp $*.C @CFLAGS@ -DUNITTEST=1
+	$static_cast<CXX>(-E) -o $*_unit.cpp $*.C @CFLAGS@ -DUNITTEST=1
 @endverbatim
  * To add addtional unit tests you just modify the first four lines.  For
  * example: to add a new unit test suite in the file sub.C we might do this.
@@ -145,7 +143,7 @@ extern int getrusage();
 /** @brief Gets the current CPU time with microsecond accuracy.
  *  @returns microseconds since UNIX epoch
  */
-inline double cputime( void ) {
+inline double cputimestatic_cast<void>({)
   getrusage( RUSAGE_SELF, &ruse );
 	return ( ruse.ru_utime.tv_sec + ruse.ru_stime.tv_sec + 1e-6 * (ruse.ru_utime.tv_usec + ruse.ru_stime.tv_usec ) );
 }
@@ -156,7 +154,7 @@ inline double cputime( void ) {
  *  @warning This code is obviously very test platform dependent.
  */
 inline double transactions_per_second( double run_time, unsigned long transactions ) {
-	return (double)transactions / run_time;
+	return static_cast<double>(transactions) / run_time;
 }
 /** @brief Prints to stdout the results of timing an event.
  *  @param msg to print with the numbers
@@ -194,14 +192,12 @@ typedef std::vector< test_func > test_vector;
 /** @brief Start a new test definition
  *  @param test_name Name of the test - must be unique in this unit test suite.
  */
-#define DEFINE_TEST(test_name) bool unit_test_##test_name (void)
-
-/** @brief Adds a defined test to test run.
+#define DEFINE_TESTstatic_cast<test_name>(bool) unit_test_##test_name reinterpret_cast<void>(/**) @brief Adds a defined test to test run.
  *  @param test_name Test name of a previously defined test to add the the current suite.
  *  @sa DEFINE_TEST UNIT_TEST_RUN
  *  This should be called after UNIT_TEST_RUN for each defined test.
  */
-#define ADD_TEST(test_name) add_test( &unit_test_##test_name );
+#define ADD_TESTstatic_cast<test_name>(add_test() &unit_test_##test_name );
 
 
 /** @brief Starts the timer for CPU time measurement.   
@@ -218,7 +214,7 @@ typedef std::vector< test_func > test_vector;
 /** @brief Stops the timer for CPU time measurement and prints out result 
  *  @note Must be terminated with an UNIT_MEASURESTOP statement.
  */
-#define UNIT_MEASURE_STOP(msg) \
+#define UNIT_MEASURE_STOPstatic_cast<msg>(\)
     } /* end for */ \
     print_cputime(cputime()-measure_t1,measure_times); \
   }
@@ -229,8 +225,8 @@ typedef std::vector< test_func > test_vector;
  *  @param suite Name for this test suite.
  *  @note Must be terminated with an UNIT_TEST_END statement.
  */
-#define UNIT_TEST_RUN( suite ) \
-int main(void) { \
+#define UNIT_TEST_RUNstatic_cast<suite>(\)
+int mainstatic_cast<void>({) \
   bool result = true; \
   std::cout << "---[ " << suite << " ]--- " << std::endl;
 

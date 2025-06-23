@@ -184,11 +184,13 @@ Position AbstractObstacle::getPosition() const {
 
     // using the Geom has maybe the advantage to get the position of transform objects
     // (e.g. hand of muscledArm)
-  if (o && o->getGeom())
-    return Position(dGeomGetPosition(o->getGeom()));
-  else if(o->getBody())
-    return Position(dBodyGetPosition(o->getBody()));
-  else return Position(0,0,0);
+  if (o) {
+    if (o->getGeom())
+      return Position(dGeomGetPosition(o->getGeom()));
+    else if(o->getBody())
+      return Position(dBodyGetPosition(o->getBody()));
+  }
+  return Position(0,0,0);
 }
 
  Position AbstractObstacle::getSpeed() const {

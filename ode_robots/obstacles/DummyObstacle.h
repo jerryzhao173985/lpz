@@ -34,19 +34,19 @@ namespace lpzrobots {
   class DummyObstacle : public lpzrobots::AbstractObstacle {
     public:
       DummyObstacle(const OdeHandle& odeHandle, const OsgHandle& osgHandle);
-      virtual ~DummyObstacle();
+      virtual ~DummyObstacle() override;
 
       /**
        * sets position of the obstacle and creates/recreates obstacle if necessary
        */
-      virtual void setPose(const osg::Matrix& pose);
+      virtual void setPose(const osg::Matrix& pose) override;
 
       /// return the "main" primitive of the obtactle. The meaning of "main" is arbitrary
-      virtual Primitive* getMainPrimitive() const;
+      virtual Primitive* getMainPrimitive() const override;
 
     protected:
       /// overload this function to create the obstactle. All primitives should go into the list "obst"
-      virtual void create();
+      virtual void create() override;
   };
 
 }

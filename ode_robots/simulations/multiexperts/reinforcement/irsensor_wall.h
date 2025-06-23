@@ -44,13 +44,13 @@ namespace lpzrobots {
 
     virtual ~IRSensorWall(){};
 
-    virtual RaySensor* clone() const;
+    virtual RaySensor* clone() const override;
 
     virtual void init(const OdeHandle& odeHandle,
                       const OsgHandle& osgHandle,
                       Primitive* body,
                       const osg::Matrix pose, float range,
-                      rayDrawMode drawMode = drawSensor);
+                      rayDrawMode drawMode = drawSensor) override;
   public:
     std::list<dGeomID> avoids;
   };

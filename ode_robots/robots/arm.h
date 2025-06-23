@@ -155,12 +155,12 @@ namespace lpzrobots{
      * sets the pose of the vehicle
      * @param pose desired 4x4 pose matrix
      */
-    virtual void placeIntern(const osg::Matrix& pose);
+    virtual void placeIntern(const osg::Matrix& pose) override;
 
     /**
      * update the subcomponents
      */
-    virtual void update();
+    virtual void update() override;
 
     /**
      * returns actual sensorvalues
@@ -168,14 +168,14 @@ namespace lpzrobots{
      * @param sensornumber length of the sensor array
      * @return number of actually written sensors
      */
-    virtual int getSensorsIntern(double* sensors, int sensornumber);
+    virtual int getSensorsIntern(double* sensors, int sensornumber) override;
 
     /**
      * sets actual motorcommands
      * @param motors motors scaled to [-1,1]
      * @param motornumber length of the motor array
      */
-    virtual void setMotorsIntern(const double* motors, int motornumber);
+    virtual void setMotorsIntern(const double* motors, int motornumber) override;
 
     /**
      * returns number of sensors
@@ -198,7 +198,7 @@ namespace lpzrobots{
      * @param poslist vector of positions (of all robot segments)
      * @return length of the list
      */
-    virtual int getSegmentsPosition(std::vector<Position> &poslist);
+    virtual int getSegmentsPosition(std::vector<Position> &poslist) override;
 
     /**
      * returns the position of the endeffector (hand)
@@ -211,10 +211,10 @@ namespace lpzrobots{
      * like space-internal collision detection, sensor resets/update etc.
      * @param globalData structure that contains global data from the simulation environment
      */
-    virtual void doInternalStuff(GlobalData& globalData);
+    virtual void doInternalStuff(GlobalData& globalData) override;
 
     /******** CONFIGURABLE ***********/
-    virtual void notifyOnChange(const paramkey& key);
+    virtual void notifyOnChange(const paramkey& key) override;
 
     virtual Primitive* getMainObject() const{
       return objects[base];
@@ -238,12 +238,12 @@ namespace lpzrobots{
      * @param pose 4x4 pose matrix
      * @param snowmanmode snowman body
      */
-    virtual void create(const osg::Matrix& pose);
+    virtual void create(const osg::Matrix& pose) override;
 
     /**
      * destroys vehicle and space
      */
-    virtual void destroy();
+    virtual void destroy() override;
 
     static void mycallback(void *data, dGeomID o1, dGeomID o2);
 
@@ -255,10 +255,10 @@ namespace lpzrobots{
     void BodyCreate(int n, dMass m, dReal x, dReal y, dReal z, dReal qx, dReal qy, dReal qz, dReal qangle);
 
     // inspectable interface
-    //virtual std::list<Inspectable::iparamkey> getInternalParamNames() const;
-    //virtual std::list<Inspectable::iparamval> getInternalParams() const;
-    //                virtual std::list<ILayer> getStructuralLayers() const;
-    //                virtual std::list<IConnection> getStructuralConnections() const;
+    //virtual std::list<Inspectable::iparamkey> getInternalParamNames() const override;
+    //virtual std::list<Inspectable::iparamval> getInternalParams() const override;
+    //                virtual std::list<ILayer> getStructuralLayers() const override;
+    //                virtual std::list<IConnection> getStructuralConnections() const override;
 
 
     ArmConf conf;
@@ -276,7 +276,7 @@ namespace lpzrobots{
 
     bool created;      // true if robot was created
 
-    dSpaceID parentspace;
+    // dSpaceID parentspace; // already defined in OdeRobot parent class
 
     int printed;
 

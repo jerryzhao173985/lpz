@@ -44,7 +44,7 @@ class ClassicReinforce : public AbstractController {
 
 public:
   ClassicReinforce(const ClassicReinforceConf& conf = getDefaultConf());
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr);
 
   virtual ~ClassicReinforce();
 

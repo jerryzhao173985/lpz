@@ -32,7 +32,8 @@ using namespace std;
 
 SineController::SineController(unsigned long int controlmask, function func)
   : AbstractController("sinecontroller", "1.0"),
-    controlmask(controlmask) {
+    controlmask(controlmask),
+    individual(false) {
   phase=0;
   addParameterDef("period", &period,50);
   addParameterDef("phaseshift", &phaseShift, 1);
@@ -116,10 +117,14 @@ double SineController::impuls(double x, double impulsWidth){
 
 
 MultiSineController::MultiSineController(unsigned long int controlmask, function func)
-  : SineController(controlmask, func) {
+  : SineController(controlmask, func),
+    periods(nullptr),
+    phaseShifts(nullptr),
+    amplitudes(nullptr),
+    offsets(nullptr),
+    t(0) {
   Configurable::setName("multisinecontroller");
   Inspectable::setNameOfInspectable("multisinecontroller");
-  t=0;
 };
 
 /** initialisation of the controller with the given sensor/ motornumber

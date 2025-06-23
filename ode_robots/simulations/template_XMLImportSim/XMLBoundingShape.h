@@ -57,11 +57,11 @@ class XMLBoundingShape : public lpzrobots::BoundingShape, public XMLObject {
    * @param parent primitive to which the BoundingShape is associated
    */
     XMLBoundingShape(const XERCESC::DOMNode* boundingBoxNode, XMLParserEngine& engine, lpzrobots::Mesh* parent);
-    virtual ~XMLBoundingShape();
+    virtual ~XMLBoundingShape() override;
 
      /// tries to open the bbox file and greates all geoms
      virtual bool init(const lpzrobots::OdeHandle& odeHandle, const lpzrobots::OsgHandle& osgHandle,
-           double scale, char mode);
+           double scale, char mode) override;
 
   protected:
      const XERCESC::DOMNode* boundingBoxNode;

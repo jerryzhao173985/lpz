@@ -27,7 +27,7 @@ using namespace std;
 InvertMotorBigModel::InvertMotorBigModel( const InvertMotorBigModelConf& conf)
   : InvertMotorController(conf.buffersize, "InvertMotorBigModel", "$Id$"), conf(conf) {
 
-  assert(conf.model != NULL);
+  assert(conf.model != nullptr);
   addConfigurable(conf.model);
   addParameterDef("inhibition",&inhibition,0);
   addParameterDef("kwta",&kwta,2);

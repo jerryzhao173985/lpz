@@ -199,7 +199,7 @@ namespace lpzrobots{
       /**
        * Destructor
        */
-      virtual ~Nejihebi();
+      virtual ~Nejihebi() override;
 
       /**
        * Returns the current configuration of the robot
@@ -231,21 +231,21 @@ namespace lpzrobots{
        *
        * @return pointer to the robot head primitive
        */
-      virtual Primitive* getMainPrimitive() const;
+      virtual Primitive* getMainPrimitive() const override;
 
       /**
        * Returns number of motors.
        *
        * @return number of motors
        */
-      virtual int getMotorNumberIntern();
+      virtual int getMotorNumberIntern() override;
 
       /**
        * Returns number of sensors.
        *
        * @return number of sensors
        */
-      virtual int getSensorNumberIntern();
+      virtual int getSensorNumberIntern() override;
 
       /**
        * Returns current sensor values
@@ -270,7 +270,7 @@ namespace lpzrobots{
        * @param sensornumber length of the sensor array
        * @return number of actually written sensors
        */
-      virtual int getSensorsIntern(sensor* sensors, int sensornumber);
+      virtual int getSensorsIntern(sensor* sensors, int sensornumber) override;
 
       /**
        * Assigns a name to a motor.
@@ -301,7 +301,7 @@ namespace lpzrobots{
        *
        * @param pose desired pose matrix
        */
-      virtual void placeIntern(const osg::Matrix& pose);
+      virtual void placeIntern(const osg::Matrix& pose) override;
 
       /**
        * Sets current motorcommands
@@ -326,7 +326,7 @@ namespace lpzrobots{
        * @param motors motors scaled to [-1,1]
        * @param motornumber length of the motor array
        */
-      virtual void setMotorsIntern(const double* motors, int motornumber);
+      virtual void setMotorsIntern(const double* motors, int motornumber) override;
 
     private:
 

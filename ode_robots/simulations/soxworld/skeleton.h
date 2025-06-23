@@ -236,43 +236,43 @@ namespace lpzrobots {
     /**
      * updates the OSG nodes of the vehicle
      */
-    virtual void update();
+    virtual void update() override;
 
 
     /** sets the pose of the vehicle
         @param pose desired pose matrix
     */
-    virtual void placeIntern(const osg::Matrix& pose);
+    virtual void placeIntern(const osg::Matrix& pose) override;
 
     /** returns actual sensorvalues
         @param sensors sensors scaled to [-1,1]
         @param sensornumber length of the sensor array
         @return number of actually written sensors
     */
-    virtual int getSensorsIntern(sensor* sensors, int sensornumber);
+    virtual int getSensorsIntern(sensor* sensors, int sensornumber) override;
 
     /** sets actual motorcommands
         @param motors motors scaled to [-1,1]
         @param motornumber length of the motor array
     */
-    virtual void setMotorsIntern(const motor* motors, int motornumber);
+    virtual void setMotorsIntern(const motor* motors, int motornumber) override;
 
     /** returns number of sensors
      */
-    virtual int getSensorNumberIntern();
+    virtual int getSensorNumberIntern() override;
 
     /** returns number of motors
      */
-    virtual int getMotorNumberIntern();
+    virtual int getMotorNumberIntern() override;
 
     /** this function is called in each timestep. It should perform robot-internal checks,
         like space-internal collision detection, sensor resets/update etc.
         @param globalData structure that contains global data from the simulation environment
     */
-    virtual void doInternalStuff(GlobalData& globalData);
+    virtual void doInternalStuff(GlobalData& globalData) override;
 
     /******** CONFIGURABLE ***********/
-    virtual void notifyOnChange(const paramkey& key);
+    virtual void notifyOnChange(const paramkey& key) override;
 
     /** the main object of the robot, which is used for position and speed tracking */
     virtual Primitive* getMainPrimitive() const { return objects[Belly]; }
@@ -281,10 +281,10 @@ namespace lpzrobots {
     virtual std::vector<Primitive*> getAllPrimitives() const { printf("HUHU");return objects; }
 
     /** returns the position of the head */
-    virtual Position getHeadPosition();
+    virtual Position getHeadPosition() override;
 
     /** returns the position of the trunk */
-    virtual Position getTrunkPosition();
+    virtual Position getTrunkPosition() override;
 
 
   protected:
@@ -292,11 +292,11 @@ namespace lpzrobots {
     /** creates vehicle at desired pose
         @param pose 4x4 pose matrix
     */
-    virtual void create(const osg::Matrix& pose);
+    virtual void create(const osg::Matrix& pose) override;
 
     /** destroys vehicle and space
      */
-    virtual void destroy();
+    virtual void destroy() override;
 
     SkeletonConf conf;
 

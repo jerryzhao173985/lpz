@@ -81,20 +81,21 @@ bool Layer::store(FILE* f) const {
 
 bool Layer::restore(FILE* f){
         char buffer[128];
-        if((fgets(buffer,128, f))==NULL) return false; // we need to use fgets in order to avoid spurious effects with following matrix (binary)
-        if(sscanf(buffer,"%i %lf %s", &size, &factor_bias, buffer) != 3) return false;
-        if(strcmp(buffer, "linear") == 0) {
+        if((fgets(buffer,128, f))==nullptr) return false; // we need to use fgets in order to avoid spurious effects with following matrix (binary)
+        char actfun_name[128];
+        if(sscanf(buffer,"%i %lf %127s", &size, &factor_bias, actfun_name) != 3) return false;
+        if(strcmp(actfun_name, "linear") == 0) {
           actfun    = FeedForwardNN::linear;
-        } else if (strcmp(buffer, "sigmoid") == 0) {
+        } else if (strcmp(actfun_name, "sigmoid") == 0) {
           actfun  = FeedForwardNN::sigmoid;
-        }else if (strcmp(buffer, "tanh") == 0) {
+        }else if (strcmp(actfun_name, "tanh") == 0) {
           actfun  = FeedForwardNN::tanh;
-        }else if (strcmp(buffer, "tanhc") == 0) {
+        }else if (strcmp(actfun_name, "tanhc") == 0) {
           actfun  = FeedForwardNN::tanhc;
-        }else if (strcmp(buffer, "tanhr") == 0) {
+        }else if (strcmp(actfun_name, "tanhr") == 0) {
           actfun  = FeedForwardNN::tanhr;
         }else {
-          fprintf(stderr, "unknown activation function \"%s\"!", buffer);
+          fprintf(stderr, "unknown activation function \"%s\"!", actfun_name);
           return false;
         }
         setActFun(actfun);

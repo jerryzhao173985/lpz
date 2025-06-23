@@ -31,7 +31,7 @@ void StatisticTools::doOnCallBack(BackCaller* source, BackCaller::CallbackableTy
     if (beginMeasureCounter>0)
         beginMeasureCounter--;
     else
-        for (std::list<AbstractMeasure*>::iterator i=activeMeasures.begin();i!=activeMeasures.end();i++) {
+        for (std::list<AbstractMeasure*>::iterator i=activeMeasures.begin();i!=activeMeasures.end();++i) {
           if (((*i)->getActualStep())%((*i)->getStepSize())==0)
             (*i)->step();
         }

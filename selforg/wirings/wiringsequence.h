@@ -35,22 +35,22 @@ public:
   /** constructor: The wirings given in the list
       are applied in the sequence. For the sensors in normal order and
       for the motors in reverse order*/
-  WiringSequence(std::list<AbstractWiring*>);
+  explicit WiringSequence(std::list<AbstractWiring*>);
   /** constructor provided for convinience, essentially calls addWiring(w1);addWiring(w2)
    */
   WiringSequence(AbstractWiring* w1, AbstractWiring* w2);
 
-  virtual ~WiringSequence();
+  virtual ~WiringSequence() override;
 
 protected:
-  virtual bool initIntern();
+  virtual bool initIntern() override;
 
   virtual bool wireSensorsIntern(const sensor* rsensors, int rsensornumber,
                                  sensor* csensors, int csensornumber,
-                                 double noise);
+                                 double noise) override;
 
   virtual bool wireMotorsIntern(motor* rmotors, int rmotornumber,
-                                const motor* cmotors, int cmotornumber);
+                                const motor* cmotors, int cmotornumber) override;
 
 
 public:

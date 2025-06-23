@@ -31,7 +31,7 @@
    CMC[i] contains the list of indices of motors,
    which are used as teaching signals for motor i.
 */
-typedef std::vector< std::list<int> > CMC;
+using CMC = std::vector< std::list<int> >;
 
 /**
  * This is an adapter for a teachable controller to implement a
@@ -57,28 +57,28 @@ public:
     // That is why we need dynamic_cast here
     Teachable* t2 = dynamic_cast<Teachable*>(controller);    
     (void)t2; // this is to avoid a "unused variable" in -DNDEBUG mode
-    assert((void*)t2==(void*)teachable);
+    assert(static_cast<void*>(t2)==static_cast<void*>(teachable));
   }
 
-  virtual void step(const sensor* sensors, int sensornumber, motor* motors, int motornumber);
+  virtual void step(const sensor* sensors, int sensornumber, motor* motors, int motornumber) override;
   
   virtual void setCMC(const CMC& cmc);
   virtual CMC getCMC();    
 
   /**** TEACHABLE Interface pass through ****/
 
-  virtual void setMotorTeaching(const matrix::Matrix& teaching){
+  virtual void setMotorTeaching(const matrix::Matrix& teaching) override {
     teachable->setMotorTeaching(teaching);
   }    
 
-  virtual void setSensorTeaching(const matrix::Matrix& teaching){
+  virtual void setSensorTeaching(const matrix::Matrix& teaching) override {
     teachable->setSensorTeaching(teaching);
   }
-  virtual matrix::Matrix getLastMotorValues(){
+  virtual matrix::Matrix getLastMotorValues() override {
     return teachable->getLastMotorValues();
   }
 
-  virtual matrix::Matrix getLastSensorValues(){
+  virtual matrix::Matrix getLastSensorValues() override {
     return teachable->getLastSensorValues();
   }
 

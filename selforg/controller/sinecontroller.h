@@ -42,21 +42,21 @@ public:
      @param controlmask bitmask to select channels to control (default all)
      @param function controller function to use
    */
-  SineController(unsigned long int controlmask = (~0), function func = Sine);
+  explicit SineController(unsigned long int controlmask = (~0), function func = Sine);
 
   /** initialisation of the controller with the given sensor/ motornumber
       Must be called before use.
   */
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override;
 
   /** @return Number of sensors the controller was initialised
       with or 0 if not initialised */
-  virtual int getSensorNumber() const {return number_sensors;}
+  virtual int getSensorNumber() const  override{return number_sensors;}
 
 
   /** @return Number of motors the controller was initialised
       with or 0 if not initialised */
-  virtual int getMotorNumber() const {return number_motors;}
+  virtual int getMotorNumber() const  override{return number_motors;}
 
   /** performs one step ( the same as StepNoLearning).
       Calculates motor commands from sensor inputs.
@@ -66,23 +66,23 @@ public:
       @param motornumber length of the provided motor array
   */
   virtual void step(const sensor* sensors, int sensornumber,
-                    motor* motors, int motornumber);
+                    motor* motors, int motornumber) override;
   /** performs one step.
       @see step
   */
   virtual void stepNoLearning(const sensor* , int number_sensors,
-                              motor* , int number_motors);
+                              motor* , int number_motors) override;
 
 
   /********* STORABLE INTERFACE ******/
   /// @see Storable
-  virtual bool store(FILE* f) const {
+  virtual bool store(FILE* f) const override {
     Configurable::print(f,"");
     return true;
   }
 
   /// @see Storable
-  virtual bool restore(FILE* f) {
+  virtual bool restore(FILE* f) override {
     Configurable::parse(f);
     return true;
   }
@@ -113,10 +113,10 @@ protected:
 
 class MultiSineController : public SineController {
 public:
-  MultiSineController(unsigned long int controlmask = (~0), function func = Sine);
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
+  explicit MultiSineController(unsigned long int controlmask = (~0), function func = Sine);
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override;
   virtual void stepNoLearning(const sensor* , int number_sensors,
-                              motor* , int number_motors);
+                              motor* , int number_motors) override;
 protected:
   double* periods;
   double* phaseShifts;

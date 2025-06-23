@@ -48,31 +48,31 @@ public:
   */
   FFNNController(MultiLayerFFNN* net, int history, bool input_only_x, unsigned int init_wait=0);
 
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
 
   virtual ~FFNNController();
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
-  virtual int getSensorNumber() const { return number_sensors; }
+  virtual int getSensorNumber() const  override{ return number_sensors; }
   /// returns the mumber of motors the controller was initialised with or 0 if not initialised
-  virtual int getMotorNumber() const  { return number_motors; }
+  virtual int getMotorNumber() const   override{ return number_motors; }
 
-  virtual void step(const sensor* , int number_sensors, motor* , int number_motors);
+  virtual void step(const sensor* , int number_sensors, motor* , int number_motors) override;
   virtual void stepNoLearning(const sensor* , int number_sensors,
-                              motor* , int number_motors);
+                              motor* , int number_motors) override;
 
   /**** CONFIGURABLE ****/
-  void notifyOnChange(const paramkey& key);
+  void notifyOnChange(const paramkey& key) override;
 
   /**** STOREABLE ****/
   /** stores the controller values to a given file (binary).  */
-  virtual bool store(FILE* f) const;
+  virtual bool store(FILE* f) const override;
   /** loads the controller values from a given file (binary). */
-  virtual bool restore(FILE* f);
+  virtual bool restore(FILE* f) override;
 
   // inspectable interface
-  virtual std::list<iparamkey> getInternalParamNames()const  { return std::list<iparamkey>(); }
-  virtual std::list<iparamval> getInternalParams() const { return std::list<iparamval>(); }
+  virtual std::list<iparamkey> getInternalParamNames()const override { return std::list<iparamkey>(); }
+  virtual std::list<iparamval> getInternalParams() const override { return std::list<iparamval>(); }
 
 protected:
   void putInBuffer(matrix::Matrix* buffer, const matrix::Matrix& vec, int delay = 0);

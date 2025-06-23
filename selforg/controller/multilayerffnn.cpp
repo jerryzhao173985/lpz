@@ -64,10 +64,10 @@ void MultiLayerFFNN::init(unsigned int inputDim, unsigned  int outputDim,
   bias[0].set(layers[0].size, 1);
   ys[0].set(layers[0].size, 1);
   zs[0].set(layers[0].size, 1);
-  for(unsigned int i = 1; i < layers.size(); i++) {
-    Matrix w(layers[i].size, layers[i-1].size);
-    w=w.mapP(randGen, random_minusone_to_one) * 0.05  + (useBypass ? w : (w^0)*unit_map);
-    weights[i] = w;
+  for(unsigned int i = 1; i < layers.size(); ++i) {
+    Matrix w_tmp(layers[i].size, layers[i-1].size);
+    w_tmp=w_tmp.mapP(randGen, random_minusone_to_one) * 0.05  + (useBypass ? w_tmp : (w_tmp^0)*unit_map);
+    weights[i] = w_tmp;
     bias[i].set(layers[i].size, 1);
     ys[i].set(layers[i].size, 1);
     zs[i].set(layers[i].size, 1);
@@ -91,7 +91,7 @@ const Matrix MultiLayerFFNN::process (const Matrix& input) {
   // calculate outputs (y's) and activations (z's), which are necessary for activation'()
   zs[0]     = weights[0] * input + bias[0];
   ys[0]     = zs[0].map(layers[0].actfun);
-  for(unsigned int i = 1; i < layernum; i++) {
+  for(unsigned int i = 1; i < layernum; ++i) {
     zs[i] = weights[i] * ys[i-1] + bias[i];
     if(i==(layernum-1) && useBypass)
       zs[i] += bypassWeights * input;
@@ -177,12 +177,12 @@ const Matrix MultiLayerFFNN::response(const Matrix& input) const{
   Matrix jacob = weights[layernum-1].multrowwise(g_prime);
   // loop over layers (backwards)
   for(int i = layernum-2; i >= 0; i--) {
-    const Matrix& g_prime = zs[i].map(layers[i].dactfun);
-    jacob *= weights[i].multrowwise(g_prime);
+    const Matrix& g_prime_local = zs[i].map(layers[i].dactfun);
+    jacob *= weights[i].multrowwise(g_prime_local);
   }
   if(useBypass){
-    const Matrix& g_prime = zs[layernum-1].map(layers[layernum-1].dactfun);
-    jacob+=bypassWeights.multrowwise(g_prime);
+    const Matrix& g_prime_bypass = zs[layernum-1].map(layers[layernum-1].dactfun);
+    jacob+=bypassWeights.multrowwise(g_prime_bypass);
   }
   return jacob;
 }
@@ -191,7 +191,7 @@ const Matrix MultiLayerFFNN::response(const Matrix& input) const{
 void MultiLayerFFNN::damp(double damping){
   unsigned int len = weights.size();
   if(damping==0) return;
-  for(unsigned int i = 0; i < len; i++) {
+  for(unsigned int i = 0; i < len; ++i) {
     //    weights[i] *= (1-damping);
     //    bias[i]    *= (1-damping);
     weights[i] -= weights[i]*damping;
@@ -207,12 +207,12 @@ bool MultiLayerFFNN::store(FILE* f) const {
         fprintf(f,"%g\n", eps);
         int layernum = layers.size();
         fprintf(f,"%i\n", layernum);
-        for(int i=0; i<layernum; i++){
+        for(int i=0; i<layernum; ++i){
                 layers[i].store(f);
         }
         int weightsnum = weights.size();
         fprintf(f,"%i\n#", weightsnum);
-        for(int i=0; i<weightsnum; i++){
+        for(int i=0; i<weightsnum; ++i){
                 weights[i].store(f);
                 bias[i].store(f);
         }
@@ -226,12 +226,12 @@ bool MultiLayerFFNN::write(FILE* f) const {
         fprintf(f,"%g\n", eps);
         int layernum = layers.size();
         fprintf(f,"%i\n", layernum);
-        for(int i=0; i<layernum; i++){
+        for(int i=0; i<layernum; ++i){
                 layers[i].store(f);
         }
         int weightsnum = weights.size();
         fprintf(f,"%i\n#", weightsnum);
-        for(int i=0; i<weightsnum; i++){
+        for(int i=0; i<weightsnum; ++i){
                 weights[i].write(f);
                 bias[i].write(f);
         }
@@ -244,19 +244,19 @@ bool MultiLayerFFNN::write(FILE* f) const {
 
 bool MultiLayerFFNN::restore(FILE* f){
         char buffer[128];
-        if(fscanf(f,"%s\n", buffer) != 1) return false;
+        if(fscanf(f,"%127s\n", buffer) != 1) return false;
         eps = atof(buffer);
         unsigned int layernum;
         layers.clear();
-        if(fscanf(f,"%i\n", &layernum) != 1) return false;
-        for(unsigned int i=0; i<layernum; i++){
+        if(fscanf(f,"%u\n", &layernum) != 1) return false;
+        for(unsigned int i=0; i<layernum; ++i){
                 Layer l(1);
                 l.restore(f);
                 layers.push_back(l);
         }
         ys.resize(layernum);
         zs.resize(layernum);
-        for(unsigned int i = 0; i < layernum; i++) {
+        for(unsigned int i = 0; i < layernum; ++i) {
           ys[i].set(layers[i].size, 1);
           zs[i].set(layers[i].size, 1);
         }
@@ -264,8 +264,8 @@ bool MultiLayerFFNN::restore(FILE* f){
         unsigned int weightsnum;
         weights.clear();
         bias.clear();
-        if(fscanf(f,"%i\n#", &weightsnum) != 1) return false;
-        for(unsigned int i=0; i<weightsnum; i++){
+        if(fscanf(f,"%u\n#", &weightsnum) != 1) return false;
+        for(unsigned int i=0; i<weightsnum; ++i){
                 Matrix m;
                 if(!m.restore(f)) return false;
                 weights.push_back(m);
@@ -284,7 +284,7 @@ bool MultiLayerFFNN::restore(FILE* f){
 Inspectable::iparamkeylist MultiLayerFFNN::getInternalParamNames() const{
   list<iparamkey> keylist;
   int weightsnum = weights.size();
-  for(int i=0; i<weightsnum; i++){
+  for(int i=0; i<weightsnum; ++i){
     if(someInternalParams)
       keylist += store4x4AndDiagonalFieldNames(weights[i], "W"+itos(i));
     else{
@@ -305,7 +305,7 @@ Inspectable::iparamkeylist MultiLayerFFNN::getInternalParamNames() const{
 Inspectable::iparamvallist MultiLayerFFNN::getInternalParams() const{
   list<iparamval> l;
   int weightsnum = weights.size();
-  for(int i=0; i<weightsnum; i++){
+  for(int i=0; i<weightsnum; ++i){
     if(someInternalParams)
       l += store4x4AndDiagonal(weights[i]);
     else{
@@ -328,7 +328,7 @@ Inspectable::ilayerlist MultiLayerFFNN::getStructuralLayers() const{
   int weightsnum = weights.size();
   l+=ILayer("x","", getInputDim(), 0, "Sensors");
 
-  for(int i=0; i<weightsnum; i++){
+  for(int i=0; i<weightsnum; ++i){
     l+=ILayer("y" + itos(i),"B" + itos(i), layers[i].size, i+1,
               (i < weightsnum-1) ? "Hidden" + itos(i) : "Output");
   }
@@ -338,7 +338,7 @@ Inspectable::ilayerlist MultiLayerFFNN::getStructuralLayers() const{
 Inspectable::iconnectionlist MultiLayerFFNN::getStructuralConnections() const{
   list<Inspectable::IConnection> l;
   int weightsnum = weights.size();
-  for(int i=0; i<weightsnum; i++){
+  for(int i=0; i<weightsnum; ++i){
     l+=IConnection("W" + itos(i) , i==0 ? "x" : ("y" + itos(i-1)), "y" + itos(i) );
   }
   return l;
@@ -357,6 +357,6 @@ void MultiLayerFFNN::setActivationFunctions(std::vector<ActivationFunction> actf
   vector<ActivationFunction>::const_iterator it=actfunList.begin();
   FOREACH (vector<Layer>,layers,l) {
     (*l).setActFun((*it));
-    it++;
+    ++it;
   }
 }

@@ -358,18 +358,18 @@ namespace lpzrobots {
       AmosII(const OdeHandle& odeHandle, const OsgHandle& osgHandle, const AmosIIConf& conf = getDefaultConf(),
           const std::string& name = "AmosII robot");
 
-      virtual ~AmosII();
+      virtual ~AmosII() override;
 
       /**
        * updates the OSG nodes of the vehicle
        */
-      virtual void update();
+      virtual void update() override;
 
       /**
        * sets the pose of the vehicle
        * @param pose desired pose matrix
        */
-      virtual void placeIntern(const osg::Matrix& pose);
+      virtual void placeIntern(const osg::Matrix& pose) override;
 
       /**
        * returns actual sensorvalues
@@ -377,24 +377,24 @@ namespace lpzrobots {
        * @param sensornumber length of the sensor array
        * @return number of actually written sensors
        */
-      virtual int getSensorsIntern(sensor* sensors, int sensornumber);
+      virtual int getSensorsIntern(sensor* sensors, int sensornumber) override;
 
       /**
        * sets actual motorcommands
        * @param motors motors scaled to [-1,1]
        * @param motornumber length of the motor array
        */
-      virtual void setMotorsIntern(const double* motors, int motornumber);
+      virtual void setMotorsIntern(const double* motors, int motornumber) override;
 
       /**
        * returns number of sensors
        */
-      virtual int getSensorNumberIntern();
+      virtual int getSensorNumberIntern() override;
 
       /**
        * returns number of motors
        */
-      virtual int getMotorNumberIntern();
+      virtual int getMotorNumberIntern() override;
 
       /**
        * this function is called in each timestep. It should perform
@@ -403,22 +403,22 @@ namespace lpzrobots {
        * @param globalData structure that contains global data from the
        *                   simulation environment
        */
-      virtual void doInternalStuff(GlobalData& globalData);
+      virtual void doInternalStuff(GlobalData& globalData) override;
 
       virtual void sense(GlobalData& globalData) override;
 
-      virtual double getMassOfRobot();
+      virtual double getMassOfRobot() override;
 
       void setLegPosUsage(LegPos leg, LegPosUsage usage);
 
       // Configurable Interface
-      virtual bool setParam(const paramkey& key, paramval val);
+      virtual bool setParam(const paramkey& key, paramval val) override;
 
       /**
        * the main object of the robot, which is used for position and speed
        * tracking
        */
-      virtual Primitive* getMainPrimitive() const;
+      virtual Primitive* getMainPrimitive() const override;
 
       /**
        * returns the MotorName enum value for the given joint at the given
@@ -478,12 +478,12 @@ namespace lpzrobots {
        *
        * @param pose 4x4 pose matrix
        */
-      virtual void create(const osg::Matrix& pose);
+      virtual void create(const osg::Matrix& pose) override;
 
       /**
        * destroys vehicle and space
        */
-      virtual void destroy();
+      virtual void destroy() override;
 
       /**
        * Assign a human readable name to a motor. This name is used for the

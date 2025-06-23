@@ -178,14 +178,14 @@ namespace lpzrobots {
     /** sets the pose of the vehicle
         @param pose desired pose matrix
     */
-    virtual void placeIntern(const osg::Matrix& pose);
+    virtual void placeIntern(const osg::Matrix& pose) override;
 
 
     /** this function is called in each timestep. It should perform robot-internal checks,
         like space-internal collision detection, sensor resets/update etc.
         @param globalData structure that contains global data from the simulation environment
     */
-    virtual void doInternalStuff(GlobalData& globalData);
+    virtual void doInternalStuff(GlobalData& globalData) override;
 
 
     /**
@@ -193,26 +193,26 @@ namespace lpzrobots {
      */
     double round(double,int);
 
-    virtual double energyConsumption();
+    virtual double energyConsumption() override;
 
-    virtual double energyConsumpThroughtHeatLoss(const dReal *torques);
+    virtual double energyConsumpThroughtHeatLoss(const dReal *torques) override;
 
-    virtual double outwardMechanicalPower(const dReal *torques,const dReal *angularV);
+    virtual double outwardMechanicalPower(const dReal *torques,const dReal *angularV) override;
 
-    virtual double costOfTransport(double E, double W, double V, double T);
+    virtual double costOfTransport(double E, double W, double V, double T) override;
 
-    virtual double getMassOfRobot();
+    virtual double getMassOfRobot() override;
 
     virtual double *getPosition(){
             return position;
     }
 
     /******** CONFIGURABLE ***********/
-    virtual void notifyOnChange(const paramkey& key);
+    virtual void notifyOnChange(const paramkey& key) override;
 
-    virtual void resetMotorPower(double power);
+    virtual void resetMotorPower(double power) override;
 
-    virtual double getPower();
+    virtual double getPower() override;
 
     /** the main object of the robot, which is used for position and speed tracking */
     virtual Primitive* getMainPrimitive() const { return objects[0]; }
@@ -221,11 +221,11 @@ namespace lpzrobots {
     /** creates vehicle at desired pose
         @param pose 4x4 pose matrix
     */
-    virtual void create(const osg::Matrix& pose);
+    virtual void create(const osg::Matrix& pose) override;
 
     /** destroys vehicle and space
      */
-    virtual void destroy();
+    virtual void destroy() override;
 
 public:
     HexapodConf conf;

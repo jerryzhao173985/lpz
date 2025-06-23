@@ -62,45 +62,46 @@ protected:
 public:
 
   CSerialThread(const CString& port, int baud, bool test_mode=false)
-    : m_port(port),m_baud(baud), terminated(false), m_is_joined(true), test_mode(test_mode){};
+    : m_port(port), m_baud(baud), terminated(false), m_is_joined(true), test_mode(test_mode),
+      m_is_running(false), fd_in(-1), fd_out(-1), verbose(false), verboseMore(false) {};
   virtual ~CSerialThread(){stopandwait();};
 
-  virtual int sendByte(uint8 c);
-  virtual int getByte(uint8 *c);
-  virtual int receiveData(uint8 adr, uint8 *cmd, uint8 *data, uint8 maxlen, int rn);
-  virtual void receiveMsg(uint8 adr, int len);
+  virtual int sendByte(uint8 c) override;
+  virtual int getByte(uint8 *c) override;
+  virtual int receiveData(uint8 adr, uint8 *cmd, uint8 *data, uint8 maxlen, int rn) override;
+  virtual void receiveMsg(uint8 adr, int len) override;
 
   /**
    * This method creates two data packets 11aaxxxx|11bbyyyy where xxxxyyyy is the original
    * data byte. Packets are numbered subsequently according to a mod 4 rule (00, 01, 10,
    * 11, 00, 01, ...; bits aa and bb, resp.).
    */
-  virtual uint8* makeDataPackets(uint8 data, uint8* p, uint8 i);
+  virtual uint8* makeDataPackets(uint8 data, uint8* p, uint8 i) override;
   /**
    * This method creates an address packet 0000xxxx with xxxx indicating the slave
    * address, i.e. only the 4 lower bits are taken from the 'adr'.
    */
-  virtual uint8 makeAddrPacket(uint8 adr);
+  virtual uint8 makeAddrPacket(uint8 adr) override;
 
-  virtual uint8 makeStopPacket(uint8 adr);
+  virtual uint8 makeStopPacket(uint8 adr) override;
 
   /**
    * This method creates an acknowledge packet 0001xxxx with xxxx indicating the
    * slave address.
    */
-  virtual uint8 makeAckPacket(uint8 adr);
+  virtual uint8 makeAckPacket(uint8 adr) override;
 
   /**
    * This method creates an not-acknowledge packet 0010xxxx with xxxx indicating the
    * slave address.
    */
-  virtual uint8 makeNackPacket(uint8 adr);
+  virtual uint8 makeNackPacket(uint8 adr) override;
 
   /**
    * This method creates a command packet 01xxxxxx with xxxxxx indicating the command,
    * i.e. only the 6 lower bits are taken from the paramter cmd.
    */
-  virtual uint8 makeCmdPacket(uint8 cmd);
+  virtual uint8 makeCmdPacket(uint8 cmd) override;
 
   /**
    * This method creates a length packet 10xxxxxx with xxxxxx indicating the length,
@@ -109,15 +110,15 @@ public:
    * of data packets is twice the number of data bytes to be send. The length indicates
    * the number of data bytes, and not the number of data packets.
    */
-  virtual uint8 makeLenPacket(uint8 len);
+  virtual uint8 makeLenPacket(uint8 len) override;
 
   /**
    * This method writes len bytes of 'raw' data to the slave with the address 'adr'.
    * On success the net number of bytes (len) is returned, otherwise -1.
    */
-  virtual int sendData(uint8 adr, uint8 cmd, uint8 *data, uint8 len);
-  virtual void sendAck(uint8 adr);
-  virtual void sendNack(uint8 adr);
+  virtual int sendData(uint8 adr, uint8 cmd, uint8 *data, uint8 len) override;
+  virtual void sendAck(uint8 adr) override;
+  virtual void sendNack(uint8 adr) override;
 
 
   /// thread is running?

@@ -44,7 +44,7 @@ public:
   /// contructor (hint: use $ID$ for revision)
         AbstractMultiController(AbstractController* controller, const std::string& name, const std::string& revision);
 
-        virtual ~AbstractMultiController();
+        virtual ~AbstractMultiController() override;
 
         /**
          * Adds a passive controller to this MultiController. If the Agent calls step(..)
@@ -74,7 +74,7 @@ public:
    * call first AbstractMultiController::init(sensornumber,motornumber)
    * if you overwrite this method
    */
-        virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
+        virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
 
           /** performs one step (includes learning).
       Calculates motor commands from sensor inputs.
@@ -84,13 +84,13 @@ public:
         @param motornumber length of the provided motor array
   */
         virtual void step(const sensor* sensors, int sensornumber,
-                          motor* motors, int motornumber)=0;
+                          motor* motors, int motornumber) override =0;
 
   /** performs one step without learning.
         @see step
   */
         virtual void stepNoLearning(const sensor* sensors , int sensornumber,
-                                    motor* motors, int motornumber)=0;
+                                    motor* motors, int motornumber) override =0;
 
 
 /****************************************************************************/
@@ -122,14 +122,8 @@ public:
 /*        BEGIN methods of Storeable                                                   */
 /****************************************************************************/
 
-  /** stores the object to the given file stream (binary).
-  */
-        virtual bool store(FILE* f) const;
-
-  /** loads the object from the given file stream (binary).
-  */
-        virtual bool restore(FILE* f);
-
+  // store() and restore() are inherited from AbstractControllerAdapter
+  // TODO: extend to store/restore the other controllers and multicontroller values
 
 /****************************************************************************/
 /*        END methods of Storeable                                                      */

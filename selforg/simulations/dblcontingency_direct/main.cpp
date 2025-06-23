@@ -133,7 +133,7 @@ void printRobots(vector<Agent*> robots){
   FOREACH(vector<Agent*>, robots, i) {
     double x = (*i)->getRobot()->getPosition().x;
     line[int((x+1)/2.0*80.0)]='0'+ k;
-    k++;
+    ++k;
   }
 
   printf("\033[1G%s",line);
@@ -143,7 +143,7 @@ void printRobots(vector<Agent*> robots){
 
 // Helper
 int contains(char **list, int len,  const char *str){
-  for(int i=0; i<len; i++){
+  for(int i=0; i<len; ++i){
     if(strcmp(list[i],str) == 0) return i+1;
   }
   return 0;
@@ -162,7 +162,7 @@ public:
     // add the simulation to the configuration list, so that we can change the parameters
     globaldata.configs.push_back(this);
 
-    for(int i=0; i<numRobots; i++){
+    for(int i=0; i<numRobots; ++i){
       //      AbstractController* controller = new Homeokinesis();
       //AbstractController* controller = new SineController();
       AbstractController* controller = new InvertMotorNStep();
@@ -189,7 +189,7 @@ public:
     // connect robots to each other (cyclic)
     FOREACH (vector<Agent*>, globaldata.agents, i){
       vector<Agent*>::iterator j = i;
-      j++;
+      ++j;
       if(j == globaldata.agents.end())
         j=globaldata.agents.begin();
       // the dynamic casts are required to convert the AbstactRobot* to MyRobot*

@@ -80,7 +80,7 @@ void MotorBabbler::stepNoLearning(const sensor* sensors, int number_sensors,
     t=0;
   }
   for (int i=0; i<number_motors; i++){
-    if(i>=32 || (mask & (1<<i))){
+    if(i>=32 || (mask & (1U<<i))){
       if(phases.val(i,0) > 2*M_PI) phases.val(i,0) -= 2*M_PI;
       motors[i]=amplitude*osci(phases.val(i,0));
     }else{

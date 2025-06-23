@@ -166,7 +166,7 @@ public:
          * Needs a set of values for which the statistical values will calculate.
          * @param values (vector<type>& the set)
          */
-        TemplateValueAnalysation(std::vector<type>& values) : m_vector(values), m_list(), m_listCreated(false) {}
+        explicit TemplateValueAnalysation(std::vector<type>& values) : m_vector(values), m_list(), m_listCreated(false) {}
 
         /**
          * default destructor
@@ -183,7 +183,7 @@ public:
                 type avg=zero();                                                                                                                                                //by begin the average is zero
                 typename std::vector<type>::iterator iter;
 
-                for(iter = m_vector.begin(); iter != m_vector.end(); iter++) {
+                for(iter = m_vector.begin(); iter != m_vector.end(); ++iter) {
                         avg = add(avg,(*iter));                                                                                                                                //for all elements in the set add it to the average.
                                                                                                                                                                                                 //So we become the sum. of all elements in the set.
                 }
@@ -204,7 +204,7 @@ public:
                 type min = m_vector[0];                        //the lowest element is at begin the first element
                 typename std::vector<type>::iterator iter = m_vector.begin();
 
-                for(iter++; iter != m_vector.end(); iter++) {
+                for(++iter; iter != m_vector.end(); ++iter) {
                         if(lower((*iter),min))                //if a element lower than min, so reset the min to the lower value.
                                 min=(*iter);
                 }
@@ -222,7 +222,7 @@ public:
                 type max = m_vector[0];                        //the highest element is at begin the first element
                 typename std::vector<type>::iterator iter = m_vector.begin();
 
-                for(iter++; iter != m_vector.end(); iter++) {
+                for(++iter; iter != m_vector.end(); ++iter) {
                         if(lower(max,(*iter)))                //if a element higher than max, so reset the max to the higher value.
                                 max=(*iter);
                 }
@@ -259,11 +259,11 @@ public:
                         sort();                                                                //sort the set. to define the middle
 
                 iter = m_list.begin();                                        //go to the middle
-                for(x=0;x<num;x++) iter++;
+                for(x=0;x<num;x++) ++iter;
 
                 if(m_vector.size() % 2 == 0) {                        //if the real middle between two values add this values and calculate the arithmetical middle.
                         median = (*iter->pointer);
-                        iter--;
+                        --iter;
                         median = add(median,(*iter->pointer));
                         median = doubleMul(median,0.5);
                 }
@@ -291,11 +291,11 @@ public:
                         sort();                                                                //sort the set.
 
                 iter = m_list.begin();                                        //go to the under quartil
-                for(x=0;x<num;x++) iter++;
+                for(x=0;x<num;x++) ++iter;
 
                 if(m_vector.size() % 4 == 0) {                        //if the real under quartil between two values add this values and calculate the arithmetical middle.
                         q = (*iter->pointer);
-                        iter--;
+                        --iter;
                         q = add(q,(*iter->pointer));
                         q = doubleMul(q,0.5);
                 }
@@ -322,11 +322,11 @@ public:
                         sort();                                                                //sort the set.
 
                 iter = m_list.begin();
-                for(x=0;x<num;x++) iter++;                                //go to the upper quartil
+                for(x=0;x<num;x++) ++iter;                                //go to the upper quartil
 
                 if(m_vector.size() % 4 == 0) {                        //if the real upper quartil between two values add this values and calculate the arithmetical middle.
                         q = (*iter->pointer);
-                        iter--;
+                        --iter;
                         q = add(q,(*iter->pointer));
                         q = doubleMul(q,0.5);
                 }
@@ -377,10 +377,8 @@ public:
                 type dBorder = sub(dQ1,dW);                                        //where is the border for the lowest value
                 typename std::list<TYPE_SAVE>::iterator iter = m_list.begin();
 
-                while(lower((*iter->pointer),dBorder) && iter!=m_list.end()) {                //search
-                        iter++;
-                        if(iter==m_list.end())
-                                break;
+                while(iter!=m_list.end() && lower((*iter->pointer),dBorder)) {                //search
+                        ++iter;
                 }
 
                 if(iter==m_list.end())                // ERROR
@@ -403,14 +401,12 @@ public:
                 type dBorder = add(dQ3,dW);                                        //where is the border for the lowest value
                 typename std::list<TYPE_SAVE>::iterator iter = m_list.begin();
 
-                while(lower((*iter->pointer),dBorder) && iter!=m_list.end()) {                //search
-                        iter++;
-                        if(iter==m_list.end())
-                                break;
+                while(iter!=m_list.end() && lower((*iter->pointer),dBorder)) {                //search
+                        ++iter;
                 }
 
                 if(iter!=m_list.begin())
-                        iter--;
+                        --iter;
 
                 return (*iter->pointer);
         }
@@ -429,21 +425,19 @@ public:
                 typename std::list<TYPE_SAVE>::iterator iter = m_list.begin();
 
                 while(lower((*iter->pointer),dW1) && iter!=m_list.end()) {        //count all elements which are lower than W1
-                        iter++;
+                        ++iter;
                         if(iter==m_list.end())
                                 break;
-                        result++;
+                        ++result;
                 }
 
-                while(!higher((*iter->pointer),dW3) && iter!=m_list.end()) {        //go from W1 to W3
-                        iter++;
-                        if(iter==m_list.end())
-                                break;
+                while(iter!=m_list.end() && !higher((*iter->pointer),dW3)) {        //go from W1 to W3
+                        ++iter;
                 }
 
                 while(iter!=m_list.end()) {                                                                        //count all element which are higher than W3
-                        iter++;
-                        result++;
+                        ++iter;
+                        ++result;
                 }
 
                 return result;
@@ -463,29 +457,29 @@ public:
                 typename std::list<TYPE_SAVE>::iterator iter = m_list.begin();
 
                 while(lower((*iter->pointer),dW1) && iter!=m_list.end()) {                        //search in lower area
-                        i--;
+                        --i;
 
                         if(i==0)
                                 return (*iter->pointer);
 
-                        iter++;
+                        ++iter;
                         if(iter==m_list.end())
                                 break;
                 }
 
                 while(!higher((*iter->pointer),dW3) && iter!=m_list.end()) {                //go from W1 to W3
-                        iter++;
+                        ++iter;
                         if(iter==m_list.end())
                                 break;
                 }
 
                 while(iter!=m_list.end()) {                                                                                        //search in upper area
-                        i--;
+                        --i;
 
                         if(i==0)
                                 return (*iter->pointer);
 
-                        iter++;
+                        ++iter;
                 }
 
                 return zero();                //not found                                                                                //if not found return zero
@@ -508,7 +502,7 @@ public:
                 typename std::list<TYPE_SAVE>::iterator iter = m_list.begin();
 
                 while(lower((*iter->pointer),z) && iter!=m_list.end()) {        //search the element which is as first higher than zero
-                        iter++;
+                        ++iter;
                         if(iter==m_list.end())
                                 break;
                 }
@@ -518,13 +512,13 @@ public:
                         h = iter->pointer;
 
                 else {
-                        iter--;
+                        --iter;
                         //return (*iter->pointer);
                         h = iter->pointer;
                 }
 
                 while(!lower((*iter->pointer),z) && iter!= m_list.begin()) {        //search the element which is as first lower than zero
-                        iter--;
+                        --iter;
                         if(iter==m_list.begin())
                                 break;
                 }
@@ -574,7 +568,7 @@ protected:
         void sort(void) {
                 typename std::vector<type>::iterator iter;
 
-                for(iter = m_vector.begin(); iter != m_vector.end(); iter++) {                        //fill the sorted list with elements of the help structur
+                for(iter = m_vector.begin(); iter != m_vector.end(); ++iter) {                        //fill the sorted list with elements of the help structur
                         m_list.push_back(TYPE_SAVE((*iter)));
                 }
 

@@ -37,9 +37,9 @@ class StatisticMeasure : public AbstractMeasure
 public:
   StatisticMeasure(double& observedValue, const char* measureName, MeasureMode mode, long stepSpan, double additionalParam);
 
-  virtual ~StatisticMeasure() {}
+  virtual ~StatisticMeasure()  override{}
 
-  virtual void step();
+  virtual void step() override;
 
 protected:
   double& observedValue; // the observed value from which the statistic is made

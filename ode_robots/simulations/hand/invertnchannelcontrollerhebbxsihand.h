@@ -65,7 +65,7 @@ class InvertNChannelControllerHebbXsiHand : public InvertNChannelController {
 
 public:
   InvertNChannelControllerHebbXsiHand(int _buffersize, bool _update_only_1=false, bool inactivate_hebb=false);
-  virtual void init(int sensornumber, int motornumber);
+  virtual void init(int sensornumber, int motornumber) override;
 
   virtual ~InvertNChannelControllerHebbXsiHand(){}
 
@@ -75,17 +75,17 @@ public:
 
   /// performs one step (includes learning).
   /// Calulates motor commands from sensor inputs.
-  virtual void step(const sensor* , int number_sensors, motor* , int number_motors);
+  virtual void step(const sensor* , int number_sensors, motor* , int number_motors) override;
 
 
   /// performs one step without learning. Calulates motor commands from sensor inputs.
   virtual void stepNoLearning(const sensor* , int number_sensors,
-                              motor* , int number_motors);
+                              motor* , int number_motors) override;
 
 
   // inspectable interface
-  virtual std::list<iparamkey> getInternalParamNames() const;
-  virtual std::list<iparamval> getInternalParams() const;
+  virtual std::list<iparamkey> getInternalParamNames() const override;
+  virtual std::list<iparamval> getInternalParams() const override;
 
 
 
@@ -129,9 +129,9 @@ protected:
 
   sensor old_sensors[10]; //memory of old sensor values (used for hebbian learning)
 
-  virtual matrix::Matrix hebb(matrix::Matrix& xsi, sensor* sensors);
-  virtual double calculateEHebb(const matrix::Matrix& x_delay, const matrix::Matrix& y_delay);
-  virtual void learn(const matrix::Matrix& x_delay, const matrix::Matrix& y_delay);
+  virtual matrix::Matrix hebb(matrix::Matrix& xsi, sensor* sensors) override;
+  virtual double calculateEHebb(const matrix::Matrix& x_delay, const matrix::Matrix& y_delay) override;
+  virtual void learn(const matrix::Matrix& x_delay, const matrix::Matrix& y_delay) override;
 
 };
 

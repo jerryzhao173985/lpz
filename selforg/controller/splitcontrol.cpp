@@ -34,7 +34,9 @@ SplitControl::SplitControl(ControllerGenerator* controllerGenerator,
                            int numContextSensors)
   : AbstractController(controllerName, "1"), controllerGenerator(controllerGenerator),
     assoz(assoziations),
-    numCtrlCreateBeforeInit (numCtrlCreateBeforeInit), numContextSensors(numContextSensors) {
+    numCtrlCreateBeforeInit (numCtrlCreateBeforeInit), numContextSensors(numContextSensors),
+    sensornumber(0), motornumber(0),
+    sensorbuffer(nullptr), motorbuffer(nullptr) {
 
   for(int i=0; i<numCtrlCreateBeforeInit; i++){
     AbstractController* c = (*controllerGenerator)(i);

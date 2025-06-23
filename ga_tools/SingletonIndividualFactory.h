@@ -110,7 +110,7 @@ private:
 	 * methode to generate a name for the new individual automatically
 	 * @return (string) the name
 	 */
-	inline static std::string createName(void) {std::string s = "Ind ";char buffer[128];sprintf(buffer,"%i",m_number);s+=buffer;return s;}
+	inline static std::string createName(void) {std::string s = "Ind ";char buffer[128];snprintf(buffer, sizeof(buffer),"%i",m_number);s+=buffer;return s;}
 };
 
 #endif /* SINGLETONINDIVIDUALFACTORY_H_ */

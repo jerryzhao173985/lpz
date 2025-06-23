@@ -73,13 +73,13 @@ ComplexMeasure( const char* measureName, ComplexMeasureMode mode, int numberBins
      */
     virtual void addObservable( double& observedValue, double minValue, double maxValue );
 
-    virtual ~ComplexMeasure();
+    virtual ~ComplexMeasure() override;
 
     /**
      * defined by AbstractMeasure. This method is called from StatisticTools
      * for updating the measure in every simStep (ODE).
      */
-    virtual void step();
+    virtual void step() override;
 
 
   protected:

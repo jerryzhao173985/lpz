@@ -29,7 +29,7 @@
 #include <list>
 #include <functional>
 
-typedef std::list<matrix::Matrix> ParameterList;
+using ParameterList = std::list<matrix::Matrix>;
 /// using ParameterList = std::list<matrix::Matrix>;
 
 /**

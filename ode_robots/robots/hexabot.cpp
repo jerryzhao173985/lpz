@@ -364,7 +364,8 @@ namespace lpzrobots {
 
   int Hexabot::getSensorsIntern(sensor* sensors, int sensornumber){
     assert(created);
-    assert(sensornumber == getSensorNumber());
+    int expectedSensors = getSensorNumber();
+    assert(sensornumber == expectedSensors);
 
     // angle sensors
     //

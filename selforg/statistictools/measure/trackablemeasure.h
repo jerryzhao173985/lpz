@@ -59,7 +59,7 @@ public:
    * @param cmode which type of complex measure should be evaluated?
    * @param numberBins number of bins used for discretisation
    */
-  TrackableMeasure(std::list<Trackable*> trackableList,const char* measureName  ,ComplexMeasureMode cmode,std::list<Position> cornerPointList, short dimensions, int numberBins);
+  TrackableMeasure(const std::list<Trackable*>& trackableList,const char* measureName  ,ComplexMeasureMode cmode,const std::list<Position>& cornerPointList, short dimensions, int numberBins);
 
   //virtual ~TrackableMeasure();
 
@@ -67,7 +67,7 @@ public:
    * defined by AbstractMeasure. This method is called from StatisticTools
       for updating the measure in every simStep (ODE).
    */
-  virtual void step();
+  virtual void step() override;
 
 
 protected:

@@ -23,7 +23,8 @@ using namespace matrix;
 using namespace std;
 
 SoML::SoML(const SoMLConf& conf)
-  : AbstractController("SoML", "0.1"), conf(conf) {
+  : AbstractController("SoML", "0.1"), conf(conf),
+    number_sensors(0), number_motors(0), numControllerLayer(0), E(0) {
   t=0;
 
   addParameterDef("creativity",&creativity,0, 0, 100, "creativity term (0: disabled) ");

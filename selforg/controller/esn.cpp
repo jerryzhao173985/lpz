@@ -33,7 +33,12 @@ using namespace matrix;
  * ESN class constructor
  */
 ESN::ESN(const ESNConf& _conf)
-  : InvertableModel("ESN","0.1"), conf(_conf)
+  : InvertableModel("ESN","0.1"), 
+    conf(_conf),
+    nbInputs(0),
+    nbOutputs(0),
+    error(0),
+    initialized(false)
 {
 
   addParameter("learningrate",&conf.learningrate,0,1,"learning rate");
@@ -45,8 +50,6 @@ ESN::ESN(const ESNConf& _conf)
     addInspectableMatrix("ESNWeights",&ESNWeights,false,"internal weights");
   }
   addInspectableValue("error",&error,"Learning error");
-  error = 0;
-  initialized = false;
 }
 
 void ESN::init(unsigned int inputDim, unsigned  int outputDim, double unit_map, RandGen* randGen)

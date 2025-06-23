@@ -32,7 +32,7 @@
 #include "matrix.h"
 #include "noisegenerator.h"
 
-typedef struct DerControllerConf {
+struct DerControllerConf {
   int buffersize; ///< buffersize size of the time-buffer for x,y,eta
   double cInit; ///< cInit size of the C matrix to initialised with.
   double cNonDiag; ///< cNonDiag is the size of the nondiagonal elements in respect to the diagonal (cInit) ones
@@ -40,7 +40,7 @@ typedef struct DerControllerConf {
   bool someInternalParams;  ///< someInternalParams if true only some internal parameters are exported, all otherwise
   bool useTeaching;         ///< if true, the controller honors the teaching signal
   bool useFantasy;           ///< if true fantasising is enabled
-} DerControllerConf;
+};
 
 /**
  * class for robot controller that uses the georg's matrixlib for
@@ -53,34 +53,34 @@ class DerController : public InvertMotorController {
 
 public:
 
-  DerController(const DerControllerConf& conf = getDefaultConf());
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
+  explicit DerController(const DerControllerConf& conf = getDefaultConf());
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override;
 
   virtual ~DerController();
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
-  virtual int getSensorNumber() const { return number_sensors; }
+  virtual int getSensorNumber() const  override{ return number_sensors; }
   /// returns the mumber of motors the controller was initialised with or 0 if not initialised
-  virtual int getMotorNumber() const  { return number_motors; }
+  virtual int getMotorNumber() const   override{ return number_motors; }
 
   /// performs one step (includes learning).
   /// Calulates motor commands from sensor inputs.
-  virtual void step(const sensor* , int number_sensors, motor* , int number_motors);
+  virtual void step(const sensor* , int number_sensors, motor* , int number_motors) override;
 
   /// performs one step without learning. Calulates motor commands from sensor inputs.
   virtual void stepNoLearning(const sensor* , int number_sensors,
-                              motor* , int number_motors);
+                              motor* , int number_motors) override;
 
 
   /**** STOREABLE ****/
-  virtual bool store(FILE* f) const;
-  virtual bool restore(FILE* f);
+  virtual bool store(FILE* f) const override;
+  virtual bool restore(FILE* f) override;
 
   /**** CONFIGURABLE ****/
-  virtual std::list<iparamkey> getInternalParamNames() const;
-  virtual std::list<iparamval> getInternalParams() const;
-  virtual std::list<ILayer> getStructuralLayers() const;
-  virtual std::list<IConnection> getStructuralConnections() const;
+  virtual std::list<iparamkey> getInternalParamNames() const override;
+  virtual std::list<iparamval> getInternalParams() const override;
+  virtual std::list<ILayer> getStructuralLayers() const override;
+  virtual std::list<IConnection> getStructuralConnections() const override;
 
   /**** TEACHING ****/
   virtual void setTeachingMode(bool onOff);
@@ -178,7 +178,7 @@ protected:
   /// calculates the city block distance (abs) norm of the matrix. (abs sum of absolutes / size of matrix)
   virtual double calcMatrixNorm(const matrix::Matrix& m);
   /// calculates the error_factor for either logarithmic (E=ln(e^T*e)) or square (E=sqrt(e^t*e)) error
-  virtual double calcErrorFactor(const matrix::Matrix& e, bool loga, bool root);
+  virtual double calcErrorFactor(const matrix::Matrix& e, bool loga, bool root) override;
 
 };
 

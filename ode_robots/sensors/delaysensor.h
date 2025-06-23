@@ -79,7 +79,7 @@ public:
 
   virtual std::list<SensorMotorInfo> getSensorInfos() const {
     std::list<SensorMotorInfo> l = childSensor->getSensorInfos();
-    for (auto& i : l){
+    for (const auto& i : l){
       i.name = i.name + "-delayed";
     }
     return l;

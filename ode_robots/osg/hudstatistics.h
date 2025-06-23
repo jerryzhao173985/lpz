@@ -87,7 +87,7 @@ public:
    */
   HUDStatisticsManager(osg::Geode* geode, osgText::Font* font, int ypos);
 
-  virtual ~HUDStatisticsManager();
+  virtual ~HUDStatisticsManager() override;
 
           /**
          * adds a variable to observe (on the window) and measure the value
@@ -107,7 +107,7 @@ public:
            * @see StatisticTools
            * @see StatisticMeasure
          */
-  virtual StatisticMeasure* getMeasure( double& observedValue, const char* measureName, MeasureMode mode, long stepSpan, double additionalParam =0);
+  virtual StatisticMeasure* getMeasure( double& observedValue, const char* measureName, MeasureMode mode, long stepSpan, double additionalParam =0) override;
 
           /**
          * adds a variable to observe (on the window) and measure the value
@@ -127,14 +127,14 @@ public:
            * @see StatisticTools
            * @see StatisticMeasure
          */
-  virtual double& addMeasure( double& observedValue, const char* measureName, MeasureMode mode, long stepSpan, double additionalParam =0);
+  virtual double& addMeasure( double& observedValue, const char* measureName, MeasureMode mode, long stepSpan, double additionalParam =0) override;
 
     /**
    * You can add another abstract measure you like. in some cases (e.g. complex
    * measures) it is better to let the measure decide how it likes to be initialized
    * @param measure the measure to add
    */
-  virtual double& addMeasure(AbstractMeasure* measure);
+  virtual double& addMeasure(AbstractMeasure* measure) override;
 
   /**
    * You can add another abstract measure you like. in some cases (e.g. complex
@@ -142,7 +142,7 @@ public:
    * With this method you can add a list of AbstractMeasures.
    * @param measureList the list of measures to add
    */
-  virtual double& addMeasureList(std::list<AbstractMeasure*> measureList);
+  virtual double& addMeasureList(std::list<AbstractMeasure*> measureList) override;
 
     /**
    * You can add another abstract measure you like. in some cases (e.g. complex
@@ -150,7 +150,7 @@ public:
    * With this method you can add a list of AbstractMeasures.
    * @param measureList the list of measures to add
    */
-  virtual double& addMeasureList(std::list<ComplexMeasure*> measureList);
+  virtual double& addMeasureList(std::list<ComplexMeasure*> measureList) override;
 
 
       /**
@@ -159,7 +159,7 @@ public:
    * With this method you can add a list of AbstractMeasures.
    * @param measureList the list of measures to add
    */
-  virtual double& addMeasureList(std::list<StatisticMeasure*> measureList);
+  virtual double& addMeasureList(std::list<StatisticMeasure*> measureList) override;
 
 
           /**
@@ -181,7 +181,7 @@ public:
          *        this method is invoked when a callback is done from the class where this
          * class is for callback registered, it is overwritten
          */
-  virtual void doOnCallBack(BackCaller* source, BackCaller::CallbackableType type = BackCaller::DEFAULT_CALLBACKABLE_TYPE);
+  virtual void doOnCallBack(BackCaller* source, BackCaller::CallbackableType type = BackCaller::DEFAULT_CALLBACKABLE_TYPE) override;
 
 
   virtual StatisticTools* getStatisticTools() { return statTool; }
@@ -190,7 +190,7 @@ public:
       (measure and graphics together)
       @return 0 if not measure was found
    */
-  virtual WindowStatistic* getMeasureWS(const std::string& measureName);
+  virtual WindowStatistic* getMeasureWS(const std::string& measureName) override;
 
 
   virtual void setColor(const Color& color){ textColor = color;}

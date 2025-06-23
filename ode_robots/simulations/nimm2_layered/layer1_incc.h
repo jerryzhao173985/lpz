@@ -65,17 +65,17 @@ class Layer1_INCC : public InvertNChannelController {
 public:
   Layer1_INCC(int _buffersize, bool _update_only_1=false);
 
-  //  virtual ~InvertNChannelControllerHebbH();
+  //  virtual ~InvertNChannelControllerHebbH() override;
 
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
 
-  virtual void learn(const matrix::Matrix& x_delay, const matrix::Matrix& y_delay);
+  virtual void learn(const matrix::Matrix& x_delay, const matrix::Matrix& y_delay) override;
 
-  virtual matrix::Matrix getH(); 
-  virtual void setH(matrix::Matrix tmp); 
-  virtual void addtoH(matrix::Matrix tmp);
+  virtual matrix::Matrix getH() override; 
+  virtual void setH(matrix::Matrix tmp) override; 
+  virtual void addtoH(matrix::Matrix tmp) override;
 
-  virtual matrix::Matrix getdH(); 
+  virtual matrix::Matrix getdH() override; 
 
 
 

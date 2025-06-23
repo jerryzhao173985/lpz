@@ -24,12 +24,13 @@ using namespace matrix;
 using namespace std;
 
 InvertNChannelController::InvertNChannelController(int _buffersize, bool _update_only_1/*=false*/)
-  : InvertController("InvertNChannelController", "$Id$"){
-  t=0;
-  update_only_1 = _update_only_1;
-  buffersize    = _buffersize;
-  x_buffer=0;
-  y_buffer=0;
+  : InvertController("InvertNChannelController", "$Id$"),
+    number_channels(0),
+    buffersize(_buffersize),
+    update_only_1(_update_only_1),
+    x_buffer(0),
+    y_buffer(0),
+    t(0) {
 
   addInspectableMatrix("A", &A, false, "model matrix");
   addInspectableMatrix("C", &C, false, "controller matrix");

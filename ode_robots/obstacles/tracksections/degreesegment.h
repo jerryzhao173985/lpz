@@ -52,22 +52,22 @@ class DegreeSegment : public AbstractTrackSection {
  * here it is the length of the arc
  */
 
-virtual double getLength();
+virtual double getLength() override;
 
 /**
  * returns the width of the segment,
  */
- virtual double getWidth();
+ virtual double getWidth() override;
 
 /**
  * sets the width of the segment,
  */
- virtual void setWidth(double w);
+ virtual void setWidth(double w) override;
 
 
-virtual void setCurveAngle(const double& alpha);
+virtual void setCurveAngle(const double& alpha) override;
 
-virtual void setRadius(const double& rad);
+virtual void setRadius(const double& rad) override;
 
   /**
    * gives the position and rotation(angle) of the segment at the
@@ -75,13 +75,13 @@ virtual void setRadius(const double& rad);
    * if you want to place the new segment, you must muliplicate:
    * getTransformedEndMatrix()*getPositionMatrix();
    */
-  virtual Matrix getTransformedEndMatrix();
+  virtual Matrix getTransformedEndMatrix() override;
 
 
 /**
  * returns true if the real coordinates lay inside of the segment
  */
-virtual bool isInside(const Position& p);
+virtual bool isInside(const Position& p) override;
 
 
 /**
@@ -91,7 +91,7 @@ virtual bool isInside(const Position& p);
  * 100 means you are at the end
  * returns -1 if no IdValue can be given
  */
-virtual double getSectionIdValue(const Position& p);
+virtual double getSectionIdValue(const Position& p) override;
 
 
 /**
@@ -102,20 +102,20 @@ virtual double getSectionIdValue(const Position& p);
  * 100 means you are on the right
  * returns -1 if no WidthValue can be given
  */
-virtual double getWidthIdValue(const Position& p);
+virtual double getWidthIdValue(const Position& p) override;
 
 
 /**
  * draws the obstacle (4 boxes for the playground)
  */
- virtual  void draw();
+ virtual  void draw() override;
 
 
 
-virtual void create(dSpaceID space);
+virtual void create(dSpaceID space) override;
 
 
-virtual  void destroy();
+virtual  void destroy() override;
 
  protected:
   // this is the radius of the curve

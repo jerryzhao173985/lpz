@@ -1,0 +1,246 @@
+/**
+ * Unit tests for Matrix class
+ * Tests basic operations and edge cases
+ */
+
+#include "matrix.h"
+#include <iostream>
+#include <cassert>
+#include <cmath>
+#include <stdexcept>
+
+using namespace matrix;
+using namespace std;
+
+// Helper function to compare matrices with tolerance
+bool matricesEqual(const Matrix& a, const Matrix& b, double tolerance = 1e-10) {
+    if (a.getM() != b.getM() || a.getN() != b.getN()) {
+        return false;
+    }
+    for (unsigned int i = 0; i < a.getM(); i++) {
+        for (unsigned int j = 0; j < a.getN(); j++) {
+            if (fabs(a.val(i, j) - b.val(i, j)) > tolerance) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+void testConstructors() {
+    cout << "Testing constructors..." << endl;
+    
+    // Default constructor
+    Matrix m1;
+    assert(m1.getM() == 0 && m1.getN() == 0);
+    
+    // Size constructor
+    Matrix m2(3, 4);
+    assert(m2.getM() == 3 && m2.getN() == 4);
+    
+    // Constructor with initial value
+    Matrix m3(2, 2, 5.0);
+    assert(m3.val(0, 0) == 5.0 && m3.val(1, 1) == 5.0);
+    
+    // Copy constructor
+    Matrix m4(m3);
+    assert(matricesEqual(m3, m4));
+    
+    cout << "  ✓ Constructors test passed" << endl;
+}
+
+void testBasicOperations() {
+    cout << "Testing basic operations..." << endl;
+    
+    // Addition
+    Matrix a(2, 2);
+    a.val(0, 0) = 1; a.val(0, 1) = 2;
+    a.val(1, 0) = 3; a.val(1, 1) = 4;
+    
+    Matrix b(2, 2);
+    b.val(0, 0) = 5; b.val(0, 1) = 6;
+    b.val(1, 0) = 7; b.val(1, 1) = 8;
+    
+    Matrix c = a + b;
+    assert(c.val(0, 0) == 6 && c.val(0, 1) == 8);
+    assert(c.val(1, 0) == 10 && c.val(1, 1) == 12);
+    
+    // Multiplication
+    Matrix d = a * b;
+    assert(d.val(0, 0) == 19 && d.val(0, 1) == 22);
+    assert(d.val(1, 0) == 43 && d.val(1, 1) == 50);
+    
+    // Scalar multiplication
+    Matrix e = a * 2.0;
+    assert(e.val(0, 0) == 2 && e.val(1, 1) == 8);
+    
+    cout << "  ✓ Basic operations test passed" << endl;
+}
+
+void testTranspose() {
+    cout << "Testing transpose..." << endl;
+    
+    Matrix a(2, 3);
+    a.val(0, 0) = 1; a.val(0, 1) = 2; a.val(0, 2) = 3;
+    a.val(1, 0) = 4; a.val(1, 1) = 5; a.val(1, 2) = 6;
+    
+    Matrix at = a^T;
+    assert(at.getM() == 3 && at.getN() == 2);
+    assert(at.val(0, 0) == 1 && at.val(0, 1) == 4);
+    assert(at.val(1, 0) == 2 && at.val(1, 1) == 5);
+    assert(at.val(2, 0) == 3 && at.val(2, 1) == 6);
+    
+    // Test in-place transpose
+    Matrix b(2, 2);
+    b.val(0, 0) = 1; b.val(0, 1) = 2;
+    b.val(1, 0) = 3; b.val(1, 1) = 4;
+    b.toTranspose();
+    assert(b.val(0, 1) == 3 && b.val(1, 0) == 2);
+    
+    cout << "  ✓ Transpose test passed" << endl;
+}
+
+void testInversion() {
+    cout << "Testing matrix inversion..." << endl;
+    
+    // 2x2 matrix inversion
+    Matrix a(2, 2);
+    a.val(0, 0) = 1; a.val(0, 1) = 2;
+    a.val(1, 0) = 3; a.val(1, 1) = 4;
+    
+    Matrix ainv = a^(-1);
+    Matrix identity = a * ainv;
+    
+    assert(fabs(identity.val(0, 0) - 1.0) < 1e-10);
+    assert(fabs(identity.val(1, 1) - 1.0) < 1e-10);
+    assert(fabs(identity.val(0, 1)) < 1e-10);
+    assert(fabs(identity.val(1, 0)) < 1e-10);
+    
+    // 3x3 matrix inversion
+    Matrix b(3, 3);
+    b.val(0, 0) = 1; b.val(0, 1) = 2; b.val(0, 2) = 3;
+    b.val(1, 0) = 0; b.val(1, 1) = 1; b.val(1, 2) = 4;
+    b.val(2, 0) = 5; b.val(2, 1) = 6; b.val(2, 2) = 0;
+    
+    Matrix binv = b^(-1);
+    Matrix identity3 = b * binv;
+    
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            if (i == j) {
+                assert(fabs(identity3.val(i, j) - 1.0) < 1e-10);
+            } else {
+                assert(fabs(identity3.val(i, j)) < 1e-10);
+            }
+        }
+    }
+    
+    cout << "  ✓ Inversion test passed" << endl;
+}
+
+void testMemoryAllocation() {
+    cout << "Testing memory allocation..." << endl;
+    
+    // Test large matrix allocation
+    try {
+        Matrix large(1000, 1000);
+        assert(large.getM() == 1000 && large.getN() == 1000);
+        cout << "  ✓ Large matrix allocation passed" << endl;
+    } catch (const std::bad_alloc& e) {
+        cout << "  ⚠ Large matrix allocation failed (expected on limited memory)" << endl;
+    }
+    
+    // Test toTranspose with memory allocation failure handling
+    Matrix m(100, 100);
+    try {
+        m.toTranspose();
+        assert(m.getM() == 100 && m.getN() == 100);
+        cout << "  ✓ Transpose memory allocation passed" << endl;
+    } catch (const std::bad_alloc& e) {
+        cout << "  ✓ Transpose properly handles allocation failure" << endl;
+    }
+}
+
+void testFileIO() {
+    cout << "Testing file I/O..." << endl;
+    
+    // Create test matrix
+    Matrix a(2, 3);
+    a.val(0, 0) = 1.5; a.val(0, 1) = 2.5; a.val(0, 2) = 3.5;
+    a.val(1, 0) = 4.5; a.val(1, 1) = 5.5; a.val(1, 2) = 6.5;
+    
+    // Write to file
+    FILE* f = fopen("test_matrix.dat", "w");
+    assert(f != nullptr);
+    assert(a.write(f));
+    fclose(f);
+    
+    // Read from file
+    f = fopen("test_matrix.dat", "r");
+    assert(f != nullptr);
+    Matrix b;
+    assert(b.read(f));
+    fclose(f);
+    
+    // Verify matrices are equal
+    assert(matricesEqual(a, b));
+    
+    // Clean up
+    remove("test_matrix.dat");
+    
+    cout << "  ✓ File I/O test passed" << endl;
+}
+
+void testEdgeCases() {
+    cout << "Testing edge cases..." << endl;
+    
+    // Empty matrix operations
+    Matrix empty;
+    Matrix empty2;
+    Matrix emptySum = empty + empty2;
+    assert(emptySum.getM() == 0 && emptySum.getN() == 0);
+    
+    // Single element matrix
+    Matrix single(1, 1, 5.0);
+    Matrix singleInv = single^(-1);
+    assert(fabs(singleInv.val(0, 0) - 0.2) < 1e-10);
+    
+    // Row vector transpose
+    Matrix row(1, 5);
+    row.toTranspose();
+    assert(row.getM() == 5 && row.getN() == 1);
+    
+    // Column vector transpose
+    Matrix col(5, 1);
+    col.toTranspose();
+    assert(col.getM() == 1 && col.getN() == 5);
+    
+    cout << "  ✓ Edge cases test passed" << endl;
+}
+
+void runAllTests() {
+    cout << "\n=== Running Matrix Library Unit Tests ===" << endl;
+    
+    testConstructors();
+    testBasicOperations();
+    testTranspose();
+    testInversion();
+    testMemoryAllocation();
+    testFileIO();
+    testEdgeCases();
+    
+    cout << "\n✅ All tests passed!" << endl;
+}
+
+int main() {
+    try {
+        runAllTests();
+        return 0;
+    } catch (const exception& e) {
+        cerr << "Test failed with exception: " << e.what() << endl;
+        return 1;
+    } catch (...) {
+        cerr << "Test failed with unknown exception" << endl;
+        return 1;
+    }
+}

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2005-2011 LpzRobots development team                    *
+ *   Copyright static_cast<C>(2005)-2011 LpzRobots development team                    *
  *    Georg Martius  <georg dot martius at web dot de>                     *
  *    Frank Guettler <guettler at informatik dot uni-leipzig dot de        *
  *    Frank Hesse    <frank at nld dot ds dot mpg dot de>                  *
@@ -29,25 +29,25 @@ namespace std {
 
   string itos(int i){
     char str[10];
-    sprintf(str,"%i", i);
+    snprintf(str, sizeof(str),"%i", i);
     return string(str);
   }
 
   string itos(int i, const char* format){
     char str[128];
-    sprintf(str,format, i);
+    snprintf(str, sizeof(str),format, i);
     return string(str);
   }
 
   string ftos(double i){
     char str[10];
-    sprintf(str,"%lf", i);
+    snprintf(str, sizeof(str),"%lf", i);
     return string(str);
   }
 
   string ftos(double i, const char* format){
     char str[128];
-    sprintf(str,format, i);
+    snprintf(str, sizeof(str),format, i);
     return string(str);
   }
 

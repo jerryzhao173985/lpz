@@ -30,15 +30,27 @@ using namespace std;
 
 
 DerController::DerController( const DerControllerConf& conf)
-  : InvertMotorController(conf.buffersize,"DerController", "$Id$"), conf(conf) {
+  : InvertMotorController(conf.buffersize,"DerController", "$Id$"), 
+    number_sensors(0),
+    number_motors(0),
+    BNoiseGen(0),
+    YNoiseGen(0),
+    xsi_norm(0),
+    xsi_norm_avg(0),
+    pain(0),
+    x_buffer(nullptr),
+    y_buffer(nullptr),
+    eta_buffer(nullptr),
+    fantControl(50),
+    fantControlLen(0),
+    fantReset(5),
+    conf(conf) {
   // entspricht:  this->conf = conf;
   //uuu
   addParameterDef("fantcontrol", &fantControl,50,0,1000,"interval length for fantasising");
   addParameterDef("fantcontrollen", &fantControlLen,0,0,100,"length of fantasy control");
   addParameterDef("fantreset", &fantReset,5,0,1000,"number of fantasy control events before reseting internal state");
 
-  YNoiseGen = 0;
-  BNoiseGen = 0;
   noiseB = 0;
 
   zetaupdate=0.0;
@@ -141,8 +153,8 @@ void DerController::stepNoLearning(const sensor* x, int number_sensors,
 
 void DerController::fillBuffersAndControl(const sensor* x_, int number_sensors,
                                           motor* y_, int number_motors){
-  assert((unsigned)number_sensors == this->number_sensors
-         && (unsigned)number_motors == this->number_motors);
+  assert(static_cast<unsigned>(number_sensors) == this->number_sensors
+         && static_cast<unsigned>(number_motors) == this->number_motors);
 
   Matrix x(number_sensors,1,x_);
 
@@ -200,7 +212,7 @@ void DerController::calcEtaAndBufferIt(int delay){
       //     eta += noiseMatrix(eta.getM(),eta.getN(), *YNoiseGen, -noiseY, noiseY); // noise for the null space!!!!!!!!!
   if(relativeE != 0) { // divide eta by |y|  == relative error
     // const Matrix& y = y_buffer[t % buffersize];
-    //   eta = eta.multrowwise(y.map(regularizedInverse2)); //TODO Prüfen was das macht.
+    //   eta = eta.multrowwise(y.map(regularizedInverse2)); //TODO Prï¿½fen was das macht.
   }
   eta_buffer[(t-1)%buffersize] = eta; // Todo: work with the reference
 }
@@ -231,7 +243,7 @@ void DerController::learnController(){
   Matrix H_update(H.getM(), H.getN());
 
   Matrix A_update(A.getM(), A.getN());
-  //TODO: B lernen wieder einführen!
+  //TODO: B lernen wieder einfï¿½hren!
 
   //
   int delay = std::max(int(s4delay)-1,0);
@@ -284,7 +296,7 @@ void DerController::calcCandHandAUpdates(Matrix& C_update, Matrix& H_update, Mat
     //    z                    = R * z.map(g) + H + C*xsi; // z is a dynamic itself (not successful)
      const Matrix& x          = x_buffer[(t-s-y_delay)%buffersize];
     const Matrix& y          = y_buffer[(t-s-y_delay)%buffersize];
-    const Matrix& z          = (C * x + H) *.5 +  ( R * y  + H) * .5; //TEST: gleiche Stärke innen und aussen
+    const Matrix& z          = (C * x + H) *.5 +  ( R * y  + H) * .5; //TEST: gleiche Stï¿½rke innen und aussen
     const Matrix shift       = (eta  + v).map(g);
     // const Matrix shift       = (eta  + v);//.map(g);  //Regularization  changed 07.02.07
     const Matrix g_prime     = Matrix::map2(g_s, z, shift);
@@ -326,8 +338,8 @@ void DerController::calcCandHandAUpdates(Matrix& C_update, Matrix& H_update, Mat
     // Dinverse =  (DD + SmallID *.05)^-1;
     // C_update += Dinverse * (( (  chi * (v^T ) ) /*- (zeta * (chi^T))*/  )*(A^T) - rho*(x^T) ) * epsC ;
     C_update += (( (  chi * (v^T ) ) /*- (zeta * (chi^T))*/  )*(A^T) - rho*(x^T) ) * epsC;// * Dinverse ;
-    C_update +=  C  * -dampA;  // Mit Dämpfung
-     C_update -= /*z*/eta * (x^T) * teacher;// Neu mit Lernen der Vorwärtsaufgabe !!!!!!!!!!???????
+    C_update +=  C  * -dampA;  // Mit Dï¿½mpfung
+     C_update -= /*z*/eta * (x^T) * teacher;// Neu mit Lernen der Vorwï¿½rtsaufgabe !!!!!!!!!!???????
 
      H_update += /*Dinverse* */ rho * -epsC ; // TEST langsameres H
      //  H_update +=  H  * -dampA;
@@ -389,7 +401,7 @@ void DerController::updateCandHandA(const Matrix& C_update, const Matrix& H_upda
     if ( u*u > 1.05 *  q*q)      epsC *=0.95;
 //    else {
       C += C_update.mapP(&_squashSize, squash);
-      double H_squashSize = _squashSize*5.0;//TEST: H soll sich schnelleer bewegen können.
+      double H_squashSize = _squashSize*5.0;//TEST: H soll sich schnelleer bewegen kï¿½nnen.
       H += H_update.mapP(&H_squashSize, squash); //Test - H*.001;
 
 

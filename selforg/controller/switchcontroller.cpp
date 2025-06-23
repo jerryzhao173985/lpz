@@ -48,9 +48,9 @@ void SwitchController::init(const int sensornumber, const int motornumber,
 }
 
 void SwitchController::step(const sensor* sensors, int sensornumber, motor* motors, int motornumber) {
-  motor* dummy = (motor*) malloc(sizeof(motor) * motornumber);
+  motor* dummy = static_cast<motor*>(malloc(sizeof(motor) * motornumber));
 
-  activecontroller = std::max(0,std::min(activecontroller,(int)controllers.size()-1));
+  activecontroller = std::max(0,std::min(activecontroller,static_cast<int>(controllers.size())-1));
 
   FOREACHIa(controllers, c, i){
     if(activecontroller==i){
@@ -63,9 +63,9 @@ void SwitchController::step(const sensor* sensors, int sensornumber, motor* moto
 }
 
 void SwitchController::stepNoLearning(const sensor* sensors , int sensornumber, motor* motors, int motornumber){
-  motor* dummy = (motor*) malloc(sizeof(motor) * motornumber);
+  motor* dummy = static_cast<motor*>(malloc(sizeof(motor) * motornumber));
 
-  activecontroller = std::max(0,std::min(activecontroller,(int)controllers.size()-1));
+  activecontroller = std::max(0,std::min(activecontroller,static_cast<int>(controllers.size())-1));
 
   FOREACHIa(controllers, c, i){
     if(activecontroller==i){

@@ -32,7 +32,8 @@ OneControllerPerChannel::OneControllerPerChannel(ControllerGenerator* controller
                                                  int numCtrlCreateBeforeInit,
                                                  int numContextSensors)
   : AbstractController(controllerName, "1"), controllerGenerator(controllerGenerator),
-    numCtrlCreateBeforeInit (numCtrlCreateBeforeInit), numContextSensors(numContextSensors) {
+    numCtrlCreateBeforeInit (numCtrlCreateBeforeInit), numContextSensors(numContextSensors),
+    sensornumber(0), motornumber(0) {
   for(int i=0; i<numCtrlCreateBeforeInit; i++){
     AbstractController* c = (*controllerGenerator)(i);
     ctrl.push_back(c);    

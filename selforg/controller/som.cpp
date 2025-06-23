@@ -28,30 +28,38 @@ using namespace std;
 using namespace matrix;
 
 
-SOM::SOM(const std::string& name, const std::string& revision) : AbstractModel(name, revision) {
-  initialised=false;
-  dimensions=1;
-  eps=0.1;
-  sigma=3;
+SOM::SOM(const std::string& name, const std::string& revision) 
+  : AbstractModel(name, revision),
+    eps(0.1),
+    dimensions(1),
+    sigma(3),
+    rbfsize(1.0),
+    size(0),
+    initialised(false) {
 }
 
 SOM::SOM(unsigned int dimensions, double sigma, double eps, double rbfsize,
          const std::string& name, const std::string& revision)
-  : AbstractModel(name, revision), eps(eps), dimensions(dimensions),  sigma(sigma), rbfsize(rbfsize){
+  : AbstractModel(name, revision), 
+    eps(eps), 
+    dimensions(dimensions),  
+    sigma(sigma), 
+    rbfsize(rbfsize),
+    size(0),
+    initialised(false) {
   addParameter("eps",&eps);
-  initialised=false;
 }
 
 void SOM::init(unsigned int inputDim, unsigned int outputDim,
                double unit_map, RandGen* randGen){
   if(!randGen) randGen = new RandGen(); // this gives a small memory leak
   double s = pow(outputDim,1.0/dimensions);
-  size = (int)round(s);
+  size = static_cast<int>(round(s));
   assert(fabs(s - int(size)) < 0.001);
   weights.resize(outputDim);
   diffvectors.resize(outputDim);
 
-  int input_cube_size = (int)round(pow(outputDim,1.0/inputDim));
+  int input_cube_size = static_cast<int>(round(pow(outputDim,1.0/inputDim)));
   Matrix offset(inputDim,1);
   offset.toMapP(unit_map, constant);
 
@@ -76,14 +84,14 @@ void SOM::init(unsigned int inputDim, unsigned int outputDim,
 double SOM::activationfunction(void* rdfsize, double d){
   // we could also use RBF here and maybe think about adaptation of cellsize
   //  return max(0.0,1-(2*d));
-  return exp(- d*d/ *(double*)rdfsize);
+  return exp(- d*d/ *static_cast<double*>(rdfsize));
 }
 
 int SOM::coordToIndex(const Matrix& m, int size){
   int index=0;
   int d = 1;
   for(int i=0; i<((signed)m.getM()); i++){
-    index+=d * (int)m.val(i,0);
+    index+=d * static_cast<int>(m.val(i,0));
     d*=size;
   }
   return index;
@@ -111,14 +119,14 @@ bool SOM::validCoord(const Matrix& m, int size){
 
 
 void SOM::initNeighbourhood(double sigma){
-  int r_sigma=(int)round(sigma);
+  int r_sigma=static_cast<int>(round(sigma));
   int i_sigma= max(3,r_sigma%2==1 ? r_sigma : r_sigma+1); // round to next odd number
-  int n_size=(int)pow((double)i_sigma,(double)dimensions);
+  int n_size=static_cast<int>(pow(static_cast<double>(i_sigma),static_cast<double>(dimensions)));
   if(sigma==0){ i_sigma=1; n_size=1; sigma=1;}
-  double maxlen = sqrt((double)dimensions)*sigma/2;
+  double maxlen = sqrt(static_cast<double>(dimensions))*sigma/2;
   neighbourhood.resize(n_size);
   Matrix middle(dimensions,1);
-  double radius = (int)i_sigma/2;
+  double radius = static_cast<int>(i_sigma)/2;
   middle.toMapP(radius, constant);
   for(int i=0; i<n_size; i++){
     Matrix m = indexToCoord(i,i_sigma, dimensions) - middle;
@@ -145,7 +153,7 @@ SOM::Neighbours SOM::getNeighbours(int winner){
 }
 
 double som_print_double(void* f, double d){
-  fprintf((FILE*)f,"%g ",d);
+  fprintf(static_cast<FILE*>(f),"%g ",d);
   return d;
 }
 
@@ -191,7 +199,7 @@ bool SOM::store(FILE* f) const{
   fprintf(f,"%g\n", sigma);
   fprintf(f,"%g\n", rbfsize);
   fprintf(f,"%i\n", size);
-  fprintf(f,"%i\n", getOutputDim());
+  fprintf(f,"%u\n", getOutputDim());
 
   distances.store(f);
   FOREACHC(vector<Matrix>, weights, w){
@@ -202,15 +210,15 @@ bool SOM::store(FILE* f) const{
 
 bool SOM::restore(FILE* f){
   char buffer[128];
-  if(fscanf(f,"%s\n", buffer) != 1) return false;
+  if(fscanf(f,"%127s\n", buffer) != 1) return false;
   eps = atof(buffer);
-  if(fscanf(f,"%s\n", buffer) != 1) return false;
+  if(fscanf(f,"%127s\n", buffer) != 1) return false;
   dimensions = atoi(buffer);
-  if(fscanf(f,"%s\n", buffer) != 1) return false;
+  if(fscanf(f,"%127s\n", buffer) != 1) return false;
   sigma = atof(buffer);
-  if(fscanf(f,"%s\n", buffer) != 1) return false;
+  if(fscanf(f,"%127s\n", buffer) != 1) return false;
   rbfsize = atof(buffer);
-  if(fscanf(f,"%s\n", buffer) != 1) return false;
+  if(fscanf(f,"%127s\n", buffer) != 1) return false;
   size = atoi(buffer);
   if((fgets(buffer,128, f))==NULL) return false; // we need to use fgets in order to avoid spurious effects with following matrix (binary)
   int odim = atoi(buffer);

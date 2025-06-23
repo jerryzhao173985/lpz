@@ -697,7 +697,7 @@ namespace lpzrobots {
     setToolTip();
   }
 
-  void QConfigurableWidget::enterEvent(QEvent * event) {
+  void QConfigurableWidget::enterEvent(QEnterEvent * event) {
     defaultPalette = palette();
     QPalette pal = QPalette(defaultPalette);
     pal.setColor(QPalette::AlternateBase, QColor(200, 200, 220));
@@ -724,7 +724,7 @@ namespace lpzrobots {
 
             QDrag *drag = new QDrag(this);
             drag->setMimeData(mimeData);
-            drag->setPixmap(QPixmap::grabWidget(configurableTile_dragging));
+            drag->setPixmap(configurableTile_dragging->grab());
             drag->setHotSpot(configurableTile_mousePressedOffset);
             configurableTile_dragging->toDummy(true);
             drag->exec(Qt::MoveAction);

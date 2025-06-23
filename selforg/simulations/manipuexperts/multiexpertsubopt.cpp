@@ -245,9 +245,9 @@ bool MultiExpertSubopt::restore(FILE* f){
     init(2,2);
 
   char buffer[128];
-  if(fscanf(f,"%s\n", buffer) != 1) return false;
+  if(fscanf(f,"%127s\n", buffer) != 1) return false;  // Security fix: added field width limit
   conf.numSats = atoi(buffer);
-  if(fscanf(f,"%s\n", buffer) != 1) return false;
+  if(fscanf(f,"%127s\n", buffer) != 1) return false;  // Security fix: added field width limit
   conf.numHidden = atoi(buffer);
 
  // we need to use fgets in order to avoid spurious effects with following matrix (binary)
@@ -282,7 +282,7 @@ void MultiExpertSubopt::storeSats(const char* filestem){
   int i=0;
   FOREACH(vector<Sat>, sats, s){
     char fname[256];
-    sprintf(fname,"%s_%02i.net", filestem, i);
+    snprintf(fname, sizeof(fname),"%s_%02i.net", filestem, i);
     FILE* f=fopen(fname,"wb");
     if(!f){ cerr << "MultiExpertSubopt::storeSats() error while writing file " << fname << endl;   return;  }
     s->net->store(f);

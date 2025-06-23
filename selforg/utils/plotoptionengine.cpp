@@ -195,7 +195,7 @@ void PlotOptionEngine::plot(double time)
 {
   assert(initialised);
 
-  for(list<PlotOption>::iterator i=plotOptions.begin(); i != plotOptions.end(); i++)
+  for(list<PlotOption>::iterator i=plotOptions.begin(); i != plotOptions.end(); ++i)
   {
     if ( ((*i).pipe) && ((*i).interval>0) && (t % (*i).interval == 0) )
     {
@@ -214,7 +214,7 @@ void PlotOptionEngine::plot(double time)
 // GEORG: it is better to plot it at initialization time!
 // void PlotOptionEngine::plotNames()
 // {
-//           for(list<PlotOption>::iterator i=plotOptions.begin(); i != plotOptions.end(); i++)
+//           for(list<PlotOption>::iterator i=plotOptions.begin(); i != plotOptions.end(); ++i)
 //           {
 //             if( ((*i).pipe) && ((*i).interval>0) && (t % (*i).interval == 0) )
 //             {

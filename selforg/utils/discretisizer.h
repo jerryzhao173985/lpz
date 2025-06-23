@@ -53,7 +53,7 @@ public:
     * 
     * @param numberBins the number of bins "created"
     */
-    Discretisizer(int numberBins);
+    explicit Discretisizer(int numberBins);
 
     /**
     * call this constructor if you like to decide yourself which range for

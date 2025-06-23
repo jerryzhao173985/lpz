@@ -56,7 +56,7 @@ public:
      @param controlmask bitmask to select channels to control (default all)
      @param function controller function to use
    */
-  ESN(const ESNConf& conf = getDefaultConf());
+  explicit ESN(const ESNConf& conf = getDefaultConf());
 
   static ESNConf getDefaultConf() {
     ESNConf c;
@@ -79,7 +79,7 @@ public:
       @param randGen pointer to random generator, if 0 an new one is used
    */
   virtual void init(unsigned int inputDim, unsigned  int outputDim,
-                    double unit_map = 0.0, RandGen* randGen = 0);
+                    double unit_map = 0.0, RandGen* randGen = nullptr);
 
   /** passive processing of the input
      (this function is not constant since a recurrent network
