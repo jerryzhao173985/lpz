@@ -66,7 +66,7 @@ namespace lpzrobots {
       virtual const char* className() const { return "Default Camera"; }
 
       /** set the position of the matrix manipulator using a 4x4 Matrix.*/
-      virtual void setByMatrix(const osg::Matrixd& matrix) override;
+      virtual void setByMatrix(const osg::Matrixd& matrix);
 
       /** set the position of the matrix manipulator using a 4x4 Matrix.*/
       virtual void setByInverseMatrix(const osg::Matrixd& matrix) {
@@ -74,11 +74,11 @@ namespace lpzrobots {
       }
 
       /** get the position of the manipulator as 4x4 Matrix.*/
-      virtual osg::Matrixd getMatrix() const override;
+      virtual osg::Matrixd getMatrix() const;
 
       /** get the position of the manipulator as a inverse matrix of the manipulator,
           typically used as a model view matrix.*/
-      virtual osg::Matrixd getInverseMatrix() const override;
+      virtual osg::Matrixd getInverseMatrix() const;
 
 
       /**
@@ -87,71 +87,71 @@ namespace lpzrobots {
        * the desired pos and view and the actual pos and view.
        */
       /*
-        virtual void computeMovement() override;*/
+        virtual void computeMovement();*/
 
-      virtual void setNode(osg::Node*) override;
+      virtual void setNode(osg::Node*);
 
-      virtual const osg::Node* getNode() const override;
+      virtual const osg::Node* getNode() const;
 
-      virtual osg::Node* getNode() override;
+      virtual osg::Node* getNode();
 
       /// set the home position of the camera. (and place it there)
-      virtual void setHome(const osg::Vec3& eye, const osg::Vec3& view) override;
+      virtual void setHome(const osg::Vec3& eye, const osg::Vec3& view);
 
       /// place the camera at its home position
-      virtual void home(const osgGA::GUIEventAdapter& ea,osgGA::GUIActionAdapter& us) override;
+      virtual void home(const osgGA::GUIEventAdapter& ea,osgGA::GUIActionAdapter& us);
 
-      virtual void init(const osgGA::GUIEventAdapter& ea,osgGA::GUIActionAdapter& us) override;
+      virtual void init(const osgGA::GUIEventAdapter& ea,osgGA::GUIActionAdapter& us);
 
-      virtual bool handle(const osgGA::GUIEventAdapter& ea,osgGA::GUIActionAdapter& us) override;
+      virtual bool handle(const osgGA::GUIEventAdapter& ea,osgGA::GUIActionAdapter& us);
 
       /** Get the keyboard and mouse usage of this manipulator.*/
-      virtual void getUsage(osg::ApplicationUsage& usage) const override;
+      virtual void getUsage(osg::ApplicationUsage& usage) const;
 
       /** updates the camera module at every drawstep
           should be called from the simulation loop
       */
-      virtual void update() override;
+      virtual void update();
 
       /** manipulate agent if Manipulation is active
           (should be called every simulation step)
       */
-      virtual void manipulateAgent( OsgHandle& osgHandle) override;
+      virtual void manipulateAgent( OsgHandle& osgHandle);
 
       /**
        * Sets the agent to be watched with the camera.
        * @param agent to set
        */
-      virtual void setWatchedAgent(OdeAgent* agent) override;
+      virtual void setWatchedAgent(OdeAgent* agent);
 
       /// returns watched agent
-      virtual OdeAgent* getWatchedAgent() override;
+      virtual OdeAgent* getWatchedAgent();
 
       /// called if agents list changed
       virtual void doOnCallBack(BackCaller* source, BackCaller::CallbackableType type
-                                = BackCaller::DEFAULT_CALLBACKABLE_TYPE) override;
+                                = BackCaller::DEFAULT_CALLBACKABLE_TYPE);
 
     protected:
 
-      virtual ~CameraManipulator() override;
+      virtual ~CameraManipulator();
 
       /** Reset the internal GUIEvent stack.*/
-      virtual void flushMouseEventStack() override;
+      virtual void flushMouseEventStack();
       /** Add the current mouse GUIEvent to internal stack.*/
-      virtual void addMouseEvent(const osgGA::GUIEventAdapter& ea) override;
+      virtual void addMouseEvent(const osgGA::GUIEventAdapter& ea);
 
-      virtual void computeMatrix() override;
+      virtual void computeMatrix();
 
       /** For the give mouse movement calculate the movement of the camera.
           Return true is camera has moved and a redraw is required.*/
-      virtual bool calcMovement() override;
+      virtual bool calcMovement();
 
       /**
        * Checks if an agent is selected and if this agent is available.
        * This agent must be listed in the global agent list.
        * @return true if defined, otherwise false
        */
-      virtual bool isWatchingAgentDefined() override;
+      virtual bool isWatchingAgentDefined();
 
       // Internal event stack comprising last three mouse events.
       osg::ref_ptr<const osgGA::GUIEventAdapter> event_old;
@@ -176,38 +176,38 @@ namespace lpzrobots {
       /** This manages the robots, switching between them and so on
           Is normally called from handle(...)
       */
-      virtual void manageAgents(const int& fkey) override;
+      virtual void manageAgents(const int& fkey);
 
 
       /** This handles robot movements, so that the camera movemenent is right affected.
           should normally be overwritten by new cameramanipulator
       */
-      virtual void calcMovementByAgent() override;
+      virtual void calcMovementByAgent();
 
 
       /** Sets the right view and eye if the robot has changed.
           Is called from manageRobots();
           should be overwritten by new cameramanipulator (if needed)
       */
-      virtual void setHomeViewByAgent() override;
-      virtual void setHomeEyeByAgent() override;
+      virtual void setHomeViewByAgent();
+      virtual void setHomeEyeByAgent();
 
 
       /** moves behind the robot which is actually watched
        */
-      virtual void moveBehindAgent() override;
+      virtual void moveBehindAgent();
 
       /** centers on the robot which is actually watched
        */
-      virtual void centerOnAgent() override;
+      virtual void centerOnAgent();
 
       /** manipulates Agent by forces. The given points are screen coords (-1 to 1) normalized.
       */
-      virtual void calcManipulationPointHorizontal(float x, float y) override;
+      virtual void calcManipulationPointHorizontal(float x, float y);
 
-      virtual void calcManipulationPointVertical(float x, float y) override;
+      virtual void calcManipulationPointVertical(float x, float y);
 
-      virtual void calcManipulationPoint(float x, float y) override;
+      virtual void calcManipulationPoint(float x, float y);
 
 
     };

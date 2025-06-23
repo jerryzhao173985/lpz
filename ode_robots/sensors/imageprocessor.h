@@ -45,10 +45,10 @@ namespace lpzrobots {
        is probably the one to use for processing. (output from last processor)
        @return result image structure of this processor
     */
-    virtual Camera::CameraImage init(const Camera::CameraImages& imgs)  override = 0;
+    virtual Camera::CameraImage init(const Camera::CameraImages& imgs)  = 0;
 
     /// perform the image calculation here
-    virtual void process()  override = 0;
+    virtual void process()  = 0;
 
   };
 

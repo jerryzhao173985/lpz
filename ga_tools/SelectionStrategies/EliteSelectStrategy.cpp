@@ -38,7 +38,7 @@ public:
         double fitness;
         Individual* ind;
 
-        inline bool operator<(SfitnessEliteStrategyStruct other) {
+        inline bool operator<(const SfitnessEliteStrategyStruct& other) const {
                 return (fitness*fitness)<(other.fitness*other.fitness);
         }
 

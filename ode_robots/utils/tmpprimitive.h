@@ -51,9 +51,9 @@ namespace lpzrobots {
     TmpPrimitive(const TmpPrimitive&) = delete;
     TmpPrimitive& operator=(const TmpPrimitive&) = delete;
 
-    virtual void init(const OdeHandle& odeHandle, const OsgHandle& osgHandle) override;
-    virtual void deleteObject() override;
-    virtual void update() override;
+    virtual void init(const OdeHandle& odeHandle, const OsgHandle& osgHandle);
+    virtual void deleteObject();
+    virtual void update();
 
   private:
     Primitive* item;
@@ -83,9 +83,9 @@ namespace lpzrobots {
                    const std::string& colorname, float alpha = 1.0,
                    OSGPrimitive::Quality quality = OSGPrimitive::Middle);
 
-    virtual void init(const OdeHandle& odeHandle, const OsgHandle& osgHandle) override;
+    virtual void init(const OdeHandle& odeHandle, const OsgHandle& osgHandle);
 
-    virtual void deleteObject() override;
+    virtual void deleteObject();
     virtual void update() {} // nothing to be done here, because they do not move
 
   private:
@@ -114,10 +114,10 @@ namespace lpzrobots {
     TmpJoint(Joint* p, const std::string& colorname, float alpha = 1.0,
              bool withVisual = true, double visualSize = 0.2, bool ignoreColl = true);
 
-    virtual void init(const OdeHandle& odeHandle, const OsgHandle& osgHandle) override;
+    virtual void init(const OdeHandle& odeHandle, const OsgHandle& osgHandle);
 
-    virtual void deleteObject() override;
-    virtual void update() override;
+    virtual void deleteObject();
+    virtual void update();
 
   private:
     Joint* joint;

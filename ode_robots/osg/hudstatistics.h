@@ -107,7 +107,7 @@ public:
            * @see StatisticTools
            * @see StatisticMeasure
          */
-  virtual StatisticMeasure* getMeasure( double& observedValue, const char* measureName, MeasureMode mode, long stepSpan, double additionalParam =0) override;
+  virtual StatisticMeasure* getMeasure( double& observedValue, const char* measureName, MeasureMode mode, long stepSpan, double additionalParam =0);
 
           /**
          * adds a variable to observe (on the window) and measure the value
@@ -127,14 +127,14 @@ public:
            * @see StatisticTools
            * @see StatisticMeasure
          */
-  virtual double& addMeasure( double& observedValue, const char* measureName, MeasureMode mode, long stepSpan, double additionalParam =0) override;
+  virtual double& addMeasure( double& observedValue, const char* measureName, MeasureMode mode, long stepSpan, double additionalParam =0);
 
     /**
    * You can add another abstract measure you like. in some cases (e.g. complex
    * measures) it is better to let the measure decide how it likes to be initialized
    * @param measure the measure to add
    */
-  virtual double& addMeasure(AbstractMeasure* measure) override;
+  virtual double& addMeasure(AbstractMeasure* measure);
 
   /**
    * You can add another abstract measure you like. in some cases (e.g. complex
@@ -142,7 +142,7 @@ public:
    * With this method you can add a list of AbstractMeasures.
    * @param measureList the list of measures to add
    */
-  virtual double& addMeasureList(std::list<AbstractMeasure*> measureList) override;
+  virtual double& addMeasureList(std::list<AbstractMeasure*> measureList);
 
     /**
    * You can add another abstract measure you like. in some cases (e.g. complex
@@ -150,7 +150,7 @@ public:
    * With this method you can add a list of AbstractMeasures.
    * @param measureList the list of measures to add
    */
-  virtual double& addMeasureList(std::list<ComplexMeasure*> measureList) override;
+  virtual double& addMeasureList(std::list<ComplexMeasure*> measureList);
 
 
       /**
@@ -159,7 +159,7 @@ public:
    * With this method you can add a list of AbstractMeasures.
    * @param measureList the list of measures to add
    */
-  virtual double& addMeasureList(std::list<StatisticMeasure*> measureList) override;
+  virtual double& addMeasureList(std::list<StatisticMeasure*> measureList);
 
 
           /**
@@ -190,7 +190,7 @@ public:
       (measure and graphics together)
       @return 0 if not measure was found
    */
-  virtual WindowStatistic* getMeasureWS(const std::string& measureName) override;
+  virtual WindowStatistic* getMeasureWS(const std::string& measureName);
 
 
   virtual void setColor(const Color& color){ textColor = color;}

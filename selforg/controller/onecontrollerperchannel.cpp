@@ -76,7 +76,7 @@ void OneControllerPerChannel::init(const int sensornumber, const int motornumber
 void OneControllerPerChannel::step(const sensor* sensors, int sensornumber, 
                                    motor* motors, int motornumber) {
   assert((int)ctrl.size()==motornumber);
-  if(numContextSensors==0){
+  if(numContextSensors==nullptr){
     for(int i=0; i<motornumber; i++){        
       ctrl[i]->step(sensors+i,1,motors+i,1);    
     }
@@ -94,7 +94,7 @@ void OneControllerPerChannel::stepNoLearning(const sensor* sensors , int sensorn
                                              motor* motors, int motornumber){
   assert((int)ctrl.size()==motornumber);
 
-  if(numContextSensors==0){
+  if(numContextSensors==nullptr){
     for(int i=0; i<motornumber; i++){        
       ctrl[i]->stepNoLearning(sensors+i,1,motors+i,1);    
     }

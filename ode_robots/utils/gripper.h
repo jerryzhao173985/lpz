@@ -94,9 +94,9 @@ namespace lpzrobots {
     /// call this to attach the gripper to the given primitive
     bool attach(Primitive* p);
 
-    virtual void addGrippables(const std::vector<Primitive*>& ps) override;
-    virtual void removeGrippables(const std::vector<Primitive*>& ps) override;
-    virtual void removeAllGrippables() override;
+    virtual void addGrippables(const std::vector<Primitive*>& ps);
+    virtual void removeGrippables(const std::vector<Primitive*>& ps);
+    virtual void removeAllGrippables();
 
     static int onCollision(dSurfaceParameters& params, GlobalData& globaldata,
                            void *userdata,

@@ -24,8 +24,8 @@
 
 #include "abstractcontroller.h"
 
+#include <_strings.h>
 #include <iostream>
-#include <list>
 #include <string>
 
 using namespace std;

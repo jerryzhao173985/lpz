@@ -61,7 +61,6 @@ public:
 
 protected:
   std::vector<AbstractWiring*> wirings;
-  bool initialised;
 
 };
 

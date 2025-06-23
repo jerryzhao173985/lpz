@@ -40,8 +40,8 @@ namespace matrix{
   class Matrix;
   using Matrices = std::vector<Matrix>;
 
-#define D_Zero 0
-#define D_One 1
+  constexpr D D_Zero = 0;
+  constexpr D D_One = 1;
   /** Matrix type. Type D is datatype of matrix elements,
    * which is fixed to double.
    * Type I is the indextype of matrix elements,

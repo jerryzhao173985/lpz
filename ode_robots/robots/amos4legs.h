@@ -392,12 +392,12 @@ namespace lpzrobots {
 
       virtual void sense(GlobalData& globalData) override;
 
-      virtual double getMassOfRobot() override;
+      virtual double getMassOfRobot();
 
       void setLegPosUsage(LegPos leg, LegPosUsage usage);
 
       // Configurable Interface
-      virtual bool setParam(const paramkey& key, paramval val) override;
+      virtual bool setParam(const paramkey& key, paramval val);
 
       /**
        * the main object of the robot, which is used for position and speed
@@ -463,12 +463,12 @@ namespace lpzrobots {
        *
        * @param pose 4x4 pose matrix
        */
-      virtual void create(const osg::Matrix& pose) override;
+      virtual void create(const osg::Matrix& pose);
 
       /**
        * destroys vehicle and space
        */
-      virtual void destroy() override;
+      virtual void destroy();
 
       /**
        * Assign a human readable name to a motor. This name is used for the

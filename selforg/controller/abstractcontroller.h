@@ -59,11 +59,11 @@ public:
 
   /** @return Number of sensors the controller
       was initialised with or 0 if not initialised */
-  virtual int getSensorNumber() const= 0;
+  [[nodiscard]] virtual int getSensorNumber() const = 0;
 
   /** @return Number of motors the controller
       was initialised with or 0 if not initialised */
-  virtual int getMotorNumber() const= 0;
+  [[nodiscard]] virtual int getMotorNumber() const = 0;
 
   /** performs one step (includes learning).
       Calculates motor commands from sensor inputs.
@@ -84,8 +84,8 @@ public:
       the motor values are given (by babbling controller) and
       this controller can learn the basic relations from observed sensors/motors
    */
-  virtual void motorBabblingStep(const sensor* , int number_sensors,
-                                 const motor* , int number_motors) {};
+  virtual void motorBabblingStep(const sensor* /*unused*/, int number_sensors,
+                                 const motor* /*unused*/, int number_motors) {};
 
   /** the controller is notified about the information on sensor.
       This is called after init and before step
@@ -114,10 +114,10 @@ public:
   virtual SensorMotorInfo MInfo(int index);
 
 protected:
-  std::map<std::string, int> sensorIndexMap;
-  std::map<std::string, int> motorIndexMap;
-  std::map<int, SensorMotorInfo> sensorInfoMap;
-  std::map<int, SensorMotorInfo> motorInfoMap;
+  std::map<std::string, int> sensorIndexMap{};
+  std::map<std::string, int> motorIndexMap{};
+  std::map<int, SensorMotorInfo> sensorInfoMap{};
+  std::map<int, SensorMotorInfo> motorInfoMap{};
 };
 
 #endif

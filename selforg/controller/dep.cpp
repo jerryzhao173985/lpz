@@ -278,7 +278,7 @@ void DEP::learnModel(double eps){
   s4delay = ::clip(s4delay,1,buffersize-1);
   int  t_delay =  max(s4delay,1)-1;
   /// we learn here with the velocities.
-  if(eps!=0){
+  if(eps!=nullptr){
     const Matrix& ydot = y_buffer[t - t_delay - timedist] - y_buffer[t - timedist - 1 - t_delay];
     // future sensor (with respect to x,y)
     const Matrix& x_fut   = x_buffer[t] - x_buffer[t - 1];

@@ -361,12 +361,13 @@ namespace qmp_internal
         struct PlatformThreadObjects
         {
                 PlatformThreadObjects()
-                : barrierEventToggle(false), barrierEvent1(NULL), barrierEvent2(NULL),
-                  threadHandles(NULL), threadIDs(NULL), threads(NULL)
-                {
 #ifdef QMP_USE_WINDOWS_THREADS
+                : barrierEventToggle(false), barrierEvent1(NULL), barrierEvent2(NULL),
+                  threadHandles(NULL), threadIDs(NULL)
 #else
+                : threads(NULL)
 #endif
+                {
                 }
 
 #ifdef QMP_USE_WINDOWS_THREADS

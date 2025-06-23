@@ -67,27 +67,27 @@ namespace lpzrobots {
     ~RaySensor();
 
     ///Create a copy of this without initialization
-    virtual RaySensor* clone() const override;
+    virtual RaySensor* clone() const;
 
-    void setPose(const osg::Matrix& pose) override;
+    void setPose(const osg::Matrix& pose);
 
-    void init(Primitive* own, Joint* joint = 0) override;
+    void init(Primitive* own, Joint* joint = 0);
 
-    bool sense(const GlobalData& globaldata) override;
+    bool sense(const GlobalData& globaldata);
 
-    int get(sensor* sensors, int length) const override;
+    int get(sensor* sensors, int length) const;
 
-    std::list<sensor> getList() const override;
+    std::list<sensor> getList() const;
 
-    virtual int getSensorNumber() const override;
+    virtual int getSensorNumber() const;
 
-    virtual void update() override;
+    virtual void update();
 
     ///Set maximum range of ray
-    virtual void setRange(double range) override;
+    virtual void setRange(double range);
 
     ///Set draw mode of ray
-    virtual void setDrawMode(rayDrawMode drawMode) override;
+    virtual void setDrawMode(rayDrawMode drawMode);
 
     ///Set length of ray (needed for callback)
     void setLength(double len, long int time);

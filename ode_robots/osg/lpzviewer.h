@@ -43,7 +43,7 @@ namespace lpzrobots {
 
     LPZViewer(const osgViewer::Viewer& viewer, const osg::CopyOp& copyop=osg::CopyOp::SHALLOW_COPY);
 
-    virtual ~LPZViewer() override;
+    virtual ~LPZViewer();
 
     ///overwritten to set cpu affinity back
     void setUpThreading();
@@ -56,16 +56,16 @@ namespace lpzrobots {
     /** call this function to render the off screen scene.
         If no off screen nodes are supplied than nothing is done
     */
-    virtual void renderOffScreen() override;
+    virtual void renderOffScreen();
 
     /** set the group that contains the offscreen scene (usually RTT cameras)
         If no group is set or the group is empty than nothing
         is done in renderOffscreen();
      */
-    virtual void setOffScreenData(osg::Group* offscreen) override;
+    virtual void setOffScreenData(osg::Group* offscreen);
 
   protected:
-    virtual void offScreenRenderingTraversals() override;
+    virtual void offScreenRenderingTraversals();
     osg::Group* offScreenGroup;
 
     void lpzviewerConstructorInit();

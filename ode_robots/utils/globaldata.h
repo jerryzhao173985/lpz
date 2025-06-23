@@ -80,22 +80,22 @@ namespace lpzrobots {
 
 
       /// adds a temporary display item with given life duration in sec
-      virtual void addTmpObject(TmpObject* i, double duration) override;
+      virtual void addTmpObject(TmpObject* i, double duration);
 
       /// called by Simulation to initialize tmp objects
       virtual void initializeTmpObjects(const OdeHandle& odeHandle,
-                                        const OsgHandle& osgHandle) override;
+                                        const OsgHandle& osgHandle);
       /// called by Simulation to update tmp objects
-      virtual void updateTmpObjects(const OsgHandle& osgHandle) override;
+      virtual void updateTmpObjects(const OsgHandle& osgHandle);
 
       /** called by Simulation to removes all expired sounds and temporary objects.
           Optionally a time can be specified otherwise the internal time is used.
       */
-      virtual void removeExpiredObjects(double time = -1) override;
+      virtual void removeExpiredObjects(double time = -1);
 
       /** removes a particular temporary display item even if it is not yet expired
           @return true if it was deleted (found) */
-      virtual bool removeTmpObject(TmpObject* i) override;
+      virtual bool removeTmpObject(TmpObject* i);
 
 
     private:

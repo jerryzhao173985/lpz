@@ -70,19 +70,19 @@ namespace lpzrobots
     static const int GRAPHICS_CALLBACKABLE = 2; //!< called each osg/draw step
 
     /// create the ground plane
-    virtual void makePhysicsScene() override;
+    virtual void makePhysicsScene();
     /** creates the base scene graph with world, sky and floor and shadow and HUD
         and stores it in scene
      */
-    virtual void makeScene(OsgScene* scene, const OsgConfig& config) override;
-    virtual osg::Node* makeSky(const OsgConfig& config) override;
-    virtual osg::Node* makeGround(const OsgConfig& config) override;
+    virtual void makeScene(OsgScene* scene, const OsgConfig& config);
+    virtual osg::Node* makeSky(const OsgConfig& config);
+    virtual osg::Node* makeGround(const OsgConfig& config);
     /** creates hud and is supposed to return the camera to it and
         adds the geode of the hud to the scene */
-    virtual osg::Node* createHUD(OsgScene* scene, const OsgConfig& config) override;
-    virtual void createHUDManager(osg::Geode* geode, osgText::Font* font) override;
+    virtual osg::Node* createHUD(OsgScene* scene, const OsgConfig& config);
+    virtual void createHUDManager(osg::Geode* geode, osgText::Font* font);
     /// adds light to the node
-    virtual void makeLights(osg::Group* node, const OsgConfig& config) override;
+    virtual void makeLights(osg::Group* node, const OsgConfig& config);
 
     /** Shadow types:
      * 1 - ShadowVolume
@@ -91,20 +91,20 @@ namespace lpzrobots
      * 4 - SoftShadowMap
      * 5 - ShadowMap
      */
-    virtual osgShadow::ShadowedScene* createShadowedScene(osg::Node* sceneToShadow, osg::LightSource* lightSource, int shadowType) override;
+    virtual osgShadow::ShadowedScene* createShadowedScene(osg::Node* sceneToShadow, osg::LightSource* lightSource, int shadowType);
 
     virtual void setGroundTexture(const char* filename) {
       this->groundTexture = filename;
     }
 
-    virtual Substance getGroundSubstance() override;
-    virtual void setGroundSubstance(const Substance& substance) override;
+    virtual Substance getGroundSubstance();
+    virtual void setGroundSubstance(const Substance& substance);
 
     /// sets the cpation that is printed at the right of the status line
-    virtual void setCaption(const std::string& caption) override;
+    virtual void setCaption(const std::string& caption);
 
     /// sets the title that is printed in the center of the status line
-    virtual void setTitle(const std::string& title) override;
+    virtual void setTitle(const std::string& title);
 
     virtual StatLineProperties getStatLineProperties() { return statlineprop; }
     /// sets the properties of the status line, do it before the scene is initialized
@@ -117,13 +117,13 @@ namespace lpzrobots
      * But do not display if the system is initialised with -nographics.
      * @return the actual HUDStatisticsManager
      */
-    virtual HUDStatisticsManager* getHUDSM() override;
+    virtual HUDStatisticsManager* getHUDSM();
 
-    virtual ~Base() override;
+    virtual ~Base();
 
   protected:
     virtual void setTimeStats(double time, double realtimefactor,
-                              double truerealtimefactor,bool pause) override;
+                              double truerealtimefactor,bool pause);
 
     /**
      * Changes the currently used shadow technique.
@@ -136,10 +136,10 @@ namespace lpzrobots
      * 1 - ShadowVolume
      * 2 - ShadowTextue
      */
-    virtual void changeShadowTechnique() override;
+    virtual void changeShadowTechnique();
 
     /// deletes the stuff that is created on makescene and the like
-    virtual void base_close() override;
+    virtual void base_close();
 
     dGeomID ground;
 

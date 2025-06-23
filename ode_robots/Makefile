@@ -97,7 +97,13 @@ library: $(LIB)
 
 $(LIB): $(UTILS) Makefile.depend $(OFILES)
 	$(AR) $(LIB) $(OFILES)
-	@if [ "$(STRIP)" = "yes" ]; then strip --strip-debug $(LIB); fi
+	@if [ "$(STRIP)" = "yes" ]; then \
+		if [ `uname` = "Darwin" ]; then \
+			strip -S $(LIB); \
+		else \
+			strip --strip-debug $(LIB); \
+		fi \
+	fi
 
 $(SHAREDLIB): Makefile.depend $(OFILES)
 	@if [ `uname` = "Darwin" ]; then \

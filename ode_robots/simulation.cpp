@@ -724,7 +724,7 @@ namespace lpzrobots {
 
          // call all registered physical callbackable classes
         QP(PROFILER.beginBlock("physicsCB                    "));
-        if (useQMPThreads!=0)
+        if (useQMPThreads!=nullptr)
           callBackQMP(Base::PHYSICS_CALLBACKABLE);
         else
           callBack(Base::PHYSICS_CALLBACKABLE);

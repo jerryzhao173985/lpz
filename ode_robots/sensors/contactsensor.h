@@ -58,30 +58,30 @@ namespace lpzrobots {
                   bool createSphere = false, bool colorObject = true,
                   Color contactColor = Color(-1,-1,-1));
 
-    virtual ~ContactSensor() override;
+    virtual ~ContactSensor();
 
     /** returns the sensor value in the range >=0;
         0 means nothing no contact
         >0 means contact with another object: size is the force in arbitrary unit
         @see characteritic()
      */
-    virtual double get() override;
+    virtual double get();
 
     // ---- Sensor interface -----
-    virtual void init(Primitive* own, Joint* joint = 0) override;
+    virtual void init(Primitive* own, Joint* joint = 0);
 
     virtual int getSensorNumber() const { return 1; }
 
-    virtual bool sense(const GlobalData& globaldata) override;
+    virtual bool sense(const GlobalData& globaldata);
 
-    virtual int get(sensor* sensors, int length) const override;
+    virtual int get(sensor* sensors, int length) const;
 
-    virtual std::list<sensor> getList() const override;
+    virtual std::list<sensor> getList() const;
 
-    virtual void update() override ;
+    virtual void update() ;
 
     // set measued depth (used internally) and the time (old measures are ignored)
-    virtual void setDepth(float depth, long int time) override;
+    virtual void setDepth(float depth, long int time);
 
     Transform* getTransformObject();
 

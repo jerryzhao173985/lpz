@@ -114,7 +114,7 @@ namespace lpzrobots{
       }while(strncmp(s,"#",1)!=0);
       int r,g,b;
       int i=0;
-      if(columns==0){
+      if(columns==nullptr){
         while(fscanf(f,"%i %i %i %127s\n",&r,&g,&b,s)==4){  // Security fix: added field width limit
           addColor(Color::rgb255(r,g,b), string(s));
           i++;

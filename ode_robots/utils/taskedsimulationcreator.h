@@ -52,7 +52,7 @@ namespace lpzrobots
      * This method must be overwritten by a deduced builder
      * @return the builded instance with basic type TaskedSimulation
      */
-    virtual TaskedSimulation* buildTaskedSimulationInstance()  override = 0;
+    virtual TaskedSimulation* buildTaskedSimulationInstance() = 0;
 
   };
 

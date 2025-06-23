@@ -55,7 +55,7 @@ namespace lpzrobots {
        This can be another robot an obstacle (light source) and such like
        This must be called before first sense() or get() call.
     */
-    virtual void setReference(Primitive* ref) override;
+    virtual void setReference(Primitive* ref);
 
   private:
     double maxDistance;

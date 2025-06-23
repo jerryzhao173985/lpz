@@ -69,19 +69,19 @@ cylinder 5 30 (0,0,175) (0,0,0)
     */
     BoundingShape(const std::string& filename, Mesh* parent);
 
-    virtual ~BoundingShape() override;
+    virtual ~BoundingShape();
 
     /// tries to open the bbox file and greates all geoms
     virtual bool init(const OdeHandle& odeHandle, const OsgHandle& osgHandle,
-                      double scale, char mode) override;
+                      double scale, char mode);
 
-    virtual bool isActive() override;
+    virtual bool isActive();
 
     /**
      * updates all Primitives of the BoundingShape if only in geom mode (no Body)
      * @param pose
      */
-    virtual void setPose(const osg::Matrix& pose) override;
+    virtual void setPose(const osg::Matrix& pose);
 
   private:
     bool readBBoxFile(std::string& filename, const OdeHandle& odeHandle, const OsgHandle& osgHandle,

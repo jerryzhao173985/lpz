@@ -34,7 +34,7 @@ namespace lpzrobots {
   using namespace std;
   using namespace matrix;
 
-  int PolyLine::parse(const std::list<char*>& lines){
+  int PolyLine::parse(std::list<char*> lines){
     int pen_color, fill_color;
     list<char*>::iterator l = lines.begin();
     if(lines.size()<2) return 1;

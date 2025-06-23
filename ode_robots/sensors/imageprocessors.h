@@ -95,7 +95,7 @@ namespace lpzrobots {
       numchannels = red+green+blue;
       printf("BWImageProcessor: Select: Red %i, Green %i, Blue %i : numchannels %i\n",
              red, green, blue,numchannels);
-      if(numchannels==0) numchannels=1; // avoid division by 0
+      if(numchannels==nullptr) numchannels=1; // avoid division by 0
     }
 
     virtual void process(const osg::Image* src, osg::Image* dest){

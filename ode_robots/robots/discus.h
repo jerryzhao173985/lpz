@@ -160,8 +160,8 @@ public:
 
 protected:
 
-  virtual void create(const osg::Matrix& pose) override;
-  virtual void destroy() override;
+  virtual void create(const osg::Matrix& pose);
+  virtual void destroy();
 
 
 };

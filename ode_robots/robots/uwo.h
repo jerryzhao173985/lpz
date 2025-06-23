@@ -86,11 +86,11 @@ namespace lpzrobots {
     /** sets the pose of the vehicle
         @param pose desired pose matrix
     */
-    virtual void placeIntern(const osg::Matrix& pose) override;
+    virtual void placeIntern(const osg::Matrix& pose);
 
 
     /******** CONFIGURABLE ***********/
-    virtual void notifyOnChange(const paramkey& key) override;
+    virtual void notifyOnChange(const paramkey& key);
 
   protected:
     /** the main object of the robot, which is used for position and speed tracking */
@@ -99,11 +99,11 @@ namespace lpzrobots {
     /** creates vehicle at desired pose
         @param pose 4x4 pose matrix
     */
-    virtual void create(const osg::Matrix& pose) override;
+    virtual void create(const osg::Matrix& pose);
 
     /** destroys vehicle and space
      */
-    virtual void destroy() override;
+    virtual void destroy();
 
     UwoConf conf;
     double legmass;    // leg mass

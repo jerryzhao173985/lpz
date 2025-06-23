@@ -432,7 +432,7 @@ bool Configurable::parse(FILE* f, const char* prefix, bool traverseChildren) {
     if(strcmp(bufNoPrefix,"######\n")==0) break;
     char* p = strchr(bufNoPrefix,'=');
     if(p!=0){
-      *p=0; // terminate string (key) at = sign
+      *p=nullptr; // terminate string (key) at = sign
       char* s = bufNoPrefix;
       while (*s==' ') s++; // skip leading spaces
       // cout << "Set: " << s << " Val:" << atof(p+1) << endl;

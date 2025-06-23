@@ -71,7 +71,7 @@ namespace lpzrobots {
     struct PostDrawCallback : public osg::Camera::DrawCallback {
       PostDrawCallback(Camera* cam):
         cam(cam) { }
-      virtual void operator () (const osg::Camera& /*camera*/) const override;
+      virtual void operator () (const osg::Camera& /*camera*/) const;
       Camera* cam;
     };
 
@@ -114,7 +114,7 @@ namespace lpzrobots {
       return c;
     }
 
-    virtual ~Camera() override;
+    virtual ~Camera();
 
     /** initializes the camera. The OSG camera is created and the
         raw image and the imageprocessor is initialized.
@@ -122,13 +122,13 @@ namespace lpzrobots {
     virtual void init(const OdeHandle& odeHandle,
                       const OsgHandle& osgHandle,
                       Primitive* body,
-                      const osg::Matrix& pose) override;
+                      const osg::Matrix& pose);
 
     /// changes the relative pose of the camera
-    virtual void setPose(const osg::Matrix& pose) override;
+    virtual void setPose(const osg::Matrix& pose);
 
     /// relative pose of the camera
-    virtual osg::Matrix getPose() override;
+    virtual osg::Matrix getPose();
 
     // virtual bool sense(const GlobalData& globaldata) override;
 
@@ -140,7 +140,7 @@ namespace lpzrobots {
 
     virtual osg::Camera* getRRTCam() { return cam;}
 
-    virtual void update() override;
+    virtual void update();
 
     bool isInitialized() { return initialized; }
   private:

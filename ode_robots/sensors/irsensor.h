@@ -48,14 +48,14 @@ namespace lpzrobots {
              rayDrawMode drawMode = drawSensor);
 
     //Override sense to include characteristic
-    virtual bool sense(const GlobalData& globaldata) override;
+    virtual bool sense(const GlobalData& globaldata);
 
     //Override to return value given by characteristic
-    virtual int get(sensor* sensors, int length) const override;
-    virtual std::list<sensor> getList() const override;
+    virtual int get(sensor* sensors, int length) const;
+    virtual std::list<sensor> getList() const;
 
     //Directly return value (needed for backward compatibility
-    virtual double getValue() override;
+    virtual double getValue();
 
     /// returns the exponent of the sensor characteritic (default: 1 (linear))
     virtual double getExponent () const { return exponent;}
@@ -68,7 +68,7 @@ namespace lpzrobots {
         An exponential curve is used.
         @see setExponent()
     */
-    virtual double characteritic(double len) override;
+    virtual double characteritic(double len);
 
     double exponent; // exponent of the sensor characteritic
 

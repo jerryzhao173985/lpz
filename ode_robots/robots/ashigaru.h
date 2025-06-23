@@ -248,7 +248,7 @@ public: // Functions
       @param poslist vector of positions (of all robot segments)
       @return length of the list
   */
-  virtual int getSegmentsPosition(std::vector<Position> &poslist) override;
+  virtual int getSegmentsPosition(std::vector<Position> &poslist);
 
 
     /** this function is called in each timestep. It should perform robot-internal checks,
@@ -266,11 +266,11 @@ protected: // Functions
   /** creates vehicle at desired pose
       @param pose 4x4 pose matrix
   */
-  virtual void create(const osg::Matrix& pose) override;
+  virtual void create(const osg::Matrix& pose);
 
   /** destroys vehicle and space
    */
-  virtual void destroy() override;
+  virtual void destroy();
 
   /**
    * Assign a human readable name to a motor. This name is used for the

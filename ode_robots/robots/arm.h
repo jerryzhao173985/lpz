@@ -198,7 +198,7 @@ namespace lpzrobots{
      * @param poslist vector of positions (of all robot segments)
      * @return length of the list
      */
-    virtual int getSegmentsPosition(std::vector<Position> &poslist) override;
+    virtual int getSegmentsPosition(std::vector<Position> &poslist);
 
     /**
      * returns the position of the endeffector (hand)
@@ -238,12 +238,12 @@ namespace lpzrobots{
      * @param pose 4x4 pose matrix
      * @param snowmanmode snowman body
      */
-    virtual void create(const osg::Matrix& pose) override;
+    virtual void create(const osg::Matrix& pose);
 
     /**
      * destroys vehicle and space
      */
-    virtual void destroy() override;
+    virtual void destroy();
 
     static void mycallback(void *data, dGeomID o1, dGeomID o2);
 

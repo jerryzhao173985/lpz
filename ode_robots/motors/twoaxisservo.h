@@ -49,7 +49,7 @@ namespace lpzrobots {
     /** sets the set point of the servo.
         Position must be between -1 and 1. It is scaled to fit into min, max
     */
-    virtual void set(double pos1, double pos2) override;
+    virtual void set(double pos1, double pos2);
 
     /** returns the position of the servo (joint) of 1. axis in ranges [-1, 1] (scaled by min1, max1)*/
     virtual double get1() const {

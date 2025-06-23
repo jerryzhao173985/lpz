@@ -62,7 +62,7 @@ unsigned int dMemoryFlag;
 
 
 
-/* This template should work almost like std::auto_ptr
+/* This template should work almost like std::unique_ptr
  */
 template<class T>
 struct Auto {

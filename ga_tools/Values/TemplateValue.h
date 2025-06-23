@@ -213,7 +213,7 @@ private:
    * disable the default constructor
    * @return
    */
-  TemplateValue() : IValue() {}
+  TemplateValue() : IValue("TemplateValue") {}
 };
 
 #endif /* TEMPLATEVALUE_H_ */

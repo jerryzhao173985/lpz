@@ -30,7 +30,7 @@ void changeParams(ConfigList& configs,
   }
   char *p = strchr(buffer,'=');
   if (p){
-    *p=0; // terminate key string
+    *p=nullptr; // terminate key string
     double v=strtod(p+1,0);
     for(ConfigList::iterator i=configs.begin(); i != configs.end(); ++i){
       if ((*i)->setParam(buffer,v)){

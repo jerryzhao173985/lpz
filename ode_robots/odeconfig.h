@@ -47,11 +47,11 @@ namespace lpzrobots {
       randomSeedCopy = randomSeed;
     }
 
-    virtual void setOdeHandle(const OdeHandle& odeHandle) override;
+    virtual void setOdeHandle(const OdeHandle& odeHandle);
 
-    virtual void setVideoRecordingMode(bool mode) override;
+    virtual void setVideoRecordingMode(bool mode);
 
-    virtual void calcAndSetDrawInterval(double Hz, double rtf) override;
+    virtual void calcAndSetDrawInterval(double Hz, double rtf);
 
     /******** CONFIGURABLE ***********/
     virtual void notifyOnChange(const paramkey& key) override;

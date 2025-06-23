@@ -314,7 +314,7 @@ DEFINE_TESTstatic_cast<check_matrix_utils>({)
   const Matrix resultvalM_r(4,1, resultval_r);
   const Matrix resultvalM_i(4,1, resultval_i);
   //cout << (eval^T) << "\n" << (resultvalM^T) << "   \n";
-  unit_assert( "NonSym Eigenvalues static_cast<Complex>("), comparetozero(eval_r-resultvalM_r)
+  unit_assert( "NonSym Eigenvalues (Complex)", comparetozero(eval_r-resultvalM_r)
                && comparetozero(eval_i-resultvalM_i));
   Matrix evec_r, evec_i;
   eigenValuesVectors(M2, eval_r, eval_i, evec_r, evec_i);

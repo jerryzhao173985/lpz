@@ -40,44 +40,44 @@ public:
     AbstractGround(const OdeHandle& odeHandle, const OsgHandle& osgHandle,
                    bool createGround, double groundLength, double groundWidth, double wallThickness);
 
-    virtual ~AbstractGround() override;
+    virtual ~AbstractGround();
 
 
-    virtual void setPose(const osg::Matrix& pose) override;
+    virtual void setPose(const osg::Matrix& pose);
 
-    virtual void createGround(bool create) override;
+    virtual void createGround(bool create);
 
-    virtual Primitive* getMainPrimitive() const override;
+    virtual Primitive* getMainPrimitive() const;
 
-    virtual void changeGeometry(double length, double width, double height, double factorxy) override;
+    virtual void changeGeometry(double length, double width, double height, double factorxy);
 
     /// prints the contour of the boxes into the file
-    virtual void printContours(FILE* f) override;
+    virtual void printContours(FILE* f);
 
     /**
      * assigns the texture to the object
      */
-    virtual void setGroundTexture(const std::string& filename) override;
+    virtual void setGroundTexture(const std::string& filename);
 
     /**
      * sets the ground color
      * should be called before setPosition()
      * @param color values in RGBA
      */
-    virtual void setGroundColor(const Color& color) override;
+    virtual void setGroundColor(const Color& color);
 
     /**
      * sets the substance of the ground.
      * @param substance description of the substance
      */
-    virtual void setGroundSubstance(const Substance& substance) override;
+    virtual void setGroundSubstance(const Substance& substance);
 
 
     /**
      * returns the corner points of the groundplane
      * @return list of the cornerpoints
      */
-    virtual std::list<Position> getCornerPointsXY() override;
+    virtual std::list<Position> getCornerPointsXY();
 
     /// size in x dimension
     virtual double getGroundLength(){ return groundLength; }
@@ -86,7 +86,7 @@ public:
 
     virtual double getGroundThickness(){ return groundThickness; }
 
-    virtual void   setGroundThickness(double thickness) override;
+    virtual void   setGroundThickness(double thickness);
 
   protected:
 
@@ -100,7 +100,7 @@ public:
     Color groundColor;
     std::string groundTextureFileName;
 
-    virtual void createGround() override;
+    virtual void createGround();
 
   };
 

@@ -203,12 +203,12 @@ void InvertMotorNStep::step(const sensor* x_, int number_sensors,
   {
     C = (C^0) *cfactor;
   }
-  if (cnondiagabs!=0)
+  if (cnondiagabs!=nullptr)
   {
     C.val(0,1)=cnondiagabs;
     C.val(1,0)=cnondiagabs;
   }
-  if (cdiagabs!=0)
+  if (cdiagabs!=nullptr)
   {
     C.val(0,0)=cdiagabs;
     C.val(1,1)=cdiagabs;

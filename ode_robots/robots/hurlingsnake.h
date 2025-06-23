@@ -47,13 +47,13 @@ namespace lpzrobots {
     /** sets the pose of the vehicle
         @param pose desired 4x4 pose matrix
     */
-    virtual void placeIntern(const osg::Matrix& pose) override;
+    virtual void placeIntern(const osg::Matrix& pose);
 
     /** this function is called in each timestep. It should perform robot-internal checks,
         like sensor resets/update etc.
         @param globalData structure that contains global data from the simulation environment
     */
-    virtual void doInternalStuff(GlobalData& globalData) override;
+    virtual void doInternalStuff(GlobalData& globalData);
 
 
     /** returns actual sensorvalues
@@ -61,30 +61,30 @@ namespace lpzrobots {
         @param sensornumber length of the sensor array
         @return number of actually written sensors
     */
-    virtual int getSensorsIntern(sensor* sensors, int sensornumber) override;
+    virtual int getSensorsIntern(sensor* sensors, int sensornumber);
 
     /** sets actual motorcommands
         @param motors motors scaled to [-1,1]
         @param motornumber length of the motor array
     */
-    virtual void setMotorsIntern(const double* motors, int motornumber) override;
+    virtual void setMotorsIntern(const double* motors, int motornumber);
 
     /** returns number of sensors
      */
-    virtual int getSensorNumberIntern() override;
+    virtual int getSensorNumberIntern();
 
     /** returns number of motors
      */
-    virtual int getMotorNumberIntern() override;
+    virtual int getMotorNumberIntern();
 
     /** returns a vector with the positions of all segments of the robot
         @param poslist vector of positions (of all robot segments)
         @return length of the list
     */
-    virtual int getSegmentsPosition(std::vector<Position> &poslist) override;
+    virtual int getSegmentsPosition(std::vector<Position> &poslist);
 
     /******** CONFIGURABLE ***********/
-    virtual void notifyOnChange(const paramkey& key) override;
+    virtual void notifyOnChange(const paramkey& key);
 
   protected:
     /** the main object of the robot, which is used for position and speed tracking */
@@ -97,11 +97,11 @@ namespace lpzrobots {
     /** creates vehicle at desired pose
         @param pose 4x4 pose matrix
     */
-    virtual void create(const osg::Matrix& pose) override;
+    virtual void create(const osg::Matrix& pose);
 
     /** destroys robot and space
      */
-    virtual void destroy() override;
+    virtual void destroy();
 
     bool created;      // true if robot was created
 

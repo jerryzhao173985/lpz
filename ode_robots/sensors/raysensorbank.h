@@ -37,23 +37,23 @@ namespace lpzrobots {
   public:
     RaySensorBank();
 
-    virtual ~RaySensorBank() override;
+    virtual ~RaySensorBank();
 
     virtual void setInitData(const OdeHandle& odeHandle,
                              const OsgHandle& osgHandle,
-                             const osg::Matrix& pose) override;
+                             const osg::Matrix& pose);
 
     // ---- Sensor interface -----
-    virtual void init(Primitive* own, Joint* joint = 0) override;
+    virtual void init(Primitive* own, Joint* joint = 0);
 
-    virtual int getSensorNumber() const override;
+    virtual int getSensorNumber() const;
 
-    virtual bool sense(const GlobalData& globaldata) override;
+    virtual bool sense(const GlobalData& globaldata);
 
-    virtual int get(sensor* sensors, int length) const override;
-    virtual std::list<sensor> getList() const override;
+    virtual int get(sensor* sensors, int length) const;
+    virtual std::list<sensor> getList() const;
 
-    virtual void update() override;
+    virtual void update();
 
     /** registers a new sensor at the sensor bank. The body and the pose have to be provided.
         @param raysensor RaySensor to add
@@ -64,7 +64,7 @@ namespace lpzrobots {
     */
     virtual unsigned int registerSensor(RaySensor* raysensor, Primitive* body,
                                         const osg::Matrix& pose, float range,
-                                        RaySensor::rayDrawMode drawMode) override;
+                                        RaySensor::rayDrawMode drawMode);
 
 
 
@@ -76,20 +76,20 @@ namespace lpzrobots {
         @param index index of sensor to modify
         @param range new length of the sensor
     */
-    virtual void setRange(unsigned int index, float range) override;
+    virtual void setRange(unsigned int index, float range);
 
     /** set the range of all sensors
         @param range new length of the sensors
     */
-    virtual void setRange(float range) override;
+    virtual void setRange(float range);
 
     /** returns the spaceID of the sensor space
      */
-    virtual dSpaceID getSpaceID() override;
+    virtual dSpaceID getSpaceID();
 
 
     // delete all registered sensors.
-    virtual void clear() override;
+    virtual void clear();
 
     // returns true if initialized
     virtual bool isInitialized() { return initialized;}

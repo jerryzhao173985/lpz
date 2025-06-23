@@ -45,26 +45,26 @@ namespace lpzrobots {
     /**
      * updates the OSG nodes of the vehicle
      */
-    virtual void update() override;
+    virtual void update();
 
 
     /** sets the pose of the vehicle
         @param pose desired pose matrix
     */
-    virtual void placeIntern(const osg::Matrix& pose) override;
+    virtual void placeIntern(const osg::Matrix& pose);
 
     /** returns actual sensorvalues
         @param sensors sensors scaled to [-1,1]
         @param sensornumber length of the sensor array
         @return number of actually written sensors
     */
-    virtual int getSensorsIntern(double* sensors, int sensornumber) override;
+    virtual int getSensorsIntern(double* sensors, int sensornumber);
 
     /** sets actual motorcommands
         @param motors motors scaled to [-1,1]
         @param motornumber length of the motor array
     */
-    virtual void setMotorsIntern(const double* motors, int motornumber) override;
+    virtual void setMotorsIntern(const double* motors, int motornumber);
 
     /** returns number of sensors
      */
@@ -86,11 +86,11 @@ namespace lpzrobots {
     /** creates vehicle at desired pose
         @param pose 4x4 pose matrix
     */
-    virtual void create(const osg::Matrix& pose) override;
+    virtual void create(const osg::Matrix& pose);
 
     /** destroys vehicle and space
      */
-    virtual void destroy() override;
+    virtual void destroy();
 
     /** additional things for collision handling can be done here
      */

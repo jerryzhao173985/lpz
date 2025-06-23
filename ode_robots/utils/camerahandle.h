@@ -78,7 +78,7 @@ namespace lpzrobots
 
     CameraHandle();
 
-    virtual ~CameraHandle() override;
+    virtual ~CameraHandle();
   };
 
 }

@@ -135,7 +135,7 @@ public:
       @param poslist vector of positions (of all robot segments)
       @return length of the list
   */
-  virtual int getSegmentsPosition(std::vector<Position> &poslist) override;
+  virtual int getSegmentsPosition(std::vector<Position> &poslist);
 
     /******** CONFIGURABLE ***********/
     virtual void notifyOnChange(const paramkey& key) override;
@@ -153,8 +153,8 @@ protected:
   /** creates vehicle at desired pose
       @param pose 4x4 pose matrix
   */
-  virtual void create(const osg::Matrix& pose) override;
-  virtual void destroy() override;
+  virtual void create(const osg::Matrix& pose);
+  virtual void destroy();
 };
 
 }

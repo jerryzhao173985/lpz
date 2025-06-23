@@ -21,7 +21,7 @@ namespace lpzrobots {
 
     RangeFinder() : own(nullptr) {};
 
-    virtual void init(Primitive* own, Joint* joint = 0) override;
+    virtual void init(Primitive* own, Joint* joint = 0);
 
     /**
      * Register equidistant IR sensor in a given angular range
@@ -33,7 +33,7 @@ namespace lpzrobots {
      * @param drawMode: Specifies if rays should be drawn or not (default is drawing rays)
      */
     virtual void registerSensorRange(int numBeams, double startAngle, double endAngle, double maxRange, double height,
-        RaySensor::rayDrawMode drawMode = RaySensor::drawRay) override;
+        RaySensor::rayDrawMode drawMode = RaySensor::drawRay);
 
   protected:
     Primitive* own;

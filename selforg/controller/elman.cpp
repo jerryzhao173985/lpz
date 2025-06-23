@@ -127,7 +127,7 @@ NetUpdate Elman::weightIncrement(const matrix::Matrix& xsi_){
   int layernum  = layers.size();
   assert(weights.size() == (unsigned)layernum);
   assert(bias.size() == (unsigned)layernum);
-  NetUpdate update(layernum, layernum, (useBypass!=0) + (useElman!=0) + (useJordan!=0));
+  NetUpdate update(layernum, layernum, (useBypass!=nullptr) + (useElman!=0) + (useJordan!=0));
   int k = 0;
   // calculate weight updates
   Matrix delta;
@@ -166,7 +166,7 @@ NetUpdate Elman::weightIncrementBlocked(const matrix::Matrix& xsi_,
   int layernum  = layers.size();
   assert(weights.size() == (unsigned)layernum);
   assert(bias.size() == (unsigned)layernum);
-  NetUpdate update(layernum, layernum, (useBypass!=0) + (useElman!=0) + (useJordan!=0));
+  NetUpdate update(layernum, layernum, (useBypass!=nullptr) + (useElman!=0) + (useJordan!=0));
   int k = 0;
   // calculate weight updates
   Matrix delta;
@@ -210,7 +210,7 @@ void Elman::updateWeights(const NetUpdate& update){
   assert(weights.size() == (unsigned)layernum);
   assert(bias.size() == (unsigned)layernum);
   assert((int)update.weights.size() == layernum &&
-         (int)update.other.size() == (useBypass!=0) + (useElman!=0) + (useJordan!=0));
+         (int)update.other.size() == (useBypass!=nullptr) + (useElman!=0) + (useJordan!=0));
 
   for(int i=0; i<layernum; i++){
     weights[i] += update.weights[i];

@@ -120,7 +120,7 @@ namespace lpzrobots{
     /** sets the pose of the vehicle
         @param pose desired 4x4 pose matrix
     */
-    virtual void placeIntern(const osg::Matrix& pose) override;
+    virtual void placeIntern(const osg::Matrix& pose);
 
 
     /** returns actual sensorvalues
@@ -128,13 +128,13 @@ namespace lpzrobots{
         @param sensornumber length of the sensor array
         @return number of actually written sensors
     */
-    virtual int getSensorsIntern(double* sensors, int sensornumber) override;
+    virtual int getSensorsIntern(double* sensors, int sensornumber);
 
     /** sets actual motorcommands
         @param motors motors scaled to [-1,1]
         @param motornumber length of the motor array
     */
-    virtual void setMotorsIntern(const double* motors, int motornumber) override;
+    virtual void setMotorsIntern(const double* motors, int motornumber);
 
     /** returns number of sensors
      */
@@ -151,22 +151,22 @@ namespace lpzrobots{
 /*     /\** returns position of hand (=sphere at the end of lower arm)  */
 /*         @return position robot position in struct Position   */
 /*     *\/ */
-/*     virtual osg::Vec3 MuscledArm::getPosition() override; */
+/*     virtual osg::Vec3 MuscledArm::getPosition(); */
 
     /** returns a vector with the positions of all segments of the robot
         @param poslist vector of positions (of all robot segments)
         @return length of the list
     */
-    virtual int getSegmentsPosition(std::vector<Position> &poslist) override;
+    virtual int getSegmentsPosition(std::vector<Position> &poslist);
 
     /** this function is called in each timestep. It should perform robot-internal checks,
         like space-internal collision detection, sensor resets/update etc.
         @param globalData structure that contains global data from the simulation environment
     */
-    virtual void doInternalStuff(GlobalData& globalData) override;
+    virtual void doInternalStuff(GlobalData& globalData);
 
 
-    virtual Primitive* getMainObject() const override;
+    virtual Primitive* getMainObject() const;
 
   protected:
     /** the main object of the robot, which is used for position and speed tracking */
@@ -176,11 +176,11 @@ namespace lpzrobots{
     /** creates vehicle at desired pose
         @param pose 4x4 pose matrix
     */
-    virtual void create(const osg::Matrix& pose) override;
+    virtual void create(const osg::Matrix& pose);
 
     /** destroys vehicle and space
      */
-    virtual void destroy() override;
+    virtual void destroy();
 
     static void mycallback(void *data, dGeomID o1, dGeomID o2);
 

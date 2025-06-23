@@ -101,30 +101,30 @@ public:
     return conf;
   }
 
-  virtual ~Nimm2() override;
+  virtual ~Nimm2();
 
   /**
    * updates the OSG nodes of the vehicle
    */
-  virtual void update() override;
+  virtual void update();
 
   /** sets the pose of the vehicle
       @param pose desired 4x4 pose matrix
   */
-  virtual void placeIntern(const osg::Matrix& pose) override;
+  virtual void placeIntern(const osg::Matrix& pose);
 
   /** returns actual sensorvalues
       @param sensors sensors scaled to [-1,1]
       @param sensornumber length of the sensor array
       @return number of actually written sensors
   */
-  virtual int getSensorsIntern(sensor* sensors, int sensornumber) override;
+  virtual int getSensorsIntern(sensor* sensors, int sensornumber);
 
   /** sets actual motorcommands
       @param motors motors scaled to [-1,1]
       @param motornumber length of the motor array
   */
-  virtual void setMotorsIntern(const double* motors, int motornumber) override;
+  virtual void setMotorsIntern(const double* motors, int motornumber);
 
   /** returns number of sensors
    */
@@ -142,14 +142,14 @@ public:
       @param poslist vector of positions (of all robot segments)
       @return length of the list
   */
-  virtual int getSegmentsPosition(std::vector<Position> &poslist) override;
+  virtual int getSegmentsPosition(std::vector<Position> &poslist);
 
 
     /** this function is called in each timestep. It should perform robot-internal checks,
       like space-internal collision detection, sensor resets/update etc.
       @param globalData structure that contains global data from the simulation environment
    */
-  virtual void doInternalStuff(GlobalData& globalData) override;
+  virtual void doInternalStuff(GlobalData& globalData);
 
         virtual double& getSumForce() { return sumForce; }
 
@@ -163,13 +163,13 @@ protected:
   /** creates vehicle at desired pose
       @param pose 4x4 pose matrix
   */
-  virtual void create(const osg::Matrix& pose) override;
+  virtual void create(const osg::Matrix& pose);
 
 
 
   /** destroys vehicle and space
    */
-  virtual void destroy() override;
+  virtual void destroy();
   static void mycallback(void *data, dGeomID o1, dGeomID o2);
 
         /**
@@ -180,9 +180,9 @@ protected:
 
         virtual std::list<iparamval> getInternalParams() const { return std::list<iparamval>(); }*/
         /*
-        virtual std::list<Inspectable::iparamkey> getInternalParamNames() const override;
+        virtual std::list<Inspectable::iparamkey> getInternalParamNames() const;
 
-        virtual std::list<Inspectable::iparamval> getInternalParams() const override;
+        virtual std::list<Inspectable::iparamval> getInternalParams() const;
         */
 
   Nimm2Conf conf;

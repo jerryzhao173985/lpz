@@ -130,45 +130,45 @@ namespace lpzrobots {
     /**
      * update the subcomponents
      */
-    virtual void update() override;
+    virtual void update();
 
     /**
      * sets the pose of the vehicle
      * @param pose desired 4x4 pose matrix
      */
-    virtual void placeIntern(const osg::Matrix& pose) override;
+    virtual void placeIntern(const osg::Matrix& pose);
 
-    virtual void sense(GlobalData& globalData) override;
+    virtual void sense(GlobalData& globalData);
 
     /** returns actual sensorvalues
         @param sensors sensors scaled to [-1,1]
         @param sensornumber length of the sensor array
         @return number of actually written sensors
     */
-    virtual int getSensorsIntern(sensor* sensors, int sensornumber) override;
+    virtual int getSensorsIntern(sensor* sensors, int sensornumber);
 
     /** sets actual motorcommands
         @param motors motors scaled to [-1,1]
         @param motornumber length of the motor array
     */
-    virtual void setMotorsIntern(const double* motors, int motornumber) override;
+    virtual void setMotorsIntern(const double* motors, int motornumber);
 
     /** returns number of sensors
      */
-    virtual int getSensorNumberIntern() override;
+    virtual int getSensorNumberIntern();
 
     /** returns number of motors
      */
-    virtual int getMotorNumberIntern() override;
+    virtual int getMotorNumberIntern();
 
     /** returns a vector with the positions of all segments of the robot
         @param poslist vector of positions (of all robot segments)
         @return length of the list
     */
-    //  virtual int getSegmentsPosition(vector<Position> &poslist) override;
+    //  virtual int getSegmentsPosition(vector<Position> &poslist);
 
     /******** CONFIGURABLE ***********/
-    virtual void notifyOnChange(const paramkey& key) override;
+    virtual void notifyOnChange(const paramkey& key);
 
 
   protected:
@@ -190,12 +190,12 @@ namespace lpzrobots {
      * creates the hand at the desired pose
      * @param pose 4x4 pose matrix
      */
-    virtual void create(const osg::Matrix& pose) override;
+    virtual void create(const osg::Matrix& pose);
 
     /**
      * destroys robot and space
      */
-    virtual void destroy() override;
+    virtual void destroy();
 
     static void mycallback(void *data, dGeomID o1, dGeomID o2);
 

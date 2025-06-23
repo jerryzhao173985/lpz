@@ -50,20 +50,20 @@ namespace lpzrobots {
     */
     SoundSensor(Dimensions dim = Z, Measure measure = Angle,
                 int segments=1, int levels=1, double maxDistance=50, double noisestrength=0.1);
-    virtual ~SoundSensor() override;
+    virtual ~SoundSensor();
 
-    virtual void init(Primitive* own, Joint* joint = 0) override { this->own = own;}
+    virtual void init(Primitive* own, Joint* joint = 0) { this->own = own;}
 
-    virtual bool sense(const GlobalData& globaldata)  override;
+    virtual bool sense(const GlobalData& globaldata) ;
 
     /// default implementation is a linear decrease in intensity until it is 0 at maxDistance
-    virtual float distanceDependency(const Sound& s, double distance) override;
+    virtual float distanceDependency(const Sound& s, double distance);
 
-    virtual int getSensorNumber() const  override;
+    virtual int getSensorNumber() const ;
 
-    virtual std::list<sensor> getList() const override;
+    virtual std::list<sensor> getList() const;
 
-    virtual int get(sensor* sensors, int length) const override;
+    virtual int get(sensor* sensors, int length) const;
 
   private:
     short dim; ///< the axis in which the sensor is selective around

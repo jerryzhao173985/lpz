@@ -1,0 +1,1137 @@
+cd opende; sh autogen.sh && ./configure --disable-asserts --enable-shared --enable-double-precision --prefix=/usr/local --disable-demos && /Applications/Xcode-beta.app/Contents/Developer/usr/bin/make && echo "you probably want to run \"make install_ode\" now (possibly as root)"
+Please make sure that you use automake 1.10 or later
+Warnings about underquoted definitions are harmless
+Running aclocal
+aclocal: warning: autoconf input should be named 'configure.ac', not 'configure.in'
+Running glibtoolize
+Running autoheader
+autoheader: warning: autoconf input should be named 'configure.ac', not 'configure.in'
+Running automake
+automake: warning: autoconf input should be named 'configure.ac', not 'configure.in'
+configure.in:53: installing './compile'
+configure.in:47: installing './missing'
+automake: warning: autoconf input should be named 'configure.ac', not 'configure.in'
+GIMPACT/src/Makefile.am: installing './depcomp'
+tests/Makefile.am:21: warning: source file 'joints/ball.cpp' is in a subdirectory,
+tests/Makefile.am:21: but option 'subdir-objects' is disabled
+automake: warning: possible forward-incompatibility.
+automake: At least one source file is in a subdirectory, but the 'subdir-objects'
+automake: automake option hasn't been enabled.  For now, the corresponding output
+automake: object file(s) will be placed in the top-level directory.  However, this
+automake: behavior may change in a future Automake major version, with object
+automake: files being placed in the same subdirectory as the corresponding sources.
+automake: You are advised to start using 'subdir-objects' option throughout your
+automake: project, to avoid future incompatibility.
+tests/Makefile.am:21: warning: source file 'joints/fixed.cpp' is in a subdirectory,
+tests/Makefile.am:21: but option 'subdir-objects' is disabled
+tests/Makefile.am:21: warning: source file 'joints/hinge.cpp' is in a subdirectory,
+tests/Makefile.am:21: but option 'subdir-objects' is disabled
+tests/Makefile.am:21: warning: source file 'joints/hinge2.cpp' is in a subdirectory,
+tests/Makefile.am:21: but option 'subdir-objects' is disabled
+tests/Makefile.am:21: warning: source file 'joints/piston.cpp' is in a subdirectory,
+tests/Makefile.am:21: but option 'subdir-objects' is disabled
+tests/Makefile.am:21: warning: source file 'joints/pr.cpp' is in a subdirectory,
+tests/Makefile.am:21: but option 'subdir-objects' is disabled
+tests/Makefile.am:21: warning: source file 'joints/pu.cpp' is in a subdirectory,
+tests/Makefile.am:21: but option 'subdir-objects' is disabled
+tests/Makefile.am:21: warning: source file 'joints/slider.cpp' is in a subdirectory,
+tests/Makefile.am:21: but option 'subdir-objects' is disabled
+tests/Makefile.am:21: warning: source file 'joints/universal.cpp' is in a subdirectory,
+tests/Makefile.am:21: but option 'subdir-objects' is disabled
+Running autoconf
+configure.in:61: warning: The macro 'AC_LIBTOOL_WIN32_DLL' is obsolete.
+configure.in:61: You should run autoupdate.
+aclocal.m4:8636: AC_LIBTOOL_WIN32_DLL is expanded from...
+configure.in:61: the top level
+configure.in:61: warning: AC_LIBTOOL_WIN32_DLL: Remove this warning and the call to _LT_SET_OPTION when you
+configure.in:61: put the 'win32-dll' option into LT_INIT's first parameter.
+./lib/autoconf/general.m4:2434: AC_DIAGNOSE is expanded from...
+aclocal.m4:8636: AC_LIBTOOL_WIN32_DLL is expanded from...
+configure.in:61: the top level
+configure.in:62: warning: The macro 'AC_PROG_LIBTOOL' is obsolete.
+configure.in:62: You should run autoupdate.
+aclocal.m4:122: AC_PROG_LIBTOOL is expanded from...
+configure.in:62: the top level
+Running bootstrap in ou directory
+configure.ac:55: warning: The macro 'AC_LIBTOOL_WIN32_DLL' is obsolete.
+configure.ac:55: You should run autoupdate.
+aclocal.m4:8636: AC_LIBTOOL_WIN32_DLL is expanded from...
+configure.ac:55: the top level
+configure.ac:55: warning: AC_LIBTOOL_WIN32_DLL: Remove this warning and the call to _LT_SET_OPTION when you
+configure.ac:55: put the 'win32-dll' option into LT_INIT's first parameter.
+./lib/autoconf/general.m4:2434: AC_DIAGNOSE is expanded from...
+aclocal.m4:8636: AC_LIBTOOL_WIN32_DLL is expanded from...
+configure.ac:55: the top level
+configure.ac:56: warning: The macro 'AC_PROG_LIBTOOL' is obsolete.
+configure.ac:56: You should run autoupdate.
+aclocal.m4:122: AC_PROG_LIBTOOL is expanded from...
+configure.ac:56: the top level
+configure.ac:67: warning: The macro 'AC_HEADER_STDC' is obsolete.
+configure.ac:67: You should run autoupdate.
+./lib/autoconf/headers.m4:663: AC_HEADER_STDC is expanded from...
+configure.ac:67: the top level
+configure.ac:110: warning: The macro 'AC_HELP_STRING' is obsolete.
+configure.ac:110: You should run autoupdate.
+./lib/autoconf/general.m4:204: AC_HELP_STRING is expanded from...
+configure.ac:110: the top level
+configure.ac:9: installing '../compile'
+configure.ac:10: installing '../missing'
+src/ou/Makefile.am: installing '../depcomp'
+Now you are ready to run ./configure
+checking build system type... aarch64-apple-darwin25.0.0
+checking host system type... aarch64-apple-darwin25.0.0
+checking for a BSD-compatible install... /opt/homebrew/bin/ginstall -c
+checking whether sleep supports fractional seconds... yes
+checking filesystem timestamp resolution... 2
+checking whether build environment is sane... yes
+checking for a race-free mkdir -p... /opt/homebrew/bin/gmkdir -p
+checking for gawk... no
+checking for mawk... no
+checking for nawk... no
+checking for awk... awk
+checking whether make sets $(MAKE)... yes
+checking whether make supports nested variables... yes
+checking xargs -n works... yes
+checking whether UID '501' is supported by ustar format... yes
+checking whether GID '20' is supported by ustar format... yes
+checking how to create a ustar tar archive... gnutar
+checking whether make sets $(MAKE)... (cached) yes
+checking for g++... g++
+checking whether the C++ compiler works... yes
+checking for C++ compiler default output file name... a.out
+checking for suffix of executables... 
+checking whether we are cross compiling... no
+checking for suffix of object files... o
+checking whether the compiler supports GNU C++... yes
+checking whether g++ accepts -g... yes
+checking for g++ option to enable C++11 features... none needed
+checking whether make supports the include directive... yes (GNU style)
+checking dependency style of g++... gcc3
+checking for gcc... gcc
+checking whether the compiler supports GNU C... yes
+checking whether gcc accepts -g... yes
+checking for gcc option to enable C11 features... none needed
+checking whether gcc understands -c and -o together... yes
+checking dependency style of gcc... gcc3
+checking how to run the C preprocessor... gcc -E
+checking for gawk... (cached) awk
+checking whether ln -s works... yes
+checking how to print strings... printf
+checking for a sed that does not truncate output... /opt/homebrew/bin/gsed
+checking for grep that handles long lines and -e... /usr/bin/grep
+checking for egrep... /usr/bin/grep -E
+checking for fgrep... /usr/bin/grep -F
+checking for ld used by gcc... /Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld
+checking if the linker (/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld) is GNU ld... no
+checking for BSD- or MS-compatible name lister (nm)... /usr/bin/nm -B
+checking the name lister (/usr/bin/nm -B) interface... BSD nm
+checking the maximum length of command line arguments... 786432
+checking how to convert aarch64-apple-darwin25.0.0 file names to aarch64-apple-darwin25.0.0 format... func_convert_file_noop
+checking how to convert aarch64-apple-darwin25.0.0 file names to toolchain format... func_convert_file_noop
+checking for /Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld option to reload object files... -r
+checking for file... file
+checking for objdump... objdump
+checking how to recognize dependent libraries... pass_all
+checking for dlltool... dlltool
+checking how to associate runtime and link libraries... printf %s\n
+checking for ranlib... ranlib
+checking for ar... ar
+checking for archiver @FILE support... no
+checking for strip... strip
+checking command to parse /usr/bin/nm -B output from gcc object... ok
+checking for sysroot... no
+checking for a working dd... /bin/dd
+checking how to truncate binary pipes... /bin/dd bs=4096 count=1
+checking for mt... no
+checking if : is a manifest tool... no
+checking for dsymutil... dsymutil
+checking for nmedit... nmedit
+checking for lipo... lipo
+checking for otool... otool
+checking for otool64... no
+checking for -single_module linker flag... ld: warning: -single_module is obsolete
+no
+checking for -no_fixup_chains linker flag... yes
+checking for -exported_symbols_list linker flag... yes
+checking for -force_load linker flag... yes
+checking for stdio.h... yes
+checking for stdlib.h... yes
+checking for string.h... yes
+checking for inttypes.h... yes
+checking for stdint.h... yes
+checking for strings.h... yes
+checking for sys/stat.h... yes
+checking for sys/types.h... yes
+checking for unistd.h... yes
+checking for sys/select.h... yes
+checking for sys/socket.h... yes
+checking for dlfcn.h... yes
+checking for objdir... .libs
+checking if gcc supports -fno-rtti -fno-exceptions... yes
+checking for gcc option to produce PIC... -fno-common -DPIC
+checking if gcc PIC flag -fno-common -DPIC works... yes
+checking if gcc static flag -static works... no
+checking if gcc supports -c -o file.o... yes
+checking if gcc supports -c -o file.o... (cached) yes
+checking whether the gcc linker (/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld) supports shared libraries... yes
+checking dynamic linker characteristics... darwin25.0.0 dyld
+checking how to hardcode library paths into programs... immediate
+checking whether stripping libraries is possible... yes
+checking if libtool supports shared libraries... yes
+checking whether to build shared libraries... yes
+checking whether to build static libraries... yes
+checking how to run the C++ preprocessor... g++ -E
+checking for ld used by g++... /Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld
+checking if the linker (/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld) is GNU ld... no
+checking whether the g++ linker (/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld) supports shared libraries... yes
+checking for g++ option to produce PIC... -fno-common -DPIC
+checking if g++ PIC flag -fno-common -DPIC works... yes
+checking if g++ static flag -static works... no
+checking if g++ supports -c -o file.o... yes
+checking if g++ supports -c -o file.o... (cached) yes
+checking whether the g++ linker (/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld) supports shared libraries... yes
+checking dynamic linker characteristics... darwin25.0.0 dyld
+checking how to hardcode library paths into programs... immediate
+checking for windres... no
+checking whether byte ordering is bigendian... no
+checking for inline... inline
+checking for working volatile... yes
+checking for _Bool... yes
+checking for stdbool.h that conforms to C99 or later... yes
+checking for size_t... yes
+checking if demos should be built... no
+checking for alloca.h... yes
+checking for stdio.h... (cached) yes
+checking for stdint.h... (cached) yes
+checking for stdlib.h... (cached) yes
+checking for math.h... yes
+checking for string.h... (cached) yes
+checking for stdarg.h... yes
+checking for malloc.h... no
+checking for float.h... yes
+checking for time.h... yes
+checking for sys/time.h... yes
+checking if double precision is requested... yes
+checking which drawstuff lib to build... OSX
+checking for main in -lstdc++... yes
+checking for main in -lpthread... yes
+checking for gprof... no
+checking for main in -lm... yes
+checking for main in -lsunmath... no
+checking for floor... yes
+checking for memmove... yes
+checking for memset... yes
+checking for select... yes
+checking for sqrt... yes
+checking for sqrtf... yes
+checking for sinf... yes
+checking for cosf... yes
+checking for fabsf... yes
+checking for atan2f... yes
+checking for fmodf... yes
+checking for copysignf... yes
+checking for copysign... yes
+checking for snprintf... yes
+checking for vsnprintf... yes
+checking for gettimeofday... yes
+checking for isnan... yes
+checking for isnanf... no
+checking for _isnan... no
+checking for _isnanf... no
+checking for __isnan... no
+checking for __isnanf... yes
+checking for working alloca.h... yes
+checking for alloca... yes
+checking for GNU libc compatible malloc... yes
+checking for obstacks... no
+checking for GNU libc compatible realloc... yes
+checking types of arguments for select... int,fd_set *,struct timeval *
+checking for vprintf... yes
+checking if alloca should be emulated by malloc... no
+checking that generated files are newer than configure... done
+configure: creating ./config.status
+config.status: creating Makefile
+config.status: creating include/Makefile
+config.status: creating include/ode-dbl/Makefile
+config.status: creating include/drawstuff/Makefile
+config.status: creating ode/Makefile
+config.status: creating ode/src/Makefile
+config.status: creating ode/src/joints/Makefile
+config.status: creating drawstuff/Makefile
+config.status: creating drawstuff/src/Makefile
+config.status: creating drawstuff/dstest/Makefile
+config.status: creating ode/demo/Makefile
+config.status: creating OPCODE/Makefile
+config.status: creating OPCODE/Ice/Makefile
+config.status: creating GIMPACT/Makefile
+config.status: creating GIMPACT/include/Makefile
+config.status: creating GIMPACT/include/GIMPACT/Makefile
+config.status: creating GIMPACT/src/Makefile
+config.status: creating tests/Makefile
+config.status: creating tests/UnitTest++/Makefile
+config.status: creating tests/UnitTest++/src/Makefile
+config.status: creating tests/UnitTest++/src/Posix/Makefile
+config.status: creating tests/UnitTest++/src/Win32/Makefile
+config.status: creating ode-dbl-config
+config.status: creating ode-dbl.pc
+config.status: creating ode/src/config.h
+config.status: ode/src/config.h is unchanged
+config.status: executing depfiles commands
+config.status: executing libtool commands
+=== configuring in ou (/Users/jerry/lpzrobot_mac/opende/ou)
+configure: running /bin/sh ./configure --disable-option-checking '--prefix=/usr/local'  '--disable-asserts' '--enable-shared' '--enable-double-precision' '--disable-demos' --cache-file=/dev/null --srcdir=.
+checking build system type... aarch64-apple-darwin25.0.0
+checking host system type... aarch64-apple-darwin25.0.0
+checking for gcc... gcc
+checking whether the C compiler works... yes
+checking for C compiler default output file name... a.out
+checking for suffix of executables... 
+checking whether we are cross compiling... no
+checking for suffix of object files... o
+checking whether the compiler supports GNU C... yes
+checking whether gcc accepts -g... yes
+checking for gcc option to enable C11 features... none needed
+checking whether gcc understands -c and -o together... yes
+checking for stdio.h... yes
+checking for stdlib.h... yes
+checking for string.h... yes
+checking for inttypes.h... yes
+checking for stdint.h... yes
+checking for strings.h... yes
+checking for sys/stat.h... yes
+checking for sys/types.h... yes
+checking for unistd.h... yes
+checking for wchar.h... yes
+checking for minix/config.h... no
+checking whether it is safe to define __EXTENSIONS__... yes
+checking whether _XOPEN_SOURCE should be defined... no
+checking for a BSD-compatible install... /opt/homebrew/bin/ginstall -c
+checking whether sleep supports fractional seconds... yes
+checking filesystem timestamp resolution... 2
+checking whether build environment is sane... yes
+checking for a race-free mkdir -p... /opt/homebrew/bin/gmkdir -p
+checking for gawk... no
+checking for mawk... no
+checking for nawk... no
+checking for awk... awk
+checking whether make sets $(MAKE)... yes
+checking whether make supports the include directive... yes (GNU style)
+checking whether make supports nested variables... yes
+checking xargs -n works... yes
+checking whether UID '501' is supported by ustar format... yes
+checking whether GID '20' is supported by ustar format... yes
+checking how to create a ustar tar archive... gnutar
+checking dependency style of gcc... gcc3
+checking target OS... darwin
+checking for g++... g++
+checking whether the compiler supports GNU C++... yes
+checking whether g++ accepts -g... yes
+checking for g++ option to enable C++11 features... none needed
+checking dependency style of g++... gcc3
+checking for gcc... (cached) gcc
+checking whether the compiler supports GNU C... (cached) yes
+checking whether gcc accepts -g... (cached) yes
+checking for gcc option to enable C11 features... (cached) none needed
+checking whether gcc understands -c and -o together... (cached) yes
+checking for gawk... (cached) awk
+checking for ranlib... ranlib
+checking how to run the C preprocessor... gcc -E
+checking how to print strings... printf
+checking for a sed that does not truncate output... /opt/homebrew/bin/gsed
+checking for grep that handles long lines and -e... /usr/bin/grep
+checking for egrep... /usr/bin/grep -E
+checking for fgrep... /usr/bin/grep -F
+checking for ld used by gcc... /Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld
+checking if the linker (/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld) is GNU ld... no
+checking for BSD- or MS-compatible name lister (nm)... /usr/bin/nm -B
+checking the name lister (/usr/bin/nm -B) interface... BSD nm
+checking whether ln -s works... yes
+checking the maximum length of command line arguments... 786432
+checking how to convert aarch64-apple-darwin25.0.0 file names to aarch64-apple-darwin25.0.0 format... func_convert_file_noop
+checking how to convert aarch64-apple-darwin25.0.0 file names to toolchain format... func_convert_file_noop
+checking for /Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld option to reload object files... -r
+checking for file... file
+checking for objdump... objdump
+checking how to recognize dependent libraries... pass_all
+checking for dlltool... dlltool
+checking how to associate runtime and link libraries... printf %s\n
+checking for ar... ar
+checking for archiver @FILE support... no
+checking for strip... strip
+checking command to parse /usr/bin/nm -B output from gcc object... ok
+checking for sysroot... no
+checking for a working dd... /bin/dd
+checking how to truncate binary pipes... /bin/dd bs=4096 count=1
+checking for mt... no
+checking if : is a manifest tool... no
+checking for dsymutil... dsymutil
+checking for nmedit... nmedit
+checking for lipo... lipo
+checking for otool... otool
+checking for otool64... no
+checking for -single_module linker flag... ld: warning: -single_module is obsolete
+no
+checking for -no_fixup_chains linker flag... yes
+checking for -exported_symbols_list linker flag... yes
+checking for -force_load linker flag... yes
+checking for dlfcn.h... yes
+checking for objdir... .libs
+checking if gcc supports -fno-rtti -fno-exceptions... yes
+checking for gcc option to produce PIC... -fno-common -DPIC
+checking if gcc PIC flag -fno-common -DPIC works... yes
+checking if gcc static flag -static works... no
+checking if gcc supports -c -o file.o... yes
+checking if gcc supports -c -o file.o... (cached) yes
+checking whether the gcc linker (/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld) supports shared libraries... yes
+checking dynamic linker characteristics... darwin25.0.0 dyld
+checking how to hardcode library paths into programs... immediate
+checking whether stripping libraries is possible... yes
+checking if libtool supports shared libraries... yes
+checking whether to build shared libraries... yes
+checking whether to build static libraries... yes
+checking how to run the C++ preprocessor... g++ -E
+checking for ld used by g++... /Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld
+checking if the linker (/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld) is GNU ld... no
+checking whether the g++ linker (/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld) supports shared libraries... yes
+checking for g++ option to produce PIC... -fno-common -DPIC
+checking if g++ PIC flag -fno-common -DPIC works... yes
+checking if g++ static flag -static works... no
+checking if g++ supports -c -o file.o... yes
+checking if g++ supports -c -o file.o... (cached) yes
+checking whether the g++ linker (/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld) supports shared libraries... yes
+checking dynamic linker characteristics... darwin25.0.0 dyld
+checking how to hardcode library paths into programs... immediate
+checking for main in -lc... yes
+checking for main in -lpthread... yes
+checking for egrep... (cached) /usr/bin/grep -E
+checking for inttypes.h... (cached) yes
+checking for malloc.h... no
+checking for stddef.h... yes
+checking for stdlib.h... (cached) yes
+checking for string.h... (cached) yes
+checking for _Bool... yes
+checking for stdbool.h that conforms to C99 or later... yes
+checking for an ANSI C-conforming const... yes
+checking for inline... inline
+checking for int16_t... yes
+checking for int32_t... yes
+checking for int64_t... yes
+checking for int8_t... yes
+checking for size_t... yes
+checking for uint16_t... yes
+checking for uint32_t... yes
+checking for uint64_t... yes
+checking for uint8_t... yes
+checking for working volatile... yes
+checking for ptrdiff_t... yes
+checking for GNU libc compatible malloc... yes
+checking for GNU libc compatible realloc... yes
+checking for memset... yes
+checking for OSAtomicAdd32Barrier... yes
+checking for OSAtomicAnd32OrigBarrier... yes
+checking that generated files are newer than configure... done
+configure: creating ./config.status
+config.status: creating Makefile
+config.status: creating include/ou/Makefile
+config.status: creating src/ou/Makefile
+config.status: creating test/Makefile
+config.status: executing depfiles commands
+config.status: executing libtool commands
+OU namespace: odeou
+Configuration:
+  Build  system type:      aarch64-apple-darwin25.0.0
+  Host   system type:      aarch64-apple-darwin25.0.0
+  Use double precision:    yes
+  Use drawstuff:           OSX
+  Demos enabled:           no
+  Use OPCODE:              yes
+  Use GIMPACT:             no
+  Is target a Pentium:     no
+  Is target ARM64:         yes
+  Use old opcode trimesh collider: no
+  TLS for global data:     no
+  Enable debug error check: no
+  Headers will be installed in ${prefix}/include/ode-dbl
+  Libraries will be installed in ${exec_prefix}/lib
+  Building in directory    /Users/jerry/lpzrobot_mac/opende
+Making all in include
+Making all in ode-dbl
+make[3]: Nothing to be done for `all'.
+Making all in drawstuff
+make[3]: Nothing to be done for `all'.
+make[3]: Nothing to be done for `all-am'.
+Making all in OPCODE
+Making all in Ice
+/bin/sh ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../../ode/src  -I ../../OPCODE -I ../../include -DdDOUBLE -DdNODEBUG  -g -O2 -MT IceAABB.lo -MD -MP -MF .deps/IceAABB.Tpo -c -o IceAABB.lo IceAABB.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../ode/src -I ../../OPCODE -I ../../include -DdDOUBLE -DdNODEBUG -g -O2 -MT IceAABB.lo -MD -MP -MF .deps/IceAABB.Tpo -c IceAABB.cpp  -fno-common -DPIC -o .libs/IceAABB.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../ode/src -I ../../OPCODE -I ../../include -DdDOUBLE -DdNODEBUG -g -O2 -MT IceAABB.lo -MD -MP -MF .deps/IceAABB.Tpo -c IceAABB.cpp -o IceAABB.o >/dev/null 2>&1
+mv -f .deps/IceAABB.Tpo .deps/IceAABB.Plo
+/bin/sh ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../../ode/src  -I ../../OPCODE -I ../../include -DdDOUBLE -DdNODEBUG  -g -O2 -MT IceContainer.lo -MD -MP -MF .deps/IceContainer.Tpo -c -o IceContainer.lo IceContainer.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../ode/src -I ../../OPCODE -I ../../include -DdDOUBLE -DdNODEBUG -g -O2 -MT IceContainer.lo -MD -MP -MF .deps/IceContainer.Tpo -c IceContainer.cpp  -fno-common -DPIC -o .libs/IceContainer.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../ode/src -I ../../OPCODE -I ../../include -DdDOUBLE -DdNODEBUG -g -O2 -MT IceContainer.lo -MD -MP -MF .deps/IceContainer.Tpo -c IceContainer.cpp -o IceContainer.o >/dev/null 2>&1
+mv -f .deps/IceContainer.Tpo .deps/IceContainer.Plo
+/bin/sh ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../../ode/src  -I ../../OPCODE -I ../../include -DdDOUBLE -DdNODEBUG  -g -O2 -MT IceHPoint.lo -MD -MP -MF .deps/IceHPoint.Tpo -c -o IceHPoint.lo IceHPoint.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../ode/src -I ../../OPCODE -I ../../include -DdDOUBLE -DdNODEBUG -g -O2 -MT IceHPoint.lo -MD -MP -MF .deps/IceHPoint.Tpo -c IceHPoint.cpp  -fno-common -DPIC -o .libs/IceHPoint.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../ode/src -I ../../OPCODE -I ../../include -DdDOUBLE -DdNODEBUG -g -O2 -MT IceHPoint.lo -MD -MP -MF .deps/IceHPoint.Tpo -c IceHPoint.cpp -o IceHPoint.o >/dev/null 2>&1
+mv -f .deps/IceHPoint.Tpo .deps/IceHPoint.Plo
+/bin/sh ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../../ode/src  -I ../../OPCODE -I ../../include -DdDOUBLE -DdNODEBUG  -g -O2 -MT IceIndexedTriangle.lo -MD -MP -MF .deps/IceIndexedTriangle.Tpo -c -o IceIndexedTriangle.lo IceIndexedTriangle.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../ode/src -I ../../OPCODE -I ../../include -DdDOUBLE -DdNODEBUG -g -O2 -MT IceIndexedTriangle.lo -MD -MP -MF .deps/IceIndexedTriangle.Tpo -c IceIndexedTriangle.cpp  -fno-common -DPIC -o .libs/IceIndexedTriangle.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../ode/src -I ../../OPCODE -I ../../include -DdDOUBLE -DdNODEBUG -g -O2 -MT IceIndexedTriangle.lo -MD -MP -MF .deps/IceIndexedTriangle.Tpo -c IceIndexedTriangle.cpp -o IceIndexedTriangle.o >/dev/null 2>&1
+mv -f .deps/IceIndexedTriangle.Tpo .deps/IceIndexedTriangle.Plo
+/bin/sh ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../../ode/src  -I ../../OPCODE -I ../../include -DdDOUBLE -DdNODEBUG  -g -O2 -MT IceMatrix3x3.lo -MD -MP -MF .deps/IceMatrix3x3.Tpo -c -o IceMatrix3x3.lo IceMatrix3x3.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../ode/src -I ../../OPCODE -I ../../include -DdDOUBLE -DdNODEBUG -g -O2 -MT IceMatrix3x3.lo -MD -MP -MF .deps/IceMatrix3x3.Tpo -c IceMatrix3x3.cpp  -fno-common -DPIC -o .libs/IceMatrix3x3.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../ode/src -I ../../OPCODE -I ../../include -DdDOUBLE -DdNODEBUG -g -O2 -MT IceMatrix3x3.lo -MD -MP -MF .deps/IceMatrix3x3.Tpo -c IceMatrix3x3.cpp -o IceMatrix3x3.o >/dev/null 2>&1
+mv -f .deps/IceMatrix3x3.Tpo .deps/IceMatrix3x3.Plo
+/bin/sh ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../../ode/src  -I ../../OPCODE -I ../../include -DdDOUBLE -DdNODEBUG  -g -O2 -MT IceMatrix4x4.lo -MD -MP -MF .deps/IceMatrix4x4.Tpo -c -o IceMatrix4x4.lo IceMatrix4x4.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../ode/src -I ../../OPCODE -I ../../include -DdDOUBLE -DdNODEBUG -g -O2 -MT IceMatrix4x4.lo -MD -MP -MF .deps/IceMatrix4x4.Tpo -c IceMatrix4x4.cpp  -fno-common -DPIC -o .libs/IceMatrix4x4.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../ode/src -I ../../OPCODE -I ../../include -DdDOUBLE -DdNODEBUG -g -O2 -MT IceMatrix4x4.lo -MD -MP -MF .deps/IceMatrix4x4.Tpo -c IceMatrix4x4.cpp -o IceMatrix4x4.o >/dev/null 2>&1
+mv -f .deps/IceMatrix4x4.Tpo .deps/IceMatrix4x4.Plo
+/bin/sh ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../../ode/src  -I ../../OPCODE -I ../../include -DdDOUBLE -DdNODEBUG  -g -O2 -MT IceOBB.lo -MD -MP -MF .deps/IceOBB.Tpo -c -o IceOBB.lo IceOBB.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../ode/src -I ../../OPCODE -I ../../include -DdDOUBLE -DdNODEBUG -g -O2 -MT IceOBB.lo -MD -MP -MF .deps/IceOBB.Tpo -c IceOBB.cpp  -fno-common -DPIC -o .libs/IceOBB.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../ode/src -I ../../OPCODE -I ../../include -DdDOUBLE -DdNODEBUG -g -O2 -MT IceOBB.lo -MD -MP -MF .deps/IceOBB.Tpo -c IceOBB.cpp -o IceOBB.o >/dev/null 2>&1
+mv -f .deps/IceOBB.Tpo .deps/IceOBB.Plo
+/bin/sh ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../../ode/src  -I ../../OPCODE -I ../../include -DdDOUBLE -DdNODEBUG  -g -O2 -MT IcePlane.lo -MD -MP -MF .deps/IcePlane.Tpo -c -o IcePlane.lo IcePlane.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../ode/src -I ../../OPCODE -I ../../include -DdDOUBLE -DdNODEBUG -g -O2 -MT IcePlane.lo -MD -MP -MF .deps/IcePlane.Tpo -c IcePlane.cpp  -fno-common -DPIC -o .libs/IcePlane.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../ode/src -I ../../OPCODE -I ../../include -DdDOUBLE -DdNODEBUG -g -O2 -MT IcePlane.lo -MD -MP -MF .deps/IcePlane.Tpo -c IcePlane.cpp -o IcePlane.o >/dev/null 2>&1
+mv -f .deps/IcePlane.Tpo .deps/IcePlane.Plo
+/bin/sh ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../../ode/src  -I ../../OPCODE -I ../../include -DdDOUBLE -DdNODEBUG  -g -O2 -MT IcePoint.lo -MD -MP -MF .deps/IcePoint.Tpo -c -o IcePoint.lo IcePoint.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../ode/src -I ../../OPCODE -I ../../include -DdDOUBLE -DdNODEBUG -g -O2 -MT IcePoint.lo -MD -MP -MF .deps/IcePoint.Tpo -c IcePoint.cpp  -fno-common -DPIC -o .libs/IcePoint.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../ode/src -I ../../OPCODE -I ../../include -DdDOUBLE -DdNODEBUG -g -O2 -MT IcePoint.lo -MD -MP -MF .deps/IcePoint.Tpo -c IcePoint.cpp -o IcePoint.o >/dev/null 2>&1
+mv -f .deps/IcePoint.Tpo .deps/IcePoint.Plo
+/bin/sh ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../../ode/src  -I ../../OPCODE -I ../../include -DdDOUBLE -DdNODEBUG  -g -O2 -MT IceRandom.lo -MD -MP -MF .deps/IceRandom.Tpo -c -o IceRandom.lo IceRandom.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../ode/src -I ../../OPCODE -I ../../include -DdDOUBLE -DdNODEBUG -g -O2 -MT IceRandom.lo -MD -MP -MF .deps/IceRandom.Tpo -c IceRandom.cpp  -fno-common -DPIC -o .libs/IceRandom.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../ode/src -I ../../OPCODE -I ../../include -DdDOUBLE -DdNODEBUG -g -O2 -MT IceRandom.lo -MD -MP -MF .deps/IceRandom.Tpo -c IceRandom.cpp -o IceRandom.o >/dev/null 2>&1
+mv -f .deps/IceRandom.Tpo .deps/IceRandom.Plo
+/bin/sh ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../../ode/src  -I ../../OPCODE -I ../../include -DdDOUBLE -DdNODEBUG  -g -O2 -MT IceRay.lo -MD -MP -MF .deps/IceRay.Tpo -c -o IceRay.lo IceRay.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../ode/src -I ../../OPCODE -I ../../include -DdDOUBLE -DdNODEBUG -g -O2 -MT IceRay.lo -MD -MP -MF .deps/IceRay.Tpo -c IceRay.cpp  -fno-common -DPIC -o .libs/IceRay.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../ode/src -I ../../OPCODE -I ../../include -DdDOUBLE -DdNODEBUG -g -O2 -MT IceRay.lo -MD -MP -MF .deps/IceRay.Tpo -c IceRay.cpp -o IceRay.o >/dev/null 2>&1
+mv -f .deps/IceRay.Tpo .deps/IceRay.Plo
+/bin/sh ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../../ode/src  -I ../../OPCODE -I ../../include -DdDOUBLE -DdNODEBUG  -g -O2 -MT IceRevisitedRadix.lo -MD -MP -MF .deps/IceRevisitedRadix.Tpo -c -o IceRevisitedRadix.lo IceRevisitedRadix.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../ode/src -I ../../OPCODE -I ../../include -DdDOUBLE -DdNODEBUG -g -O2 -MT IceRevisitedRadix.lo -MD -MP -MF .deps/IceRevisitedRadix.Tpo -c IceRevisitedRadix.cpp  -fno-common -DPIC -o .libs/IceRevisitedRadix.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../ode/src -I ../../OPCODE -I ../../include -DdDOUBLE -DdNODEBUG -g -O2 -MT IceRevisitedRadix.lo -MD -MP -MF .deps/IceRevisitedRadix.Tpo -c IceRevisitedRadix.cpp -o IceRevisitedRadix.o >/dev/null 2>&1
+mv -f .deps/IceRevisitedRadix.Tpo .deps/IceRevisitedRadix.Plo
+/bin/sh ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../../ode/src  -I ../../OPCODE -I ../../include -DdDOUBLE -DdNODEBUG  -g -O2 -MT IceSegment.lo -MD -MP -MF .deps/IceSegment.Tpo -c -o IceSegment.lo IceSegment.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../ode/src -I ../../OPCODE -I ../../include -DdDOUBLE -DdNODEBUG -g -O2 -MT IceSegment.lo -MD -MP -MF .deps/IceSegment.Tpo -c IceSegment.cpp  -fno-common -DPIC -o .libs/IceSegment.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../ode/src -I ../../OPCODE -I ../../include -DdDOUBLE -DdNODEBUG -g -O2 -MT IceSegment.lo -MD -MP -MF .deps/IceSegment.Tpo -c IceSegment.cpp -o IceSegment.o >/dev/null 2>&1
+mv -f .deps/IceSegment.Tpo .deps/IceSegment.Plo
+/bin/sh ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../../ode/src  -I ../../OPCODE -I ../../include -DdDOUBLE -DdNODEBUG  -g -O2 -MT IceTriangle.lo -MD -MP -MF .deps/IceTriangle.Tpo -c -o IceTriangle.lo IceTriangle.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../ode/src -I ../../OPCODE -I ../../include -DdDOUBLE -DdNODEBUG -g -O2 -MT IceTriangle.lo -MD -MP -MF .deps/IceTriangle.Tpo -c IceTriangle.cpp  -fno-common -DPIC -o .libs/IceTriangle.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../ode/src -I ../../OPCODE -I ../../include -DdDOUBLE -DdNODEBUG -g -O2 -MT IceTriangle.lo -MD -MP -MF .deps/IceTriangle.Tpo -c IceTriangle.cpp -o IceTriangle.o >/dev/null 2>&1
+mv -f .deps/IceTriangle.Tpo .deps/IceTriangle.Plo
+/bin/sh ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../../ode/src  -I ../../OPCODE -I ../../include -DdDOUBLE -DdNODEBUG  -g -O2 -MT IceUtils.lo -MD -MP -MF .deps/IceUtils.Tpo -c -o IceUtils.lo IceUtils.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../ode/src -I ../../OPCODE -I ../../include -DdDOUBLE -DdNODEBUG -g -O2 -MT IceUtils.lo -MD -MP -MF .deps/IceUtils.Tpo -c IceUtils.cpp  -fno-common -DPIC -o .libs/IceUtils.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../ode/src -I ../../OPCODE -I ../../include -DdDOUBLE -DdNODEBUG -g -O2 -MT IceUtils.lo -MD -MP -MF .deps/IceUtils.Tpo -c IceUtils.cpp -o IceUtils.o >/dev/null 2>&1
+mv -f .deps/IceUtils.Tpo .deps/IceUtils.Plo
+/bin/sh ../../libtool  --tag=CXX   --mode=link g++  -g -O2   -o libIce.la  IceAABB.lo IceContainer.lo IceHPoint.lo IceIndexedTriangle.lo IceMatrix3x3.lo IceMatrix4x4.lo IceOBB.lo IcePlane.lo IcePoint.lo IceRandom.lo IceRay.lo IceRevisitedRadix.lo IceSegment.lo IceTriangle.lo IceUtils.lo  -lm  -lpthread
+libtool: link: ar cr .libs/libIce.a .libs/IceAABB.o .libs/IceContainer.o .libs/IceHPoint.o .libs/IceIndexedTriangle.o .libs/IceMatrix3x3.o .libs/IceMatrix4x4.o .libs/IceOBB.o .libs/IcePlane.o .libs/IcePoint.o .libs/IceRandom.o .libs/IceRay.o .libs/IceRevisitedRadix.o .libs/IceSegment.o .libs/IceTriangle.o .libs/IceUtils.o 
+libtool: link: ranlib .libs/libIce.a
+libtool: link: ( cd ".libs" && rm -f "libIce.la" && ln -s "../libIce.la" "libIce.la" )
+/bin/sh ../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../ode/src  -fno-strict-aliasing -I../include -DdDOUBLE -DdNODEBUG  -g -O2 -MT OPC_AABBCollider.lo -MD -MP -MF .deps/OPC_AABBCollider.Tpo -c -o OPC_AABBCollider.lo OPC_AABBCollider.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../ode/src -fno-strict-aliasing -I../include -DdDOUBLE -DdNODEBUG -g -O2 -MT OPC_AABBCollider.lo -MD -MP -MF .deps/OPC_AABBCollider.Tpo -c OPC_AABBCollider.cpp  -fno-common -DPIC -o .libs/OPC_AABBCollider.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../ode/src -fno-strict-aliasing -I../include -DdDOUBLE -DdNODEBUG -g -O2 -MT OPC_AABBCollider.lo -MD -MP -MF .deps/OPC_AABBCollider.Tpo -c OPC_AABBCollider.cpp -o OPC_AABBCollider.o >/dev/null 2>&1
+mv -f .deps/OPC_AABBCollider.Tpo .deps/OPC_AABBCollider.Plo
+/bin/sh ../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../ode/src  -fno-strict-aliasing -I../include -DdDOUBLE -DdNODEBUG  -g -O2 -MT OPC_AABBTree.lo -MD -MP -MF .deps/OPC_AABBTree.Tpo -c -o OPC_AABBTree.lo OPC_AABBTree.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../ode/src -fno-strict-aliasing -I../include -DdDOUBLE -DdNODEBUG -g -O2 -MT OPC_AABBTree.lo -MD -MP -MF .deps/OPC_AABBTree.Tpo -c OPC_AABBTree.cpp  -fno-common -DPIC -o .libs/OPC_AABBTree.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../ode/src -fno-strict-aliasing -I../include -DdDOUBLE -DdNODEBUG -g -O2 -MT OPC_AABBTree.lo -MD -MP -MF .deps/OPC_AABBTree.Tpo -c OPC_AABBTree.cpp -o OPC_AABBTree.o >/dev/null 2>&1
+mv -f .deps/OPC_AABBTree.Tpo .deps/OPC_AABBTree.Plo
+/bin/sh ../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../ode/src  -fno-strict-aliasing -I../include -DdDOUBLE -DdNODEBUG  -g -O2 -MT OPC_BaseModel.lo -MD -MP -MF .deps/OPC_BaseModel.Tpo -c -o OPC_BaseModel.lo OPC_BaseModel.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../ode/src -fno-strict-aliasing -I../include -DdDOUBLE -DdNODEBUG -g -O2 -MT OPC_BaseModel.lo -MD -MP -MF .deps/OPC_BaseModel.Tpo -c OPC_BaseModel.cpp  -fno-common -DPIC -o .libs/OPC_BaseModel.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../ode/src -fno-strict-aliasing -I../include -DdDOUBLE -DdNODEBUG -g -O2 -MT OPC_BaseModel.lo -MD -MP -MF .deps/OPC_BaseModel.Tpo -c OPC_BaseModel.cpp -o OPC_BaseModel.o >/dev/null 2>&1
+mv -f .deps/OPC_BaseModel.Tpo .deps/OPC_BaseModel.Plo
+/bin/sh ../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../ode/src  -fno-strict-aliasing -I../include -DdDOUBLE -DdNODEBUG  -g -O2 -MT OPC_Collider.lo -MD -MP -MF .deps/OPC_Collider.Tpo -c -o OPC_Collider.lo OPC_Collider.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../ode/src -fno-strict-aliasing -I../include -DdDOUBLE -DdNODEBUG -g -O2 -MT OPC_Collider.lo -MD -MP -MF .deps/OPC_Collider.Tpo -c OPC_Collider.cpp  -fno-common -DPIC -o .libs/OPC_Collider.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../ode/src -fno-strict-aliasing -I../include -DdDOUBLE -DdNODEBUG -g -O2 -MT OPC_Collider.lo -MD -MP -MF .deps/OPC_Collider.Tpo -c OPC_Collider.cpp -o OPC_Collider.o >/dev/null 2>&1
+mv -f .deps/OPC_Collider.Tpo .deps/OPC_Collider.Plo
+/bin/sh ../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../ode/src  -fno-strict-aliasing -I../include -DdDOUBLE -DdNODEBUG  -g -O2 -MT OPC_Common.lo -MD -MP -MF .deps/OPC_Common.Tpo -c -o OPC_Common.lo OPC_Common.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../ode/src -fno-strict-aliasing -I../include -DdDOUBLE -DdNODEBUG -g -O2 -MT OPC_Common.lo -MD -MP -MF .deps/OPC_Common.Tpo -c OPC_Common.cpp  -fno-common -DPIC -o .libs/OPC_Common.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../ode/src -fno-strict-aliasing -I../include -DdDOUBLE -DdNODEBUG -g -O2 -MT OPC_Common.lo -MD -MP -MF .deps/OPC_Common.Tpo -c OPC_Common.cpp -o OPC_Common.o >/dev/null 2>&1
+mv -f .deps/OPC_Common.Tpo .deps/OPC_Common.Plo
+/bin/sh ../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../ode/src  -fno-strict-aliasing -I../include -DdDOUBLE -DdNODEBUG  -g -O2 -MT OPC_HybridModel.lo -MD -MP -MF .deps/OPC_HybridModel.Tpo -c -o OPC_HybridModel.lo OPC_HybridModel.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../ode/src -fno-strict-aliasing -I../include -DdDOUBLE -DdNODEBUG -g -O2 -MT OPC_HybridModel.lo -MD -MP -MF .deps/OPC_HybridModel.Tpo -c OPC_HybridModel.cpp  -fno-common -DPIC -o .libs/OPC_HybridModel.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../ode/src -fno-strict-aliasing -I../include -DdDOUBLE -DdNODEBUG -g -O2 -MT OPC_HybridModel.lo -MD -MP -MF .deps/OPC_HybridModel.Tpo -c OPC_HybridModel.cpp -o OPC_HybridModel.o >/dev/null 2>&1
+mv -f .deps/OPC_HybridModel.Tpo .deps/OPC_HybridModel.Plo
+/bin/sh ../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../ode/src  -fno-strict-aliasing -I../include -DdDOUBLE -DdNODEBUG  -g -O2 -MT OPC_LSSCollider.lo -MD -MP -MF .deps/OPC_LSSCollider.Tpo -c -o OPC_LSSCollider.lo OPC_LSSCollider.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../ode/src -fno-strict-aliasing -I../include -DdDOUBLE -DdNODEBUG -g -O2 -MT OPC_LSSCollider.lo -MD -MP -MF .deps/OPC_LSSCollider.Tpo -c OPC_LSSCollider.cpp  -fno-common -DPIC -o .libs/OPC_LSSCollider.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../ode/src -fno-strict-aliasing -I../include -DdDOUBLE -DdNODEBUG -g -O2 -MT OPC_LSSCollider.lo -MD -MP -MF .deps/OPC_LSSCollider.Tpo -c OPC_LSSCollider.cpp -o OPC_LSSCollider.o >/dev/null 2>&1
+mv -f .deps/OPC_LSSCollider.Tpo .deps/OPC_LSSCollider.Plo
+/bin/sh ../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../ode/src  -fno-strict-aliasing -I../include -DdDOUBLE -DdNODEBUG  -g -O2 -MT OPC_MeshInterface.lo -MD -MP -MF .deps/OPC_MeshInterface.Tpo -c -o OPC_MeshInterface.lo OPC_MeshInterface.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../ode/src -fno-strict-aliasing -I../include -DdDOUBLE -DdNODEBUG -g -O2 -MT OPC_MeshInterface.lo -MD -MP -MF .deps/OPC_MeshInterface.Tpo -c OPC_MeshInterface.cpp  -fno-common -DPIC -o .libs/OPC_MeshInterface.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../ode/src -fno-strict-aliasing -I../include -DdDOUBLE -DdNODEBUG -g -O2 -MT OPC_MeshInterface.lo -MD -MP -MF .deps/OPC_MeshInterface.Tpo -c OPC_MeshInterface.cpp -o OPC_MeshInterface.o >/dev/null 2>&1
+mv -f .deps/OPC_MeshInterface.Tpo .deps/OPC_MeshInterface.Plo
+/bin/sh ../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../ode/src  -fno-strict-aliasing -I../include -DdDOUBLE -DdNODEBUG  -g -O2 -MT OPC_Model.lo -MD -MP -MF .deps/OPC_Model.Tpo -c -o OPC_Model.lo OPC_Model.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../ode/src -fno-strict-aliasing -I../include -DdDOUBLE -DdNODEBUG -g -O2 -MT OPC_Model.lo -MD -MP -MF .deps/OPC_Model.Tpo -c OPC_Model.cpp  -fno-common -DPIC -o .libs/OPC_Model.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../ode/src -fno-strict-aliasing -I../include -DdDOUBLE -DdNODEBUG -g -O2 -MT OPC_Model.lo -MD -MP -MF .deps/OPC_Model.Tpo -c OPC_Model.cpp -o OPC_Model.o >/dev/null 2>&1
+mv -f .deps/OPC_Model.Tpo .deps/OPC_Model.Plo
+/bin/sh ../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../ode/src  -fno-strict-aliasing -I../include -DdDOUBLE -DdNODEBUG  -g -O2 -MT OPC_OBBCollider.lo -MD -MP -MF .deps/OPC_OBBCollider.Tpo -c -o OPC_OBBCollider.lo OPC_OBBCollider.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../ode/src -fno-strict-aliasing -I../include -DdDOUBLE -DdNODEBUG -g -O2 -MT OPC_OBBCollider.lo -MD -MP -MF .deps/OPC_OBBCollider.Tpo -c OPC_OBBCollider.cpp  -fno-common -DPIC -o .libs/OPC_OBBCollider.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../ode/src -fno-strict-aliasing -I../include -DdDOUBLE -DdNODEBUG -g -O2 -MT OPC_OBBCollider.lo -MD -MP -MF .deps/OPC_OBBCollider.Tpo -c OPC_OBBCollider.cpp -o OPC_OBBCollider.o >/dev/null 2>&1
+mv -f .deps/OPC_OBBCollider.Tpo .deps/OPC_OBBCollider.Plo
+/bin/sh ../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../ode/src  -fno-strict-aliasing -I../include -DdDOUBLE -DdNODEBUG  -g -O2 -MT Opcode.lo -MD -MP -MF .deps/Opcode.Tpo -c -o Opcode.lo Opcode.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../ode/src -fno-strict-aliasing -I../include -DdDOUBLE -DdNODEBUG -g -O2 -MT Opcode.lo -MD -MP -MF .deps/Opcode.Tpo -c Opcode.cpp  -fno-common -DPIC -o .libs/Opcode.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../ode/src -fno-strict-aliasing -I../include -DdDOUBLE -DdNODEBUG -g -O2 -MT Opcode.lo -MD -MP -MF .deps/Opcode.Tpo -c Opcode.cpp -o Opcode.o >/dev/null 2>&1
+mv -f .deps/Opcode.Tpo .deps/Opcode.Plo
+/bin/sh ../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../ode/src  -fno-strict-aliasing -I../include -DdDOUBLE -DdNODEBUG  -g -O2 -MT OPC_OptimizedTree.lo -MD -MP -MF .deps/OPC_OptimizedTree.Tpo -c -o OPC_OptimizedTree.lo OPC_OptimizedTree.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../ode/src -fno-strict-aliasing -I../include -DdDOUBLE -DdNODEBUG -g -O2 -MT OPC_OptimizedTree.lo -MD -MP -MF .deps/OPC_OptimizedTree.Tpo -c OPC_OptimizedTree.cpp  -fno-common -DPIC -o .libs/OPC_OptimizedTree.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../ode/src -fno-strict-aliasing -I../include -DdDOUBLE -DdNODEBUG -g -O2 -MT OPC_OptimizedTree.lo -MD -MP -MF .deps/OPC_OptimizedTree.Tpo -c OPC_OptimizedTree.cpp -o OPC_OptimizedTree.o >/dev/null 2>&1
+mv -f .deps/OPC_OptimizedTree.Tpo .deps/OPC_OptimizedTree.Plo
+/bin/sh ../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../ode/src  -fno-strict-aliasing -I../include -DdDOUBLE -DdNODEBUG  -g -O2 -MT OPC_Picking.lo -MD -MP -MF .deps/OPC_Picking.Tpo -c -o OPC_Picking.lo OPC_Picking.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../ode/src -fno-strict-aliasing -I../include -DdDOUBLE -DdNODEBUG -g -O2 -MT OPC_Picking.lo -MD -MP -MF .deps/OPC_Picking.Tpo -c OPC_Picking.cpp  -fno-common -DPIC -o .libs/OPC_Picking.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../ode/src -fno-strict-aliasing -I../include -DdDOUBLE -DdNODEBUG -g -O2 -MT OPC_Picking.lo -MD -MP -MF .deps/OPC_Picking.Tpo -c OPC_Picking.cpp -o OPC_Picking.o >/dev/null 2>&1
+mv -f .deps/OPC_Picking.Tpo .deps/OPC_Picking.Plo
+/bin/sh ../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../ode/src  -fno-strict-aliasing -I../include -DdDOUBLE -DdNODEBUG  -g -O2 -MT OPC_PlanesCollider.lo -MD -MP -MF .deps/OPC_PlanesCollider.Tpo -c -o OPC_PlanesCollider.lo OPC_PlanesCollider.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../ode/src -fno-strict-aliasing -I../include -DdDOUBLE -DdNODEBUG -g -O2 -MT OPC_PlanesCollider.lo -MD -MP -MF .deps/OPC_PlanesCollider.Tpo -c OPC_PlanesCollider.cpp  -fno-common -DPIC -o .libs/OPC_PlanesCollider.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../ode/src -fno-strict-aliasing -I../include -DdDOUBLE -DdNODEBUG -g -O2 -MT OPC_PlanesCollider.lo -MD -MP -MF .deps/OPC_PlanesCollider.Tpo -c OPC_PlanesCollider.cpp -o OPC_PlanesCollider.o >/dev/null 2>&1
+mv -f .deps/OPC_PlanesCollider.Tpo .deps/OPC_PlanesCollider.Plo
+/bin/sh ../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../ode/src  -fno-strict-aliasing -I../include -DdDOUBLE -DdNODEBUG  -g -O2 -MT OPC_RayCollider.lo -MD -MP -MF .deps/OPC_RayCollider.Tpo -c -o OPC_RayCollider.lo OPC_RayCollider.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../ode/src -fno-strict-aliasing -I../include -DdDOUBLE -DdNODEBUG -g -O2 -MT OPC_RayCollider.lo -MD -MP -MF .deps/OPC_RayCollider.Tpo -c OPC_RayCollider.cpp  -fno-common -DPIC -o .libs/OPC_RayCollider.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../ode/src -fno-strict-aliasing -I../include -DdDOUBLE -DdNODEBUG -g -O2 -MT OPC_RayCollider.lo -MD -MP -MF .deps/OPC_RayCollider.Tpo -c OPC_RayCollider.cpp -o OPC_RayCollider.o >/dev/null 2>&1
+mv -f .deps/OPC_RayCollider.Tpo .deps/OPC_RayCollider.Plo
+/bin/sh ../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../ode/src  -fno-strict-aliasing -I../include -DdDOUBLE -DdNODEBUG  -g -O2 -MT OPC_SphereCollider.lo -MD -MP -MF .deps/OPC_SphereCollider.Tpo -c -o OPC_SphereCollider.lo OPC_SphereCollider.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../ode/src -fno-strict-aliasing -I../include -DdDOUBLE -DdNODEBUG -g -O2 -MT OPC_SphereCollider.lo -MD -MP -MF .deps/OPC_SphereCollider.Tpo -c OPC_SphereCollider.cpp  -fno-common -DPIC -o .libs/OPC_SphereCollider.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../ode/src -fno-strict-aliasing -I../include -DdDOUBLE -DdNODEBUG -g -O2 -MT OPC_SphereCollider.lo -MD -MP -MF .deps/OPC_SphereCollider.Tpo -c OPC_SphereCollider.cpp -o OPC_SphereCollider.o >/dev/null 2>&1
+mv -f .deps/OPC_SphereCollider.Tpo .deps/OPC_SphereCollider.Plo
+/bin/sh ../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../ode/src  -fno-strict-aliasing -I../include -DdDOUBLE -DdNODEBUG  -g -O2 -MT OPC_TreeBuilders.lo -MD -MP -MF .deps/OPC_TreeBuilders.Tpo -c -o OPC_TreeBuilders.lo OPC_TreeBuilders.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../ode/src -fno-strict-aliasing -I../include -DdDOUBLE -DdNODEBUG -g -O2 -MT OPC_TreeBuilders.lo -MD -MP -MF .deps/OPC_TreeBuilders.Tpo -c OPC_TreeBuilders.cpp  -fno-common -DPIC -o .libs/OPC_TreeBuilders.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../ode/src -fno-strict-aliasing -I../include -DdDOUBLE -DdNODEBUG -g -O2 -MT OPC_TreeBuilders.lo -MD -MP -MF .deps/OPC_TreeBuilders.Tpo -c OPC_TreeBuilders.cpp -o OPC_TreeBuilders.o >/dev/null 2>&1
+mv -f .deps/OPC_TreeBuilders.Tpo .deps/OPC_TreeBuilders.Plo
+/bin/sh ../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../ode/src  -fno-strict-aliasing -I../include -DdDOUBLE -DdNODEBUG  -g -O2 -MT OPC_TreeCollider.lo -MD -MP -MF .deps/OPC_TreeCollider.Tpo -c -o OPC_TreeCollider.lo OPC_TreeCollider.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../ode/src -fno-strict-aliasing -I../include -DdDOUBLE -DdNODEBUG -g -O2 -MT OPC_TreeCollider.lo -MD -MP -MF .deps/OPC_TreeCollider.Tpo -c OPC_TreeCollider.cpp  -fno-common -DPIC -o .libs/OPC_TreeCollider.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../ode/src -fno-strict-aliasing -I../include -DdDOUBLE -DdNODEBUG -g -O2 -MT OPC_TreeCollider.lo -MD -MP -MF .deps/OPC_TreeCollider.Tpo -c OPC_TreeCollider.cpp -o OPC_TreeCollider.o >/dev/null 2>&1
+mv -f .deps/OPC_TreeCollider.Tpo .deps/OPC_TreeCollider.Plo
+/bin/sh ../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../ode/src  -fno-strict-aliasing -I../include -DdDOUBLE -DdNODEBUG  -g -O2 -MT OPC_VolumeCollider.lo -MD -MP -MF .deps/OPC_VolumeCollider.Tpo -c -o OPC_VolumeCollider.lo OPC_VolumeCollider.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../ode/src -fno-strict-aliasing -I../include -DdDOUBLE -DdNODEBUG -g -O2 -MT OPC_VolumeCollider.lo -MD -MP -MF .deps/OPC_VolumeCollider.Tpo -c OPC_VolumeCollider.cpp  -fno-common -DPIC -o .libs/OPC_VolumeCollider.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../ode/src -fno-strict-aliasing -I../include -DdDOUBLE -DdNODEBUG -g -O2 -MT OPC_VolumeCollider.lo -MD -MP -MF .deps/OPC_VolumeCollider.Tpo -c OPC_VolumeCollider.cpp -o OPC_VolumeCollider.o >/dev/null 2>&1
+mv -f .deps/OPC_VolumeCollider.Tpo .deps/OPC_VolumeCollider.Plo
+/bin/sh ../libtool  --tag=CXX   --mode=link g++  -g -O2   -o libOPCODE.la  OPC_AABBCollider.lo OPC_AABBTree.lo OPC_BaseModel.lo OPC_Collider.lo OPC_Common.lo OPC_HybridModel.lo OPC_LSSCollider.lo OPC_MeshInterface.lo OPC_Model.lo OPC_OBBCollider.lo Opcode.lo OPC_OptimizedTree.lo OPC_Picking.lo OPC_PlanesCollider.lo OPC_RayCollider.lo OPC_SphereCollider.lo OPC_TreeBuilders.lo OPC_TreeCollider.lo OPC_VolumeCollider.lo  -lm  -lpthread
+libtool: link: ar cr .libs/libOPCODE.a .libs/OPC_AABBCollider.o .libs/OPC_AABBTree.o .libs/OPC_BaseModel.o .libs/OPC_Collider.o .libs/OPC_Common.o .libs/OPC_HybridModel.o .libs/OPC_LSSCollider.o .libs/OPC_MeshInterface.o .libs/OPC_Model.o .libs/OPC_OBBCollider.o .libs/Opcode.o .libs/OPC_OptimizedTree.o .libs/OPC_Picking.o .libs/OPC_PlanesCollider.o .libs/OPC_RayCollider.o .libs/OPC_SphereCollider.o .libs/OPC_TreeBuilders.o .libs/OPC_TreeCollider.o .libs/OPC_VolumeCollider.o 
+libtool: link: ranlib .libs/libOPCODE.a
+libtool: link: ( cd ".libs" && rm -f "libOPCODE.la" && ln -s "../libOPCODE.la" "libOPCODE.la" )
+Making all in ode
+Making all in src
+/Applications/Xcode-beta.app/Contents/Developer/usr/bin/make  all-recursive
+Making all in joints
+/bin/sh ../../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../../../ode/src  -I../../../include -DdDOUBLE -DdNODEBUG  -g -O2 -MT joint.lo -MD -MP -MF .deps/joint.Tpo -c -o joint.lo joint.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../../ode/src -I../../../include -DdDOUBLE -DdNODEBUG -g -O2 -MT joint.lo -MD -MP -MF .deps/joint.Tpo -c joint.cpp  -fno-common -DPIC -o .libs/joint.o
+In file included from joint.cpp:32:
+In file included from ../../../include/ode-dbl/ode.h:40:
+../../../include/ode-dbl/misc.h:58:70: warning: ISO C++11 does not allow conversion from string literal to 'char *' [-Wwritable-strings]
+   58 | ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+      |                                                                      ^
+In file included from joint.cpp:37:
+./joint_internal.h:24:9: warning: '_ODE_JOINT_NTERNAL_H_' is used as a header guard here, followed by #define of a different macro [-Wheader-guard]
+   24 | #ifndef _ODE_JOINT_NTERNAL_H_
+      |         ^~~~~~~~~~~~~~~~~~~~~
+./joint_internal.h:25:9: note: '_ODE_JOINT_INTERNAL_H_' is defined here; did you mean '_ODE_JOINT_NTERNAL_H_'?
+   25 | #define _ODE_JOINT_INTERNAL_H_
+      |         ^~~~~~~~~~~~~~~~~~~~~~
+      |         _ODE_JOINT_NTERNAL_H_
+2 warnings generated.
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../../ode/src -I../../../include -DdDOUBLE -DdNODEBUG -g -O2 -MT joint.lo -MD -MP -MF .deps/joint.Tpo -c joint.cpp -o joint.o >/dev/null 2>&1
+mv -f .deps/joint.Tpo .deps/joint.Plo
+/bin/sh ../../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../../../ode/src  -I../../../include -DdDOUBLE -DdNODEBUG  -g -O2 -MT ball.lo -MD -MP -MF .deps/ball.Tpo -c -o ball.lo ball.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../../ode/src -I../../../include -DdDOUBLE -DdNODEBUG -g -O2 -MT ball.lo -MD -MP -MF .deps/ball.Tpo -c ball.cpp  -fno-common -DPIC -o .libs/ball.o
+In file included from ball.cpp:25:
+./joint_internal.h:24:9: warning: '_ODE_JOINT_NTERNAL_H_' is used as a header guard here, followed by #define of a different macro [-Wheader-guard]
+   24 | #ifndef _ODE_JOINT_NTERNAL_H_
+      |         ^~~~~~~~~~~~~~~~~~~~~
+./joint_internal.h:25:9: note: '_ODE_JOINT_INTERNAL_H_' is defined here; did you mean '_ODE_JOINT_NTERNAL_H_'?
+   25 | #define _ODE_JOINT_INTERNAL_H_
+      |         ^~~~~~~~~~~~~~~~~~~~~~
+      |         _ODE_JOINT_NTERNAL_H_
+1 warning generated.
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../../ode/src -I../../../include -DdDOUBLE -DdNODEBUG -g -O2 -MT ball.lo -MD -MP -MF .deps/ball.Tpo -c ball.cpp -o ball.o >/dev/null 2>&1
+mv -f .deps/ball.Tpo .deps/ball.Plo
+/bin/sh ../../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../../../ode/src  -I../../../include -DdDOUBLE -DdNODEBUG  -g -O2 -MT hinge.lo -MD -MP -MF .deps/hinge.Tpo -c -o hinge.lo hinge.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../../ode/src -I../../../include -DdDOUBLE -DdNODEBUG -g -O2 -MT hinge.lo -MD -MP -MF .deps/hinge.Tpo -c hinge.cpp  -fno-common -DPIC -o .libs/hinge.o
+In file included from hinge.cpp:25:
+./joint_internal.h:24:9: warning: '_ODE_JOINT_NTERNAL_H_' is used as a header guard here, followed by #define of a different macro [-Wheader-guard]
+   24 | #ifndef _ODE_JOINT_NTERNAL_H_
+      |         ^~~~~~~~~~~~~~~~~~~~~
+./joint_internal.h:25:9: note: '_ODE_JOINT_INTERNAL_H_' is defined here; did you mean '_ODE_JOINT_NTERNAL_H_'?
+   25 | #define _ODE_JOINT_INTERNAL_H_
+      |         ^~~~~~~~~~~~~~~~~~~~~~
+      |         _ODE_JOINT_NTERNAL_H_
+1 warning generated.
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../../ode/src -I../../../include -DdDOUBLE -DdNODEBUG -g -O2 -MT hinge.lo -MD -MP -MF .deps/hinge.Tpo -c hinge.cpp -o hinge.o >/dev/null 2>&1
+mv -f .deps/hinge.Tpo .deps/hinge.Plo
+/bin/sh ../../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../../../ode/src  -I../../../include -DdDOUBLE -DdNODEBUG  -g -O2 -MT slider.lo -MD -MP -MF .deps/slider.Tpo -c -o slider.lo slider.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../../ode/src -I../../../include -DdDOUBLE -DdNODEBUG -g -O2 -MT slider.lo -MD -MP -MF .deps/slider.Tpo -c slider.cpp  -fno-common -DPIC -o .libs/slider.o
+In file included from slider.cpp:25:
+./joint_internal.h:24:9: warning: '_ODE_JOINT_NTERNAL_H_' is used as a header guard here, followed by #define of a different macro [-Wheader-guard]
+   24 | #ifndef _ODE_JOINT_NTERNAL_H_
+      |         ^~~~~~~~~~~~~~~~~~~~~
+./joint_internal.h:25:9: note: '_ODE_JOINT_INTERNAL_H_' is defined here; did you mean '_ODE_JOINT_NTERNAL_H_'?
+   25 | #define _ODE_JOINT_INTERNAL_H_
+      |         ^~~~~~~~~~~~~~~~~~~~~~
+      |         _ODE_JOINT_NTERNAL_H_
+1 warning generated.
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../../ode/src -I../../../include -DdDOUBLE -DdNODEBUG -g -O2 -MT slider.lo -MD -MP -MF .deps/slider.Tpo -c slider.cpp -o slider.o >/dev/null 2>&1
+mv -f .deps/slider.Tpo .deps/slider.Plo
+/bin/sh ../../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../../../ode/src  -I../../../include -DdDOUBLE -DdNODEBUG  -g -O2 -MT contact.lo -MD -MP -MF .deps/contact.Tpo -c -o contact.lo contact.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../../ode/src -I../../../include -DdDOUBLE -DdNODEBUG -g -O2 -MT contact.lo -MD -MP -MF .deps/contact.Tpo -c contact.cpp  -fno-common -DPIC -o .libs/contact.o
+In file included from contact.cpp:25:
+./joint_internal.h:24:9: warning: '_ODE_JOINT_NTERNAL_H_' is used as a header guard here, followed by #define of a different macro [-Wheader-guard]
+   24 | #ifndef _ODE_JOINT_NTERNAL_H_
+      |         ^~~~~~~~~~~~~~~~~~~~~
+./joint_internal.h:25:9: note: '_ODE_JOINT_INTERNAL_H_' is defined here; did you mean '_ODE_JOINT_NTERNAL_H_'?
+   25 | #define _ODE_JOINT_INTERNAL_H_
+      |         ^~~~~~~~~~~~~~~~~~~~~~
+      |         _ODE_JOINT_NTERNAL_H_
+1 warning generated.
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../../ode/src -I../../../include -DdDOUBLE -DdNODEBUG -g -O2 -MT contact.lo -MD -MP -MF .deps/contact.Tpo -c contact.cpp -o contact.o >/dev/null 2>&1
+mv -f .deps/contact.Tpo .deps/contact.Plo
+/bin/sh ../../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../../../ode/src  -I../../../include -DdDOUBLE -DdNODEBUG  -g -O2 -MT universal.lo -MD -MP -MF .deps/universal.Tpo -c -o universal.lo universal.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../../ode/src -I../../../include -DdDOUBLE -DdNODEBUG -g -O2 -MT universal.lo -MD -MP -MF .deps/universal.Tpo -c universal.cpp  -fno-common -DPIC -o .libs/universal.o
+In file included from universal.cpp:25:
+./joint_internal.h:24:9: warning: '_ODE_JOINT_NTERNAL_H_' is used as a header guard here, followed by #define of a different macro [-Wheader-guard]
+   24 | #ifndef _ODE_JOINT_NTERNAL_H_
+      |         ^~~~~~~~~~~~~~~~~~~~~
+./joint_internal.h:25:9: note: '_ODE_JOINT_INTERNAL_H_' is defined here; did you mean '_ODE_JOINT_NTERNAL_H_'?
+   25 | #define _ODE_JOINT_INTERNAL_H_
+      |         ^~~~~~~~~~~~~~~~~~~~~~
+      |         _ODE_JOINT_NTERNAL_H_
+1 warning generated.
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../../ode/src -I../../../include -DdDOUBLE -DdNODEBUG -g -O2 -MT universal.lo -MD -MP -MF .deps/universal.Tpo -c universal.cpp -o universal.o >/dev/null 2>&1
+mv -f .deps/universal.Tpo .deps/universal.Plo
+/bin/sh ../../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../../../ode/src  -I../../../include -DdDOUBLE -DdNODEBUG  -g -O2 -MT hinge2.lo -MD -MP -MF .deps/hinge2.Tpo -c -o hinge2.lo hinge2.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../../ode/src -I../../../include -DdDOUBLE -DdNODEBUG -g -O2 -MT hinge2.lo -MD -MP -MF .deps/hinge2.Tpo -c hinge2.cpp  -fno-common -DPIC -o .libs/hinge2.o
+In file included from hinge2.cpp:25:
+./joint_internal.h:24:9: warning: '_ODE_JOINT_NTERNAL_H_' is used as a header guard here, followed by #define of a different macro [-Wheader-guard]
+   24 | #ifndef _ODE_JOINT_NTERNAL_H_
+      |         ^~~~~~~~~~~~~~~~~~~~~
+./joint_internal.h:25:9: note: '_ODE_JOINT_INTERNAL_H_' is defined here; did you mean '_ODE_JOINT_NTERNAL_H_'?
+   25 | #define _ODE_JOINT_INTERNAL_H_
+      |         ^~~~~~~~~~~~~~~~~~~~~~
+      |         _ODE_JOINT_NTERNAL_H_
+1 warning generated.
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../../ode/src -I../../../include -DdDOUBLE -DdNODEBUG -g -O2 -MT hinge2.lo -MD -MP -MF .deps/hinge2.Tpo -c hinge2.cpp -o hinge2.o >/dev/null 2>&1
+mv -f .deps/hinge2.Tpo .deps/hinge2.Plo
+/bin/sh ../../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../../../ode/src  -I../../../include -DdDOUBLE -DdNODEBUG  -g -O2 -MT fixed.lo -MD -MP -MF .deps/fixed.Tpo -c -o fixed.lo fixed.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../../ode/src -I../../../include -DdDOUBLE -DdNODEBUG -g -O2 -MT fixed.lo -MD -MP -MF .deps/fixed.Tpo -c fixed.cpp  -fno-common -DPIC -o .libs/fixed.o
+In file included from fixed.cpp:25:
+./joint_internal.h:24:9: warning: '_ODE_JOINT_NTERNAL_H_' is used as a header guard here, followed by #define of a different macro [-Wheader-guard]
+   24 | #ifndef _ODE_JOINT_NTERNAL_H_
+      |         ^~~~~~~~~~~~~~~~~~~~~
+./joint_internal.h:25:9: note: '_ODE_JOINT_INTERNAL_H_' is defined here; did you mean '_ODE_JOINT_NTERNAL_H_'?
+   25 | #define _ODE_JOINT_INTERNAL_H_
+      |         ^~~~~~~~~~~~~~~~~~~~~~
+      |         _ODE_JOINT_NTERNAL_H_
+1 warning generated.
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../../ode/src -I../../../include -DdDOUBLE -DdNODEBUG -g -O2 -MT fixed.lo -MD -MP -MF .deps/fixed.Tpo -c fixed.cpp -o fixed.o >/dev/null 2>&1
+mv -f .deps/fixed.Tpo .deps/fixed.Plo
+/bin/sh ../../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../../../ode/src  -I../../../include -DdDOUBLE -DdNODEBUG  -g -O2 -MT null.lo -MD -MP -MF .deps/null.Tpo -c -o null.lo null.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../../ode/src -I../../../include -DdDOUBLE -DdNODEBUG -g -O2 -MT null.lo -MD -MP -MF .deps/null.Tpo -c null.cpp  -fno-common -DPIC -o .libs/null.o
+In file included from null.cpp:25:
+./joint_internal.h:24:9: warning: '_ODE_JOINT_NTERNAL_H_' is used as a header guard here, followed by #define of a different macro [-Wheader-guard]
+   24 | #ifndef _ODE_JOINT_NTERNAL_H_
+      |         ^~~~~~~~~~~~~~~~~~~~~
+./joint_internal.h:25:9: note: '_ODE_JOINT_INTERNAL_H_' is defined here; did you mean '_ODE_JOINT_NTERNAL_H_'?
+   25 | #define _ODE_JOINT_INTERNAL_H_
+      |         ^~~~~~~~~~~~~~~~~~~~~~
+      |         _ODE_JOINT_NTERNAL_H_
+1 warning generated.
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../../ode/src -I../../../include -DdDOUBLE -DdNODEBUG -g -O2 -MT null.lo -MD -MP -MF .deps/null.Tpo -c null.cpp -o null.o >/dev/null 2>&1
+mv -f .deps/null.Tpo .deps/null.Plo
+/bin/sh ../../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../../../ode/src  -I../../../include -DdDOUBLE -DdNODEBUG  -g -O2 -MT amotor.lo -MD -MP -MF .deps/amotor.Tpo -c -o amotor.lo amotor.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../../ode/src -I../../../include -DdDOUBLE -DdNODEBUG -g -O2 -MT amotor.lo -MD -MP -MF .deps/amotor.Tpo -c amotor.cpp  -fno-common -DPIC -o .libs/amotor.o
+In file included from amotor.cpp:25:
+./joint_internal.h:24:9: warning: '_ODE_JOINT_NTERNAL_H_' is used as a header guard here, followed by #define of a different macro [-Wheader-guard]
+   24 | #ifndef _ODE_JOINT_NTERNAL_H_
+      |         ^~~~~~~~~~~~~~~~~~~~~
+./joint_internal.h:25:9: note: '_ODE_JOINT_INTERNAL_H_' is defined here; did you mean '_ODE_JOINT_NTERNAL_H_'?
+   25 | #define _ODE_JOINT_INTERNAL_H_
+      |         ^~~~~~~~~~~~~~~~~~~~~~
+      |         _ODE_JOINT_NTERNAL_H_
+1 warning generated.
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../../ode/src -I../../../include -DdDOUBLE -DdNODEBUG -g -O2 -MT amotor.lo -MD -MP -MF .deps/amotor.Tpo -c amotor.cpp -o amotor.o >/dev/null 2>&1
+mv -f .deps/amotor.Tpo .deps/amotor.Plo
+/bin/sh ../../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../../../ode/src  -I../../../include -DdDOUBLE -DdNODEBUG  -g -O2 -MT lmotor.lo -MD -MP -MF .deps/lmotor.Tpo -c -o lmotor.lo lmotor.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../../ode/src -I../../../include -DdDOUBLE -DdNODEBUG -g -O2 -MT lmotor.lo -MD -MP -MF .deps/lmotor.Tpo -c lmotor.cpp  -fno-common -DPIC -o .libs/lmotor.o
+In file included from lmotor.cpp:25:
+./joint_internal.h:24:9: warning: '_ODE_JOINT_NTERNAL_H_' is used as a header guard here, followed by #define of a different macro [-Wheader-guard]
+   24 | #ifndef _ODE_JOINT_NTERNAL_H_
+      |         ^~~~~~~~~~~~~~~~~~~~~
+./joint_internal.h:25:9: note: '_ODE_JOINT_INTERNAL_H_' is defined here; did you mean '_ODE_JOINT_NTERNAL_H_'?
+   25 | #define _ODE_JOINT_INTERNAL_H_
+      |         ^~~~~~~~~~~~~~~~~~~~~~
+      |         _ODE_JOINT_NTERNAL_H_
+1 warning generated.
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../../ode/src -I../../../include -DdDOUBLE -DdNODEBUG -g -O2 -MT lmotor.lo -MD -MP -MF .deps/lmotor.Tpo -c lmotor.cpp -o lmotor.o >/dev/null 2>&1
+mv -f .deps/lmotor.Tpo .deps/lmotor.Plo
+/bin/sh ../../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../../../ode/src  -I../../../include -DdDOUBLE -DdNODEBUG  -g -O2 -MT plane2d.lo -MD -MP -MF .deps/plane2d.Tpo -c -o plane2d.lo plane2d.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../../ode/src -I../../../include -DdDOUBLE -DdNODEBUG -g -O2 -MT plane2d.lo -MD -MP -MF .deps/plane2d.Tpo -c plane2d.cpp  -fno-common -DPIC -o .libs/plane2d.o
+In file included from plane2d.cpp:25:
+./joint_internal.h:24:9: warning: '_ODE_JOINT_NTERNAL_H_' is used as a header guard here, followed by #define of a different macro [-Wheader-guard]
+   24 | #ifndef _ODE_JOINT_NTERNAL_H_
+      |         ^~~~~~~~~~~~~~~~~~~~~
+./joint_internal.h:25:9: note: '_ODE_JOINT_INTERNAL_H_' is defined here; did you mean '_ODE_JOINT_NTERNAL_H_'?
+   25 | #define _ODE_JOINT_INTERNAL_H_
+      |         ^~~~~~~~~~~~~~~~~~~~~~
+      |         _ODE_JOINT_NTERNAL_H_
+1 warning generated.
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../../ode/src -I../../../include -DdDOUBLE -DdNODEBUG -g -O2 -MT plane2d.lo -MD -MP -MF .deps/plane2d.Tpo -c plane2d.cpp -o plane2d.o >/dev/null 2>&1
+mv -f .deps/plane2d.Tpo .deps/plane2d.Plo
+/bin/sh ../../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../../../ode/src  -I../../../include -DdDOUBLE -DdNODEBUG  -g -O2 -MT pu.lo -MD -MP -MF .deps/pu.Tpo -c -o pu.lo pu.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../../ode/src -I../../../include -DdDOUBLE -DdNODEBUG -g -O2 -MT pu.lo -MD -MP -MF .deps/pu.Tpo -c pu.cpp  -fno-common -DPIC -o .libs/pu.o
+In file included from pu.cpp:25:
+./joint_internal.h:24:9: warning: '_ODE_JOINT_NTERNAL_H_' is used as a header guard here, followed by #define of a different macro [-Wheader-guard]
+   24 | #ifndef _ODE_JOINT_NTERNAL_H_
+      |         ^~~~~~~~~~~~~~~~~~~~~
+./joint_internal.h:25:9: note: '_ODE_JOINT_INTERNAL_H_' is defined here; did you mean '_ODE_JOINT_NTERNAL_H_'?
+   25 | #define _ODE_JOINT_INTERNAL_H_
+      |         ^~~~~~~~~~~~~~~~~~~~~~
+      |         _ODE_JOINT_NTERNAL_H_
+1 warning generated.
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../../ode/src -I../../../include -DdDOUBLE -DdNODEBUG -g -O2 -MT pu.lo -MD -MP -MF .deps/pu.Tpo -c pu.cpp -o pu.o >/dev/null 2>&1
+mv -f .deps/pu.Tpo .deps/pu.Plo
+/bin/sh ../../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../../../ode/src  -I../../../include -DdDOUBLE -DdNODEBUG  -g -O2 -MT pr.lo -MD -MP -MF .deps/pr.Tpo -c -o pr.lo pr.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../../ode/src -I../../../include -DdDOUBLE -DdNODEBUG -g -O2 -MT pr.lo -MD -MP -MF .deps/pr.Tpo -c pr.cpp  -fno-common -DPIC -o .libs/pr.o
+In file included from pr.cpp:25:
+./joint_internal.h:24:9: warning: '_ODE_JOINT_NTERNAL_H_' is used as a header guard here, followed by #define of a different macro [-Wheader-guard]
+   24 | #ifndef _ODE_JOINT_NTERNAL_H_
+      |         ^~~~~~~~~~~~~~~~~~~~~
+./joint_internal.h:25:9: note: '_ODE_JOINT_INTERNAL_H_' is defined here; did you mean '_ODE_JOINT_NTERNAL_H_'?
+   25 | #define _ODE_JOINT_INTERNAL_H_
+      |         ^~~~~~~~~~~~~~~~~~~~~~
+      |         _ODE_JOINT_NTERNAL_H_
+1 warning generated.
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../../ode/src -I../../../include -DdDOUBLE -DdNODEBUG -g -O2 -MT pr.lo -MD -MP -MF .deps/pr.Tpo -c pr.cpp -o pr.o >/dev/null 2>&1
+mv -f .deps/pr.Tpo .deps/pr.Plo
+/bin/sh ../../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I. -I../../../ode/src  -I../../../include -DdDOUBLE -DdNODEBUG  -g -O2 -MT piston.lo -MD -MP -MF .deps/piston.Tpo -c -o piston.lo piston.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../../ode/src -I../../../include -DdDOUBLE -DdNODEBUG -g -O2 -MT piston.lo -MD -MP -MF .deps/piston.Tpo -c piston.cpp  -fno-common -DPIC -o .libs/piston.o
+In file included from piston.cpp:25:
+./joint_internal.h:24:9: warning: '_ODE_JOINT_NTERNAL_H_' is used as a header guard here, followed by #define of a different macro [-Wheader-guard]
+   24 | #ifndef _ODE_JOINT_NTERNAL_H_
+      |         ^~~~~~~~~~~~~~~~~~~~~
+./joint_internal.h:25:9: note: '_ODE_JOINT_INTERNAL_H_' is defined here; did you mean '_ODE_JOINT_NTERNAL_H_'?
+   25 | #define _ODE_JOINT_INTERNAL_H_
+      |         ^~~~~~~~~~~~~~~~~~~~~~
+      |         _ODE_JOINT_NTERNAL_H_
+1 warning generated.
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../../ode/src -I../../../include -DdDOUBLE -DdNODEBUG -g -O2 -MT piston.lo -MD -MP -MF .deps/piston.Tpo -c piston.cpp -o piston.o >/dev/null 2>&1
+mv -f .deps/piston.Tpo .deps/piston.Plo
+/bin/sh ../../../libtool  --tag=CXX   --mode=link g++  -g -O2   -o libjoints.la  joint.lo ball.lo hinge.lo slider.lo contact.lo universal.lo hinge2.lo fixed.lo null.lo amotor.lo lmotor.lo plane2d.lo pu.lo pr.lo piston.lo  -lm  -lpthread
+libtool: link: ar cr .libs/libjoints.a .libs/joint.o .libs/ball.o .libs/hinge.o .libs/slider.o .libs/contact.o .libs/universal.o .libs/hinge2.o .libs/fixed.o .libs/null.o .libs/amotor.o .libs/lmotor.o .libs/plane2d.o .libs/pu.o .libs/pr.o .libs/piston.o 
+libtool: link: ranlib .libs/libjoints.a
+libtool: link: ( cd ".libs" && rm -f "libjoints.la" && ln -s "../libjoints.la" "libjoints.la" )
+/bin/sh ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG  -g -O2 -MT array.lo -MD -MP -MF .deps/array.Tpo -c -o array.lo array.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT array.lo -MD -MP -MF .deps/array.Tpo -c array.cpp  -fno-common -DPIC -o .libs/array.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT array.lo -MD -MP -MF .deps/array.Tpo -c array.cpp -o array.o >/dev/null 2>&1
+mv -f .deps/array.Tpo .deps/array.Plo
+/bin/sh ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG  -g -O2 -MT box.lo -MD -MP -MF .deps/box.Tpo -c -o box.lo box.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT box.lo -MD -MP -MF .deps/box.Tpo -c box.cpp  -fno-common -DPIC -o .libs/box.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT box.lo -MD -MP -MF .deps/box.Tpo -c box.cpp -o box.o >/dev/null 2>&1
+mv -f .deps/box.Tpo .deps/box.Plo
+/bin/sh ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG  -g -O2 -MT capsule.lo -MD -MP -MF .deps/capsule.Tpo -c -o capsule.lo capsule.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT capsule.lo -MD -MP -MF .deps/capsule.Tpo -c capsule.cpp  -fno-common -DPIC -o .libs/capsule.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT capsule.lo -MD -MP -MF .deps/capsule.Tpo -c capsule.cpp -o capsule.o >/dev/null 2>&1
+mv -f .deps/capsule.Tpo .deps/capsule.Plo
+/bin/sh ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG  -g -O2 -MT collision_cylinder_box.lo -MD -MP -MF .deps/collision_cylinder_box.Tpo -c -o collision_cylinder_box.lo collision_cylinder_box.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT collision_cylinder_box.lo -MD -MP -MF .deps/collision_cylinder_box.Tpo -c collision_cylinder_box.cpp  -fno-common -DPIC -o .libs/collision_cylinder_box.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT collision_cylinder_box.lo -MD -MP -MF .deps/collision_cylinder_box.Tpo -c collision_cylinder_box.cpp -o collision_cylinder_box.o >/dev/null 2>&1
+mv -f .deps/collision_cylinder_box.Tpo .deps/collision_cylinder_box.Plo
+/bin/sh ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG  -g -O2 -MT collision_cylinder_plane.lo -MD -MP -MF .deps/collision_cylinder_plane.Tpo -c -o collision_cylinder_plane.lo collision_cylinder_plane.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT collision_cylinder_plane.lo -MD -MP -MF .deps/collision_cylinder_plane.Tpo -c collision_cylinder_plane.cpp  -fno-common -DPIC -o .libs/collision_cylinder_plane.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT collision_cylinder_plane.lo -MD -MP -MF .deps/collision_cylinder_plane.Tpo -c collision_cylinder_plane.cpp -o collision_cylinder_plane.o >/dev/null 2>&1
+mv -f .deps/collision_cylinder_plane.Tpo .deps/collision_cylinder_plane.Plo
+/bin/sh ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG  -g -O2 -MT collision_cylinder_sphere.lo -MD -MP -MF .deps/collision_cylinder_sphere.Tpo -c -o collision_cylinder_sphere.lo collision_cylinder_sphere.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT collision_cylinder_sphere.lo -MD -MP -MF .deps/collision_cylinder_sphere.Tpo -c collision_cylinder_sphere.cpp  -fno-common -DPIC -o .libs/collision_cylinder_sphere.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT collision_cylinder_sphere.lo -MD -MP -MF .deps/collision_cylinder_sphere.Tpo -c collision_cylinder_sphere.cpp -o collision_cylinder_sphere.o >/dev/null 2>&1
+mv -f .deps/collision_cylinder_sphere.Tpo .deps/collision_cylinder_sphere.Plo
+/bin/sh ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG  -g -O2 -MT collision_kernel.lo -MD -MP -MF .deps/collision_kernel.Tpo -c -o collision_kernel.lo collision_kernel.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT collision_kernel.lo -MD -MP -MF .deps/collision_kernel.Tpo -c collision_kernel.cpp  -fno-common -DPIC -o .libs/collision_kernel.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT collision_kernel.lo -MD -MP -MF .deps/collision_kernel.Tpo -c collision_kernel.cpp -o collision_kernel.o >/dev/null 2>&1
+mv -f .deps/collision_kernel.Tpo .deps/collision_kernel.Plo
+/bin/sh ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG  -g -O2 -MT collision_quadtreespace.lo -MD -MP -MF .deps/collision_quadtreespace.Tpo -c -o collision_quadtreespace.lo collision_quadtreespace.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT collision_quadtreespace.lo -MD -MP -MF .deps/collision_quadtreespace.Tpo -c collision_quadtreespace.cpp  -fno-common -DPIC -o .libs/collision_quadtreespace.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT collision_quadtreespace.lo -MD -MP -MF .deps/collision_quadtreespace.Tpo -c collision_quadtreespace.cpp -o collision_quadtreespace.o >/dev/null 2>&1
+mv -f .deps/collision_quadtreespace.Tpo .deps/collision_quadtreespace.Plo
+/bin/sh ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG  -g -O2 -MT collision_sapspace.lo -MD -MP -MF .deps/collision_sapspace.Tpo -c -o collision_sapspace.lo collision_sapspace.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT collision_sapspace.lo -MD -MP -MF .deps/collision_sapspace.Tpo -c collision_sapspace.cpp  -fno-common -DPIC -o .libs/collision_sapspace.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT collision_sapspace.lo -MD -MP -MF .deps/collision_sapspace.Tpo -c collision_sapspace.cpp -o collision_sapspace.o >/dev/null 2>&1
+mv -f .deps/collision_sapspace.Tpo .deps/collision_sapspace.Plo
+/bin/sh ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG  -g -O2 -MT collision_space.lo -MD -MP -MF .deps/collision_space.Tpo -c -o collision_space.lo collision_space.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT collision_space.lo -MD -MP -MF .deps/collision_space.Tpo -c collision_space.cpp  -fno-common -DPIC -o .libs/collision_space.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT collision_space.lo -MD -MP -MF .deps/collision_space.Tpo -c collision_space.cpp -o collision_space.o >/dev/null 2>&1
+mv -f .deps/collision_space.Tpo .deps/collision_space.Plo
+/bin/sh ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG  -g -O2 -MT collision_transform.lo -MD -MP -MF .deps/collision_transform.Tpo -c -o collision_transform.lo collision_transform.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT collision_transform.lo -MD -MP -MF .deps/collision_transform.Tpo -c collision_transform.cpp  -fno-common -DPIC -o .libs/collision_transform.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT collision_transform.lo -MD -MP -MF .deps/collision_transform.Tpo -c collision_transform.cpp -o collision_transform.o >/dev/null 2>&1
+mv -f .deps/collision_transform.Tpo .deps/collision_transform.Plo
+/bin/sh ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG  -g -O2 -MT collision_trimesh_disabled.lo -MD -MP -MF .deps/collision_trimesh_disabled.Tpo -c -o collision_trimesh_disabled.lo collision_trimesh_disabled.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT collision_trimesh_disabled.lo -MD -MP -MF .deps/collision_trimesh_disabled.Tpo -c collision_trimesh_disabled.cpp  -fno-common -DPIC -o .libs/collision_trimesh_disabled.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT collision_trimesh_disabled.lo -MD -MP -MF .deps/collision_trimesh_disabled.Tpo -c collision_trimesh_disabled.cpp -o collision_trimesh_disabled.o >/dev/null 2>&1
+mv -f .deps/collision_trimesh_disabled.Tpo .deps/collision_trimesh_disabled.Plo
+/bin/sh ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG  -g -O2 -MT collision_util.lo -MD -MP -MF .deps/collision_util.Tpo -c -o collision_util.lo collision_util.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT collision_util.lo -MD -MP -MF .deps/collision_util.Tpo -c collision_util.cpp  -fno-common -DPIC -o .libs/collision_util.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT collision_util.lo -MD -MP -MF .deps/collision_util.Tpo -c collision_util.cpp -o collision_util.o >/dev/null 2>&1
+mv -f .deps/collision_util.Tpo .deps/collision_util.Plo
+/bin/sh ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG  -g -O2 -MT convex.lo -MD -MP -MF .deps/convex.Tpo -c -o convex.lo convex.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT convex.lo -MD -MP -MF .deps/convex.Tpo -c convex.cpp  -fno-common -DPIC -o .libs/convex.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT convex.lo -MD -MP -MF .deps/convex.Tpo -c convex.cpp -o convex.o >/dev/null 2>&1
+mv -f .deps/convex.Tpo .deps/convex.Plo
+/bin/sh ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG  -g -O2 -MT cylinder.lo -MD -MP -MF .deps/cylinder.Tpo -c -o cylinder.lo cylinder.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT cylinder.lo -MD -MP -MF .deps/cylinder.Tpo -c cylinder.cpp  -fno-common -DPIC -o .libs/cylinder.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT cylinder.lo -MD -MP -MF .deps/cylinder.Tpo -c cylinder.cpp -o cylinder.o >/dev/null 2>&1
+mv -f .deps/cylinder.Tpo .deps/cylinder.Plo
+/bin/sh ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG  -g -O2 -MT error.lo -MD -MP -MF .deps/error.Tpo -c -o error.lo error.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT error.lo -MD -MP -MF .deps/error.Tpo -c error.cpp  -fno-common -DPIC -o .libs/error.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT error.lo -MD -MP -MF .deps/error.Tpo -c error.cpp -o error.o >/dev/null 2>&1
+mv -f .deps/error.Tpo .deps/error.Plo
+/bin/sh ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG  -g -O2 -MT export-dif.lo -MD -MP -MF .deps/export-dif.Tpo -c -o export-dif.lo export-dif.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT export-dif.lo -MD -MP -MF .deps/export-dif.Tpo -c export-dif.cpp  -fno-common -DPIC -o .libs/export-dif.o
+In file included from export-dif.cpp:36:
+In file included from ../../include/ode-dbl/ode.h:40:
+../../include/ode-dbl/misc.h:58:70: warning: ISO C++11 does not allow conversion from string literal to 'char *' [-Wwritable-strings]
+   58 | ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+      |                                                                      ^
+1 warning generated.
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT export-dif.lo -MD -MP -MF .deps/export-dif.Tpo -c export-dif.cpp -o export-dif.o >/dev/null 2>&1
+mv -f .deps/export-dif.Tpo .deps/export-dif.Plo
+/bin/sh ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG  -g -O2 -MT heightfield.lo -MD -MP -MF .deps/heightfield.Tpo -c -o heightfield.lo heightfield.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT heightfield.lo -MD -MP -MF .deps/heightfield.Tpo -c heightfield.cpp  -fno-common -DPIC -o .libs/heightfield.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT heightfield.lo -MD -MP -MF .deps/heightfield.Tpo -c heightfield.cpp -o heightfield.o >/dev/null 2>&1
+mv -f .deps/heightfield.Tpo .deps/heightfield.Plo
+/bin/sh ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG  -g -O2 -MT lcp.lo -MD -MP -MF .deps/lcp.Tpo -c -o lcp.lo lcp.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT lcp.lo -MD -MP -MF .deps/lcp.Tpo -c lcp.cpp  -fno-common -DPIC -o .libs/lcp.o
+In file included from lcp.cpp:115:
+../../include/ode-dbl/misc.h:58:70: warning: ISO C++11 does not allow conversion from string literal to 'char *' [-Wwritable-strings]
+   58 | ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+      |                                                                      ^
+In file included from lcp.cpp:116:
+./mat.h:66:27: warning: ISO C++11 does not allow conversion from string literal to 'char *' [-Wwritable-strings]
+   66 |   void print (char *fmt = "%10.4f ", FILE *f=stdout);
+      |                           ^
+2 warnings generated.
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT lcp.lo -MD -MP -MF .deps/lcp.Tpo -c lcp.cpp -o lcp.o >/dev/null 2>&1
+mv -f .deps/lcp.Tpo .deps/lcp.Plo
+/bin/sh ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG  -g -O2 -MT mass.lo -MD -MP -MF .deps/mass.Tpo -c -o mass.lo mass.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT mass.lo -MD -MP -MF .deps/mass.Tpo -c mass.cpp  -fno-common -DPIC -o .libs/mass.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT mass.lo -MD -MP -MF .deps/mass.Tpo -c mass.cpp -o mass.o >/dev/null 2>&1
+mv -f .deps/mass.Tpo .deps/mass.Plo
+/bin/sh ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG  -g -O2 -MT mat.lo -MD -MP -MF .deps/mat.Tpo -c -o mat.lo mat.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT mat.lo -MD -MP -MF .deps/mat.Tpo -c mat.cpp  -fno-common -DPIC -o .libs/mat.o
+In file included from mat.cpp:25:
+../../include/ode-dbl/misc.h:58:70: warning: ISO C++11 does not allow conversion from string literal to 'char *' [-Wwritable-strings]
+   58 | ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+      |                                                                      ^
+In file included from mat.cpp:29:
+./mat.h:66:27: warning: ISO C++11 does not allow conversion from string literal to 'char *' [-Wwritable-strings]
+   66 |   void print (char *fmt = "%10.4f ", FILE *f=stdout);
+      |                           ^
+2 warnings generated.
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT mat.lo -MD -MP -MF .deps/mat.Tpo -c mat.cpp -o mat.o >/dev/null 2>&1
+mv -f .deps/mat.Tpo .deps/mat.Plo
+/bin/sh ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG  -g -O2 -MT matrix.lo -MD -MP -MF .deps/matrix.Tpo -c -o matrix.lo matrix.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT matrix.lo -MD -MP -MF .deps/matrix.Tpo -c matrix.cpp  -fno-common -DPIC -o .libs/matrix.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT matrix.lo -MD -MP -MF .deps/matrix.Tpo -c matrix.cpp -o matrix.o >/dev/null 2>&1
+mv -f .deps/matrix.Tpo .deps/matrix.Plo
+/bin/sh ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG  -g -O2 -MT memory.lo -MD -MP -MF .deps/memory.Tpo -c -o memory.lo memory.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT memory.lo -MD -MP -MF .deps/memory.Tpo -c memory.cpp  -fno-common -DPIC -o .libs/memory.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT memory.lo -MD -MP -MF .deps/memory.Tpo -c memory.cpp -o memory.o >/dev/null 2>&1
+mv -f .deps/memory.Tpo .deps/memory.Plo
+/bin/sh ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG  -g -O2 -MT misc.lo -MD -MP -MF .deps/misc.Tpo -c -o misc.lo misc.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT misc.lo -MD -MP -MF .deps/misc.Tpo -c misc.cpp  -fno-common -DPIC -o .libs/misc.o
+In file included from misc.cpp:25:
+../../include/ode-dbl/misc.h:58:70: warning: ISO C++11 does not allow conversion from string literal to 'char *' [-Wwritable-strings]
+   58 | ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+      |                                                                      ^
+1 warning generated.
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT misc.lo -MD -MP -MF .deps/misc.Tpo -c misc.cpp -o misc.o >/dev/null 2>&1
+mv -f .deps/misc.Tpo .deps/misc.Plo
+/bin/sh ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG  -g -O2 -MT obstack.lo -MD -MP -MF .deps/obstack.Tpo -c -o obstack.lo obstack.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT obstack.lo -MD -MP -MF .deps/obstack.Tpo -c obstack.cpp  -fno-common -DPIC -o .libs/obstack.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT obstack.lo -MD -MP -MF .deps/obstack.Tpo -c obstack.cpp -o obstack.o >/dev/null 2>&1
+mv -f .deps/obstack.Tpo .deps/obstack.Plo
+/bin/sh ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG  -g -O2 -MT ode.lo -MD -MP -MF .deps/ode.Tpo -c -o ode.lo ode.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT ode.lo -MD -MP -MF .deps/ode.Tpo -c ode.cpp  -fno-common -DPIC -o .libs/ode.o
+In file included from ode.cpp:31:
+In file included from ../../include/ode-dbl/ode.h:40:
+../../include/ode-dbl/misc.h:58:70: warning: ISO C++11 does not allow conversion from string literal to 'char *' [-Wwritable-strings]
+   58 | ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+      |                                                                      ^
+1 warning generated.
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT ode.lo -MD -MP -MF .deps/ode.Tpo -c ode.cpp -o ode.o >/dev/null 2>&1
+mv -f .deps/ode.Tpo .deps/ode.Plo
+/bin/sh ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG  -g -O2 -MT odeinit.lo -MD -MP -MF .deps/odeinit.Tpo -c -o odeinit.lo odeinit.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT odeinit.lo -MD -MP -MF .deps/odeinit.Tpo -c odeinit.cpp  -fno-common -DPIC -o .libs/odeinit.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT odeinit.lo -MD -MP -MF .deps/odeinit.Tpo -c odeinit.cpp -o odeinit.o >/dev/null 2>&1
+mv -f .deps/odeinit.Tpo .deps/odeinit.Plo
+/bin/sh ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG  -g -O2 -MT odemath.lo -MD -MP -MF .deps/odemath.Tpo -c -o odemath.lo odemath.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT odemath.lo -MD -MP -MF .deps/odemath.Tpo -c odemath.cpp  -fno-common -DPIC -o .libs/odemath.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT odemath.lo -MD -MP -MF .deps/odemath.Tpo -c odemath.cpp -o odemath.o >/dev/null 2>&1
+mv -f .deps/odemath.Tpo .deps/odemath.Plo
+/bin/sh ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG  -g -O2 -MT plane.lo -MD -MP -MF .deps/plane.Tpo -c -o plane.lo plane.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT plane.lo -MD -MP -MF .deps/plane.Tpo -c plane.cpp  -fno-common -DPIC -o .libs/plane.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT plane.lo -MD -MP -MF .deps/plane.Tpo -c plane.cpp -o plane.o >/dev/null 2>&1
+mv -f .deps/plane.Tpo .deps/plane.Plo
+/bin/sh ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG  -g -O2 -MT quickstep.lo -MD -MP -MF .deps/quickstep.Tpo -c -o quickstep.lo quickstep.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT quickstep.lo -MD -MP -MF .deps/quickstep.Tpo -c quickstep.cpp  -fno-common -DPIC -o .libs/quickstep.o
+In file included from quickstep.cpp:32:
+../../include/ode-dbl/misc.h:58:70: warning: ISO C++11 does not allow conversion from string literal to 'char *' [-Wwritable-strings]
+   58 | ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+      |                                                                      ^
+1 warning generated.
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT quickstep.lo -MD -MP -MF .deps/quickstep.Tpo -c quickstep.cpp -o quickstep.o >/dev/null 2>&1
+mv -f .deps/quickstep.Tpo .deps/quickstep.Plo
+/bin/sh ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG  -g -O2 -MT ray.lo -MD -MP -MF .deps/ray.Tpo -c -o ray.lo ray.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT ray.lo -MD -MP -MF .deps/ray.Tpo -c ray.cpp  -fno-common -DPIC -o .libs/ray.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT ray.lo -MD -MP -MF .deps/ray.Tpo -c ray.cpp -o ray.o >/dev/null 2>&1
+mv -f .deps/ray.Tpo .deps/ray.Plo
+/bin/sh ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG  -g -O2 -MT rotation.lo -MD -MP -MF .deps/rotation.Tpo -c -o rotation.lo rotation.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT rotation.lo -MD -MP -MF .deps/rotation.Tpo -c rotation.cpp  -fno-common -DPIC -o .libs/rotation.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT rotation.lo -MD -MP -MF .deps/rotation.Tpo -c rotation.cpp -o rotation.o >/dev/null 2>&1
+mv -f .deps/rotation.Tpo .deps/rotation.Plo
+/bin/sh ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG  -g -O2 -MT sphere.lo -MD -MP -MF .deps/sphere.Tpo -c -o sphere.lo sphere.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT sphere.lo -MD -MP -MF .deps/sphere.Tpo -c sphere.cpp  -fno-common -DPIC -o .libs/sphere.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT sphere.lo -MD -MP -MF .deps/sphere.Tpo -c sphere.cpp -o sphere.o >/dev/null 2>&1
+mv -f .deps/sphere.Tpo .deps/sphere.Plo
+/bin/sh ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG  -g -O2 -MT step.lo -MD -MP -MF .deps/step.Tpo -c -o step.lo step.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT step.lo -MD -MP -MF .deps/step.Tpo -c step.cpp  -fno-common -DPIC -o .libs/step.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT step.lo -MD -MP -MF .deps/step.Tpo -c step.cpp -o step.o >/dev/null 2>&1
+mv -f .deps/step.Tpo .deps/step.Plo
+/bin/sh ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG  -g -O2 -MT stepfast.lo -MD -MP -MF .deps/stepfast.Tpo -c -o stepfast.lo stepfast.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT stepfast.lo -MD -MP -MF .deps/stepfast.Tpo -c stepfast.cpp  -fno-common -DPIC -o .libs/stepfast.o
+In file included from stepfast.cpp:41:
+../../include/ode-dbl/misc.h:58:70: warning: ISO C++11 does not allow conversion from string literal to 'char *' [-Wwritable-strings]
+   58 | ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+      |                                                                      ^
+1 warning generated.
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT stepfast.lo -MD -MP -MF .deps/stepfast.Tpo -c stepfast.cpp -o stepfast.o >/dev/null 2>&1
+mv -f .deps/stepfast.Tpo .deps/stepfast.Plo
+/bin/sh ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG  -g -O2 -MT testing.lo -MD -MP -MF .deps/testing.Tpo -c -o testing.lo testing.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT testing.lo -MD -MP -MF .deps/testing.Tpo -c testing.cpp  -fno-common -DPIC -o .libs/testing.o
+In file included from testing.cpp:25:
+../../include/ode-dbl/misc.h:58:70: warning: ISO C++11 does not allow conversion from string literal to 'char *' [-Wwritable-strings]
+   58 | ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+      |                                                                      ^
+testing.cpp:76:5: warning: 'vsprintf' is deprecated: This function is provided for compatibility reasons only.  Due to security concerns inherent in the design of sprintf(3), it is highly recommended that you use vsnprintf(3) instead. [-Wdeprecated-declarations]
+   76 |     vsprintf (mi->name,name,ap);
+      |     ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/_stdio.h:298:1: note: 'vsprintf' has been explicitly marked deprecated here
+  298 | __deprecated_msg("This function is provided for compatibility reasons only.  Due to security concerns inherent in the design of sprintf(3), it is highly recommended that you use vsnprintf(3) instead.")
+      | ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/cdefs.h:227:48: note: expanded from macro '__deprecated_msg'
+  227 |         #define __deprecated_msg(_msg) __attribute__((__deprecated__(_msg)))
+      |                                                       ^
+testing.cpp:92:5: warning: 'vsprintf' is deprecated: This function is provided for compatibility reasons only.  Due to security concerns inherent in the design of sprintf(3), it is highly recommended that you use vsnprintf(3) instead. [-Wdeprecated-declarations]
+   92 |     vsprintf (mi.name,name,ap);
+      |     ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/_stdio.h:298:1: note: 'vsprintf' has been explicitly marked deprecated here
+  298 | __deprecated_msg("This function is provided for compatibility reasons only.  Due to security concerns inherent in the design of sprintf(3), it is highly recommended that you use vsnprintf(3) instead.")
+      | ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/sys/cdefs.h:227:48: note: expanded from macro '__deprecated_msg'
+  227 |         #define __deprecated_msg(_msg) __attribute__((__deprecated__(_msg)))
+      |                                                       ^
+3 warnings generated.
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT testing.lo -MD -MP -MF .deps/testing.Tpo -c testing.cpp -o testing.o >/dev/null 2>&1
+mv -f .deps/testing.Tpo .deps/testing.Plo
+/bin/sh ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG  -g -O2 -MT timer.lo -MD -MP -MF .deps/timer.Tpo -c -o timer.lo timer.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT timer.lo -MD -MP -MF .deps/timer.Tpo -c timer.cpp  -fno-common -DPIC -o .libs/timer.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT timer.lo -MD -MP -MF .deps/timer.Tpo -c timer.cpp -o timer.o >/dev/null 2>&1
+mv -f .deps/timer.Tpo .deps/timer.Plo
+/bin/sh ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG  -g -O2 -MT util.lo -MD -MP -MF .deps/util.Tpo -c -o util.lo util.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT util.lo -MD -MP -MF .deps/util.Tpo -c util.cpp  -fno-common -DPIC -o .libs/util.o
+In file included from util.cpp:23:
+In file included from ../../include/ode-dbl/ode.h:40:
+../../include/ode-dbl/misc.h:58:70: warning: ISO C++11 does not allow conversion from string literal to 'char *' [-Wwritable-strings]
+   58 | ODE_API void dPrintMatrix (const dReal *A, int n, int m, char *fmt = "%10.4f ",
+      |                                                                      ^
+1 warning generated.
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT util.lo -MD -MP -MF .deps/util.Tpo -c util.cpp -o util.o >/dev/null 2>&1
+mv -f .deps/util.Tpo .deps/util.Plo
+/bin/sh ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG  -g -O2 -MT collision_trimesh_trimesh.lo -MD -MP -MF .deps/collision_trimesh_trimesh.Tpo -c -o collision_trimesh_trimesh.lo collision_trimesh_trimesh.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT collision_trimesh_trimesh.lo -MD -MP -MF .deps/collision_trimesh_trimesh.Tpo -c collision_trimesh_trimesh.cpp  -fno-common -DPIC -o .libs/collision_trimesh_trimesh.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT collision_trimesh_trimesh.lo -MD -MP -MF .deps/collision_trimesh_trimesh.Tpo -c collision_trimesh_trimesh.cpp -o collision_trimesh_trimesh.o >/dev/null 2>&1
+mv -f .deps/collision_trimesh_trimesh.Tpo .deps/collision_trimesh_trimesh.Plo
+/bin/sh ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG  -g -O2 -MT collision_trimesh_trimesh_new.lo -MD -MP -MF .deps/collision_trimesh_trimesh_new.Tpo -c -o collision_trimesh_trimesh_new.lo collision_trimesh_trimesh_new.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT collision_trimesh_trimesh_new.lo -MD -MP -MF .deps/collision_trimesh_trimesh_new.Tpo -c collision_trimesh_trimesh_new.cpp  -fno-common -DPIC -o .libs/collision_trimesh_trimesh_new.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT collision_trimesh_trimesh_new.lo -MD -MP -MF .deps/collision_trimesh_trimesh_new.Tpo -c collision_trimesh_trimesh_new.cpp -o collision_trimesh_trimesh_new.o >/dev/null 2>&1
+mv -f .deps/collision_trimesh_trimesh_new.Tpo .deps/collision_trimesh_trimesh_new.Plo
+/bin/sh ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG  -g -O2 -MT collision_trimesh_sphere.lo -MD -MP -MF .deps/collision_trimesh_sphere.Tpo -c -o collision_trimesh_sphere.lo collision_trimesh_sphere.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT collision_trimesh_sphere.lo -MD -MP -MF .deps/collision_trimesh_sphere.Tpo -c collision_trimesh_sphere.cpp  -fno-common -DPIC -o .libs/collision_trimesh_sphere.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT collision_trimesh_sphere.lo -MD -MP -MF .deps/collision_trimesh_sphere.Tpo -c collision_trimesh_sphere.cpp -o collision_trimesh_sphere.o >/dev/null 2>&1
+mv -f .deps/collision_trimesh_sphere.Tpo .deps/collision_trimesh_sphere.Plo
+/bin/sh ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG  -g -O2 -MT collision_trimesh_ray.lo -MD -MP -MF .deps/collision_trimesh_ray.Tpo -c -o collision_trimesh_ray.lo collision_trimesh_ray.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT collision_trimesh_ray.lo -MD -MP -MF .deps/collision_trimesh_ray.Tpo -c collision_trimesh_ray.cpp  -fno-common -DPIC -o .libs/collision_trimesh_ray.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT collision_trimesh_ray.lo -MD -MP -MF .deps/collision_trimesh_ray.Tpo -c collision_trimesh_ray.cpp -o collision_trimesh_ray.o >/dev/null 2>&1
+mv -f .deps/collision_trimesh_ray.Tpo .deps/collision_trimesh_ray.Plo
+/bin/sh ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG  -g -O2 -MT collision_trimesh_opcode.lo -MD -MP -MF .deps/collision_trimesh_opcode.Tpo -c -o collision_trimesh_opcode.lo collision_trimesh_opcode.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT collision_trimesh_opcode.lo -MD -MP -MF .deps/collision_trimesh_opcode.Tpo -c collision_trimesh_opcode.cpp  -fno-common -DPIC -o .libs/collision_trimesh_opcode.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT collision_trimesh_opcode.lo -MD -MP -MF .deps/collision_trimesh_opcode.Tpo -c collision_trimesh_opcode.cpp -o collision_trimesh_opcode.o >/dev/null 2>&1
+mv -f .deps/collision_trimesh_opcode.Tpo .deps/collision_trimesh_opcode.Plo
+/bin/sh ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG  -g -O2 -MT collision_trimesh_box.lo -MD -MP -MF .deps/collision_trimesh_box.Tpo -c -o collision_trimesh_box.lo collision_trimesh_box.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT collision_trimesh_box.lo -MD -MP -MF .deps/collision_trimesh_box.Tpo -c collision_trimesh_box.cpp  -fno-common -DPIC -o .libs/collision_trimesh_box.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT collision_trimesh_box.lo -MD -MP -MF .deps/collision_trimesh_box.Tpo -c collision_trimesh_box.cpp -o collision_trimesh_box.o >/dev/null 2>&1
+mv -f .deps/collision_trimesh_box.Tpo .deps/collision_trimesh_box.Plo
+/bin/sh ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG  -g -O2 -MT collision_trimesh_ccylinder.lo -MD -MP -MF .deps/collision_trimesh_ccylinder.Tpo -c -o collision_trimesh_ccylinder.lo collision_trimesh_ccylinder.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT collision_trimesh_ccylinder.lo -MD -MP -MF .deps/collision_trimesh_ccylinder.Tpo -c collision_trimesh_ccylinder.cpp  -fno-common -DPIC -o .libs/collision_trimesh_ccylinder.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT collision_trimesh_ccylinder.lo -MD -MP -MF .deps/collision_trimesh_ccylinder.Tpo -c collision_trimesh_ccylinder.cpp -o collision_trimesh_ccylinder.o >/dev/null 2>&1
+mv -f .deps/collision_trimesh_ccylinder.Tpo .deps/collision_trimesh_ccylinder.Plo
+/bin/sh ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG  -g -O2 -MT collision_trimesh_distance.lo -MD -MP -MF .deps/collision_trimesh_distance.Tpo -c -o collision_trimesh_distance.lo collision_trimesh_distance.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT collision_trimesh_distance.lo -MD -MP -MF .deps/collision_trimesh_distance.Tpo -c collision_trimesh_distance.cpp  -fno-common -DPIC -o .libs/collision_trimesh_distance.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT collision_trimesh_distance.lo -MD -MP -MF .deps/collision_trimesh_distance.Tpo -c collision_trimesh_distance.cpp -o collision_trimesh_distance.o >/dev/null 2>&1
+mv -f .deps/collision_trimesh_distance.Tpo .deps/collision_trimesh_distance.Plo
+/bin/sh ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG  -g -O2 -MT collision_cylinder_trimesh.lo -MD -MP -MF .deps/collision_cylinder_trimesh.Tpo -c -o collision_cylinder_trimesh.lo collision_cylinder_trimesh.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT collision_cylinder_trimesh.lo -MD -MP -MF .deps/collision_cylinder_trimesh.Tpo -c collision_cylinder_trimesh.cpp  -fno-common -DPIC -o .libs/collision_cylinder_trimesh.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT collision_cylinder_trimesh.lo -MD -MP -MF .deps/collision_cylinder_trimesh.Tpo -c collision_cylinder_trimesh.cpp -o collision_cylinder_trimesh.o >/dev/null 2>&1
+mv -f .deps/collision_cylinder_trimesh.Tpo .deps/collision_cylinder_trimesh.Plo
+/bin/sh ../../libtool  --tag=CXX   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG  -g -O2 -MT collision_trimesh_plane.lo -MD -MP -MF .deps/collision_trimesh_plane.Tpo -c -o collision_trimesh_plane.lo collision_trimesh_plane.cpp
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT collision_trimesh_plane.lo -MD -MP -MF .deps/collision_trimesh_plane.Tpo -c collision_trimesh_plane.cpp  -fno-common -DPIC -o .libs/collision_trimesh_plane.o
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -g -O2 -MT collision_trimesh_plane.lo -MD -MP -MF .deps/collision_trimesh_plane.Tpo -c collision_trimesh_plane.cpp -o collision_trimesh_plane.o >/dev/null 2>&1
+mv -f .deps/collision_trimesh_plane.Tpo .deps/collision_trimesh_plane.Plo
+/bin/sh ../../libtool  --tag=CC   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -O1 -Wall -g -O2 -MT libfast_la-fastldlt.lo -MD -MP -MF .deps/libfast_la-fastldlt.Tpo -c -o libfast_la-fastldlt.lo `test -f 'fastldlt.c' || echo './'`fastldlt.c
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -O1 -Wall -g -O2 -MT libfast_la-fastldlt.lo -MD -MP -MF .deps/libfast_la-fastldlt.Tpo -c fastldlt.c  -fno-common -DPIC -o .libs/libfast_la-fastldlt.o
+clang++: warning: treating 'c' input as 'c++' when in C++ mode, this behavior is deprecated [-Wdeprecated]
+fastldlt.c:379:14: warning: indirection of non-volatile null pointer will be deleted, not trap [-Wnull-dereference]
+  379 |     default: *((char*)0)=0;  /* this should never happen! */
+      |              ^~~~~~~~~~~
+fastldlt.c:379:14: note: consider using __builtin_trap() or qualifying pointer with 'volatile'
+1 warning generated.
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -O1 -Wall -g -O2 -MT libfast_la-fastldlt.lo -MD -MP -MF .deps/libfast_la-fastldlt.Tpo -c fastldlt.c -o libfast_la-fastldlt.o >/dev/null 2>&1
+mv -f .deps/libfast_la-fastldlt.Tpo .deps/libfast_la-fastldlt.Plo
+/bin/sh ../../libtool  --tag=CC   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -O1 -Wall -g -O2 -MT libfast_la-fastltsolve.lo -MD -MP -MF .deps/libfast_la-fastltsolve.Tpo -c -o libfast_la-fastltsolve.lo `test -f 'fastltsolve.c' || echo './'`fastltsolve.c
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -O1 -Wall -g -O2 -MT libfast_la-fastltsolve.lo -MD -MP -MF .deps/libfast_la-fastltsolve.Tpo -c fastltsolve.c  -fno-common -DPIC -o .libs/libfast_la-fastltsolve.o
+clang++: warning: treating 'c' input as 'c++' when in C++ mode, this behavior is deprecated [-Wdeprecated]
+fastltsolve.c:18:14: warning: variable 'lskip3' set but not used [-Wunused-but-set-variable]
+   18 |   int lskip2,lskip3,i,j;
+      |              ^
+1 warning generated.
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -O1 -Wall -g -O2 -MT libfast_la-fastltsolve.lo -MD -MP -MF .deps/libfast_la-fastltsolve.Tpo -c fastltsolve.c -o libfast_la-fastltsolve.o >/dev/null 2>&1
+mv -f .deps/libfast_la-fastltsolve.Tpo .deps/libfast_la-fastltsolve.Plo
+/bin/sh ../../libtool  --tag=CC   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -O1 -Wall -g -O2 -MT libfast_la-fastdot.lo -MD -MP -MF .deps/libfast_la-fastdot.Tpo -c -o libfast_la-fastdot.lo `test -f 'fastdot.c' || echo './'`fastdot.c
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -O1 -Wall -g -O2 -MT libfast_la-fastdot.lo -MD -MP -MF .deps/libfast_la-fastdot.Tpo -c fastdot.c  -fno-common -DPIC -o .libs/libfast_la-fastdot.o
+clang++: warning: treating 'c' input as 'c++' when in C++ mode, this behavior is deprecated [-Wdeprecated]
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -O1 -Wall -g -O2 -MT libfast_la-fastdot.lo -MD -MP -MF .deps/libfast_la-fastdot.Tpo -c fastdot.c -o libfast_la-fastdot.o >/dev/null 2>&1
+mv -f .deps/libfast_la-fastdot.Tpo .deps/libfast_la-fastdot.Plo
+/bin/sh ../../libtool  --tag=CC   --mode=compile g++ -DHAVE_CONFIG_H -I.  -I../../include   -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -O1 -Wall -g -O2 -MT libfast_la-fastlsolve.lo -MD -MP -MF .deps/libfast_la-fastlsolve.Tpo -c -o libfast_la-fastlsolve.lo `test -f 'fastlsolve.c' || echo './'`fastlsolve.c
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -O1 -Wall -g -O2 -MT libfast_la-fastlsolve.lo -MD -MP -MF .deps/libfast_la-fastlsolve.Tpo -c fastlsolve.c  -fno-common -DPIC -o .libs/libfast_la-fastlsolve.o
+clang++: warning: treating 'c' input as 'c++' when in C++ mode, this behavior is deprecated [-Wdeprecated]
+libtool: compile:  g++ -DHAVE_CONFIG_H -I. -I../../include -I../../OPCODE -I../../OPCODE/Ice -DdTRIMESH_ENABLED -DdTRIMESH_OPCODE -DdDOUBLE -DdNODEBUG -O1 -Wall -g -O2 -MT libfast_la-fastlsolve.lo -MD -MP -MF .deps/libfast_la-fastlsolve.Tpo -c fastlsolve.c -o libfast_la-fastlsolve.o >/dev/null 2>&1
+mv -f .deps/libfast_la-fastlsolve.Tpo .deps/libfast_la-fastlsolve.Plo
+/bin/sh ../../libtool  --tag=CC   --mode=link g++ -O1 -Wall -g -O2   -o libfast.la  libfast_la-fastldlt.lo libfast_la-fastltsolve.lo libfast_la-fastdot.lo libfast_la-fastlsolve.lo  -lm  -lpthread
+libtool: link: ar cr .libs/libfast.a .libs/libfast_la-fastldlt.o .libs/libfast_la-fastltsolve.o .libs/libfast_la-fastdot.o .libs/libfast_la-fastlsolve.o 
+libtool: link: ranlib .libs/libfast.a
+libtool: link: ( cd ".libs" && rm -f "libfast.la" && ln -s "../libfast.la" "libfast.la" )
+/bin/sh ../../libtool  --tag=CXX   --mode=link g++  -g -O2 -version-info 2:1:1  -o libode_dbl.la -rpath /usr/local/lib array.lo box.lo capsule.lo collision_cylinder_box.lo collision_cylinder_plane.lo collision_cylinder_sphere.lo collision_kernel.lo collision_quadtreespace.lo collision_sapspace.lo collision_space.lo collision_transform.lo collision_trimesh_disabled.lo collision_util.lo convex.lo cylinder.lo error.lo export-dif.lo heightfield.lo lcp.lo mass.lo mat.lo matrix.lo memory.lo misc.lo obstack.lo ode.lo odeinit.lo odemath.lo plane.lo quickstep.lo ray.lo rotation.lo sphere.lo step.lo stepfast.lo testing.lo timer.lo util.lo   collision_trimesh_trimesh.lo collision_trimesh_trimesh_new.lo collision_trimesh_sphere.lo collision_trimesh_ray.lo collision_trimesh_opcode.lo collision_trimesh_box.lo collision_trimesh_ccylinder.lo collision_trimesh_distance.lo collision_cylinder_trimesh.lo collision_trimesh_plane.lo libfast.la joints/libjoints.la   ../../OPCODE/libOPCODE.la ../../OPCODE/Ice/libIce.la -lm  -lpthread
+libtool: link: g++ -dynamiclib -Wl,-undefined -Wl,dynamic_lookup -Wl,-no_fixup_chains -o .libs/libode_dbl.1.dylib  .libs/array.o .libs/box.o .libs/capsule.o .libs/collision_cylinder_box.o .libs/collision_cylinder_plane.o .libs/collision_cylinder_sphere.o .libs/collision_kernel.o .libs/collision_quadtreespace.o .libs/collision_sapspace.o .libs/collision_space.o .libs/collision_transform.o .libs/collision_trimesh_disabled.o .libs/collision_util.o .libs/convex.o .libs/cylinder.o .libs/error.o .libs/export-dif.o .libs/heightfield.o .libs/lcp.o .libs/mass.o .libs/mat.o .libs/matrix.o .libs/memory.o .libs/misc.o .libs/obstack.o .libs/ode.o .libs/odeinit.o .libs/odemath.o .libs/plane.o .libs/quickstep.o .libs/ray.o .libs/rotation.o .libs/sphere.o .libs/step.o .libs/stepfast.o .libs/testing.o .libs/timer.o .libs/util.o .libs/collision_trimesh_trimesh.o .libs/collision_trimesh_trimesh_new.o .libs/collision_trimesh_sphere.o .libs/collision_trimesh_ray.o .libs/collision_trimesh_opcode.o .libs/collision_trimesh_box.o .libs/collision_trimesh_ccylinder.o .libs/collision_trimesh_distance.o .libs/collision_cylinder_trimesh.o .libs/collision_trimesh_plane.o   -Wl,-force_load,./.libs/libfast.a -Wl,-force_load,joints/.libs/libjoints.a -Wl,-force_load,../../OPCODE/.libs/libOPCODE.a -Wl,-force_load,../../OPCODE/Ice/.libs/libIce.a  -lm -lpthread  -g -O2   -install_name  /usr/local/lib/libode_dbl.1.dylib -compatibility_version 3 -current_version 3.1 
+libtool: link: (cd ".libs" && rm -f "libode_dbl.dylib" && ln -s "libode_dbl.1.dylib" "libode_dbl.dylib")
+libtool: link: (cd .libs/libode_dbl.lax/libfast.a && ar x "/Users/jerry/lpzrobot_mac/opende/ode/src/./.libs/libfast.a")
+libtool: link: (cd .libs/libode_dbl.lax/libjoints.a && ar x "/Users/jerry/lpzrobot_mac/opende/ode/src/joints/.libs/libjoints.a")
+libtool: link: (cd .libs/libode_dbl.lax/libOPCODE.a && ar x "/Users/jerry/lpzrobot_mac/opende/ode/src/../../OPCODE/.libs/libOPCODE.a")
+libtool: link: (cd .libs/libode_dbl.lax/libIce.a && ar x "/Users/jerry/lpzrobot_mac/opende/ode/src/../../OPCODE/Ice/.libs/libIce.a")
+libtool: link: ar cr .libs/libode_dbl.a  array.o box.o capsule.o collision_cylinder_box.o collision_cylinder_plane.o collision_cylinder_sphere.o collision_kernel.o collision_quadtreespace.o collision_sapspace.o collision_space.o collision_transform.o collision_trimesh_disabled.o collision_util.o convex.o cylinder.o error.o export-dif.o heightfield.o lcp.o mass.o mat.o matrix.o memory.o misc.o obstack.o ode.o odeinit.o odemath.o plane.o quickstep.o ray.o rotation.o sphere.o step.o stepfast.o testing.o timer.o util.o collision_trimesh_trimesh.o collision_trimesh_trimesh_new.o collision_trimesh_sphere.o collision_trimesh_ray.o collision_trimesh_opcode.o collision_trimesh_box.o collision_trimesh_ccylinder.o collision_trimesh_distance.o collision_cylinder_trimesh.o collision_trimesh_plane.o  .libs/libode_dbl.lax/libfast.a/libfast_la-fastdot.o .libs/libode_dbl.lax/libfast.a/libfast_la-fastldlt.o .libs/libode_dbl.lax/libfast.a/libfast_la-fastlsolve.o .libs/libode_dbl.lax/libfast.a/libfast_la-fastltsolve.o  .libs/libode_dbl.lax/libjoints.a/amotor.o .libs/libode_dbl.lax/libjoints.a/ball.o .libs/libode_dbl.lax/libjoints.a/contact.o .libs/libode_dbl.lax/libjoints.a/fixed.o .libs/libode_dbl.lax/libjoints.a/hinge.o .libs/libode_dbl.lax/libjoints.a/hinge2.o .libs/libode_dbl.lax/libjoints.a/joint.o .libs/libode_dbl.lax/libjoints.a/lmotor.o .libs/libode_dbl.lax/libjoints.a/null.o .libs/libode_dbl.lax/libjoints.a/piston.o .libs/libode_dbl.lax/libjoints.a/plane2d.o .libs/libode_dbl.lax/libjoints.a/pr.o .libs/libode_dbl.lax/libjoints.a/pu.o .libs/libode_dbl.lax/libjoints.a/slider.o .libs/libode_dbl.lax/libjoints.a/universal.o  .libs/libode_dbl.lax/libOPCODE.a/OPC_AABBCollider.o .libs/libode_dbl.lax/libOPCODE.a/OPC_AABBTree.o .libs/libode_dbl.lax/libOPCODE.a/OPC_BaseModel.o .libs/libode_dbl.lax/libOPCODE.a/OPC_Collider.o .libs/libode_dbl.lax/libOPCODE.a/OPC_Common.o .libs/libode_dbl.lax/libOPCODE.a/OPC_HybridModel.o .libs/libode_dbl.lax/libOPCODE.a/OPC_LSSCollider.o .libs/libode_dbl.lax/libOPCODE.a/OPC_MeshInterface.o .libs/libode_dbl.lax/libOPCODE.a/OPC_Model.o .libs/libode_dbl.lax/libOPCODE.a/OPC_OBBCollider.o .libs/libode_dbl.lax/libOPCODE.a/OPC_OptimizedTree.o .libs/libode_dbl.lax/libOPCODE.a/OPC_Picking.o .libs/libode_dbl.lax/libOPCODE.a/OPC_PlanesCollider.o .libs/libode_dbl.lax/libOPCODE.a/OPC_RayCollider.o .libs/libode_dbl.lax/libOPCODE.a/OPC_SphereCollider.o .libs/libode_dbl.lax/libOPCODE.a/OPC_TreeBuilders.o .libs/libode_dbl.lax/libOPCODE.a/OPC_TreeCollider.o .libs/libode_dbl.lax/libOPCODE.a/OPC_VolumeCollider.o .libs/libode_dbl.lax/libOPCODE.a/Opcode.o  .libs/libode_dbl.lax/libIce.a/IceAABB.o .libs/libode_dbl.lax/libIce.a/IceContainer.o .libs/libode_dbl.lax/libIce.a/IceHPoint.o .libs/libode_dbl.lax/libIce.a/IceIndexedTriangle.o .libs/libode_dbl.lax/libIce.a/IceMatrix3x3.o .libs/libode_dbl.lax/libIce.a/IceMatrix4x4.o .libs/libode_dbl.lax/libIce.a/IceOBB.o .libs/libode_dbl.lax/libIce.a/IcePlane.o .libs/libode_dbl.lax/libIce.a/IcePoint.o .libs/libode_dbl.lax/libIce.a/IceRandom.o .libs/libode_dbl.lax/libIce.a/IceRay.o .libs/libode_dbl.lax/libIce.a/IceRevisitedRadix.o .libs/libode_dbl.lax/libIce.a/IceSegment.o .libs/libode_dbl.lax/libIce.a/IceTriangle.o .libs/libode_dbl.lax/libIce.a/IceUtils.o 
+libtool: link: ranlib .libs/libode_dbl.a
+libtool: link: rm -fr .libs/libode_dbl.lax
+libtool: link: ( cd ".libs" && rm -f "libode_dbl.la" && ln -s "../libode_dbl.la" "libode_dbl.la" )
+make[3]: Nothing to be done for `all-am'.
+Making all in tests
+Making all in UnitTest++
+Making all in src
+Making all in Posix
+make[5]: Nothing to be done for `all'.
+make[5]: Nothing to be done for `all-am'.
+make[4]: Nothing to be done for `all-am'.
+make[3]: Nothing to be done for `all-am'.
+make[2]: Nothing to be done for `all-am'.
+you probably want to run "make install_ode" now (possibly as root)

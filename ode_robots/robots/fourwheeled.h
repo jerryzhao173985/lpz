@@ -84,27 +84,27 @@ namespace lpzrobots {
       return conf;
     }
 
-    virtual ~FourWheeled() override;
+    virtual ~FourWheeled();
 
-    virtual int getSensorNumberIntern() override;
-    virtual int getMotorNumberIntern() override;
+    virtual int getSensorNumberIntern();
+    virtual int getMotorNumberIntern();
 
-    virtual int getSensorsIntern(sensor* sensors, int sensornumber) override;
+    virtual int getSensorsIntern(sensor* sensors, int sensornumber);
 
-    virtual void setMotorsIntern(const double* motors, int motornumber) override;
+    virtual void setMotorsIntern(const double* motors, int motornumber);
 
     // returns the joint with index i
-    virtual Joint* getJoint(int i) override;
+    virtual Joint* getJoint(int i);
 
   protected:
     /** creates vehicle at desired pose
         @param pose 4x4 pose matrix
     */
-    virtual void create(const osg::Matrix& pose) override;
+    virtual void create(const osg::Matrix& pose);
 
     /** destroys vehicle and space
      */
-    virtual void destroy() override;
+    virtual void destroy();
 
     FourWheeledConf conf;
     Primitive* bumpertrans;

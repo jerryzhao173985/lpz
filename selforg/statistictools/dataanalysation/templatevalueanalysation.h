@@ -424,11 +424,9 @@ public:
                 type dW3 = getWhisker3(factor);                                                                //find W3
                 typename std::list<TYPE_SAVE>::iterator iter = m_list.begin();
 
-                while(lower((*iter->pointer),dW1) && iter!=m_list.end()) {        //count all elements which are lower than W1
-                        ++iter;
-                        if(iter==m_list.end())
-                                break;
+                while(iter!=m_list.end() && lower((*iter->pointer),dW1)) {        //count all elements which are lower than W1
                         ++result;
+                        ++iter;
                 }
 
                 while(iter!=m_list.end() && !higher((*iter->pointer),dW3)) {        //go from W1 to W3
@@ -456,21 +454,17 @@ public:
                 type dW3 = getWhisker3(factor);                                                        //find W3
                 typename std::list<TYPE_SAVE>::iterator iter = m_list.begin();
 
-                while(lower((*iter->pointer),dW1) && iter!=m_list.end()) {                        //search in lower area
+                while(iter!=m_list.end() && lower((*iter->pointer),dW1)) {                        //search in lower area
                         --i;
 
                         if(i==0)
                                 return (*iter->pointer);
 
                         ++iter;
-                        if(iter==m_list.end())
-                                break;
                 }
 
-                while(!higher((*iter->pointer),dW3) && iter!=m_list.end()) {                //go from W1 to W3
+                while(iter!=m_list.end() && !higher((*iter->pointer),dW3)) {                //go from W1 to W3
                         ++iter;
-                        if(iter==m_list.end())
-                                break;
                 }
 
                 while(iter!=m_list.end()) {                                                                                        //search in upper area
@@ -501,10 +495,8 @@ public:
 
                 typename std::list<TYPE_SAVE>::iterator iter = m_list.begin();
 
-                while(lower((*iter->pointer),z) && iter!=m_list.end()) {        //search the element which is as first higher than zero
+                while(iter!=m_list.end() && lower((*iter->pointer),z)) {        //search the element which is as first higher than zero
                         ++iter;
-                        if(iter==m_list.end())
-                                break;
                 }
 
                 if(iter!=m_list.end())
@@ -517,10 +509,8 @@ public:
                         h = iter->pointer;
                 }
 
-                while(!lower((*iter->pointer),z) && iter!= m_list.begin()) {        //search the element which is as first lower than zero
+                while(iter != m_list.begin() && !lower((*iter->pointer),z)) {        //search the element which is as first lower than zero
                         --iter;
-                        if(iter==m_list.begin())
-                                break;
                 }
 
                 l = iter->pointer;
@@ -542,7 +532,7 @@ protected:
 
                 type* pointer;
 
-                bool operator<(const TYPE_SAVE& other) {
+                bool operator<(const TYPE_SAVE& other) const {
                         return lower((*pointer),(*other.pointer));
                 }
         };

@@ -36,7 +36,7 @@ namespace lpzrobots {
 
   ForcedSphereConf::ForcedSphereConf() 
     : radius(1.0), maxForce(1.0), speedDriven(false), maxSpeed(1.0), 
-      drivenDimensions(X | Y | Z), cylinderBody(false) {}
+      drivenDimensions(ForcedSphere::X | ForcedSphere::Y | ForcedSphere::Z), cylinderBody(false) {}
 
   ForcedSphereConf::~ForcedSphereConf(){}
 
