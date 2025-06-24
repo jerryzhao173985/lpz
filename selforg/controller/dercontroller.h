@@ -55,7 +55,7 @@ class DerController : public InvertMotorController {
 
 public:
   DerController(const DerControllerConf& conf = getDefaultConf());
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr);
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override;
 
   virtual ~DerController();
 
@@ -70,23 +70,23 @@ public:
 
   /// performs one step (includes learning).
   /// Calulates motor commands from sensor inputs.
-  virtual void step(const sensor*, int number_sensors, motor*, int number_motors);
+  virtual void step(const sensor*, int number_sensors, motor*, int number_motors) override;
 
   /// performs one step without learning. Calulates motor commands from sensor inputs.
   virtual void stepNoLearning(const sensor*,
                               int number_sensors,
                               motor*,
-                              int number_motors);
+                              int number_motors) override;
 
   /**** STOREABLE ****/
   virtual bool store(FILE* f) const override;
-  virtual bool restore(FILE* f);
+  virtual bool restore(FILE* f) override;
 
   /**** CONFIGURABLE ****/
   virtual std::list<iparamkey> getInternalParamNames() const override;
   virtual std::list<iparamval> getInternalParams() const override;
-  virtual std::list<ILayer> getStructuralLayers() const;
-  virtual std::list<IConnection> getStructuralConnections() const;
+  virtual std::list<ILayer> getStructuralLayers() const override;
+  virtual std::list<IConnection> getStructuralConnections() const override;
 
   /**** TEACHING ****/
   virtual void setTeachingMode(bool onOff);
@@ -192,7 +192,7 @@ protected:
   virtual double calcMatrixNorm(const matrix::Matrix& m);
   /// calculates the error_factor for either logarithmic (E=ln(e^T*e)) or square (E=sqrt(e^t*e))
   /// error
-  virtual double calcErrorFactor(const matrix::Matrix& e, bool loga, bool root);
+  virtual double calcErrorFactor(const matrix::Matrix& e, bool loga, bool root) override;
 };
 
 #endif

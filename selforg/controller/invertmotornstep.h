@@ -63,7 +63,7 @@ class InvertMotorNStep
 public:
   InvertMotorNStep(const InvertMotorNStepConf& conf = getDefaultConf());
 
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr);
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override;
 
   virtual ~InvertMotorNStep();
 
@@ -78,23 +78,23 @@ public:
 
   /// performs one step (includes learning).
   /// Calulates motor commands from sensor inputs.
-  virtual void step(const sensor*, int number_sensors, motor*, int number_motors);
+  virtual void step(const sensor*, int number_sensors, motor*, int number_motors) override;
 
   /// performs one step without learning. Calulates motor commands from sensor inputs.
   virtual void stepNoLearning(const sensor*,
                               int number_sensors,
                               motor*,
-                              int number_motors);
+                              int number_motors) override;
 
   /**** STOREABLE ****/
   /** stores the controller values to a given file. */
   virtual bool store(FILE* f) const override;
   /** loads the controller values from a given file. */
-  virtual bool restore(FILE* f);
+  virtual bool restore(FILE* f) override;
 
   /**** INSPECTABLE ****/
-  virtual std::list<ILayer> getStructuralLayers() const;
-  virtual std::list<IConnection> getStructuralConnections() const;
+  virtual std::list<ILayer> getStructuralLayers() const override;
+  virtual std::list<IConnection> getStructuralConnections() const override;
 
   /**** TEACHING ****/
   /** The given motor teaching signal is used for this timestep.
@@ -119,21 +119,21 @@ public:
        for a continuous teaching process.
      @param teaching: matrix with dimensions (motornumber,1)
    */
-  virtual void setMotorTeaching(const matrix::Matrix& teaching);
+  virtual void setMotorTeaching(const matrix::Matrix& teaching) override;
 
   /** The given sensor teaching signal (distal learning) is used for this timestep.
       The belonging motor teachung signal is calculated by the inverse model.
       See setMotorTeaching
      @param teaching: matrix with dimensions (motorsensors,1)
    */
-  virtual void setSensorTeaching(const matrix::Matrix& teaching);
+  virtual void setSensorTeaching(const matrix::Matrix& teaching) override;
   /// returns the last motor values (useful for cross motor coupling)
-  virtual matrix::Matrix getLastMotorValues();
+  virtual matrix::Matrix getLastMotorValues() override;
   /// returns the last sensor values (useful for cross sensor coupling)
-  virtual matrix::Matrix getLastSensorValues();
+  virtual matrix::Matrix getLastSensorValues() override;
 
   // UNUSED! OLD IMPLEMENTATION which hat some consistency arguments
-  void calcCandHUpdatesTeaching(const matrix::Matrix& C_update, const matrix::Matrix& H_update, int y_delay);
+  void calcCandHUpdatesTeaching(matrix::Matrix& C_update, matrix::Matrix& H_update, int y_delay);
 
   /**** REINFORCEMENT ****/
   /** set the reinforcement signal for this timestep.
@@ -248,7 +248,7 @@ protected:
   // @param delay timesteps to delay the y-values.  (usually 0)
   //  Please note that the delayed values are NOT used for the error calculation
   //  (this is done in calcXsi())
-  virtual void calcCandHUpdates(const matrix::Matrix& C_update, const matrix::Matrix& H_update, int delay);
+  virtual void calcCandHUpdates(matrix::Matrix& C_update, matrix::Matrix& H_update, int delay);
 
   /// updates the matrix C and H
   virtual void updateCandH(const matrix::Matrix& C_update,
@@ -285,7 +285,7 @@ public:
       @param k number of synapes to strengthen
       @param damping strength of supression and exitation (typically 0.001)
    */
-  void kwtaInhibition(const matrix::Matrix& weightmatrix, unsigned int k, double damping);
+  void kwtaInhibition(matrix::Matrix& weightmatrix, unsigned int k, double damping);
 
   /** sets all connections to zero which are further away then rfSize
       from the diagonal.
@@ -293,7 +293,7 @@ public:
       If rfSize = 2: main diagonal and upper and lower side diagonal are kept and so on and so
      forth.
    */
-  void limitC(const matrix::Matrix& weightmatrix, unsigned int rfSize);
+  void limitC(matrix::Matrix& weightmatrix, unsigned int rfSize);
 
   static double clip095(double x);
   static double regularizedInverse(double v);

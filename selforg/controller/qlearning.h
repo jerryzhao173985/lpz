@@ -120,7 +120,7 @@ public:
 
   virtual bool store(FILE* f) const override;
 
-  virtual bool restore(FILE* f);
+  virtual bool restore(FILE* f) override;
 
 protected:
   double eps;

@@ -76,13 +76,13 @@ public:
   virtual void init(unsigned int inputDim,
                     unsigned int outputDim,
                     double unit_map = 0.0,
-                    RandGen* randGen = nullptr);
+                    RandGen* randGen = nullptr) override;
 
   /** passive processing of the input
      (this function is not constant since a recurrent network
      for example might change internal states
   */
-  virtual const matrix::Matrix process(const matrix::Matrix& input);
+  virtual const matrix::Matrix process(const matrix::Matrix& input) override;
 
   /* performs learning and returns the network output before learning.
      Neural networks process the input before. (no need to call process before)
@@ -90,7 +90,7 @@ public:
   */
   virtual const matrix::Matrix learn(const matrix::Matrix& input,
                                      const matrix::Matrix& nom_output,
-                                     double learnRateFactor = 1);
+                                     double learnRateFactor = 1) override;
 
   /* calculates the partial derivative of the of the output with repect to the input(const Jacobi& matrix).
 
@@ -98,7 +98,7 @@ public:
 
       The input is ignored, the network must  be processed or learned before!
    */
-  virtual const matrix::Matrix response(const matrix::Matrix& _input) const;
+  virtual const matrix::Matrix response(const matrix::Matrix& _input) const override;
 
   /* calculates the input shift v to given output shift xsi via pseudo inversion.
 
@@ -107,10 +107,10 @@ public:
       The input is ignored, the network must  be processed or learned before!
    */
   virtual const matrix::Matrix inversion(const matrix::Matrix& input,
-                                         const matrix::Matrix& xsi) const;
+                                         const matrix::Matrix& xsi) const override;
 
   /// damps the weights and the biases by multiplying (1-damping)
-  virtual void damp(double damping);
+  virtual void damp(double damping) override;
 
   /// returns the number of input neurons
   virtual unsigned int getInputDim() const override;
@@ -119,7 +119,7 @@ public:
 
   virtual bool store(FILE* f) const override;
 
-  virtual bool restore(FILE* f);
+  virtual bool restore(FILE* f) override;
 
   static double tanh_prime(double z) {
     double k = tanh(z);

@@ -61,7 +61,7 @@ public:
   bool restore(FILE* f);
 
   /// sets the activation function of the layer
-  void setActFun(const ActivationFunction& actfun);
+  void setActFun(ActivationFunction actfun);
 
   int size = 0;
   double factor_bias = 0;

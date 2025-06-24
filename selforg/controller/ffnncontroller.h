@@ -53,7 +53,7 @@ public:
   */
   FFNNController(MultiLayerFFNN* net, int history, bool input_only_x, unsigned int init_wait = 0);
 
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
 
   virtual ~FFNNController();
 
@@ -66,20 +66,20 @@ public:
     return number_motors;
   }
 
-  virtual void step(const sensor*, int number_sensors, motor*, int number_motors);
+  virtual void step(const sensor*, int number_sensors, motor*, int number_motors) override;
   virtual void stepNoLearning(const sensor*,
                               int number_sensors,
                               motor*,
-                              int number_motors);
+                              int number_motors) override;
 
   /**** CONFIGURABLE ****/
-  void notifyOnChange(const paramkey& key);
+  void notifyOnChange(const paramkey& key) override;
 
   /**** STOREABLE ****/
   /** stores the controller values to a given file (binary).  */
   virtual bool store(FILE* f) const override;
   /** loads the controller values from a given file (binary). */
-  virtual bool restore(FILE* f);
+  virtual bool restore(FILE* f) override;
 
   // inspectable interface
   virtual std::list<iparamkey> getInternalParamNames() const override {
@@ -99,7 +99,7 @@ protected:
                                                 matrix::Matrix* ybuffer) const;
 
   virtual matrix::Matrix assembleNetworkInputX(matrix::Matrix* xbuffer,
-                                               matrix::Matrix* ybuff overrideer) const;
+                                               matrix::Matrix* ybuffer) const;
 
   virtual matrix::Matrix assembleNetworkOutput(const matrix::Matrix& output) const;
 

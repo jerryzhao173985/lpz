@@ -50,9 +50,9 @@ public:
 
   virtual double getValue() const  override{ return value; }
 
-  virtual double& getValueAddress() { return value; }
+  virtual double& getValueAddress() override { return value; }
 
-  virtual void setStepSize(int newStepSize) { stepSize=newStepSize; }
+  virtual void setStepSize(int newStepSize) override { stepSize=newStepSize; }
 
   virtual int getStepSize() const  override{ return stepSize; }
 
@@ -60,7 +60,7 @@ public:
 
   virtual void setDisplayPrecision(int digits) { displayPrecision=digits; }
 
-  virtual int getDisplayPrecision() const override { return displayPrecision; }
+  virtual int getDisplayPrecision() const { return displayPrecision; }
 
 
 protected:

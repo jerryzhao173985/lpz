@@ -65,7 +65,7 @@ public:
                bool useExtendedModel = true,
                bool useTeaching = false);
 
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr);
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override;
 
   virtual ~Sox();
 
@@ -96,25 +96,25 @@ public:
 
   /// performs one step (includes learning).
   /// Calulates motor commands from sensor inputs.
-  virtual void step(const sensor*, int number_sensors, motor*, int number_motors);
+  virtual void step(const sensor*, int number_sensors, motor*, int number_motors) override;
 
   /// performs one step without learning. Calulates motor commands from sensor inputs.
   virtual void stepNoLearning(const sensor*,
                               int number_sensors,
                               motor*,
-                              int number_motors);
+                              int number_motors) override;
 
   /// called during babbling phase
   virtual void motorBabblingStep(const sensor*,
                                  int number_sensors,
                                  const motor*,
-                                 int number_motors);
+                                 int number_motors) override;
 
   /***** STOREABLE ****/
   /** stores the controller values to a given file. */
   virtual bool store(FILE* f) const override;
   /** loads the controller values from a given file. */
-  virtual bool restore(FILE* f);
+  virtual bool restore(FILE* f) override;
 
   /* some direct access functions (unsafe!) */
   virtual matrix::Matrix getA();
@@ -125,14 +125,14 @@ public:
   virtual void seth(const matrix::Matrix& h);
 
   /***** TEACHABLE ****/
-  virtual void setMotorTeaching(const matrix::Matrix& teaching);
-  virtual void setSensorTeaching(const matrix::Matrix& teaching);
-  virtual matrix::Matrix getLastMotorValues();
-  virtual matrix::Matrix getLastSensorValues();
+  virtual void setMotorTeaching(const matrix::Matrix& teaching) override;
+  virtual void setSensorTeaching(const matrix::Matrix& teaching) override;
+  virtual matrix::Matrix getLastMotorValues() override;
+  virtual matrix::Matrix getLastSensorValues() override;
 
   /***** PARAMETRIZABLE ****/
-  virtual std::list<matrix::Matrix> getParameters() const;
-  virtual int setParameters(const std::list<matrix::Matrix>& params);
+  virtual std::list<matrix::Matrix> getParameters() const override;
+  virtual int setParameters(const std::list<matrix::Matrix>& params) override;
 
 protected:
   unsigned short number_sensors = 0;

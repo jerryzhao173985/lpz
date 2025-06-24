@@ -207,7 +207,7 @@ InvertMotorBigModel::learnController() {
 //  Please note that the delayed values are NOT used for the error calculation
 //  (this is done in calcXsi())
 void
-InvertMotorBigModel::calcCandHUpdates(const Matrix& C_update, const Matrix& H_update, int y_delay) {
+InvertMotorBigModel::calcCandHUpdates(Matrix& C_update, Matrix& H_update, int y_delay) {
   assert(steps + y_delay < buffersize);
   // Matrix& eta = zero_eta;
   // Matrix v_old = (eta_buffer[t%buffersize]).map(g);
@@ -343,7 +343,7 @@ InvertMotorBigModel::management() {
 }
 
 void
-InvertMotorBigModel::kwtaInhibition(const matrix::Matrix& wm, unsigned int k, double damping) {
+InvertMotorBigModel::kwtaInhibition(matrix::Matrix& wm, unsigned int k, double damping) {
   unsigned int n = wm.getN();
   unsigned int k1 = std::min(n, k); // avoid overfloats
   double inhfactor = 1 - damping;
@@ -363,7 +363,7 @@ InvertMotorBigModel::kwtaInhibition(const matrix::Matrix& wm, unsigned int k, do
 }
 
 void
-InvertMotorBigModel::limitC(const matrix::Matrix& wm, unsigned int rfSize) {
+InvertMotorBigModel::limitC(matrix::Matrix& wm, unsigned int rfSize) {
   int n = wm.getN();
   int m = wm.getM();
   for (int i = 0; i < m; ++i) {

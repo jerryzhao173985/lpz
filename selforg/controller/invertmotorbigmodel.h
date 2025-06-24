@@ -57,7 +57,7 @@ class InvertMotorBigModel : public InvertMotorController {
 
 public:
   InvertMotorBigModel(const InvertMotorBigModelConf& conf = getDefaultConf());
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr);
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override;
 
   virtual ~InvertMotorBigModel();
 
@@ -72,25 +72,25 @@ public:
 
   /// performs one step (includes learning).
   /// Calulates motor commands from sensor inputs.
-  virtual void step(const sensor*, int number_sensors, motor*, int number_motors);
+  virtual void step(const sensor*, int number_sensors, motor*, int number_motors) override;
 
   /// performs one step without learning. Calulates motor commands from sensor inputs.
   virtual void stepNoLearning(const sensor*,
                               int number_sensors,
                               motor*,
-                              int number_motors);
+                              int number_motors) override;
 
   /**************  STOREABLE **********************************/
   /** stores the controller values to a given file. */
   virtual bool store(FILE* f) const override;
   /** loads the controller values from a given file. */
-  virtual bool restore(FILE* f);
+  virtual bool restore(FILE* f) override;
 
   /************** INSPECTABLE ********************************/
-  virtual iparamkeylist getInternalParamNames() const;
-  virtual iparamvallist getInternalParams() const;
-  virtual ilayerlist getStructuralLayers() const;
-  virtual iconnectionlist getStructuralConnections() const;
+  virtual iparamkeylist getInternalParamNames() const override;
+  virtual iparamvallist getInternalParams() const override;
+  virtual ilayerlist getStructuralLayers() const override;
+  virtual iconnectionlist getStructuralConnections() const override;
 
   /**** TEACHING ****/
   /** The given motor teaching signal is used for this timestep.
@@ -106,7 +106,7 @@ public:
    */
   virtual void setSensorTeachingSignal(const sensor* teaching, int len);
 
-  static InvertMotorBigModelConf getDefaultConf() const {
+  static InvertMotorBigModelConf getDefaultConf() {
     InvertMotorBigModelConf c;
     c.buffersize = 50;
     c.cInit = 1.0;
@@ -173,7 +173,7 @@ protected:
   // @param y_delay timesteps to delay the y-values.  (usually 0)
   //  Please note that the delayed values are NOT used for the error calculation
   //  (this is done in calcXsi())
-  virtual void calcCandHUpdates(const matrix::Matrix& C_update, const matrix::Matrix& H_update, int y_delay);
+  virtual void calcCandHUpdates(matrix::Matrix& C_update, matrix::Matrix& H_update, int y_delay);
 
   /// updates the matrix C and H
   virtual void updateCandH(const matrix::Matrix& C_update,
@@ -207,14 +207,14 @@ public:
       @param k number of synapes to strengthen
       @param damping strength of supression and exitation (typically 0.001)
    */
-  void kwtaInhibition(const matrix::Matrix& weightmatrix, unsigned int k, double damping);
+  void kwtaInhibition(matrix::Matrix& weightmatrix, unsigned int k, double damping);
 
   /** sets all connections to zero which are further away then rfSize.
       If rfSize == 1 then only main diagonal is left.
       If rfSize = 2: main diagonal and upper and lower side diagonal are kept and so on and so
      forth.
    */
-  void limitC(const matrix::Matrix& weightmatrix, unsigned int rfSize);
+  void limitC(matrix::Matrix& weightmatrix, unsigned int rfSize);
 };
 
 #endif

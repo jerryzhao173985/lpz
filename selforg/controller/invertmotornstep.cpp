@@ -346,7 +346,7 @@ InvertMotorNStep::learnController(int delay) {
 //  Please note that the delayed values are NOT used for the error calculation
 //  (this is done in calcXsi())
 void
-InvertMotorNStep::calcCandHUpdates(const Matrix& C_update, const Matrix& H_update, int delay) {
+InvertMotorNStep::calcCandHUpdates(Matrix& C_update, Matrix& H_update, int delay) {
   assert(steps + delay < buffersize);
   // Matrix& eta = zero_eta;
   // Matrix v_old = (eta_buffer[t%buffersize]).map(g);
@@ -392,7 +392,7 @@ InvertMotorNStep::calcCandHUpdates(const Matrix& C_update, const Matrix& H_updat
     Matrix LLT_I;
     if (teaching) {
       // scale of the additional terms
-      LLT_I = ((const R& g_prime).multMT() + SmallID) ^ -1;
+      LLT_I = ((R.multrowwise(g_prime)).multMT() + SmallID) ^ -1;
     }
 
     if (modelCompliant != 0 && s == 1) { // learning of the forward task:
@@ -456,7 +456,7 @@ InvertMotorNStep::calcCandHUpdates(const Matrix& C_update, const Matrix& H_updat
 //  (this is done in calcXsi())
 // UNUSED! This is an old implementation: We have to figure out why we did it this way!
 void
-InvertMotorNStep::calcCandHUpdatesTeaching(const Matrix& C_update, const Matrix& H_update, int y_delay) {
+InvertMotorNStep::calcCandHUpdatesTeaching(Matrix& C_update, Matrix& H_update, int y_delay) {
   assert(steps + y_delay < buffersize);
   const Matrix& y = y_buffer[(t) % buffersize]; // eventuell t-1
   const Matrix eta = y_teaching - y;
@@ -591,7 +591,7 @@ InvertMotorNStep::management() {
 }
 
 void
-InvertMotorNStep::kwtaInhibition(const matrix::Matrix& wm, unsigned int k, double damping) {
+InvertMotorNStep::kwtaInhibition(matrix::Matrix& wm, unsigned int k, double damping) {
   unsigned int n = wm.getN();
   unsigned int k1 = std::min(n, k); // avoid overfloats
   double inhfactor = 1 - damping;
@@ -611,7 +611,7 @@ InvertMotorNStep::kwtaInhibition(const matrix::Matrix& wm, unsigned int k, doubl
 }
 
 void
-InvertMotorNStep::limitC(const matrix::Matrix& wm, unsigned int rfSize) {
+InvertMotorNStep::limitC(matrix::Matrix& wm, unsigned int rfSize) {
   int n = wm.getN();
   int m = wm.getM();
   for (int i = 0; i < m; ++i) {

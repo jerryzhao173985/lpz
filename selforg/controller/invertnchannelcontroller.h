@@ -39,7 +39,7 @@ class InvertNChannelController : public InvertController {
 
 public:
   InvertNChannelController(int _buffersize, bool _update_only_1 = false);
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
 
   virtual ~InvertNChannelController();
 
@@ -58,23 +58,23 @@ public:
 
   /// performs one step (includes learning).
   /// Calulates motor commands from sensor inputs.
-  virtual void step(const sensor*, int number_sensors, motor*, int number_motors);
+  virtual void step(const sensor*, int number_sensors, motor*, int number_motors) override;
 
   /// performs one step without learning. Calulates motor commands from sensor inputs.
   virtual void stepNoLearning(const sensor*,
                               int number_sensors,
                               motor*,
-                              int number_motors);
+                              int number_motors) override;
 
   /***** STOREABLE ****/
   /** stores the controller values to a given file. */
   virtual bool store(FILE* f) const override;
   /** loads the controller values from a given file. */
-  virtual bool restore(FILE* f);
+  virtual bool restore(FILE* f) override;
 
   // inspectable interface
-  virtual std::list<ILayer> getStructuralLayers() const;
-  virtual std::list<IConnection> getStructuralConnections() const;
+  virtual std::list<ILayer> getStructuralLayers() const override;
+  virtual std::list<IConnection> getStructuralConnections() const override;
 
 protected:
   unsigned short number_channels = 0;
@@ -105,7 +105,7 @@ protected:
   virtual matrix::Matrix calculateDelayedValues(const matrix::Matrix* buffer,
                                                 unsigned int number_steps_of_delay_);
   virtual matrix::Matrix calculateSmoothValues(const matrix::Matrix* buffer,
-                                               unsigned int number_steps_for_av overrideeraging_);
+                                               unsigned int number_steps_for_averaging_);
 
   matrix::Matrix calculateControllerValues(const matrix::Matrix& x_smooth);
 

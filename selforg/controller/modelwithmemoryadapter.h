@@ -42,7 +42,7 @@ public:
   virtual void init(unsigned int inputDim,
                     unsigned int outputDim,
                     double unit_map = 0.0,
-                    RandGen* randGen = 0);
+                    RandGen* randGen = 0) override;
 
   /**
      learn the input output mapping but also learn mappings from the memory.
@@ -50,7 +50,7 @@ public:
    */
   virtual const matrix::Matrix learn(const matrix::Matrix& input,
                                      const matrix::Matrix& nom_output,
-                                     double learnRateFactor = 1);
+                                     double learnRateFactor = 1) override;
 
   /* ********* Delegations *****************/
 
@@ -96,10 +96,10 @@ public:
   }
 
   /* ************* Inspectable **********************************/
-  virtual iparamkeylist getInternalParamNames() const {
+  virtual iparamkeylist getInternalParamNames() const override {
     return model->getInternalParamNames();
   }
-  virtual iparamvallist getInternalParams() const {
+  virtual iparamvallist getInternalParams() const override {
     return model->getInternalParams();
   }
   virtual ilayerlist getStructuralLayers() const override {

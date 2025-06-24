@@ -61,7 +61,7 @@ class MultiReinforce : public AbstractController {
 
 public:
   MultiReinforce(const MultiReinforceConf& conf = getDefaultConf());
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
 
   virtual ~MultiReinforce();
 
@@ -76,10 +76,10 @@ public:
 
   /// performs one step (includes learning).
   /// Calulates motor commands from sensor inputs.
-  virtual void step(const sensor*, int number_sensors, motor*, int number_motors);
+  virtual void step(const sensor*, int number_sensors, motor*, int number_motors) override;
 
   /// performs one step without learning. Calulates motor commands from sensor inputs.
-  virtual void stepNoLearning(const sensor*, int number_sensors, motor*, int number_motors);
+  virtual void stepNoLearning(const sensor*, int number_sensors, motor*, int number_motors) override;
 
   // !!!!!!!!!!!!!!!!!!! MISC STUFF !!!!!!!!
 
@@ -96,21 +96,21 @@ public:
   void setManualControl(bool mControl, int action_ = 0);
 
   /************** CONFIGURABLE ********************************/
-  virtual void notifyOnChange(const paramkey& key);
+  virtual void notifyOnChange(const paramkey& key) override;
 
   /**** STOREABLE ****/
   /** stores the controller values to a given file. */
   virtual bool store(FILE* f) const override;
   /** loads the controller values from a given file. */
-  virtual bool restore(FILE* f);
+  virtual bool restore(FILE* f) override;
 
   /**** INSPECTABLE ****/
   virtual std::list<iparamkey> getInternalParamNames() const override;
   virtual std::list<iparamval> getInternalParams() const override;
-  virtual std::list<ILayer> getStructuralLayers() const;
-  virtual std::list<IConnection> getStructuralConnections() const;
+  virtual std::list<ILayer> getStructuralLayers() const override;
+  virtual std::list<IConnection> getStructuralConnections() const override;
 
-  static MultiReinforceConf getDefaultConf() const {
+  static MultiReinforceConf getDefaultConf() {
     MultiReinforceConf c;
     c.buffersize = 10;
     c.numContext = 0;

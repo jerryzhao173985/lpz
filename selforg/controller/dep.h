@@ -73,7 +73,7 @@ class DEP : public AbstractController {
 
 public:
   DEP(const DEPConf& conf = getDefaultConf());
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
 
   virtual ~DEP();
 
@@ -103,22 +103,22 @@ public:
 
   /// performs one step (includes learning).
   /// Calulates motor commands from sensor inputs.
-  virtual void step(const sensor*, int number_sensors, motor*, int number_motors);
+  virtual void step(const sensor*, int number_sensors, motor*, int number_motors) override;
 
   /// performs one step without learning. Calulates motor commands from sensor inputs.
-  virtual void stepNoLearning(const sensor*, int number_sensors, motor*, int number_motors);
+  virtual void stepNoLearning(const sensor*, int number_sensors, motor*, int number_motors) override;
 
   /// called during babbling phase
   virtual void motorBabblingStep(const sensor*,
                                  int number_sensors,
                                  const motor*,
-                                 int number_motors);
+                                 int number_motors) override;
 
   /***** STOREABLE ****/
   /** stores the controller values to a given file. */
   virtual bool store(FILE* f) const override;
   /** loads the controller values from a given file. */
-  virtual bool restore(FILE* f);
+  virtual bool restore(FILE* f) override;
 
   // accessors to matrices
   virtual matrix::Matrix getA() {

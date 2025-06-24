@@ -58,7 +58,7 @@ class DerLinInvert : public InvertMotorController {
 
 public:
   DerLinInvert(const DerLinInvertConf& conf = getDefaultConf());
-  virtual void init(int sensornumber, int motornumber, RandGen* randg);
+  virtual void init(int sensornumber, int motornumber, RandGen* randg) override;
 
   virtual ~DerLinInvert();
 
@@ -73,25 +73,25 @@ public:
 
   /// performs one step (includes learning).
   /// Calulates motor commands from sensor inputs.
-  virtual void step(const sensor*, int number_sensors, motor*, int number_motors);
+  virtual void step(const sensor*, int number_sensors, motor*, int number_motors) override;
 
   /// performs one step without learning. Calulates motor commands from sensor inputs.
   virtual void stepNoLearning(const sensor*,
                               int number_sensors,
                               motor*,
-                              int number_motors);
+                              int number_motors) override;
 
   /**************  STOREABLE **********************************/
   /** stores the controller values to a given file. */
   virtual bool store(FILE* f) const override;
   /** loads the controller values from a given file. */
-  virtual bool restore(FILE* f);
+  virtual bool restore(FILE* f) override;
 
   /************** INSPECTABLE ********************************/
-  virtual iparamkeylist getInternalParamNames() const;
-  virtual iparamvallist getInternalParams() const;
-  virtual ilayerlist getStructuralLayers() const;
-  virtual iconnectionlist getStructuralConnections() const;
+  virtual iparamkeylist getInternalParamNames() const override;
+  virtual iparamvallist getInternalParams() const override;
+  virtual ilayerlist getStructuralLayers() const override;
+  virtual iconnectionlist getStructuralConnections() const override;
 
   /**** TEACHING ****/
   /** The given motor teaching signal is used for this timestep.

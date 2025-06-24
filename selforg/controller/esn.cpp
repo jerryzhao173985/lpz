@@ -72,7 +72,7 @@ ESN::init(unsigned int inputDim, unsigned int outputDim, double unit_map, RandGe
   for (int count1 = 0; count1 < nbInputs; ++count1) {
     for (int count2 = 0; count2 < nbInputConnectionPN; ++count2) {
       int i = rand() % conf.numNeurons;
-      inputWeights.val(i, count1) = random_minusone_to_one(randGen) * conf.inputStrength;
+      inputWeights.val(i, count1) = random_minusone_to_one(static_cast<void*>(randGen), 0) * conf.inputStrength;
     }
   }
   // we may initialize the output weights with 0
@@ -90,7 +90,7 @@ ESN::init(unsigned int inputDim, unsigned int outputDim, double unit_map, RandGe
   for (int count = 0; count < nbInternalConnection; ++count) {
     int i = rand() % conf.numNeurons;
     int j = rand() % conf.numNeurons;
-    ESNWeights.val(i, j) = random_minusone_to_one(randGen);
+    ESNWeights.val(i, j) = random_minusone_to_one(static_cast<void*>(randGen), 0);
   }
 
   // calculate the eigenvalues
