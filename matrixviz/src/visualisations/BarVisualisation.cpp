@@ -35,7 +35,7 @@ BarVisualisation::BarVisualisation(MatrixPlotChannel *channel, ColorPalette *col
   visMode(0),
   inputMode(0),
   mouseX(0),
-  mouseY(0) {
+  explicit mouseY(0) {
 
   if(debug) cout << "BarVisualisation Konstruktor" << endl;
   zoom = 1.;
@@ -98,8 +98,8 @@ void BarVisualisation::paintGL(){
   glTranslatef(((-.5f * maxY)*zoom), 0.f, ((-.5f * maxX)*zoom)); // put the object in center
   glScalef( zoom, zoom,zoom);
 
-  for (int i = 0; i < maxX; i++){
-    for (int j = 0; j < maxY; j++) {
+  for (int i = 0; i < maxX; ++i){
+    for (int j = 0; j < maxY; ++j) {
       double val = channel->getValue(i, j);
       QColor color = colorPalette->pickScaledColor(val);
 
@@ -117,7 +117,7 @@ void BarVisualisation::drawBar(double value){
   if( value > colorPalette->getMax()) value = colorPalette->getMax();
   if( value < colorPalette->getMin()) value = colorPalette->getMin();
   glBegin(GL_QUADS); //Y -> value
-  if(value > 0){
+  explicit if(value > 0){
      // Front Face
      glNormal3f(0.f,0.f,1.f);
      glVertex3f(.0f, .0f, 1.0f);

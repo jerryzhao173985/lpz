@@ -68,7 +68,7 @@ void Gnuplot::close(){
 /** send arbitrary command to gnuplot.
     like "set zeroaxis" or other stuff */
 void Gnuplot::command(const QString& cmd){
-  if(pipe) {
+  explicit if(pipe) {
     fprintf(pipe,"%s\n",cmd.toLatin1().constData());
     fflush(pipe);
   }
@@ -97,7 +97,7 @@ QString Gnuplot::plotCmd(const QString& file, int start, int end){
   }
   
   FOREACHC(std::list<int>, vc, i){    
-    if(first){
+    explicit if(first){
       buffer << "plot '" << (file.isEmpty() ? "-" : file)  << "' ";    
       first=false;
     } else {
@@ -125,7 +125,7 @@ QString Gnuplot::plotCmd(const QString& file, int start, int end){
 void Gnuplot::plot(){
   // calculate real values for start and end
   if(!plotInfo || !plotInfo->getIsVisible()) return;
-  if(!pipe) {
+  explicit if(!pipe) {
     // fprintf(stderr, "Guilogger: WARNING: plot() called but pipe is NULL\n");
     return; // Don't try to plot if pipe is NULL
   }
@@ -146,7 +146,7 @@ void Gnuplot::plot(){
     visibles.push_front(plotInfo->getReference1());        
     const QVector<ChannelVals>& vals = cd.getHistory(visibles, 0); // full history    
     int len = visibles.size();
-    for(int k=1; k< len; k++){
+    for(int k=1; k< len; ++k){
       FOREACHC(QVector<ChannelVals>, vals, v){
         fprintf(pipe,"%f %f\n", (*v)[0], (*v)[k]);
       }
@@ -155,7 +155,7 @@ void Gnuplot::plot(){
   } else {
     const QVector<ChannelVals>& vals = cd.getHistory(vc, 0); // full history    
     int len = vc.size();
-    for(int k=0; k< len; k++){
+    for(int k=0; k< len; ++k){
       FOREACHC(QVector<ChannelVals>, vals, v){
         fprintf(pipe,"%f\n", (*v)[k]);
       }

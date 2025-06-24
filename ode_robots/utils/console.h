@@ -39,7 +39,7 @@ namespace lpzrobots {
       also informs agents about changes 
       @return false if program should exit
   */
-  bool handleConsole(GlobalData& globalData);
+  bool handleConsole(const GlobalData& globalData);
 
   /* prints all parameters of the configurables on the console*/
   void printConfigs(const ConfigList& configs);

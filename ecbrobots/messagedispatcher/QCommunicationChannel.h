@@ -35,9 +35,9 @@
  *
  *   Revision 1.6  2010/11/26 12:22:36  guettler
  *   - Configurable interface now allows to set bounds of paramval and paramint
- *     * setting bounds for paramval and paramint is highly recommended (for QConfigurable (Qt GUI).
+ *     * setting bounds for paramval and paramint is highly recommended (for QConfigurable(const Qt& GUI).
  *   - bugfixes
- *   - current development state of QConfigurable (Qt GUI)
+ *   - current development state of QConfigurable(const Qt& GUI)
  *
  *   Revision 1.5  2010/11/23 11:08:06  guettler
  *   - some helper functions
@@ -82,7 +82,7 @@ namespace lpzrobots {
     Q_OBJECT
 
     public:
-      QCommunicationChannel(QString usbDeviceName);
+      explicit QCommunicationChannel(const QString& usbDeviceName);
       virtual ~QCommunicationChannel();
 
       void close();
@@ -105,7 +105,7 @@ namespace lpzrobots {
 
     private slots:
       void sl_ResponseTimerExpired(uint eventId);
-      void sl_messageReceived(QByteArray received_msg);
+      void sl_messageReceived(const QByteArray& received_msg);
       void sl_XBee_ReadDnsNames_Delayed();
       void sl_switchResetOff();
       void sl_DNSScanTimeout();
@@ -113,22 +113,22 @@ namespace lpzrobots {
 
     private:
 
-      void openUsbDevice(QString usbDeviceName);
+      void openUsbDevice(const QString& usbDeviceName);
 
       void sleep(ulong msecs);
       void clearXbeeRemoteList();
 
-      void send_XBeeCommand(QByteArray command);
+      void send_XBeeCommand(const QByteArray& command);
       void send_XBeeRemoteCommand(QByteArray command, struct QCCHelper::XBeeRemoteNode_t* node);
       void send_ECB_Reset(struct QCCHelper::XBeeRemoteNode_t* node);
 
       void printMessage(QString s, QByteArray data);
       void clear_usbDeviceManagerList();
 
-      void dispatch_isp(QByteArray received_msg);
-      void dispatch_usart(QByteArray received_msg);
-      void dispatch_xbee(QByteArray received_msg);
-      void dispatch_xbee_command(QByteArray received_command);
+      void dispatch_isp(const QByteArray& received_msg);
+      void dispatch_usart(const QByteArray& received_msg);
+      void dispatch_xbee(const QByteArray& received_msg);
+      void dispatch_xbee_command(const QByteArray& received_command);
 
       QFT232DeviceManager usbDeviceManager;
       QExtTimer responseTimer;

@@ -57,11 +57,11 @@ namespace lpzrobots {
 
     void setMode(int mode);
 
-    void setUSBDeviceNames(QStringList list);
-    void setUSBDeviceBaudrates(QStringList list);
-    void setAVRDeviceAccessSpeeds(QStringList list);
-    void setUSBDeviceXBeeTypes(QStringList list);
-    void setXBeeRemoteNodeIdentifiers(QStringList list);
+    void setUSBDeviceNames(const QStringList& list);
+    void setUSBDeviceBaudrates(const QStringList& list);
+    void setAVRDeviceAccessSpeeds(const QStringList& list);
+    void setUSBDeviceXBeeTypes(const QStringList& list);
+    void setXBeeRemoteNodeIdentifiers(const QStringList& list);
 
     QString getUSBDeviceName();
     QString getUSBDeviceBaudrate();
@@ -69,33 +69,33 @@ namespace lpzrobots {
     QString getAVRDeviceAccessSpeed();
     QString getXBeeRemoteNodeIdentifier();
 
-    void setUSBDeviceName(QString name);
-    void setUSBDeviceBaudrate(QString name);
-    void setAVRDeviceAccessSpeed(QString name);
-    void setUSBDeviceXBeeType(QString name);
-    void setXBeeRemoteNodeIdentifier(QString name);
+    void setUSBDeviceName(const QString& name);
+    void setUSBDeviceBaudrate(const QString& name);
+    void setAVRDeviceAccessSpeed(const QString& name);
+    void setUSBDeviceXBeeType(const QString& name);
+    void setXBeeRemoteNodeIdentifier(const QString& name);
 
     void setDefaultBaudrate(QString deviceName, int iBaudrate);
     void setNodeIdentifierSettingEnabled(bool b);
-    void setAVRDeviceName(QString text);
-    void appendLogViewText(QString text);
+    void setAVRDeviceName(const QString& text);
+    void appendLogViewText(const QString& text);
 
     void stopSignaling();
     void startSignaling();
 
   signals:
-    void signal_USBDeviceName_changed(QString name);
-    void signal_USBDeviceBaudrate_changed(QString name);
-    void signal_AVRDeviceAccessSpeed_changed(QString name);
-    void signal_USBDeviceXBeeType_changed(QString name);
-    void signal_XBeeRemoteNodeIdentifier_changed(QString name);
+    void signal_USBDeviceName_changed(const QString& name);
+    void signal_USBDeviceBaudrate_changed(const QString& name);
+    void signal_AVRDeviceAccessSpeed_changed(const QString& name);
+    void signal_USBDeviceXBeeType_changed(const QString& name);
+    void signal_XBeeRemoteNodeIdentifier_changed(const QString& name);
 
   private slots:
-    void USBDevice_Name_changed(QString name);
-    void USBDevice_Baudrate_changed(QString name);
-    void AVRDevice_AccessSpeed_changed(QString name);
-    void XBEE_AdapterType_changed(QString elementName);
-    void XBEE_RemoteNodeIdentifier_changed(QString elementName);
+    void USBDevice_Name_changed(const QString& name);
+    void USBDevice_Baudrate_changed(const QString& name);
+    void AVRDevice_AccessSpeed_changed(const QString& name);
+    void XBEE_AdapterType_changed(const QString& elementName);
+    void XBEE_RemoteNodeIdentifier_changed(const QString& elementName);
 
   private:
     QComboBox *coBox_USBDeviceName;

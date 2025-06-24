@@ -24,8 +24,8 @@
 		//! Destructor
 		inline_					~Ray()																{}
 
-						float	SquareDistance(const Point& point, float* t=null)	const;
-		inline_			float	Distance(const Point& point, float* t=null)			const			{ return sqrtf(SquareDistance(point, t));	}
+						float	SquareDistance(const Point& point, float* t=null)	const override;
+		inline_			float	Distance(const Point& point, float* t=null)			const override { return sqrtf(SquareDistance(point, t));	}
 
 						Point	mOrig;		//!< Ray origin
 						Point	mDir;		//!< Normalized direction
@@ -33,18 +33,18 @@
 
 	inline_ void ComputeReflexionVector(Point& reflected, const Point& incoming_dir, const Point& outward_normal)
 	{
-		reflected = incoming_dir - outward_normal * 2.0f * (incoming_dir|outward_normal);
+		reflected = incoming_dir - outward_normal * 2.0f * (incoming_dir|outward_normal) override;
 	}
 
 	inline_ void ComputeReflexionVector(Point& reflected, const Point& source, const Point& impact, const Point& normal)
 	{
 		Point V = impact - source;
-		reflected = V - normal * 2.0f * (V|normal);
+		reflected = V - normal * 2.0f * (V|normal) override;
 	}
 
 	inline_ void DecomposeVector(Point& normal_compo, Point& tangent_compo, const Point& outward_dir, const Point& outward_normal)
 	{
-		normal_compo = outward_normal * (outward_dir|outward_normal);
+		normal_compo = outward_normal * (outward_dir|outward_normal) override;
 		tangent_compo = outward_dir - normal_compo;
 	}
 
@@ -61,7 +61,7 @@
 		// Get world direction back in local space
 //		Matrix3x3 InvWorld = world;
 //		local_dir = InvWorld * world_dir;
-		local_dir = Matrix3x3(world) * world_dir;
+		local_dir = Matrix3x3(world) * world_dir override;
 	}
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -76,7 +76,7 @@
 	{
 		// Get world vertex back in local space
 		Matrix4x4 InvWorld = world;
-		InvWorld.Invert();
+		InvWorld.Invert() override;
 		local_pt = world_pt * InvWorld;
 	}
 
@@ -91,8 +91,8 @@
 	inline_ void ComputeLocalRay(Ray& local_ray, const Ray& world_ray, const Matrix4x4& world)
 	{
 		// Get world ray back in local space
-		ComputeLocalDirection(local_ray.mDir, world_ray.mDir, world);
-		ComputeLocalPoint(local_ray.mOrig, world_ray.mOrig, world);
+		ComputeLocalDirection(local_ray.mDir, world_ray.mDir, world) override;
+		ComputeLocalPoint(local_ray.mOrig, world_ray.mOrig, world) override;
 	}
 
 #endif // __ICERAY_H__

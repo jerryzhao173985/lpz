@@ -38,7 +38,7 @@ namespace lpzrobots {
     bool useCamera;    ///< whether to use the camera
     osg::Matrix camPos; ///< relative pose of the camera
     /** camera sensor (converts image to sensor data)
-        (if NULL then DirectCameraSensor() is used) */
+        (if nullptr then DirectCameraSensor() is used) */
     CameraSensor* camSensor;
     /// list of sensors that are mounted at the robot. (e.g.\ AxisOrientationSensor)
     std::list<Sensor*> sensors;
@@ -62,7 +62,7 @@ namespace lpzrobots {
     TwoWheeled(const OdeHandle& odeHandle, const OsgHandle& osgHandle,
                TwoWheeledConf conf, const std::string& name);
 
-    static TwoWheeledConf getDefaultConf(){
+    static TwoWheeledConf getDefaultConf() const {
       TwoWheeledConf conf;
       conf.n2cfg = Nimm2::getDefaultConf();
       conf.camcfg = Camera::getDefaultConf();
@@ -70,12 +70,12 @@ namespace lpzrobots {
       conf.camcfg.height = 64;
       conf.camcfg.fov    =  90;
       conf.camcfg.camSize = 0.08;
-      conf.camcfg.processors.push_back(new HSVImgProc(false,1));
+      conf.camcfg.processors.push_back(new HSVImgProc(false,1)) override;
       // filter only Yellow color
       conf.camcfg.processors.push_back(new ColorFilterImgProc(true, .5,
                              HSVImgProc::Red+20, HSVImgProc::Green-20,100));
       // only two sensors for left and right visual field
-      conf.camcfg.processors.push_back(new LineImgProc(true,20, 2));
+      conf.camcfg.processors.push_back(new LineImgProc(true,20, 2)) override;
       conf.useCamera = true;
       conf.camPos    = osg::Matrix::rotate(M_PI/2,0,0,1)
         * osg::Matrix::translate(-0.20,0,0.40);
@@ -83,26 +83,26 @@ namespace lpzrobots {
       return conf;
     }
 
-    virtual ~TwoWheeled() override;
+    virtual ~TwoWheeled();
 
-    virtual void update() override;
+    virtual void update();
 
-    virtual int getSensorNumberIntern() override;
+    virtual int getSensorNumberIntern();
 
-    virtual int getSensorsIntern(double* sensors, int sensornumber) override;
+    virtual int getSensorsIntern(double* sensors, int sensornumber);
 
-    virtual void sense(GlobalData& globalData) override;
+    virtual void sense(const GlobalData& globalData);
 
 
   protected:
     /** creates vehicle at desired pose
         @param pose 4x4 pose matrix
     */
-    virtual void create(const osg::Matrix& pose) override;
+    virtual void create(const osg::Matrix& pose);
 
     /** destroys vehicle and space
      */
-    virtual void destroy() override;
+    virtual void destroy();
 
     TwoWheeledConf conf;
     CameraSensor* camsensor;

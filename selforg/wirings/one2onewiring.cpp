@@ -44,8 +44,8 @@ bool One2OneWiring::initIntern(){
   cmotornumber  = rmotornumber+blind;
   noisenumber   = csensornumber;
 
-  if(blind){
-    blindmotors = (sensor*) malloc(sizeof(sensor)  * blind);
+  if (blind){
+    blindmotors = static_cast<sensor*>(malloc)(sizeof(sensor)  * blind);
     if(blindmotors == nullptr) {
       fprintf(stderr, "One2OneWiring: memory allocation failed\n");
       exit(1);
@@ -68,10 +68,10 @@ bool One2OneWiring::wireSensorsIntern(const sensor* rsensors, int rsensornumber,
   assert(rsensornumber == this->rsensornumber);
   assert(csensornumber == this->csensornumber);
   // the noisevals are set in abstractwiring
-  for(int i=0; i< rsensornumber; i++){
+  for (int i=0; i< rsensornumber; ++i) {
     csensors[i] = rsensors[i] + noisevals[i];
   }
-  for(int i=0; i< blind; i++){
+  for (int i=0; i< blind; ++i) {
     csensors[i + rsensornumber] = blindmotors[i] + noisevals[rsensornumber+i];
   }
   return true;

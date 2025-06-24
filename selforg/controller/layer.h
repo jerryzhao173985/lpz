@@ -36,7 +36,7 @@ public:
       @param factor_bias size of bias neuron , if 0 no bias is used
       @param actfun activation function. see also FeedForwardNN
   */
-  explicit Layer(int size,
+  Layer(int size,
                  double factor_bias = 0.1,
                  ActivationFunction actfun = FeedForwardNN::linear);
 
@@ -61,10 +61,10 @@ public:
   bool restore(FILE* f);
 
   /// sets the activation function of the layer
-  void setActFun(ActivationFunction actfun);
+  void setActFun(const ActivationFunction& actfun);
 
-  int size;
-  double factor_bias;
+  int size = 0;
+  double factor_bias = 0;
   ActivationFunction actfun;       ///< callback activation function
   ActivationFunction dactfun;      ///< first derivative of the activation function
   InvActivationFunction invactfun; ///< inversion of activation function

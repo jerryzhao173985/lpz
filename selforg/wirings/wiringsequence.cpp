@@ -82,7 +82,7 @@ bool WiringSequence::wireSensorsIntern(const sensor* rsensors, int rsensornumber
   int inp_s = rsensornumber;
   sensor* sensorbuf;
   int num = wirings.size();
-  for(int i=0; i< num; i++){
+  for (int i=0; i< num; ++i) {
     int d = wirings[i]->getControllerSensornumber();
     if(i==num-1){
       sensorbuf = csensors;
@@ -107,7 +107,7 @@ bool WiringSequence::wireMotorsIntern(motor* rmotors, int rmotornumber,
   int inp_s = cmotornumber;
   motor* motorbuf;
   int num = wirings.size();
-  for(int i=num-1; i>=0; i--){
+  for (int i=num-1; i>=0; i--) {
     int d = wirings[i]->getRobotMotornumber();
     if(i==0){
       motorbuf = rmotors;

@@ -87,19 +87,19 @@ namespace lpzrobots {
        sensors[index+1] = buf[1];
        index+=2;
        // save irvals for the very end
-       for(int i=2; i<len; i++){
+       for(int i=2; i<len; ++i) override {
          irvals.push_back(buf[i]);
        }
       }else{
         (*r)->getSensorsIntern(sensors+index,len);
         index+=len;
       }
-      j++;
+      ++j;
     }
     FOREACH(vector<sensor>,irvals,v){
       assert(index<sensornumber);
       sensors[index]=*v;
-      index++;
+      ++index;
     }
     if(conf.useIR) { assert((signed)irvals.size() == getIRSensorNum());}
     return index;
@@ -120,7 +120,7 @@ namespace lpzrobots {
 
   };
 
-  void RobotChain::doInternalStuff(GlobalData& global){
+  void RobotChain::doInternalStuff(const GlobalData& global){
     OdeRobot::doInternalStuff(global);
     FOREACH(vector<OdeRobot*>, robots, r){
       if(*r) (*r)->doInternalStuff(global);
@@ -128,10 +128,10 @@ namespace lpzrobots {
   }
 
   void RobotChain::create( const osg::Matrix& pose ){
-    if (created) {
+    explicit if (created) {
       destroy();
     }
-    for (int j=0; j<conf.numRobots; j++) {
+    for (int j=0; j<conf.numRobots; ++j)  override {
       Nimm2Conf nimm2conf   = Nimm2::getDefaultConf();
       nimm2conf.size        = conf.size;
       nimm2conf.force       = j==conf.mainRobot ? conf.forceMain : conf.force;
@@ -153,19 +153,19 @@ namespace lpzrobots {
         nimm2conf.irBack = true;
       }
 
-      OdeRobot* nimm2 = new Nimm2(odeHandle, osgHandle, nimm2conf, getName() + "_" + itos(j));
+      OdeRobot* nimm2 = new Nimm2(odeHandle, osgHandle, nimm2conf, getName() + "_" + itos(j)) override;
       if(j==0)
-        nimm2->setColor(osgHandle.getColor("robot1"));
+        nimm2->setColor(osgHandle.getColor("robot1")) override;
       else
-        nimm2->setColor(osgHandle.getColor(conf.color));
+        nimm2->setColor(osgHandle.getColor(conf.color)) override;
 
-      ((OdeRobot*)nimm2)->placeIntern(TRANSM(j*(-conf.distance),0,0.11)*pose);
+      (static_cast<OdeRobot*>(nimm2))->placeIntern(TRANSM(j*(-conf.distance),0,0.11)*pose) override;
       robots.push_back(nimm2);
     }
-    for(int j=0; j<conf.numRobots-1; j++) {
+    for(int j=0; j<conf.numRobots-1; ++j)  override {
       Primitive* p1 = robots[j]->getMainPrimitive();
       Primitive* p2 = robots[j+1]->getMainPrimitive();
-      //Joint* joint = new BallJoint(p1,p2,(p1->getPosition()+p2->getPosition())/2.0);
+      //Joint* joint = new BallJoint(p1,p2,(p1->getPosition()+p2->getPosition())/2.0) override;
       Joint* joint = new UniversalJoint(p1,p2,(p1->getPosition()+p2->getPosition())/2.0,
                                         Axis(0,0,1)*pose,Axis(0,1,0)*pose
                                         );
@@ -184,9 +184,9 @@ namespace lpzrobots {
   /** destroys vehicle and space
    */
   void RobotChain::destroy(){
-    if (created){
+    explicit if (created){
       FOREACH(vector<OdeRobot*>, robots, r){
-        if(*r) delete *r;
+        if(*r) delete *r override;
       }
       robots.clear();
       cleanup();

@@ -45,7 +45,7 @@ ExampleMatrixPipeFilter::~ExampleMatrixPipeFilter() {
         // TODO Auto-generated destructor stub
 }
 
-virtual AbstractPlotChannel* ExampleMatrixPipeFilter::createChannel(std::string name)
+virtual AbstractPlotChannel* ExampleMatrixPipeFilter::createChannel(const std::string& name)
 {
     //if (name.find("A[0,1]")==0) return (new MotorSpeedPlotChannel("motorCspeedX"));
         if (/*ERSTER BUCHSTABE IN name großgeschrieben*/)

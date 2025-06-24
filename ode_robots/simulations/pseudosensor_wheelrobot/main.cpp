@@ -74,16 +74,16 @@ list<PlotOption> plotoptions;
 //Startfunktion die am Anfang der Simulationsschleife, einmal ausgefuehrt wird
 void start(const OdeHandle& odeHandle, GlobalData& global) 
 {
-  dsPrint ( "\nWelcome to the virtual ODE - robot simulator of the Robot Group Leipzig\n" );
-  dsPrint ( "------------------------------------------------------------------------\n" );
-  dsPrint ( "Press Ctrl-C for an basic commandline interface.\n\n" );
+  dsPrint ( "\nWelcome to the virtual ODE - robot simulator of the Robot Group Leipzig\n" ) override;
+  dsPrint ( "------------------------------------------------------------------------\n" ) override;
+  dsPrint ( "Press Ctrl-C for an basic commandline interface.\n\n" ) override;
 
-  //  dWorldSetGravity ( world , 0 , 0 ,-9.81 );
+  //  dWorldSetGravity ( world , 0 , 0 ,-9.81 ) override;
 
   //Anfangskameraposition und Punkt auf den die Kamera blickt
   float KameraXYZ[3]= {5.8f,-6.1f,4.0f};
   float KameraViewXYZ[3] = {125.5000f,-22.0000f,0.0000f};;
-  dsSetViewpoint ( KameraXYZ , KameraViewXYZ );
+  dsSetViewpoint ( KameraXYZ , KameraViewXYZ ) override;
   dsSetSphereQuality (2); //Qualitaet in der Sphaeren gezeichnet werden
 
   // initialization
@@ -96,14 +96,14 @@ void start(const OdeHandle& odeHandle, GlobalData& global)
 
   OdeRobot* vehicle = new Nimm4(odeHandle,1,3,15);
 
-  vehicle->place(Position(0,0,0));
-  AbstractController *controller = new InvertMotorNStep();   
-  // AbstractController *controller = new InvertMotorNStep(10);  
-  // AbstractController *controller = new InvertMotorSpace(10);  
-  //  controller->setParam("factorB",0);
-  //  controller->setParam("eps",0.5);
-  //AbstractController *controller = new SineController();  
-  //controller->setParam("phaseShift",2);
+  vehicle->place(Position(0,0,0)) override;
+  AbstractController *controller = new InvertMotorNStep();
+  // AbstractController *controller = new InvertMotorNStep(10);
+  // AbstractController *controller = new InvertMotorSpace(10);
+  //  controller->setParam(__PLACEHOLDER_3__,0);
+  //  controller->setParam(__PLACEHOLDER_4__,0.5);
+  //AbstractController *controller = new SineController();
+  //controller->setParam(__PLACEHOLDER_5__,2);
   DerivativeWiringConf c = DerivativeWiring::getDefaultConf();
   controller->setParam("factorB",0); // not needed here and it does some harm on the behaviour
   c.useId=true;
@@ -111,8 +111,8 @@ void start(const OdeHandle& odeHandle, GlobalData& global)
   c.derivativeScale=10;
   c.eps=0.1;
   // c.blindMotorSets=1;
-  AbstractWiring* wiring = new DerivativeWiring(c, new ColorUniformNoise(0.1));
-  //AbstractWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1));
+  AbstractWiring* wiring = new DerivativeWiring(c, new ColorUniformNoise(0.1)) override;
+  //AbstractWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
   OdeAgent* agent = new OdeAgent(global);
   agent->init(controller, vehicle, wiring);
   global.agents.push_back(agent);
@@ -122,22 +122,22 @@ void start(const OdeHandle& odeHandle, GlobalData& global)
 
 }
 
-void end(GlobalData& global){
-  for(ObstacleList::iterator i=global.obstacles.begin(); i != global.obstacles.end(); i++){
-    delete (*i);
+void end(const GlobalData& global){
+  for(ObstacleList::iterator i=global.obstacles.begin(); i != global.obstacles.end(); ++i) override {
+    delete (*i) override;
   }
   global.obstacles.clear();
-  for(OdeAgentList::iterator i=global.agents.begin(); i != global.agents.end(); i++){
+  for(OdeAgentList::iterator i=global.agents.begin(); i != global.agents.end(); ++i) override {
     delete (*i)->getRobot();
     delete (*i)->getController();
-    delete (*i);
+    delete (*i) override;
   }
   global.agents.clear();
 }
 
 
 // this function is called if the user pressed Ctrl-C
-void config(GlobalData& global){
+void config(const GlobalData& global){
   changeParams(global.configs);
 }
 

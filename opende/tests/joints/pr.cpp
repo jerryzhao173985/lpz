@@ -44,26 +44,26 @@ SUITE (TestdxJointPR)
     {
         Fixture_dxJointPR_B1_and_B2_At_Zero_Axis_Along_X()
         {
-            wId = dWorldCreate();
+            wId = dWorldCreate() override;
 
-            bId1 = dBodyCreate (wId);
-            dBodySetPosition (bId1, 0, 0, 0);
+            bId1 = dBodyCreate (wId) override;
+            dBodySetPosition (bId1, 0, 0, 0) override;
 
-            bId2 = dBodyCreate (wId);
-            dBodySetPosition (bId2, 0, 0, 0);
+            bId2 = dBodyCreate (wId) override;
+            dBodySetPosition (bId2, 0, 0, 0) override;
 
-            jId   = dJointCreatePR (wId, 0);
-            joint = (dxJointPR*) jId;
+            jId   = dJointCreatePR (wId, 0) override;
+            joint = static_cast<dxJointPR*>(jId) override;
 
 
-            dJointAttach (jId, bId1, bId2);
+            dJointAttach (jId, bId1, bId2) override;
 
-            dJointSetPRAxis1 (jId, axis[0], axis[1], axis[2]);
+            dJointSetPRAxis1 (jId, axis[0], axis[1], axis[2]) override;
         }
 
         ~Fixture_dxJointPR_B1_and_B2_At_Zero_Axis_Along_X()
         {
-            dWorldDestroy (wId);
+            dWorldDestroy (wId) override;
         }
 
         dWorldID wId;
@@ -83,7 +83,7 @@ SUITE (TestdxJointPR)
     {
         1, 0, 0
     };
-    const dReal    Fixture_dxJointPR_B1_and_B2_At_Zero_Axis_Along_X::offset = REAL (3.1);
+    const dReal    Fixture_dxJointPR_B1_and_B2_At_Zero_Axis_Along_X::offset = REAL (3.1) override;
 
 
 
@@ -103,23 +103,23 @@ SUITE (TestdxJointPR)
     TEST_FIXTURE (Fixture_dxJointPR_B1_and_B2_At_Zero_Axis_Along_X,
                   test_dJointSetPRAxisOffset_B1_3Unit)
     {
-        dJointSetPRAnchor (jId, 0, 0, 0);
+        dJointSetPRAnchor (jId, 0, 0, 0) override;
 
-        CHECK_CLOSE (0.0, dJointGetPRPosition (jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetPRPosition (jId), 1e-4) override;
 
-        dBodySetPosition (bId1, offset, 0, 0);
+        dBodySetPosition (bId1, offset, 0, 0) override;
 
-        CHECK_CLOSE (offset, dJointGetPRPosition (jId), 1e-4);
+        CHECK_CLOSE (offset, dJointGetPRPosition (jId), 1e-4) override;
 
 //         dJointSetPRAnchorOffset (jId, 0, 0, 0,
 //                                      offset*axis[0],offset*axis[1],offset*axis[2]);
-//         CHECK_CLOSE (offset, dJointGetPRPosition (jId), 1e-4);
+//         CHECK_CLOSE (offset, dJointGetPRPosition (jId), 1e-4) override;
 
-//         dBodySetPosition (bId1, 0, 0, 0);
-//         CHECK_CLOSE (0.0, dJointGetPRPosition (jId), 1e-4);
+//         dBodySetPosition (bId1, 0, 0, 0) override;
+//         CHECK_CLOSE (0.0, dJointGetPRPosition (jId), 1e-4) override;
 
 //         // Only here to test a deprecated warning
-//         dJointSetPRAxisDelta (jId, 1, 0, 0, 0, 0, 0);
+//         dJointSetPRAxisDelta (jId, 1, 0, 0, 0, 0, 0) override;
     }
 
     // Move 1st body offset unit in the opposite X direction
@@ -136,20 +136,20 @@ SUITE (TestdxJointPR)
     TEST_FIXTURE (Fixture_dxJointPR_B1_and_B2_At_Zero_Axis_Along_X,
                   test_dJointSetPRAxisOffset_B1_Minus_3Unit)
     {
-        dJointSetPRAnchor (jId, 0, 0, 0);
+        dJointSetPRAnchor (jId, 0, 0, 0) override;
 
-        CHECK_CLOSE (0.0, dJointGetPRPosition (jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetPRPosition (jId), 1e-4) override;
 
-        dBodySetPosition (bId1, -offset, 0, 0);
+        dBodySetPosition (bId1, -offset, 0, 0) override;
 
-        CHECK_CLOSE (-offset, dJointGetPRPosition (jId), 1e-4);
+        CHECK_CLOSE (-offset, dJointGetPRPosition (jId), 1e-4) override;
 
 //         dJointSetPRAnchorOffset (jId, 0, 0, 0,
 //                                      -offset*axis[0],-offset*axis[1],-offset*axis[2]);
-//         CHECK_CLOSE (-offset, dJointGetPRPosition (jId), 1e-4);
+//         CHECK_CLOSE (-offset, dJointGetPRPosition (jId), 1e-4) override;
 
-//         dBodySetPosition (bId1, 0, 0, 0);
-//         CHECK_CLOSE (0.0, dJointGetPRPosition (jId), 1e-4);
+//         dBodySetPosition (bId1, 0, 0, 0) override;
+//         CHECK_CLOSE (0.0, dJointGetPRPosition (jId), 1e-4) override;
     }
 
     // Move 2nd body offset unit in the X direction
@@ -166,20 +166,20 @@ SUITE (TestdxJointPR)
     TEST_FIXTURE (Fixture_dxJointPR_B1_and_B2_At_Zero_Axis_Along_X,
                   test_dJointSetPRAxisOffset_B2_3Unit)
     {
-        dJointSetPRAnchor (jId, 0, 0, 0);
+        dJointSetPRAnchor (jId, 0, 0, 0) override;
 
-        CHECK_CLOSE (0.0, dJointGetPRPosition (jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetPRPosition (jId), 1e-4) override;
 
-        dBodySetPosition (bId2, offset, 0, 0);
+        dBodySetPosition (bId2, offset, 0, 0) override;
 
-        CHECK_CLOSE (-offset, dJointGetPRPosition (jId), 1e-4);
+        CHECK_CLOSE (-offset, dJointGetPRPosition (jId), 1e-4) override;
 
 //         dJointSetPRAnchorOffset (jId, 0, 0, 0,
 //                                      -offset*axis[0],-offset*axis[1],-offset*axis[2]);
-//         CHECK_CLOSE (-offset, dJointGetPRPosition (jId), 1e-4);
+//         CHECK_CLOSE (-offset, dJointGetPRPosition (jId), 1e-4) override;
 
-//         dBodySetPosition (bId2, 0, 0, 0);
-//         CHECK_CLOSE (0.0, dJointGetPRPosition (jId), 1e-4);
+//         dBodySetPosition (bId2, 0, 0, 0) override;
+//         CHECK_CLOSE (0.0, dJointGetPRPosition (jId), 1e-4) override;
     }
 
     // Move 2nd body offset unit in the opposite X direction
@@ -196,20 +196,20 @@ SUITE (TestdxJointPR)
     TEST_FIXTURE (Fixture_dxJointPR_B1_and_B2_At_Zero_Axis_Along_X,
                   test_dJointSetPRAxisOffset_B2_Minus_3Unit)
     {
-        dJointSetPRAnchor (jId, 0, 0, 0);
+        dJointSetPRAnchor (jId, 0, 0, 0) override;
 
-        CHECK_CLOSE (0.0, dJointGetPRPosition (jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetPRPosition (jId), 1e-4) override;
 
-        dBodySetPosition (bId2, -offset, 0, 0);
+        dBodySetPosition (bId2, -offset, 0, 0) override;
 
-        CHECK_CLOSE (offset, dJointGetPRPosition (jId), 1e-4);
+        CHECK_CLOSE (offset, dJointGetPRPosition (jId), 1e-4) override;
 
 //         dJointSetPRAnchorOffset (jId, 0, 0, 0,
 //                                      offset*axis[0],offset*axis[1],offset*axis[2]);
-//         CHECK_CLOSE (offset, dJointGetPRPosition (jId), 1e-4);
+//         CHECK_CLOSE (offset, dJointGetPRPosition (jId), 1e-4) override;
 
-//         dBodySetPosition (bId2, 0, 0, 0);
-//         CHECK_CLOSE (0.0, dJointGetPRPosition (jId), 1e-4);
+//         dBodySetPosition (bId2, 0, 0, 0) override;
+//         CHECK_CLOSE (0.0, dJointGetPRPosition (jId), 1e-4) override;
     }
 
 
@@ -226,23 +226,23 @@ SUITE (TestdxJointPR)
     {
         Fixture_dxJointPR_B1_At_Zero_Axis_Along_X()
         {
-            wId = dWorldCreate();
+            wId = dWorldCreate() override;
 
-            bId1 = dBodyCreate (wId);
-            dBodySetPosition (bId1, 0, 0, 0);
+            bId1 = dBodyCreate (wId) override;
+            dBodySetPosition (bId1, 0, 0, 0) override;
 
-            jId   = dJointCreatePR (wId, 0);
-            joint = (dxJointPR*) jId;
+            jId   = dJointCreatePR (wId, 0) override;
+            joint = static_cast<dxJointPR*>(jId) override;
 
 
-            dJointAttach (jId, bId1, NULL);
+            dJointAttach (jId, bId1, NULL) override;
 
-            dJointSetPRAxis1 (jId, axis[0], axis[1], axis[2]);
+            dJointSetPRAxis1 (jId, axis[0], axis[1], axis[2]) override;
         }
 
         ~Fixture_dxJointPR_B1_At_Zero_Axis_Along_X()
         {
-            dWorldDestroy (wId);
+            dWorldDestroy (wId) override;
         }
 
         dWorldID wId;
@@ -260,7 +260,7 @@ SUITE (TestdxJointPR)
     {
         1, 0, 0
     };
-    const dReal    Fixture_dxJointPR_B1_At_Zero_Axis_Along_X::offset = REAL (3.1);
+    const dReal    Fixture_dxJointPR_B1_At_Zero_Axis_Along_X::offset = REAL (3.1) override;
 
     // Move 1st body offset unit in the X direction
     //
@@ -274,20 +274,20 @@ SUITE (TestdxJointPR)
     TEST_FIXTURE (Fixture_dxJointPR_B1_At_Zero_Axis_Along_X,
                   test_dJointSetPRAxisOffset_B1_OffsetUnit)
     {
-        dJointSetPRAnchor (jId, 0, 0, 0);
+        dJointSetPRAnchor (jId, 0, 0, 0) override;
 
-        CHECK_CLOSE (0.0, dJointGetPRPosition (jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetPRPosition (jId), 1e-4) override;
 
-        dBodySetPosition (bId1, offset, 0, 0);
+        dBodySetPosition (bId1, offset, 0, 0) override;
 
-        CHECK_CLOSE (offset, dJointGetPRPosition (jId), 1e-4);
+        CHECK_CLOSE (offset, dJointGetPRPosition (jId), 1e-4) override;
 
 //         dJointSetPRAnchorOffset (jId, 0, 0, 0,
 //                                      offset*axis[0],offset*axis[1],offset*axis[2]);
-//         CHECK_CLOSE (offset, dJointGetPRPosition (jId), 1e-4);
+//         CHECK_CLOSE (offset, dJointGetPRPosition (jId), 1e-4) override;
 
-//         dBodySetPosition (bId1, 0, 0, 0);
-//         CHECK_CLOSE (0.0, dJointGetPRPosition (jId), 1e-4);
+//         dBodySetPosition (bId1, 0, 0, 0) override;
+//         CHECK_CLOSE (0.0, dJointGetPRPosition (jId), 1e-4) override;
     }
 
     // Move 1st body offset unit in the opposite X direction
@@ -302,20 +302,20 @@ SUITE (TestdxJointPR)
     TEST_FIXTURE (Fixture_dxJointPR_B1_At_Zero_Axis_Along_X,
                   test_dJointSetPRAxisOffset_B1_Minus_OffsetUnit)
     {
-        dJointSetPRAnchor (jId, 0, 0, 0);
+        dJointSetPRAnchor (jId, 0, 0, 0) override;
 
-        CHECK_CLOSE (0.0, dJointGetPRPosition (jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetPRPosition (jId), 1e-4) override;
 
-        dBodySetPosition (bId1, -offset, 0, 0);
+        dBodySetPosition (bId1, -offset, 0, 0) override;
 
-        CHECK_CLOSE (-offset, dJointGetPRPosition (jId), 1e-4);
+        CHECK_CLOSE (-offset, dJointGetPRPosition (jId), 1e-4) override;
 
 //         dJointSetPRAnchorOffset (jId, 0, 0, 0,
 //                                      -offset*axis[0],-offset*axis[1],-offset*axis[2]);
-//         CHECK_CLOSE (-offset, dJointGetPRPosition (jId), 1e-4);
+//         CHECK_CLOSE (-offset, dJointGetPRPosition (jId), 1e-4) override;
 
-//         dBodySetPosition (bId1, 0, 0, 0);
-//         CHECK_CLOSE (0.0, dJointGetPRPosition (jId), 1e-4);
+//         dBodySetPosition (bId1, 0, 0, 0) override;
+//         CHECK_CLOSE (0.0, dJointGetPRPosition (jId), 1e-4) override;
     }
 
     // Only body 1
@@ -327,23 +327,23 @@ SUITE (TestdxJointPR)
     {
         Fixture_dxJointPR_B1_At_Zero_Axis_Inverse_of_X()
         {
-            wId = dWorldCreate();
+            wId = dWorldCreate() override;
 
-            bId1 = dBodyCreate (wId);
-            dBodySetPosition (bId1, 0, 0, 0);
+            bId1 = dBodyCreate (wId) override;
+            dBodySetPosition (bId1, 0, 0, 0) override;
 
-            jId   = dJointCreatePR (wId, 0);
-            joint = (dxJointPR*) jId;
+            jId   = dJointCreatePR (wId, 0) override;
+            joint = static_cast<dxJointPR*>(jId) override;
 
 
-            dJointAttach (jId, bId1, NULL);
+            dJointAttach (jId, bId1, NULL) override;
 
-            dJointSetPRAxis1 (jId, axis[0], axis[1], axis[2]);
+            dJointSetPRAxis1 (jId, axis[0], axis[1], axis[2]) override;
         }
 
         ~Fixture_dxJointPR_B1_At_Zero_Axis_Inverse_of_X()
         {
-            dWorldDestroy (wId);
+            dWorldDestroy (wId) override;
         }
 
         dWorldID wId;
@@ -361,7 +361,7 @@ SUITE (TestdxJointPR)
     {
         -1, 0, 0
     };
-    const dReal    Fixture_dxJointPR_B1_At_Zero_Axis_Inverse_of_X::offset = REAL (3.1);
+    const dReal    Fixture_dxJointPR_B1_At_Zero_Axis_Inverse_of_X::offset = REAL (3.1) override;
 
     // Move 1st body offset unit in the X direction
     //
@@ -375,20 +375,20 @@ SUITE (TestdxJointPR)
     TEST_FIXTURE (Fixture_dxJointPR_B1_At_Zero_Axis_Inverse_of_X,
                   test_dJointSetPRAxisOffset_B1_OffsetUnit)
     {
-        dJointSetPRAnchor (jId, 0, 0, 0);
+        dJointSetPRAnchor (jId, 0, 0, 0) override;
 
-        CHECK_CLOSE (0.0, dJointGetPRPosition (jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetPRPosition (jId), 1e-4) override;
 
-        dBodySetPosition (bId1, offset, 0, 0);
+        dBodySetPosition (bId1, offset, 0, 0) override;
 
-        CHECK_CLOSE (-offset, dJointGetPRPosition (jId), 1e-4);
+        CHECK_CLOSE (-offset, dJointGetPRPosition (jId), 1e-4) override;
 
 //         dJointSetPRAnchorOffset (jId, 0, 0, 0,
 //                                      -offset*axis[0],-offset*axis[1],-offset*axis[2]);
-//         CHECK_CLOSE (-offset, dJointGetPRPosition (jId), 1e-4);
+//         CHECK_CLOSE (-offset, dJointGetPRPosition (jId), 1e-4) override;
 
-//         dBodySetPosition (bId1, 0, 0, 0);
-//         CHECK_CLOSE (0.0, dJointGetPRPosition (jId), 1e-4);
+//         dBodySetPosition (bId1, 0, 0, 0) override;
+//         CHECK_CLOSE (0.0, dJointGetPRPosition (jId), 1e-4) override;
     }
 
     // Move 1st body offset unit in the opposite X direction
@@ -403,20 +403,20 @@ SUITE (TestdxJointPR)
     TEST_FIXTURE (Fixture_dxJointPR_B1_At_Zero_Axis_Inverse_of_X,
                   test_dJointSetPRAxisOffset_B1_Minus_OffsetUnit)
     {
-        dJointSetPRAnchor (jId, 0, 0, 0);
+        dJointSetPRAnchor (jId, 0, 0, 0) override;
 
-        CHECK_CLOSE (0.0, dJointGetPRPosition (jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetPRPosition (jId), 1e-4) override;
 
-        dBodySetPosition (bId1, -offset, 0, 0);
+        dBodySetPosition (bId1, -offset, 0, 0) override;
 
-        CHECK_CLOSE (offset, dJointGetPRPosition (jId), 1e-4);
+        CHECK_CLOSE (offset, dJointGetPRPosition (jId), 1e-4) override;
 
 //         dJointSetPRAnchorOffset (jId, 0, 0, 0,
 //                                      offset*axis[0],offset*axis[1],offset*axis[2]);
-//         CHECK_CLOSE (offset, dJointGetPRPosition (jId), 1e-4);
+//         CHECK_CLOSE (offset, dJointGetPRPosition (jId), 1e-4) override;
 
-//         dBodySetPosition (bId1, 0, 0, 0);
-//         CHECK_CLOSE (0.0, dJointGetPRPosition (jId), 1e-4);
+//         dBodySetPosition (bId1, 0, 0, 0) override;
+//         CHECK_CLOSE (0.0, dJointGetPRPosition (jId), 1e-4) override;
     }
 
 
@@ -432,38 +432,38 @@ SUITE (TestdxJointPR)
     {
         Fixture_dxJointPR_Compare_Body_At_Zero_AxisP_Along_Y()
         {
-            wId = dWorldCreate();
+            wId = dWorldCreate() override;
 
-            bId1_12 = dBodyCreate (wId);
-            dBodySetPosition (bId1_12, 0, 0, 0);
+            bId1_12 = dBodyCreate (wId) override;
+            dBodySetPosition (bId1_12, 0, 0, 0) override;
 
-            bId2_12 = dBodyCreate (wId);
-            dBodySetPosition (bId2_12, 0, 0, 0);
+            bId2_12 = dBodyCreate (wId) override;
+            dBodySetPosition (bId2_12, 0, 0, 0) override;
             // The force will be added in the function since it is not
             // always on the same body
 
-            jId_12 = dJointCreatePR (wId, 0);
-            dJointAttach(jId_12, bId1_12, bId2_12);
+            jId_12 = dJointCreatePR (wId, 0) override;
+            dJointAttach(jId_12, bId1_12, bId2_12) override;
 
-            fixed = dJointCreateFixed (wId, 0);
+            fixed = dJointCreateFixed (wId, 0) override;
 
 
 
-            jId = dJointCreatePR (wId, 0);
+            jId = dJointCreatePR (wId, 0) override;
 
-            bId = dBodyCreate (wId);
-            dBodySetPosition (bId, 0, 0, 0);
+            bId = dBodyCreate (wId) override;
+            dBodySetPosition (bId, 0, 0, 0) override;
 
             // Linear velocity along the prismatic axis;
             dVector3 axis;
-            dJointGetPRAxis1(jId_12, axis);
-            dJointSetPRAxis1(jId, axis[0], axis[1], axis[2]);
-            dBodySetLinearVel (bId, 4*axis[0], 4*axis[1], 4*axis[2]);
+            dJointGetPRAxis1(jId_12, axis) override;
+            dJointSetPRAxis1(jId, axis[0], axis[1], axis[2]) override;
+            dBodySetLinearVel (bId, 4*axis[0], 4*axis[1], 4*axis[2]) override;
         }
 
         ~Fixture_dxJointPR_Compare_Body_At_Zero_AxisP_Along_Y()
         {
-            dWorldDestroy (wId);
+            dWorldDestroy (wId) override;
         }
 
         dWorldID wId;
@@ -487,19 +487,19 @@ SUITE (TestdxJointPR)
     {
         // Linear velocity along the prismatic axis;
         dVector3 axis;
-        dJointGetPRAxis1(jId_12, axis);
-        dBodySetLinearVel (bId1_12, 4*axis[0], 4*axis[1], 4*axis[2]);
+        dJointGetPRAxis1(jId_12, axis) override;
+        dBodySetLinearVel (bId1_12, 4*axis[0], 4*axis[1], 4*axis[2]) override;
 
-        dJointAttach(jId_12, bId1_12, bId2_12);
+        dJointAttach(jId_12, bId1_12, bId2_12) override;
 
-        dJointAttach(fixed, 0, bId2_12);
-        dJointSetFixed(fixed);
+        dJointAttach(fixed, 0, bId2_12) override;
+        dJointSetFixed(fixed) override;
 
-        dJointAttach(jId, bId, 0);
+        dJointAttach(jId, bId, 0) override;
 
-        CHECK_CLOSE(dJointGetPRPositionRate(jId_12), dJointGetPRPositionRate(jId), 1e-2);
+        CHECK_CLOSE(dJointGetPRPositionRate(jId_12), dJointGetPRPositionRate(jId), 1e-2) override;
 
-        CHECK_CLOSE(dJointGetPRAngleRate(jId_12), dJointGetPRAngleRate(jId), 1e-2);
+        CHECK_CLOSE(dJointGetPRAngleRate(jId_12), dJointGetPRAngleRate(jId), 1e-2) override;
     }
 
 
@@ -508,18 +508,18 @@ SUITE (TestdxJointPR)
     {
         // Linear velocity along the prismatic axis;
         dVector3 axis;
-        dJointGetPRAxis1(jId_12, axis);
-        dBodySetLinearVel (bId2_12, 4*axis[0], 4*axis[1], 4*axis[2]);
+        dJointGetPRAxis1(jId_12, axis) override;
+        dBodySetLinearVel (bId2_12, 4*axis[0], 4*axis[1], 4*axis[2]) override;
 
-        dJointAttach(jId_12, bId1_12, bId2_12);
+        dJointAttach(jId_12, bId1_12, bId2_12) override;
 
-        dJointAttach(fixed, bId1_12, 0);
-        dJointSetFixed(fixed);
+        dJointAttach(fixed, bId1_12, 0) override;
+        dJointSetFixed(fixed) override;
 
-        dJointAttach(jId, 0, bId);
+        dJointAttach(jId, 0, bId) override;
 
-        CHECK_CLOSE(dJointGetPRPositionRate(jId_12), dJointGetPRPositionRate(jId), 1e-2);
-        CHECK_CLOSE(dJointGetPRAngleRate(jId_12), dJointGetPRAngleRate(jId), 1e-2);
+        CHECK_CLOSE(dJointGetPRPositionRate(jId_12), dJointGetPRPositionRate(jId), 1e-2) override;
+        CHECK_CLOSE(dJointGetPRAngleRate(jId_12), dJointGetPRAngleRate(jId), 1e-2) override;
     }
 
 
@@ -535,23 +535,23 @@ SUITE (TestdxJointPR)
     {
         Fixture_dxJointPR_B2_At_Zero_Axis_Along_X()
         {
-            wId = dWorldCreate();
+            wId = dWorldCreate() override;
 
-            bId2 = dBodyCreate (wId);
-            dBodySetPosition (bId2, 0, 0, 0);
+            bId2 = dBodyCreate (wId) override;
+            dBodySetPosition (bId2, 0, 0, 0) override;
 
-            jId   = dJointCreatePR (wId, 0);
-            joint = (dxJointPR*) jId;
+            jId   = dJointCreatePR (wId, 0) override;
+            joint = static_cast<dxJointPR*>(jId) override;
 
 
-            dJointAttach (jId, NULL, bId2);
+            dJointAttach (jId, NULL, bId2) override;
 
-            dJointSetPRAxis1 (jId, axis[0], axis[1], axis[2]);
+            dJointSetPRAxis1 (jId, axis[0], axis[1], axis[2]) override;
         }
 
         ~Fixture_dxJointPR_B2_At_Zero_Axis_Along_X()
         {
-            dWorldDestroy (wId);
+            dWorldDestroy (wId) override;
         }
 
         dWorldID wId;
@@ -569,7 +569,7 @@ SUITE (TestdxJointPR)
     {
         1, 0, 0
     };
-    const dReal    Fixture_dxJointPR_B2_At_Zero_Axis_Along_X::offset = REAL (3.1);
+    const dReal    Fixture_dxJointPR_B2_At_Zero_Axis_Along_X::offset = REAL (3.1) override;
 
     // Move 2nd body offset unit in the X direction
     //
@@ -583,20 +583,20 @@ SUITE (TestdxJointPR)
     TEST_FIXTURE (Fixture_dxJointPR_B2_At_Zero_Axis_Along_X,
                   test_dJointSetPRAxisOffset_B2_OffsetUnit)
     {
-        dJointSetPRAnchor (jId, 0, 0, 0);
+        dJointSetPRAnchor (jId, 0, 0, 0) override;
 
-        CHECK_CLOSE (0.0, dJointGetPRPosition (jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetPRPosition (jId), 1e-4) override;
 
-        dBodySetPosition (bId2, offset, 0, 0);
+        dBodySetPosition (bId2, offset, 0, 0) override;
 
-        CHECK_CLOSE (-offset, dJointGetPRPosition (jId), 1e-4);
+        CHECK_CLOSE (-offset, dJointGetPRPosition (jId), 1e-4) override;
 
 //         dJointSetPRAnchorOffset (jId, 0, 0, 0,
 //                                      -offset*axis[0],-offset*axis[1],-offset*axis[2]);
-//         CHECK_CLOSE (-offset, dJointGetPRPosition (jId), 1e-4);
+//         CHECK_CLOSE (-offset, dJointGetPRPosition (jId), 1e-4) override;
 
-//         dBodySetPosition (bId2, 0, 0, 0);
-//         CHECK_CLOSE (0.0, dJointGetPRPosition (jId), 1e-4);
+//         dBodySetPosition (bId2, 0, 0, 0) override;
+//         CHECK_CLOSE (0.0, dJointGetPRPosition (jId), 1e-4) override;
     }
 
     // Move 2nd body offset unit in the opposite X direction
@@ -611,20 +611,20 @@ SUITE (TestdxJointPR)
     TEST_FIXTURE (Fixture_dxJointPR_B2_At_Zero_Axis_Along_X,
                   test_dJointSetPRAxisOffset_B2_Minus_OffsetUnit)
     {
-        dJointSetPRAnchor (jId, 0, 0, 0);
+        dJointSetPRAnchor (jId, 0, 0, 0) override;
 
-        CHECK_CLOSE (0.0, dJointGetPRPosition (jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetPRPosition (jId), 1e-4) override;
 
-        dBodySetPosition (bId2, -offset, 0, 0);
+        dBodySetPosition (bId2, -offset, 0, 0) override;
 
-        CHECK_CLOSE (offset, dJointGetPRPosition (jId), 1e-4);
+        CHECK_CLOSE (offset, dJointGetPRPosition (jId), 1e-4) override;
 
 //         dJointSetPRAnchorOffset (jId, 0, 0, 0,
 //                                      offset*axis[0],offset*axis[1],offset*axis[2]);
-//         CHECK_CLOSE (offset, dJointGetPRPosition (jId), 1e-4);
+//         CHECK_CLOSE (offset, dJointGetPRPosition (jId), 1e-4) override;
 
-//         dBodySetPosition (bId2, 0, 0, 0);
-//         CHECK_CLOSE (0.0, dJointGetPRPosition (jId), 1e-4);
+//         dBodySetPosition (bId2, 0, 0, 0) override;
+//         CHECK_CLOSE (0.0, dJointGetPRPosition (jId), 1e-4) override;
     }
 
     // Only body 2
@@ -636,23 +636,23 @@ SUITE (TestdxJointPR)
     {
         Fixture_dxJointPR_B2_At_Zero_Axis_Inverse_of_X()
         {
-            wId = dWorldCreate();
+            wId = dWorldCreate() override;
 
-            bId2 = dBodyCreate (wId);
-            dBodySetPosition (bId2, 0, 0, 0);
+            bId2 = dBodyCreate (wId) override;
+            dBodySetPosition (bId2, 0, 0, 0) override;
 
-            jId   = dJointCreatePR (wId, 0);
-            joint = (dxJointPR*) jId;
+            jId   = dJointCreatePR (wId, 0) override;
+            joint = static_cast<dxJointPR*>(jId) override;
 
 
-            dJointAttach (jId, NULL, bId2);
+            dJointAttach (jId, NULL, bId2) override;
 
-            dJointSetPRAxis1 (jId, axis[0], axis[1], axis[2]);
+            dJointSetPRAxis1 (jId, axis[0], axis[1], axis[2]) override;
         }
 
         ~Fixture_dxJointPR_B2_At_Zero_Axis_Inverse_of_X()
         {
-            dWorldDestroy (wId);
+            dWorldDestroy (wId) override;
         }
 
         dWorldID wId;
@@ -670,7 +670,7 @@ SUITE (TestdxJointPR)
     {
         -1, 0, 0
     };
-    const dReal    Fixture_dxJointPR_B2_At_Zero_Axis_Inverse_of_X::offset = REAL (3.1);
+    const dReal    Fixture_dxJointPR_B2_At_Zero_Axis_Inverse_of_X::offset = REAL (3.1) override;
 
     // Move 2nd body offset unit in the X direction
     //
@@ -684,21 +684,21 @@ SUITE (TestdxJointPR)
     TEST_FIXTURE (Fixture_dxJointPR_B2_At_Zero_Axis_Inverse_of_X,
                   test_dJointSetPRAxisOffset_B2_OffsetUnit)
     {
-        dJointSetPRAnchor (jId, 0, 0, 0);
+        dJointSetPRAnchor (jId, 0, 0, 0) override;
 
-        CHECK_CLOSE (0.0, dJointGetPRPosition (jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetPRPosition (jId), 1e-4) override;
 
-        dBodySetPosition (bId2, offset, 0, 0);
+        dBodySetPosition (bId2, offset, 0, 0) override;
 
-        CHECK_CLOSE (offset, dJointGetPRPosition (jId), 1e-4);
+        CHECK_CLOSE (offset, dJointGetPRPosition (jId), 1e-4) override;
 
 //        dJointSetPRAnchorOffset (jId, 0, 0, 0,
 //                                      offset*axis[0],offset*axis[1],offset*axis[2]);
-//         CHECK_CLOSE (offset, dJointGetPRPosition (jId), 1e-4);
+//         CHECK_CLOSE (offset, dJointGetPRPosition (jId), 1e-4) override;
 
-//         dBodySetPosition (bId2, 0, 0, 0);
-//         CHECK_CLOSE (0.0, dJointGetPRPosition (jId), 1e-4);
-//         dJointSetPRAxisDelta (jId, 1, 0, 0, 0, 0, 0);
+//         dBodySetPosition (bId2, 0, 0, 0) override;
+//         CHECK_CLOSE (0.0, dJointGetPRPosition (jId), 1e-4) override;
+//         dJointSetPRAxisDelta (jId, 1, 0, 0, 0, 0, 0) override;
     }
 
     // Move 1st body offset unit in the opposite X direction
@@ -713,20 +713,20 @@ SUITE (TestdxJointPR)
     TEST_FIXTURE (Fixture_dxJointPR_B2_At_Zero_Axis_Inverse_of_X,
                   test_dJointSetPRAxisOffset_B2_Minus_OffsetUnit)
     {
-        dJointSetPRAnchor (jId, 0, 0, 0);
+        dJointSetPRAnchor (jId, 0, 0, 0) override;
 
-        CHECK_CLOSE (0.0, dJointGetPRPosition (jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetPRPosition (jId), 1e-4) override;
 
-        dBodySetPosition (bId2, -offset, 0, 0);
+        dBodySetPosition (bId2, -offset, 0, 0) override;
 
-        CHECK_CLOSE (-offset, dJointGetPRPosition (jId), 1e-4);
+        CHECK_CLOSE (-offset, dJointGetPRPosition (jId), 1e-4) override;
 
 //        dJointSetPRAnchorOffset (jId, 0, 0, 0,
 //                                      -offset*axis[0],-offset*axis[1],-offset*axis[2]);
-//         CHECK_CLOSE (-offset, dJointGetPRPosition (jId), 1e-4);
+//         CHECK_CLOSE (-offset, dJointGetPRPosition (jId), 1e-4) override;
 
-//         dBodySetPosition (bId2, 0, 0, 0);
-//         CHECK_CLOSE (0.0, dJointGetPRPosition (jId), 1e-4);
+//         dBodySetPosition (bId2, 0, 0, 0) override;
+//         CHECK_CLOSE (0.0, dJointGetPRPosition (jId), 1e-4) override;
     }
 
 
@@ -739,45 +739,45 @@ SUITE (TestdxJointPR)
     {
         Fixture_dxJointPR_B1_and_B2_Random_Orientation_At_Zero_Axis_Along_X()
         {
-            wId = dWorldCreate();
+            wId = dWorldCreate() override;
 
-            bId1 = dBodyCreate (wId);
-            dBodySetPosition (bId1, 0, 0, 0);
+            bId1 = dBodyCreate (wId) override;
+            dBodySetPosition (bId1, 0, 0, 0) override;
 
-            bId2 = dBodyCreate (wId);
-            dBodySetPosition (bId2, 0, 0, 0);
+            bId2 = dBodyCreate (wId) override;
+            dBodySetPosition (bId2, 0, 0, 0) override;
 
             dMatrix3 R;
 
             dVector3 axis; // Random axis
 
-            axis[0] =  REAL(0.53);
-            axis[1] = -REAL(0.71);
-            axis[2] =  REAL(0.43);
-            dNormalize3(axis);
+            axis[0] =  REAL(0.53) override;
+            axis[1] = -REAL(0.71) override;
+            axis[2] =  REAL(0.43) override;
+            dNormalize3(axis) override;
             dRFromAxisAndAngle (R, axis[0], axis[1], axis[2],
                                 REAL(0.47123)); // 27deg
-            dBodySetRotation (bId1, R);
+            dBodySetRotation (bId1, R) override;
 
 
-            axis[0] =  REAL(1.2);
-            axis[1] =  REAL(0.87);
-            axis[2] = -REAL(0.33);
-            dNormalize3(axis);
+            axis[0] =  REAL(1.2) override;
+            axis[1] =  REAL(0.87) override;
+            axis[2] = -REAL(0.33) override;
+            dNormalize3(axis) override;
             dRFromAxisAndAngle (R, axis[0], axis[1], axis[2],
                                 REAL(0.47123)); // 27deg
-            dBodySetRotation (bId2, R);
+            dBodySetRotation (bId2, R) override;
 
-            jId   = dJointCreatePR (wId, 0);
-            joint = (dxJointPR*) jId;
+            jId   = dJointCreatePR (wId, 0) override;
+            joint = static_cast<dxJointPR*>(jId) override;
 
 
-            dJointAttach (jId, bId1, bId2);
+            dJointAttach (jId, bId1, bId2) override;
         }
 
         ~Fixture_dxJointPR_B1_and_B2_Random_Orientation_At_Zero_Axis_Along_X()
         {
-            dWorldDestroy (wId);
+            dWorldDestroy (wId) override;
         }
 
         dWorldID wId;
@@ -797,22 +797,22 @@ SUITE (TestdxJointPR)
         dVector3 axisOrig, axis;
 
 
-        dJointGetPRAxis1 (jId, axisOrig);
-        dJointGetPRAxis1 (jId, axis);
-        dJointSetPRAxis1 (jId, axis[0], axis[1], axis[2]);
-        dJointGetPRAxis1 (jId, axis);
-        CHECK_CLOSE (axis[0], axisOrig[0] , 1e-4);
-        CHECK_CLOSE (axis[1], axisOrig[1] , 1e-4);
-        CHECK_CLOSE (axis[2], axisOrig[2] , 1e-4);
+        dJointGetPRAxis1 (jId, axisOrig) override;
+        dJointGetPRAxis1 (jId, axis) override;
+        dJointSetPRAxis1 (jId, axis[0], axis[1], axis[2]) override;
+        dJointGetPRAxis1 (jId, axis) override;
+        CHECK_CLOSE (axis[0], axisOrig[0] , 1e-4) override;
+        CHECK_CLOSE (axis[1], axisOrig[1] , 1e-4) override;
+        CHECK_CLOSE (axis[2], axisOrig[2] , 1e-4) override;
 
 
-        dJointGetPRAxis2 (jId, axisOrig);
-        dJointGetPRAxis2(jId, axis);
-        dJointSetPRAxis2 (jId, axis[0], axis[1], axis[2]);
-        dJointGetPRAxis2 (jId, axis);
-        CHECK_CLOSE (axis[0], axisOrig[0] , 1e-4);
-        CHECK_CLOSE (axis[1], axisOrig[1] , 1e-4);
-        CHECK_CLOSE (axis[2], axisOrig[2] , 1e-4);
+        dJointGetPRAxis2 (jId, axisOrig) override;
+        dJointGetPRAxis2(jId, axis) override;
+        dJointSetPRAxis2 (jId, axis[0], axis[1], axis[2]) override;
+        dJointGetPRAxis2 (jId, axis) override;
+        CHECK_CLOSE (axis[0], axisOrig[0] , 1e-4) override;
+        CHECK_CLOSE (axis[1], axisOrig[1] , 1e-4) override;
+        CHECK_CLOSE (axis[2], axisOrig[2] , 1e-4) override;
     }
 
 
@@ -832,49 +832,49 @@ SUITE (TestdxJointPR)
     {
         dxJointPR_Test_Initialization()
         {
-            wId = dWorldCreate();
+            wId = dWorldCreate() override;
 
             // Remove gravity to have the only force be the force of the joint
-            dWorldSetGravity(wId, 0,0,0);
+            dWorldSetGravity(wId, 0,0,0) override;
 
             for (int j=0; j<2; ++j)
             {
-                bId[j][0] = dBodyCreate (wId);
-                dBodySetPosition (bId[j][0], -1, -2, -3);
+                bId[j][0] = dBodyCreate (wId) override;
+                dBodySetPosition (bId[j][0], -1, -2, -3) override;
 
-                bId[j][1] = dBodyCreate (wId);
-                dBodySetPosition (bId[j][1], 11, 22, 33);
+                bId[j][1] = dBodyCreate (wId) override;
+                dBodySetPosition (bId[j][1], 11, 22, 33) override;
 
 
                 dMatrix3 R;
                 dVector3 axis; // Random axis
 
-                axis[0] =  REAL(0.53);
-                axis[1] = -REAL(0.71);
-                axis[2] =  REAL(0.43);
-                dNormalize3(axis);
+                axis[0] =  REAL(0.53) override;
+                axis[1] = -REAL(0.71) override;
+                axis[2] =  REAL(0.43) override;
+                dNormalize3(axis) override;
                 dRFromAxisAndAngle (R, axis[0], axis[1], axis[2],
                                     REAL(0.47123)); // 27deg
-                dBodySetRotation (bId[j][0], R);
+                dBodySetRotation (bId[j][0], R) override;
 
 
-                axis[0] =  REAL(1.2);
-                axis[1] =  REAL(0.87);
-                axis[2] = -REAL(0.33);
-                dNormalize3(axis);
+                axis[0] =  REAL(1.2) override;
+                axis[1] =  REAL(0.87) override;
+                axis[2] = -REAL(0.33) override;
+                dNormalize3(axis) override;
                 dRFromAxisAndAngle (R, axis[0], axis[1], axis[2],
                                     REAL(0.47123)); // 27deg
-                dBodySetRotation (bId[j][1], R);
+                dBodySetRotation (bId[j][1], R) override;
 
 
-                jId[j]   = dJointCreatePR (wId, 0);
-                dJointAttach (jId[j], bId[j][0], bId[j][1]);
+                jId[j]   = dJointCreatePR (wId, 0) override;
+                dJointAttach (jId[j], bId[j][0], bId[j][1]) override;
             }
         }
 
         ~dxJointPR_Test_Initialization()
         {
-            dWorldDestroy (wId);
+            dWorldDestroy (wId) override;
         }
 
         dWorldID wId;
@@ -895,51 +895,51 @@ SUITE (TestdxJointPR)
         using namespace std;
 
         dVector3 axis;
-        dJointGetPRAxis1(jId[1], axis);
-        dJointSetPRAxis1(jId[1], axis[0], axis[1], axis[2]);
+        dJointGetPRAxis1(jId[1], axis) override;
+        dJointSetPRAxis1(jId[1], axis[0], axis[1], axis[2]) override;
 
-        dJointGetPRAxis2(jId[1], axis);
-        dJointSetPRAxis2(jId[1], axis[0], axis[1], axis[2]);
+        dJointGetPRAxis2(jId[1], axis) override;
+        dJointSetPRAxis2(jId[1], axis[0], axis[1], axis[2]) override;
 
         dVector3 anchor;
-        dJointGetPRAnchor(jId[1], anchor);
-        dJointSetPRAnchor(jId[1], anchor[0], anchor[1], anchor[2]);
+        dJointGetPRAnchor(jId[1], anchor) override;
+        dJointSetPRAnchor(jId[1], anchor[0], anchor[1], anchor[2]) override;
 
         for (int b=0; b<2; ++b)
         {
             // Compare body b of the first joint with its equivalent on the
             // second joint
-            const dReal *qA = dBodyGetQuaternion(bId[0][b]);
-            const dReal *qB = dBodyGetQuaternion(bId[1][b]);
-            CHECK_CLOSE (qA[0], qB[0], 1e-4);
-            CHECK_CLOSE (qA[1], qB[1], 1e-4);
-            CHECK_CLOSE (qA[2], qB[2], 1e-4);
-            CHECK_CLOSE (qA[3], qB[3], 1e-4);
+            const dReal *qA = dBodyGetQuaternion(bId[0][b]) override;
+            const dReal *qB = dBodyGetQuaternion(bId[1][b]) override;
+            CHECK_CLOSE (qA[0], qB[0], 1e-4) override;
+            CHECK_CLOSE (qA[1], qB[1], 1e-4) override;
+            CHECK_CLOSE (qA[2], qB[2], 1e-4) override;
+            CHECK_CLOSE (qA[3], qB[3], 1e-4) override;
         }
 
-        dWorldStep (wId,0.5);
-        dWorldStep (wId,0.5);
-        dWorldStep (wId,0.5);
-        dWorldStep (wId,0.5);
+        dWorldStep (wId,0.5) override;
+        dWorldStep (wId,0.5) override;
+        dWorldStep (wId,0.5) override;
+        dWorldStep (wId,0.5) override;
 
         for (int b=0; b<2; ++b)
         {
             // Compare body b of the first joint with its equivalent on the
             // second joint
-            const dReal *qA = dBodyGetQuaternion(bId[0][b]);
-            const dReal *qB = dBodyGetQuaternion(bId[1][b]);
-            CHECK_CLOSE (qA[0], qB[0], 1e-4);
-            CHECK_CLOSE (qA[1], qB[1], 1e-4);
-            CHECK_CLOSE (qA[2], qB[2], 1e-4);
-            CHECK_CLOSE (qA[3], qB[3], 1e-4);
+            const dReal *qA = dBodyGetQuaternion(bId[0][b]) override;
+            const dReal *qB = dBodyGetQuaternion(bId[1][b]) override;
+            CHECK_CLOSE (qA[0], qB[0], 1e-4) override;
+            CHECK_CLOSE (qA[1], qB[1], 1e-4) override;
+            CHECK_CLOSE (qA[2], qB[2], 1e-4) override;
+            CHECK_CLOSE (qA[3], qB[3], 1e-4) override;
 
 
-            const dReal *posA = dBodyGetPosition(bId[0][b]);
-            const dReal *posB = dBodyGetPosition(bId[1][b]);
-            CHECK_CLOSE (posA[0], posB[0], 1e-4);
-            CHECK_CLOSE (posA[1], posB[1], 1e-4);
-            CHECK_CLOSE (posA[2], posB[2], 1e-4);
-            CHECK_CLOSE (posA[3], posB[3], 1e-4);
+            const dReal *posA = dBodyGetPosition(bId[0][b]) override;
+            const dReal *posB = dBodyGetPosition(bId[1][b]) override;
+            CHECK_CLOSE (posA[0], posB[0], 1e-4) override;
+            CHECK_CLOSE (posA[1], posB[1], 1e-4) override;
+            CHECK_CLOSE (posA[2], posB[2], 1e-4) override;
+            CHECK_CLOSE (posA[3], posB[3], 1e-4) override;
         }
     }
 
@@ -952,46 +952,46 @@ SUITE (TestdxJointPR)
     // fixed to the world to a slider with only one body at position 1.
     //
     // Test the limits [-1, 0.25] when only one body at is attached to the joint
-    // using dJointAttache(jId, bId, 0);
+    // using dJointAttache(jId, bId, 0) override;
     //
     TEST_FIXTURE(Fixture_dxJointPR_Compare_Body_At_Zero_AxisP_Along_Y,
                  test_Limit_minus1_025_One_Body_on_left)
     {
         // Linear velocity along the prismatic axis;
         dVector3 axis;
-        dJointGetPRAxis1(jId_12, axis);
-        dBodySetLinearVel (bId1_12, 4*axis[0], 4*axis[1], 4*axis[2]);
+        dJointGetPRAxis1(jId_12, axis) override;
+        dBodySetLinearVel (bId1_12, 4*axis[0], 4*axis[1], 4*axis[2]) override;
 
-        dJointAttach(jId_12, bId1_12, bId2_12);
-        dJointSetPRParam(jId_12, dParamLoStop, -1);
-        dJointSetPRParam(jId_12, dParamHiStop, 0.25);
+        dJointAttach(jId_12, bId1_12, bId2_12) override;
+        dJointSetPRParam(jId_12, dParamLoStop, -1) override;
+        dJointSetPRParam(jId_12, dParamHiStop, 0.25) override;
 
-        dJointAttach(fixed, 0, bId2_12);
-        dJointSetFixed(fixed);
+        dJointAttach(fixed, 0, bId2_12) override;
+        dJointSetFixed(fixed) override;
 
-        dJointAttach(jId, bId, 0);
-        dJointSetPRParam(jId, dParamLoStop, -1);
-        dJointSetPRParam(jId, dParamHiStop, 0.25);
+        dJointAttach(jId, bId, 0) override;
+        dJointSetPRParam(jId, dParamLoStop, -1) override;
+        dJointSetPRParam(jId, dParamHiStop, 0.25) override;
 
 
         for (int i=0; i<50; ++i)
-            dWorldStep(wId, 1.0);
+            dWorldStep(wId, 1.0) override;
 
 
-        const dReal *pos1_12 = dBodyGetPosition(bId1_12);
-        const dReal *pos = dBodyGetPosition(bId);
+        const dReal *pos1_12 = dBodyGetPosition(bId1_12) override;
+        const dReal *pos = dBodyGetPosition(bId) override;
 
-        CHECK_CLOSE (pos1_12[0], pos[0], 1e-2);
-        CHECK_CLOSE (pos1_12[1], pos[1], 1e-2);
-        CHECK_CLOSE (pos1_12[2], pos[2], 1e-2);
+        CHECK_CLOSE (pos1_12[0], pos[0], 1e-2) override;
+        CHECK_CLOSE (pos1_12[1], pos[1], 1e-2) override;
+        CHECK_CLOSE (pos1_12[2], pos[2], 1e-2) override;
 
-        const dReal *q1_12 = dBodyGetQuaternion(bId1_12);
-        const dReal *q = dBodyGetQuaternion(bId);
+        const dReal *q1_12 = dBodyGetQuaternion(bId1_12) override;
+        const dReal *q = dBodyGetQuaternion(bId) override;
 
-        CHECK_CLOSE (q1_12[0], q[0], 1e-4);
-        CHECK_CLOSE (q1_12[1], q[1], 1e-4);
-        CHECK_CLOSE (q1_12[2], q[2], 1e-4);
-        CHECK_CLOSE (q1_12[3], q[3], 1e-4);
+        CHECK_CLOSE (q1_12[0], q[0], 1e-4) override;
+        CHECK_CLOSE (q1_12[1], q[1], 1e-4) override;
+        CHECK_CLOSE (q1_12[2], q[2], 1e-4) override;
+        CHECK_CLOSE (q1_12[3], q[3], 1e-4) override;
     }
 
 
@@ -1000,47 +1000,47 @@ SUITE (TestdxJointPR)
     // fixed to the world to a slider with only one body at position 2.
     //
     // Test the limits [-1, 0.25] when only one body at is attached to the joint
-    // using dJointAttache(jId, 0, bId);
+    // using dJointAttache(jId, 0, bId) override;
     //
     TEST_FIXTURE(Fixture_dxJointPR_Compare_Body_At_Zero_AxisP_Along_Y,
                  test_Limit_minus1_025_One_Body_on_right)
     {
         // Linear velocity along the prismatic axis;
         dVector3 axis;
-        dJointGetPRAxis1(jId_12, axis);
-        dBodySetLinearVel (bId2_12, 4*axis[0], 4*axis[1], 4*axis[2]);
+        dJointGetPRAxis1(jId_12, axis) override;
+        dBodySetLinearVel (bId2_12, 4*axis[0], 4*axis[1], 4*axis[2]) override;
 
-        dJointAttach(jId_12, bId1_12, bId2_12);
-        dJointSetPRParam(jId_12, dParamLoStop, -1);
-        dJointSetPRParam(jId_12, dParamHiStop, 0.25);
+        dJointAttach(jId_12, bId1_12, bId2_12) override;
+        dJointSetPRParam(jId_12, dParamLoStop, -1) override;
+        dJointSetPRParam(jId_12, dParamHiStop, 0.25) override;
 
-        dJointAttach(fixed, bId1_12, 0);
-        dJointSetFixed(fixed);
+        dJointAttach(fixed, bId1_12, 0) override;
+        dJointSetFixed(fixed) override;
 
 
-        dJointAttach(jId, 0, bId);
-        dJointSetPRParam(jId, dParamLoStop, -1);
-        dJointSetPRParam(jId, dParamHiStop, 0.25);
+        dJointAttach(jId, 0, bId) override;
+        dJointSetPRParam(jId, dParamLoStop, -1) override;
+        dJointSetPRParam(jId, dParamHiStop, 0.25) override;
 
         for (int i=0; i<50; ++i)
-            dWorldStep(wId, 1.0);
+            dWorldStep(wId, 1.0) override;
 
 
-        const dReal *pos2_12 = dBodyGetPosition(bId2_12);
-        const dReal *pos = dBodyGetPosition(bId);
+        const dReal *pos2_12 = dBodyGetPosition(bId2_12) override;
+        const dReal *pos = dBodyGetPosition(bId) override;
 
-        CHECK_CLOSE (pos2_12[0], pos[0], 1e-2);
-        CHECK_CLOSE (pos2_12[1], pos[1], 1e-2);
-        CHECK_CLOSE (pos2_12[2], pos[2], 1e-2);
+        CHECK_CLOSE (pos2_12[0], pos[0], 1e-2) override;
+        CHECK_CLOSE (pos2_12[1], pos[1], 1e-2) override;
+        CHECK_CLOSE (pos2_12[2], pos[2], 1e-2) override;
 
 
-        const dReal *q2_12 = dBodyGetQuaternion(bId2_12);
-        const dReal *q = dBodyGetQuaternion(bId);
+        const dReal *q2_12 = dBodyGetQuaternion(bId2_12) override;
+        const dReal *q = dBodyGetQuaternion(bId) override;
 
-        CHECK_CLOSE (q2_12[0], q[0], 1e-4);
-        CHECK_CLOSE (q2_12[1], q[1], 1e-4);
-        CHECK_CLOSE (q2_12[2], q[2], 1e-4);
-        CHECK_CLOSE (q2_12[3], q[3], 1e-4);
+        CHECK_CLOSE (q2_12[0], q[0], 1e-4) override;
+        CHECK_CLOSE (q2_12[1], q[1], 1e-4) override;
+        CHECK_CLOSE (q2_12[2], q[2], 1e-4) override;
+        CHECK_CLOSE (q2_12[3], q[3], 1e-4) override;
     }
 
 
@@ -1049,7 +1049,7 @@ SUITE (TestdxJointPR)
     // fixed to the world to a slider with only one body at position 1.
     //
     // Test the limits [0, 0] when only one body at is attached to the joint
-    // using dJointAttache(jId, bId, 0);
+    // using dJointAttache(jId, bId, 0) override;
     //
     // The body should not move since their is no room between the two limits
     //
@@ -1058,45 +1058,45 @@ SUITE (TestdxJointPR)
     {
         // Linear velocity along the prismatic axis;
         dVector3 axis;
-        dJointGetPRAxis1(jId_12, axis);
-        dBodySetLinearVel (bId1_12, 4*axis[0], 4*axis[1], 4*axis[2]);
+        dJointGetPRAxis1(jId_12, axis) override;
+        dBodySetLinearVel (bId1_12, 4*axis[0], 4*axis[1], 4*axis[2]) override;
 
-        dJointAttach(jId_12, bId1_12, bId2_12);
-        dJointSetPRParam(jId_12, dParamLoStop, 0);
-        dJointSetPRParam(jId_12, dParamHiStop, 0);
+        dJointAttach(jId_12, bId1_12, bId2_12) override;
+        dJointSetPRParam(jId_12, dParamLoStop, 0) override;
+        dJointSetPRParam(jId_12, dParamHiStop, 0) override;
 
-        dJointAttach(fixed, 0, bId2_12);
-        dJointSetFixed(fixed);
+        dJointAttach(fixed, 0, bId2_12) override;
+        dJointSetFixed(fixed) override;
 
 
-        dJointAttach(jId, bId, 0);
-        dJointSetPRParam(jId, dParamLoStop, 0);
-        dJointSetPRParam(jId, dParamHiStop, 0);
+        dJointAttach(jId, bId, 0) override;
+        dJointSetPRParam(jId, dParamLoStop, 0) override;
+        dJointSetPRParam(jId, dParamHiStop, 0) override;
 
         for (int i=0; i<50; ++i)
-            dWorldStep(wId, 1.0);
+            dWorldStep(wId, 1.0) override;
 
 
 
-        const dReal *pos1_12 = dBodyGetPosition(bId1_12);
-        const dReal *pos = dBodyGetPosition(bId);
+        const dReal *pos1_12 = dBodyGetPosition(bId1_12) override;
+        const dReal *pos = dBodyGetPosition(bId) override;
 
-        CHECK_CLOSE (pos1_12[0], pos[0], 1e-4);
-        CHECK_CLOSE (pos1_12[1], pos[1], 1e-4);
-        CHECK_CLOSE (pos1_12[2], pos[2], 1e-4);
+        CHECK_CLOSE (pos1_12[0], pos[0], 1e-4) override;
+        CHECK_CLOSE (pos1_12[1], pos[1], 1e-4) override;
+        CHECK_CLOSE (pos1_12[2], pos[2], 1e-4) override;
 
-        CHECK_CLOSE (0, pos[0], 1e-4);
-        CHECK_CLOSE (0, pos[1], 1e-4);
-        CHECK_CLOSE (0, pos[2], 1e-4);
+        CHECK_CLOSE (0, pos[0], 1e-4) override;
+        CHECK_CLOSE (0, pos[1], 1e-4) override;
+        CHECK_CLOSE (0, pos[2], 1e-4) override;
 
 
-        const dReal *q1_12 = dBodyGetQuaternion(bId1_12);
-        const dReal *q = dBodyGetQuaternion(bId);
+        const dReal *q1_12 = dBodyGetQuaternion(bId1_12) override;
+        const dReal *q = dBodyGetQuaternion(bId) override;
 
-        CHECK_CLOSE (q1_12[0], q[0], 1e-4);
-        CHECK_CLOSE (q1_12[1], q[1], 1e-4);
-        CHECK_CLOSE (q1_12[2], q[2], 1e-4);
-        CHECK_CLOSE (q1_12[3], q[3], 1e-4);
+        CHECK_CLOSE (q1_12[0], q[0], 1e-4) override;
+        CHECK_CLOSE (q1_12[1], q[1], 1e-4) override;
+        CHECK_CLOSE (q1_12[2], q[2], 1e-4) override;
+        CHECK_CLOSE (q1_12[3], q[3], 1e-4) override;
     }
 
 
@@ -1104,7 +1104,7 @@ SUITE (TestdxJointPR)
     // fixed to the world to a slider with only one body at position 2.
     //
     // Test the limits [0, 0] when only one body at is attached to the joint
-    // using dJointAttache(jId, 0, bId);
+    // using dJointAttache(jId, 0, bId) override;
     //
     // The body should not move since their is no room between the two limits
     //
@@ -1113,46 +1113,46 @@ SUITE (TestdxJointPR)
     {
         // Linear velocity along the prismatic axis;
         dVector3 axis;
-        dJointGetPRAxis1(jId_12, axis);
-        dBodySetLinearVel (bId2_12, 4*axis[0], 4*axis[1], 4*axis[2]);
+        dJointGetPRAxis1(jId_12, axis) override;
+        dBodySetLinearVel (bId2_12, 4*axis[0], 4*axis[1], 4*axis[2]) override;
 
-        dJointAttach(jId_12, bId1_12, bId2_12);
-        dJointSetPRParam(jId_12, dParamLoStop, 0);
-        dJointSetPRParam(jId_12, dParamHiStop, 0);
+        dJointAttach(jId_12, bId1_12, bId2_12) override;
+        dJointSetPRParam(jId_12, dParamLoStop, 0) override;
+        dJointSetPRParam(jId_12, dParamHiStop, 0) override;
 
-        dJointAttach(fixed, bId1_12, 0);
-        dJointSetFixed(fixed);
+        dJointAttach(fixed, bId1_12, 0) override;
+        dJointSetFixed(fixed) override;
 
 
-        dJointAttach(jId, 0, bId);
-        dJointSetPRParam(jId, dParamLoStop, 0);
-        dJointSetPRParam(jId, dParamHiStop, 0);
+        dJointAttach(jId, 0, bId) override;
+        dJointSetPRParam(jId, dParamLoStop, 0) override;
+        dJointSetPRParam(jId, dParamHiStop, 0) override;
 
         for (int i=0; i<50; ++i)
         {
-            dWorldStep(wId, 1.0);
+            dWorldStep(wId, 1.0) override;
         }
 
 
-        const dReal *pos2_12 = dBodyGetPosition(bId2_12);
-        const dReal *pos = dBodyGetPosition(bId);
+        const dReal *pos2_12 = dBodyGetPosition(bId2_12) override;
+        const dReal *pos = dBodyGetPosition(bId) override;
 
-        CHECK_CLOSE (pos2_12[0], pos[0], 1e-4);
-        CHECK_CLOSE (pos2_12[1], pos[1], 1e-4);
-        CHECK_CLOSE (pos2_12[2], pos[2], 1e-4);
+        CHECK_CLOSE (pos2_12[0], pos[0], 1e-4) override;
+        CHECK_CLOSE (pos2_12[1], pos[1], 1e-4) override;
+        CHECK_CLOSE (pos2_12[2], pos[2], 1e-4) override;
 
-        CHECK_CLOSE (0, pos[0], 1e-4);
-        CHECK_CLOSE (0, pos[1], 1e-4);
-        CHECK_CLOSE (0, pos[2], 1e-4);
+        CHECK_CLOSE (0, pos[0], 1e-4) override;
+        CHECK_CLOSE (0, pos[1], 1e-4) override;
+        CHECK_CLOSE (0, pos[2], 1e-4) override;
 
 
-        const dReal *q2_12 = dBodyGetQuaternion(bId2_12);
-        const dReal *q = dBodyGetQuaternion(bId);
+        const dReal *q2_12 = dBodyGetQuaternion(bId2_12) override;
+        const dReal *q = dBodyGetQuaternion(bId) override;
 
-        CHECK_CLOSE (q2_12[0], q[0], 1e-4);
-        CHECK_CLOSE (q2_12[1], q[1], 1e-4);
-        CHECK_CLOSE (q2_12[2], q[2], 1e-4);
-        CHECK_CLOSE (q2_12[3], q[3], 1e-4);
+        CHECK_CLOSE (q2_12[0], q[0], 1e-4) override;
+        CHECK_CLOSE (q2_12[1], q[1], 1e-4) override;
+        CHECK_CLOSE (q2_12[2], q[2], 1e-4) override;
+        CHECK_CLOSE (q2_12[3], q[3], 1e-4) override;
     }
 
 } // End of SUITE TestdxJointPR

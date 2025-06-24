@@ -34,19 +34,19 @@ namespace lpzrobots {
   class Joint;
 
   typedef struct {
-    double size;
-    double force;
-    double speed;
-    bool sphereWheels;
-    bool useBumper;
-    bool useButton; ///< use yellow Button at the back
-    bool twoWheelMode; ///< if true then the robot emulates 2 wheels
-    bool irFront;
-    bool irBack;
-    bool irSide;
-    double irRangeFront;
-    double irRangeBack;
-    double irRangeSide;
+    double size = 0;
+    double force = 0;
+    double speed = 0;
+    bool sphereWheels = false;
+    bool useBumper = false;
+    bool useButton = false; ///< use yellow Button at the back
+    bool twoWheelMode = false; ///< if true then the robot emulates 2 wheels
+    bool irFront = false;
+    bool irBack = false;
+    bool irSide = false;
+    double irRangeFront = 0;
+    double irRangeBack = 0;
+    double irRangeSide = 0;
     Substance wheelSubstance;
   } FourWheeledConf;
 
@@ -65,7 +65,7 @@ namespace lpzrobots {
      */
     FourWheeled(const OdeHandle& odeHandle, const OsgHandle& osgHandle, FourWheeledConf conf, const std::string& name);
 
-    static FourWheeledConf getDefaultConf(){
+    static FourWheeledConf getDefaultConf() const {
       FourWheeledConf conf;
       conf.size         = 1;
       conf.force        = 3;

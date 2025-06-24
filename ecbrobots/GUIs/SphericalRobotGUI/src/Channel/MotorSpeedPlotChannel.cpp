@@ -3,7 +3,7 @@
 #include <iostream>
 
 
-MotorSpeedPlotChannel::MotorSpeedPlotChannel(std::string name) : AbstractPlotChannel(name)
+MotorSpeedPlotChannel::MotorSpeedPlotChannel(const std::string& name) : AbstractPlotChannel(name)
 {
 //   std::cout << "new MotorSpeedChannel created: " << name << std::endl;
 }

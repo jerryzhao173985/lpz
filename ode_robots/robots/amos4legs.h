@@ -59,64 +59,64 @@ namespace lpzrobots {
        */
       /**@{*/
       /** fix the shoulder element to the trunk. */
-      bool useShoulder;
+      bool useShoulder = false;
       /** whether to use joints at the knees or fix them */
-      bool useTebiaJoints;
+      bool useTebiaJoints = false;
       /** use spring foot */
-      bool useFoot;
+      bool useFoot = false;
       /** use the hinge joint in the back */
-      bool useBack;
+      bool useBack = false;
       /**
        * if true, rubber substance is used for feet instead of the substance
        * used for the rest of the robot
        */
-      bool rubberFeet;
+      bool rubberFeet = false;
       /** decide whether you wand to use a local velocity sensors.
        *  If yes it gets velocity vector in local coordinates and pass it as
        *  sensorvalues */
-      bool useLocalVelSensor;
+      bool useLocalVelSensor = false;
       /** Use binary leg contact sensors. If false, a force sensor is used. */
-      bool legContactSensorIsBinary;
+      bool legContactSensorIsBinary = false;
       /**@}*/
 
       /** scaling factor for robot (length of body) */
-      double size;
+      double size = 0;
       /** trunk width */
-      double width;
+      double width = 0;
       /** trunk height */
-      double height;
+      double height = 0;
       /** length of the front of the body (if back joint is used) */
-      double frontLength;
+      double frontLength = 0;
       /** radius of a wheel */
-      double wheel_radius;
+      double wheel_radius = 0;
       /** width of a wheel */
-      double wheel_width;
+      double wheel_width = 0;
       /** mass of a wheel */
-      double wheel_mass;
+      double wheel_mass = 0;
 
       /** trunk mass */
-      double trunkMass;
+      double trunkMass = 0;
       /** mass of the front part of the robot (if backboine joint is used) */
-      double frontMass;
+      double frontMass = 0;
       /** mass of the shoulders (if used) */
-      double shoulderMass;
+      double shoulderMass = 0;
       /** mass of the coxa limbs */
-      double coxaMass;
+      double coxaMass = 0;
       /** mass of the second limbs */
-      double secondMass;
+      double secondMass = 0;
       /** mass of the tebia limbs */
-      double tebiaMass;
+      double tebiaMass = 0;
       /** mass of the feet */
-      double footMass;
+      double footMass = 0;
 
       /** fix legs to trunk at this distance from bottom of trunk */
-      double shoulderHeight;
+      double shoulderHeight = 0;
 
       /** distance between hindlegs and middle legs */
-      double legdist1;
+      double legdist1 = 0;
 
       /** distance between middle legs and front legs */
-      double legdist2;
+      double legdist2 = 0;
 
       /** @name Leg extension from trunk
        *
@@ -128,28 +128,28 @@ namespace lpzrobots {
       /**@{*/
       /** angle in rad around vertical axis at leg-trunk fixation for front
        *  legs*/
-      double fLegTrunkAngleV;
+      double fLegTrunkAngleV = 0;
       /** angle in rad around horizontal axis at leg-trunk fixation for front
        *  legs */
-      double fLegTrunkAngleH;
+      double fLegTrunkAngleH = 0;
       /** rotation of front legs around own axis */
-      double fLegRotAngle;
+      double fLegRotAngle = 0;
       /** angle in rad around vertical axis at leg-trunk fixation for middle
        *  legs */
-      double mLegTrunkAngleV;
+      double mLegTrunkAngleV = 0;
       /** angle in rad around horizontal axis at leg-trunk fixation for middle
        *  legs */
-      double mLegTrunkAngleH;
+      double mLegTrunkAngleH = 0;
       /** rotation of middle legs around own axis */
-      double mLegRotAngle;
+      double mLegRotAngle = 0;
       /** angle in rad around vertical axis at leg-trunk fixation for rear legs
        * */
-      double rLegTrunkAngleV;
+      double rLegTrunkAngleV = 0;
       /** angle in rad around horizontal axis at leg-trunk fixation for rear
        *  legs */
-      double rLegTrunkAngleH;
+      double rLegTrunkAngleH = 0;
       /** rotation of rear legs around own axis */
-      double rLegRotAngle;
+      double rLegRotAngle = 0;
       /**@}*/
 
       /**
@@ -159,26 +159,26 @@ namespace lpzrobots {
        */
       /**@{*/
       /** length of the shoulder limbs (if used) */
-      double shoulderLength;
+      double shoulderLength = 0;
       /** radius of the shoulder limbs (if used) */
-      double shoulderRadius;
+      double shoulderRadius = 0;
       /** length of the coxa limbs */
-      double coxaLength;
+      double coxaLength = 0;
       /** radius of the coxa limbs */
-      double coxaRadius;
+      double coxaRadius = 0;
       /** length of the second limbs */
-      double secondLength;
+      double secondLength = 0;
       /** radius of the second limbs */
-      double secondRadius;
+      double secondRadius = 0;
       /** length of the tebia limbs including fully extended foot spring
        *  (if used) */
-      double tebiaLength;
+      double tebiaLength = 0;
       /** radius of the tebia limbs */
-      double tebiaRadius;
+      double tebiaRadius = 0;
       /** range of the foot spring */
-      double footRange;
+      double footRange = 0;
       /** radius of the foot capsules, choose different from tebiaRadius */
-      double footRadius;
+      double footRadius = 0;
       /**@}*/
 
       /**
@@ -188,78 +188,78 @@ namespace lpzrobots {
        */
       /**{*/
       /** smaller limit of the backbone joint, positive is down */
-      double backJointLimitD;
+      double backJointLimitD = 0;
       /** upper limit of the backbone joint, positive is down */
-      double backJointLimitU;
+      double backJointLimitU = 0;
       /** forward limit of the front TC joints, negative is forward
        *  (zero specified by fcoxazero) */
-      double fcoxaJointLimitF;
+      double fcoxaJointLimitF = 0;
       /** backward limit of the front TC joints, negative is forward
        *  (zero specified by fcoxaZero) */
-      double fcoxaJointLimitB;
+      double fcoxaJointLimitB = 0;
       /** forward limit of the middle TC joints, negative is forward
        *  (zero specified by fcoxaZero) */
-      double mcoxaJointLimitF;
+      double mcoxaJointLimitF = 0;
       /** backward limit of the middle TC joints, negative is forward
        *  (zero specified by fcoxaZero) */
-      double mcoxaJointLimitB;
+      double mcoxaJointLimitB = 0;
       /** forward limit of the rear TC joints, negative is forward
        *  (zero specified by fcoxaZero) */
-      double rcoxaJointLimitF;
+      double rcoxaJointLimitF = 0;
       /** backward limit of the rear TC joints, negative is forward
        *  (zero specified by fcoxaZero) */
-      double rcoxaJointLimitB;
+      double rcoxaJointLimitB = 0;
       /** lower limit of the CTr joints, positive is down */
-      double secondJointLimitD;
+      double secondJointLimitD = 0;
       /** upper limit of the CTr joints, positive is down */
-      double secondJointLimitU;
+      double secondJointLimitU = 0;
       /** lower limit of the FTi joints, positive is down */
-      double tebiaJointLimitD;
+      double tebiaJointLimitD = 0;
       /** upper limit of the FTi joints, positive is down */
-      double tebiaJointLimitU;
+      double tebiaJointLimitU = 0;
       /**}*/
 
       /** preload of the foot spring */
-      double footSpringPreload;
+      double footSpringPreload = 0;
       /** upper limit of the foot spring = maximum value
        *  (negative is downwards (spring extends)) */
-      double footSpringLimitU;
+      double footSpringLimitU = 0;
       /** lower limit of the foot spring = minimum value
        *  (negative is downwards (spring extends)) */
-      double footSpringLimitD;
+      double footSpringLimitD = 0;
 
       /** maximal force of the backbone joint */
-      double backPower;
+      double backPower = 0;
       /** maximal force of the TC joint servos */
-      double coxaPower;
+      double coxaPower = 0;
       /** maximal force of the CTr joint servos */
-      double secondPower;
+      double secondPower = 0;
       /** maximal force of the FTi joint servos */
-      double tebiaPower;
+      double tebiaPower = 0;
       /** maximal force of the foot spring servos */
-      double footPower;
+      double footPower = 0;
 
       /** damping of the backbone joint servo */
-      double backDamping;
+      double backDamping = 0;
       /** damping of the TC joint servos */
-      double coxaDamping;
+      double coxaDamping = 0;
       /** damping of the CTr joint servo */
-      double secondDamping;
+      double secondDamping = 0;
       /** damping of the FTi joint servo */
-      double tebiaDamping;
+      double tebiaDamping = 0;
       /** damping of the foot spring servo */
-      double footDamping;
+      double footDamping = 0;
 
       /** maximal velocity of the backbone joint servo */
-      double backMaxVel;
+      double backMaxVel = 0;
       /** maximal velocity of the TC joint servo */
-      double coxaMaxVel;
+      double coxaMaxVel = 0;
       /** maximal velocity of the CTr joint servo */
-      double secondMaxVel;
+      double secondMaxVel = 0;
       /** maximal velocity of the FTi joint servo */
-      double tebiaMaxVel;
+      double tebiaMaxVel = 0;
       /** maximal velocity of the foot spring servo */
-      double footMaxVel;
+      double footMaxVel = 0;
 
       /**
        * @name front ultrasonic sensors
@@ -268,18 +268,18 @@ namespace lpzrobots {
        */
       /**{*/
       /** angle versus x axis */
-      double usAngleX;
+      double usAngleX = 0;
       /** angle versus y axis */
-      double usAngleY;
+      double usAngleY = 0;
       /** choose between parallel or antiparallel front ultrasonic sensors true
        *  means parallel */
-      bool usParallel;
+      bool usParallel = false;
       /** range of the front ultrasonic sensors */
-      double usRangeFront;
+      double usRangeFront = 0;
       /**}*/
 
       /** range of the infrared sensors at the legs */
-      double irRangeLeg;
+      double irRangeLeg = 0;
 
       /** path to texture for legs */
       std::string texture;
@@ -291,7 +291,7 @@ namespace lpzrobots {
       //-----------Add GoalSensor by Ren------------------------
 
       // Internal variable storing the currently used version
-      int amos_version;
+      int amos_version = 0;
 
   };
 
@@ -343,18 +343,18 @@ namespace lpzrobots {
       AmosFour(const OdeHandle& odeHandle, const OsgHandle& osgHandle, const AmosFourConf& conf = getDefaultConf(),
           const std::string& name = "AmosII robot");
 
-      virtual ~AmosFour() override;
+      virtual ~AmosFour();
 
       /**
        * updates the OSG nodes of the vehicle
        */
-      virtual void update() override;
+      virtual void update();
 
       /**
        * sets the pose of the vehicle
        * @param pose desired pose matrix
        */
-      virtual void placeIntern(const osg::Matrix& pose) override;
+      virtual void placeIntern(const osg::Matrix& pose);
 
       /**
        * returns actual sensorvalues
@@ -362,24 +362,24 @@ namespace lpzrobots {
        * @param sensornumber length of the sensor array
        * @return number of actually written sensors
        */
-      virtual int getSensorsIntern(sensor* sensors, int sensornumber) override;
+      virtual int getSensorsIntern(sensor* sensors, int sensornumber);
 
       /**
        * sets actual motorcommands
        * @param motors motors scaled to [-1,1]
        * @param motornumber length of the motor array
        */
-      virtual void setMotorsIntern(const double* motors, int motornumber) override;
+      virtual void setMotorsIntern(const double* motors, int motornumber);
 
       /**
        * returns number of sensors
        */
-      virtual int getSensorNumberIntern() override;
+      virtual int getSensorNumberIntern();
 
       /**
        * returns number of motors
        */
-      virtual int getMotorNumberIntern() override;
+      virtual int getMotorNumberIntern();
 
       /**
        * this function is called in each timestep. It should perform
@@ -388,9 +388,9 @@ namespace lpzrobots {
        * @param globalData structure that contains global data from the
        *                   simulation environment
        */
-      virtual void doInternalStuff(GlobalData& globalData) override;
+      virtual void doInternalStuff(const GlobalData& globalData);
 
-      virtual void sense(GlobalData& globalData) override;
+      virtual void sense(const GlobalData& globalData);
 
       virtual double getMassOfRobot();
 

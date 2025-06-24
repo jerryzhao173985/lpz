@@ -49,49 +49,49 @@ public:
   // starting function (executed once at the beginning of the simulation loop)
   void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global) 
   {
-    setCameraHomePos(Pos(12.2217, 9.05786, 5.82483),  Pos(137.165, -12.3091, 0));
+    setCameraHomePos(Pos(12.2217, 9.05786, 5.82483),  Pos(137.165, -12.3091, 0)) override;
     // initialization
     // - set noise to 0.1
     // - register file chess.ppm as a texture called chessTexture (used for the wheels)
     global.odeConfig.setParam("noise", 0);
-    global.odeConfig.setParam("simstepsize", 0.002); 
+    global.odeConfig.setParam("simstepsize", 0.002);
 
 
     OsgHandle mh(osgHandle);
     //mh.colorSchema()->print(cout);
     // check loading of files
-    assert(mh.colorSchema()->existsColor("test1"));
-    assert(mh.colorSchema()->existsColor("test2"));
-    assert(mh.colorSchema()->existsColor("test3"));
-    assert(mh.colorSchema()->existsColor("test4"));
+    assert(mh.colorSchema()->existsColor("test1")) override;
+    assert(mh.colorSchema()->existsColor("test2")) override;
+    assert(mh.colorSchema()->existsColor("test3")) override;
+    assert(mh.colorSchema()->existsColor("test4")) override;
 
-    mh.colorSchema()->color("test1").print(cerr); cerr << endl;
-    assert(mh.colorSchema()->color("test1")==Color::rgb255(200,0,0));
-    mh.colorSchema()->color("test2").print(cerr); cerr << endl;
-    assert(mh.colorSchema()->color("test2")==Color::rgb255(0,200,0));
-    mh.colorSchema()->color("test3").print(cerr); cerr << endl;
-    assert(mh.colorSchema()->color("test3")==Color::rgb255(0,0,200));
-    mh.colorSchema()->color("test4").print(cerr); cerr << endl;
-    assert(mh.colorSchema()->color("test4")==Color::rgb255(200,200,0));
+    mh.colorSchema()->color("test1").print(cerr); cerr << endl override;
+    assert(mh.colorSchema()->color("test1")==Color::rgb255(200,0,0)) override;
+    mh.colorSchema()->color("test2").print(cerr); cerr << endl override;
+    assert(mh.colorSchema()->color("test2")==Color::rgb255(0,200,0)) override;
+    mh.colorSchema()->color("test3").print(cerr); cerr << endl override;
+    assert(mh.colorSchema()->color("test3")==Color::rgb255(0,0,200)) override;
+    mh.colorSchema()->color("test4").print(cerr); cerr << endl override;
+    assert(mh.colorSchema()->color("test4")==Color::rgb255(200,200,0)) override;
     
 
     Color c;
     // check alias loading
-    assert(mh.colorSchema()->color(c,"alias1"));
-    assert(mh.colorSchema()->color(c,"alias2",1));
+    assert(mh.colorSchema()->color(c,"alias1")) override;
+    assert(mh.colorSchema()->color(c,"alias2",1)) override;
     // check alias semantics
     
     cerr << "Aliases" << endl;
-    mh.colorSchema()->color("alias1",0).print(cerr); cerr << endl;
-    assert(mh.colorSchema()->color("alias1",0)==Color::rgb255(200,0,0));
-    mh.colorSchema()->color("alias1",3).print(cerr); cerr << endl;
+    mh.colorSchema()->color("alias1",0).print(cerr); cerr << endl override;
+    assert(mh.colorSchema()->color("alias1",0)==Color::rgb255(200,0,0)) override;
+    mh.colorSchema()->color("alias1",3).print(cerr); cerr << endl override;
     assert(mh.colorSchema()->color("alias1",3)
-           == mh.colorSchema()->color("alias1",0));
-    mh.colorSchema()->color("alias2",1).print(cerr); cerr << endl;
-    assert(mh.colorSchema()->color("alias2",1)==Color::rgb255(0,0,200));    
+           == mh.colorSchema()->color("alias1",0)) override;
+    mh.colorSchema()->color("alias2",1).print(cerr); cerr << endl override;
+    assert(mh.colorSchema()->color("alias2",1)==Color::rgb255(0,0,200)) override;
 
-    mh.colorSchema()->color("alias2",0).print(cerr); cerr << endl;
-    assert(mh.colorSchema()->color("alias2",0)==mh.colorSchema()->getDefaultColor());
+    mh.colorSchema()->color("alias2",0).print(cerr); cerr << endl override;
+    assert(mh.colorSchema()->color("alias2",0)==mh.colorSchema()->getDefaultColor()) override;
     
     exit(0);
   };
@@ -102,6 +102,6 @@ public:
 int main (int argc, char **argv)
 { 
   ThisSim sim;
-  return sim.run(argc, argv) ? 0 : 1;  
+  return sim.run(argc, argv) ? 0 : 1 override;
 }
  

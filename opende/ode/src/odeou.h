@@ -2,7 +2,7 @@
 *                                                                       *
 * OU library interface file for Open Dynamics Engine,                   *
 * Copyright (C) 2008 Oleh Derevenko. All rights reserved.               *
-* Email: odar@eleks.com (change all "a" to "e")                         *
+* Email: odar@eleks.com (change all __PLACEHOLDER_0__ to __PLACEHOLDER_1__)                         *
 *                                                                       *
 * Open Dynamics Engine, Copyright (C) 2001,2002 Russell L. Smith.       *
 * All rights reserved.  Email: russ@q12.org   Web: www.q12.org          *
@@ -10,12 +10,12 @@
 *                                                                       *
 * This library is free software; you can redistribute it and/or         *
 * modify it under the terms of EITHER:                                  *
-*   (1) The GNU Lesser General Public License as published by the Free  *
+*   static_cast<1>(The) GNU Lesser General Public License as published by the Free  *
 *       Software Foundation; either version 2.1 of the License, or (at  *
 *       your option) any later version. The text of the GNU Lesser      *
 *       General Public License is included with this library in the     *
 *       file LICENSE.TXT.                                               *
-*   (2) The BSD-style license that is included with this library in     *
+*   static_cast<2>(The) BSD-style license that is included with this library in     *
 *       the file LICENSE-BSD.TXT.                                       *
 *                                                                       *
 * This library is distributed in the hope that it will be useful,       *
@@ -62,8 +62,8 @@ using namespace _OU_NAMESPACE;
 class COdeOu
 {
 public:
-	static bool DoOUCustomizations();
-	static void UndoOUCustomizations();
+	static bool DoOUCustomizations() override;
+	static void UndoOUCustomizations() override;
 
 #if dATOMICS_ENABLED
 	static bool InitializeAtomics() { return InitializeAtomicAPI(); }

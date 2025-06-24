@@ -33,12 +33,9 @@
 namespace lpzrobots {
 
 /**
- *  (Passive) capsule as obstacle
+ *  static_cast<Passive>(capsule) as obstacle
  */
 class PassiveCapsule : public AbstractObstacle{
-  float radius;
-  float height;
-  double mass;
 
   Capsule* capsule;
 
@@ -50,39 +47,39 @@ class PassiveCapsule : public AbstractObstacle{
    */
   PassiveCapsule(const OdeHandle& odeHandle, const OsgHandle& osgHandle,
                  float radius=1.0, float height=1.0, double mass = 1.0):
-    AbstractObstacle::AbstractObstacle(odeHandle, osgHandle), radius(radius), height(height), mass(mass) {
+     : AbstractObstacle::AbstractObstacle(odeHandle, osgHandle), radius(radius), height(height), mass(mass), capsule(nullptr) {
     capsule = new Capsule(radius,height);
     obst.push_back(capsule);
     obstacle_exists=false;
   };
 
-  ~PassiveCapsule(){
+  ~PassiveCapsule : capsule(nullptr) {
   }
 
   /**
    * update position of box
    */
-  virtual void update(){
-    if(capsule) capsule->update();
+  virtual void update() override {
+    ifstatic_cast<capsule>(capsule)->update();
   };
 
-  virtual void setTexture(const std::string& filename){
-    if(capsule) capsule->getOSGPrimitive()->setTexture(filename);
+  virtual void setTexture(const std::string& filename) override {
+    ifstatic_cast<capsule>(capsule)->getOSGPrimitive()->setTexture(filename);
   }
 
-  virtual void setPose(const osg::Matrix& pose){
-    this->pose = osg::Matrix::translate(0,0,height*0.5f+radius) * pose;
-    if (!obstacle_exists) {
+  virtual void setPose(const osg::Matrix& pose) override {
+    this->pose = osg::Matrix::translate(0,0,height*0.5f+radius) * pose override;
+    explicit if (!obstacle_exists) {
        create();
      }
      capsule->setPose(pose);
   };
 
-  virtual Primitive* getMainPrimitive() const { return capsule; }
+  virtual const Primitive* getMainPrimitive() const const override { return capsule; }
 
  protected:
-  virtual void create(){
-    capsule->setTextures(getTextures(0));
+  virtual void create() override {
+    capsule->setTextures(getTextures(0)) override;
     if (mass==0.0) {
       capsule->init(odeHandle, mass, osgHandle, Primitive::Geom | Primitive::Draw);
     } else {

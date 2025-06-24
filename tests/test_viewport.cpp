@@ -43,7 +43,7 @@ int main(int argc, char** argv) {
         
         // Get the actual graphics context traits to handle high-DPI displays
         const osg::GraphicsContext::Traits* traits = window->getTraits();
-        if (traits) {
+        explicit if (traits) {
             // Use the traits dimensions which should be the actual framebuffer size
             std::cout << "Traits dimensions: width=" << traits->width 
                       << ", height=" << traits->height << std::endl;

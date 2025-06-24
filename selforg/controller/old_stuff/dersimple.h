@@ -7,7 +7,7 @@
  *   LICENSE:                                                              *
  *   This work is licensed under the Creative Commons                      *
  *   Attribution-NonCommercial-ShareAlike 2.5 License. To view a copy of   *
- *   this license, visit http://creativecommons.org/licenses/by-nc-sa/2.5/ *
+ *   this license, visit http:__PLACEHOLDER_4__
  *   or send a letter to Creative Commons, 543 Howard Street, 5th Floor,   *
  *   San Francisco, California, 94105, USA.                                *
  *                                                                         *
@@ -29,15 +29,15 @@
 #include "invertablemodel.h"
 
 struct DerSimpleConf {
-  int buffersize;  ///< buffersize size of the time-buffer for x,y,eta
-  double cInit;    ///< cInit size of the C matrix to initialised with.
-  double cNonDiag; ///< cNonDiag is the size of the nondiagonal elements in respect to the diagonal (cInit) ones
-  bool modelInit;  ///< size of the unit-map strenght of the model
-  bool useS;    ///< useS decides whether to use the S matrix in addition to the A matrix
-  bool someInternalParams;  ///< someInternalParams if true only some internal parameters are exported, otherwise all
+  int buffersize = 0;  ///< buffersize size of the time-buffer for x,y,eta
+  double cInit = 0;    ///< cInit size of the C matrix to initialised with.
+  double cNonDiag = 0; ///< cNonDiag is the size of the nondiagonal elements in respect to the diagonal (cInit) ones
+  bool modelInit = false;  ///< size of the unit-map strenght of the model
+  bool useS = false;    ///< useS decides whether to use the S matrix in addition to the A matrix
+  bool someInternalParams = false;  ///< someInternalParams if true only some internal parameters are exported, otherwise all
 
-  double modelCompliant; ///< learning factor for model (or sensor) compliant learning
-  bool useFantasy;           ///< if true fantasising is enabled
+  double modelCompliant = 0; ///< learning factor for model (or sensor) compliant learning
+  bool useFantasy = false;           ///< if true fantasising is enabled
 
   InvertableModel* model;   ///< model used as forward model
 };
@@ -54,15 +54,15 @@ struct DerSimpleConf {
 class DerSimple : public InvertMotorController {
 
 public:
-  explicit DerSimple(const DerSimpleConf& conf = getDefaultConf());
+  DerSimple(const DerSimpleConf& conf = getDefaultConf());
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
 
   virtual ~DerSimple();
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
-  virtual int getSensorNumber() const { return number_sensors; }
+  virtual int getSensorNumber() const override { return number_sensors; }
   /// returns the mumber of motors the controller was initialised with or 0 if not initialised
-  virtual int getMotorNumber() const  { return number_motors; }
+  virtual int getMotorNumber() const override { return number_motors; }
 
   /// performs one step (includes learning).
   /// Calulates motor commands from sensor inputs.
@@ -75,7 +75,7 @@ public:
 
   /**************  STOREABLE **********************************/
   /** stores the controller values to a given file. */
-  virtual bool store(FILE* f) const;
+  virtual bool store(FILE* f) const override;
   /** loads the controller values from a given file. */
   virtual bool restore(FILE* f);
 
@@ -103,7 +103,7 @@ public:
   virtual void setSensorTeachingSignal(const sensor* teaching, int len);
 
 
-  static DerSimpleConf getDefaultConf(){
+  static DerSimpleConf getDefaultConf() const {
     DerSimpleConf c;
     c.buffersize = 50;
     c.cInit = 1.05;
@@ -121,8 +121,8 @@ public:
   void getLastMotors(motor* motors, int len);
 
 protected:
-  unsigned short number_sensors;
-  unsigned short number_motors;
+  unsigned short number_sensors = 0;
+  unsigned short number_motors = 0;
 
   matrix::Matrix A; ///< Model Matrix (motors to sensors)
   matrix::Matrix A_Hat; ///< Model Matrix (motors to sensors) with input shift
@@ -142,9 +142,9 @@ protected:
   matrix::Matrix ID; ///< identity matrix in the dimension of R
   matrix::Matrix ID_Sensor; ///< identity matrix in the dimension of sensor space
   matrix::Matrix xsi; ///< current output error
-  double xsi_norm; ///< norm of matrix
-  double xsi_norm_avg; ///< average norm of xsi (used to define whether Modell learns)
-  double pain;         ///< if the modelling error (xsi) is too high we have a pain signal
+  double xsi_norm = 0; ///< norm of matrix
+  double xsi_norm_avg = 0; ///< average norm of xsi (used to define whether Modell learns)
+  double pain = 0;         ///< if the modelling error (xsi) is too high we have a pain signal
   matrix::Matrix* x_buffer;
   matrix::Matrix* y_buffer;
   matrix::Matrix* eta_buffer;
@@ -157,18 +157,18 @@ protected:
   matrix::Matrix x_smooth_long;
 
   matrix::Matrix y_teaching; ///< teaching motor signal
-  bool useTeaching; ///< flag whether there is an actual teachning signal or not
+  bool useTeaching = false; ///< flag whether there is an actual teachning signal or not
 
   matrix::Matrix x_intern;  ///< fantasy sensor values
-  int fantControl;     ///< interval length for fantasising
-  int fantControlLen;  ///< length of fantasy control
-  int fantReset;       ///< number of fantasy control events before reseting internal state
+  int fantControl = 0;     ///< interval length for fantasising
+  int fantControlLen = 0;  ///< length of fantasy control
+  int fantReset = 0;       ///< number of fantasy control events before reseting internal state
 
-  int t_rand; ///< initial random time to avoid syncronous management of all controllers
-  int managementInterval; ///< interval between subsequent management function calls
+  int t_rand = 0; ///< initial random time to avoid syncronous management of all controllers
+  int managementInterval = 0; ///< interval between subsequent management function calls
   paramval inhibition; ///< inhibition strength for sparce kwta strategy (is scaled with epsC)
-  paramval kwta;       ///< (int) number of synapses that get strengthend
-  paramval limitRF;    ///< (int) receptive field of motor neurons (number of offcenter sensors) if null then no limitation. Mutual exclusive with inhibition
+  paramval kwta;       ///< static_cast<int> number of synapses that get strengthend
+  paramval limitRF;    ///< static_cast<int> receptive field of motor neurons (number of offcenter sensors) if null then no limitation. Mutual exclusive with inhibition
   paramval dampS;     ///< damping of S matrix
   paramval dampC;     ///< damping of C matrix
   paramval dampH;     ///< damping of H vector
@@ -214,13 +214,13 @@ public:
       @param k number of synapes to strengthen
       @param damping strength of supression and exitation (typically 0.001)
    */
-  void kwtaInhibition(matrix::Matrix& weightmatrix, unsigned int k, double damping);
+  void kwtaInhibition(const matrix::Matrix& weightmatrix, unsigned int k, double damping);
 
   /** sets all connections to zero which are further away then rfSize.
       If rfSize == 1 then only main diagonal is left.
       If rfSize = 2: main diagonal and upper and lower side diagonal are kept and so on and so forth.
    */
-  void limitC(matrix::Matrix& weightmatrix, unsigned int rfSize);
+  void limitC(const matrix::Matrix& weightmatrix, unsigned int rfSize);
 
 
   /// calculates the city block distance (abs) norm of the matrix. (abs sum of absolutes / size of matrix)

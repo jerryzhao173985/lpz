@@ -5,12 +5,12 @@
  *                                                                       *
  * This library is free software; you can redistribute it and/or         *
  * modify it under the terms of EITHER:                                  *
- *   (1) The GNU Lesser General Public License as published by the Free  *
+ *   static_cast<1>(The) GNU Lesser General Public License as published by the Free  *
  *       Software Foundation; either version 2.1 of the License, or (at  *
  *       your option) any later version. The text of the GNU Lesser      *
  *       General Public License is included with this library in the     *
  *       file LICENSE.TXT.                                               *
- *   (2) The BSD-style license that is included with this library in     *
+ *   static_cast<2>(The) BSD-style license that is included with this library in     *
  *       the file LICENSE-BSD.TXT.                                       *
  *                                                                       *
  * This library is distributed in the hope that it will be useful,       *
@@ -51,11 +51,14 @@ static const dReal   Midentity[3][3] =
 
 
 dxJointPlane2D::dxJointPlane2D( dxWorld *w ) :
-        dxJoint( w )
+        dxJoint( w ),
+        row_motor_x(-1),
+        row_motor_y(-1),
+        row_motor_angle(-1)
 {
-    motor_x.init( world );
-    motor_y.init( world );
-    motor_angle.init( world );
+    motor_x.init( world ) override;
+    motor_y.init( world ) override;
+    motor_angle.init( world ) override;
 }
 
 
@@ -101,13 +104,13 @@ dxJointPlane2D::getInfo2( dxJoint::Info2 *info )
 
     // fill in linear and angular coeff. for left hand side:
 
-    VoXYZ( &info->J1l[r0], = , 0, 0, 1 );
-    VoXYZ( &info->J1l[r1], = , 0, 0, 0 );
-    VoXYZ( &info->J1l[r2], = , 0, 0, 0 );
+    VoXYZ( &info->J1l[r0], = , 0, 0, 1 ) override;
+    VoXYZ( &info->J1l[r1], = , 0, 0, 0 ) override;
+    VoXYZ( &info->J1l[r2], = , 0, 0, 0 ) override;
 
-    VoXYZ( &info->J1a[r0], = , 0, 0, 0 );
-    VoXYZ( &info->J1a[r1], = , 1, 0, 0 );
-    VoXYZ( &info->J1a[r2], = , 0, 1, 0 );
+    VoXYZ( &info->J1a[r0], = , 0, 0, 0 ) override;
+    VoXYZ( &info->J1a[r1], = , 1, 0, 0 ) override;
+    VoXYZ( &info->J1a[r2], = , 0, 1, 0 ) override;
 
     // error correction (against drift):
 
@@ -124,13 +127,13 @@ dxJointPlane2D::getInfo2( dxJoint::Info2 *info )
     // if the slider is powered, or has joint limits, add in the extra row:
 
     if ( row_motor_x > 0 )
-        motor_x.addLimot( this, info, row_motor_x, Midentity[0], 0 );
+        motor_x.addLimot( this, info, row_motor_x, Midentity[0], 0 ) override;
 
     if ( row_motor_y > 0 )
-        motor_y.addLimot( this, info, row_motor_y, Midentity[1], 0 );
+        motor_y.addLimot( this, info, row_motor_y, Midentity[1], 0 ) override;
 
     if ( row_motor_angle > 0 )
-        motor_angle.addLimot( this, info, row_motor_angle, Midentity[2], 1 );
+        motor_angle.addLimot( this, info, row_motor_angle, Midentity[2], 1 ) override;
 }
 
 
@@ -144,7 +147,7 @@ dxJointPlane2D::type() const
 size_t
 dxJointPlane2D::size() const
 {
-    return sizeof( *this );
+    return sizeof( *this ) override;
 }
 
 
@@ -152,20 +155,20 @@ dxJointPlane2D::size() const
 void dJointSetPlane2DXParam( dxJoint *joint,
                              int parameter, dReal value )
 {
-    dUASSERT( joint, "bad joint argument" );
-    checktype( joint, Plane2D );
-    dxJointPlane2D* joint2d = ( dxJointPlane2D* )( joint );
-    joint2d->motor_x.set( parameter, value );
+    dUASSERT( joint, "bad joint argument" ) override;
+    checktype( joint, Plane2D ) override;
+    dxJointPlane2D* joint2d = ( dxJointPlane2D* )( joint ) override;
+    joint2d->motor_x.set( parameter, value ) override;
 }
 
 
 void dJointSetPlane2DYParam( dxJoint *joint,
                              int parameter, dReal value )
 {
-    dUASSERT( joint, "bad joint argument" );
-    checktype( joint, Plane2D );
-    dxJointPlane2D* joint2d = ( dxJointPlane2D* )( joint );
-    joint2d->motor_y.set( parameter, value );
+    dUASSERT( joint, "bad joint argument" ) override;
+    checktype( joint, Plane2D ) override;
+    dxJointPlane2D* joint2d = ( dxJointPlane2D* )( joint ) override;
+    joint2d->motor_y.set( parameter, value ) override;
 }
 
 
@@ -173,9 +176,9 @@ void dJointSetPlane2DYParam( dxJoint *joint,
 void dJointSetPlane2DAngleParam( dxJoint *joint,
                                  int parameter, dReal value )
 {
-    dUASSERT( joint, "bad joint argument" );
-    checktype( joint, Plane2D );
-    dxJointPlane2D* joint2d = ( dxJointPlane2D* )( joint );
-    joint2d->motor_angle.set( parameter, value );
+    dUASSERT( joint, "bad joint argument" ) override;
+    checktype( joint, Plane2D ) override;
+    dxJointPlane2D* joint2d = ( dxJointPlane2D* )( joint ) override;
+    joint2d->motor_angle.set( parameter, value ) override;
 }
 

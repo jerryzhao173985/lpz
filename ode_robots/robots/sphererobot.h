@@ -36,15 +36,15 @@ namespace lpzrobots {
 
   typedef struct {
   public:
-    double diameter;
-    double spheremass;
-    double pendulardiameter;
-    double pendularmass;
-    double slidermass;
-    double sliderrange;
+    double diameter = 0;
+    double spheremass = 0;
+    double pendulardiameter = 0;
+    double pendularmass = 0;
+    double slidermass = 0;
+    double sliderrange = 0;
 
-    double force;      // forcefactor of the servo power (1 is usual)
-    double hingeRange; //the angle (in rad) of the hinges that connect pendular with poles
+    double force = 0;      // forcefactor of the servo power (1 is usual)
+    double hingeRange = 0; //the angle (in rad) of the hinges that connect pendular with poles
   } SphererobotConf;
 
 
@@ -64,7 +64,7 @@ namespace lpzrobots {
     const static int sensorno = 9;
 
     SphererobotConf conf;
-    bool created;
+    bool created = false;
 
   public:
     SliderServo* servo[3];
@@ -79,7 +79,7 @@ namespace lpzrobots {
 
     virtual ~Sphererobot();
 
-    static SphererobotConf getDefaultConf(){
+    static SphererobotConf getDefaultConf() const {
       SphererobotConf c;
       c.diameter     = 1;
       c.spheremass   = 0.2;
@@ -133,7 +133,7 @@ namespace lpzrobots {
     virtual int getSegmentsPosition(std::vector<Position> &poslist);
 
     /** the main object of the robot, which is used for position and speed tracking */
-    virtual Primitive* getMainPrimitive() const { return object[Base]; }
+    virtual Primitive* getMainPrimitive() const override { return object[Base]; }
 
   protected:
     /** creates vehicle at desired pose

@@ -45,21 +45,7 @@ namespace lpzrobots {
 
 typedef struct {
 public:
-  int    segmNumber;  ///<  number of snake elements
-  double segmLength;  ///< length of one snake element
-  double segmDia;     ///<  diameter of a snake element
-  double segmMass;    ///<  mass of one snake element
-  double motorPower;  ///<  power of the motors / servos
-  double sensorFactor;    ///<  scale for sensors
-  double frictionJoint;   ///< friction within joint
-  double frictionRatio;   ///< if != 1 then friction along the snake is the ratio fold
-  double jointLimit;      ///< maximal angle for the joints (M_PI/4 = 45 degree)
-  bool   useServoVel;     ///< if true the new Servos are used (only for schlangeservo)
-  double velocity;        ///< maximal velocity of servos
 
-  bool useSpaces;        ///< if true the snake is divided into subspaces (performance)
-
-  std::string headColor;
   std::string bodyColor;
 } SchlangeConf;
 
@@ -73,7 +59,7 @@ class Schlange: public OdeRobot
 {
 protected:
 
-  bool created;
+  bool created = false;
 
   std::vector <AngularMotor*> frictionmotors;
   SchlangeConf conf;
@@ -82,7 +68,7 @@ public:
   Schlange ( const OdeHandle& odeHandle, const OsgHandle& osgHandle,
              const SchlangeConf& conf, const std::string& name, const std::string& revision);
 
-  static SchlangeConf getDefaultConf(){
+  static SchlangeConf getDefaultConf() const {
     SchlangeConf conf;
     conf.segmNumber = 10;    //  number of snake elements
     conf.segmLength = 0.8;   // length of one snake element
@@ -148,15 +134,15 @@ public:
   virtual void notifyOnChange(const paramkey& key);
 
   /** the main object of the robot, which is used for position and speed tracking */
-  virtual Primitive* getMainPrimitive() const {
+  virtual const Primitive* getMainPrimitive() const const  override {
     if(!objects.empty()){
-      //      int half = objects.size()/2;
-      //      return (objects[half]);
-      return (objects[0]);
+      //      int half = objects.size()/2 override;
+      //      return (objects[half]) override;
+      return (objects[0]) override;
     }else return 0;
   }
 
-  virtual std::vector<Primitive*> getAllPrimitives() const { return objects;}
+  virtual std::vector<Primitive*> getAllPrimitives() const override { return objects;}
 
   /** sets a texture to the body of the snake
    * note: the head texture of the snake is set by

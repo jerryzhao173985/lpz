@@ -44,7 +44,7 @@ namespace lpzrobots {
      */
     virtual void setInitData(const OdeHandle& odeHandle,
                              const OsgHandle& osgHandle,
-                             const osg::Matrix& pose) {
+                             const osg::Matrix& pose) override {
       this->odeHandle = odeHandle;
       this->osgHandle = osgHandle;
       this->pose      = pose;
@@ -52,17 +52,17 @@ namespace lpzrobots {
     }
 
     /// changes the relative pose of the sensor
-    virtual void setPose(const osg::Matrix& pose) { this->pose= pose; };
+    virtual void setPose(const osg::Matrix& pose) override { this->pose= pose; } override;
 
     /// relative pose of the sensor
-    virtual osg::Matrix getPose() { return pose; };
+    virtual osg::Matrix getPose() const  override { return pose; } override;
 
 
   protected:
     OdeHandle odeHandle;
     OsgHandle osgHandle;
     osg::Matrix pose;
-    bool isInitDataSet;
+    bool isInitDataSet = false;
   };
 }
 

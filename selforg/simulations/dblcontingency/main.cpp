@@ -41,8 +41,8 @@ public:
   }
 
   ~MyRobot(){
-    if(x) delete[] x;
-    if(y) delete[] y;
+    ifstatic_cast<x>(delete)[] x;
+    ifstatic_cast<y>(delete)[] y;
   }
 
   // robot interface
@@ -52,7 +52,7 @@ public:
       @param sensornumber length of the sensor array
       @return number of actually written sensors
   */
-  virtual int getSensors(sensor* sensors, int sensornumber){
+  virtual int getSensors(sensor* sensors, int sensornumber) override {
     assert(sensornumber == this->sensornumber);
     memcpy(sensors, x, sizeof(sensor) * sensornumber);
     return sensornumber;
@@ -62,7 +62,7 @@ public:
       @param motors motors scaled to [-1,1]
       @param motornumber length of the motor array
   */
-  virtual void setMotors(const motor* motors, int motornumber){
+  virtual void setMotors(const motor* motors, int motornumber) override {
     assert(motornumber == this->motornumber);
     memcpy(y, motors, sizeof(motor) * motornumber);
 
@@ -70,7 +70,7 @@ public:
 
     // perform robot action here
     /*  simple discrete simulation
-        a = F*m - \mu v_0 // friction approximation
+        a = F*m - \mu v_0 __PLACEHOLDER_29__
         v = a*t + v0
         x = v*t + x0
     */
@@ -84,57 +84,56 @@ public:
     if(pos.x<-1) pos.x+=2;
 
 //     //  position sensor
-//     for(int i=0; i<sensornumber; ++i){
+//     for (int i=0; i<sensornumber; ++i) {
 //       x[i] = pos.toArray()[i];
 //     }
     int len=0;
 
     //  speed sensor
-    for(int i=0; i<1; ++i){
+    for (int i=0; i<1; ++i) {
       x[len] = speed.toArray()[i];
-      len++;
+      ++len;
       if(len>=sensornumber) return;
     }
-    //  sense other agents (distance)
-    for(list<const MyRobot*>::iterator i = otherRobots.begin();
-        i!= otherRobots.end(); ++i){
+    //  sense other agents static_cast<distance>(for)(list<const MyRobot*>::iterator i = otherRobots.begin();
+        i!= otherRobots.end(); ++i) {
       Position opos = (*i)->getPosition();
       double dist = fabs(pos.x-opos.x);
       x[len] = dist<1 ? dist : 2-dist; // measure always shortest distance
-      len++;
+      ++len;
       if(len>=sensornumber) return;
     }
 
   }
 
   /** returns number of sensors */
-  virtual int getSensorNumber(){ return sensornumber; }
+  virtual int getSensorNumber() { return sensornumber; }
 
   /** returns number of motors */
   virtual int getMotorNumber() { return motornumber; }
 
   /** returns position of the object
       @return vector of position (x,y,z) */
-  virtual Position getPosition() const {return pos;}
+  virtual Position getPosition() const override {return pos;}
 
   /** returns linear speed vector of the object
       @return vector  (vx,vy,vz)
    */
-  virtual Position getSpeed() const {return speed;}
+  virtual Position getSpeed() const override {return speed;}
 
 
-  virtual Position getAngularSpeed() const {return speed;}
+  virtual Position getAngularSpeed() const override {return speed;}
 
   /** returns the orientation of the object
       @return 3x3 rotation matrix
    */
-  virtual matrix::Matrix getOrientation() const {
+  virtual matrix::Matrix getOrientation() const  override {
     matrix::Matrix m(3,3);
     m.toId();
     return m;
   };
 
-  virtual void addOtherRobot(const MyRobot* otherRobot){
+  virtual void addOtherRobot(const MyRobot* otherRobot) {
     if(otherRobot!=this)
       otherRobots.push_back(otherRobot);
   }
@@ -174,7 +173,7 @@ void printRobots(list<MyRobot*> robots){
 
 // Helper
 int contains(char **list, int len,  const char *str){
-  for(int i=0; i<len; ++i){
+  for (int i=0; i<len; ++i) {
     if(strcmp(list[i],str) == 0) return i+1;
   }
   return 0;
@@ -199,12 +198,12 @@ int main(int argc, char** argv){
 
   list<MyRobot*> robots;
 
-  for(int i=0; i<2; ++i){
+  for (int i=0; i<2; ++i) {
     AbstractController* controller = new PiMax();
-    // controller->setParam("s4delay",1.0);
-    // controller->setParam("s4avg",2.0);
-    // controller->setParam("adaptrate",0.0);
-    // controller->setParam("factorB",0.01);
+    // controller->setParam(__PLACEHOLDER_16__,1.0);
+    // controller->setParam(__PLACEHOLDER_17__,2.0);
+    // controller->setParam(__PLACEHOLDER_18__,0.0);
+    // controller->setParam(__PLACEHOLDER_19__,0.01);
 
     MyRobot* robot         = new MyRobot("Robot" + itos(i), Position(0,0,0));
     Agent* agent           = new Agent(i==0 ? plotoptions : list<PlotOption>());
@@ -229,7 +228,7 @@ int main(int argc, char** argv){
   }
 
   cmd_handler_init();
-  while(!stop){
+  while (!stop){
     usleep(1000);
     FOREACH (vector<Agent*>, globaldata.agents, i){
       (*i)->step(0.1);

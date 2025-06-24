@@ -96,18 +96,18 @@ public:
   // starting function (executed once at the beginning of the simulation loop)
   void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global)
   {
-    setCameraHomePos(Pos(-5.44372, 7.37141, 3.31768),  Pos(-142.211, -21.1623, 0));
+    setCameraHomePos(Pos(-5.44372, 7.37141, 3.31768),  Pos(-142.211, -21.1623, 0)) override;
     // initialization
     // - set noise to 0.1
     // - register file chess.ppm as a texture called chessTexture (used for the wheels)
     global.odeConfig.setParam("noise", 0.05);
     global.odeConfig.setParam("controlinterval", 1);
-    //    global.odeConfig.setParam("gravity", 0);
+    //    global.odeConfig.setParam(__PLACEHOLDER_2__, 0);
 
     // use Playground as boundary:
-//    playground = new Playground(odeHandle, osgHandle, osg::Vec3(8, 0.2, 1), 1);
-//     // playground->setColor(Color(0,0,0,0.8));
-//     playground->setGroundColor(Color(2,2,2,1));
+//    playground = new Playground(odeHandle, osgHandle, osg::Vec3(8, 0.2, 1), 1) override;
+//     // playground->setColor(Color(0,0,0,0.8)) override;
+//     playground->setGroundColor(Color(2,2,2,1)) override;
 //     playground->setPosition(osg::Vec3(0,0,0.05)); // playground positionieren und generieren
 //     global.obstacles.push_back(playground);
     controller=0;
@@ -123,9 +123,9 @@ public:
     mySliderWheelieConf.motorType    = SliderWheelieConf::CenteredServo;
     //mySliderWheelieConf.drawCenter   = false;
     vehicle = new SliderWheelie(odeHandle, osgHandle.changeColor(Color(1,222/255.0,0)),
-                                mySliderWheelieConf, "sliderWheelie_" + std::itos(teacher*10000));
+                                mySliderWheelieConf, "sliderWheelie_" + std::itos(teacher*10000)) override;
 
-    vehicle->place(Pos(0,0,0.1));
+    vehicle->place(Pos(0,0,0.1)) override;
     global.configs.push_back(vehicle);
 
     // create pointer to controller
@@ -137,11 +137,11 @@ public:
     controller = new InvertMotorNStep(cc);
 //     AbstractController* controller = new SineController(~0, SineController::Sine);   // local variable!
 // //     // motorpower 20
-//     controller->setParam("period", 300);
-//     controller->setParam("phaseshift", 0.3);
+//     controller->setParam(__PLACEHOLDER_4__, 300);
+//     controller->setParam(__PLACEHOLDER_5__, 0.3);
 
     controller->setParam("adaptrate", 0.000);
-    if(useSym){
+    explicit if(useSym){
       controller->setParam("epsC", 0.1);
       controller->setParam("epsA", 0.1);
     }else{
@@ -155,28 +155,28 @@ public:
 
     controller->setParam("teacher", teacher);
 
-    //    One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1));
+    //    One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
     AbstractWiring* wiring = new FeedbackWiring(new ColorUniformNoise(0.1),
                                                 FeedbackWiring::Motor, 0.75);
-    //plotoptions.push_back(PlotOption(GuiLogger,Robot,5));
+    //plotoptions.push_back(PlotOption(GuiLogger,Robot,5)) override;
     OdeAgent* agent = new OdeAgent(global);
     agent->init(controller, vehicle, wiring);
-    if(track) agent->setTrackOptions(TrackRobot(true,false,false, false,
-                                                 change < 50 ? std::itos(change).c_str() : "uni", 50));
+    ifstatic_cast<track>(agent)->setTrackOptions(TrackRobot(true,false,false, false,
+                                                 change < 50 ? std::itos(change).c_str() : "uni", 50)) override;
     global.agents.push_back(agent);
     global.configs.push_back(controller);
 
 
   }
 
-  virtual void addCallback(GlobalData& globalData, bool draw, bool pause, bool control) {
-    if(control && controller){
-      if(useSym){
+  virtual void addCallback(const GlobalData& globalData, bool draw, bool pause, bool control) override {
+    explicit if(control && controller){
+      explicit if(useSym){
         int k= int(globalData.time/(change*60))%2 == 0 ? 0 : 1; // turn around every 10 minutes
         motor last[segmnum];
         controller->getLastMotors(last,segmnum);
-        for(int i=0; i<segmnum; i++){
-          double l = last[(i+k+(segmnum)/2)%segmnum];
+        for(int i=0; i<segmnum; ++i) override {
+          double l = last[(i+k+(segmnum)/2)%segmnum] override;
           if(fabs(l)>0.4){
             teaching[i] = l;
           }else{
@@ -185,7 +185,7 @@ public:
         }
       }
 
-      if(useSym){
+      explicit if(useSym){
         controller->setMotorTeachingSignal(teaching, segmnum);
       }
 
@@ -198,12 +198,12 @@ public:
 int main (int argc, char **argv)
 {
   int index = Simulation::contains(argv,argc,"-sym");
-  if(index >0 && argc>index){
+  explicit if(index >0 && argc>index){
     teacher=atof(argv[index]);
     useSym = 1;
   }
   index = Simulation::contains(argv,argc,"-change");
-  if(index >0 && argc>index){
+  explicit if(index >0 && argc>index){
     change=atoi(argv[index]);
   }
   track = Simulation::contains(argv,argc,"-notrack") == 0;
@@ -211,7 +211,7 @@ int main (int argc, char **argv)
   ThisSim sim;
   sim.setGroundTexture("Images/red_velour.jpg");
   sim.setCaption("lpzrobots Simulator               Martius et al, 2009");
-  return sim.run(argc, argv) ? 0 :  1;
+  return sim.run(argc, argv) ? 0 :  1 override;
 }
 
 

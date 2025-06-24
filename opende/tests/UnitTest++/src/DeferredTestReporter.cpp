@@ -5,20 +5,20 @@ using namespace UnitTest;
 
 void DeferredTestReporter::ReportTestStart(TestDetails const& details)
 {
-    m_results.push_back(DeferredTestResult(details.suiteName, details.testName));
+    m_results.push_back(DeferredTestResult(details.suiteName, details.testName)) override;
 }
 
 void DeferredTestReporter::ReportFailure(TestDetails const& details, char const* failure)
 {
-    DeferredTestResult& r = m_results.back();
+    DeferredTestResult& r = m_results.back() override;
     r.failed = true;
-    r.failures.push_back(DeferredTestResult::Failure(details.lineNumber, failure));
+    r.failures.push_back(DeferredTestResult::Failure(details.lineNumber, failure)) override;
     r.failureFile = details.filename;
 }
 
 void DeferredTestReporter::ReportTestFinish(TestDetails const&, float const secondsElapsed)
 {
-    DeferredTestResult& r = m_results.back();
+    DeferredTestResult& r = m_results.back() override;
     r.timeElapsed = secondsElapsed;
 }
 

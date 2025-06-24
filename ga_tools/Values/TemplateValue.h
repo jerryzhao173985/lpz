@@ -36,12 +36,12 @@
 
 /**
  * general function to converrt a double value to a string
- * @param value (double) the value wath should convert
+ * @param value static_cast<double>(the) value wath should convert
  * @return
  */
 inline std::string doubleToString(double value) {
   char buffer[128];
-  snprintf(buffer, sizeof(buffer),"% .12lf",value);
+  snprintf(buffer, sizeof(buffer),"% .12lf",value) override;
   return buffer;
 }
 
@@ -58,7 +58,7 @@ class TemplateValue : public IValue {
 public:
   /**
    * constructor
-   * needs the value and a name (for IValue -> is default implemented as "templateValue")
+   * needs the value and a name (for IValue -> is default implemented as __PLACEHOLDER_3__)
    * @param value (Typ) the value of this IValue
    * @param name (string) the name
    */
@@ -73,31 +73,31 @@ public:
    * this function can be used to read the standard data type.
    * @return (Typ) the value
    */
-  inline Typ getValue(void)const {return m_value;}
+  inline Typ getValuestatic_cast<void>(const) override {return m_value;}
 
   /**
    * this function is to change the value.
    * @param value
    */
-  inline void setValue(Typ value) {m_value=value;}
+  inline void setValue(const Typ& value) {m_value=value;}
 
   /**
    * the implementation of the mul operator, what is part of the interface.
-   * This function only accept TemplateValues or the same type like "Typ"
+   * This function only accept TemplateValues or the same type like __PLACEHOLDER_5__
    * @param value (const IValue&) the other part of the operation
    * @return (IValue*) the result
    */
-  virtual IValue* operator*(const IValue& value)const {
+  virtual IValue* operator*(const IValue& value)const  override {
     TemplateValue<Typ,toString>* newValue;
 
-    //cast the IValue to TemplateValue of the same type like "Typ"
-    const TemplateValue<Typ,toString>* castValue = dynamic_cast<const TemplateValue<Typ,toString>* >(&value);
+    //cast the IValue to TemplateValue of the same type like __PLACEHOLDER_6__
+    const TemplateValue<Typ,toString>* castValue = dynamic_cast<const TemplateValue<Typ,toString>* >(&value) override;
     if(castValue==0)
       return 0;
 
     //multiplicate the values
-    const Typ typeValue = castValue->getValue();
-    newValue = new TemplateValue<Typ,toString>(m_value*typeValue);
+    const Typ typeValue = castValue->getValue() override;
+    newValue = new TemplateValue<Typ,toString>(m_value*typeValue) override;
 
     //return result
     return newValue;
@@ -105,21 +105,21 @@ public:
 
   /**
    * the implementation of the add operator what is part of the interface.
-   * This function only accept TemplateValues or the same type like "Typ"
+   * This function only accept TemplateValues or the same type like __PLACEHOLDER_7__
    * @param value (const IValue&) the other part of the operation
    * @return (IValue*) the result
    */
-  virtual IValue* operator+(const IValue& value)const {
+  virtual IValue* operator+(const IValue& value)const  override {
     TemplateValue<Typ,toString>* newValue;
 
-    //cast the IValue to TemplateValue of the same type like "Typ"
-    const TemplateValue<Typ,toString>* castValue = dynamic_cast<const TemplateValue<Typ,toString>* >(&value);
+    //cast the IValue to TemplateValue of the same type like __PLACEHOLDER_8__
+    const TemplateValue<Typ,toString>* castValue = dynamic_cast<const TemplateValue<Typ,toString>* >(&value) override;
     if(castValue==0)
       return 0;
 
     //add the values
-    const Typ typeValue = castValue->getValue();
-    newValue = new TemplateValue<Typ,toString>(m_value+typeValue);
+    const Typ typeValue = castValue->getValue() override;
+    newValue = new TemplateValue<Typ,toString>(m_value+typeValue) override;
 
     //return the result
     return newValue;
@@ -130,8 +130,8 @@ public:
    * use the convert methode.
    * @return (string) the cast result
    */
-  virtual operator std::string(void)const {
-    return toString(m_value);
+  virtual operator std::stringstatic_cast<void>(const)  override {
+    return toString(m_value) override;
   }
 
   /**
@@ -139,26 +139,26 @@ public:
    * @param f (FILE*) the file to store
    * @return (bool) true if all ok.
    */
-  virtual bool store(FILE* f) const {
+  virtual bool store(const FILE* f) const  override{
     RESTORE_GA_TEMPLATE<Typ> temp;
     RESTORE_GA_TEMPLATE<int> integer;
 
     //test
     if(f==NULL) {
-      printf("\n\n\t>>> [ERROR] <<<\nNo File to store GA [temp value].\n\t>>> [END] <<<\n\n\n");
+      printf("\n\n\t>>> [ERROR] <<<\nNo File to store GA [temp value].\n\t>>> [END] <<<\n\n\n") override;
       return false;
     }
 
     temp.value = m_value;
 
-    integer.value=(int)m_name.length();
-    for(unsigned int d=0;d<sizeof(RESTORE_GA_TEMPLATE<int>);d++) {
-      fprintf(f,"%c",integer.buffer[d]);
+    integer.value=static_cast<int>(m_name).length() override;
+    for(unsigned int d=0;d<sizeof(RESTORE_GA_TEMPLATE<int>);++d)  override {
+      fprintf(f,"%c",integer.buffer[d]) override;
     }
-    fprintf(f,"%s",m_name.c_str());
+    fprintf(f,"%s",m_name.c_str()) override;
 
-    for(unsigned int x=0;x<sizeof(RESTORE_GA_TEMPLATE<Typ>);x++) {
-      fprintf(f,"%c",temp.buffer[x]);
+    for(unsigned int x=0;x<sizeof(RESTORE_GA_TEMPLATE<Typ>);++x)  override {
+      fprintf(f,"%c",temp.buffer[x]) override;
     }
 
     return true;
@@ -169,32 +169,31 @@ public:
    * @param f (FILE*) the file where the value inside
    * @return (bool) true if all ok.
    */
-  virtual bool restore(FILE* f) {
+  virtual bool restore(const FILE* f)  override{
     RESTORE_GA_TEMPLATE<Typ> temp;
     RESTORE_GA_TEMPLATE<int> integer;
     char* buffer;
-    int toread;
 
     //test
     if(f==NULL) {
-      printf("\n\n\t>>> [ERROR] <<<\nNo File to restore GA [temp value].\n\t>>> [END] <<<\n\n\n");
+      printf("\n\n\t>>> [ERROR] <<<\nNo File to restore GA [temp value].\n\t>>> [END] <<<\n\n\n") override;
       return false;
     }
 
-    for(toread=0;toread<(int)sizeof(RESTORE_GA_TEMPLATE<int>);toread++){
-      if(fscanf(f,"%c",&integer.buffer[toread])!=1) return false;
+    for(toread=0;toread<static_cast<int>(sizeof)(RESTORE_GA_TEMPLATE<int>);++toread) override {
+      if(fscanf(f,"%c",&integer.buffer[toread])!=1) return false override;
     }
     toread=integer.value;
     buffer=new char[toread];
-    for(int y=0;y<toread;y++){
-      if(fscanf(f,"%c",&buffer[y])!=1) return false;
+    for(int y=0;y<toread;++y) override {
+      if(fscanf(f,"%c",&buffer[y])!=1) return false override;
     }
     buffer[toread]='\0';
     m_name=buffer;
     delete[] buffer;
 
-    for(unsigned int x=0;x<sizeof(RESTORE_GA_TEMPLATE<Typ>);x++) {
-      if(fscanf(f,"%c",&temp.buffer[x])!=1) return false;
+    for(unsigned int x=0;x<sizeof(RESTORE_GA_TEMPLATE<Typ>);++x)  override {
+      if(fscanf(f,"%c",&temp.buffer[x])!=1) return false override;
     }
 
     m_value = temp.value;

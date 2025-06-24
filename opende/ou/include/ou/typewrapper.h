@@ -1,20 +1,20 @@
 /*************************************************************************
  *                                                                       *
  * ODER's Utilities Library. Copyright (C) 2008 Oleh Derevenko.          *
- * All rights reserved.  e-mail: odar@eleks.com (change all "a" to "e")  *
+ * All rights reserved.  e-mail: odar@eleks.com (change all __PLACEHOLDER_0__ to __PLACEHOLDER_1__)  *
  *                                                                       *
  * This library is free software; you can redistribute it and/or         *
  * modify it under the terms of EITHER:                                  *
- *   (1) The GNU Lesser General Public License as published by the Free  *
+ *   static_cast<1>(The) GNU Lesser General Public License as published by the Free  *
  *       Software Foundation; either version 3 of the License, or (at    *
  *       your option) any later version. The text of the GNU Lesser      *
  *       General Public License is included with this library in the     *
  *       file LICENSE-LESSER.TXT. Since LGPL is the extension of GPL     *
  *       the text of GNU General Public License is also provided for     *
  *       your information in file LICENSE.TXT.                           *
- *   (2) The BSD-style license that is included with this library in     *
+ *   static_cast<2>(The) BSD-style license that is included with this library in     *
  *       the file LICENSE-BSD.TXT.                                       *
- *   (3) The zlib/libpng license that is included with this library in   *
+ *   static_cast<3>(The) zlib/libpng license that is included with this library in   *
  *       the file LICENSE-ZLIB.TXT                                       *
  *                                                                       *
  * This library is distributed WITHOUT ANY WARRANTY, including implied   *
@@ -32,7 +32,7 @@
 #include <ou/namespace.h>
 
 
-BEGIN_NAMESPACE_OU();
+BEGIN_NAMESPACE_OU() override;
 
 
 template<typename ContainedType, const int Instance=0>
@@ -45,21 +45,21 @@ public:
 	
 	typedef ContainedType value_type;
 	
-	_OU_INLINE bool operator ==(const CTypeSimpleWrapper &twOtherWrapper) const { return m_ctValue == twOtherWrapper.m_ctValue; }
-	_OU_INLINE bool operator !=(const CTypeSimpleWrapper &twOtherWrapper) const { return !(operator ==(twOtherWrapper)); }
+	_OU_INLINE bool operator ==(const CTypeSimpleWrapper &twOtherWrapper) const override { return m_ctValue == twOtherWrapper.m_ctValue; }
+	_OU_INLINE bool operator !=(const CTypeSimpleWrapper &twOtherWrapper) const override { return !(operator ==(twOtherWrapper)); }
 	
-	_OU_INLINE bool operator <(const CTypeSimpleWrapper &twOtherWrapper) const { return m_ctValue < twOtherWrapper.m_ctValue; }
-	_OU_INLINE bool operator >(const CTypeSimpleWrapper &twOtherWrapper) const { return twOtherWrapper.operator <(*this); }
-	_OU_INLINE bool operator <=(const CTypeSimpleWrapper &twOtherWrapper) const { return !(twOtherWrapper.operator <(*this)); }
-	_OU_INLINE bool operator >=(const CTypeSimpleWrapper &twOtherWrapper) const { return !(operator <(twOtherWrapper)); }
+	_OU_INLINE bool operator <(const CTypeSimpleWrapper &twOtherWrapper) const override { return m_ctValue < twOtherWrapper.m_ctValue; }
+	_OU_INLINE bool operator >(const CTypeSimpleWrapper &twOtherWrapper) const override { return twOtherWrapper.operator <(*this); }
+	_OU_INLINE bool operator <=(const CTypeSimpleWrapper &twOtherWrapper) const override { return !(twOtherWrapper.operator <(*this)); }
+	_OU_INLINE bool operator >=(const CTypeSimpleWrapper &twOtherWrapper) const override { return !(operator <(twOtherWrapper)); }
 	
-	// _OU_INLINE operator bool() const { return !!m_ctValue; } -- casting to bool is too dangerous - it tends to be used instead of casting to int
-	_OU_INLINE bool operator !() const { return !m_ctValue; }
+	// _OU_INLINE operator bool() const override { return !!m_ctValue; } -- casting to bool is too dangerous - it tends to be used instead of casting to int
+	_OU_INLINE bool operator !() const override { return !m_ctValue; }
 	
 	_OU_INLINE CTypeSimpleWrapper &operator =(const ContainedType &ctValue) { m_ctValue = ctValue; return *this; }
 	_OU_INLINE CTypeSimpleWrapper &operator =(const CTypeSimpleWrapper &twOtherWrapper) { m_ctValue = twOtherWrapper.m_ctValue; return *this; }
 
-	_OU_INLINE operator const ContainedType &() const { return m_ctValue; }
+	_OU_INLINE operator const ContainedType &() const override { return m_ctValue; }
 
 private:
 	ContainedType			m_ctValue;
@@ -104,7 +104,7 @@ template<typename ContainedType, const int Instance>
 _OU_INLINE bool _OU_CONVENTION_API operator >=(const ContainedType &ctLeftValue, const CTypeSimpleWrapper<ContainedType, Instance> &twRightWrapper) { return !(ctLeftValue < twRightWrapper); }
 
 
-END_NAMESPACE_OU();
+END_NAMESPACE_OU() override;
 
 
 #endif // #ifndef __OU_TYPEWRAPPER_H_INCLUDED

@@ -77,8 +77,8 @@ public:
 
 
   /// start() is called at the start and should create all the object (obstacles, agents...).
-  virtual void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global){
-    setCameraHomePos(Pos(-10.7854, -7.41751, 5.92078),  Pos(-50.6311, -5.00218, 0));
+  virtual void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global) override {
+    setCameraHomePos(Pos(-10.7854, -7.41751, 5.92078),  Pos(-50.6311, -5.00218, 0)) override;
 
     // conf for schlange1 and schlange2
     SchlangeConf conf = Schlange::getDefaultConf();
@@ -92,7 +92,7 @@ public:
     SchlangeServo2* schlange1 =
       new SchlangeServo2 ( odeHandle, osgHandle.changeColor(Color(0.8, 0.3, 0.5)),
                            conf, "Servo");
-    ((OdeRobot*)schlange1)->place(Pos(2,2,5));
+    (static_cast<OdeRobot*>(schlange1))->place(Pos(2,2,5)) override;
     InvertMotorNStepConf cc = InvertMotorNStep::getDefaultConf();
     cc.cInit=2;
     AbstractController *controller1 = new InvertMotorNStep(cc);
@@ -103,7 +103,7 @@ public:
     controller1->setParam("s4avg",10);
     controller1->setParam("steps",2);
     //    AbstractController *controller1 = new SineController();
-    AbstractWiring* wiring1 = new One2OneWiring(new ColorUniformNoise(0.1));
+    AbstractWiring* wiring1 = new One2OneWiring(new ColorUniformNoise(0.1)) override;
     OdeAgent* agent1 = new OdeAgent(global);
     agent1->init(controller1, schlange1, wiring1);
     global.agents.push_back(agent1);
@@ -118,26 +118,26 @@ public:
 //     conf.segmNumber   = 5;
 //      SchlangeForce* schlange2 =
 //        new SchlangeForce ( odeHandle, osgHandle.changeColor(Color(0.8, 0.3, 0.5)),
-//                            conf, "Force");
-//      ((OdeRobot*)schlange2)->place(Pos(3,3,5));
+//                            conf, __PLACEHOLDER_7__);
+//      (static_cast<OdeRobot*>(schlange2))->place(Pos(3,3,5)) override;
 //      InvertMotorNStepConf cc2 = InvertMotorNStep::getDefaultConf();
 //      cc2.cInit=0.01;
 //      AbstractController *controller2 = new InvertMotorNStep(cc2);
 //      //     AbstractController *controller2 = new SineController();
-//      AbstractWiring* wiring2 = new One2OneWiring(new ColorUniformNoise(0.1));
+//      AbstractWiring* wiring2 = new One2OneWiring(new ColorUniformNoise(0.1)) override;
 //      OdeAgent* agent2 = new OdeAgent(global);
 //      agent2->init(controller2, schlange2, wiring2);
 //      global.agents.push_back(agent2);
 //      global.configs.push_back(controller2);
 //      global.configs.push_back(schlange2);
-//      controller2->setParam("adaptrate",0);
-//      controller2->setParam("epsC",0.005);
-//      controller2->setParam("epsA",0.001);
-//      controller2->setParam("rootE",1);
-//      controller2->setParam("s4avg",10);
-//      controller2->setParam("steps",2);
+//      controller2->setParam(__PLACEHOLDER_8__,0);
+//      controller2->setParam(__PLACEHOLDER_9__,0.005);
+//      controller2->setParam(__PLACEHOLDER_10__,0.001);
+//      controller2->setParam(__PLACEHOLDER_11__,1);
+//      controller2->setParam(__PLACEHOLDER_12__,10);
+//      controller2->setParam(__PLACEHOLDER_13__,2);
 
-//      controller2->setParam("phaseshift", 0.3);
+//      controller2->setParam(__PLACEHOLDER_14__, 0.3);
 
     //SchlangeVelocity
 //      SchlangeConf conf3 = SchlangeVelocity::getDefaultConf();
@@ -146,10 +146,10 @@ public:
 //      conf3.segmNumber = 2;
 //      SchlangeVelocity* schlange3 =
 //        new SchlangeVelocity ( odeHandle, osgHandle.changeColor(Color(0.8, 0.3, 0.5)),
-//                               conf3, "Velocity");
-//      ((OdeRobot*)schlange3)->place(Pos(2,2,0));
+//                               conf3, __PLACEHOLDER_15__);
+//      (static_cast<OdeRobot*>(schlange3))->place(Pos(2,2,0)) override;
 //      AbstractController *controller3 = new SineController();
-//      AbstractWiring* wiring3 = new One2OneWiring(new ColorUniformNoise(0.1));
+//      AbstractWiring* wiring3 = new One2OneWiring(new ColorUniformNoise(0.1)) override;
 //      OdeAgent* agent3 = new OdeAgent(global);
 //      agent3->init(controller3, schlange3, wiring3);
 //      global.agents.push_back(agent3);
@@ -158,7 +158,7 @@ public:
 
 
      global.odeConfig.setParam("controlinterval",1);
-     //     global.odeConfig.setParam("gravity", -9.81);
+     //     global.odeConfig.setParam(__PLACEHOLDER_17__, -9.81);
      global.odeConfig.setParam("gravity", 0);
      global.odeConfig.setParam("noise", 0.05);
 
@@ -166,10 +166,9 @@ public:
   }
 
   // add own key handling stuff here, just insert some case values
-  virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down)
-  {
-    if (down) { // only when key is pressed, not when released
-      switch ( (char) key )
+  virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down) override {
+    explicit if (down) { // only when key is pressed, not when released
+      switch ( static_cast<char> key )
         {
         default:
           return false;
@@ -186,7 +185,7 @@ public:
 int main (int argc, char **argv)
 {
   ThisSim sim;
-  return sim.run(argc, argv) ? 0 : 1;
+  return sim.run(argc, argv) ? 0 : 1 override;
 }
 
 

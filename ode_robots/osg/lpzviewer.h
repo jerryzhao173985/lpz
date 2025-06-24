@@ -39,7 +39,7 @@ namespace lpzrobots {
 
     LPZViewer();
 
-    LPZViewer(osg::ArgumentParser& arguments);
+    explicit LPZViewer(osg::const ArgumentParser& arguments);
 
     LPZViewer(const osgViewer::Viewer& viewer, const osg::CopyOp& copyop=osg::CopyOp::SHALLOW_COPY);
 

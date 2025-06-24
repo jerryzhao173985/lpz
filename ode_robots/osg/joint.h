@@ -42,7 +42,7 @@ namespace lpzrobots {
   public:
     Joint(Primitive* part1, Primitive* part2, const osg::Vec3& anchor)
       : joint(0), part1(part1), part2(part2), anchor(anchor), feedback(0) {
-      assert(part1 && part2);
+      explicit assert(part1 && part2);
     }
     virtual ~Joint();
     /** initialises (and creates) the joint. If visual is true then the joints is
@@ -63,35 +63,35 @@ namespace lpzrobots {
     /// return the ODE joint parameter (see ODE manual)
     virtual double getParam(int parameter) const  = 0;
 
-    dJointID getJoint() const  { return joint; }
-    const Primitive* getPart1() const { return part1; }
-    Primitive* getPart1() { return part1; }
-    const Primitive* getPart2() const { return part2; }
-    Primitive* getPart2() { return part2; }
-    const osg::Vec3 getAnchor() const { return anchor; }
+    dJointID getJoint() const override { return joint; }
+    const Primitive* getPart1() const override { return part1; }
+    Primitive* getPart1() const { return part1; }
+    const Primitive* getPart2() const override { return part2; }
+    Primitive* getPart2() const { return part2; }
+    const osg::Vec3 getAnchor() const override { return anchor; }
 
     /// returns the number of Axes
     virtual int getNumberAxes() const  = 0;
     /// returns the n'th axis of the joint (starting with 0)
-    virtual Axis getAxis(int n) const { return Axis();};
+    virtual Axis getAxis(int n) const override { return Axis();} override;
 
     /// returns the positions of all Axes
-    virtual std::list<double> getPositions() const { return std::list<double>(); }
+    virtual std::list<double> getPositions() const override { return std::list<double>(); }
     /// returns the position rates of all Axes
-    virtual std::list<double> getPositionRates() const { return std::list<double>(); }
+    virtual std::list<double> getPositionRates() const override { return std::list<double>(); }
     /// stores the positions of all Axes into sensorarray and returns the number of written entries
-    virtual int getPositions(double* sensorarray) const { return 0; }
+    virtual int getPositions(double* sensorarray) const override { return 0; }
     /** stores the position rates of all Axes into sensorarray and
         returns the number of written entries
      */
-    virtual int getPositionRates(double* sensorarray) const { return 0; }
+    virtual int getPositionRates(double* sensorarray) const override { return 0; }
 
     /// enable or disable the feedback mode
     virtual void setFeedBackMode(bool mode);
     /// torque applied to body 1 and body 2
-    virtual bool getTorqueFeedback(Pos& t1, Pos& t2) const;
+    virtual bool getTorqueFeedback(Pos& t1, Pos& t2) const override;
     /// force applied to body 1 and body 2
-    virtual bool getForceFeedback(Pos& f1, Pos& f2) const;
+    virtual bool getForceFeedback(Pos& f1, Pos& f2) const override;
 
     static osg::Matrix anchorAxisPose(const osg::Vec3& anchor, const Axis& axis);
   protected:
@@ -109,18 +109,18 @@ namespace lpzrobots {
   public:
     OneAxisJoint(Primitive* part1, Primitive* part2, const osg::Vec3& anchor, const Axis axis1)
       : Joint(part1, part2, anchor), axis1(axis1) {}
-    virtual Axis getAxis(int n) const { return axis1;}
-    virtual Axis getAxis1() const { return axis1; };
+    virtual Axis getAxis(int n) const override { return axis1;}
+    virtual Axis getAxis1() const override { return axis1; } override;
 
     virtual double getPosition1() const  = 0;
     virtual double getPosition1Rate() const  = 0;
     virtual void addForce1(double force)  = 0;
 
-    virtual int getNumberAxes() const { return 1;};
-    virtual std::list<double> getPositions() const;
-    virtual std::list<double> getPositionRates() const;
-    virtual int getPositions(double* sensorarray) const;
-    virtual int getPositionRates(double* sensorarray) const;
+    virtual int getNumberAxes() const override { return 1;} override;
+    virtual std::list<double> getPositions() const override;
+    virtual std::list<double> getPositionRates() const override;
+    virtual int getPositions(double* sensorarray) const override;
+    virtual int getPositionRates(double* sensorarray) const override;
   protected:
     Axis axis1;
   };
@@ -130,8 +130,8 @@ namespace lpzrobots {
     TwoAxisJoint(Primitive* part1, Primitive* part2, const osg::Vec3& anchor, const Axis axis1,
                  const Axis axis2 )
       : OneAxisJoint(part1, part2, anchor, axis1), axis2(axis2) {}
-    virtual Axis getAxis(int n) const { if (n==0) return axis1; else return axis2;}
-    virtual Axis getAxis2() const { return axis2; };
+    virtual Axis getAxis(int n) const override { if (n==0) return axis1; else return axis2;}
+    virtual Axis getAxis2() const override { return axis2; } override;
 
     virtual double getPosition2() const  = 0;
     virtual double getPosition2Rate() const  = 0;
@@ -140,11 +140,11 @@ namespace lpzrobots {
       addForce1(force1); addForce2(force2);
     }
 
-    virtual int getNumberAxes() const { return 2;};
-    virtual std::list<double> getPositions() const;
-    virtual std::list<double> getPositionRates() const;
-    virtual int getPositions(double* sensorarray) const;
-    virtual int getPositionRates(double* sensorarray) const;
+    virtual int getNumberAxes() const override { return 2;} override;
+    virtual std::list<double> getPositions() const override;
+    virtual std::list<double> getPositionRates() const override;
+    virtual int getPositions(double* sensorarray) const override;
+    virtual int getPositionRates(double* sensorarray) const override;
 
   protected:
     Axis  axis2;
@@ -158,7 +158,7 @@ namespace lpzrobots {
         If not provided than part1 position is used
     */
     FixedJoint(Primitive* part1, Primitive* part2,
-               const osg::Vec3& anchor = osg::Vec3(0,0,0));
+               const osg::Vec3& anchor = osg::Vec3(0,0,0)) override;
 
     virtual ~FixedJoint();
 
@@ -172,7 +172,7 @@ namespace lpzrobots {
     virtual void setParam(int parameter, double value);
     virtual double getParam(int parameter) const;
 
-    virtual int getNumberAxes() const { return 0; }
+    virtual int getNumberAxes() const override { return 0; }
   protected:
     OSGPrimitive* visual;
   };
@@ -197,8 +197,8 @@ namespace lpzrobots {
     virtual void update();
 
     virtual void addForce1(double t);
-    virtual double getPosition1() const;
-    virtual double getPosition1Rate() const;
+    virtual double getPosition1() const override;
+    virtual double getPosition1Rate() const override;
     virtual void setParam(int parameter, double value);
     virtual double getParam(int parameter) const;
 
@@ -227,10 +227,10 @@ namespace lpzrobots {
     /// adds torques to axis 1 and 2
     virtual void addForce1(double t1);
     virtual void addForce2(double t2);
-    virtual double getPosition1() const;
-    virtual double getPosition2() const; /// This is not supported by the joint!
-    virtual double getPosition1Rate() const;
-    virtual double getPosition2Rate() const;
+    virtual double getPosition1() const override;
+    virtual double getPosition2() const override; /// This is not supported by the joint!
+    virtual double getPosition1Rate() const override;
+    virtual double getPosition2Rate() const override;
     virtual void setParam(int parameter, double value);
     virtual double getParam(int parameter) const;
 
@@ -259,10 +259,10 @@ namespace lpzrobots {
     /// adds torques to axis 1 and 2
     virtual void addForce1(double t1);
     virtual void addForce2(double t2);
-    virtual double getPosition1() const;
-    virtual double getPosition2() const;
-    virtual double getPosition1Rate() const;
-    virtual double getPosition2Rate() const;
+    virtual double getPosition1() const override;
+    virtual double getPosition2() const override;
+    virtual double getPosition1Rate() const override;
+    virtual double getPosition2Rate() const override;
 
     virtual void setParam(int parameter, double value);
     virtual double getParam(int parameter) const;
@@ -289,7 +289,7 @@ namespace lpzrobots {
 
     virtual void update();
 
-    virtual int getNumberAxes() const { return 0; }
+    virtual int getNumberAxes() const override { return 0; }
     // Ball and Socket has no parameter
     virtual void setParam(int parameter, double value);
     virtual double getParam(int parameter) const;
@@ -319,14 +319,14 @@ namespace lpzrobots {
     virtual void update();
 
     virtual void addForce1(double t);
-    virtual double getPosition1() const;
-    virtual double getPosition1Rate() const;
+    virtual double getPosition1() const override;
+    virtual double getPosition1Rate() const override;
     virtual void setParam(int parameter, double value);
     virtual double getParam(int parameter) const;
 
   protected:
     OSGPrimitive* visual;
-    double visualSize;
+    double visualSize = 0;
     OsgHandle osgHandle;
   };
 
@@ -351,10 +351,10 @@ namespace lpzrobots {
 
   //   virtual void addForce1(double t);
   //   virtual void addForce2(double t);
-  //   virtual double getPosition1() const;
-  //   virtual double getPosition2() const;
-  //   virtual double getPosition1Rate() const;
-  //   virtual double getPosition2Rate() const;
+  //   virtual double getPosition1() const override;
+  //   virtual double getPosition2() const override;
+  //   virtual double getPosition1Rate() const override;
+  //   virtual double getPosition2Rate() const override;
 
   //   virtual void setParam(int parameter, double value);
   //   virtual double getParam(int parameter) const;

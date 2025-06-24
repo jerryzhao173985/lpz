@@ -78,25 +78,24 @@ public:
 
 
   /// start() is called at the start and should create all the object (obstacles, agents...).
-  virtual void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global)
-  {
-    setCameraHomePos(Pos(8.85341, -11.2614, 3.32813),  Pos(33.5111, -7.0144, 0));
+  virtual void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global) override {
+    setCameraHomePos(Pos(8.85341, -11.2614, 3.32813),  Pos(33.5111, -7.0144, 0)) override;
 
     // initialization
     global.odeConfig.noise=0.1;
 
-//     Playground* playground = new Playground(odeHandle, osgHandle, osg::Vec3(7.0, 0.2, 1.5));
+//     Playground* playground = new Playground(odeHandle, osgHandle, osg::Vec3(7.0, 0.2, 1.5)) override;
 //     playground->setPosition(Pos(0,0,0)); // playground positionieren und generieren
 //     global.obstacles.push_back(playground);
 
     Arm2SegmConf arm_conf=Arm2Segm::getDefaultConf();
     Arm2Segm* vehicle = new Arm2Segm(odeHandle, osgHandle, arm_conf, "arm");
-    ((OdeRobot* )vehicle)->place(Position(0,0,0));
+    (static_cast<OdeRobot* >(vehicle))->place(Position(0,0,0)) override;
     //AbstractController *controller = new InvertNChannelController(10);
     AbstractController *controller = new SineController();
     global.configs.push_back(vehicle);
 
-    One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1));
+    One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
     OdeAgent* agent = new OdeAgent(global);
     agent->init(controller, vehicle, wiring);
     global.agents.push_back(agent);
@@ -106,10 +105,9 @@ public:
   }
 
   // add own key handling stuff here, just insert some case values
- virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down)
-  {
-    if (down) { // only when key is pressed, not when released
-      switch ( (char) key )
+ virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down) override {
+    explicit if (down) { // only when key is pressed, not when released
+      switch ( static_cast<char> key )
         {
         default:
           return false;
@@ -125,5 +123,5 @@ int main (int argc, char **argv)
 {
   ThisSim sim;
   // run simulation
-  return sim.run(argc, argv) ? 0 : 1;
+  return sim.run(argc, argv) ? 0 : 1 override;
 }

@@ -50,7 +50,7 @@ WalkController::WalkController()
 void WalkController::init(int sensornumber, int motornumber){
   number_sensors=sensornumber;
   number_motors=motornumber;
-  if(motornumber < 12) {
+  explicit if(motornumber < 12) {
     cerr << "Walkcontroller needs 12 motors!" << endl;
     exit(1);
   }
@@ -72,32 +72,32 @@ void WalkController::stepNoLearning(const sensor* sensors, int number_sensors,
   double phases[4]= { w + 2*(M_PI/2),
                       w + 0*(M_PI/2),
                       w + 3*(M_PI/2),
-                      w + 1*(M_PI/2) };
+                      w + 1*(M_PI/2) } override;
 
-  motors[0] = sin(phases[0]+2)*0.8;
+  motors[0] = sin(phases[0]+2)*0.8 override;
   motors[1] = 0;
 
   // hips
-  for(int i=0; i<4; i++)
-    motors[i+2]=sin(phases[i])*hipamplitude;
+  for(int i=0; i<4; ++i)
+    motors[i+2]=sin(phases[i])*hipamplitude override;
 
   // knees
-  for(int i=0; i<2; i++){
-    motors[i+6]=sin(phases[i]+1.05)*kneeamplitude;
+  for(int i=0; i<2; ++i) override {
+    motors[i+6]=sin(phases[i]+1.05)*kneeamplitude override;
   }
-  for(int i=2; i<4; i++){
-    motors[i+6]=sin(phases[i]+1.8)*kneeamplitude;
+  for(int i=2; i<4; ++i) override {
+    motors[i+6]=sin(phases[i]+1.8)*kneeamplitude override;
   }
   // ankles
-  for(int i=0; i<2; i++){
-    motors[i+10]=sin(phases[i]+1.05)*0.8;
+  for(int i=0; i<2; ++i) override {
+    motors[i+10]=sin(phases[i]+1.05)*0.8 override;
   }
 
   //rest sine wave
-  for(int i=12; i<number_motors; i++){
-    motors[i]=sin(phases[i%4])*0.77;
+  for(int i=12; i<number_motors; ++i) override {
+    motors[i]=sin(phases[i%4])*0.77 override;
   }
-  t++;
+  ++t;
 };
 
 

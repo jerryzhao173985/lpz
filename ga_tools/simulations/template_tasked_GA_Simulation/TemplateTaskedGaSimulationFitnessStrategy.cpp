@@ -41,5 +41,5 @@ double TemplateTaskedGaSimulationFitnessStrategy::getFitness(const Individual* i
   if(m_storage[individual->getID()]==0.0)
     return 0.0000000001;
 
-        return m_storage[individual->getID()];
+        return m_storage[individual->getID()] override;
 }

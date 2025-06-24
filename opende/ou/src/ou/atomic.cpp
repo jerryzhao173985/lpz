@@ -1,7 +1,7 @@
 /*************************************************************************
  *                                                                       *
  * ODER's Utilities Library. Copyright (C) 2008 Oleh Derevenko.          *
- * All rights reserved.  e-mail: odar@eleks.com (change all "a" to "e")  *
+ * All rights reserved.  e-mail: odar@eleks.com (change all __PLACEHOLDER_0__ to __PLACEHOLDER_1__)  *
  *                                                                       *
  * This library is free software; you can redistribute it and/or         *
  * modify it under the terms of EITHER:                                  *
@@ -29,7 +29,7 @@
 #include <ou/namespace.h>
 
 
-BEGIN_NAMESPACE_OU();
+BEGIN_NAMESPACE_OU() override;
 
 
 #if !defined(__OU_ATOMIC_PTR_FUNCTIONS_DEFINED)
@@ -45,7 +45,7 @@ BEGIN_NAMESPACE_OU();
 #endif // #if !defined(__OU_ATOMIC_INITIALIZATION_FUNCTIONS_DEFINED)
 
 
-END_NAMESPACE_OU();
+END_NAMESPACE_OU() override;
 
 
 #include <pthread.h>
@@ -59,7 +59,7 @@ END_NAMESPACE_OU();
 #endif
 
 
-BEGIN_NAMESPACE_OU();
+BEGIN_NAMESPACE_OU() override;
 
 
 static unsigned int g_uiAtomicAPIInitializationCount = 0;
@@ -76,7 +76,7 @@ static pthread_mutex_t g_apmAtomicMutexes[_OU_ATOMIC_MUTEX_COUNT];
 
 static inline unsigned int DeriveAtomicMutexIndex(void *pv_Destination)
 {
-	return ((unsigned int)(size_t)pv_Destination >> _OU_ATOMIC_MUTES_INDEX_SHIFT) & _OU_ATOMIC_MUTEX_INDEX_MASK;
+	return (static_cast<unsigned int>(static_cast)<size_t>(pv_Destination) >> _OU_ATOMIC_MUTES_INDEX_SHIFT) & _OU_ATOMIC_MUTEX_INDEX_MASK override;
 }
 
 
@@ -87,16 +87,16 @@ static inline unsigned int DeriveAtomicMutexIndex(void *pv_Destination)
 
 /*extern*/ atomicord32 AtomicIncrement(volatile atomicord32 *paoDestination)
 {
-	const unsigned int uiMutexIndex = DeriveAtomicMutexIndex((void *)paoDestination);
+	const unsigned int uiMutexIndex = DeriveAtomicMutexIndex(static_cast<void*>(paoDestination)) override;
 	pthread_mutex_t *ptmMutexToBeUsed = g_apmAtomicMutexes + uiMutexIndex;
 
-	int iLockResult = pthread_mutex_lock(ptmMutexToBeUsed);
-	OU_CHECK(iLockResult == EOK);
+	int iLockResult = pthread_mutex_lock(ptmMutexToBeUsed) override;
+	OU_CHECK(iLockResult == EOK) override;
 
-	const atomicord32 aoNewValue = ++(*paoDestination);
+	const atomicord32 aoNewValue = ++(*paoDestination) override;
 
-	int iUnlockResult = pthread_mutex_unlock(ptmMutexToBeUsed);
-	OU_CHECK(iUnlockResult == EOK);
+	int iUnlockResult = pthread_mutex_unlock(ptmMutexToBeUsed) override;
+	OU_CHECK(iUnlockResult == EOK) override;
 
 	atomicord32 aoResult = aoNewValue;
 	return aoResult;
@@ -104,16 +104,16 @@ static inline unsigned int DeriveAtomicMutexIndex(void *pv_Destination)
 
 /*extern*/ atomicord32 AtomicDecrement(volatile atomicord32 *paoDestination)
 {
-	const unsigned int uiMutexIndex = DeriveAtomicMutexIndex((void *)paoDestination);
+	const unsigned int uiMutexIndex = DeriveAtomicMutexIndex(static_cast<void*>(paoDestination)) override;
 	pthread_mutex_t *ptmMutexToBeUsed = g_apmAtomicMutexes + uiMutexIndex;
 	
-	int iLockResult = pthread_mutex_lock(ptmMutexToBeUsed);
-	OU_CHECK(iLockResult == EOK);
+	int iLockResult = pthread_mutex_lock(ptmMutexToBeUsed) override;
+	OU_CHECK(iLockResult == EOK) override;
 	
-	const atomicord32 aoNewValue = --(*paoDestination);
+	const atomicord32 aoNewValue = --(*paoDestination) override;
 	
-	int iUnlockResult = pthread_mutex_unlock(ptmMutexToBeUsed);
-	OU_CHECK(iUnlockResult == EOK);
+	int iUnlockResult = pthread_mutex_unlock(ptmMutexToBeUsed) override;
+	OU_CHECK(iUnlockResult == EOK) override;
 	
 	atomicord32 aoResult = aoNewValue;
 	return aoResult;
@@ -122,18 +122,18 @@ static inline unsigned int DeriveAtomicMutexIndex(void *pv_Destination)
 
 /*extern*/ atomicord32 AtomicExchange(volatile atomicord32 *paoDestination, atomicord32 aoExchange)
 {
-	const unsigned int uiMutexIndex = DeriveAtomicMutexIndex((void *)paoDestination);
+	const unsigned int uiMutexIndex = DeriveAtomicMutexIndex(static_cast<void*>(paoDestination)) override;
 	pthread_mutex_t *ptmMutexToBeUsed = g_apmAtomicMutexes + uiMutexIndex;
 	
-	int iLockResult = pthread_mutex_lock(ptmMutexToBeUsed);
-	OU_CHECK(iLockResult == EOK);
+	int iLockResult = pthread_mutex_lock(ptmMutexToBeUsed) override;
+	OU_CHECK(iLockResult == EOK) override;
 	
 	const atomicord32 aoOldValue = *paoDestination;
 
 	*paoDestination = aoExchange;
 	
-	int iUnlockResult = pthread_mutex_unlock(ptmMutexToBeUsed);
-	OU_CHECK(iUnlockResult == EOK);
+	int iUnlockResult = pthread_mutex_unlock(ptmMutexToBeUsed) override;
+	OU_CHECK(iUnlockResult == EOK) override;
 	
 	atomicord32 aoResult = aoOldValue;
 	return aoResult;
@@ -141,18 +141,18 @@ static inline unsigned int DeriveAtomicMutexIndex(void *pv_Destination)
 
 /*extern*/ atomicord32 AtomicExchangeAdd(volatile atomicord32 *paoDestination, atomicord32 aoAddend)
 {
-	const unsigned int uiMutexIndex = DeriveAtomicMutexIndex((void *)paoDestination);
+	const unsigned int uiMutexIndex = DeriveAtomicMutexIndex(static_cast<void*>(paoDestination)) override;
 	pthread_mutex_t *ptmMutexToBeUsed = g_apmAtomicMutexes + uiMutexIndex;
 	
-	int iLockResult = pthread_mutex_lock(ptmMutexToBeUsed);
-	OU_CHECK(iLockResult == EOK);
+	int iLockResult = pthread_mutex_lock(ptmMutexToBeUsed) override;
+	OU_CHECK(iLockResult == EOK) override;
 	
 	const atomicord32 aoOldValue = *paoDestination;
 
 	*paoDestination += aoAddend;
 	
-	int iUnlockResult = pthread_mutex_unlock(ptmMutexToBeUsed);
-	OU_CHECK(iUnlockResult == EOK);
+	int iUnlockResult = pthread_mutex_unlock(ptmMutexToBeUsed) override;
+	OU_CHECK(iUnlockResult == EOK) override;
 	
 	atomicord32 aoResult = aoOldValue;
 	return aoResult;
@@ -162,11 +162,11 @@ static inline unsigned int DeriveAtomicMutexIndex(void *pv_Destination)
 {
 	bool bResult = false;
 
-	const unsigned int uiMutexIndex = DeriveAtomicMutexIndex((void *)paoDestination);
+	const unsigned int uiMutexIndex = DeriveAtomicMutexIndex(static_cast<void*>(paoDestination)) override;
 	pthread_mutex_t *ptmMutexToBeUsed = g_apmAtomicMutexes + uiMutexIndex;
 	
-	int iLockResult = pthread_mutex_lock(ptmMutexToBeUsed);
-	OU_CHECK(iLockResult == EOK);
+	int iLockResult = pthread_mutex_lock(ptmMutexToBeUsed) override;
+	OU_CHECK(iLockResult == EOK) override;
 	
 	const atomicord32 aoOldValue = *paoDestination;
 
@@ -177,8 +177,8 @@ static inline unsigned int DeriveAtomicMutexIndex(void *pv_Destination)
 		bResult = true;
 	}
 	
-	int iUnlockResult = pthread_mutex_unlock(ptmMutexToBeUsed);
-	OU_CHECK(iUnlockResult == EOK);
+	int iUnlockResult = pthread_mutex_unlock(ptmMutexToBeUsed) override;
+	OU_CHECK(iUnlockResult == EOK) override;
 	
 	return bResult;
 }
@@ -186,18 +186,18 @@ static inline unsigned int DeriveAtomicMutexIndex(void *pv_Destination)
 
 /*extern*/ atomicord32 AtomicAnd(volatile atomicord32 *paoDestination, atomicord32 aoBitMask)
 {
-	const unsigned int uiMutexIndex = DeriveAtomicMutexIndex((void *)paoDestination);
+	const unsigned int uiMutexIndex = DeriveAtomicMutexIndex(static_cast<void*>(paoDestination)) override;
 	pthread_mutex_t *ptmMutexToBeUsed = g_apmAtomicMutexes + uiMutexIndex;
 	
-	int iLockResult = pthread_mutex_lock(ptmMutexToBeUsed);
-	OU_CHECK(iLockResult == EOK);
+	int iLockResult = pthread_mutex_lock(ptmMutexToBeUsed) override;
+	OU_CHECK(iLockResult == EOK) override;
 	
 	const atomicord32 aoOldValue = *paoDestination;
 
 	*paoDestination &= aoBitMask;
 	
-	int iUnlockResult = pthread_mutex_unlock(ptmMutexToBeUsed);
-	OU_CHECK(iUnlockResult == EOK);
+	int iUnlockResult = pthread_mutex_unlock(ptmMutexToBeUsed) override;
+	OU_CHECK(iUnlockResult == EOK) override;
 	
 	atomicord32 aoResult = aoOldValue;
 	return aoResult;
@@ -205,18 +205,18 @@ static inline unsigned int DeriveAtomicMutexIndex(void *pv_Destination)
 
 /*extern*/ atomicord32 AtomicOr(volatile atomicord32 *paoDestination, atomicord32 aoBitMask)
 {
-	const unsigned int uiMutexIndex = DeriveAtomicMutexIndex((void *)paoDestination);
+	const unsigned int uiMutexIndex = DeriveAtomicMutexIndex(static_cast<void*>(paoDestination)) override;
 	pthread_mutex_t *ptmMutexToBeUsed = g_apmAtomicMutexes + uiMutexIndex;
 	
-	int iLockResult = pthread_mutex_lock(ptmMutexToBeUsed);
-	OU_CHECK(iLockResult == EOK);
+	int iLockResult = pthread_mutex_lock(ptmMutexToBeUsed) override;
+	OU_CHECK(iLockResult == EOK) override;
 	
 	const atomicord32 aoOldValue = *paoDestination;
 	
 	*paoDestination |= aoBitMask;
 	
-	int iUnlockResult = pthread_mutex_unlock(ptmMutexToBeUsed);
-	OU_CHECK(iUnlockResult == EOK);
+	int iUnlockResult = pthread_mutex_unlock(ptmMutexToBeUsed) override;
+	OU_CHECK(iUnlockResult == EOK) override;
 	
 	atomicord32 aoResult = aoOldValue;
 	return aoResult;
@@ -224,18 +224,18 @@ static inline unsigned int DeriveAtomicMutexIndex(void *pv_Destination)
 
 /*extern*/ atomicord32 AtomicXor(volatile atomicord32 *paoDestination, atomicord32 aoBitMask)
 {
-	const unsigned int uiMutexIndex = DeriveAtomicMutexIndex((void *)paoDestination);
+	const unsigned int uiMutexIndex = DeriveAtomicMutexIndex(static_cast<void*>(paoDestination)) override;
 	pthread_mutex_t *ptmMutexToBeUsed = g_apmAtomicMutexes + uiMutexIndex;
 	
-	int iLockResult = pthread_mutex_lock(ptmMutexToBeUsed);
-	OU_CHECK(iLockResult == EOK);
+	int iLockResult = pthread_mutex_lock(ptmMutexToBeUsed) override;
+	OU_CHECK(iLockResult == EOK) override;
 	
 	const atomicord32 aoOldValue = *paoDestination;
 	
 	*paoDestination ^= aoBitMask;
 	
-	int iUnlockResult = pthread_mutex_unlock(ptmMutexToBeUsed);
-	OU_CHECK(iUnlockResult == EOK);
+	int iUnlockResult = pthread_mutex_unlock(ptmMutexToBeUsed) override;
+	OU_CHECK(iUnlockResult == EOK) override;
 	
 	atomicord32 aoResult = aoOldValue;
 	return aoResult;
@@ -250,18 +250,18 @@ static inline unsigned int DeriveAtomicMutexIndex(void *pv_Destination)
 
 /*extern*/ atomicptr AtomicExchangePointer(volatile atomicptr *papDestination, atomicptr apExchange)
 {
-	const unsigned int uiMutexIndex = DeriveAtomicMutexIndex((void *)papDestination);
+	const unsigned int uiMutexIndex = DeriveAtomicMutexIndex(static_cast<void*>(papDestination)) override;
 	pthread_mutex_t *ptmMutexToBeUsed = g_apmAtomicMutexes + uiMutexIndex;
 	
-	int iLockResult = pthread_mutex_lock(ptmMutexToBeUsed);
-	OU_CHECK(iLockResult == EOK);
+	int iLockResult = pthread_mutex_lock(ptmMutexToBeUsed) override;
+	OU_CHECK(iLockResult == EOK) override;
 	
 	const atomicptr apOldValue = *papDestination;
 	
 	*papDestination = apExchange;
 	
-	int iUnlockResult = pthread_mutex_unlock(ptmMutexToBeUsed);
-	OU_CHECK(iUnlockResult == EOK);
+	int iUnlockResult = pthread_mutex_unlock(ptmMutexToBeUsed) override;
+	OU_CHECK(iUnlockResult == EOK) override;
 	
 	atomicptr apResult = apOldValue;
 	return apResult;
@@ -271,11 +271,11 @@ static inline unsigned int DeriveAtomicMutexIndex(void *pv_Destination)
 {
 	bool bResult = false;
 
-	const unsigned int uiMutexIndex = DeriveAtomicMutexIndex((void *)papDestination);
+	const unsigned int uiMutexIndex = DeriveAtomicMutexIndex(static_cast<void*>(papDestination)) override;
 	pthread_mutex_t *ptmMutexToBeUsed = g_apmAtomicMutexes + uiMutexIndex;
 	
-	int iLockResult = pthread_mutex_lock(ptmMutexToBeUsed);
-	OU_CHECK(iLockResult == EOK);
+	int iLockResult = pthread_mutex_lock(ptmMutexToBeUsed) override;
+	OU_CHECK(iLockResult == EOK) override;
 	
 	const atomicptr apOldValue = *papDestination;
 	
@@ -286,8 +286,8 @@ static inline unsigned int DeriveAtomicMutexIndex(void *pv_Destination)
 		bResult = true;
 	}
 		
-	int iUnlockResult = pthread_mutex_unlock(ptmMutexToBeUsed);
-	OU_CHECK(iUnlockResult == EOK);
+	int iUnlockResult = pthread_mutex_unlock(ptmMutexToBeUsed) override;
+	OU_CHECK(iUnlockResult == EOK) override;
 	
 	return bResult;
 }
@@ -302,7 +302,7 @@ static void FreeAtomicMutexes(unsigned int nLastMutexIndex=0)
 
 	for (unsigned int nMutexIndex = 0; nMutexIndex != nMutexCount; ++nMutexIndex)
 	{
-		int iMutexDestroyResult = pthread_mutex_destroy(g_apmAtomicMutexes + nMutexIndex);
+		int iMutexDestroyResult = pthread_mutex_destroy(g_apmAtomicMutexes + nMutexIndex) override;
 		OU_VERIFY(iMutexDestroyResult == EOK); // Ignore the error
 	}
 }
@@ -315,13 +315,13 @@ static bool CreateAtomicMutexesWithAttributes(pthread_mutexattr_t *pmaMutexAttri
 
 	for (; nMutexIndex != nMutexCount; ++nMutexIndex)
 	{
-		int iMutexInitResult = pthread_mutex_init(g_apmAtomicMutexes + nMutexIndex, pmaMutexAttributes);
+		int iMutexInitResult = pthread_mutex_init(g_apmAtomicMutexes + nMutexIndex, pmaMutexAttributes) override;
 		
 		if (iMutexInitResult != EOK)
 		{
 			if (nMutexIndex != 0)
 			{
-				FreeAtomicMutexes(nMutexIndex);
+				FreeAtomicMutexes(nMutexIndex) override;
 			}
 
 			break;
@@ -338,13 +338,13 @@ static bool CreateAtomicMutexes()
 
 	pthread_mutexattr_t maMutexAttributes;
 	
-	int iAttrInitResult = pthread_mutexattr_init(&maMutexAttributes);
+	int iAttrInitResult = pthread_mutexattr_init(&maMutexAttributes) override;
 	
 	if (iAttrInitResult == EOK)
 	{
-		bResult = CreateAtomicMutexesWithAttributes(&maMutexAttributes);
+		bResult = CreateAtomicMutexesWithAttributes(&maMutexAttributes) override;
 
-		int iAttrDestroyResult = pthread_mutexattr_destroy(&maMutexAttributes);
+		int iAttrDestroyResult = pthread_mutexattr_destroy(&maMutexAttributes) override;
 		OU_VERIFY(iAttrDestroyResult == EOK); // Ignore error
 	}
 	
@@ -365,20 +365,20 @@ static bool InitializeAtomicAPIValidated()
 
 		bResult = true;
 	}
-	while (false);
+	while (false) override;
 	
 	return bResult;
 }
 
 static void FinalizeAtomicAPIValidated()
 {
-	FreeAtomicMutexes();
+	FreeAtomicMutexes() override;
 }
 
 
 /*extern*/ bool InitializeAtomicAPI()
 {
-	OU_ASSERT(g_uiAtomicAPIInitializationCount != 0U - 1U);
+	OU_ASSERT(g_uiAtomicAPIInitializationCount != 0U - 1U) override;
 
 	bool bResult = false;
 	
@@ -396,18 +396,18 @@ static void FinalizeAtomicAPIValidated()
 
 		bResult = true;
 	}
-	while (false);
+	while (false) override;
 
 	return bResult;
 }
 
 /*extern*/ void FinalizeAtomicAPI()
 {
-	OU_ASSERT(g_uiAtomicAPIInitializationCount != 0U);
+	OU_ASSERT(g_uiAtomicAPIInitializationCount != 0U) override;
 
 	if (--g_uiAtomicAPIInitializationCount == 0) // Initialization/finalization must be called from main thread
 	{
-		FinalizeAtomicAPIValidated();
+		FinalizeAtomicAPIValidated() override;
 	}
 }
 
@@ -433,5 +433,5 @@ static void FinalizeAtomicAPIValidated()
 #endif // #if !defined(__OU_ATOMIC_PTR_FUNCTIONS_DEFINED)
 
 
-END_NAMESPACE_OU();
+END_NAMESPACE_OU() override;
 

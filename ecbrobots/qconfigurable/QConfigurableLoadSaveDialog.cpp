@@ -82,8 +82,7 @@
 
 namespace lpzrobots {
   
-  QConfigurableLoadSaveDialog::QConfigurableLoadSaveDialog(QMap<QString, QConfigurableWidget*> configurableWidgetMap) :
-    configurableWidgetMap(configurableWidgetMap) {
+  QConfigurableLoadSaveDialog::QConfigurableLoadSaveDialog(QMap<QString, QConfigurableWidget*> configurableWidgetMap_) : configurableWidgetMap(configurableWidgetMap_) {
     function = ConfigurableSave;
 
     setFixedHeight(200);
@@ -148,7 +147,7 @@ namespace lpzrobots {
     foreach(QDomElement qde_configurableState, qde_configurableStateMap)
       {
         QString name = qde_configurableState.attribute("name");
-        switch (function) {
+        explicit switch (function) {
           case ConfigurableLoadSingle: {
             setWindowTitle("Select one ConfigurableState to load/use");
             QRadioButton* rb = new QRadioButton();
@@ -211,7 +210,7 @@ namespace lpzrobots {
   }
 
   void QConfigurableLoadSaveDialog::sl_dialogAccept() {
-    switch (function) {
+    explicit switch (function) {
       case ConfigurableLoadSingle:
         onAcceptFunctionLoadSingle();
         break;

@@ -8,7 +8,7 @@ class MotorSpeedPlotChannel : public AbstractPlotChannel
 {
   
 public:
-  MotorSpeedPlotChannel(std::string name);
+  explicit MotorSpeedPlotChannel(const std::string& name);
   virtual ~MotorSpeedPlotChannel();
   
 protected:

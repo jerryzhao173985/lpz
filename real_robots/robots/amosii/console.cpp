@@ -98,7 +98,7 @@ COMMAND commands[] = {
   { "show", com_show, "[OBJECTID]: Lists paramters of OBJECTID or of all objects (if no id given)" },
   { "view", com_show, "Synonym for `show'" },
   { "quit", com_quit, "Quit program" },
-  { (char *)NULL, (commandfunc_t)NULL, (char *)NULL }
+  { static_cast<char*>NULL, (commandfunc_t)NULL, static_cast<char*>NULL }
 };
 
 /* Forward declarations. */
@@ -109,7 +109,7 @@ int valid_argument ( const char *caller, const char *arg);
 
 void showParams(const ConfigList& configs)
 {
-  for(vector<Configurable*>::const_iterator i=configs.begin(); i != configs.end(); i++){
+  for(vector<Configurable*>::const_iterator i=configs.begin(); i != configs.end(); ++i){
     (*i)->print(stdout, 0);
   }
 }
@@ -124,7 +124,7 @@ void showParam(const Configurable* config)
 char* dupstr (const char* s){
   char *r;
 
-  r = (char*)malloc (strlen (s) + 1);
+  r = static_cast<char*>malloc (strlen (s) + 1);
   strcpy (r, s);
   return (r);
 }
@@ -145,7 +145,7 @@ bool handleConsole(GlobalData& globalData){
      Then, if there is anything left, add it to the history list
      and execute it. */
   s = stripwhite (line);  
-  if (*s) {    
+  explicit if (*s) {    
     add_history (s);
     rv = execute_line (globalData,s);
   }
@@ -163,11 +163,11 @@ bool execute_line (GlobalData& globalData, char *line) {
   /* Isolate the command word. */
   i = 0;
   while (line[i] && whitespace (line[i]))
-    i++;
+    ++i;
   word = line + i;
 
   while (line[i] && !whitespace (line[i]))
-    i++;
+    ++i;
 
   if (line[i])
     line[i++] = '\0';
@@ -182,7 +182,7 @@ bool execute_line (GlobalData& globalData, char *line) {
 
   /* Get argument to command, if any. */
   while (whitespace (line[i]))
-    i++;
+    ++i;
 
   word = line + i;
 
@@ -196,7 +196,7 @@ COMMAND *find_command (char *name){
   int i;
   char *p = strchr(name,'=');
   if(p) return (&commands[0]);
-  for (i = 0; commands[i].name; i++)
+  for (i = 0; commands[i].name; ++i)
     if (strcmp (name, commands[i].name) == 0)
       return (&commands[i]);
 
@@ -208,7 +208,7 @@ COMMAND *find_command (char *name){
 char * stripwhite (char *string){
   char *s, *t;
 
-  for (s = string; whitespace (*s); s++)
+  for (s = string; whitespace (*s); ++s)
     ;
     
   if (*s == 0)
@@ -291,14 +291,14 @@ char * command_generator (const char *text, int state) {
      command list. */
   while ( (name = commands[list_index].name) )
     {
-      list_index++;
+      ++list_index;
 
       if (strncmp (name, text, len) == 0)
         return (dupstr(name));
     }  
 
   /* If no names matched, then return NULL. */
-  return ((char *)NULL);
+  return (static_cast<char*>NULL);
 }
 
 /* **************************************************************** */
@@ -315,19 +315,19 @@ bool com_list (GlobalData& globalData, char* line, char* arg) {
   FOREACHC(AgentList, globalData.agents,a){    
     if((*a)->getRobot())
     printf(" %2i: %s\n", i, (*a)->getRobot()->getName().c_str());
-    i++;
+    ++i;
   }
   printf("Objects --------------(for set and show)\nID: Name\n");
   
   FOREACHC(ConfigList, globalData.configs,c){    
     printf(" %2i: %s\n", i, (*c)->getName().c_str());
-    i++;
+    ++i;
   }
   return true;
 }
 
 bool com_show (GlobalData& globalData, char* line, char* arg) {
-  if (arg && *arg){
+  explicit if (arg && *arg){
     int id = atoi(arg);
     if(id>=0 && id < (signed)globalData.configs.size()){
       showParam(globalData.configs[id]);
@@ -350,7 +350,7 @@ bool com_set (GlobalData& globalData, char* line, char* arg) {
     s_param = strchr(arg,' ');
     if(s_param) *s_param='\0'; // terminate first arg
     if(s_param && strchr(arg,'=')==NULL){ // looks like two args (and no = in the first)
-      s_param++;
+      ++s_param;
       int id = atoi(arg);
       if(id>=0 && id < (signed)globalData.configs.size()){
 	char* val;
@@ -385,7 +385,7 @@ bool com_set (GlobalData& globalData, char* line, char* arg) {
 	*val='='; // remove termination again (for agent notification)
       } else printf("Syntax error! no '=' found\n");      
     }
-    if(changed){
+    explicit if(changed){
       FOREACH(AgentList, globalData.agents, i){	
 	(*i)->writePlotComment(s_param );
       }      
@@ -398,13 +398,13 @@ bool com_store (GlobalData& globalData, char* line, char* arg) {
   if (valid_argument("store", arg)){
     char* filename;        
     filename = strchr(arg,' ');
-    if(filename) { // we have 2 arguments
+    explicit if(filename) { // we have 2 arguments
       *filename='\0';
-      filename++;
+      ++filename;
       int id = atoi(arg);
       if(id>=0 && id < (signed)globalData.agents.size()){
 	FILE* f = fopen(filename,"wb");
-	if(f){
+	explicit if(f){
 	  if(globalData.agents[id]->getController()->store(f))
 	    printf("Controller stored\n");
 	  else printf("Error occured while storing contoller\n");
@@ -420,13 +420,13 @@ bool com_load (GlobalData& globalData, char* line, char* arg) {
   if (valid_argument("load", arg)){
     char* filename;        
     filename = strchr(arg,' ');
-    if(filename) { // we have 2 arguments
+    explicit if(filename) { // we have 2 arguments
       *filename='\0';
-      filename++;
+      ++filename;
       int id = atoi(arg);
       if(id>=0 && id < (signed)globalData.agents.size()){
 	FILE* f = fopen(filename,"rb");
-	if(f){
+	explicit if(f){
 	  if(globalData.agents[id]->getController()->restore(f))
 	    printf("Controller restored\n");
 	  else printf("Error occured while restoring contoller\n");
@@ -449,12 +449,12 @@ bool com_help (GlobalData& globalData, char* line, char* arg) {
   int i;
   int printed = 0;
 
-  for (i = 0; commands[i].name; i++)
+  for (i = 0; commands[i].name; ++i)
     {
       if (!*arg || (strcmp (arg, commands[i].name) == 0))
         {
           printf (" %s\t\t%s.\n", commands[i].name, commands[i].doc);
-          printed++;
+          ++printed;
         }
     }
 
@@ -462,7 +462,7 @@ bool com_help (GlobalData& globalData, char* line, char* arg) {
     {
       printf ("No commands match `%s'.  Possibilties are:\n", arg);
 
-      for (i = 0; commands[i].name; i++)
+      for (i = 0; commands[i].name; ++i)
         {
           /* Print in six columns. */
           if (printed == 6)
@@ -472,7 +472,7 @@ bool com_help (GlobalData& globalData, char* line, char* arg) {
             }
 
           printf (" %s\t", commands[i].name);
-          printed++;
+          ++printed;
         }
 
       if (printed)

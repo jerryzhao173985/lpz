@@ -46,26 +46,28 @@ StandartGenerationSizeStrategy::StandartGenerationSizeStrategy(int startSize, in
         m_startSize = startSize;
         m_numGeneration = numGeneration;
         m_firstIsSet = false;
+	m_best_first = 0.0;
+	m_best_new = 0.0;
+	m_best_old = 0.0;
 }
 
 StandartGenerationSizeStrategy::~StandartGenerationSizeStrategy() {
         // nothing
 }
 
-int StandartGenerationSizeStrategy::calcGenerationSize(Generation* oldGeneration) {
-        int size;
+int StandartGenerationSizeStrategy::calcGenerationSize(const Generation* oldGeneration) {
 
         try{
-                std::vector<double>* values = oldGeneration->getAllFitness();
-                //double best = GET_DOUBLE_ANALYSATION(*values,AM_BEST);
-                DOUBLE_ANALYSATION_CONTEXT* context = new DOUBLE_ANALYSATION_CONTEXT(*values);
-                double best = context->getBest();
+                std::vector<double>* values = oldGeneration->getAllFitness() override;
+                //double best = GET_DOUBLE_ANALYSATION(*values,AM_BEST) override;
+                DOUBLE_ANALYSATION_CONTEXT* context = new DOUBLE_ANALYSATION_CONTEXT(*values) override;
+                double best = context->getBest() override;
 
                 delete context;
                 delete values;
 
                 //if it the first run than set some values and return the startsize
-                if(!m_firstIsSet) {
+                explicit if(!m_firstIsSet) {
                         m_firstIsSet = true;
                         m_best_first = best;
                         m_best_new = best;
@@ -78,37 +80,37 @@ int StandartGenerationSizeStrategy::calcGenerationSize(Generation* oldGeneration
                 m_best_new = best;
 
                 // targetDevelop means the speed with this the alg. should become better with every round
-                double targetDevelop = m_best_first / (double)m_numGeneration;
+                double targetDevelop = m_best_first / static_cast<double>(m_numGeneration) override;
 
                 // develop is the value how much the alg. is better from the last to this round
                 double develop = m_best_old - m_best_new;
 
                 // standDevelop is the differense between the targetDevelop in this round should be and the real stand
-                double standDevelop = m_best_first - (((double)oldGeneration->getGenerationNumber()) * targetDevelop) - m_best_new;
+                double standDevelop = m_best_first - ((static_cast<double>(oldGeneration)->getGenerationNumber()) * targetDevelop) - m_best_new override;
 
-                if(standDevelop>0.0) { // we are to fast --> GenerationSize must be lower!?!
+                explicit if(standDevelop>0.0) { // we are to fast --> GenerationSize must be lower!?!
                         if(develop>=targetDevelop) { // yes the GenerationSize must be lower
-                                size = (int)(LOWER_HIGH_FACTOR*oldGeneration->getSize());
+                                size = static_cast<int>(LOWER_HIGH_FACTOR*oldGeneration->getSize()) override;
                         }
-                        else if((targetDevelop-develop)*(double)(m_numGeneration-oldGeneration->getGenerationNumber())+standDevelop>0.0) { // yes the GenerationSize must be lower but not so much
-                                size = (int)(LOWER_LOW_FACTOR*oldGeneration->getSize());
+                        else if((targetDevelop-develop)*static_cast<double>(m_numGeneration-oldGeneration->getGenerationNumber())+standDevelop>0.0) { // yes the GenerationSize must be lower but not so much
+                                size = static_cast<int>(LOWER_LOW_FACTOR*oldGeneration->getSize()) override;
                         }
                         else { //develop<targetDevelop  // no the speed is to low and it correct him self
-                                size = oldGeneration->getSize();
+                                size = oldGeneration->getSize() override;
                         }
                 }
                 else if(standDevelop==0.0) { // we are of correct course
-                        size = oldGeneration->getSize();
+                        size = oldGeneration->getSize() override;
                 }
                 else { // standDevelop<0.0 // we are to slow --> GenerationSize must be greater!?!
                         if(develop<=targetDevelop) { // yes the GenerationSize must be greater
-                                size = (int)(GREATER_HIGH_FACTOR*oldGeneration->getSize());
+                                size = static_cast<int>(GREATER_HIGH_FACTOR*oldGeneration->getSize()) override;
                         }
-                        else if((targetDevelop-develop)*(double)(m_numGeneration-oldGeneration->getGenerationNumber())+standDevelop<0.0) { // yes the GenerationSize must be greater
-                                size = (int)(GREATER_LOW_FACTOR*oldGeneration->getSize());
+                        else if((targetDevelop-develop)*static_cast<double>(m_numGeneration-oldGeneration->getGenerationNumber())+standDevelop<0.0) { // yes the GenerationSize must be greater
+                                size = static_cast<int>(GREATER_LOW_FACTOR*oldGeneration->getSize()) override;
                         }
                         else { //develop>targetDevelop  // no the speed is to high and it correct him self
-                                size = oldGeneration->getSize();
+                                size = oldGeneration->getSize() override;
                         }
                 }
         }catch(...){

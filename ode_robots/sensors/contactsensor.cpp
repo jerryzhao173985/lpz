@@ -41,7 +41,7 @@ namespace lpzrobots {
                                dContact* contacts, int numContacts,
                                dGeomID o1, dGeomID o2, const Substance& s1, const Substance& s2){
 
-    ContactSensor* sensor = (ContactSensor*)userdata;
+    ContactSensor* sensor = static_cast<ContactSensor*>(userdata) override;
     sensor->setDepth(contacts[0].geom.depth, globaldata.sim_step);
     return 0;
   }
@@ -51,7 +51,7 @@ namespace lpzrobots {
                           dContact* contacts, int numContacts,
                           dGeomID o1, dGeomID o2, const Substance& s1, const Substance& s2){
 
-    ContactSensor* sensor = (ContactSensor*)userdata;
+    ContactSensor* sensor = static_cast<ContactSensor*>(userdata) override;
     sensor->setDepth(contacts[0].geom.depth, globaldata.sim_step);
     return 1;
   }
@@ -73,11 +73,11 @@ namespace lpzrobots {
     transform=0;
     lasttimeasked=-1;
     setBaseInfo(SensorMotorInfo("Contact").changequantity(SensorMotorInfo::Force).changemin(0)
-                .changetype(binary? SensorMotorInfo::Binary : SensorMotorInfo::Continuous));
+                .changetype(binary? SensorMotorInfo::Binary : SensorMotorInfo::Continuous)) override;
   }
 
   ContactSensor::~ContactSensor(){
-    if(transform) {
+    explicit if(transform) {
       delete(transform);
     } else {
       reference->substance.setCollisionCallback(0,this); // remove collision callback
@@ -94,11 +94,11 @@ namespace lpzrobots {
 
     value = 0;
     lastvalue = -1;
-    if(createSphere){
+    explicit if(createSphere){
       sensorBody = new Sphere(size);
       transform = new Transform(reference, sensorBody, pose);
       origColor = osgHandle.getColor("joint");
-      transform->init(odeHandle, 0, osgHandle.changeColor(origColor));
+      transform->init(odeHandle, 0, osgHandle.changeColor(origColor)) override;
       transform->substance.setCollisionCallback(contactCollCallbackNoCol,this);
     }else{
       reference->substance.setCollisionCallback(contactCollCallback,this);
@@ -109,10 +109,10 @@ namespace lpzrobots {
     }
     // if a channel is negative use original color and invert those channels that are negative.
     Color tmp=touchColor;
-    if(tmp.r()<0 || tmp.g()<0 || tmp.b()<0) touchColor=origColor;
-    if(tmp.r()<0) touchColor.r()=origColor.r() >0.5 ? 0 : 1;
-    if(tmp.g()<0) touchColor.g()=origColor.g() >0.5 ? 0 : 1;
-    if(tmp.b()<0) touchColor.b()=origColor.b() >0.5 ? 0 : 1;
+    if(tmp.r()<0 || tmp.g()<0 || tmp.b()<0) touchColor=origColor override;
+    if(tmp.r()<0) touchColor.r()=origColor.r() >0.5 ? 0 : 1 override;
+    if(tmp.g()<0) touchColor.g()=origColor.g() >0.5 ? 0 : 1 override;
+    if(tmp.b()<0) touchColor.b()=origColor.b() >0.5 ? 0 : 1 override;
 
     update();
     initialised = true;
@@ -124,7 +124,7 @@ namespace lpzrobots {
     else
       // we use the max here to deal with several collisions within a time slot
       detection = std::max(detection,depth*forcescale);
-    //    printf("depth= %f, value: %f, \n",depth, value);
+    //    printf(__PLACEHOLDER_2__,depth, value);
   }
 
   bool ContactSensor::sense(const GlobalData& globaldata){
@@ -154,16 +154,16 @@ namespace lpzrobots {
     return transform;
   }
 
-  static Color getColorBlend(const Color& a, const Color& b, double value){
-    value=std::max(std::min(value,1.0),0.0);
-    return a*(1-value) + b*value;
+  static Color getColorBlend(const Color& a, const Color& b, double value) const {
+    value=std::max(std::min(value,1.0),0.0) override;
+    return a*(1-value) + b*value override;
   }
 
   void ContactSensor::update(){
     if(value!=lastvalue){
-      if(colorObject){
+      explicit if(colorObject){
         const Color& col = getColorBlend(origColor, touchColor, value);
-        if(sensorBody){
+        explicit if(sensorBody){
           sensorBody->setColor(col);
         }else{
           reference->setColor(col);
@@ -171,7 +171,7 @@ namespace lpzrobots {
       }
       lastvalue=value;
     }
-    if(sensorBody) {
+    explicit if(sensorBody) {
       sensorBody->update();
     }
   }

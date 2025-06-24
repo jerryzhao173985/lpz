@@ -8,7 +8,7 @@ class TimeStampPlotChannel : public AbstractPlotChannel
 {
 
 public:
-  TimeStampPlotChannel ( std::string name );
+  explicit TimeStampPlotChannel ( const std::string& name );
   virtual ~TimeStampPlotChannel();
 protected:
 

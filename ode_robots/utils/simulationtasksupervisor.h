@@ -68,12 +68,12 @@ namespace lpzrobots
       }
     }
 
-    static void setSimTaskHandle(SimulationTaskHandle& _simTaskHandle)
+    static void setSimTaskHandle(const SimulationTaskHandle& _simTaskHandle)
     {
       simTaskHandle= &_simTaskHandle;
     }
 
-    static void setTaskedSimCreator(TaskedSimulationCreator& _taskedSimCreator)
+    static void setTaskedSimCreator(const TaskedSimulationCreator& _taskedSimCreator)
     {
       taskedSimCreator = &_taskedSimCreator;
     }
@@ -98,9 +98,8 @@ namespace lpzrobots
      * @param argc count of arguments in argv
      * @param argv array of arguments, given to Simulation when the tasks starts
      */
-    virtual void createSimTask()
-    {
-      SimulationTask* simTask = new SimulationTask(simTaskList.size());
+    virtual void createSimTask() override {
+      SimulationTask* simTask = new SimulationTask(simTaskList.size()) override;
       SimulationTaskSupervisor::simTaskList.push_back(simTask);
     }
 
@@ -111,9 +110,8 @@ namespace lpzrobots
      * @param argc count of arguments in argv
      * @param argv array of arguments, given to Simulation when the tasks starts
      */
-    virtual void createSimTasks(int taskCount)
-    {
-      for (int i=0; i<taskCount; i++)
+    virtual void createSimTasks(int taskCount) override {
+      for (int i=0; i<taskCount; ++i)
         createSimTask();
     }
 
@@ -125,7 +123,7 @@ namespace lpzrobots
     /**
      * Sets a suffix to be appended to the window name to identify your simTask
      */
-    virtual void setSimTaskNameSuffix(std::string name);
+    virtual void setSimTaskNameSuffix(const std::string& name);
 
   protected:
 

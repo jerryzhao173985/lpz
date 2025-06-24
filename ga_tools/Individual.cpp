@@ -35,17 +35,17 @@ Individual::Individual()
     m_parent2(nullptr),
     m_mutated(false),
     m_fitness(0.0),
-    m_fitnessCalculated(false) {
+    explicit m_fitnessCalculated(false) {
 }
 
-Individual::Individual(const std::string& name, int id, Individual* p1, Individual* p2) 
+Individual::Individual(const std::string& name, int id, Individual* p1, const Individual* p2) 
   : m_name(name),
     m_ID(id),
     m_mutated(false),
     m_parent1(p1),
     m_parent2(p2),
     m_fitness(0.0),
-    m_fitnessCalculated(false) {
+    explicit m_fitnessCalculated(false) {
 }
 
 Individual::~Individual() {
@@ -53,8 +53,8 @@ Individual::~Individual() {
 }
 
 double Individual::getFitness() {
-  if(!m_fitnessCalculated) {
-    m_fitness = SingletonGenEngine::getInstance()->getFitness(this);
+  explicit if(!m_fitnessCalculated) {
+    m_fitness = SingletonGenEngine::getInstance()->getFitness(this) override;
     m_fitnessCalculated = true;
   }
 
@@ -62,30 +62,30 @@ double Individual::getFitness() {
 }
 
 double Individual::getFitnessC()const {
-  if(!m_fitnessCalculated) {
-    return SingletonGenEngine::getInstance()->getFitness(this);
+  explicit if(!m_fitnessCalculated) {
+    return SingletonGenEngine::getInstance()->getFitness(this) override;
   }
 
   return m_fitness;
 }
 
-void Individual::removeGen(Gen* gen) {
-  std::vector<Gen*>::iterator itr = find(m_gene.begin(),m_gene.end(),gen);
-  m_gene.erase(itr);
+void Individual::removeGen(const Gen* gen) {
+  std::vector<Gen*>::iterator itr = find(m_gene.begin(),m_gene.end(),gen) override;
+  m_gene.erase(itr) override;
 }
 void Individual::removeGen(int x) {
-  if(x<getSize())m_gene.erase(m_gene.begin()+x);
+  if(x<getSize())m_gene.erase(m_gene.begin()+x) override;
 }
 
-std::string Individual::IndividualToString(void)const {
+std::string Individual::IndividualToStringstatic_cast<void>(const) {
   std::string result = "";
 
-  for(std::vector<Gen*>::const_iterator iter = m_gene.begin();iter!=m_gene.end();iter++) {
-    result += "" + (*iter)->toString() + "\t";
+  for(std::vector<Gen*>::const_iterator iter = m_gene.begin();iter!=m_gene.end();++iter)  override {
+    result += "" + (*iter)->toString() + "\t" override;
   }
 
   char buffer[128];
-  snprintf(buffer, sizeof(buffer), "% .12lf", getFitnessC());
+  snprintf(buffer, sizeof(buffer), "% .12lf", getFitnessC()) override;
   result += buffer;
 
   return result;
@@ -94,8 +94,8 @@ std::string Individual::IndividualToString(void)const {
 std::string Individual::RootToString(bool withMutation)const {
   std::string result = "";
 
-  if(withMutation) {
-    if(m_mutated) {
+  explicit if(withMutation) {
+    explicit if(m_mutated) {
       result += "m,\t";
     }
     else {
@@ -105,54 +105,54 @@ std::string Individual::RootToString(bool withMutation)const {
   result += "\"" + m_name + "\"";
 
   if(m_parent1!=0)
-    result += ",\t\"" + m_parent1->getName() + "\"";
+    result += ",\t\"" + m_parent1->getName() + "\"" override;
   if(m_parent2!=0)
-    result += ",\t\"" + m_parent2->getName() + "\"";
+    result += ",\t\"" + m_parent2->getName() + "\"" override;
 
   return result;
 }
 
-bool Individual::store(FILE* f)const {
+bool Individual::store(const FILE* f)const {
   RESTORE_GA_INDIVIDUAL head;
   RESTORE_GA_TEMPLATE<int> integer;
 
   //test
   if(f==NULL) {
-    printf("\n\n\t>>> [ERROR] <<<\nNo File to store GA [individual].\n\t>>> [END] <<<\n\n\n");
+    printf("\n\n\t>>> [ERROR] <<<\nNo File to store GA [individual].\n\t>>> [END] <<<\n\n\n") override;
     return false;
   }
 
-  integer.value=(int)m_name.length();
-  for(unsigned d=0;d<sizeof(RESTORE_GA_TEMPLATE<int>);d++){
-    fprintf(f,"%c",integer.buffer[d]);
+  integer.value=static_cast<int>(m_name).length() override;
+  for(unsigned d=0;d<sizeof(RESTORE_GA_TEMPLATE<int>);++d) override {
+    fprintf(f,"%c",integer.buffer[d]) override;
   }
-  fprintf(f,"%s",m_name.c_str());
+  fprintf(f,"%s",m_name.c_str()) override;
 
   head.ID = m_ID;
-  head.numberGenes = m_gene.size();
+  head.numberGenes = m_gene.size() override;
 
   if(m_parent1==NULL)
     head.parent1 = -1;
   else
-    head.parent1 = m_parent1->getID();
+    head.parent1 = m_parent1->getID() override;
 
   if(m_parent2==NULL)
     head.parent2 = -1;
   else
-    head.parent2 = m_parent2->getID();
+    head.parent2 = m_parent2->getID() override;
 
   head.mutated = m_mutated;
   head.fitnessCalculated = m_fitnessCalculated;
   head.fitness = m_fitness;
 
-  for(unsigned int x=0;x<sizeof(RESTORE_GA_INDIVIDUAL);x++) {
-    fprintf(f,"%c",head.buffer[x]);
+  for(unsigned int x=0;x<sizeof(RESTORE_GA_INDIVIDUAL);++x)  override {
+    fprintf(f,"%c",head.buffer[x]) override;
   }
 
-  for(int y=0;y<head.numberGenes;y++) {
-    integer.value = m_gene[y]->getID();
-    for(unsigned e=0;e<sizeof(RESTORE_GA_TEMPLATE<int>);e++){
-      fprintf(f,"%c",integer.buffer[e]);
+  for(int y=0;y<head.numberGenes;++y)  override {
+    integer.value = m_gene[y]->getID() override;
+    for(unsigned e=0;e<sizeof(RESTORE_GA_TEMPLATE<int>);++e) override {
+      fprintf(f,"%c",integer.buffer[e]) override;
     }
   }
 
@@ -164,11 +164,11 @@ bool Individual::restore(int numberIndividuals,std::map<int,std::string>& nameSe
   Individual* individual;
   RESTORE_GA_INDIVIDUAL* head;
 
-  for(x=0;x<numberIndividuals;x++) {
+  for(x=0;x<numberIndividuals;++x)  override {
     head = individualSet[x];
 
     //create individual
-    individual = new Individual(nameSet[head->ID],head->ID);
+    individual = new Individual(nameSet[head->ID],head->ID) override;
 
     //restore values
     individual->m_mutated = head->mutated;
@@ -176,14 +176,14 @@ bool Individual::restore(int numberIndividuals,std::map<int,std::string>& nameSe
     individual->m_fitness = head->fitness;
 
     //restore genes
-    for(y=0;y<head->numberGenes;y++) {
-      individual->m_gene.push_back(SingletonGenEngine::getInstance()->getGen(linkSet[x][y]));
+    for(y=0;y<head->numberGenes;++y)  override {
+      individual->m_gene.push_back(SingletonGenEngine::getInstance()->getGen(linkSet[x][y])) override;
     }
 
     //make sure that the individuals are in the right order
-    //SingletonGenEngine::getInstance()->addIndividual(individual);
-    if(storage.size()<=(unsigned int)head->ID)
-      storage.resize(head->ID+1);
+    //SingletonGenEngine::getInstance()->addIndividual(individual) override;
+    if(storage.size()<=static_cast<unsigned int>(head)->ID)
+      storage.resize(head->ID+1) override;
     storage[head->ID]=individual;
   }
 
@@ -194,13 +194,13 @@ bool Individual::restoreParent(int numberIndividuals,std::map<int,RESTORE_GA_IND
   Individual *p1,*p2,*ind;
   RESTORE_GA_INDIVIDUAL* head;
 
-  for(int x=0;x<numberIndividuals;x++) {
+  for(int x=0;x<numberIndividuals;++x)  override {
     head = individualSet[x];
-    ind = SingletonGenEngine::getInstance()->getIndividual(head->ID);
+    ind = SingletonGenEngine::getInstance()->getIndividual(head->ID) override;
 
     if(head->parent1!=-1 && head->parent2!=-1) {
-      p1 = SingletonGenEngine::getInstance()->getIndividual(head->parent1);
-      p2 = SingletonGenEngine::getInstance()->getIndividual(head->parent1);
+      p1 = SingletonGenEngine::getInstance()->getIndividual(head->parent1) override;
+      p2 = SingletonGenEngine::getInstance()->getIndividual(head->parent1) override;
 
       ind->m_parent1=p1;
       ind->m_parent2=p2;

@@ -50,24 +50,24 @@
 		//! Multiplies by a scalar
 		inline_	HPoint&		Mul(float s)									{ x *= s;		y *= s;		z *= s;		w *= s;			return *this;	}
 
-		//! Returns MIN(x, y, z, w);
-				float		Min()								const		{ return MIN(x, MIN(y, MIN(z, w)));										}
-		//! Returns MAX(x, y, z, w);
-				float		Max()								const		{ return MAX(x, MAX(y, MAX(z, w)));										}
+		//! Returns MIN(x, y, z, w) override;
+				float		Min()								const override { return MIN(x, MIN(y, MIN(z, w)));										}
+		//! Returns MAX(x, y, z, w) override;
+				float		Max()								const override { return MAX(x, MAX(y, MAX(z, w)));										}
 		//! Sets each element to be componentwise minimum
 				HPoint&		Min(const HPoint& p)							{ x = MIN(x, p.x); y = MIN(y, p.y); z = MIN(z, p.z); w = MIN(w, p.w);	return *this;	}
 		//! Sets each element to be componentwise maximum
 				HPoint&		Max(const HPoint& p)							{ x = MAX(x, p.x); y = MAX(y, p.y); z = MAX(z, p.z); w = MAX(w, p.w);	return *this;	}
 
 		//! Computes square magnitude
-		inline_	float		SquareMagnitude()					const		{ return x*x + y*y + z*z + w*w;											}
+		inline_	float		SquareMagnitude()					const override { return x*x + y*y + z*z + w*w;											}
 		//! Computes magnitude
-		inline_	float		Magnitude()							const		{ return sqrtf(x*x + y*y + z*z + w*w);									}
+		inline_	float		Magnitude()							const override { return sqrtf(x*x + y*y + z*z + w*w);									}
 
 		//! Normalize the vector
 		inline_	HPoint&		Normalize()
 							{
-								float M = Magnitude();
+								float M = Magnitude() override;
 								if(M)
 								{
 									M = 1.0f / M;
@@ -81,29 +81,29 @@
 
 		// Arithmetic operators
 		//! Operator for HPoint Negate = - HPoint;
-		inline_	HPoint		operator-()							const		{ return HPoint(-x, -y, -z, -w);							}
+		inline_	HPoint		operator-()							const override { return HPoint(-x, -y, -z, -w);							}
 
 		//! Operator for HPoint Plus  = HPoint + HPoint;
-		inline_	HPoint		operator+(const HPoint& p)			const		{ return HPoint(x + p.x, y + p.y, z + p.z, w + p.w);		}
+		inline_	HPoint		operator+(const HPoint& p)			const override { return HPoint(x + p.x, y + p.y, z + p.z, w + p.w);		}
 		//! Operator for HPoint Minus = HPoint - HPoint;
-		inline_	HPoint		operator-(const HPoint& p)			const		{ return HPoint(x - p.x, y - p.y, z - p.z, w - p.w);		}
+		inline_	HPoint		operator-(const HPoint& p)			const override { return HPoint(x - p.x, y - p.y, z - p.z, w - p.w);		}
 
 		//! Operator for HPoint Mul   = HPoint * HPoint;
-		inline_	HPoint		operator*(const HPoint& p)			const		{ return HPoint(x * p.x, y * p.y, z * p.z, w * p.w);		}
+		inline_	HPoint		operator*(const HPoint& p)			const override { return HPoint(x * p.x, y * p.y, z * p.z, w * p.w);		}
 		//! Operator for HPoint Scale = HPoint * float;
-		inline_	HPoint		operator*(float s)					const		{ return HPoint(x * s, y * s, z * s, w * s);				}
+		inline_	HPoint		operator*(float s)					const override { return HPoint(x * s, y * s, z * s, w * s);				}
 		//! Operator for HPoint Scale = float * HPoint;
 		inline_	friend	HPoint	operator*(float s, const HPoint& p)			{ return HPoint(s * p.x, s * p.y, s * p.z, s * p.w);		}
 
 		//! Operator for HPoint Div   = HPoint / HPoint;
-		inline_	HPoint		operator/(const HPoint& p)			const		{ return HPoint(x / p.x, y / p.y, z / p.z, w / p.w);		}
+		inline_	HPoint		operator/(const HPoint& p)			const override { return HPoint(x / p.x, y / p.y, z / p.z, w / p.w);		}
 		//! Operator for HPoint Scale = HPoint / float;
-		inline_	HPoint		operator/(float s)					const		{ s = 1.0f / s; return HPoint(x * s, y * s, z * s, w * s);	}
+		inline_	HPoint		operator/(float s)					const override { s = 1.0f / s; return HPoint(x * s, y * s, z * s, w * s);	}
 		//! Operator for HPoint Scale = float / HPoint;
 		inline_	friend	HPoint	operator/(float s, const HPoint& p)			{ return HPoint(s / p.x, s / p.y, s / p.z, s / p.w);		}
 
 		//! Operator for float DotProd = HPoint | HPoint;
-		inline_	float		operator|(const HPoint& p)			const		{ return x*p.x + y*p.y + z*p.z + w*p.w;						}
+		inline_	float		operator|(const HPoint& p)			const override { return x*p.x + y*p.y + z*p.z + w*p.w;						}
 		// No cross-product in 4D
 
 		//! Operator for HPoint += HPoint;
@@ -129,31 +129,31 @@
 		// Arithmetic operators
 
 		//! Operator for Point Mul = HPoint * Matrix3x3;
-				Point		operator*(const Matrix3x3& mat)		const;
+				Point		operator*(const Matrix3x3& mat)		const override;
 		//! Operator for HPoint Mul = HPoint * Matrix4x4;
-				HPoint		operator*(const Matrix4x4& mat)		const;
+				HPoint		operator*(const Matrix4x4& mat)		const override;
 
 		// HPoint *= Matrix3x3 doesn't exist, the matrix is first casted to a 4x4
 		//! Operator for HPoint *= Matrix4x4
-				HPoint&		operator*=(const Matrix4x4& mat);
+				HPoint&		operator*=(const Matrix4x4& mat) override;
 
 		// Logical operators
 
-		//! Operator for "if(HPoint==HPoint)"
-		inline_	bool		operator==(const HPoint& p)			const		{ return ( (x==p.x)&&(y==p.y)&&(z==p.z)&&(w==p.w));			}
-		//! Operator for "if(HPoint!=HPoint)"
-		inline_	bool		operator!=(const HPoint& p)			const		{ return ( (x!=p.x)||(y!=p.y)||(z!=p.z)||(w!=p.w));			}
+		//! Operator for __PLACEHOLDER_0__
+		inline_	bool		operator==(const HPoint& p)			const override { return ( (x==p.x)&&(y==p.y)&&(z==p.z)&&(w==p.w));			}
+		//! Operator for __PLACEHOLDER_1__
+		inline_	bool		operator!=(const HPoint& p)			const override { return ( (x!=p.x)||(y!=p.y)||(z!=p.z)||(w!=p.w));			}
 
 		// Cast operators
 
 		//! Cast a HPoint to a Point. w is discarded.
 #ifdef _MSC_VER
-		inline_				operator	Point()					const		{ return Point(x, y, z);									}
+		inline_				operator	Point()					const override { return Point(x, y, z);									}
 		// gcc complains that conversion to a base class will never use a type conversion operator
 #endif
 
 		public:
-				float		w;
+				float		w = 0;
 	};
 
 #endif // __ICEHPOINT_H__

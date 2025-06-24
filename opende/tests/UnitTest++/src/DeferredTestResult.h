@@ -9,8 +9,8 @@ namespace UnitTest
 
 struct DeferredTestResult
 {
-	DeferredTestResult();
-    DeferredTestResult(char const* suite, char const* test);
+	DeferredTestResult() override;
+    DeferredTestResult(char const* suite, char const* test) override;
 
     std::string suiteName;
     std::string testName;
@@ -20,8 +20,8 @@ struct DeferredTestResult
     typedef std::vector< Failure > FailureVec;
     FailureVec failures;
     
-    float timeElapsed;
-	bool failed;
+    float timeElapsed = 0;
+	bool failed = false;
 };
 
 }

@@ -27,7 +27,7 @@
  *                                                                         *
  *  $Log$
  *  Revision 1.3  2010-06-15 15:02:19  guettler
- *  using now "XercescForwardDecl.h" to avoid namespace problems (3_0, 3_1)
+ *  using now __PLACEHOLDER_0__ to avoid namespace problems (3_0, 3_1)
  *
  *  Revision 1.2  2010/03/11 15:18:06  guettler
  *  -BoundingShape can now be set from outside (see XMLBoundingShape)
@@ -57,11 +57,11 @@ class XMLBoundingShape : public lpzrobots::BoundingShape, public XMLObject {
    * @param parent primitive to which the BoundingShape is associated
    */
     XMLBoundingShape(const XERCESC::DOMNode* boundingBoxNode, XMLParserEngine& engine, lpzrobots::Mesh* parent);
-    virtual ~XMLBoundingShape() override;
+    virtual ~XMLBoundingShape();
 
      /// tries to open the bbox file and greates all geoms
      virtual bool init(const lpzrobots::OdeHandle& odeHandle, const lpzrobots::OsgHandle& osgHandle,
-           double scale, char mode) override;
+           double scale, char mode);
 
   protected:
      const XERCESC::DOMNode* boundingBoxNode;

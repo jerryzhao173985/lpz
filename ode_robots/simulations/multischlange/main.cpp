@@ -42,7 +42,7 @@
  *   orientationsensor added
  *
  *   Revision 1.9  2006/12/21 11:43:05  martius
- *   commenting style for doxygen //< -> ///<
+ *   commenting style for doxygen __PLACEHOLDER_137__
  *   new sensors for spherical robots
  *
  *   Revision 1.8  2006/10/20 14:25:11  martius
@@ -121,8 +121,8 @@ class ThisSim : public Simulation {
 public:
 
   /// start() is called at the start and should create all the object (obstacles, agents...).
-  virtual void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global){
-    setCameraHomePos(Pos(15.2297, -16.7329, 11.8299),  Pos(45.3984, -29.7745, 0));
+  virtual void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global) override {
+    setCameraHomePos(Pos(15.2297, -16.7329, 11.8299),  Pos(45.3984, -29.7745, 0)) override;
 
     // Set number of robots:
 
@@ -144,45 +144,45 @@ public:
     global.odeConfig.setParam("drawinterval", 4.);
 
     /*     Playground* playground = new Playground(odeHandle, osgHandle,
-           osg::Vec3(120, 0.2, 5.5),0.9);
-           playground->setColor(Color(1,0.2,0,0.1));
-           playground->setPosition(osg::Vec3(0,0,0)); // playground positionieren und generieren
+           osg::Vec3(120, 0.2, 5.5),0.9) override;
+           playground->setColor(Color(1,0.2,0,0.1)) override;
+           playground->setPosition(osg::Vec3(0,0,0)); __PLACEHOLDER_143__
            global.obstacles.push_back(playground);
     */
     /////////Neuer Playground klein innen
     // double diam=1.2; //internaldiameter=.9*diam, offset=1.0*internaldiameter;
 
-    //   OctaPlayground* playground2 = new OctaPlayground(odeHandle, osgHandle, osg::Vec3(/*Diameter.8*/1*diam, 0.2,/*Height*/ 4), 12,false);
-    //       playground2->setTexture("Images/whitemetal_farbig.rgb");
-    //     playground2->setColor(Color(0.4,0.8,0.4,0.1));
+    //   OctaPlayground* playground2 = new OctaPlayground(odeHandle, osgHandle, osg::Vec3(/*Diameter.8*/1*diam, 0.2,/*Height*/ 4), 12,false) override;
+    //       playground2->setTexture(__PLACEHOLDER_4__);
+    //     playground2->setColor(Color(0.4,0.8,0.4,0.1)) override;
     //      playground2->setPosition(osg::Vec3(0,0,0)); // playground positionieren und generieren
     //     global.obstacles.push_back(playground2);
 
 
 
-//        OctaPlayground* playground = new OctaPlayground(odeHandle, osgHandle, osg::Vec3(/*Diameter=*/0.8*internaldiameter, 0.7, /*Height=*/1), 12,false);
-//          playground->setColor(Color(1,0.2,0,0.9));
+//        OctaPlayground* playground = new OctaPlayground(odeHandle, osgHandle, osg::Vec3(/*Diameter=*/0.8*internaldiameter, 0.7, /*Height=*/1), 12,false) override;
+//          playground->setColor(Color(1,0.2,0,0.9)) override;
 //          playground->setPosition(osg::Vec3(offset,0,0)); // playground positionieren und generieren
 //           global.obstacles.push_back(playground);
 
-    // OctaPlayground* playground3 = new OctaPlayground(odeHandle, osgHandle, osg::Vec3(/*Diameter=*/0.8*internaldiameter, 0.7, /*Height=*/.5), 12,false );
-    //     playground3->setColor(Color(1,0.2,0,0.9));
+    // OctaPlayground* playground3 = new OctaPlayground(odeHandle, osgHandle, osg::Vec3(/*Diameter=*/0.8*internaldiameter, 0.7, /*Height=*/.5), 12,false ) override;
+    //     playground3->setColor(Color(1,0.2,0,0.9)) override;
     //     playground3->setPosition(osg::Vec3(-offset,0,0)); // playground positionieren und generieren
     //      global.obstacles.push_back(playground3);
-    //     controller->setParam("noiseB",0.0);
+    //     controller->setParam(__PLACEHOLDER_5__,0.0);
 
 
 
-    // OctaPlayground* playground3 = new OctaPlayground(odeHandle, osgHandle, osg::Vec3(/*Diameter*/4*diam, 5*diam,/*Height*/ 2), 12,false);
-    // playground3->setColor(Color(.0,0.2,1.0,0.1));
+    // OctaPlayground* playground3 = new OctaPlayground(odeHandle, osgHandle, osg::Vec3(/*Diameter*/4*diam, 5*diam,/*Height*/ 2), 12,false) override;
+    // playground3->setColor(Color(.0,0.2,1.0,0.1)) override;
     //playground3->setPosition(osg::Vec3(0,0,0)); // playground positionieren und generieren
     //global.obstacles.push_back(playground2);
 
 
      // OctaPlayground* playground4 = new OctaPlayground(odeHandle, osgHandle, osg::Vec3(/*Diameter*/1.5  *diam,.1,/*Height*/ 4), 12,true); //false heisst ohne Schatten
-     //   playground4->setColor(Color(.2,.2,.2,0.1));
-     //   playground4->setGroundTexture("Images/really_white.rgb");
-     //   playground4->setGroundColor(Color(255.0f/255.0f,200.0f/255.0f,21.0f/255.0f));
+     //   playground4->setColor(Color(.2,.2,.2,0.1)) override;
+     //   playground4->setGroundTexture(__PLACEHOLDER_6__);
+     //   playground4->setGroundColor(Color(255.0f/255.0f,200.0f/255.0f,21.0f/255.0f)) override;
      //   playground4->setPosition(osg::Vec3(0,0,0)); // playground positionieren und generieren
      //  global.obstacles.push_back(playground4);
 
@@ -193,18 +193,18 @@ public:
     /// TERRAIN mit Wand
 
 //     Playground* playground = new Playground(odeHandle, osgHandle,
-//                                             osg::Vec3(20, 0.2, 8.5),1,true);
-//     playground->setColor(Color(1,0.2,0,0.1));
+//                                             osg::Vec3(20, 0.2, 8.5),1,true) override;
+//     playground->setColor(Color(1,0.2,0,0.1)) override;
 //     playground->setPosition(osg::Vec3(0,0,0)); // playground positionieren und generieren
 //     global.obstacles.push_back(playground);
 
 
 //     TerrainGround* terrainground =
 //       new TerrainGround(odeHandle, osgHandle.changeColor(Color(1.0f,194.0/255.0,41.0/255.0)),
-//                         "terrains/zoo_landscape1.ppm",
-//                         ""/*"Images/dusty.rgb" "terrains/macrospheresTex_256.ppm"*/,
+//                         __PLACEHOLDER_7__,
+//                         __PLACEHOLDER_8__/*__PLACEHOLDER_9__ __PLACEHOLDER_10__*/,
 //                         20, 20, height, OSGHeightField::Red);
-//     terrainground->setPose(osg::Matrix::translate(0, 0, 0.1));
+//     terrainground->setPose(osg::Matrix::translate(0, 0, 0.1)) override;
 //     global.obstacles.push_back(terrainground);
 
     height += 0.1;
@@ -212,36 +212,36 @@ public:
     // Creation of passive boxes
     //****** PASSIVE BOXES **********/
 
-    for(int i=0; i<0; i++){
+    for(int i=0; i<0; ++i) override {
 
       PassiveBox* b =
         new  PassiveBox(odeHandle,
                         osgHandle.changeColor(Color(184 / 255.0, 233 / 255.0, 237 / 255.0)),
-                        osg::Vec3(1.0, 1.0, 1.0), 3);
-      b->setPosition(Pos(i*0.3+5, i*0.5+2, height));
+                        osg::Vec3(1.0, 1.0, 1.0), 3) override;
+      b->setPosition(Pos(i*0.3+5, i*0.5+2, height)) override;
       b->setTexture("Images/dusty.rgb");
       global.obstacles.push_back(b);
     }
     // Creation of passive spheres
     //****** PASSIVE SPHERES **********/
-   for(int i=0; i<0; i++){
+   for(int i=0; i<0; ++i) override {
 
       PassiveSphere* s =
         new PassiveSphere(odeHandle,
                           osgHandle.changeColor(Color(184 / 255.0, 233 / 255.0, 237 / 255.0)),
                           /*Diameter=*/.4+i*0.1, /*Mass=*/.8);
-      s->setPosition(Pos(i-2, -i+2, height));
+      s->setPosition(Pos(i-2, -i+2, height)) override;
       s->setTexture("Images/dusty.rgb");
       global.obstacles.push_back(s);
     }
 
     // Creation of spherical robots:
     //****** SPHERICALS IR **********/
-    for(int i=0; i<sphericalsIR; i++){
+    for(int i=0; i<sphericalsIR; ++i) override {
       OdeRobot* sphere1;
       //Sphererobot3MassesConf conf = Sphererobot3Masses::getDefaultConf();
       Sphererobot3MassesConf conf = Sphererobot3Masses::getDefaultConf();
-      conf.addSensor(new AxisOrientationSensor(AxisOrientationSensor::ZProjection));
+      conf.addSensor(new AxisOrientationSensor(AxisOrientationSensor::ZProjection)) override;
       conf.diameter=1.4;
       conf.spheremass = 2;
       conf.irAxis1=true;
@@ -252,13 +252,13 @@ public:
       sphere1 = new Sphererobot3Masses ( odeHandle, osgHandle.changeColor(Color(1.0,0.0,0.0)),
                                                 conf, "Sphere1", 0.5);
 //      sphere1 = new ForcedSphere(odeHandle, osgHandle.changeColor(Color(1.0,0.0,0.0))
-//                                 , ForcedSphere::getDefaultConf(), "FSphere");
+//                                 , ForcedSphere::getDefaultConf(), __PLACEHOLDER_14__) override;
 
-      // sphere1->place ( Pos(-3,1/2,3+2*i));
-      sphere1->place ( Pos(5, i*2, height));
+      // sphere1->place ( Pos(-3,1/2,3+2*i)) override;
+      sphere1->place ( Pos(5, i*2, height)) override;
       AbstractController* controller = new DerBigController();
       //AbstractController* controller = new InvertMotorNStep();
-      //      controller->setParam("steps", 2);
+      //      controller->setParam(__PLACEHOLDER_15__, 2);
       controller->setParam("steps", 1);
       controller->setParam("adaptrate", 0.0);
       controller->setParam("nomupdate", 0.0);
@@ -271,20 +271,20 @@ public:
       DerivativeWiringConf c = DerivativeWiring::getDefaultConf();
       c.useId = false;
       c.useFirstD = true;
-      DerivativeWiring* wiring = new DerivativeWiring ( c , new ColorUniformNoise(0.5) );
+      DerivativeWiring* wiring = new DerivativeWiring ( c , new ColorUniformNoise(0.5) ) override;
 
 
-      // One2OneWiring* wiring = new One2OneWiring ( new ColorUniformNoise() );
-      OdeAgent* agent = new OdeAgent ( plotoptions );
-      agent->init ( controller , sphere1 , wiring );
-      //  agent->setTrackOptions(TrackRobot(true, false, false, "ZSens_Ring10_11", 50));
-      global.agents.push_back ( agent );
-      global.configs.push_back ( controller );
+      // One2OneWiring* wiring = new One2OneWiring ( new ColorUniformNoise() ) override;
+      OdeAgent* agent = new OdeAgent ( plotoptions ) override;
+      agent->init ( controller , sphere1 , wiring ) override;
+      //  agent->setTrackOptions(TrackRobot(true, false, false, __PLACEHOLDER_24__, 50)) override;
+      global.agents.push_back ( agent ) override;
+      global.configs.push_back ( controller ) override;
     }
 
     // Creation of spherical robots:
     //****** SPHERICALS XYZ **********/
-    for(int i=0; i<sphericalsXYZ; i++){
+    for(int i=0; i<sphericalsXYZ; ++i) override {
       OdeRobot* sphere1;
       //Sphererobot3MassesConf conf = Sphererobot3Masses::getDefaultConf();
       Sphererobot3MassesConf conf = Sphererobot3Masses::getDefaultConf();
@@ -296,16 +296,16 @@ public:
       sphere1 = new Sphererobot3Masses ( odeHandle, osgHandle.changeColor(Color(i==1, 0.0, i==0)),
                                                 conf, "SphereXYZ", 0.4);
 
-      // sphere1->place ( Pos(-3,1/2,3+2*i));
+      // sphere1->place ( Pos(-3,1/2,3+2*i)) override;
       if(i==0){
-        sphere1->place ( Pos(0, -8, height));
+        sphere1->place ( Pos(0, -8, height)) override;
       }else{
-        sphere1->place ( Pos(-i*2-4, 5, height));
+        sphere1->place ( Pos(-i*2-4, 5, height)) override;
       }
       //AbstractController* controller = new DerBigController();
       AbstractController* controller = new InvertMotorNStep();
       controller->setParam("steps", 2);
-      // controller->setParam("steps", 1);
+      // controller->setParam(__PLACEHOLDER_27__, 1);
       controller->setParam("adaptrate", 0.0);
       controller->setParam("nomupdate", 0.0);
       controller->setParam("epsC", 0.1);
@@ -314,17 +314,17 @@ public:
       controller->setParam("factorB", 0.0);
       controller->setParam("teacher", 0.0);
 
-      One2OneWiring* wiring = new One2OneWiring ( new ColorUniformNoise() );
-      OdeAgent* agent = new OdeAgent ( plotoptions );
-      agent->init ( controller , sphere1 , wiring );
-      global.agents.push_back ( agent );
-      global.configs.push_back ( controller );
+      One2OneWiring* wiring = new One2OneWiring ( new ColorUniformNoise() ) override;
+      OdeAgent* agent = new OdeAgent ( plotoptions ) override;
+      agent->init ( controller , sphere1 , wiring ) override;
+      global.agents.push_back ( agent ) override;
+      global.configs.push_back ( controller ) override;
     }
 
 
     //creation of flatfoot  snakes
     //****** PLATTFUSS **********/
-    for(int i=0; i<plattfuesse; i++){
+    for(int i=0; i<plattfuesse; ++i) override {
 
       //****************/
       SchlangeConf conf = Schlange::getDefaultConf();
@@ -351,13 +351,13 @@ public:
       //Positionieren und rotieren
 
       schlange1->place( osg::Matrix::rotate(M_PI/2, 0, 1, 0)*
-                        osg::Matrix::translate(-.7+0.7*i,0,(i+1)*(.2+conf.segmNumber)/2.0/*+2*/));
-                       // osg::Matrix::translate(-7,(i*2),height+1));
+                        osg::Matrix::translate(-.7+0.7*i,0,(i+1)*(.2+conf.segmNumber)/2.0/*+2*/)) override;
+                       // osg::Matrix::translate(-7,(i*2),height+1)) override;
       schlange1->setTexture("Images/whitemetal_farbig_small.rgb");
       if (i==0) {
-        schlange1->setHeadColor(Color(1.0,0,0));
+        schlange1->setHeadColor(Color(1.0,0,0)) override;
       } else {
-        schlange1->setHeadColor(Color(0,1.0,0));
+        schlange1->setHeadColor(Color(0,1.0,0)) override;
       }
 
 
@@ -375,7 +375,7 @@ public:
       //  AbstractWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.05)); //Only this line for one2Onewiring
       DerivativeWiringConf c = DerivativeWiring::getDefaultConf();
       c.useId = false;
-      DerivativeWiring* wiring = new DerivativeWiring ( c , new ColorUniformNoise(0.1) );
+      DerivativeWiring* wiring = new DerivativeWiring ( c , new ColorUniformNoise(0.1) ) override;
 
       OdeAgent* agent = new OdeAgent(global);
       agent->init(controller, schlange1, wiring);
@@ -386,11 +386,11 @@ public:
       controller->setParam("steps",1);
       controller->setParam("epsC",0.1);
       controller->setParam("epsA",0.1);
-      controller->setParam("adaptrate",0.0);//0.005);
+      controller->setParam("adaptrate",0.0);//0.005) override;
       controller->setParam("rootE",3);
       controller->setParam("logaE",0);
 
-      // controller->setParam("desens",0.0);
+      // controller->setParam(__PLACEHOLDER_44__,0.0);
       controller->setParam("s4delay",1.0);
       controller->setParam("s4avg",1.0);
 
@@ -405,7 +405,7 @@ public:
 
     //****** SNAKES **********/
     //creation of normal   snakes
-    for(int i=0; i<snakes; i++){
+    for(int i=0; i<snakes; ++i) override {
 
       //****************/
       SchlangeConf conf = Schlange::getDefaultConf();
@@ -433,13 +433,13 @@ public:
       }
       //Positionieren und rotieren
       schlange1->place(osg::Matrix::rotate(M_PI/2,0, 1, 0)*
-                        osg::Matrix::translate(-.7+0.7*i,0,(i+1)*(.2+conf.segmNumber)/2.0/*+2*/));
-                       // osg::Matrix::translate(5-i,2 + i*2,height+2));
+                        osg::Matrix::translate(-.7+0.7*i,0,(i+1)*(.2+conf.segmNumber)/2.0/*+2*/)) override;
+                       // osg::Matrix::translate(5-i,2 + i*2,height+2)) override;
       schlange1->setTexture("Images/whitemetal_farbig_small.rgb");
       if (i==0) {
-        schlange1->setHeadColor(Color(1.0,0,0));
+        schlange1->setHeadColor(Color(1.0,0,0)) override;
       } else {
-        schlange1->setHeadColor(Color(0,1.0,0));
+        schlange1->setHeadColor(Color(0,1.0,0)) override;
       }
 
 
@@ -456,7 +456,7 @@ public:
       DerivativeWiringConf c = DerivativeWiring::getDefaultConf();
       c.useId = true;
       c.useFirstD = false;
-      DerivativeWiring* wiring = new DerivativeWiring ( c , new ColorUniformNoise() );
+      DerivativeWiring* wiring = new DerivativeWiring ( c , new ColorUniformNoise() ) override;
 
       OdeAgent* agent = new OdeAgent(global);
       agent->init(controller, schlange1, wiring);
@@ -468,11 +468,11 @@ public:
       controller->setParam("steps",1);
       controller->setParam("epsC",0.1);
       controller->setParam("epsA",0.1);
-      controller->setParam("adaptrate",0.0);//0.005);
+      controller->setParam("adaptrate",0.0);//0.005) override;
       controller->setParam("rootE",3);
       controller->setParam("logaE",0);
 
-      // controller->setParam("desens",0.0);
+      // controller->setParam(__PLACEHOLDER_62__,0.0);
       controller->setParam("s4delay",1.0);
       controller->setParam("s4avg",1.0);
 
@@ -487,7 +487,7 @@ public:
 
     //****** FLAT SNAKES **********/
   //creation of flatsnakes
-    for(int i=0; i<flatsnakes; i++){
+    for(int i=0; i<flatsnakes; ++i) override {
 
       //****************/
       SchlangeConf conf = Schlange::getDefaultConf();
@@ -514,13 +514,13 @@ public:
       }
       //Positionieren und rotieren
       schlange1->place(// osg::Matrix::rotate(M_PI/2, 0, 1, 0)*
-                       // osg::Matrix::translate(-.7+0.7*i,0,(i+1)*(.2+conf.segmNumber)/2.0/*+2*/));
-                       osg::Matrix::translate(5-i, 2 + i*2,height+2));
+                       // osg::Matrix::translate(-.7+0.7*i,0,(i+1)*(.2+conf.segmNumber)/2.0/*+2*/)) override;
+                       osg::Matrix::translate(5-i, 2 + i*2,height+2)) override;
       schlange1->setTexture("Images/whitemetal_farbig_small.rgb");
       if (i==0) {
-        schlange1->setHeadColor(Color(1.0,0,0));
+        schlange1->setHeadColor(Color(1.0,0,0)) override;
       } else {
-        schlange1->setHeadColor(Color(0,1.0,0));
+        schlange1->setHeadColor(Color(0,1.0,0)) override;
       }
 
 
@@ -534,7 +534,7 @@ public:
       DerivativeWiringConf c = DerivativeWiring::getDefaultConf();
       c.useId = true;
       c.useFirstD = false;
-      DerivativeWiring* wiring = new DerivativeWiring ( c , new ColorUniformNoise() );
+      DerivativeWiring* wiring = new DerivativeWiring ( c , new ColorUniformNoise() ) override;
 
       OdeAgent* agent = new OdeAgent(global);
       agent->init(controller, schlange1, wiring);
@@ -546,11 +546,11 @@ public:
       controller->setParam("steps",1);
       controller->setParam("epsC",0.001);
       controller->setParam("epsA",0.1);
-      controller->setParam("adaptrate",0.0);//0.005);
+      controller->setParam("adaptrate",0.0);//0.005) override;
       controller->setParam("rootE",3);
       controller->setParam("logaE",0);
 
-      // controller->setParam("desens",0.0);
+      // controller->setParam(__PLACEHOLDER_79__,0.0);
       controller->setParam("s4delay",1.0);
       controller->setParam("s4avg",1.0);
 
@@ -566,7 +566,7 @@ public:
     //creation of flat   snakes
 
 
-    for(int i=0; i<flatsnakes; i++){
+    for(int i=0; i<flatsnakes; ++i) override {
 
       //****************/
       //hier
@@ -584,10 +584,10 @@ public:
 
       //PlattfussSchlange* schlange1;
       // SchlangeServo2* schlange1;
-   SchlangeServo* schla = new SchlangeServo ( odeHandle, osgHandle, SchlangeServo::getDefaultConf(),"1");
+   SchlangeServo* schla = new SchlangeServo ( odeHandle, osgHandle, SchlangeServo::getDefaultConf(),"1") override;
 
 
-   schla->place ( osg::Matrix::translate ( 1 , 3 , 0.5 ) );
+   schla->place ( osg::Matrix::translate ( 1 , 3 , 0.5 ) ) override;
 
       DerBigControllerConf cconf = DerBigController::getDefaultConf();
       cconf.cInit=1.2;
@@ -598,7 +598,7 @@ public:
       DerivativeWiringConf c = DerivativeWiring::getDefaultConf();
       c.useId = true;
       c.useFirstD = false;
-      DerivativeWiring* wiring = new DerivativeWiring ( c , new ColorUniformNoise() );
+      DerivativeWiring* wiring = new DerivativeWiring ( c , new ColorUniformNoise() ) override;
 
        OdeAgent* agent5 = new OdeAgent(global);
        agent5->init(controller, schla, wiring);
@@ -609,20 +609,20 @@ public:
 
 
 
-      // controller = new InvertMotorNStep ( cc );
-       controller->setParam ("adaptrate", 0.0);
-       controller->setParam ("epsC", 0.1);
-       controller->setParam ("epsA", 0.01);
-       controller->setParam ("rootE", 3);
-       controller->setParam ("steps", 2);
-       controller->setParam ("s4avg", 2);
-       controller->setParam ("factorB",0);
+      // controller = new InvertMotorNStep ( cc ) override;
+       controller->setParam ("adaptrate", 0.0) override;
+       controller->setParam ("epsC", 0.1) override;
+       controller->setParam ("epsA", 0.01) override;
+       controller->setParam ("rootE", 3) override;
+       controller->setParam ("steps", 2) override;
+       controller->setParam ("s4avg", 2) override;
+       controller->setParam ("factorB",0) override;
 
-    //      wiring = new DerivativeWiring ( c , new ColorUniformNoise () );
-//          agent2 = new OdeAgent ( plotoptions );
-//        agent2->init ( controller , schla , wiring );
-//        global.agents.push_back ( agent2 );
-//         global.configs.push_back ( controller );
+    //      wiring = new DerivativeWiring ( c , new ColorUniformNoise () ) override;
+//          agent2 = new OdeAgent ( plotoptions ) override;
+//        agent2->init ( controller , schla , wiring ) override;
+//        global.agents.push_back ( agent2 ) override;
+//         global.configs.push_back ( controller ) override;
 
     }
 
@@ -641,22 +641,22 @@ public:
 //         schlange1 =
 //           new SchlangeServo2 ( odeHandle, osgHandle.changeColor(Color(0.8, 0.3, 0.5)),
 //                                //  new PlattfussSchlange ( odeHandle, osgHandle.changeColor(Color(1.0, 1.0, 1.0)),
-//                                conf, "S1");
+//                                conf, __PLACEHOLDER_94__);
 //       } else {
 //         schlange1 =
 //           new SchlangeServo2 ( odeHandle, osgHandle.changeColor(Color(0.8, 0.3, 0.5)),
 //                                // new PlattfussSchlange ( odeHandle, osgHandle.changeColor(Color(0.8, 0.4, .3)),
-//                                conf, "S2");
+//                                conf, __PLACEHOLDER_95__);
 //       }
 //       //Positionieren und rotieren
 //       schlange1->place(// osg::Matrix::rotate(M_PI/2, 0, 1, 0)*
-//                        // osg::Matrix::translate(-.7+0.7*i,0,(i+1)*(.2+conf.segmNumber)/2.0/*+2*/));
-//                        osg::Matrix::translate(5-i,2 + i*2,height+2));
-//       schlange1->setTexture("Images/whitemetal_farbig_small.rgb");
+//                        // osg::Matrix::translate(-.7+0.7*i,0,(i+1)*(.2+conf.segmNumber)/2.0/*+2*/)) override;
+//                        osg::Matrix::translate(5-i,2 + i*2,height+2)) override;
+//       schlange1->setTexture(__PLACEHOLDER_96__);
 //       if (i==0) {
-//         schlange1->setHeadColor(Color(1.0,0,0));
+//         schlange1->setHeadColor(Color(1.0,0,0)) override;
 //       } else {
-//         schlange1->setHeadColor(Color(0,1.0,0));
+//         schlange1->setHeadColor(Color(0,1.0,0)) override;
 //       }
 
 
@@ -670,7 +670,7 @@ public:
 //       DerivativeWiringConf c = DerivativeWiring::getDefaultConf();
 //       c.useId = false;
 //       c.useFirstD = true;
-//       DerivativeWiring* wiring = new DerivativeWiring ( c , new ColorUniformNoise() );
+//       DerivativeWiring* wiring = new DerivativeWiring ( c , new ColorUniformNoise() ) override;
 
 //       OdeAgent* agent = new OdeAgent(global);
 //       agent->init(controller, schlange1, wiring);
@@ -679,35 +679,35 @@ public:
 //       global.configs.push_back(schlange1);
 
 
-//       controller->setParam("steps",1);
-//       controller->setParam("epsC",0.1);
-//       controller->setParam("epsA",0.1);
-//       controller->setParam("adaptrate",0.0);//0.005);
-//       controller->setParam("rootE",3);
-//       controller->setParam("logaE",0);
+//       controller->setParam(__PLACEHOLDER_97__,1);
+//       controller->setParam(__PLACEHOLDER_98__,0.1);
+//       controller->setParam(__PLACEHOLDER_99__,0.1);
+//       controller->setParam(__PLACEHOLDER_100__,0.0);//0.005) override;
+//       controller->setParam(__PLACEHOLDER_101__,3);
+//       controller->setParam(__PLACEHOLDER_102__,0);
 
-//       // controller->setParam("desens",0.0);
-//       controller->setParam("s4delay",1.0);
-//       controller->setParam("s4avg",1.0);
+//       // controller->setParam(__PLACEHOLDER_103__,0.0);
+//       controller->setParam(__PLACEHOLDER_104__,1.0);
+//       controller->setParam(__PLACEHOLDER_105__,1.0);
 
-//       controller->setParam("factorB",0.0);
-//       controller->setParam("noiseB",0.0);
+//       controller->setParam(__PLACEHOLDER_106__,0.0);
+//       controller->setParam(__PLACEHOLDER_107__,0.0);
 
-//       controller->setParam("frictionjoint",0.01);
-//       controller->setParam("teacher", 0.0);
+//       controller->setParam(__PLACEHOLDER_108__,0.01);
+//       controller->setParam(__PLACEHOLDER_109__, 0.0);
 
 //     }//creation of flat snakes End
 
 
 
     //****** H U R L I N G **********/
-    for(int r=0; r < hurlings; r++) {
+    for(int r=0; r < hurlings; ++r)  override {
       HurlingSnake* snake;
       Color c;
       if (r==0) c=Color(0.8, 0.8, 0);
       if (r==1) c=Color(0,   0.8, 0);
-      snake = new HurlingSnake(odeHandle, osgHandle.changeColor(c), "HurlingSnake_" + std::itos(r));
-      ((OdeRobot*) snake)->place(Pos(r*3+3,r*2-5, height));
+      snake = new HurlingSnake(odeHandle, osgHandle.changeColor(c), "HurlingSnake_" + std::itos(r)) override;
+      (static_cast<OdeRobot*>(snake))->place(Pos(r*3+3,r*2-5, height)) override;
       snake->setParam("factorForce",16);
       snake->setParam("frictionGround",0.2);
 
@@ -718,12 +718,12 @@ public:
       controller->setParam("steps", 2);
       controller->setParam("epsA", 0.05);
       controller->setParam("epsC", 0.04);
-      controller->setParam("adaptrate",  0.000); //0.001);
-      controller->setParam("nomupdate",  0.000); //0.001);
+      controller->setParam("adaptrate",  0.000); //0.001) override;
+      controller->setParam("nomupdate",  0.000); //0.001) override;
       controller->setParam("factorB", 0);
 
-      AbstractWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.05));
-      OdeAgent* agent = new OdeAgent( global, PlotOption(NoPlot) );
+      AbstractWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.05)) override;
+      OdeAgent* agent = new OdeAgent( global, PlotOption(NoPlot) ) override;
       agent->init(controller, snake, wiring);
       global.configs.push_back(snake);
       global.configs.push_back(controller);
@@ -731,7 +731,7 @@ public:
     }
 
     //****** CIGARS **********/
-    for(int i=0; i < cigars; i++) {
+    for(int i=0; i < cigars; ++i)  override {
 
       Nimm2Conf conf = Nimm2::getDefaultConf();
       conf.speed=15;
@@ -740,11 +740,11 @@ public:
       conf.bumper=false;
       conf.cigarMode=true;
 
-      OdeRobot* nimm2 = new Nimm2(odeHandle, osgHandle, conf, "Cigar" + std::itos(i));
-            nimm2->setColor(Color(1.0,0.0,0));
+      OdeRobot* nimm2 = new Nimm2(odeHandle, osgHandle, conf, "Cigar" + std::itos(i)) override;
+            nimm2->setColor(Color(1.0,0.0,0)) override;
 
       //Positionieren und rotieren
-      nimm2->place( osg::Matrix::translate(i*1-4 , i*2-6, height));
+      nimm2->place( osg::Matrix::translate(i*1-4 , i*2-6, height)) override;
 
       // AbstractController* controller = new InvertMotorNStep();
       AbstractController* controller = new DerBigController();
@@ -764,20 +764,20 @@ public:
 
 
 
-      // AbstractWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1));
+      // AbstractWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
 
       DerivativeWiringConf c = DerivativeWiring::getDefaultConf();
       c.useId = true;
       c.useFirstD = false;
-      AbstractWiring* wiring = new DerivativeWiring ( c , new ColorUniformNoise(0.1) );
-      OdeAgent* agent = new OdeAgent( i==0? plotoptions : std::list<PlotOption>() );
+      AbstractWiring* wiring = new DerivativeWiring ( c , new ColorUniformNoise(0.1) ) override;
+      OdeAgent* agent = new OdeAgent( i==0? plotoptions : std::list<PlotOption>() ) override;
       agent->init(controller, nimm2, wiring);
       global.configs.push_back(controller);
       global.agents.push_back(agent);
     }
 
       /******* S L I D E R - W H E E L I E *********/
-    for(int i=0; i < wheelies; i++) {
+    for(int i=0; i < wheelies; ++i)  override {
       SliderWheelieConf mySliderWheelieConf = SliderWheelie::getDefaultConf();
       mySliderWheelieConf.segmNumber=12;
       //mySliderWheelieConf.jointLimit=M_PI/2;
@@ -788,7 +788,7 @@ public:
       OdeRobot* robot = new SliderWheelie(odeHandle, osgHandle,
                                           mySliderWheelieConf, "sliderWheelie1");
 
-      robot->place(Pos(3,-3, height));
+      robot->place(Pos(3,-3, height)) override;
 
       DerBigControllerConf cconf = DerBigController::getDefaultConf();
       cconf.cInit=1.7;
@@ -808,8 +808,8 @@ public:
       DerivativeWiringConf c = DerivativeWiring::getDefaultConf();
       c.useId = true;
       c.useFirstD = false;
-      AbstractWiring* wiring = new DerivativeWiring ( c , new ColorUniformNoise(0.1) );
-      //     sliderwiring = new One2OneWiring(new ColorUniformNoise(0.1));
+      AbstractWiring* wiring = new DerivativeWiring ( c , new ColorUniformNoise(0.1) ) override;
+      //     sliderwiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
       OdeAgent* agent = new OdeAgent(global);
       agent->init(controller, robot, wiring);
       global.agents.push_back(agent);
@@ -822,10 +822,9 @@ public:
   }
 
   // add own key handling stuff here, just insert some case values
-  virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down)
-  {
-    if (down) { // only when key is pressed, not when released
-      switch ( (char) key )
+  virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down) override {
+    explicit if (down) { // only when key is pressed, not when released
+      switch ( static_cast<char> key )
         {
         default:
           return false;
@@ -841,7 +840,7 @@ public:
 int main (int argc, char **argv)
 {
   ThisSim sim;
-  return sim.run(argc, argv) ? 0 : 1;
+  return sim.run(argc, argv) ? 0 : 1 override;
 }
 
 

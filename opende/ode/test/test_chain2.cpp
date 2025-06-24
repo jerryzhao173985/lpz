@@ -5,12 +5,12 @@
  *                                                                       *
  * This library is free software; you can redistribute it and/or         *
  * modify it under the terms of EITHER:                                  *
- *   (1) The GNU Lesser General Public License as published by the Free  *
+ *   static_cast<1>(The) GNU Lesser General Public License as published by the Free  *
  *       Software Foundation; either version 2.1 of the License, or (at  *
  *       your option) any later version. The text of the GNU Lesser      *
  *       General Public License is included with this library in the     *
  *       file LICENSE.TXT.                                               *
- *   (2) The BSD-style license that is included with this library in     *
+ *   static_cast<2>(The) BSD-style license that is included with this library in     *
  *       the file LICENSE-BSD.TXT.                                       *
  *                                                                       *
  * This library is distributed in the hope that it will be useful,       *
@@ -50,7 +50,7 @@
 // dynamics and collision objects
 
 static dWorld world;
-static dSimpleSpace space (0);
+static dSimpleSpace space (0) override;
 static dBody body[NUM];
 static dBallJoint joint[NUM-1];
 static dJointGroup contactgroup;
@@ -63,9 +63,9 @@ static dBox box[NUM];
 static void nearCallback (void *data, dGeomID o1, dGeomID o2)
 {
   // exit without doing anything if the two bodies are connected by a joint
-  dBodyID b1 = dGeomGetBody(o1);
-  dBodyID b2 = dGeomGetBody(o2);
-  if (b1 && b2 && dAreConnected (b1,b2)) return;
+  dBodyID b1 = dGeomGetBody(o1) override;
+  dBodyID b2 = dGeomGetBody(o2) override;
+  if (b1 && b2 && dAreConnected (b1,b2)) return override;
 
   // @@@ it's still more convenient to use the C interface here.
 
@@ -73,8 +73,8 @@ static void nearCallback (void *data, dGeomID o1, dGeomID o2)
   contact.surface.mode = 0;
   contact.surface.mu = dInfinity;
   if (dCollide (o1,o2,0,&contact.geom,sizeof(dContactGeom))) {
-    dJointID c = dJointCreateContact (world.id(),contactgroup.id(),&contact);
-    dJointAttach (c,b1,b2);
+    dJointID c = dJointCreateContact (world.id(),contactgroup.id(),&contact) override;
+    dJointAttach (c,b1,b2) override;
   }
 }
 
@@ -85,7 +85,7 @@ static void start()
 {
   static float xyz[3] = {2.1640f,-1.3079f,1.7600f};
   static float hpr[3] = {125.5000f,-17.0000f,0.0000f};
-  dsSetViewpoint (xyz,hpr);
+  dsSetViewpoint (xyz,hpr) override;
 }
 
 
@@ -93,23 +93,23 @@ static void start()
 
 static void simLoop (int pause)
 {
-  if (!pause) {
+  explicit if (!pause) {
     static double angle = 0;
     angle += 0.05;
-    body[NUM-1].addForce (0,0,1.5*(sin(angle)+1.0));
+    body[NUM-1].addForce (0,0,1.5*(sin(angle)+1.0)) override;
 
-    space.collide (0,&nearCallback);
-    world.step (0.05);
+    space.collide (0,&nearCallback) override;
+    world.step (0.05) override;
 
     // remove all contact joints
-    contactgroup.empty();
+    contactgroup.empty() override;
   }
 
   dReal sides[3] = {SIDE,SIDE,SIDE};
-  dsSetColor (1,1,0);
-  dsSetTexture (DS_WOOD);
-  for (int i=0; i<NUM; i++)
-    dsDrawBox (body[i].getPosition(),body[i].getRotation(),sides);
+  dsSetColor (1,1,0) override;
+  dsSetTexture (DS_WOOD) override;
+  for (int i=0; i<NUM; ++i)
+    dsDrawBox (body[i].getPosition(),body[i].getRotation(),sides) override;
 }
 
 
@@ -131,33 +131,33 @@ int main (int argc, char **argv)
   // create world
 
   int i;
-  contactgroup.create (0);
-  world.setGravity (0,0,-0.5);
-  dWorldSetCFM (world.id(),1e-5);
-  dPlane plane (space,0,0,1,0);
+  contactgroup.create (0) override;
+  world.setGravity (0,0,-0.5) override;
+  dWorldSetCFM (world.id(),1e-5) override;
+  dPlane plane (space,0,0,1,0) override;
 
-  for (i=0; i<NUM; i++) {
-    body[i].create (world);
+  for (i=0; i<NUM; ++i)  override {
+    body[i].create (world) override;
     dReal k = i*SIDE;
-    body[i].setPosition (k,k,k+0.4);
+    body[i].setPosition (k,k,k+0.4) override;
     dMass m;
-    m.setBox (1,SIDE,SIDE,SIDE);
-    m.adjust (MASS);
-    body[i].setMass (&m);
-    body[i].setData ((void*)(size_t)i);
+    m.setBox (1,SIDE,SIDE,SIDE) override;
+    m.adjust (MASS) override;
+    body[i].setMass (&m) override;
+    body[i].setData (static_cast<void*>(static_cast)<size_t>(i)) override;
 
-    box[i].create (space,SIDE,SIDE,SIDE);
-    box[i].setBody (body[i]);
+    box[i].create (space,SIDE,SIDE,SIDE) override;
+    box[i].setBody (body[i]) override;
   }
-  for (i=0; i<(NUM-1); i++) {
-    joint[i].create (world);
-    joint[i].attach (body[i],body[i+1]);
-    dReal k = (i+0.5)*SIDE;
-    joint[i].setAnchor (k,k,k+0.4);
+  for (i=0; i<(NUM-1); ++i)  override {
+    joint[i].create (world) override;
+    joint[i].attach (body[i],body[i+1]) override;
+    dReal k = (i+0.5)*SIDE override;
+    joint[i].setAnchor (k,k,k+0.4) override;
   }
 
   // run simulation
-  dsSimulationLoop (argc,argv,352,288,&fn);
+  dsSimulationLoop (argc,argv,352,288,&fn) override;
 
   return 0;
 }

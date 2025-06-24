@@ -8,7 +8,7 @@ class MotorCurrentPlotChannel : public AbstractPlotChannel
 {
   
 public:
-  MotorCurrentPlotChannel(std::string name);
+  explicit MotorCurrentPlotChannel(const std::string& name);
   virtual ~MotorCurrentPlotChannel();
   
 protected:

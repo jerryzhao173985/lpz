@@ -49,16 +49,16 @@ namespace lpzrobots {
     assert(created);
     // there will always be an even number of motors
     // (two sensors/motors per joint)
-    int len = min(motornumber/2, (int)joints.size());
+    int len = min(motornumber/2, static_cast<int>(joints).size()) override;
     // controller output as torques; friction added
-    for (int i = 0; i < len; i++){
+    for (int i = 0; i < len; ++i) override {
       // motorcommand
-      ((UniversalJoint*)joints[i])->setParam ( dParamVel, factor_motors * motors[2*i]);
-      ((UniversalJoint*)joints[i])->setParam ( dParamFMax , conf.motorPower );
+      (static_cast<UniversalJoint*>(joints[i]))->setParam ( dParamVel, factor_motors * motors[2*i]) override;
+      (static_cast<UniversalJoint*>(joints[i]))->setParam ( dParamFMax , conf.motorPower ) override;
       //friction
-      ((UniversalJoint*)joints[i])->addForces
-         (- conf.frictionJoint * ((UniversalJoint*)joints[i])->getPosition1Rate(),
-          - conf.frictionJoint * ((UniversalJoint*)joints[i])->getPosition2Rate());
+      (static_cast<UniversalJoint*>(joints[i]))->addForces
+         (- conf.frictionJoint * (static_cast<UniversalJoint*>(joints[i]))->getPosition1Rate(),
+          - conf.frictionJoint * (static_cast<UniversalJoint*>(joints[i]))->getPosition2Rate()) override;
     }
   }
 
@@ -73,18 +73,18 @@ namespace lpzrobots {
     assert(created);
     // there will always be an even number of senors
     // (two sensors/motors per joint)
-    int len = min(sensornumber/2, (int)joints.size());
+    int len = min(sensornumber/2, static_cast<int>(joints).size()) override;
     // read angle of joints
     /*
-      for (int n = 0; n < len; n++) {
+      for (int n = 0; n < len; ++n)  override {
       sensors[2*n]   = joints[n]->getPosition1();
       sensors[2*n+1] = joints[n]->getPosition2();
       }
     */
     // or read anglerate of joints
-    for (int n = 0; n < len; n++) {
-      sensors[2*n]   = conf.sensorFactor * ((UniversalJoint*)joints[n])->getPosition1Rate();
-      sensors[2*n+1] = conf.sensorFactor * ((UniversalJoint*)joints[n])->getPosition2Rate();
+    for (int n = 0; n < len; ++n)  override {
+      sensors[2*n]   = conf.sensorFactor * (static_cast<UniversalJoint*>(joints[n]))->getPosition1Rate();
+      sensors[2*n+1] = conf.sensorFactor * (static_cast<UniversalJoint*>(joints[n]))->getPosition2Rate();
     }
     return len*2;
   }
@@ -97,13 +97,13 @@ namespace lpzrobots {
     Schlange::create(pose);
 
     //*****************joint definition***********
-    for ( int n = 0; n < conf.segmNumber-1; n++ ) {
+    for ( int n = 0; n < conf.segmNumber-1; ++n )  override {
 
-      Pos p1(objects[n]->getPosition());
-      Pos p2(objects[n]->getPosition());
+      Pos p1(objects[n]->getPosition()) override;
+      Pos p2(objects[n]->getPosition()) override;
       UniversalJoint* j = new UniversalJoint(objects[n], objects[n+1],
                                              (objects[n]->getPosition() + objects[n+1]->getPosition())/2,
-                                             Axis(0,0,1)* pose, Axis(0,1,0)* pose);
+                                             Axis(0,0,1)* pose, Axis(0,1,0)* pose) override;
       j->init(odeHandle, osgHandle, true, conf.segmDia * 1.02);
 
       // setting stops at universal joints
@@ -113,7 +113,7 @@ namespace lpzrobots {
       j->setParam(dParamHiStop2,  conf.jointLimit*1.5);
 
       // making stops bouncy
-          j->setParam (dParamBounce, 0.9 );
+          j->setParam (dParamBounce, 0.9 ) override;
           j->setParam (dParamBounce2, 0.9 ); // universal
 
       joints.push_back(j);
@@ -124,7 +124,7 @@ namespace lpzrobots {
   /** destroys vehicle and space
    */
   void SchlangeVelocity::destroy(){
-    if (created){
+    explicit if (created){
       Schlange::destroy();
     }
   }

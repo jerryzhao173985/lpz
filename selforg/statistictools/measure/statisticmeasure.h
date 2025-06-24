@@ -37,17 +37,17 @@ class StatisticMeasure : public AbstractMeasure
 public:
   StatisticMeasure(double& observedValue, const char* measureName, MeasureMode mode, long stepSpan, double additionalParam);
 
-  virtual ~StatisticMeasure()  override{}
+  virtual ~StatisticMeasure() {}
 
-  virtual void step() override;
+  virtual void step();
 
 protected:
   double& observedValue; // the observed value from which the statistic is made
   MeasureMode mode; // the MeasureMode, e.g. ID, AVG, MED, PEAK, CONV,...
-  long stepSpan; // determines the size of valueHistory
-  double additionalParam;
-  long oldestStepIndex; // indicates the index number in the valueHistory, which was the oldest step
-  long newestStepIndex; // indicates the index number with the newest value, this is the oldestStepIndex one step before
+  long stepSpan = 0; // determines the size of valueHistory
+  double additionalParam = 0;
+  long oldestStepIndex = 0; // indicates the index number in the valueHistory, which was the oldest step
+  long newestStepIndex = 0; // indicates the index number with the newest value, this is the oldestStepIndex one step before
 
   double* valueHistory;
 
@@ -71,7 +71,7 @@ protected:
   virtual double testConvergence();
   // stores how much steps the convergence is reached,
   // if stepsReached==stepSpan, convergence criteria is 1, otherwise 0
-  long stepsReached;
+  long stepsReached = 0;
   /* END convergence SECTION */
 
 

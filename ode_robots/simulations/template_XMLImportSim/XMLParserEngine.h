@@ -27,7 +27,7 @@
  *                                                                         *
  *  $Log$
  *  Revision 1.3  2010-06-15 15:02:19  guettler
- *  using now "XercescForwardDecl.h" to avoid namespace problems (3_0, 3_1)
+ *  using now __PLACEHOLDER_0__ to avoid namespace problems (3_0, 3_1)
  *
  *  Revision 1.2  2010/03/10 13:54:59  guettler
  *  further developments for xmlimport
@@ -60,14 +60,14 @@ namespace lpzrobots {
 class XMLParserEngine {
   public:
     XMLParserEngine(lpzrobots::GlobalData& globalData, const lpzrobots::OdeHandle& odeHandle, const lpzrobots::OsgHandle& osgHandle, lpzrobots::XMLSimulation* simulation);
-    virtual ~XMLParserEngine() override;
+    virtual ~XMLParserEngine();
 
     /**
      * Loads the given XML file into the simulation.
      * @param XMLFile name of file to load
      * @return true if successful loaded, otherwise false
      */
-    bool loadXMLFile(std::string XMLFile);
+    bool loadXMLFile(const std::string& XMLFile);
 
     void setValidateXML(bool validate);
 
@@ -78,15 +78,15 @@ class XMLParserEngine {
      */
     bool isValidateXML();
 
-    lpzrobots::GlobalData& getGlobalData() { return globalData; }
+    lpzrobots::GlobalData& getGlobalData() const { return globalData; }
 
-    const lpzrobots::OdeHandle& getOdeHandle() { return odeHandle; }
+    const lpzrobots::OdeHandle& getOdeHandle() const { return odeHandle; }
 
-    const lpzrobots::OsgHandle& getOsgHandle() { return osgHandle; }
+    const lpzrobots::OsgHandle& getOsgHandle() const { return osgHandle; }
 
-    const lpzrobots::XMLSimulation* getSimulation() { return simulation; }
+    const lpzrobots::XMLSimulation* getSimulation() const { return simulation; }
 
-    XMLPrimitiveFactory* getPrimitiveFactory() { return primitiveFactory; }
+    XMLPrimitiveFactory* getPrimitiveFactory() const { return primitiveFactory; }
 
 
   protected:
@@ -95,7 +95,7 @@ class XMLParserEngine {
     const lpzrobots::OdeHandle& odeHandle;
     const lpzrobots::OsgHandle& osgHandle;
     lpzrobots::XMLSimulation* simulation;
-    bool validateXML;
+    bool validateXML = false;
 
     XMLPrimitiveFactory* primitiveFactory;
 

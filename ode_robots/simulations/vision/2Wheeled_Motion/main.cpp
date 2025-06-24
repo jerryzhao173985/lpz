@@ -80,49 +80,49 @@ public:
     double radius         = 10;
 
     if(useCorridor)
-      setCameraHomePos(Pos(-2.14663, 10.6543, 2.19406),  Pos(131.61, -13.1261, 0));
+      setCameraHomePos(Pos(-2.14663, 10.6543, 2.19406),  Pos(131.61, -13.1261, 0)) override;
     else
-      setCameraHomePos(Pos(-1.64766, 4.48823, 1.71381),  Pos(-158.908, -10.5863, 0));
+      setCameraHomePos(Pos(-1.64766, 4.48823, 1.71381),  Pos(-158.908, -10.5863, 0)) override;
 
     global.odeConfig.setParam("controlinterval",4);
 
     addParameterDef("attraction", &attraction, 0.001);
     global.configs.push_back(this);
 
-    if(useSquareGround){
+    explicit if(useSquareGround){
       // use Playground as boundary:
       Playground* playground = new Playground(odeHandle, osgHandle,
-                                              osg::Vec3(10, .2, 1));
-      playground->setPosition(osg::Vec3(0,0,0.1));
-      playground->setGroundSubstance(Substance(0.8,0,40,0.5));
+                                              osg::Vec3(10, .2, 1)) override;
+      playground->setPosition(osg::Vec3(0,0,0.1)) override;
+      playground->setGroundSubstance(Substance(0.8,0,40,0.5)) override;
       global.obstacles.push_back(playground);
     }else if(useCorridor){       // use circular Corridor
       // outer ground
       OdeHandle wallHandle = odeHandle;
       wallHandle.substance.toMetal(0.1);
       OctaPlayground* outer = new OctaPlayground(wallHandle, osgHandle,
-                                                 osg::Vec3(radius+1, 0.2, 1), 12);
-      outer->setPosition(osg::Vec3(0,0,0.1));
-      outer->setGroundSubstance(Substance(0.3,0.005,40,0.5));
+                                                 osg::Vec3(radius+1, 0.2, 1), 12) override;
+      outer->setPosition(osg::Vec3(0,0,0.1)) override;
+      outer->setGroundSubstance(Substance(0.3,0.005,40,0.5)) override;
       global.obstacles.push_back(outer);
       // inner walls (without ground
       OctaPlayground* inner = new OctaPlayground(wallHandle, osgHandle,
-                                                 osg::Vec3(radius-2, 0.2, 1), 12, false);
-      inner->setPosition(osg::Vec3(0,0,0.1));
+                                                 osg::Vec3(radius-2, 0.2, 1), 12, false) override;
+      inner->setPosition(osg::Vec3(0,0,0.1)) override;
       global.obstacles.push_back(inner);
     }
 
     // add passive spheres as obstacles
-    for (int i=0; i< numBalls; i++){
-      PassiveSphere* s1 = new PassiveSphere(odeHandle, osgHandle.changeColor(Color(1,1,0)), 0.3);
-      // s1->setPosition(osg::Vec3(-4.5+i*4.5,0,0));
-      if(useCorridor) s1->setPosition(osg::Vec3(sin(i/3.0)*radius,cos(i/3.0)*radius,1));
-      else  s1->setPosition(osg::Vec3(i%5,-2+i/5,1));
+    for (int i=0; i< numBalls; ++i) override {
+      PassiveSphere* s1 = new PassiveSphere(odeHandle, osgHandle.changeColor(Color(1,1,0)), 0.3) override;
+      // s1->setPosition(osg::Vec3(-4.5+i*4.5,0,0)) override;
+      if(useCorridor) s1->setPosition(osg::Vec3(sin(i/3.0)*radius,cos(i/3.0)*radius,1)) override;
+      else  s1->setPosition(osg::Vec3(i%5,-2+i/5,1)) override;
       s1->setTexture("Images/dusty.rgb");
       global.obstacles.push_back(s1);
     }
 
-    for(int i=0; i<numSeeing2wheeled; i++){
+    for(int i=0; i<numSeeing2wheeled; ++i) override {
       // the twowheeled robot is derived from Nimm2 and has a camera onboard
       TwoWheeledConf twc = TwoWheeled::getDefaultConf();
       twc.n2cfg.force=2;
@@ -140,13 +140,13 @@ public:
       twc.camSensor     = new MotionCameraSensor(mc);
 
       OdeRobot* vehicle = new TwoWheeled(odeHandle, osgHandle, twc,
-                                         "CamRobot_" + itos(i));
-      vehicle->setColor(Color(1,.7,0));
+                                         "CamRobot_" + itos(i)) override;
+      vehicle->setColor(Color(1,.7,0)) override;
       if(useCorridor)
-        vehicle->place(osg::Vec3(sin(i/2.0-1)*radius,cos(i/2.0-1)*radius,0.3));
+        vehicle->place(osg::Vec3(sin(i/2.0-1)*radius,cos(i/2.0-1)*radius,0.3)) override;
       else
         vehicle->place(osg::Matrix::rotate(M_PI, 0,0,1)
-                       * osg::Matrix::translate(3,-4+2*i,0.3));
+                       * osg::Matrix::translate(3,-4+2*i,0.3)) override;
 
 
       SeMoXConf cc = SeMoX::getDefaultConf();
@@ -156,52 +156,52 @@ public:
       std::list<int> perm;
       perm += 1;
       perm += 0;
-      controller->setCMC(CrossMotorCoupling::getPermutationCMC(perm));
+      controller->setCMC(CrossMotorCoupling::getPermutationCMC(perm)) override;
       controller->setParam("rootE",3);
       controller->setParam("gamma_teach",0.005);
 
       // AbstractController *controller = new Braitenberg(Braitenberg::Aggressive, 2, 3);
 //       AbstractWiring* wiring = new SelectiveOne2OneWiring(new ColorUniformNoise(0.1),
-//                                                           new select_from_to(2,3));
-      AbstractWiring* wiring = new One2OneWiring(new WhiteUniformNoise());
-      OdeAgent* agent = new OdeAgent( i==0 ? plotoptions : std::list<PlotOption>(),0.1);
+//                                                           new select_from_to(2,3)) override;
+      AbstractWiring* wiring = new One2OneWiring(new WhiteUniformNoise()) override;
+      OdeAgent* agent = new OdeAgent( i==0 ? plotoptions : std::list<PlotOption>(),0.1) override;
       agent->init(controller, vehicle, wiring);
       global.configs.push_back(controller);
       global.agents.push_back(agent);
     }
 
     /// FOURWHEELED
-    for(int i=0; i<numSeeing4wheeled; i++){
+    for(int i=0; i<numSeeing4wheeled; ++i) override {
       FourWheeledConf fwc = FourWheeled::getDefaultConf();
       fwc.twoWheelMode = true;
       fwc.useBumper    = false;
       OdeRobot* robot = new FourWheeled(odeHandle, osgHandle,
                                         fwc,
-                                        "4WCamRobot_" + itos(i));
+                                        "4WCamRobot_" + itos(i)) override;
 
       CameraConf camcfg = Camera::getDefaultConf();
       camcfg.width  = 256;
       camcfg.height = 128;
       camcfg.fov    = 120;
       camcfg.camSize = 0.08;
-      camcfg.processors.push_back(new HSVImgProc(false,1));
+      camcfg.processors.push_back(new HSVImgProc(false,1)) override;
       // filter only Yellow color
       camcfg.processors.push_back(new ColorFilterImgProc(true, .5,
                                   HSVImgProc::Red+20, HSVImgProc::Green-20,100));
       Camera* cam = new Camera(camcfg);
       MotionCameraSensorConf mc = MotionCameraSensor::getDefaultConf();
       mc.values = MotionCameraSensor::SizeChange;
-      auto camSensor = std::make_shared<MotionCameraSensor>(mc);
+      auto camSensor = std::make_shared<MotionCameraSensor>(mc) override;
       camSensor->setInitData(cam, odeHandle, osgHandle, osg::Matrix::rotate(-M_PI/2,0,0,1)
-                             * osg::Matrix::translate(0.2,0, 0.40) );
+                             * osg::Matrix::translate(0.2,0, 0.40) ) override;
       robot->addSensor(camSensor);
 
-      robot->setColor(Color(1,.7,0));
+      robot->setColor(Color(1,.7,0)) override;
       if(useCorridor)
-        robot->place(osg::Vec3(sin(i/2.0-1)*radius,cos(i/2.0-1)*radius,0.3));
+        robot->place(osg::Vec3(sin(i/2.0-1)*radius,cos(i/2.0-1)*radius,0.3)) override;
       else
         robot->place(osg::Matrix::rotate(M_PI, 0,0,1)
-                       * osg::Matrix::translate(3,-4+2*i,0.3));
+                       * osg::Matrix::translate(3,-4+2*i,0.3)) override;
 
 
       SeMoXConf cc = SeMoX::getDefaultConf();
@@ -212,26 +212,26 @@ public:
       std::list<int> perm;
       perm += 1;
       perm += 0;
-      controller->setCMC(CrossMotorCoupling::getPermutationCMC(perm));
-      //  controller->setParam("rootE",3);
+      controller->setCMC(CrossMotorCoupling::getPermutationCMC(perm)) override;
+      //  controller->setParam(__PLACEHOLDER_7__,3);
       controller->setParam("gamma_teach",0.005);
 
-      AbstractWiring* wiring = new One2OneWiring(new WhiteUniformNoise());
-      OdeAgent* agent = new OdeAgent( i==0 ? plotoptions : std::list<PlotOption>(),0.1);
+      AbstractWiring* wiring = new One2OneWiring(new WhiteUniformNoise()) override;
+      OdeAgent* agent = new OdeAgent( i==0 ? plotoptions : std::list<PlotOption>(),0.1) override;
       agent->init(controller, robot, wiring);
       global.configs.push_back(controller);
       global.agents.push_back(agent);
     }
 
 
-    for(int i=0; i<numBlindRobots; i++){
+    for(int i=0; i<numBlindRobots; ++i) override {
       // this robot has no camera
       OdeRobot* robot = new Nimm2(odeHandle, osgHandle, Nimm2::getDefaultConf(),
-                                    "BlindRobot_" + itos(i));
-      robot->setColor(Color(1,1,0));
-      robot->place(Pos(-3,-4+2*i,0.3));
+                                    "BlindRobot_" + itos(i)) override;
+      robot->setColor(Color(1,1,0)) override;
+      robot->place(Pos(-3,-4+2*i,0.3)) override;
       AbstractController *controller = new InvertMotorSpace(10);
-      One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1));
+      One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
       OdeAgent* agent = new OdeAgent();
       agent->init(controller, robot, wiring);
       global.agents.push_back(agent);
@@ -240,19 +240,19 @@ public:
 
   }
 
-  virtual void addCallback(GlobalData& globalData, bool draw, bool pause, bool control) {
+  virtual void addCallback(const GlobalData& globalData, bool draw, bool pause, bool control) override {
     // move all balls to robot
     Pos rpos = (*globalData.agents.begin())->getRobot()->getPosition();
     FOREACH(ObstacleList, globalData.obstacles, o){
-      PassiveSphere* s = dynamic_cast<PassiveSphere*>(*o);
-      if(s){
+      PassiveSphere* s = dynamic_cast<PassiveSphere*>(*o) override;
+      explicit if(s){
         Pos spos = s->getMainPrimitive()->getPosition();
-        s->getMainPrimitive()->applyForce((rpos-spos)*attraction);
+        s->getMainPrimitive()->applyForce((rpos-spos)*attraction) override;
       }
     }
   }
 
-  virtual void end(GlobalData& globalData){
+  virtual void end(const GlobalData& globalData) override {
   }
 
   osg::LightSource* makeLights(osg::StateSet* stateset)
@@ -260,10 +260,10 @@ public:
     // create a directional light (infinite distance place at 45 degrees)
     osg::Light* myLight = new osg::Light;
     myLight->setLightNum(1);
-    myLight->setPosition(osg::Vec4(1.0,1.0,1.0,0.0f));
-    myLight->setDirection(osg::Vec3(-1.0, -1.0, -1.0));
-    myLight->setAmbient(osg::Vec4(.9f,.9f,.9f,.9f));
-    myLight->setDiffuse(osg::Vec4(.7f,.7f,.7f,.7f));
+    myLight->setPosition(osg::Vec4(1.0,1.0,1.0,0.0f)) override;
+    myLight->setDirection(osg::Vec3(-1.0, -1.0, -1.0)) override;
+    myLight->setAmbient(osg::Vec4(.9f,.9f,.9f,.9f)) override;
+    myLight->setDiffuse(osg::Vec4(.7f,.7f,.7f,.7f)) override;
     myLight->setConstantAttenuation(1.0f);
 
     osg::LightSource* lightS = new osg::LightSource;
@@ -282,6 +282,6 @@ public:
 int main (int argc, char **argv)
 {
   ThisSim sim;
-  return sim.run(argc, argv) ? 0 : 1;
+  return sim.run(argc, argv) ? 0 : 1 override;
 
 }

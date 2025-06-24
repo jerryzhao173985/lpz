@@ -31,7 +31,7 @@
 using namespace std;
 
 MatrixPipeFilter::MatrixPipeFilter(AbstractPipeReader* apr) :
-  AbstractPipeFilter(apr) {
+  explicit AbstractPipeFilter(apr) {
   if (debug) cout << "new MatrixPipeFilter()" << endl;
   QObject::connect(apr,SIGNAL(newData()),this,SLOT(updateChannels()), Qt::DirectConnection);
         // TODO Auto-generated constructor stub
@@ -42,12 +42,12 @@ MatrixPipeFilter::~MatrixPipeFilter() {
         // TODO Auto-generated destructor stub
 }
 
-AbstractPlotChannel* MatrixPipeFilter::createChannel(std::string name)
+AbstractPlotChannel* MatrixPipeFilter::createChannel(const std::string& name)
 {
         if (debug) cout << name << endl;
   bool hasBrace = false, hasComma = false;
   int bracePos=0, commaPos=0;
-  for(unsigned int i = 0; i < name.size(); i++){
+  for(unsigned int i = 0; i < name.size(); ++i){
     if(name.at(i) == '['){
       hasBrace = true;
       bracePos = i;
@@ -60,7 +60,7 @@ AbstractPlotChannel* MatrixPipeFilter::createChannel(std::string name)
         /*
          * Looking for new vector
          */
-        if (hasBrace && !hasComma) {
+        explicit if (hasBrace && !hasComma) {
     // empty vector or new vector (different name)
     if (vectors.size() == 0 || name.substr(0, bracePos) != vectors.back()->getChannelName().substr(0, bracePos)) {
       VectorPlotChannel* vePloChannel = new VectorPlotChannel(name.substr(0, bracePos));
@@ -119,7 +119,7 @@ void MatrixPipeFilter::updateChannels() {
     std::list<AbstractPlotChannel*>::const_iterator channel_it=channelList.begin();
 
     // int tmp_i=0;
-    // for(std::list<double>::const_iterator i=dataList.begin(); i != dataList.end(); i++) {
+    // for(std::list<double>::const_iterator i=dataList.begin(); i != dataList.end(); ++i) {
     //   if (debug) printf("[% .1f]",(*i));
     //   if (tmp_i > 5) break;
     //   ++tmp_i;

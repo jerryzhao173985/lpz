@@ -84,7 +84,7 @@ public:
   Matrix(const Matrix& c);
   /// copy move constructor
   Matrix(Matrix&& c) noexcept;
-  ~Matrix() override {
+  ~Matrix() {
     if (data)
       free(data);
   };
@@ -169,12 +169,12 @@ public:
   /*       STOREABLE       */
   /** stores the Matrix into the given file stream (same as write)
    */
-  bool store(FILE* f) const override;
+  bool store(FILE* f) const;
 
   /** reads a Matrix from the given file stream
       uses read (or old binary format)
    */
-  bool restore(FILE* f) override;
+  bool restore(FILE* f);
 
   /** writes the Matrix into the given file stream (ascii)
    */
@@ -252,7 +252,7 @@ public:
       In haskell this would something like: map (uncurry . (fun p)) $ zip a b
    */
   static Matrix map2P(D param, D (*fun)(D, D, D), const Matrix& a, const Matrix& b);
-  /** like map2P but with arbitrary paramters (void*) instead of double
+  /** like map2P but with arbitrary paramters static_cast<void*>(instead) of double
    */
   static Matrix map2P(void* param, D (*fun)(void*, D, D), const Matrix& a, const Matrix& b);
 

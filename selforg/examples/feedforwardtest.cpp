@@ -10,7 +10,7 @@ using namespace std;
 #include <selforg/matrix.h>
 using namespace matrix;
 
-void test2x2(MultiLayerFFNN& net){
+void test2x2(const MultiLayerFFNN& net){
   double data1[2] = {0,1};
   Matrix input1(2,1,data1);
   double data2[2] = {0,0.9};
@@ -21,17 +21,17 @@ void test2x2(MultiLayerFFNN& net){
   Matrix output2(2,1,data4);
     
   // train
-  for(int i=0; i < 500; i++){
+  for (int i=0; i < 500; ++i) {
     net.process(input1);
-    net.learn(input1, output1);        
+    net.learn(input1, output1);
     net.process(input2);
-    net.learn(input2, output2);        
+    net.learn(input2, output2);
   }
 
   // test
   cout << "TEST" << endl;
-  cout << (net.process(input1)^T) << " should be around " << (output1^T) << endl; 
-  cout << (net.process(input2)^T) << " should be around " << (output2^T) << endl; 
+  cout << (net.process(input1)^T) << " should be around " << (output1^T) << endl;
+  cout << (net.process(input2)^T) << " should be around " << (output2^T) << endl;
 }
 
 MultiLayerFFNN testnonlinear(){
@@ -52,13 +52,13 @@ MultiLayerFFNN testnonlinear(){
   net.init(2,1);
     
   // train
-  for(int i=0; i < 500; i++){
+  for (int i=0; i < 500; ++i) {
     net.process(Matrix(2, 1, i0));
-    net.learn(Matrix(2, 1, i0), Matrix(1, 1, o0));        
+    net.learn(Matrix(2, 1, i0), Matrix(1, 1, o0));
     net.process(Matrix(2, 1, i1));
-    net.learn(Matrix(2, 1, i1), Matrix(1, 1, o0));        
+    net.learn(Matrix(2, 1, i1), Matrix(1, 1, o0));
     net.process(Matrix(2, 1, i2));
-    net.learn(Matrix(2, 1, i2), Matrix(1, 1, o0));        
+    net.learn(Matrix(2, 1, i2), Matrix(1, 1, o0));
     net.process(Matrix(2, 1, i3));
     net.learn(Matrix(2, 1, i3), Matrix(1, 1, o0));
     net.process(Matrix(2, 1, i4));
@@ -67,15 +67,15 @@ MultiLayerFFNN testnonlinear(){
 
   // test
   cout << "TEST" << endl;
-  cout << net.process(Matrix(2, 1, i0))  << " should be around " << o0[0] << endl; 
-  cout << net.process(Matrix(2, 1, i1))  << " should be around " << o0[0] << endl; 
-  cout << net.process(Matrix(2, 1, i2))  << " should be around " << o0[0] << endl; 
-  cout << net.process(Matrix(2, 1, i3))  << " should be around " << o0[0] << endl; 
-  cout << net.process(Matrix(2, 1, i4))  << " should be around " << o1[0] << endl; 
+  cout << net.process(Matrix(2, 1, i0))  << " should be around " << o0[0] << endl;
+  cout << net.process(Matrix(2, 1, i1))  << " should be around " << o0[0] << endl;
+  cout << net.process(Matrix(2, 1, i2))  << " should be around " << o0[0] << endl;
+  cout << net.process(Matrix(2, 1, i3))  << " should be around " << o0[0] << endl;
+  cout << net.process(Matrix(2, 1, i4))  << " should be around " << o1[0] << endl;
   return net;
 }
 
-void testresponse(MultiLayerFFNN net){
+void testresponse(const MultiLayerFFNN& net){
   double i0[2] = {0,1};
   Matrix input (2, 1, i0);
   net.process(input);
@@ -87,7 +87,7 @@ void testresponse(MultiLayerFFNN net){
   cout << "Test: " << (o^T)  << " should be around " << (net.process(input)^T)<< endl;
 }
 
-void testinvertation(MultiLayerFFNN net){
+void testinvertation(const MultiLayerFFNN& net){
   double i0[2] = {0,  1.0};
   double xsi_[2] = {0.1,0};
   Matrix input (2, 1, i0);
@@ -113,7 +113,7 @@ void testsom1D(){
   Matrix inp(2,1);
   Matrix out(100,1);
     
-  for(int i=0; i < 10000; i++){
+  for (int i=0; i < 10000; ++i) {
     inp.toMap(random_minusone_to_one);
     net.process(inp);
     net.learn(inp,out);
@@ -133,13 +133,13 @@ void testsom2D(){
   Matrix inp(2,1);
   Matrix out(100,1);
     
-  for(int i=0; i < 10000; i++){
+  for (int i=0; i < 10000; ++i) {
     inp.toMap(random_minusone_to_one);
     net.process(inp);
     net.learn(inp,out);
   }
   net.setParam("eps",0.001);
-  for(int i=0; i < 5000; i++){
+  for (int i=0; i < 5000; ++i) {
     inp = inp.map(random_minusone_to_one) * 0.05;
     net.process(inp);
     net.learn(inp,out);
@@ -147,7 +147,7 @@ void testsom2D(){
   Matrix offset(2,1);
   offset.val(0,0)=0.5;
   offset.val(1,0)=-0.8;
-  for(int i=0; i < 5000; i++){
+  for (int i=0; i < 5000; ++i) {
     inp = inp.map(random_minusone_to_one) * 0.05 + offset;
     net.process(inp);
     net.learn(inp,out);
@@ -169,7 +169,7 @@ void testsom1D_local(){
   Matrix inp(2,1);
   Matrix out(100,1);
     
-  for(int i=0; i < 100; i++){
+  for (int i=0; i < 100; ++i) {
     inp = inp.map(random_minusone_to_one) * 0.1;
     net.process(inp);
     net.learn(inp,out);
@@ -189,7 +189,7 @@ void testneuralgas(){
   Matrix inp(2,1);
   Matrix out(100,1);
     
-  for(int i=0; i < 10000; i++){
+  for (int i=0; i < 10000; ++i) {
     inp.toMap(random_minusone_to_one);
     net.process(inp);
     net.learn(inp,out);
@@ -197,7 +197,7 @@ void testneuralgas(){
   net.printCellsizes(stdout);
   cout << "\n";
   net.setParam("eps",0.001);
-  for(int i=0; i < 5000; i++){
+  for (int i=0; i < 5000; ++i) {
     inp = inp.map(random_minusone_to_one) * 0.05;
     net.process(inp);
     net.learn(inp,out);
@@ -205,7 +205,7 @@ void testneuralgas(){
   Matrix offset(2,1);
   offset.val(0,0)=0.5;
   offset.val(1,0)=-0.8;
-  for(int i=0; i < 5000; i++){
+  for (int i=0; i < 5000; ++i) {
     inp = inp.map(random_minusone_to_one) * 0.05 + offset;
     net.process(inp);
     net.learn(inp,out);
@@ -217,24 +217,24 @@ void testneuralgas(){
   fclose(f);
 }
 
-void testprojections(ControllerNet net){
+void testprojections(const ControllerNet& net){
   double i0[2] = {0,  1.0};
   Matrix input (2, 1, i0);
   double xsi_[2] = {-.05,.1};
   Matrix xsi(2,1,xsi_);
   Matrix o = net.process(input);
   cout << "Normal input/ output: " << (input^T) << " / " << (o^T) << endl;
-  for(unsigned int i=0; i<net.getLayerNum();i++){
+  for(unsigned int i=0; i<net.getLayerNum();++i) {
     cout << "layer " << i << ": " << endl << net.getWeights(i) << endl;
     cout << " output: " << (net.getLayerOutput(i)^T) << endl;
   }
   Matrices zeta1;
   Matrix xsi_fw   = net.forwardpropagation(xsi, 0, &zeta1);
   Matrices zeta2;
-  Matrix xsi_rec = net.backprojection(xsi_fw, 0, &zeta2);  
+  Matrix xsi_rec = net.backprojection(xsi_fw, 0, &zeta2);
   cout << "ForwardProp -> BackProj = ID" << endl;
   cout << "Shift: " << (xsi^T) << endl;
-  cout << "fw propagation: " << (xsi_fw^T) <<  endl; 
+  cout << "fw propagation: " << (xsi_fw^T) <<  endl;
   FOREACHC(Matrices, zeta1, z){
     cout << " | zeta " << ((*z)^T);
   }
@@ -250,10 +250,10 @@ void testprojections(ControllerNet net){
 
 
   xsi_fw   = net.forwardprojection(xsi, 0, &zeta1);
-  xsi_rec = net.backpropagation(xsi_fw, 0, &zeta2);  
+  xsi_rec = net.backpropagation(xsi_fw, 0, &zeta2);
   cout << "ForwardProj -> BackProp = ID" << endl;
   cout << "Shift: " << (xsi^T) << endl;
-  cout << "fw projection: " << (xsi_fw^T) <<  endl; 
+  cout << "fw projection: " << (xsi_fw^T) <<  endl;
   FOREACHC(Matrices, zeta1, z)
     cout << " | zeta " << ((*z)^T);
   cout << endl << " and backpropagation " << (xsi_rec^T) << endl;
@@ -292,7 +292,7 @@ int controllernettest(){
   testprojections(netlinear);
   cout << "******************** testprojections (nonlinear)\n";
   testprojections(netnonlinear);
-  cout << "******************** testprojections (bypass)\n"; 
+  cout << "******************** testprojections (bypass)\n";
   testprojections(netbypass);
   return 1;
 }
@@ -304,7 +304,7 @@ int main(){
   bool somtests = false;
   bool contrtests = true;
 
-  if(mltests){
+  if (mltests){
     vector<Layer> layers1;
     layers1.push_back(Layer(2,0));
     MultiLayerFFNN netlinear(0.1, layers1);
@@ -344,7 +344,7 @@ int main(){
     cout << "******************** testinvertation (bypass)\n";
     testinvertation(netbypass);
   }
-  if(somtests){
+  if (somtests){
     cout << "******************** TEST SOM\n";
     testsom1D();
     testsom2D();
@@ -353,7 +353,7 @@ int main(){
     cout << "******************** TEST Neural Gas\n";
     testneuralgas();
   }
-  if(contrtests){
+  if (contrtests){
     controllernettest();
   }
 

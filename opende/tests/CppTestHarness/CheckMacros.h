@@ -5,23 +5,23 @@
 
 #define CHECK(value) \
 	if (!CppTestHarness::Check(value)) \
-		testResults_.ReportFailure(__FILE__, __LINE__, #value);
+		testResults_.ReportFailure(__FILE__, __LINE__, #value) override;
 
 #define CHECK_EQUAL(actual, expected) \
 	if (!CppTestHarness::CheckEqual(actual, expected)) \
-		testResults_.ReportFailure(__FILE__, __LINE__, CppTestHarness::BuildFailureString(expected, actual));
+		testResults_.ReportFailure(__FILE__, __LINE__, CppTestHarness::BuildFailureString(expected, actual)) override;
 
 #define CHECK_CLOSE(actual, expected, tolerance) \
 	if (!CppTestHarness::CheckClose(actual, expected, tolerance)) \
-		testResults_.ReportFailure(__FILE__, __LINE__, CppTestHarness::BuildFailureString(expected, actual));
+		testResults_.ReportFailure(__FILE__, __LINE__, CppTestHarness::BuildFailureString(expected, actual)) override;
 
 #define CHECK_ARRAY_EQUAL(actual, expected, count) \
 	if (!CppTestHarness::CheckArrayEqual(actual, expected, count)) \
-		testResults_.ReportFailure(__FILE__, __LINE__, CppTestHarness::BuildFailureString(expected, actual, count));
+		testResults_.ReportFailure(__FILE__, __LINE__, CppTestHarness::BuildFailureString(expected, actual, count)) override;
 
 #define CHECK_ARRAY_CLOSE(actual, expected, count, tolerance) \
 	if (!CppTestHarness::CheckArrayClose(actual, expected, count, tolerance)) \
-		testResults_.ReportFailure(__FILE__, __LINE__, CppTestHarness::BuildFailureString(expected, actual, count));
+		testResults_.ReportFailure(__FILE__, __LINE__, CppTestHarness::BuildFailureString(expected, actual, count)) override;
 
 #endif
 

@@ -7,7 +7,7 @@
  *   LICENSE:                                                              *
  *   This work is licensed under the Creative Commons                      *
  *   Attribution-NonCommercial-ShareAlike 2.5 License. To view a copy of   *
- *   this license, visit http://creativecommons.org/licenses/by-nc-sa/2.5/ *
+ *   this license, visit http:__PLACEHOLDER_1__
  *   or send a letter to Creative Commons, 543 Howard Street, 5th Floor,   *
  *   San Francisco, California, 94105, USA.                                *
  *                                                                         *
@@ -53,9 +53,9 @@ public:
   */
   FFNNController(MultiLayerFFNN* net, int history, bool input_only_x, unsigned int init_wait = 0);
 
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
 
-  virtual ~FFNNController() override;
+  virtual ~FFNNController();
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
   virtual int getSensorNumber() const override {
@@ -66,20 +66,20 @@ public:
     return number_motors;
   }
 
-  virtual void step(const sensor*, int number_sensors, motor*, int number_motors) override;
+  virtual void step(const sensor*, int number_sensors, motor*, int number_motors);
   virtual void stepNoLearning(const sensor*,
                               int number_sensors,
                               motor*,
-                              int number_motors) override;
+                              int number_motors);
 
   /**** CONFIGURABLE ****/
-  void notifyOnChange(const paramkey& key) override;
+  void notifyOnChange(const paramkey& key);
 
   /**** STOREABLE ****/
   /** stores the controller values to a given file (binary).  */
   virtual bool store(FILE* f) const override;
   /** loads the controller values from a given file (binary). */
-  virtual bool restore(FILE* f) override;
+  virtual bool restore(FILE* f);
 
   // inspectable interface
   virtual std::list<iparamkey> getInternalParamNames() const override {
@@ -99,26 +99,26 @@ protected:
                                                 matrix::Matrix* ybuffer) const;
 
   virtual matrix::Matrix assembleNetworkInputX(matrix::Matrix* xbuffer,
-                                               matrix::Matrix* ybuffer) const;
+                                               matrix::Matrix* ybuff overrideer) const;
 
   virtual matrix::Matrix assembleNetworkOutput(const matrix::Matrix& output) const;
 
 protected:
-  unsigned short number_motors;
-  unsigned short number_sensors;
-  unsigned short history;
-  unsigned short buffersize;
-  bool input_only_x;
-  int s4avg;
-  unsigned int t;
-  unsigned int init_wait;
+  unsigned short number_motors = 0;
+  unsigned short number_sensors = 0;
+  unsigned short history = 0;
+  unsigned short buffersize = 0;
+  bool input_only_x = false;
+  int s4avg = 0;
+  unsigned int t = 0;
+  unsigned int init_wait = 0;
 
   matrix::Matrix* x_buffer;
   matrix::Matrix* y_buffer;
   matrix::Matrix x_smooth;
 
   MultiLayerFFNN* net;
-  bool initialised;
+  bool initialised = false;
 };
 
 #endif

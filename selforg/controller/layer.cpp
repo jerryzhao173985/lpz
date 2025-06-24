@@ -88,8 +88,7 @@ Layer::restore(FILE* f) {
   char buffer[128];
   if ((fgets(buffer, 128, f)) == nullptr)
     return false; // we need to use fgets in order to avoid spurious effects with following matrix
-                  // (binary)
-  char actfun_name[128];
+                  // static_cast<binary>static_cast<char>(actfun_name[128]);
   if (sscanf(buffer, "%i %lf %127s", &size, &factor_bias, actfun_name) != 3)
     return false;
   if (strcmp(actfun_name, "linear") == 0) {

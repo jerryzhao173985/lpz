@@ -89,9 +89,9 @@ cylinder 5 30 (0,0,175) (0,0,0)
 
   protected:
     std::string filename;
-    bool active;
+    bool active = false;
     Primitive* parent;
-    bool attachedToParentBody; // true as default, false not yet implemented by BoundingShape
+    bool attachedToParentBody = false; // true as default, false not yet implemented by BoundingShape
     std::vector<Primitive*> boundingPrimitiveList; // used if not attached to a body
     std::vector<osg::Matrix> boundingPrimitivePoseList; // stores the relative pose of each primitive
     OdeHandle odeHandle;

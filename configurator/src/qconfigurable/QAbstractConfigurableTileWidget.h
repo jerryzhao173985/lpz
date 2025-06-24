@@ -113,9 +113,9 @@
  *
  *   Revision 1.1  2010/11/26 12:22:36  guettler
  *   - Configurable interface now allows to set bounds of paramval and paramint
- *     * setting bounds for paramval and paramint is highly recommended (for QConfigurable (Qt GUI).
+ *     * setting bounds for paramval and paramint is highly recommended (for QConfigurable(const Qt& GUI).
  *   - bugfixes
- *   - current development state of QConfigurable (Qt GUI)
+ *   - current development state of QConfigurable(const Qt& GUI)
  *
  *                                                                         *
  ***************************************************************************/
@@ -143,26 +143,26 @@ namespace lpzrobots {
     public:
       QAbstractConfigurableTileWidget(Configurable* config, Configurable::paramkey key, QMap<QGridPos, QAbstractConfigurableTileWidget*>& tileIndexConfigWidgetMap);
       virtual ~QAbstractConfigurableTileWidget();
-      virtual void setName(QString name) = 0;
-      virtual QString getName() {
+      virtual void setName(const QString& name) = 0;
+      virtual QString getName() const {
         return QString(key.c_str());
       }
       virtual void toDummy(bool set) = 0;
-      virtual bool contains(QPoint pos);
+      virtual bool contains(const QPoint& pos);
       virtual void reloadConfigurableData() = 0;
 
       virtual void setGridPos(int row, int column) {
         setGridPos(QGridPos(row,column));
       }
 
-      virtual void setGridPos(QGridPos newGridPos) {
+      virtual void setGridPos(const QGridPos& newGridPos) {
         if (tileIndexConfigWidgetMap.value(gridPos) == this)
           tileIndexConfigWidgetMap.remove(gridPos);
         gridPos = newGridPos;
         tileIndexConfigWidgetMap.insert(gridPos, this);
       }
 
-      virtual QGridPos getGridPos() {
+      virtual QGridPos getGridPos() const {
         return gridPos;
       }
 
@@ -180,11 +180,11 @@ namespace lpzrobots {
 
 
       signals:
-        void sig_resize(QSize newSize);
+        void sig_resize(const QSize& newSize);
         void sig_mousePressEvent(QMouseEvent* event);
 
       public slots:
-        virtual void sl_resize(QSize newSize);
+        virtual void sl_resize(const QSize& newSize);
         virtual void sl_resetToOriginalValues() = 0;
         virtual void sl_resetToOriginalValuesAndBounds() = 0;
 

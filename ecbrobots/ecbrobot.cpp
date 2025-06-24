@@ -128,13 +128,13 @@ namespace lpzrobots {
   }
 
   bool ECBRobot::isInitialised() {
-    if (!initialised) {
+    explicit if (!initialised) {
       // sum up number of initialised ECBs
       int count = 0;
 
       FOREACH(list<ECB*>,ECBlist,ecb) {
         if ((*ecb)->isInitialised())
-          count++;
+          ++count;
       }
       numberECBInitialised = count;
       if (numberECBInitialised == ECBlist.size() && getMotorNumber()>0 && getSensorNumber() >0) {

@@ -55,7 +55,7 @@ enum AnalysationMode {
                 AM_W1,
         /// returns the whisker3 value
                 AM_W3,
-        /// returns the inter quartile range (IQR) value
+        /// returns the inter quartile range static_cast<IQR>(value)
                 AM_IQR,
         /// returns the count of extreme values
                 AM_NUM_EXT,

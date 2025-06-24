@@ -121,7 +121,7 @@ DerController::init(int sensornumber, int motornumber, RandGen* randGen) {
   x_buffer = new Matrix[buffersize];
   y_buffer = new Matrix[buffersize];
   eta_buffer = new Matrix[buffersize];
-  for (unsigned int k = 0; k < buffersize; k++) {
+  for (unsigned int k = 0; k < buffersize; ++k) {
     x_buffer[k].set(number_sensors, 1);
     y_buffer[k].set(number_motors, 1);
     eta_buffer[k].set(number_motors, 1);
@@ -149,7 +149,7 @@ DerController::step(const sensor* x_, int number_sensors, motor* y_, int number_
   epsC += .001;
   // epsA *= 1.001;
 
-  t++;
+  ++t;
 };
 
 /// performs one step without learning. Calulates motor commands from sensor inputs.
@@ -157,7 +157,7 @@ void
 DerController::stepNoLearning(const sensor* x, int number_sensors, motor* y, int number_motors) {
   fillBuffersAndControl(x, number_sensors, y, number_motors);
   // update step counter
-  t++;
+  ++t;
 }; // TODO: Das kann wohl raus?
 
 void
@@ -303,7 +303,7 @@ DerController::calcCandHandAUpdates(Matrix& C_update,
   // Matrix v_old = (eta_buffer[t%buffersize]).map(g);
   Matrix v = zero_eta;
 
-  for (unsigned int s = 1; s <= steps; s++) {
+  for (unsigned int s = 1; s <= steps; ++s) {
     const Matrix& eta = eta_buffer[(t - s) % buffersize].map(g);
 
     // const Matrix& x      = A * z.map(g) + xsi;
@@ -331,7 +331,7 @@ DerController::calcCandHandAUpdates(Matrix& C_update,
 
       // //      const Matrix chi   = (RRT^T) * zeta;
       // //      const Matrix
-      // //      const Matrix XsiV = x_buffer[(t)] - A * ;
+      // //      const Matrix XsiV = x_buffer[(t)] - A *;
 
       // //+++++++==Ende Neuer Ansatz fuer den TLE 29.10.07+++++++++
     }
@@ -348,7 +348,7 @@ DerController::calcCandHandAUpdates(Matrix& C_update,
     // C_update += Dinverse * (( (  chi * (v^T ) ) /*- (zeta * (chi^T))*/  )*(A^T) - rho*(x^T) ) *
     // epsC ;
     C_update +=
-      (((chi * (v ^ T)) /*- (zeta * (chi^T))*/) * (A ^ T) - rho * (x ^ T)) * epsC; // * Dinverse ;
+      (((chi * (v ^ T)) /*- (zeta * (chi^T))*/) * (A ^ T) - rho * (x ^ T)) * epsC; // * Dinverse;
     C_update += C * -dampA;                                                        // Mit D�mpfung
     C_update -=
       /*z*/ eta * (x ^ T) * teacher; // Neu mit Lernen der Vorw�rtsaufgabe !!!!!!!!!!???????
@@ -367,11 +367,11 @@ DerController::calcCandHandAUpdates(Matrix& C_update,
     }
   }
 
-  double error_factor = calcErrorFactor(v, (logaE & 1) != 0, (rootE & 1) != 0);
+  double error_factor = calcErrorFactor(v, (logaE >= 1), (rootE >= 1));
   C_update *= error_factor;
   H_update *= error_factor;
-  // error_factor = calcErrorFactor(v, (logaE & 2) !=0, (rootE & 2) !=0);
-  error_factor = calcErrorFactor(xsi, (logaE & 2) != 0, (rootE & 2) != 0);
+  // error_factor = calcErrorFactor(v, (logaE >= 2), (rootE >= 2));
+  error_factor = calcErrorFactor(xsi, (logaE >= 2), (rootE >= 2));
   A_update *= error_factor;
   // cout << endl;
 };

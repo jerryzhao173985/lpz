@@ -38,15 +38,15 @@
 
 using namespace std;
 
-typedef bool (*commandfunc_t)(GlobalData& globalData, char *, char *);
+typedef bool (*commandfunc_t)(const GlobalData& globalData, char *, char *);
 /* The names of functions that actually do the manipulation.  parameter: global data, entire line, arg */
-bool com_list (GlobalData& globalData, char *, char *);
-bool com_show (GlobalData& globalData, char *, char *);
-bool com_store (GlobalData& globalData, char *, char *);
-bool com_load (GlobalData& globalData, char *, char *);
-bool com_set (GlobalData& globalData, char *, char *);
-bool com_help (GlobalData& globalData, char *, char *);
-bool com_quit (GlobalData& globalData, char *, char *);
+bool com_list (const GlobalData& globalData, char *, char *);
+bool com_show (const GlobalData& globalData, char *, char *);
+bool com_store (const GlobalData& globalData, char *, char *);
+bool com_load (const GlobalData& globalData, char *, char *);
+bool com_set (const GlobalData& globalData, char *, char *);
+bool com_help (const GlobalData& globalData, char *, char *);
+bool com_quit (const GlobalData& globalData, char *, char *);
 
 /* A structure which contains information on the commands this program
    can understand. */
@@ -69,18 +69,18 @@ COMMAND commands[] = {
   { "show", com_show, "[OBJECTID]: Lists paramters of OBJECTID or of all objects (if no id given)" },
   { "view", com_show, "Synonym for `show'" },
   { "quit", com_quit, "Quit program" },
-  { (char *)nullptr, (commandfunc_t)nullptr, (char *)nullptr }
+  { static_cast<char*>nullptr, (commandfunc_t)nullptr, static_cast<char*>nullptr }
 };
 
 /* Forward declarations. */
 char * stripwhite (char *string);
 COMMAND *find_command (char *name);
-bool execute_line (GlobalData& globalData, char *line);
+bool execute_line (const GlobalData& globalData, char *line);
 int valid_argument ( const char *caller, const char *arg);
 
 void showParams(const ConfigList& configs)
 {
-  for(vector<Configurable*>::const_iterator i=configs.begin(); i != configs.end(); ++i){
+  for(vector<Configurable*>::const_iterator i=configs.begin(); i != configs.end(); ++i) {
     (*i)->print(stdout, 0);
   }
 }
@@ -95,12 +95,12 @@ void showParam(const Configurable* config)
 char* dupstr (const char* s){
   char *r;
 
-  r = (char*)malloc (strlen (s) + 1);
+  r = static_cast<char*>malloc (strlen (s) + 1);
   strcpy (r, s);
   return (r);
 }
 
-bool handleConsole(GlobalData& globalData){
+bool handleConsole(const GlobalData& globalData){
   char *line, *s;
   bool rv = true;
 
@@ -126,7 +126,7 @@ bool handleConsole(GlobalData& globalData){
 }
 
 /* Execute a command line. */
-bool execute_line (GlobalData& globalData, char *line) {
+bool execute_line (const GlobalData& globalData, char *line) {
   int i;
   COMMAND *command;
   char *word;
@@ -134,11 +134,11 @@ bool execute_line (GlobalData& globalData, char *line) {
   /* Isolate the command word. */
   i = 0;
   while (line[i] && whitespace (line[i]))
-    i++;
+    ++i;
   word = line + i;
 
   while (line[i] && !whitespace (line[i]))
-    i++;
+    ++i;
 
   if (line[i])
     line[i++] = '\0';
@@ -153,7 +153,7 @@ bool execute_line (GlobalData& globalData, char *line) {
 
   /* Get argument to command, if any. */
   while (whitespace (line[i]))
-    i++;
+    ++i;
 
   word = line + i;
 
@@ -167,11 +167,11 @@ COMMAND *find_command (char *name){
   int i;
   char *p = strchr(name,'=');
   if(p) return (&commands[0]);
-  for (i = 0; commands[i].name; i++)
+  for (i = 0; commands[i].name; ++i)
     if (strcmp (name, commands[i].name) == 0)
       return (&commands[i]);
 
-  return ((COMMAND *)nullptr);
+  return (static_cast<COMMAND *>(nullptr));
 }
 
 /* Strip whitespace from the start and end of STRING.  Return a pointer
@@ -179,7 +179,7 @@ COMMAND *find_command (char *name){
 char * stripwhite (char *string){
   char *s, *t;
 
-  for (s = string; whitespace (*s); s++)
+  for (s = string; whitespace (*s); ++s)
     ;
 
   if (*s == 0)
@@ -230,7 +230,7 @@ void closeConsole(){
 char ** console_completion (const char *text, int start, int end) {
   char **matches;
 
-  matches = (char **)nullptr;
+  matches = static_cast<char **>(nullptr);
 
   /* If this word is at the start of the line, then it is a command
      to complete.  Otherwise it is the name of a file in the current
@@ -262,14 +262,14 @@ char * command_generator (const char *text, int state) {
      command list. */
   while ( (name = commands[list_index].name) )
     {
-      list_index++;
+      ++list_index;
 
       if (strncmp (name, text, len) == 0)
         return (dupstr(name));
     }
 
   /* If no names matched, then return nullptr. */
-  return ((char *)nullptr);
+  return (static_cast<char*>nullptr);
 }
 
 /* **************************************************************** */
@@ -279,25 +279,25 @@ char * command_generator (const char *text, int state) {
 /* **************************************************************** */
 
 
-bool com_list (GlobalData& globalData, char* line, char* arg) {
+bool com_list (const GlobalData& globalData, char* line, char* arg) {
   int i=0;
   printf("Agents ---------------(for store and load)\nID: Name\n");
 
   FOREACHC(AgentList, globalData.agents,a){
     if((*a)->getRobot())
     printf(" %2i: %s\n", i, (*a)->getRobot()->getName().c_str());
-    i++;
+    ++i;
   }
   printf("Objects --------------(for set and show)\nID: Name\n");
 
   FOREACHC(ConfigList, globalData.configs,c){
     printf(" %2i: %s\n", i, (*c)->getName().c_str());
-    i++;
+    ++i;
   }
   return true;
 }
 
-bool com_show (GlobalData& globalData, char* line, char* arg) {
+bool com_show (const GlobalData& globalData, char* line, char* arg) {
   if (arg && *arg){
     int id = atoi(arg);
     if(id>=0 && id < (signed)globalData.configs.size()){
@@ -310,7 +310,7 @@ bool com_show (GlobalData& globalData, char* line, char* arg) {
   return true;
 }
 
-bool com_set (GlobalData& globalData, char* line, char* arg) {
+bool com_set (const GlobalData& globalData, char* line, char* arg) {
   if(strstr(line,"set")!=line) arg=line; // if it is not invoked with set then it was param=val
   if (valid_argument("set", arg)){
     /* Isolate the command word. */
@@ -321,7 +321,7 @@ bool com_set (GlobalData& globalData, char* line, char* arg) {
     s_param = strchr(arg,' ');
     if(s_param) *s_param='\0'; // terminate first arg
     if(s_param && strchr(arg,'=')==nullptr){ // looks like two args (and no = in the first)
-      s_param++;
+      ++s_param;
       int id = atoi(arg);
       if(id>=0 && id < (signed)globalData.configs.size()){
         char* val;
@@ -356,7 +356,7 @@ bool com_set (GlobalData& globalData, char* line, char* arg) {
         *val='='; // remove termination again (for agent notification)
       } else printf("Syntax error! no '=' found\n");
     }
-    if(changed){
+    if (changed){
       FOREACH(AgentList, globalData.agents, i){
         (*i)->writePlotComment(s_param );
       }
@@ -365,17 +365,17 @@ bool com_set (GlobalData& globalData, char* line, char* arg) {
   return true;
 }
 
-bool com_store (GlobalData& globalData, char* line, char* arg) {
+bool com_store (const GlobalData& globalData, char* line, char* arg) {
   if (valid_argument("store", arg)){
     char* filename;
     filename = strchr(arg,' ');
-    if(filename) { // we have 2 arguments
+    if (filename) { // we have 2 arguments
       *filename='\0';
-      filename++;
+      ++filename;
       int id = atoi(arg);
       if(id>=0 && id < (signed)globalData.agents.size()){
         FILE* f = fopen(filename,"wb");
-        if(f){
+        if (f){
           if(globalData.agents[id]->getController()->store(f))
             printf("Controller stored\n");
           else printf("Error occured while storing contoller\n");
@@ -387,17 +387,17 @@ bool com_store (GlobalData& globalData, char* line, char* arg) {
   return true;
 }
 
-bool com_load (GlobalData& globalData, char* line, char* arg) {
+bool com_load (const GlobalData& globalData, char* line, char* arg) {
   if (valid_argument("load", arg)){
     char* filename;
     filename = strchr(arg,' ');
-    if(filename) { // we have 2 arguments
+    if (filename) { // we have 2 arguments
       *filename='\0';
-      filename++;
+      ++filename;
       int id = atoi(arg);
       if(id>=0 && id < (signed)globalData.agents.size()){
         FILE* f = fopen(filename,"rb");
-        if(f){
+        if (f){
           if(globalData.agents[id]->getController()->restore(f))
             printf("Controller restored\n");
           else printf("Error occured while restoring contoller\n");
@@ -410,22 +410,22 @@ bool com_load (GlobalData& globalData, char* line, char* arg) {
 }
 
 
-bool com_quit (GlobalData& globalData, char *, char *){
+bool com_quit (const GlobalData& globalData, char *, char *){
   return false;
 }
 
 /* Print out help for ARG, or for all of the commands if ARG is
    not present. */
-bool com_help (GlobalData& globalData, char* line, char* arg) {
+bool com_help (const GlobalData& globalData, char* line, char* arg) {
   int i;
   int printed = 0;
 
-  for (i = 0; commands[i].name; i++)
+  for (i = 0; commands[i].name; ++i)
     {
       if (!*arg || (strcmp (arg, commands[i].name) == 0))
         {
           printf (" %s\t\t%s.\n", commands[i].name, commands[i].doc);
-          printed++;
+          ++printed;
         }
     }
 
@@ -433,7 +433,7 @@ bool com_help (GlobalData& globalData, char* line, char* arg) {
     {
       printf ("No commands match `%s'.  Possibilties are:\n", arg);
 
-      for (i = 0; commands[i].name; i++)
+      for (i = 0; commands[i].name; ++i)
         {
           /* Print in six columns. */
           if (printed == 6)
@@ -443,7 +443,7 @@ bool com_help (GlobalData& globalData, char* line, char* arg) {
             }
 
           printf (" %s\t", commands[i].name);
-          printed++;
+          ++printed;
         }
 
       if (printed)

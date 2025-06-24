@@ -32,49 +32,49 @@ namespace lpzrobots {
     //private:
   public:
 
-    double position;
-    double lastposition;
-    double last2position;
+    double position = 0;
+    double lastposition = 0;
+    double last2position = 0;
 
-    double error;
-    double lasterror;
-    double derivative;
-    double targetposition;
+    double error = 0;
+    double lasterror = 0;
+    double derivative = 0;
+    double targetposition = 0;
 
-    double KP;
-    double KI;
-    double KD;
-    double tau;
+    double KP = 0;
+    double KI = 0;
+    double KD = 0;
+    double tau = 0;
 
-    double P;
-    double D;
-    double I;
+    double P = 0;
+    double D = 0;
+    double I = 0;
 
-    double force;
-    double lasttime;  // last update time (to calc stepsize)
+    double force = 0;
+    double lasttime = 0;  // last update time (to calc stepsize)
 
     //*********************methods******************
   public :
     /// KP is used as a general koefficient. KI and KD can be tuned without dependence of KP
-    PID ( double KP = 100 , double KI = 2.0 , double KD = 0.3 );
+    PID ( double KP = 100 , double KI = 2.0 , double KD = 0.3 ) override;
 
     void setKP(double KP);
 
-    void setTargetPosition ( double newpos );
+    void setTargetPosition ( double newpos ) override;
 
-    double getTargetPosition ();
+    double getTargetPosition () override;
 
     /// perform one step of the PID controller with cutoff for large forces
-    double step ( double newsensorval, double time);
+    double step ( double newsensorval, double time) override;
     /// perform one step of the PID controller without cutoffs used for Center-Servos
-    double stepNoCutoff ( double newsensorval, double time);
+    double stepNoCutoff ( double newsensorval, double time) override;
     /** perform one step of the PID controller for velocity control.
         Meaning the misfit is in position space but the output is
         the nominal velocity. The velocity is also limited. such that
         the maximal velocity cannot be so that the error is overcompenstated
         in one timestep.
      */
-    double stepVelocity ( double newsensorval, double time);
+    double stepVelocity ( double newsensorval, double time) override;
 
   };
 

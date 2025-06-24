@@ -24,16 +24,17 @@
 
 #include <osg/Notify>
 #include "cameramanipulatorFollow.h"
-//#include "mathutils.h"
+//#include __PLACEHOLDER_1__
 #include "pos.h"
 #include "odeagent.h"
+#include <cmath>  // For M_PI
 
 namespace lpzrobots {
 
   using namespace osg;
   using namespace osgGA;
 
-  CameraManipulatorFollow::CameraManipulatorFollow(osg::Node* node,GlobalData& global, CameraHandle& cameraHandle)
+  CameraManipulatorFollow::CameraManipulatorFollow(osg::Node* node,const GlobalData& global, const CameraHandle& cameraHandle)
     : CameraManipulator(node,global, cameraHandle) {}
 
   CameraManipulatorFollow::~CameraManipulatorFollow(){}
@@ -41,9 +42,9 @@ namespace lpzrobots {
   void CameraManipulatorFollow::calcMovementByAgent() {
     if (this->isWatchingAgentDefined() && camHandle.oldPositionOfAgentDefined) {
       // then manipulate desired view and desired eye
-      Position robMove = (camHandle.watchingAgent->getRobot()->getPosition()-camHandle.oldPositionOfAgent);
+      Position robMove = (camHandle.watchingAgent->getRobot()->getPosition()-camHandle.oldPositionOfAgent) override;
       // attach the robSpeed to desired eye
-      for (int i=0;i<=2;i++) {
+      for (int i=0;i<=2;++i)  override {
         if (!isNaN(robMove.toArray()[i])) {
           camHandle.desiredEye[i]+=robMove.toArray()[i];}
         else
@@ -55,7 +56,7 @@ namespace lpzrobots {
 
   void CameraManipulatorFollow::setHomeViewByAgent() {
     // ok here the camera will center on the robot
-    if (!this->isWatchingAgentDefined()) return;
+    if (!this->isWatchingAgentDefined()) return override;
     // the actual position of the agent has to be recognized
     // we use the Position getPosition() from OdeRobot
     Position robPos = camHandle.watchingAgent->getRobot()->getPosition();
@@ -63,7 +64,7 @@ namespace lpzrobots {
     // calculate the horizontal angle, means pan (view.x)
     if (robPos.x-camHandle.desiredEye[0]!=0) { // division by zero
       camHandle.desiredView[0]= atan((camHandle.desiredEye[0]-robPos.x)/(robPos.y-camHandle.desiredEye[1]))
-        / PI*180.0f+180.0f;
+        / M_PI*180.0f+180.0f;
       if (camHandle.desiredEye[1]-robPos.y<0) // we must switch
         camHandle.desiredView[0]+=180.0f;
     }
@@ -73,7 +74,7 @@ namespace lpzrobots {
       camHandle.desiredView[1]=-atan((sqrt(square(camHandle.desiredEye[0]-robPos.x)+
                                 square(camHandle.desiredEye[1]-robPos.y)))
                           /(robPos.z-camHandle.desiredEye[2]))
-        / PI*180.0f-90.0f;
+        / M_PI*180.0f-90.0f;
       if (camHandle.desiredEye[2]-robPos.z<0) // we must switch
         camHandle.desiredView[1]+=180.0f;
     }

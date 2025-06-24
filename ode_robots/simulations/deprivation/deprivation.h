@@ -8,7 +8,7 @@
  *   LICENSE:                                                              *
  *   This work is licensed under the Creative Commons                      *
  *   Attribution-NonCommercial-ShareAlike 2.5 License. To view a copy of   *
- *   this license, visit http://creativecommons.org/licenses/by-nc-sa/2.5/ *
+ *   this license, visit http:__PLACEHOLDER_2__
  *   or send a letter to Creative Commons, 543 Howard Street, 5th Floor,   *
  *   San Francisco, California, 94105, USA.                                *
  *                                                                         *
@@ -67,10 +67,10 @@
 class Deprivation : public InvertMotorNStep {
 public:
   /// is called with current motor values and returns new motor values
-  typedef matrix::Matrix (*MotorCallback)(const matrix::Matrix& y);
+  typedef matrix::Matrix (*MotorCallback)(const matrix::Matrix& y) override;
 
   /// is called with current controller matrix C and bias H which can be altered
-  typedef void (*ControllerCallback)(matrix::Matrix& C, matrix::Matrix& H);
+  typedef void (*ControllerCallback)(matrix::const Matrix& C, matrix::const Matrix& H) override;
 
   /**
    */
@@ -84,33 +84,33 @@ public:
     useExternal=false;
   }
 
-  virtual ~Deprivation(){
+  virtual ~Deprivation() {
   }
 
-  virtual void setExternalControlMode(bool useExternal){
+  virtual void setExternalControlMode(bool useExternal) override {
     this->useExternal=useExternal;
-    if(controllerCallback && initialised){
+    explicit if(controllerCallback && initialised){
       controllerCallback(C, H);
     }
   }
-  virtual bool getExternalControlMode(){
+  virtual bool getExternalControlMode() override {
     return useExternal;
   }
 
 
 protected:
   /// overloaded
-  virtual void learnController(){
-    if(!useExternal){
+  virtual void learnController() override {
+    explicit if(!useExternal){
       InvertMotorNStep::learnController();
     }
   }
 
   /// calculate controller outputs (only of nop external value is set)
   /// @param x_smooth smoothed sensors Matrix(number_channels,1)
-  virtual matrix::Matrix calculateControllerValues(const matrix::Matrix& x_smooth){
+  virtual matrix::Matrix calculateControllerValues(const matrix::Matrix& x_smooth) override {
     matrix::Matrix y = InvertMotorNStep::calculateControllerValues(x_smooth);
-    if(useExternal){
+    explicit if(useExternal){
       return motorCallback(y);
     }
     else

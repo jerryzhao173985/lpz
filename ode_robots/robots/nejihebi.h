@@ -53,134 +53,134 @@ namespace lpzrobots{
        */
       struct Conf {
         /** number of screw elements */
-        int    numberOfScrews;
+        int    numberOfScrews = 0;
         /** configurations for the two ball bearings at the robot head */
         struct {
             /** color of ball bearing */
             Color   color;
             /** mass of each ball bearing */
-            double mass;
+            double mass = 0;
             /** radius of each ball bearing */
-            double radius;
+            double radius = 0;
             /** color of the stick holding the ball bearing */
             Color  stickColor;
             /** length of the stick holding the ball bearing */
-            double stickLength;
+            double stickLength = 0;
             /** mass of the stick holding the ball bearing */
-            double stickMass;
+            double stickMass = 0;
             /** width of the stick holding the ball bearing */
-            double stickWidth;
+            double stickWidth = 0;
         } ballBearing;
         /** configurations for the blades holding the passive wheels */
         struct {
             /** angle of the blades versus the screw axis */
-            double angle;
+            double angle = 0;
             /** color of the blades */
             Color   color;
             /** height of the blades */
-            double height;
+            double height = 0;
             /** length of the blades */
-            double length;
+            double length = 0;
             /** mass of each blade */
-            double mass;
+            double mass = 0;
             /** number of wheels per blade */
-            int    wheels;
+            int    wheels = 0;
             /** width of each blade */
-            double width;
+            double width = 0;
         } blade;
         /** configurations for the robot head */
         struct {
             /** color of the robot head */
             Color   color;
             /** height of the robot head */
-            double height;
+            double height = 0;
             /** length of the robot head */
-            double length;
+            double length = 0;
             /** mass of the robot head */
-            double mass;
+            double mass = 0;
             /** width of the robot head */
-            double width;
+            double width = 0;
         } head;
         /** configurations for the inner non-rotating part of the screw
          * elements */
         struct {
             /** length of inner body behind the screw center */
-            double backLength;
+            double backLength = 0;
             /** color of the inner body */
             Color   color;
             /** length of inner body before the screw center */
-            double frontLength;
+            double frontLength = 0;
             /** height of the inner body */
-            double height;
+            double height = 0;
             /** mass of the inner body */
-            double mass;
+            double mass = 0;
             /** width of the inner body */
-            double width;
+            double width = 0;
         } innerBody;
         /** configurations for the joints between the screw elements */
         struct {
             /** damping of the joint servo motors */
-            double damping;
+            double damping = 0;
             /** maximum velocity of the joint servo motors */
-            double maxVel;
+            double maxVel = 0;
             /** configurations for the pitch (up-down) servo motors */
             struct {
                 /** minimum angle [rad] */
-                double minAngle;
+                double minAngle = 0;
                 /** maximum angle [rad] */
-                double maxAngle;
+                double maxAngle = 0;
                 /** maximum power */
-                double power;
+                double power = 0;
             } pitch;
             /** configurations for the yaw (left-right) servo motors */
             struct {
                 /** minimum angle [rad] */
-                double minAngle;
+                double minAngle = 0;
                 /** maximum angle [rad] */
-                double maxAngle;
+                double maxAngle = 0;
                 /** maximum power */
-                double power;
+                double power = 0;
             } yaw;
         } jointUnit;
         /** configurations for the basic ring of the screw elements */
         struct {
             /** number of blades per screw element */
-            int    blades;
+            int    blades = 0;
             /** color of screw ring */
             Color   color;
             /** mass of screw ring */
-            double mass;
+            double mass = 0;
             /** maximum torque for screw ring */
-            double maxForce;
+            double maxForce = 0;
             /** maximum speed for screw ring */
-            double maxSpeed;
+            double maxSpeed = 0;
             /** radius of screw ring */
-            double radius;
+            double radius = 0;
             /** width of screw ring */
-            double width;
+            double width = 0;
         } screwbase;
         /** configurations for the passive wheels */
         struct {
             /** decides if the wheel axis will be visible */
-            bool   axisVisible;
+            bool   axisVisible = false;
             /** size of the wheel axis if visible */
-            double axisSize;
+            double axisSize = 0;
             /** color of the passive wheels */
             Color   color;
             /** mass of each passive wheel */
-            double mass;
+            double mass = 0;
             /** radius of the circle on which the wheels are placed */
-            double posradius;
+            double posradius = 0;
             /** offset of the center of the position circle and the screw
              * center */
-            double posshift;
+            double posshift = 0;
             /** angle size of the circle segment on which the wheels are
              * placed */
-            double possegment;
+            double possegment = 0;
             /** radius of the passive wheels */
-            double radius;
+            double radius = 0;
             /** width of the passive wheels */
-            double width;
+            double width = 0;
         } wheel;
       };
 
@@ -199,7 +199,7 @@ namespace lpzrobots{
       /**
        * Destructor
        */
-      virtual ~Nejihebi() override;
+      virtual ~Nejihebi();
 
       /**
        * Returns the current configuration of the robot
@@ -218,9 +218,9 @@ namespace lpzrobots{
        */
       static Conf getDefaultConf();
 
-      Inspectable::iparamkeylist getInternalParamNames() const;
+      Inspectable::iparamkeylist getInternalParamNames() const override;
 
-      Inspectable::iparamvallist getInternalParams() const;
+      Inspectable::iparamvallist getInternalParams() const override;
 
       /**
        * Returns main primitive of the robot.
@@ -238,14 +238,14 @@ namespace lpzrobots{
        *
        * @return number of motors
        */
-      virtual int getMotorNumberIntern() override;
+      virtual int getMotorNumberIntern();
 
       /**
        * Returns number of sensors.
        *
        * @return number of sensors
        */
-      virtual int getSensorNumberIntern() override;
+      virtual int getSensorNumberIntern();
 
       /**
        * Returns current sensor values
@@ -270,7 +270,7 @@ namespace lpzrobots{
        * @param sensornumber length of the sensor array
        * @return number of actually written sensors
        */
-      virtual int getSensorsIntern(sensor* sensors, int sensornumber) override;
+      virtual int getSensorsIntern(sensor* sensors, int sensornumber);
 
       /**
        * Assigns a name to a motor.
@@ -301,7 +301,7 @@ namespace lpzrobots{
        *
        * @param pose desired pose matrix
        */
-      virtual void placeIntern(const osg::Matrix& pose) override;
+      virtual void placeIntern(const osg::Matrix& pose);
 
       /**
        * Sets current motorcommands
@@ -326,7 +326,7 @@ namespace lpzrobots{
        * @param motors motors scaled to [-1,1]
        * @param motornumber length of the motor array
        */
-      virtual void setMotorsIntern(const double* motors, int motornumber) override;
+      virtual void setMotorsIntern(const double* motors, int motornumber);
 
     private:
 

@@ -2,7 +2,7 @@
 /*
  *	OPCODE - Optimized Collision Detection
  *	Copyright (C) 2001 Pierre Terdiman
- *	Homepage: http://www.codercorner.com/Opcode.htm
+ *	Homepage: http:__PLACEHOLDER_1__
  */
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -33,7 +33,7 @@
 	{
 		public:
 		// Constructor / Destructor
-											VolumeCollider();
+											VolumeCollider() override;
 		virtual								~VolumeCollider() = 0;
 
 		// Collision report
@@ -46,7 +46,7 @@
 		 *	\return		the number of touched primitives
 		 */
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		inline_				udword			GetNbTouchedPrimitives()	const	{ return mTouchedPrimitives ? mTouchedPrimitives->GetNbEntries() : 0;	}
+		inline_				udword			GetNbTouchedPrimitives()	const override { return mTouchedPrimitives ? mTouchedPrimitives->GetNbEntries() : 0;	}
 
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/**
@@ -56,7 +56,7 @@
 		 *	\return		the list of touched primitives (primitive indices)
 		 */
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		inline_		const	udword*			GetTouchedPrimitives()		const	{ return mTouchedPrimitives ? mTouchedPrimitives->GetEntries() : null;	}
+		inline_		const	udword*			GetTouchedPrimitives()		const override { return mTouchedPrimitives ? mTouchedPrimitives->GetEntries() : null;	}
 
 		// Stats
 
@@ -67,7 +67,7 @@
 		 *	\return		the number of Volume-BV tests performed during last query
 		 */
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		inline_				udword			GetNbVolumeBVTests()		const	{ return mNbVolumeBVTests;												}
+		inline_				udword			GetNbVolumeBVTests()		const override { return mNbVolumeBVTests;												}
 
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/**
@@ -76,7 +76,7 @@
 		 *	\return		the number of Volume-Triangle tests performed during last query
 		 */
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		inline_				udword			GetNbVolumePrimTests()		const	{ return mNbVolumePrimTests;											}
+		inline_				udword			GetNbVolumePrimTests()		const override { return mNbVolumePrimTests;											}
 
 		// Settings
 
@@ -86,7 +86,7 @@
 		 *	\return		null if everything is ok, else a string describing the problem
 		 */
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		override(Collider)	const char*		ValidateSettings();
+		overridestatic_cast<Collider>(const) char*		ValidateSettings() override;
 
 		protected:
 		// Touched primitives
@@ -99,25 +99,25 @@
 							udword			mNbVolumeBVTests;	//!< Number of Volume-BV tests
 							udword			mNbVolumePrimTests;	//!< Number of Volume-Primitive tests
 		// Internal methods
-							void			_Dump(const AABBCollisionNode* node);
-							void			_Dump(const AABBNoLeafNode* node);
-							void			_Dump(const AABBQuantizedNode* node);
-							void			_Dump(const AABBQuantizedNoLeafNode* node);
+							void			_Dump(const AABBCollisionNode* node) override;
+							void			_Dump(const AABBNoLeafNode* node) override;
+							void			_Dump(const AABBQuantizedNode* node) override;
+							void			_Dump(const AABBQuantizedNoLeafNode* node) override;
 
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/**
 		 *	Initializes a query
 		 */
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		override(Collider) inline_	void	InitQuery()
+		overridestatic_cast<Collider>(inline_)	void	InitQuery()
 											{
 												// Reset stats & contact status
 												mNbVolumeBVTests	= 0;
 												mNbVolumePrimTests	= 0;
-												Collider::InitQuery();
+												Collider::InitQuery() override;
 											}
 
-		inline_				BOOL			IsCacheValid(VolumeCache& cache)
+		inline_				BOOL			IsCacheValid(const VolumeCache& cache)
 											{
 												// We're going to do a volume-vs-model query.
 												if(cache.Model!=mCurrentModel)

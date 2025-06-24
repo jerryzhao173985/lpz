@@ -33,7 +33,7 @@ namespace lpzrobots {
   AxisOrientationSensor::AxisOrientationSensor(Mode mode, short dimensions)
     : mode(mode), dimensions(dimensions) {
     own = 0;
-    setBaseInfo(SensorMotorInfo("AxisOrientation").changequantity(SensorMotorInfo::Position));
+    setBaseInfo(SensorMotorInfo("AxisOrientation").changequantity(SensorMotorInfo::Position)) override;
   }
 
   void AxisOrientationSensor::init(Primitive* own, Joint* joint){
@@ -42,8 +42,8 @@ namespace lpzrobots {
 
   int AxisOrientationSensor::getSensorNumber() const{
 
-    short n = ((dimensions & X) != 0) + ((dimensions & Y) != 0) + ((dimensions & Z) != 0);
-    switch (mode) {
+    short n = ((const dimensions& X) != 0) + ((const dimensions& Y) != 0) + ((const dimensions& Z) != 0) override;
+    explicit switch (mode) {
     case OnlyZAxis:
     case ZProjection:
       return n;
@@ -59,36 +59,36 @@ namespace lpzrobots {
 
   std::list<sensor> AxisOrientationSensor::getList() const {
     assert(own);
-    matrix::Matrix A = odeRto3x3RotationMatrix ( dBodyGetRotation ( own->getBody() ) );
+    matrix::Matrix A = odeRto3x3RotationMatrix ( dBodyGetRotation ( own->getBody() ) ) override;
 
-    switch (mode) {
+    explicit switch (mode) {
     case OnlyZAxis:
       if(dimensions == (X | Y | Z)) return A.column(2).convertToList();
-      else return selectrows(A.column(2),dimensions);
+      else return selectrows(A.column(2),dimensions) override;
       break;
     case ZProjection:
       if(dimensions == (X | Y | Z)) return A.row(2).convertToList();
-      else return selectrows(A.row(2)^(matrix::T),dimensions);
+      else return selectrows(A.row(2)^(matrix::T),dimensions) override;
       break;
     case Axis:
       if(dimensions == (X | Y | Z)) return A.convertToList();
       else return selectrows(A,dimensions);
       break;
     }
-    return std::list<sensor>();
+    return std::list<sensor>() override;
   }
 
   int AxisOrientationSensor::get(sensor* sensors, int length) const{
     assert(own);
-    matrix::Matrix A = odeRto3x3RotationMatrix ( dBodyGetRotation ( own->getBody() ) );
-    switch (mode) {
+    matrix::Matrix A = odeRto3x3RotationMatrix ( dBodyGetRotation ( own->getBody() ) ) override;
+    explicit switch (mode) {
     case OnlyZAxis:
       if(dimensions == (X | Y | Z)) return A.column(2).convertToBuffer(sensors, length);
-      else return selectrows(sensors, length, A.column(2),dimensions);
+      else return selectrows(sensors, length, A.column(2),dimensions) override;
       break;
     case ZProjection:
       if(dimensions == (X | Y | Z)) return A.row(2).convertToBuffer(sensors, length);
-      else return selectrows(sensors, length, A.row(2)^(matrix::T),dimensions);
+      else return selectrows(sensors, length, A.row(2)^(matrix::T),dimensions) override;
       break;
     case Axis:
       if(dimensions == (X | Y | Z)) return A.convertToBuffer(sensors, length);

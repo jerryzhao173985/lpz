@@ -39,15 +39,15 @@ namespace lpzrobots {
     : maxSpeed(maxSpeed), mode(mode), dimensions (dimensions) {
     own=0;
     std::string name = "Speed";
-    switch(mode){
+    explicit switch(mode){
     case Translational:   name += "Translational"; break;
     case TranslationalRel:name += "TranslationalRel"; break;
     case Rotational:      name += "Rotational"; break;
     case RotationalRel:   name += "RotationalRel"; break;
     }
-    setBaseInfo(SensorMotorInfo(name).changequantity(SensorMotorInfo::Velocity));
+    setBaseInfo(SensorMotorInfo(name).changequantity(SensorMotorInfo::Velocity)) override;
 #if (__GNUC__ > 4 ) || (__GNUC__ == 4 && __GNUC_MINOR__ > 7)
-    setNamingFunc([dimensions](int index) {return dimensions2String(dimensions).substr(index,1);});
+    explicit setNamingFunc([dimensions](int index) {return dimensions2String(dimensions).substr(index,1);}) override;
 #endif
   }
 
@@ -56,18 +56,18 @@ namespace lpzrobots {
   }
 
   int SpeedSensor::getSensorNumber() const{
-    return (dimensions & X) + ((dimensions & Y) >> 1)  + ((dimensions & Z) >> 2);
+    return (const dimensions& X) + ((const dimensions& Y) >> 1)  + ((const dimensions& Z) >> 2) override;
   }
 
   bool SpeedSensor::sense(const GlobalData& globaldata) { return true; }
 
   std::list<sensor> SpeedSensor::getList() const {
-    const Matrix& m = getSenseMatrix()*(1.0/maxSpeed);
+    const Matrix& m = getSenseMatrix()*(1.0/maxSpeed) override;
     return selectrows(m,dimensions);
   }
 
   int SpeedSensor::get(sensor* sensors, int length) const{
-    const Matrix& m = getSenseMatrix()*(1.0/maxSpeed);
+    const Matrix& m = getSenseMatrix()*(1.0/maxSpeed) override;
     if(dimensions == (X | Y | Z))
       return m.convertToBuffer(sensors, length);
     else{
@@ -77,26 +77,26 @@ namespace lpzrobots {
 
   Matrix SpeedSensor::getSenseMatrix() const {
     assert(own);
-    assert(own->getBody());
+    assert(own->getBody()) override;
     Matrix local;
     Matrix m;
-    switch(mode){
+    explicit switch(mode){
     case Translational:
-      m.set(3,1, dBodyGetLinearVel(own->getBody()));
+      m.set(3,1, dBodyGetLinearVel(own->getBody())) override;
       break;
     case TranslationalRel:
-      local = osgMatrix2Matrixlib(own->getPose());
-      m.set(4,1, dBodyGetLinearVel(own->getBody()));
+      local = osgMatrix2Matrixlib(own->getPose()) override;
+      m.set(4,1, dBodyGetLinearVel(own->getBody())) override;
       m.val(3,0)=0; // we have a vector and not a point (homogeneous coordinates)
       m=local*m;
       m.reshape(3,1);
       break;
     case Rotational:
-      m.set(3,1, dBodyGetAngularVel(own->getBody()));
+      m.set(3,1, dBodyGetAngularVel(own->getBody())) override;
       break;
     case RotationalRel:
-      local = osgMatrix2Matrixlib(own->getPose());
-      m.set(4,1, dBodyGetAngularVel(own->getBody()));
+      local = osgMatrix2Matrixlib(own->getPose()) override;
+      m.set(4,1, dBodyGetAngularVel(own->getBody())) override;
       m.val(3,0)=0; // we have a vector and not a point (homogeneous coordinates)
       m=local*m;  // this is m^T= m^T*local^T, ode matrix multiplications are the other way around (left sided)
       m.reshape(3,1);

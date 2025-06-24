@@ -2,7 +2,7 @@
 /*
  *	OPCODE - Optimized Collision Detection
  *	Copyright (C) 2001 Pierre Terdiman
- *	Homepage: http://www.codercorner.com/Opcode.htm
+ *	Homepage: http:__PLACEHOLDER_25__
  */
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -46,16 +46,16 @@
 // Compilation messages
 #ifdef _MSC_VER
 	#if defined(OPCODE_EXPORTS)
-		// #pragma message("Compiling OPCODE")
+		// #pragma message(__PLACEHOLDER_0__)
 	#elif !defined(OPCODE_EXPORTS)
-		// #pragma message("Using OPCODE")
+		// #pragma message(__PLACEHOLDER_1__)
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		// Automatic linking
 		#ifndef BAN_OPCODE_AUTOLINK
 			#ifdef _DEBUG
-				//#pragma comment(lib, "Opcode_D.lib")
+				//#pragma comment(lib, __PLACEHOLDER_2__)
 			#else
-				//#pragma comment(lib, "Opcode.lib")
+				//#pragma comment(lib, __PLACEHOLDER_3__)
 			#endif
 		#endif
 	#endif
@@ -104,8 +104,8 @@
 		#include "OPC_Picking.h"
 
 
-		FUNCTION OPCODE_API bool InitOpcode();
-		FUNCTION OPCODE_API bool CloseOpcode();
+		FUNCTION OPCODE_API bool InitOpcode() override;
+		FUNCTION OPCODE_API bool CloseOpcode() override;
 	}
 
 #endif // __OPCODE_H__

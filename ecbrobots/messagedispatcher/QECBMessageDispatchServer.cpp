@@ -38,9 +38,9 @@
  *
  *   Revision 1.6  2010/11/26 12:22:36  guettler
  *   - Configurable interface now allows to set bounds of paramval and paramint
- *     * setting bounds for paramval and paramint is highly recommended (for QConfigurable (Qt GUI).
+ *     * setting bounds for paramval and paramint is highly recommended (for QConfigurable(const Qt& GUI).
  *   - bugfixes
- *   - current development state of QConfigurable (Qt GUI)
+ *   - current development state of QConfigurable(const Qt& GUI)
  *
  *   Revision 1.5  2010/11/23 11:08:06  guettler
  *   - some helper functions

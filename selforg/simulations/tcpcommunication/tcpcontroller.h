@@ -46,41 +46,41 @@ public:
    */
   TcpController(const string& robotname, int port = 4000, AbstractController* teacher = 0);
 
-  virtual ~TcpController() override;
+  virtual ~TcpController();
 
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
 
   /** @return Number of sensors the controller was initialised
       with or 0 if not initialised */
-  virtual int getSensorNumber() const {return number_sensors;}
+  virtual int getSensorNumber() const override {return number_sensors;}
 
 
   /** @return Number of motors the controller was initialised
       with or 0 if not initialised */
-  virtual int getMotorNumber() const {return number_motors;}
+  virtual int getMotorNumber() const override {return number_motors;}
 
   /** performs one step (does communication with remote controller)
       and waits for motor values to be send to the robot.
   */
   virtual void step(const sensor* sensors, int sensornumber,
-                    motor* motors, int motornumber) override;
+                    motor* motors, int motornumber);
 
   /** performs one step without learning (Not implemented
       for remote controller! we use step instead)
       @see step
   */
   virtual void stepNoLearning(const sensor* , int number_sensors,
-                              motor* , int number_motors) override;
+                              motor* , int number_motors);
 
   /********* STORABLE INTERFACE ******/
   /// @see Storable
-  virtual bool store(FILE* f) const {
+  virtual bool store(FILE* f) const override {
     Configurable::print(f,"");
     return true;
   }
 
   /// @see Storable
-  virtual bool restore(FILE* f) {
+  virtual bool restore(FILE* f) override {
     Configurable::parse(f);
     return true;
   }
@@ -92,11 +92,11 @@ protected:
   void configuration();
 
 protected:
-  int number_sensors;
-  int number_motors;
+  int number_sensors = 0;
+  int number_motors = 0;
   paramint port;
   std::string robotname;
-  bool quit;
+  bool quit = false;
   AbstractController* teacher;
 
   Socket      socket;

@@ -43,7 +43,7 @@ public:
 	 * default constructor
 	 * do nothing
 	 */
-	EuclidicDistanceFitnessStrategy();
+	EuclidicDistanceFitnessStrategy() override;
 
 	/**
 	 * default destructor
@@ -55,9 +55,9 @@ public:
 	 * this function calculate the euclidic distance of all double gen which
 	 * individual has.
 	 * @param individual (const Individual*) the Individual
-	 * @return (double) the distance
+	 * @return static_cast<double>(the) distance
 	 */
-	virtual double getFitness(const Individual* individual);
+	virtual double getFitness(const Individual* individual) override;
 };
 
 #endif /* EUCLIDICDISTANCEFITNESSSTRATEGY_H_ */

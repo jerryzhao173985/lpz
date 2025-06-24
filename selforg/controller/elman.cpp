@@ -68,7 +68,7 @@ Elman::process(const Matrix& input) {
   if (useJordan)
     zs[0] += jordanWeights * jordanContext;
   ys[0] = zs[0].map(layers[0].actfun);
-  for (unsigned int i = 1; i < layernum; i++) {
+  for (unsigned int i = 1; i < layernum; ++i) {
     zs[i] = weights[i] * ys[i - 1] + bias[i];
     if (i == layernum - 1 && useBypass)
       zs[i] += bypassWeights * input;
@@ -84,8 +84,8 @@ Elman::learn(const Matrix& input, const Matrix& nom_output, double learnRateFact
   int layernum = layers.size();
   double epsilon = eps * learnRateFactor;
 
-  assert(weights.size() == (unsigned)layernum);
-  assert(bias.size() == (unsigned)layernum);
+  assert(weights.size() == static_cast<unsigned>(layernum));
+  assert(bias.size() == static_cast<unsigned>(layernum));
 
   // process inputs to calculate activations if necessary
   if (!input.equals(this->input)) {
@@ -123,8 +123,8 @@ NetUpdate
 Elman::weightIncrement(const matrix::Matrix& xsi_) {
   assert(initialised);
   int layernum = layers.size();
-  assert(weights.size() == (unsigned)layernum);
-  assert(bias.size() == (unsigned)layernum);
+  assert(weights.size() == static_cast<unsigned>(layernum));
+  assert(bias.size() == static_cast<unsigned>(layernum));
   NetUpdate update(layernum, layernum, (useBypass != 0) + (useElman != 0) + (useJordan != 0));
   int k = 0;
   // calculate weight updates
@@ -136,7 +136,7 @@ Elman::weightIncrement(const matrix::Matrix& xsi_) {
     delta = xsi.multrowwise(g_prime);
     if (i == layernum - 1 && useBypass) { // last layers xsi also has to train bypass
       update.other[i] = delta * (input ^ T);
-      k++;
+      ++k;
     }
     if (i != 0) { // all but first layer
       update.weights[i] = delta * (ys[i - 1] ^ T);
@@ -146,7 +146,7 @@ Elman::weightIncrement(const matrix::Matrix& xsi_) {
       update.bias[0] = delta * layers[0].factor_bias;
       if (useElman) {
         update.other[k] = delta * (elmanContext ^ T) - elmanWeights * 0.00001;
-        k++;
+        ++k;
       }
       if (useJordan)
         update.other[k] = delta * (jordanContext ^ T) - jordanWeights * 0.00001;
@@ -162,8 +162,8 @@ Elman::weightIncrementBlocked(const matrix::Matrix& xsi_,
                               int blockto) {
   assert(initialised);
   int layernum = layers.size();
-  assert(weights.size() == (unsigned)layernum);
-  assert(bias.size() == (unsigned)layernum);
+  assert(weights.size() == static_cast<unsigned>(layernum));
+  assert(bias.size() == static_cast<unsigned>(layernum));
   NetUpdate update(layernum, layernum, (useBypass != 0) + (useElman != 0) + (useJordan != 0));
   int k = 0;
   // calculate weight updates
@@ -177,13 +177,13 @@ Elman::weightIncrementBlocked(const matrix::Matrix& xsi_,
       if (blockto == -1)
         blockto = delta.getM();
       assert(blockfrom <= blockto && blockto <= ((signed)delta.getM()));
-      for (int idx = blockfrom; idx < blockto; idx++)
+      for (int idx = blockfrom; idx < blockto; ++idx)
         delta.val(idx, 0) = 0;
     }
 
     if (i == layernum - 1 && useBypass) { // last layers xsi also has to train bypass
       update.other[k] = delta * (input ^ T);
-      k++;
+      ++k;
     }
     if (i != 0) { // all but first layer
       update.weights[i] = delta * (ys[i - 1] ^ T);
@@ -193,7 +193,7 @@ Elman::weightIncrementBlocked(const matrix::Matrix& xsi_,
       update.bias[0] = delta * layers[0].factor_bias;
       if (useElman) {
         update.other[k] = delta * (elmanContext ^ T); //  - elmanWeights*0.00001;
-        k++;
+        ++k;
       }
       if (useJordan)
         update.other[k] = delta * (jordanContext ^ T) - jordanWeights * 0.00001;
@@ -205,23 +205,23 @@ Elman::weightIncrementBlocked(const matrix::Matrix& xsi_,
 void
 Elman::updateWeights(const NetUpdate& update) {
   int layernum = layers.size();
-  assert(weights.size() == (unsigned)layernum);
-  assert(bias.size() == (unsigned)layernum);
-  assert((int)update.weights.size() == layernum &&
-         (int)update.other.size() == (useBypass != 0) + (useElman != 0) + (useJordan != 0));
+  assert(weights.size() == static_cast<unsigned>(layernum));
+  assert(bias.size() == static_cast<unsigned>(layernum));
+  assert(static_cast<int>(update.weights.size()) == layernum &&
+         static_cast<int>(update.other.size()) == (useBypass != 0) + (useElman != 0) + (useJordan != 0));
 
-  for (int i = 0; i < layernum; i++) {
+  for (int i = 0; i < layernum; ++i) {
     weights[i] += update.weights[i];
     bias[i] += update.bias[i];
   }
   int k = 0;
   if (useBypass) {
     bypassWeights += update.other[k];
-    k++;
+    ++k;
   }
   if (useElman) {
     elmanWeights += update.other[k];
-    k++;
+    ++k;
   }
   if (useJordan)
     jordanWeights += update.other[k];

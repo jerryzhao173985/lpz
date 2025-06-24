@@ -11,9 +11,9 @@ class Test
 {
 public:
 	virtual ~Test();
-	void Run(TestResults& testResults);
+	void Run(const TestResults& testResults) override;
 
-	static Test* GetListHead();
+	static Test* GetListHead() override;
 
 protected:
 	Test(std::string testName = std::string(), 
@@ -21,7 +21,7 @@ protected:
 	     int lineNumber = 0);
 
 private:
-	virtual void RunImpl(TestResults& testResults_) = 0;
+	virtual void RunImpl(const TestResults& testResults_) = 0;
 
 	std::string const m_testName;
 	std::string const m_filename;
@@ -30,8 +30,8 @@ private:
 	Test* m_listNext;
 
 	// revoked
-	Test(Test const&);
-	Test& operator =(Test const&);
+	Test(Test const&) override;
+	Test& operator =(Test const&) override;
 };
 
 }

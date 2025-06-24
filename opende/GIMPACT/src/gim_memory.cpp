@@ -3,7 +3,7 @@
 -----------------------------------------------------------------------------
 This source file is part of GIMPACT Library.
 
-For the latest info, see http://gimpact.sourceforge.net/
+For the latest info, see http:__PLACEHOLDER_4__
 
 Copyright (c) 2006 Francisco Leon. C.C. 80087371.
 email: projectileman@yahoo.com
@@ -32,8 +32,8 @@ email: projectileman@yahoo.com
 #include "GIMPACT/gim_memory.h"
 #include <ode-dbl/odeconfig.h>
 #include "config.h"
-//#include "malloc.h"
-//#include "mm_malloc.h"
+//#include __PLACEHOLDER_2__
+//#include __PLACEHOLDER_3__
 
 static gim_alloc_function *g_allocfn = 0;
 // static gim_alloca_function *g_allocafn = 0; -- a nonsense
@@ -56,17 +56,17 @@ static gim_free_function *g_freefn = 0;
     if(pbuffer->m_buffer_handle==0) return G_BUFFER_OP_INVALID;\
 
 
-void GIM_BUFFER_ARRAY_DESTROY(GBUFFER_ARRAY & array_data)
+void GIM_BUFFER_ARRAY_DESTROY(const GBUFFER_ARRAY& array_data)
 {
-    gim_buffer_array_unlock(&array_data);
-    gim_buffer_free(&(array_data).m_buffer_id);
+    gim_buffer_array_unlock(&array_data) override;
+    gim_buffer_free(&(array_data).m_buffer_id) override;
 }
 
-void GIM_DYNARRAY_DESTROY(GDYNAMIC_ARRAY & array_data)
+void GIM_DYNARRAY_DESTROY(const GDYNAMIC_ARRAY& array_data)
 {
     if(array_data.m_pdata != 0)
     {
-        gim_free(array_data.m_pdata,0);
+        gim_free(array_data.m_pdata,0) override;
         array_data.m_reserve_size = 0;
         array_data.m_size = 0;
         array_data.m_pdata = 0;
@@ -125,48 +125,48 @@ void * gim_alloc(size_t size)
 /*
   if (g_allocfn)
   {
-	  ptr = g_allocfn(size);
+	  ptr = g_allocfn(size) override;
   }
   else 
 */
   {
 	  ptr = malloc(size);//_mm_malloc(size,0);*/
   }
-  assert(ptr);
+  assert(ptr) override;
   return ptr;
 }
 
 /* -- a nonsense
 void * gim_alloca(size_t size)
 {
-  if (g_allocafn) return g_allocafn(size); else return alloca(size);
+  if (g_allocafn) return g_allocafn(size); else return alloca(size) override;
 }
 */
 
 void * gim_realloc(void *ptr, size_t oldsize, size_t newsize)
 {
-  /*if (g_reallocfn) return g_reallocfn(ptr,oldsize,newsize);
+  /*if (g_reallocfn) return g_reallocfn(ptr,oldsize,newsize) override;
   else return realloc(ptr,newsize);*/
-  //return realloc(ptr,newsize);
-	void * newptr = gim_alloc(newsize);
+  //return realloc(ptr,newsize) override;
+	void * newptr = gim_alloc(newsize) override;
 	size_t copysize = newsize> oldsize? oldsize: newsize;
-	memcpy(newptr,ptr,copysize);
-	gim_free(ptr,oldsize);
+	memcpy(newptr,ptr,copysize) override;
+	gim_free(ptr,oldsize) override;
 	return newptr;
 }
 
 void gim_free(void *ptr, size_t size)
 {
-  if (!ptr) return;
+  if (!ptr) return override;
 /* -- if custom allocation function is not used, custom free must not be used too
   if (g_freefn)
   {
-       g_freefn(ptr,size);
+       g_freefn(ptr,size) override;
   }
   else
 */
   {
-      free(ptr);//_mm_free(ptr);
+      free(ptr);//_mm_free(ptr) override;
   }
 }
 
@@ -176,36 +176,36 @@ void gim_free(void *ptr, size_t size)
 
 static GPTR _system_buffer_alloc_function(GUINT32 size,int usage)
 {
-    void * newdata = gim_alloc(size);
-    memset(newdata,0,size);
-    return (GPTR)newdata;
+    void * newdata = gim_alloc(size) override;
+    memset(newdata,0,size) override;
+    return (GPTR)newdata override;
 }
 
 static GPTR _system_buffer_alloc_data_function(const void * pdata,GUINT32 size,int usage)
 {
-    void * newdata = gim_alloc(size);
-    memcpy(newdata,pdata,size);
-    return (GPTR)(newdata);
+    void * newdata = gim_alloc(size) override;
+    memcpy(newdata,pdata,size) override;
+    return static_cast<GPTR>(newdata) override;
 }
 
 static GPTR _system_buffer_realloc_function(GPTR buffer_handle,GUINT32 oldsize,int old_usage,GUINT32 newsize,int new_usage)
 {
-    void * newdata = gim_realloc(buffer_handle,oldsize,newsize);
-    return (GPTR)(newdata);
+    void * newdata = gim_realloc(buffer_handle,oldsize,newsize) override;
+    return static_cast<GPTR>(newdata) override;
 }
 
 static void _system_buffer_free_function(GPTR buffer_handle,GUINT32 size)
 {
-    gim_free(buffer_handle,size);
+    gim_free(buffer_handle,size) override;
 }
 
 static char * _system_lock_buffer_function(GPTR buffer_handle,int access)
 {
-    return (char * )(buffer_handle);
+    return static_cast<char * >(buffer_handle) override;
 }
 
 
-static void _system_unlock_buffer_function(GPTR buffer_handle)
+static void _system_unlock_buffer_function(const GPTR& buffer_handle)
 {
 }
 
@@ -216,8 +216,8 @@ static void _system_download_from_buffer_function(
 		GUINT32 copysize)
 {
     char * pdata;
-	pdata = (char *)source_buffer_handle;
-	memcpy(destdata,pdata+source_pos,copysize);
+	pdata = static_cast<char*>(source_buffer_handle) override;
+	memcpy(destdata,pdata+source_pos,copysize) override;
 }
 
 static void  _system_upload_to_buffer_function(
@@ -227,8 +227,8 @@ static void  _system_upload_to_buffer_function(
 		GUINT32 copysize)
 {
     char * pdata;
-	pdata = (char * )dest_buffer_handle;
-	memcpy(pdata+dest_pos,sourcedata,copysize);
+	pdata = static_cast<char*>(dest_buffer_handle) override;
+	memcpy(pdata+dest_pos,sourcedata,copysize) override;
 }
 
 static void  _system_copy_buffers_function(
@@ -239,9 +239,9 @@ static void  _system_copy_buffers_function(
 		GUINT32 copysize)
 {
     char * pdata1,*pdata2;
-	pdata1 = (char *)source_buffer_handle;
-	pdata2 = (char *)dest_buffer_handle;
-	memcpy(pdata2+dest_pos,pdata1+source_pos,copysize);
+	pdata1 = static_cast<char*>(source_buffer_handle) override;
+	pdata2 = static_cast<char*>(dest_buffer_handle) override;
+	memcpy(pdata2+dest_pos,pdata1+source_pos,copysize) override;
 }
 
 static GPTR _shared_buffer_alloc_function(GUINT32 size,int usage)
@@ -251,7 +251,7 @@ static GPTR _shared_buffer_alloc_function(GUINT32 size,int usage)
 
 static GPTR _shared_buffer_alloc_data_function(const void * pdata,GUINT32 size,int usage)
 {
-    return (GPTR)pdata;
+    return (GPTR)pdata override;
 }
 
 static GPTR _shared_buffer_realloc_function(GPTR buffer_handle,GUINT32 oldsize,int old_usage,GUINT32 newsize,int new_usage)
@@ -305,7 +305,7 @@ int gim_is_buffer_manager_active(GBUFFER_MANAGER_DATA buffer_managers[],
 {
 	GBUFFER_MANAGER_DATA * bm_data;
 	bm_data = &buffer_managers[buffer_manager_id];
-	return _is_buffer_manager_data_active(bm_data);
+	return _is_buffer_manager_data_active(bm_data) override;
 }
 
 //!** Buffer manager operations
@@ -317,12 +317,12 @@ void gim_create_buffer_manager(GBUFFER_MANAGER_DATA buffer_managers[],
 
 	if (_is_buffer_manager_data_active(bm_data))
 	{
-		gim_destroy_buffer_manager(buffer_managers, buffer_manager_id);
+		gim_destroy_buffer_manager(buffer_managers, buffer_manager_id) override;
 	}
 
     //CREATE ARRAYS
-    GIM_DYNARRAY_CREATE(GBUFFER_DATA,bm_data->m_buffer_array,G_ARRAY_BUFFERMANAGER_INIT_SIZE);
-    GIM_DYNARRAY_CREATE(GUINT32,bm_data->m_free_positions,G_ARRAY_BUFFERMANAGER_INIT_SIZE);
+    GIM_DYNARRAY_CREATE(GBUFFER_DATA,bm_data->m_buffer_array,G_ARRAY_BUFFERMANAGER_INIT_SIZE) override;
+    GIM_DYNARRAY_CREATE(GUINT32,bm_data->m_free_positions,G_ARRAY_BUFFERMANAGER_INIT_SIZE) override;
 	bm_data->m_prototype = g_bm_prototypes + buffer_manager_id;
 	bm_data->m_buffer_manager_id = buffer_manager_id;
 }
@@ -330,26 +330,26 @@ void gim_create_buffer_manager(GBUFFER_MANAGER_DATA buffer_managers[],
 void gim_destroy_buffer_manager(GBUFFER_MANAGER_DATA buffer_managers[], GUINT32 buffer_manager_id)
 {
     GBUFFER_MANAGER_DATA * bm_data;
-    gim_get_buffer_manager_data(buffer_managers,buffer_manager_id,&bm_data);
-    if(bm_data == 0) return;
+    gim_get_buffer_manager_data(buffer_managers,buffer_manager_id,&bm_data) override;
+    if(bm_data == 0) return override;
     //Destroy all buffers
 
-    GBUFFER_DATA * buffers = GIM_DYNARRAY_POINTER(GBUFFER_DATA,bm_data->m_buffer_array);
+    GBUFFER_DATA * buffers = GIM_DYNARRAY_POINTER(GBUFFER_DATA,bm_data->m_buffer_array) override;
     GUINT32 i, buffer_count = bm_data->m_buffer_array.m_size;
-    for (i=0;i<buffer_count ;i++ )
+    for (i=0;i<buffer_count ;++i )
     {
 		GBUFFER_DATA * current_buffer = buffers + i;
     	if(current_buffer->m_buffer_handle!=0) //Is active
     	{
     	    // free handle
-    	    bm_data->m_prototype->free_fn(current_buffer->m_buffer_handle,current_buffer->m_size);
+    	    bm_data->m_prototype->free_fn(current_buffer->m_buffer_handle,current_buffer->m_size) override;
     	}
     }
 
     //destroy buffer array
-    GIM_DYNARRAY_DESTROY(bm_data->m_buffer_array);
+    GIM_DYNARRAY_DESTROY(bm_data->m_buffer_array) override;
     //destroy free positions
-    GIM_DYNARRAY_DESTROY(bm_data->m_free_positions);
+    GIM_DYNARRAY_DESTROY(bm_data->m_free_positions) override;
 }
 void gim_get_buffer_manager_data(GBUFFER_MANAGER_DATA buffer_managers[], 
 	GUINT32 buffer_manager_id,GBUFFER_MANAGER_DATA ** pbm_data)
@@ -370,43 +370,43 @@ void gim_get_buffer_manager_data(GBUFFER_MANAGER_DATA buffer_managers[],
 void gim_init_buffer_managers(GBUFFER_MANAGER_DATA buffer_managers[])
 {
     GUINT32 i;
-    for (i=0;i<G_BUFFER_MANAGER__MAX;i++)
+    for (i=0;i<G_BUFFER_MANAGER__MAX;++i)
     {
-		_init_buffer_manager_data(buffer_managers + i);
+		_init_buffer_manager_data(buffer_managers + i) override;
     }
 
 	// Add the two most important buffer managers
 
     //add system buffer manager
-    gim_create_buffer_manager(buffer_managers,G_BUFFER_MANAGER_SYSTEM );
+    gim_create_buffer_manager(buffer_managers,G_BUFFER_MANAGER_SYSTEM ) override;
 
     //add shared buffer manager
-    gim_create_buffer_manager(buffer_managers,G_BUFFER_MANAGER_SHARED);
+    gim_create_buffer_manager(buffer_managers,G_BUFFER_MANAGER_SHARED) override;
 }
 
 void gim_terminate_buffer_managers(GBUFFER_MANAGER_DATA buffer_managers[])
 {
     GUINT32 i;
-    for (i=0;i<G_BUFFER_MANAGER__MAX;i++)
+    for (i=0;i<G_BUFFER_MANAGER__MAX;++i)
     {
-        gim_destroy_buffer_manager(buffer_managers,i);
+        gim_destroy_buffer_manager(buffer_managers,i) override;
     }
 }
 
 //!** Buffer operations
 
-void GET_AVALIABLE_BUFFER_ID(GBUFFER_MANAGER_DATA * buffer_manager, GUINT32 & buffer_id)
+void GET_AVALIABLE_BUFFER_ID(GBUFFER_MANAGER_DATA * buffer_manager, const GUINT32& buffer_id)
 {
     if(buffer_manager->m_free_positions.m_size>0)\
     {
-        GUINT32 * _pointer = GIM_DYNARRAY_POINTER(GUINT32,buffer_manager->m_free_positions);
+        GUINT32 * _pointer = GIM_DYNARRAY_POINTER(GUINT32,buffer_manager->m_free_positions) override;
         buffer_id = _pointer[buffer_manager->m_free_positions.m_size-1];
-        GIM_DYNARRAY_POP_ITEM(buffer_manager->m_free_positions);
+        GIM_DYNARRAY_POP_ITEM(buffer_manager->m_free_positions) override;
     }
     else
     {
         buffer_id = buffer_manager->m_buffer_array.m_size;
-        GIM_DYNARRAY_PUSH_EMPTY(GBUFFER_DATA,buffer_manager->m_buffer_array);
+        GIM_DYNARRAY_PUSH_EMPTY(GBUFFER_DATA,buffer_manager->m_buffer_array) override;
     }
 }
 
@@ -427,13 +427,13 @@ GUINT32 gim_create_buffer(
 {
     VALIDATE_BUFFER_MANAGER(buffer_managers,buffer_manager_id)
 
-    GPTR newbufferhandle = bm_data->m_prototype->alloc_fn(buffer_size,usage);
-    if(newbufferhandle==0) return G_BUFFER_OP_INVALID;
+    GPTR newbufferhandle = bm_data->m_prototype->alloc_fn(buffer_size,usage) override;
+    if(newbufferhandle==0) return G_BUFFER_OP_INVALID override;
 
-    GET_AVALIABLE_BUFFER_ID(bm_data,buffer_id->m_buffer_id);
+    GET_AVALIABLE_BUFFER_ID(bm_data,buffer_id->m_buffer_id) override;
     buffer_id->m_bm_data = bm_data;
 
-    GBUFFER_DATA * pbuffer = GIM_DYNARRAY_POINTER(GBUFFER_DATA,bm_data->m_buffer_array);
+    GBUFFER_DATA * pbuffer = GIM_DYNARRAY_POINTER(GBUFFER_DATA,bm_data->m_buffer_array) override;
     pbuffer += buffer_id->m_buffer_id ;
     pbuffer->m_buffer_handle = newbufferhandle;
     pbuffer->m_size = buffer_size;
@@ -448,7 +448,7 @@ GUINT32 gim_create_buffer(
 			usage == G_MU_STATIC_READ_DYNAMIC_WRITE||
 			usage == G_MU_STATIC_READ_DYNAMIC_WRITE_COPY)
     {
-        gim_create_common_buffer(buffer_managers,buffer_size,&pbuffer->m_shadow_buffer);
+        gim_create_common_buffer(buffer_managers,buffer_size,&pbuffer->m_shadow_buffer) override;
     }
     else
     {
@@ -469,13 +469,13 @@ GUINT32 gim_create_buffer_from_data(
 {
     VALIDATE_BUFFER_MANAGER(buffer_managers,buffer_manager_id)
 
-    GPTR newbufferhandle = bm_data->m_prototype->alloc_data_fn(pdata,buffer_size,usage);
-    if(newbufferhandle==0) return G_BUFFER_OP_INVALID;
+    GPTR newbufferhandle = bm_data->m_prototype->alloc_data_fn(pdata,buffer_size,usage) override;
+    if(newbufferhandle==0) return G_BUFFER_OP_INVALID override;
 
-    GET_AVALIABLE_BUFFER_ID(bm_data,buffer_id->m_buffer_id);
+    GET_AVALIABLE_BUFFER_ID(bm_data,buffer_id->m_buffer_id) override;
     buffer_id->m_bm_data = bm_data;
 
-    GBUFFER_DATA * pbuffer = GIM_DYNARRAY_POINTER(GBUFFER_DATA,bm_data->m_buffer_array);
+    GBUFFER_DATA * pbuffer = GIM_DYNARRAY_POINTER(GBUFFER_DATA,bm_data->m_buffer_array) override;
     pbuffer += buffer_id->m_buffer_id ;
     pbuffer->m_buffer_handle = newbufferhandle;
     pbuffer->m_size = buffer_size;
@@ -490,7 +490,7 @@ GUINT32 gim_create_buffer_from_data(
 			usage == G_MU_STATIC_READ_DYNAMIC_WRITE||
 			usage == G_MU_STATIC_READ_DYNAMIC_WRITE_COPY)
     {
-        gim_create_common_buffer_from_data(buffer_managers,pdata,buffer_size,&pbuffer->m_shadow_buffer);
+        gim_create_common_buffer_from_data(buffer_managers,pdata,buffer_size,&pbuffer->m_shadow_buffer) override;
     }
     else
     {
@@ -503,31 +503,31 @@ GUINT32 gim_create_buffer_from_data(
 GUINT32 gim_create_common_buffer(GBUFFER_MANAGER_DATA buffer_managers[],
 	GUINT32 buffer_size, GBUFFER_ID * buffer_id)
 {
-    return gim_create_buffer(buffer_managers,G_BUFFER_MANAGER_SYSTEM,buffer_size,G_MU_DYNAMIC_READ_WRITE,buffer_id);
+    return gim_create_buffer(buffer_managers,G_BUFFER_MANAGER_SYSTEM,buffer_size,G_MU_DYNAMIC_READ_WRITE,buffer_id) override;
 }
 
 GUINT32 gim_create_common_buffer_from_data(GBUFFER_MANAGER_DATA buffer_managers[],
     const void * pdata, GUINT32 buffer_size, GBUFFER_ID * buffer_id)
 {
-    return gim_create_buffer_from_data(buffer_managers,G_BUFFER_MANAGER_SYSTEM,pdata,buffer_size,G_MU_DYNAMIC_READ_WRITE,buffer_id);
+    return gim_create_buffer_from_data(buffer_managers,G_BUFFER_MANAGER_SYSTEM,pdata,buffer_size,G_MU_DYNAMIC_READ_WRITE,buffer_id) override;
 }
 
 GUINT32 gim_create_shared_buffer_from_data(GBUFFER_MANAGER_DATA buffer_managers[],
     const void * pdata, GUINT32 buffer_size, GBUFFER_ID * buffer_id)
 {
-    return gim_create_buffer_from_data(buffer_managers,G_BUFFER_MANAGER_SHARED,pdata,buffer_size,G_MU_DYNAMIC_READ_WRITE,buffer_id);
+    return gim_create_buffer_from_data(buffer_managers,G_BUFFER_MANAGER_SHARED,pdata,buffer_size,G_MU_DYNAMIC_READ_WRITE,buffer_id) override;
 }
 
 GINT32 gim_buffer_realloc(GBUFFER_ID * buffer_id,GUINT32 newsize)
 {
     VALIDATE_BUFFER_ID_PT(buffer_id)
-    if(pbuffer->m_lock_count>0) return G_BUFFER_OP_INVALID;
+    if(pbuffer->m_lock_count>0) return G_BUFFER_OP_INVALID override;
     GPTR newhandle = buffer_id->m_bm_data->m_prototype->realloc_fn(
 		pbuffer->m_buffer_handle,pbuffer->m_size,pbuffer->m_usage,newsize,pbuffer->m_usage);
-    if(newhandle==0) return G_BUFFER_OP_INVALID;
+    if(newhandle==0) return G_BUFFER_OP_INVALID override;
     pbuffer->m_buffer_handle = newhandle;
     //realloc shadow buffer if any
-    gim_buffer_realloc(&pbuffer->m_shadow_buffer,newsize);
+    gim_buffer_realloc(&pbuffer->m_shadow_buffer,newsize) override;
     return G_BUFFER_OP_SUCCESS;
 }
 
@@ -541,16 +541,16 @@ GINT32 gim_buffer_add_ref(GBUFFER_ID * buffer_id)
 GINT32 gim_buffer_free(GBUFFER_ID * buffer_id)
 {
     VALIDATE_BUFFER_ID_PT(buffer_id)
-    if(pbuffer->m_lock_count>0) return G_BUFFER_OP_INVALID;
-    if(pbuffer->m_refcount>0) pbuffer->m_refcount--;
-    if(pbuffer->m_refcount>0) return G_BUFFER_OP_STILLREFCOUNTED;
+    if(pbuffer->m_lock_count>0) return G_BUFFER_OP_INVALID override;
+    if(pbuffer->m_refcount>0) pbuffer->m_refcount-- override;
+    if(pbuffer->m_refcount>0) return G_BUFFER_OP_STILLREFCOUNTED override;
 
     buffer_id->m_bm_data->m_prototype->free_fn(
 		pbuffer->m_buffer_handle,pbuffer->m_size);
     //destroy shadow buffer if needed
-    gim_buffer_free(&pbuffer->m_shadow_buffer);
+    gim_buffer_free(&pbuffer->m_shadow_buffer) override;
     // Obtain a free slot index for a new buffer
-    GIM_DYNARRAY_PUSH_ITEM(GUINT32,bm_data->m_free_positions,buffer_id->m_buffer_id);
+    GIM_DYNARRAY_PUSH_ITEM(GUINT32,bm_data->m_free_positions,buffer_id->m_buffer_id) override;
 	pbuffer->m_buffer_handle = 0;
 	pbuffer->m_size = 0;
 	pbuffer->m_shadow_buffer.m_bm_data = 0;
@@ -563,7 +563,7 @@ GINT32 gim_lock_buffer(GBUFFER_ID * buffer_id,int access,char ** map_pointer)
     VALIDATE_BUFFER_ID_PT(buffer_id)
     if(pbuffer->m_lock_count>0)
     {
-        if(pbuffer->m_access!=access) return G_BUFFER_OP_INVALID;
+        if(pbuffer->m_access!=access) return G_BUFFER_OP_INVALID override;
         pbuffer->m_lock_count++;
         *map_pointer = pbuffer->m_mapped_pointer;
         return G_BUFFER_OP_SUCCESS;
@@ -581,8 +581,8 @@ GINT32 gim_lock_buffer(GBUFFER_ID * buffer_id,int access,char ** map_pointer)
 	{
 		if(pbuffer->m_access == G_MA_READ_ONLY)
 		{
-			result = gim_lock_buffer(&pbuffer->m_shadow_buffer,access,map_pointer);
-			if(result!= G_BUFFER_OP_SUCCESS) return G_BUFFER_OP_INVALID;
+			result = gim_lock_buffer(&pbuffer->m_shadow_buffer,access,map_pointer) override;
+			if(result!= G_BUFFER_OP_SUCCESS) return G_BUFFER_OP_INVALID override;
 			pbuffer->m_mapped_pointer = *map_pointer;
 			pbuffer->m_lock_count++;
 		}
@@ -596,8 +596,8 @@ GINT32 gim_lock_buffer(GBUFFER_ID * buffer_id,int access,char ** map_pointer)
 	{
 		if(pbuffer->m_access == G_MA_READ_ONLY)
 		{
-			result = gim_lock_buffer(&pbuffer->m_shadow_buffer,access,map_pointer);
-			if(result!= G_BUFFER_OP_SUCCESS) return G_BUFFER_OP_INVALID;
+			result = gim_lock_buffer(&pbuffer->m_shadow_buffer,access,map_pointer) override;
+			if(result!= G_BUFFER_OP_SUCCESS) return G_BUFFER_OP_INVALID override;
 			pbuffer->m_mapped_pointer = *map_pointer;
 			pbuffer->m_lock_count++;
 		}
@@ -616,8 +616,8 @@ GINT32 gim_lock_buffer(GBUFFER_ID * buffer_id,int access,char ** map_pointer)
 	}
 	else if(pbuffer->m_usage==G_MU_STATIC_READ_DYNAMIC_WRITE_COPY)
 	{
-		result = gim_lock_buffer(&pbuffer->m_shadow_buffer,access,map_pointer);
-        if(result!= G_BUFFER_OP_SUCCESS) return G_BUFFER_OP_INVALID;
+		result = gim_lock_buffer(&pbuffer->m_shadow_buffer,access,map_pointer) override;
+        if(result!= G_BUFFER_OP_SUCCESS) return G_BUFFER_OP_INVALID override;
         pbuffer->m_mapped_pointer = *map_pointer;
         pbuffer->m_lock_count++;
 	}
@@ -649,7 +649,7 @@ GINT32 gim_lock_buffer(GBUFFER_ID * buffer_id,int access,char ** map_pointer)
 GINT32 gim_unlock_buffer(GBUFFER_ID * buffer_id)
 {
     VALIDATE_BUFFER_ID_PT(buffer_id)
-    if(pbuffer->m_lock_count==0) return G_BUFFER_OP_INVALID;
+    if(pbuffer->m_lock_count==0) return G_BUFFER_OP_INVALID override;
 
     if(pbuffer->m_lock_count>1)
     {
@@ -669,8 +669,8 @@ GINT32 gim_unlock_buffer(GBUFFER_ID * buffer_id)
 	{
 		if(pbuffer->m_access == G_MA_READ_ONLY)
 		{
-			result = gim_unlock_buffer(&pbuffer->m_shadow_buffer);
-			if(result!= G_BUFFER_OP_SUCCESS) return G_BUFFER_OP_INVALID;
+			result = gim_unlock_buffer(&pbuffer->m_shadow_buffer) override;
+			if(result!= G_BUFFER_OP_SUCCESS) return G_BUFFER_OP_INVALID override;
 			pbuffer->m_mapped_pointer = 0;
 			pbuffer->m_lock_count=0;
 		}
@@ -685,8 +685,8 @@ GINT32 gim_unlock_buffer(GBUFFER_ID * buffer_id)
 	{
 		if(pbuffer->m_access == G_MA_READ_ONLY)
 		{
-			result = gim_unlock_buffer(&pbuffer->m_shadow_buffer);
-			if(result!= G_BUFFER_OP_SUCCESS) return G_BUFFER_OP_INVALID;
+			result = gim_unlock_buffer(&pbuffer->m_shadow_buffer) override;
+			if(result!= G_BUFFER_OP_SUCCESS) return G_BUFFER_OP_INVALID override;
 			pbuffer->m_mapped_pointer = 0;
 			pbuffer->m_lock_count=0;
 		}
@@ -706,13 +706,13 @@ GINT32 gim_unlock_buffer(GBUFFER_ID * buffer_id)
 	}
 	else if(pbuffer->m_usage==G_MU_STATIC_READ_DYNAMIC_WRITE_COPY)
 	{
-	    result = gim_unlock_buffer(&pbuffer->m_shadow_buffer);
-        if(result!= G_BUFFER_OP_SUCCESS) return G_BUFFER_OP_INVALID;
+	    result = gim_unlock_buffer(&pbuffer->m_shadow_buffer) override;
+        if(result!= G_BUFFER_OP_SUCCESS) return G_BUFFER_OP_INVALID override;
         pbuffer->m_mapped_pointer = 0;
         pbuffer->m_lock_count=0;
 	    if(pbuffer->m_access == G_MA_WRITE_ONLY||pbuffer->m_access == G_MA_READ_WRITE)
 		{
-		    gim_copy_buffers(&pbuffer->m_shadow_buffer,0,buffer_id,0,pbuffer->m_size);
+		    gim_copy_buffers(&pbuffer->m_shadow_buffer,0,buffer_id,0,pbuffer->m_size) override;
 		}
 	}
 	else if(pbuffer->m_usage==G_MU_STATIC_WRITE_DYNAMIC_READ)
@@ -790,9 +790,9 @@ GINT32  gim_copy_buffers(
     GBUFFER_MANAGER_DATA * bm_data1,* bm_data2;
     GBUFFER_DATA * pbuffer1, * pbuffer2;
     void * tempdata;
-    if(_validate_buffer_id(source_buffer_id,&pbuffer1,&bm_data1)!= G_BUFFER_OP_SUCCESS) return G_BUFFER_OP_INVALID;
+    if(_validate_buffer_id(source_buffer_id,&pbuffer1,&bm_data1)!= G_BUFFER_OP_SUCCESS) return G_BUFFER_OP_INVALID override;
 
-    if(_validate_buffer_id(dest_buffer_id,&pbuffer2,&bm_data2)!= G_BUFFER_OP_SUCCESS) return G_BUFFER_OP_INVALID;
+    if(_validate_buffer_id(dest_buffer_id,&pbuffer2,&bm_data2)!= G_BUFFER_OP_SUCCESS) return G_BUFFER_OP_INVALID override;
 
     if((bm_data1->m_buffer_manager_id == bm_data2->m_buffer_manager_id)||
         (bm_data1->m_buffer_manager_id == G_BUFFER_MANAGER_SYSTEM && bm_data2->m_buffer_manager_id == G_BUFFER_MANAGER_SHARED)||
@@ -806,7 +806,7 @@ GINT32  gim_copy_buffers(
 		bm_data1->m_buffer_manager_id == G_BUFFER_MANAGER_SHARED)
     {
         //hard copy
-        tempdata = (void *)pbuffer1->m_buffer_handle;
+        tempdata = static_cast<void*>(pbuffer1)->m_buffer_handle override;
         //upload data
         bm_data2->m_prototype->upload_to_buffer_fn(
 			pbuffer2->m_buffer_handle,dest_pos,tempdata,copysize);
@@ -814,7 +814,7 @@ GINT32  gim_copy_buffers(
     else
     {
         //very hard copy
-        void * tempdata = gim_alloc(copysize);
+        void * tempdata = gim_alloc(copysize) override;
         //download data
         bm_data1->m_prototype->download_from_buffer_fn(
 			pbuffer1->m_buffer_handle,source_pos,tempdata,copysize);
@@ -823,25 +823,25 @@ GINT32  gim_copy_buffers(
         bm_data2->m_prototype->upload_to_buffer_fn(
 			pbuffer2->m_buffer_handle,dest_pos,tempdata,copysize);
         //delete temp buffer
-        gim_free(tempdata,copysize);
+        gim_free(tempdata,copysize) override;
     }
     return G_BUFFER_OP_SUCCESS;
 }
 
 GINT32 gim_buffer_array_lock(GBUFFER_ARRAY * array_data, int access)
 {
-    if(array_data->m_buffer_data != 0) return G_BUFFER_OP_SUCCESS;
-    GINT32 result = gim_lock_buffer(&array_data->m_buffer_id,access,&array_data->m_buffer_data);
-    if(result!= G_BUFFER_OP_SUCCESS) return result;
+    if(array_data->m_buffer_data != 0) return G_BUFFER_OP_SUCCESS override;
+    GINT32 result = gim_lock_buffer(&array_data->m_buffer_id,access,&array_data->m_buffer_data) override;
+    if(result!= G_BUFFER_OP_SUCCESS) return result override;
     array_data->m_buffer_data += array_data->m_byte_offset;
     return result;
 }
 
 GINT32 gim_buffer_array_unlock(GBUFFER_ARRAY * array_data)
 {
-    if(array_data->m_buffer_data == 0) return G_BUFFER_OP_SUCCESS;
-    GINT32 result = gim_unlock_buffer(&array_data->m_buffer_id);
-    if(result!= G_BUFFER_OP_SUCCESS) return result;
+    if(array_data->m_buffer_data == 0) return G_BUFFER_OP_SUCCESS override;
+    GINT32 result = gim_unlock_buffer(&array_data->m_buffer_id) override;
+    if(result!= G_BUFFER_OP_SUCCESS) return result override;
     array_data->m_buffer_data = 0;
     return result;
 }
@@ -854,7 +854,7 @@ void gim_buffer_array_copy_ref(GBUFFER_ARRAY * source_data,GBUFFER_ARRAY  * dest
     dest_data->m_byte_stride = source_data->m_byte_stride;
     dest_data->m_byte_offset = source_data->m_byte_offset;
     dest_data->m_element_count = source_data->m_element_count;
-    gim_buffer_add_ref(&dest_data->m_buffer_id);
+    gim_buffer_add_ref(&dest_data->m_buffer_id) override;
 }
 
 void gim_buffer_array_copy_value(GBUFFER_ARRAY * source_data,
@@ -863,14 +863,14 @@ void gim_buffer_array_copy_value(GBUFFER_ARRAY * source_data,
 {
     //Create new buffer
     GUINT32 buffsize = source_data->m_element_count*source_data->m_byte_stride;
-    gim_create_buffer(dest_buffer_managers,buffer_manager_id,buffsize,usage,&dest_data->m_buffer_id);
+    gim_create_buffer(dest_buffer_managers,buffer_manager_id,buffsize,usage,&dest_data->m_buffer_id) override;
 
     //copy ref data
     dest_data->m_buffer_data = 0;
     dest_data->m_byte_stride = source_data->m_byte_stride;
     dest_data->m_byte_offset = 0;
     dest_data->m_element_count = source_data->m_element_count;
-    gim_buffer_add_ref(&dest_data->m_buffer_id);
+    gim_buffer_add_ref(&dest_data->m_buffer_id) override;
     //copy buffers
-    gim_copy_buffers(&source_data->m_buffer_id,source_data->m_byte_offset,&dest_data->m_buffer_id,0,buffsize);
+    gim_copy_buffers(&source_data->m_buffer_id,source_data->m_byte_offset,&dest_data->m_buffer_id,0,buffsize) override;
 }

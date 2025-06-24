@@ -45,50 +45,50 @@ namespace lpzrobots {
     /** sets the pose of the vehicle
         @param pose desired 4x4 pose matrix
     */
-    virtual void placeIntern(const osg::Matrix& pose) {}
+    virtual void placeIntern(const osg::Matrix& pose) override {}
 
     /** returns actual sensorvalues
         @param sensors sensors scaled to [-1,1]
         @param sensornumber length of the sensor array
         @return number of actually written sensors
     */
-    virtual int getSensorsIntern(sensor* sensors, int sensornumber) override;
+    virtual int getSensorsIntern(sensor* sensors, int sensornumber);
 
     /** sets actual motorcommands
         @param motors motors scaled to [-1,1]
         @param motornumber length of the motor array
     */
-    virtual void setMotorsIntern(const double* motors, int motornumber) override;
+    virtual void setMotorsIntern(const double* motors, int motornumber);
 
     /** returns number of sensors
      */
-    virtual int getSensorNumberInternIntern() {return sensorEnd - sensorStart + 1; }
+    virtual int getSensorNumberInternIntern() override {return sensorEnd - sensorStart + 1; }
 
     /** returns number of motors
      */
-    virtual int getMotorNumberInternIntern() {return motorEnd - motorStart + 1; }
+    virtual int getMotorNumberInternIntern() override {return motorEnd - motorStart + 1; }
 
     /** this function is called in each timestep. It should perform robot-internal checks,
         like space-internal collision detection, sensor resets/update etc.
         @param globalData structure that contains global data from the simulation environment
     */
-    virtual void doInternalStuff(GlobalData& globalData) {}
+    virtual void doInternalStuff(const GlobalData& globalData) override {}
 
   protected:
     /** the main object of the robot, which is used for position and speed tracking */
-    virtual Primitive* getMainPrimitive() const { return 0; }
+    virtual Primitive* getMainPrimitive() const override { return 0; }
 
-    static bool parseDataFileForHeader(FILE* f, int & sensorstart, int& sensorend,  int& motorstart, int& motorend);
-    static bool parseDataLine(matrix::Matrix& data, FILE* f);
+    static bool parseDataFileForHeader(FILE* f, const int& sensorstart, const int& sensorend,  const int& motorstart, const int& motorend);
+    static bool parseDataLine(matrix::const Matrix& data, FILE* f);
     static bool isEmpty(const char* c);
     static bool check4Number(const char* c);
 
 
   protected:
-    int sensorStart;
-    int sensorEnd;
-    int motorStart;
-    int motorEnd;
+    int sensorStart = 0;
+    int sensorEnd = 0;
+    int motorStart = 0;
+    int motorEnd = 0;
 
     matrix::Matrix sensorData;
     const char* filename;

@@ -30,12 +30,12 @@
      If all boolean parametes are false, id is set to true (equivalent to One2OneWiring)
 */
 struct DerivativeWiringConf {
-  bool useId;        //< include zeroth derivative
-  bool useFirstD;   ///< include first derivative
-  bool useSecondD;  ///< second include second derivative
-  double eps;       ///< update rate for floating average (0 -> no sensor variation, 1 -> no smoothing)
-  double derivativeScale;   ///< factor for the derivatives
-  unsigned int blindMotors;   ///< number of motors that are blind (not given to robot)
+  bool useId = false;        //< include zeroth derivative
+  bool useFirstD = false;   ///< include first derivative
+  bool useSecondD = false;  ///< second include second derivative
+  double eps = 0;       ///< update rate for floating average (0 -> no sensor variation, 1 -> no smoothing)
+  double derivativeScale = 0;   ///< factor for the derivatives
+  unsigned int blindMotors = 0;   ///< number of motors that are blind (not given to robot)
 };
 
 
@@ -47,7 +47,7 @@ class DerivativeWiring : public AbstractWiring{
 public:
   /** constructor
       @param conf  for giving the wished configuration of DerivativeWiring
-      via \ref __DerivativeWiringConf "DerivativeWiringConf"
+      via \ref __DerivativeWiringConf __PLACEHOLDER_1__
       @param noise NoiseGenerator that is used for adding noise to sensor values
   */
   DerivativeWiring(const DerivativeWiringConf& conf,
@@ -55,12 +55,12 @@ public:
 
   /** destructor
    */
-  virtual ~DerivativeWiring() override;
+  virtual ~DerivativeWiring();
 
   /** Providing default configuration for DerivativeWiring with first derivative.
       No smoothing and no scaling. ( as static method )
    */
-  static DerivativeWiringConf getDefaultConf(){
+  static DerivativeWiringConf getDefaultConf() const {
     DerivativeWiringConf c;
     c.useId = true;        // use id
     c.useFirstD = false;    // use first derivative
@@ -75,7 +75,7 @@ public:
       smoothing over 4 steps and scale of 5. Use smaller noise!
       ( as static method )
    */
-  static DerivativeWiringConf getDefaultConf1(){
+  static DerivativeWiringConf getDefaultConf1() const {
     DerivativeWiringConf c;
     c.useId = false;       // do not use id
     c.useFirstD = true;    // use first derivative
@@ -86,18 +86,18 @@ public:
     return c;
   };
 
-  virtual void reset() override;
+  virtual void reset();
 
 protected:
 
-  virtual bool initIntern() override;
+  virtual bool initIntern();
 
   virtual bool wireSensorsIntern(const sensor* rsensors, int rsensornumber,
                                  sensor* csensors, int csensornumber,
-                                 double noise) override;
+                                 double noise);
 
   virtual bool wireMotorsIntern(motor* rmotors, int rmotornumber,
-                                const motor* cmotors, int cmotornumber) override;
+                                const motor* cmotors, int cmotornumber);
 
 protected:
   /** Calculate the first derivative of the sensorvalues given by the robot

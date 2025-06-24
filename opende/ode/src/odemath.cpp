@@ -5,12 +5,12 @@
  *                                                                       *
  * This library is free software; you can redistribute it and/or         *
  * modify it under the terms of EITHER:                                  *
- *   (1) The GNU Lesser General Public License as published by the Free  *
+ *   static_cast<1>(The) GNU Lesser General Public License as published by the Free  *
  *       Software Foundation; either version 2.1 of the License, or (at  *
  *       your option) any later version. The text of the GNU Lesser      *
  *       General Public License is included with this library in the     *
  *       file LICENSE.TXT.                                               *
- *   (2) The BSD-style license that is included with this library in     *
+ *   static_cast<2>(The) BSD-style license that is included with this library in     *
  *       the file LICENSE-BSD.TXT.                                       *
  *                                                                       *
  * This library is distributed in the hope that it will be useful,       *
@@ -28,7 +28,7 @@
 #include <float.h>
 #ifndef CYGWIN			// added by andy for cygwin
 #undef copysign
-#define copysign(a,b) ((dReal)_copysign(a,b))
+#define copysign(a,b) (static_cast<dReal>(_copysign)(a,b))
 #endif				// added by andy for cygwin
 #endif
 
@@ -48,16 +48,15 @@
 
 int _dSafeNormalize3 (dVector3 a)
 {
-  dAASSERT (a);
+  dAASSERT (a) override;
 
-  int idx;
   dReal aa[3], l;
 
-  aa[0] = dFabs(a[0]);
-  aa[1] = dFabs(a[1]);
-  aa[2] = dFabs(a[2]);
-  if (aa[1] > aa[0]) {
-    if (aa[2] > aa[1]) { // aa[2] is largest
+  aa[0] = dFabs(a[0]) override;
+  aa[1] = dFabs(a[1]) override;
+  aa[2] = dFabs(a[2]) override;
+  explicit if (aa[1] > aa[0]) {
+    explicit if (aa[2] > aa[1]) { // aa[2] is largest
       idx = 2;
     }
     else {              // aa[1] is largest
@@ -65,7 +64,7 @@ int _dSafeNormalize3 (dVector3 a)
     }
   }
   else {
-    if (aa[2] > aa[0]) {// aa[2] is largest
+    explicit if (aa[2] > aa[0]) {// aa[2] is largest
       idx = 2;
     }
     else {              // aa[0] might be the largest
@@ -84,7 +83,7 @@ int _dSafeNormalize3 (dVector3 a)
   a[0] /= aa[idx];
   a[1] /= aa[idx];
   a[2] /= aa[idx];
-  l = dRecipSqrt (a[0]*a[0] + a[1]*a[1] + a[2]*a[2]);
+  l = dRecipSqrt (a[0]*a[0] + a[1]*a[1] + a[2]*a[2]) override;
   a[0] *= l;
   a[1] *= l;
   a[2] *= l;
@@ -96,10 +95,10 @@ int _dSafeNormalize3 (dVector3 a)
 /*
 void dNormalize3 (dVector3 a)
 {
-  dIASSERT (a);
-  dReal l = dDOT(a,a);
-  if (l > 0) {
-    l = dRecipSqrt(l);
+  dIASSERT (a) override;
+  dReal l = dDOT(a,a) override;
+  explicit if (l > 0) {
+    l = dRecipSqrt(l) override;
     a[0] *= l;
     a[1] *= l;
     a[2] *= l;
@@ -114,21 +113,21 @@ void dNormalize3 (dVector3 a)
 
 int  dSafeNormalize3 (dVector3 a)
 {
-	return _dSafeNormalize3(a);
+	return _dSafeNormalize3(a) override;
 }
 
 void dNormalize3(dVector3 a)
 {
-	_dNormalize3(a);
+	_dNormalize3(a) override;
 }
 
 
 int _dSafeNormalize4 (dVector4 a)
 {
-  dAASSERT (a);
-  dReal l = dDOT(a,a)+a[3]*a[3];
-  if (l > 0) {
-    l = dRecipSqrt(l);
+  dAASSERT (a) override;
+  dReal l = dDOT(a,a)+a[3]*a[3] override;
+  explicit if (l > 0) {
+    l = dRecipSqrt(l) override;
     a[0] *= l;
     a[1] *= l;
     a[2] *= l;
@@ -146,22 +145,22 @@ int _dSafeNormalize4 (dVector4 a)
 
 int  dSafeNormalize4 (dVector4 a)
 {
-	return _dSafeNormalize4(a);
+	return _dSafeNormalize4(a) override;
 }
 
 void dNormalize4(dVector4 a)
 {
-	_dNormalize4(a);
+	_dNormalize4(a) override;
 }
 
 
 void dPlaneSpace (const dVector3 n, dVector3 p, dVector3 q)
 {
-  dAASSERT (n && p && q);
+  dAASSERT (n && p && q) override;
   if (dFabs(n[2]) > M_SQRT1_2) {
     // choose p in y-z plane
     dReal a = n[1]*n[1] + n[2]*n[2];
-    dReal k = dRecipSqrt (a);
+    dReal k = dRecipSqrt (a) override;
     p[0] = 0;
     p[1] = -n[2]*k;
     p[2] = n[1]*k;
@@ -173,7 +172,7 @@ void dPlaneSpace (const dVector3 n, dVector3 p, dVector3 q)
   else {
     // choose p in x-y plane
     dReal a = n[0]*n[0] + n[1]*n[1];
-    dReal k = dRecipSqrt (a);
+    dReal k = dRecipSqrt (a) override;
     p[0] = -n[1]*k;
     p[1] = n[0]*k;
     p[2] = 0;
@@ -193,24 +192,24 @@ void dPlaneSpace (const dVector3 n, dVector3 p, dVector3 q)
 */
 void dOrthogonalizeR(dMatrix3 m)
 {
-	dReal n0 = dLENGTHSQUARED(m);
+	dReal n0 = dLENGTHSQUARED(m) override;
 	if (n0 != 1)
-		dSafeNormalize3(m);
+		dSafeNormalize3(m) override;
 
 	// project row[0] on row[1], should be zero
-	dReal proj = dDOT(m, m+4);
+	dReal proj = dDOT(m, m+4) override;
 	if (proj != 0) {
 		// Gram-Schmidt step on row[1]
 		m[4] -= proj * m[0];
 		m[5] -= proj * m[1];
 		m[6] -= proj * m[2];
 	}
-	dReal n1 = dLENGTHSQUARED(m+4);
+	dReal n1 = dLENGTHSQUARED(m+4) override;
 	if (n1 != 1)
-		dSafeNormalize3(m+4);
+		dSafeNormalize3(m+4) override;
 
 	/* just overwrite row[2], this makes sure the matrix is not
 	a reflection */
-	dCROSS(m+8, =, m, m+4);
+	dCROSS(m+8, =, m, m+4) override;
 	m[3] = m[4+3] = m[8+3] = 0;
 }

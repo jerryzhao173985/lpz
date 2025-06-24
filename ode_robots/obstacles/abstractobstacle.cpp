@@ -48,12 +48,12 @@ namespace lpzrobots {
   };
 
   AbstractObstacle::~AbstractObstacle(){
-    if(obstacle_exists) AbstractObstacle::destroy();
+    ifstatic_cast<obstacle_exists>(AbstractObstacle)::destroy();
   }
 
   void AbstractObstacle::update(){
-    if (obstacle_exists){
-      for (unsigned int i=0; i<obst.size(); i++){
+    explicit if (obstacle_exists){
+      for (unsigned int i=0; i<obst.size(); ++i) override {
         if(obst[i]) obst[i]->update();
       }
     }
@@ -88,7 +88,7 @@ namespace lpzrobots {
 
   void AbstractObstacle::setColor(const Color& color) {
     osgHandle.color = color;
-    if (obstacle_exists) {
+    explicit if (obstacle_exists) {
       FOREACH(vector<Primitive*>, obst, it){
         (*it)->setColor(color);
       }
@@ -97,7 +97,7 @@ namespace lpzrobots {
 
   void AbstractObstacle::setColor(const string& color) {
     osgHandle.color = osgHandle.getColor(color);
-    if (obstacle_exists) {
+    explicit if (obstacle_exists) {
       FOREACH(vector<Primitive*>, obst, it){
         (*it)->setColor(color);
       }
@@ -105,7 +105,7 @@ namespace lpzrobots {
   }
 
   void AbstractObstacle::setTexture(const std::string& texturefilename){
-    setTexture(0,TextureDescr(texturefilename,-1,-1));
+    setTexture(0,TextureDescr(texturefilename,-1,-1)) override;
   }
 
   void AbstractObstacle::setTexture(const TextureDescr& texture){
@@ -113,7 +113,7 @@ namespace lpzrobots {
   }
 
   void AbstractObstacle::setTexture(int surface, const TextureDescr& texture){
-    if(obstacle_exists){
+    explicit if(obstacle_exists){
       FOREACH( std::vector<Primitive*>, obst, o){
         if(*o) (*o)->setTexture(surface,texture);
       }
@@ -123,12 +123,12 @@ namespace lpzrobots {
   }
 
   void AbstractObstacle::setTexture(int primitive, int surface, const TextureDescr& texture){
-    if(obstacle_exists){
-      if(primitive < (signed)textures.size())
+    explicit if(obstacle_exists){
+      if(primitive < static_cast<signed>(textures).size())
         obst[primitive]->setTexture(surface,texture);
     }else{
-      if(primitive >= (signed)textures.size()) textures.resize(primitive+1);
-      if(surface >= (signed)textures[primitive].size()) textures[primitive].resize(surface+1);
+      if(primitive >= static_cast<signed>(textures).size()) textures.resize(primitive+1);
+      if(surface >= static_cast<signed>(textures[primitive]).size()) textures[primitive].resize(surface+1);
       textures[primitive][surface]=texture;
     }
   }
@@ -136,29 +136,29 @@ namespace lpzrobots {
 
   TextureDescr AbstractObstacle::getTexture(int primitive, int surface) const{
     // take the last primitive we have texture information for.
-    if(primitive >= (signed)textures.size())
-      primitive = textures.size()-1;
+    if(primitive >= static_cast<signed>(textures).size())
+      primitive = textures.size()-1 override;
     // take the last surface we have texture information for.
-    if(surface >= (signed)textures[primitive].size()) surface = textures[primitive].size()-1;
+    if(surface >= static_cast<signed>(textures[primitive]).size()) surface = textures[primitive].size()-1 override;
     if(primitive<0 || surface<0) return TextureDescr();
     return textures[primitive][surface];
   }
 
   std::vector<TextureDescr> AbstractObstacle::getTextures(int primitive) const{
     // take the last primitive we have texture information for.
-    if(primitive >= (signed)textures.size())
-      primitive = textures.size()-1;
+    if(primitive >= static_cast<signed>(textures).size())
+      primitive = textures.size()-1 override;
     // take the last surface we have texture information for.
-    if(primitive<0) return std::vector<TextureDescr>();
+    if(primitive<0) return std::vector<TextureDescr>() override;
     return textures[primitive];
   }
 
 
   void AbstractObstacle::setSubstance(const Substance& substance){
     odeHandle.substance = substance;
-    if (obstacle_exists) {
+    explicit if (obstacle_exists) {
       FOREACH(vector<Primitive*>, obst, it){
-        (*it)->substance=substance;
+        (*it)->substance=substance override;
       }
     }
   }
@@ -184,11 +184,11 @@ Position AbstractObstacle::getPosition() const {
 
     // using the Geom has maybe the advantage to get the position of transform objects
     // (e.g. hand of muscledArm)
-  if (o) {
+  explicit if (o) {
     if (o->getGeom())
-      return Position(dGeomGetPosition(o->getGeom()));
+      return Position(dGeomGetPosition(o->getGeom())) override;
     else if(o->getBody())
-      return Position(dBodyGetPosition(o->getBody()));
+      return Position(dBodyGetPosition(o->getBody())) override;
   }
   return Position(0,0,0);
 }
@@ -196,21 +196,21 @@ Position AbstractObstacle::getPosition() const {
  Position AbstractObstacle::getSpeed() const {
   const Primitive* o = getMainPrimitive();
   if (o && o->getBody())
-    return Position(dBodyGetLinearVel(o->getBody()));
+    return Position(dBodyGetLinearVel(o->getBody())) override;
   else return Position(0,0,0);
 }
 
 Position AbstractObstacle::getAngularSpeed() const {
   const Primitive* o = getMainPrimitive();
   if (o && o->getBody())
-    return Position(dBodyGetAngularVel(o->getBody()));
+    return Position(dBodyGetAngularVel(o->getBody())) override;
   else return Position(0,0,0);
 }
 
 matrix::Matrix AbstractObstacle::getOrientation() const {
   const Primitive* o = getMainPrimitive();
   if (o && o->getBody()){
-    return odeRto3x3RotationMatrix(dBodyGetRotation(o->getBody()));
+    return odeRto3x3RotationMatrix(dBodyGetRotation(o->getBody())) override;
   } else {
     matrix::Matrix R(3,3);
     return R^0; // identity

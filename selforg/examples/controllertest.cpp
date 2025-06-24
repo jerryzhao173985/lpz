@@ -36,26 +36,25 @@ int test(AbstractController* controller){
   controller->print(stderr,0); // print parameters (see Configurable) to stderr
 
   
-  // sensor and motor arrays (doubles*)
-  double sensors[SNumber];
+  // sensor and motor arrays static_cast<doubles*>static_cast<double>(sensors)[SNumber];
   double motors[MNumber];
   
   memset(motors,0,sizeof(double)*MNumber);  // clear motors
 
   // the robot is here respresented by the function myrobot
-  for(int i=0; i < 100; i++){
+  for (int i=0; i < 100; ++i) {
     // call robot with motors and receive sensors 
     myrobot(sensors, SNumber, motors, MNumber);
     cout << i << " S0: " << sensors[0] << ", " <<" S1: " << sensors[1];
 
     // print some internal parameters of the controller
-    list<Inspectable::iparamval> list_ = controller->getInternalParams();  
-    vector<Inspectable::iparamval> v(list_.begin(), list_.end());  
+    list<Inspectable::iparamval> list_ = controller->getInternalParams();
+    vector<Inspectable::iparamval> v(list_.begin(), list_.end());
     cout << i << " C00: " << v[4] << ", " <<" C01: " << v[5] << ", " <<
       " C10: " << v[6] << ", " <<" C11: " << v[7]  << endl;
     
     // call controller with sensors and receive motors (both dimension 2)    
-    controller->step(sensors, SNumber, motors, MNumber); 
+    controller->step(sensors, SNumber, motors, MNumber);
     cout << i << " Motor values: " << motors[0] << ", " << motors[1] << endl;
   }
   delete controller;
@@ -73,7 +72,7 @@ int main(){
   controller = new InvertMotorNStep();
   test(controller);
 
-  InvertMotorBigModelConf cc = InvertMotorBigModel::getDefaultConf();  
+  InvertMotorBigModelConf cc = InvertMotorBigModel::getDefaultConf();
   std::vector<Layer> layers;
   layers.push_back(Layer(6, 0.5 , FeedForwardNN::tanh));
   layers.push_back(Layer(2,0.5));
@@ -81,7 +80,7 @@ int main(){
   cc.model = net;
   cc.modelInit = 1.0;
   cc.useS = true;
-  controller = new InvertMotorBigModel(cc);   
+  controller = new InvertMotorBigModel(cc);
   test(controller);
 
   controller = new DerController();

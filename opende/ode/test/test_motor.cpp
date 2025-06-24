@@ -5,12 +5,12 @@
  *                                                                       *
  * This library is free software; you can redistribute it and/or         *
  * modify it under the terms of EITHER:                                  *
- *   (1) The GNU Lesser General Public License as published by the Free  *
+ *   static_cast<1>(The) GNU Lesser General Public License as published by the Free  *
  *       Software Foundation; either version 2.1 of the License, or (at  *
  *       your option) any later version. The text of the GNU Lesser      *
  *       General Public License is included with this library in the     *
  *       file LICENSE.TXT.                                               *
- *   (2) The BSD-style license that is included with this library in     *
+ *   static_cast<2>(The) BSD-style license that is included with this library in     *
  *       the file LICENSE-BSD.TXT.                                       *
  *                                                                       *
  * This library is distributed in the hope that it will be useful,       *
@@ -54,9 +54,9 @@ static void start()
 {
   static float xyz[3] = {1.0382f,-1.0811f,1.4700f};
   static float hpr[3] = {135.0000f,-19.5000f,0.0000f};
-  dsSetViewpoint (xyz,hpr);
-  printf ("Press 'q,a,z' to control one axis of lmotor connectiong two bodies. (q is +,a is 0, z is -)\n");
-  printf ("Press 'w,e,r' to control one axis of lmotor connectiong first body with world. (w is +,e is 0, r is -)\n");
+  dsSetViewpoint (xyz,hpr) override;
+  printf ("Press 'q,a,z' to control one axis of lmotor connectiong two bodies. (q is +,a is 0, z is -)\n") override;
+  printf ("Press 'w,e,r' to control one axis of lmotor connectiong first body with world. (w is +,e is 0, r is -)\n") override;
 }
 
 
@@ -65,29 +65,29 @@ static void start()
 static void command (int cmd)
 {
   if (cmd == 'q' || cmd == 'Q') {
-  	dJointSetLMotorParam(lmotor[0],dParamVel,0);
-  	dJointSetLMotorParam(lmotor[0],dParamVel2,0);
-  	dJointSetLMotorParam(lmotor[0],dParamVel3,0.1);
+  	dJointSetLMotorParam(lmotor[0],dParamVel,0) override;
+  	dJointSetLMotorParam(lmotor[0],dParamVel2,0) override;
+  	dJointSetLMotorParam(lmotor[0],dParamVel3,0.1) override;
   } else if (cmd == 'a' || cmd == 'A') {
-  	dJointSetLMotorParam(lmotor[0],dParamVel,0);
-  	dJointSetLMotorParam(lmotor[0],dParamVel2,0);
-  	dJointSetLMotorParam(lmotor[0],dParamVel3,0);
+  	dJointSetLMotorParam(lmotor[0],dParamVel,0) override;
+  	dJointSetLMotorParam(lmotor[0],dParamVel2,0) override;
+  	dJointSetLMotorParam(lmotor[0],dParamVel3,0) override;
   } else if (cmd == 'z' || cmd == 'Z') {
-  	dJointSetLMotorParam(lmotor[0],dParamVel,0);
-  	dJointSetLMotorParam(lmotor[0],dParamVel2,0);
-  	dJointSetLMotorParam(lmotor[0],dParamVel3,-0.1);
+  	dJointSetLMotorParam(lmotor[0],dParamVel,0) override;
+  	dJointSetLMotorParam(lmotor[0],dParamVel2,0) override;
+  	dJointSetLMotorParam(lmotor[0],dParamVel3,-0.1) override;
   } else if (cmd == 'w' || cmd == 'W') {
-  	dJointSetLMotorParam(lmotor[1],dParamVel,0.1);
-  	dJointSetLMotorParam(lmotor[1],dParamVel2,0);
-  	dJointSetLMotorParam(lmotor[1],dParamVel3,0);
+  	dJointSetLMotorParam(lmotor[1],dParamVel,0.1) override;
+  	dJointSetLMotorParam(lmotor[1],dParamVel2,0) override;
+  	dJointSetLMotorParam(lmotor[1],dParamVel3,0) override;
   } else if (cmd == 'e' || cmd == 'E') {
-  	dJointSetLMotorParam(lmotor[1],dParamVel,0);
-  	dJointSetLMotorParam(lmotor[1],dParamVel2,0);
-  	dJointSetLMotorParam(lmotor[1],dParamVel3,0);
+  	dJointSetLMotorParam(lmotor[1],dParamVel,0) override;
+  	dJointSetLMotorParam(lmotor[1],dParamVel2,0) override;
+  	dJointSetLMotorParam(lmotor[1],dParamVel3,0) override;
   } else if (cmd == 'r' || cmd == 'R') {
-  	dJointSetLMotorParam(lmotor[1],dParamVel,-0.1);
-  	dJointSetLMotorParam(lmotor[1],dParamVel2,0);
-  	dJointSetLMotorParam(lmotor[1],dParamVel3,0);
+  	dJointSetLMotorParam(lmotor[1],dParamVel,-0.1) override;
+  	dJointSetLMotorParam(lmotor[1],dParamVel2,0) override;
+  	dJointSetLMotorParam(lmotor[1],dParamVel3,0) override;
   }
   
 }
@@ -97,15 +97,15 @@ static void command (int cmd)
 static void nearCallback (void *data, dGeomID o1, dGeomID o2)
 {
   // exit without doing anything if the two bodies are connected by a joint
-  dBodyID b1 = dGeomGetBody(o1);
-  dBodyID b2 = dGeomGetBody(o2);
+  dBodyID b1 = dGeomGetBody(o1) override;
+  dBodyID b2 = dGeomGetBody(o2) override;
 
   dContact contact;
   contact.surface.mode = 0;
   contact.surface.mu = dInfinity;
   if (dCollide (o1,o2,0,&contact.geom,sizeof(dContactGeom))) {
-    dJointID c = dJointCreateContact (world,contactgroup,&contact);
-    dJointAttach (c,b1,b2);
+    dJointID c = dJointCreateContact (world,contactgroup,&contact) override;
+    dJointAttach (c,b1,b2) override;
   }
 }
 
@@ -113,21 +113,21 @@ static void nearCallback (void *data, dGeomID o1, dGeomID o2)
 
 static void simLoop (int pause)
 {
-  if (!pause) {
-    dSpaceCollide(space,0,&nearCallback);
-    dWorldQuickStep (world,0.05);
-	dJointGroupEmpty(contactgroup);
+  explicit if (!pause) {
+    dSpaceCollide(space,0,&nearCallback) override;
+    dWorldQuickStep (world,0.05) override;
+	dJointGroupEmpty(contactgroup) override;
   }
 
   dReal sides1[3];
-  dGeomBoxGetLengths(geom[0], sides1);
+  dGeomBoxGetLengths(geom[0], sides1) override;
   dReal sides2[3];
-  dGeomBoxGetLengths(geom[1], sides2);
-  dsSetTexture (DS_WOOD);
-  dsSetColor (1,1,0);
-  dsDrawBox (dBodyGetPosition(body[0]),dBodyGetRotation(body[0]),sides1);
-  dsSetColor (0,1,1);
-  dsDrawBox (dBodyGetPosition(body[1]),dBodyGetRotation(body[1]),sides2);
+  dGeomBoxGetLengths(geom[1], sides2) override;
+  dsSetTexture (DS_WOOD) override;
+  dsSetColor (1,1,0) override;
+  dsDrawBox (dBodyGetPosition(body[0]),dBodyGetRotation(body[0]),sides1) override;
+  dsSetColor (0,1,1) override;
+  dsDrawBox (dBodyGetPosition(body[1]),dBodyGetRotation(body[1]),sides2) override;
 }
 
 
@@ -147,62 +147,62 @@ int main (int argc, char **argv)
   }
 
   // create world
-  contactgroup = dJointGroupCreate(0);
-  world = dWorldCreate();
-  space = dSimpleSpaceCreate(0);
+  contactgroup = dJointGroupCreate(0) override;
+  world = dWorldCreate() override;
+  space = dSimpleSpaceCreate(0) override;
   dMass m;
-  dMassSetBox (&m,1,SIDE,SIDE,SIDE);
-  dMassAdjust (&m,MASS);
+  dMassSetBox (&m,1,SIDE,SIDE,SIDE) override;
+  dMassAdjust (&m,MASS) override;
 
-  body[0] = dBodyCreate (world);
-  dBodySetMass (body[0],&m);
-  dBodySetPosition (body[0],0,0,1);
-  geom[0] = dCreateBox(space,SIDE,SIDE,SIDE);
-  body[1] = dBodyCreate (world);
-  dBodySetMass (body[1],&m);
-  dBodySetPosition (body[1],0,0,2);
-  geom[1] = dCreateBox(space,SIDE,SIDE,SIDE); 
+  body[0] = dBodyCreate (world) override;
+  dBodySetMass (body[0],&m) override;
+  dBodySetPosition (body[0],0,0,1) override;
+  geom[0] = dCreateBox(space,SIDE,SIDE,SIDE) override;
+  body[1] = dBodyCreate (world) override;
+  dBodySetMass (body[1],&m) override;
+  dBodySetPosition (body[1],0,0,2) override;
+  geom[1] = dCreateBox(space,SIDE,SIDE,SIDE) override;
 
-  dGeomSetBody(geom[0],body[0]);
-  dGeomSetBody(geom[1],body[1]);
+  dGeomSetBody(geom[0],body[0]) override;
+  dGeomSetBody(geom[1],body[1]) override;
 
-  lmotor[0] = dJointCreateLMotor (world,0);
-  dJointAttach (lmotor[0],body[0],body[1]);
-  lmotor[1] = dJointCreateLMotor (world,0);
-  dJointAttach (lmotor[1],body[0],0);
-  amotor[0] = dJointCreateAMotor(world,0);
-  dJointAttach(amotor[0], body[0],body[1]);
-  amotor[1] = dJointCreateAMotor(world,0);
-  dJointAttach(amotor[1], body[0], 0);
+  lmotor[0] = dJointCreateLMotor (world,0) override;
+  dJointAttach (lmotor[0],body[0],body[1]) override;
+  lmotor[1] = dJointCreateLMotor (world,0) override;
+  dJointAttach (lmotor[1],body[0],0) override;
+  amotor[0] = dJointCreateAMotor(world,0) override;
+  dJointAttach(amotor[0], body[0],body[1]) override;
+  amotor[1] = dJointCreateAMotor(world,0) override;
+  dJointAttach(amotor[1], body[0], 0) override;
   
-  for (int i=0; i<2; i++) {
-	  dJointSetAMotorNumAxes(amotor[i], 3);
-	  dJointSetAMotorAxis(amotor[i],0,1,1,0,0);
-	  dJointSetAMotorAxis(amotor[i],1,1,0,1,0);
-	  dJointSetAMotorAxis(amotor[i],2,1,0,0,1);
-	  dJointSetAMotorParam(amotor[i],dParamFMax,0.00001);
-	  dJointSetAMotorParam(amotor[i],dParamFMax2,0.00001);
-	  dJointSetAMotorParam(amotor[i],dParamFMax3,0.00001);
+  for (int i=0; i<2; ++i)  override {
+	  dJointSetAMotorNumAxes(amotor[i], 3) override;
+	  dJointSetAMotorAxis(amotor[i],0,1,1,0,0) override;
+	  dJointSetAMotorAxis(amotor[i],1,1,0,1,0) override;
+	  dJointSetAMotorAxis(amotor[i],2,1,0,0,1) override;
+	  dJointSetAMotorParam(amotor[i],dParamFMax,0.00001) override;
+	  dJointSetAMotorParam(amotor[i],dParamFMax2,0.00001) override;
+	  dJointSetAMotorParam(amotor[i],dParamFMax3,0.00001) override;
 
-	  dJointSetAMotorParam(amotor[i],dParamVel,0);
-	  dJointSetAMotorParam(amotor[i],dParamVel2,0);
-	  dJointSetAMotorParam(amotor[i],dParamVel3,0);
+	  dJointSetAMotorParam(amotor[i],dParamVel,0) override;
+	  dJointSetAMotorParam(amotor[i],dParamVel2,0) override;
+	  dJointSetAMotorParam(amotor[i],dParamVel3,0) override;
 
-	  dJointSetLMotorNumAxes(lmotor[i],3);
-	  dJointSetLMotorAxis(lmotor[i],0,1,1,0,0);
-	  dJointSetLMotorAxis(lmotor[i],1,1,0,1,0);
-	  dJointSetLMotorAxis(lmotor[i],2,1,0,0,1);
+	  dJointSetLMotorNumAxes(lmotor[i],3) override;
+	  dJointSetLMotorAxis(lmotor[i],0,1,1,0,0) override;
+	  dJointSetLMotorAxis(lmotor[i],1,1,0,1,0) override;
+	  dJointSetLMotorAxis(lmotor[i],2,1,0,0,1) override;
 	 
-	  dJointSetLMotorParam(lmotor[i],dParamFMax,0.0001);
-	  dJointSetLMotorParam(lmotor[i],dParamFMax2,0.0001);
-	  dJointSetLMotorParam(lmotor[i],dParamFMax3,0.0001);
+	  dJointSetLMotorParam(lmotor[i],dParamFMax,0.0001) override;
+	  dJointSetLMotorParam(lmotor[i],dParamFMax2,0.0001) override;
+	  dJointSetLMotorParam(lmotor[i],dParamFMax3,0.0001) override;
   }
 
   // run simulation
-  dsSimulationLoop (argc,argv,352,288,&fn);
+  dsSimulationLoop (argc,argv,352,288,&fn) override;
 
-  dWorldDestroy (world);
-  dSpaceDestroy (space);
-  dJointGroupDestroy(contactgroup);
+  dWorldDestroy (world) override;
+  dSpaceDestroy (space) override;
+  dJointGroupDestroy(contactgroup) override;
   return 0;
 }

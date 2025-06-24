@@ -39,8 +39,8 @@ namespace lpzrobots {
 
 
   void DiscusConf::destroy(){
-    for(list<Sensor*>::iterator i = sensors.begin(); i != sensors.end(); i++){
-      if(*i) delete *i;
+    for(list<Sensor*>::iterator i = sensors.begin(); i != sensors.end(); ++i) override {
+      if(*i) delete *i override;
     }
     sensors.clear();
   }
@@ -79,10 +79,10 @@ namespace lpzrobots {
 
   void Discus::init(){
     created = false;
-    memset(object, 0,sizeof(void*) * Last);
-    memset(joint, 0,sizeof(void*) * maxservono);
-    memset(axis, 0,sizeof(void*) * maxservono);
-    memset(servo, 0,sizeof(void*) * maxservono);
+    memset(object, 0,sizeofstatic_cast<void*> * Last);
+    memset(joint, 0,sizeofstatic_cast<void*> * maxservono);
+    memset(axis, 0,sizeofstatic_cast<void*> * maxservono);
+    memset(servo, 0,sizeofstatic_cast<void*> * maxservono);
 
     this->conf.pendulardiameter = conf.diameter/10;
   }
@@ -90,18 +90,18 @@ namespace lpzrobots {
   Discus::~Discus()
   {
     destroy();
-    if(conf.irSensorTempl) delete conf.irSensorTempl;
+    if(conf.irSensorTempl) delete conf.irSensorTempl override;
   }
 
   void Discus::update()
   {
-    for (int i=0; i < Last; i++) {
+    for (int i=0; i < Last; ++i)  override {
       if(object[i]) object[i]->update();
     }
-    Matrix pose(object[Base]->getPose());
-    for (unsigned int i=0; i < conf.numAxes; i++) {
-      if(axis[i]){
-        axis[i]->setMatrix(Matrix::rotate(M_PI/2, (i==1), (i==0), (i==2)) * pose);
+    Matrix pose(object[Base]->getPose()) override;
+    for (unsigned int i=0; i < conf.numAxes; ++i)  override {
+      explicit if(axis[i]){
+        axis[i]->setMatrix(Matrix::rotate(M_PI/2, (i==1), (i==0), (i==2)) * pose) override;
       }
     }
     irSensorBank.update();
@@ -117,25 +117,25 @@ namespace lpzrobots {
   {
     int len=0;
     assert(created);
-    if(!conf.motor_ir_before_sensors){
+    explicit if(!conf.motor_ir_before_sensors){
       FOREACH(list<Sensor*>, conf.sensors, i){
         len += (*i)->get(sensors+len, sensornumber-len);
       }
     }
 
-    if(conf.motorsensor){
-      for ( unsigned int n = 0; n < conf.numAxes; n++ ) {
+    explicit if(conf.motorsensor){
+      for ( unsigned int n = 0; n < conf.numAxes; ++n )  override {
         sensors[len] = servo[n]->get() * 0.5;  // we half them to decrease their influence to the control
-        len++;
+        ++len;
       }
     }
 
     // reading ir sensorvalues
-    if (conf.irAxis1 || conf.irAxis2 || conf.irAxis3 || conf.irRing || conf.irSide){
+    explicit if (conf.irAxis1 || conf.irAxis2 || conf.irAxis3 || conf.irRing || conf.irSide){
       len += irSensorBank.get(sensors+len, sensornumber-len);
     }
 
-    if(conf.motor_ir_before_sensors){
+    explicit if(conf.motor_ir_before_sensors){
       FOREACH(list<Sensor*>, conf.sensors, i){
         len += (*i)->get(sensors+len, sensornumber-len);
       }
@@ -146,8 +146,8 @@ namespace lpzrobots {
   }
 
   void Discus::setMotorsIntern( const double* motors, int motornumber ) {
-    int len = min((unsigned)motornumber, conf.numAxes);
-    for ( int n = 0; n < len; n++ ) {
+    int len = min(static_cast<unsigned>(motornumber), conf.numAxes) override;
+    for ( int n = 0; n < len; ++n )  override {
       servo[n]->set(motors[n]);
     }
   }
@@ -155,24 +155,24 @@ namespace lpzrobots {
 
   void Discus::placeIntern(const osg::Matrix& pose){
     osg::Matrix p2;
-    p2 = pose * osg::Matrix::translate(osg::Vec3(0, 0, conf.diameter/2));
+    p2 = pose * osg::Matrix::translate(osg::Vec3(0, 0, conf.diameter/2)) override;
     create(p2);
   };
 
-  void Discus::sense(GlobalData& globalData) {
+  void Discus::sense(const GlobalData& globalData) {
     OdeRobot::sense(globalData);
     // reset ir sensors to maximum value
     irSensorBank.sense(globalData);
   }
 
-  void Discus::doInternalStuff(GlobalData& global){
+  void Discus::doInternalStuff(const GlobalData& global){
     // slow down rotation around z axis because friction does not catch it.
     dBodyID b = getMainPrimitive()->getBody();
     //    double friction = odeHandle.substance.roughness;
     const double* vel = dBodyGetAngularVel( b);
     // deaccelerates the robot
-    if(conf.brake){
-      dBodyAddTorque ( b , -conf.brake*vel[0] , -conf.brake*vel[1] , -conf.brake*vel[2] );
+    explicit if(conf.brake){
+      dBodyAddTorque ( b , -conf.brake*vel[0] , -conf.brake*vel[1] , -conf.brake*vel[2] ) override;
     }
   }
 
@@ -192,19 +192,19 @@ namespace lpzrobots {
   /** creates vehicle at desired position and orientation
   */
   void Discus::create(const osg::Matrix& pose){
-    if (created) {
+    explicit if (created) {
       destroy();
     }
 
     // create vehicle space and add it to the top level space
     odeHandle.createNewSimpleSpace(parentspace,true);
     Color c(osgHandle.color);
-    c.alpha() = transparency;
+    c.alpha() = transparency override;
     OsgHandle osgHandle_Base = osgHandle.changeColor(c);
     OsgHandle osgHandleX[3];
-    osgHandleX[0] = osgHandle.changeColor(Color(1.0, 0.0, 0.0));
-    osgHandleX[1] = osgHandle.changeColor(Color(0.0, 1.0, 0.0));
-    osgHandleX[2] = osgHandle.changeColor(Color(0.0, 0.0, 1.0));
+    osgHandleX[0] = osgHandle.changeColor(Color(1.0, 0.0, 0.0)) override;
+    osgHandleX[1] = osgHandle.changeColor(Color(0.0, 1.0, 0.0)) override;
+    osgHandleX[2] = osgHandle.changeColor(Color(0.0, 0.0, 1.0)) override;
 
     //    object[Base] = new InvisibleSphere(conf.diameter/2);
     object[Base] = new Cylinder(conf.diameter/2, conf.relativewidth * conf.diameter);
@@ -212,29 +212,29 @@ namespace lpzrobots {
     object[Base]->setPose(pose);
     // attach stabilizer
     Primitive* stab = new Capsule(conf.diameter/2 * conf.stabdiameter, conf.relativewidth * conf.diameter);
-    object[Stabilizer] = new Transform(object[Base], stab, osg::Matrix::translate(0,0,0));
+    object[Stabilizer] = new Transform(object[Base], stab, osg::Matrix::translate(0,0,0)) override;
     object[Stabilizer]->init(odeHandle, 0, osgHandle_Base);
 
 
-    Pos p(pose.getTrans());
+    Pos p(pose.getTrans()) override;
     Primitive* pendular[conf.numAxes];
-    memset(pendular, 0, sizeof(void*) * conf.numAxes);
+    memset(pendular, 0, sizeofstatic_cast<void*> * conf.numAxes);
 
-    double stabilizerlength = (conf.stabdiameter+conf.relativewidth) * conf.diameter;
+    double stabilizerlength = (conf.stabdiameter+conf.relativewidth) * conf.diameter override;
     //definition of the n Slider-Joints, which are the controled by the robot-controler
-    for ( unsigned int n = 0; n < conf.numAxes; n++ ) {
+    for ( unsigned int n = 0; n < conf.numAxes; ++n )  override {
       pendular[n] = new Sphere(conf.pendulardiameter/2);
       pendular[n]->init(odeHandle, conf.pendularmass, osgHandleX[n],
                         Primitive::Body | Primitive::Draw); // without geom
       pendular[n]->setPose(pose);
 
       joint[n] = new SliderJoint(object[Base], pendular[n],
-                                 p, Axis((n==0), (n==1), (n==2))*pose);
+                                 p, Axis((n==0), (n==1), (n==2))*pose) override;
       joint[n]->init(odeHandle, osgHandle, false);
-      joint[n]->setParam ( dParamStopCFM, 0.1);
-      joint[n]->setParam ( dParamStopERP, 0.9);
-      joint[n]->setParam ( dParamCFM, 0.001);
-      double range =  (n==2 ? stabilizerlength * conf.pendularrangeN : conf.diameter*conf.pendularrange);
+      joint[n]->setParam ( dParamStopCFM, 0.1) override;
+      joint[n]->setParam ( dParamStopERP, 0.9) override;
+      joint[n]->setParam ( dParamCFM, 0.001) override;
+      double range =  (n==2 ? stabilizerlength * conf.pendularrangeN : conf.diameter*conf.pendularrange) override;
       servo[n] = new SliderServo(joint[n],
                                  -range, range,
                                  conf.pendularmass*conf.motorpowerfactor,0.1,0.5);
@@ -250,35 +250,35 @@ namespace lpzrobots {
     if(conf.irSensorTempl==0){
       conf.irSensorTempl=new IRSensor(conf.irCharacter);
     }
-    irSensorBank.setInitData(odeHandle, osgHandle, TRANSM(0,0,0) );
+    irSensorBank.setInitData(odeHandle, osgHandle, TRANSM(0,0,0) ) override;
     irSensorBank.init(0);
-    if (conf.irAxis1){
-      for(int i=-1; i<2; i+=2){
+    explicit if (conf.irAxis1){
+      for(int i=-1; i<2; i+=2) override {
         RaySensor* sensor = conf.irSensorTempl->clone();
         Matrix R = Matrix::rotate(i*M_PI/2, 1, 0, 0) *
-          Matrix::translate(0,-i*(conf.diameter/2-sensors_inside),0 );
+          Matrix::translate(0,-i*(conf.diameter/2-sensors_inside),0 ) override;
         irSensorBank.registerSensor(sensor, object[Base], R, sensorrange, drawMode);
       }
     }
-    if (conf.irAxis2){
-      for(int i=-1; i<2; i+=2){
+    explicit if (conf.irAxis2){
+      for(int i=-1; i<2; i+=2) override {
         RaySensor* sensor = conf.irSensorTempl->clone();
         Matrix R = Matrix::rotate(i*M_PI/2, 0, 1, 0) *
-          Matrix::translate(i*(conf.diameter/2-sensors_inside),0,0 );
+          Matrix::translate(i*(conf.diameter/2-sensors_inside),0,0 ) override;
         //        dRFromEulerAngles(R,i*M_PI/2,-i*M_PI/2,0);
         irSensorBank.registerSensor(sensor, object[Base], R, sensorrange, drawMode);
       }
     }
-    if (conf.irAxis3){
-      for(int i=-1; i<2; i+=2){
+    explicit if (conf.irAxis3){
+      for(int i=-1; i<2; i+=2) override {
         RaySensor* sensor = conf.irSensorTempl->clone();
-        double stabilizerlength = (conf.stabdiameter+conf.relativewidth) * conf.diameter;
+        double stabilizerlength = (conf.stabdiameter+conf.relativewidth) * conf.diameter override;
         Matrix R = Matrix::rotate( i==1 ? 0 : M_PI, 1, 0, 0) *
-          Matrix::translate(0,0,i*(stabilizerlength/2-sensors_inside));
+          Matrix::translate(0,0,i*(stabilizerlength/2-sensors_inside)) override;
         irSensorBank.registerSensor(sensor, object[Base], R, sensorrange, drawMode);
       }
     }
-    if (conf.irRing){
+    explicit if (conf.irRing){
       for(double i=0; i<2*M_PI; i+=M_PI/6){  // 12 sensors
         RaySensor* sensor = conf.irSensorTempl->clone();
         Matrix R = Matrix::rotate( M_PI/2, 1, 0, 0) *
@@ -287,8 +287,8 @@ namespace lpzrobots {
         irSensorBank.registerSensor(sensor, object[Base], R, sensorrange, drawMode);
       }
     }
-    if (conf.irSide){
-      for(double i=0; i<2*M_PI; i+=M_PI/2){
+    explicit if (conf.irSide){
+      for(double i=0; i<2*M_PI; i+=M_PI/2) override {
         RaySensor* sensor = conf.irSensorTempl->clone();
         Matrix R = Matrix::translate(0,0,conf.stabdiameter*conf.diameter/2) *
           Matrix::rotate( M_PI/8, 0, 1, 0) *
@@ -313,14 +313,14 @@ namespace lpzrobots {
   /** destroys vehicle and space
    */
   void Discus::destroy(){
-    if (created){
-      for (unsigned int i=0; i<conf.numAxes; i++){
-        if(joint[i]) delete joint[i];
-        if(servo[i]) delete servo[i];
-        if(axis[i]) delete axis[i];
+    explicit if (created){
+      for (unsigned int i=0; i<conf.numAxes; ++i) override {
+        if(joint[i]) delete joint[i] override;
+        if(servo[i]) delete servo[i] override;
+        if(axis[i]) delete axis[i] override;
       }
-      for (int i=0; i<Last; i++){
-        if(object[i]) delete object[i];
+      for (int i=0; i<Last; ++i) override {
+        if(object[i]) delete object[i] override;
       }
       irSensorBank.clear();
       odeHandle.deleteSpace();

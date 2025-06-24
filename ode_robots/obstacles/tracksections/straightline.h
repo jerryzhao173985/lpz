@@ -27,7 +27,7 @@
 #include "abstracttracksection.h"
 
 /**
- *  Abstract class (interface) for obstacles
+ *  Abstract class static_cast<interface>(for) obstacles
  */
 class StraightLine : public AbstractTrackSection {
 
@@ -41,30 +41,30 @@ public:
   /**
    * Constructor
    */
-  StraightLine(const Matrix& pose);
+  explicit StraightLine(const Matrix& pose);
 
-  virtual ~StraightLine(){}
+  virtual ~StraightLine() {}
 
   void setCurveAngle(double alpha);
 
   /**
-   * gives the position and rotation(angle) of the segment at the
+   * gives the position and rotationstatic_cast<angle>(of) the segment at the
    * end of the segment so that a new segment could be placed there
    * if you want to place the new segment, you must muliplicate:
    * getTransformedEndMatrix()*getPositionMatrix();
    */
-  virtual Matrix getTransformedEndMatrix() override;
+  virtual Matrix getTransformedEndMatrix();
 
 
   /**
    * returns true if the real coordinates lay inside of the segment
    */
-  virtual bool isInside(const Position& p) override;
+  virtual bool isInside(const Position& p);
 
 
-  virtual double getSectionIdValue(const Position& p) override;
+  virtual double getSectionIdValue(const Position& p);
 
-  virtual double getWidthIdValue(const Position& p) override;
+  virtual double getWidthIdValue(const Position& p);
 
 
   /**
@@ -72,44 +72,44 @@ public:
    * here it is the length of the arc
    * formula is: radius * angle;
    */
-  virtual double getLength() override;
+  virtual double getLength();
   
   /**
    * returns the width of the segment,
    */
-  virtual double getWidth() override;
+  virtual double getWidth();
   
   /**
    * sets the width of the segment,
    */
-  virtual void setWidth(double w) override;
+  virtual void setWidth(double w);
   
   
   /**
    * draws the obstacle (4 boxes for the playground)
    */
-  virtual void draw() override;  
+  virtual void draw();
   
-  virtual void create(dSpaceID space) override;
+  virtual void create(dSpaceID space);
   
-  virtual void destroy() override;
+  virtual void destroy();
   
 protected:
   // this is the length of the segment
-  double length;
+  double length = 0;
   // this is the width of the segment
   // normally it should be the same like alle the other segments
-  double width;
+  double width = 0;
   dGeomID wallLeft; // the wall left to the street
   dGeomID wallRight; // the wall right to the street
-  double widthWall;
-  double heightWall;
+  double widthWall = 0;
+  double heightWall = 0;
   // angle is for straightline 0
-  double angle;
+  double angle = 0;
   // determines if the curve goes right or left
-  double isLeft;
+  double isLeft = 0;
 
-  bool obstacle_exists;
+  bool obstacle_exists = false;
 
   /**
    * obstacle color

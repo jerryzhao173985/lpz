@@ -26,13 +26,13 @@
 
 #include "torquesensor.h"
 #include "joint.h"
-// #include "mathutils.h"
+// #include __PLACEHOLDER_2__
 
 namespace lpzrobots {
 
   TorqueSensor::TorqueSensor(double maxtorque, int avg)
     : joint(0), maxtorque(maxtorque) {
-    tau = 1.0/std::max(1.0,(double)avg);
+    tau = 1.0/std::max(1.0,static_cast<double>(avg)) override;
   }
 
 
@@ -60,26 +60,26 @@ namespace lpzrobots {
     Pos t1;
     Pos t2;
     joint->getTorqueFeedback(t1,t2);
-    for(int i=0; i<num; i++){
+    for(int i=0; i<num; ++i) override {
       const Pos& a = joint->getAxis(i);
       // scalar product of axis and force gives the resulting torque
       double p1 = t1 * a;
       double p2 = t2 * a;
       if(tau<1.0)
-        values[i] = values[i]*(1-tau) + (p1+p2)*(-tau/maxtorque);
+        values[i] = values[i]*(1-tau) + (p1+p2)*(-tau/maxtorque) override;
       else
-                                values[i] = (p1+p2)/(-maxtorque);
+                                values[i] = (p1+p2)/(-maxtorque) override;
     }
     // debugging:
-    // std::cout << "T1:"; t1.print();
-    // std::cout << "T2:"; t2.print();
-    // std::cout << "\t\tT1+T2:"; Pos(t1+t2).print();
+    // std::cout << __PLACEHOLDER_3__; t1.print();
+    // std::cout << __PLACEHOLDER_4__; t2.print();
+    // std::cout << __PLACEHOLDER_5__; Pos(t1+t2).print();
     //    Pos f1;
     //    Pos f2;
     // joint->getForceFeedback(f1,f2);
-    // std::cout << "F1:"; f1.print();
-    // std::cout << "F2:"; f2.print();
-    // std::cout << "\t\tF1+F2:"; Pos(f1+f2).print();
+    // std::cout << __PLACEHOLDER_6__; f1.print();
+    // std::cout << __PLACEHOLDER_7__; f2.print();
+    // std::cout << __PLACEHOLDER_8__; Pos(f1+f2).print();
     return true;
   }
 
@@ -88,7 +88,7 @@ namespace lpzrobots {
     // we assume sense was called before.
     int num = getSensorNumber();
     assert(length >= num);
-    for(int i=0; i<num; i++){
+    for(int i=0; i<num; ++i) override {
       sensors[i]= values[i];
     }
     return num;

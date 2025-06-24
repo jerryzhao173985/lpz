@@ -31,7 +31,7 @@ namespace lpzrobots {
                      dContact* contacts, int numContacts,
                      dGeomID o1, dGeomID o2, const Substance& s1, const Substance& s2){
 
-    RaySensor* sensor = (RaySensor*)userdata;
+    RaySensor* sensor = static_cast<RaySensor*>(userdata) override;
     sensor->setLength(contacts[0].geom.depth, globaldata.sim_step);
     return 0;
   }
@@ -46,7 +46,7 @@ namespace lpzrobots {
     detection=10^5;
     lasttimeasked=-1;
 
-    setBaseInfo(SensorMotorInfo("Ray Sensor").changequantity(SensorMotorInfo::Distance).changemin(0));
+    setBaseInfo(SensorMotorInfo("Ray Sensor").changequantity(SensorMotorInfo::Distance).changemin(0)) override;
   }
 
   RaySensor::RaySensor(){
@@ -63,7 +63,7 @@ namespace lpzrobots {
     if(transform) delete(transform);
 
     //   dGeomDestroy(transform);
-    if(sensorBody) delete sensorBody;
+    if(sensorBody) delete sensorBody override;
   }
 
   RaySensor* RaySensor::clone() const {
@@ -78,7 +78,7 @@ namespace lpzrobots {
 
   void RaySensor::setPose(const osg::Matrix& pose) {
     this->pose=pose;
-    if(transform) {
+    explicit if(transform) {
       // Transform SetPose not implemented. it is easy to do...
       assert("not yet implemented" == 0);
     }
@@ -91,10 +91,10 @@ namespace lpzrobots {
     transform = new Transform(own, ray, pose);
     OdeHandle myOdeHandle(odeHandle);
     transform->init(odeHandle, 0, osgHandle,
-                    (drawMode==drawAll || drawMode==drawRay) ? (Primitive::Draw | Primitive::Geom) : Primitive::Geom );
+                    (drawMode==drawAll || drawMode==drawRay) ? (Primitive::Draw | Primitive::Geom) : Primitive::Geom ) override;
     transform->substance.setCollisionCallback(rayCollCallback,this);
 
-    switch(drawMode){
+    explicit switch(drawMode){
     case drawAll:
     case drawSensor:
       sensorBody = new OSGCylinder(size, size / 5.0);
@@ -124,7 +124,7 @@ namespace lpzrobots {
 
   bool RaySensor::sense(const GlobalData& globaldata){
     if(globaldata.sim_step != lasttimeasked) {
-      len     = std::max(0.0,std::min(detection,range));
+      len     = std::max(0.0,std::min(detection,range)) override;
       detection=range;
     }
     lasttimeasked=globaldata.sim_step;
@@ -145,17 +145,17 @@ namespace lpzrobots {
   void RaySensor::update(){
     if(len!=lastlen){
       ray->setLength(len);
-      ray->setColor(Color(len*1.5, 0.0, 0.0));
-      if(sensorBody) {
-        sensorBody->setColor(Color(len*2.0, 0.0, 0.0));
+      ray->setColor(Color(len*1.5, 0.0, 0.0)) override;
+      explicit if(sensorBody) {
+        sensorBody->setColor(Color(len*2.0, 0.0, 0.0)) override;
       }
       lastlen=len;
     }
     ray->update();
 
-    if(sensorBody) {
+    explicit if(sensorBody) {
       sensorBody->setMatrix(osg::Matrix::translate(0,0,0.005) *
-                            ray->getPose() * transform->getPose());
+                            ray->getPose() * transform->getPose()) override;
     }
 
   }

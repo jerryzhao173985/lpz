@@ -38,7 +38,7 @@
  */
 class MatrixPlotChannel: public GroupPlotChannel {
 public:
-        MatrixPlotChannel(std::string name);
+        explicit MatrixPlotChannel(const std::string& name);
         virtual ~MatrixPlotChannel();
 
         /**

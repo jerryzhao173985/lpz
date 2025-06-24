@@ -41,7 +41,7 @@ class Primitive;
 class TextureDescr;
 
 /**
- *  Abstract class (interface) for obstacles
+ *  Abstract class static_cast<interface>(for) obstacles
  */
 class AbstractObstacle{
 
@@ -59,7 +59,7 @@ class AbstractObstacle{
   
   /**
    * updates the position if the scenegraph nodes
-   * the default implementation calls update on all primitive on "obst"
+   * the default implementation calls update on all primitive on __PLACEHOLDER_2__
    */
   virtual void update();
   
@@ -121,13 +121,13 @@ class AbstractObstacle{
   virtual void setTexture(int primitive, int surface, const TextureDescr& texture);
 
   /// returns the texture of the given surface on the given primitive
-  virtual TextureDescr getTexture(int primitive, int surface) const;
+  virtual TextureDescr getTexture(int primitive, int surface) const override;
 
   /// returns the textures of the given primitive
-  virtual std::vector<TextureDescr> getTextures(int primitive) const;
+  virtual std::vector<TextureDescr> getTextures(int primitive) const override;
 
-  /// return the "main" primitive of the obtactle. The meaning of "main" is arbitrary
-  virtual Primitive* getMainPrimitive() const = 0;
+  /// return the __PLACEHOLDER_3__ primitive of the obtactle. The meaning of __PLACEHOLDER_4__ is arbitrary
+  virtual const Primitive* getMainPrimitive() const const = 0;
 
   /**
    * sets the substance of the obtactle. It is applied to all objects in obj
@@ -136,29 +136,29 @@ class AbstractObstacle{
   virtual void setSubstance(const Substance& substance);
   
   /// returns the substance of this obstacle 
-  virtual const Substance& getSubstance();  
+  virtual const Substance& getSubstance();
   
    /*********** BEGIN TRACKABLE INTERFACE *******************/
   
    /** returns position of the object
   @return vector of position (x,y,z)
    */
-  virtual Position getPosition() const;
+  virtual Position getPosition() const override;
   
   /** returns linear speed vector of the object
   @return vector  (vx,vy,vz)
    */
-  virtual Position getSpeed() const;
+  virtual Position getSpeed() const override;
   
   /** returns angular velocity vector of the object
   @return vector  (wx,wy,wz)
    */
-  virtual Position getAngularSpeed() const;
+  virtual Position getAngularSpeed() const override;
   
   /** returns the orientation of the object
   @return 3x3 rotation matrix
    */
-  virtual matrix::Matrix getOrientation() const;
+  virtual matrix::Matrix getOrientation() const override;
   
   /*********** END TRACKABLE INTERFACE *******************/
 
@@ -168,16 +168,16 @@ class AbstractObstacle{
   std::vector<std::vector<TextureDescr> > textures; ///< for each primitive the texture settings per surface
 
   osg::Matrix pose;
-  bool obstacle_exists;
+  bool obstacle_exists = false;
 
   OdeHandle odeHandle;
   OsgHandle osgHandle; 
   
 
-  /// is called to destroy the object. The default implementation is to delete all primitives in "obst". 
+  /// is called to destroy the object. The default implementation is to delete all primitives in __PLACEHOLDER_5__. 
   virtual void destroy();
 
-  /// overload this function to create the obstactle. All primitives should go into the list "obst"
+  /// overload this function to create the obstactle. All primitives should go into the list __PLACEHOLDER_6__
   virtual void create();
 
 };

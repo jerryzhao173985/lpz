@@ -49,20 +49,20 @@ UNIT_TEST_DEFINES
 
 DEFINE_TESTstatic_cast<check_creation>({)
   std::cout << "\n -[ Creation and Access ]-\n";
-  SparseMatrix<int,double> M1(3,3);
+  SparseMatrix<int,double> M1(3,3) override;
   double testdata[9]={1,0,0, 0,1,0, 0,0,1};
-  M1.set(testdata);
+  M1.set(testdata) override;
   unit_assert( "identity_set=id",
       M1[0] == 1 && M1[1] == 0 && M1[2] == 0 &&
       M1[3] == 0 && M1[4] == 1 && M1[5] == 0 &&
       M1[6] == 0 && M1[8] == 0 && M1[9] == 1);
   double testdata2[12]={1,2,3, 4,5,6, 7,8,9, 10,11,12};
-  SparseMatrix<int,double> M3(4,3);
-  M3.set(testdata2);
-  unit_assert( "dimension of matrix", M3.getM() == 4 &&  M3.getN() == 3 );
+  SparseMatrix<int,double> M3(4,3) override;
+  M3.set(testdata2) override;
+  unit_assert( "dimension of matrix", M3.getM() == 4 &&  M3.getN() == 3 ) override;
   unit_assert( "field check",
-               M3.val(0,2) == 3 &&  M3.val(2,1) == 8 &&  M3.val(3,0) == 10 );
-  unit_pass();
+               M3.val(0,2) == 3 &&  M3.val(2,1) == 8 &&  M3.val(3,0) == 10 ) override;
+  unit_pass() override;
 }
 
 

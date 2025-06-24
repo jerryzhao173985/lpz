@@ -55,7 +55,7 @@ namespace lpzrobots {
               double size=1, double force=3, double speed=15, double mass=1);
 
 
-    virtual ~TruckMesh(){ destroy(); };
+    virtual ~TruckMesh() { destroy(); } override;
 
     /**
      * updates the OSG nodes of the vehicle
@@ -83,13 +83,13 @@ namespace lpzrobots {
 
     /** returns number of sensors
      */
-    virtual int getSensorNumberIntern(){
+    virtual int getSensorNumberIntern() override {
       return sensorno;
     };
 
     /** returns number of motors
      */
-    virtual int getMotorNumberIntern(){
+    virtual int getMotorNumberIntern() override {
       return motorno;
     };
 
@@ -97,7 +97,7 @@ namespace lpzrobots {
         like space-internal collision detection, sensor resets/update etc.
         @param globalData structure that contains global data from the simulation environment
     */
-    virtual void doInternalStuff(GlobalData& globalData);
+    virtual void doInternalStuff(const GlobalData& globalData);
 
 
   protected:

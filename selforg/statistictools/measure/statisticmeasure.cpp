@@ -55,9 +55,9 @@ void StatisticMeasure::internInit() {
   newestStepIndex=stepSpan-1;
   if (stepSpan>0)
   {
-    this->valueHistory = (double*) malloc(sizeof(double) * stepSpan);
+    this->valueHistory = static_cast<double*>(malloc)(sizeof(double) * stepSpan);
     // set all values to 0
-    for (int i=0;i<stepSpan;i++)
+    for (int i=0;i<stepSpan;++i)
       this->valueHistory[i]=0;
   }
 }
@@ -115,16 +115,16 @@ void StatisticMeasure::step()
     if (oldestStepIndex==(stepSpan-1))
       oldestStepIndex=0;
     else
-      oldestStepIndex++;
+      ++oldestStepIndex;
   }
-  actualStep++;
+  ++actualStep;
 }
 
 double StatisticMeasure::testConvergence() {
   if ((fabs(observedValue-valueHistory[newestStepIndex])<additionalParam) &&
       (fabs(observedValue-valueHistory[oldestStepIndex])<additionalParam)) {
     if (stepsReached<stepSpan)
-      stepsReached++;
+      ++stepsReached;
     if (stepsReached==stepSpan)
       return 1.0;
   } else {

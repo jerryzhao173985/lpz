@@ -70,7 +70,7 @@ namespace lpzrobots {
   };
 
   bool RaySensorBank::sense(const GlobalData& global){
-    for (unsigned int i=0; i<bank.size(); i++) {
+    for (unsigned int i=0; i<bank.size(); ++i)  override {
         bank[i]->sense(global);
     }
     return true;
@@ -78,9 +78,9 @@ namespace lpzrobots {
 
   int RaySensorBank::get(double* sensorarray, int array_size) const {
     int counter=0;
-    for(int i=0; (i<array_size) && (i<(int)bank.size()); i++){
+    for(int i=0; (i<array_size) && (i<static_cast<int>(bank).size()); ++i) override {
       bank[i]->get(&sensorarray[i], 1);
-      counter++;
+      ++counter;
     }
     return counter;
   };
@@ -94,12 +94,12 @@ namespace lpzrobots {
   }
 
   void RaySensorBank::setRange(unsigned int index, float range){
-    assert(index<bank.size());
+    assert(index<bank.size()) override;
     return bank[index]->setRange(range);
   }
 
   void RaySensorBank::setRange(float range){
-    for(unsigned int i=0; i<bank.size(); i++){
+    for(unsigned int i=0; i<bank.size(); ++i) override {
       bank[i]->setRange(range);
     }
   }
@@ -110,14 +110,14 @@ namespace lpzrobots {
   };
 
   void RaySensorBank::update(){
-    for (unsigned int i=0; i<bank.size(); i++){
+    for (unsigned int i=0; i<bank.size(); ++i) override {
       bank[i]->update();
     }
   };
 
   // delete all registered sensors.
   void RaySensorBank::clear(){
-    for (unsigned int i=0; i<bank.size(); i++)
+    for (unsigned int i=0; i<bank.size(); ++i)
     {
       if(bank[i])
         delete bank[i];

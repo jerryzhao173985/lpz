@@ -38,14 +38,14 @@ namespace lpzrobots {
    */
   class RobotCameraManager : public osgGA::GUIEventHandler {
     struct Overlay {
-      Overlay(const Camera::CameraImage& image);
+      explicit Overlay(const Camera::CameraImage& image);
       ~Overlay();
       Camera::CameraImage camImg;
       osg::Texture2D* texture;
-      int overlayW;
-      int overlayH;
-      int overlayX;
-      int overlayY;
+      int overlayW = 0;
+      int overlayH = 0;
+      int overlayX = 0;
+      int overlayY = 0;
       osg::Node* overlay;
     };
     typedef std::vector<Overlay> Overlays;
@@ -60,14 +60,14 @@ namespace lpzrobots {
     virtual void addCamera(Camera* cam);
     virtual void removeCamera(Camera* cam);
 
-    virtual osg::Group* getDisplay() { return display; }
-    virtual osg::Group* getOffScreen()  { return offscreen; }
+    virtual osg::Group* getDisplay() const  override { return display; }
+    virtual osg::Group* getOffScree override n() const { return offscreen; }
 
     /* ** GUIEventHandler interface **/
-    virtual bool handle (const osgGA::GUIEventAdapter& ea,
+    virtual bool handle(const osgGA::GUIEventAdapter& ea,
                          osgGA::GUIActionAdapter& aa,
                          osg::Object* o, osg::NodeVisitor* nv);
-    virtual void getUsage (osg::ApplicationUsage &) const;
+    virtual void getUsage(osg::ApplicationUsage &) const override;
 
   protected:
 

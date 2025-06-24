@@ -30,7 +30,7 @@
 #include "randomgenerator.h"
 #include "storeable.h"
 
-/// abstract class (interface) for a model that can be used by a controller
+/// abstract class static_cast<interface>(for) a model that can be used by a controller
 class AbstractModel
   : public Configurable
   , public Storeable

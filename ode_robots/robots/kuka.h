@@ -30,11 +30,11 @@
 #include <math.h>
 
 /*
-//the inverse kinematics from the fuerte package
-#include "models/models.hpp"
-#include "src/chain.hpp"
+__PLACEHOLDER_8__
+#include __PLACEHOLDER_3__
+#include __PLACEHOLDER_4__
 #include <src/frames_io.hpp>
-//#include <src/chainiksolverpos_lma.hpp>
+__PLACEHOLDER_9__
 #include <src/chainiksolverpos_nr.hpp>
 #include <src/chainiksolverpos_nr_jl.hpp>
 #include <src/chainfksolver.hpp>
@@ -45,7 +45,7 @@
 #include <src/chainiksolvervel_wdls.hpp>
 #include <src/chainiksolverpos_lma.hpp>
 
-//#include <orocos_kinematics_dynamics/orocos_kdl/src/chainiksolverpos_lma.hpp>
+__PLACEHOLDER_10__
 */
 namespace lpzrobots {
 
@@ -54,7 +54,7 @@ namespace lpzrobots {
 
   /**Robot that emulates the Kuka lightweight robot arm,
     consisting of 5 arm segments, one endeffector upon and a small box representing
-	the Tool-Center-Point (TCP) of the endeffector where different tools
+	the Tool-Center-Point static_cast<TCP>(of) the endeffector where different tools
 	can be mounted.
     All segments are linked with hinge joints, whch allow a One-axis-rotation above
 	the x- or z- axis.
@@ -72,9 +72,9 @@ namespace lpzrobots {
      * @param objectsOfInterest a list of primitives (objects, obstacles) to which the robot will measure its relative position
      */
     Kuka(const OdeHandle& odeHandle, const OsgHandle& osgHandle, const std::string& name,
-      double size=1, std::vector<Primitive*> objectsOfInterest = std::vector<Primitive*>());
+      double size=1, std::vector<Primitive*> objectsOfInterest = std::vector<Primitive*>()) override;
 
-    virtual ~Kuka(){
+    virtual ~Kuka() {
       destroy();
     };
 
@@ -128,13 +128,13 @@ namespace lpzrobots {
 
     /** returns number of sensors
      */
-    virtual int getSensorNumberIntern(){
+    virtual int getSensorNumberIntern() override {
       return sensorno;
     };
 
     /** returns number of motors
      */
-    virtual int getMotorNumberIntern(){
+    virtual int getMotorNumberIntern() override {
       return motorno;
     };
 
@@ -145,9 +145,9 @@ namespace lpzrobots {
 
     /** enables the manual command mode an moves the arm to its initial upright position
     */
-    virtual void candle(){
+    virtual void candle() override {
         manualControl = true;
-        for (int i=0; i<motorno; i++) {manualCommands[i] = 0;}
+        for (int i=0; i<motorno; ++i) {manualCommands[i] = 0;}
     };
 
 	/** returns the desired position of a joint during the manua control mode:
@@ -155,7 +155,7 @@ namespace lpzrobots {
 	 has already reached.
     	@param number of the joint
     	*/
-    	virtual double getJointTarget(int jointno){
+    	virtual double getJointTarget(int jointno) override {
         	return manualCommands[jointno];
     	};
 
@@ -172,17 +172,17 @@ namespace lpzrobots {
 
     /** returns a pointer to the endeffector
     */
-    virtual Primitive* getEndeffector(){
+    virtual const Primitive* getEndeffector() const const  override {
         return endeffector;
     }
 	  /** returns a pointer to the gripper (the uppermost primitive)
     */
-	virtual Primitive* getGripper(){
+	virtual const Primitive* getGripper() const const  override {
 	        return gripper;
     }
     /** prints the position of the endeffector
     */
-    virtual void printEndeffectorPosition(){
+    virtual void printEndeffectorPosition() override {
         //The LpZ Position
 	std::cout<< "Lpz Endeffector Position: \t";
         Pos p = endeffector->getPosition();
@@ -191,13 +191,13 @@ namespace lpzrobots {
 
  /** prints the pose of the endeffector
     */
-	virtual void printEndeffectorPose(){
-		std::cout << "Pose des Endeffektors: "<< endeffector->getPose()<< "\n";
+	virtual void printEndeffectorPose() override {
+		std::cout << "Pose des Endeffektors: "<< endeffector->getPose()<< "\n" override;
 	}
 
 /* sets the reference of the first relative-distance-sensor to the given object
 		--> afterwards sensors 15-17 will return the relative distances of the endeffector to the object*/
-	virtual void setReference(Primitive* target){
+	virtual void setReference(Primitive* target) override {
 		relSensors[0]->setReference(target);
 	};
 
@@ -322,12 +322,12 @@ namespace lpzrobots {
 	int sensor23;
 
    /*
-	//stuff for the KDL orocos kinematics handling
+	__PLACEHOLDER_51__
 	KDL::Rotation lastRotation;
 	KDL::Vector lastPosition;
 	KDL::Chain chain;
 	KDL::JntArray lastJointConf;
-	std::vector<KDL::Rotation> orientations;	//stores orientations for the e.o. getIK()
+	std::vector<KDL::Rotation> orientations;	__PLACEHOLDER_52__
 */
 
 

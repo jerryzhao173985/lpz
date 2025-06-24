@@ -105,8 +105,7 @@ namespace lpzrobots{
 
     Arm(const OdeHandle& odeHandle, const OsgHandle& osgHandle, const ArmConf& conf, const std::string& name);
 
-    static ArmConf getDefaultConf()
-    {
+    static ArmConf getDefaultConf() const {
       ArmConf conf;
 
       conf.motorPower=5;//2-15;
@@ -147,20 +146,20 @@ namespace lpzrobots{
       return conf;
     }
 
-    virtual ~Arm(){};
+    virtual ~Arm() {} override;
 
-    virtual paramkey getName() const {return "Arm";};
+    virtual paramkey getName() const override {return "Arm";} override;
 
     /**
      * sets the pose of the vehicle
      * @param pose desired 4x4 pose matrix
      */
-    virtual void placeIntern(const osg::Matrix& pose) override;
+    virtual void placeIntern(const osg::Matrix& pose);
 
     /**
      * update the subcomponents
      */
-    virtual void update() override;
+    virtual void update();
 
     /**
      * returns actual sensorvalues
@@ -168,28 +167,26 @@ namespace lpzrobots{
      * @param sensornumber length of the sensor array
      * @return number of actually written sensors
      */
-    virtual int getSensorsIntern(double* sensors, int sensornumber) override;
+    virtual int getSensorsIntern(double* sensors, int sensornumber);
 
     /**
      * sets actual motorcommands
      * @param motors motors scaled to [-1,1]
      * @param motornumber length of the motor array
      */
-    virtual void setMotorsIntern(const double* motors, int motornumber) override;
+    virtual void setMotorsIntern(const double* motors, int motornumber);
 
     /**
      * returns number of sensors
      */
-    virtual int getSensorNumberIntern()
-    {
+    virtual int getSensorNumberIntern() override {
       return sensorno;
     };
 
     /**
      * returns number of motors
      */
-    virtual int getMotorNumberIntern()
-    {
+    virtual int getMotorNumberIntern() override {
       return motorno;
     };
 
@@ -211,12 +208,12 @@ namespace lpzrobots{
      * like space-internal collision detection, sensor resets/update etc.
      * @param globalData structure that contains global data from the simulation environment
      */
-    virtual void doInternalStuff(GlobalData& globalData) override;
+    virtual void doInternalStuff(const GlobalData& globalData);
 
     /******** CONFIGURABLE ***********/
-    virtual void notifyOnChange(const paramkey& key) override;
+    virtual void notifyOnChange(const paramkey& key);
 
-    virtual Primitive* getMainObject() const{
+    virtual Primitive* getMainObject() const override {
       return objects[base];
     }
 
@@ -224,7 +221,7 @@ namespace lpzrobots{
      * the main object of the robot, which is used for position and speed tracking
      */
     virtual Primitive* getMainPrimitive() const
-    {
+     override {
       return objects[hand];
     }
 
@@ -249,8 +246,8 @@ namespace lpzrobots{
 
     void hitTarget();
 
-    double dBodyGetPositionAll ( dBodyID basis , int para );
-    double dGeomGetPositionAll ( dGeomID basis , int para );
+    double dBodyGetPositionAll ( dBodyID basis , int para ) override;
+    double dGeomGetPositionAll ( dGeomID basis , int para ) override;
 
     void BodyCreate(int n, dMass m, dReal x, dReal y, dReal z, dReal qx, dReal qy, dReal qz, dReal qangle);
 

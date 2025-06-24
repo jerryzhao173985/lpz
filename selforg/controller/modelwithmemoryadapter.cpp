@@ -62,11 +62,11 @@ ModelWithMemoryAdapter::learn(const matrix::Matrix& input,
   // learn new mapping
   const Matrix& out = model->learn(input, nom_output, learnRateFactor);
   // learn some old stuff
-  for (int i = 0; i < numPatternsPerStep; i++) {
+  for (int i = 0; i < numPatternsPerStep; ++i) {
     int index = int(randGen->rand() * memorySize);
     const Pat& pat = memory[index];
     if (!pat.inp.isNulltimesNull()) { // if memory place is used
-      //      cout << i << " " ;
+      //      cout << i << __PLACEHOLDER_1__ ;
       model->learn(pat.inp, pat.out, pat.lrFactor);
     }
   }

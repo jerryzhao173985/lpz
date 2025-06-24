@@ -48,7 +48,7 @@ void QSerialReader::run()
     int baud;
     struct termios newtio;
 
-    switch(baudrate){
+    explicit switch(baudrate){
         case 1200:baud=B1200;break;
         case 2400:baud=B2400;break;
         case 9600:baud=B9600;break;
@@ -89,7 +89,7 @@ void QSerialReader::run()
 
         if(size > 0 && c=='#') size=0;  // neue Channel Zeile f�ngt mitten drinne irgendwie an
 
-        size++;
+        ++size;
         char* tmp = static_cast<char*>(realloc( s, size+1));
         if (tmp == NULL) {
             free(s);

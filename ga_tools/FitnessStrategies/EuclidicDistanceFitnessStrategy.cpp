@@ -53,7 +53,7 @@ double EuclidicDistanceFitnessStrategy::getFitness(const Individual* individual)
         TemplateValue<double>* tValue;                //the casted value of the gen (double gen)
 
         // take all gens
-        for(int x=0; x<num; x++) {
+        for(int x=0; x<num; ++x)  override {
                 gen = individual->getGen(x);        //become gen from individual
                 value = gen->getValue();                //become the value from the gen
                 tValue = dynamic_cast<TemplateValue<double>* >(value);        //cast the value to a double gen
@@ -61,7 +61,7 @@ double EuclidicDistanceFitnessStrategy::getFitness(const Individual* individual)
                         sum += STANDART_FACTOR_FOR_UNKNOWN_DATA_TYP;
                 }
                 else {
-                        sum += tValue->getValue() * tValue->getValue();                //euclid = sqrt(a²+b²+c²+...) so calculate first the sum of the ²
+                        sum += tValue->getValue() * tValue->getValue();                //euclid = sqrt(a+b+c+...) so calculate first the sum of the 
                 }
         }
 

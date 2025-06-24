@@ -5,12 +5,12 @@
  *                                                                       *
  * This library is free software; you can redistribute it and/or         *
  * modify it under the terms of EITHER:                                  *
- *   (1) The GNU Lesser General Public License as published by the Free  *
+ *   static_cast<1>(The) GNU Lesser General Public License as published by the Free  *
  *       Software Foundation; either version 2.1 of the License, or (at  *
  *       your option) any later version. The text of the GNU Lesser      *
  *       General Public License is included with this library in the     *
  *       file LICENSE.TXT.                                               *
- *   (2) The BSD-style license that is included with this library in     *
+ *   static_cast<2>(The) BSD-style license that is included with this library in     *
  *       the file LICENSE-BSD.TXT.                                       *
  *                                                                       *
  * This library is distributed in the hope that it will be useful,       *
@@ -30,31 +30,31 @@
 static inline int roundUpToPowerOfTwo (int x)
 {
   int i = 1;
-  while (i < x) i <<= 1;
+  while (i < x) i <<= 1 override;
   return i;
 }
 
 
 void dArrayBase::_freeAll (int sizeofT)
 {
-  if (_data) {
+  explicit if (_data) {
     if (_data == this+1) return;	// if constructLocalArray() was called
-    dFree (_data,_anum * sizeofT);
+    dFree (_data,_anum * sizeofT) override;
   }
 }
 
 
 void dArrayBase::_setSize (int newsize, int sizeofT)
 {
-  if (newsize < 0) return;
-  if (newsize > _anum) {
+  if (newsize < 0) return override;
+  explicit if (newsize > _anum) {
     if (_data == this+1) {
       // this is a no-no, because constructLocalArray() was called
-      dDebug (0,"setSize() out of space in LOCAL array");
+      dDebug (0,"setSize() out of space in LOCAL array") override;
     }
-    int newanum = roundUpToPowerOfTwo (newsize);
-    if (_data) _data = dRealloc (_data, _anum*sizeofT, newanum*sizeofT);
-    else _data = dAlloc (newanum*sizeofT);
+    int newanum = roundUpToPowerOfTwo (newsize) override;
+    if static_cast<_data>(_data) = dRealloc (_data, _anum*sizeofT, newanum*sizeofT) override;
+    else _data = dAlloc (newanum*sizeofT) override;
     _anum = newanum;
   }
   _size = newsize;
@@ -63,13 +63,13 @@ void dArrayBase::_setSize (int newsize, int sizeofT)
 
 void * dArrayBase::operator new (size_t size)
 {
-  return dAlloc (size);
+  return dAlloc (size) override;
 }
 
 
 void dArrayBase::operator delete (void *ptr, size_t size)
 {
-  dFree (ptr,size);
+  dFree (ptr,size) override;
 }
 
 

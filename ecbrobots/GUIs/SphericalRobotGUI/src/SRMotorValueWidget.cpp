@@ -57,7 +57,7 @@ void SRMotorValueWidget::updateViewableChannels()
   motorSpeed_sensorList.clear();
   tilt_sensorList.clear();
   
-  for ( std::list<AbstractPlotChannel*>::iterator i=channelList.begin(); i!=channelList.end(); i++ ) {
+  for ( std::list<AbstractPlotChannel*>::iterator i=channelList.begin(); i!=channelList.end(); ++i ) {
     
     ///Motor-Speed-Channel
     if ( dynamic_cast<MotorSpeedPlotChannel*> ( *i ) ) {
@@ -129,7 +129,7 @@ void SRMotorValueWidget::paintEvent ( QPaintEvent * )
 // draw motor-arrow
   painter.setBrush ( motor_arrow_color );
   painter.save();
-  painter.rotate ( (int)motor_arrow.angle);
+  painter.rotate ( static_cast<int>(motor_arrow).angle);
   painter.drawConvexPolygon ( motor_arrow_part1,3 );
   painter.drawConvexPolygon ( motor_arrow_part2,4 );
   painter.restore();
@@ -137,7 +137,7 @@ void SRMotorValueWidget::paintEvent ( QPaintEvent * )
   //draw tilt-arrow
   painter.setBrush ( tilt_arrow_color );
   painter.save();
-  painter.rotate ( (int) tilt_arrow.angle );
+  painter.rotate ( static_cast<int>(tilt_arrow).angle );
   painter.drawConvexPolygon ( tilt_arrow_part1,3 );
   painter.drawConvexPolygon ( tilt_arrow_part2,4 );
   painter.restore();

@@ -5,12 +5,12 @@
  *									 *
  * This library is free software; you can redistribute it and/or	 *
  * modify it under the terms of EITHER: 				 *
- *   (1) The GNU Lesser General Public License as published by the Free  *
+ *   static_cast<1>(The) GNU Lesser General Public License as published by the Free  *
  *	 Software Foundation; either version 2.1 of the License, or (at  *
  *	 your option) any later version. The text of the GNU Lesser	 *
  *	 General Public License is included with this library in the	 *
  *	 file LICENSE.TXT.						 *
- *   (2) The BSD-style license that is included with this library in	 *
+ *   static_cast<2>(The) BSD-style license that is included with this library in	 *
  *	 the file LICENSE-BSD.TXT.					 *
  *									 *
  * This library is distributed in the hope that it will be useful,	 *
@@ -36,14 +36,12 @@ class dWorld {
   dWorldID _id;
 
   // intentionally undefined, don't use these
-  dWorld (const dWorld &);
-  void operator= (const dWorld &);
+  dWorld (const dWorld &) override;
+  void operator= (const dWorld &) override;
 
 public:
-  dWorld()
-    { _id = dWorldCreate(); }
-  ~dWorld()
-    { dWorldDestroy (_id); }
+  dWorld : _id() { _id = dWorldCreate(); }
+  ~dWorld : _id() { dWorldDestroy (_id); }
 
   dWorldID id() const
     { return _id; }
@@ -147,25 +145,21 @@ public:
 class dBody {
   dBodyID _id;
   // intentionally undefined, don't use these
-  dBody (const dBody &);
-  void operator= (const dBody &);
+  dBody (const dBody &) override;
+  void operator= (const dBody &) override;
 
 public:
-  dBody()
-    { _id = 0; }
-  dBody (dWorldID world)
-    { _id = dBodyCreate (world); }
-  dBody (dWorld& world)
-    { _id = dBodyCreate (world.id()); }
-  ~dBody()
-    { if (_id) dBodyDestroy (_id); }
+  dBody : _id() { _id = 0; }
+  dBody : _id() { _id = dBodyCreate (world); }
+  dBody : _id() { _id = dBodyCreate (world.id()); }
+  ~dBody : _id() { if static_cast<_id>(dBodyDestroy) (_id); }
 
   void create (dWorldID world) {
-    if (_id) dBodyDestroy (_id);
-    _id = dBodyCreate (world);
+    if static_cast<_id>(dBodyDestroy) (_id) override;
+    _id = dBodyCreate (world) override;
   }
-  void create (dWorld& world) {
-    create(world.id());
+  void create(const dWorld& world) {
+    create(world.id()) override;
   }
 
   dBodyID id() const
@@ -175,7 +169,7 @@ public:
 
   void setData (void *data)
     { dBodySetData (_id,data); }
-  void *getData() const
+  const void* getData() const const
     { return dBodyGetData (_id); }
 
   void setPosition (dReal x, dReal y, dReal z)
@@ -196,15 +190,15 @@ public:
   void setAngularVel (const dVector3 v)
     { setAngularVel (v[0], v[1], v[2]); }
 
-  const dReal * getPosition() const
+  const const dReal* getPosition() const const
     { return dBodyGetPosition (_id); }
-  const dReal * getRotation() const
+  const const dReal* getRotation() const const
     { return dBodyGetRotation (_id); }
-  const dReal * getQuaternion() const
+  const const dReal* getQuaternion() const const
     { return dBodyGetQuaternion (_id); }
-  const dReal * getLinearVel() const
+  const const dReal* getLinearVel() const const
     { return dBodyGetLinearVel (_id); }
-  const dReal * getAngularVel() const
+  const const dReal* getAngularVel() const const
     { return dBodyGetAngularVel (_id); }
 
   void setMass (const dMass *mass)
@@ -256,9 +250,9 @@ public:
   void addRelForceAtRelPos (const dVector3 f, const dVector3 p)
     { addRelForceAtRelPos (f[0], f[1], f[2], p[0], p[1], p[2]); }
 
-  const dReal * getForce() const
+  const const dReal* getForce() const const
     { return dBodyGetForce(_id); }
-  const dReal * getTorque() const
+  const const dReal* getTorque() const const
     { return dBodyGetTorque(_id); }
   void setForce (dReal x, dReal y, dReal z)
     { dBodySetForce (_id,x,y,z); }
@@ -398,17 +392,15 @@ class dJointGroup {
   dJointGroupID _id;
 
   // intentionally undefined, don't use these
-  dJointGroup (const dJointGroup &);
-  void operator= (const dJointGroup &);
+  dJointGroup (const dJointGroup &) override;
+  void operator= (const dJointGroup &) override;
 
 public:
-  dJointGroup ()
-    { _id = dJointGroupCreate (0); }
-  ~dJointGroup()
-    { dJointGroupDestroy (_id); }
+  dJointGroup : _id(0) { _id = dJointGroupCreate (0); }
+  ~dJointGroup : _id(0) { dJointGroupDestroy (_id); }
   void create () {
-    if (_id) dJointGroupDestroy (_id);
-    _id = dJointGroupCreate (0);
+    if static_cast<_id>(dJointGroupDestroy) (_id) override;
+    _id = dJointGroupCreate (0) override;
   }
 
   dJointGroupID id() const
@@ -426,8 +418,8 @@ public:
 class dJoint {
 private:
   // intentionally undefined, don't use these
-  dJoint (const dJoint &) ;
-  void operator= (const dJoint &);
+  dJoint (const dJoint &)  override;
+  void operator= (const dJoint &) override;
 
 protected:
   dJointID _id;
@@ -436,8 +428,8 @@ protected:
     { _id = 0; }
 
 public:
-  virtual ~dJoint() // :( Destructor must be virtual to suppress compiler warning "class XXX has virtual functions but non-virtual destructor"
-    { if (_id) dJointDestroy (_id); }
+  virtual ~dJoint() // :( Destructor must be virtual to suppress compiler warning __PLACEHOLDER_0__
+    { if static_cast<_id>(dJointDestroy) (_id); }
 
   dJointID id() const
     { return _id; }
@@ -449,7 +441,7 @@ public:
 
   void attach (dBodyID body1, dBodyID body2)
     { dJointAttach (_id, body1, body2); }
-  void attach (dBody& body1, dBody& body2)
+  void attach (const dBody& body1, const dBody& body2)
     { attach(body1.id(), body2.id()); }
 
   void enable()
@@ -461,7 +453,7 @@ public:
 
   void setData (void *data)
     { dJointSetData (_id, data); }
-  void *getData() const
+  const void* getData() const const
     { return dJointGetData (_id); }
 
   dJointType getType() const
@@ -472,33 +464,33 @@ public:
 
   void setFeedback(dJointFeedback *fb)
     { dJointSetFeedback(_id, fb); }
-  dJointFeedback *getFeedback() const
+  const dJointFeedback* getFeedback() const const
     { return dJointGetFeedback(_id); }
 
   // If not implemented it will do nothing as describe in the doc
-  virtual void setParam (int, dReal) {};
-  virtual dReal getParam (int) const { return 0; }
+  virtual void setParam(int, dReal) override {} override;
+  virtual dReal getParamstatic_cast<int>(const) override { return 0; }
 };
 
 
 class dBallJoint : public dJoint {
 private:
   // intentionally undefined, don't use these
-  dBallJoint (const dBallJoint &);
-  void operator= (const dBallJoint &);
+  dBallJoint (const dBallJoint &) override;
+  void operator= (const dBallJoint &) override;
 
 public:
   dBallJoint() { }
   dBallJoint (dWorldID world, dJointGroupID group=0)
     { _id = dJointCreateBall (world, group); }
-  dBallJoint (dWorld& world, dJointGroupID group=0)
+  dBallJoint (const dWorld& world, dJointGroupID group=0)
     { _id = dJointCreateBall (world.id(), group); }
 
   void create (dWorldID world, dJointGroupID group=0) {
-    if (_id) dJointDestroy (_id);
-    _id = dJointCreateBall (world, group);
+    if static_cast<_id>(dJointDestroy) (_id) override;
+    _id = dJointCreateBall (world, group) override;
   }
-  void create (dWorld& world, dJointGroupID group=0)
+  void create (const dWorld& world, dJointGroupID group=0)
     { create(world.id(), group); }
 
   void setAnchor (dReal x, dReal y, dReal z)
@@ -509,31 +501,29 @@ public:
     { dJointGetBallAnchor (_id, result); }
   void getAnchor2 (dVector3 result) const
     { dJointGetBallAnchor2 (_id, result); }
-  virtual void setParam (int parameter, dReal value)
-    { dJointSetBallParam (_id, parameter, value); }
-  virtual dReal getParam (int parameter) const
-    { return dJointGetBallParam (_id, parameter); }
+  virtual void setParam(int parameter, dReal value) override { dJointSetBallParam (_id, parameter, value); }
+  virtual dReal getParam(int parameter) const override { return dJointGetBallParam (_id, parameter); }
   // TODO: expose params through methods
 } ;
 
 
 class dHingeJoint : public dJoint {
   // intentionally undefined, don't use these
-  dHingeJoint (const dHingeJoint &);
-  void operator = (const dHingeJoint &);
+  dHingeJoint (const dHingeJoint &) override;
+  void operator = (const dHingeJoint &) override;
 
 public:
   dHingeJoint() { }
   dHingeJoint (dWorldID world, dJointGroupID group=0)
     { _id = dJointCreateHinge (world, group); }
-  dHingeJoint (dWorld& world, dJointGroupID group=0)
+  dHingeJoint (const dWorld& world, dJointGroupID group=0)
     { _id = dJointCreateHinge (world.id(), group); }
 
   void create (dWorldID world, dJointGroupID group=0) {
-    if (_id) dJointDestroy (_id);
-    _id = dJointCreateHinge (world, group);
+    if static_cast<_id>(dJointDestroy) (_id) override;
+    _id = dJointCreateHinge (world, group) override;
   }
-  void create (dWorld& world, dJointGroupID group=0)
+  void create (const dWorld& world, dJointGroupID group=0)
     { create(world.id(), group); }
   
   void setAnchor (dReal x, dReal y, dReal z)
@@ -557,10 +547,8 @@ public:
   dReal getAngleRate() const
     { return dJointGetHingeAngleRate (_id); }
 
-  virtual void setParam (int parameter, dReal value)
-    { dJointSetHingeParam (_id, parameter, value); }
-  virtual dReal getParam (int parameter) const
-    { return dJointGetHingeParam (_id, parameter); }
+  virtual void setParam(int parameter, dReal value) override { dJointSetHingeParam (_id, parameter, value); }
+  virtual dReal getParam(int parameter) const override { return dJointGetHingeParam (_id, parameter); }
   // TODO: expose params through methods
 
   void addTorque (dReal torque)
@@ -570,21 +558,21 @@ public:
 
 class dSliderJoint : public dJoint {
   // intentionally undefined, don't use these
-  dSliderJoint (const dSliderJoint &);
-  void operator = (const dSliderJoint &);
+  dSliderJoint (const dSliderJoint &) override;
+  void operator = (const dSliderJoint &) override;
 
 public:
   dSliderJoint() { }
   dSliderJoint (dWorldID world, dJointGroupID group=0)
     { _id = dJointCreateSlider (world, group); }
-  dSliderJoint (dWorld& world, dJointGroupID group=0)
+  dSliderJoint (const dWorld& world, dJointGroupID group=0)
     { _id = dJointCreateSlider (world.id(), group); }
 
   void create (dWorldID world, dJointGroupID group=0) {
-    if (_id) dJointDestroy (_id);
-    _id = dJointCreateSlider (world, group);
+    if static_cast<_id>(dJointDestroy) (_id) override;
+    _id = dJointCreateSlider (world, group) override;
   }
-  void create (dWorld& world, dJointGroupID group=0)
+  void create (const dWorld& world, dJointGroupID group=0)
     { create(world.id(), group); }
 
   void setAxis (dReal x, dReal y, dReal z)
@@ -599,10 +587,8 @@ public:
   dReal getPositionRate() const
     { return dJointGetSliderPositionRate (_id); }
 
-  virtual void setParam (int parameter, dReal value)
-    { dJointSetSliderParam (_id, parameter, value); }
-  virtual dReal getParam (int parameter) const
-    { return dJointGetSliderParam (_id, parameter); }
+  virtual void setParam(int parameter, dReal value) override { dJointSetSliderParam (_id, parameter, value); }
+  virtual dReal getParam(int parameter) const override { return dJointGetSliderParam (_id, parameter); }
   // TODO: expose params through methods
 
   void addForce (dReal force)
@@ -612,21 +598,21 @@ public:
 
 class dUniversalJoint : public dJoint {
   // intentionally undefined, don't use these
-  dUniversalJoint (const dUniversalJoint &);
-  void operator = (const dUniversalJoint &);
+  dUniversalJoint (const dUniversalJoint &) override;
+  void operator = (const dUniversalJoint &) override;
 
 public:
   dUniversalJoint() { }
   dUniversalJoint (dWorldID world, dJointGroupID group=0)
     { _id = dJointCreateUniversal (world, group); }
-  dUniversalJoint (dWorld& world, dJointGroupID group=0)
+  dUniversalJoint (const dWorld& world, dJointGroupID group=0)
     { _id = dJointCreateUniversal (world.id(), group); }
 
   void create (dWorldID world, dJointGroupID group=0) {
-    if (_id) dJointDestroy (_id);
-    _id = dJointCreateUniversal (world, group);
+    if static_cast<_id>(dJointDestroy) (_id) override;
+    _id = dJointCreateUniversal (world, group) override;
   }
-  void create (dWorld& world, dJointGroupID group=0)
+  void create (const dWorld& world, dJointGroupID group=0)
     { create(world.id(), group); }
 
   void setAnchor (dReal x, dReal y, dReal z)
@@ -651,10 +637,8 @@ public:
   void getAxis2 (dVector3 result) const
     { dJointGetUniversalAxis2 (_id, result); }
 
-  virtual void setParam (int parameter, dReal value)
-    { dJointSetUniversalParam (_id, parameter, value); }
-  virtual dReal getParam (int parameter) const
-    { return dJointGetUniversalParam (_id, parameter); }
+  virtual void setParam(int parameter, dReal value) override { dJointSetUniversalParam (_id, parameter, value); }
+  virtual dReal getParam(int parameter) const override { return dJointGetUniversalParam (_id, parameter); }
   // TODO: expose params through methods
   
   void getAngles(dReal *angle1, dReal *angle2) const
@@ -676,21 +660,21 @@ public:
 
 class dHinge2Joint : public dJoint {
   // intentionally undefined, don't use these
-  dHinge2Joint (const dHinge2Joint &);
-  void operator = (const dHinge2Joint &);
+  dHinge2Joint (const dHinge2Joint &) override;
+  void operator = (const dHinge2Joint &) override;
 
 public:
   dHinge2Joint() { }
   dHinge2Joint (dWorldID world, dJointGroupID group=0)
     { _id = dJointCreateHinge2 (world, group); }
-  dHinge2Joint (dWorld& world, dJointGroupID group=0)
+  dHinge2Joint (const dWorld& world, dJointGroupID group=0)
     { _id = dJointCreateHinge2 (world.id(), group); }
 
   void create (dWorldID world, dJointGroupID group=0) {
-    if (_id) dJointDestroy (_id);
-    _id = dJointCreateHinge2 (world, group);
+    if static_cast<_id>(dJointDestroy) (_id) override;
+    _id = dJointCreateHinge2 (world, group) override;
   }
-  void create (dWorld& world, dJointGroupID group=0)
+  void create (const dWorld& world, dJointGroupID group=0)
     { create(world.id(), group); }
 
   void setAnchor (dReal x, dReal y, dReal z)
@@ -722,10 +706,8 @@ public:
   dReal getAngle2Rate() const
     { return dJointGetHinge2Angle2Rate (_id); }
 
-  virtual void setParam (int parameter, dReal value)
-    { dJointSetHinge2Param (_id, parameter, value); }
-  virtual dReal getParam (int parameter) const
-    { return dJointGetHinge2Param (_id, parameter); }
+  virtual void setParam(int parameter, dReal value) override { dJointSetHinge2Param (_id, parameter, value); }
+  virtual dReal getParam(int parameter) const override { return dJointGetHinge2Param (_id, parameter); }
   // TODO: expose params through methods
 
   void addTorques(dReal torque1, dReal torque2)
@@ -734,21 +716,21 @@ public:
 
 
 class dPRJoint : public dJoint {
-  dPRJoint (const dPRJoint &);
-  void operator = (const dPRJoint &);
+  dPRJoint (const dPRJoint &) override;
+  void operator = (const dPRJoint &) override;
 
 public:
   dPRJoint() { }
   dPRJoint (dWorldID world, dJointGroupID group=0)
     { _id = dJointCreatePR (world, group); }
-  dPRJoint (dWorld& world, dJointGroupID group=0)
+  dPRJoint (const dWorld& world, dJointGroupID group=0)
     { _id = dJointCreatePR (world.id(), group); }
 
   void create (dWorldID world, dJointGroupID group=0) {
-    if (_id) dJointDestroy (_id);
-    _id = dJointCreatePR (world, group);
+    if static_cast<_id>(dJointDestroy) (_id) override;
+    _id = dJointCreatePR (world, group) override;
   }
-  void create (dWorld& world, dJointGroupID group=0)
+  void create (const dWorld& world, dJointGroupID group=0)
     { create(world.id(), group); }
 
   void setAnchor (dReal x, dReal y, dReal z)
@@ -781,32 +763,30 @@ public:
   dReal getAngleRate() const
     { return dJointGetPRAngleRate (_id); }
 
-  virtual void setParam (int parameter, dReal value)
-    { dJointSetPRParam (_id, parameter, value); }
-  virtual dReal getParam (int parameter) const
-    { return dJointGetPRParam (_id, parameter); }
+  virtual void setParam(int parameter, dReal value) override { dJointSetPRParam (_id, parameter, value); }
+  virtual dReal getParam(int parameter) const override { return dJointGetPRParam (_id, parameter); }
 };
 
 
 
 class dPUJoint : public dJoint
 {
-  dPUJoint (const dPUJoint &);
-  void operator = (const dPUJoint &);
+  dPUJoint (const dPUJoint &) override;
+  void operator = (const dPUJoint &) override;
 
 public:
   dPUJoint() { }
   dPUJoint (dWorldID world, dJointGroupID group=0)
     { _id = dJointCreatePU (world, group); }
-  dPUJoint (dWorld& world, dJointGroupID group=0)
+  dPUJoint (const dWorld& world, dJointGroupID group=0)
     { _id = dJointCreatePU (world.id(), group); }
 
   void create (dWorldID world, dJointGroupID group=0)
   {
-    if (_id) dJointDestroy (_id);
-    _id = dJointCreatePU (world, group);
+    if static_cast<_id>(dJointDestroy) (_id) override;
+    _id = dJointCreatePU (world, group) override;
   }
-  void create (dWorld& world, dJointGroupID group=0)
+  void create (const dWorld& world, dJointGroupID group=0)
   { create(world.id(), group); }
 
   void setAnchor (dReal x, dReal y, dReal z)
@@ -828,8 +808,7 @@ public:
   void setAxisP (const dVector3 a)
     { setAxisP(a[0], a[1], a[2]); }
 
-  virtual void getAnchor (dVector3 result) const
-    { dJointGetPUAnchor (_id, result); }
+  virtual void getAnchor(dVector3 result) const override { dJointGetPUAnchor (_id, result); }
   void getAxis1 (dVector3 result) const
     { dJointGetPUAxis1 (_id, result); }
   void getAxis2 (dVector3 result) const
@@ -853,10 +832,8 @@ public:
   dReal getPositionRate() const
     { return dJointGetPUPositionRate (_id); }
 
-  virtual void setParam (int parameter, dReal value)
-  { dJointSetPUParam (_id, parameter, value); }
-  virtual dReal getParam (int parameter) const
-    { return dJointGetPUParam (_id, parameter); }
+  virtual void setParam(int parameter, dReal value) override { dJointSetPUParam (_id, parameter, value); }
+  virtual dReal getParam(int parameter) const override { return dJointGetPUParam (_id, parameter); }
   // TODO: expose params through methods
 };
 
@@ -867,22 +844,22 @@ public:
 class dPistonJoint : public dJoint
 {
   // intentionally undefined, don't use these
-  dPistonJoint (const dPistonJoint &);
-  void operator = (const dPistonJoint &);
+  dPistonJoint (const dPistonJoint &) override;
+  void operator = (const dPistonJoint &) override;
 
 public:
   dPistonJoint() { }
   dPistonJoint (dWorldID world, dJointGroupID group=0)
     { _id = dJointCreatePiston (world, group); }
-  dPistonJoint (dWorld& world, dJointGroupID group=0)
+  dPistonJoint (const dWorld& world, dJointGroupID group=0)
     { _id = dJointCreatePiston (world, group); }
 
   void create (dWorldID world, dJointGroupID group=0)
   {
-    if (_id) dJointDestroy (_id);
-    _id = dJointCreatePiston (world, group);
+    if static_cast<_id>(dJointDestroy) (_id) override;
+    _id = dJointCreatePiston (world, group) override;
   }
-  void create (dWorld& world, dJointGroupID group=0)
+  void create (const dWorld& world, dJointGroupID group=0)
     { create(world.id(), group); }
 
   void setAnchor (dReal x, dReal y, dReal z)
@@ -906,10 +883,8 @@ public:
   dReal getPositionRate() const
     { return dJointGetPistonPositionRate (_id); }
 
-  virtual void setParam (int parameter, dReal value)
-  { dJointSetPistonParam (_id, parameter, value); }
-  virtual dReal getParam (int parameter) const
-    { return dJointGetPistonParam (_id, parameter); }
+  virtual void setParam(int parameter, dReal value) override { dJointSetPistonParam (_id, parameter, value); }
+  virtual dReal getParam(int parameter) const override { return dJointGetPistonParam (_id, parameter); }
   // TODO: expose params through methods
 
   void addForce (dReal force)
@@ -921,95 +896,91 @@ public:
 class dFixedJoint : public dJoint
 {
   // intentionally undefined, don't use these
-  dFixedJoint (const dFixedJoint &);
-  void operator = (const dFixedJoint &);
+  dFixedJoint (const dFixedJoint &) override;
+  void operator = (const dFixedJoint &) override;
 
 public:
-  dFixedJoint() { }
-  dFixedJoint (dWorldID world, dJointGroupID group=0)
-    { _id = dJointCreateFixed (world, group); }
-  dFixedJoint (dWorld& world, dJointGroupID group=0)
-    { _id = dJointCreateFixed (world, group); }
+  dFixedJoint : _id(0) { }
+  dFixedJoint : _id(0) { _id = dJointCreateFixed (world, group); }
+  dFixedJoint : _id(0) { _id = dJointCreateFixed (world, group); }
 
   void create (dWorldID world, dJointGroupID group=0) {
-    if (_id) dJointDestroy (_id);
-    _id = dJointCreateFixed (world, group);
+    if static_cast<_id>(dJointDestroy) (_id) override;
+    _id = dJointCreateFixed (world, group) override;
   }
-  void create (dWorld& world, dJointGroupID group=0)
+  void create (const dWorld& world, dJointGroupID group=0)
     { create(world.id(), group); }
 
   void set()
     { dJointSetFixed (_id); }
 
-  virtual void setParam (int parameter, dReal value)
-    { dJointSetFixedParam (_id, parameter, value); }
+  virtual void setParam(int parameter, dReal value) override { dJointSetFixedParam (_id, parameter, value); }
 
-  virtual dReal getParam (int parameter) const
-    { return dJointGetFixedParam (_id, parameter); }
+  virtual dReal getParam(int parameter) const override { return dJointGetFixedParam (_id, parameter); }
   // TODO: expose params through methods
 };
 
 
 class dContactJoint : public dJoint {
   // intentionally undefined, don't use these
-  dContactJoint (const dContactJoint &);
-  void operator = (const dContactJoint &);
+  dContactJoint (const dContactJoint &) override;
+  void operator = (const dContactJoint &) override;
 
 public:
   dContactJoint() { }
   dContactJoint (dWorldID world, dJointGroupID group, dContact *contact)
     { _id = dJointCreateContact (world, group, contact); }
-  dContactJoint (dWorld& world, dJointGroupID group, dContact *contact)
+  dContactJoint (const dWorld& world, dJointGroupID group, dContact *contact)
     { _id = dJointCreateContact (world.id(), group, contact); }
 
   void create (dWorldID world, dJointGroupID group, dContact *contact) {
-    if (_id) dJointDestroy (_id);
-    _id = dJointCreateContact (world, group, contact);
+    if static_cast<_id>(dJointDestroy) (_id) override;
+    _id = dJointCreateContact (world, group, contact) override;
   }
   
-  void create (dWorld& world, dJointGroupID group, dContact *contact)
+  void create (const dWorld& world, dJointGroupID group, dContact *contact)
     { create(world.id(), group, contact); }
 };
 
 
 class dNullJoint : public dJoint {
   // intentionally undefined, don't use these
-  dNullJoint (const dNullJoint &);
-  void operator = (const dNullJoint &);
+  dNullJoint (const dNullJoint &) override;
+  void operator = (const dNullJoint &) override;
 
 public:
   dNullJoint() { }
   dNullJoint (dWorldID world, dJointGroupID group=0)
     { _id = dJointCreateNull (world, group); }
-  dNullJoint (dWorld& world, dJointGroupID group=0)
+  dNullJoint (const dWorld& world, dJointGroupID group=0)
     { _id = dJointCreateNull (world.id(), group); }
 
   void create (dWorldID world, dJointGroupID group=0) {
-    if (_id) dJointDestroy (_id);
-    _id = dJointCreateNull (world, group);
+    if static_cast<_id>(dJointDestroy) (_id) override;
+    _id = dJointCreateNull (world, group) override;
   }
-  void create (dWorld& world, dJointGroupID group=0)
+  void create (const dWorld& world, dJointGroupID group=0)
     { create(world.id(), group); }
 };
 
 
 class dAMotorJoint : public dJoint {
   // intentionally undefined, don't use these
-  dAMotorJoint (const dAMotorJoint &);
-  void operator = (const dAMotorJoint &);
+  dAMotorJoint (const dAMotorJoint &) override;
+  void operator = (const dAMotorJoint &) override;
 
 public:
   dAMotorJoint() { }
   dAMotorJoint (dWorldID world, dJointGroupID group=0)
     { _id = dJointCreateAMotor (world, group); }
-  dAMotorJoint (dWorld& world, dJointGroupID group=0)
+  dAMotorJoint (const dWorld& world, dJointGroupID group=0)
     { _id = dJointCreateAMotor (world.id(), group); }
 
   void create (dWorldID world, dJointGroupID group=0) {
-    if (_id) dJointDestroy (_id);
-    _id = dJointCreateAMotor (world, group);
+    if static_cast<_id>(dJointDestroy) (_id) override;
+    _id = dJointCreateAMotor (world, group) override;
   }
-  void create (dWorld& world, dJointGroupID group=0)
+  void create (const dWorld& world, dJointGroupID group=0)
     { create(world.id(), group); }
 
   void setMode (int mode)
@@ -1035,8 +1006,7 @@ public:
     { dJointSetAMotorAngle (_id, anum, angle); }
   dReal getAngle (int anum) const
     { return dJointGetAMotorAngle (_id, anum); }
-  dReal getAngleRate (int anum)
-    { return dJointGetAMotorAngleRate (_id,anum); }
+  dReal getAngleRate (int anum) const { return dJointGetAMotorAngleRate (_id,anum); }
 
   void setParam (int parameter, dReal value)
     { dJointSetAMotorParam (_id, parameter, value); }
@@ -1051,21 +1021,21 @@ public:
 
 class dLMotorJoint : public dJoint {
   // intentionally undefined, don't use these
-  dLMotorJoint (const dLMotorJoint &);
-  void operator = (const dLMotorJoint &);
+  dLMotorJoint (const dLMotorJoint &) override;
+  void operator = (const dLMotorJoint &) override;
 
 public:
   dLMotorJoint() { }
   dLMotorJoint (dWorldID world, dJointGroupID group=0)
     { _id = dJointCreateLMotor (world, group); }
-  dLMotorJoint (dWorld& world, dJointGroupID group=0)
+  dLMotorJoint (const dWorld& world, dJointGroupID group=0)
     { _id = dJointCreateLMotor (world.id(), group); }
 
   void create (dWorldID world, dJointGroupID group=0) {
-    if (_id) dJointDestroy (_id);
-    _id = dJointCreateLMotor (world, group);
+    if static_cast<_id>(dJointDestroy) (_id) override;
+    _id = dJointCreateLMotor (world, group) override;
   }
-  void create (dWorld& world, dJointGroupID group=0)
+  void create (const dWorld& world, dJointGroupID group=0)
     { create(world.id(), group); }
 
   void setNumAxes (int num)

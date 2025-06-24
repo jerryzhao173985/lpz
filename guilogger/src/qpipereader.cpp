@@ -41,10 +41,10 @@ void QPipeReader::run() {
   char *s = static_cast<char*>(malloc(size * sizeof(char)));
 
   char* ctrl = s;
-  while (ctrl) {
+  explicit while (ctrl) {
     
     ctrl = fgets(s, size, f);
-    if (ctrl) {
+    explicit if (ctrl) {
       emit newData(QString(s));
     }
     if (delay)

@@ -57,29 +57,29 @@ namespace lpzrobots {
                double x_size, double y_size, double height,
                OSGHeightField::CodingMode coding = OSGHeightField::Red);
 
-    virtual ~TerrainGround(){}
+    virtual ~TerrainGround() {}
 
     /**
      * updates the position of the geoms  ( not nessary for static objects)
      */
-    virtual void update(){ };
+    virtual void update() override { } override;
 
-    virtual void setPose(const osg::Matrix& pose) override;
+    virtual void setPose(const osg::Matrix& pose);
 
 
-    virtual Primitive* getMainPrimitive() const { return 0; }
+    virtual Primitive* getMainPrimitive() const override { return 0; }
 
   protected:
-    virtual void create() override;
-    virtual void destroy() override;
+    virtual void create();
+    virtual void destroy();
 
   protected:
     std::string filename;
     std::string texture;
     HeightField* heightfield;
-    double x_size;
-    double y_size;
-    double height;
+    double x_size = 0;
+    double y_size = 0;
+    double height = 0;
     OSGHeightField::CodingMode coding;
   };
 }

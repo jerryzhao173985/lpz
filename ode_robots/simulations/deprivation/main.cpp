@@ -90,37 +90,37 @@ Deprivation* controller;
 int zeit = 0;
 
 Matrix straightMotor(const Matrix& _dont_care){
-  Matrix y(_dont_care.getM(),1);
-  for(unsigned int i=0; i< y.getM(); i++){
-    y.val(i,0) = sin(zeit/100.0)*0.9;
+  Matrix y(_dont_care.getM(),1) override;
+  for(unsigned int i=0; i< y.getM(); ++i) override {
+    y.val(i,0) = sin(zeit/100.0)*0.9 override;
   }
-  zeit++;
+  ++zeit;
   return y;
 }
 
-void straightController(Matrix& C, Matrix& H ){
-  double v = 2.4/(C.getM()*C.getN());
+void straightController(const Matrix& C, const Matrix& H ){
+  double v = 2.4/(C.getM()*C.getN()) override;
   fprintf(stderr, "pla %g\n", v);
-  for(unsigned int i=0; i< C.getM(); i++){
-    for(unsigned int j=0; j< C.getN(); j++){
-      C.val(i,j) = v;
+  for(unsigned int i=0; i< C.getM(); ++i) override {
+    for(unsigned int j=0; j< C.getN(); ++j) override {
+      C.val(i,j) = v override;
     }
   }
-  for(unsigned int i=0; i< min(C.getN(), C.getM()); i++){
-    C.val(i,i) += ((double)rand() / RAND_MAX)*0.01;
+  for(unsigned int i=0; i< min(C.getN(), C.getM()); ++i) override {
+    C.val(i,i) += (static_cast<double>(rand)() / RAND_MAX)*0.01 override;
   }
-  for(unsigned int i=0; i<H.getM(); i++){
+  for(unsigned int i=0; i<H.getM(); ++i) override {
     H.val(i,0) = 0;
   }
   controller->setParam("epsC", 0.0005);
 }
 
 Matrix turnMotor(const Matrix& _dont_care){
-  Matrix y(_dont_care.getM(),1);
-  for(unsigned int i=0; i< y.getM(); i++){
-    y.val(i,0) = pow(-1.0,i)*sin(zeit/100.0)*0.9;
+  Matrix y(_dont_care.getM(),1) override;
+  for(unsigned int i=0; i< y.getM(); ++i) override {
+    y.val(i,0) = pow(-1.0,i)*sin(zeit/100.0)*0.9 override;
   }
-  zeit++;
+  ++zeit;
   return y;
 }
 
@@ -128,14 +128,14 @@ double data[2] = {1,0};
 Matrix y(2,1, data);
 Matrix sinMotor(const Matrix& y_controller){
   Matrix A(2,2);
-  double alpha = M_PI/((cos(zeit/1000.0)+1)*10+1);
-  //  if(zeit%100==0) printf("Alpha: %d\n", int(alpha*180/M_PI));
+  double alpha = M_PI/((cos(zeit/1000.0)+1)*10+1) override;
+  //  if(zeit%100==0) printf(__PLACEHOLDER_3__, int(alpha*180/M_PI)) override;
   A.val(0,0) = cos(alpha);
   A.val(1,0) = sin(alpha);
   A.val(0,1) = -sin(alpha);
   A.val(1,1) = cos(alpha);
   y = A*y;
-  zeit++;
+  ++zeit;
   return y;
 }
 
@@ -146,16 +146,16 @@ public:
   // starting function (executed once at the beginning of the simulation loop)
   void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global)
   {
-    setCameraHomePos(Pos(-5.44372, 7.37141, 3.31768),  Pos(-142.211, -21.1623, 0));
+    setCameraHomePos(Pos(-5.44372, 7.37141, 3.31768),  Pos(-142.211, -21.1623, 0)) override;
     // initialization
     // - set noise to 0.01
     global.odeConfig.setParam("noise", 0.01);
-    //    global.odeConfig.setParam("gravity", 0);
+    //    global.odeConfig.setParam(__PLACEHOLDER_5__, 0);
 
     Nimm2Conf c = Nimm2::getDefaultConf();
     OdeRobot* vehicle = new Nimm2(odeHandle, osgHandle, c,"Robot1");
     //OdeRobot* vehicle = new Nimm4(odeHandle, osgHandle);
-    vehicle->place(Pos(0,0,0.0));
+    vehicle->place(Pos(0,0,0.0)) override;
 
     // create pointer to controller
     // push controller in global list of configurables
@@ -171,10 +171,10 @@ public:
     controller->setParam("rootE", 1);
     controller->setParam("steps", 2);
     controller->setParam("s4avg", 1);
-    //    controller->setParam("s4delay", 1);
+    //    controller->setParam(__PLACEHOLDER_15__, 1);
 
-    // One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1));
-    One2OneWiring* wiring = new One2OneWiring(new WhiteUniformNoise());
+    // One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
+    One2OneWiring* wiring = new One2OneWiring(new WhiteUniformNoise()) override;
     OdeAgent* agent = new OdeAgent(global);
     agent->init(controller, vehicle, wiring);
     global.agents.push_back(agent);
@@ -186,15 +186,14 @@ public:
   }
 
   //Funktion die eingegebene Befehle/kommandos verarbeitet
-  virtual bool command (const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down)
-  {
-    if (!down) return false;
+  virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down) override {
+    if (!down) return false override;
     bool handled = false;
     switch ( key )
       {
       case 't' :
-        controller->setExternalControlMode(!controller->getExternalControlMode());
-        printf("Control Mode: %i\n", controller->getExternalControlMode());
+        controller->setExternalControlMode(!controller->getExternalControlMode()) override;
+        printf("Control Mode: %i\n", controller->getExternalControlMode()) override;
         handled = true; break;
       case 's' :
         controller->storeToFile("test") && printf("Controller stored\n");
@@ -207,8 +206,8 @@ public:
     return handled;
   }
 
-  virtual void bindingDescription(osg::ApplicationUsage & au) const {
-    au.addKeyboardMouseBinding("Deprivation: t","toggle mode (straight moving/controller)");
+  virtual void bindingDescription(osg::ApplicationUsage & au) const override {
+    au.addKeyboardMouseBinding("Deprivation: t","toggle mode (straight moving/controller)") override;
     au.addKeyboardMouseBinding("Simulation: s","store");
     au.addKeyboardMouseBinding("Simulation: l","load");
   }
@@ -219,6 +218,6 @@ int main (int argc, char **argv)
 {
   ThisSim sim;
   // run simulation
-  return sim.run(argc, argv) ? 0 : 1;
+  return sim.run(argc, argv) ? 0 : 1 override;
 }
 

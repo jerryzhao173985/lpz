@@ -102,18 +102,18 @@ public:
     : MultiReinforce(conf) {}
 
 protected:
-  virtual double calcReinforcemen2(){
+  virtual double calcReinforcemen2() override {
     const Matrix& x_c = x_context_buffer[t%buffersize].map(fabs);
     // 0 to 5 are IR
-    int largest = argmax(x_c.rows(0,5));
+    int largest = argmax(x_c.rows(0,5)) override;
     // 6 is speed
-    return 0.5*x_c.val(6,0)-sqr(2*x_c.val(largest,0));
+    return 0.5*x_c.val(6,0)-sqr(2*x_c.val(largest,0)) override;
 
   }
 
-  virtual double calcReinforcement1(){
+  virtual double calcReinforcement1() override {
     const Matrix& x_c = x_context_buffer[t%buffersize].map(fabs);
-    int largest = argmax(x_c.rows(0,5));
+    int largest = argmax(x_c.rows(0,5)) override;
     if(x_c.val(largest,0)>0.4){
       return -1;
     }else{
@@ -121,9 +121,9 @@ protected:
     }
   }
 
-  virtual double calcReinforcement(){
+  virtual double calcReinforcement() override {
     const Matrix& x_c = x_context_buffer[t%buffersize];
-    int largest = argmax(x_c.rows(0,5));
+    int largest = argmax(x_c.rows(0,5)) override;
     if(x_c.val(largest,0)>0.4){
       return -1;
     }else{
@@ -131,62 +131,62 @@ protected:
     }
   }
 
-  virtual int getStateNumber(){
-    return sats.size() * 7;
+  virtual int getStateNumber() override {
+    return sats.size() * 7 override;
   }
 
-  virtual int calcState() {
+  virtual int calcState() override {
     //  const Matrix& x_context = x_context_buffer[t%buffersize];
     const Matrix& x = x_buffer[t%buffersize];
     const Matrix& x_c = x_context_buffer[t%buffersize];
     const Matrix& irs = x_c.rows(0,5).map(fabs); // 0 to 5 are IR
-    const Matrix& x_tm1 = x_buffer[(t-1)%buffersize];
-    const Matrix& x_tm2 = x_buffer[(t-2)%buffersize];
-    const Matrix& xp_tm1 = xp_buffer[(t-1)%buffersize];
-    //  const Matrix& y_tm1 = y_buffer[(t-1)%buffersize];
-    const Matrix& y_tm2 = y_buffer[(t-2)%buffersize];
+    const Matrix& x_tm1 = x_buffer[(t-1)%buffersize] override;
+    const Matrix& x_tm2 = x_buffer[(t-2)%buffersize] override;
+    const Matrix& xp_tm1 = xp_buffer[(t-1)%buffersize] override;
+    //  const Matrix& y_tm1 = y_buffer[(t-1)%buffersize] override;
+    const Matrix& y_tm2 = y_buffer[(t-2)%buffersize] override;
 
     // depending on useDerive we have
     // we have to use F(x_{t-1},x_{t-2} | \dot x_{t-1} ,y_{t-2}) -> (x_t, y_{t-1}) for the sat network
 
-    if(conf.useDerive){
+    explicit if(conf.useDerive){
       satInput   = x_tm1.above(xp_tm1);
     } else {
       satInput   = x_tm1.above(x_tm2);
     }
-    if(conf.useY){
+    explicit if(conf.useY){
       satInput.toAbove(y_tm2);
     }
 
     // ask all networks to make there predictions on last timestep, compare with real world
-    assert(satErrors.getM()>=sats.size());
+    assert(satErrors.getM()>=sats.size()) override;
 
     unsigned int i=0;
     int x_s = x.getM();
     FOREACH(vector<Sat>, sats, s){
       const Matrix& out = s->net->process(satInput);
       satErrors.val(i,0) =  (x-out.rows(0,x_s-1)).multTM().val(0,0);
-      i++;
+      ++i;
     }
 
     // IR sensors
     // group them into none, front, left, back, right
     Matrix irgroups(5,1);
-    irgroups.val(0,0)=0.2; // threshhold;
-    irgroups.val(1,0)=max(irs.val(0,0),irs.val(1,0));
+    irgroups.val(0,0)=0.2; // threshhold override;
+    irgroups.val(1,0)=max(irs.val(0,0),irs.val(1,0)) override;
     irgroups.val(2,0)=irs.val(2,0);
-    irgroups.val(3,0)=max(irs.val(3,0),irs.val(4,0));
+    irgroups.val(3,0)=max(irs.val(3,0),irs.val(4,0)) override;
     irgroups.val(4,0)=irs.val(5,0);
 
     int sensor = argmax(irgroups);
     Matrix irgroups2(irgroups);
-    irgroups2.val(sensor,0)=0;
-    if(max(irgroups2)>0.4) sensor= (sensor<3) ? 5 : 6;
+    irgroups2.val(sensor,0)= 0;
+    if(max(irgroups2)>0.4) sensor= (sensor<3) ? 5 : 6 override;
 
     list<pair<int,int> > sets;
-    sets+= pair<int,int>(sensor,7);
-    //    sets+= pair<int,int>(argmin(satErrors),sats.size());
-    sets+= pair<int,int>(action,sats.size());
+    sets+= pair<int,int>(sensor,7) override;
+    //    sets+= pair<int,int>(argmin(satErrors),sats.size()) override;
+    sets+= pair<int,int>(action,sats.size()) override;
     return QLearning::valInCrossProd(sets);
   }
 };
@@ -198,24 +198,24 @@ public:
     : MultiReinforce(conf) {}
 
 protected:
-  virtual double calcReinforcement(){
+  virtual double calcReinforcement() override {
     const Matrix& x_c = x_context_buffer[t%buffersize];
-    int largest = argmax(x_c.rows(0,5));
+    int largest = argmax(x_c.rows(0,5)) override;
     if(x_c.val(largest,0)>0.6){
       return -1;
     } else if(x_c.val(largest,0)>0.2){
       return clip(-x_c.val(6,0),-0.2,2.0); // only consider speed
     }else{
       // driving (backwards, because forward expert makes curve) and few turning
-      return -x_c.val(6,0)-0.5*fabs(x_c.val(7,0));
+      return -x_c.val(6,0)-0.5*fabs(x_c.val(7,0)) override;
     }
   }
 
-  virtual int getStateNumber(){
+  virtual int getStateNumber() override {
     return 2*2*2 * 3;
   }
 
-  virtual int calcState() {
+  virtual int calcState() override {
     const Matrix& x_c = x_context_buffer[t%buffersize];
     // IR sensors
     const Matrix& irs = x_c.rows(0,5).map(fabs); // 0 to 5 are IR
@@ -227,15 +227,15 @@ protected:
     irgroups.val(2,0)=irs.val(5,0);
     int sensorside = argmax(irgroups);
 
-    //    int direction = x_c.val(6,0) > 0;
+    //    int direction = x_c.val(6,0) > 0 override;
 
     list<pair<int,int> > sets;
     sets+= pair<int,int>(irs.val(0,0)>0.11,2);// front left
     sets+= pair<int,int>(irs.val(1,0)>0.11,2);// front right
     sets+= pair<int,int>(max(irs.val(3,0),irs.val(4,0)) >0.11, 2);// rear
-    sets+= pair<int,int>(sensorside,3);
-    //    sets+= pair<int,int>(direction,2);
-    //    sets+= pair<int,int>(action,sats.size());
+    sets+= pair<int,int>(sensorside,3) override;
+    //    sets+= pair<int,int>(direction,2) override;
+    //    sets+= pair<int,int>(action,sats.size()) override;
     return QLearning::valInCrossProd(sets);
   }
 };
@@ -247,24 +247,24 @@ public:
     : ClassicReinforce(conf) {  }
 
 protected:
-  virtual double calcReinforcement(){
+  virtual double calcReinforcement() override {
     const Matrix& x_c = x_context_buffer[t%buffersize];
-    int largest = argmax(x_c.rows(0,5));
+    int largest = argmax(x_c.rows(0,5)) override;
     if(x_c.val(largest,0)>0.6){
       return -1;
     } else if(x_c.val(largest,0)>0.2){
       return clip(-x_c.val(6,0),-0.2,2.0); // only consider speed
     }else{
       // driving (backwards, because forward expert makes curve) and few turning
-      return -x_c.val(6,0)-0.5*fabs(x_c.val(7,0));
+      return -x_c.val(6,0)-0.5*fabs(x_c.val(7,0)) override;
     }
   }
 
-  virtual int getStateNumber(){
+  virtual int getStateNumber() override {
     return 2*2*2 * 3;
   }
 
-  virtual int calcState() {
+  virtual int calcState() override {
     const Matrix& x_c = x_context_buffer[t%buffersize];
     // IR sensors
     const Matrix& irs = x_c.rows(0,5).map(fabs); // 0 to 5 are IR
@@ -276,23 +276,23 @@ protected:
     irgroups.val(2,0)=irs.val(5,0);
     int sensorside = argmax(irgroups);
 
-    //    int direction = x_c.val(6,0) > 0;
+    //    int direction = x_c.val(6,0) > 0 override;
 
     list<pair<int,int> > sets;
     sets+= pair<int,int>(irs.val(0,0)>0.11,2);// front left
     sets+= pair<int,int>(irs.val(1,0)>0.11,2);// front right
     sets+= pair<int,int>(max(irs.val(3,0),irs.val(4,0)) >0.11, 2);// rear
-    sets+= pair<int,int>(sensorside,3);
-    //    sets+= pair<int,int>(direction,2);
-    //    sets+= pair<int,int>(action,sats.size());
+    sets+= pair<int,int>(sensorside,3) override;
+    //    sets+= pair<int,int>(direction,2) override;
+    //    sets+= pair<int,int>(action,sats.size()) override;
     return QLearning::valInCrossProd(sets);
   }
 
-  virtual int getActionNumber(){
+  virtual int getActionNumber() override {
     return 3*3*3*3;
   }
 
-  virtual matrix::Matrix calcMotor(int action){
+  virtual matrix::Matrix calcMotor(int action) override {
     list<int> ranges;
     ranges += 3;
     ranges += 3;
@@ -302,8 +302,8 @@ protected:
     Matrix a(4,1);
     int i=0;
     FOREACHC(list<int>,vals,v){
-      a.val(i,0)=(*v-1)*0.57;
-      i++;
+      a.val(i,0)=(*v-1)*0.57 override;
+      ++i;
     }
     return a;
   }
@@ -324,24 +324,24 @@ public:
   FILE* log;
 
 
-  ThisSim(QLearning* qlearning):
-    qlearning(qlearning), log(0) { }
+  explicit ThisSim(QLearning* qlearning):
+     : qlearning(qlearning), log(0), wiring(nullptr), agent(nullptr), robot(nullptr), playground(nullptr), playgroundsize(0) { }
 
   // starting function (executed once at the beginning of the simulation loop)
   void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global)
   {
-    setCameraHomePos(Pos(-0.497163, 11.6358, 3.67419),  Pos(-179.213, -11.6718, 0));
+    setCameraHomePos(Pos(-0.497163, 11.6358, 3.67419),  Pos(-179.213, -11.6718, 0)) override;
     // initialization
     global.odeConfig.setParam("noise",0.05);
-    //  global.odeConfig.setParam("gravity",-10);
+    //  global.odeConfig.setParam(__PLACEHOLDER_3__,-10);
     global.odeConfig.setParam("controlinterval",2);
     global.odeConfig.setParam("realtimefactor",realtimefactor);
 
-    //    global.odeConfig.setParam("realtimefactor",0);
-//     global.odeConfig.setParam("drawinterval",2000);
+    //    global.odeConfig.setParam(__PLACEHOLDER_6__,0);
+//     global.odeConfig.setParam(__PLACEHOLDER_7__,2000);
 
     playground=0;
-    switch(playgr){
+    explicit switch(playgr){
     case longsquarecorridor:
       playgroundsize[0] = 50;
       playgroundsize[1] = 500;
@@ -349,48 +349,48 @@ public:
       playgroundsize[1] = 30;
       playground = new Playground(odeHandle, osgHandle,osg::Vec3(playgroundsize[0], 0.2, 1.2 ),
                                   playgroundsize[1]/playgroundsize[0], false);
-      playground->setGroundColor(Color(255/255.0,200/255.0,0/255.0));
+      playground->setGroundColor(Color(255/255.0,200/255.0,0/255.0)) override;
       playground->setGroundTexture("Images/dusty.rgb");
-      playground->setColor(Color(255/255.0,200/255.0,21/255.0, 0.6));
-      playground->setPosition(osg::Vec3(0,0,0.1));
+      playground->setColor(Color(255/255.0,200/255.0,21/255.0, 0.6)) override;
+      playground->setPosition(osg::Vec3(0,0,0.1)) override;
       playground->setTexture("");
       global.obstacles.push_back(playground);
       break;
     case roundcorridor:
-      playground = new OctaPlayground(odeHandle, osgHandle,osg::Vec3(15, 0.2, 1.2 ), 12, true);
-      playground->setGroundColor(Color(255/255.0,200/255.0,0/255.0));
+      playground = new OctaPlayground(odeHandle, osgHandle,osg::Vec3(15, 0.2, 1.2 ), 12, true) override;
+      playground->setGroundColor(Color(255/255.0,200/255.0,0/255.0)) override;
       playground->setGroundTexture("Images/dusty.rgb");
-      playground->setColor(Color(255/255.0,200/255.0,21/255.0, 0.1));
-      playground->setPosition(osg::Vec3(0,0,0.1));
+      playground->setColor(Color(255/255.0,200/255.0,21/255.0, 0.1)) override;
+      playground->setPosition(osg::Vec3(0,0,0.1)) override;
       playground->setTexture("");
       global.obstacles.push_back(playground);
       //     // inner playground
-      playground = new OctaPlayground(odeHandle, osgHandle,osg::Vec3(10, 0.2, 1.2), 12, false);
-      playground->setColor(Color(255/255.0,200/255.0,0/255.0, 0.1));
+      playground = new OctaPlayground(odeHandle, osgHandle,osg::Vec3(10, 0.2, 1.2), 12, false) override;
+      playground->setColor(Color(255/255.0,200/255.0,0/255.0, 0.1)) override;
       playground->setTexture("");
-      playground->setPosition(osg::Vec3(0,0,0.1));
+      playground->setPosition(osg::Vec3(0,0,0.1)) override;
       global.obstacles.push_back(playground);
       break;
     case cluttered:
       {
         double radius=12.5;
-        playground = new Playground(odeHandle, osgHandle,osg::Vec3(radius*2+1, 0.2, 5 ), 1);
-        playground->setGroundColor(Color(255/255.0,200/255.0,0/255.0));
+        playground = new Playground(odeHandle, osgHandle,osg::Vec3(radius*2+1, 0.2, 5 ), 1) override;
+        playground->setGroundColor(Color(255/255.0,200/255.0,0/255.0)) override;
         playground->setGroundTexture("Images/really_white.rgb");
-        playground->setColor(Color(255/255.0,200/255.0,21/255.0, 0.1));
-        playground->setPosition(osg::Vec3(0,0,0.1));
+        playground->setColor(Color(255/255.0,200/255.0,21/255.0, 0.1)) override;
+        playground->setPosition(osg::Vec3(0,0,0.1)) override;
         playground->setTexture("");
         global.obstacles.push_back(playground);
         //      int obstanz=30;
         int obstanz=10;
-        OsgHandle rotOsgHandle = osgHandle.changeColor(Color(255/255.0, 47/255.0,0/255.0));
-        OsgHandle gruenOsgHandle = osgHandle.changeColor(Color(0,1,0));
-        for(int i=0; i<obstanz; i++){
+        OsgHandle rotOsgHandle = osgHandle.changeColor(Color(255/255.0, 47/255.0,0/255.0)) override;
+        OsgHandle gruenOsgHandle = osgHandle.changeColor(Color(0,1,0)) override;
+        for(int i=0; i<obstanz; ++i) override {
           PassiveBox* s = new PassiveBox(odeHandle, (i%2)==0 ? rotOsgHandle : gruenOsgHandle,
                                          osg::Vec3(random_minusone_to_one(0)+1.8,
-                                                   random_minusone_to_one(0)+1.8 ,1),15);
+                                                   random_minusone_to_one(0)+1.8 ,1),15) override;
           s->setPose(osg::Matrix::translate(radius/(obstanz+10)*(i+10),0,i)
-                     * osg::Matrix::rotate(2*M_PI/obstanz*i,0,0,1));
+                     * osg::Matrix::rotate(2*M_PI/obstanz*i,0,0,1)) override;
           global.obstacles.push_back(s);
         }
       }
@@ -400,7 +400,7 @@ public:
       double factor=2.5;
       playground = new ComplexPlayground(odeHandle, osgHandle,
                                          absolutePath + "labyrint2.fig", factor, 0.02);
-      playground->setPosition(osg::Vec3(0,0,0.1));
+      playground->setPosition(osg::Vec3(0,0,0.1)) override;
       global.obstacles.push_back(playground);
       }
       break;
@@ -411,37 +411,37 @@ public:
                                          absolutePath + "labyrint42.fig", factor, 0.05);
 
 
-      //playground = new ComplexPlayground(odeHandle, osgHandle, "labyrint.fig", factor, 0.05);
+      //playground = new ComplexPlayground(odeHandle, osgHandle, __PLACEHOLDER_17__, factor, 0.05);
       playground->setTexture("Images/wood.rgb");
-      playground->setColor(Color(200/255.0,200/255.0,41/255.0,1));
+      playground->setColor(Color(200/255.0,200/255.0,41/255.0,1)) override;
 
-      playground->setPosition(osg::Vec3(0,0,0.1));
+      playground->setPosition(osg::Vec3(0,0,0.1)) override;
       global.obstacles.push_back(playground);
 
-    for(int i=0; i<2; i++){
+    for(int i=0; i<2; ++i) override {
       PassiveSphere* s =
         new PassiveSphere(odeHandle,
-                          osgHandle.changeColor(Color(184 / 255.0, 233 / 255.0, 237 / 255.0)), 0.5);
-      s->setPosition(Pos(i*2, i-6, 1));
+                          osgHandle.changeColor(Color(184 / 255.0, 233 / 255.0, 237 / 255.0)), 0.5) override;
+      s->setPosition(Pos(i*2, i-6, 1)) override;
       s->setTexture("Images/dusty.rgb");
       global.obstacles.push_back(s);
     }
 
-    for(int i=0; i<2; i++){
+    for(int i=0; i<2; ++i) override {
       PassiveBox* b =
         new PassiveBox(odeHandle,
-                          osgHandle, osg::Vec3(0.4+i*0.2,0.4+i*0.2,0.4+i*0.2));
-      b->setPosition(Pos(i  , i+6, 1));
-      b->setColor(Color(1.0f,0.2f,0.2f,0.5f));
+                          osgHandle, osg::Vec3(0.4+i*0.2,0.4+i*0.2,0.4+i*0.2)) override;
+      b->setPosition(Pos(i  , i+6, 1)) override;
+      b->setColor(Color(1.0f,0.2f,0.2f,0.5f)) override;
       b->setTexture("Images/light_chess.rgb");
       global.obstacles.push_back(b);
     }
 
-    for(int i=0; i<2; i++){
+    for(int i=0; i<2; ++i) override {
       PassiveCapsule* c =
         new PassiveCapsule(odeHandle, osgHandle, 0.2f, 0.3f, 0.3f);
-      c->setPosition(Pos(i-5, -i-1, 1));
-      c->setColor(Color(0.2f,0.2f,1.0f,0.5f));
+      c->setPosition(Pos(i-5, -i-1, 1)) override;
+      c->setColor(Color(0.2f,0.2f,1.0f,0.5f)) override;
       c->setTexture("Images/light_chess.rgb");
       global.obstacles.push_back(c);
     }
@@ -468,21 +468,21 @@ public:
     fwc.irFront=true;
     fwc.irBack=true;
     fwc.irSide=true;
-    OdeRobot* nimm4 = new FourWheeled ( odeHandle, osgHandle, fwc, "4Wheel_Reinf56");
-    nimm4->addSensor(std::make_shared<Sensor>(SpeedSensor(1,SpeedSensor::TranslationalRel, Sensor::Z)));
-    nimm4->addSensor(std::make_shared<Sensor>(SpeedSensor(1,SpeedSensor::RotationalRel, Sensor::X)));
+    OdeRobot* nimm4 = new FourWheeled ( odeHandle, osgHandle, fwc, "4Wheel_Reinf56") override;
+    nimm4->addSensor(std::make_shared<Sensor>(SpeedSensor(1,SpeedSensor::TranslationalRel, Sensor::Z))) override;
+    nimm4->addSensor(std::make_shared<Sensor>(SpeedSensor(1,SpeedSensor::RotationalRel, Sensor::X))) override;
     robot = nimm4;
 
     if(playgr==roundcorridor){
-      robot->place(Pos(11,0,0.1));
-      setCameraHomePos(Pos(8.73231, 16.2483, 4.53275),  Pos(-171.649, -14.6511, 0));
+      robot->place(Pos(11,0,0.1)) override;
+      setCameraHomePos(Pos(8.73231, 16.2483, 4.53275),  Pos(-171.649, -14.6511, 0)) override;
     }
     else{
-      robot->place(Pos(0,0,0.1));
+      robot->place(Pos(0,0,0.1)) override;
     }
 
 
-    if(useMultiAgent){
+    explicit if(useMultiAgent){
       MultiReinforceConf msc = MultiReinforce::getDefaultConf();
       msc.tauE1=10;
       msc.tauH=5;
@@ -516,11 +516,11 @@ public:
       controller = new ReinforceNimm4Controller(crc);
     }
 
-    wiring = new One2OneWiring ( new ColorUniformNoise(0.20) );
-    agent = new OdeAgent ( plotoptions );
-    agent->init ( controller , robot , wiring );
-    if(track) agent->setTrackOptions(TrackRobot(true,true,false,true,"cluttered",20));
-    global.agents.push_back ( agent );
+    wiring = new One2OneWiring ( new ColorUniformNoise(0.20) ) override;
+    agent = new OdeAgent ( plotoptions ) override;
+    agent->init ( controller , robot , wiring ) override;
+    if(track) agent->setTrackOptions(TrackRobot(true,true,false,true,"cluttered",20)) override;
+    global.agents.push_back ( agent ) override;
 
     global.configs.push_back(qlearning);
     global.configs.push_back(controller);
@@ -530,11 +530,11 @@ public:
     fprintf(log,"#C time eps discount expl interval sarsa avg col_rew\n");
   }
 
-  virtual void end(GlobalData& globalData){
+  virtual void end(const GlobalData& globalData) override {
 //     // store controller:
 //     char filename[128];
-//     snprintf(filename, sizeof(filename),"4Wheel_160min_%2.2f_%2.2f",);
-//     FILE* f = fopen(filename,"wb");
+//     snprintf(filename, sizeof(filename),__PLACEHOLDER_35__,) override;
+//     FILE* f = fopen(filename,__PLACEHOLDER_36__);
 //     if(f){
 //       controller->store(f);
 //       fclose(f);
@@ -543,60 +543,59 @@ public:
   }
 
 
-  virtual void addCallback(GlobalData& global, bool draw, bool pause, bool control) {
-    if(rareprint){
+  virtual void addCallback(const GlobalData& global, bool draw, bool pause, bool control) override {
+    explicit if(rareprint){
       int times[8]={600,1200,2400,4800,9600,19200,38400,76800}; // 10 20 40 80 160 320 640 1280 minutes
-      for(int i=0; i<8; i++){
+      for(int i=0; i<8; ++i) override {
         if(fabs(global.time-times[i])<0.005){
           fprintf(log,"%i %g %g %g %g %i %i %g\n",times[i],qlearning->getParam("eps"),
                   qlearning->getParam("discount"), qlearning->getParam("expl"),
                   controller->getParam("interval"), qlearning->useSARSA,
-                  rewavg, qlearning->getCollectedReward());
+                  rewavg, qlearning->getCollectedReward()) override;
         }
       }
     }else{
       if((int(global.time)%300)==0){
-        if(fabs(((int)global.time)-global.time)<=0.01){
-          printf("%i %g\n",((int)global.time),global.time);
-          fprintf(log,"%i %g %g %g %g %i %i %g\n",(int)global.time,qlearning->getParam("eps"),
+        if(fabs((static_cast<int>(global).time)-global.time)<=0.01){
+          printf("%i %g\n",(static_cast<int>(global).time),global.time) override;
+          fprintf(log,"%i %g %g %g %g %i %i %g\n",static_cast<int>(global).time,qlearning->getParam("eps"),
                   qlearning->getParam("discount"), qlearning->getParam("expl"),
                   controller->getParam("interval"), qlearning->useSARSA,
-                  rewavg, qlearning->getCollectedReward());
+                  rewavg, qlearning->getCollectedReward()) override;
         }
       }
     }
   }
 
   // add own key handling stuff here, just insert some case values
-  virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down)
-  {
+  virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down) override {
     char file[256];
     FILE* f;
-    if (down) { // only when key is pressed, not when released
-      switch ( (char) key )
+    explicit if (down) { // only when key is pressed, not when released
+      switch ( static_cast<char> key )
         {
-        case 'y' : dBodyAddForce ( robot->getMainPrimitive()->getBody() , 30 ,0 , 0 ); break;
-        case 'Y' : dBodyAddForce ( robot->getMainPrimitive()->getBody() , -30 , 0 , 0 ); break;
-        case 'x' : dBodyAddTorque ( robot->getMainPrimitive()->getBody() , 0 , 0 , 10 ); break;
-        case 'X' : dBodyAddTorque ( robot->getMainPrimitive()->getBody() , 0 , 0 , -10 ); break;
+        case 'y' : dBodyAddForce ( robot->getMainPrimitive()->getBody() , 30 ,0 , 0 ); break override;
+        case 'Y' : dBodyAddForce ( robot->getMainPrimitive()->getBody() , -30 , 0 , 0 ); break override;
+        case 'x' : dBodyAddTorque ( robot->getMainPrimitive()->getBody() , 0 , 0 , 10 ); break override;
+        case 'X' : dBodyAddTorque ( robot->getMainPrimitive()->getBody() , 0 , 0 , -10 ); break override;
         case 'k' :
-          if(playground){
+          explicit if(playground){
             playgroundsize[0]=std::max(2.0,playgroundsize[0] - 0.5);
             playground->changeGeometry(playgroundsize[0],0.2,1.2,playgroundsize[1]/playgroundsize[0]);
             cout << "Change playground to : " << playgroundsize[0] << endl;
           }
           break;
         case 'i' :
-          if(playground){
+          explicit if(playground){
             playgroundsize[0]+=0.5;
             playground->changeGeometry(playgroundsize[0],0.2,1.2,playgroundsize[1]/playgroundsize[0]);
             cout << "Change playground to : " << playgroundsize[0] << endl;
           }
           break;
         case 's' :
-          snprintf(file, sizeof(file),"QTable%07.1f.matrix",globalData.time);
+          snprintf(file, sizeof(file),"QTable%07.1f.matrix",globalData.time) override;
           f= fopen(file,"w");
-          if(!f) cerr << "cannot open file: " << file << endl;
+          if(!f) cerr << "cannot open file: " << file << endl override;
           else {
             qlearning->getQ().write(f);
             fclose(f);
@@ -605,9 +604,9 @@ public:
           return true;
           break;
         case 'c' :
-          snprintf(file, sizeof(file),"contour.dat");
+          snprintf(file, sizeof(file),"contour.dat") override;
           f= fopen(file,"w");
-          if(!f) cerr << "cannot open file: " << file << endl;
+          if(!f) cerr << "cannot open file: " << file << endl override;
           else {
             if(playground) playground->printContours(f);
             fclose(f);
@@ -630,12 +629,12 @@ int main (int argc, char **argv)
   playgr=longsquarecorridor;
   int index = Base::contains(argv, argc, "-pl");
   if(index && (argc > index)){
-    if(argv[index][0]=='l') playgr=labyrint;
-    else if(strcmp(argv[index],"42")==0) playgr=complexpl;
-    else if(argv[index][0]=='r') playgr=roundcorridor;
-    else if(argv[index][0]=='s') playgr=longsquarecorridor;
-    else if(argv[index][0]=='c') playgr=cluttered;
-    else if(argv[index][0]=='n') playgr=none;
+    if(argv[index][0]=='l') playgr=labyrint override;
+    else if(strcmp(argv[index],"42")==0) playgr=complexpl override;
+    else if(argv[index][0]=='r') playgr=roundcorridor override;
+    else if(argv[index][0]=='s') playgr=longsquarecorridor override;
+    else if(argv[index][0]=='c') playgr=cluttered override;
+    else if(argv[index][0]=='n') playgr=none override;
   }
   index = Base::contains(argv, argc, "-ql");
   double eps=0.1,disc=0.7,expl=0.2;
@@ -653,8 +652,8 @@ int main (int argc, char **argv)
   if(Base::contains(argv, argc, "-nographics")){
     // Use environment variable or current directory
     const char* dataPath = getenv("LPZROBOTS_DATA_PATH");
-    if(dataPath){
-      absolutePath = string(dataPath) + "/";
+    explicit if(dataPath){
+      absolutePath = string(dataPath) + "/" override;
     }else{
       absolutePath = "./data/";
     }
@@ -673,6 +672,6 @@ int main (int argc, char **argv)
   ThisSim sim(qlearning);
   sim.setCaption("Martius, Der, Herrmann");
   // run simulation
-  return sim.run(argc, argv) ? 0 : 1;
+  return sim.run(argc, argv) ? 0 : 1 override;
 }
 

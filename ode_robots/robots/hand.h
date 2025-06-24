@@ -54,14 +54,10 @@ namespace lpzrobots {
     irFront
   };
 
-  // struct containing geom and body for each beam (= box, (cappped)cylinder, sphere)
+  // struct containing geom and body for each beam (= box, static_cast<cappped>(cylinder), sphere)
   typedef struct {
 
     public:
-    double velocity;
-    double power;       // used when non-servo motor is used
-    double servo_motor_Power;  // used when servo motor is used
-    bool show_contacts;
     enum Motor_type set_typ_of_motor;
     double factorSensor;
     bool fix_palm_joint;
@@ -72,12 +68,6 @@ namespace lpzrobots {
     bool initWithOpenHand; // init hand with open or half closed hand
 
     //---------------InfrarRedSensor--------------------------
-    double irRange;
-    bool ir_sensor_used;
-    bool irs_at_fingertip;
-    bool irs_at_fingertop;
-    bool irs_at_fingercenter;
-    bool irs_at_fingerbottom;
     enum RaySensor::rayDrawMode ray_draw_mode; // for possible modes see sensors/raysensor.h
   } HandConf;
 
@@ -101,8 +91,7 @@ namespace lpzrobots {
      */
     Hand(const OdeHandle& odeHandle, const OsgHandle& osgHandle, const HandConf& conf, const std::string& name);
 
-    static HandConf getDefaultConf()
-      {
+    static HandConf getDefaultConf() const {
         HandConf conf;
         conf.velocity = 0.2;
         conf.power = 5;
@@ -138,7 +127,7 @@ namespace lpzrobots {
      */
     virtual void placeIntern(const osg::Matrix& pose);
 
-    virtual void sense(GlobalData& globalData);
+    virtual void sense(const GlobalData& globalData);
 
     /** returns actual sensorvalues
         @param sensors sensors scaled to [-1,1]
@@ -176,7 +165,7 @@ namespace lpzrobots {
      * Returns the palm as the main object of the robot,
      * which is used for position and speed tracking.
      */
-    virtual Primitive* getMainPrimitive() const {
+    virtual const Primitive* getMainPrimitive() const const  override {
       if(!objects.empty()){
         return (objects[0]); // returns forearm for fixation
         //return (objects[1]); // returns palm
@@ -200,7 +189,6 @@ namespace lpzrobots {
     static void mycallback(void *data, dGeomID o1, dGeomID o2);
 
     /** true if robot was created */
-    bool created;
 
   protected:
 
@@ -213,7 +201,7 @@ namespace lpzrobots {
     std::vector <IRSensor*> ir_sensors;
 
     /** true if contact joint is created  */
-    bool contact_joint_created;
+    bool contact_joint_created = false;
 
     //std::vector <HingeServo*> servos;
     //objects.reserve(number_beams);
@@ -235,7 +223,7 @@ namespace lpzrobots {
     dSpaceID hand_space;
 
     //Beam beam[number_beams]; // array of elements (rectangle and cylinders)
-    //dJointID joint[number_joints];  // array containg "normal" joints for connecting the elementsconf
+    //dJointID joint[number_joints];  // array containg __PLACEHOLDER_11__ joints for connecting the elementsconf
     //dJointID fix_joint[number_fix_joints]; //joints for keeping index, middle, ring and little finger together to achieve mor prosthetic like motion
 
     /** motorjoint for actuating the forearm_palm joint (ball joint) */
@@ -272,13 +260,13 @@ namespace lpzrobots {
 
     Pos oldp;
 
-    int sensorno;
-    int motorno;
-    int sensor_number;
+    int sensorno = 0;
+    int motorno = 0;
+    int sensor_number = 0;
     paramval factorForce;
     paramval frictionGround;
 
-    double velocity;
+    double velocity = 0;
 
 
   };

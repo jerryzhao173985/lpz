@@ -42,7 +42,7 @@ public:
 	/**
 	 * default constructor
 	 */
-	IMutationFactorStrategy();
+	IMutationFactorStrategy() override;
 
 	/**
 	 * default destructor
@@ -53,7 +53,7 @@ public:
 	 * this abstract function should later calculate the new mutation factor.
 	 * It use for this a set gens. Most the gens which for one prototyp in one generation are.
 	 * @param gene (vector<Gen*>) this set of gens
-	 * @return (IValue*) the mutation factor
+	 * @return static_cast<IValue*>(the) mutation factor
 	 */
 	virtual IValue* calcMutationFactor(const std::vector<Gen*>& gene) = 0;
 };

@@ -46,14 +46,14 @@ namespace lpzrobots {
        *  heavy motion blur is set by globalData.odeConfig.motionPersistance=0.25
        *  light motuib blur is set by globalData.odeConfig.motionPersistence=0.1
        */ 
-      MotionBlurDrawCallback(GlobalData& global);
+      explicit MotionBlurDrawCallback(const GlobalData& global);
       
-      virtual void operator()(osgProducer::OsgSceneHandler &handler, Producer::Camera &camera) override;
+      virtual void operator()(osgProducer::const OsgSceneHandler& handler, Producer::const Camera& camera) override;
 
     private:
-      bool cleared_;
-      double t0_;
-      double persistence_;
+      bool cleared_ = false;
+      double t0_ = 0;
+      double persistence_ = 0;
       GlobalData& globalData; // the global environment variables
     };
   

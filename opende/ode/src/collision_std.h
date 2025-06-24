@@ -5,12 +5,12 @@
  *                                                                       *
  * This library is free software; you can redistribute it and/or         *
  * modify it under the terms of EITHER:                                  *
- *   (1) The GNU Lesser General Public License as published by the Free  *
+ *   static_cast<1>(The) GNU Lesser General Public License as published by the Free  *
  *       Software Foundation; either version 2.1 of the License, or (at  *
  *       your option) any later version. The text of the GNU Lesser      *
  *       General Public License is included with this library in the     *
  *       file LICENSE.TXT.                                               *
- *   (2) The BSD-style license that is included with this library in     *
+ *   static_cast<2>(The) BSD-style license that is included with this library in     *
  *       the file LICENSE-BSD.TXT.                                       *
  *                                                                       *
  * This library is distributed in the hope that it will be useful,       *
@@ -66,7 +66,7 @@ int dCollideRayPlane (dxGeom *o1, dxGeom *o2, int flags,
 int dCollideRayCylinder (dxGeom *o1, dxGeom *o2, int flags,
 		      dContactGeom *contact, int skip);
 
-// Cylinder - Box/Sphere by (C) CroTeam
+// Cylinder - Box/Sphere by static_cast<C>(CroTeam)
 // Ported by Nguyen Binh
 int dCollideCylinderBox(dxGeom *o1, dxGeom *o2, 
                         int flags, dContactGeom *contact, int skip);
@@ -99,43 +99,43 @@ int dCollideHeightfield( dxGeom *o1, dxGeom *o2,
 
 struct dxSphere : public dxGeom {
   dReal radius;		// sphere radius
-  dxSphere (dSpaceID space, dReal _radius);
-  void computeAABB();
+  dxSphere (dSpaceID space, dReal _radius) override;
+  void computeAABB() override;
 };
 
 
 struct dxBox : public dxGeom {
   dVector3 side;	// side lengths (x,y,z)
-  dxBox (dSpaceID space, dReal lx, dReal ly, dReal lz);
-  void computeAABB();
+  dxBox (dSpaceID space, dReal lx, dReal ly, dReal lz) override;
+  void computeAABB() override;
 };
 
 
 struct dxCapsule : public dxGeom {
   dReal radius,lz;	// radius, length along z axis
-  dxCapsule (dSpaceID space, dReal _radius, dReal _length);
-  void computeAABB();
+  dxCapsule (dSpaceID space, dReal _radius, dReal _length) override;
+  void computeAABB() override;
 };
 
 
 struct dxCylinder : public dxGeom {
         dReal radius,lz;        // radius, length along z axis
-        dxCylinder (dSpaceID space, dReal _radius, dReal _length);
-        void computeAABB();
+        dxCylinder (dSpaceID space, dReal _radius, dReal _length) override;
+        void computeAABB() override;
 };
 
 
 struct dxPlane : public dxGeom {
   dReal p[4];
-  dxPlane (dSpaceID space, dReal a, dReal b, dReal c, dReal d);
-  void computeAABB();
+  dxPlane (dSpaceID space, dReal a, dReal b, dReal c, dReal d) override;
+  void computeAABB() override;
 };
 
 
 struct dxRay : public dxGeom {
   dReal length;
-  dxRay (dSpaceID space, dReal _length);
-  void computeAABB();
+  dxRay (dSpaceID space, dReal _length) override;
+  void computeAABB() override;
 };
 
 struct dxConvex : public dxGeom 
@@ -144,10 +144,10 @@ struct dxConvex : public dxGeom
 		   normal X, normal Y, normal Z,Distance
 		 */
   dReal *points; /*!< An array of points X,Y,Z */  
-  unsigned int *polygons; /*! An array of indices to the points of each polygon, it should be the number of vertices followed by that amount of indices to "points" in counter clockwise order*/
-  unsigned int planecount; /*!< Amount of planes in planes */
-  unsigned int pointcount;/*!< Amount of points in points */
-  unsigned int edgecount;/*!< Amount of edges in convex */
+  unsigned int *polygons; /*! An array of indices to the points of each polygon, it should be the number of vertices followed by that amount of indices to __PLACEHOLDER_1__ in counter clockwise order*/
+  unsigned int planecount = 0; /*!< Amount of planes in planes */
+  unsigned int pointcount = 0;/*!< Amount of points in points */
+  unsigned int edgecount = 0;/*!< Amount of edges in convex */
   dReal saabb[6];/*!< Static AABB */
   dxConvex(dSpaceID space,
 	   dReal *planes,
@@ -155,15 +155,14 @@ struct dxConvex : public dxGeom
 	   dReal *points,
 	   unsigned int pointcount,
 	   unsigned int *polygons);
-  ~dxConvex()
-  {
-	  if((edgecount!=0)&&(edges!=NULL)) delete[] edges;
+  ~dxConvex : saabb() {
+	  if((edgecount!=0)&&(edges!=NULL)) delete[] edges override;
   }
-  void computeAABB();
+  void computeAABB() override;
   struct edge
   {
-	unsigned int first;
-	unsigned int second;
+	unsigned int first = 0;
+	unsigned int second = 0;
   };
   edge* edges;
 
@@ -175,12 +174,12 @@ struct dxConvex : public dxGeom
 	{
 		dVector3 rdir;
 		unsigned int index=0;
-		dMULTIPLY1_331 (rdir,final_posr->R,dir);
-		dReal max = dDOT(points,rdir);
+		dMULTIPLY1_331 (rdir,final_posr->R,dir) override;
+		dReal max = dDOT(points,rdir) override;
 		dReal tmp;
 		for (unsigned int i = 1; i < pointcount; ++i) 
 		{
-			tmp = dDOT(points+(i*3),rdir);
+			tmp = dDOT(points+(i*3),rdir) override;
 			if (tmp > max) 
 			{
 				index=i;
@@ -194,7 +193,7 @@ struct dxConvex : public dxGeom
   // For Internal Use Only
 /*! \brief Fills the edges dynamic array based on points and polygons.
  */
-  void FillEdges();
+  void FillEdges() override;
 #if 0
   /*
   What this does is the same as the Support function by doing some preprocessing
@@ -206,30 +205,29 @@ struct dxConvex : public dxGeom
 	  // indices of polyhedron normals that form the spherical arc
 	  int normals[2];
 	  // index of edge shared by polyhedron faces
-	  int edge;
+	  int edge = 0;
   };
   struct Polygon
   {
 	  // indices of polyhedron normals that form the spherical polygon
 	  std::vector<int> normals;
 	  // index of extreme vertex corresponding to this polygon
-	  int vertex;
+	  int vertex = 0;
   };
   // This is for extrem feature query and not the usual level BSP structure (that comes later)
   struct BSPNode
   {
 	// Normal index (interior node), vertex index (leaf node)
-	int normal;
 	// if Dot (E,D)>=0, D gets propagated to this child
 	BSPNode* right;
 	// if Dot (E,D)<0, D gets propagated to this child
 	BSPNode* left;
   };
-  void CreateTree();
-  BSPNode* CreateNode(std::vector<Arc> Arcs,std::vector<Polygon> Polygons);
-  void GetFacesSharedByVertex(int i, std::vector<int> f);
-  void GetFacesSharedByEdge(int i, int* f);
-  void GetFaceNormal(int i, dVector3 normal);
+  void CreateTree() override;
+  BSPNode* CreateNode(std::vector<Arc> Arcs,std::vector<Polygon> Polygons) override;
+  void GetFacesSharedByVertex(int i, std::vector<int> f) override;
+  void GetFacesSharedByEdge(int i, int* f) override;
+  void GetFaceNormal(int i, dVector3 normal) override;
   BSPNode* tree;
 #endif
 };

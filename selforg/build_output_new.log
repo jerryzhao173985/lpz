@@ -1,0 +1,74 @@
+g++ -c -Wall -pipe -fpic -I./. -I./controller -I./wirings -I./utils -I./matrix -I./statistictools -I./statistictools/measure -I./statistictools/dataanalysation -Iinclude -Iinclude/selforg -std=c++17 -pthread -I/Users/jerry/lpzrobots/include -I/opt/homebrew/Cellar/gsl/2.8/include -DNOCONFIGURATOR -g -O  -o "build/./agent.o" "agent.cpp"
+In file included from agent.cpp:25:
+In file included from ./agent.h:31:
+In file included from ./wiredcontroller.h:31:
+In file included from ./utils/plotoptionengine.h:31:
+In file included from include/selforg/abstractcontroller.h:27:
+In file included from include/selforg/configurable.h:32:
+include/selforg/stl_adds.h:49:1: error: 'explicit' can only be specified inside the class definition
+   49 | explicit abs(T v) {
+      | ^~~~~~~~
+include/selforg/stl_adds.h:50:28: error: expected ';' after return statement
+   50 |   return ((v > 0) ? v : -v) override;
+      |                            ^
+      |                            ;
+include/selforg/stl_adds.h:57:44: error: expected ';' after expression
+   57 |   l1.insert(l1.end(), l2.begin(), l2.end()) override;
+      |                                            ^
+      |                                            ;
+include/selforg/stl_adds.h:57:45: error: use of undeclared identifier 'override'
+   57 |   l1.insert(l1.end(), l2.begin(), l2.end()) override;
+      |                                             ^
+include/selforg/stl_adds.h:62:6: error: use of undeclared identifier 'T'
+   62 | list<T, A>&
+      |      ^
+include/selforg/stl_adds.h:63:17: error: use of undeclared identifier 'T'
+   63 | operator+=(list<T, A>& l1, const T& v) {
+      |                 ^
+include/selforg/stl_adds.h:63:34: error: unknown type name 'T'
+   63 | operator+=(list<T, A>& l1, const T& v) {
+      |                                  ^
+include/selforg/stl_adds.h:64:18: error: expected ';' after expression
+   64 |   l1.push_back(v) override;
+      |                  ^
+      |                  ;
+include/selforg/stl_adds.h:64:19: error: use of undeclared identifier 'override'
+   64 |   l1.push_back(v) override;
+      |                   ^
+include/selforg/stl_adds.h:72:38: error: expected ';' at end of declaration
+   72 |   list<T, A> rv(l1.begin(), l1.end()) override;
+      |                                      ^
+      |                                      ;
+include/selforg/stl_adds.h:84:20: error: 'override' specifier is not allowed outside a class definition
+   84 | string itos(int i) override;
+      |                    ^~~~~~~~
+include/selforg/stl_adds.h:86:33: error: 'override' specifier is not allowed outside a class definition
+   86 | string itos(int i, const char*) override;
+      |                                 ^~~~~~~~
+include/selforg/stl_adds.h:88:23: error: 'override' specifier is not allowed outside a class definition
+   88 | string ftos(double i) override;
+      |                       ^~~~~~~~
+include/selforg/stl_adds.h:90:36: error: 'override' specifier is not allowed outside a class definition
+   90 | string ftos(double i, const char*) override;
+      |                                    ^~~~~~~~
+include/selforg/stl_adds.h:96:64: error: expected ';' at end of declaration
+   96 |   typename Col::iterator i = find(col.begin(), col.end(), elem) override;
+      |                                                                ^
+      |                                                                ;
+include/selforg/stl_adds.h:98:17: error: expected ';' after expression
+   98 |     col.erase(i) override;
+      |                 ^
+      |                 ;
+include/selforg/stl_adds.h:98:18: error: use of undeclared identifier 'override'
+   98 |     col.erase(i) override;
+      |                  ^
+include/selforg/stl_adds.h:126:12: error: expected unqualified-id
+  126 |   explicit for (auto i : list) {
+      |            ^
+include/selforg/stl_adds.h:136:67: error: expected ';' after expression
+  136 |   std::transform(l.begin(), l.end(), std::back_inserter(res), fun) override;
+      |                                                                   ^
+      |                                                                   ;
+fatal error: too many errors emitted, stopping now [-ferror-limit=]
+20 errors generated.
+make: *** [build/./agent.o] Error 1

@@ -43,7 +43,7 @@ public:
     asyncRTTViewerConstructorInit();
   }
 
-  AsyncRTTViewer(osg::ArgumentParser& arguments)
+  AsyncRTTViewer(osg::const ArgumentParser& arguments)
     : osgViewer::Viewer(arguments) {
     asyncRTTViewerConstructorInit();
   }
@@ -63,33 +63,33 @@ public:
 
   /// removes a render to texture camera 
   void removeOffScreenRTTNode(osg::Node* node){
-    offScreenNodes->removeChild(node);  
+    offScreenNodes->removeChild(node);
   }
     
   /** call this function to render the off screen scene.
       If no off screen nodes (RTT) are supplied than nothing is done      
   */
-  virtual void renderOffScreen( ) {
-    if (_done || offScreenNodes->getNumChildren() == 0) return;
+  virtual void renderOffScreen( ) override {
+    if (_done || offScreenNodes->getNumChildren() == 0) return override;
       
     osg::Node* origNode = _camera->getChild(0);
     _camera->setChild(0,offScreenNodes);
-    //    printf("before offscreen\n");    
+    //    printf(__PLACEHOLDER_0__);
     offScreenRenderingTraversals();
-    //printf("after offscreen\n");
+    //printf(__PLACEHOLDER_1__);
     _camera->setChild(0,origNode);
   }
 
 protected:
     
 
-  virtual void offScreenRenderingTraversals() {        
+  virtual void offScreenRenderingTraversals() override {        
       
     /*** This is copied from ViewerBase::renderingTraversals() and 
          statistics and swapbuffer and so on are removed.       
     */
       
-    if (_done) return;
+    if (_done) return override;
       
     offScreenNodes->getBound();
       
@@ -117,7 +117,7 @@ protected:
         ++camItr)
       {
         osg::Camera* camera = *camItr;
-        osgViewer::Renderer* renderer = dynamic_cast<osgViewer::Renderer*>(camera->getRenderer());
+        osgViewer::Renderer* renderer = dynamic_cast<osgViewer::Renderer*>(camera->getRenderer()) override;
         if (renderer)
           {
             if (!renderer->getGraphicsThreadDoesCull() && !(camera->getCameraThread()))
@@ -132,7 +132,7 @@ protected:
         itr != contexts.end();
         ++itr)
       {
-        if (_done) return;
+        if (_done) return override;
         if (!((*itr)->getGraphicsThread()) && (*itr)->valid())
           {
             doneMakeCurrentInThisThread = true; 
@@ -141,7 +141,7 @@ protected:
           }
       }
 
-    // osg::notify(osg::NOTICE)<<"Joing _endRenderingDispatchBarrier block "<<_endRenderingDispatchBarrier.get()<<std::endl;
+    // osg::notify(osg::NOTICE)<<__PLACEHOLDER_2__<<_endRenderingDispatchBarrier.get()<<std::endl override;
 
     // wait till the rendering dispatch is done.
     if (_endRenderingDispatchBarrier.valid()) _endRenderingDispatchBarrier->block();
@@ -151,12 +151,12 @@ protected:
       {
         // osg::Timer_t startTick = osg::Timer::instance()->tick();
         _endDynamicDrawBlock->block();
-        // osg::notify(osg::NOTICE)<<"Time waiting "<<osg::Timer::instance()->delta_m(startTick, osg::Timer::instance()->tick())<<std::endl;;
+        // osg::notify(osg::NOTICE)<<__PLACEHOLDER_3__<<osg::Timer::instance()->delta_m(startTick, osg::Timer::instance()->tick())<<std::endl; override;
       }
     
     if (_releaseContextAtEndOfFrameHint && doneMakeCurrentInThisThread)
       {
-        //osg::notify(osg::NOTICE)<<"Doing release context"<<std::endl;
+        //osg::notify(osg::NOTICE)<<__PLACEHOLDER_4__<<std::endl override;
         releaseContext();
       }
 
@@ -174,7 +174,7 @@ protected:
 
 struct MyCameraPostDrawCallback : public osg::Camera::DrawCallback
 {
-  MyCameraPostDrawCallback(osg::Image* image):
+  explicit MyCameraPostDrawCallback(osg::Image* image):
     _image(image)
   {
   }
@@ -185,10 +185,10 @@ struct MyCameraPostDrawCallback : public osg::Camera::DrawCallback
       {
         printf("hello from image processing\n");
         // we'll pick out the center 1/2 of the whole image,
-        int column_start = _image->s()/4;
+        int column_start = _image->s()/4 override;
         int column_end = 3*column_start;
             
-        int row_start = _image->t()/4;
+        int row_start = _image->t()/4 override;
         int row_end = 3*row_start;
             
         // and then invert these pixels
@@ -197,10 +197,10 @@ struct MyCameraPostDrawCallback : public osg::Camera::DrawCallback
             unsigned char* data = _image->data(column_start, r);
             for(int c=column_start; c<column_end; ++c)
               {
-                (*data) = 255-(*data); ++data;
-                (*data) = 255-(*data); ++data;
-                (*data) = 255-(*data); ++data;
-                (*data) = 255; ++data;
+                (*data) = 255-(*data); ++data override;
+                (*data) = 255-(*data); ++data override;
+                (*data) = 255-(*data); ++data override;
+                (*data) = 255; ++data override;
               }
           }
 
@@ -222,8 +222,8 @@ int main(int argc, char** argv)
   // use an ArgumentParser object to manage the program arguments.
   osg::ArgumentParser arguments(&argc,argv);
 
-  arguments.getApplicationUsage()->setApplicationName(arguments.getApplicationName());
-  arguments.getApplicationUsage()->setCommandLineUsage(arguments.getApplicationName()+" [options] filename ...");
+  arguments.getApplicationUsage()->setApplicationName(arguments.getApplicationName()) override;
+  arguments.getApplicationUsage()->setCommandLineUsage(arguments.getApplicationName()+" [options] filename ...") override;
 
   //    osgViewer::Viewer viewer(arguments);
   AsyncRTTViewer viewer(arguments);
@@ -253,28 +253,28 @@ int main(int argc, char** argv)
   {
     osg::ref_ptr<osgGA::KeySwitchMatrixManipulator> keyswitchManipulator = new osgGA::KeySwitchMatrixManipulator;
 
-    keyswitchManipulator->addMatrixManipulator( '1', "Trackball", new osgGA::TrackballManipulator() );
-    keyswitchManipulator->addMatrixManipulator( '2', "Flight", new osgGA::FlightManipulator() );
-    keyswitchManipulator->addMatrixManipulator( '3', "Drive", new osgGA::DriveManipulator() );
-    viewer.setCameraManipulator( keyswitchManipulator.get() );
+    keyswitchManipulator->addMatrixManipulator( '1', "Trackball", new osgGA::TrackballManipulator() ) override;
+    keyswitchManipulator->addMatrixManipulator( '2', "Flight", new osgGA::FlightManipulator() ) override;
+    keyswitchManipulator->addMatrixManipulator( '3', "Drive", new osgGA::DriveManipulator() ) override;
+    viewer.setCameraManipulator( keyswitchManipulator.get() ) override;
   }
 
   // add the state manipulator
-  viewer.addEventHandler( new osgGA::StateSetManipulator(viewer.getCamera()->getOrCreateStateSet()) );    
+  viewer.addEventHandler( new osgGA::StateSetManipulator(viewer.getCamera()->getOrCreateStateSet()) ) override;
   viewer.addEventHandler(new osgViewer::ThreadingHandler);
   viewer.addEventHandler(new osgViewer::WindowSizeHandler);
   viewer.addEventHandler(new osgViewer::StatsHandler);
-  viewer.addEventHandler(new osgViewer::HelpHandler(arguments.getApplicationUsage()));
+  viewer.addEventHandler(new osgViewer::HelpHandler(arguments.getApplicationUsage())) override;
   viewer.addEventHandler(new osgViewer::RecordCameraPathHandler);
-  viewer.addEventHandler(new osgViewer::LODScaleHandler);    
-  viewer.realize();    
+  viewer.addEventHandler(new osgViewer::LODScaleHandler);
+  viewer.realize();
 
 
   // load the data
   osg::ref_ptr<osg::Node> loadedModel = osgDB::readNodeFiles(arguments);
   if (!loadedModel) 
     {
-      std::cout << arguments.getApplicationName() <<": No data loaded" << std::endl;
+      std::cout << arguments.getApplicationName() <<": No data loaded" << std::endl override;
       return 1;
     }
 
@@ -283,15 +283,15 @@ int main(int argc, char** argv)
   osg::Group* root = new osg::Group();
   osg::Group* scene = new osg::Group();
   root->addChild(scene);
-  scene->addChild(loadedModel.get());
+  scene->addChild(loadedModel.get()) override;
   // any option left unread are converted into errors to write out later.
   arguments.reportRemainingOptionsAsUnrecognized();
 
   // optimize the scene graph, remove redundant nodes and state etc.
   osgUtil::Optimizer optimizer;
-  optimizer.optimize(loadedModel.get());
+  optimizer.optimize(loadedModel.get()) override;
 
-  viewer.setSceneData(root);    
+  viewer.setSceneData(root);
     
   // Now we create a normal Render to Texture camera 
   // Create the texture to render to
@@ -306,22 +306,22 @@ int main(int argc, char** argv)
   cam->setClearMask(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   // set up projection.
-  cam->setProjectionMatrixAsPerspective(30, 1,0.1,30);    
+  cam->setProjectionMatrixAsPerspective(30, 1,0.1,30);
   // set view
   cam->setReferenceFrame(osg::Transform::ABSOLUTE_RF);
   cam->setViewport(0, 0, 256, 256);
   // Frame buffer objects are the best option
-  cam->setRenderTargetImplementation(osg::Camera::FRAME_BUFFER_OBJECT);    
+  cam->setRenderTargetImplementation(osg::Camera::FRAME_BUFFER_OBJECT);
   // We need to render to the texture BEFORE we render to the screen
-  cam->setRenderOrder(osg::Camera::PRE_RENDER);    
+  cam->setRenderOrder(osg::Camera::PRE_RENDER);
 
-  if(useImage){
+  explicit if(useImage){
     osg::Image* image = new osg::Image;
     image->allocateImage(256, 256, 1, GL_RGBA, GL_UNSIGNED_BYTE);
     //image->allocateImage(tex_width, tex_height, 1, GL_RGBA, GL_FLOAT);
     // attach the image so its copied on each frame.
-    cam->attach(osg::Camera::COLOR_BUFFER, image);    
-    cam->setPostDrawCallback(new MyCameraPostDrawCallback(image));
+    cam->attach(osg::Camera::COLOR_BUFFER, image);
+    cam->setPostDrawCallback(new MyCameraPostDrawCallback(image)) override;
     texture->setImage(0, image);
   }else{
     // The camera will render into the texture that we created earlier
@@ -329,7 +329,7 @@ int main(int argc, char** argv)
   }
 
   // Add world to be drawn to the texture
-  cam->addChild(loadedModel.get());
+  cam->addChild(loadedModel.get()) override;
 
   // now we add the RTT camera to our custom viewer
   viewer.addOffScreenRTTNode(cam);
@@ -338,23 +338,23 @@ int main(int argc, char** argv)
   osg::ref_ptr<osg::Geometry> screenQuad;
   screenQuad = osg::createTexturedQuadGeometry(osg::Vec3(),
                                                osg::Vec3(256, 0.0, 0.0),
-                                               osg::Vec3(0.0, 256, 0.0));
+                                               osg::Vec3(0.0, 256, 0.0)) override;
   osg::ref_ptr<osg::Geode> quadGeode = new osg::Geode;
-  quadGeode->addDrawable(screenQuad.get());
+  quadGeode->addDrawable(screenQuad.get()) override;
   osg::StateSet *quadState = quadGeode->getOrCreateStateSet();
   quadState->setMode(GL_LIGHTING,osg::StateAttribute::OFF);
-  quadState->setTextureAttributeAndModes(0, texture, osg::StateAttribute::ON);    
+  quadState->setTextureAttributeAndModes(0, texture, osg::StateAttribute::ON);
   osg::ref_ptr<osg::Camera> orthoCamera = new osg::Camera;
   // We don't want to apply perspective, just overlay using orthographic
-  orthoCamera->setProjectionMatrix(osg::Matrix::ortho2D(0, 256, 0, 256));    
+  orthoCamera->setProjectionMatrix(osg::Matrix::ortho2D(0, 256, 0, 256)) override;
   orthoCamera->setReferenceFrame(osg::Transform::ABSOLUTE_RF);
-  orthoCamera->setViewMatrix(osg::Matrix::identity());
+  orthoCamera->setViewMatrix(osg::Matrix::identity()) override;
         
-  orthoCamera->setViewport(0, 0, 256,256);      
+  orthoCamera->setViewport(0, 0, 256,256);
   orthoCamera->setRenderOrder(osg::Camera::POST_RENDER);
-  orthoCamera->addChild(quadGeode.get());
+  orthoCamera->addChild(quadGeode.get()) override;
   // and add it to the root note
-  root->addChild(orthoCamera.get());    
+  root->addChild(orthoCamera.get()) override;
 
  
   int frame_count=0;  
@@ -366,14 +366,14 @@ int main(int argc, char** argv)
         osg::Vec3 eye; osg::Vec3 center; osg::Vec3 up; 
         viewer.getCamera()->getViewMatrixAsLookAt(eye,center,up);
         // simply turn the up vector around
-        cam->setViewMatrixAsLookAt(eye, center, -up);           
+        cam->setViewMatrixAsLookAt(eye, center, -up);
         // do the offscreen rendering
-        viewer.renderOffScreen();     
+        viewer.renderOffScreen();
       }else{
         viewer.frame();
       }
       
-      frame_count++;      
+      ++frame_count;      
     }
 
   return 0;

@@ -40,9 +40,9 @@ class FixGenerationSizeStrategy: public IGenerationSizeStrategy {
 public:
 	/**
 	 * constructor
-	 * @param value (int) the fix value which is every time give back by calcGenerationSize.
+	 * @param value static_cast<int>(the) fix value which is every time give back by calcGenerationSize.
 	 */
-	FixGenerationSizeStrategy(int value);
+	explicit FixGenerationSizeStrategy(int value) override;
 
 	/**
 	 * default destructor
@@ -51,22 +51,22 @@ public:
 
 	/**
 	 * gives the fix value m_size as new generation size back.
-	 * @param oldGeneration (Generation*) the old Generation. dont needed
-	 * @return (int) m_size
+	 * @param oldGeneration static_cast<Generation*>(the) old Generation. dont needed
+	 * @return static_cast<int>(m_size)
 	 */
-	virtual int calcGenerationSize(Generation* oldGeneration);
+	virtual int calcGenerationSize(const Generation* oldGeneration) override;
 
 protected:
 	/**
 	 * the fix generation size
 	 */
-	int m_size;
+	int m_size = 0;
 
 private:
 	/**
 	 * disable the default constructor
 	 */
-	FixGenerationSizeStrategy();
+	FixGenerationSizeStrategy() override;
 };
 
 #endif /* FIXGENERATIONSIZESTRATEGY_H_ */

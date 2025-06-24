@@ -38,14 +38,14 @@ namespace lpzrobots {
 
     ~Sound();
 
-    void createVisual(GlobalData& globalData, double visualSize, Pos visualOffset) const;
+    void createVisual(GlobalData& globalData, double visualSize, Pos visualOffset) const override;
 
     /// nice predicate function for finding old sound signals
     struct older_than {
       using argument_type = const Sound&;
       using result_type = bool;
-      older_than(double time) : time(time) {}
-      double time;
+      explicit older_than(double time_) : time(time_) {}
+      double time = 0;
       bool operator()(const Sound& s) { return s.time < time; }
     };
 

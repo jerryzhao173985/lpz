@@ -59,7 +59,7 @@ class SphericalRobotECB : public ECB {
   
 public:
   
-  SphericalRobotECB(std::string address, QGlobalData& globalData, ECBConfig& ecbConfig) : ECB(address, globalData, ecbConfig), x_osci(107), y_osci(107) {}
+  SphericalRobotECB(const std::string& address, QGlobalData& globalData, ECBConfig& ecbConfig) : ECB(address, globalData, ecbConfig), x_osci(107), y_osci(107) {}
     
   virtual ~SphericalRobotECB();
   

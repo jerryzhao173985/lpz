@@ -24,7 +24,7 @@ void SimplePipeReader::run()
   bool closing=false;
   QByteArray charList;
 //   int counter = 0;
-  while ( !closing ) {
+  explicit while ( !closing ) {
       QString line = input_line->readLine ( 500 );
 //       std::cout << "SimplePipeReader: read " << line.size() << " chars" << std::endl;
       if ( line.isEmpty() ) continue;
@@ -82,7 +82,7 @@ std::list<std::string> SimplePipeReader::getChannelLine()
   std::list<std::string> tmp_list;
 
   QStringList string_list = currentChannelLine.split ( ' ' );
-  for ( int i = 0;i < string_list.size();i++ ) {
+  for ( int i = 0;i < string_list.size();++i ) {
 
       std::string s = ( ( string_list.at ( i ) ).toAscii() ).data();//toStdString;
 //    std::cout << "SimplePipeReader: getChannelLine[" << s << "]****************" << std::endl;
@@ -98,7 +98,7 @@ std::list<std::string> SimplePipeReader::getDescriptionLine()
   std::list<std::string> tmp_list;
 
   QStringList string_list = currentDescriptionLine.split ( ' ' );
-  for ( int i = 0;i < string_list.size();i++ ) {
+  for ( int i = 0;i < string_list.size();++i ) {
 
     std::string s = ( ( string_list.at ( i ) ).toAscii() ).data();//toStdString;
 //     std::cout << "SimplePipeReader: getChannelLine[" << s << "]****************" << std::endl;
@@ -119,7 +119,7 @@ std::list< double > SimplePipeReader::getDataLine()
   QString s;
 
   QStringList string_list = currentDataLine.split ( ' ' );
-  for ( int i = 0;i < string_list.size();i++ ) {
+  for ( int i = 0;i < string_list.size();++i ) {
     s = string_list.at ( i );
     if (s.size() == 0) continue;
     double d = s.toDouble ( &success );

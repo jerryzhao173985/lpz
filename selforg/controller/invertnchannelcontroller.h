@@ -8,7 +8,7 @@
  *   LICENSE:                                                              *
  *   This work is licensed under the Creative Commons                      *
  *   Attribution-NonCommercial-ShareAlike 2.5 License. To view a copy of   *
- *   this license, visit http://creativecommons.org/licenses/by-nc-sa/2.5/ *
+ *   this license, visit http:__PLACEHOLDER_2__
  *   or send a letter to Creative Commons, 543 Howard Street, 5th Floor,   *
  *   San Francisco, California, 94105, USA.                                *
  *                                                                         *
@@ -38,10 +38,10 @@
 class InvertNChannelController : public InvertController {
 
 public:
-  explicit InvertNChannelController(int _buffersize, bool _update_only_1 = false);
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
+  InvertNChannelController(int _buffersize, bool _update_only_1 = false);
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
 
-  virtual ~InvertNChannelController() override;
+  virtual ~InvertNChannelController();
 
   /// returns the name of the object (with version number)
   virtual paramkey getName() const noexcept override {
@@ -58,28 +58,28 @@ public:
 
   /// performs one step (includes learning).
   /// Calulates motor commands from sensor inputs.
-  virtual void step(const sensor*, int number_sensors, motor*, int number_motors) override;
+  virtual void step(const sensor*, int number_sensors, motor*, int number_motors);
 
   /// performs one step without learning. Calulates motor commands from sensor inputs.
   virtual void stepNoLearning(const sensor*,
                               int number_sensors,
                               motor*,
-                              int number_motors) override;
+                              int number_motors);
 
   /***** STOREABLE ****/
   /** stores the controller values to a given file. */
   virtual bool store(FILE* f) const override;
   /** loads the controller values from a given file. */
-  virtual bool restore(FILE* f) override;
+  virtual bool restore(FILE* f);
 
   // inspectable interface
-  virtual std::list<ILayer> getStructuralLayers() const override;
-  virtual std::list<IConnection> getStructuralConnections() const override;
+  virtual std::list<ILayer> getStructuralLayers() const;
+  virtual std::list<IConnection> getStructuralConnections() const;
 
 protected:
-  unsigned short number_channels;
-  unsigned short buffersize;
-  bool update_only_1;
+  unsigned short number_channels = 0;
+  unsigned short buffersize = 0;
+  bool update_only_1 = false;
 
   matrix::Matrix A; // Model Matrix
   matrix::Matrix C; // Controller Matrix
@@ -87,7 +87,7 @@ protected:
   matrix::Matrix L; // Jacobi Matrix
   matrix::Matrix* x_buffer;
   matrix::Matrix* y_buffer;
-  int t;
+  int t = 0;
   paramkey name;
 
   /*   virtual void iteration(double *column, */
@@ -105,7 +105,7 @@ protected:
   virtual matrix::Matrix calculateDelayedValues(const matrix::Matrix* buffer,
                                                 unsigned int number_steps_of_delay_);
   virtual matrix::Matrix calculateSmoothValues(const matrix::Matrix* buffer,
-                                               unsigned int number_steps_for_averaging_);
+                                               unsigned int number_steps_for_av overrideeraging_);
 
   matrix::Matrix calculateControllerValues(const matrix::Matrix& x_smooth);
 

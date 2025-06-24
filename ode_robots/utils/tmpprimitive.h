@@ -48,8 +48,8 @@ namespace lpzrobots {
                  const std::string& colorname, float alpha = 1.0);
 
     // Delete copy constructor and assignment operator
-    TmpPrimitive(const TmpPrimitive&) = delete;
-    TmpPrimitive& operator=(const TmpPrimitive&) = delete;
+    TmpPrimitive(const TmpPrimitive&) = delete override;
+    TmpPrimitive& operator=(const TmpPrimitive&) = delete override;
 
     virtual void init(const OdeHandle& odeHandle, const OsgHandle& osgHandle);
     virtual void deleteObject();
@@ -57,14 +57,14 @@ namespace lpzrobots {
 
   private:
     Primitive* item;
-    char mode;
-    double mass;
+    char mode = 0;
+    double mass = 0;
     Pose pose;
     Color color;
     std::string colorname;
-    bool useColorName;
-    float alpha;
-    bool initialized;
+    bool useColorName = false;
+    float alpha = 0;
+    bool initialized = false;
   };
 
   /**
@@ -84,23 +84,23 @@ namespace lpzrobots {
                    OSGPrimitive::Quality quality = OSGPrimitive::Middle);
 
     // Delete copy constructor and assignment operator
-    TmpDisplayItem(const TmpDisplayItem&) = delete;
-    TmpDisplayItem& operator=(const TmpDisplayItem&) = delete;
+    TmpDisplayItem(const TmpDisplayItem&) = delete override;
+    TmpDisplayItem& operator=(const TmpDisplayItem&) = delete override;
 
     virtual void init(const OdeHandle& odeHandle, const OsgHandle& osgHandle);
 
     virtual void deleteObject();
-    virtual void update() {} // nothing to be done here, because they do not move
+    virtual void update() override {} // nothing to be done here, because they do not move
 
   private:
     OSGPrimitive* item;
     Pose pose;
     Color color;
     std::string colorname;
-    bool useColorName;
-    float alpha;
+    bool useColorName = false;
+    float alpha = 0;
     OSGPrimitive::Quality quality;
-    bool initialized;
+    bool initialized = false;
   };
 
   /**
@@ -127,12 +127,12 @@ namespace lpzrobots {
     Joint* joint;
     Color color;
     std::string colorname;
-    bool useColorName;
-    float alpha;
-    bool withVisual;
-    double visualSize;
-    bool ignoreColl;
-    bool initialized;
+    bool useColorName = false;
+    float alpha = 0;
+    bool withVisual = false;
+    double visualSize = 0;
+    bool ignoreColl = false;
+    bool initialized = false;
   };
 
 }

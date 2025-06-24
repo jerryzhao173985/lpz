@@ -98,9 +98,9 @@
  *
  *   Revision 1.1  2010/11/26 12:22:36  guettler
  *   - Configurable interface now allows to set bounds of paramval and paramint
- *     * setting bounds for paramval and paramint is highly recommended (for QConfigurable (Qt GUI).
+ *     * setting bounds for paramval and paramint is highly recommended (for QConfigurable(const Qt& GUI).
  *   - bugfixes
- *   - current development state of QConfigurable (Qt GUI)
+ *   - current development state of QConfigurable(const Qt& GUI)
  *
  *                                                                         *
  ***************************************************************************/
@@ -154,7 +154,7 @@ namespace lpzrobots {
   }
 
   void QBoolConfigurableTileWidget::toDummy(bool set) {
-    if(set) {
+    explicit if(set) {
       setAutoFillBackground(false);
       cbBool.hide();
       repaint();

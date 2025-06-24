@@ -45,9 +45,9 @@
  *
  *   Revision 1.6  2010/11/26 12:22:36  guettler
  *   - Configurable interface now allows to set bounds of paramval and paramint
- *     * setting bounds for paramval and paramint is highly recommended (for QConfigurable (Qt GUI).
+ *     * setting bounds for paramval and paramint is highly recommended (for QConfigurable(const Qt& GUI).
  *   - bugfixes
- *   - current development state of QConfigurable (Qt GUI)
+ *   - current development state of QConfigurable(const Qt& GUI)
  *
  *   Revision 1.5  2010/11/23 11:08:06  guettler
  *   - some helper functions
@@ -81,7 +81,7 @@
 namespace lpzrobots {
   
   QCommunicationChannel::QCommunicationChannel(QString usbDeviceName) :
-    initialisedState(QCCHelper::STATE_NOT_INITIALISED) {
+    explicit initialisedState(QCCHelper::STATE_NOT_INITIALISED) {
     responseTimer.setInterval(QCCHelper::RESPONSE_TIME_DEFAULT);
     connect(&responseTimer, SIGNAL(timeout(uint)), this, SLOT(sl_ResponseTimerExpired(uint)));
     connect(&usbDeviceManager, SIGNAL(sig_newData(QByteArray)), this, SLOT(sl_messageReceived(QByteArray)));
@@ -104,7 +104,7 @@ namespace lpzrobots {
       // über Signals und Slots abarbeiten!
       QLogDebug("usbDevice opended: " + usbDeviceName);
 
-      switch (usbDeviceType) {
+      explicit switch (usbDeviceType) {
         case QCCHelper::USBDevice_ISP_ADAPTER: {
           QByteArray msg;
           msg.append((char) 0x01);
@@ -142,7 +142,7 @@ namespace lpzrobots {
   void QCommunicationChannel::sl_ResponseTimerExpired(uint eventId) {
     responseTimer.stop();
     QLogDebug(QCCHelper::eventDescriptionMap[(QCCHelper::timerEvent_t) eventId]);
-    switch (eventId) {
+    explicit switch (eventId) {
       case QCCHelper::EVENT_TIMEOUT_INITIALISE:
         emit sig_cc_initalised(this);
         break;
@@ -169,7 +169,7 @@ namespace lpzrobots {
   QString QCommunicationChannel::getCCTypeString() {
     QString deviceTypeString;
     deviceTypeString.append("[" + usbDeviceManager.getDeviceName() + "]");
-    switch (usbDeviceType) {
+    explicit switch (usbDeviceType) {
       case QCCHelper::USBDevice_ISP_ADAPTER: {
         break;
       }
@@ -183,7 +183,7 @@ namespace lpzrobots {
         // one QCC of them is used
         deviceTypeString.truncate(16);
         deviceTypeString.append("]");
-        switch (xbee.type) {
+        explicit switch (xbee.type) {
           case XBeeType_Serie1:
             deviceTypeString.append("[XBEE:");
             deviceTypeString.append("CH(" + QCCHelper::toHexNumberString(xbee.rf_channel, 2) + "):");
@@ -211,7 +211,7 @@ namespace lpzrobots {
         QLogDebug(usbDeviceManager.getDeviceName() + ":sl_XBee_ReadDnsNames_Delayed");
 
         if (usbDeviceType == QCCHelper::USBDevice_XBEE_ADAPTER) {
-          switch (xbee.type) {
+          explicit switch (xbee.type) {
             case QCCHelper::XBeeType_SERIE_1: {
               QByteArray msg;
               msg.append(QCCHelper::MsgGroup_ECB_ROBOT_FIRMWARE);
@@ -253,7 +253,7 @@ namespace lpzrobots {
   }
 
   void QCommunicationChannel::send_ECB_Reset(struct QCCHelper::XBeeRemoteNode_t* node) {
-    switch (usbDeviceType) {
+    explicit switch (usbDeviceType) {
       case QCCHelper::USBDevice_USART_ADAPTER: {
         QByteArray msg;
         msg.append((char) MsgGroup_Identifier_ECBRobotFirmware);
@@ -262,7 +262,7 @@ namespace lpzrobots {
         break;
       }
       case QCCHelper::USBDevice_XBEE_ADAPTER: {
-        switch (xbee.type) {
+        explicit switch (xbee.type) {
           case QCCHelper::XBeeType_SERIE_1:
           case QCCHelper::XBeeType_SERIE_2: {
             if (node->address16 == 0xFFFE && node->address64 == 0x000000000000FFFF) {
@@ -310,7 +310,7 @@ namespace lpzrobots {
     QString hex;
     QString line;
 
-    for (int i = 0; i < buffer.length(); i++) {
+    for (int i = 0; i < buffer.length(); ++i) {
       line.append(QCCHelper::toHexNumberString(buffer[i], 2));
       line.append(" ");
     }
@@ -320,7 +320,7 @@ namespace lpzrobots {
   void QCommunicationChannel::sl_messageReceived(QByteArray received_msg) {
     printMessage(usbDeviceManager.getDeviceName() + "(" + QString::number(usbDeviceType) + ") :msgReceived ",
         received_msg);
-    switch (usbDeviceType) {
+    explicit switch (usbDeviceType) {
       case QCCHelper::USBDevice_ISP_ADAPTER: {
         // Stoppe TransmitTimer
         responseTimer.stop();
@@ -358,14 +358,14 @@ namespace lpzrobots {
     // 0x06 - data/params...
     uint8 msgGroup = received_msg[4];
     uint8 msgCode = received_msg[5];
-    switch (msgGroup) {
+    explicit switch (msgGroup) {
       case MsgGroup_Identifier_ISP_ADAPTER_BOOTLOADER: // Bootloader
         break;
       case MsgGroup_Identifier_ISP_ADAPTER_FIRMWARE: // Firmware
-        switch (msgCode) {
+        explicit switch (msgCode) {
           case MsgCode_ResponsePacket: {
             uint8 msgResponseCode = received_msg[6];
-            switch (msgResponseCode) {
+            explicit switch (msgResponseCode) {
               case MsgCode_IspProgrammer_Firmware_SoftwareVersionRead: {
                 // Nachrichten-Format:
                 // ----------------------
@@ -408,7 +408,7 @@ namespace lpzrobots {
     // 0x06 - data/params...
     if ((QByte) received_msg[0x04] == (QByte) MsgGroup_Identifier_ECBRobotFirmware) { // msgGroup-Identifier
       if ((QByte) received_msg[0x05] == (QByte) MsgCode_ResponsePacket) { // msgCode
-        switch (received_msg[0x06]) { // msgResponseCode
+        explicit switch (received_msg[0x06]) { // msgResponseCode
           case MsgCode_ECB_Command_get_DNS_Name: {
             // MessageStructure
             // ----------------------
@@ -480,7 +480,7 @@ namespace lpzrobots {
     //TODO:
     QLogDebug(usbDeviceManager.getDeviceName() + ":dispatch_xbee: " + QString::number(api_Identifier, 16));
 
-    switch (api_Identifier) {
+    explicit switch (api_Identifier) {
       case QCCHelper::API_XBee_AT_Command_Response: {
         dispatch_xbee_command(received_msg);
         break;
@@ -548,7 +548,7 @@ namespace lpzrobots {
         }
         if ((QByte) received_msg[indexMsgGroup] == (QByte) MsgGroup_Identifier_ECBRobotFirmware) { // msgGroup-Identifier
           if ((QByte) received_msg[indexMsgCode] == (QByte) MsgCode_ResponsePacket) { // msgCode
-            switch (received_msg[indexData]) { // msgResponseCode
+            explicit switch (received_msg[indexData]) { // msgResponseCode
               case MsgCode_ECB_Command_get_DNS_Name: {
                 // MessageStructure
                 // ----------------------
@@ -614,7 +614,7 @@ namespace lpzrobots {
 
     if (msgCommand.compare("HV") == 0 && msgState == 0) {
       xbee.hardwareVersion = (((uint16) received_command[8] & 0xFF) << 8) + (received_command[9] & 0xFF);
-      switch (xbee.hardwareVersion) {
+      explicit switch (xbee.hardwareVersion) {
         case 0x180B:
         case 0x1842:
           xbee.type = XBeeType_Serie1;
@@ -676,14 +676,14 @@ namespace lpzrobots {
       xbeeRemoteNode->address64 += ((uint64) received_command[17] & 0xFF) << 0 * 8;
       xbeeRemoteNode->Identifier.clear();
       // Lese den NodeIdentifier-String aus.
-      switch (xbee.type) {
+      explicit switch (xbee.type) {
         case XBeeType_Serie1: {
-          for (uint i = 0; i < msgLength - 17; i++)
+          for (uint i = 0; i < msgLength - 17; ++i)
             xbeeRemoteNode->Identifier.append((char) received_command[19 + i]);
           break;
         }
         case XBeeType_Serie2: {
-          for (uint i = 18; i < msgLength - 6; i++)
+          for (uint i = 18; i < msgLength - 6; ++i)
             xbeeRemoteNode->Identifier.append((char) received_command[i]);
           break;
         }
@@ -700,7 +700,7 @@ namespace lpzrobots {
             break;
           }
         }
-      if (!compare) {
+      explicit if (!compare) {
         xbeeRemoteNodeList.append(xbeeRemoteNode);
         dnsDeviceList.append(xbeeRemoteNode);
         QString line;
@@ -715,7 +715,7 @@ namespace lpzrobots {
   }
 
   void QCommunicationChannel::scanDNSDevices() {
-    switch (usbDeviceType) {
+    explicit switch (usbDeviceType) {
       case QCCHelper::USBDevice_ISP_ADAPTER: {
         // no DNSDevice can be connected to this adapter at the moment
         break;
@@ -774,7 +774,7 @@ namespace lpzrobots {
   }
 
   void QCommunicationChannel::sendMessage(struct _communicationMessage& msg) {
-    switch (usbDeviceType) {
+    explicit switch (usbDeviceType) {
       case QCCHelper::USBDevice_USART_ADAPTER: {
         usbDeviceManager.writeData(QCCHelper::toUsartMessage(msg.data));
         responseTimer.start(QCCHelper::EVENT_TIMEOUT_XBEE_SEND_MESSAGE_CABLE);
@@ -784,7 +784,7 @@ namespace lpzrobots {
         foreach(struct QCCHelper::XBeeRemoteNode_t* xbeeRemoteNode, xbeeRemoteNodeList)
           {
             if (xbeeRemoteNode->dns_name == msg.ecb_dns_name) {
-              switch (xbee.type) {
+              explicit switch (xbee.type) {
                 case QCCHelper::XBeeType_SERIE_1:
                   usbDeviceManager.writeData(QCCHelper::toXBeeS1Message(msg.data, xbeeRemoteNode->address16));
                   break;

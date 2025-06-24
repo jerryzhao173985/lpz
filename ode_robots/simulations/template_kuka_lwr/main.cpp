@@ -68,11 +68,11 @@ public:
     // gamma=0;
     // alpha == horizontal angle
     // beta == vertical angle
-    setCameraHomePos(Pos(5.2728, 7.2112, 3.31768), Pos(140.539, -13.1456, 0));
+    setCameraHomePos(Pos(5.2728, 7.2112, 3.31768), Pos(140.539, -13.1456, 0)) override;
     // initialization
     // - set noise to 0.1
     global.odeConfig.noise=0.05;
-    //  global.odeConfig.setParam("gravity", 0);
+    //  global.odeConfig.setParam(__PLACEHOLDER_0__, 0);
 
     // use Playground as boundary:
     // - create pointer to playground (odeHandle contains things like world and space the
@@ -84,7 +84,7 @@ public:
 
     // odeHandle and osgHandle are global references
     // vec3 == length, width, height
-    Playground* playground = new Playground(odeHandle, osgHandle, osg::Vec3(32, 0.2, 0.5));
+    Playground* playground = new Playground(odeHandle, osgHandle, osg::Vec3(32, 0.2, 0.5)) override;
     playground->setPosition(osg::Vec3(0,0,0.05)); // playground positionieren und generieren
     // register playground in obstacles list
     global.obstacles.push_back(playground);
@@ -101,7 +101,7 @@ public:
     // - add sphere to list of objectsof Interest
   
       PassiveSphere* s1 = new PassiveSphere(odeHandle, osgHandle, 0.1);
-      s1->setPosition(osg::Vec3(1,0,0));
+      s1->setPosition(osg::Vec3(1,0,0)) override;
       s1->setTexture("Images/dusty.rgb");
       global.obstacles.push_back(s1);
       objectsOfInterest[0] = s1->getMainPrimitive();
@@ -110,8 +110,8 @@ public:
     // - create pointer to Kuka Arm (with odeHandle and osg Handle, the size and the objects Of Interest)
     // - place robot		
     OdeRobot* vehicle = new Kuka(odeHandle, osgHandle, "Kuka", 2, objectsOfInterest);
-    vehicle->place(Pos(0,0,0));
-	arm = (Kuka*) vehicle;
+    vehicle->place(Pos(0,0,0)) override;
+	arm = static_cast<Kuka*>(vehicle) override;
 
 	//fix arm to ground
 	Joint* fixator;
@@ -128,7 +128,7 @@ public:
     //global.configs.push_back(controller);
 
     // create pointer to one2onewiring
-    One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1));
+    One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
 
     // create pointer to agent
     // initialize pointer with controller, robot and wiring
@@ -148,10 +148,9 @@ public:
 	o/O		add/remove random Object (very funny:)
 	h		show onscreen help and more options
 */
-  virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down)
-  {
-    if (down) { // only when key is pressed, not when released
-      switch ( (char) key )
+  virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down) override {
+    explicit if (down) { // only when key is pressed, not when released
+      switch ( static_cast<char> key )
 	{
  case 'm':
 	arm->toggleManualControlMode();
@@ -159,74 +158,74 @@ public:
 	
 case 'l':
         { double posj= arm->getJointTarget(0);
-        //std::cout << "Move joint 0 from" << posj << " to " << posj + 0.1 << "\n";
+        //std::cout << __PLACEHOLDER_3__ << posj << __PLACEHOLDER_4__ << posj + 0.1 << __PLACEHOLDER_5__;
         arm->moveJoint(0,  posj + 0.1754);
         break;
         }
     case 'L':
         { double posj= arm->getJointTarget(0);
-        //std::cout << "Move joint 0 from" << posj << " to " << posj - 0.1 << "\n";
+        //std::cout << __PLACEHOLDER_6__ << posj << __PLACEHOLDER_7__ << posj - 0.1 << __PLACEHOLDER_8__;
         arm->moveJoint(0, posj - 0.1754);
         break;}
     case 'q':
         { double posj= arm->getJointTarget(1);
-        //std::cout << "Move joint 1 from" << posj << " to " << posj + 0.1 << "\n";
+        //std::cout << __PLACEHOLDER_9__ << posj << __PLACEHOLDER_10__ << posj + 0.1 << __PLACEHOLDER_11__;
         arm->moveJoint(1, posj + 0.1754);
         break;}
     case 'Q':
         { double posj= arm->getJointTarget(1);
-        //std::cout << "Move joint 1 from" << posj << " to " << posj - 0.1 << "\n";
+        //std::cout << __PLACEHOLDER_12__ << posj << __PLACEHOLDER_13__ << posj - 0.1 << __PLACEHOLDER_14__;
         arm->moveJoint(1, posj - 0.1754);
         break;}
     case 'w':
         { double posj= arm->getJointTarget(2);
-        //std::cout << "Move joint 2 from" << posj << " to " << posj + 0.1 << "\n";
+        //std::cout << __PLACEHOLDER_15__ << posj << __PLACEHOLDER_16__ << posj + 0.1 << __PLACEHOLDER_17__;
         arm->moveJoint(2, posj + 0.1754);
         break;}
     case 'W':
         { double posj= arm->getJointTarget(2);
-        //std::cout << "Move joint 2 from" << posj << " to " << posj - 0.1 << "\n";
+        //std::cout << __PLACEHOLDER_18__ << posj << __PLACEHOLDER_19__ << posj - 0.1 << __PLACEHOLDER_20__;
         arm->moveJoint(2, posj - 0.1754);
         break;}
     case 'e':
         { double posj= arm->getJointTarget(3);
-        //std::cout << "Move joint 3 from" << posj << " to " << posj + 0.1 << "\n";
+        //std::cout << __PLACEHOLDER_21__ << posj << __PLACEHOLDER_22__ << posj + 0.1 << __PLACEHOLDER_23__;
         arm->moveJoint(3, posj + 0.1754);
         break;}
     case 'E':
         { double posj= arm->getJointTarget(3);
-        //std::cout << "Move joint 3 from" << posj << " to " << posj - 0.1 << "\n";
+        //std::cout << __PLACEHOLDER_24__ << posj << __PLACEHOLDER_25__ << posj - 0.1 << __PLACEHOLDER_26__;
         arm->moveJoint(3, posj - 0.1754);
         break;}
     case 'r':
         { double posj= arm->getJointTarget(4);
-        //std::cout << "Move joint 4 from" << posj << " to " << posj + 0.1 << "\n";
+        //std::cout << __PLACEHOLDER_27__ << posj << __PLACEHOLDER_28__ << posj + 0.1 << __PLACEHOLDER_29__;
         arm->moveJoint(4, posj + 0.1754);
         break;}
     case 'R':
         { double posj= arm->getJointTarget(4);
-       // std::cout << "Move joint 4 from" << posj << " to " << posj - 0.1 << "\n";
+       // std::cout << __PLACEHOLDER_30__ << posj << __PLACEHOLDER_31__ << posj - 0.1 << __PLACEHOLDER_32__;
         arm->moveJoint(4, posj - 0.1754);
         break;}
     case 't':
         { double posj= arm->getJointTarget(5);
-        //std::cout << "Move joint 5 from" << posj << " to " << posj + 0.1 << "\n";
+        //std::cout << __PLACEHOLDER_33__ << posj << __PLACEHOLDER_34__ << posj + 0.1 << __PLACEHOLDER_35__;
         arm->moveJoint(5, posj + 0.1754);
         break;}
     case 'T':
         { double posj= arm->getJointTarget(5);
-        //std::cout << "Move joint 5 from" << posj << " to " << posj - 0.1 << "\n";
+        //std::cout << __PLACEHOLDER_36__ << posj << __PLACEHOLDER_37__ << posj - 0.1 << __PLACEHOLDER_38__;
         arm->moveJoint(5, posj - 0.1754);
         break;}
     case 'z':
         { double posj= arm->getJointTarget(6);
-        //std::cout << "Move joint 6 from" << posj << " to " << posj + 0.1 << "\n";
+        //std::cout << __PLACEHOLDER_39__ << posj << __PLACEHOLDER_40__ << posj + 0.1 << __PLACEHOLDER_41__;
         arm->moveJoint(6, posj + 0.1754);
         break;}
     case 'Z':
 	{
          double posj= arm->getJointTarget(6);
-       // std::cout << "Move joint 6 from" << posj << " to " << posj - 0.1 << "\n";
+       // std::cout << __PLACEHOLDER_42__ << posj << __PLACEHOLDER_43__ << posj - 0.1 << __PLACEHOLDER_44__;
         arm->moveJoint(6, posj - 0.1754);
         break;}
     case 'g':
@@ -257,6 +256,6 @@ return false;
 int main (int argc, char **argv)
 {
   ThisSim sim;
-  return sim.run(argc, argv) ? 0 : 1;
+  return sim.run(argc, argv) ? 0 : 1 override;
 
 }

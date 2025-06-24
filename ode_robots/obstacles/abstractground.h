@@ -47,7 +47,7 @@ public:
 
     virtual void createGround(bool create);
 
-    virtual Primitive* getMainPrimitive() const;
+    virtual Primitive* getMainPrimitive() const override;
 
     virtual void changeGeometry(double length, double width, double height, double factorxy);
 
@@ -80,22 +80,22 @@ public:
     virtual std::list<Position> getCornerPointsXY();
 
     /// size in x dimension
-    virtual double getGroundLength(){ return groundLength; }
+    virtual double getGroundLength() override { return groundLength; }
     /// size in y dimension
-    virtual double getGroundWidth(){ return groundWidth; }
+    virtual double getGroundWidth() override { return groundWidth; }
 
-    virtual double getGroundThickness(){ return groundThickness; }
+    virtual double getGroundThickness() override { return groundThickness; }
 
     virtual void   setGroundThickness(double thickness);
 
   protected:
 
     Primitive* groundPlane; // the groundplane
-    bool creategroundPlane;
-    double groundLength;
-    double groundWidth;
-    double wallThickness;
-    double groundThickness;
+    bool creategroundPlane = false;
+    double groundLength = 0;
+    double groundWidth = 0;
+    double wallThickness = 0;
+    double groundThickness = 0;
     Substance groundSubstance;
     Color groundColor;
     std::string groundTextureFileName;

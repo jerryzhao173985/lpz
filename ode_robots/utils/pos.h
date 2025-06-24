@@ -35,26 +35,26 @@ namespace lpzrobots{
 
   class Pos : public osg::Vec3 {
   public:
-    Pos () : osg::Vec3 () {};
+    Pos () : osg::Vec3 () {} override;
     Pos (float x, float y, float z) : osg::Vec3(x, y, z) {}
-    Pos (const osg::Vec3& v) : osg::Vec3(v) {}
-    Pos (const osg::Vec4& v) : osg::Vec3(v.x(),v.y(),v.z()) {}
-    Pos (const Position& p) : osg::Vec3(p.x, p.y, p.z) {}
-    Pos (const dReal v[3]) : osg::Vec3(v[0], v[1], v[2]) {}
+    explicit Pos (const osg::Vec3& v) : osg::Vec3(v) {}
+    explicit Pos (const osg::Vec4& v) : osg::Vec3(v.x(),v.y(),v.z()) {}
+    explicit Pos (const Position& p) : osg::Vec3(p.x, p.y, p.z) {}
+    explicit Pos (const dReal v[3]) : osg::Vec3(v[0], v[1], v[2]) {}
 
     /// scaling
-    Pos operator*(double f) const { return Pos(x()*f,y()*f,z()*f);}
+    Pos operator*(double f) const override { return Pos(x()*f,y()*f,z()*f);}
     /// scalar product
-    double operator*(const Pos& p) const { return p.x()*x() + p.y()*y() + p.z()*z();}
+    double operator*(const Pos& p) const override { return p.x()*x() + p.y()*y() + p.z()*z();}
     /// componentwise  product
-    Pos operator&(const Pos& p) const { return Pos(p.x()*x(), p.y()*y(), p.z()*z());}
+    Pos operator&(const Pos& p) const override { return Pos(p.x()*x(), p.y()*y(), p.z()*z());}
 
     Position toPosition(){
-      return Position(x(), y(), z());
+      return Position(x(), y(), z()) override;
     }
 
     void print() const {
-      std::cout << '(' << x() << ',' << y() << ',' << z() << ')' << std::endl;
+      std::cout << '(' << x() << ',' << y() << ',' << z() << ')' << std::endl override;
     }
   };
   

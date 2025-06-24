@@ -278,7 +278,7 @@ namespace lpzrobots {
     }
 
     // trage die default-baudrate in die ComboBox ein
-    for (int i = 0; i < coBox_USBDeviceBaudrate->count(); i++)
+    for (int i = 0; i < coBox_USBDeviceBaudrate->count(); ++i)
     {
       QString sLine = coBox_USBDeviceBaudrate->itemText(i).split(" ").at(0);
       if (sLine.compare(QString::number(iDefaultBaudrate)) == 0)
@@ -318,7 +318,7 @@ namespace lpzrobots {
   void QPanelSetting::setUSBDeviceBaudrate(QString baudrate) {
     //coBox_USBDeviceBaudrate->setCurrentIndex(coBox_USBDeviceBaudrate->findText(baudrate, Qt::MatchExactly));
 
-    for (int i = 0; i < coBox_USBDeviceBaudrate->count(); i++)
+    for (int i = 0; i < coBox_USBDeviceBaudrate->count(); ++i)
     {
       QString sLine = coBox_USBDeviceBaudrate->itemText(i).split(" ").at(0);
       if (sLine.compare(baudrate) == 0)

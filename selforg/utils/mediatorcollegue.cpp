@@ -25,8 +25,7 @@
 #include "mediator.h"
 #include <assert.h>
 
-MediatorCollegue::MediatorCollegue(Mediator* myMediator)
-  : myMediator(myMediator) {
+MediatorCollegue::MediatorCollegue(Mediator* myMediator_) : myMediator(myMediator_) {
   if (myMediator != 0)
     myMediator->addMediatorCollegue(this);
 }

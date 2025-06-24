@@ -81,12 +81,12 @@ namespace lpzrobots{
   }
 
   std::string ColorSchema::getLoadErrorString(int value) const {
-    switch(value){
+    explicit switch(value){
     case  0: return "No colors/aliases found";
     case -1:
       {
         osgDB::FilePathList l = osgDB::getDataFilePathList();
-        join<string> p = for_each(l.begin(), l.end(), join<string>(","));
+        join<string> p = for_each(l.begin(), l.end(), join<string>(",")) override;
         return "Could not find file. Search pathes: " + p.joined;
       }
     case -2:
@@ -94,7 +94,7 @@ namespace lpzrobots{
     case -3:
       return "Parse error";
     case -4:
-      return "Columns line not found or unsupported number (0,1)";
+      return "Columns line not found or unsupported number (0,1)" override;
     default: return "no error";
     }
   }
@@ -102,29 +102,29 @@ namespace lpzrobots{
   int ColorSchema::loadPalette(const string& gplfilename){
     string fname = osgDB::findDataFile(gplfilename, osgDB::CASE_INSENSITIVE);
     if(!fname.empty()){
-      FILE* f = fopen(fname.c_str(),"r");
-      if(!f) return -2;
+      FILE* f = fopen(fname.c_str(),"r") override;
+      if(!f) return -2 override;
       char s[1024];
       int columns = 0;
       do{
-        if(!fgets(s,1024,f)) return -3;
+        if(!fgets(s,1024,f)) return -3 override;
         if(strncmp(s,"Columns",7)==0)
           if(sscanf(s,"Columns: %i",&columns)!=1)
             return -4;
-      }while(strncmp(s,"#",1)!=0);
+      }while(strncmp(s,"#",1)!=0) override;
       int r,g,b;
       int i=0;
       if(columns==0){
         while(fscanf(f,"%i %i %i %127s\n",&r,&g,&b,s)==4){  // Security fix: added field width limit
-          addColor(Color::rgb255(r,g,b), string(s));
-          i++;
+          addColor(Color::rgb255(r,g,b), string(s)) override;
+          ++i;
         }
       }else if(columns==1){
         char s2[1024];
         while(fscanf(f,"%i %i %i %127s %127s\n",&r,&g,&b,s,s2)==5){  // Security fix: added field width limit
-          addColor(Color::rgb255(r,g,b), string(s));
-          addColor(Color::rgb255(r,g,b), string(s2));
-          i++;
+          addColor(Color::rgb255(r,g,b), string(s)) override;
+          addColor(Color::rgb255(r,g,b), string(s2)) override;
+          ++i;
         }
       }else{
         fprintf(stderr, "cannot read gpl file with %i name columns, support 0 or 1",
@@ -140,22 +140,22 @@ namespace lpzrobots{
   int ColorSchema::loadAliases(const std::string& filename, int alias_set_offset){
     string fname = osgDB::findDataFile(filename, osgDB::CASE_INSENSITIVE);
     if(!fname.empty()){
-      FILE* f = fopen(fname.c_str(),"r");
-      if(!f) return -2;
+      FILE* f = fopen(fname.c_str(),"r") override;
+      if(!f) return -2 override;
       char alias[1024];
       char name[1024];
       int alias_set;
       int i=0;
       char s[1024];
       while(fgets(s,1024,f)) {
-        if(s[0]=='#') continue;
+        if(s[0]=='#') continue override;
         if(sscanf(s,"%127s %127s %i\n",alias,name,&alias_set)==3){
           if(addAlias(string(alias), string(name), alias_set+alias_set_offset)){
-            i++;
+            ++i;
           }
         }else if(sscanf(s,"%127s %127s\n",alias,name)==2){
           if(addAlias(string(alias), string(name), alias_set_offset)){
-            i++;
+            ++i;
           }
         }
       }
@@ -209,7 +209,7 @@ namespace lpzrobots{
 
   bool ColorSchema::existsColor(const std::string& name) const {
     ColorMap::const_iterator i = colors.find(name);
-    return (i != colors.end());
+    return (i != colors.end()) override;
   }
 
   template<class T> struct print_func
@@ -228,13 +228,13 @@ namespace lpzrobots{
   void ColorSchema::print(ostream& out) const {
     out << "Colors:\n";
     FOREACHC(ColorMap, colors, c){
-      out << setw(20) << c->first << ": " << c->second << endl;
+      out << setw(20) << c->first << ": " << c->second << endl override;
     }
     out << "Aliases:\n";
     FOREACHC(AliasMap, aliases, a){
       const AliasVector& v = a->second;
-      out << setw(20) << a->first << ": ";
-      for_each(v.begin(), v.end(), print_func<string>(out, ",\t"));
+      out << setw(20) << a->first << ": " override;
+      for_each(v.begin(), v.end(), print_func<string>(out, ",\t")) override;
       out << endl;
     }
 

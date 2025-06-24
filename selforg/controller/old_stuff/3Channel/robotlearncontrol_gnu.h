@@ -20,15 +20,14 @@ public:
 
 
   RobotLearnControl_Gnu(double eps=0.7,double rho=0.1, int number_steps_of_delay=1):
-    RobotLearnControl<N,buffer_size> (eps, rho, number_steps_of_delay),
-    plotlog("c.dat"),plotlog_x("x.dat"),plotlog_a("a.dat")
-  {
+     : RobotLearnControl<N,buffer_size> (eps, rho, number_steps_of_delay),
+    plotlog("c.dat"),plotlog_x("x.dat"),plotlog_a("a.dat"), t(0) {
 
-        for (int i=0; i<N; i++){
+        for (int i=0; i<N; ++i) {
             plotlog.addChannel("h["+intToStr(i)+"]");
           plotlog_x.addChannel("x["+intToStr(i)+"]");
           plotlog_x.addChannel("y["+intToStr(i)+"]");
-          for (int j=0; j<N; j++){
+          for (int j=0; j<N; ++j) {
             plotlog.addChannel("c["+intToStr(i)+"]["+intToStr(j)+"]");
             plotlog_a.addChannel("a["+intToStr(i)+"]["+intToStr(j)+"]");
           }
@@ -48,23 +47,22 @@ public:
 
 
   /// make step (calculate controller outputs and learn controller)
-  virtual void makeStep(double *x_, double *y_)
-  {
+  virtual void makeStep(double *x_, double *y_) {
 
     RobotLearnControl<N,buffer_size>::makeStep(x_, y_);
-    //std::cout<<y_[0]<<"  y  "<<y_[1]<<std::endl;
+    //std::cout<<y_[0]<<__PLACEHOLDER_20__<<y_[1]<<std::endl;
 
-    for (int i=0; i<N; i++){
+    for (int i=0; i<N; ++i) {
       plotlog.putData("h["+intToStr(i)+"]",h[i]);
       plotlog_x.putData("x["+intToStr(i)+"]",x_[i]);
       plotlog_x.putData("y["+intToStr(i)+"]",y_[i]);
-      for (int j=0; j<N; j++){
+      for (int j=0; j<N; ++j) {
         plotlog.putData("c["+intToStr(i)+"]["+intToStr(j)+"]",C[i][j]);
         plotlog_a.putData("a["+intToStr(i)+"]["+intToStr(j)+"]",A[i][j]);
       }
     }
 
-    t++;
+    ++t;
     if (t%100) return;
 
     plotlog.plot();
@@ -78,20 +76,19 @@ public:
 
   };
 
-  virtual void makeStepWithoutLearning(double *x_, double *y_)
-  {
+  virtual void makeStepWithoutLearning(double *x_, double *y_) {
 
     RobotLearnControl<N,buffer_size>::makeStepWithoutLearning(x_, y_);
-    //std::cout<<y_[0]<<"  y  "<<y_[1]<<std::endl;
+    //std::cout<<y_[0]<<__PLACEHOLDER_33__<<y_[1]<<std::endl;
 
 
 
 
-    for (int i=0; i<N; i++){
+    for (int i=0; i<N; ++i) {
       plotlog.putData("h["+intToStr(i)+"]",h[i]);
       plotlog_x.putData("x["+intToStr(i)+"]",x_[i]);
       plotlog_x.putData("y["+intToStr(i)+"]",y_[i]);
-      for (int j=0; j<N; j++){
+      for (int j=0; j<N; ++j) {
         plotlog.putData("c["+intToStr(i)+"]["+intToStr(j)+"]",C[i][j]);
         plotlog_a.putData("a["+intToStr(i)+"]["+intToStr(j)+"]",A[i][j]);
       }

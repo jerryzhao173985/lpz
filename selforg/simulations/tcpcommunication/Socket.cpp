@@ -4,7 +4,7 @@
  * Copyright (C) 2003-2006 Keyan Zahedi and Arndt von Twickel.           *
  * All rights reserved.                                                  *
  * Email: {keyan,twickel}@users.sourceforge.net                          *
- * Web: http://sourceforge.net/projects/yars                             *
+ * Web: http:__PLACEHOLDER_39__
  *                                                                       *
  * For a list of contributors see the file AUTHORS.                      *
  *                                                                       *
@@ -120,7 +120,7 @@ void Socket::connect(const std::string host, const int port) throw (YarsExceptio
     throw YarsException("Socket::connect: Error calling connect()");
   }
   
-  if(setsockopt(_sock, IPPROTO_TCP, TCP_NODELAY, (char *) &flag, sizeof(int)) < 0)
+  if(setsockopt(_sock, IPPROTO_TCP, TCP_NODELAY, static_cast<char*> &flag, sizeof(int)) < 0)
   {
     throw YarsException("Socket::connect: Error setting setsockopt.");
   }
@@ -140,7 +140,7 @@ void Socket::accept(const int port) throw (YarsException)
   }
 
   do {
-    p++;
+    ++p;
     _peer.sin_port        = htons(p);
   } while(bind(_mysock, (struct sockaddr *) &_peer, sizeof(_peer)) < 0 );
 
@@ -154,12 +154,12 @@ void Socket::accept(const int port) throw (YarsException)
     throw YarsException("Socket::accept ECHOSERV: Error calling accept()");
   }
 
-  if (setsockopt(_sock, IPPROTO_TCP, TCP_NODELAY, (char *) &flag, sizeof(int)) < 0)
+  if (setsockopt(_sock, IPPROTO_TCP, TCP_NODELAY, static_cast<char*> &flag, sizeof(int)) < 0)
   {
     throw YarsException("Socket::connect: Error setting setsockopt on my socket.");
   }
 
-  if(setsockopt(_mysock, IPPROTO_TCP, TCP_NODELAY, (char *) &flag, sizeof(int)) < 0)
+  if(setsockopt(_mysock, IPPROTO_TCP, TCP_NODELAY, static_cast<char*> &flag, sizeof(int)) < 0)
   {
     throw YarsException("Socket::connect: Error setting setsockopt on client socket.");
   }
@@ -205,32 +205,32 @@ const Socket& Socket::operator>>(Buffer &b) const throw(YarsException)
   int toread   = 0;
 
   recv(_sock, type, 1, MSG_WAITALL);
-  ((Socket*)this)->__check(b.label, type[0]);
+  (static_cast<Socket*>(this))->__check(b.label, type[0]);
 
   switch(type[0])
   {
     case __STRING_VALUE:
       recv(_sock, sizeBytes, 4, MSG_WAITALL);
       for(int i = 0; i < 4; ++i) b.push_back(sizeBytes[i]);
-      ((Socket*)this)->__coneverToInt(sizeBytes, &size);
+      (static_cast<Socket*>(this))->__coneverToInt(sizeBytes, &size);
       break;
     case __INTEGER_VECTOR:
       recv(_sock, sizeBytes, 4, MSG_WAITALL);
       for(int i = 0; i < 4; ++i) b.push_back(sizeBytes[i]);
-      ((Socket*)this)->__coneverToInt(sizeBytes, &size);
-      size *= sizeof(int);
+      (static_cast<Socket*>(this))->__coneverToInt(sizeBytes, &size);
+      size *= sizeofstatic_cast<int>(override);
       break;
     case __DOUBLE_VECTOR:
       recv(_sock, sizeBytes, 4, MSG_WAITALL);
       for(int i = 0; i < 4; ++i) b.push_back(sizeBytes[i]);
-      ((Socket*)this)->__coneverToInt(sizeBytes, &size);
-      size *= sizeof(double);
+      (static_cast<Socket*>(this))->__coneverToInt(sizeBytes, &size);
+      size *= sizeofstatic_cast<double>(override);
       break;
     case __INTEGER_VALUE:
-      size = sizeof(int);
+      size = sizeofstatic_cast<int>(override);
       break;
     case __DOUBLE_VALUE:
-      size = sizeof(double);
+      size = sizeofstatic_cast<double>(override);
       break;
   }
 
@@ -264,7 +264,7 @@ const Socket& Socket::operator<<(const double &d) const
   Buffer b;
   b.resize(0);
   b.label = __DOUBLE_VALUE; 
-  ((Socket*)this)->__writeDouble(&b, d);
+  (static_cast<Socket*>(this))->__writeDouble(&b, d);
   *this << b;
   return *this;
 }
@@ -275,12 +275,12 @@ const Socket& Socket::operator<<(const double &d) const
 const Socket& Socket::operator>>(double& d) const throw(YarsException)
 {
   d = 0;
-  int size = sizeof(double);
+  int size = sizeofstatic_cast<double>(override);
   Buffer b;
   b.resize(size);
   b.label = __DOUBLE_VALUE;
   *this >> b;
-  ((Socket*)this)->__readDouble(&d, b, 0);
+  (static_cast<Socket*>(this))->__readDouble(&d, b, 0);
   return *this;
 }
 
@@ -302,7 +302,7 @@ const Socket& Socket::operator<<(const int &i) const
   Buffer b;
   b.label = __INTEGER_VALUE;
   b.resize(0);
-  ((Socket*)this)->__writeInteger(&b, i);
+  (static_cast<Socket*>(this))->__writeInteger(&b, i);
   *this << b;
   return *this;
 }
@@ -313,12 +313,12 @@ const Socket& Socket::operator<<(const int &i) const
 const Socket& Socket::operator>>(int& i) const throw(YarsException)
 {
   i = 0;
-  int size = sizeof(int);
+  int size = sizeofstatic_cast<int>(override);
   Buffer b;
   b.label = __INTEGER_VALUE;
   b.resize(size);
   *this >> b;
-  ((Socket*)this)->__readInteger(&i, b, 0);
+  (static_cast<Socket*>(this))->__readInteger(&i, b, 0);
   return *this;
 }
 
@@ -340,7 +340,7 @@ const Socket& Socket::operator<<(const std::string& s) const
   Buffer b;
   b.resize(0);
   b.label = __STRING_VALUE;
-  ((Socket*)this)->__writeInteger(&b, (int)s.length());
+  (static_cast<Socket*>(this))->__writeInteger(&b, static_cast<int>(s).length());
   for(unsigned int i = 0; i < s.length(); ++i)
   {
     b.push_back(s[i]);
@@ -361,7 +361,7 @@ const Socket& Socket::operator>>(std::string& s) const throw(YarsException)
   *this >> b;
   stringstream oss;
   int size = 0;
-  ((Socket*)this)->__readInteger(&size, b, 0);
+  (static_cast<Socket*>(this))->__readInteger(&size, b, 0);
   for(unsigned int i = sizeof(int); i < b.size(); ++i)
   {
     oss << b[i];
@@ -387,13 +387,13 @@ const Socket& Socket::operator<<(const vector<int>& v) const
   Buffer b;
   b.label = __INTEGER_VECTOR;
   b.resize(0);
-  int s = (int)v.size(); 
-  ((Socket*)this)->__writeInteger(&b, s);
+  int s = static_cast<int>(v).size();
+  (static_cast<Socket*>(this))->__writeInteger(&b, s);
 
   for(vector<int>::const_iterator i = v.begin(); i != v.end(); ++i)
   {
     int value = *i;
-    ((Socket*)this)->__writeInteger(&b, value);
+    (static_cast<Socket*>(this))->__writeInteger(&b, value);
   }
   *this << b;
   return *this;
@@ -413,12 +413,12 @@ const Socket& Socket::operator>>(vector<int>& v) const throw(YarsException)
 
   *this >> b;
 
-  ((Socket*)this)->__readInteger(&vectorSize, b, 0);
+  (static_cast<Socket*>(this))->__readInteger(&vectorSize, b, 0);
 
   for(int i = 0; i < vectorSize; ++i)
   {
     int value = 0;
-    ((Socket*)this)->__readInteger(&value, b, (i+1) * sizeof(int));
+    (static_cast<Socket*>(this))->__readInteger(&value, b, (i+1) * sizeof(int));
     v.push_back(value);
   }
   return *this;
@@ -442,14 +442,14 @@ const Socket& Socket::operator<<(const vector<double>& v) const
   Buffer b;
   b.label = __DOUBLE_VECTOR;
   b.resize(0);
-  int s = (int)v.size(); 
+  int s = static_cast<int>(v).size();
 
-  ((Socket*)this)->__writeInteger(&b, s);
+  (static_cast<Socket*>(this))->__writeInteger(&b, s);
 
   for(vector<double>::const_iterator i = v.begin(); i != v.end(); ++i)
   {
     double value = *i;
-    ((Socket*)this)->__writeDouble(&b, value);
+    (static_cast<Socket*>(this))->__writeDouble(&b, value);
   }
   *this << b;
   return *this;
@@ -470,12 +470,12 @@ const Socket& Socket::operator>>(vector<double>& v) const throw(YarsException)
 
   int vectorSize = 0;
 
-  ((Socket*)this)->__readInteger(&vectorSize, b, 0);
+  (static_cast<Socket*>(this))->__readInteger(&vectorSize, b, 0);
 
   for(int i = 0; i < vectorSize; ++i)
   {
     double value = 0;
-    ((Socket*)this)->__readDouble(&value, b, i * sizeof(double) + sizeof(int));
+    (static_cast<Socket*>(this))->__readDouble(&value, b, i * sizeof(double) + sizeof(int));
     v.push_back(value);
   }
   return *this;
@@ -491,7 +491,7 @@ const Socket& Socket::operator>>(vector<double>& v) const throw(YarsException)
 
 void Socket::__writeDouble(Buffer *b, double d)
 {
-  char *x_ptr=reinterpret_cast<char*>(&d); 
+  char *x_ptr=reinterpret_cast<char*>(&d);
   for(unsigned int count = 0;count < sizeof(double); ++count)
   {
     b->push_back(*(x_ptr+count));
@@ -501,10 +501,10 @@ void Socket::__writeDouble(Buffer *b, double d)
 void Socket::__readDouble(double *d, Buffer b, int startIndex)
 {
   *d = 0;
-  char *x_ptr=reinterpret_cast<char *>(d); 
+  char *x_ptr=reinterpret_cast<char *>(d);
   for(int count = sizeof(double)-1; count >= 0; count--)
   {
-    *(x_ptr+count)|=b[startIndex + count]; 
+    *(x_ptr+count)|=b[startIndex + count];
   }
 }
 
@@ -513,7 +513,7 @@ void Socket::__readDouble(double *d, Buffer b, int startIndex)
 
 void Socket::__writeInteger(Buffer *b, int i)
 {
-  char *x_ptr=reinterpret_cast<char*>(&i); 
+  char *x_ptr=reinterpret_cast<char*>(&i);
   for(unsigned int count = 0; count < sizeof(int); ++count)
   {
     b->push_back(*(x_ptr+count));
@@ -523,20 +523,20 @@ void Socket::__writeInteger(Buffer *b, int i)
 void Socket::__readInteger(int *i, Buffer b, int startIndex)
 {
   *i = 0;
-  char *x_ptr=reinterpret_cast<char *>(i); 
+  char *x_ptr=reinterpret_cast<char *>(i);
   for(int count = sizeof(int)-1; count >= 0; count--)
   {
-    *(x_ptr+count)|=b[startIndex + count]; 
+    *(x_ptr+count)|=b[startIndex + count];
   }
 }
 
 void Socket::__coneverToInt(char *c, int *i)
 {
   *i = 0;
-  char *x_ptr=reinterpret_cast<char *>(i); 
+  char *x_ptr=reinterpret_cast<char *>(i);
   for(int count = sizeof(int)-1; count >= 0; count--)
   {
-    *(x_ptr+count)|=c[count]; 
+    *(x_ptr+count)|=c[count];
   }
 }
 
@@ -563,7 +563,7 @@ void Socket::__check(const char a, const char b) throw(YarsException)
       oss << "<integer vector>";
       break;
     default:
-      oss << "<unknown \"" << (int)b << "\">";
+      oss << "<unknown \"" << static_cast<int>(b) << "\">";
       break;
   }
   oss << " but received ";

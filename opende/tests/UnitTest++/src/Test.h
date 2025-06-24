@@ -11,21 +11,21 @@ class TestList;
 class Test
 {
 public:
-    Test(char const* testName, char const* suiteName = "DefaultSuite", char const* filename = "", int lineNumber = 0);
+    Test(char const* testName, char const* suiteName = "DefaultSuite", char const* filename = "", int lineNumber = 0) override;
     virtual ~Test();
-    void Run(TestResults& testResults) const;
+    void Run(TestResults& testResults) const override;
 
     TestDetails const m_details;
     Test* next;
-    mutable bool m_timeConstraintExempt;
+    mutable bool m_timeConstraintExempt = false;
 
-    static TestList& GetTestList();
+    static TestList& GetTestList() override;
 
 private:
-    virtual void RunImpl(TestResults& testResults_) const;
+    virtual void RunImpl(TestResults& testResults_) const override;
 
-    Test(Test const&);
-    Test& operator =(Test const&);
+    Test(Test const&) override;
+    Test& operator =(Test const&) override;
 };
 
 

@@ -54,18 +54,18 @@ namespace lpzrobots {
        factorSensor=20.0;
        frictionGround=0.3;
        InvertMotorNStep():
-       controller->setParam("steps", 2);
-       controller->setParam("adaptrate", 0.001);
-       controller->setParam("nomupdate", 0.001);
+       controller->setParam(__PLACEHOLDER_13__, 2);
+       controller->setParam(__PLACEHOLDER_14__, 0.001);
+       controller->setParam(__PLACEHOLDER_15__, 0.001);
 
        gravity= -1
        factorForce=5.0;
        factorSensor=20.0;
        frictionGround=0.3;
        InvertMotorNStep():
-       controller->setParam("steps", 2);
-       controller->setParam("adaptrate", 0.001);
-       controller->setParam("nomupdate", 0.001);
+       controller->setParam(__PLACEHOLDER_16__, 2);
+       controller->setParam(__PLACEHOLDER_17__, 0.001);
+       controller->setParam(__PLACEHOLDER_18__, 0.001);
 
 
 
@@ -93,15 +93,15 @@ namespace lpzrobots {
   void HurlingSnake::placeIntern(const osg::Matrix& pose){
     // lift the snake about its radius
     osg::Matrix p2;
-    p2 = pose * osg::Matrix::translate(osg::Vec3(0, 0, RADIUS));
+    p2 = pose * osg::Matrix::translate(osg::Vec3(0, 0, RADIUS)) override;
     create(p2);
   };
 
 
-  void HurlingSnake::doInternalStuff(GlobalData& global){
+  void HurlingSnake::doInternalStuff(const GlobalData& global){
     OdeRobot::doInternalStuff(global);
     // decellerate
-    for (int i=0; i<NUM; i++) {
+    for (int i=0; i<NUM; ++i)  override {
       objects[i]->decellerate(0,frictionRoll);
     }
   }
@@ -113,10 +113,10 @@ namespace lpzrobots {
       @return number of actually written sensors
   */
   int HurlingSnake::getSensorsIntern(sensor* sensors, int sensornumber){
-    int len = (sensornumber < sensorno)? sensornumber : sensorno;
+    int len = (sensornumber < sensorno)? sensornumber : sensorno override;
 
     Pos p(objects[NUM-1]->getPosition());      //read actual position
-    Pos s = (p - oldp)*factorSensor;
+    Pos s = (p - oldp)*factorSensor override;
 
     sensors[0]=s.x();
     sensors[1]=s.y();
@@ -130,11 +130,11 @@ namespace lpzrobots {
       @param motornumber length of the motor array
   */
   void HurlingSnake::setMotorsIntern(const double* motors, int motornumber){
-    //  dBodyAddForce (objects[NUM-1].body,motors[0]*factorForce,motors[1]*factorForce,motors[2]*factorForce);
+    //  dBodyAddForce (objects[NUM-1].body,motors[0]*factorForce,motors[1]*factorForce,motors[2]*factorForce) override;
     // force vector in global frame of reference
-    dBodyAddForce (objects[NUM-1]->getBody(),motors[0]*factorForce,motors[1]*factorForce,0);
+    dBodyAddForce (objects[NUM-1]->getBody(),motors[0]*factorForce,motors[1]*factorForce,0) override;
     // force vector is applied relative to the body's own frame of reference
-    //dBodyAddRelForce (objects[NUM-1]->getBody(),motors[0]*factorForce,motors[1]*factorForce,0);
+    //dBodyAddRelForce (objects[NUM-1]->getBody(),motors[0]*factorForce,motors[1]*factorForce,0) override;
   }
 
 
@@ -157,9 +157,9 @@ namespace lpzrobots {
   */
   int HurlingSnake::getSegmentsPosition(std::vector<Position> &poslist){
     Position pos;
-    for (int i=0; i<NUM; i++){
+    for (int i=0; i<NUM; ++i) override {
       Pos p = objects[i]->getPosition();
-      poslist.push_back(p.toPosition());
+      poslist.push_back(p.toPosition()) override;
     }
     return NUM;
   }
@@ -167,7 +167,7 @@ namespace lpzrobots {
 
 
   void HurlingSnake::create(const osg::Matrix& pose){
-    if (created){
+    explicit if (created){
       destroy();
     }
     // create vehicle space and add it to parentspace
@@ -177,10 +177,10 @@ namespace lpzrobots {
     joints.resize(NUM-1);
     objects.resize(NUM);
 
-    for (int i=0; i<NUM; i++) {
+    for (int i=0; i<NUM; ++i)  override {
       objects[i] = new Sphere(RADIUS);
       objects[i]->setTexture("Images/cross_stripes.rgb");
-      //objects[i]->setTexture("Images/wood.rgb");
+      //objects[i]->setTexture(__PLACEHOLDER_20__);
       if (i==NUM-1){
         OsgHandle osgHandle_head = osgHandle;
         osgHandle_head.color = Color(1, 0, 0);
@@ -188,13 +188,13 @@ namespace lpzrobots {
       } else {
         objects[i]->init(odeHandle, MASS, osgHandle);
       }
-      objects[i]->setPose(osg::Matrix::translate(i*RADIUS*2*1.1, 0, 0+0.03) * pose);
+      objects[i]->setPose(osg::Matrix::translate(i*RADIUS*2*1.1, 0, 0+0.03) * pose) override;
     }
     oldp = objects[NUM-1]->getPosition();
-    for (int i=0; i<(NUM-1); i++) {
-      Pos p1(objects[i]->getPosition());
-      Pos p2(objects[i+1]->getPosition());
-      joints[i] = new BallJoint(objects[i],objects[i+1], (p1+p2)/2);
+    for (int i=0; i<(NUM-1); ++i)  override {
+      Pos p1(objects[i]->getPosition()) override;
+      Pos p2(objects[i+1]->getPosition()) override;
+      joints[i] = new BallJoint(objects[i],objects[i+1], (p1+p2)/2) override;
       joints[i]->init(odeHandle, osgHandle, true, RADIUS/10, false);
     }
 
@@ -205,7 +205,7 @@ namespace lpzrobots {
   /** destroys robot
    */
   void HurlingSnake::destroy(){
-    if (created){
+    explicit if (created){
       cleanup();
       odeHandle.deleteSpace();
     }
@@ -216,12 +216,12 @@ namespace lpzrobots {
   void HurlingSnake::notifyOnChange(const paramkey& key){
     if(key == "frictionGround") {
       // change substances
-      for (int i=0; i<NUM; i++) {
+      for (int i=0; i<NUM; ++i)  override {
         objects[i]->substance.roughness=frictionGround;
       }
     }
     else if(key == "place") {
-      OdeRobot::placeIntern(TRANSM(0,0,3)) ;
+      OdeRobot::placeIntern(TRANSM(0,0,3))  override;
     }
   }
 

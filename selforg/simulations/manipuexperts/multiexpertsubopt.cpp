@@ -7,7 +7,7 @@
  *   LICENSE:                                                              *
  *   This work is licensed under the Creative Commons                      *
  *   Attribution-NonCommercial-ShareAlike 2.5 License. To view a copy of   *
- *   this license, visit http://creativecommons.org/licenses/by-nc-sa/2.5/ *
+ *   this license, visit http:__PLACEHOLDER_34__
  *   or send a letter to Creative Commons, 543 Howard Street, 5th Floor,   *
  *   San Francisco, California, 94105, USA.                                *
  *                                                                         *
@@ -61,7 +61,7 @@ void MultiExpertSubopt::init(unsigned int inputDim, unsigned  int outputDim,
   this->inputDim  = inputDim;
   this->outputDim = outputDim;
 
-  for(int i=0; i<conf.numSats; i++){
+  for (int i=0; i<conf.numSats; ++i) {
     vector<Layer> layers;
     if(conf.numHidden!=0)
       layers.push_back(Layer(conf.numHidden, 0.5 , FeedForwardNN::tanh));
@@ -129,7 +129,7 @@ const matrix::Matrix MultiExpertSubopt::learn (const matrix::Matrix& input,
     // However learning is based on ranked suboptimality
     // rank
     vector<pair<double,int> > ranking(errors.getM());
-    for(unsigned int i=0; i< satSubOpt.getM(); i++){
+    for(unsigned int i=0; i< satSubOpt.getM(); ++i) {
       ranking[i].first  = satSubOpt.val(i,0);
       ranking[i].second = i;
     }
@@ -137,10 +137,10 @@ const matrix::Matrix MultiExpertSubopt::learn (const matrix::Matrix& input,
     // winner has lowest ranking
     //winner = ranking[0].second;
     //    out= sats[winner].net->process(input);
-    for(unsigned int i=0; i< satSubOpt.getM(); i++){
+    for(unsigned int i=0; i< satSubOpt.getM(); ++i) {
       if(conf.lambda_comp*i >= 6) continue; // no need for learning (eps factor < 1e-3 )
-      //    cout << ranking[i].first << " " << ranking[i].second
-      //         << " " << exp(-conf.lambda_comp*i) << "\n";
+      //    cout << ranking[i].first << __PLACEHOLDER_7__ << ranking[i].second
+      //         << __PLACEHOLDER_8__ << exp(-conf.lambda_comp*i) << __PLACEHOLDER_9__;
       sats[ranking[i].second].net->
         learn(input, nom_output, sats[ranking[i].second].eps * exp(-conf.lambda_comp*i));
     }
@@ -159,14 +159,14 @@ const matrix::Matrix MultiExpertSubopt::learn (const matrix::Matrix& input,
   if(t%managementInterval==0){
     management();
   }
-  t++;
+  ++t;
   return out;
 };
 
 
 // minimum dynamics
 double MultiExpertSubopt::mindynamics(void *conf, double m, double e){
-  MultiExpertSuboptConf* c = (MultiExpertSuboptConf*)conf;
+  MultiExpertSuboptConf* c = static_cast<MultiExpertSuboptConf*>(conf);
   //  if(e<m){
     return m - (1/c->tauE2)*(m-e);
     //  }else return m;
@@ -183,7 +183,7 @@ Matrix MultiExpertSubopt::compete(const matrix::Matrix& input,
   FOREACH(vector<Sat>, sats, s){
     const Matrix& out = s->net->process(input);
     satErrors.val(i,0) =  (nom_output-out).multTM().val(0,0);
-    i++;
+    ++i;
   }
   satAvg1Errors = satAvg1Errors * (1.0-1.0/conf.tauE1) + satErrors * (1.0/conf.tauE1);
   satAvg2Errors = satAvg2Errors * (1.0-1.0/conf.tauE2) + satErrors * (1.0/conf.tauE2);
@@ -269,7 +269,7 @@ bool MultiExpertSubopt::restore(FILE* f){
   // clean sats array
   sats.clear();
   // restore sats
-  for(int i=0; i < conf.numSats; i++){
+  for (int i=0; i < conf.numSats; ++i) {
     // FIXME: load and restore ModelWithMemoryAdapter!
     MultiLayerFFNN* n = new MultiLayerFFNN(0,vector<Layer>());
     n->restore(f);
@@ -288,10 +288,10 @@ void MultiExpertSubopt::storeSats(const char* filestem){
     char fname[256];
     snprintf(fname, sizeof(fname),"%s_%02i.net", filestem, i);
     FILE* f=fopen(fname,"wb");
-    if(!f){ cerr << "MultiExpertSubopt::storeSats() error while writing file " << fname << endl;   return;  }
+    if (!f){ cerr << "MultiExpertSubopt::storeSats() error while writing file " << fname << endl;   return;  }
     s->net->store(f);
     fclose(f);
-    i++;
+    ++i;
   }
 }
 
@@ -308,7 +308,7 @@ void MultiExpertSubopt::restoreSats(const std::list<std::string>& filenames){
       cout << "restore sat " << i << " with " << *file << endl;
       fclose(f);
     }
-    i++;
+    ++i;
   }
 }
 
@@ -334,8 +334,8 @@ list<Inspectable::iparamval> MultiExpertSubopt::getInternalParams() const {
   l += satSubOpt.convertToList();
   l += satMinErrors.convertToList();
   l += satEpsMod.convertToList();
-  l += (double)winner;
-  l += (double)satAvg1Errors.val(winner,0);
+  l += static_cast<double>(winner);
+  l += static_cast<double>(satAvg1Errors).val(winner,0);
   return l;
 }
 

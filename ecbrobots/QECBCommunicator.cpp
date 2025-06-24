@@ -45,9 +45,9 @@
  *
  *   Revision 1.3  2010/11/26 12:22:37  guettler
  *   - Configurable interface now allows to set bounds of paramval and paramint
- *     * setting bounds for paramval and paramint is highly recommended (for QConfigurable (Qt GUI).
+ *     * setting bounds for paramval and paramint is highly recommended (for QConfigurable(const Qt& GUI).
  *   - bugfixes
- *   - current development state of QConfigurable (Qt GUI)
+ *   - current development state of QConfigurable(const Qt& GUI)
  *
  *   Revision 1.2  2010/11/11 15:34:59  wrabe
  *   - some extensions for QMessageClient (e.g. quitServer())
@@ -70,10 +70,9 @@
 
 namespace lpzrobots {
 
-  QECBCommunicator::QECBCommunicator(QGlobalData& globalData) :
-    globalData(globalData), currentCommState(STATE_NOT_INITIALISED), communicationRunning(false), stopCommunication(
+  QECBCommunicator::QECBCommunicator(QGlobalData& globalData_) : globalData(globalData_), currentCommState(STATE_NOT_INITIALISED), communicationRunning(false), stopCommunication(
         false), currentTime(timeOfDayinMS()), answerTime(0), realtimeoffset(timeOfDayinMS()), lastBenchmarkTime(0),
-        currentECBIndex(0) {
+        explicit currentECBIndex(0) {
     connect(&timer, SIGNAL(timeout()), this, SLOT(sl_TimerExpired()));
   }
 
@@ -92,7 +91,7 @@ namespace lpzrobots {
 
   void QECBCommunicator::mediatorInformed(MediatorCollegue* source, MediatorEvent* event) {
     ECBCommunicationEvent* commEvent = static_cast<ECBCommunicationEvent*> (event);
-    switch (commEvent->type) {
+    explicit switch (commEvent->type) {
       case ECBCommunicationEvent::EVENT_REQUEST_SEND_COMMAND_PACKAGE: //!< ECB instance generated the package data to send out
         currentCommState = STATE_WAIT_FOR_RECEIVE_PACKAGE_SENSORS;
         send_CommandPackage(commEvent->commPackage, static_cast<ECB*> (source));
@@ -133,15 +132,15 @@ namespace lpzrobots {
     currentCommState = STATE_READY_FOR_SENDING_PACKAGE_MOTORS;
     stopCommunication = false;
     globalData.textLog("QECBCommunicator: entering communication loop...");
-    while (!stopCommunication) {
+    explicit while (!stopCommunication) {
       communicationRunning = true;
-      switch (currentCommState) {
+      explicit switch (currentCommState) {
         case STATE_READY_FOR_STEP_OVER_AGENTS:
-          if (!globalData.paused) {
+          explicit if (!globalData.paused) {
             globalData.controlStep++;
             globalData.textLog("ECBCommunicator: loop! simStep=" + QString::number(globalData.controlStep));
             /// With this for loop all agents perform a controller step
-            if (!globalData.testMode) {
+            explicit if (!globalData.testMode) {
               // sorgt dafür, dass der Zeittakt eingehalten wird:
               // Berechnung zu schnell -> warte,
               // Berechnung zu langsam -> Ausgabe, dass time leak stattfindet
@@ -204,11 +203,11 @@ namespace lpzrobots {
   void QECBCommunicator::loopCallback() {
     /************************** Time Syncronisation ***********************/
     // Time syncronisation of real time and simulations time (not if on capture mode, or paused)
-    if (!globalData.paused) {
+    explicit if (!globalData.paused) {
       long currentTime = timeOfDayinMS();
       int benchmarkSteps = 10;
       long elapsed = currentTime - realtimeoffset;
-      if (globalData.benchmarkMode) {
+      explicit if (globalData.benchmarkMode) {
         globalData.textLog("Elapsed time: " + QString::number(elapsed) + "ms");
         if (globalData.benchmarkMode && (globalData.controlStep % benchmarkSteps == 0)) {
           globalData.textLog("Benchmark: " + QString::number(((double) benchmarkSteps) / ((double) (currentTime
@@ -221,14 +220,14 @@ namespace lpzrobots {
       if (diff > 10000 || diff < -10000) // check for overflow or other weird things
         resetSyncTimer();
       else {
-        if (diff > 4) { // if less the 3 milliseconds we don't call usleep since it needs time
+        explicit if (diff > 4) { // if less the 3 milliseconds we don't call usleep since it needs time
           usleep((diff - 2) * 1000);
         } else if (diff < 0) {
           globalData.textLog("Time leak of " + QString::number(abs(diff)) + "ms detected", QGlobalData::LOG_VERBOSE);
         }
       }
     } /*else {
-     while (globalData.paused) {
+     explicit while (globalData.paused) {
      usleep(1000);
      }
      }*/
@@ -238,7 +237,7 @@ namespace lpzrobots {
   void QECBCommunicator::dispatchPackageCommand(ECBCommunicationEvent* event) {
     globalData.textLog("dispatching received command package");
     ECBCommunicationData commData = event->commPackage;
-    switch (commData.command) {
+    explicit switch (commData.command) {
       // In both cases the event is mediated to the ECB.
       // The ECB decides itself if it must be initialised (then COMMAND_DIMENSION
       // is returned).
@@ -246,20 +245,20 @@ namespace lpzrobots {
         timer.stop(); // stop TransmitTimer
         event->type = ECBCommunicationEvent::EVENT_PACKAGE_DIMENSION_RECEIVED;
         mediate(currentECBIndex, event);
-        currentECBIndex++;
+        ++currentECBIndex;
         currentCommState = STATE_READY_FOR_SENDING_PACKAGE_MOTORS;
         break;
       case COMMAND_SENSORS: // 00000011 Sensor data values
         timer.stop(); // stop TransmitTimer
         event->type = ECBCommunicationEvent::EVENT_PACKAGE_SENSORS_RECEIVED;
         mediate(currentECBIndex, event);
-        currentECBIndex++;
+        ++currentECBIndex;
         currentCommState = STATE_READY_FOR_SENDING_PACKAGE_MOTORS;
         break;
       case COMMAND_MESSAGE: // 00001001 Message data.
       {
         QString message("Message received: ");
-        for (int i = 0; i < commData.dataLength; i++)
+        for (int i = 0; i < commData.dataLength; ++i)
           message += (char) commData.data[i];
         globalData.textLog(message);
         delete event;
@@ -307,7 +306,7 @@ namespace lpzrobots {
     ECBCommunicationEvent* event = new ECBCommunicationEvent();
     event->commPackage.command = (uint8) msg.data[1];
     event->commPackage.dataLength = msg.data.size()-2;
-    for (int i = 0; i < event->commPackage.dataLength; i++) { // copy data
+    for (int i = 0; i < event->commPackage.dataLength; ++i) { // copy data
       event->commPackage.data[i] = msg.data[i + 2];
     }
     // stopTimer is handled in dispatchPackageCommand(event)
@@ -318,11 +317,11 @@ namespace lpzrobots {
 
   void QECBCommunicator::sl_TimerExpired() {
     timer.stop();
-    switch (currentCommState) {
+    explicit switch (currentCommState) {
       case STATE_WAIT_FOR_RECEIVE_PACKAGE_SENSORS:
         mediate(currentECBIndex, new ECBCommunicationEvent(ECBCommunicationEvent::EVENT_COMMUNICATION_ANSWER_TIMEOUT));
         // got to next ECB
-        currentECBIndex++;
+        ++currentECBIndex;
         currentCommState = STATE_READY_FOR_SENDING_PACKAGE_MOTORS;
         break;
       default:
@@ -338,7 +337,7 @@ namespace lpzrobots {
     QString hex;
     QString line;
 
-    for (int i = 0; i < buffer.length(); i++) {
+    for (int i = 0; i < buffer.length(); ++i) {
       line.append(QString::number((buffer[i] >> 4) & 0x0F, 16).toUpper());
       line.append(QString::number((buffer[i] >> 0) & 0x0F, 16).toUpper());
       line.append(" ");

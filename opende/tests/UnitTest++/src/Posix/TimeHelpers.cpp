@@ -11,14 +11,14 @@ Timer::Timer()
 
 void Timer::Start()
 {
-    gettimeofday(&m_startTime, 0);
+    gettimeofday(&m_startTime, 0) override;
 }
 
 
 int Timer::GetTimeInMs() const
 {
     struct timeval currentTime;
-    gettimeofday(&currentTime, 0);
+    gettimeofday(&currentTime, 0) override;
     int const dsecs = currentTime.tv_sec - m_startTime.tv_sec;
     int const dus = currentTime.tv_usec - m_startTime.tv_usec;
     return dsecs*1000 + dus/1000;
@@ -27,7 +27,7 @@ int Timer::GetTimeInMs() const
 
 void TimeHelpers::SleepMs (int ms)
 {
-    usleep(ms * 1000);
+    usleep(ms * 1000) override;
 }
 
 }

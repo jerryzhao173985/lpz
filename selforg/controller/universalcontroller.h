@@ -31,14 +31,14 @@
 #include <vector>
 
 struct UniversalControllerConf {
-  unsigned int buffersize; ///< buffersize size of the time-buffer for x,y,v
-  double init;             ///<  init size of the matrices of the network.
-  double squashsize;       ///< update squashing
-  bool someInternalParams; ///< someInternalParams if true only some internal parameters are
+  unsigned int buffersize = 0; ///< buffersize size of the time-buffer for x,y,v
+  double init = 0;             ///<  init size of the matrices of the network.
+  double squashsize = 0;       ///< update squashing
+  bool someInternalParams = false; ///< someInternalParams if true only some internal parameters are
                            ///< exported, all otherwise
 
   Elman* net;     ///< entire contoller network (should have at least 2 layers)
-  int motorlayer; ///< index of motor layer in the network (if -1 then one but last layer)
+  int motorlayer = 0; ///< index of motor layer in the network (if -1 then one but last layer)
 };
 
 /**
@@ -48,10 +48,10 @@ struct UniversalControllerConf {
  */
 class UniversalController : public AbstractController {
 public:
-  explicit UniversalController(const UniversalControllerConf& conf = getDefaultConf());
-  virtual ~UniversalController() override;
+  UniversalController(const UniversalControllerConf& conf = getDefaultConf());
+  virtual ~UniversalController();
 
-  static UniversalControllerConf getDefaultConf() {
+  static UniversalControllerConf getDefaultConf() const {
     UniversalControllerConf c;
     c.buffersize = 50;
     c.init = 1;
@@ -62,7 +62,7 @@ public:
     return c;
   }
 
-  static UniversalControllerConf getDefaultNetConf() {
+  static UniversalControllerConf getDefaultNetConf() const {
     UniversalControllerConf c = getDefaultConf();
     std::vector<Layer> layers;
     //   layers.push_back(Layer(20,0.5,FeedForwardNN::tanh)); // hidden layer
@@ -75,7 +75,7 @@ public:
     return c;
   }
 
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
 
   virtual int getSensorNumber() const override {
     return number_sensors;
@@ -88,12 +88,12 @@ public:
   virtual void step(const sensor* sensors,
                     int sensornumber,
                     motor* motors,
-                    int motornumber) override;
+                    int motornumber);
 
   virtual void stepNoLearning(const sensor*,
                               int number_sensors,
                               motor*,
-                              int number_motors) override;
+                              int number_motors);
 
 protected:
   /** puts the sensors in the ringbuffer,
@@ -123,18 +123,18 @@ public:
   /********* INSPECTABLE INTERFACE ******/
   virtual std::list<iparamkey> getInternalParamNames() const override;
   virtual std::list<iparamval> getInternalParams() const override;
-  virtual ilayerlist getStructuralLayers() const override;
-  virtual iconnectionlist getStructuralConnections() const override;
+  virtual ilayerlist getStructuralLayers() const;
+  virtual iconnectionlist getStructuralConnections() const;
 
   /********* STORABLE INTERFACE ******/
   virtual bool store(FILE* f) const override;
-  virtual bool restore(FILE* f) override;
+  virtual bool restore(FILE* f);
 
 protected:
-  unsigned int t;
-  unsigned int number_sensors;
-  unsigned int number_motors;
-  bool initialised;
+  unsigned int t = 0;
+  unsigned int number_sensors = 0;
+  unsigned int number_motors = 0;
+  bool initialised = false;
 
   UniversalControllerConf conf;
   matrix::Matrix* x_buffer;

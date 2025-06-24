@@ -89,7 +89,7 @@ namespace lpzrobots {
       label->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
       grid->addWidget(label, 1, 0, 1, 3);
 
-      for (int i = 0; i < 3; i++)
+      for (int i = 0; i < 3; ++i)
       {
         groupBox = new QGroupBox(headerNames.at(i));
         groupBox->setFont(fHugeBold);
@@ -118,7 +118,7 @@ namespace lpzrobots {
         label->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
         gridGroupBox->addWidget(label, 0, 3, 1, 2);
 
-        for (int j = 0; j < 8; j++)
+        for (int j = 0; j < 8; ++j)
         {
           label = new QLabel();
           label->setText(QString::number(7 - j));
@@ -218,12 +218,12 @@ namespace lpzrobots {
       fuseValues[1] = ((uint) avrDevice->FuseBytes[1]->Value) & 0xFF;
       fuseValues[2] = ((uint) avrDevice->FuseBytes[2]->Value) & 0xFF;
 
-      for (int i = 0; i < 3; i++)
+      for (int i = 0; i < 3; ++i)
       {
         // Stelle den Wert des FuseBytes dar.
         labelFuseBitValue[i]->setText("Value = " + QString::number(fuseValues[i]) + " (0x" + QString::number(fuseValues[i], 16).toUpper() + ")");
 
-        for (int j = 0; j < 8; j++)
+        for (int j = 0; j < 8; ++j)
         {
           checkBox = checkBoxes[i * 8 + (7 - j)];
           uint fuseBit = fuseValues[i] & (1 << (7 - j));
@@ -247,12 +247,12 @@ namespace lpzrobots {
       // Setze den Namen des TargetDevice
       // labelDeviceName->setText("Unbekanntes Zeilsystem.");
 
-      for (int i = 0; i < 3; i++)
+      for (int i = 0; i < 3; ++i)
       {
         // Stelle den Wert des FuseBytes dar.
         labelFuseBitValue[i]->setText("Value = 0");
 
-        for (int j = 0; j < 8; j++)
+        for (int j = 0; j < 8; ++j)
         {
           checkBox = checkBoxes[i * 8 + (7 - j)];
           checkBox->setText("-");
@@ -274,11 +274,11 @@ namespace lpzrobots {
 
     if (avrDevice != 0)
     {
-      for (int i = 0; i < 3; i++)
+      for (int i = 0; i < 3; ++i)
       {
         value = 0;
 
-        for (int j = 0; j < 8; j++)
+        for (int j = 0; j < 8; ++j)
         {
           checkBox = checkBoxes[i * 8 + (7 - j)];
 

@@ -31,9 +31,9 @@
  *
  *   Revision 1.5  2010/11/26 12:22:36  guettler
  *   - Configurable interface now allows to set bounds of paramval and paramint
- *     * setting bounds for paramval and paramint is highly recommended (for QConfigurable (Qt GUI).
+ *     * setting bounds for paramval and paramint is highly recommended (for QConfigurable(const Qt& GUI).
  *   - bugfixes
- *   - current development state of QConfigurable (Qt GUI)
+ *   - current development state of QConfigurable(const Qt& GUI)
  *
  *   Revision 1.4  2010/11/23 11:08:06  guettler
  *   - some helper functions
@@ -80,7 +80,7 @@ namespace lpzrobots {
     msg.appendEscaped((QByte) (length >> 8)); // 0x01: Length MSB
     msg.appendEscaped((QByte) (length >> 0)); // 0x02: Length LSB
     msg.appendEscapedChecksum(API_Cable_TransmitReceive); // 0x03: API-ID
-    for (int i = 0; i < msgToFormat.length(); i++) // 0x04: data ...
+    for (int i = 0; i < msgToFormat.length(); ++i) // 0x04: data ...
       msg.appendEscapedChecksum(msgToFormat[i]);
     msg.appendChecksum(); // packet checksum
     return (QByteArray) msg;
@@ -92,7 +92,7 @@ namespace lpzrobots {
     msg.appendEscaped((QByte) (length >> 8)); // 0x01: Length MSB
     msg.appendEscaped((QByte) (length >> 0)); // 0x02: Length LSB
     msg.appendEscapedChecksum(API_Cable_TransmitReceive); // 0x03: API-ID
-    for (int i = 0; i < msgToFormat.length(); i++) // 0x04: data ....
+    for (int i = 0; i < msgToFormat.length(); ++i) // 0x04: data ....
       msg.appendEscapedChecksum(msgToFormat[i]);
     msg.appendChecksum(); // packet checksum
     return (QByteArray) msg;
@@ -109,7 +109,7 @@ namespace lpzrobots {
     msg.appendEscapedChecksum((char) (address16 >> 1 * 8)); // 0x05: DestinationAddress MSB
     msg.appendEscapedChecksum((char) (address16 >> 0 * 8)); // 0x06: DestinationAddress LSB
     msg.appendEscapedChecksum(0x01); // 0x07: Options - immer 1  -> kein ResponsePaket vom XBee
-    for (int i = 0; i < msgToFormat.length(); i++) // 0x08: data ....
+    for (int i = 0; i < msgToFormat.length(); ++i) // 0x08: data ....
       msg.appendEscapedChecksum(msgToFormat[i]);
     msg.appendChecksum(); // packet checksum
     return (QByteArray) msg;
@@ -135,7 +135,7 @@ namespace lpzrobots {
     msg.appendEscapedChecksum((char) (address16 >> 0 * 8)); // 0x0E: DestinationAddress LSB
     msg.appendEscapedChecksum(0x00); // 0x0F: Broadcast-Range
     msg.appendEscapedChecksum(0x01); // 0x10: OptionsByte - immer 1  -> kein ResponsePaket vom XBee
-    for (int i = 0; i < msgToFormat.length(); i++) // 0x11: data ....
+    for (int i = 0; i < msgToFormat.length(); ++i) // 0x11: data ....
       msg.appendEscapedChecksum(msgToFormat[i]);
     msg.appendChecksum(); // packet checksum
     return (QByteArray) msg;
@@ -149,7 +149,7 @@ namespace lpzrobots {
     msg.appendEscaped((QByte) (length >> 0)); // 0x02: Length LSB
     msg.appendEscapedChecksum(API_XBee_AT_Command); // 0x03: API-ID
     msg.appendEscapedChecksum('C'); // 0x04: Frame-ID
-    for (int i = 0; i < msgToFormat.length(); i++) // 0x04: commandData 2..n bytes
+    for (int i = 0; i < msgToFormat.length(); ++i) // 0x04: commandData 2..n bytes
       msg.appendEscapedChecksum(msgToFormat[i]);
     msg.appendChecksum(); // packet checksum
     return (QByteArray) msg;
@@ -174,7 +174,7 @@ namespace lpzrobots {
     msg.appendEscapedChecksum((char) (address16 >> 1 * 8)); // 0x0D: DestinationAddress MSB
     msg.appendEscapedChecksum((char) (address16 >> 0 * 8)); // 0x0E: DestinationAddress LSB
     msg.appendEscapedChecksum(0x02); // 0x0F: Options '0x02 - apply changes'
-    for (int i = 0; i < msgToFormat.length(); i++) // 0x10: commandData 2..n bytes
+    for (int i = 0; i < msgToFormat.length(); ++i) // 0x10: commandData 2..n bytes
       msg.appendEscapedChecksum(msgToFormat[i]);
     msg.appendChecksum(); // packet checksum
     return (QByteArray) msg;
@@ -209,7 +209,7 @@ namespace lpzrobots {
   }
 
   QString QCCHelper::getInitialisedStateString(typeInitialisedState initialisedState) {
-    switch (initialisedState) {
+    explicit switch (initialisedState) {
       case STATE_INITIALISED:
         return "initialised";
       case STATE_NOT_INITIALISED:

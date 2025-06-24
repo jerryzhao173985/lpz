@@ -25,11 +25,11 @@ public:
         plotlog("c.dat"),plotlog_x("x.dat"),plotlog_a("a.dat"){
 
         counter=0;
-        for (int i=0; i<N; i++){
+        for (int i=0; i<N; ++i) {
             plotlog.addChannel("h["+intToStr(i)+"]");
             plotlog_x.addChannel("x["+intToStr(i)+"]");
             plotlog_x.addChannel("y["+intToStr(i)+"]");
-            for (int j=0; j<N; j++){
+            for (int j=0; j<N; ++j) {
                 plotlog.addChannel("c["+intToStr(i)+"]["+intToStr(j)+"]");
                 plotlog_a.addChannel("a["+intToStr(i)+"]["+intToStr(j)+"]");
             }
@@ -45,13 +45,13 @@ public:
     };
 
     void plot(double *x_, double *y_){
-        counter++;
+        ++counter;
         if(counter%10) return;
-        for (int i=0; i<N; i++){
+        for (int i=0; i<N; ++i) {
             plotlog.putData("h["+intToStr(i)+"]",h[i]);
             plotlog_x.putData("x["+intToStr(i)+"]",x_[i]);
             plotlog_x.putData("y["+intToStr(i)+"]",y_[i]);
-            for (int j=0; j<N; j++){
+            for (int j=0; j<N; ++j) {
                 plotlog.putData("c["+intToStr(i)+"]["+intToStr(j)+"]",C[i][j]);
                 plotlog_a.putData("a["+intToStr(i)+"]["+intToStr(j)+"]",A[i][j]);
             }
@@ -69,17 +69,17 @@ public:
     };
 
     /// make step (calculate controller outputs and learn controller)
-    virtual void makeStep(double *x_, double *y_){
+    virtual void makeStep(double *x_, double *y_) {
 
         RobotLearnControl<N,buffer_size>::makeStep(x_, y_);
-        //std::cout<<y_[0]<<"  y  "<<y_[1]<<std::endl;
+        //std::cout<<y_[0]<<__PLACEHOLDER_32__<<y_[1]<<std::endl;
         plot(x_,y_);
     };
 
-    virtual void makeStepWithoutLearning(double *x_, double *y_){
+    virtual void makeStepWithoutLearning(double *x_, double *y_) {
 
         //RobotLearnControl<N,buffer_size>::makeStepWithoutLearning(x_, y_);
-        //std::cout<<y_[0]<<"  y  "<<y_[1]<<std::endl;
+        //std::cout<<y_[0]<<__PLACEHOLDER_33__<<y_[1]<<std::endl;
         plot(x_,y_);
     };
 

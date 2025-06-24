@@ -40,10 +40,10 @@ class StandartGenerationSizeStrategy : public IGenerationSizeStrategy{
 public:
 	/**
 	 * constructor
-	 * @param startSize (int) is the size of the first generation. is needed as basic of the calculation
-	 * @param numGeneration (int) is the number of generation which the alg. will be create
+	 * @param startSize static_cast<int>(is) the size of the first generation. is needed as basic of the calculation
+	 * @param numGeneration static_cast<int>(is) the number of generation which the alg. will be create
 	 */
-	StandartGenerationSizeStrategy(int startSize, int numGeneration);
+	StandartGenerationSizeStrategy(int startSize, int numGeneration) override;
 
 	/**
 	 * default destructor
@@ -52,47 +52,47 @@ public:
 
 	/**
 	 * this function calculate the new generation size
-	 * @param oldGeneration (Generation*) the old generation
-	 * @return (int) the new generation size
+	 * @param oldGeneration static_cast<Generation*>(the) old generation
+	 * @return static_cast<int>(the) new generation size
 	 */
-	virtual int calcGenerationSize(Generation* oldGeneration);
+	virtual int calcGenerationSize(const Generation* oldGeneration) override;
 
 protected:
 	/**
 	 * is the first generation over?
 	 */
-	bool m_firstIsSet;
+	bool m_firstIsSet = false;
 
 	/**
 	 * the start size of the first generation
 	 */
-	int m_startSize;
+	int m_startSize = 0;
 
 	/**
 	 * the number of generation
 	 */
-	int m_numGeneration;
+	int m_numGeneration = 0;
 
 	/**
 	 * the best value of the first generation
 	 */
-	double m_best_first;
+	double m_best_first = 0;
 
 	/**
 	 * the best value of the last generation.
 	 */
-	double m_best_old;
+	double m_best_old = 0;
 
 	/**
 	 * the best value of the new generation.
 	 */
-	double m_best_new;
+	double m_best_new = 0;
 
 private:
 	/**
 	 * disable the default constructor
 	 */
-	StandartGenerationSizeStrategy();
+	StandartGenerationSizeStrategy() override;
 };
 
 #endif /* STANDARTGENERATIONSIZESTRATEGY_H_ */

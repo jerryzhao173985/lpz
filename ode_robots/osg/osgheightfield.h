@@ -47,10 +47,10 @@ namespace lpzrobots {
     OSGHeightField(osg::HeightField* heightfield,float x_size, float y_size);
     OSGHeightField(const std::string& filename, float x_size, float y_size, float height);
 
-    virtual void setMatrix(const osg::Matrix& matrix) override;
-    virtual void init(const OsgHandle& osgHandle, Quality quality = Middle) override;
+    virtual void setMatrix(const osg::Matrix& matrix);
+    virtual void init(const OsgHandle& osgHandle, Quality quality = Middle);
 
-    virtual const osg::HeightField* getHeightField() const { return field; }
+    virtual const osg::HeightField* getHeightField() const override { return field; }
 
     /** loads an ppm image and returns the height field using the given coding and the height
         (maximal height of the heightfield)
@@ -62,8 +62,8 @@ namespace lpzrobots {
 
   protected:
     osg::HeightField* field;
-    float x_size;
-    float y_size;
+    float x_size = 0;
+    float y_size = 0;
   };
 
 

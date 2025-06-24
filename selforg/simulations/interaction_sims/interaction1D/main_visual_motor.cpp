@@ -43,7 +43,7 @@ double toEnv(double pos){
   if(pos<-1) pos+=2;
   return pos;
 }
-Position toEnv(Position pos){
+Position toEnv(const Position& pos){
   pos.x = toEnv(pos.x);
   return pos;
 }
@@ -52,10 +52,8 @@ class Tactile{
 public:
   Tactile(double dist, double value, int what)
     : dist(fabs(dist)), value(value), what(what){}
-  double dist;
-  double value;
-  int what;
-  bool operator <(const Tactile& t)const { return dist < t.dist; }
+  double dist = 0;
+  bool operator <(const Tactile& t)const override { return dist < t.dist; }
 };
 
 class MyRobot : public AbstractRobot {
@@ -97,7 +95,7 @@ public:
       @param sensornumber length of the sensor array
       @return number of actually written sensors
   */
-  virtual int getSensors(sensor* sensors, int sensornumber){
+  virtual int getSensors(sensor* sensors, int sensornumber) override {
     assert(sensornumber == this->sensornumber);
     memcpy(sensors, x, sizeof(sensor) * sensornumber);
     return sensornumber;
@@ -107,7 +105,7 @@ public:
       @param motors motors scaled to [-1,1]
       @param motornumber length of the motor array
   */
-  virtual void setMotors(const motor* motors, int motornumber){
+  virtual void setMotors(const motor* motors, int motornumber) override {
     assert(motornumber == this->motornumber);
     memcpy(y, motors, sizeof(motor) * motornumber);
 
@@ -115,7 +113,7 @@ public:
 
     // perform robot action here
     /*  simple discrete simulation
-        a = F/m - \mu v_0/m // friction approximation
+        a = F/m - \mu v_0/m __PLACEHOLDER_47__
         v = a*t + v0
         x = v*t + x0
     */
@@ -129,9 +127,9 @@ public:
 
     int len=0;
     //  speed sensor (proprioception)
-    for(int i=0; i<1; i++){
+    for (int i=0; i<1; ++i) {
       x[len] = speed.toArray()[i];
-      len++;
+      ++len;
     }
 
     vector< Tactile > touchs;
@@ -143,14 +141,14 @@ public:
       //  shadow of the other in the cyclic environment
       //  Position shadow = toEnv(opos + Position(shadowdist,0,0));
       tactile(touchs, opos,k);
-      k++;
+      ++k;
     }
 
     // sense the other stuff: objects
     k=10;
     FOREACHC(list<Position>, objects, i){
       tactile(touchs,*i,k);
-      k++;
+      ++k;
     }
 
     if(touchs.empty()){
@@ -162,23 +160,23 @@ public:
       whatDoIFeel = touchs.begin()->what;
     }
 
-    len++;
+    ++len;
     // position sensor (context)
 //     x[len] = sin(pos.x*M_PI);
 //     len++;
     if(len>sensornumber) fprintf(stderr,"something is wrong with the sensornumber\n");
   }
 
-  virtual int getSensorNumber(){ return sensornumber; }
+  virtual int getSensorNumber() { return sensornumber; }
   virtual int getMotorNumber() { return motornumber; }
-  virtual Position getPosition() const {return pos;}
-  virtual Position getSpeed() const {return speed;}
-  virtual Position getAngularSpeed() const {return Position(x[0],x[1],whatDoIFeel);}
-  virtual matrix::Matrix getOrientation() const {
+  virtual Position getPosition() const override {return pos;}
+  virtual Position getSpeed() const override {return speed;}
+  virtual Position getAngularSpeed() const override {return Position(x[0],x[1],whatDoIFeel);}
+  virtual matrix::Matrix getOrientation() const  override {
     matrix::Matrix m(3,3); m.toId();  return m;
   };
 
-  virtual void addOtherRobot(const MyRobot* otherRobot){
+  virtual void addOtherRobot(const MyRobot* otherRobot) {
     if(otherRobot!=this)
       otherRobots.push_back(otherRobot);
   }
@@ -248,10 +246,10 @@ void printRobots(const list<MyRobot*>& robots){
     double x = (*i)->getPosition().x;
     int start = coord(x-(*i)->getParam("range"));
     int end = coord(x+(*i)->getParam("range"));
-    for(int i=start; i<end; i++){
+    for (int i=start; i<end; ++i) {
       color[(i+80)%80] |= 1<<k;
     }
-    k++;
+    ++k;
   }
   k=0;
   // robots itself
@@ -259,18 +257,18 @@ void printRobots(const list<MyRobot*>& robots){
     double x = (*i)->getPosition().x;
     line[coord(x)]='A'+ k;
     //  x = toEnv(x+shadowdist);
-    //  line[coord(x)]='a'+ k;
-    k++;
+    //  line[coord(x)]=__PLACEHOLDER_38__+ k;
+    ++k;
   }
   k=0;
   // objects
   FOREACHC(list<Position>, objects, i) {
     line[coord(i->x)]='O'+ k;
-    k++;
+    ++k;
   }
 
   printf("\033[1G");
-  for(int i=0; i<80; i++){
+  for (int i=0; i<80; ++i) {
     printf("\033[%im%c",color[i]==0 ? 0 : 100+color[i],line[i]);
   }
   printf("\033[0m");
@@ -279,7 +277,7 @@ void printRobots(const list<MyRobot*>& robots){
 }
 
 void reinforce(Agent* a){
-//   MyRobot* r = (MyRobot*)a->getRobot();
+//   MyRobot* r = static_cast<MyRobot*>(a)->getRobot();
 //   InvertMotorNStep* c = dynamic_cast<InvertMotorNStep*>(a->getController());
 //   if(c)
 //     c->setReinforcement(2*(r->whatDoIFeel != 0));
@@ -288,7 +286,7 @@ void reinforce(Agent* a){
 
 // Helper
 int contains(char **list, int len,  const char *str){
-  for(int i=0; i<len; i++){
+  for (int i=0; i<len; ++i) {
     if(strcmp(list[i],str) == 0) return i+1;
   }
   return 0;
@@ -300,7 +298,7 @@ int main(int argc, char** argv){
   list<PlotOption> plotoptions;
 
   int index = contains(argv,argc,"-g");
-  if(index >0 && argc>index) {
+  if (index >0 && argc>index) {
     plotoptions.push_back(PlotOption(GuiLogger,Controller,atoi(argv[index])));
   }
   if(contains(argv,argc,"-f")!=0) plotoptions.push_back(PlotOption(File));
@@ -313,7 +311,7 @@ int main(int argc, char** argv){
 
   list<MyRobot*> robots;
 
-  for(int i=0; i<1; i++){
+  for (int i=0; i<1; ++i) {
     InvertMotorNStepConf cc = InvertMotorNStep::getDefaultConf();
     cc.cInit=1.4;
     //    cc.useS=true;
@@ -334,7 +332,7 @@ int main(int argc, char** argv){
     agent->init(controller, robot, wiring);
     // if you like, you can keep track of the robot with the following line.
     //  this assumes that you robot returns its position, speed and orientation.
-    //    if(i==0) agent->setTrackOptions(TrackRobot(true,true,false, false,"updown_sinpos_3obj",5));
+    //    if(i==0) agent->setTrackOptions(TrackRobot(true,true,false, false,__PLACEHOLDER_30__,5));
 
     globaldata.configs.push_back(robot);
     globaldata.configs.push_back(controller);
@@ -364,7 +362,7 @@ int main(int argc, char** argv){
 
   cmd_handler_init();
   long int t=0;
-  while(!stop){
+  while (!stop){
     FOREACH(AgentList, globaldata.agents, i){
       (*i)->step(noise,t/100.0);
       reinforce(*i);
@@ -376,14 +374,14 @@ int main(int argc, char** argv){
       cmd_end_input();
     }
     int drawinterval = 10000;
-    if(realtimefactor){
+    if (realtimefactor){
       drawinterval = int(6*realtimefactor);
     }
     if(t%drawinterval==0){
       printRobots(robots);
       usleep(60000);
     }
-    t++;
+    ++t;
   };
 
   FOREACH(AgentList, globaldata.agents, i){

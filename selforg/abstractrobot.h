@@ -34,7 +34,7 @@
 #include "sensormotorinfo.h"
 
 /**
- * Abstract class (interface) for robot in general
+ * Abstract class static_cast<interface>(for) robot in general
  *
  *
  */
@@ -52,30 +52,30 @@ public:
     : Configurable(name, revision) {
   };
 
-  virtual ~AbstractRobot() override{}
+  virtual ~AbstractRobot(){}
 
   /** returns actual sensorvalues
       @param sensors sensors scaled to [-1,1]
       @param sensornumber length of the sensor array
       @return number of actually written sensors
   */
-  virtual int getSensors(sensor* sensors, int sensornumber)=0;
+  virtual int getSensors(sensor* sensors, int sensornumber)= 0;
 
   /** sets actual motorcommands
       @param motors motors scaled to [-1,1]
       @param motornumber length of the motor array
   */
-  virtual void setMotors(const motor* motors, int motornumber)=0;
+  virtual void setMotors(const motor* motors, int motornumber)= 0;
 
   /** returns number of sensors
   */
-  virtual int getSensorNumber()=0;
+  virtual int getSensorNumber()= 0;
 
   /** returns number of motors
   */
-  virtual int getMotorNumber()=0;
+  virtual int getMotorNumber()= 0;
 
-  virtual std::string getTrackableName() const  override{return getName();}
+  virtual std::string getTrackableName() const {return getName();}
 
   /** returns the information for the sensors.
       The following relation has to hold: getSensorNames().size() == getSensorNumber()

@@ -41,11 +41,10 @@ enum PlotStyle {PS_DEFAULT, PS_LINES, PS_POINTS};
 class ChannelPlotInfo{
 public:
   ChannelPlotInfo() {};
-  ChannelPlotInfo(PlotStyle style)
-    : style(style) {};
+  explicit ChannelPlotInfo(PlotStyle style_) : style(style_) {};
   PlotStyle style;
   const char* getStyleString() const {
-    switch(style){
+    explicit switch(style){
     case PS_LINES:   return "l";
     case PS_POINTS:  return "p";
     default: return "l";
@@ -56,7 +55,7 @@ public:
 class PlotInfo : public QObject{
   Q_OBJECT
 public:
-  PlotInfo(const ChannelData& cd);
+  explicit PlotInfo(const ChannelData& cd);
 
   /// sets whether the channel is to be shown
   void setChannelShow(int index, bool on);

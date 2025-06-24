@@ -52,7 +52,7 @@ namespace lpzrobots {
     Q_OBJECT
 
     public:
-      QDNSDeviceWidget(QCCHelper::DNSDevice_t* dnsDevice);
+      explicit QDNSDeviceWidget(QCCHelper::DNSDevice_t* dnsDevice);
       virtual ~QDNSDeviceWidget();
 
 //      QCCHelper::DNSDevice_t* getDNSDevice() {

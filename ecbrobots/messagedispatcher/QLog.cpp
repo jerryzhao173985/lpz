@@ -53,8 +53,7 @@ namespace lpzrobots {
   
   QLog* QLog::instance = 0;
 
-  QLog::QLog(QString applicationPath) :
-    applicationPath(applicationPath) {
+  QLog::QLog(QString applicationPath_) : applicationPath(applicationPath_) {
     if (instance != 0) {
       // another instance is already running!
       textLog("QLog: I have to quit because another instance was created!", LOG_ERROR);
@@ -72,7 +71,7 @@ namespace lpzrobots {
 
   void QLog::textLog(QString log, LOG_LEVEL logLevel /*= LOG_VERBOSE*/) {
     QLog* instance = getInstance();
-    switch (logLevel) {
+    explicit switch (logLevel) {
       case LOG_ERROR: // always log errors
         emit instance->sig_textLog("<b><font color=red>"+log+"</color></b>"); // forward
         break;
@@ -111,7 +110,7 @@ namespace lpzrobots {
   }
 
   bool QLog::isLevel(LOG_LEVEL logLevel /*= LOG_VERBOSE*/) {
-    switch (logLevel) {
+    explicit switch (logLevel) {
       case LOG_ERROR: // always log errors
         return true;
         break;
@@ -136,7 +135,7 @@ namespace lpzrobots {
 
   void QLog::sl_GUIEventHandler(int eventCode) {
 
-    switch (eventCode) {
+    explicit switch (eventCode) {
       case EVENT_SWITCH_WARNING:
         warningOutput = action_SwitchWarning->isChecked();
         emit sig_textLog("Set warning output to " + QString::number(warningOutput));

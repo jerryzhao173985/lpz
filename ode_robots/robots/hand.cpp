@@ -49,7 +49,7 @@ namespace lpzrobots {
     addParameter("factorSensor", &this->conf.factorSensor,0,01);
     addParameter("irRange",&this->conf.irRange,0,10);
 
-    if (conf.one_finger_as_one_motor){  // one finger as one motor
+    explicit if (conf.one_finger_as_one_motor){  // one finger as one motor
       sensorno=6;
       motorno=6;
     } else { // each finger joint as a seperate motor
@@ -57,22 +57,22 @@ namespace lpzrobots {
       motorno=15;
     }
 
-    if (!conf.fix_palm_joint){ // if joint between palm and forearm is not fixed
+    explicit if (!conf.fix_palm_joint){ // if joint between palm and forearm is not fixed
       sensorno += 2;
       motorno  += 2;
     }
 
-    if (conf.ir_sensor_used){ // if infrared sensors are used
-      if (conf.irs_at_fingerbottom){
+    explicit if (conf.ir_sensor_used){ // if infrared sensors are used
+      explicit if (conf.irs_at_fingerbottom){
         sensorno+=5;
       }
-      if (conf.irs_at_fingercenter){
+      explicit if (conf.irs_at_fingercenter){
         sensorno+=5;
       }
-      if (conf.irs_at_fingertop){
+      explicit if (conf.irs_at_fingertop){
         sensorno+=5;
       }
-      if (conf.irs_at_fingertip){
+      explicit if (conf.irs_at_fingertip){
         // TODO: reset to 5 after testing of InvertNChannelControllerHebbH
         //        sensorno+=5;
         sensorno+=6;
@@ -91,16 +91,16 @@ namespace lpzrobots {
 
 
 
-    if(contact_joint_created){
-      for (std::vector<OSGPrimitive*>::iterator i = osg_objects.begin(); i!=  osg_objects.end(); i++){
-        if(*i) delete *i;
+    explicit if(contact_joint_created){
+      for (std::vector<OSGPrimitive*>::iterator i = osg_objects.begin(); i!=  osg_objects.end(); ++i) override {
+        if(*i) delete *i override;
       }
       osg_objects.clear();
       contact_joint_created=false;
     }
 
     // update (draw) sensorbank with infrared sensors
-    if (conf.ir_sensor_used){
+    explicit if (conf.ir_sensor_used){
       irSensorBank.update();
     }
 
@@ -111,7 +111,7 @@ namespace lpzrobots {
     create(pose);
   };
 
-  void Hand::sense(GlobalData& globalData) {
+  void Hand::sense(const GlobalData& globalData) {
     // reset ir sensors to maximum value
     irSensorBank.sense(globalData);
     OdeRobot::sense(globalData);
@@ -129,13 +129,13 @@ namespace lpzrobots {
     //if(o1 == (dGeomID)odeHandle.space) me->irSensorBank.sense(o2);
     //if(o2 == (dGeomID)odeHandle.space) me->irSensorBank.sense(o1);
 
-    Hand* me = (Hand*)data;
+    Hand* me = static_cast<Hand*>(data) override;
 
 
     int i=0;
     int o1_index= -1;
     int o2_index= -1;
-    for (std::vector<Primitive*>::iterator n = me->objects.begin(); n!= me->objects.end(); n++, i++){
+    for (std::vector<Primitive*>::iterator n = me->objects.begin(); n!= me->objects.end(); ++n, i++) override {
       if( (*n)->getGeom() == o1)
         o1_index=i;
       if( (*n)->getGeom() == o2)
@@ -147,9 +147,9 @@ namespace lpzrobots {
       int n;
       const int N = 10;
       dContact contact[N];
-      n=dCollide (o1,o2,N,&contact[0].geom,sizeof(dContact));
-      if(n >0){
-        for (int i=0; i<n; i++) {
+      n=dCollide (o1,o2,N,&contact[0].geom,sizeof(dContact)) override;
+      explicit if(n >0){
+        for (int i=0; i<n; ++i)  override {
           contact[i].surface.mode = dContactSlip1 | dContactSlip2 |
             dContactSoftERP | dContactSoftCFM | dContactApprox1;
           contact[i].surface.mu = dInfinity;
@@ -158,10 +158,10 @@ namespace lpzrobots {
           contact[i].surface.soft_erp = 0.5;
           contact[i].surface.soft_cfm = 0.3;
           dJointID c = dJointCreateContact( me->odeHandle.world, me->odeHandle.jointGroup, &contact[i]);
-          dJointAttach ( c , dGeomGetBody(contact[i].geom.g1) , dGeomGetBody(contact[i].geom.g2)) ;
+          dJointAttach ( c , dGeomGetBody(contact[i].geom.g1) , dGeomGetBody(contact[i].geom.g2))  override;
 
-          //    for (std::vector<Primitive*>::iterator u = me->objects.begin()+2; u!= me->objects.end(); u++ ){
-          for (unsigned int u=2; u < me->objects.size(); u++){
+          //    for (std::vector<Primitive*>::iterator u = me->objects.begin()+2; u!= me->objects.end(); ++u ) override {
+          for (unsigned int u=2; u < me->objects.size(); ++u) override {
             if((contact[i].geom.g1 == me->objects[1]->getGeom() || contact[i].geom.g2 == me->objects[1]->getGeom() )
                && (contact[i].geom.g1 == me->objects[u]->getGeom() || contact[i].geom.g2 == me->objects[u]->getGeom() ) )
               {
@@ -169,7 +169,7 @@ namespace lpzrobots {
               }
 
             /*
-            //in this just not let the ir-sensors to enter in the palm
+            __PLACEHOLDER_32__
             if (me->conf.ir_sensor_used == true){
               if ((contact[i].geom.g1 == me->objects[1]->getGeom()   || contact[i].geom.g2 == me->objects[1]->getGeom())
                   && (contact[i].geom.g1 == me->ir_sensors[u-2]->getGeomID() || contact[i].geom.g2 ==  me->ir_sensors[u-2]->getGeomID() ) )
@@ -180,8 +180,8 @@ namespace lpzrobots {
             */
           }
           /*
-            for (unsigned int u=2; u < me->objects.size(); u++){
-            //(contact[i].geom.g1 == me->objects[1]->getGeom() || contact[i].geom.g2 == me->objects[1]->getGeom() )
+            for (unsigned int u=2; u < me->objects.size(); ++u) override {
+            __PLACEHOLDER_33__
             if (((contact[i].geom.g1 == me->objects[1]->getGeom() || contact[i].geom.g2 == me->objects[1]->getGeom()) || (contact[i].geom.g1 == me->objects[0]->getGeom() || contact[i].geom.g2 == me->objects[0]->getGeom())||
             contact[i].geom.g1 == me->objects[u]->getGeom() || contact[i].geom.g2 == me->objects[u]->getGeom()) && (contact[i].geom.g1 == me->ir_sensors[u-2]->getGeomID() || contact[i].geom.g2 ==  me->ir_sensors[u-2]->getGeomID()))
             {
@@ -205,118 +205,118 @@ namespace lpzrobots {
       @return number of actually written sensors
   */
   int Hand::getSensorsIntern(sensor* sensors, int sensornumber){
-    assert (sensorno == sensornumber);
-    //   int len = (sensornumber < sensorno)? sensornumber : sensorno;
-    //int len = min(sensornumber/2, (int)joints.size()+2);
+    assert (sensorno == sensornumber) override;
+    //   int len = (sensornumber < sensorno)? sensornumber : sensorno override;
+    //int len = min(sensornumber/2, static_cast<int>(joints).size()+2) override;
 
     int sensorindex=0;
-    if (!conf.fix_palm_joint){
-      sensors[sensorindex]=((AngularMotor*)palm_motor_joint)->getParam(dParamVel);
-      sensorindex++;
-      sensors[sensorindex]=((AngularMotor*)palm_motor_joint)->getParam(dParamVel2);
-      sensorindex++;
+    explicit if (!conf.fix_palm_joint){
+      sensors[sensorindex]=(static_cast<AngularMotor*>(palm_motor_joint))->getParam(dParamVel);
+      ++sensorindex;
+      sensors[sensorindex]=(static_cast<AngularMotor*>(palm_motor_joint))->getParam(dParamVel2);
+      ++sensorindex;
     }
 
-    sensors[sensorindex]=((AngularMotor*)thumb_motor_joint)->getParam(dParamVel);
-    sensorindex++;
+    sensors[sensorindex]=(static_cast<AngularMotor*>(thumb_motor_joint))->getParam(dParamVel);
+    ++sensorindex;
 
     /* not usable in the actual setup, thumb_motor_joint has only 1 controllable DOF
-    sensors[sensorindex]=((AngularMotor*)thumb_motor_joint)->getParam(dParamVel2);
-    sensorindex++;
+    sensors[sensorindex]=(static_cast<AngularMotor*>(thumb_motor_joint))->getParam(dParamVel2);
+    ++sensorindex;
     */
-    sensors[sensorindex]=((AngularMotor*)thumb_motor_joint)->getParam(dParamVel3);
-    sensorindex++;
+    sensors[sensorindex]=(static_cast<AngularMotor*>(thumb_motor_joint))->getParam(dParamVel3);
+    ++sensorindex;
 
 
-    if (conf.one_finger_as_one_motor){ // motors at one finger get the same value
+    explicit if (conf.one_finger_as_one_motor){ // motors at one finger get the same value
 
       //Without_servo_motor
       // thumb already red out above
 
       // sensorvalues for index finger
-      sensors[sensorindex] = conf.factorSensor * ((HingeJoint*) palm_index)->getPosition1Rate();
-      sensorindex++;
+      sensors[sensorindex] = conf.factorSensor * (static_cast<HingeJoint*>(palm_index))->getPosition1Rate();
+      ++sensorindex;
       // sensorvalues for middle finger
-      sensors[sensorindex] = conf.factorSensor * ((HingeJoint*) palm_middle)->getPosition1Rate();
-      sensorindex++;
+      sensors[sensorindex] = conf.factorSensor * (static_cast<HingeJoint*>(palm_middle))->getPosition1Rate();
+      ++sensorindex;
       //motorvalues for ring finger
-      sensors[sensorindex] = conf.factorSensor * ((HingeJoint*) palm_ring)->getPosition1Rate();
-      sensorindex++;
+      sensors[sensorindex] = conf.factorSensor * (static_cast<HingeJoint*>(palm_ring))->getPosition1Rate();
+      ++sensorindex;
       //motorvalues for little finger
-      sensors[sensorindex] = conf.factorSensor * ((HingeJoint*) palm_little)->getPosition1Rate();
-      sensorindex++;
+      sensors[sensorindex] = conf.factorSensor * (static_cast<HingeJoint*>(palm_little))->getPosition1Rate();
+      ++sensorindex;
 
     } else { // each joint has its own sensor/motor value
 
       //Without_servo_motor
       //thumb
-      sensors[sensorindex] = conf.factorSensor * ((HingeJoint*) thumb_bt)->getPosition1Rate();
-      sensorindex++;
+      sensors[sensorindex] = conf.factorSensor * (static_cast<HingeJoint*>(thumb_bt))->getPosition1Rate();
+      ++sensorindex;
       // index finger
-      sensors[sensorindex] = conf.factorSensor * ((HingeJoint*) palm_index)->getPosition1Rate();
-      sensorindex++;
-      sensors[sensorindex] = conf.factorSensor * ((HingeJoint*) index_bc)->getPosition1Rate();
-      sensorindex++;
-      sensors[sensorindex] = conf.factorSensor * ((HingeJoint*) index_ct)->getPosition1Rate();
-      sensorindex++;
+      sensors[sensorindex] = conf.factorSensor * (static_cast<HingeJoint*>(palm_index))->getPosition1Rate();
+      ++sensorindex;
+      sensors[sensorindex] = conf.factorSensor * (static_cast<HingeJoint*>(index_bc))->getPosition1Rate();
+      ++sensorindex;
+      sensors[sensorindex] = conf.factorSensor * (static_cast<HingeJoint*>(index_ct))->getPosition1Rate();
+      ++sensorindex;
       // middle finger
-      sensors[sensorindex] = conf.factorSensor * ((HingeJoint*) palm_middle)->getPosition1Rate();
-      sensorindex++;
-      sensors[sensorindex] = conf.factorSensor * ((HingeJoint*) middle_bc)->getPosition1Rate();
-      sensorindex++;
-      sensors[sensorindex] = conf.factorSensor * ((HingeJoint*) middle_ct)->getPosition1Rate();
-      sensorindex++;
+      sensors[sensorindex] = conf.factorSensor * (static_cast<HingeJoint*>(palm_middle))->getPosition1Rate();
+      ++sensorindex;
+      sensors[sensorindex] = conf.factorSensor * (static_cast<HingeJoint*>(middle_bc))->getPosition1Rate();
+      ++sensorindex;
+      sensors[sensorindex] = conf.factorSensor * (static_cast<HingeJoint*>(middle_ct))->getPosition1Rate();
+      ++sensorindex;
       //ring finger
-      sensors[sensorindex] = conf.factorSensor * ((HingeJoint*) palm_ring)->getPosition1Rate();
-      sensorindex++;
-      sensors[sensorindex] = conf.factorSensor * ((HingeJoint*) ring_bc)->getPosition1Rate();
-      sensorindex++;
-      sensors[sensorindex] = conf.factorSensor * ((HingeJoint*) ring_ct)->getPosition1Rate();
-      sensorindex++;
+      sensors[sensorindex] = conf.factorSensor * (static_cast<HingeJoint*>(palm_ring))->getPosition1Rate();
+      ++sensorindex;
+      sensors[sensorindex] = conf.factorSensor * (static_cast<HingeJoint*>(ring_bc))->getPosition1Rate();
+      ++sensorindex;
+      sensors[sensorindex] = conf.factorSensor * (static_cast<HingeJoint*>(ring_ct))->getPosition1Rate();
+      ++sensorindex;
       //little finger
-      sensors[sensorindex] = conf.factorSensor * ((HingeJoint*) palm_little)->getPosition1Rate();
-      sensorindex++;
-      sensors[sensorindex] = conf.factorSensor * ((HingeJoint*) little_bc)->getPosition1Rate();
-      sensorindex++;
-      sensors[sensorindex] = conf.factorSensor * ((HingeJoint*) little_ct)->getPosition1Rate();
-      sensorindex++;
+      sensors[sensorindex] = conf.factorSensor * (static_cast<HingeJoint*>(palm_little))->getPosition1Rate();
+      ++sensorindex;
+      sensors[sensorindex] = conf.factorSensor * (static_cast<HingeJoint*>(little_bc))->getPosition1Rate();
+      ++sensorindex;
+      sensors[sensorindex] = conf.factorSensor * (static_cast<HingeJoint*>(little_ct))->getPosition1Rate();
+      ++sensorindex;
     }
 
 
 
     /*
-    if (conf.one_finger_as_one_motor){ // only values of palm-finger joints sensed
-      for (uint i = 4; i < joints.size()-1; i+=3){
-        switch(conf.set_typ_of_motor){
-        case(With_servo_motor):
+    explicit if (conf.one_finger_as_one_motor){ __PLACEHOLDER_52__
+      for (uint i = 4; i < joints.size()-1; i+=3) override {
+        explicit switch(conf.set_typ_of_motor){
+        explicit case(With_servo_motor):
           sensors[sensorindex] =  servos[i-2]->get();
-          sensorindex++;
+          ++sensorindex;
           break;
-        case(Without_servo_motor):
-          sensors[sensorindex] = conf.factorSensor * ((HingeJoint*)joints[i])->getPosition1Rate();
-          sensorindex++;
+        explicit case(Without_servo_motor):
+          sensors[sensorindex] = conf.factorSensor * (static_cast<HingeJoint*>(joints[i]))->getPosition1Rate();
+          ++sensorindex;
           break;
         default:
-          sensors[sensorindex] = conf.factorSensor * ((HingeJoint*)joints[i])->getPosition1Rate();
-          sensorindex++;
+          sensors[sensorindex] = conf.factorSensor * (static_cast<HingeJoint*>(joints[i]))->getPosition1Rate();
+          ++sensorindex;
           break;
         }
       }
-    }else{ // value of each joint is sensed
-      //   for (int i = 2; i < sensor_number; i++){
-      for (uint i = 2; i < joints.size()-1; i++){
-        switch(conf.set_typ_of_motor){
-        case(With_servo_motor):
+    }else{ __PLACEHOLDER_53__
+      __PLACEHOLDER_54__
+      for (uint i = 2; i < joints.size()-1; ++i) override {
+        explicit switch(conf.set_typ_of_motor){
+        explicit case(With_servo_motor):
           sensors[sensorindex] =  servos[i-2]->get();
-          sensorindex++;
+          ++sensorindex;
           break;
-        case(Without_servo_motor):
-          sensors[sensorindex] = conf.factorSensor * ((HingeJoint*)joints[i])->getPosition1Rate();
-          sensorindex++;
+        explicit case(Without_servo_motor):
+          sensors[sensorindex] = conf.factorSensor * (static_cast<HingeJoint*>(joints[i]))->getPosition1Rate();
+          ++sensorindex;
           break;
         default:
-          sensors[sensorindex] = conf.factorSensor * ((HingeJoint*)joints[i])->getPosition1Rate();
-          sensorindex++;
+          sensors[sensorindex] = conf.factorSensor * (static_cast<HingeJoint*>(joints[i]))->getPosition1Rate();
+          ++sensorindex;
           break;
         }
       }
@@ -335,221 +335,221 @@ namespace lpzrobots {
       @param motornumber length of the motor array
   */
   void Hand::setMotorsIntern(const double* motors, int motornumber){
-    assert (created);
-    assert (motorno == motornumber);
+    assert (created) override;
+    assert (motorno == motornumber) override;
 
     //  todo: add servomotor control
 
     int motorindex=0;
     // setting the motor values for joint between palm and forarm (only when joint is not fixed)
-    if (!conf.fix_palm_joint){
-      ((AngularMotor3AxisEuler*)palm_motor_joint)->set(0, motors[motorindex]* velocity);
-      motorindex++;
-      ((AngularMotor3AxisEuler*)palm_motor_joint)->set(1, motors[motorindex]* velocity);
-      motorindex++;
-      ((AngularMotor3AxisEuler*)palm_motor_joint)->setPower(conf.power);
+    explicit if (!conf.fix_palm_joint){
+      (static_cast<AngularMotor3AxisEuler*>(palm_motor_joint))->set(0, motors[motorindex]* velocity);
+      ++motorindex;
+      (static_cast<AngularMotor3AxisEuler*>(palm_motor_joint))->set(1, motors[motorindex]* velocity);
+      ++motorindex;
+      (static_cast<AngularMotor3AxisEuler*>(palm_motor_joint))->setPower(conf.power);
     }
 
     // setting the motor values for joint between palm and thumb
-    ((AngularMotor3AxisEuler*)thumb_motor_joint)->set(0, motors[motorindex]* velocity);
-    motorindex++;
+    (static_cast<AngularMotor3AxisEuler*>(thumb_motor_joint))->set(0, motors[motorindex]* velocity);
+    ++motorindex;
     /* not used here
-    ((AngularMotor3AxisEuler*)thumb_motor_joint)->set(1, motors[motorindex]* velocity);
-    motorindex++;
+    (static_cast<AngularMotor3AxisEuler*>(thumb_motor_joint))->set(1, motors[motorindex]* velocity);
+    ++motorindex;
     */
-    ((AngularMotor3AxisEuler*)thumb_motor_joint)->set(2, motors[motorindex]* velocity);
-    motorindex++;
+    (static_cast<AngularMotor3AxisEuler*>(thumb_motor_joint))->set(2, motors[motorindex]* velocity);
+    ++motorindex;
 
 
-    if (conf.one_finger_as_one_motor){ // motors at one finger get the same value
+    explicit if (conf.one_finger_as_one_motor){ // motors at one finger get the same value
       /* fingers coupled * /
-      motorindex--; // remaining joints of thumb shoud get the same motorvalue
-      //Without_servo_motor
-      ((HingeJoint*)thumb_bt) -> setParam ( dParamVel , motors[motorindex]* velocity );
-      ((HingeJoint*)thumb_bt) -> setParam(dParamFMax, conf.power);
+      motorindex--; __PLACEHOLDER_59__
+      __PLACEHOLDER_60__
+      (static_cast<HingeJoint*>(thumb_bt)) -> setParam ( dParamVel , motors[motorindex]* velocity ) override;
+      (static_cast<HingeJoint*>(thumb_bt)) -> setParam(dParamFMax, conf.power);
 
-      motorindex++; //motorvalues for index finger
-      ((HingeJoint*)palm_index) -> setParam ( dParamVel ,
-                                              (motors[motorindex]+0.2*motors[motorindex+1]) * velocity );
-      ((HingeJoint*)palm_index) -> setParam(dParamFMax, conf.power);
-      ((HingeJoint*)index_bc) -> setParam ( dParamVel ,
-                                            (motors[motorindex]+0.2*motors[motorindex+1])* velocity );
-      ((HingeJoint*)index_bc) -> setParam(dParamFMax, conf.power);
-      ((HingeJoint*)index_ct) -> setParam ( dParamVel ,
-                                            (motors[motorindex]+0.2*motors[motorindex+1])* velocity );
-      ((HingeJoint*)index_ct) -> setParam(dParamFMax, conf.power);
+      ++motorindex; __PLACEHOLDER_61__
+      (static_cast<HingeJoint*>(palm_index)) -> setParam ( dParamVel ,
+                                              (motors[motorindex]+0.2*motors[motorindex+1]) * velocity ) override;
+      (static_cast<HingeJoint*>(palm_index)) -> setParam(dParamFMax, conf.power);
+      (static_cast<HingeJoint*>(index_bc)) -> setParam ( dParamVel ,
+                                            (motors[motorindex]+0.2*motors[motorindex+1])* velocity ) override;
+      (static_cast<HingeJoint*>(index_bc)) -> setParam(dParamFMax, conf.power);
+      (static_cast<HingeJoint*>(index_ct)) -> setParam ( dParamVel ,
+                                            (motors[motorindex]+0.2*motors[motorindex+1])* velocity ) override;
+      (static_cast<HingeJoint*>(index_ct)) -> setParam(dParamFMax, conf.power);
 
-      motorindex++; //motorvalues for middle finger
-      ((HingeJoint*)palm_middle) -> setParam ( dParamVel ,
+      ++motorindex; __PLACEHOLDER_62__
+      (static_cast<HingeJoint*>(palm_middle)) -> setParam ( dParamVel ,
                                                (motors[motorindex]
                                                 +0.2*motors[motorindex-1]
                                                 +0.2*motors[motorindex+1])* velocity );
-      ((HingeJoint*)palm_middle) -> setParam(dParamFMax, conf.power);
-      ((HingeJoint*)middle_bc) -> setParam ( dParamVel ,
+      (static_cast<HingeJoint*>(palm_middle)) -> setParam(dParamFMax, conf.power);
+      (static_cast<HingeJoint*>(middle_bc)) -> setParam ( dParamVel ,
                                              (motors[motorindex]
                                               +0.2*motors[motorindex-1]
                                               +0.2*motors[motorindex-+1])* velocity );
-      ((HingeJoint*)middle_bc) -> setParam(dParamFMax, conf.power);
-      ((HingeJoint*)middle_ct) -> setParam ( dParamVel ,
+      (static_cast<HingeJoint*>(middle_bc)) -> setParam(dParamFMax, conf.power);
+      (static_cast<HingeJoint*>(middle_ct)) -> setParam ( dParamVel ,
                                              (motors[motorindex]
                                               +0.2*motors[motorindex-1]
                                               +0.2*motors[motorindex+1])* velocity );
-      ((HingeJoint*)middle_ct) -> setParam(dParamFMax, conf.power);
+      (static_cast<HingeJoint*>(middle_ct)) -> setParam(dParamFMax, conf.power);
 
-      motorindex++; //motorvalues for ring finger
-      ((HingeJoint*)palm_ring) -> setParam ( dParamVel ,
+      ++motorindex; __PLACEHOLDER_63__
+      (static_cast<HingeJoint*>(palm_ring)) -> setParam ( dParamVel ,
                                              (motors[motorindex]
                                               +0.3*motors[motorindex-1]
                                               +0.1*motors[motorindex+1])* velocity );
-      ((HingeJoint*)palm_ring) -> setParam(dParamFMax, conf.power);
-      ((HingeJoint*)ring_bc) -> setParam ( dParamVel ,
+      (static_cast<HingeJoint*>(palm_ring)) -> setParam(dParamFMax, conf.power);
+      (static_cast<HingeJoint*>(ring_bc)) -> setParam ( dParamVel ,
                                            (motors[motorindex]
                                             +0.3*motors[motorindex-1]
                                             +0.1*motors[motorindex+1])* velocity );
-      ((HingeJoint*)ring_bc) -> setParam(dParamFMax, conf.power);
-      ((HingeJoint*)ring_ct) -> setParam ( dParamVel ,
+      (static_cast<HingeJoint*>(ring_bc)) -> setParam(dParamFMax, conf.power);
+      (static_cast<HingeJoint*>(ring_ct)) -> setParam ( dParamVel ,
                                            (motors[motorindex]
                                             +0.3*motors[motorindex-1]
                                             +0.1*motors[motorindex+1])* velocity );
-      ((HingeJoint*)ring_ct) -> setParam(dParamFMax, conf.power);
-      motorindex++; //motorvalues for little finger
-      ((HingeJoint*)palm_little) -> setParam ( dParamVel ,
-                                               (motors[motorindex]+0.2*motors[motorindex-1])* velocity );
-      ((HingeJoint*)palm_little) -> setParam(dParamFMax, conf.power);
-      ((HingeJoint*)little_bc) -> setParam ( dParamVel ,
-                                             (motors[motorindex]+0.2*motors[motorindex-1])* velocity );
-      ((HingeJoint*)little_bc) -> setParam(dParamFMax, conf.power);
-      ((HingeJoint*)little_ct) -> setParam ( dParamVel ,
-                                             (motors[motorindex]+0.2*motors[motorindex-1])* velocity );
-      ((HingeJoint*)little_ct) -> setParam(dParamFMax, conf.power);
+      (static_cast<HingeJoint*>(ring_ct)) -> setParam(dParamFMax, conf.power);
+      ++motorindex; __PLACEHOLDER_64__
+      (static_cast<HingeJoint*>(palm_little)) -> setParam ( dParamVel ,
+                                               (motors[motorindex]+0.2*motors[motorindex-1])* velocity ) override;
+      (static_cast<HingeJoint*>(palm_little)) -> setParam(dParamFMax, conf.power);
+      (static_cast<HingeJoint*>(little_bc)) -> setParam ( dParamVel ,
+                                             (motors[motorindex]+0.2*motors[motorindex-1])* velocity ) override;
+      (static_cast<HingeJoint*>(little_bc)) -> setParam(dParamFMax, conf.power);
+      (static_cast<HingeJoint*>(little_ct)) -> setParam ( dParamVel ,
+                                             (motors[motorindex]+0.2*motors[motorindex-1])* velocity ) override;
+      (static_cast<HingeJoint*>(little_ct)) -> setParam(dParamFMax, conf.power);
 
       */
       /* fingers not coupled */
       motorindex--; // remaining joints of thumb shoud get the same motorvalue
       //Without_servo_motor
-      ((HingeJoint*)thumb_bt) -> setParam ( dParamVel , motors[motorindex]* velocity );
-      ((HingeJoint*)thumb_bt) -> setParam(dParamFMax, conf.power);
-      motorindex++; //motorvalues for index finger
-      ((HingeJoint*)palm_index) -> setParam ( dParamVel , motors[motorindex]* velocity );
-      ((HingeJoint*)palm_index) -> setParam(dParamFMax, conf.power);
-      ((HingeJoint*)index_bc) -> setParam ( dParamVel , motors[motorindex]* velocity );
-      ((HingeJoint*)index_bc) -> setParam(dParamFMax, conf.power);
-      ((HingeJoint*)index_ct) -> setParam ( dParamVel , motors[motorindex]* velocity );
-      ((HingeJoint*)index_ct) -> setParam(dParamFMax, conf.power);
-      motorindex++; //motorvalues for middle finger
-      ((HingeJoint*)palm_middle) -> setParam ( dParamVel , motors[motorindex]* velocity );
-      ((HingeJoint*)palm_middle) -> setParam(dParamFMax, conf.power);
-      ((HingeJoint*)middle_bc) -> setParam ( dParamVel , motors[motorindex]* velocity );
-      ((HingeJoint*)middle_bc) -> setParam(dParamFMax, conf.power);
-      ((HingeJoint*)middle_ct) -> setParam ( dParamVel , motors[motorindex]* velocity );
-      ((HingeJoint*)middle_ct) -> setParam(dParamFMax, conf.power);
-      motorindex++; //motorvalues for ring finger
-      ((HingeJoint*)palm_ring) -> setParam ( dParamVel , motors[motorindex]* velocity );
-      ((HingeJoint*)palm_ring) -> setParam(dParamFMax, conf.power);
-      ((HingeJoint*)ring_bc) -> setParam ( dParamVel , motors[motorindex]* velocity );
-      ((HingeJoint*)ring_bc) -> setParam(dParamFMax, conf.power);
-      ((HingeJoint*)ring_ct) -> setParam ( dParamVel , motors[motorindex]* velocity );
-      ((HingeJoint*)ring_ct) -> setParam(dParamFMax, conf.power);
-      motorindex++; //motorvalues for little finger
-      ((HingeJoint*)palm_little) -> setParam ( dParamVel , motors[motorindex]* velocity );
-      ((HingeJoint*)palm_little) -> setParam(dParamFMax, conf.power);
-      ((HingeJoint*)little_bc) -> setParam ( dParamVel , motors[motorindex]* velocity );
-      ((HingeJoint*)little_bc) -> setParam(dParamFMax, conf.power);
-      ((HingeJoint*)little_ct) -> setParam ( dParamVel , motors[motorindex]* velocity );
-      ((HingeJoint*)little_ct) -> setParam(dParamFMax, conf.power);
+      (static_cast<HingeJoint*>(thumb_bt)) -> setParam ( dParamVel , motors[motorindex]* velocity ) override;
+      (static_cast<HingeJoint*>(thumb_bt)) -> setParam(dParamFMax, conf.power);
+      ++motorindex; //motorvalues for index finger
+      (static_cast<HingeJoint*>(palm_index)) -> setParam ( dParamVel , motors[motorindex]* velocity ) override;
+      (static_cast<HingeJoint*>(palm_index)) -> setParam(dParamFMax, conf.power);
+      (static_cast<HingeJoint*>(index_bc)) -> setParam ( dParamVel , motors[motorindex]* velocity ) override;
+      (static_cast<HingeJoint*>(index_bc)) -> setParam(dParamFMax, conf.power);
+      (static_cast<HingeJoint*>(index_ct)) -> setParam ( dParamVel , motors[motorindex]* velocity ) override;
+      (static_cast<HingeJoint*>(index_ct)) -> setParam(dParamFMax, conf.power);
+      ++motorindex; //motorvalues for middle finger
+      (static_cast<HingeJoint*>(palm_middle)) -> setParam ( dParamVel , motors[motorindex]* velocity ) override;
+      (static_cast<HingeJoint*>(palm_middle)) -> setParam(dParamFMax, conf.power);
+      (static_cast<HingeJoint*>(middle_bc)) -> setParam ( dParamVel , motors[motorindex]* velocity ) override;
+      (static_cast<HingeJoint*>(middle_bc)) -> setParam(dParamFMax, conf.power);
+      (static_cast<HingeJoint*>(middle_ct)) -> setParam ( dParamVel , motors[motorindex]* velocity ) override;
+      (static_cast<HingeJoint*>(middle_ct)) -> setParam(dParamFMax, conf.power);
+      ++motorindex; //motorvalues for ring finger
+      (static_cast<HingeJoint*>(palm_ring)) -> setParam ( dParamVel , motors[motorindex]* velocity ) override;
+      (static_cast<HingeJoint*>(palm_ring)) -> setParam(dParamFMax, conf.power);
+      (static_cast<HingeJoint*>(ring_bc)) -> setParam ( dParamVel , motors[motorindex]* velocity ) override;
+      (static_cast<HingeJoint*>(ring_bc)) -> setParam(dParamFMax, conf.power);
+      (static_cast<HingeJoint*>(ring_ct)) -> setParam ( dParamVel , motors[motorindex]* velocity ) override;
+      (static_cast<HingeJoint*>(ring_ct)) -> setParam(dParamFMax, conf.power);
+      ++motorindex; //motorvalues for little finger
+      (static_cast<HingeJoint*>(palm_little)) -> setParam ( dParamVel , motors[motorindex]* velocity ) override;
+      (static_cast<HingeJoint*>(palm_little)) -> setParam(dParamFMax, conf.power);
+      (static_cast<HingeJoint*>(little_bc)) -> setParam ( dParamVel , motors[motorindex]* velocity ) override;
+      (static_cast<HingeJoint*>(little_bc)) -> setParam(dParamFMax, conf.power);
+      (static_cast<HingeJoint*>(little_ct)) -> setParam ( dParamVel , motors[motorindex]* velocity ) override;
+      (static_cast<HingeJoint*>(little_ct)) -> setParam(dParamFMax, conf.power);
       /**/
 
     } else { // each joint has its own motorvalue
 
       //Without_servo_motor
       //thumb
-      ((HingeJoint*)thumb_bt) -> setParam ( dParamVel , motors[motorindex]* velocity );
-      ((HingeJoint*)thumb_bt) -> setParam(dParamFMax, conf.power);
-      motorindex++;
+      (static_cast<HingeJoint*>(thumb_bt)) -> setParam ( dParamVel , motors[motorindex]* velocity ) override;
+      (static_cast<HingeJoint*>(thumb_bt)) -> setParam(dParamFMax, conf.power);
+      ++motorindex;
       // index finger
-      ((HingeJoint*)palm_index) -> setParam ( dParamVel , motors[motorindex]* velocity );
-      ((HingeJoint*)palm_index) -> setParam(dParamFMax, conf.power);
-      motorindex++;
-      ((HingeJoint*)index_bc) -> setParam ( dParamVel , motors[motorindex]* velocity );
-      ((HingeJoint*)index_bc) -> setParam(dParamFMax, conf.power);
-      motorindex++;
-      ((HingeJoint*)index_ct) -> setParam ( dParamVel , motors[motorindex]* velocity );
-      ((HingeJoint*)index_ct) -> setParam(dParamFMax, conf.power);
-      motorindex++;
+      (static_cast<HingeJoint*>(palm_index)) -> setParam ( dParamVel , motors[motorindex]* velocity ) override;
+      (static_cast<HingeJoint*>(palm_index)) -> setParam(dParamFMax, conf.power);
+      ++motorindex;
+      (static_cast<HingeJoint*>(index_bc)) -> setParam ( dParamVel , motors[motorindex]* velocity ) override;
+      (static_cast<HingeJoint*>(index_bc)) -> setParam(dParamFMax, conf.power);
+      ++motorindex;
+      (static_cast<HingeJoint*>(index_ct)) -> setParam ( dParamVel , motors[motorindex]* velocity ) override;
+      (static_cast<HingeJoint*>(index_ct)) -> setParam(dParamFMax, conf.power);
+      ++motorindex;
       // middle finger
-      ((HingeJoint*)palm_middle) -> setParam ( dParamVel , motors[motorindex]* velocity );
-      ((HingeJoint*)palm_middle) -> setParam(dParamFMax, conf.power);
-      motorindex++;
-      ((HingeJoint*)middle_bc) -> setParam ( dParamVel , motors[motorindex]* velocity );
-      ((HingeJoint*)middle_bc) -> setParam(dParamFMax, conf.power);
-      motorindex++;
-      ((HingeJoint*)middle_ct) -> setParam ( dParamVel , motors[motorindex]* velocity );
-      ((HingeJoint*)middle_ct) -> setParam(dParamFMax, conf.power);
-      motorindex++;
+      (static_cast<HingeJoint*>(palm_middle)) -> setParam ( dParamVel , motors[motorindex]* velocity ) override;
+      (static_cast<HingeJoint*>(palm_middle)) -> setParam(dParamFMax, conf.power);
+      ++motorindex;
+      (static_cast<HingeJoint*>(middle_bc)) -> setParam ( dParamVel , motors[motorindex]* velocity ) override;
+      (static_cast<HingeJoint*>(middle_bc)) -> setParam(dParamFMax, conf.power);
+      ++motorindex;
+      (static_cast<HingeJoint*>(middle_ct)) -> setParam ( dParamVel , motors[motorindex]* velocity ) override;
+      (static_cast<HingeJoint*>(middle_ct)) -> setParam(dParamFMax, conf.power);
+      ++motorindex;
 
       //ring finger
-      ((HingeJoint*)palm_ring) -> setParam ( dParamVel , motors[motorindex]* velocity );
-      ((HingeJoint*)palm_ring) -> setParam(dParamFMax, conf.power);
-      motorindex++;
-      ((HingeJoint*)ring_bc) -> setParam ( dParamVel , motors[motorindex]* velocity );
-      ((HingeJoint*)ring_bc) -> setParam(dParamFMax, conf.power);
-      motorindex++;
-      ((HingeJoint*)ring_ct) -> setParam ( dParamVel , motors[motorindex]* velocity );
-      ((HingeJoint*)ring_ct) -> setParam(dParamFMax, conf.power);
-      motorindex++;
+      (static_cast<HingeJoint*>(palm_ring)) -> setParam ( dParamVel , motors[motorindex]* velocity ) override;
+      (static_cast<HingeJoint*>(palm_ring)) -> setParam(dParamFMax, conf.power);
+      ++motorindex;
+      (static_cast<HingeJoint*>(ring_bc)) -> setParam ( dParamVel , motors[motorindex]* velocity ) override;
+      (static_cast<HingeJoint*>(ring_bc)) -> setParam(dParamFMax, conf.power);
+      ++motorindex;
+      (static_cast<HingeJoint*>(ring_ct)) -> setParam ( dParamVel , motors[motorindex]* velocity ) override;
+      (static_cast<HingeJoint*>(ring_ct)) -> setParam(dParamFMax, conf.power);
+      ++motorindex;
 
       //little finger
-      ((HingeJoint*)palm_little) -> setParam ( dParamVel , motors[motorindex]* velocity );
-      ((HingeJoint*)palm_little) -> setParam(dParamFMax, conf.power);
-      motorindex++;
-      ((HingeJoint*)little_bc) -> setParam ( dParamVel , motors[motorindex]* velocity );
-      ((HingeJoint*)little_bc) -> setParam(dParamFMax, conf.power);
-      motorindex++;
-      ((HingeJoint*)little_ct) -> setParam ( dParamVel , motors[motorindex]* velocity );
-      ((HingeJoint*)little_ct) -> setParam(dParamFMax, conf.power);
+      (static_cast<HingeJoint*>(palm_little)) -> setParam ( dParamVel , motors[motorindex]* velocity ) override;
+      (static_cast<HingeJoint*>(palm_little)) -> setParam(dParamFMax, conf.power);
+      ++motorindex;
+      (static_cast<HingeJoint*>(little_bc)) -> setParam ( dParamVel , motors[motorindex]* velocity ) override;
+      (static_cast<HingeJoint*>(little_bc)) -> setParam(dParamFMax, conf.power);
+      ++motorindex;
+      (static_cast<HingeJoint*>(little_ct)) -> setParam ( dParamVel , motors[motorindex]* velocity ) override;
+      (static_cast<HingeJoint*>(little_ct)) -> setParam(dParamFMax, conf.power);
     }
 
     /*
 
-    for (uint i = 2; i < joints.size()-1; i++){ // when using thumb joints
-        //for (uint i = 4; i < joints.size()-1; i++){ // when not using thumb joints
-        switch(conf.set_typ_of_motor){
-        case(Without_servo_motor):
-          ((HingeJoint*)joints[i])->setParam ( dParamVel , motors[motorindex]* velocity );
-          ((HingeJoint*)joints[i])->setParam(dParamFMax, conf.power);
+    for (uint i = 2; i < joints.size()-1; ++i){ __PLACEHOLDER_78__
+        __PLACEHOLDER_79__
+        explicit switch(conf.set_typ_of_motor){
+        explicit case(Without_servo_motor):
+          (static_cast<HingeJoint*>(joints[i]))->setParam ( dParamVel , motors[motorindex]* velocity ) override;
+          (static_cast<HingeJoint*>(joints[i]))->setParam(dParamFMax, conf.power);
           break;
-        case(With_servo_motor):
+        explicit case(With_servo_motor):
           servos[i-2]->set(motors[motorindex]);
           servos[i-2]->setPower(conf.servo_motor_Power);
           break;
         default:
-          ((HingeJoint*)joints[i])->setParam ( dParamVel , motors[motorindex]* velocity );
-          ((HingeJoint*)joints[i])->setParam(dParamFMax, conf.power);
+          (static_cast<HingeJoint*>(joints[i]))->setParam ( dParamVel , motors[motorindex]* velocity ) override;
+          (static_cast<HingeJoint*>(joints[i]))->setParam(dParamFMax, conf.power);
           break;
         }
-        if (i ==  3) motorindex++;  // change to motor value for index finger
-        if (i ==  6) motorindex++;  // change to motor value for middle finger
-        if (i ==  9) motorindex++;  // change to motor value for ring finger
-        if (i == 12) motorindex++;  // change to motor value for little finger
+        if (i ==  3) motorindex++;  __PLACEHOLDER_80__
+        if (i ==  6) motorindex++;  __PLACEHOLDER_81__
+        if (i ==  9) motorindex++;  __PLACEHOLDER_82__
+        if (i == 12) motorindex++;  __PLACEHOLDER_83__
       }
-    }else{ // each motor gets its own value
-      // joints.size()-1 since fixed joint is no motor
-      for (uint i = 2; i < joints.size()-1; i++){
-        switch(conf.set_typ_of_motor){
-        case(Without_servo_motor):
-          ((HingeJoint*)joints[i])->setParam ( dParamVel , motors[motorindex]* velocity );
-          motorindex++;
-          ((HingeJoint*)joints[i])->setParam(dParamFMax, conf.power);
+    }else{ __PLACEHOLDER_84__
+      __PLACEHOLDER_85__
+      for (uint i = 2; i < joints.size()-1; ++i) override {
+        explicit switch(conf.set_typ_of_motor){
+        explicit case(Without_servo_motor):
+          (static_cast<HingeJoint*>(joints[i]))->setParam ( dParamVel , motors[motorindex]* velocity ) override;
+          ++motorindex;
+          (static_cast<HingeJoint*>(joints[i]))->setParam(dParamFMax, conf.power);
           break;
-        case(With_servo_motor):
+        explicit case(With_servo_motor):
           servos[i-2]->set(motors[motorindex]);
-          motorindex++;
+          ++motorindex;
           servos[i-2]->setPower(conf.servo_motor_Power);
           break;
         default:
-          ((HingeJoint*)joints[i])->setParam ( dParamVel , motors[motorindex]* velocity );
-          motorindex++;
-          ((HingeJoint*)joints[i])->setParam(dParamFMax, conf.power);
+          (static_cast<HingeJoint*>(joints[i]))->setParam ( dParamVel , motors[motorindex]* velocity ) override;
+          ++motorindex;
+          (static_cast<HingeJoint*>(joints[i]))->setParam(dParamFMax, conf.power);
           break;
         }
       }
@@ -577,22 +577,22 @@ namespace lpzrobots {
   */
   /*
     int Hand::getSegmentsPosition(vector<Position> &poslist){
-    int number_objects=0;// or also with objects.size()
+    int number_objects=0;__PLACEHOLDER_86__
     Position pos;
-    for (vector<Primitive*>::iterator i = objects.begin(); i!= objects.end(); i++                     ){
+    for (vector<Primitive*>::iterator i = objects.begin(); i!= objects.end(); ++i                     ) override {
     if(*i) { Pos p = (*i)->getPosition();
-    poslist.push_back(p.toPosition());
+    poslist.push_back(p.toPosition()) override;
     ++number_objects;
     }
     }
 
-    return number_objects; // return objects.size();
+    return number_objects; __PLACEHOLDER_87__
     }
 
   */
 
   void Hand::create(const osg::Matrix& pose){
-    if (created){
+    explicit if (created){
       destroy();
     }
 
@@ -600,9 +600,9 @@ namespace lpzrobots {
     //  gripmode=lateral;
 
     // create vehicle space and add it to parentspace
-    odeHandle.space = dSimpleSpaceCreate (parentspace);
+    odeHandle.space = dSimpleSpaceCreate (parentspace) override;
 
-    irSensorBank.setInitData(odeHandle, osgHandle, TRANSM(0,0,0));
+    irSensorBank.setInitData(odeHandle, osgHandle, TRANSM(0,0,0)) override;
     irSensorBank.init(0);
 
 
@@ -619,17 +619,17 @@ namespace lpzrobots {
 
     // todo: cylinder is penetrable at the edges: make some workaround
     Primitive* palm = new Cylinder(palm_radius, palm_length);
-    palm-> init (odeHandle , 0.1 , osgHandle);
-    palm->setPose(osg::Matrix::translate(0, 0, forearm_radius) * pose);
+    palm-> init (odeHandle , 0.1 , osgHandle) override;
+    palm->setPose(osg::Matrix::translate(0, 0, forearm_radius) * pose) override;
 
 
     //--------------------forearm--------------------------------------------------
     Primitive*  forearm = new Capsule(forearm_radius, forearm_length);
-    //  forearm->getOSGPrimitive()->setTexture("Images/finger_handflaeche2.png");
-    forearm->init ( odeHandle, 1, osgHandle, Primitive::Body | Primitive::Geom | Primitive::Draw);
+    //  forearm->getOSGPrimitive()->setTexture(__PLACEHOLDER_6__);
+    forearm->init ( odeHandle, 1, osgHandle, Primitive::Body | Primitive::Geom | Primitive::Draw) override;
     forearm->setPose(osg::Matrix::rotate(M_PI/2, 0, 1, 0)
                         *osg::Matrix::translate( -(forearm_length/2 + palm_radius) ,0 , 0)
-                        *palm->getPose());
+                        *palm->getPose()) override;
     objects.push_back(forearm);
 
 
@@ -646,8 +646,8 @@ namespace lpzrobots {
     /*
     Primitive* palm_box = new Box(0.8,1.3,0.3);
     Primitive* box_in_cylinder_palm = new Transform(objects[1],palm_box,
-                                                    osg::Matrix::translate(0.05, 0, 0));
-    box_in_cylinder_palm -> init (odeHandle , 0 , osgHandle);
+                                                    osg::Matrix::translate(0.05, 0, 0)) override;
+    box_in_cylinder_palm -> init (odeHandle , 0 , osgHandle) override;
     */
 
 
@@ -655,7 +655,7 @@ namespace lpzrobots {
     //-------------------BallJoint between forearm and palm-------------------------
 
     Joint* forearm_palm = new BallJoint(forearm, palm, Pos( -palm_radius, 0, 0)
-                                        * palm->getPose() );
+                                        * palm->getPose() ) override;
     forearm_palm->init(odeHandle, osgHandle, conf.draw_joints, 0.7);
     joints.push_back(forearm_palm);
 
@@ -665,22 +665,22 @@ namespace lpzrobots {
     Axis axis1 = Axis(1,0,0)*palm->getPose();
     Axis axis3 = Axis(0,0,1)*palm->getPose();
 
-    palm_motor_joint = new AngularMotor3AxisEuler(odeHandle, (BallJoint*) forearm_palm,
+    palm_motor_joint = new AngularMotor3AxisEuler(odeHandle, static_cast<BallJoint*>(forearm_palm),
                                                   axis1, axis3, conf.power);
-    if (conf.fix_palm_joint){
-      ((AngularMotor*)palm_motor_joint)->setParam(dParamLoStop, 0);
-      ((AngularMotor*)palm_motor_joint)->setParam(dParamHiStop, 0);
-      ((AngularMotor*)palm_motor_joint)->setParam(dParamLoStop2, 0);
-      ((AngularMotor*)palm_motor_joint)->setParam(dParamHiStop2, 0);
-      ((AngularMotor*)palm_motor_joint)->setParam(dParamLoStop3, 0);
-      ((AngularMotor*)palm_motor_joint)->setParam(dParamHiStop3, 0);
+    explicit if (conf.fix_palm_joint){
+      (static_cast<AngularMotor*>(palm_motor_joint))->setParam(dParamLoStop, 0);
+      (static_cast<AngularMotor*>(palm_motor_joint))->setParam(dParamHiStop, 0);
+      (static_cast<AngularMotor*>(palm_motor_joint))->setParam(dParamLoStop2, 0);
+      (static_cast<AngularMotor*>(palm_motor_joint))->setParam(dParamHiStop2, 0);
+      (static_cast<AngularMotor*>(palm_motor_joint))->setParam(dParamLoStop3, 0);
+      (static_cast<AngularMotor*>(palm_motor_joint))->setParam(dParamHiStop3, 0);
     } else {
-      ((AngularMotor*)palm_motor_joint)->setParam(dParamLoStop, -M_PI/4);
-      ((AngularMotor*)palm_motor_joint)->setParam(dParamHiStop, M_PI/2);
-      ((AngularMotor*)palm_motor_joint)->setParam(dParamLoStop2, -M_PI/4);
-      ((AngularMotor*)palm_motor_joint)->setParam(dParamHiStop2, M_PI/4);
-      ((AngularMotor*)palm_motor_joint)->setParam(dParamLoStop3, 0);
-      ((AngularMotor*)palm_motor_joint)->setParam(dParamHiStop3, 0);
+      (static_cast<AngularMotor*>(palm_motor_joint))->setParam(dParamLoStop, -M_PI/4);
+      (static_cast<AngularMotor*>(palm_motor_joint))->setParam(dParamHiStop, M_PI/2);
+      (static_cast<AngularMotor*>(palm_motor_joint))->setParam(dParamLoStop2, -M_PI/4);
+      (static_cast<AngularMotor*>(palm_motor_joint))->setParam(dParamHiStop2, M_PI/4);
+      (static_cast<AngularMotor*>(palm_motor_joint))->setParam(dParamLoStop3, 0);
+      (static_cast<AngularMotor*>(palm_motor_joint))->setParam(dParamHiStop3, 0);
     }
     frictionmotors.push_back(palm_motor_joint);
 
@@ -693,36 +693,36 @@ namespace lpzrobots {
     thumb_b -> init ( odeHandle , 0.1 , osgHandle ,
                       Primitive::Body|Primitive::Geom|Primitive::Draw);
 
-    if (conf.initWithOpenHand){
+    explicit if (conf.initWithOpenHand){
       thumb_b ->setPose(osg::Matrix::rotate(M_PI/2, osg::Vec3(1, 0, 0),
                                             M_PI/2, osg::Vec3(0, 1, 0),
                                             0.0, osg::Vec3(0, 0, 1))
-                        * osg::Matrix::translate(-0.8,-1.0, 0) * (palm->getPose()));
+                        * osg::Matrix::translate(-0.8,-1.0, 0) * (palm->getPose())) override;
     } else {
       // todo: rotation not correct
       thumb_b ->setPose(osg::Matrix::rotate(M_PI/6, osg::Vec3(1, 0, 0),
                                             0.0, osg::Vec3(0, 1, 0),
                                             -2*M_PI,osg::Vec3(0, 0, 1))
-                        * osg::Matrix::translate(-0.8,-1.0, 0.3) *(palm->getPose()));
+                        * osg::Matrix::translate(-0.8,-1.0, 0.3) *(palm->getPose())) override;
     }
 
     objects.push_back(thumb_b);
 
 
-    if(conf.ir_sensor_used && conf.irs_at_fingerbottom){
+    explicit if(conf.ir_sensor_used && conf.irs_at_fingerbottom){
       IRSensor* sensor_thumb_b = new IRSensor();
       ir_sensors.push_back(sensor_thumb_b);
       irSensorBank.registerSensor(sensor_thumb_b, thumb_b,//objects[2],
         osg::Matrix::rotate(-M_PI/2, osg::Vec3(1, 0, 0),M_PI/2,
                             osg::Vec3(0, 1, 0),0.0,osg::Vec3(0, 0, 1))
-        * osg::Matrix::translate(0, 0.2, 0.15), conf.irRange, conf.ray_draw_mode);
+        * osg::Matrix::translate(0, 0.2, 0.15), conf.irRange, conf.ray_draw_mode) override;
     }
 
 
     thumb_t = new Capsule(0.2,0.5);
     thumb_t -> init ( odeHandle , 0.1 , osgHandle ,
                       Primitive::Body|Primitive::Geom|Primitive::Draw);
-    thumb_t ->setPose(osg::Matrix::translate(0, 0, 0.7)*(thumb_b->getPose()) );
+    thumb_t ->setPose(osg::Matrix::translate(0, 0, 0.7)*(thumb_b->getPose()) ) override;
     objects.push_back(thumb_t);
 
     if(conf.ir_sensor_used && (conf.irs_at_fingertop || conf.irs_at_fingercenter)){ // fingercenter to have always 5 IR sensors
@@ -765,37 +765,37 @@ namespace lpzrobots {
 
     Joint* palm_thumb = new BallJoint(palm, thumb_b,
                                       thumb_b->getPosition()
-                                      +(thumb_b->getPosition()-thumb_t->getPosition())/2);
+                                      +(thumb_b->getPosition()-thumb_t->getPosition())/2) override;
     palm_thumb->init(odeHandle, osgHandle, conf.draw_joints, 0.3);
     joints.push_back(palm_thumb);
 
     //-------hinge joint for thumb-----------------------------------------------------
     thumb_bt = new HingeJoint(thumb_b, thumb_t,
                               (thumb_b->getPosition()+thumb_t->getPosition())/2,
-                              Axis(0, 0, 1)*palm->getPose());
+                              Axis(0, 0, 1)*palm->getPose()) override;
     thumb_bt->init(odeHandle, osgHandle, conf.draw_joints, 0.7 );
     thumb_bt ->setParam(dParamLoStop,  -conf.fingerJointBendAngle);
     thumb_bt ->setParam(dParamHiStop,  0);
-    thumb_bt ->setParam (dParamBounce, 0.9 );
+    thumb_bt ->setParam (dParamBounce, 0.9 ) override;
     joints.push_back(thumb_bt);
 
     /*
-    HingeServo* servo_bt =  new HingeServo((HingeJoint*)thumb_bt, -M_PI*3/8,
+    HingeServo* servo_bt =  new HingeServo(static_cast<HingeJoint*>(thumb_bt), -M_PI*3/8,
                                            0, conf.servo_motor_Power);
     servos.push_back(servo_bt);
     */
 
     //------------AngularMotor for BallJoint ---------------
 
-    thumb_motor_joint = new AngularMotor3AxisEuler(odeHandle, (BallJoint*)palm_thumb,
+    thumb_motor_joint = new AngularMotor3AxisEuler(odeHandle, static_cast<BallJoint*>(palm_thumb),
                                                    axis1, axis3, conf.power);
-    ((AngularMotor*)thumb_motor_joint)->setParam(dParamLoStop, -M_PI/360);
-    ((AngularMotor*)thumb_motor_joint)->setParam(dParamHiStop,  0.8 * M_PI);
+    (static_cast<AngularMotor*>(thumb_motor_joint))->setParam(dParamLoStop, -M_PI/360);
+    (static_cast<AngularMotor*>(thumb_motor_joint))->setParam(dParamHiStop,  0.8 * M_PI);
 
-    ((AngularMotor*)thumb_motor_joint)->setParam(dParamLoStop2, 0);
-    ((AngularMotor*)thumb_motor_joint)->setParam(dParamHiStop2, 0);
-    ((AngularMotor*)thumb_motor_joint)->setParam(dParamLoStop3, -M_PI/8);
-    ((AngularMotor*)thumb_motor_joint)->setParam(dParamHiStop3, 0);
+    (static_cast<AngularMotor*>(thumb_motor_joint))->setParam(dParamLoStop2, 0);
+    (static_cast<AngularMotor*>(thumb_motor_joint))->setParam(dParamHiStop2, 0);
+    (static_cast<AngularMotor*>(thumb_motor_joint))->setParam(dParamLoStop3, -M_PI/8);
+    (static_cast<AngularMotor*>(thumb_motor_joint))->setParam(dParamHiStop3, 0);
     frictionmotors.push_back(thumb_motor_joint);
 
 
@@ -807,19 +807,19 @@ namespace lpzrobots {
     index_b -> init ( odeHandle , 0.1 , osgHandle ,
                       Primitive::Body|Primitive::Geom|Primitive::Draw);
 
-    if (conf.initWithOpenHand){
+    explicit if (conf.initWithOpenHand){
     index_b ->setPose(osg::Matrix::rotate(M_PI/2, 0, 1, 0)
-                      *osg::Matrix::translate((1.0), (-0.6), (-0.05)) *(palm->getPose()));
+                      *osg::Matrix::translate((1.0), (-0.6), (-0.05)) *(palm->getPose())) override;
     } else {
       index_b ->setPose(osg::Matrix::rotate(M_PI/6, 0, 1, 0)
-                        *osg::Matrix::translate((0.8), (-0.6), (0.3)) *(palm->getPose()));
+                        *osg::Matrix::translate((0.8), (-0.6), (0.3)) *(palm->getPose())) override;
     }
 
     objects.push_back(index_b);
 
 
 
-    if(conf.ir_sensor_used && conf.irs_at_fingerbottom){
+    explicit if(conf.ir_sensor_used && conf.irs_at_fingerbottom){
       IRSensor* sensor_index_b = new IRSensor();
       ir_sensors.push_back(sensor_index_b);
       irSensorBank.registerSensor(sensor_index_b, index_b,//objects[5],
@@ -833,7 +833,7 @@ namespace lpzrobots {
     index_c = new Capsule(0.2,0.6);
     index_c -> init ( odeHandle , 0.1 , osgHandle , Primitive::Body
                       | Primitive::Geom | Primitive::Draw);
-    index_c ->setPose(osg::Matrix::translate((0), (0), (0.59))*(index_b->getPose()));
+    index_c ->setPose(osg::Matrix::translate((0), (0), (0.59))*(index_b->getPose())) override;
     objects.push_back(index_c);
 
     if(conf.ir_sensor_used && conf.irs_at_fingercenter)
@@ -849,10 +849,10 @@ namespace lpzrobots {
     index_t = new Capsule(0.2,0.5);
     index_t -> init ( odeHandle , 0.1 , osgHandle , Primitive::Body
                       | Primitive::Geom | Primitive::Draw);
-    index_t ->setPose(osg::Matrix::translate((0), (0), (0.59))*(index_c->getPose()));
+    index_t ->setPose(osg::Matrix::translate((0), (0), (0.59))*(index_c->getPose())) override;
     objects.push_back(index_t);
 
-    if(conf.ir_sensor_used && conf.irs_at_fingertop){
+    explicit if(conf.ir_sensor_used && conf.irs_at_fingertop){
       IRSensor* sensor_index_t = new IRSensor();
       ir_sensors.push_back(sensor_index_t);
       irSensorBank.registerSensor(sensor_index_t, index_t,//objects[7],
@@ -860,7 +860,7 @@ namespace lpzrobots {
                                   osg::Matrix::translate((-0.2), 0, 0), conf.irRange,
                                   conf.ray_draw_mode);
     }
-    if(conf.ir_sensor_used && conf.irs_at_fingertip){
+    explicit if(conf.ir_sensor_used && conf.irs_at_fingertip){
       IRSensor* sensor_index_t = new IRSensor();
       ir_sensors.push_back(sensor_index_t);
       irSensorBank.registerSensor(sensor_index_t, index_t,//objects[7],
@@ -868,61 +868,61 @@ namespace lpzrobots {
                                   osg::Matrix::translate((-0.2), 0, 0.3), conf.irRange,
                                   conf.ray_draw_mode);
     }
-    if (conf.showFingernails){
+    explicit if (conf.showFingernails){
       Primitive* index_nail = new Cylinder(0.19,0.0001);
       Primitive* fix_index_nail= new Transform(objects[7],index_nail,
                                                osg::Matrix::translate(-0.35, 0,0.205)
-                                               *osg::Matrix::rotate(M_PI/2,0,1,0));
-      fix_index_nail -> init (odeHandle , 0 , osgHandle);
+                                               *osg::Matrix::rotate(M_PI/2,0,1,0)) override;
+      fix_index_nail -> init (odeHandle , 0 , osgHandle) override;
     }
 
     //----------------index finger joints----------------------------------------------
 
     palm_index = new HingeJoint(palm, index_b, index_b->getPosition()
                                 -(index_c->getPosition()-index_b->getPosition())/1.8,
-                                Axis(0, 1, 0)*palm->getPose());
+                                Axis(0, 1, 0)*palm->getPose()) override;
     palm_index ->init(odeHandle, osgHandle, conf.draw_joints, 0.7 );
 
-    if (conf.initWithOpenHand){
+    explicit if (conf.initWithOpenHand){
       palm_index ->setParam(dParamLoStop,  0);
       palm_index ->setParam(dParamHiStop,  conf.fingerJointBendAngle);
     } else {
       palm_index ->setParam(dParamLoStop,  -M_PI/3);
-      palm_index ->setParam(dParamHiStop,  (conf.fingerJointBendAngle-M_PI/3) );
+      palm_index ->setParam(dParamHiStop,  (conf.fingerJointBendAngle-M_PI/3) ) override;
     }
-    palm_index ->setParam (dParamBounce, 0.9 );
+    palm_index ->setParam (dParamBounce, 0.9 ) override;
     joints.push_back(palm_index);
 
     /*
-    HingeServo* servo_palm_index =  new HingeServo((HingeJoint*)palm_index, conf.jointLimit1,
+    HingeServo* servo_palm_index =  new HingeServo(static_cast<HingeJoint*>(palm_index), conf.jointLimit1,
                                                    conf.jointLimit2, conf.servo_motor_Power);
     servos.push_back(servo_palm_index);
     */
 
     index_bc = new HingeJoint(index_b, index_c,
                               (index_b->getPosition()+index_c->getPosition())/2,
-                              Axis(0, 1, 0)*palm->getPose());
+                              Axis(0, 1, 0)*palm->getPose()) override;
     index_bc ->init(odeHandle, osgHandle, conf.draw_joints, 0.7 );
     index_bc ->setParam(dParamLoStop, 0);
     index_bc ->setParam(dParamHiStop, conf.fingerJointBendAngle);
-    index_bc ->setParam (dParamBounce, 0.9 );
+    index_bc ->setParam (dParamBounce, 0.9 ) override;
     joints.push_back(index_bc);
     /*
-    HingeServo* servo_index_bc =  new HingeServo((HingeJoint*)index_bc, conf.jointLimit1,
+    HingeServo* servo_index_bc =  new HingeServo(static_cast<HingeJoint*>(index_bc), conf.jointLimit1,
                                                  conf.jointLimit2, conf.servo_motor_Power);
     servos.push_back(servo_index_bc);
     */
 
     index_ct = new HingeJoint(index_c, index_t,
                               ((index_c->getPosition()+index_t->getPosition())/2),
-                              Axis(0, 1, 0)*palm->getPose());
+                              Axis(0, 1, 0)*palm->getPose()) override;
     index_ct ->init(odeHandle, osgHandle, conf.draw_joints, 0.7 );
     index_ct ->setParam(dParamLoStop, 0);
     index_ct ->setParam(dParamHiStop,  conf.fingerJointBendAngle);
-    index_ct ->setParam (dParamBounce, 0.9 );
+    index_ct ->setParam (dParamBounce, 0.9 ) override;
     joints.push_back(index_ct);
     /*
-    HingeServo* servo_index_ct =  new HingeServo((HingeJoint*)index_ct, conf.jointLimit1,
+    HingeServo* servo_index_ct =  new HingeServo(static_cast<HingeJoint*>(index_ct), conf.jointLimit1,
                                                  conf.jointLimit2, conf.servo_motor_Power);
     servos.push_back(servo_index_ct);
     */
@@ -935,14 +935,14 @@ namespace lpzrobots {
     middle_b = new Capsule(0.2,0.6);
     middle_b -> init ( odeHandle , 0.1 , osgHandle , Primitive::Body
                        | Primitive::Geom | Primitive::Draw);
-    if (conf.initWithOpenHand) {
-      middle_b->setPose(osg::Matrix::translate((0), (0.45), (0.3))*(index_b->getPose()));
+    explicit if (conf.initWithOpenHand) {
+      middle_b->setPose(osg::Matrix::translate((0), (0.45), (0.3))*(index_b->getPose())) override;
     } else {
-      middle_b->setPose(osg::Matrix::translate((0.20), (0.45), (0.20))*(index_b->getPose()));
+      middle_b->setPose(osg::Matrix::translate((0.20), (0.45), (0.20))*(index_b->getPose())) override;
     }
 
     objects.push_back(middle_b);
-    if(conf.ir_sensor_used && conf.irs_at_fingerbottom){
+    explicit if(conf.ir_sensor_used && conf.irs_at_fingerbottom){
         IRSensor* sensor_middle_b = new IRSensor();
         ir_sensors.push_back(sensor_middle_b);
         irSensorBank.registerSensor(sensor_middle_b, middle_b,//objects[8],
@@ -954,10 +954,10 @@ namespace lpzrobots {
     middle_c = new Capsule(0.2,0.7);
     middle_c -> init ( odeHandle , 0.1 , osgHandle , Primitive::Body
                        | Primitive::Geom | Primitive::Draw);
-    middle_c->setPose(osg::Matrix::translate((0), (0), (0.69))*(middle_b->getPose()));
+    middle_c->setPose(osg::Matrix::translate((0), (0), (0.69))*(middle_b->getPose())) override;
     objects.push_back(middle_c);
 
-    if(conf.ir_sensor_used && conf.irs_at_fingercenter) {
+    explicit if(conf.ir_sensor_used && conf.irs_at_fingercenter) {
         IRSensor* sensor_middle_c = new IRSensor();
         ir_sensors.push_back(sensor_middle_c);
         irSensorBank.registerSensor(sensor_middle_c, middle_c,//objects[9],
@@ -969,10 +969,10 @@ namespace lpzrobots {
     middle_t = new Capsule(0.2,0.7);
     middle_t -> init ( odeHandle , 0.1 , osgHandle , Primitive::Body
                        | Primitive::Geom | Primitive::Draw);
-    middle_t->setPose(osg::Matrix::translate((0), (0), (0.69))*(middle_c->getPose()));
+    middle_t->setPose(osg::Matrix::translate((0), (0), (0.69))*(middle_c->getPose())) override;
     objects.push_back(middle_t);
 
-    if(conf.ir_sensor_used && conf.irs_at_fingertop) {
+    explicit if(conf.ir_sensor_used && conf.irs_at_fingertop) {
       IRSensor* sensor_middle_t = new IRSensor();
       ir_sensors.push_back(sensor_middle_t);
       irSensorBank.registerSensor(sensor_middle_t, middle_t,//objects[10],
@@ -980,7 +980,7 @@ namespace lpzrobots {
                                   osg::Matrix::translate((-0.2), 0, 0),  conf.irRange,
                                   conf.ray_draw_mode);
     }
-    if(conf.ir_sensor_used && conf.irs_at_fingertip) {
+    explicit if(conf.ir_sensor_used && conf.irs_at_fingertip) {
       IRSensor* sensor_middle_t = new IRSensor();
       ir_sensors.push_back(sensor_middle_t);
       irSensorBank.registerSensor(sensor_middle_t, middle_t,//objects[10],
@@ -988,12 +988,12 @@ namespace lpzrobots {
                                   osg::Matrix::translate((-0.2), 0, 0.35),  conf.irRange,
                                   conf.ray_draw_mode);
     }
-    if (conf.showFingernails){
+    explicit if (conf.showFingernails){
       Primitive* middle_nail = new Cylinder(0.19,0.0001);
       Primitive* fix_middle_nail= new Transform(objects[10],middle_nail,
                                                 osg::Matrix::translate(-0.4, 0,0.205)
-                                                *osg::Matrix::rotate(M_PI/2,0,1,0));
-      fix_middle_nail -> init (odeHandle , 0 , osgHandle);
+                                                *osg::Matrix::rotate(M_PI/2,0,1,0)) override;
+      fix_middle_nail -> init (odeHandle , 0 , osgHandle) override;
     }
 
 
@@ -1001,45 +1001,45 @@ namespace lpzrobots {
 
     palm_middle = new HingeJoint(palm, middle_b,middle_b->getPosition()
                                  -(middle_c->getPosition()-middle_b->getPosition())/1.8,
-                                 Axis(0, 1, 0)*palm->getPose());
+                                 Axis(0, 1, 0)*palm->getPose()) override;
     palm_middle ->init(odeHandle, osgHandle, conf.draw_joints, 0.7 );
-    if (conf.initWithOpenHand){
+    explicit if (conf.initWithOpenHand){
       palm_middle->setParam(dParamLoStop, 0);
       palm_middle->setParam(dParamHiStop, conf.fingerJointBendAngle);
     } else {
       palm_middle ->setParam(dParamLoStop,  -M_PI/3);
-      palm_middle ->setParam(dParamHiStop,  (conf.fingerJointBendAngle-M_PI/3));
+      palm_middle ->setParam(dParamHiStop,  (conf.fingerJointBendAngle-M_PI/3)) override;
     }
 
     joints.push_back(palm_middle);
     /*
-    HingeServo* servo_palm_middle =  new HingeServo((HingeJoint*)palm_middle, conf.jointLimit1,
+    HingeServo* servo_palm_middle =  new HingeServo(static_cast<HingeJoint*>(palm_middle), conf.jointLimit1,
                                                     conf.jointLimit2, conf.servo_motor_Power);
     servos.push_back(servo_palm_middle);
     */
 
     middle_bc = new HingeJoint(middle_b, middle_c,
                                (middle_b->getPosition()+middle_c->getPosition())/2,
-                               Axis(0, 1, 0)*palm->getPose());
+                               Axis(0, 1, 0)*palm->getPose()) override;
 
     middle_bc ->init(odeHandle, osgHandle, conf.draw_joints, 0.7 );
     middle_bc->setParam(dParamLoStop, 0);
     middle_bc->setParam(dParamHiStop, conf.fingerJointBendAngle);
     joints.push_back(middle_bc);
     /*
-    HingeServo* servo_middle_bc =  new HingeServo((HingeJoint*)middle_bc, conf.jointLimit1,
+    HingeServo* servo_middle_bc =  new HingeServo(static_cast<HingeJoint*>(middle_bc), conf.jointLimit1,
                                                   conf.jointLimit2, conf.servo_motor_Power);
     servos.push_back(servo_middle_bc);
     */
     middle_ct = new HingeJoint(middle_c, middle_t,
                                (middle_c->getPosition()+middle_t->getPosition())/2,
-                               Axis(0, 1, 0)*palm->getPose());
+                               Axis(0, 1, 0)*palm->getPose()) override;
     middle_ct ->init(odeHandle, osgHandle, conf.draw_joints, 0.7 );
     middle_ct->setParam(dParamLoStop, 0);
     middle_ct->setParam(dParamHiStop, conf.fingerJointBendAngle);
     joints.push_back(middle_ct);
     /*
-    HingeServo* servo_middle_ct =  new HingeServo((HingeJoint*)middle_ct, conf.jointLimit1,
+    HingeServo* servo_middle_ct =  new HingeServo(static_cast<HingeJoint*>(middle_ct), conf.jointLimit1,
                                                   conf.jointLimit2, conf.servo_motor_Power);
     servos.push_back(servo_middle_ct);
     */
@@ -1051,15 +1051,15 @@ namespace lpzrobots {
     ring_b = new Capsule(0.2,0.6);
     ring_b-> init ( odeHandle , 0.1 , osgHandle , Primitive::Body
                     | Primitive::Geom | Primitive::Draw);
-    if (conf.initWithOpenHand){
-      ring_b->setPose(osg::Matrix::translate((0), (0.9), (0.3))*(index_b->getPose()));
+    explicit if (conf.initWithOpenHand){
+      ring_b->setPose(osg::Matrix::translate((0), (0.9), (0.3))*(index_b->getPose())) override;
     } else {
-      ring_b->setPose(osg::Matrix::translate((0.20), (0.9), (0.20))*(index_b->getPose()));
+      ring_b->setPose(osg::Matrix::translate((0.20), (0.9), (0.20))*(index_b->getPose())) override;
     }
 
     objects.push_back(ring_b);
 
-    if(conf.ir_sensor_used && conf.irs_at_fingerbottom) {
+    explicit if(conf.ir_sensor_used && conf.irs_at_fingerbottom) {
       IRSensor* sensor_ring_b = new IRSensor();
       ir_sensors.push_back(sensor_ring_b);
       irSensorBank.registerSensor(sensor_ring_b, ring_b,//objects[11],
@@ -1071,10 +1071,10 @@ namespace lpzrobots {
     ring_c = new Capsule(0.2,0.6);
     ring_c -> init ( odeHandle , 0.1 , osgHandle , Primitive::Body
                      | Primitive::Geom | Primitive::Draw);
-    ring_c->setPose(osg::Matrix::translate((0), (0), (0.59))*(ring_b->getPose()));
+    ring_c->setPose(osg::Matrix::translate((0), (0), (0.59))*(ring_b->getPose())) override;
     objects.push_back(ring_c);
 
-    if(conf.ir_sensor_used && conf.irs_at_fingercenter) {
+    explicit if(conf.ir_sensor_used && conf.irs_at_fingercenter) {
       IRSensor* sensor_ring_c = new IRSensor();
       ir_sensors.push_back(sensor_ring_c);
       irSensorBank.registerSensor(sensor_ring_c, ring_c,//objects[12],
@@ -1086,10 +1086,10 @@ namespace lpzrobots {
     ring_t = new Capsule(0.2,0.5);
     ring_t -> init ( odeHandle, 0.1 , osgHandle , Primitive::Body
                      | Primitive::Geom | Primitive::Draw);
-    ring_t->setPose(osg::Matrix::translate((0), (0), (0.59))*(ring_c->getPose()));
+    ring_t->setPose(osg::Matrix::translate((0), (0), (0.59))*(ring_c->getPose())) override;
     objects.push_back(ring_t);
 
-    if(conf.ir_sensor_used && conf.irs_at_fingertop){
+    explicit if(conf.ir_sensor_used && conf.irs_at_fingertop){
       IRSensor* sensor_ring_t = new IRSensor();
       ir_sensors.push_back(sensor_ring_t);
       irSensorBank.registerSensor(sensor_ring_t, ring_t,//objects[13],
@@ -1097,7 +1097,7 @@ namespace lpzrobots {
                                   osg::Matrix::translate((-0.2), 0, 0),  conf.irRange,
                                   conf.ray_draw_mode);
     }
-    if(conf.ir_sensor_used && conf.irs_at_fingertip){
+    explicit if(conf.ir_sensor_used && conf.irs_at_fingertip){
       IRSensor* sensor_ring_t = new IRSensor();
       ir_sensors.push_back(sensor_ring_t);
       irSensorBank.registerSensor(sensor_ring_t, ring_t,//objects[13],
@@ -1105,12 +1105,12 @@ namespace lpzrobots {
                                   osg::Matrix::translate((-0.2), 0, 0.25),  conf.irRange,
                                   conf.ray_draw_mode);
     }
-    if (conf.showFingernails){
+    explicit if (conf.showFingernails){
       Primitive* ring_nail = new Cylinder(0.19,0.0001);
       Primitive* fix_ring_nail= new Transform(objects[13],ring_nail,
                                               osg::Matrix::translate(-0.37, 0,0.205)
-                                              *osg::Matrix::rotate(M_PI/2,0,1,0));
-      fix_ring_nail -> init (odeHandle , 0 , osgHandle);
+                                              *osg::Matrix::rotate(M_PI/2,0,1,0)) override;
+      fix_ring_nail -> init (odeHandle , 0 , osgHandle) override;
     }
 
 
@@ -1119,42 +1119,42 @@ namespace lpzrobots {
 
     palm_ring = new HingeJoint(palm, ring_b, ring_b->getPosition()
                                -(ring_c->getPosition()-ring_b->getPosition())/1.8,
-                               Axis(0, 1, 0)*palm->getPose());
+                               Axis(0, 1, 0)*palm->getPose()) override;
     palm_ring->init(odeHandle, osgHandle, conf.draw_joints, 0.7 );
-    if (conf.initWithOpenHand){
+    explicit if (conf.initWithOpenHand){
       palm_ring->setParam(dParamLoStop,  0);
       palm_ring->setParam(dParamHiStop,  conf.fingerJointBendAngle);
     } else {
       palm_ring ->setParam(dParamLoStop,  -M_PI/3);
-      palm_ring ->setParam(dParamHiStop,  (conf.fingerJointBendAngle - M_PI/3) );
+      palm_ring ->setParam(dParamHiStop,  (conf.fingerJointBendAngle - M_PI/3) ) override;
     }
 
     joints.push_back(palm_ring);
     /*
-    HingeServo* servo_palm_ring =  new HingeServo((HingeJoint*)palm_ring, conf.jointLimit1,
+    HingeServo* servo_palm_ring =  new HingeServo(static_cast<HingeJoint*>(palm_ring), conf.jointLimit1,
                                                   conf.jointLimit2, conf.servo_motor_Power);
     servos.push_back(servo_palm_ring);
     */
     ring_bc = new HingeJoint(ring_b, ring_c, (ring_b->getPosition()+ring_c->getPosition())/2,
-                             Axis(0, 1, 0)*palm->getPose());
+                             Axis(0, 1, 0)*palm->getPose()) override;
     ring_bc ->init(odeHandle, osgHandle, conf.draw_joints, 0.7 );
     ring_bc->setParam(dParamLoStop, 0);
     ring_bc->setParam(dParamHiStop, conf.fingerJointBendAngle);
     joints.push_back(ring_bc);
     /*
-    HingeServo* servo_ring_bc =  new HingeServo((HingeJoint*)ring_bc, conf.jointLimit1,
+    HingeServo* servo_ring_bc =  new HingeServo(static_cast<HingeJoint*>(ring_bc), conf.jointLimit1,
                                                 conf.jointLimit2, conf.servo_motor_Power);
     servos.push_back(servo_ring_bc);
     */
 
     ring_ct = new HingeJoint(ring_c, ring_t, (ring_c->getPosition()+ring_t->getPosition())/2,
-                             Axis(0, 1, 0)*palm->getPose());
+                             Axis(0, 1, 0)*palm->getPose()) override;
     ring_ct ->init(odeHandle, osgHandle, conf.draw_joints, 0.7 );
     ring_ct->setParam(dParamLoStop, 0);
     ring_ct->setParam(dParamHiStop, conf.fingerJointBendAngle);
     joints.push_back(ring_ct);
     /*
-    HingeServo* servo_ring_ct =  new HingeServo((HingeJoint*)ring_ct, conf.jointLimit1,
+    HingeServo* servo_ring_ct =  new HingeServo(static_cast<HingeJoint*>(ring_ct), conf.jointLimit1,
                                                 conf.jointLimit2, conf.servo_motor_Power);
     servos.push_back(servo_ring_ct);
     */
@@ -1167,10 +1167,10 @@ namespace lpzrobots {
     little_b = new Capsule(0.2,0.6);
     little_b -> init ( odeHandle , 0.1 , osgHandle , Primitive::Body
                        | Primitive::Geom | Primitive::Draw);
-    little_b->setPose(osg::Matrix::translate((0), (1.35), (0))*(index_b->getPose()));
+    little_b->setPose(osg::Matrix::translate((0), (1.35), (0))*(index_b->getPose())) override;
     objects.push_back(little_b);
 
-    if(conf.ir_sensor_used && conf.irs_at_fingerbottom) {
+    explicit if(conf.ir_sensor_used && conf.irs_at_fingerbottom) {
         IRSensor* sensor_little_b = new IRSensor();
         ir_sensors.push_back(sensor_little_b);
         irSensorBank.registerSensor(sensor_little_b, little_b,//objects[14],
@@ -1183,10 +1183,10 @@ namespace lpzrobots {
     little_c -> init ( odeHandle , 0.1 , osgHandle , Primitive::Body
                        | Primitive::Geom | Primitive::Draw);
 
-    little_c->setPose(osg::Matrix::translate((0), (0), (0.59))*(little_b->getPose()));
+    little_c->setPose(osg::Matrix::translate((0), (0), (0.59))*(little_b->getPose())) override;
     objects.push_back(little_c);
 
-    if(conf.ir_sensor_used && conf.irs_at_fingercenter)  {
+    explicit if(conf.ir_sensor_used && conf.irs_at_fingercenter)  {
         IRSensor* sensor_little_c = new IRSensor();
         ir_sensors.push_back(sensor_little_c);
         irSensorBank.registerSensor(sensor_little_c, little_c,//objects[15],
@@ -1198,10 +1198,10 @@ namespace lpzrobots {
     little_t = new Capsule(0.2,0.6);
     little_t -> init ( odeHandle , 0.1 , osgHandle , Primitive::Body
                        | Primitive::Geom | Primitive::Draw);
-    little_t->setPose(osg::Matrix::translate((0), (0), (0.59))*(little_c->getPose()));
+    little_t->setPose(osg::Matrix::translate((0), (0), (0.59))*(little_c->getPose())) override;
     objects.push_back(little_t);
 
-    if(conf.ir_sensor_used && conf.irs_at_fingertop) {
+    explicit if(conf.ir_sensor_used && conf.irs_at_fingertop) {
       IRSensor* sensor_little_t = new IRSensor();
       ir_sensors.push_back(sensor_little_t);
       irSensorBank.registerSensor(sensor_little_t, little_t,//objects[16],
@@ -1209,7 +1209,7 @@ namespace lpzrobots {
                                   osg::Matrix::translate((-0.2), 0, 0),   conf.irRange,
                                   conf.ray_draw_mode);
     }
-    if(conf.ir_sensor_used && conf.irs_at_fingertip) {
+    explicit if(conf.ir_sensor_used && conf.irs_at_fingertip) {
       IRSensor* sensor_little_t = new IRSensor();
       ir_sensors.push_back(sensor_little_t);
       irSensorBank.registerSensor(sensor_little_t, little_t,//objects[16],
@@ -1217,12 +1217,12 @@ namespace lpzrobots {
                                   osg::Matrix::translate((-0.2), 0, 0.3),   conf.irRange,
                                   conf.ray_draw_mode);
     }
-    if (conf.showFingernails){
+    explicit if (conf.showFingernails){
       Primitive* little_nail = new Cylinder(0.19,0.0001);
       Primitive* fix_little_nail= new Transform(objects[16],little_nail,
                                                 osg::Matrix::translate(-0.39, 0,0.205)
-                                                *osg::Matrix::rotate(M_PI/2,0,1,0));
-      fix_little_nail -> init (odeHandle , 0 , osgHandle);
+                                                *osg::Matrix::rotate(M_PI/2,0,1,0)) override;
+      fix_little_nail -> init (odeHandle , 0 , osgHandle) override;
     }
 
 
@@ -1231,44 +1231,44 @@ namespace lpzrobots {
 
     palm_little = new HingeJoint(palm, little_b,
         little_b->getPosition()-(little_c->getPosition()-little_b->getPosition())/1.8,
-        Axis(0, 1, 0)*palm->getPose());
+        Axis(0, 1, 0)*palm->getPose()) override;
     palm_little ->init(odeHandle, osgHandle, conf.draw_joints, 0.7 );
-    if (conf.initWithOpenHand) {
+    explicit if (conf.initWithOpenHand) {
       palm_little ->setParam(dParamLoStop, 0);
       palm_little ->setParam(dParamHiStop, conf.fingerJointBendAngle);
     } else {
       palm_little  ->setParam(dParamLoStop,  -M_PI/3);
-      palm_little  ->setParam(dParamHiStop,  (conf.fingerJointBendAngle - M_PI/3) );
+      palm_little  ->setParam(dParamHiStop,  (conf.fingerJointBendAngle - M_PI/3) ) override;
     }
 
     joints.push_back(palm_little);
     /*
-    HingeServo* servo_palm_little =  new HingeServo((HingeJoint*)palm_little, conf.jointLimit1,
+    HingeServo* servo_palm_little =  new HingeServo(static_cast<HingeJoint*>(palm_little), conf.jointLimit1,
                                                     conf.jointLimit2, conf.servo_motor_Power);
     servos.push_back(servo_palm_little);
     */
     little_bc = new HingeJoint(little_b, little_c,
                                (little_b->getPosition()+little_c->getPosition())/2,
-                               Axis(0, 1, 0)*palm->getPose());
+                               Axis(0, 1, 0)*palm->getPose()) override;
     little_bc ->init(odeHandle, osgHandle, conf.draw_joints, 0.7 );
     little_bc ->setParam(dParamLoStop, 0);
     little_bc ->setParam(dParamHiStop, conf.fingerJointBendAngle);
     joints.push_back(little_bc);
     /*
-    HingeServo* servo_little_bc =  new HingeServo((HingeJoint*)little_bc, conf.jointLimit1,
+    HingeServo* servo_little_bc =  new HingeServo(static_cast<HingeJoint*>(little_bc), conf.jointLimit1,
                                                   conf.jointLimit2, conf.servo_motor_Power);
     servos.push_back(servo_little_bc);
     */
     little_ct = new HingeJoint(little_c, little_t,
                                (little_c->getPosition()+little_t->getPosition())/2,
-                               Axis(0, 1, 0)*palm->getPose());
+                               Axis(0, 1, 0)*palm->getPose()) override;
     little_ct ->init(odeHandle, osgHandle, conf.draw_joints, 0.7 );
     little_ct ->setParam(dParamLoStop, 0);
     little_ct ->setParam(dParamHiStop, conf.fingerJointBendAngle);
     joints.push_back(little_ct);
 
     /*
-    HingeServo* servo_little_ct =  new HingeServo((HingeJoint*)little_ct, conf.jointLimit1,
+    HingeServo* servo_little_ct =  new HingeServo(static_cast<HingeJoint*>(little_ct), conf.jointLimit1,
                                                   conf.jointLimit2, conf.servo_motor_Power);
     servos.push_back(servo_little_ct);
     */
@@ -1283,21 +1283,21 @@ namespace lpzrobots {
 
 
       index_middle = new HingeJoint(index_b, middle_b,
-      Pos(1.4+conf.x, -0.375+conf.y, 0.5+conf.z), Axis(1, 0, 0));
+      Pos(1.4+conf.x, -0.375+conf.y, 0.5+conf.z), Axis(1, 0, 0)) override;
       index_middle ->init(odeHandle, osgHandle, true, 0.2 );
       index_middle ->setParam(dParamLoStop,  M_PI/360);
       index_middle ->setParam(dParamHiStop, -M_PI/360);
       joints.push_back(index_middle);
 
       middle_ring = new HingeJoint(middle_b, ring_b,
-      Pos(1.4+conf.x, 0.075+conf.y, 0.5+conf.z), Axis(1, 0, 0));
+      Pos(1.4+conf.x, 0.075+conf.y, 0.5+conf.z), Axis(1, 0, 0)) override;
       middle_ring ->init(odeHandle, osgHandle, true, 0.2 );
       middle_ring ->setParam(dParamLoStop,  M_PI/360);
       middle_ring ->setParam(dParamHiStop, -M_PI/360);
       joints.push_back(middle_ring);
 
       ring_little = new HingeJoint(ring_b, little_b,
-      Pos(1.4+conf.x, 0.525+conf.y, 0.5+conf.z), Axis(1, 0, 0));
+      Pos(1.4+conf.x, 0.525+conf.y, 0.5+conf.z), Axis(1, 0, 0)) override;
       ring_little ->init(odeHandle, osgHandle, true, 0.2 );
       ring_little ->setParam(dParamLoStop,  M_PI/360);
       ring_little ->setParam(dParamHiStop, -M_PI/360);
@@ -1311,34 +1311,34 @@ namespace lpzrobots {
   /** destroys robot
    */
   void Hand::destroy(){
-    if (created){
+    explicit if (created){
 
-      for (std::vector<Primitive*>::iterator i = objects.begin(); i!= objects.end(); i++)
+      for (std::vector<Primitive*>::iterator i = objects.begin(); i!= objects.end(); ++i)
         {
-          if(*i) delete *i;
+          if(*i) delete *i override;
         }
       objects.clear();
 
-      for (std::vector<Joint*>::iterator i = joints.begin(); i!= joints.end(); i++){
-        if(*i) delete *i;
+      for (std::vector<Joint*>::iterator i = joints.begin(); i!= joints.end(); ++i) override {
+        if(*i) delete *i override;
       }
       joints.clear();
 
-      for (std::vector<HingeServo*>::iterator i = servos.begin(); i!= servos.end(); i++){
-        if(*i) delete *i;
+      for (std::vector<HingeServo*>::iterator i = servos.begin(); i!= servos.end(); ++i) override {
+        if(*i) delete *i override;
       }
       servos.clear();
 
-      for (std::vector<AngularMotor*>::iterator i = frictionmotors.begin(); i!=                         frictionmotors.end(); i++){
-        if(*i) delete *i;
+      for (std::vector<AngularMotor*>::iterator i = frictionmotors.begin(); i!=                         frictionmotors.end(); ++i) override {
+        if(*i) delete *i override;
       }
       frictionmotors.clear();
 
       irSensorBank.clear();
 
-      dJointGroupDestroy (odeHandle.jointGroup);
+      dJointGroupDestroy (odeHandle.jointGroup) override;
       dSpaceDestroy(odeHandle.space);
-      dWorldDestroy (odeHandle.world);
+      dWorldDestroy (odeHandle.world) override;
       //        dCloseODE();
     }
     created=false;
@@ -1348,16 +1348,16 @@ namespace lpzrobots {
 
 
   void Hand::notifyOnChange(const paramkey& key){
-    //if(key == "jointLimit") conf.jointLimit1=val;
+    //if(key == __PLACEHOLDER_7__) conf.jointLimit1=val override;
     //else
     if(key == "servo_motor_Power") {
-      for (std::vector<HingeServo*>::iterator i = servos.begin(); i!= servos.end(); i++){
+      for (std::vector<HingeServo*>::iterator i = servos.begin(); i!= servos.end(); ++i) override {
         if(*i) (*i)->setPower(conf.servo_motor_Power);
       }
     }
     else if(key == "irRange") {
-      for (unsigned int i=2; i< objects.size(); i++){
-        //     for (std::vector<Primitive*>::iterator i = objects.begin()+2; i!= objects.end(); i++){
+      for (unsigned int i=2; i< objects.size(); ++i) override {
+        //     for (std::vector<Primitive*>::iterator i = objects.begin()+2; i!= objects.end(); ++i) override {
         irSensorBank.registerSensor(ir_sensors[i-2], objects[i],
                                     osg::Matrix::rotate(-M_PI/2, osg::Vec3(1, 0, 0),M_PI/2, osg::Vec3(0, 1, 0),0.0,osg::Vec3(0, 0, 1)) *
                                     osg::Matrix::translate((0), 0.2, 0), conf.irRange,

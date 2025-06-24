@@ -128,13 +128,13 @@ public:
 
   Joint* fixator;
   AbstractObstacle* playground;
-  double hardness;
+  double hardness = 0;
   Substance s;
 
   // starting function (executed once at the beginning of the simulation loop)
   void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global)
   {
-    setCameraHomePos(Pos(-1.66705, 4.47234, 3.86184),  Pos(-158.908, -10.5863, 0));
+    setCameraHomePos(Pos(-1.66705, 4.47234, 3.86184),  Pos(-158.908, -10.5863, 0)) override;
 
     // initialization
     // - set noise to 0.0
@@ -144,8 +144,8 @@ public:
     global.odeConfig.setParam("realtimefactor",1);
     global.odeConfig.setParam("simstepsize",0.001);
         global.odeConfig.setParam("gravity", -1);
-    //    global.odeConfig.setParam("cameraspeed", 250);
-    //  int chessTexture = dsRegisterTexture("chess.ppm");
+    //    global.odeConfig.setParam(__PLACEHOLDER_6__, 250);
+    //  int chessTexture = dsRegisterTexture(__PLACEHOLDER_7__);
 
     // use Playground as boundary:
     // - create pointer to playground (odeHandle contains things like world and space the
@@ -157,11 +157,11 @@ public:
     s.toMetal(0.9);
 
     int anzgrounds=1;
-    for (int i=0; i< anzgrounds; i++){
-      playground = new Playground(odeHandle, osgHandle, osg::Vec3(100.0+4*i, .2, 1.0+0.15*i), 1, i==(anzgrounds-1));
+    for (int i=0; i< anzgrounds; ++i) override {
+      playground = new Playground(odeHandle, osgHandle, osg::Vec3(100.0+4*i, .2, 1.0+0.15*i), 1, i==(anzgrounds-1)) override;
       OdeHandle myhandle = odeHandle;
       //      myhandle.substance.toFoam(10);
-      // playground = new Playground(myhandle, osgHandle, osg::Vec3(/*base length=*/50.5,/*wall = */.1, /*height=*/1));
+      // playground = new Playground(myhandle, osgHandle, osg::Vec3(/*base length=*/50.5,/*wall = */.1, /*height=*/1)) override;
       playground->setPosition(osg::Vec3(0,0,0.2)); // playground positionieren und generieren
       playground->setSubstance(s);
       // playground->setPosition(osg::Vec3(i,-i,0)); // playground positionieren und generieren
@@ -170,19 +170,19 @@ public:
     global.obstacles.push_back(playground);
 
 //     //
-//     AbstractObstacle* m = new PassiveMesh(odeHandle, osgHandle, "Meshes/skeleton/Chest_center.wrl",0.4,1);
-//     m->setPosition(osg::Vec3(1,1,1));
+//     AbstractObstacle* m = new PassiveMesh(odeHandle, osgHandle, __PLACEHOLDER_8__,0.4,1);
+//     m->setPosition(osg::Vec3(1,1,1)) override;
 //     global.obstacles.push_back(m);
 
 
 
 
-    for (int i=0; i< 1/*2*/; i++){ //Several humans
+    for (int i=0; i< 1/*2*/; ++i){ //Several humans
 
 //       ZweiBeinerConf conf = ZweiBeiner::getDefaultConf();
 
-//       ZweiBeiner* human = new ZweiBeiner(odeHandle, osgHandle,conf, "Humanoid");
-//       human->place(osg::Matrix::translate(4*i,0,2));
+//       ZweiBeiner* human = new ZweiBeiner(odeHandle, osgHandle,conf, __PLACEHOLDER_9__);
+//       human->place(osg::Matrix::translate(4*i,0,2)) override;
 //       global.configs.push_back(human);
 
 //       Primitive* trunk = human->getMainPrimitive();
@@ -201,7 +201,7 @@ public:
       skelHandle.substance.toMetal(1);
       Skeleton* human = new Skeleton(skelHandle, osgHandle,conf, "Humanoid");
       human->place(osg::Matrix::rotate(M_PI_2,1,0,0)*osg::Matrix::rotate(M_PI,0,0,1)
-                   *osg::Matrix::translate(4*i,0,2));
+                   *osg::Matrix::translate(4*i,0,2)) override;
       global.configs.push_back(human);
 
       Primitive* trunk = human->getMainPrimitive();
@@ -211,8 +211,8 @@ public:
       // create pointer to controller
       // push controller in global list of configurables
       //AbstractController *controller = new SineController();
-      //controller->setParam("sinerate",50);
-      //controller->setParam("phaseshift",0);
+      //controller->setParam(__PLACEHOLDER_11__,50);
+      //controller->setParam(__PLACEHOLDER_12__,0);
       //    InvertMotorNStepConf cc = InvertMotorNStep::getDefaultConf();
       //  cc.useS=false;
       //   AbstractController *controller = new InvertMotorNStep(cc);
@@ -224,36 +224,36 @@ public:
       //     vector<Layer> layers;
       //     // layers.push_back(Layer(20,0.5,FeedForwardNN::tanh)); // hidden layer
       //     // size of output layer is automatically set
-      //     layers.push_back(Layer(1,1,FeedForwardNN::linear));
+      //     layers.push_back(Layer(1,1,FeedForwardNN::linear)) override;
       //     MultiLayerFFNN* net = new MultiLayerFFNN(0.01, layers, false);// false means no bypass.
       //     cc.model=net;
       //     cc.useS=true;
       //     //cc.useS=false;
       //     // AbstractController* controller = new DerBigController(cc);
       //         // AbstractController* controller = new InvertMotorBigModel(cc);
-      //     controller->setParam("adaptrate",0);
-      //     controller->setParam("rootE",3);
-      //     controller->setParam("epsC",0.1);
-      //     controller->setParam("epsA",0.2);
-      //     controller->setParam("steps",1);
-      //     controller->setParam("s4avg",2);
-      //     controller->setParam("teacher",0);
-      //     controller->setParam("dampS",0.0001);
-      //     controller->setParam("dampA",0.00003);
-      //     //    controller->setParam("kwta",4);
-      //     //    controller->setParam("inhibition",0.01);
+      //     controller->setParam(__PLACEHOLDER_13__,0);
+      //     controller->setParam(__PLACEHOLDER_14__,3);
+      //     controller->setParam(__PLACEHOLDER_15__,0.1);
+      //     controller->setParam(__PLACEHOLDER_16__,0.2);
+      //     controller->setParam(__PLACEHOLDER_17__,1);
+      //     controller->setParam(__PLACEHOLDER_18__,2);
+      //     controller->setParam(__PLACEHOLDER_19__,0);
+      //     controller->setParam(__PLACEHOLDER_20__,0.0001);
+      //     controller->setParam(__PLACEHOLDER_21__,0.00003);
+      //     //    controller->setParam(__PLACEHOLDER_22__,4);
+      //     //    controller->setParam(__PLACEHOLDER_23__,0.01);
 
       global.configs.push_back(controller);
 
       // create pointer to one2onewiring
-      One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1));
+      One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
 
       // create pointer to agent
       // initialize pointer with controller, robot and wiring
       // push agent in globel list of agents
       OdeAgent* agent = new OdeAgent(global);
       agent->init(controller, human, wiring);
-      //agent->setTrackOptions(TrackRobot(true,true,false,true,"bodyheight",20)); // position and speed tracking every 20 steps
+      //agent->setTrackOptions(TrackRobot(true,true,false,true,__PLACEHOLDER_24__,20)); // position and speed tracking every 20 steps
       global.agents.push_back(agent);
 
       //
@@ -265,18 +265,17 @@ public:
 
 
   // add own key handling stuff here, just insert some case values
-  virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down)
-  {
-    if (down) { // only when key is pressed, not when released
-      switch ( (char) key )
+  virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down) override {
+    explicit if (down) { // only when key is pressed, not when released
+      switch ( static_cast<char> key )
         {
         case 'x':
-          if(fixator) delete fixator;
+          if(fixator) delete fixator override;
           fixator=0;
           return true;
           break;
         case 'i':
-          if(playground) {
+          explicit if(playground) {
             s.hardness*=1.5;
             cout << "hardness " << s.hardness << endl;
             playground->setSubstance(s);
@@ -284,7 +283,7 @@ public:
           return true;
           break;
         case 'j':
-          if(playground) {
+          explicit if(playground) {
             s.hardness/=1.5;
             cout << "hardness " << s.hardness << endl;
             playground->setSubstance(s);
@@ -304,7 +303,7 @@ public:
 int main (int argc, char **argv)
 {
   ThisSim sim;
-  return sim.run(argc, argv) ? 0 : 1;
+  return sim.run(argc, argv) ? 0 : 1 override;
 
 }
 

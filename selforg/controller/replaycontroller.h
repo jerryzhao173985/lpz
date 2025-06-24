@@ -54,24 +54,24 @@ public:
            motorEnd);
   }
 
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) {
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override {
     // assert(sensornumber == sensorEnd - sensorStart + 1);
     assert(motornumber == motorEnd - motorStart + 1);
   }
 
-  virtual int getSensorNumber() const {
+  virtual int getSensorNumber() const override {
     return sensorEnd - sensorStart + 1;
   };
 
-  virtual int getMotorNumber() const {
+  virtual int getMotorNumber() const override {
     return motorEnd - motorStart + 1;
   };
 
-  virtual void step(const sensor* sensors, int sensornumber, motor* motors, int motornumber) {
+  virtual void step(const sensor* sensors, int sensornumber, motor* motors, int motornumber) override {
     stepNoLearning(sensors, sensornumber, motors, motornumber);
   }
 
-  virtual void stepNoLearning(const sensor*, int number_sensors, motor* motors, int number_motors) {
+  virtual void stepNoLearning(const sensor*, int number_sensors, motor* motors, int number_motors) override {
 
     if (!parseDataLine(m, f)) {
       if (repeat) {
@@ -87,19 +87,19 @@ public:
 
   /**** STOREABLE ****/
   /** stores the controller values to a given file (binary).  */
-  virtual bool store(FILE* f) const {
+  virtual bool store(FILE* f) const override {
     return false;
   }
   /** loads the controller values from a given file (binary). */
-  virtual bool restore(FILE* f) {
+  virtual bool restore(FILE* f) override {
     return false;
   }
 
   // inspectable interface
-  virtual std::list<iparamkey> getInternalParamNames() const {
+  virtual std::list<iparamkey> getInternalParamNames() const  override {
     return std::list<iparamkey>();
   }
-  virtual std::list<iparamval> getInternalParams() const {
+  virtual std::list<iparamval> getInternalParams() const  override {
     return std::list<iparamval>();
   }
 
@@ -131,7 +131,7 @@ protected:
               motorStart = i;
             motorEnd = i;
           }
-          i++;
+          ++i;
         }
         return true;
       }
@@ -145,7 +145,7 @@ protected:
     while (*p != 0) {
       if (*p > ' ')
         foundsomething = true;
-      p++;
+      ++p;
     }
     return !foundsomething;
   }
@@ -155,12 +155,12 @@ protected:
     while (*p != 0) {
       if (*p >= '0' && *p <= '9')
         return true;
-      p++;
+      ++p;
     }
     return false;
   }
 
-  static bool parseDataLine(matrix::Matrix& data, FILE* f) {
+  static bool parseDataLine(const matrix::Matrix& data, FILE* f) {
     std::array<char, 1024> buffer;
     int i;
     std::array<double, 1024> dat;
@@ -174,12 +174,12 @@ protected:
         if (!p)
           return false;
         dat[i] = atof(p);
-        i++;
+        ++i;
         while ((p = strtok(nullptr, " ")) != nullptr) {
           if (!check4Number(p))
             continue;
           dat[i] = atof(p);
-          i++;
+          ++i;
         };
         data.set(i, 1, dat.data());
         return true;

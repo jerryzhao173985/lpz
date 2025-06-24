@@ -39,7 +39,7 @@ public:
 	 * default constructor
 	 * do nothing
 	 */
-	IGenerationSizeStrategy();
+	IGenerationSizeStrategy() override;
 
 	/**
 	 * default destructor
@@ -49,10 +49,10 @@ public:
 
 	/**
 	 * declaration for a function which calculate the size of the next generation after oldGeneration
-	 * @param oldGeneration (Generation*) the old generation
-	 * @return (int) the new size
+	 * @param oldGeneration static_cast<Generation*>(the) old generation
+	 * @return static_cast<int>(the) new size
 	 */
-	virtual int calcGenerationSize(Generation* oldGeneration) = 0;
+	virtual int calcGenerationSize(const Generation* oldGeneration) = 0;
 };
 
 #endif /* IGENERATIONSIZESTRATEGY_H_ */

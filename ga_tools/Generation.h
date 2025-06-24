@@ -57,11 +57,11 @@ public:
 	 * the generation number, the size of it and how many individual don t come
 	 * in the next generation (killRate).
 	 *
-	 * @param generationNumber (int) The ID of the Generation.
-	 * @param size (int) The Size of this Generation. Means how many individual are lives in this generation
-	 * @param numChildren (int) Number of individual which will be created by crossover
+	 * @param generationNumber static_cast<int>(The) ID of the Generation.
+	 * @param size static_cast<int>(The) Size of this Generation. Means how many individual are lives in this generation
+	 * @param numChildren static_cast<int>(Number) of individual which will be created by crossover
 	 */
-	Generation(int generationNumber, int size, int numChildren);
+	Generation(int generationNumber, int size, int numChildren) override;
 
 	/**
 	 * destructor to delete a GenContext.
@@ -72,43 +72,43 @@ public:
 	 * [inline], [const]
 	 * This function gives the ID (number) of the generation back.
 	 *
-	 * @return (int) The ID
+	 * @return static_cast<int>(The) ID
 	 */
-	inline int getGenerationNumber(void)const {return m_generationNumber;}
+	inline int getGenerationNumberstatic_cast<void>(const) override {return m_generationNumber;}
 
 	/**
 	 * [inline], [const]
 	 * This function gives the size which is planed for this generation back.
 	 *
-	 * @return (int) The planed size
+	 * @return static_cast<int>(The) planed size
 	 */
-	inline int getSize(void)const {return m_size;}
+	inline int getSizestatic_cast<void>(const) override {return m_size;}
 
 	/**
 	 * [inline], [const]
 	 * This function gives the actual size (number of individuals inside the generation) back.
 	 *
-	 * @return (int) current size
+	 * @return static_cast<int>(current) size
 	 */
-	inline int getCurrentSize(void)const {return m_individual.size();}
+	inline int getCurrentSizestatic_cast<void>(const) override {return m_individual.size();}
 
 	/**
 	 * [inline], [const]
 	 * This function gives the number of children back, which will be created by crossover.
 	 *
-	 * @return (int) the number of children
+	 * @return static_cast<int>(the) number of children
 	 */
-	inline int getNumChildren(void)const {return m_numChildren;}
+	inline int getNumChildrenstatic_cast<void>(const) override {return m_numChildren;}
 
 	/**
 	 * [individual], [const]
 	 * This function gives one individual from this generation back.
 	 *
-	 * @param x (int) the index of the searched individual
+	 * @param x static_cast<int>(the) index of the searched individual
 	 *
-	 * @return (Individual*) The individual. If 0, if the param x is not inside the index range
+	 * @return static_cast<Individual*>(The) individual. If 0, if the param x is not inside the index range
 	 */
-	inline Individual* getIndividual(int x)const {if(x<getCurrentSize())return m_individual[x];return NULL;}
+	inline Individual* getIndividual(int x)const override {if(x<getCurrentSize())return m_individual[x];return NULL;}
 
 	/**
 	 * [inline], [const]
@@ -116,7 +116,7 @@ public:
 	 *
 	 * @return (vector<Individual*>&) all individual inside the generation
 	 */
-	inline const std::vector<Individual*>& getAllIndividual(void)const {return m_individual;}
+	inline const std::vector<Individual*>& getAllIndividualstatic_cast<void>(const) override {return m_individual;}
 
 	/**
    * [inline], [const]
@@ -124,67 +124,67 @@ public:
    *
    * @return (vector<Individual*>&) all individual inside the generation
    */
-  std::vector<Individual*>* getAllUnCalculatedIndividuals(void)const;
+  std::vector<Individual*>* getAllUnCalculatedIndividualsstatic_cast<void>(const) override;
 
 	/**
 	 * This function insert an individual in the generation.
 	 *
-	 * @param individual (Individual*) the individual which should be insert in the generation
+	 * @param individual static_cast<Individual*>(the) individual which should be insert in the generation
 	 */
-	void addIndividual(Individual* individual);
+	void addIndividual(const Individual* individual) override;
 
 	/**
 	 * This function makes an crossOver whit the existing individuals to become from the current size the planed size.
 	 *
-	 * @param random (RandGen*) a pseudo number generator.
+	 * @param random static_cast<RandGen*>(a) pseudo number generator.
 	 */
-	void crossover(RandGen* random);
+	void crossover(const RandGen* random) override;
 
 	/**
 	 * returns a string which represent all individual in this generation.
 	 *
 	 * @return (string) the string
 	 */
-	std::string getAllIndividualAsString(void)const;
+	std::string getAllIndividualAsStringstatic_cast<void>(const) override;
 
 	/**
 	 * returns all fitness values from the individuals.
 	 *
 	 * @return (vector<double> the fitness values.
 	 */
-	std::vector<double>* getAllFitness(void)const;
+	std::vector<double>* getAllFitnessstatic_cast<void>(const) override;
 
 	/**
 	 * This function updates the statistical values
-	 * @param factor (double) normal 1.5    Is needed for the data analysation
+	 * @param factor static_cast<double>(normal) 1.5    Is needed for the data analysation
 	 */
-	void update(double factor = 1.5);
+	void update(double factor = 1.5) override;
 
 	/**
 	 * store a generation in a file
-	 * @param f (FILE*) the file in which should be stored
+	 * @param f static_cast<FILE*>(the) file in which should be stored
 	 * @return (bool) true if all ok
 	 */
-	bool store(FILE* f)const;
+	bool store(const FILE* f)const override;
 
 	/**
 	 * restore all generation from a restore structure
 	 *
 	 * remember the individuals must be restored before
 	 *
-	 * @param numberGeneration (int) number of generations which should be restored
+	 * @param numberGeneration static_cast<int>(number) of generations which should be restored
 	 * @param generationSet (map<int,RESTORE_GA_GENERATION*>) the structures which should be restored
 	 * @param linkSet (map<int,vector<int>>) the linkings between the generation and the individuals
 	 * @return (bool) true if all ok
 	 */
-	static bool restore(int numberGeneration, std::map<int,RESTORE_GA_GENERATION*>& generationSet, std::map<int,std::vector<int> >& linkSet);
+	static bool restore(int numberGeneration, std::map<int,RESTORE_GA_GENERATION*>& generationSet, std::map<int,std::vector<int> >& linkSet) override;
 
 protected:
 	/**
 	 * (int)
 	 * The generation number (ID)
 	 */
-	int m_generationNumber;
+	int m_generationNumber = 0;
 
 	/**
 	 * (vector<Individual*>)
@@ -196,74 +196,74 @@ protected:
 	 * (int)
 	 * The planed size of the generation.
 	 */
-	int m_size;
+	int m_size = 0;
 
 	/**
 	 * (int)
 	 * The number of children
 	 */
-	int m_numChildren;
+	int m_numChildren = 0;
 
 private:
 	/**
 	 * disable the default constructor
 	 */
-	Generation();
+	Generation() override;
 
 	/**
 	 * the under quartil
 	 */
-	double m_q1;
+	double m_q1 = 0;
 
 	/**
 	 * the upper quartil
 	 */
-	double m_q3;
+	double m_q3 = 0;
 
 	/**
 	 * the min
 	 */
-	double m_min;
+	double m_min = 0;
 
 	/**
 	 * the max
 	 */
-	double m_max;
+	double m_max = 0;
 
 	/**
 	 * the average
 	 */
-	double m_avg;
+	double m_avg = 0;
 
 	/**
 	 * the median
 	 */
-	double m_med;
+	double m_med = 0;
 
 	/**
 	 * the under whisker
 	 */
-	double m_w1;
+	double m_w1 = 0;
 
 	/**
 	 * the upper whisker
 	 */
-	double m_w3;
+	double m_w3 = 0;
 
 	/**
 	 * the best fitness value inside the generation
 	 */
-	double m_best;
+	double m_best = 0;
 
 	/**
 	 * the number of individual inside the generation (will be)
 	 */
-	double m_dSize;
+	double m_dSize = 0;
 
 	/**
 	 * the number of individual which will be created by crossover.
 	 */
-	double m_dNumChildren;
+	double m_dNumChildren = 0;
 };
 
 #endif /* GENERATION_H_ */

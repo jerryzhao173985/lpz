@@ -112,10 +112,9 @@ public:
 
 
   /// start() is called at the start and should create all the object (obstacles, agents...).
-  virtual void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global)
-  {
+  virtual void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global) override {
     // initial camera position and viewpoint
-    setCameraHomePos(Pos(0.602703, -0.643497, 1.96501),  Pos(52.2474, -56.2528, 0));
+    setCameraHomePos(Pos(0.602703, -0.643497, 1.96501),  Pos(52.2474, -56.2528, 0)) override;
     setCameraMode(Static);
     // initialization
     global.odeConfig.noise=0.1;
@@ -124,8 +123,8 @@ public:
     // passive sphere
     // setPosition does not work anymore
 //     PassiveSphere* s1 = new PassiveSphere(odeHandle, osgHandle, 0.1);
-//     s1->setPosition(osg::Vec3(-0.7,0.9,0.1));
-//     s1->setTexture("Images/dusty.rgb");
+//     s1->setPosition(osg::Vec3(-0.7,0.9,0.1)) override;
+//     s1->setTexture(__PLACEHOLDER_0__);
 //     global.obstacles.push_back(s1);
 
 
@@ -138,11 +137,11 @@ public:
 
     arm = new MuscledArm(odeHandle, osgHandle, conf, "Arm");
     // set muscled arm parameters
-    //arm->setParam("damping",20);
+    //arm->setParam(__PLACEHOLDER_2__,20);
     arm->setParam("factorMotors",5);
 
 
-    ((OdeRobot*)arm)->place(Position(0,0,0));
+    (static_cast<OdeRobot*>(arm))->place(Position(0,0,0)) override;
     global.configs.push_back(arm);
 
     // create pointer to controller
@@ -155,19 +154,19 @@ public:
     AbstractController *controller = new Sox(1.0);
 
     // AbstractController *controller = new   SineController(1);
-    // controller->setParam("period",200);
-    // controller->setParam("phaseshift",1);
+    // controller->setParam(__PLACEHOLDER_4__,200);
+    // controller->setParam(__PLACEHOLDER_5__,1);
     global.configs.push_back(controller);
 
     // create pointer to one2onewiring
-    One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1));
+    One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
 
     // create pointer to agent
     // initialize pointer with controller, robot and wiring
     // push agent in globel list of agents
     OdeAgent* agent = new OdeAgent(global);
     agent->init(controller, arm, wiring);
-    agent->setTrackOptions(TrackRobot(false, false, false, true, "55" ,50));
+    agent->setTrackOptions(TrackRobot(false, false, false, true, "55" ,50)) override;
     agent->setTraceLength(10000);
     agent->setTraceThickness(0.003);
     global.agents.push_back(agent);
@@ -176,70 +175,69 @@ public:
 
 
     //       arm = new MuscledArm(odeHandle, osgHandle, conf);
-    // //      arm->setParam("damping",20);
-    // //      arm->setParam("factorMotors",5);
+    // //      arm->setParam(__PLACEHOLDER_7__,20);
+    // //      arm->setParam(__PLACEHOLDER_8__,5);
 
 
-    //      ((OdeRobot*)arm)->place(Position(10,10,0));
+    //      (static_cast<OdeRobot*>(arm))->place(Position(10,10,0)) override;
     //      global.configs.push_back(arm);
 
     //      controller = new   SineController();
     //      global.configs.push_back(controller);
 
     //     // create pointer to one2onewiring
-    //     wiring = new One2OneWiring(new ColorUniformNoise(0.1));
+    //     wiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
 
     //     // create pointer to agent
     //     // initialize pointer with controller, robot and wiring
     //     // push agent in globel list of agents
     //     agent = new OdeAgent(global);
     //     agent->init(controller, arm, wiring);
-    //     //  agent->setTrackOptions(TrackRobot(true, false, false,50));
+    //     //  agent->setTrackOptions(TrackRobot(true, false, false,50)) override;
     //     global.agents.push_back(agent);
 
     //-----------------------
     // switch off gravity
     global.odeConfig.setParam("gravity",0);
-    //     global.odeConfig.setParam("realtimefactor",0);
+    //     global.odeConfig.setParam(__PLACEHOLDER_10__,0);
 
     // show (print to console) params of all objects in configurable list
 
   }
 
   //Funktion die eingegebene Befehle/kommandos verarbeitet
-  void command (const OdeHandle&, GlobalData& globalData, int cmd)
-  {
-    //     //printp ( "Eingabe erfolgt %d (`%c')\n" , cmd , cmd );
-    //     switch ( (char) cmd )
+  void command (const OdeHandle&, GlobalData& globalData, int cmd) override {
+    //     //printp ( __PLACEHOLDER_11__ , cmd , cmd ) override;
+    //     switch ( static_cast<char> cmd )
     //       {
-    //       case '1' : arm->force_[0]+=0.5; break;
-    //       case '!' : arm->force_[0]-=0.5; break;
+    //       case __PLACEHOLDER_14__ : arm->force_[0]+=0.5; break;
+    //       case __PLACEHOLDER_15__ : arm->force_[0]-=0.5; break;
 
-    //       case '2' : arm->force_[1]+=0.5; break;
-    //       case '@' : arm->force_[1]-=0.5; break;
+    //       case __PLACEHOLDER_16__ : arm->force_[1]+=0.5; break;
+    //       case __PLACEHOLDER_17__ : arm->force_[1]-=0.5; break;
 
-    //       case '3' : arm->force_[2]+=0.5; break;
-    //       case '#' : arm->force_[2]-=0.5; break;
+    //       case __PLACEHOLDER_18__ : arm->force_[2]+=0.5; break;
+    //       case __PLACEHOLDER_19__ : arm->force_[2]-=0.5; break;
 
-    //       case '4' : arm->force_[3]+=0.5; break;
-    //       case '$' : arm->force_[3]-=0.5; break;
+    //       case __PLACEHOLDER_20__ : arm->force_[3]+=0.5; break;
+    //       case __PLACEHOLDER_21__ : arm->force_[3]-=0.5; break;
 
-    //       case '5' : arm->force_[4]+=0.5; break;
-    //       case '%' : arm->force_[4]-=0.5; break;
+    //       case __PLACEHOLDER_22__ : arm->force_[4]+=0.5; break;
+    //       case __PLACEHOLDER_23__ : arm->force_[4]-=0.5; break;
 
-    //       case '6' : arm->force_[5]+=0.5; break;
-    //       case '^' : arm->force_[5]-=0.5; break;
+    //       case __PLACEHOLDER_24__ : arm->force_[5]+=0.5; break;
+    //       case __PLACEHOLDER_25__ : arm->force_[5]-=0.5; break;
 
-    //       case 'q' : arm->force_[0]=0; break;
-    //       case 'w' : arm->force_[1]=0; break;
-    //       case 'e' : arm->force_[2]=0; break;
-    //       case 'r' : arm->force_[3]=0; break;
-    //       case 't' : arm->force_[4]=0; break;
-    //       case 'y' : arm->force_[5]=0; break;
+    //       case __PLACEHOLDER_26__ : arm->force_[0]=0; break;
+    //       case __PLACEHOLDER_27__ : arm->force_[1]=0; break;
+    //       case __PLACEHOLDER_28__ : arm->force_[2]=0; break;
+    //       case __PLACEHOLDER_29__ : arm->force_[3]=0; break;
+    //       case __PLACEHOLDER_30__ : arm->force_[4]=0; break;
+    //       case __PLACEHOLDER_31__ : arm->force_[5]=0; break;
 
-    //       case 'a' : for (int i=0; i<6; i++) arm->force_[i]=0; break;
+    //       case __PLACEHOLDER_32__ : for (int i=0; i<6; ++i) arm->force_[i]=0; break override;
 
-    //       case 'z' :
+    //       case __PLACEHOLDER_33__ :
     //         arm->force_[0]=0;
     //         arm->force_[1]=0;
     //         arm->force_[2]=0.5;
@@ -248,10 +246,10 @@ public:
     //         arm->force_[5]=-0.5;
     //         break;
     //       }
-    //     for (int i=0; i<6; i++){
-    //       std::cout<<arm->force_[i]<<"  ";
+    //     for (int i=0; i<6; ++i) override {
+    //       std::cout<<arm->force_[i]<<__PLACEHOLDER_12__;
     //     }
-    //     std::cout<<"\n";
+    //     std::cout<<__PLACEHOLDER_13__;
 
   }
 
@@ -259,9 +257,9 @@ public:
   // add own key handling stuff here, just insert some case values
   // note: this is the normal signature (look above)
   //   virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down)
-  //   {
+  //    override {
   //     if (down) { // only when key is pressed, not when released
-  //       switch ( (char) key )
+  //       switch ( static_cast<char> key )
   //         {
   //         default:
   //           return false;
@@ -277,7 +275,7 @@ int main (int argc, char **argv)
 {
   ThisSim sim;
   // run simulation
-  return sim.run(argc, argv) ? 0 : 1;
+  return sim.run(argc, argv) ? 0 : 1 override;
 }
 
 /*

@@ -106,7 +106,7 @@ namespace lpzrobots {
     // choose color here a pastel white is used
     this->osgHandle.color = Color(1.0, 1,1,1);
     //    this->osgHandle.color = Color(1.0, 156/255.0, 156/255.0, 1.0f);
-    //    addParameter("elast", &conf.elasticity);
+    //    addParameter(__PLACEHOLDER_2__, &conf.elasticity);
 
     legmass=conf.mass * conf.relLegmass / conf.legNumber;    // mass of each legs
   };
@@ -123,24 +123,24 @@ namespace lpzrobots {
   void VierBeiner::setMotors(const motor* motors, int motornumber){
     assert(created); // robot must exist
 
-    int len = min(motornumber, getMotorNumber());
+    int len = min(motornumber, getMotorNumber()) override;
     // controller output as torques
     int n=0;
     FOREACH(vector <HingeServo*>, headtailservos, s){
       (*s)->set(motors[n]);
-      n++;
+      ++n;
     }
     FOREACH(vector <HingeServo*>, hipservos, s){
       (*s)->set(motors[n]);
-      n++;
+      ++n;
     }
     FOREACH(vector <HingeServo*>, kneeservos, s){
       (*s)->set(motors[n]);
-      n++;
+      ++n;
     }
     FOREACH(vector <HingeServo*>, ankleservos, s){
       (*s)->set(motors[n]);
-      n++;
+      ++n;
     }
     assert(len==n);
     /// set knee servos to set point 0 (spring emulation)
@@ -164,23 +164,23 @@ namespace lpzrobots {
   */
   int VierBeiner::getSensors(sensor* sensors, int sensornumber){
     assert(created);
-    int len = min(sensornumber, getSensorNumber());
+    int len = min(sensornumber, getSensorNumber()) override;
     int n=0;
     FOREACHC(vector <HingeServo*>, headtailservos, s){
       sensors[n]   = (*s)->get();
-      n++;
+      ++n;
     }
     FOREACHC(vector <HingeServo*>, hipservos, s){
       sensors[n]   = (*s)->get();
-      n++;
+      ++n;
     }
     FOREACHC(vector <HingeServo*>, kneeservos, s){
       sensors[n]   = (*s)->get();
-      n++;
+      ++n;
     }
     FOREACHC(vector <HingeServo*>, ankleservos, s){
       sensors[n]   = (*s)->get();
-      n++;
+      ++n;
     }
     assert(len==n);
     return n;
@@ -191,7 +191,7 @@ namespace lpzrobots {
     // the position of the robot is the center of the body
     // to set the vehicle on the ground when the z component of the position is 0
     //    Matrix p2;
-    //    p2 = pose * Matrix::translate(Vec3(0, 0, conf.legLength + conf.legLength/8));
+    //    p2 = pose * Matrix::translate(Vec3(0, 0, conf.legLength + conf.legLength/8)) override;
     create(pose);
   };
 
@@ -202,10 +202,10 @@ namespace lpzrobots {
   void VierBeiner::update(){
     assert(created); // robot must exist
 
-    for (vector<Primitive*>::iterator i = objects.begin(); i!= objects.end(); i++){
+    for (vector<Primitive*>::iterator i = objects.begin(); i!= objects.end(); ++i) override {
       if(*i) (*i)->update();
     }
-    for (vector<Joint*>::iterator i = joints.begin(); i!= joints.end(); i++){
+    for (vector<Joint*>::iterator i = joints.begin(); i!= joints.end(); ++i) override {
       if(*i) (*i)->update();
     }
 
@@ -216,7 +216,7 @@ namespace lpzrobots {
       like space-internal collision detection, sensor resets/update etc.
       @param GlobalData structure that contains global data from the simulation environment
   */
-  void VierBeiner::doInternalStuff(GlobalData& global){
+  void VierBeiner::doInternalStuff(const GlobalData& global){
   }
 
 
@@ -224,12 +224,12 @@ namespace lpzrobots {
       @param pos struct Position with desired position
   */
   void VierBeiner::create( const Matrix& pose ){
-    if (created) {
+    explicit if (created) {
       destroy();
     }
 
     odeHandle.createNewSimpleSpace(parentspace,false);
-    OsgHandle osgHandleJ = osgHandle.changeColor(Color(1.0,0.0,0.0));
+    OsgHandle osgHandleJ = osgHandle.changeColor(Color(1.0,0.0,0.0)) override;
     HingeJoint* j;
     HingeServo* servo;
 
@@ -238,15 +238,15 @@ namespace lpzrobots {
     double theight = conf.size / 4;
     trunk = new Box(conf.size, twidth, theight);
     trunk->init(odeHandle, conf.mass*0.8, osgHandle);
-    trunk->setPose(osg::Matrix::translate(0,0,conf.legLength)*pose);
+    trunk->setPose(osg::Matrix::translate(0,0,conf.legLength)*pose) override;
     trunk->setTexture("Images/toy_fur3.jpg");
     objects.push_back(trunk);
     // the pole is a non-visible box which hinders the dog from falling over.
     Primitive* pole;
     double poleheight=conf.size*2;
     pole = new Box(conf.size*1.6,twidth*2.5,poleheight);
-    bigboxtransform= new Transform(trunk,pole, osg::Matrix::translate(0,0,theight/2+poleheight/2));
-    //bigboxtransform->init(odeHandle, 0, osgHandle.changeAlpha(0.1), Primitive::Geom | Primitive::Draw);
+    bigboxtransform= new Transform(trunk,pole, osg::Matrix::translate(0,0,theight/2+poleheight/2)) override;
+    //bigboxtransform->init(odeHandle, 0, osgHandle.changeAlpha(0.1), Primitive::Geom | Primitive::Draw) override;
     bigboxtransform->init(odeHandle, 0, osgHandle, Primitive::Geom);
     objects.push_back(bigboxtransform);
 
@@ -261,13 +261,13 @@ namespace lpzrobots {
     Pos neckpos(conf.size/2.05,0,conf.legLength);
     neck->setPose(osg::Matrix::translate(0,0,necklength/2) *
                   osg::Matrix::rotate(M_PI/4,0,1,0) *
-                  osg::Matrix::translate(neckpos)*pose);
+                  osg::Matrix::translate(neckpos)*pose) override;
     objects.push_back(neck);
     Primitive* head;
     head = new Capsule(neckwidth,theight);
     headtrans = new Transform(neck, head, Matrix::translate(0, 0, -headlength/2)
                           * Matrix::rotate(-M_PI/2,0,1,0)
-                          * Matrix::translate(0, 0, necklength));
+                          * Matrix::translate(0, 0, necklength)) override;
     headtrans->init(odeHandle, headmass/2, osgHandle);
     head->setTexture("Images/fur4.jpg");
     neck->setTexture("Images/toy_fur3.jpg");
@@ -278,7 +278,7 @@ namespace lpzrobots {
     odeHandle.addIgnoredPair(trunk,headtrans);
 
 
-    j = new HingeJoint(trunk, neck, neckpos * pose, Axis(0,0,1) * pose);
+    j = new HingeJoint(trunk, neck, neckpos * pose, Axis(0,0,1) * pose) override;
     j->init(odeHandle, osgHandleJ, true, theight * 1.2);
     joints.push_back(j);
     servo =  new HingeServo(j, -M_PI/4, M_PI/4, headmass/2);
@@ -293,9 +293,9 @@ namespace lpzrobots {
     Pos tailpos(-conf.size/1.96,0,conf.legLength+theight/3);
     tail->setPose(osg::Matrix::translate(0,0,taillength/2) *
                   osg::Matrix::rotate(M_PI/2.2,0,-1,0) *
-                  osg::Matrix::translate(tailpos)*pose);
+                  osg::Matrix::translate(tailpos)*pose) override;
     objects.push_back(tail);
-    j = new HingeJoint(trunk, tail, tailpos * pose, Axis(0,1,0) * pose);
+    j = new HingeJoint(trunk, tail, tailpos * pose, Axis(0,1,0) * pose) override;
     j->init(odeHandle, osgHandleJ, true, tailwidth * 2.05);
     j->setParam(dParamLoStop, -M_PI/2);
     j->setParam(dParamHiStop,  M_PI/2);
@@ -307,8 +307,8 @@ namespace lpzrobots {
     odeHandle.addIgnoredPair(bigboxtransform,tail);
 
     // legs  (counted from back to front)
-    double legdist = conf.size*0.9 / (conf.legNumber/2-1);
-    for ( int n = 0; n < conf.legNumber; n++ ) {
+    double legdist = conf.size*0.9 / (conf.legNumber/2-1) override;
+    for ( int n = 0; n < conf.legNumber; ++n )  override {
       double l1 =       n<2 ? conf.legLength*0.45 : conf.legLength*0.5;
       double t1       = conf.legLength/10;
       double hipangle = n<2 ? 0 : M_PI/12; // -M_PI/18 : -M_PI/18
@@ -327,19 +327,19 @@ namespace lpzrobots {
 
       // upper limp
       Primitive* p1;
-      Pos pos = Pos(-conf.size/(2+0.2) + ((int)n/2) * legdist,
+      Pos pos = Pos(-conf.size/(2+0.2) + (static_cast<int>(n)/2) * legdist,
                     n%2==0 ? - twidth/2 : twidth/2,
                     n<2 ? conf.legLength  : conf.legLength - theight/3);
-      osg::Matrix m = osg::Matrix::translate(pos) * pose;
+      osg::Matrix m = osg::Matrix::translate(pos) * pose override;
 
       p1 = new Capsule(t1, l1);
       p1->init(odeHandle, legmass*0.6, osgHandle);
-      osg::Matrix m1 = osg::Matrix::translate(0,0,-l1/2) * osg::Matrix::rotate(hipangle,0,1,0) * m;
+      osg::Matrix m1 = osg::Matrix::translate(0,0,-l1/2) * osg::Matrix::rotate(hipangle,0,1,0) * m override;
       p1->setPose(m1);
       objects.push_back(p1);
       // powered hip joint
       Pos nullpos(0,0,0);
-      j = new HingeJoint(trunk, p1, nullpos * m, Axis(0,1,0) * m);
+      j = new HingeJoint(trunk, p1, nullpos * m, Axis(0,1,0) * m) override;
       j->init(odeHandle, osgHandleJ, true, t1 * 2.1);
       joints.push_back(j);
       servo =  new HingeServo(j,hiplowstop, hiphighstop,
@@ -351,11 +351,11 @@ namespace lpzrobots {
       p2 = new Capsule(t2, l2);
       p2->init(odeHandle, legmass*0.3, osgHandle);
       osg::Matrix m2 = osg::Matrix::translate(0,0,-l2/2) * osg::Matrix::rotate(kneeangle,0, 1,0) *
-        osg::Matrix::translate(0,0,-l1/2) * m1;
+        osg::Matrix::translate(0,0,-l1/2) * m1 override;
       p2->setPose(m2);
       objects.push_back(p2);
       // powered knee joint
-      j = new HingeJoint(p1, p2, Pos(0,0,-l1/2) * m1, Axis(0,n<2 ? -1 : 1,0) * m1);
+      j = new HingeJoint(p1, p2, Pos(0,0,-l1/2) * m1, Axis(0,n<2 ? -1 : 1,0) * m1) override;
       j->init(odeHandle, osgHandleJ, true, t1 * 2.1);
       joints.push_back(j);
       // lower limp should not collide with body!
@@ -368,17 +368,17 @@ namespace lpzrobots {
       p2->setTexture("Images/toy_fur3.jpg");
 
 
-      if(n<2){
+      explicit if(n<2){
         // feet
         Primitive* p3;
         p3 = new Capsule(t3, l3);
         p3->init(odeHandle, legmass*0.2, osgHandle);
         osg::Matrix m3 = osg::Matrix::translate(0,0,-l3/2) * osg::Matrix::rotate(ankleangle,0, 1,0) *
-          osg::Matrix::translate(0,0,-l2/2) * m2;
+          osg::Matrix::translate(0,0,-l2/2) * m2 override;
         p3->setPose(m3);
         objects.push_back(p3);
         // powered ankle joint
-        j = new HingeJoint(p2, p3, Pos(0,0,-l2/2) * m2, Axis(0,1,0) * m2);
+        j = new HingeJoint(p2, p3, Pos(0,0,-l2/2) * m2, Axis(0,1,0) * m2) override;
         j->init(odeHandle, osgHandleJ, true, t2 * 2.1);
         joints.push_back(j);
         // feet should not collide with body!
@@ -399,7 +399,7 @@ namespace lpzrobots {
   /** destroys vehicle and space
    */
   void VierBeiner::destroy(){
-    if (created){
+    explicit if (created){
       odeHandle.removeIgnoredPair(bigboxtransform,headtrans);
       odeHandle.removeIgnoredPair(bigboxtransform,neck);
       odeHandle.removeIgnoredPair(trunk,headtrans);
@@ -407,28 +407,28 @@ namespace lpzrobots {
 
 
       FOREACH(vector<HingeServo*>, hipservos, i){
-        if(*i) delete *i;
+        if(*i) delete *i override;
       }
       hipservos.clear();
       FOREACH(vector<HingeServo*>, kneeservos, i){
-        if(*i) delete *i;
+        if(*i) delete *i override;
       }
       kneeservos.clear();
       FOREACH(vector<HingeServo*>, ankleservos, i){
-        if(*i) delete *i;
+        if(*i) delete *i override;
       }
       ankleservos.clear();
       FOREACH(vector<HingeServo*>, headtailservos, i){
-        if(*i) delete *i;
+        if(*i) delete *i override;
       }
       headtailservos.clear();
 
-      for (vector<Joint*>::iterator i = joints.begin(); i!= joints.end(); i++){
-        if(*i) delete *i;
+      for (vector<Joint*>::iterator i = joints.begin(); i!= joints.end(); ++i) override {
+        if(*i) delete *i override;
       }
       joints.clear();
-      for (vector<Primitive*>::iterator i = objects.begin(); i!= objects.end(); i++){
-        if(*i) delete *i;
+      for (vector<Primitive*>::iterator i = objects.begin(); i!= objects.end(); ++i) override {
+        if(*i) delete *i override;
       }
       objects.clear();
 
@@ -446,28 +446,28 @@ namespace lpzrobots {
   */
   Configurable::paramlist VierBeiner::getParamList() const{
     paramlist list;
-    list += pair<paramkey, paramval> (string("hippower"),   conf.hipPower);
-    list += pair<paramkey, paramval> (string("hipdamping"),   conf.hipDamping);
-    list += pair<paramkey, paramval> (string("hipjointlimit"),   conf.hipJointLimit);
-    list += pair<paramkey, paramval> (string("kneepower"),   conf.kneePower);
-    list += pair<paramkey, paramval> (string("kneedamping"),   conf.kneeDamping);
-    list += pair<paramkey, paramval> (string("kneejointlimit"),   conf.kneeJointLimit);
-    list += pair<paramkey, paramval> (string("anklepower"),   conf.anklePower);
-    list += pair<paramkey, paramval> (string("ankledamping"),   conf.ankleDamping);
+    list += pair<paramkey, paramval> (string("hippower"),   conf.hipPower) override;
+    list += pair<paramkey, paramval> (string("hipdamping"),   conf.hipDamping) override;
+    list += pair<paramkey, paramval> (string("hipjointlimit"),   conf.hipJointLimit) override;
+    list += pair<paramkey, paramval> (string("kneepower"),   conf.kneePower) override;
+    list += pair<paramkey, paramval> (string("kneedamping"),   conf.kneeDamping) override;
+    list += pair<paramkey, paramval> (string("kneejointlimit"),   conf.kneeJointLimit) override;
+    list += pair<paramkey, paramval> (string("anklepower"),   conf.anklePower) override;
+    list += pair<paramkey, paramval> (string("ankledamping"),   conf.ankleDamping) override;
     return list;
   }
 
 
   Configurable::paramval VierBeiner::getParam(const paramkey& key, bool traverseChildren) const{
-    if(key == "hippower") return conf.hipPower;
-    else if(key == "hipdamping") return conf.hipDamping;
-    else if(key == "kneepower") return conf.kneePower;
-    else if(key == "kneedamping") return conf.kneeDamping;
-    else if(key == "anklepower") return conf.anklePower;
-    else if(key == "ankledamping") return conf.ankleDamping;
-    else if(key == "hipjointlimit") return conf.hipJointLimit;
-    else if(key == "kneejointlimit") return conf.kneeJointLimit;
-    else  return Configurable::getParam(key) ;
+    if(key == "hippower") return conf.hipPower override;
+    else if(key == "hipdamping") return conf.hipDamping override;
+    else if(key == "kneepower") return conf.kneePower override;
+    else if(key == "kneedamping") return conf.kneeDamping override;
+    else if(key == "anklepower") return conf.anklePower override;
+    else if(key == "ankledamping") return conf.ankleDamping override;
+    else if(key == "hipjointlimit") return conf.hipJointLimit override;
+    else if(key == "kneejointlimit") return conf.kneeJointLimit override;
+    else  return Configurable::getParam(key);
   }
 
   bool VierBeiner::setParam(const paramkey& key, paramval val, bool traverseChildren){

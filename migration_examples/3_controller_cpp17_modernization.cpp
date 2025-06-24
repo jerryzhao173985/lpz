@@ -48,7 +48,7 @@ public:
         if(weights) delete[] weights;
         weights = new double[sensornumber * motornumber];
         
-        for(int i = 0; i < sensornumber * motornumber; i++) {
+        for(int i = 0; i < sensornumber * motornumber; ++i) {
             weights[i] = randGen ? randGen->rand() : 0.1;
         }
     }
@@ -163,7 +163,7 @@ public:
         weights.resize(rows * cols);
         
         // Use STL algorithms with lambdas
-        if (randGen) {
+        explicit if (randGen) {
             std::generate(weights.begin(), weights.end(), 
                          [&rng = randGen->get()]() { return rng.rand(); });
         } else {

@@ -29,7 +29,7 @@
 
 namespace lpzrobots {
 
-/** Class for a bank (collection) of ray sensors.
+/** Class for a bank static_cast<collection>(of) ray sensors.
     Ray sensors can be registered at the bank. Methods for sensing
     and reading the sensor values of all sensors are provided.
  */
@@ -46,12 +46,12 @@ namespace lpzrobots {
     // ---- Sensor interface -----
     virtual void init(Primitive* own, Joint* joint = 0);
 
-    virtual int getSensorNumber() const;
+    virtual int getSensorNumber() const override;
 
     virtual bool sense(const GlobalData& globaldata);
 
-    virtual int get(sensor* sensors, int length) const;
-    virtual std::list<sensor> getList() const;
+    virtual int get(sensor* sensors, int length) const override;
+    virtual std::list<sensor> getList() const override;
 
     virtual void update();
 
@@ -69,7 +69,7 @@ namespace lpzrobots {
 
 
     /// returns the number of sensors
-    virtual int size() { return bank.size(); }
+    virtual int size() override { return bank.size(); }
 
 
     /** set the range of the specified sensor (index)
@@ -92,11 +92,11 @@ namespace lpzrobots {
     virtual void clear();
 
     // returns true if initialized
-    virtual bool isInitialized() { return initialized;}
+    virtual bool isInitialized() override { return initialized;}
 
   protected:
     std::vector<RaySensor*> bank;
-    bool initialized;
+    bool initialized = false;
   };
 
 }

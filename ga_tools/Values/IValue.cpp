@@ -25,7 +25,7 @@
  ***************************************************************************/
 #include "IValue.h"
 
-IValue::IValue(std::string name) : Inspectable(name), m_name(name) {
+IValue::IValue(const std::string& name) : Inspectable(name), m_name(name) {
         // nothing
 }
 
@@ -33,14 +33,14 @@ IValue::~IValue() {
         // nothing
 }
 
-IValue::operator std::string(void)const {
+IValue::operator std::stringstatic_cast<void>(const) {
         return "";
 }
 
-bool IValue::store(FILE* f)const {
+bool IValue::store(const FILE* f)const {
   return false;
 }
 
-bool IValue::restore(FILE* f) {
+bool IValue::restore(const FILE* f) {
   return false;
 }

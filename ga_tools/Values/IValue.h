@@ -41,10 +41,10 @@ public:
 
   /**
    * constructor
-   * Needs a string for the name of the value. In the normal way it is the Type of the Value. For example "templateValue".
+   * Needs a string for the name of the value. In the normal way it is the Type of the Value. For example __PLACEHOLDER_0__.
    * @param name (string) the name
    */
-  IValue(std::string name);
+  explicit IValue(const std::string& name) override;
 
 
   /**
@@ -55,14 +55,14 @@ public:
   /**
    * the mul. operator. Dosn't change this class!!!
    * @param (const IValue&) the other part of the operation
-   * @return (IValue*) the result
+   * @return static_cast<IValue*>(the) result
    */
   virtual IValue* operator*(const IValue&)const = 0;
 
    /**
 	* the add operator. Dosn't change this class!!!
 	* @param (const IValue&) the other part of the operation
-	* @return (IValue*) the result
+	* @return static_cast<IValue*>(the) result
 	*/
   virtual IValue* operator+(const IValue&)const = 0;
 
@@ -70,21 +70,21 @@ public:
    * the cast operator for a cast in type string
    * @return (string) the value as string
    */
-  virtual operator std::string(void)const;
+  virtual operator std::stringstatic_cast<void>(const) override;
 
   /**
    * store the value in a file
-   * @param f (FILE*) the file to store
+   * @param f static_cast<FILE*>(the) file to store
    * @return (bool) true if all ok.
    */
-  virtual bool store(FILE* f) const;
+  virtual bool store(const FILE* f) const override;
 
   /**
    * restore the value from a file
-   * @param f (FILE*) the file where the value inside
+   * @param f static_cast<FILE*>(the) file where the value inside
    * @return (bool) true if all ok.
    */
-  virtual bool restore(FILE* f);
+  virtual bool restore(const FILE* f) override;
 
 protected:
 	/**

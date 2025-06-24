@@ -8,7 +8,7 @@
  *   LICENSE:                                                              *
  *   This work is licensed under the Creative Commons                      *
  *   Attribution-NonCommercial-ShareAlike 2.5 License. To view a copy of   *
- *   this license, visit http://creativecommons.org/licenses/by-nc-sa/2.5/ *
+ *   this license, visit http:__PLACEHOLDER_40__
  *   or send a letter to Creative Commons, 543 Howard Street, 5th Floor,   *
  *   San Francisco, California, 94105, USA.                                *
  *                                                                         *
@@ -93,7 +93,7 @@ InvertMotorBigModel::init(int sensornumber, int motornumber, RandGen* randGen) {
   x_buffer = new Matrix[buffersize];
   y_buffer = new Matrix[buffersize];
   eta_buffer = new Matrix[buffersize];
-  for (unsigned int k = 0; k < buffersize; k++) {
+  for (unsigned int k = 0; k < buffersize; ++k) {
     x_buffer[k].set(number_sensors, 1);
     y_buffer[k].set(number_motors, 1);
     eta_buffer[k].set(number_motors, 1);
@@ -120,7 +120,7 @@ InvertMotorBigModel::step(const sensor* x_, int number_sensors, motor* y_, int n
     learnController();
   }
   // update step counter
-  t++;
+  ++t;
 };
 
 /// performs one step without learning. Calulates motor commands from sensor inputs.
@@ -131,7 +131,7 @@ InvertMotorBigModel::stepNoLearning(const sensor* x,
                                     int number_motors) {
   fillBuffersAndControl(x, number_sensors, y, number_motors);
   // update step counter
-  t++;
+  ++t;
 };
 
 void
@@ -139,8 +139,8 @@ InvertMotorBigModel::fillBuffersAndControl(const sensor* x_,
                                            int number_sensors,
                                            motor* y_,
                                            int number_motors) {
-  assert((unsigned)number_sensors == this->number_sensors &&
-         (unsigned)number_motors == this->number_motors);
+  assert(static_cast<unsigned>(number_sensors) == this->number_sensors &&
+         static_cast<unsigned>(number_motors) == this->number_motors);
 
   Matrix x(number_sensors, 1, x_);
 
@@ -164,8 +164,7 @@ InvertMotorBigModel::fillBuffersAndControl(const sensor* x_,
   y.convertToBuffer(y_, number_motors);
 }
 
-double
-regularizedInverse_bigmodel(double v) {
+double regularizedInverse_bigmodel(double v) {
   return 1 / (fabs(v) + 0.1);
 }
 
@@ -208,7 +207,7 @@ InvertMotorBigModel::learnController() {
 //  Please note that the delayed values are NOT used for the error calculation
 //  (this is done in calcXsi())
 void
-InvertMotorBigModel::calcCandHUpdates(Matrix& C_update, Matrix& H_update, int y_delay) {
+InvertMotorBigModel::calcCandHUpdates(const Matrix& C_update, const Matrix& H_update, int y_delay) {
   assert(steps + y_delay < buffersize);
   // Matrix& eta = zero_eta;
   // Matrix v_old = (eta_buffer[t%buffersize]).map(g);
@@ -220,7 +219,7 @@ InvertMotorBigModel::calcCandHUpdates(Matrix& C_update, Matrix& H_update, int y_
     H_updateTeaching.set(H.getM(), H.getN());
   }
   Matrix v = zero_eta;
-  for (unsigned int s = 1; s <= steps; s++) {
+  for (unsigned int s = 1; s <= steps; ++s) {
     const Matrix& eta = eta_buffer[(t - s) % buffersize].map(g);
 
     // const Matrix& x      = A * z.map(g) + xsi;
@@ -266,7 +265,7 @@ InvertMotorBigModel::calcCandHUpdates(Matrix& C_update, Matrix& H_update, int y_
     }
   }
   // we are just using the last shift here! Is this of any problem.
-  double error_factor = calcErrorFactor(v, (logaE & 1) != 0, (rootE & 1) != 0);
+  double error_factor = calcErrorFactor(v, (logaE >= 1), (rootE >= 1));
   C_update *= error_factor;
   H_update *= error_factor;
   if (teaching) {
@@ -296,7 +295,7 @@ InvertMotorBigModel::learnModel(int delay) {
     pain = 1; // xsi_norm/ xsi_norm_avg/5;
   } else {
     pain = 0; // pain > 1 ? pain*0.9: 0;
-    double error_factor = calcErrorFactor(xsi, (logaE & 2) != 0, (rootE & 2) != 0);
+    double error_factor = calcErrorFactor(xsi, (logaE >= 2), (rootE >= 2));
     conf.model->learn(y, x, error_factor);
     if (conf.useS) {
       const Matrix& x_primes = calcDerivatives(x_buffer, 1);
@@ -337,22 +336,22 @@ InvertMotorBigModel::management() {
     S -= S * (dampS * managementInterval * epsA);
   }
   if (inhibition) {
-    kwtaInhibition(C, max((int)kwta, 1), inhibition * managementInterval * epsC);
+    kwtaInhibition(C, max(static_cast<int>(kwta), 1), inhibition * managementInterval * epsC);
   } else if (limitRF) {
-    limitC(C, max(1, (int)limitRF));
+    limitC(C, max(1, static_cast<int>(limitRF)));
   }
 }
 
 void
-InvertMotorBigModel::kwtaInhibition(matrix::Matrix& wm, unsigned int k, double damping) {
+InvertMotorBigModel::kwtaInhibition(const matrix::Matrix& wm, unsigned int k, double damping) {
   unsigned int n = wm.getN();
   unsigned int k1 = std::min(n, k); // avoid overfloats
   double inhfactor = 1 - damping;
   //  double exfactor  = 1+(damping/k1);
-  for (unsigned int i = 0; i < wm.getM(); i++) {
+  for (unsigned int i = 0; i < wm.getM(); ++i) {
     Matrix r = wm.row(i).map(fabs);
     double x = getKthLargestElement(r, k1);
-    for (unsigned int j = 0; j < n; j++) {
+    for (unsigned int j = 0; j < n; ++j) {
       if (fabs(wm.val(i, j)) < x) {
         wm.val(i, j) *= inhfactor;
       } // else {
@@ -364,12 +363,12 @@ InvertMotorBigModel::kwtaInhibition(matrix::Matrix& wm, unsigned int k, double d
 }
 
 void
-InvertMotorBigModel::limitC(matrix::Matrix& wm, unsigned int rfSize) {
+InvertMotorBigModel::limitC(const matrix::Matrix& wm, unsigned int rfSize) {
   int n = wm.getN();
   int m = wm.getM();
-  for (int i = 0; i < m; i++) {
-    for (int j = 0; j < n; j++) {
-      if (std::abs(i - j) > (int)rfSize - 1)
+  for (int i = 0; i < m; ++i) {
+    for (int j = 0; j < n; ++j) {
+      if (std::abs(i - j) > static_cast<int>(rfSize) - 1)
         wm.val(i, j) = 0;
     }
   }
@@ -473,8 +472,7 @@ InvertMotorBigModel::getStructuralConnections() const {
   return l;
 }
 
-double
-clip095_bigmodel(double x) {
+double clip095_bigmodel(double x) {
   return clip(x, -0.95, 0.95);
 }
 

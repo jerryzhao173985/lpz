@@ -34,7 +34,8 @@
 
 
 #include <cmath>
-#define PI M_PI // (3.14159265358979323846)
+// Use M_PI directly instead of defining PI to avoid conflicts with osg::PI
+// #define PI M_PI // (3.14159265358979323846)
 #include <vector>
 #include <iterator>
 #include <string>
@@ -89,31 +90,31 @@ namespace lpzrobots {
     virtual bool restart(const OdeHandle&, const OsgHandle&, GlobalData& globalData);
 
     /// end() is called at the end and should tidy up
-    virtual void end(GlobalData& globalData);
+    virtual void end(const GlobalData& globalData);
     /** config() is called when the user presses Ctrl-C
         @return false to exit program, true otherwise
     */
-    virtual bool config(GlobalData& globalData);
+    virtual bool config(const GlobalData& globalData);
     /** is called if a key was pressed.
         For keycodes see: osgGA::GUIEventAdapter
         @return true if the key was handled
     */
     virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData,
-                         int key, bool down) { return false; };
+                         int key, bool down) override { return false; };
 
     /** this can be used to describe the key bindings used by command()
      */
-    virtual void bindingDescription(osg::ApplicationUsage & au) const {};
+    virtual void bindingDescription(osg::ApplicationUsage & au) const override {} override;
 
     /** this can be used to print additional usage information (cmd-line options)
      */
-    virtual void usage() const {};
+    virtual void usage() const override {} override;
 
     /** collCallback() can be used to overload the standart collision handling.
         However it is called after the robots collision handling.
         @return true if collision is treated, false otherwise
     */
-    virtual bool collCallback(const OdeHandle&, void* data, dGeomID o1, dGeomID o2) { return false;};
+    virtual bool collCallback(const OdeHandle&, void* data, dGeomID o1, dGeomID o2) override { return false;} override;
 
     /** optional additional callback function which is called every simulation step.
         Called between physical simulation step and drawing.
@@ -121,7 +122,7 @@ namespace lpzrobots {
         @param pause always false (only called of simulation is running)
         @param control indicates that robots have been controlled this timestep
      */
-    virtual void addCallback(GlobalData& globalData, bool draw, bool pause, bool control) {};
+    virtual void addCallback(const GlobalData& globalData, bool draw, bool pause, bool control) override {} override;
 
     /** adds a palette file to be loaded at initialization time
         Call this before run()!
@@ -136,11 +137,11 @@ namespace lpzrobots {
 
     virtual void osgStep();
 
-    virtual void doOnCallBack(BackCaller *src, BackCaller::CallbackableType type=BackCaller::DEFAULT_CALLBACKABLE_TYPE) override;
+    virtual void doOnCallBack(BackCaller *src, BackCaller::CallbackableType type=BackCaller::DEFAULT_CALLBACKABLE_TYPE);
 
   protected:
     // GUIEventHandler
-    virtual bool handle(const osgGA::GUIEventAdapter& ea,osgGA::GUIActionAdapter&) override;
+    virtual bool handle(const osgGA::GUIEventAdapter& ea,osgGA::GUIActionAdapter&);
     virtual void getUsage (osg::ApplicationUsage & au) const override;
     virtual bool init(int argc, char** argv);
 
@@ -156,9 +157,9 @@ namespace lpzrobots {
      * Sets the mode of the camera, the numbers are the same like the keys
      * @param mode see CameraMode
      */
-    void setCameraMode(CameraMode mode);
+    void setCameraMode(const CameraMode& mode);
 
-    /// start video recording (write frames to name(XXX) folder)
+    /// start video recording (write frames to namestatic_cast<XXX>(folder))
     bool startVideoRecording(const char* name);
     /// stop video recording
     bool stopVideoRecording();
@@ -170,7 +171,7 @@ namespace lpzrobots {
     void setWatchedAgent(OdeAgent* agent);
 
     /// returns the watched agent (or 0)
-    OdeAgent* getWatchedAgent() const;
+    const OdeAgent* getWatchedAgent() const const override;
 
     static void nearCallback_TopLevel(void *data, dGeomID o1, dGeomID o2);
     static void nearCallback(void *data, dGeomID o1, dGeomID o2);
@@ -189,10 +190,10 @@ namespace lpzrobots {
     __attribute__ ((deprecated)) void showParams(const ConfigList& configs) {}
 
   private:
-    void insertCmdLineOption(int& argc,char**& argv);
+    void insertCmdLineOption(const int& argc,char**& argv);
     bool loop();
     /// clears obstacle and agents lists and delete entries
-    void tidyUp(GlobalData& globalData);
+    void tidyUp(const GlobalData& globalData);
 
   protected:
     /// returns false if the program is to exit
@@ -200,7 +201,7 @@ namespace lpzrobots {
     void resetSyncTimer();
     long timeOfDayinMS();
 
-    std::list<std::pair<std::string, double> > parseKeyValuePairs(std::string kv);
+    std::list<std::pair<std::string, double> > parseKeyValuePairs(const std::string& kv);
   private:
     static void control_c(int i);
     static void cmd_handler_exit();
@@ -218,29 +219,29 @@ namespace lpzrobots {
     GlobalData globalData;
     osg::ref_ptr<VideoStream> videostream;
 
-    long realtimeoffset;
-    long simtimeoffset;
-    double truerealtimefactor; // calculated true speed
-    bool justresettimes;      // true if we just reset sync times
-    bool drawContacts;
+    long realtimeoffset = 0;
+    long simtimeoffset = 0;
+    double truerealtimefactor = 0; // calculated true speed
+    bool justresettimes = false;      // true if we just reset sync times
+    bool drawContacts = false;
 
     paramint windowWidth;
     paramint windowHeight;
 
     paramint defaultFPS;      // default framerate
 
-    bool pause;
-    bool simulation_time_reached;
+    bool pause = false;
+    bool simulation_time_reached = false;
     long int simulation_time;
-    bool noGraphics;
-    bool useKeyHandler;
+    bool noGraphics = false;
+    bool useKeyHandler = false;
 
     // use globalData.sim_step instead
      //long sim_step;
 
-    int guiloggerinterval;
-    int filelogginginterval;
-    int matrixvizinterval;
+    int guiloggerinterval = 0;
+    int filelogginginterval = 0;
+    int matrixvizinterval = 0;
 
     /// parameters for configurables set on commandline
     std::string initConfParams;
@@ -251,7 +252,7 @@ namespace lpzrobots {
     //  OdeRobot* viewedRobot; // the robot who is viewed from the camera
 
     /// the current cycle; the simulation restarts if restart() returns true
-    int currentCycle;
+    int currentCycle = 0;
 
     CameraHandle cameraHandle;
 
@@ -273,20 +274,20 @@ namespace lpzrobots {
 
     std::list<std::string> paletteFiles;
     std::list<std::string> colorAliasFiles;
-    bool verboseColorLoading;
+    bool verboseColorLoading = false;
 
 
     // -conf detected in console arguments?
-    bool startConfigurator;
+    bool startConfigurator = false;
 
     // multiprocessoring stuff
     pthread_t odeThread;
     pthread_t osgThread;
-    bool odeThreadCreated;
-    bool osgThreadCreated;
+    bool odeThreadCreated = false;
+    bool osgThreadCreated = false;
 
   private:
-    bool commandline_param_dummy;
+    bool commandline_param_dummy = false;
 
   };
 

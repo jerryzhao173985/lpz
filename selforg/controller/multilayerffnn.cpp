@@ -117,8 +117,8 @@ MultiLayerFFNN::learn(const Matrix& input, const Matrix& nom_output, double lear
   int layernum = layers.size();
   double epsilon = eps * learnRateFactor;
 
-  assert(weights.size() == (unsigned)layernum);
-  assert(bias.size() == (unsigned)layernum);
+  assert(weights.size() == static_cast<unsigned>(layernum));
+  assert(bias.size() == static_cast<unsigned>(layernum));
 
   // process inputs to calculate activations if necessary
   if (!input.equals(this->input))
@@ -149,7 +149,7 @@ MultiLayerFFNN::learn(const Matrix& input, const Matrix& nom_output, double lear
 const Matrix
 MultiLayerFFNN::inversion(const matrix::Matrix& input, const matrix::Matrix& xsi) const {
   assert(initialised);
-  int layernum = (int)layers.size();
+  int layernum = static_cast<int>(layers.size());
 
   vector<Matrix> xsis(layernum + 1);
   vector<Matrix> deltas(layernum);

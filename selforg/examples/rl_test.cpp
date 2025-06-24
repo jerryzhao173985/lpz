@@ -17,10 +17,10 @@ void testQLearning(){
     
   int x=0;
   int a = 1;
-  for(int i=0; i < 10000; i++){
+  for (int i=0; i < 10000; ++i) {
     if(a==0) x--;
     if(a==1) x++;
-    if(x<0) x=0;
+    if(x<0) x= 0;
     if(x>=size) x=size-1;
     printf("action: %i state: %i\n",a, x);
     double r = (x==size-1) ? 1 : 0;
@@ -34,17 +34,17 @@ void testQLearning(){
     }
   }
 
-//   for(int i=0; i < 6; i++){
+//   for (int i=0; i < 6; ++i) {
 //     int a = q.select(x);
 //     if(a==0) x--;
-//     if(a==1) x++;    
-//     if(x<0) x=0;
+//     if(a==1) x++;
+//     if(x<0) x= 0;
 //     if(x>4) x=4;
 //     x=i%5;
-//     printf("action: %i state: %i\n",a, x);
+//     printf(__PLACEHOLDER_2__,a, x);
 //     double r = (x==4) ? 1 : 0;
-//     q.learn(x,a,r);        
-//     if(x==4) x=0;
+//     q.learn(x,a,r);
+//     if(x==4) x= 0;
 //   }
 
   cerr << q.getQ();

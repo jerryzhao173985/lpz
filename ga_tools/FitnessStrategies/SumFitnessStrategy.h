@@ -41,7 +41,7 @@ public:
 	/**
 	 * default constructor
 	 */
-	SumFitnessStrategy();
+	SumFitnessStrategy() override;
 
 	/**
 	 * default destructor
@@ -51,9 +51,9 @@ public:
 	/**
 	 * implements the getFitness function of IFitnessStrategy. Calculate the Sum of all double gens.
 	 * @param individual (const Individual*) the individual
-	 * @return (double) the result
+	 * @return static_cast<double>(the) result
 	 */
-	virtual double getFitness(const Individual* individual);
+	virtual double getFitness(const Individual* individual) override;
 };
 
 #endif /* SUMFITNESSSTRATEGY_H_ */

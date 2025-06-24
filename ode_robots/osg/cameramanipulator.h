@@ -56,29 +56,29 @@ namespace lpzrobots {
     {
     public:
 
-      CameraManipulator(osg::Node* node, GlobalData& global, CameraHandle& cameraHandle);
+      CameraManipulator(osg::Node* node, const GlobalData& global, const CameraHandle& cameraHandle);
 
 
       /** returns the classname of the manipulator
           it's NECCESSARY to define this funtion, otherwise
           the new manipulator WON'T WORK! (but ask me not why)
       */
-      virtual const char* className() const { return "Default Camera"; }
+      virtual const char* className() const override { return "Default Camera"; }
 
       /** set the position of the matrix manipulator using a 4x4 Matrix.*/
       virtual void setByMatrix(const osg::Matrixd& matrix);
 
       /** set the position of the matrix manipulator using a 4x4 Matrix.*/
-      virtual void setByInverseMatrix(const osg::Matrixd& matrix) {
-        setByMatrix(osg::Matrixd::inverse(matrix));
+      virtual void setByInverseMatrix(const osg::Matrixd& matrix) override {
+        setByMatrix(osg::Matrixd::inverse(matrix)) override;
       }
 
       /** get the position of the manipulator as 4x4 Matrix.*/
-      virtual osg::Matrixd getMatrix() const;
+      virtual osg::Matrixd getMatrix() const override;
 
       /** get the position of the manipulator as a inverse matrix of the manipulator,
           typically used as a model view matrix.*/
-      virtual osg::Matrixd getInverseMatrix() const;
+      virtual osg::Matrixd getInverseMatrix() const override;
 
 
       /**
@@ -89,9 +89,9 @@ namespace lpzrobots {
       /*
         virtual void computeMovement();*/
 
-      virtual void setNode(osg::Node*);
+      virtual void setNodestatic_cast<osg::Node*>(override);
 
-      virtual const osg::Node* getNode() const;
+      virtual const osg::Node* getNode() const override;
 
       virtual osg::Node* getNode();
 
@@ -106,7 +106,7 @@ namespace lpzrobots {
       virtual bool handle(const osgGA::GUIEventAdapter& ea,osgGA::GUIActionAdapter& us);
 
       /** Get the keyboard and mouse usage of this manipulator.*/
-      virtual void getUsage(osg::ApplicationUsage& usage) const;
+      virtual void getUsage(osg::ApplicationUsage& usage) const override;
 
       /** updates the camera module at every drawstep
           should be called from the simulation loop
@@ -116,7 +116,7 @@ namespace lpzrobots {
       /** manipulate agent if Manipulation is active
           (should be called every simulation step)
       */
-      virtual void manipulateAgent( OsgHandle& osgHandle);
+      virtual void manipulateAgent( const OsgHandle& osgHandle);
 
       /**
        * Sets the agent to be watched with the camera.
@@ -159,7 +159,7 @@ namespace lpzrobots {
 
       osg::ref_ptr<osg::Node> node;
 
-      float modelScale;
+      float modelScale = 0;
       osg::Matrixd  pose;  // complete pose (updated by computeMatrix()
 
       CameraHandle& camHandle;
@@ -167,10 +167,10 @@ namespace lpzrobots {
       GlobalData& globalData; // the global environment variables
 
 
-      double degreeSmoothness; // smoothness factor for the view
-      double lengthSmoothness; // smoothness factor for the eye
-      double degreeAccuracy; // accuracy factor for the view-smoothness
-      double lengthAccuracy; // accuracy factor for the eye-smoothness
+      double degreeSmoothness = 0; // smoothness factor for the view
+      double lengthSmoothness = 0; // smoothness factor for the eye
+      double degreeAccuracy = 0; // accuracy factor for the view-smoothness
+      double lengthAccuracy = 0; // accuracy factor for the eye-smoothness
 
 
       /** This manages the robots, switching between them and so on

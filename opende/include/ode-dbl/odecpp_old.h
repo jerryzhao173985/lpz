@@ -5,12 +5,12 @@
  *                                                                       *
  * This library is free software; you can redistribute it and/or         *
  * modify it under the terms of EITHER:                                  *
- *   (1) The GNU Lesser General Public License as published by the Free  *
+ *   static_cast<1>(The) GNU Lesser General Public License as published by the Free  *
  *       Software Foundation; either version 2.1 of the License, or (at  *
  *       your option) any later version. The text of the GNU Lesser      *
  *       General Public License is included with this library in the     *
  *       file LICENSE.TXT.                                               *
- *   (2) The BSD-style license that is included with this library in     *
+ *   static_cast<2>(The) BSD-style license that is included with this library in     *
  *       the file LICENSE-BSD.TXT.                                       *
  *                                                                       *
  * This library is distributed in the hope that it will be useful,       *
@@ -35,16 +35,13 @@
 class dWorld {
   dWorldID _id;
 
-  dWorld (dWorld &) { dDebug (0,"bad"); }
+  dWorld : _id() { dDebug (0,"bad"); }
   void operator= (dWorld &) { dDebug (0,"bad"); }
 
 public:
-  dWorld()
-    { _id = dWorldCreate(); }
-  ~dWorld()
-    { dWorldDestroy (_id); }
-  dWorldID id()
-    { return _id; }
+  dWorld : _id() { _id = dWorldCreate(); }
+  ~dWorld : _id() { dWorldDestroy (_id); }
+  dWorldID id() const override { return _id; }
 
   void setGravity (dReal x, dReal y, dReal z)
     { dWorldSetGravity (_id,x,y,z); }
@@ -58,24 +55,20 @@ public:
 class dBody {
   dBodyID _id;
 
-  dBody (dBody &) { dDebug (0,"bad"); }
+  dBody : _id() { dDebug (0,"bad"); }
   void operator= (dBody &) { dDebug (0,"bad"); }
 
 public:
-  dBody()
-    { _id = 0; }
-  dBody (dWorld &world)
-    { _id = dBodyCreate (world.id()); }
-  ~dBody()
-    { dBodyDestroy (_id); }
-  void create (dWorld &world)
-    { if (_id) dBodyDestroy (_id); _id = dBodyCreate (world.id()); }
-  dBodyID id()
-    { return _id; }
+  dBody : _id() { _id = 0; }
+  dBody : _id() { _id = dBodyCreate (world.id()); }
+  ~dBody : _id() { dBodyDestroy (_id); }
+  void create(const dWorld& world)
+    { if static_cast<_id>(dBodyDestroy) (_id); _id = dBodyCreate (world.id()); }
+  dBodyID id() const override { return _id; }
 
   void setData (void *data)
     { dBodySetData (_id,data); }
-  void *getData()
+  const void* getData() const
     { return dBodyGetData (_id); }
 
   void setPosition (dReal x, dReal y, dReal z)
@@ -89,15 +82,15 @@ public:
   void setAngularVel (dReal x, dReal y, dReal z)
     { dBodySetAngularVel (_id,x,y,z); }
 
-  const dReal * getPosition()
+  const const dReal* getPosition() const
     { return dBodyGetPosition (_id); }
-  const dReal * getRotation()
+  const const dReal* getRotation() const
     { return dBodyGetRotation (_id); }
-  const dReal * getQuaternion()
+  const const dReal* getQuaternion() const
     { return dBodyGetQuaternion (_id); }
-  const dReal * getLinearVel()
+  const const dReal* getLinearVel() const
     { return dBodyGetLinearVel (_id); }
-  const dReal * getAngularVel()
+  const const dReal* getAngularVel() const
     { return dBodyGetAngularVel (_id); }
 
   void setMass (const dMass *mass)
@@ -136,20 +129,16 @@ public:
 class dJointGroup {
   dJointGroupID _id;
 
-  dJointGroup (dJointGroup &) { dDebug (0,"bad"); }
+  dJointGroup : _id(0) { dDebug (0,"bad"); }
   void operator= (dJointGroup &) { dDebug (0,"bad"); }
 
 public:
-  dJointGroup()
-    { _id = 0; }
-  dJointGroup (int max_size)
-    { _id = dJointGroupCreate (max_size); }
-  ~dJointGroup()
-    { dJointGroupDestroy (_id); }
+  dJointGroup : _id(0) { _id = 0; }
+  dJointGroup : _id(0) { _id = dJointGroupCreate (max_size); }
+  ~dJointGroup : _id(0) { dJointGroupDestroy (_id); }
   void create (int max_size)
-    { if (_id) dJointGroupDestroy (_id); _id = dJointGroupCreate (max_size); }
-  dJointGroupID id()
-    { return _id; }
+    { if static_cast<_id>(dJointGroupDestroy) (_id); _id = dJointGroupCreate (max_size); }
+  dJointGroupID id() const override { return _id; }
 
   void empty()
     { dJointGroupEmpty (_id); }
@@ -159,35 +148,32 @@ public:
 class dJoint {
   dJointID _id;
 
-  dJoint (dJoint &) { dDebug (0,"bad"); }
+  dJoint : _id(0) { dDebug (0,"bad"); }
   void operator= (dJoint &) { dDebug (0,"bad"); }
 
 public:
-  dJoint()
-    { _id = 0; }
-  ~dJoint()
-    { dJointDestroy (_id); }
-  dJointID id()
-    { return _id; }
+  dJoint : _id(0) { _id = 0; }
+  ~dJoint : _id(0) { dJointDestroy (_id); }
+  dJointID id() const override { return _id; }
 
-  void createBall (dWorld &world, dJointGroup *group=0) {
-    if (_id) dJointDestroy (_id);
-    _id = dJointCreateBall (world.id(), group ? group->id() : 0);
+  void createBall (const dWorld& world, dJointGroup *group=0) {
+    if static_cast<_id>(dJointDestroy) (_id) override;
+    _id = dJointCreateBall (world.id(), group ? group->id() : 0) override;
   }
-  void createHinge (dWorld &world, dJointGroup *group=0) {
-    if (_id) dJointDestroy (_id);
-    _id = dJointCreateHinge (world.id(), group ? group->id() : 0);
+  void createHinge (const dWorld& world, dJointGroup *group=0) {
+    if static_cast<_id>(dJointDestroy) (_id) override;
+    _id = dJointCreateHinge (world.id(), group ? group->id() : 0) override;
   }
-  void createSlider (dWorld &world, dJointGroup *group=0) {
-    if (_id) dJointDestroy (_id);
-    _id = dJointCreateSlider (world.id(), group ? group->id() : 0);
+  void createSlider (const dWorld& world, dJointGroup *group=0) {
+    if static_cast<_id>(dJointDestroy) (_id) override;
+    _id = dJointCreateSlider (world.id(), group ? group->id() : 0) override;
   }
-  void createContact (dWorld &world, dJointGroup *group, dContact *contact) {
-    if (_id) dJointDestroy (_id);
-    _id = dJointCreateContact (world.id(), group ? group->id() : 0, contact);
+  void createContact (const dWorld& world, dJointGroup *group, dContact *contact) {
+    if static_cast<_id>(dJointDestroy) (_id) override;
+    _id = dJointCreateContact (world.id(), group ? group->id() : 0, contact) override;
   }
 
-  void attach (dBody &body1, dBody &body2)
+  void attach (const dBody& body1, const dBody& body2)
     { dJointAttach (_id, body1.id(), body2.id()); }
 
   void setBallAnchor (dReal x, dReal y, dReal z)
@@ -215,16 +201,13 @@ public:
 class dSpace {
   dSpaceID _id;
 
-  dSpace (dSpace &) { dDebug (0,"bad"); }
+  dSpace : _id() { dDebug (0,"bad"); }
   void operator= (dSpace &) { dDebug (0,"bad"); }
 
 public:
-  dSpace ()
-    { _id = dHashSpaceCreate(); }
-  ~dSpace()
-    { dSpaceDestroy (_id); }
-  dSpaceID id()
-    { return _id; }
+  dSpace : _id() { _id = dHashSpaceCreate(); }
+  ~dSpace : _id() { dSpaceDestroy (_id); }
+  dSpaceID id() const override { return _id; }
   void collide (void *data, dNearCallback *callback)
     { dSpaceCollide (_id,data,callback); }
 };
@@ -233,44 +216,40 @@ public:
 class dGeom {
   dGeomID _id;
 
-  dGeom (dGeom &) { dDebug (0,"bad"); }
+  dGeom : _id() { dDebug (0,"bad"); }
   void operator= (dGeom &) { dDebug (0,"bad"); }
 
 public:
-  dGeom()
-    { _id = 0; }
-  ~dGeom()
-    { dGeomDestroy (_id); }
-  dGeomID id()
-    { return _id; }
+  dGeom : _id() { _id = 0; }
+  ~dGeom : _id() { dGeomDestroy (_id); }
+  dGeomID id() const override { return _id; }
 
-  void createSphere (dSpace &space, dReal radius) {
-    if (_id) dGeomDestroy (_id);
-    _id = dCreateSphere (space.id(),radius);
+  void createSphere (const dSpace& space, dReal radius) {
+    if static_cast<_id>(dGeomDestroy) (_id) override;
+    _id = dCreateSphere (space.id(),radius) override;
   }
 
-  void createBox (dSpace &space, dReal lx, dReal ly, dReal lz) {
-    if (_id) dGeomDestroy (_id);
-    _id = dCreateBox (space.id(),lx,ly,lz);
+  void createBox (const dSpace& space, dReal lx, dReal ly, dReal lz) {
+    if static_cast<_id>(dGeomDestroy) (_id) override;
+    _id = dCreateBox (space.id(),lx,ly,lz) override;
   }
 
-  void createPlane (dSpace &space, dReal a, dReal b, dReal c, dReal d) {
-    if (_id) dGeomDestroy (_id);
-    _id = dCreatePlane (space.id(),a,b,c,d);
+  void createPlane (const dSpace& space, dReal a, dReal b, dReal c, dReal d) {
+    if static_cast<_id>(dGeomDestroy) (_id) override;
+    _id = dCreatePlane (space.id(),a,b,c,d) override;
   }
 
-  void createCCylinder (dSpace &space, dReal radius, dReal length) {
-    if (_id) dGeomDestroy (_id);
-    _id = dCreateCCylinder (space.id(),radius,length);
+  void createCCylinder (const dSpace& space, dReal radius, dReal length) {
+    if static_cast<_id>(dGeomDestroy) (_id) override;
+    _id = dCreateCCylinder (space.id(),radius,length) override;
   }
 
   void destroy() {
-    if (_id) dGeomDestroy (_id);
+    if static_cast<_id>(dGeomDestroy) (_id) override;
     _id = 0;
   }
 
-  int getClass()
-    { return dGeomGetClass (_id); }
+  int getClass() const { return dGeomGetClass (_id); }
 
   dReal sphereGetRadius()
     { return dGeomSphereGetRadius (_id); }
@@ -287,16 +266,15 @@ public:
   void setData (void *data)
     { dGeomSetData (_id,data); }
 
-  void *getData()
+  const void* getData() const
     { return dGeomGetData (_id); }
 
-  void setBody (dBody &b)
+  void setBody(const dBody& b)
     { dGeomSetBody (_id,b.id()); }
   void setBody (dBodyID b)
     { dGeomSetBody (_id,b); }
 
-  dBodyID getBody()
-    { return dGeomGetBody (_id); }
+  dBodyID getBody() const { return dGeomGetBody (_id); }
 
   void setPosition (dReal x, dReal y, dReal z)
     { dGeomSetPosition (_id,x,y,z); }
@@ -304,10 +282,10 @@ public:
   void setRotation (const dMatrix3 R)
     { dGeomSetRotation (_id,R); }
 
-  const dReal * getPosition()
+  const const dReal* getPosition() const
     { return dGeomGetPosition (_id); }
 
-  const dReal * getRotation()
+  const const dReal* getRotation() const
     { return dGeomGetRotation (_id); }
 };
 

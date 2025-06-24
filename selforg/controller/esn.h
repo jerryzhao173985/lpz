@@ -30,14 +30,13 @@
 #include <stdio.h>
 
 struct ESNConf {
-  int numNeurons;         ///< number of neurons in the reservoir
-  double inputStrength;   ///< strength of input to reservoir connections
-  double inputRatio;      ///< ratio of input connections w.r.t full connectivity
-  double connectionRatio; ///< ratio of internal connections w.r.t full connectivity
-  double spectralRadius;  ///< largest eigenvalue of internal weights
-  double learningrate;
-  /// switch on to get the internal weights and activations inspectabe
-  bool inspectInternals;
+  int numNeurons = 100;
+  double inputStrength = 0.1;
+  double inputRatio = 1.0;
+  double connectionRatio = 0.1;
+  double spectralRadius = 0.9;
+  bool inspectInternals = false;
+  double learningrate = 0.01;
 };
 
 /**
@@ -52,7 +51,7 @@ public:
      @param controlmask bitmask to select channels to control (default all)
      @param function controller function to use
    */
-  explicit ESN(const ESNConf& conf = getDefaultConf());
+  ESN(const ESNConf& conf = getDefaultConf());
 
   static ESNConf getDefaultConf() {
     ESNConf c;
@@ -93,8 +92,7 @@ public:
                                      const matrix::Matrix& nom_output,
                                      double learnRateFactor = 1);
 
-  /* calculates the partial derivative of the of the output with repect to the input (Jacobi
-     matrix).
+  /* calculates the partial derivative of the of the output with repect to the input(const Jacobi& matrix).
 
       \f[J_{ij} = \frac{\partial output_i}{\partial input_j}\f]
 
@@ -115,13 +113,13 @@ public:
   virtual void damp(double damping);
 
   /// returns the number of input neurons
-  virtual unsigned int getInputDim() const;
+  virtual unsigned int getInputDim() const override;
   /// returns the number of output neurons
-  virtual unsigned int getOutputDim() const;
+  virtual unsigned int getOutputDim() const override;
 
-  virtual bool store(FILE*) const;
+  virtual bool store(FILE* f) const override;
 
-  virtual bool restore(FILE*);
+  virtual bool restore(FILE* f);
 
   static double tanh_prime(double z) {
     double k = tanh(z);

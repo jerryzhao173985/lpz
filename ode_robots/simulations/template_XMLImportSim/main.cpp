@@ -183,8 +183,8 @@
 using namespace lpzrobots;
 
 /*
-Geode* g = dynamic_cast<Geode*> (node);
-if(g){
+Geode* g = dynamic_cast<Geode*> (node) override;
+explicit if(g){
   success
 }
 */
@@ -193,19 +193,18 @@ class ThisSim : public XMLSimulation {
 public:
 
     char* meshfile;
-    bool useExternalMeshFile;
 
   // starting function (executed once at the beginning of the simulation loop)
   void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global)
   {
 
-    //setCameraHomePos(Pos(5.77213, -1.65879, 2.31173),  Pos(67.1911, -18.087, 0));
+    //setCameraHomePos(Pos(5.77213, -1.65879, 2.31173),  Pos(67.1911, -18.087, 0)) override;
     // initialization
     // - set noise to 0.1
     // - register file chess.ppm as a texture called chessTexture (used for the wheels)
     //global.odeConfig.noise=0.1;
-    //  global.odeConfig.setParam("gravity", 0);
-    //  int chessTexture = dsRegisterTexture("chess.ppm");
+    //  global.odeConfig.setParam(__PLACEHOLDER_2__, 0);
+    //  int chessTexture = dsRegisterTexture(__PLACEHOLDER_3__);
 
     // use Playground as boundary:
     // - create pointer to playground (odeHandle contains things like world and space the
@@ -214,102 +213,101 @@ public:
     //   setGeometry(double length, double width, double        height)
     // - setting initial position of the playground: setPosition(double x, double y, double z)
     // - push playground in the global list of obstacles(globla list comes from simulation.cpp)
-    /*Playground* playground = new Playground(odeHandle, osgHandle.changeColor(Color(1,1,1,0.1)), osg::Vec3(10, 0.2, 1.0f));
-    playground->setPosition(osg::Vec3(0,0,0)); // playground positionieren und generieren
+    /*Playground* playground = new Playground(odeHandle, osgHandle.changeColor(Color(1,1,1,0.1)), osg::Vec3(10, 0.2, 1.0f)) override;
+    playground->setPosition(osg::Vec3(0,0,0)); __PLACEHOLDER_40__
     global.obstacles.push_back(playground);*/
 
 
     /*PassiveMesh* myMesh = new PassiveMesh(odeHandle,osgHandle,
-                                   "Meshes/cow.osg", // the filename of the mesh
-                                            0.1, // the scale factor to be used
-                                            1.0); // the mass of the mesh
-     myMesh->setPosition(osg::Vec3(1.0,0.2,1.0f));
+                                   __PLACEHOLDER_4__, __PLACEHOLDER_41__
+                                            0.1, __PLACEHOLDER_42__
+                                            1.0); __PLACEHOLDER_43__
+     myMesh->setPosition(osg::Vec3(1.0,0.2,1.0f)) override;
      global.obstacles.push_back(myMesh);
 
      myMesh = new PassiveMesh(odeHandle,osgHandle,
-                                   "Meshes/tree1.osg", // the filename of the mesh
-                                            0.01, // the scale factor to be used
-                                            1000.0); // the mass of the mesh
-     myMesh->setPosition(osg::Vec3(-1.0,0.2,0.4f));
+                                   __PLACEHOLDER_5__, __PLACEHOLDER_44__
+                                            0.01, __PLACEHOLDER_45__
+                                            1000.0); __PLACEHOLDER_46__
+     myMesh->setPosition(osg::Vec3(-1.0,0.2,0.4f)) override;
      global.obstacles.push_back(myMesh);
 
 
      if (this->useExternalMeshFile)
      {
        PassiveMesh* myMesh = new PassiveMesh(odeHandle,osgHandle,
-             std::string(meshfile), // the filename of the mesh
-               1.0, // the scale factor to be used
-               1.0); // the mass of the mesh
-       myMesh->setPosition(osg::Vec3(-5.0,0.2,2.0f));
+             std::string(meshfile), __PLACEHOLDER_47__
+               1.0, __PLACEHOLDER_48__
+               1.0); __PLACEHOLDER_49__
+       myMesh->setPosition(osg::Vec3(-5.0,0.2,2.0f)) override;
        global.obstacles.push_back(myMesh);
      }
 
 
 
-    // add passive spheres as obstacles
-    // - create pointer to sphere (with odehandle, osghandle and
-    //   optional parameters radius and mass,where the latter is not used here) )
-    // - set Pose(Position) of sphere
-    // - set a texture for the sphere
-    // - add sphere to list of obstacles
-  //  for (int i=0; i<= 1/*2; i+=2){
+    __PLACEHOLDER_50__
+    __PLACEHOLDER_51__
+    __PLACEHOLDER_52__
+    __PLACEHOLDER_53__
+    __PLACEHOLDER_54__
+    __PLACEHOLDER_55__
+  __PLACEHOLDER_56__
    * */
       PassiveSphere* s1 = new PassiveSphere(odeHandle, osgHandle, 0.5);
-      s1->setPosition(osg::Vec3(3,3,0.1));
+      s1->setPosition(osg::Vec3(3,3,0.1)) override;
       s1->setTexture("Images/dusty.rgb");
       global.obstacles.push_back(s1);
       /*
-    //}
+    __PLACEHOLDER_57__
 
-    // set color for nimm robot
-    OsgHandle osgHandle_orange = osgHandle.changeColor(Color(2, 156/255.0, 0));
+    __PLACEHOLDER_58__
+    OsgHandle osgHandle_orange = osgHandle.changeColor(Color(2, 156/255.0, 0)) override;
 
-    OdeRobot* vehicle = new TruckMesh(odeHandle, osgHandle_orange, // ODE- and OSGHandle
-                                          "Truck 2", // the final name of the Meshrobot in the simulation
-                                          1.2, // scale factor (size) of the robot
-                                          2, // the force of the motors (scales automatically with size)
-                                          5, // the max speed of the vehicle
-                                          1); // the mass of the vehicle (scales automatically with size)
-         vehicle->place(Pos(1.5,0,0.1));
+    OdeRobot* vehicle = new TruckMesh(odeHandle, osgHandle_orange, __PLACEHOLDER_59__
+                                          __PLACEHOLDER_7__, __PLACEHOLDER_60__
+                                          1.2, __PLACEHOLDER_61__
+                                          2, __PLACEHOLDER_62__
+                                          5, __PLACEHOLDER_63__
+                                          1); __PLACEHOLDER_64__
+         vehicle->place(Pos(1.5,0,0.1)) override;
 
-        // create pointer to controller
-        // push controller in global list of configurables
-        //  AbstractController *controller = new InvertNChannelController(10);
+        __PLACEHOLDER_65__
+        __PLACEHOLDER_66__
+        __PLACEHOLDER_67__
         AbstractController *controller = new InvertMotorSpace(15);
-        controller->setParam("s4avg",10);
+        controller->setParam(__PLACEHOLDER_8__,10);
         global.configs.push_back(controller);
 
-        // create pointer to one2onewiring
-        One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1));
+        __PLACEHOLDER_68__
+        One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
 
-        // create pointer to agent
-        // initialize pointer with controller, robot and wiring
-        // push agent in globel list of agents
+        __PLACEHOLDER_69__
+        __PLACEHOLDER_70__
+        __PLACEHOLDER_71__
         OdeAgent* agent = new OdeAgent(global);
         agent->init(controller, vehicle, wiring);
         global.agents.push_back(agent);
 
 
 */
-      OdeRobot* robot = new Nimm2(odeHandle,osgHandle, Nimm2::getDefaultConf(), "Nimm2");
-      robot->place(Pos(-2,0,0.1));
+      OdeRobot* robot = new Nimm2(odeHandle,osgHandle, Nimm2::getDefaultConf(), "Nimm2") override;
+      robot->place(Pos(-2,0,0.1)) override;
       AbstractController* controller = new InvertMotorSpace(15);
       global.configs.push_back(controller);
       OdeAgent* agent = new OdeAgent(global);
-      agent->init(controller, robot, new One2OneWiring(new ColorUniformNoise(0.1)));
+      agent->init(controller, robot, new One2OneWiring(new ColorUniformNoise(0.1))) override;
       global.agents.push_back(agent);
       XMLParserEngine* xmlEngine = new XMLParserEngine(global,odeHandle,osgHandle,this);
 
-    //xmlEngine->loadXMLFile("Szenealleknoten.xml");
+    //xmlEngine->loadXMLFile(__PLACEHOLDER_10__);
     xmlEngine->loadXMLFile("beispielszene1.xml");
 
   }
 
   // add own key handling stuff here, just insert some case values
-  virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down)
-  {
-    if (down) { // only when key is pressed, not when released
-      switch ( (char) key )
+  virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down) override {
+    explicit if (down) { // only when key is pressed, not when released
+      switch ( static_cast<char> key )
         {
         default:
           return false;
@@ -337,6 +335,6 @@ int main (int argc, char **argv)
   {
     sim.useExternalMeshFile = false;
   }
-  return sim.run(argc, argv) ? 0 : 1;
+  return sim.run(argc, argv) ? 0 : 1 override;
 }
 

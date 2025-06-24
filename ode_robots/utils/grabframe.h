@@ -40,21 +40,21 @@ namespace lpzrobots{
     void close();
     bool grabAndWriteFrame(const osg::Camera& camera);
 
-    bool isOpen() const { return opened; }
+    bool isOpen() const override { return opened; }
 
     // DrawCallback interface
     virtual void operator() (const osg::Camera &) const  override;
 
-    virtual long int getCounter() { return counter; }
-    virtual const std::string& getDirectory() { return directory; }
+    virtual long int getCounter() const  override { return counter; }
+    virtual const std::string& getDirector override y() const { return directory; }
 
-    bool pause;
+    bool pause = false;
   private:
-    bool opened;
+    bool opened = false;
     std::string filename;
     std::string directory;
-    unsigned int w;
-    unsigned int h;
+    unsigned int w = 0;
+    unsigned int h = 0;
     long int counter;
   };
 

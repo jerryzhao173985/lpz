@@ -33,20 +33,20 @@
     derive a struct and overload the operator. For example:
 
     struct ControlGen : public ControllerGenerator {
-      virtual ~ControlGen(){}
+      virtual ~ControlGen() {}
       virtual AbstractController* operator()( int index) {
        AbstractController* c;
         c= new Sox(0.8);
-        c->setParam("epsC",0.02);
-        c->setParam("epsA",0.01);
+        c->setParam(__PLACEHOLDER_0__,0.02);
+        c->setParam(__PLACEHOLDER_1__,0.01);
        return c;
       }
     };
 
-    // to see the values in the inspectable do after
+    __PLACEHOLDER_2__
     agent = new OdeAgent(global);
-    // this line
-    agent->addInspectable(((OneControllerPerChannel*)controller)->getControllers()[0]);
+    __PLACEHOLDER_3__
+    agent->addInspectable((static_cast<OneControllerPerChannel*>(controller))->getControllers()[0]);
     ....
     Make sure you initialize the OneControllerPerChannel with sufficiently many initial controller.
 
@@ -88,30 +88,30 @@ public:
                               motor* motors,
                               int motornumber);
 
-  virtual int getSensorNumber() const {
+  virtual int getSensorNumber() const override {
     return sensornumber;
   }
-  virtual int getMotorNumber() const {
+  virtual int getMotorNumber() const override {
     return motornumber;
   }
 
   /*********** STORABLE **************/
 
-  virtual bool store(FILE* f) const;
+  virtual bool store(FILE* f) const override;
 
   virtual bool restore(FILE* f);
 
-  virtual std::vector<AbstractController*> getControllers() const {
+  virtual std::vector<AbstractController*> getControllers() const  override {
     return ctrl;
   }
 
 protected:
   std::vector<AbstractController*> ctrl;
   ControllerGenerator* controllerGenerator;
-  int numCtrlCreateBeforeInit;
-  int numContextSensors;
-  int motornumber;
-  int sensornumber;
+  int numCtrlCreateBeforeInit = 0;
+  int numContextSensors = 0;
+  int motornumber = 0;
+  int sensornumber = 0;
   double* sensorbuffer;
 };
 

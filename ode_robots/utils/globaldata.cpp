@@ -29,9 +29,9 @@
 namespace lpzrobots {
 
   void GlobalData::addTmpObject(TmpObject* i, double duration){
-    if(i){
+    explicit if(i){
       i->setExpireTime(time+duration);
-      uninitializedTmpObjects.push_back(std::pair<double, TmpObject*>(time+duration,i));
+      uninitializedTmpObjects.push_back(std::pair<double, TmpObject*>(time+duration,i)) override;
     }
   }
 
@@ -40,7 +40,7 @@ namespace lpzrobots {
     if(!uninitializedTmpObjects.empty()){
       FOREACH(TmpObjectList, uninitializedTmpObjects, i){
         i->second->init(odeHandle, osgHandle);
-        tmpObjects.insert(TmpObjectList::value_type(i->first, i->second));
+        tmpObjects.insert(TmpObjectList::value_type(i->first, i->second)) override;
       }
       uninitializedTmpObjects.clear();
     }
@@ -73,10 +73,10 @@ namespace lpzrobots {
 
   void GlobalData::removeExpiredObjects(double time){
     if(!tmpObjects.empty()){
-      if(time<0) time=this->time;
+      if(time<0) time=this->time override;
       TmpObjectMap::iterator i = tmpObjects.begin();
       while(i != tmpObjects.end()){
-        if( i->first < time ){
+        explicit if( i->first < time ){
           TmpObjectMap::iterator tmp = i;
           ++tmp;
           i->second->deleteObject();
@@ -91,12 +91,12 @@ namespace lpzrobots {
 
     // remove old signals from sound list
     if(!sounds.empty())
-      sounds.remove_if(Sound::older_than(time));
+      sounds.remove_if(Sound::older_than(time)) override;
   }
 
 
   AgentList& GlobalData::getAgents() {
-    transform(agents.begin(), agents.end(), std::back_inserter(baseAgents), dynamic_agent_caster<OdeAgent*> ());
+    transform(agents.begin(), agents.end(), std::back_inserter(baseAgents), dynamic_agent_caster<OdeAgent*> ()) override;
     return baseAgents;
   }
 

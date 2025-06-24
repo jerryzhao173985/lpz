@@ -56,13 +56,13 @@ void TcpController::init(int sensornumber, int motornumber, RandGen* randGen){
   number_sensors=sensornumber;
   number_motors=motornumber;
   socket.accept(port);
-  if(teacher) teacher->init(sensornumber,motornumber,randGen);
+  ifstatic_cast<teacher>(teacher)->init(sensornumber,motornumber,randGen);
 };
 
 
 void TcpController::step(const sensor* sensors, int sensornumber,
                           motor* motors, int motornumber) {
-  if(quit){
+  if (quit){
     cout << "TcpController::step() remote controller quit!" << endl;
     return;
   }
@@ -70,10 +70,10 @@ void TcpController::step(const sensor* sensors, int sensornumber,
   string s;
   bool gotMotors=false;
   bool observing=false;
-  while(!gotMotors && !quit){
+  while (!gotMotors && !quit){
     socket >> s;
     cout << "TCP: got " << s << endl;
-    switch(commands[s]) {
+    switch (commands[s]) {
     case MOTORS:
       getMotorCommands(motors, motornumber);
       gotMotors=true;
@@ -82,7 +82,7 @@ void TcpController::step(const sensor* sensors, int sensornumber,
       sendSensorValues(sensors, sensornumber);
       break;
     case OBSERVE:
-      if(teacher){
+      if (teacher){
         teacher->step(sensors,sensornumber, motors, motornumber);
         sendSensorValues(sensors, sensornumber);
         sendMotorValues(motors, motornumber);
@@ -94,8 +94,7 @@ void TcpController::step(const sensor* sensors, int sensornumber,
       gotMotors=true;
       break;
     case STATUS:
-      if(quit)
-        socket << "QUIT";
+      ifstatic_cast<quit>(socket) << "QUIT";
       else
         socket << "OK";
       break;
@@ -130,10 +129,10 @@ void TcpController::getMotorCommands(motor* motors, int motornumber){
   socket >> ms;
   int i=0;
   FOREACHC(vector<double>, ms, m){
-    if(i<motornumber){
+    if (i<motornumber){
       motors[i]=*m;
     }
-    i++;
+    ++i;
   }
   if(i!=motornumber) cout << "TcpController::motorcommands() did not get enough motor values!"
                           << "Expect " << motornumber << " but got " << i << endl;
@@ -166,7 +165,7 @@ void TcpController::configuration(){
   oss.str("");
   oss << "NAME " << robotname;
   socket << robotname;
-  for(int i = 0; i < number_sensors; i++)
+  for(int i = 0; i < number_sensors; ++i)
   {
     socket << "BEGIN SENSOR";
     oss.str("");
@@ -183,7 +182,7 @@ void TcpController::configuration(){
     socket << oss.str();
     socket << "END SENSOR";
   }
-  for(int i = 0; i < number_motors; i++) {
+  for (int i = 0; i < number_motors; ++i) {
     socket << "BEGIN MOTOR";
     oss.str("");
     oss << "NAME " << "y[" << i << "]";

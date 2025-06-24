@@ -2,7 +2,7 @@
 /*
  *	OPCODE - Optimized Collision Detection
  *	Copyright (C) 2001 Pierre Terdiman
- *	Homepage: http://www.codercorner.com/Opcode.htm
+ *	Homepage: http:__PLACEHOLDER_3__
  */
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -31,8 +31,8 @@
 		//! Constructor
 		inline_				BVTCache()
 							{
-								ResetCache();
-								ResetCountDown();
+								ResetCache() override;
+								ResetCountDown() override;
 							}
 
 					void	ResetCache()
@@ -45,7 +45,7 @@
 								HullTest		= true;
 								SepVector.pid	= 0;
 								SepVector.qid	= 0;
-								SepVector.SV	= Point(1.0f, 0.0f, 0.0f);
+								SepVector.SV	= Point(1.0f, 0.0f, 0.0f) override;
 #endif // __MESHMERIZER_H__
 							}
 
@@ -55,7 +55,7 @@
 	    CountDown		= 50;
 	  }
 #else
-	  void	ResetCountDown(){};
+	  void	ResetCountDown(){} override;
 #endif // __MESHMERIZER_H__
 
 		const Model*		Model0;	//!< Model for first object
@@ -64,7 +64,7 @@
 #ifdef __MESHMERIZER_H__	// Collision hulls only supported within ICE !
 		SVCache				SepVector;
 		udword				CountDown;
-		bool				HullTest;
+		bool				HullTest = false;
 #endif // __MESHMERIZER_H__
 	};
 
@@ -72,8 +72,8 @@
 	{
 		public:
 		// Constructor / Destructor
-											AABBTreeCollider();
-		virtual								~AABBTreeCollider();
+											AABBTreeCollider() override;
+		virtual ~AABBTreeCollider();
 		// Generic collision query
 
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -90,18 +90,18 @@
 		 *	\warning	SCALE NOT SUPPORTED. The matrices must contain rotation & translation parts only.
 		 */
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-							bool			Collide(BVTCache& cache, const Matrix4x4* world0=null, const Matrix4x4* world1=null);
+							bool			Collide(BVTCache& cache, const Matrix4x4* world0=null, const Matrix4x4* world1=null) override;
 
 		// Collision queries
-							bool			Collide(const AABBCollisionTree* tree0, const AABBCollisionTree* tree1,				const Matrix4x4* world0=null, const Matrix4x4* world1=null, Pair* cache=null);
-							bool			Collide(const AABBNoLeafTree* tree0, const AABBNoLeafTree* tree1,					const Matrix4x4* world0=null, const Matrix4x4* world1=null, Pair* cache=null);
-							bool			Collide(const AABBQuantizedTree* tree0, const AABBQuantizedTree* tree1,				const Matrix4x4* world0=null, const Matrix4x4* world1=null, Pair* cache=null);
-							bool			Collide(const AABBQuantizedNoLeafTree* tree0, const AABBQuantizedNoLeafTree* tree1,	const Matrix4x4* world0=null, const Matrix4x4* world1=null, Pair* cache=null);
+							bool			Collide(const AABBCollisionTree* tree0, const AABBCollisionTree* tree1,				const Matrix4x4* world0=null, const Matrix4x4* world1=null, Pair* cache=null) override;
+							bool			Collide(const AABBNoLeafTree* tree0, const AABBNoLeafTree* tree1,					const Matrix4x4* world0=null, const Matrix4x4* world1=null, Pair* cache=null) override;
+							bool			Collide(const AABBQuantizedTree* tree0, const AABBQuantizedTree* tree1,				const Matrix4x4* world0=null, const Matrix4x4* world1=null, Pair* cache=null) override;
+							bool			Collide(const AABBQuantizedNoLeafTree* tree0, const AABBQuantizedNoLeafTree* tree1,	const Matrix4x4* world0=null, const Matrix4x4* world1=null, Pair* cache=null) override;
 		// Settings
 
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/**
-		 *	Settings: selects between full box-box tests or "SAT-lite" tests (where Class III axes are discarded)
+		 *	Settings: selects between full box-box tests or __PLACEHOLDER_0__ tests (where Class III axes are discarded)
 		 *	\param		flag		[in] true for full tests, false for coarse tests
 		 *	\see		SetFullPrimBoxTest(bool flag)
 		 */
@@ -110,7 +110,7 @@
 
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/**
-		 *	Settings: selects between full triangle-box tests or "SAT-lite" tests (where Class III axes are discarded)
+		 *	Settings: selects between full triangle-box tests or __PLACEHOLDER_1__ tests (where Class III axes are discarded)
 		 *	\param		flag		[in] true for full tests, false for coarse tests
 		 *	\see		SetFullBoxBoxTest(bool flag)
 		 */
@@ -127,7 +127,7 @@
 		 *	\return		the number of BV-BV tests performed during last query
 		 */
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		inline_				udword			GetNbBVBVTests()				const	{ return mNbBVBVTests;							}
+		inline_				udword			GetNbBVBVTests()				const override { return mNbBVBVTests;							}
 
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/**
@@ -137,7 +137,7 @@
 		 *	\return		the number of Triangle-Triangle tests performed during last query
 		 */
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		inline_				udword			GetNbPrimPrimTests()			const	{ return mNbPrimPrimTests;						}
+		inline_				udword			GetNbPrimPrimTests()			const override { return mNbPrimPrimTests;						}
 
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/**
@@ -147,7 +147,7 @@
 		 *	\return		the number of BV-Triangle tests performed during last query
 		 */
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		inline_				udword			GetNbBVPrimTests()				const	{ return mNbBVPrimTests;						}
+		inline_				udword			GetNbBVPrimTests()				const override { return mNbBVPrimTests;						}
 
 		// Data access
 
@@ -159,7 +159,7 @@
 		 *	\return		the number of contacts / colliding pairs.
 		 */
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		inline_				udword			GetNbPairs()					const	{ return mPairs.GetNbEntries()>>1;				}
+		inline_				udword			GetNbPairs()					const override { return mPairs.GetNbEntries()>>1;				}
 
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/**
@@ -169,7 +169,7 @@
 		 *	\return		the list of colliding pairs (triangle indices)
 		 */
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		inline_				const Pair*		GetPairs()						const	{ return (const Pair*)mPairs.GetEntries();		}
+		inline_				const Pair*		GetPairs()						const override { return static_cast<const Pair*>(mPairs.GetEntries)();		}
 
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/**
@@ -177,7 +177,7 @@
 		 *	\return		null if everything is ok, else a string describing the problem
 		 */
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		override(Collider)	const char*		ValidateSettings();
+		overridestatic_cast<Collider>(const) char*		ValidateSettings() override;
 
 		protected:
 		// Colliding pairs
@@ -204,40 +204,39 @@
 							Point			mLeafVerts[3];		//!< Triangle vertices
 							udword			mLeafIndex;			//!< Triangle index
 		// Settings
-							bool			mFullBoxBoxTest;	//!< Perform full BV-BV tests (true) or SAT-lite tests (false)
-							bool			mFullPrimBoxTest;	//!< Perform full Primitive-BV tests (true) or SAT-lite tests (false)
+							bool			mFullBoxBoxTest;	//!< Perform full BV-BV tests static_cast<true>(or) SAT-lite tests static_cast<false>(bool)			mFullPrimBoxTest;	//!< Perform full Primitive-BV tests static_cast<true>(or) SAT-lite tests (false)
 		// Internal methods
 
 			// Standard AABB trees
-							void			_Collide(const AABBCollisionNode* b0, const AABBCollisionNode* b1);
+							void			_Collide(const AABBCollisionNode* b0, const AABBCollisionNode* b1) override;
 			// Quantized AABB trees
-							void			_Collide(const AABBQuantizedNode* b0, const AABBQuantizedNode* b1, const Point& a, const Point& Pa, const Point& b, const Point& Pb);
+							void			_Collide(const AABBQuantizedNode* b0, const AABBQuantizedNode* b1, const Point& a, const Point& Pa, const Point& b, const Point& Pb) override;
 			// No-leaf AABB trees
-							void			_CollideTriBox(const AABBNoLeafNode* b);
-							void			_CollideBoxTri(const AABBNoLeafNode* b);
-							void			_Collide(const AABBNoLeafNode* a, const AABBNoLeafNode* b);
+							void			_CollideTriBox(const AABBNoLeafNode* b) override;
+							void			_CollideBoxTri(const AABBNoLeafNode* b) override;
+							void			_Collide(const AABBNoLeafNode* a, const AABBNoLeafNode* b) override;
 			// Quantized no-leaf AABB trees
-							void			_CollideTriBox(const AABBQuantizedNoLeafNode* b);
-							void			_CollideBoxTri(const AABBQuantizedNoLeafNode* b);
-							void			_Collide(const AABBQuantizedNoLeafNode* a, const AABBQuantizedNoLeafNode* b);
+							void			_CollideTriBox(const AABBQuantizedNoLeafNode* b) override;
+							void			_CollideBoxTri(const AABBQuantizedNoLeafNode* b) override;
+							void			_Collide(const AABBQuantizedNoLeafNode* a, const AABBQuantizedNoLeafNode* b) override;
 			// Overlap tests
-							void			PrimTest(udword id0, udword id1);
-			inline_			void			PrimTestTriIndex(udword id1);
-			inline_			void			PrimTestIndexTri(udword id0);
+							void			PrimTest(udword id0, udword id1) override;
+			inline_			void			PrimTestTriIndex(udword id1) override;
+			inline_			void			PrimTestIndexTri(udword id0) override;
 
-			inline_			BOOL			BoxBoxOverlap(const Point& ea, const Point& ca, const Point& eb, const Point& cb);
-			inline_			BOOL			TriBoxOverlap(const Point& center, const Point& extents);
-			inline_			BOOL			TriTriOverlap(const Point& V0, const Point& V1, const Point& V2, const Point& U0, const Point& U1, const Point& U2);
+			inline_			BOOL			BoxBoxOverlap(const Point& ea, const Point& ca, const Point& eb, const Point& cb) override;
+			inline_			BOOL			TriBoxOverlap(const Point& center, const Point& extents) override;
+			inline_			BOOL			TriTriOverlap(const Point& V0, const Point& V1, const Point& V2, const Point& U0, const Point& U1, const Point& U2) override;
 			// Init methods
-							void			InitQuery(const Matrix4x4* world0=null, const Matrix4x4* world1=null);
-							bool			CheckTemporalCoherence(Pair* cache);
+							void			InitQuery(const Matrix4x4* world0=null, const Matrix4x4* world1=null) override;
+							bool			CheckTemporalCoherence(Pair* cache) override;
 
 		inline_				BOOL			Setup(const MeshInterface* mi0, const MeshInterface* mi1)
 											{
 												mIMesh0	= mi0;
 												mIMesh1	= mi1;
 
-												if(!mIMesh0 || !mIMesh1)	return FALSE;
+												if(!mIMesh0 || !mIMesh1)	return FALSE override;
 
 												return TRUE;
 											}

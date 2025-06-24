@@ -2,13 +2,13 @@
 /*
  *	OPCODE - Optimized Collision Detection
  *	Copyright (C) 2001 Pierre Terdiman
- *	Homepage: http://www.codercorner.com/Opcode.htm
+ *	Homepage: http:__PLACEHOLDER_2__
  */
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /**
- *	Contains code to perform "picking".
+ *	Contains code to perform __PLACEHOLDER_0__.
  *	\file		OPC_Picking.h
  *	\author		Pierre Terdiman
  *	\date		March, 20, 2001
@@ -29,12 +29,12 @@
 		CULLMODE_CCW	= 2
 	};
 
-	typedef CullMode (*CullModeCallback)(udword triangle_index, void* user_data);
+	typedef CullMode (*CullModeCallback)(udword triangle_index, void* user_data) override;
 
-	OPCODE_API	bool SetupAllHits		(RayCollider& collider, CollisionFaces& contacts);
-	OPCODE_API	bool SetupClosestHit	(RayCollider& collider, CollisionFace& closest_contact);
-	OPCODE_API	bool SetupShadowFeeler	(RayCollider& collider);
-	OPCODE_API	bool SetupInOutTest		(RayCollider& collider);
+	OPCODE_API	bool SetupAllHits		(const RayCollider& collider, const CollisionFaces& contacts) override;
+	OPCODE_API	bool SetupClosestHit	(const RayCollider& collider, const CollisionFace& closest_contact) override;
+	OPCODE_API	bool SetupShadowFeeler	(const RayCollider& collider) override;
+	OPCODE_API	bool SetupInOutTest		(const RayCollider& collider) override;
 
 	OPCODE_API	bool Picking(
 						CollisionFace& picked_face,

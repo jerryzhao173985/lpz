@@ -8,7 +8,7 @@
  *   LICENSE:                                                              *
  *   This work is licensed under the Creative Commons                      *
  *   Attribution-NonCommercial-ShareAlike 2.5 License. To view a copy of   *
- *   this license, visit http://creativecommons.org/licenses/by-nc-sa/2.5/ *
+ *   this license, visit http:__PLACEHOLDER_25__
  *   or send a letter to Creative Commons, 543 Howard Street, 5th Floor,   *
  *   San Francisco, California, 94105, USA.                                *
  *                                                                         *
@@ -60,7 +60,7 @@ InvertNChannelController::init(int sensornumber, int motornumber, RandGen* randG
   // C*=0.1;
   x_buffer = new Matrix[buffersize];
   y_buffer = new Matrix[buffersize];
-  for (unsigned int k = 0; k < buffersize; k++) {
+  for (unsigned int k = 0; k < buffersize; ++k) {
     x_buffer[k].set(number_channels, 1);
     y_buffer[k].set(number_channels, 1);
   }
@@ -83,7 +83,7 @@ InvertNChannelController::step(const sensor* x_, int number_sensors, motor* y_, 
   learnmodel(y_effective);
 
   // update step counter
-  t++;
+  ++t;
 };
 
 /// performs one step without learning. Calulates motor commands from sensor inputs.
@@ -92,7 +92,7 @@ InvertNChannelController::stepNoLearning(const sensor* x_,
                                          int number_sensors,
                                          motor* y_,
                                          int number_motors) {
-  assert((unsigned)number_sensors <= number_channels && (unsigned)number_motors <= number_channels);
+  assert(static_cast<unsigned>(number_sensors) <= number_channels && static_cast<unsigned>(number_motors) <= number_channels);
   Matrix x(number_channels, 1, x_);
 
   // put new input vector in ring buffer x_buffer
@@ -111,51 +111,51 @@ InvertNChannelController::stepNoLearning(const sensor* x_,
   y.convertToBuffer(y_, number_motors);
 
   // update step counter
-  t++;
+  ++t;
 };
 
 // void iteration(double *colmn,double dommy[number_channels][number_channels],double *improvment){
 //   double sum[number_channels]  ;
 //   double norm=0.0 ;
 
-//   for (int k= 0; k< number_channels; k++)
+//   for (int k= 0; k< number_channels; ++k)
 //     {
 //       norm+=colmn[k]*colmn[k]  ;
 //     }
-//   norm=sqrt(norm)   ;
-//   for(int t = 0; t <number_it ; t++)
+//   norm=sqrt(norm);
+//   for(int t = 0; t <number_it ; ++t)
 //     {
 
 //       //initialization
 //       if(t==0)
 //         {
 
-//           for (int i = 0; i < number_channels; i++)
+//           for (int i = 0; i < number_channels; ++i)
 //             {
 //               improvment[i]=0.0 ;
 
 //             }
 //         }
 
-//       for (int k= 0; k< number_channels; k++)
+//       for (int k= 0; k< number_channels; ++k)
 //         {
 //           sum[k]=colmn[k]/norm ;
 
-//           for (int l= 0; l<number_channels; l++)
+//           for (int l= 0; l<number_channels; ++l)
 //             {
 //               sum[k]-=dommy[k][l]*improvment[l]  ;
 //             }
 //         }
 
-//       for (int j = 0; j< number_channels; j++){
-//         for (int i = 0; i < number_channels; i++){
+//       for (int j = 0; j< number_channels; ++j) {
+//         for (int i = 0; i < number_channels; ++i) {
 //           improvment[j]+=epsilon_it*dommy[i][j]*sum[i]       ;
 //         }
 //       }
 
 //     }//endof-t-loop
 
-//   for (int j = 0; j< number_channels; j++){
+//   for (int j = 0; j< number_channels; ++j) {
 //     improvment[j]*=norm  ;
 //   }
 // };
@@ -184,28 +184,28 @@ InvertNChannelController::calculateE(const Matrix& x_delay, const Matrix& y_dela
   }
   return (1 - desens) * E + desens * Es;
 
-  //   iteration(xsi,A,eita_zero)  ;
-  //   for (int i = 0; i < number_channels; i++)
+  //   iteration(xsi,A,eita_zero);
+  //   for (int i = 0; i < number_channels; ++i)
   //     {
   //       eita[i]=(1/(g_s(z[i])))*eita_zero[i];
   //     }
 
-  //   iteration(eita,C,shift_value) ;
+  //   iteration(eita,C,shift_value);
   //   double E=0.0  ;
-  //   for (int i=0;i<number_channels;i++)
+  //   for (int i=0;i<number_channels;++i)
   //     {
   //       E+=shift_value[i]*shift_value[i];
   //     }
-  //   for (int i = 0; i < number_channels; i++)
+  //   for (int i = 0; i < number_channels; ++i)
   //     {
   //       eita_sup[i]=eita[i];
   //     }
 
   //   // Berechnung des z mit aktuellem Sensorwert
-  //   for (int i = 0; i < number_channels; i++)
+  //   for (int i = 0; i < number_channels; ++i)
   //     {
   //       z[i] = h[i];
-  //       for (int j = 0; j < number_channels; j++)
+  //       for (int j = 0; j < number_channels; ++j)
   //         {
   //           z[i] += C[i][j] *x_buffer[(t+buffersize)%buffersize][j];
   //         }
@@ -213,9 +213,9 @@ InvertNChannelController::calculateE(const Matrix& x_delay, const Matrix& y_dela
   //     }
 
   //   double E_s=0;
-  //   for (int i = 0; i < number_channels; i++)
+  //   for (int i = 0; i < number_channels; ++i)
   //     {
-  //       for (int j = 0; j < number_channels; j++)
+  //       for (int j = 0; j < number_channels; ++j)
   //         {
   //           E_s += (A[i][j]*g(z[j]) - x_buffer[(t+buffersize)%buffersize][i]) * (A[i][j]*g(z[j])
   //           - x_buffer[(t+buffersize)%buffersize][i]);
@@ -237,7 +237,7 @@ InvertNChannelController::learn(const Matrix& x_delay, const Matrix& y_delay) {
   double E_0 = calculateE(x_delay, y_delay);
 
   // calculate updates for h,C,A
-  for (unsigned int i = 0; i < number_channels; i++) {
+  for (unsigned int i = 0; i < number_channels; ++i) {
     h.val(i, 0) += delta;
     h_update.val(i, 0) = -eps * (calculateE(x_delay, y_delay) - E_0) / delta;
     // h_update[i] = -2*eps *eita[i]*eita[i]*g(y_delay[i]);
@@ -251,8 +251,8 @@ InvertNChannelController::learn(const Matrix& x_delay, const Matrix& y_delay) {
     start = t % number_channels;
     end = (t % number_channels) + 1;
   }
-  for (unsigned int i = start; i < end; i++) {
-    for (unsigned int j = 0; j < number_channels; j++) {
+  for (unsigned int i = start; i < end; ++i) {
+    for (unsigned int j = 0; j < number_channels; ++j) {
       C.val(i, j) += delta;
       C_update.val(i, j) = -eps * (calculateE(x_delay, y_delay) - E_0) / delta;
       C_update.val(i, j) -= damping_c * C.val(i, j); // damping term
@@ -290,10 +290,10 @@ InvertNChannelController::calculateSmoothValues(const Matrix* buffer,
   assert(number_steps_for_averaging_ <= buffersize);
 
   Matrix result(number_channels, 1); // initialised with 0
-  for (unsigned int k = 0; k < number_steps_for_averaging_; k++) {
+  for (unsigned int k = 0; k < number_steps_for_averaging_; ++k) {
     result += buffer[(t - k + buffersize) % buffersize];
   }
-  result *= 1 / ((double)(number_steps_for_averaging_)); // scalar multiplication
+  result *= 1 / (static_cast<double>(number_steps_for_averaging_)); // scalar multiplication
   return result;
 };
 

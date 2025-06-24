@@ -27,7 +27,7 @@
 #include <assert.h>
 #include <cmath>
 #include <cstring>
-#include <locale.h> // need to set LC_NUMERIC to have a '.' in the numbers written
+#include <locale.h> // need to set LC_NUMERIC to have a __PLACEHOLDER_28__ in the numbers written
 #include <stdio.h>
 
 using namespace std;
@@ -151,7 +151,7 @@ Configurable::setParam(const paramkey& key, paramval val, bool traverseChildren)
     // now try to find in map for boolean values
     paramintmap::const_iterator intit = mapOfInteger.find(key);
     if (intit != mapOfInteger.end()) {
-      *(mapOfInteger[key]) = (int)val;
+      *(mapOfInteger[key]) = static_cast<int>(val);
       valueSet = true;
     } else {
       // now try to find in map for boolean values
@@ -482,8 +482,8 @@ Configurable::parse(FILE* f, const char* prefix, bool traverseChildren) {
       *p = '\0'; // terminate string (key) at = sign
       char* s = bufNoPrefix;
       while (*s == ' ')
-        s++; // skip leading spaces
-      // cout << "Set: " << s << " Val:" << atof(p+1) << endl;
+        ++s; // skip leading spaces
+      // cout << __PLACEHOLDER_25__ << s << __PLACEHOLDER_26__ << atof(p+1) << endl;
       setParam(s, atof(p + 1), false);
     }
   }

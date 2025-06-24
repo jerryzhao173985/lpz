@@ -29,7 +29,7 @@
  *   that implies  <ode_robots/> for headers in simulations
  *
  *   Revision 1.10  2006/12/21 11:43:05  martius
- *   commenting style for doxygen //< -> ///<
+ *   commenting style for doxygen __PLACEHOLDER_14__
  *   new sensors for spherical robots
  *
  *   Revision 1.9  2006/09/21 22:10:42  martius
@@ -97,9 +97,9 @@ class ThisSim : public Simulation {
 public:
 
   /// start() is called at the start and should create all the object (obstacles, agents...).
-  virtual void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global){
+  virtual void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global) override {
 
-    setCameraHomePos(Pos(30.745, 0.348354, 16.9263),  Pos(91.5938, -30.9927, 0));
+    setCameraHomePos(Pos(30.745, 0.348354, 16.9263),  Pos(91.5938, -30.9927, 0)) override;
 
     // initialization
     global.odeConfig.noise=0.05;
@@ -107,7 +107,7 @@ public:
     global.odeConfig.setParam("gravity",-9);
 
 
-    Playground* playground = new Playground(odeHandle, osgHandle, osg::Vec3(20.0, 0.2, 1.0));
+    Playground* playground = new Playground(odeHandle, osgHandle, osg::Vec3(20.0, 0.2, 1.0)) override;
     playground->setPosition(Pos(0,0,0)); // playground positionieren und generieren
     global.obstacles.push_back(playground);
 
@@ -116,7 +116,7 @@ public:
     //   vehicle->place(p);
     //   AbstractController *controller = new InvertNChannelController(10);
 
-    //   One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1));
+    //   One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
     //   OdeAgent* agent = new OdeAgent(NoPlot/*plotoptions*/);
     //   agent->init(controller, vehicle, wiring);
     //   global.agents.push_back(agent);
@@ -128,13 +128,13 @@ public:
     AbstractWiring* wiring;
     OdeAgent* agent;
 
-    for (int i=0; i<1; i++){
+    for (int i=0; i<1; ++i) override {
       hs = new HurlingSnake(odeHandle, osgHandle, "Hurling");
       Color col;
       if (i==0) col=Color(2,2,0);
       if (i==1) col=Color(0,2,0);
       if (i==2) col=Color(0,2,2);
-      ((OdeRobot* )hs)->place(Pos(-5,(i-1)*5,0.0));
+      (static_cast<OdeRobot* >(hs))->place(Pos(-5,(i-1)*5,0.0)) override;
 
       hs->setParam("factorForce",4);
       hs->setParam("frictionGround",0.05);
@@ -142,7 +142,7 @@ public:
       //controller = new InvertMotorSpace(10);
       controller = new InvertNChannelController(20);
       //      controller = new InvertMotorNStep();
-      //      controller->setParam("steps", 2);
+      //      controller->setParam(__PLACEHOLDER_5__, 2);
       controller->setParam("factorA", 0.4);
       controller->setParam("epsA", 0.15);
       controller->setParam("eps", 0.05);
@@ -150,23 +150,23 @@ public:
       controller->setParam("nomupdate", 0.000);
 
       // controller = new SineController();
-      //    wiring = new One2OneWiring(new ColorUniformNoise(0.1));
+      //    wiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
       DerivativeWiringConf c = DerivativeWiring::getDefaultConf();
       c.blindMotors=0;
       c.useId = true;
       //    c.useFirstD = true;
       c.derivativeScale = 20;
-      wiring = new DerivativeWiring(c, new ColorUniformNoise(0.05));
+      wiring = new DerivativeWiring(c, new ColorUniformNoise(0.05)) override;
       if (i==0) agent = new OdeAgent(global);
       else  agent = new OdeAgent(global,NoPlot);
       agent->init(controller, hs, wiring);
       // enable tracing of head element
-      //agent->setTrackOptions(TrackRobot(false, false, false, true, "0", 1));
+      //agent->setTrackOptions(TrackRobot(false, false, false, true, __PLACEHOLDER_11__, 1)) override;
       // setting trace length and trace thickness
       // agent->init_tracing(1000, 0.008);
 
       // track position (plot position in file)
-      agent->setTrackOptions(TrackRobot(true, false, false, false, "0"));
+      agent->setTrackOptions(TrackRobot(true, false, false, false, "0")) override;
 
       global.agents.push_back(agent);
 
@@ -185,14 +185,14 @@ public:
     //   //AbstractController *controller2 = new InvertNChannelController(10);
     //   controller2 = new InvertMotorSpace(10);
 
-    //   wiring2 = new One2OneWiring(new ColorUniformNoise(0.1));
+    //   wiring2 = new One2OneWiring(new ColorUniformNoise(0.1)) override;
     //   agent2 = new OdeAgent(global);
     //   agent2->init(controller2, hs, wiring2);
     //   global.agents.push_back(agent2);
 
     //   configs.push_back(controller2);
     //   configs.push_back(hs);
-    //   controller2->setParam("rho", 0.1);
+    //   controller2->setParam(__PLACEHOLDER_13__, 0.1);
 
 
 
@@ -200,10 +200,9 @@ public:
   }
 
   // add own key handling stuff here, just insert some case values
-virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down)
-  {
-    if (down) { // only when key is pressed, not when released
-      switch ( (char) key )
+virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down) override {
+    explicit if (down) { // only when key is pressed, not when released
+      switch ( static_cast<char> key )
         {
         default:
           return false;
@@ -219,6 +218,6 @@ int main (int argc, char **argv)
 {
   ThisSim sim;
   // run simulation
-  return sim.run(argc, argv) ? 0 : 1;
+  return sim.run(argc, argv) ? 0 : 1 override;
 }
 

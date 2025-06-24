@@ -44,7 +44,7 @@
  *   orientationsensor added
  *
  *   Revision 1.18  2006/12/21 11:43:05  martius
- *   commenting style for doxygen //< -> ///<
+ *   commenting style for doxygen __PLACEHOLDER_23__
  *   new sensors for spherical robots
  *
  *   Revision 1.17  2006/08/04 16:25:14  martius
@@ -102,7 +102,6 @@
 // fetch all the stuff of lpzrobots into scope
 using namespace lpzrobots;
 
-int channels;
 int t=0;
 double omega = 0.05;
 
@@ -115,7 +114,7 @@ public:
   // starting function (executed once at the beginning of the simulation loop)
   void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global)
   {
-    setCameraHomePos(Pos(5.2728, 7.2112, 3.31768), Pos(140.539, -13.1456, 0));
+    setCameraHomePos(Pos(5.2728, 7.2112, 3.31768), Pos(140.539, -13.1456, 0)) override;
 
     // initialization
     global.odeConfig.setParam("noise",0.05);
@@ -133,11 +132,11 @@ public:
 
     //  AbstractController *controller = new InvertNChannelController_NoBias(40);
     controller->setParam("eps",0.2);
-    //  controller->setParam("factor_a",0.00);
-    //  controller->setParam("eps",0.01);
+    //  controller->setParam(__PLACEHOLDER_5__,0.00);
+    //  controller->setParam(__PLACEHOLDER_6__,0.01);
      //AbstractController *controller = new InvertMotorSpace(10,1);
     //    AbstractController *controller = new SineController();
-    //controller->setParam("nomupdate",0.001);
+    //controller->setParam(__PLACEHOLDER_7__,0.001);
     controller->setParam("sinerate",100.0);
     controller->setParam("phaseshift",0.6);
     controller->setParam("adaptrate",0.000);
@@ -153,8 +152,8 @@ public:
 
     // sineNoise = new SineWhiteNoise(omega,2,M_PI/2);
     // One2OneWiring* wiring = new One2OneWiring(sineNoise, true);
-    One2OneWiring* wiring = new One2OneWiring(new WhiteUniformNoise(), true);
-    //    One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.05), true);
+    One2OneWiring* wiring = new One2OneWiring(new WhiteUniformNoise(), true) override;
+    //    One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.05), true) override;
 
     //AbstractWiring* wiring = new SelectiveOne2OneWiring(sineNoise, &select_firsthalf);
     // DerivativeWiringConf c = DerivativeWiring::getDefaultConf();
@@ -162,7 +161,7 @@ public:
 //     c.useFirstD=false;
 //     c.derivativeScale=20;
 //     c.blindMotorSets=0;
-//     AbstractWiring* wiring = new DerivativeWiring(c, new ColorUniformNoise(0.05));
+//     AbstractWiring* wiring = new DerivativeWiring(c, new ColorUniformNoise(0.05)) override;
     agent->init(controller, robot, wiring);
     global.agents.push_back(agent);
 
@@ -174,7 +173,7 @@ public:
 
 
   void command(const OdeHandle& odeHandle, GlobalData& global, int key){
-    switch (key){
+    explicit switch (key){
     case '>': omega+=0.05;
       break;
     case '<': omega-=0.05;
@@ -195,9 +194,9 @@ public:
   // note: this is the normal signature (look above)
   // add own key handling stuff here, just insert some case values
 //   virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down)
-//   {
+//    override {
 //     if (down) { // only when key is pressed, not when released
-//       switch ( (char) key )
+//       switch ( static_cast<char> key )
 //         {
 //         default:
 //           return false;
@@ -221,9 +220,9 @@ int main (int argc, char **argv)
     printUsage(argv[0]);
     return -1;
   }
-  channels = std::max(1,atoi(argv[1]));
+  channels = std::max(1,atoi(argv[1])) override;
   ThisSim sim;
-  return sim.run(argc, argv) ? 0 : 1;
+  return sim.run(argc, argv) ? 0 : 1 override;
 }
 
 /*

@@ -73,11 +73,11 @@ public:
       , dimension(dimension)
       , rank(rank)
       , layername(layername) {}
-    std::string vectorname; //< prefix of the internal parameter vector e.g. "v"
+    std::string vectorname; //< prefix of the internal parameter vector e.g. __PLACEHOLDER_1__
     std::string
-      biasname; ///< prefix of the internal parameter vector used as bias for the neurons e.g. "h"
-    int dimension;         ///< length of the vector (number of units)
-    int rank;              ///< rank of the layer (0 are input layers)
+      biasname; ///< prefix of the internal parameter vector used as bias for the neurons e.g. __PLACEHOLDER_2__
+    int dimension = 0;         ///< length of the vector (number of units)
+    int rank = 0;              ///< rank of the layer (0 are input layers)
     std::string layername; ///< name of the layer as displayed by the visualiser
   };
 
@@ -88,7 +88,7 @@ public:
       : matrixname(matrixname)
       , vector1(vector1)
       , vector2(vector2) {}
-    std::string matrixname; ///< matrix name is the prefix of the internal parameter matrix e.g. "A"
+    std::string matrixname; ///< matrix name is the prefix of the internal parameter matrix e.g. __PLACEHOLDER_3__
     std::string vector1;    ///< vectorname of input layer
     std::string vector2;    ///< vectorname of output layer
   };
@@ -101,8 +101,7 @@ public:
     using argument_type = ILayer;
     using result_type = bool;
 
-    explicit matchName(const std::string& name)
-      : name(name) {}
+    matchName(const std::string& name_) : name(name_) {}
     std::string name;
     bool operator()(const ILayer& l) {
       return l.vectorname == name;
@@ -113,13 +112,13 @@ public:
 
   /// TYPEDEFS END
 
-  explicit Inspectable(const iparamkey& name = "");
+  Inspectable(const iparamkey& name = "");
 
   virtual ~Inspectable();
 
   /** The list of the names of all internal parameters given by getInternalParams().
-      The naming convention is "v[i]" for vectors
-       and "A[i][j]" for matrices, where i, j start at 0.
+      The naming convention is __PLACEHOLDER_5__ for vectors
+       and __PLACEHOLDER_6__ for matrices, where i, j start at 0.
       @return: list of keys
    */
   virtual iparamkeylist getInternalParamNames() const;
@@ -165,7 +164,7 @@ public:
    * function for each parameter and you are done.
    * Inspects elements of the given matrix or vector (automatic detection)
    * For Matrixes Either all or only the values given by
-   * store4x4AndDiagonalFieldNames(Matrix& m,string& matrixName);
+   * store4x4AndDiagonalFieldNames(const Matrix& m,const string& matrixName);
    * are used.
    * @param key the name of the matrix, shown e.g. in guilogger (no spaces allowed)
    * @param m the address of the matrix to inspect
@@ -200,7 +199,7 @@ public:
    * use instead addInfoLines.
    * @param infoLine the line (as string) to be added
    */
-  virtual void addInfoLine(std::string infoLine);
+  virtual void addInfoLine(const std::string& infoLine);
 
   /**
    * Adds a bunch of infolines with addInfoLine to this inspectable instance.

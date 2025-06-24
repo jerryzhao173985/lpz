@@ -71,7 +71,7 @@ class BarrelRobotECB : public ECB {
 
       QString hex;
       QString line;
-      for (int i = 0; i < result.dataLength; i++) {
+      for (int i = 0; i < result.dataLength; ++i) {
         line.append(QString::number((result.data[i] >> 4) & 0x0F, 16).toUpper());
         line.append(QString::number((result.data[i] >> 0) & 0x0F, 16).toUpper());
         line.append(" ");
@@ -113,7 +113,7 @@ class BarrelRobotECB : public ECB {
 
 class MyController : public AbstractControllerAdapter {
   public:
-    MyController(AbstractController* controller) :
+    explicit MyController(AbstractController* controller) :
       AbstractControllerAdapter(controller, "MyController", "$ID$") {
 
     }

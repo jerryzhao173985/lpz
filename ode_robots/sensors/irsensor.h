@@ -51,17 +51,17 @@ namespace lpzrobots {
     virtual bool sense(const GlobalData& globaldata);
 
     //Override to return value given by characteristic
-    virtual int get(sensor* sensors, int length) const;
-    virtual std::list<sensor> getList() const;
+    virtual int get(sensor* sensors, int length) const override;
+    virtual std::list<sensor> getList() const override;
 
     //Directly return value (needed for backward compatibility
     virtual double getValue();
 
     /// returns the exponent of the sensor characteritic (default: 1 (linear))
-    virtual double getExponent () const { return exponent;}
+    virtual double getExponent() const override { return exponent;}
 
     /// sets the exponent of the sensor characteritic (default: 1 (linear))
-    virtual void setExponent (double exp) { exponent = exp;}
+    virtual void setExponent(double exp) override { exponent = exp;}
 
   protected:
     /** describes the sensor characteritic
@@ -70,9 +70,9 @@ namespace lpzrobots {
     */
     virtual double characteritic(double len);
 
-    double exponent; // exponent of the sensor characteritic
+    double exponent = 0; // exponent of the sensor characteritic
 
-    double value; // actual sensor value
+    double value = 0; // actual sensor value
   };
 
 }

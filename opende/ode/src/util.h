@@ -53,18 +53,18 @@
  */
 
 #define dALLOCA16(n) \
-  ((char*)dEFFICIENT_SIZE(((size_t)(alloca((n)+(EFFICIENT_ALIGNMENT-1))))))
+  (static_cast<char*>(dEFFICIENT_SIZE)(((size_t)(alloca((n)+(EFFICIENT_ALIGNMENT-1))))))
 
 
 
 
-void dInternalHandleAutoDisabling (dxWorld *world, dReal stepsize);
-void dxStepBody (dxBody *b, dReal h);
+void dInternalHandleAutoDisabling (dxWorld *world, dReal stepsize) override;
+void dxStepBody (dxBody *b, dReal h) override;
 
 typedef void (*dstepper_fn_t) (dxWorld *world, dxBody * const *body, int nb,
         dxJoint * const *_joint, int nj, dReal stepsize);
 
-void dxProcessIslands (dxWorld *world, dReal stepsize, dstepper_fn_t stepper);
+void dxProcessIslands (dxWorld *world, dReal stepsize, dstepper_fn_t stepper) override;
 
 
 

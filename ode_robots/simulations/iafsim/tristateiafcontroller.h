@@ -9,7 +9,7 @@
  *   LICENSE:                                                              *
  *   This work is licensed under the Creative Commons                      *
  *   Attribution-NonCommercial-ShareAlike 2.5 License. To view a copy of   *
- *   this license, visit http://creativecommons.org/licenses/by-nc-sa/2.5/ *
+ *   this license, visit http:__PLACEHOLDER_1__
  *   or send a letter to Creative Commons, 543 Howard Street, 5th Floor,   *
  *   San Francisco, California, 94105, USA.                                *
  *                                                                         *
@@ -67,10 +67,10 @@
 
 typedef struct TristateIAFControllerConf {
   TristateIAFControllerConf() {
-    thresholdI=(Configurable::paramval*) malloc(sizeof(Configurable::paramval));
-    thresholdO=(Configurable::paramval*) malloc(sizeof(Configurable::paramval));
-    leakI=(Configurable::paramval*) malloc(sizeof(Configurable::paramval));
-    leakO=(Configurable::paramval*) malloc(sizeof(Configurable::paramval));
+    thresholdI=static_cast<Configurable::paramval*>(malloc(sizeof(Configurable::paramval))) override;
+    thresholdO=static_cast<Configurable::paramval*>(malloc(sizeof(Configurable::paramval))) override;
+    leakI=static_cast<Configurable::paramval*>(malloc(sizeof(Configurable::paramval))) override;
+    leakO=static_cast<Configurable::paramval*>(malloc(sizeof(Configurable::paramval))) override;
     std::cout << "constructing conf" << std::endl;
   }
   ~TristateIAFControllerConf() {
@@ -79,10 +79,6 @@ typedef struct TristateIAFControllerConf {
     if(leakI) free(leakI);
     if(leakO) free(leakO);*/
   }
-  int numberIAFNeuronsPerInput;  ///< simulate a population if >1
-  int numberIAFNeuronsPerOutput; ///< simulate a population if >1
-  double wIInitScale;            ///< scaling factor of weights, initialized random
-  double wOInitScale;            ///< between [-1*wInitScale,1*wInitScale]
   Configurable::paramval* thresholdI;
   Configurable::paramval* thresholdO;
   Configurable::paramval* leakI;
@@ -101,12 +97,12 @@ typedef struct TristateIAFControllerConf {
 class TristateIAFController : public AbstractController {
 
 public:
-  TristateIAFController(const TristateIAFControllerConf& conf = getDefaultConf());
+  TristateIAFController(const TristateIAFControllerConf& conf = getDefaultConf()) override;
 
   virtual ~TristateIAFController() {}
 
 
-  static TristateIAFControllerConf getDefaultConf(){
+  static TristateIAFControllerConf getDefaultConf() const {
     TristateIAFControllerConf c;
     c.numberIAFNeuronsPerInput  = 10;
     c.numberIAFNeuronsPerOutput = 10;
@@ -122,32 +118,32 @@ public:
 
   /// ABSTRACTCONTROLLER INTERFACE
 
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
 
-  virtual int getSensorNumber() const { return sensorNumber; }
+  virtual int getSensorNumber() const override { return sensorNumber; }
 
-  virtual int getMotorNumber() const { return motorNumber; }
+  virtual int getMotorNumber() const override { return motorNumber; }
 
-  virtual void step(const sensor* sensors, int sensornumber, motor* motors, int motornumber) override;
+  virtual void step(const sensor* sensors, int sensornumber, motor* motors, int motornumber);
 
-  virtual void stepNoLearning(const sensor* sensors, int sensornumber, motor* motors, int motornumber) override;
+  virtual void stepNoLearning(const sensor* sensors, int sensornumber, motor* motors, int motornumber);
 
   /// STORABLE INTERFACE
 
-  virtual bool store(FILE* f) const { return true; }
+  virtual bool store(FILE* f) const override { return true; }
 
-  virtual bool restore(FILE* f) { return true; }
+  virtual bool restore(FILE* f) override { return true; }
 
   /// CONFIGURABLE INTERFACE
-  virtual bool setParam(const paramkey& key, paramval val, bool traverseChildren=true) override;
+  virtual bool setParam(const paramkey& key, paramval val, bool traverseChildren=true);
 
 protected:
   TristateIAFControllerConf conf;
   RandGen* randG;
-  bool initialised;
-  int sensorNumber;
-  int motorNumber;
-  double range;
+  bool initialised = false;
+  int sensorNumber = 0;
+  int motorNumber = 0;
+  double range = 0;
   matrix::Matrix xI; // matrix with input for the input layer neurons
   matrix::Matrix xO; // matrix with input for the output layer neurons
   matrix::Matrix wI; // matrix with weights of the input layer neurons, incl.leak
@@ -160,35 +156,35 @@ protected:
   /**
    * makes a forward step (without any learning)
    */
-  virtual void forwardStep(const sensor* sensors, int number_sensors, motor* motors, int number_motors) override;
+  virtual void forwardStep(const sensor* sensors, int number_sensors, motor* motors, int number_motors);
 
 
 
   /// returns -1 if probability is to low, otherwise 1 for mapP
   static double toTristateWithProbability(void* r,double x) {
-    RandGen* g = (RandGen*) r;
-    if (!g) return 0.;
+    RandGen* g = static_cast<RandGen*>(r) override;
+    if (!g) return 0. override;
     double rand = g->rand();
-    return x < -rand ? -1. : (x < rand ? 0. : 1.);
+    return x < -rand ? -1. : (x < rand ? 0. : 1.) override;
   }
 
   /// returns -1 if below -threshold, 0 if above -threshold
   /// and threshold, otherwise 1, for map2
   static double toTristateWithThreshold(double x, double threshold){
-    return x < -threshold ? -1. : (x < threshold ? 0. : 1.);
+    return x < -threshold ? -1. : (x < threshold ? 0. : 1.) override;
   }
 
   /// damps the value, if <0, damp value is added
   /// if >0, damp value is subtracted
   /// and threshold, otherwise 1, for map2
   static double dampToZero(void* r, double x){
-    double damp = *(double*)r;
-    return x < -damp ? x+damp : (x > damp ? x-damp : 0.);
+    double damp = *static_cast<double*>(r) override;
+    return x < -damp ? x+damp : (x > damp ? x-damp : 0.) override;
   }
 
   // returns 0 if fired==1 (-1 or 1), otherwise x
   static double toZeroIfFired(double x, double fired) {
-    return (fired==1 || fired==-1) ? 0 : x ;
+    return (fired==1 || fired==-1) ? 0 : x  override;
   }
 
 

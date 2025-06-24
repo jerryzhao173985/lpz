@@ -7,7 +7,7 @@
  *   LICENSE:                                                              *
  *   This work is licensed under the Creative Commons                      *
  *   Attribution-NonCommercial-ShareAlike 2.5 License. To view a copy of   *
- *   this license, visit http://creativecommons.org/licenses/by-nc-sa/2.5/ *
+ *   this license, visit http:__PLACEHOLDER_5__
  *   or send a letter to Creative Commons, 543 Howard Street, 5th Floor,   *
  *   San Francisco, California, 94105, USA.                                *
  *                                                                         *
@@ -30,13 +30,13 @@
 #include "noisegenerator.h"
 
 struct DerInfConf {
-  int buffersize;  ///< buffersize size of the time-buffer for x,y,eta
-  double cInit;    ///< cInit size of the C matrix to initialised with.
-  double cNonDiag; ///< cNonDiag is the size of the nondiagonal elements in respect to the diagonal
-                   ///< (cInit) ones
-  bool modelInit;  ///< size of the unit-map strenght of the model
-  bool useS;       ///< useS decides whether to use the S matrix in addition to the A matrix
-  bool someInternalParams; ///< someInternalParams if true only some internal parameters are
+  int buffersize = 0;  ///< buffersize size of the time-buffer for x,y,eta
+  double cInit = 0;    ///< cInit size of the C matrix to initialised with.
+  double cNonDiag = 0; ///< cNonDiag is the size of the nondiagonal elements in respect to the diagonal
+                   ///< static_cast<cInit>(ones)
+  bool modelInit = false;  ///< size of the unit-map strenght of the model
+  bool useS = false;       ///< useS decides whether to use the S matrix in addition to the A matrix
+  bool someInternalParams = false; ///< someInternalParams if true only some internal parameters are
                            ///< exported, otherwise all
 };
 /**
@@ -51,10 +51,10 @@ struct DerInfConf {
 class DerInf : public InvertMotorController {
 
 public:
-  explicit DerInf(const DerInfConf& conf = getDefaultConf());
-  virtual void init(int sensornumber, int motornumber, RandGen* randg) override;
+  DerInf(const DerInfConf& conf = getDefaultConf());
+  virtual void init(int sensornumber, int motornumber, RandGen* randg);
 
-  virtual ~DerInf() override;
+  virtual ~DerInf();
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
   virtual int getSensorNumber() const override {
@@ -67,25 +67,25 @@ public:
 
   /// performs one step (includes learning).
   /// Calulates motor commands from sensor inputs.
-  virtual void step(const sensor*, int number_sensors, motor*, int number_motors) override;
+  virtual void step(const sensor*, int number_sensors, motor*, int number_motors);
 
   /// performs one step without learning. Calulates motor commands from sensor inputs.
   virtual void stepNoLearning(const sensor*,
                               int number_sensors,
                               motor*,
-                              int number_motors) override;
+                              int number_motors);
 
   /**************  STOREABLE **********************************/
   /** stores the controller values to a given file. */
   virtual bool store(FILE* f) const override;
   /** loads the controller values from a given file. */
-  virtual bool restore(FILE* f) override;
+  virtual bool restore(FILE* f);
 
   /************** INSPECTABLE ********************************/
-  virtual iparamkeylist getInternalParamNames() const override;
-  virtual iparamvallist getInternalParams() const override;
-  virtual ilayerlist getStructuralLayers() const override;
-  virtual iconnectionlist getStructuralConnections() const override;
+  virtual iparamkeylist getInternalParamNames() const;
+  virtual iparamvallist getInternalParams() const;
+  virtual ilayerlist getStructuralLayers() const;
+  virtual iconnectionlist getStructuralConnections() const;
 
   static DerInfConf getDefaultConf() {
     DerInfConf c;
@@ -102,8 +102,8 @@ public:
   void getLastMotors(motor* motors, int len);
 
 protected:
-  unsigned short number_sensors;
-  unsigned short number_motors;
+  unsigned short number_sensors = 0;
+  unsigned short number_motors = 0;
 
   matrix::Matrix A; ///< Model Matrix (motors to sensors)
   matrix::Matrix A0;
@@ -132,19 +132,19 @@ protected:
   matrix::Matrix CCT_inv;
   matrix::Matrix CST;
   matrix::Matrix xsi;  ///< current output error
-  double xsi_norm;     ///< norm of matrix
-  double xsi_norm_avg; ///< average norm of xsi (used to define whether Modell learns)
-  double pain;         ///< if the modelling error (xsi) is too high we have a pain signal
-  double TLE;          // TimeLoopError
-  double grang1;       // GrangerCausality
-  double grang2;       // GrangerCausality
-  double causal;       // GrangerCausality
-  double causalfactor; // GrangerCausality
-  double EE;
-  double EE_mean;
-  double EE_sqr;
-  double xsistrength;
-  double sense;
+  double xsi_norm = 0;     ///< norm of matrix
+  double xsi_norm_avg = 0; ///< average norm of xsi (used to define whether Modell learns)
+  double pain;         ///< if the modelling error static_cast<xsi>(is) too high we have a pain signal
+  double TLE = 0;          // TimeLoopError
+  double grang1 = 0;       // GrangerCausality
+  double grang2 = 0;       // GrangerCausality
+  double causal = 0;       // GrangerCausality
+  double causalfactor = 0; // GrangerCausality
+  double EE = 0;
+  double EE_mean = 0;
+  double EE_sqr = 0;
+  double xsistrength = 0;
+  double sense = 0;
   matrix::Matrix* x_buffer;
   matrix::Matrix* y_buffer;
   matrix::Matrix* ysat_buffer;
@@ -181,14 +181,14 @@ protected:
   matrix::Matrix vau_avg;
 
   matrix::Matrix y_teaching; ///< teaching motor signal
-  bool useTeaching;          ///< flag whether there is an actual teachning signal or not
+  bool useTeaching = false;          ///< flag whether there is an actual teachning signal or not
 
   matrix::Matrix x_intern;
-  int num_iterations;
+  int num_iterations = 0;
 
-  int t_rand; ///< initial random time to avoid syncronous management of all controllers
-  int t_delay;
-  int managementInterval;     ///< interval between subsequent management function calls
+  int t_rand = 0; ///< initial random time to avoid syncronous management of all controllers
+  int t_delay = 0;
+  int managementInterval = 0;     ///< interval between subsequent management function calls
   paramval dampS;             ///< damping of S matrix
   paramval dampC;             ///< damping of C matrix
   paramval dampH;             ///< damping of H vector
@@ -233,7 +233,7 @@ protected:
   matrix::Matrix calcDerivatives(const matrix::Matrix* buffer, int delay);
 
 public:
-  /// calculates the city block distance (abs) norm of the matrix. (abs sum of absolutes / size of
+  /// calculates the city block distance static_cast<abs>(norm) of the matrix. (abs sum of absolutes / size of
   /// matrix)
   virtual double calcMatrixNorm(const matrix::Matrix& m);
 };

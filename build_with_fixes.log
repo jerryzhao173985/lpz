@@ -1,0 +1,1207 @@
+=== Applying critical fixes before build ===
+Fixing Matrix constructor...
+Removing incorrect override specifiers...
+sed: RE error: illegal byte sequence
+sed: RE error: illegal byte sequence
+sed: ./selforg/include/selforg/modern_randomgenerator.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/soml.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/quickmp.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/sparsematrix.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/feedbackwiring.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/classicreinforce.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/esn.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/regularisation.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/abstractmodel.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/measuremodes.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/remotecontrolled.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/invertmotorcontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/derivativewiring.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/discretisizer.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/configurable.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/forceboostwiring.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/sox.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/neuralgas.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/wiringsequence.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/storeable.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/avrtypes.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/one2onewiring.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/derlininvert.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/invertmotornstep.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/types.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/invert3channelcontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/globaldatabase.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/derinf.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/lyapunov.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/invertmotorspace.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/reinforceable.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/layer.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/mac_drand48r.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/sinecontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/som.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/invertmotorbigmodel.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/inspectable.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/randomgenerator.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/dercontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/motorbabbler.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/statisticmeasure.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/abstractwiring.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/matrix.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/matrix_neon.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/abstractrobot.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/stl_map.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/inspectableproxy.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/multilayerffnn.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/callbackable.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/templatevalueanalysation.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/mediator.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/abstractmeasure.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/dinvert3channelcontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/imeasure.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/use_java_controller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/plotoptionengine.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/discretesizable.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/teachable.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/backcallervector.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/derbigcontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/mutualinformationcontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/switchcontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/crossmotorcoupling.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/oneactivemultipassivecontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/onelayerffnn.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/agent.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/datafunc.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/selectivenoisewiring.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/wiredcontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/sparsearray.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/semox.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/soxexpand.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/pimax.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/braitenberg.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/invertnchannelcontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/matrixutils.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/trackable.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/complexmeasure.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/feedforwardnn.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/controller_misc.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/selectiveone2onewiring.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/abstractiafcontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/analysationmodes.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/measureadapter.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/controllernet.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/abstractcontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/abstractmulticontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/trackrobots.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/configurablelist.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/derpseudosensor.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/discretecontrolleradapter.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/replaycontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/trackablemeasure.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/noisegenerator.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/multireinforce.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/invertcontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/ffnncontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/backcaller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/homeokinbase.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/stl_adds.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/derlinunivers.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/elman.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/universalcontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/modelwithmemoryadapter.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/dep.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/onecontrollerperchannel.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/modern_storeable.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/invertablemodel.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/sos.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/sensormotorinfo.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/position.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/plotoption.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/abstractcontrolleradapter.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/splitcontrol.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/qlearning.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/ringbuffer.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/mediatorcollegue.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/statistictools.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/parametrizable.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/motornoisewiring.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/copywiring.h: in-place editing only works for regular files
+sed: RE error: illegal byte sequence
+sed: RE error: illegal byte sequence
+sed: RE error: illegal byte sequence
+sed: RE error: illegal byte sequence
+sed: RE error: illegal byte sequence
+sed: RE error: illegal byte sequence
+sed: RE error: illegal byte sequence
+sed: RE error: illegal byte sequence
+sed: RE error: illegal byte sequence
+sed: RE error: illegal byte sequence
+sed: RE error: illegal byte sequence
+sed: RE error: illegal byte sequence
+sed: RE error: illegal byte sequence
+sed: RE error: illegal byte sequence
+sed: RE error: illegal byte sequence
+sed: RE error: illegal byte sequence
+sed: RE error: illegal byte sequence
+sed: RE error: illegal byte sequence
+sed: ./selforg/include/selforg/modern_randomgenerator.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/soml.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/quickmp.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/sparsematrix.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/feedbackwiring.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/classicreinforce.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/esn.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/regularisation.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/abstractmodel.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/measuremodes.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/remotecontrolled.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/invertmotorcontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/derivativewiring.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/discretisizer.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/configurable.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/forceboostwiring.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/sox.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/neuralgas.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/wiringsequence.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/storeable.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/avrtypes.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/one2onewiring.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/derlininvert.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/invertmotornstep.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/types.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/invert3channelcontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/globaldatabase.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/derinf.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/lyapunov.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/invertmotorspace.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/reinforceable.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/layer.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/mac_drand48r.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/sinecontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/som.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/invertmotorbigmodel.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/inspectable.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/randomgenerator.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/dercontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/motorbabbler.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/statisticmeasure.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/abstractwiring.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/matrix.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/matrix_neon.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/abstractrobot.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/stl_map.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/inspectableproxy.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/multilayerffnn.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/callbackable.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/templatevalueanalysation.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/mediator.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/abstractmeasure.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/dinvert3channelcontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/imeasure.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/use_java_controller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/plotoptionengine.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/discretesizable.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/teachable.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/backcallervector.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/derbigcontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/mutualinformationcontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/switchcontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/crossmotorcoupling.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/oneactivemultipassivecontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/onelayerffnn.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/agent.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/datafunc.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/selectivenoisewiring.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/wiredcontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/sparsearray.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/semox.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/soxexpand.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/pimax.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/braitenberg.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/invertnchannelcontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/matrixutils.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/trackable.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/complexmeasure.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/feedforwardnn.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/controller_misc.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/selectiveone2onewiring.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/abstractiafcontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/analysationmodes.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/measureadapter.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/controllernet.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/abstractcontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/abstractmulticontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/trackrobots.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/configurablelist.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/derpseudosensor.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/discretecontrolleradapter.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/replaycontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/trackablemeasure.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/noisegenerator.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/multireinforce.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/invertcontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/ffnncontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/backcaller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/homeokinbase.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/stl_adds.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/derlinunivers.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/elman.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/universalcontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/modelwithmemoryadapter.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/dep.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/onecontrollerperchannel.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/modern_storeable.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/invertablemodel.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/sos.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/sensormotorinfo.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/position.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/plotoption.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/abstractcontrolleradapter.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/splitcontrol.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/qlearning.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/ringbuffer.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/mediatorcollegue.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/statistictools.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/parametrizable.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/motornoisewiring.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/copywiring.h: in-place editing only works for regular files
+sed: RE error: illegal byte sequence
+sed: RE error: illegal byte sequence
+sed: RE error: illegal byte sequence
+sed: RE error: illegal byte sequence
+sed: RE error: illegal byte sequence
+sed: RE error: illegal byte sequence
+sed: RE error: illegal byte sequence
+sed: RE error: illegal byte sequence
+sed: RE error: illegal byte sequence
+sed: RE error: illegal byte sequence
+sed: RE error: illegal byte sequence
+sed: RE error: illegal byte sequence
+sed: RE error: illegal byte sequence
+sed: RE error: illegal byte sequence
+sed: RE error: illegal byte sequence
+sed: RE error: illegal byte sequence
+sed: RE error: illegal byte sequence
+sed: RE error: illegal byte sequence
+sed: ./selforg/include/selforg/modern_randomgenerator.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/soml.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/quickmp.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/sparsematrix.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/feedbackwiring.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/classicreinforce.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/esn.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/regularisation.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/abstractmodel.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/measuremodes.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/remotecontrolled.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/invertmotorcontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/derivativewiring.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/discretisizer.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/configurable.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/forceboostwiring.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/sox.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/neuralgas.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/wiringsequence.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/storeable.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/avrtypes.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/one2onewiring.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/derlininvert.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/invertmotornstep.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/types.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/invert3channelcontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/globaldatabase.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/derinf.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/lyapunov.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/invertmotorspace.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/reinforceable.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/layer.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/mac_drand48r.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/sinecontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/som.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/invertmotorbigmodel.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/inspectable.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/randomgenerator.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/dercontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/motorbabbler.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/statisticmeasure.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/abstractwiring.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/matrix.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/matrix_neon.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/abstractrobot.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/stl_map.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/inspectableproxy.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/multilayerffnn.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/callbackable.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/templatevalueanalysation.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/mediator.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/abstractmeasure.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/dinvert3channelcontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/imeasure.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/use_java_controller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/plotoptionengine.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/discretesizable.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/teachable.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/backcallervector.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/derbigcontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/mutualinformationcontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/switchcontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/crossmotorcoupling.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/oneactivemultipassivecontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/onelayerffnn.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/agent.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/datafunc.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/selectivenoisewiring.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/wiredcontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/sparsearray.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/semox.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/soxexpand.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/pimax.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/braitenberg.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/invertnchannelcontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/matrixutils.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/trackable.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/complexmeasure.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/feedforwardnn.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/controller_misc.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/selectiveone2onewiring.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/abstractiafcontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/analysationmodes.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/measureadapter.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/controllernet.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/abstractcontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/abstractmulticontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/trackrobots.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/configurablelist.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/derpseudosensor.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/discretecontrolleradapter.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/replaycontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/trackablemeasure.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/noisegenerator.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/multireinforce.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/invertcontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/ffnncontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/backcaller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/homeokinbase.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/stl_adds.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/derlinunivers.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/elman.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/universalcontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/modelwithmemoryadapter.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/dep.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/onecontrollerperchannel.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/modern_storeable.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/invertablemodel.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/sos.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/sensormotorinfo.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/position.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/plotoption.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/abstractcontrolleradapter.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/splitcontrol.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/qlearning.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/ringbuffer.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/mediatorcollegue.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/statistictools.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/parametrizable.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/motornoisewiring.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/copywiring.h: in-place editing only works for regular files
+sed: RE error: illegal byte sequence
+sed: RE error: illegal byte sequence
+sed: RE error: illegal byte sequence
+sed: RE error: illegal byte sequence
+sed: RE error: illegal byte sequence
+sed: RE error: illegal byte sequence
+sed: RE error: illegal byte sequence
+sed: RE error: illegal byte sequence
+sed: RE error: illegal byte sequence
+sed: RE error: illegal byte sequence
+sed: RE error: illegal byte sequence
+sed: RE error: illegal byte sequence
+sed: RE error: illegal byte sequence
+sed: RE error: illegal byte sequence
+sed: RE error: illegal byte sequence
+sed: RE error: illegal byte sequence
+sed: RE error: illegal byte sequence
+sed: RE error: illegal byte sequence
+sed: ./selforg/include/selforg/modern_randomgenerator.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/soml.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/quickmp.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/sparsematrix.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/feedbackwiring.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/classicreinforce.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/esn.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/regularisation.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/abstractmodel.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/measuremodes.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/remotecontrolled.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/invertmotorcontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/derivativewiring.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/discretisizer.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/configurable.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/forceboostwiring.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/sox.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/neuralgas.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/wiringsequence.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/storeable.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/avrtypes.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/one2onewiring.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/derlininvert.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/invertmotornstep.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/types.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/invert3channelcontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/globaldatabase.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/derinf.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/lyapunov.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/invertmotorspace.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/reinforceable.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/layer.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/mac_drand48r.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/sinecontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/som.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/invertmotorbigmodel.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/inspectable.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/randomgenerator.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/dercontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/motorbabbler.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/statisticmeasure.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/abstractwiring.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/matrix.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/matrix_neon.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/abstractrobot.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/stl_map.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/inspectableproxy.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/multilayerffnn.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/callbackable.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/templatevalueanalysation.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/mediator.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/abstractmeasure.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/dinvert3channelcontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/imeasure.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/use_java_controller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/plotoptionengine.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/discretesizable.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/teachable.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/backcallervector.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/derbigcontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/mutualinformationcontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/switchcontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/crossmotorcoupling.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/oneactivemultipassivecontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/onelayerffnn.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/agent.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/datafunc.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/selectivenoisewiring.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/wiredcontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/sparsearray.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/semox.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/soxexpand.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/pimax.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/braitenberg.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/invertnchannelcontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/matrixutils.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/trackable.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/complexmeasure.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/feedforwardnn.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/controller_misc.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/selectiveone2onewiring.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/abstractiafcontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/analysationmodes.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/measureadapter.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/controllernet.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/abstractcontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/abstractmulticontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/trackrobots.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/configurablelist.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/derpseudosensor.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/discretecontrolleradapter.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/replaycontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/trackablemeasure.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/noisegenerator.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/multireinforce.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/invertcontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/ffnncontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/backcaller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/homeokinbase.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/stl_adds.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/derlinunivers.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/elman.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/universalcontroller.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/modelwithmemoryadapter.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/dep.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/onecontrollerperchannel.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/modern_storeable.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/invertablemodel.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/sos.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/sensormotorinfo.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/position.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/plotoption.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/abstractcontrolleradapter.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/splitcontrol.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/qlearning.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/ringbuffer.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/mediatorcollegue.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/statistictools.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/parametrizable.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/motornoisewiring.h: in-place editing only works for regular files
+sed: ./selforg/include/selforg/copywiring.h: in-place editing only works for regular files
+sed: RE error: illegal byte sequence
+sed: RE error: illegal byte sequence
+sed: RE error: illegal byte sequence
+sed: RE error: illegal byte sequence
+sed: RE error: illegal byte sequence
+sed: RE error: illegal byte sequence
+sed: RE error: illegal byte sequence
+sed: RE error: illegal byte sequence
+sed: RE error: illegal byte sequence
+sed: RE error: illegal byte sequence
+sed: RE error: illegal byte sequence
+sed: RE error: illegal byte sequence
+sed: RE error: illegal byte sequence
+sed: RE error: illegal byte sequence
+sed: RE error: illegal byte sequence
+sed: RE error: illegal byte sequence
+=== Building selforg ===
+Makefile:199: Makefile.depend: No such file or directory
+for file in ./abstractrobot.h ./agent.h ./trackable.h ./wiredcontroller.h controller/abstractcontroller.h controller/abstractcontrolleradapter.h controller/abstractiafcontroller.h controller/abstractmodel.h controller/abstractmulticontroller.h controller/braitenberg.h controller/classicreinforce.h controller/controllernet.h controller/crossmotorcoupling.h controller/dep.h controller/derbigcontroller.h controller/dercontroller.h controller/derinf.h controller/derlininvert.h controller/derlinunivers.h controller/derpseudosensor.h controller/dinvert3channelcontroller.h controller/discretecontrolleradapter.h controller/discretesizable.h controller/elman.h controller/esn.h controller/feedforwardnn.h controller/ffnncontroller.h controller/homeokinbase.h controller/invert3channelcontroller.h controller/invertablemodel.h controller/invertcontroller.h controller/invertmotorbigmodel.h controller/invertmotorcontroller.h controller/invertmotornstep.h controller/invertmotorspace.h controller/invertnchannelcontroller.h controller/layer.h controller/measureadapter.h controller/modelwithmemoryadapter.h controller/motorbabbler.h controller/multilayerffnn.h controller/multireinforce.h controller/mutualinformationcontroller.h controller/neuralgas.h controller/oneactivemultipassivecontroller.h controller/onecontrollerperchannel.h controller/onelayerffnn.h controller/pimax.h controller/qlearning.h controller/regularisation.h controller/reinforceable.h controller/remotecontrolled.h controller/replaycontroller.h controller/semox.h controller/sinecontroller.h controller/som.h controller/soml.h controller/sos.h controller/sox.h controller/soxexpand.h controller/splitcontrol.h controller/switchcontroller.h controller/teachable.h controller/universalcontroller.h controller/use_java_controller.h wirings/abstractwiring.h wirings/copywiring.h wirings/derivativewiring.h wirings/feedbackwiring.h wirings/forceboostwiring.h wirings/motornoisewiring.h wirings/one2onewiring.h wirings/selectivenoisewiring.h wirings/selectiveone2onewiring.h wirings/wiringsequence.h utils/avrtypes.h utils/backcaller.h utils/backcallervector.h utils/callbackable.h utils/configurable.h utils/configurablelist.h utils/controller_misc.h utils/datafunc.h utils/discretisizer.h utils/globaldatabase.h utils/inspectable.h utils/inspectableproxy.h utils/lyapunov.h utils/mac_drand48r.h utils/mediator.h utils/mediatorcollegue.h utils/modern_randomgenerator.h utils/modern_storeable.h utils/noisegenerator.h utils/parametrizable.h utils/plotoption.h utils/plotoptionengine.h utils/position.h utils/quickmp.h utils/randomgenerator.h utils/ringbuffer.h utils/sensormotorinfo.h utils/stl_adds.h utils/stl_map.h utils/storeable.h utils/trackrobots.h utils/types.h matrix/matrix_neon.h matrix/matrix.h matrix/matrixutils.h matrix/sparsearray.h matrix/sparsematrix.h statistictools/analysationmodes.h statistictools/measuremodes.h statistictools/statistictools.h statistictools/measure/abstractmeasure.h statistictools/measure/complexmeasure.h statistictools/measure/imeasure.h statistictools/measure/statisticmeasure.h statistictools/measure/trackablemeasure.h statistictools/dataanalysation/templatevalueanalysation.h; do \
+		ln -sf ../../$file include/selforg/; \
+	done
+makedepend -- -Wall -pipe -fpic -I./. -I./controller -I./wirings -I./utils -I./matrix -I./statistictools -I./statistictools/measure -I./statistictools/dataanalysation -Iinclude -Iinclude/selforg -std=c++17 -pthread -I/Users/jerry/lpzrobots/include -I/opt/homebrew/Cellar/gsl/2.8/include -DNOCONFIGURATOR -g -O -- ./agent.cpp ./wiredcontroller.cpp controller/abstractcontroller.cpp controller/abstractiafcontroller.cpp controller/abstractmulticontroller.cpp controller/classicreinforce.cpp controller/controllernet.cpp controller/crossmotorcoupling.cpp controller/dep.cpp controller/derbigcontroller.cpp controller/dercontroller.cpp controller/derinf.cpp controller/derlininvert.cpp controller/derlinunivers.cpp controller/derpseudosensor.cpp controller/discretecontrolleradapter.cpp controller/elman.cpp controller/esn.cpp controller/ffnncontroller.cpp controller/invertmotorbigmodel.cpp controller/invertmotornstep.cpp controller/invertmotorspace.cpp controller/invertnchannelcontroller.cpp controller/layer.cpp controller/measureadapter.cpp controller/modelwithmemoryadapter.cpp controller/motorbabbler.cpp controller/multilayerffnn.cpp controller/multireinforce.cpp controller/mutualinformationcontroller.cpp controller/neuralgas.cpp controller/oneactivemultipassivecontroller.cpp controller/onecontrollerperchannel.cpp controller/onelayerffnn.cpp controller/pimax.cpp controller/qlearning.cpp controller/semox.cpp controller/sinecontroller.cpp controller/som.cpp controller/soml.cpp controller/sos.cpp controller/sox.cpp controller/soxexpand.cpp controller/splitcontrol.cpp controller/switchcontroller.cpp controller/universalcontroller.cpp controller/use_java_controller.cpp wirings/abstractwiring.cpp wirings/copywiring.cpp wirings/derivativewiring.cpp wirings/feedbackwiring.cpp wirings/forceboostwiring.cpp wirings/one2onewiring.cpp wirings/selectiveone2onewiring.cpp wirings/wiringsequence.cpp utils/backcaller.cpp utils/configurable.cpp utils/configurablelist.cpp utils/controller_misc.cpp utils/discretisizer.cpp utils/globaldatabase.cpp utils/inspectable.cpp utils/inspectableproxy.cpp utils/lyapunov.cpp utils/mediator.cpp utils/mediatorcollegue.cpp utils/parametrizable.cpp utils/plotoption.cpp utils/plotoptionengine.cpp utils/randomgenerator.cpp utils/stl_adds.cpp utils/storeable.cpp utils/trackrobots.cpp matrix/matrix_neon.cpp matrix/matrix.cpp matrix/matrixutils.cpp statistictools/statistictools.cpp statistictools/measure/complexmeasure.cpp statistictools/measure/statisticmeasure.cpp statistictools/measure/trackablemeasure.cpp statistictools/dataanalysation/templatevalueanalysation.cpp -p'$(BUILD_DIR)/' -f- > Makefile.depend 2>/dev/null
+g++ -c -Wall -pipe -fpic -I./. -I./controller -I./wirings -I./utils -I./matrix -I./statistictools -I./statistictools/measure -I./statistictools/dataanalysation -Iinclude -Iinclude/selforg -std=c++17 -pthread -I/Users/jerry/lpzrobots/include -I/opt/homebrew/Cellar/gsl/2.8/include -DNOCONFIGURATOR -g -O  -o "build/./agent.o" "agent.cpp"
+g++ -c -Wall -pipe -fpic -I./. -I./controller -I./wirings -I./utils -I./matrix -I./statistictools -I./statistictools/measure -I./statistictools/dataanalysation -Iinclude -Iinclude/selforg -std=c++17 -pthread -I/Users/jerry/lpzrobots/include -I/opt/homebrew/Cellar/gsl/2.8/include -DNOCONFIGURATOR -g -O  -o "build/./wiredcontroller.o" "wiredcontroller.cpp"
+g++ -c -Wall -pipe -fpic -I./. -I./controller -I./wirings -I./utils -I./matrix -I./statistictools -I./statistictools/measure -I./statistictools/dataanalysation -Iinclude -Iinclude/selforg -std=c++17 -pthread -I/Users/jerry/lpzrobots/include -I/opt/homebrew/Cellar/gsl/2.8/include -DNOCONFIGURATOR -g -O  -o "build/controller/abstractcontroller.o" "controller/abstractcontroller.cpp"
+g++ -c -Wall -pipe -fpic -I./. -I./controller -I./wirings -I./utils -I./matrix -I./statistictools -I./statistictools/measure -I./statistictools/dataanalysation -Iinclude -Iinclude/selforg -std=c++17 -pthread -I/Users/jerry/lpzrobots/include -I/opt/homebrew/Cellar/gsl/2.8/include -DNOCONFIGURATOR -g -O  -o "build/controller/abstractiafcontroller.o" "controller/abstractiafcontroller.cpp"
+g++ -c -Wall -pipe -fpic -I./. -I./controller -I./wirings -I./utils -I./matrix -I./statistictools -I./statistictools/measure -I./statistictools/dataanalysation -Iinclude -Iinclude/selforg -std=c++17 -pthread -I/Users/jerry/lpzrobots/include -I/opt/homebrew/Cellar/gsl/2.8/include -DNOCONFIGURATOR -g -O  -o "build/controller/abstractmulticontroller.o" "controller/abstractmulticontroller.cpp"
+g++ -c -Wall -pipe -fpic -I./. -I./controller -I./wirings -I./utils -I./matrix -I./statistictools -I./statistictools/measure -I./statistictools/dataanalysation -Iinclude -Iinclude/selforg -std=c++17 -pthread -I/Users/jerry/lpzrobots/include -I/opt/homebrew/Cellar/gsl/2.8/include -DNOCONFIGURATOR -g -O  -o "build/controller/classicreinforce.o" "controller/classicreinforce.cpp"
+g++ -c -Wall -pipe -fpic -I./. -I./controller -I./wirings -I./utils -I./matrix -I./statistictools -I./statistictools/measure -I./statistictools/dataanalysation -Iinclude -Iinclude/selforg -std=c++17 -pthread -I/Users/jerry/lpzrobots/include -I/opt/homebrew/Cellar/gsl/2.8/include -DNOCONFIGURATOR -g -O  -o "build/controller/controllernet.o" "controller/controllernet.cpp"
+g++ -c -Wall -pipe -fpic -I./. -I./controller -I./wirings -I./utils -I./matrix -I./statistictools -I./statistictools/measure -I./statistictools/dataanalysation -Iinclude -Iinclude/selforg -std=c++17 -pthread -I/Users/jerry/lpzrobots/include -I/opt/homebrew/Cellar/gsl/2.8/include -DNOCONFIGURATOR -g -O  -o "build/controller/crossmotorcoupling.o" "controller/crossmotorcoupling.cpp"
+g++ -c -Wall -pipe -fpic -I./. -I./controller -I./wirings -I./utils -I./matrix -I./statistictools -I./statistictools/measure -I./statistictools/dataanalysation -Iinclude -Iinclude/selforg -std=c++17 -pthread -I/Users/jerry/lpzrobots/include -I/opt/homebrew/Cellar/gsl/2.8/include -DNOCONFIGURATOR -g -O  -o "build/controller/dep.o" "controller/dep.cpp"
+g++ -c -Wall -pipe -fpic -I./. -I./controller -I./wirings -I./utils -I./matrix -I./statistictools -I./statistictools/measure -I./statistictools/dataanalysation -Iinclude -Iinclude/selforg -std=c++17 -pthread -I/Users/jerry/lpzrobots/include -I/opt/homebrew/Cellar/gsl/2.8/include -DNOCONFIGURATOR -g -O  -o "build/controller/derbigcontroller.o" "controller/derbigcontroller.cpp"
+g++ -c -Wall -pipe -fpic -I./. -I./controller -I./wirings -I./utils -I./matrix -I./statistictools -I./statistictools/measure -I./statistictools/dataanalysation -Iinclude -Iinclude/selforg -std=c++17 -pthread -I/Users/jerry/lpzrobots/include -I/opt/homebrew/Cellar/gsl/2.8/include -DNOCONFIGURATOR -g -O  -o "build/controller/dercontroller.o" "controller/dercontroller.cpp"
+g++ -c -Wall -pipe -fpic -I./. -I./controller -I./wirings -I./utils -I./matrix -I./statistictools -I./statistictools/measure -I./statistictools/dataanalysation -Iinclude -Iinclude/selforg -std=c++17 -pthread -I/Users/jerry/lpzrobots/include -I/opt/homebrew/Cellar/gsl/2.8/include -DNOCONFIGURATOR -g -O  -o "build/controller/derinf.o" "controller/derinf.cpp"
+g++ -c -Wall -pipe -fpic -I./. -I./controller -I./wirings -I./utils -I./matrix -I./statistictools -I./statistictools/measure -I./statistictools/dataanalysation -Iinclude -Iinclude/selforg -std=c++17 -pthread -I/Users/jerry/lpzrobots/include -I/opt/homebrew/Cellar/gsl/2.8/include -DNOCONFIGURATOR -g -O  -o "build/controller/derlininvert.o" "controller/derlininvert.cpp"
+g++ -c -Wall -pipe -fpic -I./. -I./controller -I./wirings -I./utils -I./matrix -I./statistictools -I./statistictools/measure -I./statistictools/dataanalysation -Iinclude -Iinclude/selforg -std=c++17 -pthread -I/Users/jerry/lpzrobots/include -I/opt/homebrew/Cellar/gsl/2.8/include -DNOCONFIGURATOR -g -O  -o "build/controller/derlinunivers.o" "controller/derlinunivers.cpp"
+g++ -c -Wall -pipe -fpic -I./. -I./controller -I./wirings -I./utils -I./matrix -I./statistictools -I./statistictools/measure -I./statistictools/dataanalysation -Iinclude -Iinclude/selforg -std=c++17 -pthread -I/Users/jerry/lpzrobots/include -I/opt/homebrew/Cellar/gsl/2.8/include -DNOCONFIGURATOR -g -O  -o "build/controller/derpseudosensor.o" "controller/derpseudosensor.cpp"
+g++ -c -Wall -pipe -fpic -I./. -I./controller -I./wirings -I./utils -I./matrix -I./statistictools -I./statistictools/measure -I./statistictools/dataanalysation -Iinclude -Iinclude/selforg -std=c++17 -pthread -I/Users/jerry/lpzrobots/include -I/opt/homebrew/Cellar/gsl/2.8/include -DNOCONFIGURATOR -g -O  -o "build/controller/discretecontrolleradapter.o" "controller/discretecontrolleradapter.cpp"
+In file included from controller/derpseudosensor.cpp:20:
+In file included from controller/derpseudosensor.h:22:
+In file included from controller/invertmotorcontroller.h:24:
+In file included from ./utils/controller_misc.h:29:
+include/selforg/matrix.h:84:16: error: unknown type name 'Matrixexplicit'
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |                ^
+include/selforg/matrix.h:84:54: error: expected ')'
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |                                                      ^
+include/selforg/matrix.h:84:9: note: to match this '('
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |         ^
+include/selforg/matrix.h:84:56: error: unknown type name 'c'
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |                                                        ^
+include/selforg/matrix.h:84:57: error: expected member name or ';' after declaration specifiers
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |                                                        ~^
+In file included from controller/dercontroller.cpp:25:
+In file included from controller/dercontroller.h:27:
+In file included from controller/invertmotorcontroller.h:24:
+In file included from ./utils/controller_misc.h:29:
+include/selforg/matrix.h:84:16: error: unknown type name 'Matrixexplicit'
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |                ^
+include/selforg/matrix.h:84:54: error: expected ')'
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |                                                      ^
+include/selforg/matrix.h:84:9: note: to match this '('
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |         ^
+include/selforg/matrix.h:84:56: error: unknown type name 'c'
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |                                                        ^
+include/selforg/matrix.h:84:57: error: expected member name or ';' after declaration specifiers
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |                                                        ~^
+In file included from controller/controllernet.cpp:25:
+In file included from controller/controllernet.h:29:
+In file included from controller/feedforwardnn.h:27:
+In file included from ./utils/controller_misc.h:29:
+include/selforg/matrix.h:84:16: error: unknown type name 'Matrixexplicit'
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |                ^
+include/selforg/matrix.h:84:54: error: expected ')'
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |                                                      ^
+include/selforg/matrix.h:84:9: note: to match this '('
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |         ^
+include/selforg/matrix.h:84:56: error: unknown type name 'c'
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |                                                        ^
+include/selforg/matrix.h:84:57: error: expected member name or ';' after declaration specifiers
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |                                                        ~^
+In file included from controller/derlininvert.cpp:20:
+In file included from controller/derlininvert.h:22:
+In file included from controller/invertmotorcontroller.h:24:
+In file included from ./utils/controller_misc.h:29:
+include/selforg/matrix.h:84:16: error: unknown type name 'Matrixexplicit'
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |                ^
+include/selforg/matrix.h:84:54: error: expected ')'
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |                                                      ^
+include/selforg/matrix.h:84:9: note: to match this '('
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |         ^
+include/selforg/matrix.h:84:56: error: unknown type name 'c'
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |                                                        ^
+include/selforg/matrix.h:84:57: error: expected member name or ';' after declaration specifiers
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |                                                        ~^
+In file included from controller/derbigcontroller.cpp:20:
+In file included from controller/derbigcontroller.h:22:
+In file included from controller/invertmotorcontroller.h:24:
+In file included from ./utils/controller_misc.h:29:
+include/selforg/matrix.h:84:16: error: unknown type name 'Matrixexplicit'
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |                ^
+include/selforg/matrix.h:84:54: error: expected ')'
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |                                                      ^
+include/selforg/matrix.h:84:9: note: to match this '('
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |         ^
+include/selforg/matrix.h:84:56: error: unknown type name 'c'
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |                                                        ^
+include/selforg/matrix.h:84:57: error: expected member name or ';' after declaration specifiers
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |                                                        ~^
+In file included from controller/derinf.cpp:20:
+In file included from controller/derinf.h:22:
+In file included from controller/invertmotorcontroller.h:24:
+In file included from ./utils/controller_misc.h:29:
+include/selforg/matrix.h:84:16: error: unknown type name 'Matrixexplicit'
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |                ^
+include/selforg/matrix.h:84:54: error: expected ')'
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |                                                      ^
+include/selforg/matrix.h:84:9: note: to match this '('
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |         ^
+include/selforg/matrix.h:84:56: error: unknown type name 'c'
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |                                                        ^
+include/selforg/matrix.h:84:57: error: expected member name or ';' after declaration specifiers
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |                                                        ~^
+In file included from controller/dep.cpp:23:
+In file included from controller/dep.h:25:
+In file included from include/selforg/controller_misc.h:29:
+include/selforg/matrix.h:84:16: error: unknown type name 'Matrixexplicit'
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |                ^
+include/selforg/matrix.h:84:54: error: expected ')'
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |                                                      ^
+include/selforg/matrix.h:84:9: note: to match this '('
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |         ^
+In file included from controller/classicreinforce.cpp:20:
+In file included from controller/classicreinforce.h:28:
+include/selforg/matrix.h:84:16: error: unknown type name 'Matrixexplicit'
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |                ^
+include/selforg/matrix.h:84:54: error: expected ')'
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |                                                      ^
+include/selforg/matrix.h:84:9: note: to match this '('
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |         ^
+In file included from controller/derlinunivers.cpp:25:
+In file included from controller/derlinunivers.h:48:
+In file included from controller/elman.h:29:
+In file included from controller/multilayerffnn.h:29:
+In file included from controller/feedforwardnn.h:27:
+In file included from ./utils/controller_misc.h:29:
+include/selforg/matrix.h:84:16: error: unknown type name 'Matrixexplicit'
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |                ^
+include/selforg/matrix.h:84:54: error: expected ')'
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |                                                      ^
+include/selforg/matrix.h:84:9: note: to match this '('
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |         ^
+include/selforg/matrix.h:84:56: error: unknown type name 'c'
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |                                                        ^
+include/selforg/matrix.h:84:57: error: expected member name or ';' after declaration specifiers
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |                                                        ~^
+include/selforg/matrix.h:84:56: error: unknown type name 'c'
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |                                                        ^
+include/selforg/matrix.h:84:57: error: expected member name or ';' after declaration specifiers
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |                                                        ~^
+include/selforg/matrix.h:84:56: error: unknown type name 'c'
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |                                                        ^
+include/selforg/matrix.h:84:57: error: expected member name or ';' after declaration specifiers
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |                                                        ~^
+In file included from controller/crossmotorcoupling.cpp:20:
+In file included from controller/crossmotorcoupling.h:24:
+In file included from controller/teachable.h:27:
+include/selforg/matrix.h:84:16: error: unknown type name 'Matrixexplicit'
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |                ^
+include/selforg/matrix.h:84:54: error: expected ')'
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |                                                      ^
+include/selforg/matrix.h:84:9: note: to match this '('
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |         ^
+controller/derlinunivers.cpp:226:18: error: call to implicitly-deleted copy constructor of 'matrix::Matrix'
+  226 |   matrix::Matrix result(buffer[t % conf.buffersize]);
+      |                  ^      ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+include/selforg/matrix.h:84:56: error: unknown type name 'c'
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |                                                        ^
+include/selforg/matrix.h:84:57: error: expected member name or ';' after declaration specifiers
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |                                                        ~^
+include/selforg/matrix.h:86:3: note: copy constructor is implicitly deleted because 'Matrix' has a user-declared move constructor
+   86 |   Matrix(Matrix&& c) noexcept;
+      |   ^
+controller/derlinunivers.cpp:231:12: error: call to implicitly-deleted copy constructor of 'Matrix'
+  231 |     return result;
+      |            ^~~~~~
+include/selforg/matrix.h:86:3: note: copy constructor is implicitly deleted because 'Matrix' has a user-declared move constructor
+   86 |   Matrix(Matrix&& c) noexcept;
+      |   ^
+In file included from agent.cpp:33:
+In file included from ./wirings/abstractwiring.h:28:
+./matrix/matrix.h:84:16: error: unknown type name 'Matrixexplicit'
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |                ^
+./matrix/matrix.h:84:54: error: expected ')'
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |                                                      ^
+./matrix/matrix.h:84:9: note: to match this '('
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |         ^
+In file included from controller/discretecontrolleradapter.cpp:45:
+In file included from ./utils/controller_misc.h:29:
+include/selforg/matrix.h:84:16: error: unknown type name 'Matrixexplicit'
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |                ^
+include/selforg/matrix.h:84:54: error: expected ')'
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |                                                      ^
+include/selforg/matrix.h:84:9: note: to match this '('
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |         ^
+In file included from controller/dep.cpp:23:
+controller/dep.h:125:12: error: call to implicitly-deleted copy constructor of 'matrix::Matrix'
+  125 |     return A;
+      |            ^
+include/selforg/matrix.h:86:3: note: copy constructor is implicitly deleted because 'Matrix' has a user-declared move constructor
+   86 |   Matrix(Matrix&& c) noexcept;
+      |   ^
+./matrix/matrix.h:84:56: error: unknown type name 'c'
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |                                                        ^
+./matrix/matrix.h:84:57: error: expected member name or ';' after declaration specifiers
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |                                                        ~^
+include/selforg/matrix.h:84:56: error: unknown type name 'c'
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |                                                        ^
+include/selforg/matrix.h:84:57: error: expected member name or ';' after declaration specifiers
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |                                                        ~^
+In file included from controller/derbigcontroller.cpp:20:
+In file included from controller/derbigcontroller.h:22:
+In file included from controller/invertmotorcontroller.h:25:
+controller/homeokinbase.h:78:12: error: call to implicitly-deleted copy constructor of 'matrix::Matrix'
+   78 |     return buffer[(t - number_steps_of_delay_) % buffersize];
+      |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+include/selforg/matrix.h:86:3: note: copy constructor is implicitly deleted because 'Matrix' has a user-declared move constructor
+   86 |   Matrix(Matrix&& c) noexcept;
+      |   ^
+In file included from controller/derbigcontroller.cpp:20:
+In file included from controller/derbigcontroller.h:22:
+In file included from controller/invertmotorcontroller.h:25:
+controller/homeokinbase.h:87:20: error: call to implicitly-deleted copy constructor of 'matrix::Matrix'
+   87 |     matrix::Matrix result(buffer[t % buffersize]);
+      |                    ^      ~~~~~~~~~~~~~~~~~~~~~~
+include/selforg/matrix.h:86:3: note: copy constructor is implicitly deleted because 'Matrix' has a user-declared move constructor
+   86 |   Matrix(Matrix&& c) noexcept;
+      |   ^
+In file included from controller/derbigcontroller.cpp:20:
+In file included from controller/derbigcontroller.h:22:
+In file included from controller/invertmotorcontroller.h:25:
+controller/homeokinbase.h:92:12: error: call to implicitly-deleted copy constructor of 'matrix::Matrix'
+   92 |     return result;
+      |            ^~~~~~
+include/selforg/matrix.h:86:3controller/crossmotorcoupling.cpp:31:18: error: call to implicitly-deleted copy constructor of 'matrix::Matrix'
+   31 |   matrix: note: copy constructor is implicitly deleted because 'Matrix' has a user-declared move constructor
+   86 |   Matrix(Matrix&& c) noexcept;
+      |   ^
+::Matrix teaching = m; // default is to teach with the motor value itself
+      |                  ^          ~
+include/selforg/matrix.h:86:3: note: copy constructor is implicitly deleted because 'Matrix' has a user-declared move constructor
+   86 |   Matrix(Matrix&& c) noexcept;
+      |   ^
+In file included from controller/derbigcontroller.cpp:23:
+controller/invertmotornstep.h:162:12: error: call to implicitly-deleted copy constructor of 'matrix::Matrix'
+  162 |     return sensorweights;
+      |            ^~~~~~~~~~~~~
+include/selforg/matrix.h:86:3: note: copy constructor is implicitly deleted because 'Matrix' has a user-declared move constructor
+   86 |   Matrix(Matrix&& c) noexcept;
+      |   ^
+In file included from wiredcontroller.cpp:35:
+In file included from ./wirings/abstractwiring.h:28:
+./matrix/matrix.h:84:16: error: unknown type name 'Matrixexplicit'
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |                ^
+./matrix/matrix.h:84:54: error: expected ')'
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |                                                      ^
+./matrix/matrix.h:84:9: note: to match this '('
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |         ^
+./matrix/matrix.h:84:56: error: unknown type name 'c'
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |                                                        ^
+./matrix/matrix.h:84:57: error: expected member name or ';' after declaration specifiers
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |                                                        ~^
+In file included from controller/derpseudosensor.cpp:20:
+In file included from controller/derpseudosensor.h:22:
+In file included from controller/invertmotorcontroller.h:25:
+controller/homeokinbase.h:78:12: error: call to implicitly-deleted copy constructor of 'matrix::Matrix'
+   78 |     return buffer[(t - number_steps_of_delay_) % buffersize];
+      |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+include/selforg/matrix.h:86:3: note: copy constructor is implicitly deleted because 'Matrix' has a user-declared move constructor
+   86 |   Matrix(Matrix&& c) noexcept;
+      |   ^
+In file included from controller/derpseudosensor.cpp:20:
+In file included from controller/derpseudosensor.h:22:
+In file included from controller/invertmotorcontroller.h:25:
+controller/homeokinbase.h:87:20: error: call to implicitly-deleted copy constructor of 'matrix::Matrix'
+   87 |     matrix::Matrix result(buffer[t % buffersize]);
+      |                    ^      ~~~~~~~~~~~~~~~~~~~~~~
+include/selforg/matrix.h:86:3: note: copy constructor is implicitly deleted because 'Matrix' has a user-declared move constructor
+   86 |   Matrix(Matrix&& c) noexcept;
+      |   ^
+controller/controllernet.cpp:112:10: error: call to implicitly-deleted copy constructor of 'const Matrix'
+  112 |   return y[layernum - 1];
+      |          ^~~~~~~~~~~~~~~
+include/selforg/matrix.h:86:3: note: copy constructor is implicitly deleted because 'Matrix' has a user-declared move constructor
+   86 |   Matrix(Matrix&& c) noexcept;
+      |   ^
+In file included from controller/derpseudosensor.cpp:20:
+In file included from controller/derpseudosensor.h:22:
+In file included from controller/invertmotorcontroller.h:25:
+controller/homeokinbase.h:92:12: error: call to implicitly-deleted copy constructor of 'matrix::Matrix'
+   92 |     return result;
+      |            ^~~~~~
+include/selforg/matrix.h:86:3: note: copy constructor is implicitly deleted because 'Matrix' has a user-declared move constructor
+   86 |   Matrix(Matrix&& c) noexcept;
+      |   ^
+controller/controllernet.cpp:141:10: error: call to implicitly-deleted copy constructor of 'const Matrix'
+  141 |   return y[layernum - 1];
+      |          ^~~~~~~~~~~~~~~
+include/selforg/matrix.h:86:3: note: copy constructor is implicitly deleted because 'Matrix' has a user-declared move constructor
+   86 |   Matrix(Matrix&& c) noexcept;
+      |   ^
+controller/controllernet.cpp:173:10: error: call to implicitly-deleted copy constructor of 'Matrix'
+  173 |   Matrix result = (*errors)[layernum];
+      |          ^        ~~~~~~~~~~~~~~~~~~~
+include/selforg/matrix.h:86:3: note: copy constructor is implicitly deleted because 'Matrix' has a user-declared move constructor
+   86 |   Matrix(Matrix&& c) noexcept;
+      |   ^
+controller/controllernet.cpp:178:10: error: call to implicitly-deleted copy constructor of 'const Matrix'
+  178 |   return result;
+      |          ^~~~~~
+include/selforg/matrix.h:86:3: note: copy constructor is implicitly deleted because 'Matrix' has a user-declared move constructor
+   86 |   Matrix(Matrix&& c) noexcept;
+      |   ^
+In file included from controller/dercontroller.cpp:25:
+In file included from controller/dercontroller.h:27:
+In file included from controller/invertmotorcontroller.h:25:
+controller/homeokinbase.h:78:12: error: call to implicitly-deleted copy constructor of 'matrix::Matrix'
+   78 |     return buffer[(t - number_steps_of_delay_) % buffersize];
+      |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+include/selforg/matrix.h:86:3: note: copy constructor is implicitly deleted because 'Matrix' has a user-declared move constructor
+   86 |   Matrix(Matrix&& c) noexcept;
+      |   ^
+In file included from controller/dercontroller.cpp:25:
+In file included from controller/dercontroller.h:27:
+In file included from controller/invertmotorcontroller.h:25:
+controller/homeokinbase.h:87:20: error: call to implicitly-deleted copy constructor of 'matrix::Matrix'
+   87 |     matrix::Matrix result(buffer[t % buffersize]);
+      |                    ^      ~~~~~~~~~~~~~~~~~~~~~~
+include/selforg/matrix.h:86:3: note: copy constructor is implicitly deleted because 'Matrix' has a user-declared move constructor
+   86 |   Matrix(Matrix&& c) noexcept;
+      |   ^
+controller/controllernet.cpp:248:10: error: call to implicitly-deleted copy constructor of 'Matrix'
+  248 |   Matrix result = (*errors)[layernum];
+      |          ^        ~~~~~~~~~~~~~~~~~~~
+include/selforg/matrix.h:86:3: note: copy constructor is implicitly deleted because 'Matrix' has a user-declared move constructor
+   86 |   Matrix(Matrix&& c) noexcept;
+      |   ^
+controller/controllernet.cpp:253:10: error: call to implicitly-deleted copy constructor of 'const Matrix'
+  253 |   return result;
+      |          ^~~~~~
+include/selforg/matrix.h:86:3: note: copy constructor is implicitly deleted because 'Matrix' has a user-declared move constructor
+   86 |   Matrix(Matrix&& c) noexcept;
+      |   ^
+controller/controllernet.cpp:283:10: error: call to implicitly-deleted copy constructor of 'Matrix'
+  283 |   Matrix result = (*errors)[0];
+      In file included from controller/dercontroller.cpp:25:
+In file included from controller/dercontroller.h:27:
+In file included from controller/invertmotorcontroller.h:25:
+controller/homeokinbase.h:92:12: error: call to implicitly-deleted copy constructor of 'matrix::Matrix'
+   92 |     return result;
+      |            ^~~~~~
+include/selforg/matrix.h:86:3: note: copy constructor is implicitly deleted because 'Matrix' has a user-declared move constructor
+   86 |   Matrix(Matrix&& c) noexcept;
+      |   ^
+|          ^        ~~~~~~~~~~~~
+include/selforg/matrix.h:86:3: note: copy constructor is implicitly deleted because 'Matrix' has a user-declared move constructor
+   86 |   Matrix(Matrix&& c) noexcept;
+      |   ^
+controller/controllernet.cpp:288:10: error: call to implicitly-deleted copy constructor of 'const Matrix'
+  288 |   return result;
+      |          ^~~~~~
+include/selforg/matrix.h:86:3: note: copy constructor is implicitly deleted because 'Matrix' has a user-declared move constructor
+   86 |   Matrix(Matrix&& c) noexcept;
+      |   ^
+controller/derbigcontroller.cpp:239:10: error: call to implicitly-deleted copy constructor of 'Matrix'
+  239 |   Matrix v = zero_eta;
+      |          ^   ~~~~~~~~
+include/selforg/matrix.h:86:3: note: copy constructor is implicitly deleted because 'Matrix' has a user-declared move constructor
+   86 |   Matrix(Matrix&& c) noexcept;
+      |   ^
+controller/controllernet.cpp:326:10: error: call to implicitly-deleted copy constructor of 'Matrix'
+  326 |   Matrix result = (*errors)[0];
+      |          ^        ~~~~~~~~~~~~
+include/selforg/matrix.h:86:3: note: copy constructor is implicitly deleted because 'Matrix' has a user-declared move constructor
+   86 |   Matrix(Matrix&& c) noexcept;
+      |   ^
+controller/controllernet.cpp:331:10: error: call to implicitly-deleted copy constructor of 'const Matrix'
+  331 |   return result;
+      |          ^~~~~~
+include/selforg/matrix.h:86:3: note: copy constructor is implicitly deleted because 'Matrix' has a user-declared move constructor
+   86 |   Matrix(Matrix&& c) noexcept;
+      |   ^
+controller/controllernet.cpp:402:10: error: call to implicitly-deleted copy constructor of 'Matrix'
+  402 |   Matrix result = (*errors)[0];
+      |          ^        ~~~~~~~~~~~~
+include/selforg/matrix.h:86:3: note: copy constructor is implicitly deleted because 'Matrix' has a user-declared move constructor
+   86 |   Matrix(Matrix&& c) noexcept;
+      |   ^
+controller/controllernet.cpp:407:10: error: call to implicitly-deleted copy constructor of 'const Matrix'
+  407 |   return result;
+      |          ^~~~~~
+include/selforg/matrix.h:86:3: note: copy constructor is implicitly deleted because 'Matrix' has a user-declared move constructor
+   86 |   Matrix(Matrix&& c) noexcept;
+      |   ^
+controller/dercontroller.cpp:304:10: error: call to implicitly-deleted copy constructor of 'Matrix'
+  304 |   Matrix v = zero_eta;
+      |          ^   ~~~~~~~~
+include/selforg/matrix.h:86:3: note: copy constructor is implicitly deleted because 'Matrix' has a user-declared move constructor
+   86 |   Matrix(Matrix&& c) noexcept;
+      |   ^
+In file included from controller/derpseudosensor.cpp:23:
+controller/invertmotornstep.h:162:12: error: call to implicitly-deleted copy constructor of 'matrix::Matrix'
+  162 |     return sensorweights;
+      |            ^~~~~~~~~~~~~
+include/selforg/matrix.h:86:3: note: copy constructor is implicitly deleted because 'Matrix' has a user-declared move constructor
+   86 |   Matrix(Matrix&& c) noexcepIn file included from t;controller/abstractiafcontroller.cpp:20:
+In file included from controller/abstractiafcontroller.h:26:
+In file included from ./utils/controller_misc.h:29:
+include/selforg/matrix.h:84:16: error: unknown type name 'Matrixexplicit'
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |                ^
+include/selforg/matrix.h:84:54: error: expected ')'
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |                                                      ^
+include/selforg/matrix.h:84:9: note: to match this '('
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |         ^
+
+      |   ^
+In file included from controller/derlininvert.cpp:20:
+In file included from controller/derlininvert.h:22:
+In file included from controller/invertmotorcontroller.h:25:
+controller/homeokinbase.h:78:12: error: call to implicitly-deleted copy constructor of 'matrix::Matrix'
+   78 |     return buffer[(t - number_steps_In file included from controller/derinf.cpp:20:
+In file included from controller/derinf.h:22:
+In file included from controller/invertmotorcontroller.ho:f_delay_) % buffersize];
+      |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+include/selforg/matrix.h:86:3: note: copy constructor is implicitly deleted because 'Matrix' has a user-declared move constructor
+   86 |   Matrix(Matrix&& c) noexcept;
+      |   ^
+25:
+controller/homeokinbase.h:78:12: error: call to implicitly-deleted copy constructor of 'matrix::Matrix'
+   78 |     return buffer[(t - number_steps_of_delay_) % buffersize];
+      |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+include/selforg/matrix.h:86:3: note: copy constructor is implicitly deleted because 'Matrix' has a user-declared move constructor
+   86 |   Matrix(Matrix&& c) noexcept;
+      |   ^
+In file included from controller/derlininvert.cpp:20:
+In file included from controller/derlininvert.h:22:
+In file included from controller/invertmotorcontroller.h:25:
+controller/homeokinbase.h:87:20: error: call to implicitly-deleted copy constructor of 'matrix::Matrix'
+   87 |     matrix::Matrix result(buffer[t % buffersize]);
+      |                    ^      ~~~~~~~~~~~~~~~~~~~~~~
+include/selforg/matrix.h:86:3: note: copy constructor is implicitly deleted because 'Matrix' has a user-declared move constructor
+   86 |   Matrix(Matrix&& In file included from controller/derinf.cpp:20:
+In file included from controller/derinf.h:22:
+In file included from controller/invertmotorcontroller.h:25:
+controller/homeokinbase.h:87:20: error: call to implicitly-deleted copy constructor of 'matrix::Matrix'
+   87 |     matrix::Matrix result(buffer[t % buffersize]);
+      |                    ^      ~~~~~~~~~~~~~~~~~~~~~~
+include/selforg/matrix.h:86:3:c) noexcinclude/selforg/matrix.he:pt;
+      |   ^ 
+note: copy constructor is implicitly deleted because 'Matrix' has a user-declared move constructor
+   86 |   Matrix(Matrix&& c) noexcept;
+      |   ^
+84:56: error: unknown type name 'c'
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |                                                        ^
+include/selforg/matrix.h:84:57: error: expected member name or ';' after declaration specifiers
+   84 |   Matrix(const Matrixexplicit Matrix(const Matrix& c); c);
+      |                                                        ~^
+In file included from controller/derinf.cpp:20:
+In file included from controller/derinf.h:22:
+In file included from controller/invertmotorcontroller.h:25:
+controller/homeokinbase.h:92:12: error: call to implicitly-deleted copy constructor of 'matrix::Matrix'
+   92 |     return result;
+      |            ^~~~~~
+include/selforg/matrix.h:86:3: note: copy constructor is implicitly deleted because 'Matrix' has a user-declared move constructor
+   86 |   Matrix(Matrix&& c) noexcept;
+      |   ^
+In file included from controller/derlininvert.cpp:20:
+In file included from controller/derlininvert.h:22:
+In file included from controller/invertmotorcontroller.h:25:
+controller/homeokinbase.h:92:12: error: call to implicitly-deleted copy constructor of 'matrix::Matrix'
+   92 |     return result;
+      |            ^~~~~~
+include/selforg/matrix.h:86:3: note: copy constructor is implicitly deleted because 'Matrix' has a user-declared move constructor
+   86 |   Matrix(Matrix&& c) noexcept;
+      |   ^
+controller/derpseudosensor.cpp:307:16: error: call to implicitly-deleted copy constructor of 'const Matrix'
+  307 |   const Matrix zpluseta = z; // + eta * .5;
+      |                ^          ~
+include/selforg/matrix.h:86:3: note: copy constructor is implicitly deleted because 'Matrix' has a user-declared move constructor
+   86 |   Matrix(Matrix&& c) noexcept;
+      |   ^
+In file included from controller/derinf.cpp:22:
+controller/invertmotornstep.h:162:12: error: call to implicitly-deleted copy constructor of 'matrix::Matrix'
+  162 |     return sensorweights;
+      |            ^~~~~~~~~~~~~
+include/selforg/matrix.h:86:3: note: copy constructor is implicitly deleted because 'Matrix' has a user-declared move constructor
+   86 |   Matrix(Matrix&& c) noexcept;
+      |   ^
+In file included from controller/derlininvert.cpp:22:
+controller/invertmotornstep.h:162:12: error: call to implicitly-deleted copy constructor of 'matrix::Matrix'
+  162 |     return sensorweights;
+      |            ^~~~~~~~~~~~~
+include/selforg/matrix.h:86:3: note: copy constructor is implicitly deleted because 'Matrix' has a user-declared move constructor
+   86 |   Matrix(Matrix&& c) noexcept;
+      |   ^
+controller/derlininvert.cpp:360:20: error: call to implicitly-deleted copy constructor of 'const Matrix'
+  360 |       const Matrix mue1_local = xsi;
+      |                    ^            ~~~
+include/selforg/matrix.h:86:3: note: copy constructor is implicitly deleted because 'Matrix' has a user-declared move constructor
+   86 |   Matrix(Matrix&& c) noexcept;
+      |   ^
+4 errors generated.
+4 errors generated.
+In file included from controller/controllernet.cpp:25:
+In file included from controller/controllernet.h:27:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/vector:314:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__vector/vector.h:37:
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__memory/allocator.h:153:24: error: call to implicitly-deleted copy constructor of 'matrix::Matrix'
+  153 |     ::new ((void*)__p) _Up(std::forward<_Args>(__args)...);
+      |                        ^   ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__memory/allocator_traits.h:309:9: note: in instantiation of function template specialization 'std::allocator<matrix::Matrix>::construct<matrix::Matrix, const matrix::Matrix &>' requested here
+  309 |     __a.construct(__p, std::forward<_Args>(__args)...);
+      |         ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__vector/vector.h:742:21: note: in instantiation of function template specialization 'std::allocator_traits<std::allocator<matrix::Matrix>>::construct<matrix::Matrix, const matrix::Matrix &, 0>' requested here
+  742 |     __alloc_traits::construct(this->__alloc_, std::__to_address(__tx.__pos_), std::forward<_Args>(__args)...);
+      |                     ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__vector/vector.h:1133:5: note: in instantiation of function template specialization 'std::vector<matrix::Matrix>::__construct_one_at_end<const matrix::Matrix &>' requested here
+ 1133 |     __construct_one_at_end(std::forward<_Args>(__args)...);
+      |     ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__vector/vector.h:452:93: note: in instantiation of function template specialization 'std::vector<matrix::Matrix>::emplace_back<const matrix::Matrix &>' requested here
+  452 |   _LIBCPP_CONSTEXPR_SINCE_CXX20 _LIBCPP_HIDE_FROM_ABI void push_back(const_reference __x) { emplace_back(__x); }
+      |                                                                                             ^
+controller/controllernet.cpp:543:13: note: in instantiation of member function 'std::vector<matrix::Matrix>::push_back' requested here
+  543 |     weights.push_back(m);
+      |             ^
+include/selforg/matrix.h:86:3: note: copy constructor is implicitly deleted because 'Matrix' has a user-declared move constructor
+   86 |   Matrix(Matrix&& c) noexcept;
+      |   ^
+4 errors generated.
+17 errors generated.
+make: *** [build/controller/discretecontrolleradapter.o] Error 1
+make: *** Waiting for unfinished jobs....
+make: *** [build/./agent.o] Error 1
+6 errors generated.
+make: *** [build/controller/classicreinforce.o] Error 1
+make: *** [build/controller/controllernet.o] Error 1
+5 errors generated.
+make: *** [build/controller/derlinunivers.o] Error 1
+4 errors generated.
+make: *** [build/controller/crossmotorcoupling.o] Error 1
+make: *** [build/controller/abstractiafcontroller.o] Error 1
+8 errors generated.
+9 errors generated.
+make: *** [build/controller/dercontroller.o] Error 1
+make: *** [build/controller/derbigcontroller.o] Error 1
+In file included from controller/dep.cpp:20:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/algorithm:1854:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/for_each.h:16:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__ranges/movable_box.h:21:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/optional:1302:
+In file included from /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/memory:943:
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__memory/allocator.h:153:24: error: call to implicitly-deleted copy constructor of 'matrix::Matrix'
+  153 |     ::new ((void*)__p) _Up(std::forward<_Args>(__args)...);
+      |                        ^   ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__memory/allocator_traits.h:309:9: note: in instantiation of function template specialization 'std::allocator<matrix::Matrix>::construct<matrix::Matrix, const matrix::Matrix &>' requested here
+  309 |     __a.construct(__p, std::forward<_Args>(__args)...);
+      |         ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__vector/vector.h:922:21: note: in instantiation of function template specialization 'std::allocator_traits<std::allocator<matrix::Matrix>>::construct<matrix::Matrix, const matrix::Matrix &, 0>' requested here
+  922 |     __alloc_traits::construct(this->__alloc_, std::__to_address(__pos), __x);
+      |                     ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__vector/vector.h:956:11: note: in instantiation of member function 'std::vector<matrix::Matrix>::__construct_at_end' requested here
+  956 |     this->__construct_at_end(__n, __x);
+      |           ^
+/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__vector/vector.h:1364:11: note: in instantiation of member function 'std::vector<matrix::Matrix>::__append' requested here
+ 1364 |     this->__append(__sz - __cs, __x);
+      |           ^
+include/selforg/ringbuffer.h:41:12: note: in instantiation of member function 'std::vector<matrix::Matrix>::resize' requested here
+   41 |     buffer.resize(size, t);
+      |            ^
+controller/dep.cpp:137:12: note: in instantiation of member function 'RingBuffer<matrix::Matrix>::init' requested here
+  137 |   x_buffer.init(buffersize, Matrix(number_sensors, 1));
+      |            ^
+include/selforg/matrix.h:86:3: note: copy constructor is implicitly deleted because 'Matrix' has a user-declared move constructor
+   86 |   Matrix(Matrix&& c) noexcept;
+      |   ^
+8 errors generated.
+4 errors generated.
+6 errors generated.
+make: *** [build/controller/derinf.o] Error 1
+make: *** [build/./wiredcontroller.o] Error 1
+make: *** [build/controller/dep.o] Error 1
+9 errors generated.
+make: *** [build/controller/derpseudosensor.o] Error 1
+9 errors generated.
+make: *** [build/controller/derlininvert.o] Error 1
+=== selforg build failed ===

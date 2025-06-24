@@ -7,14 +7,14 @@
 class AbstractPlotChannel
 {
 public:
-  AbstractPlotChannel(std::string name) : name(name), channelValue(0) {};
+  explicit AbstractPlotChannel(const std::string& name_) : name(name_), channelValue(0) {};
 //   virtual ~AbstractPlotChannel() {};
   
   virtual void setValue(double v) { channelValue=v; }
   
-  virtual double getValue()       { return channelValue; }
+  virtual double getValue() const { return channelValue; }
   
-  virtual std::string getChannelName() { return name; }  
+  virtual std::string getChannelName() const { return name; }  
   
     
 protected:

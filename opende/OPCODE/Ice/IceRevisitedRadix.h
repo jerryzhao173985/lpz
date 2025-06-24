@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /**
- *	Contains source code from the article "Radix Sort Revisited".
+ *	Contains source code from the article __PLACEHOLDER_0__.
  *	\file		IceRevisitedRadix.h
  *	\author		Pierre Terdiman
  *	\date		April, 4, 2000
@@ -27,24 +27,24 @@
 	{
 		public:
 		// Constructor/Destructor
-								RadixSort();
+								RadixSort() override;
 								~RadixSort();
 		// Sorting methods
-				RadixSort&		Sort(const udword* input, udword nb, RadixHint hint=RADIX_SIGNED);
-				RadixSort&		Sort(const float* input, udword nb);
+				RadixSort&		Sort(const udword* input, udword nb, RadixHint hint=RADIX_SIGNED) override;
+				RadixSort&		Sort(const float* input, udword nb) override;
 
 		//! Access to results. mRanks is a list of indices in sorted order, i.e. in the order you may further process your data
-		inline_	const udword*	GetRanks()			const	{ return mRanks;		}
+		inline_	const udword*	GetRanks()			const override { return mRanks;		}
 
 		//! mIndices2 gets trashed on calling the sort routine, but otherwise you can recycle it the way you want.
-		inline_	udword*			GetRecyclable()		const	{ return mRanks2;		}
+		inline_	udword*			GetRecyclable()		const override { return mRanks2;		}
 
 		// Stats
-				udword			GetUsedRam()		const;
+				udword			GetUsedRam()		const override;
 		//! Returns the total number of calls to the radix sorter.
-		inline_	udword			GetNbTotalCalls()	const	{ return mTotalCalls;	}
+		inline_	udword			GetNbTotalCalls()	const override { return mTotalCalls;	}
 		//! Returns the number of eraly exits due to temporal coherence.
-		inline_	udword			GetNbHits()			const	{ return mNbHits;		}
+		inline_	udword			GetNbHits()			const override { return mNbHits;		}
 
 		private:
 #ifndef RADIX_LOCAL_RAM
@@ -58,8 +58,8 @@
 				udword			mTotalCalls;		//!< Total number of calls to the sort routine
 				udword			mNbHits;			//!< Number of early exits due to coherence
 		// Internal methods
-				void			CheckResize(udword nb);
-				bool			Resize(udword nb);
+				void			CheckResize(udword nb) override;
+				bool			Resize(udword nb) override;
 	};
 
 #endif // __ICERADIXSORT_H__

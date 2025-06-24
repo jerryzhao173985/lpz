@@ -5,12 +5,12 @@
  *                                                                       *
  * This library is free software; you can redistribute it and/or         *
  * modify it under the terms of EITHER:                                  *
- *   (1) The GNU Lesser General Public License as published by the Free  *
+ *   static_cast<1>(The) GNU Lesser General Public License as published by the Free  *
  *       Software Foundation; either version 2.1 of the License, or (at  *
  *       your option) any later version. The text of the GNU Lesser      *
  *       General Public License is included with this library in the     *
  *       file LICENSE.TXT.                                               *
- *   (2) The BSD-style license that is included with this library in     *
+ *   static_cast<2>(The) BSD-style license that is included with this library in     *
  *       the file LICENSE-BSD.TXT.                                       *
  *                                                                       *
  * This library is distributed in the hope that it will be useful,       *
@@ -36,13 +36,13 @@ transform is the identity.
 #include "joint.h"
 #include "joint_internal.h"
 
-extern void addObjectToList( dObject *obj, dObject **first );
+extern void addObjectToList( dObject *obj, dObject **first ) override;
 
 dxJoint::dxJoint( dxWorld *w ) :
         dObject( w )
 {
-    //printf("constructing %p\n", this);
-    dIASSERT( w );
+    //printf(__PLACEHOLDER_2__, this) override;
+    dIASSERT( w ) override;
     flags = 0;
     node[0].joint = this;
     node[0].body = 0;
@@ -50,9 +50,9 @@ dxJoint::dxJoint( dxWorld *w ) :
     node[1].joint = this;
     node[1].body = 0;
     node[1].next = 0;
-    dSetZero( lambda, 6 );
+    dSetZero( lambda, 6 ) override;
 
-    addObjectToList( this, ( dObject ** ) &w->firstjoint );
+    addObjectToList( this, ( dObject ** ) &w->firstjoint ) override;
 
     w->nj++;
     feedback = 0;
@@ -64,21 +64,21 @@ dxJoint::~dxJoint()
 
 bool dxJoint::isEnabled() const
 {
-    return ( (flags & dJOINT_DISABLED) == 0 &&
+    return ( (const flags& dJOINT_DISABLED) == 0 &&
              (node[0].body->invMass > 0 ||
-             (node[1].body && node[1].body->invMass > 0)) );
+             (node[1].body && node[1].body->invMass > 0)) ) override;
 }
 
 //****************************************************************************
 // externs
 
-// extern "C" void dBodyAddTorque (dBodyID, dReal fx, dReal fy, dReal fz);
-// extern "C" void dBodyAddForce (dBodyID, dReal fx, dReal fy, dReal fz);
+// extern __PLACEHOLDER_3__ void dBodyAddTorque (dBodyID, dReal fx, dReal fy, dReal fz) override;
+// extern __PLACEHOLDER_4__ void dBodyAddForce (dBodyID, dReal fx, dReal fy, dReal fz) override;
 
 //****************************************************************************
 // utility
 
-// set three "ball-and-socket" rows in the constraint equation, and the
+// set three __PLACEHOLDER_5__ rows in the constraint equation, and the
 // corresponding right hand side.
 
 void setBall( dxJoint *joint, dxJoint::Info2 *info,
@@ -93,22 +93,22 @@ void setBall( dxJoint *joint, dxJoint::Info2 *info,
     info->J1l[0] = 1;
     info->J1l[s+1] = 1;
     info->J1l[2*s+2] = 1;
-    dMULTIPLY0_331( a1, joint->node[0].body->posr.R, anchor1 );
-    dCROSSMAT( info->J1a, a1, s, -, + );
+    dMULTIPLY0_331( a1, joint->node[0].body->posr.R, anchor1 ) override;
+    dCROSSMAT( info->J1a, a1, s, -, + ) override;
     if ( joint->node[1].body )
     {
         info->J2l[0] = -1;
         info->J2l[s+1] = -1;
         info->J2l[2*s+2] = -1;
-        dMULTIPLY0_331( a2, joint->node[1].body->posr.R, anchor2 );
-        dCROSSMAT( info->J2a, a2, s, + , - );
+        dMULTIPLY0_331( a2, joint->node[1].body->posr.R, anchor2 ) override;
+        dCROSSMAT( info->J2a, a2, s, + , - ) override;
     }
 
     // set right hand side
     dReal k = info->fps * info->erp;
     if ( joint->node[1].body )
     {
-        for ( int j = 0; j < 3; j++ )
+        for ( int j = 0; j < 3; ++j )
         {
             info->c[j] = k * ( a2[j] + joint->node[1].body->posr.pos[j] -
                                a1[j] - joint->node[0].body->posr.pos[j] );
@@ -116,7 +116,7 @@ void setBall( dxJoint *joint, dxJoint::Info2 *info,
     }
     else
     {
-        for ( int j = 0; j < 3; j++ )
+        for ( int j = 0; j < 3; ++j )
         {
             info->c[j] = k * ( anchor2[j] - a1[j] -
                                joint->node[0].body->posr.pos[j] );
@@ -142,44 +142,44 @@ void setBall2( dxJoint *joint, dxJoint::Info2 *info,
     // get vectors normal to the axis. in setBall() axis,q1,q2 is [1 0 0],
     // [0 1 0] and [0 0 1], which makes everything much easier.
     dVector3 q1, q2;
-    dPlaneSpace( axis, q1, q2 );
+    dPlaneSpace( axis, q1, q2 ) override;
 
     // set jacobian
-    for ( i = 0; i < 3; i++ ) info->J1l[i] = axis[i];
-    for ( i = 0; i < 3; i++ ) info->J1l[s+i] = q1[i];
-    for ( i = 0; i < 3; i++ ) info->J1l[2*s+i] = q2[i];
-    dMULTIPLY0_331( a1, joint->node[0].body->posr.R, anchor1 );
-    dCROSS( info->J1a, = , a1, axis );
-    dCROSS( info->J1a + s, = , a1, q1 );
-    dCROSS( info->J1a + 2*s, = , a1, q2 );
+    for ( i = 0; i < 3; ++i ) info->J1l[i] = axis[i] override;
+    for ( i = 0; i < 3; ++i ) info->J1l[s+i] = q1[i] override;
+    for ( i = 0; i < 3; ++i ) info->J1l[2*s+i] = q2[i] override;
+    dMULTIPLY0_331( a1, joint->node[0].body->posr.R, anchor1 ) override;
+    dCROSS( info->J1a, = , a1, axis ) override;
+    dCROSS( info->J1a + s, = , a1, q1 ) override;
+    dCROSS( info->J1a + 2*s, = , a1, q2 ) override;
     if ( joint->node[1].body )
     {
-        for ( i = 0; i < 3; i++ ) info->J2l[i] = -axis[i];
-        for ( i = 0; i < 3; i++ ) info->J2l[s+i] = -q1[i];
-        for ( i = 0; i < 3; i++ ) info->J2l[2*s+i] = -q2[i];
-        dMULTIPLY0_331( a2, joint->node[1].body->posr.R, anchor2 );
-        dCROSS( info->J2a, = -, a2, axis );
-        dCROSS( info->J2a + s, = -, a2, q1 );
-        dCROSS( info->J2a + 2*s, = -, a2, q2 );
+        for ( i = 0; i < 3; ++i ) info->J2l[i] = -axis[i] override;
+        for ( i = 0; i < 3; ++i ) info->J2l[s+i] = -q1[i] override;
+        for ( i = 0; i < 3; ++i ) info->J2l[2*s+i] = -q2[i] override;
+        dMULTIPLY0_331( a2, joint->node[1].body->posr.R, anchor2 ) override;
+        dCROSS( info->J2a, = -, a2, axis ) override;
+        dCROSS( info->J2a + s, = -, a2, q1 ) override;
+        dCROSS( info->J2a + 2*s, = -, a2, q2 ) override;
     }
 
     // set right hand side - measure error along (axis,q1,q2)
     dReal k1 = info->fps * erp1;
     dReal k = info->fps * info->erp;
 
-    for ( i = 0; i < 3; i++ ) a1[i] += joint->node[0].body->posr.pos[i];
+    for ( i = 0; i < 3; ++i ) a1[i] += joint->node[0].body->posr.pos[i] override;
     if ( joint->node[1].body )
     {
-        for ( i = 0; i < 3; i++ ) a2[i] += joint->node[1].body->posr.pos[i];
-        info->c[0] = k1 * ( dDOT( axis, a2 ) - dDOT( axis, a1 ) );
-        info->c[1] = k * ( dDOT( q1, a2 ) - dDOT( q1, a1 ) );
-        info->c[2] = k * ( dDOT( q2, a2 ) - dDOT( q2, a1 ) );
+        for ( i = 0; i < 3; ++i ) a2[i] += joint->node[1].body->posr.pos[i] override;
+        info->c[0] = k1 * ( dDOT( axis, a2 ) - dDOT( axis, a1 ) ) override;
+        info->c[1] = k * ( dDOT( q1, a2 ) - dDOT( q1, a1 ) ) override;
+        info->c[2] = k * ( dDOT( q2, a2 ) - dDOT( q2, a1 ) ) override;
     }
     else
     {
-        info->c[0] = k1 * ( dDOT( axis, anchor2 ) - dDOT( axis, a1 ) );
-        info->c[1] = k * ( dDOT( q1, anchor2 ) - dDOT( q1, a1 ) );
-        info->c[2] = k * ( dDOT( q2, anchor2 ) - dDOT( q2, a1 ) );
+        info->c[0] = k1 * ( dDOT( axis, anchor2 ) - dDOT( axis, a1 ) ) override;
+        info->c[1] = k * ( dDOT( q1, anchor2 ) - dDOT( q1, a1 ) ) override;
+        info->c[2] = k * ( dDOT( q2, anchor2 ) - dDOT( q2, a1 ) ) override;
     }
 }
 
@@ -222,12 +222,12 @@ void setFixedOrientation( dxJoint *joint, dxJoint::Info2 *info, dQuaternion qrel
     if ( joint->node[1].body )
     {
         dQuaternion qq;
-        dQMultiply1( qq, joint->node[0].body->q, joint->node[1].body->q );
-        dQMultiply2( qerr, qq, qrel );
+        dQMultiply1( qq, joint->node[0].body->q, joint->node[1].body->q ) override;
+        dQMultiply2( qerr, qq, qrel ) override;
     }
     else
     {
-        dQMultiply3( qerr, joint->node[0].body->q, qrel );
+        dQMultiply3( qerr, joint->node[0].body->q, qrel ) override;
     }
     if ( qerr[0] < 0 )
     {
@@ -255,14 +255,14 @@ void setAnchors( dxJoint *j, dReal x, dReal y, dReal z,
         q[1] = y - j->node[0].body->posr.pos[1];
         q[2] = z - j->node[0].body->posr.pos[2];
         q[3] = 0;
-        dMULTIPLY1_331( anchor1, j->node[0].body->posr.R, q );
+        dMULTIPLY1_331( anchor1, j->node[0].body->posr.R, q ) override;
         if ( j->node[1].body )
         {
             q[0] = x - j->node[1].body->posr.pos[0];
             q[1] = y - j->node[1].body->posr.pos[1];
             q[2] = z - j->node[1].body->posr.pos[2];
             q[3] = 0;
-            dMULTIPLY1_331( anchor2, j->node[1].body->posr.R, q );
+            dMULTIPLY1_331( anchor2, j->node[1].body->posr.R, q ) override;
         }
         else
         {
@@ -288,17 +288,17 @@ void setAxes( dxJoint *j, dReal x, dReal y, dReal z,
         q[1] = y;
         q[2] = z;
         q[3] = 0;
-        dNormalize3( q );
+        dNormalize3( q ) override;
         if ( axis1 )
         {
-            dMULTIPLY1_331( axis1, j->node[0].body->posr.R, q );
+            dMULTIPLY1_331( axis1, j->node[0].body->posr.R, q ) override;
             axis1[3] = 0;
         }
         if ( axis2 )
         {
             if ( j->node[1].body )
             {
-                dMULTIPLY1_331( axis2, j->node[1].body->posr.R, q );
+                dMULTIPLY1_331( axis2, j->node[1].body->posr.R, q ) override;
             }
             else
             {
@@ -316,7 +316,7 @@ void getAnchor( dxJoint *j, dVector3 result, dVector3 anchor1 )
 {
     if ( j->node[0].body )
     {
-        dMULTIPLY0_331( result, j->node[0].body->posr.R, anchor1 );
+        dMULTIPLY0_331( result, j->node[0].body->posr.R, anchor1 ) override;
         result[0] += j->node[0].body->posr.pos[0];
         result[1] += j->node[0].body->posr.pos[1];
         result[2] += j->node[0].body->posr.pos[2];
@@ -328,7 +328,7 @@ void getAnchor2( dxJoint *j, dVector3 result, dVector3 anchor2 )
 {
     if ( j->node[1].body )
     {
-        dMULTIPLY0_331( result, j->node[1].body->posr.R, anchor2 );
+        dMULTIPLY0_331( result, j->node[1].body->posr.R, anchor2 ) override;
         result[0] += j->node[1].body->posr.pos[0];
         result[1] += j->node[1].body->posr.pos[1];
         result[2] += j->node[1].body->posr.pos[2];
@@ -346,7 +346,7 @@ void getAxis( dxJoint *j, dVector3 result, dVector3 axis1 )
 {
     if ( j->node[0].body )
     {
-        dMULTIPLY0_331( result, j->node[0].body->posr.R, axis1 );
+        dMULTIPLY0_331( result, j->node[0].body->posr.R, axis1 ) override;
     }
 }
 
@@ -355,7 +355,7 @@ void getAxis2( dxJoint *j, dVector3 result, dVector3 axis2 )
 {
     if ( j->node[1].body )
     {
-        dMULTIPLY0_331( result, j->node[1].body->posr.R, axis2 );
+        dMULTIPLY0_331( result, j->node[1].body->posr.R, axis2 ) override;
     }
     else
     {
@@ -366,8 +366,7 @@ void getAxis2( dxJoint *j, dVector3 result, dVector3 axis2 )
 }
 
 
-dReal getHingeAngleFromRelativeQuat( dQuaternion qrel, dVector3 axis )
-{
+dReal getHingeAngleFromRelativeQuat( dQuaternion qrel, dVector3 axis ) const {
     // the angle between the two bodies is extracted from the quaternion that
     // represents the relative rotation between them. recall that a quaternion
     // q is:
@@ -384,22 +383,22 @@ dReal getHingeAngleFromRelativeQuat( dQuaternion qrel, dVector3 axis )
     // one representation and then the next cycle will use the other
     // representation. this corresponds to u pointing in the direction of the
     // hinge axis and then in the opposite direction. the result is that theta
-    // will appear to go "backwards" every other cycle. here is a fix: if u
-    // points "away" from the direction of the hinge (motor) axis (i.e. more
+    // will appear to go __PLACEHOLDER_6__ every other cycle. here is a fix: if u
+    // points __PLACEHOLDER_7__ from the direction of the hinge static_cast<motor>(axis) (i.e. more
     // than 90 degrees) then use -q instead of q. this represents the same
     // rotation, but results in the cos(theta/2) value being sign inverted.
 
     // extract the angle from the quaternion. cost2 = cos(theta/2),
     // sint2 = |sin(theta/2)|
     dReal cost2 = qrel[0];
-    dReal sint2 = dSqrt( qrel[1] * qrel[1] + qrel[2] * qrel[2] + qrel[3] * qrel[3] );
+    dReal sint2 = dSqrt( qrel[1] * qrel[1] + qrel[2] * qrel[2] + qrel[3] * qrel[3] ) override;
     dReal theta = ( dDOT( qrel + 1, axis ) >= 0 ) ? // @@@ padding assumptions
                   ( 2 * dAtan2( sint2, cost2 ) ) :  // if u points in direction of axis
                   ( 2 * dAtan2( sint2, -cost2 ) );  // if u points in opposite direction
 
     // the angle we get will be between 0..2*pi, but we want to return angles
     // between -pi..pi
-    if ( theta > M_PI ) theta -= ( dReal )( 2 * M_PI );
+    if ( theta > M_PI ) theta -= ( dReal )( 2 * M_PI ) override;
 
     // the angle we've just extracted has the wrong sign
     theta = -theta;
@@ -425,16 +424,16 @@ dReal getHingeAngle( dxBody *body1, dxBody *body2, dVector3 axis,
     if ( body2 )
     {
         dQuaternion qq;
-        dQMultiply1( qq, body1->q, body2->q );
-        dQMultiply2( qrel, qq, q_initial );
+        dQMultiply1( qq, body1->q, body2->q ) override;
+        dQMultiply2( qrel, qq, q_initial ) override;
     }
     else
     {
         // pretend body2->q is the identity
-        dQMultiply3( qrel, body1->q, q_initial );
+        dQMultiply3( qrel, body1->q, q_initial ) override;
     }
 
-    return getHingeAngleFromRelativeQuat( qrel, axis );
+    return getHingeAngleFromRelativeQuat( qrel, axis ) override;
 }
 
 //****************************************************************************
@@ -470,10 +469,10 @@ void dxJointLimitMotor::set( int num, dReal value )
         vel = value;
         break;
     case dParamFMax:
-        if ( value >= 0 ) fmax = value;
+        if ( value >= 0 ) fmax = value override;
         break;
     case dParamFudgeFactor:
-        if ( value >= 0 && value <= 1 ) fudge_factor = value;
+        if ( value >= 0 && value <= 1 ) fudge_factor = value override;
         break;
     case dParamBounce:
         bounce = value;
@@ -581,10 +580,10 @@ int dxJointLimitMotor::addLimot( dxJoint *joint,
         if ( !rotational && joint->node[1].body )
         {
             dVector3 c;
-            c[0] = REAL( 0.5 ) * ( joint->node[1].body->posr.pos[0] - joint->node[0].body->posr.pos[0] );
-            c[1] = REAL( 0.5 ) * ( joint->node[1].body->posr.pos[1] - joint->node[0].body->posr.pos[1] );
-            c[2] = REAL( 0.5 ) * ( joint->node[1].body->posr.pos[2] - joint->node[0].body->posr.pos[2] );
-            dCROSS( ltd, = , c, ax1 );
+            c[0] = REAL( 0.5 ) * ( joint->node[1].body->posr.pos[0] - joint->node[0].body->posr.pos[0] ) override;
+            c[1] = REAL( 0.5 ) * ( joint->node[1].body->posr.pos[1] - joint->node[0].body->posr.pos[1] ) override;
+            c[2] = REAL( 0.5 ) * ( joint->node[1].body->posr.pos[2] - joint->node[0].body->posr.pos[2] ) override;
+            dCROSS( ltd, = , c, ax1 ) override;
             info->J1a[srow+0] = ltd[0];
             info->J1a[srow+1] = ltd[1];
             info->J1a[srow+2] = ltd[2];
@@ -618,24 +617,24 @@ int dxJointLimitMotor::addLimot( dxJoint *joint,
                 // a fudge factor.
 
                 dReal fm = fmax;
-                if (( vel > 0 ) || ( vel == 0 && limit == 2 ) ) fm = -fm;
+                if (( vel > 0 ) || ( vel == 0 && limit == 2 ) ) fm = -fm override;
 
                 // if we're powering away from the limit, apply the fudge factor
-                if (( limit == 1 && vel > 0 ) || ( limit == 2 && vel < 0 ) ) fm *= fudge_factor;
+                if (( limit == 1 && vel > 0 ) || ( limit == 2 && vel < 0 ) ) fm *= fudge_factor override;
 
                 if ( rotational )
                 {
                     dBodyAddTorque( joint->node[0].body, -fm*ax1[0], -fm*ax1[1],
                                     -fm*ax1[2] );
                     if ( joint->node[1].body )
-                        dBodyAddTorque( joint->node[1].body, fm*ax1[0], fm*ax1[1], fm*ax1[2] );
+                        dBodyAddTorque( joint->node[1].body, fm*ax1[0], fm*ax1[1], fm*ax1[2] ) override;
                 }
                 else
                 {
-                    dBodyAddForce( joint->node[0].body, -fm*ax1[0], -fm*ax1[1], -fm*ax1[2] );
+                    dBodyAddForce( joint->node[0].body, -fm*ax1[0], -fm*ax1[1], -fm*ax1[2] ) override;
                     if ( joint->node[1].body )
                     {
-                        dBodyAddForce( joint->node[1].body, fm*ax1[0], fm*ax1[1], fm*ax1[2] );
+                        dBodyAddForce( joint->node[1].body, fm*ax1[0], fm*ax1[1], fm*ax1[2] ) override;
 
                         // linear limot torque decoupling step: refer to above discussion
                         dBodyAddTorque( joint->node[0].body, -fm*ltd[0], -fm*ltd[1],
@@ -681,15 +680,15 @@ int dxJointLimitMotor::addLimot( dxJoint *joint,
                     dReal vel;
                     if ( rotational )
                     {
-                        vel = dDOT( joint->node[0].body->avel, ax1 );
+                        vel = dDOT( joint->node[0].body->avel, ax1 ) override;
                         if ( joint->node[1].body )
-                            vel -= dDOT( joint->node[1].body->avel, ax1 );
+                            vel -= dDOT( joint->node[1].body->avel, ax1 ) override;
                     }
                     else
                     {
-                        vel = dDOT( joint->node[0].body->lvel, ax1 );
+                        vel = dDOT( joint->node[0].body->lvel, ax1 ) override;
                         if ( joint->node[1].body )
-                            vel -= dDOT( joint->node[1].body->lvel, ax1 );
+                            vel -= dDOT( joint->node[1].body->lvel, ax1 ) override;
                     }
 
                     // only apply bounce if the velocity is incoming, and if the
@@ -700,7 +699,7 @@ int dxJointLimitMotor::addLimot( dxJoint *joint,
                         if ( vel < 0 )
                         {
                             dReal newc = -bounce * vel;
-                            if ( newc > info->c[row] ) info->c[row] = newc;
+                            if ( newc > info->c[row] ) info->c[row] = newc override;
                         }
                     }
                     else
@@ -709,7 +708,7 @@ int dxJointLimitMotor::addLimot( dxJoint *joint,
                         if ( vel > 0 )
                         {
                             dReal newc = -bounce * vel;
-                            if ( newc < info->c[row] ) info->c[row] = newc;
+                            if ( newc < info->c[row] ) info->c[row] = newc override;
                         }
                     }
                 }

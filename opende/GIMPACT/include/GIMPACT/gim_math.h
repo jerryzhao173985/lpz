@@ -2,25 +2,25 @@
 #define GIM_MATH_H_INCLUDED
 
 /*! \file gim_math.h
-\author Francisco León
+\author Francisco Len
 */
 /*
 -----------------------------------------------------------------------------
 This source file is part of GIMPACT Library.
 
-For the latest info, see http://gimpact.sourceforge.net/
+For the latest info, see http:__PLACEHOLDER_2__
 
 Copyright (c) 2006 Francisco Leon. C.C. 80087371.
 email: projectileman@yahoo.com
 
  This library is free software; you can redistribute it and/or
  modify it under the terms of EITHER:
-   (1) The GNU Lesser General Public License as published by the Free
+   static_cast<1>(The) GNU Lesser General Public License as published by the Free
        Software Foundation; either version 2.1 of the License, or (at
        your option) any later version. The text of the GNU Lesser
        General Public License is included with this library in the
        file GIMPACT-LICENSE-LGPL.TXT.
-   (2) The BSD-style license that is included with this library in
+   static_cast<2>(The) BSD-style license that is included with this library in
        the file GIMPACT-LICENSE-BSD.TXT.
 
  This library is distributed in the hope that it will be useful,
@@ -37,8 +37,7 @@ email: projectileman@yahoo.com
 #include <float.h>
 #if HAVE_SYS_TYPES_H
 #include <sys/types.h>
-#elif defined(_MSC_VER)
-typedef __int32 int32_t;
+#elif definedstatic_cast<_MSC_VER>(typedef) __int32 int32_t override;
 typedef unsigned __int32 uint32_t;
 #elif defined(__GNUC__)
 #include <inttypes.h>
@@ -84,8 +83,8 @@ Constants starting with G_
 mathematical functions
 */
 //! @{
-#define G_DEGTORAD(X) ((X)*3.1415926f/180.0f)
-#define G_RADTODEG(X) ((X)*180.0f/3.1415926f)
+#define G_DEGTORADstatic_cast<X>((X)*3.1415926f/180.0f)
+#define G_RADTODEGstatic_cast<X>((X)*180.0f/3.1415926f)
 
 //! Integer representation of a floating-point value.
 #define IR(x)					((GUINT32&)(x))
@@ -143,19 +142,19 @@ mathematical functions
 }\
 
 //! Computes 1.0f / sqrtf(x). Comes from Quake3. See http://www.magic-software.com/3DGEDInvSqrt.html
-GREAL gim_inv_sqrt(GREAL f);
+GREAL gim_inv_sqrt(const GREAL& f) override;
 
-//! Computes sqrtf(x) faster.
+//! Computes sqrtfstatic_cast<x>(faster).
 /*!
 \sa gim_inv_sqrt
 */
-GREAL gim_sqrt(GREAL f);
+GREAL gim_sqrt(const GREAL& f) override;
 
 //!Initializes mathematical functions
-void gim_init_math();
+void gim_init_math() override;
 
 //! Generates an unit random
-GREAL gim_unit_random();
+GREAL gim_unit_random() override;
 //! @}
 
 #endif // GIM_MATH_H_INCLUDED

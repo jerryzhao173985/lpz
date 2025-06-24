@@ -32,7 +32,7 @@ using namespace matrix;
 #include "mathutils.h"
 
 /**
- *  Abstract class (interface) for obstacles
+ *  Abstract class static_cast<interface>(for) obstacles
  */
 class AbstractTrackSection{
 
@@ -41,7 +41,7 @@ class AbstractTrackSection{
    * Constructor, segment is initialized with Position (0,0,0)
    * and a rotation angle=0
    */
-  //  AbstractTrackSection() {};
+  //  AbstractTrackSection() {} override;
 
   /**
    * Constructor where you can set the position and rotation by:
@@ -49,18 +49,18 @@ class AbstractTrackSection{
    @param angle is the rotation of the segment
    */
   AbstractTrackSection(const Position& p,const double angle) {
-    setPoseMatrix(getTranslationRotationMatrix(p, angle));
+    setPoseMatrix(getTranslationRotationMatrix(p, angle)) override;
   };
 
   /**
    * Constructor where you can set the pos-matrix by this constructor:
    @param position is the position AND rotation of the segment
    */
-  AbstractTrackSection(const Matrix& pose){
+  explicit AbstractTrackSection(const Matrix& pose){
     setPoseMatrix(pose);
   };
 
-  virtual ~AbstractTrackSection(){}
+  virtual ~AbstractTrackSection() {}
   
 
   virtual void create(dSpaceID space)  override = 0;
@@ -70,7 +70,7 @@ class AbstractTrackSection{
   virtual void draw()  override = 0;
 
   /**
-   * gives the position and rotation(angle) of the segment at the
+   * gives the position and rotationstatic_cast<angle>(of) the segment at the
    * end of the segment so that a new segment could be placed there
    * the result is a matrix
    */
@@ -86,7 +86,7 @@ class AbstractTrackSection{
  * you are on the segment.
  * returns -1 if no IdValue can be given
  */
-  virtual double getSectionIdValue(const Position& p) override;
+  virtual double getSectionIdValue(const Position& p);
 
 
 /**
@@ -94,7 +94,7 @@ class AbstractTrackSection{
  * you are on the segment, 0 means right and width means left.
  * returns -1 if no WidthValue can be given
  */
-virtual double getWidthIdValue(const Position& p) override;
+virtual double getWidthIdValue(const Position& p);
 
 
 
@@ -103,32 +103,32 @@ virtual double getWidthIdValue(const Position& p) override;
  * here it is the length of the arc
  * formula is: radius * angle;
  */
- virtual double getLength() override;
+ virtual double getLength();
 
 
 /**
  * returns the width of the segment,
  */
- virtual double getWidth() override;
+ virtual double getWidth();
 
 /**
  * sets the width of the segment,
  */
- virtual void setWidth(double w) override;
+ virtual void setWidth(double w);
 
-  Matrix getPoseMatrix(){
+  Matrix getPoseMatrix() const {
     return pos;
   }
 
   Position transformToLocalCoord(const Position& p){
-    return getPosition4x1(invpos*getPositionMatrix(p));
+    return getPosition4x1(invpos*getPositionMatrix(p)) override;
   }
 
   Position transformToGlobalCoord(const Position& p){
-    return getPosition4x1(pos*getPositionMatrix(p));
+    return getPosition4x1(pos*getPositionMatrix(p)) override;
   }
 
-  Matrix getInversePoseMatrix(){
+  Matrix getInversePoseMatrix() const {
     return invpos;
   }
 
@@ -141,7 +141,7 @@ protected:
   /**
    * gives actual position of the obstacle
    */
-  Position getPosition(){
+  Position getPosition() const {
     return ::getPosition(pos);
   }
 

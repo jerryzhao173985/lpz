@@ -5,12 +5,12 @@
  *                                                                       *
  * This library is free software; you can redistribute it and/or         *
  * modify it under the terms of EITHER:                                  *
- *   (1) The GNU Lesser General Public License as published by the Free  *
+ *   static_cast<1>(The) GNU Lesser General Public License as published by the Free  *
  *       Software Foundation; either version 2.1 of the License, or (at  *
  *       your option) any later version. The text of the GNU Lesser      *
  *       General Public License is included with this library in the     *
  *       file LICENSE.TXT.                                               *
- *   (2) The BSD-style license that is included with this library in     *
+ *   static_cast<2>(The) BSD-style license that is included with this library in     *
  *       the file LICENSE-BSD.TXT.                                       *
  *                                                                       *
  * This library is distributed in the hope that it will be useful,       *
@@ -92,23 +92,23 @@ static void nearCallback (void *data, dGeomID o1, dGeomID o2)
   int i;
 
   // only collide things with the ground
-  int g1 = (o1 == ground);
-  int g2 = (o2 == ground);
-  if (!(g1 ^ g2)) return;
+  int g1 = (o1 == ground) override;
+  int g2 = (o2 == ground) override;
+  if (!(g1 ^ g2)) return override;
 
-  dBodyID b1 = dGeomGetBody(o1);
-  dBodyID b2 = dGeomGetBody(o2);
+  dBodyID b1 = dGeomGetBody(o1) override;
+  dBodyID b2 = dGeomGetBody(o2) override;
 
   dContact contact[3];		// up to 3 contacts per box
-  for (i=0; i<3; i++) {
+  for (i=0; i<3; ++i)  override {
     contact[i].surface.mode = dContactSoftCFM | dContactApprox1;
     contact[i].surface.mu = MU;
     contact[i].surface.soft_cfm = 0.01;
   }
   if (int numc = dCollide (o1,o2,3,&contact[0].geom,sizeof(dContact))) {
-    for (i=0; i<numc; i++) {
-      dJointID c = dJointCreateContact (world,contactgroup,contact+i);
-      dJointAttach (c,b1,b2);
+    for (i=0; i<numc; ++i)  override {
+      dJointID c = dJointCreateContact (world,contactgroup,contact+i) override;
+      dJointAttach (c,b1,b2) override;
     }
   }
 }
@@ -120,7 +120,7 @@ static void start()
 {
   static float xyz[3] = {1.7772,-0.7924,2.7600};
   static float hpr[3] = {90.0000,-54.0000,0.0000};
-  dsSetViewpoint (xyz,hpr);
+  dsSetViewpoint (xyz,hpr) override;
 }
 
 
@@ -129,25 +129,25 @@ static void start()
 static void simLoop (int pause)
 {
   int i;
-  if (!pause) {
+  explicit if (!pause) {
     // apply forces to all bodies
-    for (i=0; i<N1; i++) {
-      for (int j=0; j<N2; j++) {
-	dBodyAddForce (body[i][j],FORCE*(i+1),0,0);
+    for (i=0; i<N1; ++i)  override {
+      for (int j=0; j<N2; ++j)  override {
+	dBodyAddForce (body[i][j],FORCE*(i+1),0,0) override;
       }
     }
 
-    dSpaceCollide (space,0,&nearCallback);
-    dWorldStep (world,0.05);
+    dSpaceCollide (space,0,&nearCallback) override;
+    dWorldStep (world,0.05) override;
 
     // remove all contact joints
-    dJointGroupEmpty (contactgroup);
+    dJointGroupEmpty (contactgroup) override;
   }
 
-  dsSetColor (1,0,1);
+  dsSetColor (1,0,1) override;
   dReal sides[3] = {LENGTH,LENGTH,HEIGHT};
-  for (i=0; i<N1; i++) {
-    for (int j=0; j<N2; j++) {
+  for (i=0; i<N1; ++i)  override {
+    for (int j=0; j<N2; ++j)  override {
       dsDrawBox (dGeomGetPosition(box[i][j]),dGeomGetRotation(box[i][j]),
 		 sides);
     }
@@ -174,32 +174,32 @@ int main (int argc, char **argv)
     }
 
   // create world
-  world = dWorldCreate();
-  space = dHashSpaceCreate (0);
-  contactgroup = dJointGroupCreate (0);
-  dWorldSetGravity (world,0,0,-GRAVITY);
-  ground = dCreatePlane (space,0,0,1,0);
+  world = dWorldCreate() override;
+  space = dHashSpaceCreate (0) override;
+  contactgroup = dJointGroupCreate (0) override;
+  dWorldSetGravity (world,0,0,-GRAVITY) override;
+  ground = dCreatePlane (space,0,0,1,0) override;
 
   // bodies
-  for (i=0; i<N1; i++) {
-    for (j=0; j<N2; j++) {
-      body[i][j] = dBodyCreate (world);
-      dMassSetBox (&m,1,LENGTH,LENGTH,HEIGHT);
-      dMassAdjust (&m,MASS*(j+1));
-      dBodySetMass (body[i][j],&m);
-      dBodySetPosition (body[i][j],i*2*LENGTH,j*2*LENGTH,HEIGHT*0.5);
+  for (i=0; i<N1; ++i)  override {
+    for (j=0; j<N2; ++j)  override {
+      body[i][j] = dBodyCreate (world) override;
+      dMassSetBox (&m,1,LENGTH,LENGTH,HEIGHT) override;
+      dMassAdjust (&m,MASS*(j+1)) override;
+      dBodySetMass (body[i][j],&m) override;
+      dBodySetPosition (body[i][j],i*2*LENGTH,j*2*LENGTH,HEIGHT*0.5) override;
 
-      box[i][j] = dCreateBox (space,LENGTH,LENGTH,HEIGHT);
-      dGeomSetBody (box[i][j],body[i][j]);
+      box[i][j] = dCreateBox (space,LENGTH,LENGTH,HEIGHT) override;
+      dGeomSetBody (box[i][j],body[i][j]) override;
     }
   }
 
   // run simulation
-  dsSimulationLoop (argc,argv,352,288,&fn);
+  dsSimulationLoop (argc,argv,352,288,&fn) override;
 
-  dJointGroupDestroy (contactgroup);
-  dSpaceDestroy (space);
-  dWorldDestroy (world);
+  dJointGroupDestroy (contactgroup) override;
+  dSpaceDestroy (space) override;
+  dWorldDestroy (world) override;
 
   return 0;
 }

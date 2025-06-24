@@ -7,7 +7,7 @@
  *   LICENSE:                                                              *
  *   This work is licensed under the Creative Commons                      *
  *   Attribution-NonCommercial-ShareAlike 2.5 License. To view a copy of   *
- *   this license, visit http://creativecommons.org/licenses/by-nc-sa/2.5/ *
+ *   this license, visit http:__PLACEHOLDER_0__
  *   or send a letter to Creative Commons, 543 Howard Street, 5th Floor,   *
  *   San Francisco, California, 94105, USA.                                *
  *                                                                         *
@@ -33,8 +33,8 @@
    the contructor.
  */
 struct SoxExpandConf {
-  double initFeedbackStrength;       ///< initial value of diagonals of C
-  unsigned int numberContextSensors; ///< number of sensors considered as context sensors
+  double initFeedbackStrength = 0;       ///< initial value of diagonals of C
+  unsigned int numberContextSensors = 0; ///< number of sensors considered as context sensors
   matrix::Matrix contextCoupling;    ///< coupling of context senors to bias
 };
 
@@ -45,12 +45,12 @@ struct SoxExpandConf {
 class SoxExpand : public AbstractController {
 
 public:
-  explicit SoxExpand(const SoxExpandConf& conf = getDefaultConf());
+  SoxExpand(const SoxExpandConf& conf = getDefaultConf());
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
 
   virtual ~SoxExpand();
 
-  static SoxExpandConf getDefaultConf() {
+  static SoxExpandConf getDefaultConf() const {
     SoxExpandConf c;
     c.initFeedbackStrength = 1.0;
     c.numberContextSensors = 0;
@@ -58,11 +58,11 @@ public:
   }
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
-  virtual int getSensorNumber() const {
+  virtual int getSensorNumber() const override {
     return number_sensors;
   }
   /// returns the mumber of motors the controller was initialised with or 0 if not initialised
-  virtual int getMotorNumber() const {
+  virtual int getMotorNumber() const override {
     return number_motors;
   }
 
@@ -75,7 +75,7 @@ public:
 
   /***** STOREABLE ****/
   /** stores the controller values to a given file. */
-  virtual bool store(FILE* f) const;
+  virtual bool store(FILE* f) const override;
   /** loads the controller values from a given file. */
   virtual bool restore(FILE* f);
 
@@ -90,8 +90,8 @@ public:
   virtual void setContextC(const matrix::Matrix& CC);
 
 protected:
-  unsigned short number_sensors;
-  unsigned short number_motors;
+  unsigned short number_sensors = 0;
+  unsigned short number_motors = 0;
   static constexpr unsigned short buffersize = 10;
 
   matrix::Matrix A;  // Model Matrix
@@ -111,9 +111,9 @@ protected:
   matrix::Matrix x;        // current sensor value vector
   matrix::Matrix x_c;      // current context sensor value vector
   matrix::Matrix x_smooth; // time average of x values
-  int t;
-  bool TLE;
-  bool loga;
+  int t = 0;
+  bool TLE = false;
+  bool loga = false;
 
   paramval creativity;
   paramval sense;

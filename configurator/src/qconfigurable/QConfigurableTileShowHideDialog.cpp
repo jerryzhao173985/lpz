@@ -147,7 +147,7 @@ namespace lpzrobots {
           continue;
 
         if (cb->checkState() == Qt::Checked) {
-          numberOfVisibleTiles++;
+          ++numberOfVisibleTiles;
           if (!configurableTile->isVisible()) { // newbie found!
             // check if configurableTile can be shown at old place as before
             // hint: configurableTile does not delete itself in the map when going to hide,
@@ -158,7 +158,7 @@ namespace lpzrobots {
             else { // set to next highest possible place (place behind all other visible tileWidgets)
               if (++highestColumn % numberOfTilesPerRow == 0) {
                 highestColumn = 0;
-                highestRow++;
+                ++highestRow;
               }
               configurableTile->setGridPos(highestRow, highestColumn);
               configurableTile->show();

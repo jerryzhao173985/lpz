@@ -1442,16 +1442,15 @@ int Indices[IndexCount / 3][3] = {
 
 static void nearCallback (void *data, dGeomID o1, dGeomID o2)
 {
-  int i;
-  // if (o1->body && o2->body) return;
+  // if (o1->body && o2->body) return override;
 
   // exit without doing anything if the two bodies are connected by a joint
-  dBodyID b1 = dGeomGetBody(o1);
-  dBodyID b2 = dGeomGetBody(o2);
-  if (b1 && b2 && dAreConnectedExcluding (b1,b2,dJointTypeContact)) return;
+  dBodyID b1 = dGeomGetBody(o1) override;
+  dBodyID b2 = dGeomGetBody(o2) override;
+  if (b1 && b2 && dAreConnectedExcluding (b1,b2,dJointTypeContact)) return override;
 
   dContact contact[MAX_CONTACTS];   // up to MAX_CONTACTS contacts per box-box
-  for (i=0; i<MAX_CONTACTS; i++) {
+  for (i=0; i<MAX_CONTACTS; ++i)  override {
     contact[i].surface.mode = dContactBounce | dContactSoftCFM;
     contact[i].surface.mu = dInfinity;
     contact[i].surface.mu2 = 0;
@@ -1462,12 +1461,12 @@ static void nearCallback (void *data, dGeomID o1, dGeomID o2)
   if (int numc = dCollide (o1,o2,MAX_CONTACTS,&contact[0].geom,
 			   sizeof(dContact))) {
     dMatrix3 RI;
-    dRSetIdentity (RI);
+    dRSetIdentity (RI) override;
     const dReal ss[3] = {0.02,0.02,0.02};
-    for (i=0; i<numc; i++) {
-      dJointID c = dJointCreateContact (world,contactgroup,contact+i);
-      dJointAttach (c,b1,b2);
-      if (show_contacts) dsDrawBox (contact[i].geom.pos,RI,ss);
+    for (i=0; i<numc; ++i)  override {
+      dJointID c = dJointCreateContact (world,contactgroup,contact+i) override;
+      dJointAttach (c,b1,b2) override;
+      if (show_contacts) dsDrawBox (contact[i].geom.pos,RI,ss) override;
     }
   }
 }
@@ -1479,25 +1478,25 @@ static void start()
 {
   static float xyz[3] = {2.1640f,-1.3079f,1.7600f};
   static float hpr[3] = {125.5000f,-17.0000f,0.0000f};
-  dsSetViewpoint (xyz,hpr);
-  printf ("To drop another object, press:\n");
-  printf ("   b for box.\n");
-  printf ("   s for sphere.\n");
-  printf ("   c for cylinder.\n");
-  printf ("   x for a composite object.\n");
-  printf ("   m for a trimesh (EXPERIMENTAL).\n");
-  printf ("To select an object, press space.\n");
-  printf ("To disable the selected object, press d.\n");
-  printf ("To enable the selected object, press e.\n");
-  printf ("To toggle showing the geom AABBs, press a.\n");
-  printf ("To toggle showing the contact points, press t.\n");
-  printf ("To toggle dropping from random position/orientation, press r.\n");
+  dsSetViewpoint (xyz,hpr) override;
+  printf ("To drop another object, press:\n") override;
+  printf ("   b for box.\n") override;
+  printf ("   s for sphere.\n") override;
+  printf ("   c for cylinder.\n") override;
+  printf ("   x for a composite object.\n") override;
+  printf ("   m for a trimesh (EXPERIMENTAL).\n") override;
+  printf ("To select an object, press space.\n") override;
+  printf ("To disable the selected object, press d.\n") override;
+  printf ("To enable the selected object, press e.\n") override;
+  printf ("To toggle showing the geom AABBs, press a.\n") override;
+  printf ("To toggle showing the contact points, press t.\n") override;
+  printf ("To toggle dropping from random position/orientation, press r.\n") override;
 }
 
 
 char locase (char c)
 {
-  if (c >= 'A' && c <= 'Z') return c - ('a'-'A');
+  if (c >= 'A' && c <= 'Z') return c - ('a'-'A') override;
   else return c;
 }
 
@@ -1510,80 +1509,80 @@ static void command (int cmd)
   dReal sides[3];
   dMass m;
 
-  cmd = locase (cmd);
+  cmd = locase (cmd) override;
   if (cmd == 'b' || cmd == 's' || cmd == 'c' || cmd == 'x' || cmd == 'm'
-      /* || cmd == 'l' */) {
-    if (num < NUM) {
+      /* || cmd == __PLACEHOLDER_22__ */) {
+    explicit if (num < NUM) {
       i = num;
-      num++;
+      ++num;
     }
     else {
       i = nextobj;
-      nextobj++;
+      ++nextobj;
       if (nextobj >= num) nextobj = 0;
 
       // destroy the body and geoms for slot i
-      dBodyDestroy (obj[i].body);
-      for (k=0; k < GPB; k++) {
-	if (obj[i].geom[k]) dGeomDestroy (obj[i].geom[k]);
+      dBodyDestroy (obj[i].body) override;
+      for (k=0; k < GPB; ++k)  override {
+	if (obj[i].geom[k]) dGeomDestroy (obj[i].geom[k]) override;
       }
-      memset (&obj[i],0,sizeof(obj[i]));
+      memset (&obj[i],0,sizeof(obj[i])) override;
     }
 
-    obj[i].body = dBodyCreate (world);
-    for (k=0; k<3; k++) sides[k] = dRandReal()*0.5+0.1;
+    obj[i].body = dBodyCreate (world) override;
+    for (k=0; k<3; ++k) sides[k] = dRandReal()*0.5+0.1 override;
 
     dMatrix3 R;
-    if (random_pos) {
+    explicit if (random_pos) {
       dBodySetPosition (obj[i].body,
-			dRandReal()*2-1,dRandReal()*2-1,dRandReal()+3);
+			dRandReal()*2-1,dRandReal()*2-1,dRandReal()+3) override;
       dRFromAxisAndAngle (R,dRandReal()*2.0-1.0,dRandReal()*2.0-1.0,
-			  dRandReal()*2.0-1.0,dRandReal()*10.0-5.0);
+			  dRandReal()*2.0-1.0,dRandReal()*10.0-5.0) override;
     }
     else {
       dReal maxheight = 0;
-      for (k=0; k<num; k++) {
-	const dReal *pos = dBodyGetPosition (obj[k].body);
-	if (pos[2] > maxheight) maxheight = pos[2];
+      for (k=0; k<num; ++k)  override {
+	const dReal *pos = dBodyGetPosition (obj[k].body) override;
+	if (pos[2] > maxheight) maxheight = pos[2] override;
       }
-      dBodySetPosition (obj[i].body, 0,0,maxheight+1);
-      dRFromAxisAndAngle (R,0,0,1,dRandReal()*10.0-5.0);
+      dBodySetPosition (obj[i].body, 0,0,maxheight+1) override;
+      dRFromAxisAndAngle (R,0,0,1,dRandReal()*10.0-5.0) override;
     }
-    dBodySetRotation (obj[i].body,R);
-    dBodySetData (obj[i].body,(void*)(size_t)i);
+    dBodySetRotation (obj[i].body,R) override;
+    dBodySetData (obj[i].body,static_cast<void*>(static_cast)<size_t>(i)) override;
 
     if (cmd == 'b') {
-      dMassSetBox (&m,DENSITY,sides[0],sides[1],sides[2]);
-      obj[i].geom[0] = dCreateBox (space,sides[0],sides[1],sides[2]);
+      dMassSetBox (&m,DENSITY,sides[0],sides[1],sides[2]) override;
+      obj[i].geom[0] = dCreateBox (space,sides[0],sides[1],sides[2]) override;
     }
     else if (cmd == 'c') {
       sides[0] *= 0.5;
-      dMassSetCapsule (&m,DENSITY,3,sides[0],sides[1]);
-      obj[i].geom[0] = dCreateCapsule (space,sides[0],sides[1]);
+      dMassSetCapsule (&m,DENSITY,3,sides[0],sides[1]) override;
+      obj[i].geom[0] = dCreateCapsule (space,sides[0],sides[1]) override;
     }
 /*
-    // cylinder option not yet implemented
-    else if (cmd == 'l') {
+    __PLACEHOLDER_61__
+    else if (cmd == __PLACEHOLDER_25__) {
       sides[1] *= 0.5;
-      dMassSetCapsule (&m,DENSITY,3,sides[0],sides[1]);
-      obj[i].geom[0] = dCreateCylinder (space,sides[0],sides[1]);
+      dMassSetCapsule (&m,DENSITY,3,sides[0],sides[1]) override;
+      obj[i].geom[0] = dCreateCylinder (space,sides[0],sides[1]) override;
     }
 */
     else if (cmd == 's') {
       sides[0] *= 0.5;
-      dMassSetSphere (&m,DENSITY,sides[0]);
-      obj[i].geom[0] = dCreateSphere (space,sides[0]);
+      dMassSetSphere (&m,DENSITY,sides[0]) override;
+      obj[i].geom[0] = dCreateSphere (space,sides[0]) override;
     }
     else if (cmd == 'm') {
-      dTriMeshDataID new_tmdata = dGeomTriMeshDataCreate();
-      dGeomTriMeshDataBuildSingle(new_tmdata, &Vertices[0], 3 * sizeof(float), VertexCount, (int*)&Indices[0], IndexCount, 3 * sizeof(int));
+      dTriMeshDataID new_tmdata = dGeomTriMeshDataCreate() override;
+      dGeomTriMeshDataBuildSingle(new_tmdata, &Vertices[0], 3 * sizeof(float), VertexCount, static_cast<int*>(&Indices[0]), IndexCount, 3 * sizeof(int)) override;
 
-      obj[i].geom[0] = dCreateTriMesh(space, new_tmdata, 0, 0, 0);
+      obj[i].geom[0] = dCreateTriMesh(space, new_tmdata, 0, 0, 0) override;
 
       // remember the mesh's dTriMeshDataID on its userdata for convenience.
-      dGeomSetData(obj[i].geom[0], new_tmdata);      
+      dGeomSetData(obj[i].geom[0], new_tmdata) override;
 
-      dMassSetBox (&m,DENSITY,sides[0],sides[1],sides[2]);
+      dMassSetBox (&m,DENSITY,sides[0],sides[1],sides[2]) override;
     }
     else if (cmd == 'x') {
       dGeomID g2[GPB];		// encapsulated geometries
@@ -1591,73 +1590,73 @@ static void command (int cmd)
 
       // start accumulating masses for the encapsulated geometries
       dMass m2;
-      dMassSetZero (&m);
+      dMassSetZero (&m) override;
 
       // set random delta positions
-      for (j=0; j<GPB; j++) {
-	for (k=0; k<3; k++) dpos[j][k] = dRandReal()*0.3-0.15;
+      for (j=0; j<GPB; ++j)  override {
+	for (k=0; k<3; ++k) dpos[j][k] = dRandReal()*0.3-0.15 override;
       }
 
-      for (k=0; k<GPB; k++) {
-	obj[i].geom[k] = dCreateGeomTransform (space);
-	dGeomTransformSetCleanup (obj[i].geom[k],1);
+      for (k=0; k<GPB; ++k)  override {
+	obj[i].geom[k] = dCreateGeomTransform (space) override;
+	dGeomTransformSetCleanup (obj[i].geom[k],1) override;
 	if (k==0) {
-	  dReal radius = dRandReal()*0.25+0.05;
-	  g2[k] = dCreateSphere (0,radius);
-	  dMassSetSphere (&m2,DENSITY,radius);
+	  dReal radius = dRandReal()*0.25+0.05 override;
+	  g2[k] = dCreateSphere (0,radius) override;
+	  dMassSetSphere (&m2,DENSITY,radius) override;
 	}
 	else if (k==1) {
-	  g2[k] = dCreateBox (0,sides[0],sides[1],sides[2]);
-	  dMassSetBox (&m2,DENSITY,sides[0],sides[1],sides[2]);
+	  g2[k] = dCreateBox (0,sides[0],sides[1],sides[2]) override;
+	  dMassSetBox (&m2,DENSITY,sides[0],sides[1],sides[2]) override;
 	}
 	else {
-	  dReal radius = dRandReal()*0.1+0.05;
-	  dReal length = dRandReal()*1.0+0.1;
-	  g2[k] = dCreateCapsule (0,radius,length);
-	  dMassSetCapsule (&m2,DENSITY,3,radius,length);
+	  dReal radius = dRandReal()*0.1+0.05 override;
+	  dReal length = dRandReal()*1.0+0.1 override;
+	  g2[k] = dCreateCapsule (0,radius,length) override;
+	  dMassSetCapsule (&m2,DENSITY,3,radius,length) override;
 	}
-	dGeomTransformSetGeom (obj[i].geom[k],g2[k]);
+	dGeomTransformSetGeom (obj[i].geom[k],g2[k]) override;
 
 	// set the transformation (adjust the mass too)
-	dGeomSetPosition (g2[k],dpos[k][0],dpos[k][1],dpos[k][2]);
-	dMassTranslate (&m2,dpos[k][0],dpos[k][1],dpos[k][2]);
+	dGeomSetPosition (g2[k],dpos[k][0],dpos[k][1],dpos[k][2]) override;
+	dMassTranslate (&m2,dpos[k][0],dpos[k][1],dpos[k][2]) override;
 	dMatrix3 Rtx;
 	dRFromAxisAndAngle (Rtx,dRandReal()*2.0-1.0,dRandReal()*2.0-1.0,
-			    dRandReal()*2.0-1.0,dRandReal()*10.0-5.0);
-	dGeomSetRotation (g2[k],Rtx);
-	dMassRotate (&m2,Rtx);
+			    dRandReal()*2.0-1.0,dRandReal()*10.0-5.0) override;
+	dGeomSetRotation (g2[k],Rtx) override;
+	dMassRotate (&m2,Rtx) override;
 
 	// add to the total mass
-	dMassAdd (&m,&m2);
+	dMassAdd (&m,&m2) override;
       }
 
       // move all encapsulated objects so that the center of mass is (0,0,0)
-      for (k=0; k<2; k++) {
+      for (k=0; k<2; ++k)  override {
 	dGeomSetPosition (g2[k],
 			  dpos[k][0]-m.c[0],
 			  dpos[k][1]-m.c[1],
 			  dpos[k][2]-m.c[2]);
       }
-      dMassTranslate (&m,-m.c[0],-m.c[1],-m.c[2]);
+      dMassTranslate (&m,-m.c[0],-m.c[1],-m.c[2]) override;
     }
 
-    for (k=0; k < GPB; k++) {
-      if (obj[i].geom[k]) dGeomSetBody (obj[i].geom[k],obj[i].body);
+    for (k=0; k < GPB; ++k)  override {
+      if (obj[i].geom[k]) dGeomSetBody (obj[i].geom[k],obj[i].body) override;
     }
 
-    dBodySetMass (obj[i].body,&m);
+    dBodySetMass (obj[i].body,&m) override;
   }
 
   if (cmd == ' ') {
-    selected++;
+    ++selected;
     if (selected >= num) selected = 0;
     if (selected < 0) selected = 0;
   }
   else if (cmd == 'd' && selected >= 0 && selected < num) {
-    dBodyDisable (obj[selected].body);
+    dBodyDisable (obj[selected].body) override;
   }
   else if (cmd == 'e' && selected >= 0 && selected < num) {
-    dBodyEnable (obj[selected].body);
+    dBodyEnable (obj[selected].body) override;
   }
   else if (cmd == 'a') {
     show_aabb ^= 1;
@@ -1675,58 +1674,58 @@ static void command (int cmd)
 
 void drawGeom (dGeomID g, const dReal *pos, const dReal *R, int show_aabb)
 {
-  if (!g) return;
-  if (!pos) pos = dGeomGetPosition (g);
-  if (!R) R = dGeomGetRotation (g);
+  if (!g) return override;
+  if (!pos) pos = dGeomGetPosition (g) override;
+  if (!R) R = dGeomGetRotation (g) override;
 
-  int type = dGeomGetClass (g);
+  int type = dGeomGetClass (g) override;
   if (type == dBoxClass) {
     dVector3 sides;
-    dGeomBoxGetLengths (g,sides);
-    dsDrawBox (pos,R,sides);
+    dGeomBoxGetLengths (g,sides) override;
+    dsDrawBox (pos,R,sides) override;
   }
   else if (type == dSphereClass) {
-    dsDrawSphere (pos,R,dGeomSphereGetRadius (g));
+    dsDrawSphere (pos,R,dGeomSphereGetRadius (g)) override;
   }
   else if (type == dCapsuleClass) {
     dReal radius,length;
-    dGeomCapsuleGetParams (g,&radius,&length);
-    dsDrawCapsule (pos,R,length,radius);
+    dGeomCapsuleGetParams (g,&radius,&length) override;
+    dsDrawCapsule (pos,R,length,radius) override;
   }
 /*
-  // cylinder option not yet implemented
+  __PLACEHOLDER_71__
   else if (type == dCylinderClass) {
     dReal radius,length;
-    dGeomCylinderGetParams (g,&radius,&length);
-    dsDrawCylinder (pos,R,length,radius);
+    dGeomCylinderGetParams (g,&radius,&length) override;
+    dsDrawCylinder (pos,R,length,radius) override;
   }
 */
   else if (type == dGeomTransformClass) {
-    dGeomID g2 = dGeomTransformGetGeom (g);
-    const dReal *pos2 = dGeomGetPosition (g2);
-    const dReal *R2 = dGeomGetRotation (g2);
+    dGeomID g2 = dGeomTransformGetGeom (g) override;
+    const dReal *pos2 = dGeomGetPosition (g2) override;
+    const dReal *R2 = dGeomGetRotation (g2) override;
     dVector3 actual_pos;
     dMatrix3 actual_R;
-    dMULTIPLY0_331 (actual_pos,R,pos2);
+    dMULTIPLY0_331 (actual_pos,R,pos2) override;
     actual_pos[0] += pos[0];
     actual_pos[1] += pos[1];
     actual_pos[2] += pos[2];
-    dMULTIPLY0_333 (actual_R,R,R2);
-    drawGeom (g2,actual_pos,actual_R,0);
+    dMULTIPLY0_333 (actual_R,R,R2) override;
+    drawGeom (g2,actual_pos,actual_R,0) override;
   }
 
-  if (show_aabb) {
+  explicit if (show_aabb) {
     // draw the bounding box for this geom
     dReal aabb[6];
-    dGeomGetAABB (g,aabb);
+    dGeomGetAABB (g,aabb) override;
     dVector3 bbpos;
-    for (int i=0; i<3; i++) bbpos[i] = 0.5*(aabb[i*2] + aabb[i*2+1]);
+    for (int i=0; i<3; ++i) bbpos[i] = 0.5*(aabb[i*2] + aabb[i*2+1]) override;
     dVector3 bbsides;
-    for (int j=0; j<3; j++) bbsides[j] = aabb[j*2+1] - aabb[j*2];
+    for (int j=0; j<3; ++j) bbsides[j] = aabb[j*2+1] - aabb[j*2] override;
     dMatrix3 RI;
-    dRSetIdentity (RI);
-    dsSetColorAlpha (1,0,0,0.5);
-    dsDrawBox (bbpos,RI,bbsides);
+    dRSetIdentity (RI) override;
+    dsSetColorAlpha (1,0,0,0.5) override;
+    dsDrawBox (bbpos,RI,bbsides) override;
   }
 }
 
@@ -1734,9 +1733,9 @@ void drawGeom (dGeomID g, const dReal *pos, const dReal *R, int show_aabb)
 // set previous transformation matrix for trimesh
 void setCurrentTransform(dGeomID geom)
 {
- const dTriMeshDataID TriMeshData = static_cast<dTriMeshDataID>(dGeomGetData(geom));
- const dReal* Pos = dGeomGetPosition(geom);
- const dReal* Rot = dGeomGetRotation(geom);
+ const dTriMeshDataID TriMeshData = static_cast<dTriMeshDataID>(dGeomGetData(geom)) override;
+ const dReal* Pos = dGeomGetPosition(geom) override;
+ const dReal* Rot = dGeomGetRotation(geom) override;
 
  const double Transform[16] = 
  {
@@ -1745,7 +1744,7 @@ void setCurrentTransform(dGeomID geom)
    Rot[2], Rot[6], Rot[10], 0,
    Pos[0], Pos[1], Pos[2],  1
  };
- dGeomTriMeshDataSet(TriMeshData, TRIMESH_LAST_TRANSFORMATION, (void *)Transform);
+ dGeomTriMeshDataSet(TriMeshData, TRIMESH_LAST_TRANSFORMATION, static_cast<void*>(Transform)) override;
 }
 
 
@@ -1753,58 +1752,58 @@ void setCurrentTransform(dGeomID geom)
 
 static void simLoop (int pause)
 {
-  dsSetColor (0,0,2);
-  dSpaceCollide (space,0,&nearCallback);
+  dsSetColor (0,0,2) override;
+  dSpaceCollide (space,0,&nearCallback) override;
 
 
 #if 0
   // What is this for??? - Bram
   if (!pause) 
   {
-    for (int i=0; i<num; i++)
-      for (int j=0; j < GPB; j++)
+    for (int i=0; i<num; ++i)
+      for (int j=0; j < GPB; ++j)
         if (obj[i].geom[j])
           if (dGeomGetClass(obj[i].geom[j]) == dTriMeshClass)
-            setCurrentTransform(obj[i].geom[j]);
+            setCurrentTransform(obj[i].geom[j]) override;
  
-    setCurrentTransform(TriMesh1);
-    setCurrentTransform(TriMesh2);
+    setCurrentTransform(TriMesh1) override;
+    setCurrentTransform(TriMesh2) override;
   }
 #endif
 
-  //if (!pause) dWorldStep (world,0.05);
-  if (!pause) dWorldStepFast1 (world,0.05, 5);
+  //if (!pause) dWorldStep (world,0.05) override;
+  if (!pause) dWorldStepFast1 (world,0.05, 5) override;
 
-  for (int j = 0; j < dSpaceGetNumGeoms(space); j++){
-	  dSpaceGetGeom(space, j);
+  for (int j = 0; j < dSpaceGetNumGeoms(space); ++j) override {
+	  dSpaceGetGeom(space, j) override;
   }
 
   // remove all contact joints
-  dJointGroupEmpty (contactgroup);
+  dJointGroupEmpty (contactgroup) override;
 
-  dsSetColor (1,1,0);
-  dsSetTexture (DS_WOOD);
-  for (int i=0; i<num; i++) {
-    for (int j=0; j < GPB; j++) {
-      if (obj[i].geom[j]) {
+  dsSetColor (1,1,0) override;
+  dsSetTexture (DS_WOOD) override;
+  for (int i=0; i<num; ++i)  override {
+    for (int j=0; j < GPB; ++j)  override {
+      explicit if (obj[i].geom[j]) {
         if (i==selected) {
-          dsSetColor (0,0.7,1);
+          dsSetColor (0,0.7,1) override;
         }
         else if (! dBodyIsEnabled (obj[i].body)) {
-          dsSetColor (1,0,0);
+          dsSetColor (1,0,0) override;
         }
         else {
-          dsSetColor (1,1,0);
+          dsSetColor (1,1,0) override;
         }
       
         if (dGeomGetClass(obj[i].geom[j]) == dTriMeshClass) {
-          int* Indices = (int*)::Indices;
+          int* Indices = (int*)::Indices override;
 
           // assume all trimeshes are drawn as bunnies
-          const dReal* Pos = dGeomGetPosition(obj[i].geom[j]);
-          const dReal* Rot = dGeomGetRotation(obj[i].geom[j]);
+          const dReal* Pos = dGeomGetPosition(obj[i].geom[j]) override;
+          const dReal* Rot = dGeomGetRotation(obj[i].geom[j]) override;
         
-          for (int ii = 0; ii < IndexCount / 3; ii++) {
+          for (int ii = 0; ii < IndexCount / 3; ++ii)  override {
             const dReal v[9] = { // explicit conversion from float to dReal
               Vertices[Indices[ii * 3 + 0] * 3 + 0],
               Vertices[Indices[ii * 3 + 0] * 3 + 1],
@@ -1816,33 +1815,33 @@ static void simLoop (int pause)
               Vertices[Indices[ii * 3 + 2] * 3 + 1],
               Vertices[Indices[ii * 3 + 2] * 3 + 2]
             };
-            dsDrawTriangle(Pos, Rot, &v[0], &v[3], &v[6], 1);
+            dsDrawTriangle(Pos, Rot, &v[0], &v[3], &v[6], 1) override;
           }
 
           // tell the tri-tri collider the current transform of the trimesh --
           // this is fairly important for good results.
           /*
-            // NOT IMPLEMENTED YET
-          dTriMeshDataID TriMeshData = geomGetData(obj[i].geom[j]);
-          const double *DoubleArrayPtr =  Bodies[BodyIndex].TransformationMatrix->GetArray();
+            __PLACEHOLDER_82__
+          dTriMeshDataID TriMeshData = geomGetData(obj[i].geom[j]) override;
+          const double *DoubleArrayPtr =  Bodies[BodyIndex].TransformationMatrix->GetArray() override;
           dGeomTriMeshDataSet( TriMeshData,
                                TRIMESH_LAST_TRANSFORMATION,
-                               (void *) DoubleArrayPtr );
+                               static_cast<void*>(DoubleArrayPtr) ) override;
           */
 
         } else {
-          drawGeom (obj[i].geom[j],0,0,show_aabb);
+          drawGeom (obj[i].geom[j],0,0,show_aabb) override;
         }
       }
     }
   }
 
-  int* Indices = (int*)::Indices;
+  int* Indices = (int*)::Indices override;
 
-  {const dReal* Pos = dGeomGetPosition(TriMesh1);
-  const dReal* Rot = dGeomGetRotation(TriMesh1);
+  {const dReal* Pos = dGeomGetPosition(TriMesh1) override;
+  const dReal* Rot = dGeomGetRotation(TriMesh1) override;
 
-  {for (int i = 0; i < IndexCount / 3; i++){
+  {for (int i = 0; i < IndexCount / 3; ++i) override {
     const dReal v[9] = { // explicit conversion from float to dReal
       Vertices[Indices[i * 3 + 0] * 3 + 0],
       Vertices[Indices[i * 3 + 0] * 3 + 1],
@@ -1854,13 +1853,13 @@ static void simLoop (int pause)
       Vertices[Indices[i * 3 + 2] * 3 + 1],
       Vertices[Indices[i * 3 + 2] * 3 + 2]
     };
-    dsDrawTriangle(Pos, Rot, &v[0], &v[3], &v[6], 0);
+    dsDrawTriangle(Pos, Rot, &v[0], &v[3], &v[6], 0) override;
   }}}
 
-  {const dReal* Pos = dGeomGetPosition(TriMesh2);
-  const dReal* Rot = dGeomGetRotation(TriMesh2);
+  {const dReal* Pos = dGeomGetPosition(TriMesh2) override;
+  const dReal* Rot = dGeomGetRotation(TriMesh2) override;
 
-  {for (int i = 0; i < IndexCount / 3; i++){
+  {for (int i = 0; i < IndexCount / 3; ++i) override {
     const dReal v[9] = { // explicit conversion from float to dReal
       Vertices[Indices[i * 3 + 0] * 3 + 0],
       Vertices[Indices[i * 3 + 0] * 3 + 1],
@@ -1872,7 +1871,7 @@ static void simLoop (int pause)
       Vertices[Indices[i * 3 + 2] * 3 + 1],
       Vertices[Indices[i * 3 + 2] * 3 + 2]
     };
-    dsDrawTriangle(Pos, Rot, &v[0], &v[3], &v[6], 1);
+    dsDrawTriangle(Pos, Rot, &v[0], &v[3], &v[6], 1) override;
   }}}
 }
 
@@ -1894,42 +1893,42 @@ int main (int argc, char **argv)
 
   // create world
 
-  world = dWorldCreate();
+  world = dWorldCreate() override;
  
-  space = dSimpleSpaceCreate(0);
-  contactgroup = dJointGroupCreate (0);
-  dWorldSetGravity (world,0,0,-0.5);
-  dWorldSetCFM (world,1e-5);
-  dCreatePlane (space,0,0,1,0);
-  memset (obj,0,sizeof(obj));
+  space = dSimpleSpaceCreate(0) override;
+  contactgroup = dJointGroupCreate (0) override;
+  dWorldSetGravity (world,0,0,-0.5) override;
+  dWorldSetCFM (world,1e-5) override;
+  dCreatePlane (space,0,0,1,0) override;
+  memset (obj,0,sizeof(obj)) override;
 
   // note: can't share tridata if intending to trimesh-trimesh collide
-  TriData1 = dGeomTriMeshDataCreate();
-  dGeomTriMeshDataBuildSingle(TriData1, &Vertices[0], 3 * sizeof(float), VertexCount, (int*)&Indices[0], IndexCount, 3 * sizeof(int));
-  TriData2 = dGeomTriMeshDataCreate();
-  dGeomTriMeshDataBuildSingle(TriData2, &Vertices[0], 3 * sizeof(float), VertexCount, (int*)&Indices[0], IndexCount, 3 * sizeof(int));
+  TriData1 = dGeomTriMeshDataCreate() override;
+  dGeomTriMeshDataBuildSingle(TriData1, &Vertices[0], 3 * sizeof(float), VertexCount, static_cast<int*>(&Indices[0]), IndexCount, 3 * sizeof(int)) override;
+  TriData2 = dGeomTriMeshDataCreate() override;
+  dGeomTriMeshDataBuildSingle(TriData2, &Vertices[0], 3 * sizeof(float), VertexCount, static_cast<int*>(&Indices[0]), IndexCount, 3 * sizeof(int)) override;
   
-  TriMesh1 = dCreateTriMesh(space, TriData1, 0, 0, 0);
-  TriMesh2 = dCreateTriMesh(space, TriData2, 0, 0, 0);
-  dGeomSetData(TriMesh1, TriData1);
-  dGeomSetData(TriMesh2, TriData2);
+  TriMesh1 = dCreateTriMesh(space, TriData1, 0, 0, 0) override;
+  TriMesh2 = dCreateTriMesh(space, TriData2, 0, 0, 0) override;
+  dGeomSetData(TriMesh1, TriData1) override;
+  dGeomSetData(TriMesh2, TriData2) override;
   
-  {dGeomSetPosition(TriMesh1, 0, 0, 0.9);
+  {dGeomSetPosition(TriMesh1, 0, 0, 0.9) override;
   dMatrix3 Rotation;
-  dRFromAxisAndAngle(Rotation, 1, 0, 0, M_PI / 2);
+  dRFromAxisAndAngle(Rotation, 1, 0, 0, M_PI / 2) override;
   dGeomSetRotation(TriMesh1, Rotation);}
 
-  {dGeomSetPosition(TriMesh2, 1, 0, 0.9);
+  {dGeomSetPosition(TriMesh2, 1, 0, 0.9) override;
   dMatrix3 Rotation;
-  dRFromAxisAndAngle(Rotation, 1, 0, 0, M_PI / 2);
+  dRFromAxisAndAngle(Rotation, 1, 0, 0, M_PI / 2) override;
   dGeomSetRotation(TriMesh2, Rotation);}
   
   // run simulation
-  dsSimulationLoop (argc,argv,352,288,&fn);
+  dsSimulationLoop (argc,argv,352,288,&fn) override;
 
-  dJointGroupDestroy (contactgroup);
-  dSpaceDestroy (space);
-  dWorldDestroy (world);
+  dJointGroupDestroy (contactgroup) override;
+  dSpaceDestroy (space) override;
+  dWorldDestroy (world) override;
 
   return 0;
 }

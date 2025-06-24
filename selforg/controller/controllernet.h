@@ -38,7 +38,7 @@ public:
      @param layers Layer description (the input layer is not specified (always linear))
      @param useBypass if true, then a connection from input to output layer is included
   */
-  explicit ControllerNet(const std::vector<Layer>& layers, bool useBypass = false);
+  ControllerNet(const std::vector<Layer>& layers, bool useBypass = false);
   virtual ~ControllerNet() {}
 
   /** initialisation of the network with the given number of input and output units.
@@ -167,7 +167,7 @@ public:
   virtual const matrix::Matrix& getLayerOutput(int layer) const {
     if (layer < 0)
       layer = layers.size() + layer;
-    assert(layer >= 0 && layer < (int)layers.size());
+    assert(layer >= 0 && layer < static_cast<int>(layers.size()));
     return y[layer];
   }
 
@@ -194,7 +194,7 @@ public:
   virtual const matrix::Matrix& getWeights(int to_layer) const {
     if (to_layer < 0)
       to_layer = weights.size() - to_layer;
-    assert(to_layer >= 0 && to_layer < (int)weights.size());
+    assert(to_layer >= 0 && to_layer < static_cast<int>(weights.size()));
     return weights[to_layer];
   }
 
@@ -204,7 +204,7 @@ public:
   virtual matrix::Matrix& getWeights(int to_layer) {
     if (to_layer < 0)
       to_layer = weights.size() - to_layer;
-    assert(to_layer >= 0 && to_layer < (int)weights.size());
+    assert(to_layer >= 0 && to_layer < static_cast<int>(weights.size()));
     return weights[to_layer];
   }
 
@@ -224,7 +224,7 @@ public:
   virtual const matrix::Matrix& getBias(int of_layer) const {
     if (of_layer < 0)
       of_layer = bias.size() - of_layer;
-    assert(of_layer >= 0 && of_layer < (int)bias.size());
+    assert(of_layer >= 0 && of_layer < static_cast<int>(bias.size()));
     return bias[of_layer];
   }
 
@@ -234,7 +234,7 @@ public:
   virtual matrix::Matrix& getBias(int of_layer) {
     if (of_layer < 0)
       of_layer = bias.size() - of_layer;
-    assert(of_layer >= 0 && of_layer < (int)bias.size());
+    assert(of_layer >= 0 && of_layer < static_cast<int>(bias.size()));
     return bias[of_layer];
   }
 
@@ -255,7 +255,7 @@ protected:
   std::vector<Layer> layers;
   std::vector<matrix::Matrix> weights;
   std::vector<matrix::Matrix> bias;
-  bool useBypass;
+  bool useBypass = false;
   matrix::Matrix bypassWeights;
 
   /*** storage variables ****/
@@ -268,8 +268,8 @@ protected:
   matrix::Matrix L; // jacobian (or response) matrix
   matrix::Matrix R; // linearized jacobian matrix
 
-  double lambda; // regularisation value for pseudoinverse
-  bool initialised;
+  double lambda = 0; // regularisation value for pseudoinverse
+  bool initialised = false;
 };
 
 #endif

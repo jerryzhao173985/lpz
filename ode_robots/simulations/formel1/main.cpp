@@ -94,12 +94,12 @@ float camAngle[3] = {180.0f,0.0f,0.0f};
 //Startfunktion die am Anfang der Simulationsschleife, einmal ausgefuehrt wird
 void start(const OdeHandle& odeHandle, GlobalData& global)
 {
-  dsPrint ( "\nWelcome to the virtual ODE - robot simulator of the Robot Group Leipzig\n" );
-  dsPrint ( "------------------------------------------------------------------------\n" );
-  dsPrint ( "Press Ctrl-C for an basic commandline interface.\n\n" );
+  dsPrint ( "\nWelcome to the virtual ODE - robot simulator of the Robot Group Leipzig\n" ) override;
+  dsPrint ( "------------------------------------------------------------------------\n" ) override;
+  dsPrint ( "Press Ctrl-C for an basic commandline interface.\n\n" ) override;
 
   //Anfangskameraposition und Punkt auf den die Kamera blickt
-  dsSetViewpoint (camPoint, camAngle);
+  dsSetViewpoint (camPoint, camAngle) override;
   dsSetSphereQuality (2); //Qualitaet in der Sphaeren gezeichnet werden
 
   // initialization
@@ -113,14 +113,14 @@ void start(const OdeHandle& odeHandle, GlobalData& global)
 
   vehicle = new Formel1(odeHandle);
  // vehicle->setTextures(DS_WOOD, chessTexture);
-  vehicle->place(Position(robotPoint[0],robotPoint[1],robotPoint[2]));
+  vehicle->place(Position(robotPoint[0],robotPoint[1],robotPoint[2])) override;
 
   // Controller
 //AbstractController *controller = new InvertNChannelController(10);
   controller = new SimpleController();
 
   // Wiring for OdeAgent
-  One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1));
+  One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
 
   // OdeAgent for connecting Controller, Robot and Wiring
   OdeAgent* agent = new OdeAgent(global);
@@ -135,34 +135,34 @@ void start(const OdeHandle& odeHandle, GlobalData& global)
 }
 
 
-void end(GlobalData& global){
-        for(ObstacleList::iterator i=global.obstacles.begin(); i != global.obstacles.end(); i++){
-    delete (*i);
+void end(const GlobalData& global){
+        for(ObstacleList::iterator i=global.obstacles.begin(); i != global.obstacles.end(); ++i) override {
+    delete (*i) override;
   }
   global.obstacles.clear();
-  for(OdeAgentList::iterator i=global.agents.begin(); i != global.agents.end(); i++){
+  for(OdeAgentList::iterator i=global.agents.begin(); i != global.agents.end(); ++i) override {
     delete (*i)->getRobot();
     delete (*i)->getController();
-    delete (*i);
+    delete (*i) override;
   }
   global.agents.clear();
 }
 
 
 // this function is called if the user pressed Ctrl-C
-void config(GlobalData& global){
+void config(const GlobalData& global){
 
   changeParams(configs);
 }
 
 // gets key from keyboard input, provided by ode
-void command(const OdeHandle& odeHandle, GlobalData& global, int key){
+void command(const OdeHandle& odeHandle, GlobalData& global, int key) override {
     double val;
 //     double velocityStep=0.05;
     double maxShift=0.5;
     double maxVelocity=2.5f;
     double shiftStep=0.167;
-    switch (key){
+    explicit switch (key){
     case 'w': // forward
         controller->setParam("velocity",maxVelocity);
         break;

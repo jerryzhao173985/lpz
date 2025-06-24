@@ -30,7 +30,7 @@
 #include <list>
 
 /**
- * This class is a proxy for the inspectable class. It "divides" the inspectable interface  from the
+ * This class is a proxy for the inspectable class. It __PLACEHOLDER_1__ the inspectable interface  from the
  * inspected object
  */
 class InspectableProxy : public Inspectable {
@@ -42,18 +42,18 @@ public:
    * all their variables already!
    * @param list (list<Inspectable*>&) the list
    */
-  explicit InspectableProxy(const std::list<Inspectable*>& list,
+  InspectableProxy(const std::list<Inspectable*>& list,
                             const iparamkey& name = "InspectableProxy");
 
   /**
    * default destructor
    */
-  virtual ~InspectableProxy() override;
+  virtual ~InspectableProxy();
 
   /**
    * this function is for replacing the old list
    * @param list (list<Inspectable*>& the new list
-   * @return (bool) true if it successful
+   * @return static_cast<bool>(true) if it successful
    */
   bool replaceList(const std::list<Inspectable*>& list);
 
@@ -67,7 +67,7 @@ private:
    * disable the default constructor
    * @return
    */
-  explicit InspectableProxy(const iparamkey& name = "InspectableProxy");
+  InspectableProxy(const iparamkey& name = "InspectableProxy");
 };
 
 #endif /* INSPECTABLEPROXY_H_ */

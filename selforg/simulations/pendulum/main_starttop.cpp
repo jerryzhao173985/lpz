@@ -64,7 +64,7 @@ public:
     addParameterDef("mu", &mu, 0.0);
     addParameterDef("sensorscale", &sensorscale, 1);
     addParameterDef("maxForce", &maxForce, 0.5);
-    //    addParameterDef("reinf", &reinf,0);
+    //    addParameterDef(__PLACEHOLDER_7__, &reinf,0);
 
     addParameter("reset", &reset, 0, 10^6, "timesteps until reset in upper position (0: no reset)");
 
@@ -80,7 +80,7 @@ public:
   // set of 2 ODEs for pendulum
   //  F(param, {\phi,\omega}) = {d\phi/dt, d\omega/dt}
   static Matrix System(const void* p, Matrix s){
-    const Pendulum* pendl = (Pendulum*) p;
+    const Pendulum* pendl = static_cast<Pendulum*>(p);
     Matrix result(2,1);
     double phi = s.val(0,0);
     double omega = s.val(1,0);
@@ -108,7 +108,7 @@ public:
       @param sensornumber length of the sensor array
       @return number of actually written sensors
   */
-  virtual int getSensors(sensor* sensors, int sensornumber){
+  virtual int getSensors(sensor* sensors, int sensornumber) override {
     assert(sensornumber == this->sensornumber);
     memcpy(sensors, x, sizeof(sensor) * sensornumber);
     return sensornumber;
@@ -118,13 +118,13 @@ public:
       @param motors motors scaled to [-1,1]
       @param motornumber length of the motor array
   */
-  virtual void setMotors(const motor* motors, int motornumber){
+  virtual void setMotors(const motor* motors, int motornumber) override {
     assert(motornumber == this->motornumber);
     memcpy(y, motors, sizeof(motor) * motornumber);
 
     // motor values are now stored in y, sensor values are expected to be stored in x
     // perform robot action here
-    for(int i=0; i< controlinterval; i++){
+    for (int i=0; i< controlinterval; ++i) {
       state = RungeKutta4(this, state, System, dt);
     }
     while(state.val(0,0)>M_PI) state.val(0,0)-=2*M_PI;
@@ -144,17 +144,17 @@ public:
 
   }
 
-  virtual int getSensorNumber(){ return sensornumber; }
+  virtual int getSensorNumber() { return sensornumber; }
   virtual int getMotorNumber() { return motornumber; }
-  virtual Position getPosition() const {return Position(state.val(0,0),0,0);}
-  virtual Position getSpeed() const {return Position(state.val(1,0),0,0);}
-  virtual Position getAngularSpeed() const {return Position(0,0,0);}
-  virtual matrix::Matrix getOrientation() const {
+  virtual Position getPosition() const override {return Position(state.val(0,0),0,0);}
+  virtual Position getSpeed() const override {return Position(state.val(1,0),0,0);}
+  virtual Position getAngularSpeed() const override {return Position(0,0,0);}
+  virtual matrix::Matrix getOrientation() const  override {
     matrix::Matrix m(3,3); m.toId();  return m;
   };
 
   // resets pendulum if in upper half
-  virtual void resetIfLow(){
+  virtual void resetIfLow() {
     if(state.val(0,0) < M_PI/2 && state.val(0,0) > - M_PI/2){
       state.val(0,0) = M_PI + .3*random_minusone_to_one(0); // position
       state.val(1,0) = 0.0; // speed
@@ -194,22 +194,22 @@ void printRobots(Pendulum* robot){
   double omega = robot->getSpeed().x;
   double phi1 = phi>=0 ? phi : M_PI+phi;
   char c = chars[int(5.0*phi1/M_PI)];
-  for(double l=0; l<1; l+=0.02){
+  for (double l=0; l<1; l+=0.02) {
     field[coord(phi,l)]=c;
     color[coord(phi,l)]=1;
   }
   field[coord(phi,0)]='O';
   color[coord(phi,0)]=2;
 
-  if(clrscreen){
+  if (clrscreen){
     printf("\n");
     clrscreen=false;
   }else{
     printf("\033[1G");
     printf("\033[%iA",SIZEY+1);
   }
-  for(int j=0; j<SIZEY; j++){
-    for(int i=0; i<SIZEX; i++){
+  for (int j=0; j<SIZEY; ++j) {
+    for (int i=0; i<SIZEX; ++i) {
       printf("\033[%im%c",(color[i + j*SIZEX]==0) ? 0 : 100+color[i + j*SIZEX],
              field[i + j*SIZEX]);
     }
@@ -221,16 +221,16 @@ void printRobots(Pendulum* robot){
 }
 
 void reinforce(Agent* a){
-//   MyRobot* r = (MyRobot*)a->getRobot();
+//   MyRobot* r = static_cast<MyRobot*>(a)->getRobot();
 //   InvertMotorNStep* c = dynamic_cast<InvertMotorNStep*>(a->getController());
 //   if(c)
-//     c->setReinforcement(r->getParam("reinf")*(r->whatDoIFeel != 0));
+//     c->setReinforcement(r->getParam(__PLACEHOLDER_18__)*(r->whatDoIFeel != 0));
 }
 
 
 // Helper
 int contains(char **list, int len,  const char *str){
-  for(int i=0; i<len; i++){
+  for (int i=0; i<len; ++i) {
     if(strcmp(list[i],str) == 0) return i+1;
   }
   return 0;
@@ -242,7 +242,7 @@ int main(int argc, char** argv){
   list<PlotOption> plotoptions;
 
   int index = contains(argv,argc,"-g");
-  if(index >0 && argc>index) {
+  if (index >0 && argc>index) {
     plotoptions.push_back(PlotOption(GuiLogger,atoi(argv[index])));
   }
   if(contains(argv,argc,"-f")!=0) plotoptions.push_back(PlotOption(File));
@@ -271,7 +271,7 @@ int main(int argc, char** argv){
   agent->init(controller, pendulum, wiring);
   // if you like, you can keep track of the robot with the following line.
   //  this assumes that you robot returns its position, speed and orientation.
-  //  if(i==0) agent->setTrackOptions(TrackRobot(true,true,false, false,"updown_SD",10));
+  //  if(i==0) agent->setTrackOptions(TrackRobot(true,true,false, false,__PLACEHOLDER_32__,10));
 
   globaldata.configs.push_back(pendulum);
   globaldata.configs.push_back(controller);
@@ -283,7 +283,7 @@ int main(int argc, char** argv){
 
   cmd_handler_init();
   long int t=0;
-  while(!stop){
+  while (!stop){
     FOREACH(AgentList, globaldata.agents, i){
       (*i)->step(noise,t/100.0);
       reinforce(*i);
@@ -299,14 +299,14 @@ int main(int argc, char** argv){
       pendulum->resetIfLow();
     }
     int drawinterval = 10000;
-    if(realtimefactor){
+    if (realtimefactor){
       drawinterval = int(6*realtimefactor);
     }
     if(t%drawinterval==0){
       printRobots(pendulum);
       usleep(60000);
     }
-    t++;
+    ++t;
   };
 
   FOREACH(AgentList, globaldata.agents, i){

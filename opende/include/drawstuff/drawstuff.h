@@ -5,12 +5,12 @@
  *                                                                       *
  * This library is free software; you can redistribute it and/or         *
  * modify it under the terms of EITHER:                                  *
- *   (1) The GNU Lesser General Public License as published by the Free  *
+ *   static_cast<1>(The) GNU Lesser General Public License as published by the Free  *
  *       Software Foundation; either version 2.1 of the License, or (at  *
  *       your option) any later version. The text of the GNU Lesser      *
  *       General Public License is included with this library in the     *
  *       file LICENSE.TXT.                                               *
- *   (2) The BSD-style license that is included with this library in     *
+ *   static_cast<2>(The) BSD-style license that is included with this library in     *
  *       the file LICENSE-BSD.TXT.                                       *
  *                                                                       *
  * This library is distributed in the hope that it will be useful,       *
@@ -29,7 +29,7 @@ production use.
 
 @section Notes
 
-In the virtual world, the z axis is "up" and z=0 is the floor.
+In the virtual world, the z axis is __PLACEHOLDER_0__ and z=0 is the floor.
 
 The user is able to click+drag in the main window to move the camera:
   * left button - pan and tilt.
@@ -99,7 +99,7 @@ typedef struct dsFunctions {
  * @ingroup drawstuff
  * This function starts running the simulation, and only exits when the simulation is done.
  * Function pointers should be provided for the callbacks.
- * @param argv supports flags like '-notex' '-noshadow' '-pause'
+ * @param argv supports flags like '-notex__PLACEHOLDER_4__-noshadow__PLACEHOLDER_5__-pause'
  * @param fn Callback functions.
  */
 DS_API void dsSimulationLoop (int argc, char **argv,
@@ -112,7 +112,7 @@ DS_API void dsSimulationLoop (int argc, char **argv,
  * This function displays an error message then exit.
  * @param msg format strin, like printf, without the newline character.
  */
-DS_API void dsError (const char *msg, ...);
+DS_API void dsError (const char *msg, ...) override;
 
 /**
  * @brief exit with error message and core dump.
@@ -120,14 +120,14 @@ DS_API void dsError (const char *msg, ...);
  * this functions tries to dump core or start the debugger.
  * @param msg format strin, like printf, without the newline character.
  */
-DS_API void dsDebug (const char *msg, ...);
+DS_API void dsDebug (const char *msg, ...) override;
 
 /**
  * @brief print log message
  * @ingroup drawstuff
  * @param msg format string, like printf, without the \n.
  */
-DS_API void dsPrint (const char *msg, ...);
+DS_API void dsPrint (const char *msg, ...) override;
 
 /**
  * @brief Sets the viewpoint
@@ -135,9 +135,9 @@ DS_API void dsPrint (const char *msg, ...);
  * @param xyz camera position.
  * @param hpr contains heading, pitch and roll numbers in degrees. heading=0
  * points along the x axis, pitch=0 is looking towards the horizon, and
- * roll 0 is "unrotated".
+ * roll 0 is __PLACEHOLDER_2__.
  */
-DS_API void dsSetViewpoint (float xyz[3], float hpr[3]);
+DS_API void dsSetViewpoint (float xyz[3], float hpr[3]) override;
 
 
 /**
@@ -146,7 +146,7 @@ DS_API void dsSetViewpoint (float xyz[3], float hpr[3]);
  * @param xyz position
  * @param hpr heading,pitch,roll.
  */
-DS_API void dsGetViewpoint (float xyz[3], float hpr[3]);
+DS_API void dsGetViewpoint (float xyz[3], float hpr[3]) override;
 
 /**
  * @brief Stop the simulation loop.
@@ -156,14 +156,14 @@ DS_API void dsGetViewpoint (float xyz[3], float hpr[3]);
  * user used the exit command. using this outside the loop will have no
  * effect.
  */
-DS_API void dsStop();
+DS_API void dsStop() override;
 
 /**
  * @brief Get the elapsed time (on wall-clock)
  * @ingroup drawstuff
  * It returns the nr of seconds since the last call to this function.
  */
-DS_API double dsElapsedTime();
+DS_API double dsElapsedTime() override;
 
 /**
  * @brief Toggle the rendering of textures.
@@ -175,7 +175,7 @@ DS_API double dsElapsedTime();
  * At the start of each frame, the texture is reset to none and the color is
  * reset to white.
  */
-DS_API void dsSetTexture (int texture_number);
+DS_API void dsSetTexture (int texture_number) override;
 
 /**
  * @brief Set the color with which geometry is drawn.
@@ -184,7 +184,7 @@ DS_API void dsSetTexture (int texture_number);
  * @param green Green component from 0 to 1
  * @param blue Blue component from 0 to 1
  */
-DS_API void dsSetColor (float red, float green, float blue);
+DS_API void dsSetColor (float red, float green, float blue) override;
 
 /**
  * @brief Set the color and transparency with which geometry is drawn.
@@ -192,7 +192,7 @@ DS_API void dsSetColor (float red, float green, float blue);
  * @param alpha Note that alpha transparency is a misnomer: it is alpha opacity.
  * 1.0 means fully opaque, and 0.0 means fully transparent.
  */
-DS_API void dsSetColorAlpha (float red, float green, float blue, float alpha);
+DS_API void dsSetColorAlpha (float red, float green, float blue, float alpha) override;
 
 /**
  * @brief Draw a box.
@@ -204,7 +204,7 @@ DS_API void dsSetColorAlpha (float red, float green, float blue, float alpha);
  *        [ R31 R32 R33 0 ]
  * @param sides[] is an array of x,y,z side lengths.
  */
-DS_API void dsDrawBox (const float pos[3], const float R[12], const float sides[3]);
+DS_API void dsDrawBox (const float pos[3], const float R[12], const float sides[3]) override;
 
 /**
  * @brief Draw a sphere.
@@ -213,7 +213,7 @@ DS_API void dsDrawBox (const float pos[3], const float R[12], const float sides[
  * @param R orientation.
  * @param radius
  */
-DS_API void dsDrawSphere (const float pos[3], const float R[12], float radius);
+DS_API void dsDrawSphere (const float pos[3], const float R[12], float radius) override;
 
 /**
  * @brief Draw a triangle.
@@ -246,7 +246,7 @@ DS_API void dsDrawCapsule (const float pos[3], const float R[12],
  * @brief Draw a line.
  * @ingroup drawstuff
  */
-DS_API void dsDrawLine (const float pos1[3], const float pos2[3]);
+DS_API void dsDrawLine (const float pos1[3], const float pos2[3]) override;
 
 /**
  * @brief Draw a convex shape.
@@ -272,7 +272,7 @@ DS_API void dsDrawCylinderD (const double pos[3], const double R[12],
 		      float length, float radius);
 DS_API void dsDrawCapsuleD (const double pos[3], const double R[12],
 		     float length, float radius);
-DS_API void dsDrawLineD (const double pos1[3], const double pos2[3]);
+DS_API void dsDrawLineD (const double pos1[3], const double pos2[3]) override;
 DS_API void dsDrawConvexD(const double pos[3], const double R[12],
 		  double *_planes,
 		  unsigned int _planecount,
@@ -295,14 +295,14 @@ DS_API void dsSetCapsuleQuality (int n);		/* default = 3 */
  * Use the DS_POLYFILL and DS_WIREFRAME macros.
  * @ingroup drawstuff
  */
-DS_API void dsSetDrawMode(int mode);
+DS_API void dsSetDrawMode(int mode) override;
 
 // Backwards compatible API
 #define dsDrawCappedCylinder dsDrawCapsule
 #define dsDrawCappedCylinderD dsDrawCapsuleD
 #define dsSetCappedCylinderQuality dsSetCapsuleQuality
 
-/* closing bracket for extern "C" */
+/* closing bracket for extern __PLACEHOLDER_3__ */
 #ifdef __cplusplus
 }
 #endif

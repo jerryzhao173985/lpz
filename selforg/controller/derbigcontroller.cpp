@@ -7,7 +7,7 @@
  *   LICENSE:                                                              *
  *   This work is licensed under the Creative Commons                      *
  *   Attribution-NonCommercial-ShareAlike 2.5 License. To view a copy of   *
- *   this license, visit http://creativecommons.org/licenses/by-nc-sa/2.5/ *
+ *   this license, visit http:__PLACEHOLDER_54__
  *   or send a letter to Creative Commons, 543 Howard Street, 5th Floor,   *
  *   San Francisco, California, 94105, USA.                                *
  *                                                                         *
@@ -18,7 +18,7 @@
  ***************************************************************************/
 
 #include "derbigcontroller.h"
-// #include "dercontroller.h"
+// #include __PLACEHOLDER_1__
 #include "invertmotorcontroller.h"
 #include "invertmotornstep.h"
 #include "regularisation.h"
@@ -111,7 +111,7 @@ DerBigController::init(int sensornumber, int motornumber, RandGen* randGen) {
   x_buffer = std::make_unique<Matrix[]>(buffersize);
   y_buffer = std::make_unique<Matrix[]>(buffersize);
   eta_buffer = std::make_unique<Matrix[]>(buffersize);
-  for (unsigned int k = 0; k < buffersize; k++) {
+  for (unsigned int k = 0; k < buffersize; ++k) {
     x_buffer[k].set(number_sensors, 1);
     y_buffer[k].set(number_motors, 1);
     eta_buffer[k].set(number_motors, 1);
@@ -143,7 +143,7 @@ DerBigController::step(const sensor* x_, int number_sensors, motor* y_, int numb
     learnController(delay);
   }
   // update step counter
-  t++;
+  ++t;
   if (epsC > 0)
     epsC += .00002; // Anwachsen kann dadurch von Hand gesstoppt werden.
   // epsA *= 1.001;
@@ -154,7 +154,7 @@ void
 DerBigController::stepNoLearning(const sensor* x, int number_sensors, motor* y, int number_motors) {
   fillBuffersAndControl(x, number_sensors, y, number_motors);
   // update step counter
-  t++;
+  ++t;
 };
 
 void
@@ -162,8 +162,8 @@ DerBigController::fillBuffersAndControl(const sensor* x_,
                                         int number_sensors,
                                         motor* y_,
                                         int number_motors) {
-  assert((unsigned)number_sensors == this->number_sensors &&
-         (unsigned)number_motors == this->number_motors);
+  assert(static_cast<unsigned>(number_sensors) == this->number_sensors &&
+         static_cast<unsigned>(number_motors) == this->number_motors);
 
   Matrix x(number_sensors, 1, x_);
 
@@ -238,7 +238,7 @@ DerBigController::learnController(int delay) {
   // Matrix v_old = (eta_buffer[t%buffersize]).map(g);
   Matrix v = zero_eta;
 
-  for (unsigned int s = 1; s <= steps; s++) {
+  for (unsigned int s = 1; s <= steps; ++s) {
     //????? const Matrix& eta = eta_buffer[(t-s)%buffersize].map(g);
 
     // const Matrix& x      = A * z.map(g) + xsi;
@@ -344,7 +344,7 @@ DerBigController::learnController(int delay) {
     }
   }
 
-  //  double error_factor = calcErrorFactor(v, (logaE & 1) !=0, (rootE & 1) !=0);
+  //  double error_factor = calcErrorFactor(v, (logaE >= 1), (rootE >= 1));
   //  C_update *= error_factor;
   //   H_update *= error_factor;
 
@@ -364,7 +364,7 @@ DerBigController::learnController(int delay) {
     C += C_update.mapP(&squashSize, squash) - C * dampC;
     double H_squashSize = squashSize * 2.0; // TEST: H soll sich schneller bewegen knnen.
     H += H_update.mapP(&H_squashSize, squash) - H * dampC; // Test; //Test - H*.001;
-    // std::cout <<  "c_up=" << H_update.mapP(&H_squashSize, squash) << std::endl;
+    // std::cout <<  __PLACEHOLDER_14__ << H_update.mapP(&H_squashSize, squash) << std::endl;
   }
 
   //   //  //  A += A_update.mapP(&_squashSize, squash);  //A immer updaten
@@ -394,7 +394,7 @@ DerBigController::learnModel(int delay) {
   //    pain= 1; //xsi_norm/ xsi_norm_avg/5;
   //  } else {
   //    pain = 0; //pain > 1 ? pain*0.9: 0;
-  double error_factor = calcErrorFactor(xsi, (logaE & 2) != 0, (rootE & 2) != 0);
+  double error_factor = calcErrorFactor(xsi, (logaE >= 2), (rootE >= 2));
   conf.model->learn(y - y_smooth, x - x_smooth_long, error_factor);
   // conf.model->learn(y, x, error_factor);
   if (conf.useS) {
@@ -446,22 +446,21 @@ DerBigController::management() {
     H -= H * (dampC * managementInterval);
   }
   if (inhibition) {
-    kwtaInhibition(C, max((int)kwta, 1), inhibition * managementInterval * epsC);
+    kwtaInhibition(C, max(static_cast<int>(kwta), 1), inhibition * managementInterval * epsC);
   } else if (limitRF) {
-    limitC(C, max(1, (int)limitRF));
+    limitC(C, max(1, static_cast<int>(limitRF)));
   }
 }
 
-void
-DerBigController::kwtaInhibition(matrix::Matrix& wm, unsigned int k, double damping) {
+void DerBigController::kwtaInhibition(matrix::Matrix& wm, unsigned int k, double damping) {
   unsigned int n = wm.getN();
   unsigned int k1 = std::min(n, k); // avoid overfloats
   double inhfactor = 1 - damping;
   //  double exfactor  = 1+(damping/k1);
-  for (unsigned int i = 0; i < wm.getM(); i++) {
+  for (unsigned int i = 0; i < wm.getM(); ++i) {
     Matrix r = wm.row(i).map(fabs);
     double x = getKthLargestElement(r, k1);
-    for (unsigned int j = 0; j < n; j++) {
+    for (unsigned int j = 0; j < n; ++j) {
       if (fabs(wm.val(i, j)) < x) {
         wm.val(i, j) *= inhfactor;
       } // else {
@@ -476,9 +475,9 @@ void
 DerBigController::limitC(matrix::Matrix& wm, unsigned int rfSize) {
   int n = wm.getN();
   int m = wm.getM();
-  for (int i = 0; i < m; i++) {
-    for (int j = 0; j < n; j++) {
-      if (std::abs(i - j) > (int)rfSize - 1)
+  for (int i = 0; i < m; ++i) {
+    for (int j = 0; j < n; ++j) {
+      if (std::abs(i - j) > static_cast<int>(rfSize) - 1)
         wm.val(i, j) = 0;
     }
   }
@@ -538,12 +537,12 @@ DerBigController::getInternalParamNames() const {
   }
   keylist += storeVectorFieldNames(H, "H");
   keylist += storeVectorFieldNames(eta, "eta");
-  // keylist += storeVectorFieldNames(xsi, "xsi");
+  // keylist += storeVectorFieldNames(xsi, __PLACEHOLDER_30__);
   keylist += storeVectorFieldNames(x_smooth_long, "v_smooth");
   keylist += string("weighting");
   keylist += string("epsA");
   keylist += string("epsC");
-  // keylist += string("xsi");
+  // keylist += string(__PLACEHOLDER_35__);
   keylist += string("xsi_norm");
   keylist += string("xsi_norm_avg");
   keylist += string("pain");

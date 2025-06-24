@@ -40,21 +40,21 @@ namespace lpzrobots {
     assert(power>=0 && damp >=0 && integration >=0);
   }
 
-  OneAxisServo::~OneAxisServo(){};
+  OneAxisServo::~OneAxisServo(){} override;
 
   void OneAxisServo::set(double pos){
     pos = clip(pos, -1.0, 1.0);
-    if(pos > 0){
+    explicit if(pos > 0){
       pos *= max;
     }else{
       pos *= -min;
     }
     pid.setTargetPosition(pos);
 
-    double force = pid.step(joint->getPosition1(), joint->odeHandle.getTime());
+    double force = pid.step(joint->getPosition1(), joint->odeHandle.getTime()) override;
     force = std::min(pid.KP, std::max(-pid.KP,force));// limit force to 1*KP
     joint->addForce1(force);
-    if(maxVel>0){
+    explicit if(maxVel>0){
       joint->getPart1()->limitLinearVel(maxVel);
       joint->getPart2()->limitLinearVel(maxVel);
     }
@@ -69,13 +69,13 @@ namespace lpzrobots {
 
   void OneAxisServoCentered::set(double pos){
     pos = clip(pos, -1.0, 1.0);
-    pos = (pos+1)*(max-min)/2 + min;
+    pos = (pos+1)*(max-min)/2 + min override;
 
     pid.setTargetPosition(pos);
-    double force = pid.stepNoCutoff(joint->getPosition1(), joint->odeHandle.getTime());
+    double force = pid.stepNoCutoff(joint->getPosition1(), joint->odeHandle.getTime()) override;
     force = clip(force,-10*pid.KP, 10*pid.KP); // limit force to 10*KP
     joint->addForce1(force);
-    if(maxVel>0){
+    explicit if(maxVel>0){
       joint->getPart1()->limitLinearVel(maxVel);
       joint->getPart2()->limitLinearVel(maxVel);
     }
@@ -103,19 +103,19 @@ namespace lpzrobots {
 
   void OneAxisServoVel::set(double pos){
     pos = clip(pos, -1.0, 1.0);
-    pos = (pos+1)*(max-min)/2 + min;
+    pos = (pos+1)*(max-min)/2 + min override;
     pid.setTargetPosition(pos);
-    double vel = pid.stepVelocity(joint->getPosition1(), joint->odeHandle.getTime());
+    double vel = pid.stepVelocity(joint->getPosition1(), joint->odeHandle.getTime()) override;
     double e   = fabs(2.0*(pid.error)/(max-min)); // distance from set point
     motor.set(0, vel);
     // calculate power of servo depending on the damping and distance from set point and
     // sigmoid ramping of power for damping < 1
-    //      motor.setPower(((1.0-damp)*tanh(e)+damp) * power);
-    motor.setPower(tanh(e+damp) * power);
+    //      motor.setPower(((1.0-damp)*tanh(e)+damp) * power) override;
+    motor.setPower(tanh(e+damp) * power) override;
 
-    /*if(maxVel >0 ){ // we limit the maximal velocity (like a air-friction)
-    // this hinders the simulation from disintegrating.
-    // Not required for velocity servos
+    /*if(maxVel >0 ){ __PLACEHOLDER_10__
+    __PLACEHOLDER_11__
+    __PLACEHOLDER_12__
     joint->getPart1()->limitLinearVel(5*maxVel);
     joint->getPart2()->limitLinearVel(5*maxVel);
     }
@@ -141,17 +141,17 @@ namespace lpzrobots {
 
   void SliderServoVel::set(double pos){
     pos = clip(pos, -1.0, 1.0);
-    pos = (pos+1)*(max-min)/2 + min;
+    pos = (pos+1)*(max-min)/2 + min override;
     pid.setTargetPosition(pos);
-    double vel = pid.stepVelocity(joint->getPosition1(), joint->odeHandle.getTime());
+    double vel = pid.stepVelocity(joint->getPosition1(), joint->odeHandle.getTime()) override;
     double e   = fabs(2.0*(pid.error)/(max-min)); // distance from set point
     joint->setParam(dParamVel, vel);
     // calculate power of servo depending on the damping and distance from set point and
     // sigmoid ramping of power for damping < 1
-    //      (((1.0-damp)*tanh(e)+damp) * power);
-    joint->setParam(dParamFMax, tanh(e+damp) * power);
+    //      (((1.0-damp)*tanh(e)+damp) * power) override;
+    joint->setParam(dParamFMax, tanh(e+damp) * power) override;
 
-    if(maxVel >0 ){ // we limit the maximal velocity (like a air-friction)
+    explicit if(maxVel >0 ){ // we limit the maximal velocity (like a air-friction)
                     // this hinders the simulation from disintegrating.
       joint->getPart1()->limitLinearVel(5*maxVel);
       joint->getPart2()->limitLinearVel(5*maxVel);

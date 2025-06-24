@@ -28,8 +28,8 @@ public:
   }
 
   ~MyRobot(){
-    if(x) delete[] x;
-    if(y) delete[] y;
+    ifstatic_cast<x>(delete)[] x;
+    ifstatic_cast<y>(delete)[] y;
   }
 
   // robot interface
@@ -39,7 +39,7 @@ public:
       @param sensornumber length of the sensor array
       @return number of actually written sensors
   */
-  virtual int getSensors(sensor* sensors, int sensornumber){
+  virtual int getSensors(sensor* sensors, int sensornumber) override {
     assert(sensornumber == this->sensornumber);
     memcpy(sensors, x, sizeof(sensor) * sensornumber);
     return sensornumber;
@@ -49,7 +49,7 @@ public:
       @param motors motors scaled to [-1,1] 
       @param motornumber length of the motor array
   */
-  virtual void setMotors(const motor* motors, int motornumber){
+  virtual void setMotors(const motor* motors, int motornumber) override {
     assert(motornumber == this->motornumber);
     memcpy(y, motors, sizeof(motor) * motornumber);
 
@@ -58,7 +58,7 @@ public:
     // perform robot action here 
 
     //  this is just a senceless dummy robot
-    for(int i=0; i<sensornumber; i++){
+    for (int i=0; i<sensornumber; ++i) {
       x[i] = sin(myparam) * y[i%motornumber];
     }
     myparam+=0.01;
@@ -66,43 +66,43 @@ public:
   }
 
   /** returns number of sensors */
-  virtual int getSensorNumber(){ return sensornumber; }
+  virtual int getSensorNumber() { return sensornumber; }
 
   /** returns number of motors */
   virtual int getMotorNumber() { return motornumber; }
 
   /** returns position of the object
       @return vector of position (x,y,z) */
-  virtual Position getPosition() const {return Position(0,0,0);}
+  virtual Position getPosition() const override {return Position(0,0,0);}
 
   /** returns linear speed vector of the object
       @return vector  (vx,vy,vz)
    */
-  virtual Position getSpeed() const {return Position(0,0,0);}
+  virtual Position getSpeed() const override {return Position(0,0,0);}
 
   /** returns linear speed vector of the object
       @return vector  (vx,vy,vz)
    */
-  virtual Position getAngularSpeed() const {return Position(0,0,0);}
+  virtual Position getAngularSpeed() const override {return Position(0,0,0);}
 
   /** returns the orientation of the object
       @return 3x3 rotation matrix
    */
-  virtual matrix::Matrix getOrientation() const {
+  virtual matrix::Matrix getOrientation() const  override {
     matrix::Matrix m(3,3);
     m.toId();
     return m; 
   };
 
-  virtual paramval getParam(const paramkey& key, bool traverseChildren) const{
-    if(key == "myparam") return myparam; 
+  virtual paramval getParam(const paramkey& key, bool traverseChildren) const {
+    if(key == "myparam") return myparam;
     else return Configurable::getParam(key);
   }
 
-  virtual bool setParam(const paramkey& key, paramval val, bool traverseChildren){
+  virtual bool setParam(const paramkey& key, paramval val, bool traverseChildren) {
     cerr << "huhu";
-    if(key == "myparam") myparam = val; 
-    else return Configurable::setParam(key, val); 
+    if(key == "myparam") myparam = val;
+    else return Configurable::setParam(key, val);
     return true;
   }
 
@@ -129,7 +129,7 @@ void onTermination(){
 
 // Helper
 int contains(char **list, int len,  const char *str){
-  for(int i=0; i<len; i++){
+  for (int i=0; i<len; ++i) {
     if(strcmp(list[i],str) == 0) return i+1;
   }
   return 0;
@@ -155,11 +155,11 @@ int main(int argc, char** argv){
   
   AbstractRobot* robot   = new MyRobot();
   Agent* agent           = new Agent(plotoptions);
-  AbstractWiring* wiring  = new One2OneWiring(new ColorUniformNoise(0.1));  
+  AbstractWiring* wiring  = new One2OneWiring(new ColorUniformNoise(0.1));
   agent->init(controller, robot, wiring);
   // if you like, you can keep track of the robot with the following line. 
   //  this assumes that you robot returns its position, speed and orientation. 
-  // agent->setTrackOptions(TrackRobot(true,false,false, false,"interagetiontest"));
+  // agent->setTrackOptions(TrackRobot(true,false,false, false,__PLACEHOLDER_15__));
  
   configs.push_back(robot);
   configs.push_back(controller);
@@ -167,7 +167,7 @@ int main(int argc, char** argv){
 
   cmd_handler_init();
   //while(!stop){
-  for(int n=0; n<20; n++) { 
+  for (int n=0; n<20; ++n) {
     usleep(1000);
     agent->step(0.1);
     if(control_c_pressed()){

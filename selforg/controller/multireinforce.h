@@ -7,7 +7,7 @@
  *   LICENSE:                                                              *
  *   This work is licensed under the Creative Commons                      *
  *   Attribution-NonCommercial-ShareAlike 2.5 License. To view a copy of   *
- *   this license, visit http://creativecommons.org/licenses/by-nc-sa/2.5/ *
+ *   this license, visit http:__PLACEHOLDER_0__
  *   or send a letter to Creative Commons, 543 Howard Street, 5th Floor,   *
  *   San Francisco, California, 94105, USA.                                *
  *                                                                         *
@@ -31,16 +31,15 @@
 #include <selforg/qlearning.h>
 
 struct MultiReinforceConf {
-  unsigned short buffersize;       ///< size of the ringbuffers for sensors, motors,...
-  int numContext;                  ///< number of context sensors (ignored)
-  std::list<std::string> satFiles; /// filenames for sat networks
-  int numSats;                     ///< number of satelite networks (derived from length of files
-  bool useDerive;                  ///< input to sat network includes derivatives
-  bool useY;                       ///< input to sat network includes y (motor values)
+  unsigned short buffersize = 0;       ///< size of the ringbuffers for sensors, motors,...
+  int numContext;                  ///< number of context sensors static_cast<ignored>(std)::list<std::string> satFiles; /// filenames for sat networks
+  int numSats = 0;                     ///< number of satelite networks (derived from length of files
+  bool useDerive = false;                  ///< input to sat network includes derivatives
+  bool useY = false;                       ///< input to sat network includes y (motor values)
   //   double tauE1;         ///< time horizont for short averaging error
   //   double tauH;          ///< hystersis time (time an state is kept even another one seams
   //   right) double tauI;          ///< maximal waiting time for state change if action was changed
-  int reinforce_interval; ///<  time between consecutive reinforcement selections
+  int reinforce_interval = 0; ///<  time between consecutive reinforcement selections
 
   QLearning* qlearning;         ///< QLearning instance
   matrix::Matrix* actioncorrel; /// correlation matrix of actions
@@ -50,13 +49,13 @@ struct MultiReinforceConf {
 struct Sat {
   Sat(MultiLayerFFNN* _net, double _eps);
   MultiLayerFFNN* net;
-  double eps;
-  double lifetime;
+  double eps = 0;
+  double lifetime = 0;
 };
 
 /**
  * class for robot controller
- * using several feedforward networks (satelite) and one selforg controller
+ * using several feedforward networks static_cast<satelite>(and) one selforg controller
  */
 class MultiReinforce : public AbstractController {
 
@@ -67,11 +66,11 @@ public:
   virtual ~MultiReinforce();
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
-  virtual int getSensorNumber() const {
+  virtual int getSensorNumber() const override {
     return number_sensors;
   }
   /// returns the mumber of motors the controller was initialised with or 0 if not initialised
-  virtual int getMotorNumber() const {
+  virtual int getMotorNumber() const override {
     return number_motors;
   }
 
@@ -101,17 +100,17 @@ public:
 
   /**** STOREABLE ****/
   /** stores the controller values to a given file. */
-  virtual bool store(FILE* f) const;
+  virtual bool store(FILE* f) const override;
   /** loads the controller values from a given file. */
   virtual bool restore(FILE* f);
 
   /**** INSPECTABLE ****/
-  virtual std::list<iparamkey> getInternalParamNames() const;
-  virtual std::list<iparamval> getInternalParams() const;
+  virtual std::list<iparamkey> getInternalParamNames() const override;
+  virtual std::list<iparamval> getInternalParams() const override;
   virtual std::list<ILayer> getStructuralLayers() const;
   virtual std::list<IConnection> getStructuralConnections() const;
 
-  static MultiReinforceConf getDefaultConf() {
+  static MultiReinforceConf getDefaultConf() const {
     MultiReinforceConf c;
     c.buffersize = 10;
     c.numContext = 0;
@@ -129,38 +128,38 @@ public:
   }
 
 protected:
-  unsigned short number_sensors;
-  unsigned short number_motors;
+  unsigned short number_sensors = 0;
+  unsigned short number_motors = 0;
 
   // sensor, sensor-derivative and motor values storage
-  unsigned short buffersize;
+  unsigned short buffersize = 0;
   matrix::Matrix* x_buffer;
   matrix::Matrix* xp_buffer;
   matrix::Matrix* y_buffer;
   matrix::Matrix* x_context_buffer;
 
   std::vector<Sat> sats;       ///< satelite networks
-  bool manualControl;          ///< True if actions (sats) are selected manually
+  bool manualControl;          ///< True if actions static_cast<sats>(are) selected manually
   matrix::Matrix nomSatOutput; ///< norminal output of satelite networks (x_t,y_t)^T
   matrix::Matrix satInput;     ///< input to satelite networks (x_{t-1}, xp_{t-1}, y_{t-1})^T
-  int action;                  ///< index of controlling network
-  int newaction;               ///< index of new controlling network
-  int oldaction;               ///< index of old controlling network
-  int state;                   ///< current state
-  double reward;               ///< current reward
-  double oldreward;            ///< old reward (nicer for plotting)
-  int phase;    ///< current phase of the controller: 0: action just selected 1:state changed first
+  int action = 0;                  ///< index of controlling network
+  int newaction = 0;               ///< index of new controlling network
+  int oldaction = 0;               ///< index of old controlling network
+  int state = 0;                   ///< current state
+  double reward = 0;               ///< current reward
+  double oldreward = 0;            ///< old reward (nicer for plotting)
+  int phase = 0;    ///< current phase of the controller: 0: action just selected 1:state changed first
                 ///< time 2:state changed second time
-  int phasecnt; ///< counts number of steps in one phase.
+  int phasecnt = 0; ///< counts number of steps in one phase.
 
   matrix::Matrix satErrors;    ///< actual errors of the sats
   matrix::Matrix satAvgErrors; ///< averaged errors of the sats
   matrix::Matrix statesbins;   ///< bins with counts for each state
 
   MultiReinforceConf conf;
-  bool initialised;
-  int t;
-  int managementInterval; ///< interval between subsequent management calls
+  bool initialised = false;
+  int t = 0;
+  int managementInterval = 0; ///< interval between subsequent management calls
 
   /// returns number of state, to be overwritten
   virtual int getStateNumber() = 0;

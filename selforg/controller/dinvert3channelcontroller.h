@@ -2,7 +2,7 @@
  *   LICENSE:                                                              *
  *   This work is licensed under the Creative Commons                      *
  *   Attribution-NonCommercial-ShareAlike 2.5 License. To view a copy of   *
- *   this license, visit http://creativecommons.org/licenses/by-nc-sa/2.5/ *
+ *   this license, visit http:__PLACEHOLDER_3__
  *   or send a letter to Creative Commons, 543 Howard Street, 5th Floor,   *
  *   San Francisco, California, 94105, USA.                                *
  *                                                                         *
@@ -33,19 +33,19 @@ public:
   /*
     Invert3ChannelController();
 
-    //virtual ~Invert3ChannelController(){}
+    __PLACEHOLDER_4__
 
 
-    /// performs one step (includes learning). Calulates motor commands from sensor inputs.
+    __PLACEHOLDER_5__
     virtual void step(const sensor*, motor*);
 
-    /// performs one step without learning. Calulates motor commands from sensor inputs.
+    __PLACEHOLDER_6__
     virtual void stepNoLearning(const sensor*, motor*);
   */
 
 protected:
-  int NUMBER_CHANNELS;
-  int BUFFER_SIZE;
+  int NUMBER_CHANNELS = 0;
+  int BUFFER_SIZE = 0;
 
   double* x_smooth;
   double* x_effective;
@@ -68,7 +68,7 @@ public:
   double* xsi4E;
   double* xsi4Model;
 
-  int t; ///< number of steps, needed for ringbuffer x_buffer
+  int t = 0; ///< number of steps, needed for ringbuffer x_buffer
   std::string name;
 
   /*
@@ -77,24 +77,24 @@ public:
 
     virtual double calculateE(double *x_delay, double *y_delay);
 
-    /// learn values h,C   //,A
+    __PLACEHOLDER_15__
     virtual void learn(double *x_delay, double *y_delay);
 
-    /// learn model parameter (matrix A) by gradient descent
+    __PLACEHOLDER_16__
     virtual void learnModel(double *x_actual, double *y_effective);
 
 
-    /// calculate delayed values
+    __PLACEHOLDER_17__
     virtual void calculateDelayedValues(double source[BUFFER_SIZE][NUMBER_CHANNELS], int
     number_steps_of_delay_, double *target);
 
     virtual void calculateSmoothValues(double source[BUFFER_SIZE][NUMBER_CHANNELS], int
     number_steps_for_averaging_, double *target);
 
-    /// calculate controller ouptus
+    __PLACEHOLDER_18__
     virtual void calculateControllerValues(double *x_smooth, double *y);
 
-    // put new value in ring buffer
+    __PLACEHOLDER_19__
     virtual void putInBuffer(double buffer[BUFFER_SIZE][NUMBER_CHANNELS], double *values);
 
   */

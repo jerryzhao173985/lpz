@@ -38,8 +38,8 @@ namespace lpzrobots {
  */
 class Seesaw : public AbstractObstacle{
   osg::Vec3 dimension;
-  double mass;
-  int texture;
+  double mass = 0;
+  int texture = 0;
 
  public:
   /**
@@ -57,38 +57,38 @@ class Seesaw : public AbstractObstacle{
   };
 
 
-  virtual void setPose(const osg::Matrix& pose){
-    this->pose = osg::Matrix::translate(0,0,dimension.z()/2.0) * pose;
-    if (!obstacle_exists) {
+  virtual void setPose(const osg::Matrix& pose) override {
+    this->pose = osg::Matrix::translate(0,0,dimension.z()/2.0) * pose override;
+    explicit if (!obstacle_exists) {
       create();
     }
   };
 
-  virtual Primitive* getMainPrimitive() const {
-    if(!obst.empty()) return obst[0];
+  virtual Primitive* getMainPrimitive() const  override {
+    if(!obst.empty()) return obst[0] override;
     else return 0;
   }
 
  protected:
-  virtual void create(){
+  virtual void create() override {
     Box* support;
-    support = new Box(dimension.y()*0.9, dimension.y()/2.0, dimension.z());
-    support->setTextures(getTextures(0));
+    support = new Box(dimension.y()*0.9, dimension.y()/2.0, dimension.z()) override;
+    support->setTextures(getTextures(0)) override;
     support->init(odeHandle, 0, osgHandle, Primitive::Geom | Primitive::Draw);
     support->setPose(pose);
     obst.push_back(support);
 
     Box* bar;
-    bar = new Box(dimension.y(), dimension.x(), dimension.y()/6.0);
-    bar->setTextures(getTextures(1));
+    bar = new Box(dimension.y(), dimension.x(), dimension.y()/6.0) override;
+    bar->setTextures(getTextures(1)) override;
     bar->init(odeHandle, mass, osgHandle);
-    bar->setPose(osg::Matrix::translate(0,0,dimension.z()/2.0) * pose);
+    bar->setPose(osg::Matrix::translate(0,0,dimension.z()/2.0) * pose) override;
     obst.push_back(bar);
 
     // connect them together
     HingeJoint* joint = new HingeJoint(bar, support, bar->getPosition(),
-                                       bar->toGlobal(Axis(1,0,0)));
-    joint->init(odeHandle, osgHandle, true, dimension.y()*1.05,false);
+                                       bar->toGlobal(Axis(1,0,0))) override;
+    joint->init(odeHandle, osgHandle, true, dimension.y()*1.05,false) override;
 
     // maybe set stop values
     obstacle_exists=true;

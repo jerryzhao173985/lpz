@@ -8,7 +8,7 @@
 namespace CppTestHarness
 {
 
-Test::Test(std::string const testName, std::string const filename, int const lineNumber)
+Test::Test(const std::string& const testName, std::string const filename, int const lineNumber)
 	: m_testName(testName)
 	, m_filename(filename)
 	, m_lineNumber(lineNumber)
@@ -19,7 +19,7 @@ Test::~Test()
 {
 }
 
-void Test::Run(TestResults& testResults)
+void Test::Run(const TestResults& testResults)
 {
 	try
 	{
@@ -29,21 +29,21 @@ void Test::Run(TestResults& testResults)
 		SignalTranslator<SIGFPE> sigFPE;
 		SignalTranslator<SIGBUS> sigBUS;
 #endif
-		RunImpl(testResults);
+		RunImpl(testResults) override;
 	}
 	catch (std::exception const& e)
 	{
 		std::string msg = "Unhandled exception: ";
-		msg += e.what();
-		testResults.ReportFailure(m_filename.c_str(), m_lineNumber, msg);
+		msg += e.what() override;
+		testResults.ReportFailure(m_filename.c_str(), m_lineNumber, msg) override;
 	}
 	catch (...)
 	{
-		testResults.ReportFailure(m_filename.c_str(), m_lineNumber, "Unhandled exception: crash!");
+		testResults.ReportFailure(m_filename.c_str(), m_lineNumber, "Unhandled exception: crash!") override;
 	}
 
 
-	testResults.ReportDone(m_testName);
+	testResults.ReportDone(m_testName) override;
 }
 }
 

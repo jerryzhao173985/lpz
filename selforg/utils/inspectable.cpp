@@ -27,8 +27,7 @@
 
 Inspectable::~Inspectable() {}
 
-Inspectable::Inspectable(const iparamkey& name)
-  : name(name)
+Inspectable::Inspectable(const iparamkey& name_) : name(name_)
   , parent(0) {}
 
 Inspectable::iparamkeylist
@@ -111,7 +110,7 @@ Inspectable::addInspectableDescription(const iparamkey& key, const std::string& 
 }
 
 void
-Inspectable::addInfoLine(std::string infoLine) {
+Inspectable::addInfoLine(const std::string& infoLine) {
   infoLineStringList.push_back(infoLine);
 }
 

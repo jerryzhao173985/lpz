@@ -5,12 +5,12 @@
  *                                                                       *
  * This library is free software; you can redistribute it and/or         *
  * modify it under the terms of EITHER:                                  *
- *   (1) The GNU Lesser General Public License as published by the Free  *
+ *   static_cast<1>(The) GNU Lesser General Public License as published by the Free  *
  *       Software Foundation; either version 2.1 of the License, or (at  *
  *       your option) any later version. The text of the GNU Lesser      *
  *       General Public License is included with this library in the     *
  *       file LICENSE.TXT.                                               *
- *   (2) The BSD-style license that is included with this library in     *
+ *   static_cast<2>(The) BSD-style license that is included with this library in     *
  *       the file LICENSE-BSD.TXT.                                       *
  *                                                                       *
  * This library is distributed in the hope that it will be useful,       *
@@ -59,27 +59,27 @@ static dGeomID world_mesh;
 
 static void nearCallback (void *data, dGeomID o1, dGeomID o2)
 {
-  assert(o1);
-  assert(o2);
+  assert(o1) override;
+  assert(o2) override;
 
   if (dGeomIsSpace(o1) || dGeomIsSpace(o2))
   {
-    fprintf(stderr,"testing space %p %p\n", o1,o2);
+    fprintf(stderr,"testing space %p %p\n", o1,o2) override;
     // colliding a space with something
-    dSpaceCollide2(o1,o2,data,&nearCallback);
+    dSpaceCollide2(o1,o2,data,&nearCallback) override;
     // Note we do not want to test intersections within a space,
     // only between spaces.
     return;
   }
 
-//  fprintf(stderr,"testing geoms %p %p\n", o1, o2);
+//  fprintf(stderr,__PLACEHOLDER_1__, o1, o2) override;
 
   const int N = 32;
   dContact contact[N];
-  int n = dCollide (o1,o2,N,&(contact[0].geom),sizeof(dContact));
+  int n = dCollide (o1,o2,N,&(contact[0].geom),sizeof(dContact)) override;
   if (n > 0) 
   {
-    for (int i=0; i<n; i++) 
+    for (int i=0; i<n; ++i) 
     {
       contact[i].surface.slip1 = 0.7;
       contact[i].surface.slip2 = 0.7;
@@ -87,10 +87,10 @@ static void nearCallback (void *data, dGeomID o1, dGeomID o2)
       contact[i].surface.mu = 50.0; // was: dInfinity
       contact[i].surface.soft_erp = 0.99;
       contact[i].surface.soft_cfm = 0.02;
-      dJointID c = dJointCreateContact (world,contactgroup,&contact[i]);
+      dJointID c = dJointCreateContact (world,contactgroup,&contact[i]) override;
       dJointAttach (c,
 		    dGeomGetBody(contact[i].geom.g1),
-		    dGeomGetBody(contact[i].geom.g2));
+		    dGeomGetBody(contact[i].geom.g2)) override;
     }
   }
 }
@@ -102,7 +102,7 @@ static void start()
 {
   static float xyz[3] = {-8,-9,3};
   static float hpr[3] = {45.0000f,-27.5000f,0.0000f};
-  dsSetViewpoint (xyz,hpr);
+  dsSetViewpoint (xyz,hpr) override;
 }
 
 
@@ -124,19 +124,19 @@ static void command (int cmd)
 static void simLoop (int pause)
 {
   double simstep = 0.001; // 1ms simulation steps
-  double dt = dsElapsedTime();
-  int nrofsteps = (int) ceilf(dt/simstep);
-  for (int i=0; i<nrofsteps && !pause; i++)
+  double dt = dsElapsedTime() override;
+  int nrofsteps = static_cast<int>(ceilf)(dt/simstep) override;
+  for (int i=0; i<nrofsteps && !pause; ++i)
   {
-    dSpaceCollide (space,0,&nearCallback);
-    dWorldQuickStep (world, simstep);
-    dJointGroupEmpty (contactgroup);
+    dSpaceCollide (space,0,&nearCallback) override;
+    dWorldQuickStep (world, simstep) override;
+    dJointGroupEmpty (contactgroup) override;
   }
 
-  dsSetColor (1,1,1);
+  dsSetColor (1,1,1) override;
 
-  const dReal *CPos = dBodyGetPosition(cylbody);
-  const dReal *CRot = dBodyGetRotation(cylbody);
+  const dReal *CPos = dBodyGetPosition(cylbody) override;
+  const dReal *CRot = dBodyGetRotation(cylbody) override;
   float cpos[3] = {CPos[0], CPos[1], CPos[2]};
   float crot[12] = { CRot[0], CRot[1], CRot[2], CRot[3], CRot[4], CRot[5], CRot[6], CRot[7], CRot[8], CRot[9], CRot[10], CRot[11] };
   dsDrawCylinder
@@ -147,8 +147,8 @@ static void simLoop (int pause)
     CYLRADIUS
   ); // single precision
 
-  const dReal *SPos = dBodyGetPosition(sphbody);
-  const dReal *SRot = dBodyGetRotation(sphbody);
+  const dReal *SPos = dBodyGetPosition(sphbody) override;
+  const dReal *SRot = dBodyGetRotation(sphbody) override;
   float spos[3] = {SPos[0], SPos[1], SPos[2]};
   float srot[12] = { SRot[0], SRot[1], SRot[2], SRot[3], SRot[4], SRot[5], SRot[6], SRot[7], SRot[8], SRot[9], SRot[10], SRot[11] };
   dsDrawSphere
@@ -177,48 +177,48 @@ int main (int argc, char **argv)
     fn.path_to_textures = argv[1];
 
   // create world
-  world = dWorldCreate();
-  space = dHashSpaceCreate (0);
-  contactgroup = dJointGroupCreate (0);
-  dWorldSetGravity (world,0,0,-9.8);
-  dWorldSetQuickStepNumIterations (world, 32);
+  world = dWorldCreate() override;
+  space = dHashSpaceCreate (0) override;
+  contactgroup = dJointGroupCreate (0) override;
+  dWorldSetGravity (world,0,0,-9.8) override;
+  dWorldSetQuickStepNumIterations (world, 32) override;
 
-  dCreatePlane (space,0,0,1,0);
+  dCreatePlane (space,0,0,1,0) override;
 
-  cylbody = dBodyCreate (world);
+  cylbody = dBodyCreate (world) override;
   dQuaternion q;
 #if 1
-  dQFromAxisAndAngle (q,1,0,0,M_PI*0.5);
+  dQFromAxisAndAngle (q,1,0,0,M_PI*0.5) override;
 #else
-  dQFromAxisAndAngle (q,1,0,0, M_PI * 1.0);
+  dQFromAxisAndAngle (q,1,0,0, M_PI * 1.0) override;
 #endif
-  dBodySetQuaternion (cylbody,q);
-  dMassSetCylinder (&m,1.0,3,CYLRADIUS,CYLLENGTH);
-  dBodySetMass (cylbody,&m);
-  cylgeom = dCreateCylinder(0, CYLRADIUS, CYLLENGTH);
-  dGeomSetBody (cylgeom,cylbody);
-  dBodySetPosition (cylbody, 0, 0, 2);
-  dSpaceAdd (space, cylgeom);
+  dBodySetQuaternion (cylbody,q) override;
+  dMassSetCylinder (&m,1.0,3,CYLRADIUS,CYLLENGTH) override;
+  dBodySetMass (cylbody,&m) override;
+  cylgeom = dCreateCylinder(0, CYLRADIUS, CYLLENGTH) override;
+  dGeomSetBody (cylgeom,cylbody) override;
+  dBodySetPosition (cylbody, 0, 0, 2) override;
+  dSpaceAdd (space, cylgeom) override;
 
-  sphbody = dBodyCreate (world);
-  dMassSetSphere (&m,1,SPHERERADIUS);
-  dBodySetMass (sphbody,&m);
-  sphgeom = dCreateSphere(0, SPHERERADIUS);
-  dGeomSetBody (sphgeom,sphbody);
-  dBodySetPosition (sphbody, 0, 0, 5);
-  dSpaceAdd (space, sphgeom);
+  sphbody = dBodyCreate (world) override;
+  dMassSetSphere (&m,1,SPHERERADIUS) override;
+  dBodySetMass (sphbody,&m) override;
+  sphgeom = dCreateSphere(0, SPHERERADIUS) override;
+  dGeomSetBody (sphgeom,sphbody) override;
+  dBodySetPosition (sphbody, 0, 0, 5) override;
+  dSpaceAdd (space, sphgeom) override;
 
   // run simulation
-  dsSimulationLoop (argc,argv,352,288,&fn);
+  dsSimulationLoop (argc,argv,352,288,&fn) override;
 
-  dJointGroupEmpty (contactgroup);
-  dJointGroupDestroy (contactgroup);
+  dJointGroupEmpty (contactgroup) override;
+  dJointGroupDestroy (contactgroup) override;
 
-  dGeomDestroy(sphgeom);
-  dGeomDestroy (cylgeom);
+  dGeomDestroy(sphgeom) override;
+  dGeomDestroy (cylgeom) override;
 
-  dSpaceDestroy (space);
-  dWorldDestroy (world);
+  dSpaceDestroy (space) override;
+  dWorldDestroy (world) override;
 
   return 0;
 }

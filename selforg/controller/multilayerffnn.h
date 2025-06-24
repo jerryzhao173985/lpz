@@ -43,7 +43,7 @@ public:
                  const std::vector<Layer>& layers,
                  bool useBypass = false,
                  bool someInternalParams = true);
-  virtual ~MultiLayerFFNN() override {}
+  virtual ~MultiLayerFFNN() {}
 
   /** initialisation of the network with the given number of input and output units.
       The dimensionality of the ouputlayer is automatically adjusted.
@@ -54,16 +54,16 @@ public:
   virtual void init(unsigned int inputDim,
                     unsigned int outputDim,
                     double unit_map = 0.0,
-                    RandGen* randGen = nullptr) override;
+                    RandGen* randGen = nullptr);
 
   /// passive processing of the input
-  virtual const matrix::Matrix process(const matrix::Matrix& input) override;
+  virtual const matrix::Matrix process(const matrix::Matrix& input);
 
   /** performs learning and returns the network output before learning
       (process should be called before) */
   virtual const matrix::Matrix learn(const matrix::Matrix& input,
                                      const matrix::Matrix& nom_output,
-                                     double learnRateFactor = 1) override;
+                                     double learnRateFactor = 1);
 
   /** response matrix of neural network at given input
 
@@ -73,7 +73,7 @@ public:
   \f$ G'\f$ is a diagonal matrix with \f$ G'_ii = g'_i \f$ as values on the diagonal.
   ATTENTION: input is ignored! use process before!
   */
-  virtual const matrix::Matrix response(const matrix::Matrix& input) const override;
+  virtual const matrix::Matrix response(const matrix::Matrix& input) const;
 
   /** calculates the input shift v to a given output shift xsi via pseudo inversion.
 
@@ -83,7 +83,7 @@ public:
       ATTENTION: input is ignored! use process before!
    */
   virtual const matrix::Matrix inversion(const matrix::Matrix& input,
-                                         const matrix::Matrix& xsi) const override;
+                                         const matrix::Matrix& xsi) const;
 
   /// returns the number of input neurons
   virtual unsigned int getInputDim() const override {
@@ -101,7 +101,7 @@ public:
   }
 
   /// damps the weights and the biases by multiplying (1-damping)
-  virtual void damp(double damping) override;
+  virtual void damp(double damping);
 
   // total number of layers (1 means no hidden units)
   virtual unsigned int getLayerNum() const {
@@ -148,16 +148,16 @@ public:
   /// stores the layer binary into file stream
   bool store(FILE* f) const override;
   /// restores the layer binary from file stream
-  bool restore(FILE* f) override;
+  bool restore(FILE* f);
 
   /// writes the layer ASCII into file stream (not in the storable interface)
   bool write(FILE* f) const;
 
   /************** Inspectable **********************************/
-  virtual iparamkeylist getInternalParamNames() const override;
-  virtual iparamvallist getInternalParams() const override;
-  virtual ilayerlist getStructuralLayers() const override;
-  virtual iconnectionlist getStructuralConnections() const override;
+  virtual iparamkeylist getInternalParamNames() const;
+  virtual iparamvallist getInternalParams() const;
+  virtual ilayerlist getStructuralLayers() const;
+  virtual iconnectionlist getStructuralConnections() const;
 
   virtual void setSomeInternalParams(bool someInternalParams) {
     assert(!initialised);
@@ -165,7 +165,7 @@ public:
   }
 
 public:
-  double eps; ///< learning rate
+  double eps = 0; ///< learning rate
 
   /**
    * sets the activation function (and derivative and inversion too) for ALL layers!
@@ -187,16 +187,16 @@ protected:
   std::vector<matrix::Matrix> weights;
   std::vector<matrix::Matrix> bias;
   std::vector<matrix::Matrix> smallids; // small unit matrices for pseudoinversion
-  bool useBypass;
+  bool useBypass = false;
   matrix::Matrix bypassWeights;
-  bool someInternalParams;
+  bool someInternalParams = false;
 
   matrix::Matrix input;
   std::vector<matrix::Matrix> ys; // activations
   std::vector<matrix::Matrix> zs; // potentials
 
-  double lambda; // regularisation value for pseudoinverse
-  bool initialised;
+  double lambda = 0; // regularisation value for pseudoinverse
+  bool initialised = false;
 };
 
 #endif

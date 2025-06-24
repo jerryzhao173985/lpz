@@ -27,7 +27,7 @@
 #define EXCEPTION_TEMPLATE(class_name)                                        \
   class class_name : public IException {                                      \
    public:                                                                    \
-    inline virtual void raise() const { throw *this; }                        \
+    inline virtual void raise() const override { throw *this; }                        \
   };
 
 

@@ -40,7 +40,7 @@ class AbstractRobot;
     Additionally there are some ways to keep track of internal information.
     You have the possibility to keep track of sensor values,
      motor values and internal parameters of the controller with PlotOptions.
-    The name PlotOptions is a bit missleaded, it should be "OutputOptions",
+    The name PlotOptions is a bit missleaded, it should be __PLACEHOLDER_4__,
      however you can write the data into a file or send it to visialisation tools like
      guilogger or neuronviz.
 
@@ -54,15 +54,15 @@ public:
   /** constructor. PlotOption as output setting.
       noisefactor is used to set the relative noise strength of this agent
    */
-  explicit Agent(const PlotOption& plotOption = PlotOption(PlotMode::NoPlot), double noisefactor = 1, const iparamkey& name = "Agent", const paramkey& revision = "$ID");
+  Agent(const PlotOption& plotOption = PlotOption(PlotMode::NoPlot), double noisefactor = 1, const iparamkey& name = "Agent", const paramkey& revision = "$ID");
   /** constructor. A list of PlotOption can given.
       noisefactor is used to set the relative noise strength of this agent
    */
-  explicit Agent(const std::list<PlotOption>& plotOptions, double noisefactor = 1, const iparamkey& name = "Agent", const paramkey& revision = "$ID");
+  Agent(const std::list<PlotOption>& plotOptions, double noisefactor = 1, const iparamkey& name = "Agent", const paramkey& revision = "$ID");
 
   /** destructor
    */
-  virtual ~Agent() override;
+  virtual ~Agent();
 
   // Bring base class methods into scope to avoid hiding
   using WiredController::init;
@@ -71,7 +71,7 @@ public:
   /** initializes the object with the given controller, robot and wiring
       and initializes the output options.
       It is also possible to provide a random seed,
-       if not given (0) rand() is used to create one
+       if not given static_cast<0>(rand)() is used to create one
   */
   virtual bool init(AbstractController* controller, AbstractRobot* robot,
                     AbstractWiring* wiring, long int seed=0);
@@ -80,7 +80,7 @@ public:
       controller step, pushing controller outputs (= motorcommands) back through the wiring and sent
       resulting motorcommands to robot.
       @param noise Noise strength.
-      @param time (optional) current simulation time (used for logging)
+      @param time static_cast<optional>(current) simulation time (used for logging)
   */
   virtual void step(double noise, double time=-1);
 
@@ -90,7 +90,7 @@ public:
 
   /** Returns a pointer to the robot.
    */
-  virtual AbstractRobot* getRobot() { return robot; }
+  virtual const AbstractRobot* getRobot() const { return robot; }
 
   /// sets the trackoptions which starts spatial tracking of a robot
   virtual void setTrackOptions(const TrackRobot& trackrobot);

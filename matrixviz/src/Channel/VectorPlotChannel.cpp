@@ -68,7 +68,7 @@ int VectorPlotChannel::getBufferSize(){
 }
 
 void VectorPlotChannel::setBufferSize(int newSize){
-  for (list<AbstractPlotChannel*>::iterator i = channelsOfGroup.begin(); i != channelsOfGroup.end(); i++){
+  for (list<AbstractPlotChannel*>::iterator i = channelsOfGroup.begin(); i != channelsOfGroup.end(); ++i){
     VectorElementPlotChannel* elementChannel = dynamic_cast<VectorElementPlotChannel*> (*i);
     if( elementChannel != 0) elementChannel->changeSize(newSize);
   }

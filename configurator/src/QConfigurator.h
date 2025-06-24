@@ -116,9 +116,9 @@
  *
  *   Revision 1.4  2010/11/26 12:22:37  guettler
  *   - Configurable interface now allows to set bounds of paramval and paramint
- *     * setting bounds for paramval and paramint is highly recommended (for QConfigurable (Qt GUI).
+ *     * setting bounds for paramval and paramint is highly recommended (for QConfigurable(const Qt& GUI).
  *   - bugfixes
- *   - current development state of QConfigurable (Qt GUI)
+ *   - current development state of QConfigurable(const Qt& GUI)
  *
  *   Revision 1.3  2010/11/19 15:15:00  guettler
  *   - new QLog feature
@@ -172,7 +172,7 @@ namespace lpzrobots {
       void enterEvent(QEnterEvent *event);
 
     public slots:
-      void sl_textLog(QString s);
+      void sl_textLog(const QString& s);
       void sl_GUIEventHandler(int eventCode);
       void sl_configurableChanged(QConfigurableWidget* sourceWidget);
 

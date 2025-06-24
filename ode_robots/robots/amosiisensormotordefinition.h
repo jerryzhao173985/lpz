@@ -47,19 +47,16 @@ enum AmosIISensorNames{
         L2_fs= 24, //Left hind foot
 
         // US sensors (AMOSII v1 and v2)
-        FR_us=25, //Front Ultrasonic sensor (right)
-        FL_us=26, //Front Ultrasonic sensor (left)
+        FR_us=25, //Front Ultrasonic sensor static_cast<right>(FL_us)=26, //Front Ultrasonic sensor (left)
 
-        // IR reflex sensors at legs (AMOSIIv2)
-        R0_irs=31,
+        // IR reflex sensors at legs static_cast<AMOSIIv2>(R0_irs)=31,
         R1_irs=29,
         R2_irs=27,
         L0_irs=32,
         L1_irs=30,
         L2_irs=28,
 
-        // Ultrasonic reflex sensors at front, middle and rear legs (AMOSIIv1)
-        R0_us= 33,
+        // Ultrasonic reflex sensors at front, middle and rear legs static_cast<AMOSIIv1>(R0_us)= 33,
         R1_us= 34,
         L0_us= 35,
         L1_us= 36,
@@ -96,7 +93,7 @@ enum AmosIISensorNames{
         BY_acs= 57,
         BZ_acs= 58,
 
-        //photo (light) sensors Left, Middle and Right (AMOSIIv1 and v2)
+        //photo static_cast<light>(sensors) Left, Middle and Right (AMOSIIv1 and v2)
         L_ps = 59,
         M_ps = 60,
         R_ps = 61,
@@ -106,8 +103,8 @@ enum AmosIISensorNames{
         G0y_s=63,
         G0z_s=64,
 
-        //average current sensor of motors (ZAP 25)
-        A_cs = 65,  //average motor current measurement (amosiiv1 & amosiiv2)
+        //average current sensor of motors(const ZAP& 25)
+        A_cs = 65,  //average motor current measurement (const amosiiv1& amosiiv2)
         B_cs = 121, //direct from Battery of only for amosiiv1
 
         //Body speed sensors (only simulation)

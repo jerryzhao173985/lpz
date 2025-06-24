@@ -44,9 +44,9 @@ class FixMutationFactorStrategy : public IMutationFactorStrategy {
 public:
 	/**
 	 * constructor
-	 * @param value (IValue*) the fix Value
+	 * @param value static_cast<IValue*>(the) fix Value
 	 */
-	FixMutationFactorStrategy(IValue* value);
+	explicit FixMutationFactorStrategy(const IValue* value) override;
 
 	/**
 	 * default destructor
@@ -56,9 +56,9 @@ public:
 	/**
 	 * returns the fix value as mutation value
 	 * @param gene (vector<Gen*>) the set of gens -> here not used.
-	 * @return (IValue*) the mutation factor
+	 * @return static_cast<IValue*>(the) mutation factor
 	 */
-	virtual IValue* calcMutationFactor(const std::vector<Gen*>& gene);
+	virtual IValue* calcMutationFactor(const std::vector<Gen*>& gene) override;
 
 protected:
 	/**
@@ -70,7 +70,7 @@ private:
 	/**
 	 * disable default constructor
 	 */
-	FixMutationFactorStrategy();
+	FixMutationFactorStrategy() override;
 };
 
 #endif /* FIXMUTATIONFACTORSTRATEGY_H_ */

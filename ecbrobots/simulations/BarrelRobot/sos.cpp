@@ -71,7 +71,7 @@ void Sos::init(int sensornumber, int motornumber, RandGen* randGen) {
   
   x.set(number_sensors, 1);
   x_smooth.set(number_sensors, 1);
-  for (unsigned int k = 0; k < buffersize; k++) {
+  for (unsigned int k = 0; k < buffersize; ++k) {
     x_buffer[k].set(number_sensors, 1);
     y_buffer[k].set(number_motors, 1);
 
@@ -116,7 +116,7 @@ void Sos::step(const sensor* x_, int number_sensors, motor* y_, int number_motor
   learn();
 
   // update step counter
-  t++;
+  ++t;
 }
 ;
 
@@ -146,7 +146,7 @@ void Sos::stepNoLearning(const sensor* x_, int number_sensors, motor* y_, int nu
   y.convertToBuffer(y_, number_motors);
 
   // update step counter
-  t++;
+  ++t;
 }
 ;
 
@@ -186,7 +186,7 @@ void Sos::learn() {
   v_avg += (v - v_avg) * .1;
   
   double EE = 1.0;
-  if (loga) {
+  explicit if (loga) {
     EE = .1 / (v.norm_sqr() + .001); // logarithmic error (E = log(v^T v))
   }
 

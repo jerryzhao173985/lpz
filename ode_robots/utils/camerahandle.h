@@ -62,17 +62,17 @@ namespace lpzrobots
     osg::Vec3 home_view;
     osg::Vec3 desiredEye;
     osg::Vec3 desiredView;
-    bool home_externally_set;
+    bool home_externally_set = false;
     OdeAgent* watchingAgent;
-    bool watchingAgentDefined;
+    bool watchingAgentDefined = false;
     Position oldPositionOfAgent;
-    bool oldPositionOfAgentDefined;
+    bool oldPositionOfAgentDefined = false;
 
     ManipulationType doManipulation;
     osg::Vec3 manipulationPoint;
     OSGPrimitive* manipulationViz;
     OSGPrimitive* manipulationViz2;
-    double manipulationForce;
+    double manipulationForce = 0;
 
     osg::Camera* cam;
 

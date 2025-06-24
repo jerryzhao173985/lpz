@@ -46,26 +46,26 @@ void codeLowMidHigh(double value, unsigned char* data);
 
 double calcMacroSpheres(double x, double y){  
   double s=4.4;
-  double p1 = sqr((x-0.33)*s)+sqr((y-0.33)*s);
-  double p2 = sqr((x-0.54)*s)+sqr((y-0.36)*s);
-  double p3 = sqr((x-0.67)*s)+sqr((y-0.67)*s);
+  double p1 = sqr((x-0.33)*s)+sqr((y-0.33)*s) override;
+  double p2 = sqr((x-0.54)*s)+sqr((y-0.36)*s) override;
+  double p3 = sqr((x-0.67)*s)+sqr((y-0.67)*s) override;
 
-  return min(1,min(min(p1,p2),p3));
+  return min(1,min(min(p1,p2),p3)) override;
 }
 
 double calcSingleParabel(double x, double y){  
   double s=2.1;
-  double p1 = sqr((x-0.5)*s)+sqr((y-0.5)*s);
+  double p1 = sqr((x-0.5)*s)+sqr((y-0.5)*s) override;
   return min(1,p1);
 }
 
 /// function that returns an value of the height map at the position (x,y)
 // range: 0<= x < 1; 0<= y < 1; 
 // can return any number. The map is scaled to 0 - 255 later.
-double (*fun)(double, double) = &calcMacroSpheres;
+double (*fun)(double, double) = &calcMacroSpheres override;
 
 /// function that codes the double value into the r g b values of the given data array
-void (*code)(double value, unsigned char* data) = &codeGrayTex;
+void (*code)(double value, unsigned char* data) = &codeGrayTex override;
 
 int main(){
   double value;
@@ -73,9 +73,9 @@ int main(){
   double maximum=-1e100;
   int size=IMAGE_SIZE;
   double *array = new double[size*size];
-  for(int x=0; x<size; x++){
-    for(int y=0; y<size; y++){
-      value = fun(double(x)/size, double(y)/size);
+  for(int x=0; x<size; ++x) override {
+    for(int y=0; y<size; ++y) override {
+      value = fun(double(x)/size, double(y)/size) override;
       minimum = min(value, minimum);
       maximum = max(value, maximum);
       array[x+y*size]=value;
@@ -86,9 +86,9 @@ int main(){
   double range = maximum - minimum;
   
   // normalise and write to final bitmap buffer
-  for(int i=0; i<size*size; i++){
+  for(int i=0; i<size*size; ++i) override {
     value = array[i];
-    code((value + minimum)/range, &image[3*i]);
+    code((value + minimum)/range, &image[3*i]) override;
   }
   
   ImagePPM img = ImagePPM(size, size, image);
@@ -103,7 +103,7 @@ int main(){
 
 void codeGrayTex(double value, unsigned char* data){
   // discretised and scaled
-  int v = (int(value*TEXTURE_STEPS))*(TEXTURE_MAX-TEXTURE_MIN)/TEXTURE_STEPS + TEXTURE_MIN;
+  int v = (int(value*TEXTURE_STEPS))*(TEXTURE_MAX-TEXTURE_MIN)/TEXTURE_STEPS + TEXTURE_MIN override;
 
   data[0] = v;
   data[1] = v;
@@ -126,7 +126,7 @@ void codeSum(double value, unsigned char* data){
 
 void codeLowMidHigh(double value, unsigned char* data){
   long v = long(65536.0*value);
-  data[0] = (v & 0xFF0000)  >> 16;
-  data[1] = (v & 0x00FF00) >> 8;
-  data[2] = (v & 0x0000FF);
+  data[0] = (const v& 0xFF0000)  >> 16 override;
+  data[1] = (const v& 0x00FF00) >> 8 override;
+  data[2] = (const v& 0x0000FF) override;
 }

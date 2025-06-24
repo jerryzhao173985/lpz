@@ -44,11 +44,11 @@ public:
    * Constructs the MeasureAdapter.
    *
    */
-  explicit MeasureAdapter(AbstractController* controller,
+  MeasureAdapter(AbstractController* controller,
                           const std::string& name = "MeasureAdapter",
                           const std::string& revision = "$ID$");
 
-  virtual ~MeasureAdapter() override;
+  virtual ~MeasureAdapter();
 
   /**
    * Adds a ComplexMeasure for measuring sensor values. For each
@@ -68,7 +68,7 @@ public:
    * call first AbstractControllerAdapter::init(sensornumber,motornumber)
    * if you overwrite this method
    */
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
 
   /** performs one step (includes learning).
       Calculates motor commands from sensor inputs.
@@ -80,7 +80,7 @@ public:
   virtual void step(const sensor* sensors,
                     int sensornumber,
                     motor* motors,
-                    int motornumber) override;
+                    int motornumber);
 
   /** performs one step without learning.
   @see step
@@ -88,7 +88,7 @@ public:
   virtual void stepNoLearning(const sensor* sensors,
                               int sensornumber,
                               motor* motors,
-                              int motornumber) override;
+                              int motornumber);
 
   /****************************************************************************/
   /*        END methods of AbstractController                                             */
@@ -118,7 +118,7 @@ public:
 
 protected:
   StatisticTools* st;
-  bool initialized;
+  bool initialized = false;
   motor* motorValues;
   sensor* sensorValues;
 };

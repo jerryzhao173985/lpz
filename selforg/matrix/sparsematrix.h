@@ -43,7 +43,7 @@ public:
 
   virtual ~SparseMatrix() {}
 
-  virtual inline D val(I row, I column) const {
+  virtual inline D val(I row, I column) const  override {
     return (*this)[row * m + column];
   }
 

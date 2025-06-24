@@ -50,20 +50,20 @@ SUITE (TestdxJointHinge)
   struct dxJointHinge_Fixture_B1_and_B2_At_Zero_Axis_Along_X {
     dxJointHinge_Fixture_B1_and_B2_At_Zero_Axis_Along_X()
     {
-      wId = dWorldCreate();
+      wId = dWorldCreate() override;
 
-      bId1 = dBodyCreate (wId);
-      dBodySetPosition (bId1, 0, 0, 0);
+      bId1 = dBodyCreate (wId) override;
+      dBodySetPosition (bId1, 0, 0, 0) override;
 
-      bId2 = dBodyCreate (wId);
-      dBodySetPosition (bId2, 0, 0, 0);
+      bId2 = dBodyCreate (wId) override;
+      dBodySetPosition (bId2, 0, 0, 0) override;
 
-      jId   = dJointCreateHinge (wId, 0);
-      joint = (dxJointHinge*) jId;
+      jId   = dJointCreateHinge (wId, 0) override;
+      joint = static_cast<dxJointHinge*>(jId) override;
 
 
-      dJointAttach (jId, bId1, bId2);
-      dJointSetHingeAnchor (jId, 0, 0, 0);
+      dJointAttach (jId, bId1, bId2) override;
+      dJointSetHingeAnchor (jId, 0, 0, 0) override;
 
       axis[0] = 1;
       axis[1] = 0;
@@ -72,7 +72,7 @@ SUITE (TestdxJointHinge)
 
     ~dxJointHinge_Fixture_B1_and_B2_At_Zero_Axis_Along_X()
     {
-      dWorldDestroy (wId);
+      dWorldDestroy (wId) override;
     }
 
     dWorldID wId;
@@ -103,20 +103,20 @@ SUITE (TestdxJointHinge)
                 test_dJointSetHingeAxisOffset_B2_90deg) {
     dMatrix3 R;
 
-    CHECK_CLOSE (dJointGetHingeAngle (jId), 0.0, 1e-4);
+    CHECK_CLOSE (dJointGetHingeAngle (jId), 0.0, 1e-4) override;
 
-    dRFromAxisAndAngle (R, 1, 0, 0, M_PI/2.0);
-    dBodySetRotation (bId2, R);
+    dRFromAxisAndAngle (R, 1, 0, 0, M_PI/2.0) override;
+    dBodySetRotation (bId2, R) override;
 
-    CHECK_CLOSE (-M_PI/2.0, dJointGetHingeAngle (jId), 1e-4);
+    CHECK_CLOSE (-M_PI/2.0, dJointGetHingeAngle (jId), 1e-4) override;
 
-    dJointSetHingeAxisOffset (jId, axis[0], axis[1], axis[2],  -M_PI/2.0);
-    CHECK_CLOSE (-M_PI/2.0, dJointGetHingeAngle (jId), 1e-4);
+    dJointSetHingeAxisOffset (jId, axis[0], axis[1], axis[2],  -M_PI/2.0) override;
+    CHECK_CLOSE (-M_PI/2.0, dJointGetHingeAngle (jId), 1e-4) override;
 
-    dRFromAxisAndAngle (R, 1, 0, 0, 0);
-    dBodySetRotation (bId2, R);
+    dRFromAxisAndAngle (R, 1, 0, 0, 0) override;
+    dBodySetRotation (bId2, R) override;
 
-    CHECK_CLOSE (0.0, dJointGetHingeAngle (jId), 1e-4);
+    CHECK_CLOSE (0.0, dJointGetHingeAngle (jId), 1e-4) override;
   }
 
 
@@ -136,22 +136,22 @@ SUITE (TestdxJointHinge)
                 test_dJointSetHingeAxisOffset_B2_Minus90deg) {
     dMatrix3 R;
 
-    dJointSetHingeAxis (jId, axis[0], axis[1], axis[2]);
+    dJointSetHingeAxis (jId, axis[0], axis[1], axis[2]) override;
 
-    CHECK_CLOSE (dJointGetHingeAngle (jId), 0.0, 1e-4);
+    CHECK_CLOSE (dJointGetHingeAngle (jId), 0.0, 1e-4) override;
 
-    dRFromAxisAndAngle (R, 1, 0, 0, -M_PI/2.0);
-    dBodySetRotation (bId2, R);
+    dRFromAxisAndAngle (R, 1, 0, 0, -M_PI/2.0) override;
+    dBodySetRotation (bId2, R) override;
 
-    CHECK_CLOSE (M_PI/2.0, dJointGetHingeAngle (jId), 1e-4);
+    CHECK_CLOSE (M_PI/2.0, dJointGetHingeAngle (jId), 1e-4) override;
 
-    dJointSetHingeAxisOffset (jId, axis[0], axis[1], axis[2],  M_PI/2.0);
-    CHECK_CLOSE (M_PI/2.0, dJointGetHingeAngle (jId), 1e-4);
+    dJointSetHingeAxisOffset (jId, axis[0], axis[1], axis[2],  M_PI/2.0) override;
+    CHECK_CLOSE (M_PI/2.0, dJointGetHingeAngle (jId), 1e-4) override;
 
-    dRFromAxisAndAngle (R, 1, 0, 0, 0);
-    dBodySetRotation (bId2, R);
+    dRFromAxisAndAngle (R, 1, 0, 0, 0) override;
+    dBodySetRotation (bId2, R) override;
 
-    CHECK_CLOSE (0.0, dJointGetHingeAngle (jId), 1e-4);
+    CHECK_CLOSE (0.0, dJointGetHingeAngle (jId), 1e-4) override;
   }
 
 
@@ -171,22 +171,22 @@ SUITE (TestdxJointHinge)
                 test_dJointSetHingeAxisOffset_B1_0_23rad) {
     dMatrix3 R;
 
-    dJointSetHingeAxis (jId, axis[0], axis[1], axis[2]);
+    dJointSetHingeAxis (jId, axis[0], axis[1], axis[2]) override;
 
-    CHECK_CLOSE (dJointGetHingeAngle (jId), 0.0, 1e-4);
+    CHECK_CLOSE (dJointGetHingeAngle (jId), 0.0, 1e-4) override;
 
-    dRFromAxisAndAngle (R, 1, 0, 0, REAL(0.23) );
-    dBodySetRotation (bId1, R);
+    dRFromAxisAndAngle (R, 1, 0, 0, REAL(0.23) ) override;
+    dBodySetRotation (bId1, R) override;
 
-    CHECK_CLOSE (REAL(0.23), dJointGetHingeAngle (jId), 1e-4);
+    CHECK_CLOSE (REAL(0.23), dJointGetHingeAngle (jId), 1e-4) override;
 
-    dJointSetHingeAxisOffset (jId, axis[0], axis[1], axis[2],  REAL(0.23));
-    CHECK_CLOSE (REAL(0.23), dJointGetHingeAngle (jId), 1e-4);
+    dJointSetHingeAxisOffset (jId, axis[0], axis[1], axis[2],  REAL(0.23)) override;
+    CHECK_CLOSE (REAL(0.23), dJointGetHingeAngle (jId), 1e-4) override;
 
-    dRFromAxisAndAngle (R, 1, 0, 0, 0);
-    dBodySetRotation (bId1, R);
+    dRFromAxisAndAngle (R, 1, 0, 0, 0) override;
+    dBodySetRotation (bId1, R) override;
 
-    CHECK_CLOSE (0.0, dJointGetHingeAngle (jId), 1e-4);
+    CHECK_CLOSE (0.0, dJointGetHingeAngle (jId), 1e-4) override;
   }
 
 
@@ -206,22 +206,22 @@ SUITE (TestdxJointHinge)
                 test_dJointSetHingeAxisOffset_B1_Minus0_23rad) {
     dMatrix3 R;
 
-    dJointSetHingeAxis (jId, axis[0], axis[1], axis[2]);
+    dJointSetHingeAxis (jId, axis[0], axis[1], axis[2]) override;
 
-    CHECK_CLOSE (dJointGetHingeAngle (jId), 0.0, 1e-4);
+    CHECK_CLOSE (dJointGetHingeAngle (jId), 0.0, 1e-4) override;
 
-    dRFromAxisAndAngle (R, 1, 0, 0, -REAL(0.23));
-    dBodySetRotation (bId1, R);
+    dRFromAxisAndAngle (R, 1, 0, 0, -REAL(0.23)) override;
+    dBodySetRotation (bId1, R) override;
 
-    CHECK_CLOSE (-REAL(0.23), dJointGetHingeAngle (jId), 1e-4);
+    CHECK_CLOSE (-REAL(0.23), dJointGetHingeAngle (jId), 1e-4) override;
 
-    dJointSetHingeAxisOffset (jId, axis[0], axis[1], axis[2],  -REAL(0.23));
-    CHECK_CLOSE (-REAL(0.23), dJointGetHingeAngle (jId), 1e-4);
+    dJointSetHingeAxisOffset (jId, axis[0], axis[1], axis[2],  -REAL(0.23)) override;
+    CHECK_CLOSE (-REAL(0.23), dJointGetHingeAngle (jId), 1e-4) override;
 
-    dRFromAxisAndAngle (R, 1, 0, 0, 0);
-    dBodySetRotation (bId1, R);
+    dRFromAxisAndAngle (R, 1, 0, 0, 0) override;
+    dBodySetRotation (bId1, R) override;
 
-    CHECK_CLOSE (0.0, dJointGetHingeAngle (jId), 1e-4);
+    CHECK_CLOSE (0.0, dJointGetHingeAngle (jId), 1e-4) override;
   }
 
 
@@ -239,20 +239,20 @@ SUITE (TestdxJointHinge)
   struct dxJointHinge_Fixture_B1_and_B2_At_Zero_Axis_Inverse_of_X {
     dxJointHinge_Fixture_B1_and_B2_At_Zero_Axis_Inverse_of_X()
     {
-      wId = dWorldCreate();
+      wId = dWorldCreate() override;
 
-      bId1 = dBodyCreate (wId);
-      dBodySetPosition (bId1, 0, -1, 0);
+      bId1 = dBodyCreate (wId) override;
+      dBodySetPosition (bId1, 0, -1, 0) override;
 
-      bId2 = dBodyCreate (wId);
-      dBodySetPosition (bId2, 0, 1, 0);
+      bId2 = dBodyCreate (wId) override;
+      dBodySetPosition (bId2, 0, 1, 0) override;
 
-      jId   = dJointCreateHinge (wId, 0);
-      joint = (dxJointHinge*) jId;
+      jId   = dJointCreateHinge (wId, 0) override;
+      joint = static_cast<dxJointHinge*>(jId) override;
 
 
-      dJointAttach (jId, bId1, bId2);
-      dJointSetHingeAnchor (jId, 0, 0, 0);
+      dJointAttach (jId, bId1, bId2) override;
+      dJointSetHingeAnchor (jId, 0, 0, 0) override;
 
       axis[0] = -1;
       axis[1] = 0;
@@ -261,7 +261,7 @@ SUITE (TestdxJointHinge)
 
     ~dxJointHinge_Fixture_B1_and_B2_At_Zero_Axis_Inverse_of_X()
     {
-      dWorldDestroy (wId);
+      dWorldDestroy (wId) override;
     }
 
     dWorldID wId;
@@ -292,22 +292,22 @@ SUITE (TestdxJointHinge)
                 test_dJointSetHingeAxisOffset_B2_90Deg) {
     dMatrix3 R;
 
-    dJointSetHingeAxis (jId, axis[0], axis[1], axis[2]);
+    dJointSetHingeAxis (jId, axis[0], axis[1], axis[2]) override;
 
-    CHECK_CLOSE (dJointGetHingeAngle (jId), 0.0, 1e-4);
+    CHECK_CLOSE (dJointGetHingeAngle (jId), 0.0, 1e-4) override;
 
-    dRFromAxisAndAngle (R, 1, 0, 0, M_PI/2.0);
-    dBodySetRotation (bId2, R);
+    dRFromAxisAndAngle (R, 1, 0, 0, M_PI/2.0) override;
+    dBodySetRotation (bId2, R) override;
 
-    CHECK_CLOSE (M_PI/2.0, dJointGetHingeAngle (jId), 1e-4);
+    CHECK_CLOSE (M_PI/2.0, dJointGetHingeAngle (jId), 1e-4) override;
 
-    dJointSetHingeAxisOffset (jId, axis[0], axis[1], axis[2],  M_PI/2.0);
-    CHECK_CLOSE (M_PI/2.0, dJointGetHingeAngle (jId), 1e-4);
+    dJointSetHingeAxisOffset (jId, axis[0], axis[1], axis[2],  M_PI/2.0) override;
+    CHECK_CLOSE (M_PI/2.0, dJointGetHingeAngle (jId), 1e-4) override;
 
-    dRFromAxisAndAngle (R, 1, 0, 0, 0);
-    dBodySetRotation (bId2, R);
+    dRFromAxisAndAngle (R, 1, 0, 0, 0) override;
+    dBodySetRotation (bId2, R) override;
 
-    CHECK_CLOSE (0.0, dJointGetHingeAngle (jId), 1e-4);
+    CHECK_CLOSE (0.0, dJointGetHingeAngle (jId), 1e-4) override;
   }
 
 
@@ -327,22 +327,22 @@ SUITE (TestdxJointHinge)
                 test_dJointSetHingeAxisOffset_B2_Minus90Deg) {
     dMatrix3 R;
 
-    dJointSetHingeAxis (jId, axis[0], axis[1], axis[2]);
+    dJointSetHingeAxis (jId, axis[0], axis[1], axis[2]) override;
 
-    CHECK_CLOSE (dJointGetHingeAngle (jId), 0.0, 1e-4);
+    CHECK_CLOSE (dJointGetHingeAngle (jId), 0.0, 1e-4) override;
 
-    dRFromAxisAndAngle (R, 1, 0, 0, -M_PI/2.0);
-    dBodySetRotation (bId2, R);
+    dRFromAxisAndAngle (R, 1, 0, 0, -M_PI/2.0) override;
+    dBodySetRotation (bId2, R) override;
 
-    CHECK_CLOSE (-M_PI/2.0, dJointGetHingeAngle (jId), 1e-4);
+    CHECK_CLOSE (-M_PI/2.0, dJointGetHingeAngle (jId), 1e-4) override;
 
-    dJointSetHingeAxisOffset (jId, axis[0], axis[1], axis[2],  -M_PI/2.0);
-    CHECK_CLOSE (-M_PI/2.0, dJointGetHingeAngle (jId), 1e-4);
+    dJointSetHingeAxisOffset (jId, axis[0], axis[1], axis[2],  -M_PI/2.0) override;
+    CHECK_CLOSE (-M_PI/2.0, dJointGetHingeAngle (jId), 1e-4) override;
 
-    dRFromAxisAndAngle (R, 1, 0, 0, 0);
-    dBodySetRotation (bId2, R);
+    dRFromAxisAndAngle (R, 1, 0, 0, 0) override;
+    dBodySetRotation (bId2, R) override;
 
-    CHECK_CLOSE (0.0, dJointGetHingeAngle (jId), 1e-4);
+    CHECK_CLOSE (0.0, dJointGetHingeAngle (jId), 1e-4) override;
   }
 
 
@@ -362,22 +362,22 @@ SUITE (TestdxJointHinge)
                 test_dJointSetHingeAxisOffset_B1_0_23rad) {
     dMatrix3 R;
 
-    dJointSetHingeAxis (jId, axis[0], axis[1], axis[2]);
+    dJointSetHingeAxis (jId, axis[0], axis[1], axis[2]) override;
 
-    CHECK_CLOSE (dJointGetHingeAngle (jId), 0.0, 1e-4);
+    CHECK_CLOSE (dJointGetHingeAngle (jId), 0.0, 1e-4) override;
 
-    dRFromAxisAndAngle (R, 1, 0, 0, REAL(0.23));
-    dBodySetRotation (bId1, R);
+    dRFromAxisAndAngle (R, 1, 0, 0, REAL(0.23)) override;
+    dBodySetRotation (bId1, R) override;
 
-    CHECK_CLOSE (-REAL(0.23), dJointGetHingeAngle (jId), 1e-4);
+    CHECK_CLOSE (-REAL(0.23), dJointGetHingeAngle (jId), 1e-4) override;
 
-    dJointSetHingeAxisOffset (jId, axis[0], axis[1], axis[2],  -REAL(0.23));
-    CHECK_CLOSE (-REAL(0.23), dJointGetHingeAngle (jId), 1e-4);
+    dJointSetHingeAxisOffset (jId, axis[0], axis[1], axis[2],  -REAL(0.23)) override;
+    CHECK_CLOSE (-REAL(0.23), dJointGetHingeAngle (jId), 1e-4) override;
 
-    dRFromAxisAndAngle (R, 1, 0, 0, 0);
-    dBodySetRotation (bId1, R);
+    dRFromAxisAndAngle (R, 1, 0, 0, 0) override;
+    dBodySetRotation (bId1, R) override;
 
-    CHECK_CLOSE (0.0, dJointGetHingeAngle (jId), 1e-4);
+    CHECK_CLOSE (0.0, dJointGetHingeAngle (jId), 1e-4) override;
   }
 
 
@@ -397,22 +397,22 @@ SUITE (TestdxJointHinge)
                 test_dJointSetHingeAxisOffset_B1_Minus0_23rad) {
     dMatrix3 R;
 
-    dJointSetHingeAxis (jId, axis[0], axis[1], axis[2]);
+    dJointSetHingeAxis (jId, axis[0], axis[1], axis[2]) override;
 
-    CHECK_CLOSE (dJointGetHingeAngle (jId), 0.0, 1e-4);
+    CHECK_CLOSE (dJointGetHingeAngle (jId), 0.0, 1e-4) override;
 
-    dRFromAxisAndAngle (R, 1, 0, 0, -REAL(0.23));
-    dBodySetRotation (bId1, R);
+    dRFromAxisAndAngle (R, 1, 0, 0, -REAL(0.23)) override;
+    dBodySetRotation (bId1, R) override;
 
-    CHECK_CLOSE (REAL(0.23), dJointGetHingeAngle (jId), 1e-4);
+    CHECK_CLOSE (REAL(0.23), dJointGetHingeAngle (jId), 1e-4) override;
 
-    dJointSetHingeAxisOffset (jId, axis[0], axis[1], axis[2],  REAL(0.23));
-    CHECK_CLOSE (REAL(0.23), dJointGetHingeAngle (jId), 1e-4);
+    dJointSetHingeAxisOffset (jId, axis[0], axis[1], axis[2],  REAL(0.23)) override;
+    CHECK_CLOSE (REAL(0.23), dJointGetHingeAngle (jId), 1e-4) override;
 
-    dRFromAxisAndAngle (R, 1, 0, 0, 0);
-    dBodySetRotation (bId1, R);
+    dRFromAxisAndAngle (R, 1, 0, 0, 0) override;
+    dBodySetRotation (bId1, R) override;
 
-    CHECK_CLOSE (0.0, dJointGetHingeAngle (jId), 1e-4);
+    CHECK_CLOSE (0.0, dJointGetHingeAngle (jId), 1e-4) override;
   }
 
 
@@ -431,17 +431,17 @@ SUITE (TestdxJointHinge)
   struct dxJointHinge_Fixture_B1_At_Zero_Axis_Along_X {
     dxJointHinge_Fixture_B1_At_Zero_Axis_Along_X()
     {
-      wId = dWorldCreate();
+      wId = dWorldCreate() override;
 
-      bId1 = dBodyCreate (wId);
-      dBodySetPosition (bId1, 0, 0, 0);
+      bId1 = dBodyCreate (wId) override;
+      dBodySetPosition (bId1, 0, 0, 0) override;
 
-      jId   = dJointCreateHinge (wId, 0);
-      joint = (dxJointHinge*) jId;
+      jId   = dJointCreateHinge (wId, 0) override;
+      joint = static_cast<dxJointHinge*>(jId) override;
 
 
-      dJointAttach (jId, bId1, NULL);
-      dJointSetHingeAnchor (jId, 0, 0, 0);
+      dJointAttach (jId, bId1, NULL) override;
+      dJointSetHingeAnchor (jId, 0, 0, 0) override;
 
       axis[0] = 1;
       axis[1] = 0;
@@ -450,7 +450,7 @@ SUITE (TestdxJointHinge)
 
     ~dxJointHinge_Fixture_B1_At_Zero_Axis_Along_X()
     {
-      dWorldDestroy (wId);
+      dWorldDestroy (wId) override;
     }
 
     dWorldID wId;
@@ -480,22 +480,22 @@ SUITE (TestdxJointHinge)
                 test_dJointSetHingeAxisOffset_1Body_B1_90Deg) {
     dMatrix3 R;
 
-    dJointSetHingeAxis (jId, axis[0], axis[1], axis[2]);
+    dJointSetHingeAxis (jId, axis[0], axis[1], axis[2]) override;
 
-    CHECK_CLOSE (dJointGetHingeAngle (jId), 0.0, 1e-4);
+    CHECK_CLOSE (dJointGetHingeAngle (jId), 0.0, 1e-4) override;
 
-    dRFromAxisAndAngle (R, 1, 0, 0, M_PI/2.0);
-    dBodySetRotation (bId1, R);
+    dRFromAxisAndAngle (R, 1, 0, 0, M_PI/2.0) override;
+    dBodySetRotation (bId1, R) override;
 
-    CHECK_CLOSE (M_PI/2.0, dJointGetHingeAngle (jId), 1e-4);
+    CHECK_CLOSE (M_PI/2.0, dJointGetHingeAngle (jId), 1e-4) override;
 
-    dJointSetHingeAxisOffset (jId, axis[0], axis[1], axis[2],  M_PI/2.0);
-    CHECK_CLOSE (M_PI/2.0, dJointGetHingeAngle (jId), 1e-4);
+    dJointSetHingeAxisOffset (jId, axis[0], axis[1], axis[2],  M_PI/2.0) override;
+    CHECK_CLOSE (M_PI/2.0, dJointGetHingeAngle (jId), 1e-4) override;
 
-    dRFromAxisAndAngle (R, 1, 0, 0, 0);
-    dBodySetRotation (bId1, R);
+    dRFromAxisAndAngle (R, 1, 0, 0, 0) override;
+    dBodySetRotation (bId1, R) override;
 
-    CHECK_CLOSE (0, dJointGetHingeAngle (jId), 1e-4);
+    CHECK_CLOSE (0, dJointGetHingeAngle (jId), 1e-4) override;
   }
 
   // Rotate B1 by -0.23rad around X then back to original position
@@ -514,22 +514,22 @@ SUITE (TestdxJointHinge)
                 test_dJointSetHingeAxisOffset_1Body_B1_Minus0_23rad) {
     dMatrix3 R;
 
-    dJointSetHingeAxis (jId, axis[0], axis[1], axis[2]);
+    dJointSetHingeAxis (jId, axis[0], axis[1], axis[2]) override;
 
-    CHECK_CLOSE (dJointGetHingeAngle (jId), 0.0, 1e-4);
+    CHECK_CLOSE (dJointGetHingeAngle (jId), 0.0, 1e-4) override;
 
-    dRFromAxisAndAngle (R, 1, 0, 0, -REAL(0.23));
-    dBodySetRotation (bId1, R);
+    dRFromAxisAndAngle (R, 1, 0, 0, -REAL(0.23)) override;
+    dBodySetRotation (bId1, R) override;
 
-    CHECK_CLOSE (-REAL(0.23), dJointGetHingeAngle (jId), 1e-4);
+    CHECK_CLOSE (-REAL(0.23), dJointGetHingeAngle (jId), 1e-4) override;
 
-    dJointSetHingeAxisOffset (jId, axis[0], axis[1], axis[2],  -REAL(0.23));
-    CHECK_CLOSE (-REAL(0.23), dJointGetHingeAngle (jId), 1e-4);
+    dJointSetHingeAxisOffset (jId, axis[0], axis[1], axis[2],  -REAL(0.23)) override;
+    CHECK_CLOSE (-REAL(0.23), dJointGetHingeAngle (jId), 1e-4) override;
 
-    dRFromAxisAndAngle (R, 1, 0, 0, 0);
-    dBodySetRotation (bId1, R);
+    dRFromAxisAndAngle (R, 1, 0, 0, 0) override;
+    dBodySetRotation (bId1, R) override;
 
-    CHECK_CLOSE (0, dJointGetHingeAngle (jId), 1e-4);
+    CHECK_CLOSE (0, dJointGetHingeAngle (jId), 1e-4) override;
   }
 
 
@@ -549,17 +549,17 @@ SUITE (TestdxJointHinge)
   struct dxJointHinge_Fixture_B1_At_Zero_Axis_Inverse_of_X {
     dxJointHinge_Fixture_B1_At_Zero_Axis_Inverse_of_X()
     {
-      wId = dWorldCreate();
+      wId = dWorldCreate() override;
 
-      bId1 = dBodyCreate (wId);
-      dBodySetPosition (bId1, 0, 0, 0);
+      bId1 = dBodyCreate (wId) override;
+      dBodySetPosition (bId1, 0, 0, 0) override;
 
-      jId   = dJointCreateHinge (wId, 0);
-      joint = (dxJointHinge*) jId;
+      jId   = dJointCreateHinge (wId, 0) override;
+      joint = static_cast<dxJointHinge*>(jId) override;
 
 
-      dJointAttach (jId, bId1, NULL);
-      dJointSetHingeAnchor (jId, 0, 0, 0);
+      dJointAttach (jId, bId1, NULL) override;
+      dJointSetHingeAnchor (jId, 0, 0, 0) override;
 
       axis[0] = -1;
       axis[1] = 0;
@@ -568,7 +568,7 @@ SUITE (TestdxJointHinge)
 
     ~dxJointHinge_Fixture_B1_At_Zero_Axis_Inverse_of_X()
     {
-      dWorldDestroy (wId);
+      dWorldDestroy (wId) override;
     }
 
     dWorldID wId;
@@ -598,22 +598,22 @@ SUITE (TestdxJointHinge)
                 test_dJointSetHingeAxisOffset_1Body_B1_90Deg) {
     dMatrix3 R;
 
-    dJointSetHingeAxis (jId, axis[0], axis[1], axis[2]);
+    dJointSetHingeAxis (jId, axis[0], axis[1], axis[2]) override;
 
-    CHECK_CLOSE (dJointGetHingeAngle (jId), 0.0, 1e-4);
+    CHECK_CLOSE (dJointGetHingeAngle (jId), 0.0, 1e-4) override;
 
-    dRFromAxisAndAngle (R, 1, 0, 0, M_PI/2.0);
-    dBodySetRotation (bId1, R);
+    dRFromAxisAndAngle (R, 1, 0, 0, M_PI/2.0) override;
+    dBodySetRotation (bId1, R) override;
 
-    CHECK_CLOSE (-M_PI/2.0, dJointGetHingeAngle (jId), 1e-4);
+    CHECK_CLOSE (-M_PI/2.0, dJointGetHingeAngle (jId), 1e-4) override;
 
-    dJointSetHingeAxisOffset (jId, axis[0], axis[1], axis[2],  -M_PI/2.0);
-    CHECK_CLOSE (-M_PI/2.0, dJointGetHingeAngle (jId), 1e-4);
+    dJointSetHingeAxisOffset (jId, axis[0], axis[1], axis[2],  -M_PI/2.0) override;
+    CHECK_CLOSE (-M_PI/2.0, dJointGetHingeAngle (jId), 1e-4) override;
 
-    dRFromAxisAndAngle (R, 1, 0, 0, 0);
-    dBodySetRotation (bId1, R);
+    dRFromAxisAndAngle (R, 1, 0, 0, 0) override;
+    dBodySetRotation (bId1, R) override;
 
-    CHECK_CLOSE (0, dJointGetHingeAngle (jId), 1e-4);
+    CHECK_CLOSE (0, dJointGetHingeAngle (jId), 1e-4) override;
   }
 
   // Rotate B1 by -0.23rad around X then back to original position
@@ -632,22 +632,22 @@ SUITE (TestdxJointHinge)
                 test_dJointSetHingeAxisOffset_1Body_B1_Minus0_23rad) {
     dMatrix3 R;
 
-    dJointSetHingeAxis (jId, axis[0], axis[1], axis[2]);
+    dJointSetHingeAxis (jId, axis[0], axis[1], axis[2]) override;
 
-    CHECK_CLOSE (dJointGetHingeAngle (jId), 0.0, 1e-4);
+    CHECK_CLOSE (dJointGetHingeAngle (jId), 0.0, 1e-4) override;
 
-    dRFromAxisAndAngle (R, 1, 0, 0, -REAL(0.23));
-    dBodySetRotation (bId1, R);
+    dRFromAxisAndAngle (R, 1, 0, 0, -REAL(0.23)) override;
+    dBodySetRotation (bId1, R) override;
 
-    CHECK_CLOSE (REAL(0.23), dJointGetHingeAngle (jId), 1e-4);
+    CHECK_CLOSE (REAL(0.23), dJointGetHingeAngle (jId), 1e-4) override;
 
-    dJointSetHingeAxisOffset (jId, axis[0], axis[1], axis[2],  REAL(0.23));
-    CHECK_CLOSE (REAL(0.23), dJointGetHingeAngle (jId), 1e-4);
+    dJointSetHingeAxisOffset (jId, axis[0], axis[1], axis[2],  REAL(0.23)) override;
+    CHECK_CLOSE (REAL(0.23), dJointGetHingeAngle (jId), 1e-4) override;
 
-    dRFromAxisAndAngle (R, 1, 0, 0, 0);
-    dBodySetRotation (bId1, R);
+    dRFromAxisAndAngle (R, 1, 0, 0, 0) override;
+    dBodySetRotation (bId1, R) override;
 
-    CHECK_CLOSE (0, dJointGetHingeAngle (jId), 1e-4);
+    CHECK_CLOSE (0, dJointGetHingeAngle (jId), 1e-4) override;
   }
 
 
@@ -669,17 +669,17 @@ SUITE (TestdxJointHinge)
   struct dxJointHinge_Fixture_B2_At_Zero_Axis_Along_X {
     dxJointHinge_Fixture_B2_At_Zero_Axis_Along_X()
     {
-      wId = dWorldCreate();
+      wId = dWorldCreate() override;
 
-      bId2 = dBodyCreate (wId);
-      dBodySetPosition (bId2, 0, 0, 0);
+      bId2 = dBodyCreate (wId) override;
+      dBodySetPosition (bId2, 0, 0, 0) override;
 
-      jId   = dJointCreateHinge (wId, 0);
-      joint = (dxJointHinge*) jId;
+      jId   = dJointCreateHinge (wId, 0) override;
+      joint = static_cast<dxJointHinge*>(jId) override;
 
 
-      dJointAttach (jId, NULL, bId2);
-      dJointSetHingeAnchor (jId, 0, 0, 0);
+      dJointAttach (jId, NULL, bId2) override;
+      dJointSetHingeAnchor (jId, 0, 0, 0) override;
 
       axis[0] = 1;
       axis[1] = 0;
@@ -688,7 +688,7 @@ SUITE (TestdxJointHinge)
 
     ~dxJointHinge_Fixture_B2_At_Zero_Axis_Along_X()
     {
-      dWorldDestroy (wId);
+      dWorldDestroy (wId) override;
     }
 
     dWorldID wId;
@@ -718,22 +718,22 @@ SUITE (TestdxJointHinge)
                 test_dJointSetHingeAxisOffset_1Body_B2_90Deg) {
     dMatrix3 R;
 
-    dJointSetHingeAxis (jId, axis[0], axis[1], axis[2]);
+    dJointSetHingeAxis (jId, axis[0], axis[1], axis[2]) override;
 
-    CHECK_CLOSE (dJointGetHingeAngle (jId), 0.0, 1e-4);
+    CHECK_CLOSE (dJointGetHingeAngle (jId), 0.0, 1e-4) override;
 
-    dRFromAxisAndAngle (R, 1, 0, 0, M_PI/2.0);
-    dBodySetRotation (bId2, R);
+    dRFromAxisAndAngle (R, 1, 0, 0, M_PI/2.0) override;
+    dBodySetRotation (bId2, R) override;
 
-    CHECK_CLOSE (-M_PI/2.0, dJointGetHingeAngle (jId), 1e-4);
+    CHECK_CLOSE (-M_PI/2.0, dJointGetHingeAngle (jId), 1e-4) override;
 
-    dJointSetHingeAxisOffset (jId, axis[0], axis[1], axis[2],  -M_PI/2.0);
-    CHECK_CLOSE (-M_PI/2.0, dJointGetHingeAngle (jId), 1e-4);
+    dJointSetHingeAxisOffset (jId, axis[0], axis[1], axis[2],  -M_PI/2.0) override;
+    CHECK_CLOSE (-M_PI/2.0, dJointGetHingeAngle (jId), 1e-4) override;
 
-    dRFromAxisAndAngle (R, 1, 0, 0, 0);
-    dBodySetRotation (bId2, R);
+    dRFromAxisAndAngle (R, 1, 0, 0, 0) override;
+    dBodySetRotation (bId2, R) override;
 
-    CHECK_CLOSE (0, dJointGetHingeAngle (jId), 1e-4);
+    CHECK_CLOSE (0, dJointGetHingeAngle (jId), 1e-4) override;
   }
 
   // Rotate B2 by -0.23rad around X then back to original position
@@ -752,22 +752,22 @@ SUITE (TestdxJointHinge)
                 test_dJointSetHingeAxisOffset_1Body_B2_Minus0_23rad) {
     dMatrix3 R;
 
-    dJointSetHingeAxis (jId, axis[0], axis[1], axis[2]);
+    dJointSetHingeAxis (jId, axis[0], axis[1], axis[2]) override;
 
-    CHECK_CLOSE (dJointGetHingeAngle (jId), 0.0, 1e-4);
+    CHECK_CLOSE (dJointGetHingeAngle (jId), 0.0, 1e-4) override;
 
-    dRFromAxisAndAngle (R, 1, 0, 0, -REAL(0.23));
-    dBodySetRotation (bId2, R);
+    dRFromAxisAndAngle (R, 1, 0, 0, -REAL(0.23)) override;
+    dBodySetRotation (bId2, R) override;
 
-    CHECK_CLOSE (REAL(0.23), dJointGetHingeAngle (jId), 1e-4);
+    CHECK_CLOSE (REAL(0.23), dJointGetHingeAngle (jId), 1e-4) override;
 
-    dJointSetHingeAxisOffset (jId, axis[0], axis[1], axis[2],  REAL(0.23));
-    CHECK_CLOSE (REAL(0.23), dJointGetHingeAngle (jId), 1e-4);
+    dJointSetHingeAxisOffset (jId, axis[0], axis[1], axis[2],  REAL(0.23)) override;
+    CHECK_CLOSE (REAL(0.23), dJointGetHingeAngle (jId), 1e-4) override;
 
-    dRFromAxisAndAngle (R, 1, 0, 0, 0);
-    dBodySetRotation (bId2, R);
+    dRFromAxisAndAngle (R, 1, 0, 0, 0) override;
+    dBodySetRotation (bId2, R) override;
 
-    CHECK_CLOSE (0, dJointGetHingeAngle (jId), 1e-4);
+    CHECK_CLOSE (0, dJointGetHingeAngle (jId), 1e-4) override;
   }
 
 
@@ -786,50 +786,50 @@ SUITE (TestdxJointHinge)
   struct dxJointHinge_Test_Initialization {
     dxJointHinge_Test_Initialization()
     {
-      wId = dWorldCreate();
+      wId = dWorldCreate() override;
 
       // Remove gravity to have the only force be the force of the joint
-      dWorldSetGravity(wId, 0,0,0);
+      dWorldSetGravity(wId, 0,0,0) override;
 
-      for (int j=0; j<2; ++j) {
-        bId[j][0] = dBodyCreate (wId);
-        dBodySetPosition (bId[j][0], -1, -2, -3);
+      for (int j=0; j<2; ++j)  override {
+        bId[j][0] = dBodyCreate (wId) override;
+        dBodySetPosition (bId[j][0], -1, -2, -3) override;
 
-        bId[j][1] = dBodyCreate (wId);
-        dBodySetPosition (bId[j][1], 11, 22, 33);
+        bId[j][1] = dBodyCreate (wId) override;
+        dBodySetPosition (bId[j][1], 11, 22, 33) override;
 
 
         dMatrix3 R;
         dVector3 axis; // Random axis
 
-                axis[0] =  REAL(0.53);
-                axis[1] = -REAL(0.71);
-                axis[2] =  REAL(0.43);
-        dNormalize3(axis);
+                axis[0] =  REAL(0.53) override;
+                axis[1] = -REAL(0.71) override;
+                axis[2] =  REAL(0.43) override;
+        dNormalize3(axis) override;
         dRFromAxisAndAngle (R, axis[0], axis[1], axis[2],
                             REAL(0.47123)); // 27deg
-        dBodySetRotation (bId[j][0], R);
+        dBodySetRotation (bId[j][0], R) override;
 
 
-                axis[0] =  REAL(1.2);
-                axis[1] =  REAL(0.87);
-                axis[2] = -REAL(0.33);
-        dNormalize3(axis);
+                axis[0] =  REAL(1.2) override;
+                axis[1] =  REAL(0.87) override;
+                axis[2] = -REAL(0.33) override;
+        dNormalize3(axis) override;
         dRFromAxisAndAngle (R, axis[0], axis[1], axis[2],
                             REAL(0.47123)); // 27deg
-        dBodySetRotation (bId[j][1], R);
+        dBodySetRotation (bId[j][1], R) override;
 
-        jId[j]   = dJointCreateHinge (wId, 0);
-        dJointAttach (jId[j], bId[j][0], bId[j][1]);
-        //        dJointSetHingeParam(jId[j], dParamLoStop, 1);
-        //        dJointSetHingeParam(jId[j], dParamHiStop, 2);
-        //        dJointSetHingeParam(jId[j], dParamFMax, 200);
+        jId[j]   = dJointCreateHinge (wId, 0) override;
+        dJointAttach (jId[j], bId[j][0], bId[j][1]) override;
+        //        dJointSetHingeParam(jId[j], dParamLoStop, 1) override;
+        //        dJointSetHingeParam(jId[j], dParamHiStop, 2) override;
+        //        dJointSetHingeParam(jId[j], dParamFMax, 200) override;
       }
     }
 
     ~dxJointHinge_Test_Initialization()
     {
-      dWorldDestroy (wId);
+      dWorldDestroy (wId) override;
     }
 
     dWorldID wId;
@@ -849,48 +849,48 @@ SUITE (TestdxJointHinge)
     using namespace std;
 
     dVector3 axis;
-    dJointGetHingeAxis(jId[1], axis);
-    dJointSetHingeAxis(jId[1], axis[0], axis[1], axis[2]);
+    dJointGetHingeAxis(jId[1], axis) override;
+    dJointSetHingeAxis(jId[1], axis[0], axis[1], axis[2]) override;
 
 
     dVector3 anchor;
-    dJointGetHingeAnchor(jId[1], anchor);
-    dJointSetHingeAnchor(jId[1], anchor[0], anchor[1], anchor[2]);
+    dJointGetHingeAnchor(jId[1], anchor) override;
+    dJointSetHingeAnchor(jId[1], anchor[0], anchor[1], anchor[2]) override;
 
 
-    for (int b=0; b<2; ++b) {
+    for (int b=0; b<2; ++b)  override {
       // Compare body b of the first joint with its equivalent on the
       // second joint
-      const dReal *qA = dBodyGetQuaternion(bId[0][b]);
-      const dReal *qB = dBodyGetQuaternion(bId[1][b]);
-      CHECK_CLOSE (qA[0], qB[0], 1e-6);
-      CHECK_CLOSE (qA[1], qB[1], 1e-6);
-      CHECK_CLOSE (qA[2], qB[2], 1e-6);
-      CHECK_CLOSE (qA[3], qB[3], 1e-6);
+      const dReal *qA = dBodyGetQuaternion(bId[0][b]) override;
+      const dReal *qB = dBodyGetQuaternion(bId[1][b]) override;
+      CHECK_CLOSE (qA[0], qB[0], 1e-6) override;
+      CHECK_CLOSE (qA[1], qB[1], 1e-6) override;
+      CHECK_CLOSE (qA[2], qB[2], 1e-6) override;
+      CHECK_CLOSE (qA[3], qB[3], 1e-6) override;
     }
 
-    dWorldStep (wId,0.5);
-    dWorldStep (wId,0.5);
-    dWorldStep (wId,0.5);
-    dWorldStep (wId,0.5);
+    dWorldStep (wId,0.5) override;
+    dWorldStep (wId,0.5) override;
+    dWorldStep (wId,0.5) override;
+    dWorldStep (wId,0.5) override;
 
-    for (int b=0; b<2; ++b) {
+    for (int b=0; b<2; ++b)  override {
       // Compare body b of the first joint with its equivalent on the
       // second joint
-      const dReal *qA = dBodyGetQuaternion(bId[0][b]);
-      const dReal *qB = dBodyGetQuaternion(bId[1][b]);
-      CHECK_CLOSE (qA[0], qB[0], 1e-6);
-      CHECK_CLOSE (qA[1], qB[1], 1e-6);
-      CHECK_CLOSE (qA[2], qB[2], 1e-6);
-      CHECK_CLOSE (qA[3], qB[3], 1e-6);
+      const dReal *qA = dBodyGetQuaternion(bId[0][b]) override;
+      const dReal *qB = dBodyGetQuaternion(bId[1][b]) override;
+      CHECK_CLOSE (qA[0], qB[0], 1e-6) override;
+      CHECK_CLOSE (qA[1], qB[1], 1e-6) override;
+      CHECK_CLOSE (qA[2], qB[2], 1e-6) override;
+      CHECK_CLOSE (qA[3], qB[3], 1e-6) override;
 
 
-      const dReal *posA = dBodyGetPosition(bId[0][b]);
-      const dReal *posB = dBodyGetPosition(bId[1][b]);
-      CHECK_CLOSE (posA[0], posB[0], 1e-6);
-      CHECK_CLOSE (posA[1], posB[1], 1e-6);
-      CHECK_CLOSE (posA[2], posB[2], 1e-6);
-      CHECK_CLOSE (posA[3], posB[3], 1e-6);
+      const dReal *posA = dBodyGetPosition(bId[0][b]) override;
+      const dReal *posB = dBodyGetPosition(bId[1][b]) override;
+      CHECK_CLOSE (posA[0], posB[0], 1e-6) override;
+      CHECK_CLOSE (posA[1], posB[1], 1e-6) override;
+      CHECK_CLOSE (posA[2], posB[2], 1e-6) override;
+      CHECK_CLOSE (posA[3], posB[3], 1e-6) override;
     }
   }
 

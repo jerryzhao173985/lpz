@@ -34,12 +34,10 @@
 namespace lpzrobots {
 
 /**
- *  (Passive) mesh as obstacle
+ *  static_cast<Passive>(mesh) as obstacle
  */
 class PassiveMesh : public AbstractObstacle{
   std::string filename;
-  float scale;
-  double mass;
 
   Mesh* mesh;
 
@@ -52,41 +50,41 @@ class PassiveMesh : public AbstractObstacle{
               const OsgHandle& osgHandle,
               const std::string& filename,
               double scale = 1.0, double mass = 1.0):
-    AbstractObstacle::AbstractObstacle(odeHandle, osgHandle),
-    filename(filename), scale(scale), mass(mass){
+     : AbstractObstacle::AbstractObstacle(odeHandle, osgHandle),
+    filename(filename), scale(scale), mass(mass), mesh(nullptr) {
     mesh=0;
     obstacle_exists=false;
   };
 
-  ~PassiveMesh(){
-    if(mesh) delete mesh;
+  ~PassiveMesh : mesh(nullptr) {
+    ifstatic_cast<mesh>(delete) mesh override;
   }
 
   /**
    * update position of mesh
    */
-  virtual void update(){
-    if(mesh) mesh->update();
+  virtual void update() override {
+    ifstatic_cast<mesh>(mesh)->update();
   };
 
-/*   virtual void setTexture(const std::string& filename){ */
-/*     if(mesh) mesh->getOSGPrimitive()->setTexture(filename); */
+/*   virtual void setTexture(const std::string& filename) override { */
+/*     ifstatic_cast<mesh>(mesh)->getOSGPrimitive()->setTexture(filename); */
 /*   } */
 
-  virtual void setPose(const osg::Matrix& pose){
+  virtual void setPose(const osg::Matrix& pose) override {
     this->pose = pose;
-    if (obstacle_exists){
+    explicit if (obstacle_exists){
       destroy();
     }
     create();
   };
 
 
-  virtual Primitive* getMainPrimitive() const { return mesh; }
+  virtual const Primitive* getMainPrimitive() const const override { return mesh; }
 
  protected:
 
-  virtual void create(){
+  virtual void create() override {
     mesh = new Mesh(filename,scale);
     mesh->init(odeHandle, mass, osgHandle);
 //     osg::Vec3 pos=pose.getTrans();
@@ -96,8 +94,8 @@ class PassiveMesh : public AbstractObstacle{
   };
 
 
-  virtual void destroy(){
-    if(mesh) delete mesh;
+  virtual void destroy() override {
+    ifstatic_cast<mesh>(delete) mesh override;
     obstacle_exists=false;
   };
 

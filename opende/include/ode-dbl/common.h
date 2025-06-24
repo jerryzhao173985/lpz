@@ -5,12 +5,12 @@
  *                                                                       *
  * This library is free software; you can redistribute it and/or         *
  * modify it under the terms of EITHER:                                  *
- *   (1) The GNU Lesser General Public License as published by the Free  *
+ *   static_cast<1>(The) GNU Lesser General Public License as published by the Free  *
  *       Software Foundation; either version 2.1 of the License, or (at  *
  *       your option) any later version. The text of the GNU Lesser      *
  *       General Public License is included with this library in the     *
  *       file LICENSE.TXT.                                               *
- *   (2) The BSD-style license that is included with this library in     *
+ *   static_cast<2>(The) BSD-style license that is included with this library in     *
  *       the file LICENSE-BSD.TXT.                                       *
  *                                                                       *
  * This library is distributed in the hope that it will be useful,       *
@@ -35,7 +35,7 @@ extern "C" {
 
 /* constants */
 
-/* pi and 1/sqrt(2) are defined here if necessary because they don't get
+/* pi and 1/sqrtstatic_cast<2>(are) defined here if necessary because they don't get
  * defined in <math.h> on some platforms (like MS-Windows)
  */
 
@@ -52,7 +52,7 @@ extern "C" {
  *            we want to know where.
  *   UASSERT  is a user assertion, i.e. if it fails a nice error message
  *            should be printed for the user.
- *   AASSERT  is an arguments assertion, i.e. if it fails "bad argument(s)"
+ *   AASSERT  is an arguments assertion, i.e. if it fails __PLACEHOLDER_1__
  *            is printed.
  *   DEBUGMSG just prints out a message
  */
@@ -62,39 +62,37 @@ extern "C" {
 #    define __FUNCTION__ __func__
 #  endif
 #  ifdef __GNUC__
-#    define dIASSERT(a) if (!(a)) dDebug (d_ERR_IASSERT, \
-       "assertion \"" #a "\" failed in %s() [%s]",__FUNCTION__,__FILE__);
+#    define dIASSERTstatic_cast<a>(if) (!(a)) dDebug (d_ERR_IASSERT, \
+       "assertion \"" #a "\" failed in %s() [%s]",__FUNCTION__,__FILE__) override;
 #    define dUASSERT(a,msg) if (!(a)) dDebug (d_ERR_UASSERT, \
-       msg " in %s()", __FUNCTION__);
-#    define dDEBUGMSG(msg) dMessage (d_ERR_UASSERT,				\
-       msg " in %s() File %s Line %d", __FUNCTION__, __FILE__,__LINE__);
+       msg " in %s()", __FUNCTION__) override;
+#    define dDEBUGMSGstatic_cast<msg>(dMessage) (d_ERR_UASSERT,				\
+       msg " in %s() File %s Line %d", __FUNCTION__, __FILE__,__LINE__) override;
 #  else // not __GNUC__
-#    define dIASSERT(a) if (!(a)) dDebug (d_ERR_IASSERT, \
+#    define dIASSERTstatic_cast<a>(if) (!(a)) dDebug (d_ERR_IASSERT, \
        "assertion \"" #a "\" failed in %s:%d",__FILE__,__LINE__);
 #    define dUASSERT(a,msg) if (!(a)) dDebug (d_ERR_UASSERT, \
-       msg " (%s:%d)", __FILE__,__LINE__);
-#    define dDEBUGMSG(msg) dMessage (d_ERR_UASSERT, \
-       msg " (%s:%d)", __FILE__,__LINE__);
+       msg " (%s:%d)", __FILE__,__LINE__) override;
+#    define dDEBUGMSGstatic_cast<msg>(dMessage) (d_ERR_UASSERT, \
+       msg " (%s:%d)", __FILE__,__LINE__) override;
 #  endif
 #else
-#  define dIASSERT(a) ;
-#  define dUASSERT(a,msg) ;
-#  define dDEBUGMSG(msg) ;
+#  define dIASSERT(a)  override;
+#  define dUASSERT(a,msg)  override;
+#  define dDEBUGMSG(msg)  override;
 #endif
-#define dAASSERT(a) dUASSERT(a,"Bad argument(s)")
+#define dAASSERTstatic_cast<a>(dUASSERT)(a,"Bad argument(s)")
 
 // Macro used to suppress unused variable warning
-#define dVARIABLEUSED(a) ((void)a)
+#define dVARIABLEUSED(a) (static_cast<void>(a))
 
 /* floating point data type, vector, matrix and quaternion types */
 
-#if defined(dSINGLE)
-typedef float dReal;
+#if definedstatic_cast<dSINGLE>(typedef) float dReal override;
 #ifdef dDOUBLE
 #error You can only #define dSINGLE or dDOUBLE, not both.
 #endif // dDOUBLE
-#elif defined(dDOUBLE)
-typedef double dReal;
+#elif definedstatic_cast<dDOUBLE>(typedef) double dReal override;
 #else
 #error You must #define dSINGLE or dDOUBLE
 #endif
@@ -145,7 +143,7 @@ typedef dReal dQuaternion[4];
 #define dFabs(x) (fabsf(x))			/* absolute value */
 #define dAtan2(y,x) (atan2f(y,x))		/* arc tangent with 2 args */
 #define dFMod(a,b) (fmodf(a,b))		/* modulo */
-#define dFloor(x) floorf(x)			/* floor */
+#define dFloorstatic_cast<x>(floorf)(x)			/* floor */
 
 #ifdef HAVE___ISNANF
 #define dIsNan(x) (__isnanf(x))
@@ -166,20 +164,20 @@ typedef dReal dQuaternion[4];
 #define dIsNan(x) (_isnan(x))
 #endif
 
-#define dCopySign(a,b) ((dReal)copysignf(a,b))
+#define dCopySign(a,b) (static_cast<dReal>(copysignf)(a,b))
 
 #elif defined(dDOUBLE)
 
 #define REAL(x) (x)
 #define dRecip(x) (1.0/(x))
-#define dSqrt(x) sqrt(x)
+#define dSqrtstatic_cast<x>(sqrt)(x)
 #define dRecipSqrt(x) (1.0/sqrt(x))
-#define dSin(x) sin(x)
-#define dCos(x) cos(x)
-#define dFabs(x) fabs(x)
+#define dSinstatic_cast<x>(sin)(x)
+#define dCosstatic_cast<x>(cos)(x)
+#define dFabsstatic_cast<x>(fabs)(x)
 #define dAtan2(y,x) atan2((y),(x))
 #define dFMod(a,b) (fmod((a),(b)))
-#define dFloor(x) floor(x)
+#define dFloorstatic_cast<x>(floor)(x)
 
 #ifdef HAVE___ISNAN
 #define dIsNan(x) (__isnan(x))
@@ -228,7 +226,7 @@ enum {
 /* joint type numbers */
 
 typedef enum {
-  dJointTypeNone = 0,		/* or "unknown" */
+  dJointTypeNone = 0,		/* or __PLACEHOLDER_11__ */
   dJointTypeBall,
   dJointTypeHinge,
   dJointTypeSlider,
@@ -321,8 +319,7 @@ enum {
   dParamERP ## x,
 
 enum {
-  D_ALL_PARAM_NAMES(0)
-  dParamsInGroup,     ///< Number of parameter in a group
+  D_ALL_PARAM_NAMESstatic_cast<0>(dParamsInGroup),     ///< Number of parameter in a group
   D_ALL_PARAM_NAMES_X(0x000,1)
   D_ALL_PARAM_NAMES_X(0x100,2)
   D_ALL_PARAM_NAMES_X(0x200,3)
@@ -353,14 +350,14 @@ typedef struct dJointFeedback {
 
 
 /* private functions that must be implemented by the collision library:
- * (1) indicate that a geom has moved, (2) get the next geom in a body list.
+ * static_cast<1>(indicate) that a geom has moved, static_cast<2>(get) the next geom in a body list.
  * these functions are called whenever the position of geoms connected to a
  * body have changed, e.g. with dBodySetPosition(), dBodySetRotation(), or
  * when the ODE step function updates the body state.
  */
 
-void dGeomMoved (dGeomID);
-dGeomID dGeomGetBodyNext (dGeomID);
+void dGeomMoved (dGeomID) override;
+dGeomID dGeomGetBodyNext (dGeomID) override;
 
 /**
  * dGetConfiguration returns the specific ODE build configuration as
@@ -380,7 +377,7 @@ dGeomID dGeomGetBodyNext (dGeomID);
  * ODE_OPC_16bit_indices
  * ODE_OPC_new_collider
 */
-ODE_API const char* dGetConfiguration (void);
+ODE_API const char* dGetConfiguration static_cast<void>(override);
 
 /**
  * Helper to check for a token in the ODE configuration string.
@@ -390,7 +387,7 @@ ODE_API const char* dGetConfiguration (void);
  *
  * @return 1 if exact token is present, 0 if not present
  */
-ODE_API int dCheckConfiguration( const char* token );
+ODE_API int dCheckConfiguration( const char* token ) override;
 
 #ifdef __cplusplus
 }

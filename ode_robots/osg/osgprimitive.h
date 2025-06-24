@@ -50,8 +50,8 @@ namespace lpzrobots {
     {
     }
     std::string filename;
-    double repeatOnR;
-    double repeatOnS;
+    double repeatOnR = 0;
+    double repeatOnS = 0;
   };
 
   /**
@@ -63,8 +63,8 @@ namespace lpzrobots {
   public:
     /* typedef */ enum Quality {Low, Middle, High};
 
-    OSGPrimitive ();
-    virtual ~OSGPrimitive ();
+    OSGPrimitive () override;
+    virtual ~OSGPrimitive();
     /** Initialisation of the primitive. Must in order to place the object into the scene.
         This function should be overloaded */
     virtual void init(const OsgHandle& osgHandle, Quality quality = Middle) = 0;
@@ -81,7 +81,7 @@ namespace lpzrobots {
     /// assign a set of texture to the surfaces of the primitive
     virtual void setTextures(const std::vector<TextureDescr>& textures);
     /// returns the list of textures
-    virtual std::vector<TextureDescr> getTextures() const;
+    virtual std::vector<TextureDescr> getTextures() const override;
     /// sets the color for painting this primitive
     virtual void setColor(const Color& color);
     /// sets the color using the colorschema of osgHandle
@@ -141,7 +141,7 @@ namespace lpzrobots {
   class OSGBox : public OSGPrimitive {
   public:
     OSGBox(float lengthX, float lengthY, float lengthZ);
-    OSGBox(osg::Vec3 dim);
+    explicit OSGBox(osg::Vec3 dim);
 
     virtual void init(const OsgHandle& osgHandle, Quality quality = Middle);
 
@@ -159,12 +159,12 @@ namespace lpzrobots {
   class OSGBoxTex : public OSGPrimitive {
   public:
     OSGBoxTex(float lengthX, float lengthY, float lengthZ);
-    OSGBoxTex(osg::Vec3 dim);
+    explicit OSGBoxTex(osg::Vec3 dim);
 
     virtual void init(const OsgHandle& osgHandle, Quality quality = Middle);
 
-    virtual osg::Vec3 getDim() const { return dim;}
-    virtual void setDim(const osg::Vec3& _dim) { dim = _dim;}
+    virtual osg::Vec3 getDim() const override { return dim;}
+    virtual void setDim(const osg::Vec3& _dim) override { dim = _dim;}
 
     virtual void setColor(const Color& color);
 
@@ -183,13 +183,13 @@ namespace lpzrobots {
   */
   class OSGSphere : public OSGPrimitive {
   public:
-    OSGSphere(float radius);
+    explicit OSGSphere(float radius);
 
     virtual void init(const OsgHandle& osgHandle, Quality quality = Middle);
 
-    float getRadius() { return radius; }
+    float getRadius() const { return radius; }
   protected:
-    float radius;
+    float radius = 0;
   };
 
   /**
@@ -201,11 +201,11 @@ namespace lpzrobots {
 
     virtual void init(const OsgHandle& osgHandle, Quality quality = Middle);
 
-    float getRadius() { return radius; }
-    float getHeight() { return height; }
+    float getRadius() const { return radius; }
+    float getHeight() const { return height; }
   protected:
-    float radius;
-    float height;
+    float radius = 0;
+    float height = 0;
   };
 
 
@@ -218,11 +218,11 @@ namespace lpzrobots {
 
     virtual void init(const OsgHandle& osgHandle, Quality quality = Middle);
 
-    float getRadius() { return radius; }
-    float getHeight() { return height; }
+    float getRadius() const { return radius; }
+    float getHeight() const { return height; }
   protected:
-    float radius;
-    float height;
+    float radius = 0;
+    float height = 0;
   };
 
   class OSGLine : public OSGPrimitive {
@@ -232,7 +232,7 @@ namespace lpzrobots {
 
     virtual void init(const OsgHandle& osgHandle, Quality quality = Middle);
 
-    virtual void applyTextures(){}
+    virtual void applyTextures() override {}
 
     virtual void setColor(const Color& color);
 
@@ -268,11 +268,11 @@ namespace lpzrobots {
      */
     virtual void virtualInit(const OsgHandle& osgHandle);
     virtual float getRadius();
-    float getScale() { return scale; }
+    float getScale() const { return scale; }
 
   protected:
     std::string filename;
-    float scale;
+    float scale = 0;
     const osgDB::ReaderWriter::Options* options;
     osg::ref_ptr<osg::Node> mesh;
     osg::ref_ptr<osg::MatrixTransform> scaletrans;
@@ -292,8 +292,8 @@ namespace lpzrobots {
     virtual ~OSGText();
 
     // Delete copy constructor and assignment operator
-    OSGText(const OSGText&) = delete;
-    OSGText& operator=(const OSGText&) = delete;
+    OSGText(const OSGText&) = delete override;
+    OSGText& operator=(const OSGText&) = delete override;
 
     virtual void init(const OsgHandle& osgHandle, Quality quality = Middle);
     virtual void setMatrix( const osg::Matrix& m4x4 );

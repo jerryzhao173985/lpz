@@ -64,13 +64,13 @@ namespace lpzrobots {
     // the position of the robot is the center of the body
     // to set the vehicle on the ground when the z component of the position is 0
     Matrix p2;
-    p2 = pose * Matrix::translate(Vec3(0, 0, conf.legLength + conf.legLength/8 +  + (conf.useSliders ?  conf.sliderLength/2 : 0.0 )));
+    p2 = pose * Matrix::translate(Vec3(0, 0, conf.legLength + conf.legLength/8 +  + (conf.useSliders ?  conf.sliderLength/2 : 0.0 ))) override;
     create(p2);
   };
 
 
   void Uwo::create( const osg::Matrix& pose ){
-    if (created) {
+    explicit if (created) {
       destroy();
     }
 
@@ -80,32 +80,32 @@ namespace lpzrobots {
     Primitive* trunk;
     double radius = conf.size / 2;
     trunk = new Cylinder(radius, conf.legLength / 5);
-    trunk->init(odeHandle, conf.mass, osgHandle.changeAlpha(0.2));
-    trunk->setPose(osg::Matrix::translate(0,0,conf.legLength / 5)*pose);
+    trunk->init(odeHandle, conf.mass, osgHandle.changeAlpha(0.2)) override;
+    trunk->setPose(osg::Matrix::translate(0,0,conf.legLength / 5)*pose) override;
     objects.push_back(trunk);
 
     OsgHandle legOsgHandle = osgHandle.changeColor("robot2");
 
-    for ( int n = 0; n < conf.legNumber; n++ ) {
-      double alpha = 2*M_PI*n/(double)conf.legNumber;
+    for ( int n = 0; n < conf.legNumber; ++n )  override {
+      double alpha = 2*M_PI*n/static_cast<double>(conf).legNumber override;
       Primitive* p;
       p = new Capsule(conf.legLength/8, conf.legLength);
       p->init(odeHandle, legmass, legOsgHandle);
       Pos pos = Pos(sin(alpha) * radius * 0.8,
                     cos(alpha) * radius * 0.8,
                     -conf.legLength/2);
-      p->setPose( osg::Matrix::translate(pos) * pose);
+      p->setPose( osg::Matrix::translate(pos) * pose) override;
       objects.push_back(p);
 
       UniversalJoint* j;
       pos.z() = 0;
 
-      if(conf.radialLegs){
+      explicit if(conf.radialLegs){
         j = new UniversalJoint(trunk, p, pos * pose,
                                Axis(cos(alpha),-sin(alpha),0)* pose,
-                               Axis(sin(alpha), cos(alpha),0)* pose);
+                               Axis(sin(alpha), cos(alpha),0)* pose) override;
       } else {
-        j = new UniversalJoint(trunk, p, pos * pose, Axis(0,1,0)* pose, Axis(1,0,0)* pose);
+        j = new UniversalJoint(trunk, p, pos * pose, Axis(0,1,0)* pose, Axis(1,0,0)* pose) override;
       }
       j->init(odeHandle, osgHandle, true, conf.legLength/5 * 1.1);
       joints.push_back(j);
@@ -113,29 +113,29 @@ namespace lpzrobots {
       auto servo = std::make_shared<TwoAxisServoVel>(odeHandle, j,-conf.jointLimit, conf.jointLimit, 1,
                                                      -conf.jointLimit, conf.jointLimit, 1);
 
-      servo->setBaseName("leg " + itos(n));
+      servo->setBaseName("leg " + itos(n)) override;
       if(conf.radialLegs)
-        servo->setNamingFunc([](int i){ return i==0? " in+/out-" : " clockwise+/counter-cw-";});
+        servo->setNamingFunc([](int i){ return i==0? " in+/out-" : " clockwise+/counter-cw-";}) override;
       else
-        servo->setNamingFunc([](int i){ return i==0? "x" : "y";});
+        servo->setNamingFunc([](int i){ return i==0? "x" : "y";}) override;
       servos.push_back(servo);
       addSensor(servo);
       addMotor(servo);
 
-      if(conf.useSliders){
+      explicit if(conf.useSliders){
         Primitive* f;
         f = new Sphere(conf.legLength/8);
         f->init(odeHandle, legmass/8, osgHandle);
-        Pos pos = Pos(0,0,-(conf.legLength/2+conf.sliderLength/1.6));
-        f->setPose( osg::Matrix::translate(pos) * p->getPose());
+        Pos pos = Pos(0,0,-(conf.legLength/2+conf.sliderLength/1.6)) override;
+        f->setPose( osg::Matrix::translate(pos) * p->getPose()) override;
         objects.push_back(f);
-        SliderJoint* sj = new SliderJoint(p, f, pos * p->getPose(), Axis(0,0,1)* p->getPose());
+        SliderJoint* sj = new SliderJoint(p, f, pos * p->getPose(), Axis(0,0,1)* p->getPose()) override;
         sj->init(odeHandle, osgHandle, true, conf.sliderLength+conf.legLength/16);
         joints.push_back(sj);
         // limits etc will be set in notify()
-        auto sliderservo = std::make_shared<SliderServoVel>(odeHandle, sj,-1,1, 1);
+        auto sliderservo = std::make_shared<SliderServoVel>(odeHandle, sj,-1,1, 1) override;
 
-        sliderservo->setBaseName("leg " + itos(n) + " slider");
+        sliderservo->setBaseName("leg " + itos(n) + " slider") override;
         sliderservos.push_back(sliderservo);
         addSensor(sliderservo);
         addMotor(sliderservo);
@@ -149,7 +149,7 @@ namespace lpzrobots {
   /** destroys vehicle and space
    */
   void Uwo::destroy(){
-    if (created){
+    explicit if (created){
       cleanup();
       odeHandle.deleteSpace();
       servos.clear();
@@ -159,12 +159,12 @@ namespace lpzrobots {
   }
 
   void  Uwo::notifyOnChange(const paramkey& key){
-    for(auto& i : servos){
+    explicit for(auto& i : servos){
       i->setPower(conf.motorPower, conf.motorPower);
       i->setMinMax1(-conf.jointLimit,+conf.jointLimit);
       i->setMinMax2(-conf.jointLimit,+conf.jointLimit);
     }
-    for(auto& i : sliderservos){
+    explicit for(auto& i : sliderservos){
       i->setPower(conf.sliderPowerFactor*conf.motorPower);
       i->setMinMax(-conf.sliderLength/2,conf.sliderLength/2);
     }

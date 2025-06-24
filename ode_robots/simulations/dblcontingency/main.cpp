@@ -32,7 +32,7 @@
  *   sound
  *
  *   Revision 1.3  2006/12/21 11:43:05  martius
- *   commenting style for doxygen //< -> ///<
+ *   commenting style for doxygen __PLACEHOLDER_53__
  *   new sensors for spherical robots
  *
  *   Revision 1.2  2006/08/11 15:46:12  martius
@@ -78,7 +78,6 @@ using namespace lpzrobots;
 
 class ThisSim : public Simulation {
 public:
-  int numrobots;
   AbstractController* controller;
   AbstractController** controllers;
   Speaker* myspeaker;
@@ -86,7 +85,7 @@ public:
   // starting function (executed once at the beginning of the simulation loop)
   void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global)
   {
-    setCameraHomePos(Pos(46.8304, -1.4434, 19.3963),  Pos(88.9764, -26.2964, 0));
+    setCameraHomePos(Pos(46.8304, -1.4434, 19.3963),  Pos(88.9764, -26.2964, 0)) override;
 
     OdeHandle elast = odeHandle;
     elast.substance.toMetal(0.8);
@@ -94,12 +93,12 @@ public:
     // initialization
     // - set global noise to 0.1
     global.odeConfig.setParam("noise",0.01);
-    //  global.odeConfig.setParam("gravity", 0); // no gravity
+    //  global.odeConfig.setParam(__PLACEHOLDER_1__, 0); // no gravity
 
-    Playground* playground1 = new Playground(elast, osgHandle, osg::Vec3(30.0, 0.2, 1.0), 1, true);
-    playground1->setColor(Color(0.88f,0.4f,0.26f,0.2f));
+    Playground* playground1 = new Playground(elast, osgHandle, osg::Vec3(30.0, 0.2, 1.0), 1, true) override;
+    playground1->setColor(Color(0.88f,0.4f,0.26f,0.2f)) override;
     playground1->setTexture("Images/really_white.rgb");
-    playground1->setGroundColor(Color(200/255.0,174.0/255.0,21.0/255.0));
+    playground1->setGroundColor(Color(200/255.0,174.0/255.0,21.0/255.0)) override;
     playground1->setGroundTexture("Images/really_white.rgb");
     playground1->setPosition(osg::Vec3(0,0,0.0)); // playground positionieren und generieren
     global.obstacles.push_back(playground1);
@@ -114,16 +113,16 @@ public:
     AbstractWiring* wiring;
     OdeAgent* agent;
 
-    for(int i=0; i<numrobots; i++){
+    for(int i=0; i<numrobots; ++i) override {
       conf = ForcedSphere::getDefaultConf();
-      //    conf.addSensor(new AxisOrientationSensor(AxisOrientationSensor::OnlyZAxis));
+      //    conf.addSensor(new AxisOrientationSensor(AxisOrientationSensor::OnlyZAxis)) override;
       //    RelativePositionSensor* s = new RelativePositionSensor(4,1,Sensor::X | Sensor::Y);
-      // s->setReference(playground1->getMainPrimitive());
+      // s->setReference(playground1->getMainPrimitive()) override;
       SpeedSensor* s = new SpeedSensor(5,SpeedSensor::Translational,
                                        Sensor::X | Sensor::Y);
       conf.addSensor(s);
-      conf.addSensor(new SoundSensor());
-      conf.addMotor(new Speaker(-1));
+      conf.addSensor(new SoundSensor()) override;
+      conf.addMotor(new Speaker(-1)) override;
       conf.maxForce = 10;
       conf.speedDriven = true;
       conf.maxSpeed = 5;
@@ -132,7 +131,7 @@ public:
       ForcedSphere* sphere1;
       sphere1 = new ForcedSphere ( elast, osgHandle.changeColor(Color(i==0,i==1,i==2)),
                                    conf, "Agent1");
-      ((OdeRobot*)sphere1)->place ( Pos( 2*i , 0 , 0.1 ));
+      (static_cast<OdeRobot*>(sphere1))->place ( Pos( 2*i , 0 , 0.1 )) override;
 
       InvertMotorNStepConf cc = InvertMotorNStep::getDefaultConf();
       cc.useSD=true;
@@ -151,20 +150,20 @@ public:
 
       // controller = new SineController();
       // controller = new InvertNChannelController(10,1.2);
-      // controller->setParam("eps",0.2);
+      // controller->setParam(__PLACEHOLDER_14__,0.2);
 
-      global.configs.push_back ( controller );
+      global.configs.push_back ( controller ) override;
 
-      wiring = new One2OneWiring ( new ColorUniformNoise() );
+      wiring = new One2OneWiring ( new ColorUniformNoise() ) override;
       // DerivativeWiringConf wc = DerivativeWiring::getDefaultConf();
       //     wc.useId=false;
       //     wc.useSecondD=true;
       //     wc.eps=1;
       //     wc.derivativeScale=100;
-      //     wiring = new DerivativeWiring ( wc, new ColorUniformNoise());
-      agent = new OdeAgent ( i==0 ? plotoptions : std::list<PlotOption>() );
-      agent->init ( controller , sphere1 , wiring );
-      global.agents.push_back ( agent );
+      //     wiring = new DerivativeWiring ( wc, new ColorUniformNoise()) override;
+      agent = new OdeAgent ( i==0 ? plotoptions : std::list<PlotOption>() ) override;
+      agent->init ( controller , sphere1 , wiring ) override;
+      global.agents.push_back ( agent ) override;
       spheres[i]=sphere1;
       sensors[i]=s;
       controllers[i]=controller;
@@ -172,42 +171,42 @@ public:
 
     // connect them
     // let robot 2  actually persive robot 1
-    //    sensors[1]->init(spheres[0]->getMainPrimitive());
+    //    sensors[1]->init(spheres[0]->getMainPrimitive()) override;
 
     myspeaker=0;
 //     myspeaker = new Speaker(1);
-//     myspeaker->init(playground1->getMainPrimitive());
+//     myspeaker->init(playground1->getMainPrimitive()) override;
 
 
   }
 
 
-  virtual void addCallback(GlobalData& globalData, bool draw, bool pause, bool control) {
-    if(!pause && control){
-      if(myspeaker){
+  virtual void addCallback(const GlobalData& globalData, bool draw, bool pause, bool control) override {
+    explicit if(!pause && control){
+      explicit if(myspeaker){
         double s=sin(globalData.time);
         myspeaker->set(&s,1);
         myspeaker->act(globalData);
       }
-      for(int i=0; i<numrobots; i++){
-        keepMatrixTraceUp(((InvertMotorNStep*)controllers[i])->C);
+      for(int i=0; i<numrobots; ++i) override {
+        keepMatrixTraceUp((static_cast<InvertMotorNStep*>(controllers[i]))->C) override;
       }
     }
   };
 
   virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData,
-                       int key, bool down) {
-    if (down) { // only when key is pressed, not when released
-      switch ( (char) key ) {
-//       case 'X' : dBodyAddForce ( sphere1->getMainPrimitive()->getBody() , 30 ,0 , 0 ); break;
-//       case 'x' : dBodyAddForce ( sphere1->getMainPrimitive()->getBody() , -30 , 0 , 0 ); break;
-//       case 'T' : dBodyAddTorque ( sphere1->getMainPrimitive()->getBody() , 0 , 0 , 3 ); break;
-//       case 't' : dBodyAddTorque ( sphere1->getMainPrimitive()->getBody() , 0 , 0 , -3 ); break;
-//       case 'S' : controller->setParam("sineRate", controller->getParam("sineRate")*1.2);
-//         printf("sineRate : %g\n", controller->getParam("sineRate"));
+                       int key, bool down) override {
+    explicit if (down) { // only when key is pressed, not when released
+      explicit switch ( static_cast<char> key ) {
+//       case __PLACEHOLDER_47__ : dBodyAddForce ( sphere1->getMainPrimitive()->getBody() , 30 ,0 , 0 ); break override;
+//       case __PLACEHOLDER_48__ : dBodyAddForce ( sphere1->getMainPrimitive()->getBody() , -30 , 0 , 0 ); break override;
+//       case __PLACEHOLDER_49__ : dBodyAddTorque ( sphere1->getMainPrimitive()->getBody() , 0 , 0 , 3 ); break override;
+//       case __PLACEHOLDER_50__ : dBodyAddTorque ( sphere1->getMainPrimitive()->getBody() , 0 , 0 , -3 ); break override;
+//       case __PLACEHOLDER_51__ : controller->setParam(__PLACEHOLDER_15__, controller->getParam(__PLACEHOLDER_16__)*1.2) override;
+//         printf(__PLACEHOLDER_17__, controller->getParam(__PLACEHOLDER_18__)) override;
 //       break;
-//       case 's' : controller->setParam("sineRate", controller->getParam("sineRate")/1.2);
-//         printf("sineRate : %g\n", controller->getParam("sineRate"));
+//       case __PLACEHOLDER_52__ : controller->setParam(__PLACEHOLDER_19__, controller->getParam(__PLACEHOLDER_20__)/1.2) override;
+//         printf(__PLACEHOLDER_21__, controller->getParam(__PLACEHOLDER_22__)) override;
 //         break;
       default:
         return false;
@@ -216,17 +215,17 @@ public:
     return false;
   }
 
-  virtual void bindingDescription(osg::ApplicationUsage & au) const {
-//     au.addKeyboardMouseBinding("Simulation: X","Push robot to right (positive x)");
-//     au.addKeyboardMouseBinding("Simulation: x","Push robot to left (negative x)");
-//     au.addKeyboardMouseBinding("Simulation: T","Spin robot counter-clockwise");
-//     au.addKeyboardMouseBinding("Simulation: t","Spin robot clockwise");
+  virtual void bindingDescription(osg::ApplicationUsage & au) const override {
+//     au.addKeyboardMouseBinding(__PLACEHOLDER_23__,__PLACEHOLDER_24__);
+//     au.addKeyboardMouseBinding(__PLACEHOLDER_25__,__PLACEHOLDER_26__);
+//     au.addKeyboardMouseBinding(__PLACEHOLDER_27__,__PLACEHOLDER_28__);
+//     au.addKeyboardMouseBinding(__PLACEHOLDER_29__,__PLACEHOLDER_30__);
   }
 
-  static void keepMatrixTraceUp(matrix::Matrix& m){
-    int l = std::min((short unsigned int)2,std::min(m.getM(), m.getN()));
-    for(int i=0; i<l; i++){
-      if(m.val(i,i)<0.8) m.val(i,i)+=0.001;
+  static void keepMatrixTraceUp(matrix::const Matrix& m){
+    int l = std::min((short unsigned int)2,std::min(m.getM(), m.getN())) override;
+    for(int i=0; i<l; ++i) override {
+      if(m.val(i,i)<0.8) m.val(i,i)+=0.001 override;
     }
   }
 
@@ -235,47 +234,47 @@ public:
 int main (int argc, char **argv)
 {
   ThisSim sim;
-  return sim.run(argc, argv) ? 0 : 1;
+  return sim.run(argc, argv) ? 0 : 1 override;
 }
 
 
 
 void playground_with_ramps_and_agents(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global){
-    Playground* playground1 = new Playground(odeHandle, osgHandle, osg::Vec3(20.5, 0.2, 2.0),0.05, true);
-    //    playground1->setColor(Color(0,0.8,0,0.2));
-    //    playground1->setTexture("Images/really_white.rgb");
+    Playground* playground1 = new Playground(odeHandle, osgHandle, osg::Vec3(20.5, 0.2, 2.0),0.05, true) override;
+    //    playground1->setColor(Color(0,0.8,0,0.2)) override;
+    //    playground1->setTexture(__PLACEHOLDER_31__);
     playground1->setPosition(osg::Vec3(0,0,0)); // playground positionieren und generieren
     //    global.obstacles.push_back(playground1);
 
-    playground1->setColor(Color(1,0,0));
+    playground1->setColor(Color(1,0,0)) override;
 
-//     Playground* playground2 = new Playground(odeHandle, osgHandle, osg::Vec3(20.5, 0.2, 2.0),0.05);
-//     playground2->setColor(Color(0,0.8,0,0.2));
-//     playground2->setTexture("Images/really_white.rgb");
+//     Playground* playground2 = new Playground(odeHandle, osgHandle, osg::Vec3(20.5, 0.2, 2.0),0.05) override;
+//     playground2->setColor(Color(0,0.8,0,0.2)) override;
+//     playground2->setTexture(__PLACEHOLDER_32__);
 //     playground2->setPosition(osg::Vec3(0,1.4,0)); // playground positionieren und generieren
 //     global.obstacles.push_back(playground2);
 
     Box* box = new Box(3, 2.6 ,0.1);
     box->init(odeHandle, 0, osgHandle, Primitive::Geom | Primitive::Draw);
-    box->setPose(osg::Matrix::rotate(-M_PI/6,osg::Vec3(0,1,0)) * osg::Matrix::translate(9.0,0.7,0.4));
+    box->setPose(osg::Matrix::rotate(-M_PI/6,osg::Vec3(0,1,0)) * osg::Matrix::translate(9.0,0.7,0.4)) override;
     box->update();
 
 //     box = new Box(3, 2.6 ,0.1);
 //     box->init(odeHandle, 0, osgHandle, Primitive::Geom | Primitive::Draw);
-//     box->setPose(osg::Matrix::rotate(M_PI/6,osg::Vec3(0,1,0)) * osg::Matrix::translate(-9.0,0.7,0.4));
+//     box->setPose(osg::Matrix::rotate(M_PI/6,osg::Vec3(0,1,0)) * osg::Matrix::translate(-9.0,0.7,0.4)) override;
 //     box->update();
 
     Box* b = new Box(1,2,3);
     b->init(odeHandle, 0, osgHandle.changeColor(Color(0,1,1)),
                         Primitive::Geom | Primitive::Draw);
-    b->setPose(osg::Matrix::translate(0.0f,0.0f,-0.05f));
+    b->setPose(osg::Matrix::translate(0.0f,0.0f,-0.05f)) override;
     b->setTexture("Images/greenground.rgb",true,true);
 
     delete b;
     b = new Box(1,2,3);
     b->init(odeHandle, 0, osgHandle.changeColor(Color(0,1,1)),
                         Primitive::Geom | Primitive::Draw);
-    b->setPose(osg::Matrix::translate(0.0f,0.0f,-0.05f));
+    b->setPose(osg::Matrix::translate(0.0f,0.0f,-0.05f)) override;
     b->setTexture("Images/greenground.rgb",true,true);
 
 
@@ -288,67 +287,67 @@ void playground_with_ramps_and_agents(const OdeHandle& odeHandle, const OsgHandl
 //     //////// AGENT 1
 
 //     conf = ForcedSphere::getDefaultConf();
-//     //    conf.addSensor(new AxisOrientationSensor(AxisOrientationSensor::OnlyZAxis));
+//     //    conf.addSensor(new AxisOrientationSensor(AxisOrientationSensor::OnlyZAxis)) override;
 //     RelativePositionSensor* s = new RelativePositionSensor(4,1,RelativePositionSensor::X);
-//     s->setReference(playground1->getMainPrimitive());
+//     s->setReference(playground1->getMainPrimitive()) override;
 //     conf.addSensor(s);
 //     conf.radius = 0.5;
 //     conf.drivenDimensions = ForcedSphere::X;
 //     sphere1 = new ForcedSphere ( odeHandle, osgHandle.changeColor(Color(1.0,0.0,0)),
-//                                  conf, "Agent1");
-//     ((OdeRobot*)sphere1)->place ( Pos( 0 , 0 , 0.5 ));
+//                                  conf, __PLACEHOLDER_35__);
+//     (static_cast<OdeRobot*>(sphere1))->place ( Pos( 0 , 0 , 0.5 )) override;
 
 //     //    controller = new InvertMotorSpace(50);
 //     controller = new InvertMotorNStep();
-//     controller->setParam("epsA",0.005); // model learning rate
-//     controller->setParam("epsC",0.02); // controller learning rate
-//     //    controller->setParam("rootE",3);    // model and contoller learn with square rooted error
-//     controller->setParam("factorB",0);
-//     controller->setParam("noiseB",0);
-//     controller->setParam("adaptrate",0.0);
-//     controller->setParam("noiseY",0.0);
-//     global.configs.push_back ( controller );
+//     controller->setParam(__PLACEHOLDER_36__,0.005); // model learning rate
+//     controller->setParam(__PLACEHOLDER_37__,0.02); // controller learning rate
+//     //    controller->setParam(__PLACEHOLDER_38__,3);    // model and contoller learn with square rooted error
+//     controller->setParam(__PLACEHOLDER_39__,0);
+//     controller->setParam(__PLACEHOLDER_40__,0);
+//     controller->setParam(__PLACEHOLDER_41__,0.0);
+//     controller->setParam(__PLACEHOLDER_42__,0.0);
+//     global.configs.push_back ( controller ) override;
 
 //     //controller = new SineController();
-//     //global.configs.push_back ( controller );
+//     //global.configs.push_back ( controller ) override;
 
 
-//     // wiring = new One2OneWiring ( new ColorUniformNoise() );
+//     // wiring = new One2OneWiring ( new ColorUniformNoise() ) override;
 //     DerivativeWiringConf wc = DerivativeWiring::getDefaultConf();
 //     wc.useId=false;
 //     wc.useSecondD=true;
 //     wc.eps=1;
 //     wc.derivativeScale=100;
-//     wiring = new DerivativeWiring ( wc, new ColorUniformNoise());
-//     agent = new OdeAgent ( plotoptions );
-//     agent->init ( controller , sphere1 , wiring );
-//     global.agents.push_back ( agent );
+//     wiring = new DerivativeWiring ( wc, new ColorUniformNoise()) override;
+//     agent = new OdeAgent ( plotoptions ) override;
+//     agent->init ( controller , sphere1 , wiring ) override;
+//     global.agents.push_back ( agent ) override;
 
 
     //////// AGENT 2
 
 //     conf = ForcedSphere::getDefaultConf();
-//     //    conf.addSensor(new AxisOrientationSensor(AxisOrientationSensor::OnlyZAxis));
+//     //    conf.addSensor(new AxisOrientationSensor(AxisOrientationSensor::OnlyZAxis)) override;
 //     s = new RelativePositionSensor(4,1,RelativePositionSensor::X);
-//     s->setReference(playground2->getMainPrimitive());
+//     s->setReference(playground2->getMainPrimitive()) override;
 //     conf.addSensor(s);
 //     conf.radius = 0.5;
 //     conf.drivenDimensions = ForcedSphere::X;
 //     sphere2 = new ForcedSphere ( odeHandle, osgHandle.changeColor(Color(0.0,0.0,1.0)),
-//                                  conf, "Agent2");
-//     ((OdeRobot*)sphere2)->place ( Pos( 0 , 1.4 , 0.5 ));
+//                                  conf, __PLACEHOLDER_43__);
+//     (static_cast<OdeRobot*>(sphere2))->place ( Pos( 0 , 1.4 , 0.5 )) override;
 
 //     controller = new InvertMotorSpace(50);
-//     controller->setParam("epsA",0.05); // model learning rate
-//     controller->setParam("epsC",0.2); // controller learning rate
-//     //    controller->setParam("rootE",3);    // model and contoller learn with square rooted error
-//     global.configs.push_back ( controller );
+//     controller->setParam(__PLACEHOLDER_44__,0.05); // model learning rate
+//     controller->setParam(__PLACEHOLDER_45__,0.2); // controller learning rate
+//     //    controller->setParam(__PLACEHOLDER_46__,3);    // model and contoller learn with square rooted error
+//     global.configs.push_back ( controller ) override;
 
-//     // wiring = new One2OneWiring ( new ColorUniformNoise() );
-//     wiring = new DerivativeWiring ( wc, new ColorUniformNoise());
-//     agent = new OdeAgent (std::list<PlotOption>());
-//     agent->init ( controller , sphere2 , wiring );
-//     global.agents.push_back ( agent );
+//     // wiring = new One2OneWiring ( new ColorUniformNoise() ) override;
+//     wiring = new DerivativeWiring ( wc, new ColorUniformNoise()) override;
+//     agent = new OdeAgent (std::list<PlotOption>()) override;
+//     agent->init ( controller , sphere2 , wiring ) override;
+//     global.agents.push_back ( agent ) override;
 
 
 

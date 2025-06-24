@@ -62,8 +62,7 @@
 
 namespace lpzrobots {
   
-  QChangeNumberTileColumnsDialog::QChangeNumberTileColumnsDialog(int* tileCount) :
-    tileCount(tileCount) {
+  QChangeNumberTileColumnsDialog::QChangeNumberTileColumnsDialog(int* tileCount_) : tileCount(tileCount_) {
     setLayout(&dialogGridLayout);
     setWindowTitle("Set number of columns per row");
     setSizeGripEnabled(false);

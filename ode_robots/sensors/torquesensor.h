@@ -42,23 +42,23 @@ namespace lpzrobots {
        @param avg number of averaging steps (def 1) (very noisy for universal joint)
      */
     TorqueSensor(double maxtorque = 1.0, int avg = 1);
-    virtual ~TorqueSensor() override;
+    virtual ~TorqueSensor();
 
-    /** the primitive is not required here, set it to NULL
+    /** the primitive is not required here, set it to nullptr
         @param joint the joint on which to measure the torques.
     */
-    virtual void init(Primitive* own, Joint* joint = 0) override;
+    virtual void init(Primitive* own, Joint* joint = 0);
     virtual int getSensorNumber() const override;
 
-    virtual bool sense(const GlobalData& globaldata) override;
+    virtual bool sense(const GlobalData& globaldata);
     virtual std::list<sensor> getList() const override;
     virtual int get(sensor* sensors, int length) const override; // we implement this one because easier with averaging
 
   private:
     Joint* joint;
-    double maxtorque;
+    double maxtorque = 0;
     std::vector<sensor> values;
-    double tau; // for averaging
+    double tau = 0; // for averaging
   };
 
 

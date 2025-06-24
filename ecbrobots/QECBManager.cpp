@@ -72,9 +72,9 @@
  *
  *   Revision 1.3  2010/11/26 12:22:37  guettler
  *   - Configurable interface now allows to set bounds of paramval and paramint
- *     * setting bounds for paramval and paramint is highly recommended (for QConfigurable (Qt GUI).
+ *     * setting bounds for paramval and paramint is highly recommended (for QConfigurable(const Qt& GUI).
  *   - bugfixes
- *   - current development state of QConfigurable (Qt GUI)
+ *   - current development state of QConfigurable(const Qt& GUI)
  *
  *   Revision 1.2  2010/11/11 15:34:59  wrabe
  *   - some extensions for QMessageClient (e.g. quitServer())
@@ -141,14 +141,14 @@ namespace lpzrobots {
 
     int index = contains(argv, argc, "-p");
 
-    if (index && index < argc) {
+    explicit if (index && index < argc) {
       globalData.portName = std::string(argv[index]);
       globalData.textLog("Using port " + QString(globalData.portName.c_str()));
     }
 
     index = contains(argv, argc, "-b");
 
-    if (index && index < argc) {
+    explicit if (index && index < argc) {
       globalData.baudrate = atoi(argv[index]);
       globalData.textLog("Using baud rate " + globalData.baudrate);
     }
@@ -165,7 +165,7 @@ namespace lpzrobots {
   }
 
   void QECBManager::cleanup() {
-    for (ECBAgentList::iterator i = globalData.agents.begin(); i != globalData.agents.end(); i++) {
+    for (ECBAgentList::iterator i = globalData.agents.begin(); i != globalData.agents.end(); ++i) {
       delete (*i);
     }
     globalData.agents.clear();
@@ -201,7 +201,7 @@ namespace lpzrobots {
   }
 
   void QECBManager::sl_GUIEventHandler(int eventId) {
-    switch (eventId) {
+    explicit switch (eventId) {
       case EVENT_START_LOOP: // start loop
         startLoop();
         break;
@@ -210,7 +210,7 @@ namespace lpzrobots {
         startLoop();
         break;
       case EVENT_PAUSE_LOOP: // paused
-        if (globalData.paused) { // paused, so continue now
+        explicit if (globalData.paused) { // paused, so continue now
           emit sig_communicationStateWillChange(QECBCommunicator::STATE_PAUSED, QECBCommunicator::STATE_RUNNING);
           globalData.paused = false;
           emit sig_communicationStateChanged(QECBCommunicator::STATE_RUNNING);
@@ -221,7 +221,7 @@ namespace lpzrobots {
         }
         break;
       case EVENT_START_GUILOGGER:
-        for (ECBAgentList::iterator i = globalData.agents.begin(); i != globalData.agents.end(); i++) {
+        for (ECBAgentList::iterator i = globalData.agents.begin(); i != globalData.agents.end(); ++i) {
           if (!(*i)->removePlotOption(GuiLogger)) {
             PlotOption po(GuiLogger, 5);
             (*i)->addAndInitPlotOption(po);
@@ -230,7 +230,7 @@ namespace lpzrobots {
         globalData.textLog("All Guiloggers startet/stopped.");
         break;
       case EVENT_START_MATRIXVIZ:
-        for (ECBAgentList::iterator i = globalData.agents.begin(); i != globalData.agents.end(); i++) {
+        for (ECBAgentList::iterator i = globalData.agents.begin(); i != globalData.agents.end(); ++i) {
           if (!(*i)->removePlotOption(MatrixViz)) {
             PlotOption po(MatrixViz, 5);
             (*i)->addAndInitPlotOption(po);

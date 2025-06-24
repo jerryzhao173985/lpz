@@ -36,7 +36,7 @@ OneControllerPerChannel::OneControllerPerChannel(ControllerGenerator* controller
   , numContextSensors(numContextSensors)
   , motornumber(0)
   , sensornumber(0) {
-  for (int i = 0; i < numCtrlCreateBeforeInit; i++) {
+  for (int i = 0; i < numCtrlCreateBeforeInit; ++i) {
     AbstractController* c = (*controllerGenerator)(i);
     ctrl.push_back(c);
     addConfigurable(c);
@@ -63,7 +63,7 @@ OneControllerPerChannel::init(const int sensornumber, const int motornumber, Ran
   this->sensornumber = sensornumber;
   this->motornumber = motornumber;
 
-  for (int i = 0; i < motornumber; i++) {
+  for (int i = 0; i < motornumber; ++i) {
     if (i < numCtrlCreateBeforeInit) {
       ctrl[i]->init(1 + numContextSensors, 1);
     } else {
@@ -80,16 +80,16 @@ OneControllerPerChannel::step(const sensor* sensors,
                               int sensornumber,
                               motor* motors,
                               int motornumber) {
-  assert((int)ctrl.size() == motornumber);
+  assert(static_cast<int>(ctrl.size()) == motornumber);
   if (numContextSensors == 0) {
-    for (int i = 0; i < motornumber; i++) {
+    for (int i = 0; i < motornumber; ++i) {
       ctrl[i]->step(sensors + i, 1, motors + i, 1);
     }
   } else {
     memcpy(sensorbuffer + 1,
            sensors + sensornumber - numContextSensors,
            sizeof(sensor) * numContextSensors);
-    for (int i = 0; i < motornumber; i++) {
+    for (int i = 0; i < motornumber; ++i) {
       sensorbuffer[0] = sensors[i];
       ctrl[i]->step(sensorbuffer, 1 + numContextSensors, motors + i, 1);
     }
@@ -101,17 +101,17 @@ OneControllerPerChannel::stepNoLearning(const sensor* sensors,
                                         int sensornumber,
                                         motor* motors,
                                         int motornumber) {
-  assert((int)ctrl.size() == motornumber);
+  assert(static_cast<int>(ctrl.size()) == motornumber);
 
   if (numContextSensors == 0) {
-    for (int i = 0; i < motornumber; i++) {
+    for (int i = 0; i < motornumber; ++i) {
       ctrl[i]->stepNoLearning(sensors + i, 1, motors + i, 1);
     }
   } else {
     memcpy(sensorbuffer + 1,
            sensors + sensornumber - numContextSensors,
            sizeof(sensor) * numContextSensors);
-    for (int i = 0; i < motornumber; i++) {
+    for (int i = 0; i < motornumber; ++i) {
       sensorbuffer[0] = sensors[i];
       ctrl[i]->stepNoLearning(sensorbuffer, 1 + numContextSensors, motors + i, 1);
     }

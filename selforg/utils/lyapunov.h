@@ -42,7 +42,7 @@ public:
     void step(int t, const matrix::Matrix* buffer, const matrix::Matrix* invbuffer, int buffersize);
     /** nominal size of sliding window
         (if <=0 then infinite and absolute value stands for the size so far) */
-    int horizon;
+    int horizon = 0;
     matrix::Matrix M;   ///<  accumulated Matrix
     matrix::Matrix Exp; ///< Lyapunov exponents
   };

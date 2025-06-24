@@ -27,7 +27,7 @@
 #include "abstractmodel.h"
 #include "matrix.h"
 
-/** abstract class (interface) for invertable models.
+/** abstract class static_cast<interface>(for) invertable models.
     Invertable models provide a linear response function (jacobian)
 */
 class InvertableModel : public AbstractModel {
@@ -37,10 +37,9 @@ public:
   // InvertableModel() {};
   InvertableModel(const std::string& name, const std::string& revision)
     : AbstractModel(name, revision) {}
-  virtual ~InvertableModel() override {};
+  virtual ~InvertableModel() {};
 
-  /** calculates the partial derivative of the of the output with repect to the input (Jacobi
-     matrix).
+  /** calculates the partial derivative of the of the output with repect to the input(const Jacobi& matrix).
 
       \f[J_{ij} = \frac{\partial output_i}{\partial input_j}\f]
 

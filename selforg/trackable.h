@@ -32,7 +32,7 @@ namespace matrix {
 }
 
 /**
- * Abstract class (interface) for trackable objects (used for robots)
+ * Abstract class static_cast<interface>(for) trackable objects (used for robots)
  *
  *
  */

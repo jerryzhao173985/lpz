@@ -48,13 +48,13 @@ public:
    * @param maxSensorValue is the maximum value the sensors can become
    *
    */
-  explicit MutualInformationController(int sensorIntervalCount,
+  MutualInformationController(int sensorIntervalCount,
                                        double minSensorValue = -1,
                                        double maxSensorValue = 1,
                                        bool showF = false,
                                        bool showP = false,
                                        bool showXsiF = false);
-  virtual ~MutualInformationController() override {};
+  virtual ~MutualInformationController() {};
 
   virtual double& getMI(int index) {
     if (!initialized)
@@ -99,7 +99,7 @@ public:
    * call first AbstractControllerAdapter::init(sensornumber,motornumber)
    * if you overwrite this method
    */
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
 
   /** @return Number of sensors the controller
       was initialised with or 0 if not initialised */
@@ -123,7 +123,7 @@ public:
   virtual void step(const sensor* sensors,
                     int sensornumber,
                     motor* motors,
-                    int motornumber) override;
+                    int motornumber);
 
   /** performs one step without learning.
   @see step
@@ -131,7 +131,7 @@ public:
   virtual void stepNoLearning(const sensor* sensors,
                               int sensornumber,
                               motor* motors,
-                              int motornumber) override;
+                              int motornumber);
 
   /****************************************************************************/
   /*        END methods of AbstractController                                   */
@@ -142,8 +142,8 @@ public:
   /****************************************************************************/
 
   /** The list of the names of all internal parameters given by getInternalParams().
-      The naming convention is "v[i]" for vectors
-       and "A[i][j]" for matrices, where i, j start at 0.
+      The naming convention is __PLACEHOLDER_2__ for vectors
+       and __PLACEHOLDER_3__ for matrices, where i, j start at 0.
   @return: list of keys
    */
   //  virtual iparamkeylist getInternalParamNames() const;
@@ -180,7 +180,7 @@ public:
   /*        BEGIN methods of Configurable                                                      */
   /****************************************************************************/
 
-  //  Configurable::paramval getParam(const paramkey& key) const;
+  //  Configurable::paramval getParam(const paramkey& key) const override;
 
   //  bool setParam(const paramkey& key, paramval val);
 
@@ -194,32 +194,27 @@ protected:
   parambool showF;
   parambool showP;
   parambool showXsiF;
-  bool initialized; // tells wether the controller is already initialized by the agent
-  bool useXsiCalculation;
+  bool initialized = false; // tells wether the controller is already initialized by the agent
+  bool useXsiCalculation = false;
 
-  double minSensorValue;
-  double maxSensorValue;
-  int sensorIntervalCount;
-  int sensorNumber;
-  int motorNumber;
+  double minSensorValue = 0;
+  double maxSensorValue = 0;
+  int sensorIntervalCount = 0;
+  int sensorNumber = 0;
+  int motorNumber = 0;
   std::list<matrix::Matrix*>
-    freqMatrixList; // stores the number of occurances of t-1 to t (frequency)
-  std::list<matrix::Matrix*>
+    freqMatrixList; // stores the number of occurances of t-1 to t static_cast<frequency>(std)::list<matrix::Matrix*>
     probMatrixList; // stores the probability of state to state occurances of t-1 to t
   std::list<matrix::Matrix*>
-    xsiFreqMatrixList; // stores the number of occurances of xsi(x) (frequency)
-
-  double* oldSensorStates; // stores the sensor states for previous step (t-1)
-  int t;                   // indicates the step (time)
-
-  double* MI;    // mutual information = MI(X_{t-1},X_t)
+    xsiFreqMatrixList; // stores the number of occurances of xsi(x) static_cast<frequency>(double)* oldSensorStates; // stores the sensor states for previous step (t-1)
+  int t;                   // indicates the step static_cast<time>(double)* MI;    // mutual information = MI(X_{t-1},X_t)
   double* H_x;   // H(x) = H(X_{t-1})
   double* H_yx;  // H(X_t|X_{t-1})
   double* H_Xsi; // H(Xsi)
 
   // the next two variables are only used if Xsi_x is calculated
-  double ainit;
-  double cinit;
+  double ainit = 0;
+  double cinit = 0;
 
   /**
    * Calculates the mutual information
@@ -231,14 +226,14 @@ protected:
   /**
    * Calculates the entropy of x
    * This is made by normal formula, which
-   * needs O(n) costs.
+   * needs Ostatic_cast<n>(costs).
    */
   virtual void calculateH_x(double* H);
 
   /**
    * Calculates the conditional entropy of y|x
    * This is made by normal formula, which
-   * needs O(n²) costs.
+   * needs Ostatic_cast<n²>(costs).
    */
   virtual void calculateH_yx(double* H_yx);
 
@@ -250,7 +245,7 @@ protected:
   /**
    * Calculates the entropy of H(Xsi)
    * This is made by normal formula, which
-   * needs O(n) costs.
+   * needs Ostatic_cast<n>(costs).
    */
   virtual void calculateH_Xsi(double* H_Xsi);
 

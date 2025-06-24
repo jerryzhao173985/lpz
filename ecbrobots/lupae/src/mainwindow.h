@@ -63,7 +63,7 @@ namespace lpzrobots {
     Q_OBJECT
 
     public:
-      MainWindow(QString applicationPathArg);
+      explicit MainWindow(const QString& applicationPathArg);
       QString applicationPath;
 
       enum ACTION_EVENT {
@@ -113,19 +113,19 @@ namespace lpzrobots {
       void closeEvent(QCloseEvent *event);
 
     private slots:
-      void sl_TextLog(QString s);
-      void sl_DispatchMessage(QByteArray msg);
+      void sl_TextLog(const QString& s);
+      void sl_DispatchMessage(const QByteArray& msg);
 
       void sl_eventHandler_ispProgrammer(int eventCode);
       void sl_eventHandler_ecbBootloader(int eventCode);
       void sl_eventHandler_application(int eventCode);
 
       void sl_USBDevice_opened();
-      void sl_USBDevice_Name_changed(QString name);
-      void sl_USBDevice_Baudrate_changed(QString name);
-      void sl_USBDeviceXBeeType_Changed(QString name);
-      void sl_AVRDevice_AccessSpeed_changed(QString name);
-      void sl_XBeeRemoteNodeIdentifier_changed(QString name);
+      void sl_USBDevice_Name_changed(const QString& name);
+      void sl_USBDevice_Baudrate_changed(const QString& name);
+      void sl_USBDeviceXBeeType_Changed(const QString& name);
+      void sl_AVRDevice_AccessSpeed_changed(const QString& name);
+      void sl_XBeeRemoteNodeIdentifier_changed(const QString& name);
 
       void sl_TimerExpired();
 
@@ -133,13 +133,13 @@ namespace lpzrobots {
       void push_Frame(uchar c);
       void push_FrameEscaped(uchar c);
       bool transmit(int timerExpiredCode);
-      void send_Message(QByteArray command);
+      void send_Message(const QByteArray& command);
       void send_ECB_Reset();
-      void send_XBeeCommand(QByteArray command);
+      void send_XBeeCommand(const QByteArray& command);
       void send_XBeeRemoteCommand(QByte command[], int length);
       void send_XBeeATND();
 
-      void printBuffer(QByteArray buffer);
+      void printBuffer(const QByteArray& buffer);
       void printMessageErrorCode(int errorCode);
       void initPanelSetting();
       void createActions();
@@ -155,13 +155,13 @@ namespace lpzrobots {
       void setProgrammerWaitCycles(const QString stargetSpeed);
       void sleep(ulong msecs);
 
-      void isp_MessageHandler_Bootloader(QByteArray msg);
-      void isp_MessageHandler_Firmware(QByteArray msg);
-      void bl_MessageHandler_Bootloader(QByteArray msg);
-      void bl_MessageHandler_XBeeCommandResponse(QByteArray msg);
+      void isp_MessageHandler_Bootloader(const QByteArray& msg);
+      void isp_MessageHandler_Firmware(const QByteArray& msg);
+      void bl_MessageHandler_Bootloader(const QByteArray& msg);
+      void bl_MessageHandler_XBeeCommandResponse(const QByteArray& msg);
 
       void setMode(int mode);
-      int getDefaultBaudrateByName(QString actDeviceName);
+      int getDefaultBaudrateByName(const QString& actDeviceName);
 
       QTabWidget *tabWidget;
       QPanelHexViewer *panelHexViewer;

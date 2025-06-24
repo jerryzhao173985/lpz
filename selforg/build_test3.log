@@ -1,0 +1,89 @@
+g++ -c -Wall -pipe -fpic -I./. -I./controller -I./wirings -I./utils -I./matrix -I./statistictools -I./statistictools/measure -I./statistictools/dataanalysation -Iinclude -Iinclude/selforg -std=c++17 -pthread -I/Users/jerry/lpzrobots/include -I/opt/homebrew/Cellar/gsl/2.8/include -DNOCONFIGURATOR -g -O  -o "build/./agent.o" "agent.cpp"
+In file included from agent.cpp:25:
+In file included from ./agent.h:31:
+In file included from ./wiredcontroller.h:31:
+In file included from ./utils/plotoptionengine.h:31:
+In file included from include/selforg/abstractcontroller.h:28:
+include/selforg/inspectable.h:158:16: error: 'addInspectableValue' marked 'override' but does not override any member functions
+  158 |   virtual void addInspectableValue(const iparamkey& key,
+      |                ^
+include/selforg/inspectable.h:177:16: error: 'addInspectableMatrix' marked 'override' but does not override any member functions
+  177 |   virtual void addInspectableMatrix(const iparamkey& key,
+      |                ^
+In file included from agent.cpp:25:
+In file included from ./agent.h:31:
+In file included from ./wiredcontroller.h:31:
+In file included from ./utils/plotoptionengine.h:31:
+In file included from include/selforg/abstractcontroller.h:29:
+In file included from include/selforg/randomgenerator.h:29:
+include/selforg/mac_drand48r.h:67:62: error: 'override' specifier is not allowed outside a class definition
+   67 | int srand48_r(long int seedval, struct drand48_data* buffer) override;
+      |                                                              ^~~~~~~~
+include/selforg/mac_drand48r.h:69:60: error: 'override' specifier is not allowed outside a class definition
+   69 | int drand48_r(struct drand48_data* buffer, double* result) override;
+      |                                                            ^~~~~~~~
+In file included from agent.cpp:25:
+In file included from ./agent.h:31:
+In file included from ./wiredcontroller.h:31:
+In file included from ./utils/plotoptionengine.h:31:
+In file included from include/selforg/abstractcontroller.h:29:
+include/selforg/randomgenerator.h:35:19: error: expected ';' after expression
+   35 |     init(::rand()) override;
+      |                   ^
+      |                   ;
+include/selforg/randomgenerator.h:35:20: error: use of undeclared identifier 'override'
+   35 |     init(::rand()) override;
+      |                    ^
+include/selforg/randomgenerator.h:38:32: error: expected ';' after expression
+   38 |     srand48_r(seedval, &buffer) override;
+      |                                ^
+      |                                ;
+include/selforg/randomgenerator.h:38:33: error: use of undeclared identifier 'override'
+   38 |     srand48_r(seedval, &buffer) override;
+      |                                 ^
+include/selforg/randomgenerator.h:43:27: error: expected ';' after expression
+   43 |     drand48_r(&buffer, &r) override;
+      |                           ^
+      |                           ;
+include/selforg/randomgenerator.h:43:28: error: use of undeclared identifier 'override'
+   43 |     drand48_r(&buffer, &r) override;
+      |                            ^
+In file included from agent.cpp:25:
+In file included from ./agent.h:31:
+In file included from ./wiredcontroller.h:31:
+In file included from ./utils/plotoptionengine.h:31:
+In file included from include/selforg/abstractcontroller.h:30:
+include/selforg/sensormotorinfo.h:45:54: error: a type specifier is required for all declarations
+   45 |   CHANGER(SensorMotorInfo, const std::string&, name) override;
+      |                                                      ^
+include/selforg/sensormotorinfo.h:46:41: error: a type specifier is required for all declarations
+   46 |   CHANGER(SensorMotorInfo, double, min) override;
+      |                                         ^
+include/selforg/sensormotorinfo.h:46:41: error: duplicate member 'override'
+include/selforg/sensormotorinfo.h:45:54: note: previous declaration is here
+   45 |   CHANGER(SensorMotorInfo, const std::string&, name) override;
+      |                                                      ^
+include/selforg/sensormotorinfo.h:47:41: error: a type specifier is required for all declarations
+   47 |   CHANGER(SensorMotorInfo, double, max) override;
+      |                                         ^
+include/selforg/sensormotorinfo.h:47:41: error: duplicate member 'override'
+include/selforg/sensormotorinfo.h:45:54: note: previous declaration is here
+   45 |   CHANGER(SensorMotorInfo, const std::string&, name) override;
+      |                                                      ^
+include/selforg/sensormotorinfo.h:48:48: error: a type specifier is required for all declarations
+   48 |   CHANGER(SensorMotorInfo, Quantity, quantity) override;
+      |                                                ^
+include/selforg/sensormotorinfo.h:48:48: error: duplicate member 'override'
+include/selforg/sensormotorinfo.h:45:54: note: previous declaration is here
+   45 |   CHANGER(SensorMotorInfo, const std::string&, name) override;
+      |                                                      ^
+include/selforg/sensormotorinfo.h:49:40: error: a type specifier is required for all declarations
+   49 |   CHANGER(SensorMotorInfo, Type, type) override;
+      |                                        ^
+include/selforg/sensormotorinfo.h:49:40: error: duplicate member 'override'
+include/selforg/sensormotorinfo.h:45:54: note: previous declaration is here
+   45 |   CHANGER(SensorMotorInfo, const std::string&, name) override;
+      |                                                      ^
+fatal error: too many errors emitted, stopping now [-ferror-limit=]
+20 errors generated.
+make: *** [build/./agent.o] Error 1

@@ -33,20 +33,20 @@ namespace lpzrobots {
     DummyMotor(int number=1)
       : number(number) {
     }
-    virtual ~DummyMotor() {};
+    virtual ~DummyMotor() {} override;
 
-    virtual void init(Primitive* own, Joint* joint = 0 ){
+    virtual void init(Primitive* own, Joint* joint = 0 ) override {
     }
 
-    virtual int getMotorNumber() const{
+    virtual int getMotorNumber() const override {
       return number;
     };
 
-    virtual bool act(GlobalData& globaldata){
+    virtual bool act(const GlobalData& globaldata) override {
       return true;
     }
 
-    virtual int set(const motor* values, int length){
+    virtual int set(const motor* values, int length) override {
       return number;
     };
 

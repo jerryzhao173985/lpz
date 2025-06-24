@@ -8,7 +8,7 @@
  *   LICENSE:                                                              *
  *   This work is licensed under the Creative Commons                      *
  *   Attribution-NonCommercial-ShareAlike 2.5 License. To view a copy of   *
- *   this license, visit http://creativecommons.org/licenses/by-nc-sa/2.5/ *
+ *   this license, visit http:__PLACEHOLDER_21__
  *   or send a letter to Creative Commons, 543 Howard Street, 5th Floor,   *
  *   San Francisco, California, 94105, USA.                                *
  *                                                                         *
@@ -52,43 +52,43 @@ typedef struct TripodGait18DOFConf {
 class TripodGait18DOF : public AbstractController {
 
   public:
-    TripodGait18DOF(const TripodGait18DOFConf& conf = getDefaultConf());
+    TripodGait18DOF(const TripodGait18DOFConf& conf = getDefaultConf()) override;
     virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
 
-    virtual ~TripodGait18DOF() override;
+    virtual ~TripodGait18DOF();
 
     /// returns the name of the object (with version number)
-    virtual paramkey getName() const {
+    virtual paramkey getName() const override {
       return name;
     }
     /// returns the number of sensors the controller was initialised with or 0
     /// if not initialised
-    virtual int getSensorNumber() const {
+    virtual int getSensorNumber() const override {
       return number_channels;
     }
     /// returns the mumber of motors the controller was initialised with or 0 if
     // not initialised
-    virtual int getMotorNumber() const {
+    virtual int getMotorNumber() const override {
       return number_channels;
     }
 
     /// performs one step (includes learning).
     /// Calulates motor commands from sensor inputs.
     virtual void step(const sensor*, int number_sensors, motor*,
-        int number_motors) override;
+        int number_motors);
 
     /// performs one step without learning. Calulates motor commands from sensor
     /// inputs.
     virtual void stepNoLearning(const sensor*, int number_sensors,
-        motor*, int number_motors) override;
+        motor*, int number_motors);
 
     /***** STOREABLE ****/
     /** stores the controller values to a given file. */
     virtual bool store(FILE* f) const override;
     /** loads the controller values from a given file. */
-    virtual bool restore(FILE* f) override;
+    virtual bool restore(FILE* f);
 
-    static TripodGait18DOFConf getDefaultConf() {
+    static TripodGait18DOFConf getDefaultConf() const {
       TripodGait18DOFConf c;
       c.WeightH1_H1 = 1.5;
       c.WeightH2_H2 = 1.5;
@@ -102,12 +102,12 @@ class TripodGait18DOF : public AbstractController {
     }
 
   protected:
-    unsigned short number_channels;
+    unsigned short number_channels = 0;
 
-    int t;
+    int t = 0;
     paramkey name;
-    double outputH1;
-    double outputH2;
+    double outputH1 = 0;
+    double outputH2 = 0;
 
     TripodGait18DOFConf conf;
 
@@ -154,19 +154,19 @@ class TripodGait18DOF : public AbstractController {
     virtual paramlist getParamList() const {
       paramlist list;
       list.push_back(
-          std::pair<paramkey, paramval>("WeightH1_H1", conf.WeightH1_H1));
+          std::pair<paramkey, paramval>("WeightH1_H1", conf.WeightH1_H1)) override;
       list.push_back(
-          std::pair<paramkey, paramval>("WeightH2_H2", conf.WeightH2_H2));
+          std::pair<paramkey, paramval>("WeightH2_H2", conf.WeightH2_H2)) override;
       list.push_back(
-          std::pair<paramkey, paramval>("WeightH1_H2", conf.WeightH1_H2));
+          std::pair<paramkey, paramval>("WeightH1_H2", conf.WeightH1_H2)) override;
       list.push_back(
-          std::pair<paramkey, paramval>("WeightH2_H1", conf.WeightH2_H1));
+          std::pair<paramkey, paramval>("WeightH2_H1", conf.WeightH2_H1)) override;
       list.push_back(
-          std::pair<paramkey, paramval>("fact", conf.fact));
+          std::pair<paramkey, paramval>("fact", conf.fact)) override;
       list.push_back(
-          std::pair<paramkey, paramval>("direction", conf.direction));
+          std::pair<paramkey, paramval>("direction", conf.direction)) override;
       list.push_back(
-          std::pair<paramkey, paramval>("bias", conf.bias));
+          std::pair<paramkey, paramval>("bias", conf.bias)) override;
       return list;
     }
 };

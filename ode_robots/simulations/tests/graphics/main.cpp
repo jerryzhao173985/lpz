@@ -95,7 +95,7 @@ public:
 
 
   AbstractObstacle* playground;
-  double hardness;
+  double hardness = 0;
   Substance s;
   OSGBoxTex* b;
   OSGBox* b2;
@@ -103,7 +103,7 @@ public:
   // starting function (executed once at the beginning of the simulation loop)
   void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global)
   {
-    setCameraHomePos(Pos(-1.64766, 4.48823, 1.71381),  Pos(-158.908, -10.5863, 0));
+    setCameraHomePos(Pos(-1.64766, 4.48823, 1.71381),  Pos(-158.908, -10.5863, 0)) override;
 
     // initialization
     // - set noise to 0.0
@@ -115,58 +115,57 @@ public:
 
     // use Playground as boundary:
     playground = new Playground(odeHandle, osgHandle,
-                                osg::Vec3(10, .2, 1));
-    playground->setPosition(osg::Vec3(0,0,0.2));
+                                osg::Vec3(10, .2, 1)) override;
+    playground->setPosition(osg::Vec3(0,0,0.2)) override;
     global.obstacles.push_back(playground);
 
     playground = new OctaPlayground(odeHandle, osgHandle);
-    playground->setPosition(osg::Vec3(15,0,0.2));
+    playground->setPosition(osg::Vec3(15,0,0.2)) override;
     global.obstacles.push_back(playground);
 
 
 
     // add passive spheres as obstacles
-    for (int i=0; i< 1/*2*/; i+=1){
+    for (int i=0; i< 1/*2*/; i+=1) override {
       PassiveSphere* s1 = new PassiveSphere(odeHandle, osgHandle, 0.3);
-      // s1->setPosition(osg::Vec3(-4.5+i*4.5,0,0));
-      s1->setPosition(osg::Vec3(0,0,1+i*5));
+      // s1->setPosition(osg::Vec3(-4.5+i*4.5,0,0)) override;
+      s1->setPosition(osg::Vec3(0,0,1+i*5)) override;
       s1->setTexture("Images/dusty.rgb");
       global.obstacles.push_back(s1);
     }
 
     b = new OSGBoxTex(5,1,2);
-    b->setTexture(0,TextureDescr("Images/dusty.rgb",1,1));
-    b->setTexture(1,TextureDescr("Images/tire_full.rgb",3,1));
-    b->setTexture(2,TextureDescr("Images/whitemetal_farbig_small.rgb",1,1));
-    b->setTexture(3,TextureDescr("Images/wall.rgb",1,1));
-    b->setTexture(4,TextureDescr("Images/really_white.rgb",1,1));
-    b->setTexture(5,TextureDescr("Images/light_chess.rgb",-1,-1));
-    b->init(osgHandle.changeColor(Color(1,1,0)));
-    b->setMatrix(osg::Matrix::translate(0,-2,2));
+    b->setTexture(0,TextureDescr("Images/dusty.rgb",1,1)) override;
+    b->setTexture(1,TextureDescr("Images/tire_full.rgb",3,1)) override;
+    b->setTexture(2,TextureDescr("Images/whitemetal_farbig_small.rgb",1,1)) override;
+    b->setTexture(3,TextureDescr("Images/wall.rgb",1,1)) override;
+    b->setTexture(4,TextureDescr("Images/really_white.rgb",1,1)) override;
+    b->setTexture(5,TextureDescr("Images/light_chess.rgb",-1,-1)) override;
+    b->init(osgHandle.changeColor(Color(1,1,0))) override;
+    b->setMatrix(osg::Matrix::translate(0,-2,2)) override;
 
     b2 = new OSGBox(5,1,2);
-    b2->setTexture(TextureDescr("Images/light_chess.rgb",1,1));
+    b2->setTexture(TextureDescr("Images/light_chess.rgb",1,1)) override;
     b2->init(osgHandle);
-    b2->setMatrix(osg::Matrix::translate(7,0,2));
+    b2->setMatrix(osg::Matrix::translate(7,0,2)) override;
 
 
 
 
   }
 
-  virtual void addCallback(GlobalData& globalData, bool draw, bool pause, bool control) {
-    b->setMatrix(osg::Matrix::rotate(globalData.time/2,1,0,0)*osg::Matrix::translate(0,-2,2));
-    b2->setMatrix(osg::Matrix::rotate(globalData.time/2,1,0,0)*osg::Matrix::translate(7,0,2));
+  virtual void addCallback(const GlobalData& globalData, bool draw, bool pause, bool control) override {
+    b->setMatrix(osg::Matrix::rotate(globalData.time/2,1,0,0)*osg::Matrix::translate(0,-2,2)) override;
+    b2->setMatrix(osg::Matrix::rotate(globalData.time/2,1,0,0)*osg::Matrix::translate(7,0,2)) override;
   }
 
   // add own key handling stuff here, just insert some case values
-  virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down)
-  {
-    if (down) { // only when key is pressed, not when released
-      switch ( (char) key )
+  virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down) override {
+    explicit if (down) { // only when key is pressed, not when released
+      switch ( static_cast<char> key )
         {
         case 'i':
-          if(playground) {
+          explicit if(playground) {
             s.hardness*=1.5;
             cout << "hardness " << s.hardness << endl;
             playground->setSubstance(s);
@@ -174,7 +173,7 @@ public:
           return true;
           break;
         case 'j':
-          if(playground) {
+          explicit if(playground) {
             s.hardness/=1.5;
             cout << "hardness " << s.hardness << endl;
             playground->setSubstance(s);
@@ -194,7 +193,7 @@ public:
 int main (int argc, char **argv)
 {
   ThisSim sim;
-  return sim.run(argc, argv) ? 0 : 1;
+  return sim.run(argc, argv) ? 0 : 1 override;
 
 }
 

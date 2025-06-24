@@ -90,7 +90,7 @@ namespace lpzrobots {
 
     public:
 
-      ECBRobot(QGlobalData& globalData);
+      explicit ECBRobot(QGlobalData& globalData);
 
       virtual ~ECBRobot();
 

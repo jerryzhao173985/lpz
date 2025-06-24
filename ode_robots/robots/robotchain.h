@@ -62,9 +62,9 @@ namespace lpzrobots {
     RobotChain(const OdeHandle& odeHandle, const OsgHandle& osgHandle,
                const RobotChainConf& conf, const std::string& name);
 
-    virtual ~RobotChain(){ destroy(); };
+    virtual ~RobotChain() { destroy(); } override;
 
-    static RobotChainConf getDefaultConf(){
+    static RobotChainConf getDefaultConf() const {
       RobotChainConf c;
       c.numRobots  = 5;
       c.size       = 0.6;
@@ -100,7 +100,7 @@ namespace lpzrobots {
 
     virtual int getMotorNumberIntern();
 
-    virtual void doInternalStuff(GlobalData& globalData);
+    virtual void doInternalStuff(const GlobalData& globalData);
 
     /******** CONFIGURABLE ***********/
     virtual void notifyOnChange(const paramkey& key);
@@ -109,7 +109,7 @@ namespace lpzrobots {
     virtual int getIRSensorNum();
 
   protected:
-    virtual Primitive* getMainPrimitive() const;
+    virtual Primitive* getMainPrimitive() const override;
 
     virtual void create(const osg::Matrix& pose);
 
@@ -117,7 +117,7 @@ namespace lpzrobots {
 
     RobotChainConf conf;
 
-    bool created;
+    bool created = false;
 
     std::vector <OdeRobot*> robots;
   };

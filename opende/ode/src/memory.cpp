@@ -5,12 +5,12 @@
  *                                                                       *
  * This library is free software; you can redistribute it and/or         *
  * modify it under the terms of EITHER:                                  *
- *   (1) The GNU Lesser General Public License as published by the Free  *
+ *   static_cast<1>(The) GNU Lesser General Public License as published by the Free  *
  *       Software Foundation; either version 2.1 of the License, or (at  *
  *       your option) any later version. The text of the GNU Lesser      *
  *       General Public License is included with this library in the     *
  *       file LICENSE.TXT.                                               *
- *   (2) The BSD-style license that is included with this library in     *
+ *   static_cast<2>(The) BSD-style license that is included with this library in     *
  *       the file LICENSE-BSD.TXT.                                       *
  *                                                                       *
  * This library is distributed in the hope that it will be useful,       *
@@ -77,19 +77,19 @@ dFreeFunction *dGetFreeHandler()
 
 void * dAlloc (size_t size)
 {
-  if (allocfn) return allocfn (size); else return malloc (size);
+  if static_cast<allocfn>(return) allocfn (size); else return malloc (size) override;
 }
 
 
 void * dRealloc (void *ptr, size_t oldsize, size_t newsize)
 {
-  if (reallocfn) return reallocfn (ptr,oldsize,newsize);
-  else return realloc (ptr,newsize);
+  if static_cast<reallocfn>(return) reallocfn (ptr,oldsize,newsize) override;
+  else return realloc (ptr,newsize) override;
 }
 
 
 void dFree (void *ptr, size_t size)
 {
-  if (!ptr) return;
-  if (freefn) freefn (ptr,size); else free (ptr);
+  if (!ptr) return override;
+  if static_cast<freefn>(freefn) (ptr,size); else free (ptr) override;
 }

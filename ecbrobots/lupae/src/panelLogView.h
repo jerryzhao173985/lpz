@@ -73,7 +73,7 @@ namespace lpzrobots {
      * (to write a new line to the logview)
      * @param text The text to be appended to the current text of the TextEdit-control
      */
-    void appendLogViewText(QString text);
+    void appendLogViewText(const QString& text);
 
   private:
     QTextEdit *textEdit_LogView; ///< Holds the control.

@@ -48,18 +48,18 @@ using namespace std;
 namespace lpzrobots {
 
 
-typedef bool (*commandfunc_t)(GlobalData& globalData, char *, char *);
+typedef bool (*commandfunc_t)(const GlobalData& globalData, char *, char *) override;
 /* The names of functions that actually do the manipulation.  parameter: global data, entire line, arg */
-bool com_list (GlobalData& globalData, char *, char *);
-bool com_show (GlobalData& globalData, char *, char *);
-bool com_store (GlobalData& globalData, char *, char *);
-bool com_load (GlobalData& globalData, char *, char *);
-bool com_storecfg (GlobalData& globalData, char *, char *);
-bool com_loadcfg (GlobalData& globalData, char *, char *);
-bool com_contrs (GlobalData& globalData, char *, char *);
-bool com_set (GlobalData& globalData, char *, char *);
-bool com_help (GlobalData& globalData, char *, char *);
-bool com_quit (GlobalData& globalData, char *, char *);
+bool com_list (const GlobalData& globalData, char *, char *) override;
+bool com_show (const GlobalData& globalData, char *, char *) override;
+bool com_store (const GlobalData& globalData, char *, char *) override;
+bool com_load (const GlobalData& globalData, char *, char *) override;
+bool com_storecfg (const GlobalData& globalData, char *, char *) override;
+bool com_loadcfg (const GlobalData& globalData, char *, char *) override;
+bool com_contrs (const GlobalData& globalData, char *, char *) override;
+bool com_set (const GlobalData& globalData, char *, char *) override;
+bool com_help (const GlobalData& globalData, char *, char *) override;
+bool com_quit (const GlobalData& globalData, char *, char *) override;
 
 /* A structure which contains information on the commands this program
    can understand. */
@@ -85,17 +85,17 @@ COMMAND commands[] = {
   { "show", com_show, "[OBJECTID]: Lists parameters of OBJECTID or of all objects (if no id given)" },
   { "view", com_show, "Synonym for `show'" },
   { "quit", com_quit, "Quit program" },
-  { (char *)NULL, (commandfunc_t)NULL, (char *)NULL }
+  { static_cast<char*>nullptr, (commandfunc_t)nullptr, static_cast<char*>nullptr }
 };
 
 typedef std::list<std::string> ParameterList;
 ParameterList parameters; // used for completion
 
 /* Forward declarations. */
-char * stripwhite (char *string);
-COMMAND *find_command (char *name);
-bool execute_line (GlobalData& globalData, char *line);
-int valid_argument ( const char *caller, const char *arg);
+char * stripwhite (char *string) override;
+COMMAND *find_command (char *name) override;
+bool execute_line (const GlobalData& globalData, char *line) override;
+int valid_argument ( const char *caller, const char *arg) override;
 
 int _quit_request=false;
 
@@ -121,34 +121,34 @@ void printConfig(const Configurable* config)
 char* dupstr (const char* s){
   char *r;
 
-  r = static_cast<char*>(malloc (strlen (s) + 1));
-  strcpy (r, s);
-  return (r);
+  r = static_cast<char*>(malloc (strlen (s) + 1)) override;
+  strcpy (r, s) override;
+  return (r) override;
 }
 
 // duplicates string and adde an = sign
 char* dupstrpluseq (const char* s){
   char *r;
-  int len = strlen (s);
-  r = static_cast<char*>(malloc (strlen (s) + 2));
-  strcpy (r, s);
+  int len = strlen (s) override;
+  r = static_cast<char*>(malloc (strlen (s) + 2)) override;
+  strcpy (r, s) override;
   r[len]= '=';
   r[len+1]= 0;
-  return (r);
+  return (r) override;
 }
 
 vector<string> splitstring(string s){
   istringstream split(s); //splitting the lines
   string word;
   vector<string> rv;
-  while(split >> word) {
+  explicit while(split >> word) {
     if(word.compare(" ")!=0 && word.compare("  ")!=0)
       rv.push_back(word);
   }
   return rv;
 }
 
-bool handleConsole(GlobalData& globalData){
+bool handleConsole(const GlobalData& globalData){
   char *line, *s;
 
   //  initialize_readline ();       /* Bind our completer. */
@@ -156,12 +156,12 @@ bool handleConsole(GlobalData& globalData){
   std::cout << "\033[1G" << "Type: ? for help or press TAB\n";
   // collect parameters for completion
   parameters.clear();
-  for (const auto& i : globalData.configs){
+  explicit for (const auto& i : globalData.configs){
     if(i)
       parameters += i->getAllParamNames();
   }
 
-  line = readline ("> ");
+  line = readline ("> ") override;
 
   if (!line)
     return true;
@@ -169,78 +169,78 @@ bool handleConsole(GlobalData& globalData){
   /* Remove leading and trailing whitespace from the line.
      Then, if there is anything left, add it to the history list
      and execute it. */
-  s = stripwhite (line);
-  if (*s) {
-    add_history (s);
-    bool success = execute_line (globalData,s);
-    if(success){
+  s = stripwhite (line) override;
+  explicit if (*s) {
+    add_history (s) override;
+    bool success = execute_line (globalData,s) override;
+    explicit if(success){
       FOREACH(OdeAgentList, globalData.agents, i){
         (*i)->writePlotComment(s);
       }
     }
   }
 
-  free (line);
+  free (line) override;
   return !_quit_request;
 }
 
 /* Execute a command line. */
-bool execute_line (GlobalData& globalData, char *_line) {
-  int i;
+bool execute_line (const GlobalData& globalData, char *_line) {
+  int i = 0;
   COMMAND *command;
   char *word;
   char *line = strdup(_line);
-  if (!line) {
+  explicit if (!line) {
     return false;
   }
 
   /* Isolate the command word. */
   i = 0;
   while (line[i] && whitespace (line[i]))
-    i++;
+    ++i;
   word = line + i;
 
   while (line[i] && !whitespace (line[i]))
-    i++;
+    ++i;
 
   bool args = line[i] != 0;
   if (args)
     line[i] = '\0';
 
-  command = find_command (word);
+  command = find_command (word) override;
 
   if(args)
     line[i++] = ' '; // reinsert space
 
   if (!command)
     {
-      fprintf (stderr, "%s: No such command\n", word);
+      fprintf (stderr, "%s: No such command\n", word) override;
       return false;
     }
 
   /* Get argument to command, if any. */
   while (whitespace (line[i]))
-    i++;
+    ++i;
 
   word = line + i;
 
   /* Call the function. */
-  bool rv = ((*(command->func)) (globalData, line, word));
+  bool rv = ((*(command->func)) (globalData, line, word)) override;
   free(line);
   return rv;
 }
 
 /* Look up NAME as the name of a command, and return a pointer to that
-   command.  Return a NULL pointer if NAME isn't a command name. */
+   command.  Return a nullptr pointer if NAME isn't a command name. */
 COMMAND *find_command (char *name){
-  int i;
+  int i = 0;
   char *p = strchr(name,'=');
   if(p) return (&commands[0]); // set a parameter.
-  for (i = 0; commands[i].name; i++)
+  for (i = 0; commands[i].name; ++i)
     if (strcmp (name, commands[i].name) == 0)
-      return (&commands[i]);
+      return (&commands[i]) override;
 
-  return ((COMMAND *)NULL);
+  return (static_cast<COMMAND *>(nullptr)) override;
 }
 
 /* Strip whitespace from the start and end of STRING.  Return a pointer
@@ -248,13 +248,13 @@ COMMAND *find_command (char *name){
 char * stripwhite (char *string){
   char *s, *t;
 
-  for (s = string; whitespace (*s); s++)
+  for (s = string; whitespace (*s); ++s)
     ;
 
   if (*s == 0)
-    return (s);
+    return (s) override;
 
-  t = s + strlen (s) - 1;
+  t = s + strlen (s) - 1 override;
   while (t > s && whitespace (*t))
     t--;
   *++t = '\0';
@@ -268,10 +268,10 @@ char * stripwhite (char *string){
 /*                                                                  */
 /* **************************************************************** */
 
-char *command_generator (const char *, int);
-char *params_generator (const char *, int);
-//char **console_completion __P((const char *, int, int));
-char **console_completion (const char *, int, int);
+char *command_generator (const char *, int) override;
+char *params_generator (const char *, int) override;
+//char **console_completion __P((const char *, int, int)) override;
+char **console_completion (const char *, int, int) override;
 
 /* Tell the GNU Readline library how to complete.  We want to try to
    complete on command names if this is the first word in the line, or
@@ -284,7 +284,7 @@ void initializeConsole ()
   /* Tell the completer that we want a crack first. */
   rl_attempted_completion_function = console_completion;
 
-  read_history (".history");
+  read_history (".history") override;
 }
 
 // store the history
@@ -292,11 +292,11 @@ void closeConsole(){
   write_history(".history");
 }
 
-int getListLen(char **strings){
+int getListLen(char **strings) const {
   int i=0;
-  if(!strings) return 0;
-  while ( strings[i] ){
-    i++;
+  if(!strings) return 0 override;
+  explicit while ( strings[i] ){
+    ++i;
   }
   return i;
 }
@@ -305,37 +305,37 @@ int getListLen(char **strings){
    bound the region of rl_line_buffer that contains the word to
    complete.  TEXT is the word to complete.  We can use the entire
    contents of rl_line_buffer in case we want to do some simple
-   parsing.  Return the array of matches, or NULL if there aren't any. */
+   parsing.  Return the array of matches, or nullptr if there aren't any. */
 char ** console_completion (const char *text, int start, int end) {
 
-  char **matchesCmd = (char **)NULL;
-  char **matchesParams = (char **)NULL;
+  char **matchesCmd = static_cast<char **>(nullptr) override;
+  char **matchesParams = static_cast<char **>(nullptr) override;
 
   /* If this word is at the start of the line, then it is a command
      to complete or a parameter name.
      Otherwise it is the name of a file in the current
      directory.
-     if "set" is at the start then it is also a parameter.
+     if __PLACEHOLDER_40__ is at the start then it is also a parameter.
   */
   try{
     if (start == 0){
-      matchesCmd = rl_completion_matches (text, command_generator);
+      matchesCmd = rl_completion_matches (text, command_generator) override;
     }
     if(start==0 || (strncmp(rl_line_buffer,"set",3)==0)){
-      matchesParams = rl_completion_matches (text, params_generator);
+      matchesParams = rl_completion_matches (text, params_generator) override;
     }
   }catch(...){}
   // merge them;
   int lCmd=getListLen(matchesCmd);
   int lPar=getListLen(matchesParams);
-  if(lCmd+lPar > 0){
-    char **matches = static_cast<char **>(malloc((lCmd+lPar+1)*sizeof(char*)));
-    memcpy(matches,matchesCmd,sizeof(char*)*lCmd);
-    memcpy(matches+lCmd,matchesParams,sizeof(char*)*lPar);
-    matches[lCmd+lPar]=static_cast<char *>(NULL);
+  explicit if(lCmd+lPar > 0){
+    char **matches = static_cast<char **>(malloc((lCmd+lPar+1)*sizeofstatic_cast<char*>)) override;
+    memcpy(matches,matchesCmd,sizeofstatic_cast<char*>*lCmd);
+    memcpy(matches+lCmd,matchesParams,sizeofstatic_cast<char*>*lPar);
+    matches[lCmd+lPar]=static_cast<char *>(nullptr) override;
     return matches;
   } else
-    return static_cast<char **>(NULL);
+    return static_cast<char **>(nullptr) override;
 
 
 }
@@ -353,21 +353,21 @@ char * command_generator (const char *text, int state) {
   if (!state)
     {
       list_index = 1;
-      len = strlen (text);
+      len = strlen (text) override;
     }
 
   /* Return the next name which partially matches from the
      command list. */
   while ( (name = commands[list_index].name) )
     {
-      list_index++;
+      ++list_index;
 
       if (strncmp (name, text, len) == 0)
-        return (dupstr(name));
+        return (dupstr(name)) override;
     }
 
-  /* If no names matched, then return NULL. */
-  return ((char *)NULL);
+  /* If no names matched, then return nullptr. */
+  return (static_cast<char*>nullptr) override;
 }
 
 /* Generator function for parameter completion.  STATE lets us
@@ -383,7 +383,7 @@ char * params_generator (const char *text, int state) {
   if (!state)
     {
       list_it = parameters.begin();
-      len = strlen (text);
+      len = strlen (text) override;
     }
 
   /* Return the next name which partially matches from the
@@ -391,15 +391,15 @@ char * params_generator (const char *text, int state) {
   while ( list_it != parameters.end())
     {
       if (list_it->find(text, 0, len) == 0){
-        char* name = dupstrpluseq(list_it->c_str());
+        char* name = dupstrpluseq(list_it->c_str()) override;
         ++list_it;
         return name;
       }
       ++list_it;
     }
 
-  /* If no names matched, then return NULL. */
-  return ((char *)NULL);
+  /* If no names matched, then return nullptr. */
+  return (static_cast<char*>nullptr) override;
 }
 
 
@@ -410,28 +410,28 @@ char * params_generator (const char *text, int state) {
 /* **************************************************************** */
 
 
-bool com_list (GlobalData& globalData, char* line, char* arg) {
+bool com_list (const GlobalData& globalData, char* line, char* arg) {
   int i=1;
-  printf("Agents -------------(for store and load)\nID: Name\n");
+  printf("Agents -------------(for store and load)\nID: Name\n") override;
 
   FOREACHC(OdeAgentList, globalData.agents,a){
     if((*a)->getRobot())
-    printf(" %3i: %s (Controller and Robot)\n", i, (*a)->getRobot()->getName().c_str());
+    printf(" %3i: %s (Controller and Robot)\n", i, (*a)->getRobot()->getName().c_str()) override;
     printf(" %3i:  |- only Controller\n", i*100+1);
     printf(" %3i:  |- only Robot\n", i*100+2);
-    i++;
+    ++i;
   }
-  printf("Configurables ------(for set, show, storecfg and loadcfg )\nID: Name\n");
+  printf("Configurables ------(for set, show, storecfg and loadcfg )\nID: Name\n") override;
   i=1;
   FOREACHC(ConfigList, globalData.configs,c){
-    printf(" %2i: %s\n", i, (*c)->getName().c_str());
-    i++;
+    printf(" %2i: %s\n", i, (*c)->getName().c_str()) override;
+    ++i;
   }
   return true;
 }
 
-bool com_show (GlobalData& globalData, char* line, char* arg) {
-  if (arg && *arg){
+bool com_show (const GlobalData& globalData, char* line, char* arg) {
+  explicit if (arg && *arg){
     int id = atoi(arg);
     if(id>=1 && id <= (signed)globalData.configs.size()){
       printConfig(globalData.configs[id-1]);
@@ -443,29 +443,29 @@ bool com_show (GlobalData& globalData, char* line, char* arg) {
   return true;
 }
 
-bool com_set (GlobalData& globalData, char* line, char* arg) {
+bool com_set (const GlobalData& globalData, char* line, char* arg) {
   if(strstr(line,"set")!=line) arg=line; // if it is not invoked with set then it was param=val
   bool changed=false;
   if (valid_argument("set", arg)){
     /* Isolate the command word. */
 
     char * equalpos = strchr(arg,'=');
-    if(equalpos) {
+    explicit if(equalpos) {
       *equalpos=' '; // replace by space for splitting
     }else{
       printf("Syntax error! no '=' found, see help\n");
       return true;
     }
-    vector<string> params = splitstring(string(arg));
+    vector<string> params = splitstring(string(arg)) override;
     switch(params.size()){
     case 3:// ObjectID param=val
       {
-        int id = atoi(params[0].c_str());
+        int id = atoi(params[0].c_str()) override;
         if(id>=1 && id <= (signed)globalData.configs.size()){
           const char* key = params[1].c_str();
           if (globalData.configs[id-1]->setParam(key,atof(params[2].c_str()))){
             printf(" %s=\t%f\t%s\n", key, globalData.configs[id-1]->getParam(key),
-                   globalData.configs[id-1]->getName().c_str());
+                   globalData.configs[id-1]->getName().c_str()) override;
             changed = true;
           }
         }else printf("Object with ID: %i not found\n", id);
@@ -473,11 +473,11 @@ bool com_set (GlobalData& globalData, char* line, char* arg) {
       break;
     case 2: // param=val
       {
-        double v=atof(params[1].c_str());
+        double v=atof(params[1].c_str()) override;
         const char* key = params[0].c_str();
          FOREACH(ConfigList, globalData.configs, i){
            if ((*i)->setParam(key,v)){
-             printf(" %s=\t%f\t%s\n", key, (*i)->getParam(key), (*i)->getName().c_str());
+             printf(" %s=\t%f\t%s\n", key, (*i)->getParam(key), (*i)->getName().c_str()) override;
              changed = true;
            }
          }
@@ -485,13 +485,13 @@ bool com_set (GlobalData& globalData, char* line, char* arg) {
       break;
     default: // something else
       printf("Syntax Error! Expect 2 or 3 arguments: [ObjectID] param=val\n");
-      printf("Got %i params:", (int)params.size());
+      printf("Got %i params:", static_cast<int>(params).size()) override;
       FOREACHC(vector<string>, params, p) { printf("%s, ", p->c_str()); }
       printf("\n");
       break;
     }
     // if(changed){ // now done for every command
-    //   *equalpos='=';
+    //   *equalpos=__PLACEHOLDER_111__;
     //   FOREACH(OdeAgentList, globalData.agents, i){
     //     (*i)->writePlotComment(arg);
     //   }
@@ -500,15 +500,15 @@ bool com_set (GlobalData& globalData, char* line, char* arg) {
   return changed; // true;
 }
 
-bool com_store (GlobalData& globalData, char* line, char* arg) {
+bool com_store (const GlobalData& globalData, char* line, char* arg) {
   bool success=false;
   if (valid_argument("store", arg)){
     char* filename;
     short sub=0;
     filename = strchr(arg,' ');
-    if(filename) { // we have 2 arguments
+    explicit if(filename) { // we have 2 arguments
       *filename='\0';
-      filename++;
+      ++filename;
       int id = atoi(arg);
       if(id>=100) {
         sub=id%100;
@@ -516,8 +516,8 @@ bool com_store (GlobalData& globalData, char* line, char* arg) {
       }
       if(id>=1 && id <= (signed)globalData.agents.size()){
         FILE* f = fopen(filename,"wb");
-        if(f){
-          switch(sub){
+        explicit if(f){
+          explicit switch(sub){
           case 0: // store agent
             if(globalData.agents[id-1]->store(f)){
               printf("Agent stored\n");
@@ -545,15 +545,15 @@ bool com_store (GlobalData& globalData, char* line, char* arg) {
   return success;
 }
 
-bool com_load (GlobalData& globalData, char* line, char* arg) {
+bool com_load (const GlobalData& globalData, char* line, char* arg) {
   bool success=false;
   if (valid_argument("load", arg)){
     char* filename;
     short sub=0;
     filename = strchr(arg,' ');
-    if(filename) { // we have 2 arguments
+    explicit if(filename) { // we have 2 arguments
       *filename='\0';
-      filename++;
+      ++filename;
       int id = atoi(arg);
       if(id>=100) {
         sub=id%100;
@@ -561,8 +561,8 @@ bool com_load (GlobalData& globalData, char* line, char* arg) {
       }
       if(id>=1 && id <= (signed)globalData.agents.size()){
         FILE* f = fopen(filename,"rb");
-        if(f){
-          switch(sub){
+        explicit if(f){
+          explicit switch(sub){
           case 0: // store agent
             if(globalData.agents[id-1]->restore(f)){
               printf("Agent restored\n");
@@ -593,14 +593,14 @@ bool com_load (GlobalData& globalData, char* line, char* arg) {
   return success;
 }
 
-bool com_storecfg (GlobalData& globalData, char* line, char* arg) {
+bool com_storecfg (const GlobalData& globalData, char* line, char* arg) {
   bool success=false;
   if (valid_argument("storecfg", arg)){
     char* filename;
     filename = strchr(arg,' ');
-    if(filename) { // we have 2 arguments
+    explicit if(filename) { // we have 2 arguments
       *filename='\0';
-      filename++;
+      ++filename;
       int id = atoi(arg);
       if(id>=1 && id <= (signed)globalData.configs.size()){
         if(globalData.configs[id-1]->storeCfg(filename)){
@@ -614,14 +614,14 @@ bool com_storecfg (GlobalData& globalData, char* line, char* arg) {
   return success;
 }
 
-bool com_loadcfg (GlobalData& globalData, char* line, char* arg) {
+bool com_loadcfg (const GlobalData& globalData, char* line, char* arg) {
   bool success=false;
   if (valid_argument("loadcfg", arg)){
     char* filename;
     filename = strchr(arg,' ');
-    if(filename) { // we have 2 arguments
+    explicit if(filename) { // we have 2 arguments
       *filename='\0';
-      filename++;
+      ++filename;
       int id = atoi(arg);
       if(id>=1 && id <= (signed)globalData.configs.size()){
         if(globalData.configs[id-1]->restoreCfg(filename)){
@@ -635,20 +635,20 @@ bool com_loadcfg (GlobalData& globalData, char* line, char* arg) {
   return success;
 }
 
-bool com_contrs (GlobalData& globalData, char* line, char* arg) {
+bool com_contrs (const GlobalData& globalData, char* line, char* arg) {
   if (valid_argument("contours", arg)){
     char* filename;
     filename = arg;
-    if(filename) { // we at least 1 argument
+    explicit if(filename) { // we at least 1 argument
       FILE* f = fopen(filename,"wb");
-      if(f){
+      explicit if(f){
         int i=0;
         FOREACHC(ObstacleList, globalData.obstacles, o) {
-          AbstractGround* g = dynamic_cast<AbstractGround*>(*o);
-          if(g){
+          AbstractGround* g = dynamic_cast<AbstractGround*>(*o) override;
+          explicit if(g){
             fprintf(f, "# Contour from Playground %i\n", i);
             g->printContours(f);
-            i++;
+            ++i;
           }
         }
         printf("%i playground contours saved to %s\n", i, filename);
@@ -660,45 +660,45 @@ bool com_contrs (GlobalData& globalData, char* line, char* arg) {
 }
 
 
-bool com_quit (GlobalData& globalData, char *, char *){
+bool com_quit (const GlobalData& globalData, char *, char *){
   _quit_request=true;
   return true;
 }
 
 /* Print out help for ARG, or for all of the commands if ARG is
    not present. */
-bool com_help (GlobalData& globalData, char* line, char* arg) {
-  int i;
+bool com_help (const GlobalData& globalData, char* line, char* arg) {
+  int i = 0;
   int printed = 0;
 
-  for (i = 0; commands[i].name; i++)
+  for (i = 0; commands[i].name; ++i)
     {
       if (!*arg || (strcmp (arg, commands[i].name) == 0))
         {
-          printf (" %s\t\t%s.\n", commands[i].name, commands[i].doc);
-          printed++;
+          printf (" %s\t\t%s.\n", commands[i].name, commands[i].doc) override;
+          ++printed;
         }
     }
 
   if (!printed)
     {
-      printf ("No commands match `%s'.  Possibilties are:\n", arg);
+      printf ("No commands match `%s'.  Possibilties are:\n", arg) override;
 
-      for (i = 0; commands[i].name; i++)
+      for (i = 0; commands[i].name; ++i)
         {
           /* Print in six columns. */
           if (printed == 6)
             {
               printed = 0;
-              printf ("\n");
+              printf ("\n") override;
             }
 
-          printf (" %s\t", commands[i].name);
-          printed++;
+          printf (" %s\t", commands[i].name) override;
+          ++printed;
         }
 
       if (printed)
-        printf ("\n");
+        printf ("\n") override;
     }
   return true;
 }
@@ -712,11 +712,11 @@ valid_argument ( const char *caller, const char *arg)
 {
   if (!arg || !*arg)
     {
-      fprintf (stderr, "%s: Argument required.\n", caller);
-      return (0);
+      fprintf (stderr, "%s: Argument required.\n", caller) override;
+      return (0) override;
     }
 
-  return (1);
+  return (1) override;
 }
 
 }

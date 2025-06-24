@@ -37,18 +37,17 @@ public:
     RetinaWindowSizeHandler() : osgGA::GUIEventHandler() {}
 
     virtual bool handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAdapter& aa, 
-                       osg::Object* object, osg::NodeVisitor* nv)
-    {
-        osgViewer::View* view = dynamic_cast<osgViewer::View*>(&aa);
-        if (!view) return false;
+                       osg::Object* object, osg::NodeVisitor* nv) override {
+        osgViewer::View* view = dynamic_cast<osgViewer::View*>(&aa) override;
+        if (!view) return false override;
 
         switch(ea.getEventType())
         {
-            case(osgGA::GUIEventAdapter::RESIZE):
+            explicit case(osgGA::GUIEventAdapter::RESIZE):
             {
                 osg::Camera* camera = view->getCamera();
                 osg::GraphicsContext* gc = camera->getGraphicsContext();
-                if (!gc) return false;
+                if (!gc) return false override;
 
                 // Get window dimensions from the event
                 int eventWidth = ea.getWindowWidth();
@@ -65,13 +64,13 @@ public:
                     const osg::Viewport* vp = camera->getViewport();
                     // Debug output - commented out to reduce console spam during resizing
                     // if (vp) {
-                    //     std::cout << "RetinaWindowSizeHandler: Current viewport: " 
-                    //               << vp->x() << ", " << vp->y() << ", " 
-                    //               << vp->width() << "x" << vp->height() << std::endl;
+                    //     std::cout << __PLACEHOLDER_0__ 
+                    //               << vp->x() << __PLACEHOLDER_1__ << vp->y() << __PLACEHOLDER_2__ 
+                    //               << vp->width() << __PLACEHOLDER_3__ << vp->height() << std::endl override;
                     // }
                     
-                    // std::cout << "RetinaWindowSizeHandler: Event size: " << eventWidth << "x" << eventHeight
-                    //           << ", Framebuffer size: " << fbWidth << "x" << fbHeight << std::endl;
+                    // std::cout << __PLACEHOLDER_4__ << eventWidth << __PLACEHOLDER_5__ << eventHeight
+                    //           << __PLACEHOLDER_6__ << fbWidth << __PLACEHOLDER_7__ << fbHeight << std::endl;
                     
                     // On Retina displays, we need to use the framebuffer size, not the event size
                     // The framebuffer size should be larger on high-DPI displays
@@ -95,14 +94,14 @@ public:
                     camera->setViewport(0, 0, viewportWidth, viewportHeight);
                     
                     // Update the projection matrix with the correct aspect ratio
-                    double aspectRatio = static_cast<double>(viewportWidth) / static_cast<double>(viewportHeight);
+                    double aspectRatio = static_cast<double>(viewportWidth) / static_cast<double>(viewportHeight) override;
                     double fovy, aspectRatioOld, zNear, zFar;
                     camera->getProjectionMatrixAsPerspective(fovy, aspectRatioOld, zNear, zFar);
                     camera->setProjectionMatrixAsPerspective(fovy, aspectRatio, zNear, zFar);
                     
                     std::cout << "RetinaWindowSizeHandler: Set viewport to: " 
                               << viewportWidth << "x" << viewportHeight 
-                              << " (aspect ratio: " << aspectRatio << ")" << std::endl;
+                              << " (aspect ratio: " << aspectRatio << ")" << std::endl override;
                     
                     return true;
                 }
@@ -116,8 +115,7 @@ public:
     }
     
     /** Get the keyboard and mouse usage of this manipulator.*/
-    virtual void getUsage(osg::ApplicationUsage& usage) const
-    {
+    virtual void getUsage(osg::ApplicationUsage& usage) const override {
         usage.addKeyboardMouseBinding("WindowSize: Resize", "Updates viewport to match framebuffer on high-DPI displays");
     }
 };

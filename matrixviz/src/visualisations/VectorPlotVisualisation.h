@@ -15,7 +15,7 @@ class VectorPlotVisualisation: public AbstractVisualisation {
 public:
   VectorPlotVisualisation(MatrixPlotChannel *channel, ColorPalette *colorPalette, QWidget *parent = 0);
 //  VectorPlotVisualisation(VectorPlotChannel *channel, ColorPalette *colorPalette, QWidget *parent = 0);
-  virtual ~VectorPlotVisualisation() override;
+  virtual ~VectorPlotVisualisation();
   //void updateView();
 
 

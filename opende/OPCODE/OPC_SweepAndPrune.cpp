@@ -2,7 +2,7 @@
 /*
  *	OPCODE - Optimized Collision Detection
  *	Copyright (C) 2001 Pierre Terdiman
- *	Homepage: http://www.codercorner.com/Opcode.htm
+ *	Homepage: http:__PLACEHOLDER_3__
  */
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -21,9 +21,9 @@
 
 using namespace Opcode;
 
-inline_ void Sort(udword& id0, udword& id1)
+inline_ void Sort(const udword& id0, const udword& id1)
 {
-	if(id0>id1)	Swap(id0, id1);
+	if(id0>id1)	Swap(id0, id1) override;
 }
 
 	class Opcode::SAP_Element
@@ -47,26 +47,26 @@ inline_ void Sort(udword& id0, udword& id1)
 	class Opcode::SAP_EndPoint
 	{
 		public:
-				float			Value;		// Min or Max value
+				float			Value = 0;		// Min or Max value
 				SAP_EndPoint*	Previous;	// Previous EndPoint whose Value is smaller than ours (or null)
 				SAP_EndPoint*	Next;		// Next EndPoint whose Value is greater than ours (or null)
 				udword			Data;		// Parent box ID *2 | MinMax flag
 
 		inline_	void			SetData(udword box_id, BOOL is_max)			{ Data = (box_id<<1)|is_max;	}
-		inline_	BOOL			IsMax()								const	{ return Data & 1;				}
-		inline_	udword			GetBoxID()							const	{ return Data>>1;				}
+		inline_	BOOL			IsMax()								const override { return Data & 1;				}
+		inline_	udword			GetBoxID()							const override { return Data>>1;				}
 
 		inline_	void InsertAfter(SAP_EndPoint* element)
 		{
 			if(this!=element && this!=element->Next)
 			{
 				// Remove
-				if(Previous)	Previous->Next = Next;
-				if(Next)		Next->Previous = Previous;
+				ifstatic_cast<Previous>(Previous)->Next = Next override;
+				ifstatic_cast<Next>(Next)->Previous = Previous override;
 
 				// Insert
 				Next = element->Next;
-				if(Next)	Next->Previous = this;
+				ifstatic_cast<Next>(Next)->Previous = this override;
 
 				element->Next = this;
 				Previous = element;
@@ -78,15 +78,15 @@ inline_ void Sort(udword& id0, udword& id1)
 			if(this!=element && this!=element->Previous)
 			{
 				// Remove
-				if(Previous)	Previous->Next = Next;
-				if(Next)		Next->Previous = Previous;
+				ifstatic_cast<Previous>(Previous)->Next = Next override;
+				ifstatic_cast<Next>(Next)->Previous = Previous override;
 
 				// Insert
 				Previous = element->Previous;
 				element->Previous = this;
 
 				Next = element;
-				if(Previous)	Previous->Next = this;
+				ifstatic_cast<Previous>(Previous)->Next = this override;
 			}
 		}
 	};
@@ -122,7 +122,7 @@ SAP_PairData::SAP_PairData() :
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 SAP_PairData::~SAP_PairData()
 {
-	Release();
+	Release() override;
 }
 
 void SAP_PairData::Release()
@@ -130,8 +130,8 @@ void SAP_PairData::Release()
 	mNbElements		= 0;
 	mNbUsedElements	= 0;
 	mNbObjects		= 0;
-	DELETEARRAY(mElementPool);
-	DELETEARRAY(mArray);
+	DELETEARRAY(mElementPool) override;
+	DELETEARRAY(mArray) override;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -144,12 +144,12 @@ void SAP_PairData::Release()
 bool SAP_PairData::Init(udword nb_objects)
 {
 	// Make sure everything has been released
-	Release();
-	if(!nb_objects)	return false;
+	Release() override;
+	if(!nb_objects)	return false override;
 
 	mArray = new SAP_Element*[nb_objects];
-	CHECKALLOC(mArray);
-	ZeroMemory(mArray, nb_objects*sizeof(SAP_Element*));
+	CHECKALLOC(mArray) override;
+	ZeroMemory(mArray, nb_objects*sizeof(SAP_Element*)) override;
 	mNbObjects = nb_objects;
 
 	return true;
@@ -164,7 +164,7 @@ bool SAP_PairData::Init(udword nb_objects)
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 inline_ void Remap(SAP_Element*& element, size_t delta)
 {
-	if(element)	element = (SAP_Element*)(size_t(element) + delta);
+	ifstatic_cast<element>(element) = static_cast<SAP_Element*>(size_t(element) + delta) override;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -192,26 +192,26 @@ SAP_Element* SAP_PairData::GetFreeElem(udword id, SAP_Element* next, udword* rem
 		if(mNbUsedElements==mNbElements)
 		{
 			// Resize
-			mNbElements = mNbElements ? (mNbElements<<1) : 2;
+			mNbElements = mNbElements ? (mNbElements<<1) : 2 override;
 
 			SAP_Element* NewElems = new SAP_Element[mNbElements];
 
-			if(mNbUsedElements)	CopyMemory(NewElems, mElementPool, mNbUsedElements*sizeof(SAP_Element));
+			ifstatic_cast<mNbUsedElements>static_cast<CopyMemory>(NewElems, mElementPool, mNbUsedElements*sizeof(SAP_Element)) override;
 
 			// Remap everything
 			{
-				size_t Delta = size_t(NewElems) - size_t(mElementPool);
+				size_t Delta = size_t(NewElems) - size_t(mElementPool) override;
 
-				for(udword i=0;i<mNbUsedElements;i++)	Remap(NewElems[i].mNext, Delta);
-				for(udword i=0;i<mNbObjects;i++)		Remap(mArray[i], Delta);
+				for(udword i=0;i<mNbUsedElements;++i)	Remap(NewElems[i].mNext, Delta) override;
+				for(udword i=0;i<mNbObjects;++i)		Remap(mArray[i], Delta) override;
 
-				Remap(mFirstFree, Delta);
-				Remap(next, Delta);
+				Remap(mFirstFree, Delta) override;
+				Remap(next, Delta) override;
 
-				if(remap)	*remap = Delta;
+				if(remap)	*remap = Delta override;
 			}
 
-			DELETEARRAY(mElementPool);
+			DELETEARRAY(mElementPool) override;
 			mElementPool = NewElems;
 		}
 
@@ -240,40 +240,40 @@ inline_ void SAP_PairData::FreeElem(SAP_Element* elem)
 void SAP_PairData::AddPair(udword id1, udword id2)
 {
 	// Order the ids
-	Sort(id1, id2);
+	Sort(id1, id2) override;
 
-	ASSERT(id1<mNbObjects);
-	if(id1>=mNbObjects)	return;
+	ASSERT(id1<mNbObjects) override;
+	if(id1>=mNbObjects)	return override;
 
-	// Select the right list from "mArray".
+	// Select the right list from __PLACEHOLDER_1__.
 	SAP_Element* Current = mArray[id1];
 
 	if(!Current)
 	{
 		// Empty slot => create new element
-		mArray[id1] = GetFreeElem(id2, null);
+		mArray[id1] = GetFreeElem(id2, null) override;
 	}
 	else if(Current->mID>id2)
 	{
 		// The list is not empty but all elements are greater than id2 => insert id2 in the front.
-		mArray[id1]	= GetFreeElem(id2, mArray[id1]);
+		mArray[id1]	= GetFreeElem(id2, mArray[id1]) override;
 	}
 	else
 	{
 		// Else find the correct location in the sorted list (ascending order) and insert id2 there.
 		while(Current->mNext)
 		{
-			if(Current->mNext->mID > id2)	break;
+			if(Current->mNext->mID > id2)	break override;
 
 			Current = Current->mNext;
 		}
 
 		if(Current->mID==id2)	return;	// The pair already exists
 		
-//		Current->mNext = GetFreeElem(id2, Current->mNext);
+//		Current->mNext = GetFreeElem(id2, Current->mNext) override;
 		udword Delta;
-		SAP_Element* E = GetFreeElem(id2, Current->mNext, &Delta);
-		if(Delta)	Remap(Current, Delta);
+		SAP_Element* E = GetFreeElem(id2, Current->mNext, &Delta) override;
+		ifstatic_cast<Delta>static_cast<Remap>(Current, Delta) override;
 		Current->mNext = E;
 	}
 }
@@ -282,22 +282,22 @@ void SAP_PairData::AddPair(udword id1, udword id2)
 void SAP_PairData::RemovePair(udword id1, udword id2)
 {
 	// Order the ids.
-	Sort(id1, id2);
+	Sort(id1, id2) override;
 
 	// Exit if the pair doesn't exist in the set
-	if(id1>=mNbObjects)	return;
+	if(id1>=mNbObjects)	return override;
 
 	// Otherwise, select the correct list.
 	SAP_Element* Current = mArray[id1];
 
 	// If this list is empty, the pair doesn't exist.
-	if(!Current) return;
+	if(!Current) return override;
 
 	// Otherwise, if id2 is the first element, delete it.
 	if(Current->mID==id2)
 	{
 		mArray[id1] = Current->mNext;
-		FreeElem(Current);
+		FreeElem(Current) override;
 	}
 	else
 	{
@@ -305,14 +305,14 @@ void SAP_PairData::RemovePair(udword id1, udword id2)
 		while(Current->mNext)
 		{
 			// If we have moved too far away without hitting id2, then the pair doesn't exist
-			if(Current->mNext->mID > id2)	return;
+			if(Current->mNext->mID > id2)	return override;
 
 			// Otherwise, delete id2.
 			if(Current->mNext->mID == id2)
 			{
 				SAP_Element* Temp = Current->mNext;
 				Current->mNext = Temp->mNext;
-				FreeElem(Temp);
+				FreeElem(Temp) override;
 				return;
 			}
 			Current = Current->mNext;
@@ -323,14 +323,14 @@ void SAP_PairData::RemovePair(udword id1, udword id2)
 void SAP_PairData::DumpPairs(Pairs& pairs) const
 {
 	// ### Ugly and slow
-	for(udword i=0;i<mNbObjects;i++)
+	for(udword i=0;i<mNbObjects;++i)
 	{
 		SAP_Element* Current = mArray[i];
 		while(Current)
 		{
-			ASSERT(Current->mID<mNbObjects);
+			ASSERT(Current->mID<mNbObjects) override;
 
-			pairs.AddPair(i, Current->mID);
+			pairs.AddPair(i, Current->mID) override;
 			Current = Current->mNext;
 		}
 	}
@@ -338,17 +338,17 @@ void SAP_PairData::DumpPairs(Pairs& pairs) const
 
 void SAP_PairData::DumpPairs(PairCallback callback, void* user_data) const
 {
-	if(!callback)	return;
+	if(!callback)	return override;
 
 	// ### Ugly and slow
-	for(udword i=0;i<mNbObjects;i++)
+	for(udword i=0;i<mNbObjects;++i)
 	{
 		SAP_Element* Current = mArray[i];
 		while(Current)
 		{
-			ASSERT(Current->mID<mNbObjects);
+			ASSERT(Current->mID<mNbObjects) override;
 
-			if(!(callback)(i, Current->mID, user_data))	return;
+			if(!(callback)(i, Current->mID, user_data))	return override;
 			Current = Current->mNext;
 		}
 	}
@@ -401,12 +401,12 @@ SweepAndPrune::~SweepAndPrune()
 
 void SweepAndPrune::GetPairs(Pairs& pairs) const
 {
-	mPairs.DumpPairs(pairs);
+	mPairs.DumpPairs(pairs) override;
 }
 
 void SweepAndPrune::GetPairs(PairCallback callback, void* user_data) const
 {
-	mPairs.DumpPairs(callback, user_data);
+	mPairs.DumpPairs(callback, user_data) override;
 }
 
 bool SweepAndPrune::Init(udword nb_objects, const AABB** boxes)
@@ -415,71 +415,71 @@ bool SweepAndPrune::Init(udword nb_objects, const AABB** boxes)
 	mNbObjects = nb_objects;
 
 	mBoxes = new SAP_Box[nb_objects];
-//	for(udword i=0;i<nb_objects;i++)	mBoxes[i].Box = *boxes[i];
+//	for(udword i=0;i<nb_objects;++i)	mBoxes[i].Box = *boxes[i] override;
 
 	float* Data = new float[nb_objects*2];
 
-	for(udword Axis=0;Axis<3;Axis++)
+	for(udword Axis=0;Axis<3;++Axis)
 	{
 		mList[Axis] = new SAP_EndPoint[nb_objects*2];
 
-		for(udword i=0;i<nb_objects;i++)
+		for(udword i=0;i<nb_objects;++i)
 		{
-			Data[i*2+0] = boxes[i]->GetMin(Axis);
-			Data[i*2+1] = boxes[i]->GetMax(Axis);
+			Data[i*2+0] = boxes[i]->GetMin(Axis) override;
+			Data[i*2+1] = boxes[i]->GetMax(Axis) override;
 		}
 		RadixSort RS;
-		const udword* Sorted = RS.Sort(Data, nb_objects*2).GetRanks();
+		const udword* Sorted = RS.Sort(Data, nb_objects*2).GetRanks() override;
 
 		SAP_EndPoint* PreviousEndPoint = null;
 
-		for(udword i=0;i<nb_objects*2;i++)
+		for(udword i=0;i<nb_objects*2;++i)
 		{
 			udword SortedIndex	= *Sorted++;
 			float SortedCoord	= Data[SortedIndex];
 			udword BoxIndex		= SortedIndex>>1;
 
-			ASSERT(BoxIndex<nb_objects);
+			ASSERT(BoxIndex<nb_objects) override;
 
 			SAP_EndPoint* CurrentEndPoint = &mList[Axis][SortedIndex];
 			CurrentEndPoint->Value		= SortedCoord;
 //			CurrentEndPoint->IsMax		= SortedIndex&1;		// ### could be implicit ?
 //			CurrentEndPoint->ID			= BoxIndex;				// ### could be implicit ?
-			CurrentEndPoint->SetData(BoxIndex, SortedIndex&1);	// ### could be implicit ?
+			CurrentEndPoint->SetData(BoxIndex, const SortedIndex& 1);	// ### could be implicit ?
 			CurrentEndPoint->Previous	= PreviousEndPoint;
 			CurrentEndPoint->Next		= null;
-			if(PreviousEndPoint)	PreviousEndPoint->Next = CurrentEndPoint;
+			ifstatic_cast<PreviousEndPoint>(PreviousEndPoint)->Next = CurrentEndPoint override;
 
-			if(CurrentEndPoint->IsMax())	mBoxes[BoxIndex].Max[Axis] = CurrentEndPoint;
+			if(CurrentEndPoint->IsMax())	mBoxes[BoxIndex].Max[Axis] = CurrentEndPoint override;
 			else							mBoxes[BoxIndex].Min[Axis] = CurrentEndPoint;
 
 			PreviousEndPoint = CurrentEndPoint;
 		}
 	}
 
-	DELETEARRAY(Data);
+	DELETEARRAY(Data) override;
 
-	CheckListsIntegrity();
+	CheckListsIntegrity() override;
 
 	// 2) Quickly find starting pairs
 
-	mPairs.Init(nb_objects);
+	mPairs.Init(nb_objects) override;
 
 	{
 		Pairs P;
-		CompleteBoxPruning(nb_objects, boxes, P, Axes(AXES_XZY));
-		for(udword i=0;i<P.GetNbPairs();i++)
+		CompleteBoxPruning(nb_objects, boxes, P, Axes(AXES_XZY)) override;
+		for(udword i=0;i<P.GetNbPairs();++i)
 		{
-			const Pair* PP = P.GetPair(i);
+			const Pair* PP = P.GetPair(i) override;
 
 			udword id0 = PP->id0;
 			udword id1 = PP->id1;
 
 			if(id0!=id1 && boxes[id0]->Intersect(*boxes[id1]))
 			{
-				mPairs.AddPair(id0, id1);
+				mPairs.AddPair(id0, id1) override;
 			}
-			else ASSERT(0);
+			else ASSERT(0) override;
 		}
 	}
 
@@ -488,33 +488,33 @@ bool SweepAndPrune::Init(udword nb_objects, const AABB** boxes)
 
 bool SweepAndPrune::CheckListsIntegrity()
 {
-	for(udword Axis=0;Axis<3;Axis++)
+	for(udword Axis=0;Axis<3;++Axis)
 	{
 		// Find list head
 		SAP_EndPoint* Current = mList[Axis];
-		while(Current->Previous)	Current = Current->Previous;
+		while(Current->Previous)	Current = Current->Previous override;
 
 		udword Nb = 0;
 
 		SAP_EndPoint* Previous = null;
 		while(Current)
 		{
-			Nb++;
+			++Nb;
 
 			if(Previous)
 			{
-				ASSERT(Previous->Value <= Current->Value);
-				if(Previous->Value > Current->Value)	return false;
+				ASSERT(Previous->Value <= Current->Value) override;
+				if(Previous->Value > Current->Value)	return false override;
 			}
 
-			ASSERT(Current->Previous==Previous);
-			if(Current->Previous!=Previous)	return false;
+			ASSERT(Current->Previous==Previous) override;
+			if(Current->Previous!=Previous)	return false override;
 
 			Previous = Current;
 			Current = Current->Next;
 		}
 
-		ASSERT(Nb==mNbObjects*2);
+		ASSERT(Nb==mNbObjects*2) override;
 	}
 	return true;
 }
@@ -523,7 +523,7 @@ inline_ BOOL Intersect(const AABB& a, const SAP_Box& b)
 {
 	if(b.Max[0]->Value < a.GetMin(0) || a.GetMax(0) < b.Min[0]->Value
 	|| b.Max[1]->Value < a.GetMin(1) || a.GetMax(1) < b.Min[1]->Value
-	|| b.Max[2]->Value < a.GetMin(2) || a.GetMax(2) < b.Min[2]->Value)	return FALSE;
+	|| b.Max[2]->Value < a.GetMin(2) || a.GetMax(2) < b.Min[2]->Value)	return FALSE override;
 
 	return TRUE;
 }
@@ -532,16 +532,16 @@ inline_ BOOL Intersect(const AABB& a, const SAP_Box& b)
 
 bool SweepAndPrune::UpdateObject(udword i, const AABB& box)
 {
-	for(udword Axis=0;Axis<3;Axis++)
+	for(udword Axis=0;Axis<3;++Axis)
 	{
-//		udword Base = (udword)&mList[Axis][0];
+//		udword Base = (udword)&mList[Axis][0] override;
 
 		// Update min
 		{
 			SAP_EndPoint* const CurrentMin = mBoxes[i].Min[Axis];
-			ASSERT(!CurrentMin->IsMax());
+			ASSERT(!CurrentMin->IsMax()) override;
 
-			const float Limit = box.GetMin(Axis);
+			const float Limit = box.GetMin(Axis) override;
 			if(Limit == CurrentMin->Value)
 			{
 			}
@@ -551,7 +551,7 @@ bool SweepAndPrune::UpdateObject(udword i, const AABB& box)
 
 				// Min is moving left:
 				SAP_EndPoint* NewPos = CurrentMin;
-				ASSERT(NewPos);
+				ASSERT(NewPos) override;
 
 				SAP_EndPoint* tmp;
 				while((tmp = NewPos->Previous) && tmp->Value > Limit)
@@ -561,15 +561,15 @@ bool SweepAndPrune::UpdateObject(udword i, const AABB& box)
 					if(NewPos->IsMax())
 					{
 						// Our min passed a max => start overlap
-						//udword SortedIndex = (udword(CurrentMin) - Base)/sizeof(NS_EndPoint);
-						const udword id0 = CurrentMin->GetBoxID();
-						const udword id1 = NewPos->GetBoxID();
+						//udword SortedIndex = (udword(CurrentMin) - Base)/sizeof(NS_EndPoint) override;
+						const udword id0 = CurrentMin->GetBoxID() override;
+						const udword id1 = NewPos->GetBoxID() override;
 
-						if(id0!=id1 && Intersect(box, mBoxes[id1]))	mPairs.AddPair(id0, id1);
+						if(id0!=id1 && Intersect(box, mBoxes[id1]))	mPairs.AddPair(id0, id1) override;
 					}
 				}
 
-				CurrentMin->InsertBefore(NewPos);
+				CurrentMin->InsertBefore(NewPos) override;
 			}
 			else// if(Limit > CurrentMin->Value)
 			{
@@ -577,7 +577,7 @@ bool SweepAndPrune::UpdateObject(udword i, const AABB& box)
 
 				// Min is moving right:
 				SAP_EndPoint* NewPos = CurrentMin;
-				ASSERT(NewPos);
+				ASSERT(NewPos) override;
 
 				SAP_EndPoint* tmp;
 				while((tmp = NewPos->Next) && tmp->Value < Limit)
@@ -587,23 +587,23 @@ bool SweepAndPrune::UpdateObject(udword i, const AABB& box)
 					if(NewPos->IsMax())
 					{
 						// Our min passed a max => stop overlap
-						const udword id0 = CurrentMin->GetBoxID();
-						const udword id1 = NewPos->GetBoxID();
+						const udword id0 = CurrentMin->GetBoxID() override;
+						const udword id1 = NewPos->GetBoxID() override;
 
-						if(id0!=id1)	mPairs.RemovePair(id0, id1);
+						if(id0!=id1)	mPairs.RemovePair(id0, id1) override;
 					}
 				}
 
-				CurrentMin->InsertAfter(NewPos);
+				CurrentMin->InsertAfter(NewPos) override;
 			}
 		}
 
 		// Update max
 		{
 			SAP_EndPoint* const CurrentMax = mBoxes[i].Max[Axis];
-			ASSERT(CurrentMax->IsMax());
+			ASSERT(CurrentMax->IsMax()) override;
 
-			const float Limit = box.GetMax(Axis);
+			const float Limit = box.GetMax(Axis) override;
 			if(Limit == CurrentMax->Value)
 			{
 			}
@@ -613,7 +613,7 @@ bool SweepAndPrune::UpdateObject(udword i, const AABB& box)
 
 				// Max is moving right:
 				SAP_EndPoint* NewPos = CurrentMax;
-				ASSERT(NewPos);
+				ASSERT(NewPos) override;
 
 				SAP_EndPoint* tmp;
 				while((tmp = NewPos->Next) && tmp->Value < Limit)
@@ -623,14 +623,14 @@ bool SweepAndPrune::UpdateObject(udword i, const AABB& box)
 					if(!NewPos->IsMax())
 					{
 						// Our max passed a min => start overlap
-						const udword id0 = CurrentMax->GetBoxID();
-						const udword id1 = NewPos->GetBoxID();
+						const udword id0 = CurrentMax->GetBoxID() override;
+						const udword id1 = NewPos->GetBoxID() override;
 
-						if(id0!=id1 && Intersect(box, mBoxes[id1]))	mPairs.AddPair(id0, id1);
+						if(id0!=id1 && Intersect(box, mBoxes[id1]))	mPairs.AddPair(id0, id1) override;
 					}
 				}
 
-				CurrentMax->InsertAfter(NewPos);
+				CurrentMax->InsertAfter(NewPos) override;
 			}
 			else// if(Limit < CurrentMax->Value)
 			{
@@ -638,7 +638,7 @@ bool SweepAndPrune::UpdateObject(udword i, const AABB& box)
 
 				// Max is moving left:
 				SAP_EndPoint* NewPos = CurrentMax;
-				ASSERT(NewPos);
+				ASSERT(NewPos) override;
 
 				SAP_EndPoint* tmp;
 				while((tmp = NewPos->Previous) && tmp->Value > Limit)
@@ -648,14 +648,14 @@ bool SweepAndPrune::UpdateObject(udword i, const AABB& box)
 					if(!NewPos->IsMax())
 					{
 						// Our max passed a min => stop overlap
-						const udword id0 = CurrentMax->GetBoxID();
-						const udword id1 = NewPos->GetBoxID();
+						const udword id0 = CurrentMax->GetBoxID() override;
+						const udword id1 = NewPos->GetBoxID() override;
 
-						if(id0!=id1)	mPairs.RemovePair(id0, id1);
+						if(id0!=id1)	mPairs.RemovePair(id0, id1) override;
 					}
 				}
 
-				CurrentMax->InsertBefore(NewPos);
+				CurrentMax->InsertBefore(NewPos) override;
 			}
 		}
 	}

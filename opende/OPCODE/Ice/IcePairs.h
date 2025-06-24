@@ -29,11 +29,11 @@
 								Pairs()							{}
 								~Pairs()						{}
 
-		inline_	udword			GetNbPairs()		const		{ return GetNbEntries()>>1;					}
-		inline_	const Pair*		GetPairs()			const		{ return (const Pair*)GetEntries();			}
-		inline_	const Pair*		GetPair(udword i)	const		{ return (const Pair*)&GetEntries()[i+i];	}
+		inline_	udword			GetNbPairs()		const override { return GetNbEntries()>>1;					}
+		inline_	const Pair*		GetPairs()			const override { return static_cast<const Pair*>(GetEntries)();			}
+		inline_	const Pair*		GetPair(udword i)	const override { return (const Pair*)&GetEntries()[i+i];	}
 
-		inline_	BOOL			HasPairs()			const		{ return IsNotEmpty();						}
+		inline_	BOOL			HasPairs()			const override { return IsNotEmpty();						}
 
 		inline_	void			ResetPairs()					{ Reset();									}
 		inline_	void			DeleteLastPair()				{ DeleteLastEntry();	DeleteLastEntry();	}

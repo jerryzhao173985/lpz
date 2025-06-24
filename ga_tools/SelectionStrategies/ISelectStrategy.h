@@ -38,7 +38,7 @@ public:
 	/**
 	 * default constructor
 	 */
-	ISelectStrategy();
+	ISelectStrategy() override;
 
 	/**
 	 * default destructor
@@ -47,10 +47,10 @@ public:
 
 	/**
 	 * abstract function which select the individual from the old generation and copy it in the new generation.
-	 * @param oldGeneration (Generation*) the old generation from where the individual comes
-	 * @param newGeneration (Generation*) the new generation where the selected individual should be
+	 * @param oldGeneration static_cast<Generation*>(the) old generation from where the individual comes
+	 * @param newGeneration static_cast<Generation*>(the) new generation where the selected individual should be
 	 */
-	virtual void select(Generation* oldGeneration, Generation* newGeneration) = 0;
+	virtual void select(Generation* oldGeneration, const Generation* newGeneration) = 0;
 };
 
 #endif /* ISELECTSTRATEGY_H_ */

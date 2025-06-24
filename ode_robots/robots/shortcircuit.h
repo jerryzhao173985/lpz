@@ -37,50 +37,50 @@ namespace lpzrobots {
   public:
     ShortCircuit(const OdeHandle& odeHandle, const OsgHandle& osgHandle, int sensornumber, int motornumber);
 
-    virtual ~ShortCircuit() override;
+    virtual ~ShortCircuit();
 
 
 
     /** sets the pose of the vehicle
         @param pose desired 4x4 pose matrix
     */
-    virtual void placeIntern(const osg::Matrix& pose) {}
+    virtual void placeIntern(const osg::Matrix& pose) override {}
 
     /** returns actual sensorvalues
         @param sensors sensors scaled to [-1,1]
         @param sensornumber length of the sensor array
         @return number of actually written sensors
     */
-    virtual int getSensorsIntern(sensor* sensors, int sensornumber) override;
+    virtual int getSensorsIntern(sensor* sensors, int sensornumber);
 
     /** sets actual motorcommands
         @param motors motors scaled to [-1,1]
         @param motornumber length of the motor array
     */
-    virtual void setMotorsIntern(const double* motors, int motornumber) override;
+    virtual void setMotorsIntern(const double* motors, int motornumber);
 
     /** returns number of sensors
      */
-    virtual int getSensorNumberIntern() {return sensorno; }
+    virtual int getSensorNumberIntern() override {return sensorno; }
 
     /** returns number of motors
      */
-    virtual int getMotorNumberIntern() {return motorno; }
+    virtual int getMotorNumberIntern() override {return motorno; }
 
     /** this function is called in each timestep. It should perform robot-internal checks,
         like space-internal collision detection, sensor resets/update etc.
         @param globalData structure that contains global data from the simulation environment
     */
-    virtual void doInternalStuff(GlobalData& globalData) {}
+    virtual void doInternalStuff(const GlobalData& globalData) override {}
 
   protected:
     /** the main object of the robot, which is used for position and speed tracking */
-    virtual Primitive* getMainPrimitive() const { return dummy; }
+    virtual Primitive* getMainPrimitive() const override { return dummy; }
 
   protected:
     DummyPrimitive *dummy;
-    int sensorno;      //number of sensors
-    int motorno;       // number of motors
+    int sensorno = 0;      //number of sensors
+    int motorno = 0;       // number of motors
     double* motors;
   } ;
 

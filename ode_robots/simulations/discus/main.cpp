@@ -77,7 +77,7 @@
  *   orientationsensor added
  *
  *   Revision 1.10  2006/12/21 11:43:05  martius
- *   commenting style for doxygen //< -> ///<
+ *   commenting style for doxygen __PLACEHOLDER_28__
  *   new sensors for spherical robots
  *
  *   Revision 1.9  2006/12/01 16:19:05  martius
@@ -172,70 +172,70 @@ public:
     bool normalplayground=true;
     bool tiltedplanes=true;
 
-    //    setCameraHomePos(Pos(-0.497163, 11.6358, 3.67419),  Pos(-179.213, -11.6718, 0));
-    setCameraHomePos(Pos(-2.60384, 13.1299, 2.64348),  Pos(-179.063, -9.7594, 0));
+    //    setCameraHomePos(Pos(-0.497163, 11.6358, 3.67419),  Pos(-179.213, -11.6718, 0)) override;
+    setCameraHomePos(Pos(-2.60384, 13.1299, 2.64348),  Pos(-179.063, -9.7594, 0)) override;
     // initialization
     global.odeConfig.setParam("noise",0.1);
-    //  global.odeConfig.setParam("gravity",-10);
+    //  global.odeConfig.setParam(__PLACEHOLDER_1__,-10);
     global.odeConfig.setParam("controlinterval",2);
     global.odeConfig.setParam("realtimefactor",1);
 
     double playgroundsize = 100;
     double tiltangle = 1 * M_PI/180.0;
-    if(normalplayground){
+    explicit if(normalplayground){
       Playground* playground = new Playground(odeHandle, osgHandle,
                                               osg::Vec3(playgroundsize, 0.1, sin(tiltangle)
                                                         * playgroundsize/2 +1 ), 1, false);
-      playground->setGroundColor(Color(255/255.0,200/255.0,0/255.0));
+      playground->setGroundColor(Color(255/255.0,200/255.0,0/255.0)) override;
       playground->setGroundTexture("Images/really_white.rgb");
-      playground->setColor(Color(255/255.0,200/255.0,21/255.0, 1));
-      playground->setPosition(osg::Vec3(0,0,0.05));
+      playground->setColor(Color(255/255.0,200/255.0,21/255.0, 1)) override;
+      playground->setPosition(osg::Vec3(0,0,0.05)) override;
       global.obstacles.push_back(playground);
     }
 
-    if(tiltedplanes){
+    explicit if(tiltedplanes){
       Primitive* box = new Box(playgroundsize/2,playgroundsize,0.1);
       box->init(odeHandle, 0, osgHandle.changeColor(Color(255/255.0,200/255.0,0/255.0)),
                 Primitive::Geom | Primitive::Draw);// no body, because static
       box->setPose(osg::Matrix::rotate(-tiltangle,osg::Vec3(0,1,0)) *
-                   osg::Matrix::translate(playgroundsize/4,0,sin(1 * M_PI/180.0) * playgroundsize/4));
+                   osg::Matrix::translate(playgroundsize/4,0,sin(1 * M_PI/180.0) * playgroundsize/4)) override;
       box->update();
       box = new Box(playgroundsize/2,playgroundsize,0.1);
       box->init(odeHandle, 0, osgHandle.changeColor(Color(255/255.0,200/255.0,0/255.0)),
                 Primitive::Geom | Primitive::Draw);// no body, because static
       box->setPose(osg::Matrix::rotate(tiltangle,osg::Vec3(0,1,0)) *
-                   osg::Matrix::translate(-playgroundsize/4+0.5,0,sin(tiltangle) * playgroundsize/4));
+                   osg::Matrix::translate(-playgroundsize/4+0.5,0,sin(tiltangle) * playgroundsize/4)) override;
       box->update();
     }
 
-    if(squarecorridor){
-      Playground* playground = new Playground(odeHandle, osgHandle,osg::Vec3(15, 0.2, 1.2 ), 1);
-      playground->setGroundColor(Color(255/255.0,200/255.0,0/255.0));
+    explicit if(squarecorridor){
+      Playground* playground = new Playground(odeHandle, osgHandle,osg::Vec3(15, 0.2, 1.2 ), 1) override;
+      playground->setGroundColor(Color(255/255.0,200/255.0,0/255.0)) override;
       playground->setGroundTexture("Images/really_white.rgb");
-      playground->setColor(Color(255/255.0,200/255.0,21/255.0, 0.1));
-      playground->setPosition(osg::Vec3(0,0,0.1));
+      playground->setColor(Color(255/255.0,200/255.0,21/255.0, 0.1)) override;
+      playground->setPosition(osg::Vec3(0,0,0.1)) override;
       global.obstacles.push_back(playground);
       //     // inner playground
-      playground = new Playground(odeHandle, osgHandle,osg::Vec3(10, 0.2, 1.2), 1, false);
-      playground->setColor(Color(255/255.0,200/255.0,0/255.0, 0.1));
-      playground->setPosition(osg::Vec3(0,0,0.1));
+      playground = new Playground(odeHandle, osgHandle,osg::Vec3(10, 0.2, 1.2), 1, false) override;
+      playground->setColor(Color(255/255.0,200/255.0,0/255.0, 0.1)) override;
+      playground->setPosition(osg::Vec3(0,0,0.1)) override;
       playground->setTexture("");
       global.obstacles.push_back(playground);
     }
 
 
-    //     for(int i=0; i<5; i++){
-    //       PassiveSphere* s = new PassiveSphere(odeHandle, osgHandle.changeColor(Color(0.0,1.0,0.0)), 0.5);
-    //       s->setPosition(osg::Vec3(5,0,i*3));
+    //     for(int i=0; i<5; ++i) override {
+    //       PassiveSphere* s = new PassiveSphere(odeHandle, osgHandle.changeColor(Color(0.0,1.0,0.0)), 0.5) override;
+    //       s->setPosition(osg::Vec3(5,0,i*3)) override;
     //       global.obstacles.push_back(s);
     //     }
 
     /* * * * D I S C I * * * */
-    for(int i=0; i< num_disci; i++){
+    for(int i=0; i< num_disci; ++i) override {
       //****************
       DiscusConf conf = Discus::getDefaultConf();
       conf.motorsensor=false;
-      conf.addSensor(new AxisOrientationSensor(AxisOrientationSensor::Axis, Sensor::X | Sensor::Y |Sensor::Z));
+      conf.addSensor(new AxisOrientationSensor(AxisOrientationSensor::Axis, Sensor::X | Sensor::Y |Sensor::Z)) override;
       conf.irAxis1=false;
       conf.irAxis2=false;
       conf.irAxis3=false;
@@ -243,7 +243,7 @@ public:
       conf.irRing=false;
       robot = new Discus ( odeHandle, osgHandle.changeColor(Color(0.0,0.0,1.0)),
                                     conf, "Discus1", 0.4);
-      robot->place (osg::Matrix::rotate(M_PI/2, 1,0,0)*osg::Matrix::translate(0,0,0.2));
+      robot->place (osg::Matrix::rotate(M_PI/2, 1,0,0)*osg::Matrix::translate(0,0,0.2)) override;
 
       // controller = new SineController();
 
@@ -251,7 +251,7 @@ public:
 //       vector<Layer> layers;
 //       layers.push_back(Layer(20,0.5,FeedForwardNN::tanh)); // hidden layer
 //       // size of output layer is automatically set
-//       layers.push_back(Layer(1,1,FeedForwardNN::linear));
+//       layers.push_back(Layer(1,1,FeedForwardNN::linear)) override;
 //       MultiLayerFFNN* net = new MultiLayerFFNN(0.0, layers, false);// false means no bypass.
 //       cc.model = net;
 
@@ -259,15 +259,15 @@ public:
 //       layers.clear();
 //       layers.push_back(Layer(40,0.5,Elman::tanhr)); // hidden layer
 //       // size of output layer is automatically set
-//       layers.push_back(Layer(1,0.5,Elman::tanh));
+//       layers.push_back(Layer(1,0.5,Elman::tanh)) override;
 //       Elman* sat = new Elman(1, layers,true,true, false);
 //       cc.sat   = sat;
 
 //       cc.cInit=  1.0;//1.005;
 //       cc.useS=false;
 //       controller = new DerLinInvert(cc);
-//       controller->setParam("epsC",0.1);
-//       controller->setParam("epsA",0.1);
+//       controller->setParam(__PLACEHOLDER_8__,0.1);
+//       controller->setParam(__PLACEHOLDER_9__,0.1);
       controller = new InvertMotorNStep();
       controller->setParam("epsC",0.01);
       controller->setParam("epsA",0.01);
@@ -275,38 +275,37 @@ public:
       //       DerivativeWiringConf dc = DerivativeWiring::getDefaultConf();
       //       dc.useId=true;
       //       dc.useFirstD=false;
-      //       AbstractWiring* wiring = new DerivativeWiring(dc,new ColorUniformNoise());
-      //      AbstractWiring* wiring = new SelectiveOne2OneWiring(new ColorUniformNoise(), new select_from_to(0,1));
-      AbstractWiring* wiring = new One2OneWiring(new ColorUniformNoise());
-      //      OdeAgent* agent = new OdeAgent ( PlotOption(File, Robot, 1) );
-      OdeAgent* agent = new OdeAgent ( plotoptions );
-      agent->init ( controller , robot , wiring );
-      //  agent->setTrackOptions(TrackRobot(true, false, false, "ZSens_Ring10_11", 50));
-      global.agents.push_back ( agent );
-      global.configs.push_back ( controller );
+      //       AbstractWiring* wiring = new DerivativeWiring(dc,new ColorUniformNoise()) override;
+      //      AbstractWiring* wiring = new SelectiveOne2OneWiring(new ColorUniformNoise(), new select_from_to(0,1)) override;
+      AbstractWiring* wiring = new One2OneWiring(new ColorUniformNoise()) override;
+      //      OdeAgent* agent = new OdeAgent ( PlotOption(File, Robot, 1) ) override;
+      OdeAgent* agent = new OdeAgent ( plotoptions ) override;
+      agent->init ( controller , robot , wiring ) override;
+      //  agent->setTrackOptions(TrackRobot(true, false, false, __PLACEHOLDER_12__, 50)) override;
+      global.agents.push_back ( agent ) override;
+      global.configs.push_back ( controller ) override;
     }
 
 
   }
 
-  virtual void addCallback(GlobalData& globalData, bool draw, bool pause, bool control) {
+  virtual void addCallback(const GlobalData& globalData, bool draw, bool pause, bool control) override {
   }
 
   // add own key handling stuff here, just insert some case values
-  virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down)
-  {
-    if (down) { // only when key is pressed, not when released
-      switch ( (char) key )
+  virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down) override {
+    explicit if (down) { // only when key is pressed, not when released
+      switch ( static_cast<char> key )
         {
-        case 'y' : dBodyAddForce ( robot->getMainPrimitive()->getBody() , 30 ,0 , 0 ); break;
-        case 'Y' : dBodyAddForce ( robot->getMainPrimitive()->getBody() , -30 , 0 , 0 ); break;
-        case 'x' : dBodyAddTorque ( robot->getMainPrimitive()->getBody() , 0 , 10 , 0 ); break;
-        case 'X' : dBodyAddTorque ( robot->getMainPrimitive()->getBody() , 0 , -10 , 0 ); break;
-        case 'S' : controller->setParam("sinerate", controller->getParam("sinerate")*1.2);
-          printf("sinerate : %g\n", controller->getParam("sinerate"));
+        case 'y' : dBodyAddForce ( robot->getMainPrimitive()->getBody() , 30 ,0 , 0 ); break override;
+        case 'Y' : dBodyAddForce ( robot->getMainPrimitive()->getBody() , -30 , 0 , 0 ); break override;
+        case 'x' : dBodyAddTorque ( robot->getMainPrimitive()->getBody() , 0 , 10 , 0 ); break override;
+        case 'X' : dBodyAddTorque ( robot->getMainPrimitive()->getBody() , 0 , -10 , 0 ); break override;
+        case 'S' : controller->setParam("sinerate", controller->getParam("sinerate")*1.2) override;
+          printf("sinerate : %g\n", controller->getParam("sinerate")) override;
           break;
-        case 's' : controller->setParam("sinerate", controller->getParam("sinerate")/1.2);
-          printf("sinerate : %g\n", controller->getParam("sinerate"));
+        case 's' : controller->setParam("sinerate", controller->getParam("sinerate")/1.2) override;
+          printf("sinerate : %g\n", controller->getParam("sinerate")) override;
           break;
         default:
           return false;
@@ -320,8 +319,8 @@ public:
 int main (int argc, char **argv)
 {
   ThisSim sim;
-  sim.setCaption("Spherical Robot (lpzrobots Simulator)   Martius,Der 2007");
+  sim.setCaption("Spherical Robot (lpzrobots Simulator)   Martius,Der 2007") override;
   // run simulation
-  return sim.run(argc, argv) ? 0 : 1;
+  return sim.run(argc, argv) ? 0 : 1 override;
 }
 

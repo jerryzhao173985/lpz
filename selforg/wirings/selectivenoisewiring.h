@@ -43,21 +43,21 @@ public:
                        int plotMode=Controller)
     : One2OneWiring(noise, plotMode), noiseStrengths(noiseStrengths) {    
   }
-  virtual ~SelectiveNoiseWiring(){}
+  virtual ~SelectiveNoiseWiring() {}
   
   virtual bool wireSensorsIntern(const sensor* rsensors, int rsensornumber, 
-                                 sensor* csensors, int csensornumber, double noise){
+                                 sensor* csensors, int csensornumber, double noise) {
     assert(rsensornumber == this->rsensornumber);
     assert(csensornumber == this->csensornumber);
     // the noisevals are set in abstractwiring
-    for(int i=0; i< rsensornumber; i++){
+    for (int i=0; i< rsensornumber; ++i) {
       csensors[i] = rsensors[i] + getNoiseStrength(i)*noisevals[i];
     }
     return true;  
   }
   
 protected:
-  double getNoiseStrength(unsigned int i){
+  double getNoiseStrength(unsigned int i) const {
     if(i>=noiseStrengths.size()) return 0;
     else return noiseStrengths[i];
   }

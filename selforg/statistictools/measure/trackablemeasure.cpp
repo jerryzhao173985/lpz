@@ -49,8 +49,7 @@ void TrackableMeasure::addDimension(short dim, std::list<Position> cornerPointLi
 double TrackableMeasure::findRange(std::list<Position> positionList,short dim, bool min)
 {
   double range = -1e20;
-  if (min)
-    range*=-1;
+  if (min) range*=-1;
   FOREACH(std::list<Position>, positionList, i){
     double val = (i)->toArray()[dim];
     if (min) {

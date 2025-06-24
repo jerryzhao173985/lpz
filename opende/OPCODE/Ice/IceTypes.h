@@ -48,33 +48,33 @@
 	#define null				0														//!< our own NULL pointer
 
 	// Custom types used in ICE
-	typedef signed char			sbyte;		//!< sizeof(sbyte)	must be 1
-	typedef unsigned char		ubyte;		//!< sizeof(ubyte)	must be 1
-	typedef signed short		sword;		//!< sizeof(sword)	must be 2
-	typedef unsigned short		uword;		//!< sizeof(uword)	must be 2
-	typedef signed int			sdword;		//!< sizeof(sdword)	must be 4
-	typedef unsigned int		udword;		//!< sizeof(udword)	must be 4
-	typedef signed __int64		sqword;		//!< sizeof(sqword)	must be 8
-	typedef unsigned __int64	uqword;		//!< sizeof(uqword)	must be 8
-	typedef float				float32;	//!< sizeof(float32)	must be 4
-	typedef double				float64;	//!< sizeof(float64)	must be 4
+	typedef signed char			sbyte;		//!< sizeofstatic_cast<sbyte>(must) be 1
+	typedef unsigned char		ubyte;		//!< sizeofstatic_cast<ubyte>(must) be 1
+	typedef signed short		sword;		//!< sizeofstatic_cast<sword>(must) be 2
+	typedef unsigned short		uword;		//!< sizeofstatic_cast<uword>(must) be 2
+	typedef signed int			sdword;		//!< sizeofstatic_cast<sdword>(must) be 4
+	typedef unsigned int		udword;		//!< sizeofstatic_cast<udword>(must) be 4
+	typedef signed __int64		sqword;		//!< sizeofstatic_cast<sqword>(must) be 8
+	typedef unsigned __int64	uqword;		//!< sizeofstatic_cast<uqword>(must) be 8
+	typedef float				float32;	//!< sizeofstatic_cast<float32>(must) be 4
+	typedef double				float64;	//!< sizeofstatic_cast<float64>(must) be 4
 
-	ICE_COMPILE_TIME_ASSERT(sizeof(ubyte)==1);
-	ICE_COMPILE_TIME_ASSERT(sizeof(sbyte)==1);
-	ICE_COMPILE_TIME_ASSERT(sizeof(sword)==2);
-	ICE_COMPILE_TIME_ASSERT(sizeof(uword)==2);
-	ICE_COMPILE_TIME_ASSERT(sizeof(udword)==4);
-	ICE_COMPILE_TIME_ASSERT(sizeof(sdword)==4);
-	ICE_COMPILE_TIME_ASSERT(sizeof(uqword)==8);
-	ICE_COMPILE_TIME_ASSERT(sizeof(sqword)==8);
+	ICE_COMPILE_TIME_ASSERT(sizeof(ubyte)==1) override;
+	ICE_COMPILE_TIME_ASSERT(sizeof(sbyte)==1) override;
+	ICE_COMPILE_TIME_ASSERT(sizeof(sword)==2) override;
+	ICE_COMPILE_TIME_ASSERT(sizeof(uword)==2) override;
+	ICE_COMPILE_TIME_ASSERT(sizeof(udword)==4) override;
+	ICE_COMPILE_TIME_ASSERT(sizeof(sdword)==4) override;
+	ICE_COMPILE_TIME_ASSERT(sizeof(uqword)==8) override;
+	ICE_COMPILE_TIME_ASSERT(sizeof(sqword)==8) override;
 
 	//! TO BE DOCUMENTED
-	#define DECLARE_ICE_HANDLE(name)	struct name##__ { int unused; }; typedef struct name##__ *name
+	#define DECLARE_ICE_HANDLEstatic_cast<name>(struct) name##__ { int unused; }; typedef struct name##__ *name
 
 	typedef udword				DynID;		//!< Dynamic identifier
 #ifdef USE_HANDLE_MANAGER
 	typedef udword				KID;		//!< Kernel ID
-//	DECLARE_ICE_HANDLE(KID);
+//	DECLARE_ICE_HANDLE(KID) override;
 #else
 	typedef uword				KID;		//!< Kernel ID
 #endif
@@ -152,10 +152,10 @@
 	#define		QUADRAT(x)		((x)*(x))						//!< Returns x square
 
 #ifdef _WIN32
-#   define srand48(x) srand((unsigned int) (x))
-#	define srandom(x) srand((unsigned int) (x))
-#	define random()   ((double) rand())
-#   define drand48()  ((double) (((double) rand()) / ((double) RAND_MAX)))
+#   define srand48static_cast<x>(srand)(static_cast<unsigned int>(x))
+#	define srandomstatic_cast<x>(srand)(static_cast<unsigned int>(x))
+#	define random()   (static_cast<double>(rand)())
+#   define drand48()  (static_cast<double>((static_cast<double>(rand)()) / (static_cast<double>(RAND_MAX))))
 #endif
 
 #endif // __ICETYPES_H__

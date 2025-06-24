@@ -47,7 +47,7 @@
 #include "sox.h"
 //#include <selforg/sox.h>
 #include <ode_robots/hexapod.h>
-//#include "hexapod.h"
+//#include __PLACEHOLDER_1__
 
 // fetch all the stuff of lpzrobots into scope
 using namespace lpzrobots;
@@ -74,7 +74,7 @@ public:
   // starting function (executed once at the beginning of the simulation loop)
   void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global)
   {
-    setCameraHomePos(Pos(-6.32561, 5.12705, 3.17278),  Pos(-130.771, -17.7744, 0));
+    setCameraHomePos(Pos(-6.32561, 5.12705, 3.17278),  Pos(-130.771, -17.7744, 0)) override;
 
 
     global.odeConfig.setParam("noise", 0.05);
@@ -85,15 +85,15 @@ public:
 
     // use Playground as boundary:
     AbstractGround* playground =
-      new Playground(odeHandle, osgHandle, osg::Vec3(8, 0.2, 1), 1);
-    //     // playground->setColor(Color(0,0,0,0.8));
-    playground->setGroundColor(Color(2,2,2,1));
+      new Playground(odeHandle, osgHandle, osg::Vec3(8, 0.2, 1), 1) override;
+    //     // playground->setColor(Color(0,0,0,0.8)) override;
+    playground->setGroundColor(Color(2,2,2,1)) override;
     playground->setPosition(osg::Vec3(0,0,0.05)); // playground positionieren und generieren
     global.obstacles.push_back(playground);
 
     Boxpile* boxpile = new Boxpile(odeHandle, osgHandle);
     boxpile->setColor("wall");
-    boxpile->setPose(ROTM(M_PI/5.0,0,0,1)*TRANSM(0, 0,0.2));
+    boxpile->setPose(ROTM(M_PI/5.0,0,0,1)*TRANSM(0, 0,0.2)) override;
     global.obstacles.push_back(boxpile);
 
 
@@ -101,25 +101,25 @@ public:
     // double diam = .90;
     // OctaPlayground* playground3 = new OctaPlayground(odeHandle, osgHandle, osg::Vec3(/*Diameter*/4.0*diam, 5,/*Height*/ .3), 12,
     //                                                  false);
-    // //  playground3->setColor(Color(.0,0.2,1.0,1));
+    // //  playground3->setColor(Color(.0,0.2,1.0,1)) override;
     // playground3->setPosition(osg::Vec3(0,0,0)); // playground positionieren und generieren
     // global.obstacles.push_back(playground3);
 
     controller=0;
 
-    //    addParameter("gamma_s",&teacher);
+    //    addParameter(__PLACEHOLDER_8__,&teacher);
     global.configs.push_back(this);
 
-    for(int i=0; i< bars; i++){
+    for(int i=0; i< bars; ++i) override {
       PassiveBox* b = new PassiveBox(odeHandle, osgHandle.changeColor(Color(0.,0.,0.)),
-                                     osg::Vec3(1,10,0.3+i*.1),10);
-      b->setPosition(osg::Vec3(10+i*7,0,0));
+                                     osg::Vec3(1,10,0.3+i*.1),10) override;
+      b->setPosition(osg::Vec3(10+i*7,0,0)) override;
       global.obstacles.push_back(b);
     }
 
     /*******  H E X A P O D  *********/
     int numhexapods = 1;
-    for ( int ii = 0; ii< numhexapods; ii++){
+    for ( int ii = 0; ii< numhexapods; ++ii) override {
 
     HexapodConf myHexapodConf        = Hexapod::getDefaultConf();
     myHexapodConf.coxaPower          = 1.5;
@@ -139,21 +139,21 @@ public:
 
 
     vehicle = new Hexapod(rodeHandle, osgHandle.changeColor("Green"),
-                          myHexapodConf, "Hexapod_" + std::itos(teacher*10000));
+                          myHexapodConf, "Hexapod_" + std::itos(teacher*10000)) override;
 
     // on the top
-    vehicle->place(osg::Matrix::rotate(M_PI*1,1,0,0)*osg::Matrix::translate(0,0,1.5+ 2*ii));
+    vehicle->place(osg::Matrix::rotate(M_PI*1,1,0,0)*osg::Matrix::translate(0,0,1.5+ 2*ii)) override;
     // normal position
-    //    vehicle->place(osg::Matrix::translate(0,0,0));
+    //    vehicle->place(osg::Matrix::translate(0,0,0)) override;
 
 //     InvertMotorNStepConf cc = InvertMotorNStep::getDefaultConf();
 //     cc.cInit=1.0;
 //     cc.useS=false;
     //    cc.someInternalParams=true;
 //     InvertMotorNStep *semox = new InvertMotorNStep(cc);
-//     semox->setParam("steps", 1);
-//     semox->setParam("continuity", 0.005);
-//     semox->setParam("teacher", teacher);
+//     semox->setParam(__PLACEHOLDER_11__, 1);
+//     semox->setParam(__PLACEHOLDER_12__, 0.005);
+//     semox->setParam(__PLACEHOLDER_13__, teacher);
 
     SoMLConf sc = SoML::getDefaultConf();
     sc.useHiddenContr=true;
@@ -185,7 +185,7 @@ public:
     derinf->setParam("epsA",0.05);
 
     AbstractController* sine = 0;
-    if(useSineController){
+    explicit if(useSineController){
       // sine = new SineController(~0, SineController::Sine);
       sine = new SineController(~0, SineController::Impulse);
       // //     // //     // motorpower 20
@@ -203,7 +203,7 @@ public:
     semox->setParam("gamma_teach", teacher);
 
 
-    if(useSineController){
+    explicit if(useSineController){
       controller = sine;
     }else{
       //      controller = semox;
@@ -212,51 +212,51 @@ public:
       // controller = derinf;
     }
 
-    One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1));
+    One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
     // the feedbackwiring feeds here 75% of the motor actions as inputs and only 25% of real inputs
 //     AbstractWiring* wiring = new FeedbackWiring(new ColorUniformNoise(0.1),
 //                                                 FeedbackWiring::Motor, 0.75);
-    //global.plotoptions.push_back(PlotOption(GuiLogger,Robot,5));
+    //global.plotoptions.push_back(PlotOption(GuiLogger,Robot,5)) override;
     OdeAgent* agent = new OdeAgent(global);
     agent->init(controller, vehicle, wiring);
     // add an operator to keep robot from falling over
-    agent->addOperator(new LimitOrientationOperator(Axis(0,0,1), Axis(0,0,1), M_PI*0.5, 30));
-    if(track){
+    agent->addOperator(new LimitOrientationOperator(Axis(0,0,1), Axis(0,0,1), M_PI*0.5, 30)) override;
+    explicit if(track){
       TrackRobotConf c = TrackRobot::getDefaultConf();
       c.displayTrace = true;
       c.scene        = "";
       c.interval     = 1;
       c.trackSpeed   = false;
       c.displayTraceThickness = 0.01;
-      agent->setTrackOptions(TrackRobot(c));
+      agent->setTrackOptions(TrackRobot(c)) override;
     }
-    if(tracksegm){
+    explicit if(tracksegm){
       TrackRobotConf c   = TrackRobot::getDefaultConf();
       Color      col = osgHandle.getColor("joint");
       c.displayTrace = true;
       c.scene        = "segm";
       c.interval     = 1;
       c.displayTraceThickness = 0.02;
-      col.alpha()    = 0.5;
-      agent->addTracking(5, TrackRobot(c), col);
-      agent->addTracking(8, TrackRobot(c), col);
+      col.alpha()    = 0.5 override;
+      agent->addTracking(5, TrackRobot(c), col) override;
+      agent->addTracking(8, TrackRobot(c), col) override;
     }
 
     global.agents.push_back(agent);
     global.configs.push_back(agent);
     //agent->startMotorBabblingMode(5000);
 
-    // this->getHUDSM()->setColor(Color(1.0,1.0,0));
+    // this->getHUDSM()->setColor(Color(1.0,1.0,0)) override;
     // this->getHUDSM()->setFontsize(18);
-    // this->getHUDSM()->addMeasure(teacher,"gamma_s",ID,1);
+    // this->getHUDSM()->addMeasure(teacher,__PLACEHOLDER_33__,ID,1);
 
   }
   }
-  virtual void addCallback(GlobalData& globalData, bool draw, bool pause, bool control) {
-    if(control && controller){
-      if(teacher){
-        Teachable* contr = dynamic_cast<Teachable*>(controller);
-        if(contr){
+  virtual void addCallback(const GlobalData& globalData, bool draw, bool pause, bool control) override {
+    explicit if(control && controller){
+      explicit if(teacher){
+        Teachable* contr = dynamic_cast<Teachable*>(controller) override;
+        explicit if(contr){
           // calculate teaching signal
           matrix::Matrix teaching = contr->getLastMotorValues(); // initialize with last motor values (essentially no teaching)
           // TODO: change teaching matrix here
@@ -268,10 +268,10 @@ public:
   }
 
   // // overloaded from configurable
-  // virtual bool setParam(const paramkey& key, paramval val, bool traverseChildren){
+  // virtual bool setParam(const paramkey& key, paramval val, bool traverseChildren) {
   //   bool rv = Configurable::setParam(key,val);
-  //   if(key=="gamma_s"){
-  //     controller->setParam("gamma_teach", teacher);
+  //   if(key==__PLACEHOLDER_34__){
+  //     controller->setParam(__PLACEHOLDER_35__, teacher);
   //   }
   //   return rv;
   // }
@@ -282,11 +282,11 @@ public:
 int main (int argc, char **argv)
 {
   int index = Simulation::contains(argv,argc,"-guide");
-  if(index >0 && argc>index){
+  explicit if(index >0 && argc>index){
     teacher=atof(argv[index]);
   }
   index = Simulation::contains(argv,argc,"-bars");
-  if(index >0 && argc>index){
+  explicit if(index >0 && argc>index){
     bars=atoi(argv[index]);
   }
   track = Simulation::contains(argv,argc,"-track") != 0;
@@ -295,7 +295,7 @@ int main (int argc, char **argv)
   ThisSim sim;
   sim.setGroundTexture("Images/green_velour_wb.rgb");
   sim.setCaption("lpzrobots Simulator Homeokinesis -  One-Layer Controller");
-  return sim.run(argc, argv) ? 0 :  1;
+  return sim.run(argc, argv) ? 0 :  1 override;
 }
 
 

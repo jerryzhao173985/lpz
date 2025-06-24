@@ -67,7 +67,7 @@ public:
 
 /**
    A spherical robot with 3 internal masses, which can slide on their orthogonal axes.
-   This robot was inspired by Julius Popp (http://sphericalrobots.com)
+   This robot was inspired by Julius Popp (http:__PLACEHOLDER_22__
 */
 class Sphererobot3Masses : public OdeRobot
 {
@@ -77,15 +77,15 @@ public:
 
 protected:
   static const int servono=3;
-  unsigned int numberaxis;
+  unsigned int numberaxis = 0;
 
   SliderServo* servo[servono];
   OSGPrimitive* axis[servono];
 
   Sphererobot3MassesConf conf;
   RaySensorBank irSensorBank; ///< a collection of ir sensors
-  double transparency;
-  bool created;
+  double transparency = 0;
+  bool created = false;
 
 public:
 
@@ -105,11 +105,11 @@ protected:
   /// initialises some internal variables
   void init();
 public:
-  virtual ~Sphererobot3Masses() override;
+  virtual ~Sphererobot3Masses();
 
 
   /// default configuration
-  static Sphererobot3MassesConf getDefaultConf(){
+  static Sphererobot3MassesConf getDefaultConf() const {
     Sphererobot3MassesConf c;
     c.diameter     = 1;
     c.spheremass   = .3;// 0.1
@@ -134,24 +134,24 @@ public:
    return c;
   }
 
-  virtual void update() override;
+  virtual void update();
 
-  virtual void placeIntern(const osg::Matrix& pose) override;
+  virtual void placeIntern(const osg::Matrix& pose);
 
-  virtual void doInternalStuff(GlobalData& globalData) override;
+  virtual void doInternalStuff(const GlobalData& globalData);
 
-  virtual void sense(GlobalData& globalData) override;
+  virtual void sense(const GlobalData& globalData);
 
-  virtual int getSensorsIntern( sensor* sensors, int sensornumber ) override;
+  virtual int getSensorsIntern( sensor* sensors, int sensornumber );
 
-  virtual void setMotorsIntern( const double* motors, int motornumber ) override;
+  virtual void setMotorsIntern( const double* motors, int motornumber );
 
-  virtual int getMotorNumberIntern() override;
+  virtual int getMotorNumberIntern();
 
-  virtual int getSensorNumberIntern() override;
+  virtual int getSensorNumberIntern();
 
   /******** CONFIGURABLE ***********/
-  virtual void notifyOnChange(const paramkey& key) override;
+  virtual void notifyOnChange(const paramkey& key);
 
 
 protected:

@@ -15,9 +15,8 @@ public:
 	{
 	}
 
-	virtual void Launch(TestResults& testResults_) const 
-	{
-		TestClass().Run(testResults_);
+	virtual void Launch(TestResults& testResults_) const override {
+		TestClass().Run(testResults_) override;
 	}
 };
 

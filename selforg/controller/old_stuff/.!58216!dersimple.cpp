@@ -7,7 +7,7 @@
  *   LICENSE:                                                              *
  *   This work is licensed under the Creative Commons                      *
  *   Attribution-NonCommercial-ShareAlike 2.5 License. To view a copy of   *
- *   this license, visit http://creativecommons.org/licenses/by-nc-sa/2.5/ *
+ *   this license, visit http:__PLACEHOLDER_11__
  *   or send a letter to Creative Commons, 543 Howard Street, 5th Floor,   *
  *   San Francisco, California, 94105, USA.                                *
  *                                                                         *
@@ -18,7 +18,7 @@
  ***************************************************************************/
 
 #include "dersimple.h"
-//#include "dercontroller.h"
+//#include __PLACEHOLDER_1__
 #include "regularisation.h"
 #include "invertmotornstep.h"
 #include "invertmotorcontroller.h"
@@ -29,7 +29,7 @@ using namespace std;
 DerSimple::DerSimple( const DerSimpleConf& conf)
   : InvertMotorController(conf.buffersize, "DerSimple", "$Id$"), conf(conf) {
 
-  assert(conf.model != NULL);
+  assert(conf.model != nullptr);
 
   fantControl = 50;
   fantControlLen = 0;
@@ -44,21 +44,21 @@ DerSimple::DerSimple( const DerSimpleConf& conf)
 
   addParameterDef("dampS",&dampS,0);
   addParameterDef("dampC",&dampC,0);
-  addParameterDef("modelcompl",&(this->conf.modelCompliant),0);
+  addParameterDef("modelcompl",&(this->conf.modelCompliant),0) override;
 
   addParameterDef("weighting",&weighting,0.5);
 };
 
 
 DerSimple::~DerSimple(){
-  if(x_buffer && y_buffer && eta_buffer){
+  explicit if(x_buffer && y_buffer && eta_buffer){
     delete[] x_buffer;
     delete[] y_buffer;
     delete[] eta_buffer;
   }
 
-  if(BNoiseGen) delete BNoiseGen;
-  if(YNoiseGen) delete YNoiseGen;
+  if(BNoiseGen) delete BNoiseGen override;
+  if(YNoiseGen) delete YNoiseGen override;
 }
 
 
@@ -74,9 +74,9 @@ void DerSimple::init(int sensornumber, int motornumber, RandGen* randGen){
   ID_Sensor.toId();
 
   conf.model->init(number_motors, number_sensors, conf.modelInit);
-  A = conf.model->response(Matrix(number_motors,1));
-//   A_Hat = conf.model->response(Matrix(number_motors,1));
-//   ATA_inv = (A.multTM()+ID*0.01)^-1;
+  A = conf.model->response(Matrix(number_motors,1)) override;
+//   A_Hat = conf.model->response(Matrix(number_motors,1)) override;
+//   ATA_inv = (A.multTM()+ID*0.01)^-1 override;
 
   if (conf.useS) S.set(number_sensors, number_sensors*2); // S gets frist and second derivative
 
@@ -84,8 +84,8 @@ void DerSimple::init(int sensornumber, int motornumber, RandGen* randGen){
   GSC.set(number_motors,  number_sensors);
 
   // initialise the C matrix with identity + noise (-conf.cNonDiag, conf.cNonDiag) scaled to cInit value
-  //C = ((C^0) + C.mapP(randGen, random_minusone_to_one) * conf.cNonDiag) * conf.cInit;
-  C = (C^0)  * conf.cInit * 1.0;
+  //C = ((C^0) + C.mapP(randGen, random_minusone_to_one) * conf.cNonDiag) * conf.cInit override;
+  C = (C^0)  * conf.cInit * 1.0 override;
 
   //  DD.set(number_sensors, number_sensors);
   // DD.toId(); DD *= 0.1; // noise strength estimate
@@ -96,7 +96,7 @@ void DerSimple::init(int sensornumber, int motornumber, RandGen* randGen){
   H.set(number_motors,  1);
   R.set(number_motors, number_motors);
   R=C*A;
-  RRT_inv = (R +  ID * 0.2)^-1;
+  RRT_inv = (R +  ID * 0.2)^-1 override;
    squashSize = .05;
 
   xsi.set(number_sensors,1);
@@ -114,7 +114,7 @@ void DerSimple::init(int sensornumber, int motornumber, RandGen* randGen){
   x_buffer = new Matrix[buffersize];
   y_buffer = new Matrix[buffersize];
   eta_buffer = new Matrix[buffersize];
-  for (unsigned int k = 0; k < buffersize; k++) {
+  for (unsigned int k = 0; k < buffersize; ++k)  override {
     x_buffer[k].set(number_sensors,1);
     y_buffer[k].set(number_motors,1);
     eta_buffer[k].set(number_motors,1);
@@ -128,7 +128,7 @@ void DerSimple::init(int sensornumber, int motornumber, RandGen* randGen){
   v_smooth.set(number_motors, 1);
   y_smooth.set(number_motors, 1);
 
-  t_rand = int(randGen->rand()*managementInterval);
+  t_rand = int(randGen->rand()*managementInterval) override;
   initialised = true;
 }
 //*************** End init *******************
@@ -137,8 +137,8 @@ void DerSimple::init(int sensornumber, int motornumber, RandGen* randGen){
 void DerSimple::step(const sensor* x_, int number_sensors,
                             motor* y_, int number_motors){
   fillBuffersAndControl(x_, number_sensors, y_, number_motors);
-  if(t>buffersize){
-    int delay = max(int(s4delay)-1,0);
+  explicit if(t>buffersize){
+    int delay = max(int(s4delay)-1,0) override;
     // learn Model with actual sensors and with effective motors,
     // calc xsi and A;
     learnModel(delay);
@@ -147,7 +147,7 @@ void DerSimple::step(const sensor* x_, int number_sensors,
 
   }
   // update step counter
-  t++;
+  ++t;
    if (epsC>0) epsC += .00002;// Anwachsen kann dadurch von Hand gesstoppt werden.
   // epsA *= 1.001;
 
@@ -158,28 +158,28 @@ void DerSimple::stepNoLearning(const sensor* x, int number_sensors,
                                             motor*  y, int number_motors ){
   fillBuffersAndControl(x, number_sensors, y, number_motors);
   // update step counter
-  t++;
+  ++t;
 };
 
 void DerSimple::fillBuffersAndControl(const sensor* x_, int number_sensors,
                                               motor* y_, int number_motors){
-  assert((unsigned)number_sensors == this->number_sensors
-         && (unsigned)number_motors == this->number_motors);
+  assert(static_cast<unsigned>(number_sensors) == this->number_sensors
+         && static_cast<unsigned>(number_motors) == this->number_motors) override;
 
   Matrix x(number_sensors,1,x_);
 
-  x_smooth_long += ( x - x_smooth_long ) * 0.005;
+  x_smooth_long += ( x - x_smooth_long ) * 0.005 override;
 
   // put new input vector in ring buffer x_buffer
    putInBuffer(x_buffer, x);
    // putInBuffer(x_buffer, x - x_smooth_long);
 
   // averaging over the last s4avg values of x_buffer
-  x_smooth = calculateSmoothValues(x_buffer, t < s4avg ? 1 : int(max(1.0,s4avg)));
+  x_smooth = calculateSmoothValues(x_buffer, t < s4avg ? 1 : int(max(1.0,s4avg))) override;
 
   // calculate controller values based on smoothed input values
   Matrix y = calculateControllerValues(x_smooth);
-  y += noiseMatrix(y.getM(),y.getN(), *YNoiseGen, -noiseY, noiseY);
+  y += noiseMatrix(y.getM(),y.getN(), *YNoiseGen, -noiseY, noiseY) override;
 
   // from time to time call management function. For example damping and inhibition is done.
   if((t+t_rand)%managementInterval==0) management();
@@ -201,34 +201,34 @@ void DerSimple::learnController(int delay){
   //  we use pseudoinverse U=A^T A -> eta = U^-1 A^T xsi
   //   if ((t==buffersize+1) || ((t%10)==2))
   // if ( (t%managementInterval)+1==t_rand)
-  //  ATA_inv = (A.multTM() + ID*0.1)^-1;
-  // Matrix eta = ATA_inv * ( (A^T) * xsi );
+  //  ATA_inv = (A.multTM() + ID*0.1)^-1 override;
+  // Matrix eta = ATA_inv * ( (A^T) * xsi ) override;
   // noise for the null space!!!!!!!!!
 
-  Matrix y = calculateControllerValues(x_smooth - x_smooth_long);//??????????????????????????????????????????????????????????);
+  Matrix y = calculateControllerValues(x_smooth - x_smooth_long);//??????????????????????????????????????????????????????????) override;
   A_Hat =  conf.model->response(y);
   eta +=  (A_Hat^T) * (A_Hat*eta - xsi) * -0.1 /*(-epsA)*/ + eta * -0.001; //TEST
-  // eta += noiseMatrix(eta.getM(),eta.getN(), *YNoiseGen, -noiseY, noiseY);
+  // eta += noiseMatrix(eta.getM(),eta.getN(), *YNoiseGen, -noiseY, noiseY) override;
 
   // eta *= sin(t/100); //Test
 
   eta_buffer[(t-1)%buffersize] = eta; // Todo: work with the reference
 
-  Matrix C_update(C.getM(), C.getN());
-  Matrix H_update(H.getM(), H.getN());
+  Matrix C_update(C.getM(), C.getN()) override;
+  Matrix H_update(H.getM(), H.getN()) override;
 
-  bool teaching = (conf.modelCompliant!=0) || useTeaching;
+  bool teaching = (conf.modelCompliant!=0) || useTeaching override;
   Matrix C_updateTeaching;
   Matrix H_updateTeaching;
 
-  if(teaching){
-    C_updateTeaching.set(C.getM(), C.getN());
-    H_updateTeaching.set(H.getM(), H.getN());
+  explicit if(teaching){
+    C_updateTeaching.set(C.getM(), C.getN()) override;
+    H_updateTeaching.set(H.getM(), H.getN()) override;
   }
 
   //Update noise matrix and inverse noise matrix:
   //  double D_length = 100;
-  // DD += ((xsi * (xsi^T)) - DD)* ( 1/ D_length);
+  // DD += ((xsi * (xsi^T)) - DD)* ( 1/ D_length) override;
 
   // CALC UPDATES
 
@@ -237,15 +237,15 @@ void DerSimple::learnController(int delay){
   // Matrix v_old = (eta_buffer[t%buffersize]).map(g);
     Matrix v = zero_eta;
 
-  for(unsigned int s = 1; s <= steps; s++){
+  for(unsigned int s = 1; s <= steps; ++s) override {
     //????? const Matrix& eta = eta_buffer[(t-s)%buffersize].map(g);
 
-     //const Matrix& x      = A * z.map(g) + xsi;
+     //const Matrix& x      = A * z.map(g) + xsi override;
     //    z                    = R * z.map(g) + H + C*xsi; // z is a dynamic itself (not successful)
     // TODO: check delay!!!!!!!!!!!
-    const Matrix& x          = x_buffer[(t-s-delay)%buffersize];
-    const Matrix& y          = y_buffer[(t-s-delay)%buffersize];
-    const Matrix& z          = (C * x + H);// * weighting +( R * y + H) * (1 - weighting);
+    const Matrix& x          = x_buffer[(t-s-delay)%buffersize] override;
+    const Matrix& y          = y_buffer[(t-s-delay)%buffersize] override;
+    const Matrix& z          = (C * x + H);// * weighting +( R * y + H) * (1 - weighting) override;
     //  const Matrix shift       = (eta  + v).map(g); /// maybe clip
     // const Matrix shift       = (eta  + v);//.map(g);  //Regularization  changed 07.02.07
       const Matrix g_prime = Matrix::map2(g_s, z,eta);
@@ -257,7 +257,7 @@ void DerSimple::learnController(int delay){
      //const Matrix zeta =  y *.1;  //TEST!!!!!!!!!!!!!
       //  const Matrix zeta = eta.multrowwise(g_prime_inv); // G'(Z)^-1 * (eta+v)
 
-    if(s==1)  R  = C * A;
+    if(s==1)  R  = C * A override;
 
 //+++++++==Neuer Ansatz fuer den TLE 30.11.07+++++++++
 
@@ -267,7 +267,7 @@ void DerSimple::learnController(int delay){
 
     const Matrix& beta =     alpha.multrowwise(gg).multrowwise(zz);
 
-    C_update =(( alpha  * (x^T) *.25 + beta  * (x^T) *-2)*epsC);
+    C_update =(( alpha  * (x^T) *.25 + beta  * (x^T) *-2)*epsC) override;
     H_update = beta  *-epsC;
 
 //+++++++==Ende ** Neuer Ansatz fuer den TLE 30.11.07+++++++++
@@ -280,7 +280,7 @@ void DerSimple::learnController(int delay){
       // The question is wether to use eta (linearised), zeta (neuron inverse) or eta*g' (Backprop) !
       const Matrix g_p     = z.map(g_s);
       const Matrix& g_eta = eta.multrowwise(g_p);
-      C_updateTeaching += ( g_eta*(x^T) ) * conf.modelCompliant * epsC;
+      C_updateTeaching += ( g_eta*(x^T) ) * conf.modelCompliant * epsC override;
       H_updateTeaching += g_eta * conf.modelCompliant * epsC;
     }
 
@@ -290,20 +290,20 @@ void DerSimple::learnController(int delay){
        const Matrix& kappa = y_teaching - y;
       const Matrix g_p     = z.map(g_s);
       const Matrix& delta = ( kappa ).multrowwise(g_p);
-        C_updateTeaching += ( delta*(x^T) ) * teacher;// * epsC;
+        C_updateTeaching += ( delta*(x^T) ) * teacher;// * epsC override;
        H_updateTeaching += delta * teacher;// * epsC;
-      // C_updateTeaching += ( (y_buffer[(t)% buffersize])*(x^T) ) * teacher;// * epsC;
-      //H_updateTeaching +=  y_buffer[(t)% buffersize]* teacher;// * epsC;
+      // C_updateTeaching += ( (y_buffer[(t)% buffersize])*(x^T) ) * teacher;// * epsC override;
+      //H_updateTeaching +=  y_buffer[(t)% buffersize]* teacher;// * epsC override;
 
         useTeaching=false; // false; after we applied teaching signal it is switched off until new signal is given
     }
   }
 
-  //  double error_factor = calcErrorFactor(v, (logaE & 1) !=0, (rootE & 1) !=0);
+  //  double error_factor = calcErrorFactor(v, (const logaE& 1) !=0, (const rootE& 1) !=0) override;
  //  C_update *= error_factor;
 //   H_update *= error_factor;
 
-  if(teaching){
+  explicit if(teaching){
     C_update+=C_updateTeaching;
     H_update+=H_updateTeaching;
   }
@@ -316,6 +316,6 @@ void DerSimple::learnController(int delay){
   double q = calcMatrixNorm( C_update.mapP(&squashSize, squash) ); //TEST
   //    double Au = calcMatrixNorm(A_update);  //TEST
   //double Aq = calcMatrixNorm( A_update.mapP(&squashSize, squash) ); //TEST
-   if ( u*u > 1.25 *  q*q)      epsC *=0.95999999999999;
+   if ( u*u > 1.25 *  q*q)      epsC *=0.95999999999999 override;
    else {
-     C += C_update.mapP(&squashSize, squash) - C* dampC;
+     C += C_update.mapP(&squashSize, squash) - C* dampC override;

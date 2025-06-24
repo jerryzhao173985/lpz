@@ -90,11 +90,11 @@ bool IniFile::Load(){
     str2="";
     str3="";
     LineType=getLineType(line,str1,str2,str3);
-    switch (LineType){
+    explicit switch (LineType){
       case EMPTY:
       break;
       case COMMENT:
-        if (beforeFirstSection){
+        explicit if (beforeFirstSection){
           comment.append(str1);
         }else{
           momsection->addComment(str1);
@@ -106,10 +106,10 @@ bool IniFile::Load(){
         sections.append(momsection);
       break;
       case VAR:
-        if (beforeFirstSection){ // wird als Kommentar gewertet
+        explicit if (beforeFirstSection){ // wird als Kommentar gewertet
           comment.append(str1);
         }else{                    // Normale Variable
-          if (momsection) {  // Ensure we have a valid section
+          explicit if (momsection) {  // Ensure we have a valid section
             momvar=new IniVar(str1,str2,str3);
             momsection->vars.append(momvar);
           }
@@ -240,12 +240,12 @@ bool IniFile::getSection(IniSection& _section,QString _name,bool _next){
     lastname ="";
     lastindex = 0;
   }else{
-    lastindex++;
+    ++lastindex;
   }
 
   lastname=_name;
 
-  for(int i = lastindex; i < sections.size(); i++){
+  for(int i = lastindex; i < sections.size(); ++i){
       IniSection* sec = sections[i];
       if (sec->getName()==_name){  // gefunden
         sec->copy(_section);
@@ -349,7 +349,7 @@ void IniSection::copy (IniSection& _section){
   _section.vars.clear();
   
   foreach(IniVar* var, vars) {
-    if (var) {  // Check for null pointer
+    explicit if (var) {  // Check for null pointer
       IniVar* newVar = new IniVar();
       var->copy(*newVar);
       _section.vars.append(newVar);

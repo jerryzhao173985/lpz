@@ -1,0 +1,46 @@
+[3J[H[2J[0;34m
+╔═══════════════════════════════════════╗
+║     LPZRobots Automated Build         ║
+╚═══════════════════════════════════════╝
+[0m
+
+[0;34m=== Build Configuration ===[0m
+  Installation prefix: /Users/jerry/lpzrobots
+  Installation type: USER
+  Parallel jobs: 16
+  Platform: Darwin arm64
+
+[0;34m=== Creating directories ===[0m
+[0;32m✓[0m Directories created
+[0;34m=== Cleaning previous builds ===[0m
+[0;32m✓[0m Previous builds cleaned
+[0;34m=== Configuring build system ===[0m
+Configuring lpzrobots installation...
+  PREFIX: /Users/jerry/lpzrobots
+  TYPE: USER
+Note: /Users/jerry/lpzrobots/bin is not in PATH
+Adding to ~/.bashrc and ~/.zshrc if they exist...
+Configuration complete!
+
+Summary:
+  Installation prefix: /Users/jerry/lpzrobots
+  Installation type: USER
+  Configuration saved to: Makefile.conf
+
+Next steps:
+  make all          - Build and install everything
+  make build-all-auto - Automated build with warning fixes
+
+[0;32m✓[0m Configuration complete
+[0;34m=== Pre-fixing common warnings ===[0m
+[0;32m✓[0m Warning fixes applied
+[0;34m=== Building components ===[0m
+
+  Building Utility Tools... [0;32m✓[0m (with 91 warnings)
+  Installing Utility Tools... [0;32m✓[0m
+
+  Building Self-Organization Library... [0;31m✗[0m
+[0;31m✗[0m Failed to build selforg. Check build_logs/selforg_build.log
+  Last errors:
+[0;34m=== Build Failed ===[0m
+[0;31m✗[0m Build process failed. Check logs in build_logs/

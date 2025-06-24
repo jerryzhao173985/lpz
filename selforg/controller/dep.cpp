@@ -6,7 +6,7 @@
  *   LICENSE:                                                              *
  *   This work is licensed under the Creative Commons                      *
  *   Attribution-NonCommercial-ShareAlike 2.5 License. To view a copy of   *
- *   this license, visit http://creativecommons.org/licenses/by-nc-sa/2.5/ *
+ *   this license, visit http:__PLACEHOLDER_59__
  *   or send a letter to Creative Commons, 543 Howard Street, 5th Floor,   *
  *   San Francisco, California, 94105, USA.                                *
  *                                                                         *
@@ -49,7 +49,7 @@ DEP::DEP(const DEPConf& conf)
                                     std::string(),
                                     [](const std::string& a, const auto& lr) {
                                       auto [rule, name] = lr;
-                                      return a + itos((int)rule) + ": " + name + ", ";
+                                      return a + itos(static_cast<int>(rule)) + ": " + name + ", ";
                                     }));
   addParameterDef(
     "timedist", &timedist, 1, 0, 10, "time distance of product terms in learning rule");
@@ -57,7 +57,7 @@ DEP::DEP(const DEPConf& conf)
     "synboost", &synboost, 5, 0, 1, "booster for synapses during motor signal creation");
   addParameterDef("urate", &urate, .1, 0, 5, "update rate ");
 
-  //  addParameterDef("maxspeed", &maxSpeed, 0.5,   0,2, "maximal speed for motors");
+  //  addParameterDef(__PLACEHOLDER_25__, &maxSpeed, 0.5,   0,2, __PLACEHOLDER_26__);
   addParameterDef("indnorm", &indnorm, 1, 0, 2, "individual normalization for each motor");
   addParameterDef("regularization",
                   &regularization,
@@ -67,7 +67,7 @@ DEP::DEP(const DEPConf& conf)
                   "exponent of regularization 10^{-regularization}");
 
   addInspectableMatrix("A", &A, false, "model matrix");
-  //  addInspectableMatrix("S", &S, true, "model matrix");
+  //  addInspectableMatrix(__PLACEHOLDER_33__, &S, true, __PLACEHOLDER_34__);
 
   if (conf.useExtendedModel)
     addInspectableMatrix("S", &S, false, "model matrix (sensor branch)");
@@ -148,13 +148,13 @@ DEP::step(const sensor* x_, int number_sensors, motor* y_, int number_motors) {
 
 void
 DEP::stepNoLearning(const sensor* x_, int number_sensors_robot, motor* y_, int number_motors_) {
-  assert((unsigned)number_sensors_robot <= this->number_sensors &&
-         (unsigned)number_motors_ <= this->number_motors);
+  assert(static_cast<unsigned>(number_sensors_robot) <= this->number_sensors &&
+         static_cast<unsigned>(number_motors_) <= this->number_motors);
 
   Matrix xrobot(number_sensors_robot, 1, x_); // store sensor values
 
   // averaging over the last s4avg values of x_buffer
-  // if ( damping ==0) for(int i = 18; i<36; i++) xrobot.val(i,0) = xrobot.val(i-18,0);
+  // if ( damping ==0) for(int i = 18; i<36; ++i) xrobot.val(i,0) = xrobot.val(i-18,0);
   if (s4avg > 1)
     x_smooth += (xrobot - x_smooth) * (1.0 / s4avg);
   else
@@ -162,7 +162,7 @@ DEP::stepNoLearning(const sensor* x_, int number_sensors_robot, motor* y_, int n
 
   x_buffer[t] = x_smooth;
 
-  // if(damping==0) for (int i=18; i<36;i++) x_buffer[t].val(i,0) = x_buffer[t-20].val(i,0);
+  // if(damping==0) for (int i=18; i<36;++i) x_buffer[t].val(i,0) = x_buffer[t-20].val(i,0);
 
   if (_internWithLearning)
     learnController();
@@ -184,7 +184,7 @@ DEP::stepNoLearning(const sensor* x_, int number_sensors_robot, motor* y_, int n
 
   y.convertToBuffer(y_, number_motors);
   // update step counter
-  t++;
+  ++t;
 };
 
 void
@@ -198,7 +198,7 @@ DEP::learnController() {
   const Matrix& xxx = x_buffer[t - 2 + offset];
   const Matrix& yy = y_buffer[t - 1];
   const Matrix& yyy = y_buffer[t - 2];
-  // cout <<"senasordiff="<< x.val(0,0) - x.val(18,0)<<endl;
+  // cout <<__PLACEHOLDER_57__<< x.val(0,0) - x.val(18,0)<<endl;
 
   Matrix mu;
   Matrix v;
@@ -247,7 +247,7 @@ DEP::learnController() {
       //***** individual normalization for each motor neuron***************
       // Matrix normmot(h);//just for Initialisierung
       const Matrix& CA = C * A;
-      for (int i = 0; i < number_motors; i++) {
+      for (int i = 0; i < number_motors; ++i) {
         double normi = sqrt(CA.row(i).norm_sqr()); // norm of one row
         normmot.val(i, 0) = .3 * synboost / (normi + reg);
       }
@@ -311,7 +311,7 @@ DEP::motorBabblingStep(const sensor* x_,
                        int number_sensors_robot,
                        const motor* y_,
                        int number_motors) {
-  assert((unsigned)number_motors <= this->number_motors);
+  assert(static_cast<unsigned>(number_motors) <= this->number_motors);
   Matrix x(number_sensors_robot, 1, x_); // convert to matrix
   Matrix y(number_motors, 1, y_);        // convert to matrix
   x_buffer[t] = x;
@@ -320,7 +320,7 @@ DEP::motorBabblingStep(const sensor* x_,
   // model learning
   learnModel(1.0 / (sqrt(t + 1)));
 
-  t++;
+  ++t;
 }
 
 /* stores the controller values to a given file. */

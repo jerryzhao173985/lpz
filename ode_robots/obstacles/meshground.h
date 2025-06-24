@@ -57,22 +57,22 @@ namespace lpzrobots {
     /**
      * updates the position of the geoms  ( not nessary for static objects)
      */
-    virtual void update(){ };
+    virtual void update() override { } override;
 
-    virtual void setPose(const osg::Matrix& pose) override;
+    virtual void setPose(const osg::Matrix& pose);
 
 
   protected:
-    virtual void create() override;
-    virtual void destroy() override;
+    virtual void create();
+    virtual void destroy();
 
   protected:
     std::string filename;
     std::string texture;
     HeightField* heightfield;
-    double x_size;
-    double y_size;
-    double height;
+    double x_size = 0;
+    double y_size = 0;
+    double height = 0;
     OSGHeightField::CodingMode coding;
   };
 }

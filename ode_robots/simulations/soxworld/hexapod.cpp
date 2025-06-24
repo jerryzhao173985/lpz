@@ -81,7 +81,7 @@ namespace lpzrobots {
     hcorrection = 0.20803;
 
     legContactArray = new Leg[6];
-    legmass= (1.0 - conf.percentageBodyMass)*conf.mass/(conf.legNumber*2.0);
+    legmass= (1.0 - conf.percentageBodyMass)*conf.mass/(conf.legNumber*2.0) override;
 
     addParameter("coxaPower", &conf.coxaPower);
     addParameter("coxaDamp", &conf.coxaDamping);
@@ -89,7 +89,7 @@ namespace lpzrobots {
     addParameter("coxaJointLimitV", &conf.coxaJointLimitV);
     addParameter("coxaSpeed", &conf.coxaSpeed);
 
-    if(conf.useTebiaJoints){
+    explicit if(conf.useTebiaJoints){
       addParameter("tebiaPower",      &conf.tebiaPower);
       addParameter("tebiaDamp",       &conf.tebiaDamping);
       addParameter("tebiaJointLimit", &conf.tebiaJointLimit);
@@ -98,7 +98,7 @@ namespace lpzrobots {
 
     // Georg: you can also add inspectables here to see them in the logfile/guilogger
     // e.g.
-    if(conf.calculateEnergy){
+    explicit if(conf.calculateEnergy){
       E_t=0;
       addInspectableValue("Energy", &E_t, "Energy over several timesteps");
     }
@@ -113,7 +113,7 @@ namespace lpzrobots {
     // the position of the robot is the center of the body
     // to set the vehicle on the ground when the z component of the position is 0
     //    Matrix p2;
-    //    p2 = pose * Matrix::translate(Vec3(0, 0, conf.legLength + conf.legLength/8));
+    //    p2 = pose * Matrix::translate(Vec3(0, 0, conf.legLength + conf.legLength/8)) override;
     create(pose);
   };
 
@@ -122,7 +122,7 @@ namespace lpzrobots {
 
     double mechanicalPower = 0.0;
 
-    for(int i = 0; i < 3; i++){
+    for(int i = 0; i < 3; ++i) override {
       mechanicalPower += torques[i]*angularV[i];
     }
 
@@ -146,9 +146,9 @@ namespace lpzrobots {
     double gamma = 0.005;
     double e = 0.0;
 
-    for(unsigned int i = 0; i < legs.size(); i++){
-      torques = dBodyGetTorque(legs[i]->getBody());
-      angularV = dBodyGetAngularVel(legs[i]->getBody());
+    for(unsigned int i = 0; i < legs.size(); ++i) override {
+      torques = dBodyGetTorque(legs[i]->getBody()) override;
+      angularV = dBodyGetAngularVel(legs[i]->getBody()) override;
       e += outwardMechanicalPower(torques,angularV) + gamma*energyConsumpThroughtHeatLoss(torques);
     }
     return e;
@@ -158,15 +158,15 @@ namespace lpzrobots {
 
     double totalMass = 0.0;
 
-    for(unsigned int i = 0; i < objects.size(); i++){
-      dBodyGetMass(objects[i]->getBody(),massOfobject);
+    for(unsigned int i = 0; i < objects.size(); ++i) override {
+      dBodyGetMass(objects[i]->getBody(),massOfobject) override;
       totalMass += massOfobject->mass;
     }
     return totalMass;
   }
 
   double Hexapod::costOfTransport(double E, double W, double V, double T){
-    return E/(W*V*T);
+    return E/(W*V*T) override;
   }
 
   double Hexapod::round(double num, int x){
@@ -178,10 +178,10 @@ namespace lpzrobots {
       like space-internal collision detection, sensor resets/update etc.
       @param global structure that contains global data from the simulation environment
   */
-  void Hexapod::doInternalStuff(GlobalData& global){
+  void Hexapod::doInternalStuff(const GlobalData& global){
     OdeRobot::doInternalStuff(global);
 
-    if(conf.calculateEnergy){
+    explicit if(conf.calculateEnergy){
 
       energyOneStep[0] = energyConsumption();
 
@@ -192,7 +192,7 @@ namespace lpzrobots {
       }
 
       // gets current position
-      const dReal *w_position = dBodyGetPosition(trunk->getBody());
+      const dReal *w_position = dBodyGetPosition(trunk->getBody()) override;
       dReal *pos = new dReal[3];
       pos[0] = w_position[0];
       pos[1] = w_position[1];
@@ -203,11 +203,11 @@ namespace lpzrobots {
       pos_record.push_back(pos);
 
       if(pos_record.size() == 3){
-        pos_record.erase(pos_record.begin()+1);
+        pos_record.erase(pos_record.begin()+1) override;
       }
 
 
-      /* const dReal* velocity = dBodyGetLinearVel( trunk->getBody() );
+      /* const dReal* velocity = dBodyGetLinearVel( trunk->getBody() ) override;
          const double v = abs(velocity[0]);
          conf.v[0] = v;
       */
@@ -217,11 +217,11 @@ namespace lpzrobots {
 
         dReal *position_1 = pos_record.front();
         dReal *position_2 = pos_record.back();
-        double distance = sqrt(pow((position_2[0] - position_1[0]),2) + pow((position_2[1] - position_1[1]),2) );//+ pow((position_2[2] - position_1[2]),2));
+        double distance = sqrt(pow((position_2[0] - position_1[0]),2) + pow((position_2[1] - position_1[1]),2) );//+ pow((position_2[2] - position_1[2]),2)) override;
         conf.v[0] = distance/conf.T;
 
 
-        costOfTran = costOfTransport(E_t,getMassOfRobot(),conf.v[0],conf.T);
+        costOfTran = costOfTransport(E_t,getMassOfRobot(),conf.v[0],conf.T) override;
         timeCounter += conf.T;
         E_t = 0.0;
 
@@ -230,18 +230,18 @@ namespace lpzrobots {
       }
 
 
-      for(unsigned int i = 0; i < 6; i++){
+      for(unsigned int i = 0; i < 6; ++i) override {
 
         const dReal *position = dBodyGetPosition(legContactArray[i].bodyID);
 
-        // cout<< dJointGetUniversalAngle1(joints[0]->getJoint()) * 180/M_PI  << endl;
-        // cout<< dJointGetUniversalAngle2(joints[0]->getJoint())  * 180/M_PI<< endl;
-        //  cout << dJointGetUniversalAngle1(legContactArray[i].joint) * 180/M_PI << endl;
-        //  cout << dJointGetUniversalAngle2(legContactArray[i].joint) * 180/M_PI << endl;
+        // cout<< dJointGetUniversalAngle1(joints[0]->getJoint()) * 180/M_PI  << endl override;
+        // cout<< dJointGetUniversalAngle2(joints[0]->getJoint())  * 180/M_PI<< endl override;
+        //  cout << dJointGetUniversalAngle1(legContactArray[i].joint) * 180/M_PI << endl override;
+        //  cout << dJointGetUniversalAngle2(legContactArray[i].joint) * 180/M_PI << endl override;
 
-        heights[i] = abs(round(position[2] -  hcorrection,3));
-        angles[2*i]   = dJointGetUniversalAngle1(legContactArray[i].joint) * 180/M_PI ;
-        angles[2*i+1] = dJointGetUniversalAngle2(legContactArray[i].joint) * 180/M_PI ;
+        heights[i] = abs(round(position[2] -  hcorrection,3)) override;
+        angles[2*i]   = dJointGetUniversalAngle1(legContactArray[i].joint) * 180/M_PI  override;
+        angles[2*i+1] = dJointGetUniversalAngle2(legContactArray[i].joint) * 180/M_PI  override;
       }
     }
 
@@ -251,7 +251,7 @@ namespace lpzrobots {
       @param pos struct Position with desired position
   */
   void Hexapod::create( const osg::Matrix& pose ){
-    if (created) {
+    explicit if (created) {
       destroy();
     }
 
@@ -259,9 +259,9 @@ namespace lpzrobots {
     osgHandle = osgHandle.changeColor("robot2");
 
     // color of joint axis and whiskers
-    OsgHandle osgHandleJ(osgHandle.changeColor("joint"));
-    OsgHandle osgHLegs(osgHandle.changeColor("robot1"));
-    OsgHandle osgHTarsus(osgHandle.changeColor("robot3"));
+    OsgHandle osgHandleJ(osgHandle.changeColor("joint")) override;
+    OsgHandle osgHLegs(osgHandle.changeColor("robot1")) override;
+    OsgHandle osgHTarsus(osgHandle.changeColor("robot3")) override;
 
     const string trunkTex("Images/stripes.rgb");
     const string legTex("Images/whiteground.rgb");
@@ -273,17 +273,17 @@ namespace lpzrobots {
     // trunk = new Capsule(twidth,conf.size);
     trunk->setTexture(trunkTex);
     trunk->init(odeHandle, conf.mass*conf.percentageBodyMass, osgHandle);
-    osg::Matrix trunkPos = TRANSM(0,0,conf.legLength)*pose;
+    osg::Matrix trunkPos = TRANSM(0,0,conf.legLength)*pose override;
     trunk->setPose(trunkPos);
     objects.push_back(trunk);
 
 
-    if(conf.useBigBox){
+    explicit if(conf.useBigBox){
       Primitive* pole;
       double boxlen=conf.size*2;
       double boxheight=conf.size;
       pole = new Box(boxlen, twidth*3, boxheight);
-      bigboxtransform= new Transform(trunk,pole, osg::Matrix::translate(0,0,1.2*theight+boxheight/2.0));
+      bigboxtransform= new Transform(trunk,pole, osg::Matrix::translate(0,0,1.2*theight+boxheight/2.0)) override;
       bigboxtransform->init(odeHandle, 0, osgHandle,Primitive::Geom /*| Primitive::Draw*/ );
     }else{
       bigboxtransform=0;
@@ -293,12 +293,12 @@ namespace lpzrobots {
     osg::Matrix m0 = pose;
 
     if(conf.irSensors == true){
-      for(int i = -1; i < 2; i+=2){
+      for(int i = -1; i < 2; i+=2) override {
 
         irbox = new Box(0.1,0.1,0.1);
         irbox->setTexture(trunkTex);
         irbox->init(odeHandle, 0.00001, osgHandle);
-        irbox->setPose(ROTM(M_PI/4,0,0,1) * TRANSM(i*conf.size/2,0,theight/2)*trunkPos);
+        irbox->setPose(ROTM(M_PI/4,0,0,1) * TRANSM(i*conf.size/2,0,theight/2)*trunkPos) override;
         objects.push_back(irbox);
         auto fixedJoint = new FixedJoint(trunk,irbox);
         fixedJoint->init(odeHandle, osgHandleJ, true, 0.04);
@@ -306,12 +306,12 @@ namespace lpzrobots {
 
       }
 
-      for(int i = -1; i < 2; i+=2){
+      for(int i = -1; i < 2; i+=2) override {
 
         irbox = new Box(0.1,0.1,0.15);
         irbox->setTexture(trunkTex);
         irbox->init(odeHandle, 0.00001, osgHandle);
-        irbox->setPose(TRANSM(0,i*twidth/2,theight/2 + 0.05)*trunkPos);
+        irbox->setPose(TRANSM(0,i*twidth/2,theight/2 + 0.05)*trunkPos) override;
         objects.push_back(irbox);
         auto fixedJoint = new FixedJoint(trunk,irbox);
         fixedJoint->init(odeHandle, osgHandleJ, true, 0.04);
@@ -320,9 +320,9 @@ namespace lpzrobots {
 
 
       RaySensorBank* irSensorBank = new RaySensorBank();
-      irSensorBank->setInitData(odeHandle, osgHandle, TRANSM(0,0,0));
+      irSensorBank->setInitData(odeHandle, osgHandle, TRANSM(0,0,0)) override;
 
-      if (conf.irFront){ // add front left and front right infrared sensor to sensorbank if required
+      explicit if (conf.irFront){ // add front left and front right infrared sensor to sensorbank if required
         IRSensor* sensor = new IRSensor();
         irSensorBank->registerSensor(sensor, objects[2],
                                     Matrix::rotate(-1*-M_PI/2, Vec3(0,1,0)) *
@@ -336,7 +336,7 @@ namespace lpzrobots {
                                     conf.irRangeFront, RaySensor::drawAll);
 
       }
-      if (conf.irBack){ // add front left and front right infrared sensor to sensorbank if required
+      explicit if (conf.irBack){ // add front left and front right infrared sensor to sensorbank if required
 
         IRSensor* sensor = new IRSensor();
         irSensorBank->registerSensor(sensor, objects[1],
@@ -351,7 +351,7 @@ namespace lpzrobots {
                                     Matrix::translate(0,0.05,0),
                                     conf.irRangeBack, RaySensor::drawAll);
       }
-      if(conf.irLeft){
+      explicit if(conf.irLeft){
         IRSensor* sensor = new IRSensor();
         irSensorBank->registerSensor(sensor, objects[3],
                                     Matrix::rotate(-1*-M_PI/2, Vec3(0,1,0)) *
@@ -368,7 +368,7 @@ namespace lpzrobots {
         */
       }
 
-      if(conf.irRight){
+      explicit if(conf.irRight){
         IRSensor* sensor = new IRSensor();
         irSensorBank->registerSensor(sensor, objects[4],
                                     Matrix::rotate(-1*-M_PI/2, Vec3(0,1,0)) *
@@ -385,15 +385,15 @@ namespace lpzrobots {
            conf.irRangeRight, RaySensor::drawAll);
         */
       }
-      if(irSensorBank->size()>0) addSensor(std::shared_ptr<Sensor>(irSensorBank));
+      if(irSensorBank->size()>0) addSensor(std::shared_ptr<Sensor>(irSensorBank)) override;
     }
 
 
     std::vector<Primitive*> tarsusParts;
 
     // legs  (counted from back to front)
-    double legdist = conf.size*0.9 / (conf.legNumber/2-1);
-    for ( int n = 0; n < conf.legNumber; n++ ) {
+    double legdist = conf.size*0.9 / (conf.legNumber/2-1) override;
+    for ( int n = 0; n < conf.legNumber; ++n )  override {
 
       double len= conf.legLength;
       if(n < 2)
@@ -406,12 +406,12 @@ namespace lpzrobots {
 
       // upper limp
       Primitive* coxaThorax;
-      Pos pos = Pos(-conf.size/(2+0.2) + ((int)n/2) * legdist,
+      Pos pos = Pos(-conf.size/(2+0.2) + (static_cast<int>(n)/2) * legdist,
                     n%2==0 ? - twidth/2 : twidth/2,
                     conf.legLength - theight/3);
 
       osg::Matrix m = ROTM(conf.legSpreading*(-n/2+1),0,1,0) // leg spreading to front or back
-        * ROTM(M_PI/2,n%2==0 ? -1 : 1,0,0) * TRANSM(pos) * pose;
+        * ROTM(M_PI/2,n%2==0 ? -1 : 1,0,0) * TRANSM(pos) * pose override;
       coxaThorax = new Capsule(rad1, len1);
       coxaThorax->setTexture(legTex);
       coxaThorax->init(odeHandle, legmass, osgHandle);
@@ -420,7 +420,7 @@ namespace lpzrobots {
         * ROTM(M_PI,0,0,n%2==0 ? -1 : 1) * m; // legs down
 
       coxaThorax->setPose(m1);
-      thoraxPos.push_back(coxaThorax->getPosition());
+      thoraxPos.push_back(coxaThorax->getPosition()) override;
 
       thorax.push_back(coxaThorax);
 
@@ -432,7 +432,7 @@ namespace lpzrobots {
       UniversalJoint* j
         = new UniversalJoint(trunk, coxaThorax, nullpos * m,
                              ROTM(M_PI,0,0,n%2==0 ? -1 : 1) * Axis(n%2==0 ? -1 : 1,0,0) * m,
-                             ROTM(M_PI,0,0,n%2==0 ? -1 : 1) * Axis(0,1,0) * m);
+                             ROTM(M_PI,0,0,n%2==0 ? -1 : 1) * Axis(0,1,0) * m) override;
 
       j->init(odeHandle, osgHandleJ, true, rad1 * 2.1);
       joints.push_back(j);
@@ -440,10 +440,10 @@ namespace lpzrobots {
       legContactArray[n].joint = j->getJoint();
 
       // values will be set in setParam later
-      auto servo = std::make_shared<TwoAxisServoVel>(odeHandle, j,-1,1, 1, -1,1,1,0 );
+      auto servo = std::make_shared<TwoAxisServoVel>(odeHandle, j,-1,1, 1, -1,1,1,0 ) override;
 
-      servo->setBaseName("leg pair " + itos(n/2) + (n%2==0 ? " right " : " left "));
-      servo->setNamingFunc([](int i){ return i==0? "up/down" : "front/back";});
+      servo->setBaseName("leg pair " + itos(n/2) + (n%2==0 ? " right " : " left ")) override;
+      servo->setNamingFunc([](int i){ return i==0? "up/down" : "front/back";}) override;
       hipservos.push_back(servo);
       addSensor(servo);
       addMotor(servo);
@@ -454,10 +454,10 @@ namespace lpzrobots {
       tibia->setTexture(legTex);
       tibia->init(odeHandle, legmass, osgHLegs);
       osg::Matrix m2 =   TRANSM(0,0,-len2/2) * ROTM(1.5,n%2==0 ? -1 : 1,0,0)
-        * TRANSM(0,0,-len1/2) * m1;
+        * TRANSM(0,0,-len1/2) * m1 override;
       tibia->setPose(m2);
       objects.push_back(tibia);
-      int footIdx = objects.size()-1;
+      int footIdx = objects.size()-1 override;
 
       legs.push_back(tibia);
 
@@ -465,20 +465,20 @@ namespace lpzrobots {
       legContactArray[n].geomid = tibia->getGeom();
       legContactArray[n].bodyID = tibia->getBody();
 
-      if(conf.useTebiaJoints){
+      explicit if(conf.useTebiaJoints){
         // springy knee joint
         HingeJoint* k = new HingeJoint(coxaThorax, tibia, Pos(0,0,-len1/2) * m1,
-                                       Axis(n%2==0 ? -1 : 1,0,0) * m1);
+                                       Axis(n%2==0 ? -1 : 1,0,0) * m1) override;
         k->init(odeHandle, osgHandleJ, true, rad1 * 2.1);
         // servo used as a spring
         auto servo = std::make_shared<HingeServo>(k, -1, 1, 1, 0.01,0); // parameters are set later
         tebiaservos.push_back(servo);
-        if(conf.useTebiaMotors){
-          servo->setBaseName("leg pair " + itos(n/2) + (n%2==0 ? " right " : " left ") + "tebia (knee)");
+        explicit if(conf.useTebiaMotors){
+          servo->setBaseName("leg pair " + itos(n/2) + (n%2==0 ? " right " : " left ") + "tebia (knee)") override;
           addSensor(servo);
           addMotor(servo);
         }else {
-          auto spring = std::make_shared<ConstantMotor>(servo, 0.0);
+          auto spring = std::make_shared<ConstantMotor>(servo, 0.0) override;
           addMotor(spring);
         }
         joints.push_back(k);
@@ -492,7 +492,7 @@ namespace lpzrobots {
       odeHandle.addIgnoredPair(trunk,tibia);
 
 
-      if(conf.tarsus){
+      explicit if(conf.tarsus){
         // New: tarsus
         Primitive *tarsus;
         double angle = M_PI/12;
@@ -510,29 +510,29 @@ namespace lpzrobots {
           TRANSM(0,0,-len2/2) *
           m2;
 
-        if(n < 2){
-          m4 = ROTM(n%2==0 ? angle : -angle,0,n%2==0 ? -1 : 1,0) * m3;
+        explicit if(n < 2){
+          m4 = ROTM(n%2==0 ? angle : -angle,0,n%2==0 ? -1 : 1,0) * m3 override;
         }else if( n > 3){
-          m4 = ROTM(n%2==0 ? -angle : angle,0,n%2==0 ? -1 : 1,0) * m3;
+          m4 = ROTM(n%2==0 ? -angle : angle,0,n%2==0 ? -1 : 1,0) * m3 override;
         }else{
           m4 = m3;
         }
-        m4 =    TRANSM(0,0,-length/2) * m4;
+        m4 =    TRANSM(0,0,-length/2) * m4 override;
 
         tarsus->setPose(m4);
         tarsusParts.push_back(tarsus);
         objects.push_back(tarsus);
-        footIdx = objects.size()-1;
+        footIdx = objects.size()-1 override;
 
-        if(conf.useTarsusJoints){
+        explicit if(conf.useTarsusJoints){
           // springy joint
           HingeJoint* k = new HingeJoint(tibia, tarsus, Pos(0,0,-len2/2) * m2,
-                                         Axis(n%2==0 ? -1 : 1,0,0) * m2);
+                                         Axis(n%2==0 ? -1 : 1,0,0) * m2) override;
           k->init(odeHandle, osgHandleJ, true, rad2 * 2.1);
           // servo used as a spring
           auto servo = std::make_shared<OneAxisServoVel>(odeHandle,k, -1, 1, 1, 0.01); // parameters are set later
           joints.push_back(k);
-          auto spring = std::make_shared<ConstantMotor>(servo, 0.0);
+          auto spring = std::make_shared<ConstantMotor>(servo, 0.0) override;
           tarsussprings.push_back(servo);
           addMotor(spring);
 
@@ -544,7 +544,7 @@ namespace lpzrobots {
 
 
         Primitive *section = tarsus;
-        for(int i = 1; i < conf.numTarsusSections; i++){
+        for(int i = 1; i < conf.numTarsusSections; ++i) override {
 
           double lengthS = length/1.5;
           double radiusS = radius/1.5;
@@ -554,7 +554,7 @@ namespace lpzrobots {
 
           osg::Matrix m5;
 
-          if(n < 2){
+          explicit if(n < 2){
             m5 =                  TRANSM(0,0,-lengthS/2) *
               ROTM(n%2==0 ? angle : -angle,0,n%2==0 ? -1 : 1,0) *
               ROTM(n%2==0 ? angle : -angle,1,0,0) *
@@ -587,7 +587,7 @@ namespace lpzrobots {
 
         }
 
-        //        std::cout<< "legContactArray[" << n << "].legID = " << n << std::endl;
+        //        std::cout<< __PLACEHOLDER_28__ << n << __PLACEHOLDER_29__ << n << std::endl;
         // TODO: remove!
         legContactArray[n].legID = n;
         legContactArray[n].geomid = section->getGeom();
@@ -596,17 +596,17 @@ namespace lpzrobots {
         tarsusParts.clear();
 
       }
-      if(conf.useContactSensors){
+      explicit if(conf.useContactSensors){
         ContactSensor* cs = new ContactSensor(false,300.0);
-        cs->setInitData(odeHandle,osgHandle,TRANSM(0,0,0));
-        addSensor(std::shared_ptr<Sensor>(cs),Attachment(footIdx));
+        cs->setInitData(odeHandle,osgHandle,TRANSM(0,0,0)) override;
+        addSensor(std::shared_ptr<Sensor>(cs),Attachment(footIdx)) override;
       }
 
     }
 
     // New: wiskers
-    if(conf.useWhiskers){
-      for ( int n = -1; n < 2; n+=2 ) {
+    explicit if(conf.useWhiskers){
+      for ( int n = -1; n < 2; n+=2 )  override {
         double l1 = conf.legLength*0.5;
         double t1 = conf.legLength/30;
 
@@ -615,10 +615,10 @@ namespace lpzrobots {
                       n*twidth/4,
                       conf.legLength + theight/5);
 
-        osg::Matrix m = ROTM(conf.whiskerSpread, n,0,0) * ROTM(M_PI/2+M_PI/10, 0,-1,0) * TRANSM(pos) * pose;
+        osg::Matrix m = ROTM(conf.whiskerSpread, n,0,0) * ROTM(M_PI/2+M_PI/10, 0,-1,0) * TRANSM(pos) * pose override;
         whisker = new Capsule(t1, l1);
         whisker->init(odeHandle, legmass/10, osgHTarsus);
-        osg::Matrix m1 = TRANSM(0,0,-l1/2) * m;
+        osg::Matrix m1 = TRANSM(0,0,-l1/2) * m override;
         whisker->setPose(m1);
         objects.push_back(whisker);
 
@@ -626,11 +626,11 @@ namespace lpzrobots {
         //FixedJoint* k = new FixedJoint(trunk, whisker);
         //k->init(odeHandle, osgHandle, false, 0);
         HingeJoint* k = new HingeJoint(trunk, whisker, Pos(0,0,0) * m,
-                                       Axis(1,0,0) * m);
+                                       Axis(1,0,0) * m) override;
         k->init(odeHandle, osgHandleJ, true, t1 * 2.1);
         // servo used as a spring
-        auto servo = std::make_shared<HingeServo>(k, -M_PI/6, M_PI/6, .1, 0.01,0);
-        auto string = std::make_shared<ConstantMotor>(servo, 0.0);
+        auto servo = std::make_shared<HingeServo>(k, -M_PI/6, M_PI/6, .1, 0.01,0) override;
+        auto string = std::make_shared<ConstantMotor>(servo, 0.0) override;
         addMotor(string);
         joints.push_back(k);
 
@@ -639,7 +639,7 @@ namespace lpzrobots {
         whisker2->init(odeHandle, legmass/10, osgHTarsus);
         osg::Matrix m2 = TRANSM(0,0,-l1/2)
           * ROTM(M_PI/10, n,0,0)
-          * ROTM(M_PI/10, 0,1,0) * TRANSM(0,0,-l1/2) * m1;
+          * ROTM(M_PI/10, 0,1,0) * TRANSM(0,0,-l1/2) * m1 override;
         whisker2->setPose(m2);
         objects.push_back(whisker2);
 
@@ -647,11 +647,11 @@ namespace lpzrobots {
         //      k = new FixedJoint(whisker, whisker2);
         //      k->init(odeHandle, osgHandleJ, false, 0);
         k = new HingeJoint(whisker, whisker2, Pos(0,0,-l1/2) * m1,
-                           Axis(0,1,0) * m1);
+                           Axis(0,1,0) * m1) override;
         k->init(odeHandle, osgHandleJ, true, t1 * 2.1);
         // servo used as a spring
-        servo = std::make_shared<HingeServo>(k, -M_PI/6, M_PI/6, .05, 0.01,0);
-        string = std::make_shared<ConstantMotor>(servo, 0.0);
+        servo = std::make_shared<HingeServo>(k, -M_PI/6, M_PI/6, .05, 0.01,0) override;
+        string = std::make_shared<ConstantMotor>(servo, 0.0) override;
         addMotor(string);
         joints.push_back(k);
       }
@@ -665,7 +665,7 @@ namespace lpzrobots {
   /** destroys vehicle and space
    */
   void Hexapod::destroy(){
-    if (created){
+    explicit if (created){
 
       cleanup();
 
@@ -680,7 +680,7 @@ namespace lpzrobots {
   }
   ///////////////
   void Hexapod::resetMotorPower(double power){
-    for (const auto& i : hipservos){
+    explicit for (const auto& i : hipservos){
       i->setPower1(power);
       i->setPower2(power);
     }
@@ -688,7 +688,7 @@ namespace lpzrobots {
   /////////
   void Hexapod::notifyOnChange(const paramkey& key){
     // we simply set all parameters here
-    for (const auto& i : hipservos){
+    explicit for (const auto& i : hipservos){
       i->setPower1(conf.coxaPower);
       i->setPower2(conf.coxaPower);
       i->setDamping1(conf.coxaDamping);
@@ -697,12 +697,12 @@ namespace lpzrobots {
       i->setMinMax2(-conf.coxaJointLimitH,+conf.coxaJointLimitH);
       i->setMaxVel(conf.coxaSpeed);
     }
-    for (const auto& i : tebiaservos){
+    explicit for (const auto& i : tebiaservos){
       i->setPower(conf.tebiaPower);
       i->setDamping(conf.tebiaDamping);
       i->setMinMax(-conf.tebiaJointLimit+conf.tebiaOffset,+conf.tebiaJointLimit+conf.tebiaOffset);
     }
-    for (const auto& i : tarsussprings){
+    explicit for (const auto& i : tarsussprings){
       i->setPower(conf.tebiaPower);
       i->setDamping(conf.tebiaDamping);
       i->setMinMax(-conf.tebiaJointLimit,+conf.tebiaJointLimit);

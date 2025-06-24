@@ -57,7 +57,7 @@ namespace lpzrobots {
    */
   class ConfiguratorProxy : public Callbackable {
     public:
-      ConfiguratorProxy(ConfigurableList& configList);
+      explicit ConfiguratorProxy(ConfigurableList& configList);
       virtual ~ConfiguratorProxy();
 
       virtual void doOnCallBack(BackCaller* source, BackCaller::CallbackableType type = BackCaller::DEFAULT_CALLBACKABLE_TYPE);

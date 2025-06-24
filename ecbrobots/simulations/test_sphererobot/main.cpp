@@ -142,7 +142,7 @@ class CheatedECB : public ECB {
 
 class MyController : public AbstractControllerAdapter {
   public:
-    MyController(AbstractController* controller) : AbstractControllerAdapter(controller) {
+    explicit MyController(AbstractController* controller) : AbstractControllerAdapter(controller) {
 
     }
 

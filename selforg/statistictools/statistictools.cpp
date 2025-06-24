@@ -120,7 +120,7 @@ type sub(const type&, const type&),
 type mul(const type&, const type&),
 type div(const type&, const type&)>
 type StatisticTools::getAnalisation(DOUBLE_ANALYSATION_CONTEXT* tvAnalysation,        AnalysationMode mode, unsigned int feature) {
-        switch(mode){
+        switch (mode){
         case AM_AVG:
                 return tvAnalysation->getAvg();
         case AM_MIN:
@@ -144,7 +144,7 @@ type StatisticTools::getAnalisation(DOUBLE_ANALYSATION_CONTEXT* tvAnalysation,  
         case AM_W3:
                 return tvAnalysation->getWhisker3(1.5);
         case AM_NUM_EXT:
-                return (type)tvAnalysation->getNumExtrems(1.5);
+                return static_cast<type>(tvAnalysation)->getNumExtrems(1.5);
         case AM_EXT:
                 return tvAnalysation->getExtrem(1.5,feature);
         }

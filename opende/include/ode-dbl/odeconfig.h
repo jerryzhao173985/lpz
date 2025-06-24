@@ -84,14 +84,14 @@
     #ifdef HUGE_VALF
       #define dInfinity HUGE_VALF
     #else
-      #define dInfinity ((float)HUGE_VAL)
+      #define dInfinity (static_cast<float>(HUGE_VAL))
     #endif
   #else
     #define dInfinity HUGE_VAL
   #endif
 #else
   #ifdef dSINGLE
-    #define dInfinity ((float)(1.0/0.0))
+    #define dInfinity (static_cast<float>(1.0/0.0))
   #else
     #define dInfinity (1.0/0.0)
   #endif

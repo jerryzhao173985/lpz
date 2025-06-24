@@ -62,11 +62,11 @@ namespace lpzrobots {
       virtual ~QDummyConfigurableTileWidget() {
       }
 
-      void setName(QString name) {
+      void setName(const QString& name) {
         this->name = name;
       }
 
-      QString getName() {
+      QString getName() const {
         return name;
       }
 

@@ -47,7 +47,7 @@
  *   new teaching interface
  *
  *   Revision 1.3  2006/12/21 11:43:05  martius
- *   commenting style for doxygen //< -> ///<
+ *   commenting style for doxygen __PLACEHOLDER_28__
  *   new sensors for spherical robots
  *
  *   Revision 1.2  2006/07/14 12:23:53  martius
@@ -109,28 +109,28 @@ public:
   InvertMotorNStep*controller;
   OdeRobot* vehicle;
   motor teaching[2];
-  int useTeaching;
+  int useTeaching = 0;
 
   // starting function (executed once at the beginning of the simulation loop)
   void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global)
   {
-    setCameraHomePos(Pos(-5.44372, 7.37141, 3.31768),  Pos(-142.211, -21.1623, 0));
+    setCameraHomePos(Pos(-5.44372, 7.37141, 3.31768),  Pos(-142.211, -21.1623, 0)) override;
     // initialization
     // - set noise to 0.1
     // - register file chess.ppm as a texture called chessTexture (used for the wheels)
     global.odeConfig.setParam("noise", 0.05);
     global.odeConfig.setParam("controlinterval", 1);
-    //    global.odeConfig.setParam("gravity", 0);
+    //    global.odeConfig.setParam(__PLACEHOLDER_2__, 0);
 
     // use Playground as boundary:
-    Playground* playground = new Playground(odeHandle, osgHandle, osg::Vec3(100, 0.2, 1), 2);
-    // playground->setColor(Color(0,0,0,0.8));
+    Playground* playground = new Playground(odeHandle, osgHandle, osg::Vec3(100, 0.2, 1), 2) override;
+    // playground->setColor(Color(0,0,0,0.8)) override;
     playground->setPosition(osg::Vec3(0,0,0.05)); // playground positionieren und generieren
     global.obstacles.push_back(playground);
 
-    for(int i=0; i<0; i++){ //20
-      PassiveSphere* s = new PassiveSphere(odeHandle, osgHandle.changeColor(Color(0.0,1.0,0.0)), 0.5,10);
-      s->setPosition(osg::Vec3(-4+2*(i/5),-4+2*(i%5),2));
+    for(int i=0; i<0; ++i){ //20
+      PassiveSphere* s = new PassiveSphere(odeHandle, osgHandle.changeColor(Color(0.0,1.0,0.0)), 0.5,10) override;
+      s->setPosition(osg::Vec3(-4+2*(i/5),-4+2*(i%5),2)) override;
       global.obstacles.push_back(s);
     }
 
@@ -140,7 +140,7 @@ public:
 
     vehicle = new Nimm2(odeHandle, osgHandle, c, "Nimm2");
     //OdeRobot* vehicle = new Nimm4(odeHandle, osgHandle);
-    vehicle->place(Pos(0,0,0.6));
+    vehicle->place(Pos(0,0,0.6)) override;
 
     // create pointer to controller
     // push controller in global list of configurables
@@ -153,14 +153,14 @@ public:
 
     controller = new InvertMotorNStep(cc);
     controller->setParam("adaptrate", 0.000);
-    //    controller->setParam("nomupdate", 0.0005);
+    //    controller->setParam(__PLACEHOLDER_5__, 0.0005);
     controller->setParam("epsC", 0.1);
     controller->setParam("epsA", 0.1);
     controller->setParam("rootE", 0);
     controller->setParam("steps", 1);
     controller->setParam("s4avg", 1);
 
-    One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1));
+    One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
     OdeAgent* agent = new OdeAgent(global);
     agent->init(controller, vehicle, wiring);
     global.agents.push_back(agent);
@@ -170,9 +170,8 @@ public:
   }
 
   //Funktion die eingegebene Befehle/kommandos verarbeitet
-  virtual bool command (const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down)
-  {
-    if (!down) return false;
+  virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down) override {
+    if (!down) return false override;
     bool handled = false;
     // FILE* f;
     //    double m;
@@ -192,9 +191,9 @@ public:
         handled = true;
         break;
       case 'i' :
-        useTeaching = (useTeaching+1)%3;
+        useTeaching = (useTeaching+1)%3 override;
         printf("%s\n", useTeaching==0 ? "Teaching disabled" :
-               (useTeaching ==1 ? "enabled motor teaching" : "enabled sensor teaching"));
+               (useTeaching ==1 ? "enabled motor teaching" : "enabled sensor teaching")) override;
         handled = true;
         break;
       }
@@ -202,7 +201,7 @@ public:
     return handled;
   }
 
-  virtual void addCallback(GlobalData& globalData, bool draw, bool pause, bool control) {
+  virtual void addCallback(const GlobalData& globalData, bool draw, bool pause, bool control) override {
     if(control && useTeaching==1){
       controller->setMotorTeachingSignal(teaching, 2);
     }
@@ -213,7 +212,7 @@ public:
   };
 
 
-  virtual void bindingDescription(osg::ApplicationUsage & au) const {
+  virtual void bindingDescription(osg::ApplicationUsage & au) const override {
     au.addKeyboardMouseBinding("Teaching: u","forward");
     au.addKeyboardMouseBinding("Teaching: j","backward");
     au.addKeyboardMouseBinding("Distal Teaching: i","forward");
@@ -226,7 +225,7 @@ public:
 int main (int argc, char **argv)
 {
   ThisSim sim;
-  return sim.run(argc, argv) ? 0 :  1;
+  return sim.run(argc, argv) ? 0 :  1 override;
 }
 
 

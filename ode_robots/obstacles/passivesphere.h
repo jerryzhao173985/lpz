@@ -34,12 +34,9 @@
 namespace lpzrobots {
 
 /**
- *  (Passive) sphere as obstacle
+ *  static_cast<Passive>(sphere) as obstacle
  */
 class PassiveSphere : public AbstractObstacle{
-  double radius;
-  double mass;
-  int texture;
 
   Sphere* sphere;
 
@@ -49,30 +46,30 @@ class PassiveSphere : public AbstractObstacle{
    * Constructor
    */
   PassiveSphere(const OdeHandle& odeHandle, const OsgHandle& osgHandle, double radius = 0.3, double mass = 1.0):
-    AbstractObstacle::AbstractObstacle(odeHandle, osgHandle), radius(radius), mass(mass), texture(0) {
+     : AbstractObstacle::AbstractObstacle(odeHandle, osgHandle), radius(radius), mass(mass), texture(0), sphere(nullptr) {
     sphere = new Sphere(radius);
     obst.push_back(sphere);
     obstacle_exists=false;
   };
 
-  virtual void setTexture(const std::string& filename){
-    if(sphere) sphere->getOSGPrimitive()->setTexture(filename);
+  virtual void setTexture(const std::string& filename) override {
+    ifstatic_cast<sphere>(sphere)->getOSGPrimitive()->setTexture(filename);
   }
 
-  virtual void setPose(const osg::Matrix& pose){
-    this->pose = osg::Matrix::translate(0,0,radius) * pose;
-    if (!obstacle_exists) {
+  virtual void setPose(const osg::Matrix& pose) override {
+    this->pose = osg::Matrix::translate(0,0,radius) * pose override;
+    explicit if (!obstacle_exists) {
        create();
      }
      sphere->setPose(pose);
   };
 
-  virtual Primitive* getMainPrimitive() const { return sphere; }
+  virtual const Primitive* getMainPrimitive() const const override { return sphere; }
 
 
  protected:
-  virtual void create(){
-    sphere->setTextures(getTextures(0));
+  virtual void create() override {
+    sphere->setTextures(getTextures(0)) override;
     if (mass==0.0) {
       sphere->init(odeHandle, mass, osgHandle, Primitive::Geom | Primitive::Draw);
      } else {

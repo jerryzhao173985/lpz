@@ -102,10 +102,10 @@ public:
   void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global)
   {
 
-    setCameraHomePos(Pos(5.2728, 7.2112, 3.31768), Pos(140.539, -13.1456, 0));
+    setCameraHomePos(Pos(5.2728, 7.2112, 3.31768), Pos(140.539, -13.1456, 0)) override;
     global.odeConfig.noise=0.05;
 
-    Playground* playground = new Playground(odeHandle, osgHandle, osg::Vec3(10, 0.2, 0.5),1,true);
+    Playground* playground = new Playground(odeHandle, osgHandle, osg::Vec3(10, 0.2, 0.5),1,true) override;
     playground->setPosition(osg::Vec3(0,0,0)); // playground positionieren und generieren
 
     global.obstacles.push_back(playground);
@@ -123,14 +123,14 @@ public:
 
 
     // zusaetzlich das rauschen, gibt weisses und color...
-    One2OneWiring* wiring1 = new One2OneWiring ( new ColorUniformNoise() );
-    One2OneWiring* wiring2 = new One2OneWiring ( new ColorUniformNoise() );
+    One2OneWiring* wiring1 = new One2OneWiring ( new ColorUniformNoise() ) override;
+    One2OneWiring* wiring2 = new One2OneWiring ( new ColorUniformNoise() ) override;
 
 
     //Kugel 1 ***********************************************
 
-    Sphererobot3Masses* myBarrel_1 = new Sphererobot3Masses ( odeHandle, osgHandle.changeColor(Color(1.0,0.0,1.0)),conf, "Rocco-Kugel-1-Java-Controller");
-    ((OdeRobot*)myBarrel_1)->place (Pos( 1.3,0,0.1));
+    Sphererobot3Masses* myBarrel_1 = new Sphererobot3Masses ( odeHandle, osgHandle.changeColor(Color(1.0,0.0,1.0)),conf, "Rocco-Kugel-1-Java-Controller") override;
+    (static_cast<OdeRobot*>(myBarrel_1))->place (Pos( 1.3,0,0.1)) override;
 
     //Controller Kugel 1
 
@@ -138,9 +138,9 @@ public:
     jcontroller1 = new use_java_controller("4811","4812","robot2");
 
     OdeAgent* agent_1 = new OdeAgent( global, plotoptions );
-    agent_1->init ( jcontroller1 , myBarrel_1 , wiring1 );
-    global.agents.push_back ( agent_1 );
-    global.configs.push_back ( jcontroller1 );
+    agent_1->init ( jcontroller1 , myBarrel_1 , wiring1 ) override;
+    global.agents.push_back ( agent_1 ) override;
+    global.configs.push_back ( jcontroller1 ) override;
 
     // ENDE****************************************************
 
@@ -148,8 +148,8 @@ public:
 
 
     //Kugel 2 ***********************************************
-    Sphererobot3Masses* myBarrel_2 = new Sphererobot3Masses ( odeHandle, osgHandle.changeColor(Color(0.0,0.0,1.0)),conf, "Rocco-Kugel-2-Java-Controller");
-    myBarrel_2->place ( osg::Matrix::rotate(M_PI/2, 1,0,0));
+    Sphererobot3Masses* myBarrel_2 = new Sphererobot3Masses ( odeHandle, osgHandle.changeColor(Color(0.0,0.0,1.0)),conf, "Rocco-Kugel-2-Java-Controller") override;
+    myBarrel_2->place ( osg::Matrix::rotate(M_PI/2, 1,0,0)) override;
 
     //Controller Kugel 2
 
@@ -159,9 +159,9 @@ public:
    //Jcontroller = new SineController();
 
     OdeAgent* agent_2 = new OdeAgent( global, plotoptions);
-    agent_2->init ( Jcontroller , myBarrel_2 , wiring2);
-    global.agents.push_back ( agent_2 );
-    global.configs.push_back ( Jcontroller );
+    agent_2->init ( Jcontroller , myBarrel_2 , wiring2) override;
+    global.agents.push_back ( agent_2 ) override;
+    global.configs.push_back ( Jcontroller ) override;
     // ENDE****************************************************
 
 
@@ -169,11 +169,10 @@ public:
   }
 
   // add own key handling stuff here, just insert some case values
-  virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down)
-  {
+  virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down) override {
     if (down)
     { // only when key is pressed, not when released
-      switch ( (char) key )
+      switch ( static_cast<char> key )
       {
       default:
         return false;

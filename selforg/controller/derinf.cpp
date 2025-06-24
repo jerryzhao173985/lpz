@@ -7,7 +7,7 @@
  *   LICENSE:                                                              *
  *   This work is licensed under the Creative Commons                      *
  *   Attribution-NonCommercial-ShareAlike 2.5 License. To view a copy of   *
- *   this license, visit http://creativecommons.org/licenses/by-nc-sa/2.5/ *
+ *   this license, visit http:__PLACEHOLDER_69__
  *   or send a letter to Creative Commons, 543 Howard Street, 5th Floor,   *
  *   San Francisco, California, 94105, USA.                                *
  *                                                                         *
@@ -18,11 +18,11 @@
  ***************************************************************************/
 
 #include "derinf.h"
-// #include "dercontroller.h"
+// #include __PLACEHOLDER_1__
 #include "invertmotornstep.h"
 #include "regularisation.h"
-// #include "invertmotorcontroller.h"
-// #include "statistictools.h"
+// #include __PLACEHOLDER_4__
+// #include __PLACEHOLDER_5__
 using namespace matrix;
 using namespace std;
 
@@ -66,15 +66,15 @@ DerInf::DerInf(const DerInfConf& conf)
 
   addParameterDef("dampS", &dampS, 0.01);
   addParameterDef("dampC", &dampC, 0.0001);
-  //  addParameterDef("modelcompl",&(this->conf.modelCompliant),0);
-  //   addParameterDef("epsSat",&epsSat,0.1);
-  //   //  addParameterDef("satT",&satelliteTeaching,1);
+  //  addParameterDef(__PLACEHOLDER_10__,&(this->conf.modelCompliant),0);
+  //   addParameterDef(__PLACEHOLDER_11__,&epsSat,0.1);
+  //   //  addParameterDef(__PLACEHOLDER_12__,&satelliteTeaching,1);
 
-  //    addParameterDef("weighting",&weighting,.01);
-  //   addParameterDef("gamma",&gamma,.1);
-  //   addParameterDef("PIDint",&PIDint,.03);
-  //   addParameterDef("PIDdrv",&PIDdrv,.2);
-  //   addParameterDef("intstate",&intstate,1.0);
+  //    addParameterDef(__PLACEHOLDER_13__,&weighting,.01);
+  //   addParameterDef(__PLACEHOLDER_14__,&gamma,.1);
+  //   addParameterDef(__PLACEHOLDER_15__,&PIDint,.03);
+  //   addParameterDef(__PLACEHOLDER_16__,&PIDdrv,.2);
+  //   addParameterDef(__PLACEHOLDER_17__,&intstate,1.0);
   addParameterDef("zetaupdate", &zetaupdate, .03);
   addParameterDef("adaptrate", &adaptrate, 1.8);
   addParameterDef("xsifactor", &xsifactor, 1.1);
@@ -178,7 +178,7 @@ DerInf::init(int sensornumber, int motornumber, RandGen* randg) {
   y_buffer = new Matrix[buffersize];
   eta_buffer = new Matrix[buffersize];
   xsi_buffer = new Matrix[buffersize];
-  for (unsigned int k = 0; k < buffersize; k++) {
+  for (unsigned int k = 0; k < buffersize; ++k) {
     x_buffer[k].set(number_sensors, 1);
     xsi_buffer[k].set(number_sensors, 1);
     y_buffer[k].set(number_motors, 1);
@@ -219,7 +219,7 @@ DerInf::step(const sensor* x_, int number_sensors, motor* y_, int number_motors)
     learnController(delay);
   }
   // update step counter
-  t++;
+  ++t;
 };
 
 /// performs one step without learning. Calulates motor commands from sensor inputs.
@@ -227,14 +227,14 @@ void
 DerInf::stepNoLearning(const sensor* x, int number_sensors, motor* y, int number_motors) {
   fillBuffersAndControl(x, number_sensors, y, number_motors);
   // update step counter
-  t++;
+  ++t;
   //  cout << y << endl;
 };
 
 void
 DerInf::fillBuffersAndControl(const sensor* x_, int number_sensors, motor* y_, int number_motors) {
-  assert((unsigned)number_sensors == this->number_sensors &&
-         (unsigned)number_motors == this->number_motors);
+  assert(static_cast<unsigned>(number_sensors) == this->number_sensors &&
+         static_cast<unsigned>(number_motors) == this->number_motors);
   Matrix x(number_sensors, 1, x_);
 
   //   x = (((x*1.3).map(g))*(1/1.3))*(1/sqrt(xsifactor));
@@ -242,11 +242,11 @@ DerInf::fillBuffersAndControl(const sensor* x_, int number_sensors, motor* y_, i
 
   //  x += H; //TEST H
   //  if ( t > 60) x = x_intern;//TEST
-  x_smooth_long += (x - x_smooth_long) * ((0.03 * 3.0) / (double)s4avg);
+  x_smooth_long += (x - x_smooth_long) * ((0.03 * 3.0) / static_cast<double>(s4avg));
   //  x -=   x_smooth_long;
 
   // averaging over the last s4avg values of x_buffer
-  x_smooth += (x - x_smooth) * (1.0 / (double)s4avg); // calculateSmoothValues;
+  x_smooth += (x - x_smooth) * (1.0 / static_cast<double>(s4avg)); // calculateSmoothValues;
 
   putInBuffer(x_buffer, x);
   //  x_buffer[(t + buffersize)%buffersize] liefert das x zurueck.
@@ -255,13 +255,13 @@ DerInf::fillBuffersAndControl(const sensor* x_, int number_sensors, motor* y_, i
   //    calculate controller values
   //    Matrix y = y_buffer[(t -1 + buffersize)%buffersize];
   //         y += (calculateControllerValues(x) +  noiseMatrix(eta.getM(),eta.getN(), *YNoiseGen,
-  //         -noiseY, noiseY) - y)*(1.0/(double)s4avg);
+  //         -noiseY, noiseY) - y)*(1.0/static_cast<double>(s4avg));
 
   Matrix y = calculateControllerValues(
     x /*TEST*/); // +  vau_avg.map(g)*creat);//_buffer[(t - t_delay  + buffersize)%buffersize]);
                  //  x_intern=A*y;
 
-  y_smooth += (y - y_smooth) * (1.0 / (double)s4avg);
+  y_smooth += (y - y_smooth) * (1.0 / static_cast<double>(s4avg));
 
   //  y_smooth.convertToBuffer(y_, number_motors);
 
@@ -295,7 +295,7 @@ DerInf::learnController(int delay) {
 
   // Iteration Beginn
   xx = (x_buffer[(t - num_iterations + buffersize) % buffersize]);
-  for (int i = 0; i < num_iterations; i++) {
+  for (int i = 0; i < num_iterations; ++i) {
     if (!conf.useS) {
       xx = A * ((C * xx + C * H + HY).map(g)) + B;
     } else {
@@ -306,7 +306,7 @@ DerInf::learnController(int delay) {
 
   zz = C * xx + C * H + HY;
   yy = zz.map(g);
-  //    if(t%100==1) cout<< 20 <<endl ;
+  //    if(t%100==1) cout<< 20 <<endl;
   const Matrix& z = C * x_delay + C * H + HY;
   const Matrix& y = z.map(g);
   const Matrix g_prime = zz.map(g_derivative);
@@ -321,7 +321,7 @@ DerInf::learnController(int delay) {
   if (conf.useS)
     S += xsi * (x_delay ^ T) * epsA - S * epsA * dampS;
 
-  for (int i = 0; i < number_motors; i++) {
+  for (int i = 0; i < number_motors; ++i) {
     G.val(i, i) = g_prime.val(i, 0);
   }
 
@@ -347,15 +347,15 @@ DerInf::learnController(int delay) {
   //      DD = G*(A^T)*
   //        ((RG + ((G^0)*xsifactor -  L * (L^T) )*((G^0)*xsifactor -  L * (L^T) ))
   //         ^(-1))*A*G;
-  //     DD = G*(A^T)*((RG + ((ID_Sensor^0) -  L * (L^T) ))^(-1))* A * G; ;
+  //     DD = G*(A^T)*((RG + ((ID_Sensor^0) -  L * (L^T) ))^(-1))* A * G;;
   //    DD = DD  - xsi1*(xsi1^T);
   xsistrength += ((((xsi ^ T) * xsi).val(0, 0)) / sensornumber - xsistrength) * .03;
   //  double Dfactor = 1/(xsistrength + .00001);
   //  Dinverse = (( ((DD*Dfactor)^-1)*.03 ).map(tanh))*3;
-  ////   cout << DD.val(0,0)*Dfactor << "Dfactor"<<Dfactor<< endl;
+  ////   cout << DD.val(0,0)*Dfactor << __PLACEHOLDER_24__<<Dfactor<< endl;
 
   //  xx = x; yy = y;
-  for (int i = 0; i < number_motors; i++) {
+  for (int i = 0; i < number_motors; ++i) {
     ups.val(i, 0) = (DD * C * (C ^ T)).val(i, i);
   }
 
@@ -374,16 +374,16 @@ DerInf::learnController(int delay) {
 
   //   C_update = ((DD * C + (DD * C * (C^T) ) * y * (xx^T)*(-2 * xsifactor)).map(g))*epsC*EE;
 
-  //    for (int k=0; k<number_motors;k++) for (int l=0; l<number_sensors;l++) {
+  //    for (int k=0; k<number_motors;++k) for (int l=0; l<number_sensors;++l) {
 
-  //          if(k-l>1 || l-k>1) C.val(k,l)=0;
+  //          if(k-l>1 || l-k>1) C.val(k,l)= 0;
   //     }
 
   //  HY_update += x*-.003;//TEST
   if (epsC > 0) {
     C -= (C - (C ^ 0)) /* *(C - (C^0)) *(C - (C^0)) */ * dampC;
-    H -= (H & H & H) * dampC;
-    HY -= (HY & HY & HY) * .00000001;
+    H -= (H & H) * dampC;
+    HY -= (HY & HY) * .00000001;
 
     //     C_update = C_update * gamma + C_updateOld * ( 1 - gamma );
     //     H_update = H_update * gamma + H_updateOld * ( 1 - gamma );
@@ -468,38 +468,38 @@ DerInf::getInternalParamNames() const {
     if (conf.useS)
       keylist += store4x4AndDiagonalFieldNames(S, "S");
     keylist += store4x4AndDiagonalFieldNames(C, "C");
-    //            keylist += store4x4AndDiagonalFieldNames(S, "S");
-    //         keylist += store4x4AndDiagonalFieldNames(Q, "Q");
+    //            keylist += store4x4AndDiagonalFieldNames(S, __PLACEHOLDER_28__);
+    //         keylist += store4x4AndDiagonalFieldNames(Q, __PLACEHOLDER_29__);
 
   } else {
     keylist += storeMatrixFieldNames(A, "A");
     if (conf.useS)
       keylist += storeMatrixFieldNames(S, "S");
     keylist += storeMatrixFieldNames(C, "C");
-    //    keylist += storeMatrixFieldNames(R, "R");
-    //       keylist += storeMatrixFieldNames(Q, "Q");
+    //    keylist += storeMatrixFieldNames(R, __PLACEHOLDER_33__);
+    //       keylist += storeMatrixFieldNames(Q, __PLACEHOLDER_34__);
   }
-  //   keylist += storeVectorFieldNames(y_integration, "y_integration");
-  //  keylist += storeVectorFieldNames(PID_deriv, "PID_deriv");
+  //   keylist += storeVectorFieldNames(y_integration, __PLACEHOLDER_35__);
+  //  keylist += storeVectorFieldNames(PID_deriv, __PLACEHOLDER_36__);
   keylist += storeVectorFieldNames(HY, "HY");
-  //  keylist += storeVectorFieldNames(vau_avg, "vau_avg");
+  //  keylist += storeVectorFieldNames(vau_avg, __PLACEHOLDER_38__);
   keylist += storeVectorFieldNames(xx, "xx");
   //  if(conf.sat)
   //             keylist += conf.sat->getInternalParamNames();
-  //  keylist += storeVectorFieldNames(eta, "eta");
-  // keylist += storeVectorFieldNames(xsi, "xsi");
-  //  keylist += storeVectorFieldNames(x_smooth_long, "v_smooth");
-  //   keylist += string("weighting");
-  //   keylist += string("epsA");
-  //   keylist += string("epsC");
-  //   // keylist += string("xsi");
-  //    //  keylist += string("xsi_norm");
-  //   //  keylist += string("xsi_norm_avg");
-  //   keylist += string("PIDint");
-  //    keylist += string("TimeLoopError");
-  //   keylist += string("EE");
-  //   keylist += string("GrangerError2");
-  //   keylist += string("GrangerCausality");
+  //  keylist += storeVectorFieldNames(eta, __PLACEHOLDER_40__);
+  // keylist += storeVectorFieldNames(xsi, __PLACEHOLDER_41__);
+  //  keylist += storeVectorFieldNames(x_smooth_long, __PLACEHOLDER_42__);
+  //   keylist += string(__PLACEHOLDER_43__);
+  //   keylist += string(__PLACEHOLDER_44__);
+  //   keylist += string(__PLACEHOLDER_45__);
+  //   // keylist += string(__PLACEHOLDER_46__);
+  //    //  keylist += string(__PLACEHOLDER_47__);
+  //   //  keylist += string(__PLACEHOLDER_48__);
+  //   keylist += string(__PLACEHOLDER_49__);
+  //    keylist += string(__PLACEHOLDER_50__);
+  //   keylist += string(__PLACEHOLDER_51__);
+  //   keylist += string(__PLACEHOLDER_52__);
+  //   keylist += string(__PLACEHOLDER_53__);
   return keylist;
 }
 

@@ -76,24 +76,24 @@ public:
                               motor* motors,
                               int motornumber);
 
-  virtual int getSensorNumber() const {
+  virtual int getSensorNumber() const override {
     return sensornumber;
   }
-  virtual int getMotorNumber() const {
+  virtual int getMotorNumber() const override {
     return motornumber;
   }
 
   /*********** STORABLE **************/
 
-  virtual bool store(FILE* f) const {
+  virtual bool store(FILE* f) const override {
     return false;
   }
 
-  virtual bool restore(FILE* f) {
+  virtual bool restore(FILE* f) override {
     return false;
   }
 
-  virtual std::vector<AbstractController*> getControllers() const {
+  virtual std::vector<AbstractController*> getControllers() const  override {
     return ctrl;
   }
 

@@ -45,7 +45,7 @@ void signal_handler_init(){
 }
 
 int contains(char **list, int len,  const char *str) {
-  for(int i=0; i<len; i++) {
+  for(int i=0; i<len; ++i) {
     if(strcmp(list[i],str) == 0)
       return i+1;
   }

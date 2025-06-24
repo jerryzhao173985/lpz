@@ -12,12 +12,12 @@ namespace lpzrobots{
       double maxRange, double height,  RaySensor::rayDrawMode drawMode){
 
     double sensorAngle = startAngle;
-    double angleStep = (endAngle - startAngle) / (numBeams - 1);
+    double angleStep = (endAngle - startAngle) / (numBeams - 1) override;
     //Register IR sensors in given angular range
-    for(int i = 0; i < numBeams; i++){
+    for(int i = 0; i < numBeams; ++i) override {
       this->registerSensor(new RaySensor(),this->own, osg::Matrix::rotate(M_PI / 2, 0, 1, 0) *
           osg::Matrix::rotate(sensorAngle, 0, 0, 1)*
-          osg::Matrix::translate(0,0, height), maxRange, drawMode);
+          osg::Matrix::translate(0,0, height), maxRange, drawMode) override;
       sensorAngle += angleStep;
     }
   }

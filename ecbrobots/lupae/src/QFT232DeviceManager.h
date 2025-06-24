@@ -73,28 +73,28 @@ namespace lpzrobots {
     int setDTR(int dtr_val);
     int closeDevice();
 
-    bool isDeviceAvailable(QString deviceName);
+    bool isDeviceAvailable(const QString& deviceName);
     bool isDeviceOpened() {
       return opened;
     }
-    int getBaudrate() {
+    int getBaudrate() const {
       return baudrate;
     }
     ;
-    QString getDeviceName() {
+    QString getDeviceName() const {
       return deviceName;
     }
     ;
-    int writeData(QByteArray msg);
+    int writeData(const QByteArray& msg);
 
     /*
-     void setDeviceName(QString name){ deviceName = name.toLatin1(); };
+     void setDeviceName(const QString& name){ deviceName = name.toLatin1(); };
      QString getDeviceName() {return deviceName;};
      */
 
   signals:
-    void newData(QByteArray msg);
-    void textLog(QString s);
+    void newData(const QByteArray& msg);
+    void textLog(const QString& s);
     void deviceOpened();
 
   private:

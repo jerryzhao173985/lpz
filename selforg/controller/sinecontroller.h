@@ -42,12 +42,12 @@ public:
      @param controlmask bitmask to select channels to control (default all)
      @param function controller function to use
    */
-  explicit SineController(unsigned long int controlmask = (~0), function func = function::Sine);
+  SineController(unsigned long int controlmask = (~0), function func = function::Sine);
 
   /** initialisation of the controller with the given sensor/ motornumber
       Must be called before use.
   */
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override;
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr);
 
   /** @return Number of sensors the controller was initialised
       with or 0 if not initialised */
@@ -71,14 +71,14 @@ public:
   virtual void step(const sensor* sensors,
                     int sensornumber,
                     motor* motors,
-                    int motornumber) override;
+                    int motornumber);
   /** performs one step.
       @see step
   */
   virtual void stepNoLearning(const sensor*,
                               int number_sensors,
                               motor*,
-                              int number_motors) override;
+                              int number_motors);
 
   /********* STORABLE INTERFACE ******/
   /// @see Storable
@@ -102,15 +102,15 @@ public:
 
 protected:
   std::string name;
-  int number_sensors;
-  int number_motors;
+  int number_sensors = 0;
+  int number_motors = 0;
   unsigned long int controlmask; // bitmask to select channels. (the others are set to 0)
-  bool individual;
+  bool individual = false;
 
   paramval period;
   paramval phaseShift;
   paramval impulsWidth;
-  double phase; // phase of oscillator
+  double phase = 0; // phase of oscillator
   paramval amplitude;
 
   double (*osci)(double x, double param); // oscillator function
@@ -118,21 +118,21 @@ protected:
 
 class MultiSineController : public SineController {
 public:
-  explicit MultiSineController(unsigned long int controlmask = (~0),
+  MultiSineController(unsigned long int controlmask = (~0),
                                function func = function::Sine);
-  virtual ~MultiSineController() override;
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override;
+  virtual ~MultiSineController();
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr);
   virtual void stepNoLearning(const sensor*,
                               int number_sensors,
                               motor*,
-                              int number_motors) override;
+                              int number_motors);
 
 protected:
   std::unique_ptr<double[]> periods;
   std::unique_ptr<double[]> phaseShifts;
   std::unique_ptr<double[]> amplitudes;
   std::unique_ptr<double[]> offsets;
-  long t;
+  long t = 0;
 };
 
 #endif

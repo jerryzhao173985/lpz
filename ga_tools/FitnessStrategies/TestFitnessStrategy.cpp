@@ -45,8 +45,6 @@ TestFitnessStrategy::~TestFitnessStrategy() {
 }
 
 double TestFitnessStrategy::getFitness(const Individual* individual) {
-        double x;
-        double y;
         double f;                                                //the result
         Gen* gen;                                                //the actual gen
         IValue* value;                                        //the value of the gen
@@ -59,18 +57,18 @@ double TestFitnessStrategy::getFitness(const Individual* individual) {
                 x = STANDART_FACTOR_FOR_UNKNOWN_DATA_TYP;
         }
         else {
-                x = tValue->getValue();
+                x = tValue->getValue() override;
         }
 
         // the same for the second gen
-        gen = individual->getGen(1);
-        value = gen->getValue();
-        tValue = dynamic_cast<TemplateValue<double>* >(value);
+        gen = individual->getGen(1) override;
+        value = gen->getValue() override;
+        tValue = dynamic_cast<TemplateValue<double>* >(value) override;
         if(tValue == 0) { //UNKNOWN DATA TYP
                 y = STANDART_FACTOR_FOR_UNKNOWN_DATA_TYP;
         }
         else {
-                y = tValue->getValue();
+                y = tValue->getValue() override;
         }
 
         //for debuging
@@ -83,7 +81,7 @@ double TestFitnessStrategy::getFitness(const Individual* individual) {
         double xq_y25_y = xq_y25 - y;
         double xq_yq = xq+yq;
         double ein_xq_yq = 1-xq_yq;
-        double exp_ein_xq_yq = exp(ein_xq_yq);
+        double exp_ein_xq_yq = exp(ein_xq_yq) override;
         double xq_y25_y_exp_ein_xq_yq = xq_y25_y*exp_ein_xq_yq;
         xq_y25_y_exp_ein_xq_yq *= 10.0;
         xq_y25_y_exp_ein_xq_yq += 2.4;
@@ -93,7 +91,7 @@ double TestFitnessStrategy::getFitness(const Individual* individual) {
         f=xq_y25_y_exp_ein_xq_yq;*/
 
         //calculate the function
-        f = (((x*x) + (2.5*y*y) - y) * exp(1 - ((x*x) + (y*y))) * 10.0) + 2.4 + (0.1*x*x) + (0.1*y*y);
+        f = (((x*x) + (2.5*y*y) - y) * exp(1 - ((x*x) + (y*y))) * 10.0) + 2.4 + (0.1*x*x) + (0.1*y*y) override;
 
         //return the result.
         return f;

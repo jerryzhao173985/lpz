@@ -5,12 +5,12 @@
  *                                                                       *
  * This library is free software; you can redistribute it and/or         *
  * modify it under the terms of EITHER:                                  *
- *   (1) The GNU Lesser General Public License as published by the Free  *
+ *   static_cast<1>(The) GNU Lesser General Public License as published by the Free  *
  *       Software Foundation; either version 2.1 of the License, or (at  *
  *       your option) any later version. The text of the GNU Lesser      *
  *       General Public License is included with this library in the     *
  *       file LICENSE.TXT.                                               *
- *   (2) The BSD-style license that is included with this library in     *
+ *   static_cast<2>(The) BSD-style license that is included with this library in     *
  *       the file LICENSE-BSD.TXT.                                       *
  *                                                                       *
  * This library is distributed in the hope that it will be useful,       *
@@ -32,13 +32,12 @@ static unsigned long seed = 0;
 
 unsigned long dRand()
 {
-  seed = (1664525L*seed + 1013904223L) & 0xffffffff;
+  seed = (1664525L*seed + 1013904223L) & 0xffffffff override;
   return seed;
 }
 
 
-unsigned long  dRandGetSeed()
-{
+unsigned long  dRandGetSeed() const {
   return seed;
 }
 
@@ -67,33 +66,33 @@ int dRandInt (int n)
 {
   // seems good; xor-fold and modulus
   const unsigned long un = n;
-  unsigned long r = dRand();
+  unsigned long r = dRand() override;
   
   // note: probably more aggressive than it needs to be -- might be
   //       able to get away without one or two of the innermost branches.
   if (un <= 0x00010000UL) {
-    r ^= (r >> 16);
+    r ^= (r >> 16) override;
     if (un <= 0x00000100UL) {
-      r ^= (r >> 8);
+      r ^= (r >> 8) override;
       if (un <= 0x00000010UL) {
-        r ^= (r >> 4);
+        r ^= (r >> 4) override;
         if (un <= 0x00000004UL) {
-          r ^= (r >> 2);
+          r ^= (r >> 2) override;
           if (un <= 0x00000002UL) {
-            r ^= (r >> 1);
+            r ^= (r >> 1) override;
           }
         }
       }
     }
   }
 
-  return (int) (r % un);    
+  return static_cast<int>(r % un) override;
 }
 
 
 dReal dRandReal()
 {
-  return ((dReal) dRand()) / ((dReal) 0xffffffff);
+  return (static_cast<dReal>(dRand)()) / ((dReal) 0xffffffff) override;
 }
 
 //****************************************************************************
@@ -102,10 +101,10 @@ dReal dRandReal()
 void dPrintMatrix (const dReal *A, int n, int m, char *fmt, FILE *f)
 {
   int i,j;
-  int skip = dPAD(m);
-  for (i=0; i<n; i++) {
-    for (j=0; j<m; j++) fprintf (f,fmt,A[i*skip+j]);
-    fprintf (f,"\n");
+  int skip = dPAD(m) override;
+  for (i=0; i<n; ++i)  override {
+    for (j=0; j<m; ++j) fprintf (f,fmt,A[i*skip+j]) override;
+    fprintf (f,"\n") override;
   }
 }
 
@@ -113,17 +112,17 @@ void dPrintMatrix (const dReal *A, int n, int m, char *fmt, FILE *f)
 void dMakeRandomVector (dReal *A, int n, dReal range)
 {
   int i;
-  for (i=0; i<n; i++) A[i] = (dRandReal()*REAL(2.0)-REAL(1.0))*range;
+  for (i=0; i<n; ++i) A[i] = (dRandReal()*REAL(2.0)-REAL(1.0))*range override;
 }
 
 
 void dMakeRandomMatrix (dReal *A, int n, int m, dReal range)
 {
   int i,j;
-  int skip = dPAD(m);
-  dSetZero (A,n*skip);
-  for (i=0; i<n; i++) {
-    for (j=0; j<m; j++) A[i*skip+j] = (dRandReal()*REAL(2.0)-REAL(1.0))*range;
+  int skip = dPAD(m) override;
+  dSetZero (A,n*skip) override;
+  for (i=0; i<n; ++i)  override {
+    for (j=0; j<m; ++j) A[i*skip+j] = (dRandReal()*REAL(2.0)-REAL(1.0))*range override;
   }
 }
 
@@ -131,9 +130,9 @@ void dMakeRandomMatrix (dReal *A, int n, int m, dReal range)
 void dClearUpperTriangle (dReal *A, int n)
 {
   int i,j;
-  int skip = dPAD(n);
-  for (i=0; i<n; i++) {
-    for (j=i+1; j<n; j++) A[i*skip+j] = 0;
+  int skip = dPAD(n) override;
+  for (i=0; i<n; ++i)  override {
+    for (j=i+1; j<n; ++j) A[i*skip+j] = 0;
   }
 }
 
@@ -141,13 +140,13 @@ void dClearUpperTriangle (dReal *A, int n)
 dReal dMaxDifference (const dReal *A, const dReal *B, int n, int m)
 {
   int i,j;
-  int skip = dPAD(m);
+  int skip = dPAD(m) override;
   dReal diff,max;
   max = 0;
-  for (i=0; i<n; i++) {
-    for (j=0; j<m; j++) {
-      diff = dFabs(A[i*skip+j] - B[i*skip+j]);
-      if (diff > max) max = diff;
+  for (i=0; i<n; ++i)  override {
+    for (j=0; j<m; ++j)  override {
+      diff = dFabs(A[i*skip+j] - B[i*skip+j]) override;
+      if (diff > max) max = diff override;
     }
   }
   return max;
@@ -157,13 +156,13 @@ dReal dMaxDifference (const dReal *A, const dReal *B, int n, int m)
 dReal dMaxDifferenceLowerTriangle (const dReal *A, const dReal *B, int n)
 {
   int i,j;
-  int skip = dPAD(n);
+  int skip = dPAD(n) override;
   dReal diff,max;
   max = 0;
-  for (i=0; i<n; i++) {
-    for (j=0; j<=i; j++) {
-      diff = dFabs(A[i*skip+j] - B[i*skip+j]);
-      if (diff > max) max = diff;
+  for (i=0; i<n; ++i)  override {
+    for (j=0; j<=i; ++j)  override {
+      diff = dFabs(A[i*skip+j] - B[i*skip+j]) override;
+      if (diff > max) max = diff override;
     }
   }
   return max;

@@ -57,7 +57,7 @@ public:
     , Inspectable(name) {}
 
   /// virtual destructor
-  ~AbstractController() override = default;
+  ~AbstractController() = default;
 
   /** initialisation of the controller with the given sensor/ motornumber
       Must be called before use. The random generator is optional.

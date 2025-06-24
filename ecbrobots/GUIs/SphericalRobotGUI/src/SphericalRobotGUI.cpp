@@ -54,7 +54,7 @@ void SphericalRobotGUI::linkChannels()
   // create ChannelList and start createChannelList() in class SRGUIPipeFilter
   std::list<AbstractPlotChannel*> channelList = srgui_filter->getChannelList();
   
-  for (std::list<AbstractPlotChannel*>::iterator i=channelList.begin(); i!=channelList.end(); i++)
+  for (std::list<AbstractPlotChannel*>::iterator i=channelList.begin(); i!=channelList.end(); ++i)
   {
     //Infrared-Sensor-Channel
     if (dynamic_cast<IRPlotChannel*> (*i))
@@ -152,7 +152,7 @@ QGroupBox* SphericalRobotGUI::createIRProgressBar() {
   QGroupBox *gbox = new QGroupBox(QString("Infrarot-Sensors-View"));
   QGridLayout *gl = new QGridLayout;
   
-  for(int i=0;i<NUMBER_IR_SENSORS;i++) {
+  for(int i=0;i<NUMBER_IR_SENSORS;++i) {
     ir_labels[i] = new QLabel(QString("IR%1").arg(i+1));
     ir_progressBar[i] = new QProgressBar(this);
     ir_progressBar[i]->setRange(0,255); 

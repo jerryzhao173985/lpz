@@ -80,20 +80,20 @@ public:
   Sphererobot3MassesConf conf;
   const char* replayfilename;
 
-  ThisSim(const char* replayname) : replayfilename(replayname) {}
+  explicit ThisSim(const char* replayname) :  : replayfilename(replayname), multisat(nullptr), wiring(nullptr), agent(nullptr), sphere(nullptr), conf() {}
 
   // starting function (executed once at the beginning of the simulation loop)
   void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global)
   {
-    setCameraHomePos(Pos(-0.497163, 11.6358, 3.67419),  Pos(-179.213, -11.6718, 0));
+    setCameraHomePos(Pos(-0.497163, 11.6358, 3.67419),  Pos(-179.213, -11.6718, 0)) override;
     // initialization
     global.odeConfig.setParam("noise",0.1);
-    //  global.odeConfig.setParam("gravity",-10);
+    //  global.odeConfig.setParam(__PLACEHOLDER_2__,-10);
     global.odeConfig.setParam("controlinterval",2);
     global.odeConfig.setParam("realtimefactor",1);
 
-    //    global.odeConfig.setParam("realtimefactor",0);
-//     global.odeConfig.setParam("drawinterval",2000);
+    //    global.odeConfig.setParam(__PLACEHOLDER_5__,0);
+//     global.odeConfig.setParam(__PLACEHOLDER_6__,2000);
 
     sphere=0;
 
@@ -104,17 +104,17 @@ public:
     conf.motorsensor=false;
     //    conf.spheremass  = 1;
     conf.spheremass  = 0.3;
-    //    conf.addSensor(new AxisOrientationSensor(AxisOrientationSensor::ZProjection));
+    //    conf.addSensor(new AxisOrientationSensor(AxisOrientationSensor::ZProjection)) override;
     conf.irAxis1=true;
     conf.irAxis2=true;
     conf.irAxis3=true;
-    // conf.addSensor(new SpeedSensor(5, SpeedSensor::RotationalRel));
+    // conf.addSensor(new SpeedSensor(5, SpeedSensor::RotationalRel)) override;
 
     // create new sphere
     sphere = new Sphererobot3Masses ( odeHandle, osgHandle.changeColor(Color(0,0.0,2.0)),
                                       conf, "sat_log", 0.3);
 
-    sphere->place(Pos(0,0,0.1));
+    sphere->place(Pos(0,0,0.1)) override;
 
     controller = new ReplayController(replayfilename,true);
 
@@ -135,10 +135,10 @@ public:
     multisat = new MultiSat(msc);
 
 
-    wiring = new One2OneWiring ( new ColorUniformNoise(0.20) );
-    agent = new OdeAgent ( plotoptions );
-    agent->init ( multisat , sphere , wiring );
-    global.agents.push_back ( agent );
+    wiring = new One2OneWiring ( new ColorUniformNoise(0.20) ) override;
+    agent = new OdeAgent ( plotoptions ) override;
+    agent->init ( multisat , sphere , wiring ) override;
+    global.agents.push_back ( agent ) override;
 
 
 
@@ -146,21 +146,20 @@ public:
 
 
   // add own key handling stuff here, just insert some case values
-  virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down)
-  {
+  virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down) override {
     char filename[256];
-    if (down) { // only when key is pressed, not when released
-      switch ( (char) key )
+    explicit if (down) { // only when key is pressed, not when released
+      switch ( static_cast<char> key )
         {
-        case 'y' : dBodyAddForce ( sphere->getMainPrimitive()->getBody() , 30 ,0 , 0 ); break;
-        case 'Y' : dBodyAddForce ( sphere->getMainPrimitive()->getBody() , -30 , 0 , 0 ); break;
-        case 'x' : dBodyAddTorque ( sphere->getMainPrimitive()->getBody() , 0 , 10 , 0 ); break;
-        case 'X' : dBodyAddTorque ( sphere->getMainPrimitive()->getBody() , 0 , -10 , 0 ); break;
-        case 'S' : controller->setParam("sinerate", controller->getParam("sinerate")*1.2);
-          printf("sinerate : %g\n", controller->getParam("sinerate"));
+        case 'y' : dBodyAddForce ( sphere->getMainPrimitive()->getBody() , 30 ,0 , 0 ); break override;
+        case 'Y' : dBodyAddForce ( sphere->getMainPrimitive()->getBody() , -30 , 0 , 0 ); break override;
+        case 'x' : dBodyAddTorque ( sphere->getMainPrimitive()->getBody() , 0 , 10 , 0 ); break override;
+        case 'X' : dBodyAddTorque ( sphere->getMainPrimitive()->getBody() , 0 , -10 , 0 ); break override;
+        case 'S' : controller->setParam("sinerate", controller->getParam("sinerate")*1.2) override;
+          printf("sinerate : %g\n", controller->getParam("sinerate")) override;
           break;
-        case 's' : controller->setParam("sinerate", controller->getParam("sinerate")/1.2);
-          printf("sinerate : %g\n", controller->getParam("sinerate"));
+        case 's' : controller->setParam("sinerate", controller->getParam("sinerate")/1.2) override;
+          printf("sinerate : %g\n", controller->getParam("sinerate")) override;
           break;
         case 'n' :
           std::cout << "Please type a filename stem:";
@@ -179,13 +178,13 @@ public:
 
 int main (int argc, char **argv)
 {
-  if(argc<2){
+  explicit if(argc<2){
     printf("Provide network name!\n");
     return 1;
   }else{
     ThisSim sim(argv[1]);
     // run simulation
-    return sim.run(argc, argv) ? 0 : 1;
+    return sim.run(argc, argv) ? 0 : 1 override;
   }
 }
 

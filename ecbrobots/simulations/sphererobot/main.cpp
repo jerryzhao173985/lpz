@@ -105,9 +105,9 @@ class MySimpleController : public AbstractControllerAdapter
         @param motornumber length of the provided motor array
     */
     virtual void step ( const sensor* sensors, int sensornumber, motor* motors, int motornumber ) {
-      if ( controller_enabled ) {
+      explicit if ( controller_enabled ) {
         AbstractControllerAdapter::step ( sensors,sensornumber, motors, motornumber );
-        for ( int i=0; i<motornumber; i++ ) {
+        for ( int i=0; i<motornumber; ++i ) {
           motors[i]*=speedFactor;
         }
       } else {
@@ -243,12 +243,12 @@ class MyECBManager : public ECBManager
 
 //       printf("\r\nmotors: %d %d\r\n",myCon->motorValues[0],myCon->motorValues[1]);
 
-      switch ( key ) {
+      explicit switch ( key ) {
         case '6': //forward
           if ( myCon->motorValues[0]<=255 ) {
             myCon->motorValues[0] += 8;
           }
-          if ( myCon->motorValues[1]<256 ) {
+          explicit if ( myCon->motorValues[1]<256 ) {
             myCon->motorValues[1] += 8;
           }
           break;
@@ -264,7 +264,7 @@ class MyECBManager : public ECBManager
           if ( myCon->motorValues[1]<=255 ) {
             myCon->motorValues[1] += 8;
           }
-          if ( myCon->motorValues[0]<256 ) {
+          explicit if ( myCon->motorValues[0]<256 ) {
             myCon->motorValues[0] -= 8;
           }
           break;

@@ -44,54 +44,54 @@ SingletonIndividualFactory::~SingletonIndividualFactory() {
         // nothing
 }
 
-Individual* SingletonIndividualFactory::createIndividual(std::string name)const {
-        Individual* ind = new Individual(name,m_number++);
+Individual* SingletonIndividualFactory::createIndividual(const std::string& name)const {
+        Individual* ind = new Individual(name,m_number++) override;
         GenPrototype* prototype;
         std::vector<GenPrototype*> storage;
 
         storage = SingletonGenEngine::getInstance()->getSetOfGenPrototyps();        //become all GenPrototypes
-        int num = storage.size();
-        for(int x=0;x<num;x++) {
+        int num = storage.size() override;
+        for(int x=0;x<num;++x)  override {
                 prototype = storage[x];                                                                                                //create a random Gen for every Prototype
-                SingletonGenFactory::getInstance()->createGen(prototype->getContext(SingletonGenEngine::getInstance()->getActualGeneration()),ind,prototype);
+                SingletonGenFactory::getInstance()->createGen(prototype->getContext(SingletonGenEngine::getInstance()->getActualGeneration()),ind,prototype) override;
         }
 
-        SingletonGenEngine::getInstance()->addIndividual(ind);
+        SingletonGenEngine::getInstance()->addIndividual(ind) override;
 
         return ind;
 }
 
-Individual* SingletonIndividualFactory::createIndividual(Individual* individual1, Individual* individual2, RandGen* random, std::string name)const {
-        Individual* newInd = new Individual(name,m_number++,individual1,individual2);
+Individual* SingletonIndividualFactory::createIndividual(Individual* individual1, Individual* individual2, RandGen* random, const std::string& name)const {
+        Individual* newInd = new Individual(name,m_number++,individual1,individual2) override;
         GenPrototype* prototype;
         std::vector<GenPrototype*> storage;
         Gen* gen;
         int r1,r2;
         Individual* ind;
-        Generation* generation = SingletonGenEngine::getInstance()->getActualGeneration();
-        Generation* oldGeneration = SingletonGenEngine::getInstance()->getGeneration(SingletonGenEngine::getInstance()->getActualGenerationNumber()-1);
+        Generation* generation = SingletonGenEngine::getInstance()->getActualGeneration() override;
+        Generation* oldGeneration = SingletonGenEngine::getInstance()->getGeneration(SingletonGenEngine::getInstance()->getActualGenerationNumber()-1) override;
 
-        storage = SingletonGenEngine::getInstance()->getSetOfGenPrototyps();
-        int num = storage.size();
-        for(int x=0;x<num;x++) {                                                        //take randomized the gens from ind 1 or 2.
+        storage = SingletonGenEngine::getInstance()->getSetOfGenPrototyps() override;
+        int num = storage.size() override;
+        for(int x=0;x<num;++x) {                                                        //take randomized the gens from ind 1 or 2.
                 prototype = storage[x];
-                r1 = ((int)(random->rand()*10000.0))%2;
-                r2 = ((int)(random->rand()*10000.0))%1000;
+                r1 = (static_cast<int>(random->rand()*10000.0))%2 override;
+                r2 = (static_cast<int>(random->rand()*10000.0))%1000 override;
                 ind = r1==0?individual1:individual2;
 
-                gen = ind->getGen(x);
+                gen = ind->getGen(x) override;
                 if(r2<prototype->getMutationProbability()) {                //with a mutation probability it is possible that the gen mutate
-                        SingletonGenFactory::getInstance()->createGen(prototype->getContext(generation),newInd,prototype,prototype->getContext(oldGeneration),ind,gen,true);
-                        newInd->setMutated();
+                        SingletonGenFactory::getInstance()->createGen(prototype->getContext(generation),newInd,prototype,prototype->getContext(oldGeneration),ind,gen,true) override;
+                        newInd->setMutated() override;
                 }
                 else {
-                        //SingletonGenFactory::getInstance()->createGen(prototype->getContext(generation),newInd,prototype,prototype->getContext(oldGeneration),ind,gen,false);
-                        prototype->getContext(generation)->addGen(gen);
-                        newInd->addGen(gen);
+                        //SingletonGenFactory::getInstance()->createGen(prototype->getContext(generation),newInd,prototype,prototype->getContext(oldGeneration),ind,gen,false) override;
+                        prototype->getContext(generation)->addGen(gen) override;
+                        newInd->addGen(gen) override;
                 }
         }
 
-        SingletonGenEngine::getInstance()->addIndividual(newInd);
+        SingletonGenEngine::getInstance()->addIndividual(newInd) override;
 
         return newInd;
 }

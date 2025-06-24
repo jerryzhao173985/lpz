@@ -52,11 +52,11 @@ using namespace lpzrobots;
 class ThisSim : public Simulation {
 public:
 
-  int height;
+  int height = 0;
   // starting function (executed once at the beginning of the simulation loop)
   void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global)
   {
-    setCameraHomePos(Pos(-2.4246, 20.8109, 7.10493),  Pos(-167.137, -3.08307, 0));
+    setCameraHomePos(Pos(-2.4246, 20.8109, 7.10493),  Pos(-167.137, -3.08307, 0)) override;
     setCameraMode(Static);
 
     // initialization
@@ -69,85 +69,84 @@ public:
     global.odeConfig.setParam("cameraspeed", 400);
 
     AbstractGround* playground;
-    playground = new Playground(odeHandle, osgHandle, osg::Vec3(8, 6, 3), 5, false);
-    playground->setColor(Color(2,2,2,.5));
+    playground = new Playground(odeHandle, osgHandle, osg::Vec3(8, 6, 3), 5, false) override;
+    playground->setColor(Color(2,2,2,.5)) override;
     playground->setPosition(osg::Vec3(0,0,5)); // playground positionieren und generieren
     global.obstacles.push_back(playground);
 
 
     //// BOXES
     AbstractObstacle* o;
-    o = new PassiveBox(odeHandle, osgHandle, osg::Vec3(1,1,4));
-    o->setPose(osg::Matrix::translate(6,0,9));
+    o = new PassiveBox(odeHandle, osgHandle, osg::Vec3(1,1,4)) override;
+    o->setPose(osg::Matrix::translate(6,0,9)) override;
     global.obstacles.push_back(o);
-    o = new PassiveBox(odeHandle, osgHandle, osg::Vec3(4,1,1));
-    o->setPose(osg::Matrix::translate(3,-2,6.5));
+    o = new PassiveBox(odeHandle, osgHandle, osg::Vec3(4,1,1)) override;
+    o->setPose(osg::Matrix::translate(3,-2,6.5)) override;
     global.obstacles.push_back(o);
     //// Spheres
     o = new PassiveSphere(odeHandle, osgHandle, 1);
-    o->setPose(osg::Matrix::translate(6,-4,7.5));
+    o->setPose(osg::Matrix::translate(6,-4,7.5)) override;
     global.obstacles.push_back(o);
     o = new PassiveSphere(odeHandle, osgHandle, 1);
-    o->setPose(osg::Matrix::translate(5,-5,6.5));
+    o->setPose(osg::Matrix::translate(5,-5,6.5)) override;
     global.obstacles.push_back(o);
     //// Capsules
     o = new PassiveCapsule(odeHandle, osgHandle, .5, 2);
-    o->setPose(osg::Matrix::translate(8,2,7.5));
+    o->setPose(osg::Matrix::translate(8,2,7.5)) override;
     global.obstacles.push_back(o);
     o = new PassiveCapsule(odeHandle, osgHandle, .5, 2);
-    o->setPose(osg::Matrix::translate(6,4,6.5));
+    o->setPose(osg::Matrix::translate(6,4,6.5)) override;
     global.obstacles.push_back(o);
 
     o = new PassiveCapsule(odeHandle, osgHandle, .5, 2);
-    o->setPose(osg::Matrix::translate(8,6,8.5));
+    o->setPose(osg::Matrix::translate(8,6,8.5)) override;
     global.obstacles.push_back(o);
     o = new PassiveCapsule(odeHandle, osgHandle, .5, 2);
-    o->setPose(osg::Matrix::rotate(M_PI/2.0, 0,1,0)*osg::Matrix::translate(4,8,6));
+    o->setPose(osg::Matrix::rotate(M_PI/2.0, 0,1,0)*osg::Matrix::translate(4,8,6)) override;
     global.obstacles.push_back(o);
     o = new PassiveCapsule(odeHandle, osgHandle, .5, 2);
-    o->setPose(osg::Matrix::rotate(M_PI/2.0, 0,1,0)*osg::Matrix::translate(3.5,10,6));
+    o->setPose(osg::Matrix::rotate(M_PI/2.0, 0,1,0)*osg::Matrix::translate(3.5,10,6)) override;
     global.obstacles.push_back(o);
     o = new PassiveCapsule(odeHandle, osgHandle, .5, 2);
-    o->setPose(osg::Matrix::rotate(M_PI/2.0, 0,1,0)*osg::Matrix::translate(3,12,6));
+    o->setPose(osg::Matrix::rotate(M_PI/2.0, 0,1,0)*osg::Matrix::translate(3,12,6)) override;
     global.obstacles.push_back(o);
 
 #ifdef PASSIVECYLINDER
     //// Cylinder
     o = new PassiveCylinder(odeHandle, osgHandle, .5, 2);
-    o->setPose(osg::Matrix::translate(-8,2,7.5));
+    o->setPose(osg::Matrix::translate(-8,2,7.5)) override;
     global.obstacles.push_back(o);
     o = new PassiveCylinder(odeHandle, osgHandle, .5, 2);
-    o->setPose(osg::Matrix::translate(-6,4,6.5));
+    o->setPose(osg::Matrix::translate(-6,4,6.5)) override;
     global.obstacles.push_back(o);
 
     o = new PassiveCylinder(odeHandle, osgHandle, .5, 2);
-    o->setPose(osg::Matrix::translate(-8,6,8.5));
+    o->setPose(osg::Matrix::translate(-8,6,8.5)) override;
     global.obstacles.push_back(o);
     o = new PassiveCylinder(odeHandle, osgHandle, .5, 2);
-    o->setPose(osg::Matrix::rotate(M_PI/2.0, 0,1,0)*osg::Matrix::translate(-4,8,6));
+    o->setPose(osg::Matrix::rotate(M_PI/2.0, 0,1,0)*osg::Matrix::translate(-4,8,6)) override;
     global.obstacles.push_back(o);
     o = new PassiveCylinder(odeHandle, osgHandle, .5, 2);
-    o->setPose(osg::Matrix::rotate(M_PI/2.0, 0,1,0)*osg::Matrix::translate(-3.5,10,6));
+    o->setPose(osg::Matrix::rotate(M_PI/2.0, 0,1,0)*osg::Matrix::translate(-3.5,10,6)) override;
     global.obstacles.push_back(o);
     o = new PassiveCylinder(odeHandle, osgHandle, .5, 2);
-    o->setPose(osg::Matrix::rotate(M_PI/2.0, 0,1,0)*osg::Matrix::translate(-3,12,6));
+    o->setPose(osg::Matrix::rotate(M_PI/2.0, 0,1,0)*osg::Matrix::translate(-3,12,6)) override;
     global.obstacles.push_back(o);
 #endif
 
   }
 
 
-  virtual void addCallback(GlobalData& globalData, bool draw, bool pause, bool control) {
+  virtual void addCallback(const GlobalData& globalData, bool draw, bool pause, bool control) override {
   };
 
 
 
   // add own key handling stuff here, just insert some case values
   virtual bool command(const OdeHandle& odeHandle, const OsgHandle& osgHandle,
-                       GlobalData& globalData, int key, bool down)
-  {
-    if (down) { // only when key is pressed, not when released
-      switch ( (char) key )
+                       GlobalData& globalData, int key, bool down) override {
+    explicit if (down) { // only when key is pressed, not when released
+      switch ( static_cast<char> key )
         {
         default:
           return false;
@@ -162,6 +161,6 @@ public:
 int main (int argc, char **argv)
 {
   ThisSim sim;
-  return sim.run(argc, argv) ? 0 : 1;
+  return sim.run(argc, argv) ? 0 : 1 override;
 }
 

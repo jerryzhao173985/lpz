@@ -5,12 +5,12 @@
  *                                                                       *
  * This library is free software; you can redistribute it and/or         *
  * modify it under the terms of EITHER:                                  *
- *   (1) The GNU Lesser General Public License as published by the Free  *
+ *   static_cast<1>(The) GNU Lesser General Public License as published by the Free  *
  *       Software Foundation; either version 2.1 of the License, or (at  *
  *       your option) any later version. The text of the GNU Lesser      *
  *       General Public License is included with this library in the     *
  *       file LICENSE.TXT.                                               *
- *   (2) The BSD-style license that is included with this library in     *
+ *   static_cast<2>(The) BSD-style license that is included with this library in     *
  *       the file LICENSE-BSD.TXT.                                       *
  *                                                                       *
  * This library is distributed in the hope that it will be useful,       *
@@ -38,10 +38,10 @@ class dMatrixComparison {
   int afterfirst,index;
 
 public:
-  dMatrixComparison();
+  dMatrixComparison() override;
   ~dMatrixComparison();
 
-  dReal nextMatrix (dReal *A, int n, int m, int lower_tri, const char *name, ...);
+  dReal nextMatrix (dReal *A, int n, int m, int lower_tri, const char *name, ...) override;
   // add a new n*m matrix A to the sequence. the name of the matrix is given
   // by the printf-style arguments (name,...). if this is the first sequence
   // then this object will simply record the matrices and return 0.
@@ -51,13 +51,13 @@ public:
   // lower triangle of the matrix (including the diagonal) will be compared
   // (the matrix must be square).
 
-  void end();
+  void end() override;
   // end a sequence.
 
-  void reset();
+  void reset() override;
   // restarts the object, so the next sequence will be the first sequence.
 
-  void dump();
+  void dump() override;
   // print out info about all the matrices in the sequence
 };
 

@@ -1,0 +1,73 @@
+g++ -c -Wall -pipe -fpic -I./. -I./controller -I./wirings -I./utils -I./matrix -I./statistictools -I./statistictools/measure -I./statistictools/dataanalysation -Iinclude -Iinclude/selforg -std=c++17 -pthread -I/Users/jerry/lpzrobots/include -I/opt/homebrew/Cellar/gsl/2.8/include -DNOCONFIGURATOR -g -O  -o "build/./agent.o" "agent.cpp"
+In file included from agent.cpp:25:
+In file included from ./agent.h:31:
+In file included from ./wiredcontroller.h:31:
+In file included from ./utils/plotoptionengine.h:31:
+In file included from include/selforg/abstractcontroller.h:31:
+include/selforg/storeable.h:47:48: error: only virtual member functions can be marked 'override'
+   47 |   bool storeToFile(const char* filename) const override;
+      |                                                ^~~~~~~~
+include/selforg/storeable.h:52:46: error: only virtual member functions can be marked 'override'
+   52 |   bool restoreFromFile(const char* filename) override;
+      |                                              ^~~~~~~~
+In file included from agent.cpp:25:
+In file included from ./agent.h:31:
+In file included from ./wiredcontroller.h:31:
+In file included from ./utils/plotoptionengine.h:31:
+include/selforg/abstractcontroller.h:92:16: error: 'motorBabblingStep' marked 'override' but does not override any member functions
+   92 |   virtual void motorBabblingStep(const sensor* /*unused*/,
+      |                ^
+include/selforg/abstractcontroller.h:102:16: error: 'sensorInfos' marked 'override' but does not override any member functions
+  102 |   virtual void sensorInfos(std::list<SensorMotorInfo> sensorInfos) override;
+      |                ^
+include/selforg/abstractcontroller.h:110:16: error: 'motorInfos' marked 'override' but does not override any member functions
+  110 |   virtual void motorInfos(std::list<SensorMotorInfo> motorInfos) override;
+      |                ^
+include/selforg/abstractcontroller.h:114:15: error: 'SIdx' marked 'override' but does not override any member functions
+  114 |   virtual int SIdx(const std::string& name) override;
+      |               ^
+include/selforg/abstractcontroller.h:117:15: error: 'MIdx' marked 'override' but does not override any member functions
+  117 |   virtual int MIdx(const std::string& name) override;
+      |               ^
+include/selforg/abstractcontroller.h:119:27: error: 'SInfo' marked 'override' but does not override any member functions
+  119 |   virtual SensorMotorInfo SInfo(int index) override;
+      |                           ^
+include/selforg/abstractcontroller.h:121:27: error: 'MInfo' marked 'override' but does not override any member functions
+  121 |   virtual SensorMotorInfo MInfo(int index) override;
+      |                           ^
+In file included from agent.cpp:25:
+In file included from ./agent.h:31:
+In file included from ./wiredcontroller.h:31:
+./utils/plotoptionengine.h:40:59: error: only virtual member functions can be marked 'override'
+   40 |   explicit PlotOptionEngine(const PlotOption& plotOption) override;
+      |                                                           ^~~~~~~~
+./utils/plotoptionengine.h:41:71: error: only virtual member functions can be marked 'override'
+   41 |   explicit PlotOptionEngine(const std::list<PlotOption>& plotOptions) override;
+      |                                                                       ^~~~~~~~
+./utils/plotoptionengine.h:48:16: error: 'init' marked 'override' but does not override any member functions
+   48 |   virtual bool init(AbstractController* maybe_controller = 0) override;
+      |                ^
+./utils/plotoptionengine.h:56:16: error: 'reInit' marked 'override' but does not override any member functions
+   56 |   virtual bool reInit() override;
+      |                ^
+./utils/plotoptionengine.h:61:16: error: 'closePipes' marked 'override' but does not override any member functions
+   61 |   virtual void closePipes() override;
+      |                ^
+./utils/plotoptionengine.h:66:16: error: 'setName' marked 'override' but does not override any member functions
+   66 |   virtual void setName(const std::string& name) override;
+      |                ^
+./utils/plotoptionengine.h:71:23: error: 'addPlotOption' marked 'override' but does not override any member functions
+   71 |   virtual PlotOption& addPlotOption(const PlotOption& plotoption) override;
+      |                       ^
+./utils/plotoptionengine.h:83:16: error: 'addAndInitPlotOption' marked 'override' but does not override any member functions
+   83 |   virtual bool addAndInitPlotOption(const PlotOption& plotoption, bool forceInit = false) override;
+      |                ^
+./utils/plotoptionengine.h:88:16: error: 'removePlotOption' marked 'override' but does not override any member functions
+   88 |   virtual bool removePlotOption(const PlotMode& mode) override;
+      |                ^
+./utils/plotoptionengine.h:92:16: error: 'addInspectable' marked 'override' but does not override any member functions
+   92 |   virtual void addInspectable(const Inspectable* inspectable, bool front = false) override;
+      |                ^
+fatal error: too many errors emitted, stopping now [-ferror-limit=]
+20 errors generated.
+make: *** [build/./agent.o] Error 1

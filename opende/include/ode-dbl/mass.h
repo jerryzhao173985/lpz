@@ -5,12 +5,12 @@
  *                                                                       *
  * This library is free software; you can redistribute it and/or         *
  * modify it under the terms of EITHER:                                  *
- *   (1) The GNU Lesser General Public License as published by the Free  *
+ *   static_cast<1>(The) GNU Lesser General Public License as published by the Free  *
  *       Software Foundation; either version 2.1 of the License, or (at  *
  *       your option) any later version. The text of the GNU Lesser      *
  *       General Public License is included with this library in the     *
  *       file LICENSE.TXT.                                               *
- *   (2) The BSD-style license that is included with this library in     *
+ *   static_cast<2>(The) BSD-style license that is included with this library in     *
  *       the file LICENSE-BSD.TXT.                                       *
  *                                                                       *
  * This library is distributed in the hope that it will be useful,       *
@@ -40,17 +40,17 @@ typedef struct dMass dMass;
  *
  * @return 1 if both codition are met
  */
-ODE_API int dMassCheck(const dMass *m);
+ODE_API int dMassCheck(const dMass *m) override;
 
-ODE_API void dMassSetZero (dMass *);
+ODE_API void dMassSetZero (dMass *) override;
 
 ODE_API void dMassSetParameters (dMass *, dReal themass,
 			 dReal cgx, dReal cgy, dReal cgz,
 			 dReal I11, dReal I22, dReal I33,
 			 dReal I12, dReal I13, dReal I23);
 
-ODE_API void dMassSetSphere (dMass *, dReal density, dReal radius);
-ODE_API void dMassSetSphereTotal (dMass *, dReal total_mass, dReal radius);
+ODE_API void dMassSetSphere (dMass *, dReal density, dReal radius) override;
+ODE_API void dMassSetSphereTotal (dMass *, dReal total_mass, dReal radius) override;
 
 ODE_API void dMassSetCapsule (dMass *, dReal density, int direction,
 		  	dReal radius, dReal length);
@@ -67,22 +67,22 @@ ODE_API void dMassSetBox (dMass *, dReal density,
 ODE_API void dMassSetBoxTotal (dMass *, dReal total_mass,
 		       dReal lx, dReal ly, dReal lz);
 
-ODE_API void dMassSetTrimesh (dMass *, dReal density, dGeomID g);
+ODE_API void dMassSetTrimesh (dMass *, dReal density, dGeomID g) override;
 
-ODE_API void dMassSetTrimeshTotal (dMass *m, dReal total_mass, dGeomID g);
+ODE_API void dMassSetTrimeshTotal (dMass *m, dReal total_mass, dGeomID g) override;
 
-ODE_API void dMassAdjust (dMass *, dReal newmass);
+ODE_API void dMassAdjust (dMass *, dReal newmass) override;
 
-ODE_API void dMassTranslate (dMass *, dReal x, dReal y, dReal z);
+ODE_API void dMassTranslate (dMass *, dReal x, dReal y, dReal z) override;
 
-ODE_API void dMassRotate (dMass *, const dMatrix3 R);
+ODE_API void dMassRotate (dMass *, const dMatrix3 R) override;
 
-ODE_API void dMassAdd (dMass *a, const dMass *b);
+ODE_API void dMassAdd (dMass *a, const dMass *b) override;
 
 
 // Backwards compatible API
-ODE_API ODE_API_DEPRECATED void dMassSetCappedCylinder(dMass *a, dReal b, int c, dReal d, dReal e);
-ODE_API ODE_API_DEPRECATED void dMassSetCappedCylinderTotal(dMass *a, dReal b, int c, dReal d, dReal e);
+ODE_API ODE_API_DEPRECATED void dMassSetCappedCylinder(dMass *a, dReal b, int c, dReal d, dReal e) override;
+ODE_API ODE_API_DEPRECATED void dMassSetCappedCylinderTotal(dMass *a, dReal b, int c, dReal d, dReal e) override;
 
 
 struct dMass {
@@ -91,8 +91,7 @@ struct dMass {
   dMatrix3 I;
 
 #ifdef __cplusplus
-  dMass()
-    { dMassSetZero (this); }
+  dMass : mass(), c(), I() { dMassSetZero (this); }
   void setZero()
     { dMassSetZero (this); }
   void setParameters (dReal themass, dReal cgx, dReal cgy, dReal cgz,

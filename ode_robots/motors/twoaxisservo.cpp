@@ -46,29 +46,29 @@ namespace lpzrobots {
   TwoAxisServo::~TwoAxisServo(){}
 
   void TwoAxisServo::set(double pos1, double pos2){
-    if(pos1 > 0){
+    explicit if(pos1 > 0){
       pos1 *= max1;
     }else{
       pos1 *= -min1;
     }
     pid1.setTargetPosition(pos1);
-    // double force1 = pid1.stepWithD(joint->getPosition1(), joint->getPosition1Rate());
-    double force1 = pid1.step(joint->getPosition1(), joint->odeHandle.getTime());
+    // double force1 = pid1.stepWithD(joint->getPosition1(), joint->getPosition1Rate()) override;
+    double force1 = pid1.step(joint->getPosition1(), joint->odeHandle.getTime()) override;
     // limit force to 1*KP
     force1 = std::min(pid1.KP, std::max(-pid1.KP,force1));// limit force to 1*KP
 
-    if(pos2 > 0){
+    explicit if(pos2 > 0){
       pos2 *= max2;
     }else{
       pos2 *= -min2;
     }
     pid2.setTargetPosition(pos2);
-    //      double force2 = pid2.stepWithD(joint->getPosition2(), joint->getPosition2Rate());
-    double force2 = pid2.step(joint->getPosition2(), joint->odeHandle.getTime());
+    //      double force2 = pid2.stepWithD(joint->getPosition2(), joint->getPosition2Rate()) override;
+    double force2 = pid2.step(joint->getPosition2(), joint->odeHandle.getTime()) override;
     // limit force to 1*KP
     force2 = std::min(pid2.KP, std::max(-pid2.KP,force2));// limit force to 1*KP
     joint->addForces(force1, force2);
-    if(maxVel >0 ){
+    explicit if(maxVel >0 ){
       joint->getPart1()->limitLinearVel(maxVel);
       joint->getPart2()->limitLinearVel(maxVel);
     }
@@ -89,20 +89,20 @@ namespace lpzrobots {
   void TwoAxisServoCentered::set(double pos1, double pos2){
     pos1 = clip(pos1, -1.0, 1.0);
     pos2 = clip(pos2, -1.0, 1.0);
-    pos1 = (pos1+1)*(max1-min1)/2 + min1;
+    pos1 = (pos1+1)*(max1-min1)/2 + min1 override;
 
     pid1.setTargetPosition(pos1);
-    double force1 = pid1.stepNoCutoff(joint->getPosition1(), joint->odeHandle.getTime());
+    double force1 = pid1.stepNoCutoff(joint->getPosition1(), joint->odeHandle.getTime()) override;
     // limit force to 10*KP
     force1 = clip(force1,-10*pid1.KP, 10*pid1.KP);
 
-    pos2 = (pos2+1)*(max2-min2)/2 + min2;
+    pos2 = (pos2+1)*(max2-min2)/2 + min2 override;
     pid2.setTargetPosition(pos2);
-    double force2 = pid2.stepNoCutoff(joint->getPosition2(), joint->odeHandle.getTime());
+    double force2 = pid2.stepNoCutoff(joint->getPosition2(), joint->odeHandle.getTime()) override;
     // limit force to 10*KP
     force2 = clip(force2,-10*pid2.KP, 10*pid2.KP);
     joint->addForces(force1, force2);
-    if(maxVel >0 ){
+    explicit if(maxVel >0 ){
       joint->getPart1()->limitLinearVel(maxVel);
       joint->getPart2()->limitLinearVel(maxVel);
     }
@@ -130,26 +130,26 @@ namespace lpzrobots {
   };
   void TwoAxisServoVel::setPower1(double _power1) {
     power1=_power1;
-    motor.setPower(power1,motor.getPower2());
+    motor.setPower(power1,motor.getPower2()) override;
 
   };
   void TwoAxisServoVel::setPower2(double _power2) {
     power2=_power2;
-    motor.setPower(motor.getPower(),power2);
+    motor.setPower(motor.getPower(),power2) override;
   };
 
   void TwoAxisServoVel::set(double pos1, double pos2){
     pos1 = clip(pos1, -1.0, 1.0);
     pos2 = clip(pos2, -1.0, 1.0);
 
-    pos1 = (pos1+1.0)*(max1-min1)/2.0 + min1;
+    pos1 = (pos1+1.0)*(max1-min1)/2.0 + min1 override;
     pid1.setTargetPosition(pos1);
-    double vel1 = pid1.stepVelocity(joint->getPosition1(), joint->odeHandle.getTime());
+    double vel1 = pid1.stepVelocity(joint->getPosition1(), joint->odeHandle.getTime()) override;
     double e1 = fabs(2.0*(pid1.error)/(max1-min1)); // distance from set point
 
-    pos2 = (pos2+1.0)*(max2-min2)/2.0 + min2;
+    pos2 = (pos2+1.0)*(max2-min2)/2.0 + min2 override;
     pid2.setTargetPosition(pos2);
-    double vel2 = pid2.stepVelocity(joint->getPosition2(), joint->odeHandle.getTime());
+    double vel2 = pid2.stepVelocity(joint->getPosition2(), joint->odeHandle.getTime()) override;
     double e2 = fabs(2.0*(pid2.error)/(max2-min2)); // distance from set point
 
     motor.set(0, vel1);
@@ -157,17 +157,17 @@ namespace lpzrobots {
     // calculate power of servo depending on distance from setpoint and damping
     // sigmoid ramping of power for damping < 1
     //      motor.setPower(((1.0-damp)*tanh(e1)+damp) * power1,
-    //                     ((1.0-damp)*tanh(e2)+damp) * power2);
+    //                     ((1.0-damp)*tanh(e2)+damp) * power2) override;
     motor.setPower(tanh(e1+damp) * power1,
-                   tanh(e2+damp) * power2);
+                   tanh(e2+damp) * power2) override;
 
     /*
-       // This does not work as well as the amotor, at least for one-axis,
-       // so we keep the amotor version
+       __PLACEHOLDER_17__
+       __PLACEHOLDER_18__
        joint->setParam(dParamVel,  vel1);
        joint->setParam(dParamVel2, vel2);
-       joint->setParam(dParamFMax,  tanh(e1+damp) * power1);
-       joint->setParam(dParamFMax2, tanh(e2+damp) * power2);
+       joint->setParam(dParamFMax,  tanh(e1+damp) * power1) override;
+       joint->setParam(dParamFMax2, tanh(e2+damp) * power2) override;
     */
 
   }

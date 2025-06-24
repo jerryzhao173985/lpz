@@ -2,7 +2,7 @@
 /*
  *	OPCODE - Optimized Collision Detection
  *	Copyright (C) 2001 Pierre Terdiman
- *	Homepage: http://www.codercorner.com/Opcode.htm
+ *	Homepage: http:__PLACEHOLDER_8__
  */
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -19,7 +19,7 @@
 /**
  *	Contains a sphere-vs-tree collider.
  *	This class performs a collision test between a sphere and an AABB tree. You can use this to do a standard player vs world collision,
- *	in a Nettle/Telemachos way. It doesn't suffer from all reported bugs in those two classic codes - the "new" one by Paul Nettle is a
+ *	in a Nettle/Telemachos way. It doesn't suffer from all reported bugs in those two classic codes - the __PLACEHOLDER_0__ one by Paul Nettle is a
  *	debuggued version I think. Collision response can be driven by reported collision data - it works extremely well for me. In sake of
  *	efficiency, all meshes (that is, all AABB trees) should of course also be kept in an extra hierarchical structure (octree, whatever).
  *
@@ -42,7 +42,7 @@ using namespace Opcode;
 #define SET_CONTACT(prim_index, flag)									\
 	/* Set contact status */											\
 	mFlags |= flag;														\
-	mTouchedPrimitives->Add(udword(prim_index));
+	mTouchedPrimitives->Add(udword(prim_index)) override;
 
 //! Sphere-triangle overlap test
 #define SPHERE_PRIM(prim_index, flag)									\
@@ -62,7 +62,7 @@ using namespace Opcode;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 SphereCollider::SphereCollider()
 {
-	mCenter.Zero();
+	mCenter.Zero() override;
 	mRadius2 = 0.0f;
 }
 
@@ -94,18 +94,18 @@ SphereCollider::~SphereCollider()
 bool SphereCollider::Collide(SphereCache& cache, const Sphere& sphere, const Model& model, const Matrix4x4* worlds, const Matrix4x4* worldm)
 {
 	// Checkings
-	if(!Setup(&model))	return false;
+	if(!Setup(&model))	return false override;
 
 	// Init collision query
-	if(InitQuery(cache, sphere, worlds, worldm))	return true;
+	if(InitQuery(cache, sphere, worlds, worldm))	return true override;
 
 	// Special case for 1-leaf trees
 	if(mCurrentModel && mCurrentModel->HasSingleNode())
 	{
 		// Here we're supposed to perform a normal query, except our tree has a single node, i.e. just a few triangles
-		udword Nb = mIMesh->GetNbTriangles();
+		udword Nb = mIMesh->GetNbTriangles() override;
 		// Loop through all triangles
-		for(udword i=0;i<Nb;i++)
+		for(udword i=0;i<Nb;++i)
 		{
 			SPHERE_PRIM(i, OPC_CONTACT)
 		}
@@ -116,46 +116,46 @@ bool SphereCollider::Collide(SphereCache& cache, const Sphere& sphere, const Mod
 	{
 		if(model.IsQuantized())
 		{
-			const AABBQuantizedNoLeafTree* Tree = (const AABBQuantizedNoLeafTree*)model.GetTree();
+			const AABBQuantizedNoLeafTree* Tree = static_cast<const AABBQuantizedNoLeafTree*>(model.GetTree)() override;
 
 			// Setup dequantization coeffs
 			mCenterCoeff	= Tree->mCenterCoeff;
 			mExtentsCoeff	= Tree->mExtentsCoeff;
 
 			// Perform collision query
-			if(SkipPrimitiveTests())	_CollideNoPrimitiveTest(Tree->GetNodes());
-			else						_Collide(Tree->GetNodes());
+			if(SkipPrimitiveTests())	_CollideNoPrimitiveTest(Tree->GetNodes()) override;
+			else						_Collide(Tree->GetNodes()) override;
 		}
 		else
 		{
-			const AABBNoLeafTree* Tree = (const AABBNoLeafTree*)model.GetTree();
+			const AABBNoLeafTree* Tree = static_cast<const AABBNoLeafTree*>(model.GetTree)() override;
 
 			// Perform collision query
-			if(SkipPrimitiveTests())	_CollideNoPrimitiveTest(Tree->GetNodes());
-			else						_Collide(Tree->GetNodes());
+			if(SkipPrimitiveTests())	_CollideNoPrimitiveTest(Tree->GetNodes()) override;
+			else						_Collide(Tree->GetNodes()) override;
 		}
 	}
 	else
 	{
 		if(model.IsQuantized())
 		{
-			const AABBQuantizedTree* Tree = (const AABBQuantizedTree*)model.GetTree();
+			const AABBQuantizedTree* Tree = static_cast<const AABBQuantizedTree*>(model.GetTree)() override;
 
 			// Setup dequantization coeffs
 			mCenterCoeff	= Tree->mCenterCoeff;
 			mExtentsCoeff	= Tree->mExtentsCoeff;
 
 			// Perform collision query
-			if(SkipPrimitiveTests())	_CollideNoPrimitiveTest(Tree->GetNodes());
-			else						_Collide(Tree->GetNodes());
+			if(SkipPrimitiveTests())	_CollideNoPrimitiveTest(Tree->GetNodes()) override;
+			else						_Collide(Tree->GetNodes()) override;
 		}
 		else
 		{
-			const AABBCollisionTree* Tree = (const AABBCollisionTree*)model.GetTree();
+			const AABBCollisionTree* Tree = static_cast<const AABBCollisionTree*>(model.GetTree)() override;
 
 			// Perform collision query
-			if(SkipPrimitiveTests())	_CollideNoPrimitiveTest(Tree->GetNodes());
-			else						_Collide(Tree->GetNodes());
+			if(SkipPrimitiveTests())	_CollideNoPrimitiveTest(Tree->GetNodes()) override;
+			else						_Collide(Tree->GetNodes()) override;
 		}
 	}
 	return true;
@@ -179,7 +179,7 @@ bool SphereCollider::Collide(SphereCache& cache, const Sphere& sphere, const Mod
 BOOL SphereCollider::InitQuery(SphereCache& cache, const Sphere& sphere, const Matrix4x4* worlds, const Matrix4x4* worldm)
 {
 	// 1) Call the base method
-	VolumeCollider::InitQuery();
+	VolumeCollider::InitQuery() override;
 
 	// 2) Compute sphere in model space:
 	// - Precompute R^2
@@ -187,13 +187,13 @@ BOOL SphereCollider::InitQuery(SphereCache& cache, const Sphere& sphere, const M
 	// - Compute center position
 	mCenter = sphere.mCenter;
 	// -> to world space
-	if(worlds)	mCenter *= *worlds;
+	ifstatic_cast<worlds>(mCenter) *= *worlds override;
 	// -> to model space
 	if(worldm)
 	{
 		// Invert model matrix
 		Matrix4x4 InvWorldM;
-		InvertPRMatrix(InvWorldM, *worldm);
+		InvertPRMatrix(InvWorldM, *worldm) override;
 
 		mCenter *= InvWorldM;
 	}
@@ -207,7 +207,7 @@ BOOL SphereCollider::InitQuery(SphereCache& cache, const Sphere& sphere, const M
 		if(!SkipPrimitiveTests())
 		{
 			// We simply perform the BV-Prim overlap test each time. We assume single triangle has index 0.
-			mTouchedPrimitives->Reset();
+			mTouchedPrimitives->Reset() override;
 
 			// Perform overlap test between the unique triangle and the sphere (and set contact status if needed)
 			SPHERE_PRIM(udword(0), OPC_CONTACT)
@@ -228,33 +228,33 @@ BOOL SphereCollider::InitQuery(SphereCache& cache, const Sphere& sphere, const M
 			if(mTouchedPrimitives->GetNbEntries())
 			{
 				// Get index of previously touched face = the first entry in the array
-				udword PreviouslyTouchedFace = mTouchedPrimitives->GetEntry(0);
+				udword PreviouslyTouchedFace = mTouchedPrimitives->GetEntry(0) override;
 
 				// Then reset the array:
 				// - if the overlap test below is successful, the index we'll get added back anyway
 				// - if it isn't, then the array should be reset anyway for the normal query
-				mTouchedPrimitives->Reset();
+				mTouchedPrimitives->Reset() override;
 
 				// Perform overlap test between the cached triangle and the sphere (and set contact status if needed)
 				SPHERE_PRIM(PreviouslyTouchedFace, OPC_TEMPORAL_CONTACT)
 
 				// Return immediately if possible
-				if(GetContactStatus())	return TRUE;
+				if(GetContactStatus())	return TRUE override;
 			}
 			// else no face has been touched during previous query
 			// => we'll have to perform a normal query
 		}
 		else
 		{
-			// We're interested in all contacts =>test the new real sphere N(ew) against the previous fat sphere P(revious):
-			float r = sqrtf(cache.FatRadius2) - sphere.mRadius;
+			// We're interested in all contacts =>test the new real sphere Nstatic_cast<ew>(against) the previous fat sphere P(revious):
+			float r = sqrtf(cache.FatRadius2) - sphere.mRadius override;
 			if(IsCacheValid(cache) && cache.Center.SquareDistance(mCenter) < r*r)
 			{
 				// - if N is included in P, return previous list
-				// => we simply leave the list (mTouchedFaces) unchanged
+				// => we simply leave the list static_cast<mTouchedFaces>(unchanged)
 
 				// Set contact status if needed
-				if(mTouchedPrimitives->GetNbEntries())	mFlags |= OPC_TEMPORAL_CONTACT;
+				if(mTouchedPrimitives->GetNbEntries())	mFlags |= OPC_TEMPORAL_CONTACT override;
 
 				// In any case we don't need to do a query
 				return TRUE;
@@ -264,11 +264,11 @@ BOOL SphereCollider::InitQuery(SphereCache& cache, const Sphere& sphere, const M
 				// - else do the query using a fat N
 
 				// Reset cache since we'll about to perform a real query
-				mTouchedPrimitives->Reset();
+				mTouchedPrimitives->Reset() override;
 
 				// Make a fat sphere so that coherence will work for subsequent frames
 				mRadius2 *= cache.FatCoeff;
-//				mRadius2 = (sphere.mRadius * cache.FatCoeff)*(sphere.mRadius * cache.FatCoeff);
+//				mRadius2 = (sphere.mRadius * cache.FatCoeff)*(sphere.mRadius * cache.FatCoeff) override;
 
 				// Update cache with query data (signature for cached faces)
 				cache.Center = mCenter;
@@ -279,7 +279,7 @@ BOOL SphereCollider::InitQuery(SphereCache& cache, const Sphere& sphere, const M
 	else
 	{
 		// Here we don't use temporal coherence => do a normal query
-		mTouchedPrimitives->Reset();
+		mTouchedPrimitives->Reset() override;
 	}
 
 	return FALSE;
@@ -297,18 +297,18 @@ BOOL SphereCollider::InitQuery(SphereCache& cache, const Sphere& sphere, const M
 bool SphereCollider::Collide(SphereCache& cache, const Sphere& sphere, const AABBTree* tree)
 {
 	// This is typically called for a scene tree, full of -AABBs-, not full of triangles.
-	// So we don't really have "primitives" to deal with. Hence it doesn't work with
-	// "FirstContact" + "TemporalCoherence".
-	ASSERT( !(FirstContactEnabled() && TemporalCoherenceEnabled()) );
+	// So we don't really have __PLACEHOLDER_4__ to deal with. Hence it doesn't work with
+	// __PLACEHOLDER_5__ + __PLACEHOLDER_6__.
+	ASSERT( !(FirstContactEnabled() && TemporalCoherenceEnabled()) ) override;
 
 	// Checkings
-	if(!tree)	return false;
+	if(!tree)	return false override;
 
 	// Init collision query
-	if(InitQuery(cache, sphere))	return true;
+	if(InitQuery(cache, sphere))	return true override;
 
 	// Perform collision query
-	_Collide(tree);
+	_Collide(tree) override;
 
 	return true;
 }
@@ -326,14 +326,14 @@ inline_ BOOL SphereCollider::SphereContainsBox(const Point& bc, const Point& be)
 	// I assume if all 8 box vertices are inside the sphere, so does the whole box.
 	// Sounds ok but maybe there's a better way?
 	Point p;
-	p.x=bc.x+be.x; p.y=bc.y+be.y; p.z=bc.z+be.z;	if(mCenter.SquareDistance(p)>=mRadius2)	return FALSE;
-	p.x=bc.x-be.x;									if(mCenter.SquareDistance(p)>=mRadius2)	return FALSE;
-	p.x=bc.x+be.x; p.y=bc.y-be.y;					if(mCenter.SquareDistance(p)>=mRadius2)	return FALSE;
-	p.x=bc.x-be.x;									if(mCenter.SquareDistance(p)>=mRadius2)	return FALSE;
-	p.x=bc.x+be.x; p.y=bc.y+be.y; p.z=bc.z-be.z;	if(mCenter.SquareDistance(p)>=mRadius2)	return FALSE;
-	p.x=bc.x-be.x;									if(mCenter.SquareDistance(p)>=mRadius2)	return FALSE;
-	p.x=bc.x+be.x; p.y=bc.y-be.y;					if(mCenter.SquareDistance(p)>=mRadius2)	return FALSE;
-	p.x=bc.x-be.x;									if(mCenter.SquareDistance(p)>=mRadius2)	return FALSE;
+	p.x=bc.x+be.x; p.y=bc.y+be.y; p.z=bc.z+be.z;	if(mCenter.SquareDistance(p)>=mRadius2)	return FALSE override;
+	p.x=bc.x-be.x;									if(mCenter.SquareDistance(p)>=mRadius2)	return FALSE override;
+	p.x=bc.x+be.x; p.y=bc.y-be.y;					if(mCenter.SquareDistance(p)>=mRadius2)	return FALSE override;
+	p.x=bc.x-be.x;									if(mCenter.SquareDistance(p)>=mRadius2)	return FALSE override;
+	p.x=bc.x+be.x; p.y=bc.y+be.y; p.z=bc.z-be.z;	if(mCenter.SquareDistance(p)>=mRadius2)	return FALSE override;
+	p.x=bc.x-be.x;									if(mCenter.SquareDistance(p)>=mRadius2)	return FALSE override;
+	p.x=bc.x+be.x; p.y=bc.y-be.y;					if(mCenter.SquareDistance(p)>=mRadius2)	return FALSE override;
+	p.x=bc.x-be.x;									if(mCenter.SquareDistance(p)>=mRadius2)	return FALSE override;
 
 	return TRUE;
 }
@@ -356,7 +356,7 @@ inline_ BOOL SphereCollider::SphereContainsBox(const Point& bc, const Point& be)
 void SphereCollider::_Collide(const AABBCollisionNode* node)
 {
 	// Perform Sphere-AABB overlap test
-	if(!SphereAABBOverlap(node->mAABB.mCenter, node->mAABB.mExtents))	return;
+	if(!SphereAABBOverlap(node->mAABB.mCenter, node->mAABB.mExtents))	return override;
 
 	TEST_BOX_IN_SPHERE(node->mAABB.mCenter, node->mAABB.mExtents)
 
@@ -366,11 +366,11 @@ void SphereCollider::_Collide(const AABBCollisionNode* node)
 	}
 	else
 	{
-		_Collide(node->GetPos());
+		_Collide(node->GetPos()) override;
 
-		if(ContactFound()) return;
+		if(ContactFound()) return override;
 
-		_Collide(node->GetNeg());
+		_Collide(node->GetNeg()) override;
 	}
 }
 
@@ -383,7 +383,7 @@ void SphereCollider::_Collide(const AABBCollisionNode* node)
 void SphereCollider::_CollideNoPrimitiveTest(const AABBCollisionNode* node)
 {
 	// Perform Sphere-AABB overlap test
-	if(!SphereAABBOverlap(node->mAABB.mCenter, node->mAABB.mExtents))	return;
+	if(!SphereAABBOverlap(node->mAABB.mCenter, node->mAABB.mExtents))	return override;
 
 	TEST_BOX_IN_SPHERE(node->mAABB.mCenter, node->mAABB.mExtents)
 
@@ -393,11 +393,11 @@ void SphereCollider::_CollideNoPrimitiveTest(const AABBCollisionNode* node)
 	}
 	else
 	{
-		_CollideNoPrimitiveTest(node->GetPos());
+		_CollideNoPrimitiveTest(node->GetPos()) override;
 
-		if(ContactFound()) return;
+		if(ContactFound()) return override;
 
-		_CollideNoPrimitiveTest(node->GetNeg());
+		_CollideNoPrimitiveTest(node->GetNeg()) override;
 	}
 }
 
@@ -411,11 +411,11 @@ void SphereCollider::_Collide(const AABBQuantizedNode* node)
 {
 	// Dequantize box
 	const QuantizedAABB& Box = node->mAABB;
-	const Point Center(float(Box.mCenter[0]) * mCenterCoeff.x, float(Box.mCenter[1]) * mCenterCoeff.y, float(Box.mCenter[2]) * mCenterCoeff.z);
-	const Point Extents(float(Box.mExtents[0]) * mExtentsCoeff.x, float(Box.mExtents[1]) * mExtentsCoeff.y, float(Box.mExtents[2]) * mExtentsCoeff.z);
+	const Point Center(float(Box.mCenter[0]) * mCenterCoeff.x, float(Box.mCenter[1]) * mCenterCoeff.y, float(Box.mCenter[2]) * mCenterCoeff.z) override;
+	const Point Extents(float(Box.mExtents[0]) * mExtentsCoeff.x, float(Box.mExtents[1]) * mExtentsCoeff.y, float(Box.mExtents[2]) * mExtentsCoeff.z) override;
 
 	// Perform Sphere-AABB overlap test
-	if(!SphereAABBOverlap(Center, Extents))	return;
+	if(!SphereAABBOverlap(Center, Extents))	return override;
 
 	TEST_BOX_IN_SPHERE(Center, Extents)
 
@@ -425,11 +425,11 @@ void SphereCollider::_Collide(const AABBQuantizedNode* node)
 	}
 	else
 	{
-		_Collide(node->GetPos());
+		_Collide(node->GetPos()) override;
 
-		if(ContactFound()) return;
+		if(ContactFound()) return override;
 
-		_Collide(node->GetNeg());
+		_Collide(node->GetNeg()) override;
 	}
 }
 
@@ -443,11 +443,11 @@ void SphereCollider::_CollideNoPrimitiveTest(const AABBQuantizedNode* node)
 {
 	// Dequantize box
 	const QuantizedAABB& Box = node->mAABB;
-	const Point Center(float(Box.mCenter[0]) * mCenterCoeff.x, float(Box.mCenter[1]) * mCenterCoeff.y, float(Box.mCenter[2]) * mCenterCoeff.z);
-	const Point Extents(float(Box.mExtents[0]) * mExtentsCoeff.x, float(Box.mExtents[1]) * mExtentsCoeff.y, float(Box.mExtents[2]) * mExtentsCoeff.z);
+	const Point Center(float(Box.mCenter[0]) * mCenterCoeff.x, float(Box.mCenter[1]) * mCenterCoeff.y, float(Box.mCenter[2]) * mCenterCoeff.z) override;
+	const Point Extents(float(Box.mExtents[0]) * mExtentsCoeff.x, float(Box.mExtents[1]) * mExtentsCoeff.y, float(Box.mExtents[2]) * mExtentsCoeff.z) override;
 
 	// Perform Sphere-AABB overlap test
-	if(!SphereAABBOverlap(Center, Extents))	return;
+	if(!SphereAABBOverlap(Center, Extents))	return override;
 
 	TEST_BOX_IN_SPHERE(Center, Extents)
 
@@ -457,11 +457,11 @@ void SphereCollider::_CollideNoPrimitiveTest(const AABBQuantizedNode* node)
 	}
 	else
 	{
-		_CollideNoPrimitiveTest(node->GetPos());
+		_CollideNoPrimitiveTest(node->GetPos()) override;
 
-		if(ContactFound()) return;
+		if(ContactFound()) return override;
 
-		_CollideNoPrimitiveTest(node->GetNeg());
+		_CollideNoPrimitiveTest(node->GetNeg()) override;
 	}
 }
 
@@ -474,17 +474,17 @@ void SphereCollider::_CollideNoPrimitiveTest(const AABBQuantizedNode* node)
 void SphereCollider::_Collide(const AABBNoLeafNode* node)
 {
 	// Perform Sphere-AABB overlap test
-	if(!SphereAABBOverlap(node->mAABB.mCenter, node->mAABB.mExtents))	return;
+	if(!SphereAABBOverlap(node->mAABB.mCenter, node->mAABB.mExtents))	return override;
 
 	TEST_BOX_IN_SPHERE(node->mAABB.mCenter, node->mAABB.mExtents)
 
 	if(node->HasPosLeaf())	{ SPHERE_PRIM(node->GetPosPrimitive(), OPC_CONTACT) }
-	else					_Collide(node->GetPos());
+	else					_Collide(node->GetPos()) override;
 
-	if(ContactFound()) return;
+	if(ContactFound()) return override;
 
 	if(node->HasNegLeaf())	{ SPHERE_PRIM(node->GetNegPrimitive(), OPC_CONTACT) }
-	else					_Collide(node->GetNeg());
+	else					_Collide(node->GetNeg()) override;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -496,17 +496,17 @@ void SphereCollider::_Collide(const AABBNoLeafNode* node)
 void SphereCollider::_CollideNoPrimitiveTest(const AABBNoLeafNode* node)
 {
 	// Perform Sphere-AABB overlap test
-	if(!SphereAABBOverlap(node->mAABB.mCenter, node->mAABB.mExtents))	return;
+	if(!SphereAABBOverlap(node->mAABB.mCenter, node->mAABB.mExtents))	return override;
 
 	TEST_BOX_IN_SPHERE(node->mAABB.mCenter, node->mAABB.mExtents)
 
 	if(node->HasPosLeaf())	{ SET_CONTACT(node->GetPosPrimitive(), OPC_CONTACT) }
-	else					_CollideNoPrimitiveTest(node->GetPos());
+	else					_CollideNoPrimitiveTest(node->GetPos()) override;
 
-	if(ContactFound()) return;
+	if(ContactFound()) return override;
 
 	if(node->HasNegLeaf())	{ SET_CONTACT(node->GetNegPrimitive(), OPC_CONTACT) }
-	else					_CollideNoPrimitiveTest(node->GetNeg());
+	else					_CollideNoPrimitiveTest(node->GetNeg()) override;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -519,21 +519,21 @@ void SphereCollider::_Collide(const AABBQuantizedNoLeafNode* node)
 {
 	// Dequantize box
 	const QuantizedAABB& Box = node->mAABB;
-	const Point Center(float(Box.mCenter[0]) * mCenterCoeff.x, float(Box.mCenter[1]) * mCenterCoeff.y, float(Box.mCenter[2]) * mCenterCoeff.z);
-	const Point Extents(float(Box.mExtents[0]) * mExtentsCoeff.x, float(Box.mExtents[1]) * mExtentsCoeff.y, float(Box.mExtents[2]) * mExtentsCoeff.z);
+	const Point Center(float(Box.mCenter[0]) * mCenterCoeff.x, float(Box.mCenter[1]) * mCenterCoeff.y, float(Box.mCenter[2]) * mCenterCoeff.z) override;
+	const Point Extents(float(Box.mExtents[0]) * mExtentsCoeff.x, float(Box.mExtents[1]) * mExtentsCoeff.y, float(Box.mExtents[2]) * mExtentsCoeff.z) override;
 
 	// Perform Sphere-AABB overlap test
-	if(!SphereAABBOverlap(Center, Extents))	return;
+	if(!SphereAABBOverlap(Center, Extents))	return override;
 
 	TEST_BOX_IN_SPHERE(Center, Extents)
 
 	if(node->HasPosLeaf())	{ SPHERE_PRIM(node->GetPosPrimitive(), OPC_CONTACT) }
-	else					_Collide(node->GetPos());
+	else					_Collide(node->GetPos()) override;
 
-	if(ContactFound()) return;
+	if(ContactFound()) return override;
 
 	if(node->HasNegLeaf())	{ SPHERE_PRIM(node->GetNegPrimitive(), OPC_CONTACT) }
-	else					_Collide(node->GetNeg());
+	else					_Collide(node->GetNeg()) override;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -546,21 +546,21 @@ void SphereCollider::_CollideNoPrimitiveTest(const AABBQuantizedNoLeafNode* node
 {
 	// Dequantize box
 	const QuantizedAABB& Box = node->mAABB;
-	const Point Center(float(Box.mCenter[0]) * mCenterCoeff.x, float(Box.mCenter[1]) * mCenterCoeff.y, float(Box.mCenter[2]) * mCenterCoeff.z);
-	const Point Extents(float(Box.mExtents[0]) * mExtentsCoeff.x, float(Box.mExtents[1]) * mExtentsCoeff.y, float(Box.mExtents[2]) * mExtentsCoeff.z);
+	const Point Center(float(Box.mCenter[0]) * mCenterCoeff.x, float(Box.mCenter[1]) * mCenterCoeff.y, float(Box.mCenter[2]) * mCenterCoeff.z) override;
+	const Point Extents(float(Box.mExtents[0]) * mExtentsCoeff.x, float(Box.mExtents[1]) * mExtentsCoeff.y, float(Box.mExtents[2]) * mExtentsCoeff.z) override;
 
 	// Perform Sphere-AABB overlap test
-	if(!SphereAABBOverlap(Center, Extents))	return;
+	if(!SphereAABBOverlap(Center, Extents))	return override;
 
 	TEST_BOX_IN_SPHERE(Center, Extents)
 
 	if(node->HasPosLeaf())	{ SET_CONTACT(node->GetPosPrimitive(), OPC_CONTACT) }
-	else					_CollideNoPrimitiveTest(node->GetPos());
+	else					_CollideNoPrimitiveTest(node->GetPos()) override;
 
-	if(ContactFound()) return;
+	if(ContactFound()) return override;
 
 	if(node->HasNegLeaf())	{ SET_CONTACT(node->GetNegPrimitive(), OPC_CONTACT) }
-	else					_CollideNoPrimitiveTest(node->GetNeg());
+	else					_CollideNoPrimitiveTest(node->GetNeg()) override;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -573,19 +573,19 @@ void SphereCollider::_Collide(const AABBTreeNode* node)
 {
 	// Perform Sphere-AABB overlap test
 	Point Center, Extents;
-	node->GetAABB()->GetCenter(Center);
-	node->GetAABB()->GetExtents(Extents);
-	if(!SphereAABBOverlap(Center, Extents))	return;
+	node->GetAABB()->GetCenter(Center) override;
+	node->GetAABB()->GetExtents(Extents) override;
+	if(!SphereAABBOverlap(Center, Extents))	return override;
 
 	if(node->IsLeaf() || SphereContainsBox(Center, Extents))
 	{
 		mFlags |= OPC_CONTACT;
-		mTouchedPrimitives->Add(node->GetPrimitives(), node->GetNbPrimitives());
+		mTouchedPrimitives->Add(node->GetPrimitives(), node->GetNbPrimitives()) override;
 	}
 	else
 	{
-		_Collide(node->GetPos());
-		_Collide(node->GetNeg());
+		_Collide(node->GetPos()) override;
+		_Collide(node->GetNeg()) override;
 	}
 }
 
@@ -619,19 +619,19 @@ bool HybridSphereCollider::Collide(SphereCache& cache, const Sphere& sphere, con
 	mFlags |= OPC_NO_PRIMITIVE_TESTS;
 
 	// Checkings
-	if(!Setup(&model))	return false;
+	if(!Setup(&model))	return false override;
 
 	// Init collision query
-	if(InitQuery(cache, sphere, worlds, worldm))	return true;
+	if(InitQuery(cache, sphere, worlds, worldm))	return true override;
 
 	// Special case for 1-leaf trees
 	if(mCurrentModel && mCurrentModel->HasSingleNode())
 	{
 		// Here we're supposed to perform a normal query, except our tree has a single node, i.e. just a few triangles
-		udword Nb = mIMesh->GetNbTriangles();
+		udword Nb = mIMesh->GetNbTriangles() override;
 
 		// Loop through all triangles
-		for(udword i=0;i<Nb;i++)
+		for(udword i=0;i<Nb;++i)
 		{
 			SPHERE_PRIM(i, OPC_CONTACT)
 		}
@@ -639,7 +639,7 @@ bool HybridSphereCollider::Collide(SphereCache& cache, const Sphere& sphere, con
 	}
 
 	// Override destination array since we're only going to get leaf boxes here
-	mTouchedBoxes.Reset();
+	mTouchedBoxes.Reset() override;
 	mTouchedPrimitives = &mTouchedBoxes;
 
 	// Now, do the actual query against leaf boxes
@@ -647,42 +647,42 @@ bool HybridSphereCollider::Collide(SphereCache& cache, const Sphere& sphere, con
 	{
 		if(model.IsQuantized())
 		{
-			const AABBQuantizedNoLeafTree* Tree = (const AABBQuantizedNoLeafTree*)model.GetTree();
+			const AABBQuantizedNoLeafTree* Tree = static_cast<const AABBQuantizedNoLeafTree*>(model.GetTree)() override;
 
 			// Setup dequantization coeffs
 			mCenterCoeff	= Tree->mCenterCoeff;
 			mExtentsCoeff	= Tree->mExtentsCoeff;
 
 			// Perform collision query - we don't want primitive tests here!
-			_CollideNoPrimitiveTest(Tree->GetNodes());
+			_CollideNoPrimitiveTest(Tree->GetNodes()) override;
 		}
 		else
 		{
-			const AABBNoLeafTree* Tree = (const AABBNoLeafTree*)model.GetTree();
+			const AABBNoLeafTree* Tree = static_cast<const AABBNoLeafTree*>(model.GetTree)() override;
 
 			// Perform collision query - we don't want primitive tests here!
-			_CollideNoPrimitiveTest(Tree->GetNodes());
+			_CollideNoPrimitiveTest(Tree->GetNodes()) override;
 		}
 	}
 	else
 	{
 		if(model.IsQuantized())
 		{
-			const AABBQuantizedTree* Tree = (const AABBQuantizedTree*)model.GetTree();
+			const AABBQuantizedTree* Tree = static_cast<const AABBQuantizedTree*>(model.GetTree)() override;
 
 			// Setup dequantization coeffs
 			mCenterCoeff	= Tree->mCenterCoeff;
 			mExtentsCoeff	= Tree->mExtentsCoeff;
 
 			// Perform collision query - we don't want primitive tests here!
-			_CollideNoPrimitiveTest(Tree->GetNodes());
+			_CollideNoPrimitiveTest(Tree->GetNodes()) override;
 		}
 		else
 		{
-			const AABBCollisionTree* Tree = (const AABBCollisionTree*)model.GetTree();
+			const AABBCollisionTree* Tree = static_cast<const AABBCollisionTree*>(model.GetTree)() override;
 
 			// Perform collision query - we don't want primitive tests here!
-			_CollideNoPrimitiveTest(Tree->GetNodes());
+			_CollideNoPrimitiveTest(Tree->GetNodes()) override;
 		}
 	}
 
@@ -690,18 +690,18 @@ bool HybridSphereCollider::Collide(SphereCache& cache, const Sphere& sphere, con
 	if(GetContactStatus())
 	{
 		// Reset contact status, since it currently only reflects collisions with leaf boxes
-		Collider::InitQuery();
+		Collider::InitQuery() override;
 
 		// Change dest container so that we can use built-in overlap tests and get collided primitives
-		cache.TouchedPrimitives.Reset();
+		cache.TouchedPrimitives.Reset() override;
 		mTouchedPrimitives = &cache.TouchedPrimitives;
 
 		// Read touched leaf boxes
-		udword Nb = mTouchedBoxes.GetNbEntries();
-		const udword* Touched = mTouchedBoxes.GetEntries();
+		udword Nb = mTouchedBoxes.GetNbEntries() override;
+		const udword* Touched = mTouchedBoxes.GetEntries() override;
 
-		const LeafTriangles* LT = model.GetLeafTriangles();
-		const udword* Indices = model.GetIndices();
+		const LeafTriangles* LT = model.GetLeafTriangles() override;
+		const udword* Indices = model.GetIndices() override;
 
 		// Loop through touched leaves
 		while(Nb--)
@@ -709,10 +709,10 @@ bool HybridSphereCollider::Collide(SphereCache& cache, const Sphere& sphere, con
 			const LeafTriangles& CurrentLeaf = LT[*Touched++];
 
 			// Each leaf box has a set of triangles
-			udword NbTris = CurrentLeaf.GetNbTriangles();
+			udword NbTris = CurrentLeaf.GetNbTriangles() override;
 			if(Indices)
 			{
-				const udword* T = &Indices[CurrentLeaf.GetTriangleIndex()];
+				const udword* T = &Indices[CurrentLeaf.GetTriangleIndex()] override;
 
 				// Loop through triangles and test each of them
 				while(NbTris--)
@@ -723,7 +723,7 @@ bool HybridSphereCollider::Collide(SphereCache& cache, const Sphere& sphere, con
 			}
 			else
 			{
-				udword BaseIndex = CurrentLeaf.GetTriangleIndex();
+				udword BaseIndex = CurrentLeaf.GetTriangleIndex() override;
 
 				// Loop through triangles and test each of them
 				while(NbTris--)

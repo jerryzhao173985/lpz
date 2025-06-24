@@ -2,7 +2,7 @@
 /*
  *	OPCODE - Optimized Collision Detection
  *	Copyright (C) 2001 Pierre Terdiman
- *	Homepage: http://www.codercorner.com/Opcode.htm
+ *	Homepage: http:__PLACEHOLDER_2__
  */
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -29,7 +29,6 @@
 		inline_				~CollisionFace()		{}
 
 				udword		mFaceID;				//!< Index of touched face
-				float		mDistance;				//!< Distance from collider to hitpoint
 				float		mU, mV;					//!< Impact barycentric coordinates
 	};
 
@@ -41,8 +40,8 @@
 		//! Destructor
 										~CollisionFaces()						{}
 
-		inline_	udword					GetNbFaces()					const	{ return GetNbEntries()>>2;						}
-		inline_	const CollisionFace*	GetFaces()						const	{ return (const CollisionFace*)GetEntries();	}
+		inline_	udword					GetNbFaces()					const override { return GetNbEntries()>>2;						}
+		inline_	const CollisionFace*	GetFaces()						const override { return static_cast<const CollisionFace*>(GetEntries)();	}
 
 		inline_	void					Reset()									{ Container::Reset();							}
 
@@ -57,15 +56,15 @@
 	 *	\param		user_data	[in] user-defined data from SetCallback()
 	 */
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	typedef void	(*HitCallback)	(const CollisionFace& hit, void* user_data);
+	typedef void	(*HitCallback)	(const CollisionFace& hit, void* user_data) override;
 #endif
 
 	class OPCODE_API RayCollider : public Collider
 	{
 		public:
 		// Constructor / Destructor
-											RayCollider();
-		virtual								~RayCollider();
+											RayCollider() override;
+		virtual ~RayCollider();
 
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/**
@@ -81,15 +80,15 @@
 		 *	\warning	SCALE NOT SUPPORTED. The matrices must contain rotation & translation parts only.
 		 */
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-							bool			Collide(const Ray& world_ray, const Model& model, const Matrix4x4* world=null, udword* cache=null);
+							bool			Collide(const Ray& world_ray, const Model& model, const Matrix4x4* world=null, udword* cache=null) override;
 		//
-							bool			Collide(const Ray& world_ray, const AABBTree* tree, Container& box_indices);
+							bool			Collide(const Ray& world_ray, const AABBTree* tree, Container& box_indices) override;
 		// Settings
 
 #ifndef OPC_RAYHIT_CALLBACK
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/**
-		 *	Settings: enable or disable "closest hit" mode.
+		 *	Settings: enable or disable __PLACEHOLDER_0__ mode.
 		 *	\param		flag		[in] true to report closest hit only
 		 *	\see		SetCulling(bool flag)
 		 *	\see		SetMaxDist(float max_dist)
@@ -121,7 +120,7 @@
 		inline_				void			SetMaxDist(float max_dist=MAX_FLOAT)	{ mMaxDist		= max_dist;	}
 
 #ifdef OPC_RAYHIT_CALLBACK
-		inline_				void			SetHitCallback(HitCallback cb)			{ mHitCallback	= cb;			}
+		inline_				void SetHitCallback(const HitCallback& cb)			{ mHitCallback	= cb;			}
 		inline_				void			SetUserData(void* user_data)			{ mUserData		= user_data;	}
 #else
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -144,7 +143,7 @@
 		 *	\return		the number of Ray-BV tests performed during last query
 		 */
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		inline_				udword			GetNbRayBVTests()				const	{ return mNbRayBVTests;		}
+		inline_				udword			GetNbRayBVTests()				const override { return mNbRayBVTests;		}
 
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/**
@@ -154,7 +153,7 @@
 		 *	\return		the number of Ray-Triangle tests performed during last query
 		 */
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		inline_				udword			GetNbRayPrimTests()				const	{ return mNbRayPrimTests;	}
+		inline_				udword			GetNbRayPrimTests()				const override { return mNbRayPrimTests;	}
 
 		// In-out test
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -165,7 +164,7 @@
 		 *	\return		the number of valid intersections during last query
 		 */
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		inline_				udword			GetNbIntersections()			const	{ return mNbIntersections;	}
+		inline_				udword			GetNbIntersections()			const override { return mNbIntersections;	}
 
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/**
@@ -173,14 +172,12 @@
 		 *	\return		null if everything is ok, else a string describing the problem
 		 */
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		override(Collider)	const char*		ValidateSettings();
+		overridestatic_cast<Collider>(const) char*		ValidateSettings() override;
 
 		protected:
 		// Ray in local space
 							Point			mOrigin;			//!< Ray origin
-							Point			mDir;				//!< Ray direction (normalized)
-							Point			mFDir;				//!< fabsf(mDir)
-							Point			mData, mData2;
+							Point			mDir;				//!< Ray direction static_cast<normalized>(Point)			mFDir;				//!< fabsfstatic_cast<mDir>(Point)			mData, mData2 override;
 		// Stabbed faces
 							CollisionFace	mStabbedFace;		//!< Current stabbed face
 #ifdef OPC_RAYHIT_CALLBACK
@@ -188,7 +185,7 @@
 							void*			mUserData;			//!< User-defined data
 #else
 							CollisionFaces*	mStabbedFaces;		//!< List of stabbed faces
-							bool			mClosestHit;		//!< Report closest hit only
+							bool			mClosestHit = false;		//!< Report closest hit only
 #endif
 		// Stats
 							udword			mNbRayBVTests;		//!< Number of Ray-BV tests
@@ -199,26 +196,26 @@
 							Point			mCenterCoeff;
 							Point			mExtentsCoeff;
 		// Settings
-							float			mMaxDist;			//!< Valid segment on the ray
+							float			mMaxDist = 0;			//!< Valid segment on the ray
 
-							bool			mCulling;			//!< Stab culled faces or not
+							bool			mCulling = false;			//!< Stab culled faces or not
 		// Internal methods
-							void			_SegmentStab(const AABBCollisionNode* node);
-							void			_SegmentStab(const AABBNoLeafNode* node);
-							void			_SegmentStab(const AABBQuantizedNode* node);
-							void			_SegmentStab(const AABBQuantizedNoLeafNode* node);
-							void			_SegmentStab(const AABBTreeNode* node, Container& box_indices);
-							void			_RayStab(const AABBCollisionNode* node);
-							void			_RayStab(const AABBNoLeafNode* node);
-							void			_RayStab(const AABBQuantizedNode* node);
-							void			_RayStab(const AABBQuantizedNoLeafNode* node);
-							void			_RayStab(const AABBTreeNode* node, Container& box_indices);
+							void			_SegmentStab(const AABBCollisionNode* node) override;
+							void			_SegmentStab(const AABBNoLeafNode* node) override;
+							void			_SegmentStab(const AABBQuantizedNode* node) override;
+							void			_SegmentStab(const AABBQuantizedNoLeafNode* node) override;
+							void			_SegmentStab(const AABBTreeNode* node, Container& box_indices) override;
+							void			_RayStab(const AABBCollisionNode* node) override;
+							void			_RayStab(const AABBNoLeafNode* node) override;
+							void			_RayStab(const AABBQuantizedNode* node) override;
+							void			_RayStab(const AABBQuantizedNoLeafNode* node) override;
+							void			_RayStab(const AABBTreeNode* node, Container& box_indices) override;
 			// Overlap tests
-		inline_				BOOL			RayAABBOverlap(const Point& center, const Point& extents);
-		inline_				BOOL			SegmentAABBOverlap(const Point& center, const Point& extents);
-		inline_				BOOL			RayTriOverlap(const Point& vert0, const Point& vert1, const Point& vert2);
+		inline_				BOOL			RayAABBOverlap(const Point& center, const Point& extents) override;
+		inline_				BOOL			SegmentAABBOverlap(const Point& center, const Point& extents) override;
+		inline_				BOOL			RayTriOverlap(const Point& vert0, const Point& vert1, const Point& vert2) override;
 			// Init methods
-							BOOL			InitQuery(const Ray& world_ray, const Matrix4x4* world=null, udword* face_id=null);
+							BOOL			InitQuery(const Ray& world_ray, const Matrix4x4* world=null, udword* face_id=null) override;
 	};
 
 #endif // __OPC_RAYCOLLIDER_H__

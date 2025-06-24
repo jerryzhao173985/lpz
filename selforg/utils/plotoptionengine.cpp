@@ -27,7 +27,7 @@
 #include "plotoption.h"
 #include <algorithm>
 #include <assert.h>
-#include <locale.h> // need to set LC_NUMERIC to have a '.' in the numbers written or piped to gnuplot
+#include <locale.h> // need to set LC_NUMERIC to have a __PLACEHOLDER_22__ in the numbers written or piped to gnuplot
 #include <signal.h>
 #include <string.h>
 #include <string>
@@ -43,8 +43,7 @@ PlotOptionEngine::PlotOptionEngine(const PlotOption& plotOption)
   t = 1;
 }
 
-PlotOptionEngine::PlotOptionEngine(const list<PlotOption>& plotOptions)
-  : plotOptions(plotOptions)
+PlotOptionEngine::PlotOptionEngine(const list<PlotOption>& plotOptions_) : plotOptions(plotOptions_)
   , maybe_controller(0)
   , name("") {
   initialised = false;
@@ -73,7 +72,7 @@ PlotOptionEngine::init(AbstractController* maybe_controller) {
 }
 
 bool
-PlotOptionEngine::initPlotOption(PlotOption& po) {
+PlotOptionEngine::initPlotOption(const PlotOption& po) {
   po.open();
   if (po.pipe) {
     // print start
@@ -175,8 +174,7 @@ PlotOptionEngine::removePlotOption(PlotMode mode) {
 void
 PlotOptionEngine::addInspectable(const Inspectable* inspectable, bool front) {
   assert(!initialised);
-  if (front)
-    inspectables.push_front(inspectable);
+  if (front) inspectables.push_front(inspectable);
   else
     inspectables.push_back(inspectable);
 }
@@ -193,8 +191,7 @@ PlotOptionEngine::writePlotComment(const char* cmt, bool addSpace) {
   for (auto& po : plotOptions) {
     if ((po.pipe) && (strlen(cmt) > 0)) { // for the guilogger pipe
       char last = cmt[strlen(cmt) - 1];
-      if (addSpace)
-        fprintf(po.pipe, "# %s", cmt);
+      if (addSpace) fprintf(po.pipe, "# %s", cmt);
       else
         fprintf(po.pipe, "#%s", cmt);
       if (last != 10 && last != 13) // print with or without new line
@@ -216,7 +213,7 @@ PlotOptionEngine::plot(double time) {
       (*i).flush(t);
     }
   }
-  t++;
+  ++t;
 }
 
 // GEORG: it is better to plot it at initialization time!
@@ -228,7 +225,7 @@ PlotOptionEngine::plot(double time) {
 //             {
 //                     if (!(*i).namesPlotted)
 //                     {
-//                             fprintf((*i).pipe,"#C t");
+//                             fprintf((*i).pipe,__PLACEHOLDER_21__);
 //                             printInspectableNames((*i).pipe,inspectables);
 //                             (*i).namesPlotted = true;
 //                     }

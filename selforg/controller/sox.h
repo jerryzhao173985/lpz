@@ -7,7 +7,7 @@
  *   LICENSE:                                                              *
  *   This work is licensed under the Creative Commons                      *
  *   Attribution-NonCommercial-ShareAlike 2.5 License. To view a copy of   *
- *   this license, visit http://creativecommons.org/licenses/by-nc-sa/2.5/ *
+ *   this license, visit http:__PLACEHOLDER_1__
  *   or send a letter to Creative Commons, 543 Howard Street, 5th Floor,   *
  *   San Francisco, California, 94105, USA.                                *
  *                                                                         *
@@ -31,25 +31,25 @@
 
 /// configuration object for Sox controller. Use Sox::getDefaultConf().
 struct SoxConf {
-  double initFeedbackStrength; ///< initial strength of sensor to motor connection
-  bool useExtendedModel;       ///< if true, the extended model (S matrix) is used
+  double initFeedbackStrength = 0; ///< initial strength of sensor to motor connection
+  bool useExtendedModel = false;       ///< if true, the extended model (S matrix) is used
   /// if true the controller can be taught see teachable interface
-  bool useTeaching;
+  bool useTeaching = false;
   /// # of steps the sensors are averaged (1 means no averaging)
-  int steps4Averaging;
+  int steps4Averaging = 0;
   /// # of steps the motor values are delayed (1 means no delay)
-  int steps4Delay;
-  bool someInternalParams; ///< if true only some internal parameters are exported
-  bool onlyMainParameters; ///< if true only some configurable parameters are exported
+  int steps4Delay = 0;
+  bool someInternalParams = false; ///< if true only some internal parameters are exported
+  bool onlyMainParameters = false; ///< if true only some configurable parameters are exported
 
-  double factorS; ///< factor for learning rate of S
-  double factorb; ///< factor for learning rate of b
-  double factorh; ///< factor for learning rate of h
+  double factorS = 0; ///< factor for learning rate of S
+  double factorb = 0; ///< factor for learning rate of b
+  double factorh = 0; ///< factor for learning rate of h
 };
 
 /**
  * This controller implements the standard algorihm described the the Chapter 5 (Homeokinesis)
- *  with extensions of Chapter 15 of book "The Playful Machine"
+ *  with extensions of Chapter 15 of book __PLACEHOLDER_0__
  */
 class Sox
   : public AbstractController
@@ -58,14 +58,14 @@ class Sox
 
 public:
   /// constructor
-  explicit Sox(const SoxConf& conf = getDefaultConf());
+  Sox(const SoxConf& conf = getDefaultConf());
 
   /// constructor provided for convenience, use conf object to customize more
-  explicit Sox(double init_feedback_strength,
+  Sox(double init_feedback_strength,
                bool useExtendedModel = true,
                bool useTeaching = false);
 
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override;
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr);
 
   virtual ~Sox();
 
@@ -96,25 +96,25 @@ public:
 
   /// performs one step (includes learning).
   /// Calulates motor commands from sensor inputs.
-  virtual void step(const sensor*, int number_sensors, motor*, int number_motors) override;
+  virtual void step(const sensor*, int number_sensors, motor*, int number_motors);
 
   /// performs one step without learning. Calulates motor commands from sensor inputs.
   virtual void stepNoLearning(const sensor*,
                               int number_sensors,
                               motor*,
-                              int number_motors) override;
+                              int number_motors);
 
   /// called during babbling phase
   virtual void motorBabblingStep(const sensor*,
                                  int number_sensors,
                                  const motor*,
-                                 int number_motors) override;
+                                 int number_motors);
 
   /***** STOREABLE ****/
   /** stores the controller values to a given file. */
   virtual bool store(FILE* f) const override;
   /** loads the controller values from a given file. */
-  virtual bool restore(FILE* f) override;
+  virtual bool restore(FILE* f);
 
   /* some direct access functions (unsafe!) */
   virtual matrix::Matrix getA();
@@ -125,18 +125,18 @@ public:
   virtual void seth(const matrix::Matrix& h);
 
   /***** TEACHABLE ****/
-  virtual void setMotorTeaching(const matrix::Matrix& teaching) override;
-  virtual void setSensorTeaching(const matrix::Matrix& teaching) override;
-  virtual matrix::Matrix getLastMotorValues() override;
-  virtual matrix::Matrix getLastSensorValues() override;
+  virtual void setMotorTeaching(const matrix::Matrix& teaching);
+  virtual void setSensorTeaching(const matrix::Matrix& teaching);
+  virtual matrix::Matrix getLastMotorValues();
+  virtual matrix::Matrix getLastSensorValues();
 
   /***** PARAMETRIZABLE ****/
-  virtual std::list<matrix::Matrix> getParameters() const override;
-  virtual int setParameters(const std::list<matrix::Matrix>& params) override;
+  virtual std::list<matrix::Matrix> getParameters() const;
+  virtual int setParameters(const std::list<matrix::Matrix>& params);
 
 protected:
-  unsigned short number_sensors;
-  unsigned short number_motors;
+  unsigned short number_sensors = 0;
+  unsigned short number_motors = 0;
   static constexpr unsigned short buffersize = 10;
 
   matrix::Matrix A;                    // Model Matrix
@@ -153,13 +153,13 @@ protected:
   matrix::Matrix v_avg;
   matrix::Matrix x;        // current sensor value vector
   matrix::Matrix x_smooth; // time average of x values
-  int t;
+  int t = 0;
 
-  bool loga;
+  bool loga = false;
 
   SoxConf conf; ///< configuration objects
 
-  bool intern_isTeaching;    // teaching signal available?
+  bool intern_isTeaching = false;    // teaching signal available?
   matrix::Matrix y_teaching; // motor teaching  signal
 
   paramval creativity;

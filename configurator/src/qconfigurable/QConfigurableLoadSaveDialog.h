@@ -87,7 +87,7 @@ namespace lpzrobots {
       QConfigurableLoadSaveDialog(QMap<QString, QConfigurableWidget*> configurableWidgetMap, QHash<QString, QDomElement> qde_configurableStateMap,
           DialogFunction function);
       virtual ~QConfigurableLoadSaveDialog();
-      //void setConfigurableTileNames(QStringList configurabelTileName);
+      //void setConfigurableTileNames(const QStringList& configurabelTileName);
 
     private slots:
       void sl_dialogAccept();

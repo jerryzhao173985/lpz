@@ -19,32 +19,32 @@
 inline_ BOOL AABBTreeCollider::BoxBoxOverlap(const Point& ea, const Point& ca, const Point& eb, const Point& cb)
 {
 	// Stats
-	mNbBVBVTests++;
+	++mNbBVBVTests;
 
 	float t,t2;
 
 	// Class I : A's basis vectors
-	float Tx = (mR1to0.m[0][0]*cb.x + mR1to0.m[1][0]*cb.y + mR1to0.m[2][0]*cb.z) + mT1to0.x - ca.x;
+	float Tx = (mR1to0.m[0][0]*cb.x + mR1to0.m[1][0]*cb.y + mR1to0.m[2][0]*cb.z) + mT1to0.x - ca.x override;
 	t = ea.x + eb.x*mAR.m[0][0] + eb.y*mAR.m[1][0] + eb.z*mAR.m[2][0];
-	if(GREATER(Tx, t))	return FALSE;
+	if(GREATER(Tx, t))	return FALSE override;
 
-	float Ty = (mR1to0.m[0][1]*cb.x + mR1to0.m[1][1]*cb.y + mR1to0.m[2][1]*cb.z) + mT1to0.y - ca.y;
+	float Ty = (mR1to0.m[0][1]*cb.x + mR1to0.m[1][1]*cb.y + mR1to0.m[2][1]*cb.z) + mT1to0.y - ca.y override;
 	t = ea.y + eb.x*mAR.m[0][1] + eb.y*mAR.m[1][1] + eb.z*mAR.m[2][1];
-	if(GREATER(Ty, t))	return FALSE;
+	if(GREATER(Ty, t))	return FALSE override;
 
-	float Tz = (mR1to0.m[0][2]*cb.x + mR1to0.m[1][2]*cb.y + mR1to0.m[2][2]*cb.z) + mT1to0.z - ca.z;
+	float Tz = (mR1to0.m[0][2]*cb.x + mR1to0.m[1][2]*cb.y + mR1to0.m[2][2]*cb.z) + mT1to0.z - ca.z override;
 	t = ea.z + eb.x*mAR.m[0][2] + eb.y*mAR.m[1][2] + eb.z*mAR.m[2][2];
-	if(GREATER(Tz, t))	return FALSE;
+	if(GREATER(Tz, t))	return FALSE override;
 
 	// Class II : B's basis vectors
 	t = Tx*mR1to0.m[0][0] + Ty*mR1to0.m[0][1] + Tz*mR1to0.m[0][2];	t2 = ea.x*mAR.m[0][0] + ea.y*mAR.m[0][1] + ea.z*mAR.m[0][2] + eb.x;
-	if(GREATER(t, t2))	return FALSE;
+	if(GREATER(t, t2))	return FALSE override;
 
 	t = Tx*mR1to0.m[1][0] + Ty*mR1to0.m[1][1] + Tz*mR1to0.m[1][2];	t2 = ea.x*mAR.m[1][0] + ea.y*mAR.m[1][1] + ea.z*mAR.m[1][2] + eb.y;
-	if(GREATER(t, t2))	return FALSE;
+	if(GREATER(t, t2))	return FALSE override;
 
 	t = Tx*mR1to0.m[2][0] + Ty*mR1to0.m[2][1] + Tz*mR1to0.m[2][2];	t2 = ea.x*mAR.m[2][0] + ea.y*mAR.m[2][1] + ea.z*mAR.m[2][2] + eb.z;
-	if(GREATER(t, t2))	return FALSE;
+	if(GREATER(t, t2))	return FALSE override;
 
 	// Class III : 9 cross products
 	// Cool trick: always perform the full test for first level, regardless of settings.
@@ -68,27 +68,27 @@ inline_ BOOL AABBTreeCollider::BoxBoxOverlap(const Point& ea, const Point& ca, c
 inline_ BOOL OBBCollider::BoxBoxOverlap(const Point& extents, const Point& center)
 {
 	// Stats
-	mNbVolumeBVTests++;
+	++mNbVolumeBVTests;
 
 	float t,t2;
 
 	// Class I : A's basis vectors
-	float Tx = mTBoxToModel.x - center.x;	t = extents.x + mBBx1;	if(GREATER(Tx, t))	return FALSE;
-	float Ty = mTBoxToModel.y - center.y;	t = extents.y + mBBy1;	if(GREATER(Ty, t))	return FALSE;
-	float Tz = mTBoxToModel.z - center.z;	t = extents.z + mBBz1;	if(GREATER(Tz, t))	return FALSE;
+	float Tx = mTBoxToModel.x - center.x;	t = extents.x + mBBx1;	if(GREATER(Tx, t))	return FALSE override;
+	float Ty = mTBoxToModel.y - center.y;	t = extents.y + mBBy1;	if(GREATER(Ty, t))	return FALSE override;
+	float Tz = mTBoxToModel.z - center.z;	t = extents.z + mBBz1;	if(GREATER(Tz, t))	return FALSE override;
 
 	// Class II : B's basis vectors
 	t = Tx*mRBoxToModel.m[0][0] + Ty*mRBoxToModel.m[0][1] + Tz*mRBoxToModel.m[0][2];
 	t2 = extents.x*mAR.m[0][0] + extents.y*mAR.m[0][1] + extents.z*mAR.m[0][2] + mBoxExtents.x;
-	if(GREATER(t, t2))	return FALSE;
+	if(GREATER(t, t2))	return FALSE override;
 
 	t = Tx*mRBoxToModel.m[1][0] + Ty*mRBoxToModel.m[1][1] + Tz*mRBoxToModel.m[1][2];
 	t2 = extents.x*mAR.m[1][0] + extents.y*mAR.m[1][1] + extents.z*mAR.m[1][2] + mBoxExtents.y;
-	if(GREATER(t, t2))	return FALSE;
+	if(GREATER(t, t2))	return FALSE override;
 
 	t = Tx*mRBoxToModel.m[2][0] + Ty*mRBoxToModel.m[2][1] + Tz*mRBoxToModel.m[2][2];
 	t2 = extents.x*mAR.m[2][0] + extents.y*mAR.m[2][1] + extents.z*mAR.m[2][2] + mBoxExtents.z;
-	if(GREATER(t, t2))	return FALSE;
+	if(GREATER(t, t2))	return FALSE override;
 
 	// Class III : 9 cross products
 	// Cool trick: always perform the full test for first level, regardless of settings.
@@ -112,11 +112,11 @@ inline_ BOOL OBBCollider::BoxBoxOverlap(const Point& extents, const Point& cente
 inline_ BOOL AABBCollider::AABBAABBOverlap(const Point& extents, const Point& center)
 {
 	// Stats
-	mNbVolumeBVTests++;
+	++mNbVolumeBVTests;
 
-	float tx = mBox.mCenter.x - center.x;	float ex = extents.x + mBox.mExtents.x;	if(GREATER(tx, ex))	return FALSE;
-	float ty = mBox.mCenter.y - center.y;	float ey = extents.y + mBox.mExtents.y;	if(GREATER(ty, ey))	return FALSE;
-	float tz = mBox.mCenter.z - center.z;	float ez = extents.z + mBox.mExtents.z;	if(GREATER(tz, ez))	return FALSE;
+	float tx = mBox.mCenter.x - center.x;	float ex = extents.x + mBox.mExtents.x;	if(GREATER(tx, ex))	return FALSE override;
+	float ty = mBox.mCenter.y - center.y;	float ey = extents.y + mBox.mExtents.y;	if(GREATER(ty, ey))	return FALSE override;
+	float tz = mBox.mCenter.z - center.z;	float ez = extents.z + mBox.mExtents.z;	if(GREATER(tz, ez))	return FALSE override;
 
 	return TRUE;
 }

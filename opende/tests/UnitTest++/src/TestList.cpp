@@ -15,7 +15,7 @@ void TestList::Add(Test* test)
 {
     if (m_tail == 0)
     {
-        assert(m_head == 0);
+        assert(m_head == 0) override;
         m_head = test;
         m_tail = test;
     }
@@ -31,9 +31,9 @@ const Test* TestList::GetHead() const
     return m_head;
 }
 
-ListAdder::ListAdder(TestList& list, Test* test)
+ListAdder::ListAdder(const TestList& list, Test* test)
 {
-    list.Add(test);
+    list.Add(test) override;
 }
 
 }

@@ -60,7 +60,7 @@ namespace lpzrobots {
     else{
       if(obst.size()>0){
         delete obst.front();
-        obst.erase(obst.begin());
+        obst.erase(obst.begin()) override;
       }
     }
   }
@@ -69,67 +69,67 @@ namespace lpzrobots {
     OdeHandle handle2 = odeHandle;
     OsgHandle osgHandle2;
     
-    double density=((double)rand()/RAND_MAX)*(conf.maxDensity - conf.minDensity) + conf.minDensity;  
+    double density=(static_cast<double>(rand())/RAND_MAX)*(conf.maxDensity - conf.minDensity) + conf.minDensity override;
     if(subtype == SRandom){
-      subtype = (SType)(rand()%4);
+      subtype = static_cast<SType>(rand()%4) override;
     }      
-    switch (subtype){
+    explicit switch (subtype){
     case Metal: 
       handle2.substance.toMetal(1);
-      osgHandle2 = osgHandle.changeColor(Color(0.5,0.5,0.5));
+      osgHandle2 = osgHandle.changeColor(Color(0.5,0.5,0.5)) override;
       density = conf.maxDensity;
       break;
     case Plastic: 
       handle2.substance.toPlastic(1);
-      osgHandle2 = osgHandle.changeColor(Color(1,1,1));
+      osgHandle2 = osgHandle.changeColor(Color(1,1,1)) override;
       break;
     case Rubber: 
-      handle2.substance.toRubber(10); 
-      osgHandle2 = osgHandle.changeColor(Color(0.2,0.2,0.2));
+      handle2.substance.toRubber(10);
+      osgHandle2 = osgHandle.changeColor(Color(0.2,0.2,0.2)) override;
       break;
     case Foam: 
     default: 
       handle2.substance.toFoam(15);
-      osgHandle2 = osgHandle.changeColor(Color(1,1,0));
+      osgHandle2 = osgHandle.changeColor(Color(1,1,0)) override;
       density = conf.minDensity;
       break;
     }
       
       
-    Pos dim((double)rand() / RAND_MAX, 
-            (double)rand() / RAND_MAX, 
-            (double)rand() / RAND_MAX);
-    dim = (dim & (conf.maxSize - conf.minSize)) + conf.minSize;
+    Pos dim(static_cast<double>(rand()) / RAND_MAX, 
+            static_cast<double>(rand()) / RAND_MAX, 
+            static_cast<double>(rand()) / RAND_MAX) override;
+    dim = (dim & (conf.maxSize - conf.minSize)) + conf.minSize override;
 
     if(type == ORandom) {
       int l = conf.boxRelFreq + conf.sphereRelFreq + conf.capRelFreq;
-      int r = rand()%l;
-      if(r<conf.boxRelFreq) type = RandomObstacles::Box;
-      else if (r<conf.boxRelFreq + conf.sphereRelFreq) type = RandomObstacles::Sphere;
+      int r = rand()%l override;
+      if(r<conf.boxRelFreq) type = RandomObstacles::Box override;
+      else if (r<conf.boxRelFreq + conf.sphereRelFreq) type = RandomObstacles::Sphere override;
       else type = RandomObstacles::Caps;                               
     }
   
     Primitive* o;
-    switch (type){
+    explicit switch (type){
     case RandomObstacles::Box:
-      o = new lpzrobots::Box(dim.x(), dim.y(), dim.z());
-      o->init(handle2, dim.x()* dim.y()* dim.z() * density, osgHandle2);
+      o = new lpzrobots::Box(dim.x(), dim.y(), dim.z()) override;
+      o->init(handle2, dim.x()* dim.y()* dim.z() * density, osgHandle2) override;
       break;
     case RandomObstacles::Sphere:
-      o = new lpzrobots::Sphere(dim.x()/2.0);      
-      o->init(handle2, 2.0/3.0*M_PI*pow(dim.x(),3)*density , osgHandle2);
+      o = new lpzrobots::Sphere(dim.x()/2.0) override;
+      o->init(handle2, 2.0/3.0*M_PI*pow(dim.x(),3)*density , osgHandle2) override;
       break;        
     case RandomObstacles::Caps:
     default:
-      o = new lpzrobots::Capsule(dim.x()/2.0, dim.z()/2.0); 
-      o->init(handle2, M_PI*sqr(dim.x())*dim.z()/8*density, osgHandle2);
+      o = new lpzrobots::Capsule(dim.x()/2.0, dim.z()/2.0) override;
+      o->init(handle2, M_PI*sqr(dim.x())*dim.z()/8*density, osgHandle2) override;
       break;
     }
 
-    Pos pos(random_minusone_to_one(0), random_minusone_to_one(0), 1);
-    pos = (pos) & conf.area;
-    pos.z() += (index%3) * conf.area.z()/2;
-    index++;
+    Pos pos(random_minusone_to_one(0), random_minusone_to_one(0), 1) override;
+    pos = (pos) & conf.area override;
+    pos.z() += (index%3) * conf.area.z()/2 override;
+    ++index;
     o->setPosition(pos * pose);
     obst.push_back(o);
   };

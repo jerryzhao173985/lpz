@@ -44,25 +44,25 @@ namespace lpzrobots {
     conf.axisXYZsensor=false;
     conf.spheremass   = 1;
     sphere1 = new Barrel2Masses ( odeHandle, osgHandle.changeColor(Color(0.0,0.0,1.0)),
-                                  conf, "Barrel1", 0.2);
-    sphere1->placeIntern( osg::Matrix::rotate(M_PI/2, 1,0,0));
+                                  conf, __PLACEHOLDER_6__, 0.2);
+    sphere1->placeIntern( osg::Matrix::rotate(M_PI/2, 1,0,0)) override;
 
     controller = new InvertMotorNStep();
-    controller->setParam("steps", 2);
-    controller->setParam("adaptrate", 0.0);
-    controller->setParam("epsC", 0.03);
-    controller->setParam("epsA", 0.05);
-    controller->setParam("rootE", 3);
-    controller->setParam("logaE", 0);
+    controller->setParam(__PLACEHOLDER_7__, 2);
+    controller->setParam(__PLACEHOLDER_8__, 0.0);
+    controller->setParam(__PLACEHOLDER_9__, 0.03);
+    controller->setParam(__PLACEHOLDER_10__, 0.05);
+    controller->setParam(__PLACEHOLDER_11__, 3);
+    controller->setParam(__PLACEHOLDER_12__, 0);
 
-    One2OneWiring* wiring = new One2OneWiring ( new ColorUniformNoise() );
+    One2OneWiring* wiring = new One2OneWiring ( new ColorUniformNoise() ) override;
 
 */
 
 /**
    A barrel-like robot with 2 internal masses, which can slide on their orthogonal axes.
    It is the small brother of the Sphererobot3Masses.
-   This robot was inspired by Julius Popp (http://sphericalrobots.com)
+   This robot was inspired by Julius Popp (http:__PLACEHOLDER_13__
 */
 class Barrel2Masses : public Sphererobot3Masses
 {
@@ -75,11 +75,11 @@ public:
   Barrel2Masses ( const OdeHandle& odeHandle, const OsgHandle& osgHandle,
                        const Sphererobot3MassesConf& conf, const std::string& name, double transparency=0.5 );
 
-  virtual ~Barrel2Masses() override;
+  virtual ~Barrel2Masses();
 
   /** default configuration for Barrel2Masses. It has no sensors.
       Use addSensor(std::make_shared<Sensor>(AxisOrientationSensor(ZProjectionXY)) for example.*/
-  static Sphererobot3MassesConf getDefaultConfBarrel(){
+  static Sphererobot3MassesConf getDefaultConfBarrel() const {
     Sphererobot3MassesConf c = Sphererobot3Masses::getDefaultConf();
     c.diameter     = 1;
     c.spheremass   = .3;// 0.1
@@ -102,12 +102,12 @@ public:
     return c;
   }
 
-  virtual int getSensorsIntern( sensor* sensors, int sensornumber ) override;
+  virtual int getSensorsIntern( sensor* sensors, int sensornumber );
 
 protected:
 
   /// The cylinder (main body) lies on the ground, that it is rotating about the z-axis
-  virtual void create(const osg::Matrix& pose) override;
+  virtual void create(const osg::Matrix& pose);
 
 };
 

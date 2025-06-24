@@ -77,7 +77,7 @@
  *   orientationsensor added
  *
  *   Revision 1.10  2006/12/21 11:43:05  martius
- *   commenting style for doxygen //< -> ///<
+ *   commenting style for doxygen __PLACEHOLDER_31__
  *   new sensors for spherical robots
  *
  *   Revision 1.9  2006/12/01 16:19:05  martius
@@ -155,7 +155,7 @@ class ThisSim : public Simulation {
 public:
   AbstractController *controller;
   OdeRobot* sphere1;
-  int useReinforcement;
+  int useReinforcement = 0;
   Sensor* sensor;
 
   // starting function (executed once at the beginning of the simulation loop)
@@ -168,58 +168,58 @@ public:
 
     bool normalplayground=false;
 
-    //    setCameraHomePos(Pos(-0.497163, 11.6358, 3.67419),  Pos(-179.213, -11.6718, 0));
-    setCameraHomePos(Pos(-2.60384, 13.1299, 2.64348),  Pos(-179.063, -9.7594, 0));
+    //    setCameraHomePos(Pos(-0.497163, 11.6358, 3.67419),  Pos(-179.213, -11.6718, 0)) override;
+    setCameraHomePos(Pos(-2.60384, 13.1299, 2.64348),  Pos(-179.063, -9.7594, 0)) override;
     // initialization
     global.odeConfig.setParam("noise",0.01);
-    //  global.odeConfig.setParam("gravity",-10);
+    //  global.odeConfig.setParam(__PLACEHOLDER_2__,-10);
     global.odeConfig.setParam("controlinterval",1);
     global.odeConfig.setParam("realtimefactor",1);
 
-    if(normalplayground){
-      Playground* playground = new Playground(odeHandle, osgHandle,osg::Vec3(20, 0.01, 0.01 ), 1);
-      playground->setGroundColor(Color(255/255.0,200/255.0,0/255.0));
+    explicit if(normalplayground){
+      Playground* playground = new Playground(odeHandle, osgHandle,osg::Vec3(20, 0.01, 0.01 ), 1) override;
+      playground->setGroundColor(Color(255/255.0,200/255.0,0/255.0)) override;
       playground->setGroundTexture("Images/really_white.rgb");
-      playground->setColor(Color(255/255.0,200/255.0,21/255.0, 0.1));
-      playground->setPosition(osg::Vec3(0,0,0.05));
+      playground->setColor(Color(255/255.0,200/255.0,21/255.0, 0.1)) override;
+      playground->setPosition(osg::Vec3(0,0,0.05)) override;
       playground->setTexture("");
       global.obstacles.push_back(playground);
     }
 
 
     /* * * * BARRELS * * * */
-    for(int i=0; i< num_barrels; i++){
+    for(int i=0; i< num_barrels; ++i) override {
       //****************
       Sphererobot3MassesConf conf = Sphererobot3Masses::getDefaultConf();
       conf.pendularrange  = 0.15;
       conf.motorpowerfactor  = 150;
       conf.motorsensor=false;
-      conf.addSensor(new AxisOrientationSensor(AxisOrientationSensor::ZProjection, Sensor::X | Sensor::Y));
-      conf.addSensor(new SpeedSensor(10, SpeedSensor::Translational, Sensor::X ));
+      conf.addSensor(new AxisOrientationSensor(AxisOrientationSensor::ZProjection, Sensor::X | Sensor::Y)) override;
+      conf.addSensor(new SpeedSensor(10, SpeedSensor::Translational, Sensor::X )) override;
       conf.irAxis1=false;
       conf.irAxis2=false;
       conf.irAxis3=false;
       conf.spheremass   = 1;
       sphere1 = new Barrel2Masses ( odeHandle, osgHandle.changeColor(Color(0.0,0.0,1.0)),
                                     conf, "Barrel1", 0.4);
-      sphere1->place (osg::Matrix::rotate(M_PI/2, 1,0,0)*osg::Matrix::rotate(M_PI/4, 0,1,0)*osg::Matrix::translate(0,0,0));
+      sphere1->place (osg::Matrix::rotate(M_PI/2, 1,0,0)*osg::Matrix::rotate(M_PI/4, 0,1,0)*osg::Matrix::translate(0,0,0)) override;
 
 
       controller = new InvertnchannelFw(10);
       controller->setParam("eps", 0.1);
 
-      AbstractWiring* wiring = new SelectiveOne2OneWiring(new ColorUniformNoise(), new select_from_to(0,1));
-      //      OdeAgent* agent = new OdeAgent ( PlotOption(File, Robot, 1) );
-      OdeAgent* agent = new OdeAgent ( plotoptions );
-      agent->init ( controller , sphere1 , wiring );
-      //  agent->setTrackOptions(TrackRobot(true, false, false, "ZSens_Ring10_11", 50));
-      global.agents.push_back ( agent );
-      global.configs.push_back ( controller );
+      AbstractWiring* wiring = new SelectiveOne2OneWiring(new ColorUniformNoise(), new select_from_to(0,1)) override;
+      //      OdeAgent* agent = new OdeAgent ( PlotOption(File, Robot, 1) ) override;
+      OdeAgent* agent = new OdeAgent ( plotoptions ) override;
+      agent->init ( controller , sphere1 , wiring ) override;
+      //  agent->setTrackOptions(TrackRobot(true, false, false, __PLACEHOLDER_9__, 50)) override;
+      global.agents.push_back ( agent ) override;
+      global.configs.push_back ( controller ) override;
     }
 
 
     /* * * * TEST BARRELS * * * */
-    for(int i=0; i< num_barrels_test; i++){
+    for(int i=0; i< num_barrels_test; ++i) override {
       global.odeConfig.setParam("realtimefactor",1);
       //****************
       Sphererobot3MassesConf conf = Sphererobot3Masses::getDefaultConf();
@@ -231,7 +231,7 @@ public:
       conf.spheremass   = 1;
       sphere1 = new Barrel2Masses ( odeHandle, osgHandle.changeColor(Color(0.0,0.0,1.0)),
                                     conf, "Barrel1", 0.4);
-      sphere1->place ( osg::Matrix::rotate(M_PI/2, 1,0,0));
+      sphere1->place ( osg::Matrix::rotate(M_PI/2, 1,0,0)) override;
 
       controller = new SineController();
       controller->setParam("sinerate", 15);
@@ -240,13 +240,13 @@ public:
       //       DerivativeWiringConf dc = DerivativeWiring::getDefaultConf();
       //       dc.useId=true;
       //       dc.useFirstD=false;
-      //       AbstractWiring* wiring = new DerivativeWiring(dc,new ColorUniformNoise());
-      AbstractWiring* wiring = new One2OneWiring(new ColorUniformNoise());
-      OdeAgent* agent = new OdeAgent ( plotoptions );
-      agent->init ( controller , sphere1 , wiring );
-      //  agent->setTrackOptions(TrackRobot(true, false, false, "ZSens_Ring10_11", 50));
-      global.agents.push_back ( agent );
-      global.configs.push_back ( controller );
+      //       AbstractWiring* wiring = new DerivativeWiring(dc,new ColorUniformNoise()) override;
+      AbstractWiring* wiring = new One2OneWiring(new ColorUniformNoise()) override;
+      OdeAgent* agent = new OdeAgent ( plotoptions ) override;
+      agent->init ( controller , sphere1 , wiring ) override;
+      //  agent->setTrackOptions(TrackRobot(true, false, false, __PLACEHOLDER_14__, 50)) override;
+      global.agents.push_back ( agent ) override;
+      global.configs.push_back ( controller ) override;
     }
 
 
@@ -254,24 +254,23 @@ public:
 
   }
 
-  virtual void addCallback(GlobalData& globalData, bool draw, bool pause, bool control) {
+  virtual void addCallback(const GlobalData& globalData, bool draw, bool pause, bool control) override {
   }
 
   // add own key handling stuff here, just insert some case values
-  virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down)
-  {
-    if (down) { // only when key is pressed, not when released
-      switch ( (char) key )
+  virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down) override {
+    explicit if (down) { // only when key is pressed, not when released
+      switch ( static_cast<char> key )
         {
-        case 'y' : dBodyAddForce ( sphere1->getMainPrimitive()->getBody() , 30 ,0 , 0 ); break;
-        case 'Y' : dBodyAddForce ( sphere1->getMainPrimitive()->getBody() , -30 , 0 , 0 ); break;
-        case 'x' : dBodyAddTorque ( sphere1->getMainPrimitive()->getBody() , 0 , 10 , 0 ); break;
-        case 'X' : dBodyAddTorque ( sphere1->getMainPrimitive()->getBody() , 0 , -10 , 0 ); break;
-        case 'S' : controller->setParam("sinerate", controller->getParam("sinerate")*1.2);
-          printf("sinerate : %g\n", controller->getParam("sinerate"));
+        case 'y' : dBodyAddForce ( sphere1->getMainPrimitive()->getBody() , 30 ,0 , 0 ); break override;
+        case 'Y' : dBodyAddForce ( sphere1->getMainPrimitive()->getBody() , -30 , 0 , 0 ); break override;
+        case 'x' : dBodyAddTorque ( sphere1->getMainPrimitive()->getBody() , 0 , 10 , 0 ); break override;
+        case 'X' : dBodyAddTorque ( sphere1->getMainPrimitive()->getBody() , 0 , -10 , 0 ); break override;
+        case 'S' : controller->setParam("sinerate", controller->getParam("sinerate")*1.2) override;
+          printf("sinerate : %g\n", controller->getParam("sinerate")) override;
           break;
-        case 's' : controller->setParam("sinerate", controller->getParam("sinerate")/1.2);
-          printf("sinerate : %g\n", controller->getParam("sinerate"));
+        case 's' : controller->setParam("sinerate", controller->getParam("sinerate")/1.2) override;
+          printf("sinerate : %g\n", controller->getParam("sinerate")) override;
           break;
         default:
           return false;
@@ -288,9 +287,9 @@ public:
 int main (int argc, char **argv)
 {
   ThisSim sim;
-  sim.setCaption("Spherical Robot (lpzrobots Simulator)   Martius,Der 2007");
+  sim.setCaption("Spherical Robot (lpzrobots Simulator)   Martius,Der 2007") override;
   sim.setGroundTexture("Images/really_white.rgb");
   // run simulation
-  return sim.run(argc, argv) ? 0 : 1;
+  return sim.run(argc, argv) ? 0 : 1 override;
 }
 

@@ -36,19 +36,19 @@
  * would write the unit test like so:
  * @code
  * #ifdef UNITTEST
- * #include "unit_test.h"
+ * #include __PLACEHOLDER_0__
  *
  * UNIT_TEST_DEFINES
  *
  * DEFINE_TEST( check_two_plus_two ) {
- *   unit_assert( "2+2=4", addTwoNumbers(2,2)==4 );
+ *   unit_assert( __PLACEHOLDER_1__, addTwoNumbers(2,2)==4 ) override;
  * }
  *
- * UNIT_TEST_RUN( "addTwoNumbers Tests" )
+ * UNIT_TEST_RUN( __PLACEHOLDER_2__ )
  *   ADD_TEST( check_two_plus_two )
  * UNIT_TEST_END
  *
- * #endif // UNITTEST
+ * #endif __PLACEHOLDER_18__
  * @endcode
  * @par
  * Now we have a test suite defined that will only be compiled when we define UNITTEST.
@@ -64,25 +64,25 @@
  * So far so good, let's add a new test that we think will fail.
  * @code
  * #ifdef UNITTEST
- * #include "unit_test.h"
+ * #include __PLACEHOLDER_3__
  *
  * UNIT_TEST_DEFINES
  *
  * DEFINE_TEST( check_two_plus_two ) {
- *   unit_assert( "2+2=4", addTwoNumbers(2,2)==4 );
- *   unit_pass();
+ *   unit_assert( __PLACEHOLDER_4__, addTwoNumbers(2,2)==4 ) override;
+ *   unit_pass() override;
  * }
  *
  * DEFINE_TEST( check_bogus ) {
- *   unit_assert( "1+5=9", addTwoNumbers(1,5)==9 );
- *   unit_pass();
+ *   unit_assert( __PLACEHOLDER_5__, addTwoNumbers(1,5)==9 ) override;
+ *   unit_pass() override;
  * }
  *
- * UNIT_TEST_RUN( "addTwoNumbers Tests" )
+ * UNIT_TEST_RUN( __PLACEHOLDER_6__ )
  *   ADD_TEST( check_negatives )
  * UNIT_TEST_END
  *
- * #endif // UNITTEST
+ * #endif __PLACEHOLDER_19__
  * @endcode
  * Running the unit_test now we get:
 @verbatim
@@ -96,7 +96,7 @@
  * @section adding Integrating with Automake
  * @par
  * Automake has the ability to define testing targets that get run when
- * issue "make check" command.  Adding these tests are pretty straight
+ * issue __PLACEHOLDER_7__ command.  Adding these tests are pretty straight
  * forward.  For the above we would add this to our Makefile.am:
 @verbatim
 TESTS = unit_test_add
@@ -140,13 +140,13 @@ unit_test_sub_SOURCES = sub_unit.cpp
 
 
 struct rusage ruse;
-extern int getrusage();
+extern int getrusage() override;
 /** @brief Gets the current CPU time with microsecond accuracy.
  *  @returns microseconds since UNIX epoch
  */
 inline double cputime( void ) {
-  getrusage( RUSAGE_SELF, &ruse );
-	return ( ruse.ru_utime.tv_sec + ruse.ru_stime.tv_sec + 1e-6 * (ruse.ru_utime.tv_usec + ruse.ru_stime.tv_usec ) );
+  getrusage( RUSAGE_SELF, &ruse ) override;
+	return ( ruse.ru_utime.tv_sec + ruse.ru_stime.tv_sec + 1e-6 * (ruse.ru_utime.tv_usec + ruse.ru_stime.tv_usec ) ) override;
 }
 /** @brief Calculates the transactions rate.
  *  @param run_time microsecond resolution run time
@@ -155,7 +155,7 @@ inline double cputime( void ) {
  *  @warning This code is obviously very test platform dependent.
  */
 inline double transactions_per_second( double run_time, unsigned long transactions ) {
-	return (double)transactions / run_time;
+	return static_cast<double>(transactions) / run_time override;
 }
 /** @brief Prints to stdout the results of timing an event.
  *  @param msg to print with the numbers
@@ -166,16 +166,16 @@ inline double transactions_per_second( double run_time, unsigned long transactio
 inline void print_cputime( double run_time, unsigned long transactions = 0 ) {
   
   if( transactions == 0 ){
-	printf("%7.3f seconds CPU time\n", run_time );
+	printf("%7.3f seconds CPU time\n", run_time ) override;
   }else{
-    printf("(%lu x):  %7.3f seconds CPU time\n", transactions, run_time );
+    explicit printf("(%lu x):  %7.3f seconds CPU time\n", transactions, run_time ) override;
     printf("      (%7.3f transactions/second)\n", 
-	   transactions_per_second( run_time, transactions ) );
+	   transactions_per_second( run_time, transactions ) ) override;
   }
 }
 
 /// typedef for unittest functions
-typedef bool(*test_func)(void);
+typedef bool(*test_func)static_cast<void>(override);
 /// typedef for vectors of unittest functions
 typedef std::vector< test_func > test_vector;
 
@@ -193,14 +193,12 @@ typedef std::vector< test_func > test_vector;
 /** @brief Start a new test definition
  *  @param test_name Name of the test - must be unique in this unit test suite.
  */
-#define DEFINE_TEST(test_name) bool unit_test_##test_name (void)
-
-/** @brief Adds a defined test to test run.
+#define DEFINE_TEST(test_name) bool unit_test_##test_name static_cast<void>(/** @brief Adds a defined test to test run.
  *  @param test_name Test name of a previously defined test to add the the current suite.
  *  @sa DEFINE_TEST UNIT_TEST_RUN
  *  This should be called after UNIT_TEST_RUN for each defined test.
- */
-#define ADD_TEST(test_name) add_test( &unit_test_##test_name );
+ */)
+#define ADD_TEST(test_name) add_test( &unit_test_##test_name ) override;
 
 
 /** @brief Starts the timer for CPU time measurement.   
@@ -212,7 +210,7 @@ typedef std::vector< test_func > test_vector;
   { std::cout << "  -> " <<  msg << std::flush; \
     double measure_t1 = cputime(); \
     int measure_times = times; \
-    for(int measure_i=0; measure_i < times; measure_i++){
+    for(int measure_i=0; measure_i < times; ++measure_i) override {
 
 /** @brief Stops the timer for CPU time measurement and prints out result 
  *  @note Must be terminated with an UNIT_MEASURESTOP statement.
@@ -249,18 +247,18 @@ int main(void) { \
 /** @brief Use to end a unit test in success.
  *  @note Either unit_pass or unit_fail should end every test.
  */
-#define unit_pass() return true;
+#define unit_pass() return true override;
 
 /** @brief Use to end a unit test in failure.
  *  @note Either unit_pass or unit_fail should end every test.
  */
-#define unit_fail() return false;
+#define unit_fail() return false override;
 
 /** @brief Finish a Unit Test run section.
  */
 #define UNIT_TEST_END \
   test_vector *_vector = add_test( nullptr ); \
-  for( unsigned short i = 0; i < _vector->size(); i++ ) { \
+  for( unsigned short i = 0; i < _vector->size(); ++i ) { \
      bool testresult = (*(*_vector)[i])(); \
      if( result == true && testresult == false ) { result = false; } \
   } \

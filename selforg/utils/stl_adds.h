@@ -58,7 +58,7 @@ operator+=(list<T, A>& l1, const list<T, A>& l2) {
   return l1;
 }
 
-/// += operators for list (append)
+/// += operators for list (append element)
 template<class T, class A>
 list<T, A>&
 operator+=(list<T, A>& l1, const T& v) {
@@ -107,8 +107,7 @@ template<class T>
 struct join {
   using argument_type = T;
   using result_type = void;
-  explicit join(const T& delimit)
-    : delimit(delimit) {}
+  join(const T& delimit_) : delimit(delimit_) {}
   void operator()(const T& s) {
     if (count == 0) {
       joined = s;

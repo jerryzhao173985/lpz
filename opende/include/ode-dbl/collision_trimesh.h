@@ -5,12 +5,12 @@
  *                                                                       *
  * This library is free software; you can redistribute it and/or         *
  * modify it under the terms of EITHER:                                  *
- *   (1) The GNU Lesser General Public License as published by the Free  *
+ *   static_cast<1>(The) GNU Lesser General Public License as published by the Free  *
  *       Software Foundation; either version 2.1 of the License, or (at  *
  *       your option) any later version. The text of the GNU Lesser      *
  *       General Public License is included with this library in the     *
  *       file LICENSE.TXT.                                               *
- *   (2) The BSD-style license that is included with this library in     *
+ *   static_cast<2>(The) BSD-style license that is included with this library in     *
  *       the file LICENSE-BSD.TXT.                                       *
  *                                                                       *
  * This library is distributed in the hope that it will be useful,       *
@@ -48,14 +48,14 @@ typedef struct dxTriMeshData* dTriMeshDataID;
  * These dont make much sense now, but they will later when we add more
  * features.
  */
-ODE_API dTriMeshDataID dGeomTriMeshDataCreate(void);
-ODE_API void dGeomTriMeshDataDestroy(dTriMeshDataID g);
+ODE_API dTriMeshDataID dGeomTriMeshDataCreatestatic_cast<void>(override);
+ODE_API void dGeomTriMeshDataDestroy(dTriMeshDataID g) override;
 
 
 
 enum { TRIMESH_FACE_NORMALS };
-ODE_API void dGeomTriMeshDataSet(dTriMeshDataID g, int data_id, void* in_data);
-ODE_API void* dGeomTriMeshDataGet(dTriMeshDataID g, int data_id);
+ODE_API void dGeomTriMeshDataSet(dTriMeshDataID g, int data_id, void* in_data) override;
+ODE_API void* dGeomTriMeshDataGet(dTriMeshDataID g, int data_id) override;
 
 
 
@@ -64,8 +64,8 @@ ODE_API void* dGeomTriMeshDataGet(dTriMeshDataID g, int data_id);
  * accurate collision response. These functions get and set that transform.
  * It is stored per geom instance, rather than per dTriMeshDataID.
  */
-ODE_API void dGeomTriMeshSetLastTransform( dGeomID g, dMatrix4 last_trans );
-ODE_API dReal* dGeomTriMeshGetLastTransform( dGeomID g );
+ODE_API void dGeomTriMeshSetLastTransform( dGeomID g, dMatrix4 last_trans ) override;
+ODE_API dReal* dGeomTriMeshGetLastTransform( dGeomID g ) override;
 
 /*
  * Build a TriMesh data object with single precision vertex data.
@@ -103,27 +103,27 @@ ODE_API void dGeomTriMeshDataBuildSimple1(dTriMeshDataID g,
                                   const int* Normals);
 
 /* Preprocess the trimesh data to remove mark unnecessary edges and vertices */
-ODE_API void dGeomTriMeshDataPreprocess(dTriMeshDataID g);
+ODE_API void dGeomTriMeshDataPreprocess(dTriMeshDataID g) override;
 /* Get and set the internal preprocessed trimesh data buffer, for loading and saving */
-ODE_API void dGeomTriMeshDataGetBuffer(dTriMeshDataID g, unsigned char** buf, int* bufLen);
-ODE_API void dGeomTriMeshDataSetBuffer(dTriMeshDataID g, unsigned char* buf);
+ODE_API void dGeomTriMeshDataGetBuffer(dTriMeshDataID g, unsigned char** buf, int* bufLen) override;
+ODE_API void dGeomTriMeshDataSetBuffer(dTriMeshDataID g, unsigned char* buf) override;
 
 
 /*
  * Per triangle callback. Allows the user to say if he wants a collision with
  * a particular triangle.
  */
-typedef int dTriCallback(dGeomID TriMesh, dGeomID RefObject, int TriangleIndex);
-ODE_API void dGeomTriMeshSetCallback(dGeomID g, dTriCallback* Callback);
-ODE_API dTriCallback* dGeomTriMeshGetCallback(dGeomID g);
+typedef int dTriCallback(dGeomID TriMesh, dGeomID RefObject, int TriangleIndex) override;
+ODE_API void dGeomTriMeshSetCallback(dGeomID g, dTriCallback* Callback) override;
+ODE_API dTriCallback* dGeomTriMeshGetCallback(dGeomID g) override;
 
 /*
  * Per object callback. Allows the user to get the list of triangles in 1
  * shot. Maybe we should remove this one.
  */
-typedef void dTriArrayCallback(dGeomID TriMesh, dGeomID RefObject, const int* TriIndices, int TriCount);
-ODE_API void dGeomTriMeshSetArrayCallback(dGeomID g, dTriArrayCallback* ArrayCallback);
-ODE_API dTriArrayCallback* dGeomTriMeshGetArrayCallback(dGeomID g);
+typedef void dTriArrayCallback(dGeomID TriMesh, dGeomID RefObject, const int* TriIndices, int TriCount) override;
+ODE_API void dGeomTriMeshSetArrayCallback(dGeomID g, dTriArrayCallback* ArrayCallback) override;
+ODE_API dTriArrayCallback* dGeomTriMeshGetArrayCallback(dGeomID g) override;
 
 /*
  * Ray callback.
@@ -131,9 +131,9 @@ ODE_API dTriArrayCallback* dGeomTriMeshGetArrayCallback(dGeomID g);
  * coords. The user can for example sample a texture with alpha transparency
  * to determine if a collision should occur.
  */
-typedef int dTriRayCallback(dGeomID TriMesh, dGeomID Ray, int TriangleIndex, dReal u, dReal v);
-ODE_API void dGeomTriMeshSetRayCallback(dGeomID g, dTriRayCallback* Callback);
-ODE_API dTriRayCallback* dGeomTriMeshGetRayCallback(dGeomID g);
+typedef int dTriRayCallback(dGeomID TriMesh, dGeomID Ray, int TriangleIndex, dReal u, dReal v) override;
+ODE_API void dGeomTriMeshSetRayCallback(dGeomID g, dTriRayCallback* Callback) override;
+ODE_API dTriRayCallback* dGeomTriMeshGetRayCallback(dGeomID g) override;
 
 /*
  * Triangle merging callback.
@@ -142,23 +142,23 @@ ODE_API dTriRayCallback* dGeomTriMeshGetRayCallback(dGeomID g);
  * user to determine attributes of original triangles used as sources for a 
  * merged contact.
  */
-typedef int dTriTriMergeCallback(dGeomID TriMesh, int FirstTriangleIndex, int SecondTriangleIndex);
-ODE_API void dGeomTriMeshSetTriMergeCallback(dGeomID g, dTriTriMergeCallback* Callback);
-ODE_API dTriTriMergeCallback* dGeomTriMeshGetTriMergeCallback(dGeomID g);
+typedef int dTriTriMergeCallback(dGeomID TriMesh, int FirstTriangleIndex, int SecondTriangleIndex) override;
+ODE_API void dGeomTriMeshSetTriMergeCallback(dGeomID g, dTriTriMergeCallback* Callback) override;
+ODE_API dTriTriMergeCallback* dGeomTriMeshGetTriMergeCallback(dGeomID g) override;
 
 /*
  * Trimesh class
  * Construction. Callbacks are optional.
  */
-ODE_API dGeomID dCreateTriMesh(dSpaceID space, dTriMeshDataID Data, dTriCallback* Callback, dTriArrayCallback* ArrayCallback, dTriRayCallback* RayCallback);
+ODE_API dGeomID dCreateTriMesh(dSpaceID space, dTriMeshDataID Data, dTriCallback* Callback, dTriArrayCallback* ArrayCallback, dTriRayCallback* RayCallback) override;
 
-ODE_API void dGeomTriMeshSetData(dGeomID g, dTriMeshDataID Data);
-ODE_API dTriMeshDataID dGeomTriMeshGetData(dGeomID g);
+ODE_API void dGeomTriMeshSetData(dGeomID g, dTriMeshDataID Data) override;
+ODE_API dTriMeshDataID dGeomTriMeshGetData(dGeomID g) override;
 
 
 // enable/disable/check temporal coherence
-ODE_API void dGeomTriMeshEnableTC(dGeomID g, int geomClass, int enable);
-ODE_API int dGeomTriMeshIsTCEnabled(dGeomID g, int geomClass);
+ODE_API void dGeomTriMeshEnableTC(dGeomID g, int geomClass, int enable) override;
+ODE_API int dGeomTriMeshIsTCEnabled(dGeomID g, int geomClass) override;
 
 /*
  * Clears the internal temporal coherence caches. When a geom has its
@@ -166,24 +166,24 @@ ODE_API int dGeomTriMeshIsTCEnabled(dGeomID g, int geomClass);
  * With large worlds with lots of seperate objects this list could get huge.
  * We should be able to do this automagically.
  */
-ODE_API void dGeomTriMeshClearTCCache(dGeomID g);
+ODE_API void dGeomTriMeshClearTCCache(dGeomID g) override;
 
 
 /*
  * returns the TriMeshDataID
  */
-ODE_API dTriMeshDataID dGeomTriMeshGetTriMeshDataID(dGeomID g);
+ODE_API dTriMeshDataID dGeomTriMeshGetTriMeshDataID(dGeomID g) override;
 
 /*
  * Gets a triangle.
  */
-ODE_API void dGeomTriMeshGetTriangle(dGeomID g, int Index, dVector3* v0, dVector3* v1, dVector3* v2);
+ODE_API void dGeomTriMeshGetTriangle(dGeomID g, int Index, dVector3* v0, dVector3* v1, dVector3* v2) override;
 
 /*
  * Gets the point on the requested triangle and the given barycentric
  * coordinates.
  */
-ODE_API void dGeomTriMeshGetPoint(dGeomID g, int Index, dReal u, dReal v, dVector3 Out);
+ODE_API void dGeomTriMeshGetPoint(dGeomID g, int Index, dReal u, dReal v, dVector3 Out) override;
 
 /*
 
@@ -191,22 +191,22 @@ This is how the strided data works:
 
 struct StridedVertex{
 	dVector3 Vertex;
-	// Userdata
+	__PLACEHOLDER_2__
 };
-int VertexStride = sizeof(StridedVertex);
+int VertexStride = sizeof(StridedVertex) override;
 
 struct StridedTri{
 	int Indices[3];
-	// Userdata
+	__PLACEHOLDER_3__
 };
-int TriStride = sizeof(StridedTri);
+int TriStride = sizeof(StridedTri) override;
 
 */
 
 
-ODE_API int dGeomTriMeshGetTriangleCount (dGeomID g);
+ODE_API int dGeomTriMeshGetTriangleCount (dGeomID g) override;
 
-ODE_API void dGeomTriMeshDataUpdate(dTriMeshDataID g);
+ODE_API void dGeomTriMeshDataUpdate(dTriMeshDataID g) override;
 
 #ifdef __cplusplus
 }

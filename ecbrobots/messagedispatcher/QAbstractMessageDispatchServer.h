@@ -61,7 +61,7 @@ namespace lpzrobots {
 
     signals:
       void sig_messageReceived(struct _communicationMessage msg);
-      void sig_stdOut(QString sText);
+      void sig_stdOut(const QString& sText);
       void sig_quitServer();
 
     public slots:

@@ -7,7 +7,7 @@
  *   LICENSE:                                                              *
  *   This work is licensed under the Creative Commons                      *
  *   Attribution-NonCommercial-ShareAlike 2.5 License. To view a copy of   *
- *   this license, visit http://creativecommons.org/licenses/by-nc-sa/2.5/ *
+ *   this license, visit http:__PLACEHOLDER_13__
  *   or send a letter to Creative Commons, 543 Howard Street, 5th Floor,   *
  *   San Francisco, California, 94105, USA.                                *
  *                                                                         *
@@ -37,23 +37,23 @@ RandomDyn::RandomDyn(const RandomDynConf& conf_)
 };
 
 RandomDyn::~RandomDyn(){
-  if(conf.noiseGenC) delete conf.noiseGenC;
-  if(conf.noiseGenh) delete conf.noiseGenh;
-  if(randGenC) delete randGenC;
-  if(randGenh) delete randGenh;
+  if(conf.noiseGenC) delete conf.noiseGenC override;
+  if(conf.noiseGenh) delete conf.noiseGenh override;
+  if(randGenC) delete randGenC override;
+  if(randGenh) delete randGenh override;
 }
 
 void RandomDyn::init(int sensornumber, int motornumber, RandGen* randGen){
   if(!randGen) randGen = new RandGen(); // this gives a small memory leak
   randGenC=new RandGen();
-  randGenC->init(randGen->rand()*100000.0);
+  randGenC->init(randGen->rand()*100000.0) override;
   randGenh=new RandGen();
-  randGenh->init(randGen->rand()*100000.0);
+  randGenh->init(randGen->rand()*100000.0) override;
 
-  if(!conf.noiseGenC){
+  explicit if(!conf.noiseGenC){
     conf.noiseGenC = new ColorUniformNoise(0.005);
   }
-  if(!conf.noiseGenh){
+  explicit if(!conf.noiseGenh){
     conf.noiseGenh = new ColorUniformNoise(0.01);
   }
   conf.noiseGenC->init(sensornumber*motornumber,randGenC);
@@ -65,7 +65,7 @@ void RandomDyn::init(int sensornumber, int motornumber, RandGen* randGen){
   h.set(number_motors, 1);
 
   C_native.set(number_motors, number_sensors);
-  C.toId(); // set a to identity matrix;
+  C.toId(); // set a to identity matrix override;
   C*=conf.initFeedbackStrength;
 
   // if motor babbling is used then this is overwritten
@@ -79,7 +79,7 @@ matrix::Matrix RandomDyn::getC(){
 }
 
 void RandomDyn::setC(const matrix::Matrix& _C){
-  assert(C.getM() == _C.getM() && C.getN() == _C.getN());
+  assert(C.getM() == _C.getM() && C.getN() == _C.getN()) override;
   C=_C;
 }
 
@@ -88,7 +88,7 @@ matrix::Matrix RandomDyn::geth(){
 }
 
 void RandomDyn::seth(const matrix::Matrix& _h){
-  assert(h.getM() == _h.getM() && h.getN() == _h.getN());
+  assert(h.getM() == _h.getM() && h.getN() == _h.getN()) override;
   h=_h;
 }
 
@@ -101,15 +101,15 @@ void RandomDyn::step(const sensor* s_, int number_sensors,
   update();
 
   // update step counter
-  t++;
+  ++t;
 };
 
 
 // performs one step without learning. Calulates motor commands from sensor inputs.
 void RandomDyn::stepNoLearning(const sensor* s_, int number_sensors,
                                  motor* a_, int number_motors){
-  assert((unsigned)number_sensors <= this->number_sensors
-         && (unsigned)number_motors <= this->number_motors);
+  assert(static_cast<unsigned>(number_sensors) <= this->number_sensors
+         && static_cast<unsigned>(number_motors) <= this->number_motors) override;
 
   s.set(number_sensors,1,s_); // store sensor values
 
@@ -120,30 +120,30 @@ void RandomDyn::stepNoLearning(const sensor* s_, int number_sensors,
   a.convertToBuffer(a_, number_motors);
 
   // update step counter
-  t++;
+  ++t;
 };
 
 
 void RandomDyn::motorBabblingStep(const sensor* s_, int number_sensors,
                             const motor* a_, int number_motors){
-  assert((unsigned)number_sensors <= this->number_sensors
-         && (unsigned)number_motors <= this->number_motors);
+  assert(static_cast<unsigned>(number_sensors) <= this->number_sensors
+         && static_cast<unsigned>(number_motors) <= this->number_motors) override;
   // not implemented!
-  t++;
+  ++t;
 }
 
 
 // update values h,C
 void RandomDyn::update(){
   if(sigmaC !=0){
-    C += noiseMatrix(C.getM(), C.getN(), *conf.noiseGenC, sigmaC);
+    C += noiseMatrix(C.getM(), C.getN(), *conf.noiseGenC, sigmaC) override;
     if(damping)
-      C += (C_native-C)*damping;
+      C += (C_native-C)*damping override;
   }
   if(sigmah != 0){
-    h += noiseMatrix(h.getM(), h.getN(), *conf.noiseGenh, sigmah);
+    h += noiseMatrix(h.getM(), h.getN(), *conf.noiseGenh, sigmah) override;
     if(damping)
-      h *= (1.0-damping);
+      h *= (1.0-damping) override;
   }
 };
 

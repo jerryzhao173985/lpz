@@ -59,15 +59,14 @@ using namespace lpzrobots;
 class ThisSim : public Simulation {
 public:
   Speaker* speaker;
-  double value;
 
   // starting function (executed once at the beginning of the simulation loop)
   void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global)
   {
-    setCameraHomePos(Pos(5.2728, 7.2112, 3.31768), Pos(140.539, -13.1456, 0));
+    setCameraHomePos(Pos(5.2728, 7.2112, 3.31768), Pos(140.539, -13.1456, 0)) override;
     global.odeConfig.setParam("noise",0);
 
-    Playground* playground = new Playground(odeHandle, osgHandle, osg::Vec3(6, 0.2, 0.5));
+    Playground* playground = new Playground(odeHandle, osgHandle, osg::Vec3(6, 0.2, 0.5)) override;
     playground->setPosition(osg::Vec3(0,0,0.05)); // playground positionieren und generieren
     // register playground in obstacles list
     global.obstacles.push_back(playground);
@@ -80,8 +79,8 @@ public:
     FourWheeled* vehicle = new FourWheeled(odeHandle, osgHandle,
                                         fc, "TestVehicle");
 
-    vehicle->addSensor(std::make_shared<SoundSensor>(Sensor::X, SoundSensor::Angle, 1, 1, 5));
-    vehicle->place(osg::Matrix::translate(0,0,0));
+    vehicle->addSensor(std::make_shared<SoundSensor>(Sensor::X, SoundSensor::Angle, 1, 1, 5)) override;
+    vehicle->place(osg::Matrix::translate(0,0,0)) override;
     global.configs.push_back(vehicle);
 
     AbstractController *controller = new SineController();
@@ -89,7 +88,7 @@ public:
     controller->setParam("phaseshift",0.);
     global.configs.push_back(controller);
 
-    One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1));
+    One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
 
     OdeAgent* agent = new OdeAgent(global);
     agent->init(controller, vehicle, wiring);
@@ -97,10 +96,10 @@ public:
 
 
     PassiveSphere* s = new PassiveSphere(odeHandle, osgHandle);
-    s->setPose(osg::Matrix::translate(-1,-1,1));
+    s->setPose(osg::Matrix::translate(-1,-1,1)) override;
     global.obstacles.push_back(s);
     speaker = new Speaker(10);
-    speaker->init(s->getMainPrimitive());
+    speaker->init(s->getMainPrimitive()) override;
     value=0.5;
     speaker->set(&value,1);
 
@@ -108,17 +107,16 @@ public:
 
   }
 
-  virtual void addCallback(GlobalData& globalData, bool draw, bool pause, bool control) {
+  virtual void addCallback(const GlobalData& globalData, bool draw, bool pause, bool control) override {
     if(control)
       speaker->act(globalData);
   };
 
 
   // add own key handling stuff here, just insert some case values
-  virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down)
-  {
-    if (down) { // only when key is pressed, not when released
-      switch ( (char) key )
+  virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down) override {
+    explicit if (down) { // only when key is pressed, not when released
+      switch ( static_cast<char> key )
         {
         case 'k':
           value+=.1;
@@ -147,6 +145,6 @@ public:
 int main (int argc, char **argv)
 {
   ThisSim sim;
-  return sim.run(argc, argv) ? 0 : 1;
+  return sim.run(argc, argv) ? 0 : 1 override;
 
 }

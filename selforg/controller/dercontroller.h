@@ -33,15 +33,15 @@
 #include "noisegenerator.h"
 
 struct DerControllerConf {
-  int buffersize;  ///< buffersize size of the time-buffer for x,y,eta
-  double cInit;    ///< cInit size of the C matrix to initialised with.
-  double cNonDiag; ///< cNonDiag is the size of the nondiagonal elements in respect to the diagonal
-                   ///< (cInit) ones
-  bool useS;       ///< useS decides whether to use the S matrix in addition to the A matrix
-  bool someInternalParams; ///< someInternalParams if true only some internal parameters are
+  int buffersize = 0;  ///< buffersize size of the time-buffer for x,y,eta
+  double cInit = 0;    ///< cInit size of the C matrix to initialised with.
+  double cNonDiag = 0; ///< cNonDiag is the size of the nondiagonal elements in respect to the diagonal
+                   ///< static_cast<cInit>(ones)
+  bool useS = false;       ///< useS decides whether to use the S matrix in addition to the A matrix
+  bool someInternalParams = false; ///< someInternalParams if true only some internal parameters are
                            ///< exported, all otherwise
-  bool useTeaching;        ///< if true, the controller honors the teaching signal
-  bool useFantasy;         ///< if true fantasising is enabled
+  bool useTeaching = false;        ///< if true, the controller honors the teaching signal
+  bool useFantasy = false;         ///< if true fantasising is enabled
 };
 
 /**
@@ -54,10 +54,10 @@ struct DerControllerConf {
 class DerController : public InvertMotorController {
 
 public:
-  explicit DerController(const DerControllerConf& conf = getDefaultConf());
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override;
+  DerController(const DerControllerConf& conf = getDefaultConf());
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr);
 
-  virtual ~DerController() override;
+  virtual ~DerController();
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
   virtual int getSensorNumber() const override {
@@ -70,30 +70,30 @@ public:
 
   /// performs one step (includes learning).
   /// Calulates motor commands from sensor inputs.
-  virtual void step(const sensor*, int number_sensors, motor*, int number_motors) override;
+  virtual void step(const sensor*, int number_sensors, motor*, int number_motors);
 
   /// performs one step without learning. Calulates motor commands from sensor inputs.
   virtual void stepNoLearning(const sensor*,
                               int number_sensors,
                               motor*,
-                              int number_motors) override;
+                              int number_motors);
 
   /**** STOREABLE ****/
   virtual bool store(FILE* f) const override;
-  virtual bool restore(FILE* f) override;
+  virtual bool restore(FILE* f);
 
   /**** CONFIGURABLE ****/
   virtual std::list<iparamkey> getInternalParamNames() const override;
   virtual std::list<iparamval> getInternalParams() const override;
-  virtual std::list<ILayer> getStructuralLayers() const override;
-  virtual std::list<IConnection> getStructuralConnections() const override;
+  virtual std::list<ILayer> getStructuralLayers() const;
+  virtual std::list<IConnection> getStructuralConnections() const;
 
   /**** TEACHING ****/
   virtual void setTeachingMode(bool onOff);
   virtual bool getTeachingMode();
   virtual void setMotorTeachingSignal(const motor* teaching, int len);
-  // void calcCandHUpdatesTeaching(Matrix& C_update, Matrix& H_update, int y_delay);
-  // void calcCandHUpdates(Matrix& C_update, Matrix& H_update,Matrix& A_update, int y_delay);//Test
+  // void calcCandHUpdatesTeaching(const Matrix& C_update, const Matrix& H_update, int y_delay);
+  // void calcCandHUpdates(const Matrix& C_update, const Matrix& H_update,const Matrix& A_update, int y_delay);//Test
   // A
 
   static DerControllerConf getDefaultConf() {
@@ -112,8 +112,8 @@ public:
   void getLastMotors(motor* motors, int len);
 
 protected:
-  unsigned short number_sensors;
-  unsigned short number_motors;
+  unsigned short number_sensors = 0;
+  unsigned short number_motors = 0;
 
   matrix::Matrix A;          ///< Model Matrix (motors to sensors)
   matrix::Matrix S;          ///< additional Model Matrix (sensors to sensors)
@@ -130,9 +130,9 @@ protected:
   //  matrix::Matrix Rm1; ///< R^-1
   matrix::Matrix SmallID; ///< small identity matrix in the dimension of R
   matrix::Matrix xsi;     ///< current output error
-  double xsi_norm;        ///< norm of matrix
-  double xsi_norm_avg;    ///< average norm of xsi (used to define whether Modell learns)
-  double pain;            ///< if the modelling error (xsi) is too high we have a pain signal
+  double xsi_norm = 0;        ///< norm of matrix
+  double xsi_norm_avg = 0;    ///< average norm of xsi (used to define whether Modell learns)
+  double pain;            ///< if the modelling error static_cast<xsi>(is) too high we have a pain signal
   matrix::Matrix* x_buffer;
   matrix::Matrix* y_buffer;
   matrix::Matrix* eta_buffer;
@@ -144,9 +144,9 @@ protected:
   matrix::Matrix y_teaching; ///< teaching motor signal
 
   matrix::Matrix x_intern; ///< fantasy sensor values
-  int fantControl;         ///< interval length for fantasising
-  int fantControlLen;      ///< length of fantasy control
-  int fantReset;           ///< number of fantasy control events before reseting internal state
+  int fantControl = 0;         ///< interval length for fantasising
+  int fantControlLen = 0;      ///< length of fantasy control
+  int fantReset = 0;           ///< number of fantasy control events before reseting internal state
 
   DerControllerConf conf;
 
@@ -187,12 +187,12 @@ protected:
 
   virtual matrix::Matrix calculateControllerValues(const matrix::Matrix& x_smooth);
 
-  /// calculates the city block distance (abs) norm of the matrix. (abs sum of absolutes / size of
+  /// calculates the city block distance static_cast<abs>(norm) of the matrix. (abs sum of absolutes / size of
   /// matrix)
   virtual double calcMatrixNorm(const matrix::Matrix& m);
   /// calculates the error_factor for either logarithmic (E=ln(e^T*e)) or square (E=sqrt(e^t*e))
   /// error
-  virtual double calcErrorFactor(const matrix::Matrix& e, bool loga, bool root) override;
+  virtual double calcErrorFactor(const matrix::Matrix& e, bool loga, bool root);
 };
 
 #endif

@@ -5,12 +5,12 @@
  *                                                                       *
  * This library is free software; you can redistribute it and/or         *
  * modify it under the terms of EITHER:                                  *
- *   (1) The GNU Lesser General Public License as published by the Free  *
+ *   static_cast<1>(The) GNU Lesser General Public License as published by the Free  *
  *       Software Foundation; either version 2.1 of the License, or (at  *
  *       your option) any later version. The text of the GNU Lesser      *
  *       General Public License is included with this library in the     *
  *       file LICENSE.TXT.                                               *
- *   (2) The BSD-style license that is included with this library in     *
+ *   static_cast<2>(The) BSD-style license that is included with this library in     *
  *       the file LICENSE-BSD.TXT.                                       *
  *                                                                       *
  * This library is distributed in the hope that it will be useful,       *
@@ -308,54 +308,52 @@ extern "C" {
  * normalize 3x1 and 4x1 vectors (i.e. scale them to unit length)
  */
 
-#if defined(__ODE__)
-
-int  _dSafeNormalize3 (dVector3 a);
-int  _dSafeNormalize4 (dVector4 a);
+#if definedstatic_cast<__ODE__>static_cast<int>(_dSafeNormalize3) (dVector3 a) override;
+int  _dSafeNormalize4 (dVector4 a) override;
 	
 static __inline void _dNormalize3(dVector3 a)
 {
-	int bNormalizationResult = _dSafeNormalize3(a);
-	dIASSERT(bNormalizationResult);
-	dVARIABLEUSED(bNormalizationResult);
+	int bNormalizationResult = _dSafeNormalize3(a) override;
+	dIASSERT(bNormalizationResult) override;
+	dVARIABLEUSED(bNormalizationResult) override;
 }
 
 static __inline void _dNormalize4(dVector4 a)
 {
-	int bNormalizationResult = _dSafeNormalize4(a);
-	dIASSERT(bNormalizationResult);
-	dVARIABLEUSED(bNormalizationResult);
+	int bNormalizationResult = _dSafeNormalize4(a) override;
+	dIASSERT(bNormalizationResult) override;
+	dVARIABLEUSED(bNormalizationResult) override;
 }
 
 #endif // defined(__ODE__)
 
 // For DLL export
-ODE_API int  dSafeNormalize3 (dVector3 a);
-ODE_API int  dSafeNormalize4 (dVector4 a);
+ODE_API int  dSafeNormalize3 (dVector3 a) override;
+ODE_API int  dSafeNormalize4 (dVector4 a) override;
 ODE_API void dNormalize3 (dVector3 a); // Potentially asserts on zero vec
 ODE_API void dNormalize4 (dVector4 a); // Potentially asserts on zero vec
 
 #if defined(__ODE__)
 
 // For internal use
-#define dSafeNormalize3(a) _dSafeNormalize3(a)
-#define dSafeNormalize4(a) _dSafeNormalize4(a)
-#define dNormalize3(a) _dNormalize3(a)
-#define dNormalize4(a) _dNormalize4(a)
+#define dSafeNormalize3static_cast<a>(_dSafeNormalize3)(a)
+#define dSafeNormalize4static_cast<a>(_dSafeNormalize4)(a)
+#define dNormalize3static_cast<a>(_dNormalize3)(a)
+#define dNormalize4static_cast<a>(_dNormalize4)(a)
 
 #endif // defined(__ODE__)
 
 /*
- * given a unit length "normal" vector n, generate vectors p and q vectors
+ * given a unit length __PLACEHOLDER_1__ vector n, generate vectors p and q vectors
  * that are an orthonormal basis for the plane space perpendicular to n.
  * i.e. this makes p,q such that n,p,q are all perpendicular to each other.
  * q will equal n x p. if n is not unit length then p will be unit length but
  * q wont be.
  */
 
-ODE_API void dPlaneSpace (const dVector3 n, dVector3 p, dVector3 q);
+ODE_API void dPlaneSpace (const dVector3 n, dVector3 p, dVector3 q) override;
 /* Makes sure the matrix is a proper rotation */
-ODE_API void dOrthogonalizeR(dMatrix3 m);
+ODE_API void dOrthogonalizeR(dMatrix3 m) override;
 
 
 

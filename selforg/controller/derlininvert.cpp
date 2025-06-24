@@ -7,7 +7,7 @@
  *   LICENSE:                                                              *
  *   This work is licensed under the Creative Commons                      *
  *   Attribution-NonCommercial-ShareAlike 2.5 License. To view a copy of   *
- *   this license, visit http://creativecommons.org/licenses/by-nc-sa/2.5/ *
+ *   this license, visit http:__PLACEHOLDER_66__
  *   or send a letter to Creative Commons, 543 Howard Street, 5th Floor,   *
  *   San Francisco, California, 94105, USA.                                *
  *                                                                         *
@@ -18,11 +18,11 @@
  ***************************************************************************/
 
 #include "derlininvert.h"
-// #include "dercontroller.h"
+// #include __PLACEHOLDER_1__
 #include "invertmotornstep.h"
 #include "regularisation.h"
-// #include "invertmotorcontroller.h"
-// #include "statistictools.h"
+// #include __PLACEHOLDER_4__
+// #include __PLACEHOLDER_5__
 using namespace matrix;
 using namespace std;
 
@@ -53,9 +53,9 @@ DerLinInvert::DerLinInvert(const DerLinInvertConf& conf)
 
   addParameterDef("weighting", &weighting, 1);
   addParameterDef("PIDint", &PIDint, .03);
-  //   addParameterDef("PIDdrv",&PIDdrv,.2);
-  //  addParameterDef("intstate",&intstate,1.0);
-  //  addParameterDef("zetaupdate",&zetaupdate,.0);
+  //   addParameterDef(__PLACEHOLDER_16__,&PIDdrv,.2);
+  //  addParameterDef(__PLACEHOLDER_17__,&intstate,1.0);
+  //  addParameterDef(__PLACEHOLDER_18__,&zetaupdate,.0);
 };
 
 DerLinInvert::~DerLinInvert() {
@@ -149,7 +149,7 @@ DerLinInvert::init(int sensornumber, int motornumber, RandGen* randg) {
   x_buffer = new Matrix[buffersize];
   y_buffer = new Matrix[buffersize];
   eta_buffer = new Matrix[buffersize];
-  for (unsigned int k = 0; k < buffersize; k++) {
+  for (unsigned int k = 0; k < buffersize; ++k) {
     x_buffer[k].set(number_sensors, 1);
     y_buffer[k].set(number_motors, 1);
     eta_buffer[k].set(number_motors, 1);
@@ -187,7 +187,7 @@ DerLinInvert::step(const sensor* x_, int number_sensors, motor* y_, int number_m
     learnController(delay);
   }
   // update step counter
-  t++;
+  ++t;
 };
 
 /// performs one step without learning. Calulates motor commands from sensor inputs.
@@ -195,7 +195,7 @@ void
 DerLinInvert::stepNoLearning(const sensor* x, int number_sensors, motor* y, int number_motors) {
   fillBuffersAndControl(x, number_sensors, y, number_motors);
   // update step counter
-  t++;
+  ++t;
   //  cout << y << endl;
 };
 
@@ -204,20 +204,20 @@ DerLinInvert::fillBuffersAndControl(const sensor* x_,
                                     int number_sensors,
                                     motor* y_,
                                     int number_motors) {
-  assert((unsigned)number_sensors == this->number_sensors &&
-         (unsigned)number_motors == this->number_motors);
+  assert(static_cast<unsigned>(number_sensors) == this->number_sensors &&
+         static_cast<unsigned>(number_motors) == this->number_motors);
   Matrix x(number_sensors, 1, x_);
 
   // x = x.map(g); //TEST Begrenzung
 
   //  cout << number_sensors;
 
-  x_smooth_long += (x - x_smooth_long) * ((0.03 * 1.0) / (double)s4avg);
+  x_smooth_long += (x - x_smooth_long) * ((0.03 * 1.0) / static_cast<double>(s4avg));
 
   //  x -=   x_smooth_long;
 
   // averaging over the last s4avg values of x_buffer
-  x_smooth += (x - x_smooth) * (1.0 / (double)s4avg); // calculateSmoothValues;
+  x_smooth += (x - x_smooth) * (1.0 / static_cast<double>(s4avg)); // calculateSmoothValues;
 
   //   x -= x_smooth_long; ////////////////////***********///////////////////////
   putInBuffer(x_buffer, x_smooth);
@@ -225,14 +225,14 @@ DerLinInvert::fillBuffersAndControl(const sensor* x_,
   // calculate controller values
   //    Matrix y = y_buffer[(t -1 + buffersize)%buffersize];
   //         y += (calculateControllerValues(x) +  noiseMatrix(eta.getM(),eta.getN(), *YNoiseGen,
-  //         -noiseY, noiseY) - y)*(1.0/(double)s4avg);
+  //         -noiseY, noiseY) - y)*(1.0/static_cast<double>(s4avg));
 
   Matrix y =
     calculateControllerValues(x_smooth); //_buffer[(t - t_delay  + buffersize)%buffersize]);
                                          //     Add noise
   //  y += noiseMatrix(eta.getM(),eta.getN(), *YNoiseGen, -noiseY, noiseY);
 
-  //  y_smooth += (y - y_smooth)* (1.0/(double)s4avg);
+  //  y_smooth += (y - y_smooth)* (1.0/static_cast<double>(s4avg));
 
   //   //  y_smooth.convertToBuffer(y_, number_motors);
 
@@ -241,7 +241,7 @@ DerLinInvert::fillBuffersAndControl(const sensor* x_,
 
   //   ///////Global PID controller
 
-  y_smooth += (y + y_integration - y_smooth) * (1.0 / (double)s4avg);
+  y_smooth += (y + y_integration - y_smooth) * (1.0 / static_cast<double>(s4avg));
   y_integration += (A0 ^ T) * (x_smooth - A0 * y_smooth) * (-.1) - y_integration * PIDint;
   y_integration = (y_integration).map(g) * 0; // TEST
   //   PID_deriv += ((A0^T) * ( (  x_buffer[(t + buffersize)%buffersize] - x_buffer[(t -1 +
@@ -289,14 +289,14 @@ DerLinInvert::learnController(int delay) {
   //     double diffmin=   fabs (calcMatrixNorm(x_buffer[(t + buffersize)%buffersize]
   //                           - (A^0)*y_buffer[(t -2 + buffersize)%buffersize]));
   //     t_delay = 2;
-  //     for ( int i=1; i<20;i++) {
+  //     for ( int i=1; i<20;++i) {
   //      diff =   fabs (calcMatrixNorm(x_buffer[(t + buffersize)%buffersize]
   //                           - (A^0)*y_buffer[(t  -2*i -2 + buffersize)%buffersize]));
   //                     if ( diffmin > diff) {diffmin = diff; t_delay =  2*i + 2; }
 
   //     }
 
-  //            cout << t_delay << "   " ;
+  //            cout << t_delay << __PLACEHOLDER_19__ ;
 
   const Matrix& x_delay = x_buffer[(t - delay + buffersize) % buffersize];
 
@@ -319,7 +319,7 @@ DerLinInvert::learnController(int delay) {
 
     if ((t % 50) == 2)
       ATA_inv = (A.multTM() + ID * 0.1) ^ -1;
-    //    cout <<A.val(0,0) << " " << xsi.val(0,0) << endl;
+    //    cout <<A.val(0,0) << __PLACEHOLDER_20__ << xsi.val(0,0) << endl;
     eta = ATA_inv * (A ^ T) * xsi;
     //   eta += noiseMatrix(eta.getM(),eta.getN(), *YNoiseGen, -noiseY, noiseY);
     eta = eta.map(g);
@@ -396,7 +396,7 @@ DerLinInvert::learnController(int delay) {
 
       //  H *=0;
 
-      //   for(int m=0; m < number_motors; m++)  for(int n = 0; n < number_motors; n++)
+      //   for(int m=0; m < number_motors; ++m)  for(int n = 0; n < number_motors; ++n)
       //     if ( n!= m ) C.val(m,n) = 0.0;
     }
   } // Ende if !useS
@@ -433,7 +433,7 @@ DerLinInvert::learnController(int delay) {
 
     A += xsi * (y ^ T) * epsA;
     B += xsi * epsA * factorB - B * epsA * factorB * .003;
-    for (int i = 0; i < 20; i++)
+    for (int i = 0; i < 20; ++i)
       S += (x_delay - B - A * (y)-S * (x_delay)).map(g) * (x ^ T) * epsA - S * epsA * dampS;
 
     //  C += (( kappa * ((/*(x_delay + H) +*/ vau)^T) + ( kappag.multrowwise( Cvau)*(-2))* ((x_delay
@@ -457,7 +457,7 @@ DerLinInvert::learnController(int delay) {
                     noiseMatrix(HY.getM(), HY.getN(), *YNoiseGen, -noiseY, noiseY))
                        .map(g) *
                      epsC +
-                   (HY & HY & HY) * (-.003)) *
+                   (HY & HY) * (-.003)) *
                     gamma +
                   DeltaHY_Old * (1 - gamma);
 
@@ -531,7 +531,7 @@ DerLinInvert::learnModel(int delay) {
   //  xsi = x - A * y; //TEST
   // xsi_norm = matrixNorm1(xsi);
 
-  double error_factor = calcErrorFactor(xsi, (logaE & 2) != 0, (rootE & 2) != 0);
+  double error_factor = calcErrorFactor(xsi, false, false);
   //   conf.model->learn(y-y_smooth, x- x_smooth_long, error_factor);
   conf.model->learn(y, x, error_factor);
 
@@ -557,7 +557,7 @@ Matrix
 DerLinInvert::calculateControllerValues(const Matrix& x) {
 
   //  if(1 || satelliteTeaching){ ///TEST
-  //     // cout << "satteachiing" << endl;
+  //     // cout << __PLACEHOLDER_21__ << endl;
   //     const Matrix& ySat = conf.sat->process(x_smooth);
   //     return ySat; }
   //   else {
@@ -641,38 +641,38 @@ DerLinInvert::getInternalParamNames() const {
     if (conf.useS)
       keylist += store4x4AndDiagonalFieldNames(S, "S");
     keylist += store4x4AndDiagonalFieldNames(C, "C");
-    //      keylist += store4x4AndDiagonalFieldNames(S, "S");
-    //         keylist += store4x4AndDiagonalFieldNames(Q, "Q");
+    //      keylist += store4x4AndDiagonalFieldNames(S, __PLACEHOLDER_25__);
+    //         keylist += store4x4AndDiagonalFieldNames(Q, __PLACEHOLDER_26__);
 
   } else {
     keylist += storeMatrixFieldNames(A, "A");
     if (conf.useS)
       keylist += storeMatrixFieldNames(S, "S");
     keylist += storeMatrixFieldNames(C, "C");
-    //    keylist += storeMatrixFieldNames(R, "R");
-    //       keylist += storeMatrixFieldNames(Q, "Q");
+    //    keylist += storeMatrixFieldNames(R, __PLACEHOLDER_30__);
+    //       keylist += storeMatrixFieldNames(Q, __PLACEHOLDER_31__);
   }
-  // keylist += storeVectorFieldNames(y_integration, "y_integration");
-  //  keylist += storeVectorFieldNames(PID_deriv, "PID_deriv");
-  //  keylist += storeVectorFieldNames(B, "B");
+  // keylist += storeVectorFieldNames(y_integration, __PLACEHOLDER_32__);
+  //  keylist += storeVectorFieldNames(PID_deriv, __PLACEHOLDER_33__);
+  //  keylist += storeVectorFieldNames(B, __PLACEHOLDER_34__);
   keylist += storeVectorFieldNames(HY, "HY");
   keylist += storeVectorFieldNames(y_integration, "y_integration");
   //  if(conf.sat)
   //             keylist += conf.sat->getInternalParamNames();
-  //  keylist += storeVectorFieldNames(eta, "eta");
-  // keylist += storeVectorFieldNames(xsi, "xsi");
-  //  keylist += storeVectorFieldNames(x_smooth_long, "v_smooth");
+  //  keylist += storeVectorFieldNames(eta, __PLACEHOLDER_37__);
+  // keylist += storeVectorFieldNames(xsi, __PLACEHOLDER_38__);
+  //  keylist += storeVectorFieldNames(x_smooth_long, __PLACEHOLDER_39__);
   keylist += string("weighting");
   keylist += string("epsA");
   keylist += string("epsC");
-  // keylist += string("xsi");
-  //  keylist += string("xsi_norm");
-  //  keylist += string("xsi_norm_avg");
+  // keylist += string(__PLACEHOLDER_43__);
+  //  keylist += string(__PLACEHOLDER_44__);
+  //  keylist += string(__PLACEHOLDER_45__);
   keylist += string("PIDint");
   keylist += string("TimeLoopError");
-  //  keylist += string("GrangerError1");
-  //   keylist += string("GrangerError2");
-  //   keylist += string("GrangerCausality");
+  //  keylist += string(__PLACEHOLDER_48__);
+  //   keylist += string(__PLACEHOLDER_49__);
+  //   keylist += string(__PLACEHOLDER_50__);
   return keylist;
 }
 

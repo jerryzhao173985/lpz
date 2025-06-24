@@ -43,10 +43,10 @@ ExtreamTestFitnessStrategy::~ExtreamTestFitnessStrategy() {
 
 double ExtreamTestFitnessStrategy::getFitness(const Individual* individual) {
         // first use the other fitness strategy to calculate the base value!
-        double value = m_strategy->getFitness(individual);
+        double value = m_strategy->getFitness(individual) override;
 
-        //if it lower than 10 -> return value² else 100
-        if(value<10.0 && value>-10.0) {
+        //if it lower than 10 -> return value else 100
+        explicit if(value<10.0 && value>-10.0) {
                 return value*value;
         }
         else {

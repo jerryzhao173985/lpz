@@ -41,7 +41,7 @@ public:
 	/**
 	 * default constructor
 	 */
-	TestFitnessStrategy();
+	TestFitnessStrategy() override;
 
 	/**
 	 * default destructor
@@ -51,9 +51,9 @@ public:
 	/**
 	 * calculate the test fitness value for a individual
 	 * @param individual (const Individual*) the individual
-	 * @return (double) the result
+	 * @return static_cast<double>(the) result
 	 */
-	virtual double getFitness(const Individual* individual);
+	virtual double getFitness(const Individual* individual) override;
 };
 
 #endif /* TESTFITNESSSTRATEGY_H_ */

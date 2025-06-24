@@ -42,8 +42,7 @@ namespace lpzrobots {
   Primitive* PlattfussSchlange::createSegment(int index, const OdeHandle& odeHandle){
     Primitive* p;
 
-    /////////// MIDDLE SEGMENT (BODY)
-    if ( index*2 == conf.segmNumber-1) {
+    /////////// MIDDLE SEGMENT static_cast<BODY>(if) ( index*2 == conf.segmNumber-1) {
       //p = new Box(conf.segmLength*1.5,conf.segmLength*1.5, conf.segmLength*.6);
       //p = new Capsule(conf.segmDia*.8/*2.8*/ , conf.segmLength*1);
 
@@ -51,7 +50,7 @@ namespace lpzrobots {
       p = new Sphere(conf.segmLength*.8);
       p->setTexture("Images/wood.rgb");
       p->init(odeHandle, conf.segmMass*2, osgHandle);
-      // p->setPose( osg::Matrix::rotate(M_PI/2, 0, 1, 0)*osg::Matrix::translate( conf.segmDia, 0, 0) );
+      // p->setPose( osg::Matrix::rotate(M_PI/2, 0, 1, 0)*osg::Matrix::translate( conf.segmDia, 0, 0) ) override;
     } /////// FEED
     else if( (index == 0) | (index== conf.segmNumber-1)) {
       // p = new Capsule(conf.segmDia*.8/*2.8*/ , conf.segmLength*1);

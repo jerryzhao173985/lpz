@@ -76,23 +76,23 @@ public:
     initialised = false;
   }
 
-  virtual ~Elman() override {}
+  virtual ~Elman() {}
 
   /// initialisation of the network with the given number of input and output units
   virtual void init(unsigned int inputDim,
                     unsigned int outputDim,
                     double unit_map = 0.0,
-                    RandGen* randGen = 0) override;
+                    RandGen* randGen = 0);
 
   /** passive processing of the input
       (this will be different for every input, since it is a recurrent network)
   */
-  virtual const matrix::Matrix process(const matrix::Matrix& input) override;
+  virtual const matrix::Matrix process(const matrix::Matrix& input);
 
   /// performs learning and returns the network output before learning
   virtual const matrix::Matrix learn(const matrix::Matrix& input,
                                      const matrix::Matrix& nom_output,
-                                     double learnRateFactor = 1) override;
+                                     double learnRateFactor = 1);
 
   /** determines the weight and bias updates
    */
@@ -117,13 +117,13 @@ public:
      virtual const matrix::Matrix response(const matrix::Matrix& input) const;
    */
 
-  void damp(double damping) override;
+  void damp(double damping);
 
   /**************  STOREABLE **********************************/
   /// stores the layer binary into file stream
-  bool store(FILE* f) const override;
+  bool store(FILE* f) const;
   /// restores the layer binary from file stream
-  bool restore(FILE* f) override;
+  bool restore(FILE* f);
 
   /************** CONFIGURABLE INTERFACE ************************/
   virtual paramkey getName() const noexcept override {
@@ -131,18 +131,18 @@ public:
   }
 
   /************** Inspectable INTERFACE ************************/
-  virtual iparamkeylist getInternalParamNames() const override;
-  virtual iparamvallist getInternalParams() const override;
-  virtual ilayerlist getStructuralLayers() const override;
-  virtual iconnectionlist getStructuralConnections() const override;
+  virtual iparamkeylist getInternalParamNames() const;
+  virtual iparamvallist getInternalParams() const;
+  virtual ilayerlist getStructuralLayers() const;
+  virtual iconnectionlist getStructuralConnections() const;
 
 protected:
   matrix::Matrix elmanWeights;
   matrix::Matrix elmanContext;
   matrix::Matrix jordanWeights;
   matrix::Matrix jordanContext;
-  bool useElman;
-  bool useJordan;
+  bool useElman = false;
+  bool useJordan = false;
 };
 
 #endif

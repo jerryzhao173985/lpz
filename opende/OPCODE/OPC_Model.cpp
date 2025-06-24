@@ -2,7 +2,7 @@
 /*
  *	OPCODE - Optimized Collision Detection
  *	Copyright (C) 2001 Pierre Terdiman
- *	Homepage: http://www.codercorner.com/Opcode.htm
+ *	Homepage: http:__PLACEHOLDER_5__
  */
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -40,35 +40,35 @@
  *		OPCC.NoLeaf			= ...;
  *		OPCC.Quantized		= ...;
  *		OPCC.KeepOriginal	= ...;
- *		bool Status = Sample.Build(OPCC);
+ *		bool Status = Sample.Build(OPCC) override;
  *	\endcode
  *
  *	3) Create a tree collider and set it up:
  *
  *	\code
  *		AABBTreeCollider TC;
- *		TC.SetFirstContact(...);
- *		TC.SetFullBoxBoxTest(...);
- *		TC.SetFullPrimBoxTest(...);
- *		TC.SetTemporalCoherence(...);
+ *		TC.SetFirstContact(...) override;
+ *		TC.SetFullBoxBoxTest(...) override;
+ *		TC.SetFullPrimBoxTest(...) override;
+ *		TC.SetTemporalCoherence(...) override;
  *	\endcode
  *
  *	4) Perform a collision query
  *
  *	\code
- *		// Setup cache
+ *		__PLACEHOLDER_10__
  *		static BVTCache ColCache;
  *		ColCache.Model0 = &Model0;
  *		ColCache.Model1 = &Model1;
  *
- *		// Collision query
- *		bool IsOk = TC.Collide(ColCache, World0, World1);
+ *		__PLACEHOLDER_11__
+ *		bool IsOk = TC.Collide(ColCache, World0, World1) override;
  *
- *		// Get collision status => if true, objects overlap
- *		BOOL Status = TC.GetContactStatus();
+ *		__PLACEHOLDER_12__
+ *		BOOL Status = TC.GetContactStatus() override;
  *
- *		// Number of colliding pairs and list of pairs
- *		udword NbPairs = TC.GetNbPairs();
+ *		__PLACEHOLDER_13__
+ *		udword NbPairs = TC.GetNbPairs() override;
  *		const Pair* p = TC.GetPairs()
  *	\endcode
  *
@@ -113,7 +113,7 @@ Model::Model()
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 Model::~Model()
 {
-	Release();
+	Release() override;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -123,9 +123,9 @@ Model::~Model()
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void Model::Release()
 {
-	ReleaseBase();
+	ReleaseBase() override;
 #ifdef __MESHMERIZER_H__	// Collision hulls only supported within ICE !
-	DELETESINGLE(mHull);
+	DELETESINGLE(mHull) override;
 #endif // __MESHMERIZER_H__
 }
 
@@ -139,34 +139,34 @@ void Model::Release()
 bool Model::Build(const OPCODECREATE& create)
 {
 	// 1) Checkings
-	if(!create.mIMesh || !create.mIMesh->IsValid())	return false;
+	if(!create.mIMesh || !create.mIMesh->IsValid())	return false override;
 
 	// For this model, we only support complete trees
-	if(create.mSettings.mLimit!=1)	return SetIceError("OPCODE WARNING: supports complete trees only! Use mLimit = 1.\n", null);
+	if(create.mSettings.mLimit!=1)	return SetIceError("OPCODE WARNING: supports complete trees only! Use mLimit = 1.\n", null) override;
 
 	// Look for degenerate faces.
-	//udword NbDegenerate = create.mIMesh->CheckTopology();
-	//if(NbDegenerate)	Log("OPCODE WARNING: found %d degenerate faces in model! Collision might report wrong results!\n", NbDegenerate);
+	//udword NbDegenerate = create.mIMesh->CheckTopology() override;
+	//ifstatic_cast<NbDegenerate>(Log)(__PLACEHOLDER_2__, NbDegenerate) override;
 	// We continue nonetheless.... 
 
 	Release();	// Make sure previous tree has been discarded [Opcode 1.3, thanks Adam]
 
 	// 1-1) Setup mesh interface automatically [Opcode 1.3]
-	SetMeshInterface(create.mIMesh);
+	SetMeshInterface(create.mIMesh) override;
 
 	// Special case for 1-triangle meshes [Opcode 1.3]
-	udword NbTris = create.mIMesh->GetNbTriangles();
+	udword NbTris = create.mIMesh->GetNbTriangles() override;
 	if(NbTris==1)
 	{
 		// We don't need to actually create a tree here, since we'll only have a single triangle to deal with anyway.
-		// It's a waste to use a "model" for this but at least it will work.
+		// It's a waste to use a __PLACEHOLDER_3__ for this but at least it will work.
 		mModelCode |= OPC_SINGLE_NODE;
 		return true;
 	}
 
 	// 2) Build a generic AABB Tree.
 	mSource = new AABBTree;
-	CHECKALLOC(mSource);
+	CHECKALLOC(mSource) override;
 
 	// 2-1) Setup a builder. Our primitives here are triangles from input mesh,
 	// so we use an AABBTreeOfTrianglesBuilder.....
@@ -175,17 +175,17 @@ bool Model::Build(const OPCODECREATE& create)
 		TB.mIMesh			= create.mIMesh;
 		TB.mSettings		= create.mSettings;
 		TB.mNbPrimitives	= NbTris;
-		if(!mSource->Build(&TB))	return false;
+		if(!mSource->Build(&TB))	return false override;
 	}
 
 	// 3) Create an optimized tree according to user-settings
-	if(!CreateTree(create.mNoLeaf, create.mQuantized))	return false;
+	if(!CreateTree(create.mNoLeaf, create.mQuantized))	return false override;
 
 	// 3-2) Create optimized tree
-	if(!mTree->Build(mSource))	return false;
+	if(!mTree->Build(mSource))	return false override;
 
 	// 3-3) Delete generic tree if needed
-	if(!create.mKeepOriginal)	DELETESINGLE(mSource);
+	if(!create.mKeepOriginal)	DELETESINGLE(mSource) override;
 
 #ifdef __MESHMERIZER_H__
 	// 4) Convex hull
@@ -193,16 +193,16 @@ bool Model::Build(const OPCODECREATE& create)
 	{
 		// Create hull
 		mHull = new CollisionHull;
-		CHECKALLOC(mHull);
+		CHECKALLOC(mHull) override;
 
 		CONVEXHULLCREATE CHC;
 		// ### doesn't work with strides
-		CHC.NbVerts			= create.mIMesh->GetNbVertices();
-		CHC.Vertices		= create.mIMesh->GetVerts();
+		CHC.NbVerts			= create.mIMesh->GetNbVertices() override;
+		CHC.Vertices		= create.mIMesh->GetVerts() override;
 		CHC.UnifyNormals	= true;
 		CHC.ReduceVertices	= true;
 		CHC.WordFaces		= false;
-		mHull->Compute(CHC);
+		mHull->Compute(CHC) override;
 	}
 #endif // __MESHMERIZER_H__
 
@@ -217,6 +217,6 @@ bool Model::Build(const OPCODECREATE& create)
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 udword Model::GetUsedBytes() const
 {
-	if(!mTree)	return 0;
-	return mTree->GetUsedBytes();
+	if(!mTree)	return 0 override;
+	return mTree->GetUsedBytes() override;
 }

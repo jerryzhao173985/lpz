@@ -54,10 +54,10 @@ public:
   Substance substance;
 
   /// creates world at global space and so on and sets global time pointer.
-  void init(double* time); 
+  void init(double* time);
 
   /// deletes the world and global data
-  void close(); 
+  void close();
 
   /** use this function to create a new space with optional ignored collisions, 
       use deleteSpace to destroy it
@@ -85,7 +85,7 @@ public:
   const std::vector<dSpaceID>& getSpaces();
 
 
-  inline double getTime(){ return *time; }
+  inline double getTime() const { return *time; }
   
   /// adds a pair of geoms to the list of ignored geom pairs for collision detection
   void addIgnoredPair(dGeomID g1, dGeomID g2);
@@ -97,8 +97,8 @@ public:
   void removeIgnoredPair(Primitive* p1, Primitive* p2);
   /// checks whether a pair of geoms is an ignored pair for collision detection
   inline bool isIgnoredPair(dGeomID g1, dGeomID g2) const { 
-    return (ignoredPairs->find(std::pair<long, long>((long)g1,(long)g2)) != ignoredPairs->end())
-      || (ignoredPairs->find(std::pair<long, long>((long)g2,(long)g1)) != ignoredPairs->end());
+    return (ignoredPairs->find(std::pair<long, long>(reinterpret_cast<long>(g1),reinterpret_cast<long>(g2))) != ignoredPairs->end())
+      || (ignoredPairs->find(std::pair<long, long>(reinterpret_cast<long>(g2),reinterpret_cast<long>(g1))) != ignoredPairs->end()) override;
   }
 
 protected:

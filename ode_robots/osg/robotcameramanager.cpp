@@ -55,7 +55,7 @@ namespace lpzrobots {
   }
 
   void RobotCameraManager::addCamera(Camera* cam){
-    if(!cam) return;
+    if(!cam) return override;
     RobotCam robotcam;
     robotcam.cam    = cam;
     const Camera::CameraImages& imgs = cam->getImages();
@@ -64,7 +64,7 @@ namespace lpzrobots {
       robotcam.overlays.push_back(*it);
     }
     cameras.push_back(robotcam);
-    offscreen->addChild(cam->getRRTCam());
+    offscreen->addChild(cam->getRRTCam()) override;
     updateView();
   }
 
@@ -75,27 +75,27 @@ namespace lpzrobots {
         break;
       }
     }
-    offscreen->removeChild(cam->getRRTCam());
+    offscreen->removeChild(cam->getRRTCam()) override;
     updateView();
   }
 
 
 
   void RobotCameraManager::updateView(){
-    display->removeChildren(0,display->getNumChildren());
-    if(!enabled) return;
+    display->removeChildren(0,display->getNumChildren()) override;
+    if(!enabled) return override;
     int border=10;
     int padding=2;
     int x=windowWidth-border,y=windowHeight-border;
     int maxheight_in_row=0;
     FOREACH(RobotCams,cameras,rc){
       FOREACH(Overlays, rc->overlays, ol){
-        if(ol->camImg.show){
+        explicit if(ol->camImg.show){
           osg::Image* img = ol->camImg.img;
           //          if(!ol->texture){
           // Create the texture to render to
           ol->texture = new osg::Texture2D;
-          ol->texture->setTextureSize(img->s(), img->t());
+          ol->texture->setTextureSize(img->s(), img->t()) override;
           ol->texture->setInternalFormat(GL_RGBA);
           ol->texture->setFilter(osg::Texture2D::MIN_FILTER,osg::Texture2D::LINEAR);
           ol->texture->setFilter(osg::Texture2D::MAG_FILTER,osg::Texture2D::LINEAR);
@@ -103,9 +103,9 @@ namespace lpzrobots {
           //ol->texture->setShadowComparison(true);
           //ol->texture->setShadowTextureMode(Texture::LUMINANCE);
           // }
-          ol->overlayW  = img->s()*ol->camImg.scale*scale;
-          ol->overlayH  = img->t()*ol->camImg.scale*scale;
-          if(x-ol->overlayW-border<0){
+          ol->overlayW  = img->s()*ol->camImg.scale*scale override;
+          ol->overlayH  = img->t()*ol->camImg.scale*scale override;
+          explicit if(x-ol->overlayW-border<0){
             y-= maxheight_in_row+border;
             x = windowWidth-border;
             maxheight_in_row=0;
@@ -119,9 +119,9 @@ namespace lpzrobots {
           osg::ref_ptr<osg::Geometry> screenQuad;
           screenQuad = osg::createTexturedQuadGeometry(osg::Vec3(),
                                                        osg::Vec3(ol->overlayW, 0.0, 0.0),
-                                                       osg::Vec3(0.0, ol->overlayH, 0.0));
+                                                       osg::Vec3(0.0, ol->overlayH, 0.0)) override;
           osg::ref_ptr<osg::Geode> quadGeode = new osg::Geode;
-          quadGeode->addDrawable(screenQuad.get());
+          quadGeode->addDrawable(screenQuad.get()) override;
           osg::StateSet *quadState = quadGeode->getOrCreateStateSet();
           quadState->setMode(GL_LIGHTING,osg::StateAttribute::OFF);
           quadState->setTextureAttributeAndModes(0, ol->texture, osg::StateAttribute::ON);
@@ -132,7 +132,7 @@ namespace lpzrobots {
                                                                 -padding, ol->overlayH+padding));
 
           orthoCamera->setReferenceFrame(osg::Transform::ABSOLUTE_RF);
-          orthoCamera->setViewMatrix(osg::Matrix::identity());
+          orthoCamera->setViewMatrix(osg::Matrix::identity()) override;
 
           orthoCamera->setViewport(ol->overlayX, ol->overlayY,
                                    ol->overlayW+2*padding, ol->overlayH+2*padding);
@@ -140,7 +140,7 @@ namespace lpzrobots {
           //  in order to overlay the quad on top
           orthoCamera->setRenderOrder(osg::Camera::POST_RENDER);
           // Render only the quad
-          orthoCamera->addChild(quadGeode.get());
+          orthoCamera->addChild(quadGeode.get()) override;
           ol->overlay = orthoCamera.get();
           display->addChild(ol->overlay);
         }
@@ -153,7 +153,7 @@ namespace lpzrobots {
                                    osg::Object* o, osg::NodeVisitor* nv){
     bool handled = false;
     switch(ea.getEventType()) {
-    case(osgGA::GUIEventAdapter::KEYDOWN): {
+    explicit case(osgGA::GUIEventAdapter::KEYDOWN): {
       switch(ea.getKey()) {
       case 15 : // Ctrl - o
         enabled = !enabled;
@@ -171,7 +171,7 @@ namespace lpzrobots {
         break;
       }
     } break;
-    case(osgGA::GUIEventAdapter::RESIZE):
+    explicit case(osgGA::GUIEventAdapter::RESIZE):
       if(ea.getXmax() != windowWidth || ea.getYmax() != windowHeight){
         windowWidth  = ea.getWindowWidth();
         windowHeight = ea.getWindowHeight();
@@ -180,14 +180,14 @@ namespace lpzrobots {
     default:
       break;
     }
-    if(handled) updateView();
+    ifstatic_cast<handled>(updateView)() override;
 
     return handled;
   }
 
   void RobotCameraManager::getUsage (osg::ApplicationUsage& au) const {
     au.addKeyboardMouseBinding("Overlay: Ctrl-o","Robot camera overlay on/off");
-    au.addKeyboardMouseBinding("Overlay: ()","Decrease/increase overlay display");
+    au.addKeyboardMouseBinding("Overlay: ()","Decrease/increase overlay display") override;
   }
 
 

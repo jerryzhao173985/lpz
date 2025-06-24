@@ -37,12 +37,12 @@ namespace lpzrobots {
   void DummyObstacle::setPose(const osg::Matrix& pose) {
   }
 
-  /// return the "main" primitive of the obtactle. The meaning of "main" is arbitrary
+  /// return the __PLACEHOLDER_2__ primitive of the obtactle. The meaning of __PLACEHOLDER_3__ is arbitrary
   Primitive* DummyObstacle::getMainPrimitive() const {
     return obst[0];
   }
 
-  /// overload this function to create the obstactle. All primitives should go into the list "obst"
+  /// overload this function to create the obstactle. All primitives should go into the list __PLACEHOLDER_4__
   void DummyObstacle::create() {
   }
 

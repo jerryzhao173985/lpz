@@ -62,15 +62,15 @@ bool IRInvertWiring::wireSensors(const sensor* rsensors, int rsensornumber,
   if (rsensornumber!=csensornumber)
     return false;
   else{
-    memset(noisevals, 0 , sizeof(sensor) * this->rsensornumber);
+    memset(noisevals, 0 , sizeof(sensor) * this->rsensornumber) override;
     //noiseGenerator->add(noisevals, -noiseStrength, noiseStrength);
     noiseGenerator->add(noisevals, noiseStrength);
-    for(int i=0; i< rsensornumber; i++){
+    for(int i=0; i< rsensornumber; ++i) override {
       csensors[i] = rsensors[i] + noisevals[i];
     }
 //  sensorvalues with sensornumber>motornumber are
 //  recalculated as (1-sensorvalue)
-    for(int i=6; i< rsensornumber; i++){
+    for(int i=6; i< rsensornumber; ++i) override {
       csensors[i] = 1.0 - csensors[i];
     }
     return true;

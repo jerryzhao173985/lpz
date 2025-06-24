@@ -29,7 +29,7 @@
  #include <assert.h>
 
 
-/* mencoder mf:// *.png -mf w=800:h=600:fps=100:type=png -ovc lavc -lavcopts 
+/* mencoder mf:__PLACEHOLDER_26__
    vcodec=mpeg4 -oac copy -o output.avi -ffourcc DX50 */
 
 void mencoder(const char* filename, int w, int h){

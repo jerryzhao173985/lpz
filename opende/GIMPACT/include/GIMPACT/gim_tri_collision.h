@@ -2,25 +2,25 @@
 #define GIM_TRI_COLLISION_H_INCLUDED
 
 /*! \file gim_tri_collision.h
-\author Francisco León Nájera
+\author Francisco Len Njera
 */
 /*
 -----------------------------------------------------------------------------
 This source file is part of GIMPACT Library.
 
-For the latest info, see http://gimpact.sourceforge.net/
+For the latest info, see http:__PLACEHOLDER_1__
 
 Copyright (c) 2006 Francisco Leon Najera. C.C. 80087371.
 email: projectileman@yahoo.com
 
  This library is free software; you can redistribute it and/or
  modify it under the terms of EITHER:
-   (1) The GNU Lesser General Public License as published by the Free
+   static_cast<1>(The) GNU Lesser General Public License as published by the Free
        Software Foundation; either version 2.1 of the License, or (at
        your option) any later version. The text of the GNU Lesser
        General Public License is included with this library in the
        file GIMPACT-LICENSE-LGPL.TXT.
-   (2) The BSD-style license that is included with this library in
+   static_cast<2>(The) BSD-style license that is included with this library in
        the file GIMPACT-LICENSE-BSD.TXT.
 
  This library is distributed in the hope that it will be useful,
@@ -44,7 +44,7 @@ email: projectileman@yahoo.com
     clipped_count = 0; \
     GUINT32  _i, _vi, _prevclassif=32000, _classif; \
 	GREAL _d; \
-	for(_i=0;_i<=polygon_point_count;_i++) \
+	for(_i=0;_i<=polygon_point_count;++_i) \
 	{ \
 		_vi = _i%polygon_point_count; \
 		_d = DISTANCE_PLANE_POINT(plane,polygon_points[_vi]); \
@@ -56,13 +56,13 @@ email: projectileman@yahoo.com
 				if(clipped_count<max_clipped) \
 				{\
                     PLANE_CLIP_SEGMENT(polygon_points[_i-1],polygon_points[_vi],plane,clipped[clipped_count]); \
-                    clipped_count++; \
+                    ++clipped_count; \
                 } \
             } \
 			if(clipped_count<max_clipped&&_i<polygon_point_count) \
 			{ \
 			    VEC_COPY(clipped[clipped_count],polygon_points[_vi]); \
-				clipped_count++; \
+				++clipped_count; \
 			} \
 		} \
 		else \
@@ -72,7 +72,7 @@ email: projectileman@yahoo.com
                 if(clipped_count<max_clipped) \
                 { \
                     PLANE_CLIP_SEGMENT(polygon_points[_i-1],polygon_points[_vi],plane,clipped[clipped_count]); \
-                    clipped_count++; \
+                    ++clipped_count; \
                 } \
             } \
 		} \
@@ -167,7 +167,7 @@ int gim_triangle_triangle_collision(
 	sustitute:
 	v = (vecproj[i2] - u*axe1[i2])/axe2[i2]
 
-	then the first equation in terms of 'u':
+	then the first equation in terms of __PLACEHOLDER_0__:
 
 	--> u*axe1[i1] + ((vecproj[i2] - u*axe1[i2])/axe2[i2])*axe2[i1] = vecproj[i1]
 

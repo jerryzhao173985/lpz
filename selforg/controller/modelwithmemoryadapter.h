@@ -37,12 +37,12 @@ public:
      @param numPatternsPerStep number of past patterns to learn each step
   */
   ModelWithMemoryAdapter(InvertableModel* model, int memorySize, int numPatternsPerStep);
-  virtual ~ModelWithMemoryAdapter() override {}
+  virtual ~ModelWithMemoryAdapter() {}
 
   virtual void init(unsigned int inputDim,
                     unsigned int outputDim,
                     double unit_map = 0.0,
-                    RandGen* randGen = 0) override;
+                    RandGen* randGen = 0);
 
   /**
      learn the input output mapping but also learn mappings from the memory.
@@ -50,7 +50,7 @@ public:
    */
   virtual const matrix::Matrix learn(const matrix::Matrix& input,
                                      const matrix::Matrix& nom_output,
-                                     double learnRateFactor = 1) override;
+                                     double learnRateFactor = 1);
 
   /* ********* Delegations *****************/
 
@@ -78,7 +78,7 @@ public:
 
   /* ************** Accessors **********************************/
 
-  Inspectable* getModel() {
+  Inspectable* getModel() const {
     return model;
   }
   const Inspectable* getModel() const {
@@ -96,10 +96,10 @@ public:
   }
 
   /* ************* Inspectable **********************************/
-  virtual iparamkeylist getInternalParamNames() const override {
+  virtual iparamkeylist getInternalParamNames() const {
     return model->getInternalParamNames();
   }
-  virtual iparamvallist getInternalParams() const override {
+  virtual iparamvallist getInternalParams() const {
     return model->getInternalParams();
   }
   virtual ilayerlist getStructuralLayers() const override {
@@ -119,7 +119,7 @@ protected:
       , lrFactor(lrFactor) {}
     matrix::Matrix inp;
     matrix::Matrix out;
-    double lrFactor;
+    double lrFactor = 0;
   };
 
   InvertableModel* model;

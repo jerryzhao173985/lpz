@@ -5,12 +5,12 @@
  *                                                                       *
  * This library is free software; you can redistribute it and/or         *
  * modify it under the terms of EITHER:                                  *
- *   (1) The GNU Lesser General Public License as published by the Free  *
+ *   static_cast<1>(The) GNU Lesser General Public License as published by the Free  *
  *       Software Foundation; either version 2.1 of the License, or (at  *
  *       your option) any later version. The text of the GNU Lesser      *
  *       General Public License is included with this library in the     *
  *       file LICENSE.TXT.                                               *
- *   (2) The BSD-style license that is included with this library in     *
+ *   static_cast<2>(The) BSD-style license that is included with this library in     *
  *       the file LICENSE-BSD.TXT.                                       *
  *                                                                       *
  * This library is distributed in the hope that it will be useful,       *
@@ -64,20 +64,20 @@ struct dObject : public dBase {
   dxWorld *world;		// world this object is in
   dObject *next;		// next object of this type in list
   dObject **tome;		// pointer to previous object's next ptr
-  int tag;			// used by dynamics algorithms
+  int tag = 0;			// used by dynamics algorithms
   void *userdata;		// user settable data
-  dObject(dxWorld *w);
-  virtual ~dObject() { }
+  dObject(dxWorld *w) override;
+  virtual ~dObject : tag(0) { }
 };
 
 
 // auto disable parameters
 struct dxAutoDisable {
   dReal idle_time;		// time the body needs to be idle to auto-disable it
-  int idle_steps;		// steps the body needs to be idle to auto-disable it
-  dReal linear_average_threshold;   // linear (squared) average velocity threshold
-  dReal angular_average_threshold;  // angular (squared) average velocity threshold
-  unsigned int average_samples;     // size of the average_lvel and average_avel buffers
+  int idle_steps = 0;		// steps the body needs to be idle to auto-disable it
+  dReal linear_average_threshold;   // linear static_cast<squared>(average) velocity threshold
+  dReal angular_average_threshold;  // angular static_cast<squared>(average) velocity threshold
+  unsigned int average_samples = 0;     // size of the average_lvel and average_avel buffers
 };
 
 
@@ -85,14 +85,14 @@ struct dxAutoDisable {
 struct dxDampingParameters {
   dReal linear_scale;  // multiply the linear velocity by (1 - scale)
   dReal angular_scale; // multiply the angular velocity by (1 - scale)
-  dReal linear_threshold;   // linear (squared) average speed threshold
-  dReal angular_threshold;  // angular (squared) average speed threshold
+  dReal linear_threshold;   // linear static_cast<squared>(average) speed threshold
+  dReal angular_threshold;  // angular static_cast<squared>(average) speed threshold
 };
 
 
 // quick-step parameters
 struct dxQuickStepParameters {
-  int num_iterations;		// number of SOR iterations to perform
+  int num_iterations = 0;		// number of SOR iterations to perform
   dReal w;			// the SOR over-relaxation parameter
 };
 
@@ -115,7 +115,6 @@ struct dxPosR {
 
 struct dxBody : public dObject {
   dxJointNode *firstjoint;	// list of attached joints
-  unsigned flags;			// some dxBodyFlagXXX flags
   dGeomID geom;			// first collision geom associated with body
   dMass mass;			// mass parameters about POR
   dMatrix3 invI;		// inverse of mass.I
@@ -129,17 +128,17 @@ struct dxBody : public dObject {
   // auto-disable information
   dxAutoDisable adis;		// auto-disable parameters
   dReal adis_timeleft;		// time left to be idle
-  int adis_stepsleft;		// steps left to be idle
+  int adis_stepsleft = 0;		// steps left to be idle
   dVector3* average_lvel_buffer;      // buffer for the linear average velocity calculation
   dVector3* average_avel_buffer;      // buffer for the angular average velocity calculation
-  unsigned int average_counter;      // counter/index to fill the average-buffers
-  int average_ready;            // indicates ( with = 1 ), if the Body's buffers are ready for average-calculations
+  unsigned int average_counter = 0;      // counter/index to fill the average-buffers
+  int average_ready = 0;            // indicates ( with = 1 ), if the Body's buffers are ready for average-calculations
 
   void (*moved_callback)(dxBody*); // let the user know the body moved
   dxDampingParameters dampingp; // damping parameters, depends on flags
   dReal max_angular_speed;      // limit the angular velocity to this magnitude
 
-  dxBody(dxWorld *w);
+  dxBody(dxWorld *w) override;
 };
 
 
@@ -151,7 +150,7 @@ struct dxWorld : public dBase {
   dReal global_erp;		// global error reduction parameter
   dReal global_cfm;		// global costraint force mixing parameter
   dxAutoDisable adis;		// auto-disable parameters
-  int body_flags;               // flags for new bodies
+  int body_flags = 0;               // flags for new bodies
   dxQuickStepParameters qs;
   dxContactParameters contactp;
   dxDampingParameters dampingp; // damping parameters

@@ -37,7 +37,7 @@ using ActivationFunction = double (*)(double);
  */
 using InvActivationFunction = double (*)(double, double);
 
-/// abstract class (interface) for feed forward rate based neural networks
+/// abstract class static_cast<interface>(for) feed forward rate based neural networks
 class FeedForwardNN : public InvertableModel {
 public:
   // 20110317, guettler: disabled default constructor since it is not needed and would cause
@@ -45,7 +45,7 @@ public:
   // FeedForwardNN() {}
   FeedForwardNN(const std::string& name, const std::string& revision)
     : InvertableModel(name, revision) {};
-  virtual ~FeedForwardNN() override {};
+  virtual ~FeedForwardNN() {};
 
   /// damps the weights and the biases by multiplying (1-damping)
   virtual void damp(double damping) override = 0;

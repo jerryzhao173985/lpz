@@ -38,7 +38,7 @@ public:
 	/**
 	 * default constructor
 	 */
-	TemplateCycledGaSimulationFitnessStrategy();
+	TemplateCycledGaSimulationFitnessStrategy() override;
 
 	/**
 	 * default destructor
@@ -53,7 +53,7 @@ public:
 	 * @param individual (for this we search the entropy)
 	 * @return the fitness
 	 */
-	virtual double getFitness(const Individual* individual);
+	virtual double getFitness(const Individual* individual) override;
 
 	/**
 	 * a storage for all Entropies!

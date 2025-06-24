@@ -12,14 +12,14 @@
 #ifndef __ICERANDOM_H__
 #define __ICERANDOM_H__
 
-	FUNCTION ICECORE_API	void	SRand(udword seed);
-	FUNCTION ICECORE_API	udword	Rand();
+	FUNCTION ICECORE_API	void	SRand(udword seed) override;
+	FUNCTION ICECORE_API	udword	Rand() override;
 
 	//! Returns a unit random floating-point value
 	inline_ float UnitRandomFloat()	{ return float(Rand()) * ONE_OVER_RAND_MAX;	}
 
 	//! Returns a random index so that 0<= index < max_index
-	ICECORE_API	udword GetRandomIndex(udword max_index);
+	ICECORE_API	udword GetRandomIndex(udword max_index) override;
 
 	class ICECORE_API BasicRandom
 	{
@@ -31,7 +31,7 @@
 		inline_				~BasicRandom()								{}
 
 		inline_	void		SetSeed(udword seed)		{ mRnd = seed;											}
-		inline_	udword		GetCurrentValue()	const	{ return mRnd;											}
+		inline_	udword		GetCurrentValue()	const override { return mRnd;											}
 		inline_	udword		Randomize()					{ mRnd = mRnd * 2147001325 + 715136305; return mRnd;	}
 
 		private:

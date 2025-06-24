@@ -35,17 +35,17 @@ namespace lpzrobots {
 
   typedef struct {
   public:
-    double size;       ///< scaling factor for robot (diameter of body)
-    double legLength;  ///< length of the legs in units of size
-    int    legNumber;  ///<  number of snake elements
-    bool   radialLegs; ///< joint orientation is radial instead of cartesian
-    bool   useSliders; ///< use sliders at legs
-    double mass;       ///< chassis mass
-    double relLegmass; ///< relative overall leg mass
-    double jointLimit; ///< angle range for legs
-    double sliderLength;///< length of sliders at legs
-    double motorPower; ///< maximal force for motors
-    double sliderPowerFactor; ///< power factor for slider motors
+    double size = 0;       ///< scaling factor for robot (diameter of body)
+    double legLength = 0;  ///< length of the legs in units of size
+    int    legNumber = 0;  ///<  number of snake elements
+    bool   radialLegs = false; ///< joint orientation is radial instead of cartesian
+    bool   useSliders = false; ///< use sliders at legs
+    double mass = 0;       ///< chassis mass
+    double relLegmass = 0; ///< relative overall leg mass
+    double jointLimit = 0; ///< angle range for legs
+    double sliderLength = 0;///< length of sliders at legs
+    double motorPower = 0; ///< maximal force for motors
+    double sliderPowerFactor = 0; ///< power factor for slider motors
   } UwoConf;
 
 
@@ -65,9 +65,9 @@ namespace lpzrobots {
     Uwo(const OdeHandle& odeHandle, const OsgHandle& osgHandle, const UwoConf& conf,
         const std::string& name);
 
-    virtual ~Uwo(){ destroy(); };
+    virtual ~Uwo() { destroy(); } override;
 
-    static UwoConf getDefaultConf(){
+    static UwoConf getDefaultConf() const {
       UwoConf c;
       c.size       = 1;
       c.legNumber  = 8;
@@ -94,7 +94,7 @@ namespace lpzrobots {
 
   protected:
     /** the main object of the robot, which is used for position and speed tracking */
-    virtual Primitive* getMainPrimitive() const { return objects[0]; }
+    virtual Primitive* getMainPrimitive() const override { return objects[0]; }
 
     /** creates vehicle at desired pose
         @param pose 4x4 pose matrix
@@ -106,9 +106,9 @@ namespace lpzrobots {
     virtual void destroy();
 
     UwoConf conf;
-    double legmass;    // leg mass
+    double legmass = 0;    // leg mass
 
-    bool created;      // true if robot was created
+    bool created = false;      // true if robot was created
 
     std::vector <std::shared_ptr<TwoAxisServo> > servos;
     std::vector <std::shared_ptr<OneAxisServo> > sliderservos;

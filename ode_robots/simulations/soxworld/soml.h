@@ -7,7 +7,7 @@
  *   LICENSE:                                                              *
  *   This work is licensed under the Creative Commons                      *
  *   Attribution-NonCommercial-ShareAlike 2.5 License. To view a copy of   *
- *   this license, visit http://creativecommons.org/licenses/by-nc-sa/2.5/ *
+ *   this license, visit http:__PLACEHOLDER_0__
  *   or send a letter to Creative Commons, 543 Howard Street, 5th Floor,   *
  *   San Francisco, California, 94105, USA.                                *
  *                                                                         *
@@ -32,16 +32,16 @@
 
 /// Configuration object for SoML controller
 struct SoMLConf {
-  bool useHiddenContr; ///< use a hidden layer in the controller network?
+  bool useHiddenContr = false; ///< use a hidden layer in the controller network?
   /// ratio of motor units and hidden units in the controller (2 -> double amount of hidden unit)
-  double hiddenContrUnitsRatio;
-  bool useHiddenModel; ///< use a hiddenlayer in the model network?
+  double hiddenContrUnitsRatio = 0;
+  bool useHiddenModel = false; ///< use a hiddenlayer in the model network?
   /// ratio of motor units and hidden units in the model (2 -> double amount of hidden unit)
-  double hiddenModelUnitsRatio;
-  bool useS;         ///< direct connection from x_t to xp_t+1
-  bool initUnitMatrix; /// if true then the network is initialized with unit matrices
+  double hiddenModelUnitsRatio = 0;
+  bool useS = false;         ///< direct connection from x_t to xp_t+1
+  bool initUnitMatrix = false; /// if true then the network is initialized with unit matrices
 
-  bool someInternalParams; ///< only export some internal parameters
+  bool someInternalParams = false; ///< only export some internal parameters
 };
 
 /**
@@ -51,9 +51,9 @@ struct SoMLConf {
 class SoML : public AbstractController {
 
 public:
-  SoML(const SoMLConf& conf = getDefaultConf());
+  SoML(const SoMLConf& conf = getDefaultConf()) override;
 
-  static SoMLConf getDefaultConf(){
+  static SoMLConf getDefaultConf() const {
     SoMLConf c;
     c.useHiddenContr = true;
     c.useHiddenModel = true;
@@ -65,36 +65,36 @@ public:
     return c;
   }
 
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
 
-  virtual ~SoML() override;
+  virtual ~SoML();
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
-  virtual int getSensorNumber() const { return number_sensors; }
+  virtual int getSensorNumber() const override { return number_sensors; }
   /// returns the mumber of motors the controller was initialised with or 0 if not initialised
-  virtual int getMotorNumber() const  { return number_motors; }
+  virtual int getMotorNumber() const override { return number_motors; }
 
   /// performs one step (includes learning).
   /// Calulates motor commands from sensor inputs.
-  virtual void step(const sensor* , int number_sensors, motor* , int number_motors) override;
+  virtual void step(const sensor* , int number_sensors, motor* , int number_motors);
 
   /// performs one step without learning. Calulates motor commands from sensor inputs.
   virtual void stepNoLearning(const sensor* , int number_sensors,
-                              motor* , int number_motors) override;
+                              motor* , int number_motors);
 
   // motor babbling: learn the basic relations from observed sensors/motors
   virtual void motorBabblingStep(const sensor* , int number_sensors,
-                                 const motor* , int number_motors) override;
+                                 const motor* , int number_motors);
 
 
   /***** STOREABLE ****/
   /** stores the controller values to a given file. */
   virtual bool store(FILE* f) const override;
   /** loads the controller values from a given file. */
-  virtual bool restore(FILE* f) override;
+  virtual bool restore(FILE* f);
 
   /// returns controller network (to be added to inspectables of agent)
-  virtual ControllerNet* getCNet() override;
+  virtual ControllerNet* getCNet();
 
 protected:
   /// performs control step (activates network and stores results in buffer and y_)
@@ -103,29 +103,29 @@ protected:
   /** learn values model and controller network
       using the current sensors x, the commands y (from last step (or earlier in case of delay))
    */
-  virtual void learn(const matrix::Matrix& x, const matrix::Matrix& y) override;
+  virtual void learn(const matrix::Matrix& x, const matrix::Matrix& y);
 
   /* learns the model using backprop. It uses the current activation,
      the current x and x_tm1 from the buffer */
-  virtual void learnModelBP(double factor) override;
+  virtual void learnModelBP(double factor);
 
 protected:
-  unsigned short number_sensors;
-  unsigned short number_motors;
+  unsigned short number_sensors = 0;
+  unsigned short number_motors = 0;
   static const unsigned short buffersize = 10;
 
   matrix::Matrix y_buffer[buffersize]; ///< buffer needed for delay
   matrix::Matrix x_buffer[buffersize]; ///< buffer needed for delay
   ControllerNet* cNet; ///< Controller network
-  unsigned int numControllerLayer; ///< number of controller layer
+  unsigned int numControllerLayer = 0; ///< number of controller layer
 
   SoMLConf conf; ///< configuration object
 
   matrix::Matrix x;        // current sensor value vector
   matrix::Matrix x_smooth; // time average of x values
   matrix::Matrix eta_avg;    // time average of shift (in motor space)
-  int t;
-  double E;
+  int t = 0;
+  double E = 0;
 
   paramval creativity;
   paramval epsC;

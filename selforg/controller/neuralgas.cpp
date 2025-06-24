@@ -60,7 +60,7 @@ NeuralGas::init(unsigned int inputDim, unsigned int outputDim, double unit_map, 
   diffvectors.resize(outputDim);
   double factor = (unit_map == 0) ? 1 : unit_map;
   // pure random initialised in the interval (-factor, factor) in all dimensions
-  for (unsigned int i = 0; i < outputDim; i++) {
+  for (unsigned int i = 0; i < outputDim; ++i) {
     weights[i].set(inputDim, 1);
     weights[i] = weights[i].mapP(randGen, random_minusone_to_one) * factor;
     diffvectors[i].set(inputDim, 1);
@@ -92,7 +92,7 @@ NeuralGas::printWeights(FILE* f) const {
   FOREACHC(vector<Matrix>, weights, i) {
     i->mapP(f, ng_print_double);
     fprintf(f, "\t%f\n", cellsizes.val(k, 0));
-    k++;
+    ++k;
   }
 }
 
@@ -104,7 +104,7 @@ NeuralGas::printCellsizes(FILE* f) const {
 const Matrix
 NeuralGas::process(const Matrix& input) {
   unsigned int s = weights.size();
-  for (unsigned int i = 0; i < s; i++) {
+  for (unsigned int i = 0; i < s; ++i) {
     diffvectors[i] = (input - weights[i]);
     double d = diffvectors[i].map(sqr).elementSum();
     distances.val(i, 0) = d;
@@ -114,10 +114,10 @@ NeuralGas::process(const Matrix& input) {
 
 const Matrix
 NeuralGas::learn(const Matrix& input, const Matrix& nom_output, double learnRateFactor) {
-  // "activation" of network already done in process
+  // __PLACEHOLDER_5__ of network already done in process
   // rank by distance
   rankingvector ranking(distances.getM());
-  for (int i = 0; i < ((signed)distances.getM()); i++) {
+  for (int i = 0; i < ((signed)distances.getM()); ++i) {
     ranking[i].first = distances.val(i, 0);
     ranking[i].second = i;
   }
@@ -132,11 +132,11 @@ NeuralGas::learn(const Matrix& input, const Matrix& nom_output, double learnRate
     if (e_l < e - 9)
       break;
     weights[i->second] = weights[i->second] + diffvectors[i->second] * e_l;
-    k++;
+    ++k;
   }
   if (t % 100 == 0)
     updateCellSizes();
-  t++;
+  ++t;
   return Matrix();
 }
 
@@ -148,14 +148,14 @@ NeuralGas::updateCellSizes() {
 
   FOREACHC(vector<Matrix>, weights, w) {
     Matrix dists(s, 1);
-    for (unsigned int i = 0; i < s; i++) {
+    for (unsigned int i = 0; i < s; ++i) {
       diffvectors[i] = (*w - weights[i]);
       double d = diffvectors[i].map(sqr).elementSum();
       dists.val(i, 0) = d;
     }
     double size = getKthSmallestElement(dists, 3);
     cellsizes.val(k, 0) = size;
-    k++;
+    ++k;
   }
 }
 
@@ -199,7 +199,7 @@ NeuralGas::restore(FILE* f) {
   cellsizes.restore(f);
   weights.clear();
   diffvectors.clear();
-  for (int i = 0; i < odim; i++) {
+  for (int i = 0; i < odim; ++i) {
     Matrix w;
     w.restore(f);
     weights.push_back(w);

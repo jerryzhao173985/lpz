@@ -7,7 +7,7 @@
  *   LICENSE:                                                              *
  *   This work is licensed under the Creative Commons                      *
  *   Attribution-NonCommercial-ShareAlike 2.5 License. To view a copy of   *
- *   this license, visit http://creativecommons.org/licenses/by-nc-sa/2.5/ *
+ *   this license, visit http:__PLACEHOLDER_64__
  *   or send a letter to Creative Commons, 543 Howard Street, 5th Floor,   *
  *   San Francisco, California, 94105, USA.                                *
  *                                                                         *
@@ -18,11 +18,11 @@
  ***************************************************************************/
 
 #include "derpseudosensor.h"
-// #include "dercontroller.h"
+// #include __PLACEHOLDER_1__
 #include "invertmotorcontroller.h"
 #include "invertmotornstep.h"
 #include "regularisation.h"
-// #include "statistictools.h"
+// #include __PLACEHOLDER_5__
 using namespace matrix;
 using namespace std;
 
@@ -131,7 +131,7 @@ DerPseudoSensor::init(int sensornumber, int motornumber, RandGen* randGen) {
   x_buffer = new Matrix[buffersize];
   y_buffer = new Matrix[buffersize];
   eta_buffer = new Matrix[buffersize];
-  for (unsigned int k = 0; k < buffersize; k++) {
+  for (unsigned int k = 0; k < buffersize; ++k) {
     x_buffer[k].set(number_sensors, 1);
     y_buffer[k].set(number_motors, 1);
     eta_buffer[k].set(number_motors, 1);
@@ -164,7 +164,7 @@ DerPseudoSensor::step(const sensor* x_, int number_sensors, motor* y_, int numbe
     learnController(delay);
   }
   // update step counter
-  t++;
+  ++t;
 };
 
 /// performs one step without learning. Calulates motor commands from sensor inputs.
@@ -172,7 +172,7 @@ void
 DerPseudoSensor::stepNoLearning(const sensor* x, int number_sensors, motor* y, int number_motors) {
   fillBuffersAndControl(x, number_sensors, y, number_motors);
   // update step counter
-  t++;
+  ++t;
   cout << y << endl;
 };
 
@@ -181,8 +181,8 @@ DerPseudoSensor::fillBuffersAndControl(const sensor* x_,
                                        int number_sensors,
                                        motor* y_,
                                        int number_motors) {
-  assert((unsigned)number_sensors == this->number_sensors &&
-         (unsigned)number_motors == this->number_motors);
+  assert(static_cast<unsigned>(number_sensors) == this->number_sensors &&
+         static_cast<unsigned>(number_motors) == this->number_motors);
   Matrix x(number_sensors, 1, x_);
   x = ((x * .9).map(g)) * (1 / .9); // TEST
   // averaging over the last s4avg values of x_buffer
@@ -228,7 +228,7 @@ DerPseudoSensor::learnController(int delay) {
   //   if(conf.sat){
   //     const Matrix& ySat = conf.sat->process(x_smooth);
   //     conf.sat->learn(x_smooth,y,epsSat);
-  //     cout << "satlearning" << endl;
+  //     cout << __PLACEHOLDER_14__ << endl;
   //     if(satelliteTeaching){// set teaching signal for controller
   //       if(useTeaching) // if external teaching signal then combine
   //         y_teaching+=ySat;
@@ -239,7 +239,7 @@ DerPseudoSensor::learnController(int delay) {
   //       useTeaching=true;
   //     }
   //   }
-  // NEW APPROACHES Calculate Psi (Matrix R)
+  // NEW APPROACHES Calculate Psi(const Matrix& R)
 
   const Matrix deltaR = (x_buffer[(t) % buffersize] - x_buffer[(t - delay) % buffersize] -
                          R * x_buffer[(t - delay) % buffersize])
@@ -408,7 +408,7 @@ DerPseudoSensor::learnController(int delay) {
   }
   //}
 
-  //  double error_factor = calcErrorFactor(v, (logaE & 1) !=0, (rootE & 1) !=0);
+  //  double error_factor = calcErrorFactor(v, (logaE >= 1), (rootE >= 1));
   //   C_update *= error_factor;
   //   H_update *= error_factor;
 
@@ -449,7 +449,7 @@ DerPseudoSensor::learnModel(int delay) {
   //  xsi = x - A * y; //TEST
   // xsi_norm = matrixNorm1(xsi);
 
-  double error_factor = calcErrorFactor(xsi, (logaE & 2) != 0, (rootE & 2) != 0);
+  double error_factor = calcErrorFactor(xsi, (logaE >= 2), (rootE >= 2));
   //   conf.model->learn(y-y_smooth, x- x_smooth_long, error_factor);
   conf.model->learn(y, x, error_factor);
 
@@ -474,7 +474,7 @@ Matrix
 DerPseudoSensor::calculateControllerValues(const Matrix& x_smooth) {
 
   //  if(1 || satelliteTeaching){ ///TEST
-  //     // cout << "satteachiing" << endl;
+  //     // cout << __PLACEHOLDER_16__ << endl;
   //     const Matrix& ySat = conf.sat->process(x_smooth);
   //     return ySat; }
   //   else {
@@ -553,33 +553,33 @@ DerPseudoSensor::getInternalParamNames() const {
   list<iparamkey> keylist;
   if (conf.someInternalParams) {
     keylist += store4x4AndDiagonalFieldNames(A, "A");
-    //  if(conf.useS) keylist += store4x4AndDiagonalFieldNames(S, "S");
+    //  if(conf.useS) keylist += store4x4AndDiagonalFieldNames(S, __PLACEHOLDER_22__);
     keylist += store4x4AndDiagonalFieldNames(C, "C");
     keylist += store4x4AndDiagonalFieldNames(R, "R");
-    //         keylist += store4x4AndDiagonalFieldNames(Q, "Q");
+    //         keylist += store4x4AndDiagonalFieldNames(Q, __PLACEHOLDER_25__);
 
   } else {
     keylist += storeMatrixFieldNames(A, "A");
-    //    if(conf.useS) keylist += storeMatrixFieldNames(S, "S");
+    //    if(conf.useS) keylist += storeMatrixFieldNames(S, __PLACEHOLDER_27__);
     keylist += storeMatrixFieldNames(C, "C");
     keylist += storeMatrixFieldNames(R, "R");
-    //       keylist += storeMatrixFieldNames(Q, "Q");
+    //       keylist += storeMatrixFieldNames(Q, __PLACEHOLDER_30__);
   }
-  //    keylist += storeMatrixFieldNames(y_teaching, "yteach");
+  //    keylist += storeMatrixFieldNames(y_teaching, __PLACEHOLDER_31__);
   keylist += storeVectorFieldNames(H, "H");
   if (conf.sat)
     keylist += conf.sat->getInternalParamNames();
-  //  keylist += storeVectorFieldNames(eta, "eta");
-  // keylist += storeVectorFieldNames(xsi, "xsi");
-  //  keylist += storeVectorFieldNames(x_smooth_long, "v_smooth");
+  //  keylist += storeVectorFieldNames(eta, __PLACEHOLDER_33__);
+  // keylist += storeVectorFieldNames(xsi, __PLACEHOLDER_34__);
+  //  keylist += storeVectorFieldNames(x_smooth_long, __PLACEHOLDER_35__);
   keylist += string("weighting");
   keylist += string("epsA");
   keylist += string("epsC");
-  // keylist += string("xsi");
-  //  keylist += string("xsi_norm");
-  //  keylist += string("xsi_norm_avg");
-  //   keylist += string("pain");
-  // keylist += string("TimeLoopError");
+  // keylist += string(__PLACEHOLDER_39__);
+  //  keylist += string(__PLACEHOLDER_40__);
+  //  keylist += string(__PLACEHOLDER_41__);
+  //   keylist += string(__PLACEHOLDER_42__);
+  // keylist += string(__PLACEHOLDER_43__);
   keylist += string("GrangerError1");
   keylist += string("GrangerError2");
   keylist += string("causalFactor");
@@ -624,8 +624,8 @@ DerPseudoSensor::getInternalParams() const {
   l += grang1;
   l += grang2;
   l += causalfactor;
-  l += (double)headPosition.z;
-  l += (double)trunkPosition.z;
+  l += headPosition.z;
+  l += trunkPosition.z;
   return l;
 }
 

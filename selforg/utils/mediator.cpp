@@ -24,7 +24,7 @@
 #include "mediator.h"
 #include "stl_adds.h"
 #include <assert.h>
-// #include "quickmp.h"
+// #include __PLACEHOLDER_2__
 
 Mediator::Mediator() {}
 
@@ -58,7 +58,7 @@ Mediator::getMediatorCollegue(unsigned int index) {
 
 unsigned int
 Mediator::getMediatorCollegueIndex(MediatorCollegue* collegue) {
-  for (unsigned int index = 0; index < collegueList.size(); index++)
+  for (unsigned int index = 0; index < collegueList.size(); ++index)
     if (collegueList[index] == collegue)
       return index;
   return -1;
@@ -66,7 +66,7 @@ Mediator::getMediatorCollegueIndex(MediatorCollegue* collegue) {
 
 unsigned int
 Mediator::getNumberOfMediatorCollegues() {
-  return (unsigned int)collegueList.size();
+  return static_cast<unsigned int>(collegueList).size();
 }
 
 void

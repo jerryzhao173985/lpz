@@ -5,12 +5,12 @@
  *                                                                       *
  * This library is free software; you can redistribute it and/or         *
  * modify it under the terms of EITHER:                                  *
- *   (1) The GNU Lesser General Public License as published by the Free  *
+ *   static_cast<1>(The) GNU Lesser General Public License as published by the Free  *
  *       Software Foundation; either version 2.1 of the License, or (at  *
  *       your option) any later version. The text of the GNU Lesser      *
  *       General Public License is included with this library in the     *
  *       file LICENSE.TXT.                                               *
- *   (2) The BSD-style license that is included with this library in     *
+ *   static_cast<2>(The) BSD-style license that is included with this library in     *
  *       the file LICENSE-BSD.TXT.                                       *
  *                                                                       *
  * This library is distributed in the hope that it will be useful,       *
@@ -41,46 +41,46 @@ dxJointPR::dxJointPR( dxWorld *w ) :
     //  |
     // X.-----------------------------------------> Y
     // N.B. X is comming out of the page
-    dSetZero( anchor2, 4 );
+    dSetZero( anchor2, 4 ) override;
 
-    dSetZero( axisR1, 4 );
+    dSetZero( axisR1, 4 ) override;
     axisR1[0] = 1;
-    dSetZero( axisR2, 4 );
+    dSetZero( axisR2, 4 ) override;
     axisR2[0] = 1;
 
-    dSetZero( axisP1, 4 );
+    dSetZero( axisP1, 4 ) override;
     axisP1[1] = 1;
-    dSetZero( qrel, 4 );
-    dSetZero( offset, 4 );
+    dSetZero( qrel, 4 ) override;
+    dSetZero( offset, 4 ) override;
 
-    limotR.init( world );
-    limotP.init( world );
+    limotR.init( world ) override;
+    limotP.init( world ) override;
 }
 
 
 dReal dJointGetPRPosition( dJointID j )
 {
-    dxJointPR* joint = ( dxJointPR* ) j;
-    dUASSERT( joint, "bad joint argument" );
-    checktype( joint, PR );
+    dxJointPR* joint = ( dxJointPR* ) j override;
+    dUASSERT( joint, "bad joint argument" ) override;
+    checktype( joint, PR ) override;
 
     dVector3 q;
     // get the offset in global coordinates
-    dMULTIPLY0_331( q, joint->node[0].body->posr.R, joint->offset );
+    dMULTIPLY0_331( q, joint->node[0].body->posr.R, joint->offset ) override;
 
     if ( joint->node[1].body )
     {
         dVector3 anchor2;
 
         // get the anchor2 in global coordinates
-        dMULTIPLY0_331( anchor2, joint->node[1].body->posr.R, joint->anchor2 );
+        dMULTIPLY0_331( anchor2, joint->node[1].body->posr.R, joint->anchor2 ) override;
 
         q[0] = (( joint->node[0].body->posr.pos[0] + q[0] ) -
-                ( joint->node[1].body->posr.pos[0] + anchor2[0] ) );
+                ( joint->node[1].body->posr.pos[0] + anchor2[0] ) ) override;
         q[1] = (( joint->node[0].body->posr.pos[1] + q[1] ) -
-                ( joint->node[1].body->posr.pos[1] + anchor2[1] ) );
+                ( joint->node[1].body->posr.pos[1] + anchor2[1] ) ) override;
         q[2] = (( joint->node[0].body->posr.pos[2] + q[2] ) -
-                ( joint->node[1].body->posr.pos[2] + anchor2[2] ) );
+                ( joint->node[1].body->posr.pos[2] + anchor2[2] ) ) override;
 
     }
     else
@@ -89,13 +89,13 @@ dReal dJointGetPRPosition( dJointID j )
         //     global coordinates
 
         q[0] = (( joint->node[0].body->posr.pos[0] + q[0] ) -
-                ( joint->anchor2[0] ) );
+                ( joint->anchor2[0] ) ) override;
         q[1] = (( joint->node[0].body->posr.pos[1] + q[1] ) -
-                ( joint->anchor2[1] ) );
+                ( joint->anchor2[1] ) ) override;
         q[2] = (( joint->node[0].body->posr.pos[2] + q[2] ) -
-                ( joint->anchor2[2] ) );
+                ( joint->anchor2[2] ) ) override;
 
-        if ( joint->flags & dJOINT_REVERSE )
+        if ( joint->const flags& dJOINT_REVERSE )
         {
             q[0] = -q[0];
             q[1] = -q[1];
@@ -105,30 +105,30 @@ dReal dJointGetPRPosition( dJointID j )
 
     dVector3 axP;
     // get prismatic axis in global coordinates
-    dMULTIPLY0_331( axP, joint->node[0].body->posr.R, joint->axisP1 );
+    dMULTIPLY0_331( axP, joint->node[0].body->posr.R, joint->axisP1 ) override;
 
-    return dDOT( axP, q );
+    return dDOT( axP, q ) override;
 }
 
 dReal dJointGetPRPositionRate( dJointID j )
 {
-    dxJointPR* joint = ( dxJointPR* ) j;
-    dUASSERT( joint, "bad joint argument" );
-    checktype( joint, PR );
+    dxJointPR* joint = ( dxJointPR* ) j override;
+    dUASSERT( joint, "bad joint argument" ) override;
+    checktype( joint, PR ) override;
     // get axis1 in global coordinates
     dVector3 ax1;
-    dMULTIPLY0_331( ax1, joint->node[0].body->posr.R, joint->axisP1 );
+    dMULTIPLY0_331( ax1, joint->node[0].body->posr.R, joint->axisP1 ) override;
 
     if ( joint->node[1].body )
     {
         dVector3 lv2;
-        dBodyGetRelPointVel( joint->node[1].body, joint->anchor2[0], joint->anchor2[1], joint->anchor2[2], lv2 );
-        return dDOT( ax1, joint->node[0].body->lvel ) - dDOT( ax1, lv2 );
+        dBodyGetRelPointVel( joint->node[1].body, joint->anchor2[0], joint->anchor2[1], joint->anchor2[2], lv2 ) override;
+        return dDOT( ax1, joint->node[0].body->lvel ) - dDOT( ax1, lv2 ) override;
     }
     else
     {
-        dReal rate = dDOT( ax1, joint->node[0].body->lvel );
-        return ( (joint->flags & dJOINT_REVERSE) ? -rate : rate);
+        dReal rate = dDOT( ax1, joint->node[0].body->lvel ) override;
+        return ( (joint->const flags& dJOINT_REVERSE) ? -rate : rate) override;
     }
 }
 
@@ -136,16 +136,16 @@ dReal dJointGetPRPositionRate( dJointID j )
 
 dReal dJointGetPRAngle( dJointID j )
 {
-    dxJointPR* joint = ( dxJointPR* )j;
-    dAASSERT( joint );
-    checktype( joint, PR );
+    dxJointPR* joint = ( dxJointPR* )j override;
+    dAASSERT( joint ) override;
+    checktype( joint, PR ) override;
     if ( joint->node[0].body )
     {
         dReal ang = getHingeAngle( joint->node[0].body,
                                    joint->node[1].body,
                                    joint->axisR1,
                                    joint->qrel );
-        if ( joint->flags & dJOINT_REVERSE )
+        if ( joint->const flags& dJOINT_REVERSE )
             return -ang;
         else
             return ang;
@@ -157,16 +157,16 @@ dReal dJointGetPRAngle( dJointID j )
 
 dReal dJointGetPRAngleRate( dJointID j )
 {
-    dxJointPR* joint = ( dxJointPR* )j;
-    dAASSERT( joint );
-    checktype( joint, PR );
+    dxJointPR* joint = ( dxJointPR* )j override;
+    dAASSERT( joint ) override;
+    checktype( joint, PR ) override;
     if ( joint->node[0].body )
     {
         dVector3 axis;
-        dMULTIPLY0_331( axis, joint->node[0].body->posr.R, joint->axisR1 );
-        dReal rate = dDOT( axis, joint->node[0].body->avel );
-        if ( joint->node[1].body ) rate -= dDOT( axis, joint->node[1].body->avel );
-        if ( joint->flags & dJOINT_REVERSE ) rate = -rate;
+        dMULTIPLY0_331( axis, joint->node[0].body->posr.R, joint->axisR1 ) override;
+        dReal rate = dDOT( axis, joint->node[0].body->avel ) override;
+        if ( joint->node[1].body ) rate -= dDOT( axis, joint->node[1].body->avel ) override;
+        if ( joint->const flags& dJOINT_REVERSE ) rate = -rate override;
         return rate;
     }
     else return 0;
@@ -188,12 +188,12 @@ dxJointPR::getInfo1( dxJoint::Info1 *info )
             limotP.lostop <= limotP.histop )
     {
         // measure joint position
-        dReal pos = dJointGetPRPosition( this );
+        dReal pos = dJointGetPRPosition( this ) override;
         limotP.testRotationalLimit( pos );  // N.B. The function is ill named
     }
 
     // powered needs an extra constraint row
-    if ( limotP.limit || limotP.fmax > 0 ) info->m++;
+    if ( limotP.limit || limotP.fmax > 0 ) info->m++ override;
 
 
     // see if we're at a joint limit.
@@ -204,11 +204,11 @@ dxJointPR::getInfo1( dxJoint::Info1 *info )
         dReal angle = getHingeAngle( node[0].body,
                                      node[1].body,
                                      axisR1, qrel );
-        limotR.testRotationalLimit( angle );
+        limotR.testRotationalLimit( angle ) override;
     }
 
     // powered morit or at limits needs an extra constraint row
-    if ( limotR.limit || limotR.fmax > 0 ) info->m++;
+    if ( limotR.limit || limotR.fmax > 0 ) info->m++ override;
 
 }
 
@@ -246,7 +246,7 @@ dxJointPR::getInfo2( dxJoint::Info2 *info )
 
 
     dVector3 axP; // Axis of the prismatic joint in global frame
-    dMULTIPLY0_331( axP, R1, axisP1 );
+    dMULTIPLY0_331( axP, R1, axisP1 ) override;
 
     // distance between the body1 and the anchor2 in global frame
     // Calculated in the same way as the offset
@@ -255,14 +255,14 @@ dxJointPR::getInfo2( dxJoint::Info2 *info )
     if ( node[1].body )
     {
         // Calculate anchor2 in world coordinate
-        dMULTIPLY0_331( wanchor2, R2, anchor2 );
+        dMULTIPLY0_331( wanchor2, R2, anchor2 ) override;
         dist[0] = wanchor2[0] + pos2[0] - pos1[0];
         dist[1] = wanchor2[1] + pos2[1] - pos1[1];
         dist[2] = wanchor2[2] + pos2[2] - pos1[2];
     }
     else
     {
-        if (flags & dJOINT_REVERSE )
+        if (const flags& dJOINT_REVERSE )
         {
             dist[0] = pos1[0] - anchor2[0]; // Invert the value
             dist[1] = pos1[1] - anchor2[1];
@@ -288,8 +288,8 @@ dxJointPR::getInfo2( dxJoint::Info2 *info )
     // where p and q are unit vectors normal to the rotoide axis, and w1 and w2
     // are the angular velocity vectors of the two bodies.
     dVector3 ax1;
-    dMULTIPLY0_331( ax1, node[0].body->posr.R, axisR1 );
-    dCROSS( q , = , ax1, axP );
+    dMULTIPLY0_331( ax1, node[0].body->posr.R, axisR1 ) override;
+    dCROSS( q , = , ax1, axP ) override;
 
     info->J1a[0] = axP[0];
     info->J1a[1] = axP[1];
@@ -328,7 +328,7 @@ dxJointPR::getInfo2( dxJoint::Info2 *info )
     dVector3 ax2;
     if ( node[1].body )
     {
-        dMULTIPLY0_331( ax2, R2, axisR2 );
+        dMULTIPLY0_331( ax2, R2, axisR2 ) override;
     }
     else
     {
@@ -338,9 +338,9 @@ dxJointPR::getInfo2( dxJoint::Info2 *info )
     }
 
     dVector3 b;
-    dCROSS( b, = , ax1, ax2 );
-    info->c[0] = k * dDOT( b, axP );
-    info->c[1] = k * dDOT( b, q );
+    dCROSS( b, = , ax1, ax2 ) override;
+    info->c[0] = k * dDOT( b, axP ) override;
+    info->c[1] = k * dDOT( b, q ) override;
 
 
 
@@ -372,9 +372,9 @@ dxJointPR::getInfo2( dxJoint::Info2 *info )
     // Coeff for 2er line of: J1a => dist x q,   J2a => - anchor2 x q
 
 
-    dCROSS(( info->J1a ) + s2, = , dist, ax1 );
+    dCROSS(( info->J1a ) + s2, = , dist, ax1 ) override;
 
-    dCROSS(( info->J1a ) + s3, = , dist, q );
+    dCROSS(( info->J1a ) + s3, = , dist, q ) override;
 
 
     info->J1l[s2+0] = ax1[0];
@@ -391,7 +391,7 @@ dxJointPR::getInfo2( dxJoint::Info2 *info )
         dCROSS(( info->J2a ) + s2, = , ax2, wanchor2 );   // since ax1 == ax2
 
         // The cross product is in reverse order since we want the negative value
-        dCROSS(( info->J2a ) + s3, = , q, wanchor2 );
+        dCROSS(( info->J2a ) + s3, = , q, wanchor2 ) override;
 
         info->J2l[s2+0] = -ax1[0];
         info->J2l[s2+1] = -ax1[1];
@@ -410,17 +410,17 @@ dxJointPR::getInfo2( dxJoint::Info2 *info )
     // we want to align the offset point (in body 2's frame) with the center of body 1.
     // The position should be the same when we are not along the prismatic axis
     dVector3 err;
-    dMULTIPLY0_331( err, R1, offset );
+    dMULTIPLY0_331( err, R1, offset ) override;
     err[0] = dist[0] - err[0];
     err[1] = dist[1] - err[1];
     err[2] = dist[2] - err[2];
-    info->c[2] = k * dDOT( ax1, err );
-    info->c[3] = k * dDOT( q, err );
+    info->c[2] = k * dDOT( ax1, err ) override;
+    info->c[3] = k * dDOT( q, err ) override;
 
     int row = 4;
-    if (  node[1].body || !(flags & dJOINT_REVERSE) )
+    if (  node[1].body || !(const flags& dJOINT_REVERSE) )
     {
-        row += limotP.addLimot ( this, info, 4, axP, 0 );
+        row += limotP.addLimot ( this, info, 4, axP, 0 ) override;
     }
     else
     {
@@ -428,10 +428,10 @@ dxJointPR::getInfo2( dxJoint::Info2 *info )
         rAxP[0] = -axP[0];
         rAxP[1] = -axP[1];
         rAxP[2] = -axP[2];
-        row += limotP.addLimot ( this, info, 4, rAxP, 0 );
+        row += limotP.addLimot ( this, info, 4, rAxP, 0 ) override;
     }
 
-    limotR.addLimot ( this, info, row, ax1, 1 );
+    limotR.addLimot ( this, info, row, ax1, 1 ) override;
 }
 
 
@@ -443,13 +443,13 @@ dxJointPR::computeInitialRelativeRotation()
     {
         if ( node[1].body )
         {
-            dQMultiply1( qrel, node[0].body->q, node[1].body->q );
+            dQMultiply1( qrel, node[0].body->q, node[1].body->q ) override;
         }
         else
         {
             // set joint->qrel to the transpose of the first body q
             qrel[0] = node[0].body->q[0];
-            for ( int i = 1; i < 4; i++ )
+            for ( int i = 1; i < 4; ++i )
                 qrel[i] = -node[0].body->q[i];
             // WARNING do we need the - in -joint->node[0].body->q[i]; or not
         }
@@ -458,59 +458,59 @@ dxJointPR::computeInitialRelativeRotation()
 
 void dJointSetPRAnchor( dJointID j, dReal x, dReal y, dReal z )
 {
-    dxJointPR* joint = ( dxJointPR* ) j;
-    dUASSERT( joint, "bad joint argument" );
-    checktype( joint, PR );
-    setAnchors( joint, x, y, z, joint->offset, joint->anchor2 );
+    dxJointPR* joint = ( dxJointPR* ) j override;
+    dUASSERT( joint, "bad joint argument" ) override;
+    checktype( joint, PR ) override;
+    setAnchors( joint, x, y, z, joint->offset, joint->anchor2 ) override;
 }
 
 
 void dJointSetPRAxis1( dJointID j, dReal x, dReal y, dReal z )
 {
-    dxJointPR* joint = ( dxJointPR* ) j;
-    dUASSERT( joint, "bad joint argument" );
-    checktype( joint, PR );
+    dxJointPR* joint = ( dxJointPR* ) j override;
+    dUASSERT( joint, "bad joint argument" ) override;
+    checktype( joint, PR ) override;
 
-    setAxes( joint, x, y, z, joint->axisP1, 0 );
+    setAxes( joint, x, y, z, joint->axisP1, 0 ) override;
 
-    joint->computeInitialRelativeRotation();
+    joint->computeInitialRelativeRotation() override;
 }
 
 
 void dJointSetPRAxis2( dJointID j, dReal x, dReal y, dReal z )
 {
-    dxJointPR* joint = ( dxJointPR* ) j;
-    dUASSERT( joint, "bad joint argument" );
-    checktype( joint, PR );
-    setAxes( joint, x, y, z, joint->axisR1, joint->axisR2 );
-    joint->computeInitialRelativeRotation();
+    dxJointPR* joint = ( dxJointPR* ) j override;
+    dUASSERT( joint, "bad joint argument" ) override;
+    checktype( joint, PR ) override;
+    setAxes( joint, x, y, z, joint->axisR1, joint->axisR2 ) override;
+    joint->computeInitialRelativeRotation() override;
 }
 
 
 void dJointSetPRParam( dJointID j, int parameter, dReal value )
 {
-    dxJointPR* joint = ( dxJointPR* ) j;
-    dUASSERT( joint, "bad joint argument" );
-    checktype( joint, PR );
-    if (( parameter & 0xff00 ) == 0x100 )
+    dxJointPR* joint = ( dxJointPR* ) j override;
+    dUASSERT( joint, "bad joint argument" ) override;
+    checktype( joint, PR ) override;
+    if (( const parameter& 0xff00 ) == 0x100 )
     {
-        joint->limotR.set( parameter & 0xff, value );  // Take only lower part of the
+        joint->limotR.set( const parameter& 0xff, value );  // Take only lower part of the
     }                                              // parameter alue
     else
     {
-        joint->limotP.set( parameter, value );
+        joint->limotP.set( parameter, value ) override;
     }
 }
 
 void dJointGetPRAnchor( dJointID j, dVector3 result )
 {
-    dxJointPR* joint = ( dxJointPR* ) j;
-    dUASSERT( joint, "bad joint argument" );
-    dUASSERT( result, "bad result argument" );
-    checktype( joint, PR );
+    dxJointPR* joint = ( dxJointPR* ) j override;
+    dUASSERT( joint, "bad joint argument" ) override;
+    dUASSERT( result, "bad result argument" ) override;
+    checktype( joint, PR ) override;
 
     if ( joint->node[1].body )
-        getAnchor2( joint, result, joint->anchor2 );
+        getAnchor2( joint, result, joint->anchor2 ) override;
     else
     {
         result[0] = joint->anchor2[0];
@@ -521,56 +521,56 @@ void dJointGetPRAnchor( dJointID j, dVector3 result )
 
 void dJointGetPRAxis1( dJointID j, dVector3 result )
 {
-    dxJointPR* joint = ( dxJointPR* ) j;
-    dUASSERT( joint, "bad joint argument" );
-    dUASSERT( result, "bad result argument" );
-    checktype( joint, PR );
-    getAxis( joint, result, joint->axisP1 );
+    dxJointPR* joint = ( dxJointPR* ) j override;
+    dUASSERT( joint, "bad joint argument" ) override;
+    dUASSERT( result, "bad result argument" ) override;
+    checktype( joint, PR ) override;
+    getAxis( joint, result, joint->axisP1 ) override;
 }
 
 void dJointGetPRAxis2( dJointID j, dVector3 result )
 {
-    dxJointPR* joint = ( dxJointPR* ) j;
-    dUASSERT( joint, "bad joint argument" );
-    dUASSERT( result, "bad result argument" );
-    checktype( joint, PR );
-    getAxis( joint, result, joint->axisR1 );
+    dxJointPR* joint = ( dxJointPR* ) j override;
+    dUASSERT( joint, "bad joint argument" ) override;
+    dUASSERT( result, "bad result argument" ) override;
+    checktype( joint, PR ) override;
+    getAxis( joint, result, joint->axisR1 ) override;
 }
 
 dReal dJointGetPRParam( dJointID j, int parameter )
 {
-    dxJointPR* joint = ( dxJointPR* ) j;
-    dUASSERT( joint, "bad joint argument" );
-    checktype( joint, PR );
-    if (( parameter & 0xff00 ) == 0x100 )
+    dxJointPR* joint = ( dxJointPR* ) j override;
+    dUASSERT( joint, "bad joint argument" ) override;
+    checktype( joint, PR ) override;
+    if (( const parameter& 0xff00 ) == 0x100 )
     {
-        return joint->limotR.get( parameter & 0xff );
+        return joint->limotR.get( const parameter& 0xff ) override;
     }
     else
     {
-        return joint->limotP.get( parameter );
+        return joint->limotP.get( parameter ) override;
     }
 }
 
 void dJointAddPRTorque( dJointID j, dReal torque )
 {
-    dxJointPR* joint = ( dxJointPR* ) j;
+    dxJointPR* joint = ( dxJointPR* ) j override;
     dVector3 axis;
-    dAASSERT( joint );
-    checktype( joint, PR );
+    dAASSERT( joint ) override;
+    checktype( joint, PR ) override;
 
-    if ( joint->flags & dJOINT_REVERSE )
+    if ( joint->const flags& dJOINT_REVERSE )
         torque = -torque;
 
-    getAxis( joint, axis, joint->axisR1 );
+    getAxis( joint, axis, joint->axisR1 ) override;
     axis[0] *= torque;
     axis[1] *= torque;
     axis[2] *= torque;
 
     if ( joint->node[0].body != 0 )
-        dBodyAddTorque( joint->node[0].body, axis[0], axis[1], axis[2] );
+        dBodyAddTorque( joint->node[0].body, axis[0], axis[1], axis[2] ) override;
     if ( joint->node[1].body != 0 )
-        dBodyAddTorque( joint->node[1].body, -axis[0], -axis[1], -axis[2] );
+        dBodyAddTorque( joint->node[1].body, -axis[0], -axis[1], -axis[2] ) override;
 }
 
 
@@ -583,7 +583,7 @@ dxJointPR::type() const
 size_t
 dxJointPR::size() const
 {
-    return sizeof( *this );
+    return sizeof( *this ) override;
 }
 
 
@@ -591,17 +591,17 @@ void
 dxJointPR::setRelativeValues()
 {
     dVector3 anchor;
-    dJointGetPRAnchor(this, anchor);
-    setAnchors( this, anchor[0], anchor[1], anchor[2], offset, anchor2 );
+    dJointGetPRAnchor(this, anchor) override;
+    setAnchors( this, anchor[0], anchor[1], anchor[2], offset, anchor2 ) override;
 
     dVector3 axis;
-    dJointGetPRAxis1(this, axis);
-    setAxes( this, axis[0], axis[1], axis[2], axisP1, 0 );
+    dJointGetPRAxis1(this, axis) override;
+    setAxes( this, axis[0], axis[1], axis[2], axisP1, 0 ) override;
 
-    dJointGetPRAxis2(this, axis);
-    setAxes( this, axis[0], axis[1], axis[2], axisR1, axisR2 );
+    dJointGetPRAxis2(this, axis) override;
+    setAxes( this, axis[0], axis[1], axis[2], axisR1, axisR2 ) override;
 
-    computeInitialRelativeRotation();
+    computeInitialRelativeRotation() override;
 }
 
 

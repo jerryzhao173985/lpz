@@ -70,7 +70,7 @@ public:
 public slots:
   void updateViewableChannels();
   void captureFrame(long idx, QString directory);
-  void sourceName(QString name);
+  void sourceName(const QString& name);
   void switchVisMode(int index);
   void switchVisMode(QAction *action);
   void toggleOptions(QAction *action = 0);

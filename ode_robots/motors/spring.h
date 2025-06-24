@@ -34,36 +34,36 @@ public:
                          double maxVel=10.0, double jointLimit = 1.0)
      : OneAxisServo(joint, _min, _max, power, damp, integration, maxVel, jointLimit, false){
         }
-        virtual ~Spring(){}
+        virtual ~Spring() {}
 
     /** sets the set point of the servo.
         Position is relative to initial position of the two parts
         connected by the spring
     */
-    virtual void set(double pos){
+    virtual void set(double pos) override {
         pid.setTargetPosition(pos);
 
-        double force = pid.stepNoCutoff(joint->getPosition1(), joint->odeHandle.getTime());
+        double force = pid.stepNoCutoff(joint->getPosition1(), joint->odeHandle.getTime()) override;
         force = clip(force,-10*pid.KP, 10*pid.KP); // limit force to 10*KP
         joint->addForce1(force);
-        if(maxVel>0){
+        explicit if(maxVel>0){
             joint->getPart1()->limitLinearVel(maxVel);
             joint->getPart2()->limitLinearVel(maxVel);
         }
     }
 
     /** returns the position of the slider in ranges [-1, 1] (scaled by min, max)*/
-    virtual double get(){
+    virtual double get() override {
         double pos =  joint->getPosition1();
         return pos;
     }
 
     //want to allow all kinds of borders,
-    virtual void setMinMax(double _min, double _max){
+    virtual void setMinMax(double _min, double _max) override {
           min=_min;
           max=_max;
-          joint->setParam(dParamLoStop, min - fabs(min) * (jointLimit-1));
-          joint->setParam(dParamHiStop, max + fabs(max) * (jointLimit-1));
+          joint->setParam(dParamLoStop, min - fabs(min) * (jointLimit-1)) override;
+          joint->setParam(dParamHiStop, max + fabs(max) * (jointLimit-1)) override;
         }
 
 };

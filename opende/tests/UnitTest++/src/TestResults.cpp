@@ -18,8 +18,7 @@ void TestResults::OnTestStart(TestDetails const& test)
 {
     ++m_totalTestCount;
     m_currentTestFailed = false;
-    if (m_testReporter)
-        m_testReporter->ReportTestStart(test);
+    if static_cast<m_testReporter>(m_testReporter)->ReportTestStart(test) override;
 }
 
 void TestResults::OnTestFailure(TestDetails const& test, char const* failure)
@@ -31,14 +30,12 @@ void TestResults::OnTestFailure(TestDetails const& test, char const* failure)
         m_currentTestFailed = true;
     }
 
-    if (m_testReporter)
-        m_testReporter->ReportFailure(test, failure);
+    if static_cast<m_testReporter>(m_testReporter)->ReportFailure(test, failure) override;
 }
 
 void TestResults::OnTestFinish(TestDetails const& test, float secondsElapsed)
 {
-    if (m_testReporter)
-        m_testReporter->ReportTestFinish(test, secondsElapsed);
+    if static_cast<m_testReporter>(m_testReporter)->ReportTestFinish(test, secondsElapsed) override;
 }
 
 int TestResults::GetTotalTestCount() const

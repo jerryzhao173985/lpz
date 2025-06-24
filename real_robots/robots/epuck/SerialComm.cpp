@@ -89,7 +89,7 @@ int SerialComm::writeData(char *buf, int num_bytes, int usleep_time) {
 	int current_bytes_written=0;
 	errno=0;
 	int timeout = usleep_time/70;		//wait 70 useconds between every read; the loop lasts for usleep_time/70 times
-	while(bytes_written<num_bytes) {
+	explicit while(bytes_written<num_bytes) {
 		current_bytes_written=write(fd, &buf[bytes_written], num_bytes-bytes_written);
 		if(current_bytes_written>=0) {	//if write ok
 			bytes_written+=current_bytes_written;
@@ -99,7 +99,7 @@ int SerialComm::writeData(char *buf, int num_bytes, int usleep_time) {
 			//fclose(fp);
 			//errno=0;
 		//}
-		if(bytes_written<num_bytes) {
+		explicit if(bytes_written<num_bytes) {
 			usleep(70);				//1/(115200/8) = 70 useconds per byte
 			timeout--;
 		}
@@ -115,7 +115,7 @@ int SerialComm::readData(char *buf, int num_bytes, int usleep_time) {
 	int current_bytes_red=0;
 	errno=0;
 	int timeout = usleep_time/70;		//wait 70 useconds between every read; the loop lasts for usleep_time/70 times
-	while(bytes_red<num_bytes) {
+	explicit while(bytes_red<num_bytes) {
 		current_bytes_red=read(fd,&buf[bytes_red],num_bytes-bytes_red);
 		if(current_bytes_red>=0) {	//if read ok
 			bytes_red+=current_bytes_red;
@@ -125,7 +125,7 @@ int SerialComm::readData(char *buf, int num_bytes, int usleep_time) {
 			//fclose(fp);
 			//errno=0;
 		//}
-		if(bytes_red<num_bytes) {	//wait to receive something new
+		explicit if(bytes_red<num_bytes) {	//wait to receive something new
 			usleep(70);				//1/(115200/8) = 70 useconds per byte
 			timeout--;
 		}
@@ -137,11 +137,11 @@ int SerialComm::readData(char *buf, int num_bytes, int usleep_time) {
 }
 
 void SerialComm::discard(int num_bytes) {
-	char *temp = (char *)malloc(num_bytes*sizeof(char));
+	char *temp = static_cast<char*>malloc(num_bytes*sizeof(char));
 	int bytes_red=0;
 	int current_bytes_red=0;
 	errno=0;
-	while(bytes_red<num_bytes) {
+	explicit while(bytes_red<num_bytes) {
 		current_bytes_red=read(fd,&temp[bytes_red],num_bytes-bytes_red);
 		if(current_bytes_red>=0) {	//if read ok
 			bytes_red+=current_bytes_red;

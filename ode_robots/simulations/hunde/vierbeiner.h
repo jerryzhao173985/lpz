@@ -76,19 +76,19 @@ namespace lpzrobots {
 
   typedef struct {
   public:
-    double size;       ///< scaling factor for robot (diameter of body)
-    double legLength;  ///< length of the legs in units of size
-    int    legNumber;  ///<  number of snake elements
-    double mass;       ///< chassis mass
-    double relLegmass; ///< relative overall leg mass
-    double hipPower; ///< maximal force for at hip joint motors
-    double hipDamping; ///< damping of hio joint servos
-    double hipJointLimit; ///< angle range for legs
-    double kneePower;  ///< spring strength in the knees
-    double kneeJointLimit; ///< angle range for knees
-    double kneeDamping; ///< damping in the knees
-    double anklePower;  ///< spring strength in the ankles
-    double ankleDamping; ///< damping in the ankles
+    double size = 0;       ///< scaling factor for robot (diameter of body)
+    double legLength = 0;  ///< length of the legs in units of size
+    int    legNumber = 0;  ///<  number of snake elements
+    double mass = 0;       ///< chassis mass
+    double relLegmass = 0; ///< relative overall leg mass
+    double hipPower = 0; ///< maximal force for at hip joint motors
+    double hipDamping = 0; ///< damping of hio joint servos
+    double hipJointLimit = 0; ///< angle range for legs
+    double kneePower = 0;  ///< spring strength in the knees
+    double kneeJointLimit = 0; ///< angle range for knees
+    double kneeDamping = 0; ///< damping in the knees
+    double anklePower = 0;  ///< spring strength in the ankles
+    double ankleDamping = 0; ///< damping in the ankles
   } VierBeinerConf;
 
 
@@ -111,9 +111,9 @@ namespace lpzrobots {
     VierBeiner(const OdeHandle& odeHandle, const OsgHandle& osgHandle, const VierBeinerConf& conf,
                const std::string& name);
 
-    virtual ~VierBeiner(){};
+    virtual ~VierBeiner() {} override;
 
-    static VierBeinerConf getDefaultConf(){
+    static VierBeinerConf getDefaultConf() const {
       VierBeinerConf c;
       c.size       = 1;
       c.legNumber  = 4;
@@ -135,73 +135,73 @@ namespace lpzrobots {
     /**
      * updates the OSG nodes of the vehicle
      */
-    virtual void update() override;
+    virtual void update();
 
 
     /** sets the pose of the vehicle
         @param pose desired pose matrix
     */
-    virtual void place(const osg::Matrix& pose) override;
+    virtual void place(const osg::Matrix& pose);
 
     /** returns actual sensorvalues
         @param sensors sensors scaled to [-1,1]
         @param sensornumber length of the sensor array
         @return number of actually written sensors
     */
-    virtual int getSensors(sensor* sensors, int sensornumber) override;
+    virtual int getSensors(sensor* sensors, int sensornumber);
 
     /** sets actual motorcommands
         @param motors motors scaled to [-1,1]
         @param motornumber length of the motor array
     */
-    virtual void setMotors(const motor* motors, int motornumber) override;
+    virtual void setMotors(const motor* motors, int motornumber);
 
     /** returns number of sensors
      */
-    virtual int getSensorNumber() override;
+    virtual int getSensorNumber();
 
     /** returns number of motors
      */
-    virtual int getMotorNumber() override;
+    virtual int getMotorNumber();
     /** checks for internal collisions and treats them.
      *  In case of a treatment return true (collision will be ignored by other objects
      *  and the default routine)  else false (collision is passed to other objects and
      *  (if not treated) to the default routine).
      */
-    virtual bool collisionCallback(void *data, dGeomID o1, dGeomID o2) override;
+    virtual bool collisionCallback(void *data, dGeomID o1, dGeomID o2);
 
     /** this function is called in each timestep. It should perform robot-internal checks,
         like space-internal collision detection, sensor resets/update etc.
         @param globalData structure that contains global data from the simulation environment
     */
-    virtual void doInternalStuff(GlobalData& globalData) override;
+    virtual void doInternalStuff(const GlobalData& globalData);
 
 
     /** The list of all parameters with there value as allocated lists.
      */
-    virtual paramlist getParamList() const override;
+    virtual paramlist getParamList() const;
 
-    virtual paramval getParam(const paramkey& key, bool traverseChildren=true) const override;;
+    virtual paramval getParam(const paramkey& key, bool traverseChildren=true) const; override;
 
-    virtual bool setParam(const paramkey& key, paramval val, bool traverseChildren=true) override;
+    virtual bool setParam(const paramkey& key, paramval val, bool traverseChildren=true);
 
     /** the main object of the robot, which is used for position and speed tracking */
-    virtual Primitive* getMainPrimitive() const { return objects[0]; }
+    virtual Primitive* getMainPrimitive() const override { return objects[0]; }
   protected:
 
     /** creates vehicle at desired pose
         @param pose 4x4 pose matrix
     */
-    virtual void create(const osg::Matrix& pose) override;
+    virtual void create(const osg::Matrix& pose);
 
     /** destroys vehicle and space
      */
-    virtual void destroy() override;
+    virtual void destroy();
 
     VierBeinerConf conf;
-    double legmass;    // leg mass
+    double legmass = 0;    // leg mass
 
-    bool created;      // true if robot was created
+    bool created = false;      // true if robot was created
 
 
     // some objects explicitly needed for ignored collision pairs

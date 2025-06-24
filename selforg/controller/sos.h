@@ -7,7 +7,7 @@
  *   LICENSE:                                                              *
  *   This work is licensed under the Creative Commons                      *
  *   Attribution-NonCommercial-ShareAlike 2.5 License. To view a copy of   *
- *   this license, visit http://creativecommons.org/licenses/by-nc-sa/2.5/ *
+ *   this license, visit http:__PLACEHOLDER_1__
  *   or send a letter to Creative Commons, 543 Howard Street, 5th Floor,   *
  *   San Francisco, California, 94105, USA.                                *
  *                                                                         *
@@ -29,22 +29,22 @@
 
 /**
  * This controller implements the standard algorihm described the Chapter 5 (Homeokinesis)
- *  of book "The Playful Machine"
+ *  of book __PLACEHOLDER_0__
  */
 class Sos : public AbstractController {
 
 public:
-  explicit Sos(double init_feedback_strength = 1.0);
+  Sos(double init_feedback_strength = 1.0);
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
 
   virtual ~Sos();
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
-  virtual int getSensorNumber() const {
+  virtual int getSensorNumber() const override {
     return number_sensors;
   }
   /// returns the mumber of motors the controller was initialised with or 0 if not initialised
-  virtual int getMotorNumber() const {
+  virtual int getMotorNumber() const override {
     return number_motors;
   }
 
@@ -57,7 +57,7 @@ public:
 
   /***** STOREABLE ****/
   /** stores the controller values to a given file. */
-  virtual bool store(FILE* f) const;
+  virtual bool store(FILE* f) const override;
   /** loads the controller values from a given file. */
   virtual bool restore(FILE* f);
 
@@ -70,8 +70,8 @@ public:
   virtual void seth(const matrix::Matrix& h);
 
 protected:
-  unsigned short number_sensors;
-  unsigned short number_motors;
+  unsigned short number_sensors = 0;
+  unsigned short number_motors = 0;
   static constexpr unsigned short buffersize = 10;
 
   matrix::Matrix A;                    // Model Matrix
@@ -84,11 +84,11 @@ protected:
   matrix::Matrix v_avg;
   matrix::Matrix x;        // current sensor value vector
   matrix::Matrix x_smooth; // time average of x values
-  int t;
-  bool TLE;
-  bool loga;
+  int t = 0;
+  bool TLE = false;
+  bool loga = false;
 
-  double init_feedback_strength;
+  double init_feedback_strength = 0;
 
   paramval creativity;
   paramval epsC;

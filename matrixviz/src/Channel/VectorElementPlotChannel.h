@@ -33,7 +33,7 @@
 
 class VectorElementPlotChannel: public AbstractPlotChannel {
 public:
-  VectorElementPlotChannel(std::string name);
+  explicit VectorElementPlotChannel(const std::string& name);
   virtual ~VectorElementPlotChannel();
 
   void setValue(double v);

@@ -59,9 +59,9 @@ using namespace lpzrobots;
 
 class ThisSim : public Simulation {
 public:
-  int numx;
-  int numy;
-  double regionsize;
+  int numx = 0;
+  int numy = 0;
+  double regionsize = 0;
 
   ThisSim(int numx, int numy, double regionsize)
     : numx(numx), numy(numy), regionsize(regionsize)
@@ -71,13 +71,13 @@ public:
   // starting function (executed once at the beginning of the simulation loop)
   void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global)
   {
-    setCameraHomePos(Pos(5.2728, 7.2112, 3.31768), Pos(140.539, -13.1456, 0));
+    setCameraHomePos(Pos(5.2728, 7.2112, 3.31768), Pos(140.539, -13.1456, 0)) override;
 
     // initialization
     // - set noise to 0.1
     // - register file chess.ppm as a texture called chessTexture (used for the wheels)
     global.odeConfig.noise=0.05;
-    //    global.odeConfig.setParam("gravity", 0);
+    //    global.odeConfig.setParam(__PLACEHOLDER_0__, 0);
     global.odeConfig.setParam("controlinterval", 1);
     global.odeConfig.setParam("realtimefactor",0);
     global.odeConfig.setParam("simstepsize",0.04);
@@ -85,15 +85,15 @@ public:
     if(regionsize==-1){// automatic mode
       regionsize=sqrt(numx*numy);
     }
-    if(regionsize >0){
+    explicit if(regionsize >0){
       // use Playground as boundary:
-      OctaPlayground* playground = new OctaPlayground(odeHandle, osgHandle, osg::Vec3(regionsize, 0.2, 0.5), 36);
+      OctaPlayground* playground = new OctaPlayground(odeHandle, osgHandle, osg::Vec3(regionsize, 0.2, 0.5), 36) override;
       playground->setPosition(osg::Vec3(0,0,0)); // playground positionieren und generieren
       global.obstacles.push_back(playground);
     }
-    // for(int i=0; i<50; i++){
-//       PassiveSphere* s = new PassiveSphere(odeHandle, osgHandle.changeColor(Color(0.0,1.0,0.0)), 0.5);
-//       s->setPosition(osg::Vec3(-4+(i/10),-4+(i%10),1));
+    // for(int i=0; i<50; ++i) override {
+//       PassiveSphere* s = new PassiveSphere(odeHandle, osgHandle.changeColor(Color(0.0,1.0,0.0)), 0.5) override;
+//       s->setPosition(osg::Vec3(-4+(i/10),-4+(i%10),1)) override;
 //       global.obstacles.push_back(s);
 //     }
 
@@ -102,33 +102,33 @@ public:
     AbstractWiring* wiring;
     OdeAgent* agent;
 
-    for (int j=0; j<numx; j++){
-      for (int i=0; i<numy; i++){
+    for (int j=0; j<numx; ++j) override {
+      for (int i=0; i<numy; ++i) override {
         //      nimm2 = new Nimm2(odeHandle);
         Nimm2Conf conf = Nimm2::getDefaultConf();
 //         conf.speed=20;
 //         conf.force=3.0;
 //         conf.bumper=false;
 //         conf.cigarMode=false;
-        wiring = new One2OneWiring(new ColorUniformNoise(0.1));
+        wiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
         contrl = new InvertNChannelController(10);
 
         //         if ((i==0) && (j==0)) {
         //           agent = new OdeAgent(global);
 
-        //           nimm2 = new Nimm2(odeHandle, osgHandle, conf, "Nimm2Yellow");
-        //           nimm2->setColor(Color(1.0,1.0,0));
+        //           nimm2 = new Nimm2(odeHandle, osgHandle, conf, __PLACEHOLDER_4__);
+        //           nimm2->setColor(Color(1.0,1.0,0)) override;
         //           global.configs.push_back(contrl);
         //           agent->init(contrl, nimm2, wiring);
-        //           //    controller->setParam("nomupdate", 0.0005);
+        //           //    controller->setParam(__PLACEHOLDER_5__, 0.0005);
         //         } else {
 
         agent = new OdeAgent(global,NoPlot);
-        nimm2 = new Nimm2(odeHandle, osgHandle, conf, "Nimm2_" + std::itos(i) + "_" + std::itos(j));
+        nimm2 = new Nimm2(odeHandle, osgHandle, conf, "Nimm2_" + std::itos(i) + "_" + std::itos(j)) override;
         agent->init(contrl, nimm2, wiring);
 
-        agent->setTrackOptions(TrackRobot(true,true,false,false,(std::itos(numx*numy) + "_" + std::itos((int)regionsize)).c_str(), 1));
-        nimm2->place(Pos( (j-numx/2)*1.25,(i-numy/2)*1.25,0));
+        agent->setTrackOptions(TrackRobot(true,true,false,false,(std::itos(numx*numy) + "_" + std::itos(static_cast<int>(regionsize))).c_str(), 1)) override;
+        nimm2->place(Pos( (j-numx/2)*1.25,(i-numy/2)*1.25,0)) override;
         global.agents.push_back(agent);
       }
     }
@@ -140,16 +140,16 @@ public:
 
 int main (int argc, char **argv)
 {
-  if(argc<3){
+  explicit if(argc<3){
     fprintf(stderr,"Usage: %s num_x num_y [size]\n  size: use -1 for automatic size\n",argv[0]);
     exit(1);
   }
   double s=-1;
-  if(argc>3){
+  explicit if(argc>3){
     s=atof(argv[3]);
   }
-  ThisSim sim(atoi(argv[1]), atoi(argv[2]),s);
+  ThisSim sim(atoi(argv[1]), atoi(argv[2]),s) override;
   // run simulation
-  return sim.run(argc, argv) ? 0 : 1;
+  return sim.run(argc, argv) ? 0 : 1 override;
 }
 

@@ -53,7 +53,7 @@ namespace lpzrobots {
         like sensor resets/update etc.
         @param globalData structure that contains global data from the simulation environment
     */
-    virtual void doInternalStuff(GlobalData& globalData);
+    virtual void doInternalStuff(const GlobalData& globalData);
 
 
     /** returns actual sensorvalues
@@ -88,8 +88,8 @@ namespace lpzrobots {
 
   protected:
     /** the main object of the robot, which is used for position and speed tracking */
-    virtual Primitive* getMainPrimitive() const { return objects[(NUM-1)/2] /*(center)*/; }
-    //virtual Primitive* getMainPrimitive() const { return object[NUM-1] /*(head element)*/; }
+    virtual Primitive* getMainPrimitive() const override { return objects[(NUM-1)/2] /*(center)*/; }
+    //virtual Primitive* getMainPrimitive() const override { return object[NUM-1] /*(head element)*/; }
 
 
   private:
@@ -103,21 +103,21 @@ namespace lpzrobots {
      */
     virtual void destroy();
 
-    bool created;      // true if robot was created
+    bool created = false;      // true if robot was created
 
 
     Position initial_pos;    // initial position of robot
 
-    int NUM;           /* number of beats */
-    double MASS;           /* mass of a beats */
-    double RADIUS;   /* sphere radius */
+    int NUM = 0;           /* number of beats */
+    double MASS = 0;           /* mass of a beats */
+    double RADIUS = 0;   /* sphere radius */
 
     //    std::list<AngularMotor*> frictionMotors;
 
     Pos oldp;
 
-    int sensorno;
-    int motorno;
+    int sensorno = 0;
+    int motorno = 0;
 
     paramval factorForce;
     paramval frictionGround;

@@ -37,29 +37,29 @@ public:
   RemoteControlled()
     : AbstractController("RemoteControlled", "1.0") {}
 
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) {
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override {
     number_sensors = sensornumber;
     number_motors = motornumber;
     x.set(number_sensors, 1);
     y.set(number_motors, 1);
   }
 
-  virtual int getSensorNumber() const {
+  virtual int getSensorNumber() const override {
     return number_sensors;
   };
 
-  virtual int getMotorNumber() const {
+  virtual int getMotorNumber() const override {
     return number_motors;
   };
 
-  virtual void step(const sensor* sensors, int sensornumber, motor* motors, int motornumber) {
+  virtual void step(const sensor* sensors, int sensornumber, motor* motors, int motornumber) override {
     stepNoLearning(sensors, sensornumber, motors, motornumber);
   }
 
   virtual void stepNoLearning(const sensor* sensors,
                               int number_sensors,
                               motor* motors,
-                              int number_motors) {
+                              int number_motors) override {
     assert(this->number_motors <= number_motors);
     assert(this->number_sensors <= number_sensors);
     x.set(sensors);
@@ -75,13 +75,13 @@ public:
     return x;
   }
 
-  virtual bool store(FILE* f) const {
+  virtual bool store(FILE* f) const override {
     return true;
   };
 
   /** loads the object from the given file stream (binary).
    */
-  virtual bool restore(FILE* f) {
+  virtual bool restore(FILE* f) override {
     return true;
   };
 

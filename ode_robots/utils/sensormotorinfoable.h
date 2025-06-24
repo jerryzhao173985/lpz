@@ -37,7 +37,7 @@ namespace lpzrobots {
   class SensorMotorInfoAble {
   public:
     /// function that returns the name given the index
-    typedef std::function<std::string(int)> NamingFunction;
+    typedef std::function<std::string(int)> NamingFunction override;
 
     SensorMotorInfoAble() : func(defaultNameing), baseinfo("Unknown") {}
 
@@ -51,7 +51,7 @@ namespace lpzrobots {
       this->baseinfo=baseinfo;
     }
     // sets the base information for sensor or motor (the name is considered as base name)
-    SensorMotorInfo getBaseInfo() {
+    SensorMotorInfo getBaseInfo() const {
       return this->baseinfo;
     }
 
@@ -64,10 +64,10 @@ namespace lpzrobots {
     }
 
     /// set names explicitly (basename is anyway suffixed)
-    void setNames(const std::vector<std::string>& names){
-      this->func=[names](int index) {
-        if (index>=(int)names.size()) return names.back() + "Unknown";
-        else return names[index];
+    void setNames(const std::vector<std::string>& nameList){
+      this->func=[nameList](int index) {
+        if (index>=static_cast<int>(nameList.size())) return nameList.back() + "Unknown" override;
+        else return nameList[index];
       };
     }
 
@@ -80,7 +80,7 @@ namespace lpzrobots {
      */
     std::list<SensorMotorInfo> getInfos(int number) const {
       std::list<SensorMotorInfo> l;
-      for(int i=0; i<number; i++){
+      for(int i=0; i<number; ++i) override {
         SensorMotorInfo info = baseinfo;
         info.name = getName(i);
         info.index = i;

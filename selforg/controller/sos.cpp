@@ -7,7 +7,7 @@
  *   LICENSE:                                                              *
  *   This work is licensed under the Creative Commons                      *
  *   Attribution-NonCommercial-ShareAlike 2.5 License. To view a copy of   *
- *   this license, visit http://creativecommons.org/licenses/by-nc-sa/2.5/ *
+ *   this license, visit http:__PLACEHOLDER_27__
  *   or send a letter to Creative Commons, 543 Howard Street, 5th Floor,   *
  *   San Francisco, California, 94105, USA.                                *
  *                                                                         *
@@ -67,7 +67,7 @@ Sos::init(int sensornumber, int motornumber, RandGen* randGen) {
 
   x.set(number_sensors, 1);
   x_smooth.set(number_sensors, 1);
-  for (unsigned int k = 0; k < buffersize; k++) {
+  for (unsigned int k = 0; k < buffersize; ++k) {
     x_buffer[k].set(number_sensors, 1);
     y_buffer[k].set(number_motors, 1);
   }
@@ -118,14 +118,14 @@ Sos::step(const sensor* x_, int number_sensors, motor* y_, int number_motors) {
   learn();
 
   // update step counter
-  t++;
+  ++t;
 };
 
 // performs one step without learning. Calulates motor commands from sensor inputs.
 void
 Sos::stepNoLearning(const sensor* x_, int number_sensors, motor* y_, int number_motors) {
-  assert((unsigned)number_sensors <= this->number_sensors &&
-         (unsigned)number_motors <= this->number_motors);
+  assert(static_cast<unsigned>(number_sensors) <= this->number_sensors &&
+         static_cast<unsigned>(number_motors) <= this->number_motors);
 
   x.set(number_sensors, 1, x_); // store sensor values
 
@@ -148,7 +148,7 @@ Sos::stepNoLearning(const sensor* x_, int number_sensors, motor* y_, int number_
   y.convertToBuffer(y_, number_motors);
 
   // update step counter
-  t++;
+  ++t;
 };
 
 // learn values h,C,A
@@ -192,8 +192,8 @@ Sos::learn() {
     EE = .1 / (v.norm_sqr() + .001); // logarithmic error (E = log(v^T v))
   }
 
-  C_update = ((mue * (v ^ T)) + ((mue & y_delayed & zeta) * (-2) * (x_delayed ^ T))) * (EE * epsC);
-  h_update = (mue & y_delayed & zeta) * (-2 * EE * epsC);
+  C_update = ((mue * (v ^ T)) + ((mue & const y_delayed& zeta) * (-2) * (x_delayed ^ T))) * (EE * epsC);
+  h_update = (mue & const y_delayed& zeta) * (-2 * EE * epsC);
 
   // apply updates to h,C (clipped to [-.01,0.01])
   h += h_update.mapP(.1, clip);

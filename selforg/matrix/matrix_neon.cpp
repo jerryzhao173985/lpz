@@ -37,10 +37,10 @@ MatrixNEON::mult_neon(const Matrix& a, const Matrix& b, Matrix& result) {
   }
 
   // Handle remaining elements with scalar code
-  for (unsigned int i = 0; i < m; i++) {
-    for (unsigned int j = (i < m4) ? n4 : 0; j < n; j++) {
+  for (unsigned int i = 0; i < m; ++i) {
+    for (unsigned int j = (i < m4) ? n4 : 0; j < n; ++j) {
       double sum = 0.0;
-      for (unsigned int l = 0; l < k; l++) {
+      for (unsigned int l = 0; l < k; ++l) {
         sum += aData[i * k + l] * bData[l * n + j];
       }
       cData[i * n + j] = sum;
@@ -48,10 +48,10 @@ MatrixNEON::mult_neon(const Matrix& a, const Matrix& b, Matrix& result) {
   }
 
   // Handle remaining rows
-  for (unsigned int i = m4; i < m; i++) {
-    for (unsigned int j = 0; j < n; j++) {
+  for (unsigned int i = m4; i < m; ++i) {
+    for (unsigned int j = 0; j < n; ++j) {
       double sum = 0.0;
-      for (unsigned int l = 0; l < k; l++) {
+      for (unsigned int l = 0; l < k; ++l) {
         sum += aData[i * k + l] * bData[l * n + j];
       }
       cData[i * n + j] = sum;
@@ -149,15 +149,15 @@ MatrixNEON::transpose_neon(const Matrix& src, Matrix& result) {
   }
 
   // Handle remaining elements with scalar code
-  for (unsigned int i = 0; i < m; i++) {
-    for (unsigned int j = (i < m2) ? n2 : 0; j < n; j++) {
+  for (unsigned int i = 0; i < m; ++i) {
+    for (unsigned int j = (i < m2) ? n2 : 0; j < n; ++j) {
       rData[j * m + i] = sData[i * n + j];
     }
   }
 
   // Handle remaining rows
-  for (unsigned int i = m2; i < m; i++) {
-    for (unsigned int j = 0; j < n; j++) {
+  for (unsigned int i = m2; i < m; ++i) {
+    for (unsigned int j = 0; j < n; ++j) {
       rData[j * m + i] = sData[i * n + j];
     }
   }
@@ -215,7 +215,7 @@ MatrixNEON::mult_block_4x4_neon(const double* a,
   float64x2_t c31 = vdupq_n_f64(0.0);
 
   // Compute 4x4 block multiplication
-  for (unsigned int l = 0; l < k; l++) {
+  for (unsigned int l = 0; l < k; ++l) {
     // Load A column
     float64x2_t a0 = vld1q_f64(a + 0 * lda + l);
     float64x2_t a1 = vld1q_f64(a + 2 * lda + l);

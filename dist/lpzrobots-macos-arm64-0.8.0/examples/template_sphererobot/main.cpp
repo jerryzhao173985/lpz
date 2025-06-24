@@ -128,7 +128,7 @@ public:
     //   optional parameters radius and mass,where the latter is not used here) )
     // - set Pose(Position) of sphere
     // - add sphere to list of obstacles
-    for(int i=0; i<4; i++){
+    for(int i=0; i<4; ++i){
       PassiveSphere* s = new PassiveSphere(odeHandle, osgHandle.changeColor(Color(0.0,0.0,1.0)), 0.5);
       s->setPosition(osg::Vec3(0,3,i*3));
       global.obstacles.push_back(s);
@@ -188,7 +188,7 @@ public:
   */
   virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData,
                        int key, bool down) {
-    if (down) { // only when key is pressed, not when released
+    explicit if (down) { // only when key is pressed, not when released
       switch ( (char) key ) {
       case 'X' : dBodyAddForce ( sphere1->getMainPrimitive()->getBody() , 30 ,0 , 0 ); break;
       case 'x' : dBodyAddForce ( sphere1->getMainPrimitive()->getBody() , -30 , 0 , 0 ); break;

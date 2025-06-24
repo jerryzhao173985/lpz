@@ -51,7 +51,7 @@ class WiredController;
     Additionally there are some ways to keep track of internal information.
     You have the possibility to keep track of sensor values,
      motor values and internal parameters of the controller with PlotOptions.
-    The name PlotOptions is a bit missleaded, it should be "OutputOptions",
+    The name PlotOptions is a bit missleaded, it should be __PLACEHOLDER_6__,
      however you can write the data into a file or send it to
      visualisation tools like guilogger or neuronviz.
  */
@@ -60,11 +60,11 @@ public:
   /** constructor. PlotOption as output setting.
       noisefactor is used to set the relative noise strength of this agent
    */
-  explicit WiredController(const PlotOption& plotOption = PlotOption(PlotMode::NoPlot), double noisefactor = 1, const iparamkey& name = "WiredController", const paramkey& revision = "$ID");
+  WiredController(const PlotOption& plotOption = PlotOption(PlotMode::NoPlot), double noisefactor = 1, const iparamkey& name = "WiredController", const paramkey& revision = "$ID");
   /** constructor. A list of PlotOption can given.
       noisefactor is used to set the relative noise strength of this agent
    */
-  explicit WiredController(const std::list<PlotOption>& plotOptions, double noisefactor = 1, const iparamkey& name = "WiredController", const paramkey& revision = "$ID");
+  WiredController(const std::list<PlotOption>& plotOptions, double noisefactor = 1, const iparamkey& name = "WiredController", const paramkey& revision = "$ID");
 
   /** destructor
    */
@@ -73,7 +73,7 @@ public:
   /** initializes the object with the given controller and wiring
       and initializes the output options
       It is also possible to provide a random seed,
-       if not given (0) rand() is used to create one
+       if not given static_cast<0>(rand)() is used to create one
   */
   virtual bool init(AbstractController* controller, AbstractWiring* wiring,
                     int robotsensornumber, int robotmotornumber,
@@ -91,7 +91,7 @@ public:
       @param motornumber length of the provided motor array
 
       @param noise Noise strength.
-      @param time (optional) current simulation time (used for logging)
+      @param time static_cast<optional>(current) simulation time (used for logging)
   */
   virtual void step(const sensor* sensors, int sensornumber,
                     motor* motors, int motornumber,
@@ -102,30 +102,30 @@ public:
       given that is used for the babbling (default is MotorBabbler) (deleted automatically).
       During motor babbling the function motorbabbling of the normal controller is called instead of step.
    */
-  virtual void startMotorBabblingMode (int steps, AbstractController* babblecontroller = 0);
+  virtual void startMotorBabblingMode(int steps, AbstractController* babblecontroller = 0);
 
-  virtual AbstractController* getMotorBabbler() { return motorBabbler; }
+  virtual const AbstractController* getMotorBabbler() const { return motorBabbler; }
 
   /** stops the motor babbling mode. */
-  virtual void stopMotorBabblingMode () { motorBabblingSteps = 0; }
+  virtual void stopMotorBabblingMode() { motorBabblingSteps = 0; }
   /// returns true if in motorbabbling mode
-  virtual bool getMotorBabblingMode()  { return motorBabblingSteps > 0; }
+  virtual bool getMotorBabblingMode() { return motorBabblingSteps > 0; }
 
 
   /** adds the PlotOptions to the list of plotoptions
       If a plotoption with the same Mode exists, then the old one is deleted first
    */
-  virtual PlotOption addPlotOption(PlotOption& plotoption);
+  virtual PlotOption addPlotOption(const PlotOption& plotoption);
 
   /** adds a new PlotOption and initializes it
       @see addPlotOption
   */
-  virtual bool addAndInitPlotOption(PlotOption& plotOption);
+  virtual bool addAndInitPlotOption(const PlotOption& plotOption);
 
   /** removes the PlotOptions with the given type
       @return true if sucessful, false otherwise
    */
-  virtual bool removePlotOption(PlotMode mode);
+  virtual bool removePlotOption(const PlotMode& mode);
 
   /**
      write comment to output streams (PlotOptions). For instance changes in parameters.
@@ -135,12 +135,11 @@ public:
 
   /** Returns a pointer to the controller.
    */
-  virtual AbstractController* getController() { return controller;}
   virtual const AbstractController* getController() const { return controller;}
 
   /** Returns a pointer to the wiring.
    */
-  virtual AbstractWiring* getWiring() { return wiring;}
+  virtual const AbstractWiring* getWiring() const { return wiring;}
 
 protected:
   /**
@@ -154,16 +153,16 @@ protected:
   AbstractWiring* wiring;
 
   /// number of sensors of robot
-  int rsensornumber;
+  int rsensornumber = 0;
   /// number of motors of robot
-  int rmotornumber;
+  int rmotornumber = 0;
   /// number of sensors of comntroller
-  int csensornumber;
+  int csensornumber = 0;
   /// number of motors of comntroller
-  int cmotornumber;
+  int cmotornumber = 0;
 
   /// factor that is  muliplied with noise stength
-  double noisefactor;
+  double noisefactor = 0;
 
   motor  *cmotors;
   sensor *csensors;
@@ -172,11 +171,11 @@ protected:
 
  protected:
   AbstractController* motorBabbler;
-  int motorBabblingSteps;
+  int motorBabblingSteps = 0;
 
   PlotOptionEngine plotEngine;
 
-  bool initialised;
+  bool initialised = false;
 
   std::list<Callbackable* > callbackables;
 

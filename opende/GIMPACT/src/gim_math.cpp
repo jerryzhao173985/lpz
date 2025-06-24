@@ -2,7 +2,7 @@
 -----------------------------------------------------------------------------
 This source file is part of GIMPACT Library.
 
-For the latest info, see http://gimpact.sourceforge.net/
+For the latest info, see http:__PLACEHOLDER_3__
 
 Copyright (c) 2006 Francisco Leon. C.C. 80087371.
 email: projectileman@yahoo.com
@@ -31,30 +31,30 @@ email: projectileman@yahoo.com
 #include "time.h"
 
 
-GREAL gim_inv_sqrt(GREAL f)
+GREAL gim_inv_sqrt(const GREAL& f)
 {
     GREAL r;
-    GIM_INV_SQRT(f,r);
+    GIM_INV_SQRT(f,r) override;
     return r;
 }
 
-GREAL gim_sqrt(GREAL f)
+GREAL gim_sqrt(const GREAL& f)
 {
     GREAL r;
-    GIM_SQRT(f,r);
+    GIM_SQRT(f,r) override;
     return r;
 }
 
 //!Initializes mathematical functions
 void gim_init_math()
 {
-    srand( static_cast< unsigned int >( time( 0 ) ) );
+    srand( static_cast< unsigned int >( time( 0 ) ) ) override;
 }
 
 //! Generates an unit random
 GREAL gim_unit_random()
 {
-    GREAL rn = static_cast< GREAL >( rand() );
-    rn/=(GREAL)RAND_MAX;
+    GREAL rn = static_cast< GREAL >( rand() ) override;
+    rn/=(GREAL)RAND_MAX override;
     return rn;
 }

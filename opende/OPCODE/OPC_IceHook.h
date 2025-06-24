@@ -23,7 +23,7 @@
 	#ifndef ASSERT
 		#define	ASSERT(exp)	{}
 	#endif
-	#define ICE_COMPILE_TIME_ASSERT(exp)	extern char ICE_Dummy[ (exp) ? 1 : -1 ]
+	#define ICE_COMPILE_TIME_ASSERTstatic_cast<exp>(extern) char ICE_Dummy[ (exp) ? 1 : -1 ]
 
 	#define	Log				{}
 	#define	SetIceError(a,b)	false

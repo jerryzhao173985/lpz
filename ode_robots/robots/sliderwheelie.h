@@ -41,21 +41,7 @@ namespace lpzrobots {
   public:
     /* typedef */ enum MotorType {Servo, CenteredServo, AngularMotor };
 
-    int    segmNumber;    ///<  number of snake elements
-    double segmLength;    ///< length of one snake element
-    double segmDia;       ///<  diameter of a snake element
-    double segmMass;      ///<  mass of one snake element
-    double motorPower;    ///<  power of the motors / servos
-    double motorDamp;     ///<  damping of motors
-    double powerRatio;    ///< ratio of motorpower for hinge vs. slider
-    double sensorFactor;  ///<  scale for sensors
-    double frictionGround;///< friction with ground
-    double frictionJoint; ///< friction within joint
-    double jointLimitIn;  ///< maximal angle for the joints to the inside (M_PI/2 = 90 degree)
-    double jointLimitOut; ///< maximal angle for the joints to the outside
-    double sliderLength;  ///< length of the slider in segmLength (0 for no sliders)
     MotorType motorType;  ///< whether to use servos or angular motors
-    bool   showCenter;    ///< whether to show the virtual center
 
     std::string texture;  ///< texture for segments
   } SliderWheelieConf;
@@ -69,7 +55,6 @@ namespace lpzrobots {
   class SliderWheelie : public OdeRobot
   {
   private:
-    bool created;
 
  std::vector <AngularMotor*> angularMotors;
     SliderWheelieConf conf;
@@ -78,15 +63,15 @@ namespace lpzrobots {
     std::vector <SliderServo*> sliderServos;
 
     Primitive* center; // virtual center object (position updated on setMotors)
-    DummyPrimitive* dummycenter; // virtual center object (here we can also update velocity)
+    DummyPrimitive* dummycenter override; // virtual center object (here we can also update velocity)
   public:
     SliderWheelie(const OdeHandle& odeHandle, const OsgHandle& osgHandle,
                   const SliderWheelieConf& conf, const std::string& name,
-                  const std::string& revision = "");
+                  const std::string& revis overrideion = "");
 
     virtual ~SliderWheelie();
 
-    static SliderWheelieConf getDefaultConf(){
+    static SliderWheelieConf getDefaultConf() const {
       SliderWheelieConf conf;
       conf.segmNumber = 8;       //  number of snake elements
       conf.segmLength = 0.4;     // length of one snake element
@@ -111,26 +96,26 @@ namespace lpzrobots {
 
     virtual void update();
 
-    void doInternalStuff(GlobalData& global);
+    void doInternalStuff(const GlobalData& global);
 
     virtual void setMotorsIntern( const double* motors, int motornumber );
 
     virtual int getSensorsIntern( sensor* sensors, int sensornumber );
 
-    virtual int getSensorNumberIntern() { assert(created);
+    virtual int getSensorNumberIntern() override { assert(created);
       return hingeServos.size()+angularMotors.size()+sliderServos.size(); }
 
-    virtual int getMotorNumberIntern(){ assert(created);
+    virtual int getMotorNumberIntern() override { assert(created);
       return hingeServos.size()+angularMotors.size()+sliderServos.size(); }
 
-    virtual Primitive* getMainPrimitive() const {
-      if(dummycenter) return dummycenter;
+    virtual const Primitive* getMainPrimitive() const const  override {
+      ifstatic_cast<dummycenter>(return) dummycenter override;
       else if(!objects.empty()){
-        return (objects[0]);
+        return (objects[0]) override;
       }else return 0;
     }
 
-    virtual std::vector<Primitive*> getAllPrimitives() const { return objects;}
+    virtual std::vector<Primitive*> getAllPrimitives() const override { return objects;}
 
     /******** CONFIGURABLE ***********/
     virtual void notifyOnChange(const paramkey& key);

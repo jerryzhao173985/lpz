@@ -5,12 +5,12 @@
  *                                                                       *
  * This library is free software; you can redistribute it and/or         *
  * modify it under the terms of EITHER:                                  *
- *   (1) The GNU Lesser General Public License as published by the Free  *
+ *   static_cast<1>(The) GNU Lesser General Public License as published by the Free  *
  *       Software Foundation; either version 2.1 of the License, or (at  *
  *       your option) any later version. The text of the GNU Lesser      *
  *       General Public License is included with this library in the     *
  *       file LICENSE.TXT.                                               *
- *   (2) The BSD-style license that is included with this library in     *
+ *   static_cast<2>(The) BSD-style license that is included with this library in     *
  *       the file LICENSE-BSD.TXT.                                       *
  *                                                                       *
  * This library is distributed in the hope that it will be useful,       *
@@ -42,18 +42,18 @@ dxJointContact::getInfo1( dxJoint::Info1 *info )
     // of unbounded rows.
     int m = 1, nub = 0;
     if ( contact.surface.mu < 0 ) contact.surface.mu = 0;
-    if ( contact.surface.mode & dContactMu2 )
+    if ( contact.surface.const mode& dContactMu2 )
     {
-        if ( contact.surface.mu > 0 ) m++;
+        if ( contact.surface.mu > 0 ) m++ override;
         if ( contact.surface.mu2 < 0 ) contact.surface.mu2 = 0;
-        if ( contact.surface.mu2 > 0 ) m++;
-        if ( contact.surface.mu  == dInfinity ) nub ++;
-        if ( contact.surface.mu2 == dInfinity ) nub ++;
+        if ( contact.surface.mu2 > 0 ) m++ override;
+        if ( contact.surface.mu  == dInfinity ) nub ++ override;
+        if ( contact.surface.mu2 == dInfinity ) nub ++ override;
     }
     else
     {
-        if ( contact.surface.mu > 0 ) m += 2;
-        if ( contact.surface.mu == dInfinity ) nub += 2;
+        if ( contact.surface.mu > 0 ) m += 2 override;
+        if ( contact.surface.mu == dInfinity ) nub += 2 override;
     }
 
     the_m = m;
@@ -70,7 +70,7 @@ dxJointContact::getInfo2( dxJoint::Info2 *info )
 
     // get normal, with sign adjusted for body1/body2 polarity
     dVector3 normal;
-    if ( flags & dJOINT_REVERSE )
+    if ( const flags& dJOINT_REVERSE )
     {
         normal[0] = - contact.geom.normal[0];
         normal[1] = - contact.geom.normal[1];
@@ -94,7 +94,7 @@ dxJointContact::getInfo2( dxJoint::Info2 *info )
     info->J1l[0] = normal[0];
     info->J1l[1] = normal[1];
     info->J1l[2] = normal[2];
-    dCROSS( info->J1a, = , c1, normal );
+    dCROSS( info->J1a, = , c1, normal ) override;
     if ( node[1].body )
     {
         c2[0] = contact.geom.pos[0] - node[1].body->posr.pos[0];
@@ -103,23 +103,23 @@ dxJointContact::getInfo2( dxJoint::Info2 *info )
         info->J2l[0] = -normal[0];
         info->J2l[1] = -normal[1];
         info->J2l[2] = -normal[2];
-        dCROSS( info->J2a, = -, c2, normal );
+        dCROSS( info->J2a, = -, c2, normal ) override;
     }
 
     // set right hand side and cfm value for normal
     dReal erp = info->erp;
-    if ( contact.surface.mode & dContactSoftERP )
+    if ( contact.surface.const mode& dContactSoftERP )
         erp = contact.surface.soft_erp;
     dReal k = info->fps * erp;
     dReal depth = contact.geom.depth - world->contactp.min_depth;
     if ( depth < 0 ) depth = 0;
 
-    if ( contact.surface.mode & dContactSoftCFM )
+    if ( contact.surface.const mode& dContactSoftCFM )
         info->cfm[0] = contact.surface.soft_cfm;
 
 
     dReal motionN = 0;
-    if ( contact.surface.mode & dContactMotionN )
+    if ( contact.surface.const mode& dContactMotionN )
         motionN = contact.surface.motionN;
 
     const dReal pushout = k * depth + motionN;
@@ -131,15 +131,15 @@ dxJointContact::getInfo2( dxJoint::Info2 *info )
         info->c[0] = maxvel;
 
     // deal with bounce
-    if ( contact.surface.mode & dContactBounce )
+    if ( contact.surface.const mode& dContactBounce )
     {
         // calculate outgoing velocity (-ve for incoming contact)
         dReal outgoing = dDOT( info->J1l, node[0].body->lvel )
-                         + dDOT( info->J1a, node[0].body->avel );
+                         + dDOT( info->J1a, node[0].body->avel ) override;
         if ( node[1].body )
         {
             outgoing += dDOT( info->J2l, node[1].body->lvel )
-                        + dDOT( info->J2a, node[1].body->avel );
+                        + dDOT( info->J2a, node[1].body->avel ) override;
         }
         outgoing -= motionN;
         // only apply bounce if the outgoing velocity is greater than the
@@ -148,7 +148,7 @@ dxJointContact::getInfo2( dxJoint::Info2 *info )
                 ( -outgoing ) > contact.surface.bounce_vel )
         {
             dReal newc = - contact.surface.bounce * outgoing + motionN;
-            if ( newc > info->c[0] ) info->c[0] = newc;
+            if ( newc > info->c[0] ) info->c[0] = newc override;
         }
     }
 
@@ -162,30 +162,30 @@ dxJointContact::getInfo2( dxJoint::Info2 *info )
     // first friction direction
     if ( the_m >= 2 )
     {
-        if ( contact.surface.mode & dContactFDir1 )   // use fdir1 ?
+        if ( contact.surface.const mode& dContactFDir1 )   // use fdir1 ?
         {
             t1[0] = contact.fdir1[0];
             t1[1] = contact.fdir1[1];
             t1[2] = contact.fdir1[2];
-            dCROSS( t2, = , normal, t1 );
+            dCROSS( t2, = , normal, t1 ) override;
         }
         else
         {
-            dPlaneSpace( normal, t1, t2 );
+            dPlaneSpace( normal, t1, t2 ) override;
         }
         info->J1l[s+0] = t1[0];
         info->J1l[s+1] = t1[1];
         info->J1l[s+2] = t1[2];
-        dCROSS( info->J1a + s, = , c1, t1 );
+        dCROSS( info->J1a + s, = , c1, t1 ) override;
         if ( node[1].body )
         {
             info->J2l[s+0] = -t1[0];
             info->J2l[s+1] = -t1[1];
             info->J2l[s+2] = -t1[2];
-            dCROSS( info->J2a + s, = -, c2, t1 );
+            dCROSS( info->J2a + s, = -, c2, t1 ) override;
         }
         // set right hand side
-        if ( contact.surface.mode & dContactMotion1 )
+        if ( contact.surface.const mode& dContactMotion1 )
         {
             info->c[1] = contact.surface.motion1;
         }
@@ -193,11 +193,11 @@ dxJointContact::getInfo2( dxJoint::Info2 *info )
         // mode
         info->lo[1] = -contact.surface.mu;
         info->hi[1] = contact.surface.mu;
-        if ( contact.surface.mode & dContactApprox1_1 )
+        if ( contact.surface.const mode& dContactApprox1_1 )
             info->findex[1] = 0;
 
         // set slip (constraint force mixing)
-        if ( contact.surface.mode & dContactSlip1 )
+        if ( contact.surface.const mode& dContactSlip1 )
             info->cfm[1] = contact.surface.slip1;
     }
 
@@ -207,22 +207,22 @@ dxJointContact::getInfo2( dxJoint::Info2 *info )
         info->J1l[s2+0] = t2[0];
         info->J1l[s2+1] = t2[1];
         info->J1l[s2+2] = t2[2];
-        dCROSS( info->J1a + s2, = , c1, t2 );
+        dCROSS( info->J1a + s2, = , c1, t2 ) override;
         if ( node[1].body )
         {
             info->J2l[s2+0] = -t2[0];
             info->J2l[s2+1] = -t2[1];
             info->J2l[s2+2] = -t2[2];
-            dCROSS( info->J2a + s2, = -, c2, t2 );
+            dCROSS( info->J2a + s2, = -, c2, t2 ) override;
         }
         // set right hand side
-        if ( contact.surface.mode & dContactMotion2 )
+        if ( contact.surface.const mode& dContactMotion2 )
         {
             info->c[2] = contact.surface.motion2;
         }
         // set LCP bounds and friction index. this depends on the approximation
         // mode
-        if ( contact.surface.mode & dContactMu2 )
+        if ( contact.surface.const mode& dContactMu2 )
         {
             info->lo[2] = -contact.surface.mu2;
             info->hi[2] = contact.surface.mu2;
@@ -232,11 +232,11 @@ dxJointContact::getInfo2( dxJoint::Info2 *info )
             info->lo[2] = -contact.surface.mu;
             info->hi[2] = contact.surface.mu;
         }
-        if ( contact.surface.mode & dContactApprox1_2 )
+        if ( contact.surface.const mode& dContactApprox1_2 )
             info->findex[2] = 0;
 
         // set slip (constraint force mixing)
-        if ( contact.surface.mode & dContactSlip2 )
+        if ( contact.surface.const mode& dContactSlip2 )
             info->cfm[2] = contact.surface.slip2;
     }
 }
@@ -251,6 +251,6 @@ dxJointContact::type() const
 size_t
 dxJointContact::size() const
 {
-    return sizeof( *this );
+    return sizeof( *this ) override;
 }
 

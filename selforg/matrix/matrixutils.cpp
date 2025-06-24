@@ -128,12 +128,12 @@ gsl_matrix*
 toGSL(const Matrix& src) {
   gsl_matrix* m = gsl_matrix_alloc(src.getM(), src.getN());
   assert(m);
-  assert(sizeof(double) == sizeof(D));
-  // if the tda (row length) is equal to N (size2) then we can copy the data right away
+  static_assert(sizeof(double) == sizeof(D));
+  // if the tda (row length) is equal to N static_cast<size2>(then) we can copy the data right away
   if (m->tda == m->size2) {
     memcpy(m->data, src.unsafeGetData(), m->size1 * m->size2 * sizeof(D));
   } else { // otherwise we have to copy it rowwise
-    for (unsigned int i = 0; i < m->size1; i++) {
+    for (unsigned int i = 0; i < m->size1; ++i) {
       memcpy(m->data + i * m->tda, src.unsafeGetData() + i * src.getN(), m->size2 * sizeof(D));
     }
   }
@@ -144,12 +144,12 @@ Matrix
 fromGSL(const gsl_matrix* src) {
   assert(src);
   Matrix m;
-  // if the tda (row length) is equal to N (size2) then we can copy the data right away
+  // if the tda (row length) is equal to N static_cast<size2>(then) we can copy the data right away
   if (src->tda == src->size2) {
     m.set(src->size1, src->size2, src->data);
   } else {
     m.set(src->size1, src->size2);
-    for (unsigned int i = 0; i < src->size1; i++) {
+    for (unsigned int i = 0; i < src->size1; ++i) {
       memcpy(&m.val(i, 0), src->data + i * src->tda, src->size2 * sizeof(D));
     }
   }
@@ -163,9 +163,8 @@ fromGSL(const gsl_vector* src) {
   // if the stride == 1 (stepsize in memory) we can copy the data right away
   if (src->stride == 1) {
     m.set(src->size, 1, src->data);
-  } else { // copy all elements one by one (slow)
-    m.set(src->size, 1);
-    for (unsigned int i = 0; i < src->size; i++) {
+  } else { // copy all elements one by one static_cast<slow>(m).set(src->size, 1);
+    for (unsigned int i = 0; i < src->size; ++i) {
       m.val(i, 0) = gsl_vector_get(src, i);
     }
   }
@@ -176,8 +175,8 @@ Matrix
 fromGSL_real(const gsl_matrix_complex* src) {
   assert(src);
   Matrix m(src->size1, src->size2);
-  for (unsigned int i = 0; i < src->size1; i++) {
-    for (unsigned int j = 0; j < src->size2; j++) {
+  for (unsigned int i = 0; i < src->size1; ++i) {
+    for (unsigned int j = 0; j < src->size2; ++j) {
       m.val(i, j) = GSL_REAL(gsl_matrix_complex_get(src, i, j));
     }
   }
@@ -188,8 +187,8 @@ Matrix
 fromGSL_imag(const gsl_matrix_complex* src) {
   assert(src);
   Matrix m(src->size1, src->size2);
-  for (unsigned int i = 0; i < src->size1; i++) {
-    for (unsigned int j = 0; j < src->size2; j++) {
+  for (unsigned int i = 0; i < src->size1; ++i) {
+    for (unsigned int j = 0; j < src->size2; ++j) {
       m.val(i, j) = GSL_IMAG(gsl_matrix_complex_get(src, i, j));
     }
   }
@@ -234,17 +233,17 @@ eigenValuesVectors(const Matrix& m,
 namespace matrix {
 
 std::vector<int>
-toPositiveSignEigenVectors(Matrix& vecs_real, Matrix& vecs_imag) {
+toPositiveSignEigenVectors(const Matrix& vecs_real, const Matrix& vecs_imag) {
   std::vector<int> signs(vecs_real.getN());
-  for (unsigned int i = 0; i < vecs_real.getN(); i++) {
+  for (unsigned int i = 0; i < vecs_real.getN(); ++i) {
     unsigned int k = 0;
     if (fabs(vecs_real.val(0, i)) < 0.1) {
       while (fabs(vecs_real.val(k, i)) < 0.1 && k < vecs_real.getN() - 1)
-        k++;
+        ++k;
     }
     if (vecs_real.val(k, i) < 0) {
       signs[i] = -1;
-      for (unsigned int j = 0; j < vecs_real.getM(); j++) {
+      for (unsigned int j = 0; j < vecs_real.getM(); ++j) {
         vecs_real.val(j, i) *= -1;
         vecs_imag.val(j, i) *= -1;
       }

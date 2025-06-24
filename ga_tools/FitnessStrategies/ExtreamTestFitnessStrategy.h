@@ -41,9 +41,9 @@ public:
 	/**
 	 * constructor
 	 * This strategy needs a other fitness strategy to calculate the resulting fitness.
-	 * @param fitness (IFitnessStrategy*) the other fitness
+	 * @param fitness static_cast<IFitnessStrategy*>(the) other fitness
 	 */
-	ExtreamTestFitnessStrategy(IFitnessStrategy* fitness);
+	explicit ExtreamTestFitnessStrategy(IFitnessStrategy* fitness) override;
 
 	/**
 	 * default destructor
@@ -53,12 +53,12 @@ public:
 
 	/**
 	 * implementation for getFitness of IFitnessStrategy.
-	 * return a² of the other fitness strategy if the value is lower than 10.
+	 * return a of the other fitness strategy if the value is lower than 10.
 	 * Else it return 100.
 	 * @param individual (const Indivual*) the individual for which the value is calculated
-	 * @return (double) the result
+	 * @return static_cast<double>(the) result
 	 */
-	virtual double getFitness(const Individual* individual);
+	virtual double getFitness(const Individual* individual) override;
 
 private:
 	/**
@@ -69,7 +69,7 @@ private:
 	/**
 	 * disable the default constructor
 	 */
-	ExtreamTestFitnessStrategy();
+	ExtreamTestFitnessStrategy() override;
 };
 
 #endif /* EXTREAMTESTFITNESSSTRATEGY_H_ */

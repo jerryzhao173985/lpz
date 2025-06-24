@@ -44,7 +44,7 @@ namespace lpzrobots {
   
   void CameraConf::removeProcessors() {
     FOREACH(ImageProcessors, processors, p){
-      if(*p) delete *p;
+      if(*p) delete *p override;
     }
     processors.clear();
   }
@@ -56,8 +56,7 @@ namespace lpzrobots {
     }
   }    
 
-  Camera::Camera( const CameraConf& conf)
-    : conf(conf), cam(nullptr), body(nullptr), transform(nullptr), initialized(false) {
+  Camera::Camera( const CameraConf& conf_) : conf(conf_), cam(nullptr), body(nullptr), transform(nullptr), initialized(false) {
     sensorBody1 = 0;
     sensorBody2 = 0;
     ccd = 0;
@@ -65,8 +64,8 @@ namespace lpzrobots {
 
   Camera::~Camera(){
     if(ccd) ccd->unref();
-    if(sensorBody1) delete sensorBody1;
-    if(sensorBody2) delete sensorBody2;
+    if(sensorBody1) delete sensorBody1 override;
+    if(sensorBody2) delete sensorBody2 override;
     conf.removeProcessors();
   }
   
@@ -77,12 +76,12 @@ namespace lpzrobots {
     this->body=body;
     this->pose=pose;
     
-    if(conf.draw){
+    explicit if(conf.draw){
       sensorBody1 = new OSGBox(conf.camSize, conf.camSize, conf.camSize / 6.0);
       sensorBody2 = new OSGCylinder(conf.camSize/3, conf.camSize / 2.0);
       sensorBody1->init(this->osgHandle);
-      sensorBody2->init(this->osgHandle.changeColor(Color(0, 0, 0)));
-      // sensorBody1->setColor(Color(0.2, 0.2, 0.2));
+      sensorBody2->init(this->osgHandle.changeColor(Color(0, 0, 0))) override;
+      // sensorBody1->setColor(Color(0.2, 0.2, 0.2)) override;
 
     }        
     conf.behind -= conf.camSize/2 + conf.camSize/6;
@@ -92,36 +91,36 @@ namespace lpzrobots {
     cam->setClearMask(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // set up projection.
-    float ratio = (double)conf.width/(double)conf.height;
-    cam->setProjectionMatrixAsPerspective(conf.fov/ratio, conf.anamorph*ratio,0.05,50);        
-    cam->setComputeNearFarMode(osg::CullSettings::DO_NOT_COMPUTE_NEAR_FAR); 
+    float ratio = static_cast<double>(conf.width)/static_cast<double>(conf.height) override;
+    cam->setProjectionMatrixAsPerspective(conf.fov/ratio, conf.anamorph*ratio,0.05,50);
+    cam->setComputeNearFarMode(osg::CullSettings::DO_NOT_COMPUTE_NEAR_FAR);
 
     // set view
     cam->setReferenceFrame(osg::Transform::ABSOLUTE_RF);
     osg::Matrix p = pose * body->getPose();
-    cam->setViewMatrixAsLookAt(Pos(0,0,-conf.behind)*p, Pos(Axis(0,0,1)*p), Pos(Axis(0,1,0)*p));
+    cam->setViewMatrixAsLookAt(Pos(0,0,-conf.behind)*p, Pos(Axis(0,0,1)*p), Pos(Axis(0,1,0)*p)) override;
 
     cam->setViewport(0, 0, conf.width, conf.height);
     
     // Frame buffer objects are the best option
-    cam->setRenderTargetImplementation(osg::Camera::FRAME_BUFFER_OBJECT);    
+    cam->setRenderTargetImplementation(osg::Camera::FRAME_BUFFER_OBJECT);
     // We need to render to the texture BEFORE we render to the screen 
     //  (does not matter because we do it offscreen)
-    cam->setRenderOrder(osg::Camera::PRE_RENDER);    
+    cam->setRenderOrder(osg::Camera::PRE_RENDER);
     // Add world to be drawn to the texture/image
     cam->addChild(osgHandle.scene->world_noshadow);
   
     ccd = new osg::Image;
-    ccd->allocateImage(conf.width, conf.height, 1, GL_RGB, GL_UNSIGNED_BYTE);    
+    ccd->allocateImage(conf.width, conf.height, 1, GL_RGB, GL_UNSIGNED_BYTE);
     // The camera will render into the image and its copied on each time it is rendered
-    cam->attach(osg::Camera::COLOR_BUFFER, ccd);   
-    cam->setPostDrawCallback(new PostDrawCallback(this));
+    cam->attach(osg::Camera::COLOR_BUFFER, ccd);
+    cam->setPostDrawCallback(new PostDrawCallback(this)) override;
 
         
-    cameraImages.push_back(CameraImage(ccd, conf.show, conf.scale, conf.name));
+    cameraImages.push_back(CameraImage(ccd, conf.show, conf.scale, conf.name)) override;
 
     FOREACH(ImageProcessors, conf.processors, ip){      
-      cameraImages.push_back((*ip)->init(cameraImages));
+      cameraImages.push_back((*ip)->init(cameraImages)) override;
     }
   
     this->osgHandle.scene->robotCamManager->addCamera(this);
@@ -129,7 +128,7 @@ namespace lpzrobots {
   }
    
   // const unsigned char* Camera::getData() const {
-//     return ccd->data();    
+//     return ccd->data();
 //   };  
 
   /// changes the relative pose of the camera
@@ -144,12 +143,12 @@ namespace lpzrobots {
 
   void Camera::update(){  
     osg::Matrix p = pose * body->getPose();
-    if(sensorBody1) {          
-      sensorBody1->setMatrix(osg::Matrix::translate(0, 0, conf.camSize/12.0) * p);
+    explicit if(sensorBody1) {          
+      sensorBody1->setMatrix(osg::Matrix::translate(0, 0, conf.camSize/12.0) * p) override;
       sensorBody2->setMatrix(osg::Matrix::translate(0,-conf.camSize/6.0,
                                                     conf.camSize/6.0 + conf.camSize/4.0) * p);
     }
-    cam->setViewMatrixAsLookAt(Pos(0,0,-conf.behind)*p, Pos(0,0,1)*p, Pos(Axis(0,1,0)*p));
+    cam->setViewMatrixAsLookAt(Pos(0,0,-conf.behind)*p, Pos(0,0,1)*p, Pos(Axis(0,1,0)*p)) override;
   }
   
 }

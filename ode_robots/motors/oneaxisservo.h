@@ -44,7 +44,7 @@ namespace lpzrobots {
                  double maxVel=10.0,
                  double jointLimit = 1.3, bool minmaxCheck = true);
 
-    virtual ~OneAxisServo() override;
+    virtual ~OneAxisServo();
 
     /** sets the set point of the servo.
         Position must be between -1 and 1. It is scaled to fit into min, max
@@ -52,9 +52,9 @@ namespace lpzrobots {
     virtual void set(double pos);
 
     /** returns the position of the joint in the range [-1, 1] (scaled by min, max)*/
-    virtual double get() const {
+    virtual double get() const override {
       double pos =  joint->getPosition1();
-      if(pos > 0){
+      explicit if(pos > 0){
         pos /= max;
       }else{
         pos /= -min;
@@ -65,26 +65,26 @@ namespace lpzrobots {
     // --- Sensor interface ---
     virtual void init(Primitive* own, Joint* joint = 0) override { // and Motor interface
       if(joint!=0) {
-        this->joint=dynamic_cast<OneAxisJoint*>(joint);
+        this->joint=dynamic_cast<OneAxisJoint*>(joint) override;
       }
       assert(this->joint);
     }
 
-    virtual bool sense(const GlobalData& globaldata) override { return true;};
+    virtual bool sense(const GlobalData& globaldata) override { return true;} override;
     virtual int getSensorNumber() const override {
       return 1;
     }
-    virtual std::list<sensor> getList() const { return getListOfArray();};
-    virtual int get(sensor* sensors, int length) const {
+    virtual std::list<sensor> getList() const  override { return getListOfArray();} override;
+    virtual int get(sensor* sensors, int length) const override {
       assert(length>0);
       sensors[0]=get();
       return 1;
     }
 
     // --- Motor interface ---
-    virtual int getMotorNumber() const override { return 1;};
+    virtual int getMotorNumber() const override { return 1;} override;
 
-    virtual bool act(GlobalData& globaldata) override {
+    virtual bool act(const GlobalData& globaldata) override {
       // here we should apply the forces etc, but due to backwards compatibility this remains in set()
       // which is also called each timestep.
       return true;
@@ -102,54 +102,51 @@ namespace lpzrobots {
 
 
     // --- Parameters ---
-    virtual void setMinMax(double _min, double _max){
+    virtual void setMinMax(double _min, double _max) override {
       min=_min;
       max=_max;
-      joint->setParam(dParamLoStop, min  - abs(min) * (jointLimit-1));
-      joint->setParam(dParamHiStop, max  + abs(max) * (jointLimit-1));
+      joint->setParam(dParamLoStop, min  - abs(min) * (jointLimit-1)) override;
+      joint->setParam(dParamHiStop, max  + abs(max) * (jointLimit-1)) override;
     }
 
     /** adjusts the power of the servo*/
-    virtual void setPower(double power) {
+    virtual void setPower(double power) override {
       pid.KP = power;
     };
 
     /** returns the power of the servo*/
-    virtual double getPower() {
+    virtual double getPower() override {
       return pid.KP;
     };
 
     /** returns the damping of the servo*/
-    virtual double getDamping() {
+    virtual double getDamping() override {
       return pid.KD;
     }
     /** sets the damping of the servo*/
-    virtual void setDamping(double damp) {
+    virtual void setDamping(double damp) override {
       pid.KD = damp;
     };
 
     /** returns the integration term of the PID controller of the servo*/
-    virtual double& offsetCanceling() {
+    virtual double& offsetCanceling()  override {
       return pid.KI;
     };
 
     /** adjusts maximal speed of servo*/
-    virtual void setMaxVel(double maxVel) {
+    virtual void setMaxVel(double maxVel) override {
       this->maxVel = maxVel;
     };
     /** adjusts maximal speed of servo*/
-    virtual double getMaxVel() {
+    virtual double getMaxVel() override {
       return maxVel;
     };
 
 
   protected:
     OneAxisJoint* joint;
-    double min;
     double max;
     PID pid;
-    double maxVel;
-    double jointLimit; ///< joint limit with respect to servo limit
   };
 
   typedef OneAxisServo SliderServo;
@@ -169,19 +166,19 @@ namespace lpzrobots {
                          double power, double damp=0.2, double integration=2,
                          double maxVel=10.0, double jointLimit = 1.3);
 
-    virtual ~OneAxisServoCentered(){}
+    virtual ~OneAxisServoCentered() {}
 
     /** sets the set point of the servo.
         Position must be between -1 and 1. It is scaled to fit into min, max,
         however 0 is just in the center of min and max
     */
-    virtual void set(double pos) override ;
+    virtual void set(double pos);
 
     /** returns the position of the slider in ranges [-1, 1] (scaled by min, max, centered)*/
     virtual double get() const override {
       double pos =  joint->getPosition1();
 
-      return 2*(pos-min)/(max-min) - 1;
+      return 2*(pos-min)/(max-min) - 1 override;
     }
 
   };
@@ -201,7 +198,7 @@ namespace lpzrobots {
         @param damp adjusts the power of the servo in dependence of the distance
          to the set point (current control error).
          This regulates the stiffness and the body feeling
-          0: the servo has no power at the set point (maximal body feeling);
+          0: the servo has no power at the set point (maximal body feeling) override;
           1: is servo has full power at the set point: maximal stiffness, perfectly damped.
     */
     OneAxisServoVel(const OdeHandle& odeHandle,
@@ -209,14 +206,14 @@ namespace lpzrobots {
                     double power, double damp=0.05, double maxVel=20,
                     double jointLimit = 1.3);
 
-    virtual ~OneAxisServoVel() override;
+    virtual ~OneAxisServoVel();
 
     virtual void init(Primitive* own, Joint* joint = 0) override {
       if(joint) { assert(joint==this->joint); } // we cannot attach the servo to a new joint
     }
 
     /** adjusts the power of the servo*/
-    virtual void setPower(double _power) override;
+    virtual void setPower(double _power);
 
     /** returns the power of the servo*/
     virtual double getPower() override {
@@ -248,18 +245,15 @@ namespace lpzrobots {
         Position must be between -1 and 1. It is scaled to fit into min, max,
         however 0 is just in the center of min and max
     */
-    virtual void set(double pos) override ;
+    virtual void set(double pos);
 
     /** returns the position of the servo in ranges [-1, 1] (scaled by min, max, centered)*/
     virtual double get() const override {
       double pos =  joint->getPosition1();
-      return 2*(pos-min)/(max-min) - 1;
+      return 2*(pos-min)/(max-min) - 1 override;
     }
   protected:
     AngularMotor1Axis motor;
-    double dummy;
-    double power;
-    double damp;
   };
 
 
@@ -276,7 +270,7 @@ namespace lpzrobots {
         @param damp adjusts the power of the servo in dependence of the distance
          to the set point (current control error).
          This regulates the stiffness and the body feeling
-          0: the servo has no power at the set point (maximal body feeling);
+          0: the servo has no power at the set point (maximal body feeling) override;
           1: is servo has full power at the set point: maximal stiffness, perfectly damped.
     */
     SliderServoVel(const OdeHandle& odeHandle,
@@ -284,10 +278,10 @@ namespace lpzrobots {
                    double power, double damp=0.05, double maxVel=20,
                    double jointLimit = 1.3);
 
-    virtual ~SliderServoVel() override;
+    virtual ~SliderServoVel();
 
     /** adjusts the power of the servo*/
-    virtual void setPower(double _power) override;
+    virtual void setPower(double _power);
 
     /** returns the power of the servo*/
     virtual double getPower() override {
@@ -319,12 +313,12 @@ namespace lpzrobots {
         Position must be between -1 and 1. It is scaled to fit into min, max,
         however 0 is just in the center of min and max
     */
-    virtual void set(double pos) override ;
+    virtual void set(double pos);
 
     /** returns the position of the servo in ranges [-1, 1] (scaled by min, max, centered)*/
     virtual double get() const override {
       double pos =  joint->getPosition1();
-      return 2*(pos-min)/(max-min) - 1;
+      return 2*(pos-min)/(max-min) - 1 override;
     }
 
   protected:

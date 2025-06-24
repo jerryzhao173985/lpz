@@ -2,7 +2,7 @@
 /*
  *	OPCODE - Optimized Collision Detection
  *	Copyright (C) 2001 Pierre Terdiman
- *	Homepage: http://www.codercorner.com/Opcode.htm
+ *	Homepage: http:__PLACEHOLDER_1__
  */
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -27,17 +27,17 @@
 
 		// Cached faces signature
 		Point		Center;		//!< Sphere used when performing the query resulting in cached faces
-		float		FatRadius2;	//!< Sphere used when performing the query resulting in cached faces
+		float		FatRadius2 = 0;	//!< Sphere used when performing the query resulting in cached faces
 		// User settings
-		float		FatCoeff;	//!< mRadius2 multiplier used to create a fat sphere
+		float		FatCoeff = 0;	//!< mRadius2 multiplier used to create a fat sphere
 	};
 
 	class OPCODE_API SphereCollider : public VolumeCollider
 	{
 		public:
 		// Constructor / Destructor
-											SphereCollider();
-		virtual								~SphereCollider();
+											SphereCollider() override;
+		virtual ~SphereCollider();
 
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/**
@@ -55,40 +55,40 @@
 		 *	\warning	SCALE NOT SUPPORTED. The matrices must contain rotation & translation parts only.
 		 */
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-							bool			Collide(SphereCache& cache, const Sphere& sphere, const Model& model, const Matrix4x4* worlds=null, const Matrix4x4* worldm=null);
+							bool			Collide(SphereCache& cache, const Sphere& sphere, const Model& model, const Matrix4x4* worlds=null, const Matrix4x4* worldm=null) override;
 
 		// 
-							bool			Collide(SphereCache& cache, const Sphere& sphere, const AABBTree* tree);
+							bool			Collide(SphereCache& cache, const Sphere& sphere, const AABBTree* tree) override;
 		protected:
 		// Sphere in model space
 							Point			mCenter;			//!< Sphere center
-							float			mRadius2;			//!< Sphere radius squared
+							float			mRadius2 = 0;			//!< Sphere radius squared
 		// Internal methods
-							void			_Collide(const AABBCollisionNode* node);
-							void			_Collide(const AABBNoLeafNode* node);
-							void			_Collide(const AABBQuantizedNode* node);
-							void			_Collide(const AABBQuantizedNoLeafNode* node);
-							void			_Collide(const AABBTreeNode* node);
-							void			_CollideNoPrimitiveTest(const AABBCollisionNode* node);
-							void			_CollideNoPrimitiveTest(const AABBNoLeafNode* node);
-							void			_CollideNoPrimitiveTest(const AABBQuantizedNode* node);
-							void			_CollideNoPrimitiveTest(const AABBQuantizedNoLeafNode* node);
+							void			_Collide(const AABBCollisionNode* node) override;
+							void			_Collide(const AABBNoLeafNode* node) override;
+							void			_Collide(const AABBQuantizedNode* node) override;
+							void			_Collide(const AABBQuantizedNoLeafNode* node) override;
+							void			_Collide(const AABBTreeNode* node) override;
+							void			_CollideNoPrimitiveTest(const AABBCollisionNode* node) override;
+							void			_CollideNoPrimitiveTest(const AABBNoLeafNode* node) override;
+							void			_CollideNoPrimitiveTest(const AABBQuantizedNode* node) override;
+							void			_CollideNoPrimitiveTest(const AABBQuantizedNoLeafNode* node) override;
 			// Overlap tests
-		inline_				BOOL			SphereContainsBox(const Point& bc, const Point& be);
-		inline_				BOOL			SphereAABBOverlap(const Point& center, const Point& extents);
-							BOOL			SphereTriOverlap(const Point& vert0, const Point& vert1, const Point& vert2);
+		inline_				BOOL			SphereContainsBox(const Point& bc, const Point& be) override;
+		inline_				BOOL			SphereAABBOverlap(const Point& center, const Point& extents) override;
+							BOOL			SphereTriOverlap(const Point& vert0, const Point& vert1, const Point& vert2) override;
 			// Init methods
-							BOOL			InitQuery(SphereCache& cache, const Sphere& sphere, const Matrix4x4* worlds=null, const Matrix4x4* worldm=null);
+							BOOL			InitQuery(SphereCache& cache, const Sphere& sphere, const Matrix4x4* worlds=null, const Matrix4x4* worldm=null) override;
 	};
 
 	class OPCODE_API HybridSphereCollider : public SphereCollider
 	{
 		public:
 		// Constructor / Destructor
-											HybridSphereCollider();
-		virtual								~HybridSphereCollider();
+											HybridSphereCollider() override;
+		virtual ~HybridSphereCollider();
 
-							bool			Collide(SphereCache& cache, const Sphere& sphere, const HybridModel& model, const Matrix4x4* worlds=null, const Matrix4x4* worldm=null);
+							bool			Collide(SphereCache& cache, const Sphere& sphere, const HybridModel& model, const Matrix4x4* worlds=null, const Matrix4x4* worldm=null) override;
 		protected:
 							Container		mTouchedBoxes;
 	};

@@ -44,7 +44,7 @@ class BufferedPipeReader : public AbstractPipeReader
   
 public:
   
-  BufferedPipeReader(AbstractPipeReader* apr);
+  explicit BufferedPipeReader(AbstractPipeReader* apr);
   virtual ~BufferedPipeReader();
 //   virtual void waitForChannelData();
   virtual bool readyForData() {return true;};

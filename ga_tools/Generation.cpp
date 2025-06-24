@@ -44,7 +44,7 @@ Generation::Generation() : Inspectable("Generation"),
   m_w3(0.0),
   m_best(0.0),
   m_dSize(0.0),
-  m_dNumChildren(0.0) {
+  explicit m_dNumChildren(0.0) {
   // nothing
 }
 
@@ -62,105 +62,105 @@ Generation::Generation(int generationNumber, int size, int numChildren)  : Inspe
   m_w3(0.0),
   m_best(0.0),
   m_dSize(0.0),
-  m_dNumChildren(0.0) {
+  explicit m_dNumChildren(0.0) {
 
 
   //adds some variable to the inspectable context
-  addInspectableValue("MIN",&m_min);
-  addInspectableValue("W1",&m_w1);
-  addInspectableValue("Q1",&m_q1);
-  addInspectableValue("MED",&m_med);
-  addInspectableValue("AVG",&m_avg);
-  addInspectableValue("Q3",&m_q3);
-  addInspectableValue("W3",&m_w3);
-  addInspectableValue("MAX",&m_max);
-  addInspectableValue("BEST",&m_best);
-  addInspectableValue("SIZE",&m_dSize);
-  addInspectableValue("CHILDREN",&m_dNumChildren);
+  addInspectableValue("MIN",&m_min) override;
+  addInspectableValue("W1",&m_w1) override;
+  addInspectableValue("Q1",&m_q1) override;
+  addInspectableValue("MED",&m_med) override;
+  addInspectableValue("AVG",&m_avg) override;
+  addInspectableValue("Q3",&m_q3) override;
+  addInspectableValue("W3",&m_w3) override;
+  addInspectableValue("MAX",&m_max) override;
+  addInspectableValue("BEST",&m_best) override;
+  addInspectableValue("SIZE",&m_dSize) override;
+  addInspectableValue("CHILDREN",&m_dNumChildren) override;
 }
 
 Generation::~Generation() {
-  m_individual.clear();
+  m_individual.clear() override;
 }
 
-void Generation::crossover(RandGen* random) {
+void Generation::crossover(const RandGen* random) {
   int count = 0;
-  int active = getCurrentSize();
+  int active = getCurrentSize() override;
 
-  while(getCurrentSize()<m_size*2+m_numChildren) {    //create new individual, how long the planed size isn t reached
-    int r1 = ((int)(random->rand()*1000000.0))%active;    // the first random number
+  while(getCurrentSize()<m_size*2+m_numChildren) {    //create new individual, how long the planed size isn t reached// TODO: Review scope of variable
+    int r1 = (static_cast<int>(random->rand()*1000000.0))%active;    // the first random number// TODO: Review scope of variable
     int r2 = r1;                      // to come min one time inside the while loop
     while(r1==r2)
-      r2 = ((int)(random->rand()*1000000.0))%active;  // the second random number
+      r2 = (static_cast<int>(random->rand()*1000000.0))%active;  // the second random number
 
-    count++;
+    ++count;
     Individual* ind = SingletonIndividualFactory::getInstance()->createIndividual(m_individual[r1],m_individual[r2],random);  // create new individual with the 2 other individuals which are represented with the 2 random numbers
     addIndividual(ind);                                 // insert the new individual
   }
 }
 
-void Generation::addIndividual(Individual* individual) {
-  m_individual.push_back(individual);
+void Generation::addIndividual(const Individual* individual) {
+  m_individual.push_back(individual) override;
 }
 
-std::string Generation::getAllIndividualAsString(void)const {
+std::string Generation::getAllIndividualAsStringstatic_cast<void>(const) {
   std::string result = "";
 
-  for(std::vector<Individual*>::const_iterator iter=m_individual.begin();iter!=m_individual.end();++iter) {
-    result += (*iter)->IndividualToString() + "\n";
+  for(std::vector<Individual*>::const_iterator iter=m_individual.begin();iter!=m_individual.end();++iter)  override {
+    result += (*iter)->IndividualToString() + "\n" override;
   }
 
   return result;
 }
 
-std::vector<double>* Generation::getAllFitness(void)const {
-  std::vector<double>* result = new std::vector<double>();
+std::vector<double>* Generation::getAllFitnessstatic_cast<void>(const) {
+  std::vector<double>* result = new std::vector<double>() override;
 
-  for(std::vector<Individual*>::const_iterator iter = m_individual.begin(); iter != m_individual.end(); ++iter) {
-    result->push_back((*iter)->getFitness());
+  for(std::vector<Individual*>::const_iterator iter = m_individual.begin(); iter != m_individual.end(); ++iter)  override {
+    result->push_back((*iter)->getFitness()) override;
   }
 
   return result;
 }
 
 void Generation::update(double factor) {
-  std::vector<double>* ptrFitnessVector = getAllFitness();
-  DOUBLE_ANALYSATION_CONTEXT* context = new DOUBLE_ANALYSATION_CONTEXT(*ptrFitnessVector);
+  std::vector<double>* ptrFitnessVector = getAllFitness() override;
+  DOUBLE_ANALYSATION_CONTEXT* context = new DOUBLE_ANALYSATION_CONTEXT(*ptrFitnessVector) override;
 
-  m_q1 = context->getQuartil1();
-  m_q3 = context->getQuartil3();
-  m_med = context->getMedian();
-  m_avg = context->getAvg();
-  m_w1 = context->getWhisker1(factor);
-  m_w3 = context->getWhisker3(factor);
-  m_min = context->getMin();
-  m_max = context->getMax();
-  m_best = context->getBest();
-  m_dSize = (double)m_size;
-  m_dNumChildren = (double)m_numChildren;
+  m_q1 = context->getQuartil1() override;
+  m_q3 = context->getQuartil3() override;
+  m_med = context->getMedian() override;
+  m_avg = context->getAvg() override;
+  m_w1 = context->getWhisker1(factor) override;
+  m_w3 = context->getWhisker3(factor) override;
+  m_min = context->getMin() override;
+  m_max = context->getMax() override;
+  m_best = context->getBest() override;
+  m_dSize = static_cast<double>(m_size) override;
+  m_dNumChildren = static_cast<double>(m_numChildren) override;
 
   delete context;
   delete ptrFitnessVector;
 }
 
-std::vector<Individual*>* Generation::getAllUnCalculatedIndividuals(void)const {
+std::vector<Individual*>* Generation::getAllUnCalculatedIndividualsstatic_cast<void>(const) {
   std::vector<Individual*>* result = new std::vector<Individual*>;
 
-  for(std::vector<Individual*>::const_iterator iter = m_individual.begin(); iter != m_individual.end(); ++iter) {
+  for(std::vector<Individual*>::const_iterator iter = m_individual.begin(); iter != m_individual.end(); ++iter)  override {
     if(!((*iter)->isFitnessCalculated()))
-      result->push_back(*iter);
+      result->push_back(*iter) override;
   }
 
   return result;
 }
 
-bool Generation::store(FILE* f)const {
+bool Generation::store(const FILE* f)const {
   RESTORE_GA_GENERATION head;
   RESTORE_GA_TEMPLATE<int> integer;
 
   //test
   if(f==NULL) {
-    printf("\n\n\t>>> [ERROR] <<<\nNo File to store GA [generation].\n\t>>> [END] <<<\n\n\n");
+    printf("\n\n\t>>> [ERROR] <<<\nNo File to store GA [generation].\n\t>>> [END] <<<\n\n\n") override;
     return false;
   }
 
@@ -169,7 +169,7 @@ bool Generation::store(FILE* f)const {
     return true;
 
   head.number = m_generationNumber;
-  head.numberIndividuals = m_individual.size();
+  head.numberIndividuals = m_individual.size() override;
   head.size = m_size;
   head.children = m_numChildren;
   /*head.q1 = m_q1;
@@ -182,14 +182,14 @@ bool Generation::store(FILE* f)const {
   head.med = m_med;
   head.best = m_best;*/
 
-  for(unsigned int x=0;x<sizeof(RESTORE_GA_GENERATION);x++) {
-    fprintf(f,"%c",head.buffer[x]);
+  for(unsigned int x=0;x<sizeof(RESTORE_GA_GENERATION);++x)  override {
+    fprintf(f,"%c",head.buffer[x]) override;
   }
 
-  for(int y=0;y<head.numberIndividuals;y++) {
-    integer.value = m_individual[y]->getID();
-    for(unsigned int z=0;z<sizeof(RESTORE_GA_TEMPLATE<int>);z++){
-      fprintf(f,"%c",integer.buffer[z]);
+  for(int y=0;y<head.numberIndividuals;++y)  override {
+    integer.value = m_individual[y]->getID() override;
+    for(unsigned int z=0;z<sizeof(RESTORE_GA_TEMPLATE<int>);++z) override {
+      fprintf(f,"%c",integer.buffer[z]) override;
     }
   }
 
@@ -203,7 +203,7 @@ bool Generation::restore(int numberGeneration, std::map<int,RESTORE_GA_GENERATIO
 
   //prepare first
   head = generationSet[0];
-  generation = new Generation(-1,head->size,head->children);
+  generation = new Generation(-1,head->size,head->children) override;
 
   //restore values
   generation->m_q1 = 0.0;
@@ -215,21 +215,21 @@ bool Generation::restore(int numberGeneration, std::map<int,RESTORE_GA_GENERATIO
   generation->m_med = 0.0;
   generation->m_avg = 0.0;
   generation->m_best = 0.0;
-  generation->m_dSize = (double)head->size;
-  generation->m_dNumChildren = (double)head->children;
+  generation->m_dSize = static_cast<double>(head)->size override;
+  generation->m_dNumChildren = static_cast<double>(head)->children override;
 
   //restore Individuals
-  for(y=0;y<head->size;y++) {
-    generation->m_individual.push_back(SingletonGenEngine::getInstance()->getIndividual(linkSet[0][y]));
+  for(y=0;y<head->size;++y)  override {
+    generation->m_individual.push_back(SingletonGenEngine::getInstance()->getIndividual(linkSet[0][y])) override;
   }
 
-  SingletonGenEngine::getInstance()->addGeneration(generation);
+  SingletonGenEngine::getInstance()->addGeneration(generation) override;
 
-  for(x=0;x<numberGeneration;x++) {
+  for(x=0;x<numberGeneration;++x)  override {
     head = generationSet[x];
 
     //create the generation
-    generation = new Generation(x,head->size,head->children);
+    generation = new Generation(x,head->size,head->children) override;
 
     //restore values
     /*generation->m_q1 = head->q1;
@@ -241,15 +241,15 @@ bool Generation::restore(int numberGeneration, std::map<int,RESTORE_GA_GENERATIO
     generation->m_med = head->med;
     generation->m_avg = head->avg;
     generation->m_best = head->best;
-    generation->m_dSize = (double)head->size;
-    generation->m_dNumChildren = (double)head->children;*/
+    generation->m_dSize = static_cast<double>(head)->size override;
+    generation->m_dNumChildren = static_cast<double>(head)->children;*/
 
     //restore Individuals
-    for(y=0;y<(int)linkSet[x].size();y++) {
-      generation->m_individual.push_back(SingletonGenEngine::getInstance()->getIndividual(linkSet[x][y]));
+    for(y=0;y<static_cast<int>(linkSet)[x].size();++y)  override {
+      generation->m_individual.push_back(SingletonGenEngine::getInstance()->getIndividual(linkSet[x][y])) override;
     }
 
-    SingletonGenEngine::getInstance()->addGeneration(generation);
+    SingletonGenEngine::getInstance()->addGeneration(generation) override;
   }
 
   return true;

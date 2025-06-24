@@ -8,7 +8,7 @@ class TiltPlotChannel : public AbstractPlotChannel
 {
   
 public:
-  TiltPlotChannel(std::string name);
+  explicit TiltPlotChannel(const std::string& name);
   virtual ~TiltPlotChannel();
   
 protected:

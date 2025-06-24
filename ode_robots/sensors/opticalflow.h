@@ -41,13 +41,10 @@ namespace lpzrobots {
     /** maximum fraction of the image dimension to consider for 
         a possible flow. Larger values increase the computational demand and move the
         points more to the center (since we don't want edge effects)*/
-    double maxFlow; 
-    /** size (edge length) of the measurement field (block) in pixel 
+    /** size (edge length) of the measurement field static_cast<block>(in) pixel 
         (if 0 then 1/12th of width) */
-    int fieldSize; 
     /** verbosity level 
         (0: quite, 1: initialization values, 2: warnings, 3: info, 4: debug) */
-    int verbose; 
   };
 
   /** This CameraSensor calculates the optical flow at few points of the image
@@ -60,20 +57,18 @@ namespace lpzrobots {
     struct Vec2i {
       Vec2i() : x(0), y(0) {}
       Vec2i(int x, int y) : x(x), y(y) {}
-      int x;
-      int y;
-      Vec2i operator + (const Vec2i& v) const;
-      Vec2i operator * (int i) const;
-      Vec2i operator / (int i) const;
+      Vec2i operator + (const Vec2i& v) const override;
+      Vec2i operator * (int i) const override;
+      Vec2i operator / (int i) const override;
     };
 
     typedef std::list< std::pair<Vec2i,int> > FlowDelList;
 
     /** @see CameraSensor for further parameter explanation.
      */
-    OpticalFlow(OpticalFlowConf conf = getDefaultConf());
+    OpticalFlow(OpticalFlowConf conf = getDefaultConf()) override;
 
-    virtual ~OpticalFlow() override;
+    virtual ~OpticalFlow();
 
     /** calculates default positions for optical flow detection.
         The points are in aranged horizontally in a line at the vertical center.
@@ -83,7 +78,7 @@ namespace lpzrobots {
     static std::list<Pos> getDefaultPoints(int num);
 
     /// the default config has 2 points in and calculates the flow in X and Y
-    static OpticalFlowConf getDefaultConf(){
+    static OpticalFlowConf getDefaultConf() const {
       OpticalFlowConf c;
       c.dims    = XY;
       c.points  = getDefaultPoints(2);
@@ -93,12 +88,12 @@ namespace lpzrobots {
       return c;
     }
 
-    virtual void intern_init() override;
+    virtual void intern_init();
     
     /// Performs the calculations
-    virtual bool sense(const GlobalData& globaldata) override;
+    virtual bool sense(const GlobalData& globaldata);
     
-    virtual int getSensorNumber() const {
+    virtual int getSensorNumber() const override {
       return num;
     };
 
@@ -111,7 +106,7 @@ namespace lpzrobots {
        and returns the average absolute difference.
        Field center, size and shift have to be choosen, 
        so that no clipping is required!
-       \param field specifies position(center) of subimage to use for comparison
+       \param field specifies positionstatic_cast<center>(of) subimage to use for comparison
        \param size specifies the size of the field edged in pixels
        \param d_x shift in x direction
        \param d_y shift in y direction   

@@ -35,7 +35,7 @@
  *   stuctural output for neuronviz
  *
  *   Revision 1.1  2007/12/11 14:22:09  martius
- *   new (old) controller update only with backprop steps
+ *   new static_cast<old>(controller) update only with backprop steps
  *   and complex nets
  *
  *                                            *
@@ -51,15 +51,15 @@
 #include <vector>
 
 struct DerLinUniversConf {
-  unsigned int buffersize; ///< buffersize size of the time-buffer for x,y,v
-  double init;             ///<  init size of the matrices of the network.
-  double squashsize;       ///< update squashing
-  bool someInternalParams; ///< someInternalParams if true only some internal parameters are
+  unsigned int buffersize = 0; ///< buffersize size of the time-buffer for x,y,v
                            ///< exported, all otherwise
 
   Elman* net;     ///< entire contoller network (should have at least 2 layers)
-  int motorlayer; ///< index of motor layer in the network (if -1 then one but last layer)
-};
+
+  double init = 1.0;
+  double squashsize = 0.05;
+  bool someInternalParams = true;
+  int motorlayer = -1;};
 
 /**
  * class for robot control with sine and cosine
@@ -68,8 +68,8 @@ struct DerLinUniversConf {
  */
 class DerLinUnivers : public AbstractController {
 public:
-  explicit DerLinUnivers(const DerLinUniversConf& conf = getDefaultConf());
-  virtual ~DerLinUnivers() override;
+  DerLinUnivers(const DerLinUniversConf& conf = getDefaultConf());
+  virtual ~DerLinUnivers();
 
   static DerLinUniversConf getDefaultConf() {
     DerLinUniversConf c;
@@ -95,7 +95,7 @@ public:
     return c;
   }
 
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
 
   virtual int getSensorNumber() const override {
     return number_sensors;
@@ -108,12 +108,12 @@ public:
   virtual void step(const sensor* sensors,
                     int sensornumber,
                     motor* motors,
-                    int motornumber) override;
+                    int motornumber);
 
   virtual void stepNoLearning(const sensor*,
                               int number_sensors,
                               motor*,
-                              int number_motors) override;
+                              int number_motors);
 
 protected:
   /** puts the sensors in the ringbuffer,
@@ -143,18 +143,18 @@ public:
   /********* INSPECTABLE INTERFACE ******/
   virtual std::list<iparamkey> getInternalParamNames() const override;
   virtual std::list<iparamval> getInternalParams() const override;
-  virtual ilayerlist getStructuralLayers() const override;
-  virtual iconnectionlist getStructuralConnections() const override;
+  virtual ilayerlist getStructuralLayers() const;
+  virtual iconnectionlist getStructuralConnections() const;
 
   /********* STORABLE INTERFACE ******/
   virtual bool store(FILE* f) const override;
-  virtual bool restore(FILE* f) override;
+  virtual bool restore(FILE* f);
 
 protected:
-  unsigned int t;
-  unsigned int number_sensors;
-  unsigned int number_motors;
-  bool initialised;
+  unsigned int t = 0;
+  unsigned int number_sensors = 0;
+  unsigned int number_motors = 0;
+  bool initialised = false;
 
   DerLinUniversConf conf;
   matrix::Matrix* x_buffer;

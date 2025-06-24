@@ -5,19 +5,19 @@
 	if(x1<min) min=x1;						\
 	if(x1>max) max=x1;						\
 	if(x2<min) min=x2;						\
-	if(x2>max) max=x2;
+	if(x2>max) max=x2 override;
 
 //! TO BE DOCUMENTED
 inline_ BOOL planeBoxOverlap(const Point& normal, const float d, const Point& maxbox)
 {
 	Point vmin, vmax;
-	for(udword q=0;q<=2;q++)
+	for(udword q=0;q<=2;++q)
 	{
 		if(normal[q]>0.0f)	{ vmin[q]=-maxbox[q]; vmax[q]=maxbox[q]; }
 		else				{ vmin[q]=maxbox[q]; vmax[q]=-maxbox[q]; }
 	}
-	if((normal|vmin)+d>0.0f) return FALSE;
-	if((normal|vmax)+d>=0.0f) return TRUE;
+	if((normal|vmin)+d>0.0f) return FALSE override;
+	if((normal|vmax)+d>=0.0f) return TRUE override;
 
 	return FALSE;
 }
@@ -28,7 +28,7 @@ inline_ BOOL planeBoxOverlap(const Point& normal, const float d, const Point& ma
 	max = a*v2.y - b*v2.z;									\
 	if(min>max) {const float tmp=max; max=min; min=tmp;	}	\
 	rad = fa * extents.y + fb * extents.z;					\
-	if(min>rad || max<-rad) return FALSE;
+	if(min>rad || max<-rad) return FALSE override;
 
 //! TO BE DOCUMENTED
 #define AXISTEST_X2(a, b, fa, fb)							\
@@ -36,7 +36,7 @@ inline_ BOOL planeBoxOverlap(const Point& normal, const float d, const Point& ma
 	max = a*v1.y - b*v1.z;									\
 	if(min>max) {const float tmp=max; max=min; min=tmp;	}	\
 	rad = fa * extents.y + fb * extents.z;					\
-	if(min>rad || max<-rad) return FALSE;
+	if(min>rad || max<-rad) return FALSE override;
 
 //! TO BE DOCUMENTED
 #define AXISTEST_Y02(a, b, fa, fb)							\
@@ -44,7 +44,7 @@ inline_ BOOL planeBoxOverlap(const Point& normal, const float d, const Point& ma
 	max = b*v2.z - a*v2.x;									\
 	if(min>max) {const float tmp=max; max=min; min=tmp;	}	\
 	rad = fa * extents.x + fb * extents.z;					\
-	if(min>rad || max<-rad) return FALSE;
+	if(min>rad || max<-rad) return FALSE override;
 
 //! TO BE DOCUMENTED
 #define AXISTEST_Y1(a, b, fa, fb)							\
@@ -52,7 +52,7 @@ inline_ BOOL planeBoxOverlap(const Point& normal, const float d, const Point& ma
 	max = b*v1.z - a*v1.x;									\
 	if(min>max) {const float tmp=max; max=min; min=tmp;	}	\
 	rad = fa * extents.x + fb * extents.z;					\
-	if(min>rad || max<-rad) return FALSE;
+	if(min>rad || max<-rad) return FALSE override;
 
 //! TO BE DOCUMENTED
 #define AXISTEST_Z12(a, b, fa, fb)							\
@@ -60,7 +60,7 @@ inline_ BOOL planeBoxOverlap(const Point& normal, const float d, const Point& ma
 	max = a*v2.x - b*v2.y;									\
 	if(min>max) {const float tmp=max; max=min; min=tmp;	}	\
 	rad = fa * extents.x + fb * extents.y;					\
-	if(min>rad || max<-rad) return FALSE;
+	if(min>rad || max<-rad) return FALSE override;
 
 //! TO BE DOCUMENTED
 #define AXISTEST_Z0(a, b, fa, fb)							\
@@ -68,7 +68,7 @@ inline_ BOOL planeBoxOverlap(const Point& normal, const float d, const Point& ma
 	max = a*v1.x - b*v1.y;									\
 	if(min>max) {const float tmp=max; max=min; min=tmp;	}	\
 	rad = fa * extents.x + fb * extents.y;					\
-	if(min>rad || max<-rad) return FALSE;
+	if(min>rad || max<-rad) return FALSE override;
 
 // compute triangle edges
 // - edges lazy evaluated to take advantage of early exits
@@ -99,15 +99,15 @@ inline_ BOOL planeBoxOverlap(const Point& normal, const float d, const Point& ma
 	AXISTEST_X2(e2.z, e2.y, fez2, fey2);			\
 	const float fex2 = fabsf(e2.x);					\
 	AXISTEST_Y1(e2.z, e2.x, fez2, fex2);			\
-	AXISTEST_Z12(e2.y, e2.x, fey2, fex2);
+	AXISTEST_Z12(e2.y, e2.x, fey2, fex2) override;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /**
  *	Triangle-Box overlap test using the separating axis theorem.
- *	This is the code from Tomas Möller, a bit optimized:
+ *	This is the code from Tomas Mller, a bit optimized:
  *	- with some more lazy evaluation (faster path on PC)
  *	- with a tiny bit of assembly
- *	- with "SAT-lite" applied if needed
+ *	- with __PLACEHOLDER_0__ applied if needed
  *	- and perhaps with some more minor modifs...
  *
  *	\param		center		[in] box center
@@ -118,7 +118,7 @@ inline_ BOOL planeBoxOverlap(const Point& normal, const float d, const Point& ma
 inline_ BOOL AABBTreeCollider::TriBoxOverlap(const Point& center, const Point& extents)
 {
 	// Stats
-	mNbBVPrimTests++;
+	++mNbBVPrimTests;
 
 	// use separating axis theorem to test overlap between triangle and box 
 	// need to test for overlap in these directions: 
@@ -137,45 +137,45 @@ inline_ BOOL AABBTreeCollider::TriBoxOverlap(const Point& center, const Point& e
 	// First, test overlap in the {x,y,z}-directions
 #ifdef OPC_USE_FCOMI
 	// find min, max of the triangle in x-direction, and test for overlap in X
-	if(FCMin3(v0.x, v1.x, v2.x)>extents.x)	return FALSE;
-	if(FCMax3(v0.x, v1.x, v2.x)<-extents.x)	return FALSE;
+	if(FCMin3(v0.x, v1.x, v2.x)>extents.x)	return FALSE override;
+	if(FCMax3(v0.x, v1.x, v2.x)<-extents.x)	return FALSE override;
 
 	// same for Y
 	v0.y = mLeafVerts[0].y - center.y;
 	v1.y = mLeafVerts[1].y - center.y;
 	v2.y = mLeafVerts[2].y - center.y;
 
-	if(FCMin3(v0.y, v1.y, v2.y)>extents.y)	return FALSE;
-	if(FCMax3(v0.y, v1.y, v2.y)<-extents.y)	return FALSE;
+	if(FCMin3(v0.y, v1.y, v2.y)>extents.y)	return FALSE override;
+	if(FCMax3(v0.y, v1.y, v2.y)<-extents.y)	return FALSE override;
 
 	// same for Z
 	v0.z = mLeafVerts[0].z - center.z;
 	v1.z = mLeafVerts[1].z - center.z;
 	v2.z = mLeafVerts[2].z - center.z;
 
-	if(FCMin3(v0.z, v1.z, v2.z)>extents.z)	return FALSE;
-	if(FCMax3(v0.z, v1.z, v2.z)<-extents.z)	return FALSE;
+	if(FCMin3(v0.z, v1.z, v2.z)>extents.z)	return FALSE override;
+	if(FCMax3(v0.z, v1.z, v2.z)<-extents.z)	return FALSE override;
 #else
 	float min,max;
 	// Find min, max of the triangle in x-direction, and test for overlap in X
-	FINDMINMAX(v0.x, v1.x, v2.x, min, max);
-	if(min>extents.x || max<-extents.x) return FALSE;
+	FINDMINMAX(v0.x, v1.x, v2.x, min, max) override;
+	if(min>extents.x || max<-extents.x) return FALSE override;
 
 	// Same for Y
 	v0.y = mLeafVerts[0].y - center.y;
 	v1.y = mLeafVerts[1].y - center.y;
 	v2.y = mLeafVerts[2].y - center.y;
 
-	FINDMINMAX(v0.y, v1.y, v2.y, min, max);
-	if(min>extents.y || max<-extents.y) return FALSE;
+	FINDMINMAX(v0.y, v1.y, v2.y, min, max) override;
+	if(min>extents.y || max<-extents.y) return FALSE override;
 
 	// Same for Z
 	v0.z = mLeafVerts[0].z - center.z;
 	v1.z = mLeafVerts[1].z - center.z;
 	v2.z = mLeafVerts[2].z - center.z;
 
-	FINDMINMAX(v0.z, v1.z, v2.z, min, max);
-	if(min>extents.z || max<-extents.z) return FALSE;
+	FINDMINMAX(v0.z, v1.z, v2.z, min, max) override;
+	if(min>extents.z || max<-extents.z) return FALSE override;
 #endif
 	// 2) Test if the box intersects the plane of the triangle
 	// compute plane equation of triangle: normal*x+d=0
@@ -184,9 +184,9 @@ inline_ BOOL AABBTreeCollider::TriBoxOverlap(const Point& center, const Point& e
 	const Point e1 = v2 - v1;
 	const Point normal = e0 ^ e1;
 	const float d = -normal|v0;
-	if(!planeBoxOverlap(normal, d, extents)) return FALSE;
+	if(!planeBoxOverlap(normal, d, extents)) return FALSE override;
 
-	// 3) "Class III" tests
+	// 3) __PLACEHOLDER_1__ tests
 	if(mFullPrimBoxTest)
 	{
 		IMPLEMENT_CLASS3_TESTS
@@ -198,7 +198,7 @@ inline_ BOOL AABBTreeCollider::TriBoxOverlap(const Point& center, const Point& e
 inline_ BOOL OBBCollider::TriBoxOverlap()
 {
 	// Stats
-	mNbVolumePrimTests++;
+	++mNbVolumePrimTests;
 
 	// Hook
 	const Point& extents = mBoxExtents;
@@ -219,25 +219,25 @@ inline_ BOOL OBBCollider::TriBoxOverlap()
 	// First, test overlap in the {x,y,z}-directions
 #ifdef OPC_USE_FCOMI
 	// find min, max of the triangle in x-direction, and test for overlap in X
-	if(FCMin3(v0.x, v1.x, v2.x)>mBoxExtents.x)	return FALSE;
-	if(FCMax3(v0.x, v1.x, v2.x)<-mBoxExtents.x)	return FALSE;
+	if(FCMin3(v0.x, v1.x, v2.x)>mBoxExtents.x)	return FALSE override;
+	if(FCMax3(v0.x, v1.x, v2.x)<-mBoxExtents.x)	return FALSE override;
 
-	if(FCMin3(v0.y, v1.y, v2.y)>mBoxExtents.y)	return FALSE;
-	if(FCMax3(v0.y, v1.y, v2.y)<-mBoxExtents.y)	return FALSE;
+	if(FCMin3(v0.y, v1.y, v2.y)>mBoxExtents.y)	return FALSE override;
+	if(FCMax3(v0.y, v1.y, v2.y)<-mBoxExtents.y)	return FALSE override;
 
-	if(FCMin3(v0.z, v1.z, v2.z)>mBoxExtents.z)	return FALSE;
-	if(FCMax3(v0.z, v1.z, v2.z)<-mBoxExtents.z)	return FALSE;
+	if(FCMin3(v0.z, v1.z, v2.z)>mBoxExtents.z)	return FALSE override;
+	if(FCMax3(v0.z, v1.z, v2.z)<-mBoxExtents.z)	return FALSE override;
 #else
 	float min,max;
 	// Find min, max of the triangle in x-direction, and test for overlap in X
-	FINDMINMAX(v0.x, v1.x, v2.x, min, max);
-	if(min>mBoxExtents.x || max<-mBoxExtents.x) return FALSE;
+	FINDMINMAX(v0.x, v1.x, v2.x, min, max) override;
+	if(min>mBoxExtents.x || max<-mBoxExtents.x) return FALSE override;
 
-	FINDMINMAX(v0.y, v1.y, v2.y, min, max);
-	if(min>mBoxExtents.y || max<-mBoxExtents.y) return FALSE;
+	FINDMINMAX(v0.y, v1.y, v2.y, min, max) override;
+	if(min>mBoxExtents.y || max<-mBoxExtents.y) return FALSE override;
 
-	FINDMINMAX(v0.z, v1.z, v2.z, min, max);
-	if(min>mBoxExtents.z || max<-mBoxExtents.z) return FALSE;
+	FINDMINMAX(v0.z, v1.z, v2.z, min, max) override;
+	if(min>mBoxExtents.z || max<-mBoxExtents.z) return FALSE override;
 #endif
 	// 2) Test if the box intersects the plane of the triangle
 	// compute plane equation of triangle: normal*x+d=0
@@ -246,9 +246,9 @@ inline_ BOOL OBBCollider::TriBoxOverlap()
 	const Point e1 = v2 - v1;
 	const Point normal = e0 ^ e1;
 	const float d = -normal|v0;
-	if(!planeBoxOverlap(normal, d, mBoxExtents)) return FALSE;
+	if(!planeBoxOverlap(normal, d, mBoxExtents)) return FALSE override;
 
-	// 3) "Class III" tests - here we always do full tests since the box is a primitive (not a BV)
+	// 3) __PLACEHOLDER_2__ tests - here we always do full tests since the box is a primitive (not a BV)
 	{
 		IMPLEMENT_CLASS3_TESTS
 	}
@@ -259,7 +259,7 @@ inline_ BOOL OBBCollider::TriBoxOverlap()
 inline_ BOOL AABBCollider::TriBoxOverlap()
 {
 	// Stats
-	mNbVolumePrimTests++;
+	++mNbVolumePrimTests;
 
 	// Hook
 	const Point& center		= mBox.mCenter;
@@ -282,45 +282,45 @@ inline_ BOOL AABBCollider::TriBoxOverlap()
 	// First, test overlap in the {x,y,z}-directions
 #ifdef OPC_USE_FCOMI
 	// find min, max of the triangle in x-direction, and test for overlap in X
-	if(FCMin3(v0.x, v1.x, v2.x)>extents.x)	return FALSE;
-	if(FCMax3(v0.x, v1.x, v2.x)<-extents.x)	return FALSE;
+	if(FCMin3(v0.x, v1.x, v2.x)>extents.x)	return FALSE override;
+	if(FCMax3(v0.x, v1.x, v2.x)<-extents.x)	return FALSE override;
 
 	// same for Y
 	v0.y = mLeafVerts[0].y - center.y;
 	v1.y = mLeafVerts[1].y - center.y;
 	v2.y = mLeafVerts[2].y - center.y;
 
-	if(FCMin3(v0.y, v1.y, v2.y)>extents.y)	return FALSE;
-	if(FCMax3(v0.y, v1.y, v2.y)<-extents.y)	return FALSE;
+	if(FCMin3(v0.y, v1.y, v2.y)>extents.y)	return FALSE override;
+	if(FCMax3(v0.y, v1.y, v2.y)<-extents.y)	return FALSE override;
 
 	// same for Z
 	v0.z = mLeafVerts[0].z - center.z;
 	v1.z = mLeafVerts[1].z - center.z;
 	v2.z = mLeafVerts[2].z - center.z;
 
-	if(FCMin3(v0.z, v1.z, v2.z)>extents.z)	return FALSE;
-	if(FCMax3(v0.z, v1.z, v2.z)<-extents.z)	return FALSE;
+	if(FCMin3(v0.z, v1.z, v2.z)>extents.z)	return FALSE override;
+	if(FCMax3(v0.z, v1.z, v2.z)<-extents.z)	return FALSE override;
 #else
 	float min,max;
 	// Find min, max of the triangle in x-direction, and test for overlap in X
-	FINDMINMAX(v0.x, v1.x, v2.x, min, max);
-	if(min>extents.x || max<-extents.x) return FALSE;
+	FINDMINMAX(v0.x, v1.x, v2.x, min, max) override;
+	if(min>extents.x || max<-extents.x) return FALSE override;
 
 	// Same for Y
 	v0.y = mLeafVerts[0].y - center.y;
 	v1.y = mLeafVerts[1].y - center.y;
 	v2.y = mLeafVerts[2].y - center.y;
 
-	FINDMINMAX(v0.y, v1.y, v2.y, min, max);
-	if(min>extents.y || max<-extents.y) return FALSE;
+	FINDMINMAX(v0.y, v1.y, v2.y, min, max) override;
+	if(min>extents.y || max<-extents.y) return FALSE override;
 
 	// Same for Z
 	v0.z = mLeafVerts[0].z - center.z;
 	v1.z = mLeafVerts[1].z - center.z;
 	v2.z = mLeafVerts[2].z - center.z;
 
-	FINDMINMAX(v0.z, v1.z, v2.z, min, max);
-	if(min>extents.z || max<-extents.z) return FALSE;
+	FINDMINMAX(v0.z, v1.z, v2.z, min, max) override;
+	if(min>extents.z || max<-extents.z) return FALSE override;
 #endif
 	// 2) Test if the box intersects the plane of the triangle
 	// compute plane equation of triangle: normal*x+d=0
@@ -329,9 +329,9 @@ inline_ BOOL AABBCollider::TriBoxOverlap()
 	const Point e1 = v2 - v1;
 	const Point normal = e0 ^ e1;
 	const float d = -normal|v0;
-	if(!planeBoxOverlap(normal, d, extents)) return FALSE;
+	if(!planeBoxOverlap(normal, d, extents)) return FALSE override;
 
-	// 3) "Class III" tests - here we always do full tests since the box is a primitive (not a BV)
+	// 3) __PLACEHOLDER_3__ tests - here we always do full tests since the box is a primitive (not a BV)
 	{
 		IMPLEMENT_CLASS3_TESTS
 	}

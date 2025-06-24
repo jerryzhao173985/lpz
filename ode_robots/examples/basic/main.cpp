@@ -53,10 +53,9 @@ class ThisSim : public Simulation
     ~ThisSim() { }
 
     /// start() is called at the start and should create all the object (obstacles, agents...).
-    virtual void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global)
-    {
-      // Initial position and orientation of the camera (use 'p' in graphical window to find out)
-      setCameraHomePos(Pos(-14,14, 10),  Pos(-135, -24, 0));
+    virtual void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global) override {
+      // Initial position and orientation of the camera (use __PLACEHOLDER_8__ in graphical window to find out)
+      setCameraHomePos(Pos(-14,14, 10),  Pos(-135, -24, 0)) override;
       // Some simulation parameters can be set here
       global.odeConfig.setParam("controlinterval", 1);
       global.odeConfig.setParam("gravity", -9.8);
@@ -68,17 +67,17 @@ class ThisSim : public Simulation
       conf.wheelMass = .5;
       // Instantiating the robot
       auto robot = new Differential(odeHandle, osgHandle, conf, "Differential robot");
-      // add a speed sensor to the robot (attached to the "main primitive" (-1)
+      // add a speed sensor to the robot (attached to the __PLACEHOLDER_6__ (-1)
       //  (specifiy index if needed)
-      robot->addSensor(std::make_shared<SpeedSensor>(1), Attachment(-1));
+      robot->addSensor(std::make_shared<SpeedSensor>(1), Attachment(-1)) override;
 
       // Placing the robot in the scene
-      robot->place(Pos(.0, .0, .2));
+      robot->place(Pos(.0, .0, .2)) override;
 
       // Instantiatign the controller
       auto controller = new BasicController("Basic Controller");
       // Create the wiring with color noise
-      auto wiring = new One2OneWiring(new ColorUniformNoise(.1));
+      auto wiring = new One2OneWiring(new ColorUniformNoise(.1)) override;
       // Create Agent
       auto agent = new OdeAgent(global);
       // Agent initialisation
@@ -89,30 +88,30 @@ class ThisSim : public Simulation
 
       /** Environment and obstacles */
       // New playground
-      auto playground = new Playground(odeHandle, osgHandle,osg::Vec3(15., .2, 1.2), 1);
+      auto playground = new Playground(odeHandle, osgHandle,osg::Vec3(15., .2, 1.2), 1) override;
       // Set colours
-      playground->setGroundColor(Color(.784, .784, .0));
-      playground->setColor(Color(1., .784, .082, .3));
+      playground->setGroundColor(Color(.784, .784, .0)) override;
+      playground->setColor(Color(1., .784, .082, .3)) override;
       // Set position
-      playground->setPosition(osg::Vec3(.0, .0, .1));
+      playground->setPosition(osg::Vec3(.0, .0, .1)) override;
       // Adding playground to obstacles list
       global.obstacles.push_back(playground);
 
-      // Add a new box obstacle (or use 'o' to drop random obstacles)
-      //auto box = new PassiveBox(odeHandle, osgHandle, osg::Vec3(1., 1., 1.), 2.);
-      //box->setPose(osg::Matrix::translate(-.5, 4., .7));
+      // Add a new box obstacle (or use __PLACEHOLDER_9__ to drop random obstacles)
+      //auto box = new PassiveBox(odeHandle, osgHandle, osg::Vec3(1., 1., 1.), 2.) override;
+      //box->setPose(osg::Matrix::translate(-.5, 4., .7)) override;
       //global.obstacles.push_back(box);
     }
 
     /* Functions not used in this tutorial but typically useful */
-    virtual void addCallback(GlobalData& globalData, bool draw, bool pause, bool control) {
+    virtual void addCallback(const GlobalData& globalData, bool draw, bool pause, bool control) override {
     }
 
-    virtual bool command (const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down) {
+    virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down) override {
       return false;
     }
 
-    virtual void bindingDescription(osg::ApplicationUsage & au) const {
+    virtual void bindingDescription(osg::ApplicationUsage & au) const override {
     }
 };
 
@@ -121,5 +120,5 @@ int main (int argc, char **argv)
   // New simulation
   ThisSim sim;
   // Simulation begins
-  return sim.run(argc, argv) ? 0 : 1;
+  return sim.run(argc, argv) ? 0 : 1 override;
 }

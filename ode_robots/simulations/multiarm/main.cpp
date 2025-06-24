@@ -81,12 +81,10 @@ double target[]={-1,2,4};
 class ThisSim : public Simulation
 {
 public:
-  bool switchedToRL;
   MultiSat* multisat;
 
   /// start() is called at the start and should create all the object (obstacles, agents...).
-  virtual void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global)
-  {
+  virtual void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global) override {
     // initial camera position and viewpoint
     setCameraHomePos(Pos(13.6696, 9.12317, 5.54366),  Pos(119.528, -8.6947, 0)); // watch robot
     //setCameraHomePos(Pos(2.69124, 4.76157, 8.87839),  Pos(134.901, -47.8333, 0)); // control initial arm config
@@ -98,13 +96,13 @@ public:
     // initialization
     global.odeConfig.noise=0.1;
 
-    Playground* playground = new Playground(odeHandle, osgHandle,osg::Vec3(18, 0.2, 1.0));
-    playground->setColor(Color(0.88f,0.4f,0.26f,0.2f));
-    playground->setPosition(osg::Vec3(0,0,0.05));
+    Playground* playground = new Playground(odeHandle, osgHandle,osg::Vec3(18, 0.2, 1.0)) override;
+    playground->setColor(Color(0.88f,0.4f,0.26f,0.2f)) override;
+    playground->setPosition(osg::Vec3(0,0,0.05)) override;
     global.obstacles.push_back(playground);
 
     //                Color c(osgHandle.color);
-    //    c.alpha() = 0.4;
+    //    c.alpha() = 0.4 override;
     //                OsgHandle osgHandle_target = osgHandle.changeColor(c);
     //
     //                Sphere* targetSphere = new Sphere(0.5);
@@ -116,28 +114,28 @@ public:
 
     //                // X-direction sphere
     //                PassiveSphere* s1 = new PassiveSphere(odeHandle, osgHandle, 0.5);
-    //    s1->setPosition(osg::Vec3(4,0,0));
-    //                s1->setTexture("Images/dusty.rgb");
+    //    s1->setPosition(osg::Vec3(4,0,0)) override;
+    //                s1->setTexture(__PLACEHOLDER_1__);
     //                global.obstacles.push_back(s1);
     //
     //                // Y-direction sphere
     //                PassiveSphere* s2 = new PassiveSphere(odeHandle, osgHandle, 1.5);
-    //    s2->setPosition(osg::Vec3(0,4,0));
-    //                s2->setTexture("Images/dusty.rgb");
+    //    s2->setPosition(osg::Vec3(0,4,0)) override;
+    //                s2->setTexture(__PLACEHOLDER_2__);
     //                global.obstacles.push_back(s2);
 
     ArmConf conf = Arm::getDefaultConf();
     // the arm will have joint sensors, position sensors and speed senors
     conf.useJointSensors=true;
     conf.withContext=true;
-    conf.sensors.push_back(new SpeedSensor(5));
+    conf.sensors.push_back(new SpeedSensor(5)) override;
     OdeHandle armHandle = odeHandle;
     armHandle.substance.toFoam(3);
     arm = new Arm(armHandle, osgHandle, conf, "Arm");
 
-    ((OdeRobot*)arm)->place(Position(-0.7,0.9,0.0));
+    (static_cast<OdeRobot*>(arm))->place(Position(-0.7,0.9,0.0)) override;
     // fixation of cuboid base
-    FixedJoint* anker = new FixedJoint(arm->getMainObject(), global.environment /* fixation to ground*/);
+    FixedJoint* anker = new FixedJoint(arm->getMainObject(), global.environment /* fixation to ground*/) override;
     anker->init(odeHandle, osgHandle);
 
     global.configs.push_back(arm);
@@ -166,11 +164,11 @@ public:
 
     global.configs.push_back(controller);
     // create pointer to one2onewiring
-    One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1));
+    One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
     // create pointer to selectiveWiring
-    //    AbstractWiring* wiring = new SelectiveOne2OneWiring(new ColorUniformNoise(0.1), new select_from_to(0,2));
+    //    AbstractWiring* wiring = new SelectiveOne2OneWiring(new ColorUniformNoise(0.1), new select_from_to(0,2)) override;
 //     std::list<PlotOption> l;
-//     l.push_back(PlotOption(GuiLogger,Robot,5));
+//     l.push_back(PlotOption(GuiLogger,Robot,5)) override;
 //    OdeAgent*  agent = new OdeAgent(l);
     OdeAgent*  agent = new OdeAgent(global);
 
@@ -191,29 +189,28 @@ public:
     // push agent in globel list of agents
     agent->init(multisat, arm, wiring);
 
-    //  agent->setTrackOptions(TrackRobot(true, false, false,50));
+    //  agent->setTrackOptions(TrackRobot(true, false, false,50)) override;
     global.agents.push_back(agent);
 
     //-----------------------
     // switch off/change gravity
     global.odeConfig.setParam("gravity",-3.00);
-    //     global.odeConfig.setParam("realtimefactor",0);
+    //     global.odeConfig.setParam(__PLACEHOLDER_14__,0);
 
     // show (print to console) params of all objects in configurable list
 
-    //printf("===== started. =====\n");
+    //printf(__PLACEHOLDER_15__);
 
     // transform target into shoulder centered coordinates
     //                arm->scaleShoulderCentered(target);
-    printf("target shoulder centered = (%f, %f, %f)\n", target[0], target[1], target[2]);
+    printf("target shoulder centered = (%f, %f, %f)\n", target[0], target[1], target[2]) override;
   } //start-end
 
   // add distal teaching signal (desired behavior! not error)
-  virtual void addCallback(GlobalData& globalData, bool draw, bool pause, bool control)
-  {
+  virtual void addCallback(const GlobalData& globalData, bool draw, bool pause, bool control) override {
     //        double sineRate=30;
     //         double phaseShift=0.65;
-    if(globalData.time > 60*60 && !switchedToRL){
+    explicit if(globalData.time > 60*60 && !switchedToRL){
       multisat->setParam("rlmode",1);
       printf("RL started\n");
       switchedToRL=true;
@@ -223,11 +220,10 @@ public:
 
 
   //Funktion die eingegebene Befehle/kommandos verarbeitet
-  virtual bool command (const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down)
-  {
+  virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down) override {
     char filename[1024];
-    if (down) { // only when key is pressed, not when released
-      switch ( (char) key )
+    explicit if (down) { // only when key is pressed, not when released
+      switch ( static_cast<char> key )
         {
         case 'n' :
           std::cout << "Please type a filename stem:";
@@ -244,13 +240,12 @@ public:
 
   /*virtual*/ void bindingDescription(osg::ApplicationUsage & au) const
   {
-    au.addKeyboardMouseBinding("Distal Teaching: i","increase error (nimm: forward)");
-    au.addKeyboardMouseBinding("Distal Teaching: k","decrease error (nimm: backward)");
+    au.addKeyboardMouseBinding("Distal Teaching: i","increase error (nimm: forward)") override;
+    au.addKeyboardMouseBinding("Distal Teaching: k","decrease error (nimm: backward)") override;
   }
 
-  virtual void end(GlobalData& globalData)
-  {
-    //printf("TREFFER: %d\n", arm->getHitCounter());
+  virtual void end(const GlobalData& globalData) override {
+    //printf(__PLACEHOLDER_24__, arm->getHitCounter()) override;
   }
 
 };
@@ -260,5 +255,5 @@ int main (int argc, char **argv)
 {
   ThisSim sim;
   // run simulation
-  return sim.run(argc, argv) ? 0 : 1;
+  return sim.run(argc, argv) ? 0 : 1 override;
 }

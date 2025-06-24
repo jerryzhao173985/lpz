@@ -8,7 +8,7 @@
  *   LICENSE:                                                              *
  *   This work is licensed under the Creative Commons                      *
  *   Attribution-NonCommercial-ShareAlike 2.5 License. To view a copy of   *
- *   this license, visit http://creativecommons.org/licenses/by-nc-sa/2.5/ *
+ *   this license, visit http:__PLACEHOLDER_0__
  *   or send a letter to Creative Commons, 543 Howard Street, 5th Floor,   *
  *   San Francisco, California, 94105, USA.                                *
  *                                                                         *
@@ -79,32 +79,32 @@ class InvertNChannelController_NoBias : public InvertController {
 
 public:
   InvertNChannelController_NoBias(int _buffersize, bool _update_only_1=false);
-  virtual void init(int sensornumber, int motornumber) override;
+  virtual void init(int sensornumber, int motornumber);
 
-  virtual ~InvertNChannelController_NoBias() override;
+  virtual ~InvertNChannelController_NoBias();
 
   /// returns the name of the object (with version number)
-  virtual paramkey getName() const {return name; }
+  virtual paramkey getName() const override {return name; }
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
-  virtual int getSensorNumber() const { return number_channels; }
+  virtual int getSensorNumber() const override { return number_channels; }
   /// returns the mumber of motors the controller was initialised with or 0 if not initialised
-  virtual int getMotorNumber() const  { return number_channels; }
+  virtual int getMotorNumber() const override { return number_channels; }
 
   /// performs one step (includes learning).
   /// Calulates motor commands from sensor inputs.
-  virtual void step(const sensor* , int number_sensors, motor* , int number_motors) override;
+  virtual void step(const sensor* , int number_sensors, motor* , int number_motors);
 
 
   /// performs one step without learning. Calulates motor commands from sensor inputs.
   virtual void stepNoLearning(const sensor* , int number_sensors,
-                              motor* , int number_motors) override;
+                              motor* , int number_motors);
 
 
   /***** STOREABLE ****/
   /** stores the controller values to a given file. */
   virtual bool store(FILE* f) const override;
   /** loads the controller values from a given file. */
-  virtual bool restore(FILE* f) override;
+  virtual bool restore(FILE* f);
 
   // inspectable interface
   virtual std::list<iparamkey> getInternalParamNames() const override;
@@ -114,9 +114,9 @@ public:
 
 
 protected:
-  unsigned short number_channels;
-  unsigned short buffersize;
-  bool update_only_1;
+  unsigned short number_channels = 0;
+  unsigned short buffersize = 0;
+  bool update_only_1 = false;
 
   matrix::Matrix A; // Model Matrix
   matrix::Matrix C; // Controller Matrix
@@ -124,26 +124,26 @@ protected:
   matrix::Matrix L; // Jacobi Matrix
   matrix::Matrix* x_buffer;
   matrix::Matrix* y_buffer;
-  int t;
+  int t = 0;
   paramkey name;
 
 
 /*   virtual void iteration(double *column, */
 /*                          double dommy[NUMBER_CHANNELS][NUMBER_CHANNELS], */
-/*                          double *improvment) override; */
+/*                          double *improvment); */
 
-  virtual double calculateE(const matrix::Matrix& x_delay, const matrix::Matrix& y_delay) override;
+  virtual double calculateE(const matrix::Matrix& x_delay, const matrix::Matrix& y_delay);
 
   /// learn values h,C
-  virtual void learn(const matrix::Matrix& x_delay, const matrix::Matrix& y_delay) override;
+  virtual void learn(const matrix::Matrix& x_delay, const matrix::Matrix& y_delay);
 
-  virtual void learnmodel( const matrix::Matrix& y_delay) override;
+  virtual void learnmodel( const matrix::Matrix& y_delay);
 
   /// calculate delayed values
   virtual matrix::Matrix calculateDelayedValues(const matrix::Matrix* buffer,
-                                        unsigned int number_steps_of_delay_) override;
+                                        unsigned int number_steps_of_delay_);
   virtual matrix::Matrix calculateSmoothValues(const matrix::Matrix* buffer,
-                                       unsigned int number_steps_for_averaging_) override;
+                                       unsigned int number_steps_for_averaging_);
 
   matrix::Matrix calculateControllerValues(const matrix::Matrix& x_smooth);
 
@@ -170,7 +170,7 @@ protected:
   static double squash(double z)
   {
     return clip(z,-0.1,0.1);
-    //    return z < -0.1 ? -0.1 : ( z > 0.1 ? 0.1 : z );
+    //    return z < -0.1 ? -0.1 : ( z > 0.1 ? 0.1 : z ) override;
     //return 0.1 * tanh(10.0 * z);
   };
 };

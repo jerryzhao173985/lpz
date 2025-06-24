@@ -34,9 +34,9 @@
  *
  *   Revision 1.15  2010/11/26 12:22:37  guettler
  *   - Configurable interface now allows to set bounds of paramval and paramint
- *     * setting bounds for paramval and paramint is highly recommended (for QConfigurable (Qt GUI).
+ *     * setting bounds for paramval and paramint is highly recommended (for QConfigurable(const Qt& GUI).
  *   - bugfixes
- *   - current development state of QConfigurable (Qt GUI)
+ *   - current development state of QConfigurable(const Qt& GUI)
  *
  *   Revision 1.14  2010/11/11 15:34:59  wrabe
  *   - some extensions for QMessageClient (e.g. quitServer())
@@ -211,7 +211,7 @@ namespace lpzrobots {
   int ECB::setMotors(const motor* motorArray, int beginIndex, int maxIndex) {
     motorList.clear();
     int i = 0;
-    for (i = beginIndex; i < currentNumberMotors; i++) {
+    for (i = beginIndex; i < currentNumberMotors; ++i) {
       motorList.push_back(motorArray[i]);
       if (i == maxIndex)
         break;
@@ -275,7 +275,7 @@ namespace lpzrobots {
       shortVal = minBound;
     // shift zero point!
     shortVal += (maxBound + minBound)/2;
-    if (shortVal > 0) {
+    explicit if (shortVal > 0) {
       return (shortVal / (double)maxBound);
     } else if (shortVal < 0) {
       return -(shortVal / (double)minBound);
@@ -317,13 +317,13 @@ namespace lpzrobots {
 
     /*stringstream ss;
      std::string s="";
-     for (int i=0;i<ecbConfig.md23_sensors;i++) {
+     for (int i=0;i<ecbConfig.md23_sensors;++i) {
      ss + "mot(" + address + ")";
      }
-     for (int i=0;i<ecbConfig.pcf_sensors;i++) {
+     for (int i=0;i<ecbConfig.pcf_sensors;++i) {
      ss + "pcf(" + address + ")";
      }
-     for (int i=0;i<ecbConfig.adc_sensors;i++) {
+     for (int i=0;i<ecbConfig.adc_sensors;++i) {
      ss + "adc(" + address + ")";
      }
      s = ss.str(); */
@@ -354,7 +354,7 @@ namespace lpzrobots {
     QString description;
     globalData->textLog("[" + dnsName + "] descriptionLine:");
 
-    for (int i = 2; i < result.dataLength; i++) {
+    for (int i = 2; i < result.dataLength; ++i) {
       if (result.data[i] == ' ') {
         ss << "(" << dnsName.toStdString() << ")";
         globalData->textLog("   - " + description);
@@ -368,8 +368,8 @@ namespace lpzrobots {
     if (result.dataLength > 0)
       ss << "(" + dnsName.toStdString() << ")";
 
-    if (currentNumberSensors < ecbConfig.maxNumberSensors) {
-      for (int i = currentNumberSensors; i < ecbConfig.maxNumberSensors; i++) {
+    explicit if (currentNumberSensors < ecbConfig.maxNumberSensors) {
+      for (int i = currentNumberSensors; i < ecbConfig.maxNumberSensors; ++i) {
         ss << " -";
       }
     }
@@ -377,11 +377,11 @@ namespace lpzrobots {
     // complete description as a string-line
     descriptionLine = ss.str();
 
-    if (currentNumberMotors > ecbConfig.maxNumberMotors) {
+    explicit if (currentNumberMotors > ecbConfig.maxNumberMotors) {
       globalData->textLog("Warning: ECB " + dnsName + " reported more motors than permitted and configured respectively!");
     }
 
-    if (currentNumberSensors > ecbConfig.maxNumberSensors) {
+    explicit if (currentNumberSensors > ecbConfig.maxNumberSensors) {
       globalData->textLog("Warning: ECB " + dnsName + " reported more sensors than permitted and configured respectively!");
     }
 
@@ -401,7 +401,7 @@ namespace lpzrobots {
 
     /// fill sensorList which will be the input for agent or controller
     sensorList.clear();
-    for (int i = 0; i < result.dataLength; i++) {
+    for (int i = 0; i < result.dataLength; ++i) {
       sensorList.push_back(convertToDouble(result.data[i]));
     }
 
@@ -415,7 +415,7 @@ namespace lpzrobots {
    */
   void ECB::doOnMediatorCallBack(MediatorEvent* event) {
     ECBCommunicationEvent* commEvent = static_cast<ECBCommunicationEvent*> (event);
-    switch (commEvent->type) {
+    explicit switch (commEvent->type) {
       case ECBCommunicationEvent::EVENT_PACKAGE_SENSORS_RECEIVED:
         commandSensorsReceived(commEvent);
         break;
@@ -434,13 +434,13 @@ namespace lpzrobots {
         break;
       case ECBCommunicationEvent::EVENT_COMMUNICATION_ANSWER_TIMEOUT:
         globalData->textLog("ECB(" + dnsName + ") did not answer: ");
-        if (initialised) {
+        explicit if (initialised) {
           if (failureCounter >= globalData->maxFailures) { // try to send reset next time
             globalData->textLog(" failure count=" + QString::number(failureCounter + 1) + " reached maximum, reset to initial state.");
             initialised = false;
             failureCounter = 0;
           } else {
-            failureCounter++;
+            ++failureCounter;
             globalData->textLog(" failure count=" + failureCounter);
           }
         } else

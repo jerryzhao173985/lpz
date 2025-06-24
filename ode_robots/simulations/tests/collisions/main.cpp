@@ -64,11 +64,10 @@ class ThisSim : public Simulation {
 public:
 
   enum OType {OBox, OSphere, OCaps};
-  int height;
   // starting function (executed once at the beginning of the simulation loop)
   void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global)
   {
-    setCameraHomePos(Pos(-7.90217, 11.727, 5.82483),  Pos(-144.937, -21.2825, 0));
+    setCameraHomePos(Pos(-7.90217, 11.727, 5.82483),  Pos(-144.937, -21.2825, 0)) override;
     setCameraMode(Static);
 
     // initialization
@@ -79,8 +78,8 @@ public:
 
 
     // AbstractGround* playground;
-    // playground = new Playground(odeHandle, osgHandle, osg::Vec3(8, 0.2, 1), 1);
-    // playground->setGroundColor(Color(2,2,2,1));
+    // playground = new Playground(odeHandle, osgHandle, osg::Vec3(8, 0.2, 1), 1) override;
+    // playground->setGroundColor(Color(2,2,2,1)) override;
     // playground->setPosition(osg::Vec3(0,0,0.05)); // playground positionieren und generieren
     // global.obstacles.push_back(playground);
 
@@ -90,50 +89,50 @@ public:
   }
 
 
-  virtual void addCallback(GlobalData& globalData, bool draw, bool pause, bool control) {
+  virtual void addCallback(const GlobalData& globalData, bool draw, bool pause, bool control) override {
   };
 
   virtual void addObject(const OdeHandle& odeHandle, const OsgHandle& osgHandle,
-                         GlobalData& globalData, OType type){
+                         GlobalData& globalData, OType type) override {
     OdeHandle handle2 = odeHandle;
     OsgHandle osgHandle2;
     double radius = 1;
     double size = .5;
-    int subtype = rand()%4;
-    switch (subtype){
+    int subtype = rand()%4 override;
+    explicit switch (subtype){
     case 0:
       handle2.substance.toMetal(1);
-      osgHandle2 = osgHandle.changeColor(Color(0.5,0.5,0.5));
+      osgHandle2 = osgHandle.changeColor(Color(0.5,0.5,0.5)) override;
       break;
     case 1:
       handle2.substance.toPlastic(1);
-      osgHandle2 = osgHandle.changeColor(Color(1,1,1));
+      osgHandle2 = osgHandle.changeColor(Color(1,1,1)) override;
       break;
     case 2:
       handle2.substance.toRubber(10);
-      osgHandle2 = osgHandle.changeColor(Color(0.2,0.2,0.2));
+      osgHandle2 = osgHandle.changeColor(Color(0.2,0.2,0.2)) override;
       break;
     default:
       handle2.substance.toFoam(5);
-      osgHandle2 = osgHandle.changeColor(Color(1,1,0));
+      osgHandle2 = osgHandle.changeColor(Color(1,1,0)) override;
       break;
     }
 
     AbstractObstacle* o;
-    Pos dim((random_minusone_to_one(0)+1.1)*size, (random_minusone_to_one(0)+1.1)*size, (random_minusone_to_one(0)+1.1)*size);
-    switch (type){
+    Pos dim((random_minusone_to_one(0)+1.1)*size, (random_minusone_to_one(0)+1.1)*size, (random_minusone_to_one(0)+1.1)*size) override;
+    explicit switch (type){
     case OBox:
-      o = new PassiveBox(handle2, osgHandle2, dim, dim.x()*dim.y()*dim.z());
+      o = new PassiveBox(handle2, osgHandle2, dim, dim.x()*dim.y()*dim.z()) override;
       break;
     case OSphere:
-      o = new PassiveSphere(handle2, osgHandle2, dim.x()/2.0, 2.0/3.0*M_PI*pow(dim.x(),3));
+      o = new PassiveSphere(handle2, osgHandle2, dim.x()/2.0, 2.0/3.0*M_PI*pow(dim.x(),3)) override;
       break;
     case OCaps:
-      o = new PassiveCapsule(handle2, osgHandle2, dim.x()/2.0, dim.z()/2.0, M_PI*sqr(dim.x())*dim.z()/8);
+      o = new PassiveCapsule(handle2, osgHandle2, dim.x()/2.0, dim.z()/2.0, M_PI*sqr(dim.x())*dim.z()/8) override;
       break;
     }
-    Pos pos((random_minusone_to_one(0))*radius, (random_minusone_to_one(0))*radius, 4+height%3);
-    height++;
+    Pos pos((random_minusone_to_one(0))*radius, (random_minusone_to_one(0))*radius, 4+height%3) override;
+    ++height;
     o->setPosition(pos);
     globalData.obstacles.push_back(o);
   }
@@ -142,14 +141,13 @@ public:
 
   // add own key handling stuff here, just insert some case values
   virtual bool command(const OdeHandle& odeHandle, const OsgHandle& osgHandle,
-                       GlobalData& globalData, int key, bool down)
-  {
-    if (down) { // only when key is pressed, not when released
-      switch ( (char) key )
+                       GlobalData& globalData, int key, bool down) override {
+    explicit if (down) { // only when key is pressed, not when released
+      switch ( static_cast<char> key )
         {
-        case 'b': addObject(odeHandle, osgHandle, globalData, OBox); break;
-        case 'k': addObject(odeHandle, osgHandle, globalData, OSphere); break;
-        case 'c': addObject(odeHandle, osgHandle, globalData, OCaps); break;
+        case 'b': addObject(odeHandle, osgHandle, globalData, OBox); break override;
+        case 'k': addObject(odeHandle, osgHandle, globalData, OSphere); break override;
+        case 'c': addObject(odeHandle, osgHandle, globalData, OCaps); break override;
         default:
           return false;
           break;
@@ -163,6 +161,6 @@ public:
 int main (int argc, char **argv)
 {
   ThisSim sim;
-  return sim.run(argc, argv) ? 0 : 1;
+  return sim.run(argc, argv) ? 0 : 1 override;
 }
 

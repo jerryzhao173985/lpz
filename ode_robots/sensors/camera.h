@@ -48,15 +48,15 @@ namespace lpzrobots {
 
 
   struct CameraConf {
-    int width;       ///< horizontal resolution (power of 2)
-    int height;      ///< vertical resolution (power of 2)
-    float fov;       ///< field of view in degree (opening angle of lenses)
-    float anamorph;  ///< anamorph ratio of focal length in vertical and horizontal direction
-    float behind;    ///< distance of which the camera is behind the actually drawn position (to aviod near clipping)
-    float draw;      ///< whether to draw a physical camera object
-    float camSize;   ///< size of the physical camera object
-    bool show;       ///< whether to show the image on the screen
-    float scale;     ///< scaling for display
+    int width = 0;       ///< horizontal resolution (power of 2)
+    int height = 0;      ///< vertical resolution (power of 2)
+    float fov = 0;       ///< field of view in degree (opening angle of lenses)
+    float anamorph = 0;  ///< anamorph ratio of focal length in vertical and horizontal direction
+    float behind = 0;    ///< distance of which the camera is behind the actually drawn position (to aviod near clipping)
+    float draw = 0;      ///< whether to draw a physical camera object
+    float camSize = 0;   ///< size of the physical camera object
+    bool show = false;       ///< whether to show the image on the screen
+    float scale = 0;     ///< scaling for display
     std::string name; ///< name of the camera
     ImageProcessors processors; ///< list of image processors that filter the raw image
 
@@ -69,22 +69,21 @@ namespace lpzrobots {
   class Camera {
   public:
     struct PostDrawCallback : public osg::Camera::DrawCallback {
-      PostDrawCallback(Camera* cam):
-        cam(cam) { }
-      virtual void operator () (const osg::Camera& /*camera*/) const;
+      explicit PostDrawCallback(Camera* cam_) : cam(cam_) { }
+      virtual void operator () (const osg::Camera& /*camera*/) const override;
       Camera* cam;
     };
 
 
     /// structure to store the image data and information for display
     struct CameraImage{
-      CameraImage(){};
+      CameraImage(){} override;
       CameraImage(osg::Image* img, bool show, float scale, const std::string& name)
         : img(img), show(show), scale(scale), name(name){
       }
       osg::Image* img;
-      bool show;       ///< whether to show the image on the screen
-      float scale;     ///< scaling for display
+      bool show = false;       ///< whether to show the image on the screen
+      float scale = 0;     ///< scaling for display
       std::string name; ///< name of the image
     };
 
@@ -97,9 +96,9 @@ namespace lpzrobots {
         usually the processors use the last image in this list (result of last processing).
      */
 
-    Camera( const CameraConf& conf = getDefaultConf() );
+    Camera( const CameraConf& conf = getDefaultConf() ) override;
 
-    static CameraConf getDefaultConf(){
+    static CameraConf getDefaultConf() const {
       CameraConf c;
       c.width     = 256;
       c.height    = 128;
@@ -130,15 +129,15 @@ namespace lpzrobots {
     /// relative pose of the camera
     virtual osg::Matrix getPose();
 
-    // virtual bool sense(const GlobalData& globaldata) override;
+    // virtual bool sense(const GlobalData& globaldata);
 
     /// all images (raw and processed)
-    virtual const CameraImages& getImages() const  { return cameraImages;}
+    virtual const CameraImages& getImages() const override { return cameraImages;}
 
     /// last image of processing stack
-    virtual const osg::Image* getImage() const  { return cameraImages.back().img;}
+    virtual const osg::Image* getImage() const override { return cameraImages.back().img;}
 
-    virtual osg::Camera* getRRTCam() { return cam;}
+    virtual osg::Camera* getRRTCam() const { return cam;}
 
     virtual void update();
 

@@ -56,15 +56,15 @@ namespace lpzrobots
     StatLineProperties(int fontSizeTime, int fontSizeText, const std::string& fontColor)
       :fontSizeTime(fontSizeTime), fontSizeText(fontSizeText), fontColor(fontColor) {
     }
-    int fontSizeTime;
-    int fontSizeText;
+    int fontSizeTime = 0;
+    int fontSizeText = 0;
     std::string fontColor;
   };
 
   class Base : public Configurable
   {
   public:
-    Base(const std::string& caption="LpzRobots Simulator (Martius et al)");
+    Base(const std::string& caption="LpzRobots Simulator (Martius et al)") override;
 
     static const int PHYSICS_CALLBACKABLE = 1; //!< called each ode/physics step
     static const int GRAPHICS_CALLBACKABLE = 2; //!< called each osg/draw step
@@ -93,7 +93,7 @@ namespace lpzrobots
      */
     virtual osgShadow::ShadowedScene* createShadowedScene(osg::Node* sceneToShadow, osg::LightSource* lightSource, int shadowType);
 
-    virtual void setGroundTexture(const char* filename) {
+    virtual void setGroundTexture(const char* filename) override {
       this->groundTexture = filename;
     }
 
@@ -106,9 +106,9 @@ namespace lpzrobots
     /// sets the title that is printed in the center of the status line
     virtual void setTitle(const std::string& title);
 
-    virtual StatLineProperties getStatLineProperties() { return statlineprop; }
+    virtual StatLineProperties getStatLineProperties() override { return statlineprop; }
     /// sets the properties of the status line, do it before the scene is initialized
-    virtual void setStatLineProperties(const StatLineProperties& statlineprop){
+    virtual void setStatLineProperties(const StatLineProperties& statlineprop) override {
       this->statlineprop = statlineprop;
     }
 
@@ -164,13 +164,13 @@ namespace lpzrobots
     /// this manager provides methods for displaying statistics on the graphical window!
     HUDStatisticsManager* hUDStatisticsManager;
 
-    int ReceivesShadowTraversalMask;
-    int CastsShadowTraversalMask;
+    int ReceivesShadowTraversalMask = 0;
+    int CastsShadowTraversalMask = 0;
 
     // the types are double because they are configurable and stored to the cfg file
     // int shadow;     // set by child class Simulation, now found in OsgHandle
-    int shadowTexSize;  // set by child class Simulation
-    bool useNVidia;      // unused: if false use ATI Radeon!
+    int shadowTexSize = 0;  // set by child class Simulation
+    bool useNVidia = false;      // unused: if false use ATI Radeon!
 
 
   public:

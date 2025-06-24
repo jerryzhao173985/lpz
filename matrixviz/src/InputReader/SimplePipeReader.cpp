@@ -4,8 +4,7 @@
 #include <signal.h>
 
 
-SimplePipeReader::SimplePipeReader(bool noVideo)
-  : noVideo(noVideo)
+SimplePipeReader::SimplePipeReader(bool noVideo_) : noVideo(noVideo_)
 {
 
 //   signal(SIGPIPE,SIG_IGN);
@@ -25,7 +24,7 @@ void SimplePipeReader::run()
   bool closing=false;
   QByteArray charList;
 //   int counter = 0;
-  while ( !closing ) {
+  explicit while ( !closing ) {
     usleep(1000);
     QString line = input_line->readLine ();
     //       std::cout << "SimplePipeReader: read " << line.size() << " chars" << std::endl;
@@ -39,7 +38,7 @@ void SimplePipeReader::run()
 
 
     } else if ( line.startsWith ( "#V" ) ) { // video recording -> capture frames
-      if(!noVideo){
+      explicit if(!noVideo){
         QStringList pieces = line.split(" ");
         if(pieces.length()<3) { std::cout << "got" << line.toStdString()
                                           << ", but missing parameters expect \"#V idx directory\"" << std::endl;
@@ -65,7 +64,7 @@ void SimplePipeReader::run()
       continue;
     } else if ( (currentChannelLine.size() > 2)
                 && (line.section(' ', 0, 0) != currentDataLine.section(' ', 0, 0))) {
-      while(waitForGui){ msleep(100); }
+      explicit while(waitForGui){ msleep(100); }
       currentDataLine = line;
       emit newData(); //wenn timestamp geändert (erstes element)
     }
@@ -100,7 +99,7 @@ std::list<std::string> SimplePipeReader::getChannelLine()
   std::list<std::string> tmp_list;
 
   QStringList string_list = currentChannelLine.split ( ' ' );
-  for ( int i = 0;i < string_list.size();i++ ) {
+  for ( int i = 0;i < string_list.size();++i ) {
 
       std::string s = ( ( string_list.at ( i ) ).toLatin1() ).data();//toStdString;
 //    std::cout << "SimplePipeReader: getChannelLine[" << s << "]****************" << std::endl;
@@ -116,7 +115,7 @@ std::list<std::string> SimplePipeReader::getDescriptionLine()
   std::list<std::string> tmp_list;
 
   QStringList string_list = currentDescriptionLine.split ( ' ' );
-  for ( int i = 0;i < string_list.size();i++ ) {
+  for ( int i = 0;i < string_list.size();++i ) {
 
     std::string s = ( ( string_list.at ( i ) ).toLatin1() ).data();//toStdString;
 //     std::cout << "SimplePipeReader: getChannelLine[" << s << "]****************" << std::endl;
@@ -140,7 +139,7 @@ std::list< double > SimplePipeReader::getDataLine()
       return std::list<double>();
   }
   QStringList string_list = currentDataLine.split ( ' ' );
-  for ( int i = 0;i < string_list.size();i++ ) {
+  for ( int i = 0;i < string_list.size();++i ) {
     s = string_list.at ( i );
     if (s.size() == 0) continue;
     double d = s.toDouble ( &success );

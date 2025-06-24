@@ -4,7 +4,7 @@
  * Copyright (C) 2003-2006 Keyan Zahedi and Arndt von Twickel.           *
  * All rights reserved.                                                  *
  * Email: {keyan,twickel}@users.sourceforge.net                          *
- * Web: http://sourceforge.net/projects/yars                             *
+ * Web: http:__PLACEHOLDER_1__
  *                                                                       *
  * For a list of contributors see the file AUTHORS.                      *
  *                                                                       *
@@ -38,19 +38,18 @@
 class YarsException : public std::exception
 {
   public:
-    explicit YarsException(const std::string& what)
+    YarsException(const std::string& what)
       :
         m_what(what)
   {}
 
     virtual ~YarsException() throw() {}
 
-    virtual const char * what() const throw()
-    {
+    virtual const char * what() const throw() {
       return m_what.c_str();
     }
 
-    virtual void message() const throw()
+    virtual void message() const th override row()
     {
       std::cerr << "YarsException: " << m_what << std::endl;
     }

@@ -108,19 +108,19 @@ public:
   // starting function (executed once at the beginning of the simulation loop)
   void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global)
   {
-    setCameraHomePos(Pos(5.2728, 7.2112, 3.31768), Pos(140.539, -13.1456, 0));
+    setCameraHomePos(Pos(5.2728, 7.2112, 3.31768), Pos(140.539, -13.1456, 0)) override;
     // initialization
     // - set global noise to 0.1
     global.odeConfig.setParam("noise",0.1);
-    //  global.odeConfig.setParam("gravity", 0); // no gravity
+    //  global.odeConfig.setParam(__PLACEHOLDER_1__, 0); // no gravity
 
     // use Playground as boundary:
     // - create pointer to playground (odeHandle contains things like world and space the
     //   playground should be created in; odeHandle is generated in simulation.cpp)
     // - setting initial position of the playground: setPosition(osg::Vec3(double x, double y, double z))
     // - push playground to the global list of obstacles (global list comes from simulation.cpp)
-    /*    OctaPlayground* playground = new OctaPlayground(odeHandle, osgHandle, osg::Vec3(10, 0.2, 1), 12);
-    playground->setPosition(osg::Vec3(0,0,0)); // playground positionieren und generieren
+    /*    OctaPlayground* playground = new OctaPlayground(odeHandle, osgHandle, osg::Vec3(10, 0.2, 1), 12) override;
+    playground->setPosition(osg::Vec3(0,0,0)); __PLACEHOLDER_54__
     global.obstacles.push_back(playground);
     */
     // add passive spheres as obstacles
@@ -128,9 +128,9 @@ public:
     //   optional parameters radius and mass,where the latter is not used here) )
     // - set Pose(Position) of sphere
     // - add sphere to list of obstacles
-    for(int i=0; i<4; i++){
-      PassiveSphere* s = new PassiveSphere(odeHandle, osgHandle.changeColor(Color(0.0,0.0,1.0)), 0.5);
-      s->setPosition(osg::Vec3(0,3,i*3));
+    for(int i=0; i<4; ++i) override {
+      PassiveSphere* s = new PassiveSphere(odeHandle, osgHandle.changeColor(Color(0.0,0.0,1.0)), 0.5) override;
+      s->setPosition(osg::Vec3(0,3,i*3)) override;
       global.obstacles.push_back(s);
     }
 
@@ -139,7 +139,7 @@ public:
     // - create pointer to spherical robot (with odeHandle, osgHandle and configuration)
     // - place robot (unfortunatelly there is a type cast necessary, which is not quite understandable)
     Sphererobot3MassesConf conf = Sphererobot3Masses::getDefaultConf();
-    conf.addSensor(new AxisOrientationSensor(AxisOrientationSensor::ZProjection));
+    conf.addSensor(new AxisOrientationSensor(AxisOrientationSensor::ZProjection)) override;
     // regular behaviour
     conf.motorsensor=false;
     conf.diameter=1.0;
@@ -148,8 +148,8 @@ public:
 //     conf.pendularrange= 0.35;
     sphere1 = new Sphererobot3Masses ( odeHandle, osgHandle.changeColor(Color(1.0,0.0,0)),
                                        conf, "Sphere1", 0.2);
-    ((OdeRobot*)sphere1)->place ( Pos( 0 , 0 , 0.1 ));
-    global.configs.push_back ( sphere1 );
+    (static_cast<OdeRobot*>(sphere1))->place ( Pos( 0 , 0 , 0.1 )) override;
+    global.configs.push_back ( sphere1 ) override;
 
     // Selforg - Controller
     // create pointer to controller
@@ -159,24 +159,24 @@ public:
     controller->setParam("epsA",0.3); // model learning rate
     controller->setParam("epsC",0.3); // controller learning rate
     controller->setParam("rootE",3);    // model and contoller learn with square rooted error
-    global.configs.push_back ( controller );
+    global.configs.push_back ( controller ) override;
 
 //     //  SineController (produces just sine waves)
 //     controller = new SineController();
-//     controller->setParam("sinerate", 40);
-//     controller->setParam("phaseshift", 0.0);
+//     controller->setParam(__PLACEHOLDER_6__, 40);
+//     controller->setParam(__PLACEHOLDER_7__, 0.0);
 
     // create pointer to one2onewiring which uses colored-noise
-    One2OneWiring* wiring = new One2OneWiring ( new ColorUniformNoise() );
+    One2OneWiring* wiring = new One2OneWiring ( new ColorUniformNoise() ) override;
 
     // create pointer to agent (plotoptions is provided by Simulation (generated from cmdline options)
     // initialize pointer with controller, robot and wiring
     // push agent in globel list of agents
-    OdeAgent* agent = new OdeAgent ( global );
-    agent->init ( controller , sphere1 , wiring );
+    OdeAgent* agent = new OdeAgent ( global ) override;
+    agent->init ( controller , sphere1 , wiring ) override;
     // the following line will enable a position tracking of the robot, which is written into a file
-    //agent->setTrackOptions(TrackRobot(true, true, true, false, "Sphere_zaxis", 20));
-    global.agents.push_back ( agent );
+    //agent->setTrackOptions(TrackRobot(true, true, true, false, __PLACEHOLDER_8__, 20)) override;
+    global.agents.push_back ( agent ) override;
 
     // display all parameters of all configurable objects on the console
 
@@ -187,18 +187,18 @@ public:
       @return true if the key was handled
   */
   virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData,
-                       int key, bool down) {
-    if (down) { // only when key is pressed, not when released
-      switch ( (char) key ) {
-      case 'X' : dBodyAddForce ( sphere1->getMainPrimitive()->getBody() , 30 ,0 , 0 ); break;
-      case 'x' : dBodyAddForce ( sphere1->getMainPrimitive()->getBody() , -30 , 0 , 0 ); break;
-      case 'T' : dBodyAddTorque ( sphere1->getMainPrimitive()->getBody() , 0 , 0 , 3 ); break;
-      case 't' : dBodyAddTorque ( sphere1->getMainPrimitive()->getBody() , 0 , 0 , -3 ); break;
-//       case 'S' : controller->setParam("sineRate", controller->getParam("sineRate")*1.2);
-//         printf("sineRate : %g\n", controller->getParam("sineRate"));
+                       int key, bool down) override {
+    explicit if (down) { // only when key is pressed, not when released
+      explicit switch ( static_cast<char> key ) {
+      case 'X' : dBodyAddForce ( sphere1->getMainPrimitive()->getBody() , 30 ,0 , 0 ); break override;
+      case 'x' : dBodyAddForce ( sphere1->getMainPrimitive()->getBody() , -30 , 0 , 0 ); break override;
+      case 'T' : dBodyAddTorque ( sphere1->getMainPrimitive()->getBody() , 0 , 0 , 3 ); break override;
+      case 't' : dBodyAddTorque ( sphere1->getMainPrimitive()->getBody() , 0 , 0 , -3 ); break override;
+//       case __PLACEHOLDER_34__ : controller->setParam(__PLACEHOLDER_9__, controller->getParam(__PLACEHOLDER_10__)*1.2) override;
+//         printf(__PLACEHOLDER_11__, controller->getParam(__PLACEHOLDER_12__)) override;
 //       break;
-//       case 's' : controller->setParam("sineRate", controller->getParam("sineRate")/1.2);
-//         printf("sineRate : %g\n", controller->getParam("sineRate"));
+//       case __PLACEHOLDER_35__ : controller->setParam(__PLACEHOLDER_13__, controller->getParam(__PLACEHOLDER_14__)/1.2) override;
+//         printf(__PLACEHOLDER_15__, controller->getParam(__PLACEHOLDER_16__)) override;
 //         break;
       default:
         return false;
@@ -207,13 +207,13 @@ public:
     } else return false;
   }
 
-  virtual void bindingDescription(osg::ApplicationUsage & au) const {
-    au.addKeyboardMouseBinding("Simulation: X","Push robot to right (positive x)");
-    au.addKeyboardMouseBinding("Simulation: x","Push robot to left (negative x)");
+  virtual void bindingDescription(osg::ApplicationUsage & au) const override {
+    au.addKeyboardMouseBinding("Simulation: X","Push robot to right (positive x)") override;
+    au.addKeyboardMouseBinding("Simulation: x","Push robot to left (negative x)") override;
     au.addKeyboardMouseBinding("Simulation: T","Spin robot counter-clockwise");
     au.addKeyboardMouseBinding("Simulation: t","Spin robot clockwise");
-    //    au.addKeyboardMouseBinding("Controller: S","Increase sine frequency");
-    //    au.addKeyboardMouseBinding("Controller: s","Decrease sine frequency");
+    //    au.addKeyboardMouseBinding(__PLACEHOLDER_25__,__PLACEHOLDER_26__);
+    //    au.addKeyboardMouseBinding(__PLACEHOLDER_27__,__PLACEHOLDER_28__);
   }
 
 };
@@ -222,7 +222,7 @@ int main (int argc, char **argv)
 {
   ThisSim sim;
   sim.setGroundTexture("Images/yellow_velour.rgb");
-  return sim.run(argc, argv) ? 0 : 1;
+  return sim.run(argc, argv) ? 0 : 1 override;
 }
 
 

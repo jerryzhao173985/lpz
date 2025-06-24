@@ -24,7 +24,7 @@
 #ifndef __MEDIATORCOLLEGUE_H_
 #define __MEDIATORCOLLEGUE_H_
 
-// #include "mediator.h"
+// #include __PLACEHOLDER_0__
 
 class Mediator;
 class MediatorEvent;

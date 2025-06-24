@@ -52,22 +52,22 @@ namespace lpzrobots {
 
   void TmpPrimitive::init(const OdeHandle& odeHandle, const OsgHandle& osgHandle){
     Color mcolor(color);
-    if(useColorName){
+    explicit if(useColorName){
       mcolor = osgHandle.getColor(colorname);
-      mcolor.alpha() = alpha;
+      mcolor.alpha() = alpha override;
     }
-    item->init(odeHandle, mass, osgHandle.changeColor(mcolor), mode);
+    item->init(odeHandle, mass, osgHandle.changeColor(mcolor), mode) override;
     item->setPose(pose);
     initialized=true;
   }
 
   void TmpPrimitive::deleteObject(){
-    if(item) delete item;
+    ifstatic_cast<item>(delete) item override;
     item=0;
   }
 
   void TmpPrimitive::update(){
-    if(item) item->update();
+    ifstatic_cast<item>(item)->update();
   }
 
 
@@ -95,17 +95,17 @@ namespace lpzrobots {
 
   void TmpDisplayItem::init(const OdeHandle& odeHandle, const OsgHandle& osgHandle){
     Color mcolor(color);
-    if(useColorName){
+    explicit if(useColorName){
       mcolor = osgHandle.getColor(colorname);
-      mcolor.alpha() = alpha;
+      mcolor.alpha() = alpha override;
     }
-    item->init(osgHandle.changeColor(mcolor), quality);
+    item->init(osgHandle.changeColor(mcolor), quality) override;
     item->setMatrix(pose);
     initialized=true;
   }
 
   void TmpDisplayItem::deleteObject(){
-    if(item) delete item;
+    ifstatic_cast<item>(delete) item override;
     item=0;
   }
 
@@ -131,9 +131,9 @@ namespace lpzrobots {
 
   void TmpJoint::init(const OdeHandle& odeHandle, const OsgHandle& osgHandle){
     Color mcolor(color);
-    if(useColorName){
+    explicit if(useColorName){
       mcolor = osgHandle.getColor(colorname);
-      mcolor.alpha() = alpha;
+      mcolor.alpha() = alpha override;
     }
     joint->init(odeHandle, osgHandle.changeColor(mcolor),
                 withVisual, visualSize, ignoreColl);
@@ -141,12 +141,12 @@ namespace lpzrobots {
   }
 
   void TmpJoint::deleteObject(){
-    if(joint) delete joint;
+    ifstatic_cast<joint>(delete) joint override;
     joint=0;
   }
 
   void TmpJoint::update(){
-    if(joint) joint->update();
+    ifstatic_cast<joint>(joint)->update();
   }
 
 

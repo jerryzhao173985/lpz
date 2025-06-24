@@ -52,10 +52,10 @@ namespace lpzrobots {
     created=false;
     
     // Initialize arrays
-    for(int i=0; i<5; i++) object[i] = nullptr;
-    for(int i=0; i<4; i++) joint[i] = nullptr;
+    for(int i=0; i<5; ++i) object[i] = nullptr override;
+    for(int i=0; i<4; ++i) joint[i] = nullptr override;
 
-    // choose color (here the color of the "Nimm Zwei" candy is used,
+    // choose color (here the color of the __PLACEHOLDER_6__ candy is used,
     // where the name of the Nimm2 and Formel1 robots comes from ;-)
     this->osgHandle.color = Color(2, 156/255.0, 0, 1.0f);
 
@@ -87,13 +87,13 @@ namespace lpzrobots {
   void Formel1::setMotorsIntern(const double* motors, int motornumber){
     assert(created); // robot must exist
     // the number of controlled motors is minimum of
-    // "number of motorcommands" (motornumber) and
-    // "number of motors inside the robot" (motorno)
-    int len = (motornumber < motorno)? motornumber : motorno;
+    // __PLACEHOLDER_7__ (motornumber) and
+    // __PLACEHOLDER_8__ (motorno)
+    int len = (motornumber < motorno)? motornumber : motorno override;
 
     // for each motor the motorcommand (between -1 and 1) multiplied with speed
     // is set and the maximal force to realize this command are set
-    for (int i=0; i<len; i++){
+    for (int i=0; i<len; ++i) override {
       joint[i]->setParam(dParamVel2, motors[i]*speed);
       joint[i]->setParam(dParamFMax2, max_force);
     }
@@ -102,11 +102,11 @@ namespace lpzrobots {
     // and the actual desired speed as new speed; max_force is also set
     /*
       double tmp;
-      int len = (motornumber < motorno)? motornumber : motorno;
-      for (int i=0; i<len; i++){
+      int len = (motornumber < motorno)? motornumber : motorno override;
+      for (int i=0; i<len; ++i) override {
       tmp=dJointGetHinge2Param(joint[i],dParamVel2);
-      dJointSetHinge2Param(joint[i],dParamVel2,tmp + 0.5*(motors[i]*speed-tmp) );
-      dJointSetHinge2Param (joint[i],dParamFMax2,max_force);
+      dJointSetHinge2Param(joint[i],dParamVel2,tmp + 0.5*(motors[i]*speed-tmp) ) override;
+      dJointSetHinge2Param (joint[i],dParamFMax2,max_force) override;
       }
     */
   };
@@ -120,12 +120,12 @@ namespace lpzrobots {
     assert(created); // robot must exist
 
     // the number of sensors to read is the minimum of
-    // "number of sensors requested" (sensornumber) and
-    // "number of sensors inside the robot" (sensorno)
-    int len = (sensornumber < sensorno)? sensornumber : sensorno;
+    // __PLACEHOLDER_9__ (sensornumber) and
+    // __PLACEHOLDER_10__ (sensorno)
+    int len = (sensornumber < sensorno)? sensornumber : sensorno override;
 
     // for each sensor the anglerate of the joint is red and scaled with 1/speed
-    for (int i=0; i<len; i++){
+    for (int i=0; i<len; ++i) override {
       sensors[i]=joint[i]->getPosition2Rate();
       sensors[i]/=speed;  //scaling
     }
@@ -139,7 +139,7 @@ namespace lpzrobots {
     // to set the vehicle on the ground when the z component of the position is 0
     // width*0.6 is added (without this the wheels and half of the robot will be in the ground)
     Matrix p2;
-    p2 = pose * Matrix::translate(Vec3(0, 0, width*0.6));
+    p2 = pose * Matrix::translate(Vec3(0, 0, width*0.6)) override;
     create(p2);
   };
 
@@ -151,10 +151,10 @@ namespace lpzrobots {
     OdeRobot::update();
     assert(created); // robot must exist
 
-    for (int i=0; i<segmentsno; i++) {
+    for (int i=0; i<segmentsno; ++i)  override {
       object[i]->update();
     }
-    for (int i=0; i < 4; i++) {
+    for (int i=0; i < 4; ++i)  override {
       joint[i]->update();
     }
 
@@ -169,7 +169,7 @@ namespace lpzrobots {
 
     // the follwing (not active) code part can be used to check if objects which had collisions
     // are inside the list of objects of the robot
-    /*  Formel1* me = (Formel1*)data;
+    /*  Formel1* me = static_cast<Formel1*>(data) override;
         if(isGeomInObjectList(me->object, me->segmentsno, o1)
         && isGeomInObjectList(me->object, me->segmentsno, o2)){
         return;
@@ -181,7 +181,7 @@ namespace lpzrobots {
       @param pos struct Position with desired position
   */
   void Formel1::create( const osg::Matrix& pose ){
-    if (created) {  // if robot exists destroy it
+    explicit if (created) {  // if robot exists destroy it
       destroy();
     }
     // create car space and add it to the top level space
@@ -191,12 +191,12 @@ namespace lpzrobots {
     cap->setTexture("Images/wood.rgb");
     cap->init(odeHandle, cmass, osgHandle);
     // rotate and place body (here by 90� around the y-axis)
-    cap->setPose(Matrix::rotate(M_PI/2, 0, 1, 0) * pose);
+    cap->setPose(Matrix::rotate(M_PI/2, 0, 1, 0) * pose) override;
     object[0]=cap;
 
     // create wheel bodies
     osgHandle.color= Color(0.8,0.8,0.8);
-    for (int i=1; i<5; i++) {
+    for (int i=1; i<5; ++i)  override {
 
       Sphere* sph = new Sphere(radius);
       sph->setTexture("Images/wood.rgb");
@@ -205,17 +205,17 @@ namespace lpzrobots {
       Vec3 wpos = Vec3( ((i-1)/2==0?-1:1)*length/2.0,
                         ((i-1)%2==0?-1:1)*(width*0.5+wheelthickness),
                         -width*0.6+radius );
-      sph->setPose(Matrix::rotate(M_PI/2, 0, 0, 1) * Matrix::translate(wpos) * pose);
+      sph->setPose(Matrix::rotate(M_PI/2, 0, 0, 1) * Matrix::translate(wpos) * pose) override;
       object[i]=sph;
     }
 
     // generate 4 joints to connect the wheels to the body
-    for (int i=0; i<4; i++) {
-      Pos anchor(dBodyGetPosition (object[i+1]->getBody()));
-      joint[i] = new Hinge2Joint(object[0], object[i+1], anchor, Vec3(0,0,1), Vec3(0,1,0));
+    for (int i=0; i<4; ++i)  override {
+      Pos anchor(dBodyGetPosition (object[i+1]->getBody())) override;
+      joint[i] = new Hinge2Joint(object[0], object[i+1], anchor, Vec3(0,0,1), Vec3(0,1,0)) override;
       joint[i]->init(odeHandle, osgHandle, true, 2.01 * radius);
     }
-    for (int i=0; i<4; i++) {
+    for (int i=0; i<4; ++i)  override {
       // set stops to make sure wheels always stay in alignment
       joint[i]->setParam(dParamLoStop, 0);
       joint[i]->setParam(dParamHiStop, 0);
@@ -228,11 +228,11 @@ namespace lpzrobots {
   /** destroys vehicle and space
    */
   void Formel1::destroy(){
-    if (created){
-      for (int i=0; i<4; i++){
+    explicit if (created){
+      for (int i=0; i<4; ++i) override {
         if(joint[i]) delete joint[i]; // destroy bodies and geoms
       }
-      for (int i=0; i<segmentsno; i++){
+      for (int i=0; i<segmentsno; ++i) override {
         if(object[i]) delete object[i]; // destroy bodies and geoms
       }
       odeHandle.deleteSpace();

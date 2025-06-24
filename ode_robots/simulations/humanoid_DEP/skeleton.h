@@ -38,73 +38,72 @@ namespace lpzrobots {
 
   typedef struct {
   public:
-    double size;       ///< scaling factor for robot (height)
-    double massfactor; ///< mass factor for all parts
-    bool   useDensity; ///< massfactor is interpreted as a density
+    double size;       ///< scaling factor for robot static_cast<height>static_cast<double>(massfactor); ///< mass factor for all parts
+    bool   useDensity = false; ///< massfactor is interpreted as a density
 
-    bool   useVelocityServos; ///< if true the more stable velocity controlling servos are used
+    bool   useVelocityServos = false; ///< if true the more stable velocity controlling servos are used
 
-    double relLegmass; ///< relative overall leg mass
-    double relArmmass; ///< relative overall arm mass
-    double relFeetmass; ///< relative overall feet mass
+    double relLegmass = 0; ///< relative overall leg mass
+    double relArmmass = 0; ///< relative overall arm mass
+    double relFeetmass = 0; ///< relative overall feet mass
 
-    double hipPower;   ///< maximal force for at hip joint motors
-    double hipDamping; ///< damping of hip joint servos
-    double hipVelocity; ///< velocity of hip joint servos
-    double hipJointLimit; ///< angle range for legs
-    double hip2Power;   ///< maximal force for at hip2 (sagital joint axis) joint motors
-    double hip2Damping; ///< damping of hip2 joint servos
-    double hip2JointLimit; ///< angle range for hip joint in lateral direction
-    double neckPower;  ///< spring strength in the neck
-    double neckDamping; ///< damping in the neck
-    double neckVelocity; ///< velocity in the neck
-    double neckJointLimit; ///< angle range for neck
-    double kneePower;  ///< spring strength in the knees
-    double kneeDamping; ///< damping in the knees
-    double kneeVelocity; ///< velocity in the knees
-    double kneeJointLimit; ///< angle range for knees
-    double anklePower;  ///< spring strength in the ankles
-    double ankleDamping; ///< damping in the ankles
-    double ankleVelocity; ///< velocity in the ankles
-    double ankleJointLimit; ///< angle range for ankles
-    double armPower;   ///< maximal force for at arm (shoulder) joint motors
-    double armDamping; ///< damping of arm ((shoulder)) joint servos
-    double armVelocity; ///< velocity of arm ((shoulder)) joint servos
-    double armJointLimit; ///< angle range of arm joint
-    double elbowPower;   ///< maximal force for at elbow (shoulder) joint motors
-    double elbowDamping; ///< damping of elbow ((shoulder)) joint servos
-    double elbowVelocity; ///< velocity of elbow ((shoulder)) joint servos
-    double elbowJointLimit; ///< angle range of elbow joint
-    double pelvisPower;   ///< maximal force for at pelvis joint motor
-    double pelvisDamping; ///< damping of pelvis joint servo
-    double pelvisVelocity; ///< velocity of pelvis joint servo
-    double pelvisJointLimit; ///< angle range of pelvis joint
-    double backPower;   ///< maximal force for at back joint motor
-    double backDamping; ///< damping of back joint servo
-    double backVelocity; ///< velocity of back joint servo
-    double backJointLimit; ///< angle range of back joint
+    double hipPower = 0;   ///< maximal force for at hip joint motors
+    double hipDamping = 0; ///< damping of hip joint servos
+    double hipVelocity = 0; ///< velocity of hip joint servos
+    double hipJointLimit = 0; ///< angle range for legs
+    double hip2Power = 0;   ///< maximal force for at hip2 (sagital joint axis) joint motors
+    double hip2Damping = 0; ///< damping of hip2 joint servos
+    double hip2JointLimit = 0; ///< angle range for hip joint in lateral direction
+    double neckPower = 0;  ///< spring strength in the neck
+    double neckDamping = 0; ///< damping in the neck
+    double neckVelocity = 0; ///< velocity in the neck
+    double neckJointLimit = 0; ///< angle range for neck
+    double kneePower = 0;  ///< spring strength in the knees
+    double kneeDamping = 0; ///< damping in the knees
+    double kneeVelocity = 0; ///< velocity in the knees
+    double kneeJointLimit = 0; ///< angle range for knees
+    double anklePower = 0;  ///< spring strength in the ankles
+    double ankleDamping = 0; ///< damping in the ankles
+    double ankleVelocity = 0; ///< velocity in the ankles
+    double ankleJointLimit = 0; ///< angle range for ankles
+    double armPower;   ///< maximal force for at arm static_cast<shoulder>(joint) motors
+    double armDamping = 0; ///< damping of arm ((shoulder)) joint servos
+    double armVelocity = 0; ///< velocity of arm ((shoulder)) joint servos
+    double armJointLimit = 0; ///< angle range of arm joint
+    double elbowPower;   ///< maximal force for at elbow static_cast<shoulder>(joint) motors
+    double elbowDamping = 0; ///< damping of elbow ((shoulder)) joint servos
+    double elbowVelocity = 0; ///< velocity of elbow ((shoulder)) joint servos
+    double elbowJointLimit = 0; ///< angle range of elbow joint
+    double pelvisPower = 0;   ///< maximal force for at pelvis joint motor
+    double pelvisDamping = 0; ///< damping of pelvis joint servo
+    double pelvisVelocity = 0; ///< velocity of pelvis joint servo
+    double pelvisJointLimit = 0; ///< angle range of pelvis joint
+    double backPower = 0;   ///< maximal force for at back joint motor
+    double backDamping = 0; ///< damping of back joint servo
+    double backVelocity = 0; ///< velocity of back joint servo
+    double backJointLimit = 0; ///< angle range of back joint
 
-    double powerFactor; ///< scale factor for maximal forces of the servos
-    double relForce;    ///< factor between arm force and rest
-    double dampingFactor; ///< scale factor for damping of the servos
+    double powerFactor = 0; ///< scale factor for maximal forces of the servos
+    double relForce = 0;    ///< factor between arm force and rest
+    double dampingFactor = 0; ///< scale factor for damping of the servos
 
-    double jointLimitFactor; ///< factor between servo range (XXXJointLimit, see above) and physical joint limit
-
-
-    bool onlyPrimaryFunctions; ///< true: only leg and arm are controlable, false: all joints
-    bool onlyMainParameters; ///< true: only a few parameters are exported for configuration
-
-    bool handsRotating; ///< hands are attached with a ball joint
-    bool useGripper;        ///< hands have a gripper: use getGrippers and add grippables
-    double gripDuration;    ///< time the gripper can grasp
-    double releaseDuration; ///< time the gripper has to release before grasping again
-
-    bool movableHead;   ///< if false then no neck movement
-    bool useBackJoint;  ///< whether to use the joint in the back
-    bool backSideBend;  ///< whether to use a joint to bend the back sideways
+    double jointLimitFactor = 0; ///< factor between servo range (XXXJointLimit, see above) and physical joint limit
 
 
-    bool irSensors; ///< whether to use the irsensor eyes
+    bool onlyPrimaryFunctions = false; ///< true: only leg and arm are controlable, false: all joints
+    bool onlyMainParameters = false; ///< true: only a few parameters are exported for configuration
+
+    bool handsRotating = false; ///< hands are attached with a ball joint
+    bool useGripper = false;        ///< hands have a gripper: use getGrippers and add grippables
+    double gripDuration = 0;    ///< time the gripper can grasp
+    double releaseDuration = 0; ///< time the gripper has to release before grasping again
+
+    bool movableHead = false;   ///< if false then no neck movement
+    bool useBackJoint = false;  ///< whether to use the joint in the back
+    bool backSideBend = false;  ///< whether to use a joint to bend the back sideways
+
+
+    bool irSensors = false; ///< whether to use the irsensor eyes
 
     std::string headColor;   ///< special color of head (typically like body)
     std::string bodyColor;   ///< color of skin
@@ -143,9 +142,9 @@ namespace lpzrobots {
     Skeleton(const OdeHandle& odeHandle, const OsgHandle& osgHandle, SkeletonConf& conf,
                const std::string& name);
 
-    virtual ~Skeleton(){ destroy(); };
+    virtual ~Skeleton() { destroy(); } override;
 
-    static SkeletonConf getDefaultConf(){
+    static SkeletonConf getDefaultConf() const {
       SkeletonConf c;
       c.size        = 1;
       c.massfactor  = 1;
@@ -220,19 +219,19 @@ namespace lpzrobots {
       c.gripDuration         = 30;
       c.releaseDuration      = 1;
 
-      //      c.headTexture = "Images/really_white.rgb";
+      //      c.headTexture = __PLACEHOLDER_0__;
       c.headTexture     = "Images/dusty.rgb";
       c.headColor       = "robot4";
-      //  c.bodyTexture = "Images/whitemetal_farbig_small.rgb";
+      //  c.bodyTexture = __PLACEHOLDER_3__;
       c.bodyTexture     = "Images/dusty.rgb";
       c.bodyColor       = "robot4";
-      c.trunkTexture    = "Images/dusty.rgb"; //"Images/whitemetal_farbig_small.rgb";
+      c.trunkTexture    = "Images/dusty.rgb"; //__PLACEHOLDER_7__;
       c.trunkColor      = "robot1";
       c.trouserColor    = "robot2";
       return c;
     }
 
-    static SkeletonConf getDefaultConfVelServos(){
+    static SkeletonConf getDefaultConfVelServos() const {
       SkeletonConf c = getDefaultConf();
 
       c.useVelocityServos = true;
@@ -255,25 +254,25 @@ namespace lpzrobots {
     /** sets the pose of the vehicle
         @param pose desired pose matrix
     */
-    virtual void placeIntern(const osg::Matrix& pose) override;
+    virtual void placeIntern(const osg::Matrix& pose);
 
-    virtual int getSensorsIntern(sensor* sensors, int sensornumber) override;
-    virtual void setMotorsIntern(const motor* motors, int motornumber) override;
-    virtual int getSensorNumberIntern() override;
-    virtual int getMotorNumberIntern() override;
+    virtual int getSensorsIntern(sensor* sensors, int sensornumber);
+    virtual void setMotorsIntern(const motor* motors, int motornumber);
+    virtual int getSensorNumberIntern();
+    virtual int getMotorNumberIntern();
 
 
     /******** CONFIGURABLE ***********/
-    virtual void notifyOnChange(const paramkey& key) override;
+    virtual void notifyOnChange(const paramkey& key);
 
     /** the main object of the robot, which is used for position and speed tracking */
-    virtual Primitive* getMainPrimitive() const { return objects[Thorax]; } // Trunk_comp
+    virtual const Primitive* getMainPrimitive() const const override { return objects[Thorax]; } // Trunk_comp
 
     /** returns the position of the head */
-    virtual Position getHeadPosition() override;
+    virtual Position getHeadPosition();
 
     /** returns the position of the trunk */
-    virtual Position getTrunkPosition() override;
+    virtual Position getTrunkPosition();
 
     /// returns a the gripper list
     GripperList& getGrippers();
@@ -284,15 +283,15 @@ namespace lpzrobots {
     /** creates vehicle at desired pose
         @param pose 4x4 pose matrix
     */
-    virtual void create(const osg::Matrix& pose) override;
+    virtual void create(const osg::Matrix& pose);
 
     /** destroys vehicle and space
      */
-    virtual void destroy() override;
+    virtual void destroy();
 
     SkeletonConf conf;
 
-    bool created;      // true if robot was created
+    bool created = false;      // true if robot was created
 
     OdeHandle ignoreColSpace; // odehandle with space within collisions are ignored
 
@@ -311,7 +310,7 @@ namespace lpzrobots {
     std::vector<AngularMotor*> frictionmotors;
 
     GripperList grippers;
-    int backbendindex;
+    int backbendindex = 0;
   };
 
 }

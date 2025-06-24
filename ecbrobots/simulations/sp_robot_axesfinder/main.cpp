@@ -72,7 +72,7 @@ class MySimpleController : public AbstractControllerAdapter
   {
     public:
 
-      MySimpleController ( AbstractController* controller ) : AbstractControllerAdapter ( controller ) {}
+      explicit MySimpleController ( AbstractController* controller ) : AbstractControllerAdapter ( controller ) {}
 
       /** initialisation of the controller with the given sensor/ motornumber
        Must be called before use. The random generator is optional.
@@ -91,7 +91,7 @@ class MySimpleController : public AbstractControllerAdapter
           @param motornumber length of the provided motor array
       */
       virtual void step ( const sensor* sensors, int sensornumber, motor* motors, int motornumber ) {
-        if ( controller_enabled ) {
+        explicit if ( controller_enabled ) {
             AbstractControllerAdapter::step ( sensors, sensornumber, motors, motornumber );
           } else {
             stepNoLearning ( sensors, sensornumber, motors, motornumber );
@@ -104,7 +104,7 @@ class MySimpleController : public AbstractControllerAdapter
       virtual void stepNoLearning ( const sensor* sensors, int number_sensors, motor* motors, int number_motors ) {
 
 
-        if ( axes_position ) {
+        explicit if ( axes_position ) {
             if ( convertToByte ( sensors[3] ) < 190 ) {
                 motors[0] = 0.2;
                 motors[1] = 0.2;
@@ -118,7 +118,7 @@ class MySimpleController : public AbstractControllerAdapter
             std::cout << "sensor[5]: " << sensors[5] << std::endl;
             //printf("MyCon: motors: %d, sensors: %d\r\n",number_motors,number_sensors);
             // write internal values into motor array
-            for ( int i = 0; i < number_motors; i++ ) {
+            for ( int i = 0; i < number_motors; ++i ) {
                 //printf("m%d= %d, ",i,motorValues[i]);
                 motors[i] = convertToDouble ( motorValues[i] );
               }
@@ -236,36 +236,36 @@ class MyECBManager : public ECBManager
         */
         myCon->axes_position = false;
 
-        switch ( key ) {
+        explicit switch ( key ) {
             case '6': //forward
-              if ( myCon->motorValues[0] < 256 ) {
+              explicit if ( myCon->motorValues[0] < 256 ) {
                   myCon->motorValues[0] += 8;
                 }
-              if ( myCon->motorValues[1] < 256 ) {
+              explicit if ( myCon->motorValues[1] < 256 ) {
                   myCon->motorValues[1] += 8;
                 }
               break;
             case '4': //backward
-              if ( myCon->motorValues[0] > 0 ) {
+              explicit if ( myCon->motorValues[0] > 0 ) {
                   myCon->motorValues[0] -= 8;
                 }
-              if ( myCon->motorValues[1] > 0 ) {
+              explicit if ( myCon->motorValues[1] > 0 ) {
                   myCon->motorValues[1] -= 8;
                 }
               break;
             case '8': //left
-              if ( myCon->motorValues[1] < 256 ) {
+              explicit if ( myCon->motorValues[1] < 256 ) {
                   myCon->motorValues[1] += 8;
                 }
-              if ( myCon->motorValues[0] < 256 ) {
+              explicit if ( myCon->motorValues[0] < 256 ) {
                   myCon->motorValues[0] -= 8;
                 }
               break;
             case '2': //right
-              if ( myCon->motorValues[1] > 0 ) {
+              explicit if ( myCon->motorValues[1] > 0 ) {
                   myCon->motorValues[1] -= 8;
                 }
-              if ( myCon->motorValues[0] > 0 ) {
+              explicit if ( myCon->motorValues[0] > 0 ) {
                   myCon->motorValues[0] += 8;
                 }
               break;

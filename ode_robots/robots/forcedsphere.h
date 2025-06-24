@@ -40,16 +40,16 @@ namespace lpzrobots {
     /// deletes sensors
     void destroy();
 
-    double radius; //< radius of the sphere
-    double maxForce; ///< maximal force applied to the sphere
+    double radius = 0; //< radius of the sphere
+    double maxForce = 0; ///< maximal force applied to the sphere
     /// if true, the robot is powered to reach the given speed (force is calculated)
-    bool speedDriven;
-    double maxSpeed; ///< maximum speed of the robot when in speedDriven mode
+    bool speedDriven = false;
+    double maxSpeed = 0; ///< maximum speed of the robot when in speedDriven mode
 
     /// bit mask for selecting the dimensions for the forces (see ForcedSphere::Dimensions)
-    short drivenDimensions;
+    short drivenDimensions = 0;
     /// whether to use a cylinder as body (like a puck) or the normal sphere
-    bool cylinderBody;
+    bool cylinderBody = false;
     /// list of sensors that are mounted at the robot. (e.g.\ AxisOrientationSensor)
     std::list<Sensor*> sensors;
     /// adds a sensor to the list of sensors
@@ -65,7 +65,7 @@ namespace lpzrobots {
   {
   protected:
     Primitive* object[1];
-    bool created;
+    bool created = false;
     ForcedSphereConf conf;
 
   public:
@@ -81,9 +81,9 @@ namespace lpzrobots {
     ForcedSphere ( const OdeHandle& odeHandle, const OsgHandle& osgHandle,
                    const ForcedSphereConf& ForcedSphereConf, const std::string& name);
 
-    virtual ~ForcedSphere() override;
+    virtual ~ForcedSphere();
 
-    static ForcedSphereConf getDefaultConf(){
+    static ForcedSphereConf getDefaultConf() const {
       ForcedSphereConf c;
       c.radius = 1;
       c.maxForce = 1;
@@ -94,18 +94,18 @@ namespace lpzrobots {
       return c;
     }
 
-    virtual void update() override;
+    virtual void update();
 
-    virtual void placeIntern(const osg::Matrix& pose) override;
+    virtual void placeIntern(const osg::Matrix& pose);
 
-    virtual void doInternalStuff(GlobalData& globalData) override;
+    virtual void doInternalStuff(const GlobalData& globalData);
 
-    virtual int getSensorsIntern( sensor* sensors, int sensornumber ) override;
-    virtual void setMotorsIntern( const double* motors, int motornumber ) override;
-    virtual int getMotorNumberIntern() override;
-    virtual int getSensorNumberIntern() override;
+    virtual int getSensorsIntern( sensor* sensors, int sensornumber );
+    virtual void setMotorsIntern( const double* motors, int motornumber );
+    virtual int getMotorNumberIntern();
+    virtual int getSensorNumberIntern();
 
-    virtual Primitive* getMainPrimitive() const { return object[0]; }
+    virtual Primitive* getMainPrimitive() const override { return object[0]; }
 
   protected:
 

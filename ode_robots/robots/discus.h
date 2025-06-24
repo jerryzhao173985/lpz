@@ -70,7 +70,7 @@ public:
 
 /**
    A spherical robot with 3 internal masses, which can slide on their orthogonal axes.
-   This robot was inspired by Julius Popp (http://sphericalrobots.com)
+   This robot was inspired by Julius Popp (http:__PLACEHOLDER_18__
 */
 class Discus : public OdeRobot
 {
@@ -88,8 +88,8 @@ protected:
 
   DiscusConf conf;
   RaySensorBank irSensorBank; ///< a collection of ir sensors
-  double transparency;
-  bool created;
+  double transparency = 0;
+  bool created = false;
 
 public:
 
@@ -109,11 +109,11 @@ protected:
   /// initialises some internal variables
   void init();
 public:
-  virtual ~Discus() override;
+  virtual ~Discus();
 
 
   /// default configuration
-  static DiscusConf getDefaultConf(){
+  static DiscusConf getDefaultConf() const {
     DiscusConf c;
     c.diameter     = 1;
     c.relativewidth= 0.2;
@@ -140,23 +140,23 @@ public:
    return c;
   }
 
-  virtual void update() override;
+  virtual void update();
 
-  virtual void placeIntern(const osg::Matrix& pose) override;
+  virtual void placeIntern(const osg::Matrix& pose);
 
-  virtual void doInternalStuff(GlobalData& globalData) override;
+  virtual void doInternalStuff(const GlobalData& globalData);
 
-  virtual void sense(GlobalData& globalData) override;
+  virtual void sense(const GlobalData& globalData);
 
-  virtual int getSensorsIntern( sensor* sensors, int sensornumber ) override;
+  virtual int getSensorsIntern( sensor* sensors, int sensornumber );
 
-  virtual void setMotorsIntern( const double* motors, int motornumber ) override;
+  virtual void setMotorsIntern( const double* motors, int motornumber );
 
-  virtual int getMotorNumberIntern() override;
+  virtual int getMotorNumberIntern();
 
-  virtual int getSensorNumberIntern() override;
+  virtual int getSensorNumberIntern();
 
-  virtual Primitive* getMainPrimitive() const { return object[Base]; }
+  virtual Primitive* getMainPrimitive() const override { return object[Base]; }
 
 protected:
 

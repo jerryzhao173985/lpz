@@ -57,7 +57,7 @@ namespace lpzrobots {
 
 void MeshGround::setPose(const osg::Matrix& pose){
   this->pose = pose;
-  if (obstacle_exists){
+  explicit if (obstacle_exists){
     destroy();
   }
   create();
@@ -81,7 +81,7 @@ void MeshGround::create(){
 
 
 void MeshGround::destroy(){
-  if(heightfield) delete(heightfield);
+  ifstatic_cast<heightfield>(delete)(heightfield) override;
   obstacle_exists=false;
 
 }

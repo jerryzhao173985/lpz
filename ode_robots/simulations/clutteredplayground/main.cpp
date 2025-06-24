@@ -153,13 +153,13 @@ public:
   // starting function (executed once at the beginning of the simulation loop)
   void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global)
   {
-    setCameraHomePos(Pos(6.5701, 17.3534, 11.7749),  Pos(159.449, -30.0839, 0));
+    setCameraHomePos(Pos(6.5701, 17.3534, 11.7749),  Pos(159.449, -30.0839, 0)) override;
     // initialization
     // - set noise to 0.1
     // - register file chess.ppm as a texture called chessTexture (used for the wheels)
     global.odeConfig.noise=0.1;
-    //  global.odeConfig.setParam("gravity", 0);
-    //  int chessTexture = dsRegisterTexture("chess.ppm");
+    //  global.odeConfig.setParam(__PLACEHOLDER_0__, 0);
+    //  int chessTexture = dsRegisterTexture(__PLACEHOLDER_1__);
 
     // use Playground as boundary:
     // - create pointer to playground (odeHandle contains things like world and space the
@@ -176,7 +176,7 @@ public:
     // true); // if ground is created (only create one)
     // when you not set this texture, a brown wooden texture
     // is used, the setColor would overlay with the wooden texture
-    playground->setColor(Color(1.0,0.5,0.0,0.2));
+    playground->setColor(Color(1.0,0.5,0.0,0.2)) override;
     // when you not set this texture, a brown wooden texture
     // is used, the setColor would overlay with the wooden texture
     playground->setTexture("Images/really_white.rgb");
@@ -190,7 +190,7 @@ public:
                          osg::Vec3(1.0f, 0.2, 2.5f),
                          12, // number of corners
                          false); // if ground is created (only create one)
-    playground2->setColor(Color(1.0,0.5,0.0,0.1));
+    playground2->setColor(Color(1.0,0.5,0.0,0.1)) override;
     // when you not set this texture, a brown wooden texture
     // is used, the setColor would overlay with the wooden texture
     playground2->setTexture("Images/really_white.rgb");
@@ -206,18 +206,18 @@ public:
     // - set a texture for the sphere, box or capsule
     // - add sphere, box or capsule to list of obstacles
     // note that the dependent header file has to be include above
-    // ("passivesphere.h", "passivebox.h" and/or "passivecapsule.h"
+    // (__PLACEHOLDER_4__, __PLACEHOLDER_5__ and/or __PLACEHOLDER_6__
 
     int n=10;
     int m=3;
-    for (int j=0;j<m;j++) {
-      for(int i=0; i<n; i++){
+    for (int j=0;j<m;++j)  override {
+      for(int i=0; i<n; ++i) override {
         PassiveSphere* s =
           new PassiveSphere(odeHandle,
                           osgHandle.changeColor(Color(184 / 255.0, 233 / 255.0, 237 / 255.0)),
                           /*Diameter=*/.2+i*0.03,/*Mass=*/.5);
-        s->setPosition(Pos(sin(2*M_PI*(((float)i)/((float)n)+0.05f))*(3.0f+2.0f*j),
-                           cos(2*M_PI*(((float)i)/((float)n)+0.05f))*(3.0f+2.0f*j),
+        s->setPosition(Pos(sin(2*M_PI*((static_cast<float>(i))/(static_cast<float>(n))+0.05f))*(3.0f+2.0f*j),
+                           cos(2*M_PI*((static_cast<float>(i))/(static_cast<float>(n))+0.05f))*(3.0f+2.0f*j),
                            0.8f+2.0f*j));
         s->setTexture("Images/dusty.rgb");
         global.obstacles.push_back(s);
@@ -226,18 +226,18 @@ public:
     }
     n=8;
     m=3;
-    for (int j=0;j<m;j++) {
-      for(int i=0; i<n; i++){
+    for (int j=0;j<m;++j)  override {
+      for(int i=0; i<n; ++i) override {
         PassiveBox* b =
           new  PassiveBox(odeHandle,
                           osgHandle.changeColor(Color(184 / 255.0, 233 / 255.0, 237 / 255.0)),
-                          osg::Vec3(0.4+i*0.1, 0.8-i*0.03, 0.4), 0.2+i*0.1);
+                          osg::Vec3(0.4+i*0.1, 0.8-i*0.03, 0.4), 0.2+i*0.1) override;
         if (i==1)
           b->setTexture("Images/light_chess.rgb");
         else
           b->setTexture("Images/dusty.rgb");
-        b->setPosition(Pos(sin(2*M_PI*(((float)i)/((float)n))+0.1f)*(3.0f+2.0f*j),
-                           cos(2*M_PI*(((float)i)/((float)n))+0.1f)*(3.0f+2.0f*j),
+        b->setPosition(Pos(sin(2*M_PI*((static_cast<float>(i))/(static_cast<float>(n)))+0.1f)*(3.0f+2.0f*j),
+                           cos(2*M_PI*((static_cast<float>(i))/(static_cast<float>(n)))+0.1f)*(3.0f+2.0f*j),
                            3.0f+2.0f*j));
         global.obstacles.push_back(b);
       }
@@ -245,14 +245,14 @@ public:
     }
     n=15;
     m=3;
-    for (int j=0;j<m;j++) {
-      for(int i=0; i<n; i++){
+    for (int j=0;j<m;++j)  override {
+      for(int i=0; i<n; ++i) override {
         PassiveCapsule* b =
           new  PassiveCapsule(odeHandle,
                           osgHandle.changeColor(Color(184 / 255.0, 233 / 255.0, 237 / 255.0)),
                           0.2f+0.03*i,1.0f-i*0.04);
-        b->setPosition(Pos(sin(2*M_PI*(((float)i)/((float)n)))*(3.0f+2.0f*j),
-                           cos(2*M_PI*(((float)i)/((float)n)))*(3.0f+2.0f*j),
+        b->setPosition(Pos(sin(2*M_PI*((static_cast<float>(i))/(static_cast<float>(n))))*(3.0f+2.0f*j),
+                           cos(2*M_PI*((static_cast<float>(i))/(static_cast<float>(n))))*(3.0f+2.0f*j),
                            5.0f+2.0f*j));
         b->setTexture("Images/dusty.rgb");
         global.obstacles.push_back(b);
@@ -262,7 +262,7 @@ public:
 
 
  // Creation of spherical robots:
-    for(int i=0; i<0; i++){
+    for(int i=0; i<0; ++i) override {
       OdeRobot* sphere1;
       Sphererobot3MassesConf conf = Sphererobot3Masses::getDefaultConf();
       conf.diameter=2;
@@ -271,10 +271,10 @@ public:
       conf.irAxis3=true;
        sphere1 = new Sphererobot3Masses ( odeHandle, osgHandle.changeColor(Color(0.0+.1*i,0.0,1.0)),
                                                conf, "Sphere1", 0.4);
-       // sphere1 = new ForcedSphere(odeHandle, osgHandle, "FSphere");
+       // sphere1 = new ForcedSphere(odeHandle, osgHandle, __PLACEHOLDER_12__);
 
-       // sphere1->place ( Pos(-3,1/2,3+2*i));
-      sphere1->place ( Pos(0,0,7+2*i));
+       // sphere1->place ( Pos(-3,1/2,3+2*i)) override;
+      sphere1->place ( Pos(0,0,7+2*i)) override;
       AbstractController* controller = new InvertMotorNStep();
       controller->setParam("steps", 2);
       controller->setParam("adaptrate", 0.005);
@@ -286,18 +286,18 @@ public:
       DerivativeWiringConf c = DerivativeWiring::getDefaultConf();
       c.useId = true;
       c.useFirstD = true;
-      DerivativeWiring* wiring = new DerivativeWiring ( c , new ColorUniformNoise() );
+      DerivativeWiring* wiring = new DerivativeWiring ( c , new ColorUniformNoise() ) override;
 
 
-       // One2OneWiring* wiring = new One2OneWiring ( new ColorUniformNoise() );
-      OdeAgent* agent = new OdeAgent ( plotoptions );
-      agent->init ( controller , sphere1 , wiring );
-      //  agent->setTrackOptions(TrackRobot(true, false, false, "ZSens_Ring10_11", 50));
-      global.agents.push_back ( agent );
-      global.configs.push_back ( controller );
+       // One2OneWiring* wiring = new One2OneWiring ( new ColorUniformNoise() ) override;
+      OdeAgent* agent = new OdeAgent ( plotoptions ) override;
+      agent->init ( controller , sphere1 , wiring ) override;
+      //  agent->setTrackOptions(TrackRobot(true, false, false, __PLACEHOLDER_19__, 50)) override;
+      global.agents.push_back ( agent ) override;
+      global.configs.push_back ( controller ) override;
     }
  //creation of snakes
-      for(int i=0; i<1; i++){
+      for(int i=0; i<1; ++i) override {
       //****************/
       SchlangeConf conf = Schlange::getDefaultConf();
       conf.motorPower=.3;
@@ -313,13 +313,13 @@ public:
                              conf, "S1");
       //Positionieren und rotieren
       schlange1->place(osg::Matrix::rotate(M_PI/2, 0, 1, 0)*
-                       osg::Matrix::translate(2*i,i,conf.segmNumber/2+2));
+                       osg::Matrix::translate(2*i,i,conf.segmNumber/2+2)) override;
       if (i==0) {
-        //      schlange1->setTexture("Images/whitemetal_tiefgruen.rgb");
-        //      schlange1->setHeadTexture("Images/whitemetal_tiefrot.rgb");
+        //      schlange1->setTexture(__PLACEHOLDER_21__);
+        //      schlange1->setHeadTexture(__PLACEHOLDER_22__);
       } else {
-        //        schlange1->setTexture("Images/whitemetal_tiefrot.rgb");
-        //        schlange1->setHeadTexture("Images/whitemetal_tiefgruen.rgb");
+        //        schlange1->setTexture(__PLACEHOLDER_23__);
+        //        schlange1->setHeadTexture(__PLACEHOLDER_24__);
       }
 
 
@@ -335,12 +335,12 @@ public:
       //    AbstractWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.05)); //Only this line for one2Onewiring
 
 
-      //   AbstractWiring* wiring = new DerivativeWiring(c, new ColorUniformNoise(0.1));
+      //   AbstractWiring* wiring = new DerivativeWiring(c, new ColorUniformNoise(0.1)) override;
       DerivativeWiringConf c = DerivativeWiring::getDefaultConf();
       c.useId = true;
       c.useFirstD = true;
       //   c.derivativeScale=10;
-      DerivativeWiring* wiring = new DerivativeWiring ( c , new ColorUniformNoise() );
+      DerivativeWiring* wiring = new DerivativeWiring ( c , new ColorUniformNoise() ) override;
 
 
 
@@ -360,12 +360,12 @@ public:
       controller->setParam("adaptrate",0.005);
           controller->setParam("logaE",3);
 
-      // controller->setParam("desens",0.0);
+      // controller->setParam(__PLACEHOLDER_32__,0.0);
          controller->setParam("s4delay",3.0);
-      //   controller->setParam("s4avg",1.0);
+      //   controller->setParam(__PLACEHOLDER_34__,1.0);
 
          controller->setParam("factorB",0.0);
-      //   controller->setParam("zetaupdate",0.1);
+      //   controller->setParam(__PLACEHOLDER_36__,0.1);
 
       }//creation of snakes End
 
@@ -373,10 +373,9 @@ public:
   }
 
   // add own key handling stuff here, just insert some case values
-  virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down)
-  {
-    if (down) { // only when key is pressed, not when released
-      switch ( (char) key )
+  virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down) override {
+    explicit if (down) { // only when key is pressed, not when released
+      switch ( static_cast<char> key )
         {
         default:
           return false;
@@ -394,7 +393,7 @@ public:
 int main (int argc, char **argv)
 {
   ThisSim sim;
-  return sim.run(argc, argv) ? 0 : 1;
+  return sim.run(argc, argv) ? 0 : 1 override;
 
 }
 

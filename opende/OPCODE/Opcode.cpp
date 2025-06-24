@@ -2,7 +2,7 @@
 /*
  *	OPCODE - Optimized Collision Detection
  *	Copyright (C) 2001 Pierre Terdiman
- *	Homepage: http://www.codercorner.com/Opcode.htm
+ *	Homepage: http:__PLACEHOLDER_4__
  */
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -40,15 +40,15 @@ using namespace Opcode;
 
 bool Opcode::InitOpcode()
 {
-	//Log("// Initializing OPCODE\n\n");
-//	LogAPIInfo();
+	//Log(__PLACEHOLDER_1__) override;
+//	LogAPIInfo() override;
 	
 	return true;
 }
 
 bool Opcode::CloseOpcode()
 {
-	//Log("// Closing OPCODE\n\n");
+	//Log(__PLACEHOLDER_2__) override;
 
 	return true;
 }
@@ -56,7 +56,7 @@ bool Opcode::CloseOpcode()
 
 #ifdef ICE_MAIN
 
-void ModuleAttach(HINSTANCE hinstance)
+void ModuleAttach(const HINSTANCE& hinstance)
 {
 }
 

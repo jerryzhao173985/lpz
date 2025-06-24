@@ -1,0 +1,38 @@
+=== LPZRobots Warning Fix Script ===
+Fixing common C++ warnings...
+Starting automatic fixes...
+Fixing missing override specifiers...
+  Fixed: ./selforg/utils/discretisizer.h
+  Fixed: ./selforg/utils/globaldatabase.h
+  Fixed: ./selforg/utils/inspectable.h
+  Fixed: ./selforg/utils/mediator.h
+  Fixed: ./selforg/utils/plotoptionengine.h
+  Fixed: ./selforg/utils/backcaller.h
+  Fixed: ./selforg/utils/mediatorcollegue.h
+Fixing missing explicit constructors...
+  Fixed: ./selforg/matrix/matrix.h
+Fixing const correctness issues...
+Fixing C-style casts...
+Removing 'using namespace std' from headers...
+  Fixed: ./real_robots/robots/amosii/amosIIserialv1.h
+  NOTE: You may need to add std:: prefixes in corresponding .cpp files
+  Fixed: ./real_robots/robots/amosii/amosIIserialv2.h
+  NOTE: You may need to add std:: prefixes in corresponding .cpp files
+  Fixed: ./selforg/controller/use_java_controller.h
+  NOTE: You may need to add std:: prefixes in corresponding .cpp files
+  Fixed: ./selforg/simulations/spherical_xbee/workstation/serial_unix.h
+  NOTE: You may need to add std:: prefixes in corresponding .cpp files
+  Fixed: ./selforg/simulations/spherical_xbee/commtest/serial_unix.h
+  NOTE: You may need to add std:: prefixes in corresponding .cpp files
+  Fixed: ./selforg/simulations/tcpcommunication/Socket.h
+  NOTE: You may need to add std:: prefixes in corresponding .cpp files
+  Fixed: ./ode_robots/simulations/life_vs_copy/environment.h
+  NOTE: You may need to add std:: prefixes in corresponding .cpp files
+  Fixed: ./ode_robots/simulations/zoo/environment.h
+  NOTE: You may need to add std:: prefixes in corresponding .cpp files
+  Fixed: ./ode_robots/simulations/humanoid_DEP/environment.h
+  NOTE: You may need to add std:: prefixes in corresponding .cpp files
+
+=== Warning Fix Complete ===
+Note: Some warnings may require manual intervention.
+Check build logs for remaining issues.

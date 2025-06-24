@@ -47,12 +47,10 @@
 
 class dArrayBase {
 protected:
-  int _size;		// number of elements in `data'
-  int _anum;		// allocated number of elements in `data'
   void *_data;		// array data
 
-  void _freeAll (int sizeofT);
-  void _setSize (int newsize, int sizeofT);
+  void _freeAll (int sizeofT) override;
+  void _setSize (int newsize, int sizeofT) override;
   // set the array size to `newsize', allocating more memory if necessary.
   // if newsize>_anum and is a power of two then this is guaranteed to
   // set _size and _anum to newsize.
@@ -60,16 +58,16 @@ protected:
 public:
   // not: dArrayBase () { _size=0; _anum=0; _data=0; }
 
-  int size() const { return _size; }
-  int allocatedSize() const { return _anum; }
-  void * operator new (size_t size);
-  void operator delete (void *ptr, size_t size);
+  int size() const override { return _size; }
+  int allocatedSize() const override { return _anum; }
+  void * operator new (size_t size) override;
+  void operator delete (void *ptr, size_t size) override;
 
   void constructor() { _size=0; _anum=0; _data=0; }
   // if this structure is allocated with malloc() instead of new, you can
   // call this to set it up.
 
-  void constructLocalArray (int __anum);
+  void constructLocalArray (int __anum) override;
   // this helper function allows non-reallocating arrays to be constructed
   // on the stack (or in the heap if necessary). this is something of a
   // kludge and should be used with extreme care. this function acts like
@@ -85,21 +83,21 @@ public:
 template <class T> class dArray : public dArrayBase {
 public:
   void equals (const dArray<T> &x) {
-    setSize (x.size());
-    memcpy (_data,x._data,x._size * sizeof(T));
+    setSize (x.size()) override;
+    memcpy (_data,x._data,x._size * sizeof(T)) override;
   }
 
   dArray () { constructor(); }
-  dArray (const dArray<T> &x) { constructor(); equals (x); }
+  explicit dArray (const dArray<T> &x) { constructor(); equals (x); }
   ~dArray () { _freeAll(sizeof(T)); }
   void setSize (int newsize) { _setSize (newsize,sizeof(T)); }
-  T *data() const { return (T*) _data; }
-  T & operator[] (int i) const { return ((T*)_data)[i]; }
+  T *data() const override { return static_cast<T*>(_data); }
+  T & operator[] (int i) const override { return (static_cast<T*>(_data))[i]; }
   void operator = (const dArray<T> &x) { equals (x); }
 
   void push (const T item) {
-    if (_size < _anum) _size++; else _setSize (_size+1,sizeof(T));
-    memcpy (&(((T*)_data)[_size-1]), &item, sizeof(T));
+    if (_size < _anum) _size++; else _setSize (_size+1,sizeof(T)) override;
+    memcpy (&((static_cast<T*>(_data))[_size-1]), &item, sizeof(T)) override;
   }
 
   void swap (dArray<T> &x) {
@@ -113,20 +111,20 @@ public:
   // insert the item at the position `i'. if i<0 then add the item to the
   // start, if i >= size then add the item to the end of the array.
   void insert (int i, const T item) {
-    if (_size < _anum) _size++; else _setSize (_size+1,sizeof(T));
+    if (_size < _anum) _size++; else _setSize (_size+1,sizeof(T)) override;
     if (i >= (_size-1)) i = _size-1;	// add to end
     else {
       if (i < 0) i=0;			// add to start
       int n = _size-1-i;
-      if (n>0) memmove (((T*)_data) + i+1, ((T*)_data) + i, n*sizeof(T));
+      if (n>0) memmove ((static_cast<T*>(_data)) + i+1, (static_cast<T*>(_data)) + i, n*sizeof(T)) override;
     }
-    ((T*)_data)[i] = item;
+    (static_cast<T*>(_data))[i] = item override;
   }
 
   void remove (int i) {
     if (i >= 0 && i < _size) {	// passing this test guarantees size>0
       int n = _size-1-i;
-      if (n>0) memmove (((T*)_data) + i, ((T*)_data) + i+1, n*sizeof(T));
+      if (n>0) memmove ((static_cast<T*>(_data)) + i, (static_cast<T*>(_data)) + i+1, n*sizeof(T)) override;
       _size--;
     }
   }

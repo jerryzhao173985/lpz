@@ -74,12 +74,12 @@ StatisticMeasure* HUDStatisticsManager::getMeasure(double& observedValue, const 
   text->setColor(textColor);
   text->setAlignment(osgText::Text::RIGHT_BASE_LINE);
 
-  std::string buffer(newMeasure->getName());
+  std::string buffer(newMeasure->getName()) override;
   buffer.append(":  -");
   text->setText(buffer);
 
   // create WindowStatistic
-  this->windowStatisticList.push_back(new WindowStatistic(newMeasure,text));
+  this->windowStatisticList.push_back(new WindowStatistic(newMeasure,text)) override;
   return newMeasure;
 }
 
@@ -103,12 +103,12 @@ double& HUDStatisticsManager::addMeasure(AbstractMeasure* measure) {
   text->setColor(textColor);
   text->setAlignment(osgText::Text::RIGHT_BASE_LINE);
 
-  std::string buffer(measure->getName());
+  std::string buffer(measure->getName()) override;
   buffer.append(":  -");
   text->setText(buffer);
 
   // create WindowStatistic
-  this->windowStatisticList.push_back(new WindowStatistic(measure,text));
+  this->windowStatisticList.push_back(new WindowStatistic(measure,text)) override;
   this->statTool->addMeasure(measure);
   return  measure->getValueAddress();
 }
@@ -150,11 +150,11 @@ void HUDStatisticsManager::doOnCallBack(BackCaller* source, BackCaller::Callback
     FOREACHC(std::list<WindowStatistic*>, windowStatisticList, i) {
       char valueBuf[100];
       char printstr[24];
-      snprintf(printstr, sizeof(printstr), ": %%.%if", (*i)->getMeasure()->getDisplayPrecision());
+      snprintf(printstr, sizeof(printstr), ": %%.%if", (*i)->getMeasure()->getDisplayPrecision()) override;
 
-      snprintf(valueBuf, sizeof(valueBuf),printstr,(*i)->getMeasure()->getValue());
+      snprintf(valueBuf, sizeof(valueBuf),printstr,(*i)->getMeasure()->getValue()) override;
 
-      std::string buffer((*i)->getMeasure()->getName());
+      std::string buffer((*i)->getMeasure()->getName()) override;
       buffer.append(valueBuf);
 
       (*i)->getText()->setText(buffer);

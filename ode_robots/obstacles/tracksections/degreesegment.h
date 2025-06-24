@@ -42,9 +42,9 @@ class DegreeSegment : public AbstractTrackSection {
   /**
    * Constructor
    */
-  DegreeSegment(const Matrix& position);
+  explicit DegreeSegment(const Matrix& position);
 
-  virtual ~DegreeSegment(){}
+  virtual ~DegreeSegment() {}
 
 
 /**
@@ -52,36 +52,36 @@ class DegreeSegment : public AbstractTrackSection {
  * here it is the length of the arc
  */
 
-virtual double getLength() override;
+virtual double getLength();
 
 /**
  * returns the width of the segment,
  */
- virtual double getWidth() override;
+ virtual double getWidth();
 
 /**
  * sets the width of the segment,
  */
- virtual void setWidth(double w) override;
+ virtual void setWidth(double w);
 
 
-virtual void setCurveAngle(const double& alpha) override;
+virtual void setCurveAngle(const double& alpha);
 
-virtual void setRadius(const double& rad) override;
+virtual void setRadius(const double& rad);
 
   /**
-   * gives the position and rotation(angle) of the segment at the
+   * gives the position and rotationstatic_cast<angle>(of) the segment at the
    * end of the segment so that a new segment could be placed there
    * if you want to place the new segment, you must muliplicate:
    * getTransformedEndMatrix()*getPositionMatrix();
    */
-  virtual Matrix getTransformedEndMatrix() override;
+  virtual Matrix getTransformedEndMatrix();
 
 
 /**
  * returns true if the real coordinates lay inside of the segment
  */
-virtual bool isInside(const Position& p) override;
+virtual bool isInside(const Position& p);
 
 
 /**
@@ -91,7 +91,7 @@ virtual bool isInside(const Position& p) override;
  * 100 means you are at the end
  * returns -1 if no IdValue can be given
  */
-virtual double getSectionIdValue(const Position& p) override;
+virtual double getSectionIdValue(const Position& p);
 
 
 /**
@@ -102,44 +102,41 @@ virtual double getSectionIdValue(const Position& p) override;
  * 100 means you are on the right
  * returns -1 if no WidthValue can be given
  */
-virtual double getWidthIdValue(const Position& p) override;
+virtual double getWidthIdValue(const Position& p);
 
 
 /**
  * draws the obstacle (4 boxes for the playground)
  */
- virtual  void draw() override;
+ virtual  void draw();
 
 
 
-virtual void create(dSpaceID space) override;
+virtual void create(dSpaceID space);
 
 
-virtual  void destroy() override;
+virtual  void destroy();
 
  protected:
   // this is the radius of the curve
-  double radius;
   // this is the width of the segment
   // normally it should be the same like alle the other segments
-  double width;
 
-  bool show_aabb;
+  bool show_aabb = false;
 
   // the wall to be drawed
   list<dGeomID> innerWalls;
   list<dGeomID> outerWalls;
 
-  double widthWall;
-  double heightWall;
+  double widthWall = 0;
+  double heightWall = 0;
 
   // angle is for 90DegreeSegment is 90
-  double angle;
 
   // determines if the curve goes left or right
-  int left;
+  int left = 0;
 
-  bool obstacle_exists;
+  bool obstacle_exists = false;
 
   /**
    * obstacle color

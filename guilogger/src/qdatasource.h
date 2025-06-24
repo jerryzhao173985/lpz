@@ -36,7 +36,7 @@ class QDataSource : public QThread
     Q_OBJECT
 
 signals:    
-    void newData(QString datablock);
+    void newData(const QString& datablock);
 
 };
 #endif

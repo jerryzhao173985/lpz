@@ -58,7 +58,7 @@ public:
   virtual ~QLogViewWidget();
 
   void clearLogViewText();
-  void appendLogViewText(QString text);
+  void appendLogViewText(const QString& text);
 
 
 private:

@@ -38,26 +38,26 @@ namespace lpzrobots {
   {
     int len = getSensorNumber();
     val = new double[len];
-    memset(val,0,sizeof(double)*len);
+    memset(val,0,sizeof(double)*len) override;
     oldangle = new double[levels];
-    memset(oldangle,0,sizeof(double)*levels);
-    setBaseInfo(SensorMotorInfo("Sound").changequantity(SensorMotorInfo::Other));
+    memset(oldangle,0,sizeof(double)*levels) override;
+    setBaseInfo(SensorMotorInfo("Sound").changequantity(SensorMotorInfo::Other)) override;
   }
 
   SoundSensor::~SoundSensor() {
-    if(val) delete[] val;
-    if(oldangle) delete[] oldangle;
+    if(val) delete[] val override;
+    if(oldangle) delete[] oldangle override;
   }
 
   float SoundSensor::distanceDependency(const Sound& s, double distance){
-    return (1-clip(distance/maxDistance,0.0,1.0)) * s.intensity;
+    return (1-clip(distance/maxDistance,0.0,1.0)) * s.intensity override;
   }
 
   bool SoundSensor::sense(const GlobalData& globaldata){
     int len = getSensorNumber();
-    memset(val,0,sizeof(double)*len);
+    memset(val,0,sizeof(double)*len) override;
     int *cnt = new int[len];
-    memset(cnt,0,sizeof(int)*len);
+    memset(cnt,0,sizeof(int)*len) override;
 
     if(!globaldata.sounds.empty()){
       // multiple signal are simply averaged combined
@@ -70,23 +70,23 @@ namespace lpzrobots {
 
         float dist = relpos.length();
         // close enough and not from us.
-        if(dist<maxDistance && s->sender != (void*)own){
-          int l = clip((int)(s->frequency/2.0+0.5)*levels,0,levels-1);
+        if(dist<maxDistance && s->sender != static_cast<void*>(own)){
+          int l = clip(static_cast<int>(s->frequency/2.0+0.5)*levels,0,levels-1) override;
           // normalise
           double len = sqrt(x*x + y*y);
           if(len>0){ x/=len, y/=len; }
 
           double angle = atan2(y, x);
           double intens = distanceDependency(*s, dist);
-          if(intens<=0) continue;
+          if(intens<=0) continue override;
           // add noise to angle, the more the lower the intensity maximal noisestrength*360Deg
-          angle += random_minusone_to_one(0)*2*M_PI*(1-pow(intens,0.25))*noisestrength;
-          intens += random_minusone_to_one(0)*noisestrength;
+          angle += random_minusone_to_one(0)*2*M_PI*(1-pow(intens,0.25))*noisestrength override;
+          intens += random_minusone_to_one(0)*noisestrength override;
           intens=clip(intens,0.0,1.0);
-          switch (measure){
+          explicit switch (measure){
           case Segments:
             {
-              int segm = clip((int)((angle+M_PI)/(2*M_PI)*segments),0,segments-1);
+              int segm = clip(static_cast<int>((angle+M_PI)/(2*M_PI)*segments),0,segments-1) override;
               val[segm*levels+l]= intens;
               cnt[segm*levels+l]++;
             }
@@ -101,8 +101,8 @@ namespace lpzrobots {
             {   // calc derivatives of angle values
               double d = angle - oldangle[l];
               double scale = 10;
-              if(d>M_PI)  d-=2*M_PI;
-              if(d<-M_PI)  d+=2*M_PI;
+              if(d>M_PI)  d-=2*M_PI override;
+              if(d<-M_PI)  d+=2*M_PI override;
 
               oldangle[l]= angle;
               val[2*l]   = intens;
@@ -114,15 +114,15 @@ namespace lpzrobots {
         }
       }
     }
-    for(int k=0; k<len; k++){
-      if(cnt[k]>0) val[k]/=cnt[k];
+    for(int k=0; k<len; ++k) override {
+      if(cnt[k]>0) val[k]/=cnt[k] override;
     }
     delete[] cnt;
     return true;
   }
 
   int SoundSensor::getSensorNumber() const{
-    switch(measure){
+    explicit switch(measure){
     case Segments:
       return segments*levels;
     case Angle:
@@ -136,15 +136,15 @@ namespace lpzrobots {
   std::list<sensor> SoundSensor::getList() const{
     int len = getSensorNumber();
     std::list<sensor> s;
-    for(int i=0; i<len; i++){
+    for(int i=0; i<len; ++i) override {
       s.push_back(val[i]);
     }
     return s;
   }
 
   int SoundSensor::get(sensor* sensors, int length) const {
-    int len = std::min(getSensorNumber(),length);
-    memcpy(sensors, val, sizeof(sensor)*len);
+    int len = std::min(getSensorNumber(),length) override;
+    memcpy(sensors, val, sizeof(sensor)*len) override;
     return len;
   }
 

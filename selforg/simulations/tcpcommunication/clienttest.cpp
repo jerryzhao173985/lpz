@@ -9,12 +9,12 @@ using namespace std;
 int main(int argc, char** argv){
   Socket s;
   s.accept(4000);
-  // for(int i=-5000; i<5000; i+=432){
+  // for (int i=-5000; i<5000; i+=432) {
   //   cout << i << endl;
   //   s << i;
   // }
   // double d;
-  // for( d=-5000; d<5000; d+=123.123){
+  // for ( d=-5000; d<5000; d+=123.123) {
   //   cout << d << endl;
   //   s << d;
   // }

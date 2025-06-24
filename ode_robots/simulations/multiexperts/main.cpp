@@ -67,7 +67,6 @@ public:
   AbstractController *controller;
   MultiSat *multisat;
   AbstractGround* playground;
-  int useReinforcement;
 
   // starting function (executed once at the beginning of the simulation loop)
   void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global)
@@ -83,49 +82,49 @@ public:
     multisat=0;
     robot=0;
 
-    setCameraHomePos(Pos(-0.497163, 11.6358, 3.67419),  Pos(-179.213, -11.6718, 0));
+    setCameraHomePos(Pos(-0.497163, 11.6358, 3.67419),  Pos(-179.213, -11.6718, 0)) override;
     // initialization
     global.odeConfig.setParam("noise",0.05);
-    //  global.odeConfig.setParam("gravity",-10);
+    //  global.odeConfig.setParam(__PLACEHOLDER_2__,-10);
     global.odeConfig.setParam("controlinterval",2);
 
     bool longsquarecorridor=false;
 
     playground=0;
-    if(longsquarecorridor){
+    explicit if(longsquarecorridor){
       playground = new Playground(odeHandle, osgHandle,osg::Vec3(500, 0.2, 1.2 ),
                                   5000/500, false);
-      playground->setGroundColor(Color(255/255.0,200/255.0,0/255.0));
+      playground->setGroundColor(Color(255/255.0,200/255.0,0/255.0)) override;
       playground->setGroundTexture("Images/dusty.rgb");
-      playground->setColor(Color(255/255.0,200/255.0,21/255.0, 0.6));
-      playground->setPosition(osg::Vec3(0,0,0.1));
+      playground->setColor(Color(255/255.0,200/255.0,21/255.0, 0.6)) override;
+      playground->setPosition(osg::Vec3(0,0,0.1)) override;
       playground->setTexture("");
       global.obstacles.push_back(playground);
     }
 
     /* * * * BARRELS * * * */
-    for(int i=0; i< num_barrels; i++){
+    for(int i=0; i< num_barrels; ++i) override {
       //****************
       Sphererobot3MassesConf conf = Sphererobot3Masses::getDefaultConf();
       conf.pendularrange  = 0.15;
       conf.motorsensor=false;
-      conf.addSensor(new AxisOrientationSensor(AxisOrientationSensor::ZProjection, Sensor::X | Sensor::Y));
-      //      conf.addSensor(new SpeedSensor(5, SpeedSensor::Translational, Sensor::X ));
-      conf.addSensor(new SpeedSensor(5, SpeedSensor::RotationalRel, Sensor::Z ));
+      conf.addSensor(new AxisOrientationSensor(AxisOrientationSensor::ZProjection, Sensor::X | Sensor::Y)) override;
+      //      conf.addSensor(new SpeedSensor(5, SpeedSensor::Translational, Sensor::X )) override;
+      conf.addSensor(new SpeedSensor(5, SpeedSensor::RotationalRel, Sensor::Z )) override;
       conf.irAxis1=false;
       conf.irAxis2=false;
       conf.irAxis3=false;
       conf.spheremass   = 0.3; // 1
       robot = new Barrel2Masses ( odeHandle, osgHandle.changeColor(Color(0.0,0.0,1.0)),
                                    conf, "Multi4_4h_Barrel", 0.4);
-      robot->place ( osg::Matrix::rotate(M_PI/2, 1,0,0));
+      robot->place ( osg::Matrix::rotate(M_PI/2, 1,0,0)) override;
 
       InvertMotorNStepConf cc = InvertMotorNStep::getDefaultConf();
       cc.cInit=0.5;
       cc.useSD=true;
       AbstractController* controller = new InvertMotorNStep(cc); // selforg controller
       //AbstractController* controller = new SineController();
-      //controller = new FFNNController("models/barrel/controller/nonoise.cx1-10.net", 10, true);
+      //controller = new FFNNController(__PLACEHOLDER_7__, 10, true);
       MultiSatConf msc = MultiSat::getDefaultConf();
       msc.controller = controller;
       //      msc.numContext = 1;
@@ -134,11 +133,11 @@ public:
       multisat = new MultiSat(msc);
 
       controller->setParam("steps", 2);
-      //    controller->setParam("adaptrate", 0.001);
+      //    controller->setParam(__PLACEHOLDER_9__, 0.001);
       controller->setParam("adaptrate", 0.0);
       controller->setParam("nomupdate", 0.005);
-      //      controller->setParam("epsC", 0.03);
-      //      controller->setParam("epsA", 0.05);
+      //      controller->setParam(__PLACEHOLDER_12__, 0.03);
+      //      controller->setParam(__PLACEHOLDER_13__, 0.05);
       controller->setParam("epsC", 0.02);
       controller->setParam("epsA", 0.03);
       controller->setParam("rootE", 3);
@@ -147,29 +146,29 @@ public:
       //       DerivativeWiringConf dc = DerivativeWiring::getDefaultConf();
       //       dc.useId=true;
       //       dc.useFirstD=false;
-      //       AbstractWiring* wiring = new DerivativeWiring(dc,new ColorUniformNoise());
-      //      AbstractWiring* wiring = new SelectiveOne2OneWiring(new ColorUniformNoise(), new select_from_to(0,1));
-      AbstractWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.2));
-      //      OdeAgent* agent = new OdeAgent ( PlotOption(File, Robot, 1) );
-      OdeAgent* agent = new OdeAgent ( global );
+      //       AbstractWiring* wiring = new DerivativeWiring(dc,new ColorUniformNoise()) override;
+      //      AbstractWiring* wiring = new SelectiveOne2OneWiring(new ColorUniformNoise(), new select_from_to(0,1)) override;
+      AbstractWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.2)) override;
+      //      OdeAgent* agent = new OdeAgent ( PlotOption(File, Robot, 1) ) override;
+      OdeAgent* agent = new OdeAgent ( global ) override;
       agent->addInspectable(controller); // add selforg controller to list of inspectables
-      agent->init ( multisat , robot , wiring );
-      //  agent->setTrackOptions(TrackRobot(true, false, false, "ZSens_Ring10_11", 50));
-      global.agents.push_back ( agent );
-      global.configs.push_back ( controller );
-      global.configs.push_back ( multisat );
+      agent->init ( multisat , robot , wiring ) override;
+      //  agent->setTrackOptions(TrackRobot(true, false, false, __PLACEHOLDER_18__, 50)) override;
+      global.agents.push_back ( agent ) override;
+      global.configs.push_back ( controller ) override;
+      global.configs.push_back ( multisat ) override;
     }
 
 
     /* * * * SPHERES * * * */
-    for(int i=0; i< num_spheres; i++){
+    for(int i=0; i< num_spheres; ++i) override {
       bool replay=true;
       global.odeConfig.setParam("noise", replay ? 0 : 0.05);
       //****************
-      // const char* replayfilename="Sphere_reinforce_axis_rot.sel.log";
+      // const char* replayfilename=__PLACEHOLDER_20__;
       const char* replayfilename="Sphere_slow_07-07-18.sel.log";
-      //   const char* replayfilename="Sphere_long_rich_07-07-18.sel.log";
-      // const char* replayfilename="Sphere_long_rich_2_07-07-31.sel.log";
+      //   const char* replayfilename=__PLACEHOLDER_22__;
+      // const char* replayfilename=__PLACEHOLDER_23__;
       Sphererobot3MassesConf conf = Sphererobot3Masses::getDefaultConf();
       conf.pendularrange  = 0.30;
       conf.brake          = 0.1;
@@ -178,16 +177,16 @@ public:
       // conf.spheremass  = 1;
       //      conf.spheremass  = 0.3;
       conf.motorsensor=false;
-      conf.addSensor(new AxisOrientationSensor(AxisOrientationSensor::ZProjection));
-      //      conf.addSensor(new AxisOrientationSensor(AxisOrientationSensor::Axis));
-      conf.addSensor(new SpeedSensor(5, SpeedSensor::RotationalRel));
+      conf.addSensor(new AxisOrientationSensor(AxisOrientationSensor::ZProjection)) override;
+      //      conf.addSensor(new AxisOrientationSensor(AxisOrientationSensor::Axis)) override;
+      conf.addSensor(new SpeedSensor(5, SpeedSensor::RotationalRel)) override;
 
       robot = new Sphererobot3Masses(odeHandle, osgHandle.changeColor(Color(0,0.0,2.0)),
                                      conf, "Multi20_h_Sphereslow_v5_noy_sqrt", 0.3);
-      //        conf, "Multi16_2h_Sphere_long_rich2", 0.3);
-      robot->place ( osg::Matrix::translate(0,0,0.2));
+      //        conf, __PLACEHOLDER_25__, 0.3);
+      robot->place ( osg::Matrix::translate(0,0,0.2)) override;
 
-      if(!replay){
+      explicit if(!replay){
         InvertMotorNStepConf cc = InvertMotorNStep::getDefaultConf();
         //      DerControllerConf cc = DerController::getDefaultConf();
         cc.cInit=1.0;
@@ -214,9 +213,9 @@ public:
       msc.useY=false;
       multisat = new MultiSat(msc);
 
-      //controller = new FFNNController("models/barrel/controller/nonoise.cx1-10.net", 10, true);
+      //controller = new FFNNController(__PLACEHOLDER_26__, 10, true);
       controller->setParam("steps", 1);
-      //    controller->setParam("adaptrate", 0.001);
+      //    controller->setParam(__PLACEHOLDER_28__, 0.001);
       controller->setParam("adaptrate", 0.0);
       controller->setParam("nomupdate", 0.005);
       controller->setParam("epsC", 0.1);
@@ -226,22 +225,22 @@ public:
       controller->setParam("sinerate", 15);
       controller->setParam("phaseshift", 0.45);
 
-      // AbstractWiring* wiring = new SelectiveOne2OneWiring(new ColorUniformNoise(0.2), new select_from_to(0,2));
-      //OdeAgent* agent = new OdeAgent ( PlotOption(GuiLogger, Robot, 5) );
-      //     agent->init ( controller , robot , wiring );
-      global.configs.push_back ( controller );
+      // AbstractWiring* wiring = new SelectiveOne2OneWiring(new ColorUniformNoise(0.2), new select_from_to(0,2)) override;
+      //OdeAgent* agent = new OdeAgent ( PlotOption(GuiLogger, Robot, 5) ) override;
+      //     agent->init ( controller , robot , wiring ) override;
+      global.configs.push_back ( controller ) override;
 
-      AbstractWiring* wiring = new One2OneWiring ( new ColorUniformNoise(0.20) );
-      OdeAgent* agent = new OdeAgent ( global );
+      AbstractWiring* wiring = new One2OneWiring ( new ColorUniformNoise(0.20) ) override;
+      OdeAgent* agent = new OdeAgent ( global ) override;
       agent->addInspectable(controller);
-      agent->init ( multisat , robot , wiring );
-      global.configs.push_back ( multisat );
-      //      agent->setTrackOptions(TrackRobot(true, true, false, true, "ZSens", 50));
-      global.agents.push_back ( agent );
+      agent->init ( multisat , robot , wiring ) override;
+      global.configs.push_back ( multisat ) override;
+      //      agent->setTrackOptions(TrackRobot(true, true, false, true, __PLACEHOLDER_37__, 50)) override;
+      global.agents.push_back ( agent ) override;
     }
 
     /* * * * 4 Wheeled * * * */
-    for(int i=0; i< num_4wheel; i++){
+    for(int i=0; i< num_4wheel; ++i) override {
       bool replay=false;
       global.odeConfig.setParam("noise", replay ? 0 : 0.05);
       //****************
@@ -251,13 +250,13 @@ public:
       //       fwc.irFront=true;
       //       fwc.irBack=true;
       //       fwc.irSide=true;
-      OdeRobot* nimm4 = new FourWheeled ( odeHandle, osgHandle, fwc, "Multi8_2h_Nimm4_nogat_noy_sqrt");
-      nimm4->addSensor(std::make_shared<SpeedSensor>(SpeedSensor(1,SpeedSensor::TranslationalRel, Sensor::Z)));
-      nimm4->addSensor(std::make_shared<SpeedSensor>(SpeedSensor(1,SpeedSensor::RotationalRel, Sensor::X)));
+      OdeRobot* nimm4 = new FourWheeled ( odeHandle, osgHandle, fwc, "Multi8_2h_Nimm4_nogat_noy_sqrt") override;
+      nimm4->addSensor(std::make_shared<SpeedSensor>(SpeedSensor(1,SpeedSensor::TranslationalRel, Sensor::Z))) override;
+      nimm4->addSensor(std::make_shared<SpeedSensor>(SpeedSensor(1,SpeedSensor::RotationalRel, Sensor::X))) override;
       robot = nimm4;
-      robot->place ( osg::Matrix::translate(0,0,0.2));
+      robot->place ( osg::Matrix::translate(0,0,0.2)) override;
 
-      if(!replay){
+      explicit if(!replay){
         InvertMotorNStepConf cc = InvertMotorNStep::getDefaultConf();
         //      DerControllerConf cc = DerController::getDefaultConf();
         cc.cInit=1.0;
@@ -282,7 +281,7 @@ public:
       msc.useY=false;
       multisat = new MultiSat(msc);
 
-      //controller = new FFNNController("models/barrel/controller/nonoise.cx1-10.net", 10, true);
+      //controller = new FFNNController(__PLACEHOLDER_41__, 10, true);
       controller->setParam("steps", 1);
       controller->setParam("adaptrate", 0.0);
       controller->setParam("epsC", 0.05);
@@ -290,33 +289,33 @@ public:
       controller->setParam("rootE", 0);
       controller->setParam("logaE", 0);
 
-      global.configs.push_back ( controller );
+      global.configs.push_back ( controller ) override;
 
-      AbstractWiring* wiring = new One2OneWiring ( new ColorUniformNoise(0.20) );
-      OdeAgent* agent = new OdeAgent ( global );
+      AbstractWiring* wiring = new One2OneWiring ( new ColorUniformNoise(0.20) ) override;
+      OdeAgent* agent = new OdeAgent ( global ) override;
       agent->addInspectable(controller);
-      agent->init ( multisat , robot , wiring );
-      global.configs.push_back ( multisat );
-      //      agent->setTrackOptions(TrackRobot(true, true, false, true, "ZSens", 50));
-      global.agents.push_back ( agent );
+      agent->init ( multisat , robot , wiring ) override;
+      global.configs.push_back ( multisat ) override;
+      //      agent->setTrackOptions(TrackRobot(true, true, false, true, __PLACEHOLDER_48__, 50)) override;
+      global.agents.push_back ( agent ) override;
     }
 
 
 
   }
 
-  virtual void addCallback(GlobalData& globalData, bool draw, bool pause, bool control) {
-//     InvertMotorNStep* c = dynamic_cast<InvertMotorNStep*>(controller);
+  virtual void addCallback(const GlobalData& globalData, bool draw, bool pause, bool control) override {
+//     InvertMotorNStep* c = dynamic_cast<InvertMotorNStep*>(controller) override;
 //     if(c){
-//       matrix::Matrix m(3,1, dBodyGetLinearVel( sphere->getMainPrimitive()->getBody()));
-//       c->setReinforcement(m.map(abs).elementSum()/3 - 1);
+//       matrix::Matrix m(3,1, dBodyGetLinearVel( sphere->getMainPrimitive()->getBody())) override;
+//       c->setReinforcement(m.map(abs).elementSum()/3 - 1) override;
 //     }
     // if(useReinforcement==4){ // for FourWheelie
-    //   InvertMotorNStep* c = dynamic_cast<InvertMotorNStep*>(controller);
+    //   InvertMotorNStep* c = dynamic_cast<InvertMotorNStep*>(controller) override;
     //   if(c && sensor){
     //      double dat[1];
     //     sensor->get(dat, 1);
-    //      c->setReinforcement(fabs(dat[0]));
+    //      c->setReinforcement(fabs(dat[0])) override;
     //   }
     // }
 
@@ -324,25 +323,24 @@ public:
   }
 
   // add own key handling stuff here, just insert some case values
-  virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down)
-  {
+  virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down) override {
     char filename[256];
-    if (down) { // only when key is pressed, not when released
-      switch ( (char) key )
+    explicit if (down) { // only when key is pressed, not when released
+      switch ( static_cast<char> key )
         {
-        case 'y' : dBodyAddForce ( robot->getMainPrimitive()->getBody() , 30 ,0 , 0 ); break;
-        case 'Y' : dBodyAddForce ( robot->getMainPrimitive()->getBody() , -30 , 0 , 0 ); break;
-          //        case 'x' : dBodyAddTorque ( robot->getMainPrimitive()->getBody() , 0 , 10 , 0 ); break;
-          //        case 'X' : dBodyAddTorque ( robot->getMainPrimitive()->getBody() , 0 , -10 , 0 ); break;
-        case 'x' : dBodyAddTorque ( robot->getMainPrimitive()->getBody() , 0 , 0, 30); break;
-        case 'X' : dBodyAddTorque ( robot->getMainPrimitive()->getBody() , 0 , 0,-30); break;
+        case 'y' : dBodyAddForce ( robot->getMainPrimitive()->getBody() , 30 ,0 , 0 ); break override;
+        case 'Y' : dBodyAddForce ( robot->getMainPrimitive()->getBody() , -30 , 0 , 0 ); break override;
+          //        case __PLACEHOLDER_57__ : dBodyAddTorque ( robot->getMainPrimitive()->getBody() , 0 , 10 , 0 ); break override;
+          //        case __PLACEHOLDER_58__ : dBodyAddTorque ( robot->getMainPrimitive()->getBody() , 0 , -10 , 0 ); break override;
+        case 'x' : dBodyAddTorque ( robot->getMainPrimitive()->getBody() , 0 , 0, 30); break override;
+        case 'X' : dBodyAddTorque ( robot->getMainPrimitive()->getBody() , 0 , 0,-30); break override;
         case 'n' :
           std::cout << "Please type a filename stem:";
           std::cin >> filename;
           if(multisat) multisat->storeSats(filename);
           break;
         case 'l' :
-          if(controller){
+          explicit if(controller){
             std::cout << "Controller filename: ";
             std::cin >> filename;
             {
@@ -370,7 +368,7 @@ int main (int argc, char **argv)
 {
   ThisSim sim;
   // run simulation
-  return sim.run(argc, argv) ? 0 : 1;
+  return sim.run(argc, argv) ? 0 : 1 override;
 }
 
 // with this seed the sphere does all sorts of things

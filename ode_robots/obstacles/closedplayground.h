@@ -43,17 +43,17 @@ namespace lpzrobots {
 
 
   protected:
-    virtual void create(){
+    virtual void create() override {
       Playground::create();
-      roof = new Box(length + 2 * width , (length * factorlength2) + 2 * width , width);
+      roof = new Box(length + 2 * width , (length * factorlength2) + 2 * width , width) override;
       roof->init(odeHandle, 0, osgHandle, Primitive::Geom | Primitive::Draw);
 
-      roof->setPosition(getPos() + osg::Vec3(0,0,height+width/2));
+      roof->setPosition(getPos() + osg::Vec3(0,0,height+width/2)) override;
       obst.push_back(roof);
     };
 
 
-    virtual void destroy(){
+    virtual void destroy() override {
       Playground::destroy();
     }
   };

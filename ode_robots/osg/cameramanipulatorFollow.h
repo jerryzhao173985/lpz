@@ -43,27 +43,27 @@ namespace lpzrobots {
         it's NECCESSARY to define this funtion, otherwise
         the new manipulator WON'T WORK! (but ask me not why)
      */
-    virtual const char* className() const { return "Following Camera"; }
+    virtual const char* className() const override { return "Following Camera"; }
 
   public:
 
-    CameraManipulatorFollow(osg::Node* node,GlobalData& global, CameraHandle& cameraHandle);
+    CameraManipulatorFollow(osg::Node* node,const GlobalData& global, const CameraHandle& cameraHandle);
 
   protected:
 
-    virtual ~CameraManipulatorFollow() override;
+    virtual ~CameraManipulatorFollow();
 
     /** This handles robot movements, so that the camera movemenent is right affected.
         should be overwritten by new cameramanipulator
     */
-    virtual void calcMovementByAgent() override;
+    virtual void calcMovementByAgent();
 
 
     /** Sets the right view and eye if the robot has changed.
         Is called from manageRobots();
         should be overwritten by new cameramanipulator if needed
     */
-        virtual void setHomeViewByAgent() override;
+        virtual void setHomeViewByAgent();
 
 
 

@@ -7,7 +7,7 @@
  *   LICENSE:                                                              *
  *   This work is licensed under the Creative Commons                      *
  *   Attribution-NonCommercial-ShareAlike 2.5 License. To view a copy of   *
- *   this license, visit http://creativecommons.org/licenses/by-nc-sa/2.5/ *
+ *   this license, visit http:__PLACEHOLDER_0__
  *   or send a letter to Creative Commons, 543 Howard Street, 5th Floor,   *
  *   San Francisco, California, 94105, USA.                                *
  *                                                                         *
@@ -29,23 +29,23 @@
 #include <selforg/invertablemodel.h>
 
 struct MultiExpertSuboptConf {
-  int numHidden;        ///< number of hidden units in the satelite networks
-  double eps0;          ///< learning rate for satelite networks
-  double tauE1;         ///< time horizont for short averaging error
-  double tauE2;         ///< time horizont for long averaging error
-  double tauF;          ///< time scale for forgetting minimum (should be very large)
-  int    numSats;       ///< number of satelite networks
-  double lambda_comp;   ///< competition for ranking
+  int numHidden = 0;        ///< number of hidden units in the satelite networks
+  double eps0 = 0;          ///< learning rate for satelite networks
+  double tauE1 = 0;         ///< time horizont for short averaging error
+  double tauE2 = 0;         ///< time horizont for long averaging error
+  double tauF = 0;          ///< time scale for forgetting minimum (should be very large)
+  int    numSats = 0;       ///< number of satelite networks
+  double lambda_comp = 0;   ///< competition for ranking
 
-  int    satMemory;    ///< number of memory cells for past patterns
-  int    satTrainPast; ///< number of past patterns that are trained each timestep
-  int    version;      ///< type of learning schema, see MultiExpertSubopt::Version
+  int    satMemory = 0;    ///< number of memory cells for past patterns
+  int    satTrainPast = 0; ///< number of past patterns that are trained each timestep
+  int    version = 0;      ///< type of learning schema, see MultiExpertSubopt::Version
 };
 
 
 /**
  * class for robot controller
- * using several feedforward networks (satelite) and one selforg controller
+ * using several feedforward networks static_cast<satelite>(and) one selforg controller
  */
 class MultiExpertSubopt : public  AbstractModel{
 
@@ -62,21 +62,21 @@ public:
   struct Sat {
     Sat(InvertableModel* _net, double _eps);
     InvertableModel* net;
-    double eps;
-    double lifetime;
+    double eps = 0;
+    double lifetime = 0;
   };
 public:
-  explicit MultiExpertSubopt(const MultiExpertSuboptConf& conf = getDefaultConf());
+  MultiExpertSubopt(const MultiExpertSuboptConf& conf = getDefaultConf());
 
-  virtual ~MultiExpertSubopt() override;
+  virtual ~MultiExpertSubopt();
 
   virtual void init(unsigned int inputDim, unsigned  int outputDim,
-                    double unit_map = 0.0, RandGen* randGen = 0) override;
+                    double unit_map = 0.0, RandGen* randGen = 0);
 
-  virtual unsigned int getInputDim() const { return inputDim;}
-  virtual unsigned int getOutputDim() const  { return outputDim;}
+  virtual unsigned int getInputDim() const override { return inputDim;}
+  virtual unsigned int getOutputDim() const override { return outputDim;}
 
-  virtual void damp(double damping) {};
+  virtual void damp(double damping) override {};
 
   virtual const matrix::Matrix process (const matrix::Matrix& input) override;
 
@@ -99,24 +99,24 @@ public:
   void restoreSats(const std::list<std::string>& filenames);
 
   /************** CONFIGURABLE ********************************/
-  virtual paramval getParam(const paramkey& key, bool traverseChildren=true) const override;
-  virtual bool setParam(const paramkey& key, paramval val, bool traverseChildren=true) override;
-  virtual paramlist getParamList() const override;
+  virtual paramval getParam(const paramkey& key, bool traverseChildren=true) const;
+  virtual bool setParam(const paramkey& key, paramval val, bool traverseChildren=true);
+  virtual paramlist getParamList() const;
 
 
   /**** STOREABLE ****/
   /** stores the controller values to a given file. */
   virtual bool store(FILE* f) const override;
   /** loads the controller values from a given file. */
-  virtual bool restore(FILE* f) override;
+  virtual bool restore(FILE* f);
 
   /**** INSPECTABLE ****/
   virtual std::list<iparamkey> getInternalParamNames() const override;
   virtual std::list<iparamval> getInternalParams() const override;
-  virtual std::list<ILayer> getStructuralLayers() const override;
-  virtual std::list<IConnection> getStructuralConnections() const override;
+  virtual std::list<ILayer> getStructuralLayers() const;
+  virtual std::list<IConnection> getStructuralConnections() const;
 
-  static MultiExpertSuboptConf getDefaultConf(){
+  static MultiExpertSuboptConf getDefaultConf() const {
     MultiExpertSuboptConf c;
     c.numHidden = 2;
     c.eps0      = 0.05;

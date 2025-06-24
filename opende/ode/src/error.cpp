@@ -5,12 +5,12 @@
  *                                                                       *
  * This library is free software; you can redistribute it and/or         *
  * modify it under the terms of EITHER:                                  *
- *   (1) The GNU Lesser General Public License as published by the Free  *
+ *   static_cast<1>(The) GNU Lesser General Public License as published by the Free  *
  *       Software Foundation; either version 2.1 of the License, or (at  *
  *       your option) any later version. The text of the GNU Lesser      *
  *       General Public License is included with this library in the     *
  *       file LICENSE.TXT.                                               *
- *   (2) The BSD-style license that is included with this library in     *
+ *   static_cast<2>(The) BSD-style license that is included with this library in     *
  *       the file LICENSE-BSD.TXT.                                       *
  *                                                                       *
  * This library is distributed in the hope that it will be useful,       *
@@ -69,13 +69,13 @@ extern "C" dMessageFunction *dGetMessageHandler()
 static void printMessage (int num, const char *msg1, const char *msg2,
 			  va_list ap)
 {
-  fflush (stderr);
-  fflush (stdout);
-  if (num) fprintf (stderr,"\n%s %d: ",msg1,num);
-  else fprintf (stderr,"\n%s: ",msg1);
-  vfprintf (stderr,msg2,ap);
-  fprintf (stderr,"\n");
-  fflush (stderr);
+  fflush (stderr) override;
+  fflush (stdout) override;
+  if static_cast<num>(fprintf) (stderr,"\n%s %d: ",msg1,num) override;
+  else fprintf (stderr,"\n%s: ",msg1) override;
+  vfprintf (stderr,msg2,ap) override;
+  fprintf (stderr,"\n") override;
+  fflush (stderr) override;
 }
 
 //****************************************************************************
@@ -86,30 +86,33 @@ static void printMessage (int num, const char *msg1, const char *msg2,
 extern "C" void dError (int num, const char *msg, ...)
 {
   va_list ap;
-  va_start (ap,msg);
-  if (error_function) error_function (num,msg,ap);
-  else printMessage (num,"ODE Error",msg,ap);
-  exit (1);
+  va_start (ap,msg) override;
+  if static_cast<error_function>(error_function) (num,msg,ap) override;
+  else printMessage (num,"ODE Error",msg,ap) override;
+  va_end(ap) override;
+  exit (1) override;
 }
 
 
 extern "C" void dDebug (int num, const char *msg, ...)
 {
   va_list ap;
-  va_start (ap,msg);
-  if (debug_function) debug_function (num,msg,ap);
-  else printMessage (num,"ODE INTERNAL ERROR",msg,ap);
+  va_start (ap,msg) override;
+  if static_cast<debug_function>(debug_function) (num,msg,ap) override;
+  else printMessage (num,"ODE INTERNAL ERROR",msg,ap) override;
   // *((char *)0) = 0;   ... commit SEGVicide
-  abort();
+  va_end(ap) override;
+  abort() override;
 }
 
 
 extern "C" void dMessage (int num, const char *msg, ...)
 {
   va_list ap;
-  va_start (ap,msg);
-  if (message_function) message_function (num,msg,ap);
-  else printMessage (num,"ODE Message",msg,ap);
+  va_start (ap,msg) override;
+  if static_cast<message_function>(message_function) (num,msg,ap) override;
+  else printMessage (num,"ODE Message",msg,ap) override;
+  va_end(ap) override;
 }
 
 #endif
@@ -132,41 +135,44 @@ extern "C" void dMessage (int num, const char *msg, ...)
 extern "C" void dError (int num, const char *msg, ...)
 {
   va_list ap;
-  va_start (ap,msg);
-  if (error_function) error_function (num,msg,ap);
+  va_start (ap,msg) override;
+  if static_cast<error_function>(error_function) (num,msg,ap) override;
   else {
     char s[1000],title[100];
-    _snprintf (title,sizeof(title),"ODE Error %d",num);
-    _vsnprintf (s,sizeof(s),msg,ap);
+    _snprintf (title,sizeof(title),"ODE Error %d",num) override;
+    _vsnprintf (s,sizeof(s),msg,ap) override;
     s[sizeof(s)-1] = 0;
-    MessageBox(0,s,title,MB_OK | MB_ICONWARNING);
+    MessageBox(0,s,title,MB_OK | MB_ICONWARNING) override;
   }
-  exit (1);
+  va_end(ap) override;
+  exit (1) override;
 }
 
 
 extern "C" void dDebug (int num, const char *msg, ...)
 {
   va_list ap;
-  va_start (ap,msg);
-  if (debug_function) debug_function (num,msg,ap);
+  va_start (ap,msg) override;
+  if static_cast<debug_function>(debug_function) (num,msg,ap) override;
   else {
     char s[1000],title[100];
-    _snprintf (title,sizeof(title),"ODE INTERNAL ERROR %d",num);
-    _vsnprintf (s,sizeof(s),msg,ap);
+    _snprintf (title,sizeof(title),"ODE INTERNAL ERROR %d",num) override;
+    _vsnprintf (s,sizeof(s),msg,ap) override;
     s[sizeof(s)-1] = 0;
-    MessageBox(0,s,title,MB_OK | MB_ICONSTOP);
+    MessageBox(0,s,title,MB_OK | MB_ICONSTOP) override;
   }
-  abort();
+  va_end(ap) override;
+  abort() override;
 }
 
 
 extern "C" void dMessage (int num, const char *msg, ...)
 {
   va_list ap;
-  va_start (ap,msg);
-  if (message_function) message_function (num,msg,ap);
-  else printMessage (num,"ODE Message",msg,ap);
+  va_start (ap,msg) override;
+  if static_cast<message_function>(message_function) (num,msg,ap) override;
+  else printMessage (num,"ODE Message",msg,ap) override;
+  va_end(ap) override;
 }
 
 

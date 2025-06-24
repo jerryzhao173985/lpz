@@ -178,8 +178,7 @@ namespace lpzrobots
       virtual int setMotors(const motor* motorArray, int beginIndex, int maxIndex);
 
       /// CONFIG VARS
-      static ECBConfig getDefaultConf()
-      {
+      static ECBConfig getDefaultConf() const {
         ECBConfig conf;
         conf.maxNumberMotors = 2;
         conf.maxNumberSensors = 16;

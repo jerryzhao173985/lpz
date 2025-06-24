@@ -49,7 +49,7 @@ namespace lpzrobots {
 
     public:
 
-    QExtAction(QObject* parent);
+    explicit QExtAction(QObject* parent);
 
     QExtAction(int actionId, const QString &text, QObject* parent);
 

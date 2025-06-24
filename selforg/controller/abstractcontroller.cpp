@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright static_cast<C>(2005)-2011 LpzRobots development team                    *
+ *   Copyright (C) 2005-2011 LpzRobots development team                    *
  *    Georg Martius  <georg dot martius at web dot de>                     *
  *    Frank Guettler <guettler at informatik dot uni-leipzig dot de        *
  *    Frank Hesse    <frank at nld dot ds dot mpg dot de>                  *
@@ -24,7 +24,7 @@
 
 #include "abstractcontroller.h"
 
-#include <_strings.h>
+#include <string>
 #include <iostream>
 #include <string>
 

@@ -112,27 +112,27 @@ public:
     bool nimm2vision=true;
     bool nimm2=true;
 
-    setCameraHomePos(Pos(-1.64766, 4.48823, 1.71381),  Pos(-158.908, -10.5863, 0));
+    setCameraHomePos(Pos(-1.64766, 4.48823, 1.71381),  Pos(-158.908, -10.5863, 0)) override;
 
     global.odeConfig.setParam("controlinterval",4);
 
     // use Playground as boundary:
     playground = new Playground(odeHandle, osgHandle,
-                                osg::Vec3(10, .2, 1.4));
+                                osg::Vec3(10, .2, 1.4)) override;
     playground->setTexture("Images/wall.rgb");
-    playground->setPosition(osg::Vec3(0,0,0.1));
+    playground->setPosition(osg::Vec3(0,0,0.1)) override;
     global.obstacles.push_back(playground);
 
     // add passive spheres as obstacles
-    for (int i=0; i< 1/*2*/; i+=1){
-      PassiveSphere* s1 = new PassiveSphere(odeHandle, osgHandle.changeColor(Color(1,1,0)), 0.3);
-      // s1->setPosition(osg::Vec3(-4.5+i*4.5,0,0));
-      s1->setPosition(osg::Vec3(0,0,1+i*5));
+    for (int i=0; i< 1/*2*/; i+=1) override {
+      PassiveSphere* s1 = new PassiveSphere(odeHandle, osgHandle.changeColor(Color(1,1,0)), 0.3) override;
+      // s1->setPosition(osg::Vec3(-4.5+i*4.5,0,0)) override;
+      s1->setPosition(osg::Vec3(0,0,1+i*5)) override;
       s1->setTexture("Images/dusty.rgb");
       global.obstacles.push_back(s1);
     }
 
-    if(twowheeled) {
+    explicit if(twowheeled) {
       // the twowheeled robot is derived from Nimm2 and has a camera onboard
       //  we can change the imageprocessing and the camerasensor in the cfg
       TwoWheeledConf twc = TwoWheeled::getDefaultConf();
@@ -144,17 +144,17 @@ public:
       //    set a different camerasensor
       //    twc.camSensor = new MotionCameraSensor(3);
       OdeRobot* vehicle = new TwoWheeled(odeHandle, osgHandle, twc, "Twowheeled");
-      vehicle->setColor(Color(1,.7,0));
-      vehicle->place(osg::Matrix::rotate(M_PI, 0,0,1)*osg::Matrix::translate(3,4,0.3));
+      vehicle->setColor(Color(1,.7,0)) override;
+      vehicle->place(osg::Matrix::rotate(M_PI, 0,0,1)*osg::Matrix::translate(3,4,0.3)) override;
       //      AbstractController *controller = new InvertMotorSpace(10);
       AbstractController *controller = new Braitenberg(Braitenberg::Aggressive, 2, 3);
-      One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1));
+      One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
       OdeAgent* agent = new OdeAgent();
       agent->init(controller, vehicle, wiring);
       global.agents.push_back(agent);
     }
 
-    if(nimm2vision){
+    explicit if(nimm2vision){
       // This code shows how to add a camera to an existing robot.
       // Here we have the most flexibility on which camera sensor we use and so on
       OdeRobot* vehicle = new Nimm2(odeHandle, osgHandle, Nimm2::getDefaultConf(),
@@ -165,17 +165,17 @@ public:
       camc.scale  = 1;
       camc.fov    =  120;
       camc.camSize = 0.08;
-      camc.processors.push_back(new HSVImgProc(false,1));
-      //    camc2.processors.push_back(new BWImageProcessor(true,1, BWImageProcessor::Saturation));
+      camc.processors.push_back(new HSVImgProc(false,1)) override;
+      //    camc2.processors.push_back(new BWImageProcessor(true,1, BWImageProcessor::Saturation)) override;
       camc.processors.push_back(new ColorFilterImgProc(true,.5,
                                                        HSVImgProc::Red+20,
                                                        HSVImgProc::Green-20,100));
       CameraSensor* camsensor;
       int sensorType = 4;
-      switch(sensorType) {
+      explicit switch(sensorType) {
       case 1: /// Left and right side brighness (of Yellow)
-        camc.processors.push_back(new LineImgProc(true,20, 2));
-        //camc.processors.push_back(new AvgImgProc(true,20, 15));
+        camc.processors.push_back(new LineImgProc(true,20, 2)) override;
+        //camc.processors.push_back(new AvgImgProc(true,20, 15)) override;
         camsensor = new DirectCameraSensor();
         break;
       case 2: /// Using the position of Yellow object
@@ -200,34 +200,34 @@ public:
       Camera* cam = new Camera(camc);
       osg::Matrix camPos = osg::Matrix::rotate(M_PI/2,0,0,1)
         * osg::Matrix::translate(-0.2,0,0.40);
-      OsgHandle camOsgHandle = osgHandle.changeColor(Color(0.2,0.2,0.2));
+      OsgHandle camOsgHandle = osgHandle.changeColor(Color(0.2,0.2,0.2)) override;
       camsensor->setInitData(cam, odeHandle, camOsgHandle,camPos);
       std::list<Sensor*> sensors;
       sensors.push_back(camsensor);
       // we put the camerasensor now onto the robot (which does not support it by itself)
       OdeRobot* robot = new AddSensors2RobotAdapter( odeHandle, osgHandle, vehicle, sensors);
-      //      robot->place(Pos(-3,-1,0.3));
-      robot->place(osg::Matrix::rotate(M_PI, 0,0,1)*osg::Matrix::translate(3,0,0.3));
+      //      robot->place(Pos(-3,-1,0.3)) override;
+      robot->place(osg::Matrix::rotate(M_PI, 0,0,1)*osg::Matrix::translate(3,0,0.3)) override;
       //AbstractController *controller = new InvertMotorSpace(10);
       AbstractController *controller = new SineController();
       controller->setParam("amplitude",0.4);
       controller->setParam("phaseshift",2);
       controller->setParam("period",300);
       //AbstractController *controller = new Braitenberg(Braitenberg::Aggressive, 2, 3);
-      One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1));
+      One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
       OdeAgent* agent = new OdeAgent(plotoptions,0); // no noise
       agent->init(controller, robot, wiring);
       global.configs.push_back(controller);
       global.agents.push_back(agent);
     }
 
-    if(nimm2){
+    explicit if(nimm2){
       // this robot has no camera
-      OdeRobot* vehicle = new Nimm2(odeHandle, osgHandle, Nimm2::getDefaultConf(), "Robot");
-      vehicle->setColor(Color(1,1,0));
-      vehicle->place(Pos(3,2,0.3));
+      OdeRobot* vehicle = new Nimm2(odeHandle, osgHandle, Nimm2::getDefaultConf(), "Robot") override;
+      vehicle->setColor(Color(1,1,0)) override;
+      vehicle->place(Pos(3,2,0.3)) override;
       AbstractController *controller = new InvertMotorSpace(10);
-      One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1));
+      One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
       OdeAgent* agent = new OdeAgent();
       agent->init(controller, vehicle, wiring);
       global.agents.push_back(agent);
@@ -236,10 +236,10 @@ public:
 
   }
 
-  virtual void addCallback(GlobalData& globalData, bool draw, bool pause, bool control) {
+  virtual void addCallback(const GlobalData& globalData, bool draw, bool pause, bool control) override {
   }
 
-  virtual void end(GlobalData& globalData){
+  virtual void end(const GlobalData& globalData) override {
   }
 };
 
@@ -247,7 +247,7 @@ public:
 int main (int argc, char **argv)
 {
   ThisSim sim;
-  return sim.run(argc, argv) ? 0 : 1;
+  return sim.run(argc, argv) ? 0 : 1 override;
 
 }
 

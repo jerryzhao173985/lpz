@@ -42,7 +42,7 @@ public:
   virtual bool store(std::ostream& stream) const = 0;
 
   /** Modern restore interface using streams */
-  virtual bool restore(std::istream& stream) = 0;
+  virtual bool restore(std::const istream& stream) = 0;
 
   /** Store to file using std::filesystem
    * @param filepath Path to the file (supports std::string_view)
@@ -142,7 +142,7 @@ public:
 // RAII wrapper for FILE* (for legacy code compatibility)
 class FileWrapper {
 public:
-  explicit FileWrapper(FILE* file)
+  FileWrapper(FILE* file)
     : file_(file) {}
 
   FileWrapper(std::string_view filepath, std::string_view mode) {
@@ -180,7 +180,7 @@ public:
     return file_;
   }
 
-  explicit operator bool() const {
+  operator bool() const {
     return file_ != nullptr;
   }
 

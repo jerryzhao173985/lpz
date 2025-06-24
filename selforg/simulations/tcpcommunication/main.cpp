@@ -43,7 +43,7 @@ public:
       mode(mode) {
     t=0;
     buffersize=20;
-    switch(mode){
+    switch (mode){
     case NORMAL:
     case SWING:
       motornumber  = dimension;
@@ -58,7 +58,7 @@ public:
     x = new double[sensornumber];
     y = new double[motornumber];
     x_buffer = new double*[buffersize];
-    for (unsigned int k = 0; k < buffersize; k++) {
+    for (unsigned int k = 0; k < buffersize; ++k) {
       x_buffer[k] = new double[sensornumber];
       memset(x_buffer[k],0,sizeof(double)*sensornumber);
     }
@@ -88,10 +88,10 @@ public:
   }
 
   ~MyRobot(){
-    if(x) delete[] x;
-    if(y) delete[] y;
-    if(x_buffer) {
-      for (unsigned int k = 0; k < buffersize; k++)
+    ifstatic_cast<x>(delete)[] x;
+    ifstatic_cast<y>(delete)[] y;
+    if (x_buffer) {
+      for (unsigned int k = 0; k < buffersize; ++k)
         if(x_buffer[k]) delete [] x_buffer[k];
       delete[] x_buffer;
     }
@@ -104,7 +104,7 @@ public:
       @param sensornumber length of the sensor array
       @return number of actually written sensors
   */
-  virtual int getSensors(sensor* sensors, int sensornumber){
+  virtual int getSensors(sensor* sensors, int sensornumber) override {
     assert(sensornumber >= this->sensornumber);
     int d = max(1,int(delay));
     double* x_cur = x_buffer[(t-d + buffersize)%buffersize];
@@ -116,10 +116,10 @@ public:
       @param motors motors scaled to [-1,1]
       @param motornumber length of the motor array
   */
-  virtual void setMotors(const motor* motors, int motornumber){
+  virtual void setMotors(const motor* motors, int motornumber) override {
     assert(motornumber >= this->motornumber);
     memcpy(y, motors, sizeof(motor) * this->motornumber);
-    switch(mode){
+    switch (mode){
     case SWING: swing(); break;
     case NORMAL:
     default: normal(); break;
@@ -129,19 +129,19 @@ public:
     }
     // copy the sensor values into the buffer
     memcpy(x_buffer[t%buffersize],x,sizeof(sensor)*sensornumber);
-    t++;
+    ++t;
   }
 
   /** returns number of sensors */
-  virtual int getSensorNumber(){ return sensornumber; }
+  virtual int getSensorNumber() { return sensornumber; }
 
   /** returns number of motors */
   virtual int getMotorNumber() { return motornumber; }
 
-  virtual Position getPosition()     const {return Position(0,0,0);}
-  virtual Position getSpeed()        const {return Position(0,0,0);}
-  virtual Position getAngularSpeed() const {return Position(0,0,0);}
-  virtual matrix::Matrix getOrientation() const {
+  virtual Position getPosition() const override {return Position(0,0,0);}
+  virtual Position getSpeed() const override {return Position(0,0,0);}
+  virtual Position getAngularSpeed() const override {return Position(0,0,0);}
+  virtual matrix::Matrix getOrientation() const  override {
     matrix::Matrix m(3,3);
     m.toId();
     return m;
@@ -158,7 +158,7 @@ public:
   // system with damping, correlation of subsequent channels (cyclic),
   // and delay (the delay is actually done by getSensors()
   void normal(){
-    for(int i=0; i<motornumber; i++){
+    for (int i=0; i<motornumber; ++i) {
       x[i] = x[i]*inertia + y[i]*(1-inertia) + correlation*x[(i+1)%motornumber];
     }
     if(disablesensor!=0.0)
@@ -170,7 +170,7 @@ public:
   // and delay (the delay is actually done by getSensors()
   void swing(){
     //    double* x_tm1 = x_buffer[(t-1+buffersize)%buffersize];
-    for(int i=0; i<motornumber; i++){
+    for (int i=0; i<motornumber; ++i) {
       // x_{t+1} = f(x) + x_t - x_{t-1} +  correlation
       // x_{t+1} = f(x) - (1-1/m)* x_t - x_{t-1}
       cout <<      x[i] << endl;
@@ -209,7 +209,7 @@ void printRobot(MyRobot* robot){
   line[80]=0;
   sensor s[20];
   int len = robot->getSensors(s,20);
-  for(int i=0; i<len; i++){
+  for (int i=0; i<len; ++i) {
     double x = s[i];
     x=clip(x,-1.0,1.0);
     line[int((x+1.0)/2.0*80.0)%80]='0'+ i;
@@ -222,7 +222,7 @@ void printRobot(MyRobot* robot){
 
 // Helper
 int contains(char **list, int len,  const char *str){
-  for(int i=0; i<len; i++){
+  for (int i=0; i<len; ++i) {
     if(strcmp(list[i],str) == 0) return i+1;
   }
   return 0;
@@ -235,13 +235,13 @@ int main(int argc, char** argv){
   int dim = 2;
 
   int index = contains(argv,argc,"-g");
-  if(index >0 && argc>index) {
+  if (index >0 && argc>index) {
     plotoptions.push_back(PlotOption(GuiLogger, atoi(argv[index])));
   }
   if(contains(argv,argc,"-f")!=0) plotoptions.push_back(PlotOption(File));
   if(contains(argv,argc,"-n")!=0) plotoptions.push_back(PlotOption(NeuronViz));
   index = contains(argv,argc,"-m");
-  if(index >0 && argc>index) {
+  if (index >0 && argc>index) {
     modestr = argv[index];
     if(strcasecmp(modestr,"normal")==0) mode = NORMAL;
     else if(strcasecmp(modestr,"swing")==0) mode = SWING;
@@ -293,7 +293,7 @@ int main(int argc, char** argv){
 //   cc.init = 1;
 //   cc.someInternalParams=false;
 //   AbstractController* controller = new UniversalController(cc);
-//   controller->setParam("epsDyn",     0);
+//   controller->setParam(__PLACEHOLDER_30__,     0);
 
 
 //  AbstractController* controller = new InvertMotorSpace(10,1.2);
@@ -317,7 +317,7 @@ int main(int argc, char** argv){
   agent->init(controller, robot, wiring);
   // if you like, you can keep track of the robot with the following line.
   //  this assumes that you robot returns its position, speed and orientation.
-  // agent->setTrackOptions(TrackRobot(true,false,false, false,"systemtest"));
+  // agent->setTrackOptions(TrackRobot(true,false,false, false,__PLACEHOLDER_34__));
 
   globaldata.agents.push_back(agent);
   globaldata.configs.push_back(robot);
@@ -332,7 +332,7 @@ int main(int argc, char** argv){
 
   cmd_handler_init();
   long int t=0;
-  while(!stop){
+  while (!stop){
 
     agent->step(noise,t);
 
@@ -350,7 +350,7 @@ int main(int argc, char** argv){
       printRobot(robot);
       usleep(60000);
     }
-    t++;
+    ++t;
   };
   delete agent;
   closeConsole();

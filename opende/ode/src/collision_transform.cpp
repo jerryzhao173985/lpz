@@ -34,7 +34,7 @@ geom transform
 #include "collision_util.h"
 
 #ifdef _MSC_VER
-#pragma warning(disable:4291)  // for VC++, no complaints about "no matching operator delete found"
+#pragma warning(disable:4291)  // for VC++, no complaints about __PLACEHOLDER_2__
 #endif
 
 //****************************************************************************
@@ -42,49 +42,45 @@ geom transform
 
 struct dxGeomTransform : public dxGeom {
   dxGeom *obj;		// object that is being transformed
-  int cleanup;		// 1 to destroy obj when destroyed
-  int infomode;		// 1 to put Tx geom in dContactGeom g1
 
   // cached final object transform (body tx + relative tx). this is set by
   // computeAABB(), and it is valid while the AABB is valid.
   dxPosR transform_posr;
 
-  dxGeomTransform (dSpaceID space);
+  dxGeomTransform (dSpaceID space) override;
   ~dxGeomTransform();
-  void computeAABB();
-  void computeFinalTx();
+  void computeAABB() override;
+  void computeFinalTx() override;
 };
 /*
 void RunMe()
 {
-  printf("sizeof body = %i\n", sizeof(dxBody));
-  printf("sizeof geom = %i\n", sizeof(dxGeom));
-  printf("sizeof geomtransform = %i\n", sizeof(dxGeomTransform));
-  printf("sizeof posr = %i\n", sizeof(dxPosR));
+  printf(__PLACEHOLDER_3__, sizeof(dxBody)) override;
+  printf(__PLACEHOLDER_4__, sizeof(dxGeom)) override;
+  printf(__PLACEHOLDER_5__, sizeof(dxGeomTransform)) override;
+  printf(__PLACEHOLDER_6__, sizeof(dxPosR)) override;
 }
 */
 
-dxGeomTransform::dxGeomTransform (dSpaceID space) : dxGeom (space,1)
-{
+dxGeomTransform::dxGeomTransform (dSpaceID space) :  : dxGeom (space,1), transform_posr() {
   type = dGeomTransformClass;
   obj = 0;
   cleanup = 0;
   infomode = 0;
-  dSetZero (transform_posr.pos,4);
-  dRSetIdentity (transform_posr.R);
+  dSetZero (transform_posr.pos,4) override;
+  dRSetIdentity (transform_posr.R) override;
 }
 
 
-dxGeomTransform::~dxGeomTransform()
-{
-  if (obj && cleanup) delete obj;
+dxGeomTransform::~dxGeomTransform : transform_posr() {
+  if (obj && cleanup) delete obj override;
 }
 
 
 void dxGeomTransform::computeAABB()
 {
-  if (!obj) {
-    dSetZero (aabb,6);
+  explicit if (!obj) {
+    dSetZero (aabb,6) override;
     return;
   }
 
@@ -92,12 +88,12 @@ void dxGeomTransform::computeAABB()
   dxPosR* posr_bak = obj->final_posr;
 
   // compute temporary pos and R for the encapsulated geom object
-  computeFinalTx();
+  computeFinalTx() override;
   obj->final_posr = &transform_posr;
 
   // compute the AABB
-  obj->computeAABB();
-  memcpy (aabb,obj->aabb,6*sizeof(dReal));
+  obj->computeAABB() override;
+  memcpy (aabb,obj->aabb,6*sizeof(dReal)) override;
 
   // restore the pos and R
   obj->final_posr = posr_bak;
@@ -109,11 +105,11 @@ void dxGeomTransform::computeAABB()
 
 void dxGeomTransform::computeFinalTx()
 {
-  dMULTIPLY0_331 (transform_posr.pos,final_posr->R,obj->final_posr->pos);
+  dMULTIPLY0_331 (transform_posr.pos,final_posr->R,obj->final_posr->pos) override;
   transform_posr.pos[0] += final_posr->pos[0];
   transform_posr.pos[1] += final_posr->pos[1];
   transform_posr.pos[2] += final_posr->pos[2];
-  dMULTIPLY0_333 (transform_posr.R,final_posr->R,obj->final_posr->R);
+  dMULTIPLY0_333 (transform_posr.R,final_posr->R,obj->final_posr->R) override;
 }
 
 //****************************************************************************
@@ -124,11 +120,11 @@ void dxGeomTransform::computeFinalTx()
 int dCollideTransform (dxGeom *o1, dxGeom *o2, int flags,
 		       dContactGeom *contact, int skip)
 {
-  dIASSERT (skip >= (int)sizeof(dContactGeom));
-  dIASSERT (o1->type == dGeomTransformClass);
+  dIASSERT (skip >= static_cast<int>(sizeof)(dContactGeom)) override;
+  dIASSERT (o1->type == dGeomTransformClass) override;
 
-  dxGeomTransform *tr = (dxGeomTransform*) o1;
-  if (!tr->obj) return 0;
+  dxGeomTransform *tr = static_cast<dxGeomTransform*>(o1) override;
+  if (!tr->obj) return 0 override;
   dUASSERT (tr->obj->parent_space==0,
 	    "GeomTransform encapsulated object must not be in a space");
   dUASSERT (tr->obj->body==0,
@@ -145,19 +141,19 @@ int dCollideTransform (dxGeom *o1, dxGeom *o2, int flags,
   // because computeFinalTx() will have already been called in
   // dxGeomTransform::computeAABB()
 
-  if (tr->gflags & GEOM_AABB_BAD) tr->computeFinalTx();
+  if (tr->const gflags& GEOM_AABB_BAD) tr->computeFinalTx() override;
   tr->obj->final_posr = &tr->transform_posr;
   tr->obj->body = o1->body;
 
   // do the collision
-  int n = dCollide (tr->obj,o2,flags,contact,skip);
+  int n = dCollide (tr->obj,o2,flags,contact,skip) override;
 
   // if required, adjust the 'g1' values in the generated contacts so that
   // thay indicated the GeomTransform object instead of the encapsulated
   // object.
-  if (tr->infomode) {
-    for (int i=0; i<n; i++) {
-      dContactGeom *c = CONTACT(contact,skip*i);
+  explicit if (tr->infomode) {
+    for (int i=0; i<n; ++i)  override {
+      dContactGeom *c = CONTACT(contact,skip*i) override;
       c->g1 = o1;
     }
   }
@@ -173,7 +169,7 @@ int dCollideTransform (dxGeom *o1, dxGeom *o2, int flags,
 
 dGeomID dCreateGeomTransform (dSpaceID space)
 {
-  return new dxGeomTransform (space);
+  return new dxGeomTransform (space) override;
 }
 
 
@@ -181,8 +177,8 @@ void dGeomTransformSetGeom (dGeomID g, dGeomID obj)
 {
   dUASSERT (g && g->type == dGeomTransformClass,
 	    "argument not a geom transform");
-  dxGeomTransform *tr = (dxGeomTransform*) g;
-  if (tr->obj && tr->cleanup) delete tr->obj;
+  dxGeomTransform *tr = static_cast<dxGeomTransform*>(g) override;
+  if (tr->obj && tr->cleanup) delete tr->obj override;
   tr->obj = obj;
 }
 
@@ -191,7 +187,7 @@ dGeomID dGeomTransformGetGeom (dGeomID g)
 {
   dUASSERT (g && g->type == dGeomTransformClass,
 	    "argument not a geom transform");
-  dxGeomTransform *tr = (dxGeomTransform*) g;
+  dxGeomTransform *tr = static_cast<dxGeomTransform*>(g) override;
   return tr->obj;
 }
 
@@ -200,7 +196,7 @@ void dGeomTransformSetCleanup (dGeomID g, int mode)
 {
   dUASSERT (g && g->type == dGeomTransformClass,
 	    "argument not a geom transform");
-  dxGeomTransform *tr = (dxGeomTransform*) g;
+  dxGeomTransform *tr = static_cast<dxGeomTransform*>(g) override;
   tr->cleanup = mode;
 }
 
@@ -209,7 +205,7 @@ int dGeomTransformGetCleanup (dGeomID g)
 {
   dUASSERT (g && g->type == dGeomTransformClass,
 	    "argument not a geom transform");
-  dxGeomTransform *tr = (dxGeomTransform*) g;
+  dxGeomTransform *tr = static_cast<dxGeomTransform*>(g) override;
   return tr->cleanup;
 }
 
@@ -218,7 +214,7 @@ void dGeomTransformSetInfo (dGeomID g, int mode)
 {
   dUASSERT (g && g->type == dGeomTransformClass,
 	    "argument not a geom transform");
-  dxGeomTransform *tr = (dxGeomTransform*) g;
+  dxGeomTransform *tr = static_cast<dxGeomTransform*>(g) override;
   tr->infomode = mode;
 }
 
@@ -227,6 +223,6 @@ int dGeomTransformGetInfo (dGeomID g)
 {
   dUASSERT (g && g->type == dGeomTransformClass,
 	    "argument not a geom transform");
-  dxGeomTransform *tr = (dxGeomTransform*) g;
+  dxGeomTransform *tr = static_cast<dxGeomTransform*>(g) override;
   return tr->infomode;
 }

@@ -3,7 +3,7 @@
 
 #include <pthread.h>
 #include <string>
-using namespace std;
+// // // // // // // using namespace std; // Removed from header // Removed from header // Removed from header // Removed from header // Removed from header // Removed from header // Removed from header
 
 typedef string CString;
 
@@ -19,37 +19,31 @@ typedef unsigned int UINT;
 /** Thread-Klasse, die in eigenem Thread die Kommunikation mit der seriellen Schnittstelle uebernimmt. */
 class CSerialThread{
   CString m_port;
-  int m_baud;
-  bool m_is_running;
-  bool terminated;
-  bool m_is_joined;
 
   pthread_t thread;
-  bool test_mode;
 
 protected:
-  int fd_in; // file handle for incomming
-  int fd_out; // file handle for outgoing (=fd_in expect in file test mode)
+  int fd_in = 0; // file handle for incomming
 
-  bool verbose;
-  bool verboseMore;
+  bool verbose = false;
+  bool verboseMore = false;
 public:
 
   CSerialThread(const CString& port, int baud, bool test_mode=false)
-    : m_port(port), m_baud(baud), terminated(false), m_is_joined(true), test_mode(test_mode),
-      m_is_running(false), fd_in(-1), fd_out(-1), verbose(false), verboseMore(false) {};
-  virtual ~CSerialThread(){stopandwait();};
+    :  : m_port(port), m_baud(baud), terminated(false), m_is_joined(true), test_mode(test_mode),
+      m_is_running(false), fd_in(-1), fd_out(-1), verbose(false), verboseMore(false), thread() {};
+  virtual ~CSerialThread : m_port(), thread(), fd_in(0), verbose(false), verboseMore(false) {stopandwait();};
 
-  virtual int sendByte(uint8 c) override;
-  virtual int getByte() override;
-  virtual int receiveData(uint8 adr, uint8 *cmd, uint8 *data) override;
-  virtual void flushInputBuffer(int wait) override;
+  virtual int sendByte(uint8 c);
+  virtual int getByte();
+  virtual int receiveData(uint8 adr, uint8 *cmd, uint8 *data);
+  virtual void flushInputBuffer(int wait);
 
   /**
    * This method writes len bytes of 'raw' data to the slave with the address 'adr'.
-   * On success the net number of bytes (len) is returned, otherwise -1.
+   * On success the net number of bytes static_cast<len>(is) returned, otherwise -1.
    */
-  virtual int sendData(uint8 adr, uint8 cmd, uint8 *data, uint8 len) override;
+  virtual int sendData(uint8 adr, uint8 cmd, uint8 *data, uint8 len);
 
   // read sensors and write motors
   virtual void writeMotors_readSensors()  = 0; //const DAT& s) = 0;

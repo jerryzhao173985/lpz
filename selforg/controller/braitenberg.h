@@ -55,29 +55,29 @@ public:
     addParameterDef("offset", &offset, 0.0);
   }
 
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) {
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override {
     number_sensors = sensornumber;
     number_motors = motornumber;
     assert(sensornumber >= 2 && sensornumber >= leftsensor && sensornumber >= rightsensor);
     assert(motornumber >= 2 && motornumber >= leftmotor && motornumber >= rightmotor);
   }
 
-  virtual int getSensorNumber() const {
+  virtual int getSensorNumber() const override {
     return number_sensors;
   }
 
-  virtual int getMotorNumber() const {
+  virtual int getMotorNumber() const override {
     return number_motors;
   }
 
-  virtual void step(const sensor* sensors, int sensornumber, motor* motors, int motornumber) {
+  virtual void step(const sensor* sensors, int sensornumber, motor* motors, int motornumber) override {
     stepNoLearning(sensors, sensornumber, motors, motornumber);
   }
 
   virtual void stepNoLearning(const sensor* sensors,
                               int sensornumber,
                               motor* motors,
-                              int motornumber) {
+                              int motornumber) override {
     switch (type) {
       case Aggressive:
         motors[leftmotor] = sensors[rightsensor] * strength + offset;
@@ -92,25 +92,25 @@ public:
 
   /********* STORABLE INTERFACE ******/
   /// @see Storable
-  virtual bool store(FILE* f) const {
+  virtual bool store(FILE* f) const override {
     Configurable::print(f, "");
     return true;
   }
 
   /// @see Storable
-  virtual bool restore(FILE* f) {
+  virtual bool restore(FILE* f) override {
     Configurable::parse(f);
     return true;
   }
 
 protected:
   Type type;
-  int leftsensor;
-  int rightsensor;
-  int leftmotor;
-  int rightmotor;
-  int number_sensors;
-  int number_motors;
+  int leftsensor = 0;
+  int rightsensor = 0;
+  int leftmotor = 0;
+  int rightmotor = 0;
+  int number_sensors = 0;
+  int number_motors = 0;
   paramval strength;
   paramval offset;
 };

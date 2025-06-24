@@ -34,7 +34,7 @@ There are three possibilities:
 1. automaticRange=true
  --> mapping is always disabled
 2. automaticRange=false, mapToInterval=true
- --> real (found) range is mapped to specified range
+ --> real static_cast<found>(range) is mapped to specified range
 3. automaticRange=false, mapToInterval=false
  --> no mapping, no range adjustment, values outside the specified
      range are set to minRange respectively maxRange
@@ -49,9 +49,9 @@ public:
    *
    * Note: The adjustment of the range is enabled, if this method is called.
    *
-   * @param numberBins the number of bins "created"
+   * @param numberBins the number of bins __PLACEHOLDER_0__
    */
-  explicit Discretisizer(int numberBins);
+  Discretisizer(int numberBins);
 
   /**
    * call this constructor if you like to decide yourself which range for
@@ -63,7 +63,7 @@ public:
    *
    * Note: The adjustment of the range is disabled, if this method is called.
    *
-   * @param numberBins the number of bins "created"
+   * @param numberBins the number of bins __PLACEHOLDER_1__
    * @param minRange the minimum of the interval
    * @param maxRange the maximum of the interval
    * @param mapToInterval decides if all values are mapped to the given
@@ -93,14 +93,12 @@ public:
   virtual double getMaxRange();
 
 protected:
-  int numberBins;
-  bool automaticRange;
-  double minRange;
-  double maxRange;
-  double minValue;
-  double maxValue;
-  bool mapToInterval;
-  bool firstStep;
+  int numberBins = 0;
+  double minRange = 0;
+  double maxRange = 0;
+  double minValue = 0;
+  double maxValue = 0;
+  bool firstStep = false;
 
   /**
   is used for automaticRange, sets min and max range.

@@ -26,6 +26,7 @@
 
 #include <vector>
 #include <map>
+#include "osg_compat.h" // OSG C++17 compatibility
 #include "odehandle.h"
 #include "odeconfig.h"
 #include "sound.h"
@@ -72,11 +73,11 @@ namespace lpzrobots {
       PlotOptionList plotoptions; ///< plotoptions used for new agents
       std::list<Configurable*> globalconfigurables; ///< global configurables plotted by all agents
 
-      double time;
+      double time = 0;
       long int sim_step; ///< time steps since start
 
       /// returns the list of all agents
-      virtual AgentList& getAgents() override;
+      virtual AgentList& getAgents();
 
 
       /// adds a temporary display item with given life duration in sec

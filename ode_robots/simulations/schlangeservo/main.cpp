@@ -118,24 +118,23 @@ class ThisSim : public Simulation {
 public:
   Joint* fixator;
   InvertMotorNStep* controller;
-  bool teaching;
-  bool dteaching;
+  bool teaching = false;
+  bool dteaching = false;
   double* teachingSignal;
-  int teachingLen;
+  int teachingLen = 0;
   double* dteachingSignal;
-  int dteachingLen;
-  double sineRate;
-  double phaseShift;
+  int dteachingLen = 0;
+  double sineRate = 0;
+  double phaseShift = 0;
 
-  ThisSim()
-  {
+  ThisSim : fixator(nullptr), controller(nullptr), teaching(false), dteaching(false), teachingSignal(nullptr), teachingLen(0), dteachingSignal(nullptr), dteachingLen(0), sineRate(0), phaseShift(0) {
     addParameterDef("sinerate",   &sineRate,   20);
     addParameterDef("phaseshift", &phaseShift, 0.65);
   }
 
   /// start() is called at the start and should create all the object (obstacles, agents...).
-  virtual void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global){
-    setCameraHomePos(Pos(-19.7951, -12.3665, 16.4319),  Pos(-51.7826, -26.772, 0));
+  virtual void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global) override {
+    setCameraHomePos(Pos(-19.7951, -12.3665, 16.4319),  Pos(-51.7826, -26.772, 0)) override;
 
     bool schlange=true;
 
@@ -157,7 +156,7 @@ public:
     SchlangeServo* schlange1 =
       new SchlangeServo ( odeHandle, osgHandle.changeColor(Color(0.8, 0.3, 0.5)),
                           conf, "Schlange1D");
-    ((OdeRobot*)schlange1)->place(Pos(0,0,3));
+    (static_cast<OdeRobot*>(schlange1))->place(Pos(0,0,3)) override;
 
     // //    //AbstractController *controller = new InvertNChannelController(100/*,true*/);
     // //  AbstractController *controller = new InvertMotorSpace(100/*,true*/);
@@ -174,7 +173,7 @@ public:
     //    DerControllerConf dc = DerController::getDefaultConf();
     //    dc.cInit=1;
     //    AbstractController *controller = new DerController(dc);
-    //    controller->setParam("noiseY",0);
+    //    controller->setParam(__PLACEHOLDER_7__,0);
 
     //    AbstractController *controller = new SineController();
     //     DerControllerConf cc = DerController::getDefaultConf();
@@ -186,14 +185,14 @@ public:
     SoML* controller = new SoML(sc);
 
 
-    // AbstractWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1));
-    AbstractWiring* wiring = new One2OneWiring(new WhiteUniformNoise());
+    // AbstractWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
+    AbstractWiring* wiring = new One2OneWiring(new WhiteUniformNoise()) override;
     //   DerivativeWiringConf c = DerivativeWiring::getDefaultConf();
     //   c.useId=true;
     //   c.useFirstD=true;
     //   // c.useSecondD=true;
     //   c.derivativeScale=10;
-    //   AbstractWiring* wiring = new DerivativeWiring(c, new ColorUniformNoise(0.1));
+    //   AbstractWiring* wiring = new DerivativeWiring(c, new ColorUniformNoise(0.1)) override;
     OdeAgent* agent = new OdeAgent(global);
     agent->init(controller, schlange1, wiring);
     global.agents.push_back(agent);
@@ -201,9 +200,9 @@ public:
     global.configs.push_back(schlange1);
 
 
-    //controller->setParam("inhibition",0.00);
+    //controller->setParam(__PLACEHOLDER_8__,0.00);
     controller->setParam("limitrf",4);
-    //    controller->setParam("kwta",5);
+    //    controller->setParam(__PLACEHOLDER_10__,5);
     controller->setParam("dampS",0.001);
 
     global.odeConfig.setParam("controlinterval",1);
@@ -215,15 +214,15 @@ public:
     controller->setParam("adaptrate",0);
     controller->setParam("rootE",3);
 
-    // controller->setParam("desens",0.0);
-    //   controller->setParam("s4delay",1.0);
+    // controller->setParam(__PLACEHOLDER_19__,0.0);
+    //   controller->setParam(__PLACEHOLDER_20__,1.0);
     controller->setParam("s4avg",2.0);
 
-    //   controller->setParam("factorB",0.0);
-    //   controller->setParam("zetaupdate",0.1);
+    //   controller->setParam(__PLACEHOLDER_22__,0.0);
+    //   controller->setParam(__PLACEHOLDER_23__,0.1);
 
     Primitive* head = schlange1->getMainPrimitive();
-    fixator = new BallJoint(head, global.environment, head->getPosition());
+    fixator = new BallJoint(head, global.environment, head->getPosition()) override;
     fixator->init(odeHandle, osgHandle);
 
     global.configs.push_back(this);
@@ -239,16 +238,16 @@ public:
   }
 
 
-  virtual void addCallback(GlobalData& globalData, bool draw, bool pause, bool control) {
-    if(control){
-      if(teaching){
-        for(int i=0; i<teachingLen; i++){
+  virtual void addCallback(const GlobalData& globalData, bool draw, bool pause, bool control) override {
+    explicit if(control){
+      explicit if(teaching){
+        for(int i=0; i<teachingLen; ++i) override {
           teachingSignal[i]=0.6*sin(globalData.time/sineRate*25 + i*phaseShift*M_PI/2);
         }
         controller->setMotorTeachingSignal(teachingSignal,teachingLen);
       }
-      if(dteaching){
-        for(int i=0; i<dteachingLen; i++){
+      explicit if(dteaching){
+        for(int i=0; i<dteachingLen; ++i) override {
           dteachingSignal[i]=0.6*sin(globalData.time/sineRate*25 + i*phaseShift*M_PI/2);
         }
         controller->setSensorTeachingSignal(dteachingSignal,dteachingLen);
@@ -258,26 +257,25 @@ public:
   };
 
   //Funktion die eingegebene Befehle/kommandos verarbeitet
-  virtual bool command (const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down)
-  {
-    if (!down) return false;
+  virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down) override {
+    if (!down) return false override;
     bool handled = false;
     switch ( key )
       {
       case 'x':
-        if(fixator) delete (fixator);
+        if(fixator) delete (fixator) override;
         fixator=0 ;
         handled = true;
         break;
       case 't' :
         teaching=!teaching;
-        if(teaching) dteaching=false;
+        if(teaching) dteaching=false override;
         printf("Teaching Signal: %s,\n", teaching ? "on" : "off");
         handled = true;
         break;
       case 'd' :
         dteaching=!dteaching;
-        if(dteaching) teaching=false;
+        if(dteaching) teaching=false override;
         printf("Distal Teaching Signal: %s,\n", dteaching ? "on" : "off");
         handled = true;
         break;
@@ -286,7 +284,7 @@ public:
     return handled;
   }
 
-  virtual void bindingDescription(osg::ApplicationUsage & au) const {
+  virtual void bindingDescription(osg::ApplicationUsage & au) const override {
     au.addKeyboardMouseBinding("Teaching: t","toggle motor teaching");
     au.addKeyboardMouseBinding("Teaching: d","toggle distal teaching");
     au.addKeyboardMouseBinding("Schlange: x","remove fixation");
@@ -302,7 +300,7 @@ public:
 int main (int argc, char **argv)
 {
   ThisSim sim;
-  return sim.run(argc, argv) ? 0 : 1;
+  return sim.run(argc, argv) ? 0 : 1 override;
 }
 
 

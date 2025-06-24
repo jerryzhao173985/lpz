@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright static_cast<C>(2005)-2011 by                                            *
+ *   Copyright (C) 2005-2011 by                                            *
  *    Frank Guettler <guettler at informatik dot uni-leipzig dot de        *
  *    Georg Martius  <georg dot martius at web dot de>                     *
  *    Ralf Der       <ralfder at mis dot mpg dot de>                       *
@@ -8,7 +8,7 @@
  *   LICENSE:                                                              *
  *   This work is licensed under the Creative Commons                      *
  *   Attribution-NonCommercial-ShareAlike 2.5 License. To view a copy of   *
- *   this license, visit http://creativecommons.org/licenses/by-nc-sa/2.5/ *
+ *   this license, visit http:__PLACEHOLDER_28__
  *   or send a letter to Creative Commons, 543 Howard Street, 5th Floor,   *
  *   San Francisco, California, 94105, USA.                                *
  *                                                                         *
@@ -38,14 +38,14 @@ AbstractIAFController::AbstractIAFController(const AbstractIAFControllerConf& co
   addParameter("wiinitscale", conf.wOInitScale);
   addParameter("niafperinput", conf.numberIAFNeuronsPerInput);
   addParameter("niafperoutput", conf.numberIAFNeuronsPerOutput);
-  //       addInspectableValue("[I]leak", conf.leakI);
-  //       addInspectableValue("[O]leak", conf.leakO);
-  //       addInspectableValue("[I]t",conf.thresholdI);
-  //       addInspectableValue("[O]t",conf.thresholdO);
+  //       addInspectableValue(__PLACEHOLDER_12__, conf.leakI);
+  //       addInspectableValue(__PLACEHOLDER_13__, conf.leakO);
+  //       addInspectableValue(__PLACEHOLDER_14__,conf.thresholdI);
+  //       addInspectableValue(__PLACEHOLDER_15__,conf.thresholdO);
   addInspectableMatrix("[I]sum", &sumI);
   addInspectableMatrix("[O]sum", &sumO);
-  //       addInspectableMatrix("[I]W",&wI);
-  //       addInspectableMatrix("[O]W",&wO);
+  //       addInspectableMatrix(__PLACEHOLDER_18__,&wI);
+  //       addInspectableMatrix(__PLACEHOLDER_19__,&wO);
   addInspectableMatrix("[I]x", &xI);
   addInspectableMatrix("[O]x", &xO);
   initialised = false;
@@ -117,7 +117,7 @@ AbstractIAFController::forwardStep(const sensor* sensors,
   // generate discrete fire events (0 or 1)
   xI.toMapP(randG, toDualStateWithProbability);                                  // positive neurons
   xI.addColumns(sensorNumber, negInput.mapP(randG, toDualStateWithProbability)); // neg
-  for (int i = 1; i < *conf.numberIAFNeuronsPerInput; i++) {
+  for (int i = 1; i < *conf.numberIAFNeuronsPerInput; ++i) {
     xI.addColumns(sensorNumber, input.mapP(randG, toDualStateWithProbability));    // positive
     xI.addColumns(sensorNumber, negInput.mapP(randG, toDualStateWithProbability)); // neg
   }
@@ -149,8 +149,8 @@ AbstractIAFController::forwardStep(const sensor* sensors,
 
   // calculate a summed rate of the output of the output population neurons
   matrix::Matrix m(1, motorNumber);
-  for (int i = 0; i < *conf.numberIAFNeuronsPerOutput; i++) {
-    for (int j = 0; j < motorNumber; j++) {
+  for (int i = 0; i < *conf.numberIAFNeuronsPerOutput; ++i) {
+    for (int j = 0; j < motorNumber; ++j) {
       m.val(0, j) += y.val(0, motorNumber * i + j); // positive neurons
       m.val(0, j) -= y.val(
         0,

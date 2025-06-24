@@ -8,7 +8,7 @@
  *   LICENSE:                                                              *
  *   This work is licensed under the Creative Commons                      *
  *   Attribution-NonCommercial-ShareAlike 2.5 License. To view a copy of   *
- *   this license, visit http://creativecommons.org/licenses/by-nc-sa/2.5/ *
+ *   this license, visit http:__PLACEHOLDER_73__
  *   or send a letter to Creative Commons, 543 Howard Street, 5th Floor,   *
  *   San Francisco, California, 94105, USA.                                *
  *                                                                         *
@@ -165,7 +165,7 @@ InvertMotorNStep::init(int sensornumber, int motornumber, RandGen* randGen) {
   x_buffer = new Matrix[buffersize];
   y_buffer = new Matrix[buffersize];
   eta_buffer = new Matrix[buffersize];
-  for (unsigned int k = 0; k < buffersize; k++) {
+  for (unsigned int k = 0; k < buffersize; ++k) {
     x_buffer[k].set(number_sensors, 1);
     y_buffer[k].set(number_motors, 1);
     eta_buffer[k].set(number_motors, 1);
@@ -194,7 +194,7 @@ InvertMotorNStep::step(const sensor* x_, int number_sensors, motor* y_, int numb
     learnModel(delay);
   }
   // update step counter
-  t++;
+  ++t;
 
   //   // Georg: This a very special case. Should be removed! Make a copy to the precise simulation
   if (cfactor != 1) {
@@ -215,7 +215,7 @@ void
 InvertMotorNStep::stepNoLearning(const sensor* x, int number_sensors, motor* y, int number_motors) {
   fillBuffersAndControl(x, number_sensors, y, number_motors);
   // update step counter
-  t++;
+  ++t;
 };
 
 void
@@ -223,8 +223,8 @@ InvertMotorNStep::fillBuffersAndControl(const sensor* x_,
                                         int number_sensors,
                                         motor* y_,
                                         int number_motors) {
-  assert((unsigned)number_sensors == this->number_sensors &&
-         (unsigned)number_motors == this->number_motors);
+  assert(static_cast<unsigned>(number_sensors) == this->number_sensors &&
+         static_cast<unsigned>(number_motors) == this->number_motors);
 
   Matrix x(number_sensors, 1, x_);
 
@@ -346,7 +346,7 @@ InvertMotorNStep::learnController(int delay) {
 //  Please note that the delayed values are NOT used for the error calculation
 //  (this is done in calcXsi())
 void
-InvertMotorNStep::calcCandHUpdates(Matrix& C_update, Matrix& H_update, int delay) {
+InvertMotorNStep::calcCandHUpdates(const Matrix& C_update, const Matrix& H_update, int delay) {
   assert(steps + delay < buffersize);
   // Matrix& eta = zero_eta;
   // Matrix v_old = (eta_buffer[t%buffersize]).map(g);
@@ -360,7 +360,7 @@ InvertMotorNStep::calcCandHUpdates(Matrix& C_update, Matrix& H_update, int delay
   v = zero_eta;
   double shiftlimit = 1; // maximal size of vector components in shifts
   // and other intermediate vectors calculated with the inverse or pseudoinverse
-  for (unsigned int s = 1; s <= steps; s++) {
+  for (unsigned int s = 1; s <= steps; ++s) {
     const Matrix& eta = eta_buffer[(t - s) % buffersize].map(g);
 
     // const Matrix& x      = A * z.map(g) + xsi;
@@ -392,7 +392,7 @@ InvertMotorNStep::calcCandHUpdates(Matrix& C_update, Matrix& H_update, int delay
     Matrix LLT_I;
     if (teaching) {
       // scale of the additional terms
-      LLT_I = ((R & g_prime).multMT() + SmallID) ^ -1;
+      LLT_I = ((const R& g_prime).multMT() + SmallID) ^ -1;
     }
 
     if (modelCompliant != 0 && s == 1) { // learning of the forward task:
@@ -420,11 +420,11 @@ InvertMotorNStep::calcCandHUpdates(Matrix& C_update, Matrix& H_update, int delay
       //       H_updateTeaching += delta * (continuity * epsC * v_size);
       C_updateTeaching += (LLT_I * (delta * (x ^ T))) * (continuity * epsC);
       H_updateTeaching += (LLT_I * delta) * (continuity * epsC);
-      // cerr << v.multTM().val(0,0) << "\t" << xsi.multTM().val(0,0) << "\n";
+      // cerr << v.multTM().val(0,0) << __PLACEHOLDER_51__ << xsi.multTM().val(0,0) << __PLACEHOLDER_52__;
     }
     if (useTeaching && s == 1) {
       const Matrix& y = y_buffer[(t - 1 - delay) % buffersize]; // eventuell t-1
-      //      printf("Learn: %i\n", t-1-delay);
+      //      printf(__PLACEHOLDER_53__, t-1-delay);
       const Matrix& xsi_teach = y_teaching - y;
       const Matrix& delta_teach = xsi_teach.multrowwise(g_prime);
       //       double v_size = v.multTM().val(0,0);
@@ -437,7 +437,7 @@ InvertMotorNStep::calcCandHUpdates(Matrix& C_update, Matrix& H_update, int delay
     }
   }
   // we are just using the last shift here! Is this of any problem.
-  double error_factor = calcErrorFactor(v, (logaE & 1) != 0, (rootE & 1) != 0);
+  double error_factor = calcErrorFactor(v, (logaE >= 1), (rootE >= 1));
   // apply reinforcement factor
   error_factor *= reinforcefactor;
   reinforcefactor = 1; // only use it in one timestep (next has to be given by setReinforcement())
@@ -456,7 +456,7 @@ InvertMotorNStep::calcCandHUpdates(Matrix& C_update, Matrix& H_update, int delay
 //  (this is done in calcXsi())
 // UNUSED! This is an old implementation: We have to figure out why we did it this way!
 void
-InvertMotorNStep::calcCandHUpdatesTeaching(Matrix& C_update, Matrix& H_update, int y_delay) {
+InvertMotorNStep::calcCandHUpdatesTeaching(const Matrix& C_update, const Matrix& H_update, int y_delay) {
   assert(steps + y_delay < buffersize);
   const Matrix& y = y_buffer[(t) % buffersize]; // eventuell t-1
   const Matrix eta = y_teaching - y;
@@ -499,7 +499,7 @@ InvertMotorNStep::learnModel(int delay) {
   } else {
     pain = 0; // pain > 1 ? pain*0.9: 0;
     //    double error_factor = calcErrorFactor(xsi, true, false); // logarithmic error
-    double error_factor = calcErrorFactor(xsi, (logaE & 2) != 0, (rootE & 2) != 0); //
+    double error_factor = calcErrorFactor(xsi, (logaE >= 2), (rootE >= 2)); //
     Matrix A_update;
     Matrix B_update;
     A_update = ((xsi * (y ^ T)) * (epsA * error_factor));
@@ -584,22 +584,22 @@ InvertMotorNStep::management() {
     SD *= 1 - dampS * managementInterval;
   }
   if (inhibition) {
-    kwtaInhibition(C, max((int)kwta, 1), inhibition * managementInterval * epsC);
+    kwtaInhibition(C, max(static_cast<int>(kwta), 1), inhibition * managementInterval * epsC);
   } else if (limitRF) {
-    limitC(C, max(1, (int)limitRF));
+    limitC(C, max(1, static_cast<int>(limitRF)));
   }
 }
 
 void
-InvertMotorNStep::kwtaInhibition(matrix::Matrix& wm, unsigned int k, double damping) {
+InvertMotorNStep::kwtaInhibition(const matrix::Matrix& wm, unsigned int k, double damping) {
   unsigned int n = wm.getN();
   unsigned int k1 = std::min(n, k); // avoid overfloats
   double inhfactor = 1 - damping;
   //  double exfactor  = 1+(damping/k1);
-  for (unsigned int i = 0; i < wm.getM(); i++) {
+  for (unsigned int i = 0; i < wm.getM(); ++i) {
     Matrix r = wm.row(i).map(fabs);
     double x = getKthLargestElement(r, k1);
-    for (unsigned int j = 0; j < n; j++) {
+    for (unsigned int j = 0; j < n; ++j) {
       if (fabs(wm.val(i, j)) < x) {
         wm.val(i, j) *= inhfactor;
       } // else {
@@ -611,12 +611,12 @@ InvertMotorNStep::kwtaInhibition(matrix::Matrix& wm, unsigned int k, double damp
 }
 
 void
-InvertMotorNStep::limitC(matrix::Matrix& wm, unsigned int rfSize) {
+InvertMotorNStep::limitC(const matrix::Matrix& wm, unsigned int rfSize) {
   int n = wm.getN();
   int m = wm.getM();
-  for (int i = 0; i < m; i++) {
-    for (int j = 0; j < n; j++) {
-      if (std::abs(i - j) > (int)rfSize - 1)
+  for (int i = 0; i < m; ++i) {
+    for (int j = 0; j < n; ++j) {
+      if (std::abs(i - j) > static_cast<int>(rfSize) - 1)
         wm.val(i, j) = 0;
     }
   }

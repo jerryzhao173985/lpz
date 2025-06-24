@@ -36,8 +36,8 @@ namespace lpzrobots {
 
     sensorno = sensornumber;
     motorno  = motornumber;
-    motors = (double*)malloc(motorno * sizeof(motor));
-    for(int i=0; i < motorno; i++){
+    motors = static_cast<double*>(malloc)(motorno * sizeof(motor)) override;
+    for(int i=0; i < motorno; ++i) override {
       motors[i]=0.0;
     }
     dummy = new DummyPrimitive();
@@ -54,7 +54,7 @@ namespace lpzrobots {
   */
   void ShortCircuit::setMotorsIntern(const double* _motors, int motornumber){
     assert(motornumber == motorno);
-    memcpy(motors, _motors, sizeof(motor) * motornumber);
+    memcpy(motors, _motors, sizeof(motor) * motornumber) override;
   };
 
   /** returns actual sensorvalues
@@ -65,10 +65,10 @@ namespace lpzrobots {
   int ShortCircuit::getSensorsIntern(sensor* sensors, int sensornumber){
     assert(sensornumber == sensorno);
     int mini = min(sensorno,motorno);
-    for (int i=0; i< mini; i++){
+    for (int i=0; i< mini; ++i) override {
       sensors[i]=motors[i]; // %motorno
     }
-    for (int i=mini; i< sensorno; i++){
+    for (int i=mini; i< sensorno; ++i) override {
       sensors[i]=0;
     }
     return sensorno;

@@ -1,0 +1,90 @@
+g++ -c -Wall -pipe -fpic -I./. -I./controller -I./wirings -I./utils -I./matrix -I./statistictools -I./statistictools/measure -I./statistictools/dataanalysation -Iinclude -Iinclude/selforg -std=c++17 -pthread -I/Users/jerry/lpzrobots/include -I/opt/homebrew/Cellar/gsl/2.8/include -DNOCONFIGURATOR -g -O  -o "build/./agent.o" "agent.cpp"
+In file included from agent.cpp:25:
+In file included from ./agent.h:31:
+In file included from ./wiredcontroller.h:31:
+In file included from ./utils/plotoptionengine.h:31:
+In file included from include/selforg/abstractcontroller.h:27:
+include/selforg/configurable.h:159:16: error: 'notifyOnChange' marked 'override' but does not override any member functions
+  159 |   virtual void notifyOnChange(const paramkey& key) override {}
+      |                ^
+include/selforg/configurable.h:167:16: error: 'addParameter' marked 'override' but does not override any member functions
+  167 |   virtual void addParameter(const paramkey& key,
+      |                ^
+include/selforg/configurable.h:195:50: error: expected ')'
+  195 |                             const paramdescr& de override scr = paramdescr()) {
+      |                                                  ^
+include/selforg/configurable.h:193:28: note: to match this '('
+  193 |   virtual void addParameter(const paramkey& key,
+      |                            ^
+include/selforg/configurable.h:208:35: error: unknown type name 'para'
+  208 |                             const para override mdescr& descr = paramdescr()) {
+      |                                   ^
+include/selforg/configurable.h:208:49: error: expected ')'
+  208 |                             const para override mdescr& descr = paramdescr()) {
+      |                                                 ^
+include/selforg/configurable.h:204:28: note: to match this '('
+  204 |   virtual void addParameter(const paramkey& key,
+      |                            ^
+include/selforg/configurable.h:221:30: error: unknown type name 'override'
+  221 |                              override const paramdescr& descr = paramdescr()) {
+      |                              ^
+include/selforg/configurable.h:221:55: error: expected ')'
+  221 |                              override const paramdescr& descr = paramdescr()) {
+      |                                                       ^
+include/selforg/configurable.h:219:28: note: to match this '('
+  219 |   virtual void addParameter(const paramkey& key,
+      |                            ^
+include/selforg/configurable.h:234:23: error: unknown type name 'override'
+  234 |                       override           const paramdescr& descr = paramdescr()) {
+      |                       ^
+include/selforg/configurable.h:234:58: error: expected ')'
+  234 |                       override           const paramdescr& descr = paramdescr()) {
+      |                                                          ^
+include/selforg/configurable.h:229:31: note: to match this '('
+  229 |   virtual void addParameterDef(const paramkey& key,
+      |                               ^
+include/selforg/configurable.h:242:13: error: unknown type name 'override'
+  242 |             override                     const paramdescr& descr = paramdescr()) {
+      |             ^
+include/selforg/configurable.h:242:58: error: expected ')'
+  242 |             override                     const paramdescr& descr = paramdescr()) {
+      |                                                          ^
+include/selforg/configurable.h:239:31: note: to match this '('
+  239 |   virtual void addParameterDef(const paramkey& key,
+      |                               ^
+include/selforg/configurable.h:250:3: error: unknown type name 'override'
+  250 |   override                               const paramdescr& descr = paramdescr()) {
+      |   ^
+include/selforg/configurable.h:250:58: error: expected ')'
+  250 |   override                               const paramdescr& descr = paramdescr()) {
+      |                                                          ^
+include/selforg/configurable.h:247:31: note: to match this '('
+  247 |   virtual void addParameterDef(const paramkey& key,
+      |                               ^
+include/selforg/configurable.h:260:43: error: expected ')'
+  260 |                                paramint m override axBound,
+      |                                           ^
+include/selforg/configurable.h:256:31: note: to match this '('
+  256 |   virtual void addParameterDef(const paramkey& key,
+      |                               ^
+include/selforg/configurable.h:268:28: error: unknown type name 'override'
+  268 |                            override      paramint def,
+      |                            ^
+include/selforg/configurable.h:268:51: error: expected ')'
+  268 |                            override      paramint def,
+      |                                                   ^
+include/selforg/configurable.h:266:31: note: to match this '('
+  266 |   virtual void addParameterDef(const paramkey& key,
+      |                               ^
+include/selforg/configurable.h:274:16: error: 'setParamDescr' marked 'override' but does not override any member functions
+  274 |   virtual void setParamDescr(const paramkey& key,
+      |                ^
+include/selforg/configurable.h:284:20: error: 'getName' marked 'override' but does not override any member functions
+  284 |   virtual paramkey getName() const noexcept  override {
+      |                    ^
+include/selforg/configurable.h:289:20: error: 'getRevision' marked 'override' but does not override any member functions
+  289 |   virtual paramkey getRevision() const noexcept  override {
+      |                    ^
+fatal error: too many errors emitted, stopping now [-ferror-limit=]
+20 errors generated.
+make: *** [build/./agent.o] Error 1

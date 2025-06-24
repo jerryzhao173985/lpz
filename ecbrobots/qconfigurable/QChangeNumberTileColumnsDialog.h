@@ -55,7 +55,7 @@ namespace lpzrobots {
     Q_OBJECT
 
     public:
-    QChangeNumberTileColumnsDialog(int* tileCount);
+    explicit QChangeNumberTileColumnsDialog(int* tileCount);
       virtual ~QChangeNumberTileColumnsDialog();
 
     private slots:

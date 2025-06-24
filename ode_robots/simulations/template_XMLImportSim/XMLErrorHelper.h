@@ -27,7 +27,7 @@
  *                                                                         *
  *  $Log$
  *  Revision 1.2  2010-06-15 15:02:19  guettler
- *  using now "XercescForwardDecl.h" to avoid namespace problems (3_0, 3_1)
+ *  using now __PLACEHOLDER_0__ to avoid namespace problems (3_0, 3_1)
  *
  *  Revision 1.1  2010/03/07 22:50:38  guettler
  *  first development state for feature XMLImport
@@ -66,10 +66,10 @@ class XMLErrorHelper : public XERCESC::ErrorHandler {
 
     static void printError(const std::string message);
 
-    bool getSawErrors() const;
+    bool getSawErrors() const override;
 
   private:
-    bool errorsSeen;
+    bool errorsSeen = false;
 };
 
 #endif // __XMLERRORHELPER_H_

@@ -95,7 +95,7 @@ namespace lpzrobots {
      * the constuctor will read the content of the parameter-file 'AVR_Device_List.xml'.
      * @param filename specifies the full path and name of the parameter-file.
      */
-    QAVR_DeviceList(QString filename);
+    explicit QAVR_DeviceList(const QString& filename);
     /**
      * Destroys the handler.
      */

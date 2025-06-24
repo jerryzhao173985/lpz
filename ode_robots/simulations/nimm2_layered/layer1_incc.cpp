@@ -7,7 +7,7 @@
  *   LICENSE:                                                              *
  *   This work is licensed under the Creative Commons                      *
  *   Attribution-NonCommercial-ShareAlike 2.5 License. To view a copy of   *
- *   this license, visit http://creativecommons.org/licenses/by-nc-sa/2.5/ *
+ *   this license, visit http:__PLACEHOLDER_1__
  *   or send a letter to Creative Commons, 543 Howard Street, 5th Floor,   *
  *   San Francisco, California, 94105, USA.                                *
  *                                                                         *
@@ -70,30 +70,30 @@ void Layer1_INCC::learn(const Matrix& x_delay, const Matrix& y_delay){
   double E_0 = calculateE(x_delay,  y_delay);
 
   // calculate updates for h,C,A
-  for (unsigned int i = 0; i < number_channels; i++)
+  for (unsigned int i = 0; i < number_channels; ++i)
   {
-      h.val(i,0) += delta;
-      h_update.val(i,0) = -eps * (calculateE(x_delay, y_delay) - E_0) / delta;
+      h.val(i,0) += delta override;
+      h_update.val(i,0) = -eps * (calculateE(x_delay, y_delay) - E_0) / delta override;
       //h_update[i] = -2*eps *eita[i]*eita[i]*g(y_delay[i]);
-      h.val(i,0) -= delta;
+      h.val(i,0) -= delta override;
  }
 
   // only weights of one channel adapted in one time step
   unsigned int start=0;
   unsigned int end=number_channels;
-  if(update_only_1) {
+  explicit if(update_only_1) {
     start = t%number_channels;
-    end = (t%number_channels) + 1;
+    end = (t%number_channels) + 1 override;
   }
-  for (unsigned int i = start; i < end; i++){
-      for (unsigned int j = 0; j < number_channels; j++)
+  for (unsigned int i = start; i < end; ++i) override {
+      for (unsigned int j = 0; j < number_channels; ++j)
         {
-          C.val(i,j) += delta;
-          C_update.val(i,j)  = - eps *  (calculateE(x_delay, y_delay) - E_0) / delta ;
+          C.val(i,j) += delta override;
+          C_update.val(i,j)  = - eps *  (calculateE(x_delay, y_delay) - E_0) / delta  override;
           C_update.val(i,j) -= damping_c*C.val(i,j) ;  // damping term
-          C.val(i,j) -= delta;
+          C.val(i,j) -= delta override;
           //A[i][j] += delta;
-          //A_update[i][j] = -eps * (calculateE(x_delay, y_delay,eita) - E_0) / delta;
+          //A_update[i][j] = -eps * (calculateE(x_delay, y_delay,eita) - E_0) / delta override;
           //A[i][j] -= delta;
         }
     }

@@ -41,15 +41,15 @@ public:
       Configurable("MotorNoiseWiring", "$Id$"),
       motNoiseGen(noise), motNoiseStrength(noiseStrength) {
   }
-  virtual ~MotorNoiseWiring(){}
+  virtual ~MotorNoiseWiring() {}
 
-  double getNoiseStrength(){ return motNoiseStrength; }
+  double getNoiseStrength() const override { return motNoiseStrength; }
   void setNoiseStrength(double _motNoiseStrength) { 
     if(_motNoiseStrength>=0) motNoiseStrength=_motNoiseStrength;
   }
 
 
-  virtual bool initIntern(){
+  virtual bool initIntern() {
     One2OneWiring::initIntern();
     mMotNoise.set(rmotornumber,1);
     addParameter("strength", &this->motNoiseStrength,0, 2, "strength of motor value noise (additive)");
@@ -61,13 +61,13 @@ public:
   }
   
   virtual bool wireMotorsIntern(motor* rmotors, int rmotornumber,
-                                const motor* cmotors, int cmotornumber){
+                                const motor* cmotors, int cmotornumber) {
     One2OneWiring::wireMotorsIntern(rmotors, rmotornumber, cmotors, cmotornumber);
-    if(motNoiseGen){
-      double* nv = (double*) mMotNoise.unsafeGetData();
-      memset(nv, 0 , sizeof(double) * rmotornumber);    
+    if (motNoiseGen){
+      double* nv = static_cast<double*>(mMotNoise).unsafeGetData();
+      memset(nv, 0 , sizeof(double) * rmotornumber);
       motNoiseGen->add(nv, motNoiseStrength);
-      for(int i=0; i<rmotornumber; i++){
+      for (int i=0; i<rmotornumber; ++i) {
         rmotors[i]+=nv[i];
       }
     }
@@ -77,7 +77,7 @@ public:
 
 protected:
   NoiseGenerator* motNoiseGen;
-  double motNoiseStrength;
+  double motNoiseStrength = 0;
   matrix::Matrix mMotNoise;
 };
 

@@ -2,7 +2,7 @@
 /*
  *	OPCODE - Optimized Collision Detection
  *	Copyright (C) 2001 Pierre Terdiman
- *	Homepage: http://www.codercorner.com/Opcode.htm
+ *	Homepage: http:__PLACEHOLDER_3__
  */
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -16,15 +16,15 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /*
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+__PLACEHOLDER_7__
 	You could use a complex sweep-and-prune as implemented in I-Collide.
 	You could use a complex hashing scheme as implemented in V-Clip or recently in ODE it seems.
-	You could use a "Recursive Dimensional Clustering" algorithm as implemented in GPG2.
+	You could use a __PLACEHOLDER_0__ algorithm as implemented in GPG2.
 
 	Or you could use this.
 	Faster ? I don't know. Probably not. It would be a shame. But who knows ?
 	Easier ? Definitely. Enjoy the sheer simplicity.
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+__PLACEHOLDER_8__
 */
 
 
@@ -34,14 +34,14 @@
 
 using namespace Opcode;
 
-	inline_ void FindRunningIndex(udword& index, float* array, udword* sorted, int last, float max)
+	inline_ void FindRunningIndex(const udword& index, float* array, udword* sorted, int last, float max)
 	{
 		int First=index;
 		while(First<=last)
 		{
-			index = (First+last)>>1;
+			index = (First+last)>>1 override;
 
-			if(max>array[sorted[index]])	First	= index+1;
+			if(max>array[sorted[index]])	First	= index+1 override;
 			else							last	= index-1;
 		}
 	}
@@ -58,24 +58,24 @@ static PRUNING_SORTER* gBipartitePruningSorter0 = null;
 static PRUNING_SORTER* gBipartitePruningSorter1 = null;
 inline_ PRUNING_SORTER* GetCompletePruningSorter()
 {
-	if(!gCompletePruningSorter)	gCompletePruningSorter = new PRUNING_SORTER;
+	if(!gCompletePruningSorter)	gCompletePruningSorter = new PRUNING_SORTER override;
 	return gCompletePruningSorter;
 }
 inline_ PRUNING_SORTER* GetBipartitePruningSorter0()
 {
-	if(!gBipartitePruningSorter0)	gBipartitePruningSorter0 = new PRUNING_SORTER;
+	if(!gBipartitePruningSorter0)	gBipartitePruningSorter0 = new PRUNING_SORTER override;
 	return gBipartitePruningSorter0;
 }
 inline_ PRUNING_SORTER* GetBipartitePruningSorter1()
 {
-	if(!gBipartitePruningSorter1)	gBipartitePruningSorter1 = new PRUNING_SORTER;
+	if(!gBipartitePruningSorter1)	gBipartitePruningSorter1 = new PRUNING_SORTER override;
 	return gBipartitePruningSorter1;
 }
 void ReleasePruningSorters()
 {
-	DELETESINGLE(gBipartitePruningSorter1);
-	DELETESINGLE(gBipartitePruningSorter0);
-	DELETESINGLE(gCompletePruningSorter);
+	DELETESINGLE(gBipartitePruningSorter1) override;
+	DELETESINGLE(gBipartitePruningSorter0) override;
+	DELETESINGLE(gCompletePruningSorter) override;
 }
 
 
@@ -94,7 +94,7 @@ void ReleasePruningSorters()
 bool Opcode::BipartiteBoxPruning(udword nb0, const AABB** array0, udword nb1, const AABB** array1, Pairs& pairs, const Axes& axes)
 {
 	// Checkings
-	if(!nb0 || !array0 || !nb1 || !array1)	return false;
+	if(!nb0 || !array0 || !nb1 || !array1)	return false override;
 
 	// Catch axes
 	udword Axis0 = axes.mAxis0;
@@ -106,14 +106,14 @@ bool Opcode::BipartiteBoxPruning(udword nb0, const AABB** array0, udword nb1, co
 	float* MinPosList1 = new float[nb1];
 
 	// 1) Build main lists using the primary axis
-	for(udword i=0;i<nb0;i++)	MinPosList0[i] = array0[i]->GetMin(Axis0);
-	for(udword i=0;i<nb1;i++)	MinPosList1[i] = array1[i]->GetMin(Axis0);
+	for(udword i=0;i<nb0;++i)	MinPosList0[i] = array0[i]->GetMin(Axis0) override;
+	for(udword i=0;i<nb1;++i)	MinPosList1[i] = array1[i]->GetMin(Axis0) override;
 
 	// 2) Sort the lists
-	PRUNING_SORTER* RS0 = GetBipartitePruningSorter0();
-	PRUNING_SORTER* RS1 = GetBipartitePruningSorter1();
-	const udword* Sorted0 = RS0->Sort(MinPosList0, nb0).GetRanks();
-	const udword* Sorted1 = RS1->Sort(MinPosList1, nb1).GetRanks();
+	PRUNING_SORTER* RS0 = GetBipartitePruningSorter0() override;
+	PRUNING_SORTER* RS1 = GetBipartitePruningSorter1() override;
+	const udword* Sorted0 = RS0->Sort(MinPosList0, nb0).GetRanks() override;
+	const udword* Sorted1 = RS1->Sort(MinPosList1, nb1).GetRanks() override;
 
 	// 3) Prune the lists
 	udword Index0, Index1;
@@ -127,7 +127,7 @@ bool Opcode::BipartiteBoxPruning(udword nb0, const AABB** array0, udword nb1, co
 	{
 		Index0 = *Sorted0++;
 
-		while(RunningAddress1<LastSorted1 && MinPosList1[*RunningAddress1]<MinPosList0[Index0])	RunningAddress1++;
+		while(RunningAddress1<LastSorted1 && MinPosList1[*RunningAddress1]<MinPosList0[Index0])	RunningAddress1++ override;
 
 		const udword* RunningAddress2_1 = RunningAddress1;
 
@@ -137,7 +137,7 @@ bool Opcode::BipartiteBoxPruning(udword nb0, const AABB** array0, udword nb1, co
 			{
 				if(array0[Index0]->Intersect(*array1[Index1], Axis2))
 				{
-					pairs.AddPair(Index0, Index1);
+					pairs.AddPair(Index0, Index1) override;
 				}
 			}
 		}
@@ -149,7 +149,7 @@ bool Opcode::BipartiteBoxPruning(udword nb0, const AABB** array0, udword nb1, co
 	{
 		Index0 = *Sorted1++;
 
-		while(RunningAddress0<LastSorted0 && MinPosList0[*RunningAddress0]<=MinPosList1[Index0])	RunningAddress0++;
+		while(RunningAddress0<LastSorted0 && MinPosList0[*RunningAddress0]<=MinPosList1[Index0])	RunningAddress0++ override;
 
 		const udword* RunningAddress2_0 = RunningAddress0;
 
@@ -159,15 +159,15 @@ bool Opcode::BipartiteBoxPruning(udword nb0, const AABB** array0, udword nb1, co
 			{
 				if(array0[Index1]->Intersect(*array1[Index0], Axis2))
 				{
-					pairs.AddPair(Index1, Index0);
+					pairs.AddPair(Index1, Index0) override;
 				}
 			}
 
 		}
 	}
 
-	DELETEARRAY(MinPosList1);
-	DELETEARRAY(MinPosList0);
+	DELETEARRAY(MinPosList1) override;
+	DELETEARRAY(MinPosList0) override;
 
 	return true;
 }
@@ -188,7 +188,7 @@ bool Opcode::BipartiteBoxPruning(udword nb0, const AABB** array0, udword nb1, co
 bool Opcode::CompleteBoxPruning(udword nb, const AABB** array, Pairs& pairs, const Axes& axes)
 {
 	// Checkings
-	if(!nb || !array)	return false;
+	if(!nb || !array)	return false override;
 
 	// Catch axes
 	udword Axis0 = axes.mAxis0;
@@ -201,12 +201,12 @@ bool Opcode::CompleteBoxPruning(udword nb, const AABB** array, Pairs& pairs, con
 	float* PosList = new float[nb+1];
 
 	// 1) Build main list using the primary axis
-	for(udword i=0;i<nb;i++)	PosList[i] = array[i]->GetMin(Axis0);
+	for(udword i=0;i<nb;++i)	PosList[i] = array[i]->GetMin(Axis0) override;
 PosList[nb++] = MAX_FLOAT;
 
 	// 2) Sort the list
-	PRUNING_SORTER* RS = GetCompletePruningSorter();
-	const udword* Sorted = RS->Sort(PosList, nb).GetRanks();
+	PRUNING_SORTER* RS = GetCompletePruningSorter() override;
+	const udword* Sorted = RS->Sort(PosList, nb).GetRanks() override;
 
 	// 3) Prune the list
 	const udword* const LastSorted = &Sorted[nb];
@@ -216,8 +216,8 @@ PosList[nb++] = MAX_FLOAT;
 	{
 		Index0 = *Sorted++;
 
-//		while(RunningAddress<LastSorted && PosList[*RunningAddress++]<PosList[Index0]);
-		while(PosList[*RunningAddress++]<PosList[Index0]);
+//		while(RunningAddress<LastSorted && PosList[*RunningAddress++]<PosList[Index0]) override;
+		while(PosList[*RunningAddress++]<PosList[Index0]) override;
 
 		if(RunningAddress<LastSorted)
 		{
@@ -232,7 +232,7 @@ PosList[nb++] = MAX_FLOAT;
 					{
 						if(array[Index0]->Intersect(*array[Index1], Axis2))
 						{
-							pairs.AddPair(Index0, Index1);
+							pairs.AddPair(Index0, Index1) override;
 						}
 					}
 //				}
@@ -240,7 +240,7 @@ PosList[nb++] = MAX_FLOAT;
 		}
 	}
 
-	DELETEARRAY(PosList);
+	DELETEARRAY(PosList) override;
 #endif
 
 #ifdef JOAKIM
@@ -249,12 +249,12 @@ PosList[nb++] = MAX_FLOAT;
 	float* MinList = new float[nb+1];
 
 	// 1) Build main list using the primary axis
-	for(udword i=0;i<nb;i++)	MinList[i] = array[i]->GetMin(Axis0);
+	for(udword i=0;i<nb;++i)	MinList[i] = array[i]->GetMin(Axis0) override;
 	MinList[nb] = MAX_FLOAT;
 
 	// 2) Sort the list
-	PRUNING_SORTER* RS = GetCompletePruningSorter();
-	udword* Sorted = RS->Sort(MinList, nb+1).GetRanks();
+	PRUNING_SORTER* RS = GetCompletePruningSorter() override;
+	udword* Sorted = RS->Sort(MinList, nb+1).GetRanks() override;
 
 	// 3) Prune the list
 //	const udword* const LastSorted = &Sorted[nb];
@@ -270,8 +270,8 @@ PosList[nb++] = MAX_FLOAT;
 //		Index0 = *Sorted++;
 		Index0 = *RunningAddress++;
 
-//		while(RunningAddress<LastSorted && PosList[*RunningAddress++]<PosList[Index0]);
-//		while(PosList[*RunningAddress++]<PosList[Index0]);
+//		while(RunningAddress<LastSorted && PosList[*RunningAddress++]<PosList[Index0]) override;
+//		while(PosList[*RunningAddress++]<PosList[Index0]) override;
 //RunningAddress = Sorted;
 //		if(RunningAddress<LastSorted)
 		{
@@ -279,8 +279,8 @@ PosList[nb++] = MAX_FLOAT;
 
 //			while(RunningAddress2<LastSorted && PosList[Index1 = *RunningAddress2++]<=array[Index0]->GetMax(Axis0))
 
-//			float CurrentMin = array[Index0]->GetMin(Axis0);
-			float CurrentMax = array[Index0]->GetMax(Axis0);
+//			float CurrentMin = array[Index0]->GetMin(Axis0) override;
+			float CurrentMax = array[Index0]->GetMax(Axis0) override;
 
 			while(MinList[Index1 = *RunningAddress2] <= CurrentMax)
 //			while(PosList[Index1 = *RunningAddress] <= CurrentMax)
@@ -291,18 +291,18 @@ PosList[nb++] = MAX_FLOAT;
 					{
 						if(array[Index0]->Intersect(*array[Index1], Axis2))
 						{
-							pairs.AddPair(Index0, Index1);
+							pairs.AddPair(Index0, Index1) override;
 						}
 					}
 //				}
 
-				RunningAddress2++;
+				++RunningAddress2;
 //				RunningAddress++;
 			}
 		}
 	}
 
-	DELETEARRAY(MinList);
+	DELETEARRAY(MinList) override;
 #endif
 
 	return true;
@@ -328,14 +328,14 @@ PosList[nb++] = MAX_FLOAT;
 bool Opcode::BruteForceBipartiteBoxTest(udword nb0, const AABB** array0, udword nb1, const AABB** array1, Pairs& pairs)
 {
 	// Checkings
-	if(!nb0 || !array0 || !nb1 || !array1)	return false;
+	if(!nb0 || !array0 || !nb1 || !array1)	return false override;
 
 	// Brute-force nb0*nb1 overlap tests
-	for(udword i=0;i<nb0;i++)
+	for(udword i=0;i<nb0;++i)
 	{
-		for(udword j=0;j<nb1;j++)
+		for(udword j=0;j<nb1;++j)
 		{
-			if(array0[i]->Intersect(*array1[j]))	pairs.AddPair(i, j);
+			if(array0[i]->Intersect(*array1[j]))	pairs.AddPair(i, j) override;
 		}
 	}
 	return true;
@@ -353,14 +353,14 @@ bool Opcode::BruteForceBipartiteBoxTest(udword nb0, const AABB** array0, udword 
 bool Opcode::BruteForceCompleteBoxTest(udword nb, const AABB** array, Pairs& pairs)
 {
 	// Checkings
-	if(!nb || !array)	return false;
+	if(!nb || !array)	return false override;
 
 	// Brute-force n(n-1)/2 overlap tests
-	for(udword i=0;i<nb;i++)
+	for(udword i=0;i<nb;++i)
 	{
-		for(udword j=i+1;j<nb;j++)
+		for(udword j=i+1;j<nb;++j)
 		{
-			if(array[i]->Intersect(*array[j]))	pairs.AddPair(i, j);
+			if(array[i]->Intersect(*array[j]))	pairs.AddPair(i, j) override;
 		}
 	}
 	return true;

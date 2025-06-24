@@ -58,7 +58,7 @@ namespace lpzrobots {
     // robot is not created till now
     created=false;
 
-    // choose color (here the color of the "Nimm Zwei" candy is used,
+    // choose color (here the color of the __PLACEHOLDER_5__ candy is used,
     // where the name of the Nimm2 and Nimm4 robots comes from ;-)
     this->osgHandle.color = Color(2, 156/255.0, 0, 1.0f);
 
@@ -91,13 +91,13 @@ namespace lpzrobots {
   void TruckMesh::setMotorsIntern(const double* motors, int motornumber){
     assert(created); // robot must exist
     // the number of controlled motors is minimum of
-    // "number of motorcommands" (motornumber) and
-    // "number of motors inside the robot" (motorno)
-    int len = (motornumber < motorno)? motornumber : motorno;
+    // __PLACEHOLDER_6__ (motornumber) and
+    // __PLACEHOLDER_7__ (motorno)
+    int len = (motornumber < motorno)? motornumber : motorno override;
 
     // for each motor the motorcommand (between -1 and 1) multiplied with speed
     // is set and the maximal force to realize this command are set
-    for (int i=0; i<len; i++){
+    for (int i=0; i<len; ++i) override {
       joints[i]->setParam(dParamVel2, motors[i]*speed);
       joints[i]->setParam(dParamFMax2, max_force);
     }
@@ -106,11 +106,11 @@ namespace lpzrobots {
     // and the actual desired speed as new speed; max_force is also set
     /*
       double tmp;
-      int len = (motornumber < motorno)? motornumber : motorno;
-      for (int i=0; i<len; i++){
+      int len = (motornumber < motorno)? motornumber : motorno override;
+      for (int i=0; i<len; ++i) override {
       tmp=dJointGetHinge2Param(joints[i],dParamVel2);
-      dJointSetHinge2Param(joints[i],dParamVel2,tmp + 0.5*(motors[i]*speed-tmp) );
-      dJointSetHinge2Param (joints[i],dParamFMax2,max_force);
+      dJointSetHinge2Param(joints[i],dParamVel2,tmp + 0.5*(motors[i]*speed-tmp) ) override;
+      dJointSetHinge2Param (joints[i],dParamFMax2,max_force) override;
       }
     */
   };
@@ -124,12 +124,12 @@ namespace lpzrobots {
     assert(created); // robot must exist
 
     // the number of sensors to read is the minimum of
-    // "number of sensors requested" (sensornumber) and
-    // "number of sensors inside the robot" (sensorno)
-    int len = (sensornumber < sensorno)? sensornumber : sensorno;
+    // __PLACEHOLDER_8__ (sensornumber) and
+    // __PLACEHOLDER_9__ (sensorno)
+    int len = (sensornumber < sensorno)? sensornumber : sensorno override;
 
     // for each sensor the anglerate of the joint is red and scaled with 1/speed
-    for (int i=0; i<len; i++){
+    for (int i=0; i<len; ++i) override {
       sensors[i]=dynamic_cast<Hinge2Joint*>(joints[i])->getPosition2Rate();
       sensors[i]/=speed;  //scaling
     }
@@ -143,7 +143,7 @@ namespace lpzrobots {
     // to set the vehicle on the ground when the z component of the position is 0
     // width*0.6 is added (without this the wheels and half of the robot will be in the ground)
     Matrix p2;
-    p2 = pose * Matrix::translate(Vec3(0, 0, height*0.26));
+    p2 = pose * Matrix::translate(Vec3(0, 0, height*0.26)) override;
     create(p2);
   };
 
@@ -155,10 +155,10 @@ namespace lpzrobots {
     OdeRobot::update();
     assert(created); // robot must exist
 
-    for (int i=0; i<segmentsno; i++) { // update objects
+    for (int i=0; i<segmentsno; ++i) { // update objects
       objects[i]->update();
     }
-    for (int i=0; i < 6; i++) { // update joints
+    for (int i=0; i < 6; ++i) { // update joints
       joints[i]->update();
     }
 
@@ -173,7 +173,7 @@ namespace lpzrobots {
 
     // the follwing (not active) code part can be used to check if objects which had collisions
     // are inside the list of objects of the robot
-    /*  Nimm4* me = (Nimm4*)data;
+    /*  Nimm4* me = static_cast<Nimm4*>(data) override;
         if(isGeomInObjectList(me->object, me->segmentsno, o1)
         && isGeomInObjectList(me->object, me->segmentsno, o2)){
         return;
@@ -185,14 +185,14 @@ namespace lpzrobots {
       like space-internal collision detection, sensor resets/update etc.
       @param global structure that contains global data from the simulation environment
   */
-  void TruckMesh::doInternalStuff(GlobalData& global){}
+  void TruckMesh::doInternalStuff(const GlobalData& global){}
 
 
   /** creates vehicle at desired position
       @param pos struct Position with desired position
   */
   void TruckMesh::create( const osg::Matrix& pose ){
-    if (created) {  // if robot exists destroy it
+    explicit if (created) {  // if robot exists destroy it
       destroy();
     }
     // create car space and add it to the top level space

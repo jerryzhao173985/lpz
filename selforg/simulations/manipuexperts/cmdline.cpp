@@ -7,7 +7,7 @@ using namespace std;
 void showParams(const ConfigList& configs, FILE* f /*= 0*/, const char* lineprefix /*= 0*/)
 {
   if(!f) f=stdout;
-  for(vector<Configurable*>::const_iterator i=configs.begin(); i != configs.end(); ++i){
+  for(vector<Configurable*>::const_iterator i=configs.begin(); i != configs.end(); ++i) {
     (*i)->print(f, lineprefix);
   }
 }
@@ -17,7 +17,7 @@ void showParams(const ConfigList& configs, FILE* f /*= 0*/, const char* linepref
 int Control_C=0;
 
 void cmd_handler_exit(void){
-  signal(SIGINT,SIG_DFL);    
+  signal(SIGINT,SIG_DFL);
   Control_C=0;
 }
 
@@ -47,6 +47,6 @@ void cmd_begin_input(){
 }
 
 void cmd_end_input(){
-  cmd_handler_init();  
+  cmd_handler_init();
 }
 

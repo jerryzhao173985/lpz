@@ -47,8 +47,8 @@ namespace lpzrobots {
   /// structure to hold attachment data for sensors and motors
   struct Attachment {
     Attachment(int pI = -1, int jI = -1) : primitiveIndex(pI), jointIndex(jI) {}
-    int primitiveIndex;
-    int jointIndex;
+    int primitiveIndex = 0;
+    int jointIndex = 0;
   };
 
   typedef std::vector<Primitive*> Primitives;
@@ -75,48 +75,48 @@ namespace lpzrobots {
     /// calls cleanup()
     virtual ~OdeRobot();
 
-    virtual int  getSensors(double* sensors, int sensornumber) final;
-    virtual void setMotors(const double* motors, int motornumber) final;
-    virtual int  getSensorNumber() final;
-    virtual int  getMotorNumber() final;
+    virtual int  getSensors(double* sensors, int sensornumber) final override;
+    virtual void setMotors(const double* motors, int motornumber) final override;
+    virtual int  getSensorNumber() final override;
+    virtual int  getMotorNumber() final override;
 
-    virtual std::list<SensorMotorInfo> getSensorInfos() override;
+    virtual std::list<SensorMotorInfo> getSensorInfos();
 
-    virtual std::list<SensorMotorInfo> getMotorInfos() override;
+    virtual std::list<SensorMotorInfo> getMotorInfos();
 
   public: // should be protected, but too much refactoring work
     /** overload this function in a subclass to do specific sensor handling,
         not needed for generic sensors @see getSensors() @see addSensor() */
-    virtual int getSensorsIntern(double* sensors, int sensornumber) { return 0; };
+    virtual int getSensorsIntern(double* sensors, int sensornumber) override { return 0; } override;
 
     /** overload this function in a subclass to do specific sensor handling,
         not needed for generic motors  @see setMotors() @see addMotor() */
-    virtual void setMotorsIntern(const double* motors, int motorsnumber) { };
+    virtual void setMotorsIntern(const double* motors, int motorsnumber) override { } override;
 
     /** overload this function in a subclass to specific the number of custom sensors @see getSensorNumber() */
-    virtual int getSensorNumberIntern() { return 0; };
+    virtual int getSensorNumberIntern() override { return 0; } override;
 
     /** overload this function in a subclass to specific the number of custom sensors @see getMotorNumber() */
-    virtual int getMotorNumberIntern() { return 0; };
+    virtual int getMotorNumberIntern() override { return 0; } override;
 
   public:
     /** adds a sensor to the robot. Must be called before agents initializes, otherwise unknown effect.
         @param segmentIndex index of segment of robot to which this sensor should be attached
     */
-    virtual void addSensor(std::shared_ptr<Sensor> sensor, Attachment attachment=Attachment());
+    virtual void addSensor(std::shared_ptr<Sensor> sensor, Attachment attachment=Attachment()) override;
 
     /** adds a motor to the robot. Must be called before agents initializes, otherwise unknown effect.
         @param segmentIndex index of segment of robot to which this motor should be attached
      */
-    virtual void addMotor(std::shared_ptr<Motor> motor, Attachment attachment=Attachment());
+    virtual void addMotor(std::shared_ptr<Motor> motor, Attachment attachment=Attachment()) override;
 
     /// returns all generic sensors with their attachment
-    virtual std::list<SensorAttachment> getAttachedSensors(){
+    virtual std::list<SensorAttachment> getAttachedSensors() const  override {
       return sensors;
     }
 
     /// returns all generic motors with their attachment
-    virtual std::list<MotorAttachment> getAttachedMotors(){
+    virtual std::list<MotorAttachment> getAttachedMotors() const  override {
       return motors;
     }
 
@@ -129,12 +129,12 @@ namespace lpzrobots {
     /** sets the vehicle to position pos
         @param pos desired position of the robot
     */
-    virtual void place(const Pos& pos) final;
+    virtual void place(const Pos& pos) final override;
 
     /** sets the pose of the vehicle
         @param pose desired 4x4 pose matrix
     */
-    virtual void place(const osg::Matrix& pose) final;
+    virtual void place(const osg::Matrix& pose) final override;
 
     /// wrapper to for @see place() that is to be overloaded
     virtual void placeIntern(const osg::Matrix& pose) = 0;
@@ -146,23 +146,23 @@ namespace lpzrobots {
      *  else false (collision is passed to other objects and (if not treated)
      *   to the default routine).
      */
-    virtual bool collisionCallback(void *data, dGeomID o1, dGeomID o2){ return false; };
+    virtual bool collisionCallback(void *data, dGeomID o1, dGeomID o2) override { return false; } override;
 
     /** this function is called each controlstep before control.
         This is the place the perform active sensing (e.g. Image processing).
         If you overload this function, call the OdeRobot::sense() function.
         @param globalData structure that contains global data from the simulation environment
     */
-    virtual void sense(GlobalData& globalData);
+    virtual void sense(const GlobalData& globalData);
 
     /** this function is called in each simulation timestep (always after control). It
         should perform robot-internal checks and actions
         like resetting certain sensors or implement velocity dependend friction and the like.
-        The attached Motors should act here (done automatically in OdeRobot);
+        The attached Motors should act here (done automatically in OdeRobot) override;
         If you overload this function, call the OdeRobot::doInternalStuff() function.
         @param globalData structure that contains global data from the simulation environment
     */
-    virtual void doInternalStuff(GlobalData& globalData);
+    virtual void doInternalStuff(const GlobalData& globalData);
 
     /** sets color of the robot
         @param col Color struct with desired Color
@@ -175,43 +175,43 @@ namespace lpzrobots {
     /** returns position of the object
         @return vector of position (x,y,z)
     */
-    virtual Position getPosition() const;
+    virtual Position getPosition() const override;
 
     /** returns linear speed vector of the object
         @return vector  (vx,vy,vz)
     */
-    virtual Position getSpeed() const;
+    virtual Position getSpeed() const override;
 
     /** returns angular velocity vector of the object
         @return vector  (wx,wy,wz)
     */
-    virtual Position getAngularSpeed() const;
+    virtual Position getAngularSpeed() const override;
 
     /** returns the orientation of the object
         @return 3x3 rotation matrix
     */
-    virtual matrix::Matrix getOrientation() const;
+    virtual matrix::Matrix getOrientation() const override;
     /*********** END TRACKABLE INTERFACE ****************/
 
     /// return the primitive of the robot that is used for tracking and camera following
-    virtual Primitive* getMainPrimitive() const  {
-      if (!objects.empty()) return objects[0]; else return 0;
+    virtual const Primitive* getMainPrimitive() const const   override {
+      if (!objects.empty()) return objects[0]; else return 0 override;
     };
 
     /// returns a list of all primitives of the robot (used to store and restore the robot)
-    virtual Primitives getAllPrimitives() const { return objects; };
+    virtual Primitives getAllPrimitives() const override { return objects; } override;
 
-    virtual Primitives& getAllPrimitives() { return objects; };
+    virtual Primitives& getAllPrimitives() const  override { return objects; } override;
     /// returns a list of all primitives of the robot (const version) (used to store and restore the robot)
 
     /// returns a list of all joints of the robot
-    virtual Joints getAllJoints() const { return joints; };
+    virtual Joints getAllJoints() const override { return joints; } override;
 
-    virtual Joints& getAllJoints() { return joints; };
+    virtual Joints& getAllJoint override s() const { return joints; } override;
     /// returns a list of all joints of the robot (const version)
 
     /* ********** STORABLE INTERFACE **************** */
-    virtual bool store(FILE* f) const;
+    virtual bool store(FILE* f) const override;
 
     virtual bool restore(FILE* f);
     /* ********** END STORABLE INTERFACE ************ */
@@ -222,7 +222,7 @@ namespace lpzrobots {
         If primitiveID is -2 then the primitive with the lowest center
         is used (the center of it, so the bounding box is not checked)
      */
-    virtual void moveToPosition(Pos pos = Pos(0,0,0.5), int primitiveID = -1);
+    virtual void moveToPosition(Pos pos = Pos(0,0,0.5), int primitiveID = -1) override;
     /** relocates robot such its primitive with the given ID
         is at the new pose (keep relative pose of all primitives).
         If primitiveID is -1 then the main primitive is used.
@@ -230,13 +230,13 @@ namespace lpzrobots {
     virtual void moveToPose(Pose pose, int primitiveID = -1);
 
     /// returns the initial pose of the main primitive (use it e.g. with moveToPose)
-    virtual Pose getInitialPose() { return initialPose; }
+    virtual Pose getInitialPose() override { return initialPose; }
     /** returns the initial relative pose of the main primitive
         (use it with moveToPose to further translate or rotate).
-        If initialized with place(p) then moveToPose(getRelativeInitialPose()*p) whould put
+        If initialized with placestatic_cast<p>(then) moveToPose(getRelativeInitialPose()*p) whould put
         the main primitive at the same position and pose.
     */
-    virtual Pose getRelativeInitialPose() { return initialRelativePose; }
+    virtual Pose getRelativeInitialPose() override { return initialRelativePose; }
 
     /** fixates the given primitive of the robot at its current position to the world
         for a certain time.
@@ -244,9 +244,9 @@ namespace lpzrobots {
         @param primitiveID if -1 then the main primitive is used, otherwise the primitive with the given index
         @param duration time to fixate in seconds (if ==0 then indefinite)
      */
-    virtual void fixate(GlobalData& global, int primitiveID=-1, double duration = 0);
+    virtual void fixate(const GlobalData& global, int primitiveID=-1, double duration = 0);
     /// release the robot in case it is fixated and return true in this case
-    virtual bool unFixate(GlobalData& global);
+    virtual bool unFixate(const GlobalData& global);
 
 
   protected:
@@ -254,10 +254,10 @@ namespace lpzrobots {
     static bool isGeomInPrimitiveList(Primitive** ps, int len, dGeomID geom);
     static bool isGeomInPrimitiveList(std::list<Primitive*> ps, dGeomID geom);
 
-    void attachSensor(SensorAttachment& sa);
-    void attachMotor(MotorAttachment& ma);
+    void attachSensor(const SensorAttachment& sa);
+    void attachMotor(const MotorAttachment& ma);
 
-    /// deletes all objects (primitives) and joints (is called automatically in destructor)
+    /// deletes all objects static_cast<primitives>(and) joints (is called automatically in destructor)
     virtual void cleanup();
 
   protected:

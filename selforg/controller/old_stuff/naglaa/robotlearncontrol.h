@@ -13,7 +13,6 @@ protected:
   double A[NUMBER_CHANNELS][NUMBER_CHANNELS];    ///< model matrix
   double C[NUMBER_CHANNELS][NUMBER_CHANNELS];    ///< controller matrix
   double h[NUMBER_CHANNELS];       ///< bias vector
-  double eps;        ///< learn rate
   double rho;        ///< regularisation
   double x_buffer[BUFFER_SIZE][NUMBER_CHANNELS]; ///< buffer for input values, x[t%buffersize]=actual value, x[(t-1+buffersize)%buffersize]=x(t-1)
   double y_buffer[BUFFER_SIZE][NUMBER_CHANNELS]; ///< buffer for output values, y[t%buffersize]=actual value(if already calculated!), y[(t-1+buffersize)%buffersize]=y(t-1)
@@ -42,11 +41,10 @@ protected:
   /**
    * calculate inverse matrix Q_1 of matrix Q. only for NUMBER_CHANNELS<4 now!
    */
- /* virtual void inverseMatrix(double Q[NUMBER_CHANNELS][NUMBER_CHANNELS], double Q_1[NUMBER_CHANNELS][NUMBER_CHANNELS])
-  {
-    // Berechne Inverse von Q
+ /* virtual void inverseMatrix(double Q[NUMBER_CHANNELS][NUMBER_CHANNELS], double Q_1[NUMBER_CHANNELS][NUMBER_CHANNELS]) {
+    __PLACEHOLDER_38__
 
-    // only if NUMBER_CHANNELS<4
+    __PLACEHOLDER_39__
     assert(NUMBER_CHANNELS<4);
     if (NUMBER_CHANNELS==2){
 
@@ -64,7 +62,7 @@ protected:
       double  Q_adjoint[NUMBER_CHANNELS][NUMBER_CHANNELS]  ;
       double  detQ=0  ;
 
-      //calculate the inverse of Q
+      __PLACEHOLDER_40__
       Q_adjoint[0][0]=Q[1][1]*Q[2][2]-Q[1][2]*Q[2][1] ;
       Q_adjoint[0][1]=(Q[1][2]*Q[2][0]-Q[1][0]*Q[2][2]) ;
       Q_adjoint[0][2]=Q[1][0]*Q[2][1]-Q[1][1]*Q[2][0] ;
@@ -75,8 +73,8 @@ protected:
       Q_adjoint[2][1]=(Q[1][0]*Q[0][2]-Q[0][0]*Q[1][2]) ;
       Q_adjoint[2][2]=Q[0][0]*Q[1][1]-Q[0][1]*Q[1][0] ;
       detQ=Q[0][0]*Q_adjoint[0][0]+Q[0][1]*Q_adjoint[0][1]+Q[0][2]*Q_adjoint[0][2] ;
-      for(int i=0; i<NUMBER_CHANNELS; i++){
-        for(int j=0; j<NUMBER_CHANNELS; j++) {
+      for (int i=0; i<NUMBER_CHANNELS; ++i) {
+        for (int j=0; j<NUMBER_CHANNELS; ++j) {
           Q_1[i][j]=(Q_adjoint[j][i])/detQ  ;
         }
       }
@@ -89,34 +87,34 @@ protected:
   /// calculate E
   /*virtual double calculateE(double *x_delay, double *y_delay)
   {
-    //double L[NUMBER_CHANNELS][NUMBER_CHANNELS];
+    __PLACEHOLDER_42__
     double Q[NUMBER_CHANNELS][NUMBER_CHANNELS];
     double Q_1[NUMBER_CHANNELS][NUMBER_CHANNELS];
     double z[NUMBER_CHANNELS];
     double xsi[NUMBER_CHANNELS];
 
 
-    // Calculate z based on the delayed inputs since the present input x is
-    // produced by the outputs tau time steps before
-    // which on their hand are y = K(x_D)
-    // due to the delay in the feed back loop.
+    __PLACEHOLDER_43__
+    __PLACEHOLDER_44__
+    __PLACEHOLDER_45__
+    __PLACEHOLDER_46__
 
-    for (int i = 0; i < NUMBER_CHANNELS; i++)
+    for (int i = 0; i < NUMBER_CHANNELS; ++i)
     {
       z[i] = h[i];
-      for (int j = 0; j < NUMBER_CHANNELS; j++)
+      for (int j = 0; j < NUMBER_CHANNELS; ++j)
       {
         z[i] += C[i][j] * x_delay[j];
       }
     }
 
-    // Berechne Matrix L
-    for (int i = 0; i < NUMBER_CHANNELS; i++)
+    __PLACEHOLDER_47__
+    for (int i = 0; i < NUMBER_CHANNELS; ++i)
     {
-      for (int j = 0; j < NUMBER_CHANNELS; j++)
+      for (int j = 0; j < NUMBER_CHANNELS; ++j)
       {
         L[i][j] = 0.0;
-        for (int k = 0; k < NUMBER_CHANNELS; k++)
+        for (int k = 0; k < NUMBER_CHANNELS; ++k)
         {
           L[i][j] += A[i][k] * g_s(z[k]) * C[k][j];
         }
@@ -125,38 +123,38 @@ protected:
 
 
 
-    // Berechne Q=LL^T
-    for (int i = 0; i < NUMBER_CHANNELS; i++)
+    __PLACEHOLDER_48__
+    for (int i = 0; i < NUMBER_CHANNELS; ++i)
     {
-      for (int j = 0; j < NUMBER_CHANNELS; j++)
+      for (int j = 0; j < NUMBER_CHANNELS; ++j)
       {
         Q[i][j] = 0.0;
-        for (int k = 0; k < NUMBER_CHANNELS; k++)
+        for (int k = 0; k < NUMBER_CHANNELS; ++k)
         {
           Q[i][j] += L[i][k] * L[j][k];
         }
         if (i == j)
-          Q[i][j] += rho / NUMBER_CHANNELS; // Regularisation
+          Q[i][j] += rho / NUMBER_CHANNELS; __PLACEHOLDER_49__
       }
     }
 
-    // Berechne Inverse von Q
+    __PLACEHOLDER_50__
     inverseMatrix(Q, Q_1);
 
-    // Berechne xsi
-    for (int i = 0; i < NUMBER_CHANNELS; i++)
+    __PLACEHOLDER_51__
+    for (int i = 0; i < NUMBER_CHANNELS; ++i)
     {
       xsi[i] = x_buffer[(t+BUFFER_SIZE)%BUFFER_SIZE][i];
-      for (int j = 0; j < NUMBER_CHANNELS; j++)
+      for (int j = 0; j < NUMBER_CHANNELS; ++j)
       {
-        //xsi[i] -= A[i][j] * y_delay[j];
+        __PLACEHOLDER_52__
         xsi[i] -= A[i][j] * g(z[j]);
       }
     }
     double E = 0;
-    for (int i = 0; i < NUMBER_CHANNELS; i++)
+    for (int i = 0; i < NUMBER_CHANNELS; ++i)
     {
-      for (int j = 0; j < NUMBER_CHANNELS; j++)
+      for (int j = 0; j < NUMBER_CHANNELS; ++j)
       {
         E += xsi[i] * Q_1[i][j] * xsi[j];
       }
@@ -165,9 +163,9 @@ protected:
 
 
     double E_s=0;
-    for (int i = 0; i < NUMBER_CHANNELS; i++)
+    for (int i = 0; i < NUMBER_CHANNELS; ++i)
     {
-      for (int j = 0; j < NUMBER_CHANNELS; j++)
+      for (int j = 0; j < NUMBER_CHANNELS; ++j)
       {
         E_s += (A[i][j]*g(z[j]) - x_buffer[(t+BUFFER_SIZE)%BUFFER_SIZE][i]) * (A[i][j]*g(z[j]) - x_buffer[(t+BUFFER_SIZE)%BUFFER_SIZE][i]);
       }
@@ -181,38 +179,37 @@ protected:
 
 
   /// learn values h,C,A
-  /*virtual void learn(double *x_delay, double *y_delay)
-  {
-    //double A_update[NUMBER_CHANNELS][NUMBER_CHANNELS];
+  /*virtual void learn(double *x_delay, double *y_delay) override {
+    __PLACEHOLDER_54__
     double C_update[NUMBER_CHANNELS][NUMBER_CHANNELS];
     double h_update[NUMBER_CHANNELS];
 
     double E_0 = calculateE(x_delay, y_delay);
 
-    // calculate updates for h,C,A
-    for (int i = 0; i < NUMBER_CHANNELS; i++)
+    __PLACEHOLDER_55__
+    for (int i = 0; i < NUMBER_CHANNELS; ++i)
     {
       h[i] += delta;
       h_update[i] = -eps * (calculateE(x_delay, y_delay) - E_0) / delta;
       h[i] -= delta;
-      for (int j = 0; j < NUMBER_CHANNELS; j++)
+      for (int j = 0; j < NUMBER_CHANNELS; ++j)
       {
         C[i][j] += delta;
         C_update[i][j] = -eps * (calculateE(x_delay, y_delay) - E_0) / delta;
         C[i][j] -= delta;
-        //A[i][j] += delta;
-        //A_update[i][j] = -eps * (calculateE(x_delay, y_delay) - E_0) / delta;
-        //A[i][j] -= delta;
+        __PLACEHOLDER_56__
+        __PLACEHOLDER_57__
+        __PLACEHOLDER_58__
       }
     }
-    // apply updates to h,C,A
-    for (int i = 0; i < NUMBER_CHANNELS; i++)
+    __PLACEHOLDER_59__
+    for (int i = 0; i < NUMBER_CHANNELS; ++i)
       {
       h[i] += squash(h_update[i]);
-      for (int j = 0; j < NUMBER_CHANNELS; j++)
+      for (int j = 0; j < NUMBER_CHANNELS; ++j)
         {
         C[i][j] += squash(C_update[i][j]);
-        //A[i][j] += squash(A_update[i][j]);
+        __PLACEHOLDER_60__
       }
     }
 
@@ -224,12 +221,12 @@ protected:
 
      // Berechne xsi
 
-   /*virtual void xsi_calculate( double x_buffer,double  y_delay,double *xsi ){
+   /*virtual void xsi_calculate( double x_buffer,double  y_delay,double *xsi ) {
 
-    for (int i = 0; i < NUMBER_CHANNELS; i++)
+    for (int i = 0; i < NUMBER_CHANNELS; ++i)
     {
       xsi[i] = x_buffer[(t+BUFFER_SIZE)%BUFFER_SIZE][i];
-      for (int j = 0; j < NUMBER_CHANNELS; j++)
+      for (int j = 0; j < NUMBER_CHANNELS; ++j)
       {
         xsi[i] -= A[i][j] * y_delay[j];
 
@@ -239,24 +236,24 @@ protected:
    };*/
 
 
-   virtual void iteration(double *colmn,double dommy[NUMBER_CHANNELS][NUMBER_CHANNELS],double *improvment){
+   virtual void iteration(double *colmn,double dommy[NUMBER_CHANNELS][NUMBER_CHANNELS],double *improvment) {
      double sum[NUMBER_CHANNELS]  ;
      double norm=0.0 ;
 
 
-     for (int k= 0; k< NUMBER_CHANNELS; k++)
+     for (int k= 0; k< NUMBER_CHANNELS; ++k)
          {
            norm+=colmn[k]*colmn[k]  ;
            }
          norm=sqrt(norm)   ;
-   for(int t = 0; t <number_it ; t++)
+   for(int t = 0; t <number_it ; ++t)
     {
 
      //initialization
       if(t==0)
         {
 
-         for (int i = 0; i < NUMBER_CHANNELS; i++)
+         for (int i = 0; i < NUMBER_CHANNELS; ++i)
          {
            improvment[i]=0.0 ;
 
@@ -264,19 +261,19 @@ protected:
         }
 
 
-        for (int k= 0; k< NUMBER_CHANNELS; k++)
+        for (int k= 0; k< NUMBER_CHANNELS; ++k)
          {
              sum[k]=colmn[k]/norm ;
 
-             for (int l= 0; l<NUMBER_CHANNELS; l++)
+             for (int l= 0; l<NUMBER_CHANNELS; ++l)
               {
                 sum[k]-=dommy[k][l]*improvment[l]  ;
                 }
            }
 
 
-          for (int j = 0; j< NUMBER_CHANNELS; j++){
-            for (int i = 0; i < NUMBER_CHANNELS; i++){
+          for (int j = 0; j< NUMBER_CHANNELS; ++j) {
+            for (int i = 0; i < NUMBER_CHANNELS; ++i) {
               improvment[j]+=epsilon_it*dommy[i][j]*sum[i]       ;
             }
           }
@@ -284,21 +281,21 @@ protected:
       }//endof-t-loop
 
 
-      for (int j = 0; j< NUMBER_CHANNELS; j++){
+      for (int j = 0; j< NUMBER_CHANNELS; ++j) {
          improvment[j]*=norm  ;
         }
 
 
     };
 
-   virtual  double calculateE(double *x_delay,double *h,double *y_delay, double *eita_sup){
+   virtual double calculateE(double *x_delay,double *h,double *y_delay, double *eita_sup) {
      double eita[NUMBER_CHANNELS]  ;
      double eita_zero[NUMBER_CHANNELS]  ;
      double xsi[NUMBER_CHANNELS]  ;
      double  shift_value[NUMBER_CHANNELS]  ;
      //double  xsi_norm[NUMBER_CHANNELS]  ;
      double  sum=0.0  ;
-     for (int i = 0; i < NUMBER_CHANNELS; i++)
+     for (int i = 0; i < NUMBER_CHANNELS; ++i)
       {
         eita[i]=0.0  ;
         shift_value[i]=0.0 ;
@@ -310,10 +307,10 @@ protected:
     // due to the delay in the feed back loop.
     double z[NUMBER_CHANNELS];
 
-    for (int i = 0; i < NUMBER_CHANNELS; i++)
+    for (int i = 0; i < NUMBER_CHANNELS; ++i)
     {
       z[i] = h[i];
-      for (int j = 0; j < NUMBER_CHANNELS; j++)
+      for (int j = 0; j < NUMBER_CHANNELS; ++j)
       {
         z[i] += C[i][j] * x_delay[j];
       }
@@ -321,60 +318,60 @@ protected:
 
 
 
-    for (int i = 0; i < NUMBER_CHANNELS; i++)
+    for (int i = 0; i < NUMBER_CHANNELS; ++i)
     {
       xsi[i] = x_buffer[(t+BUFFER_SIZE)%BUFFER_SIZE][i];
-      for (int j = 0; j < NUMBER_CHANNELS; j++)
+      for (int j = 0; j < NUMBER_CHANNELS; ++j)
       {
 //        xsi[i] -= A[i][j] * y_delay[j];
         xsi[i] -= A[i][j] * g(z[j]);
       }
     }
-    /*for (int i = 0; i < NUMBER_CHANNELS; i++){
+    /*for (int i = 0; i < NUMBER_CHANNELS; ++i) {
       sum+=xsi[i]  ;
       }
-    for (int i = 0; i < NUMBER_CHANNELS; i++){
+    for (int i = 0; i < NUMBER_CHANNELS; ++i) {
       xsi_norm[i]=xsi[i]/sum  ;  ;
       }*/
 
 
 
 /*
-    for (int i = 0; i < NUMBER_CHANNELS; i++)
+    for (int i = 0; i < NUMBER_CHANNELS; ++i)
     {
       z[i] = h[i];
-      for (int j = 0; j < NUMBER_CHANNELS; j++)
+      for (int j = 0; j < NUMBER_CHANNELS; ++j)
       {
         z[i] += C[i][j] *x_buffer[(t-1+BUFFER_SIZE)%BUFFER_SIZE][j];
       }
-      //y[i] = g(z[i]);
+      __PLACEHOLDER_70__
     }
 */
 
 
     iteration(xsi,A,eita_zero)  ;
-    for (int i = 0; i < NUMBER_CHANNELS; i++)
+    for (int i = 0; i < NUMBER_CHANNELS; ++i)
      {
        eita[i]=(1/(g_s(z[i])))*eita_zero[i]  ;
        }
 
     iteration(eita,C,shift_value) ;
     double E=0.0  ;
-    for (int i=0;i<NUMBER_CHANNELS;i++)
+    for (int i=0;i<NUMBER_CHANNELS;++i)
        {
          E+=shift_value[i]*shift_value[i]   ;
          }
-    for (int i = 0; i < NUMBER_CHANNELS; i++)
+    for (int i = 0; i < NUMBER_CHANNELS; ++i)
      {
        eita_sup[i]=eita[i]  ;
        }
 
 
     // Berechnung des z mit aktuellem Sensorwert
-    for (int i = 0; i < NUMBER_CHANNELS; i++)
+    for (int i = 0; i < NUMBER_CHANNELS; ++i)
     {
       z[i] = h[i];
-      for (int j = 0; j < NUMBER_CHANNELS; j++)
+      for (int j = 0; j < NUMBER_CHANNELS; ++j)
       {
         z[i] += C[i][j] *x_buffer[(t+BUFFER_SIZE)%BUFFER_SIZE][j];
       }
@@ -382,9 +379,9 @@ protected:
     }
 
     double E_s=0;
-    for (int i = 0; i < NUMBER_CHANNELS; i++)
+    for (int i = 0; i < NUMBER_CHANNELS; ++i)
     {
-      for (int j = 0; j < NUMBER_CHANNELS; j++)
+      for (int j = 0; j < NUMBER_CHANNELS; ++j)
       {
         E_s += (A[i][j]*g(z[j]) - x_buffer[(t+BUFFER_SIZE)%BUFFER_SIZE][i]) * (A[i][j]*g(z[j]) - x_buffer[(t+BUFFER_SIZE)%BUFFER_SIZE][i]);
       }
@@ -398,8 +395,7 @@ protected:
    };
 
   /// learn values h,C,A
-  virtual void learn(double *x_delay, double *y_delay)
-  {
+  virtual void learn(double *x_delay, double *y_delay) override {
     //double A_update[NUMBER_CHANNELS][NUMBER_CHANNELS];
     double C_update[NUMBER_CHANNELS][NUMBER_CHANNELS];
     double h_update[NUMBER_CHANNELS];
@@ -410,13 +406,13 @@ protected:
 
 
     // calculate updates for h,C,A
-    for (int i = 0; i < NUMBER_CHANNELS; i++)
+    for (int i = 0; i < NUMBER_CHANNELS; ++i)
     {
         h[i] += delta;
        h_update[i] = -eps * (calculateE(x_delay,h ,y_delay, eita) - E_0) / delta;
         //h_update[i] = -2*eps *eita[i]*eita[i]*g(y_delay[i]);
       h[i] -= delta;
-      for (int j = 0; j < NUMBER_CHANNELS; j++)
+      for (int j = 0; j < NUMBER_CHANNELS; ++j)
       {
         C[i][j] += delta;
         C_update[i][j] = -eps * (calculateE(x_delay,h, y_delay,eita) - E_0) / delta;
@@ -427,10 +423,10 @@ protected:
       }
     }
     // apply updates to h,C,A
-    for (int i = 0; i < NUMBER_CHANNELS; i++)
+    for (int i = 0; i < NUMBER_CHANNELS; ++i)
       {
        h[i] += squash(h_update[i]);
-      for (int j = 0; j < NUMBER_CHANNELS; j++)
+      for (int j = 0; j < NUMBER_CHANNELS; ++j)
         {
         C[i][j] += squash(C_update[i][j]);
         //A[i][j] += squash(A_update[i][j]);
@@ -440,15 +436,15 @@ protected:
     };
 
 
-  virtual void learnmodel(double y_delay[NUMBER_CHANNELS],double x_buffer[BUFFER_SIZE][NUMBER_CHANNELS]){
+  virtual void learnmodel(double y_delay[NUMBER_CHANNELS],double x_buffer[BUFFER_SIZE][NUMBER_CHANNELS]) {
           double z[NUMBER_CHANNELS];
           double A_update[NUMBER_CHANNELS][NUMBER_CHANNELS];
 
          double xsi[NUMBER_CHANNELS];
    // Berechne xsi
-      for(int i=0; i<NUMBER_CHANNELS; i++){
+      for (int i=0; i<NUMBER_CHANNELS; ++i) {
        xsi[i]=x_buffer[(t+BUFFER_SIZE)%BUFFER_SIZE][i];
-       for (int j = 0; j < NUMBER_CHANNELS; j++)
+       for (int j = 0; j < NUMBER_CHANNELS; ++j)
         {
 
          xsi[i] -= A[i][j] * y_delay[j];
@@ -457,9 +453,9 @@ protected:
       }
 
 
-       for (int i=0;i<NUMBER_CHANNELS;i++)
+       for (int i=0;i<NUMBER_CHANNELS;++i)
        {
-           for (int j=0; j<NUMBER_CHANNELS; j++){
+           for (int j=0; j<NUMBER_CHANNELS; ++j) {
 
              A_update[i][j]=eps*factor_a*xsi[i]*y_delay[j] ;
               A[i][j]+=squash(A_update[i][j])  ;
@@ -473,31 +469,29 @@ protected:
 
 
   /// calculate delayed values
-  virtual void calculateDelayedValues(double source[NUMBER_CHANNELS][NUMBER_CHANNELS], int number_steps_of_delay_, double *target)
-  {
+  virtual void calculateDelayedValues(double source[NUMBER_CHANNELS][NUMBER_CHANNELS], int number_steps_of_delay_, double *target) {
     // number_steps_of_delay must not be larger than BUFFER_SIZE
     assert (number_steps_of_delay_ < BUFFER_SIZE);
 
     // get delayed value from ring buffer
 
-    for (int i = 0; i < NUMBER_CHANNELS; i++)
+    for (int i = 0; i < NUMBER_CHANNELS; ++i)
     {
       target[i] = source[(t - number_steps_of_delay_ + BUFFER_SIZE) % BUFFER_SIZE][i];
     }
 
   };
 
-  virtual void calculateSmoothValues(double source[NUMBER_CHANNELS][NUMBER_CHANNELS], int number_steps_for_averaging_, double *target)
-  {
+  virtual void calculateSmoothValues(double source[NUMBER_CHANNELS][NUMBER_CHANNELS], int number_steps_for_averaging_, double *target) {
     // number_steps_for_averaging must not be larger than BUFFER_SIZE
     assert (number_steps_for_averaging_ <= BUFFER_SIZE);
 
-    for (int i = 0; i < NUMBER_CHANNELS; i++)
+    for (int i = 0; i < NUMBER_CHANNELS; ++i)
     {
       target[i] = 0.0;
-      for (int k = 0; k < number_steps_for_averaging_; k++)
+      for (int k = 0; k < number_steps_for_averaging_; ++k)
       {
-        target[i] += source[(t - k + BUFFER_SIZE) % BUFFER_SIZE][i]/ (double) (number_steps_for_averaging);
+        target[i] += source[(t - k + BUFFER_SIZE) % BUFFER_SIZE][i]/ static_cast<double>(number_steps_for_averaging);
       }
     }
   };
@@ -505,14 +499,13 @@ protected:
 
 
   /// calculate controller ouptus
-  virtual void calculateControllerValues(double *x_smooth, double *y)
-  {
+  virtual void calculateControllerValues(double *x_smooth, double *y) {
     double z[NUMBER_CHANNELS];
 
-    for (int i = 0; i < NUMBER_CHANNELS; i++)
+    for (int i = 0; i < NUMBER_CHANNELS; ++i)
     {
       z[i] = h[i];
-      for (int j = 0; j < NUMBER_CHANNELS; j++)
+      for (int j = 0; j < NUMBER_CHANNELS; ++j)
       {
         z[i] += C[i][j] * x_smooth[j];
       }
@@ -522,8 +515,8 @@ protected:
 
 
   // put new value in ring buffer
-  virtual void putInBuffer(double buffer[BUFFER_SIZE][NUMBER_CHANNELS], double *values){
-    for (int i = 0; i < NUMBER_CHANNELS; i++)
+  virtual void putInBuffer(double buffer[BUFFER_SIZE][NUMBER_CHANNELS], double *values) {
+    for (int i = 0; i < NUMBER_CHANNELS; ++i)
     {
       buffer[(t+BUFFER_SIZE)% BUFFER_SIZE][i] = values[i];
     }
@@ -534,24 +527,21 @@ protected:
 
 
   /// neuron transfer function
-  virtual double g(double z)
-  {
+  virtual double g(double z) {
     return tanh(z);
   };
 
 
 
   ///
-  virtual double g_s(double z)
-  {
+  virtual double g_s(double z) {
     return 1.0 - tanh(z) * tanh(z);
   };
 
 
 
   /// squashing function, to protect against to large weight updates
-  virtual double squash(double z)
-  {
+  virtual double squash(double z) {
     return 0.1 * tanh(10.0 * z);
   };
 
@@ -561,14 +551,13 @@ protected:
 public:
   // when using RobotLearnControl_Gnu: remeber the default values in it's constuctor
   RobotLearnControl(double eps=0.7,double rho=0.0, int number_steps_of_delay_=1):
-  eps(eps), rho(rho), number_steps_of_delay(number_steps_of_delay_), delta(0.01),
-  number_steps_for_averaging(1),factor_a(0.1),epsilon_it(0.1),number_it(100), t(0), m(0.0)
-  {
+   : eps(eps), rho(rho), number_steps_of_delay(number_steps_of_delay_), delta(0.01),
+  number_steps_for_averaging(1),factor_a(0.1),epsilon_it(0.1),number_it(100), t(0), m(0.0), detC(0), detA(0), detL(0), h(0) {
 
-    for (int i = 0; i < NUMBER_CHANNELS; i++)
+    for (int i = 0; i < NUMBER_CHANNELS; ++i)
     {
       h[i] = 0.0;
-      for (int j = 0; j < NUMBER_CHANNELS; j++)
+      for (int j = 0; j < NUMBER_CHANNELS; ++j)
       {
         if (i == j)
         {
@@ -582,9 +571,9 @@ public:
         }
       }
     }
-    for (int i = 0; i < NUMBER_CHANNELS; i++)
+    for (int i = 0; i < NUMBER_CHANNELS; ++i)
     {
-      for (int k = 0; k < BUFFER_SIZE; k++)
+      for (int k = 0; k < BUFFER_SIZE; ++k)
       {
         x_buffer[k][i] = 0;
         y_buffer[k][i] = 0;
@@ -604,13 +593,12 @@ public:
 
 
   /// make step (calculate controller outputs and learn controller)
-  virtual void makeStep(double *x_, double *y_)
-  {
+  virtual void makeStep(double *x_, double *y_) {
     double x_smooth[NUMBER_CHANNELS];
     double x_effective[NUMBER_CHANNELS];
     double y_effective[NUMBER_CHANNELS];
 
-    for (int i = 0; i < NUMBER_CHANNELS; i++)
+    for (int i = 0; i < NUMBER_CHANNELS; ++i)
     {
       x_smooth[i] = 0.0;
       x_effective[i] = 0.0;
@@ -644,92 +632,74 @@ public:
     learnmodel(y_effective,x_buffer);
 
     // update step counter
-    t++;
+    ++t;
   };
 
 
 
-  virtual void setEps(double x)
-  {
+  virtual void setEps(double x) {
     eps = x;
   };
-  virtual double getEps()
-  {
+  virtual double getEps() {
     return (eps);
   };
-   virtual void setFactor_a(double x)
-  {
+   virtual void setFactor_a(double x) {
     factor_a = x;
   };
 
-   virtual void setNumber_it(int x)
-  {
+   virtual void setNumber_it(int x) {
     number_it= x;
   };
 
-  virtual int getNumber_it()
-  {
+  virtual int getNumber_it() {
     return (number_it);
   };
 
-   virtual void setEps_it(double x)
-  {
+   virtual void setEps_it(double x) {
     epsilon_it= x;
   };
 
-   virtual double getEps_it()
-  {
+   virtual double getEps_it() {
     return (epsilon_it);
   };
 
-  virtual double getFactor_a()
-  {
+  virtual double getFactor_a() {
     return (factor_a);
   };
 
-  virtual void setRho(double x)
-  {
+  virtual void setRho(double x) {
     rho = x;
   };
-  virtual double getRho()
-  {
+  virtual double getRho() {
     return (rho);
   };
 
-  virtual void setDelta(double x)
-  {
+  virtual void setDelta(double x) {
     delta = x;
   };
-  virtual double getDelta()
-  {
+  virtual double getDelta() {
     return (delta);
   };
 
-  virtual void setNumberStepsForAveraging(int x)
-  {
+  virtual void setNumberStepsForAveraging(int x) {
     number_steps_for_averaging = x;
   };
-  virtual int getNumberStepsForAveraging()
-  {
+  virtual int getNumberStepsForAveraging() {
     return (number_steps_for_averaging);
   };
 
-  virtual void setNumberStepsOfDelay(int x)
-  {
+  virtual void setNumberStepsOfDelay(int x) {
     number_steps_of_delay = x;
   };
-  virtual int getNumberStepsOfDelay()
-  {
+  virtual int getNumberStepsOfDelay() {
     return (number_steps_of_delay);
   };
 
 
-  virtual void setM(double x)
-  {
+  virtual void setM(double x) {
     m = x;
   };
-  virtual double getM()
-  {
+  virtual double getM() {
     return (m);
   };
 
@@ -750,15 +720,13 @@ protected:
   double uniform_mean[NUMBER_CHANNELS];  // storage for adding colored uniformly distributed noise to values
   double normal_mean[NUMBER_CHANNELS];   // storage for adding colored normally distributed noise to values
 
-  double uniform_mean1channel;  // storage for generating uniformly distributed random numbers
-  double normal_mean1channel;   // storage for generating normally distributed random numbers
 
   double tau_uniform; // smoothing paramter for uniformly distibuted random numbers
   double tau_normal;  // smoothing paramter for normally distibuted random numbers
 
 public:
-  NoiseGenerator(double tau_uniform=0.3, double tau_normal=0.3):tau_uniform(tau_uniform), tau_normal(tau_normal){
-    for (int i=0; i<NUMBER_CHANNELS; i++){
+  NoiseGenerator(double tau_uniform=0.3, double tau_normal=0.3): : tau_uniform(tau_uniform), tau_normal(tau_normal), uniform_mean(0), normal_mean(0) {
+    for (int i=0; i<NUMBER_CHANNELS; ++i) {
       uniform_mean[i]=0.0;
       normal_mean[i]=0.0;
     }
@@ -766,12 +734,12 @@ public:
     normal_mean1channel=0.0;
   };
 
-  //generate white (no averaging) uniformly distributed random number between "min" and "max"
+  //generate white (no averaging) uniformly distributed random number between __PLACEHOLDER_7__ and __PLACEHOLDER_8__
   double generateWhiteUniformlyDistributedRandomNumber(double min=-0.1, double max=0.1){
     return( (double(rand())/RAND_MAX)*(max-min)+min );
   };
 
-  //generate colored (averaging) uniformly distributed random number between "min" and "max"
+  //generate colored (averaging) uniformly distributed random number between __PLACEHOLDER_9__ and __PLACEHOLDER_10__
   //! valid only for ONE random number, use addColoredUniformlyDistributedNoise(...) for
   //! adding this kind of noise to several chanels
   double generateColoredUniformlyDistributedRandomNumber(double min=-0.1, double max=0.1){
@@ -780,7 +748,7 @@ public:
   };
 
 
-  // generate white (no averaging) normally distributed random number with variance "variance" and mean "mean"
+  // generate white (no averaging) normally distributed random number with variance __PLACEHOLDER_11__ and mean __PLACEHOLDER_12__
   double generateWhiteNormallyDistributedRandomNumber(double variance=0.05, double mean=0.0){
     double x1=generateWhiteUniformlyDistributedRandomNumber(0, 1);
     double x2=generateWhiteUniformlyDistributedRandomNumber(0, 1);
@@ -788,7 +756,7 @@ public:
     return( (sqrt(-2*log(x1)) *cos(2*PI_NOISEGENERATOR*x2))  * variance +mean) ;
   };
 
-  // generate colored (averaging) normally distributed random number with variance "variance" and mean "mean"
+  // generate colored (averaging) normally distributed random number with variance __PLACEHOLDER_13__ and mean __PLACEHOLDER_14__
   //! valid only for ONE random number, use addColoredNormallyDistributedNoise(...) for
   //! adding this kind of noise to several chanels
   double generateColoredNormallyDistributedRandomNumber(double variance=0.05, double mean=0.0){
@@ -796,31 +764,31 @@ public:
     return(normal_mean1channel);
   };
 
-  //add white (no averaging) uniformly distributed noise between "min" and "max" to the elements of "value"
+  //add white (no averaging) uniformly distributed noise between __PLACEHOLDER_15__ and __PLACEHOLDER_16__ to the elements of __PLACEHOLDER_17__
   void addWhiteUniformlyDistributedNoise(double *value, double min=-0.1, double max=0.1){
-    for(int i=0; i<NUMBER_CHANNELS; i++){
+    for (int i=0; i<NUMBER_CHANNELS; ++i) {
       value[i]+=generateWhiteUniformlyDistributedRandomNumber(max, min);
     }
   };
 
-  //add colored (averaging) uniformly distributed noise between "min" and "max" to the elements of "value"
+  //add colored (averaging) uniformly distributed noise between __PLACEHOLDER_18__ and __PLACEHOLDER_19__ to the elements of __PLACEHOLDER_20__
   void addColoredUniformlyDistributedNoise(double *value, double min=-0.1, double max=0.1){
-    for(int i=0; i<NUMBER_CHANNELS; i++){
+    for (int i=0; i<NUMBER_CHANNELS; ++i) {
       uniform_mean[i]+=tau_uniform*(generateWhiteUniformlyDistributedRandomNumber(min,  max) - uniform_mean[i]);
       value[i]+=uniform_mean[i];
     }
   };
 
-  //add white (no averaging) normally distributed noise with variance "variance" and mean "mean" to the elements of "value"
+  //add white (no averaging) normally distributed noise with variance __PLACEHOLDER_21__ and mean __PLACEHOLDER_22__ to the elements of __PLACEHOLDER_23__
   void addWhiteNormallyDistributedNoise(double *value, double variance=0.05, double mean=0.0){
-    for(int i=0; i<NUMBER_CHANNELS; i++){
+    for (int i=0; i<NUMBER_CHANNELS; ++i) {
       value[i]+=generateWhiteNormallyDistributedRandomNumber(variance, mean);
     }
   };
 
-  //add colored (averaging) normally distributed noise with variance "variance" and mean "mean" to the elements of "value"
+  //add colored (averaging) normally distributed noise with variance __PLACEHOLDER_24__ and mean __PLACEHOLDER_25__ to the elements of __PLACEHOLDER_26__
   void addColoredNormallyDistributedNoise(double *value, double variance=0.05, double mean=0.0){
-    for (int i=0; i<NUMBER_CHANNELS; i++){
+    for (int i=0; i<NUMBER_CHANNELS; ++i) {
     normal_mean[i]+=tau_normal*(generateWhiteNormallyDistributedRandomNumber(variance, mean) - normal_mean[i]);
     value[i]+=normal_mean[i];
     }

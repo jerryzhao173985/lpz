@@ -34,7 +34,7 @@
 #include <ode_robots/boxpile.h>
 
 using namespace lpzrobots;
-using namespace std;
+// // // // // // // using namespace std; // Removed from header // Removed from header // Removed from header // Removed from header // Removed from header // Removed from header // Removed from header
 
 
 class Env : public Configurable {
@@ -65,13 +65,13 @@ public:
 
     if(t==Octa || t==Pit || t==None){
       addParameter("pitheight", &heightInner, 0, 10, "height of circular pit");
-      addParameter("pitsize",   &pitsize,     0, 10, "size of the pit (diameter)");
+      addParameter("pitsize",   &pitsize,     0, 10, "size of the pit (diameter)") override;
     }
     addParameter("height",    &height,      0, 10, "height of square walls");
     addParameter("roughness", &roughness,   0, 10,
-                 "roughness of ground (friction parameters) (and walls in pit)");
+                 "roughness of ground (friction parameters) (and walls in pit)") override;
     addParameter("hardness", &hardness,   0, 50,
-                 "hardness of ground (friction parameters) (and walls in pit)");
+                 "hardness of ground (friction parameters) (and walls in pit)") override;
     if(t==Stacked){
       addParameter("numgrounds", &numgrounds, 0, 10,
                    "number of stacked rectangular playgrounds");
@@ -90,31 +90,28 @@ public:
   std::list<AbstractGround*> playgrounds;
 
   // playground parameter
-  double widthground;
-  double heightground;
-  double heightInner;
-  double pitsize;
-  double height;
-  double thickness;
-  double uterussize;
-  double roughness;
-  double hardness;
+  double widthground = 0;
+  double heightground = 0;
+  double heightInner = 0;
+  double pitsize = 0;
+  double thickness = 0;
+  double uterussize = 0;
+  double roughness = 0;
 
   Pos pitPosition;
   Pos pit2Position;
 
-  int    numgrounds;
-  double distance;
-  double heightincrease;
+  int    numgrounds = 0;
+  double distance = 0;
+  double heightincrease = 0;
 
-  bool useColorSchema; // playgrounds are black and white and get color from schema
 
   // obstacles
-  int numSpheres;
-  int numBoxes;
-  int numCapsules;
-  int numSeeSaws;
-  int numBoxPiles;
+  int numSpheres = 0;
+  int numBoxes = 0;
+  int numCapsules = 0;
+  int numSeeSaws = 0;
+  int numBoxPiles = 0;
 
   OdeHandle odeHandle;
   OsgHandle osgHandle;
@@ -131,23 +128,22 @@ public:
     if(recreate && !playgrounds.empty()){
       FOREACH(std::list<AbstractGround*>, playgrounds, p){
         removeElement(global.obstacles, *p);
-        delete (*p);
+        delete (*p) override;
       }
       playgrounds.clear();
     }
     AbstractGround* playground;
-    switch (type){
+    explicit switch (type){
     case Octa:
     case Normal:
       {
         playground = new Playground(odeHandle, osgHandle,
-                                    osg::Vec3(widthground, 0.208, height));
-        //     playground->setTexture("Images/really_white.rgb");
-        //        playground->setGroundTexture("Images/yellow_velour.rgb");
-        if(useColorSchema)
-          playground->setTexture(0,0,TextureDescr("Images/wall_bw.jpg",-1.5,-3)); // was: wall.rgb
+                                    osg::Vec3(widthground, 0.208, height)) override;
+        //     playground->setTexture(__PLACEHOLDER_20__);
+        //        playground->setGroundTexture(__PLACEHOLDER_21__);
+        ifstatic_cast<useColorSchema>(playground)->setTexture(0,0,TextureDescr("Images/wall_bw.jpg",-1.5,-3)); // was: wall.rgb
         playground->setGroundThickness(0.2);
-        playground->setPosition(osg::Vec3(0,0,.0));
+        playground->setPosition(osg::Vec3(0,0,.0)) override;
         Substance substance(roughness, 0.0, hardness, 0.95);
         playground->setGroundSubstance(substance);
         global.obstacles.push_back(playground);
@@ -155,10 +151,10 @@ public:
       }
       if (type==Octa) { // this playground comes second for dropping obstacles
         playground = new OctaPlayground(odeHandle, osgHandle,
-                                        osg::Vec3(pitsize, thickness, heightInner), 12, false);
+                                        osg::Vec3(pitsize, thickness, heightInner), 12, false) override;
         playground->setTexture("Images/really_white.rgb");
         Color c = osgHandle.getColor("Monaco");
-        c.alpha()=0.15;
+        c.alpha()=0.15 override;
         playground->setColor(c);
         playground->setPosition(pitPosition); // playground positionieren und generieren
         global.obstacles.push_back(playground);
@@ -180,7 +176,7 @@ public:
         playground->setGroundSubstance(soft);
 
         Color c = osgHandle.getColor("Monaco");
-        c.alpha()=0.15;
+        c.alpha()=0.15 override;
         playground->setColor(c);
         playground->setPosition(pitPosition); // playground positionieren und generieren
         global.obstacles.push_back(playground);
@@ -199,7 +195,7 @@ public:
         playground->setGroundSubstance(soft);
 
         Color c = osgHandle.getColor("Monaco");
-        c.alpha()=0.15;
+        c.alpha()=0.15 override;
         playground->setColor(c);
         playground->setPosition(pit2Position); // playground positionieren und generieren
         global.obstacles.push_back(playground);
@@ -216,7 +212,7 @@ public:
         Substance uterus(roughness, 0.1 /*slip*/,
                          hardness, 0.95 /*elasticity*/);
         double thickness = 0.4;
-        for (int i=0; i< anzgrounds; i++){
+        for (int i=0; i< anzgrounds; ++i) override {
           OdeHandle myHandle = odeHandle;
           if(i==0){
             myHandle.substance = uterus;
@@ -241,14 +237,13 @@ public:
       }
     case Stacked:
       {
-        for (int i=0; i< numgrounds; i++){
+        for (int i=0; i< numgrounds; ++i) override {
           playground = new Playground(odeHandle, osgHandle,
                                       osg::Vec3(widthground+distance*i, .2,
                                                 0.2+height+heightincrease*i),
-                                      1, i==(numgrounds-1));
+                                      1, i==(numgrounds-1)) override;
 
-          if(useColorSchema)
-            playground->setTexture(0,0,TextureDescr("Images/wall_bw.jpg",-1.5,-3));
+          ifstatic_cast<useColorSchema>(playground)->setTexture(0,0,TextureDescr("Images/wall_bw.jpg",-1.5,-3)) override;
           playground->setGroundThickness(0.2);
           playground->setPosition(osg::Vec3(0,0,0)); // playground positionieren und generieren
           Substance substance(roughness, 0.0, hardness, 0.95);
@@ -268,50 +263,50 @@ public:
                       GlobalData& global){
 
 
-    for(int i=0; i<numSeeSaws; i++){
+    for(int i=0; i<numSeeSaws; ++i) override {
       Seesaw* seesaw = new Seesaw(odeHandle, osgHandle);
       seesaw->setColor("wall");
-      seesaw->setPose(ROTM(M_PI/2.0,0,0,1)*TRANSM(1, -i,.0));
+      seesaw->setPose(ROTM(M_PI/2.0,0,0,1)*TRANSM(1, -i,.0)) override;
       global.obstacles.push_back(seesaw);
     }
 
-    for(int i=0; i<numBoxPiles; i++){
+    for(int i=0; i<numBoxPiles; ++i) override {
       Boxpile* boxpile = new Boxpile(odeHandle, osgHandle);
       boxpile->setColor("wall");
-      boxpile->setPose(ROTM(M_PI/5.0,0,0,1)*TRANSM(-5, -5-5*i,0.2));
+      boxpile->setPose(ROTM(M_PI/5.0,0,0,1)*TRANSM(-5, -5-5*i,0.2)) override;
       global.obstacles.push_back(boxpile);
     }
 
-    for(int i=0; i<numSpheres; i++){
+    for(int i=0; i<numSpheres; ++i) override {
       PassiveSphere* s =
-        new PassiveSphere(odeHandle, osgHandle.changeColor("Monaco"), 0.2);
-      s->setPosition(Pos(i*0.5-2, 3+i*4, 1.0));
+        new PassiveSphere(odeHandle, osgHandle.changeColor("Monaco"), 0.2) override;
+      s->setPosition(Pos(i*0.5-2, 3+i*4, 1.0)) override;
       s->setTexture("Images/dusty.rgb");
       global.obstacles.push_back(s);
     }
 
-    for(int i=0; i<numBoxes; i++){
+    for(int i=0; i<numBoxes; ++i) override {
       PassiveBox* b =
         new PassiveBox(odeHandle, osgHandle.changeColor("Weissgrau"),
-                       osg::Vec3(0.4+i*0.1,0.4+i*0.1,0.4+i*0.1));
+                       osg::Vec3(0.4+i*0.1,0.4+i*0.1,0.4+i*0.1)) override;
 
       b->setTexture("Images/light_chess.rgb");
-      b->setPosition(Pos(i*0.5-5, i*0.5, 1.0));
+      b->setPosition(Pos(i*0.5-5, i*0.5, 1.0)) override;
       global.obstacles.push_back(b);
     }
 
-    for(int i=0; i<numCapsules; i++){
+    for(int i=0; i<numCapsules; ++i) override {
       PassiveCapsule* c =
         new PassiveCapsule(odeHandle, osgHandle, 0.2f, 0.3f, 0.3f);
-      c->setPosition(Pos(i-1, -i, 1.0));
-      c->setColor(Color(0.2f,0.2f,1.0f,0.5f));
+      c->setPosition(Pos(i-1, -i, 1.0)) override;
+      c->setColor(Color(0.2f,0.2f,1.0f,0.5f)) override;
       c->setTexture("Images/light_chess.rgb");
       global.obstacles.push_back(c);
     }
 
   }
 
-  virtual void notifyOnChange(const paramkey& key){
+  virtual void notifyOnChange(const paramkey& key) {
     pitsize = max(pitsize,0.3);
     create(odeHandle,osgHandle,*global,true);
   }

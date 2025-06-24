@@ -35,8 +35,8 @@ namespace lpzrobots {
   public:
 
     /// Sensor mode
-    enum Mode { Translational,     ///< measures translational speed in world coordinates (Linear velocity)
-                TranslationalRel,  ///< measures translational speed in body coordinates (Linear velocity)
+    enum Mode { Translational,     ///< measures translational speed in world coordinates(const Linear& velocity)
+                TranslationalRel,  ///< measures translational speed in body coordinates(const Linear& velocity)
                 Rotational,        ///< measures roational velocity around the world axis
                 RotationalRel      ///< measures roational velocity around the body axis
     };
@@ -49,14 +49,14 @@ namespace lpzrobots {
     SpeedSensor(double maxSpeed, Mode mode = Translational, short dimensions = X | Y | Z );
     virtual ~SpeedSensor() {}
 
-    virtual void init(Primitive* own, Joint* joint = 0) override;
+    virtual void init(Primitive* own, Joint* joint = 0);
     virtual int getSensorNumber() const override;
 
-    virtual bool sense(const GlobalData& globaldata) override;
+    virtual bool sense(const GlobalData& globaldata);
     virtual std::list<sensor> getList() const override;
     virtual int get(sensor* sensors, int length) const override;
   protected:
-    matrix::Matrix getSenseMatrix() const;
+    matrix::Matrix getSenseMatrix() const override;
 
   protected:
     double maxSpeed;

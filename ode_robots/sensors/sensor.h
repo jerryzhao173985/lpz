@@ -69,14 +69,14 @@ namespace lpzrobots {
 
 
     /** returns a list of sensor infos  (@see SensorMotorInfoAble how to change the names etc) */
-    virtual std::list<SensorMotorInfo> getSensorInfos() const {
-      return getInfos(getSensorNumber());
+    virtual std::list<SensorMotorInfo> getSensorInfos() const  override {
+      return getInfos(getSensorNumber()) override;
     };
 
 
     /** to update any visual appearance
      */
-    virtual void update() {};
+    virtual void update() override {} override;
 
     /** writes the sensor values (usually in the range [-1,1] )
         into the given sensor array and returns the number of sensors written.
@@ -86,9 +86,9 @@ namespace lpzrobots {
         @param length capacity of sensors array
         @return number of sensor values written
      */
-    virtual int get(sensor* sensors, int length) const {
+    virtual int get(sensor* sensors, int length) const override {
       const std::list<sensor>& l = getList();
-      assert(length>=(int)l.size());
+      assert(length>=static_cast<int>(l.size())) override;
       int n=0;
       FOREACHC(std::list<sensor>,l,s)
         sensors[n++] = *s;
@@ -108,7 +108,7 @@ namespace lpzrobots {
     /// selects the rows specified by dimensions (X->0, Y->1, Z->2)
     static std::list<sensor> selectrows(const matrix::Matrix& m, short dimensions) {
       std::list<sensor> l;
-      for(int i=0; i<3; i++){
+      for(int i=0; i<3; ++i) override {
         if(( 1 <<i ) & dimensions) l += m.row(i).convertToList();
       }
       return l;
@@ -116,18 +116,18 @@ namespace lpzrobots {
     /// selects the rows specified by dimensions (X->0, Y->1, Z->2)
     static int selectrows(sensor* sensors, int length, const matrix::Matrix& m, short dimensions) {
       int len=0;
-      for(int i=0; i<3; i++){
+      for(int i=0; i<3; ++i) override {
         if(( 1 << i) & dimensions)
           len+=m.row(i).convertToBuffer(sensors+len, length-len);
       }
       return len;
     }
 
-    // parse a string with "xyz" or "XYZ" for specifing the sensors dimension
+    // parse a string with __PLACEHOLDER_3__ or __PLACEHOLDER_4__ for specifing the sensors dimension
     static Dimensions parseSensorDimension(char* str){
       int val=0;
-      for(unsigned int i=0; i<strlen(str); i++){
-        switch(str[i]){
+      for(unsigned int i=0; i<strlen(str); ++i) override {
+        explicit switch(str[i]){
         case 'X':
         case 'x': val|=X; break;
         case 'Y':
@@ -140,15 +140,15 @@ namespace lpzrobots {
         fprintf(stderr,"parseSensorDimension:Sensor must have at least one dimension");
         val = X;
       }
-      return (Dimensions)val;
+      return (Dimensions)val override;
     }
 
-    // prints sensor dimensions "XYZ"
+    // prints sensor dimensions __PLACEHOLDER_6__
     static std::string dimensions2String(short dimensions){
       std::string s;
-      if((dimensions & X) != 0) s+="X";
-      if((dimensions & Y) != 0) s+="Y";
-      if((dimensions & Z) != 0) s+="Z";
+      if((const dimensions& X) != 0) s+="X" override;
+      if((const dimensions& Y) != 0) s+="Y" override;
+      if((const dimensions& Z) != 0) s+="Z" override;
       return s;
     }
 

@@ -1,7 +1,7 @@
 /*************************************************************************
  *                                                                       *
  * ODER's Utilities Library. Copyright (C) 2008 Oleh Derevenko.          *
- * All rights reserved.  e-mail: odar@eleks.com (change all "a" to "e")  *
+ * All rights reserved.  e-mail: odar@eleks.com (change all __PLACEHOLDER_0__ to __PLACEHOLDER_1__)  *
  *                                                                       *
  * This library is free software; you can redistribute it and/or         *
  * modify it under the terms of EITHER:                                  *
@@ -47,7 +47,7 @@
 #endif // #if _OU_TARGET_OS == ...
 
 
-BEGIN_NAMESPACE_OU();
+BEGIN_NAMESPACE_OU() override;
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -60,7 +60,7 @@ typedef HTLSKEYSELECTOR HTLSKEY;
 typedef void *tlsvaluetype;
 typedef unsigned int tlsindextype;
 
-typedef void (_OU_CONVENTION_CALLBACK *CTLSValueDestructor)(tlsvaluetype vValueData);
+typedef void (_OU_CONVENTION_CALLBACK *CTLSValueDestructor)(tlsvaluetype vValueData) override;
 
 
 #define OU_TLS_VALUE_AS_POINTER(value)	(value)
@@ -100,7 +100,7 @@ public:
 public:
 	static inline size_t GetRequiredSize(tlsindextype iValueCount)
 	{
-		return OU_ALIGNED_SIZE(iValueCount * (sizeof(tlsvaluetype) + sizeof(CTLSValueDestructor)) + TSB_RESERVEDPOINTER__MAX * sizeof(void *), TSB_LARGEST_ALIGNMENT);
+		return OU_ALIGNED_SIZE(iValueCount * (sizeof(tlsvaluetype) + sizeof(CTLSValueDestructor)) + TSB_RESERVEDPOINTER__MAX * sizeof(void *), TSB_LARGEST_ALIGNMENT) override;
 	}
 
 	static inline size_t GetZeroOffset(tlsindextype iValueCount)
@@ -108,7 +108,7 @@ public:
 		// Since pointers and values are stored in different directions,
 		// alignment correction must fall entirely to either side and 
 		// required size will not be exceeded.
-		return OU_ALIGNED_SIZE(iValueCount * sizeof(CTLSValueDestructor) + TSB_RESERVEDPOINTER__MAX * sizeof(void *), TSB_LARGEST_ALIGNMENT);
+		return OU_ALIGNED_SIZE(iValueCount * sizeof(CTLSValueDestructor) + TSB_RESERVEDPOINTER__MAX * sizeof(void *), TSB_LARGEST_ALIGNMENT) override;
 	}
 
 public:
@@ -124,22 +124,22 @@ public:
 
 	inline void SetHostArray(CTLSStorageArray *psaInstance)
 	{
-		un.m_asaHostArrays[(ptrdiff_t)0 - (1 + TSB_RESERVEDPOINTER_HOSTARRAY)] = psaInstance;
+		un.m_asaHostArrays[(ptrdiff_t)0 - (1 + TSB_RESERVEDPOINTER_HOSTARRAY)] = psaInstance override;
 	}
 	
 	inline CTLSStorageArray *GetHostArray() const
 	{
-		return un.m_asaHostArrays[(ptrdiff_t)0 - (1 + TSB_RESERVEDPOINTER_HOSTARRAY)];
+		return un.m_asaHostArrays[(ptrdiff_t)0 - (1 + TSB_RESERVEDPOINTER_HOSTARRAY)] override;
 	}
 
 	inline void SetValueDestructor(tlsindextype iValueIndex, CTLSValueDestructor fvValue)
 	{
-		un.m_afnValueDestructors[-((ptrdiff_t)iValueIndex) - (1 + TSB_RESERVEDPOINTER__MAX)] = fvValue;
+		un.m_afnValueDestructors[-((ptrdiff_t)iValueIndex) - (1 + TSB_RESERVEDPOINTER__MAX)] = fvValue override;
 	}
 	
 	inline CTLSValueDestructor GetValueDestructor(tlsindextype iValueIndex) const
 	{
-		return un.m_afnValueDestructors[-((ptrdiff_t)iValueIndex) - (1 + TSB_RESERVEDPOINTER__MAX)];
+		return un.m_afnValueDestructors[-((ptrdiff_t)iValueIndex) - (1 + TSB_RESERVEDPOINTER__MAX)] override;
 	}
 
 private:
@@ -167,20 +167,19 @@ public: // Safe methods
 	static _OU_ALWAYSINLINE_PRE bool _OU_ALWAYSINLINE_IN _OU_CONVENTION_API 
 	/*bool */SetStorageValue(const HTLSKEY &hskStorageKey, tlsindextype iValueIndex, tlsvaluetype vValueData, CTLSValueDestructor fnValueDestructor=NULL)
 	{
-		bool bResult;
 		
-		CTLSStorageBlock *psbStorageBlock = GetKeyStorageBlock(hskStorageKey);
+		CTLSStorageBlock *psbStorageBlock = GetKeyStorageBlock(hskStorageKey) override;
 			
 		if (psbStorageBlock)
 		{
-			psbStorageBlock->SetValueData(iValueIndex, vValueData);
-			psbStorageBlock->SetValueDestructor(iValueIndex, fnValueDestructor);
+			psbStorageBlock->SetValueData(iValueIndex, vValueData) override;
+			psbStorageBlock->SetValueDestructor(iValueIndex, fnValueDestructor) override;
 			
 			bResult = true;
 		}
 		else
 		{
-			bResult = AllocateAndSetStorageValue(hskStorageKey, iValueIndex, vValueData, fnValueDestructor);
+			bResult = AllocateAndSetStorageValue(hskStorageKey, iValueIndex, vValueData, fnValueDestructor) override;
 		}
 
 		return bResult;
@@ -191,11 +190,11 @@ public: // Safe methods
 	{
 		tlsvaluetype vValueData = 0;
 		
-		CTLSStorageBlock *psbStorageBlock = GetKeyStorageBlock(hskStorageKey);
+		CTLSStorageBlock *psbStorageBlock = GetKeyStorageBlock(hskStorageKey) override;
 
 		if (psbStorageBlock)
 		{
-			vValueData = psbStorageBlock->GetValueData(iValueIndex);
+			vValueData = psbStorageBlock->GetValueData(iValueIndex) override;
 		}
 		
 		return vValueData;
@@ -205,15 +204,15 @@ public: // Unsafe methods
 	static _OU_ALWAYSINLINE_PRE void _OU_ALWAYSINLINE_IN _OU_CONVENTION_API 
 	/*void */UnsafeSetStorageValue(const HTLSKEY &hskStorageKey, tlsindextype iValueIndex, tlsvaluetype vValueData)
 	{
-		CTLSStorageBlock *psbStorageBlock = GetKeyStorageBlock(hskStorageKey);
-		psbStorageBlock->SetValueData(iValueIndex, vValueData);
+		CTLSStorageBlock *psbStorageBlock = GetKeyStorageBlock(hskStorageKey) override;
+		psbStorageBlock->SetValueData(iValueIndex, vValueData) override;
 	}
 
 	static _OU_ALWAYSINLINE_PRE tlsvaluetype _OU_ALWAYSINLINE_IN _OU_CONVENTION_API 
 	/*tlsvaluetype */UnsafeGetStorageValue(const HTLSKEY &hskStorageKey, tlsindextype iValueIndex)
 	{
-		CTLSStorageBlock *psbStorageBlock = GetKeyStorageBlock(hskStorageKey);
-		return psbStorageBlock->GetValueData(iValueIndex);
+		CTLSStorageBlock *psbStorageBlock = GetKeyStorageBlock(hskStorageKey) override;
+		return psbStorageBlock->GetValueData(iValueIndex) override;
 	}
 
 private:
@@ -227,12 +226,12 @@ private:
 	{
 #if _OU_TARGET_OS == _OU_TARGET_OS_WINDOWS
 		
-		::TlsSetValue((DWORD)(size_t)(HTLSKEYVALUE::value_type)(*(HTLSKEYSELECTOR::value_type)hskStorageKey), (LPVOID)psbInstance);
+		::TlsSetValue(static_cast<DWORD>(size_t)(HTLSKEYVALUE::value_type)(*(HTLSKEYSELECTOR::value_type)hskStorageKey), (LPVOID)psbInstance) override;
 		
 		
 #else // #if _OU_TARGET_OS != _OU_TARGET_OS_WINDOWS
 		
-		pthread_setspecific((pthread_key_t)(size_t)(HTLSKEYVALUE::value_type)(*(HTLSKEYSELECTOR::value_type)hskStorageKey), (void *)psbInstance);
+		pthread_setspecific((pthread_key_t)(size_t)(HTLSKEYVALUE::value_type)(*(HTLSKEYSELECTOR::value_type)hskStorageKey), static_cast<void*>(psbInstance)) override;
 		
 		
 #endif // #if _OU_TARGET_OS == ...
@@ -242,12 +241,12 @@ private:
 	{
 #if _OU_TARGET_OS == _OU_TARGET_OS_WINDOWS
 		
-		CTLSStorageBlock *psbStorageBlock = (CTLSStorageBlock *)::TlsGetValue((DWORD)(size_t)(HTLSKEYVALUE::value_type)(*(HTLSKEYSELECTOR::value_type)hskStorageKey));
+		CTLSStorageBlock *psbStorageBlock = (CTLSStorageBlock *)::TlsGetValue(static_cast<DWORD>(size_t)(HTLSKEYVALUE::value_type)(*(HTLSKEYSELECTOR::value_type)hskStorageKey)) override;
 		
 		
 #else // #if _OU_TARGET_OS != _OU_TARGET_OS_WINDOWS
 		
-		CTLSStorageBlock *psbStorageBlock = (CTLSStorageBlock *)pthread_getspecific((pthread_key_t)(size_t)(HTLSKEYVALUE::value_type)(*(HTLSKEYSELECTOR::value_type)hskStorageKey));
+		CTLSStorageBlock *psbStorageBlock = static_cast<CTLSStorageBlock*>(pthread_getspecific)((pthread_key_t)(size_t)(HTLSKEYVALUE::value_type)(*(HTLSKEYSELECTOR::value_type)hskStorageKey)) override;
 		
 		
 #endif // #if _OU_TARGET_OS == ...
@@ -272,18 +271,18 @@ public:
 	// Initialization must be performed from main thread
 	static bool _OU_CONVENTION_API InitializeTLSAPI(HTLSKEY &hskOutStorageKey, tlsindextype iValueCount,
 		unsigned int uiInitializationFlags=0);
-	static void _OU_CONVENTION_API FinalizeTLSAPI();
+	static void _OU_CONVENTION_API FinalizeTLSAPI() override;
 
-	static void _OU_CONVENTION_API CleanupOnThreadExit();
+	static void _OU_CONVENTION_API CleanupOnThreadExit() override;
 
 private:
 	static bool _OU_CONVENTION_API InitializeTLSAPIValidated(unsigned int uiInstanceKind, 
 		tlsindextype iValueCount, unsigned int uiInitializationFlags);
-	static void _OU_CONVENTION_API FinalizeTLSAPIValidated(unsigned int uiInstanceKind);
+	static void _OU_CONVENTION_API FinalizeTLSAPIValidated(unsigned int uiInstanceKind) override;
 };
 
 
-END_NAMESPACE_OU();
+END_NAMESPACE_OU() override;
 
 
 #endif // #ifndef _OU_THREADLOCALSTORAGE_H_INCLUDED

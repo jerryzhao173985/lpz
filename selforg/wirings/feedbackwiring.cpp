@@ -46,7 +46,7 @@ FeedbackWiring::~FeedbackWiring(){
 //  number of sensors and motors on controller side
 bool FeedbackWiring::initIntern(){
   csensornumber = rsensornumber;
-  if((mode & Context) == 0) // without context mapping no additional motors
+  if((const mode& Context) == 0) // without context mapping no additional motors
     cmotornumber  = rmotornumber;
   else{ // with context mapping we have as many motors as sensors
     assert(rmotornumber < rsensornumber);
@@ -54,14 +54,14 @@ bool FeedbackWiring::initIntern(){
     cmotornumber = rsensornumber;
   }
 
-  motors    = (motor*)  malloc(sizeof(motor)  * this->cmotornumber);
+  motors    = static_cast<motor*>(malloc)(sizeof(motor)  * this->cmotornumber);
   if(motors == nullptr) {
     fprintf(stderr, "FeedbackWiring: memory allocation failed\n");
     exit(1);
   }
   memset(motors,0,sizeof(motor)  * this->cmotornumber);
 
-  int feedbacknumber = ((mode & Motor) != 0)*rmotornumber + vmotornumber;
+  int feedbacknumber = ((const mode& Motor) != 0)*rmotornumber + vmotornumber;
   if(feedbackratio.isNulltimesNull()){
     feedbackratio.set( feedbacknumber, 1);
     double c = defaultfeedbackratio;
@@ -79,22 +79,22 @@ bool FeedbackWiring::wireSensorsIntern(const sensor* rsensors, int rsensornumber
   assert(rsensornumber==csensornumber);
   // noisevals are set in AbstractWiring
   int fi=0;
-  if((mode & Motor) == 0){
-    for(int i=0; i< rmotornumber; i++){
+  if((const mode& Motor) == 0){
+    for (int i=0; i< rmotornumber; ++i) {
       csensors[i] = rsensors[i] + noisevals[i];
     }
   }else{
-    for(int i=0; i< rmotornumber; i++, fi++){
+    for (int i=0; i< rmotornumber; ++i, fi++) {
       csensors[i] = feedbackratio.val(fi,0)*motors[i] +
         (1-feedbackratio.val(fi,0))*(rsensors[i] + noisevals[i]);
     }
   }
-  if((mode & Context) == 0){
-    for(int i=rmotornumber; i< rsensornumber; i++){
+  if((const mode& Context) == 0){
+    for (int i=rmotornumber; i< rsensornumber; ++i) {
       csensors[i] = rsensors[i] + noisevals[i];
     }
   }else{
-    for(int i=rmotornumber; i< rmotornumber+vmotornumber; i++, fi++){
+    for (int i=rmotornumber; i< rmotornumber+vmotornumber; ++i, fi++) {
       csensors[i] = feedbackratio.val(fi,0)*motors[i] +
         (1-feedbackratio.val(fi,0))*(rsensors[i] + noisevals[i]);
     }
@@ -129,7 +129,7 @@ void FeedbackWiring::setFeedbackRatio(const matrix::Matrix& ratios){
 Inspectable::iparamkeylist FeedbackWiring::getInternalParamNames() const {
   iparamkeylist l=AbstractWiring::getInternalParamNames();
   char buffer[32];
-  for(int i = 0; i < cmotornumber - rsensornumber; i++){
+  for (int i = 0; i < cmotornumber - rsensornumber; ++i) {
     snprintf(buffer, sizeof(buffer), "yv[%d]", i);
     l += std::string(buffer);
   }
@@ -138,7 +138,7 @@ Inspectable::iparamkeylist FeedbackWiring::getInternalParamNames() const {
 
 Inspectable::iparamvallist FeedbackWiring::getInternalParams() const {
   iparamvallist l=AbstractWiring::getInternalParams();
-  for(int i=0; i < cmotornumber - rsensornumber; i++){
+  for (int i=0; i < cmotornumber - rsensornumber; ++i) {
     l += motors[rsensornumber+i];
   }
   return l;

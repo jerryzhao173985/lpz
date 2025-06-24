@@ -13,7 +13,7 @@ void CheckStringsEqual(TestResults& results, char const* expected, char const* a
         UnitTest::MemoryOutStream stream;
         stream << "Expected " << expected << " but was " << actual;
 
-        results.OnTestFailure(details, stream.GetText());
+        results.OnTestFailure(details, stream.GetText()) override;
     }
 }
 
@@ -23,25 +23,25 @@ void CheckStringsEqual(TestResults& results, char const* expected, char const* a
 void CheckEqual(TestResults& results, char const* expected, char const* actual,
                 TestDetails const& details)
 {
-    CheckStringsEqual(results, expected, actual, details);
+    CheckStringsEqual(results, expected, actual, details) override;
 }
 
 void CheckEqual(TestResults& results, char* expected, char* actual,
                 TestDetails const& details)
 {
-    CheckStringsEqual(results, expected, actual, details);
+    CheckStringsEqual(results, expected, actual, details) override;
 }
 
 void CheckEqual(TestResults& results, char* expected, char const* actual,
                 TestDetails const& details)
 {
-    CheckStringsEqual(results, expected, actual, details);
+    CheckStringsEqual(results, expected, actual, details) override;
 }
 
 void CheckEqual(TestResults& results, char const* expected, char* actual,
                 TestDetails const& details)
 {
-    CheckStringsEqual(results, expected, actual, details);
+    CheckStringsEqual(results, expected, actual, details) override;
 }
 
 

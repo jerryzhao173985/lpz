@@ -52,13 +52,12 @@ void CSerialThread::stop(){
 // thread function
 bool CSerialThread::run(){
   
-  int baud;
   struct termios newtio;
 
   pthread_setcancelstate(PTHREAD_CANCEL_ENABLE,0);
   pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS,0);
 
-  switch(m_baud){
+  switch (m_baud){
   case   1200: baud=B1200;   break;
   case   2400: baud=B2400;   break;
   case   4800: baud=B4800;   break;
@@ -76,8 +75,8 @@ bool CSerialThread::run(){
   //fd_in = open(m_port.c_str(), O_RDWR);
   //    pthread_testcancel();
   if (fd_in <0) { cerr << "Error open port.\n"; return false; }
-  if(test_mode){
-    fd_out = open((m_port + "_out").c_str(), O_RDWR|O_SYNC);//|O_NONBLOCK);    
+  if (test_mode){
+    fd_out = open((m_port + "_out").c_str(), O_RDWR|O_SYNC);//|O_NONBLOCK);
   }else{
     fd_out=fd_in;
   }
@@ -97,7 +96,7 @@ bool CSerialThread::run(){
   Initialise();
 
   // main loop
-  while(!terminated){
+  while (!terminated){
     pthread_testcancel();
     /* Get sensor values / send motor values. */
     writeMotors_readSensors();
@@ -117,12 +116,12 @@ bool CSerialThread::run(){
  */
 int CSerialThread::sendData(uint8 adr, uint8 cmd, uint8 *data, uint8 len) {  
   if (sendByte(255) <= 0) return -1;   // Marker
-  if (sendByte(adr) <= 0) return -1;  
-  if (sendByte(cmd) <= 0) return -1;  
-  if (sendByte(len) <= 0) return -1;  
+  if (sendByte(adr) <= 0) return -1;
+  if (sendByte(cmd) <= 0) return -1;
+  if (sendByte(len) <= 0) return -1;
 
   int i; 
-  for (i = 0; i < (int) len; i++) {
+  for (i = 0; i < static_cast<int>(len); ++i) {
     if(data[i]==255) data[i]=254;
     if (sendByte(data[i]) <= 0) return -1;
   }      
@@ -163,7 +162,7 @@ void CSerialThread::flushInputBuffer(int wait) {
 int CSerialThread::receiveData(uint8 my_adr, uint8 *cmd, uint8 *data) {
   int b;
   do{
-    b = getByte();    
+    b = getByte();
   }while( (b != 255) && (b != -1));
   if (b == -1) return -1;
   int addr = getByte();
@@ -175,13 +174,13 @@ int CSerialThread::receiveData(uint8 my_adr, uint8 *cmd, uint8 *data) {
   if (len == -1) return -1;
   if(addr==my_adr){
     int i;
-    for(i=0; i<len; i++){
+    for (i=0; i<len; ++i) {
       int b =getByte();
-      if(b==-1) return -1; 
+      if(b==-1) return -1;
       data[i] = b;
     }
   }else{
-    printf("Got weird packet\n");    
+    printf("Got weird packet\n");
   }
   return len;
 }
@@ -192,7 +191,7 @@ int CSerialThread::receiveData(uint8 my_adr, uint8 *cmd, uint8 *data) {
 static void* CSerialThread_run(void* p)
 {
   
-  bool rv = ((CSerialThread*)p)->run();
+  bool rv = (static_cast<CSerialThread*>(p))->run();
   pthread_exit(&rv);
 
 }

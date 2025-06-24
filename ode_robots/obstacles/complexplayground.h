@@ -32,23 +32,23 @@ namespace lpzrobots {
 
 // Taken from XFIG documentation
 // .....
-// (2) The first non-comment line consists of the following:
+// static_cast<2>(The) first non-comment line consists of the following:
 
-//         string  orientation             ("Landscape" or "Portrait")
-//         string  justification           ("Center" or "Flush Left")
-//         string  units                   ("Metric" or "Inches")
-//         string  papersize               ("Letter", "Legal", "Ledger", "Tabloid",
-//                                          "A", "B", "C", "D", "E",
-//                                          "A4",   "A3", "A2", "A1", "A0" and "B5")
+//         string  orientation             (__PLACEHOLDER_3__ or __PLACEHOLDER_4__)
+//         string  justification           (__PLACEHOLDER_5__ or __PLACEHOLDER_6__)
+//         string  units                   (__PLACEHOLDER_7__ or __PLACEHOLDER_8__)
+//         string  papersize               (__PLACEHOLDER_9__, __PLACEHOLDER_10__, __PLACEHOLDER_11__, __PLACEHOLDER_12__,
+//                                          __PLACEHOLDER_13__, __PLACEHOLDER_14__, __PLACEHOLDER_15__, __PLACEHOLDER_16__, __PLACEHOLDER_17__,
+//                                          __PLACEHOLDER_18__,   __PLACEHOLDER_19__, __PLACEHOLDER_20__, __PLACEHOLDER_21__, __PLACEHOLDER_22__ and __PLACEHOLDER_23__)
 //         float   magnification           (export and print magnification, %)
-//         string  multiple-page           ("Single" or "Multiple" pages)
+//         string  multiple-page           (__PLACEHOLDER_24__ or __PLACEHOLDER_25__ pages)
 //         int     transparent color       (color number for transparent color for GIF
 //                                          export. -3=background, -2=None, -1=Default,
 //                                          0-31 for standard colors or 32- for user colors)
 //         # optional comment              (An optional set of comments may be here,
 //                                          which are associated with the whole figure)
 //         int     resolution coord_system (Fig units/inch and coordinate system:
-//                                            1: origin at lower left corner (NOT USED)
+//                                            1: origin at lower left corner(const NOT& USED)
 //                                            2: upper left)
 
 //     Fig_resolution is the resolution of the figure in the file.
@@ -64,16 +64,16 @@ namespace lpzrobots {
 //     The coordinate_system variable is ignored - the origin is ALWAYS the
 //     upper-left corner.
 
-//     ** Coordinates are given in "fig_resolution" units.
+//     ** Coordinates are given in __PLACEHOLDER_26__ units.
 //     ** Line thicknesses are given in 1/80 inch (0.3175mm) or 1 screen pixel.
 //        When exporting to EPS, PostScript or any bitmap format (e.g. GIF),  the
-//        line thickness is reduced to 1/160 inch (0.159mm) to "lighten" the look.
+//        line thickness is reduced to 1/160 inch (0.159mm) to __PLACEHOLDER_27__ the look.
 //     ** dash-lengths/dot-gaps are given in 80-ths of an inch.
 
 
 
 
-// (3) The rest of the file contains various objects.  An object can be one
+// static_cast<3>(The) rest of the file contains various objects.  An object can be one
 //     of six classes (or types).
 
 //         0)      Color pseudo-object.
@@ -118,7 +118,7 @@ namespace lpzrobots {
 //     For picture (type 5) the following line follows:
 //         type    name                    (brief description)
 //         ----    ----                    -------------------
-//         boolean flipped                 orientation = normal (0) or flipped (1)
+//         boolean flipped                 orientation = normal static_cast<0>(or) flipped (1)
 //         char    file[]                  name of picture file to import
 
 //     Points line(s).  The x,y coordinates follow, any number to a line, with
@@ -150,8 +150,6 @@ namespace lpzrobots {
     int     object_code; //             (always 2)
     int     sub_type;    //             (we require 1: polyline)
     int     line_style;  //             (0: normal wall, 1: border, rest ignored)
-    int     thickness;   //             (1/80 inch means factor of .3175 )
-    int     depth;       //             (multiple of height)
     std::list<Pos> points;
   };
 
@@ -183,7 +181,7 @@ namespace lpzrobots {
     void createPolyline(const PolyLine&);
 
   protected:
-    virtual void create() override;
+    virtual void create();
 
   };
 

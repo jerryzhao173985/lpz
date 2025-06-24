@@ -34,25 +34,25 @@ namespace lpzrobots {
 
   typedef struct {
   public:
-    double size;       ///< scaling factor for robot (diameter of body)
-    double legLength;  ///< length of the legs in units of size
-    int    legNumber;  ///<  number of snake elements
-    double mass;       ///< chassis mass
-    double relLegmass; ///< relative overall leg mass
-    double powerFactor;   ///< global factor for power parameters
-    double dampingFactor; ///< global factor for damping parameters
-    double hipPower; ///< maximal force for at hip joint motors
-    double hipDamping; ///< damping of hio joint servos
-    double hipJointLimit; ///< angle range for legs
-    double kneePower;  ///< spring strength in the knees
-    double kneeJointLimit; ///< angle range for knees
-    double kneeDamping; ///< damping in the knees
-    double anklePower;  ///< spring strength in the ankles
-    double ankleDamping; ///< damping in the ankles
-    bool   hippo;        ///< "dog" looks like a hippopotamus
-    bool   drawstupidface;
-    bool   useBigBox;   ///< use big box on back or not
-    bool   legBodyCollisions; ///< legs and body collide
+    double size = 0;       ///< scaling factor for robot (diameter of body)
+    double legLength = 0;  ///< length of the legs in units of size
+    int    legNumber = 0;  ///<  number of snake elements
+    double mass = 0;       ///< chassis mass
+    double relLegmass = 0; ///< relative overall leg mass
+    double powerFactor = 0;   ///< global factor for power parameters
+    double dampingFactor = 0; ///< global factor for damping parameters
+    double hipPower = 0; ///< maximal force for at hip joint motors
+    double hipDamping = 0; ///< damping of hio joint servos
+    double hipJointLimit = 0; ///< angle range for legs
+    double kneePower = 0;  ///< spring strength in the knees
+    double kneeJointLimit = 0; ///< angle range for knees
+    double kneeDamping = 0; ///< damping in the knees
+    double anklePower = 0;  ///< spring strength in the ankles
+    double ankleDamping = 0; ///< damping in the ankles
+    bool   hippo = false;        ///< __PLACEHOLDER_0__ looks like a hippopotamus
+    bool   drawstupidface = false;
+    bool   useBigBox = false;   ///< use big box on back or not
+    bool   legBodyCollisions = false; ///< legs and body collide
   } VierBeinerConf;
 
 
@@ -75,9 +75,9 @@ namespace lpzrobots {
     VierBeiner(const OdeHandle& odeHandle, const OsgHandle& osgHandle, const VierBeinerConf& conf,
                const std::string& name);
 
-    virtual ~VierBeiner(){};
+    virtual ~VierBeiner() {} override;
 
-    static VierBeinerConf getDefaultConf(){
+    static VierBeinerConf getDefaultConf() const {
       VierBeinerConf c;
       c.size               = 1;
       c.legNumber          = 4;
@@ -138,14 +138,14 @@ namespace lpzrobots {
         like space-internal collision detection, sensor resets/update etc.
         @param globalData structure that contains global data from the simulation environment
     */
-    virtual void doInternalStuff(GlobalData& globalData);
+    virtual void doInternalStuff(const GlobalData& globalData);
 
 
     /******** CONFIGURABLE ***********/
     virtual void notifyOnChange(const paramkey& key);
 
     /** the main object of the robot, which is used for position and speed tracking */
-    virtual Primitive* getMainPrimitive() const { return objects[0]; }
+    virtual Primitive* getMainPrimitive() const override { return objects[0]; }
   protected:
 
     /** creates vehicle at desired pose
@@ -158,9 +158,9 @@ namespace lpzrobots {
     virtual void destroy();
 
     VierBeinerConf conf;
-    double legmass;    // leg mass
+    double legmass = 0;    // leg mass
 
-    bool created;      // true if robot was created
+    bool created = false;      // true if robot was created
 
 
     // some objects explicitly needed for ignored collision pairs

@@ -7,7 +7,7 @@
  *   LICENSE:                                                              *
  *   This work is licensed under the Creative Commons                      *
  *   Attribution-NonCommercial-ShareAlike 2.5 License. To view a copy of   *
- *   this license, visit http://creativecommons.org/licenses/by-nc-sa/2.5/ *
+ *   this license, visit http:__PLACEHOLDER_1__
  *   or send a letter to Creative Commons, 543 Howard Street, 5th Floor,   *
  *   San Francisco, California, 94105, USA.                                *
  *                                                                         *
@@ -36,10 +36,10 @@
 class InvertMotorSpace : public InvertMotorController {
 
 public:
-  explicit InvertMotorSpace(int buffersize, double cInit = 0.1, bool someInternalParams = true);
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override;
+  InvertMotorSpace(int buffersize, double cInit = 0.1, bool someInternalParams = true);
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr);
 
-  virtual ~InvertMotorSpace() override;
+  virtual ~InvertMotorSpace();
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
   virtual int getSensorNumber() const override {
@@ -52,27 +52,27 @@ public:
 
   /// performs one step (includes learning).
   /// Calulates motor commands from sensor inputs.
-  virtual void step(const sensor*, int number_sensors, motor*, int number_motors) override;
+  virtual void step(const sensor*, int number_sensors, motor*, int number_motors);
 
   /// performs one step without learning. Calulates motor commands from sensor inputs.
   virtual void stepNoLearning(const sensor*,
                               int number_sensors,
                               motor*,
-                              int number_motors) override;
+                              int number_motors);
 
   /**** STOREABLE ****/
   /** stores the controller values to a given file (binary).  */
   virtual bool store(FILE* f) const override;
   /** loads the controller values from a given file (binary). */
-  virtual bool restore(FILE* f) override;
+  virtual bool restore(FILE* f);
 
   // inspectable interface
-  virtual std::list<ILayer> getStructuralLayers() const override;
-  virtual std::list<IConnection> getStructuralConnections() const override;
+  virtual std::list<ILayer> getStructuralLayers() const;
+  virtual std::list<IConnection> getStructuralConnections() const;
 
 protected:
-  unsigned short number_sensors;
-  unsigned short number_motors;
+  unsigned short number_sensors = 0;
+  unsigned short number_motors = 0;
 
   matrix::Matrix A;          // Model Matrix
   matrix::Matrix C;          // Controller Matrix
@@ -84,8 +84,8 @@ protected:
   matrix::Matrix* y_buffer;
   matrix::Matrix x_smooth;
 
-  bool someInternalParams;
-  double cInit;
+  bool someInternalParams = false;
+  double cInit = 0;
 
   /// puts the sensors in the ringbuffer, generate controller values and put them in the
   //  ringbuffer as well

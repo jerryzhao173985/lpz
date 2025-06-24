@@ -46,7 +46,7 @@ namespace lpzrobots {
 
       /// start() is called at the first start of the cycles and should create all the object (obstacles, agents...).
       virtual void start(const OdeHandle&, const OsgHandle&, GlobalData& globalData,
-          SimulationTaskHandle& simTaskHandle, int taskId) {
+          SimulationTaskHandle& simTaskHandle, int taskId) override {
       }
 
       /**
@@ -58,7 +58,7 @@ namespace lpzrobots {
        * @return if the simulation should be restarted; this is false by default
        */
       virtual bool restart(const OdeHandle&, const OsgHandle&, GlobalData& globalData, SimulationTaskHandle&,
-          int taskId) {
+          int taskId) override {
         return false;
       }
 
@@ -69,7 +69,7 @@ namespace lpzrobots {
        @param control indicates that robots have been controlled this timestep
        */
       virtual void addCallback(GlobalData& globalData, bool draw, bool pause, bool control, SimulationTaskHandle&,
-          int taskId) {
+          int taskId) override {
       }
 
       /** is called if a key was pressed.
@@ -77,7 +77,7 @@ namespace lpzrobots {
        @return true if the key was handled
        */
       virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down,
-          SimulationTaskHandle&, int taskId) {
+          SimulationTaskHandle&, int taskId) override {
         return false;
       }
 
@@ -96,7 +96,7 @@ namespace lpzrobots {
         //osgHandle.cfg->noGraphics=noGraphics;
       }
 
-      void setTaskNameSuffix(std::string nameSuffix) {
+      void setTaskNameSuffix(const std::string& nameSuffix) {
         windowName.append(nameSuffix);
       }
 
@@ -105,7 +105,7 @@ namespace lpzrobots {
        * called by the associated SimulationTask.
        * @param simTaskHandle
        */
-      void setSimTaskHandle(SimulationTaskHandle& simTaskHandle) {
+      void setSimTaskHandle(const SimulationTaskHandle& simTaskHandle) {
         this->simTaskHandle = &simTaskHandle;
       }
 
@@ -132,7 +132,7 @@ namespace lpzrobots {
        * Overwrite to avoid thread conflicts while
        * accessing the same file. Just disable it.
        */
-      virtual bool storeCfg(const char* filenamestem, const std::list<std::string>& comments = std::list<std::string>()) {
+      virtual bool storeCfg(const char* filenamestem, const std::list<std::string>& comments = std::list<std::string>())  override {
         return true;
       }
 
@@ -154,7 +154,7 @@ namespace lpzrobots {
         return result;
       }
 
-      int taskId;
+      int taskId = 0;
       SimulationTaskHandle* simTaskHandle;
       std::string nameSuffix;
 
@@ -165,21 +165,21 @@ namespace lpzrobots {
       }
 
       bool restart(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& globalData) {
-        bool doRestart;
+        bool doRestart = false;
         QMP_CRITICAL(62);
         doRestart = restart(odeHandle, osgHandle, globalData, *simTaskHandle, taskId);
         QMP_END_CRITICAL(62);
         return doRestart;
       }
 
-      virtual void addCallback(GlobalData& globalData, bool draw, bool pause, bool control) {
+      virtual void addCallback(const GlobalData& globalData, bool draw, bool pause, bool control) override {
         QMP_CRITICAL(63);
         addCallback(globalData, draw, pause, control, *simTaskHandle, taskId);
         QMP_END_CRITICAL(63);
       }
       ;
 
-      bool command(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& globalData, int key, bool down) {
+      bool command(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& globalData, int key, bool down) override {
         return command(odeHandle, osgHandle, globalData, key, down, *simTaskHandle, taskId);
       }
 

@@ -68,7 +68,7 @@ ControllerNet::init(unsigned int inputDim,
   y[0].set(layers[0].size, 1);
   z[0].set(layers[0].size, 1);
   gp[0].set(layers[0].size, 1);
-  for (unsigned int i = 1; i < layers.size(); i++) {
+  for (unsigned int i = 1; i < layers.size(); ++i) {
     Matrix w_init(layers[i].size, layers[i - 1].size);
     w_init = w_init.mapP(randGen, random_minusone_to_one) * rand + (w_init ^ 0) * unit_map;
     weights[i] = w_init;
@@ -96,7 +96,7 @@ ControllerNet::process(const Matrix& input) {
   assert(bias.size() == layernum);
   this->input = input;
 
-  for (unsigned int i = 0; i < layernum; i++) {
+  for (unsigned int i = 0; i < layernum; ++i) {
     if (i == 0)
       z[i] = weights[i] * this->input + bias[i];
     else
@@ -117,12 +117,12 @@ ControllerNet::processX(const Matrix& input, const Matrix& injection, unsigned i
   assert(initialised);
   unsigned int layernum = layers.size();
   assert(injectInLayer < layernum);
-  assert((int)injection.getM() == layers[injectInLayer].size && injection.getN() == 1);
+  assert(static_cast<int>(injection.getM()) == layers[injectInLayer].size && injection.getN() == 1);
   assert(weights.size() == layernum);
   assert(bias.size() == layernum);
   this->input = input;
 
-  for (unsigned int i = 0; i < layernum; i++) {
+  for (unsigned int i = 0; i < layernum; ++i) {
     if (i == 0)
       z[i] = weights[i] * this->input + bias[i];
     else
@@ -161,7 +161,7 @@ ControllerNet::forwardpropagation(const matrix::Matrix& error,
 
   (*errors)[0] = error;
 
-  for (unsigned int i = 0; i <= layernum - 1; i++) {
+  for (unsigned int i = 0; i <= layernum - 1; ++i) {
     (*zetas)[i] = weights[i] * (*errors)[i];
     if (i == layernum - 1 && useBypass) {
       (*zetas)[i] += bypassWeights * (*errors)[0];
@@ -195,7 +195,7 @@ ControllerNet::forwardpropagation(const matrix::Matrix& error,
 
 //   (*errors)[0] = error;
 
-//   for(unsigned int i=0; i<=layernum-1; i++){
+//   for (unsigned int i=0; i<=layernum-1; ++i) {
 //     (*zetas)[i]    = (weights[i]^T).pseudoInverse(lambda) * (*errors)[i];
 //     // 1/g' o (W^T)^-1 * error (rowwise multiplication)
 //     (*errors)[i+1] =  gp[i].map(one_over) & (*zetas)[i];
@@ -234,7 +234,7 @@ ControllerNet::forwardprojection(const matrix::Matrix& error,
     (*errors)[0] = error;
   }
 
-  for (unsigned int i = 0; i <= layernum - 1; i++) {
+  for (unsigned int i = 0; i <= layernum - 1; ++i) {
     (*zetas)[i] = (weights[i] ^ T).pseudoInverse(lambda) * (*errors)[i];
     if (i == layernum - 1 && useBypass) {
       // the bypass branch gets
@@ -256,7 +256,7 @@ ControllerNet::forwardprojection(const matrix::Matrix& error,
 const Matrix
 ControllerNet::backpropagation(const Matrix& error, Matrices* errors, Matrices* zetas) const {
   assert(initialised);
-  int layernum = (int)layers.size();
+  int layernum = static_cast<int>(layers.size());
 
   bool errorsgiven = errors != nullptr;
   bool zetasgiven = zetas != nullptr;
@@ -294,7 +294,7 @@ ControllerNet::backpropagationX(const Matrix& error,
                                 Matrices* zetas,
                                 int startWithLayer) const {
   assert(initialised);
-  int layernum = (int)layers.size();
+  int layernum = static_cast<int>(layers.size());
   if (startWithLayer < 0)
     startWithLayer = layers.size() + startWithLayer;
   assert(startWithLayer >= 0 && startWithLayer < layernum);
@@ -337,7 +337,7 @@ ControllerNet::backpropagationX(const Matrix& error,
 //   if(useBypass) {
 //     return backprojectionBP(error,errors,zetas);
 //   }
-//   int layernum  = (int)layers.size();
+//   int layernum  = static_cast<int>(layers.size());
 //   bool errorsgiven = errors != nullptr;
 //   bool zetasgiven  = zetas  != nullptr;
 //   if(!errorsgiven) errors = new Matrices(layernum+1);
@@ -347,7 +347,7 @@ ControllerNet::backpropagationX(const Matrix& error,
 
 //   (*errors)[layernum] = error;
 
-//   for(int i=layernum-1; i>=0; i--){
+//   for (int i=layernum-1; i>=0; i--) {
 //     // 1/g' o error (rowwise multiplication)
 //     (*zetas)[i]  = gp[i].map(one_over) & (*errors)[i+1];
 //     // W^-1 * (1/g' o error)
@@ -363,7 +363,7 @@ ControllerNet::backpropagationX(const Matrix& error,
 const Matrix
 ControllerNet::backprojection(const Matrix& error, Matrices* errors, Matrices* zetas) const {
   assert(initialised);
-  int layernum = (int)layers.size();
+  int layernum = static_cast<int>(layers.size());
   bool errorsgiven = errors != nullptr;
   bool zetasgiven = zetas != nullptr;
   if (!errorsgiven)
@@ -431,7 +431,7 @@ ControllerNet::calcResponseIntern() {
   L = weights[0] & gp[0];
   R = weights[0];
   // loop over layers
-  for (unsigned int i = 1; i < layernum; i++) {
+  for (unsigned int i = 1; i < layernum; ++i) {
     L = (weights[i] & gp[i]) * L;
     R = weights[i] * R;
   }
@@ -444,17 +444,17 @@ ControllerNet::calcResponseIntern() {
 Matrix
 ControllerNet::responsePart(int from, int to) const {
   assert(initialised);
-  int layernum = (int)layers.size();
+  int layernum = static_cast<int>(layers.size());
   Matrix Res;
   assert(from >= -1 && from < layernum - 1);
-  from++;
+  ++from;
   if (to < 0)
     to = layernum + to;
   assert(to >= 0 && to < layernum);
   // initialisation of jacobian
   Res = weights[from] & gp[from];
   // loop over layers
-  for (int i = from + 1; i <= to; i++) {
+  for (int i = from + 1; i <= to; ++i) {
     Res = (weights[i] & gp[i]) * Res;
   }
   return Res;
@@ -465,7 +465,7 @@ ControllerNet::damp(double damping) {
   unsigned int len = weights.size();
   if (damping == 0)
     return;
-  for (unsigned int i = 0; i < len; i++) {
+  for (unsigned int i = 0; i < len; ++i) {
     //    weights[i] *= (1-damping);
     //    bias[i]    *= (1-damping);
     weights[i] -= weights[i] * damping;
@@ -484,7 +484,7 @@ ControllerNet::store(FILE* f) const {
   }
   int weightsnum = weights.size();
   fprintf(f, "%i\n#", weightsnum);
-  for (int i = 0; i < weightsnum; i++) {
+  for (int i = 0; i < weightsnum; ++i) {
     weights[i].store(f);
     bias[i].store(f);
   }
@@ -503,7 +503,7 @@ ControllerNet::write(FILE* f) const {
   }
   int weightsnum = weights.size();
   fprintf(f, "%i\n#", weightsnum);
-  for (int i = 0; i < weightsnum; i++) {
+  for (int i = 0; i < weightsnum; ++i) {
     weights[i].write(f);
     bias[i].write(f);
   }
@@ -519,14 +519,14 @@ ControllerNet::restore(FILE* f) {
   layers.clear();
   if (fscanf(f, "%u\n", &layernum) != 1)
     return false;
-  for (unsigned int i = 0; i < layernum; i++) {
+  for (unsigned int i = 0; i < layernum; ++i) {
     Layer l(1);
     l.restore(f);
     layers.push_back(l);
   }
   y.resize(layernum);
   z.resize(layernum);
-  for (unsigned int i = 0; i < layernum; i++) {
+  for (unsigned int i = 0; i < layernum; ++i) {
     y[i].set(layers[i].size, 1);
     z[i].set(layers[i].size, 1);
   }
@@ -536,7 +536,7 @@ ControllerNet::restore(FILE* f) {
   bias.clear();
   if (fscanf(f, "%u\n#", &weightsnum) != 1)
     return false;
-  for (unsigned int i = 0; i < weightsnum; i++) {
+  for (unsigned int i = 0; i < weightsnum; ++i) {
     Matrix m;
     if (!m.restore(f))
       return false;

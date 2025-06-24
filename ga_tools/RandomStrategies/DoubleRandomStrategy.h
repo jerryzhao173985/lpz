@@ -47,12 +47,12 @@ public:
 	/**
 	 * The constructor.
 	 * It becomes the 3 parameters which the class need to generate double value in a special range.
-	 * @param random (RandGen*) random generator which create double values in the range zero to one.
-	 * @param base (double) A parameter for the alg. it move a random value.
-	 * @param factor (double) A parameter which resize the interval of the random values.
-	 * @param epsilon (double) A parameter which dified the interval of the random values.
+	 * @param random static_cast<RandGen*>(random) generator which create double values in the range zero to one.
+	 * @param base static_cast<double>(A) parameter for the alg. it move a random value.
+	 * @param factor static_cast<double>(A) parameter which resize the interval of the random values.
+	 * @param epsilon static_cast<double>(A) parameter which dified the interval of the random values.
 	 */
-	DoubleRandomStrategy(RandGen* random, double base=0.0, double factor=1.0, double epsilon=0.0);
+	DoubleRandomStrategy(RandGen* random, double base=0.0, double factor=1.0, double epsilon=0.0) override;
 
 	/**
 	 * default destructor
@@ -61,9 +61,9 @@ public:
 
 	/**
 	 * implementation for the interface. It create the random double value and give it as a IValue back (TemplateValue with type double)
-	 * @return (IValue*) the random value.
+	 * @return static_cast<IValue*>(the) random value.
 	 */
-	virtual IValue* getRandomValue(void);
+	virtual IValue* getRandomValuestatic_cast<void>(override);
 
 protected:
 	/**
@@ -74,23 +74,23 @@ protected:
 	/**
 	 * base parameter. moves the random value interval.
 	 */
-	double m_base;
+	double m_base = 0;
 
 	/**
 	 * factor parameter. resize the random value interval.
 	 */
-	double m_factor;
+	double m_factor = 0;
 
 	/**
 	 * epsilon parameter. dified the random value interval by zero and move it away.
 	 */
-	double m_epsilon;
+	double m_epsilon = 0;
 
 private:
 	/**
 	 * disable default constructor
 	 */
-	DoubleRandomStrategy();
+	DoubleRandomStrategy() override;
 };
 
 #endif /* DOUBLERANDOMSTRATEGY_H_ */

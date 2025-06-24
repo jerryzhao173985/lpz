@@ -1,0 +1,79 @@
+Makefile:199: Makefile.depend: No such file or directory
+for file in ./abstractrobot.h ./agent.h ./trackable.h ./wiredcontroller.h controller/abstractcontroller.h controller/abstractcontrolleradapter.h controller/abstractiafcontroller.h controller/abstractmodel.h controller/abstractmulticontroller.h controller/braitenberg.h controller/classicreinforce.h controller/controllernet.h controller/crossmotorcoupling.h controller/dep.h controller/derbigcontroller.h controller/dercontroller.h controller/derinf.h controller/derlininvert.h controller/derlinunivers.h controller/derpseudosensor.h controller/dinvert3channelcontroller.h controller/discretecontrolleradapter.h controller/discretesizable.h controller/elman.h controller/esn.h controller/feedforwardnn.h controller/ffnncontroller.h controller/homeokinbase.h controller/invert3channelcontroller.h controller/invertablemodel.h controller/invertcontroller.h controller/invertmotorbigmodel.h controller/invertmotorcontroller.h controller/invertmotornstep.h controller/invertmotorspace.h controller/invertnchannelcontroller.h controller/layer.h controller/measureadapter.h controller/modelwithmemoryadapter.h controller/motorbabbler.h controller/multilayerffnn.h controller/multireinforce.h controller/mutualinformationcontroller.h controller/neuralgas.h controller/oneactivemultipassivecontroller.h controller/onecontrollerperchannel.h controller/onelayerffnn.h controller/pimax.h controller/qlearning.h controller/regularisation.h controller/reinforceable.h controller/remotecontrolled.h controller/replaycontroller.h controller/semox.h controller/sinecontroller.h controller/som.h controller/soml.h controller/sos.h controller/sox.h controller/soxexpand.h controller/splitcontrol.h controller/switchcontroller.h controller/teachable.h controller/universalcontroller.h controller/use_java_controller.h wirings/abstractwiring.h wirings/copywiring.h wirings/derivativewiring.h wirings/feedbackwiring.h wirings/forceboostwiring.h wirings/motornoisewiring.h wirings/one2onewiring.h wirings/selectivenoisewiring.h wirings/selectiveone2onewiring.h wirings/wiringsequence.h utils/avrtypes.h utils/backcaller.h utils/backcallervector.h utils/callbackable.h utils/configurable.h utils/configurablelist.h utils/controller_misc.h utils/datafunc.h utils/discretisizer.h utils/globaldatabase.h utils/inspectable.h utils/inspectableproxy.h utils/lyapunov.h utils/mac_drand48r.h utils/mediator.h utils/mediatorcollegue.h utils/modern_randomgenerator.h utils/modern_storeable.h utils/noisegenerator.h utils/parametrizable.h utils/plotoption.h utils/plotoptionengine.h utils/position.h utils/quickmp.h utils/randomgenerator.h utils/ringbuffer.h utils/sensormotorinfo.h utils/stl_adds.h utils/stl_map.h utils/storeable.h utils/trackrobots.h utils/types.h matrix/matrix_neon.h matrix/matrix.h matrix/matrixutils.h matrix/sparsearray.h matrix/sparsematrix.h statistictools/analysationmodes.h statistictools/measuremodes.h statistictools/statistictools.h statistictools/measure/abstractmeasure.h statistictools/measure/complexmeasure.h statistictools/measure/imeasure.h statistictools/measure/statisticmeasure.h statistictools/measure/trackablemeasure.h statistictools/dataanalysation/templatevalueanalysation.h; do \
+		ln -sf ../../$file include/selforg/; \
+	done
+makedepend -- -Wall -pipe -fpic -I./. -I./controller -I./wirings -I./utils -I./matrix -I./statistictools -I./statistictools/measure -I./statistictools/dataanalysation -Iinclude -Iinclude/selforg -std=c++17 -pthread -I/Users/jerry/lpzrobots/include -I/opt/homebrew/Cellar/gsl/2.8/include -DNOCONFIGURATOR -g -O -- ./agent.cpp ./wiredcontroller.cpp controller/abstractcontroller.cpp controller/abstractiafcontroller.cpp controller/abstractmulticontroller.cpp controller/classicreinforce.cpp controller/controllernet.cpp controller/crossmotorcoupling.cpp controller/dep.cpp controller/derbigcontroller.cpp controller/dercontroller.cpp controller/derinf.cpp controller/derlininvert.cpp controller/derlinunivers.cpp controller/derpseudosensor.cpp controller/discretecontrolleradapter.cpp controller/elman.cpp controller/esn.cpp controller/ffnncontroller.cpp controller/invertmotorbigmodel.cpp controller/invertmotornstep.cpp controller/invertmotorspace.cpp controller/invertnchannelcontroller.cpp controller/layer.cpp controller/measureadapter.cpp controller/modelwithmemoryadapter.cpp controller/motorbabbler.cpp controller/multilayerffnn.cpp controller/multireinforce.cpp controller/mutualinformationcontroller.cpp controller/neuralgas.cpp controller/oneactivemultipassivecontroller.cpp controller/onecontrollerperchannel.cpp controller/onelayerffnn.cpp controller/pimax.cpp controller/qlearning.cpp controller/semox.cpp controller/sinecontroller.cpp controller/som.cpp controller/soml.cpp controller/sos.cpp controller/sox.cpp controller/soxexpand.cpp controller/splitcontrol.cpp controller/switchcontroller.cpp controller/universalcontroller.cpp controller/use_java_controller.cpp wirings/abstractwiring.cpp wirings/copywiring.cpp wirings/derivativewiring.cpp wirings/feedbackwiring.cpp wirings/forceboostwiring.cpp wirings/one2onewiring.cpp wirings/selectiveone2onewiring.cpp wirings/wiringsequence.cpp utils/backcaller.cpp utils/configurable.cpp utils/configurablelist.cpp utils/controller_misc.cpp utils/discretisizer.cpp utils/globaldatabase.cpp utils/inspectable.cpp utils/inspectableproxy.cpp utils/lyapunov.cpp utils/mediator.cpp utils/mediatorcollegue.cpp utils/parametrizable.cpp utils/plotoption.cpp utils/plotoptionengine.cpp utils/randomgenerator.cpp utils/stl_adds.cpp utils/storeable.cpp utils/trackrobots.cpp matrix/matrix_neon.cpp matrix/matrix.cpp matrix/matrixutils.cpp statistictools/statistictools.cpp statistictools/measure/complexmeasure.cpp statistictools/measure/statisticmeasure.cpp statistictools/measure/trackablemeasure.cpp statistictools/dataanalysation/templatevalueanalysation.cpp -p'$(BUILD_DIR)/' -f- > Makefile.depend 2>/dev/null
+g++ -c -Wall -pipe -fpic -I./. -I./controller -I./wirings -I./utils -I./matrix -I./statistictools -I./statistictools/measure -I./statistictools/dataanalysation -Iinclude -Iinclude/selforg -std=c++17 -pthread -I/Users/jerry/lpzrobots/include -I/opt/homebrew/Cellar/gsl/2.8/include -DNOCONFIGURATOR -g -O  -o "build/./agent.o" "agent.cpp"
+g++ -c -Wall -pipe -fpic -I./. -I./controller -I./wirings -I./utils -I./matrix -I./statistictools -I./statistictools/measure -I./statistictools/dataanalysation -Iinclude -Iinclude/selforg -std=c++17 -pthread -I/Users/jerry/lpzrobots/include -I/opt/homebrew/Cellar/gsl/2.8/include -DNOCONFIGURATOR -g -O  -o "build/./wiredcontroller.o" "wiredcontroller.cpp"
+g++ -c -Wall -pipe -fpic -I./. -I./controller -I./wirings -I./utils -I./matrix -I./statistictools -I./statistictools/measure -I./statistictools/dataanalysation -Iinclude -Iinclude/selforg -std=c++17 -pthread -I/Users/jerry/lpzrobots/include -I/opt/homebrew/Cellar/gsl/2.8/include -DNOCONFIGURATOR -g -O  -o "build/controller/abstractcontroller.o" "controller/abstractcontroller.cpp"
+g++ -c -Wall -pipe -fpic -I./. -I./controller -I./wirings -I./utils -I./matrix -I./statistictools -I./statistictools/measure -I./statistictools/dataanalysation -Iinclude -Iinclude/selforg -std=c++17 -pthread -I/Users/jerry/lpzrobots/include -I/opt/homebrew/Cellar/gsl/2.8/include -DNOCONFIGURATOR -g -O  -o "build/controller/abstractiafcontroller.o" "controller/abstractiafcontroller.cpp"
+g++ -c -Wall -pipe -fpic -I./. -I./controller -I./wirings -I./utils -I./matrix -I./statistictools -I./statistictools/measure -I./statistictools/dataanalysation -Iinclude -Iinclude/selforg -std=c++17 -pthread -I/Users/jerry/lpzrobots/include -I/opt/homebrew/Cellar/gsl/2.8/include -DNOCONFIGURATOR -g -O  -o "build/controller/abstractmulticontroller.o" "controller/abstractmulticontroller.cpp"
+g++ -c -Wall -pipe -fpic -I./. -I./controller -I./wirings -I./utils -I./matrix -I./statistictools -I./statistictools/measure -I./statistictools/dataanalysation -Iinclude -Iinclude/selforg -std=c++17 -pthread -I/Users/jerry/lpzrobots/include -I/opt/homebrew/Cellar/gsl/2.8/include -DNOCONFIGURATOR -g -O  -o "build/controller/classicreinforce.o" "controller/classicreinforce.cpp"
+In file included from controller/classicreinforce.cpp:20:
+In file included from controller/classicreinforce.h:30:
+include/selforg/qlearning.h:123:16: warning: 'restore' overrides a member function but is not marked 'override' [-Winconsistent-missing-override]
+  123 |   virtual bool restore(FILE* f);
+      |                ^
+include/selforg/storeable.h:42:16: note: overridden virtual function is here
+   42 |   virtual bool restore(FILE* f) = 0;
+      |                ^
+In file included from controller/classicreinforce.cpp:20:
+controller/classicreinforce.h:55:16: warning: 'init' overrides a member function but is not marked 'override' [-Winconsistent-missing-override]
+   55 |   virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr);
+      |                ^
+include/selforg/abstractcontroller.h:65:16: note: overridden virtual function is here
+   65 |   virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) = 0;
+      |                ^
+In file included from controller/classicreinforce.cpp:20:
+controller/classicreinforce.h:70:16: warning: 'step' overrides a member function but is not marked 'override' [-Winconsistent-missing-override]
+   70 |   virtual void step(const sensor*, int number_sensors, motor*, int number_motors);
+      |                ^
+include/selforg/abstractcontroller.h:82:16: note: overridden virtual function is here
+   82 |   virtual void step(const sensor* sensors, int sensornumber, motor* motors, int motornumber) = 0;
+      |                ^
+In file included from controller/classicreinforce.cpp:20:
+controller/classicreinforce.h:73:16: warning: 'stepNoLearning' overrides a member function but is not marked 'override' [-Winconsistent-missing-override]
+   73 |   virtual void stepNoLearning(const sensor*, int number_sensors, motor*, int number_motors);
+      |                ^
+include/selforg/abstractcontroller.h:86:16: note: overridden virtual function is here
+   86 |   virtual void stepNoLearning(const sensor*, int number_sensors, motor*, int number_motors) = 0;
+      |                ^
+In file included from controller/classicreinforce.cpp:20:
+controller/classicreinforce.h:83:16: warning: 'notifyOnChange' overrides a member function but is not marked 'override' [-Winconsistent-missing-override]
+   83 |   virtual void notifyOnChange(const paramkey& key);
+      |                ^
+include/selforg/configurable.h:159:16: note: overridden virtual function is here
+  159 |   virtual void notifyOnChange(const paramkey& key) {}
+      |                ^
+In file included from controller/classicreinforce.cpp:20:
+controller/classicreinforce.h:89:16: warning: 'restore' overrides a member function but is not marked 'override' [-Winconsistent-missing-override]
+   89 |   virtual bool restore(FILE* f);
+      |                ^
+include/selforg/storeable.h:42:16: note: overridden virtual function is here
+   42 |   virtual bool restore(FILE* f) = 0;
+      |                ^
+In file included from controller/classicreinforce.cpp:20:
+controller/classicreinforce.h:94:29: warning: 'getStructuralLayers' overrides a member function but is not marked 'override' [-Winconsistent-missing-override]
+   94 |   virtual std::list<ILayer> getStructuralLayers() const;
+      |                             ^
+include/selforg/inspectable.h:142:22: note: overridden virtual function is here
+  142 |   virtual ilayerlist getStructuralLayers() const;
+      |                      ^
+In file included from controller/classicreinforce.cpp:20:
+controller/classicreinforce.h:95:34: warning: 'getStructuralConnections' overrides a member function but is not marked 'override' [-Winconsistent-missing-override]
+   95 |   virtual std::list<IConnection> getStructuralConnections() const;
+      |                                  ^
+include/selforg/inspectable.h:148:27: note: overridden virtual function is here
+  148 |   virtual iconnectionlist getStructuralConnections() const;
+      |                           ^
+8 warnings generated.
+g++ -c -Wall -pipe -fpic -I./. -I./controller -I./wirings -I./utils -I./matrix -I./statistictools -I./statistictools/measure -I./statistictools/dataanalysation -Iinclude -Iinclude/selforg -std=c++17 -pthread -I/Users/jerry/lpzrobots/include -I/opt/homebrew/Cellar/gsl/2.8/include -DNOCONFIGURATOR -g -O  -o "build/controller/controllernet.o" "controller/controllernet.cpp"
+In file included from controller/controllernet.cpp:25:
+controller/controllernet.h:156:24: error: 'getInputDim' marked 'override' but does not override any member functions
+  156 |   virtual unsigned int getInputDim() const override {
+      |                        ^
+controller/controllernet.h:160:24: error: 'getOutputDim' marked 'override' but does not override any member functions
+  160 |   virtual unsigned int getOutputDim() const override {
+      |                        ^
+2 errors generated.
+make: *** [build/controller/controllernet.o] Error 1

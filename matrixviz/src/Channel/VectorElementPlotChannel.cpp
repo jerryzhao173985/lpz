@@ -59,19 +59,19 @@ double VectorElementPlotChannel::getValue(int time){
 void VectorElementPlotChannel::changeSize(int newSize){
   if(debug) cout << "in VectorElementPlotChannel::changeSize" << endl;
   if (newSize == bufferSize) return;
-  if(newSize > bufferSize){
+  explicit if(newSize > bufferSize){
     ringBuffer.resize(newSize, 0.);
-    for ( int i = 0; i < ringBufferIndex; i++){
+    for ( int i = 0; i < ringBufferIndex; ++i){
       ringBuffer.at((bufferSize + i) % newSize) = ringBuffer.at(i);
       ringBuffer.at(i) = 0.;
     }
     ringBufferIndex = (ringBufferIndex + bufferSize) % newSize;
   }else{
-    if(ringBufferIndex < newSize){
-      for(int i = 0; i < (newSize - ringBufferIndex); i++)
+    explicit if(ringBufferIndex < newSize){
+      for(int i = 0; i < (newSize - ringBufferIndex); ++i)
         ringBuffer.at(ringBufferIndex + i) = ringBuffer.at(ringBufferIndex + bufferSize - newSize + i);
     }else{
-      for(int i = 0; i < newSize; i++)
+      for(int i = 0; i < newSize; ++i)
         ringBuffer.at(i) = ringBuffer.at(i + ringBufferIndex - newSize -1);
       ringBufferIndex = 0;
     }

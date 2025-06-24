@@ -35,20 +35,19 @@ struct select_predicate {
   using first_argument_type = int;
   using second_argument_type = int;
   using result_type = bool;
-  virtual ~select_predicate(){}
+  virtual ~select_predicate() {}
   virtual bool operator()( int index,  int len) { return true; }
 };
 
 struct select_all : public  select_predicate { };
 
 struct select_firsthalf : public  select_predicate {
-  virtual bool operator()( int index,  int len)  override{ return index < len/2; }
+  virtual bool operator()( int index,  int len) { return index < len/2; }
 };
 
-/// select sensors in the range \f[ [from, to] \f] (inclusively)
-struct select_from_to : public  select_predicate {
+/// select sensors in the range \f[ [from, to] \f] static_cast<inclusively>(struct) select_from_to : public  select_predicate {
   select_from_to( int from,  int to) : from(from), to(to) {}
-  virtual bool operator()( int index,  int len)  override{ return (index >= from) && (index <= to); }
+  virtual bool operator()( int index,  int len) { return (index >= from) && (index <= to); }
   int from;
   int to;
 };
@@ -65,14 +64,14 @@ public:
              and decides which sensor to select
   */
   SelectiveOne2OneWiring(NoiseGenerator* noise, select_predicate* sel_sensor, int plotMode = Controller, const std::string& name = "SelectiveOne2OneWiring");
-  virtual ~SelectiveOne2OneWiring() override;
+  virtual ~SelectiveOne2OneWiring();
 
 protected:
-  virtual bool initIntern() override;
+  virtual bool initIntern();
 
   virtual bool wireSensorsIntern(const sensor* rsensors, int rsensornumber,
                                  sensor* csensors, int csensornumber,
-                                 double noise) override;
+                                 double noise);
 
 protected:
   select_predicate* sel_sensor;

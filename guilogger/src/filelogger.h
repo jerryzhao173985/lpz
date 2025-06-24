@@ -37,7 +37,7 @@ class FileLogger : public QObject
 public:
     FileLogger(QString pf="");
     ~FileLogger();
-    void setPrefix(QString pf) {prefix = pf;};
+    void setPrefix(const QString& pf) {prefix = pf;};
     void setLogging(bool log)  {this->log = log;}
     
 private:

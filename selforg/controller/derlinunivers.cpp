@@ -76,7 +76,7 @@ DerLinUnivers::init(int sensornumber, int motornumber, RandGen* randGen) {
   // if no motorlayer is given, we use the second last (n-1)
   if (conf.motorlayer == -1)
     conf.motorlayer = conf.net->getLayerNum() - 2;
-  assert(conf.motorlayer < (int)conf.net->getLayerNum());
+  assert(conf.motorlayer < static_cast<int>(conf.net->getLayerNum()));
 
   // the number of neurons in the motorlayer at initialisation time
   //  is considered to be the number of additional neurons in this layer.
@@ -91,7 +91,7 @@ DerLinUnivers::init(int sensornumber, int motornumber, RandGen* randGen) {
   x_buffer = new Matrix[conf.buffersize];
   y_buffer = new Matrix[conf.buffersize];
   v_buffer = new Matrix[conf.buffersize];
-  for (unsigned int k = 0; k < conf.buffersize; k++) {
+  for (unsigned int k = 0; k < conf.buffersize; ++k) {
     x_buffer[k].set(number_sensors, 1);
     y_buffer[k].set(number_motors, 1);
     v_buffer[k].set(number_sensors, 1);
@@ -143,11 +143,11 @@ DerLinUnivers::step(const sensor* x_, int sensornumber, motor* y_, int motornumb
 
     NetUpdate update(modelupdate.weights.size(), modelupdate.bias.size(), modelupdate.other.size());
 
-    double error_factor = calcErrorFactor(v, (int)Enorm);
-    for (unsigned int i = 0; i < update.weights.size(); i++) {
+    double error_factor = calcErrorFactor(v, static_cast<int>(Enorm));
+    for (unsigned int i = 0; i < update.weights.size(); ++i) {
       update.weights[i] = cupdate2.weights[i] - cupdate1.weights[i];
       update.weights[i] *= eps * error_factor;
-      if ((int)i > conf.motorlayer)
+      if (static_cast<int>(i) > conf.motorlayer)
         update.weights[i] *= 0;
       update.weights[i] += modelupdate.weights[i] * epsM;
       double n = matrixNorm1(update.weights[i]);
@@ -158,15 +158,15 @@ DerLinUnivers::step(const sensor* x_, int sensornumber, motor* y_, int motornumb
         update.weights[i] *= 0;
       }
     }
-    for (unsigned int i = 0; i < update.bias.size(); i++) {
+    for (unsigned int i = 0; i < update.bias.size(); ++i) {
       update.bias[i] = cupdate2.bias[i] - cupdate1.bias[i];
       update.bias[i] *= eps * error_factor;
-      if ((int)i > conf.motorlayer)
+      if (static_cast<int>(i) > conf.motorlayer)
         update.bias[i] *= 0;
       update.bias[i] += modelupdate.bias[i] * epsM;
       update.bias[i].toMapP(&conf.squashsize, squash);
     }
-    for (unsigned int i = 0; i < update.other.size(); i++) {
+    for (unsigned int i = 0; i < update.other.size(); ++i) {
       update.other[i] = cupdate2.other[i] - cupdate1.other[i];
       update.other[i] *= eps * error_factor;
       update.other[i] += modelupdate.other[i] * epsM;
@@ -178,14 +178,14 @@ DerLinUnivers::step(const sensor* x_, int sensornumber, motor* y_, int motornumb
     eps += epsDyn;
   }
   // update step counter
-  t++;
+  ++t;
 };
 
 void
 DerLinUnivers::stepNoLearning(const sensor* x, int number_sensors, motor* y, int number_motors) {
   fillBuffersAndControl(x, number_sensors, y, number_motors);
   // update step counter
-  t++;
+  ++t;
 };
 
 void
@@ -193,8 +193,8 @@ DerLinUnivers::fillBuffersAndControl(const sensor* x_,
                                      int number_sensors,
                                      motor* y_,
                                      int number_motors) {
-  assert((unsigned)number_sensors == this->number_sensors &&
-         (unsigned)number_motors == this->number_motors);
+  assert(static_cast<unsigned>(number_sensors) == this->number_sensors &&
+         static_cast<unsigned>(number_motors) == this->number_motors);
 
   Matrix x(number_sensors, 1, x_);
 
@@ -222,15 +222,15 @@ DerLinUnivers::calculateControllerValues(const matrix::Matrix& x) {
 Matrix
 DerLinUnivers::calculateSmoothValues(const Matrix* buffer, int number_steps_for_averaging_) {
   // number_steps_for_averaging_ must not be larger than buffersize
-  assert((unsigned)number_steps_for_averaging_ <= conf.buffersize);
+  assert(static_cast<unsigned>(number_steps_for_averaging_) <= conf.buffersize);
   matrix::Matrix result(buffer[t % conf.buffersize]);
-  for (int k = 1; k < number_steps_for_averaging_; k++) {
+  for (int k = 1; k < number_steps_for_averaging_; ++k) {
     result += buffer[(t - k + conf.buffersize) % conf.buffersize];
   }
   if (number_steps_for_averaging_ == 1)
     return result;
   else
-    return result * (1 / ((double)(number_steps_for_averaging_)));
+    return result * (1 / (static_cast<double>(number_steps_for_averaging_)));
 };
 
 double

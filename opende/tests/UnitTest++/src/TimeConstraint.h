@@ -11,12 +11,12 @@ class TestDetails;
 class TimeConstraint
 {
 public:
-    TimeConstraint(int ms, TestResults& result, TestDetails const& details);
+    TimeConstraint(int ms, TestResults& result, TestDetails const& details) override;
     ~TimeConstraint();
 
 private:
-    void operator=(TimeConstraint const&); 
-	TimeConstraint(TimeConstraint const&);
+    void operator=(TimeConstraint const&) override;
+	TimeConstraint(TimeConstraint const&) override;
 
 	Timer m_timer;
     TestResults& m_result;

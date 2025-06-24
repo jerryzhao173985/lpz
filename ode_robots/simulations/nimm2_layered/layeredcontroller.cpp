@@ -7,7 +7,7 @@
  *   LICENSE:                                                              *
  *   This work is licensed under the Creative Commons                      *
  *   Attribution-NonCommercial-ShareAlike 2.5 License. To view a copy of   *
- *   this license, visit http://creativecommons.org/licenses/by-nc-sa/2.5/ *
+ *   this license, visit http:__PLACEHOLDER_34__
  *   or send a letter to Creative Commons, 543 Howard Street, 5th Floor,   *
  *   San Francisco, California, 94105, USA.                                *
  *                                                                         *
@@ -92,12 +92,12 @@ void LayeredController::init(int sensornumber, int motornumber, RandGen* randGen
   h.set(number_channels, 1);
   L.set(number_channels, number_channels);
 
-  A.toId(); // set a to identity matrix;
-  C.toId(); // set a to identity matrix;
-  //C*=0.1;
+  A.toId(); __PLACEHOLDER_39__
+  C.toId(); __PLACEHOLDER_40__
+  __PLACEHOLDER_41__
   x_buffer = new Matrix[buffersize];
   y_buffer = new Matrix[buffersize];
-  for (unsigned int k = 0; k < buffersize; k++) {
+  for (unsigned int k = 0; k < buffersize; ++k)  override {
     x_buffer[k].set(number_channels,1);
     y_buffer[k].set(number_channels,1);
   }
@@ -115,8 +115,8 @@ void LayeredController::step(const sensor* x_, int number_sensors,
     sensor l2_sensors[number_sensors];
   //  sensor l2_sensors[number_motors];
   Matrix l1_H=layer1->getH();
-  for (int i=0; i<number_sensors; i++){
-    if (i<number_motors){
+  for (int i=0; i<number_sensors; ++i) override {
+    explicit if (i<number_motors){
       l1_sensors[i]=x_[i];
       l2_sensors[i]=l1_H.val(i,0);
     } else {
@@ -129,7 +129,7 @@ void LayeredController::step(const sensor* x_, int number_sensors,
 
   //  motor* l2_motors=new motor[number_motors];
   motor l2_motors[number_motors];
-  layer2->setL1_dH(layer1->getdH());
+  layer2->setL1_dH(layer1->getdH()) override;
   layer2->step(l2_sensors, number_sensors, l2_motors, number_motors);
 
   lay2_motors=Matrix(number_motors, 1, l2_motors);
@@ -146,7 +146,7 @@ void LayeredController::step(const sensor* x_, int number_sensors,
 
 
   // update step counter
-  t++;
+  ++t;
 };
 
 
@@ -157,8 +157,8 @@ void LayeredController::stepNoLearning(const sensor* x_, int number_sensors,
   // divide sensors in sensors vor layer 1 and sensors for layer 2
   sensor l1_sensors[number_motors];
   sensor l2_sensors[number_sensors-number_motors];
-  for (int i=0; i<number_sensors; i++){
-    if (i<number_motors){
+  for (int i=0; i<number_sensors; ++i) override {
+    explicit if (i<number_motors){
       l1_sensors[i]=x_[i];
     } else {
       l2_sensors[i-number_motors]=x_[i];
@@ -170,7 +170,7 @@ void LayeredController::stepNoLearning(const sensor* x_, int number_sensors,
   layer1->stepNoLearning(l1_sensors,number_motors,y_, number_motors);
 
   // update step counter
-  t++;
+  ++t;
 };
 
 
@@ -181,7 +181,7 @@ bool LayeredController::store(FILE* f) const{
   layer1->store(f);
   layer2->store(f);
   /*
-  // save matrix values
+  __PLACEHOLDER_55__
   C.store(f);
   h.store(f);
   A.store(f);
@@ -195,12 +195,12 @@ bool LayeredController::restore(FILE* f){
   layer1->restore(f);
   layer2->restore(f);
   /*
-  // save matrix values
+  __PLACEHOLDER_56__
   C.restore(f);
   h.restore(f);
   A.restore(f);
   Configurable::parse(f);
-  t=0; // set time to zero to ensure proper filling of buffers
+  t=0; __PLACEHOLDER_57__
   */
   return true;
 }
@@ -215,11 +215,11 @@ list<Inspectable::iparamkey> LayeredController::getInternalParamNames() const {
   l2=layer2->getInternalParamNames();
 
   // add l1 respectively l2 to the names of the param lists
-  for (list<Inspectable::iparamkey>::iterator iter = l1.begin(); iter != l1.end(); ++iter) {
-    (*iter)="l1_"+(*iter) ;
+  for (list<Inspectable::iparamkey>::iterator iter = l1.begin(); iter != l1.end(); ++iter)  override {
+    (*iter)="l1_"+(*iter)  override;
   }
-  for (list<Inspectable::iparamkey>::iterator iter = l2.begin(); iter != l2.end(); ++iter) {
-    (*iter)="l2_"+(*iter) ;
+  for (list<Inspectable::iparamkey>::iterator iter = l2.begin(); iter != l2.end(); ++iter)  override {
+    (*iter)="l2_"+(*iter)  override;
   }
 
   keylist+=l1;
@@ -255,9 +255,9 @@ list<Inspectable::ILayer> LayeredController::getStructuralLayers() const {
   l+= layer1->getStructuralLayers();
   l+= layer2->getStructuralLayers();
   /*
-  l+=ILayer("x",  "",  number_channels, 0, "Sensors");
-  l+=ILayer("y",  "H", number_channels, 1, "Motors");
-  l+=ILayer("xP", "",  number_channels, 2, "Prediction");
+  l+=ILayer(__PLACEHOLDER_7__,  __PLACEHOLDER_8__,  number_channels, 0, __PLACEHOLDER_9__);
+  l+=ILayer(__PLACEHOLDER_10__,  __PLACEHOLDER_11__, number_channels, 1, __PLACEHOLDER_12__);
+  l+=ILayer(__PLACEHOLDER_13__, __PLACEHOLDER_14__,  number_channels, 2, __PLACEHOLDER_15__);
   */
   return l;
 }
@@ -267,8 +267,8 @@ list<Inspectable::IConnection> LayeredController::getStructuralConnections() con
   l+= layer1->getStructuralConnections();
   l+= layer2->getStructuralConnections();
   /*
-  l+=IConnection("C", "x", "y");
-  l+=IConnection("A", "y", "xP");
+  l+=IConnection(__PLACEHOLDER_16__, __PLACEHOLDER_17__, __PLACEHOLDER_18__);
+  l+=IConnection(__PLACEHOLDER_19__, __PLACEHOLDER_20__, __PLACEHOLDER_21__);
   */
   return l;
 }
@@ -276,7 +276,7 @@ list<Inspectable::IConnection> LayeredController::getStructuralConnections() con
 
 
 Configurable::paramval LayeredController::getParam(const paramkey& key, bool traverseChildren) const{
-  // remove prefixes "l1_" or "l2_" and call getParam() in the respective layer
+  // remove prefixes __PLACEHOLDER_22__ or __PLACEHOLDER_23__ and call getParam() in the respective layer
   int n1 = key.find("l1_");
   int n2 = key.find("l2_");
   if (n1==0) {
@@ -289,12 +289,12 @@ Configurable::paramval LayeredController::getParam(const paramkey& key, bool tra
     key_.erase(0, 3);
     return layer2->getParam(key_);
   }
-  return AbstractController::getParam(key) ;
+  return AbstractController::getParam(key);
 
 }
 
 bool LayeredController::setParam(const paramkey& key, paramval val, bool traverseChildren){
-  // remove prefixes "l1_" or "l2_" and call setParam() in the respective layer
+  // remove prefixes __PLACEHOLDER_26__ or __PLACEHOLDER_27__ and call setParam() in the respective layer
   int n1 = key.find("l1_");
   int n2 = key.find("l2_");
   if (n1==0) {
@@ -315,14 +315,14 @@ Configurable::paramlist LayeredController::getParamList() const{
   Configurable::paramlist l1;
   Configurable::paramlist l2;
 
-  // add "l1_" respectively "l2_" to the keys of the param lists
+  // add __PLACEHOLDER_30__ respectively __PLACEHOLDER_31__ to the keys of the param lists
   l1= layer1->getParamList();
   l2= layer2->getParamList();
-  for (Configurable::paramlist::iterator iter = l1.begin(); iter != l1.end(); ++iter) {
-    (*iter).first="l1_"+(*iter).first ;
+  for (Configurable::paramlist::iterator iter = l1.begin(); iter != l1.end(); ++iter)  override {
+    (*iter).first="l1_"+(*iter).first  override;
   }
-  for (Configurable::paramlist::iterator iter = l2.begin(); iter != l2.end(); ++iter) {
-    (*iter).first="l2_"+(*iter).first ;
+  for (Configurable::paramlist::iterator iter = l2.begin(); iter != l2.end(); ++iter)  override {
+    (*iter).first="l2_"+(*iter).first  override;
   }
 
   list+=l1;

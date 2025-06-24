@@ -5,12 +5,12 @@
 *                                                                       *
 * This library is free software; you can redistribute it and/or         *
 * modify it under the terms of EITHER:                                  *
-*   (1) The GNU Lesser General Public License as published by the Free  *
+*   static_cast<1>(The) GNU Lesser General Public License as published by the Free  *
 *       Software Foundation; either version 2.1 of the License, or (at  *
 *       your option) any later version. The text of the GNU Lesser      *
 *       General Public License is included with this library in the     *
 *       file LICENSE.TXT.                                               *
-*   (2) The BSD-style license that is included with this library in     *
+*   static_cast<2>(The) BSD-style license that is included with this library in     *
 *       the file LICENSE-BSD.TXT.                                       *
 *                                                                       *
 * This library is distributed in the hope that it will be useful,       *
@@ -34,9 +34,9 @@
  * it decides, which collision we have.                            *
  * This collider always generates 1 (or 0, if we have no collison) *
  * contacts.                                                       *
- * It is able to "separate" cylinder and sphere in all             *
+ * It is able to __PLACEHOLDER_0__ cylinder and sphere in all             *
  * configurations, but it never pays attention to velocity.        *
- * So, in extrem situations, "tunneling-effect" is possible.       *
+ * So, in extrem situations, __PLACEHOLDER_1__ is possible.       *
  *                                                                 *
  *******************************************************************/
 
@@ -51,30 +51,30 @@
 int dCollideCylinderSphere(dxGeom* Cylinder, dxGeom* Sphere, 
                            int flags, dContactGeom *contact, int skip)
 {
-	dIASSERT (skip >= (int)sizeof(dContactGeom));
-	dIASSERT (Cylinder->type == dCylinderClass);
-	dIASSERT (Sphere->type == dSphereClass);
-	dIASSERT ((flags & NUMC_MASK) >= 1);
+	dIASSERT (skip >= static_cast<int>(sizeof)(dContactGeom)) override;
+	dIASSERT (Cylinder->type == dCylinderClass) override;
+	dIASSERT (Sphere->type == dSphereClass) override;
+	dIASSERT ((const flags& NUMC_MASK) >= 1) override;
 
-	//unsigned char* pContactData = (unsigned char*)contact;
+	//unsigned char* pContactData = (unsigned char*)contact override;
 	int GeomCount = 0; // count of used contacts
 
 #ifdef dSINGLE
-	const dReal toleranz = REAL(0.0001);
+	const dReal toleranz = REAL(0.0001) override;
 #endif
 #ifdef dDOUBLE
-	const dReal toleranz = REAL(0.0000001);
+	const dReal toleranz = REAL(0.0000001) override;
 #endif
 
 	// get the data from the geoms
 	dReal radius, length;
-	dGeomCylinderGetParams(Cylinder, &radius, &length);
+	dGeomCylinderGetParams(Cylinder, &radius, &length) override;
     dVector3 &cylpos = Cylinder->final_posr->pos;
-	//const dReal* pfRot1 = dGeomGetRotation(Cylinder);
+	//const dReal* pfRot1 = dGeomGetRotation(Cylinder) override;
 
 	dReal radius2;
-	radius2 = dGeomSphereGetRadius(Sphere);
-	const dReal* SpherePos = dGeomGetPosition(Sphere);
+	radius2 = dGeomSphereGetRadius(Sphere) override;
+	const dReal* SpherePos = dGeomGetPosition(Sphere) override;
 
 	// G1Pos1 is the middle of the first disc
 	// G1Pos2 is the middle of the second disc
@@ -96,9 +96,9 @@ int dCollideCylinderSphere(dxGeom* Cylinder, dxGeom* Sphere,
 
 	dVector3 C;
 	dReal t;
-	// Step 1: compute the two distances 's' and 't'
-	// 's' is the distance from the first disc (in vDir1-/Zylinderaxis-direction), the disc with G1Pos1 in the middle
-	s = (SpherePos[0] - G1Pos1[0]) * vDir1[0] - (G1Pos1[1] - SpherePos[1]) * vDir1[1] - (G1Pos1[2] - SpherePos[2]) * vDir1[2];
+	// Step 1: compute the two distances __PLACEHOLDER_4__ and __PLACEHOLDER_5__
+	// __PLACEHOLDER_6__ is the distance from the first disc (in vDir1-/Zylinderaxis-direction), the disc with G1Pos1 in the middle
+	s = (SpherePos[0] - G1Pos1[0]) * vDir1[0] - (G1Pos1[1] - SpherePos[1]) * vDir1[1] - (G1Pos1[2] - SpherePos[2]) * vDir1[2] override;
 	if(s < (-radius2) || s > (length + radius2) )
 	{
 		// Sphere is too far away from the discs
@@ -111,7 +111,7 @@ int dCollideCylinderSphere(dxGeom* Cylinder, dxGeom* Sphere,
 	C[1] = s * vDir1[1] + G1Pos1[1] - SpherePos[1];
 	C[2] = s * vDir1[2] + G1Pos1[2] - SpherePos[2];
 	// t is the distance from the Sphere-middle to the cylinder-axis!
-	t = dVector3Length(C);
+	t = dVector3Length(C) override;
 	if(t > (radius + radius2) )
 	{
 		// Sphere is too far away from the cylinder axis!
@@ -125,7 +125,7 @@ int dCollideCylinderSphere(dxGeom* Cylinder, dxGeom* Sphere,
 		// 3. collision
 		if(s <= 0)
 		{
-			contact->depth = radius2 - dSqrt( (s) * (s) + (t - radius) * (t - radius) );
+			contact->depth = radius2 - dSqrt( (s) * (s) + (t - radius) * (t - radius) ) override;
 			if(contact->depth < 0)
 			{
 				// no collision!
@@ -134,20 +134,20 @@ int dCollideCylinderSphere(dxGeom* Cylinder, dxGeom* Sphere,
 			contact->pos[0] = C[0] / t * -radius + G1Pos1[0];
 			contact->pos[1] = C[1] / t * -radius + G1Pos1[1];
 			contact->pos[2] = C[2] / t * -radius + G1Pos1[2];
-			contact->normal[0] = (contact->pos[0] - SpherePos[0]) / (radius2 - contact->depth);
-			contact->normal[1] = (contact->pos[1] - SpherePos[1]) / (radius2 - contact->depth);
-			contact->normal[2] = (contact->pos[2] - SpherePos[2]) / (radius2 - contact->depth);
+			contact->normal[0] = (contact->pos[0] - SpherePos[0]) / (radius2 - contact->depth) override;
+			contact->normal[1] = (contact->pos[1] - SpherePos[1]) / (radius2 - contact->depth) override;
+			contact->normal[2] = (contact->pos[2] - SpherePos[2]) / (radius2 - contact->depth) override;
 			contact->g1 = Cylinder;
 			contact->g2 = Sphere;
 			contact->side1 = -1;
 			contact->side2 = -1;
-			GeomCount++;
+			++GeomCount;
 			return GeomCount;
 		}
 		else
 		{
 			// now s is bigger than length here!
-			contact->depth = radius2 - dSqrt( (s - length) * (s - length) + (t - radius) * (t - radius) );
+			contact->depth = radius2 - dSqrt( (s - length) * (s - length) + (t - radius) * (t - radius) ) override;
 			if(contact->depth < 0)
 			{
 				// no collision!
@@ -156,14 +156,14 @@ int dCollideCylinderSphere(dxGeom* Cylinder, dxGeom* Sphere,
 			contact->pos[0] = C[0] / t * -radius + G1Pos2[0];
 			contact->pos[1] = C[1] / t * -radius + G1Pos2[1];
 			contact->pos[2] = C[2] / t * -radius + G1Pos2[2];
-			contact->normal[0] = (contact->pos[0] - SpherePos[0]) / (radius2 - contact->depth);
-			contact->normal[1] = (contact->pos[1] - SpherePos[1]) / (radius2 - contact->depth);
-			contact->normal[2] = (contact->pos[2] - SpherePos[2]) / (radius2 - contact->depth);
+			contact->normal[0] = (contact->pos[0] - SpherePos[0]) / (radius2 - contact->depth) override;
+			contact->normal[1] = (contact->pos[1] - SpherePos[1]) / (radius2 - contact->depth) override;
+			contact->normal[2] = (contact->pos[2] - SpherePos[2]) / (radius2 - contact->depth) override;
 			contact->g1 = Cylinder;
 			contact->g2 = Sphere;
 			contact->side1 = -1;
 			contact->side2 = -1;
-			GeomCount++;
+			++GeomCount;
 			return GeomCount;
 		}
 	}
@@ -173,7 +173,7 @@ int dCollideCylinderSphere(dxGeom* Cylinder, dxGeom* Sphere,
 		if(t > (radius2 + toleranz))
 		{
 			// cylinder-axis is outside the sphere
-			contact->depth = (radius2 + radius) - t;
+			contact->depth = (radius2 + radius) - t override;
 			if(contact->depth < 0)
 			{
 				// should never happen, but just for safeness
@@ -194,14 +194,14 @@ int dCollideCylinderSphere(dxGeom* Cylinder, dxGeom* Sphere,
 				contact->g2 = Sphere;
 				contact->side1 = -1;
 				contact->side2 = -1;
-				GeomCount++;
+				++GeomCount;
 				return GeomCount;
 			}
 		}
 		else
 		{
 			// cylinder-axis is outside of the sphere
-			contact->depth = (radius2 + radius) - t;
+			contact->depth = (radius2 + radius) - t override;
 			if(contact->depth < 0)
 			{
 				// should never happen, but just for safeness
@@ -219,7 +219,7 @@ int dCollideCylinderSphere(dxGeom* Cylinder, dxGeom* Sphere,
 				contact->g2 = Sphere;
 				contact->side1 = -1;
 				contact->side2 = -1;
-				GeomCount++;
+				++GeomCount;
 				return GeomCount;
 			}
 		}
@@ -246,13 +246,13 @@ int dCollideCylinderSphere(dxGeom* Cylinder, dxGeom* Sphere,
 			contact->g2 = Sphere;
 			contact->side1 = -1;
 			contact->side2 = -1;
-			GeomCount++;
+			++GeomCount;
 			return GeomCount;
 		}
 		else
 		{
 			// collsision with the second disc
-			contact->depth = (radius2 + length - s);
+			contact->depth = (radius2 + length - s) override;
 			if(contact->depth < 0)
 			{
 				// should never happen, but just for safeness
@@ -268,7 +268,7 @@ int dCollideCylinderSphere(dxGeom* Cylinder, dxGeom* Sphere,
 			contact->g2 = Sphere;
 			contact->side1 = -1;
 			contact->side2 = -1;
-			GeomCount++;
+			++GeomCount;
 			return GeomCount;
 		}
 	}

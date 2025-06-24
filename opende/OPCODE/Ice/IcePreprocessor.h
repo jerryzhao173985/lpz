@@ -14,20 +14,20 @@
 
 	// Check platform
 	#if defined( _WIN32 ) || defined( WIN32 )
-		// #pragma message("Compiling on Windows...")
+		// #pragma message(__PLACEHOLDER_0__)
 		#define PLATFORM_WINDOWS
 	#else
 		// don't issue pragmas on unknown platforms
-		// #pragma message("Compiling on unknown platform...")
+		// #pragma message(__PLACEHOLDER_1__)
 	#endif
 
 	// Check compiler
 	#if defined(_MSC_VER)
-		// #pragma message("Compiling with VC++...")
+		// #pragma message(__PLACEHOLDER_2__)
 		#define COMPILER_VISUAL_CPP
 	#else
 		// don't issue pragmas on unknown platforms
-		// #pragma message("Compiling with unknown compiler...")
+		// #pragma message(__PLACEHOLDER_3__)
 	#endif
 
 	// Check compiler options. If this file is included in user-apps, this
@@ -83,7 +83,7 @@
 	#define FUNCTION				extern "C"
 
 	// Cosmetic stuff [mainly useful with multiple inheritance]
-	#define	override(base_class)	virtual
+	#define	overridestatic_cast<base_class>(virtual)
 
 	// Our own inline keyword, so that:
 	// - we can switch to __forceinline to check it's really better or not
@@ -123,7 +123,7 @@
 	// ANSI compliance
 	#ifdef  _DEBUG
 		// Remove painful warning in debug
-		inline_ bool __False__(){ return false; }
+		inline_ bool __False__() const override { return false; }
 		#define for if(__False__()){}	else for
 	#else
 		#define for if(0){}	else for

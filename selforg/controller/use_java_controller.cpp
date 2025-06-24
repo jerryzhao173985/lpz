@@ -8,7 +8,7 @@
 #include <unistd.h>
 #include <vector>
 
-// Removed using namespace std - using explicit std:: prefixes
+// Removed using namespace std - using std:: prefixes
 
 use_java_controller::~use_java_controller() {
 
@@ -207,9 +207,9 @@ use_java_controller::init(int sensornumber, int motornumber, RandGen* randgen) {
 
         if (recvData_controller[counter] == '#') {
           values[m][counter_help] = '\0';
-          m++;
+          ++m;
           counter_help = 0;
-          counter++;
+          ++counter;
         }
         values[m][counter_help++] = recvData_controller[counter];
         if (recvData_controller[counter++] == '\0')
@@ -252,9 +252,9 @@ use_java_controller::init(int sensornumber, int motornumber, RandGen* randgen) {
 
         if (recvData_internalParams[counter] == '#') {
           values_param[m][counter_help] = '\0';
-          m++;
+          ++m;
           counter_help = 0;
-          counter++;
+          ++counter;
         }
         values_param[m][counter_help++] = recvData_internalParams[counter];
         if (recvData_internalParams[counter++] == '\0')
@@ -269,7 +269,7 @@ use_java_controller::init(int sensornumber, int motornumber, RandGen* randgen) {
           break;
         printf("%s\n", values_param[ip]);
         internal_keylist += std::string(values_param[ip]);
-        anz_internal_param++;
+        ++anz_internal_param;
       }
 
       printf("Anzahl der InternalParameter: %d\n", anz_internal_param);
@@ -298,7 +298,7 @@ use_java_controller::init(int sensornumber, int motornumber, RandGen* randgen) {
   server_guilogger_isClosed = false;
 
   motor_values_alt = static_cast<double*>(malloc(motornumber * sizeof(double)));
-  for (int i = 0; i < motornumber; i++) {
+  for (int i = 0; i < motornumber; ++i) {
     motor_values_alt[i] = 0;
   }
 
@@ -339,7 +339,7 @@ use_java_controller::stepNoLearning(const sensor* sensors,
 
     // sammeln der zusendenden daten
     // sensoren
-    for (int i = 0; i < number_sensors - 1; i++) {
+    for (int i = 0; i < number_sensors - 1; ++i) {
       snprintf(temp, BUFFER_SIZE, "%f&", sensors[i]);
       strcat(temp1, temp);
     }
@@ -347,7 +347,7 @@ use_java_controller::stepNoLearning(const sensor* sensors,
     strcat(temp1, temp);
 
     // motoren
-    for (int i = 0; i < number_motors - 1; i++) {
+    for (int i = 0; i < number_motors - 1; ++i) {
       snprintf(temp, BUFFER_SIZE, "%f&", motors[i]);
       strcat(temp1, temp);
     }
@@ -368,10 +368,9 @@ use_java_controller::stepNoLearning(const sensor* sensors,
     // recv() blockiert nicht
     fcntl(client_controller, F_SETFL, O_NONBLOCK);
     int bytes = recv(client_controller, recvData_controller, sizeof(recvData_controller) - 1, 0);
-    // if ( bytes == -1 ) { printf ( "Fehler beim Empfangen der Daten vom
-    // Java-Controller(stepNoLearning)\nProgramm beendet!\n" );exit ( 1 );}
+    // if ( bytes == -1 ) { printf ( __PLACEHOLDER_34__ );exit ( 1 );}
     recvData_controller[bytes] = '\0';
-    // printf("hier-%d-%sENDE\n",bytes,recvData_controller);
+    // printf(__PLACEHOLDER_35__,bytes,recvData_controller);
 
     if (bytes > 0 && strlen(recvData_controller) != 0 && recvData_controller[0] == 'X') {
       printf("\n%s - Controller-Socket geschlossen", name);
@@ -380,7 +379,7 @@ use_java_controller::stepNoLearning(const sensor* sensors,
       server_controller_isClosed = true;
     }
 
-    // if(bytes == 0) printf("0\n");
+    // if(bytes == 0) printf(__PLACEHOLDER_37__);
 
     if (bytes > 0 && strlen(recvData_controller) != 0 && recvData_controller[0] == 'N') {
       can_send = true;
@@ -395,9 +394,9 @@ use_java_controller::stepNoLearning(const sensor* sensors,
       while (1) {
         if (recvData_controller[counter] == '#') {
           values[m][counter_help] = '\0';
-          m++;
+          ++m;
           counter_help = 0;
-          counter++;
+          ++counter;
         }
         values[m][counter_help++] = recvData_controller[counter];
         if (recvData_controller[counter++] == '\0')
@@ -405,7 +404,7 @@ use_java_controller::stepNoLearning(const sensor* sensors,
       }
 
       // übergeben der Motorwerte an den Robot
-      for (int i = 0; i < number_motors; i++) {
+      for (int i = 0; i < number_motors; ++i) {
         // nach float casten
         double floatval;
         floatval = atof(values[i]);
@@ -420,7 +419,7 @@ use_java_controller::stepNoLearning(const sensor* sensors,
     // wenn fehler beim empfang, alte Motorwerte benutzen
     // java-Controller hat noch keine neuen werte gesendet
     {
-      // printf("%d",bytes);
+      // printf(__PLACEHOLDER_38__,bytes);
       if (!isFirst)
         can_send = false;
       motors = motor_values_alt;
@@ -457,16 +456,16 @@ use_java_controller::stepNoLearning(const sensor* sensors,
 
         if (recvData_internalParams[counter] == '#') {
           values_param[m][counter_help] = '\0';
-          m++;
+          ++m;
           counter_help = 0;
-          counter++;
+          ++counter;
         }
         values_param[m][counter_help++] = recvData_internalParams[counter];
         if (recvData_internalParams[counter++] == '\0')
           break;
       }
 
-      for (int ip = 0; ip <= anz_internal_param; ip++) {
+      for (int ip = 0; ip <= anz_internal_param; ++ip) {
         internal_vallist += atof(values_param[ip]);
       }
 
@@ -541,12 +540,12 @@ use_java_controller::getParamList() const {
 }
 
 // guilogger
-list<Inspectable::iparamkey>
+std::list<Inspectable::iparamkey>
 use_java_controller::getInternalParamNames() const {
   return internal_keylist;
 }
 
-list<Inspectable::iparamval>
+std::list<Inspectable::iparamval>
 use_java_controller::getInternalParams() const {
   return internal_vallist;
 }

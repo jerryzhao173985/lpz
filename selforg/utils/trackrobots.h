@@ -38,19 +38,18 @@ class TraceDrawer;
 } // namespace lpzrobots
 
 struct TrackRobotConf {
-  bool trackPos;
-  bool trackSpeed;
-  bool trackOrientation;
-  bool displayTrace;
-  double displayTraceDur;       ///< duration in second to display the trace
-  double displayTraceThickness; ///< if thickkness is 0 (default) then a line is used otherwise a
-                                ///< cylinder
+  bool trackPos = true;              ///< whether to track position
+  bool trackSpeed = false;           ///< whether to track speed
+  bool trackOrientation = false;     ///< whether to track orientation
+  bool displayTrace = false;         ///< display the trace
+  int displayTraceDur = 60;          ///< duration of trace display
+  double displayTraceThickness = 0.0;///< thickness of trace cylinder
+  int interval = 1;                  ///< interval between tracking events
+  bool writeFile = true;             ///< whether to write to file
+  bool autoFilename = true;          ///< generate filename automatically
 
-  bool writeFile;    ///< whether to write a log file
-  int interval;      ///< every how many control steps a record is written
   std::string scene; ///< used as part of the filename (used as is (+id), if autoFilename=false)
-  bool autoFilename; ///< whether to create a unique filename with date, scene and robotname
-  int id;
+  int id = 0;
 };
 
 /**
@@ -65,7 +64,7 @@ public:
   friend class lpzrobots::TraceDrawer;
 
   /// constructor for no tracking at all
-  explicit TrackRobot(TrackRobotConf conf = getDefaultConf())
+  TrackRobot(TrackRobotConf conf = getDefaultConf())
     : conf(conf)
     , enabledDuringVideo(false)
     , file(0)
@@ -81,7 +80,7 @@ public:
     conf.displayTraceThickness = 0.0;
     conf.interval = 1;
     conf.writeFile = true;
-    //    conf.scene           = "";
+    //    conf.scene           = __PLACEHOLDER_0__;
     conf.id = -1; // disabled
     conf.autoFilename = true;
     return conf;

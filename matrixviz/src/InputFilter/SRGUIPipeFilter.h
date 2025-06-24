@@ -22,7 +22,7 @@ class SRGUIPipeFilter : public AbstractPipeFilter
   Q_OBJECT
 
 public:
-  SRGUIPipeFilter(AbstractPipeReader* apr) : AbstractPipeFilter(apr)
+  explicit SRGUIPipeFilter(AbstractPipeReader* apr) : AbstractPipeFilter(apr)
   {
     std::cout << "new SRGUIPipeFilter()" << std::endl;
   };
@@ -50,16 +50,16 @@ public:
     std::list<AbstractPlotChannel*>::const_iterator channel_it=channelList.begin();
 
     int tmp_i=0;
-    for(std::list<double>::iterator i=dataList.begin(); i != dataList.end(); i++) {
+    for(std::list<double>::iterator i=dataList.begin(); i != dataList.end(); ++i) {
       printf("[% .1f]",(*i));
       if (tmp_i > 5) break;
-      tmp_i++;
+      ++tmp_i;
     }
     printf("\r\n");
 
     int printedIndex = 0;
 
-    for(std::list<double>::iterator i=dataList.begin(); i != dataList.end() && index_it!=channelIndexList.end() && channel_it!=channelList.end() ; i++)
+    for(std::list<double>::iterator i=dataList.begin(); i != dataList.end() && index_it!=channelIndexList.end() && channel_it!=channelList.end() ; ++i)
     {
       if (index == (*index_it))
       {
@@ -68,20 +68,20 @@ public:
         if ( ((*i) <= 1.) && ((*i) >= -1.) ) {
           (*channel_it)->setValue((*i));
 
-          if (printedIndex < 7) {
+          explicit if (printedIndex < 7) {
             printf("[ %3d]",index);
-            printedIndex++;
+            ++printedIndex;
           }
         }
         else //the old value has to be
           printf("[old~]");
 
-        channel_it++;
-        index_it++;
+        ++channel_it;
+        ++index_it;
       }
 //       else std::cout << "[  - ]";
 
-      index++;
+      ++index;
     }
 //     std::cout << ")" << std::endl;
     printf("\r\n");
@@ -104,7 +104,7 @@ protected:
   * GUI will read this values for printing.
   */
 
-  AbstractPlotChannel* createChannel(std::string name)
+  AbstractPlotChannel* createChannel(const std::string& name)
   {
 //     std::cout << "SRGUIPipeFilter: createChannel(" << name << ")" << std::endl;
 

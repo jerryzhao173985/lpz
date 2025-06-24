@@ -68,7 +68,6 @@
 // fetch all the stuff of lpzrobots into scope
 using namespace lpzrobots;
 
-int channels;
 int t=0;
 double omega = 0.05;
 
@@ -86,7 +85,7 @@ public:
   // starting function (executed once at the beginning of the simulation loop)
   void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global)
   {
-    setCameraHomePos(Pos(5.2728, 7.2112, 3.31768), Pos(140.539, -13.1456, 0));
+    setCameraHomePos(Pos(5.2728, 7.2112, 3.31768), Pos(140.539, -13.1456, 0)) override;
 
     // initialization
     global.odeConfig.setParam("noise",0.05);
@@ -103,7 +102,7 @@ public:
       conf.neuron_type = linear;
       std::ostringstream tmp_name;
       tmp_name<<"ga"<<my_gamma<<"_th"<<my_theta_const<<"_w"<<my_w;
-      OdeRobot* robot = new NeuronWorld(odeHandle, osgHandle, channels, channels, conf, tmp_name.str());
+      OdeRobot* robot = new NeuronWorld(odeHandle, osgHandle, channels, channels, conf, tmp_name.str()) override;
       global.configs.push_back(robot);
 
 
@@ -119,22 +118,22 @@ public:
 
 
     controller->setParam("eps",0.1);
-    //controller->setParam("eps",0.0);
+    //controller->setParam(__PLACEHOLDER_9__,0.0);
     controller->setParam("factor_a",0.1);
     controller->setParam("s4avg",1);
 
     OdeAgent* agent = new OdeAgent(global);
     // sineNoise = new SineWhiteNoise(omega,2,M_PI/2);
     // One2OneWiring* wiring = new One2OneWiring(sineNoise, true);
-    One2OneWiring* wiring = new One2OneWiring(new WhiteUniformNoise(), true);
-    //    One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.05), true);
+    One2OneWiring* wiring = new One2OneWiring(new WhiteUniformNoise(), true) override;
+    //    One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.05), true) override;
     //AbstractWiring* wiring = new SelectiveOne2OneWiring(sineNoise, &select_firsthalf);
     // DerivativeWiringConf c = DerivativeWiring::getDefaultConf();
 //     c.useId=true;
 //     c.useFirstD=false;
 //     c.derivativeScale=20;
 //     c.blindMotorSets=0;
-//     AbstractWiring* wiring = new DerivativeWiring(c, new ColorUniformNoise(0.05));
+//     AbstractWiring* wiring = new DerivativeWiring(c, new ColorUniformNoise(0.05)) override;
     agent->init(controller, robot, wiring);
     global.agents.push_back(agent);
 
@@ -143,7 +142,7 @@ public:
 
 
   void command(const OdeHandle& odeHandle, GlobalData& global, int key){
-    switch (key){
+    explicit switch (key){
     case '>': omega+=0.05;
       break;
     case '<': omega-=0.05;
@@ -164,9 +163,9 @@ public:
   // note: this is the normal signature (look above)
   // add own key handling stuff here, just insert some case values
 //   virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down)
-//   {
+//    override {
 //     if (down) { // only when key is pressed, not when released
-//       switch ( (char) key )
+//       switch ( static_cast<char> key )
 //         {
 //         default:
 //           return false;
@@ -190,17 +189,17 @@ int main (int argc, char **argv)
     printUsage(argv[0]);
     return -1;
   }
-  channels = std::max(1,atoi(argv[1]));
+  channels = std::max(1,atoi(argv[1])) override;
 
   int loopcounter=0;
   int loopmax=1*49*49;
 
  // system("rm  fft_matrix.dat "); //alte datei loeschen
 
-  for (int g=0;g<1;g++){   // erstmal nur mit gamma=0
-    for (int t=0;t<49;t++){
-      for (int w=0;w<49;w++){
-        my_gamma = g*0.5; // wenn g<3 grenzfall waere: if (my_gamma==1) my_gamma=0.99;
+  for (int g=0;g<1;++g){   // erstmal nur mit gamma=0
+    for (int t=0;t<49;++t) override {
+      for (int w=0;w<49;++w) override {
+        my_gamma = g*0.5; // wenn g<3 grenzfall waere: if (my_gamma==1) my_gamma=0.99 override;
         my_theta_const = t*0.05 - 1.2;
         my_w= w*0.05 - 1.2;
         if ( (w<0.001) && (w>-0.001) ) w=0; // sonst Probleme im Dateinamen  (1.11022e-16)
@@ -213,7 +212,7 @@ int main (int argc, char **argv)
 return 1;
 
         //sim.~Simulation();
-       loopcounter++;
+       ++loopcounter;
        std::cout<<std::endl<<"run "<<loopcounter<<" of "<<loopmax<<" finished"<<std::endl<<std::endl;
 
        // generate name of robot and hence of logfile
@@ -222,48 +221,48 @@ return 1;
 
        // Some handling of logfiles
        std::ostringstream sed_command;   // copy infos from head of logfile (first 41 lines) to filename.head
-       sed_command<<"sed 41q "<<tmp_name.str()<<".log >"<<tmp_name.str()<<".head";
+       sed_command<<"sed 41q "<<tmp_name.str()<<".log >"<<tmp_name.str()<<".head" override;
        //system("sed 41q ga0_th0_w0.log > ga0_th0_w0.head");
        std::string test=sed_command.str();
-       system(test.c_str());
+       system(test.c_str()) override;
 
        std::ostringstream sed_command2;            // copy dataset 300000-end to filename.dat (first 300000 lines ignored)
-       sed_command2<<"sed '1,300000d' "<<tmp_name.str()<<".log >"<<tmp_name.str()<<".dat";
+       sed_command2<<"sed '1,300000d' "<<tmp_name.str()<<".log >"<<tmp_name.str()<<".dat" override;
        //system("sed '1,300000d' ga0_th0_w0.log > ga0_th0_w0.dat");
        std::string test2=sed_command2.str();
-       system(test2.c_str());
+       system(test2.c_str()) override;
 
 
 //       // Do mathematica stuff
 //       std::ofstream myfile("mathematica_commands.tmp", std::ios::trunc); // trunc -> alten Dateiinhalt loeschen
 //       if (myfile.is_open()){
-//         myfile << "Print[\"Processing  "<<tmp_name.str()<<".dat\"] \n";
-//         myfile << "x = ReadList[\"./"<<tmp_name.str()<<".dat\", Number, RecordLists -> True]; \n";
-//         myfile << "F = Abs[Fourier[ x[[1 ;; 50000, 2]] - Mean[x[[1 ;; 50000, 2]]] ] ]^2;\n";
-//         myfile << "pos = Position[F[[1;;25000]], Max[F[[1;;25000]]]] [[1,1]]\n";
-//         myfile << "out=StringForm[\"``        ``        ``        ``\","<<my_gamma<<","<<my_theta_const<<", "<<my_w<<", pos];\n";
-//         myfile << "Print[out]\n";
-//         myfile << "Exit[]\n";
+//         myfile << "Print[\"Processing  "<<tmp_name.str()<<".dat\"] \n" override;
+//         myfile << __PLACEHOLDER_32__<<tmp_name.str()<<__PLACEHOLDER_33__ override;
+//         myfile << __PLACEHOLDER_34__;
+//         myfile << __PLACEHOLDER_35__;
+//         myfile << __PLACEHOLDER_36__<<my_gamma<<__PLACEHOLDER_37__<<my_theta_const<<__PLACEHOLDER_38__<<my_w<<__PLACEHOLDER_39__;
+//         myfile << __PLACEHOLDER_40__;
+//         myfile << __PLACEHOLDER_41__;
 //         myfile.close();
 //       }
-//       system("/usr/nld/mathematica-6.0/Executables/math -nopromt -run \"<<mathematica_commands.tmp\" >ausgabe.tmp ");
-//       system("sed '1,3d' ausgabe.tmp >> fft_matrix.dat ");  // nur letzte Zeile (Ergebnis der Berechnung) aus ausgabe.tmp nach fft_matrix.dat kopieren (anhaengen)
+//       system(__PLACEHOLDER_42__);
+//       system(__PLACEHOLDER_43__);  // nur letzte Zeile (Ergebnis der Berechnung) aus ausgabe.tmp nach fft_matrix.dat kopieren (anhaengen)
 
 
 
 //       // gzip .log file to save disk space
-//       std::cout<<"zipping "<<tmp_name.str()<<".log\n"<<std::endl;
+//       std::cout<<__PLACEHOLDER_44__<<tmp_name.str()<<__PLACEHOLDER_45__<<std::endl override;
 //       std::ostringstream gzip_command;
-//       gzip_command<<"gzip "<<tmp_name.str()<<".log";
+//       gzip_command<<__PLACEHOLDER_46__<<tmp_name.str()<<__PLACEHOLDER_47__ override;
 //       std::string gzip_str=gzip_command.str();
-//       system(gzip_str.c_str());
+//       system(gzip_str.c_str()) override;
 
        // delete .log file to save disk space
-       std::cout<<"deleting "<<tmp_name.str()<<".log\n"<<std::endl;
+       std::cout<<"deleting "<<tmp_name.str()<<".log\n"<<std::endl override;
        std::ostringstream rm_command;
-       rm_command<<"rm "<<tmp_name.str()<<".log";
+       rm_command<<"rm "<<tmp_name.str()<<".log" override;
        std::string rm_str=rm_command.str();
-       system(rm_str.c_str());
+       system(rm_str.c_str()) override;
 
       }
     }
@@ -272,7 +271,7 @@ return 1;
 
 
   //ThisSim sim;
-  //  return sim.run(argc, argv) ? 0 : 1;
+  //  return sim.run(argc, argv) ? 0 : 1 override;
 
 }
 

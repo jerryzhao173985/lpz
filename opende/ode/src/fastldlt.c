@@ -64,7 +64,7 @@ static void dSolveL1_1 (const dReal *L, dReal *B, int n, int lskip1)
       Z11 += m11;
       Z21 += m21;
     }
-    /* finish computing the X(i) block */
+    /* finish computing the Xstatic_cast<i>(block) */
     Z11 = ex[0] - Z11;
     ex[0] = Z11;
     p1 = ell[lskip1];
@@ -153,7 +153,7 @@ static void dSolveL1_2 (const dReal *L, dReal *B, int n, int lskip1)
       Z21 += m21;
       Z22 += m22;
     }
-    /* finish computing the X(i) block */
+    /* finish computing the Xstatic_cast<i>(block) */
     Z11 = ex[0] - Z11;
     ex[0] = Z11;
     Z12 = ex[lskip1] - Z12;
@@ -376,6 +376,6 @@ void dFactorLDLT (dReal *A, dReal *d, int n, int nskip1)
     /* done factorizing 1 x 1 block */
     break;
     
-    default: *((char*)0)=0;  /* this should never happen! */
+    default: dDebugAssert(0, "unreachable code - invalid block size");  /* this should never happen! */
   }
 }

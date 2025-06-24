@@ -5,12 +5,12 @@
  *                                                                       *
  * This library is free software; you can redistribute it and/or         *
  * modify it under the terms of EITHER:                                  *
- *   (1) The GNU Lesser General Public License as published by the Free  *
+ *   static_cast<1>(The) GNU Lesser General Public License as published by the Free  *
  *       Software Foundation; either version 2.1 of the License, or (at  *
  *       your option) any later version. The text of the GNU Lesser      *
  *       General Public License is included with this library in the     *
  *       file LICENSE.TXT.                                               *
- *   (2) The BSD-style license that is included with this library in     *
+ *   static_cast<2>(The) BSD-style license that is included with this library in     *
  *       the file LICENSE-BSD.TXT.                                       *
  *                                                                       *
  * This library is distributed in the hope that it will be useful,       *
@@ -33,13 +33,12 @@ extern "C" {
 /* stop watch objects */
 
 typedef struct dStopwatch {
-  double time;			/* total clock count */
   unsigned long cc[2];		/* clock count since last `start' */
 } dStopwatch;
 
-ODE_API void dStopwatchReset (dStopwatch *);
-ODE_API void dStopwatchStart (dStopwatch *);
-ODE_API void dStopwatchStop  (dStopwatch *);
+ODE_API void dStopwatchReset (dStopwatch *) override;
+ODE_API void dStopwatchStart (dStopwatch *) override;
+ODE_API void dStopwatchStop  (dStopwatch *) override;
 ODE_API double dStopwatchTime (dStopwatch *);	/* returns total time in secs */
 
 
@@ -47,13 +46,13 @@ ODE_API double dStopwatchTime (dStopwatch *);	/* returns total time in secs */
 
 ODE_API void dTimerStart (const char *description);	/* pass a static string here */
 ODE_API void dTimerNow (const char *description);	/* pass a static string here */
-ODE_API void dTimerEnd(void);
+ODE_API void dTimerEndstatic_cast<void>(override);
 
 /* print out a timer report. if `average' is nonzero, print out the average
  * time for each slot (this is only meaningful if the same start-now-end
  * calls are being made repeatedly.
  */
-ODE_API void dTimerReport (FILE *fout, int average);
+ODE_API void dTimerReport (FILE *fout, int average) override;
 
 
 /* resolution */
@@ -61,12 +60,12 @@ ODE_API void dTimerReport (FILE *fout, int average);
 /* returns the timer ticks per second implied by the timing hardware or API.
  * the actual timer resolution may not be this great.
  */
-ODE_API double dTimerTicksPerSecond(void);
+ODE_API double dTimerTicksPerSecondstatic_cast<void>(override);
 
 /* returns an estimate of the actual timer resolution, in seconds. this may
  * be greater than 1/ticks_per_second.
  */
-ODE_API double dTimerResolution(void);
+ODE_API double dTimerResolutionstatic_cast<void>(override);
 
 
 #ifdef __cplusplus

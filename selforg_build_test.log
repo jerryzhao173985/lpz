@@ -1,0 +1,305 @@
+Makefile:199: Makefile.depend: No such file or directory
+for file in ./abstractrobot.h ./agent.h ./trackable.h ./wiredcontroller.h controller/abstractcontroller.h controller/abstractcontrolleradapter.h controller/abstractiafcontroller.h controller/abstractmodel.h controller/abstractmulticontroller.h controller/braitenberg.h controller/classicreinforce.h controller/controllernet.h controller/crossmotorcoupling.h controller/dep.h controller/derbigcontroller.h controller/dercontroller.h controller/derinf.h controller/derlininvert.h controller/derlinunivers.h controller/derpseudosensor.h controller/dinvert3channelcontroller.h controller/discretecontrolleradapter.h controller/discretesizable.h controller/elman.h controller/esn.h controller/feedforwardnn.h controller/ffnncontroller.h controller/homeokinbase.h controller/invert3channelcontroller.h controller/invertablemodel.h controller/invertcontroller.h controller/invertmotorbigmodel.h controller/invertmotorcontroller.h controller/invertmotornstep.h controller/invertmotorspace.h controller/invertnchannelcontroller.h controller/layer.h controller/measureadapter.h controller/modelwithmemoryadapter.h controller/motorbabbler.h controller/multilayerffnn.h controller/multireinforce.h controller/mutualinformationcontroller.h controller/neuralgas.h controller/oneactivemultipassivecontroller.h controller/onecontrollerperchannel.h controller/onelayerffnn.h controller/pimax.h controller/qlearning.h controller/regularisation.h controller/reinforceable.h controller/remotecontrolled.h controller/replaycontroller.h controller/semox.h controller/sinecontroller.h controller/som.h controller/soml.h controller/sos.h controller/sox.h controller/soxexpand.h controller/splitcontrol.h controller/switchcontroller.h controller/teachable.h controller/universalcontroller.h controller/use_java_controller.h wirings/abstractwiring.h wirings/copywiring.h wirings/derivativewiring.h wirings/feedbackwiring.h wirings/forceboostwiring.h wirings/motornoisewiring.h wirings/one2onewiring.h wirings/selectivenoisewiring.h wirings/selectiveone2onewiring.h wirings/wiringsequence.h utils/avrtypes.h utils/backcaller.h utils/backcallervector.h utils/callbackable.h utils/configurable.h utils/configurablelist.h utils/controller_misc.h utils/datafunc.h utils/discretisizer.h utils/globaldatabase.h utils/inspectable.h utils/inspectableproxy.h utils/lyapunov.h utils/mac_drand48r.h utils/mediator.h utils/mediatorcollegue.h utils/modern_randomgenerator.h utils/modern_storeable.h utils/noisegenerator.h utils/parametrizable.h utils/plotoption.h utils/plotoptionengine.h utils/position.h utils/quickmp.h utils/randomgenerator.h utils/ringbuffer.h utils/sensormotorinfo.h utils/stl_adds.h utils/stl_map.h utils/storeable.h utils/trackrobots.h utils/types.h matrix/matrix_neon.h matrix/matrix.h matrix/matrixutils.h matrix/sparsearray.h matrix/sparsematrix.h statistictools/analysationmodes.h statistictools/measuremodes.h statistictools/statistictools.h statistictools/measure/abstractmeasure.h statistictools/measure/complexmeasure.h statistictools/measure/imeasure.h statistictools/measure/statisticmeasure.h statistictools/measure/trackablemeasure.h statistictools/dataanalysation/templatevalueanalysation.h; do \
+		ln -sf ../../$file include/selforg/; \
+	done
+makedepend -- -Wall -pipe -fpic -I./. -I./controller -I./wirings -I./utils -I./matrix -I./statistictools -I./statistictools/measure -I./statistictools/dataanalysation -Iinclude -Iinclude/selforg -std=c++17 -pthread -I/Users/jerry/lpzrobots/include -I/opt/homebrew/Cellar/gsl/2.8/include -DNOCONFIGURATOR -g -O -- ./agent.cpp ./wiredcontroller.cpp controller/abstractcontroller.cpp controller/abstractiafcontroller.cpp controller/abstractmulticontroller.cpp controller/classicreinforce.cpp controller/controllernet.cpp controller/crossmotorcoupling.cpp controller/dep.cpp controller/derbigcontroller.cpp controller/dercontroller.cpp controller/derinf.cpp controller/derlininvert.cpp controller/derlinunivers.cpp controller/derpseudosensor.cpp controller/discretecontrolleradapter.cpp controller/elman.cpp controller/esn.cpp controller/ffnncontroller.cpp controller/invertmotorbigmodel.cpp controller/invertmotornstep.cpp controller/invertmotorspace.cpp controller/invertnchannelcontroller.cpp controller/layer.cpp controller/measureadapter.cpp controller/modelwithmemoryadapter.cpp controller/motorbabbler.cpp controller/multilayerffnn.cpp controller/multireinforce.cpp controller/mutualinformationcontroller.cpp controller/neuralgas.cpp controller/oneactivemultipassivecontroller.cpp controller/onecontrollerperchannel.cpp controller/onelayerffnn.cpp controller/pimax.cpp controller/qlearning.cpp controller/semox.cpp controller/sinecontroller.cpp controller/som.cpp controller/soml.cpp controller/sos.cpp controller/sox.cpp controller/soxexpand.cpp controller/splitcontrol.cpp controller/switchcontroller.cpp controller/universalcontroller.cpp controller/use_java_controller.cpp wirings/abstractwiring.cpp wirings/copywiring.cpp wirings/derivativewiring.cpp wirings/feedbackwiring.cpp wirings/forceboostwiring.cpp wirings/one2onewiring.cpp wirings/selectiveone2onewiring.cpp wirings/wiringsequence.cpp utils/backcaller.cpp utils/configurable.cpp utils/configurablelist.cpp utils/controller_misc.cpp utils/discretisizer.cpp utils/globaldatabase.cpp utils/inspectable.cpp utils/inspectableproxy.cpp utils/lyapunov.cpp utils/mediator.cpp utils/mediatorcollegue.cpp utils/parametrizable.cpp utils/plotoption.cpp utils/plotoptionengine.cpp utils/randomgenerator.cpp utils/stl_adds.cpp utils/storeable.cpp utils/trackrobots.cpp matrix/matrix_neon.cpp matrix/matrix.cpp matrix/matrixutils.cpp statistictools/statistictools.cpp statistictools/measure/complexmeasure.cpp statistictools/measure/statisticmeasure.cpp statistictools/measure/trackablemeasure.cpp statistictools/dataanalysation/templatevalueanalysation.cpp -p'$(BUILD_DIR)/' -f- > Makefile.depend 2>/dev/null
+g++ -c -Wall -pipe -fpic -I./. -I./controller -I./wirings -I./utils -I./matrix -I./statistictools -I./statistictools/measure -I./statistictools/dataanalysation -Iinclude -Iinclude/selforg -std=c++17 -pthread -I/Users/jerry/lpzrobots/include -I/opt/homebrew/Cellar/gsl/2.8/include -DNOCONFIGURATOR -g -O  -o "build/./agent.o" "agent.cpp"
+g++ -c -Wall -pipe -fpic -I./. -I./controller -I./wirings -I./utils -I./matrix -I./statistictools -I./statistictools/measure -I./statistictools/dataanalysation -Iinclude -Iinclude/selforg -std=c++17 -pthread -I/Users/jerry/lpzrobots/include -I/opt/homebrew/Cellar/gsl/2.8/include -DNOCONFIGURATOR -g -O  -o "build/./wiredcontroller.o" "wiredcontroller.cpp"
+g++ -c -Wall -pipe -fpic -I./. -I./controller -I./wirings -I./utils -I./matrix -I./statistictools -I./statistictools/measure -I./statistictools/dataanalysation -Iinclude -Iinclude/selforg -std=c++17 -pthread -I/Users/jerry/lpzrobots/include -I/opt/homebrew/Cellar/gsl/2.8/include -DNOCONFIGURATOR -g -O  -o "build/controller/abstractcontroller.o" "controller/abstractcontroller.cpp"
+g++ -c -Wall -pipe -fpic -I./. -I./controller -I./wirings -I./utils -I./matrix -I./statistictools -I./statistictools/measure -I./statistictools/dataanalysation -Iinclude -Iinclude/selforg -std=c++17 -pthread -I/Users/jerry/lpzrobots/include -I/opt/homebrew/Cellar/gsl/2.8/include -DNOCONFIGURATOR -g -O  -o "build/controller/abstractiafcontroller.o" "controller/abstractiafcontroller.cpp"
+In file included from agent.cpp:25:
+In file included from ./agent.h:31:
+In file included from ./wiredcontroller.h:31:
+In file included from ./utils/plotoptionengine.h:30:
+./utils/plotoption.h:132:38: error: only virtual member functions can be marked 'override'
+  132 |   const std::string& getName() const override {
+      |                                      ^~~~~~~~
+In file included from wiredcontroller.cpp:25:
+In file included from ./wiredcontroller.h:31:
+In file included from ./utils/plotoptionengine.h:30:
+./utils/plotoption.h:132:38: error: only virtual member functions can be marked 'override'
+  132 |   const std::string& getName() const override {
+      |                                      ^~~~~~~~
+In file included from agent.cpp:25:
+In file included from ./agent.h:31:
+In file included from ./wiredcontroller.h:31:
+In file included from ./utils/plotoptionengine.h:31:
+In file included from include/selforg/abstractcontroller.h:27:
+include/selforg/configurable.h:159:16: error: 'notifyOnChange' marked 'override' but does not override any member functions
+  159 |   virtual void notifyOnChange(const paramkey& key) override {}
+      |                ^
+include/selforg/configurable.h:309:20: error: 'getParam' marked 'override' but does not override any member functions
+  309 |   virtual paramval getParam(const paramkey& key, bool traverseChildren = true) const override;
+      |                    ^
+include/selforg/configurable.h:327:16: error: 'setParam' marked 'override' but does not override any member functions
+  327 |   virtual bool setParam(const paramkey& key, paramval val, bool traverseChildren = true) override;
+      |                ^
+include/selforg/configurable.h:357:21: error: 'getParamList' marked 'override' but does not override any member functions
+  357 |   virtual paramlist getParamList() const override {
+      |                     ^
+include/selforg/configurable.h:397:97: error: only virtual member functions can be marked 'override'
+  397 |   void print(FILE* f, const char* prefix, int columns = 90, bool traverseChildren = true) const override;
+      |                                                                                                 ^~~~~~~~
+include/selforg/configurable.h:406:16: error: 'addConfigurable' marked 'override' but does not override any member functions
+  406 |   virtual void addConfigurable(Configurable* conf) override;
+      |                ^
+include/selforg/configurable.h:412:16: error: 'removeConfigurable' marked 'override' but does not override any member functions
+  412 |   virtual void removeConfigurable(Configurable* conf) override;
+      |                ^
+In file included from wiredcontroller.cpp:25:
+In file included from ./wiredcontroller.h:31:
+In file included from ./utils/plotoptionengine.h:31:
+In file included from include/selforg/abstractcontroller.h:27:
+include/selforg/configurable.h:159:16: error: 'notifyOnChange' marked 'override' but does not override any member functions
+  159 |   virtual void notifyOnChange(const paramkey& key) override {}
+      |                ^
+include/selforg/configurable.h:309:20: error: 'getParam' marked 'override' but does not override any member functions
+  309 |   virtual paramval getParam(const paramkey& key, bool traverseChildren = true) const override;
+      |                    ^
+include/selforg/configurable.h:327:16: error: 'setParam' marked 'override' but does not override any member functions
+  327 |   virtual bool setParam(const paramkey& key, paramval val, bool traverseChildren = true) override;
+      |                ^
+include/selforg/configurable.h:357:21: error: 'getParamList' marked 'override' but does not override any member functions
+  357 |   virtual paramlist getParamList() const override {
+      |                     ^
+include/selforg/configurable.h:397:97: error: only virtual member functions can be marked 'override'
+  397 |   void print(FILE* f, const char* prefix, int columns = 90, bool traverseChildren = true) const override;
+      |                                                                                                 ^~~~~~~~
+include/selforg/configurable.h:406:16: error: 'addConfigurable' marked 'override' but does not override any member functions
+  406 |   virtual void addConfigurable(Configurable* conf) override;
+      |                ^
+include/selforg/configurable.h:412:16: error: 'removeConfigurable' marked 'override' but does not override any member functions
+  412 |   virtual void removeConfigurable(Configurable* conf) override;
+      |                ^
+include/selforg/configurable.h:187:66: error: expected ';' after expression
+  187 |     addParameter(key, val, valDefMinBound, valDefMaxBound, descr) override;
+      |                                                                  ^
+      |                                                                  ;
+include/selforg/configurable.h:187:67: error: use of undeclared identifier 'override'
+  187 |     addParameter(key, val, valDefMinBound, valDefMaxBound, descr) override;
+      |                                                                   ^
+include/selforg/configurable.h:222:66: error: expected ';' after expression
+  222 |     addParameter(key, val, intDefMinBound, intDefMaxBound, descr) override;
+      |                                                                  ^
+      |                                                                  ;
+include/selforg/configurable.h:222:67: error: use of undeclared identifier 'override'
+  222 |     addParameter(key, val, intDefMinBound, intDefMaxBound, descr) override;
+      |                                                                   ^
+include/selforg/configurable.h:236:54: error: expected ';' after expression
+  236 |     addParameter(key, val, minBound, maxBound, descr) override;
+      |                                                      ^
+      |                                                      ;
+include/selforg/configurable.h:236:55: error: use of undeclared identifier 'override'
+  236 |     addParameter(key, val, minBound, maxBound, descr) override;
+      |                                                       ^
+In file included from controller/abstractcontroller.cpp:25:
+In file included from controller/abstractcontroller.h:27:
+./utils/configurable.h:159:16: error: 'notifyOnChange' marked 'override' but does not override any member functions
+  159 |   virtual void notifyOnChange(const paramkey& key) override {}
+      |                ^
+include/selforg/configurable.h:252:34: error: expected ';' after expression
+  252 |     addParameter(key, val, descr) override;
+      |                                  ^
+      |                                  ;
+./utils/configurable.h:309:20: error: 'getParam' marked 'override' but does not override any member functions
+  309 |   virtual paramval getParam(const paramkey& key, bool traverseChildren = true) const override;
+      |                    ^
+./utils/configurable.h:327:16: error: 'setParam' marked 'override' but does not override any member functions
+  327 |   virtual bool setParam(const paramkey& key, paramval val, bool traverseChildren = true) override;
+      |                ^
+./utils/configurable.h:357:21: error: 'getParamList' marked 'override' but does not override any member functions
+  357 |   virtual paramlist getParamList() const override {
+      |                     ^
+./utils/configurable.h:397:97: error: only virtual member functions can be marked 'override'
+  397 |   void print(FILE* f, const char* prefix, int columns = 90, bool traverseChildren = true) const override;
+      |                                                                                                 ^~~~~~~~
+./utils/configurable.h:406:16: error: 'addConfigurable' marked 'override' but does not override any member functions
+  406 |   virtual void addConfigurable(Configurable* conf) override;
+      |                ^
+./utils/configurable.h:412:16: error: 'removeConfigurable' marked 'override' but does not override any member functions
+  412 |   virtual void removeConfigurable(Configurable* conf) override;
+      |                ^
+include/selforg/configurable.h:252:35: error: use of undeclared identifier 'override'
+  252 |     addParameter(key, val, descr) override;
+      |                                   ^
+include/selforg/configurable.h:263:54: error: expected ';' after expression
+  263 |     addParameter(key, val, minBound, maxBound, descr) override;
+      |                                                      ^
+      |                                                      ;
+include/selforg/configurable.h:263:55: error: use of undeclared identifier 'override'
+  263 |     addParameter(key, val, minBound, maxBound, descr) override;
+      |                                                       ^
+include/selforg/configurable.h:187:66: error: expected ';' after expression
+  187 |     addParameter(key, val, valDefMinBound, valDefMaxBound, descr) override;
+      |                                                                  ^
+      |                                                                  ;
+include/selforg/configurable.h:187:67: error: use of undeclared identifier 'override'
+  187 |     addParameter(key, val, valDefMinBound, valDefMaxBound, descr) override;
+      |                                                                   ^
+In file included from agent.cpp:25:
+In file included from ./agent.h:31:
+In file included from ./wiredcontroller.h:31:
+In file included from ./utils/plotoptionengine.h:31:
+In file included from include/selforg/abstractcontroller.h:28:
+include/selforg/inspectable.h:124:25: error: 'getInternalParamNames' marked 'override' but does not override any member functions
+  124 |   virtual iparamkeylist getInternalParamNames() const override;
+      |                         ^
+fatal error: too many errors emitted, stopping now [-ferror-limit=]
+include/selforg/configurable.h:222:66: error: expected ';' after expression
+  222 |     addParameter(key, val, intDefMinBound, intDefMaxBound, descr) override;
+      |                                                                  ^
+      |                                                                  ;
+include/selforg/configurable.h:222:67: error: use of undeclared identifier 'override'
+  222 |     addParameter(key, val, intDefMinBound, intDefMaxBound, descr) override;
+      |                                                                   ^
+include/selforg/configurable.h:236:54: error: expected ';' after expression
+  236 |     addParameter(key, val, minBound, maxBound, descr) override;
+      |                                                      ^
+      |                                                      ;
+include/selforg/configurable.h:236:55: error: use of undeclared identifier 'override'
+  236 |     addParameter(key, val, minBound, maxBound, descr) override;
+      |                                                       ^
+include/selforg/configurable.h:252:34: error: expected ';' after expression
+  252 |     addParameter(key, val, descr) override;
+      |                                  ^
+      |                                  ;
+include/selforg/configurable.h:252:35: error: use of undeclared identifier 'override'
+  252 |     addParameter(key, val, descr) override;
+      |                                   ^
+include/selforg/configurable.h:263:54: error: expected ';' after expression
+  263 |     addParameter(key, val, minBound, maxBound, descr) override;
+      |                                                      ^
+      |                                                      ;
+include/selforg/configurable.h:263:55: error: use of undeclared identifier 'override'
+  263 |     addParameter(key, val, minBound, maxBound, descr) override;
+      |                                                       ^
+In file included from wiredcontroller.cpp:25:
+In file included from ./wiredcontroller.h:31:
+In file included from ./utils/plotoptionengine.h:31:
+In file included from include/selforg/abstractcontroller.h:28:
+include/selforg/inspectable.h:124:25: error: 'getInternalParamNames' marked 'override' but does not override any member functions
+  124 |   virtual iparamkeylist getInternalParamNames() const override;
+      |                         ^
+fatal error: too many errors emitted, stopping now [-ferror-limit=]
+In file included from controller/abstractiafcontroller.cpp:20:
+In file included from controller/abstractiafcontroller.h:24:
+In file included from controller/abstractcontroller.h:27:
+./utils/configurable.h:159:16: error: 'notifyOnChange' marked 'override' but does not override any member functions
+  159 |   virtual void notifyOnChange(const paramkey& key) override {}
+      |                ^
+./utils/configurable.h:309:20: error: 'getParam' marked 'override' but does not override any member functions
+  309 |   virtual paramval getParam(const paramkey& key, bool traverseChildren = true) const override;
+      |                    ^
+./utils/configurable.h:327:16: error: 'setParam' marked 'override' but does not override any member functions
+  327 |   virtual bool setParam(const paramkey& key, paramval val, bool traverseChildren = true) override;
+      |                ^
+./utils/configurable.h:357:21: error: 'getParamList' marked 'override' but does not override any member functions
+  357 |   virtual paramlist getParamList() const override {
+      |                     ^
+./utils/configurable.h:397:97: error: only virtual member functions can be marked 'override'
+  397 |   void print(FILE* f, const char* prefix, int columns = 90, bool traverseChildren = true) const override;
+      |                                                                                                 ^~~~~~~~
+./utils/configurable.h:406:16: error: 'addConfigurable' marked 'override' but does not override any member functions
+  406 |   virtual void addConfigurable(Configurable* conf) override;
+      |                ^
+./utils/configurable.h:412:16: error: 'removeConfigurable' marked 'override' but does not override any member functions
+  412 |   virtual void removeConfigurable(Configurable* conf) override;
+      |                ^
+./utils/configurable.h:187:66: error: expected ';' after expression
+  187 |     addParameter(key, val, valDefMinBound, valDefMaxBound, descr) override;
+      |                                                                  ^
+      |                                                                  ;
+./utils/configurable.h:187:67: error: use of undeclared identifier 'override'
+  187 |     addParameter(key, val, valDefMinBound, valDefMaxBound, descr) override;
+      |                                                                   ^
+./utils/configurable.h:222:66: error: expected ';' after expression
+  222 |     addParameter(key, val, intDefMinBound, intDefMaxBound, descr) override;
+      |                                                                  ^
+      |                                                                  ;
+./utils/configurable.h:222:67: error: use of undeclared identifier 'override'
+  222 |     addParameter(key, val, intDefMinBound, intDefMaxBound, descr) override;
+      |                                                                   ^
+./utils/configurable.h:236:54: error: expected ';' after expression
+  236 |     addParameter(key, val, minBound, maxBound, descr) override;
+      |                                                      ^
+      |                                                      ;
+./utils/configurable.h:236:55: error: use of undeclared identifier 'override'
+  236 |     addParameter(key, val, minBound, maxBound, descr) override;
+      |                                                       ^
+./utils/configurable.h:252:34: error: expected ';' after expression
+  252 |     addParameter(key, val, descr) override;
+      |                                  ^
+      |                                  ;
+./utils/configurable.h:252:35: error: use of undeclared identifier 'override'
+  252 |     addParameter(key, val, descr) override;
+      |                                   ^
+./utils/configurable.h:263:54: error: expected ';' after expression
+  263 |     addParameter(key, val, minBound, maxBound, descr) override;
+      |                                                      ^
+      |                                                      ;
+./utils/configurable.h:263:55: error: use of undeclared identifier 'override'
+  263 |     addParameter(key, val, minBound, maxBound, descr) override;
+      |                                                       ^
+In file included from controller/abstractcontroller.cpp:25:
+In file included from controller/abstractcontroller.h:28:
+./utils/inspectable.h:124:25: error: 'getInternalParamNames' marked 'override' but does not override any member functions
+  124 |   virtual iparamkeylist getInternalParamNames() const override;
+      |                         ^
+./utils/inspectable.h:128:25: error: 'getInternalParams' marked 'override' but does not override any member functions
+  128 |   virtual iparamvallist getInternalParams() const override;
+      |                         ^
+fatal error: too many errors emitted, stopping now [-ferror-limit=]
+20 errors generated.
+make: *** [build/./agent.o] Error 1
+make: *** Waiting for unfinished jobs....
+./utils/configurable.h:187:66: error: expected ';' after expression
+  187 |     addParameter(key, val, valDefMinBound, valDefMaxBound, descr) override;
+      |                                                                  ^
+      |                                                                  ;
+20 errors generated.
+./utils/configurable.h:187:67: error: use of undeclared identifier 'override'
+  187 |     addParameter(key, val, valDefMinBound, valDefMaxBound, descr) override;
+      |                                                                   ^
+./utils/configurable.h:222:66: error: expected ';' after expression
+  222 |     addParameter(key, val, intDefMinBound, intDefMaxBound, descr) override;
+      |                                                                  ^
+      |                                                                  ;
+make: *** [build/./wiredcontroller.o] Error 1
+./utils/configurable.h:222:67: error: use of undeclared identifier 'override'
+  222 |     addParameter(key, val, intDefMinBound, intDefMaxBound, descr) override;
+      |                                                                   ^
+./utils/configurable.h:236:54: error: expected ';' after expression
+  236 |     addParameter(key, val, minBound, maxBound, descr) override;
+      |                                                      ^
+      |                                                      ;
+./utils/configurable.h:236:55: error: use of undeclared identifier 'override'
+  236 |     addParameter(key, val, minBound, maxBound, descr) override;
+      |                                                       ^
+./utils/configurable.h:252:34: error: expected ';' after expression
+  252 |     addParameter(key, val, descr) override;
+      |                                  ^
+      |                                  ;
+./utils/configurable.h:252:35: error: use of undeclared identifier 'override'
+  252 |     addParameter(key, val, descr) override;
+      |                                   ^
+./utils/configurable.h:263:54: error: expected ';' after expression
+  263 |     addParameter(key, val, minBound, maxBound, descr) override;
+      |                                                      ^
+      |                                                      ;
+./utils/configurable.h:263:55: error: use of undeclared identifier 'override'
+  263 |     addParameter(key, val, minBound, maxBound, descr) override;
+      |                                                       ^
+In file included from controller/abstractiafcontroller.cpp:20:
+In file included from controller/abstractiafcontroller.h:24:
+In file included from controller/abstractcontroller.h:28:
+./utils/inspectable.h:124:25: error: 'getInternalParamNames' marked 'override' but does not override any member functions
+  124 |   virtual iparamkeylist getInternalParamNames() const override;
+      |                         ^
+./utils/inspectable.h:128:25: error: 'getInternalParams' marked 'override' but does not override any member functions
+  128 |   virtual iparamvallist getInternalParams() const override;
+      |                         ^
+fatal error: too many errors emitted, stopping now [-ferror-limit=]
+20 errors generated.
+make: *** [build/controller/abstractcontroller.o] Error 1
+20 errors generated.
+make: *** [build/controller/abstractiafcontroller.o] Error 1

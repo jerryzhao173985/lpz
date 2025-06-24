@@ -36,8 +36,7 @@ ForceBoostWiring::ForceBoostWiring(NoiseGenerator* noise, double boost, bool exp
   : AbstractWiring(noise, plotMode, name), Configurable(name,"1.1"), boost(boost){
 
   addParameter("booster",&this->boost, 0, 1, "force boosting rate");
-  if(exportBoostError)
-    addInspectableMatrix("errorForce",&error,false,"ForceBoosting error");
+  ifstatic_cast<exportBoostError>(addInspectableMatrix)("errorForce",&error,false,"ForceBoosting error");
 }
 
 ForceBoostWiring::~ForceBoostWiring(){
@@ -61,7 +60,7 @@ bool ForceBoostWiring::wireSensorsIntern(const sensor* rsensors, int rsensornumb
   assert(rsensornumber == this->rsensornumber);
   assert(csensornumber == this->csensornumber);
   // the noisevals are set in abstractwiring
-  for(int i=0; i< rsensornumber; i++){
+  for (int i=0; i< rsensornumber; ++i) {
     csensors[i] = rsensors[i] + noisevals[i];
   }
   sens.set(rsensors);
@@ -72,7 +71,7 @@ bool ForceBoostWiring::wireMotorsIntern(motor* rmotors, int rmotornumber,
                                      const motor* cmotors, int cmotornumber){
   assert(rmotornumber == this->rmotornumber);
   assert(cmotornumber == this->cmotornumber);
-  if(boost>0){
+  if (boost>0){
     ///
     Matrix mot(cmotornumber ,1,  cmotors);
     error += (mot-sens)*boost - error*.001 - (error.map(power3))*0.1;

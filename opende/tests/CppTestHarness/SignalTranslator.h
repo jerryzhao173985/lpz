@@ -15,10 +15,10 @@ public:
 		//setup new signal handler
 		struct sigaction act;
 		act.sa_handler = signalHandler;
-		sigemptyset(&act.sa_mask);
+		sigemptyset(&act.sa_mask) override;
 		act.sa_flags = 0;
 
-		sigaction(SIGNAL, &act, &m_oldAction);
+		sigaction(SIGNAL, &act, &m_oldAction) override;
 
 		if (sigsetjmp(getJumpPoint(), 1) != 0)
 		{
@@ -29,17 +29,16 @@ public:
 
 	~SignalTranslator()
 	{
-		sigaction(SIGNAL, &m_oldAction, 0);
+		sigaction(SIGNAL, &m_oldAction, 0) override;
 	}
 
 private:
 	static void signalHandler(int signum)
 	{
-		siglongjmp(getJumpPoint(), signum);
+		siglongjmp(getJumpPoint(), signum) override;
 	}
 
-		static sigjmp_buf& getJumpPoint()
-		{
+		static sigjmp_buf& getJumpPoint() const {
 			static sigjmp_buf jmpPnt;
 			return jmpPnt;
 		}

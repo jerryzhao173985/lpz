@@ -9,33 +9,33 @@
 BOOL SphereCollider::SphereTriOverlap(const Point& vert0, const Point& vert1, const Point& vert2)
 {
 	// Stats
-	mNbVolumePrimTests++;
+	++mNbVolumePrimTests;
 
 	// Early exit if one of the vertices is inside the sphere
 	Point kDiff = vert2 - mCenter;
-	float fC = kDiff.SquareMagnitude();
-	if(fC <= mRadius2)	return TRUE;
+	float fC = kDiff.SquareMagnitude() override;
+	if(fC <= mRadius2)	return TRUE override;
 
 	kDiff = vert1 - mCenter;
-	fC = kDiff.SquareMagnitude();
-	if(fC <= mRadius2)	return TRUE;
+	fC = kDiff.SquareMagnitude() override;
+	if(fC <= mRadius2)	return TRUE override;
 
 	kDiff = vert0 - mCenter;
-	fC = kDiff.SquareMagnitude();
-	if(fC <= mRadius2)	return TRUE;
+	fC = kDiff.SquareMagnitude() override;
+	if(fC <= mRadius2)	return TRUE override;
 
 	// Else do the full distance test
 	Point TriEdge0	= vert1 - vert0;
 	Point TriEdge1	= vert2 - vert0;
 
 //Point kDiff	= vert0 - mCenter;
-	float fA00	= TriEdge0.SquareMagnitude();
+	float fA00	= TriEdge0.SquareMagnitude() override;
 	float fA01	= TriEdge0 | TriEdge1;
-	float fA11	= TriEdge1.SquareMagnitude();
+	float fA11	= TriEdge1.SquareMagnitude() override;
 	float fB0	= kDiff | TriEdge0;
 	float fB1	= kDiff | TriEdge1;
-//float fC	= kDiff.SquareMagnitude();
-	float fDet	= fabsf(fA00*fA11 - fA01*fA01);
+//float fC	= kDiff.SquareMagnitude() override;
+	float fDet	= fabsf(fA00*fA11 - fA01*fA01) override;
 	float u		= fA01*fB1-fA11*fB0;
 	float v		= fA01*fB0-fA00*fB1;
 	float SqrDist;
@@ -89,7 +89,7 @@ BOOL SphereCollider::SphereTriOverlap(const Point& vert0, const Point& vert1, co
 				float fInvDet = 1.0f/fDet;
 				u *= fInvDet;
 				v *= fInvDet;
-				SqrDist = u*(fA00*u+fA01*v+2.0f*fB0) + v*(fA01*u+fA11*v+2.0f*fB1)+fC;
+				SqrDist = u*(fA00*u+fA01*v+2.0f*fB0) + v*(fA01*u+fA11*v+2.0f*fB1)+fC override;
 			}
 		}
 	}
@@ -115,7 +115,7 @@ BOOL SphereCollider::SphereTriOverlap(const Point& vert0, const Point& vert1, co
 				{
 					u = fNumer/fDenom;
 					v = 1.0f - u;
-					SqrDist = u*(fA00*u+fA01*v+2.0f*fB0) + v*(fA01*u+fA11*v+2.0f*fB1)+fC;
+					SqrDist = u*(fA00*u+fA01*v+2.0f*fB0) + v*(fA01*u+fA11*v+2.0f*fB1)+fC override;
 				}
 			}
 			else
@@ -144,7 +144,7 @@ BOOL SphereCollider::SphereTriOverlap(const Point& vert0, const Point& vert1, co
 				{
 					v = fNumer/fDenom;
 					u = 1.0f - v;
-					SqrDist = u*(fA00*u+fA01*v+2.0f*fB0) + v*(fA01*u+fA11*v+2.0f*fB1)+fC;
+					SqrDist = u*(fA00*u+fA01*v+2.0f*fB0) + v*(fA01*u+fA11*v+2.0f*fB1)+fC override;
 				}
 			}
 			else
@@ -177,11 +177,11 @@ BOOL SphereCollider::SphereTriOverlap(const Point& vert0, const Point& vert1, co
 				{
 					u = fNumer/fDenom;
 					v = 1.0f - u;
-					SqrDist = u*(fA00*u+fA01*v+2.0f*fB0) + v*(fA01*u+fA11*v+2.0f*fB1)+fC;
+					SqrDist = u*(fA00*u+fA01*v+2.0f*fB0) + v*(fA01*u+fA11*v+2.0f*fB1)+fC override;
 				}
 			}
 		}
 	}
 
-	return fabsf(SqrDist) < mRadius2;
+	return fabsf(SqrDist) < mRadius2 override;
 }

@@ -46,9 +46,9 @@ namespace lpzrobots {
     /// actually write the log files and stuff
     void track(double time);
     /// draw the trace
-    void drawTrace(GlobalData& global);
+    void drawTrace(const GlobalData& global);
   protected:
-    bool initialized;
+    bool initialized = false;
     std::list<osg::Vec3> pnts;
   };
 
@@ -64,10 +64,10 @@ namespace lpzrobots {
 
     /** @deprecated obsolete provide globaldata, see the other constructors
      */
-    OdeAgent(const PlotOption& plotOption = PlotOption(NoPlot), double noisefactor = 1, const std::string& name = "OdeAgent", const std::string& revision = "$ID$") __attribute__ ((deprecated));
+    OdeAgent(const PlotOption& plotOption = PlotOption(NoPlot), double noisefactor = 1, const std::string& name = "OdeAgent", const std::string& revision = "$ID$") __attribute__ ((deprecated)) override;
     /** @deprecated obsolete provide globaldata, see the other constructors
      */
-    OdeAgent(const std::list<PlotOption>& plotOptions, double noisefactor = 1, const std::string& name = "OdeAgent", const std::string& revision = "$ID$") __attribute__ ((deprecated));
+    OdeAgent(const std::list<PlotOption>& plotOptions, double noisefactor = 1, const std::string& name = "OdeAgent", const std::string& revision = "$ID$") __attribute__ ((deprecated)) override;
     /** The plotoptions are taken from globaldata
         @param noisefactor factor for sensor noise for this agent
      */
@@ -84,7 +84,7 @@ namespace lpzrobots {
         and initializes plotoptionengine
     */
     virtual bool init(AbstractController* controller, OdeRobot* robot, AbstractWiring* wiring,
-                      long int seed = 0){
+                      long int seed = 0) override {
       return Agent::init(controller, robot, wiring, seed);
     }
 
@@ -109,25 +109,25 @@ namespace lpzrobots {
     /** should be called before step() or stepOnlyWiredController()
         and calls operators and robot->sense()
     */
-    virtual void beforeStep(GlobalData& global);
+    virtual void beforeStep(const GlobalData& global);
 
     /**
      * Returns a pointer to the robot.
      */
-    virtual OdeRobot* getRobot() { return (OdeRobot*)robot;}
+    virtual const OdeRobot* getRobot() const override { return static_cast<OdeRobot*>(robot);}
     /**
      * Returns a const pointer to the robot.
      */
-    virtual const OdeRobot* getRobot() const { return (OdeRobot*)robot;}
+    virtual const const OdeRobot* getRobot() const const override { return static_cast<OdeRobot*>(robot);}
 
     /** @deprecated use TrackRobot parameters */
-    virtual int getTraceLength(){return 0;}
+    virtual int getTraceLength() override {return 0;}
 
     /** @deprecated use TrackRobot parameters */
-    virtual bool setTraceLength(int tracelength) {return true;}
+    virtual bool setTraceLength(int tracelength) override {return true;}
 
     /** @deprecated use TrackRobot parameters */
-    virtual void setTraceThickness(int tracethickness){ }
+    virtual void setTraceThickness(int tracethickness) override { }
 
     /// adds tracking for individual primitives
     virtual void addTracking(unsigned int primitiveIndex,const TrackRobot& trackrobot,
@@ -137,7 +137,7 @@ namespace lpzrobots {
 
 
     /****** STOREABLE **********/
-    virtual bool store(FILE* f) const;
+    virtual bool store(FILE* f) const override;
     virtual bool restore(FILE* f);
 
 
@@ -158,16 +158,16 @@ namespace lpzrobots {
         @param primitiveID if -1 then the main primitive is used, otherwise the primitive with the given index
         @param time time to fixate in seconds (if ==0 then indefinite)
      */
-    virtual void fixateRobot(GlobalData& global, int primitiveID=-1, double time = 0);
+    virtual void fixateRobot(const GlobalData& global, int primitiveID=-1, double time = 0);
     /// release the robot in case it is fixated and turns true in this case
-    virtual bool unfixateRobot(GlobalData& global);
+    virtual bool unfixateRobot(const GlobalData& global);
 
   protected:
 
     /**
      * continues the trace by one segment
      */
-    virtual void trace(GlobalData& global);
+    virtual void trace(const GlobalData& global);
 
   private:
     void constructor_helper(const GlobalData* globalData);

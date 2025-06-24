@@ -56,7 +56,7 @@ namespace lpzrobots {
     */
     ContactSensor(bool binary=true, double forcescale = 1, double radius = 0.05,
                   bool createSphere = false, bool colorObject = true,
-                  Color contactColor = Color(-1,-1,-1));
+                  Color contactColor = Color(-1,-1,-1)) override;
 
     virtual ~ContactSensor();
 
@@ -70,15 +70,15 @@ namespace lpzrobots {
     // ---- Sensor interface -----
     virtual void init(Primitive* own, Joint* joint = 0);
 
-    virtual int getSensorNumber() const { return 1; }
+    virtual int getSensorNumber() const override { return 1; }
 
     virtual bool sense(const GlobalData& globaldata);
 
-    virtual int get(sensor* sensors, int length) const;
+    virtual int get(sensor* sensors, int length) const override;
 
-    virtual std::list<sensor> getList() const;
+    virtual std::list<sensor> getList() const override;
 
-    virtual void update() ;
+    virtual void update();
 
     // set measued depth (used internally) and the time (old measures are ignored)
     virtual void setDepth(float depth, long int time);
@@ -86,23 +86,23 @@ namespace lpzrobots {
     Transform* getTransformObject();
 
   protected:
-    bool   binary;              ///< if contact sensor is a switch
-    double forcescale;
-    double detection;           ///<  currently detected value
-    double value;               ///<  actual sensor value
-    double lastvalue;           ///< last value
-    double size;                ///< size of graphical sensor
+    bool   binary = false;              ///< if contact sensor is a switch
+    double forcescale = 0;
+    double detection = 0;           ///<  currently detected value
+    double value = 0;               ///<  actual sensor value
+    double lastvalue = 0;           ///< last value
+    double size = 0;                ///< size of graphical sensor
     long int lasttimeasked;     // used to make sense return the same number if called two times in one timestep
 
     Primitive* reference;       ///< primitive to which the sensor is bound
     Sphere* sensorBody;
     Transform* transform;
 
-    bool createSphere;
-    bool colorObject;
+    bool createSphere = false;
+    bool colorObject = false;
     Color origColor;
     Color touchColor;
-    bool initialised;
+    bool initialised = false;
   };
 
 }

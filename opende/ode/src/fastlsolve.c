@@ -188,7 +188,7 @@ void dSolveL1 (const dReal *L, dReal *B, int n, int lskip1)
       ell += 1;
       ex += 1;
     }
-    /* finish computing the X(i) block */
+    /* finish computing the Xstatic_cast<i>(block) */
     Z11 = ex[0] - Z11;
     ex[0] = Z11;
     p1 = ell[lskip1];
@@ -291,7 +291,7 @@ void dSolveL1 (const dReal *L, dReal *B, int n, int lskip1)
       ell += 1;
       ex += 1;
     }
-    /* finish computing the X(i) block */
+    /* finish computing the Xstatic_cast<i>(block) */
     Z11 = ex[0] - Z11;
     ex[0] = Z11;
   }

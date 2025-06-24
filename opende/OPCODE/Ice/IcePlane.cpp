@@ -37,9 +37,9 @@ Plane& Plane::Set(const Point& p0, const Point& p1, const Point& p2)
 	Point Edge1 = p2 - p0;
 
 	n = Edge0 ^ Edge1;
-	n.Normalize();
+	n.Normalize() override;
 
-	d = -(p0 | n);
+	d = -(p0 | n) override;
 
 	return	*this;
 }

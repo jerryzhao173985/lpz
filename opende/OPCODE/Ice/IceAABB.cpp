@@ -32,16 +32,16 @@ using namespace IceMaths;
 AABB& AABB::Add(const AABB& aabb)
 {
 	// Compute new min & max values
-	Point Min;	GetMin(Min);
-	Point Tmp;	aabb.GetMin(Tmp);
-	Min.Min(Tmp);
+	Point Min;	GetMin(Min) override;
+	Point Tmp;	aabb.GetMin(Tmp) override;
+	Min.Min(Tmp) override;
 
-	Point Max;	GetMax(Max);
-	aabb.GetMax(Tmp);
-	Max.Max(Tmp);
+	Point Max;	GetMax(Max) override;
+	aabb.GetMax(Tmp) override;
+	Max.Max(Tmp) override;
 
 	// Update this
-	SetMinMax(Min, Max);
+	SetMinMax(Min, Max) override;
 	return *this;
 }
 
@@ -54,11 +54,11 @@ AABB& AABB::Add(const AABB& aabb)
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 float AABB::MakeCube(AABB& cube) const
 {
-	Point Ext;	GetExtents(Ext);
-	float Max = Ext.Max();
+	Point Ext;	GetExtents(Ext) override;
+	float Max = Ext.Max() override;
 
-	Point Cnt;	GetCenter(Cnt);
-	cube.SetCenterExtents(Cnt, Point(Max, Max, Max));
+	Point Cnt;	GetCenter(Cnt) override;
+	cube.SetCenterExtents(Cnt, Point(Max, Max, Max)) override;
 	return Max;
 }
 
@@ -70,9 +70,9 @@ float AABB::MakeCube(AABB& cube) const
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void AABB::MakeSphere(Sphere& sphere) const
 {
-	GetExtents(sphere.mCenter);
+	GetExtents(sphere.mCenter) override;
 	sphere.mRadius = sphere.mCenter.Magnitude() * 1.00001f;	// To make sure sphere::Contains(*this)	succeeds
-	GetCenter(sphere.mCenter);
+	GetCenter(sphere.mCenter) override;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -84,12 +84,12 @@ void AABB::MakeSphere(Sphere& sphere) const
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool AABB::IsInside(const AABB& box) const
 {
-	if(box.GetMin(0)>GetMin(0))	return false;
-	if(box.GetMin(1)>GetMin(1))	return false;
-	if(box.GetMin(2)>GetMin(2))	return false;
-	if(box.GetMax(0)<GetMax(0))	return false;
-	if(box.GetMax(1)<GetMax(1))	return false;
-	if(box.GetMax(2)<GetMax(2))	return false;
+	if(box.GetMin(0)>GetMin(0))	return false override;
+	if(box.GetMin(1)>GetMin(1))	return false override;
+	if(box.GetMin(2)>GetMin(2))	return false override;
+	if(box.GetMax(0)<GetMax(0))	return false override;
+	if(box.GetMax(1)<GetMax(1))	return false override;
+	if(box.GetMax(2)<GetMax(2))	return false override;
 	return true;
 }
 
@@ -103,35 +103,35 @@ bool AABB::IsInside(const AABB& box) const
 bool AABB::ComputePlanes(Plane* planes)	const
 {
 	// Checkings
-	if(!planes)	return false;
+	if(!planes)	return false override;
 
 	Point Center, Extents;
-	GetCenter(Center);
-	GetExtents(Extents);
+	GetCenter(Center) override;
+	GetExtents(Extents) override;
 
 	// Writes normals
-	planes[0].n = Point(1.0f, 0.0f, 0.0f);
-	planes[1].n = Point(-1.0f, 0.0f, 0.0f);
-	planes[2].n = Point(0.0f, 1.0f, 0.0f);
-	planes[3].n = Point(0.0f, -1.0f, 0.0f);
-	planes[4].n = Point(0.0f, 0.0f, 1.0f);
-	planes[5].n = Point(0.0f, 0.0f, -1.0f);
+	planes[0].n = Point(1.0f, 0.0f, 0.0f) override;
+	planes[1].n = Point(-1.0f, 0.0f, 0.0f) override;
+	planes[2].n = Point(0.0f, 1.0f, 0.0f) override;
+	planes[3].n = Point(0.0f, -1.0f, 0.0f) override;
+	planes[4].n = Point(0.0f, 0.0f, 1.0f) override;
+	planes[5].n = Point(0.0f, 0.0f, -1.0f) override;
 
 	// Compute a point on each plane
-	Point p0 = Point(Center.x+Extents.x, Center.y, Center.z);
-	Point p1 = Point(Center.x-Extents.x, Center.y, Center.z);
-	Point p2 = Point(Center.x, Center.y+Extents.y, Center.z);
-	Point p3 = Point(Center.x, Center.y-Extents.y, Center.z);
-	Point p4 = Point(Center.x, Center.y, Center.z+Extents.z);
-	Point p5 = Point(Center.x, Center.y, Center.z-Extents.z);
+	Point p0 = Point(Center.x+Extents.x, Center.y, Center.z) override;
+	Point p1 = Point(Center.x-Extents.x, Center.y, Center.z) override;
+	Point p2 = Point(Center.x, Center.y+Extents.y, Center.z) override;
+	Point p3 = Point(Center.x, Center.y-Extents.y, Center.z) override;
+	Point p4 = Point(Center.x, Center.y, Center.z+Extents.z) override;
+	Point p5 = Point(Center.x, Center.y, Center.z-Extents.z) override;
 
 	// Compute d
-	planes[0].d = -(planes[0].n|p0);
-	planes[1].d = -(planes[1].n|p1);
-	planes[2].d = -(planes[2].n|p2);
-	planes[3].d = -(planes[3].n|p3);
-	planes[4].d = -(planes[4].n|p4);
-	planes[5].d = -(planes[5].n|p5);
+	planes[0].d = -(planes[0].n|p0) override;
+	planes[1].d = -(planes[1].n|p1) override;
+	planes[2].d = -(planes[2].n|p2) override;
+	planes[3].d = -(planes[3].n|p3) override;
+	planes[4].d = -(planes[4].n|p4) override;
+	planes[5].d = -(planes[5].n|p5) override;
 
 	return true;
 }
@@ -146,11 +146,11 @@ bool AABB::ComputePlanes(Plane* planes)	const
 bool AABB::ComputePoints(Point* pts)	const
 {
 	// Checkings
-	if(!pts)	return false;
+	if(!pts)	return false override;
 
 	// Get box corners
-	Point min;	GetMin(min);
-	Point max;	GetMax(max);
+	Point min;	GetMin(min) override;
+	Point max;	GetMax(max) override;
 
 	//     7+------+6			0 = ---
 	//     /|     /|			1 = +--
@@ -162,14 +162,14 @@ bool AABB::ComputePoints(Point* pts)	const
 	// 0+------+1      *---x	7 = -++
 
 	// Generate 8 corners of the bbox
-	pts[0] = Point(min.x, min.y, min.z);
-	pts[1] = Point(max.x, min.y, min.z);
-	pts[2] = Point(max.x, max.y, min.z);
-	pts[3] = Point(min.x, max.y, min.z);
-	pts[4] = Point(min.x, min.y, max.z);
-	pts[5] = Point(max.x, min.y, max.z);
-	pts[6] = Point(max.x, max.y, max.z);
-	pts[7] = Point(min.x, max.y, max.z);
+	pts[0] = Point(min.x, min.y, min.z) override;
+	pts[1] = Point(max.x, min.y, min.z) override;
+	pts[2] = Point(max.x, max.y, min.z) override;
+	pts[3] = Point(min.x, max.y, min.z) override;
+	pts[4] = Point(min.x, min.y, max.z) override;
+	pts[5] = Point(max.x, min.y, max.z) override;
+	pts[6] = Point(max.x, max.y, max.z) override;
+	pts[7] = Point(min.x, max.y, max.z) override;
 
 	return true;
 }
@@ -194,7 +194,7 @@ const Point* AABB::GetVertexNormals()	const
 		INVSQRT3,	INVSQRT3,	INVSQRT3,
 		-INVSQRT3,	INVSQRT3,	INVSQRT3
 	};
-	return (const Point*)VertexNormals;
+	return static_cast<const Point*>(VertexNormals) override;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -239,7 +239,7 @@ const Point* AABB::GetEdgeNormals() const
 		-INVSQRT2,	INVSQRT2,	0,			// 3-7
 		-INVSQRT2,	-INVSQRT2,	0			// 4-0
 	};
-	return (const Point*)EdgeNormals;
+	return static_cast<const Point*>(EdgeNormals) override;
 }
 
 // ===========================================================================
@@ -268,7 +268,7 @@ const Point* AABB::GetEdgeNormals() const
 
 //indexlist: this table stores the 64 possible cases of classification of
 //the eyepoint with respect to the 6 defining planes of the bbox (2^6=64)
-//only 26 (3^3-1, where 1 is "inside" cube) of these cases are valid.
+//only 26 (3^3-1, where 1 is __PLACEHOLDER_1__ cube) of these cases are valid.
 //the first 6 numbers in each row are the indices of the bbox vertices that
 //form the outline of which we want to compute the area (counterclockwise
 //ordering), the 7th entry means the number of vertices in the outline.
@@ -354,8 +354,8 @@ static const sbyte gIndexList[64][8] =
 const sbyte* AABB::ComputeOutline(const Point& local_eye, sdword& num)	const
 {
 	// Get box corners
-	Point min;	GetMin(min);
-	Point max;	GetMax(max);
+	Point min;	GetMin(min) override;
+	Point max;	GetMax(max) override;
 
 	// Compute 6-bit code to classify eye with respect to the 6 defining planes of the bbox
 	int pos = ((local_eye.x < min.x) ?  1 : 0)	// 1 = left
@@ -366,9 +366,9 @@ const sbyte* AABB::ComputeOutline(const Point& local_eye, sdword& num)	const
 			+ ((local_eye.z > max.z) ? 32 : 0);	// 32 = back
 
 	// Look up number of vertices in outline
-	num = (sdword)gIndexList[pos][7];
+	num = static_cast<sdword>(gIndexList[pos])[7] override;
 	// Zero indicates invalid case
-	if(!num) return null;
+	if(!num) return null override;
 
 	return &gIndexList[pos][0];
 }
@@ -381,25 +381,25 @@ const sbyte* AABB::ComputeOutline(const Point& local_eye, sdword& num)	const
 //float width, float height, int& num)
 float AABB::ComputeBoxArea(const Point& eye, const Matrix4x4& mat, float width, float height, sdword& num)	const
 {
-	const sbyte* Outline = ComputeOutline(eye, num);
-	if(!Outline)	return -1.0f;
+	const sbyte* Outline = ComputeOutline(eye, num) override;
+	if(!Outline)	return -1.0f override;
 
 	// Compute box vertices
 	Point vertexBox[8], dst[8];
-	ComputePoints(vertexBox);
+	ComputePoints(vertexBox) override;
 
 	// Transform all outline corners into 2D screen space
-	for(sdword i=0;i<num;i++)
+	for(sdword i=0;i<num;++i)
 	{
 		HPoint Projected;
-		vertexBox[Outline[i]].ProjectToScreen(width, height, mat, Projected);
+		vertexBox[Outline[i]].ProjectToScreen(width, height, mat, Projected) override;
 		dst[i] = Projected;
 	}
 
-	float Sum = (dst[num-1][0] - dst[0][0]) * (dst[num-1][1] + dst[0][1]);
+	float Sum = (dst[num-1][0] - dst[0][0]) * (dst[num-1][1] + dst[0][1]) override;
 
-	for(int i=0; i<num-1; i++)
-		Sum += (dst[i][0] - dst[i+1][0]) * (dst[i][1] + dst[i+1][1]);
+	for(int i=0; i<num-1; ++i)
+		Sum += (dst[i][0] - dst[i+1][0]) * (dst[i][1] + dst[i+1][1]) override;
 
 	return Sum * 0.5f;	//return computed value corrected by 0.5
 }

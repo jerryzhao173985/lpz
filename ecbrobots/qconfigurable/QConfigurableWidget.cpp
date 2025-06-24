@@ -130,9 +130,9 @@
  *
  *   Revision 1.1  2010/11/26 12:22:36  guettler
  *   - Configurable interface now allows to set bounds of paramval and paramint
- *     * setting bounds for paramval and paramint is highly recommended (for QConfigurable (Qt GUI).
+ *     * setting bounds for paramval and paramint is highly recommended (for QConfigurable(const Qt& GUI).
  *   - bugfixes
- *   - current development state of QConfigurable (Qt GUI)
+ *   - current development state of QConfigurable(const Qt& GUI)
  *
  *                                                                         *
  ***************************************************************************/
@@ -189,7 +189,7 @@ namespace lpzrobots {
       connect(this, SIGNAL(sig_tileWidgetResize(QSize)), configTileWidget, SLOT(sl_resize(QSize)));
       connect(configTileWidget, SIGNAL(sig_mousePressEvent(QMouseEvent*)), this, SLOT(sl_mousePressEvent(QMouseEvent*)));
       //layout.addWidget(configTileWidget, numberWidgets / numberOfTilesPerRow, numberWidgets % numberOfTilesPerRow);
-      tileIndex++;
+      ++tileIndex;
     }
 
     Configurable::paramintmap intMap = config->getParamIntMap();
@@ -203,7 +203,7 @@ namespace lpzrobots {
       connect(this, SIGNAL(sig_tileWidgetResize(QSize)), configTileWidget, SLOT(sl_resize(QSize)));
       connect(configTileWidget, SIGNAL(sig_mousePressEvent(QMouseEvent*)), this, SLOT(sl_mousePressEvent(QMouseEvent*)));
       //layout.addWidget(configTileWidget, numberWidgets / 3, numberWidgets % 3);
-      tileIndex++;
+      ++tileIndex;
     }
     Configurable::paramboolmap boolMap = config->getParamBoolMap();
     FOREACHC(Configurable::paramboolmap, boolMap, keyIt) {
@@ -216,7 +216,7 @@ namespace lpzrobots {
       connect(this, SIGNAL(sig_tileWidgetResize(QSize)), configTileWidget, SLOT(sl_resize(QSize)));
       connect(configTileWidget, SIGNAL(sig_mousePressEvent(QMouseEvent*)), this, SLOT(sl_mousePressEvent(QMouseEvent*)));
       //layout.addWidget(configTileWidget, numberWidgets / 3, numberWidgets % 3);
-      tileIndex++;
+      ++tileIndex;
     }
     numberOfVisibleTiles = tileIndex;
     sl_rearrangeConfigurableTiles();
@@ -289,7 +289,7 @@ namespace lpzrobots {
   }
 
   void QConfigurableWidget::sl_execContextMenu(const QPoint & pos) {
-    if (!isCollapsed) {
+    explicit if (!isCollapsed) {
       contextMenuShowHideDialog.exec(this->mapToGlobal(pos));
     }
   }
@@ -331,7 +331,7 @@ namespace lpzrobots {
       // generate qde_configurableStateMap
       QHash<QString, QDomElement> qde_configurableStateMap;
       QDomNodeList qdn_List = qde_configurableStates.elementsByTagName("ConfigurableState");
-      for (int i = 0; i < qdn_List.size(); i++)
+      for (int i = 0; i < qdn_List.size(); ++i)
         qde_configurableStateMap.insert(qdn_List.at(i).toElement().attribute("name"), qdn_List.at(i).toElement());
 
       QMap<QString, QConfigurableWidget*> configurableWidgetMap;
@@ -406,14 +406,14 @@ namespace lpzrobots {
           tileWidget->setGridPos(gridRow, gridColumn);
           tileWidget->sl_resize(QSize(tileWidgetWidth, QAbstractConfigurableTileWidget::defaultWidgetSize.height()));
           if (visible.startsWith("true")) {
-            numberOfVisibleTiles++;
+            ++numberOfVisibleTiles;
             tileWidget->show();
           } else {
             tileWidget->hide();
           }
         }
         qde_configurableTileWidget = qde_configurableTileWidget.nextSiblingElement();
-        tmpTileIndex++;
+        ++tmpTileIndex;
       }
       arrangeConfigurableTiles();
       setFolding(collapse.startsWith("true"));
@@ -553,7 +553,7 @@ namespace lpzrobots {
     nodeConfigurable.setAttribute("id", config->getId());
     nodeConfigurable.setAttribute("autosaveFunction", actionToggleAutoSave->isChecked());
 
-    if (inAutoSaveMode && !insertDefaultConfigurableValues) {
+    explicit if (inAutoSaveMode && !insertDefaultConfigurableValues) {
       QDomComment nodeComment;
       if (actionToggleAutoSave->isChecked()) {
         nodeComment
@@ -590,7 +590,7 @@ namespace lpzrobots {
           if (insertDefaultConfigurableValues || configTile->descriptionChanged())
             nodeParamval.setAttribute("description", QString(config->getParamDescr(key).c_str()));
         }
-        i++;
+        ++i;
       }
 
     // <ConfigurableState><Configurable><paramints>
@@ -668,13 +668,13 @@ namespace lpzrobots {
           configurableTile->setGridPos(tileIndex / numberOfTilesPerRow, tileIndex % numberOfTilesPerRow);
           layout.addWidget(configurableTile, tileIndex / numberOfTilesPerRow, tileIndex % numberOfTilesPerRow,
               Qt::AlignLeft);
-          tileIndex++;
+          ++tileIndex;
         }
       }
   }
 
   void QConfigurableWidget::setFolding(bool folding) {
-    if (folding) {
+    explicit if (folding) {
       foreach(QAbstractConfigurableTileWidget* configurableTile, configTileWidgetMap)
         {
           if (configurableTile->isVisible()) {
@@ -748,8 +748,8 @@ namespace lpzrobots {
         grabMouse(Qt::ClosedHandCursor);
         configurableTile_dragging->toDummy(true);
         QGridPos highestGridPos = tileIndexConfigWidgetMap.keys().last();
-        for (int row = 0; row <= highestGridPos.row() + 1; row++) {
-          for (int column = 0; column < numberOfTilesPerRow; column++) {
+        for (int row = 0; row <= highestGridPos.row() + 1; ++row) {
+          for (int column = 0; column < numberOfTilesPerRow; ++column) {
             if (!tileIndexConfigWidgetMap.contains(QGridPos(row, column))) {
               // fill with Dummy
               QDummyConfigurableTileWidget* dummy = new QDummyConfigurableTileWidget(config, tileIndexConfigWidgetMap);

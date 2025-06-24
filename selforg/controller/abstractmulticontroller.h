@@ -45,7 +45,7 @@ public:
                           const std::string& name,
                           const std::string& revision);
 
-  virtual ~AbstractMultiController() override;
+  virtual ~AbstractMultiController();
 
   /**
    * Adds a passive controller to this MultiController. If the Agent calls step(..)

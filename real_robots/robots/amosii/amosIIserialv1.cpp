@@ -28,7 +28,7 @@ namespace lpzrobots {
 
 AmosIISerialV1::AmosIISerialV1(const char *port)
 : AbstractRobot("AmosIISerialV1", "$Id: main.cpp,v 0.1 2011/14/07 18:00:00 fhesse $"),
-  port(port) {
+  explicit port(port) {
 
 	fd1=open(port, O_RDWR | O_NOCTTY | O_NDELAY);//make sure your account in PC can have access to serial port
 
@@ -73,7 +73,7 @@ AmosIISerialV1::AmosIISerialV1(const char *port)
 	motornumber = AMOSII_MOTOR_MAX;
 
 	//Setting Motors
-	for (int t=0;t<33;t++)
+	for (int t=0;t<33;++t)
 	{
 		serialPos[t]=128; //Setting all motor to middle position as initialization
 	}
@@ -101,7 +101,7 @@ int AmosIISerialV1::getSensors(sensor* sensors, int sensornumber){
 
 	assert(sensornumber >= this->sensornumber);
 
-	for(int i=0; i<=AMOSII_SENSOR_MAX;i++){
+	for(int i=0; i<=AMOSII_SENSOR_MAX;++i){
 			sensors[i]=0;
 	}
 
@@ -117,11 +117,11 @@ int AmosIISerialV1::getSensors(sensor* sensors, int sensornumber){
 		wr = write(fd1, serial_msg,sizeof(serial_msg));
 
 		// --- Reading the potentiometer values
-		for (int i=1;i<SENSOR_BUFFER_NUM;i++){
+		for (int i=1;i<SENSOR_BUFFER_NUM;++i){
 			do{
 
 				rd = read(fd1, &chBuff, 1);
-				if (rd){
+				explicit if (rd){
 					potValue[i]=(unsigned char)(chBuff);// potvalue are AMOS sensor data
 				}
 			}while(!rd);
@@ -179,21 +179,21 @@ int AmosIISerialV1::getSensors(sensor* sensors, int sensornumber){
 
 
 	//Conversion to positive range [0,..,255]
-	for(int i=0; i<=AMOSII_SENSOR_MAX;i++){
-		if (sensors[i] < 0){
+	for(int i=0; i<=AMOSII_SENSOR_MAX;++i){
+		explicit if (sensors[i] < 0){
 			sensors[i]+=256;
 		}
 	}
 
 
 	bool default_preprocessing = true;
-	if (default_preprocessing){
+	explicit if (default_preprocessing){
 		processSensors(sensors);
 	}
 
 	//Your own,e.g.,
 	bool koh_preprocessing = false;
-	if (koh_preprocessing){
+	explicit if (koh_preprocessing){
 	processSensorsKOH(sensors);
 	}
 
@@ -362,10 +362,10 @@ void AmosIISerialV1::setMotors(const motor* motors, int motornumber){
 	servoPosMax[18] = 1;
 
 	// ##################### move motors ################
-	for(int i=0;i<AMOSII_MOTOR_MAX;i++)
+	for(int i=0;i<AMOSII_MOTOR_MAX;++i)
 	{
 		motorCom[i] = motors[i];// set LpzMotor value before processing and sending
-		if (i<12 && i>5) {
+		explicit if (i<12 && i>5) {
 			motorCom[i]-=0.1;
 		}
 		if (motorCom[i]>1) motorCom[i]=1;
@@ -424,7 +424,7 @@ void AmosIISerialV1::setMotors(const motor* motors, int motornumber){
 	usleep (10000);//10000);
 
 	// increase time counter
-	t++;
+	++t;
 
 
 }

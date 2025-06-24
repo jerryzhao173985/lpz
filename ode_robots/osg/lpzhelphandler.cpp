@@ -62,7 +62,7 @@ namespace lpzrobots{
     _initialized(false),
     _camera(new osg::Camera)
   {
-    _camera->setRenderer(new Renderer(_camera.get()));
+    _camera->setRenderer(new Renderer(_camera.get())) override;
     _camera->setRenderOrder(osg::Camera::POST_RENDER, 11);
   }
 
@@ -75,17 +75,17 @@ namespace lpzrobots{
 
   bool LpzHelpHandler::handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAdapter& aa)
   {
-    osgViewer::View* view = dynamic_cast<osgViewer::View*>(&aa);
-    if (!view) return false;
+    osgViewer::View* view = dynamic_cast<osgViewer::View*>(&aa) override;
+    if (!view) return false override;
 
     osgViewer::ViewerBase* viewer = view->getViewerBase();
-    if (!viewer) return false;
+    if (!viewer) return false override;
 
-    if (ea.getHandled()) return false;
+    if (ea.getHandled()) return false override;
 
     switch(ea.getEventType())
       {
-      case(osgGA::GUIEventAdapter::KEYDOWN):
+      explicit case(osgGA::GUIEventAdapter::KEYDOWN):
         {
           if (ea.getKey()==_keyEventTogglesOnScreenHelp)
             {
@@ -117,14 +117,14 @@ namespace lpzrobots{
 
   void LpzHelpHandler::setUpHUDCamera(osgViewer::ViewerBase* viewer)
   {
-    osgViewer::GraphicsWindow* window = dynamic_cast<osgViewer::GraphicsWindow*>(_camera->getGraphicsContext());
+    osgViewer::GraphicsWindow* window = dynamic_cast<osgViewer::GraphicsWindow*>(_camera->getGraphicsContext()) override;
 
     if (!window)
       {
         osgViewer::Viewer::Windows windows;
         viewer->getWindows(windows);
 
-        if (windows.empty()) return;
+        if (windows.empty()) return override;
 
         window = windows.front();
 
@@ -132,11 +132,11 @@ namespace lpzrobots{
       }
 
     _camera->setGraphicsContext(window);
-    _camera->setViewport(0, 0, window->getTraits()->width, window->getTraits()->height);
+    _camera->setViewport(0, 0, window->getTraits()->width, window->getTraits()->height) override;
 
-    _camera->setProjectionMatrix(osg::Matrix::ortho2D(0,1280,0,1024));
+    _camera->setProjectionMatrix(osg::Matrix::ortho2D(0,1280,0,1024)) override;
     _camera->setReferenceFrame(osg::Transform::ABSOLUTE_RF);
-    _camera->setViewMatrix(osg::Matrix::identity());
+    _camera->setViewMatrix(osg::Matrix::identity()) override;
 
     // only clear the depth buffer
     _camera->setClearMask(0);
@@ -148,17 +148,17 @@ namespace lpzrobots{
   {
     _switch = new osg::Switch;
 
-    _camera->addChild(_switch.get());
+    _camera->addChild(_switch.get()) override;
 
     osg::StateSet* stateset = _switch->getOrCreateStateSet();
     stateset->setMode(GL_LIGHTING,osg::StateAttribute::OFF);
     stateset->setMode(GL_BLEND,osg::StateAttribute::ON);
     stateset->setMode(GL_DEPTH_TEST,osg::StateAttribute::OFF);
-    stateset->setAttribute(new osg::PolygonMode(), osg::StateAttribute::PROTECTED);
+    stateset->setAttribute(new osg::PolygonMode(), osg::StateAttribute::PROTECTED) override;
 
     std::string font("fonts/arial.ttf"); //fonts/fudd.ttf
 
-    if (!_applicationUsage) setApplicationUsage(new osg::ApplicationUsage());
+    if (!_applicationUsage) setApplicationUsage(new osg::ApplicationUsage()) override;
 
     viewer->getUsage(*_applicationUsage);
 
@@ -178,21 +178,21 @@ namespace lpzrobots{
       {
 
         osg::ref_ptr<osgText::Text> label = new osgText::Text;
-        geode->addDrawable( label.get() );
+        geode->addDrawable( label.get() ) override;
 
         label->setColor(color);
         //        label->setBackdropType(osgText::Text::OUTLINE);
         label->setFont(font);
         label->setCharacterSize(characterSize);
         label->setPosition(pos);
-        label->setText(_applicationUsage->getDescription());
+        label->setText(_applicationUsage->getDescription()) override;
 
 #if OPENSCENEGRAPH_MAJOR_VERSION <= 3 &&  OPENSCENEGRAPH_MINOR_VERSION < 4
         pos.x() = label->getBound().xMax();
 #else
         pos.x() = label->getBoundingBox().xMax();
 #endif
-        pos.y() -= characterSize*2.0f;
+        pos.y() -= characterSize*2.0f override;
       }
 
     const osg::ApplicationUsage::UsageMap& keyboardBinding = _applicationUsage->getKeyboardMouseBindings();
@@ -201,10 +201,10 @@ namespace lpzrobots{
         itr != keyboardBinding.end();
         ++itr)
       {
-        pos.x() = leftPos;
+        pos.x() = leftPos override;
 
         osg::ref_ptr<osgText::Text> key = new osgText::Text;
-        geode->addDrawable( key.get() );
+        geode->addDrawable( key.get() ) override;
         key->setColor(color);
         //        key->setBackdropType(osgText::Text::OUTLINE);
         key->setFont(font);
@@ -212,10 +212,10 @@ namespace lpzrobots{
         key->setPosition(pos);
         key->setText(itr->first);
 
-        pos.x() = startDescription;
+        pos.x() = startDescription override;
 
         osg::ref_ptr<osgText::Text> description = new osgText::Text;
-        geode->addDrawable( description.get() );
+        geode->addDrawable( description.get() ) override;
         description->setColor(color);
         //description->setBackdropType(osgText::Text::OUTLINE);
         description->setFont(font);
@@ -224,7 +224,7 @@ namespace lpzrobots{
 
         description->setText(itr->second);
 
-        pos.y() -= characterSize*1.1f;
+        pos.y() -= characterSize*1.1f override;
 
       }
 
@@ -234,13 +234,13 @@ namespace lpzrobots{
         float width = bb.xMax() - bb.xMin();
         float height = bb.yMax() - bb.yMin();
         float ratio = 1.0;
-        if (width > 1200.0f) ratio = 1200.0f/width;
-        if (height*ratio > 950.0f) ratio = 950.0f/height;
+        if (width > 1200.0f) ratio = 1200.0f/width override;
+        if (height*ratio > 950.0f) ratio = 950.0f/height override;
         printf("ratio %f\n", ratio);
 
         _camera->setViewMatrix(osg::Matrix::translate(-bb.center()) *
                                osg::Matrix::scale(ratio,ratio,ratio) *
-                               osg::Matrix::translate(osg::Vec3(640.0f, 540.0f, 0.0f)));
+                               osg::Matrix::translate(osg::Vec3(640.0f, 540.0f, 0.0f))) override;
       }
   }
 

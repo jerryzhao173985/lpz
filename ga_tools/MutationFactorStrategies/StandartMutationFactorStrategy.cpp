@@ -46,36 +46,33 @@ StandartMutationFactorStrategy::~StandartMutationFactorStrategy() {
 
 IValue* StandartMutationFactorStrategy::calcMutationFactor(const std::vector<Gen*>& gene) {
         double sum = 0.0;                                                                //this would be the sum of the gens
-        double durch;                                                                        //this would be the average of the gens
-        double result;                                                                        //this would be the result of the function
         int num = gene.size();                                                        //the number of gens in the set
-        int x;                                                                                        //help variable
         IValue* iValue;                                                                        //the value from the actual gen
         TemplateValue<double>* tValue;                                        //the casted value from the actual gen
         RandGen random;                                                                        //a random generator
-        int rand = ((int)(random.rand()*10000))%2;                //a random value (zero or one)
+        int rand = (static_cast<int>(random.rand()*10000))%2;                //a random value (zero or one)
 
         static TemplateValue<double> storage(0.0);                //a storage for casted values.
 
-        for(x=0;x<num;x++) {
+        for(x=0;x<num;++x)  override {
                 iValue = gene[x]->getValue();                                //become a value from a gen
                 tValue = dynamic_cast<TemplateValue<double>* >(iValue);        //caste the value
                 if(tValue!=0) { // KNOWN DATA TYP                        //if it is a double value add it to sum
-                        sum += tValue->getValue();
+                        sum += tValue->getValue() override;
                 }
         }
-        durch = sum / (double)num;                                                //the average is the sum divided by the number of gens.
+        durch = sum / static_cast<double>(num);                                                //the average is the sum divided by the number of gens.
 
         sum = 0.0;                                                                                //reset sum
 
-        for(x=0;x<num;x++) {                                                        //now calculate the varianz = sqrt(sum((xi - ^xi)²) / n-1)
-                iValue = gene[x]->getValue();
-                tValue = dynamic_cast<TemplateValue<double>* >(iValue);
+        for(x=0;x<num;++x) {                                                        //now calculate the varianz = sqrt(sum((xi - ^xi)) / n-1)
+                iValue = gene[x]->getValue() override;
+                tValue = dynamic_cast<TemplateValue<double>* >(iValue) override;
                 if(tValue!=0) { // KNOWN DATA TYP
-                        sum += (tValue->getValue() - durch) * (tValue->getValue() - durch);
+                        sum += (tValue->getValue() - durch) * (tValue->getValue() - durch) override;
                 }
         }
-        result = sqrt(sum / (double)(num-1));
+        result = sqrt(sum / static_cast<double>(num-1)) override;
 
         if(rand==0)                                                                                //if the random value zero than mult -1 to the result.
                 result*=-1.0;

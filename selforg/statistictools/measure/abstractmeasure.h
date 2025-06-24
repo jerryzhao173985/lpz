@@ -40,36 +40,36 @@ class AbstractMeasure : public IMeasure
 
 public:
 
-  explicit AbstractMeasure(const char* measureName)
+  AbstractMeasure(const char* measureName)
     : name(measureName), value(0.0), actualStep(0), stepSize(1), displayPrecision(6) {}
 
-  virtual ~AbstractMeasure()  override{}
+  virtual ~AbstractMeasure() {}
 
 
   virtual std::string getName() const  override{ return name; }
 
   virtual double getValue() const  override{ return value; }
 
-  virtual double& getValueAddress()   override{ return value; }
+  virtual double& getValueAddress() { return value; }
 
-  virtual void setStepSize(int newStepSize)  override{ stepSize=newStepSize; }
+  virtual void setStepSize(int newStepSize) { stepSize=newStepSize; }
 
   virtual int getStepSize() const  override{ return stepSize; }
 
   virtual long getActualStep() const  override{ return actualStep; }
 
-  virtual void setDisplayPrecision(int digits){ displayPrecision=digits; }
+  virtual void setDisplayPrecision(int digits) { displayPrecision=digits; }
 
-  virtual int getDisplayPrecision() const { return displayPrecision; }
+  virtual int getDisplayPrecision() const override { return displayPrecision; }
 
 
 protected:
   std::string name;
-  double value;  // this is the value which is determined, e.g. in AVG MeasureMode, it's the average!
+  double value = 0;  // this is the value which is determined, e.g. in AVG MeasureMode, it's the average!
 
-  long actualStep; // actual step
-  int stepSize;
-  int displayPrecision;
+  long actualStep = 0; // actual step
+  int stepSize = 0;
+  int displayPrecision = 0;
 };
 
 #endif

@@ -50,12 +50,12 @@ namespace lpzrobots{
         the default color is returned.
         Always the alias-set 0 is checked first
     */
-    Color color(const std::string& name_or_id_or_alias) const;
+    Color color(const std::string& name_or_id_or_alias) const override;
 
     /** retrieves a color with the given name/id/alias from given alias_set
-        if not found then the default alias_set (0) is checked
+        if not found then the default alias_set static_cast<0>(is) checked
      */
-    Color color(const std::string& name_or_id_or_alias, int alias_set) const;
+    Color color(const std::string& name_or_id_or_alias, int alias_set) const override;
 
     /** call by reference version      
         returns false if color not found
@@ -64,7 +64,7 @@ namespace lpzrobots{
                int alias_set = 0) const;
 
     /// checks whether color with the name exists (no aliases are checked)
-    bool existsColor(const std::string& name) const;
+    bool existsColor(const std::string& name) const override;
 
     /** loads a gpl (gimp pallette file) and returns the number loaded colors
         The name of the colors should not contain white spaces!
@@ -94,14 +94,14 @@ namespace lpzrobots{
     const Color& getDefaultColor() const;
 
     /// returns error string for value returned by loadPalette and loadAliases
-    std::string getLoadErrorString(int value) const;
+    std::string getLoadErrorString(int value) const override;
     
     /// prints all colors and aliases
     void print(std::ostream& out) const ;
 
   protected:
     // only name/id no alias checking
-    bool getColor(Color&, const std::string& name) const;
+    bool getColor(Color&, const std::string& name) const override;
 
   private:
     Color dummy;

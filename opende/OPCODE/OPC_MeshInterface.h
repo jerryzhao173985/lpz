@@ -2,7 +2,7 @@
 /*
  *	OPCODE - Optimized Collision Detection
  *	Copyright (C) 2001 Pierre Terdiman
- *	Homepage: http://www.codercorner.com/Opcode.htm
+ *	Homepage: http:__PLACEHOLDER_2__
  */
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -31,10 +31,10 @@
 			const Point& p2 = *Vertex[2];
 
 			// Compute normal direction
-			Point Normal = (p2 - p1)^(p0 - p1);
+			Point Normal = (p2 - p1)^(p0 - p1) override;
 
 			// Backface culling
-			return (Normal | (source - p0)) >= 0.0f;
+			return (Normal | (source - p0)) >= 0.0f override;
 		}
 	};
 
@@ -49,18 +49,18 @@
 	 *	\param		user_data		[in] user-defined data from SetCallback()
 	 */
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	typedef void	(*RequestCallback)	(udword triangle_index, VertexPointers& triangle, void* user_data);
+	typedef void	(*RequestCallback)	(udword triangle_index, const VertexPointers& triangle, void* user_data) override;
 #endif
 
 	class OPCODE_API MeshInterface
 	{
 		public:
 		// Constructor / Destructor
-											MeshInterface();
+											MeshInterface() override;
 											~MeshInterface();
 		// Common settings
-		inline_			udword				GetNbTriangles()	const	{ return mNbTris;	}
-		inline_			udword				GetNbVertices()		const	{ return mNbVerts;	}
+		inline_			udword				GetNbTriangles()	const override { return mNbTris;	}
+		inline_			udword				GetNbVertices()		const override { return mNbVerts;	}
 		inline_			void				SetNbTriangles(udword nb)	{ mNbTris = nb;		}
 		inline_			void				SetNbVertices(udword nb)	{ mNbVerts = nb;	}
 
@@ -75,9 +75,9 @@
 		 *	\return		true if success
 		 */
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-						bool				SetCallback(RequestCallback callback, void* user_data);
-		inline_			void*				GetUserData()		const	{ return mUserData;		}
-		inline_			RequestCallback		GetCallback()		const	{ return mObjCallback;	}
+						bool				SetCallback(RequestCallback callback, void* user_data) override;
+		inline_			void*				GetUserData()		const override { return mUserData;		}
+		inline_			RequestCallback		GetCallback()		const override { return mObjCallback;	}
 #else
 		// Pointers settings
 
@@ -89,9 +89,9 @@
 		 *	\return		true if success
 		 */
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-						bool				SetPointers(const IndexedTriangle* tris, const Point* verts);
-		inline_	const	IndexedTriangle*	GetTris()			const	{ return mTris;			}
-		inline_	const	Point*				GetVerts()			const	{ return mVerts;		}
+						bool				SetPointers(const IndexedTriangle* tris, const Point* verts) override;
+		inline_	const	IndexedTriangle*	GetTris()			const override { return mTris;			}
+		inline_	const	Point*				GetVerts()			const override { return mVerts;		}
 
 	#ifdef OPC_USE_STRIDE
 		// Strides settings
@@ -99,14 +99,14 @@
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/**
 		 *	Strides control
-		 *	\param		tri_stride		[in] size of a triangle in bytes. The first sizeof(IndexedTriangle) bytes are used to get vertex indices.
-		 *	\param		vertex_stride	[in] size of a vertex in bytes. The first sizeof(Point) bytes are used to get vertex position.
+		 *	\param		tri_stride		[in] size of a triangle in bytes. The first sizeofstatic_cast<IndexedTriangle>(bytes) are used to get vertex indices.
+		 *	\param		vertex_stride	[in] size of a vertex in bytes. The first sizeofstatic_cast<Point>(bytes) are used to get vertex position.
 		 *	\return		true if success
 		 */
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-						bool				SetStrides(udword tri_stride=sizeof(IndexedTriangle), udword vertex_stride=sizeof(Point));
-		inline_			udword				GetTriStride()		const	{ return mTriStride;	}
-		inline_			udword				GetVertexStride()	const	{ return mVertexStride;	}
+						bool				SetStrides(udword tri_stride=sizeof(IndexedTriangle), udword vertex_stride=sizeof(Point)) override;
+		inline_			udword				GetTriStride()		const override { return mTriStride;	}
+		inline_			udword				GetVertexStride()	const override { return mVertexStride;	}
 
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/**
@@ -130,14 +130,14 @@
 		inline_			void				GetTriangle(VertexPointers& vp, udword index, ConversionArea vc)	const
 											{
 #ifdef OPC_USE_CALLBACKS
-												(mObjCallback)(index, vp, mUserData);
+												(mObjCallback)(index, vp, mUserData) override;
 #else
 	#ifdef OPC_USE_STRIDE
-												// Since there was conditional statement "if (Single)" which was unpredictable for compiler 
+												// Since there was conditional statement __PLACEHOLDER_0__ which was unpredictable for compiler 
 												// and required both branches to be always generated what made inlining a questionable 
 												// benefit, I consider it better to introduce a forced call
 												// but get rig of branching and dead code injection.
-												((*this).*mFetchTriangle)(vp, index, vc);
+												((*this).*mFetchTriangle)(vp, index, vc) override;
 	#else
 												const IndexedTriangle* T = &mTris[index];
 												vp.Vertex[0] = &mVerts[T->mVRef[0]];
@@ -150,8 +150,8 @@
 		private:
 #ifndef OPC_USE_CALLBACKS
 	#ifdef OPC_USE_STRIDE
-		void				FetchTriangleFromSingles(VertexPointers& vp, udword index, ConversionArea vc) const;
-		void				FetchTriangleFromDoubles(VertexPointers& vp, udword index, ConversionArea vc) const;
+		void				FetchTriangleFromSingles(VertexPointers& vp, udword index, ConversionArea vc) const override;
+		void				FetchTriangleFromDoubles(VertexPointers& vp, udword index, ConversionArea vc) const override;
 	#endif
 #endif
 
@@ -164,7 +164,7 @@
 		 *	\return		true if success
 		 */
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		bool				RemapClient(udword nb_indices, const dTriIndex* permutation)	const;
+		bool				RemapClient(udword nb_indices, const dTriIndex* permutation)	const override;
 
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/**
@@ -172,7 +172,7 @@
 		 *	\return		true if valid
 		 */
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-						bool				IsValid()		const;
+						bool				IsValid()		const override;
 
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/**
@@ -181,7 +181,7 @@
 		 *	\return		number of degenerate faces
 		 */
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-						udword				CheckTopology()	const;
+						udword				CheckTopology()	const override;
 		private:
 
 						udword				mNbTris;			//!< Number of triangles in the input model
@@ -195,7 +195,7 @@
 	#ifdef OPC_USE_STRIDE
 						udword				mTriStride;			//!< Possible triangle stride in bytes [Opcode 1.3]
 						udword				mVertexStride;		//!< Possible vertex stride in bytes [Opcode 1.3]
-				typedef	void (MeshInterface:: *TriangleFetchProc)(VertexPointers& vp, udword index, ConversionArea vc) const;
+				typedef	void (MeshInterface:: *TriangleFetchProc)(VertexPointers& vp, udword index, ConversionArea vc) const override;
 						TriangleFetchProc	mFetchTriangle;
 	#endif
 						const	IndexedTriangle*	mTris;				//!< Array of indexed triangles

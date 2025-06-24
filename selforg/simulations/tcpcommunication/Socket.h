@@ -4,7 +4,7 @@
  * Copyright (C) 2003-2006 Keyan Zahedi and Arndt von Twickel.           *
  * All rights reserved.                                                  *
  * Email: {keyan,twickel}@users.sourceforge.net                          *
- * Web: http://sourceforge.net/projects/yars                             *
+ * Web: http:__PLACEHOLDER_18__
  *                                                                       *
  * For a list of contributors see the file AUTHORS.                      *
  *                                                                       *
@@ -42,19 +42,19 @@
 #include <string>
 #include <vector>
 
-using namespace std;
+// // // // // // // using namespace std; // Removed from header // Removed from header // Removed from header // Removed from header // Removed from header // Removed from header // Removed from header
 
 class Buffer : public vector<char>
 {
   public:
-    char label;
+    char label = 0;
     // d = double
     // i = int
     // s = string
     // D = vector of double
     // I = vector of int
     //
-    // in case of D, I, s the first sizeof(int) bytes give the size of the
+    // in case of D, I, s the first sizeofstatic_cast<int>(bytes) give the size of the
     // vector or the length of the string
 };
 
@@ -107,12 +107,12 @@ class Socket
      * to yars' standard port of 4500. 
      * \param[in] std::string host
      * \param[in] integer port
-     * \exception YarsException with message "Socket::connect: ECHOCLNT: Error creating listening socket.\n"), if the socket could not be opened
-     * \exception YarsException with message "Socket::connect: gethostbyname, cannot resolve hostname"), if the hostname was not resolved
-     * \exception YarsException with message "Socket::connect: invalid address given.", if the given address was invalid
-     * \exception YarsException with message "Socket::connect: Error creating listening socket.", if the listening port could not be opened
-     * \exception YarsException with message "Socket::connect: Error calling connect()", if the connection could not be initialised
-     * \exception YarsException with message "Socket::connect: Error setting setsockopt.", if the options for the socket could not be set
+     * \exception YarsException with message __PLACEHOLDER_1__), if the socket could not be opened
+     * \exception YarsException with message __PLACEHOLDER_2__), if the hostname was not resolved
+     * \exception YarsException with message __PLACEHOLDER_3__, if the given address was invalid
+     * \exception YarsException with message __PLACEHOLDER_4__, if the listening port could not be opened
+     * \exception YarsException with message __PLACEHOLDER_5__, if the connection could not be initialised
+     * \exception YarsException with message __PLACEHOLDER_6__, if the options for the socket could not be set
      */
     void connect(const std::string host = "127.0.0.1", const int port = __YARS_STANDARD_PORT) throw (YarsException);
 
@@ -147,7 +147,7 @@ class Socket
      * which, in details, is:
      *
      * \verbatim
-     <'s'>
+     <__PLACEHOLDER_8__>
      <int low byte 0>
      <int byte 1>
      <int byte 2>
@@ -181,7 +181,7 @@ class Socket
      *
      *
      \verbatim
-     <'s'>
+     <__PLACEHOLDER_9__>
      <int low byte 0>
      <int byte 1>
      <int byte 2>
@@ -213,7 +213,7 @@ class Socket
      * which, in details, is:
      *
      * \verbatim
-     <'d'>
+     <__PLACEHOLDER_10__>
      <low byte = byte 0>
      <byte 1>
      <byte 2>
@@ -243,7 +243,7 @@ class Socket
      * which, in details, is:
      *
      * \verbatim
-     <'d'>
+     <__PLACEHOLDER_11__>
      <low byte = byte 0>
      <byte 1>
      <byte 2>
@@ -278,7 +278,7 @@ class Socket
      * which, in details, is:
      *
      * \verbatim
-     <'i'>
+     <__PLACEHOLDER_12__>
      <low byte = byte 0>
      <byte 1>
      <byte 2>
@@ -302,7 +302,7 @@ class Socket
      *
      * which, in details, is:
      *
-     * \verbatim <'i'> <low byte = byte 0> <byte 1> <byte 2> <high byte = byte 3>\endverbatim 
+     * \verbatim <__PLACEHOLDER_13__> <low byte = byte 0> <byte 1> <byte 2> <high byte = byte 3>\endverbatim 
      *
      * \param[out] int i, the integer to be send
      * \exception YarsException with detailed message if the received data type
@@ -328,7 +328,7 @@ class Socket
      * which, in details, is:
      *
      * \verbatim
-     <'I'>
+     <__PLACEHOLDER_14__>
      <size low byte = byte 0>
      <byte 1>
      <byte 2>
@@ -361,7 +361,7 @@ class Socket
      * which, in details, is:
      *
      * \verbatim
-     <'I'>
+     <__PLACEHOLDER_15__>
      <size low byte = byte 0>
      <byte 1>
      <byte 2>
@@ -396,7 +396,7 @@ class Socket
      * which, in details, is:
      *
      * \verbatim
-     <'D'>
+     <__PLACEHOLDER_16__>
      <size low byte = byte 0>
      <byte 1>
      <byte 2>
@@ -433,7 +433,7 @@ class Socket
      * which, in details, is:
      *
      * \verbatim
-     <'D'>
+     <__PLACEHOLDER_17__>
      <size low byte = byte 0>
      <byte 1>
      <byte 2>
@@ -467,9 +467,9 @@ class Socket
     void __writeInteger(Buffer *b, int i);
     void __coneverToInt(char *c, int *i);
 
-    int                _mysock;
-    int                _sock;
-    int                _tcpClientSock;
+    int                _mysock = 0;
+    int                _sock = 0;
+    int                _tcpClientSock = 0;
     sockaddr_in        _addr;
 
     struct sockaddr_in _myself;

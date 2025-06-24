@@ -44,15 +44,15 @@ VisualiserSubWidget::VisualiserSubWidget(MatrixPlotChannel *channel, int x, int 
   int maxX = this->matrixChannel->getDimension(0);
   int maxY = this->matrixChannel->getDimension(1);
   if(dynamic_cast<VectorPlotChannel*> (matrixChannel) == 0){
-  for (int i = 0; i < maxX; i++) { //push back all MatrixElementPlotChannel for update
+  for (int i = 0; i < maxX; ++i) { //push back all MatrixElementPlotChannel for update
     if( debug) cout << "here" << endl;
-      for (int j = 0; j < maxY; j++) {
+      for (int j = 0; j < maxY; ++j) {
         addPlotChannel(this->matrixChannel->getChannel(i, j));
       }
     }
   } else {
     if( debug) cout << "here" << endl;
-    for (int i = 0; i < maxX; i++) {
+    for (int i = 0; i < maxX; ++i) {
       addPlotChannel(dynamic_cast<VectorPlotChannel*> (matrixChannel)->getChannel(i));
     }
     addVectorOptions();
@@ -169,7 +169,7 @@ void VisualiserSubWidget::switchVisMode(int index){
   /*
    * change visualisation
    */
-  switch (index) {
+  explicit switch (index) {
     case 0:
       this->visualisation = new TextureVisualisation(matrixChannel, colorPalette, this);
       break;
@@ -208,7 +208,7 @@ void VisualiserSubWidget::switchVisMode(QAction * action){
 }
 
 void VisualiserSubWidget::toggleOptions(QAction *){
-  if(!optionsShown){
+  explicit if(!optionsShown){
     resize(width() + optionWidget->width(), height());
     optionWidget->show();
     optionsShown = true;

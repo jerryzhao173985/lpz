@@ -55,7 +55,7 @@ bool eigenValuesVectors(const Matrix& m,
    The eigenvectors are assumed to be columnwise (as returned by eigenValues() etc).
    Returns the original signs (1 or -1 per column)
  */
-std::vector<int> toPositiveSignEigenVectors(Matrix& vecs_real, Matrix& vecs_imag);
+std::vector<int> toPositiveSignEigenVectors(const Matrix& vecs_real, const Matrix& vecs_imag);
 
 /**
    scales the eigenvectors with the absolute value of the eigenvalues.

@@ -8,7 +8,7 @@
  *   LICENSE:                                                              *
  *   This work is licensed under the Creative Commons                      *
  *   Attribution-NonCommercial-ShareAlike 2.5 License. To view a copy of   *
- *   this license, visit http://creativecommons.org/licenses/by-nc-sa/2.5/ *
+ *   this license, visit http:__PLACEHOLDER_1__
  *   or send a letter to Creative Commons, 543 Howard Street, 5th Floor,   *
  *   San Francisco, California, 94105, USA.                                *
  *                                                                         *
@@ -65,17 +65,17 @@ class Layer1_INCC : public InvertNChannelController {
 public:
   Layer1_INCC(int _buffersize, bool _update_only_1=false);
 
-  //  virtual ~InvertNChannelControllerHebbH() override;
+  //  virtual ~InvertNChannelControllerHebbH();
 
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
 
-  virtual void learn(const matrix::Matrix& x_delay, const matrix::Matrix& y_delay) override;
+  virtual void learn(const matrix::Matrix& x_delay, const matrix::Matrix& y_delay);
 
-  virtual matrix::Matrix getH() override; 
-  virtual void setH(matrix::Matrix tmp) override; 
-  virtual void addtoH(matrix::Matrix tmp) override;
+  virtual matrix::Matrix getH();
+  virtual void setH(matrix::Matrix tmp);
+  virtual void addtoH(matrix::Matrix tmp);
 
-  virtual matrix::Matrix getdH() override; 
+  virtual matrix::Matrix getdH();
 
 
 

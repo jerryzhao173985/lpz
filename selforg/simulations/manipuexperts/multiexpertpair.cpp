@@ -7,7 +7,7 @@
  *   LICENSE:                                                              *
  *   This work is licensed under the Creative Commons                      *
  *   Attribution-NonCommercial-ShareAlike 2.5 License. To view a copy of   *
- *   this license, visit http://creativecommons.org/licenses/by-nc-sa/2.5/ *
+ *   this license, visit http:__PLACEHOLDER_40__
  *   or send a letter to Creative Commons, 543 Howard Street, 5th Floor,   *
  *   San Francisco, California, 94105, USA.                                *
  *                                                                         *
@@ -60,7 +60,7 @@ void MultiExpertPair::init(unsigned int inputDim, unsigned  int outputDim,
   this->inputDim  = inputDim;
   this->outputDim = outputDim;
 
-  for(int i=0; i<conf.numSats; i++){
+  for (int i=0; i<conf.numSats; ++i) {
     vector<Layer> layers;
     if(conf.numHidden!=0)
       layers.push_back(Layer(conf.numHidden, 0.5 , FeedForwardNN::tanh));
@@ -82,12 +82,12 @@ void MultiExpertPair::init(unsigned int inputDim, unsigned  int outputDim,
 
   errorCov.set(conf.numSats, conf.numSats);
 
-  //  addParameter("lambda_c", &(conf.lambda_comp));
+  //  addParameter(__PLACEHOLDER_3__, &(conf.lambda_comp));
   addParameter("tauE1", &(conf.tauE1));
   addParameter("tauE2", &(conf.tauE2));
   addParameter("tauW", &(conf.tauW));
   addParameter("lw", &(conf.lambda_w));
-  //  addParameter("penalty", &(conf.penalty));
+  //  addParameter(__PLACEHOLDER_8__, &(conf.penalty));
 
   t=0;
   initialised = true;
@@ -141,7 +141,7 @@ const matrix::Matrix MultiExpertPair::learn (const matrix::Matrix& input,
       winner=newwinner;
     }
   }
-  if(!newsatadded){ // cov matrix stuff
+  if (!newsatadded){ // cov matrix stuff
     // update cov matrix only with respect to the winner
     // we assume the mean normalised error is 1 (also because we are more interested
     // in the correlation of low errors than high ones)
@@ -151,7 +151,7 @@ const matrix::Matrix MultiExpertPair::learn (const matrix::Matrix& input,
                                  errors.mapP(&mu, constant)) *
                                 (errors.val(winner,0) - mu);
     // we consider rowwise the correlation of the winner with the others
-    for(unsigned int i=0; i<errorCov.getN(); i++){
+    for(unsigned int i=0; i<errorCov.getN(); ++i) {
       errorCov.val(winner,i) = (1-1/conf.tauW)*errorCov.val(winner,i)
         + (1/conf.tauW)*covE_winner.val(i,0);
     }
@@ -174,7 +174,7 @@ const matrix::Matrix MultiExpertPair::learn (const matrix::Matrix& input,
   if(t%managementInterval==0){
     management();
   }
-  t++;
+  ++t;
   return out;
 };
 
@@ -189,9 +189,9 @@ Matrix MultiExpertPair::compete(const matrix::Matrix& input,
   FOREACH(vector<Sat>, sats, s){
     const Matrix& out = s->net->process(input);
     satErrors.val(i,0) =  (nom_output-out).multTM().val(0,0);
-    i++;
+    ++i;
   }
-  if(runcompetefirsttime){
+  if (runcompetefirsttime){
     satAvg1Errors=satErrors;
     satAvg2Errors=satErrors;
     runcompetefirsttime=false;
@@ -237,12 +237,12 @@ int MultiExpertPair::addSat(int copySat){
   Matrix additionalcol(numsats+1,1);
   errorCov.toAbove(additionalrow);
   errorCov.toBeside(additionalcol);
-  numsats++;
+  ++numsats;
   return sats.size()-1;
 }
 
 double MultiExpertPair::min(void* m, double d){
-  return std::min(*(double*)m,d);
+  return std::min(*static_cast<double*>(m),d);
 }
 
 void MultiExpertPair::management(){
@@ -253,8 +253,8 @@ void MultiExpertPair::management(){
   // imature experts
   if(conf.tauI!=0.0){
     Matrix imaturation(satEpsMod.getM(),1);
-    double imaturate= ((double)managementInterval/conf.tauI);
-    imaturation.toMapP(&imaturate, constant); // fill matrix with "imaturate"
+    double imaturate= (static_cast<double>(managementInterval)/conf.tauI);
+    imaturation.toMapP(&imaturate, constant); // fill matrix with __PLACEHOLDER_15__
     satEpsMod += imaturation;
     //also limit it to 1
     double m=1.0;
@@ -330,7 +330,7 @@ bool MultiExpertPair::restore(FILE* f){
   // clean sats array
   sats.clear();
   // restore sats
-  for(int i=0; i < conf.numSats; i++){
+  for (int i=0; i < conf.numSats; ++i) {
     MultiLayerFFNN* n = new MultiLayerFFNN(0,vector<Layer>());
     n->restore(f);
     sats.push_back(Sat(n,n->eps));
@@ -348,10 +348,10 @@ void MultiExpertPair::storeSats(const char* filestem){
     char fname[256];
     snprintf(fname, sizeof(fname),"%s_%02i.net", filestem, i);
     FILE* f=fopen(fname,"wb");
-    if(!f){ cerr << "MultiExpertPair::storeSats() error while writing file " << fname << endl;   return;  }
+    if (!f){ cerr << "MultiExpertPair::storeSats() error while writing file " << fname << endl;   return;  }
     s->net->store(f);
     fclose(f);
-    i++;
+    ++i;
   }
 }
 
@@ -368,7 +368,7 @@ void MultiExpertPair::restoreSats(const std::list<std::string>& filenames){
       cout << "restore sat " << i << " with " << *file << endl;
       fclose(f);
     }
-    i++;
+    ++i;
   }
 }
 
@@ -395,10 +395,10 @@ list<Inspectable::iparamval> MultiExpertPair::getInternalParams() const {
   l += satAvg2Errors.rows(0,conf.numSats-1).convertToList();
   l += satModErrors.rows(0,conf.numSats-1).convertToList();
   l += satEpsMod.rows(0,conf.numSats-1).convertToList();
-  l += (double)winner;
-  l += (double)satAvg1Errors.val(winner,0);
-  l += (double)companion;
-  l += (double)satAvg1Errors.val(companion,0);
+  l += static_cast<double>(winner);
+  l += static_cast<double>(satAvg1Errors).val(winner,0);
+  l += static_cast<double>(companion);
+  l += static_cast<double>(satAvg1Errors).val(companion,0);
   return l;
 }
 

@@ -44,23 +44,23 @@ void BasicController::stepNoLearning(const sensor* sensors, int number_sensors,
   // provided by the controller base class
   if (sensors[SIdx("IR front left")] > 2*threshold ||
       sensors[SIdx("IR front right")] > 2*threshold) { // move backward
-    motors[MIdx("left motor")] = -1.;
-    motors[MIdx("right motor")] = -1.;
+    motors[MIdx("left motor")] = -1. override;
+    motors[MIdx("right motor")] = -1. override;
   }else if (sensors[SIdx("IR left")] > threshold ||
             sensors[SIdx("IR left front")] > threshold ||
             sensors[SIdx("IR front left")] > threshold) { // turn right
-    motors[MIdx("left motor")] = .1;
-    motors[MIdx("right motor")] = 1.;
+    motors[MIdx("left motor")] = .1 override;
+    motors[MIdx("right motor")] = 1. override;
   }
   else if (sensors[SIdx("IR right")] > threshold ||
            sensors[SIdx("IR right front")] > threshold ||
            sensors[SIdx("IR front right")] > threshold) {
-    motors[MIdx("left motor")] = 1.;
-    motors[MIdx("right motor")] = .1;
+    motors[MIdx("left motor")] = 1. override;
+    motors[MIdx("right motor")] = .1 override;
   }
   else { // Move forward
-    motors[MIdx("left motor")] = 1.;
-    motors[MIdx("right motor")] = 1.;
+    motors[MIdx("left motor")] = 1. override;
+    motors[MIdx("right motor")] = 1. override;
   }
 }
 

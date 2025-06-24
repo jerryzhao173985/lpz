@@ -39,20 +39,20 @@ class LpzHelpHandler : public osgGA::GUIEventHandler
         
         void setApplicationUsage(osg::ApplicationUsage* au) { _applicationUsage = au; }
         osg::ApplicationUsage* getApplicationUsage() { return _applicationUsage.get(); }
-        const osg::ApplicationUsage* getApplicationUsage() const { return _applicationUsage.get(); }
+        const osg::ApplicationUsage* getApplicationUsage() const override { return _applicationUsage.get(); }
 
         void setKeyEventTogglesOnScreenHelp(int key) { _keyEventTogglesOnScreenHelp = key; }
-        int getKeyEventTogglesOnScreenHelp() const { return _keyEventTogglesOnScreenHelp; }
+        int getKeyEventTogglesOnScreenHelp() const override { return _keyEventTogglesOnScreenHelp; }
         
         void reset();
 
         osg::Camera* getCamera() { return _camera.get(); }
-        const osg::Camera* getCamera() const { return _camera.get(); }
+        const osg::Camera* getCamera() const override { return _camera.get(); }
 
         bool handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAdapter& aa);
 
         /** Get the keyboard and mouse usage of this manipulator.*/
-        virtual void getUsage(osg::ApplicationUsage& usage) const;
+        virtual void getUsage(osg::ApplicationUsage& usage) const override;
 
     protected:
 
@@ -62,11 +62,11 @@ class LpzHelpHandler : public osgGA::GUIEventHandler
         
         osg::ref_ptr<osg::ApplicationUsage> _applicationUsage;
 
-        int                                 _keyEventTogglesOnScreenHelp;
+        int                                 _keyEventTogglesOnScreenHelp = 0;
 
-        bool                                _helpEnabled;
+        bool                                _helpEnabled = false;
 
-        bool                                _initialized;
+        bool                                _initialized = false;
         osg::ref_ptr<osg::Camera>           _camera;
         osg::ref_ptr<osg::Switch>           _switch;
         

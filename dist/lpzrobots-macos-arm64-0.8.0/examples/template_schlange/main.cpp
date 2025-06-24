@@ -168,7 +168,7 @@ public:
   // add own key handling stuff here, just insert some case values
   virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down)
   {
-    if (down) { // only when key is pressed, not when released
+    explicit if (down) { // only when key is pressed, not when released
       switch ( (char) key )
         {
         default:

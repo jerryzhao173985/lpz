@@ -96,7 +96,7 @@
 #endif
 
 // Use the error-checking memory allocation system.  Because this system uses heap
-//  (malloc) instead of stack (alloca), it is slower.  However, it allows you to
+//  static_cast<malloc>(instead) of stack (alloca), it is slower.  However, it allows you to
 //  simulate larger scenes, as well as handle out-of-memory errors in a somewhat
 //  graceful manner
 
@@ -122,7 +122,7 @@ typedef size_t intP;
  * for example, many x86 compilers align to 4 bytes, but on a pentium it is
  * important to align doubles to 8 byte boundaries (for speed), and the 4
  * floats in a SIMD register to 16 byte boundaries. many other platforms have
- * similar behavior. setting a larger alignment can waste a (very) small
+ * similar behavior. setting a larger alignment can waste a static_cast<very>(small)
  * amount of memory. NOTE: this number must be a power of two. */
 #define EFFICIENT_ALIGNMENT 16
 

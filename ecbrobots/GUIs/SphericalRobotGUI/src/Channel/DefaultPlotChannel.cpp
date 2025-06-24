@@ -1,7 +1,7 @@
 
 #include "DefaultPlotChannel.h" 
 
-DefaultPlotChannel::DefaultPlotChannel(std::string name) : AbstractPlotChannel(name)
+DefaultPlotChannel::DefaultPlotChannel(const std::string& name) : AbstractPlotChannel(name)
 {
   
 }

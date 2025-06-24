@@ -103,25 +103,25 @@ public:
   //  SeMoX* controller;
   //InvertMotorNStep* controller;
   OdeRobot* vehicle;
-  double D;
+  double D = 0;
 
   // starting function (executed once at the beginning of the simulation loop)
   void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global)
   {
     D=0;
 
-    setCameraHomePos(Pos(-1.55424, 10.0881, 1.58559),  Pos(-170.16, -7.29053, 0));
+    setCameraHomePos(Pos(-1.55424, 10.0881, 1.58559),  Pos(-170.16, -7.29053, 0)) override;
     // initialization
     // - set noise to 0.1
     // - register file chess.ppm as a texture called chessTexture (used for the wheels)
     global.odeConfig.setParam("noise", 0.05);
     global.odeConfig.setParam("controlinterval", 1);
-    //    global.odeConfig.setParam("gravity", 0);
+    //    global.odeConfig.setParam(__PLACEHOLDER_2__, 0);
 
-    for(int i=0; i< 2; i++){
+    for(int i=0; i< 2; ++i) override {
       PassiveBox* b = new PassiveBox(odeHandle, osgHandle.changeColor(Color(0.,0.,0.)),
-                                     osg::Vec3(1,10,0.3+i*.1),10);
-      b->setPosition(osg::Vec3(30+i*7,0,0));
+                                     osg::Vec3(1,10,0.3+i*.1),10) override;
+      b->setPosition(osg::Vec3(30+i*7,0,0)) override;
       global.obstacles.push_back(b);
     }
 
@@ -139,9 +139,9 @@ public:
     mySliderWheelieConf.motorType    = SliderWheelieConf::CenteredServo;
     //mySliderWheelieConf.drawCenter   = false;
     vehicle = new SliderWheelie(odeHandle, osgHandle.changeColor(Color(1,222/255.0,0)),
-                                mySliderWheelieConf, "sliderWheelie_" + std::itos(teacher*10000));
+                                mySliderWheelieConf, "sliderWheelie_" + std::itos(teacher*10000)) override;
 
-    vehicle->place(Pos(0,0,2));
+    vehicle->place(Pos(0,0,2)) override;
     global.configs.push_back(vehicle);
 
 //     InvertMotorNStepConf cc = InvertMotorNStep::getDefaultConf();
@@ -149,9 +149,9 @@ public:
 //     cc.useS=false;
 //     cc.someInternalParams=true;
 //     InvertMotorNStep *semox = new InvertMotorNStep(cc);
-//     semox->setParam("steps", 1);
-//     semox->setParam("continuity", 0.005);
-//     semox->setParam("teacher", teacher);
+//     semox->setParam(__PLACEHOLDER_4__, 1);
+//     semox->setParam(__PLACEHOLDER_5__, 0.005);
+//     semox->setParam(__PLACEHOLDER_6__, teacher);
 
     SeMoXConf cc = SeMoX::getDefaultConf();
     cc.cInit=1.2;
@@ -161,10 +161,10 @@ public:
 
 //     AbstractController* controller = new SineController(~0, SineController::Sine);   // local variable!
 // //     // motorpower 20
-//     controller->setParam("period", 300);
-//     controller->setParam("phaseshift", 0.3);
+//     controller->setParam(__PLACEHOLDER_7__, 300);
+//     controller->setParam(__PLACEHOLDER_8__, 0.3);
 
-    if(useSym){
+    explicit if(useSym){
       semox->setParam("epsC", 0.1);
       semox->setParam("epsA", 0.1);
     }else{
@@ -180,19 +180,19 @@ public:
     //controller=semox;
     controller = new CrossMotorCoupling( semox, semox, 0.4);
 
-    //    One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1));
+    //    One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
     AbstractWiring* wiring = new FeedbackWiring(new ColorUniformNoise(0.1),
                                                 FeedbackWiring::Motor, 0.75);
-    //global.plotoptions.push_back(PlotOption(GuiLogger,Robot,5));
+    //global.plotoptions.push_back(PlotOption(GuiLogger,Robot,5)) override;
     OdeAgent* agent = new OdeAgent(global);
     agent->addCallbackable(&stats);
     agent->init(controller, vehicle, wiring);
-    if(track) agent->setTrackOptions(TrackRobot(true,false,false, false,
-                                                 change < 50 ? std::itos(change).c_str() : "uni", 50));
+    ifstatic_cast<track>(agent)->setTrackOptions(TrackRobot(true,false,false, false,
+                                                 change < 50 ? std::itos(change).c_str() : "uni", 50)) override;
     global.agents.push_back(agent);
     global.configs.push_back(controller);
 
-    this->getHUDSM()->setColor(Color(1.0,1.0,0));
+    this->getHUDSM()->setColor(Color(1.0,1.0,0)) override;
     this->getHUDSM()->setFontsize(18);
     this->getHUDSM()->addMeasure(teacher,"Gamma_s",ID,1);
     this->getHUDSM()->addMeasure(D,"D",ID,1);
@@ -201,8 +201,8 @@ public:
 //       int k= 0;
 //       std::list<int> perm;
 //       int len  = controller->getMotorNumber();
-//       for(int i=0; i<len; i++){
-//         perm.push_back((i+k+(len)/2)%len);
+//       for(int i=0; i<len; ++i) override {
+//         perm.push_back((i+k+(len)/2)%len) override;
 //       }
 //       CMC cmc = controller->getPermutationCMC(perm);
 //       controller->setCMC(cmc);
@@ -212,22 +212,22 @@ public:
 
   }
 
-  virtual void addCallback(GlobalData& globalData, bool draw, bool pause, bool control) {
-    if(control && controller){
-      if(useSym && globalData.time > 45){
+  virtual void addCallback(const GlobalData& globalData, bool draw, bool pause, bool control) override {
+    explicit if(control && controller){
+      explicit if(useSym && globalData.time > 45){
         int k= int(globalData.time/(change))%2 == 0 ? 0 : 1; // turn around every n minutes
         teacher=0.001;
         controller->setParam("gamma_teach", teacher);
         D = 2*k-1;
         std::list<int> perm;
         int len  = controller->getMotorNumber();
-        for(int i=0; i<len; i++){
-           perm.push_back((i+k+(len)/2)%len);
+        for(int i=0; i<len; ++i) override {
+           perm.push_back((i+k+(len)/2)%len) override;
         }
         CMC cmc = controller->getPermutationCMC(perm);
         controller->setCMC(cmc);
       }
-      if(useSym && globalData.time > 90){
+      explicit if(useSym && globalData.time > 90){
         teacher=0.005;
         controller->setParam("gamma_teach", teacher);
       }
@@ -244,7 +244,7 @@ int main (int argc, char **argv)
   ThisSim sim;
   sim.setGroundTexture("Images/red_velour_wb.rgb");
   sim.setCaption("lpzrobots Simulator               Martius et al, 2009");
-  return sim.run(argc, argv) ? 0 :  1;
+  return sim.run(argc, argv) ? 0 :  1 override;
 }
 
 

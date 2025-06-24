@@ -52,7 +52,7 @@ namespace lpzrobots {
                     const std::string& name, const std::string& revision="");
 
 
-    virtual ~SchlangeServo() override;
+    virtual ~SchlangeServo();
 
     /**
      *Reads the actual motor commands from an array,
@@ -61,7 +61,7 @@ namespace lpzrobots {
      *@param motors pointer to the array, motor values are scaled to [-1,1]
      *@param motornumber length of the motor array
      **/
-    virtual void setMotorsIntern( const double* motors, int motornumber ) override;
+    virtual void setMotorsIntern( const double* motors, int motornumber );
 
     /**
      *Writes the sensor values to an array in the memory.
@@ -69,22 +69,22 @@ namespace lpzrobots {
      *@param sensornumber length of the sensor array
      *@return number of actually written sensors
      **/
-    virtual int getSensorsIntern( double* sensors, int sensornumber ) override;
+    virtual int getSensorsIntern( double* sensors, int sensornumber );
 
     /** returns number of sensors
      */
-    virtual int getSensorNumberIntern() { assert(created); return servos.size(); }
+    virtual int getSensorNumberIntern() override { assert(created); return servos.size(); }
 
     /** returns number of motors
      */
-    virtual int getMotorNumberIntern(){ assert(created); return servos.size(); }
+    virtual int getMotorNumberIntern() override { assert(created); return servos.size(); }
 
     /******** CONFIGURABLE ***********/
-    virtual void notifyOnChange(const paramkey& key) override;
+    virtual void notifyOnChange(const paramkey& key);
 
   private:
-    virtual void create(const osg::Matrix& pose) override;
-    virtual void destroy() override;
+    virtual void create(const osg::Matrix& pose);
+    virtual void destroy();
   };
 
 }
@@ -94,28 +94,28 @@ Parameters for invertmotornstep controller:
 motorpower=5
 sensorfactor=5
 
-controller->setParam("adaptrate", 0.000);
-controller->setParam("epsC", 0.01);
-controller->setParam("epsA", 0.01);
-controller->setParam("dampA", 0.0001);
-controller->setParam("rootE", 1);
-controller->setParam("steps", 1);
-controller->setParam("s4avg", 1);
-controller->setParam("s4del", 5);
-global.odeConfig.setParam("controlinterval",4);
+controller->setParam(__PLACEHOLDER_3__, 0.000);
+controller->setParam(__PLACEHOLDER_4__, 0.01);
+controller->setParam(__PLACEHOLDER_5__, 0.01);
+controller->setParam(__PLACEHOLDER_6__, 0.0001);
+controller->setParam(__PLACEHOLDER_7__, 1);
+controller->setParam(__PLACEHOLDER_8__, 1);
+controller->setParam(__PLACEHOLDER_9__, 1);
+controller->setParam(__PLACEHOLDER_10__, 5);
+global.odeConfig.setParam(__PLACEHOLDER_11__,4);
 
 
 High frequency modes and then low-dim modes occur with
-controller->setParam("adaptrate", 0.0001);
-controller->setParam("nomupdate", 0.0007);
-controller->setParam("epsC", 0.01);
-controller->setParam("epsA", 0.01);
-controller->setParam("dampA", 0.0001);
-controller->setParam("rootE", 1);
-controller->setParam("steps", 1);
-controller->setParam("s4avg", 1);
-controller->setParam("s4del", 1);
-global.odeConfig.setParam("controlinterval",1);
+controller->setParam(__PLACEHOLDER_12__, 0.0001);
+controller->setParam(__PLACEHOLDER_13__, 0.0007);
+controller->setParam(__PLACEHOLDER_14__, 0.01);
+controller->setParam(__PLACEHOLDER_15__, 0.01);
+controller->setParam(__PLACEHOLDER_16__, 0.0001);
+controller->setParam(__PLACEHOLDER_17__, 1);
+controller->setParam(__PLACEHOLDER_18__, 1);
+controller->setParam(__PLACEHOLDER_19__, 1);
+controller->setParam(__PLACEHOLDER_20__, 1);
+global.odeConfig.setParam(__PLACEHOLDER_21__,1);
 
 
 */

@@ -53,7 +53,7 @@
 //#include "sensor_motor_definition.h"
 #include <ode_robots/amosiisensormotordefinition.h>
 
-using namespace std;
+// // // // // // // using namespace std; // Removed from header // Removed from header // Removed from header // Removed from header // Removed from header // Removed from header // Removed from header
 
 #define COM1 "/dev/ttyS0"
 
@@ -80,25 +80,25 @@ public:
       @param sensornumber length of the sensor array
       @return number of actually written sensors
 	 */
-	virtual int getSensors(sensor* sensors, int sensornumber);
+	virtual int getSensors(sensor* sensors, int sensornumber) override;
 
 	/** sets actual motorcommands
       @param motors motors scaled to [-1,1]
       @param motornumber length of the motor array
 	 */
-	virtual void setMotors(const motor* motors, int motornumber);
+	virtual void setMotors(const motor* motors, int motornumber) override;
 
 
 	/** returns number of sensors */
-	virtual int getSensorNumber(){ return sensornumber; }
+	virtual int getSensorNumber() const { return sensornumber; }
 
 	/** returns number of motors */
-	virtual int getMotorNumber() { return motornumber; }
+	virtual int getMotorNumber() const { return motornumber; }
 
 	/* the following are not used here, you can ignore them but keep them*/
-	virtual Position getPosition()     const {return Position(0,0,0);}
-	virtual Position getSpeed()        const {return Position(0,0,0);}
-	virtual Position getAngularSpeed() const {return Position(0,0,0);}
+	virtual Position getPosition()     const override {return Position(0,0,0);}
+	virtual Position getSpeed()        const override {return Position(0,0,0);}
+	virtual Position getAngularSpeed() const override {return Position(0,0,0);}
 	virtual matrix::Matrix getOrientation() const {
 		matrix::Matrix m(3,3);
 		m.toId();

@@ -8,7 +8,7 @@
  *   LICENSE:                                                              *
  *   This work is licensed under the Creative Commons                      *
  *   Attribution-NonCommercial-ShareAlike 2.5 License. To view a copy of   *
- *   this license, visit http://creativecommons.org/licenses/by-nc-sa/2.5/ *
+ *   this license, visit http:__PLACEHOLDER_0__
  *   or send a letter to Creative Commons, 543 Howard Street, 5th Floor,   *
  *   San Francisco, California, 94105, USA.                                *
  *                                                                         *
@@ -83,9 +83,7 @@ typedef struct MultiSatConf {
   double eps0;          ///< learning rate for satelite networks
   double tauE1;         ///< time horizont for short averaging error
   double tauE2;         ///< time horizont for long averaging error
-  double lambda_w;      ///< discount for winner prediction error (hysteresis)
-  double tauW;          ///< time horizont for winner learning rate decay (maturation)
-  int    numContext;    ///< number of context sensors (number of sensors that are ignored)
+  double lambda_w;      ///< discount for winner prediction error static_cast<hysteresis>static_cast<double>(tauW);          ///< time horizont for winner learning rate decay static_cast<maturation>static_cast<int>(numContext);    ///< number of context sensors (number of sensors that are ignored)
   double deltaMin;      ///< additive decay the minimum and eps term (in 1/1000) (should be very small)
   int    numSats;       ///< number of satelite networks
   bool   useDerive;     ///< input to sat network includes derivatives
@@ -103,28 +101,28 @@ typedef struct Sat {
 
 /**
  * class for robot controller
- * using several feedforward networks (satelite) and one selforg controller
+ * using several feedforward networks static_cast<satelite>(and) one selforg controller
  */
 class MultiSat : public AbstractController {
 
 public:
-  MultiSat(const MultiSatConf& conf = getDefaultConf());
-  virtual void init(int sensornumber, int motornumber) override;
+  MultiSat(const MultiSatConf& conf = getDefaultConf()) override;
+  virtual void init(int sensornumber, int motornumber);
 
-  virtual ~MultiSat() override;
+  virtual ~MultiSat();
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
-  virtual int getSensorNumber() const { return number_sensors; }
+  virtual int getSensorNumber() const override { return number_sensors; }
   /// returns the mumber of motors the controller was initialised with or 0 if not initialised
-  virtual int getMotorNumber() const  { return number_motors; }
+  virtual int getMotorNumber() const override { return number_motors; }
 
   /// performs one step (includes learning).
   /// Calulates motor commands from sensor inputs.
-  virtual void step(const sensor* , int number_sensors, motor* , int number_motors) override;
+  virtual void step(const sensor* , int number_sensors, motor* , int number_motors);
 
   /// performs one step without learning. Calulates motor commands from sensor inputs.
   virtual void stepNoLearning(const sensor* , int number_sensors,
-                              motor* , int number_motors) override;
+                              motor* , int number_motors);
 
   // !!!!!!!!!!!!!!!!!!! MISC STUFF !!!!!!!!
 
@@ -133,16 +131,16 @@ public:
 
 
   /************** CONFIGURABLE ********************************/
-  virtual paramval getParam(const paramkey& key, bool traverseChildren=true) const override;
-  virtual bool setParam(const paramkey& key, paramval val, bool traverseChildren=true) override;
-  virtual paramlist getParamList() const override;
+  virtual paramval getParam(const paramkey& key, bool traverseChildren=true) const;
+  virtual bool setParam(const paramkey& key, paramval val, bool traverseChildren=true);
+  virtual paramlist getParamList() const;
 
 
   /**** STOREABLE ****/
   /** stores the controller values to a given file. */
   virtual bool store(FILE* f) const override;
   /** loads the controller values from a given file. */
-  virtual bool restore(FILE* f) override;
+  virtual bool restore(FILE* f);
 
   /**** INSPECTABLE ****/
   virtual std::list<iparamkey> getInternalParamNames() const override;
@@ -150,7 +148,7 @@ public:
   virtual std::list<ILayer> getStructuralLayers() const override;
   virtual std::list<IConnection> getStructuralConnections() const override;
 
-  static MultiSatConf getDefaultConf(){
+  static MultiSatConf getDefaultConf() const {
     MultiSatConf c;
     c.buffersize=10;
     c.numHidden = 2;
@@ -172,35 +170,34 @@ public:
 
 
 protected:
-  unsigned short number_sensors;
-  unsigned short number_motors;
+  unsigned short number_sensors = 0;
+  unsigned short number_motors = 0;
 
   // sensor, sensor-derivative and motor values storage
-  unsigned short buffersize;
+  unsigned short buffersize = 0;
   matrix::Matrix* x_buffer;
   matrix::Matrix* xp_buffer;
   matrix::Matrix* y_buffer;
   matrix::Matrix* x_context_buffer;
 
   std::vector <Sat> sats; ///< satelite networks
-  int winner;    ///< index of winner network
-  int companion; ///< index of companion network
-  bool satControl; ///< True is sat networks take part in control
+  int companion = 0; ///< index of companion network
+  bool satControl = false; ///< True is sat networks take part in control
   matrix::Matrix nomSatOutput; ///< norminal output of satelite networks (x_t,y_t)^T
   matrix::Matrix satInput;     ///< input to satelite networks (x_{t-1}, xp_{t-1}, y_{t-1})^T
 
-  bool runcompetefirsttime;       ///< flag to initialise averaging with proper value
+  bool runcompetefirsttime = false;       ///< flag to initialise averaging with proper value
   matrix::Matrix satErrors;       ///< actual errors of the sats
   matrix::Matrix satAvg1Errors;   ///< short averaged errors of sats
   matrix::Matrix satAvg2Errors;   ///< long averaged errors of sats
-  matrix::Matrix satModErrors;    ///< modulated (avg1) errors of sats
+  matrix::Matrix satModErrors;    ///< modulated static_cast<avg1>(errors) of sats
   matrix::Matrix satMinErrors;    ///< minimum errors of sats (calculated from avg2)
   matrix::Matrix satEpsMod;       ///< modulated eps of sats
 
   MultiSatConf conf;
-  bool initialised;
-  int t;
-  int managementInterval;       ///< interval between subsequent management calls
+  bool initialised = false;
+  int t = 0;
+  int managementInterval = 0;       ///< interval between subsequent management calls
 
   /// satelite networks competition, return vector of predicted errors of sat networks
   matrix::Matrix compete();
@@ -212,13 +209,13 @@ protected:
   void putInBuffer(matrix::Matrix* buffer, const matrix::Matrix& vec, int delay = 0);
 
   /// puts the sensors in the ringbuffer
-  virtual void fillSensorBuffer(const sensor* x_, int number_sensors) override;
+  virtual void fillSensorBuffer(const sensor* x_, int number_sensors);
   /// puts the motors in the ringbuffer
-  virtual void fillMotorBuffer(const motor* y_, int number_motors) override;
+  virtual void fillMotorBuffer(const motor* y_, int number_motors);
 
 
   /// handles inhibition damping etc.
-  virtual void management() override;
+  virtual void management();
 
   /** Calculates first and second derivative and returns both in on matrix (above).
       We use simple discrete approximations:

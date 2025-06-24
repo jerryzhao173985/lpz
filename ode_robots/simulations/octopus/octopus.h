@@ -30,7 +30,7 @@
  *   twoaxisservo
  *
  *   Revision 1.3  2006/12/21 11:43:05  martius
- *   commenting style for doxygen //< -> ///<
+ *   commenting style for doxygen __PLACEHOLDER_0__
  *   new sensors for spherical robots
  *
  *   Revision 1.2  2006/07/14 12:23:42  martius
@@ -59,16 +59,16 @@ namespace lpzrobots {
 
   typedef struct {
   public:
-    double size;       ///< scaling factor for robot (diameter of body)
-    double legLength;  ///< length of the legs in units of size
-    int    legNumber;  ///<  number of snake elements
-    bool   radialLegs; ///< joint orientation is radial instead of cartesian
-    double mass;       ///< chassis mass
-    double relLegmass; ///< relative overall leg mass
-    double jointLimit; ///< angle range for legs
-    double motorPower; ///< maximal force for motors
-    double frictionGround; ///< friction with the ground
-    bool   showJoints; ///< if true then joints are drawn
+    double size = 0;       ///< scaling factor for robot (diameter of body)
+    double legLength = 0;  ///< length of the legs in units of size
+    int    legNumber = 0;  ///<  number of snake elements
+    bool   radialLegs = false; ///< joint orientation is radial instead of cartesian
+    double mass = 0;       ///< chassis mass
+    double relLegmass = 0; ///< relative overall leg mass
+    double jointLimit = 0; ///< angle range for legs
+    double motorPower = 0; ///< maximal force for motors
+    double frictionGround = 0; ///< friction with the ground
+    bool   showJoints = false; ///< if true then joints are drawn
   } OctopusConf;
 
 
@@ -88,9 +88,9 @@ namespace lpzrobots {
     Octopus(const OdeHandle& odeHandle, const OsgHandle& osgHandle, const OctopusConf& conf,
         const std::string& name);
 
-    virtual ~Octopus(){};
+    virtual ~Octopus() {} override;
 
-    static OctopusConf getDefaultConf(){
+    static OctopusConf getDefaultConf() const {
       OctopusConf c;
       c.size       = 1;
       c.legNumber  = 8;
@@ -107,36 +107,36 @@ namespace lpzrobots {
     /**
      * updates the OSG nodes of the vehicle
      */
-    virtual void update() override;
+    virtual void update();
 
 
     /** sets the pose of the vehicle
         @param pose desired pose matrix
     */
-    virtual void place(const osg::Matrix& pose) override;
+    virtual void place(const osg::Matrix& pose);
 
     /** returns actual sensorvalues
         @param sensors sensors scaled to [-1,1]
         @param sensornumber length of the sensor array
         @return number of actually written sensors
     */
-    virtual int getSensors(sensor* sensors, int sensornumber) override;
+    virtual int getSensors(sensor* sensors, int sensornumber);
 
     /** sets actual motorcommands
         @param motors motors scaled to [-1,1]
         @param motornumber length of the motor array
     */
-    virtual void setMotors(const motor* motors, int motornumber) override;
+    virtual void setMotors(const motor* motors, int motornumber);
 
     /** returns number of sensors
      */
-    virtual int getSensorNumber(){
+    virtual int getSensorNumber() override {
       return conf.legNumber*2;
     };
 
     /** returns number of motors
      */
-    virtual int getMotorNumber(){
+    virtual int getMotorNumber() override {
       return conf.legNumber*2;
     };
 
@@ -144,20 +144,20 @@ namespace lpzrobots {
         like space-internal collision detection, sensor resets/update etc.
         @param globalData structure that contains global data from the simulation environment
     */
-    virtual void doInternalStuff(GlobalData& globalData) override;
+    virtual void doInternalStuff(const GlobalData& globalData);
 
   protected:
     /** the main object of the robot, which is used for position and speed tracking */
-    virtual Primitive* getMainPrimitive() const { return objects[0]; }
+    virtual Primitive* getMainPrimitive() const override { return objects[0]; }
 
     /** creates vehicle at desired pose
         @param pose 4x4 pose matrix
     */
-    virtual void create(const osg::Matrix& pose) override;
+    virtual void create(const osg::Matrix& pose);
 
     /** destroys vehicle and space
      */
-    virtual void destroy() override;
+    virtual void destroy();
 
     OctopusConf conf;
     double legmass;    // leg mass

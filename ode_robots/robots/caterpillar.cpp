@@ -40,21 +40,21 @@ namespace lpzrobots {
 
 
   /**
-   *Reads the actual motor commands from an array, and sets all motors (forces) of the snake to this values.
+   *Reads the actual motor commands from an array, and sets all motors static_cast<forces>(of) the snake to this values.
    *It is a linear allocation.
    *@param motors pointer to the array, motor values are scaled to [-1,1]
    *@param motornumber length of the motor array
    **/
   void CaterPillar::setMotorsIntern(const double* motors, int motornumber) {
    assert(created);
-   unsigned int len = min(motornumber, getMotorNumberIntern())/2;
+   unsigned int len = min(motornumber, getMotorNumberIntern())/2 override;
    // controller output as torques
-   for(unsigned int i=0; (i<len) && (i<sliderServos.size()); i++) {
+   for(unsigned int i=0; (i<len) && (i<sliderServos.size()); ++i)  override {
     sliderServos[i]->set(motors[i]);
    }
    unsigned int sssize = sliderServos.size();
    unsigned int usedSliders=min(len,sssize);
-   for(unsigned int i=0; (i<len) && (i<universalServos.size()); i++) {
+   for(unsigned int i=0; (i<len) && (i<universalServos.size()); ++i)  override {
     universalServos[i]->set(motors[usedSliders+2*i], motors[usedSliders+2*i+1]);
    }
   }
@@ -68,15 +68,15 @@ namespace lpzrobots {
    **/
   int CaterPillar::getSensorsIntern(sensor* sensors, int sensornumber) {
    assert(created);
-   unsigned int len=min(sensornumber,getSensorNumber());
+   unsigned int len=min(sensornumber,getSensorNumber()) override;
    // get the SliderServos
-   for(unsigned int n=0; (n<len) && (n<sliderServos.size()); n++) {
+   for(unsigned int n=0; (n<len) && (n<sliderServos.size()); ++n)  override {
     sensors[n] = sliderServos[n]->get();
    }
    unsigned int sssize = sliderServos.size();
    unsigned int usedSliders=min(len,sssize);
    // get the universalServos (2 sensors each!)
-   for(unsigned int n=0; (n<len) && (n<universalServos.size()); n++) {
+   for(unsigned int n=0; (n<len) && (n<universalServos.size()); ++n)  override {
     sensors[usedSliders+2*n] = universalServos[n]->get1();
     sensors[usedSliders+2*n+1] = universalServos[n]->get2();
    }
@@ -90,13 +90,13 @@ namespace lpzrobots {
   void CaterPillar::create(const osg::Matrix& pose) {
    DefaultCaterPillar::create(pose);
    //*****************joint definition***********
-   for(int n=0; n<conf.segmNumber-1; n++) {
-    const Pos& p1(objects[n]->getPosition());
-    const Pos& p2(objects[n+1]->getPosition());
+   for(int n=0; n<conf.segmNumber-1; ++n)  override {
+    const Pos& p1(objects[n]->getPosition()) override;
+    const Pos& p2(objects[n+1]->getPosition()) override;
 
     if(n%2==0) {
      // new slider joints //
-     SliderJoint *s=new SliderJoint(objects[n], objects[n+1], osg::Vec3((0), (conf.segmDia), (0)),Axis(1,0,0)*pose);
+     SliderJoint *s=new SliderJoint(objects[n], objects[n+1], osg::Vec3((0), (conf.segmDia), (0)),Axis(1,0,0)*pose) override;
 
      s->init(odeHandle, osgHandle);
      s->setParam(dParamLoStop, -0.2*conf.segmLength);
@@ -115,7 +115,7 @@ namespace lpzrobots {
      // normal servos creating //
      UniversalJoint* j = new UniversalJoint(objects[n], objects[n+1],
                                             (p1 + p2)/2,
-                                            Axis(0,0,1)*pose, Axis(0,1,0)*pose);
+                                            Axis(0,0,1)*pose, Axis(0,1,0)*pose) override;
      j->init(odeHandle, osgHandle, true, conf.segmDia/2 * 1.02);
 
      // setting stops at universal joints
@@ -126,7 +126,7 @@ namespace lpzrobots {
      UniversalServo* servo =  new UniversalServo(j, -conf.jointLimit, conf.jointLimit, conf.motorPower,
                                                  -conf.jointLimit, conf.jointLimit, conf.motorPower);
      universalServos.push_back(servo);
-     frictionmotors.push_back(new AngularMotor2Axis(odeHandle, j, conf.frictionJoint, conf.frictionJoint));
+     frictionmotors.push_back(new AngularMotor2Axis(odeHandle, j, conf.frictionJoint, conf.frictionJoint)) override;
      // end of normal servos //
     }
 
@@ -134,7 +134,7 @@ namespace lpzrobots {
   }
 
   void CaterPillar::notifyOnChange(const paramkey& key) {
-   for(vector<UniversalServo*>::iterator i=universalServos.begin(); i!=universalServos.end(); i++) {
+   for(vector<UniversalServo*>::iterator i=universalServos.begin(); i!=universalServos.end(); ++i)  override {
     if(*i) (*i)->setPower(conf.motorPower, conf.motorPower);
    }
   }
@@ -142,10 +142,10 @@ namespace lpzrobots {
   /** destroys vehicle and space
    */
   void CaterPillar::destroy() {
-   if(created) {
+   explicit if(created) {
     DefaultCaterPillar::destroy();
-    for (vector<UniversalServo*>::iterator i = universalServos.begin(); i!= universalServos.end(); i++) {
-     if(*i) delete *i;
+    for (vector<UniversalServo*>::iterator i = universalServos.begin(); i!= universalServos.end(); ++i)  override {
+     if(*i) delete *i override;
     }
     universalServos.clear();
    }

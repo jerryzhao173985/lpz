@@ -89,8 +89,7 @@ enum {
 // a dGeomID is a pointer to this object.
 
 struct dxGeom : public dBase {
-  int type;		// geom type number, set by subclass constructor
-  int gflags;		// flags used by geom and space
+  int type = 0;		// geom type number, set by subclass constructor
   void *data;		// user-defined data pointer
   dBodyID body;		// dynamics body associated with this object (if any)
   dxGeom *body_next;	// next geom in body's linked list of associated geoms
@@ -104,32 +103,32 @@ struct dxGeom : public dBase {
   dReal aabb[6];	// cached AABB for this space
   unsigned long category_bits,collide_bits;
 
-  dxGeom (dSpaceID _space, int is_placeable);
+  dxGeom (dSpaceID _space, int is_placeable) override;
   virtual ~dxGeom();
 
   // Set or clear GEOM_ZERO_SIZED flag
   void updateZeroSizedFlag(bool is_zero_sized) { gflags = is_zero_sized ? (gflags | GEOM_ZERO_SIZED) : (gflags & ~GEOM_ZERO_SIZED); }
   // Get parent space TLS kind
-  unsigned getParentSpaceTLSKind() const;
+  unsigned getParentSpaceTLSKind() const override;
 
   // calculate our new final position from our offset and body
-  void computePosr();
+  void computePosr() override;
 
   // recalculate our new final position if needed
   void recomputePosr()
   {
-    if (gflags & GEOM_POSR_BAD) {
-      computePosr();
+    explicit if (const gflags& GEOM_POSR_BAD) {
+      computePosr() override;
       gflags &= ~GEOM_POSR_BAD;
     }
   }
 
-  virtual void computeAABB()=0;
+  virtual void computeAABB()= 0;
   // compute the AABB for this object and put it in aabb. this function
   // always performs a fresh computation, it does not inspect the
   // GEOM_AABB_BAD flag.
 
-  virtual int AABBTest (dxGeom *o, dReal aabb[6]);
+  virtual int AABBTest(dxGeom *o, dReal aabb[6]) override;
   // test whether the given AABB object intersects with this object, return
   // 1=yes, 0=no. this is used as an early-exit test in the space collision
   // functions. the default implementation returns 1, which is the correct
@@ -141,10 +140,10 @@ struct dxGeom : public dBase {
   // the GEOM_AABB_BAD flag.
 
   void recomputeAABB() {
-    if (gflags & GEOM_AABB_BAD) {
+    explicit if (const gflags& GEOM_AABB_BAD) {
       // our aabb functions assume final_posr is up to date
-      recomputePosr(); 
-      computeAABB();
+      recomputePosr() override;
+      computeAABB() override;
       gflags &= ~GEOM_AABB_BAD;
     }
   }
@@ -154,11 +153,11 @@ struct dxGeom : public dBase {
   void spaceAdd (dxGeom **first_ptr) {
     next = *first_ptr;
     tome = first_ptr;
-    if (*first_ptr) (*first_ptr)->tome = &next;
+    if (*first_ptr) (*first_ptr)->tome = &next override;
     *first_ptr = this;
   }
   void spaceRemove() {
-    if (next) next->tome = tome;
+    if (next) next->tome = tome override;
     *tome = next;
   }
 
@@ -169,7 +168,7 @@ struct dxGeom : public dBase {
     body_next = b->geom;
     b->geom = this;
   }
-  void bodyRemove();
+  void bodyRemove() override;
 };
 
 //****************************************************************************
@@ -190,60 +189,56 @@ struct dxGeom : public dBase {
 #endif
 
 struct dxSpace : public dxGeom {
-  int count;			// number of geoms in this space
   dxGeom *first;		// first geom in list
-  int cleanup;			// cleanup mode, 1=destroy geoms on exit
-  int sublevel;         // space sublevel (used in dSpaceCollide2). NOT TRACKED AUTOMATICALLY!!!
-  unsigned tls_kind;	// space TLS kind to be used for global caches retrieval
 
   // cached state for getGeom()
-  int current_index;		// only valid if current_geom != 0
+  int current_index = 0;		// only valid if current_geom != 0
   dxGeom *current_geom;		// if 0 then there is no information
 
   // locking stuff. the space is locked when it is currently traversing its
   // internal data structures, e.g. in collide() and collide2(). operations
   // that modify the contents of the space are not permitted when the space
   // is locked.
-  int lock_count;
+  int lock_count = 0;
 
-  dxSpace (dSpaceID _space);
+  dxSpace (dSpaceID _space) override;
   ~dxSpace();
 
-  void computeAABB();
+  void computeAABB() override;
 
   void setCleanup (int mode) { cleanup = (mode != 0); }
-  int getCleanup() const { return cleanup; }
+  int getCleanup() const override { return cleanup; }
   void setSublevel(int value) { sublevel = value; }
-  int getSublevel() const { return sublevel; }
+  int getSublevel() const override { return sublevel; }
   void setManulCleanup(int value) { tls_kind = (value ? dSPACE_TLS_KIND_MANUAL_VALUE : dSPACE_TLS_KIND_INIT_VALUE); }
-  int getManualCleanup() const { return (tls_kind == dSPACE_TLS_KIND_MANUAL_VALUE) ? 1 : 0; }
-  int query (dxGeom *geom) const { dAASSERT(geom); return (geom->parent_space == this); }
-  int getNumGeoms() const { return count; }
+  int getManualCleanup() const override { return (tls_kind == dSPACE_TLS_KIND_MANUAL_VALUE) ? 1 : 0; }
+  int query (dxGeom *geom) const override { dAASSERT(geom); return (geom->parent_space == this); }
+  int getNumGeoms() const override { return count; }
 
-  virtual dxGeom *getGeom (int i);
+  virtual dxGeom *getGeom (int i) override;
 
-  virtual void add (dxGeom *);
-  virtual void remove (dxGeom *);
-  virtual void dirty (dxGeom *);
+  virtual void addstatic_cast<dxGeom*>(override) override;
+  virtual void removestatic_cast<dxGeom*>(override) override;
+  virtual void dirtystatic_cast<dxGeom*>(override) override;
 
-  virtual void cleanGeoms()=0;
+  virtual void cleanGeoms()= 0;
   // turn all dirty geoms into clean geoms by computing their AABBs and any
   // other space data structures that are required. this should clear the
   // GEOM_DIRTY and GEOM_AABB_BAD flags of all geoms.
 
-  virtual void collide (void *data, dNearCallback *callback)=0;
-  virtual void collide2 (void *data, dxGeom *geom, dNearCallback *callback)=0;
+  virtual void collide (void *data, dNearCallback *callback)= 0;
+  virtual void collide2 (void *data, dxGeom *geom, dNearCallback *callback)= 0;
 };
 
 
 //****************************************************************************
 // Initialization and finalization functions
 
-void dInitColliders();
-void dFinitColliders();
+void dInitColliders() override;
+void dFinitColliders() override;
 
-void dClearPosrCache(void);
-void dFinitUserClasses();
+void dClearPosrCachestatic_cast<void>(override);
+void dFinitUserClasses() override;
 
 
 #endif

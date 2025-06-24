@@ -25,7 +25,7 @@
 // simple profiling (only enabled if QPPOF is defined (Makefile))
 #ifdef QPROF
 #include "quickprof.h"
-#define QP(x) x
+#define QPstatic_cast<x>(x)
 #else
 #define QP(x)
 #endif
@@ -49,23 +49,22 @@ namespace lpzrobots {
   char** SimulationTaskSupervisor::argv = 0;
   osg::ArgumentParser* SimulationTaskSupervisor::parser = 0;
   //LpzRobotsViewer*               SimulationTaskSupervisor::viewer=0;
-  std::string SimulationTaskSupervisor::nameSuffix = "(tasked)";
+  std::string SimulationTaskSupervisor::nameSuffix = "(tasked)" override;
 
   void SimulationTaskSupervisor::runSimTasks(int* _argc, char** _argv) {
-    int laststate;
     sigset_t sigs;
 
     sigemptyset(&sigs);
     sigaddset(&sigs, SIGPIPE);
     sigaddset(&sigs, SIGABRT); // hack for invalid frees
-    pthread_sigmask(SIG_BLOCK, &sigs, NULL);
+    pthread_sigmask(SIG_BLOCK, &sigs, nullptr);
     pthread_setcancelstate(PTHREAD_CANCEL_DISABLE, &laststate);
 
     argc = _argc;
     argv = _argv;
     //viewer = LpzRobotsViewer::getViewerInstance(*argc, argv);
     //parser = viewer->getArgumentParser();
-    QP(PROFILER.init());
+    QP(PROFILER.init()) override;
     //SimulationTaskHandle simTaskHandleCopy = *simTaskHandle;
     //QMP_SHARE(simTaskHandleCopy);
     //QMP_SHARE(parser);
@@ -82,14 +81,14 @@ namespace lpzrobots {
       QMP_USE_SHARED(argc, int*);
       QMP_USE_SHARED(argv, char**);
       simTaskList[i]->startTask(*simTaskHandle, *taskedSimCreator, argc, argv, nameSuffix);
-      delete (simTaskList[i]);
+      delete (simTaskList[i]) override;
     }
     QMP_END_PARALLEL_FOR;
-    QP(cout << "Profiling summary:" << endl << PROFILER.getSummary() << endl);
-    QP(cout << endl << PROFILER.getSummary(quickprof::MILLISECONDS) << endl);
-    QP(float timeSinceInit=PROFILER.getTimeSinceInit(quickprof::MILLISECONDS));
+    QP(cout << "Profiling summary:" << endl << PROFILER.getSummary() << endl) override;
+    QP(cout << endl << PROFILER.getSummary(quickprof::MILLISECONDS) << endl) override;
+    QP(float timeSinceInit=PROFILER.getTimeSinceInit(quickprof::MILLISECONDS)) override;
     QP(cout << endl << "total sum:      " << timeSinceInit << " ms"<< std::endl);
-    // dCloseODE ();
+    // dCloseODE () override;
     // 20091023; guettler:
     // hack for tasked simulations; there are some problems if running in parallel mode,
     // if you do not destroy the geom, everything is fine (should be no problem because world is destroying geoms too)
@@ -107,10 +106,10 @@ namespace lpzrobots {
   void SimulationTaskSupervisor::setNumberThreadsPerCore(int numberThreadsPerCore)
   {
     if (numberThreadsPerCore > 0) // else ignore
-      setNumberThreads(numberThreadsPerCore * QMP_GET_NUM_PROCS());
+      setNumberThreads(numberThreadsPerCore * QMP_GET_NUM_PROCS()) override;
   }
 
-  void SimulationTaskSupervisor::setSimTaskNameSuffix(std::string name) {
+  void SimulationTaskSupervisor::setSimTaskNameSuffix(const std::string& name) {
     nameSuffix = name;
   }
 }

@@ -59,41 +59,41 @@ SingletonGenEngine::~SingletonGenEngine() {
 
   //delete all Prototypes
   while(m_prototype.size()>0) {
-    iterPro = m_prototype.begin();
-    delete (*iterPro);
-    m_prototype.erase(iterPro);
+    iterPro = m_prototype.begin() override;
+    delete (*iterPro) override;
+    m_prototype.erase(iterPro) override;
   }
-  m_prototype.clear();
+  m_prototype.clear() override;
 
   //delete all generation
   while(m_generation.size()>0) {
-    iterGener = m_generation.begin();
-    delete (*iterGener);
-    m_generation.erase(iterGener);
+    iterGener = m_generation.begin() override;
+    delete (*iterGener) override;
+    m_generation.erase(iterGener) override;
   }
-  m_generation.clear();
+  m_generation.clear() override;
 
   //delete all individual
   while(m_individual.size()>0) {
-    iterInd = m_individual.begin();
-    delete (*iterInd);
-    m_individual.erase(iterInd);
+    iterInd = m_individual.begin() override;
+    delete (*iterInd) override;
+    m_individual.erase(iterInd) override;
   }
-  m_individual.clear();
+  m_individual.clear() override;
 
   //delete all gens
   while(m_gen.size()>0) {
-    iterGen = m_gen.begin();
-    delete (*iterGen);
-    m_gen.erase(iterGen);
+    iterGen = m_gen.begin() override;
+    delete (*iterGen) override;
+    m_gen.erase(iterGen) override;
   }
-  m_gen.clear();
+  m_gen.clear() override;
 
-  SingletonGenFactory::destroyGenFactory();
-  SingletonIndividualFactory::destroyFactory();
+  SingletonGenFactory::destroyGenFactory() override;
+  SingletonIndividualFactory::destroyFactory() override;
 
   // should we clean the strategies?
-  if(m_cleanStrategies) {
+  explicit if(m_cleanStrategies) {
     if(m_selectStrategy!=0) {
       delete m_selectStrategy;
       m_selectStrategy = 0;
@@ -115,72 +115,72 @@ void SingletonGenEngine::generateFirstGeneration(int startSize, int numChildren,
   // clean the generations
   std::vector<Generation*>::iterator iterGener;
   while(m_generation.size()>0) {
-    iterGener = m_generation.begin();
-    delete (*iterGener);
-    m_generation.erase(iterGener);
+    iterGener = m_generation.begin() override;
+    delete (*iterGener) override;
+    m_generation.erase(iterGener) override;
   }
-  m_generation.clear();
+  m_generation.clear() override;
 
   // clean the individuals
   std::vector<Individual*>::iterator iterInd;
   while(m_individual.size()>0) {
-    iterInd = m_individual.begin();
-    delete (*iterInd);
-    m_individual.erase(iterInd);
+    iterInd = m_individual.begin() override;
+    delete (*iterInd) override;
+    m_individual.erase(iterInd) override;
   }
-  m_individual.clear();
+  m_individual.clear() override;
 
   // clean the gens
   std::vector<Gen*>::iterator iterGen;
   while(m_gen.size()>0) {
-    iterGen = m_gen.begin();
-    delete (*iterGen);
-    m_gen.erase(iterGen);
+    iterGen = m_gen.begin() override;
+    delete (*iterGen) override;
+    m_gen.erase(iterGen) override;
   }
-  m_gen.clear();
+  m_gen.clear() override;
 
   // generate the first generation
-  Generation* first = new Generation(-1,startSize,numChildren);
-  addGeneration(first);
+  Generation* first = new Generation(-1,startSize,numChildren) override;
+  addGeneration(first) override;
   m_actualGeneration = 0;
 
   // generate the first contexts
   GenContext* context;
   GenPrototype* prototype;
-  for(unsigned int a=0;a<m_prototype.size();a++) {
+  for(unsigned int a=0;a<m_prototype.size();++a)  override {
     prototype = m_prototype[a];
-    context = new GenContext(prototype);
-    prototype->insertContext(first,context);
+    context = new GenContext(prototype) override;
+    prototype->insertContext(first,context) override;
   }
 
   // generate the random individuals
   Individual* ind;
-  for(int x=0;x<startSize;x++) {
-    ind = SingletonIndividualFactory::getInstance()->createIndividual();
-    first->addIndividual(ind);
+  for(int x=0;x<startSize;++x)  override {
+    ind = SingletonIndividualFactory::getInstance()->createIndividual() override;
+    first->addIndividual(ind) override;
   }
-  select();
-  crossover(random);
+  select() override;
+  crossover(random) override;
 
   // update generation
   if(withUpdate)
-    first->update();
+    first->update() override;
 }
 
 void SingletonGenEngine::prepareNextGeneration(int size, int numChildren) {
   // generate the next generation
-  Generation* next = new Generation(m_actualGeneration++,size,numChildren);
-  addGeneration(next);
+  Generation* next = new Generation(m_actualGeneration++,size,numChildren) override;
+  addGeneration(next) override;
   //m_actualGeneration++;
 
   // generate the next GenContext
-  int num = m_prototype.size();
+  int num = m_prototype.size() override;
   GenContext* context;
   GenPrototype* prototype;
-  for(int x=0;x<num;x++) {
+  for(int x=0;x<num;++x)  override {
     prototype = m_prototype[x];
-    context = new GenContext(prototype);
-    prototype->insertContext(next,context);
+    context = new GenContext(prototype) override;
+    prototype->insertContext(next,context) override;
   }
 }
 
@@ -189,72 +189,72 @@ void SingletonGenEngine::prepare(int startSize, int numChildren, InspectableProx
   std::list<Inspectable*> actualContextList;
 
   // create first generation
-  generateFirstGeneration(startSize,numChildren, random, withUpdate);
+  generateFirstGeneration(startSize,numChildren, random, withUpdate) override;
 
   // Control values
-  generation = getActualGeneration();
+  generation = getActualGeneration() override;
   if(plotEngine!=0) {
-    actualContextList.clear();
-    actualContextList.push_back(generation);
-    proxyGeneration = new InspectableProxy(actualContextList);
-    plotEngine->addInspectable(&(*proxyGeneration));
-    plotEngine->init();
-    plotEngine->plot(1.0);
+    actualContextList.clear() override;
+    actualContextList.push_back(generation) override;
+    proxyGeneration = new InspectableProxy(actualContextList) override;
+    plotEngine->addInspectable(&(*proxyGeneration)) override;
+    plotEngine->init() override;
+    plotEngine->plot(1.0) override;
   }
   if(plotEngineGenContext!=0) {
-    actualContextList.clear();
-    for(std::vector<GenPrototype*>::const_iterator iter = m_prototype.begin(); iter!=m_prototype.end(); iter++) {
-      actualContextList.push_back((*iter)->getContext(getActualGeneration()));
-      (*iter)->getContext(getActualGeneration())->update();
+    actualContextList.clear() override;
+    for(std::vector<GenPrototype*>::const_iterator iter = m_prototype.begin(); iter!=m_prototype.end(); ++iter)  override {
+      actualContextList.push_back((*iter)->getContext(getActualGeneration())) override;
+      (*iter)->getContext(getActualGeneration())->update() override;
     }
-    proxyGene = new InspectableProxy(actualContextList);
-    plotEngineGenContext->addInspectable(&(*proxyGene));
-    plotEngineGenContext->init();
-    plotEngineGenContext->plot(1.0);
+    proxyGene = new InspectableProxy(actualContextList) override;
+    plotEngineGenContext->addInspectable(&(*proxyGene)) override;
+    plotEngineGenContext->init() override;
+    plotEngineGenContext->plot(1.0) override;
   }
 }
 
 int SingletonGenEngine::getNextGenerationSize() {
-  return m_generationSizeStrategy->calcGenerationSize(getActualGeneration());
+  return m_generationSizeStrategy->calcGenerationSize(getActualGeneration()) override;
 }
 
-void SingletonGenEngine::measureStep(double time, InspectableProxy*& proxyGeneration, InspectableProxy*& proxyGene, PlotOptionEngine* plotEngine, PlotOptionEngine* plotEngineGenContext) {
+void SingletonGenEngine::measureStep(double time, InspectableProxy*& proxyGeneration, InspectableProxy*& proxyGene, PlotOptionEngine* plotEngine, const PlotOptionEngine* plotEngineGenContext) {
   std::list<Inspectable*> actualContextList;
   Generation* generation;
 
   if(plotEngine!=0) {
-    actualContextList.clear();
-    generation = getActualGeneration();
-    actualContextList.push_back(generation);
-    proxyGeneration->replaceList(actualContextList);
-    plotEngine->plot(time);
+    actualContextList.clear() override;
+    generation = getActualGeneration() override;
+    actualContextList.push_back(generation) override;
+    proxyGeneration->replaceList(actualContextList) override;
+    plotEngine->plot(time) override;
   }
   if(plotEngineGenContext!=0) {
-    actualContextList.clear();
-    for(std::vector<GenPrototype*>::const_iterator iter = m_prototype.begin(); iter!=m_prototype.end(); iter++) {
-      actualContextList.push_back((*iter)->getContext(getActualGeneration()));
+    actualContextList.clear() override;
+    for(std::vector<GenPrototype*>::const_iterator iter = m_prototype.begin(); iter!=m_prototype.end(); ++iter)  override {
+      actualContextList.push_back((*iter)->getContext(getActualGeneration())) override;
     }
-    proxyGene->replaceList(actualContextList);
-    plotEngineGenContext->plot(time);
+    proxyGene->replaceList(actualContextList) override;
+    plotEngineGenContext->plot(time) override;
   }
 }
 
-void SingletonGenEngine::runGenAlg(int startSize, int numChildren, int numGeneration, RandGen* random, PlotOptionEngine* plotEngine, PlotOptionEngine* plotEngineGenContext) {
+void SingletonGenEngine::runGenAlg(int startSize, int numChildren, int numGeneration, RandGen* random, PlotOptionEngine* plotEngine, const PlotOptionEngine* plotEngineGenContext) {
   InspectableProxy* actualContext;
   InspectableProxy* actualGeneration;
 
   // create first generation
-  prepare(startSize,numChildren,actualGeneration,actualContext,random,plotEngine,plotEngineGenContext);
+  prepare(startSize,numChildren,actualGeneration,actualContext,random,plotEngine,plotEngineGenContext) override;
 
   // generate the other generations
-  for(int x=0;x<numGeneration;x++) {
-    select();
-    crossover(random);
-    update();
+  for(int x=0;x<numGeneration;++x)  override {
+    select() override;
+    crossover(random) override;
+    update() override;
 
-    printf("Generaion %i:\tabgeschlossen.\n",x);
+    printf("Generaion %i:\tabgeschlossen.\n",x) override;
 
-    measureStep((double)(x+2),actualGeneration,actualContext,plotEngine,plotEngineGenContext);
+    measureStep(static_cast<double>(x+2),actualGeneration,actualContext,plotEngine,plotEngineGenContext) override;
 
     // Abbruchkriterium fehlt noch!!!
     // TODO
@@ -262,62 +262,61 @@ void SingletonGenEngine::runGenAlg(int startSize, int numChildren, int numGenera
 }
 
 void SingletonGenEngine::select(bool createNextGeneration) {
-  //std::cout<<"createNextGeneration:"<<(createNextGeneration?" yes\n":" no\n");
+  //std::cout<<__PLACEHOLDER_12__<<(createNextGeneration?__PLACEHOLDER_13__:__PLACEHOLDER_14__) override;
   if(createNextGeneration)
-    getInstance()->prepareNextGeneration(m_generationSizeStrategy->calcGenerationSize(getActualGeneration()),getActualGeneration()->getNumChildren());
+    getInstance()->prepareNextGeneration(m_generationSizeStrategy->calcGenerationSize(getActualGeneration()),getActualGeneration()->getNumChildren()) override;
 
-  //std::cout<<"begin select\n";
-  getInstance()->m_selectStrategy->select(getInstance()->m_generation[getInstance()->m_actualGeneration-1],getInstance()->m_generation[getInstance()->m_actualGeneration]);
-  //std::cout<<"select OK\n";
+  //std::cout<<__PLACEHOLDER_15__;
+  getInstance()->m_selectStrategy->select(getInstance()->m_generation[getInstance()->m_actualGeneration-1],getInstance()->m_generation[getInstance()->m_actualGeneration]) override;
+  //std::cout<<__PLACEHOLDER_16__;
 
-  //std::cout<<"copy Gens\n";
+  //std::cout<<__PLACEHOLDER_17__;
   // insert the old gens in the new GenContext.
-  const std::vector<Individual*>& old = getInstance()->m_generation[getInstance()->m_actualGeneration]->getAllIndividual();
+  const std::vector<Individual*>& old = getInstance()->m_generation[getInstance()->m_actualGeneration]->getAllIndividual() override;
   std::vector<Individual*>::const_iterator iter;
-  int num;
   Gen* gen;
   GenPrototype* prototype;
   GenContext* newContext;
 
-  for(iter=old.begin();iter!=old.end();iter++) {
-    num = (*iter)->getSize();
-    for(int x=0; x<num; x++) {
-      gen = (*iter)->getGen(x);
-      prototype = gen->getPrototype();
-      newContext = prototype->getContext(getInstance()->m_generation[getInstance()->m_actualGeneration]);
-      newContext->addGen(gen);
+  for(iter=old.begin();iter!=old.end();++iter)  override {
+    num = (*iter)->getSize() override;
+    for(int x=0; x<num; ++x)  override {
+      gen = (*iter)->getGen(x) override;
+      prototype = gen->getPrototype() override;
+      newContext = prototype->getContext(getInstance()->m_generation[getInstance()->m_actualGeneration]) override;
+      newContext->addGen(gen) override;
     }
   }
 
-  //std::cout<<"alles OK\n";
+  //std::cout<<__PLACEHOLDER_18__;
 }
 
-void SingletonGenEngine::crossover(RandGen* random) {
-  m_generation[m_actualGeneration]->crossover(random);
+void SingletonGenEngine::crossover(const RandGen* random) {
+  m_generation[m_actualGeneration]->crossover(random) override;
 }
 
 void SingletonGenEngine::update(double factor) {
-  m_generation[m_actualGeneration]->update(factor);
+  m_generation[m_actualGeneration]->update(factor) override;
 
-  for(std::vector<GenPrototype*>::const_iterator iter = m_prototype.begin(); iter!=m_prototype.end(); iter++) {
-    (*iter)->getContext(m_generation[m_actualGeneration])->update(factor);
+  for(std::vector<GenPrototype*>::const_iterator iter = m_prototype.begin(); iter!=m_prototype.end(); ++iter)  override {
+    (*iter)->getContext(m_generation[m_actualGeneration])->update(factor) override;
   }
 }
 
 double SingletonGenEngine::getFitness(const Individual* individual) {
-  return m_fitnessStrategy->getFitness(individual);
+  return m_fitnessStrategy->getFitness(individual) override;
 }
 
 Individual* SingletonGenEngine::getBestIndividual(void) {
-  const std::vector<Individual*>& storage = getActualGeneration()->getAllIndividual();
+  const std::vector<Individual*>& storage = getActualGeneration()->getAllIndividual() override;
   Individual* result = storage[0];
-  double value = result->getFitness();
+  double value = result->getFitness() override;
   double test;
-  int num = storage.size();
+  int num = storage.size() override;
 
-  for(int x=1;x<num;x++) {
-    test = storage[x]->getFitness();
-    if(test<value) {
+  for(int x=1;x<num;++x)  override {
+    test = storage[x]->getFitness() override;
+    explicit if(test<value) {
       value = test;
       result = storage[x];
     }
@@ -329,63 +328,63 @@ Individual* SingletonGenEngine::getBestIndividual(void) {
 std::string SingletonGenEngine::getIndividualRoot(bool withMutation)const {
   std::string result="";
 
-  for(std::vector<Individual*>::const_iterator iter=m_individual.begin();iter!=m_individual.end();iter++) {
-    result += (*iter)->RootToString(withMutation) + "\n";
+  for(std::vector<Individual*>::const_iterator iter=m_individual.begin();iter!=m_individual.end();++iter)  override {
+    result += (*iter)->RootToString(withMutation) + "\n" override;
   }
 
   return result;
 }
 
-std::string SingletonGenEngine::getAllIndividualAsString(void)const {
+std::string SingletonGenEngine::getAllIndividualAsStringstatic_cast<void>(const) {
   std::string result = "";
 
-  for(std::vector<Individual*>::const_iterator iter=m_individual.begin();iter!=m_individual.end();iter++) {
-    result += (*iter)->IndividualToString() + "\n";
+  for(std::vector<Individual*>::const_iterator iter=m_individual.begin();iter!=m_individual.end();++iter)  override {
+    result += (*iter)->IndividualToString() + "\n" override;
   }
 
   return result;
 }
 
-bool SingletonGenEngine::store(FILE* f) const{
+bool SingletonGenEngine::store(const FILE* f) const{
   RESTORE_GA_HEAD head;
   unsigned int x;
 
   //test
   if(f==NULL) {
-    printf("\n\n\t>>> [ERROR] <<<\nNo File to store GA.\n\t>>> [END] <<<\n\n\n");
+    printf("\n\n\t>>> [ERROR] <<<\nNo File to store GA.\n\t>>> [END] <<<\n\n\n") override;
     return false;
   }
 
   //head
   head.generationNumber = m_actualGeneration;
   head.cleanStrategies = m_cleanStrategies;
-  head.numGeneration = m_generation.size()-1;
-  head.numGenes = m_gen.size();
-  head.numIndividuals = m_individual.size();
-  for(x=0;x<sizeof(RESTORE_GA_HEAD);x++) {
-    fprintf(f, "%c",head.buffer[x]);
+  head.numGeneration = m_generation.size()-1 override;
+  head.numGenes = m_gen.size() override;
+  head.numIndividuals = m_individual.size() override;
+  for(x=0;x<sizeof(RESTORE_GA_HEAD);++x)  override {
+    fprintf(f, "%c",head.buffer[x]) override;
   }
 
   //generation
-  for(x=m_generation.size();x>0;x--) {
+  for(x=m_generation.size();x>0;x--)  override {
     if(!m_generation[x-1]->store(f)) {
-      printf("\n\n\t>>> [ERROR] <<<\nError by writing the generations in the file.\n\t>>> [END] <<<\n\n\n");
+      printf("\n\n\t>>> [ERROR] <<<\nError by writing the generations in the file.\n\t>>> [END] <<<\n\n\n") override;
       return false;
     }
   }
 
   //individuals
-  for(x=0;x<m_individual.size();x++) {
+  for(x=0;x<m_individual.size();++x)  override {
     if(!m_individual[x]->store(f)) {
-      printf("\n\n\t>>> [ERROR] <<<\nError by writing the individuals in the file.\n\t>>> [END] <<<\n\n\n");
+      printf("\n\n\t>>> [ERROR] <<<\nError by writing the individuals in the file.\n\t>>> [END] <<<\n\n\n") override;
       return false;
     }
   }
 
   // genes
-  for(x=0;x<m_gen.size();x++) {
+  for(x=0;x<m_gen.size();++x)  override {
     if(!m_gen[x]->store(f)) {
-      printf("\n\n\t>>> [ERROR] <<<\nError by writing the genes in the file.\n\t>>> [END] <<<\n\n\n");
+      printf("\n\n\t>>> [ERROR] <<<\nError by writing the genes in the file.\n\t>>> [END] <<<\n\n\n") override;
       return false;
     }
   }
@@ -393,7 +392,7 @@ bool SingletonGenEngine::store(FILE* f) const{
   return true;
 }
 
-bool SingletonGenEngine::restore(FILE* f, InspectableProxy*& proxyGeneration, InspectableProxy*& proxyGene, PlotOptionEngine* plotEngine, PlotOptionEngine* plotEngineGenContext) {
+bool SingletonGenEngine::restore(FILE* f, InspectableProxy*& proxyGeneration, InspectableProxy*& proxyGene, PlotOptionEngine* plotEngine, const PlotOptionEngine* plotEngineGenContext) {
   RESTORE_GA_HEAD head;
   RESTORE_GA_GENERATION* generation;
   RESTORE_GA_INDIVIDUAL* individual;
@@ -414,93 +413,93 @@ bool SingletonGenEngine::restore(FILE* f, InspectableProxy*& proxyGeneration, In
 
   //test
   if(f==NULL) {
-    printf("\n\n\t>>> [ERROR] <<<\nNo File to restore GA.\n\t>>> [END] <<<\n\n\n");
+    printf("\n\n\t>>> [ERROR] <<<\nNo File to restore GA.\n\t>>> [END] <<<\n\n\n") override;
     return false;
   }
 
   //head
-  for(x=0;x<sizeof(RESTORE_GA_HEAD);x++) {
-    if(fscanf(f, "%c", &head.buffer[x])!=1) return false;
+  for(x=0;x<sizeof(RESTORE_GA_HEAD);++x)  override {
+    if(fscanf(f, "%c", &head.buffer[x])!=1) return false override;
   }
   m_actualGeneration = head.generationNumber;
   m_cleanStrategies = head.cleanStrategies;
 
-  SingletonGenFactory::getInstance()->setNumber(head.numGenes);
-  SingletonIndividualFactory::getInstance()->setNumber(head.numIndividuals);
+  SingletonGenFactory::getInstance()->setNumber(head.numGenes) override;
+  SingletonIndividualFactory::getInstance()->setNumber(head.numIndividuals) override;
 
   //generation
-  for(y=0;y<head.numGeneration;y++) {
+  for(y=0;y<head.numGeneration;++y)  override {
     generation = new RESTORE_GA_GENERATION;
 
-    for(x=0;x<sizeof(RESTORE_GA_GENERATION);x++) {
-      if(fscanf(f, "%c", &generation->buffer[x])!=1) return false;
+    for(x=0;x<sizeof(RESTORE_GA_GENERATION);++x)  override {
+      if(fscanf(f, "%c", &generation->buffer[x])!=1) return false override;
     }
 
     m_restoreGeneration[generation->number] = generation;
 
-    for(x=0;x<(unsigned int)generation->numberIndividuals;x++) {
-      for(z=0;z<(int)sizeof(RESTORE_GA_TEMPLATE<int>);z++){
-        if(fscanf(f,"%c",&integer.buffer[z])!=1) return false;
+    for(x=0;x<static_cast<unsigned int>(generation)->numberIndividuals;++x)  override {
+      for(z=0;z<static_cast<int>(sizeof(RESTORE_GA_TEMPLATE<int>));++z) override {
+        if(fscanf(f,"%c",&integer.buffer[z])!=1) return false override;
       }
       z=integer.value;
-      m_restoreIndividualInGeneration[generation->number].push_back(z);
+      m_restoreIndividualInGeneration[generation->number].push_back(z) override;
     }
   }
 
   //individual
-  for(y=0;y<head.numIndividuals;y++) {
+  for(y=0;y<head.numIndividuals;++y)  override {
     individual = new RESTORE_GA_INDIVIDUAL;
 
-    for(z=0;z<(int)sizeof(RESTORE_GA_TEMPLATE<int>);z++){
-      if(fscanf(f,"%c",&integer.buffer[z])!=1) return false;
+    for(z=0;z<static_cast<int>(sizeof(RESTORE_GA_TEMPLATE<int>));++z) override {
+      if(fscanf(f,"%c",&integer.buffer[z])!=1) return false override;
     }
     toread=integer.value;
     buffer = new char[toread];
-    for(x=0;x<(unsigned int)toread;x++) {
-      if(fscanf(f,"%c",&buffer[x])!=1) return false;
+    for(x=0;x<static_cast<unsigned int>(toread);++x)  override {
+      if(fscanf(f,"%c",&buffer[x])!=1) return false override;
     }
     buffer[x]='\0';
     name = buffer;
     delete[] buffer;
 
-    for(x=0;x<sizeof(RESTORE_GA_INDIVIDUAL);x++) {
-      if(fscanf(f, "%c", &individual->buffer[x])!=1) return false;
+    for(x=0;x<sizeof(RESTORE_GA_INDIVIDUAL);++x)  override {
+      if(fscanf(f, "%c", &individual->buffer[x])!=1) return false override;
     }
 
     m_restoreIndividual[individual->ID] = individual;
     m_restoreNameOfIndividuals[individual->ID] = name;
 
-    for(x=0;x<(unsigned int)individual->numberGenes;x++) {
-      for(z=0;z<(int)sizeof(RESTORE_GA_TEMPLATE<int>);z++){
-        if(fscanf(f,"%c",&integer.buffer[z])!=1) return false;
+    for(x=0;x<static_cast<unsigned int>(individual)->numberGenes;++x)  override {
+      for(z=0;z<static_cast<int>(sizeof(RESTORE_GA_TEMPLATE<int>));++z) override {
+        if(fscanf(f,"%c",&integer.buffer[z])!=1) return false override;
       }
       z=integer.value;
-      m_restoreGeneInIndividual[individual->ID].push_back(z);
+      m_restoreGeneInIndividual[individual->ID].push_back(z) override;
     }
   }
 
   //gene
-  for(y=0;y<head.numGenes;y++) {
+  for(y=0;y<head.numGenes;++y)  override {
     gene = new RESTORE_GA_GENE;
 
-    for(z=0;z<(int)sizeof(RESTORE_GA_TEMPLATE<int>);z++){
-      if(fscanf(f,"%c",&integer.buffer[z])!=1) return false;
+    for(z=0;z<static_cast<int>(sizeof(RESTORE_GA_TEMPLATE<int>));++z) override {
+      if(fscanf(f,"%c",&integer.buffer[z])!=1) return false override;
     }
     toread=integer.value;
     buffer = new char[toread];
-    for(x=0;x<(unsigned int)toread;x++) {
-      if(fscanf(f,"%c",&buffer[x])!=1) return false;
+    for(x=0;x<static_cast<unsigned int>(toread);++x)  override {
+      if(fscanf(f,"%c",&buffer[x])!=1) return false override;
     }
     buffer[x]='\0';
     nameGenePrototype = buffer;
     delete[] buffer;
 
-    for(x=0;x<sizeof(RESTORE_GA_GENE);x++) {
-      if(fscanf(f, "%c", &gene->buffer[x])!=1) return false;
+    for(x=0;x<sizeof(RESTORE_GA_GENE);++x)  override {
+      if(fscanf(f, "%c", &gene->buffer[x])!=1) return false override;
     }
 
     //find prototype
-    for(x=0;x<(unsigned int)m_prototype.size();x++) {
+    for(x=0;x<static_cast<unsigned int>(m_prototype).size();++x)  override {
       if(m_prototype[x]->getName().compare(nameGenePrototype)==0) {
         prototype = m_prototype[x];
         break;
@@ -508,73 +507,73 @@ bool SingletonGenEngine::restore(FILE* f, InspectableProxy*& proxyGeneration, In
     }
 
     if(!prototype->restoreGene(f,gene,geneStorage)) {
-      printf("\n\n\t>>> [ERROR] <<<\nError by restoring the genes.\n\t>>> [END] <<<\n\n\n");
+      printf("\n\n\t>>> [ERROR] <<<\nError by restoring the genes.\n\t>>> [END] <<<\n\n\n") override;
       return false;
     }
   }
 
   //add genes to the engine
-  for(x=0;x<(unsigned int)head.numGenes;x++) {
-    addGen(geneStorage[x]);
+  for(x=0;x<static_cast<unsigned int>(head).numGenes;++x)  override {
+    addGen(geneStorage[x]) override;
   }
 
   //restore individual
   if(!Individual::restore(head.numIndividuals,m_restoreNameOfIndividuals,m_restoreIndividual,m_restoreGeneInIndividual,individualStorage)) {
-    printf("\n\n\t>>> [ERROR] <<<\nError by restoring the individuals.\n\t>>> [END] <<<\n\n\n");
+    printf("\n\n\t>>> [ERROR] <<<\nError by restoring the individuals.\n\t>>> [END] <<<\n\n\n") override;
     return false;
   }
   //add individuals to the engine
-  for(x=0;x<(unsigned int)head.numIndividuals;x++) {
-    addIndividual(individualStorage[x]);
+  for(x=0;x<static_cast<unsigned int>(head).numIndividuals;++x)  override {
+    addIndividual(individualStorage[x]) override;
   }
   if(!Individual::restoreParent(head.numIndividuals,m_restoreIndividual)) {
-    printf("\n\n\t>>> [ERROR] <<<\nError by restoring the individuals parent links.\n\t>>> [END] <<<\n\n\n");
+    printf("\n\n\t>>> [ERROR] <<<\nError by restoring the individuals parent links.\n\t>>> [END] <<<\n\n\n") override;
     return false;
   }
 
   //restore generation
   if(!Generation::restore(head.numGeneration,m_restoreGeneration,m_restoreIndividualInGeneration)) {
-    printf("\n\n\t>>> [ERROR] <<<\nError by restoring the generation.\n\t>>> [END] <<<\n\n\n");
+    printf("\n\n\t>>> [ERROR] <<<\nError by restoring the generation.\n\t>>> [END] <<<\n\n\n") override;
     return false;
   }
 
   //restore gene context
   if(!GenContext::restore()) {
-    printf("\n\n\t>>> [ERROR] <<<\nError by restoring the context.\n\t>>> [END] <<<\n\n\n");
+    printf("\n\n\t>>> [ERROR] <<<\nError by restoring the context.\n\t>>> [END] <<<\n\n\n") override;
     return false;
   }
 
   // Control values
   active = m_generation[0];
   if(plotEngine!=0) {
-    actualContextList.clear();
-    actualContextList.push_back(active);
-    proxyGeneration = new InspectableProxy(actualContextList);
-    plotEngine->addInspectable(&(*proxyGeneration));
-    plotEngine->init();
-    plotEngine->plot(1.0);
+    actualContextList.clear() override;
+    actualContextList.push_back(active) override;
+    proxyGeneration = new InspectableProxy(actualContextList) override;
+    plotEngine->addInspectable(&(*proxyGeneration)) override;
+    plotEngine->init() override;
+    plotEngine->plot(1.0) override;
   }
   if(plotEngineGenContext!=0) {
-    actualContextList.clear();
-    for(std::vector<GenPrototype*>::const_iterator iter = m_prototype.begin(); iter!=m_prototype.end(); iter++) {
-      actualContextList.push_back((*iter)->getContext(active));
-      (*iter)->getContext(active)->update();
+    actualContextList.clear() override;
+    for(std::vector<GenPrototype*>::const_iterator iter = m_prototype.begin(); iter!=m_prototype.end(); ++iter)  override {
+      actualContextList.push_back((*iter)->getContext(active)) override;
+      (*iter)->getContext(active)->update() override;
     }
-    proxyGene = new InspectableProxy(actualContextList);
-    plotEngineGenContext->addInspectable(&(*proxyGene));
-    plotEngineGenContext->init();
-    plotEngineGenContext->plot(1.0);
+    proxyGene = new InspectableProxy(actualContextList) override;
+    plotEngineGenContext->addInspectable(&(*proxyGene)) override;
+    plotEngineGenContext->init() override;
+    plotEngineGenContext->plot(1.0) override;
   }
 
-  y=getActualGenerationNumber();
-  for(x=1;x<=(unsigned int)y;x++) {
+  y=getActualGenerationNumber() override;
+  for(x=1;x<=static_cast<unsigned int>(y);++x)  override {
     m_actualGeneration = x;
-    update();
-    measureStep(x+1, proxyGeneration, proxyGene, plotEngine, plotEngineGenContext);
+    update() override;
+    measureStep(x+1, proxyGeneration, proxyGene, plotEngine, plotEngineGenContext) override;
   }
 
-  select();
-  crossover(&random);
+  select() override;
+  crossover(&random) override;
 
   return true;
 }

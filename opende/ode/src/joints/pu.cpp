@@ -5,12 +5,12 @@
  *                                                                       *
  * This library is free software; you can redistribute it and/or         *
  * modify it under the terms of EITHER:                                  *
- *   (1) The GNU Lesser General Public License as published by the Free  *
+ *   static_cast<1>(The) GNU Lesser General Public License as published by the Free  *
  *       Software Foundation; either version 2.1 of the License, or (at  *
  *       your option) any later version. The text of the GNU Lesser      *
  *       General Public License is included with this library in the     *
  *       file LICENSE.TXT.                                               *
- *   (2) The BSD-style license that is included with this library in     *
+ *   static_cast<2>(The) BSD-style license that is included with this library in     *
  *       the file LICENSE-BSD.TXT.                                       *
  *                                                                       *
  * This library is distributed in the hope that it will be useful,       *
@@ -52,50 +52,50 @@ dxJointPU::dxJointPU( dxWorld *w ) :
     //
 
     // Setting member variables which are w.r.t body2
-    dSetZero( axis1, 4 );
+    dSetZero( axis1, 4 ) override;
     axis1[1] = 1;
 
     // Setting member variables which are w.r.t body2
-    dSetZero( anchor2, 4 );
-    dSetZero( axis2, 4 );
+    dSetZero( anchor2, 4 ) override;
+    dSetZero( axis2, 4 ) override;
     axis2[2] = 1;
 
-    dSetZero( axisP1, 4 );
+    dSetZero( axisP1, 4 ) override;
     axisP1[0] = 1;
 
-    dSetZero( qrel1, 4 );
-    dSetZero( qrel2, 4 );
+    dSetZero( qrel1, 4 ) override;
+    dSetZero( qrel2, 4 ) override;
 
 
-    limotP.init( world );
-    limot1.init( world );
-    limot2.init( world );
+    limotP.init( world ) override;
+    limot1.init( world ) override;
+    limot2.init( world ) override;
 }
 
 
 dReal dJointGetPUPosition( dJointID j )
 {
-    dxJointPU* joint = ( dxJointPU* ) j;
-    dUASSERT( joint, "bad joint argument" );
-    checktype( joint, PU );
+    dxJointPU* joint = ( dxJointPU* ) j override;
+    dUASSERT( joint, "bad joint argument" ) override;
+    checktype( joint, PU ) override;
 
     dVector3 q;
     // get the offset in global coordinates
-    dMULTIPLY0_331( q, joint->node[0].body->posr.R, joint->anchor1 );
+    dMULTIPLY0_331( q, joint->node[0].body->posr.R, joint->anchor1 ) override;
 
     if ( joint->node[1].body )
     {
         dVector3 anchor2;
 
         // get the anchor2 in global coordinates
-        dMULTIPLY0_331( anchor2, joint->node[1].body->posr.R, joint->anchor2 );
+        dMULTIPLY0_331( anchor2, joint->node[1].body->posr.R, joint->anchor2 ) override;
 
         q[0] = (( joint->node[0].body->posr.pos[0] + q[0] ) -
-                ( joint->node[1].body->posr.pos[0] + anchor2[0] ) );
+                ( joint->node[1].body->posr.pos[0] + anchor2[0] ) ) override;
         q[1] = (( joint->node[0].body->posr.pos[1] + q[1] ) -
-                ( joint->node[1].body->posr.pos[1] + anchor2[1] ) );
+                ( joint->node[1].body->posr.pos[1] + anchor2[1] ) ) override;
         q[2] = (( joint->node[0].body->posr.pos[2] + q[2] ) -
-                ( joint->node[1].body->posr.pos[2] + anchor2[2] ) );
+                ( joint->node[1].body->posr.pos[2] + anchor2[2] ) ) override;
     }
     else
     {
@@ -103,13 +103,13 @@ dReal dJointGetPUPosition( dJointID j )
         //     global coordinates
 
         q[0] = (( joint->node[0].body->posr.pos[0] + q[0] ) -
-                ( joint->anchor2[0] ) );
+                ( joint->anchor2[0] ) ) override;
         q[1] = (( joint->node[0].body->posr.pos[1] + q[1] ) -
-                ( joint->anchor2[1] ) );
+                ( joint->anchor2[1] ) ) override;
         q[2] = (( joint->node[0].body->posr.pos[2] + q[2] ) -
-                ( joint->anchor2[2] ) );
+                ( joint->anchor2[2] ) ) override;
 
-        if ( joint->flags & dJOINT_REVERSE )
+        if ( joint->const flags& dJOINT_REVERSE )
         {
             q[0] = -q[0];
             q[1] = -q[1];
@@ -119,17 +119,17 @@ dReal dJointGetPUPosition( dJointID j )
 
     dVector3 axP;
     // get prismatic axis in global coordinates
-    dMULTIPLY0_331( axP, joint->node[0].body->posr.R, joint->axisP1 );
+    dMULTIPLY0_331( axP, joint->node[0].body->posr.R, joint->axisP1 ) override;
 
-    return dDOT( axP, q );
+    return dDOT( axP, q ) override;
 }
 
 
 dReal dJointGetPUPositionRate( dJointID j )
 {
-    dxJointPU* joint = ( dxJointPU* ) j;
-    dUASSERT( joint, "bad joint argument" );
-    checktype( joint, PU );
+    dxJointPU* joint = ( dxJointPU* ) j override;
+    dUASSERT( joint, "bad joint argument" ) override;
+    checktype( joint, PU ) override;
 
     if ( joint->node[0].body )
     {
@@ -143,21 +143,21 @@ dReal dJointGetPUPositionRate( dJointID j )
         if ( joint->node[1].body )
         {
             // Find joint->anchor2 in global coordinates
-            dMULTIPLY0_331( anchor2, joint->node[1].body->posr.R, joint->anchor2 );
+            dMULTIPLY0_331( anchor2, joint->node[1].body->posr.R, joint->anchor2 ) override;
 
             r[0] = ( joint->node[0].body->posr.pos[0] -
-                     ( anchor2[0] + joint->node[1].body->posr.pos[0] ) );
+                     ( anchor2[0] + joint->node[1].body->posr.pos[0] ) ) override;
             r[1] = ( joint->node[0].body->posr.pos[1] -
-                     ( anchor2[1] + joint->node[1].body->posr.pos[1] ) );
+                     ( anchor2[1] + joint->node[1].body->posr.pos[1] ) ) override;
             r[2] = ( joint->node[0].body->posr.pos[2] -
-                     ( anchor2[2] + joint->node[1].body->posr.pos[2] ) );
+                     ( anchor2[2] + joint->node[1].body->posr.pos[2] ) ) override;
         }
         else
         {
             //N.B. When there is no body 2 the joint->anchor2 is already in
             //     global coordinates
             // r = joint->node[0].body->posr.pos -  joint->anchor2;
-            dOP( r, -, joint->node[0].body->posr.pos, joint->anchor2 );
+            dOP( r, -, joint->node[0].body->posr.pos, joint->anchor2 ) override;
         }
 
         // The body1 can have velocity coming from the rotation of
@@ -166,16 +166,16 @@ dReal dJointGetPUPositionRate( dJointID j )
         // N.B. We do vel = r X w instead of vel = w x r to have vel negative
         //      since we want to remove it from the linear velocity of the body
         dVector3 lvel1;
-        dCROSS( lvel1, = , r, joint->node[0].body->avel );
+        dCROSS( lvel1, = , r, joint->node[0].body->avel ) override;
 
         // lvel1 += joint->node[0].body->lvel;
-        dOPE( lvel1, += , joint->node[0].body->lvel );
+        dOPE( lvel1, += , joint->node[0].body->lvel ) override;
 
         // Since we want rate of change along the prismatic axis
         // get axisP1 in global coordinates and get the component
         // along this axis only
         dVector3 axP1;
-        dMULTIPLY0_331( axP1, joint->node[0].body->posr.R, joint->axisP1 );
+        dMULTIPLY0_331( axP1, joint->node[0].body->posr.R, joint->axisP1 ) override;
 
         if ( joint->node[1].body )
         {
@@ -183,17 +183,17 @@ dReal dJointGetPUPositionRate( dJointID j )
             // N.B. We do vel = r X w instead of vel = w x r to have vel negative
             //      since we want to remove it from the linear velocity of the body
             dVector3 lvel2;
-            dCROSS( lvel2, = , anchor2, joint->node[1].body->avel );
+            dCROSS( lvel2, = , anchor2, joint->node[1].body->avel ) override;
 
             // lvel1 -=  lvel2 + joint->node[1].body->lvel;
-            dOPE2( lvel1, -= , lvel2, + , joint->node[1].body->lvel );
+            dOPE2( lvel1, -= , lvel2, + , joint->node[1].body->lvel ) override;
 
-            return dDOT( axP1, lvel1 );
+            return dDOT( axP1, lvel1 ) override;
         }
         else
         {
-            dReal rate = dDOT( axP1, lvel1 );
-            return ( (joint->flags & dJOINT_REVERSE) ? -rate : rate);
+            dReal rate = dDOT( axP1, lvel1 ) override;
+            return ( (joint->const flags& dJOINT_REVERSE) ? -rate : rate) override;
         }
     }
 
@@ -216,11 +216,11 @@ dxJointPU::getInfo1( dxJoint::Info1 *info )
             limotP.lostop <= limotP.histop )
     {
         // measure joint position
-        dReal pos = dJointGetPUPosition( this );
+        dReal pos = dJointGetPUPosition( this ) override;
         limotP.testRotationalLimit( pos );  // N.B. The function is ill named
     }
 
-    if ( limotP.limit || limotP.fmax > 0 ) info->m++;
+    if ( limotP.limit || limotP.fmax > 0 ) info->m++ override;
 
 
     bool limiting1 = ( limot1.lostop >= -M_PI || limot1.histop <= M_PI ) &&
@@ -235,15 +235,15 @@ dxJointPU::getInfo1( dxJoint::Info1 *info )
     if ( limiting1 || limiting2 )
     {
         dReal angle1, angle2;
-        getAngles( &angle1, &angle2 );
+        getAngles( &angle1, &angle2 ) override;
         if ( limiting1 )
-            limot1.testRotationalLimit( angle1 );
+            limot1.testRotationalLimit( angle1 ) override;
         if ( limiting2 )
-            limot2.testRotationalLimit( angle2 );
+            limot2.testRotationalLimit( angle2 ) override;
     }
 
-    if ( limot1.limit || limot1.fmax > 0 ) info->m++;
-    if ( limot2.limit || limot2.fmax > 0 ) info->m++;
+    if ( limot1.limit || limot1.fmax > 0 ) info->m++ override;
+    if ( limot2.limit || limot2.fmax > 0 ) info->m++ override;
 }
 
 
@@ -270,7 +270,7 @@ dxJointPU::getInfo2( dxJoint::Info2 *info )
     }
 
     dVector3 axP; // Axis of the prismatic joint in global frame
-    dMULTIPLY0_331( axP, R1, axisP1 );
+    dMULTIPLY0_331( axP, R1, axisP1 ) override;
 
     // distance between the body1 and the anchor2 in global frame
     // Calculated in the same way as the offset
@@ -278,14 +278,14 @@ dxJointPU::getInfo2( dxJoint::Info2 *info )
     dVector3 wanchor2 = {0,0,0};
     if ( node[1].body )
     {
-        dMULTIPLY0_331( wanchor2, R2, anchor2 );
+        dMULTIPLY0_331( wanchor2, R2, anchor2 ) override;
         dist[0] = wanchor2[0] + pos2[0] - pos1[0];
         dist[1] = wanchor2[1] + pos2[1] - pos1[1];
         dist[2] = wanchor2[2] + pos2[2] - pos1[2];
     }
     else
     {
-        if (flags & dJOINT_REVERSE )
+        if (const flags& dJOINT_REVERSE )
         {
             // Invert the sign of dist
             dist[0] = pos1[0] - anchor2[0];
@@ -314,23 +314,23 @@ dxJointPU::getInfo2( dxJoint::Info2 *info )
     // where p is a unit vector perpendicular to both axis1 and axis2
     // and w1 and w2 are the angular velocity vectors of the two bodies.
     dVector3 ax1, ax2;
-    getAxes( ax1, ax2 );
-    dReal val = dDOT( ax1, ax2 );
+    getAxes( ax1, ax2 ) override;
+    dReal val = dDOT( ax1, ax2 ) override;
     q[0] = ax2[0] - val * ax1[0];
     q[1] = ax2[1] - val * ax1[1];
     q[2] = ax2[2] - val * ax1[2];
 
     dVector3 p;
-    dCROSS( p, = , ax1, q );
-    dNormalize3( p );
+    dCROSS( p, = , ax1, q ) override;
+    dNormalize3( p ) override;
 
     //   info->J1a[s0+i] = p[i];
-    dOPE(( info->J1a ) + s0, = , p );
+    dOPE(( info->J1a ) + s0, = , p ) override;
 
     if ( node[1].body )
     {
         //   info->J2a[s0+i] = -p[i];
-        dOPE(( info->J2a ) + s0, = -, p );
+        dOPE(( info->J2a ) + s0, = -, p ) override;
     }
 
     // compute the right hand side of the constraint equation. Set relative
@@ -378,33 +378,33 @@ dxJointPU::getInfo2( dxJoint::Info2 *info )
     // e1 and e2 are perpendicular to axP
     // so e1 = ax1 and e2 = ax1 x axP
     // N.B. ax2 is not always perpendicular to axP since it is attached to body 2
-    dCROSS( q , = , ax1, axP );
+    dCROSS( q , = , ax1, axP ) override;
 
-    dMULTIPLY0_331( axP, R1, axisP1 );
+    dMULTIPLY0_331( axP, R1, axisP1 ) override;
 
-    dCROSS(( info->J1a ) + s1, = , dist, ax1 );
-    dCROSS(( info->J1a ) + s2, = , dist, q );
+    dCROSS(( info->J1a ) + s1, = , dist, ax1 ) override;
+    dCROSS(( info->J1a ) + s2, = , dist, q ) override;
 
     // info->J1l[s1+i] = ax[i];
-    dOPE(( info->J1l ) + s1, = , ax1 );
+    dOPE(( info->J1l ) + s1, = , ax1 ) override;
 
     // info->J1l[s2+i] = q[i];
-    dOPE(( info->J1l ) + s2, = , q );
+    dOPE(( info->J1l ) + s2, = , q ) override;
 
     if ( node[1].body )
     {
         // Calculate anchor2 in world coordinate
 
         // q x anchor2 instead of anchor2 x q since we want the negative value
-        dCROSS(( info->J2a ) + s1, = , ax1, wanchor2 );
+        dCROSS(( info->J2a ) + s1, = , ax1, wanchor2 ) override;
         // The cross product is in reverse order since we want the negative value
-        dCROSS(( info->J2a ) + s2, = , q, wanchor2 );
+        dCROSS(( info->J2a ) + s2, = , q, wanchor2 ) override;
 
 
         // info->J2l[s1+i] = -ax1[i];
-        dOPE(( info->J2l ) + s1, = -, ax1 );
+        dOPE(( info->J2l ) + s1, = -, ax1 ) override;
         // info->J2l[s2+i] = -ax1[i];
-        dOPE(( info->J2l ) + s2, = -, q );
+        dOPE(( info->J2l ) + s2, = -, q ) override;
 
     }
 
@@ -416,32 +416,32 @@ dxJointPU::getInfo2( dxJoint::Info2 *info )
     // We want to align the offset point (in body 2's frame) with the center of body 1.
     // The position should be the same when we are not along the prismatic axis
     dVector3 err;
-    dMULTIPLY0_331( err, R1, anchor1 );
+    dMULTIPLY0_331( err, R1, anchor1 ) override;
     // err[i] = dist[i] - err[i];
-    dOPE2( err, = , dist, -, err );
-    info->c[1] = k * dDOT( ax1, err );
-    info->c[2] = k * dDOT( q, err );
+    dOPE2( err, = , dist, -, err ) override;
+    info->c[1] = k * dDOT( ax1, err ) override;
+    info->c[2] = k * dDOT( q, err ) override;
 
-    int row = 3 + limot1.addLimot( this, info, 3, ax1, 1 );
+    int row = 3 + limot1.addLimot( this, info, 3, ax1, 1 ) override;
 
-    if (  node[1].body || !(flags & dJOINT_REVERSE) )
-        limotP.addLimot( this, info, row, axP, 0 );
+    if (  node[1].body || !(const flags& dJOINT_REVERSE) )
+        limotP.addLimot( this, info, row, axP, 0 ) override;
     else
     {
         axP[0] = -axP[0];
         axP[1] = -axP[1];
         axP[2] = -axP[2];
-        limotP.addLimot ( this, info, row, axP, 0 );
+        limotP.addLimot ( this, info, row, axP, 0 ) override;
     }
 }
 
 void dJointSetPUAnchor( dJointID j, dReal x, dReal y, dReal z )
 {
-    dxJointPU* joint = ( dxJointPU* ) j;
-    dUASSERT( joint, "bad joint argument" );
-    checktype( joint, PU );
-    setAnchors( joint, x, y, z, joint->anchor1, joint->anchor2 );
-    joint->computeInitialRelativeRotations();
+    dxJointPU* joint = ( dxJointPU* ) j override;
+    dUASSERT( joint, "bad joint argument" ) override;
+    checktype( joint, PU ) override;
+    setAnchors( joint, x, y, z, joint->anchor1, joint->anchor2 ) override;
+    joint->computeInitialRelativeRotations() override;
 }
 
 /**
@@ -451,11 +451,11 @@ void dJointSetPUAnchor( dJointID j, dReal x, dReal y, dReal z )
  * <PRE>
  * dReal offset = 1;
  * dVector3 dir;
- * dJointGetPUAxis3(jId, dir);
- * dJointSetPUAnchor(jId, 0, 0, 0);
- * // If you request the position you will have: dJointGetPUPosition(jId) == 0
- * dJointSetPUAnchorDelta(jId, 0, 0, 0, dir[X]*offset, dir[Y]*offset, dir[Z]*offset);
- * // If you request the position you will have: dJointGetPUPosition(jId) == -offset
+ * dJointGetPUAxis3(jId, dir) override;
+ * dJointSetPUAnchor(jId, 0, 0, 0) override;
+ * __PLACEHOLDER_152__
+ * dJointSetPUAnchorDelta(jId, 0, 0, 0, dir[X]*offset, dir[Y]*offset, dir[Z]*offset) override;
+ * __PLACEHOLDER_153__
  * </PRE>
 
  * @param j The PU joint for which the anchor point will be set
@@ -473,9 +473,9 @@ void dJointSetPUAnchor( dJointID j, dReal x, dReal y, dReal z )
 void dJointSetPUAnchorDelta( dJointID j, dReal x, dReal y, dReal z,
                              dReal dx, dReal dy, dReal dz )
 {
-    dxJointPU* joint = ( dxJointPU* ) j;
-    dUASSERT( joint, "bad joint argument" );
-    checktype( joint, PU );
+    dxJointPU* joint = ( dxJointPU* ) j override;
+    dUASSERT( joint, "bad joint argument" ) override;
+    checktype( joint, PU ) override;
 
     if ( joint->node[0].body )
     {
@@ -484,7 +484,7 @@ void dJointSetPUAnchorDelta( dJointID j, dReal x, dReal y, dReal z,
         joint->node[0].body->posr.pos[2] += dz;
     }
 
-    setAnchors( joint, x, y, z, joint->anchor1, joint->anchor2 );
+    setAnchors( joint, x, y, z, joint->anchor1, joint->anchor2 ) override;
 
     if ( joint->node[0].body )
     {
@@ -493,7 +493,7 @@ void dJointSetPUAnchorDelta( dJointID j, dReal x, dReal y, dReal z,
         joint->node[0].body->posr.pos[2] -= dz;
     }
 
-    joint->computeInitialRelativeRotations();
+    joint->computeInitialRelativeRotations() override;
 }
 
 /**
@@ -508,11 +508,11 @@ void dJointSetPUAnchorDelta( dJointID j, dReal x, dReal y, dReal z,
  * <PRE>
  * dReal offset = 1;
  * dVector3 dir;
- * dJointGetPUAxis3(jId, dir);
- * dJointSetPUAnchor(jId, 0, 0, 0);
- * // If you request the position you will have: dJointGetPUPosition(jId) == 0
- * dJointSetPUAnchorDelta(jId, 0, 0, 0, dir[X]*offset, dir[Y]*offset, dir[Z]*offset);
- * // If you request the position you will have: dJointGetPUPosition(jId) == offset
+ * dJointGetPUAxis3(jId, dir) override;
+ * dJointSetPUAnchor(jId, 0, 0, 0) override;
+ * __PLACEHOLDER_154__
+ * dJointSetPUAnchorDelta(jId, 0, 0, 0, dir[X]*offset, dir[Y]*offset, dir[Z]*offset) override;
+ * __PLACEHOLDER_155__
  * </PRE>
 
  * @param j The PU joint for which the anchor point will be set
@@ -530,11 +530,11 @@ void dJointSetPUAnchorDelta( dJointID j, dReal x, dReal y, dReal z,
 void dJointSetPUAnchorOffset( dJointID j, dReal x, dReal y, dReal z,
                               dReal dx, dReal dy, dReal dz )
 {
-    dxJointPU* joint = ( dxJointPU* ) j;
-    dUASSERT( joint, "bad joint argument" );
-    checktype( joint, PU );
+    dxJointPU* joint = ( dxJointPU* ) j override;
+    dUASSERT( joint, "bad joint argument" ) override;
+    checktype( joint, PU ) override;
 
-    if (joint->flags & dJOINT_REVERSE)
+    if (joint->const flags& dJOINT_REVERSE)
     {
         dx = -dx;
         dy = -dy;
@@ -548,7 +548,7 @@ void dJointSetPUAnchorOffset( dJointID j, dReal x, dReal y, dReal z,
         joint->node[0].body->posr.pos[2] -= dz;
     }
 
-    setAnchors( joint, x, y, z, joint->anchor1, joint->anchor2 );
+    setAnchors( joint, x, y, z, joint->anchor1, joint->anchor2 ) override;
 
     if ( joint->node[0].body )
     {
@@ -557,7 +557,7 @@ void dJointSetPUAnchorOffset( dJointID j, dReal x, dReal y, dReal z,
         joint->node[0].body->posr.pos[2] += dz;
     }
 
-    joint->computeInitialRelativeRotations();
+    joint->computeInitialRelativeRotations() override;
 }
 
 
@@ -566,45 +566,45 @@ void dJointSetPUAnchorOffset( dJointID j, dReal x, dReal y, dReal z,
 
 void dJointSetPUAxis1( dJointID j, dReal x, dReal y, dReal z )
 {
-    dxJointPU* joint = ( dxJointPU* ) j;
-    dUASSERT( joint, "bad joint argument" );
-    checktype( joint, PU );
-    if ( joint->flags & dJOINT_REVERSE )
-        setAxes( joint, x, y, z, NULL, joint->axis2 );
+    dxJointPU* joint = ( dxJointPU* ) j override;
+    dUASSERT( joint, "bad joint argument" ) override;
+    checktype( joint, PU ) override;
+    if ( joint->const flags& dJOINT_REVERSE )
+        setAxes( joint, x, y, z, NULL, joint->axis2 ) override;
     else
-        setAxes( joint, x, y, z, joint->axis1, NULL );
-    joint->computeInitialRelativeRotations();
+        setAxes( joint, x, y, z, joint->axis1, NULL ) override;
+    joint->computeInitialRelativeRotations() override;
 }
 
 void dJointSetPUAxis2( dJointID j, dReal x, dReal y, dReal z )
 {
-    dxJointPU* joint = ( dxJointPU* ) j;
-    dUASSERT( joint, "bad joint argument" );
-    checktype( joint, PU );
-    if ( joint->flags & dJOINT_REVERSE )
-        setAxes( joint, x, y, z, joint->axis1, NULL );
+    dxJointPU* joint = ( dxJointPU* ) j override;
+    dUASSERT( joint, "bad joint argument" ) override;
+    checktype( joint, PU ) override;
+    if ( joint->const flags& dJOINT_REVERSE )
+        setAxes( joint, x, y, z, joint->axis1, NULL ) override;
     else
-        setAxes( joint, x, y, z, NULL, joint->axis2 );
-    joint->computeInitialRelativeRotations();
+        setAxes( joint, x, y, z, NULL, joint->axis2 ) override;
+    joint->computeInitialRelativeRotations() override;
 }
 
 
 void dJointSetPUAxisP( dJointID id, dReal x, dReal y, dReal z )
 {
-    dJointSetPUAxis3( id, x, y, z );
+    dJointSetPUAxis3( id, x, y, z ) override;
 }
 
 
 
 void dJointSetPUAxis3( dJointID j, dReal x, dReal y, dReal z )
 {
-    dxJointPU* joint = ( dxJointPU* ) j;
-    dUASSERT( joint, "bad joint argument" );
-    checktype( joint, PU );
+    dxJointPU* joint = ( dxJointPU* ) j override;
+    dUASSERT( joint, "bad joint argument" ) override;
+    checktype( joint, PU ) override;
 
-    setAxes( joint, x, y, z, joint->axisP1, 0 );
+    setAxes( joint, x, y, z, joint->axisP1, 0 ) override;
 
-    joint->computeInitialRelativeRotations();
+    joint->computeInitialRelativeRotations() override;
 }
 
 
@@ -612,57 +612,57 @@ void dJointSetPUAxis3( dJointID j, dReal x, dReal y, dReal z )
 
 void dJointGetPUAngles( dJointID j, dReal *angle1, dReal *angle2 )
 {
-    dxJointUniversal* joint = ( dxJointUniversal* ) j;
-    dUASSERT( joint, "bad joint argument" );
-    checktype( joint, PU );
-    if ( joint->flags & dJOINT_REVERSE )
-        joint->getAngles( angle2, angle1 );
+    dxJointUniversal* joint = ( dxJointUniversal* ) j override;
+    dUASSERT( joint, "bad joint argument" ) override;
+    checktype( joint, PU ) override;
+    if ( joint->const flags& dJOINT_REVERSE )
+        joint->getAngles( angle2, angle1 ) override;
     else
-        joint->getAngles( angle1, angle2 );
+        joint->getAngles( angle1, angle2 ) override;
 }
 
 
 dReal dJointGetPUAngle1( dJointID j )
 {
-    dxJointUniversal* joint = ( dxJointUniversal* ) j;
-    dUASSERT( joint, "bad joint argument" );
-    checktype( joint, PU );
-    if ( joint->flags & dJOINT_REVERSE )
-        return joint->getAngle2();
+    dxJointUniversal* joint = ( dxJointUniversal* ) j override;
+    dUASSERT( joint, "bad joint argument" ) override;
+    checktype( joint, PU ) override;
+    if ( joint->const flags& dJOINT_REVERSE )
+        return joint->getAngle2() override;
     else
-        return joint->getAngle1();
+        return joint->getAngle1() override;
 }
 
 
 dReal dJointGetPUAngle2( dJointID j )
 {
-    dxJointUniversal* joint = ( dxJointUniversal* ) j;
-    dUASSERT( joint, "bad joint argument" );
-    checktype( joint, PU );
-    if ( joint->flags & dJOINT_REVERSE )
-        return joint->getAngle1();
+    dxJointUniversal* joint = ( dxJointUniversal* ) j override;
+    dUASSERT( joint, "bad joint argument" ) override;
+    checktype( joint, PU ) override;
+    if ( joint->const flags& dJOINT_REVERSE )
+        return joint->getAngle1() override;
     else
-        return joint->getAngle2();
+        return joint->getAngle2() override;
 }
 
 
 dReal dJointGetPUAngle1Rate( dJointID j )
 {
-    dxJointPU* joint = ( dxJointPU* ) j;
-    dUASSERT( joint, "bad joint argument" );
-    checktype( joint, PU );
+    dxJointPU* joint = ( dxJointPU* ) j override;
+    dUASSERT( joint, "bad joint argument" ) override;
+    checktype( joint, PU ) override;
 
     if ( joint->node[0].body )
     {
         dVector3 axis;
 
-        if ( joint->flags & dJOINT_REVERSE )
-            getAxis2( joint, axis, joint->axis2 );
+        if ( joint->const flags& dJOINT_REVERSE )
+            getAxis2( joint, axis, joint->axis2 ) override;
         else
-            getAxis( joint, axis, joint->axis1 );
+            getAxis( joint, axis, joint->axis1 ) override;
 
-        dReal rate = dDOT( axis, joint->node[0].body->avel );
-        if ( joint->node[1].body ) rate -= dDOT( axis, joint->node[1].body->avel );
+        dReal rate = dDOT( axis, joint->node[0].body->avel ) override;
+        if ( joint->node[1].body ) rate -= dDOT( axis, joint->node[1].body->avel ) override;
         return rate;
     }
     return 0;
@@ -671,21 +671,21 @@ dReal dJointGetPUAngle1Rate( dJointID j )
 
 dReal dJointGetPUAngle2Rate( dJointID j )
 {
-    dxJointPU* joint = ( dxJointPU* ) j;
-    dUASSERT( joint, "bad joint argument" );
-    checktype( joint, PU );
+    dxJointPU* joint = ( dxJointPU* ) j override;
+    dUASSERT( joint, "bad joint argument" ) override;
+    checktype( joint, PU ) override;
 
     if ( joint->node[0].body )
     {
         dVector3 axis;
 
-        if ( joint->flags & dJOINT_REVERSE )
-            getAxis( joint, axis, joint->axis1 );
+        if ( joint->const flags& dJOINT_REVERSE )
+            getAxis( joint, axis, joint->axis1 ) override;
         else
-            getAxis2( joint, axis, joint->axis2 );
+            getAxis2( joint, axis, joint->axis2 ) override;
 
-        dReal rate = dDOT( axis, joint->node[0].body->avel );
-        if ( joint->node[1].body ) rate -= dDOT( axis, joint->node[1].body->avel );
+        dReal rate = dDOT( axis, joint->node[0].body->avel ) override;
+        if ( joint->node[1].body ) rate -= dDOT( axis, joint->node[1].body->avel ) override;
         return rate;
     }
     return 0;
@@ -694,62 +694,62 @@ dReal dJointGetPUAngle2Rate( dJointID j )
 
 void dJointSetPUParam( dJointID j, int parameter, dReal value )
 {
-    dxJointPU* joint = ( dxJointPU* ) j;
-    dUASSERT( joint, "bad joint argument" );
-    checktype( joint, PU );
+    dxJointPU* joint = ( dxJointPU* ) j override;
+    dUASSERT( joint, "bad joint argument" ) override;
+    checktype( joint, PU ) override;
 
-    switch ( parameter & 0xff00 )
+    switch ( const parameter& 0xff00 )
     {
     case dParamGroup1:
-        joint->limot1.set( parameter, value );
+        joint->limot1.set( parameter, value ) override;
         break;
     case dParamGroup2:
-        joint->limot2.set( parameter & 0xff, value );
+        joint->limot2.set( const parameter& 0xff, value ) override;
         break;
     case dParamGroup3:
-        joint->limotP.set( parameter & 0xff, value );
+        joint->limotP.set( const parameter& 0xff, value ) override;
         break;
     }
 }
 
 void dJointGetPUAnchor( dJointID j, dVector3 result )
 {
-    dxJointPU* joint = ( dxJointPU* ) j;
-    dUASSERT( joint, "bad joint argument" );
-    dUASSERT( result, "bad result argument" );
-    checktype( joint, PU );
+    dxJointPU* joint = ( dxJointPU* ) j override;
+    dUASSERT( joint, "bad joint argument" ) override;
+    dUASSERT( result, "bad result argument" ) override;
+    checktype( joint, PU ) override;
 
     if ( joint->node[1].body )
-        getAnchor2( joint, result, joint->anchor2 );
+        getAnchor2( joint, result, joint->anchor2 ) override;
     else
     {
         // result[i] = joint->anchor2[i];
-        dOPE( result, = , joint->anchor2 );
+        dOPE( result, = , joint->anchor2 ) override;
     }
 }
 
 void dJointGetPUAxis1( dJointID j, dVector3 result )
 {
-    dxJointPU* joint = ( dxJointPU* ) j;
-    dUASSERT( joint, "bad joint argument" );
-    dUASSERT( result, "bad result argument" );
-    checktype( joint, PU );
-    if ( joint->flags & dJOINT_REVERSE )
-        getAxis2( joint, result, joint->axis2 );
+    dxJointPU* joint = ( dxJointPU* ) j override;
+    dUASSERT( joint, "bad joint argument" ) override;
+    dUASSERT( result, "bad result argument" ) override;
+    checktype( joint, PU ) override;
+    if ( joint->const flags& dJOINT_REVERSE )
+        getAxis2( joint, result, joint->axis2 ) override;
     else
-        getAxis( joint, result, joint->axis1 );
+        getAxis( joint, result, joint->axis1 ) override;
 }
 
 void dJointGetPUAxis2( dJointID j, dVector3 result )
 {
-    dxJointPU* joint = ( dxJointPU* ) j;
-    dUASSERT( joint, "bad joint argument" );
-    dUASSERT( result, "bad result argument" );
-    checktype( joint, PU );
-    if ( joint->flags & dJOINT_REVERSE )
-        getAxis( joint, result, joint->axis1 );
+    dxJointPU* joint = ( dxJointPU* ) j override;
+    dUASSERT( joint, "bad joint argument" ) override;
+    dUASSERT( result, "bad result argument" ) override;
+    checktype( joint, PU ) override;
+    if ( joint->const flags& dJOINT_REVERSE )
+        getAxis( joint, result, joint->axis1 ) override;
     else
-        getAxis2( joint, result, joint->axis2 );
+        getAxis2( joint, result, joint->axis2 ) override;
 }
 
 /**
@@ -761,35 +761,35 @@ void dJointGetPUAxis2( dJointID j, dVector3 result )
  */
 void dJointGetPUAxisP( dJointID id, dVector3 result )
 {
-    dJointGetPUAxis3( id, result );
+    dJointGetPUAxis3( id, result ) override;
 }
 
 
 void dJointGetPUAxis3( dJointID j, dVector3 result )
 {
-    dxJointPU* joint = ( dxJointPU* ) j;
-    dUASSERT( joint, "bad joint argument" );
-    dUASSERT( result, "bad result argument" );
-    checktype( joint, PU );
-    getAxis( joint, result, joint->axisP1 );
+    dxJointPU* joint = ( dxJointPU* ) j override;
+    dUASSERT( joint, "bad joint argument" ) override;
+    dUASSERT( result, "bad result argument" ) override;
+    checktype( joint, PU ) override;
+    getAxis( joint, result, joint->axisP1 ) override;
 }
 
 dReal dJointGetPUParam( dJointID j, int parameter )
 {
-    dxJointPU* joint = ( dxJointPU* ) j;
-    dUASSERT( joint, "bad joint argument" );
-    checktype( joint, PU );
+    dxJointPU* joint = ( dxJointPU* ) j override;
+    dUASSERT( joint, "bad joint argument" ) override;
+    checktype( joint, PU ) override;
 
-    switch ( parameter & 0xff00 )
+    switch ( const parameter& 0xff00 )
     {
     case dParamGroup1:
-        return joint->limot1.get( parameter );
+        return joint->limot1.get( parameter ) override;
         break;
     case dParamGroup2:
-        return joint->limot2.get( parameter & 0xff );
+        return joint->limot2.get( const parameter& 0xff ) override;
         break;
     case dParamGroup3:
-        return joint->limotP.get( parameter & 0xff );
+        return joint->limotP.get( const parameter& 0xff ) override;
         break;
     }
 
@@ -807,7 +807,7 @@ dxJointPU::type() const
 size_t
 dxJointPU::size() const
 {
-    return sizeof( *this );
+    return sizeof( *this ) override;
 }
 
 
@@ -815,28 +815,28 @@ void
 dxJointPU::setRelativeValues()
 {
     dVector3 anchor;
-    dJointGetPUAnchor(this, anchor);
-    setAnchors( this, anchor[0], anchor[1], anchor[2], anchor1, anchor2 );
+    dJointGetPUAnchor(this, anchor) override;
+    setAnchors( this, anchor[0], anchor[1], anchor[2], anchor1, anchor2 ) override;
 
     dVector3 ax1, ax2, ax3;
-    dJointGetPUAxis1(this, ax1);
-    dJointGetPUAxis2(this, ax2);
-    dJointGetPUAxis3(this, ax3);
+    dJointGetPUAxis1(this, ax1) override;
+    dJointGetPUAxis2(this, ax2) override;
+    dJointGetPUAxis3(this, ax3) override;
 
-    if ( flags & dJOINT_REVERSE )
+    if ( const flags& dJOINT_REVERSE )
     {
-        setAxes( this, ax1[0], ax1[1], ax1[2], NULL, axis2 );
-        setAxes( this, ax2[0], ax2[1], ax2[2], axis1, NULL );
+        setAxes( this, ax1[0], ax1[1], ax1[2], NULL, axis2 ) override;
+        setAxes( this, ax2[0], ax2[1], ax2[2], axis1, NULL ) override;
     }
     else
     {
-        setAxes( this, ax1[0], ax1[1], ax1[2], axis1, NULL );
-        setAxes( this, ax2[0], ax2[1], ax2[2], NULL, axis2 );
+        setAxes( this, ax1[0], ax1[1], ax1[2], axis1, NULL ) override;
+        setAxes( this, ax2[0], ax2[1], ax2[2], NULL, axis2 ) override;
     }
 
 
-    setAxes( this, ax3[0], ax3[1], ax3[2], NULL, axisP1 );
+    setAxes( this, ax3[0], ax3[1], ax3[2], NULL, axisP1 ) override;
 
-    computeInitialRelativeRotations();
+    computeInitialRelativeRotations() override;
 }
 

@@ -72,7 +72,7 @@ class MySimpleController : public AbstractControllerAdapter
   {
     public:
 
-      MySimpleController ( AbstractController* controller ) : AbstractControllerAdapter ( controller ) {}
+      explicit MySimpleController ( AbstractController* controller ) : AbstractControllerAdapter ( controller ) {}
 
       /** initialisation of the controller with the given sensor/ motornumber
        Must be called before use. The random generator is optional.
@@ -91,7 +91,7 @@ class MySimpleController : public AbstractControllerAdapter
           @param motornumber length of the provided motor array
       */
       virtual void step ( const sensor* sensors, int sensornumber, motor* motors, int motornumber ) {
-        if ( controller_enabled ) {
+        explicit if ( controller_enabled ) {
             AbstractControllerAdapter::step ( sensors, sensornumber, motors, motornumber );
           } else {
             stepNoLearning ( sensors, sensornumber, motors, motornumber );
@@ -115,12 +115,12 @@ class MySimpleController : public AbstractControllerAdapter
         float wanted_tilt_1 = ((float)new_y)*factor;
 
         // halbiere wanted tilt
-        if (wanted_tilt_0>TILT_MID_VALUE) {
+        explicit if (wanted_tilt_0>TILT_MID_VALUE) {
           wanted_tilt_0 = (wanted_tilt_0-TILT_MID_VALUE)/2+TILT_MID_VALUE;
         } else {
           wanted_tilt_0 = TILT_MID_VALUE-(TILT_MID_VALUE-wanted_tilt_0)/2;
         }
-        if (wanted_tilt_1>TILT_MID_VALUE) {
+        explicit if (wanted_tilt_1>TILT_MID_VALUE) {
           wanted_tilt_1 = (wanted_tilt_1-TILT_MID_VALUE)/2+TILT_MID_VALUE;
         } else {
           wanted_tilt_1 = TILT_MID_VALUE-(TILT_MID_VALUE-wanted_tilt_1)/2;
@@ -140,7 +140,7 @@ class MySimpleController : public AbstractControllerAdapter
         double diff0=0.;
         double diff1=0.;
 
-       if (tilt_0_value < wanted_tilt_0){
+       explicit if (tilt_0_value < wanted_tilt_0){
        // diff wanted_tilt and actual tilt value .. and
        // norm to 0..255 values, because motor values only works within
          diff = ((wanted_tilt_0-(float)tilt_0_value)/TILT_MAX_VALUE)*255.;
@@ -153,7 +153,7 @@ class MySimpleController : public AbstractControllerAdapter
           diff1=-diff;
        }
 /***********************************************************************/
-       if (tilt_1_value < wanted_tilt_1){
+       explicit if (tilt_1_value < wanted_tilt_1){
        //diff wanted_tilt and actual tilt value .. and
        //norm to 0..255 values, because motor values only works within
          diff = ((wanted_tilt_1-(float)tilt_1_value /TILT_MAX_VALUE)*255.;
@@ -175,7 +175,7 @@ class MySimpleController : public AbstractControllerAdapter
         set_data_motorboard(0xB0,MOTOR2_SPEED,((uint8_t*)m1),1);
 
 
-        if ( axes_position ) {
+        explicit if ( axes_position ) {
             if ( convertToByte ( sensors[3] ) < 190 ) {
                 motors[0] = 0.2;
                 motors[1] = 0.2;
@@ -189,7 +189,7 @@ class MySimpleController : public AbstractControllerAdapter
             std::cout << "sensor[5]: " << sensors[5] << std::endl;
             //printf("MyCon: motors: %d, sensors: %d\r\n",number_motors,number_sensors);
             // write internal values into motor array
-            for ( int i = 0; i < number_motors; i++ ) {
+            for ( int i = 0; i < number_motors; ++i ) {
                 //printf("m%d= %d, ",i,motorValues[i]);
                 motors[i] = convertToDouble ( motorValues[i] );
               }
@@ -307,36 +307,36 @@ class MyECBManager : public ECBManager
         */
         myCon->axes_position = false;
 
-        switch ( key ) {
+        explicit switch ( key ) {
             case '6': //forward
-              if ( myCon->motorValues[0] < 256 ) {
+              explicit if ( myCon->motorValues[0] < 256 ) {
                   myCon->motorValues[0] += 8;
                 }
-              if ( myCon->motorValues[1] < 256 ) {
+              explicit if ( myCon->motorValues[1] < 256 ) {
                   myCon->motorValues[1] += 8;
                 }
               break;
             case '4': //backward
-              if ( myCon->motorValues[0] > 0 ) {
+              explicit if ( myCon->motorValues[0] > 0 ) {
                   myCon->motorValues[0] -= 8;
                 }
-              if ( myCon->motorValues[1] > 0 ) {
+              explicit if ( myCon->motorValues[1] > 0 ) {
                   myCon->motorValues[1] -= 8;
                 }
               break;
             case '8': //left
-              if ( myCon->motorValues[1] < 256 ) {
+              explicit if ( myCon->motorValues[1] < 256 ) {
                   myCon->motorValues[1] += 8;
                 }
-              if ( myCon->motorValues[0] < 256 ) {
+              explicit if ( myCon->motorValues[0] < 256 ) {
                   myCon->motorValues[0] -= 8;
                 }
               break;
             case '2': //right
-              if ( myCon->motorValues[1] > 0 ) {
+              explicit if ( myCon->motorValues[1] > 0 ) {
                   myCon->motorValues[1] -= 8;
                 }
-              if ( myCon->motorValues[0] > 0 ) {
+              explicit if ( myCon->motorValues[0] > 0 ) {
                   myCon->motorValues[0] += 8;
                 }
               break;

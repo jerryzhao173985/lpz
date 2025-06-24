@@ -8,7 +8,7 @@
  *   LICENSE:                                                              *
  *   This work is licensed under the Creative Commons                      *
  *   Attribution-NonCommercial-ShareAlike 2.5 License. To view a copy of   *
- *   this license, visit http://creativecommons.org/licenses/by-nc-sa/2.5/ *
+ *   this license, visit http:__PLACEHOLDER_2__
  *   or send a letter to Creative Commons, 543 Howard Street, 5th Floor,   *
  *   San Francisco, California, 94105, USA.                                *
  *                                                                         *
@@ -30,22 +30,22 @@
 #include <selforg/noisegenerator.h>
 
 struct InvertMotorNStepConf {
-  int buffersize;          ///< buffersize size of the time-buffer for x,y,eta
+  int buffersize = 0;          ///< buffersize size of the time-buffer for x,y,eta
   matrix::Matrix initialC; ///< initial controller matrix C (if not given then randomly chosen, see
                            ///< cInit, cNonDiag...)
-  double cInit;            ///< cInit size of the C matrix to initialised with.
-  double cNonDiag; ///< cNonDiag is the size of the nondiagonal elements in respect to the diagonal
+  double cInit = 0;            ///< cInit size of the C matrix to initialised with.
+  double cNonDiag = 0; ///< cNonDiag is the size of the nondiagonal elements in respect to the diagonal
                    ///< (cInit) ones
-  double cNonDiagAbs; ///< cNonDiag is the value of the nondiagonal elements
+  double cNonDiagAbs = 0; ///< cNonDiag is the value of the nondiagonal elements
   bool
     useS; ///< useS decides whether to use the S matrix in addition to the A matrix (sees sensors)
   /** useSD decides whether to use the SD matrix in addition to the A
       matrix (sees first and second derivatives)  */
-  bool useSD;
+  bool useSD = false;
   /** number of context sensors(considered at the end of the sensor
       vector. If not 0, then S will only get them as input  */
-  int numberContext;
-  bool someInternalParams; ///< someInternalParams if true only some internal parameters are
+  int numberContext = 0;
+  bool someInternalParams = false; ///< someInternalParams if true only some internal parameters are
                            ///< exported, all otherwise
 };
 
@@ -61,11 +61,11 @@ class InvertMotorNStep
   , public Teachable {
 
 public:
-  explicit InvertMotorNStep(const InvertMotorNStepConf& conf = getDefaultConf());
+  InvertMotorNStep(const InvertMotorNStepConf& conf = getDefaultConf());
 
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override;
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr);
 
-  virtual ~InvertMotorNStep() override;
+  virtual ~InvertMotorNStep();
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
   virtual int getSensorNumber() const override {
@@ -78,23 +78,23 @@ public:
 
   /// performs one step (includes learning).
   /// Calulates motor commands from sensor inputs.
-  virtual void step(const sensor*, int number_sensors, motor*, int number_motors) override;
+  virtual void step(const sensor*, int number_sensors, motor*, int number_motors);
 
   /// performs one step without learning. Calulates motor commands from sensor inputs.
   virtual void stepNoLearning(const sensor*,
                               int number_sensors,
                               motor*,
-                              int number_motors) override;
+                              int number_motors);
 
   /**** STOREABLE ****/
   /** stores the controller values to a given file. */
   virtual bool store(FILE* f) const override;
   /** loads the controller values from a given file. */
-  virtual bool restore(FILE* f) override;
+  virtual bool restore(FILE* f);
 
   /**** INSPECTABLE ****/
-  virtual std::list<ILayer> getStructuralLayers() const override;
-  virtual std::list<IConnection> getStructuralConnections() const override;
+  virtual std::list<ILayer> getStructuralLayers() const;
+  virtual std::list<IConnection> getStructuralConnections() const;
 
   /**** TEACHING ****/
   /** The given motor teaching signal is used for this timestep.
@@ -119,21 +119,21 @@ public:
        for a continuous teaching process.
      @param teaching: matrix with dimensions (motornumber,1)
    */
-  virtual void setMotorTeaching(const matrix::Matrix& teaching) override;
+  virtual void setMotorTeaching(const matrix::Matrix& teaching);
 
   /** The given sensor teaching signal (distal learning) is used for this timestep.
       The belonging motor teachung signal is calculated by the inverse model.
       See setMotorTeaching
      @param teaching: matrix with dimensions (motorsensors,1)
    */
-  virtual void setSensorTeaching(const matrix::Matrix& teaching) override;
+  virtual void setSensorTeaching(const matrix::Matrix& teaching);
   /// returns the last motor values (useful for cross motor coupling)
-  virtual matrix::Matrix getLastMotorValues() override;
+  virtual matrix::Matrix getLastMotorValues();
   /// returns the last sensor values (useful for cross sensor coupling)
-  virtual matrix::Matrix getLastSensorValues() override;
+  virtual matrix::Matrix getLastSensorValues();
 
   // UNUSED! OLD IMPLEMENTATION which hat some consistency arguments
-  void calcCandHUpdatesTeaching(matrix::Matrix& C_update, matrix::Matrix& H_update, int y_delay);
+  void calcCandHUpdatesTeaching(const matrix::Matrix& C_update, const matrix::Matrix& H_update, int y_delay);
 
   /**** REINFORCEMENT ****/
   /** set the reinforcement signal for this timestep.
@@ -162,7 +162,7 @@ public:
     return sensorweights;
   }
   /// reference to C-matrix
-  matrix::Matrix& getC() {
+  const matrix::Matrix& getC() const {
     return C;
   };
 
@@ -212,8 +212,8 @@ protected:
   double modelCompliant;  ///< learning factor for model (or sensor) compliant learning
   int managementInterval; ///< interval between subsequent management function calls
   paramval inhibition;    ///< inhibition strength for sparce kwta strategy (is scaled with epsC)
-  paramval kwta;          ///< (int) number of synapses that get strengthend
-  paramval limitRF; ///< (int) receptive field of motor neurons (number of offcenter sensors) if
+  paramval kwta;          ///< static_cast<int> number of synapses that get strengthend
+  paramval limitRF; ///< static_cast<int> receptive field of motor neurons (number of offcenter sensors) if
                     ///< null then no limitation. Mutual exclusive with inhibition
   paramval dampS;   ///< damping of S matrix
   paramval dampC;   ///< damping of C matrix
@@ -248,7 +248,7 @@ protected:
   // @param delay timesteps to delay the y-values.  (usually 0)
   //  Please note that the delayed values are NOT used for the error calculation
   //  (this is done in calcXsi())
-  virtual void calcCandHUpdates(matrix::Matrix& C_update, matrix::Matrix& H_update, int delay);
+  virtual void calcCandHUpdates(const matrix::Matrix& C_update, const matrix::Matrix& H_update, int delay);
 
   /// updates the matrix C and H
   virtual void updateCandH(const matrix::Matrix& C_update,
@@ -285,7 +285,7 @@ public:
       @param k number of synapes to strengthen
       @param damping strength of supression and exitation (typically 0.001)
    */
-  void kwtaInhibition(matrix::Matrix& weightmatrix, unsigned int k, double damping);
+  void kwtaInhibition(const matrix::Matrix& weightmatrix, unsigned int k, double damping);
 
   /** sets all connections to zero which are further away then rfSize
       from the diagonal.
@@ -293,7 +293,7 @@ public:
       If rfSize = 2: main diagonal and upper and lower side diagonal are kept and so on and so
      forth.
    */
-  void limitC(matrix::Matrix& weightmatrix, unsigned int rfSize);
+  void limitC(const matrix::Matrix& weightmatrix, unsigned int rfSize);
 
   static double clip095(double x);
   static double regularizedInverse(double v);

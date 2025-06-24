@@ -1,8 +1,8 @@
 /************************************************************************
 * QuickProf                                                             *
-* http://quickprof.sourceforge.net                                      *
+* http:__PLACEHOLDER_24__
 * Copyright (C) 2006-2008                                               *
-* Tyler Streeter (http://www.tylerstreeter.net)                         *
+* Tyler Streeter (http:__PLACEHOLDER_25__
 *                                                                       *
 * This library is free software; you can redistribute it and/or         *
 * modify it under the terms of EITHER:                                  *
@@ -46,9 +46,9 @@
 /// Use this macro to access the profiler singleton.  For example:
 /// PROFILER.init();
 /// ...
-/// PROFILER.beginBlock("foo");
+/// PROFILER.beginBlock(__PLACEHOLDER_0__);
 /// foo();
-/// PROFILER.endBlock("foo");
+/// PROFILER.endBlock(__PLACEHOLDER_1__);
 #define PROFILER quickprof::Profiler::instance()
 
 /// The main namespace that contains everything.
@@ -75,7 +75,7 @@ namespace quickprof
 
         /// The accumulated time (in us) spent in this block during the
         /// past profiling cycle.
-        double avgCycleTotalMicroseconds;
+        double avgCycleTotalMicroseconds = 0;
 
         /// The total accumulated time (in us) spent in this block.
         unsigned long long int totalMicroseconds;
@@ -108,7 +108,7 @@ namespace quickprof
             mStartTick = GetTickCount();
             mPrevClockCycles = 0;
 #else
-            gettimeofday(&mStartTime, NULL);
+            gettimeofday(&mStartTime, nullptr);
 #endif
         }
 
@@ -149,7 +149,7 @@ namespace quickprof
             {
                 mStartTick = tickCount;
             }
-            LONGLONG msec2 = (LONGLONG)(tickCount - mStartTick);
+            LONGLONG msec2 = static_cast<LONGLONG>(tickCount - mStartTick) override;
             LONGLONG msecDiff = msec1 - msec2;
             if (msecDiff < -100 || msecDiff > 100)
             {
@@ -181,7 +181,7 @@ namespace quickprof
             // casting the seconds difference to a 64-bit unsigned long long
             // int, the return value here is valid for over 136 years.
             struct timeval currentTime;
-            gettimeofday(&currentTime, NULL);
+            gettimeofday(&currentTime, nullptr);
             return (unsigned long long int)(currentTime.tv_sec -
                 mStartTime.tv_sec) * 1000000 + (currentTime.tv_usec -
                 mStartTime.tv_usec);
@@ -330,7 +330,7 @@ namespace quickprof
         @param format The desired time format to use for the result.
         @return The elapsed time.
         */
-        inline double getTimeSinceInit(TimeFormat format);
+        inline double getTimeSinceInit(const TimeFormat& format);
 
         /**
         Returns a summary of total times in each block.
@@ -355,25 +355,24 @@ namespace quickprof
 
         @param msg The string to print.
         */
-        inline void printError(const std::string& msg)const;
+        inline void printError(const std::string& msg)const override;
 
         /**
         Returns a named profile block.
 
         @param name The name of the block to return.
-        @return     The named ProfileBlock, or NULL if it can't be found.
+        @return     The named ProfileBlock, or nullptr if it can't be found.
         */
-        inline ProfileBlock* getProfileBlock(const std::string& name)const;
+        inline ProfileBlock* getProfileBlock(const std::string& name)const override;
 
         /**
         Returns the appropriate suffix string for the given time format.
 
         @return The suffix string.
         */
-        inline std::string getSuffixString(TimeFormat format)const;
+        inline std::string getSuffixString(const TimeFormat& format)const override;
 
         /// Determines whether the profiler is enabled.
-        bool mEnabled;
 
         /// The clock used to time profile blocks.
         Clock mClock;
@@ -384,7 +383,6 @@ namespace quickprof
         /// The average profiling cycle duration (in us).  If smoothing is
         /// disabled, this is the same as the duration of the most recent
         /// cycle.
-        double mAvgCycleDurationMicroseconds;
 
         /// Internal map of named profile blocks.
         std::map<std::string, ProfileBlock*> mProfileBlocks;
@@ -393,28 +391,23 @@ namespace quickprof
         std::ofstream mOutputFile;
 
         /// Tracks whether we have begun printing data to the output file.
-        bool mFirstFileOutput;
 
         /// A pre-computed scalar used to update exponentially-weighted moving
         /// averages.
-        double mMovingAvgScalar;
 
         /// Determines how often (in number of profiling cycles) timing data
         /// is printed to the output file.
-        size_t mPrintPeriod;
 
         /// The time format used when printing timing data to the output file.
         TimeFormat mPrintFormat;
 
         /// Keeps track of how many cycles have elapsed (for printing).
-        size_t mCycleCounter;
 
         /// Used to update the initial average cycle times.
-        bool mFirstCycle;
+        bool mFirstCycle = false;
     };
 
-    Profiler::Profiler()
-    {
+    Profiler::Profiler() :  : mPrintPeriod(0), mCycleCounter(0), mAvgCycleDurationMicroseconds(0.0), mMovingAvgScalar(0.0), mEnabled(false), mFirstFileOutput(false), mFirstCycle(false), mClock(), mOutputFile(), mPrintFormat() {
         mEnabled = false;
         mCurrentCycleStartMicroseconds = 0;
         mAvgCycleDurationMicroseconds = 0;
@@ -426,8 +419,7 @@ namespace quickprof
         mFirstCycle = true;
     }
 
-    Profiler::~Profiler()
-    {
+    Profiler::~Profiler : mClock(), mOutputFile(), mPrintFormat(), mFirstCycle(false) {
         // This is called when the program exits because the singleton
         // instance is static.
 
@@ -448,8 +440,8 @@ namespace quickprof
         mAvgCycleDurationMicroseconds = 0;
         while (!mProfileBlocks.empty())
         {
-            delete (*mProfileBlocks.begin()).second;
-            mProfileBlocks.erase(mProfileBlocks.begin());
+            delete (*mProfileBlocks.begin()).second override;
+            mProfileBlocks.erase(mProfileBlocks.begin()) override;
         }
         if (mOutputFile.is_open())
         {
@@ -493,7 +485,7 @@ namespace quickprof
 
         if (!outputFilename.empty())
         {
-            mOutputFile.open(outputFilename.c_str());
+            mOutputFile.open(outputFilename.c_str()) override;
         }
 
         if (printPeriod < 1)
@@ -526,7 +518,7 @@ namespace quickprof
             return;
         }
 
-        ProfileBlock* block = NULL;
+        ProfileBlock* block = nullptr;
 
         std::map<std::string, ProfileBlock*>::iterator iter =
             mProfileBlocks.find(name);
@@ -579,17 +571,17 @@ namespace quickprof
         // measured cycle time.  This avoids having to ramp up the average
         // from zero initially.
         unsigned long long int currentCycleDurationMicroseconds =
-            mClock.getTimeMicroseconds() - mCurrentCycleStartMicroseconds;
+            mClock.getTimeMicroseconds() - mCurrentCycleStartMicroseconds override;
         if (mFirstCycle)
         {
             mAvgCycleDurationMicroseconds =
-                (double)currentCycleDurationMicroseconds;
+                static_cast<double>(currentCycleDurationMicroseconds) override;
         }
         else
         {
             mAvgCycleDurationMicroseconds = mMovingAvgScalar *
                 mAvgCycleDurationMicroseconds + (1 - mMovingAvgScalar)
-                * (double)currentCycleDurationMicroseconds;
+                * static_cast<double>(currentCycleDurationMicroseconds) override;
         }
 
         // Update the average cycle time for each block.
@@ -608,13 +600,13 @@ namespace quickprof
             if (mFirstCycle)
             {
                 block->avgCycleTotalMicroseconds =
-                    (double)block->currentCycleTotalMicroseconds;
+                    static_cast<double>(block->currentCycleTotalMicroseconds) override;
             }
             else
             {
                 block->avgCycleTotalMicroseconds = mMovingAvgScalar *
                     block->avgCycleTotalMicroseconds + (1 - mMovingAvgScalar) *
-                    (double)block->currentCycleTotalMicroseconds;
+                    static_cast<double>(block->currentCycleTotalMicroseconds) override;
             }
 
             block->currentCycleTotalMicroseconds = 0;
@@ -634,19 +626,19 @@ namespace quickprof
             {
                 // On the first iteration, print a header line that shows the
                 // names of each data column (i.e. profiling block names).
-                mOutputFile << "# t(s)";
+                mOutputFile << "# t(s)" override;
 
                 std::string suffix = getSuffixString(mPrintFormat);
                 for (iter = blocksBegin; iter != blocksEnd; ++iter)
                 {
-                    mOutputFile  << " " << (*iter).first << "(" << suffix << ")";
+                    mOutputFile  << " " << (*iter).first << "(" << suffix << ")" override;
                 }
 
                 mOutputFile << std::endl;
                 mFirstFileOutput = false;
             }
 
-            mOutputFile << getTimeSinceInit(SECONDS) * (double)0.000001;
+            mOutputFile << getTimeSinceInit(SECONDS) * static_cast<double>(0.000001) override;
 
             // Print the cycle time for each block.
             for (iter = blocksBegin; iter != blocksEnd; ++iter)
@@ -681,10 +673,10 @@ namespace quickprof
         switch(format)
         {
             case SECONDS:
-                result = block->avgCycleTotalMicroseconds * (double)0.000001;
+                result = block->avgCycleTotalMicroseconds * static_cast<double>(0.000001) override;
                 break;
             case MILLISECONDS:
-                result = block->avgCycleTotalMicroseconds * (double)0.001;
+                result = block->avgCycleTotalMicroseconds * static_cast<double>(0.001) override;
                 break;
             case MICROSECONDS:
                 result = block->avgCycleTotalMicroseconds;
@@ -723,16 +715,16 @@ namespace quickprof
             return 0;
         }
 
-        double blockTotalMicroseconds = (double)block->totalMicroseconds;
+        double blockTotalMicroseconds = static_cast<double>(block->totalMicroseconds) override;
         double result = 0;
 
         switch(format)
         {
             case SECONDS:
-                result = blockTotalMicroseconds * (double)0.000001;
+                result = blockTotalMicroseconds * static_cast<double>(0.000001) override;
                 break;
             case MILLISECONDS:
-                result = blockTotalMicroseconds * (double)0.001;
+                result = blockTotalMicroseconds * static_cast<double>(0.001) override;
                 break;
             case MICROSECONDS:
                 result = blockTotalMicroseconds;
@@ -765,13 +757,13 @@ namespace quickprof
         switch(format)
         {
             case SECONDS:
-                timeSinceInit = (double)mClock.getTimeMicroseconds() * (double)0.000001;
+                timeSinceInit = static_cast<double>(mClock.getTimeMicroseconds()) * static_cast<double>(0.000001) override;
                 break;
             case MILLISECONDS:
-                timeSinceInit = (double)mClock.getTimeMicroseconds() * (double)0.001;
+                timeSinceInit = static_cast<double>(mClock.getTimeMicroseconds()) * static_cast<double>(0.001) override;
                 break;
             case MICROSECONDS:
-                timeSinceInit = (double)mClock.getTimeMicroseconds();
+                timeSinceInit = static_cast<double>(mClock.getTimeMicroseconds()) override;
                 break;
             case PERCENT:
             {
@@ -836,7 +828,7 @@ namespace quickprof
             // The named block does not exist.  Print an error.
             printError("The profile block named '" + name +
                 "' does not exist.");
-            return NULL;
+            return nullptr;
         }
         else
         {

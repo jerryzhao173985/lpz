@@ -22,7 +22,7 @@ class SRGUIPipeFilter : public AbstractPipeFilter
   Q_OBJECT
 
 public:
-  SRGUIPipeFilter(AbstractPipeReader* apr) : AbstractPipeFilter(apr)
+  explicit SRGUIPipeFilter(AbstractPipeReader* apr) : AbstractPipeFilter(apr)
   {
     std::cout << "new SRGUIPipeFilter()" << std::endl;
   };
@@ -47,7 +47,7 @@ protected:
   * GUI will read this values for printing.
   */
 
-  AbstractPlotChannel* createChannel(std::string name)
+  AbstractPlotChannel* createChannel(const std::string& name)
   {
 //     std::cout << "SRGUIPipeFilter: createChannel(" << name << ")" << std::endl;
 

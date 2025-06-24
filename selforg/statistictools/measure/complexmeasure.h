@@ -32,12 +32,10 @@
 /** measure modes of complex measures.
  */
 enum ComplexMeasureMode {
-  /// returns the entropy of the value, uses update formula, needs O(1)
-  ENT,
-  /// returns the entropy of the value, uses normal formula, needs O(n) or O(m*n)
+  /// returns the entropy of the value, uses update formula, needs Ostatic_cast<1>(ENT),
+  /// returns the entropy of the value, uses normal formula, needs Ostatic_cast<n>(or) O(m*n)
   ENTSLOW,
-  /// returns the mutual information of two values, uses update formula, needs O(1)
-  MI,
+  /// returns the mutual information of two values, uses update formula, needs Ostatic_cast<1>(MI),
   /// returns the predictive information of two or more values
   PINF
 };
@@ -71,30 +69,30 @@ ComplexMeasure( const char* measureName, ComplexMeasureMode mode, int numberBins
      * @param minValue minimum value the observed value can become
      * @param maxValue maximum value the observed value can become
      */
-    virtual void addObservable( double& observedValue, double minValue, double maxValue );
+    virtual void addObservable( const double& observedValue, double minValue, double maxValue );
 
-    virtual ~ComplexMeasure() override;
+    virtual ~ComplexMeasure();
 
     /**
      * defined by AbstractMeasure. This method is called from StatisticTools
      * for updating the measure in every simStep (ODE).
      */
-    virtual void step() override;
+    virtual void step();
 
 
   protected:
   std::list<double*> observedValueList; // stores the adresses of the observedValues
   std::list<Discretisizer*> discretisizerList; // stores the Discretisizer
   ComplexMeasureMode mode;
-  int numberBins;
-  long fSize; // size of F
-  int historySize; // size of binNumberHistory
+  int numberBins = 0;
+  long fSize = 0; // size of F
+  int historySize = 0; // size of binNumberHistory
 //  int *F; // stores the frequencies as a linear vector
   int *binNumberHistory; // holds the binNumbers as an history, for predictive information 2 values are enough
-  int historyIndex; // index of last stored value
+  int historyIndex = 0; // index of last stored value
   int *historyIndexList; // indexes of relevant stored values
-  int historyIndexNumber; // number of indexes stored in historyIndexList
-  int historyInterval; // interval between two different histoy indexes
+  int historyIndexNumber = 0; // number of indexes stored in historyIndexList
+  int historyInterval = 0; // interval between two different histoy indexes
 
   // new: use SparseArray backed by HashMap instead of normal array
   matrix::SparseArray<long, int> F;
@@ -107,7 +105,7 @@ ComplexMeasure( const char* measureName, ComplexMeasureMode mode, int numberBins
 
 
     /**
-     * updates the entropy. uses update rule with O(1) costs
+     * updates the entropy. uses update rule with Ostatic_cast<1>(costs)
      * @param binNumber the bin number
      */
     void updateEntropy( int binNumber);

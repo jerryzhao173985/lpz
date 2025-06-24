@@ -8,7 +8,7 @@ class DefaultPlotChannel : public AbstractPlotChannel
 {
 public:
   
-  DefaultPlotChannel(std::string name);
+  explicit DefaultPlotChannel(const std::string& name);
   virtual ~DefaultPlotChannel();
   
 protected:

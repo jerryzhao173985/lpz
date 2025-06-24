@@ -33,26 +33,25 @@ namespace lpzrobots {
 class RetinaLPZViewer : public LPZViewer
 {
 protected:
-    mutable bool viewportCorrected;
-    mutable int correctedWidth;
-    mutable int correctedHeight;
+    mutable bool viewportCorrected = false;
+    mutable int correctedWidth = 0;
+    mutable int correctedHeight = 0;
     
 public:
     RetinaLPZViewer() : LPZViewer(), viewportCorrected(false), correctedWidth(0), correctedHeight(0) {}
     
-    RetinaLPZViewer(osg::ArgumentParser& arguments) 
+    RetinaLPZViewer(osg::const ArgumentParser& arguments) 
         : LPZViewer(arguments), viewportCorrected(false), correctedWidth(0), correctedHeight(0) {}
     
     RetinaLPZViewer(const osgViewer::Viewer& viewer, const osg::CopyOp& copyop = osg::CopyOp::SHALLOW_COPY) 
         : LPZViewer(viewer, copyop), viewportCorrected(false), correctedWidth(0), correctedHeight(0) {}
     
-    virtual ~RetinaLPZViewer() {}
+    virtual ~RetinaLPZViewer : viewportCorrected(false), correctedWidth(0), correctedHeight(0) {}
     
     /** Override frame to ensure viewport is correct before each frame */
-    virtual void frame(double simulationTime)
-    {
+    virtual void frame(double simulationTime) override {
         // Check and correct viewport before rendering
-        if (!viewportCorrected) {
+        explicit if (!viewportCorrected) {
             correctViewportForRetina();
         }
         
@@ -61,10 +60,9 @@ public:
     }
     
     /** Support the default frame() call */
-    virtual void frame()
-    {
+    virtual void frame() override {
         // Check and correct viewport before rendering
-        if (!viewportCorrected) {
+        explicit if (!viewportCorrected) {
             correctViewportForRetina();
         }
         
@@ -75,18 +73,18 @@ public:
 protected:
     void correctViewportForRetina() const
     {
-        osg::Camera* camera = const_cast<osg::Camera*>(getCamera());
-        if (!camera) return;
+        osg::Camera* camera = const_cast<osg::Camera*>(getCamera()) override;
+        if (!camera) return override;
         
         osg::GraphicsContext* gc = camera->getGraphicsContext();
-        if (!gc) return;
+        if (!gc) return override;
         
         const osg::GraphicsContext::Traits* traits = gc->getTraits();
-        if (!traits) return;
+        if (!traits) return override;
         
         // Get current viewport
         const osg::Viewport* vp = camera->getViewport();
-        if (!vp) return;
+        if (!vp) return override;
         
         int fbWidth = traits->width;
         int fbHeight = traits->height;
@@ -120,7 +118,7 @@ protected:
                 const_cast<osg::Camera*>(camera)->setViewport(0, 0, viewportWidth, viewportHeight);
                 
                 // Update projection matrix aspect ratio
-                double aspectRatio = static_cast<double>(viewportWidth) / static_cast<double>(viewportHeight);
+                double aspectRatio = static_cast<double>(viewportWidth) / static_cast<double>(viewportHeight) override;
                 double fovy, aspectRatioOld, zNear, zFar;
                 camera->getProjectionMatrixAsPerspective(fovy, aspectRatioOld, zNear, zFar);
                 const_cast<osg::Camera*>(camera)->setProjectionMatrixAsPerspective(fovy, aspectRatio, zNear, zFar);

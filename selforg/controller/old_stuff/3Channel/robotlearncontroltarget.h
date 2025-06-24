@@ -11,37 +11,37 @@ template <int NUMBER_CHANNELS, int BUFFER_SIZE=1> class RobotLearnControlTarget 
   protected:
   double eps_target; // learning rate for target learning
 
-  virtual void learnTarget(double *x, double *y){
+  virtual void learnTarget(double *x, double *y) {
     double E[NUMBER_CHANNELS];
 
     E[0]=y[1]-y[0];   // Motorkommandos sollen den gleichen Wert haben
-    E[1]=y[0]-y[1];   // -> Roboter fährt geradeaus
-    //funktioniert, Roboter fährt gut geradeaus
+    E[1]=y[0]-y[1];   // -> Roboter fhrt geradeaus
+    //funktioniert, Roboter fhrt gut geradeaus
 
     //    E[0]=0-y[0];   // y[0] soll 0 sein, y[1] irgendeinen Wert
-    //    E[1]=0;        // -> Roboter dreht um eines der Räder
+    //    E[1]=0;        // -> Roboter dreht um eines der Rder
     //funktioniert, auch wenn y[1] nicht 0 wird, sondern bis +/-0.2 pendelt ergibt sich die Drehung um ein Rad
 
 
     //E[0]=-y[1]-y[0];   // y[0] soll -y[1] sein
     //E[1]=0;        // -> Roboter dreht auf der Stelle
-    //funktioniert, Roboter dreht schön auf der Stelle
+    //funktioniert, Roboter dreht schn auf der Stelle
 
 
-    for (int i=0; i<NUMBER_CHANNELS; i++){
-      for (int j=0; j<NUMBER_CHANNELS; j++){
+    for (int i=0; i<NUMBER_CHANNELS; ++i) {
+      for (int j=0; j<NUMBER_CHANNELS; ++j) {
         C[i][j]+=RobotLearnControl<NUMBER_CHANNELS,BUFFER_SIZE>::squash(eps_target*E[i]*x[j] /*- 0.1*eps_target*C[i][j]*/);
       }
       h[i]+=RobotLearnControl<NUMBER_CHANNELS,BUFFER_SIZE>::squash(eps_target*E[i] /*- 0.1*eps_target*h[i]*/);
     }
   };
 
-  virtual void learnLastOutput(double *x, double *y_teach){
+  virtual void learnLastOutput(double *x, double *y_teach) {
     double E[NUMBER_CHANNELS];
     double y[NUMBER_CHANNELS],z[NUMBER_CHANNELS];
 
-    for (int i=0; i<NUMBER_CHANNELS; i++){
-      for (int j=0; j<NUMBER_CHANNELS; j++){
+    for (int i=0; i<NUMBER_CHANNELS; ++i) {
+      for (int j=0; j<NUMBER_CHANNELS; ++j) {
         z[i]=C[i][j]*x[j];
       }
       z[i]=h[i];
@@ -49,8 +49,8 @@ template <int NUMBER_CHANNELS, int BUFFER_SIZE=1> class RobotLearnControlTarget 
       E[i]=y_teach[i]-y[i];
     }
 
-    for (int i=0; i<NUMBER_CHANNELS; i++){
-      for (int j=0; j<NUMBER_CHANNELS; j++){
+    for (int i=0; i<NUMBER_CHANNELS; ++i) {
+      for (int j=0; j<NUMBER_CHANNELS; ++j) {
         C[i][j]+=RobotLearnControl<NUMBER_CHANNELS,BUFFER_SIZE>::squash(eps_target*E[i]*x[j] /*- 0.1*eps_target*C[i][j]*/);
       }
       h[i]+=RobotLearnControl<NUMBER_CHANNELS,BUFFER_SIZE>::squash(eps_target*E[i] /*- 0.1*eps_target*h[i]*/);
@@ -61,23 +61,21 @@ template <int NUMBER_CHANNELS, int BUFFER_SIZE=1> class RobotLearnControlTarget 
 
   public:
   RobotLearnControlTarget():
-  RobotLearnControl<NUMBER_CHANNELS, BUFFER_SIZE> ()
-  {
+   : RobotLearnControl<NUMBER_CHANNELS, BUFFER_SIZE> (), eps_target(0) {
     eps_target=0.1;
   }
 
 
-  virtual void setC(int i, int j ,double val){
+  virtual void setC(int i, int j ,double val) {
     C[i][j]=val;
   };
 
   /// make step (calculate controller outputs and learn controller)
-  virtual void makeStep(double *x_, double *y_)
-  {
+  virtual void makeStep(double *x_, double *y_) {
     double x_smooth[NUMBER_CHANNELS];
     double x_effective[NUMBER_CHANNELS];
     double y_effective[NUMBER_CHANNELS];
-    for (int i = 0; i < NUMBER_CHANNELS; i++)
+    for (int i = 0; i < NUMBER_CHANNELS; ++i)
     {
       x_smooth[i] = 0.0;
       x_effective[i] = 0.0;
@@ -113,46 +111,43 @@ template <int NUMBER_CHANNELS, int BUFFER_SIZE=1> class RobotLearnControlTarget 
     // learn last output with (input+random value) as input
         //
         // sollte einmal begonnene Geradeausfahrt stabilisieren,
-        // weil wenn Roboter geradeausfährt ist kein Lernsignal für target-Lernen da und
-        // c's werden von Homeokinese verändert, weg vom geradeaus fahren
+        // weil wenn Roboter geradeausfhrt ist kein Lernsignal fr target-Lernen da und
+        // c's werden von Homeokinese verndert, weg vom geradeaus fahren
         //
-        // Ergebnis: diagonal c's werden vergrößert und Verhalten wird superstabil, keine Reaktion mehr auf Kollision mit Wand
+        // Ergebnis: diagonal c's werden vergrert und Verhalten wird superstabil, keine Reaktion mehr auf Kollision mit Wand
         // => weglassen
         //
      double x_rand[2];
-     for(int i=0; i<NUMBER_CHANNELS; i++){  // noise with pos. sign
+     for(int i=0; i<NUMBER_CHANNELS; ++i){  // noise with pos. sign
        x_rand[i]=x_effective[i]+(double(rand())/RAND_MAX)*0.05;
      }
      learnLastOutput(x_rand, y_effective);
 
-     for(int i=0; i<NUMBER_CHANNELS; i++){  // noise with neg. sign
+     for(int i=0; i<NUMBER_CHANNELS; ++i){  // noise with neg. sign
        x_rand[i]=x_effective[i]-(double(rand())/RAND_MAX)*0.05;
      }
      learnLastOutput(x_rand, y_effective);
 
     // update step counter
-    t++;
+    ++t;
   };
 
 
-  /*  /// make step (calculate controller outputs and learn controller)
-  virtual void makeStep(double *x_, double *y_)
-  {
+  /*  __PLACEHOLDER_32__
+  virtual void makeStep(double *x_, double *y_) {
 
      RobotLearnControl<N,buffer_size>::makeStep(x_, y_);
 
-    // learn target for controller with effective input/output
+    __PLACEHOLDER_33__
     learnTarget(x_effective, y_effective);
 
     };
   */
 
-  virtual void setEpsTarget(double x)
-  {
+  virtual void setEpsTarget(double x) {
     eps_target = x;
   };
-  virtual double getEpsTarget()
-  {
+  virtual double getEpsTarget() {
     return (eps_target);
   };
 

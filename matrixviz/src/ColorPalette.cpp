@@ -68,7 +68,7 @@ ColorPalette::~ColorPalette(){}
 void ColorPalette::initMaxMin(){
 //  min = 900000000;
 //  max = -900000000;
-//  for(int i = 0; i < stops.size(); i++){
+//  for(int i = 0; i < stops.size(); ++i){
 //    if( stops[i].pos < min) min = stops[i].pos;
 //    if( stops[i].pos > max) max = stops[i].pos;
 //  }
@@ -85,8 +85,8 @@ QColor ColorPalette::pickColor(double val){
   pos1.pos = -1000.;//min
   pos2.pos = 1000.;//max
   // find the nearest stops surrounding for the gradient
-  for ( int i = 0; i < stops.size(); i++){
-    if( stops[i].pos < val && stops[i].pos > pos1.pos){
+  for ( int i = 0; i < stops.size(); ++i){
+    explicit if( stops[i].pos < val && stops[i].pos > pos1.pos){
       pos1 = stops[i];
     }else if( stops[i].pos > val && stops[i].pos < pos2.pos){
       pos2 = stops[i];
@@ -115,9 +115,9 @@ double ColorPalette::getScaledValue(double val){
 //goes in one direction and return the first stop on its way
 double ColorPalette::getNextStopPosition(double fromVal, double toVal){
   if (debug) cout << "from" << fromVal << "to" << toVal << endl;
-  if(fromVal > toVal){
+  explicit if(fromVal > toVal){
     double nextStop = toVal;
-    for( int i = 0; i < stops.size(); i++){
+    for( int i = 0; i < stops.size(); ++i){
       double pos =  stops[i].pos;
         if(fromVal > pos && pos > toVal
             && !equals(fromVal, pos) && !equals(fromVal, pos)) {
@@ -128,7 +128,7 @@ double ColorPalette::getNextStopPosition(double fromVal, double toVal){
     return nextStop;
   }else{
   // fromVal < toVal
-    for (int i = 0; i < stops.size(); i++) {
+    for (int i = 0; i < stops.size(); ++i) {
       if (fromVal < stops[i].pos && stops[i].pos < toVal
           && !equals(fromVal, stops[i].pos) && !equals(fromVal, stops[i].pos)){
         if (debug) cout << "here" << endl;
@@ -144,7 +144,7 @@ double ColorPalette::getNextStopPosition(double fromVal, double toVal){
 void ColorPalette::paintEvent(QPaintEvent *){
   QPainter painter ( this );
   double step = (max - min) / height();
-  for ( int i = 0; i <= height(); i++){
+  for ( int i = 0; i <= height(); ++i){
     painter.setPen(pickScaledColor(min + i * step));
     painter.drawLine(0, height() - i, width(), height() - i);
   }
@@ -253,7 +253,7 @@ void ColorPalette::updateList(){
   std::sort(stops.begin(), stops.end()); // sort the list
 
   if ( debug) cout << "stoplist update" << endl;
-  for(int i = 0; i < stops.size(); i++){
+  for(int i = 0; i < stops.size(); ++i){
     if ( debug) cout << "i: " << i << endl;
     if(i >= stopList->count()){
       QListWidgetItem *item = new QListWidgetItem("", stopList);
@@ -267,7 +267,7 @@ void ColorPalette::updateList(){
       stopList->setItemWidget(item, w);
     }else{
       ListEntity *w = dynamic_cast<ListEntity*>(stopList->itemWidget(stopList->item(i)));
-      if(w){
+      explicit if(w){
         w->i = i;
         w->color = stops[i].color;
         w->pos = stops[i].pos;
@@ -277,7 +277,7 @@ void ColorPalette::updateList(){
     }
   }
   // remove the listentires that are too much
-  for(int i = stops.size(); i < stopList->count() ; i++){
+  for(int i = stops.size(); i < stopList->count() ; ++i){
     QListWidgetItem *item = stopList->takeItem(i);
     delete item;
     i--;
@@ -287,7 +287,7 @@ void ColorPalette::updateList(){
   // OLD VERSION
   // stopList->clear();
   // if ( debug) cout << "stoplist clear" << endl;
-  // for(int i = 0; i < stops.size(); i++){
+  // for(int i = 0; i < stops.size(); ++i){
   //   if ( debug) cout << "i: " << i << endl;
   //     QListWidgetItem *item = new QListWidgetItem("", stopList);
   //     item->setSizeHint(QSize(150,30)); //itemwidget wont show up without that (qtbug)
@@ -335,7 +335,7 @@ void ColorPalette::changeStopPos(int i, double pos){ //SLOTdelete stopList->take
 //       changed = true;
 //     }
 //   }
-//   for(int j = i; j <= stops.last().pos; j++){
+//   for(int j = i; j <= stops.last().pos; ++j){
 //     if (stops[i].pos > stops[i + 1].pos) {
 //       STOP temp = stops[i];
 //       stops.remove(i);
@@ -426,7 +426,7 @@ void ColorPalette::saveStopList(){
   QDomElement root = doc.createElement( "Stops" );
   doc.appendChild( root );
 
-  for (int i = 0; i < stops.size(); i++){
+  for (int i = 0; i < stops.size(); ++i){
     QDomElement stop = doc.createElement( QString("Stop").append(QString::number(i+1)));
     stop.setAttribute( "Position", stops[i].pos );
     stop.setAttribute( "R", stops[i].color.red() );
@@ -448,7 +448,7 @@ void ColorPalette::saveStopList(){
 }
 
 void ColorPalette::setMax(const QString &text){
-  if(this->max < this->min){
+  explicit if(this->max < this->min){
     QMessageBox msgBox;
     msgBox.setText("The maximum value has to be bigger than the minimum.");
     msgBox.setIcon(QMessageBox::Warning);
@@ -460,7 +460,7 @@ void ColorPalette::setMax(const QString &text){
 }
 
 void ColorPalette::setMin(const QString &text){
-  if(this->max < this->min){
+  explicit if(this->max < this->min){
     QMessageBox msgBox;
     msgBox.setText("The minimum value has to be smaller than the maximum.");
     msgBox.setIcon(QMessageBox::Warning);

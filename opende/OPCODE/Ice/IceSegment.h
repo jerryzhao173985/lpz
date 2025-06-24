@@ -24,11 +24,11 @@
 		//! Destructor
 		inline_					~Segment()															{}
 
-		inline_	const	Point&	GetOrigin()						const	{ return mP0;						}
-		inline_			Point	ComputeDirection()				const	{ return mP1 - mP0;					}
-		inline_			void	ComputeDirection(Point& dir)	const	{ dir = mP1 - mP0;					}
-		inline_			float	ComputeLength()					const	{ return mP1.Distance(mP0);			}
-		inline_			float	ComputeSquareLength()			const	{ return mP1.SquareDistance(mP0);	}
+		inline_	const	Point&	GetOrigin()						const override { return mP0;						}
+		inline_			Point	ComputeDirection()				const override { return mP1 - mP0;					}
+		inline_			void	ComputeDirection(Point& dir)	const override { dir = mP1 - mP0;					}
+		inline_			float	ComputeLength()					const override { return mP1.Distance(mP0);			}
+		inline_			float	ComputeSquareLength()			const override { return mP1.SquareDistance(mP0);	}
 
 		inline_			void	SetOriginDirection(const Point& origin, const Point& direction)
 								{
@@ -43,10 +43,10 @@
 		 *	\param		t	[in] point's parameter [t=0 => pt = mP0, t=1 => pt = mP1]
 		 */
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		inline_			void	ComputePoint(Point& pt, float t)	const	{	pt = mP0 + t * (mP1 - mP0);		}
+		inline_			void	ComputePoint(Point& pt, float t)	const override {	pt = mP0 + t * (mP1 - mP0);		}
 
-						float	SquareDistance(const Point& point, float* t=null)	const;
-		inline_			float	Distance(const Point& point, float* t=null)			const			{ return sqrtf(SquareDistance(point, t));	}
+						float	SquareDistance(const Point& point, float* t=null)	const override;
+		inline_			float	Distance(const Point& point, float* t=null)			const override { return sqrtf(SquareDistance(point, t));	}
 
 						Point	mP0;		//!< Start of segment
 						Point	mP1;		//!< End of segment

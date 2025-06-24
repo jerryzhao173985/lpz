@@ -7,7 +7,7 @@
 class IRPlotChannel : public AbstractPlotChannel
 {
 public:
-  IRPlotChannel(std::string name);
+  explicit IRPlotChannel(const std::string& name);
   virtual ~IRPlotChannel();
 
 protected:

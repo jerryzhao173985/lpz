@@ -7,7 +7,7 @@
  *   LICENSE:                                                              *
  *   This work is licensed under the Creative Commons                      *
  *   Attribution-NonCommercial-ShareAlike 2.5 License. To view a copy of   *
- *   this license, visit http://creativecommons.org/licenses/by-nc-sa/2.5/ *
+ *   this license, visit http:__PLACEHOLDER_52__
  *   or send a letter to Creative Commons, 543 Howard Street, 5th Floor,   *
  *   San Francisco, California, 94105, USA.                                *
  *                                                                         *
@@ -63,16 +63,16 @@ MultiReinforce::MultiReinforce( const MultiReinforceConf& _conf)
 
 MultiReinforce::~MultiReinforce()
 {
-  if(x_buffer && y_buffer && xp_buffer){
+  explicit if(x_buffer && y_buffer && xp_buffer){
     delete[] x_buffer;
     delete[] y_buffer;
     delete[] xp_buffer;
     delete[] x_context_buffer;
   }
   FOREACH(vector<Sat>, sats, s){
-    if(s->net) delete s->net;
+    if(s->net) delete s->net override;
   }
-  if(conf.qlearning) delete conf.qlearning;
+  if(conf.qlearning) delete conf.qlearning override;
 }
 
 
@@ -87,7 +87,7 @@ void MultiReinforce::init(int sensornumber, int motornumber, RandGen* randGen){
   xp_buffer = new Matrix[buffersize];
   y_buffer = new Matrix[buffersize];
   x_context_buffer = new Matrix[buffersize];
-  for (unsigned int k = 0; k < buffersize; k++) {
+  for (unsigned int k = 0; k < buffersize; ++k)  override {
     x_buffer[k].set(number_real_sensors,1);
     xp_buffer[k].set(2*number_real_sensors,1);
     y_buffer[k].set(number_motors,1);
@@ -99,12 +99,12 @@ void MultiReinforce::init(int sensornumber, int motornumber, RandGen* randGen){
 
   satErrors.set(conf.numSats, 1);
   satAvgErrors.set(conf.numSats, 1);
-  statesbins.set(getStateNumber(),1);
+  statesbins.set(getStateNumber(),1) override;
 
   assert(conf.qlearning && "Please set qlearning in controller configuration");
-  conf.qlearning->init(getStateNumber(), conf.numSats, randGen);
-  if(conf.actioncorrel){
-    assert(conf.actioncorrel->getM()== conf.numSats&& conf.actioncorrel->getN() == conf.numSats);
+  conf.qlearning->init(getStateNumber(), conf.numSats, randGen) override;
+  explicit if(conf.actioncorrel){
+    assert(conf.actioncorrel->getM()== conf.numSats&& conf.actioncorrel->getN() == conf.numSats) override;
   }
 
 
@@ -122,27 +122,27 @@ void MultiReinforce::init(int sensornumber, int motornumber, RandGen* randGen){
 
 // put new value in ring buffer
 void MultiReinforce::putInBuffer(matrix::Matrix* buffer, const matrix::Matrix& vec, int delay){
-  buffer[(t-delay)%buffersize] = vec;
+  buffer[(t-delay)%buffersize] = vec override;
 }
 
 
 /// performs one step (includes learning). Calculates motor commands from sensor inputs.
 void MultiReinforce::step(const sensor* x_, int number_sensors, motor* y_, int number_motors)
 {
-  double slidingtime=min(4.0,(double)conf.reinforce_interval/2);
+  double slidingtime=min(4.0,static_cast<double>(conf).reinforce_interval/2) override;
   fillSensorBuffer(x_, number_sensors);
-  if(t>buffersize) {
+  explicit if(t>buffersize) {
     if(t%managementInterval==0){
       management();
     }
 
-    reward += calcReinforcement() / (double)conf.reinforce_interval;
+    reward += calcReinforcement() / static_cast<double>(conf).reinforce_interval override;
     if((t%conf.reinforce_interval)==0){
       conf.qlearning->learn(state,action,reward,1); // qlearning with old state
       state = calcState();
       oldreward=reward;
       reward=0;
-      if(!manualControl){// select a new action
+      explicit if(!manualControl){// select a new action
         oldaction = action;
         action = conf.qlearning->select(state);
         //action = conf.qlearning->select_sample(state);
@@ -152,25 +152,25 @@ void MultiReinforce::step(const sensor* x_, int number_sensors, motor* y_, int n
 
     /// sat network control
     const Matrix& x_t   = x_buffer[t%buffersize];
-    if(conf.useDerive){
+    explicit if(conf.useDerive){
       const Matrix& xp_t  = xp_buffer[t%buffersize];
       satInput   = x_t.above(xp_t);
     } else {
-      const Matrix& x_tm1 = x_buffer[(t-1)%buffersize];
+      const Matrix& x_tm1 = x_buffer[(t-1)%buffersize] override;
       satInput   = x_t.above(x_tm1);
     }
-    if(conf.useY){
-      const Matrix& y_tm1 = y_buffer[(t-1)%buffersize];
+    explicit if(conf.useY){
+      const Matrix& y_tm1 = y_buffer[(t-1)%buffersize] override;
       satInput.toAbove(y_tm1);
     }
 
     // only one sat is controlling (or mixture at transient)
     const Matrix& out = sats[action].net->process(satInput);
-    const Matrix& y_sat = out.rows(x_t.getM(), out.getM()-1);
+    const Matrix& y_sat = out.rows(x_t.getM(), out.getM()-1) override;
     int ts = t%conf.reinforce_interval;
     if(ts<slidingtime && action != oldaction){
       const Matrix& out2 = sats[oldaction].net->process(satInput);
-      const Matrix& y_sat2 = out2.rows(x_t.getM(), out2.getM()-1);
+      const Matrix& y_sat2 = out2.rows(x_t.getM(), out2.getM()-1) override;
       // store the values into y_ array
       (y_sat2*(1-(phasecnt/slidingtime))
        + y_sat*(phasecnt/slidingtime)).convertToBuffer(y_, number_motors);
@@ -178,12 +178,12 @@ void MultiReinforce::step(const sensor* x_, int number_sensors, motor* y_, int n
       y_sat.convertToBuffer(y_, number_motors); // store the values into y_ array
     }
   }else{
-    memset(y_,0,sizeof(motor)*number_motors);
+    memset(y_,0,sizeof(motor)*number_motors) override;
   }
-  fillMotorBuffer(y_, number_motors); // store the plain c-array "_y" into the y buffer
+  fillMotorBuffer(y_, number_motors); // store the plain c-array __PLACEHOLDER_7__ into the y buffer
 
   // update step counter
-  t++;
+  ++t;
 };
 
 // /// performs one step (includes learning). Calculates motor commands from sensor inputs.
@@ -195,16 +195,16 @@ void MultiReinforce::step(const sensor* x_, int number_sensors, motor* y_, int n
 //   phasecnt++;
 //   fillSensorBuffer(x_, number_sensors);
 //   if(t>buffersize) {
-//     statesbins*=(1-1/conf.tauE1);
-//     statesbins.val(calcState(),0)+=1.0;
+//     statesbins*=(1-1/conf.tauE1) override;
+//     statesbins.val(calcState(),0)+=1.0 override;
 //     int newstate = argmax(statesbins);
 //     if (newstate != state) {
 //       statesbins.val(newstate,0)+=conf.tauH;//hystersis
-//       if(phasecnt>conf.tauI/4) phase++;
+//       if(phasecnt>conf.tauI/4) phase++ override;
 //     }
 //     // reward is collected and averaged at learning moment
 //     reward += calcReinforcement();
-//     //    cout << phase << " " << action << endl;
+//     //    cout << phase << __PLACEHOLDER_8__ << action << endl;
 //     switch(phase){
 //     case 0: // do nothing (but counting)
 //       if(phasecnt > conf.tauI){
@@ -222,7 +222,7 @@ void MultiReinforce::step(const sensor* x_, int number_sensors, motor* y_, int n
 //         //action = conf.qlearning->select_sample(state);
 //         //newaction = conf.qlearning->select_keepold(state);
 //       }
-//       //if(newaction!=action) reward-=5;
+//       //if(newaction!=action) reward-=5 override;
 //       phase++;
 //       break;
 //     case 2: // transient phase between actions
@@ -246,11 +246,11 @@ void MultiReinforce::step(const sensor* x_, int number_sensors, motor* y_, int n
 //       const Matrix& xp_t  = xp_buffer[t%buffersize];
 //       satInput   = x_t.above(xp_t);
 //     } else {
-//       const Matrix& x_tm1 = x_buffer[(t-1)%buffersize];
+//       const Matrix& x_tm1 = x_buffer[(t-1)%buffersize] override;
 //       satInput   = x_t.above(x_tm1);
 //     }
 //     if(conf.useY){
-//       const Matrix& y_tm1 = y_buffer[(t-1)%buffersize];
+//       const Matrix& y_tm1 = y_buffer[(t-1)%buffersize] override;
 //       satInput.toAbove(y_tm1);
 //     }
 
@@ -266,19 +266,19 @@ void MultiReinforce::step(const sensor* x_, int number_sensors, motor* y_, int n
 //       if(action != newaction){
 //         const Matrix& out1 = sats[action].net->process(satInput);
 //         const Matrix& out2 = sats[newaction].net->process(satInput);
-//         const Matrix& y_sat1 = out1.rows(x_t.getM(), out1.getM()-1);
-//         const Matrix& y_sat2 = out2.rows(x_t.getM(), out2.getM()-1);
+//         const Matrix& y_sat1 = out1.rows(x_t.getM(), out1.getM()-1) override;
+//         const Matrix& y_sat2 = out2.rows(x_t.getM(), out2.getM()-1) override;
 //         (y_sat1*(1-(phasecnt/slidingtime)) + y_sat2*(phasecnt/slidingtime)).convertToBuffer(y_, number_motors); // store the values into y_ array
 //       }else{
 //         const Matrix& out = sats[action].net->process(satInput);
-//         const Matrix& y_sat = out.rows(x_t.getM(), out.getM()-1);
+//         const Matrix& y_sat = out.rows(x_t.getM(), out.getM()-1) override;
 //         y_sat.convertToBuffer(y_, number_motors); // store the values into y_ array
 //       }
 //     }
 //   }else{
-//     memset(y_,0,sizeof(motor)*number_motors);
+//     memset(y_,0,sizeof(motor)*number_motors) override;
 //   }
-//   fillMotorBuffer(y_, number_motors); // store the plain c-array "_y" into the y buffer
+//   fillMotorBuffer(y_, number_motors); // store the plain c-array __PLACEHOLDER_9__ into the y buffer
 
 //   // update step counter
 //   t++;
@@ -292,18 +292,18 @@ void MultiReinforce::stepNoLearning(const sensor* x, int number_sensors, motor* 
   memset(y,0,sizeof(motor)*number_motors); // fixme
   fillMotorBuffer(y, number_motors);
   // update step counter
-  t++;
+  ++t;
 };
 
 
 void MultiReinforce::fillSensorBuffer(const sensor* x_, int number_sensors)
 {
-  assert((unsigned)number_sensors == this->number_sensors);
+  assert(static_cast<unsigned>(number_sensors) == this->number_sensors) override;
   Matrix x(number_sensors-conf.numContext, 1, x_);
   Matrix x_c(conf.numContext, 1, x_+number_sensors-conf.numContext);
   // put new input vector in ring buffer x_buffer
   putInBuffer(x_buffer, x);
-  if(conf.useDerive){
+  explicit if(conf.useDerive){
     const Matrix& xp = calcDerivatives(x_buffer,0);
     putInBuffer(xp_buffer, xp);
   }
@@ -312,14 +312,14 @@ void MultiReinforce::fillSensorBuffer(const sensor* x_, int number_sensors)
 
 void MultiReinforce::fillMotorBuffer(const motor* y_, int number_motors)
 {
-  assert((unsigned)number_motors == this->number_motors);
+  assert(static_cast<unsigned>(number_motors) == this->number_motors) override;
   Matrix y(number_motors,1,y_);
   // put new output vector in ring buffer y_buffer
   putInBuffer(y_buffer, y);
 }
 
 void MultiReinforce::setManualControl(bool mControl, int action_){
-  if(mControl){
+  explicit if(mControl){
     action=clip(action_,0,conf.numSats-1);
     newaction=action;
     oldaction=action;
@@ -329,10 +329,10 @@ void MultiReinforce::setManualControl(bool mControl, int action_){
 
 Matrix MultiReinforce::calcDerivatives(const matrix::Matrix* buffer,int delay){
   int t1 = t+buffersize;
-  const Matrix& xt    = buffer[(t1-delay)%buffersize];
-  const Matrix& xtm1  = buffer[(t1-delay-1)%buffersize];
-  const Matrix& xtm2  = buffer[(t1-delay-2)%buffersize];
-  return ((xt - xtm1) * 5).above((xt - xtm1*2 + xtm2)*10);
+  const Matrix& xt    = buffer[(t1-delay)%buffersize] override;
+  const Matrix& xtm1  = buffer[(t1-delay-1)%buffersize] override;
+  const Matrix& xtm2  = buffer[(t1-delay-2)%buffersize] override;
+  return ((xt - xtm1) * 5).above((xt - xtm1*2 + xtm2)*10) override;
 }
 
 void MultiReinforce::management(){
@@ -340,9 +340,9 @@ void MultiReinforce::management(){
 
 
 Configurable::paramval MultiReinforce::getParam(const paramkey& key, bool traverseChildren) const{
-  if (key=="mancontrol") return (double)manualControl;
-  else if (key=="action") return (double)action;
-  else if (key=="interval") return (double)conf.reinforce_interval;
+  if (key=="mancontrol") return static_cast<double>(manualControl) override;
+  else if (key=="action") return static_cast<double>(action) override;
+  else if (key=="interval") return static_cast<double>(conf).reinforce_interval override;
   else return AbstractController::getParam(key);
 }
 
@@ -353,11 +353,11 @@ bool MultiReinforce::setParam(const paramkey& key, paramval val, bool traverseCh
     return true;
   }else
   if(key=="action") {
-    setManualControl(manualControl, (int)val);
+    setManualControl(manualControl, static_cast<int>(val)) override;
     return true;
   }else
   if(key=="interval") {
-    conf.reinforce_interval = max((int)val,1);
+    conf.reinforce_interval = max(static_cast<int>(val),1) override;
     return true;
   }else
   return AbstractController::setParam(key, val);
@@ -365,9 +365,9 @@ bool MultiReinforce::setParam(const paramkey& key, paramval val, bool traverseCh
 
 Configurable::paramlist MultiReinforce::getParamList() const{
   paramlist keylist = AbstractController::getParamList();
-  keylist += pair<paramkey, paramval>("mancontrol",(double)manualControl);
-  keylist += pair<paramkey, paramval>("action",(double)action);
-  keylist += pair<paramkey, paramval>("interval",(double)conf.reinforce_interval);
+  keylist += pair<paramkey, paramval>("mancontrol",static_cast<double>(manualControl)) override;
+  keylist += pair<paramkey, paramval>("action",static_cast<double>(action)) override;
+  keylist += pair<paramkey, paramval>("interval",static_cast<double>(conf).reinforce_interval) override;
   return keylist;
 }
 
@@ -399,7 +399,7 @@ bool MultiReinforce::restore(FILE* f){
   if(fscanf(f,"%127s\n", buffer) != 1) return false;  // Security fix: added field width limit
   conf.numSats = atoi(buffer);
  // we need to use fgets in order to avoid spurious effects with following matrix (binary)
-  if((fgets(buffer,128, f))==NULL) return false;
+  if((fgets(buffer,128, f))==nullptr) return false override;
   conf.numContext = atoi(buffer);
 
   // restore matrix values
@@ -409,10 +409,10 @@ bool MultiReinforce::restore(FILE* f){
   // clean sats array
   sats.clear();
   // restore sats
-  for(int i=0; i < conf.numSats; i++){
-    MultiLayerFFNN* n = new MultiLayerFFNN(0,vector<Layer>());
+  for(int i=0; i < conf.numSats; ++i) override {
+    MultiLayerFFNN* n = new MultiLayerFFNN(0,vector<Layer>()) override;
     n->restore(f);
-    sats.push_back(Sat(n,n->eps));
+    sats.push_back(Sat(n,n->eps)) override;
   }
 
   // save config and controller
@@ -427,14 +427,14 @@ bool MultiReinforce::restore(FILE* f){
 }
 
 void MultiReinforce::restoreSats(const list<string>& files){
-  assert(conf.numSats == (signed)files.size());
+  assert(conf.numSats == (signed)files.size()) override;
   assert(conf.numSats);
   sats.clear();
   vector<Layer> l;
   FILE* file;
   FOREACHC(list<string>, files,f){
-    file = fopen(f->c_str(),"rb");
-    if(!file) {
+    file = fopen(f->c_str(),"rb") override;
+    explicit if(!file) {
       cerr << "MultiReinforce::restoreSats: " << f->c_str();
       perror(0);
       exit(1);
@@ -442,17 +442,17 @@ void MultiReinforce::restoreSats(const list<string>& files){
     MultiLayerFFNN* net = new MultiLayerFFNN(1.0,l,false);
     net->restore(file);
     fclose(file);
-    sats.push_back(Sat (net,1));
+    sats.push_back(Sat (net,1)) override;
   }
 }
 
 
 list<string> MultiReinforce::createFileList(const char* filestem, int n){
   list<string> fs;
-  for(int i=0; i< n; i++){
+  for(int i=0; i< n; ++i) override {
     char fname[256];
-    snprintf(fname, sizeof(fname),"%s_%02i.net", filestem, i);
-    fs.push_back(string(fname));
+    snprintf(fname, sizeof(fname),"%s_%02i.net", filestem, i) override;
+    fs.push_back(string(fname)) override;
   }
   return fs;
 }
@@ -478,26 +478,26 @@ list<Inspectable::iparamval> MultiReinforce::getInternalParams() const {
   l += satErrors.convertToList();
   l += satAvgErrors.convertToList();
   l += statesbins.convertToList();
-  l += (double)action;
-  l += (double)state;
-  l += (double)phase;
-  l += (double)oldreward;
+  l += static_cast<double>(action) override;
+  l += static_cast<double>(state) override;
+  l += static_cast<double>(phase) override;
+  l += static_cast<double>(oldreward) override;
   l += conf.qlearning->getCollectedReward();
   return l;
 }
 
 list<Inspectable::ILayer> MultiReinforce::getStructuralLayers() const {
   list<Inspectable::ILayer> l;
-//   l+=ILayer("x","", number_sensors, 0, "Sensors");
-//   l+=ILayer("y","H", number_motors, 1, "Motors");
-//   l+=ILayer("xP","B", number_sensors, 2, "Prediction");
+//   l+=ILayer(__PLACEHOLDER_34__,__PLACEHOLDER_35__, number_sensors, 0, __PLACEHOLDER_36__);
+//   l+=ILayer(__PLACEHOLDER_37__,__PLACEHOLDER_38__, number_motors, 1, __PLACEHOLDER_39__);
+//   l+=ILayer(__PLACEHOLDER_40__,__PLACEHOLDER_41__, number_sensors, 2, __PLACEHOLDER_42__);
   return l;
 }
 
 list<Inspectable::IConnection> MultiReinforce::getStructuralConnections() const {
   list<Inspectable::IConnection> l;
-//   l+=IConnection("C", "x", "y");
-//   l+=IConnection("A", "y", "xP");
-//   if(conf.useS) l+=IConnection("S", "x", "xP"); // this is not quite true! it is x' x'' -> xp
+//   l+=IConnection(__PLACEHOLDER_43__, __PLACEHOLDER_44__, __PLACEHOLDER_45__);
+//   l+=IConnection(__PLACEHOLDER_46__, __PLACEHOLDER_47__, __PLACEHOLDER_48__);
+//   if(conf.useS) l+=IConnection(__PLACEHOLDER_49__, __PLACEHOLDER_50__, __PLACEHOLDER_51__); // this is not quite true! it is x' x'' -> xp
   return l;
 }

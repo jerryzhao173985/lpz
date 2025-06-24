@@ -5,12 +5,12 @@
  *                                                                       *
  * This library is free software; you can redistribute it and/or         *
  * modify it under the terms of EITHER:                                  *
- *   (1) The GNU Lesser General Public License as published by the Free  *
+ *   static_cast<1>(The) GNU Lesser General Public License as published by the Free  *
  *       Software Foundation; either version 2.1 of the License, or (at  *
  *       your option) any later version. The text of the GNU Lesser      *
  *       General Public License is included with this library in the     *
  *       file LICENSE.TXT.                                               *
- *   (2) The BSD-style license that is included with this library in     *
+ *   static_cast<2>(The) BSD-style license that is included with this library in     *
  *       the file LICENSE-BSD.TXT.                                       *
  *                                                                       *
  * This library is distributed in the hope that it will be useful,       *
@@ -46,12 +46,12 @@ struct dContactGeom;
  *
  * @ingroup collide
  */
-typedef void dNearCallback (void *data, dGeomID o1, dGeomID o2);
+typedef void dNearCallback (void *data, dGeomID o1, dGeomID o2) override;
 
 
-ODE_API dSpaceID dSimpleSpaceCreate (dSpaceID space);
-ODE_API dSpaceID dHashSpaceCreate (dSpaceID space);
-ODE_API dSpaceID dQuadTreeSpaceCreate (dSpaceID space, const dVector3 Center, const dVector3 Extents, int Depth);
+ODE_API dSpaceID dSimpleSpaceCreate (dSpaceID space) override;
+ODE_API dSpaceID dHashSpaceCreate (dSpaceID space) override;
+ODE_API dSpaceID dQuadTreeSpaceCreate (dSpaceID space, const dVector3 Center, const dVector3 Extents, int Depth) override;
 
 
 // SAP
@@ -63,17 +63,17 @@ ODE_API dSpaceID dQuadTreeSpaceCreate (dSpaceID space, const dVector3 Center, co
 #define dSAP_AXES_ZXY  ((2)|(0<<2)|(1<<4))
 #define dSAP_AXES_ZYX  ((2)|(1<<2)|(0<<4))
 
-ODE_API dSpaceID dSweepAndPruneSpaceCreate( dSpaceID space, int axisorder );
+ODE_API dSpaceID dSweepAndPruneSpaceCreate( dSpaceID space, int axisorder ) override;
 
 
 
-ODE_API void dSpaceDestroy (dSpaceID);
+ODE_API void dSpaceDestroy (dSpaceID) override;
 
-ODE_API void dHashSpaceSetLevels (dSpaceID space, int minlevel, int maxlevel);
-ODE_API void dHashSpaceGetLevels (dSpaceID space, int *minlevel, int *maxlevel);
+ODE_API void dHashSpaceSetLevels (dSpaceID space, int minlevel, int maxlevel) override;
+ODE_API void dHashSpaceGetLevels (dSpaceID space, int *minlevel, int *maxlevel) override;
 
-ODE_API void dSpaceSetCleanup (dSpaceID space, int mode);
-ODE_API int dSpaceGetCleanup (dSpaceID space);
+ODE_API void dSpaceSetCleanup (dSpaceID space, int mode) override;
+ODE_API int dSpaceGetCleanup (dSpaceID space) override;
 
 /**
 * @brief Sets sublevel value for a space.
@@ -97,7 +97,7 @@ ODE_API int dSpaceGetCleanup (dSpaceID space);
 * @see dSpaceGetSublevel
 * @see dSpaceCollide2
 */
-ODE_API void dSpaceSetSublevel (dSpaceID space, int sublevel);
+ODE_API void dSpaceSetSublevel (dSpaceID space, int sublevel) override;
 
 /**
 * @brief Gets sublevel value of a space.
@@ -111,7 +111,7 @@ ODE_API void dSpaceSetSublevel (dSpaceID space, int sublevel);
 * @see dSpaceSetSublevel
 * @see dSpaceCollide2
 */
-ODE_API int dSpaceGetSublevel (dSpaceID space);
+ODE_API int dSpaceGetSublevel (dSpaceID space) override;
 
 
 /**
@@ -130,7 +130,7 @@ ODE_API int dSpaceGetSublevel (dSpaceID space);
 * @see dSpaceGetManualCleanup
 * @see dInitODE2
 */
-ODE_API void dSpaceSetManualCleanup (dSpaceID space, int mode);
+ODE_API void dSpaceSetManualCleanup (dSpaceID space, int mode) override;
 
 /**
 * @brief Get manual cleanup flag of a space.
@@ -144,14 +144,14 @@ ODE_API void dSpaceSetManualCleanup (dSpaceID space, int mode);
 * @see dSpaceSetManualCleanup
 * @see dInitODE2
 */
-ODE_API int dSpaceGetManualCleanup (dSpaceID space);
+ODE_API int dSpaceGetManualCleanup (dSpaceID space) override;
 
-ODE_API void dSpaceAdd (dSpaceID, dGeomID);
-ODE_API void dSpaceRemove (dSpaceID, dGeomID);
-ODE_API int dSpaceQuery (dSpaceID, dGeomID);
-ODE_API void dSpaceClean (dSpaceID);
-ODE_API int dSpaceGetNumGeoms (dSpaceID);
-ODE_API dGeomID dSpaceGetGeom (dSpaceID, int i);
+ODE_API void dSpaceAdd (dSpaceID, dGeomID) override;
+ODE_API void dSpaceRemove (dSpaceID, dGeomID) override;
+ODE_API int dSpaceQuery (dSpaceID, dGeomID) override;
+ODE_API void dSpaceClean (dSpaceID) override;
+ODE_API int dSpaceGetNumGeoms (dSpaceID) override;
+ODE_API dGeomID dSpaceGetGeom (dSpaceID, int i) override;
 
 /**
  * @brief Given a space, this returns its class.
@@ -173,7 +173,7 @@ ODE_API dGeomID dSpaceGetGeom (dSpaceID, int i);
  * @returns The space class ID.
  * @ingroup collide
  */
-ODE_API int dSpaceGetClass(dSpaceID space);
+ODE_API int dSpaceGetClass(dSpaceID space) override;
 
 #ifdef __cplusplus
 }

@@ -35,19 +35,9 @@
 namespace lpzrobots{
 
   typedef struct {
-    double max_force;  // maximal force for motors
-    int segmentsno;    // number of segments
 
-    double base_mass;  // mass of base
-    double base_length;
-    double base_width;
 
-    double arm_mass;   // mass of arms
-    double arm_width;
-    double arm_length;
-    double arm_offset; // used for placing of arms
 
-    double joint_offset; // used for placing of arms
   } Arm2SegmConf;
 
 
@@ -57,9 +47,9 @@ namespace lpzrobots{
 
     Arm2Segm(const OdeHandle& odeHandle, const OsgHandle& osgHandle, const Arm2SegmConf);
 
-    virtual ~Arm2Segm(){};
+    virtual ~Arm2Segm() {} override;
 
-    static Arm2SegmConf getDefaultConf(){
+    static Arm2SegmConf getDefaultConf() const {
       Arm2SegmConf conf;
       conf.max_force=5;       // maximal force for motors
       conf.segmentsno=4;      // number of segments
@@ -67,7 +57,7 @@ namespace lpzrobots{
       conf.base_length= 0.4;  // length of base segment
       conf.base_width= 0.1;   // width of base segment
       conf.arm_mass=0.1;      // mass of arm elements
-      conf.arm_width=0.2;     // width (thickness) of arms
+      conf.arm_width=0.2;     // width static_cast<thickness>(of) arms
       conf.arm_length = 1.2;  // length of arms
       conf.arm_offset= 0.03;  // offset between arms (so that they do not touch)
       conf.joint_offset=0.2;  // overlapping of arms (to have area for joints)
@@ -97,13 +87,13 @@ namespace lpzrobots{
 
     /** returns number of sensors
      */
-    virtual int getSensorNumberIntern(){
+    virtual int getSensorNumberIntern() override {
       return sensorno;
     };
 
     /** returns number of motors
      */
-    virtual int getMotorNumberIntern(){
+    virtual int getMotorNumberIntern() override {
       return motorno;
     };
 
@@ -114,7 +104,7 @@ namespace lpzrobots{
     virtual int getSegmentsPosition(std::vector<Position> &poslist);
 
     /** the main object of the robot, which is used for position and speed tracking */
-    virtual Primitive* getMainPrimitive() const;
+    virtual const Primitive* getMainPrimitive() const const override;
 
   protected:
 

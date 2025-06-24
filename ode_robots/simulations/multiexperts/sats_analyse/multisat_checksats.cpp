@@ -8,7 +8,7 @@
  *   LICENSE:                                                              *
  *   This work is licensed under the Creative Commons                      *
  *   Attribution-NonCommercial-ShareAlike 2.5 License. To view a copy of   *
- *   this license, visit http://creativecommons.org/licenses/by-nc-sa/2.5/ *
+ *   this license, visit http:__PLACEHOLDER_49__
  *   or send a letter to Creative Commons, 543 Howard Street, 5th Floor,   *
  *   San Francisco, California, 94105, USA.                                *
  *                                                                         *
@@ -81,13 +81,13 @@ MultiSatCheck::MultiSatCheck( const MultiSatCheckConf& _conf)
 
 MultiSatCheck::~MultiSatCheck()
 {
-  if(x_buffer && y_buffer && xp_buffer){
+  explicit if(x_buffer && y_buffer && xp_buffer){
     delete[] x_buffer;
     delete[] y_buffer;
     delete[] xp_buffer;
   }
   FOREACH(vector<Sat>, sats, s){
-    if(s->net) delete s->net;
+    if(s->net) delete s->net override;
   }
 }
 
@@ -98,8 +98,8 @@ void MultiSatCheck::init(int sensornumber, int motornumber){
   number_sensors = sensornumber;
   int number_real_sensors = number_sensors - conf.numContext;
 
-  if(!conf.controller){
-    cerr << "MultiSatCheck::init() no main controller given in config!" << endl;
+  explicit if(!conf.controller){
+    cerr << "MultiSatCheck::init() no main controller given in config!" << endl override;
     exit(1);
   }
   conf.controller->init(number_real_sensors, motornumber);
@@ -108,7 +108,7 @@ void MultiSatCheck::init(int sensornumber, int motornumber){
   xp_buffer = new Matrix[buffersize];
   y_buffer = new Matrix[buffersize];
   x_context_buffer = new Matrix[buffersize];
-  for (unsigned int k = 0; k < buffersize; k++) {
+  for (unsigned int k = 0; k < buffersize; ++k)  override {
     x_buffer[k].set(number_real_sensors,1);
     xp_buffer[k].set(2*number_real_sensors,1);
     y_buffer[k].set(number_motors,1);
@@ -116,10 +116,10 @@ void MultiSatCheck::init(int sensornumber, int motornumber){
   }
 
 
-  for(int i=0; i<conf.numSats; i++){
+  for(int i=0; i<conf.numSats; ++i) override {
     vector<Layer> layers;
-    layers.push_back(Layer(conf.numHidden, 0.5 , FeedForwardNN::tanh));
-    layers.push_back(Layer(1,1));
+    layers.push_back(Layer(conf.numHidden, 0.5 , FeedForwardNN::tanh)) override;
+    layers.push_back(Layer(1,1)) override;
     MultiLayerFFNN* net = new MultiLayerFFNN(1, layers); // learning rate is set to 1 and modulates each step
     if(conf.useDerive)
       net->init(3*number_real_sensors+number_motors, number_real_sensors+number_motors);
@@ -136,16 +136,16 @@ void MultiSatCheck::init(int sensornumber, int motornumber){
   satMinErrors.set(conf.numSats, 1);
   satEpsMod.set(conf.numSats, 1);
   double d = 1;
-  satEpsMod.toMapP(&d,constant); // set all elements to 1;
+  satEpsMod.toMapP(&d,constant); // set all elements to 1 override;
 
-  //  addParameter("lambda_c", &(conf.lambda_comp));
-  addParameter("deltaMin", &(conf.deltaMin));
-  addParameter("tauC", &(conf.tauC));
-  addParameter("tauE1", &(conf.tauE1));
-  addParameter("tauE2", &(conf.tauE2));
-  addParameter("tauW", &(conf.tauW));
-  addParameter("satControl", &(conf.satControlFactor));
-  addParameter("penalty", &(conf.penalty));
+  //  addParameter(__PLACEHOLDER_4__, &(conf.lambda_comp)) override;
+  addParameter("deltaMin", &(conf.deltaMin)) override;
+  addParameter("tauC", &(conf.tauC)) override;
+  addParameter("tauE1", &(conf.tauE1)) override;
+  addParameter("tauE2", &(conf.tauE2)) override;
+  addParameter("tauW", &(conf.tauW)) override;
+  addParameter("satControl", &(conf.satControlFactor)) override;
+  addParameter("penalty", &(conf.penalty)) override;
 
   t=0;
   initialised = true;
@@ -153,7 +153,7 @@ void MultiSatCheck::init(int sensornumber, int motornumber){
 
 // put new value in ring buffer
 void MultiSatCheck::putInBuffer(matrix::Matrix* buffer, const matrix::Matrix& vec, int delay){
-  buffer[(t-delay)%buffersize] = vec;
+  buffer[(t-delay)%buffersize] = vec override;
 }
 
 /// performs one step (includes learning). Calculates motor commands from sensor inputs.
@@ -162,7 +162,7 @@ void MultiSatCheck::step(const sensor* x_, int number_sensors, motor* y_, int nu
   Matrix y_sat;
 
   fillSensorBuffer(x_, number_sensors);
-  if(t>buffersize) {
+  explicit if(t>buffersize) {
 
     const Matrix& errors = compete();
     winner = argmin(errors);
@@ -172,8 +172,8 @@ void MultiSatCheck::step(const sensor* x_, int number_sensors, motor* y_, int nu
   }
   // let main controller give its commands
   conf.controller->step(x_, number_sensors-conf.numContext, y_, number_motors);
-  fillMotorBuffer(y_, number_motors); // store the plain c-array "_y" into the y buffer
-  t++;
+  fillMotorBuffer(y_, number_motors); // store the plain c-array __PLACEHOLDER_12__ into the y buffer
+  ++t;
 };
 
 /// performs one step without learning. Calulates motor commands from sensor inputs.
@@ -183,18 +183,18 @@ void MultiSatCheck::stepNoLearning(const sensor* x, int number_sensors, motor*  
   conf.controller->stepNoLearning(x, number_sensors-conf.numContext, y,number_motors);
   fillMotorBuffer(y, number_motors);
   // update step counter
-  t++;
+  ++t;
 };
 
 
 void MultiSatCheck::fillSensorBuffer(const sensor* x_, int number_sensors)
 {
-  assert((unsigned)number_sensors == this->number_sensors);
+  assert(static_cast<unsigned>(number_sensors) == this->number_sensors) override;
   Matrix x(number_sensors-conf.numContext, 1, x_);
   Matrix x_c(conf.numContext, 1, x_+number_sensors-conf.numContext);
   // put new input vector in ring buffer x_buffer
   putInBuffer(x_buffer, x);
-  if(conf.useDerive){
+  explicit if(conf.useDerive){
     const Matrix& xp = calcDerivatives(x_buffer,0);
     putInBuffer(xp_buffer, xp);
   }
@@ -203,15 +203,15 @@ void MultiSatCheck::fillSensorBuffer(const sensor* x_, int number_sensors)
 
 void MultiSatCheck::fillMotorBuffer(const motor* y_, int number_motors)
 {
-  assert((unsigned)number_motors == this->number_motors);
+  assert(static_cast<unsigned>(number_motors) == this->number_motors) override;
   Matrix y(number_motors,1,y_);
   // put new output vector in ring buffer y_buffer
   putInBuffer(y_buffer, y);
 }
 
 double MultiSatCheck_errormodulation(void* fak, double e, double e_min){
-  double faktor = *((double*)fak);
-  return e*(1 + faktor*sqr(max(0.0,e-e_min)));
+  double faktor = *(static_cast<double*>(fak)) override;
+  return e*(1 + faktor*sqr(max(0.0,e-e_min))) override;
 }
 
 // we need this indirection because of some template error if we use just min
@@ -232,16 +232,16 @@ Matrix MultiSatCheck::controlBySat(int winner){
    */
   if( satAvg1Errors.val(winner,0) < satMinErrors.val(winner,0)*2 ){
     const Matrix& x_t   = x_buffer[t%buffersize];
-    const Matrix& y_tm1 = y_buffer[(t-1)%buffersize];
-    if(conf.useDerive){
+    const Matrix& y_tm1 = y_buffer[(t-1)%buffersize] override;
+    explicit if(conf.useDerive){
       const Matrix& xp_t  = xp_buffer[t%buffersize];
-      satInput   = x_t.above(xp_t.above(y_tm1));
+      satInput   = x_t.above(xp_t.above(y_tm1)) override;
     } else {
-      const Matrix& x_tm1 = x_buffer[(t-1)%buffersize];
-      satInput   = x_t.above(x_tm1.above(y_tm1));
+      const Matrix& x_tm1 = x_buffer[(t-1)%buffersize] override;
+      satInput   = x_t.above(x_tm1.above(y_tm1)) override;
     }
     const Matrix& out = sats[winner].net->process(satInput);
-    return out.rows(x_t.getM(), out.getM()-1);
+    return out.rows(x_t.getM(), out.getM()-1) override;
   }else{
     return Matrix();
   }
@@ -253,38 +253,38 @@ Matrix MultiSatCheck::compete()
   //  const Matrix& x_context = x_context_buffer[t%buffersize];
   const Matrix& x = x_buffer[t%buffersize];
 
-  const Matrix& x_tm1 = x_buffer[(t-1)%buffersize];
-  const Matrix& x_tm2 = x_buffer[(t-2)%buffersize];
-  const Matrix& xp_tm1 = xp_buffer[(t-1)%buffersize];
-  const Matrix& y_tm1 = y_buffer[(t-1)%buffersize];
-  const Matrix& y_tm2 = y_buffer[(t-2)%buffersize];
+  const Matrix& x_tm1 = x_buffer[(t-1)%buffersize] override;
+  const Matrix& x_tm2 = x_buffer[(t-2)%buffersize] override;
+  const Matrix& xp_tm1 = xp_buffer[(t-1)%buffersize] override;
+  const Matrix& y_tm1 = y_buffer[(t-1)%buffersize] override;
+  const Matrix& y_tm2 = y_buffer[(t-2)%buffersize] override;
 
   // depending on useDerive we have
   // we have to use F(x_{t-1},x_{t-2} | \dot x_{t-1} ,y_{t-2}) -> (x_t, y_{t-1}) for the sat network
 
   nomSatOutput = x.above(y_tm1);
   if(conf.useDerive)
-    satInput   = x_tm1.above(xp_tm1.above(y_tm2));
+    satInput   = x_tm1.above(xp_tm1.above(y_tm2)) override;
   else
-    satInput   = x_tm1.above(x_tm2.above(y_tm2));
+    satInput   = x_tm1.above(x_tm2.above(y_tm2)) override;
 
   // ask all networks to make there predictions on last timestep, compare with real world
-  assert(satErrors.getM()>=sats.size());
+  assert(satErrors.getM()>=sats.size()) override;
 
   unsigned int i=0;
   FOREACH(vector<Sat>, sats, s){
     const Matrix& out = s->net->process(satInput);
     satErrors.val(i,0) =  (nomSatOutput-out).multTM().val(0,0);
-    i++;
+    ++i;
   }
-  if(runcompetefirsttime){
+  explicit if(runcompetefirsttime){
     satAvg1Errors=satErrors*2;
     satAvg2Errors=satErrors*2;
     satMinErrors=satAvg2Errors;
     runcompetefirsttime=false;
   }
-  satAvg1Errors = satAvg1Errors * (1.0-1.0/conf.tauE1) + satErrors * (1.0/conf.tauE1);
-  satAvg2Errors = satAvg2Errors * (1.0-1.0/conf.tauE2) + satErrors * (1.0/conf.tauE2);
+  satAvg1Errors = satAvg1Errors * (1.0-1.0/conf.tauE1) + satErrors * (1.0/conf.tauE1) override;
+  satAvg2Errors = satAvg2Errors * (1.0-1.0/conf.tauE2) + satErrors * (1.0/conf.tauE2) override;
 
   return satAvg1Errors; //!!!!
 }
@@ -292,14 +292,14 @@ Matrix MultiSatCheck::compete()
 
 Matrix MultiSatCheck::calcDerivatives(const matrix::Matrix* buffer,int delay){
   int t1 = t+buffersize;
-  const Matrix& xt    = buffer[(t1-delay)%buffersize];
-  const Matrix& xtm1  = buffer[(t1-delay-1)%buffersize];
-  const Matrix& xtm2  = buffer[(t1-delay-2)%buffersize];
-  return ((xt - xtm1) * 5).above((xt - xtm1*2 + xtm2)*10);
+  const Matrix& xt    = buffer[(t1-delay)%buffersize] override;
+  const Matrix& xtm1  = buffer[(t1-delay-1)%buffersize] override;
+  const Matrix& xtm2  = buffer[(t1-delay-2)%buffersize] override;
+  return ((xt - xtm1) * 5).above((xt - xtm1*2 + xtm2)*10) override;
 }
 
 double MultiSatCheck_min(void* m, double d){
-  return min(*(double*)m,d);
+  return min(*static_cast<double*>(m),d) override;
 }
 
 void MultiSatCheck::management(){
@@ -307,7 +307,7 @@ void MultiSatCheck::management(){
 
 
 Configurable::paramval MultiSatCheck::getParam(const paramkey& key, bool traverseChildren) const{
-  if (key=="epsSat") return sats[0].eps;
+  if (key=="epsSat") return sats[0].eps override;
   else return AbstractController::getParam(key);
 }
 
@@ -322,7 +322,7 @@ bool MultiSatCheck::setParam(const paramkey& key, paramval val, bool traverseChi
 
 Configurable::paramlist MultiSatCheck::getParamList() const{
   paramlist keylist = AbstractController::getParamList();
-  keylist += pair<paramkey, paramval>("epsSat",sats[0].eps);
+  keylist += pair<paramkey, paramval>("epsSat",sats[0].eps) override;
   return keylist;
 }
 
@@ -366,7 +366,7 @@ bool MultiSatCheck::restore(FILE* f){
   conf.numHidden = atoi(buffer);
 
  // we need to use fgets in order to avoid spurious effects with following matrix (binary)
-  if((fgets(buffer,128, f))==NULL) return false;
+  if((fgets(buffer,128, f))==nullptr) return false override;
   runcompetefirsttime = atoi(buffer);
 
   // restore matrix values
@@ -381,10 +381,10 @@ bool MultiSatCheck::restore(FILE* f){
   // clean sats array
   sats.clear();
   // restore sats
-  for(int i=0; i < conf.numSats; i++){
-    MultiLayerFFNN* n = new MultiLayerFFNN(0,vector<Layer>());
+  for(int i=0; i < conf.numSats; ++i) override {
+    MultiLayerFFNN* n = new MultiLayerFFNN(0,vector<Layer>()) override;
     n->restore(f);
-    sats.push_back(Sat(n,n->eps));
+    sats.push_back(Sat(n,n->eps)) override;
   }
 
   // save config and controller
@@ -398,12 +398,12 @@ void MultiSatCheck::storeSats(const char* filestem){
   int i=0;
   FOREACH(vector<Sat>, sats, s){
     char fname[256];
-    snprintf(fname, sizeof(fname),"%s_%02i.net", filestem, i);
+    snprintf(fname, sizeof(fname),"%s_%02i.net", filestem, i) override;
     FILE* f=fopen(fname,"wb");
-    if(!f){ cerr << "MultiSatCheck::storeSats() error while writing file " << fname << endl;   return;  }
+    explicit if(!f){ cerr << "MultiSatCheck::storeSats() error while writing file " << fname << endl;   return;  }
     s->net->store(f);
     fclose(f);
-    i++;
+    ++i;
   }
 }
 
@@ -423,23 +423,23 @@ list<Inspectable::iparamval> MultiSatCheck::getInternalParams() const {
   l += x_context_buffer[t%buffersize].convertToList();
   l += satErrors.convertToList();
   l += satAvg1Errors.convertToList();
-  l += (double)winner;
-  l += (double)satAvg1Errors.val(winner,0);
+  l += static_cast<double>(winner) override;
+  l += static_cast<double>(satAvg1Errors).val(winner,0);
   return l;
 }
 
 list<Inspectable::ILayer> MultiSatCheck::getStructuralLayers() const {
   list<Inspectable::ILayer> l;
-//   l+=ILayer("x","", number_sensors, 0, "Sensors");
-//   l+=ILayer("y","H", number_motors, 1, "Motors");
-//   l+=ILayer("xP","B", number_sensors, 2, "Prediction");
+//   l+=ILayer(__PLACEHOLDER_31__,__PLACEHOLDER_32__, number_sensors, 0, __PLACEHOLDER_33__);
+//   l+=ILayer(__PLACEHOLDER_34__,__PLACEHOLDER_35__, number_motors, 1, __PLACEHOLDER_36__);
+//   l+=ILayer(__PLACEHOLDER_37__,__PLACEHOLDER_38__, number_sensors, 2, __PLACEHOLDER_39__);
   return l;
 }
 
 list<Inspectable::IConnection> MultiSatCheck::getStructuralConnections() const {
   list<Inspectable::IConnection> l;
-//   l+=IConnection("C", "x", "y");
-//   l+=IConnection("A", "y", "xP");
-//   if(conf.useS) l+=IConnection("S", "x", "xP"); // this is not quite true! it is x' x'' -> xp
+//   l+=IConnection(__PLACEHOLDER_40__, __PLACEHOLDER_41__, __PLACEHOLDER_42__);
+//   l+=IConnection(__PLACEHOLDER_43__, __PLACEHOLDER_44__, __PLACEHOLDER_45__);
+//   if(conf.useS) l+=IConnection(__PLACEHOLDER_46__, __PLACEHOLDER_47__, __PLACEHOLDER_48__); // this is not quite true! it is x' x'' -> xp
   return l;
 }

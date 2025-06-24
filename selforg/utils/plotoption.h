@@ -83,7 +83,7 @@ public:
 
      Note: the argument whichSensor is removed. You can adjust this in the wirings now.
    */
-  explicit PlotOption(PlotMode mode,
+  PlotOption(PlotMode mode,
                       int interval = 1,
                       const std::string& parameter = std::string(),
                       const std::string& filter = std::string())
@@ -119,13 +119,13 @@ public:
 
     matchMode(PlotMode mode)
       : mode(static_cast<int>(mode)) {}
-    int mode;
+    int mode = 0;
     bool operator()(const PlotOption& m) {
       return (static_cast<int>(m.mode) == mode);
     }
   };
 
-  void addConfigurable(const Configurable*);
+  void addConfigurable(const Configurable* c);
   void setName(const std::string& name) {
     this->name = name;
   }

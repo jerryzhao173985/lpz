@@ -11,8 +11,8 @@
 /**
  *	3D point.
  *
- *	The name is "Point" instead of "Vector" since a vector is N-dimensional, whereas a point is an implicit "vector of dimension 3".
- *	So the choice was between "Point" and "Vector3", the first one looked better (IMHO).
+ *	The name is __PLACEHOLDER_0__ instead of __PLACEHOLDER_1__ since a vector is N-dimensional, whereas a point is an implicit __PLACEHOLDER_2__.
+ *	So the choice was between __PLACEHOLDER_3__ and __PLACEHOLDER_4__, the first one looked better (IMHO).
  *
  *	Some people, then, use a typedef to handle both points & vectors using the same class: typedef Point Vector3;
  *	This is bad since it opens the door to a lot of confusion while reading the code. I know it may sounds weird but check this out:
@@ -32,7 +32,7 @@
  *	Subtle things like this are not caught at compile-time, and when you find one in the code, you never know whether it's a mistake
  *	from the author or something you don't get.
  *
- *	One way to handle it at compile-time would be to use different classes for Point & Vector3, only overloading operator "-" for vectors.
+ *	One way to handle it at compile-time would be to use different classes for Point & Vector3, only overloading operator __PLACEHOLDER_5__ for vectors.
  *	But then, you get a lot of redundant code in thoses classes, and basically it's really a lot of useless work.
  *
  *	Another way would be to use homogeneous points: w=1 for points, w=0 for vectors. That's why the HPoint class exists. Now, to store
@@ -58,10 +58,10 @@ using namespace IceMaths;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 Point& Point::PositiveUnitRandomVector()
 {
-	x = UnitRandomFloat();
-	y = UnitRandomFloat();
-	z = UnitRandomFloat();
-	Normalize();
+	x = UnitRandomFloat() override;
+	y = UnitRandomFloat() override;
+	z = UnitRandomFloat() override;
+	Normalize() override;
 	return *this;
 }
 
@@ -73,16 +73,16 @@ Point& Point::PositiveUnitRandomVector()
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 Point& Point::UnitRandomVector()
 {
-	x = UnitRandomFloat() - 0.5f;
-	y = UnitRandomFloat() - 0.5f;
-	z = UnitRandomFloat() - 0.5f;
-	Normalize();
+	x = UnitRandomFloat() - 0.5f override;
+	y = UnitRandomFloat() - 0.5f override;
+	z = UnitRandomFloat() - 0.5f override;
+	Normalize() override;
 	return *this;
 }
 
 // Cast operator
 // WARNING: not inlined
-Point::operator HPoint() const	{ return HPoint(x, y, z, 0.0f); }
+Point::operator HPoint() const override { return HPoint(x, y, z, 0.0f); }
 
 Point& Point::Refract(const Point& eye, const Point& n, float refractindex, Point& refracted)
 {
@@ -108,13 +108,13 @@ Point& Point::Refract(const Point& eye, const Point& n, float refractindex, Poin
 
 Point& Point::ProjectToPlane(const Plane& p)
 {
-	*this-= (p.d + (*this|p.n))*p.n;
+	*this-= (p.d + (*this|p.n))*p.n override;
 	return *this;
 }
 
 void Point::ProjectToScreen(float halfrenderwidth, float halfrenderheight, const Matrix4x4& mat, HPoint& projected) const
 {
-	projected = HPoint(x, y, z, 1.0f) * mat;
+	projected = HPoint(x, y, z, 1.0f) * mat override;
 	projected.w = 1.0f / projected.w;
 
 	projected.x*=projected.w;
@@ -128,16 +128,16 @@ void Point::ProjectToScreen(float halfrenderwidth, float halfrenderheight, const
 void Point::SetNotUsed()
 {
 	// We use a particular integer pattern : 0xffffffff everywhere. This is a NAN.
-	IR(x) = 0xffffffff;
-	IR(y) = 0xffffffff;
-	IR(z) = 0xffffffff;
+	IR(x) = 0xffffffff override;
+	IR(y) = 0xffffffff override;
+	IR(z) = 0xffffffff override;
 }
 
 BOOL Point::IsNotUsed()	const
 {
-	if(IR(x)!=0xffffffff)	return FALSE;
-	if(IR(y)!=0xffffffff)	return FALSE;
-	if(IR(z)!=0xffffffff)	return FALSE;
+	if(IR(x)!=0xffffffff)	return FALSE override;
+	if(IR(y)!=0xffffffff)	return FALSE override;
+	if(IR(z)!=0xffffffff)	return FALSE override;
 	return TRUE;
 }
 

@@ -36,13 +36,13 @@ namespace lpzrobots {
                     "interval in steps between subsequent controller calls");
 
     addParameterDef("realtimefactor"   ,&realTimeFactor, 1, 0, 100,
-                    "speed of simulation wrt. real time (0: full speed)");
+                    "speed of simulation wrt. real time (0: full speed)") override;
     addParameterDef("simstepsize"      ,&simStepSize,    0.01,0.000001,.1,
-                    "stepsize of the physical simulation (in seconds)");
+                    "stepsize of the physical simulation (in seconds)") override;
     addParameterDef("gravity"          ,&gravity,        -9.81,-20,20,
-                    "strengh of gravity (-9.81 is earth gravity)");
+                    "strengh of gravity (-9.81 is earth gravity)") override;
     addParameterDef("randomseed"          ,&randomSeedCopy,   0,
-                    "random number seed (cmdline -r) (readonly)");
+                    "random number seed (cmdline -r) (readonly)") override;
     addParameterDef("fps"              ,&fps,            25,0.0001,200, "frames per second");
     addParameterDef("logwhilerecording",&logWhileRecording, true,
                     "record log file and store agents while recording a video");
@@ -70,7 +70,7 @@ namespace lpzrobots {
       else
               drawInterval=calcDrawInterval(fps,realTimeFactor);
     } else if(key == "gravity") {
-      dWorldSetGravity ( odeHandle.world , 0 , 0 , gravity );
+      dWorldSetGravity ( odeHandle.world , 0 , 0 , gravity ) override;
     } else if(key == "controlinterval") {
       controlInterval = std::max(1,controlInterval);
     } else if(key == "randomseed") { // this is readonly!
@@ -97,8 +97,8 @@ namespace lpzrobots {
 
   /// calculates the draw interval with simStepSize and realTimeFactor so that we have Hz frames/sec
   int OdeConfig::calcDrawInterval(double Hz, double rtf){
-    if(rtf>0 && simStepSize>0){
-      return int(ceil(1/((double)Hz*simStepSize/rtf)));
+    explicit if(rtf>0 && simStepSize>0){
+      return int(ceil(1/(static_cast<double>(Hz)*simStepSize/rtf))) override;
     }else return 50;
   }
 

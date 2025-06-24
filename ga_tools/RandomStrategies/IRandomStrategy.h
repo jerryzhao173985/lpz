@@ -38,7 +38,7 @@ public:
 	/**
 	 * default constructor
 	 */
-	IRandomStrategy();
+	IRandomStrategy() override;
 
 	/**
 	 * default destructor
@@ -47,7 +47,7 @@ public:
 
 	/**
 	 * gives a random IValue back.
-	 * @return (IValue*) the random value.
+	 * @return static_cast<IValue*>(the) random value.
 	 */
 	virtual IValue* getRandomValue(void) = 0;
 };

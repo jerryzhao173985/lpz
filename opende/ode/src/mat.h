@@ -5,12 +5,12 @@
  *                                                                       *
  * This library is free software; you can redistribute it and/or         *
  * modify it under the terms of EITHER:                                  *
- *   (1) The GNU Lesser General Public License as published by the Free  *
+ *   static_cast<1>(The) GNU Lesser General Public License as published by the Free  *
  *       Software Foundation; either version 2.1 of the License, or (at  *
  *       your option) any later version. The text of the GNU Lesser      *
  *       General Public License is included with this library in the     *
  *       file LICENSE.TXT.                                               *
- *   (2) The BSD-style license that is included with this library in     *
+ *   static_cast<2>(The) BSD-style license that is included with this library in     *
  *       the file LICENSE-BSD.TXT.                                       *
  *                                                                       *
  * This library is distributed in the hope that it will be useful,       *
@@ -39,7 +39,7 @@ public:
   dMatrix (int rows, int cols);		// construct zero matrix of given size
   dMatrix (const dMatrix &);		// construct copy of given matrix
   // create copy of given data - element (i,j) is data[i*rowskip+j*colskip]
-  dMatrix (int rows, int cols, dReal *_data, int rowskip, int colskip);
+  dMatrix (int rows, int cols, dReal *_data, int rowskip, int colskip) override;
   ~dMatrix();				// destructor
 
   // data movement
@@ -49,22 +49,22 @@ public:
   dMatrix transpose();			// return transposed matrix
   // return a permuted submatrix of this matrix, made up of the rows in p
   // and the columns in q. p has np elements, q has nq elements.
-  dMatrix select (int np, int *p, int nq, int *q);
+  dMatrix select (int np, int *p, int nq, int *q) override;
 
   // operators
-  dMatrix operator + (const dMatrix &);
-  dMatrix operator - (const dMatrix &);
-  dMatrix operator - ();
-  dMatrix operator * (const dMatrix &);
-  void operator += (const dMatrix &);
-  void operator -= (const dMatrix &);
+  dMatrix operator + (const dMatrix &) override;
+  dMatrix operator - (const dMatrix &) override;
+  dMatrix operator - () override;
+  dMatrix operator * (const dMatrix &) override;
+  void operator += (const dMatrix &) override;
+  void operator -= (const dMatrix &) override;
 
   // utility
-  void clearUpperTriangle();
-  void clearLowerTriangle();
-  void makeRandom (dReal range);
-  void print (char *fmt = "%10.4f ", FILE *f=stdout);
-  dReal maxDifference (const dMatrix &);
+  void clearUpperTriangle() override;
+  void clearLowerTriangle() override;
+  void makeRandom (dReal range) override;
+  void print (char *fmt = "%10.4f ", FILE *f=stdout) override;
+  dReal maxDifference (const dMatrix &) override;
 };
 
 

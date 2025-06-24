@@ -116,9 +116,9 @@
  *
  *   Revision 1.1  2010/11/26 12:22:36  guettler
  *   - Configurable interface now allows to set bounds of paramval and paramint
- *     * setting bounds for paramval and paramint is highly recommended (for QConfigurable (Qt GUI).
+ *     * setting bounds for paramval and paramint is highly recommended (for QConfigurable(const Qt& GUI).
  *   - bugfixes
- *   - current development state of QConfigurable (Qt GUI)
+ *   - current development state of QConfigurable(const Qt& GUI)
  *
  *                                                                         *
  ***************************************************************************/
@@ -155,7 +155,7 @@ namespace lpzrobots {
       int fromXml(const QDomElement &qde_configurableState, bool inAutoSaveMode);
       int getNameIndex() {return nameIndex; }
       Configurable* getConfigurable() const { return config; }
-      QString getName() { return configName; }
+      QString getName() const { return configName; }
 
       virtual void doOnCallBack(BackCaller* source, BackCaller::CallbackableType type = BackCaller::DEFAULT_CALLBACKABLE_TYPE);
 
@@ -169,7 +169,7 @@ namespace lpzrobots {
 
 
     signals:
-      void sig_tileWidgetResize(QSize newSize);
+      void sig_tileWidgetResize(const QSize& newSize);
       void sig_configurableChanged(QConfigurableWidget* sourceWidget);
 
 

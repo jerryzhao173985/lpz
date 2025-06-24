@@ -41,29 +41,29 @@ namespace lpzrobots {
 
   public:
 
-    CameraManipulatorTV(osg::Node* node,GlobalData& global, CameraHandle& cameraHandle);
+    CameraManipulatorTV(osg::Node* node,const GlobalData& global, const CameraHandle& cameraHandle);
 
     /** returns the classname of the manipulator
         it's NECCESSARY to define this funtion, otherwise
         the new manipulator WON'T WORK! (but ask me not why)
      */
-    virtual const char* className() const { return "TV-Camera"; }
+    virtual const char* className() const override { return "TV-Camera"; }
 
   protected:
 
-    virtual ~CameraManipulatorTV() override;
+    virtual ~CameraManipulatorTV();
 
     /** This handles robot movements, so that the camera movemenent is right affected.
         should be overwritten by new cameramanipulator
     */
-       virtual void calcMovementByAgent() override;
+       virtual void calcMovementByAgent();
 
     /** Sets the right view and eye if the robot has changed.
         Is called from manageRobots();
         should be overwritten by new cameramanipulator
     */
-        virtual void setHomeViewByAgent() override;
-        virtual void setHomeEyeByAgent() override;
+        virtual void setHomeViewByAgent();
+        virtual void setHomeEyeByAgent();
 
   };
 }

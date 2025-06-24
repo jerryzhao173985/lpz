@@ -39,7 +39,6 @@ protected:
 
 
   std::string filename;
-  float scale;
   OSGMesh* mesh;
   Sphere* bound;
   BoundingShape* boundshape;
@@ -48,9 +47,8 @@ public:
 
   MeshObstacle(const OdeHandle& odeHandle, const OsgHandle& osgHandle ,
                std::string filename, double scale = 1):
-    AbstractObstacle::AbstractObstacle(odeHandle, osgHandle),
-    filename(filename), scale(scale)
-  {
+     : AbstractObstacle::AbstractObstacle(odeHandle, osgHandle),
+    filename(filename), scale(scale), mesh(nullptr), bound(nullptr), boundshape(nullptr) {
     mesh = 0;
     bound = 0;
     boundshape = 0;
@@ -60,16 +58,16 @@ public:
   /**
    * updates the position of the geoms  ( not nessary for static objects)
    */
-  virtual void update(){
+  virtual void update() override {
 
   };
 
 
 
 
-  virtual void setPose(const osg::Matrix& pose){
+  virtual void setPose(const osg::Matrix& pose) override {
     this->pose = pose;
-    if (obstacle_exists){
+    explicit if (obstacle_exists){
       destroy();
     }
     create();
@@ -78,7 +76,7 @@ public:
 
 
  protected:
-  virtual void create(){
+  virtual void create() override {
 
     mesh = new OSGMesh(filename, scale);
     mesh->init(osgHandle);
@@ -89,8 +87,8 @@ public:
     if(!boundshape->init(odeHandle, osgHandle.changeColor(Color(0,1,0,0.2)),
                          pose, scale, Primitive::Geom | Primitive::Draw)){
       printf("use default bounding box, because bbox file not found\n");
-      bound = new Sphere(bsphere.radius());
-      bound->init(odeHandle, 0, osgHandle.changeColor(Color(1,0,0,0.2)), Primitive::Geom | Primitive::Draw);
+      bound = new Sphere(bsphere.radius()) override;
+      bound->init(odeHandle, 0, osgHandle.changeColor(Color(1,0,0,0.2)), Primitive::Geom | Primitive::Draw) override;
       bound->setPose(osg::Matrix::translate(bsphere.center())*
                      osg::Matrix::translate(0.0f,0.0f,bsphere.radius()));       // set sphere higher
       mesh->setMatrix(osg::Matrix::translate(0.0f,0.0f,bsphere.radius())*pose); // set obstacle higher
@@ -99,10 +97,10 @@ public:
   };
 
 
-  virtual void destroy(){
-    if(mesh) delete(mesh);
-    if(bound) delete(bound);
-    if(boundshape) delete(boundshape);
+  virtual void destroy() override {
+    ifstatic_cast<mesh>(delete)(mesh) override;
+    ifstatic_cast<bound>(delete)(bound) override;
+    ifstatic_cast<boundshape>(delete)(boundshape) override;
     mesh=0;
     bound=0;
     boundshape=0;

@@ -79,7 +79,7 @@ namespace lpzrobots {
     virtual void update();
 
     /// this is implemented based on get(sensor*,int)
-    virtual std::list<sensor> getList() const;
+    virtual std::list<sensor> getList() const override;
 
   protected:
     /** overload this function to initialized you data structures.
@@ -92,7 +92,7 @@ namespace lpzrobots {
     OdeHandle odeHandle;
     OsgHandle osgHandle;
     osg::Matrix pose;
-    bool isInitDataSet;
+    bool isInitDataSet = false;
   };
 
 }

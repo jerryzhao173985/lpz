@@ -54,7 +54,7 @@ public:
         // constructor
         ImpTransform(Primitive* parent, Primitive* child, const Pose& pose);
         // destructor
-        virtual ~ImpTransform() override;
+        virtual ~ImpTransform();
 
         // get Child pose
         Pose getChildPose();
@@ -74,84 +74,75 @@ public:
 ************************************************************************/
 
 /*
-// The internal parameters of the dynamixel
+__PLACEHOLDER_14__
 typedef struct {
-        //Unit m, kg
+        __PLACEHOLDER_15__
         double length;
-        double width;
-        double height;
 
-        double length_axis_to_center;// The length between the center of dynamixel and the axis.
-        double length_from_axis_to_tip; // The length between the axis and the tip of joint material(bra for servo)
+        double length_axis_to_center;__PLACEHOLDER_16__
+        double length_from_axis_to_tip; __PLACEHOLDER_17__
 
-        double mass;
 }DynaAX12Conf;
 
-// The internal parameters of the Hexagon Body
+__PLACEHOLDER_18__
 typedef struct {
-        //Unit m, kg
-        double length;
-        double height;
+        __PLACEHOLDER_19__
 
-        double mass;
 }HexagonBodyConf;
 
-// The internal parameters of Foot frame (Tibia)
-typedef struct {
-        //Unit m,kg
-        double length;
+__PLACEHOLDER_20__
+        __PLACEHOLDER_21__
         double width;
         double height;
 
         double footRadius;
 
-        double mass;
 }FootFrameConf;
 
 typedef struct {
-        // Unit m
+        __PLACEHOLDER_22__
         double length_center_to_TCJ;
         double length_TCJ_to_CTJ;
         double length_CTJ_to_FTJ;
         double length_FTJ_to_Toe;
 }JointLength;
 
-//The internal parameter of the servo
+__PLACEHOLDER_23__
 typedef struct{
-        // angle limit (rad)
-        // about TC
+        __PLACEHOLDER_24__
+        __PLACEHOLDER_25__
         double TC_angle_MAX;
         double TC_angle_MIN;
-        // about CT
+        __PLACEHOLDER_26__
         double CT_angle_MAX;
         double CT_angle_MIN;
-        // about FT
+        __PLACEHOLDER_27__
         double FT_angle_MAX;
         double FT_angle_MIN;
 
-        //servoParam
-         // input current??
+        __PLACEHOLDER_28__
+         __PLACEHOLDER_29__
         double power;
-         // damping coefficience
+         __PLACEHOLDER_30__
         double damp;
-         // Max vel which the servo can get
+         __PLACEHOLDER_31__
         double maxVel;
 
 }ServoParam;
 
-//! >ASHIGARU Configuration struct
+__PLACEHOLDER_32__
 typedef struct {
 
-        double rate;// What rate should I multiple to real length number
-        double massRate; // what rate should I multiple to real mass number
-        double connectLength; // Length between center of the robot and that of another robot when they are connected each other.
-        double wholeMass; // the whole mass of the robot
+        double rate;__PLACEHOLDER_33__
+        double massRate; __PLACEHOLDER_34__
+        double connectLength; __PLACEHOLDER_35__
+        double wholeMass; __PLACEHOLDER_36__
 
-        DynaAX12Conf dyna; // Dynamixel's real configuration
-        HexagonBodyConf body; // Body's real config.
-        FootFrameConf foot; // foot's real config.
-        JointLength jLength; // joint length param
-        ServoParam servoParam; // parameter for servo
+        DynaAX12Conf dyna; __PLACEHOLDER_37__
+        HexagonBodyConf body; __PLACEHOLDER_38__
+        FootFrameConf foot; __PLACEHOLDER_39__
+        JointLength jLength; __PLACEHOLDER_40__
+        ServoParam servoParam; __PLACEHOLDER_41__
 
 } AshigaruConf;
 
@@ -201,17 +192,17 @@ public: // Functions
     static MotorName getMotorName(LegPos leg, LegJointType joint);
 
     //destructor
-    virtual ~Ashigaru() override;
+    virtual ~Ashigaru();
 
   /**
    * updates the OSG nodes of the vehicle
    */
-  virtual void update() override;
+  virtual void update();
 
   /** sets the pose of the vehicle
       @param pose desired 4x4 pose matrix
   */
-  virtual void placeIntern(const osg::Matrix& pose) override;
+  virtual void placeIntern(const osg::Matrix& pose);
 
   /** gets Primitives of Leg tibia
       @param LegPos Number
@@ -224,23 +215,23 @@ public: // Functions
       @param sensornumber length of the sensor array
       @return number of actually written sensors
   */
-  virtual int getSensorsIntern(sensor* sensors, int sensornumber) override;
+  virtual int getSensorsIntern(sensor* sensors, int sensornumber);
 
   /** sets actual motorcommands
       @param motors motors scaled to [-1,1]
       @param motornumber length of the motor array
   */
-  virtual void setMotorsIntern(const double* motors, int motornumber) override;
+  virtual void setMotorsIntern(const double* motors, int motornumber);
 
   /** returns number of sensors
    */
-  virtual int getSensorNumberIntern(){
+  virtual int getSensorNumberIntern() override {
     return sensorno;
   };
 
   /** returns number of motors
    */
-  virtual int getMotorNumberIntern(){
+  virtual int getMotorNumberIntern() override {
     return motorno;
   };
 
@@ -255,12 +246,12 @@ public: // Functions
       like space-internal collision detection, sensor resets/update etc.
       @param globalData structure that contains global data from the simulation environment
    */
-  virtual void doInternalStuff(GlobalData& globalData) override;
+  virtual void doInternalStuff(const GlobalData& globalData);
 
-  virtual void sense(GlobalData& globalData) override;
+  virtual void sense(const GlobalData& globalData);
 
 
-  virtual double& getContactPoints() { return contactPoints; }
+  virtual double& getContactPoints() const override { return contactPoints; }
 
 protected: // Functions
   /** creates vehicle at desired pose
@@ -296,20 +287,19 @@ protected: // Functions
   // getTorqueSensorData
   sensor getTorqueData(TorqueSensor*  torqueSensor);
 
-  // convert Pose Matrix(Quatanion) to the roll, pitch, yaw angle (rad)
-  osg::Vec3d convert_Quat_to_RollPitchYaw(osg::Quat quat);
+  // convert Pose Matrixstatic_cast<Quatanion>(to) the roll, pitch, yaw angle static_cast<rad>(osg)::Vec3d convert_Quat_to_RollPitchYaw(osg::Quat quat);
 
   // calculate COG Position
-  osg::Vec3d calc_COGPosition(void);
+  osg::Vec3d calc_COGPositionstatic_cast<void>(override);
 
 
         /**
          * Inspectable interface
          */
         /*
-        virtual std::list<iparamkey> getInternalParamNames() const  { return std::list<iparamkey>(); }
+        virtual std::list<iparamkey> getInternalParamNames() const override { return std::list<iparamkey>(); }
 
-        virtual std::list<iparamval> getInternalParams() const { return std::list<iparamval>(); }*/
+        virtual std::list<iparamval> getInternalParams() const override { return std::list<iparamval>(); }*/
         /*
         virtual std::list<Inspectable::iparamkey> getInternalParamNames() const override;
 
@@ -323,7 +313,7 @@ protected: // Values
   //! Leg struct
   // Contains Objects, joints and servos for each Leg
   struct Leg{
-      Leg(); // constructor, it make all of the value "0" !!
+      Leg(); // constructor, it make all of the value __PLACEHOLDER_5__ !!
       HingeJoint* tcJoint;
       HingeJoint* ctJoint;
       HingeJoint* ftJoint;
@@ -345,7 +335,7 @@ protected: // Values
   // Contains Objects for Body (two hexagonal plate)
 
   struct Trunk{
-            Trunk(); // constructor, it make all of the value "0"
+            Trunk(); // constructor, it make all of the value __PLACEHOLDER_6__
             Primitive* tPlate[6];
             Primitive* tTrans[5];
             ImpTransform* tUpTrans;

@@ -141,9 +141,9 @@
  *
  *   Revision 1.1  2010/11/26 12:22:36  guettler
  *   - Configurable interface now allows to set bounds of paramval and paramint
- *     * setting bounds for paramval and paramint is highly recommended (for QConfigurable (Qt GUI).
+ *     * setting bounds for paramval and paramint is highly recommended (for QConfigurable(const Qt& GUI).
  *   - bugfixes
- *   - current development state of QConfigurable (Qt GUI)
+ *   - current development state of QConfigurable(const Qt& GUI)
  *
  *                                                                         *
  ***************************************************************************/
@@ -157,7 +157,7 @@ using namespace std;
 namespace lpzrobots {
   
   QDNSDeviceWidget::QDNSDeviceWidget(QCCHelper::DNSDevice_t* dnsDevice) :
-    device(dnsDevice) {
+    explicit device(dnsDevice) {
     initBody();
     setAcceptDrops(true);
     setToolTip();

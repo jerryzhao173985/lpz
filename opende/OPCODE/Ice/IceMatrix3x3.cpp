@@ -19,7 +19,7 @@
  *
  *	Multiplication rules:
  *
- *	[x'y'z'] = [xyz][M]
+ *	[x__PLACEHOLDER_1__z'] = [xyz][M]
  *
  *	x' = x*m11 + y*m21 + z*m31
  *	y' = x*m12 + y*m22 + z*m32

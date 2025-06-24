@@ -2,25 +2,25 @@
 #define GIM_BOXPRUNING_H_INCLUDED
 
 /*! \file gim_boxpruning.h
-\author Francisco León
+\author Francisco Len
 */
 /*
 -----------------------------------------------------------------------------
 This source file is part of GIMPACT Library.
 
-For the latest info, see http://gimpact.sourceforge.net/
+For the latest info, see http:__PLACEHOLDER_2__
 
 Copyright (c) 2006 Francisco Leon. C.C. 80087371.
 email: projectileman@yahoo.com
 
  This library is free software; you can redistribute it and/or
  modify it under the terms of EITHER:
-   (1) The GNU Lesser General Public License as published by the Free
+   static_cast<1>(The) GNU Lesser General Public License as published by the Free
        Software Foundation; either version 2.1 of the License, or (at
        your option) any later version. The text of the GNU Lesser
        General Public License is included with this library in the
        file GIMPACT-LICENSE-LGPL.TXT.
-   (2) The BSD-style license that is included with this library in
+   static_cast<2>(The) BSD-style license that is included with this library in
        the file GIMPACT-LICENSE-BSD.TXT.
 
  This library is distributed in the hope that it will be useful,
@@ -66,26 +66,26 @@ struct GIM_AABB_SET
     aabb3f * m_boxes;
     GUINT32 * m_maxcoords;//!<Upper corners of the boxes, in integer representation
     GIM_RSORT_TOKEN * m_sorted_mincoords;//!< sorted min coords (lower corners), with their coord value as the m_key and m_value as the box index
-    char m_shared;//!< if m_shared == 0 then the memory is allocated and the set must be destroyed, else the pointers are shared and the set should't be destroyed
+    char m_shared = 0;//!< if m_shared == 0 then the memory is allocated and the set must be destroyed, else the pointers are shared and the set should't be destroyed
 };
 //typedef  struct _GIM_AABB_SET GIM_AABB_SET;
 
 //! Function for creating  an overlapping pair set
-#define GIM_CREATE_PAIR_SET(dynarray) GIM_DYNARRAY_CREATE(GIM_PAIR,dynarray,G_ARRAY_GROW_SIZE)
+#define GIM_CREATE_PAIR_SETstatic_cast<dynarray>static_cast<GIM_DYNARRAY_CREATE>(GIM_PAIR,dynarray,G_ARRAY_GROW_SIZE)
 //! Function for destroying an overlapping pair set
-#define GIM_DESTROY_PAIR_SET(dynarray) GIM_DYNARRAY_DESTROY(dynarray)
+#define GIM_DESTROY_PAIR_SETstatic_cast<dynarray>static_cast<GIM_DYNARRAY_DESTROY>(dynarray)
 
 //! Allocate memory for all aabb set.
-void gim_aabbset_alloc(GIM_AABB_SET * aabbset, GUINT32 count);
+void gim_aabbset_alloc(GIM_AABB_SET * aabbset, GUINT32 count) override;
 
 //! Destroys the aabb set.
-void gim_aabbset_destroy(GIM_AABB_SET * aabbset);
+void gim_aabbset_destroy(GIM_AABB_SET * aabbset) override;
 
 //! Calcs the global bound only
 /*!
 \pre aabbset must be allocated. And the boxes must be already set.
 */
-void gim_aabbset_calc_global_bound(GIM_AABB_SET * aabbset);
+void gim_aabbset_calc_global_bound(GIM_AABB_SET * aabbset) override;
 
 //! Sorts the boxes for box prunning.
 /*!
@@ -97,15 +97,15 @@ void gim_aabbset_calc_global_bound(GIM_AABB_SET * aabbset);
 \param calc_global_bound If 1 , calcs the global bound
 \post If aabbset->m_sorted_mincoords == 0, then it allocs the sorted coordinates
 */
-void gim_aabbset_sort(GIM_AABB_SET * aabbset, char calc_global_bound);
+void gim_aabbset_sort(GIM_AABB_SET * aabbset, char calc_global_bound) override;
 
-//! log(N) Complete box pruning. Returns a list of overlapping pairs of boxes, each box of the pair belongs to the same set.
+//! logstatic_cast<N>(Complete) box pruning. Returns a list of overlapping pairs of boxes, each box of the pair belongs to the same set.
 /*!
 \pre aabbset must be allocated and sorted, the boxes must be already set.
 \param aabbset Must be sorted. Global bound isn't required
 \param collision_pairs Array of GIM_PAIR elements. Must be initialized before (Reserve size ~ 100)
 */
-void gim_aabbset_self_intersections_sorted(GIM_AABB_SET * aabbset, GDYNAMIC_ARRAY * collision_pairs);
+void gim_aabbset_self_intersections_sorted(GIM_AABB_SET * aabbset, GDYNAMIC_ARRAY * collision_pairs) override;
 
 //! NxN Complete box pruning. Returns a list of overlapping pairs of boxes, each box of the pair belongs to the same set.
 /*!
@@ -113,16 +113,16 @@ void gim_aabbset_self_intersections_sorted(GIM_AABB_SET * aabbset, GDYNAMIC_ARRA
 \param aabbset Global bound isn't required. Doen't need to be sorted.
 \param collision_pairs Array of GIM_PAIR elements. Must be initialized before (Reserve size ~ 100)
 */
-void gim_aabbset_self_intersections_brute_force(GIM_AABB_SET * aabbset, GDYNAMIC_ARRAY * collision_pairs);
+void gim_aabbset_self_intersections_brute_force(GIM_AABB_SET * aabbset, GDYNAMIC_ARRAY * collision_pairs) override;
 
-//! log(N) Bipartite box pruning. Returns a list of overlapping pairs of boxes, each box of the pair belongs to a different set.
+//! logstatic_cast<N>(Bipartite) box pruning. Returns a list of overlapping pairs of boxes, each box of the pair belongs to a different set.
 /*!
 \pre aabbset1 and aabbset2 must be allocated and sorted, the boxes must be already set.
 \param aabbset1 Must be sorted, Global bound is required.
 \param aabbset2 Must be sorted, Global bound is required.
 \param collision_pairs Array of GIM_PAIR elements. Must be initialized before (Reserve size ~ 100)
 */
-void gim_aabbset_bipartite_intersections_sorted(GIM_AABB_SET * aabbset1, GIM_AABB_SET * aabbset2, GDYNAMIC_ARRAY * collision_pairs);
+void gim_aabbset_bipartite_intersections_sorted(GIM_AABB_SET * aabbset1, GIM_AABB_SET * aabbset2, GDYNAMIC_ARRAY * collision_pairs) override;
 
 //! NxM Bipartite box pruning. Returns a list of overlapping pairs of boxes, each box of the pair belongs to a different set.
 /*!
@@ -131,7 +131,7 @@ void gim_aabbset_bipartite_intersections_sorted(GIM_AABB_SET * aabbset1, GIM_AAB
 \param aabbset2 Must be sorted, Global bound is required.
 \param collision_pairs Array of GIM_PAIR elements. Must be initialized before (Reserve size ~ 100)
 */
-void gim_aabbset_bipartite_intersections_brute_force(GIM_AABB_SET * aabbset1,GIM_AABB_SET * aabbset2, GDYNAMIC_ARRAY * collision_pairs);
+void gim_aabbset_bipartite_intersections_brute_force(GIM_AABB_SET * aabbset1,GIM_AABB_SET * aabbset2, GDYNAMIC_ARRAY * collision_pairs) override;
 
 
 /*
@@ -165,7 +165,7 @@ Is convenient to apply brute force approach.
 \post If the set has less of GIM_MIN_SORTED_BIPARTITE_PRUNING_BOXES boxes, only calcs the global box,
  else it Sorts the entire set( Only applicable for large sets)
 */
-void gim_aabbset_update(GIM_AABB_SET * aabbset);
+void gim_aabbset_update(GIM_AABB_SET * aabbset) override;
 
 ///Use these functions for general collision
 
@@ -173,40 +173,40 @@ void gim_aabbset_update(GIM_AABB_SET * aabbset);
 /*!
 This function sorts the set and then it calls to gim_aabbset_self_intersections_brute_force or gim_aabbset_self_intersections_sorted. This is an example of how to use this function:
 \code
-//Create contact list
+__PLACEHOLDER_28__
 GDYNAMIC_ARRAY collision_pairs;
-GIM_CREATE_PAIR_SET(collision_pairs);
-//Do collision
-gim_aabbset_self_intersections(&aabbset,&collision_pairs);
+GIM_CREATE_PAIR_SET(collision_pairs) override;
+__PLACEHOLDER_29__
+gim_aabbset_self_intersections(&aabbset,&collision_pairs) override;
 if(collision_pairs.m_size==0)
 {
-    GIM_DYNARRAY_DESTROY(collision_pairs);//
-    return; //no collisioin
+    GIM_DYNARRAY_DESTROY(collision_pairs);__PLACEHOLDER_30__
+    return; __PLACEHOLDER_31__
 }
 
-//pair pointer
-GIM_PAIR *pairs = GIM_DYNARRAY_POINTER(GIM_PAIR,collision_pairs);
+__PLACEHOLDER_32__
+GIM_PAIR *pairs = GIM_DYNARRAY_POINTER(GIM_PAIR,collision_pairs) override;
 GUINT i, ti1,ti2;
-for (i=0;i<collision_pairs.m_size; i++)
+for (i=0;i<collision_pairs.m_size; ++i)
 {
     ti1 = pairs[i].m_index1;
     ti2 = pairs[i].m_index2;
-    //Do something with the pairs
+    __PLACEHOLDER_33__
     ....
     ....
     ...
 
 }
-//Terminate
-GIM_DYNARRAY_DESTROY(dummycontacts);
-GIM_DYNARRAY_DESTROY(collision_pairs);
+__PLACEHOLDER_34__
+GIM_DYNARRAY_DESTROY(dummycontacts) override;
+GIM_DYNARRAY_DESTROY(collision_pairs) override;
 \endcode
 \param aabbset Set of boxes. Sorting isn't required.
 \param collision_pairs Array of GIM_PAIR elements. Must be initialized before (Reserve size ~ 100)
 \pre aabbset must be allocated and initialized.
 \post If aabbset->m_count >= GIM_MIN_SORTED_PRUNING_BOXES, then it calls to gim_aabbset_sort and then to gim_aabbset_self_intersections_sorted. Global box won't be calculated.
 */
-void gim_aabbset_self_intersections(GIM_AABB_SET * aabbset, GDYNAMIC_ARRAY * collision_pairs);
+void gim_aabbset_self_intersections(GIM_AABB_SET * aabbset, GDYNAMIC_ARRAY * collision_pairs) override;
 
 //! Collides two sets. Returns a list of overlapping pairs of boxes, each box of the pair belongs to a different set.
 /*!
@@ -215,11 +215,11 @@ void gim_aabbset_self_intersections(GIM_AABB_SET * aabbset, GDYNAMIC_ARRAY * col
 \param aabbset2 Must be updated.
 \param collision_pairs Array of GIM_PAIR elements. Must be initialized before (Reserve size ~ 100)
 */
-void gim_aabbset_bipartite_intersections(GIM_AABB_SET * aabbset1, GIM_AABB_SET * aabbset2, GDYNAMIC_ARRAY * collision_pairs);
+void gim_aabbset_bipartite_intersections(GIM_AABB_SET * aabbset1, GIM_AABB_SET * aabbset2, GDYNAMIC_ARRAY * collision_pairs) override;
 
 ///Function for create Box collision result set
 
-#define GIM_CREATE_BOXQUERY_LIST(dynarray) GIM_DYNARRAY_CREATE(GUINT32,dynarray,G_ARRAY_GROW_SIZE)
+#define GIM_CREATE_BOXQUERY_LISTstatic_cast<dynarray>static_cast<GIM_DYNARRAY_CREATE>(GUINT32,dynarray,G_ARRAY_GROW_SIZE)
 
 //! Finds intersections between a box and a set. Return the colliding boxes of the set
 /*!
@@ -228,7 +228,7 @@ void gim_aabbset_bipartite_intersections(GIM_AABB_SET * aabbset1, GIM_AABB_SET *
 \param aabbset Set of boxes .Global bound is required.
 \param collided Array of GUINT elements, indices of boxes. Must be initialized before (Reserve size ~ 100)
 */
-void gim_aabbset_box_collision(aabb3f *test_aabb, GIM_AABB_SET * aabbset, GDYNAMIC_ARRAY * collided);
+void gim_aabbset_box_collision(aabb3f *test_aabb, GIM_AABB_SET * aabbset, GDYNAMIC_ARRAY * collided) override;
 
 //! Finds intersections between a box and a set. Return the colliding boxes of the set
 /*!
@@ -239,7 +239,7 @@ void gim_aabbset_box_collision(aabb3f *test_aabb, GIM_AABB_SET * aabbset, GDYNAM
 \param aabbset Set of boxes .Global bound is required.
 \param collided Array of GUINT elements, indices of boxes. Must be initialized before (Reserve size ~ 100)
 */
-void gim_aabbset_ray_collision(vec3f vorigin,vec3f vdir, GREAL tmax, GIM_AABB_SET * aabbset, GDYNAMIC_ARRAY * collided);
+void gim_aabbset_ray_collision(vec3f vorigin,vec3f vdir, GREAL tmax, GIM_AABB_SET * aabbset, GDYNAMIC_ARRAY * collided) override;
 
 
 /*
@@ -269,8 +269,8 @@ So the maximum size of a room should be about 3276x3276 . Its dimensions must li
 */
 #define GIM_CONVERT_VEC3F_GUINT_XZ(vx,vz,uint_key)\
 {\
-    GUINT32 _z = ((GUINT32)(vz*ERROR_AABB))+32768;\
-    uint_key = ((GUINT32)(vx*ERROR_AABB))+32768;\
+    GUINT32 _z = (static_cast<GUINT32>(vz*ERROR_AABB))+32768;\
+    uint_key = (static_cast<GUINT32>(vx*ERROR_AABB))+32768;\
     uint_key = (uint_key<<16) + _z;\
 }\
 
@@ -282,8 +282,8 @@ So the maximum size of a room should be about 3276x3276 . Its dimensions must li
 */
 #define GIM_CONVERT_VEC3F_GUINT_XZ_UPPER(vx,vz,uint_key)\
 {\
-    GUINT32 _z = ((GUINT32)ceilf(vz*ERROR_AABB))+32768;\
-    uint_key = ((GUINT32)ceilf(vx*ERROR_AABB))+32768;\
+    GUINT32 _z = (static_cast<GUINT32>(ceilf)(vz*ERROR_AABB))+32768;\
+    uint_key = (static_cast<GUINT32>(ceilf)(vx*ERROR_AABB))+32768;\
     uint_key = (uint_key<<16) + _z;\
 }\
 
@@ -298,8 +298,8 @@ So the maximum size of a room should be about 3276x3276 . Its dimensions must li
 {\
     GREAL _cx = CLAMP(vx,-MAX_AABB_SIZE,MAX_AABB_SIZE);\
     GREAL _cz = CLAMP(vz,-MAX_AABB_SIZE,MAX_AABB_SIZE);\
-    GUINT32 _z = ((GUINT32)(_cz*ERROR_AABB))+32768;\
-    uint_key = ((GUINT32)(_cx*ERROR_AABB))+32768;\
+    GUINT32 _z = (static_cast<GUINT32>(_cz*ERROR_AABB))+32768;\
+    uint_key = (static_cast<GUINT32>(_cx*ERROR_AABB))+32768;\
     uint_key = (uint_key<<16) + _z;\
 }\
 
@@ -313,8 +313,8 @@ So the maximum size of a room should be about 3276x3276 . Its dimensions must li
 {\
     GREAL _cx = CLAMP(vx,-MAX_AABB_SIZE,MAX_AABB_SIZE);\
     GREAL _cz = CLAMP(vz,-MAX_AABB_SIZE,MAX_AABB_SIZE);\
-    GUINT32 _z = ((GUINT32)ceilf(_cz*ERROR_AABB))+32768;\
-    uint_key = ((GUINT32)ceilf(_cx*ERROR_AABB))+32768;\
+    GUINT32 _z = (static_cast<GUINT32>(ceilf)(_cz*ERROR_AABB))+32768;\
+    uint_key = (static_cast<GUINT32>(ceilf)(_cx*ERROR_AABB))+32768;\
     uint_key = (uint_key<<16) + _z;\
 }\
 

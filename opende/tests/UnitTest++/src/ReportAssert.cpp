@@ -4,7 +4,7 @@ namespace UnitTest {
 
 void ReportAssert(char const* description, char const* filename, int const lineNumber)
 {
-    throw AssertException(description, filename, lineNumber);
+    throw AssertException(description, filename, lineNumber) override;
 }
 
 }

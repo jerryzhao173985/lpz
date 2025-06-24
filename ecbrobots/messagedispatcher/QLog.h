@@ -126,7 +126,7 @@ namespace lpzrobots {
       /**
        * if emitted, given QString will be forwarded to the log window which instantiates this class
        */
-      void sig_textLog(QString log);
+      void sig_textLog(const QString& log);
 
     protected:
       bool warningOutput;
@@ -173,17 +173,17 @@ namespace lpzrobots {
        * @deprecated
        * @param log
        */
-      static void logError(QString log);
+      static void logError(const QString& log);
       /**
        * @deprecated
        * @param log
        */
-      static void logWarning(QString log);
+      static void logWarning(const QString& log);
       /**
        * @deprecated
        * @param log
        */
-      static void logVerbose(QString log);
+      static void logVerbose(const QString& log);
       /**
        * @deprecated
        * @param log

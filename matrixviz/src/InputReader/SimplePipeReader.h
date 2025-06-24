@@ -12,7 +12,7 @@ class SimplePipeReader : public AbstractPipeReader
 
 public:
 
-  SimplePipeReader(bool noVideo);
+  explicit SimplePipeReader(bool noVideo);
   virtual ~SimplePipeReader();
 
   virtual void run();
@@ -35,7 +35,7 @@ protected:
 signals:
   void newData();
   void captureFrame(long index, QString directory);
-  void sourceName(QString name);
+  void sourceName(const QString& name);
 
 private:
 

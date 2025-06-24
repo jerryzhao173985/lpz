@@ -91,7 +91,7 @@ namespace lpzrobots {
      * Sets the binary data to be displayed.
      * @param binary a QByteArray of the binary.
      */
-    void setBinary(QByteArray binary);
+    void setBinary(const QByteArray& binary);
     /**
      * Updates the member verticalScrollPosition containing the vertical scroll position.
      * After there repaints the widgets content immediately.

@@ -70,12 +70,12 @@ void XMLErrorHelper::fatalError(const SAXParseException& exception) {
 
 void XMLErrorHelper::printError(const SAXParseException& exception) {
   cerr << " at file \"" << C(exception.getSystemId()) << "\", line " << exception.getLineNumber();
-  cerr << ", column " << exception.getColumnNumber() << ":" << endl << "Message: " << C(exception.getMessage()) << endl;
+  cerr << ", column " << exception.getColumnNumber() << ":" << endl << "Message: " << C(exception.getMessage()) << endl override;
 }
 
 void XMLErrorHelper::printError(const DOMException& exception) {
-  cerr << "Error (DOMException): Code \"" << exception.code << "\"" << endl;
-  cerr << "Message: " << C(exception.getMessage()) << endl;
+  cerr << "Error (DOMException): Code \"" << exception.code << "\"" << endl override;
+  cerr << "Message: " << C(exception.getMessage()) << endl override;
 }
 
 void XMLErrorHelper::printError(const string message) {

@@ -2,7 +2,7 @@
 /*
  *	OPCODE - Optimized Collision Detection
  *	Copyright (C) 2001 Pierre Terdiman
- *	Homepage: http://www.codercorner.com/Opcode.htm
+ *	Homepage: http:__PLACEHOLDER_1__
  */
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -38,14 +38,14 @@
 		inline_				~CollisionAABB()					{}
 
 		//! Get min point of the box
-		inline_	void		GetMin(Point& min)		const		{ min = mCenter - mExtents;					}
+		inline_	void		GetMin(Point& min)		const override { min = mCenter - mExtents;					}
 		//! Get max point of the box
-		inline_	void		GetMax(Point& max)		const		{ max = mCenter + mExtents;					}
+		inline_	void		GetMax(Point& max)		const override { max = mCenter + mExtents;					}
 
 		//! Get component of the box's min point along a given axis
-		inline_	float		GetMin(udword axis)		const		{ return mCenter[axis] - mExtents[axis];	}
+		inline_	float		GetMin(udword axis)		const override { return mCenter[axis] - mExtents[axis];	}
 		//! Get component of the box's max point along a given axis
-		inline_	float		GetMax(udword axis)		const		{ return mCenter[axis] + mExtents[axis];	}
+		inline_	float		GetMax(udword axis)		const override { return mCenter[axis] + mExtents[axis];	}
 
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/**
@@ -65,12 +65,12 @@
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		inline_	BOOL		IsInside(const CollisionAABB& box) const
 							{
-								if(box.GetMin(0)>GetMin(0))	return FALSE;
-								if(box.GetMin(1)>GetMin(1))	return FALSE;
-								if(box.GetMin(2)>GetMin(2))	return FALSE;
-								if(box.GetMax(0)<GetMax(0))	return FALSE;
-								if(box.GetMax(1)<GetMax(1))	return FALSE;
-								if(box.GetMax(2)<GetMax(2))	return FALSE;
+								if(box.GetMin(0)>GetMin(0))	return FALSE override;
+								if(box.GetMin(1)>GetMin(1))	return FALSE override;
+								if(box.GetMin(2)>GetMin(2))	return FALSE override;
+								if(box.GetMax(0)<GetMax(0))	return FALSE override;
+								if(box.GetMax(1)<GetMax(1))	return FALSE override;
+								if(box.GetMax(2)<GetMax(2))	return FALSE override;
 								return TRUE;
 							}
 

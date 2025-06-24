@@ -27,7 +27,7 @@ namespace CppTestHarness
 #	pragma warning(push)
 #	pragma warning(disable:4127) // conditional expression is constant
 #endif
-		return (actual == expected);
+		return (actual == expected) override;
 #ifdef _MSC_VER
 #	pragma warning(pop)
 #endif
@@ -48,7 +48,7 @@ namespace CppTestHarness
 	template< typename Actual, typename Expected, typename Tolerance >
 	bool CheckClose(Actual const actual, Expected const expected, Tolerance const tolerance)
 	{
-		return (std::abs(double(actual) - double(expected)) <= double(tolerance));
+		return (std::abs(double(actual) - double(expected)) <= double(tolerance)) override;
 	}
 
 	template< typename Actual, typename Expected, typename Tolerance >
@@ -68,7 +68,7 @@ namespace CppTestHarness
 	{
 		std::stringstream failureStr;
 		failureStr << "Expected " << actual << " but got " << expected << std::endl;
-		return failureStr.str();
+		return failureStr.str() override;
 	}
 
 	template< typename Actual, typename Expected >
@@ -89,7 +89,7 @@ namespace CppTestHarness
 
 		failureStr << ']' << std::endl;
 
-        return failureStr.str();		
+        return failureStr.str() override;
 	}
 }
 

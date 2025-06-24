@@ -38,7 +38,7 @@ public:
   using Neighbours = std::list<std::pair<int, double>>;
   using Neighbourhood = std::vector<std::pair<matrix::Matrix, double>>;
 
-  explicit SOM(const std::string& name = "SOM", const std::string& revision = "$Id$");
+  SOM(const std::string& name = "SOM", const std::string& revision = "$Id$");
 
   /** create a som
       @param dimensions number of dimensions of the neuron lattice
@@ -49,11 +49,11 @@ public:
       double rbfsize,
       const std::string& name = "SOM",
       const std::string& revision = "$Id$");
-  virtual ~SOM() override {};
+  virtual ~SOM() {};
 
   /** initialised som
       @param inputDim dimension of input vector
-      @param outputDim number of outputneurons (must be a multiple of "dimensions" given at
+      @param outputDim number of outputneurons (must be a multiple of __PLACEHOLDER_6__ given at
      constructor)
       @param unit_map if zero then weights are randomly choosed, otherwise
              uniformly distributed in the inputspace of size (unit_map x unit_map x ...)
@@ -61,9 +61,9 @@ public:
   virtual void init(unsigned int inputDim,
                     unsigned int outputDim,
                     double unit_map = 0.0,
-                    RandGen* randGen = nullptr) override;
+                    RandGen* randGen = nullptr);
 
-  virtual const matrix::Matrix process(const matrix::Matrix& input) override;
+  virtual const matrix::Matrix process(const matrix::Matrix& input);
 
   /*  performs training. Nominal output is ignored.
       A zero-Matrix is returned.
@@ -72,7 +72,7 @@ public:
   */
   virtual const matrix::Matrix learn(const matrix::Matrix& input,
                                      const matrix::Matrix& nom_output,
-                                     double learnRateFactor = 1) override;
+                                     double learnRateFactor = 1);
 
   virtual void damp(double damping) override {
     return;
@@ -86,17 +86,16 @@ public:
   }
 
   virtual bool store(FILE* f) const override;
-  virtual bool restore(FILE* f) override;
+  virtual bool restore(FILE* f);
 
   virtual void printWeights(FILE* f) const;
 
-  const Neighbourhood& getNeighbourhood() {
+  const Neighbourhood& getNeighbourhood() const {
     return neighbourhood;
   }
 
 protected:
-  /// activation function (rbf)
-  static double activationfunction(void* rdfsize, double d);
+  /// activation function static_cast<rbf>(static) double activationfunction(void* rdfsize, double d);
 
   /// checks whether the given coordinate is within the lattice
   static bool validCoord(const matrix::Matrix& m, int size);
@@ -113,20 +112,20 @@ protected:
   Neighbours getNeighbours(int winner);
 
 public:
-  double eps; ///< learning rate for weight update
+  double eps = 0; ///< learning rate for weight update
 private:
   std::vector<matrix::Matrix> weights;
   std::vector<matrix::Matrix> diffvectors; ///< temporary difference vectors
   matrix::Matrix distances;                ///< vector of distances
-  int dimensions;                          ///< number of dimensions of lattice
-  double sigma;                            ///< neighbourhood size
-  double rbfsize;                          ///< size of rbf function
-  int size;                                ///< size of the lattice in each dimension
+  int dimensions = 0;                          ///< number of dimensions of lattice
+  double sigma = 0;                            ///< neighbourhood size
+  double rbfsize = 0;                          ///< size of rbf function
+  int size = 0;                                ///< size of the lattice in each dimension
 
   /// list of vectors defining relative neighbourhood coordinates and weights
   Neighbourhood neighbourhood;
 
-  bool initialised;
+  bool initialised = false;
 };
 
 #endif

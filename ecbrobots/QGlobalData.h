@@ -31,9 +31,9 @@
  *
  *   Revision 1.3  2010/11/26 12:22:37  guettler
  *   - Configurable interface now allows to set bounds of paramval and paramint
- *     * setting bounds for paramval and paramint is highly recommended (for QConfigurable (Qt GUI).
+ *     * setting bounds for paramval and paramint is highly recommended (for QConfigurable(const Qt& GUI).
  *   - bugfixes
- *   - current development state of QConfigurable (Qt GUI)
+ *   - current development state of QConfigurable(const Qt& GUI)
  *
  *   Revision 1.2  2010/11/11 15:34:59  wrabe
  *   - some extensions for QMessageClient (e.g. quitServer())
@@ -159,7 +159,7 @@ namespace lpzrobots {
       /**
        * if emitted, given QString will be forwarded to the log window (managed by QECBManager)
        */
-      void sig_textLog(QString log);
+      void sig_textLog(const QString& log);
 
     protected:
       bool warningOutput;

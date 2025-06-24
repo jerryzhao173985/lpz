@@ -1,99 +1,148 @@
 #!/usr/bin/env python3
-"""Fix C-style casts to C++ style casts."""
+"""
+Replace C-style casts with modern C++ casts.
+This script converts (type)value to static_cast<type>(value) and similar.
+"""
 
-import re
 import os
-import subprocess
+import re
+import sys
 
-def fix_cstyle_casts(filepath):
-    """Replace C-style casts with appropriate C++ casts."""
-    if not os.path.exists(filepath):
-        return False
+def fix_cstyle_casts_in_file(filepath):
+    """Fix C-style casts in a single file."""
+    try:
+        with open(filepath, 'r') as f:
+            content = f.read()
+    except Exception as e:
+        print(f"Error reading {filepath}: {e}")
+        return 0
     
-    # Skip backup files
-    if '.bak' in filepath:
-        return False
+    original_content = content
+    changes = 0
     
-    # Create backup
-    backup_path = filepath + '.bak.cast'
-    if not os.path.exists(backup_path):
-        subprocess.run(['cp', filepath, backup_path], check=True)
-    
-    with open(filepath, 'r', encoding='utf-8', errors='ignore') as f:
-        content = f.read()
-    
-    changes = []
-    modified = content
-    
-    # Pattern for C-style casts: (type)expression
-    patterns = [
-        # Pointer casts
-        (r'\((\w+)\s*\*\s*\)\s*(\w+)', r'static_cast<\1*>(\2)'),
-        (r'\((const\s+\w+)\s*\*\s*\)\s*(\w+)', r'static_cast<\1*>(\2)'),
-        (r'\((\w+)\s*\*\s*\)\s*\(([^)]+)\)', r'static_cast<\1*>(\2)'),
-        (r'\((void)\s*\*\s*\)\s*(\w+)', r'static_cast<\1*>(\2)'),
-        # Basic type casts
-        (r'\((int|double|float|long|short|char|bool)\)\s*(\w+)', r'static_cast<\1>(\2)'),
-        (r'\((int|double|float|long|short|char|bool)\)\s*\(([^)]+)\)', r'static_cast<\1>(\2)'),
-        # Unsigned type casts
-        (r'\((unsigned\s+int|unsigned\s+long|unsigned\s+short|size_t)\)\s*(\w+)', r'static_cast<\1>(\2)'),
-        (r'\((unsigned\s+int|unsigned\s+long|unsigned\s+short|size_t)\)\s*\(([^)]+)\)', r'static_cast<\1>(\2)'),
+    # Common cast patterns to replace
+    cast_patterns = [
+        # (int)expr -> static_cast<int>(expr)
+        (r'\(int\)\s*([a-zA-Z_]\w*(?:\[[^\]]+\])?(?:\.\w+)*(?:\([^)]*\))?)',
+         r'static_cast<int>(\1)'),
+        
+        # (double)expr -> static_cast<double>(expr)
+        (r'\(double\)\s*([a-zA-Z_]\w*(?:\[[^\]]+\])?(?:\.\w+)*(?:\([^)]*\))?)',
+         r'static_cast<double>(\1)'),
+        
+        # (float)expr -> static_cast<float>(expr)
+        (r'\(float\)\s*([a-zA-Z_]\w*(?:\[[^\]]+\])?(?:\.\w+)*(?:\([^)]*\))?)',
+         r'static_cast<float>(\1)'),
+        
+        # (unsigned int)expr -> static_cast<unsigned int>(expr)
+        (r'\(unsigned\s+int\)\s*([a-zA-Z_]\w*(?:\[[^\]]+\])?(?:\.\w+)*(?:\([^)]*\))?)',
+         r'static_cast<unsigned int>(\1)'),
+        
+        # (size_t)expr -> static_cast<size_t>(expr)
+        (r'\(size_t\)\s*([a-zA-Z_]\w*(?:\[[^\]]+\])?(?:\.\w+)*(?:\([^)]*\))?)',
+         r'static_cast<size_t>(\1)'),
+        
+        # (bool)expr -> static_cast<bool>(expr)
+        (r'\(bool\)\s*([a-zA-Z_]\w*(?:\[[^\]]+\])?(?:\.\w+)*(?:\([^)]*\))?)',
+         r'static_cast<bool>(\1)'),
+        
+        # (char)expr -> static_cast<char>(expr)
+        (r'\(char\)\s*([a-zA-Z_]\w*(?:\[[^\]]+\])?(?:\.\w+)*(?:\([^)]*\))?)',
+         r'static_cast<char>(\1)'),
+        
+        # (unsigned char)expr -> static_cast<unsigned char>(expr)
+        (r'\(unsigned\s+char\)\s*([a-zA-Z_]\w*(?:\[[^\]]+\])?(?:\.\w+)*(?:\([^)]*\))?)',
+         r'static_cast<unsigned char>(\1)'),
+        
+        # (short)expr -> static_cast<short>(expr)
+        (r'\(short\)\s*([a-zA-Z_]\w*(?:\[[^\]]+\])?(?:\.\w+)*(?:\([^)]*\))?)',
+         r'static_cast<short>(\1)'),
+        
+        # (long)expr -> static_cast<long>(expr)
+        (r'\(long\)\s*([a-zA-Z_]\w*(?:\[[^\]]+\])?(?:\.\w+)*(?:\([^)]*\))?)',
+         r'static_cast<long>(\1)'),
+        
+        # (void*)expr -> static_cast<void*>(expr)
+        (r'\(void\s*\*\)\s*([a-zA-Z_]\w*(?:\[[^\]]+\])?(?:\.\w+)*(?:\([^)]*\))?)',
+         r'static_cast<void*>(\1)'),
+        
+        # (const char*)expr -> static_cast<const char*>(expr)
+        (r'\(const\s+char\s*\*\)\s*([a-zA-Z_]\w*(?:\[[^\]]+\])?(?:\.\w+)*(?:\([^)]*\))?)',
+         r'static_cast<const char*>(\1)'),
     ]
     
-    for pattern, replacement in patterns:
-        matches = list(re.finditer(pattern, modified))
-        for match in reversed(matches):
-            # Skip if it's already a C++ cast
-            if 'static_cast' in modified[max(0, match.start()-20):match.start()]:
-                continue
-            if 'dynamic_cast' in modified[max(0, match.start()-20):match.start()]:
-                continue
-            if 'reinterpret_cast' in modified[max(0, match.start()-20):match.start()]:
-                continue
-            if 'const_cast' in modified[max(0, match.start()-20):match.start()]:
-                continue
-            
-            new_text = re.sub(pattern, replacement, match.group(0))
-            modified = modified[:match.start()] + new_text + modified[match.end():]
-            changes.append(('C-style cast → static_cast', match.start()))
+    # More complex pattern for pointer casts
+    # (Type*)expr -> static_cast<Type*>(expr) or reinterpret_cast<Type*>(expr)
+    pointer_pattern = re.compile(
+        r'\(([a-zA-Z_]\w*(?:::[a-zA-Z_]\w*)*)\s*\*\)\s*([a-zA-Z_]\w*(?:\[[^\]]+\])?(?:\.\w+)*(?:\([^)]*\))?)'
+    )
     
-    # Special case for malloc/calloc casts
-    malloc_pattern = r'\((\w+\s*\*)\)\s*(malloc|calloc)\s*\('
-    malloc_matches = list(re.finditer(malloc_pattern, modified))
-    for match in reversed(malloc_matches):
-        type_str = match.group(1).strip()
-        func = match.group(2)
-        new_text = f'static_cast<{type_str}>({func}('
-        modified = modified[:match.start()] + new_text + modified[match.start() + len(match.group(0)):]
-        changes.append(('malloc cast → static_cast', match.start()))
+    # Apply simple cast patterns
+    for pattern, replacement in cast_patterns:
+        new_content = re.sub(pattern, replacement, content)
+        if new_content != content:
+            changes += len(re.findall(pattern, content))
+            content = new_content
     
-    if changes:
-        print(f"  Fixed {len(changes)} C-style casts")
-        with open(filepath, 'w', encoding='utf-8') as f:
-            f.write(modified)
-        return True
+    # Handle pointer casts
+    def replace_pointer_cast(match):
+        nonlocal changes
+        type_name = match.group(1)
+        expr = match.group(2)
+        changes += 1
+        # Use static_cast for most pointer conversions
+        # Could use reinterpret_cast for low-level conversions
+        return f'static_cast<{type_name}*>({expr})'
     
-    return False
+    content = pointer_pattern.sub(replace_pointer_cast, content)
+    
+    # Special case: NULL casts
+    null_cast_pattern = re.compile(r'\([^)]+\*\)\s*NULL\b')
+    content = null_cast_pattern.sub('nullptr', content)
+    
+    # Count NULL replacements
+    null_pattern = re.compile(r'\bNULL\b')
+    null_replacements = len(null_pattern.findall(content))
+    if null_replacements > 0:
+        content = null_pattern.sub('nullptr', content)
+        changes += null_replacements
+    
+    if content != original_content:
+        try:
+            with open(filepath, 'w') as f:
+                f.write(content)
+            print(f"Fixed {changes} C-style casts in {filepath}")
+        except Exception as e:
+            print(f"Error writing {filepath}: {e}")
+            return 0
+    
+    return changes
 
 def main():
-    # Process specific files with C-style cast warnings
-    files_to_fix = [
-        'selforg/agent.cpp',
-        'selforg/controller/abstractiafcontroller.h',
-        'selforg/controller/regularisation.h',
-        'selforg/controller/crossmotorcoupling.h',
-        'selforg/controller/dep.cpp',
-        'selforg/controller/discretecontrolleradapter.cpp',
-        'selforg/controller/measureadapter.cpp'
-    ]
-    
-    modified_count = 0
-    for filepath in files_to_fix:
-        print(f"\nProcessing: {filepath}")
-        if fix_cstyle_casts(filepath):
-            modified_count += 1
-    
-    print(f"\nTotal files modified: {modified_count}")
+    if len(sys.argv) > 1:
+        # Process specific files
+        total_changes = 0
+        for filepath in sys.argv[1:]:
+            if os.path.isfile(filepath) and (filepath.endswith('.h') or filepath.endswith('.cpp')):
+                total_changes += fix_cstyle_casts_in_file(filepath)
+        print(f"\nTotal C-style casts replaced: {total_changes}")
+    else:
+        # Process all .h and .cpp files in selforg and ode_robots
+        total_changes = 0
+        dirs_to_process = ['selforg', 'ode_robots']
+        
+        for dir_name in dirs_to_process:
+            if os.path.exists(dir_name):
+                for root, dirs, files in os.walk(dir_name):
+                    # Skip .svn directories
+                    if '.svn' in root:
+                        continue
+                    for file in files:
+                        if file.endswith(('.h', '.cpp')):
+                            filepath = os.path.join(root, file)
+                            total_changes += fix_cstyle_casts_in_file(filepath)
+        
+        print(f"\nTotal C-style casts replaced: {total_changes}")
 
 if __name__ == '__main__':
     main()

@@ -96,10 +96,8 @@ public:
     { dGeomSetCategoryBits (_id, bits); }
   void setCollideBits (unsigned long bits)
     { dGeomSetCollideBits (_id, bits); }
-  unsigned long getCategoryBits()
-    { return dGeomGetCategoryBits (_id); }
-  unsigned long getCollideBits()
-    { return dGeomGetCollideBits (_id); }
+  unsigned long getCategoryBits() const { return dGeomGetCategoryBits (_id); }
+  unsigned long getCollideBits() const { return dGeomGetCollideBits (_id); }
 
   void enable()
     { dGeomEnable (_id); }
@@ -152,8 +150,7 @@ public:
 
   void setCleanup (int mode)
     { dSpaceSetCleanup (id(), mode); }
-  int getCleanup()
-    { return dSpaceGetCleanup (id()); }
+  int getCleanup() const { return dSpaceGetCleanup (id()); }
 
   void add (dGeomID x)
     { dSpaceAdd (id(), x); }
@@ -162,10 +159,8 @@ public:
   int query (dGeomID x)
     { return dSpaceQuery (id(),x); }
 
-  int getNumGeoms()
-    { return dSpaceGetNumGeoms (id()); }
-  dGeomID getGeom (int i)
-    { return dSpaceGetGeom (id(),i); }
+  int getNumGeoms() const { return dSpaceGetNumGeoms (id()); }
+  dGeomID getGeom (int i) const { return dSpaceGetGeom (id(),i); }
 
   void collide (void *data, dNearCallback *callback)
     { dSpaceCollide (id(),data,callback); }
@@ -371,8 +366,7 @@ public:
 
   void setLength (dReal length)
     { dGeomRaySetLength (_id, length); }
-  dReal getLength()
-    { return dGeomRayGetLength (_id); }
+  dReal getLength() const { return dGeomRayGetLength (_id); }
 
   void set (dReal px, dReal py, dReal pz, dReal dx, dReal dy, dReal dz)
     { dGeomRaySet (_id, px, py, pz, dx, dy, dz); }
@@ -400,18 +394,15 @@ public:
 #endif
   void setBackfaceCull (int backfaceCull)
     { dGeomRaySetBackfaceCull (_id, backfaceCull); }
-  int getBackfaceCull()
-    { return dGeomRayGetBackfaceCull (_id); }
+  int getBackfaceCull() const { return dGeomRayGetBackfaceCull (_id); }
 
   void setFirstContact (int firstContact)
     { dGeomRaySetFirstContact (_id, firstContact); }
-  int getFirstContact()
-    { return dGeomRayGetFirstContact (_id); }
+  int getFirstContact() const { return dGeomRayGetFirstContact (_id); }
 
   void setClosestHit (int closestHit)
     { dGeomRaySetClosestHit (_id, closestHit); }
-  int getClosestHit()
-    { return dGeomRayGetClosestHit (_id); }
+  int getClosestHit() const { return dGeomRayGetClosestHit (_id); }
 };
 
 #ifdef _MSC_VER
@@ -446,13 +437,11 @@ public:
 
   void setCleanup (int mode)
     { dGeomTransformSetCleanup (_id,mode); }
-  int getCleanup ()
-    { return dGeomTransformGetCleanup (_id); }
+  int getCleanup () const { return dGeomTransformGetCleanup (_id); }
 
   void setInfo (int mode)
     { dGeomTransformSetInfo (_id,mode); }
-  int getInfo()
-    { return dGeomTransformGetInfo (_id); }
+  int getInfo() const { return dGeomTransformGetInfo (_id); }
 };
 
 #ifdef _MSC_VER

@@ -67,7 +67,7 @@ namespace lpzrobots {
     ~RaySensor();
 
     ///Create a copy of this without initialization
-    virtual RaySensor* clone() const;
+    virtual RaySensor* clone() const override;
 
     void setPose(const osg::Matrix& pose);
 
@@ -75,11 +75,11 @@ namespace lpzrobots {
 
     bool sense(const GlobalData& globaldata);
 
-    int get(sensor* sensors, int length) const;
+    int get(sensor* sensors, int length) const override;
 
-    std::list<sensor> getList() const;
+    std::list<sensor> getList() const override;
 
-    virtual int getSensorNumber() const;
+    virtual int getSensorNumber() const override;
 
     virtual void update();
 
@@ -97,19 +97,19 @@ namespace lpzrobots {
     //by every constructor
     void defaultInit();
 
-    double size; // size of graphical sensor
-    double range; // max length
+    double size = 0; // size of graphical sensor
+    double range = 0; // max length
     rayDrawMode drawMode;
 
-    double len;   // measured length
-    double lastlen; //last measured length
-    double detection;   // detected length (internally used)
-    long lasttimeasked; // used to make sense return the same number if called two times in one timestep
+    double len = 0;   // measured length
+    double lastlen = 0; //last measured length
+    double detection = 0;   // detected length (internally used)
+    long lasttimeasked = 0; // used to make sense return the same number if called two times in one timestep
 
     OSGCylinder* sensorBody;
     Transform* transform;
     Ray* ray;
-    bool initialised;
+    bool initialised = false;
 
   };
 

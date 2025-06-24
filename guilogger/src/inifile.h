@@ -42,19 +42,19 @@ class IniVar;
 class IniFile {
 public:
   IniFile();
-  explicit IniFile(QString _filename);
+  explicit IniFile(const QString& _filename);
   ~IniFile();
 
   bool Load();  //liest Datei ein und speichert alle Infos in den Variablen
   bool Save();  // Speichert alle Infos wieder ab. ACHTUNG eine vorhandene Datei wird ueberschrieben.
   void Clear(); // Loescht alle Infos aus den Vars. Aus Sicherheitsgr�nden wird der Dateiname intern auf "" gesetzt
 
-  void setFilename(QString _filename);
+  void setFilename(const QString& _filename);
   QString getFilename();
 
 
-  void setComment(QString _comment);
-  void addComment(QString _comment);
+  void setComment(const QString& _comment);
+  void addComment(const QString& _comment);
   QString getComment();
 
   // liefert eine Section mit dem Namen zurueck, beim direkt folgenden Aufruf gibt sie die n�chste
@@ -86,13 +86,13 @@ private:
 class IniSection {
 public:
   IniSection();
-  explicit IniSection(QString _name);
+  explicit IniSection(const QString& _name);
   ~IniSection();
 
-  void    setName(QString _name);
+  void setName(const QString& _name);
   QString getName();
-  void    setComment(QString _comment);
-  void    addComment(QString _addcomment);
+  void setComment(const QString& _comment);
+  void addComment(const QString& _addcomment);
   QString getComment();
 
 
@@ -120,11 +120,11 @@ public:
   IniVar(QString _name,QString _value,QString _comment);
   ~IniVar();
 
-  void    setName(QString _name);
+  void setName(const QString& _name);
   QString getName();
-  void    setValue(QString _value);
+  void setValue(const QString& _value);
   QString getValue();
-  void    setComment(QString _comment);
+  void setComment(const QString& _comment);
   QString getComment();
 
   bool operator== (IniVar& _var); // Vergleicht nur Namen!

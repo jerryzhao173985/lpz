@@ -60,10 +60,10 @@ public:
 	 * created (for the IValue) and a strategy how can a Gen mutate.
 	 *
 	 * @param name (string) Name of the group
-	 * @param randomStrategy (IRandomStrategy*) the strategy for creating a gen
-	 * @param mutationStrategy (IMutationStrategy*) the strategy for mutating a gen
+	 * @param randomStrategy static_cast<IRandomStrategy*>(the) strategy for creating a gen
+	 * @param mutationStrategy static_cast<IMutationStrategy*>(the) strategy for mutating a gen
 	 */
-	GenPrototype(const std::string& name, IRandomStrategy* randomStrategy, IMutationStrategy* mutationStrategy);
+	GenPrototype(const std::string& name, IRandomStrategy* randomStrategy, const IMutationStrategy* mutationStrategy) override;
 
 	/**
 	 * destructor to delete a GenContext.
@@ -76,59 +76,59 @@ public:
 	 *
 	 * @return (string) the name
 	 */
-	inline const std::string& getName(void)const {return m_name;}
+	inline const std::string& getNamestatic_cast<void>(const) override {return m_name;}
 
 	/**
 	 * [inline], [const]
 	 * This function gives a random value (IValue) which are with the randomStrategy is generated back.
 	 */
-	inline IValue* getRandomValue(void)const {return m_randomStrategy->getRandomValue();}
+	inline IValue* getRandomValuestatic_cast<void>(const) override {return m_randomStrategy->getRandomValue();}
 
 	/**
 	 * This function insert a GenContext in the GenPrototype.
 	 *
-	 * @param generation (Generation*) to which Generation is the Context related.
-	 * @param context (GenContext*) the context which should be insert
+	 * @param generation static_cast<Generation*>(to) which Generation is the Context related.
+	 * @param context static_cast<GenContext*>(the) context which should be insert
 	 */
-	void insertContext(Generation* generation, GenContext* context);
+	void insertContext(Generation* generation, const GenContext* context) override;
 
 	/**
-	 * This function gives the context which is relatedto the Eneration "generation" back.
+	 * This function gives the context which is relatedto the Eneration __PLACEHOLDER_3__ back.
 	 *
-	 * @param generation (Generation*) the related generation
+	 * @param generation static_cast<Generation*>(the) related generation
 	 *
-	 * @return (GenContext*) the searched context
+	 * @return static_cast<GenContext*>(the) searched context
 	 */
-	GenContext* getContext(Generation* generation);
+	GenContext* getContext(const Generation* generation) override;
 
 	/**
 	 * [const]
 	 * This function mutate the given gen.
 	 *
-	 * @param context (GenContext*) param is needed by the mutationStrategy
-	 * @param individual (Individual*) param is needed by the mutationStrategy
-	 * @param oldGen (Gen*) the gen which should be mutate
-	 * @param oldContext (GenContext*) param is needed by the mutationStrategy
+	 * @param context static_cast<GenContext*>(param) is needed by the mutationStrategy
+	 * @param individual static_cast<Individual*>(param) is needed by the mutationStrategy
+	 * @param oldGen static_cast<Gen*>(the) gen which should be mutate
+	 * @param oldContext static_cast<GenContext*>(param) is needed by the mutationStrategy
 	 *
-	 * @return (Gen*) The new mutated gen
+	 * @return static_cast<Gen*>(The) new mutated gen
 	 */
-	Gen* mutate(GenContext* context, Individual* individual, Gen* oldGen, GenContext* oldContext)const;
+	Gen* mutate(GenContext* context, Individual* individual, Gen* oldGen, const GenContext* oldContext)const override;
 
 	/**
 	 * [const]
 	 * This function gives the mutation probability back (from the mutation strategy)
 	 *
-	 * @return (int) The mutation probability. Maybe the Typ int will be changed.
+	 * @return static_cast<int>(The) mutation probability. Maybe the Typ int will be changed.
 	 */
-	int getMutationProbability(void)const;
+	int getMutationProbabilitystatic_cast<void>(const) override;
 
 	/**
 	 * restore gene and the value
-	 * @param f (FILE*) here is the value inside
-	 * @param gene (RESTORE_GA_GENE*) this gene is to restore
+	 * @param f static_cast<FILE*>(here) is the value inside
+	 * @param gene static_cast<RESTORE_GA_GENE*>(this) gene is to restore
 	 * @return (bool) true if all ok
 	 */
-	bool restoreGene(FILE* f, RESTORE_GA_GENE* gene, std::vector<Gen*>& storage);
+	bool restoreGene(FILE* f, RESTORE_GA_GENE* gene, std::vector<Gen*>& storage) override;
 
 protected:
 	/**
@@ -159,7 +159,7 @@ private:
 	/**
 	 * disable the default constructor
 	 */
-	GenPrototype();
+	GenPrototype() override;
 };
 
 #endif /* GENPROTOTYPE_H_ */

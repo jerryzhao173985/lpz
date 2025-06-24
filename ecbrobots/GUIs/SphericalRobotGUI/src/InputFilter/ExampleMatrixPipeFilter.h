@@ -50,7 +50,7 @@ public:
 	ExampleMatrixPipeFilter();
 	virtual ~ExampleMatrixPipeFilter();
 
-	virtual AbstractPlotChannel* createChannel(std::string name);
+	virtual AbstractPlotChannel* createChannel(const std::string& name);
 
 	/**
 	  * The dataLine from PipeReader will be iterate to set the new channel-value.

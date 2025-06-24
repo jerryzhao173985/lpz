@@ -2,7 +2,7 @@
 /*
  *	OPCODE - Optimized Collision Detection
  *	Copyright (C) 2001 Pierre Terdiman
- *	Homepage: http://www.codercorner.com/Opcode.htm
+ *	Homepage: http:__PLACEHOLDER_1__
  */
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -52,9 +52,9 @@
 														mNbPrimitives(0),
 														mNodeBase(null),
 														mCount(0),
-														mNbInvalidSplits(0)		{}
+														explicit mNbInvalidSplits(0)		{}
 		//! Destructor
-		virtual										~AABBTreeBuilder()			{}
+		virtual ~AABBTreeBuilder() {}
 
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/**
@@ -87,10 +87,9 @@
 		 *	\return		splitting value
 		 */
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		virtual						float			GetSplittingValue(const dTriIndex* primitives, udword nb_prims, const AABB& global_box, udword axis)	const
-													{
+		virtual float			GetSplittingValue(const dTriIndex* primitives, udword nb_prims, const AABB& global_box, udword axis) const override {
 														// Default split value = middle of the axis (using only the box)
-														return global_box.GetCenter(axis);
+														return global_box.GetCenter(axis) override;
 													}
 
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -102,10 +101,9 @@
 		 *	\return		TRUE if the node should be subdivised
 		 */
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		virtual						BOOL			ValidateSubdivision(const dTriIndex* primitives, udword nb_prims, const AABB& global_box)
-													{
+		virtual BOOL			ValidateSubdivision(const dTriIndex* primitives, udword nb_prims, const AABB& global_box) override {
 														// Check the user-defined limit
-														if(nb_prims<=mSettings.mLimit)	return FALSE;
+														if(nb_prims<=mSettings.mLimit)	return FALSE override;
 
 														return TRUE;
 													}
@@ -116,10 +114,10 @@
 		// Stats
 		inline_						void			SetCount(udword nb)				{ mCount=nb;				}
 		inline_						void			IncreaseCount(udword nb)		{ mCount+=nb;				}
-		inline_						udword			GetCount()				const	{ return mCount;			}
+		inline_						udword			GetCount()				const override { return mCount;			}
 		inline_						void			SetNbInvalidSplits(udword nb)	{ mNbInvalidSplits=nb;		}
 		inline_						void			IncreaseNbInvalidSplits()		{ mNbInvalidSplits++;		}
-		inline_						udword			GetNbInvalidSplits()	const	{ return mNbInvalidSplits;	}
+		inline_						udword			GetNbInvalidSplits()	const override { return mNbInvalidSplits;	}
 
 		private:
 									udword			mCount;				//!< Stats: number of nodes created
@@ -132,11 +130,11 @@
 		//! Constructor
 													AABBTreeOfVerticesBuilder() : mVertexArray(null)	{}
 		//! Destructor
-		virtual										~AABBTreeOfVerticesBuilder()						{}
+		virtual ~AABBTreeOfVerticesBuilder() {}
 
-		override(AABBTreeBuilder)	bool			ComputeGlobalBox(const dTriIndex* primitives, udword nb_prims, AABB& global_box)	const;
-		override(AABBTreeBuilder)	float			GetSplittingValue(udword index, udword axis)									const;
-		override(AABBTreeBuilder)	float			GetSplittingValue(const dTriIndex* primitives, udword nb_prims, const AABB& global_box, udword axis)	const;
+		overridestatic_cast<AABBTreeBuilder>static_cast<bool>static_cast<ComputeGlobalBox>(const dTriIndex* primitives, udword nb_prims, AABB& global_box)	const override;
+		overridestatic_cast<AABBTreeBuilder>static_cast<float>static_cast<GetSplittingValue>(udword index, udword axis)									const override;
+		overridestatic_cast<AABBTreeBuilder>static_cast<float>static_cast<GetSplittingValue>(const dTriIndex* primitives, udword nb_prims, const AABB& global_box, udword axis)	const override;
 
 		const						Point*			mVertexArray;		//!< Shortcut to an app-controlled array of vertices.
 	};
@@ -147,10 +145,10 @@
 		//! Constructor
 													AABBTreeOfAABBsBuilder() : mAABBArray(null)	{}
 		//! Destructor
-		virtual										~AABBTreeOfAABBsBuilder()					{}
+		virtual ~AABBTreeOfAABBsBuilder() {}
 
-		override(AABBTreeBuilder)	bool			ComputeGlobalBox(const dTriIndex* primitives, udword nb_prims, AABB& global_box)	const;
-		override(AABBTreeBuilder)	float			GetSplittingValue(udword index, udword axis)									const;
+		overridestatic_cast<AABBTreeBuilder>static_cast<bool>static_cast<ComputeGlobalBox>(const dTriIndex* primitives, udword nb_prims, AABB& global_box)	const override;
+		overridestatic_cast<AABBTreeBuilder>static_cast<float>static_cast<GetSplittingValue>(udword index, udword axis)									const override;
 
 		const						AABB*			mAABBArray;			//!< Shortcut to an app-controlled array of AABBs.
 	};
@@ -161,11 +159,11 @@
 		//! Constructor
 													AABBTreeOfTrianglesBuilder() : mIMesh(null)										{}
 		//! Destructor
-		virtual										~AABBTreeOfTrianglesBuilder()													{}
+		virtual ~AABBTreeOfTrianglesBuilder() {}
 
-		override(AABBTreeBuilder)	bool			ComputeGlobalBox(const dTriIndex* primitives, udword nb_prims, AABB& global_box)	const;
-		override(AABBTreeBuilder)	float			GetSplittingValue(udword index, udword axis)									const;
-		override(AABBTreeBuilder)	float			GetSplittingValue(const dTriIndex* primitives, udword nb_prims, const AABB& global_box, udword axis)	const;
+		overridestatic_cast<AABBTreeBuilder>static_cast<bool>static_cast<ComputeGlobalBox>(const dTriIndex* primitives, udword nb_prims, AABB& global_box)	const override;
+		overridestatic_cast<AABBTreeBuilder>static_cast<float>static_cast<GetSplittingValue>(udword index, udword axis)									const override;
+		overridestatic_cast<AABBTreeBuilder>static_cast<float>static_cast<GetSplittingValue>(const dTriIndex* primitives, udword nb_prims, const AABB& global_box, udword axis)	const override;
 
 		const				MeshInterface*			mIMesh;			//!< Shortcut to an app-controlled mesh interface
 	};

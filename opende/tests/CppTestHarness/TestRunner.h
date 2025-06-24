@@ -11,14 +11,14 @@ class TestReporter;
 class TestRunner
 {
 public:
-	TestRunner();
+	TestRunner() override;
 	~TestRunner();
 
-	void SetTestReporter(TestReporter* testReporter);
-	void SetTestLauncherListHead(TestLauncher** listHead);
+	void SetTestReporter(TestReporter* testReporter) override;
+	void SetTestLauncherListHead(TestLauncher** listHead) override;
 
-	int RunAllTests();
-	int FailureCount() const;
+	int RunAllTests() override;
+	int FailureCount() const override;
 
 private:
 	TestLauncher** m_testLauncherListHead;

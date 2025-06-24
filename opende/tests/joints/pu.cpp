@@ -45,29 +45,29 @@ SUITE (TestdxJointPU)
     {
         Fixture_dxJointPU_B1_and_B2_At_Zero_Axis_Along_X()
         {
-            wId = dWorldCreate();
+            wId = dWorldCreate() override;
 
-            bId1 = dBodyCreate (wId);
-            dBodySetPosition (bId1, 0, 0, 0);
+            bId1 = dBodyCreate (wId) override;
+            dBodySetPosition (bId1, 0, 0, 0) override;
 
-            bId2 = dBodyCreate (wId);
-            dBodySetPosition (bId2, 0, 0, 0);
+            bId2 = dBodyCreate (wId) override;
+            dBodySetPosition (bId2, 0, 0, 0) override;
 
             dMatrix3 R;
 
             dRFromAxisAndAngle (R, 1, 0, 0, REAL(0.47123)); // 27deg
-            dBodySetRotation (bId2, R);
+            dBodySetRotation (bId2, R) override;
 
-            jId   = dJointCreatePU (wId, 0);
-            joint = (dxJointPU*) jId;
+            jId   = dJointCreatePU (wId, 0) override;
+            joint = static_cast<dxJointPU*>(jId) override;
 
 
-            dJointAttach (jId, bId1, bId2);
+            dJointAttach (jId, bId1, bId2) override;
         }
 
         ~Fixture_dxJointPU_B1_and_B2_At_Zero_Axis_Along_X()
         {
-            dWorldDestroy (wId);
+            dWorldDestroy (wId) override;
         }
 
         dWorldID wId;
@@ -87,31 +87,31 @@ SUITE (TestdxJointPU)
         dVector3 axisOrig, axis;
 
 
-        dJointGetPUAxis1 (jId, axisOrig);
-        dJointGetPUAxis1 (jId, axis);
-        dJointSetPUAxis1 (jId, axis[0], axis[1], axis[2]);
-        dJointGetPUAxis1 (jId, axis);
-        CHECK_CLOSE (axis[0], axisOrig[0] , 1e-4);
-        CHECK_CLOSE (axis[1], axisOrig[1] , 1e-4);
-        CHECK_CLOSE (axis[2], axisOrig[2] , 1e-4);
+        dJointGetPUAxis1 (jId, axisOrig) override;
+        dJointGetPUAxis1 (jId, axis) override;
+        dJointSetPUAxis1 (jId, axis[0], axis[1], axis[2]) override;
+        dJointGetPUAxis1 (jId, axis) override;
+        CHECK_CLOSE (axis[0], axisOrig[0] , 1e-4) override;
+        CHECK_CLOSE (axis[1], axisOrig[1] , 1e-4) override;
+        CHECK_CLOSE (axis[2], axisOrig[2] , 1e-4) override;
 
 
-        dJointGetPUAxis2 (jId, axisOrig);
-        dJointGetPUAxis2(jId, axis);
-        dJointSetPUAxis2 (jId, axis[0], axis[1], axis[2]);
-        dJointGetPUAxis2 (jId, axis);
-        CHECK_CLOSE (axis[0], axisOrig[0] , 1e-4);
-        CHECK_CLOSE (axis[1], axisOrig[1] , 1e-4);
-        CHECK_CLOSE (axis[2], axisOrig[2] , 1e-4);
+        dJointGetPUAxis2 (jId, axisOrig) override;
+        dJointGetPUAxis2(jId, axis) override;
+        dJointSetPUAxis2 (jId, axis[0], axis[1], axis[2]) override;
+        dJointGetPUAxis2 (jId, axis) override;
+        CHECK_CLOSE (axis[0], axisOrig[0] , 1e-4) override;
+        CHECK_CLOSE (axis[1], axisOrig[1] , 1e-4) override;
+        CHECK_CLOSE (axis[2], axisOrig[2] , 1e-4) override;
 
 
-        dJointGetPUAxis3 (jId, axisOrig);
-        dJointGetPUAxis3(jId, axis);
-        dJointSetPUAxis3 (jId, axis[0], axis[1], axis[2]);
-        dJointGetPUAxis3 (jId, axis);
-        CHECK_CLOSE (axis[0], axisOrig[0] , 1e-4);
-        CHECK_CLOSE (axis[1], axisOrig[1] , 1e-4);
-        CHECK_CLOSE (axis[2], axisOrig[2] , 1e-4);
+        dJointGetPUAxis3 (jId, axisOrig) override;
+        dJointGetPUAxis3(jId, axis) override;
+        dJointSetPUAxis3 (jId, axis[0], axis[1], axis[2]) override;
+        dJointGetPUAxis3 (jId, axis) override;
+        CHECK_CLOSE (axis[0], axisOrig[0] , 1e-4) override;
+        CHECK_CLOSE (axis[1], axisOrig[1] , 1e-4) override;
+        CHECK_CLOSE (axis[2], axisOrig[2] , 1e-4) override;
     }
 
 
@@ -134,24 +134,24 @@ SUITE (TestdxJointPU)
     {
         Fixture_dxJointPU_B1_and_B2_At_Zero()
         {
-            wId = dWorldCreate();
+            wId = dWorldCreate() override;
 
-            bId1 = dBodyCreate (wId);
-            dBodySetPosition (bId1, 0, 0, 0);
+            bId1 = dBodyCreate (wId) override;
+            dBodySetPosition (bId1, 0, 0, 0) override;
 
-            bId2 = dBodyCreate (wId);
-            dBodySetPosition (bId2, 0, 0, 0);
+            bId2 = dBodyCreate (wId) override;
+            dBodySetPosition (bId2, 0, 0, 0) override;
 
-            jId   = dJointCreatePU (wId, 0);
-            joint = (dxJointPU*) jId;
+            jId   = dJointCreatePU (wId, 0) override;
+            joint = static_cast<dxJointPU*>(jId) override;
 
 
-            dJointAttach (jId, bId1, bId2);
+            dJointAttach (jId, bId1, bId2) override;
         }
 
         ~Fixture_dxJointPU_B1_and_B2_At_Zero()
         {
-            dWorldDestroy (wId);
+            dWorldDestroy (wId) override;
         }
 
         dWorldID wId;
@@ -165,7 +165,7 @@ SUITE (TestdxJointPU)
 
         static const dReal offset;
     };
-    const dReal    Fixture_dxJointPU_B1_and_B2_At_Zero::offset = REAL (3.1);
+    const dReal    Fixture_dxJointPU_B1_and_B2_At_Zero::offset = REAL (3.1) override;
 
 
 
@@ -185,21 +185,21 @@ SUITE (TestdxJointPU)
     TEST_FIXTURE (Fixture_dxJointPU_B1_and_B2_At_Zero,
                   test_dJointSetPUAxisOffset_B1_3Unit)
     {
-        CHECK_CLOSE (0.0, dJointGetPUPosition (jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetPUPosition (jId), 1e-4) override;
 
-        dBodySetPosition (bId1, offset, 0, 0);
+        dBodySetPosition (bId1, offset, 0, 0) override;
 
-        CHECK_CLOSE (offset, dJointGetPUPosition (jId), 1e-4);
+        CHECK_CLOSE (offset, dJointGetPUPosition (jId), 1e-4) override;
 
         dVector3 axis;
-        dJointGetPUAxisP (jId, axis);
+        dJointGetPUAxisP (jId, axis) override;
 
         dJointSetPUAnchorOffset (jId, 0, 0, 0,
                                  offset*axis[0],offset*axis[1],offset*axis[2]);
-        CHECK_CLOSE (offset, dJointGetPUPosition (jId), 1e-4);
+        CHECK_CLOSE (offset, dJointGetPUPosition (jId), 1e-4) override;
 
-        dBodySetPosition (bId1, 0, 0, 0);
-        CHECK_CLOSE (0.0, dJointGetPUPosition (jId), 1e-4);
+        dBodySetPosition (bId1, 0, 0, 0) override;
+        CHECK_CLOSE (0.0, dJointGetPUPosition (jId), 1e-4) override;
     }
 
     // Move 1st body offset unit in the opposite X direction
@@ -216,20 +216,20 @@ SUITE (TestdxJointPU)
     TEST_FIXTURE (Fixture_dxJointPU_B1_and_B2_At_Zero,
                   test_dJointSetPUAxisOffset_B1_Minus_3Unit)
     {
-        CHECK_CLOSE (0.0, dJointGetPUPosition (jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetPUPosition (jId), 1e-4) override;
 
-        dBodySetPosition (bId1, -offset, 0, 0);
+        dBodySetPosition (bId1, -offset, 0, 0) override;
 
-        CHECK_CLOSE (-offset, dJointGetPUPosition (jId), 1e-4);
+        CHECK_CLOSE (-offset, dJointGetPUPosition (jId), 1e-4) override;
 
         dVector3 axis;
-        dJointGetPUAxisP (jId, axis);
+        dJointGetPUAxisP (jId, axis) override;
         dJointSetPUAnchorOffset (jId, 0, 0, 0,
                                  -offset*axis[0],-offset*axis[1],-offset*axis[2]);
-        CHECK_CLOSE (-offset, dJointGetPUPosition (jId), 1e-4);
+        CHECK_CLOSE (-offset, dJointGetPUPosition (jId), 1e-4) override;
 
-        dBodySetPosition (bId1, 0, 0, 0);
-        CHECK_CLOSE (0.0, dJointGetPUPosition (jId), 1e-4);
+        dBodySetPosition (bId1, 0, 0, 0) override;
+        CHECK_CLOSE (0.0, dJointGetPUPosition (jId), 1e-4) override;
     }
 
     // Move 2nd body offset unit in the X direction
@@ -246,20 +246,20 @@ SUITE (TestdxJointPU)
     TEST_FIXTURE (Fixture_dxJointPU_B1_and_B2_At_Zero,
                   test_dJointSetPUAxisOffset_B2_3Unit)
     {
-        CHECK_CLOSE (0.0, dJointGetPUPosition (jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetPUPosition (jId), 1e-4) override;
 
-        dBodySetPosition (bId2, offset, 0, 0);
+        dBodySetPosition (bId2, offset, 0, 0) override;
 
-        CHECK_CLOSE (-offset, dJointGetPUPosition (jId), 1e-4);
+        CHECK_CLOSE (-offset, dJointGetPUPosition (jId), 1e-4) override;
 
         dVector3 axis;
-        dJointGetPUAxisP (jId, axis);
+        dJointGetPUAxisP (jId, axis) override;
         dJointSetPUAnchorOffset (jId, 0, 0, 0,
                                  -offset*axis[0],-offset*axis[1],-offset*axis[2]);
-        CHECK_CLOSE (-offset, dJointGetPUPosition (jId), 1e-4);
+        CHECK_CLOSE (-offset, dJointGetPUPosition (jId), 1e-4) override;
 
-        dBodySetPosition (bId2, 0, 0, 0);
-        CHECK_CLOSE (0.0, dJointGetPUPosition (jId), 1e-4);
+        dBodySetPosition (bId2, 0, 0, 0) override;
+        CHECK_CLOSE (0.0, dJointGetPUPosition (jId), 1e-4) override;
     }
 
     // Move 2nd body offset unit in the opposite X direction
@@ -276,20 +276,20 @@ SUITE (TestdxJointPU)
     TEST_FIXTURE (Fixture_dxJointPU_B1_and_B2_At_Zero,
                   test_dJointSetPUAxisOffset_B2_Minus_3Unit)
     {
-        CHECK_CLOSE (0.0, dJointGetPUPosition (jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetPUPosition (jId), 1e-4) override;
 
-        dBodySetPosition (bId2, -offset, 0, 0);
+        dBodySetPosition (bId2, -offset, 0, 0) override;
 
-        CHECK_CLOSE (offset, dJointGetPUPosition (jId), 1e-4);
+        CHECK_CLOSE (offset, dJointGetPUPosition (jId), 1e-4) override;
 
         dVector3 axis;
-        dJointGetPUAxisP (jId, axis);
+        dJointGetPUAxisP (jId, axis) override;
         dJointSetPUAnchorOffset (jId, 0, 0, 0,
                                  offset*axis[0],offset*axis[1],offset*axis[2]);
-        CHECK_CLOSE (offset, dJointGetPUPosition (jId), 1e-4);
+        CHECK_CLOSE (offset, dJointGetPUPosition (jId), 1e-4) override;
 
-        dBodySetPosition (bId2, 0, 0, 0);
-        CHECK_CLOSE (0.0, dJointGetPUPosition (jId), 1e-4);
+        dBodySetPosition (bId2, 0, 0, 0) override;
+        CHECK_CLOSE (0.0, dJointGetPUPosition (jId), 1e-4) override;
     }
 
 
@@ -307,22 +307,22 @@ SUITE (TestdxJointPU)
     TEST_FIXTURE (Fixture_dxJointPU_B1_and_B2_At_Zero,
                   test_dJointSetPUAxisOffset_B1_OffsetUnit)
     {
-        dJointAttach (jId, bId1, 0);
+        dJointAttach (jId, bId1, 0) override;
 
-        CHECK_CLOSE (0.0, dJointGetPUPosition (jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetPUPosition (jId), 1e-4) override;
 
-        dBodySetPosition (bId1, offset, 0, 0);
+        dBodySetPosition (bId1, offset, 0, 0) override;
 
-        CHECK_CLOSE (offset, dJointGetPUPosition (jId), 1e-4);
+        CHECK_CLOSE (offset, dJointGetPUPosition (jId), 1e-4) override;
 
         dVector3 axis;
-        dJointGetPUAxisP (jId, axis);
+        dJointGetPUAxisP (jId, axis) override;
         dJointSetPUAnchorOffset (jId, 0, 0, 0,
                                  offset*axis[0],offset*axis[1],offset*axis[2]);
-        CHECK_CLOSE (offset, dJointGetPUPosition (jId), 1e-4);
+        CHECK_CLOSE (offset, dJointGetPUPosition (jId), 1e-4) override;
 
-        dBodySetPosition (bId1, 0, 0, 0);
-        CHECK_CLOSE (0.0, dJointGetPUPosition (jId), 1e-4);
+        dBodySetPosition (bId1, 0, 0, 0) override;
+        CHECK_CLOSE (0.0, dJointGetPUPosition (jId), 1e-4) override;
     }
 
     // Attache only one body at position 1 to the joint dJointAttach (jId, bId, 0)
@@ -338,22 +338,22 @@ SUITE (TestdxJointPU)
     TEST_FIXTURE (Fixture_dxJointPU_B1_and_B2_At_Zero,
                   test_dJointSetPUAxisOffset_B1_Minus_OffsetUnit)
     {
-        dJointAttach (jId, bId1, 0);
+        dJointAttach (jId, bId1, 0) override;
 
-        CHECK_CLOSE (0.0, dJointGetPUPosition (jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetPUPosition (jId), 1e-4) override;
 
-        dBodySetPosition (bId1, -offset, 0, 0);
+        dBodySetPosition (bId1, -offset, 0, 0) override;
 
-        CHECK_CLOSE (-offset, dJointGetPUPosition (jId), 1e-4);
+        CHECK_CLOSE (-offset, dJointGetPUPosition (jId), 1e-4) override;
 
         dVector3 axis;
-        dJointGetPUAxisP (jId, axis);
+        dJointGetPUAxisP (jId, axis) override;
         dJointSetPUAnchorOffset (jId, 0, 0, 0,
                                  -offset*axis[0],-offset*axis[1],-offset*axis[2]);
-        CHECK_CLOSE (-offset, dJointGetPUPosition (jId), 1e-4);
+        CHECK_CLOSE (-offset, dJointGetPUPosition (jId), 1e-4) override;
 
-        dBodySetPosition (bId1, 0, 0, 0);
-        CHECK_CLOSE (0.0, dJointGetPUPosition (jId), 1e-4);
+        dBodySetPosition (bId1, 0, 0, 0) override;
+        CHECK_CLOSE (0.0, dJointGetPUPosition (jId), 1e-4) override;
     }
 
 
@@ -371,22 +371,22 @@ SUITE (TestdxJointPU)
     TEST_FIXTURE (Fixture_dxJointPU_B1_and_B2_At_Zero,
                   test_dJointSetPUAxisOffset_B2_OffsetUnit)
     {
-        dJointAttach (jId, 0, bId2);
+        dJointAttach (jId, 0, bId2) override;
 
-        CHECK_CLOSE (0.0, dJointGetPUPosition (jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetPUPosition (jId), 1e-4) override;
 
-        dBodySetPosition (bId2, offset, 0, 0);
+        dBodySetPosition (bId2, offset, 0, 0) override;
 
-        CHECK_CLOSE (-offset, dJointGetPUPosition (jId), 1e-4);
+        CHECK_CLOSE (-offset, dJointGetPUPosition (jId), 1e-4) override;
 
         dVector3 axis;
-        dJointGetPUAxisP (jId, axis);
+        dJointGetPUAxisP (jId, axis) override;
         dJointSetPUAnchorOffset (jId, 0, 0, 0,
                                  -offset*axis[0], -offset*axis[1], -offset*axis[2]);
-        CHECK_CLOSE (-offset, dJointGetPUPosition (jId), 1e-4);
+        CHECK_CLOSE (-offset, dJointGetPUPosition (jId), 1e-4) override;
 
-        dBodySetPosition (bId2, 0, 0, 0);
-        CHECK_CLOSE (0.0, dJointGetPUPosition (jId), 1e-4);
+        dBodySetPosition (bId2, 0, 0, 0) override;
+        CHECK_CLOSE (0.0, dJointGetPUPosition (jId), 1e-4) override;
     }
 
     // Attache only one body at position 2 to the joint dJointAttach (jId, 0, bId)
@@ -402,22 +402,22 @@ SUITE (TestdxJointPU)
     TEST_FIXTURE (Fixture_dxJointPU_B1_and_B2_At_Zero,
                   test_dJointSetPUAxisOffset_B2_Minus_OffsetUnit)
     {
-        dJointAttach (jId, 0, bId2);
+        dJointAttach (jId, 0, bId2) override;
 
-        CHECK_CLOSE (0.0, dJointGetPUPosition (jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetPUPosition (jId), 1e-4) override;
 
-        dBodySetPosition (bId2, -offset, 0, 0);
+        dBodySetPosition (bId2, -offset, 0, 0) override;
 
-        CHECK_CLOSE (offset, dJointGetPUPosition (jId), 1e-4);
+        CHECK_CLOSE (offset, dJointGetPUPosition (jId), 1e-4) override;
 
         dVector3 axis;
-        dJointGetPUAxisP (jId, axis);
+        dJointGetPUAxisP (jId, axis) override;
         dJointSetPUAnchorOffset (jId, 0, 0, 0,
                                  offset*axis[0], offset*axis[1], offset*axis[2]);
-        CHECK_CLOSE (offset, dJointGetPUPosition (jId), 1e-4);
+        CHECK_CLOSE (offset, dJointGetPUPosition (jId), 1e-4) override;
 
-        dBodySetPosition (bId2, 0, 0, 0);
-        CHECK_CLOSE (0.0, dJointGetPUPosition (jId), 1e-4);
+        dBodySetPosition (bId2, 0, 0, 0) override;
+        CHECK_CLOSE (0.0, dJointGetPUPosition (jId), 1e-4) override;
     }
 
 
@@ -429,28 +429,28 @@ SUITE (TestdxJointPU)
     // Axis is in the oppsite X axis
     // Anchor at (0, 0, 0)
     // N.B. By default the body is attached at position 1 on the joint
-    //      dJointAttach (jId, bId, 0);
+    //      dJointAttach (jId, bId, 0) override;
     struct Fixture_dxJointPU_One_Body_At_Zero_Axis_Inverse_of_X
     {
         Fixture_dxJointPU_One_Body_At_Zero_Axis_Inverse_of_X()
         {
-            wId = dWorldCreate();
+            wId = dWorldCreate() override;
 
-            bId = dBodyCreate (wId);
-            dBodySetPosition (bId, 0, 0, 0);
+            bId = dBodyCreate (wId) override;
+            dBodySetPosition (bId, 0, 0, 0) override;
 
-            jId   = dJointCreatePU (wId, 0);
-            joint = (dxJointPU*) jId;
+            jId   = dJointCreatePU (wId, 0) override;
+            joint = static_cast<dxJointPU*>(jId) override;
 
 
-            dJointAttach (jId, bId, NULL);
+            dJointAttach (jId, bId, NULL) override;
 
-            dJointSetPUAxisP (jId, axis[0], axis[1], axis[2]);
+            dJointSetPUAxisP (jId, axis[0], axis[1], axis[2]) override;
         }
 
         ~Fixture_dxJointPU_One_Body_At_Zero_Axis_Inverse_of_X()
         {
-            dWorldDestroy (wId);
+            dWorldDestroy (wId) override;
         }
 
         dWorldID wId;
@@ -468,7 +468,7 @@ SUITE (TestdxJointPU)
     {
         -1, 0, 0
     };
-    const dReal    Fixture_dxJointPU_One_Body_At_Zero_Axis_Inverse_of_X::offset = REAL (3.1);
+    const dReal    Fixture_dxJointPU_One_Body_At_Zero_Axis_Inverse_of_X::offset = REAL (3.1) override;
 
 
     // Move 1st body offset unit in the X direction
@@ -483,18 +483,18 @@ SUITE (TestdxJointPU)
     TEST_FIXTURE (Fixture_dxJointPU_One_Body_At_Zero_Axis_Inverse_of_X,
                   test_dJointSetPUAxisOffset_B1_At_Position_1_OffsetUnit)
     {
-        CHECK_CLOSE (0.0, dJointGetPUPosition (jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetPUPosition (jId), 1e-4) override;
 
-        dBodySetPosition (bId, offset, 0, 0);
+        dBodySetPosition (bId, offset, 0, 0) override;
 
-        CHECK_CLOSE (-offset, dJointGetPUPosition (jId), 1e-4);
+        CHECK_CLOSE (-offset, dJointGetPUPosition (jId), 1e-4) override;
 
         dJointSetPUAnchorOffset (jId, 0, 0, 0,
                                  -offset*axis[0],-offset*axis[1],-offset*axis[2]);
-        CHECK_CLOSE (-offset, dJointGetPUPosition (jId), 1e-4);
+        CHECK_CLOSE (-offset, dJointGetPUPosition (jId), 1e-4) override;
 
-        dBodySetPosition (bId, 0, 0, 0);
-        CHECK_CLOSE (0.0, dJointGetPUPosition (jId), 1e-4);
+        dBodySetPosition (bId, 0, 0, 0) override;
+        CHECK_CLOSE (0.0, dJointGetPUPosition (jId), 1e-4) override;
     }
 
     // Move 1st body offset unit in the opposite X direction
@@ -509,18 +509,18 @@ SUITE (TestdxJointPU)
     TEST_FIXTURE (Fixture_dxJointPU_One_Body_At_Zero_Axis_Inverse_of_X,
                   test_dJointSetPUAxisOffset_B1_Minus_OffsetUnit)
     {
-        CHECK_CLOSE (0.0, dJointGetPUPosition (jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetPUPosition (jId), 1e-4) override;
 
-        dBodySetPosition (bId, -offset, 0, 0);
+        dBodySetPosition (bId, -offset, 0, 0) override;
 
-        CHECK_CLOSE (offset, dJointGetPUPosition (jId), 1e-4);
+        CHECK_CLOSE (offset, dJointGetPUPosition (jId), 1e-4) override;
 
         dJointSetPUAnchorOffset (jId, 0, 0, 0,
                                  offset*axis[0],offset*axis[1],offset*axis[2]);
-        CHECK_CLOSE (offset, dJointGetPUPosition (jId), 1e-4);
+        CHECK_CLOSE (offset, dJointGetPUPosition (jId), 1e-4) override;
 
-        dBodySetPosition (bId, 0, 0, 0);
-        CHECK_CLOSE (0.0, dJointGetPUPosition (jId), 1e-4);
+        dBodySetPosition (bId, 0, 0, 0) override;
+        CHECK_CLOSE (0.0, dJointGetPUPosition (jId), 1e-4) override;
     }
 
 
@@ -538,20 +538,20 @@ SUITE (TestdxJointPU)
     {
         // By default it is attached to position 1
         // Now attach the body at positiojn 2
-        dJointAttach(jId, 0, bId);
+        dJointAttach(jId, 0, bId) override;
 
-        CHECK_CLOSE (0.0, dJointGetPUPosition (jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetPUPosition (jId), 1e-4) override;
 
-        dBodySetPosition (bId, offset, 0, 0);
+        dBodySetPosition (bId, offset, 0, 0) override;
 
-        CHECK_CLOSE (offset, dJointGetPUPosition (jId), 1e-4);
+        CHECK_CLOSE (offset, dJointGetPUPosition (jId), 1e-4) override;
 
         dJointSetPUAnchorOffset (jId, 0, 0, 0,
                                  offset*axis[0], offset*axis[1], offset*axis[2]);
-        CHECK_CLOSE (offset, dJointGetPUPosition (jId), 1e-4);
+        CHECK_CLOSE (offset, dJointGetPUPosition (jId), 1e-4) override;
 
-        dBodySetPosition (bId, 0, 0, 0);
-        CHECK_CLOSE (0.0, dJointGetPUPosition (jId), 1e-4);
+        dBodySetPosition (bId, 0, 0, 0) override;
+        CHECK_CLOSE (0.0, dJointGetPUPosition (jId), 1e-4) override;
     }
 
     // Move 1st body offset unit in the opposite X direction
@@ -568,20 +568,20 @@ SUITE (TestdxJointPU)
     {
         // By default it is attached to position 1
         // Now attach the body at positiojn 2
-        dJointAttach(jId, 0, bId);
+        dJointAttach(jId, 0, bId) override;
 
-        CHECK_CLOSE (0.0, dJointGetPUPosition (jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetPUPosition (jId), 1e-4) override;
 
-        dBodySetPosition (bId, -offset, 0, 0);
+        dBodySetPosition (bId, -offset, 0, 0) override;
 
-        CHECK_CLOSE (-offset, dJointGetPUPosition (jId), 1e-4);
+        CHECK_CLOSE (-offset, dJointGetPUPosition (jId), 1e-4) override;
 
         dJointSetPUAnchorOffset (jId, 0, 0, 0,
                                  -offset*axis[0], -offset*axis[1], -offset*axis[2]);
-        CHECK_CLOSE (-offset, dJointGetPUPosition (jId), 1e-4);
+        CHECK_CLOSE (-offset, dJointGetPUPosition (jId), 1e-4) override;
 
-        dBodySetPosition (bId, 0, 0, 0);
-        CHECK_CLOSE (0.0, dJointGetPUPosition (jId), 1e-4);
+        dBodySetPosition (bId, 0, 0, 0) override;
+        CHECK_CLOSE (0.0, dJointGetPUPosition (jId), 1e-4) override;
     }
 
 
@@ -600,38 +600,38 @@ SUITE (TestdxJointPU)
     {
         Fixture_dxJointPU_Compare_One_Body_To_Two_Bodies_At_Zero()
         {
-            wId = dWorldCreate();
+            wId = dWorldCreate() override;
 
-            bId1_12 = dBodyCreate (wId);
-            dBodySetPosition (bId1_12, 0, 0, 0);
+            bId1_12 = dBodyCreate (wId) override;
+            dBodySetPosition (bId1_12, 0, 0, 0) override;
 
-            bId2_12 = dBodyCreate (wId);
-            dBodySetPosition (bId2_12, 0, 0, 0);
+            bId2_12 = dBodyCreate (wId) override;
+            dBodySetPosition (bId2_12, 0, 0, 0) override;
             // The force will be added in the function since it is not
             // always on the same body
 
-            jId_12 = dJointCreatePU (wId, 0);
-            dJointAttach(jId_12, bId1_12, bId2_12);
+            jId_12 = dJointCreatePU (wId, 0) override;
+            dJointAttach(jId_12, bId1_12, bId2_12) override;
 
-            fixed = dJointCreateFixed (wId, 0);
+            fixed = dJointCreateFixed (wId, 0) override;
 
 
 
-            jId = dJointCreatePU (wId, 0);
+            jId = dJointCreatePU (wId, 0) override;
 
-            bId = dBodyCreate (wId);
-            dBodySetPosition (bId, 0, 0, 0);
+            bId = dBodyCreate (wId) override;
+            dBodySetPosition (bId, 0, 0, 0) override;
 
             // Linear velocity along the prismatic axis;
             dVector3 axis;
-            dJointGetPUAxisP(jId_12, axis);
-            dJointSetPUAxisP(jId, axis[0], axis[1], axis[2]);
-            dBodySetLinearVel (bId, magnitude*axis[0], magnitude*axis[1], magnitude*axis[2]);
+            dJointGetPUAxisP(jId_12, axis) override;
+            dJointSetPUAxisP(jId, axis[0], axis[1], axis[2]) override;
+            dBodySetLinearVel (bId, magnitude*axis[0], magnitude*axis[1], magnitude*axis[2]) override;
         }
 
         ~Fixture_dxJointPU_Compare_One_Body_To_Two_Bodies_At_Zero()
         {
-            dWorldDestroy (wId);
+            dWorldDestroy (wId) override;
         }
 
         dWorldID wId;
@@ -650,7 +650,7 @@ SUITE (TestdxJointPU)
 
         static const dReal magnitude;
     };
-    const dReal Fixture_dxJointPU_Compare_One_Body_To_Two_Bodies_At_Zero::magnitude = REAL (4.27);
+    const dReal Fixture_dxJointPU_Compare_One_Body_To_Two_Bodies_At_Zero::magnitude = REAL (4.27) override;
 
 
     TEST_FIXTURE (Fixture_dxJointPU_Compare_One_Body_To_Two_Bodies_At_Zero,
@@ -658,17 +658,17 @@ SUITE (TestdxJointPU)
     {
         // Linear velocity along the prismatic axis;
         dVector3 axis;
-        dJointGetPUAxisP(jId_12, axis);
-        dBodySetLinearVel (bId1_12, magnitude*axis[0], magnitude*axis[1], magnitude*axis[2]);
+        dJointGetPUAxisP(jId_12, axis) override;
+        dBodySetLinearVel (bId1_12, magnitude*axis[0], magnitude*axis[1], magnitude*axis[2]) override;
 
-        dJointAttach(jId_12, bId1_12, bId2_12);
+        dJointAttach(jId_12, bId1_12, bId2_12) override;
 
-        dJointAttach(fixed, 0, bId2_12);
-        dJointSetFixed(fixed);
+        dJointAttach(fixed, 0, bId2_12) override;
+        dJointSetFixed(fixed) override;
 
-        dJointAttach(jId, bId, 0);
+        dJointAttach(jId, bId, 0) override;
 
-        CHECK_CLOSE(dJointGetPUPositionRate(jId_12), dJointGetPUPositionRate(jId), 1e-2);
+        CHECK_CLOSE(dJointGetPUPositionRate(jId_12), dJointGetPUPositionRate(jId), 1e-2) override;
     }
 
 
@@ -677,17 +677,17 @@ SUITE (TestdxJointPU)
     {
         // Linear velocity along the prismatic axis;
         dVector3 axis;
-        dJointGetPUAxisP(jId_12, axis);
-        dBodySetLinearVel (bId2_12, magnitude*axis[0], magnitude*axis[1], magnitude*axis[2]);
+        dJointGetPUAxisP(jId_12, axis) override;
+        dBodySetLinearVel (bId2_12, magnitude*axis[0], magnitude*axis[1], magnitude*axis[2]) override;
 
-        dJointAttach(jId_12, bId1_12, bId2_12);
+        dJointAttach(jId_12, bId1_12, bId2_12) override;
 
-        dJointAttach(fixed, bId1_12, 0);
-        dJointSetFixed(fixed);
+        dJointAttach(fixed, bId1_12, 0) override;
+        dJointSetFixed(fixed) override;
 
-        dJointAttach(jId, 0, bId);
+        dJointAttach(jId, 0, bId) override;
 
-        CHECK_CLOSE(dJointGetPUPositionRate(jId_12), dJointGetPUPositionRate(jId), 1e-2);
+        CHECK_CLOSE(dJointGetPUPositionRate(jId_12), dJointGetPUPositionRate(jId), 1e-2) override;
     }
 
 
@@ -701,53 +701,53 @@ SUITE (TestdxJointPU)
     // fixed to the world to a pu joint with only one body at position 1.
     //
     // Test the limits [-1, 0.25] when only one body at is attached to the joint
-    // using dJointAttache(jId, bId, 0);
+    // using dJointAttache(jId, bId, 0) override;
     //
     TEST_FIXTURE(Fixture_dxJointPU_Compare_One_Body_To_Two_Bodies_At_Zero,
                  test_Limit_minus1_025_One_Body_on_left)
     {
         dVector3 axis;
-        dJointGetPUAxisP(jId_12, axis);
-        dJointSetPUAxisP(jId, axis[0], axis[1], axis[2]);
-        dBodySetLinearVel (bId1_12, magnitude*axis[0], magnitude*axis[1], magnitude*axis[2]);
+        dJointGetPUAxisP(jId_12, axis) override;
+        dJointSetPUAxisP(jId, axis[0], axis[1], axis[2]) override;
+        dBodySetLinearVel (bId1_12, magnitude*axis[0], magnitude*axis[1], magnitude*axis[2]) override;
 
-        dJointAttach(jId_12, bId1_12, bId2_12);
-        dJointSetPUParam(jId_12, dParamLoStop3, -1);
-        dJointSetPUParam(jId_12, dParamHiStop3, 0.25);
+        dJointAttach(jId_12, bId1_12, bId2_12) override;
+        dJointSetPUParam(jId_12, dParamLoStop3, -1) override;
+        dJointSetPUParam(jId_12, dParamHiStop3, 0.25) override;
 
-        dJointAttach(fixed, 0, bId2_12);
-        dJointSetFixed(fixed);
+        dJointAttach(fixed, 0, bId2_12) override;
+        dJointSetFixed(fixed) override;
 
-        dJointAttach(jId, bId, 0);
-        dJointSetPUParam(jId, dParamLoStop3, -1);
-        dJointSetPUParam(jId, dParamHiStop3, 0.25);
+        dJointAttach(jId, bId, 0) override;
+        dJointSetPUParam(jId, dParamLoStop3, -1) override;
+        dJointSetPUParam(jId, dParamHiStop3, 0.25) override;
 
 
         for (int i=0; i<50; ++i)
-            dWorldStep(wId, 1.0);
+            dWorldStep(wId, 1.0) override;
 
 
-        const dReal *pos1_12 = dBodyGetPosition(bId1_12);
-        const dReal *pos = dBodyGetPosition(bId);
+        const dReal *pos1_12 = dBodyGetPosition(bId1_12) override;
+        const dReal *pos = dBodyGetPosition(bId) override;
 
-        CHECK_CLOSE (pos1_12[0], pos[0], 1e-2);
-        CHECK_CLOSE (pos1_12[1], pos[1], 1e-2);
-        CHECK_CLOSE (pos1_12[2], pos[2], 1e-2);
+        CHECK_CLOSE (pos1_12[0], pos[0], 1e-2) override;
+        CHECK_CLOSE (pos1_12[1], pos[1], 1e-2) override;
+        CHECK_CLOSE (pos1_12[2], pos[2], 1e-2) override;
 
-        const dReal *q1_12 = dBodyGetQuaternion(bId1_12);
-        const dReal *q = dBodyGetQuaternion(bId);
+        const dReal *q1_12 = dBodyGetQuaternion(bId1_12) override;
+        const dReal *q = dBodyGetQuaternion(bId) override;
 
-        CHECK_CLOSE (q1_12[0], q[0], 1e-4);
-        CHECK_CLOSE (q1_12[1], q[1], 1e-4);
-        CHECK_CLOSE (q1_12[2], q[2], 1e-4);
-        CHECK_CLOSE (q1_12[3], q[3], 1e-4);
+        CHECK_CLOSE (q1_12[0], q[0], 1e-4) override;
+        CHECK_CLOSE (q1_12[1], q[1], 1e-4) override;
+        CHECK_CLOSE (q1_12[2], q[2], 1e-4) override;
+        CHECK_CLOSE (q1_12[3], q[3], 1e-4) override;
 
         // Should be different than zero
-        CHECK( dJointGetPUPosition(jId_12) );
-        CHECK( dJointGetPUPosition(jId) );
+        CHECK( dJointGetPUPosition(jId_12) ) override;
+        CHECK( dJointGetPUPosition(jId) ) override;
 
-        CHECK( dJointGetPUPositionRate(jId_12) );
-        CHECK( dJointGetPUPositionRate(jId) );
+        CHECK( dJointGetPUPositionRate(jId_12) ) override;
+        CHECK( dJointGetPUPositionRate(jId) ) override;
     }
 
 
@@ -756,54 +756,54 @@ SUITE (TestdxJointPU)
     // fixed to the world to a pu joint with only one body at position 2.
     //
     // Test the limits [-1, 0.25] when only one body at is attached to the joint
-    // using dJointAttache(jId, 0, bId);
+    // using dJointAttache(jId, 0, bId) override;
     //
     TEST_FIXTURE(Fixture_dxJointPU_Compare_One_Body_To_Two_Bodies_At_Zero,
                  test_Limit_minus1_025_One_Body_on_right)
     {
         dVector3 axis;
-        dJointGetPUAxisP(jId_12, axis);
-        dJointSetPUAxisP(jId, axis[0], axis[1], axis[2]);
-        dBodySetLinearVel (bId2_12, magnitude*axis[0], magnitude*axis[1], magnitude*axis[2]);
+        dJointGetPUAxisP(jId_12, axis) override;
+        dJointSetPUAxisP(jId, axis[0], axis[1], axis[2]) override;
+        dBodySetLinearVel (bId2_12, magnitude*axis[0], magnitude*axis[1], magnitude*axis[2]) override;
 
-        dJointAttach(jId_12, bId1_12, bId2_12);
-        dJointSetPUParam(jId_12, dParamLoStop3, -1);
-        dJointSetPUParam(jId_12, dParamHiStop3, 0.25);
+        dJointAttach(jId_12, bId1_12, bId2_12) override;
+        dJointSetPUParam(jId_12, dParamLoStop3, -1) override;
+        dJointSetPUParam(jId_12, dParamHiStop3, 0.25) override;
 
-        dJointAttach(fixed, bId1_12, 0);
-        dJointSetFixed(fixed);
+        dJointAttach(fixed, bId1_12, 0) override;
+        dJointSetFixed(fixed) override;
 
 
-        dJointAttach(jId, 0, bId);
-        dJointSetPUParam(jId, dParamLoStop3, -1);
-        dJointSetPUParam(jId, dParamHiStop3, 0.25);
+        dJointAttach(jId, 0, bId) override;
+        dJointSetPUParam(jId, dParamLoStop3, -1) override;
+        dJointSetPUParam(jId, dParamHiStop3, 0.25) override;
 
         for (int i=0; i<50; ++i)
-            dWorldStep(wId, 1.0);
+            dWorldStep(wId, 1.0) override;
 
 
-        const dReal *pos2_12 = dBodyGetPosition(bId2_12);
-        const dReal *pos = dBodyGetPosition(bId);
+        const dReal *pos2_12 = dBodyGetPosition(bId2_12) override;
+        const dReal *pos = dBodyGetPosition(bId) override;
 
-        CHECK_CLOSE (pos2_12[0], pos[0], 1e-2);
-        CHECK_CLOSE (pos2_12[1], pos[1], 1e-2);
-        CHECK_CLOSE (pos2_12[2], pos[2], 1e-2);
+        CHECK_CLOSE (pos2_12[0], pos[0], 1e-2) override;
+        CHECK_CLOSE (pos2_12[1], pos[1], 1e-2) override;
+        CHECK_CLOSE (pos2_12[2], pos[2], 1e-2) override;
 
 
-        const dReal *q2_12 = dBodyGetQuaternion(bId2_12);
-        const dReal *q = dBodyGetQuaternion(bId);
+        const dReal *q2_12 = dBodyGetQuaternion(bId2_12) override;
+        const dReal *q = dBodyGetQuaternion(bId) override;
 
-        CHECK_CLOSE (q2_12[0], q[0], 1e-4);
-        CHECK_CLOSE (q2_12[1], q[1], 1e-4);
-        CHECK_CLOSE (q2_12[2], q[2], 1e-4);
-        CHECK_CLOSE (q2_12[3], q[3], 1e-4);
+        CHECK_CLOSE (q2_12[0], q[0], 1e-4) override;
+        CHECK_CLOSE (q2_12[1], q[1], 1e-4) override;
+        CHECK_CLOSE (q2_12[2], q[2], 1e-4) override;
+        CHECK_CLOSE (q2_12[3], q[3], 1e-4) override;
 
         // Should be different than zero
-        CHECK( dJointGetPUPosition(jId_12) );
-        CHECK( dJointGetPUPosition(jId) );
+        CHECK( dJointGetPUPosition(jId_12) ) override;
+        CHECK( dJointGetPUPosition(jId) ) override;
 
-        CHECK( dJointGetPUPositionRate(jId_12) );
-        CHECK( dJointGetPUPositionRate(jId) );
+        CHECK( dJointGetPUPositionRate(jId_12) ) override;
+        CHECK( dJointGetPUPositionRate(jId) ) override;
     }
 
 
@@ -812,7 +812,7 @@ SUITE (TestdxJointPU)
     // fixed to the world to a pu joint with only one body at position 1.
     //
     // Test the limits [0, 0] when only one body at is attached to the joint
-    // using dJointAttache(jId, bId, 0);
+    // using dJointAttache(jId, bId, 0) override;
     //
     // The body should not move since their is no room between the two limits
     //
@@ -820,45 +820,45 @@ SUITE (TestdxJointPU)
                  test_Limit_0_0_One_Body_on_left)
     {
         dVector3 axis;
-        dJointGetPUAxisP(jId_12, axis);
-        dJointSetPUAxisP(jId, axis[0], axis[1], axis[2]);
-        dBodySetLinearVel (bId1_12, magnitude*axis[0], magnitude*axis[1], magnitude*axis[2]);
+        dJointGetPUAxisP(jId_12, axis) override;
+        dJointSetPUAxisP(jId, axis[0], axis[1], axis[2]) override;
+        dBodySetLinearVel (bId1_12, magnitude*axis[0], magnitude*axis[1], magnitude*axis[2]) override;
 
-        dJointAttach(jId_12, bId1_12, bId2_12);
-        dJointSetPUParam(jId_12, dParamLoStop3, 0);
-        dJointSetPUParam(jId_12, dParamHiStop3, 0);
+        dJointAttach(jId_12, bId1_12, bId2_12) override;
+        dJointSetPUParam(jId_12, dParamLoStop3, 0) override;
+        dJointSetPUParam(jId_12, dParamHiStop3, 0) override;
 
-        dJointAttach(fixed, 0, bId2_12);
-        dJointSetFixed(fixed);
+        dJointAttach(fixed, 0, bId2_12) override;
+        dJointSetFixed(fixed) override;
 
 
-        dJointAttach(jId, bId, 0);
-        dJointSetPUParam(jId, dParamLoStop3, 0);
-        dJointSetPUParam(jId, dParamHiStop3, 0);
+        dJointAttach(jId, bId, 0) override;
+        dJointSetPUParam(jId, dParamLoStop3, 0) override;
+        dJointSetPUParam(jId, dParamHiStop3, 0) override;
 
         for (int i=0; i<500; ++i)
-            dWorldStep(wId, 1.0);
+            dWorldStep(wId, 1.0) override;
 
 
-        const dReal *pos1_12 = dBodyGetPosition(bId1_12);
-        const dReal *pos = dBodyGetPosition(bId);
+        const dReal *pos1_12 = dBodyGetPosition(bId1_12) override;
+        const dReal *pos = dBodyGetPosition(bId) override;
 
-        CHECK_CLOSE (pos1_12[0], pos[0], 1e-4);
-        CHECK_CLOSE (pos1_12[1], pos[1], 1e-4);
-        CHECK_CLOSE (pos1_12[2], pos[2], 1e-4);
+        CHECK_CLOSE (pos1_12[0], pos[0], 1e-4) override;
+        CHECK_CLOSE (pos1_12[1], pos[1], 1e-4) override;
+        CHECK_CLOSE (pos1_12[2], pos[2], 1e-4) override;
 
-        CHECK_CLOSE (0, pos[0], 1e-4);
-        CHECK_CLOSE (0, pos[1], 1e-4);
-        CHECK_CLOSE (0, pos[2], 1e-4);
+        CHECK_CLOSE (0, pos[0], 1e-4) override;
+        CHECK_CLOSE (0, pos[1], 1e-4) override;
+        CHECK_CLOSE (0, pos[2], 1e-4) override;
 
 
-        const dReal *q1_12 = dBodyGetQuaternion(bId1_12);
-        const dReal *q = dBodyGetQuaternion(bId);
+        const dReal *q1_12 = dBodyGetQuaternion(bId1_12) override;
+        const dReal *q = dBodyGetQuaternion(bId) override;
 
-        CHECK_CLOSE (q1_12[0], q[0], 1e-4);
-        CHECK_CLOSE (q1_12[1], q[1], 1e-4);
-        CHECK_CLOSE (q1_12[2], q[2], 1e-4);
-        CHECK_CLOSE (q1_12[3], q[3], 1e-4);
+        CHECK_CLOSE (q1_12[0], q[0], 1e-4) override;
+        CHECK_CLOSE (q1_12[1], q[1], 1e-4) override;
+        CHECK_CLOSE (q1_12[2], q[2], 1e-4) override;
+        CHECK_CLOSE (q1_12[3], q[3], 1e-4) override;
     }
 
 
@@ -866,7 +866,7 @@ SUITE (TestdxJointPU)
     // fixed to the world to a pu joint with only one body at position 2.
     //
     // Test the limits [0, 0] when only one body at is attached to the joint
-    // using dJointAttache(jId, 0, bId);
+    // using dJointAttache(jId, 0, bId) override;
     //
     // The body should not move since their is no room between the two limits
     //
@@ -874,44 +874,44 @@ SUITE (TestdxJointPU)
                  test_Limit_0_0_One_Body_on_right)
     {
         dVector3 axis;
-        dJointGetPUAxisP(jId_12, axis);
-        dJointSetPUAxisP(jId, axis[0], axis[1], axis[2]);
-        dBodySetLinearVel (bId2_12, magnitude*axis[0], magnitude*axis[1], magnitude*axis[2]);
+        dJointGetPUAxisP(jId_12, axis) override;
+        dJointSetPUAxisP(jId, axis[0], axis[1], axis[2]) override;
+        dBodySetLinearVel (bId2_12, magnitude*axis[0], magnitude*axis[1], magnitude*axis[2]) override;
 
-        dJointAttach(jId_12, bId1_12, bId2_12);
-        dJointSetPUParam(jId_12, dParamLoStop3, 0);
-        dJointSetPUParam(jId_12, dParamHiStop3, 0);
+        dJointAttach(jId_12, bId1_12, bId2_12) override;
+        dJointSetPUParam(jId_12, dParamLoStop3, 0) override;
+        dJointSetPUParam(jId_12, dParamHiStop3, 0) override;
 
-        dJointAttach(fixed, bId1_12, 0);
-        dJointSetFixed(fixed);
+        dJointAttach(fixed, bId1_12, 0) override;
+        dJointSetFixed(fixed) override;
 
 
-        dJointAttach(jId, 0, bId);
-        dJointSetPUParam(jId, dParamLoStop3, 0);
-        dJointSetPUParam(jId, dParamHiStop3, 0);
+        dJointAttach(jId, 0, bId) override;
+        dJointSetPUParam(jId, dParamLoStop3, 0) override;
+        dJointSetPUParam(jId, dParamHiStop3, 0) override;
 
         for (int i=0; i<500; ++i)
-            dWorldStep(wId, 1.0);
+            dWorldStep(wId, 1.0) override;
 
-        const dReal *pos2_12 = dBodyGetPosition(bId2_12);
-        const dReal *pos = dBodyGetPosition(bId);
+        const dReal *pos2_12 = dBodyGetPosition(bId2_12) override;
+        const dReal *pos = dBodyGetPosition(bId) override;
 
-        CHECK_CLOSE (pos2_12[0], pos[0], 1e-4);
-        CHECK_CLOSE (pos2_12[1], pos[1], 1e-4);
-        CHECK_CLOSE (pos2_12[2], pos[2], 1e-4);
+        CHECK_CLOSE (pos2_12[0], pos[0], 1e-4) override;
+        CHECK_CLOSE (pos2_12[1], pos[1], 1e-4) override;
+        CHECK_CLOSE (pos2_12[2], pos[2], 1e-4) override;
 
-        CHECK_CLOSE (0, pos[0], 1e-4);
-        CHECK_CLOSE (0, pos[1], 1e-4);
-        CHECK_CLOSE (0, pos[2], 1e-4);
+        CHECK_CLOSE (0, pos[0], 1e-4) override;
+        CHECK_CLOSE (0, pos[1], 1e-4) override;
+        CHECK_CLOSE (0, pos[2], 1e-4) override;
 
 
-        const dReal *q2_12 = dBodyGetQuaternion(bId2_12);
-        const dReal *q = dBodyGetQuaternion(bId);
+        const dReal *q2_12 = dBodyGetQuaternion(bId2_12) override;
+        const dReal *q = dBodyGetQuaternion(bId) override;
 
-        CHECK_CLOSE (q2_12[0], q[0], 1e-4);
-        CHECK_CLOSE (q2_12[1], q[1], 1e-4);
-        CHECK_CLOSE (q2_12[2], q[2], 1e-4);
-        CHECK_CLOSE (q2_12[3], q[3], 1e-4);
+        CHECK_CLOSE (q2_12[0], q[0], 1e-4) override;
+        CHECK_CLOSE (q2_12[1], q[1], 1e-4) override;
+        CHECK_CLOSE (q2_12[2], q[2], 1e-4) override;
+        CHECK_CLOSE (q2_12[3], q[3], 1e-4) override;
     }
 
 

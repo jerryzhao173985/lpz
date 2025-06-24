@@ -35,9 +35,9 @@
  *   $Log$
  *   Revision 1.6  2010-11-26 12:22:36  guettler
  *   - Configurable interface now allows to set bounds of paramval and paramint
- *     * setting bounds for paramval and paramint is highly recommended (for QConfigurable (Qt GUI).
+ *     * setting bounds for paramval and paramint is highly recommended (for QConfigurable(const Qt& GUI).
  *   - bugfixes
- *   - current development state of QConfigurable (Qt GUI)
+ *   - current development state of QConfigurable(const Qt& GUI)
  *
  *   Revision 1.4  2010/11/19 15:15:00  guettler
  *   - new QLog feature
@@ -87,27 +87,27 @@ namespace lpzrobots {
       int setDTR(int dtr_val);
       int closeDevice();
 
-      bool isDeviceAvailable(QString deviceName);
+      bool isDeviceAvailable(const QString& deviceName);
       bool isDeviceOpened() {
         return opened;
       }
-      int getBaudrate() {
+      int getBaudrate() const {
         return baudrate;
       }
       ;
-      QString getDeviceName() {
+      QString getDeviceName() const {
         return deviceName;
       }
       ;
-      int writeData(QByteArray msg);
+      int writeData(const QByteArray& msg);
 
       /*
-       void setDeviceName(QString name){ deviceName = name.toLatin1(); };
+       void setDeviceName(const QString& name){ deviceName = name.toLatin1(); };
        QString getDeviceName() {return deviceName;};
        */
 
     signals:
-      void sig_newData(QByteArray msg);
+      void sig_newData(const QByteArray& msg);
       void sig_DeviceOpened();
 
     private:

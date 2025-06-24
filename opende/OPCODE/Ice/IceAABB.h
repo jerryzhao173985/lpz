@@ -18,16 +18,16 @@
 //! Declarations of type-independent methods (most of them implemented in the .cpp)
 #define AABB_COMMON_METHODS																											\
 			AABB&			Add(const AABB& aabb);																					\
-			float			MakeCube(AABB& cube)																			const;	\
-			void			MakeSphere(Sphere& sphere)																		const;	\
-			const sbyte*	ComputeOutline(const Point& local_eye, sdword& num)												const;	\
-			float			ComputeBoxArea(const Point& eye, const Matrix4x4& mat, float width, float height, sdword& num)	const;	\
-			bool			IsInside(const AABB& box)																		const;	\
-			bool			ComputePlanes(Plane* planes)																	const;	\
-			bool			ComputePoints(Point* pts)																		const;	\
-			const Point*	GetVertexNormals()																				const;	\
-			const udword*	GetEdges()																						const;	\
-			const Point*	GetEdgeNormals()																				const;	\
+			float			MakeCube(AABB& cube)																			const override;	\
+			void			MakeSphere(Sphere& sphere)																		const override;	\
+			const sbyte*	ComputeOutline(const Point& local_eye, sdword& num)												const override;	\
+			float			ComputeBoxArea(const Point& eye, const Matrix4x4& mat, float width, float height, sdword& num)	const override;	\
+			bool			IsInside(const AABB& box)																		const override;	\
+			bool			ComputePlanes(Plane* planes)																	const override;	\
+			bool			ComputePoints(Point* pts)																		const override;	\
+			const Point*	GetVertexNormals()																				const override;	\
+			const udword*	GetEdges()																						const override;	\
+			const Point*	GetEdgeNormals()																				const override;	\
 	inline_	BOOL			ContainsPoint(const Point& p)																	const	\
 							{																										\
 								if(p.x > GetMax(0) || p.x < GetMin(0)) return FALSE;												\
@@ -101,7 +101,7 @@
 		 *	\return		the size of the AABB
 		 */
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-						float		GetSize()								const		{ Point e; GetExtents(e);	return e.Max();	}
+						float		GetSize()								const override { Point e; GetExtents(e);	return e.Max();	}
 
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/**
@@ -111,45 +111,45 @@
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 						void		Extend(const Point& p)
 									{
-										if(p.x > mMax.x)	mMax.x = p.x;
-										if(p.x < mMin.x)	mMin.x = p.x;
+										if(p.x > mMax.x)	mMax.x = p.x override;
+										if(p.x < mMin.x)	mMin.x = p.x override;
 
-										if(p.y > mMax.y)	mMax.y = p.y;
-										if(p.y < mMin.y)	mMin.y = p.y;
+										if(p.y > mMax.y)	mMax.y = p.y override;
+										if(p.y < mMin.y)	mMin.y = p.y override;
 
-										if(p.z > mMax.z)	mMax.z = p.z;
-										if(p.z < mMin.z)	mMin.z = p.z;
+										if(p.z > mMax.z)	mMax.z = p.z override;
+										if(p.z < mMin.z)	mMin.z = p.z override;
 									}
 		// Data access
 
 		//! Get min point of the box
-		inline_			void		GetMin(Point& min)						const		{ min = mMin;								}
+		inline_			void		GetMin(Point& min)						const override { min = mMin;								}
 		//! Get max point of the box
-		inline_			void		GetMax(Point& max)						const		{ max = mMax;								}
+		inline_			void		GetMax(Point& max)						const override { max = mMax;								}
 
 		//! Get component of the box's min point along a given axis
-		inline_			float		GetMin(udword axis)						const		{ return mMin[axis];						}
+		inline_			float		GetMin(udword axis)						const override { return mMin[axis];						}
 		//! Get component of the box's max point along a given axis
-		inline_			float		GetMax(udword axis)						const		{ return mMax[axis];						}
+		inline_			float		GetMax(udword axis)						const override { return mMax[axis];						}
 
 		//! Get box center
-		inline_			void		GetCenter(Point& center)				const		{ center = (mMax + mMin)*0.5f;				}
+		inline_			void		GetCenter(Point& center)				const override { center = (mMax + mMin)*0.5f;				}
 		//! Get box extents
-		inline_			void		GetExtents(Point& extents)				const		{ extents = (mMax - mMin)*0.5f;				}
+		inline_			void		GetExtents(Point& extents)				const override { extents = (mMax - mMin)*0.5f;				}
 
 		//! Get component of the box's center along a given axis
-		inline_			float		GetCenter(udword axis)					const		{ return (mMax[axis] + mMin[axis])*0.5f;	}
+		inline_			float		GetCenter(udword axis)					const override { return (mMax[axis] + mMin[axis])*0.5f;	}
 		//! Get component of the box's extents along a given axis
-		inline_			float		GetExtents(udword axis)					const		{ return (mMax[axis] - mMin[axis])*0.5f;	}
+		inline_			float		GetExtents(udword axis)					const override { return (mMax[axis] - mMin[axis])*0.5f;	}
 
 		//! Get box diagonal
-		inline_			void		GetDiagonal(Point& diagonal)			const		{ diagonal = mMax - mMin;					}
-		inline_			float		GetWidth()								const		{ return mMax.x - mMin.x;					}
-		inline_			float		GetHeight()								const		{ return mMax.y - mMin.y;					}
-		inline_			float		GetDepth()								const		{ return mMax.z - mMin.z;					}
+		inline_			void		GetDiagonal(Point& diagonal)			const override { diagonal = mMax - mMin;					}
+		inline_			float		GetWidth()								const override { return mMax.x - mMin.x;					}
+		inline_			float		GetHeight()								const override { return mMax.y - mMin.y;					}
+		inline_			float		GetDepth()								const override { return mMax.z - mMin.z;					}
 
 		//! Volume
-		inline_			float		GetVolume()								const		{ return GetWidth() * GetHeight() * GetDepth();		}
+		inline_			float		GetVolume()								const override { return GetWidth() * GetHeight() * GetDepth();		}
 
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/**
@@ -180,7 +180,7 @@
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		inline_			BOOL		Intersect(const AABB& a, udword axis)	const
 									{
-										if(mMax[axis] < a.mMin[axis] || a.mMax[axis] < mMin[axis])	return FALSE;
+										if(mMax[axis] < a.mMin[axis] || a.mMax[axis] < mMin[axis])	return FALSE override;
 										return TRUE;
 									}
 
@@ -195,26 +195,26 @@
 		inline_			void		Rotate(const Matrix4x4& mtx, AABB& aabb)	const
 									{
 										// The three edges transformed: you can efficiently transform an X-only vector
-										// by just getting the "X" column of the matrix
+										// by just getting the __PLACEHOLDER_0__ column of the matrix
 										Point vx,vy,vz;
-										mtx.GetRow(0, vx);	vx *= (mMax.x - mMin.x);
-										mtx.GetRow(1, vy);	vy *= (mMax.y - mMin.y);
-										mtx.GetRow(2, vz);	vz *= (mMax.z - mMin.z);
+										mtx.GetRow(0, vx);	vx *= (mMax.x - mMin.x) override;
+										mtx.GetRow(1, vy);	vy *= (mMax.y - mMin.y) override;
+										mtx.GetRow(2, vz);	vz *= (mMax.z - mMin.z) override;
 
 										// Transform the min point
 										aabb.mMin = aabb.mMax = mMin * mtx;
 
 										// Take the transformed min & axes and find new extents
 										// Using CPU code in the right place is faster...
-										if(IS_NEGATIVE_FLOAT(vx.x))	aabb.mMin.x += vx.x; else aabb.mMax.x += vx.x;
-										if(IS_NEGATIVE_FLOAT(vx.y))	aabb.mMin.y += vx.y; else aabb.mMax.y += vx.y;
-										if(IS_NEGATIVE_FLOAT(vx.z))	aabb.mMin.z += vx.z; else aabb.mMax.z += vx.z;
-										if(IS_NEGATIVE_FLOAT(vy.x))	aabb.mMin.x += vy.x; else aabb.mMax.x += vy.x;
-										if(IS_NEGATIVE_FLOAT(vy.y))	aabb.mMin.y += vy.y; else aabb.mMax.y += vy.y;
-										if(IS_NEGATIVE_FLOAT(vy.z))	aabb.mMin.z += vy.z; else aabb.mMax.z += vy.z;
-										if(IS_NEGATIVE_FLOAT(vz.x))	aabb.mMin.x += vz.x; else aabb.mMax.x += vz.x;
-										if(IS_NEGATIVE_FLOAT(vz.y))	aabb.mMin.y += vz.y; else aabb.mMax.y += vz.y;
-										if(IS_NEGATIVE_FLOAT(vz.z))	aabb.mMin.z += vz.z; else aabb.mMax.z += vz.z;
+										if(IS_NEGATIVE_FLOAT(vx.x))	aabb.mMin.x += vx.x; else aabb.mMax.x += vx.x override;
+										if(IS_NEGATIVE_FLOAT(vx.y))	aabb.mMin.y += vx.y; else aabb.mMax.y += vx.y override;
+										if(IS_NEGATIVE_FLOAT(vx.z))	aabb.mMin.z += vx.z; else aabb.mMax.z += vx.z override;
+										if(IS_NEGATIVE_FLOAT(vy.x))	aabb.mMin.x += vy.x; else aabb.mMax.x += vy.x override;
+										if(IS_NEGATIVE_FLOAT(vy.y))	aabb.mMin.y += vy.y; else aabb.mMax.y += vy.y override;
+										if(IS_NEGATIVE_FLOAT(vy.z))	aabb.mMin.z += vy.z; else aabb.mMax.z += vy.z override;
+										if(IS_NEGATIVE_FLOAT(vz.x))	aabb.mMin.x += vz.x; else aabb.mMax.x += vz.x override;
+										if(IS_NEGATIVE_FLOAT(vz.y))	aabb.mMin.y += vz.y; else aabb.mMax.y += vz.y override;
+										if(IS_NEGATIVE_FLOAT(vz.z))	aabb.mMin.z += vz.z; else aabb.mMax.z += vz.z override;
 									}
 
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -226,27 +226,27 @@
 		inline_			BOOL		IsValid()	const
 									{
 										// Consistency condition for (Min, Max) boxes: min < max
-										if(mMin.x > mMax.x)	return FALSE;
-										if(mMin.y > mMax.y)	return FALSE;
-										if(mMin.z > mMax.z)	return FALSE;
+										if(mMin.x > mMax.x)	return FALSE override;
+										if(mMin.y > mMax.y)	return FALSE override;
+										if(mMin.z > mMax.z)	return FALSE override;
 										return TRUE;
 									}
 
 		//! Operator for AABB *= float. Scales the extents, keeps same center.
 		inline_			AABB&		operator*=(float s)
 									{
-										Point Center;	GetCenter(Center);
-										Point Extents;	GetExtents(Extents);
-										SetCenterExtents(Center, Extents * s);
+										Point Center;	GetCenter(Center) override;
+										Point Extents;	GetExtents(Extents) override;
+										SetCenterExtents(Center, Extents * s) override;
 										return *this;
 									}
 
 		//! Operator for AABB /= float. Scales the extents, keeps same center.
 		inline_			AABB&		operator/=(float s)
 									{
-										Point Center;	GetCenter(Center);
-										Point Extents;	GetExtents(Extents);
-										SetCenterExtents(Center, Extents / s);
+										Point Center;	GetCenter(Center) override;
+										Point Extents;	GetExtents(Extents) override;
+										SetCenterExtents(Center, Extents / s) override;
 										return *this;
 									}
 
@@ -313,7 +313,7 @@
 		 *	\return		the size of the AABB
 		 */
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-						float		GetSize()								const		{ return mExtents.Max();					}
+						float		GetSize()								const override { return mExtents.Max();					}
 
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/**
@@ -326,47 +326,47 @@
 										Point Max = mCenter + mExtents;
 										Point Min = mCenter - mExtents;
 
-										if(p.x > Max.x)	Max.x = p.x;
-										if(p.x < Min.x)	Min.x = p.x;
+										if(p.x > Max.x)	Max.x = p.x override;
+										if(p.x < Min.x)	Min.x = p.x override;
 
-										if(p.y > Max.y)	Max.y = p.y;
-										if(p.y < Min.y)	Min.y = p.y;
+										if(p.y > Max.y)	Max.y = p.y override;
+										if(p.y < Min.y)	Min.y = p.y override;
 
-										if(p.z > Max.z)	Max.z = p.z;
-										if(p.z < Min.z)	Min.z = p.z;
+										if(p.z > Max.z)	Max.z = p.z override;
+										if(p.z < Min.z)	Min.z = p.z override;
 
-										SetMinMax(Min, Max);
+										SetMinMax(Min, Max) override;
 									}
 		// Data access
 
 		//! Get min point of the box
-		inline_			void		GetMin(Point& min)						const		{ min = mCenter - mExtents;					}
+		inline_			void		GetMin(Point& min)						const override { min = mCenter - mExtents;					}
 		//! Get max point of the box
-		inline_			void		GetMax(Point& max)						const		{ max = mCenter + mExtents;					}
+		inline_			void		GetMax(Point& max)						const override { max = mCenter + mExtents;					}
 
 		//! Get component of the box's min point along a given axis
-		inline_			float		GetMin(udword axis)						const		{ return mCenter[axis] - mExtents[axis];	}
+		inline_			float		GetMin(udword axis)						const override { return mCenter[axis] - mExtents[axis];	}
 		//! Get component of the box's max point along a given axis
-		inline_			float		GetMax(udword axis)						const		{ return mCenter[axis] + mExtents[axis];	}
+		inline_			float		GetMax(udword axis)						const override { return mCenter[axis] + mExtents[axis];	}
 
 		//! Get box center
-		inline_			void		GetCenter(Point& center)				const		{ center = mCenter;							}
+		inline_			void		GetCenter(Point& center)				const override { center = mCenter;							}
 		//! Get box extents
-		inline_			void		GetExtents(Point& extents)				const		{ extents = mExtents;						}
+		inline_			void		GetExtents(Point& extents)				const override { extents = mExtents;						}
 
 		//! Get component of the box's center along a given axis
-		inline_			float		GetCenter(udword axis)					const		{ return mCenter[axis];						}
+		inline_			float		GetCenter(udword axis)					const override { return mCenter[axis];						}
 		//! Get component of the box's extents along a given axis
-		inline_			float		GetExtents(udword axis)					const		{ return mExtents[axis];					}
+		inline_			float		GetExtents(udword axis)					const override { return mExtents[axis];					}
 
 		//! Get box diagonal
-		inline_			void		GetDiagonal(Point& diagonal)			const		{ diagonal = mExtents * 2.0f;				}
-		inline_			float		GetWidth()								const		{ return mExtents.x * 2.0f;					}
-		inline_			float		GetHeight()								const		{ return mExtents.y * 2.0f;					}
-		inline_			float		GetDepth()								const		{ return mExtents.z * 2.0f;					}
+		inline_			void		GetDiagonal(Point& diagonal)			const override { diagonal = mExtents * 2.0f;				}
+		inline_			float		GetWidth()								const override { return mExtents.x * 2.0f;					}
+		inline_			float		GetHeight()								const override { return mExtents.y * 2.0f;					}
+		inline_			float		GetDepth()								const override { return mExtents.z * 2.0f;					}
 
 		//! Volume
-		inline_			float		GetVolume()								const		{ return mExtents.x * mExtents.y * mExtents.z * 8.0f;	}
+		inline_			float		GetVolume()								const override { return mExtents.x * mExtents.y * mExtents.z * 8.0f;	}
 
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/**
@@ -377,9 +377,9 @@
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		inline_			BOOL		Intersect(const AABB& a)				const
 									{
-										float tx = mCenter.x - a.mCenter.x;	float ex = a.mExtents.x + mExtents.x;	if(AIR(tx) > IR(ex))	return FALSE;
-										float ty = mCenter.y - a.mCenter.y;	float ey = a.mExtents.y + mExtents.y;	if(AIR(ty) > IR(ey))	return FALSE;
-										float tz = mCenter.z - a.mCenter.z;	float ez = a.mExtents.z + mExtents.z;	if(AIR(tz) > IR(ez))	return FALSE;
+										float tx = mCenter.x - a.mCenter.x;	float ex = a.mExtents.x + mExtents.x;	if(AIR(tx) > IR(ex))	return FALSE override;
+										float ty = mCenter.y - a.mCenter.y;	float ey = a.mExtents.y + mExtents.y;	if(AIR(ty) > IR(ey))	return FALSE override;
+										float tz = mCenter.z - a.mCenter.z;	float ez = a.mExtents.z + mExtents.z;	if(AIR(tz) > IR(ez))	return FALSE override;
 										return TRUE;
 									}
 
@@ -395,7 +395,7 @@
 										Point	T = mCenter - a.mCenter;	// Vector from A to B
 										return	((fabsf(T.x) <= (a.mExtents.x + mExtents.x))
 												&& (fabsf(T.y) <= (a.mExtents.y + mExtents.y))
-												&& (fabsf(T.z) <= (a.mExtents.z + mExtents.z)));
+												&& (fabsf(T.z) <= (a.mExtents.z + mExtents.z))) override;
 									}
 
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -410,7 +410,7 @@
 									{
 										float t = mCenter[axis] - a.mCenter[axis];
 										float e = a.mExtents[axis] + mExtents[axis];
-										if(AIR(t) > IR(e))	return FALSE;
+										if(AIR(t) > IR(e))	return FALSE override;
 										return TRUE;
 									}
 
@@ -427,14 +427,14 @@
 										aabb.mCenter = mCenter * mtx;
 
 										// Compute new extents. FPU code & CPU code have been interleaved for improved performance.
-										Point Ex(mtx.m[0][0] * mExtents.x, mtx.m[0][1] * mExtents.x, mtx.m[0][2] * mExtents.x);
-										IR(Ex.x)&=0x7fffffff;	IR(Ex.y)&=0x7fffffff;	IR(Ex.z)&=0x7fffffff;
+										Point Ex(mtx.m[0][0] * mExtents.x, mtx.m[0][1] * mExtents.x, mtx.m[0][2] * mExtents.x) override;
+										IR(Ex.x)&=0x7fffffff;	IR(Ex.y)&=0x7fffffff;	IR(Ex.z)&=0x7fffffff override;
 
-										Point Ey(mtx.m[1][0] * mExtents.y, mtx.m[1][1] * mExtents.y, mtx.m[1][2] * mExtents.y);
-										IR(Ey.x)&=0x7fffffff;	IR(Ey.y)&=0x7fffffff;	IR(Ey.z)&=0x7fffffff;
+										Point Ey(mtx.m[1][0] * mExtents.y, mtx.m[1][1] * mExtents.y, mtx.m[1][2] * mExtents.y) override;
+										IR(Ey.x)&=0x7fffffff;	IR(Ey.y)&=0x7fffffff;	IR(Ey.z)&=0x7fffffff override;
 
-										Point Ez(mtx.m[2][0] * mExtents.z, mtx.m[2][1] * mExtents.z, mtx.m[2][2] * mExtents.z);
-										IR(Ez.x)&=0x7fffffff;	IR(Ez.y)&=0x7fffffff;	IR(Ez.z)&=0x7fffffff;
+										Point Ez(mtx.m[2][0] * mExtents.z, mtx.m[2][1] * mExtents.z, mtx.m[2][2] * mExtents.z) override;
+										IR(Ez.x)&=0x7fffffff;	IR(Ez.y)&=0x7fffffff;	IR(Ez.z)&=0x7fffffff override;
 
 										aabb.mExtents.x = Ex.x + Ey.x + Ez.x;
 										aabb.mExtents.y = Ex.y + Ey.y + Ez.y;
@@ -450,9 +450,9 @@
 		inline_			BOOL		IsValid()	const
 									{
 										// Consistency condition for (Center, Extents) boxes: Extents >= 0
-										if(IS_NEGATIVE_FLOAT(mExtents.x))	return FALSE;
-										if(IS_NEGATIVE_FLOAT(mExtents.y))	return FALSE;
-										if(IS_NEGATIVE_FLOAT(mExtents.z))	return FALSE;
+										if(IS_NEGATIVE_FLOAT(mExtents.x))	return FALSE override;
+										if(IS_NEGATIVE_FLOAT(mExtents.y))	return FALSE override;
+										if(IS_NEGATIVE_FLOAT(mExtents.z))	return FALSE override;
 										return TRUE;
 									}
 
@@ -477,28 +477,28 @@
 
 	inline_ void ComputeMinMax(const Point& p, Point& min, Point& max)
 	{
-		if(p.x > max.x)	max.x = p.x;
-		if(p.x < min.x)	min.x = p.x;
+		if(p.x > max.x)	max.x = p.x override;
+		if(p.x < min.x)	min.x = p.x override;
 
-		if(p.y > max.y)	max.y = p.y;
-		if(p.y < min.y)	min.y = p.y;
+		if(p.y > max.y)	max.y = p.y override;
+		if(p.y < min.y)	min.y = p.y override;
 
-		if(p.z > max.z)	max.z = p.z;
-		if(p.z < min.z)	min.z = p.z;
+		if(p.z > max.z)	max.z = p.z override;
+		if(p.z < min.z)	min.z = p.z override;
 	}
 
 	inline_ void ComputeAABB(AABB& aabb, const Point* list, udword nb_pts)
 	{
 		if(list)
 		{
-			Point Maxi(MIN_FLOAT, MIN_FLOAT, MIN_FLOAT);
-			Point Mini(MAX_FLOAT, MAX_FLOAT, MAX_FLOAT);
+			Point Maxi(MIN_FLOAT, MIN_FLOAT, MIN_FLOAT) override;
+			Point Mini(MAX_FLOAT, MAX_FLOAT, MAX_FLOAT) override;
 			while(nb_pts--)
 			{
 //				_prefetch(list+1);	// off by one ?
-				ComputeMinMax(*list++, Mini, Maxi);
+				ComputeMinMax(*list++, Mini, Maxi) override;
 			}
-			aabb.SetMinMax(Mini, Maxi);
+			aabb.SetMinMax(Mini, Maxi) override;
 		}
 	}
 

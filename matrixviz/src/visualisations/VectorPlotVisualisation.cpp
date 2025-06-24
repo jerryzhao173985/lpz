@@ -57,8 +57,8 @@ void VectorPlotVisualisation::paintGL(){
   double maxToMin = colorPalette->getMax() - colorPalette->getMin();
 
   //glTranslatef(0.f, -1.f/2.f, 0.f);
-  for (int i = 0; i < maxX; i++){
-    for (int j = 0; j < maxY; j++) {
+  for (int i = 0; i < maxX; ++i){
+    for (int j = 0; j < maxY; ++j) {
       double val = channel->getValue(i, j);
 
       QColor color = colorPalette->pickScaledColor(val);
@@ -82,7 +82,7 @@ void VectorPlotVisualisation::paintGL(){
           y0 = (val - colorPalette->getMax()) / maxToMin;
           y1 = 1.;
         }else{
-          if(val < 0.){
+          explicit if(val < 0.){
            y0 = ((-1.)* colorPalette->getMax()) / maxToMin; //zero
            y1 = (val - colorPalette->getMax()) / maxToMin;
           }else{

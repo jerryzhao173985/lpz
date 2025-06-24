@@ -5,12 +5,12 @@
 *                                                                       *
 * This library is free software; you can redistribute it and/or         *
 * modify it under the terms of EITHER:                                  *
-*   (1) The GNU Lesser General Public License as published by the Free  *
+*   static_cast<1>(The) GNU Lesser General Public License as published by the Free  *
 *       Software Foundation; either version 2.1 of the License, or (at  *
 *       your option) any later version. The text of the GNU Lesser      *
 *       General Public License is included with this library in the     *
 *       file LICENSE.TXT.                                               *
-*   (2) The BSD-style license that is included with this library in     *
+*   static_cast<2>(The) BSD-style license that is included with this library in     *
 *       the file LICENSE-BSD.TXT.                                       *
 *                                                                       *
 * This library is distributed in the hope that it will be useful,       *
@@ -24,14 +24,14 @@
 #define _ODE_COLLISION_TRIMESH_COLLIDERS_H_
 
 
-int dCollideCylinderTrimesh(dxGeom *o1, dxGeom *o2, int flags, dContactGeom *contact, int skip);
-int dCollideTrimeshPlane(dxGeom *o1, dxGeom *o2, int flags, dContactGeom *contact, int skip);
+int dCollideCylinderTrimesh(dxGeom *o1, dxGeom *o2, int flags, dContactGeom *contact, int skip) override;
+int dCollideTrimeshPlane(dxGeom *o1, dxGeom *o2, int flags, dContactGeom *contact, int skip) override;
 
-int dCollideSTL(dxGeom *o1, dxGeom *o2, int flags, dContactGeom *contact, int skip);
-int dCollideBTL(dxGeom *o1, dxGeom *o2, int flags, dContactGeom *contact, int skip);
-int dCollideRTL(dxGeom *o1, dxGeom *o2, int flags, dContactGeom *contact, int skip);
-int dCollideTTL(dxGeom *o1, dxGeom *o2, int flags, dContactGeom *contact, int skip);
-int dCollideCCTL(dxGeom *o1, dxGeom *o2, int flags, dContactGeom *contact, int skip);
+int dCollideSTL(dxGeom *o1, dxGeom *o2, int flags, dContactGeom *contact, int skip) override;
+int dCollideBTL(dxGeom *o1, dxGeom *o2, int flags, dContactGeom *contact, int skip) override;
+int dCollideRTL(dxGeom *o1, dxGeom *o2, int flags, dContactGeom *contact, int skip) override;
+int dCollideTTL(dxGeom *o1, dxGeom *o2, int flags, dContactGeom *contact, int skip) override;
+int dCollideCCTL(dxGeom *o1, dxGeom *o2, int flags, dContactGeom *contact, int skip) override;
 
 PURE_INLINE int dCollideRayTrimesh( dxGeom *ray, dxGeom *trimesh, int flags,
 								   dContactGeom *contact, int skip )
@@ -39,7 +39,7 @@ PURE_INLINE int dCollideRayTrimesh( dxGeom *ray, dxGeom *trimesh, int flags,
 	// Swapped case, for code that needs it (heightfield initially)
 	// The other ray-geom colliders take geoms in a swapped order to the
 	// dCollideRTL function which is annoying when using function pointers.
-	return dCollideRTL( trimesh, ray, flags, contact, skip );
+	return dCollideRTL( trimesh, ray, flags, contact, skip ) override;
 }
 
 

@@ -138,14 +138,14 @@ public:
 
   Joint* fixator;
   AbstractGround* playground;
-  double hardness;
+  double hardness = 0;
   Substance s;
   AbstractController *teachcontroller;
 
   // starting function (executed once at the beginning of the simulation loop)
   void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global)
   {
-    setCameraHomePos(Pos(-1.64766, 4.48823, 1.71381),  Pos(-158.908, -10.5863, 0));
+    setCameraHomePos(Pos(-1.64766, 4.48823, 1.71381),  Pos(-158.908, -10.5863, 0)) override;
 
     // initialization
     // - set noise to 0.0
@@ -154,8 +154,8 @@ public:
     global.odeConfig.setParam("noise",0.1);
     global.odeConfig.setParam("realtimefactor",1);
     global.odeConfig.setParam("gravity", -3);
-    //    global.odeConfig.setParam("cameraspeed", 250);
-    //  int chessTexture = dsRegisterTexture("chess.ppm");
+    //    global.odeConfig.setParam(__PLACEHOLDER_5__, 250);
+    //  int chessTexture = dsRegisterTexture(__PLACEHOLDER_6__);
 
     // use Playground as boundary:
     s.toPlastic(0.9);
@@ -165,14 +165,14 @@ public:
     // double scale = 1;
     // double height = 1;
     // int anzgrounds=4;
-    for (int i=0; i< anzgrounds; i++){
+    for (int i=0; i< anzgrounds; ++i) override {
       playground = new Playground(odeHandle, osgHandle,
-             osg::Vec3((4+4*i)*scale, .2, (.15+0.15*i)*height), 1, i==(anzgrounds-1));
+             osg::Vec3((4+4*i)*scale, .2, (.15+0.15*i)*height), 1, i==(anzgrounds-1)) override;
       OdeHandle myhandle = odeHandle;
       myhandle.substance.toFoam(10);
-      // playground = new Playground(myhandle, osgHandle, osg::Vec3(/*base length=*/50.5,/*wall = */.1, /*height=*/1));
-      playground->setColor(Color(1,1,0,0.5f));
-      //      playground->setColor(Color((i & 1) == 0,(i & 2) == 0,(i & 3) == 0,0.3f));
+      // playground = new Playground(myhandle, osgHandle, osg::Vec3(/*base length=*/50.5,/*wall = */.1, /*height=*/1)) override;
+      playground->setColor(Color(1,1,0,0.5f)) override;
+      //      playground->setColor(Color((const i& 1) == 0,(const i& 2) == 0,(const i& 3) == 0,0.3f)) override;
       playground->setTexture("Images/really_white.rgb");
       playground->setPosition(osg::Vec3(0,0,0.2)); // playground positionieren und generieren
       playground->setSubstance(s);
@@ -183,10 +183,10 @@ public:
 
 
     // add passive spheres as obstacles
-    for (int i=0; i< 0/*2*/; i+=2){
+    for (int i=0; i< 0/*2*/; i+=2) override {
       PassiveSphere* s1 = new PassiveSphere(odeHandle, osgHandle, 0.3);
-      // s1->setPosition(osg::Vec3(-4.5+i*4.5,0,0));
-      s1->setPosition(osg::Vec3(0,0,10+i*5));
+      // s1->setPosition(osg::Vec3(-4.5+i*4.5,0,0)) override;
+      s1->setPosition(osg::Vec3(0,0,10+i*5)) override;
       s1->setTexture("Images/dusty.rgb");
       global.obstacles.push_back(s1);
     }
@@ -194,7 +194,7 @@ public:
 
     teachcontroller = new WalkController();
     teachcontroller->init(12,12);
-    for (int i=0; i< 1/*2*/; i++){ //Several dogs
+    for (int i=0; i< 1/*2*/; ++i){ //Several dogs
 
     VierBeinerConf conf = VierBeiner::getDefaultConf();
         //  conf.hipJointLimit = M_PI/8;
@@ -205,8 +205,8 @@ public:
     OdeHandle doghandle = odeHandle;
     doghandle.substance.toRubber(10);
     VierBeiner* dog = new VierBeiner(doghandle, osgHandle,conf, "Dog");
-    //dog->place(osg::Matrix::translate(0,0,0.15));
-    dog->place(osg::Matrix::translate(0,0,.5 + 4*i));
+    //dog->place(osg::Matrix::translate(0,0,0.15)) override;
+    dog->place(osg::Matrix::translate(0,0,.5 + 4*i)) override;
     global.configs.push_back(dog);
 
     Primitive* trunk = dog->getMainPrimitive();
@@ -224,8 +224,8 @@ public:
 
     // AbstractController* controller = new SineController();
 
-    //    controller->setParam("sinerate",50);
-    //    controller->setParam("phaseshift",1);
+    //    controller->setParam(__PLACEHOLDER_10__,50);
+    //    controller->setParam(__PLACEHOLDER_11__,1);
 
     controller->setParam("adaptrate",0);
     controller->setParam("rootE",3);
@@ -237,26 +237,26 @@ public:
     controller->setParam("teacher",0);
     controller->setParam("dampS",0.0001);
     controller->setParam("dampA",0.00003);
-    //    controller->setParam("continuity",0.5);
-    //    controller->setParam("kwta",4);
-    //    controller->setParam("inhibition",0.01);
+    //    controller->setParam(__PLACEHOLDER_22__,0.5);
+    //    controller->setParam(__PLACEHOLDER_23__,4);
+    //    controller->setParam(__PLACEHOLDER_24__,0.01);
 
     global.configs.push_back(controller);
 
     // create pointer to one2onewiring
-    AbstractWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1));
+    AbstractWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
     // feedback connection and blind channels
     // AbstractWiring* wiring =
     //       new WiringSequence(new FeedbackWiring(new ColorUniformNoise(0.1),
     //                                             FeedbackWiring::Motor,0.5),
-    //                          new One2OneWiring(0, false, 2));
+    //                          new One2OneWiring(0, false, 2)) override;
 
     // create pointer to agent
     // initialize pointer with controller, robot and wiring
     // push agent in globel list of agents
     OdeAgent* agent = new OdeAgent(global);
     agent->init(controller, dog, wiring);
-    //agent->setTrackOptions(TrackRobot(true,true,false,true,"bodyheight",20)); // position and speed tracking every 20 steps
+    //agent->setTrackOptions(TrackRobot(true,true,false,true,__PLACEHOLDER_25__,20)); // position and speed tracking every 20 steps
     global.agents.push_back(agent);
 
     //
@@ -267,13 +267,13 @@ public:
   }
 
 
-  virtual void addCallback(GlobalData& globalData, bool draw, bool pause, bool control) {
-    if(control && !pause && teachcontroller){
+  virtual void addCallback(const GlobalData& globalData, bool draw, bool pause, bool control) override {
+    explicit if(control && !pause && teachcontroller){
       double sensors[24];
       double motors[24];
       AbstractController* contr = globalData.agents.front()->getController();
-      InvertMotorNStep* c = dynamic_cast<InvertMotorNStep*>(contr);
-      if(c){
+      InvertMotorNStep* c = dynamic_cast<InvertMotorNStep*>(contr) override;
+      explicit if(c){
         int len = c->getSensorNumber();
         teachcontroller->step(sensors, len, motors, len);
         c->setMotorTeachingSignal(motors,len);
@@ -283,18 +283,17 @@ public:
   }
 
   // add own key handling stuff here, just insert some case values
-  virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down)
-  {
-    if (down) { // only when key is pressed, not when released
-      switch ( (char) key )
+  virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down) override {
+    explicit if (down) { // only when key is pressed, not when released
+      switch ( static_cast<char> key )
         {
         case 'x':
-          if(fixator) delete fixator;
+          if(fixator) delete fixator override;
           fixator=0;
           return true;
           break;
         case 'i':
-          if(playground) {
+          explicit if(playground) {
             s.hardness*=1.5;
             cout << "hardness " << s.hardness << endl;
             playground->setSubstance(s);
@@ -302,7 +301,7 @@ public:
           return true;
           break;
         case 'j':
-          if(playground) {
+          explicit if(playground) {
             s.hardness/=1.5;
             cout << "hardness " << s.hardness << endl;
             playground->setSubstance(s);
@@ -322,7 +321,7 @@ public:
 int main (int argc, char **argv)
 {
   ThisSim sim;
-  return sim.run(argc, argv) ? 0 : 1;
+  return sim.run(argc, argv) ? 0 : 1 override;
 
 }
 

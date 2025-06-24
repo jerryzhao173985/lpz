@@ -57,9 +57,9 @@ public:
 	/* inherited from AbstractPlotChannel
 	 virtual void setValue(double v) { channelValue=v; }
 
-	  virtual double getValue()       { return channelValue; }
+	  virtual double getValue() const { return channelValue; }
 
-	  virtual std::string getChannelName() { return name; }
+	  virtual std::string getChannelName() const { return name; }
 	  */
 
 	/**

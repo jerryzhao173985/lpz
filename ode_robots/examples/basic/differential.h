@@ -76,7 +76,7 @@ namespace lpzrobots{
       /**
        * Default configuration of the robot
        */
-      static DifferentialConf getDefaultConf(){
+      static DifferentialConf getDefaultConf() const {
         DifferentialConf conf;
         conf.bodyRadius         = 1.;
         conf.bodyHeight         = .5;
@@ -93,19 +93,19 @@ namespace lpzrobots{
       /**
        * Destructor
        */
-      virtual ~Differential() override;
+      virtual ~Differential();
 
       /**
        * Place the robot in the desired pose
        * @param pose desired 4x4 pose matrix
        */
-      virtual void placeIntern(const osg::Matrix& pose) override;
+      virtual void placeIntern(const osg::Matrix& pose);
 
       /**
        * Create the robot in the desired pose
        * @param pose desired 4x4 pose matrix
        */
-      virtual void create(const osg::Matrix& pose) override;
+      virtual void create(const osg::Matrix& pose);
 
   };
 

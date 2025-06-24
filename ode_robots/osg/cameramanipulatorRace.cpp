@@ -28,6 +28,7 @@
 #include "pos.h"
 #include "odeagent.h"
 #include <stdio.h>
+#include <cmath>  // For M_PI
 
 
 #define square(x) ((x)*(x))
@@ -37,18 +38,18 @@ namespace lpzrobots {
   using namespace osg;
   using namespace osgGA;
 
-  CameraManipulatorRace::CameraManipulatorRace(osg::Node* node,GlobalData& global, CameraHandle& cameraHandle)
+  CameraManipulatorRace::CameraManipulatorRace(osg::Node* node,const GlobalData& global, const CameraHandle& cameraHandle)
   : CameraManipulator(node,global, cameraHandle) {}
 
   CameraManipulatorRace::~CameraManipulatorRace(){}
 
 
   void CameraManipulatorRace::calcMovementByAgent() {
-    if (!this->isWatchingAgentDefined()) return;
+    if (!this->isWatchingAgentDefined()) return override;
     // manipulate desired eye by the move of the robot
     const double* robMove = (camHandle.watchingAgent->getRobot()->getPosition()-camHandle.oldPositionOfAgent).toArray();
     // attach the robSpeed to desired eye
-    for (int i=0;i<=2;i++) {
+    for (int i=0;i<=2;++i)  override {
       if (!isNaN(robMove[i])) {
         camHandle.desiredEye[i]+=robMove[i];}
       else
@@ -56,7 +57,7 @@ namespace lpzrobots {
     }
     // move behind the robot
     // returns the orientation of the robot in matrix style
-    matrix::Matrix Orientation= (camHandle.watchingAgent->getRobot()->getOrientation());
+    matrix::Matrix Orientation= (camHandle.watchingAgent->getRobot()->getOrientation()) override;
     Orientation.toTranspose();
     // first get the normalized vector of the orientation
     double eVecX[3] = {0,1,0};
@@ -66,7 +67,7 @@ namespace lpzrobots {
     // then get the distance between robot and camera
     Position robPos = camHandle.watchingAgent->getRobot()->getPosition();
     double distance = sqrt(square(camHandle.desiredEye[0]-robPos.x)+
-                           square(camHandle.desiredEye[1]-robPos.y));
+                           square(camHandle.desiredEye[1]-robPos.y)) override;
     // then new eye = robPos minus normalized vector * distance
     camHandle.desiredEye[0]=robPos.x + distance *normVecX.val(1,0);
     camHandle.desiredEye[1]=robPos.y - distance *normVecY.val(1,0);
@@ -76,7 +77,7 @@ namespace lpzrobots {
     // calculate the horizontal angle, means pan (view.x)
     if (robPos.x-camHandle.desiredEye[0]!=0) { // division by zero
       camHandle.desiredView[0]= atan((camHandle.desiredEye[0]-robPos.x)/(robPos.y-camHandle.desiredEye[1]))
-        / PI*180.0f+180.0f;
+        / M_PI*180.0f+180.0f;
       if (camHandle.desiredEye[1]-robPos.y<0) // we must switch
         camHandle.desiredView[0]+=180.0f;
     }
@@ -86,7 +87,7 @@ namespace lpzrobots {
       camHandle.desiredView[1]=-atan((sqrt(square(camHandle.desiredEye[0]-robPos.x)+
                                 square(camHandle.desiredEye[1]-robPos.y)))
                           /(robPos.z-camHandle.desiredEye[2]))
-        / PI*180.0f-90.0f;
+        / M_PI*180.0f-90.0f;
       if (camHandle.desiredEye[2]-robPos.z<0) // we must switch
         camHandle.desiredView[1]+=180.0f;
     }

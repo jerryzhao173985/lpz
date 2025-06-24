@@ -7,7 +7,7 @@
  *   LICENSE:                                                              *
  *   This work is licensed under the Creative Commons                      *
  *   Attribution-NonCommercial-ShareAlike 2.5 License. To view a copy of   *
- *   this license, visit http://creativecommons.org/licenses/by-nc-sa/2.5/ *
+ *   this license, visit http:__PLACEHOLDER_10__
  *   or send a letter to Creative Commons, 543 Howard Street, 5th Floor,   *
  *   San Francisco, California, 94105, USA.                                *
  *                                                                         *
@@ -60,9 +60,9 @@ protected:
 
   paramval squashSize; ///< size of the box, where the parameter updates are clipped to
 
-  int t;
-  unsigned short buffersize;
-  bool initialised;
+  int t = 0;
+  unsigned short buffersize = 0;
+  bool initialised = false;
 
 protected:
   /// put new value in ring buffer
@@ -74,7 +74,7 @@ protected:
   virtual matrix::Matrix calculateDelayedValues(const matrix::Matrix* buffer,
                                                 int number_steps_of_delay_) {
     // number_steps_of_delay must not be smaller than buffersize
-    assert((unsigned)number_steps_of_delay_ < buffersize);
+    assert(static_cast<unsigned>(number_steps_of_delay_) < buffersize);
     return buffer[(t - number_steps_of_delay_) % buffersize];
   };
 
@@ -82,13 +82,13 @@ protected:
   virtual matrix::Matrix calculateSmoothValues(const matrix::Matrix* buffer,
                                                int number_steps_for_averaging_) {
     // number_steps_for_averaging_ must not be larger than buffersize
-    assert((int)number_steps_for_averaging_ <= buffersize);
+    assert(static_cast<int>(number_steps_for_averaging_) <= buffersize);
 
     matrix::Matrix result(buffer[t % buffersize]);
-    for (int k = 1; k < number_steps_for_averaging_; k++) {
+    for (int k = 1; k < number_steps_for_averaging_; ++k) {
       result += buffer[(t - k + buffersize) % buffersize];
     }
-    result *= 1 / ((double)(number_steps_for_averaging_)); // scalar multiplication
+    result *= 1 / (static_cast<double>(number_steps_for_averaging_)); // scalar multiplication
     return result;
   };
 

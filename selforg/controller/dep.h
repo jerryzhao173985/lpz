@@ -7,7 +7,7 @@
  *   LICENSE:                                                              *
  *   This work is licensed under the Creative Commons                      *
  *   Attribution-NonCommercial-ShareAlike 2.5 License. To view a copy of   *
- *   this license, visit http://creativecommons.org/licenses/by-nc-sa/2.5/ *
+ *   this license, visit http:__PLACEHOLDER_5__
  *   or send a letter to Creative Commons, 543 Howard Street, 5th Floor,   *
  *   San Francisco, California, 94105, USA.                                *
  *                                                                         *
@@ -72,7 +72,7 @@ struct DEPConf {
 class DEP : public AbstractController {
 
 public:
-  explicit DEP(const DEPConf& conf = getDefaultConf());
+  DEP(const DEPConf& conf = getDefaultConf());
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
 
   virtual ~DEP();
@@ -93,11 +93,11 @@ public:
   }
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
-  virtual int getSensorNumber() const {
+  virtual int getSensorNumber() const override {
     return number_sensors;
   }
   /// returns the mumber of motors the controller was initialised with or 0 if not initialised
-  virtual int getMotorNumber() const {
+  virtual int getMotorNumber() const override {
     return number_motors;
   }
 
@@ -116,7 +116,7 @@ public:
 
   /***** STOREABLE ****/
   /** stores the controller values to a given file. */
-  virtual bool store(FILE* f) const;
+  virtual bool store(FILE* f) const override;
   /** loads the controller values from a given file. */
   virtual bool restore(FILE* f);
 
@@ -130,8 +130,8 @@ public:
   }
 
 protected:
-  unsigned short number_sensors;
-  unsigned short number_motors;
+  unsigned short number_sensors = 0;
+  unsigned short number_motors = 0;
   static constexpr unsigned short buffersize = 150;
 
   DEPConf conf; // configuration object
@@ -154,11 +154,11 @@ protected:
   matrix::Matrix eigenvaluesLRe; // Eigenvalues of L matrix real part
   matrix::Matrix eigenvaluesLIm; // Eigenvalues of L matrix imaginary part
   matrix::Matrix eigenvectors;   // Eigenvectors of L matrix (real part)
-  double proj_ev1;               // projection of x into first eigenvector
-  double proj_ev2;               // projection of x into second eigenvector
-  int calcEVInterval;
+  double proj_ev1 = 0;               // projection of x into first eigenvector
+  double proj_ev2 = 0;               // projection of x into second eigenvector
+  int calcEVInterval = 0;
 
-  int t;
+  int t = 0;
 
   paramval epsC;
   paramval epsh;
@@ -169,15 +169,15 @@ protected:
   paramint s4delay; // # of steps the motor values are delayed (1 means no delay)
 
   //  paramval maxSpeed;       ///< maximal speed for motors
-  int indnorm;
-  int regularization; ///< exponent of regularization 10^{-regularization}
+  int indnorm = 0;
+  int regularization = 0; ///< exponent of regularization 10^{-regularization}
 
   paramval urate;
   paramval slowfast;
   paramval synboost;
 
   paramval timedist;
-  bool _internWithLearning;
+  bool _internWithLearning = false;
 
   /// learn  model (M = A^T )
   virtual void learnModel(double eps);

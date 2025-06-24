@@ -29,12 +29,12 @@
 class BasicController : public AbstractController{
   public:
 
-    BasicController(const std::string& name);
+    explicit BasicController(const std::string& name);
 
     /** initialisation of the controller with the given sensor/ motornumber
       Must be called before use. The random generator is optional.
       */
-    virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0)  override;
+    virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
 
     /** @return Number of sensors the controller
       was initialised with or 0 if not initialised */
@@ -52,14 +52,14 @@ class BasicController : public AbstractController{
       @param motornumber length of the provided motor array
       */
     virtual void step(const sensor* sensors, int sensornumber,
-                      motor* motors, int motornumber) override;
+                      motor* motors, int motornumber);
 
 
     /** performs one step without learning.
       @see step
       */
     virtual void stepNoLearning(const sensor* , int number_sensors,
-                                motor* , int number_motors) override;
+                                motor* , int number_motors);
 
     /** stores the object to the given file stream (binary).
     */
@@ -67,13 +67,13 @@ class BasicController : public AbstractController{
 
     /** loads the object from the given file stream (binary).
     */
-    virtual bool restore(FILE* f) override;
+    virtual bool restore(FILE* f);
 
   protected:
-  double nSensors;
-  double nMotors;
-  bool initialised;
-  double threshold;
+  double nSensors = 0;
+  double nMotors = 0;
+  bool initialised = false;
+  double threshold = 0;
 
 };
 

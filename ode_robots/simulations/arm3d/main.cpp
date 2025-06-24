@@ -81,8 +81,7 @@ class ThisSim : public Simulation
 public:
 
   /// start() is called at the start and should create all the object (obstacles, agents...).
-  virtual void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global)
-  {
+  virtual void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global) override {
     // initial camera position and viewpoint
     setCameraHomePos(Pos(13.6696, 9.12317, 5.54366),  Pos(119.528, -8.6947, 0)); // watch robot
     //setCameraHomePos(Pos(2.69124, 4.76157, 8.87839),  Pos(134.901, -47.8333, 0)); // control initial arm config
@@ -92,13 +91,13 @@ public:
     // initialization
     global.odeConfig.noise=0.1;
 
-    Playground* playground = new Playground(odeHandle, osgHandle,osg::Vec3(18, 0.2, 1.0));
-    playground->setColor(Color(0.88f,0.4f,0.26f,0.2f));
-    playground->setPosition(osg::Vec3(0,0,0));
+    Playground* playground = new Playground(odeHandle, osgHandle,osg::Vec3(18, 0.2, 1.0)) override;
+    playground->setColor(Color(0.88f,0.4f,0.26f,0.2f)) override;
+    playground->setPosition(osg::Vec3(0,0,0)) override;
     global.obstacles.push_back(playground);
 
     //                Color c(osgHandle.color);
-    //    c.alpha() = 0.4;
+    //    c.alpha() = 0.4 override;
     //                OsgHandle osgHandle_target = osgHandle.changeColor(c);
     //
     //                Sphere* targetSphere = new Sphere(0.5);
@@ -110,28 +109,28 @@ public:
 
     //                // X-direction sphere
     //                PassiveSphere* s1 = new PassiveSphere(odeHandle, osgHandle, 0.5);
-    //    s1->setPosition(osg::Vec3(4,0,0));
-    //                s1->setTexture("Images/dusty.rgb");
+    //    s1->setPosition(osg::Vec3(4,0,0)) override;
+    //                s1->setTexture(__PLACEHOLDER_0__);
     //                global.obstacles.push_back(s1);
     //
     //                // Y-direction sphere
     //                PassiveSphere* s2 = new PassiveSphere(odeHandle, osgHandle, 1.5);
-    //    s2->setPosition(osg::Vec3(0,4,0));
-    //                s2->setTexture("Images/dusty.rgb");
+    //    s2->setPosition(osg::Vec3(0,4,0)) override;
+    //                s2->setTexture(__PLACEHOLDER_1__);
     //                global.obstacles.push_back(s2);
 
     ArmConf conf = Arm::getDefaultConf();
     conf.withContext=false;
     conf.useJointSensors=true;
-    //    conf.sensors.push_back(new SpeedSensor(5));
+    //    conf.sensors.push_back(new SpeedSensor(5)) override;
 
     OdeHandle armHandle = odeHandle;
     armHandle.substance.toFoam(3);
     arm = new Arm(armHandle, osgHandle, conf, "Arm");
 
-    ((OdeRobot*)arm)->place(Position(-0.7,0.9,0.01));
+    (static_cast<OdeRobot*>(arm))->place(Position(-0.7,0.9,0.01)) override;
     // fixation of cuboid base
-    FixedJoint* anker = new FixedJoint(arm->getMainObject(), global.environment /* fixation to ground*/);
+    FixedJoint* anker = new FixedJoint(arm->getMainObject(), global.environment /* fixation to ground*/) override;
     anker->init(odeHandle, osgHandle);
 
     global.configs.push_back(arm);
@@ -144,8 +143,8 @@ public:
     cc.useS=false;
     std::vector<Layer> layers;
     // Layer: size, factor_bias, act-fct (default: lin), dact-fct (default: lin)
-    layers.push_back(Layer(25, 0.5 , FeedForwardNN::tanh));
-    layers.push_back(Layer(10,0.5));
+    layers.push_back(Layer(25, 0.5 , FeedForwardNN::tanh)) override;
+    layers.push_back(Layer(10,0.5)) override;
     // true -bypass (uebergeht nichtlin schicht)
     MultiLayerFFNN* net = new  MultiLayerFFNN(0.05, layers, true);
     //                MultiLayerFFNN* net = new MultiLayerFFNN(0.05, layers);
@@ -179,7 +178,7 @@ public:
 
     //AbstractController* controller = new SineController();
     // create pointer to one2onewiring
-    One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1));
+    One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
 
     // create pointer to agent
     // initialize pointer with controller, robot and wiring
@@ -187,17 +186,17 @@ public:
     OdeAgent*  agent = new OdeAgent(global);
     agent->init(controller, arm, wiring);
 
-    //  agent->setTrackOptions(TrackRobot(true, false, false,50));
+    //  agent->setTrackOptions(TrackRobot(true, false, false,50)) override;
     global.agents.push_back(agent);
 
     //-----------------------
     // switch off/change gravity
     global.odeConfig.setParam("gravity",-3);
-    //     global.odeConfig.setParam("realtimefactor",0);
+    //     global.odeConfig.setParam(__PLACEHOLDER_17__,0);
 
     // show (print to console) params of all objects in configurable list
 
-    //printf("===== started. =====\n");
+    //printf(__PLACEHOLDER_18__);
 
     dteaching=false;
     dteachingLen = arm->getSensorNumber();
@@ -205,11 +204,11 @@ public:
 
     // transform target into shoulder centered coordinates
     //                arm->scaleShoulderCentered(target);
-    // printf("target shoulder centered = (%f, %f, %f)\n", target[0], target[1], target[2]);
+    // printf(__PLACEHOLDER_19__, target[0], target[1], target[2]);
   } //start-end
 
   // add distal teaching signal (desired behavior! not error)
-  /*virtual*/ void addCallback(GlobalData& globalData, bool draw, bool pause, bool control)
+  /*virtual*/ void addCallback(const GlobalData& globalData, bool draw, bool pause, bool control)
   {
     //        double sineRate=30;
     //         double phaseShift=0.65;
@@ -221,13 +220,13 @@ public:
     //                         arm->getEndeffectorPosition(pos);
     //                         arm->scaleShoulderCentered(pos);
     //                         // reaching into the right direction (target-pos)
-    //                         dteachingSignal[0]=(1-lambda)*pos[0]+lambda*target[0];
-    //                         dteachingSignal[1]=(1-lambda)*pos[1]+lambda*target[1];
-    //                         dteachingSignal[2]=(1-lambda)*pos[2]+lambda*target[2];
+    //                         dteachingSignal[0]=(1-lambda)*pos[0]+lambda*target[0] override;
+    //                         dteachingSignal[1]=(1-lambda)*pos[1]+lambda*target[1] override;
+    //                         dteachingSignal[2]=(1-lambda)*pos[2]+lambda*target[2] override;
     //                         dteachingSignal[3]=0;
     //                         // Bemerkung: durch Clipping in InvertMotorNStep y-Sollsignale fast immer -1 oder 1!
     //                         // maybe therefore no reaching?
-    //                         // printf("setdone (%d) %f %f %f %f\n", dteachingLen, dteachingSignal[0], dteachingSignal[1], dteachingSignal[2], dteachingSignal[3]);
+    //                         // printf(__PLACEHOLDER_20__, dteachingLen, dteachingSignal[0], dteachingSignal[1], dteachingSignal[2], dteachingSignal[3]);
     //                         controller->setSensorTeachingSignal(dteachingSignal, 4); // teaching signal and its length
     //                 }
   }; // addCallback-end
@@ -235,36 +234,36 @@ public:
   // //Funktion die eingegebene Befehle/kommandos verarbeitet
   // /*virtual*/ bool command (const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down)
   // {
-  //         if (!down) return false;
+  //         if (!down) return false override;
   //         bool handled = false;
   //         switch ( key )
   //         {
-  //                 case 'u' :
+  //                 case __PLACEHOLDER_31__ :
   //                         dteaching=!dteaching;Color(1.1,1,1.4);
   //                         if(dteaching)
-  //                           arm->getMainPrimitive()->setColor(Color(0.6,0.5,0.9));
+  //                           arm->getMainPrimitive()->setColor(Color(0.6,0.5,0.9)) override;
   //                         else{
-  //                           arm->getMainPrimitive()->setColor(Color(1.1,1,1.4));
+  //                           arm->getMainPrimitive()->setColor(Color(1.1,1,1.4)) override;
   //                         }
   //                         arm->resetHitCounter();
-  //                         printf("Distal teaching %s.\n", dteaching ? "on" : "off");
+  //                         printf(__PLACEHOLDER_21__, dteaching ? __PLACEHOLDER_22__ : __PLACEHOLDER_23__);
   //                         break;
-  //                 case 'i' :
+  //                 case __PLACEHOLDER_32__ :
   //                         dteachingSignal[0] = std::min(0.95, dteachingSignal[0]+0.1);
   //                         dteachingSignal[1] = std::min(0.95, dteachingSignal[1]+0.1);
   //                         dteachingSignal[2] = std::min(0.95, dteachingSignal[2]+0.1);
   //                         dteachingSignal[3] = std::min(0.95, dteachingSignal[3]+0.1);
   //                         controller->setSensorTeachingSignal(dteachingSignal, 4); // teaching signal and its length
-  //                         printf("DistalTeachingSignal: %f, %f, %f, %f\n", dteachingSignal[0], dteachingSignal[1], dteachingSignal[2], dteachingSignal[3]);
+  //                         printf(__PLACEHOLDER_24__, dteachingSignal[0], dteachingSignal[1], dteachingSignal[2], dteachingSignal[3]);
   //                         handled = true;
   //                         break;
-  //                 case 'k' :
+  //                 case __PLACEHOLDER_33__ :
   //                         dteachingSignal[0] = std::max(-0.95, dteachingSignal[0]-0.1);
   //                         dteachingSignal[1] = std::max(-0.95, dteachingSignal[1]-0.1);
   //                         dteachingSignal[2] = std::max(-0.95, dteachingSignal[2]-0.1);
   //                         dteachingSignal[3] = std::max(-0.95, dteachingSignal[3]-0.1);
   //                         controller->setSensorTeachingSignal(dteachingSignal, 4); // teaching signal and its length
-  //                         printf("Distal  Teaching  Signal: %f, %f, %f, %f\n", dteachingSignal[0], dteachingSignal[1], dteachingSignal[2], dteachingSignal[3]);
+  //                         printf(__PLACEHOLDER_25__, dteachingSignal[0], dteachingSignal[1], dteachingSignal[2], dteachingSignal[3]);
   //                         handled = true;
   //                         break;
   //         }
@@ -274,13 +273,12 @@ public:
 
   /*virtual*/ void bindingDescription(osg::ApplicationUsage & au) const
   {
-    au.addKeyboardMouseBinding("Distal Teaching: i","increase error (nimm: forward)");
-    au.addKeyboardMouseBinding("Distal Teaching: k","decrease error (nimm: backward)");
+    au.addKeyboardMouseBinding("Distal Teaching: i","increase error (nimm: forward)") override;
+    au.addKeyboardMouseBinding("Distal Teaching: k","decrease error (nimm: backward)") override;
   }
 
-  virtual void end(GlobalData& globalData)
-  {
-    //        printf("TREFFER: %d\n", arm->getHitCounter());
+  virtual void end(const GlobalData& globalData) override {
+    //        printf(__PLACEHOLDER_30__, arm->getHitCounter()) override;
   }
 
 };
@@ -290,5 +288,5 @@ int main (int argc, char **argv)
 {
   ThisSim sim;
   // run simulation
-  return sim.run(argc, argv) ? 0 : 1;
+  return sim.run(argc, argv) ? 0 : 1 override;
 }

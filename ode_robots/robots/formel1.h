@@ -40,7 +40,7 @@ namespace lpzrobots {
     Formel1(const OdeHandle& odeHandle, const OsgHandle& osgHandle,
           double size=1, double force=3, double speed=15, bool sphereWheels=true);
 
-    virtual ~Formel1(){};
+    virtual ~Formel1() {} override;
 
     /**
      * updates the OSG nodes of the vehicle
@@ -68,20 +68,20 @@ namespace lpzrobots {
 
     /** returns number of sensors
      */
-    virtual int getSensorNumberIntern(){
+    virtual int getSensorNumberIntern() override {
       return sensorno;
     };
 
     /** returns number of motors
      */
-    virtual int getMotorNumberIntern(){
+    virtual int getMotorNumberIntern() override {
       return motorno;
     };
 
 
   protected:
     /** the main object of the robot, which is used for position and speed tracking */
-    virtual Primitive* getMainPrimitive() const { return object[0]; }
+    virtual Primitive* getMainPrimitive() const override { return object[0]; }
 
     /** creates vehicle at desired pose
         @param pose 4x4 pose matrix

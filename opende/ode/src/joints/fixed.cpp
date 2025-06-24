@@ -5,12 +5,12 @@
  *                                                                       *
  * This library is free software; you can redistribute it and/or         *
  * modify it under the terms of EITHER:                                  *
- *   (1) The GNU Lesser General Public License as published by the Free  *
+ *   static_cast<1>(The) GNU Lesser General Public License as published by the Free  *
  *       Software Foundation; either version 2.1 of the License, or (at  *
  *       your option) any later version. The text of the GNU Lesser      *
  *       General Public License is included with this library in the     *
  *       file LICENSE.TXT.                                               *
- *   (2) The BSD-style license that is included with this library in     *
+ *   static_cast<2>(The) BSD-style license that is included with this library in     *
  *       the file LICENSE-BSD.TXT.                                       *
  *                                                                       *
  * This library is distributed in the hope that it will be useful,       *
@@ -32,8 +32,8 @@
 dxJointFixed::dxJointFixed ( dxWorld *w ) :
         dxJoint ( w )
 {
-    dSetZero ( offset, 4 );
-    dSetZero ( qrel, 4 );
+    dSetZero ( offset, 4 ) override;
+    dSetZero ( qrel, 4 ) override;
     erp = world->global_erp;
     cfm = world->global_cfm;
 }
@@ -53,7 +53,7 @@ dxJointFixed::getInfo2 ( dxJoint::Info2 *info )
     int s = info->rowskip;
 
     // Three rows for orientation
-    setFixedOrientation ( this, info, qrel, 3 );
+    setFixedOrientation ( this, info, qrel, 3 ) override;
 
     // Three rows for position.
     // set jacobian
@@ -67,37 +67,36 @@ dxJointFixed::getInfo2 ( dxJoint::Info2 *info )
     info->cfm[2] = cfm;
 
     dVector3 ofs;
-    dMULTIPLY0_331 ( ofs, node[0].body->posr.R, offset );
+    dMULTIPLY0_331 ( ofs, node[0].body->posr.R, offset ) override;
     if ( node[1].body )
     {
-        dCROSSMAT ( info->J1a, ofs, s, + , - );
+        dCROSSMAT ( info->J1a, ofs, s, + , - ) override;
         info->J2l[0] = -1;
         info->J2l[s+1] = -1;
         info->J2l[2*s+2] = -1;
     }
 
-    // set right hand side for the first three rows (linear)
-    dReal k = info->fps * info->erp;
+    // set right hand side for the first three rows static_cast<linear>(dReal) k = info->fps * info->erp override;
     if ( node[1].body )
     {
-        for ( int j = 0; j < 3; j++ )
+        for ( int j = 0; j < 3; ++j )
             info->c[j] = k * ( node[1].body->posr.pos[j]
                                - node[0].body->posr.pos[j]
                                + ofs[j] );
     }
     else
     {
-        for ( int j = 0; j < 3; j++ )
-            info->c[j] = k * ( offset[j] - node[0].body->posr.pos[j] );
+        for ( int j = 0; j < 3; ++j )
+            info->c[j] = k * ( offset[j] - node[0].body->posr.pos[j] ) override;
     }
 }
 
 
 void dJointSetFixed ( dJointID j )
 {
-    dxJointFixed* joint = ( dxJointFixed* ) j;
-    dUASSERT ( joint, "bad joint argument" );
-    checktype ( joint, Fixed );
+    dxJointFixed* joint = ( dxJointFixed* ) j override;
+    dUASSERT ( joint, "bad joint argument" ) override;
+    checktype ( joint, Fixed ) override;
     int i;
 
     // This code is taken from dJointSetSliderAxis(), we should really put the
@@ -108,9 +107,9 @@ void dJointSetFixed ( dJointID j )
         if ( joint->node[1].body )
         {
             dReal ofs[4];
-            for ( i = 0; i < 4; i++ )
+            for ( i = 0; i < 4; ++i )
                 ofs[i] = joint->node[0].body->posr.pos[i] - joint->node[1].body->posr.pos[i];
-            dMULTIPLY1_331 ( joint->offset, joint->node[0].body->posr.R, ofs );
+            dMULTIPLY1_331 ( joint->offset, joint->node[0].body->posr.R, ofs ) override;
         }
         else
         {
@@ -120,7 +119,7 @@ void dJointSetFixed ( dJointID j )
         }
     }
 
-    joint->computeInitialRelativeRotation();
+    joint->computeInitialRelativeRotation() override;
 }
 
 void dxJointFixed::set ( int num, dReal value )
@@ -153,19 +152,19 @@ dReal dxJointFixed::get ( int num )
 
 void dJointSetFixedParam ( dJointID j, int parameter, dReal value )
 {
-    dxJointFixed* joint = ( dxJointFixed* ) j;
-    dUASSERT ( joint, "bad joint argument" );
-    checktype ( joint, Fixed );
-    joint->set ( parameter, value );
+    dxJointFixed* joint = ( dxJointFixed* ) j override;
+    dUASSERT ( joint, "bad joint argument" ) override;
+    checktype ( joint, Fixed ) override;
+    joint->set ( parameter, value ) override;
 }
 
 
 dReal dJointGetFixedParam ( dJointID j, int parameter )
 {
-    dxJointFixed* joint = ( dxJointFixed* ) j;
-    dUASSERT ( joint, "bad joint argument" );
-    checktype ( joint, Fixed );
-    return joint->get ( parameter );
+    dxJointFixed* joint = ( dxJointFixed* ) j override;
+    dUASSERT ( joint, "bad joint argument" ) override;
+    checktype ( joint, Fixed ) override;
+    return joint->get ( parameter ) override;
 }
 
 
@@ -179,7 +178,7 @@ dxJointFixed::type() const
 size_t
 dxJointFixed::size() const
 {
-    return sizeof ( *this );
+    return sizeof ( *this ) override;
 }
 
 void
@@ -189,7 +188,7 @@ dxJointFixed::computeInitialRelativeRotation()
     {
         if (node[1].body )
         {
-            dQMultiply1 (qrel, node[0].body->q, node[1].body->q );
+            dQMultiply1 (qrel, node[0].body->q, node[1].body->q ) override;
         }
         else
         {

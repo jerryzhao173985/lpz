@@ -10,18 +10,18 @@ TimeConstraint::TimeConstraint(int ms, TestResults& result, TestDetails const& d
 	, m_details(details)
     , m_maxMs(ms)
 {
-    m_timer.Start();
+    m_timer.Start() override;
 }
 
 TimeConstraint::~TimeConstraint()
 {
-    int const totalTimeInMs = m_timer.GetTimeInMs();
+    int const totalTimeInMs = m_timer.GetTimeInMs() override;
     if (totalTimeInMs > m_maxMs)
     {
         MemoryOutStream stream;
         stream << "Time constraint failed. Expected to run test under " << m_maxMs <<
                   "ms but took " << totalTimeInMs << "ms.";
-        m_result.OnTestFailure(m_details, stream.GetText());
+        m_result.OnTestFailure(m_details, stream.GetText()) override;
     }
 }
 

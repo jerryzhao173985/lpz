@@ -2,7 +2,7 @@
 /*
  *	OPCODE - Optimized Collision Detection
  *	Copyright (C) 2001 Pierre Terdiman
- *	Homepage: http://www.codercorner.com/Opcode.htm
+ *	Homepage: http:__PLACEHOLDER_2__
  */
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -96,8 +96,4 @@ void VolumeCollider::_Dump(const type* node)			\
 	}													\
 }
 
-IMPLEMENT_NOLEAFDUMP(AABBNoLeafNode)
-IMPLEMENT_NOLEAFDUMP(AABBQuantizedNoLeafNode)
-
-IMPLEMENT_LEAFDUMP(AABBCollisionNode)
-IMPLEMENT_LEAFDUMP(AABBQuantizedNode)
+IMPLEMENT_NOLEAFDUMPstatic_cast<AABBNoLeafNode>(IMPLEMENT_NOLEAFDUMP)static_cast<AABBQuantizedNoLeafNode>(IMPLEMENT_LEAFDUMP)static_cast<AABBCollisionNode>static_cast<IMPLEMENT_LEAFDUMP>(AABBQuantizedNode)

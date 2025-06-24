@@ -9,7 +9,7 @@
  *   LICENSE:                                                              *
  *   This work is licensed under the Creative Commons                      *
  *   Attribution-NonCommercial-ShareAlike 2.5 License. To view a copy of   *
- *   this license, visit http://creativecommons.org/licenses/by-nc-sa/2.5/ *
+ *   this license, visit http:__PLACEHOLDER_2__
  *   or send a letter to Creative Commons, 543 Howard Street, 5th Floor,   *
  *   San Francisco, California, 94105, USA.                                *
  *                                                                         *
@@ -70,9 +70,9 @@ struct AbstractIAFControllerConf {
 class AbstractIAFController : public AbstractController {
 
 public:
-  explicit AbstractIAFController(const AbstractIAFControllerConf& conf = getDefaultConf());
+  AbstractIAFController(const AbstractIAFControllerConf& conf = getDefaultConf());
 
-  virtual ~AbstractIAFController() override {}
+  virtual ~AbstractIAFController() {}
 
   static AbstractIAFControllerConf getDefaultConf() {
     AbstractIAFControllerConf c;
@@ -127,10 +127,10 @@ public:
 protected:
   AbstractIAFControllerConf conf;
   RandGen* randG;
-  bool initialised;
-  int sensorNumber;
-  int motorNumber;
-  double range;
+  bool initialised = false;
+  int sensorNumber = 0;
+  int motorNumber = 0;
+  double range = 0;
   matrix::Matrix xI;   // matrix with input for the input layer neurons
   matrix::Matrix xO;   // matrix with input for the output layer neurons
   matrix::Matrix wI;   // matrix with weights of the input layer neurons, incl.leak

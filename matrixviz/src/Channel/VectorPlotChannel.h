@@ -34,7 +34,7 @@
  */
 class VectorPlotChannel: public MatrixPlotChannel {
 public:
-  VectorPlotChannel(std::string name);
+  explicit VectorPlotChannel(const std::string& name);
   virtual ~VectorPlotChannel();
 
   virtual int getDimension(int dim);

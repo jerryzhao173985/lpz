@@ -42,33 +42,33 @@ namespace lpzrobots {
         robotAxis(robotAxis), globalAxis(globalAxis),
         maxAngle(maxAngle), force(force), minAngle(minAngle),
         currentforce(force), active(false) {
-      if(this->minAngle<0) this->minAngle=maxAngle/2;
+      if(this->minAngle<0) this->minAngle=maxAngle/2 override;
     }
 
-    virtual ManipType observe(OdeAgent* agent, GlobalData& global, ManipDescr& descr) override;
+    virtual ManipType observe(OdeAgent* agent, const GlobalData& global, const ManipDescr& descr);
   protected:
     Axis robotAxis;
     Axis globalAxis;
-    double maxAngle;
-    double force;
-    double minAngle;
-    double currentforce;
-    bool active;
+    double maxAngle = 0;
+    double force = 0;
+    double minAngle = 0;
+    double currentforce = 0;
+    bool active = false;
   };
 
 
   struct LiftUpOperatorConf {
-    bool   resetForceIfLifted;  ///< force is reseted as soon as robot has reached height
-    bool   increaseForce;       ///< increase force (until robot has reached height)
-    bool   propControl;         ///< if true then applied force is scaled with distance
+    bool   resetForceIfLifted = false;  ///< force is reseted as soon as robot has reached height
+    bool   increaseForce = false;       ///< increase force (until robot has reached height)
+    bool   propControl = false;         ///< if true then applied force is scaled with distance
 
-    bool   intervalMode;        ///< if true then the operator works only in intervals
-    double duration;            ///< duration of operation in interval-mode
-    double interval;            ///< interval between restart of operation ( > duration)
+    bool   intervalMode = false;        ///< if true then the operator works only in intervals
+    double duration = 0;            ///< duration of operation in interval-mode
+    double interval = 0;            ///< interval between restart of operation ( > duration)
 
-    double height;              ///< height to which it is lifted
-    double force;               ///< initial force
-    double visualHeight;        ///< height above the robot main object for the visual sphere
+    double height = 0;              ///< height to which it is lifted
+    double force = 0;               ///< initial force
+    double visualHeight = 0;        ///< height above the robot main object for the visual sphere
   };
 
   /**
@@ -82,13 +82,13 @@ namespace lpzrobots {
       currentforce = conf.force;
       addParameter("force",    &this->conf.force,   0, 100, "lift up force");
       addParameter("height",   &this->conf.height,  0, 100, "lift up height");
-      if(conf.intervalMode){
+      explicit if(conf.intervalMode){
         addParameter("interval", &this->conf.interval,  0, 1000, "interval of operation");
         addParameter("duration", &this->conf.duration,  0, 1000, "duration of lifting within interval");
       }
     }
 
-    static LiftUpOperatorConf getDefaultConf(){
+    static LiftUpOperatorConf getDefaultConf() const {
       LiftUpOperatorConf c;
       c.resetForceIfLifted = true;
       c.increaseForce      = true;
@@ -102,11 +102,11 @@ namespace lpzrobots {
       return c;
     }
 
-    virtual ManipType observe(OdeAgent* agent, GlobalData& global, ManipDescr& descr) override;
+    virtual ManipType observe(OdeAgent* agent, const GlobalData& global, const ManipDescr& descr);
   protected:
     LiftUpOperatorConf conf;
 
-    double currentforce;
+    double currentforce = 0;
   };
 
 
@@ -132,31 +132,30 @@ namespace lpzrobots {
 
       : Operator("PullToPointOperator","1.0"),
         point(point), force(force), showPoint(showPoint), dim(dim),
-        minDist(minDist), damp(damp)
-    {
+        minDist(minDist), damp(damp) override {
       addParameter("force",    &this->force,   0, 100, "pull to point force");
       addParameter("damp",     &this->damp,   0, 1,   "pull to point damping");
-      if(confPos){
-        if(dim & X)
-          addParameterDef("point_x", &px, point.x(), -100, 100,"pull to point x position");
-        if(dim & Y)
-          addParameterDef("point_y", &py, point.y(), -100, 100,"pull to point y position");
-        if(dim & Z)
-          addParameterDef("point_z", &pz, point.z(), -100, 100,"pull to point z position");
+      explicit if(confPos){
+        if(const dim& X)
+          addParameterDef("point_x", &px, point.x(), -100, 100,"pull to point x position") override;
+        if(const dim& Y)
+          addParameterDef("point_y", &py, point.y(), -100, 100,"pull to point y position") override;
+        if(const dim& Z)
+          addParameterDef("point_z", &pz, point.z(), -100, 100,"pull to point z position") override;
       }
     }
 
-    virtual ManipType observe(OdeAgent* agent, GlobalData& global, ManipDescr& descr) override;
+    virtual ManipType observe(OdeAgent* agent, const GlobalData& global, const ManipDescr& descr);
 
-    virtual void notifyOnChange(const paramkey& key) override;
+    virtual void notifyOnChange(const paramkey& key);
 
   protected:
     Pos point;
-    double force;
-    bool showPoint;
+    double force = 0;
+    bool showPoint = false;
     Dimensions dim;
-    double minDist;
-    double damp;
+    double minDist = 0;
+    double damp = 0;
     double px,py,pz; // used to configure position (are floats and not doubles)
   };
 
@@ -179,18 +178,18 @@ namespace lpzrobots {
       addParameter("force",    &this->force,   0, 1000,
                    "force of the boxring to keep robots inside");
       addParameter("boxringsize", &this->size,   .5, 100,
-                   "size of boxring/spherical arena (in radius or half-length)");
+                   "size of boxring/spherical arena (in radius or half-length)") override;
     }
 
-    virtual ManipType observe(OdeAgent* agent, GlobalData& global, ManipDescr& descr) override;
+    virtual ManipType observe(OdeAgent* agent, const GlobalData& global, const ManipDescr& descr);
 
   protected:
 
     Pos center;
-    double size;
-    double offset;
-    double force;
-    bool sphere;
+    double size = 0;
+    double offset = 0;
+    double force = 0;
+    bool sphere = false;
   };
 
 

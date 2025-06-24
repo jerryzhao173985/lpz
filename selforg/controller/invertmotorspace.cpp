@@ -7,7 +7,7 @@
  *   LICENSE:                                                              *
  *   This work is licensed under the Creative Commons                      *
  *   Attribution-NonCommercial-ShareAlike 2.5 License. To view a copy of   *
- *   this license, visit http://creativecommons.org/licenses/by-nc-sa/2.5/ *
+ *   this license, visit http:__PLACEHOLDER_30__
  *   or send a letter to Creative Commons, 543 Howard Street, 5th Floor,   *
  *   San Francisco, California, 94105, USA.                                *
  *                                                                         *
@@ -78,7 +78,7 @@ InvertMotorSpace::init(int sensornumber, int motornumber, RandGen* randGen) {
   C *= cInit;
   x_buffer = new Matrix[buffersize];
   y_buffer = new Matrix[buffersize];
-  for (unsigned int k = 0; k < buffersize; k++) {
+  for (unsigned int k = 0; k < buffersize; ++k) {
     x_buffer[k].set(number_sensors, 1);
     y_buffer[k].set(number_motors, 1);
   }
@@ -102,7 +102,7 @@ InvertMotorSpace::step(const sensor* x_, int number_sensors, motor* y_, int numb
     learnModel(x, y_effective);
   }
   // update step counter
-  t++;
+  ++t;
 };
 
 /// performs one step without learning. Calulates motor commands from sensor inputs.
@@ -110,7 +110,7 @@ void
 InvertMotorSpace::stepNoLearning(const sensor* x, int number_sensors, motor* y, int number_motors) {
   fillBuffersAndControl(x, number_sensors, y, number_motors);
   // update step counter
-  t++;
+  ++t;
 };
 
 void
@@ -118,8 +118,8 @@ InvertMotorSpace::fillBuffersAndControl(const sensor* x_,
                                         int number_sensors,
                                         motor* y_,
                                         int number_motors) {
-  assert((unsigned)number_sensors == this->number_sensors &&
-         (unsigned)number_motors == this->number_motors);
+  assert(static_cast<unsigned>(number_sensors) == this->number_sensors &&
+         static_cast<unsigned>(number_motors) == this->number_motors);
 
   Matrix x(number_sensors, 1, x_);
 
@@ -166,7 +166,7 @@ InvertMotorSpace::learnController(const Matrix& x, const Matrix& x_smooth, int d
   const Matrix omega = zeta.multrowwise(g_prime_inv);
   // correction of negled terms (LL^T)^-1 from learning rule, which drive the system out of
   // saturation. double f=1;
-  //   for(int i=0; i< g_prime_inv.getM(); i++){
+  //   for(int i=0; i< g_prime_inv.getM(); ++i) {
   //     f *= g_prime_inv.val(i,0);
   //   }
   //   const Matrix omega = eta * f;
@@ -188,7 +188,7 @@ InvertMotorSpace::learnController(const Matrix& x, const Matrix& x_smooth, int d
     H_update = (beta + zeta * zetaupdate) * epsC; // delta H = beta + zeta
   }
 
-  double error_factor = calcErrorFactor(v, (logaE & 1) != 0, (rootE & 1) != 0);
+  double error_factor = calcErrorFactor(v, (logaE >= 1), (rootE >= 1));
   C_update *= error_factor;
   H_update *= error_factor;
 
@@ -207,7 +207,7 @@ InvertMotorSpace::learnModel(const Matrix& x, const Matrix& y) {
   Matrix B_noise = noiseMatrix(B.getM(), B.getN(), *BNoiseGen, -noiseB, noiseB); // noise for bias
   B_update = (xsi * epsA + B_noise) * factorB;
 
-  double error_factor = calcErrorFactor(xsi, (logaE & 2) != 0, (rootE & 2) != 0); //
+  double error_factor = calcErrorFactor(xsi, (logaE >= 2), (rootE >= 2)); //
   A_update *= error_factor;
   B_update *= error_factor;
 

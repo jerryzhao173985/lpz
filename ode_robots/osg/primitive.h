@@ -33,7 +33,7 @@
 #include "pos.h"
 #include "pose.h"
 #include "substance.h"
-// another forward declaration "block"
+// another forward declaration __PLACEHOLDER_3__
 #include "osgforwarddecl.h"
 
 namespace lpzrobots {
@@ -59,9 +59,9 @@ namespace lpzrobots {
    /*****  end of forward declaration block  *****/
 
 
-/// returns the osg (4x4) pose matrix of the ode geom
+/// returns the osg static_cast<4x4>(pose) matrix of the ode geom
 Pose osgPose( dGeomID geom );
-/// returns the osg (4x4) pose matrix of the ode body
+/// returns the osg static_cast<4x4>(pose) matrix of the ode body
 Pose osgPose( dBodyID body );
 /// converts a position vector and a rotation matrix from ode to osg 4x4 matrix
 Pose osgPose( const double * position , const double * rotation );
@@ -91,8 +91,8 @@ public:
   /* typedef */ enum Category { Dyn=1, Stat=2};
 
 
-  Primitive ();
-  virtual ~Primitive ();
+  Primitive () override;
+  virtual ~Primitive();
   /** registers primitive in ODE and OSG.
       @param osgHandle scruct with ODE variables inside (to specify space, world...)
       @param mass Mass of the object in ODE (if withBody = true)
@@ -106,10 +106,10 @@ public:
   /** Updates the OSG nodes with ODE coordinates.
       This function must be overloaded (usually calls setMatrix of OsgPrimitives)
    */
-  virtual void update() ;
+  virtual void update();
 
   /// returns the assoziated osg primitive if there or 0
-  virtual OSGPrimitive* getOSGPrimitive()  = 0;
+  virtual const OSGPrimitive* getOSGPrimitive() const  = 0;
 
   /// sets the color for the underlaying osgprimitive
   virtual void setColor(const Color& color);
@@ -138,13 +138,13 @@ public:
   /// set the pose of the primitive
   virtual void setPose(const Pose& pose);
   /// returns the position
-  virtual Pos getPosition() const;
+  virtual Pos getPosition() const override;
   /// returns the pose
-  virtual Pose getPose() const;
+  virtual Pose getPose() const override;
   /// returns the velocity
-  virtual Pos getVel() const;
+  virtual Pos getVel() const override;
   /// returns the angular velocity
-  virtual Pos getAngularVel() const;
+  virtual Pos getAngularVel() const override;
 
   /** apply a force (in world coordinates) to the primitive and
       returns true if it was possible */
@@ -159,8 +159,7 @@ public:
   /** @see applyTorque(osg::Vec3) */
   virtual bool applyTorque(double x, double y, double z);
 
-  /** sets the mass of the body (uniform)
-      if density==true then mass is interpreted as a density
+  /** sets the mass of the body static_cast<uniform>(if) density==true then mass is interpreted as a density
    */
   virtual void setMass(double mass, bool density = false)  = 0;
   /** sets full mass specification
@@ -172,9 +171,9 @@ public:
                double I12, double I13, double I23);
 
   /// returns ODE geomID if there
-  dGeomID getGeom() const { return geom; }
+  dGeomID getGeom() const override { return geom; }
   /// returns ODE bodyID if there
-  dBodyID getBody() const { return body; }
+  dBodyID getBody() const override { return body; }
 
   /// checks whether the object has higher velocity than maxVel and limits it in case
   bool limitLinearVel(double maxVel);
@@ -189,18 +188,18 @@ public:
 
 
   /// return the given point transformed to local coordinates of the primitive
-  osg::Vec3 toLocal(const osg::Vec3& pos) const;
+  osg::Vec3 toLocal(const osg::Vec3& pos) const override;
   /** return the given vector or axis transformed to local coordinates
       of the primitive (translation depends on the 4th coordinate)
   */
-  osg::Vec4 toLocal(const osg::Vec4& axis) const;
+  osg::Vec4 toLocal(const osg::Vec4& axis) const override;
 
   /// transforms the given point in local corrds of the primitive to global coordinates
-  osg::Vec3 toGlobal(const osg::Vec3& pos) const;
+  osg::Vec3 toGlobal(const osg::Vec3& pos) const override;
   /**  transforms the given vector or axis in local corrds of the primitive to global coordinates
        (translation depends on the 4th coordinate)
   */
-  osg::Vec4 toGlobal(const osg::Vec4& axis) const;
+  osg::Vec4 toGlobal(const osg::Vec4& axis) const override;
 
   /**
    * 20091023; guettler:
@@ -212,12 +211,12 @@ public:
     destroyGeom = _destroyGeom;
   }
 
-  int getNumVelocityViolations(){ return numVelocityViolations; }
+  int getNumVelocityViolations() const override { return numVelocityViolations; }
 
   void setSubstance(const Substance& substance);
 
   /* **** storable interface *******/
-  virtual bool store(FILE* f) const;
+  virtual bool store(FILE* f) const override;
 
   virtual bool restore(FILE* f);
 
@@ -233,9 +232,9 @@ public:
 protected:
   dGeomID geom;
   dBodyID body;
-  char mode;
-  bool substanceManuallySet;
-  int numVelocityViolations; ///< number of times the maximal velocity was exceeded
+  char mode = 0;
+  bool substanceManuallySet = false;
+  int numVelocityViolations = 0; ///< number of times the maximal velocity was exceeded
 
   // 20091023; guettler:
   // hack for tasked simulations; there are some problems if running in parallel mode,
@@ -251,10 +250,10 @@ public:
   virtual ~Plane();
   virtual void init(const OdeHandle& odeHandle, double mass,
                     const OsgHandle& osgHandle,
-                    char mode = Body | Geom | Draw) ;
+                    char mode = Body | Geom | Draw);
 
   virtual void update();
-  virtual OSGPrimitive* getOSGPrimitive();
+  virtual const OSGPrimitive* getOSGPrimitive() const;
 
   virtual void setMass(double mass, bool density = false);
 
@@ -268,16 +267,16 @@ class Box : public Primitive {
 public:
 
   Box(float lengthX, float lengthY, float lengthZ);
-  Box(const osg::Vec3& dim);
+  explicit Box(const osg::Vec3& dim);
 
   virtual ~Box();
 
   virtual void init(const OdeHandle& odeHandle, double mass,
                     const OsgHandle& osgHandle,
-                    char mode = Body | Geom | Draw) ;
+                    char mode = Body | Geom | Draw);
 
   virtual void update();
-  virtual OSGPrimitive* getOSGPrimitive();
+  virtual const OSGPrimitive* getOSGPrimitive() const;
 
   virtual void setMass(double mass, bool density = false);
 protected:
@@ -288,15 +287,15 @@ protected:
 /** Sphere primitive */
 class Sphere : public Primitive {
 public:
-  Sphere(float radius);
+  explicit Sphere(float radius);
   virtual ~Sphere();
 
   virtual void init(const OdeHandle& odeHandle, double mass,
                     const OsgHandle& osgHandle,
-                    char mode = Body | Geom | Draw) ;
+                    char mode = Body | Geom | Draw);
 
   virtual void update();
-  virtual OSGPrimitive* getOSGPrimitive();
+  virtual const OSGPrimitive* getOSGPrimitive() const;
 
   virtual void setMass(double mass, bool density = false);
 
@@ -311,10 +310,10 @@ public:
   virtual ~Capsule();
   virtual void init(const OdeHandle& odeHandle, double mass,
                     const OsgHandle& osgHandle,
-                    char mode = Body | Geom | Draw) ;
+                    char mode = Body | Geom | Draw);
 
   virtual void update();
-  virtual OSGPrimitive* getOSGPrimitive();
+  virtual const OSGPrimitive* getOSGPrimitive() const;
 
   virtual void setMass(double mass, bool density = false);
 
@@ -329,10 +328,10 @@ public:
   virtual ~Cylinder();
   virtual void init(const OdeHandle& odeHandle, double mass,
                     const OsgHandle& osgHandle,
-                    char mode = Body | Geom | Draw) ;
+                    char mode = Body | Geom | Draw);
 
   virtual void update();
-  virtual OSGPrimitive* getOSGPrimitive();
+  virtual const OSGPrimitive* getOSGPrimitive() const;
 
   virtual void setMass(double mass, bool density = false);
 protected:
@@ -353,17 +352,17 @@ public:
   virtual ~Ray();
   virtual void init(const OdeHandle& odeHandle, double mass,
       const OsgHandle& osgHandle,
-      char mode = Geom | Draw) ;
+      char mode = Geom | Draw);
 
   void setLength(float len);
   virtual void update();
-  virtual OSGPrimitive* getOSGPrimitive();
+  virtual const OSGPrimitive* getOSGPrimitive() const;
 
   virtual void setMass(double mass, bool density = false);
 protected:
-  double range;
-  float thickness;
-  float length;
+  double range = 0;
+  float thickness = 0;
+  float length = 0;
   OSGPrimitive* osgprimitive;
 };
 
@@ -377,9 +376,9 @@ public:
   virtual ~Mesh();
   virtual void init(const OdeHandle& odeHandle, double mass,
                     const OsgHandle& osgHandle,
-                    char mode = Body | Geom | Draw) ;
+                    char mode = Body | Geom | Draw);
   virtual void update();
-  virtual OSGPrimitive* getOSGPrimitive();
+  virtual const OSGPrimitive* getOSGPrimitive() const;
   virtual float getRadius();
 
   virtual void setMass(double mass, bool density = false);
@@ -395,7 +394,7 @@ public:
 protected:
   OSGMesh* osgmesh;
   const std::string filename;
-  float scale;
+  float scale = 0;
   BoundingShape* boundshape;
   Pose poseWithoutBodyAndGeom;
 
@@ -429,18 +428,18 @@ public:
                     char mode = Body | Geom | Draw);
 
   virtual void update();
-  virtual OSGPrimitive* getOSGPrimitive();
+  virtual const OSGPrimitive* getOSGPrimitive() const;
 
   virtual void setMass(double mass, bool density = false);
 
   // setting the pose is not supported
-  virtual void setPose(const Pose& pose) {}
+  virtual void setPose(const Pose& pose) override {}
 
 protected:
   Primitive* parent;
   Primitive* child;
   Pose pose;
-  bool deleteChild;
+  bool deleteChild = false;
 };
 
 /**
@@ -457,23 +456,23 @@ public:
     geom=0;
   }
   virtual void init(const OdeHandle& odeHandle, double mass,
-                    const OsgHandle& osgHandle, char mode = Body | Geom | Draw) {
+                    const OsgHandle& osgHandle, char mode = Body | Geom | Draw) override {
   }
-  virtual void update() {}
-  virtual OSGPrimitive* getOSGPrimitive() { return 0; }
+  virtual void update() override {}
+  virtual const OSGPrimitive* getOSGPrimitive() const const override { return 0; }
 
-  virtual void setMass(double mass, bool density = false) {}
+  virtual void setMass(double mass, bool density = false) override {}
 
-  virtual void setPosition(Pos pos){
+  virtual void setPosition(const Pos& pos) override {
     this->pos=pos;
   }
-  virtual Pos getPosition() const {
+  virtual Pos getPosition() const override {
     return pos;
   }
-  virtual void setVel(Pos vel){
+  virtual void setVel(const Pos& vel) override {
     this->vel=vel;
   }
-  virtual Pos getVel() const {
+  virtual Pos getVel() const override {
     return vel;
   }
 

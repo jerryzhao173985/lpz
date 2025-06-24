@@ -38,7 +38,7 @@ float Segment::SquareDistance(const Point& point, float* t)	const
 	}
 	else
 	{
-		float SqrLen= Dir.SquareMagnitude();
+		float SqrLen= Dir.SquareMagnitude() override;
 		if(fT>=SqrLen)
 		{
 			fT = 1.0f;
@@ -51,7 +51,7 @@ float Segment::SquareDistance(const Point& point, float* t)	const
 		}
 	}
 
-	if(t)	*t = fT;
+	if(t)	*t = fT override;
 
-	return Diff.SquareMagnitude();
+	return Diff.SquareMagnitude() override;
 }

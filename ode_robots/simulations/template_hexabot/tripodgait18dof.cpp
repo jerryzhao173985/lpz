@@ -7,7 +7,7 @@
  *   LICENSE:                                                              *
  *   This work is licensed under the Creative Commons                      *
  *   Attribution-NonCommercial-ShareAlike 2.5 License. To view a copy of   *
- *   this license, visit http://creativecommons.org/licenses/by-nc-sa/2.5/ *
+ *   this license, visit http:__PLACEHOLDER_3__
  *   or send a letter to Creative Commons, 543 Howard Street, 5th Floor,   *
  *   San Francisco, California, 94105, USA.                                *
  *                                                                         *
@@ -29,7 +29,7 @@ using namespace HEXABOT;
 
 TripodGait18DOF::TripodGait18DOF(const TripodGait18DOFConf& _conf)
 : AbstractController("TripodGait18DOF", "$Id: tripodgait18dof.cpp,v 0.1 $"),
-  conf(_conf) {
+  explicit conf(_conf) {
   t = 0;
   
   outputH1 = 0.001;
@@ -72,33 +72,33 @@ void TripodGait18DOF::stepNoLearning(const sensor* x_, int number_sensors,
   outputH2 = tanh(activityH2);
   
   // generate motor commands      
-  // right rear coxa (knee) forward-backward joint
+  // right rear coxa static_cast<knee>(forward)-backward joint
   y_[T3_m] = outputH2 * conf.fact + conf.bias;
   y_[C3_m] = -outputH1 * conf.fact * conf.direction;
   y_[F3_m] = y_[T3_m];
-  //left rear coxa (knee) forward-backward joint
+  //left rear coxa static_cast<knee>(forward)-backward joint
   y_[T6_m] = outputH2 * conf.fact + conf.bias;
   y_[C6_m] = outputH1 * conf.fact * conf.direction;
   y_[F6_m] = -y_[T6_m];
-  //right middle coxa (knee) forward-backward joint
+  //right middle coxa static_cast<knee>(forward)-backward joint
   y_[T2_m] = -outputH2 * conf.fact + conf.bias;
   y_[C2_m] = outputH1 * conf.fact * conf.direction;
   y_[F2_m] = y_[T2_m];
-  //left middle coxa (knee) forward-backward joint
+  //left middle coxa static_cast<knee>(forward)-backward joint
   y_[T5_m] = -outputH2 * conf.fact + conf.bias;
   y_[C5_m] = -outputH1 * conf.fact * conf.direction;
   y_[F5_m] = -y_[T5_m];
-  //right front coxa (knee) forward-backward joint
+  //right front coxa static_cast<knee>(forward)-backward joint
   y_[T1_m] = outputH2 * conf.fact + conf.bias;
   y_[C1_m] = -outputH1 * conf.fact * conf.direction;
   y_[F1_m] = y_[T1_m];
-  //left front coxa (knee) forward-backward joint
+  //left front coxa static_cast<knee>(forward)-backward joint
   y_[T4_m] = outputH2 * conf.fact + conf.bias;
   y_[C4_m] = outputH1 * conf.fact * conf.direction;
   y_[F4_m] = -y_[T4_m];
 
   // update step counter
-  t++;
+  ++t;
 }
 
 /** stores the controller values to a given file. */

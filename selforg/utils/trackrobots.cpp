@@ -92,7 +92,7 @@ TrackRobot::track(const Trackable* robot, double time) {
     return;
 
   if (cnt % conf.interval == 0) {
-    //   fprintf(file, "%li ", cnt);
+    //   fprintf(file, __PLACEHOLDER_15__, cnt);
     fprintf(file, "%f", time);
     if (conf.trackPos) {
       Position p = robot->getPosition();
@@ -106,21 +106,20 @@ TrackRobot::track(const Trackable* robot, double time) {
     }
     if (conf.trackOrientation) {
       const matrix::Matrix& o = robot->getOrientation();
-      for (int i = 0; i < 3; i++) {
-        for (int j = 0; j < 3; j++) {
+      for (int i = 0; i < 3; ++i) {
+        for (int j = 0; j < 3; ++j) {
           fprintf(file, " %g", o.val(i, j));
         }
       }
     }
     fprintf(file, "\n");
   }
-  cnt++;
+  ++cnt;
 }
 
 void
 TrackRobot::close() {
-  if (file)
-    fclose(file);
+  if (file) fclose(file);
   file = 0;
 }
 

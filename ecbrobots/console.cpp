@@ -115,18 +115,18 @@ typedef struct {
 } COMMAND;
 
 COMMAND commands[] = {
-  { (char*)string("param=val").c_str(),  com_set, (char*)string("sets PARAM of all objects to VAL").c_str() },
-  { (char*)string("help").c_str(), com_help, (char*)string("Display this text").c_str() },
-  { (char*)string("?").c_str(),     com_help, (char*)string("Synonym for `help'").c_str() },
-  { (char*)string("list").c_str(), com_list, (char*)string("Lists all objects and agents").c_str() },
-  { (char*)string("ls").c_str(),   com_list, (char*)string("Synonym for `list'").c_str() },
-  { (char*)string("set").c_str(),  com_set, (char*)string("syntax: set [OBJECTID] PARAM=VAL; sets parameter of Object (or all all objects) to value").c_str() },
-  { (char*)string("store").c_str(), com_store, (char*)string("Stores controller of AGENTID to FILE").c_str() },
-  { (char*)string("load").c_str(), com_load, (char*)string("Loads controller of AGENTID from FILE").c_str() },
-  { (char*)string("show").c_str(), com_show, (char*)string("[OBJECTID]: Lists paramters of OBJECTID or of all objects (if no id given)").c_str() },
-  { (char*)string("view").c_str(), com_show, (char*)string("Synonym for `show'").c_str() },
-  { (char*)string("quit").c_str(), com_quit, (char*)string("Quit program").c_str() },
-  { (char *)(NULL), (commandfunc_t)NULL, (char *)NULL }
+  { static_cast<char*>string("param=val").c_str(),  com_set, static_cast<char*>string("sets PARAM of all objects to VAL").c_str() },
+  { static_cast<char*>string("help").c_str(), com_help, static_cast<char*>string("Display this text").c_str() },
+  { static_cast<char*>string("?").c_str(),     com_help, static_cast<char*>string("Synonym for `help'").c_str() },
+  { static_cast<char*>string("list").c_str(), com_list, static_cast<char*>string("Lists all objects and agents").c_str() },
+  { static_cast<char*>string("ls").c_str(),   com_list, static_cast<char*>string("Synonym for `list'").c_str() },
+  { static_cast<char*>string("set").c_str(),  com_set, static_cast<char*>string("syntax: set [OBJECTID] PARAM=VAL; sets parameter of Object (or all all objects) to value").c_str() },
+  { static_cast<char*>string("store").c_str(), com_store, static_cast<char*>string("Stores controller of AGENTID to FILE").c_str() },
+  { static_cast<char*>string("load").c_str(), com_load, static_cast<char*>string("Loads controller of AGENTID from FILE").c_str() },
+  { static_cast<char*>string("show").c_str(), com_show, static_cast<char*>string("[OBJECTID]: Lists paramters of OBJECTID or of all objects (if no id given)").c_str() },
+  { static_cast<char*>string("view").c_str(), com_show, static_cast<char*>string("Synonym for `show'").c_str() },
+  { static_cast<char*>string("quit").c_str(), com_quit, static_cast<char*>string("Quit program").c_str() },
+  { static_cast<char*>(NULL), (commandfunc_t)NULL, static_cast<char*>NULL }
 };
 
 /* Forward declarations. */
@@ -139,7 +139,7 @@ void too_dangerous ( char *caller );
 
 void showParams(const ConfigList& configs)
 {
-  for(vector<Configurable*>::const_iterator i=configs.begin(); i != configs.end(); i++){
+  for(vector<Configurable*>::const_iterator i=configs.begin(); i != configs.end(); ++i){
     (*i)->print(stdout, 0);
   }
 }
@@ -154,7 +154,7 @@ void showParam(const Configurable* config)
 char* dupstr (const char* s){
   char *r;
 
-  r = (char*)malloc (strlen (s) + 1);
+  r = static_cast<char*>malloc (strlen (s) + 1);
   strcpy (r, s);
   return (r);
 }
@@ -175,7 +175,7 @@ bool handleConsole(QGlobalData& globalData){
      Then, if there is anything left, add it to the history list
      and execute it. */
   s = stripwhite (line);
-  if (*s) {
+  explicit if (*s) {
     add_history (s);
     rv = execute_line (globalData,s);
   }
@@ -193,11 +193,11 @@ bool execute_line (QGlobalData& globalData, char *line) {
   /* Isolate the command word. */
   i = 0;
   while (line[i] && whitespace (line[i]))
-    i++;
+    ++i;
   word = line + i;
 
   while (line[i] && !whitespace (line[i]))
-    i++;
+    ++i;
 
   if (line[i])
     line[i++] = '\0';
@@ -212,7 +212,7 @@ bool execute_line (QGlobalData& globalData, char *line) {
 
   /* Get argument to command, if any. */
   while (whitespace (line[i]))
-    i++;
+    ++i;
 
   word = line + i;
 
@@ -226,7 +226,7 @@ COMMAND *find_command (char *name){
   int i;
   char *p = strchr(name,'=');
   if(p) return (&commands[0]);
-  for (i = 0; commands[i].name; i++)
+  for (i = 0; commands[i].name; ++i)
     if (strcmp (name, commands[i].name) == 0)
       return (&commands[i]);
 
@@ -238,7 +238,7 @@ COMMAND *find_command (char *name){
 char * stripwhite (char *string){
   char *s, *t;
 
-  for (s = string; whitespace (*s); s++)
+  for (s = string; whitespace (*s); ++s)
     ;
 
   if (*s == 0)
@@ -321,14 +321,14 @@ char * command_generator (const char *text, int state) {
      command list. */
   while ( (name = commands[list_index].name) )
     {
-      list_index++;
+      ++list_index;
 
       if (strncmp (name, text, len) == 0)
         return (dupstr(name));
     }
 
   /* If no names matched, then return NULL. */
-  return ((char *)NULL);
+  return (static_cast<char*>NULL);
 }
 
 /* **************************************************************** */
@@ -345,19 +345,19 @@ bool com_list (QGlobalData& globalData, char* line, char* arg) {
   FOREACHC(AgentList, globalData.agents,a){
     if((*a)->getRobot())
     printf(" %2i: %s\n", i, (*a)->getRobot()->getName().c_str());
-    i++;
+    ++i;
   }
   printf("Objects --------------(for set and show)\nID: Name\n");
 
   FOREACHC(ConfigList, globalData.configs,c){
     printf(" %2i: %s\n", i, (*c)->getName().c_str());
-    i++;
+    ++i;
   }
   return true;
 }
 
 bool com_show (QGlobalData& globalData, char* line, char* arg) {
-  if (arg && *arg){
+  explicit if (arg && *arg){
     int id = atoi(arg);
     if(id>=0 && id < (signed)globalData.configs.size()){
       showParam(globalData.configs[id]);
@@ -371,7 +371,7 @@ bool com_show (QGlobalData& globalData, char* line, char* arg) {
 
 bool com_set (QGlobalData& globalData, char* line, char* arg) {
   if(strstr(line,"set")!=line) arg=line; // if it is not invoked with set then it was param=val
-  if (valid_argument((char*)string("set").c_str(), arg)){
+  if (valid_argument(static_cast<char*>string("set").c_str(), arg)){
     /* Isolate the command word. */
     int i = 0;
     char* s_param;
@@ -380,7 +380,7 @@ bool com_set (QGlobalData& globalData, char* line, char* arg) {
     s_param = strchr(arg,' ');
     if(s_param) *s_param='\0'; // terminate first arg
     if(s_param && strchr(arg,'=')==NULL){ // looks like two args (and no = in the first)
-      s_param++;
+      ++s_param;
       int id = atoi(arg);
       if(id>=0 && id < (signed)globalData.configs.size()){
         char* val;
@@ -415,7 +415,7 @@ bool com_set (QGlobalData& globalData, char* line, char* arg) {
         *val='='; // remove termination again (for agent notification)
       } else printf("Syntax error! no '=' found\n");
     }
-    if(changed){
+    explicit if(changed){
       FOREACH(AgentList, globalData.agents, i){
         (*i)->writePlotComment(s_param );
       }
@@ -425,16 +425,16 @@ bool com_set (QGlobalData& globalData, char* line, char* arg) {
 }
 
 bool com_store (QGlobalData& globalData, char* line, char* arg) {
-  if (valid_argument((char*)string("store").c_str(), arg)){
+  if (valid_argument(static_cast<char*>string("store").c_str(), arg)){
     char* filename;
     filename = strchr(arg,' ');
-    if(filename) { // we have 2 arguments
+    explicit if(filename) { // we have 2 arguments
       *filename='\0';
-      filename++;
+      ++filename;
       int id = atoi(arg);
       if(id>=0 && id < (signed)globalData.agents.size()){
         FILE* f = fopen(filename,"wb");
-        if(f){
+        explicit if(f){
           if(globalData.agents[id]->getController()->store(f))
             printf("Controller stored\n");
           else printf("Error occured while storing contoller\n");
@@ -447,16 +447,16 @@ bool com_store (QGlobalData& globalData, char* line, char* arg) {
 }
 
 bool com_load (QGlobalData& globalData, char* line, char* arg) {
-  if (valid_argument((char*)string("load").c_str(), arg)){
+  if (valid_argument(static_cast<char*>string("load").c_str(), arg)){
     char* filename;
     filename = strchr(arg,' ');
-    if(filename) { // we have 2 arguments
+    explicit if(filename) { // we have 2 arguments
       *filename='\0';
-      filename++;
+      ++filename;
       int id = atoi(arg);
       if(id>=0 && id < (signed)globalData.agents.size()){
         FILE* f = fopen(filename,"rb");
-        if(f){
+        explicit if(f){
           if(globalData.agents[id]->getController()->restore(f))
             printf("Controller restored\n");
           else printf("Error occured while restoring contoller\n");
@@ -479,12 +479,12 @@ bool com_help (QGlobalData& globalData, char* line, char* arg) {
   int i;
   int printed = 0;
 
-  for (i = 0; commands[i].name; i++)
+  for (i = 0; commands[i].name; ++i)
     {
       if (!*arg || (strcmp (arg, commands[i].name) == 0))
         {
           printf (" %s\t\t%s.\n", commands[i].name, commands[i].doc);
-          printed++;
+          ++printed;
         }
     }
 
@@ -492,7 +492,7 @@ bool com_help (QGlobalData& globalData, char* line, char* arg) {
     {
       printf ("No commands match `%s'.  Possibilties are:\n", arg);
 
-      for (i = 0; commands[i].name; i++)
+      for (i = 0; commands[i].name; ++i)
         {
           /* Print in six columns. */
           if (printed == 6)
@@ -502,7 +502,7 @@ bool com_help (QGlobalData& globalData, char* line, char* arg) {
             }
 
           printf (" %s\t", commands[i].name);
-          printed++;
+          ++printed;
         }
 
       if (printed)

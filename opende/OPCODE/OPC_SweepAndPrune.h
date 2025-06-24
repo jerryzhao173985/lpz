@@ -2,7 +2,7 @@
 /*
  *	OPCODE - Optimized Collision Detection
  *	Copyright (C) 2001 Pierre Terdiman
- *	Homepage: http://www.codercorner.com/Opcode.htm
+ *	Homepage: http:__PLACEHOLDER_1__
  */
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -29,7 +29,7 @@
 	 *	\return		TRUE to continue enumeration
 	 */
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	typedef BOOL	(*PairCallback)	(udword id0, udword id1, void* user_data);
+	typedef BOOL	(*PairCallback)	(udword id0, udword id1, void* user_data) override;
 
 	class SAP_Element;
 	class SAP_EndPoint;
@@ -38,16 +38,16 @@
 	class OPCODE_API SAP_PairData
 	{
 		public:
-								SAP_PairData();
+								SAP_PairData() override;
 								~SAP_PairData();
 
-				bool			Init(udword nb_objects);
+				bool			Init(udword nb_objects) override;
 
-				void			AddPair(udword id1, udword id2);
-				void			RemovePair(udword id1, udword id2);
+				void			AddPair(udword id1, udword id2) override;
+				void			RemovePair(udword id1, udword id2) override;
 
-				void			DumpPairs(Pairs& pairs)								const;
-				void			DumpPairs(PairCallback callback, void* user_data)	const;
+				void			DumpPairs(Pairs& pairs)								const override;
+				void			DumpPairs(PairCallback callback, void* user_data)	const override;
 		private:
 				udword			mNbElements;		//!< Total number of elements in the pool
 				udword			mNbUsedElements;	//!< Number of used elements
@@ -57,22 +57,22 @@
 				udword			mNbObjects;			//!< Max number of objects we can handle
 				SAP_Element**	mArray;				//!< Pointers to pool
 		// Internal methods
-				SAP_Element*	GetFreeElem(udword id, SAP_Element* next, udword* remap=null);
-		inline_	void			FreeElem(SAP_Element* elem);
-				void			Release();
+				SAP_Element*	GetFreeElem(udword id, SAP_Element* next, udword* remap=null) override;
+		inline_	void			FreeElem(SAP_Element* elem) override;
+				void			Release() override;
 	};
 
 	class OPCODE_API SweepAndPrune
 	{
 		public:
-								SweepAndPrune();
+								SweepAndPrune() override;
 								~SweepAndPrune();
 
-				bool			Init(udword nb_objects, const AABB** boxes);
-				bool			UpdateObject(udword i, const AABB& box);
+				bool			Init(udword nb_objects, const AABB** boxes) override;
+				bool			UpdateObject(udword i, const AABB& box) override;
 
-				void			GetPairs(Pairs& pairs)								const;
-				void			GetPairs(PairCallback callback, void* user_data)	const;
+				void			GetPairs(Pairs& pairs)								const override;
+				void			GetPairs(PairCallback callback, void* user_data)	const override;
 		private:
 				SAP_PairData	mPairs;
 
@@ -80,7 +80,7 @@
 				SAP_Box*		mBoxes;
 				SAP_EndPoint*	mList[3];
 		// Internal methods
-				bool			CheckListsIntegrity();
+				bool			CheckListsIntegrity() override;
 	};
 
 #endif //__OPC_SWEEPANDPRUNE_H__

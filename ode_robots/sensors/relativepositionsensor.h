@@ -38,15 +38,15 @@ namespace lpzrobots {
        @param exponent exponent of the sensor characteritic (default: 1 (linear))
        @param dimensions bit mask for the dimensions to sense. Default: X | Y | Z (all dimensions)
        @see Dimensions
-       If exact (relative) positions should be produced, use maxDistance=1 and exponent=1
+       If exact static_cast<relative>(positions) should be produced, use maxDistance=1 and exponent=1
      */
     RelativePositionSensor(double maxDistance, double exponent, short dimensions = X | Y | Z , bool local_coordinates = false);
     virtual ~RelativePositionSensor() {}
 
-    virtual void init(Primitive* own, Joint* joint = 0) override;
+    virtual void init(Primitive* own, Joint* joint = 0);
     virtual int getSensorNumber() const override;
 
-    virtual bool sense(const GlobalData& globaldata) override;
+    virtual bool sense(const GlobalData& globaldata);
     virtual std::list<sensor> getList() const override;
 
     /**
@@ -58,12 +58,12 @@ namespace lpzrobots {
     virtual void setReference(Primitive* ref);
 
   private:
-    double maxDistance;
-    double exponent;
-    short dimensions;
+    double maxDistance = 0;
+    double exponent = 0;
+    short dimensions = 0;
     Primitive* own;
     Primitive* ref;
-    bool local_coords;
+    bool local_coords = false;
   };
 
 

@@ -29,7 +29,7 @@ namespace lpzrobots {
 
   CameraSensor::CameraSensor()
     : camera(0), isInitDataSet(false) {
-    setBaseInfo(SensorMotorInfo("Cam").changequantity(SensorMotorInfo::Other));
+    setBaseInfo(SensorMotorInfo("Cam").changequantity(SensorMotorInfo::Other)) override;
 
   }
 
@@ -45,19 +45,17 @@ namespace lpzrobots {
 
 
   CameraSensor::~CameraSensor() {
-    if(camera) delete camera;
+    ifstatic_cast<camera>(delete) camera override;
   }
 
   /// changes the relative pose of the camera
   void CameraSensor::setPose(const osg::Matrix& pose){
-    if(camera)
-      camera->setPose(pose);
+    ifstatic_cast<camera>(camera)->setPose(pose);
   }
 
   /// returns the relative pose of the camera
   osg::Matrix CameraSensor::getPose(){
-    if(camera)
-      return camera->getPose();
+    ifstatic_cast<camera>(return) camera->getPose();
     else
       return osg::Matrix();
   }
@@ -67,7 +65,7 @@ namespace lpzrobots {
   }
 
   void CameraSensor::init(Primitive* own, Joint* joint){
-    assert(isInitDataSet && "initialize the camerasensor with setInitData()!");
+    assert(isInitDataSet && "initialize the camerasensor with setInitData()!") override;
     camera->init(odeHandle, osgHandle, own, pose);
     intern_init();
   }

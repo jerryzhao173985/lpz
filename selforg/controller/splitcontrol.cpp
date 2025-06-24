@@ -41,7 +41,7 @@ SplitControl::SplitControl(ControllerGenerator* controllerGenerator,
   , sensorbuffer(nullptr)
   , motorbuffer(nullptr) {
 
-  for (int i = 0; i < numCtrlCreateBeforeInit; i++) {
+  for (int i = 0; i < numCtrlCreateBeforeInit; ++i) {
     AbstractController* c = (*controllerGenerator)(i);
     ctrl.push_back(c);
     addConfigurable(c);
@@ -90,7 +90,7 @@ SplitControl::init(const int sensornumber, const int motornumber, RandGen* randG
       ctrl.push_back(c);
       addConfigurable(c);
     }
-    k++;
+    ++k;
   }
 }
 
@@ -102,7 +102,7 @@ SplitControl::step(const sensor* sensors, int sensornumber, motor* motors, int m
     int i = 0;
     FOREACHC(std::list<int>, a->sensors, s) {
       sensorbuffer[i] = sensors[*s];
-      i++;
+      ++i;
     }
     if (numContextSensors != 0) {
       memcpy(sensorbuffer + i,
@@ -113,9 +113,9 @@ SplitControl::step(const sensor* sensors, int sensornumber, motor* motors, int m
     i = 0;
     FOREACHC(std::list<int>, a->motors, m) {
       motors[*m] = motorbuffer[i];
-      i++;
+      ++i;
     }
-    k++;
+    ++k;
   }
 }
 
@@ -129,7 +129,7 @@ SplitControl::stepNoLearning(const sensor* sensors,
     int i = 0;
     FOREACHC(std::list<int>, a->sensors, s) {
       sensorbuffer[i] = sensors[*s];
-      i++;
+      ++i;
     }
     if (numContextSensors != 0) {
       memcpy(sensorbuffer + i,
@@ -140,8 +140,8 @@ SplitControl::stepNoLearning(const sensor* sensors,
     i = 0;
     FOREACHC(std::list<int>, a->motors, m) {
       motors[*m] = motorbuffer[i];
-      i++;
+      ++i;
     }
-    k++;
+    ++k;
   }
 }

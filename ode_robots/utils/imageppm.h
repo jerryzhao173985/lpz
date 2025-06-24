@@ -33,14 +33,14 @@ private:
   unsigned char *image_data;
 
 public:
-  ImagePPM ();  
-  /// data must contain width*height*3 (RGB) values!
-  ImagePPM (int width, int height, unsigned char* data);  
+  ImagePPM () override;
+  /// data must contain width*height*3 static_cast<RGB>(values)!
+  ImagePPM (int width, int height, unsigned char* data) override;
   ~ImagePPM();
   int loadImage(const std::string& filename); // load from PPM file (returns 0 if error)
   int storeImage(const std::string& filename); // store to PPM file (returns 0 if error)
-  int width()           { return image_width;  }
-  int height()          { return image_height; }
+  int width() const override { return image_width;  }
+  int height() const override { return image_height; }
   unsigned char *data() { return image_data;   }
 
 };

@@ -66,7 +66,7 @@ class CheatedECB : public ECB {
 
 class MyController : public AbstractControllerAdapter {
   public:
-    MyController(AbstractController* controller) :
+    explicit MyController(AbstractController* controller) :
       AbstractControllerAdapter(controller, "MyController", "$ID") {
 
     }
@@ -127,7 +127,7 @@ class MyECBManager : public QECBManager {
       //global.plotOptions.push_back(PlotOption(GuiLogger, 1));
 
       int numberNimm2 = 3;
-      for (int nimm2Index = 0; nimm2Index < numberNimm2; nimm2Index++) {
+      for (int nimm2Index = 0; nimm2Index < numberNimm2; ++nimm2Index) {
         if (nimm2Index != 1)
           continue;
         // create new controller
@@ -160,7 +160,7 @@ class MyECBManager : public QECBManager {
         ecbConf.maxNumberSensors = 2; // no infrared sensors
         ecbConf.maxNumberMotors = 2;
         QString* DNSName;
-        switch (nimm2Index) {
+        explicit switch (nimm2Index) {
           case 0:
             //            DNSName = new string("NIMM2_PRIMUS");
             DNSName = new QString("ECB_NIMM2_PRIMUS");

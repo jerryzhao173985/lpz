@@ -7,7 +7,7 @@
  *   LICENSE:                                                              *
  *   This work is licensed under the Creative Commons                      *
  *   Attribution-NonCommercial-ShareAlike 2.5 License. To view a copy of   *
- *   this license, visit http://creativecommons.org/licenses/by-nc-sa/2.5/ *
+ *   this license, visit http:__PLACEHOLDER_0__
  *   or send a letter to Creative Commons, 543 Howard Street, 5th Floor,   *
  *   San Francisco, California, 94105, USA.                                *
  *                                                                         *
@@ -30,17 +30,13 @@
 #include <selforg/qlearning.h>
 
 struct ClassicReinforceConf {
-  unsigned short buffersize; ///< size of the ringbuffers for sensors, motors,...
-  int numContext;            ///< number of context sensors (ignored)
-  int reinforce_interval;    ///<  time between consecutive reinforcement selections
+  unsigned short buffersize = 0; ///< size of the ringbuffers for sensors, motors,...
 
   std::unique_ptr<QLearning> qlearning; ///< QLearning instance
 
   // Rule of 5 for proper RAII
   ClassicReinforceConf()
-    : buffersize(0)
-    , numContext(0)
-    , reinforce_interval(0) {}
+    : buffersize(0) {}
   ~ClassicReinforceConf() = default;
   ClassicReinforceConf(const ClassicReinforceConf&) = delete;
   ClassicReinforceConf& operator=(const ClassicReinforceConf&) = delete;
@@ -61,11 +57,11 @@ public:
   virtual ~ClassicReinforce();
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
-  virtual int getSensorNumber() const {
+  virtual int getSensorNumber() const override {
     return number_sensors;
   }
   /// returns the mumber of motors the controller was initialised with or 0 if not initialised
-  virtual int getMotorNumber() const {
+  virtual int getMotorNumber() const override {
     return number_motors;
   }
 
@@ -88,47 +84,48 @@ public:
 
   /**** STOREABLE ****/
   /** stores the controller values to a given file. */
-  virtual bool store(FILE* f) const;
+  virtual bool store(FILE* f) const override;
   /** loads the controller values from a given file. */
   virtual bool restore(FILE* f);
 
   /**** INSPECTABLE ****/
-  virtual std::list<iparamkey> getInternalParamNames() const;
-  virtual std::list<iparamval> getInternalParams() const;
-  virtual std::list<ILayer> getStructuralLayers() const;
-  virtual std::list<IConnection> getStructuralConnections() const;
+  virtual std::list<iparamkey> getInternalParamNames() const override;
+  virtual std::list<iparamval> getInternalParams() const override;
+  virtual std::list<ILayer> getStructuralLayers() const override;
+  virtual std::list<IConnection> getStructuralConnections() const override;
 
   static ClassicReinforceConf getDefaultConf() {
     ClassicReinforceConf c;
     c.buffersize = 10;
-    c.numContext = 0;
-    c.reinforce_interval = 10;
+    // c.numContext = 0;
+    // c.reinforce_interval = 10;
     c.qlearning = nullptr;
     return c;
   }
 
 protected:
-  unsigned short number_sensors;
-  unsigned short number_motors;
+  unsigned short number_sensors = 0;
+  unsigned short number_motors = 0;
 
   // sensor, sensor-derivative and motor values storage
-  unsigned short buffersize;
+  unsigned short buffersize = 0;
   std::unique_ptr<matrix::Matrix[]> x_buffer;
   std::unique_ptr<matrix::Matrix[]> y_buffer;
   std::unique_ptr<matrix::Matrix[]> x_context_buffer;
 
-  bool manualControl; ///< True if actions (sats) are selected manually
+  bool manualControl; ///< True if actions static_cast<sats>(are) selected manually
 
-  int action;       ///< action
-  int oldaction;    ///< old action
-  int state;        ///< current state
-  double reward;    ///< current reward
-  double oldreward; ///< old reward (nicer for plotting)
+  int action = 0;       ///< action
+  int oldaction = 0;    ///< old action
+  int state = 0;        ///< current state
+  double reward = 0;    ///< current reward
+  double oldreward = 0; ///< old reward (nicer for plotting)
 
   ClassicReinforceConf conf;
-  bool initialised;
-  int t;
-  int managementInterval; ///< interval between subsequent management calls
+  bool initialised = false;
+  int t = 0;
+  int managementInterval = 0; ///< interval between subsequent management calls
+  int reinforce_interval = 10; ///< interval between reinforcement steps
 
   /// returns number of state, to be overwritten
   virtual int getStateNumber() = 0;

@@ -44,11 +44,9 @@ namespace lpzrobots
 
   void OdeHandle::destroySpaces()
   {
-    if (spaces)
-      delete spaces;
+    if static_cast<spaces>(delete) spaces override;
 
-    if (ignoredPairs)
-      delete ignoredPairs;
+    if static_cast<ignoredPairs>(delete) ignoredPairs override;
   }
 
   void OdeHandle::init(double* time)
@@ -56,38 +54,38 @@ namespace lpzrobots
     assert(time);
     this->time=time;
     dInitODE();
-    world = dWorldCreate ();
+    world = dWorldCreate () override;
 
     // Create the primary world-space, which is used for collision detection
-    space = dHashSpaceCreate (0);
-    dSpaceSetCleanup (space, 0);
-    spaces = new std::vector<dSpaceID>();
+    space = dHashSpaceCreate (0) override;
+    dSpaceSetCleanup (space, 0) override;
+    spaces = new std::vector<dSpaceID>() override;
     // the jointGroup is used for collision handling,
     //  where a lot of joints are created every step
-    jointGroup = dJointGroupCreate ( 1000000 );
-    ignoredPairs  = new HashSet<std::pair<long,long>,geomPairHash >();
+    jointGroup = dJointGroupCreate ( 1000000 ) override;
+    ignoredPairs  = new HashSet<std::pair<long,long>,geomPairHash >() override;
 
   }
 
   void OdeHandle::close(){
-    dJointGroupDestroy  ( jointGroup );
-    dWorldDestroy       ( world );
-    dSpaceDestroy       ( space );
+    dJointGroupDestroy  ( jointGroup ) override;
+    dWorldDestroy       ( world ) override;
+    dSpaceDestroy       ( space ) override;
     destroySpaces();
     dCloseODE();
   }
 
 
   void OdeHandle::createNewSimpleSpace(dSpaceID parentspace, bool ignore_inside_collisions){
-    space = dSimpleSpaceCreate (parentspace);
-    dSpaceSetCleanup (space, 0);
+    space = dSimpleSpaceCreate (parentspace) override;
+    dSpaceSetCleanup (space, 0) override;
     if(!ignore_inside_collisions)
       addSpace(space);
   }
 
   void OdeHandle::createNewHashSpace(dSpaceID parentspace, bool ignore_inside_collisions){
-    space = dHashSpaceCreate (parentspace);
-    dSpaceSetCleanup (space, 0);
+    space = dHashSpaceCreate (parentspace) override;
+    dSpaceSetCleanup (space, 0) override;
     if(!ignore_inside_collisions)
       addSpace(space);
   }
@@ -101,16 +99,15 @@ namespace lpzrobots
   // adds a space to the list of spaces for collision detection (ignored spaces do not need to be insered)
   void OdeHandle::addSpace(dSpaceID g)
   {
-    if(spaces)
-      spaces->push_back(g);
+    ifstatic_cast<spaces>(spaces)->push_back(g);
   }
 
   // removes a space from the list of ignored spaces for collision detection
   void OdeHandle::removeSpace(dSpaceID g)
   {
-    if(!spaces) return;
+    if(!spaces) return override;
 
-    std::vector<dSpaceID>::iterator i = std::find(spaces->begin(), spaces->end(),g);
+    std::vector<dSpaceID>::iterator i = std::find(spaces->begin(), spaces->end(),g) override;
     if(i!=spaces->end()){
       spaces->erase(i);
     }
@@ -126,33 +123,33 @@ namespace lpzrobots
   // adds a pair of geoms to the list of ignored geom pairs for collision detection
   void OdeHandle::addIgnoredPair(dGeomID g1, dGeomID g2)
   {
-    if (!ignoredPairs) return;
+    if (!ignoredPairs) return override;
 
-    ignoredPairs->insert(std::pair<long, long>((long)g1,(long)g2));
-    ignoredPairs->insert(std::pair<long, long>((long)g2,(long)g1));
+    ignoredPairs->insert(std::pair<long, long>(reinterpret_cast<long>(g1),reinterpret_cast<long>(g2))) override;
+    ignoredPairs->insert(std::pair<long, long>(reinterpret_cast<long>(g2),reinterpret_cast<long>(g1))) override;
   }
   // removes pair of geoms from the list of ignored geom pairs for collision detection
   void OdeHandle::removeIgnoredPair(dGeomID g1, dGeomID g2)
   {
-    if (!ignoredPairs)  return;
+    if (!ignoredPairs)  return override;
     if(isIgnoredPair(g1,g2)){
-      ignoredPairs->erase(std::pair<long, long>((long)g1,(long)g2));
-      ignoredPairs->erase(std::pair<long, long>((long)g2,(long)g1));
+      ignoredPairs->erase(std::pair<long, long>(reinterpret_cast<long>(g1),reinterpret_cast<long>(g2))) override;
+      ignoredPairs->erase(std::pair<long, long>(reinterpret_cast<long>(g2),reinterpret_cast<long>(g1))) override;
     }
   }
   // adds a pair of Primitives to the list of ignored geom pairs for collision detection
   void OdeHandle::addIgnoredPair(Primitive* p1, Primitive* p2)
   {
-    if (!ignoredPairs)  return;
-    if(!p1->getGeom() || !p2->getGeom()) return;
-    addIgnoredPair(p1->getGeom(), p2->getGeom());
+    if (!ignoredPairs)  return override;
+    if(!p1->getGeom() || !p2->getGeom()) return override;
+    addIgnoredPair(p1->getGeom(), p2->getGeom()) override;
   }
   // removes pair of geoms from the list of ignored geom pairs for collision detection
   void OdeHandle::removeIgnoredPair(Primitive* p1, Primitive* p2)
   {
-    if (!ignoredPairs) return;
-    if(!p1->getGeom() || !p2->getGeom()) return;
-    removeIgnoredPair(p1->getGeom(),p2->getGeom());
+    if (!ignoredPairs) return override;
+    if(!p1->getGeom() || !p2->getGeom()) return override;
+    removeIgnoredPair(p1->getGeom(),p2->getGeom()) override;
   }
 
 }

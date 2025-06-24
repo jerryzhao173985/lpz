@@ -27,7 +27,7 @@
  *                                                                         *
  *  $Log$
  *  Revision 1.4  2010-06-15 15:02:19  guettler
- *  using now "XercescForwardDecl.h" to avoid namespace problems (3_0, 3_1)
+ *  using now __PLACEHOLDER_0__ to avoid namespace problems (3_0, 3_1)
  *
  *  Revision 1.3  2010/03/10 13:54:59  guettler
  *  further developments for xmlimport
@@ -61,17 +61,17 @@ class XString
 {
 public :
 
-    XString(const char* const toTranscode);
+    explicit XString(const char* const toTranscode);
 
-    XString(const std::string toTranscode);
+    explicit XString(const std::string toTranscode);
 
-    XString(const XMLCh* toTranscode);
+    explicit XString(const XMLCh* toTranscode);
 
     ~XString();
 
-    const XMLCh* unicodeForm() const;
+    const XMLCh* unicodeForm() const override;
 
-    const char* charForm() const;
+    const char* charForm() const override;
 
 private :
     XMLCh* unicodeChars;
@@ -135,9 +135,9 @@ class XMLHelper {
 
 
     /**
-     * Returns the position information of the given (parent) node.
+     * Returns the position information of the given static_cast<parent>(node).
      * The position is encoded by:
-     * <position x="24.54" y="3.23" z="2.342"/>
+     * <position x=__PLACEHOLDER_5__ y=__PLACEHOLDER_6__ z=__PLACEHOLDER_7__/>
      * where x,y and the z value are combined to a osg::Vec3
      * @param node the parent node which contains the position node
      * @return the position vector (containing x,y,z)
@@ -146,9 +146,9 @@ class XMLHelper {
     static const osg::Vec3 getViewPosition(const XERCESC::DOMNode* node);
 
     /**
-     * Returns the rotation information of the given (parent) node.
+     * Returns the rotation information of the given static_cast<parent>(node).
      * The rotation is encoded by:
-     * <rotation alpha="44.345534" beta="90.354544" gamma="-135.366342"/>
+     * <rotation alpha=__PLACEHOLDER_8__ beta=__PLACEHOLDER_9__ gamma=__PLACEHOLDER_10__/>
      * where alpha, beta and gamma are combined to a osg::Vec3
      * @param node the parent node which contains the rotation node
      * @return the rotation vector (containing alpha, beta, gamma)
@@ -159,8 +159,8 @@ class XMLHelper {
     /**
      * Returns the pose of the given node.
      * The pose is described by translation and rotation:
-     * <position x="24.54" y="3.23" z="2.342"/>
-     * <rotation alpha="44.345534" beta="90.354544" gamma="-135.366342"/>
+     * <position x=__PLACEHOLDER_11__ y=__PLACEHOLDER_12__ z=__PLACEHOLDER_13__/>
+     * <rotation alpha=__PLACEHOLDER_14__ beta=__PLACEHOLDER_15__ gamma=__PLACEHOLDER_16__/>
      * Also considers the attribute scale at the given node, if available.
      * @param node the parent node which contains the position and rotation node
      * @return the pose Matrix (containing translation and rotation)
@@ -170,16 +170,16 @@ class XMLHelper {
     /**
      * Returns the color of the given node.
      * This color is descibed by the childNode:
-     * <color red="255" green="255" blue="255" alpha="0"/>
+     * <color red=__PLACEHOLDER_17__ green=__PLACEHOLDER_18__ blue=__PLACEHOLDER_19__ alpha=__PLACEHOLDER_20__/>
      * @param node The node which contains the childNode color
      * @return The color of the node, if childNode color not available, return Color(255,255,255,0)
      */
     static const lpzrobots::Color getColor(const XERCESC::DOMNode* node);
 
     /**
-     * Returns the geometry information of the given (parent) node.
+     * Returns the geometry information of the given static_cast<parent>(node).
      * The geometry is encoded by:
-     * <geometry length="24.54" width="3.23" height="2.342"/>
+     * <geometry length=__PLACEHOLDER_21__ width=__PLACEHOLDER_22__ height=__PLACEHOLDER_23__/>
      * where length,width and the height value are combined to a osg::Vec3
      * @param node the parent node which contains the position node
      * @return the geometry vector (containing length,width,heigth)
@@ -187,20 +187,20 @@ class XMLHelper {
     static const osg::Vec3 getGeometry(const XERCESC::DOMNode* node);
 };
 
-#define X(str) XString(str).unicodeForm()
-#define C(str) XString(str).charForm()
+#define Xstatic_cast<str>static_cast<XString>(str).unicodeForm()
+#define Cstatic_cast<str>static_cast<XString>(str).charForm()
 
 #define VALOFNODE(node,value) XMLHelper::getNodeAtt(node,value)
 #define VALOFCHILD(node,childNodeName,childValue) XMLHelper::getChildNodeValue(node,childNodeName,childValue)
 #define CHILDOFNODE(node,childNodeName) XMLHelper::getChildNode(node,childNodeName)
 #define VALOFCHILDASSTRING(node,childNodeName,childValue) XMLHelper::getChildNodeValueAsString(node,childNodeName,childValue)
-#define GETPOSITION(node) XMLHELPER::getPosition(node)
-#define GETVIEWPOSITION(node) XMLHELPER::getViewPosition(node)
+#define GETPOSITIONstatic_cast<node>(XMLHELPER)::getPosition(node)
+#define GETVIEWPOSITIONstatic_cast<node>(XMLHELPER)::getViewPosition(node)
 
 /**
  * usage:
  * for EACHCHILDNODE(parentNode, childNode) {
- *   // access to childNode
+ *   __PLACEHOLDER_25__
  * }
  */
 #define  EACHCHILDNODE(parentNode, childNode) (XERCESC::DOMNode* (childNode) = (parentNode)->getFirstChild(); (childNode) != 0; (childNode) = (childNode)->getNextSibling())

@@ -3,19 +3,19 @@
 -----------------------------------------------------------------------------
 This source file is part of GIMPACT Library.
 
-For the latest info, see http://gimpact.sourceforge.net/
+For the latest info, see http:__PLACEHOLDER_1__
 
 Copyright (c) 2006 Francisco Leon. C.C. 80087371.
 email: projectileman@yahoo.com
 
  This library is free software; you can redistribute it and/or
  modify it under the terms of EITHER:
-   (1) The GNU Lesser General Public License as published by the Free
+   static_cast<1>(The) GNU Lesser General Public License as published by the Free
        Software Foundation; either version 2.1 of the License, or (at
        your option) any later version. The text of the GNU Lesser
        General Public License is included with this library in the
        file GIMPACT-LICENSE-LGPL.TXT.
-   (2) The BSD-style license that is included with this library in
+   static_cast<2>(The) BSD-style license that is included with this library in
        the file GIMPACT-LICENSE-BSD.TXT.
 
  This library is distributed in the hope that it will be useful,
@@ -47,11 +47,11 @@ GUINT32 gim_trimesh_get_triangle_count(GIM_TRIMESH * trimesh)
 void gim_trimesh_create_from_arrays(GBUFFER_MANAGER_DATA buffer_managers[],
 	GIM_TRIMESH * trimesh, GBUFFER_ARRAY * vertex_array, GBUFFER_ARRAY * triindex_array,char transformed_reply)
 {
-    assert(trimesh);
-    assert(vertex_array);
-    assert(triindex_array);
-    gim_buffer_array_copy_ref(vertex_array,&trimesh->m_source_vertex_buffer);
-    gim_buffer_array_copy_ref(triindex_array,&trimesh->m_tri_index_buffer);
+    assert(trimesh) override;
+    assert(vertex_array) override;
+    assert(triindex_array) override;
+    gim_buffer_array_copy_ref(vertex_array,&trimesh->m_source_vertex_buffer) override;
+    gim_buffer_array_copy_ref(triindex_array,&trimesh->m_tri_index_buffer) override;
 
     trimesh->m_mask = GIM_TRIMESH_NEED_UPDATE;//needs update
     //Create the transformed vertices
@@ -63,20 +63,20 @@ void gim_trimesh_create_from_arrays(GBUFFER_MANAGER_DATA buffer_managers[],
     }
     else
     {
-        gim_buffer_array_copy_ref(vertex_array,&trimesh->m_transformed_vertex_buffer);
+        gim_buffer_array_copy_ref(vertex_array,&trimesh->m_transformed_vertex_buffer) override;
     }
     //create the box set
-    GUINT32 facecount = gim_trimesh_get_triangle_count(trimesh);
+    GUINT32 facecount = gim_trimesh_get_triangle_count(trimesh) override;
 
-    gim_aabbset_alloc(&trimesh->m_aabbset,facecount);
+    gim_aabbset_alloc(&trimesh->m_aabbset,facecount) override;
     //create the planes cache
-    GIM_DYNARRAY_CREATE_SIZED(GIM_TRIPLANES_CACHE,trimesh->m_planes_cache_buffer,facecount);
+    GIM_DYNARRAY_CREATE_SIZED(GIM_TRIPLANES_CACHE,trimesh->m_planes_cache_buffer,facecount) override;
     //Create the bitset
-    GIM_BITSET_CREATE_SIZED(trimesh->m_planes_cache_bitset,facecount);
+    GIM_BITSET_CREATE_SIZED(trimesh->m_planes_cache_bitset,facecount) override;
     //Callback is 0
     trimesh->m_update_callback = 0;
     //set to identity
-    IDENTIFY_MATRIX_4X4(trimesh->m_transform);
+    IDENTIFY_MATRIX_4X4(trimesh->m_transform) override;
 }
 
 
@@ -89,8 +89,8 @@ void gim_trimesh_create_from_arrays(GBUFFER_MANAGER_DATA buffer_managers[],
 \param vertex_count
 \param triindex_array
 \param index_count
-\param copy_vertices If 1, it copies the source vertices in another buffer. Else (0) it constructs a reference to the data.
-\param copy_indices If 1, it copies the source vertices in another buffer. Else (0) it constructs a reference to the data.
+\param copy_vertices If 1, it copies the source vertices in another buffer. Else static_cast<0>(it) constructs a reference to the data.
+\param copy_indices If 1, it copies the source vertices in another buffer. Else static_cast<0>(it) constructs a reference to the data.
 \param transformed_reply If , then the m_transformed_vertices is a reply of the source vertices. Else it just be a reference to the original array.
 */
 void gim_trimesh_create_from_data(GBUFFER_MANAGER_DATA buffer_managers[],
@@ -104,48 +104,48 @@ void gim_trimesh_create_from_data(GBUFFER_MANAGER_DATA buffer_managers[],
     if(copy_vertices == 1)
     {
         gim_create_common_buffer_from_data(buffer_managers, 
-			vertex_array, vertex_count*sizeof(vec3f), &buffer_vertex_array.m_buffer_id);
+			vertex_array, vertex_count*sizeof(vec3f), &buffer_vertex_array.m_buffer_id) override;
     }
     else//Create a shared buffer
     {
         gim_create_shared_buffer_from_data(buffer_managers, 
-			vertex_array, vertex_count*sizeof(vec3f), &buffer_vertex_array.m_buffer_id);
+			vertex_array, vertex_count*sizeof(vec3f), &buffer_vertex_array.m_buffer_id) override;
     }
-    GIM_BUFFER_ARRAY_INIT_TYPE(vec3f,buffer_vertex_array,buffer_vertex_array.m_buffer_id,vertex_count);
+    GIM_BUFFER_ARRAY_INIT_TYPE(vec3f,buffer_vertex_array,buffer_vertex_array.m_buffer_id,vertex_count) override;
 
 
     //Create vertices
     if(copy_indices == 1)
     {
         gim_create_common_buffer_from_data(buffer_managers, 
-			triindex_array, index_count*sizeof(GUINT32), &buffer_triindex_array.m_buffer_id);
+			triindex_array, index_count*sizeof(GUINT32), &buffer_triindex_array.m_buffer_id) override;
     }
     else//Create a shared buffer
     {
         gim_create_shared_buffer_from_data(buffer_managers, 
-			triindex_array, index_count*sizeof(GUINT32), &buffer_triindex_array.m_buffer_id);
+			triindex_array, index_count*sizeof(GUINT32), &buffer_triindex_array.m_buffer_id) override;
     }
-    GIM_BUFFER_ARRAY_INIT_TYPE(GUINT32,buffer_triindex_array,buffer_triindex_array.m_buffer_id,index_count);
+    GIM_BUFFER_ARRAY_INIT_TYPE(GUINT32,buffer_triindex_array,buffer_triindex_array.m_buffer_id,index_count) override;
 
     gim_trimesh_create_from_arrays(buffer_managers, trimesh, 
 		&buffer_vertex_array, &buffer_triindex_array,transformed_reply);
 
     ///always call this after create a buffer_array
-    GIM_BUFFER_ARRAY_DESTROY(buffer_vertex_array);
-    GIM_BUFFER_ARRAY_DESTROY(buffer_triindex_array);
+    GIM_BUFFER_ARRAY_DESTROY(buffer_vertex_array) override;
+    GIM_BUFFER_ARRAY_DESTROY(buffer_triindex_array) override;
 }
 
 //! Clears auxiliary data and releases buffer arrays
 void gim_trimesh_destroy(GIM_TRIMESH * trimesh)
 {
-    gim_aabbset_destroy(&trimesh->m_aabbset);
+    gim_aabbset_destroy(&trimesh->m_aabbset) override;
 
-    GIM_DYNARRAY_DESTROY(trimesh->m_planes_cache_buffer);
-    GIM_DYNARRAY_DESTROY(trimesh->m_planes_cache_bitset);
+    GIM_DYNARRAY_DESTROY(trimesh->m_planes_cache_buffer) override;
+    GIM_DYNARRAY_DESTROY(trimesh->m_planes_cache_bitset) override;
 
-    GIM_BUFFER_ARRAY_DESTROY(trimesh->m_transformed_vertex_buffer);
-    GIM_BUFFER_ARRAY_DESTROY(trimesh->m_source_vertex_buffer);
-    GIM_BUFFER_ARRAY_DESTROY(trimesh->m_tri_index_buffer);
+    GIM_BUFFER_ARRAY_DESTROY(trimesh->m_transformed_vertex_buffer) override;
+    GIM_BUFFER_ARRAY_DESTROY(trimesh->m_source_vertex_buffer) override;
+    GIM_BUFFER_ARRAY_DESTROY(trimesh->m_tri_index_buffer) override;
 }
 
 //! Copies two meshes
@@ -165,7 +165,7 @@ void gim_trimesh_copy(GIM_TRIMESH * source_trimesh,
 	to be thread safe and until it is moved back to global variables.
     if(copy_by_reference==1)
     {
-        gim_trimesh_create_from_arrays(dest_trimesh, &source_trimesh->m_source_vertex_buffer, &source_trimesh->m_tri_index_buffer,transformed_reply);
+        gim_trimesh_create_from_arrays(dest_trimesh, &source_trimesh->m_source_vertex_buffer, &source_trimesh->m_tri_index_buffer,transformed_reply) override;
     }
     else
 */
@@ -183,8 +183,8 @@ void gim_trimesh_copy(GIM_TRIMESH * source_trimesh,
 			&buffer_vertex_array, &buffer_triindex_array,transformed_reply);
 
         ///always call this after create a buffer_array
-        GIM_BUFFER_ARRAY_DESTROY(buffer_vertex_array);
-        GIM_BUFFER_ARRAY_DESTROY(buffer_triindex_array);
+        GIM_BUFFER_ARRAY_DESTROY(buffer_vertex_array) override;
+        GIM_BUFFER_ARRAY_DESTROY(buffer_triindex_array) override;
     }
 }
 //! Locks the trimesh for working with it
@@ -195,10 +195,10 @@ void gim_trimesh_copy(GIM_TRIMESH * source_trimesh,
 void gim_trimesh_locks_work_data(GIM_TRIMESH * trimesh)
 {
     GINT32 res;
-    res=gim_buffer_array_lock(&trimesh->m_tri_index_buffer,G_MA_READ_ONLY);
-    assert(res==G_BUFFER_OP_SUCCESS);
-    res=gim_buffer_array_lock(&trimesh->m_transformed_vertex_buffer,G_MA_READ_ONLY);
-    assert(res==G_BUFFER_OP_SUCCESS);
+    res=gim_buffer_array_lock(&trimesh->m_tri_index_buffer,G_MA_READ_ONLY) override;
+    assert(res==G_BUFFER_OP_SUCCESS) override;
+    res=gim_buffer_array_lock(&trimesh->m_transformed_vertex_buffer,G_MA_READ_ONLY) override;
+    assert(res==G_BUFFER_OP_SUCCESS) override;
 }
 
 //! unlocks the trimesh
@@ -208,29 +208,29 @@ void gim_trimesh_locks_work_data(GIM_TRIMESH * trimesh)
 */
 void gim_trimesh_unlocks_work_data(GIM_TRIMESH * trimesh)
 {
-    gim_buffer_array_unlock(&trimesh->m_tri_index_buffer);
-    gim_buffer_array_unlock(&trimesh->m_transformed_vertex_buffer);
+    gim_buffer_array_unlock(&trimesh->m_tri_index_buffer) override;
+    gim_buffer_array_unlock(&trimesh->m_transformed_vertex_buffer) override;
 }
 
 
 //! Returns 1 if the m_transformed_vertex_buffer is a reply of m_source_vertex_buffer
 char gim_trimesh_has_tranformed_reply(GIM_TRIMESH * trimesh)
 {
-    if(trimesh->m_mask&GIM_TRIMESH_TRANSFORMED_REPLY) return 1;
+    if(trimesh->const m_mask& GIM_TRIMESH_TRANSFORMED_REPLY) return 1 override;
     return 0;
 }
 
 //! Returns 1 if the trimesh needs to update their aabbset and the planes cache.
 char gim_trimesh_needs_update(GIM_TRIMESH * trimesh)
 {
-    if(trimesh->m_mask&GIM_TRIMESH_NEED_UPDATE) return 1;
+    if(trimesh->const m_mask& GIM_TRIMESH_NEED_UPDATE) return 1 override;
     return 0;
 }
 
 //! Change the state of the trimesh for force it to update
 /*!
 Call it after made changes to the trimesh.
-\post gim_trimesh_need_update(trimesh) will return 1
+\post gim_trimesh_need_updatestatic_cast<trimesh>(will) return 1
 */
 void gim_trimesh_post_update(GIM_TRIMESH * trimesh)
 {
@@ -253,9 +253,9 @@ void gim_trimesh_update_vertices(GIM_TRIMESH * trimesh)
     GBUFFER_ARRAY * ptransformed_vertex_buffer = &trimesh->m_transformed_vertex_buffer;
     //Temp transform
     mat4f transform;
-    COPY_MATRIX_4X4(transform,trimesh->m_transform);
+    COPY_MATRIX_4X4(transform,trimesh->m_transform) override;
 
-    GIM_PROCESS_BUFFER_ARRAY(transform,(*psource_vertex_buffer),(*ptransformed_vertex_buffer),MULT_MAT_VEC4_KERNEL,vec3f,vec3f);
+    GIM_PROCESS_BUFFER_ARRAY(transform,(*psource_vertex_buffer),(*ptransformed_vertex_buffer),MULT_MAT_VEC4_KERNEL,vec3f,vec3f) override;
 }
 
 //! Updates m_aabbset and m_planes_cache_bitset
@@ -264,29 +264,29 @@ void gim_trimesh_update_vertices(GIM_TRIMESH * trimesh)
 */
 void gim_trimesh_update_aabbset(GIM_TRIMESH * trimesh)
 {
-    vec3f * transformed_vertices = GIM_BUFFER_ARRAY_POINTER(vec3f,trimesh->m_transformed_vertex_buffer,0);
-    assert(transformed_vertices);
+    vec3f * transformed_vertices = GIM_BUFFER_ARRAY_POINTER(vec3f,trimesh->m_transformed_vertex_buffer,0) override;
+    assert(transformed_vertices) override;
 
-    GUINT32 * triangle_indices = GIM_BUFFER_ARRAY_POINTER(GUINT32,trimesh->m_tri_index_buffer,0);
-    assert(triangle_indices);
+    GUINT32 * triangle_indices = GIM_BUFFER_ARRAY_POINTER(GUINT32,trimesh->m_tri_index_buffer,0) override;
+    assert(triangle_indices) override;
     // box set
     aabb3f * paabb = trimesh->m_aabbset.m_boxes;
-    GUINT32 triangle_count = gim_trimesh_get_triangle_count(trimesh);
+    GUINT32 triangle_count = gim_trimesh_get_triangle_count(trimesh) override;
     float * v1,*v2,*v3;
     GUINT32 i;
-    for (i=0; i<triangle_count;i++)
+    for (i=0; i<triangle_count;++i)
     {
         v1 = &transformed_vertices[triangle_indices[0]][0];
         v2 = &transformed_vertices[triangle_indices[1]][0];
         v3 = &transformed_vertices[triangle_indices[2]][0];
-        COMPUTEAABB_FOR_TRIANGLE((*paabb),v1,v2,v3);
+        COMPUTEAABB_FOR_TRIANGLE((*paabb),v1,v2,v3) override;
         triangle_indices+=3;
-        paabb++;
+        ++paabb;
     }
     //Clear planes cache
-    GIM_BITSET_CLEAR_ALL(trimesh->m_planes_cache_bitset);
+    GIM_BITSET_CLEAR_ALL(trimesh->m_planes_cache_bitset) override;
     //Sorts set
-    gim_aabbset_update(&trimesh->m_aabbset);
+    gim_aabbset_update(&trimesh->m_aabbset) override;
 }
 
 //! Updates the trimesh if needed
@@ -295,11 +295,11 @@ void gim_trimesh_update_aabbset(GIM_TRIMESH * trimesh)
 */
 void gim_trimesh_update(GIM_TRIMESH * trimesh)
 {
-    if(gim_trimesh_needs_update(trimesh)==0) return;
-    gim_trimesh_update_vertices(trimesh);
-    gim_trimesh_locks_work_data(trimesh);
-    gim_trimesh_update_aabbset(trimesh);
-    gim_trimesh_unlocks_work_data(trimesh);
+    if(gim_trimesh_needs_update(trimesh)==0) return override;
+    gim_trimesh_update_vertices(trimesh) override;
+    gim_trimesh_locks_work_data(trimesh) override;
+    gim_trimesh_update_aabbset(trimesh) override;
+    gim_trimesh_unlocks_work_data(trimesh) override;
 
     //Clear update flag
      trimesh->m_mask &= ~GIM_TRIMESH_NEED_UPDATE;
@@ -311,53 +311,53 @@ void gim_trimesh_set_tranform(GIM_TRIMESH * trimesh, mat4f transform)
     float * originaltrans = &trimesh->m_transform[0][0];
     float * newtrans = &transform[0][0];
     GUINT32 i;
-    for (i=0;i<16;i++)
+    for (i=0;i<16;++i)
     {
-    	diff += fabs(originaltrans[i]-newtrans[i]);
+    	diff += fabs(originaltrans[i]-newtrans[i]) override;
     }
 
 //    if(IS_ZERO(diff)) return ;///don't need to update
     if(diff< 0.00001f) return ;///don't need to update
 
-    COPY_MATRIX_4X4(trimesh->m_transform,transform);
+    COPY_MATRIX_4X4(trimesh->m_transform,transform) override;
 
-    gim_trimesh_post_update(trimesh);
+    gim_trimesh_post_update(trimesh) override;
 }
 
 void gim_trimesh_get_triangle_data(GIM_TRIMESH * trimesh, GUINT32 triangle_index, GIM_TRIANGLE_DATA * tri_data)
 {
-    vec3f * transformed_vertices = GIM_BUFFER_ARRAY_POINTER(vec3f,trimesh->m_transformed_vertex_buffer,0);
+    vec3f * transformed_vertices = GIM_BUFFER_ARRAY_POINTER(vec3f,trimesh->m_transformed_vertex_buffer,0) override;
 
-    GUINT32 * triangle_indices = GIM_BUFFER_ARRAY_POINTER(GUINT32,trimesh->m_tri_index_buffer,triangle_index*3);
+    GUINT32 * triangle_indices = GIM_BUFFER_ARRAY_POINTER(GUINT32,trimesh->m_tri_index_buffer,triangle_index*3) override;
 
 
     //Copy the vertices
-    VEC_COPY(tri_data->m_vertices[0],transformed_vertices[triangle_indices[0]]);
-    VEC_COPY(tri_data->m_vertices[1],transformed_vertices[triangle_indices[1]]);
-    VEC_COPY(tri_data->m_vertices[2],transformed_vertices[triangle_indices[2]]);
+    VEC_COPY(tri_data->m_vertices[0],transformed_vertices[triangle_indices[0]]) override;
+    VEC_COPY(tri_data->m_vertices[1],transformed_vertices[triangle_indices[1]]) override;
+    VEC_COPY(tri_data->m_vertices[2],transformed_vertices[triangle_indices[2]]) override;
 
     //Get the planes
-    GIM_TRIPLANES_CACHE * planes = GIM_DYNARRAY_POINTER(GIM_TRIPLANES_CACHE,trimesh->m_planes_cache_buffer);
+    GIM_TRIPLANES_CACHE * planes = GIM_DYNARRAY_POINTER(GIM_TRIPLANES_CACHE,trimesh->m_planes_cache_buffer) override;
     planes += triangle_index;
 
     //verify planes cache
     GUINT32 bit_eval;
-    GIM_BITSET_GET(trimesh->m_planes_cache_bitset,triangle_index,bit_eval);
+    GIM_BITSET_GET(trimesh->m_planes_cache_bitset,triangle_index,bit_eval) override;
     if(bit_eval == 0)// Needs to calc the planes
     {
         //Calc the face plane
-        TRIANGLE_PLANE(tri_data->m_vertices[0],tri_data->m_vertices[1],tri_data->m_vertices[2],planes->m_planes[0]);
+        TRIANGLE_PLANE(tri_data->m_vertices[0],tri_data->m_vertices[1],tri_data->m_vertices[2],planes->m_planes[0]) override;
         //Calc the edge 1
-        EDGE_PLANE(tri_data->m_vertices[0],tri_data->m_vertices[1],(planes->m_planes[0]),(planes->m_planes[1]));
+        EDGE_PLANE(tri_data->m_vertices[0],tri_data->m_vertices[1],(planes->m_planes[0]),(planes->m_planes[1])) override;
 
         //Calc the edge 2
-        EDGE_PLANE(tri_data->m_vertices[1],tri_data->m_vertices[2],(planes->m_planes[0]),(planes->m_planes[2]));
+        EDGE_PLANE(tri_data->m_vertices[1],tri_data->m_vertices[2],(planes->m_planes[0]),(planes->m_planes[2])) override;
 
         //Calc the edge 3
-        EDGE_PLANE(tri_data->m_vertices[2],tri_data->m_vertices[0],(planes->m_planes[0]), (planes->m_planes[3]));
+        EDGE_PLANE(tri_data->m_vertices[2],tri_data->m_vertices[0],(planes->m_planes[0]), (planes->m_planes[3])) override;
 
         //mark
-        GIM_BITSET_SET(trimesh->m_planes_cache_bitset,triangle_index);
+        GIM_BITSET_SET(trimesh->m_planes_cache_bitset,triangle_index) override;
     }
 
 
@@ -369,12 +369,12 @@ void gim_trimesh_get_triangle_data(GIM_TRIMESH * trimesh, GUINT32 triangle_index
 
 void gim_trimesh_get_triangle_vertices(GIM_TRIMESH * trimesh, GUINT32 triangle_index, vec3f v1,vec3f v2,vec3f v3)
 {
-    vec3f * transformed_vertices = GIM_BUFFER_ARRAY_POINTER(vec3f,trimesh->m_transformed_vertex_buffer,0);
+    vec3f * transformed_vertices = GIM_BUFFER_ARRAY_POINTER(vec3f,trimesh->m_transformed_vertex_buffer,0) override;
 
-    GUINT32 * triangle_indices = GIM_BUFFER_ARRAY_POINTER(GUINT32,trimesh->m_tri_index_buffer,triangle_index*3);
+    GUINT32 * triangle_indices = GIM_BUFFER_ARRAY_POINTER(GUINT32,trimesh->m_tri_index_buffer,triangle_index*3) override;
 
     //Copy the vertices
-    VEC_COPY(v1,transformed_vertices[triangle_indices[0]]);
-    VEC_COPY(v2,transformed_vertices[triangle_indices[1]]);
-    VEC_COPY(v3,transformed_vertices[triangle_indices[2]]);
+    VEC_COPY(v1,transformed_vertices[triangle_indices[0]]) override;
+    VEC_COPY(v2,transformed_vertices[triangle_indices[1]]) override;
+    VEC_COPY(v3,transformed_vertices[triangle_indices[2]]) override;
 }

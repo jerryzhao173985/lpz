@@ -7,7 +7,7 @@
  *   LICENSE:                                                              *
  *   This work is licensed under the Creative Commons                      *
  *   Attribution-NonCommercial-ShareAlike 2.5 License. To view a copy of   *
- *   this license, visit http://creativecommons.org/licenses/by-nc-sa/2.5/ *
+ *   this license, visit http:__PLACEHOLDER_0__
  *   or send a letter to Creative Commons, 543 Howard Street, 5th Floor,   *
  *   San Francisco, California, 94105, USA.                                *
  *                                                                         *
@@ -30,8 +30,8 @@
 
 /// configuration object for PiMax controller. Use PiMax::getDefaultConf().
 struct RandomDynConf {
-  double initFeedbackStrength;  ///< initial strength of sensor to motor connection
-  bool   someInternalParams;    ///< if true only some internal parameters are exported
+  double initFeedbackStrength = 0;  ///< initial strength of sensor to motor connection
+  bool   someInternalParams = false;    ///< if true only some internal parameters are exported
   NoiseGenerator* noiseGenC;     ///< noise generator (will be initialized internally)
   NoiseGenerator* noiseGenh;    ///< noise generator (will be initialized internally)
 };
@@ -44,13 +44,13 @@ class RandomDyn : public AbstractController {
 
 public:
   /// constructor
-  RandomDyn(const RandomDynConf& conf = getDefaultConf());
+  RandomDyn(const RandomDynConf& conf = getDefaultConf()) override;
 
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
 
-  virtual ~RandomDyn() override;
+  virtual ~RandomDyn();
 
-  static RandomDynConf getDefaultConf(){
+  static RandomDynConf getDefaultConf() const {
     RandomDynConf conf;
     conf.initFeedbackStrength = 1.0;
     conf.someInternalParams   = false;
@@ -60,37 +60,37 @@ public:
   }
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
-  virtual int getSensorNumber() const { return number_sensors; }
+  virtual int getSensorNumber() const override { return number_sensors; }
   /// returns the mumber of motors the controller was initialised with or 0 if not initialised
-  virtual int getMotorNumber() const  { return number_motors; }
+  virtual int getMotorNumber() const override { return number_motors; }
 
   /// performs one step (includes learning).
   /// Calulates motor commands from sensor inputs.
-  virtual void step(const sensor* , int number_sensors, motor* , int number_motors) override;
+  virtual void step(const sensor* , int number_sensors, motor* , int number_motors);
 
   /// performs one step without learning. Calulates motor commands from sensor inputs.
   virtual void stepNoLearning(const sensor* , int number_sensors,
-			      motor* , int number_motors) override;
+			      motor* , int number_motors);
 
   /// called during babbling phase
   virtual void motorBabblingStep(const sensor* , int number_sensors,
-				 const motor* , int number_motors) override;
+				 const motor* , int number_motors);
 
   /***** STOREABLE ****/
   /** stores the controller values to a given file. */
   virtual bool store(FILE* f) const override;
   /** loads the controller values from a given file. */
-  virtual bool restore(FILE* f) override;
+  virtual bool restore(FILE* f);
 
   /* some direct access functions (unsafe!) */
-  virtual matrix::Matrix getC() override;
-  virtual void setC(const matrix::Matrix& C) override;
-  virtual matrix::Matrix geth() override;
-  virtual void seth(const matrix::Matrix& h) override;
+  virtual matrix::Matrix getC();
+  virtual void setC(const matrix::Matrix& C);
+  virtual matrix::Matrix geth();
+  virtual void seth(const matrix::Matrix& h);
 
 protected:
-  unsigned short number_sensors;
-  unsigned short number_motors;
+  unsigned short number_sensors = 0;
+  unsigned short number_motors = 0;
 
   matrix::Matrix s; // sensors
   matrix::Matrix C; // Controller Matrix
@@ -103,13 +103,13 @@ protected:
   RandGen* randGenC;
   RandGen* randGenh;
 
-  int t;
+  int t = 0;
 
   paramval sigmaC;
   paramval sigmah;
   paramval damping;
 
-  virtual void update() override;
+  virtual void update();
 
   /// neuron transfer function
   static double g(double z)

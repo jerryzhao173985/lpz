@@ -29,7 +29,7 @@
 // #include <utility>
 // #include <string>
 // #include <map>
-// #include "stl_adds.h"
+// #include __PLACEHOLDER_0__
 
 /**
  * Abstact class for discretesizable controllers. Implements the methods
@@ -68,7 +68,7 @@ public:
    * @param motors motors outputs. MUST have enough space for motor values!
    * @param motornumber length of the provided motor array
    */
-  void step(const sensor* sensors, int sensornumber, motor* motors, int motornumber) {
+  void step(const sensor* sensors, int sensornumber, motor* motors, int motornumber) override {
     DiscreteControllerAdapter::step(sensors, sensornumber, motors, motornumber);
   }
 
@@ -77,7 +77,7 @@ public:
    * @note This method cannot be overwritten, use @see dStepNoLearning
    * instead.
    */
-  void stepNoLearning(const sensor* sensors, int sensornumber, motor* motors, int motornumber) {
+  void stepNoLearning(const sensor* sensors, int sensornumber, motor* motors, int motornumber) override {
     DiscreteControllerAdapter::step(sensors, sensornumber, motors, motornumber);
   }
 

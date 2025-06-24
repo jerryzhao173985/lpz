@@ -124,13 +124,13 @@ namespace lpzrobots {
         avrDevice->FuseBytes[1] = new AVRFUSEBYTE;
         avrDevice->FuseBytes[2] = new AVRFUSEBYTE;
 
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 3; ++i)
         {
           avrDevice->FuseBytes[i]->EnabledBitMask = 0;
           avrDevice->FuseBytes[i]->DefaultValue = 0;
           avrDevice->FuseBytes[i]->Value = 0;
 
-          for (int j = 0; j < 8; j++)
+          for (int j = 0; j < 8; ++j)
           {
             avrDevice->FuseBytes[i]->Names[j] = 0;
             avrDevice->FuseBytes[i]->Description[j] = 0;

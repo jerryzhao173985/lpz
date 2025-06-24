@@ -39,21 +39,14 @@ namespace lpzrobots {
   struct GripperConf {
     std::string name; ///< name of gripper for configuration
 
-    double gripDuration; ///< time in seconds for how long the gripper grasps
     /** releaseDuration time in seconds for how long the gripper
         cannot grasp after release */
-    double releaseDuration;
     Color  color;
-    double size; ///< diameter of the drawn sphere (if 0 nothing is drawn)
-    /** sphere is drawn at contact point (true)
-        or at center of attached primitive (false)
+    /** sphere is drawn at contact point static_cast<true>(or) at center of attached primitive (false)
     */
-    bool   drawAtContactPoint;
     /** if true the last grasped object cannot be directly grasped again
      */
-    bool   forbitLastPrimitive;
-    //     bool incOrExc; ///< include (false) or exclude (true) grippables;
-    bool   fixedOrBallJoint; ///< use fixed joint (true) or ball joint (false)
+    //     bool incOrExc; ///< include static_cast<false>(or) exclude static_cast<true>(grippables) override;
   };
 
   /**
@@ -62,7 +55,7 @@ namespace lpzrobots {
      specified objects.
      Usage: in your robot, create a Gripper object and attach
       it to the primitive that grips (e.g. hand). Then you
-      need make the gripper(s) available to you simulation
+      need make the gripperstatic_cast<s>(available) to you simulation
       in order to set call the addGrippables from there
       (e.g. with otherrobot->getAllPrimitives()), see Skeleton.
    */
@@ -73,12 +66,11 @@ namespace lpzrobots {
        @param releaseDuration time in seconds for how long the gripper cannot grasp
         after release
        @param size diameter of the drawn sphere (if 0 nothing is drawn)
-       @param drawAtContactPoint sphere is drawn at contact point (true)
-              or at center of attached primitive (false)
+       @param drawAtContactPoint sphere is drawn at contact point static_cast<true>(or) at center of attached primitive (false)
     */
-    Gripper(const GripperConf& conf = getDefaultConf());
+    Gripper(const GripperConf& conf = getDefaultConf()) override;
 
-    static GripperConf getDefaultConf(){
+    static GripperConf getDefaultConf() const {
       GripperConf conf;
       conf.name                = "Gripper";
       conf.gripDuration        = 10;
@@ -106,11 +98,11 @@ namespace lpzrobots {
 
   private:
     GripperConf conf;
-    bool   isAttached;
+    bool   isAttached = false;
 
     dGeomID last;
     HashSet<dGeomID> grippables;
-    double gripStartTime;
+    double gripStartTime = 0;
   };
 
   typedef std::vector<Gripper*> GripperList;

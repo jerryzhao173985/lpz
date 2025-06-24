@@ -98,8 +98,8 @@ bool WiredController::init(AbstractController* controller, AbstractWiring* wirin
   cmotornumber  = wiring->getControllerMotornumber();
   controller->init(csensornumber, cmotornumber, randGen);
 
-  csensors      = (sensor*) malloc(sizeof(sensor) * csensornumber);
-  cmotors       = (motor*)  malloc(sizeof(motor)  * cmotornumber);
+  csensors      = static_cast<sensor*>(malloc(sizeof(sensor) * csensornumber));
+  cmotors       = static_cast<motor*>(malloc(sizeof(motor) * cmotornumber));
 
   // wire infos and send to controller and for plotting
   const std::list<SensorMotorInfo>& controllerSensorInfos = wiring->wireSensorInfos(robotSensorInfos);
@@ -139,15 +139,15 @@ void WiredController::startMotorBabblingMode (int steps, AbstractController* bab
   motorBabblingSteps=steps;
 }
 
-PlotOption WiredController::addPlotOption(PlotOption& plotOption) {
+PlotOption WiredController::addPlotOption(const PlotOption& plotOption) {
   return plotEngine.addPlotOption(plotOption);
 }
 
-bool WiredController::addAndInitPlotOption(PlotOption& plotOption) {
+bool WiredController::addAndInitPlotOption(const PlotOption& plotOption) {
   return plotEngine.addAndInitPlotOption(plotOption);
 }
 
-bool WiredController::removePlotOption(PlotMode mode){
+bool WiredController::removePlotOption(const PlotMode& mode){
   return plotEngine.removePlotOption(mode);
 }
 
@@ -190,5 +190,5 @@ void WiredController::step(const sensor* sensors, int sensornumber,
   plot(time);
   // do a callback for all registered Callbackable classes
   callBack();
-  t++;
+  ++t;
 }

@@ -76,7 +76,7 @@ public:
   Nimm2(const OdeHandle& odehandle, const OsgHandle& osgHandle,
         const Nimm2Conf& conf, const std::string& name);
 
-  static Nimm2Conf getDefaultConf(){
+  static Nimm2Conf getDefaultConf() const {
     Nimm2Conf conf;
     conf.size=1;
     conf.force=5;
@@ -128,13 +128,13 @@ public:
 
   /** returns number of sensors
    */
-  virtual int getSensorNumberIntern(){
+  virtual int getSensorNumberIntern() override {
     return sensorno;
   };
 
   /** returns number of motors
    */
-  virtual int getMotorNumberIntern(){
+  virtual int getMotorNumberIntern() override {
     return motorno;
   };
 
@@ -149,11 +149,11 @@ public:
       like space-internal collision detection, sensor resets/update etc.
       @param globalData structure that contains global data from the simulation environment
    */
-  virtual void doInternalStuff(GlobalData& globalData);
+  virtual void doInternalStuff(const GlobalData& globalData);
 
-        virtual double& getSumForce() { return sumForce; }
+        virtual double& getSumForce() const  override { return sumForce; }
 
-        virtual double& getContactPoints() { return contactPoints; }
+        virtual double& getContactPoint override s() const { return contactPoints; }
 
 protected:
 
@@ -176,13 +176,13 @@ protected:
          * Inspectable interface
          */
         /*
-        virtual std::list<iparamkey> getInternalParamNames() const  { return std::list<iparamkey>(); }
+        virtual std::list<iparamkey> getInternalParamNames() const override { return std::list<iparamkey>(); }
 
-        virtual std::list<iparamval> getInternalParams() const { return std::list<iparamval>(); }*/
+        virtual std::list<iparamval> getInternalParams() const override { return std::list<iparamval>(); }*/
         /*
-        virtual std::list<Inspectable::iparamkey> getInternalParamNames() const;
+        virtual std::list<Inspectable::iparamkey> getInternalParamNames() const override;
 
-        virtual std::list<Inspectable::iparamval> getInternalParams() const;
+        virtual std::list<Inspectable::iparamval> getInternalParams() const override;
         */
 
   Nimm2Conf conf;

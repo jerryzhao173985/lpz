@@ -71,7 +71,7 @@ class ChannelData : public QObject{
   Q_OBJECT
 public:
 
-  ChannelData(int buffersize);
+  explicit ChannelData(int buffersize);
 
   int getBuffersize();
   void setBufferSize(int newBuffersize);
@@ -125,7 +125,7 @@ public:
   int getTime() const { return time; }
 
 public slots:
-  void receiveRawData(QString line);
+  void receiveRawData(const QString& line);
 
 protected:
   /// extracts a multichannel from the channels starting from position i (i is advanced)
@@ -136,7 +136,7 @@ signals:
   void quit();
   void channelsChanged();
   void update();
-  void rootNameUpdate(QString name);
+  void rootNameUpdate(const QString& name);
 
 private:
   /** first array is the ring buffer

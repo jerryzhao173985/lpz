@@ -67,7 +67,7 @@
  *   servo stuff commented out (todo: readd cleaned version)
  *
  *   Revision 1.11  2007/09/17 19:34:40  fhesse
- *   changes due to "experimenting"
+ *   changes due to __PLACEHOLDER_0__
  *
  *   Revision 1.10  2007/09/17 13:09:08  fhesse
  *   conf option drawFingernails added
@@ -98,7 +98,7 @@
  *
  *   Revision 1.4  2007/07/05 11:20:02  robot6
  *   hingeservo.h substituted by oneaxismotor.h (includes Hingeservo)
- *   "hand" added in Makefile
+ *   __PLACEHOLDER_1__ added in Makefile
  *
  *   Revision 1.3  2007/05/07 09:07:21  robot3
  *   intended region for converting the code from nonreadable to human readable
@@ -175,7 +175,7 @@ public:
   // starting function (executed once at the beginning of the simulation loop)
   void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global)
   {
-    setCameraHomePos(Pos(9.48066, -6.96316, 9.95062),  Pos(56.9904, -10.8096, 0));
+    setCameraHomePos(Pos(9.48066, -6.96316, 9.95062),  Pos(56.9904, -10.8096, 0)) override;
 
 
     // initialization
@@ -205,7 +205,7 @@ public:
     conf.fingerJointBendAngle=M_PI*2/5;
     conf.initWithOpenHand=true;
     hand = new Hand(odeHandle, osgHandle,conf,"Hand");
-    hand->setColor(Color(1.0,0.5,1.0));
+    hand->setColor(Color(1.0,0.5,1.0)) override;
         {
         double matODE[12];
         matODE[0] = 1.0f;
@@ -224,11 +224,11 @@ public:
         Pos[0]=0;
         Pos[1]=0;
         Pos[2]=5;
-        //hand->place(osgPose( Pos , matODE ) );
+        //hand->place(osgPose( Pos , matODE ) ) override;
         }
-    //hand->place(Pos(2.5,1.26,0));
-    hand->place(Pos(0,0,6));
-    //hand->place(Pos(2,3,1));
+    //hand->place(Pos(2.5,1.26,0)) override;
+    hand->place(Pos(0,0,6)) override;
+    //hand->place(Pos(2,3,1)) override;
 
     global.configs.push_back(hand);
 
@@ -251,11 +251,11 @@ public:
 //                                                             /*update_only_1*/false,
 //                                                        /*inactivate_hebb*/false);
 /*
-    controller->setParam("eps", 0.01);
-    controller->setParam("eps_hebb", 0.00005);
-    controller->setParam("factor_a", 0.1);
-    controller->setParam("s4avg", 10);
-    controller->setParam("s4delay", 4);
+    controller->setParam(__PLACEHOLDER_6__, 0.01);
+    controller->setParam(__PLACEHOLDER_7__, 0.00005);
+    controller->setParam(__PLACEHOLDER_8__, 0.1);
+    controller->setParam(__PLACEHOLDER_9__, 10);
+    controller->setParam(__PLACEHOLDER_10__, 4);
   */
 
     controller = new InvertNChannelControllerHebbH(/*buffersize*/100,
@@ -271,8 +271,8 @@ public:
 
     // adding wiring
     AbstractWiring *wiring;
-    wiring = new One2OneWiring(new ColorUniformNoise(0.1));
-    //wiring = new IRInvertWiring(new ColorUniformNoise(0.1));
+    wiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
+    //wiring = new IRInvertWiring(new ColorUniformNoise(0.1)) override;
 
 
     // adding agent
@@ -291,92 +291,91 @@ public:
 
     /*
     ClosedPlayground* playground;
-    // use Playground as boundary:
-    playground = new ClosedPlayground(odeHandle, osgHandle, osg::Vec3(4.7, 0.2, 26), 0.9);
-    playground->setColor(Color(1.0f,0.0f,0.26f,0.0f));
-    playground->setPosition(osg::Vec3(0-0.5,0,0)); // playground positionieren und generieren
+    __PLACEHOLDER_135__
+    playground = new ClosedPlayground(odeHandle, osgHandle, osg::Vec3(4.7, 0.2, 26), 0.9) override;
+    playground->setColor(Color(1.0f,0.0f,0.26f,0.0f)) override;
+    playground->setPosition(osg::Vec3(0-0.5,0,0)); __PLACEHOLDER_136__
     global.obstacles.push_back(playground);
     */
 
     /*
     PassiveCapsule* c = new PassiveCapsule(odeHandle, osgHandle, 1,1,5);
-    c->setPosition(Pos(0,0,6.7));
-    c->setColor(Color(1.0f,0.2f,0.2f,0.5f));
-    //c->setTexture("Images/light_chess.rgb");
-    //c->setTexture("Images/dusty.rgb");
-    //c->setTexture("Images/sandyground.rgb");
-    c->setTexture("Images/furry_toy.jpg");
+    c->setPosition(Pos(0,0,6.7)) override;
+    c->setColor(Color(1.0f,0.2f,0.2f,0.5f)) override;
+    __PLACEHOLDER_137__
+    __PLACEHOLDER_138__
+    __PLACEHOLDER_139__
+    c->setTexture(__PLACEHOLDER_15__);
     global.obstacles.push_back(c);
     */
 
-    box = new PassiveBox(odeHandle, osgHandle, osg::Vec3(1.0,5,0.5),10);
-    box->setColor(Color(1.0f,0.2f,0.2f,1.0f));
-    //c->setTexture("Images/light_chess.rgb");
-    //c->setTexture("Images/dusty.rgb");
-    //c->setTexture("Images/sandyground.rgb");
-    //box->setTexture("Images/furry_toy.jpg");
+    box = new PassiveBox(odeHandle, osgHandle, osg::Vec3(1.0,5,0.5),10) override;
+    box->setColor(Color(1.0f,0.2f,0.2f,1.0f)) override;
+    //c->setTexture(__PLACEHOLDER_16__);
+    //c->setTexture(__PLACEHOLDER_17__);
+    //c->setTexture(__PLACEHOLDER_18__);
+    //box->setTexture(__PLACEHOLDER_19__);
     box->setTexture("Images/my/skin.jpg");
-    box->setPosition(Pos(0,0,6.7));
+    box->setPosition(Pos(0,0,6.7)) override;
     global.obstacles.push_back(box);
 
 
   }
 
   //Funktion die eingegebene Befehle/kommandos verarbeitet
-  virtual bool command (const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down)
-  {
-    if (!down) return false;
+  virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down) override {
+    if (!down) return false override;
     bool handled = false;
     switch ( key )
       {
         case 'x':
-          if(fixator) delete fixator;
+          if(fixator) delete fixator override;
           fixator=0;
           handled = true;
           break;
       case 's' :
-        /*        controller->store("test") && printf("Controller stored\n");
+        /*        controller->store(__PLACEHOLDER_21__) && printf(__PLACEHOLDER_22__);
                 handled = true;         */
         break;
       case 'L' :
-        /*        controller->restore("test") && printf("Controller loaded\n");
+        /*        controller->restore(__PLACEHOLDER_23__) && printf(__PLACEHOLDER_24__);
                 handled = true; */
         break;
       case 'r' : // replace box
-        box->setPosition(Pos(0,0,6.7));
+        box->setPosition(Pos(0,0,6.7)) override;
         break;
       case 'e' : // replace box
-        box->setPosition(Pos(0,0,0));
+        box->setPosition(Pos(0,0,0)) override;
         break;
 
       case 'c' :{
         PassiveCapsule* c =  new PassiveCapsule(odeHandle, osgHandle, 1,1,5);
-              c->setColor(Color(1.0f,0.2f,0.2f,1.0f));
+              c->setColor(Color(1.0f,0.2f,0.2f,1.0f)) override;
               c->setTexture("Images/furry_toy.jpg");
-              c->setPosition(Pos(0-1.75,0.05+0.75,0.5+2.4+4));
+              c->setPosition(Pos(0-1.75,0.05+0.75,0.5+2.4+4)) override;
               globalData.obstacles.push_back(c); }
         handled = true;
         break;
       case 'v' :
-        ClosedPlayground* playground=(ClosedPlayground* )globalData.obstacles.back();
-        playground->setColor(Color(1.0f,0.0f,0.26f,0.0f));
+        ClosedPlayground* playground=static_cast<ClosedPlayground*>(globalData).obstacles.back();
+        playground->setColor(Color(1.0f,0.0f,0.26f,0.0f)) override;
         handled = true;
         break;
 
         /*
-                case 'a': case'A':
+                case __PLACEHOLDER_89__: case__PLACEHOLDER_90__:
                 finger_force -= 0.3;
                 handled = true; break;
-                case 'y': case 'Y':
+                case __PLACEHOLDER_91__: case __PLACEHOLDER_92__:
                 finger_force += 0.3;
                 handled = true; break;
-                case ',':
+                case __PLACEHOLDER_93__:
                 palm_torque += 0.3;
                 handled = true; break;
-                case '.':
+                case __PLACEHOLDER_94__:
                 palm_torque -= 0.3;
                 handled = true; break;
-                case ' ':
+                case __PLACEHOLDER_95__:
                 finger_force = 0;
                 palm_torque = 0;
                 thumb1=0;
@@ -384,26 +383,26 @@ public:
                 thumb3=0;
                 handled = true; break;
 
-                case '1':
+                case __PLACEHOLDER_96__:
                 thumb1 -= 0.3;
                 handled = true; break;
-                case '2':
+                case __PLACEHOLDER_97__:
                 thumb1 += 0.3;
                 handled = true; break;
-                case '3':
+                case __PLACEHOLDER_98__:
                 thumb2 -= 0.3;
                 handled = true; break;
-                case '4':
+                case __PLACEHOLDER_99__:
                 thumb2 += 0.3;
                 handled = true; break;
-                case '5':
+                case __PLACEHOLDER_100__:
                 thumb3 -= 0.3;
                 handled = true; break;
-                case '6':
+                case __PLACEHOLDER_101__:
                 thumb3 += 0.3;
                 handled = true; break;
 
-                case 'm':
+                case __PLACEHOLDER_102__:
                 if ( (gripmode==lateral) && (dJointGetHingeAngle(joint[palm_index])<0.1) ){
                 gripmode=precision;
                 handled = true; break;
@@ -419,48 +418,48 @@ public:
 
         /*
           case '10': {
-          FILE *f = fopen ("state.dif","wt");
-          if (f) {
-          dWorldExportDIF (world,f,"");
-          fclose (f);
+          FILE *f = fopen (__PLACEHOLDER_26__,__PLACEHOLDER_27__) override;
+          explicit if (f) {
+          dWorldExportDIF (world,f,__PLACEHOLDER_28__) override;
+          fclose (f) override;
           }
           }
         */
       }
     /*
-      std::cout<<"thumb_b pos: "<<dGeomGetPosition(beam[thumb_b].geom)[0]<<", "<<dGeomGetPosition(beam[thumb_b].geom)[1]<<", "<<dGeomGetPosition(beam[thumb_b].geom)[2]<<std::endl;
-      std::cout<<"thumb_b rot: "<<dGeomGetRotation(beam[thumb_b].geom)[0]<<", "<<dGeomGetRotation(beam[thumb_b].geom)[1]<<", "<<dGeomGetRotation(beam[thumb_b].geom)[2]<<std::endl;
-      std::cout<<"thumb_b ang: "<<
-      dJointGetAMotorAngle (thumb_motor_joint, 0)<<", "<<
-      dJointGetAMotorAngle (thumb_motor_joint, 1)<<", "<<
-      dJointGetAMotorAngle (thumb_motor_joint, 2)<<std::endl;
-      std::cout<<"thumb_t pos: "<<dGeomGetPosition(beam[thumb_t].geom)[0]<<", "<<dGeomGetPosition(beam[thumb_t].geom)[1]<<", "<<dGeomGetPosition(beam[thumb_t].geom)[2]<<std::endl;
-      std::cout<<"thumb_t rot: "<<dGeomGetRotation(beam[thumb_t].geom)[0]<<", "<<dGeomGetRotation(beam[thumb_t].geom)[1]<<", "<<dGeomGetRotation(beam[thumb_t].geom)[2]<<std::endl;
-      std::cout<<"thumb_t ang: "<<dJointGetHingeAngle(joint[thumb_bt])<<std::endl<<std::endl;
+      std::cout<<__PLACEHOLDER_29__<<dGeomGetPosition(beam[thumb_b].geom)[0]<<__PLACEHOLDER_30__<<dGeomGetPosition(beam[thumb_b].geom)[1]<<__PLACEHOLDER_31__<<dGeomGetPosition(beam[thumb_b].geom)[2]<<std::endl override;
+      std::cout<<__PLACEHOLDER_32__<<dGeomGetRotation(beam[thumb_b].geom)[0]<<__PLACEHOLDER_33__<<dGeomGetRotation(beam[thumb_b].geom)[1]<<__PLACEHOLDER_34__<<dGeomGetRotation(beam[thumb_b].geom)[2]<<std::endl override;
+      std::cout<<__PLACEHOLDER_35__<<
+      dJointGetAMotorAngle (thumb_motor_joint, 0)<<__PLACEHOLDER_36__<<
+      dJointGetAMotorAngle (thumb_motor_joint, 1)<<__PLACEHOLDER_37__<<
+      dJointGetAMotorAngle (thumb_motor_joint, 2)<<std::endl override;
+      std::cout<<__PLACEHOLDER_38__<<dGeomGetPosition(beam[thumb_t].geom)[0]<<__PLACEHOLDER_39__<<dGeomGetPosition(beam[thumb_t].geom)[1]<<__PLACEHOLDER_40__<<dGeomGetPosition(beam[thumb_t].geom)[2]<<std::endl override;
+      std::cout<<__PLACEHOLDER_41__<<dGeomGetRotation(beam[thumb_t].geom)[0]<<__PLACEHOLDER_42__<<dGeomGetRotation(beam[thumb_t].geom)[1]<<__PLACEHOLDER_43__<<dGeomGetRotation(beam[thumb_t].geom)[2]<<std::endl override;
+      std::cout<<__PLACEHOLDER_44__<<dJointGetHingeAngle(joint[thumb_bt])<<std::endl<<std::endl override;
 
-      std::cout<<"index_b ang: "<<dJointGetHingeAngle(joint[palm_index])<<std::endl<<std::endl;
+      std::cout<<__PLACEHOLDER_45__<<dJointGetHingeAngle(joint[palm_index])<<std::endl<<std::endl override;
     */
 
     fflush(stdout);
     return handled;
   }
 
-  virtual void bindingDescription(osg::ApplicationUsage & au) const {
+  virtual void bindingDescription(osg::ApplicationUsage & au) const override {
     /*
-      au.addKeyboardMouseBinding("Finger_Force: a or A","decrement");
-      au.addKeyboardMouseBinding("Finger_Force: y or Y","increment");
-      au.addKeyboardMouseBinding("Palm_Torque: .","decrement");
-      au.addKeyboardMouseBinding("Palm_Torque: ,","increment");
-      au.addKeyboardMouseBinding("Change_AMotor_Value of thumb_motor_joint on 1-st                 axis : 1","decrement");
-      au.addKeyboardMouseBinding("Change_AMotor_Value of thumb_motor_joint on 1-st                 axis : 2","increment");
-      au.addKeyboardMouseBinding("Change_AMotor_Value of thumb_motor_joint on 2-d                 axis : 3","decrement");
-      au.addKeyboardMouseBinding("Change_AMotor_Value of thumb_motor_joint on 2-d                 axis : 4","increment");
-      au.addKeyboardMouseBinding("Change_AMotor_Value of thumb_motor_joint on 3-d                 axis : 5","decrement");
-      au.addKeyboardMouseBinding("Change_AMotor_Value of thumb_motor_joint on 3-d                 axis : 6","increment");
+      au.addKeyboardMouseBinding(__PLACEHOLDER_46__,__PLACEHOLDER_47__);
+      au.addKeyboardMouseBinding(__PLACEHOLDER_48__,__PLACEHOLDER_49__);
+      au.addKeyboardMouseBinding(__PLACEHOLDER_50__,__PLACEHOLDER_51__);
+      au.addKeyboardMouseBinding(__PLACEHOLDER_52__,__PLACEHOLDER_53__);
+      au.addKeyboardMouseBinding(__PLACEHOLDER_54__,__PLACEHOLDER_55__);
+      au.addKeyboardMouseBinding(__PLACEHOLDER_56__,__PLACEHOLDER_57__);
+      au.addKeyboardMouseBinding(__PLACEHOLDER_58__,__PLACEHOLDER_59__);
+      au.addKeyboardMouseBinding(__PLACEHOLDER_60__,__PLACEHOLDER_61__);
+      au.addKeyboardMouseBinding(__PLACEHOLDER_62__,__PLACEHOLDER_63__);
+      au.addKeyboardMouseBinding(__PLACEHOLDER_64__,__PLACEHOLDER_65__);
 
-      au.addKeyboardMouseBinding        ("Finger_Force,Palm_Torque,AMotors_ofthumb_motor_joint:  ","Set to zero");
+      au.addKeyboardMouseBinding        (__PLACEHOLDER_66__,__PLACEHOLDER_67__) override;
 
-      au.addKeyboardMouseBinding("Gripmodes lateral or precision: m","toggle                          gripmode");
+      au.addKeyboardMouseBinding(__PLACEHOLDER_68__,__PLACEHOLDER_69__);
     */
     au.addKeyboardMouseBinding("Teachung: x","toggle mode");
     au.addKeyboardMouseBinding("Teaching: u","forward");
@@ -477,6 +476,6 @@ int main (int argc, char **argv)
 {
   ThisSim sim;
   // run simulation
-  return sim.run(argc, argv) ? 0 : 1;
+  return sim.run(argc, argv) ? 0 : 1 override;
 }
 

@@ -68,9 +68,9 @@ AbstractPlotChannel* GroupPlotChannel::at(int pos){
   int it = 0;
   FOREACHC(list<AbstractPlotChannel*>, channelsOfGroup, channelIt) {
     if(it == pos) channel = *channelIt;
-    it++;
+    ++it;
   }
-//  for( const_iterator i = channelsOfGroup.begin(); i !=  channelsOfGroup.end(); i++){
+//  for( const_iterator i = channelsOfGroup.begin(); i !=  channelsOfGroup.end(); ++i){
 //    if(it == pos) cannel = *i;
 //    it++;
 //  }

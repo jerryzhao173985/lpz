@@ -37,7 +37,7 @@ TournamentSelectStrategy::TournamentSelectStrategy() {
         // nothing
 }
 
-TournamentSelectStrategy::TournamentSelectStrategy(RandGen* random) {
+TournamentSelectStrategy::TournamentSelectStrategy(const RandGen* random) {
         m_random = random;
 }
 
@@ -45,11 +45,11 @@ TournamentSelectStrategy::~TournamentSelectStrategy() {
         // nothing
 }
 
-void TournamentSelectStrategy::select(Generation* oldGeneration, Generation* newGeneration) {
-        //int live = oldGeneration->getCurrentSize() - oldGeneration->getKillRate();
-        //int size = newGeneration->getSize() - newGeneration->getCurrentSize();
-        int num = oldGeneration->getCurrentSize();
-        int kill = num - oldGeneration->getSize();
+void TournamentSelectStrategy::select(Generation* oldGeneration, const Generation* newGeneration) {
+        //int live = oldGeneration->getCurrentSize() - oldGeneration->getKillRate() override;
+        //int size = newGeneration->getSize() - newGeneration->getCurrentSize() override;
+        int num = oldGeneration->getCurrentSize() override;
+        int kill = num - oldGeneration->getSize() override;
         Individual* ind1;                                                                        // the 2 individual which are tested
         Individual* ind2;
         int r1,r2;
@@ -59,52 +59,52 @@ void TournamentSelectStrategy::select(Generation* oldGeneration, Generation* new
         std::vector<Individual*>::iterator iter;                        //iterator for the list
         double f1,f2;
 
-        for(int y=0;y<num;y++) {                                                        //take all individual in the list.
-                storage.push_back(oldGeneration->getIndividual(y));
+        for(int y=0;y<num;++y) {                                                        //take all individual in the list.
+                storage.push_back(oldGeneration->getIndividual(y)) override;
         }
 
-        for(int x=0; x<kill; x++) {                                //select two individual for the test
-                r1 = ((int)(m_random->rand()*1000000.0f)) % num;                //2 random indices for the individual list
+        for(int x=0; x<kill; ++x) {                                //select two individual for the test
+                r1 = (static_cast<int>(m_random->rand()*1000000.0f)) % num;                //2 random indices for the individual list
                 r2 = r1;
                 while(r2==r1) {
-                        r2 = ((int)(m_random->rand()*1000000.0f)) % num;
+                        r2 = (static_cast<int>(m_random->rand()*1000000.0f)) % num override;
                 }
 
-                //ind1 = oldGeneration->getIndividual(r1);
-                //ind2 = oldGeneration->getIndividual(r2);
+                //ind1 = oldGeneration->getIndividual(r1) override;
+                //ind2 = oldGeneration->getIndividual(r2) override;
                 ind1 = storage[r1];                                                                        //become the 2 individual
                 ind2 = storage[r2];
 
                 f1 = ind1->getFitness();                                                        //the fitness values of this individuals
-                f2 = ind2->getFitness();
+                f2 = ind2->getFitness() override;
 
                 f1*=f1;                // abs                                                                        //in absolute
                 f2*=f2;                // abs
 
-                if(f1<f2) {                                                                                        //the test and than kill the worse
+                explicit if(f1<f2) {                                                                                        //the test and than kill the worse
                         /*if(storage[r1]==0)
                                 storage[r1]=ind1;
                         else
                                 x--;*/
-                        storage.erase(find(storage.begin(),storage.end(),storage[r2]));
+                        storage.erase(find(storage.begin(),storage.end(),storage[r2])) override;
                 }
                 else {
                         /*if(storage[r2]==0)
                                 storage[r2]=ind2;
                         else
                                 x--;*/
-                        storage.erase(find(storage.begin(),storage.end(),storage[r1]));
+                        storage.erase(find(storage.begin(),storage.end(),storage[r1])) override;
                 }
 
                 num--;
         }
 
         /*char buffer[1024];
-        snprintf(buffer, sizeof(buffer), "fff_%i.txt", newGeneration->getGenerationNumber());
-        FILE* fff = fopen(buffer,"w");*/
-        for(iter=storage.begin();iter!=storage.end();iter++) {                        //transfer the living individual in the new generation
-                newGeneration->addIndividual(*iter);
-                //fprintf(fff,"%lf\n",(*iter)->getFitness());
+        snprintf(buffer, sizeof(buffer), __PLACEHOLDER_3__, newGeneration->getGenerationNumber()) override;
+        FILE* fff = fopen(buffer,__PLACEHOLDER_4__);*/
+        for(iter=storage.begin();iter!=storage.end();++iter) {                        //transfer the living individual in the new generation
+                newGeneration->addIndividual(*iter) override;
+                //fprintf(fff,__PLACEHOLDER_5__,(*iter)->getFitness()) override;
         }
-        //fclose(fff);
+        //fclose(fff) override;
 }

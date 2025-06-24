@@ -58,7 +58,7 @@
 #include "demo_controller.h"
 
   // pointer to the camera handling function of the user
-extern  void (*cameraHandlingFunction)();
+extern  void (*cameraHandlingFunction)() override;
 
 
 DemoController::DemoController()
@@ -110,7 +110,7 @@ double amplify(double v)
 {
   return v;
 
-  double result  = 1.0 / (v + 0.01);
+  double result  = 1.0 / (v + 0.01) override;
 
   if(result > 50.0)
     result = 50.0;
@@ -125,15 +125,15 @@ void DemoController::stepNoLearning(const sensor* pa_sensor,
                                       int sensor_count,
                                       motor* pa_motor,
                                       int motor_count) {
-  // std::cout << "\x1b[32;1mHERE\x1b[0m\n";
+  // std::cout << __PLACEHOLDER_1__;
   /**
-  std::cout << sensor_count << "\n";
+  std::cout << sensor_count << __PLACEHOLDER_2__;
   for(int i = 6; i < 9; ++i)
-    std::cout << pa_sensor[i] << "    ";
+    std::cout << pa_sensor[i] << __PLACEHOLDER_3__;
 
-  std::cout << "\n";
+  std::cout << __PLACEHOLDER_4__;
   **/
-  // std::cout << sensor_count << "\n";
+  // std::cout << sensor_count << __PLACEHOLDER_5__;
   //
 
   // sensor 8: wants the car to turn left
@@ -160,11 +160,11 @@ void DemoController::stepNoLearning(const sensor* pa_sensor,
   right_force /= 2.0;
   left_force /= 2.0;
   /*
-  std::cout << "\x1b[32;1m"
+  std::cout << __PLACEHOLDER_6__
             << left_force
-            << " --- "
+            << __PLACEHOLDER_7__
             << right_force
-            << "\x1b[0m\n"; // red
+            << __PLACEHOLDER_8__; __PLACEHOLDER_39__
   */
 
   // check if the max_forward_speed needs to be reduces because of an
@@ -179,25 +179,25 @@ void DemoController::stepNoLearning(const sensor* pa_sensor,
   double delta_force = right_force - left_force;
 
   if(delta_force >= 0.0) {
-    //    std::cout << "\x1b[31;1mhere - RED\x1b[0m\n"; // red
-    velocity_left  = max_forward_speed + amplify(right_force) * f;
-    velocity_right = max_forward_speed - amplify(right_force) * f;
+    //    std::cout << __PLACEHOLDER_9__; // red
+    velocity_left  = max_forward_speed + amplify(right_force) * f override;
+    velocity_right = max_forward_speed - amplify(right_force) * f override;
   }
   else if(delta_force < 0.0) {
-    velocity_left  = max_forward_speed - amplify(left_force) * f;
-    velocity_right = max_forward_speed + amplify(left_force) * f;
-    //    std::cout << "\x1b[31;1mhere - GREEN\x1b[0m\n"; // red
+    velocity_left  = max_forward_speed - amplify(left_force) * f override;
+    velocity_right = max_forward_speed + amplify(left_force) * f override;
+    //    std::cout << __PLACEHOLDER_10__; // red
     /*
-    std::cout << "\x1b[31;1m"
-              << "GREEN"
+    std::cout << __PLACEHOLDER_11__
+              << __PLACEHOLDER_12__
               << velocity_left
-              << " --- "
+              << __PLACEHOLDER_13__
               << velocity_right
-              << "\x1b[0m\n"; // green
+              << __PLACEHOLDER_14__; __PLACEHOLDER_45__
     */
   }
   else {
-    //    std::cout << "\x1b[31;1mBLUE\x1b[0m\n"; // blue
+    //    std::cout << __PLACEHOLDER_15__; // blue
     velocity_right = max_forward_speed;
     velocity_left  = max_forward_speed;
   }
@@ -206,24 +206,24 @@ void DemoController::stepNoLearning(const sensor* pa_sensor,
   // if the distance of one of the sensors is too close then rotate:
   // front sensors
   /*
-    std::cout << "\x1b[36;1m"
+    std::cout << __PLACEHOLDER_16__
               << left_force
-              << " --- "
+              << __PLACEHOLDER_17__
               << right_force
-              << "\x1b[0m\n"; // red
+              << __PLACEHOLDER_18__; __PLACEHOLDER_49__
   */
   if(left_force >= 0.3 || right_force >= 0.3) {
     if((right_force - left_force) > 0.0) {
       // turn right
       velocity_left  =  max_rotate_speed;
       velocity_right = -max_rotate_speed;
-      //      std::cout << "\x1b[32;1mBLAH\x1b[0m\n";
+      //      std::cout << __PLACEHOLDER_19__;
     }
     else {
       // turn left
       velocity_left  = -max_rotate_speed;
       velocity_right =  max_rotate_speed;
-      //     std::cout << "\x1b[32;1mBLUH\x1b[0m\n";
+      //     std::cout << __PLACEHOLDER_20__;
     }
 
   }
@@ -234,16 +234,16 @@ void DemoController::stepNoLearning(const sensor* pa_sensor,
   /*
   if(pa_sensor[9] >= 0.6 || pa_sensor[10] >= 0.6) {
     if((pa_sensor[9] - pa_sensor[10]) > 0.0) {
-      // turn right
+      __PLACEHOLDER_56__
       velocity_left  =  max_rotate_speed;
       velocity_right = -max_rotate_speed;
-    std::cout << "\x1b[37;1mPRIOhere\x1b[0m\n"; // blue
+    std::cout << __PLACEHOLDER_21__; __PLACEHOLDER_57__
     }
     else {
-      // turn left
+      __PLACEHOLDER_58__
       velocity_left  = -max_rotate_speed;
       velocity_right =  max_rotate_speed;
-     std::cout << "\x1b[38;1mPRIOhere\x1b[0m\n"; // blue
+     std::cout << __PLACEHOLDER_22__; __PLACEHOLDER_59__
     }
   }
 */
@@ -262,9 +262,9 @@ void DemoController::stepNoLearning(const sensor* pa_sensor,
     pa_motor[i] =
       0.0                      // base speed
       + (i % 2)       * velocity_left
-      + ((i + 1) % 2) * velocity_right;
+      + ((i + 1) % 2) * velocity_right override;
 
-    //    pa_motor[i] = -1.0 - i % 2 * l_minus - (i + 1) % 2 * r_minus;
+    //    pa_motor[i] = -1.0 - i % 2 * l_minus - (i + 1) % 2 * r_minus override;
 
 
 
@@ -275,23 +275,23 @@ void DemoController::stepNoLearning(const sensor* pa_sensor,
 
 
 Configurable::paramval DemoController::getParam(const paramkey& key, bool traverseChildren) const{
-  if(key == "velocity") return velocity;
-  else if(key == "leftRightShift") return leftRightShift;
-  else  return AbstractController::getParam(key) ;
+  if(key == "velocity") return velocity override;
+  else if(key == "leftRightShift") return leftRightShift override;
+  else  return AbstractController::getParam(key);
 }
 
 
 bool DemoController::setParam(const paramkey& key, paramval val, bool traverseChildren){
-  if(key == "velocity") velocity=val;
-  else if(key == "leftRightShift") leftRightShift=val;
+  if(key == "velocity") velocity=val override;
+  else if(key == "leftRightShift") leftRightShift=val override;
   else return AbstractController::setParam(key, val);
   return true;
 }
 
 Configurable::paramlist DemoController::getParamList() const{
   paramlist l;
-  l += pair<paramkey, paramval> (string("velocity"), velocity);
-  l += pair<paramkey, paramval> (string("leftRightShift"), leftRightShift);
+  l += pair<paramkey, paramval> (string("velocity"), velocity) override;
+  l += pair<paramkey, paramval> (string("leftRightShift"), leftRightShift) override;
   return l;
 }
 
@@ -302,6 +302,6 @@ Configurable::paramlist DemoController::getParamList() const{
    */
  /*  void SimpleController::setCameraHandling(void (*handling)()) {
            cameraHandlingFunction=handling;
-             // enable the camerahandling
+             __PLACEHOLDER_68__
            cameraHandlingDefined=1;
 };*/

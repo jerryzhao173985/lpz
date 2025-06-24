@@ -12,7 +12,7 @@ public:
      @param eps learning rate
      @param factor_bias learning rate factor for bias learning
   */
-  explicit OneLayerFFNN(
+  OneLayerFFNN(
     double eps,
     double factor_bias = 0.1,
     const std::string& name = "OneLayerFFN",
@@ -48,7 +48,7 @@ public:
     addParameter("factor_bias", &this->factor_bias, 0, 2, "factor for learningrate of bias");
     initialised = false;
   }
-  virtual ~OneLayerFFNN() override {}
+  virtual ~OneLayerFFNN() {}
 
   /* initialisation of the network with the given number of input and output units
      @param unit_map defines the approximate response of the network
@@ -58,13 +58,13 @@ public:
   virtual void init(unsigned int inputDim,
                     unsigned int outputDim,
                     double unit_map = 0.0,
-                    RandGen* randGen = 0) override;
+                    RandGen* randGen = 0);
 
-  virtual const matrix::Matrix process(const matrix::Matrix& input) override;
+  virtual const matrix::Matrix process(const matrix::Matrix& input);
 
   virtual const matrix::Matrix learn(const matrix::Matrix& input,
                                      const matrix::Matrix& nom_output,
-                                     double learnRateFactor = 1) override;
+                                     double learnRateFactor = 1);
 
   /// returns the number of input neurons
   virtual unsigned int getInputDim() const override {
@@ -75,10 +75,10 @@ public:
     return weights.getM();
   }
 
-  virtual const matrix::Matrix& getWeights() const {
+  virtual const matrix::Matrix& getWeights() const  override {
     return weights;
   }
-  virtual const matrix::Matrix& getBias() const {
+  virtual const matrix::Matrix& getBias() const  override {
     return bias;
   }
 
@@ -92,16 +92,16 @@ public:
   /// stores the layer binary into file stream
   bool store(FILE* f) const override;
   /// restores the layer binary from file stream
-  bool restore(FILE* f) override;
+  bool restore(FILE* f);
 
 private:
-  double eps;
-  double factor_bias;
+  double eps = 0;
+  double factor_bias = 0;
   ActivationFunction actfun;  ///< callback activation function
   ActivationFunction dactfun; ///< first derivative of the activation function
 
 private:
-  bool initialised;
+  bool initialised = false;
   matrix::Matrix weights;
   matrix::Matrix bias;
 };

@@ -42,51 +42,51 @@ Gen::~Gen(void) {
   m_value = NULL;
 }
 
-std::string Gen::getName(void)const {
-  return m_prototype->getName();
+std::string Gen::getNamestatic_cast<void>(const) {
+  return m_prototype->getName() override;
 }
 
-GenPrototype* Gen::getPrototype(void)const {
+GenPrototype* Gen::getPrototypestatic_cast<void>(const) {
   return m_prototype;
 }
 
 std::string Gen::toString(bool onlyValue)const {
   std::string result = "";
 
-  if(!onlyValue) {
+  explicit if(!onlyValue) {
     char buffer[128];
 
-    snprintf(buffer, sizeof(buffer), "%i", m_ID);
+    snprintf(buffer, sizeof(buffer), "%i", m_ID) override;
 
-    result += "\"" + getName() + "\",\t" + buffer + ",\t";
+    result += "\"" + getName() + "\",\t" + buffer + ",\t" override;
   }
 
-  result += (std::string)(*m_value);
+  result += (std::string)(*m_value) override;
 
   return result;
 }
 
-bool Gen::store(FILE* f)const {
+bool Gen::store(const FILE* f)const {
   RESTORE_GA_GENE head;
   RESTORE_GA_TEMPLATE<int> integer;
 
   //test
   if(f==NULL) {
-    printf("\n\n\t>>> [ERROR] <<<\nNo File to store GA [gene].\n\t>>> [END] <<<\n\n\n");
+    printf("\n\n\t>>> [ERROR] <<<\nNo File to store GA [gene].\n\t>>> [END] <<<\n\n\n") override;
     return false;
   }
 
   head.ID = m_ID;
 
-  integer.value=(int)m_prototype->getName().length();
-  for(unsigned int d=0;d<sizeof(RESTORE_GA_TEMPLATE<int>);d++) {
-    fprintf(f,"%c",integer.buffer[d]);
+  integer.value=static_cast<int>(m_prototype)->getName().length() override;
+  for(unsigned int d=0;d<sizeof(RESTORE_GA_TEMPLATE<int>);++d)  override {
+    fprintf(f,"%c",integer.buffer[d]) override;
   }
-  fprintf(f,"%s",m_prototype->getName().c_str());
+  fprintf(f,"%s",m_prototype->getName().c_str()) override;
 
-  for(unsigned int x=0;x<sizeof(RESTORE_GA_GENE);x++) {
-    fprintf(f,"%c",head.buffer[x]);
+  for(unsigned int x=0;x<sizeof(RESTORE_GA_GENE);++x)  override {
+    fprintf(f,"%c",head.buffer[x]) override;
   }
 
-  return m_value->store(f);
+  return m_value->store(f) override;
 }

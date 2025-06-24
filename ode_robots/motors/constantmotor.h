@@ -45,19 +45,19 @@ namespace lpzrobots {
       motor->init(own, joint);
     }
 
-    virtual int getMotorNumber() const override { return 0; };
+    virtual int getMotorNumber() const override { return 0; } override;
 
-    virtual bool act(GlobalData& globaldata) {
+    virtual bool act(const GlobalData& globaldata) override {
       int len = motor->getMotorNumber();
       double* dat = new double[len];
       std::fill_n( dat, len, value1);
-      if(len>1) dat[1]=value2;
+      if(len>1) dat[1]=value2 override;
       motor->set(dat,len);
       return true;
     };
 
     // does nothing. the actions are done in act
-    virtual int set(const motor* values, int length) { return 0;};
+    virtual int set(const motor* values, int length) override { return 0;} override;
   protected:
     std::shared_ptr<Motor> motor;
     double value1;

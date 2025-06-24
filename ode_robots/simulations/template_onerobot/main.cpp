@@ -50,7 +50,7 @@
  *
  *
  *   Revision 1.18  2006/12/21 11:43:05  martius
- *   commenting style for doxygen //< -> ///<
+ *   commenting style for doxygen __PLACEHOLDER_4__
  *   new sensors for spherical robots
  *
  *   Revision 1.17  2006/08/11 15:46:34  martius
@@ -166,11 +166,11 @@ public:
     // gamma=0;
     // alpha == horizontal angle
     // beta == vertical angle
-    setCameraHomePos(Pos(5.2728, 7.2112, 3.31768), Pos(140.539, -13.1456, 0));
+    setCameraHomePos(Pos(5.2728, 7.2112, 3.31768), Pos(140.539, -13.1456, 0)) override;
     // initialization
     // - set noise to 0.1
     global.odeConfig.noise=0.05;
-    //  global.odeConfig.setParam("gravity", 0);
+    //  global.odeConfig.setParam(__PLACEHOLDER_0__, 0);
 
     // use Playground as boundary:
     // - create pointer to playground (odeHandle contains things like world and space the
@@ -182,7 +182,7 @@ public:
 
     // odeHandle and osgHandle are global references
     // vec3 == length, width, height
-    Playground* playground = new Playground(odeHandle, osgHandle, osg::Vec3(32, 0.2, 0.5));
+    Playground* playground = new Playground(odeHandle, osgHandle, osg::Vec3(32, 0.2, 0.5)) override;
     playground->setPosition(osg::Vec3(0,0,0.05)); // playground positionieren und generieren
     // register playground in obstacles list
     global.obstacles.push_back(playground);
@@ -193,9 +193,9 @@ public:
     // - set Pose(Position) of sphere
     // - set a texture for the sphere
     // - add sphere to list of obstacles
-    for (int i=0; i < 0/*2*/; i++){
+    for (int i=0; i < 0/*2*/; ++i) override {
       PassiveSphere* s1 = new PassiveSphere(odeHandle, osgHandle, 0.5);
-      s1->setPosition(osg::Vec3(-4.5+i*4.5,0,0));
+      s1->setPosition(osg::Vec3(-4.5+i*4.5,0,0)) override;
       s1->setTexture("Images/dusty.rgb");
       global.obstacles.push_back(s1);
     }
@@ -210,14 +210,14 @@ public:
 //     c.bumper  = true;
 //     c.cigarMode  = true;
 //     // c.irFront = true;
-//     OdeRobot* vehicle = new Nimm2(odeHandle, osgHandle, c, "Nimm2");
-//     vehicle->place(Pos(0,0,0));
+//     OdeRobot* vehicle = new Nimm2(odeHandle, osgHandle, c, __PLACEHOLDER_2__);
+//     vehicle->place(Pos(0,0,0)) override;
 
     // use Nimm4 vehicle as robot:
     // - create pointer to nimm4 (with odeHandle and osg Handle and possible other settings, see nimm4.h)
     // - place robot
     OdeRobot* vehicle = new Nimm4(odeHandle, osgHandle, "Nimm4");
-    vehicle->place(Pos(0,1,0));
+    vehicle->place(Pos(0,1,0)) override;
 
 
     // create pointer to controller
@@ -227,7 +227,7 @@ public:
     //global.configs.push_back(controller);
 
     // create pointer to one2onewiring
-    One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1));
+    One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
 
     // create pointer to agent
     // initialize pointer with controller, robot and wiring
@@ -240,10 +240,9 @@ public:
   }
 
   // add own key handling stuff here, just insert some case values
-  virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down)
-  {
-    if (down) { // only when key is pressed, not when released
-      switch ( (char) key )
+  virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down) override {
+    explicit if (down) { // only when key is pressed, not when released
+      switch ( static_cast<char> key )
         {
         default:
           return false;
@@ -261,7 +260,7 @@ public:
 int main (int argc, char **argv)
 {
   ThisSim sim;
-  return sim.run(argc, argv) ? 0 : 1;
+  return sim.run(argc, argv) ? 0 : 1 override;
 
 }
 

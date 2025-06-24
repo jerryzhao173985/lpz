@@ -9,10 +9,10 @@ class Test;
 class TestList
 {
 public:
-    TestList();
-    void Add (Test* test);
+    TestList() override;
+    void Add (Test* test) override;
 
-    const Test* GetHead() const;
+    const Test* GetHead() const override;
 
 private:
     Test* m_head;
@@ -23,7 +23,7 @@ private:
 class ListAdder
 {
 public:
-    ListAdder(TestList& list, Test* test);
+    ListAdder(const TestList& list, Test* test) override;
 };
 
 }

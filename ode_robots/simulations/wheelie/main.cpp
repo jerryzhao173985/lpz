@@ -108,8 +108,6 @@ class ThisSim : public Simulation {
 public:
   AbstractController *controller;
   OdeRobot* robot;
-  int useReinforcement;
-  double totalReinforcement;
 
   // starting function (executed once at the beginning of the simulation loop)
   void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global)
@@ -119,7 +117,7 @@ public:
     totalReinforcement    = 0;
     bool useSliderWheelie = true;
 
-    setCameraHomePos(Pos(-3.90752, 9.63146, 3.31768),  Pos(172.39, -10.7938, 0));
+    setCameraHomePos(Pos(-3.90752, 9.63146, 3.31768),  Pos(172.39, -10.7938, 0)) override;
     // initialization
     // - set noise to 0.1
     // - register file chess.ppm as a texture called chessTexture (used for the wheels)
@@ -127,26 +125,26 @@ public:
     global.odeConfig.setParam("noise",0.05);
     global.odeConfig.setParam("controlinterval",2);
     global.odeConfig.setParam("gravity",-3); // normally at -9.81
-    //    global.odeConfig.setParam("realtimefactor",1);
+    //    global.odeConfig.setParam(__PLACEHOLDER_3__,1);
     // initialization
 
-//     Playground* playground = new Playground(odeHandle, osgHandle, osg::Vec3(30, 0.2, 1));
+//     Playground* playground = new Playground(odeHandle, osgHandle, osg::Vec3(30, 0.2, 1)) override;
 //     playground->setPosition(osg::Vec3(0,0,0.1)); // playground positionieren und generieren
 //     global.obstacles.push_back(playground);
 
-//     for(int i=0; i<5; i++){
+//     for(int i=0; i<5; ++i) override {
 //       PassiveSphere* s =
 //         new PassiveSphere(odeHandle,
-//                           osgHandle.changeColor(Color(184 / 255.0, 233 / 255.0, 237 / 255.0)), 0.2);
-//       s->setPosition(Pos(i*0.5-2, i*0.5, 1.0));
-//       s->setTexture("Images/dusty.rgb");
+//                           osgHandle.changeColor(Color(184 / 255.0, 233 / 255.0, 237 / 255.0)), 0.2) override;
+//       s->setPosition(Pos(i*0.5-2, i*0.5, 1.0)) override;
+//       s->setTexture(__PLACEHOLDER_4__);
 //       global.obstacles.push_back(s);
 //     }
 
     OdeAgent *agent;
     AbstractWiring *wiring;
 
-    if(useSliderWheelie){
+    explicit if(useSliderWheelie){
       SliderWheelieConf mySliderWheelieConf = SliderWheelie::getDefaultConf();
       /******* S L I D E R - w H E E L I E *********/
       mySliderWheelieConf.segmNumber=12;
@@ -157,7 +155,7 @@ public:
       mySliderWheelieConf.sliderLength=0.5;
       mySliderWheelieConf.segmLength=1.4;
       robot = new SliderWheelie(odeHandle, osgHandle, mySliderWheelieConf, "sliderWheelie1");
-      ((OdeRobot*) robot)->place(Pos(-5,-3,3.0));
+      (static_cast<OdeRobot*>(robot))->place(Pos(-5,-3,3.0)) override;
       InvertMotorNStepConf sliderinvertnconf = InvertMotorNStep::getDefaultConf();
       //      sliderinvertnconf.cInit=0.1;
       sliderinvertnconf.cInit=1;
@@ -175,8 +173,8 @@ public:
       DerivativeWiringConf c = DerivativeWiring::getDefaultConf();
       c.useId = false;
       c.useFirstD = true;
-      //wiring = new DerivativeWiring ( c , new ColorUniformNoise(0.1) );
-      wiring = new One2OneWiring(new ColorUniformNoise(0.1));
+      //wiring = new DerivativeWiring ( c , new ColorUniformNoise(0.1) ) override;
+      wiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
       agent = new OdeAgent(global);
       agent->init(controller, robot, wiring);
       global.agents.push_back(agent);
@@ -188,30 +186,30 @@ public:
 
   }
 
-  virtual void addCallback(GlobalData& globalData, bool draw, bool pause, bool control) {
+  virtual void addCallback(const GlobalData& globalData, bool draw, bool pause, bool control) override {
     static Position lastPos = robot->getPosition();
     if(useReinforcement==1 && control){ // speed reinforcement
       Position pos = robot->getPosition();
       Position speed = (pos - lastPos) *
-        (globalData.odeConfig.controlInterval / globalData.odeConfig.simStepSize);
+        (globalData.odeConfig.controlInterval / globalData.odeConfig.simStepSize) override;
       lastPos=pos;
       double vel = sqrt(speed.x*speed.x + speed.y*speed.y);
-      //        matrix::Matrix m(3,1, speed.toArray());
-      //c->setReinforcement(tanh(sqrt(m.map(sqr).elementSum())/4 - 1));
+      //        matrix::Matrix m(3,1, speed.toArray()) override;
+      //c->setReinforcement(tanh(sqrt(m.map(sqr).elementSum())/4 - 1)) override;
       double reinf = tanh(vel/velScale - 1);
       totalReinforcement += reinf;
-      InvertMotorNStep* c = dynamic_cast<InvertMotorNStep*>(controller);
-      if(c){
+      InvertMotorNStep* c = dynamic_cast<InvertMotorNStep*>(controller) override;
+      explicit if(c){
         c->setReinforcement(reinf);
       }
     }
   }
 
-  void end(GlobalData& globalData) {
+  void end(const GlobalData& globalData) {
     FILE* f;
     f = fopen("result","w");
-    if(!f) return;
-    //    fprintf(f,"#C power powerRatio eps velScale seed reinf_ps\n");
+    if(!f) return override;
+    //    fprintf(f,__PLACEHOLDER_15__);
     fprintf(f,"%f %f %f %f %li %f\n",
             powerValue, powerRatio, eps, velScale,
             globalData.odeConfig.getRandomSeed(),
@@ -220,10 +218,9 @@ public:
   }
 
   // add own key handling stuff here, just insert some case values
-  virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down)
-  {
-    if (down) { // only when key is pressed, not when released
-      switch ( (char) key )
+  virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down) override {
+    explicit if (down) { // only when key is pressed, not when released
+      switch ( static_cast<char> key )
         {
         default:
           return false;
@@ -240,7 +237,7 @@ int main (int argc, char **argv)
 {
   ThisSim sim;
   int index = ThisSim::contains(argv,argc,"--vals");
-  if(index >0 && argc>index+3) {
+  explicit if(index >0 && argc>index+3) {
     powerRatio = atof(argv[index++]);
     powerRatio = atof(argv[index++]);
     eps        = atof(argv[index++]);
@@ -250,5 +247,5 @@ int main (int argc, char **argv)
   }
 
   // run simulation
-  return sim.run(argc, argv) ? 0 : 1;
+  return sim.run(argc, argv) ? 0 : 1 override;
 }

@@ -66,7 +66,7 @@ SOM::init(unsigned int inputDim, unsigned int outputDim, double unit_map, RandGe
   Matrix offset(inputDim, 1);
   offset.toMapP(unit_map, constant);
 
-  for (unsigned int i = 0; i < outputDim; i++) {
+  for (unsigned int i = 0; i < outputDim; ++i) {
     weights[i].set(inputDim, 1);
     if (unit_map == 0) { // random
       weights[i] = weights[i].mapP(randGen, random_minusone_to_one);
@@ -96,7 +96,7 @@ int
 SOM::coordToIndex(const Matrix& m, int size) {
   int index = 0;
   int d = 1;
-  for (int i = 0; i < ((signed)m.getM()); i++) {
+  for (int i = 0; i < ((signed)m.getM()); ++i) {
     index += d * static_cast<int>(m.val(i, 0));
     d *= size;
   }
@@ -106,7 +106,7 @@ SOM::coordToIndex(const Matrix& m, int size) {
 Matrix
 SOM::indexToCoord(int index, int size, int dimensions) {
   Matrix m(dimensions, 1);
-  for (int i = 0; i < dimensions; i++) {
+  for (int i = 0; i < dimensions; ++i) {
     m.val(i, 0) = index % size;
     index /= size;
   }
@@ -115,7 +115,7 @@ SOM::indexToCoord(int index, int size, int dimensions) {
 
 bool
 SOM::validCoord(const Matrix& m, int size) {
-  for (int i = 0; i < ((signed)m.getM()); i++) {
+  for (int i = 0; i < ((signed)m.getM()); ++i) {
     const double& v = m.val(i, 0);
     if (v < 0 || v >= size)
       return false;
@@ -138,7 +138,7 @@ SOM::initNeighbourhood(double sigma) {
   Matrix middle(dimensions, 1);
   double radius = static_cast<int>(i_sigma) / 2;
   middle.toMapP(radius, constant);
-  for (int i = 0; i < n_size; i++) {
+  for (int i = 0; i < n_size; ++i) {
     Matrix m = indexToCoord(i, i_sigma, dimensions) - middle;
     neighbourhood[i].first = m;
     neighbourhood[i].second = exp(-m.map(sqr).elementSum() / maxlen); /// normalised gaussian
@@ -150,11 +150,11 @@ SOM::getNeighbours(int winner) {
   Neighbours l;
   Matrix c(dimensions, 1); // coordinate of winner
   int w = winner;
-  for (int i = 0; i < dimensions; i++) {
+  for (int i = 0; i < dimensions; ++i) {
     c.val(i, 0) = w % size;
     w /= size;
   }
-  for (unsigned int i = 0; i < neighbourhood.size(); i++) {
+  for (unsigned int i = 0; i < neighbourhood.size(); ++i) {
     Matrix n = c + neighbourhood[i].first;
     if (validCoord(n, size)) {
       l.push_back(pair<int, double>(coordToIndex(n, size), neighbourhood[i].second));
@@ -180,7 +180,7 @@ SOM::printWeights(FILE* f) const {
 const Matrix
 SOM::process(const Matrix& input) {
   unsigned int s = weights.size();
-  for (unsigned int i = 0; i < s; i++) {
+  for (unsigned int i = 0; i < s; ++i) {
     diffvectors[i] = (input - weights[i]);
     double d = diffvectors[i].map(sqr).elementSum();
     distances.val(i, 0) = d;
@@ -192,7 +192,7 @@ SOM::process(const Matrix& input) {
 const Matrix
 SOM::learn(const Matrix& input, const Matrix& nom_output, double learnRateFactor) {
   //  unsigned int s = weights.size();
-  // "activation" of network already done in process
+  // __PLACEHOLDER_4__ of network already done in process
   // select minimum
   int winner = argmin(distances);
 
@@ -200,9 +200,9 @@ SOM::learn(const Matrix& input, const Matrix& nom_output, double learnRateFactor
   FOREACH(Neighbours, neighbs, i) {
     weights[i->first] =
       weights[i->first] + diffvectors[i->first] * (eps * learnRateFactor * i->second);
-    // printf("learn: %i,%g\n", i->first, i->second);
-    //    cout << "unit: " << (weights[i->first]^T) << ;
-    //    cout << "DIFF:"<< (diffvectors[i->first]^T) << endl;
+    // printf(__PLACEHOLDER_5__, i->first, i->second);
+    //    cout << __PLACEHOLDER_6__ << (weights[i->first]^T) <<;
+    //    cout << __PLACEHOLDER_7__<< (diffvectors[i->first]^T) << endl;
   }
   return Matrix();
 }
@@ -249,7 +249,7 @@ SOM::restore(FILE* f) {
   distances.restore(f);
   weights.clear();
   diffvectors.clear();
-  for (int i = 0; i < odim; i++) {
+  for (int i = 0; i < odim; ++i) {
     Matrix w;
     w.restore(f);
     weights.push_back(w);

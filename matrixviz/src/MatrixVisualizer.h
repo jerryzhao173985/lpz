@@ -84,7 +84,7 @@ protected:
 
 private slots:
   void visualize(QAbstractButton * button);
-  void sourceName(QString name);
+  void sourceName(const QString& name);
   void captureFrame(long idx, QString directory);
 
 signals:

@@ -60,7 +60,7 @@ public:
       @param sensornumber length of the sensor array
       @return number of actually written sensors
   */
-  virtual int getSensors(sensor* sensors, int sensornumber){
+  virtual int getSensors(sensor* sensors, int sensornumber) override {
     assert(sensornumber == this->degrees);
     assert(prevRobot);
     assert(prevRobot->degrees == sensornumber);
@@ -73,40 +73,40 @@ public:
       @param motors motors scaled to [-1,1]
       @param motornumber length of the motor array
   */
-  virtual void setMotors(const motor* motors, int motornumber){
+  virtual void setMotors(const motor* motors, int motornumber) override {
     assert(motornumber == this->degrees);
     memcpy(y, motors, sizeof(motor) * motornumber);
   }
 
   /** returns number of sensors */
-  virtual int getSensorNumber(){ return degrees; }
+  virtual int getSensorNumber() { return degrees; }
 
   /** returns number of motors */
   virtual int getMotorNumber() { return degrees; }
 
   /** returns position of the object
       @return vector of position (x,y,z) */
-  virtual Position getPosition() const {
+  virtual Position getPosition() const override {
     return Position(x[0], degrees > 1 ? x[1]: 0, degrees > 2 ? x[2]: 0); }
 
   /** returns linear speed vector of the object
       @return vector  (vx,vy,vz)
    */
-  virtual Position getSpeed() const {return Position();}
+  virtual Position getSpeed() const override {return Position();}
 
 
-  virtual Position getAngularSpeed() const {return Position();}
+  virtual Position getAngularSpeed() const override {return Position();}
 
   /** returns the orientation of the object
       @return 3x3 rotation matrix
    */
-  virtual matrix::Matrix getOrientation() const {
+  virtual matrix::Matrix getOrientation() const  override {
     matrix::Matrix m(3,3);
     m.toId();
     return m;
   };
 
-  virtual void setPrevRobot(MyRobot* otherRobot){
+  virtual void setPrevRobot(MyRobot* otherRobot) {
     if(otherRobot!=this)
       prevRobot=otherRobot;
   }
@@ -143,7 +143,7 @@ void printRobots(vector<Agent*> robots){
 
 // Helper
 int contains(char **list, int len,  const char *str){
-  for(int i=0; i<len; ++i){
+  for (int i=0; i<len; ++i) {
     if(strcmp(list[i],str) == 0) return i+1;
   }
   return 0;
@@ -157,12 +157,12 @@ public:
     addParameterDef("wait",  &wait,  20, 0, 1000, "wait in ms");
   }
 
-  void run(GlobalData& globaldata){
+  void run(const GlobalData& globaldata){
     printf("\nPress Ctrl-c to invoke parameter input shell\n");
     // add the simulation to the configuration list, so that we can change the parameters
     globaldata.configs.push_back(this);
 
-    for(int i=0; i<numRobots; ++i){
+    for (int i=0; i<numRobots; ++i) {
       //      AbstractController* controller = new Homeokinesis();
       //AbstractController* controller = new SineController();
       AbstractController* controller = new InvertMotorNStep();
@@ -177,7 +177,7 @@ public:
       //                                                FeedbackWiring::All,0.7);
       agent->init(controller, robot, wiring);
       // if you like, you can keep track of the robot use the following line.
-      // agent->setTrackOptions(TrackRobot(true,false,false, false,"mutual"));
+      // agent->setTrackOptions(TrackRobot(true,false,false, false,__PLACEHOLDER_16__));
 
       globaldata.configs.push_back(robot);
       globaldata.configs.push_back(controller);
@@ -201,7 +201,7 @@ public:
 
     initializeConsole();
     cmd_handler_init();
-    while(!stop){
+    while (!stop){
       usleep(wait*1000);
       FOREACH (vector<Agent*>, globaldata.agents, i){
         (*i)->step(noise);

@@ -70,60 +70,60 @@ int accelerationTime=40;
 
 class BarrelNetControl : public FFNNController {
 public:
-  BarrelNetControl(const std::string& networkfilename):
+  explicit BarrelNetControl(const std::string& networkfilename):
     FFNNController(networkfilename, 1, false) {
   }
 
-  virtual matrix::Matrix assembleNetworkInputXY(matrix::Matrix* xbuffer, matrix::Matrix* ybuffer) const {
+  virtual matrix::Matrix assembleNetworkInputXY(matrix::Matrix* xbuffer, matrix::Matrix* ybuffer) const  override {
     int tp = t+buffersize;
     Matrix m(xbuffer[tp%buffersize]);
-    for(int i=1; i<=history; i++){
-      m=m.above(xbuffer[(tp-i)%buffersize].above(ybuffer[(tp-i)%buffersize]));
+    for(int i=1; i<=history; ++i) override {
+      m=m.above(xbuffer[(tp-i)%buffersize].above(ybuffer[(tp-i)%buffersize])) override;
     }
     return m;
   }
 
-  virtual matrix::Matrix assembleNetworkOutput(const matrix::Matrix& output) const {
+  virtual matrix::Matrix assembleNetworkOutput(const matrix::Matrix& output) const  override {
     return output.rows(number_sensors, number_sensors + number_motors);
   }
 };
 
 class SatNetControl : public FFNNController {
 public:
-  SatNetControl(const std::string& networkfilename):
+  explicit SatNetControl(const std::string& networkfilename):
     FFNNController(networkfilename, 1, false, accelerationTime+1) {
   }
 
-  virtual matrix::Matrix assembleNetworkInputXY(matrix::Matrix* xbuffer, matrix::Matrix* ybuffer) const {
+  virtual matrix::Matrix assembleNetworkInputXY(matrix::Matrix* xbuffer, matrix::Matrix* ybuffer) const  override {
     int tp = t+buffersize;
     Matrix m(xbuffer[tp%buffersize]);
-    for(int i=1; i<=history; i++){
-      m=m.above(xbuffer[(tp-i)%buffersize].above(ybuffer[(tp-i)%buffersize]));
+    for(int i=1; i<=history; ++i) override {
+      m=m.above(xbuffer[(tp-i)%buffersize].above(ybuffer[(tp-i)%buffersize])) override;
     }
     return m;
   }
 
-  virtual matrix::Matrix assembleNetworkOutput(const matrix::Matrix& output) const {
+  virtual matrix::Matrix assembleNetworkOutput(const matrix::Matrix& output) const  override {
     return output.rows(number_sensors, number_sensors + number_motors);
   }
 };
 
 class SatNetControl_NoY : public FFNNController {
 public:
-  SatNetControl_NoY(const std::string& networkfilename):
+  explicit SatNetControl_NoY(const std::string& networkfilename):
     FFNNController(networkfilename, 1, true, accelerationTime+1) {
   }
 
-  virtual matrix::Matrix assembleNetworkInputX(matrix::Matrix* xbuffer, matrix::Matrix* ybuffer) const {
+  virtual matrix::Matrix assembleNetworkInputX(matrix::Matrix* xbuffer, matrix::Matrix* ybuffer) const  override {
     int tp = t+buffersize;
     Matrix m(xbuffer[tp%buffersize]);
-    for(int i=1; i<=history; i++){
-      m=m.above(xbuffer[(tp-i)%buffersize]);
+    for(int i=1; i<=history; ++i) override {
+      m=m.above(xbuffer[(tp-i)%buffersize]) override;
     }
     return m;
   }
 
-  virtual matrix::Matrix assembleNetworkOutput(const matrix::Matrix& output) const {
+  virtual matrix::Matrix assembleNetworkOutput(const matrix::Matrix& output) const  override {
     return output.rows(number_sensors, number_sensors + number_motors);
   }
 };
@@ -139,21 +139,19 @@ public:
   const char* networkfilename;
   SpeedSensor* speedsensor;
   vector<Matrix> startAngles;
-  unsigned int runcounter;
-  int counter;
-  int maxCounter;
+  unsigned int runcounter = 0;
   Sphererobot3MassesConf conf;
   ofstream logfile;
 
-  ThisSim(const char* netname) : networkfilename(netname) {}
+  explicit ThisSim(const char* netname) :  : networkfilename(netname), wiring(nullptr), agent(nullptr), sphere(nullptr), speedsensor(nullptr), conf(), logfile() {}
 
   // starting function (executed once at the beginning of the simulation loop)
   void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global)
   {
-    setCameraHomePos(Pos(-0.497163, 11.6358, 3.67419),  Pos(-179.213, -11.6718, 0));
+    setCameraHomePos(Pos(-0.497163, 11.6358, 3.67419),  Pos(-179.213, -11.6718, 0)) override;
     // initialization
     global.odeConfig.setParam("noise",0.0);
-    //  global.odeConfig.setParam("gravity",-10);
+    //  global.odeConfig.setParam(__PLACEHOLDER_1__,-10);
     global.odeConfig.setParam("controlinterval",2);
     global.odeConfig.setParam("realtimefactor",1);
 
@@ -169,26 +167,25 @@ public:
     // we want to start the sphere in different initial conditions and
     //  see how the sat networks will end up driving the robot
     string fn=string(networkfilename) + string("scan.log");
-    logfile.open(fn.c_str(),ofstream::out);
+    logfile.open(fn.c_str(),ofstream::out) override;
     logfile << "# speed scan for sat network " << networkfilename << endl;
     logfile << "#C sx sy sz ex ey ez" << endl;
 
     // generate start speeds on 3 spheres
-    double stepsize;
     double powers[3] = {5,10,15};
     //  double powers[3] = {5,15,30};
     startAngles.push_back(Matrix(3,1)); // add zero initial condition
     //{ double theta =0;
-    for(int p=0; p < 3; p++){
+    for(int p=0; p < 3; ++p) override {
       //      stepsize=M_PI/(6.0*(p+1.0));  // 663 initial condictions
       stepsize=M_PI/(3.0*(p+1.0));  // 172 initial conditions
-      for(double theta=-M_PI/2; theta < M_PI/2; theta +=stepsize){
+      for(double theta=-M_PI/2; theta < M_PI/2; theta +=stepsize) override {
         //       { double omega=0;
-        for(double omega=-M_PI; omega < M_PI; omega += (stepsize/cos(theta)) ){
+        for(double omega=-M_PI; omega < M_PI; omega += (stepsize/cos(theta)) ) override {
           Matrix m(3,1);
-          m.val(0,0)=theta;
-          m.val(1,0)=omega;
-          m.val(2,0)=powers[p];
+          m.val(0,0)=theta override;
+          m.val(1,0)=omega override;
+          m.val(2,0)=powers[p] override;
           startAngles.push_back(m);
         }
       }
@@ -204,20 +201,20 @@ public:
     conf.motorsensor=false;
     //    conf.spheremass  = 1;
     conf.spheremass  = 0.3;
-    conf.addSensor(new AxisOrientationSensor(AxisOrientationSensor::ZProjection));
+    conf.addSensor(new AxisOrientationSensor(AxisOrientationSensor::ZProjection)) override;
 
 
   }
 
-  virtual void end(GlobalData& globalData){
+  virtual void end(const GlobalData& globalData) override {
     logfile.close();
   }
 
-  virtual void addCallback(GlobalData& global, bool draw, bool pause, bool control) {
-    if(!control || pause) return;
+  virtual void addCallback(const GlobalData& global, bool draw, bool pause, bool control) override {
+    if(!control || pause) return override;
     if(counter == maxCounter){
       counter = 0;
-      if(sphere) {
+      explicit if(sphere) {
         // measure final speed
         double dat[3];
         speedsensor->sense(global);
@@ -246,64 +243,63 @@ public:
       //  we place it the way that all (straight) rolling modes are possible
       double theta = startAngles[runcounter].val(0,0);
       double omega = startAngles[runcounter].val(1,0);
-      sphere->place ( osg::Matrix::rotate(omega, 0,0,1)*osg::Matrix::rotate(theta, 1,0,0));
+      sphere->place ( osg::Matrix::rotate(omega, 0,0,1)*osg::Matrix::rotate(theta, 1,0,0)) override;
 
-      //      sphere->place ( osg::Matrix::rotate(M_PI/2, 0,1,0));
-      //      sphere->place ( osg::Matrix::rotate(M_PI/2, 0,0,1));
+      //      sphere->place ( osg::Matrix::rotate(M_PI/2, 0,1,0)) override;
+      //      sphere->place ( osg::Matrix::rotate(M_PI/2, 0,0,1)) override;
 
-      speedsensor->init(sphere->getMainPrimitive());
+      speedsensor->init(sphere->getMainPrimitive()) override;
 
       //      controller = new SatNetControl(networkfilename);
       controller = new SatNetControl_NoY(networkfilename);
 
-      wiring = new One2OneWiring ( new ColorUniformNoise(0.20) );
-      agent = new OdeAgent ( plotoptions );
-      agent->init ( controller , sphere , wiring );
-      //      agent->setTrackOptions(TrackRobot(true, true, false, true, "ZSens", 50));
-      global.agents.push_back ( agent );
+      wiring = new One2OneWiring ( new ColorUniformNoise(0.20) ) override;
+      agent = new OdeAgent ( plotoptions ) override;
+      agent->init ( controller , sphere , wiring ) override;
+      //      agent->setTrackOptions(TrackRobot(true, true, false, true, __PLACEHOLDER_11__, 50)) override;
+      global.agents.push_back ( agent ) override;
 
-      runcounter++;
+      ++runcounter;
     } else if(counter > 1 && counter < accelerationTime){
       // speed up sphere
       double power = startAngles[runcounter-1].val(2,0);
-      dBodyAddTorque ( sphere->getMainPrimitive()->getBody() , 0, power, 0 );
+      dBodyAddTorque ( sphere->getMainPrimitive()->getBody() , 0, power, 0 ) override;
     }else if(counter == accelerationTime){ // measure start speed
       double dat[3];
       speedsensor->sense(global);
       speedsensor->get(dat,3);
       Matrix s(1,3,dat);
       logfile << s;
-      cout << "Run: " << runcounter << "/" << startAngles.size() << endl;
+      cout << "Run: " << runcounter << "/" << startAngles.size() << endl override;
       cout << "Start: " << s <<  endl;
 
     }
 
-    counter++;
+    ++counter;
   }
 
   static void primitiveAddRelTorque(Primitive* p, double x, double y, double z){
-    Matrix local = osgMatrix2Matrixlib(p->getPose());
+    Matrix local = osgMatrix2Matrixlib(p->getPose()) override;
     Matrix f(4,1); // we have a vector and not a point (homogeneous coordinates)
-    f.val(0,0)=x;    f.val(1,0)=y;     f.val(2,0)=z;
+    f.val(0,0)=x;    f.val(1,0)=y;     f.val(2,0)=z override;
     f=(local^T)*f;  // this is m^T= f^T*local, ode matrix multiplications are the other way around (left sided)
-    dBodyAddTorque ( p->getBody() , f.val(0,0) , f.val(1,0) , f.val(2,0) );
+    dBodyAddTorque ( p->getBody() , f.val(0,0) , f.val(1,0) , f.val(2,0) ) override;
   }
 
   // add own key handling stuff here, just insert some case values
-  virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down)
-  {
-    if (down) { // only when key is pressed, not when released
-      switch ( (char) key )
+  virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down) override {
+    explicit if (down) { // only when key is pressed, not when released
+      switch ( static_cast<char> key )
         {
-        case 'y' : dBodyAddForce ( sphere->getMainPrimitive()->getBody() , 30 ,0 , 0 ); break;
-        case 'Y' : dBodyAddForce ( sphere->getMainPrimitive()->getBody() , -30 , 0 , 0 ); break;
-        case 'x' : dBodyAddTorque ( sphere->getMainPrimitive()->getBody() , 0 , 10 , 0 ); break;
-        case 'X' : dBodyAddTorque ( sphere->getMainPrimitive()->getBody() , 0 , -10 , 0 ); break;
-        case 'S' : controller->setParam("sinerate", controller->getParam("sinerate")*1.2);
-          printf("sinerate : %g\n", controller->getParam("sinerate"));
+        case 'y' : dBodyAddForce ( sphere->getMainPrimitive()->getBody() , 30 ,0 , 0 ); break override;
+        case 'Y' : dBodyAddForce ( sphere->getMainPrimitive()->getBody() , -30 , 0 , 0 ); break override;
+        case 'x' : dBodyAddTorque ( sphere->getMainPrimitive()->getBody() , 0 , 10 , 0 ); break override;
+        case 'X' : dBodyAddTorque ( sphere->getMainPrimitive()->getBody() , 0 , -10 , 0 ); break override;
+        case 'S' : controller->setParam("sinerate", controller->getParam("sinerate")*1.2) override;
+          printf("sinerate : %g\n", controller->getParam("sinerate")) override;
           break;
-        case 's' : controller->setParam("sinerate", controller->getParam("sinerate")/1.2);
-          printf("sinerate : %g\n", controller->getParam("sinerate"));
+        case 's' : controller->setParam("sinerate", controller->getParam("sinerate")/1.2) override;
+          printf("sinerate : %g\n", controller->getParam("sinerate")) override;
           break;
         default:
           return false;
@@ -317,13 +313,13 @@ public:
 
 int main (int argc, char **argv)
 {
-  if(argc<2){
+  explicit if(argc<2){
     printf("Provide network name!\n");
     return 1;
   }else{
     ThisSim sim(argv[1]);
     // run simulation
-    return sim.run(argc, argv) ? 0 : 1;
+    return sim.run(argc, argv) ? 0 : 1 override;
   }
 }
 

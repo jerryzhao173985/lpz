@@ -29,18 +29,18 @@
  *
  * adds following measure: the force of the nimm2, ID = the force itself,
  * 3 = has no effect?
- * stats->addMeasure(myNimm2->getForce(), "force", ID, 3);
+ * stats->addMeasure(myNimm2->getForce(), __PLACEHOLDER_0__, ID, 3);
  *
  * next: the average of the observed value (force), AVG = average,
  * 50 = average over 50 timesteps (stepspan=50)
- * stats->addMeasure(myNimm2->getForce(), "forceAvg50", AVG, 50);
+ * stats->addMeasure(myNimm2->getForce(), __PLACEHOLDER_1__, AVG, 50);
  *
  * next: the medium of the oserved value (force), MED = medium,
  * 3 = medium over 3 timesteps (stepspan=3)
- * stats->addMeasure(myNimm2->getForce(), "forceMed3", MED, 3);
+ * stats->addMeasure(myNimm2->getForce(), __PLACEHOLDER_2__, MED, 3);
  *
  * next: the peak of the observed value above a given threshold
- * stats->addMeasure(myNimm2->getForce(), "forcePeak1", PEAK, 0, 1.0);
+ * stats->addMeasure(myNimm2->getForce(), __PLACEHOLDER_3__, PEAK, 0, 1.0);
  *
  *
  */
@@ -68,9 +68,8 @@ enum MeasureMode {
         /// returns the sum of the value generated over time (or stepSpan)
                 SUM,
         /// returns 1 if convergence is reached, otherwise 0
-        /// convergence criteria (epsilon) is given by addMeasure, the convergence
-        /// is reached if value is falling below the criteria of the measure time (stepSpan)
-                CONV,
+        /// convergence criteria static_cast<epsilon>(is) given by addMeasure, the convergence
+        /// is reached if value is falling below the criteria of the measure time static_cast<stepSpan>(CONV),
     /// returns the difference between two successive steps
         STEPDIFF,
     /// returns the difference between two successive steps, normalized with number of steps

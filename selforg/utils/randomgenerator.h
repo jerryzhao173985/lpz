@@ -39,7 +39,7 @@ struct _RandGen {
   }
   /// returns a value in [0,1)
   double rand() {
-    double r;
+    double r = 0;
     drand48_r(&buffer, &r);
     return r;
   }

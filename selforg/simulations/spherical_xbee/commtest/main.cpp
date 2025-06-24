@@ -14,7 +14,7 @@
 
 // Helper
 int contains(char **list, int len,  const char *str){
-  for(int i=0; i<len; i++){
+  for (int i=0; i<len; ++i) {
     if(strcmp(list[i],str) == 0) return i+1;
   }
   return 0;
@@ -35,12 +35,12 @@ int main(int argc, char** argv){
     exit(0);
   }
   int index = contains(argv,argc,"-p");
-  if(index && index<argc){
+  if (index && index<argc){
     port = argv[index];
     cout << "use port " << port << endl;
   }
   index = contains(argv,argc,"-b");
-  if(index && index<argc){
+  if (index && index<argc){
     baud = atoi(argv[index]);
     cout << "use baud rate " << baud << endl;
   }

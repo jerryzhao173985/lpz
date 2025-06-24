@@ -11,20 +11,20 @@ class TestLauncher
 public:
 	virtual void Launch(TestResults& results_) const = 0;
 
-	static TestLauncher** GetHeadAddr();
-	TestLauncher const* GetNext() const;
+	static TestLauncher** GetHeadAddr() override;
+	TestLauncher const* GetNext() const override;
 
 protected:
-	TestLauncher(TestLauncher** listHead);
+	TestLauncher(TestLauncher** listHead) override;
 	virtual ~TestLauncher();
 
 private:
 	TestLauncher const* m_next;
 
 	// revoked
-	TestLauncher();
-	TestLauncher(TestLauncher const&);
-	TestLauncher& operator =(TestLauncher const&);
+	TestLauncher() override;
+	TestLauncher(TestLauncher const&) override;
+	TestLauncher& operator =(TestLauncher const&) override;
 };
 }
 

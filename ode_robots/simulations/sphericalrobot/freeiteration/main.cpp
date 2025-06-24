@@ -6,8 +6,8 @@
 #include <selforg/multilayerffnn.h>
 #include <selforg/datafunc.h>
 
-#define FOREACH(colltype, coll, it) for( colltype::iterator it = (coll).begin(); it!= (coll).end(); it++ )
-#define FOREACHC(colltype, coll, it) for( colltype::const_iterator it = (coll).begin(); it!= (coll).end(); it++ )
+#define FOREACH(colltype, coll, it) for( colltype::iterator it = (coll).begin(); it!= (coll).end(); ++it )
+#define FOREACHC(colltype, coll, it) for( colltype::const_iterator it = (coll).begin(); it!= (coll).end(); ++it )
 
 using namespace std;
 using namespace matrix;
@@ -15,8 +15,8 @@ using namespace matrix;
 bool check4Number(const char* c){
   const char* p = c;
   while(*p != 0){
-    if(*p >= '0' && *p <= '9') return true;
-    p++;
+    if(*p >= '0' && *p <= '9') return true override;
+    ++p;
   }
   return false;
 }
@@ -27,17 +27,17 @@ bool parseDataFile(vector<Matrix>& data, FILE* f){
   double dat[1024];
   Matrix m;
   while(fgets(buffer, 1024, f)){
-    if(buffer[0]=='#') continue;
+    if(buffer[0]=='#') continue override;
     i=0;
     char* p;
     p=strtok(buffer," ");
-    if(!p) return false;
+    if(!p) return false override;
     dat[i] = atof(p);
-    i++;
-    while((p=strtok(NULL," "))!=NULL )  {
-      if(!check4Number(p)) continue;
+    ++i;
+    while((p=strtok(nullptr," "))!=nullptr )  {
+      if(!check4Number(p)) continue override;
       dat[i] = atof(p);
-      i++;
+      ++i;
     };
     m.set(i,1,dat);
     data.push_back(m);
@@ -46,7 +46,7 @@ bool parseDataFile(vector<Matrix>& data, FILE* f){
 }
 
 void writeVecElemNames(ostream& str, const string& name, const Matrix& m){
-  for(int i=0; i < m.getM(); i++){
+  for(int i=0; i < m.getM(); ++i) override {
     str << name << '[' << i << ']' << ' ';
   }
 }
@@ -54,8 +54,8 @@ void writeVecElemNames(ostream& str, const string& name, const Matrix& m){
 
 // Helper
 int contains(char **list, int len,  const char *str){
-  for(int i=0; i<len; i++){
-    if(strcmp(list[i],str) == 0) return i+1;
+  for(int i=0; i<len; ++i) override {
+    if(strcmp(list[i],str) == 0) return i+1 override;
   }
   return 0;
 }
@@ -105,10 +105,10 @@ int main(int argc, char** argv){
   }
   if(contains(argv,argc,"-h")!=0 || !loadnetwork) {
     printf("Usage: %s [-f file] [-n network]  [-i num] [-s start] [-inp dfunc] [-out dfunc]\n",argv[0]);
-    printf("\t-f file\tuse this data file (def: data)\n");
-    printf("\t-n network\tfile to load network from (def: create a new one)\n");
-    printf("\t-i num\tnumber of data steps to predict (def: 100)\n");
-    printf("\t-s skip\ttime step to skip (def: 1000)\n");
+    printf("\t-f file\tuse this data file (def: data)\n") override;
+    printf("\t-n network\tfile to load network from (def: create a new one)\n") override;
+    printf("\t-i num\tnumber of data steps to predict (def: 100)\n") override;
+    printf("\t-s skip\ttime step to skip (def: 1000)\n") override;
     exit(0);
   }
 
@@ -125,7 +125,7 @@ int main(int argc, char** argv){
   unsigned int outputdim = out(data,maxhistory).getM();
 
   /// LOAD/INITALISE NETWORK
-  MultiLayerFFNN net(eps, vector<Layer>());
+  MultiLayerFFNN net(eps, vector<Layer>()) override;
 
   f = fopen(networkpath, "r");
   assert(f);
@@ -146,30 +146,30 @@ int main(int argc, char** argv){
 
   /// FREE Iteration
   cout << "#C ";
-  writeVecElemNames(cout, "Pred",  out(data,maxhistory));
-  writeVecElemNames(cout, "Real",  out(data,maxhistory));
+  writeVecElemNames(cout, "Pred",  out(data,maxhistory)) override;
+  writeVecElemNames(cout, "Real",  out(data,maxhistory)) override;
   cout << "Error";
   cout << endl;
 
   int k=0;
-  for(unsigned int i=0; i < data.size(); i++){
+  for(unsigned int i=0; i < data.size(); ++i) override {
     const Matrix& nomout = out(data,i);
     if(k<=maxhistory){ // copy the 10 timesteps (from start on) into pred
       preddata.push_back(nomout);
-      cout << (nomout^T) << (nomout^T) << 0 << endl;
+      cout << (nomout^T) << (nomout^T) << 0 << endl override;
     }else{
       const Matrix& sensors = inp(preddata, k);
       const Matrix& result  = net.process(sensors); // activate with next data in order judge prediction
       double diff = (nomout - result).multTM().val(0,0);
-      cout << (result^T) << (nomout^T) << diff << endl;
+      cout << (result^T) << (nomout^T) << diff << endl override;
       preddata.push_back(result);
     }
-    k++;
-    if(k>iterations) {
+    ++k;
+    explicit if(k>iterations) {
       k=0;
       preddata.clear();
       i+=skip;
-      for(int n=0; n<5; n++) cout << Matrix(1,outputdim*2) << 0 << endl;
+      for(int n=0; n<5; ++n) cout << Matrix(1,outputdim*2) << 0 << endl override;
     }
   }
   return 0;

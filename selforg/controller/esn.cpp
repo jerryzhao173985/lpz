@@ -69,16 +69,16 @@ ESN::init(unsigned int inputDim, unsigned int outputDim, double unit_map, RandGe
   ESNState.set(conf.numNeurons, 1);
   ESNActivations.set(conf.numNeurons, 1);
   ESNWeights.set(conf.numNeurons, conf.numNeurons);
-  for (int count1 = 0; count1 < nbInputs; count1++) {
-    for (int count2 = 0; count2 < nbInputConnectionPN; count2++) {
+  for (int count1 = 0; count1 < nbInputs; ++count1) {
+    for (int count2 = 0; count2 < nbInputConnectionPN; ++count2) {
       int i = rand() % conf.numNeurons;
-      inputWeights.val(i, count1) = random_minusone_to_one(0) * conf.inputStrength;
+      inputWeights.val(i, count1) = random_minusone_to_one(randGen) * conf.inputStrength;
     }
   }
   // we may initialize the output weights with 0
-  // for(int count1 = 0; count1 < nbOutputs; count1++)
+  // for(int count1 = 0; count1 < nbOutputs; ++count1)
   //         {
-  //                 for(int count = 0; count < nbOutputConnectionPN; count++)
+  //                 for(int count = 0; count < nbOutputConnectionPN; ++count)
   //                         {
   //                                 int i = rand()%conf.numNeurons;
   //                                 outputWeights.val(count1,i) =
@@ -87,10 +87,10 @@ ESN::init(unsigned int inputDim, unsigned int outputDim, double unit_map, RandGe
   //         }
 
   outputDirectWeights = (outputDirectWeights ^ 0) * unit_map;
-  for (int count = 0; count < nbInternalConnection; count++) {
+  for (int count = 0; count < nbInternalConnection; ++count) {
     int i = rand() % conf.numNeurons;
     int j = rand() % conf.numNeurons;
-    ESNWeights.val(i, j) = random_minusone_to_one(0);
+    ESNWeights.val(i, j) = random_minusone_to_one(randGen);
   }
 
   // calculate the eigenvalues
@@ -138,11 +138,11 @@ ESN::learn(const Matrix& input, const Matrix& nom_output, double learnRateFactor
   case 'online'
   nSampleInput = length(trainInput);
   stateCollection = zeros(nSampleInput, trained_esn.nInternalUnits + trained_esn.nInputUnits);
-  SInverse = 1 / trained_esn.RLS_delta * eye(trained_esn.nInternalUnits + trained_esn.nInputUnits) ;
+  SInverse = 1 / trained_esn.RLS_delta * eye(trained_esn.nInternalUnits + trained_esn.nInputUnits);
   totalstate = zeros(trained_esn.nTotalUnits,1);
-  internalState = zeros(trained_esn.nInternalUnits,1) ;
-  error = zeros(nSampleInput , 1) ;
-  weights = zeros(nSampleInput , 1) ;
+  internalState = zeros(trained_esn.nInternalUnits,1);
+  error = zeros(nSampleInput , 1);
+  weights = zeros(nSampleInput , 1);
   for iInput = 1 : nSampleInput
   if trained_esn.nInputUnits > 0
   in = [diag(trained_esn.inputScaling) * trainInput(iInput,:)' + esn.inputShift];  % in is column
@@ -167,24 +167,24 @@ ESN::learn(const Matrix& input, const Matrix& nom_output, double learnRateFactor
   end
   typeSpecificArg = esn.avDist;
   end
-  internalState = feval(trained_esn.type , totalstate, trained_esn, typeSpecificArg ) ;
+  internalState = feval(trained_esn.type , totalstate, trained_esn, typeSpecificArg );
   netOut = feval(trained_esn.outputActivationFunction,trained_esn.outputWeights*[internalState;in]);
   totalstate = [internalState;in;netOut];
   state = [internalState;in] ;
   stateCollection(iInput, :) = state';
   phi = state' * SInverse ;
   %            u = SInverse * state ;
-  %            k = 1 / (lambda + state'*u)*u ;
+  %            k = 1 / (lambda + state'*u)*u;
   k = phi'/(trained_esn.RLS_lambda + phi * state );
-  e = trained_esn.teacherScaling * trainOutput(iInput,1) + trained_esn.teacherShift - netOut(1) ;
+  e = trained_esn.teacherScaling * trainOutput(iInput,1) + trained_esn.teacherShift - netOut(1);
   % collect the error that will be plotted
-  error(iInput , 1 ) = e*e ;
+  error(iInput , 1 ) = e*e;
   % update the weights
-  trained_esn.outputWeights(1,:) = trained_esn.outputWeights(1,:) + (k*e)' ;
+  trained_esn.outputWeights(1,:) = trained_esn.outputWeights(1,:) + (k*e)';
   % collect the weights for plotting
-  weights(iInput , 1) = sum(abs(trained_esn.outputWeights(1,:))) ;
-  %            SInverse = 1 / lambda * (SInverse - k*(state' * SInverse)) ;
-  SInverse = ( SInverse - k * phi ) / trained_esn.RLS_lambda ;
+  weights(iInput , 1) = sum(abs(trained_esn.outputWeights(1,:)));
+  %            SInverse = 1 / lambda * (SInverse - k*(state' * SInverse));
+  SInverse = ( SInverse - k * phi ) / trained_esn.RLS_lambda;
   end
 
 

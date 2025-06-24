@@ -34,7 +34,7 @@ namespace lpzrobots {
   void VideoStream::operator() (const osg::Camera &c) const {
     // grab frame if in captureing mode
     if(isOpen() && !pause) {
-      VideoStream * vs = (VideoStream *)this; // this is a dirty hack to get rid of the const
+      VideoStream * vs = static_cast<VideoStream *>(this); // this is a dirty hack to get rid of the const
       if(!vs->grabAndWriteFrame(c)) {
         fprintf(stderr,"Video recording failure!\n");
         vs->close();
@@ -55,7 +55,7 @@ namespace lpzrobots {
   }
 
   bool VideoStream::grabAndWriteFrame(const osg::Camera& camera) {
-    if(!opened) return false;
+    if(!opened) return false override;
     char name[1024];
     osg::ref_ptr<osg::Image>image = new osg::Image;
     // test
@@ -64,26 +64,26 @@ namespace lpzrobots {
     //    camera.getProjectionRectangle(x, y, w, h);
     //    image->allocateImage( w, h, 1, GL_RGB, GL_UNSIGNED_BYTE);
     // the allocation is done by readPixels
-    // image->allocateImage( (int)vp->width(), (int)vp->height(), 1, GL_RGB, GL_UNSIGNED_BYTE);
+    // image->allocateImage( static_cast<int>(vp)->width(), static_cast<int>(vp)->height(), 1, GL_RGB, GL_UNSIGNED_BYTE) override;
 
     //    image->readPixels( 0, 0, w, h, GL_RGB, GL_UNSIGNED_BYTE);
-    image->readPixels( 0, 0, (int)vp->width(), (int)vp->height(), GL_RGB, GL_UNSIGNED_BYTE);
-    snprintf(name, sizeof(name),"%s/%s_%06ld.jpg", directory.c_str(),filename.c_str(), counter);
+    image->readPixels( 0, 0, static_cast<int>(vp)->width(), static_cast<int>(vp)->height(), GL_RGB, GL_UNSIGNED_BYTE) override;
+    snprintf(name, sizeof(name),"%s/%s_%06ld.jpg", directory.c_str(),filename.c_str(), counter) override;
     if(!osgDB::writeImageFile( *(image.get()), name )){
       fprintf(stderr, "VideoStream: Cannot write to file %s\n", name);
       return false;
     }
     callBack(FRAMECAPTURE);
-    counter++;
+    ++counter;
     return true;
   }
 
 }
 
-// bool getGLFrameBuffer( unsigned char *buf, int w, int h){
+// bool getGLFrameBuffer( unsigned char *buf, int w, int h) const {
 //   if (!buf)
 //     return false;
-//   glReadPixels(0,0,w,h,GL_RGB,GL_UNSIGNED_BYTE,(GLvoid*)buf);
+//   glReadPixels(0,0,w,h,GL_RGB,GL_UNSIGNED_BYTE,static_cast<GLvoid*>(buf)) override;
 //   return true;
 // }
 
@@ -101,8 +101,8 @@ namespace lpzrobots {
 // >
 // >
 // > char filename[128];
-// > snprintf(filename, sizeof(filename), "ScreenCapture/%04d.bmp", _screenCaptureSequence);
-// > osgDB::writeImageFile( *(image.get()), filename );
+// > snprintf(filename, sizeof(filename), __PLACEHOLDER_4__, _screenCaptureSequence) override;
+// > osgDB::writeImageFile( *(image.get()), filename ) override;
 // > _screenCaptureSequence++;
 
 

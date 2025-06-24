@@ -53,7 +53,9 @@ CPPFLAGS = -Wall -pipe -fpic $(INC) $(shell $(SELFORGCFG) $(CFGOPTS) --cflags) \
 	$(shell ./ode_robots-config --srcprefix="." $(CFGOPTS) --intern --cflags)
 # Maximum warning flags added by enable_max_warnings.sh
 EXTRA_WARNINGS = -Wall -Wextra -Wpedantic -Wconversion -Wsign-conversion -Wcast-align -Wformat=2 -Wuninitialized -Wunused-function -Wunused-label -Wunused-variable -Wunused-value -Wunused-parameter -Wfloat-equal -Wundef -Wshadow -Wpointer-arith -Wcast-qual -Wwrite-strings -Wmissing-declarations -Wredundant-decls -Woverloaded-virtual -Wsign-promo -Wformat-security -Wnon-virtual-dtor -Wold-style-cast -Wzero-as-null-pointer-constant -Wno-unused-parameter -Wno-sign-conversion
-CPPFLAGS += $(EXTRA_WARNINGS)
+# Disable OSG-specific warnings for C++17 compatibility
+OSG_WARNINGS = -Wno-zero-as-null-pointer-constant
+CPPFLAGS += $(EXTRA_WARNINGS) $(OSG_WARNINGS)
 
 # used for single file compilation
 CXX = g++

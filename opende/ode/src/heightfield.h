@@ -42,11 +42,11 @@ struct dxHeightfieldData
     dReal m_fScale;            // Sample value multiplier
     dReal m_fOffset;           // Vertical sample offset
 
-    int	m_nWidthSamples;       // Vertex count on X axis edge (number of samples)
-    int	m_nDepthSamples;       // Vertex count on Z axis edge (number of samples)
-    int m_bCopyHeightData;     // Do we own the sample data?
-    int	m_bWrapMode;           // Heightfield wrapping mode (0=finite, 1=infinite)
-    int m_nGetHeightMode;      // GetHeight mode ( 0=callback, 1=byte, 2=short, 3=float )
+    int	m_nWidthSamples = 0;       // Vertex count on X axis edge (number of samples)
+    int	m_nDepthSamples = 0;       // Vertex count on Z axis edge (number of samples)
+    int m_bCopyHeightData = 0;     // Do we own the sample data?
+    int	m_bWrapMode = 0;           // Heightfield wrapping mode (0=finite, 1=infinite)
+    int m_nGetHeightMode = 0;      // GetHeight mode ( 0=callback, 1=byte, 2=short, 3=float )
 
     const void* m_pHeightData; // Sample data array
     void* m_pUserData;         // Callback user data
@@ -55,7 +55,7 @@ struct dxHeightfieldData
 
     dHeightfieldGetHeight* m_pGetHeightCallback;		// Callback pointer.
 
-    dxHeightfieldData();
+    dxHeightfieldData() override;
     ~dxHeightfieldData();
 
     void SetData( int nWidthSamples, int nDepthSamples,
@@ -63,13 +63,13 @@ struct dxHeightfieldData
         dReal fScale, dReal fOffset,
         dReal fThickness, int bWrapMode );
 
-    void ComputeHeightBounds();
+    void ComputeHeightBounds() override;
 
     bool IsOnHeightfield2  ( const HeightFieldVertex * const CellCorner, 
         const dReal * const pos,  const bool isABC) const;
 
-    dReal GetHeight(int x, int z);
-    dReal GetHeight(dReal x, dReal z);
+    dReal GetHeight(int x, int z) override;
+    dReal GetHeight(dReal x, dReal z) override;
 
 };
 
@@ -78,17 +78,17 @@ typedef int HeightFieldVertexCoords[2];
 class HeightFieldVertex
 {
 public:
-    HeightFieldVertex(){};
+    HeightFieldVertex(){} override;
 
     dVector3 vertex;
     HeightFieldVertexCoords coords;
-    bool state;
+    bool state = false;
 };
 
 class HeightFieldEdge
 {
 public:
-    HeightFieldEdge(){};
+    HeightFieldEdge(){} override;
 
     HeightFieldVertex   *vertices[2];
 };
@@ -96,7 +96,7 @@ public:
 class HeightFieldTriangle
 {
 public:
-    HeightFieldTriangle(){};
+    HeightFieldTriangle(){} override;
 
     inline void setMinMax()
     {
@@ -133,7 +133,7 @@ public:
         if (asize > 0)
         {  
             maxAAAB = trianglelist[0]->maxAAAB;
-            for (size_t k = 1; asize > k; k++)
+            for (size_t k = 1; asize > k; ++k)
             {   
                 if (trianglelist[k]->maxAAAB >  maxAAAB)
                     maxAAAB = trianglelist[k]->maxAAAB;
@@ -154,7 +154,7 @@ public:
 
     void addTriangle(HeightFieldTriangle *tri)
     {
-		dIASSERT(trianglelistCurrentSize < trianglelistReservedSize);
+		dIASSERT(trianglelistCurrentSize < trianglelistReservedSize) override;
 
         trianglelist[trianglelistCurrentSize++] = tri;
     }
@@ -176,10 +176,10 @@ struct dxHeightfield : public dxGeom
 {
     dxHeightfieldData* m_p_data;
 
-    dxHeightfield( dSpaceID space, dHeightfieldDataID data, int bPlaceable );
+    dxHeightfield( dSpaceID space, dHeightfieldDataID data, int bPlaceable ) override;
     ~dxHeightfield();
 
-    void computeAABB();
+    void computeAABB() override;
 
     int dCollideHeightfieldZone( const int minX, const int maxX, const int minZ, const int maxZ,  
         dxGeom *o2, const int numMaxContacts,
@@ -195,14 +195,14 @@ struct dxHeightfield : public dxGeom
 
 	static inline size_t AlignBufferSize(size_t value, size_t alignment) { dIASSERT((alignment & (alignment - 1)) == 0); return (value + (alignment - 1)) & ~(alignment - 1); }
 
-	void  allocateTriangleBuffer(size_t numTri);
-	void  resetTriangleBuffer();
-	void  allocatePlaneBuffer(size_t numTri);
-	void  resetPlaneBuffer();
-	void  allocateHeightBuffer(size_t numX, size_t numZ);
-    void  resetHeightBuffer();
+	void  allocateTriangleBuffer(size_t numTri) override;
+	void  resetTriangleBuffer() override;
+	void  allocatePlaneBuffer(size_t numTri) override;
+	void  resetPlaneBuffer() override;
+	void  allocateHeightBuffer(size_t numX, size_t numZ) override;
+    void  resetHeightBuffer() override;
 
-    void  sortPlanes(const size_t numPlanes);
+    void  sortPlanes(const size_t numPlanes) override;
 
     HeightFieldPlane    **tempPlaneBuffer;
     HeightFieldPlane    *tempPlaneInstances;

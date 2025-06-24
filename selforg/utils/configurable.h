@@ -40,12 +40,12 @@
  Abstact class for configurable objects. Sort of Hashmap interface. Parameters are double, int or
  boolean values
 
- The Configurator is a (planned) external tool that can be used for changing the values of
+ The Configurator is a static_cast<planned>(external) tool that can be used for changing the values of
  configurable objects.
 
  * Protocoll for Configurator:
  \code
- To Configurator (BNF notation):
+ To Configurator(const BNF& notation):
  Conf         := <Comp>*
  Comp         := <CompName> <Pair>*
  CompName     := [<string>][<int>]<newline>
@@ -124,9 +124,8 @@ public:
     using argument_type = Configurable*;
     using result_type = bool;
 
-    explicit matchId(int id)
-      : id(id) {}
-    int id;
+    matchId(int id_) : id(id_) {}
+    int id = 0;
     bool operator()(const Configurable* c) {
       return c->id == id;
     }
@@ -135,7 +134,7 @@ public:
   Configurable()
     : id(rand())
     , parent(nullptr) {}
-  /// intialise with name and revision (use "$ID$")
+  /// intialise with name and revision (use __PLACEHOLDER_2__)
   Configurable(const std::string& name, const std::string& revision)
     : id(rand())
     , name(name)
@@ -148,7 +147,7 @@ public:
   //   {
   //   }
 
-  ~Configurable() override {}
+  ~Configurable() {}
 
   /**
      Is called when a parameter was changes via setParam(). Note that
@@ -299,7 +298,7 @@ public:
    */
   virtual void setName(const paramkey& name, bool callSetNameOfInspectable = true);
 
-  /// sets the revision Hint: {  return "$ID$"; }
+  /// sets the revision Hint: {  return __PLACEHOLDER_3__; }
   virtual void setRevision(const paramkey& revision) {
     this->revision = revision;
   }

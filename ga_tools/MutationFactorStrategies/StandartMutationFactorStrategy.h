@@ -45,7 +45,7 @@ public:
 	/**
 	 * default constructor
 	 */
-	StandartMutationFactorStrategy();
+	StandartMutationFactorStrategy() override;
 
 	/**
 	 * default destructor
@@ -55,9 +55,9 @@ public:
 	/**
 	 * gives the varianz of the gens in the set as mutation factor back.
 	 * @param gene (vector<Gen*>) the set of gens
-	 * @return (IValue*) the mutation factor
+	 * @return static_cast<IValue*>(the) mutation factor
 	 */
-	virtual IValue* calcMutationFactor(const std::vector<Gen*>& gene);
+	virtual IValue* calcMutationFactor(const std::vector<Gen*>& gene) override;
 };
 
 #endif /* STANDARTMUTATIONFACTORSTRATEGY_H_ */

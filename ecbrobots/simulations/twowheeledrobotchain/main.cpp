@@ -149,7 +149,7 @@ class CheatedECB : public ECB {
 
 class MyController : public AbstractControllerAdapter {
   public:
-    MyController(AbstractController* controller) : AbstractControllerAdapter(controller) {
+    explicit MyController(AbstractController* controller) : AbstractControllerAdapter(controller) {
 
     }
 
@@ -202,7 +202,7 @@ class MyECBManager : public ECBManager {
       StatisticTools* stattools = new StatisticTools();
 
       int numberNimm2 = 3;
-      for (int nimm2Index=0; nimm2Index< numberNimm2; nimm2Index++)
+      for (int nimm2Index=0; nimm2Index< numberNimm2; ++nimm2Index)
       {
        // if (nimm2Index!=2)
 //          continue;
@@ -232,7 +232,7 @@ class MyECBManager : public ECBManager {
         ECBConfig ecbConf = ECB::getDefaultConf();
         ecbConf.maxNumberSensors = 2; // no infrared sensors
         string* DNSName;
-        switch (nimm2Index) {
+        explicit switch (nimm2Index) {
           case 0:
 //            DNSName = new string("NIMM2_PRIMUS");
             DNSName = new string("NIMM2_PRIMUS");

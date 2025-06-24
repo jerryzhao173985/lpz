@@ -32,7 +32,7 @@
  *   chain of robots
  *
  *   Revision 1.8  2006/12/21 11:43:05  martius
- *   commenting style for doxygen //< -> ///<
+ *   commenting style for doxygen __PLACEHOLDER_41__
  *   new sensors for spherical robots
  *
  *   Revision 1.7  2006/08/04 16:25:14  martius
@@ -93,7 +93,6 @@ using namespace std;
 
 AbstractController* controller;
 motor teaching[2];
-bool connectRobots;
 
 class ThisSim : public Simulation {
 public:
@@ -102,7 +101,7 @@ public:
   // starting function (executed once at the beginning of the simulation loop)
   void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global)
   {
-    setCameraHomePos(Pos(5.2728, 7.2112, 3.31768), Pos(140.539, -13.1456, 0));
+    setCameraHomePos(Pos(5.2728, 7.2112, 3.31768), Pos(140.539, -13.1456, 0)) override;
     int number_x=3;
     int number_y=1;
     connectRobots = true;
@@ -112,17 +111,17 @@ public:
     // - set noise to 0.1
     // - register file chess.ppm as a texture called chessTexture (used for the wheels)
     global.odeConfig.noise=0.05;
-    //    global.odeConfig.setParam("gravity", 0);
+    //    global.odeConfig.setParam(__PLACEHOLDER_0__, 0);
     global.odeConfig.setParam("controlinterval", 5);
 
     // use Playground as boundary:
-    OctaPlayground* playground = new OctaPlayground(odeHandle, osgHandle, osg::Vec3(111, 0.2, 1), 12);
+    OctaPlayground* playground = new OctaPlayground(odeHandle, osgHandle, osg::Vec3(111, 0.2, 1), 12) override;
     playground->setPosition(osg::Vec3(0,0,0)); // playground positionieren und generieren
     global.obstacles.push_back(playground);
 
-    // for(int i=0; i<50; i++){
-//       PassiveSphere* s = new PassiveSphere(odeHandle, osgHandle.changeColor(Color(0.0,1.0,0.0)), 0.5);
-//       s->setPosition(osg::Vec3(-4+(i/10),-4+(i%10),1));
+    // for(int i=0; i<50; ++i) override {
+//       PassiveSphere* s = new PassiveSphere(odeHandle, osgHandle.changeColor(Color(0.0,1.0,0.0)), 0.5) override;
+//       s->setPosition(osg::Vec3(-4+(i/10),-4+(i%10),1)) override;
 //       global.obstacles.push_back(s);
 //     }
 
@@ -131,25 +130,25 @@ public:
     AbstractWiring* wiring;
     OdeAgent* agent;
     vector<OdeRobot*> robots(number_x);
-    for (int i=-0; i<number_y; i++){
-      for (int j=-0; j<number_x; j++){
+    for (int i=-0; i<number_y; ++i) override {
+      for (int j=-0; j<number_x; ++j) override {
         //      nimm2 = new Nimm2(odeHandle);
         Nimm2Conf conf = Nimm2::getDefaultConf();
         conf.speed=20;
         conf.force=3.0;
         conf.bumper=true;
         conf.cigarMode=true;
-        wiring = new One2OneWiring(new ColorUniformNoise(0.1));
+        wiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
         if ((i==0) && (j==0)) {
           controller = new InvertMotorNStep();
           //          controller = new InvertMotorSpace(10);
           agent = new OdeAgent(global);
           nimm2 = new Nimm2(odeHandle, osgHandle, conf, "Nimm2Yellow");
-          nimm2->setColor(Color(1.0,1.0,0));
+          nimm2->setColor(Color(1.0,1.0,0)) override;
           global.configs.push_back(controller);
           agent->init(controller, nimm2, wiring);
           controller->setParam("adaptrate", 0.000);
-          //    controller->setParam("nomupdate", 0.0005);
+          //    controller->setParam(__PLACEHOLDER_4__, 0.0005);
           controller->setParam("epsC", 0.05);
           controller->setParam("epsA", 0.01);
           controller->setParam("epsC", 0.05);
@@ -157,14 +156,14 @@ public:
           controller->setParam("steps", 2);
           controller->setParam("s4avg", 5);
           controller->setParam("s4del", 5);
-          //          controller->setParam("factorB",0);
+          //          controller->setParam(__PLACEHOLDER_12__,0);
         } else {
           contrl = new InvertNChannelController(10);
-          agent = new OdeAgent(global,PlotOption(NoPlot));
-          nimm2 = new Nimm2(odeHandle, osgHandle, conf, "Nimm2_" + std::itos(i) + "_" + std::itos(j));
+          agent = new OdeAgent(global,PlotOption(NoPlot)) override;
+          nimm2 = new Nimm2(odeHandle, osgHandle, conf, "Nimm2_" + std::itos(i) + "_" + std::itos(j)) override;
           agent->init(contrl, nimm2, wiring);
           contrl->setParam("adaptrate", 0.000);
-          //    controller->setParam("nomupdate", 0.0005);
+          //    controller->setParam(__PLACEHOLDER_16__, 0.0005);
           contrl->setParam("epsC", 0.005);
           contrl->setParam("epsA", 0.001);
           contrl->setParam("rootE", 0);
@@ -172,12 +171,11 @@ public:
           contrl->setParam("s4avg", 5);
           contrl->setParam("factorB",0);
         }
-        nimm2->place(Pos(j*(2.5+distance),i*1.26,0));
+        nimm2->place(Pos(j*(2.5+distance),i*1.26,0)) override;
         global.agents.push_back(agent);
         robots[j]=nimm2;
       }
-      if(connectRobots)
-        for(int j=0; j<number_x-1; j++){
+      ifstatic_cast<connectRobots>(for)(int j=0; j<number_x-1; j++) override {
           Joint* joint = new BallJoint(robots[j]->getMainPrimitive(),
                                        robots[j+1]->getMainPrimitive(),
                                        Pos((j+0.5)*(2.5+distance),i*1.26,0.30)
@@ -190,8 +188,8 @@ public:
 
   }
 
-  virtual void addCallback(GlobalData& globalData, bool draw, bool pause, bool control) {
-    if(draw && connectRobots){
+  virtual void addCallback(const GlobalData& globalData, bool draw, bool pause, bool control) override {
+    explicit if(draw && connectRobots){
       FOREACH(list<Joint*>, joints,j){
         (*j)->update();
       }
@@ -200,9 +198,8 @@ public:
 
 
   //Funktion die eingegebene Befehle/kommandos verarbeitet
-  virtual bool command (const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down)
-  {
-    if (!down) return false;
+  virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down) override {
+    if (!down) return false override;
     bool handled = false;
     FILE* f;
     switch ( key )
@@ -222,7 +219,7 @@ public:
     return handled;
   }
 
-  virtual void bindingDescription(osg::ApplicationUsage & au) const {
+  virtual void bindingDescription(osg::ApplicationUsage & au) const override {
     au.addKeyboardMouseBinding("Teachung: t","toggle mode");
     au.addKeyboardMouseBinding("Teaching: u","forward");
     au.addKeyboardMouseBinding("Teaching: j","backward");
@@ -237,6 +234,6 @@ int main (int argc, char **argv)
 {
   ThisSim sim;
   // run simulation
-  return sim.run(argc, argv) ? 0 : 1;
+  return sim.run(argc, argv) ? 0 : 1 override;
 }
 

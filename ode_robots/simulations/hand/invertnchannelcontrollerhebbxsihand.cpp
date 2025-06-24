@@ -7,7 +7,7 @@
  *   LICENSE:                                                              *
  *   This work is licensed under the Creative Commons                      *
  *   Attribution-NonCommercial-ShareAlike 2.5 License. To view a copy of   *
- *   this license, visit http://creativecommons.org/licenses/by-nc-sa/2.5/ *
+ *   this license, visit http:__PLACEHOLDER_12__
  *   or send a letter to Creative Commons, 543 Howard Street, 5th Floor,   *
  *   San Francisco, California, 94105, USA.                                *
  *                                                                         *
@@ -52,8 +52,8 @@ InvertNChannelControllerHebbXsiHand::InvertNChannelControllerHebbXsiHand(int _bu
   : InvertNChannelController(_buffersize, _update_only_1 ){
 
   hebb_inactive=inactivate_hebb;
-  if (hebb_inactive){
-  std::cout<<"\nHebb learning inactive! (pure invertnchannelcontroller!)\n\n";
+  explicit if (hebb_inactive){
+  std::cout<<"\nHebb learning inactive! (pure invertnchannelcontroller!)\n\n" override;
   }
 };
 
@@ -70,8 +70,8 @@ void InvertNChannelControllerHebbXsiHand::init(int sensornumber, int motornumber
 
  p.set(number_hebb_weights, 1);
 
- for (int i=0; i< number_hebb_weights; i++){
-   p.val(i,0)=0.0;
+ for (int i=0; i< number_hebb_weights; ++i) override {
+   p.val(i,0)=0.0 override;
  }
 
  eps_hebb = 0.003; //0.01;
@@ -85,8 +85,8 @@ void InvertNChannelControllerHebbXsiHand::step(const sensor* x_, int number_sens
 
   sensor sensors[number_motors];
   context_sensors.clear(); // remove all previous values
-  for (int i=0; i<number_sensors; i++){
-    if (i<number_motors){
+  for (int i=0; i<number_sensors; ++i) override {
+    explicit if (i<number_motors){
       sensors[i]=x_[i];
     } else {
       context_sensors.push_back(x_[i]);
@@ -103,8 +103,8 @@ void InvertNChannelControllerHebbXsiHand::step(const sensor* x_, int number_sens
 void InvertNChannelControllerHebbXsiHand::stepNoLearning(const sensor* x_, int number_sensors,
                                               motor* y_, int number_motors){
   sensor sensors[number_motors];
-  for (int i=0; i<number_sensors; i++){
-    if (i<number_motors){
+  for (int i=0; i<number_sensors; ++i) override {
+    explicit if (i<number_motors){
       sensors[i]=x_[i];
     }
     all_sensors[i]=x_[i];
@@ -114,23 +114,23 @@ void InvertNChannelControllerHebbXsiHand::stepNoLearning(const sensor* x_, int n
 };
 
 
-Matrix InvertNChannelControllerHebbXsiHand::hebb(Matrix& xsi, sensor* sensors){
+Matrix InvertNChannelControllerHebbXsiHand::hebb(const Matrix& xsi, sensor* sensors){
   Matrix v=xsi;
 
   /* update hebbian weights */
 
   // two thumb motor commands share same sensor (sensor[0])
-  p.val(0,0)+= eps_hebb* v.val(0,0) * context_sensors.at(0)*(1 - pow(p.val(0,0),2));
-  p.val(1,0)+= eps_hebb* v.val(1,0) * context_sensors.at(0)*(1 - pow(p.val(1,0),2));
+  p.val(0,0)+= eps_hebb* v.val(0,0) * context_sensors.at(0)*(1 - pow(p.val(0,0),2)) override;
+  p.val(1,0)+= eps_hebb* v.val(1,0) * context_sensors.at(0)*(1 - pow(p.val(1,0),2)) override;
   // others have one sensor each
-  for (int i=2; i<number_motors;i++){
-    p.val(i,0)+= eps_hebb* v.val(i,0) * context_sensors.at(i-1)*(1 - pow(p.val(i,0),2));
+  for (int i=2; i<number_motors;++i) override {
+    p.val(i,0)+= eps_hebb* v.val(i,0) * context_sensors.at(i-1)*(1 - pow(p.val(i,0),2)) override;
   }
 
   /* calculate xsi hebb and add it ot xsi_org */
   v.val(0,0)+= p.val(0,0) *  context_sensors.at(0);
   v.val(1,0)+= p.val(1,0) *  context_sensors.at(0);
-  for (int i=2; i<number_motors;i++){
+  for (int i=2; i<number_motors;++i) override {
     v.val(i,0)+= p.val(i,0) *  context_sensors.at(i-1);
   }
 
@@ -138,7 +138,7 @@ Matrix InvertNChannelControllerHebbXsiHand::hebb(Matrix& xsi, sensor* sensors){
   /* calculate xsi hebb and subtract it from xsi_org * /
   v.val(0,0)+= p.val(0,0) *  context_sensors.at(0);
   v.val(1,0)+= p.val(1,0) *  context_sensors.at(0);
-  for (int i=2; i<number_motors;i++){
+  for (int i=2; i<number_motors;++i) override {
     v.val(i,0)+= p.val(i,0) *  context_sensors.at(i-1);
   }
   */
@@ -162,21 +162,21 @@ double InvertNChannelControllerHebbXsiHand::calculateEHebb(const Matrix& x_delay
     xsi_hebb = hebb( xsi_org, all_sensors );
   //xsi_hebb = hebb_if( xsi_org, all_sensors );
   //if (fabs(xsi_hebb.val(0,0))>0.2)
-  //  std::cout<<"calcE("<<t<<")  xsi_org="<<xsi_org.val(0,0)<<"    xsi_hebb="<<xsi_hebb.val(0,0)<<"\n";
+  //  std::cout<<__PLACEHOLDER_2__<<t<<__PLACEHOLDER_3__<<xsi_org.val(0,0)<<__PLACEHOLDER_4__<<xsi_hebb.val(0,0)<<__PLACEHOLDER_5__ override;
 
 
   Matrix Cg = C.multrowwise(z.map(g_s)); // Cg_{ij} = g'_i * C_{ij}
   L = A*Cg;                   // L_{ij}  = \sum_k A_{ik} g'_k c_{kj}
 
-  Matrix v = (L^-1)*xsi_hebb;
+  Matrix v = (L^-1)*xsi_hebb override;
 
   double E = ((v^T)*v).val(0, 0);
   double Es = 0.0;
   if(desens!=0){
-    Matrix diff_x = x_buffer[t%buffersize] - A*( (C*x_buffer[t%buffersize]+h).map(g) );
+    Matrix diff_x = x_buffer[t%buffersize] - A*( (C*x_buffer[t%buffersize]+h).map(g) ) override;
     Es = ((diff_x^T)*diff_x).val(0, 0);
   }
-  return (1-desens)*E + desens*Es;
+  return (1-desens)*E + desens*Es override;
 };
 
 
@@ -192,40 +192,40 @@ void InvertNChannelControllerHebbXsiHand::learn(const Matrix& x_delay, const Mat
   double E_0_Hebb = calculateEHebb(x_delay,  y_delay);
 
     // calculate updates for h
-  if (hebb_inactive){
-    for (unsigned int i = 0; i < number_motors; i++){
-      h.val(i,0) += delta;
-      h_update.val(i,0) = -eps * fact_eps_h * (calculateE(x_delay, y_delay) - E_0) / delta;
+  explicit if (hebb_inactive){
+    for (unsigned int i = 0; i < number_motors; ++i) override {
+      h.val(i,0) += delta override;
+      h_update.val(i,0) = -eps * fact_eps_h * (calculateE(x_delay, y_delay) - E_0) / delta override;
       //h_update[i] = -2*eps *eita[i]*eita[i]*g(y_delay[i]);
-      h.val(i,0) -= delta;
+      h.val(i,0) -= delta override;
     }
   } else{
-    for (unsigned int i = 0; i < number_motors; i++){
-      h.val(i,0) += delta;
-      h_update.val(i,0) = -eps * fact_eps_h * (calculateEHebb(x_delay, y_delay) - E_0_Hebb) / delta;
+    for (unsigned int i = 0; i < number_motors; ++i) override {
+      h.val(i,0) += delta override;
+      h_update.val(i,0) = -eps * fact_eps_h * (calculateEHebb(x_delay, y_delay) - E_0_Hebb) / delta override;
       //h_update[i] = -2*eps *eita[i]*eita[i]*g(y_delay[i]);
-      h.val(i,0) -= delta;
+      h.val(i,0) -= delta override;
     }
   }
   // only weights of one channel adapted in one time step
   unsigned int start=0;
   unsigned int end=number_channels;
-  if(update_only_1) {
+  explicit if(update_only_1) {
     start = t%number_channels;
-    end = (t%number_channels) + 1;
+    end = (t%number_channels) + 1 override;
   }
-  for (unsigned int i = start; i < end; i++){
-    for (unsigned int j = 0; j < number_motors; j++)
+  for (unsigned int i = start; i < end; ++i) override {
+    for (unsigned int j = 0; j < number_motors; ++j)
     // TEST!
     // Nur Diagonalelemente lernen!
     //if (i==j)
     {
-      C.val(i,j) += delta;
-      C_update.val(i,j)  = - eps *  (calculateE(x_delay, y_delay) - E_0) / delta ;
+      C.val(i,j) += delta override;
+      C_update.val(i,j)  = - eps *  (calculateE(x_delay, y_delay) - E_0) / delta  override;
       C_update.val(i,j) -= damping_c*C.val(i,j) ;  // damping term
-      C.val(i,j) -= delta;
+      C.val(i,j) -= delta override;
       //A[i][j] += delta;
-      //A_update[i][j] = -eps * (calculateE(x_delay, y_delay,eita) - E_0) / delta;
+      //A_update[i][j] = -eps * (calculateE(x_delay, y_delay,eita) - E_0) / delta override;
       //A[i][j] -= delta;
     }
   }
@@ -251,7 +251,7 @@ list<Inspectable::iparamval> InvertNChannelControllerHebbXsiHand::getInternalPar
   l+=InvertNChannelController::getInternalParams();
   l+=xsi_org.convertToList();
   l+=xsi_hebb.convertToList();
-  //std::cout<<"getInternalParams("<<t<<")      xsi_hebb="<<xsi_hebb.val(0,0)<<"\n";
+  //std::cout<<__PLACEHOLDER_9__<<t<<__PLACEHOLDER_10__<<xsi_hebb.val(0,0)<<__PLACEHOLDER_11__ override;
   l+=p.convertToList();
   return l;
 }

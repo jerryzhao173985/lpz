@@ -67,13 +67,13 @@ public:
   public:
 
     WindowStatistic(AbstractMeasure* measure, osgText::Text* text) : measure(measure),
-      text(text) {}
+      explicit text(text) {}
 
     virtual ~WindowStatistic() {}
 
-    virtual AbstractMeasure* getMeasure() { return measure; }
+    virtual AbstractMeasure* getMeasure() const  override { return measure; }
 
-    virtual osgText::Text* getText() { return text; }
+    virtual osgText::Text* getTex override t() const { return text; }
 
   private:
     AbstractMeasure* measure;
@@ -87,7 +87,7 @@ public:
    */
   HUDStatisticsManager(osg::Geode* geode, osgText::Font* font, int ypos);
 
-  virtual ~HUDStatisticsManager() override;
+  virtual ~HUDStatisticsManager();
 
           /**
          * adds a variable to observe (on the window) and measure the value
@@ -167,12 +167,12 @@ public:
          * values that have to be ignored at simulation start.
          * @param step number of steps (normally simsteps) to wait for beginning the measures
          */
-  virtual void beginMeasureAt(long step) { statTool->beginMeasureAt(step);}
+  virtual void beginMeasureAt(long step) override { statTool->beginMeasureAt(step);}
 
   /**
    * Tells you wether the measures have already been started.
    */
-  virtual bool measureStarted() { return statTool->measureStarted(); }
+  virtual bool measureStarted() override { return statTool->measureStarted(); }
 
 
         /**
@@ -181,10 +181,10 @@ public:
          *        this method is invoked when a callback is done from the class where this
          * class is for callback registered, it is overwritten
          */
-  virtual void doOnCallBack(BackCaller* source, BackCaller::CallbackableType type = BackCaller::DEFAULT_CALLBACKABLE_TYPE) override;
+  virtual void doOnCallBack(BackCaller* source, BackCaller::CallbackableType type = BackCaller::DEFAULT_CALLBACKABLE_TYPE);
 
 
-  virtual StatisticTools* getStatisticTools() { return statTool; }
+  virtual StatisticTools* getSta override tisticTools() const { return statTool; }
 
   /** searches for the measure with the given name and returns it windowstatistics
       (measure and graphics together)
@@ -193,8 +193,8 @@ public:
   virtual WindowStatistic* getMeasureWS(const std::string& measureName);
 
 
-  virtual void setColor(const Color& color){ textColor = color;}
-  virtual void setFontsize(int size){fontsize = size, yOffset = 1.2*size;}
+  virtual void setColor(const Color& color) override { textColor = color;}
+  virtual void setFontsize(int size) override {fontsize = size, yOffset = 1.2*size;}
 
 protected:
 

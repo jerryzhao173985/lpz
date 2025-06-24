@@ -38,39 +38,39 @@ public:
      @param port Port number to listen for controller
      @param robotname name of robot to send to controller
    */
-  ROSController(const std::string& name);
+  explicit ROSController(const std::string& name);
 
-  virtual ~ROSController() override;
+  virtual ~ROSController();
 
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
 
-  virtual int getSensorNumber() const {return number_sensors;}
-  virtual int getMotorNumber() const {return number_motors;}
+  virtual int getSensorNumber() const override {return number_sensors;}
+  virtual int getMotorNumber() const override {return number_motors;}
 
   virtual void step(const sensor* sensors, int sensornumber,
-                    motor* motors, int motornumber) override;
+                    motor* motors, int motornumber);
   virtual void stepNoLearning(const sensor* , int number_sensors,
-                              motor* , int number_motors) override;
+                              motor* , int number_motors);
 
   void motorsCallback(const std_msgs::Float64MultiArray::ConstPtr& motormsg);
 
   /********* STORABLE INTERFACE ******/
   /// @see Storable
-  virtual bool store(FILE* f) const {
+  virtual bool store(FILE* f) const override {
     Configurable::print(f,"");
     return true;
   }
 
   /// @see Storable
-  virtual bool restore(FILE* f) {
+  virtual bool restore(FILE* f) override {
     Configurable::parse(f);
     return true;
   }
 
 protected:
-  int number_sensors;
-  int number_motors;
-  bool gotmotor;
+  int number_sensors = 0;
+  int number_motors = 0;
+  bool gotmotor = false;
   ros::Publisher sensor_pub;
   ros::Subscriber motor_sub;
   motor* motorValues;

@@ -69,9 +69,9 @@ void TextureVisualisation::initializeGL(){
 
   //initialize texture
   // Georg: das geht mit memset
-  for(int i = 0; i < texSize; i++)
-    for(int j = 0; j < texSize; j++)
-      for(int k = 0; k < 3; k++) tex[i][j][k] = (GLubyte) 255;
+  for(int i = 0; i < texSize; ++i)
+    for(int j = 0; j < texSize; ++j)
+      for(int k = 0; k < 3; ++k) tex[i][j][k] = (GLubyte) 255;
 
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, texSize, texSize, 0, GL_RGB, GL_UNSIGNED_BYTE, tex);
 }
@@ -92,8 +92,8 @@ void TextureVisualisation::paintGL(){
   glBindTexture(GL_TEXTURE_2D, texName);
 
   GLubyte subTex[maxX][maxY][3];
-  for (int i = 0; i < maxX; i++)
-    for (int j = 0; j < maxY; j++) {
+  for (int i = 0; i < maxX; ++i)
+    for (int j = 0; j < maxY; ++j) {
       QColor color;
       color = colorPalette->pickColor(clip(colorPalette->getScaledValue(channel->getValue(i, j))));
       if(debug) cout << "at pickColor i: " << i << ", " << j << "\t val: " << channel->getValue(i, j) << " \t red:" << color.red() <<endl;

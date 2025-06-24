@@ -51,7 +51,7 @@ namespace lpzrobots {
       CaterPillar ( const OdeHandle& odeHandle, const OsgHandle& osgHandle,
                       const CaterPillarConf& conf, const std::string& name);
 
-      virtual ~CaterPillar() override;
+      virtual ~CaterPillar();
 
     /**
      *Reads the actual motor commands from an array,
@@ -60,7 +60,7 @@ namespace lpzrobots {
      *@param motors pointer to the array, motor values are scaled to [-1,1]
      *@param motornumber length of the motor array
      **/
-    virtual void setMotorsIntern( const double* motors, int motornumber ) override;
+    virtual void setMotorsIntern( const double* motors, int motornumber );
 
     /**
      *Writes the sensor values to an array in the memory.
@@ -68,22 +68,22 @@ namespace lpzrobots {
      *@param sensornumber length of the sensor array
      *@return number of actually written sensors
      **/
-    virtual int getSensorsIntern( double* sensors, int sensornumber ) override;
+    virtual int getSensorsIntern( double* sensors, int sensornumber );
 
     /** returns number of sensors
      */
-    virtual int getSensorNumberIntern() { assert(created); return 2*universalServos.size()+sliderServos.size(); }
+    virtual int getSensorNumberIntern() override { assert(created); return 2*universalServos.size()+sliderServos.size(); }
 
     /** returns number of motors
      */
-    virtual int getMotorNumberIntern(){ assert(created); return 2*universalServos.size()+sliderServos.size(); }
+    virtual int getMotorNumberIntern() override { assert(created); return 2*universalServos.size()+sliderServos.size(); }
 
     /******** CONFIGURABLE ***********/
-    virtual void notifyOnChange(const paramkey& key) override;
+    virtual void notifyOnChange(const paramkey& key);
 
   private:
-    virtual void create(const osg::Matrix& pose) override;
-    virtual void destroy() override;
+    virtual void create(const osg::Matrix& pose);
+    virtual void destroy();
   };
 
 }

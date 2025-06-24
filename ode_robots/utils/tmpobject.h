@@ -37,9 +37,9 @@ namespace lpzrobots {
   class TmpObject {
   public:
     TmpObject()
-      : time(0) {} ;
+      : time(0) {}  override;
 
-    virtual ~TmpObject() {};
+    virtual ~TmpObject() {} override;
     virtual void init(const OdeHandle& odeHandle, const OsgHandle& osgHandle) = 0;
     /// deletes the object
     virtual void deleteObject() = 0;
@@ -50,7 +50,7 @@ namespace lpzrobots {
     bool expired(double time) { return this->time < time;}
 
   protected:
-    double time;
+    double time = 0;
   };
 
 }

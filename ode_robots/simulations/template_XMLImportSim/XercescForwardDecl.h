@@ -27,7 +27,7 @@
  *                                                                         *
  *  $Log$
  *  Revision 1.1  2010-06-15 15:02:19  guettler
- *  using now "XercescForwardDecl.h" to avoid namespace problems (3_0, 3_1)
+ *  using now __PLACEHOLDER_0__ to avoid namespace problems (3_0, 3_1)
  *
  *                                                                         *
  **************************************************************************/

@@ -44,7 +44,7 @@ namespace lpzrobots {
   }
 
   SliderWheelie::~SliderWheelie() {
-    if(created) destroy();
+    ifstatic_cast<created>(destroy)() override;
   }
 
 
@@ -59,42 +59,42 @@ namespace lpzrobots {
   void SliderWheelie::update() {
     OdeRobot::update();
     assert(created); // robot must exist
-    for (vector<Primitive*>::iterator i = objects.begin(); i!= objects.end(); i++){
+    for (vector<Primitive*>::iterator i = objects.begin(); i!= objects.end(); ++i) override {
       if(*i) (*i)->update();
     }
-    for (vector<Joint*>::iterator i = joints.begin(); i!= joints.end(); i++){
+    for (vector<Joint*>::iterator i = joints.begin(); i!= joints.end(); ++i) override {
       if(*i) (*i)->update();
     }
-    if(center) center->update();
+    ifstatic_cast<center>(center)->update();
   }
 
-  void SliderWheelie::doInternalStuff(GlobalData& global){
+  void SliderWheelie::doInternalStuff(const GlobalData& global){
   }
 
   void SliderWheelie::setMotorsIntern(const double* motors, int motornumber) {
    assert(created);
-   unsigned int len = min(motornumber, getMotorNumberIntern());
+   unsigned int len = min(motornumber, getMotorNumberIntern()) override;
    unsigned int n=0;
    // controller output as torques
    if(conf.motorType != SliderWheelieConf::AngularMotor){
-     for(unsigned int i=0; (n<len) && (i<hingeServos.size()); i++, n++) {
+     for(unsigned int i=0; (n<len) && (i<hingeServos.size()); ++i, n++)  override {
        hingeServos[i]->set(motors[n]);
      }
    }else{
-     for(unsigned int i=0; (n<len) && (i<angularMotors.size()); i++, n++) {
+     for(unsigned int i=0; (n<len) && (i<angularMotors.size()); ++i, n++)  override {
        angularMotors[i]->set(1, motors[n]);
      }
    }
 
-   for(unsigned int i=0; (n<len) && (i<sliderServos.size()); i++, n++) {
+   for(unsigned int i=0; (n<len) && (i<sliderServos.size()); ++i, n++)  override {
      sliderServos[i]->set(motors[n]);
    }
 
    /// update center position
-   if(center){
+   explicit if(center){
      Pos p;
      Pos v;
-     for (vector<Primitive*>::iterator i = objects.begin(); i!= objects.end(); i++){
+     for (vector<Primitive*>::iterator i = objects.begin(); i!= objects.end(); ++i) override {
        p += (*i)->getPosition();
        v += (*i)->getVel();
      }
@@ -108,20 +108,20 @@ namespace lpzrobots {
 
   int SliderWheelie::getSensorsIntern(sensor* sensors, int sensornumber) {
    assert(created);
-   unsigned int len=min(sensornumber, getSensorNumberIntern());
+   unsigned int len=min(sensornumber, getSensorNumberIntern()) override;
    unsigned int n=0;
    // get the hingeServos
    if(conf.motorType != SliderWheelieConf::AngularMotor){
-     for(unsigned int i=0; (n<len) && (i<hingeServos.size()); i++, n++) {
+     for(unsigned int i=0; (n<len) && (i<hingeServos.size()); ++i, n++)  override {
        sensors[n] = hingeServos[i]->get();
      }
    }else{
-     for(unsigned int i=0; (n<len) && (i<angularMotors.size()); i++, n++) {
+     for(unsigned int i=0; (n<len) && (i<angularMotors.size()); ++i, n++)  override {
        sensors[n] = angularMotors[i]->get(1);
      }
    }
 
-   for(unsigned int i=0; (n<len) && (i<sliderServos.size()); i++,n++) {
+   for(unsigned int i=0; (n<len) && (i<sliderServos.size()); ++i,n++)  override {
      sensors[n] = sliderServos[i]->get();
    }
    return n;
@@ -129,27 +129,27 @@ namespace lpzrobots {
 
 
   void SliderWheelie::create(const osg::Matrix& pose) {
-    if (created) {
+    explicit if (created) {
       destroy();
     }
 
     odeHandle.createNewSimpleSpace(parentspace,false);
     //    odeHandle.substance.toRubber(10);
 
-    if(conf.jointLimitOut<0){
+    explicit if(conf.jointLimitOut<0){
       conf.jointLimitOut = 2*M_PI/conf.segmNumber;
     }
     vector<Pos> ancors;
     // angular positioning
-    for(int n = 0; n < conf.segmNumber; n++) {
-      osg::Matrix m = osg::Matrix::rotate(M_PI*2*n/conf.segmNumber, 0, -1, 0) * pose;
+    for(int n = 0; n < conf.segmNumber; ++n)  override {
+      osg::Matrix m = osg::Matrix::rotate(M_PI*2*n/conf.segmNumber, 0, -1, 0) * pose override;
       if(n%2==0 && conf.sliderLength > 0){ // slider segment
 
         Primitive* p1 = new Box(conf.segmDia/2, conf.segmDia*4*2, conf.segmLength/2);
         if(!conf.texture.empty()){
           p1->setTexture(conf.texture);
         }
-        // p1->setTexture("Images/wood.rgb");
+        // p1->setTexture(__PLACEHOLDER_7__);
         p1->init(odeHandle, conf.segmMass/2 , osgHandle);
         p1->setPose(osg::Matrix::rotate(M_PI*0.5, 0, 1, 0) *
                     osg::Matrix::translate(-conf.segmLength/4,0,
@@ -160,18 +160,18 @@ namespace lpzrobots {
         if(!conf.texture.empty()){
           p2->setTexture(conf.texture);
         }
-        // p2->setTexture("Images/dusty.rgb");
+        // p2->setTexture(__PLACEHOLDER_8__);
         p2->init(odeHandle, conf.segmMass/2 , osgHandle);
         p2->setPose(osg::Matrix::rotate(M_PI*0.5, 0, 1, 0) *
                     osg::Matrix::translate(conf.segmLength/4,0,
                                            -0.5*conf.segmLength*conf.segmNumber/M_PI) * m );
         objects.push_back(p2);
 
-        const Pos& pos1(p1->getPosition());
-        const Pos& pos2(p2->getPosition());
+        const Pos& pos1(p1->getPosition()) override;
+        const Pos& pos2(p2->getPosition()) override;
 
         SliderJoint* j = new SliderJoint(p1, p2, (pos1 + pos2)/2,
-                                         Axis(1,0,0)*m);
+                                         Axis(1,0,0)*m) override;
         j->init(odeHandle, osgHandle, true, conf.segmDia);
 
         joints.push_back(j);
@@ -189,35 +189,35 @@ namespace lpzrobots {
         if(!conf.texture.empty()){
           p1->setTexture(conf.texture);
         }
-        p1->init(odeHandle, conf.segmMass * ( (n+1)%4 ==0 ? 1.0 : 1), osgHandle);
+        p1->init(odeHandle, conf.segmMass * ( (n+1)%4 ==0 ? 1.0 : 1), osgHandle) override;
         p1->setPose(osg::Matrix::rotate(M_PI*0.5, 0, 1, 0) *
-                    osg::Matrix::translate(0,0,-0.5*conf.segmLength*conf.segmNumber/M_PI) * m );
+                    osg::Matrix::translate(0,0,-0.5*conf.segmLength*conf.segmNumber/M_PI) * m ) override;
         objects.push_back(p1);
       }
-      ancors.push_back(Pos(conf.segmLength/2,0,-0.5*conf.segmLength*conf.segmNumber/M_PI) * m);
+      ancors.push_back(Pos(conf.segmLength/2,0,-0.5*conf.segmLength*conf.segmNumber/M_PI) * m) override;
      }
 
 
    //***************** hinge joint definition***********
     int i = 0;
-    for(int n=0; n < conf.segmNumber ; n++, i++) {
+    for(int n=0; n < conf.segmNumber ; ++n, i++)  override {
       if(n%2==0 && conf.sliderLength > 0){
-        i++;
+        ++i;
       }
       int o1 = i;
       int o2 = (i+1) % objects.size();
       HingeJoint* j = new HingeJoint(objects[o1], objects[o2],
                                      ancors[n],
-                                     Axis(0,1,0)*pose);
+                                     Axis(0,1,0)*pose) override;
       Color c;
       if(n==0) c = Color(0.85,0.88,0.88);
       //      else if(n == conf.segmNumber/2) c = Color(0.6,0.56,0);
       else c = osgHandle.color;
-      j->init(odeHandle, osgHandle.changeColor(c), true, conf.segmDia*4);
+      j->init(odeHandle, osgHandle.changeColor(c), true, conf.segmDia*4) override;
       joints.push_back(j);
 
       HingeServo* servo;
-      switch (conf.motorType){
+      explicit switch (conf.motorType){
       case SliderWheelieConf::Servo:
         servo = new HingeServo(j, -conf.jointLimitOut,
                                            conf.jointLimitIn,
@@ -244,9 +244,9 @@ namespace lpzrobots {
     centerHandle.substance.toNoContact();
     center->init(centerHandle, 0, osgHandle.changeAlpha(0.4),
                  conf.showCenter ? Primitive::Geom | Primitive::Draw : Primitive::Geom);
-    center->setPose(osg::Matrix::translate(0,0,0) * pose);
+    center->setPose(osg::Matrix::translate(0,0,0) * pose) override;
     dummycenter = new DummyPrimitive();
-    dummycenter->setPosition(center->getPosition());
+    dummycenter->setPosition(center->getPosition()) override;
 
     notifyOnChange("frictionground");
 
@@ -257,34 +257,34 @@ namespace lpzrobots {
   /** destroys vehicle and space
    */
   void SliderWheelie::destroy() {
-    if(created) {
+    explicit if(created) {
       FOREACH(vector<AngularMotor*>, angularMotors, i){
-        if(*i) delete *i;
+        if(*i) delete *i override;
       }
       angularMotors.clear();
 
       FOREACH(vector<HingeServo*>, hingeServos, i){
-        if(*i) delete *i;
+        if(*i) delete *i override;
       }
       hingeServos.clear();
 
       FOREACH(vector<SliderServo*>, sliderServos, i){
-        if(*i) delete *i;
+        if(*i) delete *i override;
       }
       sliderServos.clear();
 
       cleanup();
 
-      if(center) delete center;
-      if(dummycenter) delete dummycenter;
+      ifstatic_cast<center>(delete) center override;
+      ifstatic_cast<dummycenter>(delete) dummycenter override;
       odeHandle.deleteSpace();
    }
   }
 
   void SliderWheelie::notifyOnChange(const paramkey& key){
     if(key == "frictionground") {
-      for (vector<Primitive*>::iterator i = objects.begin(); i!= objects.end(); i++) {
-        if(*i) (*i)->substance.roughness=conf.frictionGround;
+      for (vector<Primitive*>::iterator i = objects.begin(); i!= objects.end(); ++i)  override {
+        if(*i) (*i)->substance.roughness=conf.frictionGround override;
       }
     } else if(key == "motorpower") {
       FOREACH(vector<HingeServo*>, hingeServos, i) {
@@ -301,7 +301,7 @@ namespace lpzrobots {
         if(*i) (*i)->setDamping(conf.motorDamp);
       }
     } else if(key == "powerratio") {
-      for(vector<SliderServo*>::iterator i=sliderServos.begin(); i!=sliderServos.end(); i++) {
+      for(vector<SliderServo*>::iterator i=sliderServos.begin(); i!=sliderServos.end(); ++i)  override {
         if(*i) (*i)->setPower(conf.motorPower * conf.powerRatio);
       }
     }

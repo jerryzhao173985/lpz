@@ -45,7 +45,7 @@ double toEnv(double pos){
   if(pos<-1) pos+=2;
   return pos;
 }
-Position toEnv(Position pos){
+Position toEnv(const Position& pos){
   pos.x = toEnv(pos.x);
   return pos;
 }
@@ -81,7 +81,7 @@ public:
       @param sensornumber length of the sensor array
       @return number of actually written sensors
   */
-  virtual int getSensors(sensor* sensors, int sensornumber){
+  virtual int getSensors(sensor* sensors, int sensornumber) override {
     assert(sensornumber == this->sensornumber);
     memcpy(sensors, x, sizeof(sensor) * sensornumber);
     return sensornumber;
@@ -91,7 +91,7 @@ public:
       @param motors motors scaled to [-1,1]
       @param motornumber length of the motor array
   */
-  virtual void setMotors(const motor* motors, int motornumber){
+  virtual void setMotors(const motor* motors, int motornumber) override {
     assert(motornumber == this->motornumber);
     memcpy(y, motors, sizeof(motor) * motornumber);
 
@@ -99,7 +99,7 @@ public:
 
     // perform robot action here
     /*  simple discrete simulation
-        a = F/m - \mu v_0/m // friction approximation
+        a = F/m - \mu v_0/m __PLACEHOLDER_52__
         v = a*t + v0
         x = v*t + x0
     */
@@ -113,9 +113,9 @@ public:
 
     int len=0;
     //  speed sensor (proprioception)
-    for(int i=0; i<1; i++){
+    for (int i=0; i<1; ++i) {
       x[len] = speed.toArray()[i];
-      len++;
+      ++len;
       if(len>=sensornumber) return;
     }
     whatDoIFeel=0;
@@ -141,8 +141,8 @@ public:
         sensestat=true;
       }
 
-      if(dist < -range) x[len]=0;
-      else if(dist > range) x[len]=0;
+      if(dist < -range) x[len]= 0;
+      else if(dist > range) x[len]= 0;
       else {
         whatDoIFeel = k        * (fabs(rdist) < fabs(sdist) ? 1 : -1);
         if(sensestat) whatDoIFeel = 2;
@@ -152,24 +152,24 @@ public:
         // x[len] = sensorscale * tactilesteepsides(dist,range);
         // x[len] = sensorscale * tactilerect(dist,range);
       }
-      len++;
-      k++;
-      if(len>sensornumber){
+      ++len;
+      ++k;
+      if (len>sensornumber){
         fprintf(stderr,"something is wrong with the sensornumber\n");
       }
     }
   }
 
-  virtual int getSensorNumber(){ return sensornumber; }
+  virtual int getSensorNumber() { return sensornumber; }
   virtual int getMotorNumber() { return motornumber; }
-  virtual Position getPosition() const {return pos;}
-  virtual Position getSpeed() const {return speed;}
-  virtual Position getAngularSpeed() const {return Position(real_dist,x[1],whatDoIFeel);}
-  virtual matrix::Matrix getOrientation() const {
+  virtual Position getPosition() const override {return pos;}
+  virtual Position getSpeed() const override {return speed;}
+  virtual Position getAngularSpeed() const override {return Position(real_dist,x[1],whatDoIFeel);}
+  virtual matrix::Matrix getOrientation() const  override {
     matrix::Matrix m(3,3); m.toId();  return m;
   };
 
-  virtual void addOtherRobot(const MyRobot* otherRobot){
+  virtual void addOtherRobot(const MyRobot* otherRobot) {
     if(otherRobot!=this)
       otherRobots.push_back(otherRobot);
   }
@@ -234,10 +234,10 @@ void printRobots(const list<MyRobot*>& robots){
     double x = (*i)->getPosition().x;
     int start = coord(x-(*i)->getParam("range"));
     int end = coord(x+(*i)->getParam("range"));
-    for(int i=start; i<end; i++){
+    for (int i=start; i<end; ++i) {
       color[(i+80)%80] |= 1<<k;
     }
-    k++;
+    ++k;
   }
   k=0;
 
@@ -250,13 +250,13 @@ void printRobots(const list<MyRobot*>& robots){
     line[coord(x)]='A'+ k;
     x = toEnv(x+shadowdist);
     line[coord(x)]='a'+ k;
-    k++;
+    ++k;
   }
 
 
   printf("\033[1G");
-  //printf("\n");
-  for(int i=0; i<80; i++){
+  //printf(__PLACEHOLDER_13__);
+  for (int i=0; i<80; ++i) {
     printf("\033[%im%c",color[i]==0 ? 0 : 100+color[i],line[i]);
   }
   printf("\033[0m");
@@ -274,7 +274,7 @@ void reinforce(Agent* a){
 
 // Helper
 int contains(char **list, int len,  const char *str){
-  for(int i=0; i<len; i++){
+  for (int i=0; i<len; ++i) {
     if(strcmp(list[i],str) == 0) return i+1;
   }
   return 0;
@@ -287,12 +287,12 @@ int main(int argc, char** argv){
   int seed = time(0);
 
   int index = contains(argv,argc,"-g");
-  if(index >0 && argc>index) {
+  if (index >0 && argc>index) {
     plotoptions.push_back(PlotOption(GuiLogger,atoi(argv[index])));
   }
   if(contains(argv,argc,"-f")!=0) plotoptions.push_back(PlotOption(File));
   index = contains(argv,argc,"-r");
-  if(index >0 && argc>index) {
+  if (index >0 && argc>index) {
     seed = atoi(argv[index]);
   }
   if(contains(argv,argc,"-h")!=0) {
@@ -307,7 +307,7 @@ int main(int argc, char** argv){
 
   list<MyRobot*> robots;
 
-  for(int i=0; i<2; i++){
+  for (int i=0; i<2; ++i) {
     InvertMotorNStepConf cc = InvertMotorNStep::getDefaultConf();
     cc.useSD=true;
     //    cc.useSD=false;
@@ -327,10 +327,10 @@ int main(int argc, char** argv){
     // if you like, you can keep track of the robot with the following line.
     //  this assumes that you robot returns its position, speed and orientation.
     if(i==0)
-      //      agent->setTrackOptions(TrackRobot(true,true,false, false,"fb_bump_reinf2_range0_2",10));
+      //      agent->setTrackOptions(TrackRobot(true,true,false, false,__PLACEHOLDER_31__,10));
       agent->setTrackOptions(TrackRobot(true,true,false, false,"updown_static",10));
-    //robot->setParam("range",0.2);
-    //    robot->setParam("sensorscale",1);
+    //robot->setParam(__PLACEHOLDER_33__,0.2);
+    //    robot->setParam(__PLACEHOLDER_34__,1);
     globaldata.configs.push_back(robot);
     globaldata.configs.push_back(controller);
     robots.push_back(robot);
@@ -353,7 +353,7 @@ int main(int argc, char** argv){
 
   cmd_handler_init();
   long int t=0;
-  while(!stop){
+  while (!stop){
     FOREACH(AgentList, globaldata.agents, i){
       (*i)->step(0.1,t/100.0);
       if(usereinforc) reinforce(*i);
@@ -365,7 +365,7 @@ int main(int argc, char** argv){
       cmd_end_input();
     }
     int drawinterval = 100000;
-    if(sleep_){
+    if (sleep_){
       drawinterval = static_cast<int>(1000000.0/(25*sleep_));
       if(sleep_ < 5000 && (t%10)==0)
         usleep(static_cast<int>(10*sleep_));
@@ -374,7 +374,7 @@ int main(int argc, char** argv){
     if(t%drawinterval==0)
       printRobots(robots);
     if(maxsimtime>0 && t/100.0 > maxsimtime) break;
-    t++;
+    ++t;
   };
 
   FOREACH(AgentList, globaldata.agents, i){

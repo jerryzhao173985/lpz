@@ -15,7 +15,7 @@ void showParams(const ConfigList& configs, FILE* file = 0, const char* lineprefi
 /// Asks the user for changing a parameter of the configurable objects.
 // ALL input and output goes to stdin and stdout. 
 // @param onTerminate() callback if user quits the program
-void changeParams(ConfigList& configs, void (*onTerminate)()=0);
+void changeParams(const ConfigList& configs, void (*onTerminate)()=0);
 
 bool control_c_pressed();
 void cmd_handler_init();

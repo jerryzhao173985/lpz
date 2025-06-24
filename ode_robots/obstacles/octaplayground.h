@@ -34,9 +34,9 @@ namespace lpzrobots {
   protected:
     double radius, width, height;
 
-    int number_elements;
-    double angle;
-    double box_length;
+    int number_elements = 0;
+    double angle = 0;
+    double box_length = 0;
 
   public:
 
@@ -57,15 +57,15 @@ namespace lpzrobots {
 
 protected:
 
-  virtual void create(){
+  virtual void create() override {
     createGround();
 
     // radius for positioning is smaller than radius since we use secants.
     //  r is the smallest distance of the secant to the center of the circle.
-    double r = sqrt(pow((1+cos(angle))/2, 2) + pow( sin(angle)/2 ,2)) * radius;
-    for (int i=0; i<number_elements; i++){
+    double r = sqrt(pow((1+cos(angle))/2, 2) + pow( sin(angle)/2 ,2)) * radius override;
+    for (int i=0; i<number_elements; ++i) override {
       Box* box =  new Box(width , box_length , height);
-      box->setTextures(getTextures(i));
+      box->setTextures(getTextures(i)) override;
       box->init(odeHandle, 0, osgHandle, Primitive::Geom | Primitive::Draw);
       osg::Matrix R = osg::Matrix::rotate(- i*angle, 0,0,1) *
         osg::Matrix::translate( cos(M_PI - i*angle) * r,
@@ -78,10 +78,10 @@ protected:
     obstacle_exists=true;
   };
 
-  virtual void calcBoxLength(){
+  virtual void calcBoxLength() override {
     double r = radius+width/2;
-    //    box_length =1.4 * sqrt( 2 * pow(radius,2) * (1 - cos(angle)) );
-    box_length =  sqrt(pow( 1 - cos(angle), 2) + pow(sin(angle),2)) * r;
+    //    box_length =1.4 * sqrt( 2 * pow(radius,2) * (1 - cos(angle)) ) override;
+    box_length =  sqrt(pow( 1 - cos(angle), 2) + pow(sin(angle),2)) * r override;
   }
 
 };

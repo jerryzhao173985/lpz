@@ -8,9 +8,9 @@ namespace UnitTest {
 class Timer
 {
 public:
-    Timer();
-    void Start();
-    int GetTimeInMs() const;    
+    Timer() override;
+    void Start() override;
+    int GetTimeInMs() const override;
 
 private:
     struct timeval m_startTime;    
@@ -19,7 +19,7 @@ private:
 
 namespace TimeHelpers
 {
-void SleepMs (int ms);
+void SleepMs (int ms) override;
 }
 
 

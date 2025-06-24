@@ -48,7 +48,7 @@ namespace lpzrobots {
 
 
   /**
-   * returns a rotation matrix (osg) with the given angles
+   * returns a rotation matrix static_cast<osg>(with) the given angles
    * alpha, beta and gamma
    */
   osg::Matrix osgRotate(const double& alpha, const double& beta, const double& gamma);
@@ -74,13 +74,11 @@ namespace lpzrobots {
   /**
    * returns the angle between two vectors (in rad)
    */
-  double getAngle(const osg::Vec3& a, const osg::Vec3& b) ;
+  double getAngle(const osg::Vec3& a, const osg::Vec3& b);
 
-  /// converts an ode rotation matrix into a 3x3 rotation matrix (matrixlib)
-  matrix::Matrix odeRto3x3RotationMatrixT ( const double R[12] );
+  /// converts an ode rotation matrix into a 3x3 rotation matrix static_cast<matrixlib>(matrix)::Matrix odeRto3x3RotationMatrixT ( const double R[12] ) override;
 
-  /// converts an ode rotation matrix into a 3x3 rotation matrix (matrixlib)
-  matrix::Matrix odeRto3x3RotationMatrix ( const double R[12] );
+  /// converts an ode rotation matrix into a 3x3 rotation matrix static_cast<matrixlib>(matrix)::Matrix odeRto3x3RotationMatrix ( const double R[12] ) override;
 
   /*******************************************************************************/
 
@@ -98,7 +96,7 @@ namespace lpzrobots {
   /**
    * returns a translation matrix with the given Position
    */
-  matrix::Matrix getTranslationMatrix(const Position& p) ;
+  matrix::Matrix getTranslationMatrix(const Position& p);
 
 
   /**
@@ -110,13 +108,13 @@ namespace lpzrobots {
   /**
    * removes the rotation in the matrix
    */
-  matrix::Matrix removeRotationInMatrix(const matrix::Matrix& pose) ;
+  matrix::Matrix removeRotationInMatrix(const matrix::Matrix& pose);
 
 
   /**
    * returns the angle between two vectors
    */
-  double getAngle(Position a, Position b) ;
+  double getAngle(Position a, Position b);
 
 }
 

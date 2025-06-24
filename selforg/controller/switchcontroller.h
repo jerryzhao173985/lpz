@@ -32,21 +32,21 @@
  */
 class SwitchController : public AbstractController {
 public:
-  explicit SwitchController(const std::list<AbstractController*>& controllers,
+  SwitchController(const std::list<AbstractController*>& controllers,
                             const std::string& name = "SwitchController",
                             const std::string& revision = "1.0");
 
-  virtual ~SwitchController() override;
+  virtual ~SwitchController();
 
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
   virtual void step(const sensor* sensors,
                     int sensornumber,
                     motor* motors,
-                    int motornumber) override;
+                    int motornumber);
   virtual void stepNoLearning(const sensor* sensors,
                               int sensornumber,
                               motor* motors,
-                              int motornumber) override;
+                              int motornumber);
 
   virtual int getSensorNumber() const override {
     return controllers.front()->getSensorNumber();

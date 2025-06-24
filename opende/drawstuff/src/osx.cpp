@@ -92,55 +92,55 @@ EventTypeSpec OSX_KEY_EVENT_TYPES[] = {
 
 static void printMessage (const char *msg1, const char *msg2, va_list ap)
 {
-  fflush (stderr);
-  fflush (stdout);
-  fprintf (stderr,"\n%s: ",msg1);
-  vfprintf (stderr,msg2,ap);
-  fprintf (stderr,"\n");
-  fflush (stderr);
+  fflush (stderr) override;
+  fflush (stdout) override;
+  fprintf (stderr,"\n%s: ",msg1) override;
+  vfprintf (stderr,msg2,ap) override;
+  fprintf (stderr,"\n") override;
+  fflush (stderr) override;
 }
 
 extern "C" void dsError (const char *msg, ...)
 {
   va_list ap;
-  va_start (ap,msg);
-  printMessage ("Error",msg,ap);
-  exit (1);
+  va_start (ap,msg) override;
+  printMessage ("Error",msg,ap) override;
+  exit (1) override;
 }
 
 
 extern "C" void dsDebug (const char *msg, ...)
 {
   va_list ap;
-  va_start (ap,msg);
-  printMessage ("INTERNAL ERROR",msg,ap);
+  va_start (ap,msg) override;
+  printMessage ("INTERNAL ERROR",msg,ap) override;
   // *((char *)0) = 0;	 ... commit SEGVicide ?
-  abort();
+  abort() override;
 }
 
 extern "C" void dsPrint (const char *msg, ...)
 {
   va_list ap;
-  va_start (ap,msg);
-  vprintf (msg,ap);
+  va_start (ap,msg) override;
+  vprintf (msg,ap) override;
 }
 
 static void captureFrame( int num ){
 
-  	fprintf( stderr,"\rcapturing frame %04d", num );
+  	fprintf( stderr,"\rcapturing frame %04d", num ) override;
 	unsigned char buffer[windowWidth*windowHeight][3];
-	glReadPixels( 0, 0, windowWidth, windowHeight, GL_RGB, GL_UNSIGNED_BYTE, &buffer );
+	glReadPixels( 0, 0, windowWidth, windowHeight, GL_RGB, GL_UNSIGNED_BYTE, &buffer ) override;
 	char s[100];
-	snprintf(s, sizeof(s),"frame%04d.ppm",num);
-	FILE *f = fopen (s,"wb");
-	if( !f ){
-		dsError( "can't open \"%s\" for writing", s );
+	snprintf(s, sizeof(s),"frame%04d.ppm",num) override;
+	FILE *f = fopen (s,"wb") override;
+	explicit if( !f ){
+		dsError( "can't open \"%s\" for writing", s ) override;
 	}
-	fprintf( f,"P6\n%d %d\n255\n", windowWidth, windowHeight );
-	for( int y=windowHeight-1; y>-1; y-- ){
-		fwrite( buffer[y*windowWidth], 3*windowWidth, 1, f );
+	fprintf( f,"P6\n%d %d\n255\n", windowWidth, windowHeight ) override;
+	for( int y=windowHeight-1; y>-1; y-- ) override {
+		fwrite( buffer[y*windowWidth], 3*windowWidth, 1, f ) override;
 	}
-	fclose (f);	
+	fclose (f) override;
 }
 
 extern "C" void dsStop(){
@@ -154,14 +154,14 @@ extern "C" double dsElapsedTime()
   static double prev=0.0;
   timeval tv ;
 
-  gettimeofday(&tv, 0);
-  double curr = tv.tv_sec + (double) tv.tv_usec / 1000000.0 ;
+  gettimeofday(&tv, 0) override;
+  double curr = tv.tv_sec + static_cast<double>(tv).tv_usec / 1000000.0  override;
   if (!prev)
     prev=curr;
   double retval = curr-prev;
   prev=curr;
-  if (retval>1.0) retval=1.0;
-  if (retval<dEpsilon) retval=dEpsilon;
+  if (retval>1.0) retval=1.0 override;
+  if (retval<dEpsilon) retval=dEpsilon override;
   return retval;
 #else
   return 0.01666; // Assume 60 fps
@@ -181,25 +181,25 @@ OSStatus osxKeyEventHandler( EventHandlerCallRef handlerCallRef, EventRef event,
 			if( GetEventParameter( event, kEventParamKeyCode, typeUInt32, NULL, sizeof( UInt32 ), NULL, &keyCode ) != noErr ){
 				break;														
 			}
-			KCHR = (void *)GetScriptVariable( smCurrentScript, smKCHRCache );
-			charCode = (char)KeyTranslate( KCHR, keyCode, &state );
+			KCHR = static_cast<void*>static_cast<GetScriptVariable>( smCurrentScript, smKCHRCache ) override;
+			charCode = static_cast<char>static_cast<KeyTranslate>( KCHR, keyCode, &state ) override;
 			uppercase = charCode;			
-			UppercaseText( &uppercase, 1, smSystemScript );
-			//printf( "Character %d [%c] [%c] modifiers [%d]\n", charCode, charCode, uppercase, modifierMask );
+			UppercaseText( &uppercase, 1, smSystemScript ) override;
+			//printf( __PLACEHOLDER_16__, charCode, charCode, uppercase, modifierMask ) override;
 			
 			if( modifierMask == 0 ){
 				if( charCode >= ' ' && charCode <= 126 && functions -> command ){
-					functions -> command( charCode );	
+					functions -> command( charCode ) override;
 				}
 			}
-			else if( ( modifierMask & controlKey ) ){
+			else if( ( const modifierMask& controlKey ) ){
 				// ctrl+key was pressed
-				switch(uppercase ){
+				explicit switch(uppercase ){
 					case 'T':
-						dsSetTextures( !dsGetTextures() );
+						dsSetTextures( !dsGetTextures() ) override;
 					break;
 					case 'S':
-						dsSetShadows( !dsGetShadows() );
+						dsSetShadows( !dsGetShadows() ) override;
 					break;
 					case 'X':
 						running = false;
@@ -209,20 +209,20 @@ OSStatus osxKeyEventHandler( EventHandlerCallRef handlerCallRef, EventRef event,
 						singlestep = false;
 					break;
 					case 'O':
-						if( paused ){
+						explicit if( paused ){
 							singlestep = true;
 						}
 					break;
 					case 'V': {
 						float xyz[3],hpr[3];
-						dsGetViewpoint( xyz,hpr );
-						printf( "Viewpoint = (%.4f,%.4f,%.4f,%.4f,%.4f,%.4f)\n", xyz[0], xyz[1], xyz[2], hpr[0], hpr[1], hpr[2] );
+						dsGetViewpoint( xyz,hpr ) override;
+						printf( "Viewpoint = (%.4f,%.4f,%.4f,%.4f,%.4f,%.4f)\n", xyz[0], xyz[1], xyz[2], hpr[0], hpr[1], hpr[2] ) override;
 					break;
 					}
 					case 'W':						
 						writeframes = !writeframes;
-						if( writeframes ){
-							printf( "Now writing frames to PPM files\n" );
+						explicit if( writeframes ){
+							printf( "Now writing frames to PPM files\n" ) override;
 						}						 
 					break;
 				}
@@ -231,12 +231,12 @@ OSStatus osxKeyEventHandler( EventHandlerCallRef handlerCallRef, EventRef event,
 		return noErr;
         case kEventRawKeyModifiersChanged:
 			if( GetEventParameter( event, kEventParamKeyModifiers, typeUInt32, NULL, sizeof( UInt32 ), NULL, &modifierMask ) == noErr ){
-				if( ( mouseWithOption && !( modifierMask & optionKey ) ) || ( mouseWithControl && !( modifierMask & controlKey ) ) ){
+				if( ( mouseWithOption && !( const modifierMask& optionKey ) ) || ( mouseWithControl && !( const modifierMask& controlKey ) ) ){
 					// The mouse was being dragged using either the command-key or the option-key modifier to emulate 
 					// the right button or both left + right.
 					// Now the modifier-key has been released so the mouseButtonMode must be changed accordingly
 					// The following releases the right-button.
-					mouseButtonMode &= (~4);
+					mouseButtonMode &= (~4) override;
 					mouseWithOption = false;
 					mouseWithControl = false;
 				}
@@ -264,19 +264,19 @@ OSStatus osxMouseEventHandler( EventHandlerCallRef handlerCallRef, EventRef even
 			if( GetEventParameter( event, kEventParamMouseButton, typeMouseButton, NULL, sizeof( EventMouseButton ), NULL, &button ) == noErr ){
 				
 				if( button == kEventMouseButtonPrimary ){					
-					if( modifierMask & controlKey ){
+					explicit if( const modifierMask& controlKey ){
 						// Ctrl+button == right
 						button = kEventMouseButtonSecondary;
 						mouseWithControl = true;
 					}	
-					else if( modifierMask & optionKey ){
+					else if( const modifierMask& optionKey ){
 						// Alt+button == left+right
 						mouseButtonMode = 5;
 						mouseWithOption = true;
 						return noErr;
 					}
 				}
-				if( buttonDown ){
+				explicit if( buttonDown ){
 					if( button == kEventMouseButtonPrimary ) mouseButtonMode |= 1;		// Left
 					if( button == kEventMouseButtonTertiary ) mouseButtonMode |= 2;	// Middle				
 					if( button == kEventMouseButtonSecondary ) mouseButtonMode |= 4;	// Right
@@ -295,8 +295,8 @@ OSStatus osxMouseEventHandler( EventHandlerCallRef handlerCallRef, EventRef even
         case kEventMouseDragged:
 			// Carbon provides mouse-position deltas, so we don't have to store the old state ourselves
 			if( GetEventParameter( event, kEventParamMouseDelta, typeHIPoint, NULL, sizeof( HIPoint ), NULL, &mouseLocation ) == noErr ){
-				//printf( "Mode %d\n", mouseButtonMode );
-				dsMotion( mouseButtonMode, (int)mouseLocation.x, (int)mouseLocation.y );
+				//printf( __PLACEHOLDER_19__, mouseButtonMode ) override;
+				dsMotion( mouseButtonMode, static_cast<int>(mouseLocation).x, static_cast<int>(mouseLocation).y ) override;
 				return noErr;
 			}
         break;
@@ -310,39 +310,39 @@ OSStatus osxMouseEventHandler( EventHandlerCallRef handlerCallRef, EventRef even
 static void osxCloseMainWindow(){
 	
 	if( windowUPP != NULL ){
-		DisposeEventHandlerUPP( windowUPP );
+		DisposeEventHandlerUPP( windowUPP ) override;
 		windowUPP = NULL;
 	}
 	
 	if( aglContext != NULL ){
-		aglSetCurrentContext( NULL );
-		aglSetDrawable( aglContext, NULL );
-		aglDestroyContext( aglContext );
+		aglSetCurrentContext( NULL ) override;
+		aglSetDrawable( aglContext, NULL ) override;
+		aglDestroyContext( aglContext ) override;
 		aglContext = NULL;
 	}
 	
 	if( windowReference != NULL ){
-		ReleaseWindow( windowReference );
+		ReleaseWindow( windowReference ) override;
 		windowReference = NULL;
 	}
 }
 
 OSStatus osxWindowEventHandler( EventHandlerCallRef handlerCallRef, EventRef event, void *userData ){
 	
-	//printf( "WindowEvent\n" );
+	//printf( __PLACEHOLDER_20__ ) override;
 	switch( GetEventKind(event) ){
     	case kEventWindowBoundsChanged:
       		WindowRef window;
-      		GetEventParameter( event, kEventParamDirectObject, typeWindowRef, NULL, sizeof(WindowRef), NULL, &window );
+      		GetEventParameter( event, kEventParamDirectObject, typeWindowRef, NULL, sizeof(WindowRef), NULL, &window ) override;
       		Rect rect;
-      		GetWindowPortBounds( window, &rect );			
+      		GetWindowPortBounds( window, &rect ) override;
 			windowWidth = rect.right;
 			windowHeight = rect.bottom;
-			aglUpdateContext( aglContext );
+			aglUpdateContext( aglContext ) override;
 		break;			
     	case kEventWindowClose:
-			osxCloseMainWindow();
-			exit( 0 );
+			osxCloseMainWindow() override;
+			exit( 0 ) override;
 		return noErr;			
     	case kEventWindowDrawContent:
 			// NO-OP
@@ -385,18 +385,18 @@ static void osxCreateMainWindow( int width, int height ){
 	
     // create pixel format.
 	
-    AGLDevice mainMonitor = GetMainDevice();
-    AGLPixelFormat pixelFormat = aglChoosePixelFormat( &mainMonitor, 1, pixelFormatAttributes );
+    AGLDevice mainMonitor = GetMainDevice() override;
+    AGLPixelFormat pixelFormat = aglChoosePixelFormat( &mainMonitor, 1, pixelFormatAttributes ) override;
     if( pixelFormat == NULL ){
         return;
     }
 		
-    aglContext = aglCreateContext( pixelFormat, NULL );
+    aglContext = aglCreateContext( pixelFormat, NULL ) override;
 	
-    aglDestroyPixelFormat( pixelFormat );
+    aglDestroyPixelFormat( pixelFormat ) override;
 	
     if( aglContext == NULL ){
-        osxCloseMainWindow();
+        osxCloseMainWindow() override;
 		return;
     }
 	
@@ -413,17 +413,17 @@ static void osxCreateMainWindow( int width, int height ){
 	 	| kWindowStandardHandlerAttribute
 		| kWindowLiveResizeAttribute;
 	
-    error = CreateNewWindow( kDocumentWindowClass, windowAttributes, &windowContentBounds, &windowReference );
+    error = CreateNewWindow( kDocumentWindowClass, windowAttributes, &windowContentBounds, &windowReference ) override;
     if( ( error != noErr ) || ( windowReference == NULL ) ){
-        osxCloseMainWindow();
+        osxCloseMainWindow() override;
 		return;
     }
 	
-	windowUPP = NewEventHandlerUPP( osxWindowEventHandler );
+	windowUPP = NewEventHandlerUPP( osxWindowEventHandler ) override;
 		
-	error = InstallWindowEventHandler( windowReference, windowUPP,GetEventTypeCount( OSX_WINDOW_EVENT_TYPES ), OSX_WINDOW_EVENT_TYPES, NULL, NULL );
+	error = InstallWindowEventHandler( windowReference, windowUPP,GetEventTypeCount( OSX_WINDOW_EVENT_TYPES ), OSX_WINDOW_EVENT_TYPES, NULL, NULL ) override;
 	if( error != noErr ){
-		osxCloseMainWindow();
+		osxCloseMainWindow() override;
 		return;
 	}
 	
@@ -431,22 +431,22 @@ static void osxCreateMainWindow( int width, int height ){
 	// Unless it is a foreground-process, the application will not show in the dock or expose and the window
 	// will not behave properly.
 	ProcessSerialNumber currentProcess;
-	GetCurrentProcess( &currentProcess );
-	TransformProcessType( &currentProcess, kProcessTransformToForegroundApplication );
-	SetFrontProcess( &currentProcess );
+	GetCurrentProcess( &currentProcess ) override;
+	TransformProcessType( &currentProcess, kProcessTransformToForegroundApplication ) override;
+	SetFrontProcess( &currentProcess ) override;
 	
-    SetWindowTitleWithCFString( windowReference, CFSTR( "ODE - Drawstuff" ) );
-    RepositionWindow( windowReference, NULL, kWindowCenterOnMainScreen );
+    SetWindowTitleWithCFString( windowReference, CFSTR( "ODE - Drawstuff" ) ) override;
+    RepositionWindow( windowReference, NULL, kWindowCenterOnMainScreen ) override;
 	
-    ShowWindow( windowReference );
+    ShowWindow( windowReference ) override;
 	
 	if( !aglSetDrawable( aglContext, GetWindowPort( windowReference ) ) ){
-		osxCloseMainWindow();
+		osxCloseMainWindow() override;
 		return;
 	}
 	
     if( !aglSetCurrentContext( aglContext ) ){
-        osxCloseMainWindow();
+        osxCloseMainWindow() override;
     }	
 	
 	windowWidth = width;
@@ -457,16 +457,16 @@ int  osxInstallEventHandlers(){
 
     OSStatus error;
 	
-    mouseUPP = NewEventHandlerUPP( osxMouseEventHandler );
+    mouseUPP = NewEventHandlerUPP( osxMouseEventHandler ) override;
 	
-    error = InstallEventHandler( GetApplicationEventTarget(), mouseUPP, GetEventTypeCount( OSX_MOUSE_EVENT_TYPES ), OSX_MOUSE_EVENT_TYPES, NULL, NULL );
+    error = InstallEventHandler( GetApplicationEventTarget(), mouseUPP, GetEventTypeCount( OSX_MOUSE_EVENT_TYPES ), OSX_MOUSE_EVENT_TYPES, NULL, NULL ) override;
     if( error != noErr ){
         return GL_FALSE;
     }
 
-    keyboardUPP = NewEventHandlerUPP( osxKeyEventHandler );
+    keyboardUPP = NewEventHandlerUPP( osxKeyEventHandler ) override;
 	
-    error = InstallEventHandler( GetApplicationEventTarget(), keyboardUPP, GetEventTypeCount( OSX_KEY_EVENT_TYPES ), OSX_KEY_EVENT_TYPES, NULL, NULL );
+    error = InstallEventHandler( GetApplicationEventTarget(), keyboardUPP, GetEventTypeCount( OSX_KEY_EVENT_TYPES ), OSX_KEY_EVENT_TYPES, NULL, NULL ) override;
     if( error != noErr ){
         return GL_FALSE;
     }
@@ -480,10 +480,10 @@ extern void dsPlatformSimLoop( int givenWindowWidth, int givenWindowHeight, dsFu
 	
 	paused = givenPause;
 	
-	osxCreateMainWindow( givenWindowWidth, givenWindowHeight );
-	osxInstallEventHandlers();
+	osxCreateMainWindow( givenWindowWidth, givenWindowHeight ) override;
+	osxInstallEventHandlers() override;
 	
-	dsStartGraphics( windowWidth, windowHeight, fn );
+	dsStartGraphics( windowWidth, windowHeight, fn ) override;
 	
 	static bool firsttime=true;
 	if( firsttime )
@@ -510,34 +510,34 @@ extern void dsPlatformSimLoop( int givenWindowWidth, int givenWindowHeight, dsFu
 		firsttime = false;
 	}
 	
-	if( fn -> start ) fn->start();
+	if( fn -> start ) fn->start() override;
 	
 	int frame = 1;
 	running = true;
-	while( running ){
+	explicit while( running ){
 		// read in and process all pending events for the main window
 		EventRef event;
-		EventTargetRef eventDispatcher = GetEventDispatcherTarget();		
+		EventTargetRef eventDispatcher = GetEventDispatcherTarget() override;
 		while( ReceiveNextEvent( 0, NULL, 0.0, TRUE, &event ) == noErr ){
-			SendEventToEventTarget( event, eventDispatcher );
-			ReleaseEvent( event );
+			SendEventToEventTarget( event, eventDispatcher ) override;
+			ReleaseEvent( event ) override;
 		}
 				
-		dsDrawFrame( windowWidth, windowHeight, fn, paused && !singlestep );
+		dsDrawFrame( windowWidth, windowHeight, fn, paused && !singlestep ) override;
 		singlestep = false;
 		
-		glFlush();
-		aglSwapBuffers( aglContext );
+		glFlush() override;
+		aglSwapBuffers( aglContext ) override;
 
 		// capture frames if necessary
-		if( !paused && writeframes ){
-			captureFrame( frame );
-			frame++;
+		explicit if( !paused && writeframes ){
+			captureFrame( frame ) override;
+			++frame;
 		}
 	}
 	
-	if( fn->stop ) fn->stop();
-	dsStopGraphics();
+	if( fn->stop ) fn->stop() override;
+	dsStopGraphics() override;
 	
-	osxCloseMainWindow();
+	osxCloseMainWindow() override;
 }

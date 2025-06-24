@@ -41,22 +41,22 @@ namespace lpzrobots {
 
   public:
 
-    CameraManipulatorRace(osg::Node* node,GlobalData& global, CameraHandle& cameraHandle);
+    CameraManipulatorRace(osg::Node* node,const GlobalData& global, const CameraHandle& cameraHandle);
 
     /** returns the classname of the manipulator
         it's NECCESSARY to define this funtion, otherwise
         the new manipulator WON'T WORK! (but ask me not why)
      */
-    virtual const char* className() const { return "Race-Camera"; }
+    virtual const char* className() const override { return "Race-Camera"; }
 
   protected:
 
-    virtual ~CameraManipulatorRace() override;
+    virtual ~CameraManipulatorRace();
 
     /** This handles robot movements, so that the camera movemenent is right affected.
         should be overwritten by new cameramanipulator
     */
-       virtual void calcMovementByAgent() override;
+       virtual void calcMovementByAgent();
 
   };
 }

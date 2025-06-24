@@ -41,7 +41,7 @@ InspectableProxy::InspectableProxy(const std::list<Inspectable*>& list, const ip
     std::list<double const*>::iterator valuesIter = values.begin();
     unsigned int num = names.size();
 
-    for (unsigned int i = 0; i < num; i++) {
+    for (unsigned int i = 0; i < num; ++i) {
       addInspectableValue(*namesIter, *valuesIter);
       ++namesIter;
       ++valuesIter;
@@ -80,7 +80,7 @@ InspectableProxy::replaceList(const std::list<Inspectable*>& list) {
   mapOfValues.clear();
   mapOfMatrices.clear();
 
-  //add the new parameters
+  __PLACEHOLDER_10__
   for(std::list<Inspectable*>::const_iterator iter = list.begin(); iter!=list.end(); ++iter) {
           m_list.push_back(*iter);
           std::list<std::string> names = (*iter)->getInternalParamNames();
@@ -89,7 +89,7 @@ InspectableProxy::replaceList(const std::list<Inspectable*>& list) {
           std::list<double*>::iterator valuesIter = values.begin();
           unsigned int num = names.size();
 
-          for(unsigned int i = 0; i < num; i++) {
+          for (unsigned int i = 0; i < num; ++i) {
                   addInspectableValue(*namesIter,*valuesIter);
                   ++namesIter;
                   ++valuesIter;

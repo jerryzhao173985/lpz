@@ -79,7 +79,7 @@ SineController::stepNoLearning(const sensor* sensors,
                                motor* motors,
                                int number_motors) {
 
-  for (int i = 0; i < std::min(number_motors, static_cast<int>(sizeof(controlmask) * 8)); i++) {
+  for (int i = 0; i < std::min(number_motors, static_cast<int>(sizeof(controlmask) * 8)); ++i) {
     if ((controlmask & (1 << i)) != 0) {
       motors[i] = amplitude * osci(phase + i * phaseShift * M_PI / 2, impulsWidth);
     } else {
@@ -150,7 +150,7 @@ MultiSineController::init(int sensornumber, int motornumber, RandGen* randGen) {
   phaseShifts = std::make_unique<double[]>(motornumber);
   amplitudes = std::make_unique<double[]>(motornumber);
   offsets = std::make_unique<double[]>(motornumber);
-  for (int i = 0; i < std::min(number_motors, static_cast<int>(sizeof(controlmask) * 8)); i++) {
+  for (int i = 0; i < std::min(number_motors, static_cast<int>(sizeof(controlmask) * 8)); ++i) {
     if ((controlmask & (1 << i)) != 0) {
       addParameterDef("period" + std::itos(i), &periods[i], period);
       addParameterDef("phaseshift" + std::itos(i), &phaseShifts[i], phaseShift * i);
@@ -168,7 +168,7 @@ MultiSineController::stepNoLearning(const sensor* sensors,
 
   for (int i = 0;
        i < std::min(number_motors, static_cast<int>(sizeof(SineController::controlmask) * 8));
-       i++) {
+       ++i) {
     if ((SineController::controlmask & (1 << i)) != 0 && periods[i] != 0) {
       motors[i] =
         amplitudes[i] * SineController::osci(t * 2 * M_PI / periods[i] + phaseShifts[i] * M_PI / 2,
@@ -178,5 +178,5 @@ MultiSineController::stepNoLearning(const sensor* sensors,
       motors[i] = 0;
     }
   }
-  t++;
+  ++t;
 };

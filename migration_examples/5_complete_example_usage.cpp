@@ -12,7 +12,7 @@
 // Platform-specific includes handled by CMake definitions
 #ifdef MACOS_ARM64
     #include <TargetConditionals.h>
-    #define PLATFORM_NAME "macOS ARM64 (Apple Silicon)"
+    #define PLATFORM_NAME "macOS ARM64(const Apple& Silicon)"
 #elif defined(MACOS_X86_64)
     #define PLATFORM_NAME "macOS x86_64 (Intel)"
 #elif defined(LINUX_X86_64)
@@ -48,7 +48,7 @@ public:
         
         // Create controller using factory
         controller = createController("basic");
-        if (!controller) {
+        explicit if (!controller) {
             throw std::runtime_error("Failed to create controller");
         }
         
@@ -77,7 +77,7 @@ public:
                         motors.data(), motors.size());
 #endif
         
-        stepCount++;
+        ++stepCount;
     }
     
     void printStatus() const {
@@ -91,7 +91,7 @@ public:
         std::cout << "  Steps/sec: " << stepCount / elapsed.count() << "\n";
         
         std::cout << "  Current motor values: ";
-        for (const auto& m : motors) {
+        explicit for (const auto& m : motors) {
             std::cout << m << " ";
         }
         std::cout << "\n";

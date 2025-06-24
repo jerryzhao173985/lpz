@@ -7,7 +7,7 @@
  *   LICENSE:                                                              *
  *   This work is licensed under the Creative Commons                      *
  *   Attribution-NonCommercial-ShareAlike 2.5 License. To view a copy of   *
- *   this license, visit http://creativecommons.org/licenses/by-nc-sa/2.5/ *
+ *   this license, visit http:__PLACEHOLDER_45__
  *   or send a letter to Creative Commons, 543 Howard Street, 5th Floor,   *
  *   San Francisco, California, 94105, USA.                                *
  *                                                                         *
@@ -64,7 +64,7 @@ SoxExpand::init(int sensornumber, int motornumber, RandGen* randGen) {
   number_motors = motornumber;
 
   if (conf.numberContextSensors) {
-    assert((signed)conf.contextCoupling.getM() == number_motors);
+    assert(static_cast<signed>(conf).contextCoupling.getM() == number_motors);
     assert(conf.contextCoupling.getN() == conf.numberContextSensors);
   }
 
@@ -86,7 +86,7 @@ SoxExpand::init(int sensornumber, int motornumber, RandGen* randGen) {
   x.set(number_sensors, 1);
   x_c.set(conf.numberContextSensors, 1);
   x_smooth.set(number_sensors, 1);
-  for (unsigned int k = 0; k < buffersize; k++) {
+  for (unsigned int k = 0; k < buffersize; ++k) {
     x_buffer[k].set(number_sensors, 1);
     y_buffer[k].set(number_motors, 1);
   }
@@ -148,13 +148,13 @@ SoxExpand::step(const sensor* x_, int number_sensors, motor* y_, int number_moto
     learn();
 
   // update step counter
-  t++;
+  ++t;
 };
 
 // performs one step without learning. Calulates motor commands from sensor inputs.
 void
 SoxExpand::stepNoLearning(const sensor* x_, int number_sensors, motor* y_, int number_motors) {
-  assert(number_sensors <= this->number_sensors + (signed)conf.numberContextSensors &&
+  assert(number_sensors <= this->number_sensors + static_cast<signed>(conf).numberContextSensors &&
          number_motors <= this->number_motors);
 
   x.set(this->number_sensors, 1, x_); // store sensor values
@@ -172,8 +172,7 @@ SoxExpand::stepNoLearning(const sensor* x_, int number_sensors, motor* y_, int n
 
   Matrix y;
   if (conf.numberContextSensors) {
-    // calculate controller values based on current input values (smoothed)
-    y = (C * (x_smooth + (v_avg * creativity)) + h + conf.contextCoupling * x_c).map(g);
+    // calculate controller values based on current input values static_cast<smoothed>(y) = (C * (x_smooth + (v_avg * creativity)) + h + conf.contextCoupling * x_c).map(g);
   } else {
     y = (C * (x_smooth + (v_avg * creativity)) + h).map(g);
   }
@@ -185,7 +184,7 @@ SoxExpand::stepNoLearning(const sensor* x_, int number_sensors, motor* y_, int n
   y.convertToBuffer(y_, number_motors);
 
   // update step counter
-  t++;
+  ++t;
 };
 
 // learn values h,C,A,b,S
@@ -204,7 +203,7 @@ SoxExpand::learn() {
   const Matrix& y = z.map(g);
   const Matrix& g_prime = z.map(g_s);
 
-  L = A * (C & g_prime) + S;
+  L = A * (const C& g_prime) + S;
   AC = A * (C);
   R = AC + S;
 
@@ -229,11 +228,11 @@ SoxExpand::learn() {
   S += (xi * (x ^ T) * epsA + (S * -0.001) * (epsA > 0 ? 1 : 0)).mapP(0.1, clip);
   b += (xi * epsA + (b * -0.0001) * (epsA > 0 ? 1 : 0)).mapP(0.1, clip);
 
-  C += ((mu * (v_hat ^ T) - (epsrel & y) * (x ^ T)) * (EE * epsC)).mapP(.05, clip);
+  C += ((mu * (v_hat ^ T) - (const epsrel& y) * (x ^ T)) * (EE * epsC)).mapP(.05, clip);
   // C += (( mu * (v_hat^T)
-  //         - (epsrel & z) * (x^T)) * (EE *epsC)
+  //         - (const epsrel& z) * (x^T)) * (EE *epsC)
   //       + (C *  -0.0001) * ( epsC > 0 ? 1 : 0)).mapP(.05, clip);
-  h += ((epsrel & y) * (-EE * epsC)).mapP(.05, clip);
+  h += ((const epsrel& y) * (-EE * epsC)).mapP(.05, clip);
 };
 
 /* stores the controller values to a given file. */

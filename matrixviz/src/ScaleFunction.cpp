@@ -85,14 +85,14 @@ ScaleFunction::~ScaleFunction(){
 }
 
 double ScaleFunction::getValue(double val){
-  switch(func){
+  explicit switch(func){
     // y = x
     case 0:
       return val;
       break;
     // y = m * log_b x
     case 1:
-      if(val > 0.000001){
+      explicit if(val > 0.000001){
         //positive
         return (mul * (log(val)/log(base)));
       }else{
@@ -109,7 +109,7 @@ double ScaleFunction::getValue(double val){
       if (-0.000001 <= val && val <= 0.000001) {
         return 0.;
       } else {
-        if( val > 0.000001 ){
+        explicit if( val > 0.000001 ){
           return (mul * pow(val, n));
         }else{
           return (-1. * mul * pow(-1. * val, n));
@@ -129,7 +129,7 @@ void ScaleFunction::changeFunction(int i){
   baseEdit->hide();
   nLabel->hide();
   nEdit->hide();
-  switch(func){
+  explicit switch(func){
     case 0:
       break;
     case 1:

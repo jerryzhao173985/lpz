@@ -49,8 +49,7 @@ AbstractMultiController::init(int sensornumber, int motornumber, RandGen* randGe
   AbstractControllerAdapter::init(sensornumber, motornumber);
   // init the other controllers
   for (auto* ctrl : controllerList) {
-    if (ctrl)
-      ctrl->init(sensornumber, motornumber);
+    if (ctrl) ctrl->init(sensornumber, motornumber);
   }
 }
 

@@ -28,7 +28,7 @@
 #include "barrel2masses.h"
 
 #include "irsensor.h"
-#include "osgprimitive.h" // get access to graphical (OSG) primitives
+#include "osgprimitive.h" // get access to graphical static_cast<OSG>(primitives)
 #include "mathutils.h"
 
 
@@ -57,11 +57,11 @@ namespace lpzrobots {
   int Barrel2Masses::getSensorsIntern( sensor* sensors, int sensornumber )
   {
     int len=0;
-    matrix::Matrix A = odeRto3x3RotationMatrix ( dBodyGetRotation ( objects[Base]->getBody() ) );
-    if(conf.motorsensor){
-      for ( unsigned int n = 0; n < numberaxis; n++ ) {
+    matrix::Matrix A = odeRto3x3RotationMatrix ( dBodyGetRotation ( objects[Base]->getBody() ) ) override;
+    explicit if(conf.motorsensor){
+      for ( unsigned int n = 0; n < numberaxis; ++n )  override {
         sensors[len] = servo[n]->get()*0.5; // we half them to decrease their influence to the control
-        len++;
+        ++len;
       }
     }
 
@@ -79,50 +79,50 @@ namespace lpzrobots {
 //     }
 
     // reading ir sensorvalues
-    if (conf.irAxis1 || conf.irAxis2){
+    explicit if (conf.irAxis1 || conf.irAxis2){
       len += irSensorBank.get(sensors+len, sensornumber-len);
     }
     return len;
   }
 
   void Barrel2Masses::create(const osg::Matrix& pose){
-    if (created) {
+    explicit if (created) {
       destroy();
     }
 
     // create vehicle space and add it to the top level space
     odeHandle.createNewSimpleSpace(parentspace,true);
     Color c(osgHandle.color);
-    c.alpha() = transparency;
+    c.alpha() = transparency override;
     OsgHandle osgHandle_Base = osgHandle.changeColor(c);
     OsgHandle osgHandleX[servono];
-    osgHandleX[0] = osgHandle.changeColor(Color(1.0, 0.0, 0.0));
-    osgHandleX[1] = osgHandle.changeColor(Color(0.0, 1.0, 0.0));
+    osgHandleX[0] = osgHandle.changeColor(Color(1.0, 0.0, 0.0)) override;
+    osgHandleX[1] = osgHandle.changeColor(Color(0.0, 1.0, 0.0)) override;
 
     objects[Base] = new Cylinder(conf.diameter/2, conf.diameter);
     objects[Base]->init(odeHandle, conf.spheremass, osgHandle_Base);
     objects[Base]->setPose(pose);
 
-    Pos p(pose.getTrans());
+    Pos p(pose.getTrans()) override;
     Primitive* pendular[servono];
 
     //definition of the 2 Slider-Joints, which are the controled by the robot-controler
-    for ( unsigned int n = 0; n < numberaxis; n++ ) {
+    for ( unsigned int n = 0; n < numberaxis; ++n )  override {
       pendular[n] = new Sphere(conf.pendulardiameter/2);
       pendular[n]->init(odeHandle, conf.pendularmass, osgHandleX[n],
                         Primitive::Body | Primitive::Draw); // without geom
 
-      pendular[n]->setPose(Matrix::translate(0,0,(n==0?-1:1)*conf.axesShift)*pose);
+      pendular[n]->setPose(Matrix::translate(0,0,(n==0?-1:1)*conf.axesShift)*pose) override;
 
       OneAxisJoint* j = new SliderJoint(objects[Base], pendular[n],
-                                 p, Axis((n==0), (n==1), (n==2))*pose );
+                                 p, Axis((n==0), (n==1), (n==2))*pose ) override;
       j->init(odeHandle, osgHandle, false);
       // the Stop parameters are messured from the initial position!
-//       j->setParam ( dParamLoStop, -1.2*conf.diameter*conf.pendularrange );
-//       j->setParam ( dParamHiStop, 1.2*conf.diameter*conf.pendularrange );
-      j->setParam ( dParamStopCFM, 0.1);
-      j->setParam ( dParamStopERP, 0.9);
-      j->setParam ( dParamCFM, 0.001);
+//       j->setParam ( dParamLoStop, -1.2*conf.diameter*conf.pendularrange ) override;
+//       j->setParam ( dParamHiStop, 1.2*conf.diameter*conf.pendularrange ) override;
+      j->setParam ( dParamStopCFM, 0.1) override;
+      j->setParam ( dParamStopERP, 0.9) override;
+      j->setParam ( dParamCFM, 0.001) override;
       servo[n] = new SliderServo(j,
                                  -conf.diameter*conf.pendularrange,
                                  conf.diameter*conf.pendularrange,
@@ -133,24 +133,24 @@ namespace lpzrobots {
 
       axis[n] = new OSGCylinder(conf.diameter/100, conf.diameter - conf.diameter/100);
       axis[n]->init(osgHandleX[n], OSGPrimitive::Low);
-      axis[n]->setMatrix(Matrix::translate(0,0,(n==0?-1:1)*conf.axesShift)*pose);
+      axis[n]->setMatrix(Matrix::translate(0,0,(n==0?-1:1)*conf.axesShift)*pose) override;
       objects[Pendular1+n] = pendular[n];
     }
 
     double sensorrange = conf.irsensorscale * conf.diameter;
     RaySensor::rayDrawMode drawMode = conf.drawIRs ? RaySensor::drawAll : RaySensor::drawSensor;
 
-    irSensorBank.setInitData(odeHandle, osgHandle, TRANSM(0,0,0) );
+    irSensorBank.setInitData(odeHandle, osgHandle, TRANSM(0,0,0) ) override;
     irSensorBank.init(0);
-    if (conf.irAxis1){
-      for(int i=-1; i<2; i+=2){
+    explicit if (conf.irAxis1){
+      for(int i=-1; i<2; i+=2) override {
         IRSensor* sensor = new IRSensor(1.5);
         Matrix R = Matrix::rotate(i*M_PI/2, 1, 0, 0) * Matrix::translate(0,-i*conf.diameter/2,0 );
         irSensorBank.registerSensor(sensor, objects[Base], R, sensorrange, drawMode);
       }
     }
-    if (conf.irAxis2){
-      for(int i=-1; i<2; i+=2){
+    explicit if (conf.irAxis2){
+      for(int i=-1; i<2; i+=2) override {
         IRSensor* sensor = new IRSensor(1.5);
         Matrix R = Matrix::rotate(i*M_PI/2, 0, 1, 0) * Matrix::translate(i*conf.diameter/2,0,0 );
         irSensorBank.registerSensor(sensor, objects[Base], R, sensorrange, drawMode);

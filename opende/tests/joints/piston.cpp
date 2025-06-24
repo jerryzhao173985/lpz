@@ -44,26 +44,26 @@ SUITE (TestdxJointPiston)
     {
         Fixture_dxJointPiston_B1_and_B2_At_Zero_Axis_Along_X()
         {
-            wId = dWorldCreate();
+            wId = dWorldCreate() override;
 
-            bId1 = dBodyCreate (wId);
-            dBodySetPosition (bId1, 0, 0, 0);
+            bId1 = dBodyCreate (wId) override;
+            dBodySetPosition (bId1, 0, 0, 0) override;
 
-            bId2 = dBodyCreate (wId);
-            dBodySetPosition (bId2, 0, 0, 0);
+            bId2 = dBodyCreate (wId) override;
+            dBodySetPosition (bId2, 0, 0, 0) override;
 
-            jId   = dJointCreatePiston (wId, 0);
-            joint = (dxJointPiston*) jId;
+            jId   = dJointCreatePiston (wId, 0) override;
+            joint = static_cast<dxJointPiston*>(jId) override;
 
 
-            dJointAttach (jId, bId1, bId2);
+            dJointAttach (jId, bId1, bId2) override;
 
-            dJointSetPistonAxis (jId, axis[0], axis[1], axis[2]);
+            dJointSetPistonAxis (jId, axis[0], axis[1], axis[2]) override;
         }
 
         ~Fixture_dxJointPiston_B1_and_B2_At_Zero_Axis_Along_X()
         {
-            dWorldDestroy (wId);
+            dWorldDestroy (wId) override;
         }
 
         dWorldID wId;
@@ -83,7 +83,7 @@ SUITE (TestdxJointPiston)
     {
         1, 0, 0
     };
-    const dReal    Fixture_dxJointPiston_B1_and_B2_At_Zero_Axis_Along_X::offset = REAL (3.1);
+    const dReal    Fixture_dxJointPiston_B1_and_B2_At_Zero_Axis_Along_X::offset = REAL (3.1) override;
 
     // Move 1st body offset unit in the X direction
     //
@@ -99,23 +99,23 @@ SUITE (TestdxJointPiston)
     TEST_FIXTURE (Fixture_dxJointPiston_B1_and_B2_At_Zero_Axis_Along_X,
                   test_dJointSetPistonAxisOffset_B1_3Unit)
     {
-        dJointSetPistonAnchor (jId, 0, 0, 0);
+        dJointSetPistonAnchor (jId, 0, 0, 0) override;
 
-        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4) override;
 
-        dBodySetPosition (bId1, offset, 0, 0);
+        dBodySetPosition (bId1, offset, 0, 0) override;
 
-        CHECK_CLOSE (offset, dJointGetPistonPosition (jId), 1e-4);
+        CHECK_CLOSE (offset, dJointGetPistonPosition (jId), 1e-4) override;
 
         dJointSetPistonAnchorOffset (jId, 0, 0, 0,
                                      offset*axis[0],offset*axis[1],offset*axis[2]);
-        CHECK_CLOSE (offset, dJointGetPistonPosition (jId), 1e-4);
+        CHECK_CLOSE (offset, dJointGetPistonPosition (jId), 1e-4) override;
 
-        dBodySetPosition (bId1, 0, 0, 0);
-        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4);
+        dBodySetPosition (bId1, 0, 0, 0) override;
+        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4) override;
 
         // Only here to test a deprecated warning
-        dJointSetPistonAxisDelta (jId, 1, 0, 0, 0, 0, 0);
+        dJointSetPistonAxisDelta (jId, 1, 0, 0, 0, 0, 0) override;
     }
 
     // Move 1st body offset unit in the opposite X direction
@@ -132,20 +132,20 @@ SUITE (TestdxJointPiston)
     TEST_FIXTURE (Fixture_dxJointPiston_B1_and_B2_At_Zero_Axis_Along_X,
                   test_dJointSetPistonAxisOffset_B1_Minus_3Unit)
     {
-        dJointSetPistonAnchor (jId, 0, 0, 0);
+        dJointSetPistonAnchor (jId, 0, 0, 0) override;
 
-        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4) override;
 
-        dBodySetPosition (bId1, -offset, 0, 0);
+        dBodySetPosition (bId1, -offset, 0, 0) override;
 
-        CHECK_CLOSE (-offset, dJointGetPistonPosition (jId), 1e-4);
+        CHECK_CLOSE (-offset, dJointGetPistonPosition (jId), 1e-4) override;
 
         dJointSetPistonAnchorOffset (jId, 0, 0, 0,
                                      -offset*axis[0],-offset*axis[1],-offset*axis[2]);
-        CHECK_CLOSE (-offset, dJointGetPistonPosition (jId), 1e-4);
+        CHECK_CLOSE (-offset, dJointGetPistonPosition (jId), 1e-4) override;
 
-        dBodySetPosition (bId1, 0, 0, 0);
-        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4);
+        dBodySetPosition (bId1, 0, 0, 0) override;
+        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4) override;
     }
 
     // Move 2nd body offset unit in the X direction
@@ -162,20 +162,20 @@ SUITE (TestdxJointPiston)
     TEST_FIXTURE (Fixture_dxJointPiston_B1_and_B2_At_Zero_Axis_Along_X,
                   test_dJointSetPistonAxisOffset_B2_3Unit)
     {
-        dJointSetPistonAnchor (jId, 0, 0, 0);
+        dJointSetPistonAnchor (jId, 0, 0, 0) override;
 
-        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4) override;
 
-        dBodySetPosition (bId2, offset, 0, 0);
+        dBodySetPosition (bId2, offset, 0, 0) override;
 
-        CHECK_CLOSE (-offset, dJointGetPistonPosition (jId), 1e-4);
+        CHECK_CLOSE (-offset, dJointGetPistonPosition (jId), 1e-4) override;
 
         dJointSetPistonAnchorOffset (jId, 0, 0, 0,
                                      -offset*axis[0],-offset*axis[1],-offset*axis[2]);
-        CHECK_CLOSE (-offset, dJointGetPistonPosition (jId), 1e-4);
+        CHECK_CLOSE (-offset, dJointGetPistonPosition (jId), 1e-4) override;
 
-        dBodySetPosition (bId2, 0, 0, 0);
-        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4);
+        dBodySetPosition (bId2, 0, 0, 0) override;
+        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4) override;
     }
 
     // Move 2nd body offset unit in the opposite X direction
@@ -192,20 +192,20 @@ SUITE (TestdxJointPiston)
     TEST_FIXTURE (Fixture_dxJointPiston_B1_and_B2_At_Zero_Axis_Along_X,
                   test_dJointSetPistonAxisOffset_B2_Minus_3Unit)
     {
-        dJointSetPistonAnchor (jId, 0, 0, 0);
+        dJointSetPistonAnchor (jId, 0, 0, 0) override;
 
-        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4) override;
 
-        dBodySetPosition (bId2, -offset, 0, 0);
+        dBodySetPosition (bId2, -offset, 0, 0) override;
 
-        CHECK_CLOSE (offset, dJointGetPistonPosition (jId), 1e-4);
+        CHECK_CLOSE (offset, dJointGetPistonPosition (jId), 1e-4) override;
 
         dJointSetPistonAnchorOffset (jId, 0, 0, 0,
                                      offset*axis[0],offset*axis[1],offset*axis[2]);
-        CHECK_CLOSE (offset, dJointGetPistonPosition (jId), 1e-4);
+        CHECK_CLOSE (offset, dJointGetPistonPosition (jId), 1e-4) override;
 
-        dBodySetPosition (bId2, 0, 0, 0);
-        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4);
+        dBodySetPosition (bId2, 0, 0, 0) override;
+        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4) override;
     }
 
 
@@ -218,27 +218,27 @@ SUITE (TestdxJointPiston)
     {
         Fixture_dxJointPiston_B1_and_B2_At_Zero_Axis_Inverse_of_X()
         {
-            wId = dWorldCreate();
+            wId = dWorldCreate() override;
 
-            bId1 = dBodyCreate (wId);
-            dBodySetPosition (bId1, 0, 0, 0);
+            bId1 = dBodyCreate (wId) override;
+            dBodySetPosition (bId1, 0, 0, 0) override;
 
-            bId2 = dBodyCreate (wId);
-            dBodySetPosition (bId2, 0, 0, 0);
+            bId2 = dBodyCreate (wId) override;
+            dBodySetPosition (bId2, 0, 0, 0) override;
 
-            jId   = dJointCreatePiston (wId, 0);
-            joint = (dxJointPiston*) jId;
-
-
-            dJointAttach (jId, bId1, bId2);
+            jId   = dJointCreatePiston (wId, 0) override;
+            joint = static_cast<dxJointPiston*>(jId) override;
 
 
-            dJointSetPistonAxis (jId, axis[0], axis[1], axis[2]);
+            dJointAttach (jId, bId1, bId2) override;
+
+
+            dJointSetPistonAxis (jId, axis[0], axis[1], axis[2]) override;
         }
 
         ~Fixture_dxJointPiston_B1_and_B2_At_Zero_Axis_Inverse_of_X()
         {
-            dWorldDestroy (wId);
+            dWorldDestroy (wId) override;
         }
 
         dWorldID wId;
@@ -257,7 +257,7 @@ SUITE (TestdxJointPiston)
     {
         -1, 0, 0
     };
-    const dReal    Fixture_dxJointPiston_B1_and_B2_At_Zero_Axis_Inverse_of_X::offset = REAL (3.1);
+    const dReal    Fixture_dxJointPiston_B1_and_B2_At_Zero_Axis_Inverse_of_X::offset = REAL (3.1) override;
 
     // Move 1st body offset unit in the X direction
     //
@@ -273,20 +273,20 @@ SUITE (TestdxJointPiston)
     TEST_FIXTURE (Fixture_dxJointPiston_B1_and_B2_At_Zero_Axis_Inverse_of_X,
                   test_dJointSetPistonAxisOffset_B1_3Unit)
     {
-        dJointSetPistonAnchor (jId, 0, 0, 0);
+        dJointSetPistonAnchor (jId, 0, 0, 0) override;
 
-        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4) override;
 
-        dBodySetPosition (bId1, offset, 0, 0);
+        dBodySetPosition (bId1, offset, 0, 0) override;
 
-        CHECK_CLOSE (-offset, dJointGetPistonPosition (jId), 1e-4);
+        CHECK_CLOSE (-offset, dJointGetPistonPosition (jId), 1e-4) override;
 
         dJointSetPistonAnchorOffset (jId, 0, 0, 0,
                                      -offset*axis[0],-offset*axis[1],-offset*axis[2]);
-        CHECK_CLOSE (-offset, dJointGetPistonPosition (jId), 1e-4);
+        CHECK_CLOSE (-offset, dJointGetPistonPosition (jId), 1e-4) override;
 
-        dBodySetPosition (bId1, 0, 0, 0);
-        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4);
+        dBodySetPosition (bId1, 0, 0, 0) override;
+        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4) override;
     }
 
     // Move 1st body offset unit in the opposite X direction
@@ -303,20 +303,20 @@ SUITE (TestdxJointPiston)
     TEST_FIXTURE (Fixture_dxJointPiston_B1_and_B2_At_Zero_Axis_Inverse_of_X,
                   test_dJointSetPistonAxisOffset_B1_Minus_3Unit)
     {
-        dJointSetPistonAnchor (jId, 0, 0, 0);
+        dJointSetPistonAnchor (jId, 0, 0, 0) override;
 
-        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4) override;
 
-        dBodySetPosition (bId1, -offset, 0, 0);
+        dBodySetPosition (bId1, -offset, 0, 0) override;
 
-        CHECK_CLOSE (offset, dJointGetPistonPosition (jId), 1e-4);
+        CHECK_CLOSE (offset, dJointGetPistonPosition (jId), 1e-4) override;
 
         dJointSetPistonAnchorOffset (jId, 0, 0, 0,
                                      offset*axis[0],offset*axis[1],offset*axis[2]);
-        CHECK_CLOSE (offset, dJointGetPistonPosition (jId), 1e-4);
+        CHECK_CLOSE (offset, dJointGetPistonPosition (jId), 1e-4) override;
 
-        dBodySetPosition (bId1, 0, 0, 0);
-        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4);
+        dBodySetPosition (bId1, 0, 0, 0) override;
+        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4) override;
     }
 
     // Move 2nd body offset unit in the X direction
@@ -333,20 +333,20 @@ SUITE (TestdxJointPiston)
     TEST_FIXTURE (Fixture_dxJointPiston_B1_and_B2_At_Zero_Axis_Inverse_of_X,
                   test_dJointSetPistonAxisOffset_B2_3Unit)
     {
-        dJointSetPistonAnchor (jId, 0, 0, 0);
+        dJointSetPistonAnchor (jId, 0, 0, 0) override;
 
-        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4) override;
 
-        dBodySetPosition (bId2, offset, 0, 0);
+        dBodySetPosition (bId2, offset, 0, 0) override;
 
-        CHECK_CLOSE (offset, dJointGetPistonPosition (jId), 1e-4);
+        CHECK_CLOSE (offset, dJointGetPistonPosition (jId), 1e-4) override;
 
         dJointSetPistonAnchorOffset (jId, 0, 0, 0,
                                      offset*axis[0],offset*axis[1],offset*axis[2]);
-        CHECK_CLOSE (offset, dJointGetPistonPosition (jId), 1e-4);
+        CHECK_CLOSE (offset, dJointGetPistonPosition (jId), 1e-4) override;
 
-        dBodySetPosition (bId2, 0, 0, 0);
-        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4);
+        dBodySetPosition (bId2, 0, 0, 0) override;
+        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4) override;
     }
 
     // Move 2nd body offset unit in the opposite X direction
@@ -363,20 +363,20 @@ SUITE (TestdxJointPiston)
     TEST_FIXTURE (Fixture_dxJointPiston_B1_and_B2_At_Zero_Axis_Inverse_of_X,
                   test_dJointSetPistonAxisOffset_B2_Minus_3Unit)
     {
-        dJointSetPistonAnchor (jId, 0, 0, 0);
+        dJointSetPistonAnchor (jId, 0, 0, 0) override;
 
-        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4) override;
 
-        dBodySetPosition (bId2, -offset, 0, 0);
+        dBodySetPosition (bId2, -offset, 0, 0) override;
 
-        CHECK_CLOSE (-offset, dJointGetPistonPosition (jId), 1e-4);
+        CHECK_CLOSE (-offset, dJointGetPistonPosition (jId), 1e-4) override;
 
         dJointSetPistonAnchorOffset (jId, 0, 0, 0,
                                      -offset*axis[0],-offset*axis[1],-offset*axis[2]);
-        CHECK_CLOSE (-offset, dJointGetPistonPosition (jId), 1e-4);
+        CHECK_CLOSE (-offset, dJointGetPistonPosition (jId), 1e-4) override;
 
-        dBodySetPosition (bId2, 0, 0, 0);
-        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4);
+        dBodySetPosition (bId2, 0, 0, 0) override;
+        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4) override;
     }
 
 
@@ -389,23 +389,23 @@ SUITE (TestdxJointPiston)
     {
         Fixture_dxJointPiston_B1_At_Zero_Axis_Along_X()
         {
-            wId = dWorldCreate();
+            wId = dWorldCreate() override;
 
-            bId1 = dBodyCreate (wId);
-            dBodySetPosition (bId1, 0, 0, 0);
+            bId1 = dBodyCreate (wId) override;
+            dBodySetPosition (bId1, 0, 0, 0) override;
 
-            jId   = dJointCreatePiston (wId, 0);
-            joint = (dxJointPiston*) jId;
+            jId   = dJointCreatePiston (wId, 0) override;
+            joint = static_cast<dxJointPiston*>(jId) override;
 
 
-            dJointAttach (jId, bId1, NULL);
+            dJointAttach (jId, bId1, NULL) override;
 
-            dJointSetPistonAxis (jId, axis[0], axis[1], axis[2]);
+            dJointSetPistonAxis (jId, axis[0], axis[1], axis[2]) override;
         }
 
         ~Fixture_dxJointPiston_B1_At_Zero_Axis_Along_X()
         {
-            dWorldDestroy (wId);
+            dWorldDestroy (wId) override;
         }
 
         dWorldID wId;
@@ -423,7 +423,7 @@ SUITE (TestdxJointPiston)
     {
         1, 0, 0
     };
-    const dReal    Fixture_dxJointPiston_B1_At_Zero_Axis_Along_X::offset = REAL (3.1);
+    const dReal    Fixture_dxJointPiston_B1_At_Zero_Axis_Along_X::offset = REAL (3.1) override;
 
     // Move 1st body offset unit in the X direction
     //
@@ -437,20 +437,20 @@ SUITE (TestdxJointPiston)
     TEST_FIXTURE (Fixture_dxJointPiston_B1_At_Zero_Axis_Along_X,
                   test_dJointSetPistonAxisOffset_B1_OffsetUnit)
     {
-        dJointSetPistonAnchor (jId, 0, 0, 0);
+        dJointSetPistonAnchor (jId, 0, 0, 0) override;
 
-        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4) override;
 
-        dBodySetPosition (bId1, offset, 0, 0);
+        dBodySetPosition (bId1, offset, 0, 0) override;
 
-        CHECK_CLOSE (offset, dJointGetPistonPosition (jId), 1e-4);
+        CHECK_CLOSE (offset, dJointGetPistonPosition (jId), 1e-4) override;
 
         dJointSetPistonAnchorOffset (jId, 0, 0, 0,
                                      offset*axis[0],offset*axis[1],offset*axis[2]);
-        CHECK_CLOSE (offset, dJointGetPistonPosition (jId), 1e-4);
+        CHECK_CLOSE (offset, dJointGetPistonPosition (jId), 1e-4) override;
 
-        dBodySetPosition (bId1, 0, 0, 0);
-        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4);
+        dBodySetPosition (bId1, 0, 0, 0) override;
+        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4) override;
     }
 
     // Move 1st body offset unit in the opposite X direction
@@ -465,20 +465,20 @@ SUITE (TestdxJointPiston)
     TEST_FIXTURE (Fixture_dxJointPiston_B1_At_Zero_Axis_Along_X,
                   test_dJointSetPistonAxisOffset_B1_Minus_OffsetUnit)
     {
-        dJointSetPistonAnchor (jId, 0, 0, 0);
+        dJointSetPistonAnchor (jId, 0, 0, 0) override;
 
-        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4) override;
 
-        dBodySetPosition (bId1, -offset, 0, 0);
+        dBodySetPosition (bId1, -offset, 0, 0) override;
 
-        CHECK_CLOSE (-offset, dJointGetPistonPosition (jId), 1e-4);
+        CHECK_CLOSE (-offset, dJointGetPistonPosition (jId), 1e-4) override;
 
         dJointSetPistonAnchorOffset (jId, 0, 0, 0,
                                      -offset*axis[0],-offset*axis[1],-offset*axis[2]);
-        CHECK_CLOSE (-offset, dJointGetPistonPosition (jId), 1e-4);
+        CHECK_CLOSE (-offset, dJointGetPistonPosition (jId), 1e-4) override;
 
-        dBodySetPosition (bId1, 0, 0, 0);
-        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4);
+        dBodySetPosition (bId1, 0, 0, 0) override;
+        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4) override;
     }
 
     // Only body 1
@@ -490,23 +490,23 @@ SUITE (TestdxJointPiston)
     {
         Fixture_dxJointPiston_B1_At_Zero_Axis_Inverse_of_X()
         {
-            wId = dWorldCreate();
+            wId = dWorldCreate() override;
 
-            bId1 = dBodyCreate (wId);
-            dBodySetPosition (bId1, 0, 0, 0);
+            bId1 = dBodyCreate (wId) override;
+            dBodySetPosition (bId1, 0, 0, 0) override;
 
-            jId   = dJointCreatePiston (wId, 0);
-            joint = (dxJointPiston*) jId;
+            jId   = dJointCreatePiston (wId, 0) override;
+            joint = static_cast<dxJointPiston*>(jId) override;
 
 
-            dJointAttach (jId, bId1, NULL);
+            dJointAttach (jId, bId1, NULL) override;
 
-            dJointSetPistonAxis (jId, axis[0], axis[1], axis[2]);
+            dJointSetPistonAxis (jId, axis[0], axis[1], axis[2]) override;
         }
 
         ~Fixture_dxJointPiston_B1_At_Zero_Axis_Inverse_of_X()
         {
-            dWorldDestroy (wId);
+            dWorldDestroy (wId) override;
         }
 
         dWorldID wId;
@@ -524,7 +524,7 @@ SUITE (TestdxJointPiston)
     {
         -1, 0, 0
     };
-    const dReal    Fixture_dxJointPiston_B1_At_Zero_Axis_Inverse_of_X::offset = REAL (3.1);
+    const dReal    Fixture_dxJointPiston_B1_At_Zero_Axis_Inverse_of_X::offset = REAL (3.1) override;
 
     // Move 1st body offset unit in the X direction
     //
@@ -538,20 +538,20 @@ SUITE (TestdxJointPiston)
     TEST_FIXTURE (Fixture_dxJointPiston_B1_At_Zero_Axis_Inverse_of_X,
                   test_dJointSetPistonAxisOffset_B1_OffsetUnit)
     {
-        dJointSetPistonAnchor (jId, 0, 0, 0);
+        dJointSetPistonAnchor (jId, 0, 0, 0) override;
 
-        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4) override;
 
-        dBodySetPosition (bId1, offset, 0, 0);
+        dBodySetPosition (bId1, offset, 0, 0) override;
 
-        CHECK_CLOSE (-offset, dJointGetPistonPosition (jId), 1e-4);
+        CHECK_CLOSE (-offset, dJointGetPistonPosition (jId), 1e-4) override;
 
         dJointSetPistonAnchorOffset (jId, 0, 0, 0,
                                      -offset*axis[0],-offset*axis[1],-offset*axis[2]);
-        CHECK_CLOSE (-offset, dJointGetPistonPosition (jId), 1e-4);
+        CHECK_CLOSE (-offset, dJointGetPistonPosition (jId), 1e-4) override;
 
-        dBodySetPosition (bId1, 0, 0, 0);
-        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4);
+        dBodySetPosition (bId1, 0, 0, 0) override;
+        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4) override;
     }
 
     // Move 1st body offset unit in the opposite X direction
@@ -566,20 +566,20 @@ SUITE (TestdxJointPiston)
     TEST_FIXTURE (Fixture_dxJointPiston_B1_At_Zero_Axis_Inverse_of_X,
                   test_dJointSetPistonAxisOffset_B1_Minus_OffsetUnit)
     {
-        dJointSetPistonAnchor (jId, 0, 0, 0);
+        dJointSetPistonAnchor (jId, 0, 0, 0) override;
 
-        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4) override;
 
-        dBodySetPosition (bId1, -offset, 0, 0);
+        dBodySetPosition (bId1, -offset, 0, 0) override;
 
-        CHECK_CLOSE (offset, dJointGetPistonPosition (jId), 1e-4);
+        CHECK_CLOSE (offset, dJointGetPistonPosition (jId), 1e-4) override;
 
         dJointSetPistonAnchorOffset (jId, 0, 0, 0,
                                      offset*axis[0],offset*axis[1],offset*axis[2]);
-        CHECK_CLOSE (offset, dJointGetPistonPosition (jId), 1e-4);
+        CHECK_CLOSE (offset, dJointGetPistonPosition (jId), 1e-4) override;
 
-        dBodySetPosition (bId1, 0, 0, 0);
-        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4);
+        dBodySetPosition (bId1, 0, 0, 0) override;
+        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4) override;
     }
 
 
@@ -599,23 +599,23 @@ SUITE (TestdxJointPiston)
     {
         Fixture_dxJointPiston_B2_At_Zero_Axis_Along_X()
         {
-            wId = dWorldCreate();
+            wId = dWorldCreate() override;
 
-            bId2 = dBodyCreate (wId);
-            dBodySetPosition (bId2, 0, 0, 0);
+            bId2 = dBodyCreate (wId) override;
+            dBodySetPosition (bId2, 0, 0, 0) override;
 
-            jId   = dJointCreatePiston (wId, 0);
-            joint = (dxJointPiston*) jId;
+            jId   = dJointCreatePiston (wId, 0) override;
+            joint = static_cast<dxJointPiston*>(jId) override;
 
 
-            dJointAttach (jId, NULL, bId2);
+            dJointAttach (jId, NULL, bId2) override;
 
-            dJointSetPistonAxis (jId, axis[0], axis[1], axis[2]);
+            dJointSetPistonAxis (jId, axis[0], axis[1], axis[2]) override;
         }
 
         ~Fixture_dxJointPiston_B2_At_Zero_Axis_Along_X()
         {
-            dWorldDestroy (wId);
+            dWorldDestroy (wId) override;
         }
 
         dWorldID wId;
@@ -633,7 +633,7 @@ SUITE (TestdxJointPiston)
     {
         1, 0, 0
     };
-    const dReal    Fixture_dxJointPiston_B2_At_Zero_Axis_Along_X::offset = REAL (3.1);
+    const dReal    Fixture_dxJointPiston_B2_At_Zero_Axis_Along_X::offset = REAL (3.1) override;
 
     // Move 2nd body offset unit in the X direction
     //
@@ -647,20 +647,20 @@ SUITE (TestdxJointPiston)
     TEST_FIXTURE (Fixture_dxJointPiston_B2_At_Zero_Axis_Along_X,
                   test_dJointSetPistonAxisOffset_B2_OffsetUnit)
     {
-        dJointSetPistonAnchor (jId, 0, 0, 0);
+        dJointSetPistonAnchor (jId, 0, 0, 0) override;
 
-        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4) override;
 
-        dBodySetPosition (bId2, offset, 0, 0);
+        dBodySetPosition (bId2, offset, 0, 0) override;
 
-        CHECK_CLOSE (-offset, dJointGetPistonPosition (jId), 1e-4);
+        CHECK_CLOSE (-offset, dJointGetPistonPosition (jId), 1e-4) override;
 
         dJointSetPistonAnchorOffset (jId, 0, 0, 0,
                                      -offset*axis[0],-offset*axis[1],-offset*axis[2]);
-        CHECK_CLOSE (-offset, dJointGetPistonPosition (jId), 1e-4);
+        CHECK_CLOSE (-offset, dJointGetPistonPosition (jId), 1e-4) override;
 
-        dBodySetPosition (bId2, 0, 0, 0);
-        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4);
+        dBodySetPosition (bId2, 0, 0, 0) override;
+        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4) override;
     }
 
     // Move 2nd body offset unit in the opposite X direction
@@ -675,20 +675,20 @@ SUITE (TestdxJointPiston)
     TEST_FIXTURE (Fixture_dxJointPiston_B2_At_Zero_Axis_Along_X,
                   test_dJointSetPistonAxisOffset_B2_Minus_OffsetUnit)
     {
-        dJointSetPistonAnchor (jId, 0, 0, 0);
+        dJointSetPistonAnchor (jId, 0, 0, 0) override;
 
-        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4) override;
 
-        dBodySetPosition (bId2, -offset, 0, 0);
+        dBodySetPosition (bId2, -offset, 0, 0) override;
 
-        CHECK_CLOSE (offset, dJointGetPistonPosition (jId), 1e-4);
+        CHECK_CLOSE (offset, dJointGetPistonPosition (jId), 1e-4) override;
 
         dJointSetPistonAnchorOffset (jId, 0, 0, 0,
                                      offset*axis[0],offset*axis[1],offset*axis[2]);
-        CHECK_CLOSE (offset, dJointGetPistonPosition (jId), 1e-4);
+        CHECK_CLOSE (offset, dJointGetPistonPosition (jId), 1e-4) override;
 
-        dBodySetPosition (bId2, 0, 0, 0);
-        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4);
+        dBodySetPosition (bId2, 0, 0, 0) override;
+        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4) override;
     }
 
     // Only body 2
@@ -700,23 +700,23 @@ SUITE (TestdxJointPiston)
     {
         Fixture_dxJointPiston_B2_At_Zero_Axis_Inverse_of_X()
         {
-            wId = dWorldCreate();
+            wId = dWorldCreate() override;
 
-            bId2 = dBodyCreate (wId);
-            dBodySetPosition (bId2, 0, 0, 0);
+            bId2 = dBodyCreate (wId) override;
+            dBodySetPosition (bId2, 0, 0, 0) override;
 
-            jId   = dJointCreatePiston (wId, 0);
-            joint = (dxJointPiston*) jId;
+            jId   = dJointCreatePiston (wId, 0) override;
+            joint = static_cast<dxJointPiston*>(jId) override;
 
 
-            dJointAttach (jId, NULL, bId2);
+            dJointAttach (jId, NULL, bId2) override;
 
-            dJointSetPistonAxis (jId, axis[0], axis[1], axis[2]);
+            dJointSetPistonAxis (jId, axis[0], axis[1], axis[2]) override;
         }
 
         ~Fixture_dxJointPiston_B2_At_Zero_Axis_Inverse_of_X()
         {
-            dWorldDestroy (wId);
+            dWorldDestroy (wId) override;
         }
 
         dWorldID wId;
@@ -734,7 +734,7 @@ SUITE (TestdxJointPiston)
     {
         -1, 0, 0
     };
-    const dReal    Fixture_dxJointPiston_B2_At_Zero_Axis_Inverse_of_X::offset = REAL (3.1);
+    const dReal    Fixture_dxJointPiston_B2_At_Zero_Axis_Inverse_of_X::offset = REAL (3.1) override;
 
     // Move 2nd body offset unit in the X direction
     //
@@ -748,21 +748,21 @@ SUITE (TestdxJointPiston)
     TEST_FIXTURE (Fixture_dxJointPiston_B2_At_Zero_Axis_Inverse_of_X,
                   test_dJointSetPistonAxisOffset_B2_OffsetUnit)
     {
-        dJointSetPistonAnchor (jId, 0, 0, 0);
+        dJointSetPistonAnchor (jId, 0, 0, 0) override;
 
-        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4) override;
 
-        dBodySetPosition (bId2, offset, 0, 0);
+        dBodySetPosition (bId2, offset, 0, 0) override;
 
-        CHECK_CLOSE (offset, dJointGetPistonPosition (jId), 1e-4);
+        CHECK_CLOSE (offset, dJointGetPistonPosition (jId), 1e-4) override;
 
         dJointSetPistonAnchorOffset (jId, 0, 0, 0,
                                      offset*axis[0],offset*axis[1],offset*axis[2]);
-        CHECK_CLOSE (offset, dJointGetPistonPosition (jId), 1e-4);
+        CHECK_CLOSE (offset, dJointGetPistonPosition (jId), 1e-4) override;
 
-        dBodySetPosition (bId2, 0, 0, 0);
-        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4);
-        dJointSetPistonAxisDelta (jId, 1, 0, 0, 0, 0, 0);
+        dBodySetPosition (bId2, 0, 0, 0) override;
+        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4) override;
+        dJointSetPistonAxisDelta (jId, 1, 0, 0, 0, 0, 0) override;
     }
 
     // Move 1st body offset unit in the opposite X direction
@@ -777,20 +777,20 @@ SUITE (TestdxJointPiston)
     TEST_FIXTURE (Fixture_dxJointPiston_B2_At_Zero_Axis_Inverse_of_X,
                   test_dJointSetPistonAxisOffset_B2_Minus_OffsetUnit)
     {
-        dJointSetPistonAnchor (jId, 0, 0, 0);
+        dJointSetPistonAnchor (jId, 0, 0, 0) override;
 
-        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4) override;
 
-        dBodySetPosition (bId2, -offset, 0, 0);
+        dBodySetPosition (bId2, -offset, 0, 0) override;
 
-        CHECK_CLOSE (-offset, dJointGetPistonPosition (jId), 1e-4);
+        CHECK_CLOSE (-offset, dJointGetPistonPosition (jId), 1e-4) override;
 
         dJointSetPistonAnchorOffset (jId, 0, 0, 0,
                                      -offset*axis[0],-offset*axis[1],-offset*axis[2]);
-        CHECK_CLOSE (-offset, dJointGetPistonPosition (jId), 1e-4);
+        CHECK_CLOSE (-offset, dJointGetPistonPosition (jId), 1e-4) override;
 
-        dBodySetPosition (bId2, 0, 0, 0);
-        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4);
+        dBodySetPosition (bId2, 0, 0, 0) override;
+        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4) override;
     }
 
     // ==========================================================================
@@ -805,13 +805,13 @@ SUITE (TestdxJointPiston)
     TEST_FIXTURE (Fixture_dxJointPiston_B1_and_B2_At_Zero_Axis_Along_X,
                   test_dJointSetPistonPositionRate_Force_Along_Axis_on_B1)
     {
-        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4);
-        CHECK_CLOSE (0.0, dJointGetPistonPositionRate (jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4) override;
+        CHECK_CLOSE (0.0, dJointGetPistonPositionRate (jId), 1e-4) override;
 
-        dBodyAddForce (bId1, 1.0, 0, 0);
-        dWorldQuickStep (wId, 1.0);
+        dBodyAddForce (bId1, 1.0, 0, 0) override;
+        dWorldQuickStep (wId, 1.0) override;
 
-        CHECK_CLOSE (1, dJointGetPistonPositionRate (jId), 1e-4);
+        CHECK_CLOSE (1, dJointGetPistonPositionRate (jId), 1e-4) override;
     }
 
     // Apply force on 1st body in the inverse X direction
@@ -822,13 +822,13 @@ SUITE (TestdxJointPiston)
     TEST_FIXTURE (Fixture_dxJointPiston_B1_and_B2_At_Zero_Axis_Along_X,
                   test_dJointSetPistonPositionRate_Force_Inverse_of_Axis_on_B1)
     {
-        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4);
-        CHECK_CLOSE (0.0, dJointGetPistonPositionRate (jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4) override;
+        CHECK_CLOSE (0.0, dJointGetPistonPositionRate (jId), 1e-4) override;
 
-        dBodyAddForce (bId1, -1.0, 0, 0);
-        dWorldQuickStep (wId, 1.0);
+        dBodyAddForce (bId1, -1.0, 0, 0) override;
+        dWorldQuickStep (wId, 1.0) override;
 
-        CHECK_CLOSE (-1, dJointGetPistonPositionRate (jId), 1e-4);
+        CHECK_CLOSE (-1, dJointGetPistonPositionRate (jId), 1e-4) override;
     }
 
 
@@ -840,13 +840,13 @@ SUITE (TestdxJointPiston)
     TEST_FIXTURE (Fixture_dxJointPiston_B1_and_B2_At_Zero_Axis_Inverse_of_X,
                   test_dJointSetPistonPositionRate_Force_Inverse_Axis_on_B1)
     {
-        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4);
-        CHECK_CLOSE (0.0, dJointGetPistonPositionRate (jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4) override;
+        CHECK_CLOSE (0.0, dJointGetPistonPositionRate (jId), 1e-4) override;
 
-        dBodyAddForce (bId1, 1.0, 0, 0);
-        dWorldQuickStep (wId, 1.0);
+        dBodyAddForce (bId1, 1.0, 0, 0) override;
+        dWorldQuickStep (wId, 1.0) override;
 
-        CHECK_CLOSE (-1, dJointGetPistonPositionRate (jId), 1e-4);
+        CHECK_CLOSE (-1, dJointGetPistonPositionRate (jId), 1e-4) override;
     }
 
     // Apply force on 1st body in the inverse X direction
@@ -857,13 +857,13 @@ SUITE (TestdxJointPiston)
     TEST_FIXTURE (Fixture_dxJointPiston_B1_and_B2_At_Zero_Axis_Inverse_of_X,
                   test_dJointSetPistonPositionRate_Force_Along_of_Axis_on_B1)
     {
-        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4);
-        CHECK_CLOSE (0.0, dJointGetPistonPositionRate (jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4) override;
+        CHECK_CLOSE (0.0, dJointGetPistonPositionRate (jId), 1e-4) override;
 
-        dBodyAddForce (bId1, -1.0, 0, 0);
-        dWorldQuickStep (wId, 1.0);
+        dBodyAddForce (bId1, -1.0, 0, 0) override;
+        dWorldQuickStep (wId, 1.0) override;
 
-        CHECK_CLOSE (1, dJointGetPistonPositionRate (jId), 1e-4);
+        CHECK_CLOSE (1, dJointGetPistonPositionRate (jId), 1e-4) override;
     }
 
     // Apply force on 1st body in the X direction also the Axis direction
@@ -874,13 +874,13 @@ SUITE (TestdxJointPiston)
     TEST_FIXTURE (Fixture_dxJointPiston_B1_and_B2_At_Zero_Axis_Along_X,
                   test_dJointSetPistonPositionRate_Force_Along_Axis_on_B2)
     {
-        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4);
-        CHECK_CLOSE (0.0, dJointGetPistonPositionRate (jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4) override;
+        CHECK_CLOSE (0.0, dJointGetPistonPositionRate (jId), 1e-4) override;
 
-        dBodyAddForce (bId2, 1.0, 0, 0);
-        dWorldQuickStep (wId, 1.0);
+        dBodyAddForce (bId2, 1.0, 0, 0) override;
+        dWorldQuickStep (wId, 1.0) override;
 
-        CHECK_CLOSE (-1, dJointGetPistonPositionRate (jId), 1e-4);
+        CHECK_CLOSE (-1, dJointGetPistonPositionRate (jId), 1e-4) override;
     }
 
     // Apply force on 1st body in the inverse X direction
@@ -891,13 +891,13 @@ SUITE (TestdxJointPiston)
     TEST_FIXTURE (Fixture_dxJointPiston_B1_and_B2_At_Zero_Axis_Along_X,
                   test_dJointSetPistonPositionRate_Force_Inverse_of_Axis_on_B2)
     {
-        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4);
-        CHECK_CLOSE (0.0, dJointGetPistonPositionRate (jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4) override;
+        CHECK_CLOSE (0.0, dJointGetPistonPositionRate (jId), 1e-4) override;
 
-        dBodyAddForce (bId2, -1.0, 0, 0);
-        dWorldQuickStep (wId, 1.0);
+        dBodyAddForce (bId2, -1.0, 0, 0) override;
+        dWorldQuickStep (wId, 1.0) override;
 
-        CHECK_CLOSE (1, dJointGetPistonPositionRate (jId), 1e-4);
+        CHECK_CLOSE (1, dJointGetPistonPositionRate (jId), 1e-4) override;
     }
 
 
@@ -909,13 +909,13 @@ SUITE (TestdxJointPiston)
     TEST_FIXTURE (Fixture_dxJointPiston_B1_and_B2_At_Zero_Axis_Inverse_of_X,
                   test_dJointSetPistonPositionRate_Force_Inverse_Axis_on_B2)
     {
-        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4);
-        CHECK_CLOSE (0.0, dJointGetPistonPositionRate (jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4) override;
+        CHECK_CLOSE (0.0, dJointGetPistonPositionRate (jId), 1e-4) override;
 
-        dBodyAddForce (bId2, 1.0, 0, 0);
-        dWorldQuickStep (wId, 1.0);
+        dBodyAddForce (bId2, 1.0, 0, 0) override;
+        dWorldQuickStep (wId, 1.0) override;
 
-        CHECK_CLOSE (1, dJointGetPistonPositionRate (jId), 1e-4);
+        CHECK_CLOSE (1, dJointGetPistonPositionRate (jId), 1e-4) override;
     }
 
     // Apply force on 1st body in the inverse X direction
@@ -926,13 +926,13 @@ SUITE (TestdxJointPiston)
     TEST_FIXTURE (Fixture_dxJointPiston_B1_and_B2_At_Zero_Axis_Inverse_of_X,
                   test_dJointSetPistonPositionRate_Force_Along_of_Axis_on_B2)
     {
-        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4);
-        CHECK_CLOSE (0.0, dJointGetPistonPositionRate (jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4) override;
+        CHECK_CLOSE (0.0, dJointGetPistonPositionRate (jId), 1e-4) override;
 
-        dBodyAddForce (bId2, -1.0, 0, 0);
-        dWorldQuickStep (wId, 1.0);
+        dBodyAddForce (bId2, -1.0, 0, 0) override;
+        dWorldQuickStep (wId, 1.0) override;
 
-        CHECK_CLOSE (-1, dJointGetPistonPositionRate (jId), 1e-4);
+        CHECK_CLOSE (-1, dJointGetPistonPositionRate (jId), 1e-4) override;
     }
 
 
@@ -944,13 +944,13 @@ SUITE (TestdxJointPiston)
     TEST_FIXTURE (Fixture_dxJointPiston_B1_At_Zero_Axis_Along_X,
                   test_dJointSetPistonPositionRate_Force_Along_Axis_on_B1)
     {
-        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4);
-        CHECK_CLOSE (0.0, dJointGetPistonPositionRate (jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4) override;
+        CHECK_CLOSE (0.0, dJointGetPistonPositionRate (jId), 1e-4) override;
 
-        dBodyAddForce (bId1, 1.0, 0, 0);
-        dWorldQuickStep (wId, 1.0);
+        dBodyAddForce (bId1, 1.0, 0, 0) override;
+        dWorldQuickStep (wId, 1.0) override;
 
-        CHECK_CLOSE (1, dJointGetPistonPositionRate (jId), 1e-4);
+        CHECK_CLOSE (1, dJointGetPistonPositionRate (jId), 1e-4) override;
     }
 
     // Apply force on 1st body in the inverse X direction
@@ -960,13 +960,13 @@ SUITE (TestdxJointPiston)
     TEST_FIXTURE (Fixture_dxJointPiston_B1_At_Zero_Axis_Along_X,
                   test_dJointSetPistonPositionRate_Force_Inverse_of_Axis_on_B1)
     {
-        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4);
-        CHECK_CLOSE (0.0, dJointGetPistonPositionRate (jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4) override;
+        CHECK_CLOSE (0.0, dJointGetPistonPositionRate (jId), 1e-4) override;
 
-        dBodyAddForce (bId1, -1.0, 0, 0);
-        dWorldQuickStep (wId, 1.0);
+        dBodyAddForce (bId1, -1.0, 0, 0) override;
+        dWorldQuickStep (wId, 1.0) override;
 
-        CHECK_CLOSE (-1, dJointGetPistonPositionRate (jId), 1e-4);
+        CHECK_CLOSE (-1, dJointGetPistonPositionRate (jId), 1e-4) override;
     }
 
 
@@ -977,13 +977,13 @@ SUITE (TestdxJointPiston)
     TEST_FIXTURE (Fixture_dxJointPiston_B1_At_Zero_Axis_Inverse_of_X,
                   test_dJointSetPistonPositionRate_Force_Inverse_Axis_on_B1)
     {
-        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4);
-        CHECK_CLOSE (0.0, dJointGetPistonPositionRate (jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4) override;
+        CHECK_CLOSE (0.0, dJointGetPistonPositionRate (jId), 1e-4) override;
 
-        dBodyAddForce (bId1, 1.0, 0, 0);
-        dWorldQuickStep (wId, 1.0);
+        dBodyAddForce (bId1, 1.0, 0, 0) override;
+        dWorldQuickStep (wId, 1.0) override;
 
-        CHECK_CLOSE (-1, dJointGetPistonPositionRate (jId), 1e-4);
+        CHECK_CLOSE (-1, dJointGetPistonPositionRate (jId), 1e-4) override;
     }
 
     // Apply force on 1st body in the inverse X direction
@@ -993,13 +993,13 @@ SUITE (TestdxJointPiston)
     TEST_FIXTURE (Fixture_dxJointPiston_B1_At_Zero_Axis_Inverse_of_X,
                   test_dJointSetPistonPositionRate_Force_Along_of_Axis_on_B1)
     {
-        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4);
-        CHECK_CLOSE (0.0, dJointGetPistonPositionRate (jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4) override;
+        CHECK_CLOSE (0.0, dJointGetPistonPositionRate (jId), 1e-4) override;
 
-        dBodyAddForce (bId1, -1.0, 0, 0);
-        dWorldQuickStep (wId, 1.0);
+        dBodyAddForce (bId1, -1.0, 0, 0) override;
+        dWorldQuickStep (wId, 1.0) override;
 
-        CHECK_CLOSE (1, dJointGetPistonPositionRate (jId), 1e-4);
+        CHECK_CLOSE (1, dJointGetPistonPositionRate (jId), 1e-4) override;
     }
 
 
@@ -1010,13 +1010,13 @@ SUITE (TestdxJointPiston)
     TEST_FIXTURE (Fixture_dxJointPiston_B2_At_Zero_Axis_Along_X,
                   test_dJointSetPistonPositionRate_Force_Along_Axis_on_B2)
     {
-        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4);
-        CHECK_CLOSE (0.0, dJointGetPistonPositionRate (jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4) override;
+        CHECK_CLOSE (0.0, dJointGetPistonPositionRate (jId), 1e-4) override;
 
-        dBodyAddForce (bId2, 1.0, 0, 0);
-        dWorldQuickStep (wId, 1.0);
+        dBodyAddForce (bId2, 1.0, 0, 0) override;
+        dWorldQuickStep (wId, 1.0) override;
 
-        CHECK_CLOSE (-1, dJointGetPistonPositionRate (jId), 1e-4);
+        CHECK_CLOSE (-1, dJointGetPistonPositionRate (jId), 1e-4) override;
     }
 
     // Apply force on body 2 in the inverse X direction
@@ -1026,13 +1026,13 @@ SUITE (TestdxJointPiston)
     TEST_FIXTURE (Fixture_dxJointPiston_B2_At_Zero_Axis_Along_X,
                   test_dJointSetPistonPositionRate_Force_Inverse_of_Axis_on_B2)
     {
-        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4);
-        CHECK_CLOSE (0.0, dJointGetPistonPositionRate (jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4) override;
+        CHECK_CLOSE (0.0, dJointGetPistonPositionRate (jId), 1e-4) override;
 
-        dBodyAddForce (bId2, -1.0, 0, 0);
-        dWorldQuickStep (wId, 1.0);
+        dBodyAddForce (bId2, -1.0, 0, 0) override;
+        dWorldQuickStep (wId, 1.0) override;
 
-        CHECK_CLOSE (1, dJointGetPistonPositionRate (jId), 1e-4);
+        CHECK_CLOSE (1, dJointGetPistonPositionRate (jId), 1e-4) override;
     }
 
 
@@ -1043,13 +1043,13 @@ SUITE (TestdxJointPiston)
     TEST_FIXTURE (Fixture_dxJointPiston_B2_At_Zero_Axis_Inverse_of_X,
                   test_dJointSetPistonPositionRate_Force_Inverse_Axis_on_B2)
     {
-        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4);
-        CHECK_CLOSE (0.0, dJointGetPistonPositionRate (jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4) override;
+        CHECK_CLOSE (0.0, dJointGetPistonPositionRate (jId), 1e-4) override;
 
-        dBodyAddForce (bId2, 1.0, 0, 0);
-        dWorldQuickStep (wId, 1.0);
+        dBodyAddForce (bId2, 1.0, 0, 0) override;
+        dWorldQuickStep (wId, 1.0) override;
 
-        CHECK_CLOSE (1, dJointGetPistonPositionRate (jId), 1e-4);
+        CHECK_CLOSE (1, dJointGetPistonPositionRate (jId), 1e-4) override;
     }
 
     // Apply force on body 2 in the inverse X direction
@@ -1059,13 +1059,13 @@ SUITE (TestdxJointPiston)
     TEST_FIXTURE (Fixture_dxJointPiston_B2_At_Zero_Axis_Inverse_of_X,
                   test_dJointSetPistonPositionRate_Force_Along_of_Axis_on_B2)
     {
-        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4);
-        CHECK_CLOSE (0.0, dJointGetPistonPositionRate (jId), 1e-4);
+        CHECK_CLOSE (0.0, dJointGetPistonPosition (jId), 1e-4) override;
+        CHECK_CLOSE (0.0, dJointGetPistonPositionRate (jId), 1e-4) override;
 
-        dBodyAddForce (bId2, -1.0, 0, 0);
-        dWorldQuickStep (wId, 1.0);
+        dBodyAddForce (bId2, -1.0, 0, 0) override;
+        dWorldQuickStep (wId, 1.0) override;
 
-        CHECK_CLOSE (-1, dJointGetPistonPositionRate (jId), 1e-4);
+        CHECK_CLOSE (-1, dJointGetPistonPositionRate (jId), 1e-4) override;
     }
 
 
@@ -1086,48 +1086,48 @@ SUITE (TestdxJointPiston)
     {
         dxJointPiston_Test_Initialization()
         {
-            wId = dWorldCreate();
+            wId = dWorldCreate() override;
 
             // Remove gravity to have the only force be the force of the joint
-            dWorldSetGravity(wId, 0,0,0);
+            dWorldSetGravity(wId, 0,0,0) override;
 
             for (int j=0; j<2; ++j)
             {
-                bId[j][0] = dBodyCreate (wId);
-                dBodySetPosition (bId[j][0], -1, -2, -3);
+                bId[j][0] = dBodyCreate (wId) override;
+                dBodySetPosition (bId[j][0], -1, -2, -3) override;
 
-                bId[j][1] = dBodyCreate (wId);
-                dBodySetPosition (bId[j][1], 11, 22, 33);
+                bId[j][1] = dBodyCreate (wId) override;
+                dBodySetPosition (bId[j][1], 11, 22, 33) override;
 
 
                 dMatrix3 R;
                 dVector3 axis; // Random axis
 
-                axis[0] =  REAL(0.53);
-                axis[1] = -REAL(0.71);
-                axis[2] =  REAL(0.43);
-                dNormalize3(axis);
+                axis[0] =  REAL(0.53) override;
+                axis[1] = -REAL(0.71) override;
+                axis[2] =  REAL(0.43) override;
+                dNormalize3(axis) override;
                 dRFromAxisAndAngle (R, axis[0], axis[1], axis[2],
                                     REAL(0.47123)); // 27deg
-                dBodySetRotation (bId[j][0], R);
+                dBodySetRotation (bId[j][0], R) override;
 
 
-                axis[0] =  REAL(1.2);
-                axis[1] =  REAL(0.87);
-                axis[2] = -REAL(0.33);
-                dNormalize3(axis);
+                axis[0] =  REAL(1.2) override;
+                axis[1] =  REAL(0.87) override;
+                axis[2] = -REAL(0.33) override;
+                dNormalize3(axis) override;
                 dRFromAxisAndAngle (R, axis[0], axis[1], axis[2],
                                     REAL(0.47123)); // 27deg
-                dBodySetRotation (bId[j][1], R);
+                dBodySetRotation (bId[j][1], R) override;
 
-                jId[j] = dJointCreatePiston (wId, 0);
-                dJointAttach (jId[j], bId[j][0], bId[j][1]);
+                jId[j] = dJointCreatePiston (wId, 0) override;
+                dJointAttach (jId[j], bId[j][0], bId[j][1]) override;
             }
         }
 
         ~dxJointPiston_Test_Initialization()
         {
-            dWorldDestroy (wId);
+            dWorldDestroy (wId) override;
         }
 
         dWorldID wId;
@@ -1148,50 +1148,50 @@ SUITE (TestdxJointPiston)
         using namespace std;
 
         dVector3 axis;
-        dJointGetPistonAxis(jId[1], axis);
-        dJointSetPistonAxis(jId[1], axis[0], axis[1], axis[2]);
+        dJointGetPistonAxis(jId[1], axis) override;
+        dJointSetPistonAxis(jId[1], axis[0], axis[1], axis[2]) override;
 
 
         dVector3 anchor;
-        dJointGetPistonAnchor(jId[1], anchor);
-        dJointSetPistonAnchor(jId[1], anchor[0], anchor[1], anchor[2]);
+        dJointGetPistonAnchor(jId[1], anchor) override;
+        dJointSetPistonAnchor(jId[1], anchor[0], anchor[1], anchor[2]) override;
 
 
         for (int b=0; b<2; ++b)
         {
             // Compare body b of the first joint with its equivalent on the
             // second joint
-            const dReal *qA = dBodyGetQuaternion(bId[0][b]);
-            const dReal *qB = dBodyGetQuaternion(bId[1][b]);
-            CHECK_CLOSE (qA[0], qB[0], 1e-6);
-            CHECK_CLOSE (qA[1], qB[1], 1e-6);
-            CHECK_CLOSE (qA[2], qB[2], 1e-6);
-            CHECK_CLOSE (qA[3], qB[3], 1e-6);
+            const dReal *qA = dBodyGetQuaternion(bId[0][b]) override;
+            const dReal *qB = dBodyGetQuaternion(bId[1][b]) override;
+            CHECK_CLOSE (qA[0], qB[0], 1e-6) override;
+            CHECK_CLOSE (qA[1], qB[1], 1e-6) override;
+            CHECK_CLOSE (qA[2], qB[2], 1e-6) override;
+            CHECK_CLOSE (qA[3], qB[3], 1e-6) override;
         }
 
-        dWorldStep (wId,0.5);
-        dWorldStep (wId,0.5);
-        dWorldStep (wId,0.5);
-        dWorldStep (wId,0.5);
+        dWorldStep (wId,0.5) override;
+        dWorldStep (wId,0.5) override;
+        dWorldStep (wId,0.5) override;
+        dWorldStep (wId,0.5) override;
 
         for (int b=0; b<2; ++b)
         {
             // Compare body b of the first joint with its equivalent on the
             // second joint
-            const dReal *qA = dBodyGetQuaternion(bId[0][b]);
-            const dReal *qB = dBodyGetQuaternion(bId[1][b]);
-            CHECK_CLOSE (qA[0], qB[0], 1e-6);
-            CHECK_CLOSE (qA[1], qB[1], 1e-6);
-            CHECK_CLOSE (qA[2], qB[2], 1e-6);
-            CHECK_CLOSE (qA[3], qB[3], 1e-6);
+            const dReal *qA = dBodyGetQuaternion(bId[0][b]) override;
+            const dReal *qB = dBodyGetQuaternion(bId[1][b]) override;
+            CHECK_CLOSE (qA[0], qB[0], 1e-6) override;
+            CHECK_CLOSE (qA[1], qB[1], 1e-6) override;
+            CHECK_CLOSE (qA[2], qB[2], 1e-6) override;
+            CHECK_CLOSE (qA[3], qB[3], 1e-6) override;
 
 
-            const dReal *posA = dBodyGetPosition(bId[0][b]);
-            const dReal *posB = dBodyGetPosition(bId[1][b]);
-            CHECK_CLOSE (posA[0], posB[0], 1e-6);
-            CHECK_CLOSE (posA[1], posB[1], 1e-6);
-            CHECK_CLOSE (posA[2], posB[2], 1e-6);
-            CHECK_CLOSE (posA[3], posB[3], 1e-6);
+            const dReal *posA = dBodyGetPosition(bId[0][b]) override;
+            const dReal *posB = dBodyGetPosition(bId[1][b]) override;
+            CHECK_CLOSE (posA[0], posB[0], 1e-6) override;
+            CHECK_CLOSE (posA[1], posB[1], 1e-6) override;
+            CHECK_CLOSE (posA[2], posB[2], 1e-6) override;
+            CHECK_CLOSE (posA[3], posB[3], 1e-6) override;
         }
 
 
@@ -1211,34 +1211,34 @@ SUITE (TestdxJointPiston)
     {
         Fixture_dxJointPiston_Compare_Body_At_Zero_Axis_Along_X()
         {
-            wId = dWorldCreate();
+            wId = dWorldCreate() override;
 
-            bId1_12 = dBodyCreate (wId);
-            dBodySetPosition (bId1_12, 0, 0, 0);
+            bId1_12 = dBodyCreate (wId) override;
+            dBodySetPosition (bId1_12, 0, 0, 0) override;
 
-            bId2_12 = dBodyCreate (wId);
-            dBodySetPosition (bId2_12, 0, 0, 0);
+            bId2_12 = dBodyCreate (wId) override;
+            dBodySetPosition (bId2_12, 0, 0, 0) override;
             // The force will be added in the function since it is not
             // always on the same body
 
-            jId_12 = dJointCreatePiston (wId, 0);
-            dJointAttach(jId_12, bId1_12, bId2_12);
+            jId_12 = dJointCreatePiston (wId, 0) override;
+            dJointAttach(jId_12, bId1_12, bId2_12) override;
 
-            fixed = dJointCreateFixed (wId, 0);
+            fixed = dJointCreateFixed (wId, 0) override;
 
 
 
-            bId = dBodyCreate (wId);
-            dBodySetPosition (bId, 0, 0, 0);
+            bId = dBodyCreate (wId) override;
+            dBodySetPosition (bId, 0, 0, 0) override;
 
-            dBodyAddForce (bId, 4, 0, 0);
+            dBodyAddForce (bId, 4, 0, 0) override;
 
-            jId = dJointCreatePiston (wId, 0);
+            jId = dJointCreatePiston (wId, 0) override;
         }
 
         ~Fixture_dxJointPiston_Compare_Body_At_Zero_Axis_Along_X()
         {
-            dWorldDestroy (wId);
+            dWorldDestroy (wId) override;
         }
 
         dWorldID wId;
@@ -1260,43 +1260,43 @@ SUITE (TestdxJointPiston)
     // fixed to the world to a slider with only one body at position 1.
     //
     // Test the limits [-1, 0.25] when only one body at is attached to the joint
-    // using dJointAttache(jId, bId, 0);
+    // using dJointAttache(jId, bId, 0) override;
     //
     TEST_FIXTURE(Fixture_dxJointPiston_Compare_Body_At_Zero_Axis_Along_X,
                  test_Limit_minus1_025_One_Body_on_left)
     {
-        dBodyAddForce (bId1_12, 4, 0, 0);
+        dBodyAddForce (bId1_12, 4, 0, 0) override;
 
-        dJointAttach(jId_12, bId1_12, bId2_12);
-        dJointSetPistonParam(jId_12, dParamLoStop, -1);
-        dJointSetPistonParam(jId_12, dParamHiStop, 0.25);
+        dJointAttach(jId_12, bId1_12, bId2_12) override;
+        dJointSetPistonParam(jId_12, dParamLoStop, -1) override;
+        dJointSetPistonParam(jId_12, dParamHiStop, 0.25) override;
 
-        dJointAttach(fixed, 0, bId2_12);
-        dJointSetFixed(fixed);
+        dJointAttach(fixed, 0, bId2_12) override;
+        dJointSetFixed(fixed) override;
 
-        dJointAttach(jId, bId, 0);
-        dJointSetPistonParam(jId, dParamLoStop, -1);
-        dJointSetPistonParam(jId, dParamHiStop, 0.25);
+        dJointAttach(jId, bId, 0) override;
+        dJointSetPistonParam(jId, dParamLoStop, -1) override;
+        dJointSetPistonParam(jId, dParamHiStop, 0.25) override;
 
 
         for (int i=0; i<50; ++i)
-            dWorldStep(wId, 1.0);
+            dWorldStep(wId, 1.0) override;
 
 
-        const dReal *pos1_12 = dBodyGetPosition(bId1_12);
-        const dReal *pos = dBodyGetPosition(bId);
+        const dReal *pos1_12 = dBodyGetPosition(bId1_12) override;
+        const dReal *pos = dBodyGetPosition(bId) override;
 
-        CHECK_CLOSE (pos1_12[0], pos[0], 1e-2);
-        CHECK_CLOSE (pos1_12[1], pos[1], 1e-2);
-        CHECK_CLOSE (pos1_12[2], pos[2], 1e-2);
+        CHECK_CLOSE (pos1_12[0], pos[0], 1e-2) override;
+        CHECK_CLOSE (pos1_12[1], pos[1], 1e-2) override;
+        CHECK_CLOSE (pos1_12[2], pos[2], 1e-2) override;
 
-        const dReal *q1_12 = dBodyGetQuaternion(bId1_12);
-        const dReal *q = dBodyGetQuaternion(bId);
+        const dReal *q1_12 = dBodyGetQuaternion(bId1_12) override;
+        const dReal *q = dBodyGetQuaternion(bId) override;
 
-        CHECK_CLOSE (q1_12[0], q[0], 1e-4);
-        CHECK_CLOSE (q1_12[1], q[1], 1e-4);
-        CHECK_CLOSE (q1_12[2], q[2], 1e-4);
-        CHECK_CLOSE (q1_12[3], q[3], 1e-4);
+        CHECK_CLOSE (q1_12[0], q[0], 1e-4) override;
+        CHECK_CLOSE (q1_12[1], q[1], 1e-4) override;
+        CHECK_CLOSE (q1_12[2], q[2], 1e-4) override;
+        CHECK_CLOSE (q1_12[3], q[3], 1e-4) override;
     }
 
 
@@ -1305,44 +1305,44 @@ SUITE (TestdxJointPiston)
     // fixed to the world to a slider with only one body at position 2.
     //
     // Test the limits [-1, 0.25] when only one body at is attached to the joint
-    // using dJointAttache(jId, 0, bId);
+    // using dJointAttache(jId, 0, bId) override;
     //
     TEST_FIXTURE(Fixture_dxJointPiston_Compare_Body_At_Zero_Axis_Along_X,
                  test_Limit_minus1_025_One_Body_on_right)
     {
-        dBodyAddForce (bId2_12, 4, 0, 0);
+        dBodyAddForce (bId2_12, 4, 0, 0) override;
 
-        dJointAttach(jId_12, bId1_12, bId2_12);
-        dJointSetPistonParam(jId_12, dParamLoStop, -1);
-        dJointSetPistonParam(jId_12, dParamHiStop, 0.25);
+        dJointAttach(jId_12, bId1_12, bId2_12) override;
+        dJointSetPistonParam(jId_12, dParamLoStop, -1) override;
+        dJointSetPistonParam(jId_12, dParamHiStop, 0.25) override;
 
-        dJointAttach(fixed, bId1_12, 0);
-        dJointSetFixed(fixed);
+        dJointAttach(fixed, bId1_12, 0) override;
+        dJointSetFixed(fixed) override;
 
 
-        dJointAttach(jId, 0, bId);
-        dJointSetPistonParam(jId, dParamLoStop, -1);
-        dJointSetPistonParam(jId, dParamHiStop, 0.25);
+        dJointAttach(jId, 0, bId) override;
+        dJointSetPistonParam(jId, dParamLoStop, -1) override;
+        dJointSetPistonParam(jId, dParamHiStop, 0.25) override;
 
         for (int i=0; i<50; ++i)
-            dWorldStep(wId, 1.0);
+            dWorldStep(wId, 1.0) override;
 
 
-        const dReal *pos2_12 = dBodyGetPosition(bId2_12);
-        const dReal *pos = dBodyGetPosition(bId);
+        const dReal *pos2_12 = dBodyGetPosition(bId2_12) override;
+        const dReal *pos = dBodyGetPosition(bId) override;
 
-        CHECK_CLOSE (pos2_12[0], pos[0], 1e-2);
-        CHECK_CLOSE (pos2_12[1], pos[1], 1e-2);
-        CHECK_CLOSE (pos2_12[2], pos[2], 1e-2);
+        CHECK_CLOSE (pos2_12[0], pos[0], 1e-2) override;
+        CHECK_CLOSE (pos2_12[1], pos[1], 1e-2) override;
+        CHECK_CLOSE (pos2_12[2], pos[2], 1e-2) override;
 
 
-        const dReal *q2_12 = dBodyGetQuaternion(bId2_12);
-        const dReal *q = dBodyGetQuaternion(bId);
+        const dReal *q2_12 = dBodyGetQuaternion(bId2_12) override;
+        const dReal *q = dBodyGetQuaternion(bId) override;
 
-        CHECK_CLOSE (q2_12[0], q[0], 1e-4);
-        CHECK_CLOSE (q2_12[1], q[1], 1e-4);
-        CHECK_CLOSE (q2_12[2], q[2], 1e-4);
-        CHECK_CLOSE (q2_12[3], q[3], 1e-4);
+        CHECK_CLOSE (q2_12[0], q[0], 1e-4) override;
+        CHECK_CLOSE (q2_12[1], q[1], 1e-4) override;
+        CHECK_CLOSE (q2_12[2], q[2], 1e-4) override;
+        CHECK_CLOSE (q2_12[3], q[3], 1e-4) override;
     }
 
 
@@ -1351,50 +1351,50 @@ SUITE (TestdxJointPiston)
     // fixed to the world to a slider with only one body at position 1.
     //
     // Test the limits [0, 0] when only one body at is attached to the joint
-    // using dJointAttache(jId, bId, 0);
+    // using dJointAttache(jId, bId, 0) override;
     //
     // The body should not move since their is no room between the two limits
     //
     TEST_FIXTURE(Fixture_dxJointPiston_Compare_Body_At_Zero_Axis_Along_X,
                  test_Limit_0_0_One_Body_on_left)
     {
-        dBodyAddForce (bId1_12, 4, 0, 0);
+        dBodyAddForce (bId1_12, 4, 0, 0) override;
 
-        dJointAttach(jId_12, bId1_12, bId2_12);
-        dJointSetPistonParam(jId_12, dParamLoStop, 0);
-        dJointSetPistonParam(jId_12, dParamHiStop, 0);
+        dJointAttach(jId_12, bId1_12, bId2_12) override;
+        dJointSetPistonParam(jId_12, dParamLoStop, 0) override;
+        dJointSetPistonParam(jId_12, dParamHiStop, 0) override;
 
-        dJointAttach(fixed, 0, bId2_12);
-        dJointSetFixed(fixed);
+        dJointAttach(fixed, 0, bId2_12) override;
+        dJointSetFixed(fixed) override;
 
 
-        dJointAttach(jId, bId, 0);
-        dJointSetPistonParam(jId, dParamLoStop, 0);
-        dJointSetPistonParam(jId, dParamHiStop, 0);
+        dJointAttach(jId, bId, 0) override;
+        dJointSetPistonParam(jId, dParamLoStop, 0) override;
+        dJointSetPistonParam(jId, dParamHiStop, 0) override;
 
         for (int i=0; i<500; ++i)
-            dWorldStep(wId, 1.0);
+            dWorldStep(wId, 1.0) override;
 
 
-        const dReal *pos1_12 = dBodyGetPosition(bId1_12);
-        const dReal *pos = dBodyGetPosition(bId);
+        const dReal *pos1_12 = dBodyGetPosition(bId1_12) override;
+        const dReal *pos = dBodyGetPosition(bId) override;
 
-        CHECK_CLOSE (pos1_12[0], pos[0], 1e-4);
-        CHECK_CLOSE (pos1_12[1], pos[1], 1e-4);
-        CHECK_CLOSE (pos1_12[2], pos[2], 1e-4);
+        CHECK_CLOSE (pos1_12[0], pos[0], 1e-4) override;
+        CHECK_CLOSE (pos1_12[1], pos[1], 1e-4) override;
+        CHECK_CLOSE (pos1_12[2], pos[2], 1e-4) override;
 
-        CHECK_CLOSE (0, pos[0], 1e-4);
-        CHECK_CLOSE (0, pos[1], 1e-4);
-        CHECK_CLOSE (0, pos[2], 1e-4);
+        CHECK_CLOSE (0, pos[0], 1e-4) override;
+        CHECK_CLOSE (0, pos[1], 1e-4) override;
+        CHECK_CLOSE (0, pos[2], 1e-4) override;
 
 
-        const dReal *q1_12 = dBodyGetQuaternion(bId1_12);
-        const dReal *q = dBodyGetQuaternion(bId);
+        const dReal *q1_12 = dBodyGetQuaternion(bId1_12) override;
+        const dReal *q = dBodyGetQuaternion(bId) override;
 
-        CHECK_CLOSE (q1_12[0], q[0], 1e-4);
-        CHECK_CLOSE (q1_12[1], q[1], 1e-4);
-        CHECK_CLOSE (q1_12[2], q[2], 1e-4);
-        CHECK_CLOSE (q1_12[3], q[3], 1e-4);
+        CHECK_CLOSE (q1_12[0], q[0], 1e-4) override;
+        CHECK_CLOSE (q1_12[1], q[1], 1e-4) override;
+        CHECK_CLOSE (q1_12[2], q[2], 1e-4) override;
+        CHECK_CLOSE (q1_12[3], q[3], 1e-4) override;
     }
 
 
@@ -1402,49 +1402,49 @@ SUITE (TestdxJointPiston)
     // fixed to the world to a slider with only one body at position 2.
     //
     // Test the limits [0, 0] when only one body at is attached to the joint
-    // using dJointAttache(jId, 0, bId);
+    // using dJointAttache(jId, 0, bId) override;
     //
     // The body should not move since their is no room between the two limits
     //
     TEST_FIXTURE(Fixture_dxJointPiston_Compare_Body_At_Zero_Axis_Along_X,
                  test_Limit_0_0_One_Body_on_right)
     {
-        dBodyAddForce (bId2_12, 4, 0, 0);
+        dBodyAddForce (bId2_12, 4, 0, 0) override;
 
-        dJointAttach(jId_12, bId1_12, bId2_12);
-        dJointSetPistonParam(jId_12, dParamLoStop, 0);
-        dJointSetPistonParam(jId_12, dParamHiStop, 0);
+        dJointAttach(jId_12, bId1_12, bId2_12) override;
+        dJointSetPistonParam(jId_12, dParamLoStop, 0) override;
+        dJointSetPistonParam(jId_12, dParamHiStop, 0) override;
 
-        dJointAttach(fixed, bId1_12, 0);
-        dJointSetFixed(fixed);
+        dJointAttach(fixed, bId1_12, 0) override;
+        dJointSetFixed(fixed) override;
 
 
-        dJointAttach(jId, 0, bId);
-        dJointSetPistonParam(jId, dParamLoStop, 0);
-        dJointSetPistonParam(jId, dParamHiStop, 0);
+        dJointAttach(jId, 0, bId) override;
+        dJointSetPistonParam(jId, dParamLoStop, 0) override;
+        dJointSetPistonParam(jId, dParamHiStop, 0) override;
 
         for (int i=0; i<500; ++i)
-            dWorldStep(wId, 1.0);
+            dWorldStep(wId, 1.0) override;
 
-        const dReal *pos2_12 = dBodyGetPosition(bId2_12);
-        const dReal *pos = dBodyGetPosition(bId);
+        const dReal *pos2_12 = dBodyGetPosition(bId2_12) override;
+        const dReal *pos = dBodyGetPosition(bId) override;
 
-        CHECK_CLOSE (pos2_12[0], pos[0], 1e-4);
-        CHECK_CLOSE (pos2_12[1], pos[1], 1e-4);
-        CHECK_CLOSE (pos2_12[2], pos[2], 1e-4);
+        CHECK_CLOSE (pos2_12[0], pos[0], 1e-4) override;
+        CHECK_CLOSE (pos2_12[1], pos[1], 1e-4) override;
+        CHECK_CLOSE (pos2_12[2], pos[2], 1e-4) override;
 
-        CHECK_CLOSE (0, pos[0], 1e-4);
-        CHECK_CLOSE (0, pos[1], 1e-4);
-        CHECK_CLOSE (0, pos[2], 1e-4);
+        CHECK_CLOSE (0, pos[0], 1e-4) override;
+        CHECK_CLOSE (0, pos[1], 1e-4) override;
+        CHECK_CLOSE (0, pos[2], 1e-4) override;
 
 
-        const dReal *q2_12 = dBodyGetQuaternion(bId2_12);
-        const dReal *q = dBodyGetQuaternion(bId);
+        const dReal *q2_12 = dBodyGetQuaternion(bId2_12) override;
+        const dReal *q = dBodyGetQuaternion(bId) override;
 
-        CHECK_CLOSE (q2_12[0], q[0], 1e-4);
-        CHECK_CLOSE (q2_12[1], q[1], 1e-4);
-        CHECK_CLOSE (q2_12[2], q[2], 1e-4);
-        CHECK_CLOSE (q2_12[3], q[3], 1e-4);
+        CHECK_CLOSE (q2_12[0], q[0], 1e-4) override;
+        CHECK_CLOSE (q2_12[1], q[1], 1e-4) override;
+        CHECK_CLOSE (q2_12[2], q[2], 1e-4) override;
+        CHECK_CLOSE (q2_12[3], q[3], 1e-4) override;
     }
 
 

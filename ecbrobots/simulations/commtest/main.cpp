@@ -62,7 +62,7 @@ class ECBTestCommunicator : public ECBCommunicator {
 public:
 //         GlobalData* global;
 
-        ECBTestCommunicator(GlobalData& global) : ECBCommunicator(global) {}
+        explicit ECBTestCommunicator(GlobalData& global) : ECBCommunicator(global) {}
 
         virtual ~ECBTestCommunicator(){}
 
@@ -77,8 +77,8 @@ public:
                 cerr << "Error while sending motor values for ECB " << 1 << "." << endl;
           }
           commData result = globalData->commchannel->receiveData();
-        printf("command(hex): %x,\r\n",result.command);
-          for(int i=0;i<result.dataLength;i++) {
+        explicit printf("command(hex): %x,\r\n",result.command);
+          for(int i=0;i<result.dataLength;++i) {
                     std::cout << "result: " << result.data[i] << std::endl;
             }
 
@@ -92,7 +92,7 @@ class MyECBManager : public ECBManager {
 
   public:
 
-    MyECBManager(ECBCommunicator* comm) : ECBManager(comm) {}
+    explicit MyECBManager(ECBCommunicator* comm) : ECBManager(comm) {}
 
     virtual ~MyECBManager() {}
 

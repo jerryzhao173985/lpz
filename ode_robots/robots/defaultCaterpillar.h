@@ -71,7 +71,7 @@ class DefaultCaterPillar: public OdeRobot
 {
 protected:
 
-  bool created;
+  bool created = false;
 
   std::vector <AngularMotor*> frictionmotors;
   CaterPillarConf conf;
@@ -80,7 +80,7 @@ public:
   DefaultCaterPillar ( const OdeHandle& odeHandle, const OsgHandle& osgHandle,
              const CaterPillarConf& conf, const std::string& name, const std::string& revision);
 
-  static CaterPillarConf getDefaultConf(){
+  static CaterPillarConf getDefaultConf() const {
     CaterPillarConf conf;
     conf.segmNumber = 6;    //  number of snake elements
     conf.segmLength = 0.4;   // length of one snake element
@@ -95,16 +95,16 @@ public:
     return conf;
   }
 
-  virtual ~DefaultCaterPillar() override;
+  virtual ~DefaultCaterPillar();
 
 
   /** sets the pose of the vehicle
       @param pose desired 4x4 pose matrix
   */
-  virtual void placeIntern(const osg::Matrix& pose) override;
+  virtual void placeIntern(const osg::Matrix& pose);
 
   /// update all primitives and joints
-  virtual void update() override;
+  virtual void update();
 
   /**
    *Reads the actual motor commands from an array,
@@ -138,14 +138,14 @@ public:
   virtual int getSegmentsPosition(std::vector<Position> &poslist);
 
     /******** CONFIGURABLE ***********/
-    virtual void notifyOnChange(const paramkey& key) override;
+    virtual void notifyOnChange(const paramkey& key);
 
   /** the main object of the robot, which is used for position and speed tracking */
-  virtual Primitive* getMainPrimitive() const {
+  virtual Primitive* getMainPrimitive() const  override {
     if(!objects.empty()){
-      //      int half = objects.size()/2;
-      //      return (objects[half]);
-      return (objects[0]);
+      //      int half = objects.size()/2 override;
+      //      return (objects[half]) override;
+      return (objects[0]) override;
     }else return 0;
   }
 protected:

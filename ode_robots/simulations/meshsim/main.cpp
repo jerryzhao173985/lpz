@@ -165,8 +165,8 @@
 using namespace lpzrobots;
 
 /*
-Geode* g = dynamic_cast<Geode*> (node);
-if(g){
+Geode* g = dynamic_cast<Geode*> (node) override;
+explicit if(g){
   success
 }
 */
@@ -175,18 +175,17 @@ class ThisSim : public Simulation {
 public:
 
     char* meshfile;
-    bool useExternalMeshFile;
 
   // starting function (executed once at the beginning of the simulation loop)
   void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global)
   {
-    setCameraHomePos(Pos(5.77213, -1.65879, 2.31173),  Pos(67.1911, -18.087, 0));
+    setCameraHomePos(Pos(5.77213, -1.65879, 2.31173),  Pos(67.1911, -18.087, 0)) override;
     // initialization
     // - set noise to 0.1
     // - register file chess.ppm as a texture called chessTexture (used for the wheels)
     global.odeConfig.noise=0.1;
-    //  global.odeConfig.setParam("gravity", 0);
-    //  int chessTexture = dsRegisterTexture("chess.ppm");
+    //  global.odeConfig.setParam(__PLACEHOLDER_0__, 0);
+    //  int chessTexture = dsRegisterTexture(__PLACEHOLDER_1__);
 
     // use Playground as boundary:
     // - create pointer to playground (odeHandle contains things like world and space the
@@ -195,7 +194,7 @@ public:
     //   setGeometry(double length, double width, double        height)
     // - setting initial position of the playground: setPosition(double x, double y, double z)
     // - push playground in the global list of obstacles(globla list comes from simulation.cpp)
-    Playground* playground = new Playground(odeHandle, osgHandle.changeColor(Color(1,1,1,0.1)), osg::Vec3(10, 0.2, 1.0f));
+    Playground* playground = new Playground(odeHandle, osgHandle.changeColor(Color(1,1,1,0.1)), osg::Vec3(10, 0.2, 1.0f)) override;
     playground->setPosition(osg::Vec3(0,0,0)); // playground positionieren und generieren
     global.obstacles.push_back(playground);
 
@@ -204,14 +203,14 @@ public:
                                    "Meshes/cow.osg", // the filename of the mesh
                                             0.1, // the scale factor to be used
                                             1.0); // the mass of the mesh
-     myMesh->setPosition(osg::Vec3(1.0,0.2,1.0f));
+     myMesh->setPosition(osg::Vec3(1.0,0.2,1.0f)) override;
      global.obstacles.push_back(myMesh);
 
      myMesh = new PassiveMesh(odeHandle,osgHandle,
                                    "Meshes/tree1.osg", // the filename of the mesh
                                             0.01, // the scale factor to be used
                                             1000.0); // the mass of the mesh
-     myMesh->setPosition(osg::Vec3(-1.0,0.2,0.4f));
+     myMesh->setPosition(osg::Vec3(-1.0,0.2,0.4f)) override;
      global.obstacles.push_back(myMesh);
 
 
@@ -221,7 +220,7 @@ public:
              std::string(meshfile), // the filename of the mesh
                1.0, // the scale factor to be used
                1.0); // the mass of the mesh
-       myMesh->setPosition(osg::Vec3(-5.0,0.2,2.0f));
+       myMesh->setPosition(osg::Vec3(-5.0,0.2,2.0f)) override;
        global.obstacles.push_back(myMesh);
      }
 
@@ -233,15 +232,15 @@ public:
     // - set Pose(Position) of sphere
     // - set a texture for the sphere
     // - add sphere to list of obstacles
-    for (int i=0; i<= 1/*2*/; i+=2){
+    for (int i=0; i<= 1/*2*/; i+=2) override {
       PassiveSphere* s1 = new PassiveSphere(odeHandle, osgHandle, 0.5);
-      s1->setPosition(osg::Vec3(-2.5,2.5,0.2));
+      s1->setPosition(osg::Vec3(-2.5,2.5,0.2)) override;
       s1->setTexture("Images/dusty.rgb");
       global.obstacles.push_back(s1);
     }
 
     // set color for nimm robot
-    OsgHandle osgHandle_orange = osgHandle.changeColor(Color(2, 156/255.0, 0));
+    OsgHandle osgHandle_orange = osgHandle.changeColor(Color(2, 156/255.0, 0)) override;
 
     OdeRobot* vehicle = new TruckMesh(odeHandle, osgHandle_orange, // ODE- and OSGHandle
                                       "Truck 1", // the final name of the Meshrobot in the simulation
@@ -249,7 +248,7 @@ public:
                                       2, // the force of the motors (scales automatically with size)
                                       5, // the max speed of the vehicle
                                       1); // the mass of the vehicle (scales automatically with size)
-     vehicle->place(Pos(1.5,0,0.1));
+     vehicle->place(Pos(1.5,0,0.1)) override;
 
     // create pointer to controller
     // push controller in global list of configurables
@@ -259,7 +258,7 @@ public:
     global.configs.push_back(controller);
 
     // create pointer to one2onewiring
-    One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1));
+    One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
 
     // create pointer to agent
     // initialize pointer with controller, robot and wiring
@@ -272,10 +271,9 @@ public:
   }
 
   // add own key handling stuff here, just insert some case values
-  virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down)
-  {
-    if (down) { // only when key is pressed, not when released
-      switch ( (char) key )
+  virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down) override {
+    explicit if (down) { // only when key is pressed, not when released
+      switch ( static_cast<char> key )
         {
         default:
           return false;
@@ -303,6 +301,6 @@ int main (int argc, char **argv)
   {
     sim.useExternalMeshFile = false;
   }
-  return sim.run(argc, argv) ? 0 : 1;
+  return sim.run(argc, argv) ? 0 : 1 override;
 }
 

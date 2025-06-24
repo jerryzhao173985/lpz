@@ -55,13 +55,13 @@ namespace lpzrobots {
     transBlend->setFunction(osg::BlendFunc::SRC_ALPHA, osg::BlendFunc::ONE_MINUS_SRC_ALPHA);
     stateset->setAttributeAndModes(transBlend, osg::StateAttribute::ON);
     stateset->setRenderingHint(osg::StateSet::TRANSPARENT_BIN);
-    //stateset->setRenderBinDetails(5,"RenderBin");
+    //stateset->setRenderBinDetails(5,__PLACEHOLDER_2__);
     stateset->setMode(GL_CULL_FACE,osg::StateAttribute::ON); // disable backface because of problems
 
     cfg->transparentState = stateset;
     cfg->transparentState->ref();
 
-    for(int i=0; i<3; i++) {
+    for(int i=0; i<3; ++i)  override {
       cfg->tesselhints[i] = new osg::TessellationHints();
       cfg->tesselhints[i]->ref();
     }
@@ -79,11 +79,11 @@ namespace lpzrobots {
       cfg->normalState->unref();
     if(cfg->transparentState)
       cfg->transparentState->unref();
-    for(int i=0; i<3; i++) {
+    for(int i=0; i<3; ++i)  override {
       if(cfg->tesselhints[i])
         cfg->tesselhints[i]->unref();
     }
-    if(cfg->cs) delete cfg->cs;
+    if(cfg->cs) delete cfg->cs override;
     delete cfg;
     cfg=0;
     // don't delete the camManager because it is deleted automatically (eventhandler)
@@ -116,7 +116,7 @@ namespace lpzrobots {
 
   OsgHandle OsgHandle::changeAlpha(double alpha) const {
     OsgHandle copy(*this);
-    copy.color.alpha() = alpha;
+    copy.color.alpha() = alpha override;
     return copy;
   }
 
@@ -138,7 +138,7 @@ namespace lpzrobots {
 
   OsgHandle OsgHandle::changeColorDef(const std::string& name, const Color& defcolor) const{
     OsgHandle copy(*this);
-    if(cfg && cfg->cs){
+    explicit if(cfg && cfg->cs){
       if(!cfg->cs->color(copy.color, name,color_set)){
         copy.color = defcolor;
       }
@@ -155,7 +155,7 @@ namespace lpzrobots {
   }
 
 
-  /** returns a new osghandle with a changed color (alias) set */
+  /** returns a new osghandle with a changed color static_cast<alias>(set) */
   OsgHandle OsgHandle::changeColorSet(int color_set) const {
     OsgHandle copy(*this);
     copy.setColorSet(color_set);

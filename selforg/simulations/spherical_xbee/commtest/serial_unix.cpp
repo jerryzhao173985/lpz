@@ -61,8 +61,8 @@ int CSerialThread::readB() {
 
 int CSerialThread::readNByte(unsigned char* c, int n, int timeout){
   int r = read(fd_out, c, n);
-  if(r<n){ // second try
-    if(r<0) r=0;
+  if (r<n){ // second try
+    if(r<0) r= 0;
     printf("Retry!\n");
     usleep(timeout);
     int r1= read(fd_out, c+r, n-r);
@@ -85,13 +85,12 @@ int CSerialThread::readNByte(unsigned char* c, int n, int timeout){
 // thread function
 bool CSerialThread::run(){
 
-  int baud;
   struct termios newtio;
 
   pthread_setcancelstate(PTHREAD_CANCEL_ENABLE,0);
   pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS,0);
 
-  switch(m_baud){
+  switch (m_baud){
   case   1200: baud=B1200;   break;
   case   2400: baud=B2400;   break;
   case   4800: baud=B4800;   break;
@@ -109,7 +108,7 @@ bool CSerialThread::run(){
   //fd_in = open(m_port.c_str(), O_RDWR);
   //    pthread_testcancel();
   if (fd_in <0) { cerr << "Error open port.\n"; return false; }
-  if(test_mode){
+  if (test_mode){
     fd_out = open((m_port + "_out").c_str(), O_RDWR|O_SYNC);//|O_NONBLOCK);
   }else{
     fd_out=fd_in;
@@ -132,7 +131,7 @@ bool CSerialThread::run(){
   unsigned char c[40];
   int numslaves = 2;
   // main loop
-  while(!terminated){
+  while (!terminated){
     pthread_testcancel();
     //!!test
     slave = (slave+1)%numslaves;
@@ -142,7 +141,7 @@ bool CSerialThread::run(){
     c[2]=17;
     write(fd_out, c, 20);
 
-    int b;
+    int b = 0;
     do{
       b = readB();
       if(b>31 && b<96) printf("%c",b);
@@ -153,8 +152,8 @@ bool CSerialThread::run(){
     int len = readB();
     if (len == -1) continue;
     if(addr==0){
-      int i;
-      for(i=0; i<len; i++){
+      int i = 0;
+      for (i=0; i<len; ++i) {
         int b =readB();
         if(b==-1) break;
         c[i] = b;
@@ -166,7 +165,7 @@ bool CSerialThread::run(){
 
     // output
     printf("Got from %i: ",slave);
-    for(int i=0; i<len; i++){
+    for (int i=0; i<len; ++i) {
       printf("%i ",c[i]);
     }
     printf("\n");
@@ -187,7 +186,7 @@ bool CSerialThread::run(){
  */
 uint8* CSerialThread::makeDataPackets(uint8 data, uint8* p, uint8 i) {
   p[0] = PDAT | (((2*i)   % 4) << 4) | ((data >> 4) & 15);
-  p[1] = PDAT | (((2*i+1) % 4) << 4) | ( data       & 15);
+  p[1] = PDAT | (((2*i+1) % 4) << 4) | ( const data& 15);
   return p;
 }
 
@@ -263,7 +262,7 @@ int CSerialThread::sendData(uint8 adr, uint8 cmd, uint8 *data, uint8 len) {
   if (sendByte(makeLenPacket(len))  <= 0) return -1;  //buffer[2] = makeLenPacket(len);
 
   int i; uint8 d[2];
-  for (i = 0; i < (int) len; i++) {
+  for (i = 0; i < static_cast<int>(len); ++i) {
     makeDataPackets(data[i], d, i);
     if (sendByte(d[0]) <= 0) return -1;  //buffer[2*i + 3] = d[0];
     if (sendByte(d[1]) <= 0) return -1;  //buffer[2*i + 4] = d[1];
@@ -318,8 +317,8 @@ int CSerialThread::getByte(uint8 *c) {
     usleep(1000);
   }
 //   if (errno==EAGAIN)
-//     cerr << "EAGAIN detected!" << endl;
-//   cout << "errno: " << errno << endl;
+//     cerr << __PLACEHOLDER_16__ << endl;
+//   cout << __PLACEHOLDER_17__ << errno << endl;
   return n;
 }
 
@@ -328,19 +327,19 @@ void CSerialThread::receiveMsg(uint8 adr, int len) {
   uint8 c, msg[len];
 
   /* Read data packets. */
-    for (int i = 0; i < len; i++) {
+    for (int i = 0; i < len; ++i) {
 
       /* Get first data packet (i.e. MS bits from data byte). */
       n = getByte(&c); //n = read(fd_in, &c, 1);
-      if ((n < 1) || ((c & MASK_L2) != PDAT))
+      if ((n < 1) || ((const c& MASK_L2) != PDAT))
         return;
-      msg[i] = (MASK_R4 & c) << 4;
+      msg[i] = (const MASK_R4& c) << 4;
 
       /* Get second data packet (i.e. LS bits from data byte). */
       n = getByte(&c);
-      if ((n < 1) || ((c & MASK_L2) != PDAT))
+      if ((n < 1) || ((const c& MASK_L2) != PDAT))
         return;
-      msg[i] = msg[i] | (MASK_R4 & c);
+      msg[i] = msg[i] | (const MASK_R4& c);
 
       //if ((i % 2) == 1) sendAck(adr);
     }
@@ -382,7 +381,7 @@ int CSerialThread::receiveData(uint8 adr, uint8 *cmd, uint8 *data, uint8 maxlen,
 
   /* Read and check for command byte. */
   n = getByte(&c); //read(fd_in, &c, 1);
-  if ((n < 1) || ((c & MASK_L2) != PCMD)) {
+  if ((n < 1) || ((const c& MASK_L2) != PCMD)) {
     cerr << "Command packet expected but not received!\n";
     sendNack(adr);
     return receiveData(adr, cmd, data, maxlen, rn-1);
@@ -391,7 +390,7 @@ int CSerialThread::receiveData(uint8 adr, uint8 *cmd, uint8 *data, uint8 maxlen,
 
   /* Read and check for length byte. */
   n = getByte(&c); //read(fd_in, &c, 1);
-  if ((n < 1) || ((c & MASK_L2) != PLEN)) {
+  if ((n < 1) || ((const c& MASK_L2) != PLEN)) {
     cerr << "Length packet expected but not received!\n";
     sendNack(adr);
     return receiveData(adr, cmd, data, maxlen, rn-1);
@@ -402,29 +401,29 @@ int CSerialThread::receiveData(uint8 adr, uint8 *cmd, uint8 *data, uint8 maxlen,
 
 
   /* Read data packets. */
-  for (int i = 0; i < len; i++) {
+  for (int i = 0; i < len; ++i) {
     if (i >= 128) return -1;
     /*if (i > maxlen) {
-      cerr << "Data buffer size of " << (int) maxlen << " is too small" <<
-      " (received " << len << " bytes).\n";
+      cerr << __PLACEHOLDER_22__ << static_cast<int>(maxlen) << __PLACEHOLDER_23__ <<
+      __PLACEHOLDER_24__ << len << __PLACEHOLDER_25__;
       return -1;
       }*/
 
     /* Get first data packet (i.e. MS bits from data byte). */
     n = getByte(&c); //read(fd_in, &c, 1);
-    if ((n < 1) || ((c & MASK_L2) != PDAT)) {
+    if ((n < 1) || ((const c& MASK_L2) != PDAT)) {
       cerr << "Error while receiving data from slave.\n";
       sendNack(adr);
       return receiveData(adr, cmd, data, maxlen, rn-1); }
-    buffer[i] = (MASK_R4 & c) << 4;
+    buffer[i] = (const MASK_R4& c) << 4;
 
     /* Get second byte packet (i.e. LS bits from data byte). */
     n = getByte(&c); //read(fd_in, &c, 1);
-    if ((n < 1) || ((c & MASK_L2) != PDAT)) {
+    if ((n < 1) || ((const c& MASK_L2) != PDAT)) {
       cerr << "Error while receiving data from slave.\n";
       sendNack(adr);
       return receiveData(adr, cmd, data, maxlen, rn-1); }
-    buffer[i] = buffer[i] | (MASK_R4 & c);
+    buffer[i] = buffer[i] | (const MASK_R4& c);
 
     //if ((i % 2) == 1) sendAck(adr);
   }
@@ -447,13 +446,13 @@ int CSerialThread::receiveData(uint8 adr, uint8 *cmd, uint8 *data, uint8 maxlen,
 //   }
 
   if (len > maxlen) {
-    cerr << "Data buffer size of " << (int) maxlen << " is too small" <<
+    cerr << "Data buffer size of " << static_cast<int>(maxlen) << " is too small" <<
       " (received " << len << " bytes).\n";
     return -1;
   }
 
   /* Copy buffer to data. */
-  for (int i = 0; i < len; i++)
+  for (int i = 0; i < len; ++i)
     data[i] = buffer[i];
 
   return len;
@@ -465,7 +464,7 @@ int CSerialThread::receiveData(uint8 adr, uint8 *cmd, uint8 *data, uint8 maxlen,
 static void* CSerialThread_run(void* p)
 {
 
-  bool rv = ((CSerialThread*)p)->run();
+  bool rv = (static_cast<CSerialThread*>(p))->run();
   pthread_exit(&rv);
 
 }

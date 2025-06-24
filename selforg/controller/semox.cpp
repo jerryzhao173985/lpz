@@ -7,7 +7,7 @@
  *   LICENSE:                                                              *
  *   This work is licensed under the Creative Commons                      *
  *   Attribution-NonCommercial-ShareAlike 2.5 License. To view a copy of   *
- *   this license, visit http://creativecommons.org/licenses/by-nc-sa/2.5/ *
+ *   this license, visit http:__PLACEHOLDER_50__
  *   or send a letter to Creative Commons, 543 Howard Street, 5th Floor,   *
  *   San Francisco, California, 94105, USA.                                *
  *                                                                         *
@@ -108,7 +108,7 @@ SeMoX::init(int sensornumber, int motornumber, RandGen* randGen) {
   x_buffer = new Matrix[buffersize];
   x_c_buffer = new Matrix[buffersize];
   y_buffer = new Matrix[buffersize];
-  for (unsigned int k = 0; k < buffersize; k++) {
+  for (unsigned int k = 0; k < buffersize; ++k) {
     x_buffer[k].set(number_sensors, 1);
     x_c_buffer[k].set(number_sensors + conf.numContext, 1);
     y_buffer[k].set(number_motors, 1);
@@ -133,7 +133,7 @@ SeMoX::step(const sensor* x_, int number_sensors, motor* y_, int number_motors) 
     learnModel(delay);
   }
   // update step counter
-  t++;
+  ++t;
 };
 
 /// performs one step without learning. Calulates motor commands from sensor inputs.
@@ -141,13 +141,13 @@ void
 SeMoX::stepNoLearning(const sensor* x, int number_sensors, motor* y, int number_motors) {
   fillBuffersAndControl(x, number_sensors, y, number_motors);
   // update step counter
-  t++;
+  ++t;
 };
 
 void
 SeMoX::fillBuffersAndControl(const sensor* x_, int number_sensors, motor* y_, int number_motors) {
-  assert((unsigned)number_sensors == (this->number_sensors + (unsigned)conf.numContext) &&
-         (unsigned)number_motors == this->number_motors);
+  assert(static_cast<unsigned>(number_sensors) == (this->number_sensors + static_cast<unsigned>(conf).numContext) &&
+         static_cast<unsigned>(number_motors) == this->number_motors);
 
   Matrix x(this->number_sensors, 1, x_);
   Matrix x_c(this->number_sensors + conf.numContext, 1, x_);
@@ -260,7 +260,7 @@ SeMoX::learnController() {
     }
   }
 
-  double error_factor = calcErrorFactor(v, (logaE & 1) != 0, (rootE & 1) != 0);
+  double error_factor = calcErrorFactor(v, (logaE >= 1), (rootE >= 1));
   C_update *= error_factor;
   H_update *= error_factor;
   if (teaching) {
@@ -279,7 +279,7 @@ SeMoX::learnModel(int delay) {
   const Matrix& y_tm1 = y_buffer[(t - 1 - delay) % buffersize];
 
   if (!pain) {
-    double error_factor = calcErrorFactor(xsi, (logaE & 2) != 0, (rootE & 2) != 0);
+    double error_factor = calcErrorFactor(xsi, (logaE >= 2), (rootE >= 2));
     Matrix A_update;
     Matrix S_update;
     Matrix B_update;
@@ -348,7 +348,7 @@ SeMoX::setParameters(const list<Matrix>& params) {
     else
       return false;
   } else {
-    fprintf(stderr, "setParameters wrong len %i!=2\n", (int)params.size());
+    fprintf(stderr, "setParameters wrong len %i!=2\n", static_cast<int>(params.size()));
     return false;
   }
   return true;

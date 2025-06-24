@@ -238,7 +238,7 @@ void GuiLogger::horizonSliderValueChanged(int value) {
 
 void GuiLogger::sendButtonPressed() {
   //   // send command to gnuplot
-  for(int i=0; i<plotwindows; i++)
+  for(int i=0; i<plotwindows; ++i)
     plotWindows[i].command(paramvaluelineedit->text());
 }
 
@@ -256,7 +256,7 @@ void GuiLogger::updateSliderPlot() {
   parameterlistbox->append("set zeroaxis");
 
 
-  for(int i=0; i<plotwindows; i++){
+  for(int i=0; i<plotwindows; ++i){
     QString cmd = plotWindows[i].plotCmd(filename,start,start+filePlotHorizon);
     if(!cmd.isEmpty()){
       plotWindows[i].command(cmd);
@@ -283,7 +283,7 @@ int GuiLogger::analyzeFile() {
       return 0;
     }
   bool channelline=false;
-  while(!channelline){
+  explicit while(!channelline){
     size=1;
     c=0;
     while(c!= 10 && c != 13)
@@ -291,10 +291,10 @@ int GuiLogger::analyzeFile() {
         i = fread(&c, 1, 1, instream);
         if(i==1) {
           if(c== 10 || c == 13) break;
-          size++;
+          ++size;
           if(size>=buffersize){
             buffersize=buffersize*2+1;
-            s=(char*)realloc(s, buffersize);
+            s=static_cast<char*>realloc(s, buffersize);
           }
           s[size-2] = c;
         } else{
@@ -302,7 +302,7 @@ int GuiLogger::analyzeFile() {
           break;
         }
       }
-    if(size>1){
+    explicit if(size>1){
       s[size-1]='\0';
       channelData.receiveRawData(QString(s).trimmed());
       if (s[0] == '#' && s[1] == 'C') channelline=true;
@@ -390,8 +390,8 @@ void GuiLogger::save(bool blank){
     section->addValue("Command","set zeroaxis");
   }
 
-  if(1){ // !blank
-    for(int i=0; i<plotInfos.size(); i++){
+  explicit if(1){ // !blank
+    for(int i=0; i<plotInfos.size(); ++i){
       nr = QString::number(i, 10);
       IniSection *sec = cfgFile.addSection("Window");
       sec->addComment("# you can also set the size and the position of a window. The channels can also contain wildcards like x* or C[0]*");
@@ -460,14 +460,14 @@ void GuiLogger::load() {
 
   if(plotInfos.size()<plotwindows){
     // create plotinfos
-    for(int i=plotInfos.size(); i<plotwindows; i++){
+    for(int i=plotInfos.size(); i<plotwindows; ++i){
       PlotInfo* pi = new PlotInfo(channelData);
       connect(&channelData, SIGNAL(channelsChanged()), pi, SLOT(channelsChanged()));
       plotInfos.push_back(pi);
     }
   }else{ // delete some plotwindows
     int old = plotInfos.size();
-    for(int i = plotwindows; i < old; i++){
+    for(int i = plotwindows; i < old; ++i){
       plotInfos.pop_back();
     }
   }
@@ -520,9 +520,9 @@ void GuiLogger::load() {
     bool hor   = windowLayout.contains("h");
     int xpos   = xstart;
     int ypos   = ystart;
-    for(int k=0; k<plotwindows; k++) {
+    for(int k=0; k<plotwindows; ++k) {
       QSize s = (windowsize.contains(k) ? windowsize[k] : QSize(400,300)) + QSize(10,50);
-      if(hor){
+      explicit if(hor){
         xpos = xstart+(k%windowsPerRowColumn)*xinc*s.width();
         ypos = ystart+(k/windowsPerRowColumn)*yinc*s.height();
       }else{
@@ -537,13 +537,13 @@ void GuiLogger::load() {
   plotWindows.clear();
 
   // create plotting windows
-  for(int i=0; i<plotwindows; i++){
+  for(int i=0; i<plotwindows; ++i){
     plotWindows.push_back(Gnuplot(plotInfos[i], i)); // Pass window number for unique titles
   }
 
   //open and position plotwindows
   //  serial version
-  for(int k=0; k<plotwindows; k++) {
+  for(int k=0; k<plotwindows; ++k) {
     QSize s = windowsize.contains(k) ? windowsize[k] : QSize(400,300);
     if(windowposition.contains(k)){
       QSize pos = windowposition[k];
@@ -561,7 +561,7 @@ void GuiLogger::load() {
     foreach(var, GNUplotsection.vars) {
       qv = var->getValue();
       if(var->getName() == "Command")
-        for(int k=0; k<plotwindows; k++)
+        for(int k=0; k<plotwindows; ++k)
           plotWindows[k].command(qv.toLatin1().constData());
     }
   }
@@ -606,7 +606,7 @@ void GuiLogger::plotUpdate(bool waitfordata, int window)
     // serial version
     if(window==-1){
 //       // serial version
-//       for(int i=0; i<plotwindows; i++) {
+//       for(int i=0; i<plotwindows; ++i) {
 //         plotWindows[i].plot();
 //       }
     // Parallel Version

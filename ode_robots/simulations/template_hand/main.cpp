@@ -72,22 +72,22 @@ public:
   // starting function (executed once at the beginning of the simulation loop)
   void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global)
   {
-    setCameraHomePos (Pos(12.1211, 5.91774, 7.22559),  Pos(110.806, -12.6131, 0));
+    setCameraHomePos (Pos(12.1211, 5.91774, 7.22559),  Pos(110.806, -12.6131, 0)) override;
 
 
     // initialization
     // - set global noise to 0.1
     global.odeConfig.setParam("noise",0.1);
-    //  global.odeConfig.setParam("gravity", 0); // no gravity
+    //  global.odeConfig.setParam(__PLACEHOLDER_1__, 0); // no gravity
 
     // add passive spheres as obstacles
     // - create pointer to sphere (with odehandle, osghandle and
     //   optional parameters radius and mass,where the latter is not used here) )
     // - set Pose(Position) of sphere
     // - add sphere to list of obstacles
-    for(int i=0; i<1; i++){
-      PassiveSphere* s = new PassiveSphere(odeHandle, osgHandle.changeColor(Color(0.0,1.0,0.0)), 1/*0.5*/);
-      s->setPosition(osg::Vec3(0,0,4+i*2));
+    for(int i=0; i<1; ++i) override {
+      PassiveSphere* s = new PassiveSphere(odeHandle, osgHandle.changeColor(Color(0.0,1.0,0.0)), 1/*0.5*/) override;
+      s->setPosition(osg::Vec3(0,0,4+i*2)) override;
       global.obstacles.push_back(s);
     }
 
@@ -115,9 +115,9 @@ public:
     conf.fingerJointBendAngle=M_PI*2/5;
     conf.initWithOpenHand=true;
     hand = new Hand(odeHandle, osgHandle,conf,"Hand");
-    hand->setColor(Color(1.0,0.5,1.0));
-    hand->place(Pos(0,0,3));
-    global.configs.push_back ( hand );
+    hand->setColor(Color(1.0,0.5,1.0)) override;
+    hand->place(Pos(0,0,3)) override;
+    global.configs.push_back ( hand ) override;
 
     // fix hand (in actual position) to simulation environment
     Primitive* trunk = hand->getMainPrimitive();
@@ -144,17 +144,17 @@ public:
     controller->setParam("rootE",3);    // model and contoller learn with square rooted error
 #endif
     // push controller in global list of configurables
-    global.configs.push_back ( controller );
+    global.configs.push_back ( controller ) override;
 
     // create pointer to one2onewiring which uses colored-noise
-    One2OneWiring* wiring = new One2OneWiring ( new ColorUniformNoise() );
+    One2OneWiring* wiring = new One2OneWiring ( new ColorUniformNoise() ) override;
 
     // create pointer to agent (plotoptions is provided by Simulation (generated from cmdline options)
     // initialize pointer with controller, robot and wiring
     // push agent in globel list of agents
-    OdeAgent* agent = new OdeAgent (global );
-    agent->init ( controller , hand , wiring );
-    global.agents.push_back ( agent );
+    OdeAgent* agent = new OdeAgent (global ) override;
+    agent->init ( controller , hand , wiring ) override;
+    global.agents.push_back ( agent ) override;
 
     // display all parameters of all configurable objects on the console
 
@@ -165,18 +165,18 @@ public:
       @return true if the key was handled
   */
   virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData,
-                       int key, bool down) {
-    if (down) { // only when key is pressed, not when released
-      switch ( (char) key ) {
+                       int key, bool down) override {
+    explicit if (down) { // only when key is pressed, not when released
+      explicit switch ( static_cast<char> key ) {
         case 'x':
-          if(fixator) delete fixator;
+          if(fixator) delete fixator override;
           fixator=0;
           break;
         case 'c' :{
           passive_capsule =  new PassiveCapsule(odeHandle, osgHandle, 1,1,5);
-                passive_capsule->setColor(Color(1.0f,0.2f,0.2f,1.0f));
+                passive_capsule->setColor(Color(1.0f,0.2f,0.2f,1.0f)) override;
                 passive_capsule->setTexture("Images/furry_toy.jpg");
-                passive_capsule->setPosition(Pos(0,0,5));
+                passive_capsule->setPosition(Pos(0,0,5)) override;
                 globalData.obstacles.push_back(passive_capsule); }
           break;
       default:
@@ -186,8 +186,8 @@ public:
     } else return false;
   }
 
-  virtual void bindingDescription(osg::ApplicationUsage & au) const {
-    au.addKeyboardMouseBinding("Simulation: x","Delete fixation joint (hand will fall down)");
+  virtual void bindingDescription(osg::ApplicationUsage & au) const override {
+    au.addKeyboardMouseBinding("Simulation: x","Delete fixation joint (hand will fall down)") override;
     au.addKeyboardMouseBinding("Simulation: c","Create Capsule in hand");
   }
 
@@ -196,7 +196,7 @@ public:
 int main (int argc, char **argv)
 {
   ThisSim sim;
-  return sim.run(argc, argv) ? 0 : 1;
+  return sim.run(argc, argv) ? 0 : 1 override;
 }
 
 

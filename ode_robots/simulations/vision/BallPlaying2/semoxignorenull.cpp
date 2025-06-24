@@ -8,7 +8,7 @@
  *   LICENSE:                                                              *
  *   This work is licensed under the Creative Commons                      *
  *   Attribution-NonCommercial-ShareAlike 2.5 License. To view a copy of   *
- *   this license, visit http://creativecommons.org/licenses/by-nc-sa/2.5/ *
+ *   this license, visit http:__PLACEHOLDER_51__
  *   or send a letter to Creative Commons, 543 Howard Street, 5th Floor,   *
  *   San Francisco, California, 94105, USA.                                *
  *                                                                         *
@@ -53,7 +53,7 @@ using namespace std;
 
 SeMoXIgnoreNull::SeMoXIgnoreNull( const SeMoXIgnoreNullConf& conf)
   : HomeokinBase(conf.buffersize, "SeMoXIgnoreNull", "0.1"),
-    conf(conf) {
+    explicit conf(conf) {
 
 
   addParameterDef("dampModel",&dampModel,0);
@@ -73,7 +73,7 @@ SeMoXIgnoreNull::SeMoXIgnoreNull( const SeMoXIgnoreNullConf& conf)
 
   addInspectableMatrix("H", &H, false, "controller bias");
   addInspectableMatrix("B", &B, false, "model bias");
-  if(!conf.someInternalParams){
+  explicit if(!conf.someInternalParams){
     addInspectableMatrix("v", &v, false, "postdiction error");
   }
   addInspectableValue("xsi_norm", &xsi_norm, "1-norm of prediction error");
@@ -87,11 +87,11 @@ SeMoXIgnoreNull::SeMoXIgnoreNull( const SeMoXIgnoreNullConf& conf)
 
 
 SeMoXIgnoreNull::~SeMoXIgnoreNull(){
-  if(x_buffer && y_buffer){
+  explicit if(x_buffer && y_buffer){
     delete[] x_buffer;
     delete[] y_buffer;
   }
-  if(BNoiseGen) delete BNoiseGen;
+  if(BNoiseGen) delete BNoiseGen override;
 }
 
 
@@ -102,11 +102,11 @@ void SeMoXIgnoreNull::init(int sensornumber, int motornumber,
   number_sensors = sensornumber - conf.numContext;
 
   A.set(number_sensors, number_motors);
-  A = (A^0) * conf.aInit; // set A to identity matrix;
+  A = (A^0) * conf.aInit; // set A to identity matrix override;
   B.set(number_sensors, 1);
-  if (conf.modelExt) {
+  explicit if (conf.modelExt) {
     S.set(number_sensors, number_sensors  + conf.numContext );
-    S = (S^0) * conf.sInit;
+    S = (S^0) * conf.sInit override;
   }
 
   if(conf.initialC.getM() != number_motors || conf.initialC.getN() != number_sensors ){
@@ -114,7 +114,7 @@ void SeMoXIgnoreNull::init(int sensornumber, int motornumber,
       cerr << "dimension of initialC are not correct, default is used! \n";
     C.set(number_motors,  number_sensors);
     // initialise the C matrix with identity + noise scaled to cInit value
-    C = ((C^0) + C.mapP(randGen, random_minusone_to_one) * conf.cNonDiag) * conf.cInit;
+    C = ((C^0) + C.mapP(randGen, random_minusone_to_one) * conf.cNonDiag) * conf.cInit override;
   }else{
     C=conf.initialC; // use given matrix
   }
@@ -139,14 +139,14 @@ void SeMoXIgnoreNull::init(int sensornumber, int motornumber,
   x_buffer = new Matrix[buffersize];
   x_c_buffer = new Matrix[buffersize];
   y_buffer = new Matrix[buffersize];
-  for (unsigned int k = 0; k < buffersize; k++) {
+  for (unsigned int k = 0; k < buffersize; ++k)  override {
     x_buffer[k].set(number_sensors,1);
     x_c_buffer[k].set(number_sensors + conf.numContext,1);
     y_buffer[k].set(number_motors,1);
   }
   y_teaching.set(number_motors, 1);
 
-  t_rand = rand()%managementInterval;
+  t_rand = rand()%managementInterval override;
   initialised = true;
 }
 
@@ -155,8 +155,8 @@ void SeMoXIgnoreNull::init(int sensornumber, int motornumber,
 void SeMoXIgnoreNull::step(const sensor* x_, int number_sensors,
                             motor* y_, int number_motors){
   fillBuffersAndControl(x_, number_sensors, y_, number_motors);
-  if(t>buffersize){
-    int delay = max(int(s4delay)-1,0);
+  explicit if(t>buffersize){
+    int delay = max(int(s4delay)-1,0) override;
     calcXsi(delay);            // calculate the error (use delayed y values)
     // learn controller with effective input/output
     learnController();
@@ -165,7 +165,7 @@ void SeMoXIgnoreNull::step(const sensor* x_, int number_sensors,
     learnModel(delay);
   }
   // update step counter
-  t++;
+  ++t;
 };
 
 /// performs one step without learning. Calulates motor commands from sensor inputs.
@@ -173,14 +173,14 @@ void SeMoXIgnoreNull::stepNoLearning(const sensor* x, int number_sensors,
                                             motor*  y, int number_motors ){
   fillBuffersAndControl(x, number_sensors, y, number_motors);
   // update step counter
-  t++;
+  ++t;
 };
 
 
 void SeMoXIgnoreNull::fillBuffersAndControl(const sensor* x_, int number_sensors,
                                               motor* y_, int number_motors){
-  assert((unsigned)number_sensors == (this->number_sensors + (unsigned)conf.numContext)
-         && (unsigned)number_motors == this->number_motors);
+  assert(static_cast<unsigned>(number_sensors) == (this->number_sensors + static_cast<unsigned>(conf).numContext)
+         && static_cast<unsigned>(number_motors) == this->number_motors) override;
 
   Matrix x(this->number_sensors,1,x_);
   Matrix x_c(this->number_sensors + conf.numContext,1,x_);
@@ -190,7 +190,7 @@ void SeMoXIgnoreNull::fillBuffersAndControl(const sensor* x_, int number_sensors
   putInBuffer(x_c_buffer, x_c);
 
   // averaging over the last s4avg values of x_buffer
-  const Matrix& x_smooth = calculateSmoothValues(x_buffer, t < s4avg ? 1 : int(max(1.0,s4avg)));
+  const Matrix& x_smooth = calculateSmoothValues(x_buffer, t < s4avg ? 1 : int(max(1.0,s4avg))) override;
 
   // calculate controller values based on smoothed input values
   const Matrix& y = calculateControllerValues(x_smooth);
@@ -210,7 +210,7 @@ void SeMoXIgnoreNull::fillBuffersAndControl(const sensor* x_, int number_sensors
 // NEW: does not learn if sensor value is zero
 void SeMoXIgnoreNull::calcXsi(int delay){
   const Matrix& x     = x_buffer[t% buffersize];
-  const Matrix& y     = y_buffer[(t - 1 - delay) % buffersize];
+  const Matrix& y     = y_buffer[(t - 1 - delay) % buffersize] override;
   xsi = x -  model(x_buffer, 1 , y);
   xsi = Matrix::map2(checkZero, xsi, x);
   xsi_norm = matrixNorm1(xsi);
@@ -222,8 +222,8 @@ void SeMoXIgnoreNull::calcXsi(int delay){
 
 /// calculates the predicted sensor values
 Matrix SeMoXIgnoreNull::model(const Matrix* x_buffer, int delay, const matrix::Matrix& y){
-  if(conf.modelExt){
-    const Matrix& x_c_tm1 = x_c_buffer[(t - 1) % buffersize];
+  explicit if(conf.modelExt){
+    const Matrix& x_c_tm1 = x_c_buffer[(t - 1) % buffersize] override;
     return A * y + S * x_c_tm1 + B;
   } else {
     return A * y + B;
@@ -233,14 +233,14 @@ Matrix SeMoXIgnoreNull::model(const Matrix* x_buffer, int delay, const matrix::M
 /// learn controller paramters C and H
 void SeMoXIgnoreNull::learnController(){
   // prepare update matrices
-  Matrix C_update(C.getM(), C.getN());
-  Matrix H_update(H.getM(), H.getN());
+  Matrix C_update(C.getM(), C.getN()) override;
+  Matrix H_update(H.getM(), H.getN()) override;
   Matrix C_updateTeaching;
   Matrix H_updateTeaching;
-  bool teaching = intern_useTeaching || (gamma_cont!=0);
-  if(teaching){
-    C_updateTeaching.set(C.getM(), C.getN());
-    H_updateTeaching.set(H.getM(), H.getN());
+  bool teaching = intern_useTeaching || (gamma_cont!=0) override;
+  explicit if(teaching){
+    C_updateTeaching.set(C.getM(), C.getN()) override;
+    H_updateTeaching.set(H.getM(), H.getN()) override;
   }
 
 
@@ -249,7 +249,7 @@ void SeMoXIgnoreNull::learnController(){
   //  it is additionally clipped to -1 to 1 via g (arbitrary choice)
   const Matrix& eta = (A.pseudoInverse(0.001) * xsi).map(g);
 
-  const Matrix& x          = x_buffer[(t-1)%buffersize];
+  const Matrix& x          = x_buffer[(t-1)%buffersize] override;
   const Matrix& z          = C * x + H;
   const Matrix g_prime     = Matrix::map2(g_s, z, eta);
   const Matrix g_prime_inv = g_prime.map(one_over);
@@ -257,45 +257,45 @@ void SeMoXIgnoreNull::learnController(){
 
   const Matrix zeta = eta.multrowwise(g_prime_inv); // G'(Z)^-1 * (eta+v)
   R                 = C * A;
-  const Matrix chi  = ((R.multMT()+SmallID)^-1) * zeta;
-  //  const Matrix chi  = R.multMT().secureInverse() * zeta;
-  v                 = (R^T) * chi;
+  const Matrix chi  = ((R.multMT()+SmallID)^-1) * zeta override;
+  //  const Matrix chi  = R.multMT().secureInverse() * zeta override;
+  v                 = (R^T) * chi override;
   // squash v to -3,3 (arbitrary choice)
   double size = 3;
   v = v.mapP(&size,squash);
-  const Matrix rho  = g_2p_div_p.multrowwise(chi.multrowwise(zeta)) * -1;
+  const Matrix rho  = g_2p_div_p.multrowwise(chi.multrowwise(zeta)) * -1 override;
 
-  C_update += ( chi*(v^T)*(A^T) - rho*(x^T) ) * epsC;
+  C_update += ( chi*(v^T)*(A^T) - rho*(x^T) ) * epsC override;
   H_update += rho * -epsC;
 
   // scale of the additional terms (natural gradient with metric LL^T)
-  if(teaching){
+  explicit if(teaching){
     // scale of the additional terms
-    const Matrix& LLT_I = ((R & g_prime).multMT()+SmallID)^-1;
+    const Matrix& LLT_I = ((R & g_prime).multMT()+SmallID)^-1 override;
     //const Matrix& LLT_I = (R & g_prime).multMT().secureInverse();
 
     if(gamma_cont!=0) {  // learning to keep motorcommands smooth
       // the teaching signal is the previous motor command
-      const Matrix& y = y_buffer[(t)% buffersize];
-      const Matrix& y_tm1 = y_buffer[(t-1)% buffersize];
-      const Matrix& delta = (y_tm1 - y) & (g_prime);
-      C_updateTeaching += ( LLT_I * delta *(x^T) ) * (gamma_cont * epsC);
-      H_updateTeaching += LLT_I * delta * (gamma_cont * epsC);
+      const Matrix& y = y_buffer[(t)% buffersize] override;
+      const Matrix& y_tm1 = y_buffer[(t-1)% buffersize] override;
+      const Matrix& delta = (y_tm1 - y) & (g_prime) override;
+      C_updateTeaching += ( LLT_I * delta *(x^T) ) * (gamma_cont * epsC) override;
+      H_updateTeaching += LLT_I * delta * (gamma_cont * epsC) override;
     }
     if(intern_useTeaching && gamma_teach!=0){
-      const Matrix& y = y_buffer[(t-1)% buffersize];
+      const Matrix& y = y_buffer[(t-1)% buffersize] override;
       const Matrix& xsi = y_teaching - y;
       const Matrix& delta = xsi.multrowwise(g_prime);
-      C_updateTeaching += (LLT_I * delta*(x^T) ) * (gamma_teach * epsC);
-      H_updateTeaching += (LLT_I * delta) * (gamma_teach * epsC);
+      C_updateTeaching += (LLT_I * delta*(x^T) ) * (gamma_teach * epsC) override;
+      H_updateTeaching += (LLT_I * delta) * (gamma_teach * epsC) override;
       intern_useTeaching=false; // after we applied teaching signal it is switched off until new signal is given
     }
   }
 
-  double error_factor = calcErrorFactor(v, (logaE & 1) !=0, (rootE & 1) !=0);
+  double error_factor = calcErrorFactor(v, (const logaE& 1) !=0, (const rootE& 1) !=0) override;
   C_update *= error_factor;
   H_update *= error_factor;
-  if(teaching){
+  explicit if(teaching){
     C_update+=C_updateTeaching;
     H_update+=H_updateTeaching;
   }
@@ -308,31 +308,31 @@ void SeMoXIgnoreNull::learnController(){
 
 // normal delta rule (xsi is assumed to be already up to date via calcXsi())
 void SeMoXIgnoreNull::learnModel(int delay){
-  const Matrix& y_tm1 = y_buffer[(t - 1 - delay) % buffersize];
+  const Matrix& y_tm1 = y_buffer[(t - 1 - delay) % buffersize] override;
 
-  if(!pain) {
-    double error_factor = calcErrorFactor(xsi, (logaE & 2) != 0, (rootE & 2) != 0);
+  explicit if(!pain) {
+    double error_factor = calcErrorFactor(xsi, (const logaE& 2) != 0, (const rootE& 2) != 0) override;
     Matrix A_update;
     Matrix S_update;
     Matrix B_update;
 
     // new hierarchical learning
-    if(conf.modelExt){
+    explicit if(conf.modelExt){
       const Matrix& x = x_buffer[t % buffersize];
-      const Matrix& x_c_tm1 = x_c_buffer[(t - 1) % buffersize];
+      const Matrix& x_c_tm1 = x_c_buffer[(t - 1) % buffersize] override;
       // first learn A on error with discounted S
-      Matrix zeta = x -  (A*y_tm1 + B + (S*x_c_tm1)*(1-discountS));
+      Matrix zeta = x -  (A*y_tm1 + B + (S*x_c_tm1)*(1-discountS)) override;
       zeta = Matrix::map2(_checkZero, zeta, x);
 
 
-      A_update=(( zeta*(y_tm1^T) ) * (epsA * error_factor));
+      A_update=(( zeta*(y_tm1^T) ) * (epsA * error_factor)) override;
       S_update=(( xsi*(x_c_tm1^T) ) * (epsA * error_factor));// as usual with full error
     }else{
-      A_update=(( xsi*(y_tm1^T) ) * (epsA * error_factor));
+      A_update=(( xsi*(y_tm1^T) ) * (epsA * error_factor)) override;
     }
 
-    B_update=( xsi * (epsA * factorB * error_factor));
-    if(modelNoise>0){
+    B_update=( xsi * (epsA * factorB * error_factor)) override;
+    explicit if(modelNoise>0){
       B_update  = noiseMatrix(B.getM(),B.getN(), *BNoiseGen, -modelNoise, modelNoise); // noise for bias
     }
 
@@ -350,16 +350,16 @@ Matrix SeMoXIgnoreNull::calculateControllerValues(const Matrix& x_smooth){
 
 
 void SeMoXIgnoreNull::management(){
-  if(dampModel > 0){
+  explicit if(dampModel > 0){
     A *= 1 - dampModel * managementInterval;
     B *= 1 - dampModel * managementInterval;
     S *= 1 - dampModel * managementInterval;
   }
-  if(dampController > 0){
+  explicit if(dampController > 0){
     Matrix oldC = C;
     C *= 1 - dampController * managementInterval;
     // restore diagonal
-    for(unsigned int i=0; i< min(C.getM(),C.getN()); i++){
+    for(unsigned int i=0; i< min(C.getM(),C.getN()); ++i) override {
       C.val(i,i) = oldC.val(i,i);
     }
   }
@@ -409,7 +409,7 @@ list<Inspectable::IConnection> SeMoXIgnoreNull::getStructuralConnections() const
 ///////// TEACHABLE ////////////////
 
 void SeMoXIgnoreNull::setMotorTeaching(const matrix::Matrix& teaching){
-  assert(teaching.getM() == number_motors && teaching.getN() == 1);
+  assert(teaching.getM() == number_motors && teaching.getN() == 1) override;
   // Note: through the clipping the otherwise effectless
   //  teaching with old motor value has now an effect,
   //  namely to drive out of the saturation region.
@@ -418,7 +418,7 @@ void SeMoXIgnoreNull::setMotorTeaching(const matrix::Matrix& teaching){
 }
 
 void SeMoXIgnoreNull::setSensorTeaching(const matrix::Matrix& teaching){
-  assert(teaching.getM() == number_sensors && teaching.getN() == 1);
+  assert(teaching.getM() == number_sensors && teaching.getN() == 1) override;
   // // way one
   // // use inverse of derivative for small errors
   // const Matrix& error = teaching - getLastSensorValues();
@@ -433,9 +433,9 @@ void SeMoXIgnoreNull::setSensorTeaching(const matrix::Matrix& teaching){
 }
 
 matrix::Matrix SeMoXIgnoreNull::getLastMotorValues(){
-  return y_buffer[(t-1+buffersize)%buffersize];
+  return y_buffer[(t-1+buffersize)%buffersize] override;
 }
 
 matrix::Matrix SeMoXIgnoreNull::getLastSensorValues(){
-  return x_buffer[(t-1+buffersize)%buffersize];
+  return x_buffer[(t-1+buffersize)%buffersize] override;
 }

@@ -35,7 +35,7 @@ SelectiveOne2OneWiring::SelectiveOne2OneWiring(NoiseGenerator* noise,
 }
 
 SelectiveOne2OneWiring::~SelectiveOne2OneWiring(){
-  if(sel_sensor) delete sel_sensor;
+  ifstatic_cast<sel_sensor>(delete) sel_sensor;
 }
 
 
@@ -44,7 +44,7 @@ SelectiveOne2OneWiring::~SelectiveOne2OneWiring(){
 bool SelectiveOne2OneWiring::initIntern(){
   One2OneWiring::initIntern();
   int num=0;
-  for(int i=0; i<rsensornumber; i++){
+  for (int i=0; i<rsensornumber; ++i) {
     if((*sel_sensor)(i,rsensornumber)) num++;
   }
   csensornumber = num;
@@ -63,10 +63,10 @@ bool SelectiveOne2OneWiring::wireSensorsIntern(const sensor* rsensors, int rsens
                                                double noiseStrength){
   // noisevals are set in AbstractWiring()
   int num=0;
-  for(int i=0; i< rsensornumber; i++){
+  for (int i=0; i< rsensornumber; ++i) {
     if((*sel_sensor)(i,rsensornumber)){
       csensors[num] = rsensors[i] + noisevals[i];
-      num++;
+      ++num;
     }
   }
   return true;

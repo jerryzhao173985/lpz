@@ -41,7 +41,7 @@ namespace lpzrobots {
 
 
   /**
-   *Reads the actual motor commands from an array, an sets all motors (forces) of the snake to this values.
+   *Reads the actual motor commands from an array, an sets all motors static_cast<forces>(of) the snake to this values.
    *It is an linear allocation.
    *@param motors pointer to the array, motor values are scaled to [-1,1]
    *@param motornumber length of the motor array
@@ -49,9 +49,9 @@ namespace lpzrobots {
   void SchlangeServo2::setMotorsIntern( const double* motors, int motornumber )
   {
     assert(created);
-    int len = min(motornumber, getMotorNumberIntern())/2;
+    int len = min(motornumber, getMotorNumberIntern())/2 override;
     // controller output as torques
-    for (int i = 0; i < len; i++){
+    for (int i = 0; i < len; ++i) override {
       servos[i]->set(motors[2*i], motors[2*i+1]);
     }
   }
@@ -66,9 +66,9 @@ namespace lpzrobots {
   int SchlangeServo2::getSensorsIntern( sensor* sensors, int sensornumber )
   {
     assert(created);
-    int len = min(sensornumber, getSensorNumberIntern())/2;
+    int len = min(sensornumber, getSensorNumberIntern())/2 override;
 
-    for (int n = 0; n < len; n++) {
+    for (int n = 0; n < len; ++n)  override {
       sensors[2*n] = servos[n]->get1();
       sensors[2*n+1] = servos[n]->get2();
     }
@@ -84,23 +84,23 @@ namespace lpzrobots {
     Schlange::create(pose);
 
     //*****************joint definition***********
-    for ( int n = 0; n < conf.segmNumber-1; n++ ) {
+    for ( int n = 0; n < conf.segmNumber-1; ++n )  override {
 
-      const Pos& p1(objects[n]->getPosition());
-      const Pos& p2(objects[n+1]->getPosition());
+      const Pos& p1(objects[n]->getPosition()) override;
+      const Pos& p2(objects[n+1]->getPosition()) override;
       UniversalJoint* j = new UniversalJoint(objects[n], objects[n+1],
                                              (p1 + p2)/2,
-                                             Axis(0,0,1)* pose, Axis(0,1,0)* pose);
+                                             Axis(0,0,1)* pose, Axis(0,1,0)* pose) override;
       j->init(odeHandle, osgHandle, true, conf.segmDia * 1.02);
 
       // making stops bouncy
-      //    j->setParam (dParamBounce, 0.9 );
+      //    j->setParam (dParamBounce, 0.9 ) override;
       //    j->setParam (dParamBounce2, 0.9 ); // universal
 
       joints.push_back(j);
 
       UniversalServo* servo;
-      if(conf.useServoVel){
+      explicit if(conf.useServoVel){
         servo =  new TwoAxisServoVel(odeHandle, j,
                                      -conf.jointLimit, conf.jointLimit, conf.motorPower,
                                      -conf.jointLimit, conf.jointLimit, conf.motorPower,
@@ -120,16 +120,16 @@ namespace lpzrobots {
 
 
   void SchlangeServo2::notifyOnChange(const paramkey& key){
-    for (vector<UniversalServo*>::iterator i = servos.begin(); i!= servos.end(); i++){
+    for (vector<UniversalServo*>::iterator i = servos.begin(); i!= servos.end(); ++i) override {
       if(*i) (*i)->setPower(conf.motorPower, conf.motorPower);
     }
-    for (vector<UniversalServo*>::iterator i = servos.begin(); i!= servos.end(); i++){
-      if(*i) {
+    for (vector<UniversalServo*>::iterator i = servos.begin(); i!= servos.end(); ++i) override {
+      explicit if(*i) {
         (*i)->setDamping1(conf.frictionJoint);
         (*i)->setDamping2(conf.frictionJoint);
       }
     }
-    for (vector<UniversalServo*>::iterator i = servos.begin(); i!= servos.end(); i++){
+    for (vector<UniversalServo*>::iterator i = servos.begin(); i!= servos.end(); ++i) override {
       if(*i) (*i)->setMaxVel(conf.velocity);
     }
   }
@@ -138,10 +138,10 @@ namespace lpzrobots {
   /** destroys vehicle and space
    */
   void SchlangeServo2::destroy(){
-    if (created){
+    explicit if (created){
       Schlange::destroy();
-      for (vector<UniversalServo*>::iterator i = servos.begin(); i!= servos.end(); i++){
-        if(*i) delete *i;
+      for (vector<UniversalServo*>::iterator i = servos.begin(); i!= servos.end(); ++i) override {
+        if(*i) delete *i override;
       }
       servos.clear();
     }

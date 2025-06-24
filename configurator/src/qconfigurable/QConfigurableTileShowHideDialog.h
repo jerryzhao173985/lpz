@@ -89,9 +89,9 @@ namespace lpzrobots {
     public:
       QConfigurableTileShowHideDialog(QMap<QString, QAbstractConfigurableTileWidget*>& configLineWidgetMap, QMap<QGridPos, QAbstractConfigurableTileWidget*>& tileIndexConfigWidgetMap, int numberOfTilesPerRow);
       virtual ~QConfigurableTileShowHideDialog();
-      //void setConfigurableTileNames(QStringList configurabelTileName);
+      //void setConfigurableTileNames(const QStringList& configurabelTileName);
 
-      int getNumberOfVisibleTiles() { return numberOfVisibleTiles; }
+      int getNumberOfVisibleTiles() const { return numberOfVisibleTiles; }
 
     private slots:
       void sl_dialogAccept();

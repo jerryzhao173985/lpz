@@ -43,9 +43,9 @@ public:
 	/**
 	 * constructor
 	 * Needs a other fitness strategy, which should be inverted.
-	 * @param strategy (IFitnessStrategy*) the other fitness strategy
+	 * @param strategy static_cast<IFitnessStrategy*>(the) other fitness strategy
 	 */
-	InvertedFitnessStrategy(IFitnessStrategy* strategy);
+	explicit InvertedFitnessStrategy(const IFitnessStrategy* strategy) override;
 
 	/**
 	 * default destructor
@@ -53,12 +53,12 @@ public:
 	virtual ~InvertedFitnessStrategy();
 
 	/**
-	 * returns the inverse fitness value what the other strategy returns for the individual "individual".
+	 * returns the inverse fitness value what the other strategy returns for the individual __PLACEHOLDER_1__.
 	 *
 	 * @param individual (const Individual*) calculate the fitness for this individual
-	 * @return (double) The fitness value
+	 * @return static_cast<double>(The) fitness value
 	 */
-	virtual double getFitness(const Individual* individual);
+	virtual double getFitness(const Individual* individual) override;
 
 protected:
 	/**
@@ -70,7 +70,7 @@ private:
 	/**
 	 * disable the default constructor
 	 */
-	InvertedFitnessStrategy();
+	InvertedFitnessStrategy() override;
 };
 
 #endif /* INVERTEDFITNESSSTRATEGY_H_ */

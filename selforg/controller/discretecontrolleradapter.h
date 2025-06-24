@@ -56,7 +56,7 @@ public:
                             const std::string& name,
                             const std::string& revision);
 
-  virtual ~DiscreteControllerAdapter() override;
+  virtual ~DiscreteControllerAdapter();
 
   /**
   Sets the number of intervals, in which sensor AND motor values are mapped.
@@ -142,19 +142,19 @@ public:
   virtual void step(const sensor* sensors,
                     int sensornumber,
                     motor* motors,
-                    int motornumber) override;
+                    int motornumber);
   /** performs one step without learning.
       @see step
   */
   virtual void stepNoLearning(const sensor*,
                               int number_sensors,
                               motor*,
-                              int number_motors) override;
+                              int number_motors);
 
   /**
    * init function
    */
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
 
   /***************************************************************************/
   /* END: forwarding methods of AbstractController                           */
@@ -171,24 +171,24 @@ public:
   /***************************************************************************/
 
 protected:
-  int sensorIntervalCount;
-  int motorIntervalCount;
-  bool automaticMotorRange;
-  bool automaticSensorRange;
-  bool mapToSensorInterval;
-  bool mapToMotorInterval;
-  double minMotorRange;
-  double maxMotorRange;
-  double minSensorRange;
-  double maxSensorRange;
+  int sensorIntervalCount = 0;
+  int motorIntervalCount = 0;
+  bool automaticMotorRange = false;
+  bool automaticSensorRange = false;
+  bool mapToSensorInterval = false;
+  bool mapToMotorInterval = false;
+  double minMotorRange = 0;
+  double maxMotorRange = 0;
+  double minSensorRange = 0;
+  double maxSensorRange = 0;
 
 private:
-  double minMotorValue;
-  double maxMotorValue;
-  double minSensorValue;
-  double maxSensorValue;
+  double minMotorValue = 0;
+  double maxMotorValue = 0;
+  double minSensorValue = 0;
+  double maxSensorValue = 0;
   sensor* discreteSensors;
-  bool firstStep;
+  bool firstStep = false;
 
 private:
   /**

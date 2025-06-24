@@ -42,7 +42,7 @@ namespace lpzrobots {
     */
     IRSensorWall(float exponent, const std::list<dGeomID>& avoids);
 
-    virtual ~IRSensorWall(){};
+    virtual ~IRSensorWall() {} override;
 
     virtual RaySensor* clone() const override;
 
@@ -50,7 +50,7 @@ namespace lpzrobots {
                       const OsgHandle& osgHandle,
                       Primitive* body,
                       const osg::Matrix pose, float range,
-                      rayDrawMode drawMode = drawSensor) override;
+                      rayDrawMode drawMode = drawSensor);
   public:
     std::list<dGeomID> avoids;
   };

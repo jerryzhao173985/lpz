@@ -17,7 +17,7 @@ constant(double c, double) {
 
 double
 power(void* c, double x) {
-  return pow(x, *((double*)c));
+  return pow(x, *(static_cast<double*>(c)));
 }
 
 double
@@ -28,13 +28,13 @@ power3(double x) {
 // creates random number from -1 to 1
 double
 random_minusone_to_one(double) {
-  return (((double)rand() / RAND_MAX) - 0.5) * 2.0;
+  return ((static_cast<double>(rand()) / RAND_MAX) - 0.5) * 2.0;
 }
 
 // creates random number from -1 to 1
 double
 random_minusone_to_one(void* r, double) {
-  RandGen* g = (RandGen*)r;
+  RandGen* g = static_cast<RandGen*>(r);
   if (!g)
     return 0;
   else
@@ -49,12 +49,12 @@ clip(double r, double x) {
 
 double
 lowercutof(void* theta, double x) {
-  return x < *(double*)(theta) ? 0 : x;
+  return x < *static_cast<double*>(theta) ? 0 : x;
 }
 
 double
 toBinaryWithProbability(void* r, double x) {
-  RandGen* g = (RandGen*)r;
+  RandGen* g = static_cast<RandGen*>(r);
   if (!g)
     return 0.;
   else
@@ -82,13 +82,13 @@ store4x4AndDiagonal(const Matrix& m) {
   I smalldimN = min(m.getN(), (I)4);
   I smallerdim = min(m.getM(), m.getN());
   // 4x4
-  for (I i = 0; i < smalldimM; i++) {
-    for (I j = 0; j < smalldimN; j++) {
+  for (I i = 0; i < smalldimM; ++i) {
+    for (I j = 0; j < smalldimN; ++j) {
       l.push_back(m.val(i, j));
     }
   }
   // diagonal below 4x4
-  for (I i = 4; i < smallerdim; i++) {
+  for (I i = 4; i < smallerdim; ++i) {
     l.push_back(m.val(i, i));
   }
   return l;
@@ -100,18 +100,18 @@ store4x4AndDiagonal(const Matrix& m, D* buffer, I len) {
   I smalldimN = min(m.getN(), (I)4);
   I smallerdim = min(m.getM(), m.getN());
   I written = 0;
-  assert(len >= (I)(smalldimM * smalldimN + max(0, signed(smallerdim) - 4)));
+  assert(len >= static_cast<I>(smalldimM * smalldimN + max(0, signed(smallerdim) - 4)));
   // 4x4
-  for (I i = 0; i < smalldimM; i++) {
-    for (I j = 0; j < smalldimN; j++) {
+  for (I i = 0; i < smalldimM; ++i) {
+    for (I j = 0; j < smalldimN; ++j) {
       buffer[written] = m.val(i, j);
-      written++;
+      ++written;
     }
   }
   // diagonal below 4x4
-  for (I i = 4; i < smallerdim; i++) {
+  for (I i = 4; i < smallerdim; ++i) {
     buffer[written] = m.val(i, i);
-    written++;
+    ++written;
   }
   return written;
 }
@@ -121,7 +121,7 @@ get4x4AndDiagonalSize(const Matrix& m) {
   I smalldimM = min(m.getM(), (I)4);
   I smalldimN = min(m.getN(), (I)4);
   I smallerdim = min(m.getM(), m.getN());
-  I sm = (I)(max(0, signed(smallerdim) - 4));
+  I sm = static_cast<I>(max(0, signed(smallerdim) - 4));
   return smalldimM * smalldimN + sm;
 }
 
@@ -133,14 +133,14 @@ store4x4AndDiagonalFieldNames(const Matrix& m, const std::string& matrixName) {
   I smalldimN = min(m.getN(), (I)4);
   I smallerdim = min(m.getM(), m.getN());
   // 4x4
-  for (I i = 0; i < smalldimM; i++) {
-    for (I j = 0; j < smalldimN; j++) {
+  for (I i = 0; i < smalldimM; ++i) {
+    for (I j = 0; j < smalldimN; ++j) {
       snprintf(buffer, sizeof(buffer), "%s[%d,%d]", matrixName.c_str(), i, j);
       l.push_back(string(buffer));
     }
   }
   // diagonal below 4x4
-  for (I i = 4; i < smallerdim; i++) {
+  for (I i = 4; i < smallerdim; ++i) {
     snprintf(buffer, sizeof(buffer), "%s[%d,%d]", matrixName.c_str(), i, i);
     l.push_back(string(buffer));
   }
@@ -159,18 +159,18 @@ store4x4AndDiagonalFieldNames(const Matrix& m,
   assert(len >= get4x4AndDiagonalSize(m));
   unsigned char keyLen = matrixName.length() + 10;
   // 4x4
-  for (I i = 0; i < smalldimM; i++) {
-    for (I j = 0; j < smalldimN; j++) {
-      keylist[written] = (char*)malloc(keyLen);
+  for (I i = 0; i < smalldimM; ++i) {
+    for (I j = 0; j < smalldimN; ++j) {
+      keylist[written] = static_cast<char*>(malloc(keyLen));
       snprintf(keylist[written], keyLen, "%s[%d,%d]", matrixName.c_str(), i, j);
-      written++;
+      ++written;
     }
   }
   // diagonal below 4x4
-  for (I i = 4; i < smallerdim; i++) {
-    keylist[written] = (char*)malloc(keyLen);
+  for (I i = 4; i < smallerdim; ++i) {
+    keylist[written] = static_cast<char*>(malloc(keyLen));
     snprintf(keylist[written], keyLen, "%s[%d,%d]", matrixName.c_str(), i, i);
-    written++;
+    ++written;
   }
   return written;
 }
@@ -182,8 +182,8 @@ storeMatrixFieldNames(const Matrix& m, const string& matrixName) {
   I dimM = m.getM();
   I dimN = m.getN();
   //  assert(matrixName);
-  for (I i = 0; i < dimM; i++) {
-    for (I j = 0; j < dimN; j++) {
+  for (I i = 0; i < dimM; ++i) {
+    for (I j = 0; j < dimN; ++j) {
       snprintf(buffer, sizeof(buffer), "%s[%d,%d]", matrixName.c_str(), i, j);
       l.push_back(string(buffer));
     }
@@ -196,7 +196,7 @@ storeVectorFieldNames(const Matrix& m, const string& vectorName) {
   list<Inspectable::iparamkey> l;
   char buffer[32];
   I dimM = m.getM() * m.getN();
-  for (I i = 0; i < dimM; i++) {
+  for (I i = 0; i < dimM; ++i) {
     snprintf(buffer, sizeof(buffer), "%s[%d]", vectorName.c_str(), i);
     l.push_back(string(buffer));
   }
@@ -211,11 +211,11 @@ storeMatrixFieldNames(const Matrix& m, const char* matrixName, char** keylist, I
   assert(matrixName);
   assert(len >= dimM * dimN);
   unsigned char keyLen = strlen(matrixName) + 10;
-  for (I i = 0; i < dimM; i++) {
-    for (I j = 0; j < dimN; j++) {
-      keylist[written] = (char*)malloc(keyLen);
+  for (I i = 0; i < dimM; ++i) {
+    for (I j = 0; j < dimN; ++j) {
+      keylist[written] = static_cast<char*>(malloc(keyLen));
       snprintf(keylist[written], keyLen, "%s[%d,%d]", matrixName, i, j);
-      written++;
+      ++written;
     }
   }
   return written;
@@ -228,21 +228,21 @@ storeVectorFieldNames(const Matrix& m, const char* vectorName, char** keylist, I
   assert(vectorName);
   assert(len >= dimM);
   unsigned char keyLen = strlen(vectorName) + 7;
-  for (I i = 0; i < dimM; i++) {
-    keylist[written] = (char*)malloc(keyLen);
+  for (I i = 0; i < dimM; ++i) {
+    keylist[written] = static_cast<char*>(malloc(keyLen));
     snprintf(keylist[written], keyLen, "%s[%d]", vectorName, i);
-    written++;
+    ++written;
   }
   return written;
 }
 
 Matrix
-noiseMatrix(I m, I n, NoiseGenerator& ng, double strength, double unused) {
+noiseMatrix(I m, I n, const NoiseGenerator& ng, double strength, double unused) {
   I len = m * n;
   Matrix result(m, n);
   const D* noise = result.unsafeGetData();
   ng.setDimension(len);
-  ng.add((D*)noise, fabs(strength));
+  ng.add(static_cast<D*>(noise), fabs(strength));
   return result;
 }
 
@@ -279,7 +279,7 @@ matrixNormalized(const matrix::Matrix& m) {
 }
 
 double
-getKthLargestElement(Matrix& vec, I k /*, double* max*/) {
+getKthLargestElement(const Matrix& vec, I k /*, double* max*/) {
   I len = (vec.getM()) * (vec.getN());
   vec.reshape(1, len);
   assert(k > 0 && len >= k);
@@ -289,7 +289,7 @@ getKthLargestElement(Matrix& vec, I k /*, double* max*/) {
 }
 
 double
-getKthSmallestElement(Matrix& vec, I k /*, double* max*/) {
+getKthSmallestElement(const Matrix& vec, I k /*, double* max*/) {
   I len = vec.size();
   vec.reshape(1, len);
   assert(k > 0 && len >= k);
@@ -304,7 +304,7 @@ argmin(const Matrix& v) {
   const double* d = v.unsafeGetData();
   double m = *d;
   I index = 0;
-  for (I i = 1; i < v.size(); i++) {
+  for (I i = 1; i < v.size(); ++i) {
     if (*(d + i) < m) {
       m = *(d + i);
       index = i;
@@ -319,7 +319,7 @@ argmax(const Matrix& v) {
   const double* d = v.unsafeGetData();
   double m = *d;
   I index = 0;
-  for (I i = 1; i < v.size(); i++) {
+  for (I i = 1; i < v.size(); ++i) {
     if (*(d + i) > m) {
       m = *(d + i);
       index = i;
@@ -355,10 +355,10 @@ max(double a, double b) {
 // samples from the pdf (rowwise stored with sum = 1)
 I
 sample(const matrix::Matrix& pdf) {
-  double x = ((double)rand()) / (double)RAND_MAX;
+  double x = (static_cast<double>(rand())) / static_cast<double>(RAND_MAX);
   double s = 0;
   const double* vs = pdf.unsafeGetData();
-  for (I i = 0; i < pdf.size(); i++) {
+  for (I i = 0; i < pdf.size(); ++i) {
     s += vs[i];
     if (s >= x)
       return i;
@@ -387,10 +387,10 @@ double
 adaptMinMax(double p, double actual, double _min, double _max, double up_rate, double down_rate) {
   double result = p;
   if (actual < _min) {
-    //    printf("Under: %g, eps: %g\n", updateSize, eps);
+    //    printf(__PLACEHOLDER_9__, updateSize, eps);
     result = p * (1 + up_rate);
   } else if (actual > _max) {
-    //    printf("Over : %g, eps: %g\n", updateSize, eps);
+    //    printf(__PLACEHOLDER_10__, updateSize, eps);
     result = p * (1 - down_rate);
   }
   return result;
@@ -403,7 +403,7 @@ adaptMinMax(double p, double actual, double _min, double _max, double up_rate, d
 list<Inspectable::iparamval>
 convertArrayToList(double* array, int arraySize) {
   std::list<Inspectable::iparamval> l;
-  for (int i = 0; i < arraySize; i++) {
+  for (int i = 0; i < arraySize; ++i) {
     l.push_back(array[i]);
   }
   return l;
@@ -417,7 +417,7 @@ list<Inspectable::iparamkey>
 getArrayNames(int arraySize, const char* name) {
   std::list<Inspectable::iparamkey> nameList;
   char buffer[32];
-  for (int i = 0; i < arraySize; i++) {
+  for (int i = 0; i < arraySize; ++i) {
     snprintf(buffer, sizeof(buffer), "%s[%d]", name, i);
     nameList.push_back(std::string(buffer));
   }

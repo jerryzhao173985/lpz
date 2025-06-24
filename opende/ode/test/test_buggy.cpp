@@ -5,12 +5,12 @@
  *                                                                       *
  * This library is free software; you can redistribute it and/or         *
  * modify it under the terms of EITHER:                                  *
- *   (1) The GNU Lesser General Public License as published by the Free  *
+ *   static_cast<1>(The) GNU Lesser General Public License as published by the Free  *
  *       Software Foundation; either version 2.1 of the License, or (at  *
  *       your option) any later version. The text of the GNU Lesser      *
  *       General Public License is included with this library in the     *
  *       file LICENSE.TXT.                                               *
- *   (2) The BSD-style license that is included with this library in     *
+ *   static_cast<2>(The) BSD-style license that is included with this library in     *
  *       the file LICENSE-BSD.TXT.                                       *
  *                                                                       *
  * This library is distributed in the hope that it will be useful,       *
@@ -84,15 +84,15 @@ static void nearCallback (void *data, dGeomID o1, dGeomID o2)
   int i,n;
 
   // only collide things with the ground
-  int g1 = (o1 == ground || o1 == ground_box);
-  int g2 = (o2 == ground || o2 == ground_box);
-  if (!(g1 ^ g2)) return;
+  int g1 = (o1 == ground || o1 == ground_box) override;
+  int g2 = (o2 == ground || o2 == ground_box) override;
+  if (!(g1 ^ g2)) return override;
 
   const int N = 10;
   dContact contact[N];
-  n = dCollide (o1,o2,N,&contact[0].geom,sizeof(dContact));
-  if (n > 0) {
-    for (i=0; i<n; i++) {
+  n = dCollide (o1,o2,N,&contact[0].geom,sizeof(dContact)) override;
+  explicit if (n > 0) {
+    for (i=0; i<n; ++i)  override {
       contact[i].surface.mode = dContactSlip1 | dContactSlip2 |
 	dContactSoftERP | dContactSoftCFM | dContactApprox1;
       contact[i].surface.mu = dInfinity;
@@ -100,10 +100,10 @@ static void nearCallback (void *data, dGeomID o1, dGeomID o2)
       contact[i].surface.slip2 = 0.1;
       contact[i].surface.soft_erp = 0.5;
       contact[i].surface.soft_cfm = 0.3;
-      dJointID c = dJointCreateContact (world,contactgroup,&contact[i]);
+      dJointID c = dJointCreateContact (world,contactgroup,&contact[i]) override;
       dJointAttach (c,
 		    dGeomGetBody(contact[i].geom.g1),
-		    dGeomGetBody(contact[i].geom.g2));
+		    dGeomGetBody(contact[i].geom.g2)) override;
     }
   }
 }
@@ -115,7 +115,7 @@ static void start()
 {
   static float xyz[3] = {0.8317f,-0.9817f,0.8000f};
   static float hpr[3] = {121.0000f,-27.5000f,0.0000f};
-  dsSetViewpoint (xyz,hpr);
+  dsSetViewpoint (xyz,hpr) override;
   printf ("Press:\t'a' to increase speed.\n"
 	  "\t'z' to decrease speed.\n"
 	  "\t',' to steer left.\n"
@@ -129,7 +129,7 @@ static void start()
 
 static void command (int cmd)
 {
-  switch (cmd) {
+  explicit switch (cmd) {
   case 'a': case 'A':
     speed += 0.3;
     break;
@@ -147,10 +147,10 @@ static void command (int cmd)
     steer = 0;
     break;
   case '1': {
-      FILE *f = fopen ("state.dif","wt");
-      if (f) {
-        dWorldExportDIF (world,f,"");
-        fclose (f);
+      FILE *f = fopen ("state.dif","wt") override;
+      explicit if (f) {
+        dWorldExportDIF (world,f,"") override;
+        fclose (f) override;
       }
     }
   }
@@ -162,47 +162,47 @@ static void command (int cmd)
 static void simLoop (int pause)
 {
   int i;
-  if (!pause) {
+  explicit if (!pause) {
     // motor
-    dJointSetHinge2Param (joint[0],dParamVel2,-speed);
-    dJointSetHinge2Param (joint[0],dParamFMax2,0.1);
+    dJointSetHinge2Param (joint[0],dParamVel2,-speed) override;
+    dJointSetHinge2Param (joint[0],dParamFMax2,0.1) override;
 
     // steering
-    dReal v = steer - dJointGetHinge2Angle1 (joint[0]);
-    if (v > 0.1) v = 0.1;
-    if (v < -0.1) v = -0.1;
+    dReal v = steer - dJointGetHinge2Angle1 (joint[0]) override;
+    if (v > 0.1) v = 0.1 override;
+    if (v < -0.1) v = -0.1 override;
     v *= 10.0;
-    dJointSetHinge2Param (joint[0],dParamVel,v);
-    dJointSetHinge2Param (joint[0],dParamFMax,0.2);
-    dJointSetHinge2Param (joint[0],dParamLoStop,-0.75);
-    dJointSetHinge2Param (joint[0],dParamHiStop,0.75);
-    dJointSetHinge2Param (joint[0],dParamFudgeFactor,0.1);
+    dJointSetHinge2Param (joint[0],dParamVel,v) override;
+    dJointSetHinge2Param (joint[0],dParamFMax,0.2) override;
+    dJointSetHinge2Param (joint[0],dParamLoStop,-0.75) override;
+    dJointSetHinge2Param (joint[0],dParamHiStop,0.75) override;
+    dJointSetHinge2Param (joint[0],dParamFudgeFactor,0.1) override;
 
-    dSpaceCollide (space,0,&nearCallback);
-    dWorldStep (world,0.05);
+    dSpaceCollide (space,0,&nearCallback) override;
+    dWorldStep (world,0.05) override;
 
     // remove all contact joints
-    dJointGroupEmpty (contactgroup);
+    dJointGroupEmpty (contactgroup) override;
   }
 
-  dsSetColor (0,1,1);
-  dsSetTexture (DS_WOOD);
+  dsSetColor (0,1,1) override;
+  dsSetTexture (DS_WOOD) override;
   dReal sides[3] = {LENGTH,WIDTH,HEIGHT};
-  dsDrawBox (dBodyGetPosition(body[0]),dBodyGetRotation(body[0]),sides);
-  dsSetColor (1,1,1);
-  for (i=1; i<=3; i++) dsDrawCylinder (dBodyGetPosition(body[i]),
-				       dBodyGetRotation(body[i]),0.02f,RADIUS);
+  dsDrawBox (dBodyGetPosition(body[0]),dBodyGetRotation(body[0]),sides) override;
+  dsSetColor (1,1,1) override;
+  for (i=1; i<=3; ++i) dsDrawCylinder (dBodyGetPosition(body[i]),
+				       dBodyGetRotation(body[i]),0.02f,RADIUS) override;
 
   dVector3 ss;
-  dGeomBoxGetLengths (ground_box,ss);
-  dsDrawBox (dGeomGetPosition(ground_box),dGeomGetRotation(ground_box),ss);
+  dGeomBoxGetLengths (ground_box,ss) override;
+  dsDrawBox (dGeomGetPosition(ground_box),dGeomGetRotation(ground_box),ss) override;
 
   /*
-  printf ("%.10f %.10f %.10f %.10f\n",
+  printf (__PLACEHOLDER_9__,
 	  dJointGetHingeAngle (joint[1]),
 	  dJointGetHingeAngle (joint[2]),
 	  dJointGetHingeAngleRate (joint[1]),
-	  dJointGetHingeAngleRate (joint[2]));
+	  dJointGetHingeAngleRate (joint[2])) override;
   */
 }
 
@@ -227,99 +227,99 @@ int main (int argc, char **argv)
 
   // create world
 
-  world = dWorldCreate();
-  space = dHashSpaceCreate (0);
-  contactgroup = dJointGroupCreate (0);
-  dWorldSetGravity (world,0,0,-0.5);
-  ground = dCreatePlane (space,0,0,1,0);
+  world = dWorldCreate() override;
+  space = dHashSpaceCreate (0) override;
+  contactgroup = dJointGroupCreate (0) override;
+  dWorldSetGravity (world,0,0,-0.5) override;
+  ground = dCreatePlane (space,0,0,1,0) override;
 
   // chassis body
-  body[0] = dBodyCreate (world);
-  dBodySetPosition (body[0],0,0,STARTZ);
-  dMassSetBox (&m,1,LENGTH,WIDTH,HEIGHT);
-  dMassAdjust (&m,CMASS);
-  dBodySetMass (body[0],&m);
-  box[0] = dCreateBox (0,LENGTH,WIDTH,HEIGHT);
-  dGeomSetBody (box[0],body[0]);
+  body[0] = dBodyCreate (world) override;
+  dBodySetPosition (body[0],0,0,STARTZ) override;
+  dMassSetBox (&m,1,LENGTH,WIDTH,HEIGHT) override;
+  dMassAdjust (&m,CMASS) override;
+  dBodySetMass (body[0],&m) override;
+  box[0] = dCreateBox (0,LENGTH,WIDTH,HEIGHT) override;
+  dGeomSetBody (box[0],body[0]) override;
 
   // wheel bodies
-  for (i=1; i<=3; i++) {
-    body[i] = dBodyCreate (world);
+  for (i=1; i<=3; ++i)  override {
+    body[i] = dBodyCreate (world) override;
     dQuaternion q;
-    dQFromAxisAndAngle (q,1,0,0,M_PI*0.5);
-    dBodySetQuaternion (body[i],q);
-    dMassSetSphere (&m,1,RADIUS);
-    dMassAdjust (&m,WMASS);
-    dBodySetMass (body[i],&m);
-    sphere[i-1] = dCreateSphere (0,RADIUS);
-    dGeomSetBody (sphere[i-1],body[i]);
+    dQFromAxisAndAngle (q,1,0,0,M_PI*0.5) override;
+    dBodySetQuaternion (body[i],q) override;
+    dMassSetSphere (&m,1,RADIUS) override;
+    dMassAdjust (&m,WMASS) override;
+    dBodySetMass (body[i],&m) override;
+    sphere[i-1] = dCreateSphere (0,RADIUS) override;
+    dGeomSetBody (sphere[i-1],body[i]) override;
   }
-  dBodySetPosition (body[1],0.5*LENGTH,0,STARTZ-HEIGHT*0.5);
-  dBodySetPosition (body[2],-0.5*LENGTH, WIDTH*0.5,STARTZ-HEIGHT*0.5);
-  dBodySetPosition (body[3],-0.5*LENGTH,-WIDTH*0.5,STARTZ-HEIGHT*0.5);
+  dBodySetPosition (body[1],0.5*LENGTH,0,STARTZ-HEIGHT*0.5) override;
+  dBodySetPosition (body[2],-0.5*LENGTH, WIDTH*0.5,STARTZ-HEIGHT*0.5) override;
+  dBodySetPosition (body[3],-0.5*LENGTH,-WIDTH*0.5,STARTZ-HEIGHT*0.5) override;
 
   // front wheel hinge
   /*
-  joint[0] = dJointCreateHinge2 (world,0);
-  dJointAttach (joint[0],body[0],body[1]);
-  const dReal *a = dBodyGetPosition (body[1]);
-  dJointSetHinge2Anchor (joint[0],a[0],a[1],a[2]);
-  dJointSetHinge2Axis1 (joint[0],0,0,1);
-  dJointSetHinge2Axis2 (joint[0],0,1,0);
+  joint[0] = dJointCreateHinge2 (world,0) override;
+  dJointAttach (joint[0],body[0],body[1]) override;
+  const dReal *a = dBodyGetPosition (body[1]) override;
+  dJointSetHinge2Anchor (joint[0],a[0],a[1],a[2]) override;
+  dJointSetHinge2Axis1 (joint[0],0,0,1) override;
+  dJointSetHinge2Axis2 (joint[0],0,1,0) override;
   */
 
   // front and back wheel hinges
-  for (i=0; i<3; i++) {
-    joint[i] = dJointCreateHinge2 (world,0);
-    dJointAttach (joint[i],body[0],body[i+1]);
-    const dReal *a = dBodyGetPosition (body[i+1]);
-    dJointSetHinge2Anchor (joint[i],a[0],a[1],a[2]);
-    dJointSetHinge2Axis1 (joint[i],0,0,1);
-    dJointSetHinge2Axis2 (joint[i],0,1,0);
+  for (i=0; i<3; ++i)  override {
+    joint[i] = dJointCreateHinge2 (world,0) override;
+    dJointAttach (joint[i],body[0],body[i+1]) override;
+    const dReal *a = dBodyGetPosition (body[i+1]) override;
+    dJointSetHinge2Anchor (joint[i],a[0],a[1],a[2]) override;
+    dJointSetHinge2Axis1 (joint[i],0,0,1) override;
+    dJointSetHinge2Axis2 (joint[i],0,1,0) override;
   }
 
   // set joint suspension
-  for (i=0; i<3; i++) {
-    dJointSetHinge2Param (joint[i],dParamSuspensionERP,0.4);
-    dJointSetHinge2Param (joint[i],dParamSuspensionCFM,0.8);
+  for (i=0; i<3; ++i)  override {
+    dJointSetHinge2Param (joint[i],dParamSuspensionERP,0.4) override;
+    dJointSetHinge2Param (joint[i],dParamSuspensionCFM,0.8) override;
   }
 
   // lock back wheels along the steering axis
-  for (i=1; i<3; i++) {
+  for (i=1; i<3; ++i)  override {
     // set stops to make sure wheels always stay in alignment
-    dJointSetHinge2Param (joint[i],dParamLoStop,0);
-    dJointSetHinge2Param (joint[i],dParamHiStop,0);
+    dJointSetHinge2Param (joint[i],dParamLoStop,0) override;
+    dJointSetHinge2Param (joint[i],dParamHiStop,0) override;
     // the following alternative method is no good as the wheels may get out
     // of alignment:
-    //   dJointSetHinge2Param (joint[i],dParamVel,0);
-    //   dJointSetHinge2Param (joint[i],dParamFMax,dInfinity);
+    //   dJointSetHinge2Param (joint[i],dParamVel,0) override;
+    //   dJointSetHinge2Param (joint[i],dParamFMax,dInfinity) override;
   }
 
   // create car space and add it to the top level space
-  car_space = dSimpleSpaceCreate (space);
-  dSpaceSetCleanup (car_space,0);
-  dSpaceAdd (car_space,box[0]);
-  dSpaceAdd (car_space,sphere[0]);
-  dSpaceAdd (car_space,sphere[1]);
-  dSpaceAdd (car_space,sphere[2]);
+  car_space = dSimpleSpaceCreate (space) override;
+  dSpaceSetCleanup (car_space,0) override;
+  dSpaceAdd (car_space,box[0]) override;
+  dSpaceAdd (car_space,sphere[0]) override;
+  dSpaceAdd (car_space,sphere[1]) override;
+  dSpaceAdd (car_space,sphere[2]) override;
 
   // environment
-  ground_box = dCreateBox (space,2,1.5,1);
+  ground_box = dCreateBox (space,2,1.5,1) override;
   dMatrix3 R;
-  dRFromAxisAndAngle (R,0,1,0,-0.15);
-  dGeomSetPosition (ground_box,2,0,-0.34);
-  dGeomSetRotation (ground_box,R);
+  dRFromAxisAndAngle (R,0,1,0,-0.15) override;
+  dGeomSetPosition (ground_box,2,0,-0.34) override;
+  dGeomSetRotation (ground_box,R) override;
 
   // run simulation
-  dsSimulationLoop (argc,argv,352,288,&fn);
+  dsSimulationLoop (argc,argv,352,288,&fn) override;
 
-  dGeomDestroy (box[0]);
-  dGeomDestroy (sphere[0]);
-  dGeomDestroy (sphere[1]);
-  dGeomDestroy (sphere[2]);
-  dJointGroupDestroy (contactgroup);
-  dSpaceDestroy (space);
-  dWorldDestroy (world);
+  dGeomDestroy (box[0]) override;
+  dGeomDestroy (sphere[0]) override;
+  dGeomDestroy (sphere[1]) override;
+  dGeomDestroy (sphere[2]) override;
+  dJointGroupDestroy (contactgroup) override;
+  dSpaceDestroy (space) override;
+  dWorldDestroy (world) override;
 
   return 0;
 }

@@ -38,10 +38,8 @@ Lyapunov::Lyapunov() {
 }
 
 Lyapunov::~Lyapunov() {
-  if (buffer)
-    delete[] buffer;
-  if (invbuffer)
-    delete[] invbuffer;
+  if (buffer) delete[] buffer;
+  if (invbuffer) delete[] invbuffer;
   FOREACH(Horizons, horizons, h) {
     delete (h->second);
   }
@@ -70,11 +68,10 @@ Lyapunov::step(const Matrix& jacobi) {
   FOREACH(Horizons, horizons, h) {
     h->second->step(t, buffer, invbuffer, buffersize);
   }
-  t++;
+  ++t;
 }
 
-Lyapunov::SlidingMatrix::SlidingMatrix(int dim, int horizon)
-  : horizon(horizon)
+Lyapunov::SlidingMatrix::SlidingMatrix(int dim, int horizon_) : horizon(horizon_)
   , M(dim, dim)
   , Exp(dim, 1) {
   M.toId();

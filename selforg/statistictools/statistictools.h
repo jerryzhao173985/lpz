@@ -38,14 +38,12 @@ class ComplexMeasure;
 #include "analysationmodes.h"
 #include "templatevalueanalysation.h"
 
-#define GET_TYPE_ANALYSATION(type) getAnalysation<type,defaultZero,defaultLower<type>,defaultHigher<type>,defaultDoubleDiv<type>,defaultDoubleMul<type>,defaultAdd<type>,defaultSub<type>,defaultMul<type>,defaultDiv<type> >
-#define GET_DOUBLE_ANALYSATION GET_TYPE_ANALYSATION(double)
-
-/// TODO: add possibility to pass description of a measure
+#define GET_TYPE_ANALYSATIONstatic_cast<type>(getAnalysation)<type,defaultZero,defaultLower<type>,defaultHigher<type>,defaultDoubleDiv<type>,defaultDoubleMul<type>,defaultAdd<type>,defaultSub<type>,defaultMul<type>,defaultDiv<type> >
+#define GET_DOUBLE_ANALYSATION GET_TYPE_ANALYSATIONstatic_cast<double>(/// TODO: add possibility to pass description of a measure)
 class StatisticTools : public Inspectable, public Callbackable {
 
 public:
-  explicit StatisticTools(const std::string& name = "StatisticTools") : Inspectable(name), beginMeasureCounter(0) { }
+  StatisticTools(const std::string& name = "StatisticTools") : Inspectable(name), beginMeasureCounter(0) { }
 
         /**
          * adds a variable to observe and measure the value
@@ -137,7 +135,7 @@ public:
 
 protected:
         std::list<AbstractMeasure*> activeMeasures;
-        long beginMeasureCounter;
+        long beginMeasureCounter = 0;
 };
 
 
@@ -146,7 +144,7 @@ protected:
  * class type must implement following operators:
  *
  * @param values (vector<type>) values for the analysation
- * @return (TemplateValueAnalysation) the analysation context
+ * @return static_cast<TemplateValueAnalysation>(the) analysation context
  */
 template
 <class type,
@@ -166,10 +164,10 @@ ANALYSATION_CONTEXT* getAnalysation(std::vector<type> values) {
 /**
  * class type must implement following operators:
  *
- * @param tvAnalysation (TemplateValueAnalysation) the analysation context
- * @param mode (AnalysationMode) what value you want
- * @param feature (unsigned int) special param. for mode
- * @return (type) the value you want
+ * @param tvAnalysation static_cast<TemplateValueAnalysation>(the) analysation context
+ * @param mode static_cast<AnalysationMode>(what) value you want
+ * @param feature static_cast<unsigned int>(special) param. for mode
+ * @return static_cast<type>(the) value you want
  */
 template
 <class type,
@@ -182,8 +180,8 @@ type add(const type&, const type&),
 type sub(const type&, const type&),
 type mul(const type&, const type&),
 type div(const type&, const type&)>
-type getAnalysation(ANALYSATION_CONTEXT* tvAnalysation, AnalysationMode mode, unsigned int feature = 0) {
-        switch(mode){
+type getAnalysation(ANALYSATION_CONTEXT* tvAnalysation, AnalysationMode mode, unsigned int feature = 0) const {
+        switch (mode){
         case AM_AVG:
                 return tvAnalysation->getAvg();
         case AM_MIN:
@@ -207,7 +205,7 @@ type getAnalysation(ANALYSATION_CONTEXT* tvAnalysation, AnalysationMode mode, un
         case AM_W3:
                 return tvAnalysation->getWhisker3(1.5);
         case AM_NUM_EXT:
-                return (type)tvAnalysation->getNumExtrems(1.5);
+                return static_cast<type>(tvAnalysation)->getNumExtrems(1.5);
         case AM_EXT:
                 return tvAnalysation->getExtrem(1.5,feature);
         case AM_BEST:
@@ -221,9 +219,9 @@ type getAnalysation(ANALYSATION_CONTEXT* tvAnalysation, AnalysationMode mode, un
  * class type must implement following operators:
  *
  * @param values (vector<type>) values for the analysation
- * @param mode (AnalysationMode) what value you want
- * @param feature (unsigned int) special param. for mode
- * @return (type) the value you want
+ * @param mode static_cast<AnalysationMode>(what) value you want
+ * @param feature static_cast<unsigned int>(special) param. for mode
+ * @return static_cast<type>(the) value you want
  */
 template
 <class type,
@@ -236,7 +234,7 @@ type add(const type&, const type&),
 type sub(const type&, const type&),
 type mul(const type&, const type&),
 type div(const type&, const type&)>
-type getAnalysation(std::vector<type> values, AnalysationMode mode, unsigned int feature = 0) {
+type getAnalysation(std::vector<type> values, AnalysationMode mode, unsigned int feature = 0) const {
         ANALYSATION_CONTEXT* context = GET_TYPE_ANALYSATION(type)(values);
         type result = GET_TYPE_ANALYSATION(type)(context,mode,feature);
         delete context;

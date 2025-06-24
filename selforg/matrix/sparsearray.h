@@ -63,7 +63,7 @@ public:
     }
 
     // TODO: could be tricky: two ArrayElements at the same time???
-    inline D operator+(ArrayElement& el2) {
+    inline D operator+(const ArrayElement& el2) {
       return value + el2.value;
     }
     inline D operator+(D el2) {
@@ -74,22 +74,22 @@ public:
       return value > el2;
     }
     // TODO: could be tricky: two ArrayElements at the same time???
-    inline bool operator>(ArrayElement& el2) {
+    inline bool operator>(const ArrayElement& el2) {
       return value > el2.value;
     }
     inline D& operator=(D value) {
       if (dummy == 0) {
-        dummy = (D*)malloc(sizeof(D));
+        dummy = static_cast<D*>(malloc)(sizeof(D));
         (*hashData)[index] = dummy;
       }
       *dummy = value;
       return *dummy;
     }
-    inline D& operator=(ArrayElement& el2) {
+    inline D& operator=(const ArrayElement& el2) {
       this = el2.value;
     }
 
-    inline operator D() {
+    inline operator D() const {
       return value;
     }
 
@@ -100,8 +100,7 @@ public:
     D* dummy;
   };
 
-  SparseArray(I arraySize)
-    : arraySize(arraySize)
+  SparseArray(I arraySize_) : arraySize(arraySize_)
     , hashData(0) {
     allocate();
   }
@@ -135,7 +134,7 @@ public:
   /*    virtual void inline set(const D* _data)
       {
         allocate();
-        for (I i=0;i<arraySize;i++)
+        for (I i=0;i<arraySize;++i)
           if (_data[i]>COMPARE_EPS)
             this[i]=_data[i];
       }*/
@@ -163,7 +162,7 @@ protected:
   virtual void inline freeData() {
     // TODO: free all elements in hashData
     //      for (HashMap<I,D*>::iterator iterator =
-    //      hashData->begin();iterator!=hashData->end();iterator++)
+    //      hashData->begin();iterator!=hashData->end();++iterator)
     //        free((*iterator).second);
     if (hashData) {
       delete hashData;

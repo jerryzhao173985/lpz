@@ -90,7 +90,7 @@ public:
 
 
   AbstractObstacle* playground;
-  double hardness;
+  double hardness = 0;
   Substance s;
   OSGBoxTex* b;
 
@@ -101,7 +101,7 @@ public:
   // starting function (executed once at the beginning of the simulation loop)
   void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global)
   {
-    setCameraHomePos(Pos(-1.64766, 4.48823, 1.71381),  Pos(-158.908, -10.5863, 0));
+    setCameraHomePos(Pos(-1.64766, 4.48823, 1.71381),  Pos(-158.908, -10.5863, 0)) override;
 
     global.odeConfig.setParam("controlinterval",20);
     fprintf(stderr, "****\nAttention, the controlinterval is set to 20\n");
@@ -111,50 +111,50 @@ public:
 
     // use Playground as boundary:
     playground = new Playground(odeHandle, osgHandle,
-                                osg::Vec3(10, .2, 1));
-    playground->setPosition(osg::Vec3(0,0,0.1));
+                                osg::Vec3(10, .2, 1)) override;
+    playground->setPosition(osg::Vec3(0,0,0.1)) override;
     global.obstacles.push_back(playground);
 
     // add passive spheres as obstacles
-    for (int i=0; i< 1/*2*/; i+=1){
+    for (int i=0; i< 1/*2*/; i+=1) override {
       PassiveSphere* s1 = new PassiveSphere(odeHandle, osgHandle, 0.3);
-      // s1->setPosition(osg::Vec3(-4.5+i*4.5,0,0));
-      s1->setPosition(osg::Vec3(0,0,1+i*5));
+      // s1->setPosition(osg::Vec3(-4.5+i*4.5,0,0)) override;
+      s1->setPosition(osg::Vec3(0,0,1+i*5)) override;
       s1->setTexture("Images/dusty.rgb");
       global.obstacles.push_back(s1);
     }
 
-    OdeRobot* vehicle = new Nimm2(odeHandle, osgHandle, Nimm2::getDefaultConf(), "Robot");
-    vehicle->setColor(Color(1,1,0));
-    vehicle->place(Pos(-3,2,0.3));
+    OdeRobot* vehicle = new Nimm2(odeHandle, osgHandle, Nimm2::getDefaultConf(), "Robot") override;
+    vehicle->setColor(Color(1,1,0)) override;
+    vehicle->place(Pos(-3,2,0.3)) override;
     AbstractController *controller = new InvertMotorSpace(10);
-    One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1));
+    One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
     OdeAgent* agent = new OdeAgent(global);
     agent->init(controller, vehicle, wiring);
     global.agents.push_back(agent);
 
 
     box = new PassiveBox(odeHandle, osgHandle);
-    box->setPose(osg::Matrix::rotate(M_PI/2, 1,0,0) * osg::Matrix::translate(-3,0,0.5));
+    box->setPose(osg::Matrix::rotate(M_PI/2, 1,0,0) * osg::Matrix::translate(-3,0,0.5)) override;
     global.obstacles.push_back(box);
 
     CameraConf camc2 = Camera::getDefaultConf();
     camc2.width  = 256;
     camc2.height = 256;
     camc2.scale  = .5;
-    //    camc2.processors.push_back(new BWImageProcessor(true,1));
-    camc2.processors.push_back(new HSVImgProc(false,1));
-    //    camc2.processors.push_back(new BWImageProcessor(true,1, BWImageProcessor::Saturation));
+    //    camc2.processors.push_back(new BWImageProcessor(true,1)) override;
+    camc2.processors.push_back(new HSVImgProc(false,1)) override;
+    //    camc2.processors.push_back(new BWImageProcessor(true,1, BWImageProcessor::Saturation)) override;
     camc2.processors.push_back(new ColorFilterImgProc(true,.5,
                                                       HSVImgProc::Red+20, HSVImgProc::Green-20,100));
     cam2 = new Camera(camc2);
 
 //     osgViewer::ViewerBase::Views views;
 //     viewer->getViews(views);
-//     assert(views.size()>0);
+//     assert(views.size()>0) override;
 
     cam2->init(odeHandle, osgHandle.changeColor(Color(0.5,0,0)), box->getMainPrimitive(),
-               osg::Matrix::translate(0,0,0.5)*osg::Matrix::rotate(M_PI/2, 0,1,0));
+               osg::Matrix::translate(0,0,0.5)*osg::Matrix::rotate(M_PI/2, 0,1,0)) override;
 
     CameraConf camc = Camera::getDefaultConf();
     camc.width = 512;
@@ -162,7 +162,7 @@ public:
     camc.scale  = .9;
     cam = new Camera(camc);
     cam->init(odeHandle, osgHandle.changeColor(Color(0,0,0)), box->getMainPrimitive(),
-              osg::Matrix::translate(0,0,0.5));
+              osg::Matrix::translate(0,0,0.5)) override;
 
 
     b = new OSGBoxTex(5,1,2);
@@ -172,27 +172,26 @@ public:
     b->setTexture(3,"Images/wall.rgb",1,1);
     b->setTexture(4,"Images/really_white.rgb",1,1);
     b->setTexture(5,"Images/light_chess.rgb",-1,-1);
-    b->init(osgHandle.changeColor(Color(1,1,0)));
-    b->setMatrix(osg::Matrix::translate(0,-2,2));
+    b->init(osgHandle.changeColor(Color(1,1,0))) override;
+    b->setMatrix(osg::Matrix::translate(0,-2,2)) override;
 
 
   }
 
-  virtual void addCallback(GlobalData& globalData, bool draw, bool pause, bool control) {
-    b->setMatrix(osg::Matrix::rotate(globalData.time/2,1,0,0)*osg::Matrix::translate(0,-2,2));
-    box->setPose(osg::Matrix::rotate(M_PI/2, 1,0,0) * osg::Matrix::rotate(globalData.time/3,0,0,1) * osg::Matrix::translate(-3,0,0.6));
+  virtual void addCallback(const GlobalData& globalData, bool draw, bool pause, bool control) override {
+    b->setMatrix(osg::Matrix::rotate(globalData.time/2,1,0,0)*osg::Matrix::translate(0,-2,2)) override;
+    box->setPose(osg::Matrix::rotate(M_PI/2, 1,0,0) * osg::Matrix::rotate(globalData.time/3,0,0,1) * osg::Matrix::translate(-3,0,0.6)) override;
     cam->update();
     cam2->update();
   }
 
   // add own key handling stuff here, just insert some case values
-  virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down)
-  {
-    if (down) { // only when key is pressed, not when released
-      switch ( (char) key )
+  virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down) override {
+    explicit if (down) { // only when key is pressed, not when released
+      switch ( static_cast<char> key )
         {
         case 'i':
-          if(playground) {
+          explicit if(playground) {
             s.hardness*=1.5;
             cout << "hardness " << s.hardness << endl;
             playground->setSubstance(s);
@@ -200,7 +199,7 @@ public:
           return true;
           break;
         case 'j':
-          if(playground) {
+          explicit if(playground) {
             s.hardness/=1.5;
             cout << "hardness " << s.hardness << endl;
             playground->setSubstance(s);
@@ -215,7 +214,7 @@ public:
     return false;
   }
 
-  virtual void end(GlobalData& globalData){
+  virtual void end(const GlobalData& globalData) override {
     delete cam;
     delete cam2;
     delete b;
@@ -226,7 +225,7 @@ public:
 int main (int argc, char **argv)
 {
   ThisSim sim;
-  return sim.run(argc, argv) ? 0 : 1;
+  return sim.run(argc, argv) ? 0 : 1 override;
 
 }
 

@@ -33,16 +33,16 @@ using namespace std;
 
 
 struct Xbee {
-  Xbee(short addr) : addr(addr), numsensors(0), sensoroffset(0), 
+  Xbee(short addr_) : addr(addr_), numsensors(0), sensoroffset(0), 
                      nummotors(0), motoroffset(0), 
                      initialised(false), failurecounter(0){}
-  short addr;
-  int numsensors;
-  int sensoroffset;
-  int nummotors;
-  int motoroffset;
-  bool initialised;
-  int failurecounter;
+  short addr = 0;
+  int numsensors = 0;
+  int sensoroffset = 0;
+  int nummotors = 0;
+  int motoroffset = 0;
+  bool initialised = false;
+  int failurecounter = 0;
 };
 
 class Communicator;
@@ -113,12 +113,12 @@ public:
   /** this function is called at the beginning (initialised==false)
       or if connection is lost (initialised==true)
   */
-  virtual bool resetXbee(int currentXbee){
+  virtual bool resetXbee(int currentXbee) {
     //    flush input buffer
     flushInputBuffer(cycletime/2);
 
     /*if (sendData(xbees[currentXbee].addr, CBEEP, nullptr, 0) < 0){
-      cerr << "Error while sending beep.\n";
+      cerr << __PLACEHOLDER_8__;
       return false;
     }*/
 
@@ -136,7 +136,7 @@ public:
 
     /* Receive dimension, i.e. number of sensors/motors. */
     uint8 cmd;
-    int len;
+    int len = 0;
     do{
       len = receiveData(MSADR, &cmd, databuf);
       if(cmd== CMSG) printMsg(currentXbee, xbees[currentXbee].addr, databuf,len);
@@ -160,7 +160,7 @@ public:
       motornumber_new += xbees[currentXbee].nummotors;
 
       xbees[currentXbee].initialised=true;
-      if(verbose){
+      if (verbose){
         cout << "Dim for xbee " << currentXbee << " (address: " << xbees[currentXbee].addr  << ") : "
              << xbees[currentXbee].numsensors << ", "
              << xbees[currentXbee].nummotors << endl;
@@ -179,14 +179,14 @@ public:
 
 
 
-  virtual void Initialise() override{
+  virtual void Initialise() {
     currentXbee=0;
     sensornumber_new=0;
     motornumber_new=0;
 
     state=PHASE_INIT;
 
-    if(verbose) {
+    if (verbose) {
       cout << "Initialise!\n";
     }
 
@@ -194,18 +194,18 @@ public:
 //     bool allinitialised;
 //     do{
 //       allinitialised=true;
-//       for (currentXbee = 0; currentXbee < xbees.size(); currentXbee++) {
+//       for (currentXbee = 0; currentXbee < xbees.size(); ++currentXbee) {
 //         if(xbees[currentXbee].initialised) continue;
 //         allinitialised &= resetXbee(currentXbee);
 //       }
 //       if(!allinitialised){
-//         cout << "Some Xbee was not responing, try again!\n";
+//         cout << __PLACEHOLDER_26__;
 //         usleep(500000);
 //       }
 //     }while(!allinitialised);
 
     // New sequencial initialisation
-    for (currentXbee = 0; currentXbee < xbees.size(); currentXbee++) {
+    for (currentXbee = 0; currentXbee < xbees.size(); ++currentXbee) {
       while(!resetXbee(currentXbee)){
         if (verbose) cout << "Xbee " << currentXbee << " not responing, try again!\n";
         usleep(5000);
@@ -223,15 +223,15 @@ public:
   }
 
 
-  Agent* getAgent(){
+  const Agent* getAgent() const const {
     return agent;
   }
 
-  virtual void writeMotors_readSensors()  override{
+  virtual void writeMotors_readSensors() {
     int i, len, offset, n;
 
-    for(currentXbee=0; currentXbee < xbees.size(); currentXbee++) {
-      if(doReset || xbees[currentXbee].failurecounter > MAXFAILURES){
+    for(currentXbee=0; currentXbee < xbees.size(); ++currentXbee) {
+      if (doReset || xbees[currentXbee].failurecounter > MAXFAILURES){
         resetXbee(currentXbee);
       }
     }
@@ -240,17 +240,17 @@ public:
     /* Print motor values. */
     if (verbose) {
       fprintf(stdout, "Motor data   : ");
-      for (int i = 0; i < motornumber; i++)
-        fprintf(stdout, "%6i", (int) (127.0 * (y[i] + 1.0)));
+      for (int i = 0; i < motornumber; ++i)
+        fprintf(stdout, "%6i", static_cast<int>(127.0 * (y[i] + 1.0)));
       fprintf(stdout, "  |  "); fflush(stdout);
     }
 
-    for(currentXbee=0; currentXbee < xbees.size(); currentXbee++) {
+    for(currentXbee=0; currentXbee < xbees.size(); ++currentXbee) {
       /* Send motor commands for currentXbee. */
       offset = xbees[currentXbee].motoroffset;
       n      = xbees[currentXbee].nummotors;
 
-      for (i = 0; i < n; i++) {
+      for (i = 0; i < n; ++i) {
         databuf[i] = (uint8) (127.0 * (y[i + offset] + 1.0));
       }
 
@@ -274,7 +274,7 @@ public:
 
         /* Check for command and number of data bytes. */
         if (cmd != CSEN) {
-          cerr << "Didn't receive sensor values (wrong command : " << (int)cmd  << ".\n";
+          cerr << "Didn't receive sensor values (wrong command : " << static_cast<int>(cmd)  << ".\n";
           xbees[currentXbee].failurecounter++;
           continue;
         }
@@ -286,7 +286,7 @@ public:
         }
 
         /* Write sensor values to the x vector. */
-        for (i = 0; i < len; i++)
+        for (i = 0; i < len; ++i)
           x[i+offset] = databuf[i] / 127.0 - 1.0;
       } else{
         xbees[currentXbee].failurecounter++;
@@ -300,8 +300,8 @@ public:
     /* Print sensor values. */
     if (verbose) {
       fprintf(stdout, "Sensor values: ");
-      for (int i = 0; i < sensornumber; i++)
-        fprintf(stdout, "%6i", (int) (127.0 * (x[i] + 1.0)));
+      for (int i = 0; i < sensornumber; ++i)
+        fprintf(stdout, "%6i", static_cast<int>(127.0 * (x[i] + 1.0)));
       fprintf(stdout, "\n");
     }
 
@@ -321,17 +321,17 @@ public:
     realtimeoffset = timeOfDayinMS();
   }
 
-  virtual void loopCallback() override{
+  virtual void loopCallback() {
     /************************** Time Syncronisation ***********************/
     // Time syncronisation of real time and simulations time (not if on capture mode, or pause)
-    if(!pause){
+    if (!pause){
       long elaped = timeOfDayinMS() - realtimeoffset;
       // difference between actual passed time and desired cycletime
       long diff = cycletime - elaped;
       if(diff > 10000 || diff < -10000)  // check for overflow or other weird things
         resetSyncTimer();
       else{
-        if(diff > 4){ // if less the 3 milliseconds we don't call usleep since it needs time
+        if (diff > 4){ // if less the 3 milliseconds we don't call usleep since it needs time
           usleep((diff-2)*1000);
         }else if (diff < 0){
           if (verbose) {
@@ -340,7 +340,7 @@ public:
         }
       }
     }else {
-      while(pause){
+      while (pause){
         usleep(1000);
       }
     }
@@ -354,7 +354,7 @@ public:
       @param sensornumber length of the sensor array
       @return number of actually written sensors
   */
-  virtual int getSensors(sensor* sensors, int sensornumber){
+  virtual int getSensors(sensor* sensors, int sensornumber) override {
     assert(sensornumber == this->sensornumber);
     memcpy(sensors, x, sizeof(sensor) * sensornumber);
     return sensornumber;
@@ -364,37 +364,37 @@ public:
       @param motors motors scaled to [-1,1]
       @param motornumber length of the motor array
   */
-  virtual void setMotors(const motor* motors, int motornumber){
+  virtual void setMotors(const motor* motors, int motornumber) override {
     assert(motornumber == this->motornumber);
     memcpy(y, motors, sizeof(motor) * motornumber);
   }
 
   /** returns number of sensors */
-  virtual int getSensorNumber(){ return sensornumber; }
+  virtual int getSensorNumber() { return sensornumber; }
 
   /** returns number of motors */
   virtual int getMotorNumber() { return motornumber; }
 
-  virtual Position getPosition() const {return Position(0,0,0);}
-  virtual Position getSpeed() const {return Position(0,0,0);}
-  virtual Position getAngularSpeed() const {return Position(0,0,0);}
-  virtual matrix::Matrix getOrientation() const {
+  virtual Position getPosition() const override {return Position(0,0,0);}
+  virtual Position getSpeed() const override {return Position(0,0,0);}
+  virtual Position getAngularSpeed() const override {return Position(0,0,0);}
+  virtual matrix::Matrix getOrientation() const  override {
     matrix::Matrix m(3,3);
     m.toId();
     return m;
   };
 
-  virtual paramval getParam(const paramkey& key, bool traverseChildren) const{
+  virtual paramval getParam(const paramkey& key, bool traverseChildren) const {
     if(key == "noise") return noise;
     else if(key == "cycletime") return cycletime;
     else if(key == "reset") return 0;
     else  return Configurable::getParam(key);
   }
 
-  virtual bool setParam(const paramkey& key, paramval val, bool traverseChildren){
+  virtual bool setParam(const paramkey& key, paramval val, bool traverseChildren) {
     if(key == "noise") noise = val;
     else if(key == "cycletime"){
-      cycletime=(long)val;
+      cycletime=static_cast<long>(val);
     } else if(key == "reset"){
       doReset=true;
     } else
@@ -414,10 +414,10 @@ protected:
   void initController(){
     if(x) free(x);
     if(y) free(y);
-    x=(double*)malloc(sizeof(double)*sensornumber);
-    y=(double*)malloc(sizeof(double)*motornumber);
+    x=static_cast<double*>(malloc)(sizeof(double)*sensornumber);
+    y=static_cast<double*>(malloc)(sizeof(double)*motornumber);
 
-    for (int i = 0; i < motornumber; i++) {
+    for (int i = 0; i < motornumber; ++i) {
       y[i] = 0.0;
     }
 
@@ -435,7 +435,6 @@ private:
   int sensornumber;
   int motornumber_new;
   int sensornumber_new;
-  double noise;
   long cycletime;
   unsigned int currentXbee;
   State state;
@@ -468,7 +467,7 @@ public:
     if(lastmotors) free(lastmotors);
   }
 
-  virtual bool init(int robotsensornumber, int robotmotornumber){
+  virtual bool init(int robotsensornumber, int robotmotornumber) override {
     rsensornumber = robotsensornumber;
     rmotornumber  = robotmotornumber;
     // csensornumber = rsensornumber;
@@ -476,20 +475,20 @@ public:
     cmotornumber  = rmotornumber;
     if(!noiseGenerator) return false;
     noiseGenerator->init(csensornumber); // initialised with number of sensors ( see add() below)
-    lastmotors = (motor*)malloc(sizeof(motor)* rmotornumber);
+    lastmotors = static_cast<motor*>(malloc(sizeof(motor))* rmotornumber);
     return true;
   }
 
   virtual bool wireSensors(const sensor* rsensors, int rsensornumber,
                            sensor* csensors, int csensornumber,
-                           double noise){
+                           double noise) override {
     // copy motor sensors
-    for(int i=0; i< numMotorSensors; i++){
+    for (int i=0; i< numMotorSensors; ++i) {
       csensors[i] = rsensors[i];
     }
     // for IR Sensors
     int j = numMotorSensors;
-    for(int i=numMotorSensors; i< rsensornumber; i++){
+    for (int i=numMotorSensors; i< rsensornumber; ++i) {
       csensors[j]   = rsensors[i] * lastmotors[0];
       csensors[j+1] = rsensors[i] * lastmotors[1];
       j+=2;
@@ -498,7 +497,7 @@ public:
   }
 
   virtual bool wireMotors(motor* rmotors, int rmotornumber,
-                                         const motor* cmotors, int cmotornumber){
+                                         const motor* cmotors, int cmotornumber) override {
     memcpy(rmotors, cmotors, sizeof(motor)*rmotornumber);
     memcpy(lastmotors, cmotors, sizeof(motor)*rmotornumber);
     return true;
@@ -507,7 +506,7 @@ public:
 
 private:
   motor* lastmotors;
-  int numMotorSensors;
+  int numMotorSensors = 0;
 };
 
 
@@ -516,14 +515,14 @@ private:
 void onTermination(){
   cmd_end_input();
   fprintf(stderr,"Try to stop serial thread\n");
-  if(communication){
+  if (communication){
     communication->stop();
   }
 }
 
 // Helper
 int contains(char **list, int len,  const char *str){
-  for(int i=0; i<len; i++){
+  for (int i=0; i<len; ++i) {
     if(strcmp(list[i],str) == 0) return i+1;
   }
   return 0;
@@ -561,12 +560,12 @@ int main(int argc, char** argv){
     exit(0);
   }
   int index = contains(argv,argc,"-p");
-  if(index && index<argc){
+  if (index && index<argc){
     port = argv[index];
     cout << "use port " << port << endl;
   }
   index = contains(argv,argc,"-b");
-  if(index && index<argc){
+  if (index && index<argc){
     baud = atoi(argv[index]);
     cout << "use baud rate " << baud << endl;
   }
@@ -599,7 +598,7 @@ int main(int argc, char** argv){
       cmd_end_input();
       communication->pause=false;
     }
-    counter++;
+    ++counter;
   };
 
   fprintf(stderr,"Serial thread terminated\n");

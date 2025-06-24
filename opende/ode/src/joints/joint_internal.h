@@ -5,12 +5,12 @@
  *                                                                       *
  * This library is free software; you can redistribute it and/or         *
  * modify it under the terms of EITHER:                                  *
- *   (1) The GNU Lesser General Public License as published by the Free  *
+ *   static_cast<1>(The) GNU Lesser General Public License as published by the Free  *
  *       Software Foundation; either version 2.1 of the License, or (at  *
  *       your option) any later version. The text of the GNU Lesser      *
  *       General Public License is included with this library in the     *
  *       file LICENSE.TXT.                                               *
- *   (2) The BSD-style license that is included with this library in     *
+ *   static_cast<2>(The) BSD-style license that is included with this library in     *
  *       the file LICENSE-BSD.TXT.                                       *
  *                                                                       *
  * This library is distributed in the hope that it will be useful,       *
@@ -45,19 +45,19 @@ void setBall2( dxJoint *joint, dxJoint::Info2 *info,
 void setAnchors( dxJoint *j, dReal x, dReal y, dReal z,
                  dVector3 anchor1, dVector3 anchor2 );
 
-void getAnchor( dxJoint *j, dVector3 result, dVector3 anchor1 );
-void getAnchor2( dxJoint *j, dVector3 result, dVector3 anchor2 );
+void getAnchor( dxJoint *j, dVector3 result, dVector3 anchor1 ) override;
+void getAnchor2( dxJoint *j, dVector3 result, dVector3 anchor2 ) override;
 
 void setAxes( dxJoint *j, dReal x, dReal y, dReal z,
               dVector3 axis1, dVector3 axis2 );
-void getAxis( dxJoint *j, dVector3 result, dVector3 axis1 );
-void getAxis2( dxJoint *j, dVector3 result, dVector3 axis2 );
+void getAxis( dxJoint *j, dVector3 result, dVector3 axis1 ) override;
+void getAxis2( dxJoint *j, dVector3 result, dVector3 axis2 ) override;
 
 
-dReal getHingeAngle( dxBody *body1, dxBody *body2, dVector3 axis, dQuaternion q_initial );
-dReal getHingeAngleFromRelativeQuat( dQuaternion qrel, dVector3 axis );
+dReal getHingeAngle( dxBody *body1, dxBody *body2, dVector3 axis, dQuaternion q_initial ) override;
+dReal getHingeAngleFromRelativeQuat( dQuaternion qrel, dVector3 axis ) override;
 
-void setFixedOrientation( dxJoint *joint, dxJoint::Info2 *info, dQuaternion qrel, int start_row );
+void setFixedOrientation( dxJoint *joint, dxJoint::Info2 *info, dQuaternion qrel, int start_row ) override;
 
 #endif
 

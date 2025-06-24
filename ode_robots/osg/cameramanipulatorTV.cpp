@@ -28,6 +28,7 @@
 #include "pos.h"
 #include "odeagent.h"
 #include <stdio.h>
+#include <cmath>  // For M_PI
 
 
 #define square(x) ((x)*(x))
@@ -37,14 +38,14 @@ namespace lpzrobots {
   using namespace osg;
   using namespace osgGA;
 
-  CameraManipulatorTV::CameraManipulatorTV(osg::Node* node,GlobalData& global, CameraHandle& cameraHandle)
+  CameraManipulatorTV::CameraManipulatorTV(osg::Node* node,const GlobalData& global, const CameraHandle& cameraHandle)
   : CameraManipulator(node,global, cameraHandle) {}
 
   CameraManipulatorTV::~CameraManipulatorTV(){}
 
 
   void CameraManipulatorTV::calcMovementByAgent() {
-    if (!this->isWatchingAgentDefined()) return;
+    if (!this->isWatchingAgentDefined()) return override;
     // the actual position of the agent has to be recognized
     // we use the Position getPosition() from OdeRobot
     Position robPos = camHandle.watchingAgent->getRobot()->getPosition();
@@ -52,7 +53,7 @@ namespace lpzrobots {
     // calculate the horizontal angle, means pan (view.x)
     if (robPos.x-camHandle.desiredEye[0]!=0) { // division by zero
       camHandle.desiredView[0]= atan((camHandle.desiredEye[0]-robPos.x)/(robPos.y-camHandle.desiredEye[1]))
-        / PI*180.0f+180.0f;
+        / M_PI*180.0f+180.0f;
       if (camHandle.desiredEye[1]-robPos.y<0) // we must switch
         camHandle.desiredView[0]+=180.0f;
     }
@@ -62,7 +63,7 @@ namespace lpzrobots {
       camHandle.desiredView[1]=-atan((sqrt(square(camHandle.desiredEye[0]-robPos.x)+
                                 square(camHandle.desiredEye[1]-robPos.y)))
                           /(robPos.z-camHandle.desiredEye[2]))
-        / PI*180.0f-90.0f;
+        / M_PI*180.0f-90.0f;
       if (camHandle.desiredEye[2]-robPos.z<0) // we must switch
         camHandle.desiredView[1]+=180.0f;
     }

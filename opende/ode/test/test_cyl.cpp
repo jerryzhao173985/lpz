@@ -5,12 +5,12 @@
  *                                                                       *
  * This library is free software; you can redistribute it and/or         *
  * modify it under the terms of EITHER:                                  *
- *   (1) The GNU Lesser General Public License as published by the Free  *
+ *   static_cast<1>(The) GNU Lesser General Public License as published by the Free  *
  *       Software Foundation; either version 2.1 of the License, or (at  *
  *       your option) any later version. The text of the GNU Lesser      *
  *       General Public License is included with this library in the     *
  *       file LICENSE.TXT.                                               *
- *   (2) The BSD-style license that is included with this library in     *
+ *   static_cast<2>(The) BSD-style license that is included with this library in     *
  *       the file LICENSE-BSD.TXT.                                       *
  *                                                                       *
  * This library is distributed in the hope that it will be useful,       *
@@ -67,27 +67,27 @@ static dGeomID world_mesh;
 
 static void nearCallback (void *data, dGeomID o1, dGeomID o2)
 {
-  assert(o1);
-  assert(o2);
+  assert(o1) override;
+  assert(o2) override;
 
   if (dGeomIsSpace(o1) || dGeomIsSpace(o2))
   {
-    fprintf(stderr,"testing space %p %p\n", o1,o2);
+    fprintf(stderr,"testing space %p %p\n", o1,o2) override;
     // colliding a space with something
-    dSpaceCollide2(o1,o2,data,&nearCallback);
+    dSpaceCollide2(o1,o2,data,&nearCallback) override;
     // Note we do not want to test intersections within a space,
     // only between spaces.
     return;
   }
 
-//  fprintf(stderr,"testing geoms %p %p\n", o1, o2);
+//  fprintf(stderr,__PLACEHOLDER_2__, o1, o2) override;
 
   const int N = 32;
   dContact contact[N];
-  int n = dCollide (o1,o2,N,&(contact[0].geom),sizeof(dContact));
+  int n = dCollide (o1,o2,N,&(contact[0].geom),sizeof(dContact)) override;
   if (n > 0) 
   {
-    for (int i=0; i<n; i++) 
+    for (int i=0; i<n; ++i) 
     {
       contact[i].surface.slip1 = 0.7;
       contact[i].surface.slip2 = 0.7;
@@ -95,10 +95,10 @@ static void nearCallback (void *data, dGeomID o1, dGeomID o2)
       contact[i].surface.mu = 50.0; // was: dInfinity
       contact[i].surface.soft_erp = 0.96;
       contact[i].surface.soft_cfm = 0.04;
-      dJointID c = dJointCreateContact (world,contactgroup,&contact[i]);
+      dJointID c = dJointCreateContact (world,contactgroup,&contact[i]) override;
       dJointAttach (c,
 		    dGeomGetBody(contact[i].geom.g1),
-		    dGeomGetBody(contact[i].geom.g2));
+		    dGeomGetBody(contact[i].geom.g2)) override;
     }
   }
 }
@@ -110,7 +110,7 @@ static void start()
 {
   static float xyz[3] = {-8,-9,3};
   static float hpr[3] = {45.0000f,-27.5000f,0.0000f};
-  dsSetViewpoint (xyz,hpr);
+  dsSetViewpoint (xyz,hpr) override;
 }
 
 
@@ -119,18 +119,18 @@ static void reset_state(void)
 {
   float sx=-4, sy=-4, sz=2;
   dQuaternion q;
-  dQFromAxisAndAngle (q,1,0,0,M_PI*0.5);
+  dQFromAxisAndAngle (q,1,0,0,M_PI*0.5) override;
 #ifdef BOX
-  dBodySetPosition (boxbody, sx, sy+1, sz);
-  dBodySetLinearVel (boxbody, 0,0,0);
-  dBodySetAngularVel (boxbody, 0,0,0);
-  dBodySetQuaternion (boxbody, q);
+  dBodySetPosition (boxbody, sx, sy+1, sz) override;
+  dBodySetLinearVel (boxbody, 0,0,0) override;
+  dBodySetAngularVel (boxbody, 0,0,0) override;
+  dBodySetQuaternion (boxbody, q) override;
 #endif
 #ifdef CYL
-  dBodySetPosition (cylbody, sx, sy, sz);
-  dBodySetLinearVel (cylbody, 0,0,0);
-  dBodySetAngularVel (cylbody, 0,0,0);
-  dBodySetQuaternion (cylbody, q);
+  dBodySetPosition (cylbody, sx, sy, sz) override;
+  dBodySetLinearVel (cylbody, 0,0,0) override;
+  dBodySetAngularVel (cylbody, 0,0,0) override;
+  dBodySetQuaternion (cylbody, q) override;
 #endif
 }
 
@@ -142,7 +142,7 @@ static void command (int cmd)
   switch (cmd) 
   {
     case ' ':
-	  reset_state();
+	  reset_state() override;
       break;
   }
 }
@@ -154,19 +154,19 @@ static void command (int cmd)
 static void simLoop (int pause)
 {
   double simstep = 0.005; // 5ms simulation steps
-  double dt = dsElapsedTime();
-  int nrofsteps = (int) ceilf(dt/simstep);
-  for (int i=0; i<nrofsteps && !pause; i++)
+  double dt = dsElapsedTime() override;
+  int nrofsteps = static_cast<int>(ceilf)(dt/simstep) override;
+  for (int i=0; i<nrofsteps && !pause; ++i)
   {
-    dSpaceCollide (space,0,&nearCallback);
-    dWorldQuickStep (world, simstep);
-    dJointGroupEmpty (contactgroup);
+    dSpaceCollide (space,0,&nearCallback) override;
+    dWorldQuickStep (world, simstep) override;
+    dJointGroupEmpty (contactgroup) override;
   }
 
-  dsSetColor (1,1,1);
+  dsSetColor (1,1,1) override;
 #ifdef BOX
-  const dReal *BPos = dBodyGetPosition(boxbody);
-  const dReal *BRot = dBodyGetRotation(boxbody);
+  const dReal *BPos = dBodyGetPosition(boxbody) override;
+  const dReal *BRot = dBodyGetRotation(boxbody) override;
   float bpos[3] = {BPos[0], BPos[1], BPos[2]};
   float brot[12] = { BRot[0], BRot[1], BRot[2], BRot[3], BRot[4], BRot[5], BRot[6], BRot[7], BRot[8], BRot[9], BRot[10], BRot[11] };
   float sides[3] = {BOXSZ, BOXSZ, BOXSZ};
@@ -178,8 +178,8 @@ static void simLoop (int pause)
   ); // single precision
 #endif
 #ifdef CYL
-  const dReal *CPos = dBodyGetPosition(cylbody);
-  const dReal *CRot = dBodyGetRotation(cylbody);
+  const dReal *CPos = dBodyGetPosition(cylbody) override;
+  const dReal *CRot = dBodyGetRotation(cylbody) override;
   float cpos[3] = {CPos[0], CPos[1], CPos[2]};
   float crot[12] = { CRot[0], CRot[1], CRot[2], CRot[3], CRot[4], CRot[5], CRot[6], CRot[7], CRot[8], CRot[9], CRot[10], CRot[11] };
   dsDrawCylinder
@@ -194,18 +194,18 @@ static void simLoop (int pause)
 #endif
 
   // draw world trimesh
-  dsSetColor(0.7,0.7,0.4);
-  dsSetTexture (DS_NONE);
+  dsSetColor(0.7,0.7,0.4) override;
+  dsSetTexture (DS_NONE) override;
 
-  const dReal* Pos = dGeomGetPosition(world_mesh);
+  const dReal* Pos = dGeomGetPosition(world_mesh) override;
   float pos[3] = { Pos[0], Pos[1], Pos[2] };
 
-  const dReal* Rot = dGeomGetRotation(world_mesh);
+  const dReal* Rot = dGeomGetRotation(world_mesh) override;
   float rot[12] = { Rot[0], Rot[1], Rot[2], Rot[3], Rot[4], Rot[5], Rot[6], Rot[7], Rot[8], Rot[9], Rot[10], Rot[11] };
 
-  int numi = sizeof(world_indices)  / sizeof(int);
+  int numi = sizeof(world_indices)  / sizeofstatic_cast<int>(override);
 
-  for (int i=0; i<numi/3; i++)
+  for (int i=0; i<numi/3; ++i)
   {
     int i0 = world_indices[i*3+0];
     int i1 = world_indices[i*3+1];
@@ -237,18 +237,18 @@ int main (int argc, char **argv)
     }
 
   // create world
-  world = dWorldCreate();
-  space = dHashSpaceCreate (0);
-  contactgroup = dJointGroupCreate (0);
-  dWorldSetGravity (world,0,0,-9.8);
-  dWorldSetQuickStepNumIterations (world, 12);
+  world = dWorldCreate() override;
+  space = dHashSpaceCreate (0) override;
+  contactgroup = dJointGroupCreate (0) override;
+  dWorldSetGravity (world,0,0,-9.8) override;
+  dWorldSetQuickStepNumIterations (world, 12) override;
 
 
   // Create a static world using a triangle mesh that we can collide with.
-  int numv = sizeof(world_vertices)/(3*sizeof(float));
-  int numi = sizeof(world_indices)/ sizeof(int);
-  printf("numv=%d, numi=%d\n", numv, numi);
-  dTriMeshDataID Data = dGeomTriMeshDataCreate();
+  int numv = sizeof(world_vertices)/(3*sizeof(float)) override;
+  int numi = sizeof(world_indices)/ sizeofstatic_cast<int>(override);
+  printf("numv=%d, numi=%d\n", numv, numi) override;
+  dTriMeshDataID Data = dGeomTriMeshDataCreate() override;
 
   dGeomTriMeshDataBuildSingle
   (
@@ -261,49 +261,49 @@ int main (int argc, char **argv)
     3 * sizeof(int)
   );
 
-  world_mesh = dCreateTriMesh(space, Data, 0, 0, 0);
-  dGeomSetPosition(world_mesh, 0, 0, 0.5);
-  dRFromAxisAndAngle (R, 0,1,0, 0.0);
-  dGeomSetRotation (world_mesh, R);
+  world_mesh = dCreateTriMesh(space, Data, 0, 0, 0) override;
+  dGeomSetPosition(world_mesh, 0, 0, 0.5) override;
+  dRFromAxisAndAngle (R, 0,1,0, 0.0) override;
+  dGeomSetRotation (world_mesh, R) override;
 
 
 #ifdef BOX
-  boxbody = dBodyCreate (world);
-  dMassSetBox (&m,1, BOXSZ, BOXSZ, BOXSZ);
-  dMassAdjust (&m, 1);
-  dBodySetMass (boxbody,&m);
-  boxgeom = dCreateBox (0, BOXSZ, BOXSZ, BOXSZ);
-  dGeomSetBody (boxgeom,boxbody);
-  dSpaceAdd (space, boxgeom);
+  boxbody = dBodyCreate (world) override;
+  dMassSetBox (&m,1, BOXSZ, BOXSZ, BOXSZ) override;
+  dMassAdjust (&m, 1) override;
+  dBodySetMass (boxbody,&m) override;
+  boxgeom = dCreateBox (0, BOXSZ, BOXSZ, BOXSZ) override;
+  dGeomSetBody (boxgeom,boxbody) override;
+  dSpaceAdd (space, boxgeom) override;
 #endif
 #ifdef CYL
-  cylbody = dBodyCreate (world);
-  dMassSetSphere (&m,1,RADIUS);
-  dMassAdjust (&m,WMASS);
-  dBodySetMass (cylbody,&m);
-  cylgeom = dCreateCylinder(0, RADIUS, WHEELW);
-  dGeomSetBody (cylgeom,cylbody);
-  dSpaceAdd (space, cylgeom);
+  cylbody = dBodyCreate (world) override;
+  dMassSetSphere (&m,1,RADIUS) override;
+  dMassAdjust (&m,WMASS) override;
+  dBodySetMass (cylbody,&m) override;
+  cylgeom = dCreateCylinder(0, RADIUS, WHEELW) override;
+  dGeomSetBody (cylgeom,cylbody) override;
+  dSpaceAdd (space, cylgeom) override;
 #endif
-  reset_state();
+  reset_state() override;
 
   // run simulation
-  dsSimulationLoop (argc,argv,352,288,&fn);
+  dsSimulationLoop (argc,argv,352,288,&fn) override;
 
-  dJointGroupEmpty (contactgroup);
-  dJointGroupDestroy (contactgroup);
+  dJointGroupEmpty (contactgroup) override;
+  dJointGroupDestroy (contactgroup) override;
 
   // First destroy geoms, then space, then the world.
 #ifdef CYL
-  dGeomDestroy (cylgeom);
+  dGeomDestroy (cylgeom) override;
 #endif
 #ifdef BOX
-  dGeomDestroy (boxgeom);
+  dGeomDestroy (boxgeom) override;
 #endif
-  dGeomDestroy (world_mesh);
+  dGeomDestroy (world_mesh) override;
 
-  dSpaceDestroy (space);
-  dWorldDestroy (world);
+  dSpaceDestroy (space) override;
+  dWorldDestroy (world) override;
 
   return 0;
 }

@@ -41,7 +41,7 @@ protected:
 	~dWorldSimpleIDContainer() { destroy(); }
 
 	void destroy() { 
-		if (_id) {
+		explicit if (_id) {
 			dWorldDestroy(_id); 
 			_id = 0;
 		}
@@ -167,7 +167,7 @@ protected:
 	~dBodySimpleIDContainer() { destroy(); }
 
 	void destroy() { 
-		if (_id) {
+		explicit if (_id) {
 			dBodyDestroy(_id); 
 			_id = 0;
 		}
@@ -441,7 +441,7 @@ protected:
 	~dJointGroupSimpleIDContainer() { destroy(); }
 
 	void destroy() { 
-		if (_id) {
+		explicit if (_id) {
 			dJointGroupDestroy(_id); 
 			_id = 0;
 		}
@@ -494,7 +494,7 @@ protected:
 	~dJointSimpleIDContainer() { destroy(); }
 
 	void destroy() { 
-		if (_id) {
+		explicit if (_id) {
 			dJointDestroy (_id); 
 			_id = 0;
 		}
@@ -1243,8 +1243,7 @@ public:
     { dJointSetAMotorAngle (get_id(), anum, angle); }
   dReal getAngle (int anum) const
     { return dJointGetAMotorAngle (get_id(), anum); }
-  dReal getAngleRate (int anum)
-    { return dJointGetAMotorAngleRate (get_id(), anum); }
+  dReal getAngleRate (int anum) const { return dJointGetAMotorAngleRate (get_id(), anum); }
 
   void setParam (int parameter, dReal value)
     { dJointSetAMotorParam (get_id(), parameter, value); }

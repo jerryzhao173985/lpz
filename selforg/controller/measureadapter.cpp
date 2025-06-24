@@ -48,7 +48,7 @@ MeasureAdapter::addSensorComplexMeasure(char* measureName,
                                         int stepSize) {
   std::list<ComplexMeasure*> cmlist;
   if (initialized) {
-    for (int i = 0; i < controller->getSensorNumber(); i++) {
+    for (int i = 0; i < controller->getSensorNumber(); ++i) {
       std::stringstream name;
       name << measureName << " [" << i << "]";
       ComplexMeasure* cm = new ComplexMeasure(name.str().c_str(), mode, numberBins);
@@ -94,9 +94,9 @@ void
 MeasureAdapter::step(const sensor* sensors, int sensornumber, motor* motors, int motornumber) {
   AbstractControllerAdapter::step(sensors, sensornumber, motors, motornumber);
   // store motor and sensor values in motorValues and sensorValues
-  for (int i = 0; i < motornumber; i++)
+  for (int i = 0; i < motornumber; ++i)
     motorValues[i] = motors[i];
-  for (int i = 0; i < sensornumber; i++)
+  for (int i = 0; i < sensornumber; ++i)
     sensorValues[i] = sensors[i];
   callBack();
 }
@@ -108,9 +108,9 @@ MeasureAdapter::stepNoLearning(const sensor* sensors,
                                int motornumber) {
   AbstractControllerAdapter::stepNoLearning(sensors, sensornumber, motors, motornumber);
   // store motor and sensor values in motorValues and sensorValues
-  for (int i = 0; i < motornumber; i++)
+  for (int i = 0; i < motornumber; ++i)
     motorValues[i] = motors[i];
-  for (int i = 0; i < sensornumber; i++)
+  for (int i = 0; i < sensornumber; ++i)
     sensorValues[i] = sensors[i];
   callBack();
 }

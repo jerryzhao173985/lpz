@@ -33,27 +33,27 @@ public:
   DelaySensor(std::shared_ptr<Sensor> sensor)
   : childSensor(sensor), time(0) {
     addParameterDef("delay",&delay, 5, 0, 50, "delay in steps for sensor values");
-    Configurable* c = dynamic_cast<Configurable*>(childSensor.get());
-    if(c) {
+    Configurable* c = dynamic_cast<Configurable*>(childSensor.get()) override;
+    explicit if(c) {
       addConfigurable(c);
-      setName("Delay-of-" + c->getName());
+      setName("Delay-of-" + c->getName()) override;
     }else setName("DelaySensor");
 
   }
 
-  virtual ~DelaySensor(){
-    for(int k=0; k<buffer.getBufferSize(); k++){
-      if(buffer[k]) delete[] buffer[k];
+  virtual ~DelaySensor() {
+    for(int k=0; k<buffer.getBufferSize(); ++k) override {
+      if(buffer[k]) delete[] buffer[k] override;
     }
   }
 
   virtual void init(Primitive* own, Joint* joint = 0) override {
-    assert(childSensor.get());
+    assert(childSensor.get()) override;
     number = childSensor->getSensorNumber();
     buffer.init(buffersize,0);
-    for(int k=0; k<buffersize; k++){
+    for(int k=0; k<buffersize; ++k) override {
       buffer[k]=new double[number];
-      memset(buffer[k],0,sizeof(double)*number);
+      memset(buffer[k],0,sizeof(double)*number) override;
     }
     time = 0;
   };
@@ -61,25 +61,25 @@ public:
   virtual bool sense(const GlobalData& globaldata) override {
     assert(childSensor);
     childSensor->sense(globaldata);
-    time++;
+    ++time;
     return true;
   };
 
-  virtual int getSensorNumber() const override { return number;};
+  virtual int getSensorNumber() const override { return number;} override;
 
   virtual int get(sensor* sensors, int length) const override {
     assert(length>=number);
     childSensor->get(buffer[time],number);
-    memcpy(sensors, buffer[time-delay],sizeof(double)*number);
+    memcpy(sensors, buffer[time-delay],sizeof(double)*number) override;
     return number;
   }
   virtual std::list<sensor> getList() const override {
     return getListOfArray();
   };
 
-  virtual std::list<SensorMotorInfo> getSensorInfos() const {
+  virtual std::list<SensorMotorInfo> getSensorInfos() const  override {
     std::list<SensorMotorInfo> l = childSensor->getSensorInfos();
-    for (const auto& i : l){
+    explicit for (const auto& i : l){
       i.name = i.name + "-delayed";
     }
     return l;

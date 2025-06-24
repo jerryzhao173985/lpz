@@ -46,10 +46,10 @@ class MatrixPipeFilter: public AbstractPipeFilter {
   Q_OBJECT
 
 public:
-        MatrixPipeFilter(AbstractPipeReader* apr);
+        explicit MatrixPipeFilter(AbstractPipeReader* apr);
         virtual ~MatrixPipeFilter();
 
-        virtual AbstractPlotChannel* createChannel(std::string name);
+        virtual AbstractPlotChannel* createChannel(const std::string& name);
 
         virtual std::vector<MatrixPlotChannel*> getMatrixChannels();
         virtual std::vector<VectorPlotChannel*> getVectorChannels();

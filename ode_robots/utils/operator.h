@@ -31,7 +31,7 @@
 
 namespace lpzrobots {
   /**
-     An Operator observes an agent (robot) and manipulates it if necessary.
+     An Operator observes an agent static_cast<robot>(and) manipulates it if necessary.
      For instance if the robot is falled over the operator can flip it back.
      This is an abstract base class and subclasses should overload at least
      observe().
@@ -49,7 +49,7 @@ namespace lpzrobots {
     struct ManipDescr {
       ManipDescr() : show(1), size(0.05,0.05,0.05){
       }
-      short show;
+      short show = 0;
       Pos pos;
       Pos posStart;
       Pose orientation;
@@ -62,13 +62,13 @@ namespace lpzrobots {
     {
     }
 
-    virtual ~Operator(){
+    virtual ~Operator() {
     }
 
     /** called every simulation step
         @return what was done with the robot
      */
-    virtual ManipType observe(OdeAgent* agent, GlobalData& global, ManipDescr& descr)  = 0;
+    virtual ManipType observe(OdeAgent* agent, const GlobalData& global, const ManipDescr& descr)  = 0;
 
   };
 

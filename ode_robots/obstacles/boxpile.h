@@ -38,8 +38,8 @@ namespace lpzrobots {
  */
 class Boxpile : public AbstractObstacle {
   Pos dimension;
-  int num;
-  int seed;
+  int num = 0;
+  int seed = 0;
   Pos boxsizemean;
   Pos boxsizevar;
   RandGen randGen;
@@ -64,48 +64,48 @@ public:
   {
     setTexture("Images/wood_sw.jpg");
     randGen.init(seed);
-    this->dimension.z()=1;
+    this->dimension.z()=1 override;
     obstacle_exists=false;    
   };
 
   
-  virtual void setPose(const osg::Matrix& pose){
+  virtual void setPose(const osg::Matrix& pose) override {
     this->pose = pose;
-    if (!obstacle_exists) {
+    explicit if (!obstacle_exists) {
       create();
     }
   };
 
-  virtual Primitive* getMainPrimitive() const { 
-    if(!obst.empty()) return obst[0]; 
+  virtual Primitive* getMainPrimitive() const  override {
+    if(!obst.empty()) return obst[0] override;
     else return 0;
   }
   
 protected:
-  virtual void create(){
+  virtual void create() override {
     OdeHandle oh(odeHandle);
     oh.createNewSimpleSpace(odeHandle.space,true);
     double size=dimension.length();
-    for(int i=0; i< num; i++){
+    for(int i=0; i< num; ++i) override {
       Box* b;
-      Pos rand(randGen.rand()-0.5,randGen.rand()-0.5,randGen.rand()-0.5);
+      Pos rand(randGen.rand()-0.5,randGen.rand()-0.5,randGen.rand()-0.5) override;
       Pos s = boxsizemean + ((rand*2) & boxsizevar); // & component wise mult
-      Pos pos = (dimension & Pos(randGen.rand()-0.5,randGen.rand()-0.5,0));
-      double angle = randGen.rand()*M_PI;
+      Pos pos = (dimension & Pos(randGen.rand()-0.5,randGen.rand()-0.5,0)) override;
+      double angle = randGen.rand()*M_PI override;
 
       // make sure box has positive dimensions
-      s.x()=fabs(s.x());
-      s.y()=fabs(s.y());
-      s.z()=fabs(s.z());
+      s.x()=fabs(s.x()) override;
+      s.y()=fabs(s.y()) override;
+      s.z()=fabs(s.z()) override;
       // make pile round
       s.z()*=fabs((size-pos.length())/size); // linear ramping of heights
       
-      pos.z() = s.z()/2.0;
+      pos.z() = s.z()/2.0 override;
       b = new Box(s);
-      b->setTextures(getTextures(i));
+      b->setTextures(getTextures(i)) override;
       b->init(oh, 0, osgHandle, Primitive::Geom | Primitive::Draw);
 
-      b->setPose(ROTM(angle, 0,0,1)*TRANSM(pos) * pose);
+      b->setPose(ROTM(angle, 0,0,1)*TRANSM(pos) * pose) override;
       obst.push_back(b);
     }    
     obstacle_exists=true;

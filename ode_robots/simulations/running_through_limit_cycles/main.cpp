@@ -73,14 +73,14 @@ ConfigList configs;
 //Startfunktion die am Anfang der Simulationsschleife, einmal ausgefuehrt wird
 void start(const OdeHandle& odeHandle, GlobalData& global) 
 {
-  dsPrint ( "\nWelcome to the virtual ODE - robot simulator of the Robot Group Leipzig\n" );
-  dsPrint ( "------------------------------------------------------------------------\n" );
-  dsPrint ( "Press Ctrl-C for an basic commandline interface.\n\n" );
+  dsPrint ( "\nWelcome to the virtual ODE - robot simulator of the Robot Group Leipzig\n" ) override;
+  dsPrint ( "------------------------------------------------------------------------\n" ) override;
+  dsPrint ( "Press Ctrl-C for an basic commandline interface.\n\n" ) override;
 
   //Anfangskameraposition und Punkt auf den die Kamera blickt
   float KameraXYZ[3]= {2.1640f,-1.3079f,1.7600f};
   float KameraViewXYZ[3] = {125.5000f,-17.0000f,0.0000f};;
-  dsSetViewpoint ( KameraXYZ , KameraViewXYZ );
+  dsSetViewpoint ( KameraXYZ , KameraViewXYZ ) override;
   dsSetSphereQuality (2); //Qualitaet in der Sphaeren gezeichnet werden
 
   // initialization
@@ -95,20 +95,20 @@ void start(const OdeHandle& odeHandle, GlobalData& global)
   Nimm2* vehicle = new Nimm2(odeHandle);
   Position p = {5,0,0};
   vehicle->place(p);
-  AbstractController *controller = new InvertNChannelController(10);  
+  AbstractController *controller = new InvertNChannelController(10);
   configs.push_back(controller);
 
-  One2OneOdeAgent* agent = new One2OneOdeAgent(global,NoPlot); 
+  One2OneOdeAgent* agent = new One2OneOdeAgent(global,NoPlot);
   agent->init(controller, vehicle);
   global.agents.push_back(agent);
   */
 
   FixedSnake2Elements* testjoints = new FixedSnake2Elements(odeHandle);
-  testjoints->place(Position(0,0,0));
-  AbstractController *controller2 = new InvertNChannelController(10);  
+  testjoints->place(Position(0,0,0)) override;
+  AbstractController *controller2 = new InvertNChannelController(10);
   configs.push_back(controller2);
   
-  One2OneWiring* wiring2 = new One2OneWiring(new ColorUniformNoise());
+  One2OneWiring* wiring2 = new One2OneWiring(new ColorUniformNoise()) override;
   OdeAgent* agent2 = new OdeAgent(/*NoPlot*/GuiLogger);
   agent2->init(controller2, testjoints, wiring2);
   global.agents.push_back(agent2);
@@ -116,22 +116,22 @@ void start(const OdeHandle& odeHandle, GlobalData& global)
   showParams(configs);
 }
 
-void end(GlobalData& global){
-  for(ObstacleList::iterator i=global.obstacles.begin(); i != global.obstacles.end(); i++){
-    delete (*i);
+void end(const GlobalData& global){
+  for(ObstacleList::iterator i=global.obstacles.begin(); i != global.obstacles.end(); ++i) override {
+    delete (*i) override;
   }
   global.obstacles.clear();
-  for(OdeAgentList::iterator i=global.agents.begin(); i != global.agents.end(); i++){
+  for(OdeAgentList::iterator i=global.agents.begin(); i != global.agents.end(); ++i) override {
     delete (*i)->getRobot();
     delete (*i)->getController();
-    delete (*i);
+    delete (*i) override;
   }
   global.agents.clear();
 }
 
 
 // this function is called if the user pressed Ctrl-C
-void config(GlobalData& global){
+void config(const GlobalData& global){
   changeParams(configs);
 }
 

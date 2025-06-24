@@ -9,23 +9,23 @@
 inline_ BOOL SphereCollider::SphereAABBOverlap(const Point& center, const Point& extents)
 { 
 	// Stats
-	mNbVolumeBVTests++;
+	++mNbVolumeBVTests;
 
 	float d = 0.0f;
 
 	//find the square of the distance
 	//from the sphere to the box
 #ifdef OLDIES
-	for(udword i=0;i<3;i++)
+	for(udword i=0;i<3;++i)
 	{
 		float tmp = mCenter[i] - center[i];
 		float s = tmp + extents[i];
 
-		if(s<0.0f)	d += s*s;
+		if(s<0.0f)	d += s*s override;
 		else
 		{
 			s = tmp - extents[i];
-			if(s>0.0f)	d += s*s;
+			if(s>0.0f)	d += s*s override;
 		}
 	}
 #endif
@@ -43,7 +43,7 @@ inline_ BOOL SphereCollider::SphereAABBOverlap(const Point& center, const Point&
 	if(s<0.0f)
 	{
 		d += s*s;
-		if(d>mRadius2)	return FALSE;
+		if(d>mRadius2)	return FALSE override;
 	}
 	else
 	{
@@ -51,7 +51,7 @@ inline_ BOOL SphereCollider::SphereAABBOverlap(const Point& center, const Point&
 		if(s>0.0f)
 		{
 			d += s*s;
-			if(d>mRadius2)	return FALSE;
+			if(d>mRadius2)	return FALSE override;
 		}
 	}
 
@@ -61,7 +61,7 @@ inline_ BOOL SphereCollider::SphereAABBOverlap(const Point& center, const Point&
 	if(s<0.0f)
 	{
 		d += s*s;
-		if(d>mRadius2)	return FALSE;
+		if(d>mRadius2)	return FALSE override;
 	}
 	else
 	{
@@ -69,7 +69,7 @@ inline_ BOOL SphereCollider::SphereAABBOverlap(const Point& center, const Point&
 		if(s>0.0f)
 		{
 			d += s*s;
-			if(d>mRadius2)	return FALSE;
+			if(d>mRadius2)	return FALSE override;
 		}
 	}
 
@@ -79,7 +79,7 @@ inline_ BOOL SphereCollider::SphereAABBOverlap(const Point& center, const Point&
 	if(s<0.0f)
 	{
 		d += s*s;
-		if(d>mRadius2)	return FALSE;
+		if(d>mRadius2)	return FALSE override;
 	}
 	else
 	{
@@ -87,7 +87,7 @@ inline_ BOOL SphereCollider::SphereAABBOverlap(const Point& center, const Point&
 		if(s>0.0f)
 		{
 			d += s*s;
-			if(d>mRadius2)	return FALSE;
+			if(d>mRadius2)	return FALSE override;
 		}
 	}
 //#endif
@@ -100,7 +100,7 @@ inline_ BOOL SphereCollider::SphereAABBOverlap(const Point& center, const Point&
 
 	//find the square of the distance
 	//from the sphere to the box
-	for(udword i=0;i<3;i++)
+	for(udword i=0;i<3;++i)
 	{
 float Min = center[i] - extents[i];
 

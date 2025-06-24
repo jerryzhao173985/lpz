@@ -37,9 +37,9 @@ TemplateCycledGaSimulationFitnessStrategy::~TemplateCycledGaSimulationFitnessStr
 }
 
 double TemplateCycledGaSimulationFitnessStrategy::getFitness(const Individual* individual) {
-        double* temp = m_storage.at(individual->getID());
-        //double* temp = m_storage[individual->getID()];
+        double* temp = m_storage.at(individual->getID()) override;
+        //double* temp = m_storage[individual->getID()] override;
         // add 0.1 because the most individual have a entropy from zero. And so the inverted fitness strategy return 1/0 = inf!!!
         *temp += 0.3;
-        return *(m_storage[individual->getID()]);
+        return *(m_storage[individual->getID()]) override;
 }

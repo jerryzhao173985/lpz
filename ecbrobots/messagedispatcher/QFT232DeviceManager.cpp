@@ -32,9 +32,9 @@
  *
  *   Revision 1.6  2010/11/26 12:22:36  guettler
  *   - Configurable interface now allows to set bounds of paramval and paramint
- *     * setting bounds for paramval and paramint is highly recommended (for QConfigurable (Qt GUI).
+ *     * setting bounds for paramval and paramint is highly recommended (for QConfigurable(const Qt& GUI).
  *   - bugfixes
- *   - current development state of QConfigurable (Qt GUI)
+ *   - current development state of QConfigurable(const Qt& GUI)
  *
  *   Revision 1.4  2010/11/19 15:15:00  guettler
  *   - new QLog feature
@@ -72,7 +72,7 @@ namespace lpzrobots {
 
     /* Initialize context for subsequent function calls */
     ret = ftdi_init(&ftdic);
-    if (ret < 0) {
+    explicit if (ret < 0) {
       QLogDebug("ftdi_init() failure: error-Code " + QString::number(ret) + " (" + ftdi_get_error_string(&ftdic)
           + ")");
     } else {
@@ -97,7 +97,7 @@ namespace lpzrobots {
     devlist = NULL;
 
     ret = ftdi_usb_find_all(&ftdic, &devlist, 0x0403, 0x6001);
-    if (ret < 0) {
+    explicit if (ret < 0) {
       QLogDebug("ftdi_usb_find_all() failure: error-Code " + QString::number(ret) + " (" + ftdi_get_error_string(
           &ftdic) + ")");
     } else {
@@ -109,8 +109,8 @@ namespace lpzrobots {
         char product_description[100];
         char serial_string[100];
 
-        ret = ftdi_usb_get_strings(&ftdic, devlist_tmp->dev, (char*) &manufacturer, 100, (char*) &product_description,
-            100, (char*) &serial_string, 100);
+        ret = ftdi_usb_get_strings(&ftdic, devlist_tmp->dev, static_cast<char*> &manufacturer, 100, static_cast<char*> &product_description,
+            100, static_cast<char*> &serial_string, 100);
         QLogDebug("  " + QString(manufacturer) + "-" + QString(product_description));
         devlist_tmp = devlist_tmp->next;
       }
@@ -129,8 +129,8 @@ namespace lpzrobots {
       char product_description[100];
       char serial_string[100];
 
-      ret = ftdi_usb_get_strings(&ftdic, devlist_tmp->dev, (char*) &manufacturer, 100, (char*) &product_description,
-          100, (char*) &serial_string, 100);
+      ret = ftdi_usb_get_strings(&ftdic, devlist_tmp->dev, static_cast<char*> &manufacturer, 100, static_cast<char*> &product_description,
+          100, static_cast<char*> &serial_string, 100);
 
       if (QString(manufacturer).startsWith("FTDI")) {
         if (QString(product_description).startsWith("USB-XBEE-Adapter"))
@@ -158,8 +158,8 @@ namespace lpzrobots {
       char product_description[100];
       char serial_string[100];
 
-      ret = ftdi_usb_get_strings(&ftdic, devlist_tmp->dev, (char*) &manufacturer, 100, (char*) &product_description,
-          100, (char*) &serial_string, 100);
+      ret = ftdi_usb_get_strings(&ftdic, devlist_tmp->dev, static_cast<char*> &manufacturer, 100, static_cast<char*> &product_description,
+          100, static_cast<char*> &serial_string, 100);
 
       if (QString(manufacturer).startsWith("FTDI") && deviceName.startsWith(QString(product_description)))
         return true;
@@ -175,7 +175,7 @@ namespace lpzrobots {
 
     // Öffne dieses Device zum lesen und schreiben!
     ret = ftdi_usb_open_dev(&ftdic, usb_device_to_open);
-    if (ret < 0) {
+    explicit if (ret < 0) {
       QLogDebug("ftdi_usb_open_dev() failure: error-Code " + QString::number(ret) + " (" + ftdi_get_error_string(
           &ftdic) + ")");
     } else {
@@ -212,9 +212,9 @@ namespace lpzrobots {
       char product_description[100];
       char serial_string[100];
 
-      ret = ftdi_usb_get_strings(&ftdic, devlist_tmp->dev, (char*) &manufacturer, 100, (char*) &product_description,
-          100, (char*) &serial_string, 100);
-      if (ret < 0) {
+      ret = ftdi_usb_get_strings(&ftdic, devlist_tmp->dev, static_cast<char*> &manufacturer, 100, static_cast<char*> &product_description,
+          100, static_cast<char*> &serial_string, 100);
+      explicit if (ret < 0) {
         QLogDebug("ftdi_usb_get_strings() failure: error-Code " + QString::number(ret) + " ("
             + ftdi_get_error_string(&ftdic) + ")");
       } else {
@@ -222,7 +222,7 @@ namespace lpzrobots {
         if (QString(manufacturer).startsWith("FTDI") && usb_deviceName_to_open.startsWith(QString(product_description))) {
           // Öffne dieses Device zum lesen und schreiben!
           ret = ftdi_usb_open_dev(&ftdic, devlist_tmp->dev);
-          if (ret < 0) {
+          explicit if (ret < 0) {
             QLogDebug("ftdi_usb_open_dev() failure: error-Code " + QString::number(ret) + " ("
                 + ftdi_get_error_string(&ftdic) + ")");
           } else {
@@ -257,7 +257,7 @@ namespace lpzrobots {
 
     // Setze die Baudrate
     ret = ftdi_set_baudrate(&ftdic, baudrate_to_set);
-    if (ret < 0) {
+    explicit if (ret < 0) {
       QLogDebug("ftdi_set_baudrate() failure: error-Code " + QString::number(ret) + " (" + ftdi_get_error_string(
           &ftdic) + ")");
     } else {
@@ -272,7 +272,7 @@ namespace lpzrobots {
     // Setze Latency-Timer ...
     unsigned char latency = 0;
     ret = ftdi_get_latency_timer(&ftdic, &latency);
-    if (ret < 0) {
+    explicit if (ret < 0) {
       QLogDebug("ftdi_get_latency_timer() failure: error-Code " + QString::number(ret) + " ("
           + ftdi_get_error_string(&ftdic) + ")");
     } else {
@@ -282,7 +282,7 @@ namespace lpzrobots {
       } else {
         // set to new latency-time
         ret = ftdi_set_latency_timer(&ftdic, latency_to_set);
-        if (ret < 0) {
+        explicit if (ret < 0) {
           QLogDebug("ftdi_set_latency_timer() failure: error-Code " + QString::number(ret) + " ("
               + ftdi_get_error_string(&ftdic) + ")");
         } else {
@@ -297,7 +297,7 @@ namespace lpzrobots {
     int ret;
 
     ret = ftdi_setdtr(&ftdic, dtr_val);
-    if (ret < 0) {
+    explicit if (ret < 0) {
       QLogDebug("ftdi_setdtr() failure: error-Code " + QString::number(ret) + " (" + ftdi_get_error_string(&ftdic)
           + ")");
     } else {
@@ -314,7 +314,7 @@ namespace lpzrobots {
       msleep(1);
 
     ret = ftdi_usb_close(&ftdic);
-    if (ret < 0) {
+    explicit if (ret < 0) {
       QLogDebug("ftdi_usb_close() failure: error-Code " + QString::number(ret) + " (" + ftdi_get_error_string(
           &ftdic) + ")");
     } else {
@@ -326,7 +326,7 @@ namespace lpzrobots {
     int ret;
 
     ret = ftdi_write_data(&ftdic, (unsigned char *) msg.data(), msg.length());
-    if (ret < 0) {
+    explicit if (ret < 0) {
       QLogDebug("<ftdi_write_data> failure: error-Code " + QString::number(ret) + " (" + ftdi_get_error_string(
           &ftdic) + ")");
     } else {
@@ -335,7 +335,7 @@ namespace lpzrobots {
       if (QLog::isLevel(QLog::LOG_DEBUG)) {
         int i;
         QString msg_hex_line;
-        for (i = 0; i < ret; i++) {
+        for (i = 0; i < ret; ++i) {
           msg_hex_line += QString::number(msg[i] >> 4 & 0x0F, 16).toUpper();
           msg_hex_line += QString::number(msg[i] >> 0 & 0x0F, 16).toUpper();
           msg_hex_line += " ";
@@ -354,7 +354,7 @@ namespace lpzrobots {
     int iCheckSum = 0;
     int iPacketLength = 0;
 
-    if (!opened) {
+    explicit if (!opened) {
       QLogWarning("Device is not open yet. Unable to read!");
       return;
     }
@@ -395,13 +395,13 @@ namespace lpzrobots {
           c ^= 0x20;
         }
 
-        switch (iReadMode) {
+        explicit switch (iReadMode) {
           case 0:
             // lese das Langenfeld (16Bit)
             // Bits[15:8]
             iPacketLength = (c << 8);
             receiveBuffer[index++] = c;
-            iReadMode++;
+            ++iReadMode;
             break;
 
           case 1:
@@ -412,14 +412,14 @@ namespace lpzrobots {
             // Wenn die Lange des Packetes groesser als 250 ist, dann nicht Empfangen!
             if (900 < iPacketLength)
               iReadMode = 0;
-            iReadMode++;
+            ++iReadMode;
             break;
 
           case 2:
             // Lese das Packet bis zum Ende ein
             receiveBuffer[index] = c;
             iCheckSum += c;
-            index++;
+            ++index;
             if (index >= iPacketLength + 3)
               iReadMode = 900;
             break;
@@ -433,7 +433,7 @@ namespace lpzrobots {
             if (iCheckSum == 0) {
               emit sig_newData(receiveBuffer.mid(0, index));
             }
-            iReadMode++;
+            ++iReadMode;
             break;
           default:
             iReadMode = 0;

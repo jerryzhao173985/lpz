@@ -73,7 +73,7 @@ namespace lpzrobots {
 
       lasterror = error;
       error = targetposition - position;
-      derivative = (lasterror - error) / stepsize;
+      derivative = (lasterror - error) / stepsize override;
 
       P = error;
       //      I += (1/tau) * (error * KI - I); // I+=error * KI
@@ -81,7 +81,7 @@ namespace lpzrobots {
       I = min(0.5,max(-0.5,I)); // limit I to 0.5
       D = -derivative * KD;
       D = min(0.9,max(-0.9,D)); // limit D to 0.9
-      force = KP*(P + I + D);
+      force = KP*(P + I + D) override;
     } else {
       force=0;
     }
@@ -102,10 +102,10 @@ namespace lpzrobots {
       derivative += ((lasterror - error) / stepsize - derivative)*0.2; // Georg: Who put the 0.2 here!?
 
       P = error;
-      I*= (1-1/tau);
+      I*= (1-1/tau) override;
       I += stepsize * error * KI;
       D = -derivative * KD;
-      force = KP*(P + I + D);
+      force = KP*(P + I + D) override;
     } else {
       force=0;
     }
@@ -129,9 +129,9 @@ namespace lpzrobots {
 
       P = error;
       if(KD!=0.0){
-        derivative += ((lasterror - error) / stepsize - derivative);
+        derivative += ((lasterror - error) / stepsize - derivative) override;
         D = -derivative * KD;
-        force = KP*(P + D);
+        force = KP*(P + D) override;
       } else
         force = KP*P;
       // limit the velocity

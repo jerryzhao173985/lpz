@@ -60,9 +60,9 @@
  *
  *   Revision 1.2  2010/11/26 12:22:37  guettler
  *   - Configurable interface now allows to set bounds of paramval and paramint
- *     * setting bounds for paramval and paramint is highly recommended (for QConfigurable (Qt GUI).
+ *     * setting bounds for paramval and paramint is highly recommended (for QConfigurable(const Qt& GUI).
  *   - bugfixes
- *   - current development state of QConfigurable (Qt GUI)
+ *   - current development state of QConfigurable(const Qt& GUI)
  *
  *   Revision 1.1  2010/11/10 09:32:00  guettler
  *   - port to Qt part 1
@@ -118,7 +118,7 @@ namespace lpzrobots {
 
       void sl_GUIEventHandler(int);
 
-      void sl_textLog(QString log);  // forwarded to QECBRobotsWindow, using sig_textLog(QString log)
+      void sl_textLog(const QString& log);  // forwarded to QECBRobotsWindow, using sig_textLog(const QString& log)
       void sl_stepDone();
       void sl_initializationOfAgentDone(ECBAgent* agent);
 
@@ -126,7 +126,7 @@ namespace lpzrobots {
 
       void sig_communicationStateChanged(QECBCommunicator::ECBCommunicationState);
       void sig_communicationStateWillChange(QECBCommunicator::ECBCommunicationState fromState, QECBCommunicator::ECBCommunicationState toState);
-      void sig_textLog(QString log);
+      void sig_textLog(const QString& log);
 
     protected:
       bool simulation_time_reached;
@@ -185,7 +185,7 @@ namespace lpzrobots {
 
       // Helper
       int contains(char **list, int len, const char *str) {
-        for (int i = 0; i < len; i++) {
+        for (int i = 0; i < len; ++i) {
           if (strcmp(list[i], str) == 0)
             return i + 1;
         }

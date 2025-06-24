@@ -19,12 +19,12 @@ using namespace std;
 // globals to be ref'ed to
 
 struct Dat {
-  double d;
-  int i;
-  bool b;
-  double pla;  
+  double d = 0;
+  int i = 0;
+  bool b = false;
+  double pla = 0;  
   bool operator == (const Dat& dat){
-    return d==dat.d && i==dat.i && b == dat.b && pla==dat.pla; //memcmp(this, &dat, sizeof(Dat))==0;
+    return d==dat.d && i==dat.i && b == dat.b && pla==dat.pla; //memcmp(this, &dat, sizeof(Dat))== 0;
   }
 };
 
@@ -38,7 +38,7 @@ Configurable setupConfigable(Dat& d, const char* name){
   return c;
 }
 
-void setValues(Configurable& c){
+void setValues(const Configurable& c){
   c.setParam("d",0.1234, false);
   c.setParam("pla", -123456, false);
   c.setParam("i",-123, false);
@@ -80,23 +80,23 @@ DEFINE_TEST( store_restore ) {
   Configurable bc = setupConfigable(bd,"c");
   Configurable bc1 = setupConfigable(bd1,"c1");
   Configurable bc2 = setupConfigable(bd2,"c2");
-  Configurable bc3 = setupConfigable(bd3,"c3");    
+  Configurable bc3 = setupConfigable(bd3,"c3");
   bc1.addConfigurable(&bc2);
   bc.addConfigurable(&bc1);
   bc.addConfigurable(&bc3);
   unit_assert("restore ", bc.restoreCfg("configurablestore"));
   // validate:
   unit_assert("validate ", d==bd && d1==bd1 && d2==bd2 && d3==bd3 );
-  bc.print(stdout,0,80); 
+  bc.print(stdout,0,80);
   
-  unit_pass();  
+  unit_pass();
 }
 
 // DEFINE_TEST( store_restore ) {  
-//   cout << "\n -[ Store and Restore ]-\n";  
+//   cout << __PLACEHOLDER_38__;  
 
 
-//   unit_pass();  
+//   unit_pass();
 // }
 
 

@@ -44,7 +44,7 @@
 namespace lpzrobots {
 
   QPanelHexViewer::QPanelHexViewer(QWidget *parent) :
-    QWidget(parent) {
+    explicit QWidget(parent) {
     scrollBar = new QScrollBar(Qt::Vertical);
     connect(scrollBar, SIGNAL(valueChanged(int)), this, SLOT(setScrollPosition(int)));
 
@@ -81,7 +81,7 @@ namespace lpzrobots {
     try
     {
       // Load the Page
-      for (int i = 0; i < iPageSize_in_Bytes && startIndex + i < pgmBuffer.length(); i++)
+      for (int i = 0; i < iPageSize_in_Bytes && startIndex + i < pgmBuffer.length(); ++i)
       {
         bPage[i] = pgmBuffer[startIndex + i];
       }
@@ -92,7 +92,7 @@ namespace lpzrobots {
   }
 
   bool QPanelHexViewer::hasPage(ushort iPageNumber, ushort iPageSize_in_Bytes) {
-    int startIndex = (int) iPageNumber * (int) iPageSize_in_Bytes;
+    int startIndex = static_cast<int>(iPageNumber) * static_cast<int>(iPageSize_in_Bytes);
 
     try
     {
@@ -111,7 +111,7 @@ namespace lpzrobots {
       // graduate into pices of the size of second param. If all the bytes of the
       // pice specified by the first param compares 0xFF the page is empty,
       // true will be returned.
-      for (uint i = 0; i < iPageSize; i++)
+      for (uint i = 0; i < iPageSize; ++i)
         if ((QByte) (pgmBuffer.at(startIndex + i)) != 0xFF)
         {
           return false;
@@ -140,12 +140,12 @@ namespace lpzrobots {
     {
       int lines = (height() - 20) / lineSpacing;
 
-      for (int j = 0; j < lines; j++)
+      for (int j = 0; j < lines; ++j)
       {
         sSpace = "";
         sPgm = "";
         sAscii = "";
-        for (int i = 0; i < 16; i++)
+        for (int i = 0; i < 16; ++i)
         {
           int index = i + j * 16 + verticalScrollPosition * 16;
           if (index >= pgmBuffer.length())

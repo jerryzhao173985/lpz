@@ -7,7 +7,7 @@ using namespace std;
 void showParams(const ConfigList& configs, FILE* f /*= 0*/, const char* lineprefix /*= 0*/)
 {
   if(!f) f=stdout;
-  for(vector<Configurable*>::const_iterator i=configs.begin(); i != configs.end(); ++i){
+  for(vector<Configurable*>::const_iterator i=configs.begin(); i != configs.end(); ++i) {
     (*i)->print(f, lineprefix);
   }
 }
@@ -18,8 +18,7 @@ void changeParams(ConfigList& configs,
   std::cout << "Type: Parameter=Value\n";
   fgets( buffer, 1024, stdin);
   if ( strstr(buffer,"quit")==buffer){
-    if(onQuit)
-      onQuit();
+    ifstatic_cast<onQuit>(onQuit)();
     else
       exit(0);
     return;
@@ -32,7 +31,7 @@ void changeParams(ConfigList& configs,
   if (p){
     *p=nullptr; // terminate key string
     double v=strtod(p+1,0);
-    for(ConfigList::iterator i=configs.begin(); i != configs.end(); ++i){
+    for(ConfigList::iterator i=configs.begin(); i != configs.end(); ++i) {
       if ((*i)->setParam(buffer,v)){
         printf(" %s=\t%f \n", buffer, (*i)->getParam(buffer));
       }
@@ -43,7 +42,7 @@ void changeParams(ConfigList& configs,
 vector<string> splitString(const string& str, char seperator){
   vector<string> rv;
   string::const_iterator startword=str.begin();
-  for(string::const_iterator i=str.begin(); i<str.end(); ++i){
+  for(string::const_iterator i=str.begin(); i<str.end(); ++i) {
     if((i+1)==str.end())
       rv.push_back(string(startword, str.end()));
     else{

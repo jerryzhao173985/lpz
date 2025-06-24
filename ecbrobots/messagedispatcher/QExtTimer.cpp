@@ -80,7 +80,7 @@ namespace lpzrobots {
   }
 
   void QExtTimer::sl_tickTimeout() {
-    timeRan++;
+    ++timeRan;
   }
 
   unsigned int QExtTimer::getTimeRan() {

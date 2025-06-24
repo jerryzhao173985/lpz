@@ -13,16 +13,16 @@ public:
   
   LPZViewer();
 
-  LPZViewer(osg::ArgumentParser& arguments);
+  explicit LPZViewer(osg::const ArgumentParser& arguments);
 
   LPZViewer(const osgViewer::Viewer& viewer, const osg::CopyOp& copyop=osg::CopyOp::SHALLOW_COPY);
 
-  virtual ~LPZViewer() override;
+  virtual ~LPZViewer();
 
   /** call this function to render the cameras off screen.
       If no off screen nodes are supplied than nothing is done      
    */
-  virtual void renderOffScreen() override;
+  virtual void renderOffScreen();
 
   /// adds a render to texture camera 
   void addOffScreenRRTNode(osg::Node* node);
@@ -30,7 +30,7 @@ public:
   void removeOffScreenRRTNode(osg::Node* node);
 
 protected:
-  virtual void offScreenRenderingTraversals() override;
+  virtual void offScreenRenderingTraversals();
   osg::ref_ptr<osg::Group> offScreenNodes;
 
   void lpzviewerConstructorInit();

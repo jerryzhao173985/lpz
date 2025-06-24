@@ -46,10 +46,10 @@ constexpr int BUFFER_SIZE = 1024;
 constexpr int MAX_CONFIG_PARAM = 50;
 constexpr int MAX_INTERNAL_PARAM = 50;
 
-double atof(const char*);
-int ctoi(const char*);
+double atofstatic_cast<const char*>;
+int ctoistatic_cast<const char*>;
 
-// using namespace std; // Removed from header - use std:: prefix instead
+// // // // // // // // using namespace std; // Removed from header // Removed from header // Removed from header // Removed from header // Removed from header // Removed from header // Removed from header // Removed from header - use std:: prefix instead
 
 /**
  * class for robot control with sine and cosine
@@ -61,7 +61,7 @@ class use_java_controller : public AbstractController {
 public:
   static int anzahl_Java_controller;
 
-  explicit use_java_controller(const char* port_controller = "4444",
+  use_java_controller(const char* port_controller = "4444",
                                const char* port_internalParams = nullptr,
                                const char* name = "defaultRobot");
 
@@ -69,12 +69,12 @@ public:
     use_java_controller::anzahl_Java_controller++;
   }
 
-  virtual ~use_java_controller() override;
+  virtual ~use_java_controller();
 
   /** initialisation of the controller with the given sensor/ motornumber
       Must be called before use.
   */
-  virtual void init(int sensornumber, int motornumber, RandGen* randgen = nullptr) override;
+  virtual void init(int sensornumber, int motornumber, RandGen* randgen = nullptr);
 
   /** @return Number of sensors the controller was initialised
       with or 0 if not initialised */
@@ -98,14 +98,14 @@ public:
   virtual void step(const sensor* sensors,
                     int sensornumber,
                     motor* motors,
-                    int motornumber) override;
+                    int motornumber);
   /** performs one step without learning.
       @see step
   */
   virtual void stepNoLearning(const sensor*,
                               int number_sensors,
                               motor*,
-                              int number_motors) override;
+                              int number_motors);
 
   /**
    * Methode verschickt message an Java-controller
@@ -126,7 +126,7 @@ public:
   the inspectable parameters (values should be sent from java-controller and returned)
   */
 
-  virtual std::list<iparamval> getInternalParams() const override;
+  virtual std::list<iparamval> getInternalParams() const;
 
   // Bring base class methods into scope
   using Configurable::getParam;
@@ -135,7 +135,7 @@ public:
   // next three described in cpp-file
   virtual paramval getParam(const paramkey& key) const;
   virtual bool setParam(const paramkey& key, paramval val);
-  virtual paramlist getParamList() const override;
+  virtual paramlist getParamList() const;
 
   virtual bool store(FILE* f) const override {
     return true;
@@ -145,18 +145,18 @@ public:
   }; // FIXME: restore Parameter
 
 protected:
-  int t;
+  int t = 0;
   const char* name;
-  int number_sensors;
-  int number_motors;
-  int number_controlled;
+  int number_sensors = 0;
+  int number_motors = 0;
+  int number_controlled = 0;
 
-  bool serverOK;
+  bool serverOK = false;
 
-  int server_controller;
-  int server_internalParams;
-  int client_controller;
-  int client_internalParams;
+  int server_controller = 0;
+  int server_internalParams = 0;
+  int client_controller = 0;
+  int client_internalParams = 0;
 
   socklen_t client_controller_size;
   socklen_t client_internalParams_size;
@@ -167,20 +167,20 @@ protected:
   struct sockaddr_in client_internalParams_addr;
 
   paramlist config_param_list;
-  int anz_config_param;
+  int anz_config_param = 0;
 
   iparamkeylist internal_keylist;
   iparamvallist internal_vallist;
   iparamvallist internal_vallist_alt;
-  int anz_internal_param;
+  int anz_internal_param = 0;
 
-  bool can_send;
-  bool isFirst;
-  bool isClosed;
-  bool server_guilogger_isClosed;
-  bool server_controller_isClosed;
+  bool can_send = false;
+  bool isFirst = false;
+  bool isClosed = false;
+  bool server_guilogger_isClosed = false;
+  bool server_controller_isClosed = false;
 
-  int anzahl_closed_Server;
+  int anzahl_closed_Server = 0;
 
   double* motor_values_alt;
 };

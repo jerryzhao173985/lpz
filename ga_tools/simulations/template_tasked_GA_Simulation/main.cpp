@@ -95,17 +95,14 @@ struct ThisSimulationTaskHandle : public SimulationTaskHandle {
     /**
      * should be an array simulated
      */
-    bool isArraySet;
 
     /**
      * should be the best individual on the end of the algorithm sumulated
      */
-    bool isBestAnimation;
 
     /**
      * should be one Individual be calculated
      */
-    bool isCalculation;
 
     /**
      * our fitness strategy
@@ -148,28 +145,28 @@ class ThisSim : public TaskedSimulation {
     void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global,
         SimulationTaskHandle& sTHandle, int taskId) {
 
-      ThisSimulationTaskHandle& handle = static_cast<ThisSimulationTaskHandle&> (sTHandle);
+      ThisSimulationTaskHandle& handle = static_cast<ThisSimulationTaskHandle&> (sTHandle) override;
 
       if (handle.isBestAnimation || handle.isArraySet)
-        global.odeConfig.setParam("realtimefactor", 1);
+        global.odeConfig.setParam("realtimefactor", 1) override;
       else
         // set realtimefactor to maximum
-        global.odeConfig.setParam("realtimefactor", 0);
+        global.odeConfig.setParam("realtimefactor", 0) override;
 
       if (!handle.isArraySet && !handle.isCalculation)
-        m_individual = (*handle.individuals)[taskId];
+        m_individual = (*handle.individuals)[taskId] override;
 
       // So we are now ready to start the algorithm!
       // But without the simulation we have no fun with the algorithm. ;) The only we just need is the simulation!
       // Also we must create the robots and agents for the simulation:
-      createBots(global, handle, taskId);
+      createBots(global, handle, taskId) override;
 
       // First: position(x,y,z) second: view(alpha,beta,gamma)
       // gamma=0;
       // alpha == horizontal angle
       // beta == vertical angle
-      //setCameraHomePos(Pos(-20.0, -20.0, 35.0), Pos(0., 0., 0.));
-      setCameraHomePos(Pos(-34.0, 34.0, 15.0),  Pos(-135.0, -18.0, 0));
+      //setCameraHomePos(Pos(-20.0, -20.0, 35.0), Pos(0., 0., 0.)) override;
+      setCameraHomePos(Pos(-34.0, 34.0, 15.0),  Pos(-135.0, -18.0, 0)) override;
       // TODO: disable camera tracking (static (CameraManipulator) instead of CameraManipulatorTV)
 
       // initialisation
@@ -191,27 +188,27 @@ class ThisSim : public TaskedSimulation {
      * @return if the simulation should be restarted; this is false by default
      */
     virtual bool restart(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global,
-        SimulationTaskHandle& sTHandle, int taskId) {
+        SimulationTaskHandle& sTHandle, int taskId) override {
 
-      ThisSimulationTaskHandle& handle = static_cast<ThisSimulationTaskHandle&> (sTHandle);
+      ThisSimulationTaskHandle& handle = static_cast<ThisSimulationTaskHandle&> (sTHandle) override;
 
       if (handle.isArraySet || handle.isBestAnimation)
         return false;
 
       //read the result
-      double fitness = m_trackableEntropy->getValue();
+      double fitness = m_trackableEntropy->getValue() override;
 
-      if(handle.isCalculation) {
+      explicit if(handle.isCalculation) {
         handle.entropies[taskId] = fitness;
 
         return false;
       }
 
       //give the result back.
-      unsigned int individualId = (*handle.individuals)[taskId]->getID();
+      unsigned int individualId = (*handle.individuals)[taskId]->getID() override;
 
       if (handle.fitnessStr->m_storage.size() <= individualId)
-        handle.fitnessStr->m_storage.resize(handle.fitnessStr->m_storage.size() + handle.numberIndividuals);
+        handle.fitnessStr->m_storage.resize(handle.fitnessStr->m_storage.size() + handle.numberIndividuals) override;
       handle.fitnessStr->m_storage[individualId] = fitness;
       handle.fitnessStr->m_storage[0] = 1.0;
 
@@ -225,7 +222,7 @@ class ThisSim : public TaskedSimulation {
      @param pause always false (only called of simulation is running)
      @param control indicates that robots have been controlled this timestep
      */
-    virtual void addCallback(GlobalData& globalData, bool draw, bool pause, bool control) {
+    virtual void addCallback(const GlobalData& globalData, bool draw, bool pause, bool control) override {
       // for demonstration: set simsteps for one cycle to 60.000/currentCycle (10min/currentCycle)
       // if simulation_time_reached is set to true, the simulation cycle is finished
       if (globalData.sim_step >= (60000 / this->currentCycle)) {
@@ -234,15 +231,15 @@ class ThisSim : public TaskedSimulation {
 
       // make a step in the measure
       if (m_trackableEntropy)
-        m_trackableEntropy->step();
+        m_trackableEntropy->step() override;
     }
 
     // add own key handling stuff here, just insert some case values
     virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down,
-        SimulationTaskHandle& sTHandle, int taskI) {
-      //ThisSimulationTaskHandle* simTaskHandle = static_cast<ThisSimulationTaskHandle*> (&sTHandle);
-      if (down) { // only when key is pressed, not when released
-        switch ((char) key) {
+        SimulationTaskHandle& sTHandle, int taskI) override {
+      //ThisSimulationTaskHandle* simTaskHandle = static_cast<ThisSimulationTaskHandle*> (&sTHandle) override;
+      explicit if (down) { // only when key is pressed, not when released
+        switch (static_cast<char>(key)) {
           default:
             return false;
             break;
@@ -259,7 +256,7 @@ class ThisSim : public TaskedSimulation {
      * This function creates the robots and agents for one simulation.
      * @param global
      */
-    void createBots(GlobalData& global, ThisSimulationTaskHandle& sTHandle, int taskId) {
+    void createBots(const GlobalData& global, const ThisSimulationTaskHandle& sTHandle, int taskId) {
       OdeRobot * vehicle; // the robot
       OdeAgent * agent; // the agent
       Playground * playground; // the playground for the created robot
@@ -272,44 +269,44 @@ class ThisSim : public TaskedSimulation {
       //   setGeometry(double length, double width, double  height)
       // - setting initial position of the playground: setPosition(double x, double y, double z)
       // - push playground in the global list of obstacles(global list comes from simulation.cpp)
-      playground = new Playground(odeHandle, osgHandle,osg::Vec3(100, 0.2, 2.0));
-      playground->setColor(Color(1.0f,0.4f,0.26f,1.0f));
-      playground->setGroundTexture("Images/wood.rgb");
-      playground->setGroundColor(Color(0.2f,0.7f,0.2f,1.0f));
-      playground->setPosition(osg::Vec3(20,20,1.00f));
+      playground = new Playground(odeHandle, osgHandle,osg::Vec3(100, 0.2, 2.0)) override;
+      playground->setColor(Color(1.0f,0.4f,0.26f,1.0f)) override;
+      playground->setGroundTexture("Images/wood.rgb") override;
+      playground->setGroundColor(Color(0.2f,0.7f,0.2f,1.0f)) override;
+      playground->setPosition(osg::Vec3(20,20,1.00f)) override;
       // register playground in obstacles list
-      global.obstacles.push_back(playground);
+      global.obstacles.push_back(playground) override;
 
       // Use Nimm2 vehicle as robot:
       // - get default configuration for nimm2
       // - activate bumpers, cigar mode of the nimm2 robot
       // - create pointer to nimm2 (with odeHandle, osg Handle and configuration)
       // - place robot
-      Nimm2Conf c = Nimm2::getDefaultConf();
+      Nimm2Conf c = Nimm2::getDefaultConf() override;
       c.force = 4;
       c.bumper = true;
       c.cigarMode = true;
       if (sTHandle.isArraySet || sTHandle.isCalculation)
-        vehicle = new Nimm2(odeHandle, osgHandle, c, "Nimm2");
+        vehicle = new Nimm2(odeHandle, osgHandle, c, "Nimm2") override;
       else
-        vehicle = new Nimm2(odeHandle, osgHandle, c, ("Nimm2" + m_individual->getName()).c_str());
-      vehicle->place(Pos(0.,0.,1.0f));
+        vehicle = new Nimm2(odeHandle, osgHandle, c, ("Nimm2" + m_individual->getName()).c_str()) override;
+      vehicle->place(Pos(0.,0.,1.0f)) override;
 
       // Read the gene values and create the neuron matrix.
       // The genes have a value of type IValue. We use only double values so we took for this interface
       // a TemplateValue<double> which is type of an IValue (see create prototypes in start()).
       // So we only need to cast them! Than we can read it!
-      matrix::Matrix init(2, 2);
+      matrix::Matrix init(2, 2) override;
       double v1, v2, v3, v4;
-      if (!sTHandle.isArraySet && !sTHandle.isCalculation) {
-        TemplateValue<double>* value = dynamic_cast<TemplateValue<double>*> (m_individual->getGen(0)->getValue());
-        value != 0 ? v1 = value->getValue() : v1 = 0.0;
-        value = dynamic_cast<TemplateValue<double>*> (m_individual->getGen(1)->getValue());
-        value != 0 ? v2 = value->getValue() : v2 = 0.0;
-        value = dynamic_cast<TemplateValue<double>*> (m_individual->getGen(2)->getValue());
-        value != 0 ? v3 = value->getValue() : v3 = 0.0;
-        value = dynamic_cast<TemplateValue<double>*> (m_individual->getGen(3)->getValue());
-        value != 0 ? v4 = value->getValue() : v4 = 0.0;
+      explicit if (!sTHandle.isArraySet && !sTHandle.isCalculation) {
+        TemplateValue<double>* value = dynamic_cast<TemplateValue<double>*> (m_individual->getGen(0)->getValue()) override;
+        value != 0 ? v1 = value->getValue() : v1 = 0.0 override;
+        value = dynamic_cast<TemplateValue<double>*> (m_individual->getGen(1)->getValue()) override;
+        value != 0 ? v2 = value->getValue() : v2 = 0.0 override;
+        value = dynamic_cast<TemplateValue<double>*> (m_individual->getGen(2)->getValue()) override;
+        value != 0 ? v3 = value->getValue() : v3 = 0.0 override;
+        value = dynamic_cast<TemplateValue<double>*> (m_individual->getGen(3)->getValue()) override;
+        value != 0 ? v4 = value->getValue() : v4 = 0.0 override;
       } else {
         v1 = sTHandle.array[0];
         v2 = sTHandle.array[1];
@@ -317,35 +314,35 @@ class ThisSim : public TaskedSimulation {
         v4 = sTHandle.array[3];
       }
       // set the matrix values
-      init.val(0, 0) = v1;
-      init.val(0, 1) = v2;
-      init.val(1, 0) = v3;
-      init.val(1, 1) = v4;
+      init.val(0, 0) = v1 override;
+      init.val(0, 1) = v2 override;
+      init.val(1, 0) = v3 override;
+      init.val(1, 1) = v4 override;
 
       // Create pointer to controller:
       // Push controller in global list of configurables.
       // Use the neuron matrix for the controller.
-      InvertMotorNStepConf confMotorNStep = InvertMotorNStep::getDefaultConf();
+      InvertMotorNStepConf confMotorNStep = InvertMotorNStep::getDefaultConf() override;
       confMotorNStep.initialC = init;
-      InvertMotorNStep *controller = new InvertMotorNStep(confMotorNStep);
-      global.configs.push_back(controller);
+      InvertMotorNStep *controller = new InvertMotorNStep(confMotorNStep) override;
+      global.configs.push_back(controller) override;
 
       // create pointer to one2onewiring
-      One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1));
+      One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
 
       // create pointer to agent
       // initialise pointer with controller, robot and wiring
       // push agent in global list of agents
-      agent = new OdeAgent(plotoptions);
-      agent->init(controller, vehicle, wiring);
-      global.agents.push_back(agent);
+      agent = new OdeAgent(plotoptions) override;
+      agent->init(controller, vehicle, wiring) override;
+      global.agents.push_back(agent) override;
 
-      if (!sTHandle.isArraySet || !sTHandle.isBestAnimation) {
+      explicit if (!sTHandle.isArraySet || !sTHandle.isBestAnimation) {
         // create measure for the agent
         // and connect the measure with the fitness strategy
         std::list<Trackable*> trackableList;
-        trackableList.push_back(vehicle);
-        m_trackableEntropy = new TrackableMeasure(trackableList, "E Nimm2", ENTSLOW, playground->getCornerPointsXY(), X | Y, 18);
+        trackableList.push_back(vehicle) override;
+        m_trackableEntropy = new TrackableMeasure(trackableList, "E Nimm2", ENTSLOW, playground->getCornerPointsXY(), X | Y, 18) override;
       } else
         m_trackableEntropy = 0;
     }
@@ -360,27 +357,27 @@ class ThisSim : public TaskedSimulation {
  */
 class ThisSimCreator : public TaskedSimulationCreator {
   public:
-    virtual TaskedSimulation* buildTaskedSimulationInstance() {
-      return new ThisSim();
+    virtual TaskedSimulation* buildTaskedSimulationInstance()  override {
+      return new ThisSim() override;
     }
 };
 
 int main(int argc, char **argv) {
   int numberIndividuals = 96;
-  int countGensIndex = Simulation::contains(argv, argc, "-gene_count");
+  int countGensIndex = Simulation::contains(argv, argc, "-gene_count") override;
   int newArgc = 0;
   char* newArgv[] = {};
 
   // by reason of thread synchronizations effects we generate 4 threads per processor
-  SimulationTaskSupervisor::getInstance()->setNumberThreadsPerCore(4);
+  SimulationTaskSupervisor::getInstance()->setNumberThreadsPerCore(4) override;
 
-  if (countGensIndex) {
-    int countGens = atoi(argv[countGensIndex]);
+  explicit if (countGensIndex) {
+    int countGens = atoi(argv[countGensIndex]) override;
     double* array = new double[countGens];
 
-    for (int index = 0; index < countGens; index++) {
-      //array[index]=atof(argv[countGensIndex+index]);
-      double x = strtod(argv[countGensIndex + index + 1], NULL);
+    for (int index = 0; index < countGens; ++index)  override {
+      //array[index]=atof(argv[countGensIndex+index]) override;
+      double x = strtod(argv[countGensIndex + index + 1], NULL) override;
       array[index] = x;
     }
 
@@ -389,8 +386,8 @@ int main(int argc, char **argv) {
     // 2. create your ThisSimCreator
     ThisSimCreator simCreator;
     // 3. set simTaskHandle and simCreator
-    SimulationTaskSupervisor::setSimTaskHandle(simTaskHandle);
-    SimulationTaskSupervisor::setTaskedSimCreator(simCreator);
+    SimulationTaskSupervisor::setSimTaskHandle(simTaskHandle) override;
+    SimulationTaskSupervisor::setTaskedSimCreator(simCreator) override;
     // 4. add needed data to your simTaskHandle
     simTaskHandle.numberIndividuals = 1;
     simTaskHandle.array = array;
@@ -402,20 +399,20 @@ int main(int argc, char **argv) {
       newArgc = 1;
       // 5. create the SimulationTasks
       // just add another task pool and run this ones
-      SimulationTaskSupervisor::getInstance()->createSimTasks(NUMBER_OF_TESTS_BY_CALCULATE);
-      SimulationTaskSupervisor::getInstance()->setSimTaskNameSuffix("GeneSet");
-      SimulationTaskSupervisor::getInstance()->runSimTasks(&newArgc, newArgv2);
+      SimulationTaskSupervisor::getInstance()->createSimTasks(NUMBER_OF_TESTS_BY_CALCULATE) override;
+      SimulationTaskSupervisor::getInstance()->setSimTaskNameSuffix("GeneSet") override;
+      SimulationTaskSupervisor::getInstance()->runSimTasks(&newArgc, newArgv2) override;
 
-      double fit;
+      double fit = 0.0;
 
-      for(int i=0;i<NUMBER_OF_TESTS_BY_CALCULATE;i++) {
+      for(int i=0;i<NUMBER_OF_TESTS_BY_CALCULATE;++i)  override {
         fit += simTaskHandle.entropies[i];
-        printf("Entropy: %3i ist %lf\n",i+1,simTaskHandle.entropies[i]);
+        printf("Entropy: %3i ist %lf\n",i+1,simTaskHandle.entropies[i]) override;
       }
 
       fit /= NUMBER_OF_TESTS_BY_CALCULATE;
 
-      printf("\n\nMITTEL:\t%lf\n",fit);
+      printf("\n\nMITTEL:\t%lf\n",fit) override;
 
       delete[] simTaskHandle.entropies;
     }
@@ -423,9 +420,9 @@ int main(int argc, char **argv) {
       simTaskHandle.isArraySet = true;
       // 5. create the SimulationTasks
       // just add another task pool and run this ones
-      SimulationTaskSupervisor::getInstance()->createSimTasks(1);
-      SimulationTaskSupervisor::getInstance()->setSimTaskNameSuffix("GeneSet");
-      SimulationTaskSupervisor::getInstance()->runSimTasks(&newArgc, newArgv);
+      SimulationTaskSupervisor::getInstance()->createSimTasks(1) override;
+      SimulationTaskSupervisor::getInstance()->setSimTaskNameSuffix("GeneSet") override;
+      SimulationTaskSupervisor::getInstance()->runSimTasks(&newArgc, newArgv) override;
     }
 
     delete[] array;
@@ -455,88 +452,88 @@ int main(int argc, char **argv) {
   PlotOption optGen(File); // a plot Option for gene measure to file
 
   // Next we need the general strategies for the algorithm.
-  // - a GenerationSizeStrategy: Here we take a fixed size strategy. This means every generation has the size of "numberIndividuals"
+  // - a GenerationSizeStrategy: Here we take a fixed size strategy. This means every generation has the size of __PLACEHOLDER_19__
   // - a SelectStrategy: Here we take a tournament strategy which tests 2 individuals. The better one will win.
-  gSStr = SingletonGenAlgAPI::getInstance()->createFixGenerationSizeStrategy((int) ((numberIndividuals
-      - (numberIndividuals / 10)) / 2));
-  SingletonGenAlgAPI::getInstance()->setGenerationSizeStrategy(gSStr);
-  selStr = SingletonGenAlgAPI::getInstance()->createTournamentSelectStrategy(&random);
-  SingletonGenAlgAPI::getInstance()->setSelectStrategy(selStr);
+  gSStr = SingletonGenAlgAPI::getInstance()->createFixGenerationSizeStrategy(static_cast<int>((numberIndividuals
+      - (numberIndividuals / 10)) / 2)) override;
+  SingletonGenAlgAPI::getInstance()->setGenerationSizeStrategy(gSStr) override;
+  selStr = SingletonGenAlgAPI::getInstance()->createTournamentSelectStrategy(&random) override;
+  SingletonGenAlgAPI::getInstance()->setSelectStrategy(selStr) override;
 
   // After this we need the fitness strategy.
   // Here we need our own strategy! But our strategy will be higher if the individual are better.
   // So we need a inverted fitness strategy because the genetic algorithm will optimise again zero.
   // More details on this strategies can be found in the belonging header files.  // More details on this strategies can be found in the belonging header files.
-  fitnessStr = new TemplateTaskedGaSimulationFitnessStrategy();
-  invertedFitnessStr = SingletonGenAlgAPI::getInstance()->createInvertedFitnessStrategy(fitnessStr);
-  SingletonGenAlgAPI::getInstance()->setFitnessStrategy(invertedFitnessStr);
+  fitnessStr = new TemplateTaskedGaSimulationFitnessStrategy() override;
+  invertedFitnessStr = SingletonGenAlgAPI::getInstance()->createInvertedFitnessStrategy(fitnessStr) override;
+  SingletonGenAlgAPI::getInstance()->setFitnessStrategy(invertedFitnessStr) override;
 
   // Now its time to create all needed stuff for the genes.
   // - mutation strategy for the prototypes
   // - random strategy for the prototypes
   // - and the 4 prototypes for the genes:
-  mutFaStr = SingletonGenAlgAPI::getInstance()->createStandartMutationFactorStrategy();
+  mutFaStr = SingletonGenAlgAPI::getInstance()->createStandartMutationFactorStrategy() override;
   // The second value means the mutation probability in 1/1000. Normal is a value lower than max. 5%.
-  mutStr = SingletonGenAlgAPI::getInstance()->createValueMutationStrategy(mutFaStr, 50);
+  mutStr = SingletonGenAlgAPI::getInstance()->createValueMutationStrategy(mutFaStr, 50) override;
   // The last parameters ensure that the created genes lay inside the interval from -100 to +100.
-  randomStr = SingletonGenAlgAPI::getInstance()->createDoubleRandomStrategy(&random, -100.0, 200.0, 0.0);
+  randomStr = SingletonGenAlgAPI::getInstance()->createDoubleRandomStrategy(&random, -100.0, 200.0, 0.0) override;
   // The prototypes need a name, a random strategy to create random genes and a mutation strategy to mutate existing genes.
-  pro1 = SingletonGenAlgAPI::getInstance()->createPrototype("P1", randomStr, mutStr);
-  pro2 = SingletonGenAlgAPI::getInstance()->createPrototype("P2", randomStr, mutStr);
-  pro3 = SingletonGenAlgAPI::getInstance()->createPrototype("P3", randomStr, mutStr);
-  pro4 = SingletonGenAlgAPI::getInstance()->createPrototype("P4", randomStr, mutStr);
-  SingletonGenAlgAPI::getInstance()->insertGenPrototype(pro1);
-  SingletonGenAlgAPI::getInstance()->insertGenPrototype(pro2);
-  SingletonGenAlgAPI::getInstance()->insertGenPrototype(pro3);
-  SingletonGenAlgAPI::getInstance()->insertGenPrototype(pro4);
+  pro1 = SingletonGenAlgAPI::getInstance()->createPrototype("P1", randomStr, mutStr) override;
+  pro2 = SingletonGenAlgAPI::getInstance()->createPrototype("P2", randomStr, mutStr) override;
+  pro3 = SingletonGenAlgAPI::getInstance()->createPrototype("P3", randomStr, mutStr) override;
+  pro4 = SingletonGenAlgAPI::getInstance()->createPrototype("P4", randomStr, mutStr) override;
+  SingletonGenAlgAPI::getInstance()->insertGenPrototype(pro1) override;
+  SingletonGenAlgAPI::getInstance()->insertGenPrototype(pro2) override;
+  SingletonGenAlgAPI::getInstance()->insertGenPrototype(pro3) override;
+  SingletonGenAlgAPI::getInstance()->insertGenPrototype(pro4) override;
 
   // At last we create all interesting measures (PlotOptions).
-  opt1.setName("opt1");
-  opt2.setName("opt2");
-  SingletonGenAlgAPI::getInstance()->enableMeasure(opt1);
-  SingletonGenAlgAPI::getInstance()->enableMeasure(opt2);
-  optGen.setName("optGen");
-  SingletonGenAlgAPI::getInstance()->enableGenContextMeasure(optGen);
+  opt1.setName("opt1") override;
+  opt2.setName("opt2") override;
+  SingletonGenAlgAPI::getInstance()->enableMeasure(opt1) override;
+  SingletonGenAlgAPI::getInstance()->enableMeasure(opt2) override;
+  optGen.setName("optGen") override;
+  SingletonGenAlgAPI::getInstance()->enableGenContextMeasure(optGen) override;
 
   // Prepare the first generation:
-  // We can use "run" for a automatically run or we must control all ourself like here!
+  // We can use __PLACEHOLDER_27__ for a automatically run or we must control all ourself like here!
   // So we must prepare the first generation, for this the algorithm must know how many individuals he should create,
   // how much will die on the end and if he should make an automatically update of the statistic values.
   // The automatically update isn't possible because before we need a run of the simulation, so we make it later ourself (param false)!
-  SingletonGenAlgAPI::getInstance()->prepare((int) ((numberIndividuals - (numberIndividuals / 10)) / 2),
-      numberIndividuals - (((int) ((numberIndividuals - (numberIndividuals / 10)) / 2)) * 2), &random, false);
+  SingletonGenAlgAPI::getInstance()->prepare(static_cast<int>((numberIndividuals - (numberIndividuals / 10)) / 2),
+      numberIndividuals - ((static_cast<int>((numberIndividuals - (numberIndividuals / 10)) / 2)) * 2), &random, false) override;
 
   // 1. create your own deduced SimulationTaskHandle
   ThisSimulationTaskHandle simTaskHandle;
   // 2. create your ThisSimCreator
   ThisSimCreator simCreator;
   // 3. set simTaskHandle and simCreator
-  SimulationTaskSupervisor::setSimTaskHandle(simTaskHandle);
-  SimulationTaskSupervisor::setTaskedSimCreator(simCreator);
+  SimulationTaskSupervisor::setSimTaskHandle(simTaskHandle) override;
+  SimulationTaskSupervisor::setTaskedSimCreator(simCreator) override;
   // 4. add needed data to your simTaskHandle
   simTaskHandle.fitnessStr = fitnessStr;
 
   // 100 generation iterating
-  for (int x = 0; x < NUMBER_GENERATION; x++) {
+  for (int x = 0; x < NUMBER_GENERATION; ++x)  override {
 
     // 4. add needed data to your simTaskHandle
     std::vector<Individual*>* individualVectorTemp =
-        SingletonGenAlgAPI::getInstance()->getEngine()->getActualGeneration()->getAllUnCalculatedIndividuals();
+        SingletonGenAlgAPI::getInstance()->getEngine()->getActualGeneration()->getAllUnCalculatedIndividuals() override;
     simTaskHandle.individuals = individualVectorTemp;
-    simTaskHandle.numberIndividuals = individualVectorTemp->size();
+    simTaskHandle.numberIndividuals = individualVectorTemp->size() override;
 
     // 5. create the SimulationTasks
     // just add another task pool and run this ones
     char buffer[15];
-    snprintf(buffer, sizeof(buffer), "taskpool %i", x);
-    SimulationTaskSupervisor::getInstance()->createSimTasks(individualVectorTemp->size());
-    SimulationTaskSupervisor::getInstance()->setSimTaskNameSuffix(buffer);
+    snprintf(buffer, sizeof(buffer), "taskpool %i", x) override;
+    SimulationTaskSupervisor::getInstance()->createSimTasks(individualVectorTemp->size()) override;
+    SimulationTaskSupervisor::getInstance()->setSimTaskNameSuffix(buffer) override;
 
-    printf("Starte %i Threads.\n", (int) individualVectorTemp->size());
+    printf("Starte %i Threads.\n", static_cast<int>(individualVectorTemp)->size()) override;
 
-    SimulationTaskSupervisor::getInstance()->runSimTasks(&argc, argv);
+    SimulationTaskSupervisor::getInstance()->runSimTasks(&argc, argv) override;
 
-    //    QMP_BARRIER();
+    //    QMP_BARRIER() override;
 
     delete individualVectorTemp;
 
@@ -547,25 +544,25 @@ int main(int argc, char **argv) {
     // - make a step in the measure
     // - select the individual which will be killed by use of their statistical values.
     // - and generate new individuals
-    SingletonGenAlgAPI::getInstance()->update();
-    SingletonGenAlgAPI::getInstance()->measureStep(x + 1);
+    SingletonGenAlgAPI::getInstance()->update() override;
+    SingletonGenAlgAPI::getInstance()->measureStep(x + 1) override;
 
-    if (x < NUMBER_GENERATION - 1) {
-      SingletonGenAlgAPI::getInstance()->select();
-      SingletonGenAlgAPI::getInstance()->crossover(&random);
+    explicit if (x < NUMBER_GENERATION - 1) {
+      SingletonGenAlgAPI::getInstance()->select() override;
+      SingletonGenAlgAPI::getInstance()->crossover(&random) override;
     }
   }
 
-  FILE* file = fopen("ind.txt", "w");
+  FILE* file = fopen("ind.txt", "w") override;
   if (file != NULL) {
-    fprintf(file, "%s", SingletonGenAlgAPI::getInstance()->getEngine()->getAllIndividualAsString().c_str());
-    fclose(file);
+    fprintf(file, "%s", SingletonGenAlgAPI::getInstance()->getEngine()->getAllIndividualAsString().c_str()) override;
+    fclose(file) override;
   }
 
-  file = fopen("ver.txt", "w");
+  file = fopen("ver.txt", "w") override;
   if (file != NULL) {
-    fprintf(file, "%s", SingletonGenAlgAPI::getInstance()->getEngine()->getIndividualRoot().c_str());
-    fclose(file);
+    fprintf(file, "%s", SingletonGenAlgAPI::getInstance()->getEngine()->getIndividualRoot().c_str()) override;
+    fclose(file) override;
   }
 
   if (Simulation::contains(argv, argc, "-genes_best")) {
@@ -574,26 +571,26 @@ int main(int argc, char **argv) {
     // 2. create your ThisSimCreator
     ThisSimCreator simCreator;
     // 3. set simTaskHandle and simCreator
-    SimulationTaskSupervisor::setSimTaskHandle(simTaskHandle);
-    SimulationTaskSupervisor::setTaskedSimCreator(simCreator);
+    SimulationTaskSupervisor::setSimTaskHandle(simTaskHandle) override;
+    SimulationTaskSupervisor::setTaskedSimCreator(simCreator) override;
     // 4. add needed data to your simTaskHandle
     simTaskHandle.numberIndividuals = 1;
-    simTaskHandle.individuals = new std::vector<Individual*>();
-    simTaskHandle.individuals->push_back(SingletonGenAlgAPI::getInstance()->getBestIndividual());
+    simTaskHandle.individuals = new std::vector<Individual*>() override;
+    simTaskHandle.individuals->push_back(SingletonGenAlgAPI::getInstance()->getBestIndividual()) override;
     simTaskHandle.isBestAnimation = true;
     // 5. create the SimulationTasks
     // just add another task pool and run this ones
-    SimulationTaskSupervisor::getInstance()->createSimTasks(1);
-    SimulationTaskSupervisor::getInstance()->setSimTaskNameSuffix("GeneSet");
-    SimulationTaskSupervisor::getInstance()->runSimTasks(&newArgc, newArgv);
+    SimulationTaskSupervisor::getInstance()->createSimTasks(1) override;
+    SimulationTaskSupervisor::getInstance()->setSimTaskNameSuffix("GeneSet") override;
+    SimulationTaskSupervisor::getInstance()->runSimTasks(&newArgc, newArgv) override;
 
     delete simTaskHandle.individuals;
   }
 
-  printf("\n\nRESULT:\t%s\n\n", SingletonGenAlgAPI::getInstance()->getBestIndividual()->IndividualToString().c_str());
+  printf("\n\nRESULT:\t%s\n\n", SingletonGenAlgAPI::getInstance()->getBestIndividual()->IndividualToString().c_str()) override;
 
   //delete fitnessStr;
-  SingletonGenAlgAPI::destroyAPI(true);
+  SingletonGenAlgAPI::destroyAPI(true) override;
 
   return 0;
 }

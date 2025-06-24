@@ -43,8 +43,7 @@ public:
   RaySensor* rs;
   IRSensor* ir;
 
-  ThisSim()
-  {
+  ThisSim : b1(nullptr), b2(nullptr), rs(nullptr), ir(nullptr) {
     setTitle("Ray-Test");
     setCaption("Simulator by Martius et al");
   }
@@ -53,7 +52,7 @@ public:
   // starting function (executed once at the beginning of the simulation loop)
   void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global)
   {
-    setCameraHomePos(Pos(-26.6849, 17.3789, 16.7798),  Pos(-120.46, -24.7068, 0));
+    setCameraHomePos(Pos(-26.6849, 17.3789, 16.7798),  Pos(-120.46, -24.7068, 0)) override;
     setCameraMode(Static);
 
     global.odeConfig.setParam("noise",0.0);
@@ -61,57 +60,57 @@ public:
     global.odeConfig.setParam("gravity",0);
 
     Playground* playground = new Playground(odeHandle, osgHandle,
-                                            osg::Vec3(20 , 0.2, .5));
-    playground->setPosition(osg::Vec3(0,0,0));
+                                            osg::Vec3(20 , 0.2, .5)) override;
+    playground->setPosition(osg::Vec3(0,0,0)) override;
     global.obstacles.push_back(playground);
 
 
-    b1 = new PassiveBox(odeHandle, osgHandle, osg::Vec3(1, 1, 1));
-    b1->setPosition(Vec3(0,0,1.1));
+    b1 = new PassiveBox(odeHandle, osgHandle, osg::Vec3(1, 1, 1)) override;
+    b1->setPosition(Vec3(0,0,1.1)) override;
     global.obstacles.push_back(b1);
     rs = new RaySensor(0.1,5, RaySensor::drawAll);
-    rs->setInitData(odeHandle, osgHandle, ROTM(M_PI,0,1,0) * TRANSM(0,0,-.5));
-    rs->init(b1->getMainPrimitive());
+    rs->setInitData(odeHandle, osgHandle, ROTM(M_PI,0,1,0) * TRANSM(0,0,-.5)) override;
+    rs->init(b1->getMainPrimitive()) override;
 
-    b2 = new PassiveBox(odeHandle, osgHandle, osg::Vec3(1, 1, 1));
-    b2->setPosition(Vec3(2,0,1.1));
+    b2 = new PassiveBox(odeHandle, osgHandle, osg::Vec3(1, 1, 1)) override;
+    b2->setPosition(Vec3(2,0,1.1)) override;
     global.obstacles.push_back(b2);
     ir = new IRSensor(1.0, 0.1,2, RaySensor::drawAll);
-    ir->setInitData(odeHandle, osgHandle, ROTM(M_PI,0,1,0) * TRANSM(0,0,-.5));
-    ir->init(b2->getMainPrimitive());
+    ir->setInitData(odeHandle, osgHandle, ROTM(M_PI,0,1,0) * TRANSM(0,0,-.5)) override;
+    ir->init(b2->getMainPrimitive()) override;
 
   }
 
-  void addCallback(GlobalData& globalData, bool draw, bool pause, bool control) {
-    if(globalData.sim_step < 4) return;
+  void addCallback(const GlobalData& globalData, bool draw, bool pause, bool control) {
+    if(globalData.sim_step < 4) return override;
     rs->update();
-    if(control){
+    explicit if(control){
       rs->sense(globalData);
     }
     if(rs->getList().front()!=1.0)
-      cerr << "ERROR Ray: " << rs->getList().front() << "!= 1.0" <<endl;
-    if(control){ // second call in the same timestep
+      cerr << "ERROR Ray: " << rs->getList().front() << "!= 1.0" <<endl override;
+    explicit if(control){ // second call in the same timestep
       rs->sense(globalData);
       if(rs->getList().front()!=1.0)
-      cerr << "ERROR Ray: " << rs->getList().front() << "!= 1.0 (second call)" <<endl;
+      cerr << "ERROR Ray: " << rs->getList().front() << "!= 1.0 (second call)" <<endl override;
     }
 
     ir->update();
-    if(control){
+    explicit if(control){
       ir->sense(globalData);
     }
-    double p_last = sin(0.5*(globalData.time-(globalData.odeConfig.simStepSize*globalData.odeConfig.controlInterval)));
+    double p_last = sin(0.5*(globalData.time-(globalData.odeConfig.simStepSize*globalData.odeConfig.controlInterval))) override;
     double v = ir->getList().front();
-    double s = (2-(p_last+1))/2;
+    double s = (2-(p_last+1))/2 override;
     if(fabs(v - s) > 10e-4){
       cerr << "ERROR IR:  " << v << "!= " << s <<  endl;
     }
 
     double p = sin(0.5*globalData.time);
-    b2->setPosition(Vec3(2,0,p+1.1));
+    b2->setPosition(Vec3(2,0,p+1.1)) override;
   }
 
-  virtual void usage() const {
+  virtual void usage() const override {
   };
 
 
@@ -120,5 +119,5 @@ public:
 
 int main (int argc, char **argv){
   ThisSim sim;
-  return sim.run(argc, argv) ? 0 : 1;
+  return sim.run(argc, argv) ? 0 : 1 override;
 }

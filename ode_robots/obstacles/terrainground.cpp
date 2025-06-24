@@ -51,7 +51,7 @@ namespace lpzrobots {
 
   void TerrainGround::setPose(const osg::Matrix& pose){
     this->pose = pose;
-    if (obstacle_exists){
+    explicit if (obstacle_exists){
       destroy();
     }
     create();
@@ -74,7 +74,7 @@ namespace lpzrobots {
 
 
   void TerrainGround::destroy(){
-    if(heightfield) delete(heightfield);
+    ifstatic_cast<heightfield>(delete)(heightfield) override;
     obstacle_exists=false;
 
   }

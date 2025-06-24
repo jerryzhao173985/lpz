@@ -9,12 +9,12 @@ class DefaultPipeChannel
 {
 public:
   
-  DefaultPipeChannel(AbstractPipeFilter* apr) : AbstractPipeFilter(apr) {};
+  explicit DefaultPipeChannel(AbstractPipeFilter* apr) : AbstractPipeFilter(apr) {};
   virtual ~DefaultPipeChannel();
   
 protected:
   
-  virtual AbstractChannel* createChannel(std::string name) 
+  virtual AbstractChannel* createChannel(const std::string& name) 
   {
     return new DefaultPlotChannel(name);
   }

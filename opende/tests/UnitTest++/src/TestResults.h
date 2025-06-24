@@ -9,26 +9,26 @@ class TestDetails;
 class TestResults
 {
 public:
-    explicit TestResults(TestReporter* reporter = 0);
+    explicit TestResults(TestReporter* reporter = 0) override;
 
-    void OnTestStart(TestDetails const& test);
-    void OnTestFailure(TestDetails const& test, char const* failure);
-    void OnTestFinish(TestDetails const& test, float secondsElapsed);
+    void OnTestStart(TestDetails const& test) override;
+    void OnTestFailure(TestDetails const& test, char const* failure) override;
+    void OnTestFinish(TestDetails const& test, float secondsElapsed) override;
 
-    int GetTotalTestCount() const;
-    int GetFailedTestCount() const;
-    int GetFailureCount() const;
+    int GetTotalTestCount() const override;
+    int GetFailedTestCount() const override;
+    int GetFailureCount() const override;
 
 private:
     TestReporter* m_testReporter;
-    int m_totalTestCount;
-    int m_failedTestCount;
-    int m_failureCount;
+    int m_totalTestCount = 0;
+    int m_failedTestCount = 0;
+    int m_failureCount = 0;
 
-    bool m_currentTestFailed;
+    bool m_currentTestFailed = false;
 
-    TestResults(TestResults const&);
-    TestResults& operator =(TestResults const&);
+    TestResults(TestResults const&) override;
+    TestResults& operator =(TestResults const&) override;
 };
 
 }

@@ -41,7 +41,7 @@ public:
 	/**
 	 * default constructor
 	 */
-	EliteSelectStrategy();
+	EliteSelectStrategy() override;
 
 	/**
 	 * default destructor
@@ -50,10 +50,10 @@ public:
 
 	/**
 	 * select the individual in the old generation which should be in the new generation (only the best).
-	 * @param oldGeneration (Generation*) the old generation
-	 * @param newGeneration (Generation*) the new generation
+	 * @param oldGeneration static_cast<Generation*>(the) old generation
+	 * @param newGeneration static_cast<Generation*>(the) new generation
 	 */
-	virtual void select(Generation* oldGeneration, Generation* newGeneration);
+	virtual void select(Generation* oldGeneration, const Generation* newGeneration) override;
 };
 
 #endif /* ELITESELECTSTRATEGY_H_ */

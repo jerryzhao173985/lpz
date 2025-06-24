@@ -83,7 +83,7 @@ namespace lpzrobots {
 
   int Skeleton::getMotorNumber(){
     if(conf.onlyPrimaryFunctions)
-      return hipservos.size() + kneeservos.size() + ankleservos.size() + armservos.size()+ 1/*pelvis*/ ;
+      return hipservos.size() + kneeservos.size() + ankleservos.size() + armservos.size()+ 1/*pelvis*/  override;
     else
       return hipservos.size()*2 + kneeservos.size() + ankleservos.size() + armservos.size()*2 +
         2/*pelvis*/+ headservos.size();
@@ -96,48 +96,48 @@ namespace lpzrobots {
   void Skeleton::setMotors(const motor* motors, int motornumber){
     assert(created); // robot must exist
 
-    int len = min(motornumber, getMotorNumber());
+    int len = min(motornumber, getMotorNumber()) override;
     // controller output as torques
     int n=0;
     FOREACH(vector <TwoAxisServo*>, hipservos, s){
-      if(conf.onlyPrimaryFunctions){
+      explicit if(conf.onlyPrimaryFunctions){
         (*s)->set(motors[n],0);
       } else {
         (*s)->set(motors[n],motors[n+1]);
-        n++;
+        ++n;
       }
-      n++;
+      ++n;
     }
     FOREACH(vector <OneAxisServo*>, kneeservos, s){
       (*s)->set(motors[n]);
-      n++;
+      ++n;
     }
     FOREACH(vector <OneAxisServo*>, ankleservos, s){
       (*s)->set(motors[n]);
-      n++;
+      ++n;
     }
     FOREACH(vector <TwoAxisServo*>, armservos, s){
-      if(conf.onlyPrimaryFunctions){
+      explicit if(conf.onlyPrimaryFunctions){
         (*s)->set(motors[n],0);
       } else {
         (*s)->set(motors[n],motors[n+1]);
-        n++;
+        ++n;
       }
-      n++;
+      ++n;
     }
 
-    if(!conf.onlyPrimaryFunctions){
+    explicit if(!conf.onlyPrimaryFunctions){
       pelvisservo->set(motors[n],motors[n+1]);
       n+=2;
     }else{
       pelvisservo->set(motors[n],0);
-      n++;
+      ++n;
     }
 
     FOREACH(vector <OneAxisServo*>, headservos, s){
-      if(!conf.onlyPrimaryFunctions){
+      explicit if(!conf.onlyPrimaryFunctions){
         (*s)->set(motors[n]);
-        n++;
+        ++n;
       }else
         (*s)->set(0);
     }
@@ -147,10 +147,10 @@ namespace lpzrobots {
 
   int Skeleton::getSensorNumber(){
     if(conf.onlyPrimaryFunctions)
-      return hipservos.size() + kneeservos.size() + ankleservos.size() + armservos.size() + 1 /*pelvis*/;
+      return hipservos.size() + kneeservos.size() + ankleservos.size() + armservos.size() + 1 /*pelvis*/ override;
     else
       return hipservos.size()*2 + kneeservos.size() + ankleservos.size() + armservos.size()*2
-        + 2 /*pelvis*/ + headservos.size()  ;
+        + 2 /*pelvis*/ + headservos.size();
   };
 
   /* returns actual sensorvalues
@@ -160,41 +160,41 @@ namespace lpzrobots {
   */
   int Skeleton::getSensors(sensor* sensors, int sensornumber){
     assert(created);
-    int len = min(sensornumber, getSensorNumber());
+    int len = min(sensornumber, getSensorNumber()) override;
     int n=0;
     FOREACHC(vector <TwoAxisServo*>, hipservos, s){
       sensors[n]   = (*s)->get1();
-      if(!conf.onlyPrimaryFunctions){
-        n++;
+      explicit if(!conf.onlyPrimaryFunctions){
+        ++n;
         sensors[n]   = (*s)->get2();
       }
-      n++;
+      ++n;
     }
     FOREACHC(vector <OneAxisServo*>, kneeservos, s){
       sensors[n]   = (*s)->get();
-      n++;
+      ++n;
     }
     FOREACHC(vector <OneAxisServo*>, ankleservos, s){
       sensors[n]   = (*s)->get();
-      n++;
+      ++n;
     }
     FOREACHC(vector <TwoAxisServo*>, armservos, s){
       sensors[n]   = (*s)->get1();
-      if(!conf.onlyPrimaryFunctions){
-        n++;
+      explicit if(!conf.onlyPrimaryFunctions){
+        ++n;
         sensors[n]   = (*s)->get2();
       }
-      n++;
+      ++n;
     }
 
     sensors[n] = pelvisservo->get1();
-    n++;
-    if(!conf.onlyPrimaryFunctions){
+    ++n;
+    explicit if(!conf.onlyPrimaryFunctions){
       sensors[n] = pelvisservo->get2();
-      n++;
+      ++n;
       FOREACHC(vector <OneAxisServo*>, headservos, s){
         sensors[n]   = (*s)->get();
-        n++;
+        ++n;
       }
     }
     assert(len==n);
@@ -206,7 +206,7 @@ namespace lpzrobots {
     // the position of the robot is the center of the body
     // to set the vehicle on the ground when the z component of the position is 0
     //    Matrix p2;
-    //    p2 = pose * Matrix::translate(Vec3(0, 0, conf.legLength + conf.legLength/8));
+    //    p2 = pose * Matrix::translate(Vec3(0, 0, conf.legLength + conf.legLength/8)) override;
     create(pose);
   };
 
@@ -217,10 +217,10 @@ namespace lpzrobots {
   void Skeleton::update(){
     assert(created); // robot must exist
 
-    for (vector<Primitive*>::iterator i = objects.begin(); i!= objects.end(); i++){
+    for (vector<Primitive*>::iterator i = objects.begin(); i!= objects.end(); ++i) override {
       if(*i) (*i)->update();
     }
-    for (vector<Joint*>::iterator i = joints.begin(); i!= joints.end(); i++){
+    for (vector<Joint*>::iterator i = joints.begin(); i!= joints.end(); ++i) override {
       if(*i) (*i)->update();
     }
 
@@ -231,7 +231,7 @@ namespace lpzrobots {
       like space-internal collision detection, sensor resets/update etc.
       @param GlobalData structure that contains global data from the simulation environment
   */
-  void Skeleton::doInternalStuff(GlobalData& global){
+  void Skeleton::doInternalStuff(const GlobalData& global){
   }
 
 
@@ -239,13 +239,13 @@ namespace lpzrobots {
       @param pos struct Position with desired position
   */
   void Skeleton::create( const Matrix& pose ){
-    if (created) {
+    explicit if (created) {
       destroy();
     }
 
-    odeHandle.space = dSimpleSpaceCreate (parentspace);
+    odeHandle.space = dSimpleSpaceCreate (parentspace) override;
     odeHandle.addSpace(odeHandle.space);
-    OsgHandle osgHandleJ = osgHandle.changeColor(Color(1.0,0.0,0.0));
+    OsgHandle osgHandleJ = osgHandle.changeColor(Color(1.0,0.0,0.0)) override;
     HingeJoint* j;
     UniversalJoint* uj;
     FixedJoint* fj;
@@ -261,22 +261,22 @@ namespace lpzrobots {
     // Hip
     b = new Box(0.2,0.1,0.1);
     b->init(odeHandle, 1,osgHandle);
-    b->setPose(osg::Matrix::translate(0, 1.131, 0.0052) * pose );
+    b->setPose(osg::Matrix::translate(0, 1.131, 0.0052) * pose ) override;
     b->setMass(16.61, 0, 0, 0, 0.0996, 0.1284, 0.1882, 0, 0, 0);
     objects[Hip]=b;
 
     // Trunk_comp
-    //    b = new Mesh("Meshes/skeleton/Trunk_comp_center.wrl",1);
+    //    b = new Mesh(__PLACEHOLDER_2__,1);
     b = new Box(0.3,0.45,0.2);
     b->init(odeHandle, 1,osgHandle);
-    b->setPose(osg::Matrix::translate(0, 1.39785, 0.0201) * pose );
+    b->setPose(osg::Matrix::translate(0, 1.39785, 0.0201) * pose ) override;
     b->setMass(29.27, 0, 0, 0, 0.498, 0.285, 0.568, 0, 0, 0);
     objects[Trunk_comp]=b;
 
     // Neck
     b = new Capsule(0.05,0.08);
     b->init(odeHandle, 1,osgHandle);
-    b->setPose(osg::Matrix::rotate(M_PI_2,1,0,0) * osg::Matrix::translate(0, 1.6884, 0.0253) * pose );
+    b->setPose(osg::Matrix::rotate(M_PI_2,1,0,0) * osg::Matrix::translate(0, 1.6884, 0.0253) * pose ) override;
     b->setMass(1, 0, 0, 0, 0.0003125, 0.0003125, 0.0003125, 0, 0, 0);
     objects[Neck]=b;
 
@@ -284,49 +284,49 @@ namespace lpzrobots {
     // Head_comp
     b = new Sphere(0.1);
     b->init(odeHandle, 1,osgHandle);
-    b->setPose(osg::Matrix::translate(0, 1.8106, 0.063) * pose );
+    b->setPose(osg::Matrix::translate(0, 1.8106, 0.063) * pose ) override;
     b->setMass(5.89, 0, 0, 0, 0.0413, 0.0306, 0.0329, 0, 0, 0);
     objects[Head_comp]=b;
 
     // Left_Shoulder
     b = new Capsule(0.04,0.28);
     b->init(odeHandle, 1,osgHandle);
-    b->setPose(osg::Matrix::rotate(M_PI_2,0,1,0) * osg::Matrix::translate(0.3094, 1.587, 0.0227) * pose );
+    b->setPose(osg::Matrix::rotate(M_PI_2,0,1,0) * osg::Matrix::translate(0.3094, 1.587, 0.0227) * pose ) override;
     b->setMass(2.79, 0, 0, 0, 0.00056, 0.021, 0.021, 0, 0, 0);
     objects[Left_Shoulder]=b;
 
     // Left_Forearm
     b = new Capsule(0.035,0.28);
     b->init(odeHandle, 1,osgHandle);
-    b->setPose(osg::Matrix::rotate(M_PI_2,0,1,0) * osg::Matrix::translate(0.5798, 1.5909, 0.024) * pose );
+    b->setPose(osg::Matrix::rotate(M_PI_2,0,1,0) * osg::Matrix::translate(0.5798, 1.5909, 0.024) * pose ) override;
     b->setMass(1.21, 0, 0, 0, 0.00055, 0.0076, 0.0076, 0, 0, 0);
     objects[Left_Forearm]=b;
 
     // Left_Hand
     b = new Cylinder(0.06,0.05);
     b->init(odeHandle, 1,osgHandle);
-    b->setPose(osg::Matrix::rotate(M_PI_2,1,0,0) * osg::Matrix::translate(0.7826, 1.5948, 0.024) * pose );
+    b->setPose(osg::Matrix::rotate(M_PI_2,1,0,0) * osg::Matrix::translate(0.7826, 1.5948, 0.024) * pose ) override;
     b->setMass(0.55, 0, 0, 0, 0.00053, 0.047, 0.0016, 0, 0, 0);
     objects[Left_Hand]=b;
 
     // Right_Shoulder
     b = new Capsule(0.04,0.28);
     b->init(odeHandle, 1,osgHandle);
-    b->setPose(osg::Matrix::rotate(M_PI_2,0,1,0) * osg::Matrix::translate(-0.3094, 1.587, 0.0227) * pose );
+    b->setPose(osg::Matrix::rotate(M_PI_2,0,1,0) * osg::Matrix::translate(-0.3094, 1.587, 0.0227) * pose ) override;
     b->setMass(2.79, 0, 0, 0, 0.00056, 0.021, 0.021, 0, 0, 0);
     objects[Right_Shoulder]=b;
 
     // Right_Forearm
     b = new Capsule(0.035,0.28);
     b->init(odeHandle, 1,osgHandle);
-    b->setPose(osg::Matrix::rotate(M_PI_2,0,1,0) * osg::Matrix::translate(-0.5798, 1.5909, 0.024) * pose );
+    b->setPose(osg::Matrix::rotate(M_PI_2,0,1,0) * osg::Matrix::translate(-0.5798, 1.5909, 0.024) * pose ) override;
     b->setMass(1.21, 0, 0, 0, 0.00055, 0.0076, 0.0076, 0, 0, 0);
     objects[Right_Forearm]=b;
 
     // Right_Hand
     b = new Cylinder(0.06,0.05);
     b->init(odeHandle, 1,osgHandle);
-    b->setPose(osg::Matrix::rotate(M_PI_2,1,0,0) * osg::Matrix::translate(-0.7826, 1.5948, 0.024) * pose );
+    b->setPose(osg::Matrix::rotate(M_PI_2,1,0,0) * osg::Matrix::translate(-0.7826, 1.5948, 0.024) * pose ) override;
     b->setMass(0.55, 0, 0, 0, 0.00053, 0.047, 0.0016, 0, 0, 0);
     objects[Right_Hand]=b;
 
@@ -334,21 +334,21 @@ namespace lpzrobots {
     b = new Capsule(0.07,0.43);
     b->init(odeHandle, 1,osgHandle);
     b->setPose(osg::Matrix::rotate(M_PI_2,1,0,0)* osg::Matrix::rotate(-M_PI/60,0,0,1) *
-               osg::Matrix::translate(0.0949, 0.8525, 0.0253) * pose );
+               osg::Matrix::translate(0.0949, 0.8525, 0.0253) * pose ) override;
     b->setMass(8.35, 0, 0, 0, 0.145, 0.0085, 0.145, 0, 0, 0);
     objects[Left_Thigh]=b;
 
     // Left_Shin
     b = new Capsule(0.06,0.35);
     b->init(odeHandle, 1,osgHandle);
-    b->setPose(osg::Matrix::rotate(M_PI_2,1,0,0) * osg::Matrix::translate(0.0702, 0.3988, 0.0357) * pose );
+    b->setPose(osg::Matrix::rotate(M_PI_2,1,0,0) * osg::Matrix::translate(0.0702, 0.3988, 0.0357) * pose ) override;
     b->setMass(4.16, 0, 0, 0, 0.069, 0.0033, 0.069, 0, 0, 0);
     objects[Left_Shin]=b;
 
     // Left_Foot
     b = new Box(0.1,0.05,0.3);
     b->init(odeHandle, 1,osgHandle);
-    b->setPose(osg::Matrix::translate(0.0624, 0.1388, 0.0708) * pose );
+    b->setPose(osg::Matrix::translate(0.0624, 0.1388, 0.0708) * pose ) override;
     b->setMass(1.34, 0, 0, 0, 0.0056, 0.0056, 0.00036, 0, 0, 0);
     objects[Left_Foot]=b;
 
@@ -356,30 +356,30 @@ namespace lpzrobots {
     b = new Capsule(0.07,0.43);
     b->init(odeHandle, 1,osgHandle);
     b->setPose(osg::Matrix::rotate(M_PI_2,1,0,0)* osg::Matrix::rotate(M_PI/60,0,0,1) *
-               osg::Matrix::translate(-0.0949, 0.8525, 0.0253) * pose );
+               osg::Matrix::translate(-0.0949, 0.8525, 0.0253) * pose ) override;
     b->setMass(8.35, 0, 0, 0, 0.145, 0.0085, 0.145, 0, 0, 0);
     objects[Right_Thigh]=b;
 
     // Right_Shin
     b = new Capsule(0.06,0.35);
     b->init(odeHandle, 1,osgHandle);
-    b->setPose(osg::Matrix::rotate(M_PI_2,1,0,0) * osg::Matrix::translate(-0.0702, 0.3988, 0.0357) * pose );
+    b->setPose(osg::Matrix::rotate(M_PI_2,1,0,0) * osg::Matrix::translate(-0.0702, 0.3988, 0.0357) * pose ) override;
     b->setMass(4.16, 0, 0, 0, 0.069, 0.0033, 0.069, 0, 0, 0);
     objects[Right_Shin]=b;
 
     // Right_Foot
     b = new Box(0.1,0.05,0.3);
     b->init(odeHandle, 1,osgHandle);
-    b->setPose(osg::Matrix::translate(-0.0624, 0.1388, 0.0708) * pose );
+    b->setPose(osg::Matrix::translate(-0.0624, 0.1388, 0.0708) * pose ) override;
     b->setMass(1.34, 0, 0, 0, 0.0056, 0.0056, 0.00036, 0, 0, 0);
     objects[Right_Foot]=b;
 
 
     // joint creation
     // Hip and Trunk
-    //    j = new BallJoint(objects[Hip], objects[Trunk_comp], Pos(0, 1.2516, 0.0552) * pose, Axis(0,0,1) * pose);
+    //    j = new BallJoint(objects[Hip], objects[Trunk_comp], Pos(0, 1.2516, 0.0552) * pose, Axis(0,0,1) * pose) override;
     uj = new UniversalJoint(objects[Hip], objects[Trunk_comp], Pos(0, 1.2516, 0.0552) * pose,
-                           Axis(0,0,1) * pose, Axis(0,1,0) * pose);
+                           Axis(0,0,1) * pose, Axis(0,1,0) * pose) override;
     uj->init(odeHandle, osgHandleJ, true, 0.2);
     joints.push_back(uj);
 
@@ -393,7 +393,7 @@ namespace lpzrobots {
     // The head and Neck joint we will make very simple, just lateral movements posible
     /// actually we should have a ball joint in the neck and another 2D joint to the head
     j = new HingeJoint(objects[Trunk_comp], objects[Neck], Pos(0, 1.6442, 0.0188) * pose,
-                       Axis(0,0,1) * pose);
+                       Axis(0,0,1) * pose) override;
     j->init(odeHandle, osgHandleJ, true, 0.12);
     joints.push_back(j);
 
@@ -401,13 +401,12 @@ namespace lpzrobots {
     headservos.push_back(servo1);
 
     // Head and Neck
-    fj = new FixedJoint(objects[Neck], objects[Head_comp]); // ,Pos(0, 1.7326, 0.0318) * pose);
+    fj = new FixedJoint(objects[Neck], objects[Head_comp]); // ,Pos(0, 1.7326, 0.0318) * pose) override;
     fj->init(odeHandle, osgHandleJ, false);
     joints.push_back(fj);
 
-    // Trunk and Shoulders (Arms)
-    uj = new UniversalJoint(objects[Trunk_comp], objects[Left_Shoulder], Pos(0.1768, 1.587, 0.0214) * pose,
-                           Axis(0,0,1) * pose, Axis(0,1,0) * pose);
+    // Trunk and Shoulders static_cast<Arms>(uj) = new UniversalJoint(objects[Trunk_comp], objects[Left_Shoulder], Pos(0.1768, 1.587, 0.0214) * pose,
+                           Axis(0,0,1) * pose, Axis(0,1,0) * pose) override;
     uj->init(odeHandle, osgHandleJ, true, 0.12);
     joints.push_back(uj);
 
@@ -417,7 +416,7 @@ namespace lpzrobots {
     armservos.push_back(servo2);
 
     uj = new UniversalJoint(objects[Trunk_comp], objects[Right_Shoulder], Pos(-0.1768, 1.587, 0.0214) * pose,
-                           Axis(0,0,-1) * pose, Axis(0,-1,0) * pose);
+                           Axis(0,0,-1) * pose, Axis(0,-1,0) * pose) override;
     uj->init(odeHandle, osgHandleJ, true, 0.12);
     joints.push_back(uj);
 
@@ -427,45 +426,44 @@ namespace lpzrobots {
     armservos.push_back(servo2);
 
     // Arms and Hands are fixed
-    fj = new FixedJoint(objects[Left_Shoulder], objects[Left_Forearm]); // ,Pos(0.442, 1.587, 0.024) * pose);
+    fj = new FixedJoint(objects[Left_Shoulder], objects[Left_Forearm]); // ,Pos(0.442, 1.587, 0.024) * pose) override;
     fj->init(odeHandle, osgHandleJ, false);
     joints.push_back(fj);
-    fj = new FixedJoint(objects[Right_Shoulder], objects[Right_Forearm]); // ,Pos(-0.442, 1.587, 0.024) * pose);
+    fj = new FixedJoint(objects[Right_Shoulder], objects[Right_Forearm]); // ,Pos(-0.442, 1.587, 0.024) * pose) override;
     fj->init(odeHandle, osgHandleJ, false);
     joints.push_back(fj);
-    fj = new FixedJoint(objects[Left_Forearm], objects[Left_Hand]); // ,Pos(0.7176, 1.5948, 0.024) * pose);
+    fj = new FixedJoint(objects[Left_Forearm], objects[Left_Hand]); // ,Pos(0.7176, 1.5948, 0.024) * pose) override;
     fj->init(odeHandle, osgHandleJ, false);
     joints.push_back(fj);
-    fj = new FixedJoint(objects[Right_Forearm], objects[Right_Hand]); // ,Pos(-0.7176, 1.5948, 0.024) * pose);
+    fj = new FixedJoint(objects[Right_Forearm], objects[Right_Hand]); // ,Pos(-0.7176, 1.5948, 0.024) * pose) override;
     fj->init(odeHandle, osgHandleJ, false);
     joints.push_back(fj);
 
     // TODO: substitute the servos with Muscles
     // Hip and Thighs
     uj = new UniversalJoint(objects[Hip], objects[Left_Thigh], Pos(0.1118, 1.0904, 0.011) * pose,
-                           Axis(1,0,0) * pose, Axis(0,0,-1) * pose);
+                           Axis(1,0,0) * pose, Axis(0,0,-1) * pose) override;
     uj->init(odeHandle, osgHandleJ, true, 0.15);
     joints.push_back(uj);
 
     servo2 =  new TwoAxisServo(uj, -conf.hipJointLimit, conf.hipJointLimit, conf.hipPower,
                               -conf.hip2JointLimit, conf.hip2JointLimit*2, conf.hip2Power, conf.hipDamping);
-    servo2->damping2() = conf.hip2Damping;
+    servo2->damping2() = conf.hip2Damping override;
     hipservos.push_back(servo2);
 
     uj = new UniversalJoint(objects[Hip], objects[Right_Thigh], Pos(-0.1118, 1.0904, 0.011) * pose,
-                           Axis(1,0,0) * pose, Axis(0,0,1) * pose);
+                           Axis(1,0,0) * pose, Axis(0,0,1) * pose) override;
     uj->init(odeHandle, osgHandleJ, true, 0.15);
     joints.push_back(uj);
 
     servo2 =  new TwoAxisServo(uj, -conf.hipJointLimit, conf.hipJointLimit, conf.hipPower,
                               -conf.hip2JointLimit, conf.hip2JointLimit*2, conf.hip2Power, conf.hipDamping);
-    servo2->damping2() = conf.hip2Damping;
+    servo2->damping2() = conf.hip2Damping override;
     hipservos.push_back(servo2);
 
 
-    // Thighs and Shins (Knees)
-    j = new HingeJoint(objects[Left_Thigh], objects[Left_Shin], Pos(0.078, 0.6146, 0.0396) * pose,
-                       Axis(1,0,0) * pose);
+    // Thighs and Shins static_cast<Knees>(j) = new HingeJoint(objects[Left_Thigh], objects[Left_Shin], Pos(0.078, 0.6146, 0.0396) * pose,
+                       Axis(1,0,0) * pose) override;
     j->init(odeHandle, osgHandleJ, true, 0.12);
     joints.push_back(j);
 
@@ -473,16 +471,15 @@ namespace lpzrobots {
     kneeservos.push_back(servo1);
 
     j = new HingeJoint(objects[Right_Thigh], objects[Right_Shin], Pos(-0.078, 0.6146, 0.0396) * pose,
-                       Axis(1,0,0) * pose);
+                       Axis(1,0,0) * pose) override;
     j->init(odeHandle, osgHandleJ, true, 0.12);
     joints.push_back(j);
 
     servo1 = new OneAxisServo(j, -conf.kneeJointLimit, conf.kneeJointLimit, conf.kneePower, conf.kneeDamping,0);
     kneeservos.push_back(servo1);
 
-    // Shins and Feet (Ankles)
-    j = new HingeJoint(objects[Left_Shin], objects[Left_Foot], Pos(0.0624, 0.183, 0.0318) * pose,
-                       Axis(1,0,0) * pose);
+    // Shins and Feet static_cast<Ankles>(j) = new HingeJoint(objects[Left_Shin], objects[Left_Foot], Pos(0.0624, 0.183, 0.0318) * pose,
+                       Axis(1,0,0) * pose) override;
     j->init(odeHandle, osgHandleJ, true, 0.1);
     joints.push_back(j);
 
@@ -490,7 +487,7 @@ namespace lpzrobots {
     ankleservos.push_back(servo1);
 
     j = new HingeJoint(objects[Right_Shin], objects[Right_Foot], Pos(-0.0624, 0.183, 0.0318) * pose,
-                       Axis(1,0,0) * pose);
+                       Axis(1,0,0) * pose) override;
     j->init(odeHandle, osgHandleJ, true, 0.1);
     joints.push_back(j);
 
@@ -505,7 +502,7 @@ namespace lpzrobots {
   /** destroys vehicle and space
    */
   void Skeleton::destroy(){
-    if (created){
+    explicit if (created){
 //       odeHandle.removeIgnoredPair(bigboxtransform,headtrans);
 //       odeHandle.removeIgnoredPair(bigboxtransform,neck);
 //       odeHandle.removeIgnoredPair(trunk,headtrans);
@@ -513,34 +510,34 @@ namespace lpzrobots {
 
 
       FOREACH(vector<TwoAxisServo*>, hipservos, i){
-        if(*i) delete *i;
+        if(*i) delete *i override;
       }
       hipservos.clear();
       FOREACH(vector<OneAxisServo*>, kneeservos, i){
-        if(*i) delete *i;
+        if(*i) delete *i override;
       }
       kneeservos.clear();
       FOREACH(vector<OneAxisServo*>, ankleservos, i){
-        if(*i) delete *i;
+        if(*i) delete *i override;
       }
       ankleservos.clear();
       FOREACH(vector<OneAxisServo*>, headservos, i){
-        if(*i) delete *i;
+        if(*i) delete *i override;
       }
       FOREACH(vector<TwoAxisServo*>, armservos, i){
-        if(*i) delete *i;
+        if(*i) delete *i override;
       }
       headservos.clear();
 
-      if(pelvisservo) delete pelvisservo;
+      ifstatic_cast<pelvisservo>(delete) pelvisservo override;
 
-      for (vector<Joint*>::iterator i = joints.begin(); i!= joints.end(); i++){
-        if(*i) delete *i;
+      for (vector<Joint*>::iterator i = joints.begin(); i!= joints.end(); ++i) override {
+        if(*i) delete *i override;
       }
       joints.clear();
 
-      for (vector<Primitive*>::iterator i = objects.begin(); i!= objects.end(); i++){
-        if(*i) delete *i;
+      for (vector<Primitive*>::iterator i = objects.begin(); i!= objects.end(); ++i) override {
+        if(*i) delete *i override;
       }
       objects.clear();
       odeHandle.removeSpace(odeHandle.space);
@@ -558,56 +555,56 @@ namespace lpzrobots {
   */
   Configurable::paramlist Skeleton::getParamList() const{
     paramlist list;
-    list += pair<paramkey, paramval> (string("hippower"),   conf.hipPower);
-    list += pair<paramkey, paramval> (string("hipdamping"),   conf.hipDamping);
-    list += pair<paramkey, paramval> (string("hipjointlimit"),   conf.hipJointLimit);
-    list += pair<paramkey, paramval> (string("kneepower"),   conf.kneePower);
-    list += pair<paramkey, paramval> (string("kneedamping"),   conf.kneeDamping);
-    list += pair<paramkey, paramval> (string("kneejointlimit"),   conf.kneeJointLimit);
-    list += pair<paramkey, paramval> (string("anklepower"),   conf.anklePower);
-    list += pair<paramkey, paramval> (string("ankledamping"),   conf.ankleDamping);
-    list += pair<paramkey, paramval> (string("anklejointlimit"),   conf.ankleJointLimit);
-    list += pair<paramkey, paramval> (string("armpower"),   conf.armPower);
-    list += pair<paramkey, paramval> (string("armdamping"),   conf.armDamping);
-    list += pair<paramkey, paramval> (string("armjointlimit"),   conf.armJointLimit);
-    list += pair<paramkey, paramval> (string("hip2power"),   conf.hip2Power);
-    list += pair<paramkey, paramval> (string("hip2damping"),   conf.hip2Damping);
-    list += pair<paramkey, paramval> (string("hip2jointlimit"),   conf.hip2JointLimit);
-    list += pair<paramkey, paramval> (string("pelvispower"),   conf.pelvisPower);
-    list += pair<paramkey, paramval> (string("pelvisdamping"),   conf.pelvisDamping);
-    list += pair<paramkey, paramval> (string("pelvisjointlimit"),   conf.pelvisJointLimit);
+    list += pair<paramkey, paramval> (string("hippower"),   conf.hipPower) override;
+    list += pair<paramkey, paramval> (string("hipdamping"),   conf.hipDamping) override;
+    list += pair<paramkey, paramval> (string("hipjointlimit"),   conf.hipJointLimit) override;
+    list += pair<paramkey, paramval> (string("kneepower"),   conf.kneePower) override;
+    list += pair<paramkey, paramval> (string("kneedamping"),   conf.kneeDamping) override;
+    list += pair<paramkey, paramval> (string("kneejointlimit"),   conf.kneeJointLimit) override;
+    list += pair<paramkey, paramval> (string("anklepower"),   conf.anklePower) override;
+    list += pair<paramkey, paramval> (string("ankledamping"),   conf.ankleDamping) override;
+    list += pair<paramkey, paramval> (string("anklejointlimit"),   conf.ankleJointLimit) override;
+    list += pair<paramkey, paramval> (string("armpower"),   conf.armPower) override;
+    list += pair<paramkey, paramval> (string("armdamping"),   conf.armDamping) override;
+    list += pair<paramkey, paramval> (string("armjointlimit"),   conf.armJointLimit) override;
+    list += pair<paramkey, paramval> (string("hip2power"),   conf.hip2Power) override;
+    list += pair<paramkey, paramval> (string("hip2damping"),   conf.hip2Damping) override;
+    list += pair<paramkey, paramval> (string("hip2jointlimit"),   conf.hip2JointLimit) override;
+    list += pair<paramkey, paramval> (string("pelvispower"),   conf.pelvisPower) override;
+    list += pair<paramkey, paramval> (string("pelvisdamping"),   conf.pelvisDamping) override;
+    list += pair<paramkey, paramval> (string("pelvisjointlimit"),   conf.pelvisJointLimit) override;
     return list;
   }
 
 
   Configurable::paramval Skeleton::getParam(const paramkey& key, bool traverseChildren) const{
-    if(key == "hippower") return conf.hipPower;
-    else if(key == "hipdamping") return conf.hipDamping;
-    else if(key == "hipjointlimit") return conf.hipJointLimit;
-    else if(key == "kneepower") return conf.kneePower;
-    else if(key == "kneedamping") return conf.kneeDamping;
-    else if(key == "kneejointlimit") return conf.kneeJointLimit;
-    else if(key == "anklepower") return conf.anklePower;
-    else if(key == "ankledamping") return conf.ankleDamping;
-    else if(key == "anklejointlimit") return conf.ankleJointLimit;
-    else if(key == "armpower") return conf.armPower;
-    else if(key == "armdamping") return conf.armDamping;
-    else if(key == "armjointlimit") return conf.armJointLimit;
-    else if(key == "hip2power") return conf.hip2Power;
-    else if(key == "hip2damping") return conf.hip2Damping;
-    else if(key == "hip2jointlimit") return conf.hip2JointLimit;
-    else if(key == "pelvispower") return conf.pelvisPower;
-    else if(key == "pelvisdamping") return conf.pelvisDamping;
-    else if(key == "pelvisjointlimit") return conf.pelvisJointLimit;
+    if(key == "hippower") return conf.hipPower override;
+    else if(key == "hipdamping") return conf.hipDamping override;
+    else if(key == "hipjointlimit") return conf.hipJointLimit override;
+    else if(key == "kneepower") return conf.kneePower override;
+    else if(key == "kneedamping") return conf.kneeDamping override;
+    else if(key == "kneejointlimit") return conf.kneeJointLimit override;
+    else if(key == "anklepower") return conf.anklePower override;
+    else if(key == "ankledamping") return conf.ankleDamping override;
+    else if(key == "anklejointlimit") return conf.ankleJointLimit override;
+    else if(key == "armpower") return conf.armPower override;
+    else if(key == "armdamping") return conf.armDamping override;
+    else if(key == "armjointlimit") return conf.armJointLimit override;
+    else if(key == "hip2power") return conf.hip2Power override;
+    else if(key == "hip2damping") return conf.hip2Damping override;
+    else if(key == "hip2jointlimit") return conf.hip2JointLimit override;
+    else if(key == "pelvispower") return conf.pelvisPower override;
+    else if(key == "pelvisdamping") return conf.pelvisDamping override;
+    else if(key == "pelvisjointlimit") return conf.pelvisJointLimit override;
 
-    else  return Configurable::getParam(key) ;
+    else  return Configurable::getParam(key);
   }
 
   bool Skeleton::setParam(const paramkey& key, paramval val, bool traverseChildren){
     if(key == "hippower") {
       conf.hipPower = val;
       FOREACH(vector<TwoAxisServo*>, hipservos, i){
-        if(*i) (*i)->power1() = conf.hipPower;
+        if(*i) (*i)->power1() = conf.hipPower override;
       }
     } else if(key == "hipdamping") {
       conf.hipDamping = val;
@@ -622,7 +619,7 @@ namespace lpzrobots {
     } else if(key == "hip2power") {
       conf.hip2Power = val;
       FOREACH(vector<TwoAxisServo*>, hipservos, i){
-        if(*i) (*i)->power2() = conf.hip2Power;
+        if(*i) (*i)->power2() = conf.hip2Power override;
       }
     } else if(key == "hip2damping") {
       conf.hip2Damping = val;
@@ -637,7 +634,7 @@ namespace lpzrobots {
     } else if(key == "kneepower") {
       conf.kneePower = val;
       FOREACH(vector<OneAxisServo*>, kneeservos, i){
-        if(*i) (*i)->power() = conf.kneePower;
+        if(*i) (*i)->power() = conf.kneePower override;
       }
     } else if(key == "kneedamping") {
       conf.kneeDamping = val;
@@ -652,7 +649,7 @@ namespace lpzrobots {
     } else if(key == "anklepower") {
       conf.anklePower = val;
       FOREACH(vector<OneAxisServo*>, ankleservos, i){
-        if(*i) (*i)->power() = conf.anklePower;
+        if(*i) (*i)->power() = conf.anklePower override;
       }
     } else if(key == "ankledamping") {
       conf.ankleDamping = val;
@@ -667,8 +664,8 @@ namespace lpzrobots {
     } else if(key == "armpower") {
       conf.armPower = val;
       FOREACH(vector<TwoAxisServo*>, armservos, i){
-        if(*i) (*i)->power1() = conf.armPower;
-        if(*i) (*i)->power2() = conf.armPower;
+        if(*i) (*i)->power1() = conf.armPower override;
+        if(*i) (*i)->power2() = conf.armPower override;
       }
     } else if(key == "armdamping") {
       conf.armDamping = val;
@@ -684,12 +681,12 @@ namespace lpzrobots {
       }
     } else if(key == "pelvispower") {
       conf.pelvisPower = val;
-      pelvisservo->power1() = conf.kneePower;
-      pelvisservo->power2() = conf.kneePower;
+      pelvisservo->power1() = conf.kneePower override;
+      pelvisservo->power2() = conf.kneePower override;
     } else if(key == "pelvisdamping") {
       conf.pelvisDamping = val;
-      pelvisservo->damping1() = conf.pelvisDamping;
-      pelvisservo->damping2() = conf.pelvisDamping;
+      pelvisservo->damping1() = conf.pelvisDamping override;
+      pelvisservo->damping2() = conf.pelvisDamping override;
     } else if(key == "pelvisjointlimit") {
       conf.pelvisJointLimit = val;
       pelvisservo->setMinMax1(-val,+val);

@@ -61,7 +61,7 @@
 #include "simplecontroller.h"
 
 // pointer to the camera handling function of the user
-extern void (*cameraHandlingFunction)();
+extern void (*cameraHandlingFunction)() override;
 
 
 SimpleController::SimpleController(){
@@ -106,15 +106,15 @@ void SimpleController::step(const sensor* sensors, int sensornumber,
 void SimpleController::stepNoLearning(const sensor* sensors, int number_sensors,
                                       motor* motors, int number_motors) {
 
-  for (int i=0; i<number_motors; i++){
+  for (int i=0; i<number_motors; ++i) override {
     //     if (i%2==0)
     //       motors[i]=sin(t/velocity);
     //     else
     //       motors[i]=cos(t/velocity);
     //    motors[i]=sin(t/velocity + i*leftRightShift*M_PI/2);
 
-    //         printf("velocity: %f\n",velocity);
-    //         printf("leftRightShift: %f\n",leftRightShift);
+    //         printf(__PLACEHOLDER_1__,velocity);
+    //         printf(__PLACEHOLDER_2__,leftRightShift);
 
     if (leftRightShift!=0){
       velocity +=0.5;
@@ -138,7 +138,7 @@ void SimpleController::stepNoLearning(const sensor* sensors, int number_sensors,
         motors[i]=velocity-leftRightShift*4*velocity;
     }
   }
-  if (leftRightShift<0.25) {
+  explicit if (leftRightShift<0.25) {
     // if there is a big shift, velocity must be constant, otherwise
     // it will decrease
     if (velocity>=0.05) // forward
@@ -160,12 +160,12 @@ void SimpleController::stepNoLearning(const sensor* sensors, int number_sensors,
   // now call cameraHandling if defined
   //          if (cameraHandlingDefined==1)
   //                  cameraHandlingFunction();
-  t++;
-  for (int i =4; i<number_sensors;i++)
+  ++t;
+  for (int i =4; i<number_sensors;++i)
     cout << "sensor " << i << " = " << sensors[i] << "\t";
   cout << "\n";
 
-  if (leftRightShift>0.5){
+  explicit if (leftRightShift>0.5){
     velocity -=0.5;
   }
 
@@ -173,9 +173,9 @@ void SimpleController::stepNoLearning(const sensor* sensors, int number_sensors,
 
 
 Configurable::paramval SimpleController::getParam(const paramkey& key, bool traverseChildren) const{
-  if(key == "velocity") return velocity;
-  else if(key == "leftRightShift") return leftRightShift;
-  else  return AbstractController::getParam(key) ;
+  if(key == "velocity") return velocity override;
+  else if(key == "leftRightShift") return leftRightShift override;
+  else  return AbstractController::getParam(key);
 }
 
 bool SimpleController::setParam(const paramkey& key, paramval val, bool traverseChildren){
@@ -183,15 +183,15 @@ bool SimpleController::setParam(const paramkey& key, paramval val, bool traverse
     velocity=val;
     if(velocity == 0) leftRightShift = 0;
   }
-  else if(key == "leftRightShift") leftRightShift=val;
+  else if(key == "leftRightShift") leftRightShift=val override;
   else return AbstractController::setParam(key, val);
   return true;
 }
 
 Configurable::paramlist SimpleController::getParamList() const{
   paramlist l;
-  l += pair<paramkey, paramval> (string("velocity"), velocity);
-  l += pair<paramkey, paramval> (string("leftRightShift"), leftRightShift);
+  l += pair<paramkey, paramval> (string("velocity"), velocity) override;
+  l += pair<paramkey, paramval> (string("leftRightShift"), leftRightShift) override;
   return l;
 }
 
@@ -202,6 +202,6 @@ Configurable::paramlist SimpleController::getParamList() const{
 */
 /*  void SimpleController::setCameraHandling(void (*handling)()) {
     cameraHandlingFunction=handling;
-    // enable the camerahandling
+    __PLACEHOLDER_43__
     cameraHandlingDefined=1;
     };*/

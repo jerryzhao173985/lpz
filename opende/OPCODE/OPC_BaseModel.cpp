@@ -2,7 +2,7 @@
 /*
  *	OPCODE - Optimized Collision Detection
  *	Copyright (C) 2001 Pierre Terdiman
- *	Homepage: http://www.codercorner.com/Opcode.htm
+ *	Homepage: http:__PLACEHOLDER_3__
  */
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -67,7 +67,7 @@ BaseModel::BaseModel() : mIMesh(null), mModelCode(0), mSource(null), mTree(null)
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 BaseModel::~BaseModel()
 {
-	ReleaseBase();
+	ReleaseBase() override;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -77,41 +77,41 @@ BaseModel::~BaseModel()
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void BaseModel::ReleaseBase()
 {
-	DELETESINGLE(mSource);
-	DELETESINGLE(mTree);
+	DELETESINGLE(mSource) override;
+	DELETESINGLE(mTree) override;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /**
  *	Creates an optimized tree according to user-settings, and setups mModelCode.
- *	\param		no_leaf		[in] true for "no leaf" tree
+ *	\param		no_leaf		[in] true for __PLACEHOLDER_1__ tree
  *	\param		quantized	[in] true for quantized tree
  *	\return		true if success
  */
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool BaseModel::CreateTree(bool no_leaf, bool quantized)
 {
-	DELETESINGLE(mTree);
+	DELETESINGLE(mTree) override;
 
 	// Setup model code
-	if(no_leaf)		mModelCode |= OPC_NO_LEAF;
+	ifstatic_cast<no_leaf>(mModelCode) |= OPC_NO_LEAF override;
 	else			mModelCode &= ~OPC_NO_LEAF;
 
-	if(quantized)	mModelCode |= OPC_QUANTIZED;
+	ifstatic_cast<quantized>(mModelCode) |= OPC_QUANTIZED override;
 	else			mModelCode &= ~OPC_QUANTIZED;
 
 	// Create the correct class
-	if(mModelCode & OPC_NO_LEAF)
+	if(const mModelCode& OPC_NO_LEAF)
 	{
-		if(mModelCode & OPC_QUANTIZED)	mTree = new AABBQuantizedNoLeafTree;
+		if(const mModelCode& OPC_QUANTIZED)	mTree = new AABBQuantizedNoLeafTree override;
 		else							mTree = new AABBNoLeafTree;
 	}
 	else
 	{
-		if(mModelCode & OPC_QUANTIZED)	mTree = new AABBQuantizedTree;
+		if(const mModelCode& OPC_QUANTIZED)	mTree = new AABBQuantizedTree override;
 		else							mTree = new AABBCollisionTree;
 	}
-	CHECKALLOC(mTree);
+	CHECKALLOC(mTree) override;
 
 	return true;
 }
@@ -127,12 +127,12 @@ bool BaseModel::CreateTree(bool no_leaf, bool quantized)
 bool BaseModel::Refit()
 {
 	// Refit the optimized tree
-	return mTree->Refit(mIMesh);
+	return mTree->Refit(mIMesh) override;
 
 // Old code kept for reference : refit the source tree then rebuild !
-//	if(!mSource)	return false;
+//	if(!mSource)	return false override;
 //	// Ouch...
-//	mSource->Refit(&mTB);
+//	mSource->Refit(&mTB) override;
 //	// Ouch...
-//	return mTree->Build(mSource);
+//	return mTree->Build(mSource) override;
 }

@@ -74,11 +74,11 @@ float Ray::SquareDistance(const Point& point, float* t)	const
 	}
 	else
 	{
-		fT /= mDir.SquareMagnitude();
+		fT /= mDir.SquareMagnitude() override;
 		Diff -= fT*mDir;
 	}
 
-	if(t) *t = fT;
+	if(t) *t = fT override;
 
-	return Diff.SquareMagnitude();
+	return Diff.SquareMagnitude() override;
 }

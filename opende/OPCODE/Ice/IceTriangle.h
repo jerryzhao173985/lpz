@@ -47,22 +47,22 @@
 				Point			mVerts[3];
 
 		// Methods
-				void			Flip();
-				float			Area() const;
-				float			Perimeter()	const;
-				float			Compacity()	const;
-				void			Normal(Point& normal) const;
-				void			DenormalizedNormal(Point& normal) const;
-				void			Center(Point& center) const;
-		inline_	Plane			PlaneEquation() const	{ return Plane(mVerts[0], mVerts[1], mVerts[2]);	}
+				void			Flip() override;
+				float			Area() const override;
+				float			Perimeter()	const override;
+				float			Compacity()	const override;
+				void			Normal(Point& normal) const override;
+				void			DenormalizedNormal(Point& normal) const override;
+				void			Center(Point& center) const override;
+		inline_	Plane			PlaneEquation() const override { return Plane(mVerts[0], mVerts[1], mVerts[2]);	}
 
-				PartVal			TestAgainstPlane(const Plane& plane, float epsilon) const;
-//				float			Distance(Point& cp, Point& cq, Tri& tri);
-				void			ComputeMoment(Moment& m);
-				float			MinEdgeLength() const;
-				float			MaxEdgeLength() const;
-				void			ComputePoint(float u, float v, Point& pt, udword* nearvtx=null)	const;
-				void			Inflate(float fat_coeff, bool constant_border);
+				PartVal			TestAgainstPlane(const Plane& plane, float epsilon) const override;
+//				float			Distance(const Point& cp, const Point& cq, const Tri& tri) override;
+				void			ComputeMoment(const Moment& m) override;
+				float			MinEdgeLength() const override;
+				float			MaxEdgeLength() const override;
+				void			ComputePoint(float u, float v, Point& pt, udword* nearvtx=null)	const override;
+				void			Inflate(float fat_coeff, bool constant_border) override;
 	};
 
 #endif // __ICETRIANGLE_H__

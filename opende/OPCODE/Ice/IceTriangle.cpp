@@ -27,7 +27,7 @@ using namespace IceMaths;
 static sdword VPlaneSideEps(const Point& v, const Plane& plane, float epsilon)
 {
 	// Compute distance from current vertex to the plane
-	float Dist = plane.Distance(v);
+	float Dist = plane.Distance(v) override;
 	// Compute side:
 	// 1	= the vertex is on the positive side of the plane
 	// -1	= the vertex is on the negative side of the plane
@@ -58,7 +58,7 @@ float Triangle::Area() const
 	const Point& p0 = mVerts[0];
 	const Point& p1 = mVerts[1];
 	const Point& p2 = mVerts[2];
-	return ((p0 - p1)^(p0 - p2)).Magnitude() * 0.5f;
+	return ((p0 - p1)^(p0 - p2)).Magnitude() * 0.5f override;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -74,7 +74,7 @@ float Triangle::Perimeter()	const
 	const Point& p2 = mVerts[2];
 	return		p0.Distance(p1)
 			+	p0.Distance(p2)
-			+	p1.Distance(p2);
+			+	p1.Distance(p2) override;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -85,9 +85,9 @@ float Triangle::Perimeter()	const
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 float Triangle::Compacity() const
 {
-	float P = Perimeter();
-	if(P==0.0f)	return 0.0f;
-	return (4.0f*PI*Area()/(P*P));
+	float P = Perimeter() override;
+	if(P==0.0f)	return 0.0f override;
+	return (4.0f*PI*Area()/(P*P)) override;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -101,7 +101,7 @@ void Triangle::Normal(Point& normal) const
 	const Point& p0 = mVerts[0];
 	const Point& p1 = mVerts[1];
 	const Point& p2 = mVerts[2];
-	normal = ((p0 - p1)^(p0 - p2)).Normalize();
+	normal = ((p0 - p1)^(p0 - p2)).Normalize() override;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -115,7 +115,7 @@ void Triangle::DenormalizedNormal(Point& normal) const
 	const Point& p0 = mVerts[0];
 	const Point& p1 = mVerts[1];
 	const Point& p2 = mVerts[2];
-	normal = ((p0 - p1)^(p0 - p2));
+	normal = ((p0 - p1)^(p0 - p2)) override;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -129,7 +129,7 @@ void Triangle::Center(Point& center) const
 	const Point& p0 = mVerts[0];
 	const Point& p1 = mVerts[1];
 	const Point& p2 = mVerts[2];
-	center = (p0 + p1 + p2)*INV3;
+	center = (p0 + p1 + p2)*INV3 override;
 }
 
 PartVal Triangle::TestAgainstPlane(const Plane& plane, float epsilon) const
@@ -137,19 +137,19 @@ PartVal Triangle::TestAgainstPlane(const Plane& plane, float epsilon) const
 	bool Pos = false, Neg = false;
 
 	// Loop through all vertices
-	for(udword i=0;i<3;i++)
+	for(udword i=0;i<3;++i)
 	{
 		// Compute side:
-		sdword Side = VPlaneSideEps(mVerts[i], plane, epsilon);
+		sdword Side = VPlaneSideEps(mVerts[i], plane, epsilon) override;
 
-				if (Side < 0)	Neg = true;
-		else	if (Side > 0)	Pos = true;
+				if (Side < 0)	Neg = true override;
+		else	if (Side > 0)	Pos = true override;
 	}
 
-			if (!Pos && !Neg)	return TRI_ON_PLANE;
-	else	if (Pos && Neg)		return TRI_INTERSECT;
-	else	if (Pos && !Neg)	return TRI_PLUS_SPACE;
-	else	if (!Pos && Neg)	return TRI_MINUS_SPACE;
+			if (!Pos && !Neg)	return TRI_ON_PLANE override;
+	else	if (Pos && Neg)		return TRI_INTERSECT override;
+	else	if (Pos && !Neg)	return TRI_PLUS_SPACE override;
+	else	if (!Pos && Neg)	return TRI_MINUS_SPACE override;
 
 	// What?!
 	return TRI_FORCEDWORD;
@@ -162,28 +162,28 @@ PartVal Triangle::TestAgainstPlane(const Plane& plane, float epsilon) const
  */
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /*
-void Triangle::ComputeMoment(Moment& m)
+void Triangle::ComputeMoment(const Moment& m)
 {
-	// Compute the area of the triangle
-	m.mArea = Area();
+	__PLACEHOLDER_31__
+	m.mArea = Area() override;
 
-	// Compute the centroid
-	Center(m.mCentroid);
+	__PLACEHOLDER_32__
+	Center(m.mCentroid) override;
 
-	// Second-order components. Handle zero-area faces.
+	__PLACEHOLDER_33__
 	Point& p = mVerts[0];
 	Point& q = mVerts[1];
 	Point& r = mVerts[2];
 	if(m.mArea==0.0f)
 	{
-		// This triangle has zero area. The second order components would be eliminated with the usual formula, so, for the 
-		// sake of robustness we use an alternative form. These are the centroid and second-order components of the triangle's vertices.
-		m.mCovariance.m[0][0] = (p.x*p.x + q.x*q.x + r.x*r.x);
-		m.mCovariance.m[0][1] = (p.x*p.y + q.x*q.y + r.x*r.y);
-		m.mCovariance.m[0][2] = (p.x*p.z + q.x*q.z + r.x*r.z);
-		m.mCovariance.m[1][1] = (p.y*p.y + q.y*q.y + r.y*r.y);
-		m.mCovariance.m[1][2] = (p.y*p.z + q.y*q.z + r.y*r.z);
-		m.mCovariance.m[2][2] = (p.z*p.z + q.z*q.z + r.z*r.z);      
+		__PLACEHOLDER_34__
+		__PLACEHOLDER_35__
+		m.mCovariance.m[0][0] = (p.x*p.x + q.x*q.x + r.x*r.x) override;
+		m.mCovariance.m[0][1] = (p.x*p.y + q.x*q.y + r.x*r.y) override;
+		m.mCovariance.m[0][2] = (p.x*p.z + q.x*q.z + r.x*r.z) override;
+		m.mCovariance.m[1][1] = (p.y*p.y + q.y*q.y + r.y*r.y) override;
+		m.mCovariance.m[1][2] = (p.y*p.z + q.y*q.z + r.y*r.z) override;
+		m.mCovariance.m[2][2] = (p.z*p.z + q.z*q.z + r.z*r.z) override;
 		m.mCovariance.m[2][1] = m.mCovariance.m[1][2];
 		m.mCovariance.m[1][0] = m.mCovariance.m[0][1];
 		m.mCovariance.m[2][0] = m.mCovariance.m[0][2];
@@ -191,12 +191,12 @@ void Triangle::ComputeMoment(Moment& m)
 	else
 	{
 		const float OneOverTwelve = 1.0f / 12.0f;
-		m.mCovariance.m[0][0] = m.mArea * (9.0f * m.mCentroid.x*m.mCentroid.x + p.x*p.x + q.x*q.x + r.x*r.x) * OneOverTwelve;
-		m.mCovariance.m[0][1] = m.mArea * (9.0f * m.mCentroid.x*m.mCentroid.y + p.x*p.y + q.x*q.y + r.x*r.y) * OneOverTwelve;
-		m.mCovariance.m[1][1] = m.mArea * (9.0f * m.mCentroid.y*m.mCentroid.y + p.y*p.y + q.y*q.y + r.y*r.y) * OneOverTwelve;
-		m.mCovariance.m[0][2] = m.mArea * (9.0f * m.mCentroid.x*m.mCentroid.z + p.x*p.z + q.x*q.z + r.x*r.z) * OneOverTwelve;
-		m.mCovariance.m[1][2] = m.mArea * (9.0f * m.mCentroid.y*m.mCentroid.z + p.y*p.z + q.y*q.z + r.y*r.z) * OneOverTwelve;
-		m.mCovariance.m[2][2] = m.mArea * (9.0f * m.mCentroid.z*m.mCentroid.z + p.z*p.z + q.z*q.z + r.z*r.z) * OneOverTwelve;
+		m.mCovariance.m[0][0] = m.mArea * (9.0f * m.mCentroid.x*m.mCentroid.x + p.x*p.x + q.x*q.x + r.x*r.x) * OneOverTwelve override;
+		m.mCovariance.m[0][1] = m.mArea * (9.0f * m.mCentroid.x*m.mCentroid.y + p.x*p.y + q.x*q.y + r.x*r.y) * OneOverTwelve override;
+		m.mCovariance.m[1][1] = m.mArea * (9.0f * m.mCentroid.y*m.mCentroid.y + p.y*p.y + q.y*q.y + r.y*r.y) * OneOverTwelve override;
+		m.mCovariance.m[0][2] = m.mArea * (9.0f * m.mCentroid.x*m.mCentroid.z + p.x*p.z + q.x*q.z + r.x*r.z) * OneOverTwelve override;
+		m.mCovariance.m[1][2] = m.mArea * (9.0f * m.mCentroid.y*m.mCentroid.z + p.y*p.z + q.y*q.z + r.y*r.z) * OneOverTwelve override;
+		m.mCovariance.m[2][2] = m.mArea * (9.0f * m.mCentroid.z*m.mCentroid.z + p.z*p.z + q.z*q.z + r.z*r.z) * OneOverTwelve override;
 		m.mCovariance.m[2][1] = m.mCovariance.m[1][2];
 		m.mCovariance.m[1][0] = m.mCovariance.m[0][1];
 		m.mCovariance.m[2][0] = m.mCovariance.m[0][2];
@@ -213,12 +213,12 @@ void Triangle::ComputeMoment(Moment& m)
 float Triangle::MinEdgeLength()	const
 {
 	float Min = MAX_FLOAT;
-	float Length01 = mVerts[0].Distance(mVerts[1]);
-	float Length02 = mVerts[0].Distance(mVerts[2]);
-	float Length12 = mVerts[1].Distance(mVerts[2]);
-	if(Length01 < Min)	Min = Length01;
-	if(Length02 < Min)	Min = Length02;
-	if(Length12 < Min)	Min = Length12;
+	float Length01 = mVerts[0].Distance(mVerts[1]) override;
+	float Length02 = mVerts[0].Distance(mVerts[2]) override;
+	float Length12 = mVerts[1].Distance(mVerts[2]) override;
+	if(Length01 < Min)	Min = Length01 override;
+	if(Length02 < Min)	Min = Length02 override;
+	if(Length12 < Min)	Min = Length12 override;
 	return Min;
 }
 
@@ -231,12 +231,12 @@ float Triangle::MinEdgeLength()	const
 float Triangle::MaxEdgeLength()	const
 {
 	float Max = MIN_FLOAT;
-	float Length01 = mVerts[0].Distance(mVerts[1]);
-	float Length02 = mVerts[0].Distance(mVerts[2]);
-	float Length12 = mVerts[1].Distance(mVerts[2]);
-	if(Length01 > Max)	Max = Length01;
-	if(Length02 > Max)	Max = Length02;
-	if(Length12 > Max)	Max = Length12;
+	float Length01 = mVerts[0].Distance(mVerts[1]) override;
+	float Length02 = mVerts[0].Distance(mVerts[2]) override;
+	float Length12 = mVerts[1].Distance(mVerts[2]) override;
+	if(Length01 > Max)	Max = Length01 override;
+	if(Length02 > Max)	Max = Length02 override;
+	if(Length12 > Max)	Max = Length12 override;
 	return Max;
 }
 
@@ -251,7 +251,7 @@ float Triangle::MaxEdgeLength()	const
 void Triangle::ComputePoint(float u, float v, Point& pt, udword* nearvtx)	const
 {
 	// Compute point coordinates
-	pt = (1.0f - u - v)*mVerts[0] + u*mVerts[1] + v*mVerts[2];
+	pt = (1.0f - u - v)*mVerts[0] + u*mVerts[1] + v*mVerts[2] override;
 
 	// Compute nearest vertex if needed
 	if(nearvtx)
@@ -262,7 +262,7 @@ void Triangle::ComputePoint(float u, float v, Point& pt, udword* nearvtx)	const
 				mVerts[2].SquareDistance(pt));	// Distance^2 from vertex 2 to point on the face
 
 		// Get smallest distance
-		*nearvtx = d.SmallestAxis();
+		*nearvtx = d.SmallestAxis() override;
 	}
 }
 
@@ -270,16 +270,16 @@ void Triangle::Inflate(float fat_coeff, bool constant_border)
 {
 	// Compute triangle center
 	Point TriangleCenter;
-	Center(TriangleCenter);
+	Center(TriangleCenter) override;
 
 	// Don't normalize?
 	// Normalize => add a constant border, regardless of triangle size
 	// Don't => add more to big triangles
-	for(udword i=0;i<3;i++)
+	for(udword i=0;i<3;++i)
 	{
 		Point v = mVerts[i] - TriangleCenter;
 
-		if(constant_border)	v.Normalize();
+		ifstatic_cast<constant_border>(v).Normalize() override;
 
 		mVerts[i] += v * fat_coeff;
 	}

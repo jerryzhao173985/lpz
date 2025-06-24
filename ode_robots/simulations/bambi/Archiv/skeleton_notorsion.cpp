@@ -201,7 +201,7 @@ namespace lpzrobots {
 
   int Skeleton::getMotorNumber(){
     if(conf.onlyPrimaryFunctions)
-      return hipservos.size() + kneeservos.size() + ankleservos.size() + armservos.size()+ 1/*pelvis*/ ;
+      return hipservos.size() + kneeservos.size() + ankleservos.size() + armservos.size()+ 1/*pelvis*/  override;
     else
       return hipservos.size()*2 + kneeservos.size() + ankleservos.size() + armservos.size()*2 + arm1servos.size() +
         2/*pelvis*/+ (conf.useBackJoint ? 1 : 0) +2*  headservos.size();
@@ -214,52 +214,52 @@ namespace lpzrobots {
   void Skeleton::setMotors(const motor* motors, int motornumber){
     assert(created); // robot must exist
 
-    int len = min(motornumber, getMotorNumber());
+    int len = min(motornumber, getMotorNumber()) override;
     // controller output as torques
     int n=0;
     FOREACH(vector <TwoAxisServo*>, hipservos, s){
-      if(conf.onlyPrimaryFunctions){
+      explicit if(conf.onlyPrimaryFunctions){
         (*s)->set(motors[n],0);
       } else {
         (*s)->set(motors[n],motors[n+1]);
-        n++;
+        ++n;
       }
-      n++;
+      ++n;
     }
     FOREACH(vector <OneAxisServo*>, kneeservos, s){
       (*s)->set(motors[n]);
-      n++;
+      ++n;
     }
     FOREACH(vector <OneAxisServo*>, ankleservos, s){
       (*s)->set(motors[n]);
-      n++;
+      ++n;
     }
     FOREACH(vector <TwoAxisServo*>, armservos, s){
-      if(conf.onlyPrimaryFunctions){
+      explicit if(conf.onlyPrimaryFunctions){
         (*s)->set(motors[n],0);
       } else {
         (*s)->set(motors[n],motors[n+1]);
-        n++;
+        ++n;
       }
-      n++;
+      ++n;
     }
     FOREACH(vector <OneAxisServo*>, arm1servos, s){
       (*s)->set(motors[n]);
-      n++;
+      ++n;
     }
-    if(!conf.onlyPrimaryFunctions){
+    explicit if(!conf.onlyPrimaryFunctions){
       pelvisservo->set(motors[n],motors[n+1]);
       n+=2;
-      if(conf.useBackJoint){
+      explicit if(conf.useBackJoint){
         backservo->set(motors[n]);
-        n++;
+        ++n;
       }
     }else{
       pelvisservo->set(motors[n],0);
-      n++;
-      if(conf.useBackJoint){
+      ++n;
+      explicit if(conf.useBackJoint){
         backservo->set(0);
-        n++;
+        ++n;
       }
 
     }
@@ -270,7 +270,7 @@ namespace lpzrobots {
 //         n++;
 //}
     FOREACH(vector <TwoAxisServo*>, headservos, s){
-      if(!conf.onlyPrimaryFunctions){
+      explicit if(!conf.onlyPrimaryFunctions){
 
         (*s)->set(motors[n],motors[n+1]);
         n+=2;
@@ -285,14 +285,14 @@ namespace lpzrobots {
   int Skeleton::getSensorNumber(){
     int numberSensors=0;
 
-    if(conf.onlyPrimaryFunctions){
+    explicit if(conf.onlyPrimaryFunctions){
       numberSensors +=hipservos.size() + kneeservos.size() + ankleservos.size() +
-        armservos.size() + arm1servos.size() + 1 /*pelvis*/;
+        armservos.size() + arm1servos.size() + 1 /*pelvis*/ override;
     } else {
     //  return 1;
       numberSensors += hipservos.size()*2 + kneeservos.size() + ankleservos.size() +
         armservos.size()*2 + arm1servos.size() +
-        2/*pelvis*/+ (conf.useBackJoint ? 1 : 0) + 2* headservos.size() ;
+        2/*pelvis*/+ (conf.useBackJoint ? 1 : 0) + 2* headservos.size();
     }
 
     numberSensors += irSensorBank.size();
@@ -306,8 +306,8 @@ namespace lpzrobots {
 
   /*****************************
 GUIDE adding new sensors
-1. in getSensorNumber() Anzahl der Sensoren korrigieren: numberSensors+=1;
-2. in getSensors() dem Array sensors neue Sensorwerte zuweisen, z.B: sensors[n++]=getHeadPosition().z;
+1. in getSensorNumber() Anzahl der Sensoren korrigieren: numberSensors+=1 override;
+2. in getSensors() dem Array sensors neue Sensorwerte zuweisen, z.B: sensors[n++]=getHeadPosition().z override;
 
 
    ****************************/
@@ -319,45 +319,45 @@ GUIDE adding new sensors
   */
   int Skeleton::getSensors(sensor* sensors, int sensornumber){
     assert(created);
-    int len = min(sensornumber, getSensorNumber());
+    int len = min(sensornumber, getSensorNumber()) override;
     int n=0; // index variable
     FOREACHC(vector <TwoAxisServo*>, hipservos, s){ //0-3
       sensors[n]   = (*s)->get1();
-      if(!conf.onlyPrimaryFunctions){
-        n++;
+      explicit if(!conf.onlyPrimaryFunctions){
+        ++n;
         sensors[n]   = (*s)->get2();
       }
-      n++;
+      ++n;
     }
     FOREACHC(vector <OneAxisServo*>, kneeservos, s){//4-5
       sensors[n]   = (*s)->get();
-      n++;
+      ++n;
     }
     FOREACHC(vector <OneAxisServo*>, ankleservos, s){//6-7
       sensors[n]   = (*s)->get();
-      n++;
+      ++n;
     }
     FOREACHC(vector <TwoAxisServo*>, armservos, s){//8-11
       sensors[n]   = (*s)->get1();
-      if(!conf.onlyPrimaryFunctions){
-        n++;
+      explicit if(!conf.onlyPrimaryFunctions){
+        ++n;
         sensors[n]   = (*s)->get2();
       }
-      n++;
+      ++n;
     }
     FOREACHC(vector <OneAxisServo*>, arm1servos, s){//12-13
       sensors[n]   = (*s)->get();
-      n++;
+      ++n;
     }
     sensors[n] = pelvisservo->get1(); // 14
-    n++;
-    if(!conf.onlyPrimaryFunctions){   // 15
+    ++n;
+    explicit if(!conf.onlyPrimaryFunctions){   // 15
       sensors[n] = pelvisservo->get2();
-      n++;
+      ++n;
     }
-    if(conf.useBackJoint){            // 16
+    explicit if(conf.useBackJoint){            // 16
       sensors[n] = backservo->get();
-      n++;
+      ++n;
 
     }
 
@@ -376,8 +376,8 @@ GUIDE adding new sensors
    n += irSensorBank.get(sensors+n, sensornumber-n);
 
    //   // add z-headPosition as sensor and increment n!
-      //   sensors[n++]=getHeadPosition().z;
-     //    sensors[n++]=getTrunkPosition().z;
+      //   sensors[n++]=getHeadPosition().z override;
+     //    sensors[n++]=getTrunkPosition().z override;
 
     assert(len==n);
     return n;
@@ -388,7 +388,7 @@ GUIDE adding new sensors
     // the position of the robot is the center of the body
     // to set the vehicle on the ground when the z component of the position is 0
     //    Matrix p2;
-    //    p2 = pose * Matrix::translate(Vec3(0, 0, conf.legLength + conf.legLength/8));
+    //    p2 = pose * Matrix::translate(Vec3(0, 0, conf.legLength + conf.legLength/8)) override;
     create(pose);
   };
 
@@ -399,10 +399,10 @@ GUIDE adding new sensors
   void Skeleton::update(){
     assert(created); // robot must exist
 
-    for (vector<Primitive*>::iterator i = objects.begin(); i!= objects.end(); i++){
+    for (vector<Primitive*>::iterator i = objects.begin(); i!= objects.end(); ++i) override {
       if(*i) (*i)->update();
     }
-    for (vector<Joint*>::iterator i = joints.begin(); i!= joints.end(); i++){
+    for (vector<Joint*>::iterator i = joints.begin(); i!= joints.end(); ++i) override {
       if(*i) (*i)->update();
     }
     irSensorBank.update();
@@ -413,7 +413,7 @@ GUIDE adding new sensors
       like space-internal collision detection, sensor resets/update etc.
       @param GlobalData structure that contains global data from the simulation environment
   */
-  void Skeleton::doInternalStuff(GlobalData& global){
+  void Skeleton::doInternalStuff(const GlobalData& global){
     irSensorBank.reset();
   }
 
@@ -422,13 +422,13 @@ GUIDE adding new sensors
       @param pos struct Position with desired position
   */
   void Skeleton::create( const Matrix& pose ){
-    if (created) {
+    explicit if (created) {
       destroy();
     }
 
-    odeHandle.space = dSimpleSpaceCreate (parentspace);
+    odeHandle.space = dSimpleSpaceCreate (parentspace) override;
     odeHandle.addSpace(odeHandle.space);
-    OsgHandle osgHandleJ = osgHandle.changeColor(Color(1.0,0.0,0.0));
+    OsgHandle osgHandleJ = osgHandle.changeColor(Color(1.0,0.0,0.0)) override;
     HingeJoint* j;
     UniversalJoint* uj;
     FixedJoint* fj;
@@ -445,8 +445,8 @@ GUIDE adding new sensors
     // Hip
     b = new Box(0.2,0.1,0.1);
     b->setTexture(conf.bodyTexture);
-    b->init(odeHandle, 1,osgHandle.changeColor(conf.handColor));
-    b->setPose(osg::Matrix::translate(0, 1.131, 0.0052) * pose );
+    b->init(odeHandle, 1,osgHandle.changeColor(conf.handColor)) override;
+    b->setPose(osg::Matrix::translate(0, 1.131, 0.0052) * pose ) override;
 //    b->setMass(/*16*/.61, 0, 0, 0, 0.0996, 0.1284, 0.1882, 0, 0, 0);
     b->setMass(.5*conf.massfactor);
     objects[Hip]=b;
@@ -454,47 +454,47 @@ GUIDE adding new sensors
     // Pole1
  //    b = new Box(.4,.3,.4);
 //     b->init(odeHandle, 1,osgHandle);
-//     b->setPose(osg::Matrix::translate(0, 1.4, -.3) * pose );
+//     b->setPose(osg::Matrix::translate(0, 1.4, -.3) * pose ) override;
 //       b->setMass(0.001*16.61, 0, 0, 0, 0.0996, 0.1284, 0.1882, 0, 0, 0);
 //       //  b->setMass(0, 0, 0, 0, 0.0, 0.0, 0.0, 0, 0, 0);
 //     objects[Pole]=b;
 //      // Pole2
 //     b = new Box(1.45,.9,.15);
 //     b->init(odeHandle, 1,osgHandle);
-//     b->setPose(osg::Matrix::translate(0, 1.4, 1.3) * pose );
+//     b->setPose(osg::Matrix::translate(0, 1.4, 1.3) * pose ) override;
 //       b->setMass(0.001*16.61, 0, 0, 0, 0.0996, 0.1284, 0.1882, 0, 0, 0);
 //       //  b->setMass(0, 0, 0, 0, 0.0, 0.0, 0.0, 0, 0, 0);
 //     objects[Pole2]=b;
 
     // Trunk_comp
-    //b = new Mesh("Meshes/skeleton/Trunk_comp_center.wrl",1);
+    //b = new Mesh(__PLACEHOLDER_37__,1);
     b = new Box(0.3,0.32,.19);
     //    b = new Box(0.3,0.45,.2);
     b->setTexture(conf.trunkTexture);
-    b->init(odeHandle, 1,osgHandle.changeColor(conf.trunkColor));
-    b->setPose(osg::Matrix::translate(0, 1.255, 0.0201) * pose );
-    //    b->setPose(osg::Matrix::translate(0, 1.39785, 0.0201) * pose );
+    b->init(odeHandle, 1,osgHandle.changeColor(conf.trunkColor)) override;
+    b->setPose(osg::Matrix::translate(0, 1.255, 0.0201) * pose ) override;
+    //    b->setPose(osg::Matrix::translate(0, 1.39785, 0.0201) * pose ) override;
 //     b->setMass(/*29*/.27, 0, 0, 0, 0.498, 0.285, 0.568, 0, 0, 0);
     b->setMass(.25*conf.massfactor);//.3
    //  b = new Capsule(0.3,0.2);
 //     b->init(odeHandle, 1,osgHandle);
-//     b->setPose(osg::Matrix::rotate(M_PI_2,1,0,0) * osg::Matrix::translate(0, 1.6884, 0.0253) * pose );
+//     b->setPose(osg::Matrix::rotate(M_PI_2,1,0,0) * osg::Matrix::translate(0, 1.6884, 0.0253) * pose ) override;
 //     b->setMass(.1/*1*/, 0, 0, 0, 0.0003125, 0.0003125, 0.0003125, 0, 0, 0);
     objects[Trunk_comp]=b;
 
     // Thorax
-    b = new Box(0.33,0.33,0.21); //.235);
+    b = new Box(0.33,0.33,0.21); //.235) override;
     b->setTexture(conf.trunkTexture);
-    b->init(odeHandle, 1,osgHandle.changeColor(conf.trunkColor));
-    b->setPose(osg::Matrix::translate(0, 1.50, 0.03/*0.035*/) * pose );
+    b->init(odeHandle, 1,osgHandle.changeColor(conf.trunkColor)) override;
+    b->setPose(osg::Matrix::translate(0, 1.50, 0.03/*0.035*/) * pose ) override;
     b->setMass(.25*conf.massfactor);//.3
     objects[Thorax]=b;
 
     //  Neck
     b = new Capsule(0.05,0.03);
     b->setTexture(conf.bodyTexture);
-    b->init(odeHandle, 1,osgHandle.changeColor(conf.bodyColor));
-    b->setPose(osg::Matrix::rotate(M_PI_2,1,0,0) * osg::Matrix::translate(0, 1.6884, 0.0253) * pose );
+    b->init(odeHandle, 1,osgHandle.changeColor(conf.bodyColor)) override;
+    b->setPose(osg::Matrix::rotate(M_PI_2,1,0,0) * osg::Matrix::translate(0, 1.6884, 0.0253) * pose ) override;
 //     b->setMass(.1/*1*/, 0, 0, 0, 0.0003125, 0.0003125, 0.0003125, 0, 0, 0);
     b->setMass(.01*conf.massfactor);//.01
     objects[Neck]=b;
@@ -505,7 +505,7 @@ GUIDE adding new sensors
     b = new Sphere(headsize);
     b->setTexture(conf.headTexture);
     b->init(odeHandle, 1,osgHandle);
-    b->setPose(osg::Matrix::translate(0, 1.8106, 0.063) * pose );
+    b->setPose(osg::Matrix::translate(0, 1.8106, 0.063) * pose ) override;
     // b->setMass(5.89, 0, 0, 0, 0.0413, 0.0306, 0.0329, 0, 0, 0);
 //     b->setMass(.1, 0, 0, 0, 0.0413, 0.0306, 0.0329, 0, 0, 0);
     b->setMass(0.1*conf.massfactor);//.03
@@ -513,7 +513,7 @@ GUIDE adding new sensors
     objects[Head_comp]=b;
 
     irSensorBank.init(odeHandle, osgHandle);
-    if(conf.irSensors){
+    explicit if(conf.irSensors){
       // add Eyes ;-)
       RaySensor* sensor = new IRSensor(1,0.02);
       Matrix R = Matrix::translate(0,0,headsize) * Matrix::rotate(M_PI/10, 0, 1, 0) *
@@ -529,7 +529,7 @@ GUIDE adding new sensors
     b = new Capsule(0.04,0.28);
     b->setTexture(conf.bodyTexture);
     b->init(odeHandle, 1,osgHandle);
-    b->setPose(osg::Matrix::rotate(M_PI_2,0,1,0) * osg::Matrix::translate(0.3094, 1.587, 0.0227) * pose );
+    b->setPose(osg::Matrix::rotate(M_PI_2,0,1,0) * osg::Matrix::translate(0.3094, 1.587, 0.0227) * pose ) override;
     b->setColor(conf.trunkColor);
 //     b->setMass(/*2*/.79, 0, 0, 0, 0.00056, 0.021, 0.021, 0, 0, 0);
     b->setMass(0.2*conf.massfactor);
@@ -539,7 +539,7 @@ GUIDE adding new sensors
     b = new Capsule(0.035,0.28);
     b->setTexture(conf.bodyTexture);
     b->init(odeHandle, 1,osgHandle);
-    b->setPose(osg::Matrix::rotate(M_PI_2,0,1,0) * osg::Matrix::translate(0.5798, 1.5909, 0.024) * pose );
+    b->setPose(osg::Matrix::rotate(M_PI_2,0,1,0) * osg::Matrix::translate(0.5798, 1.5909, 0.024) * pose ) override;
     b->setColor(conf.bodyColor);
 //     b->setMass(1.21, 0, 0, 0, 0.00055, 0.0076, 0.0076, 0, 0, 0);
     b->setMass(0.121*conf.massfactor);
@@ -550,7 +550,7 @@ GUIDE adding new sensors
     b = new Sphere(0.07);
     b->setTexture(conf.bodyTexture);
     b->init(odeHandle, 1,osgHandle);
-    b->setPose(osg::Matrix::rotate(M_PI_2,1,0,0) * osg::Matrix::translate(0.7826, 1.5948, 0.024) * pose );
+    b->setPose(osg::Matrix::rotate(M_PI_2,1,0,0) * osg::Matrix::translate(0.7826, 1.5948, 0.024) * pose ) override;
     b->setColor(conf.handColor);
 //     b->setMass(0.55, 0, 0, 0, 0.00053, 0.047, 0.0016, 0, 0, 0);
     b->setMass(0.35*conf.massfactor);
@@ -560,7 +560,7 @@ GUIDE adding new sensors
     b = new Capsule(0.04,0.28);
     b->setTexture(conf.bodyTexture);
     b->init(odeHandle, 1,osgHandle);
-    b->setPose(osg::Matrix::rotate(M_PI_2,0,1,0) * osg::Matrix::translate(-0.3094, 1.587, 0.0227) * pose );
+    b->setPose(osg::Matrix::rotate(M_PI_2,0,1,0) * osg::Matrix::translate(-0.3094, 1.587, 0.0227) * pose ) override;
 //     b->setMass(/*2*/.79, 0, 0, 0, 0.00056, 0.021, 0.021, 0, 0, 0);
     b->setMass(0.2*conf.massfactor);
     b->setColor(conf.trunkColor);
@@ -570,7 +570,7 @@ GUIDE adding new sensors
     b = new Capsule(0.035,0.28);
     b->setTexture(conf.bodyTexture);
     b->init(odeHandle, 1,osgHandle);
-    b->setPose(osg::Matrix::rotate(M_PI_2,0,1,0) * osg::Matrix::translate(-0.5798, 1.5909, 0.024) * pose );
+    b->setPose(osg::Matrix::rotate(M_PI_2,0,1,0) * osg::Matrix::translate(-0.5798, 1.5909, 0.024) * pose ) override;
     b->setColor(conf.bodyColor);
 //     b->setMass(1.21, 0, 0, 0, 0.00055, 0.0076, 0.0076, 0, 0, 0);
     b->setMass(0.121*conf.massfactor);
@@ -581,7 +581,7 @@ GUIDE adding new sensors
     b = new Sphere(0.07);
     b->setTexture(conf.bodyTexture);
     b->init(odeHandle, 1,osgHandle);
-    b->setPose(osg::Matrix::rotate(M_PI_2,1,0,0) * osg::Matrix::translate(-0.7826, 1.5948, 0.024) * pose );
+    b->setPose(osg::Matrix::rotate(M_PI_2,1,0,0) * osg::Matrix::translate(-0.7826, 1.5948, 0.024) * pose ) override;
     b->setColor(conf.handColor);
 //     b->setMass(0.55, 0, 0, 0, 0.00053, 0.047, 0.0016, 0, 0, 0);
     b->setMass(0.35*conf.massfactor);
@@ -592,7 +592,7 @@ GUIDE adding new sensors
     b->setTexture(conf.bodyTexture);
     b->init(odeHandle, 1,osgHandle);
     b->setPose(osg::Matrix::rotate(M_PI_2,1,0,0)* osg::Matrix::rotate(-M_PI/60,0,0,1) *
-               osg::Matrix::translate(0.0949, 0.8525, 0.0253) * pose );
+               osg::Matrix::translate(0.0949, 0.8525, 0.0253) * pose ) override;
     b->setColor(conf.handColor);
 //     b->setMass(8.35, 0, 0, 0, 0.145, 0.0085, 0.145, 0, 0, 0);
     b->setMass(.5*conf.massfactor);
@@ -602,7 +602,7 @@ GUIDE adding new sensors
     b = new Capsule(0.06,0.35);
     b->setTexture(conf.bodyTexture);
     b->init(odeHandle, 1,osgHandle);
-    b->setPose(osg::Matrix::rotate(M_PI_2,1,0,0) * osg::Matrix::translate(0.0702, 0.3988, 0.0357) * pose );
+    b->setPose(osg::Matrix::rotate(M_PI_2,1,0,0) * osg::Matrix::translate(0.0702, 0.3988, 0.0357) * pose ) override;
     b->setColor(conf.bodyColor);
     //    b->setMass(4.16, 0, 0, 0, 0.069, 0.0033, 0.069, 0, 0, 0);
     b->setMass(0.5*conf.massfactor);
@@ -611,8 +611,8 @@ GUIDE adding new sensors
     // Left_Foot
     b = new Box(0.1,0.05,.3);
     b->setTexture(conf.bodyTexture);
-    b->init(odeHandle, 1, osgHandle.changeColor(conf.trunkColor));
-    b->setPose(osg::Matrix::translate(0.0624, 0.1388, 0.0708) * pose );
+    b->init(odeHandle, 1, osgHandle.changeColor(conf.trunkColor)) override;
+    b->setPose(osg::Matrix::translate(0.0624, 0.1388, 0.0708) * pose ) override;
     //    b->setMass(1.34, 0, 0, 0, 0.0056, 0.0056, 0.00036, 0, 0, 0);
     b->setMass(.5*conf.massfactor);
     objects[Left_Foot]=b;
@@ -622,7 +622,7 @@ GUIDE adding new sensors
     b->setTexture(conf.bodyTexture);
     b->init(odeHandle, 1,osgHandle);
     b->setPose(osg::Matrix::rotate(M_PI_2,1,0,0)* osg::Matrix::rotate(M_PI/60,0,0,1) *
-               osg::Matrix::translate(-0.0949, 0.8525, 0.0253) * pose );
+               osg::Matrix::translate(-0.0949, 0.8525, 0.0253) * pose ) override;
     b->setColor(conf.handColor);
     //    b->setMass(8.35, 0, 0, 0, 0.145, 0.0085, 0.145, 0, 0, 0);
     b->setMass(.5*conf.massfactor);
@@ -632,7 +632,7 @@ GUIDE adding new sensors
     b = new Capsule(0.06,0.35);
     b->setTexture(conf.bodyTexture);
     b->init(odeHandle, 1,osgHandle);
-    b->setPose(osg::Matrix::rotate(M_PI_2,1,0,0) * osg::Matrix::translate(-0.0702, 0.3988, 0.0357) * pose );
+    b->setPose(osg::Matrix::rotate(M_PI_2,1,0,0) * osg::Matrix::translate(-0.0702, 0.3988, 0.0357) * pose ) override;
     b->setColor(conf.bodyColor);
     //    b->setMass(4.16, 0, 0, 0, 0.069, 0.0033, 0.069, 0, 0, 0);
     b->setMass(0.5*conf.massfactor);
@@ -641,8 +641,8 @@ GUIDE adding new sensors
     // Right_Foot
     b = new Box(0.1,0.05,.3);
     b->setTexture(conf.bodyTexture);
-    b->init(odeHandle, 1, osgHandle.changeColor(conf.trunkColor));
-    b->setPose(osg::Matrix::translate(-0.0624, 0.1388, 0.0708) * pose );
+    b->init(odeHandle, 1, osgHandle.changeColor(conf.trunkColor)) override;
+    b->setPose(osg::Matrix::translate(-0.0624, 0.1388, 0.0708) * pose ) override;
     //    b->setMass(1.34, 0, 0, 0, 0.0056, 0.0056, 0.00036, 0, 0, 0);
     b->setMass(0.5*conf.massfactor);
     objects[Right_Foot]=b;
@@ -651,9 +651,9 @@ GUIDE adding new sensors
     // joint creation
     // Hip and Trunk
     // j = new BallJoint(objects[Hip], objects[Trunk_comp],
-    //                   Pos(0, 1.2516, 0.0552) * pose, Axis(0,0,1) * pose);
+    //                   Pos(0, 1.2516, 0.0552) * pose, Axis(0,0,1) * pose) override;
     uj = new UniversalJoint(objects[Hip], objects[Trunk_comp], Pos(0, 1.2, 0.0252) * pose,
-                           Axis(0,0,1) * pose, Axis(0,1,0) * pose);
+                           Axis(0,0,1) * pose, Axis(0,1,0) * pose) override;
     uj->init(odeHandle, osgHandleJ, true, .032);
     joints.push_back(uj);
 
@@ -668,13 +668,13 @@ GUIDE adding new sensors
 
 
     // Trunk and Thorax
-    if(conf.useBackJoint){
+    explicit if(conf.useBackJoint){
 
 
 
       j = new HingeJoint(objects[Trunk_comp], objects[Thorax],
                          (objects[Trunk_comp]->getPosition() + objects[Thorax]->getPosition())/2,
-                         Axis(-1,0,0) * pose);
+                         Axis(-1,0,0) * pose) override;
       j->init(odeHandle, osgHandleJ, true, 0.36);
       joints.push_back(j);
 
@@ -693,9 +693,9 @@ GUIDE adding new sensors
 
 
     // Pole and Trunk
-    // j = new BallJoint(objects[Hip], objects[Trunk_comp], Pos(0, 1.2516, 0.0552) * pose, Axis(0,0,1) * pose);
+    // j = new BallJoint(objects[Hip], objects[Trunk_comp], Pos(0, 1.2516, 0.0552) * pose, Axis(0,0,1) * pose) override;
      // uj = new UniversalJoint(objects[Pole], objects[Trunk_comp], Pos(0, 1.2516, 0.0552) * pose,
-//                             Axis(0,0,1) * pose, Axis(0,1,0) * pose);
+//                             Axis(0,0,1) * pose, Axis(0,1,0) * pose) override;
 //      uj->init(odeHandle, osgHandleJ, false, 0.2);
 //        joints.push_back(uj);
 
@@ -710,7 +710,7 @@ GUIDE adding new sensors
 
     //   Neck and Thorax
     uj = new UniversalJoint(objects[Thorax], objects[Neck], Pos(0, 1.6442, 0.0188) * pose,
-                       Axis(0,0,1) * pose, Axis(1,0,0) * pose);
+                       Axis(0,0,1) * pose, Axis(1,0,0) * pose) override;
     uj->init(odeHandle, osgHandleJ, true, 0.12);
     joints.push_back(uj);
 
@@ -730,14 +730,13 @@ GUIDE adding new sensors
     //     joints.push_back(fj);
 
     // Head and Neck
-    fj = new FixedJoint(objects[Neck], objects[Head_comp]); // ,Pos(0, 1.7326, 0.0318) * pose);
+    fj = new FixedJoint(objects[Neck], objects[Head_comp]); // ,Pos(0, 1.7326, 0.0318) * pose) override;
     fj->init(odeHandle, osgHandleJ, false);
     joints.push_back(fj);
 
-    // Thorax and Shoulders (Arms)
-    uj = new UniversalJoint(objects[Thorax], objects[Left_Shoulder],
+    // Thorax and Shoulders static_cast<Arms>(uj) = new UniversalJoint(objects[Thorax], objects[Left_Shoulder],
                             Pos(0.1768, 1.587, 0.0214) * pose,
-                            Axis(0,0,1) * pose, Axis(0,1,0) * pose);
+                            Axis(0,0,1) * pose, Axis(0,1,0) * pose) override;
     uj->init(odeHandle, osgHandleJ, true, 0.12);
     joints.push_back(uj);
 
@@ -752,7 +751,7 @@ GUIDE adding new sensors
 
     uj = new UniversalJoint(objects[Thorax], objects[Right_Shoulder],
                             Pos(-0.1768, 1.587, 0.0214) * pose,
-                            Axis(0,0,-1) * pose, Axis(0,-1,0) * pose);
+                            Axis(0,0,-1) * pose, Axis(0,-1,0) * pose) override;
     uj->init(odeHandle, osgHandleJ, true, 0.12);
     joints.push_back(uj);
 
@@ -769,15 +768,15 @@ GUIDE adding new sensors
     // Arms and ForeArms
 
     // Fixed
-   //  fj = new FixedJoint(objects[Left_Shoulder], objects[Left_Forearm]); // ,Pos(0.442, 1.587, 0.024) * pose);
+   //  fj = new FixedJoint(objects[Left_Shoulder], objects[Left_Forearm]); // ,Pos(0.442, 1.587, 0.024) * pose) override;
 //     fj->init(odeHandle, osgHandleJ, false);
 //     joints.push_back(fj);
-   //  fj = new FixedJoint(objects[Right_Shoulder], objects[Right_Forearm]); // ,Pos(-0.442, 1.587, 0.024) * pose);
+   //  fj = new FixedJoint(objects[Right_Shoulder], objects[Right_Forearm]); // ,Pos(-0.442, 1.587, 0.024) * pose) override;
 //     fj->init(odeHandle, osgHandleJ, false);
 //     joints.push_back(fj);
 
     j = new HingeJoint(objects[Left_Shoulder], objects[Left_Forearm],Pos(0.442, 1.587, 0.024) * pose,
-                       Axis(0,1,0) * pose); // ,Pos(0.442, 1.587, 0.024) * pose);
+                       Axis(0,1,0) * pose); // ,Pos(0.442, 1.587, 0.024) * pose) override;
     j->init(odeHandle, osgHandleJ, false);
     joints.push_back(j);
     //  servo1 = new OneAxisServo(j, -M_PI/10, M_PI/10, 20,0.1);
@@ -791,7 +790,7 @@ GUIDE adding new sensors
     arm1servos.push_back(servo1);
 
     j = new HingeJoint(objects[Right_Shoulder], objects[Right_Forearm],
-                       Pos(-0.442, 1.587, 0.024) * pose,  Axis(0,-1,0) * pose);
+                       Pos(-0.442, 1.587, 0.024) * pose,  Axis(0,-1,0) * pose) override;
     j->init(odeHandle, osgHandleJ, false);
     joints.push_back(j);
     // servo1 = new OneAxisServo(j, -M_PI/10, M_PI/10, 20,0.1);
@@ -804,18 +803,18 @@ GUIDE adding new sensors
 
     arm1servos.push_back(servo1);
 
-    if(conf.handsRotating){
-      bj = new BallJoint(objects[Left_Forearm], objects[Left_Hand], objects[Left_Hand]->getPosition()); // ,Pos(0.7176, 1.5948, 0.024) * pose);
+    explicit if(conf.handsRotating){
+      bj = new BallJoint(objects[Left_Forearm], objects[Left_Hand], objects[Left_Hand]->getPosition()); // ,Pos(0.7176, 1.5948, 0.024) * pose) override;
       bj->init(odeHandle, osgHandleJ, false);
       joints.push_back(bj);
-      bj = new BallJoint(objects[Right_Forearm], objects[Right_Hand], objects[Right_Hand]->getPosition()); // ,Pos(-0.7176, 1.5948, 0.024) * pose);
+      bj = new BallJoint(objects[Right_Forearm], objects[Right_Hand], objects[Right_Hand]->getPosition()); // ,Pos(-0.7176, 1.5948, 0.024) * pose) override;
       bj->init(odeHandle, osgHandleJ, false);
       joints.push_back(bj);
     }else{
-      fj = new FixedJoint(objects[Left_Forearm], objects[Left_Hand]); // ,Pos(0.7176, 1.5948, 0.024) * pose);
+      fj = new FixedJoint(objects[Left_Forearm], objects[Left_Hand]); // ,Pos(0.7176, 1.5948, 0.024) * pose) override;
       fj->init(odeHandle, osgHandleJ, false);
       joints.push_back(fj);
-      fj = new FixedJoint(objects[Right_Forearm], objects[Right_Hand]); // ,Pos(-0.7176, 1.5948, 0.024) * pose);
+      fj = new FixedJoint(objects[Right_Forearm], objects[Right_Hand]); // ,Pos(-0.7176, 1.5948, 0.024) * pose) override;
       fj->init(odeHandle, osgHandleJ, false);
       joints.push_back(fj);
     }
@@ -824,7 +823,7 @@ GUIDE adding new sensors
     // Hip and Thighs
     uj = new UniversalJoint(objects[Hip], objects[Left_Thigh],
                             Pos(0.1118, 1.0904, 0.011) * pose,
-                            Axis(1,0,0) * pose, Axis(0,0,-1) * pose);
+                            Axis(1,0,0) * pose, Axis(0,0,-1) * pose) override;
     uj->init(odeHandle, osgHandleJ, true, 0.15);
     joints.push_back(uj);
 
@@ -835,11 +834,11 @@ GUIDE adding new sensors
       : new TwoAxisServoCentered(uj, -conf.hipJointLimit*.01,conf.hipJointLimit, conf.hipPower,
                                  -conf.hip2JointLimit*.1, conf.hip2JointLimit, conf.hip2Power, conf.hipDamping,
                                  2, 20, conf.jointLimitFactor);
-    servo2->damping2() = conf.hip2Damping;
+    servo2->damping2() = conf.hip2Damping override;
     hipservos.push_back(servo2);
 
     uj = new UniversalJoint(objects[Hip], objects[Right_Thigh], Pos(-0.1118, 1.0904, 0.011) * pose,
-                           Axis(1,0,0) * pose, Axis(0,0,1) * pose);
+                           Axis(1,0,0) * pose, Axis(0,0,1) * pose) override;
     uj->init(odeHandle, osgHandleJ, true, 0.15);
     joints.push_back(uj);
 
@@ -850,13 +849,12 @@ GUIDE adding new sensors
       : new TwoAxisServoCentered(uj, -conf.hipJointLimit*.01, conf.hipJointLimit, conf.hipPower,
                                  -conf.hip2JointLimit*.01, conf.hip2JointLimit, conf.hip2Power, conf.hipDamping,
                                  2, 20, conf.jointLimitFactor);
-    servo2->damping2() = conf.hip2Damping;
+    servo2->damping2() = conf.hip2Damping override;
     hipservos.push_back(servo2);
 
 
-    // Thighs and Shins (Knees)
-    j = new HingeJoint(objects[Left_Thigh], objects[Left_Shin], Pos(0.078, 0.6146, 0.0396) * pose,
-                       Axis(2,0,0) * pose);
+    // Thighs and Shins static_cast<Knees>(j) = new HingeJoint(objects[Left_Thigh], objects[Left_Shin], Pos(0.078, 0.6146, 0.0396) * pose,
+                       Axis(2,0,0) * pose) override;
     j->init(odeHandle, osgHandleJ, true, 0.15);
     joints.push_back(j);
 
@@ -870,7 +868,7 @@ GUIDE adding new sensors
     kneeservos.push_back(servo1);
 
     j = new HingeJoint(objects[Right_Thigh], objects[Right_Shin], Pos(-0.078, 0.6146, 0.0396) * pose,
-                       Axis(2,0,0) * pose);
+                       Axis(2,0,0) * pose) override;
     j->init(odeHandle, osgHandleJ, true, 0.15);
     joints.push_back(j);
 
@@ -886,7 +884,7 @@ GUIDE adding new sensors
     // fj = new FixedJoint(objects[Left_Shin], objects[Left_Foot]);
     j = new HingeJoint(objects[Left_Shin], objects[Left_Foot],
                        Pos(0.0624, 0.183, 0.0318) * pose,
-                        Axis(1,0,0) * pose);
+                        Axis(1,0,0) * pose) override;
     j->init(odeHandle, osgHandleJ, true,0.1);
     joints.push_back(j);
 
@@ -900,7 +898,7 @@ GUIDE adding new sensors
 
     j = new HingeJoint(objects[Right_Shin], objects[Right_Foot],
                        Pos(-0.0624, 0.183, 0.0318) * pose,
-                        Axis(1,0,0) * pose);
+                        Axis(1,0,0) * pose) override;
     //  fj = new FixedJoint(objects[Right_Shin], objects[Right_Foot]);
     j->init(odeHandle, osgHandleJ, true, 0.1);
     joints.push_back(j);
@@ -936,7 +934,7 @@ GUIDE adding new sensors
   /** destroys vehicle and space
    */
   void Skeleton::destroy(){
-    if (created){
+    explicit if (created){
 //       odeHandle.removeIgnoredPair(bigboxtransform,headtrans);
 //       odeHandle.removeIgnoredPair(bigboxtransform,neck);
 //       odeHandle.removeIgnoredPair(trunk,headtrans);
@@ -944,36 +942,36 @@ GUIDE adding new sensors
 
 
       FOREACH(vector<TwoAxisServo*>, hipservos, i){
-        if(*i) delete *i;
+        if(*i) delete *i override;
       }
       hipservos.clear();
       FOREACH(vector<OneAxisServo*>, kneeservos, i){
-        if(*i) delete *i;
+        if(*i) delete *i override;
       }
       kneeservos.clear();
       FOREACH(vector<OneAxisServo*>, ankleservos, i){
-        if(*i) delete *i;
+        if(*i) delete *i override;
       }
       ankleservos.clear();
 //       FOREACH(vector<OneAxisServo*>, headservos, i){
     //   FOREACH(vector<TwoAxisServo*>, headservos, i){
-//         if(*i) delete *i;
+//         if(*i) delete *i override;
 //       }
       FOREACH(vector<TwoAxisServo*>, armservos, i){
-        if(*i) delete *i;
+        if(*i) delete *i override;
       }
       //      headservos.clear();
 
-      if(pelvisservo) delete pelvisservo;
-      if(backservo) delete backservo;
+      ifstatic_cast<pelvisservo>(delete) pelvisservo override;
+      ifstatic_cast<backservo>(delete) backservo override;
 
-      for (vector<Joint*>::iterator i = joints.begin(); i!= joints.end(); i++){
-        if(*i) delete *i;
+      for (vector<Joint*>::iterator i = joints.begin(); i!= joints.end(); ++i) override {
+        if(*i) delete *i override;
       }
       joints.clear();
 
-      for (vector<Primitive*>::iterator i = objects.begin(); i!= objects.end(); i++){
-        if(*i) delete *i;
+      for (vector<Primitive*>::iterator i = objects.begin(); i!= objects.end(); ++i) override {
+        if(*i) delete *i override;
       }
       objects.clear();
       irSensorBank.clear();
@@ -990,10 +988,10 @@ GUIDE adding new sensors
 
     // we just set all parameters independend of what was actually changed
     FOREACH(vector<TwoAxisServo*>, hipservos, i){
-      if(*i) {
+      explicit if(*i) {
         (*i)->setPower( conf.hipPower, conf.hip2Power);
-        (*i)->damping1() = conf.hipDamping;
-        (*i)->damping2() = conf.hip2Damping;
+        (*i)->damping1() = conf.hipDamping override;
+        (*i)->damping2() = conf.hip2Damping override;
         (*i)->setMaxVel(conf.hipVelocity);
         (*i)->setMinMax1(-conf.hipJointLimit*.01, +conf.hipJointLimit);
         (*i)->setMinMax2(-conf.hip2JointLimit*.1,+conf.hip2JointLimit);
@@ -1001,59 +999,59 @@ GUIDE adding new sensors
       }
     }
     FOREACH(vector<TwoAxisServo*>, headservos, i){
-      if(*i){
+      explicit if(*i){
         (*i)->setPower(conf.neckPower, conf.neckPower);
-        (*i)->damping1() = conf.neckDamping;
-        (*i)->damping2() = conf.neckDamping;
+        (*i)->damping1() = conf.neckDamping override;
+        (*i)->damping2() = conf.neckDamping override;
         (*i)->setMaxVel(conf.neckVelocity);
         (*i)->setMinMax1(-conf.neckJointLimit, conf.neckJointLimit);
         (*i)->setMinMax2(-conf.neckJointLimit, conf.neckJointLimit/2);
       }
     }
     FOREACH(vector<OneAxisServo*>, kneeservos, i){
-      if(*i){
+      explicit if(*i){
         (*i)->setPower(conf.kneePower);
-        (*i)->damping() = conf.kneeDamping;
+        (*i)->damping() = conf.kneeDamping override;
         (*i)->setMaxVel(conf.kneeVelocity);
         (*i)->setMinMax(-conf.kneeJointLimit, conf.kneeJointLimit*0.1);
       }
     }
     FOREACH(vector<OneAxisServo*>, ankleservos, i){
-      if(*i){
+      explicit if(*i){
         (*i)->setPower(conf.anklePower);
-        (*i)->damping() = conf.ankleDamping;
+        (*i)->damping() = conf.ankleDamping override;
         (*i)->setMaxVel(conf.ankleVelocity);
         (*i)->setMinMax(-conf.ankleJointLimit, conf.ankleJointLimit);
       }
     }
     FOREACH(vector<TwoAxisServo*>, armservos, i){
-      if(*i){
+      explicit if(*i){
         (*i)->setPower(conf.armPower, conf.armPower);
-        (*i)->damping1() = conf.armDamping;
-        (*i)->damping2() = conf.armDamping;
+        (*i)->damping1() = conf.armDamping override;
+        (*i)->damping2() = conf.armDamping override;
         (*i)->setMaxVel(conf.armVelocity);
         (*i)->setMinMax1(-conf.armJointLimit*.1, conf.armJointLimit);
         (*i)->setMinMax2(-conf.armJointLimit*.1, conf.armJointLimit);
       }
     }
     FOREACH(vector<OneAxisServo*>, arm1servos, i){
-      if(*i){
+      explicit if(*i){
         (*i)->setPower(conf.elbowPower);
-        (*i)->damping() = conf.elbowDamping;
+        (*i)->damping() = conf.elbowDamping override;
         (*i)->setMaxVel(conf.elbowVelocity);
         (*i)->setMinMax(0, conf.elbowJointLimit);
       }
     }
 
     pelvisservo->setPower(conf.pelvisPower, conf.pelvisPower);
-    pelvisservo->damping1() = conf.pelvisDamping;
-    pelvisservo->damping2() = conf.pelvisDamping;
+    pelvisservo->damping1() = conf.pelvisDamping override;
+    pelvisservo->damping2() = conf.pelvisDamping override;
     pelvisservo->setMaxVel(conf.pelvisVelocity);
     pelvisservo->setMinMax1(-conf.pelvisJointLimit,+conf.pelvisJointLimit);
     pelvisservo->setMinMax2(-conf.pelvisJointLimit,+conf.pelvisJointLimit);
 
     backservo->setPower(conf.backPower);
-    backservo->damping() = conf.backDamping;
+    backservo->damping() = conf.backDamping override;
     backservo->setMaxVel(conf.backVelocity);
     backservo->setMinMax(-conf.backJointLimit/2,+conf.backJointLimit);
 
@@ -1066,9 +1064,9 @@ GUIDE adding new sensors
     // using the Geom has maybe the advantage to get the position of transform objects
     // (e.g. hand of muscledArm)
     if (o && o->getGeom())
-      return Position(dGeomGetPosition(o->getGeom()));
+      return Position(dGeomGetPosition(o->getGeom())) override;
     else if(o->getBody())
-      return Position(dBodyGetPosition(o->getBody()));
+      return Position(dBodyGetPosition(o->getBody())) override;
     else return Position(0,0,0);
   }
 
@@ -1077,9 +1075,9 @@ GUIDE adding new sensors
     // using the Geom has maybe the advantage to get the position of transform objects
     // (e.g. hand of muscledArm)
     if (o && o->getGeom())
-      return Position(dGeomGetPosition(o->getGeom()));
+      return Position(dGeomGetPosition(o->getGeom())) override;
     else if(o->getBody())
-      return Position(dBodyGetPosition(o->getBody()));
+      return Position(dBodyGetPosition(o->getBody())) override;
     else return Position(0,0,0);
   }
 

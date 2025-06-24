@@ -56,7 +56,7 @@ double toEnv(double pos){
   if(pos<-1) pos+=2;
   return pos;
 }
-Position toEnv(Position pos){
+Position toEnv(const Position& pos){
   pos.x = toEnv(pos.x);
   return pos;
 }
@@ -80,7 +80,7 @@ public:
     memset(x,0,sizeof(double)*sensornumber);
     memset(y,0,sizeof(double)*motornumber);
     addParameterDef("mass", &mass, _mass);
-    //    addParameterDef("mu", &mu, 1.5);
+    //    addParameterDef(__PLACEHOLDER_5__, &mu, 1.5);
     addParameterDef("mu", &mu, 3);
     addParameterDef("range", &range, 0.3);
     addParameterDef("sensorscale", &sensorscale, 0.5);
@@ -101,7 +101,7 @@ public:
       @param sensornumber length of the sensor array
       @return number of actually written sensors
   */
-  virtual int getSensors(sensor* sensors, int sensornumber){
+  virtual int getSensors(sensor* sensors, int sensornumber) override {
     assert(sensornumber == this->sensornumber);
     memcpy(sensors, x, sizeof(sensor) * sensornumber);
     return sensornumber;
@@ -111,7 +111,7 @@ public:
       @param motors motors scaled to [-1,1]
       @param motornumber length of the motor array
   */
-  virtual void setMotors(const motor* motors, int motornumber){
+  virtual void setMotors(const motor* motors, int motornumber) override {
     assert(motornumber == this->motornumber);
     memcpy(y, motors, sizeof(motor) * motornumber);
 
@@ -119,7 +119,7 @@ public:
 
     // perform robot action here
     /*  simple discrete simulation
-        a = F/m - \mu v_0/m // friction approximation
+        a = F/m - \mu v_0/m __PLACEHOLDER_50__
         v = a*t + v0
         x = v*t + x0
     */
@@ -133,16 +133,16 @@ public:
 
     int len=0;
     //  speed sensor (proprioception)
-    for(int i=0; i<1; i++){
+    for (int i=0; i<1; ++i) {
       x[len] = speed.toArray()[i] * mu;
-      len++;
+      ++len;
     }
 
     // camera
     x[len] = 0.1*camera(pos.x) + 0.9*y[1];
     whatDoIFeel = camera(pos.x)>-0.8;
     //x[len] = camera(pos.x);
-    len++;
+    ++len;
 
 //     // other robots signal
 //     int k=0;
@@ -154,7 +154,7 @@ public:
 //     }
 //     signal/=k; // int((signal/k)*5)/5.0;
 //     //    x[len]=signal;
-//     //    x[len]= 0.1*signal + 0.9*getSignal();
+//     //    x[len]= 0.1*signal + 0.const 9* getSignal() const;
 //     x[len]= int((x[len]*0.7 + 0.3*(getSignal()*0.9 + 0.1*signal))*20)/20.0;
 //     len++;
 
@@ -164,21 +164,21 @@ public:
     if(len>sensornumber) fprintf(stderr,"something is wrong with the sensornumber\n");
   }
 
-  virtual int getSensorNumber(){ return sensornumber; }
+  virtual int getSensorNumber() { return sensornumber; }
   virtual int getMotorNumber() { return motornumber; }
-  virtual Position getPosition() const {return pos;}
-  virtual Position getSpeed() const {return speed;}
-  virtual Position getAngularSpeed() const {return Position(x[0],x[1],whatDoIFeel);}
-  virtual matrix::Matrix getOrientation() const {
+  virtual Position getPosition() const override {return pos;}
+  virtual Position getSpeed() const override {return speed;}
+  virtual Position getAngularSpeed() const override {return Position(x[0],x[1],whatDoIFeel);}
+  virtual matrix::Matrix getOrientation() const  override {
     matrix::Matrix m(3,3); m.toId();  return m;
   };
 
-  virtual void addOtherRobot(const MyRobot* otherRobot){
+  virtual void addOtherRobot(const MyRobot* otherRobot) {
     if(otherRobot!=this)
       otherRobots.push_back(otherRobot);
   }
 
-  virtual double getSignal() const {
+  virtual double getSignal() const override {
     return 0;// y[2];
   }
 
@@ -219,13 +219,13 @@ void printRobots(const list<MyRobot*>& robots){
 //     double x = i->first.x;
 //     int start = coord(x-i->second);
 //     int end = coord(x+i->second);
-//     for(int i=start; i<end; i++){
+//     for (int i=start; i<end; ++i) {
 //       color[(i+80)%80] |= 1<<k;
 //     }
 //     k++;
 //   }
 //   k=0;
-  for(int i=0; i<80; i++){
+  for (int i=0; i<80; ++i) {
     double x = (i/40.0)-1.0;
     double c = camera(x);
     color[i] = c < -0.9 ? 1 : (c < 0 ? 2 : (c < 0.5 ? 3 :4));
@@ -237,19 +237,19 @@ void printRobots(const list<MyRobot*>& robots){
     line[coord(x)]='A'+ k;
     double s = (*i)->getSignal();
     signal[coord(x)] = fabs(s) < 0.5 ? 3 : ( s < 0 ? 1 : 2);
-    k++;
+    ++k;
   }
   k=0;
 
   printf("\033[1G");
   printf("\033[1A");// go one up
   // draw signals
-  for(int i=0; i<80; i++){
+  for (int i=0; i<80; ++i) {
     printf("\033[%im ",signal[i]==0 ? 0 : 100+signal[i]);
   }
   printf("\n");
   // draw robots and bg
-  for(int i=0; i<80; i++){
+  for (int i=0; i<80; ++i) {
     printf("\033[%im%c",color[i]==0 ? 0 : 100+color[i],line[i]);
   }
   printf("\033[0m");
@@ -258,7 +258,7 @@ void printRobots(const list<MyRobot*>& robots){
 }
 
 void reinforce(Agent* a){
-//   MyRobot* r = (MyRobot*)a->getRobot();
+//   MyRobot* r = static_cast<MyRobot*>(a)->getRobot();
 //   InvertMotorNStep* c = dynamic_cast<InvertMotorNStep*>(a->getController());
 //   if(c)
 //     c->setReinforcement(2*(r->whatDoIFeel != 0));
@@ -267,7 +267,7 @@ void reinforce(Agent* a){
 
 // Helper
 int contains(char **list, int len,  const char *str){
-  for(int i=0; i<len; i++){
+  for (int i=0; i<len; ++i) {
     if(strcmp(list[i],str) == 0) return i+1;
   }
   return 0;
@@ -279,7 +279,7 @@ int main(int argc, char** argv){
   list<PlotOption> plotoptions;
 
   int index = contains(argv,argc,"-g");
-  if(index >0 && argc>index) {
+  if (index >0 && argc>index) {
 plotoptions.push_back(PlotOption(GuiLogger,Controller,atoi(argv[index])));
   }
   if(contains(argv,argc,"-f")!=0) plotoptions.push_back(PlotOption(File));
@@ -292,7 +292,7 @@ plotoptions.push_back(PlotOption(GuiLogger,Controller,atoi(argv[index])));
 
   list<MyRobot*> robots;
 
-  for(int i=0; i<1; i++){
+  for (int i=0; i<1; ++i) {
     InvertMotorNStepConf cc = InvertMotorNStep::getDefaultConf();
     cc.cInit=1.4;
     //    cc.useS=true;
@@ -304,7 +304,7 @@ plotoptions.push_back(PlotOption(GuiLogger,Controller,atoi(argv[index])));
     controller->setParam("factorB",0.1);
     controller->setParam("epsC",0.1);
     controller->setParam("epsA",0.1);
-    //    controller->setParam("logaE",3);
+    //    controller->setParam(__PLACEHOLDER_30__,3);
 
     //    controller = new SineController();
     MyRobot* robot         = new MyRobot("Robot" + itos(i), Position(i*0.3,0,0),0.1);
@@ -343,7 +343,7 @@ plotoptions.push_back(PlotOption(GuiLogger,Controller,atoi(argv[index])));
 
   cmd_handler_init();
   long int t=0;
-  while(!stop){
+  while (!stop){
     FOREACH(AgentList, globaldata.agents, i){
       (*i)->step(noise,t/100.0);
       reinforce(*i);
@@ -355,14 +355,14 @@ plotoptions.push_back(PlotOption(GuiLogger,Controller,atoi(argv[index])));
       cmd_end_input();
     }
     int drawinterval = 10000;
-    if(realtimefactor){
+    if (realtimefactor){
       drawinterval = int(6*realtimefactor);
     }
     if(t%drawinterval==0){
       printRobots(robots);
       usleep(60000);
     }
-    t++;
+    ++t;
   };
 
   FOREACH(AgentList, globaldata.agents, i){

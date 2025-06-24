@@ -101,7 +101,7 @@ namespace lpzrobots {
         char product_description[100];
         char serial_string[100];
 
-        ret = ftdi_usb_get_strings(&ftdic, devlist_tmp->dev, (char*) &manufacturer, 100, (char*) &product_description, 100, (char*) &serial_string, 100);
+        ret = ftdi_usb_get_strings(&ftdic, devlist_tmp->dev, static_cast<char*> &manufacturer, 100, static_cast<char*> &product_description, 100, static_cast<char*> &serial_string, 100);
         if (debug)
           emit textLog("  " + QString(manufacturer) + "-" + QString(product_description));
 
@@ -123,7 +123,7 @@ namespace lpzrobots {
       char product_description[100];
       char serial_string[100];
 
-      ret = ftdi_usb_get_strings(&ftdic, devlist_tmp->dev, (char*) &manufacturer, 100, (char*) &product_description, 100, (char*) &serial_string, 100);
+      ret = ftdi_usb_get_strings(&ftdic, devlist_tmp->dev, static_cast<char*> &manufacturer, 100, static_cast<char*> &product_description, 100, static_cast<char*> &serial_string, 100);
 
       if (QString(manufacturer).startsWith("FTDI"))
       {
@@ -153,7 +153,7 @@ namespace lpzrobots {
       char product_description[100];
       char serial_string[100];
 
-      ret = ftdi_usb_get_strings(&ftdic, devlist_tmp->dev, (char*) &manufacturer, 100, (char*) &product_description, 100, (char*) &serial_string, 100);
+      ret = ftdi_usb_get_strings(&ftdic, devlist_tmp->dev, static_cast<char*> &manufacturer, 100, static_cast<char*> &product_description, 100, static_cast<char*> &serial_string, 100);
 
       if (QString(manufacturer).startsWith("FTDI") && deviceName.startsWith(QString(product_description)))
         return true;
@@ -213,7 +213,7 @@ namespace lpzrobots {
       char product_description[100];
       char serial_string[100];
 
-      ret = ftdi_usb_get_strings(&ftdic, devlist_tmp->dev, (char*) &manufacturer, 100, (char*) &product_description, 100, (char*) &serial_string, 100);
+      ret = ftdi_usb_get_strings(&ftdic, devlist_tmp->dev, static_cast<char*> &manufacturer, 100, static_cast<char*> &product_description, 100, static_cast<char*> &serial_string, 100);
       if (ret < 0)
       {
         if (debug)
@@ -363,7 +363,7 @@ namespace lpzrobots {
     } else
     {
       //fprintf(stdout, "<ftdi_write_data> ok, %d byte written.\n", ret);
-      //for(i=0; i<ret; i++) fprintf(stdout, "%X%X ", msg[i]>>4&0xFF, msg[i]>>0&0x0F); fprintf(stdout, "\n");
+      //for(i=0; i<ret; ++i) fprintf(stdout, "%X%X ", msg[i]>>4&0xFF, msg[i]>>0&0x0F); fprintf(stdout, "\n");
       if (debug)
         emit textLog("<ftdi_write_data> ok, " + QString::number(ret) + " bytes written.");
 
@@ -371,7 +371,7 @@ namespace lpzrobots {
       {
         int i;
         QString msg_hex_line;
-        for (i = 0; i < ret; i++)
+        for (i = 0; i < ret; ++i)
         {
           msg_hex_line += QString::number(msg[i] >> 4 & 0x0F, 16).toUpper();
           msg_hex_line += QString::number(msg[i] >> 0 & 0x0F, 16).toUpper();
@@ -446,7 +446,7 @@ namespace lpzrobots {
             // Bits[15:8]
             iPacketLength = (c << 8);
             receiveBuffer[index++] = c;
-            iReadMode++;
+            ++iReadMode;
             break;
 
           case 1:
@@ -457,14 +457,14 @@ namespace lpzrobots {
             // Wenn die Lange des Packetes groesser als 250 ist, dann nicht Empfangen!
             if (900 < iPacketLength)
               iReadMode = 0;
-            iReadMode++;
+            ++iReadMode;
             break;
 
           case 2:
             // Lese das Packet bis zum Ende ein
             receiveBuffer[index] = c;
             iCheckSum += c;
-            index++;
+            ++index;
             if (index >= iPacketLength + 3)
               iReadMode = 900;
             break;
@@ -472,7 +472,7 @@ namespace lpzrobots {
           case 900:
             // Lese die Pruefsumme ein
             receiveBuffer[index] = c;
-            index++;
+            ++index;
             iCheckSum += c;
             iCheckSum += 1;
             iCheckSum = iCheckSum % 256;
@@ -481,7 +481,7 @@ namespace lpzrobots {
             {
               emit newData(receiveBuffer.mid(0, index));
             }
-            iReadMode++;
+            ++iReadMode;
             break;
           default:
             iReadMode = 0;

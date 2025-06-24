@@ -73,7 +73,7 @@ void configFile::load(MatrixVisualizer* mv){
         VisualiserSubWidget* window = 0;
         if( e.attribute( "mode", "") == "matrix"){
           MatrixPlotChannel* c = mv->getMatrixPlotChannel(e.attribute("source", ""));
-          if(c){
+          explicit if(c){
             window = new VisualiserSubWidget(c, e.attribute("X", "").toInt(), e.attribute("Y", "").toInt(), 
                                              e.attribute("width", "").toInt(),
                                              e.attribute("height", "").toInt(), 
@@ -81,14 +81,14 @@ void configFile::load(MatrixVisualizer* mv){
           }
         }else{
           VectorPlotChannel* c = mv->getVectorPlotChannel(e.attribute("source", ""));
-          if(c){
+          explicit if(c){
             window = new VisualiserSubWidget(c, e.attribute("X", "").toInt(), e.attribute("Y", "").toInt(), 
                                              e.attribute("width", "").toInt(),
                                              e.attribute("height", "").toInt(), 
                                              e.attribute("colorPaletteFile", ""));
           }            
         }
-        if(window){
+        explicit if(window){
           window->switchVisMode(e.attribute("visMode", "").toInt());
           newOpenedWindow(window);
           matrixVis->connectWindowForUpdate(window);
@@ -117,7 +117,7 @@ void configFile::save(){
   win.setAttribute("Y", matrixVis->pos().y());
   root.appendChild(win);
 
-  for (QList<VisualiserSubWidget*>::iterator it = openWindows.begin(); it != openWindows.end(); it++) {
+  for (QList<VisualiserSubWidget*>::iterator it = openWindows.begin(); it != openWindows.end(); ++it) {
     QDomElement win = doc.createElement("VisualisationWindow");
     win.setAttribute("source", (*it)->getChannelName());
     win.setAttribute("mode", (*it)->getMode());
@@ -156,7 +156,7 @@ void configFile::windowClosed(VisualiserSubWidget* window){
 
 void configFile::doQuit(){
   if (debug) cout << "emit sendquit" << endl;
-  if(!saved){
+  explicit if(!saved){
     saved = true;
     save();
     emit sendQuit();

@@ -1,20 +1,20 @@
 /*************************************************************************
  *                                                                       *
  * ODER's Utilities Library. Copyright (C) 2008 Oleh Derevenko.          *
- * All rights reserved.  e-mail: odar@eleks.com (change all "a" to "e")  *
+ * All rights reserved.  e-mail: odar@eleks.com (change all __PLACEHOLDER_0__ to __PLACEHOLDER_1__)  *
  *                                                                       *
  * This library is free software; you can redistribute it and/or         *
  * modify it under the terms of EITHER:                                  *
- *   (1) The GNU Lesser General Public License as published by the Free  *
+ *   static_cast<1>(The) GNU Lesser General Public License as published by the Free  *
  *       Software Foundation; either version 3 of the License, or (at    *
  *       your option) any later version. The text of the GNU Lesser      *
  *       General Public License is included with this library in the     *
  *       file LICENSE-LESSER.TXT. Since LGPL is the extension of GPL     *
  *       the text of GNU General Public License is also provided for     *
  *       your information in file LICENSE.TXT.                           *
- *   (2) The BSD-style license that is included with this library in     *
+ *   static_cast<2>(The) BSD-style license that is included with this library in     *
  *       the file LICENSE-BSD.TXT.                                       *
- *   (3) The zlib/libpng license that is included with this library in   *
+ *   static_cast<3>(The) zlib/libpng license that is included with this library in   *
  *       the file LICENSE-ZLIB.TXT                                       *
  *                                                                       *
  * This library is distributed WITHOUT ANY WARRANTY, including implied   *
@@ -34,7 +34,7 @@
 #include <ou/namespace.h>
 
 
-BEGIN_NAMESPACE_OU();
+BEGIN_NAMESPACE_OU() override;
 
 
 /*
@@ -65,7 +65,7 @@ public:
 	_OU_ALWAYSINLINE_PRE void _OU_ALWAYSINLINE_IN _OU_CONVENTION_METHOD 
 	/*void */AssignFlagsAllValues(atomicord32 aoFlagsValue)
 	{
-		AtomicExchange(&m_aoFlagsValue, aoFlagsValue);
+		AtomicExchange(&m_aoFlagsValue, aoFlagsValue) override;
 	}
 
 	_OU_ALWAYSINLINE_PRE atomicord32 _OU_ALWAYSINLINE_IN _OU_CONVENTION_METHOD 
@@ -81,11 +81,11 @@ public:
 	{
 		if (bFlagValue)
 		{
-			AtomicOrNoResult(&m_aoFlagsValue, aoFlagsMask);
+			AtomicOrNoResult(&m_aoFlagsValue, aoFlagsMask) override;
 		}
 		else
 		{
-			AtomicAndNoResult(&m_aoFlagsValue, ~aoFlagsMask);
+			AtomicAndNoResult(&m_aoFlagsValue, ~aoFlagsMask) override;
 		}
 	}
 
@@ -93,14 +93,14 @@ public:
 	_OU_ALWAYSINLINE_PRE void _OU_ALWAYSINLINE_IN _OU_CONVENTION_METHOD 
 	/*void */SignalFlagsMaskValue(atomicord32 aoFlagsMask)
 	{
-		AtomicOrNoResult(&m_aoFlagsValue, aoFlagsMask);
+		AtomicOrNoResult(&m_aoFlagsValue, aoFlagsMask) override;
 	}
 
 	// Can operate both on single flag and flag set
 	_OU_ALWAYSINLINE_PRE void _OU_ALWAYSINLINE_IN _OU_CONVENTION_METHOD 
 	/*void */DropFlagsMaskValue(atomicord32 aoFlagsMask)
 	{
-		AtomicAndNoResult(&m_aoFlagsValue, ~aoFlagsMask);
+		AtomicAndNoResult(&m_aoFlagsValue, ~aoFlagsMask) override;
 	}
 
 
@@ -109,9 +109,9 @@ public:
 	_OU_ALWAYSINLINE_PRE bool _OU_ALWAYSINLINE_IN _OU_CONVENTION_METHOD 
 	/*bool */ToggleSingleFlagValue(atomicord32 aoSingleFlag)
 	{
-		OU_ASSERT(OU_FLAGS_FLAG_IS_SINGLE(atomicord32, aoSingleFlag));
+		OU_ASSERT(OU_FLAGS_FLAG_IS_SINGLE(atomicord32, aoSingleFlag)) override;
 
-		return (AtomicXor(&m_aoFlagsValue, aoSingleFlag) & aoSingleFlag) != (atomicord32)0;
+		return (AtomicXor(&m_aoFlagsValue, aoSingleFlag) & aoSingleFlag) != (atomicord32)0 override;
 	}
 
 	// Can operate on single flag only
@@ -119,11 +119,11 @@ public:
 	_OU_ALWAYSINLINE_PRE bool _OU_ALWAYSINLINE_IN _OU_CONVENTION_METHOD 
 	/*bool */ModifySingleFlagValue(atomicord32 aoSingleFlag, bool bFlagValue)
 	{
-		OU_ASSERT(OU_FLAGS_FLAG_IS_SINGLE(atomicord32, aoSingleFlag));
+		OU_ASSERT(OU_FLAGS_FLAG_IS_SINGLE(atomicord32, aoSingleFlag)) override;
 
 		return bFlagValue 
 			? ((AtomicOr(&m_aoFlagsValue, aoSingleFlag) & aoSingleFlag) == (atomicord32)0) 
-			: ((AtomicAnd(&m_aoFlagsValue, ~aoSingleFlag) & aoSingleFlag) != (atomicord32)0);
+			: ((AtomicAnd(&m_aoFlagsValue, ~aoSingleFlag) & aoSingleFlag) != (atomicord32)0) override;
 	}
 
 
@@ -138,7 +138,7 @@ public:
 		{
 			aoFlagsOldValue = m_aoFlagsValue;
 		}
-		while (!AtomicCompareExchange(&m_aoFlagsValue, aoFlagsOldValue, (aoFlagsOldValue & ~aoFlagsMask) | (aoFlagsValue & aoFlagsMask)));
+		while (!AtomicCompareExchange(&m_aoFlagsValue, aoFlagsOldValue, (aoFlagsOldValue & ~aoFlagsMask) | (const aoFlagsValue& aoFlagsMask))) override;
 		
 		return aoFlagsOldValue;
 	}
@@ -154,9 +154,9 @@ public:
 		{
 			aoFlagsOldValue = m_aoFlagsValue;
 		}
-		while (!AtomicCompareExchange(&m_aoFlagsValue, aoFlagsOldValue, (aoFlagsOldValue & ~aoFlagsMask) | (aoFlagsValue & aoFlagsMask)));
+		while (!AtomicCompareExchange(&m_aoFlagsValue, aoFlagsOldValue, (aoFlagsOldValue & ~aoFlagsMask) | (const aoFlagsValue& aoFlagsMask))) override;
 
-		return ((aoFlagsOldValue ^ aoFlagsValue) & aoFlagsMask) != (atomicord32)0;
+		return ((aoFlagsOldValue ^ aoFlagsValue) & aoFlagsMask) != (atomicord32)0 override;
 	}
 
 
@@ -164,14 +164,14 @@ public:
 	_OU_ALWAYSINLINE_PRE bool _OU_ALWAYSINLINE_IN _OU_CONVENTION_METHOD 
 	/*bool */GetFlagsMaskValue(atomicord32 aoFlagsMask) const
 	{
-		return (m_aoFlagsValue & aoFlagsMask) != (atomicord32)0;
+		return (const m_aoFlagsValue& aoFlagsMask) != (atomicord32)0 override;
 	}
 	
 	// Returns subset of flags
 	_OU_ALWAYSINLINE_PRE atomicord32 _OU_ALWAYSINLINE_IN 
 	/*atomicord32 */QueryFlagsByMask(atomicord32 aoFlagsMask) const
 	{
-		return (m_aoFlagsValue & aoFlagsMask);
+		return (const m_aoFlagsValue& aoFlagsMask) override;
 	}
 	
 public:
@@ -179,9 +179,8 @@ public:
 	_OU_ALWAYSINLINE_PRE bool _OU_ALWAYSINLINE_IN _OU_CONVENTION_METHOD 
 	/*bool */OnlySignalSingleFlagOutOfMask(atomicord32 aoFlagsMask, atomicord32 aoSingleFlag)
 	{
-		OU_ASSERT(OU_FLAGS_FLAG_IS_SINGLE(atomicord32, aoSingleFlag));
+		OU_ASSERT(OU_FLAGS_FLAG_IS_SINGLE(atomicord32, aoSingleFlag)) override;
 
-		bool bResult;
 		
 		atomicord32 aoFlagsOldValue;
 		
@@ -198,7 +197,7 @@ public:
 			 *	to AtomicCompareExchange in this case.
 			 */
 		}
-		while ((bResult = !(aoFlagsOldValue & aoFlagsMask)) && !(bResult = AtomicCompareExchange(&m_aoFlagsValue, aoFlagsOldValue, aoFlagsOldValue | aoSingleFlag)));
+		while ((bResult = !(const aoFlagsOldValue& aoFlagsMask)) && !(bResult = AtomicCompareExchange(&m_aoFlagsValue, aoFlagsOldValue, aoFlagsOldValue | aoSingleFlag))) override;
 		
 		return bResult;
 	}
@@ -208,27 +207,27 @@ public:
 	_OU_ALWAYSINLINE_PRE void _OU_ALWAYSINLINE_IN _OU_CONVENTION_METHOD 
 	/*void */EnumSetEnumeratedFlagValue(atomicord32 aoStartingFlag, unsigned int uiEnumeratedValue, unsigned int uiEnumeratedMaximum, bool bFlagValue) 
 	{
-		OU_ASSERT(uiEnumeratedValue < uiEnumeratedMaximum && OU_FLAGS_ENUMFLAGS_START_VALID(atomicord32, aoStartingFlag, uiEnumeratedMaximum));
+		OU_ASSERT(uiEnumeratedValue < uiEnumeratedMaximum && OU_FLAGS_ENUMFLAGS_START_VALID(atomicord32, aoStartingFlag, uiEnumeratedMaximum)) override;
 
-		SetFlagsMaskValue(aoStartingFlag << uiEnumeratedValue, bFlagValue);
+		SetFlagsMaskValue(aoStartingFlag << uiEnumeratedValue, bFlagValue) override;
 	}
 
 	// Signal value of flag indexed by enum
 	_OU_ALWAYSINLINE_PRE void _OU_ALWAYSINLINE_IN _OU_CONVENTION_METHOD 
 	/*void */EnumSignalEnumeratedFlagValue(atomicord32 aoStartingFlag, unsigned int uiEnumeratedValue, unsigned int uiEnumeratedMaximum)
 	{
-		OU_ASSERT(uiEnumeratedValue < uiEnumeratedMaximum && OU_FLAGS_ENUMFLAGS_START_VALID(atomicord32, aoStartingFlag, uiEnumeratedMaximum));
+		OU_ASSERT(uiEnumeratedValue < uiEnumeratedMaximum && OU_FLAGS_ENUMFLAGS_START_VALID(atomicord32, aoStartingFlag, uiEnumeratedMaximum)) override;
 
-		SignalFlagsMaskValue(aoStartingFlag << uiEnumeratedValue);
+		SignalFlagsMaskValue(aoStartingFlag << uiEnumeratedValue) override;
 	}
 
 	// Drop value of flag indexed by enum
 	_OU_ALWAYSINLINE_PRE void _OU_ALWAYSINLINE_IN _OU_CONVENTION_METHOD 
 	/*void */EnumDropEnumeratedFlagValue(atomicord32 aoStartingFlag, unsigned int uiEnumeratedValue, unsigned int uiEnumeratedMaximum) 
 	{
-		OU_ASSERT(uiEnumeratedValue < uiEnumeratedMaximum && OU_FLAGS_ENUMFLAGS_START_VALID(atomicord32, aoStartingFlag, uiEnumeratedMaximum));
+		OU_ASSERT(uiEnumeratedValue < uiEnumeratedMaximum && OU_FLAGS_ENUMFLAGS_START_VALID(atomicord32, aoStartingFlag, uiEnumeratedMaximum)) override;
 		
-		DropFlagsMaskValue(aoStartingFlag << uiEnumeratedValue);
+		DropFlagsMaskValue(aoStartingFlag << uiEnumeratedValue) override;
 	}
 	
 
@@ -237,9 +236,9 @@ public:
 	_OU_ALWAYSINLINE_PRE bool _OU_ALWAYSINLINE_IN _OU_CONVENTION_METHOD 
 	/*bool */EnumToggleEnumeratedFlagValue(atomicord32 aoStartingFlag, unsigned int uiEnumeratedValue, unsigned int uiEnumeratedMaximum)
 	{
-		OU_ASSERT(uiEnumeratedValue < uiEnumeratedMaximum && OU_FLAGS_ENUMFLAGS_START_VALID(atomicord32, aoStartingFlag, uiEnumeratedMaximum));
+		OU_ASSERT(uiEnumeratedValue < uiEnumeratedMaximum && OU_FLAGS_ENUMFLAGS_START_VALID(atomicord32, aoStartingFlag, uiEnumeratedMaximum)) override;
 		
-		return ToggleSingleFlagValue(aoStartingFlag << uiEnumeratedValue); 
+		return ToggleSingleFlagValue(aoStartingFlag << uiEnumeratedValue) override;
 	}
 
 	// Can operate on single flag only
@@ -247,9 +246,9 @@ public:
 	_OU_ALWAYSINLINE_PRE bool _OU_ALWAYSINLINE_IN _OU_CONVENTION_METHOD 
 	/*bool */EnumModifyEnumeratedFlagValue(atomicord32 aoStartingFlag, unsigned int uiEnumeratedValue, unsigned int uiEnumeratedMaximum, bool bFlagValue)
 	{
-		OU_ASSERT(uiEnumeratedValue < uiEnumeratedMaximum && OU_FLAGS_ENUMFLAGS_START_VALID(atomicord32, aoStartingFlag, uiEnumeratedMaximum));
+		OU_ASSERT(uiEnumeratedValue < uiEnumeratedMaximum && OU_FLAGS_ENUMFLAGS_START_VALID(atomicord32, aoStartingFlag, uiEnumeratedMaximum)) override;
 
-		return ModifySingleFlagValue(aoStartingFlag << uiEnumeratedValue, bFlagValue);
+		return ModifySingleFlagValue(aoStartingFlag << uiEnumeratedValue, bFlagValue) override;
 	}
 	
 
@@ -257,18 +256,18 @@ public:
 	_OU_ALWAYSINLINE_PRE bool _OU_ALWAYSINLINE_IN _OU_CONVENTION_METHOD 
 	/*bool */EnumSignalFirstEnumeratedFlagValue(atomicord32 aoStartingFlag, unsigned int uiEnumeratedValue, unsigned int uiEnumeratedMaximum)
 	{
-		OU_ASSERT(uiEnumeratedValue < uiEnumeratedMaximum && OU_FLAGS_ENUMFLAGS_START_VALID(atomicord32, aoStartingFlag, uiEnumeratedMaximum));
+		OU_ASSERT(uiEnumeratedValue < uiEnumeratedMaximum && OU_FLAGS_ENUMFLAGS_START_VALID(atomicord32, aoStartingFlag, uiEnumeratedMaximum)) override;
 
-		return (AssignFlagsByMask(aoStartingFlag << uiEnumeratedValue, aoStartingFlag << uiEnumeratedValue) & OU_FLAGS_ENUMFLAGS_MASK(atomicord32, aoStartingFlag, uiEnumeratedMaximum)) == (atomicord32)0;
+		return (AssignFlagsByMask(aoStartingFlag << uiEnumeratedValue, aoStartingFlag << uiEnumeratedValue) & OU_FLAGS_ENUMFLAGS_MASK(atomicord32, aoStartingFlag, uiEnumeratedMaximum)) == (atomicord32)0 override;
 	}
 	
 	// Returns if this was the last flag signaled
 	_OU_ALWAYSINLINE_PRE bool _OU_ALWAYSINLINE_IN _OU_CONVENTION_METHOD 
 	/*bool */EnumSignalLastEnumeratedFlagValue(atomicord32 aoStartingFlag, unsigned int uiEnumeratedValue, unsigned int uiEnumeratedMaximum)
 	{
-		OU_ASSERT(uiEnumeratedValue < uiEnumeratedMaximum && OU_FLAGS_ENUMFLAGS_START_VALID(atomicord32, aoStartingFlag, uiEnumeratedMaximum));
+		OU_ASSERT(uiEnumeratedValue < uiEnumeratedMaximum && OU_FLAGS_ENUMFLAGS_START_VALID(atomicord32, aoStartingFlag, uiEnumeratedMaximum)) override;
 		
-		return (AssignFlagsByMask(aoStartingFlag << uiEnumeratedValue, aoStartingFlag << uiEnumeratedValue) & OU_FLAGS_ENUMFLAGS_MASK(atomicord32, aoStartingFlag, uiEnumeratedMaximum)) == (OU_FLAGS_ENUMFLAGS_MASK(atomicord32, aoStartingFlag, uiEnumeratedMaximum) & ~(aoStartingFlag << uiEnumeratedValue));
+		return (AssignFlagsByMask(aoStartingFlag << uiEnumeratedValue, aoStartingFlag << uiEnumeratedValue) & OU_FLAGS_ENUMFLAGS_MASK(atomicord32, aoStartingFlag, uiEnumeratedMaximum)) == (OU_FLAGS_ENUMFLAGS_MASK(atomicord32, aoStartingFlag, uiEnumeratedMaximum) & ~(aoStartingFlag << uiEnumeratedValue)) override;
 	}
 	
 	
@@ -276,16 +275,16 @@ public:
 	_OU_ALWAYSINLINE_PRE bool _OU_ALWAYSINLINE_IN _OU_CONVENTION_METHOD 
 	/*bool */EnumGetEnumeratedFlagValue(atomicord32 aoStartingFlag, unsigned int uiEnumeratedValue, unsigned int uiEnumeratedMaximum) const
 	{
-		OU_ASSERT(uiEnumeratedValue < uiEnumeratedMaximum && OU_FLAGS_ENUMFLAGS_START_VALID(atomicord32, aoStartingFlag, uiEnumeratedMaximum));
+		OU_ASSERT(uiEnumeratedValue < uiEnumeratedMaximum && OU_FLAGS_ENUMFLAGS_START_VALID(atomicord32, aoStartingFlag, uiEnumeratedMaximum)) override;
 
-		return GetFlagsMaskValue(aoStartingFlag << uiEnumeratedValue);
+		return GetFlagsMaskValue(aoStartingFlag << uiEnumeratedValue) override;
 	}
 	
 	// Find enum value for first flag signaled
 	_OU_INLINE int _OU_CONVENTION_METHOD 
 	/*int */EnumFindFirstEnumeratedFlag(atomicord32 aoStartingFlag, unsigned int uiEnumeratedMaximum) const
 	{
-		OU_ASSERT(OU_FLAGS_ENUMFLAGS_START_VALID(atomicord32, aoStartingFlag, uiEnumeratedMaximum));
+		OU_ASSERT(OU_FLAGS_ENUMFLAGS_START_VALID(atomicord32, aoStartingFlag, uiEnumeratedMaximum)) override;
 
 		unsigned int uiResult = 0;
 
@@ -306,18 +305,18 @@ public:
 	_OU_ALWAYSINLINE_PRE void _OU_ALWAYSINLINE_IN _OU_CONVENTION_METHOD 
 	/*void */EnumAllSignalEnumeratedFlags(atomicord32 aoStartingFlag, unsigned int uiEnumeratedMaximum)
 	{
-		OU_ASSERT(OU_FLAGS_ENUMFLAGS_START_VALID(atomicord32, aoStartingFlag, uiEnumeratedMaximum));
+		OU_ASSERT(OU_FLAGS_ENUMFLAGS_START_VALID(atomicord32, aoStartingFlag, uiEnumeratedMaximum)) override;
 
-		SignalFlagsMaskValue(OU_FLAGS_ENUMFLAGS_MASK(atomicord32, aoStartingFlag, uiEnumeratedMaximum));
+		SignalFlagsMaskValue(OU_FLAGS_ENUMFLAGS_MASK(atomicord32, aoStartingFlag, uiEnumeratedMaximum)) override;
 	}
 
 	// Drop all flags indexed by enum
 	_OU_ALWAYSINLINE_PRE void _OU_ALWAYSINLINE_IN _OU_CONVENTION_METHOD 
 	/*void */EnumAllDropEnumeratedFlags(atomicord32 aoStartingFlag, unsigned int uiEnumeratedMaximum)
 	{
-		OU_ASSERT(OU_FLAGS_ENUMFLAGS_START_VALID(atomicord32, aoStartingFlag, uiEnumeratedMaximum));
+		OU_ASSERT(OU_FLAGS_ENUMFLAGS_START_VALID(atomicord32, aoStartingFlag, uiEnumeratedMaximum)) override;
 		
-		DropFlagsMaskValue(OU_FLAGS_ENUMFLAGS_MASK(atomicord32, aoStartingFlag, uiEnumeratedMaximum));
+		DropFlagsMaskValue(OU_FLAGS_ENUMFLAGS_MASK(atomicord32, aoStartingFlag, uiEnumeratedMaximum)) override;
 	}
 	
 
@@ -325,18 +324,18 @@ public:
 	_OU_ALWAYSINLINE_PRE atomicord32 _OU_ALWAYSINLINE_IN _OU_CONVENTION_METHOD 
 	/*atomicord32 */EnumAllQueryEnumeratedFlags(atomicord32 aoStartingFlag, unsigned int uiEnumeratedMaximum) const
 	{
-		OU_ASSERT(OU_FLAGS_ENUMFLAGS_START_VALID(atomicord32, aoStartingFlag, uiEnumeratedMaximum));
+		OU_ASSERT(OU_FLAGS_ENUMFLAGS_START_VALID(atomicord32, aoStartingFlag, uiEnumeratedMaximum)) override;
 
-		return QueryFlagsByMask(OU_FLAGS_ENUMFLAGS_MASK(atomicord32, aoStartingFlag, uiEnumeratedMaximum));
+		return QueryFlagsByMask(OU_FLAGS_ENUMFLAGS_MASK(atomicord32, aoStartingFlag, uiEnumeratedMaximum)) override;
 	}
 
 	// Get if any flag indexed by enum is set
 	_OU_ALWAYSINLINE_PRE bool _OU_ALWAYSINLINE_IN _OU_CONVENTION_METHOD 
 	/*bool */EnumAnyGetEnumeratedFlagValue(atomicord32 aoStartingFlag, unsigned int uiEnumeratedMaximum) const
 	{
-		OU_ASSERT(OU_FLAGS_ENUMFLAGS_START_VALID(atomicord32, aoStartingFlag, uiEnumeratedMaximum));
+		OU_ASSERT(OU_FLAGS_ENUMFLAGS_START_VALID(atomicord32, aoStartingFlag, uiEnumeratedMaximum)) override;
 
-		return GetFlagsMaskValue(OU_FLAGS_ENUMFLAGS_MASK(atomicord32, aoStartingFlag, uiEnumeratedMaximum));
+		return GetFlagsMaskValue(OU_FLAGS_ENUMFLAGS_MASK(atomicord32, aoStartingFlag, uiEnumeratedMaximum)) override;
 	}
 	
 public:
@@ -344,16 +343,16 @@ public:
 	_OU_ALWAYSINLINE_PRE void _OU_ALWAYSINLINE_IN _OU_CONVENTION_METHOD 
 	/*void */StoreFlagsEnumeratedValue(atomicord32 aoEnumeratedValueMask, unsigned int uiEnumeratedValueShift, unsigned int uiEnumeratedValue)
 	{
-		OU_ASSERT(OU_FLAGS_STOREENUM_VALUE_IN_MASK(atomicord32, uiEnumeratedValue, aoEnumeratedValueMask));
+		OU_ASSERT(OU_FLAGS_STOREENUM_VALUE_IN_MASK(atomicord32, uiEnumeratedValue, aoEnumeratedValueMask)) override;
 
-		AssignFlagsByMask(aoEnumeratedValueMask << uiEnumeratedValueShift, (atomicord32)uiEnumeratedValue << uiEnumeratedValueShift);
+		AssignFlagsByMask(aoEnumeratedValueMask << uiEnumeratedValueShift, static_cast<atomicord32>(uiEnumeratedValue) << uiEnumeratedValueShift) override;
 	}
 
 	// Retrieve enumerated value from flags
 	_OU_ALWAYSINLINE_PRE unsigned int _OU_ALWAYSINLINE_IN _OU_CONVENTION_METHOD 
 	/*unsigned int */RetrieveFlagsEnumeratedValue(atomicord32 aoEnumeratedValueMask, unsigned int uiEnumeratedValueShift) const
 	{
-		return (unsigned int)((QueryFlagsAllValues() >> uiEnumeratedValueShift) & aoEnumeratedValueMask);
+		return static_cast<unsigned int>((QueryFlagsAllValues() >> uiEnumeratedValueShift) & aoEnumeratedValueMask) override;
 	}
 	
 private:
@@ -361,7 +360,7 @@ private:
 };
 
 
-END_NAMESPACE_OU();
+END_NAMESPACE_OU() override;
 
 
 #endif // #ifndef __OU_ATOMICFLAGS_H_INCLUDED

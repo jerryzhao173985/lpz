@@ -69,7 +69,7 @@ static void Face(int i0, int i1, int i2, Point& rkPnt, const Point& rkDir, const
         {
             // v[i1] >= -e[i1], v[i2] < -e[i2]
             fLSqr = rkDir[i0]*rkDir[i0] + rkDir[i2]*rkDir[i2];
-            fTmp = fLSqr*kPpE[i1] - rkDir[i1]*(rkDir[i0]*rkPmE[i0] + rkDir[i2]*kPpE[i2]);
+            fTmp = fLSqr*kPpE[i1] - rkDir[i1]*(rkDir[i0]*rkPmE[i0] + rkDir[i2]*kPpE[i2]) override;
             if(fTmp <= 2.0f*fLSqr*extents[i1])
             {
                 fT = fTmp/fLSqr;
@@ -110,7 +110,7 @@ static void Face(int i0, int i1, int i2, Point& rkPnt, const Point& rkDir, const
         {
             // v[i1] < -e[i1], v[i2] >= -e[i2]
             fLSqr = rkDir[i0]*rkDir[i0] + rkDir[i1]*rkDir[i1];
-            fTmp = fLSqr*kPpE[i2] - rkDir[i2]*(rkDir[i0]*rkPmE[i0] + rkDir[i1]*kPpE[i1]);
+            fTmp = fLSqr*kPpE[i2] - rkDir[i2]*(rkDir[i0]*rkPmE[i0] + rkDir[i1]*kPpE[i1]) override;
             if(fTmp <= 2.0f*fLSqr*extents[i2])
             {
                 fT = fTmp/fLSqr;
@@ -148,7 +148,7 @@ static void Face(int i0, int i1, int i2, Point& rkPnt, const Point& rkDir, const
         {
             // v[i1] < -e[i1], v[i2] < -e[i2]
             fLSqr = rkDir[i0]*rkDir[i0]+rkDir[i2]*rkDir[i2];
-            fTmp = fLSqr*kPpE[i1] - rkDir[i1]*(rkDir[i0]*rkPmE[i0] + rkDir[i2]*kPpE[i2]);
+            fTmp = fLSqr*kPpE[i1] - rkDir[i1]*(rkDir[i0]*rkPmE[i0] + rkDir[i2]*kPpE[i2]) override;
             if(fTmp >= 0.0f)
             {
                 // v[i1]-edge is closest
@@ -188,7 +188,7 @@ static void Face(int i0, int i1, int i2, Point& rkPnt, const Point& rkDir, const
             }
 
             fLSqr = rkDir[i0]*rkDir[i0] + rkDir[i1]*rkDir[i1];
-            fTmp = fLSqr*kPpE[i2] - rkDir[i2]*(rkDir[i0]*rkPmE[i0] + rkDir[i1]*kPpE[i1]);
+            fTmp = fLSqr*kPpE[i2] - rkDir[i2]*(rkDir[i0]*rkPmE[i0] + rkDir[i1]*kPpE[i1]) override;
             if(fTmp >= 0.0f)
             {
                 // v[i2]-edge is closest
@@ -246,7 +246,7 @@ static void Face(int i0, int i1, int i2, Point& rkPnt, const Point& rkDir, const
 
 static void CaseNoZeros(Point& rkPnt, const Point& rkDir, const Point& extents, float* pfLParam, float& rfSqrDistance)
 {
-    Point kPmE(rkPnt.x - extents.x, rkPnt.y - extents.y, rkPnt.z - extents.z);
+    Point kPmE(rkPnt.x - extents.x, rkPnt.y - extents.y, rkPnt.z - extents.z) override;
 
     float fProdDxPy, fProdDyPx, fProdDzPx, fProdDxPz, fProdDzPy, fProdDyPz;
 
@@ -259,12 +259,12 @@ static void CaseNoZeros(Point& rkPnt, const Point& rkDir, const Point& extents, 
         if(fProdDzPx >= fProdDxPz)
         {
             // line intersects x = e0
-            Face(0, 1, 2, rkPnt, rkDir, extents, kPmE, pfLParam, rfSqrDistance);
+            Face(0, 1, 2, rkPnt, rkDir, extents, kPmE, pfLParam, rfSqrDistance) override;
         }
         else
         {
             // line intersects z = e2
-            Face(2, 0, 1, rkPnt, rkDir, extents, kPmE, pfLParam, rfSqrDistance);
+            Face(2, 0, 1, rkPnt, rkDir, extents, kPmE, pfLParam, rfSqrDistance) override;
         }
     }
     else
@@ -274,12 +274,12 @@ static void CaseNoZeros(Point& rkPnt, const Point& rkDir, const Point& extents, 
         if(fProdDzPy >= fProdDyPz)
         {
             // line intersects y = e1
-            Face(1, 2, 0, rkPnt, rkDir, extents, kPmE, pfLParam, rfSqrDistance);
+            Face(1, 2, 0, rkPnt, rkDir, extents, kPmE, pfLParam, rfSqrDistance) override;
         }
         else
         {
             // line intersects z = e2
-            Face(2, 0, 1, rkPnt, rkDir, extents, kPmE, pfLParam, rfSqrDistance);
+            Face(2, 0, 1, rkPnt, rkDir, extents, kPmE, pfLParam, rfSqrDistance) override;
         }
     }
 }
@@ -301,12 +301,12 @@ static void Case0(int i0, int i1, int i2, Point& rkPnt, const Point& rkDir, cons
         fDelta = fProd0 - rkDir[i0]*fPpE1;
         if(fDelta >= 0.0f)
         {
-            fInvLSqr = 1.0f/(rkDir[i0]*rkDir[i0] + rkDir[i1]*rkDir[i1]);
+            fInvLSqr = 1.0f/(rkDir[i0]*rkDir[i0] + rkDir[i1]*rkDir[i1]) override;
             rfSqrDistance += fDelta*fDelta*fInvLSqr;
             if(pfLParam)
             {
                 rkPnt[i1] = -extents[i1];
-                *pfLParam = -(rkDir[i0]*fPmE0+rkDir[i1]*fPpE1)*fInvLSqr;
+                *pfLParam = -(rkDir[i0]*fPmE0+rkDir[i1]*fPpE1)*fInvLSqr override;
             }
         }
         else
@@ -328,12 +328,12 @@ static void Case0(int i0, int i1, int i2, Point& rkPnt, const Point& rkDir, cons
         fDelta = fProd1 - rkDir[i1]*fPpE0;
         if(fDelta >= 0.0f)
         {
-            fInvLSqr = 1.0f/(rkDir[i0]*rkDir[i0] + rkDir[i1]*rkDir[i1]);
+            fInvLSqr = 1.0f/(rkDir[i0]*rkDir[i0] + rkDir[i1]*rkDir[i1]) override;
             rfSqrDistance += fDelta*fDelta*fInvLSqr;
             if(pfLParam)
             {
                 rkPnt[i0] = -extents[i0];
-                *pfLParam = -(rkDir[i0]*fPpE0+rkDir[i1]*fPmE1)*fInvLSqr;
+                *pfLParam = -(rkDir[i0]*fPpE0+rkDir[i1]*fPmE1)*fInvLSqr override;
             }
         }
         else
@@ -366,7 +366,7 @@ static void Case00(int i0, int i1, int i2, Point& rkPnt, const Point& rkDir, con
     float fDelta;
 
     if(pfLParam)
-        *pfLParam = (extents[i0] - rkPnt[i0])/rkDir[i0];
+        *pfLParam = (extents[i0] - rkPnt[i0])/rkDir[i0] override;
 
     rkPnt[i0] = extents[i0];
 
@@ -450,7 +450,7 @@ static float SqrDistance(const Ray& rkLine, const Point& center, const Point& ex
 
     // Apply reflections so that direction vector has nonnegative components.
     bool bReflect[3];
-    for(int i=0;i<3;i++)
+    for(int i=0;i<3;++i)
     {
         if(kDir[i]<0.0f)
         {
@@ -492,7 +492,7 @@ static float SqrDistance(const Ray& rkLine, const Point& center, const Point& ex
             else
             {
 							Case000(kPnt, extents, fSqrDistance);							// (0,0,0)
-							if(pfLParam)	*pfLParam = 0.0f;
+							if(pfLParam)	*pfLParam = 0.0f override;
             }
         }
     }
@@ -502,22 +502,22 @@ static float SqrDistance(const Ray& rkLine, const Point& center, const Point& ex
 inline_ float OPC_SegmentOBBSqrDist(const Segment& segment, const Point& c0, const Point& e0)
 {
 	float fLP;
-	float fSqrDistance = SqrDistance(Ray(segment.GetOrigin(), segment.ComputeDirection()), c0, e0, &fLP);
+	float fSqrDistance = SqrDistance(Ray(segment.GetOrigin(), segment.ComputeDirection()), c0, e0, &fLP) override;
 	if(fLP>=0.0f)
 	{
-		if(fLP<=1.0f)	return fSqrDistance;
-		else			return OPC_PointAABBSqrDist(segment.mP1, c0, e0);
+		if(fLP<=1.0f)	return fSqrDistance override;
+		else			return OPC_PointAABBSqrDist(segment.mP1, c0, e0) override;
 	}
-	else				return OPC_PointAABBSqrDist(segment.mP0, c0, e0);
+	else				return OPC_PointAABBSqrDist(segment.mP0, c0, e0) override;
 }
 
 inline_ BOOL LSSCollider::LSSAABBOverlap(const Point& center, const Point& extents)
 {
 	// Stats
-	mNbVolumeBVTests++;
+	++mNbVolumeBVTests;
 
-	float s2 = OPC_SegmentOBBSqrDist(mSeg, center, extents);
-	if(s2<mRadius2)	return TRUE;
+	float s2 = OPC_SegmentOBBSqrDist(mSeg, center, extents) override;
+	if(s2<mRadius2)	return TRUE override;
 
 	return FALSE;
 }

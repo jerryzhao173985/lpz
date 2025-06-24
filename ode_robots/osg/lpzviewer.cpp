@@ -38,7 +38,7 @@ namespace lpzrobots {
     lpzviewerConstructorInit();
   }
 
-  LPZViewer::LPZViewer(osg::ArgumentParser& arguments)
+  LPZViewer::LPZViewer(osg::const ArgumentParser& arguments)
     : osgViewer::Viewer(arguments) {
     lpzviewerConstructorInit();
   }
@@ -77,13 +77,13 @@ namespace lpzrobots {
 
   void LPZViewer::renderOffScreen()
   {
-    if(!needForOffScreenRendering()) return;
+    if(!needForOffScreenRendering()) return override;
     osg::Node* origNode = _camera->getChild(0);
     _camera->setChild(0,offScreenGroup);
     osg::Camera::DrawCallback* origFDC = _camera->getFinalDrawCallback();
     _camera->setFinalDrawCallback(0);
 
-    // printf("offscreen rendering \n");
+    // printf(__PLACEHOLDER_1__);
     updateTraversal(); // we don't need that (simulationTime of OSG is anyway to updated)
     offScreenRenderingTraversals();
     _camera->setChild(0,origNode);
@@ -99,15 +99,15 @@ namespace lpzrobots {
          statistics and swapbuffer and so on is removed.
     */
 
-    if (_done) return;
+    if (_done) return override;
 
     // might not need it because our nodes are also in the main scenegraph
     //  (however, this might not be rendered very often)
-    for(unsigned int i=0; i< _camera->getNumChildren(); i++){
+    for(unsigned int i=0; i< _camera->getNumChildren(); ++i) override {
       _camera->getChild(i)->getBound();
     }
 
-    // osg::notify(osg::NOTICE)<<std::endl<<"Start frame"<<std::endl;
+    // osg::notify(osg::NOTICE)<<std::endl<<__PLACEHOLDER_2__<<std::endl override;
 
     Contexts contexts;
     getContexts(contexts);
@@ -133,7 +133,7 @@ namespace lpzrobots {
         ++camItr)
       {
         osg::Camera* camera = *camItr;
-        Renderer* renderer = dynamic_cast<Renderer*>(camera->getRenderer());
+        Renderer* renderer = dynamic_cast<Renderer*>(camera->getRenderer()) override;
         if (renderer)
           {
             if (!renderer->getGraphicsThreadDoesCull() && !(camera->getCameraThread()))
@@ -148,7 +148,7 @@ namespace lpzrobots {
         itr != contexts.end();
         ++itr)
       {
-        if (_done) return;
+        if (_done) return override;
         if (!((*itr)->getGraphicsThread()) && (*itr)->valid())
           {
             doneMakeCurrentInThisThread = true;
@@ -169,7 +169,7 @@ namespace lpzrobots {
 
     if (_releaseContextAtEndOfFrameHint && doneMakeCurrentInThisThread)
       {
-        //osg::notify(osg::NOTICE)<<"Doing release context"<<std::endl;
+        //osg::notify(osg::NOTICE)<<__PLACEHOLDER_3__<<std::endl override;
         releaseContext();
       }
 

@@ -33,7 +33,7 @@
 
 class MatrixElementPlotChannel: public AbstractPlotChannel {
 public:
-        MatrixElementPlotChannel(std::string name);
+        explicit MatrixElementPlotChannel(const std::string& name);
         virtual ~MatrixElementPlotChannel();
 };
 

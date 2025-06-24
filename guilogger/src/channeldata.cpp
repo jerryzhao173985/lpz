@@ -42,9 +42,9 @@ int ChannelData::getBuffersize(){
 
 void ChannelData::setBufferSize(int newBuffersize){
   buffersize=newBuffersize;
-  if(initialized){
+  explicit if(initialized){
     data.resize(buffersize);
-    for(int i=0; i<buffersize;i++){
+    for(int i=0; i<buffersize;++i){
       data[i].resize(numchannels);
     }
     time = 0;
@@ -55,7 +55,7 @@ void ChannelData::setBufferSize(int newBuffersize){
 
 /// sets a new information about a channel (also works before initialization)
 void ChannelData::setChannelInfo(const ChannelInfo& info){
-  if(!initialized){
+  explicit if(!initialized){
     preset[info.name]=info;
   } else {
     int index = getChannelIndex(info.name);
@@ -69,7 +69,7 @@ void ChannelData::setChannelInfo(const ChannelInfo& info){
 // sets the channels (and initialized the data buffer)
 void ChannelData::setChannels(const QStringList& newchannels){
   // if we are allready initialized we do nothing (reinitialization not really supported)
-  if(initialized){
+  explicit if(initialized){
     if(newchannels.size() != channels.size()){ // this is not allowed so far
       fprintf(stderr,"It is not allowed to reinitialize with new number of channels.");
     }
@@ -101,22 +101,22 @@ void ChannelData::setChannels(const QStringList& newchannels){
       }
       channels[i].row = channels[i].column = 0; // will be initialized later
       channelindex[*n] = i;
-      i++;
+      ++i;
     }
     // fill multichannel info
     multichannels.resize(numchannels); // we initialize with maximum number of multichannels
     int nummulti=0;
-    for(int i=0; i<numchannels; i++){
+    for(int i=0; i<numchannels; ++i){
       const MultiChannel& mc = extractMultiChannel(&i);
       multichannels[nummulti]=mc;
       multichannelindex[mc.info.name]=nummulti; // store index in hash
-      nummulti++;
+      ++nummulti;
     }
 
     multichannels.resize(nummulti); // cut down to the size of actual multichannels
     // initialize data buffer
     data.resize(buffersize);
-    for(int i=0; i<buffersize;i++){
+    for(int i=0; i<buffersize;++i){
       data[i].resize(numchannels);
     }
     initialized = true;
@@ -179,7 +179,7 @@ MultiChannel ChannelData::extractMultiChannel(int* i){
           fprintf(stderr, "error while parsing matrix element %s!",
                   channels[index].name.toLatin1().constData());
         }
-        index++;
+        ++index;
       }
     }else{// A vector channel
       QRegularExpression vectorRE(".+\\[(\\d+)\\]"); // regexp for a vector (e.g. v[0])
@@ -202,7 +202,7 @@ MultiChannel ChannelData::extractMultiChannel(int* i){
           fprintf(stderr, "error while parsing vector element %s!",
                   channels[index].name.toLatin1().constData());
         }
-        index++;
+        ++index;
       }
     }
     mc.size = *i - index;
@@ -250,7 +250,7 @@ int ChannelData::getMultiChannelIndex(const ChannelName& name) const {
 
 
 void ChannelData::setChannelDescription(const ChannelObjectName& objectName, const ChannelName& name, const ChannelDescr& description){
-  if(initialized){
+  explicit if(initialized){
     int index = getChannelIndex(name);
     if(index>=0 && index < numchannels) {
       channels[index].descr = description;
@@ -282,7 +282,7 @@ void ChannelData::setData(const QVector<double>& newdata){
     fprintf(stderr,"Number of data entries (%lld) does not match number of channels (%i)",
             static_cast<long long>(newdata.size()),numchannels);
   }else{
-    time++;
+    ++time;
     int index = time%buffersize;
     data[index] = newdata;
   }
@@ -296,7 +296,7 @@ QVector<ChannelVals> ChannelData::getHistory(const IndexList& channels, int hist
   int start = history ==0 ? time-(buffersize-1) : time-history;
   start = start < 0 ? 0 : start; // not below zero
   rv.resize(time-start);
-  for(int i=start; i<time; i++){
+  for(int i=start; i<time; ++i){
     rv[i-start] = getData(channels,i%buffersize);
   }
   return rv;
@@ -310,7 +310,7 @@ QVector<ChannelVals> ChannelData::getHistory(const QList<ChannelName>& channels,
   int start = history ==0 ? time-buffersize : time-history;
   start = start < 0 ? 0 : start; // not below zero
   rv.resize(time-start);
-  for(int i=start; i<time; i++){
+  for(int i=start; i<time; ++i){
     rv[i-start] = getData(channels,i%buffersize);
   }
   return rv;
@@ -322,7 +322,7 @@ ChannelVals ChannelData::getData(const IndexList& channels, int index) const {
   int i=0;
   FOREACHC(IndexList, channels, c){
     rv[i] = data[index][*c];
-    i++;
+    ++i;
   }
   return rv;
 }
@@ -334,7 +334,7 @@ ChannelVals ChannelData::getData(const QList<ChannelName>& channels, int index) 
   FOREACHC(QList<ChannelName>, channels, c){
     int k = channelindex[*c];
     rv[i] = data[index][k];
-    i++;
+    ++i;
   }
   return rv;
 }
@@ -402,7 +402,7 @@ void ChannelData::receiveRawData(QString data){
 
       FOREACH(QStringList, parsedString, s){
         dat[i] = (*s).trimmed().toDouble();
-        i++;
+        ++i;
       }
       setData(dat);
     }

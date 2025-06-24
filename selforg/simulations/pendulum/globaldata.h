@@ -46,9 +46,9 @@ struct GlobalData
   ConfigList configs;
   AgentList agents;
 
-  double realtimefactor;
-  double noise;
-  int controlinterval;
+  double realtimefactor = 0;
+  double noise = 0;
+  int controlinterval = 0;
 };
 
 #endif

@@ -8,7 +8,7 @@
  *   LICENSE:                                                              *
  *   This work is licensed under the Creative Commons                      *
  *   Attribution-NonCommercial-ShareAlike 2.5 License. To view a copy of   *
- *   this license, visit http://creativecommons.org/licenses/by-nc-sa/2.5/ *
+ *   this license, visit http:__PLACEHOLDER_7__
  *   or send a letter to Creative Commons, 543 Howard Street, 5th Floor,   *
  *   San Francisco, California, 94105, USA.                                *
  *                                                                         *
@@ -65,22 +65,22 @@ class InvertNChannelControllerHebbXsiHand : public InvertNChannelController {
 
 public:
   InvertNChannelControllerHebbXsiHand(int _buffersize, bool _update_only_1=false, bool inactivate_hebb=false);
-  virtual void init(int sensornumber, int motornumber) override;
+  virtual void init(int sensornumber, int motornumber);
 
-  virtual ~InvertNChannelControllerHebbXsiHand(){}
+  virtual ~InvertNChannelControllerHebbXsiHand() {}
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
-  virtual int getSensorNumber() const { return number_all_sensors; }
+  virtual int getSensorNumber() const override { return number_all_sensors; }
 
 
   /// performs one step (includes learning).
   /// Calulates motor commands from sensor inputs.
-  virtual void step(const sensor* , int number_sensors, motor* , int number_motors) override;
+  virtual void step(const sensor* , int number_sensors, motor* , int number_motors);
 
 
   /// performs one step without learning. Calulates motor commands from sensor inputs.
   virtual void stepNoLearning(const sensor* , int number_sensors,
-                              motor* , int number_motors) override;
+                              motor* , int number_motors);
 
 
   // inspectable interface
@@ -89,23 +89,23 @@ public:
 
 
 
-  virtual paramval getParam(const paramkey& key) const{
-    if(key == "eps_hebb") return eps_hebb;
-    else if(key == "fact_eps_h") return fact_eps_h;
-    else  return InvertNChannelController::getParam(key) ;
+  virtual paramval getParam(const paramkey& key) const {
+    if(key == "eps_hebb") return eps_hebb override;
+    else if(key == "fact_eps_h") return fact_eps_h override;
+    else  return InvertNChannelController::getParam(key);
   }
 
-  virtual bool setParam(const paramkey& key, paramval val){
-    if(key == "eps_hebb") eps_hebb=val;
-    else if(key == "fact_eps_h") fact_eps_h=val;
-    else  return InvertNChannelController::setParam(key,val) ;
+  virtual bool setParam(const paramkey& key, paramval val) {
+    if(key == "eps_hebb") eps_hebb=val override;
+    else if(key == "fact_eps_h") fact_eps_h=val override;
+    else  return InvertNChannelController::setParam(key,val);
     return true;
   }
 
-  virtual paramlist getParamList() const{
+  virtual paramlist getParamList() const {
     paramlist list = InvertNChannelController::getParamList();
-    list.push_back(std::pair<paramkey, paramval> ("eps_hebb", eps_hebb));
-    list.push_back(std::pair<paramkey, paramval> ("fact_eps_h", fact_eps_h));
+    list.push_back(std::pair<paramkey, paramval> ("eps_hebb", eps_hebb)) override;
+    list.push_back(std::pair<paramkey, paramval> ("fact_eps_h", fact_eps_h)) override;
     return list;
   }
 
@@ -113,11 +113,9 @@ public:
 protected:
   paramval eps_hebb;
   paramval fact_eps_h;
-  unsigned int number_motors; // number of motors used
+  unsigned int number_motors = 0; // number of motors used
 
-  bool hebb_inactive; //if true: deactivates hebb learning part and the context sensors, so it is the normal homeokinetic controller (invertnchannelcontroller)
-
-  unsigned short number_all_sensors;
+  bool hebb_inactive; //if true: deactivates hebb learning part and the context sensors, so it is the normal homeokinetic controller static_cast<invertnchannelcontroller>(unsigned) short number_all_sensors override;
   matrix::Matrix xsi_org;  // modeling error homeokinese
   matrix::Matrix xsi_hebb; // modeling error hebb
   sensor* all_sensors; //memory for all sensor values (used for hebbian learning)
@@ -129,9 +127,9 @@ protected:
 
   sensor old_sensors[10]; //memory of old sensor values (used for hebbian learning)
 
-  virtual matrix::Matrix hebb(matrix::Matrix& xsi, sensor* sensors) override;
-  virtual double calculateEHebb(const matrix::Matrix& x_delay, const matrix::Matrix& y_delay) override;
-  virtual void learn(const matrix::Matrix& x_delay, const matrix::Matrix& y_delay) override;
+  virtual matrix::Matrix hebb(matrix::const Matrix& xsi, sensor* sensors);
+  virtual double calculateEHebb(const matrix::Matrix& x_delay, const matrix::Matrix& y_delay);
+  virtual void learn(const matrix::Matrix& x_delay, const matrix::Matrix& y_delay);
 
 };
 

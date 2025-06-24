@@ -185,8 +185,7 @@ PlotOption::close() {
         break;
       case PlotMode::GuiLogger:
       case PlotMode::GuiLogger_File:
-        // std::cout << "guilogger pipe closing...maybe you must manually close the guilogger
-        // first!"
+        // std::cout << __PLACEHOLDER_42__
         //           << std::endl;
         //  send quit message to pipe
         fprintf(pipe, "#QUIT\n");
@@ -195,13 +194,13 @@ PlotOption::close() {
         std::cout << "guilogger pipe closing...SUCCESSFUL" << std::endl;
         break;
       case PlotMode::MatrixViz:
-        //       std::cout << "Try to close ECBRobotGUI pipe...";
+        //       std::cout << __PLACEHOLDER_45__;
         fprintf(pipe, "#QUIT\n");
         pclose(pipe);
         std::cout << "MatixViz pipe closing...SUCCESSFUL" << std::endl;
         break;
       case PlotMode::ECBRobotGUI:
-        //       std::cout << "Try to close ECBRobotGUI pipe...";
+        //       std::cout << __PLACEHOLDER_48__;
         fprintf(pipe, "#QUIT\n");
         pclose(pipe);
         std::cout << "ECBRobotGUI pipe closing...SUCCESSFUL" << std::endl;
@@ -269,10 +268,10 @@ PlotOption::setFilter(const std::string& filter) {
       if (!substr.empty()) {
         if (flag) {
           accept += substr;
-          //          cout << "accept: " << substr << endl;
+          //          cout << __PLACEHOLDER_53__ << substr << endl;
         } else {
           ignore += substr;
-          //          cout << "ignore: " << substr << endl;
+          //          cout << __PLACEHOLDER_54__ << substr << endl;
         }
       }
     }
@@ -307,7 +306,7 @@ PlotOption::printInspectableNames(const list<const Inspectable*>& inspectables, 
       list<Inspectable::iparamkey> l = (*insp)->getInternalParamNames();
       for (list<Inspectable::iparamkey>::iterator i = l.begin(); i != l.end(); ++i) {
         const string& str = (*i);
-        if ((int)mask.size() <= cnt) {
+        if (static_cast<int>(mask.size()) <= cnt) {
           mask.resize(cnt * 2);
         }
         if (useChannel(str)) {
@@ -315,7 +314,7 @@ PlotOption::printInspectableNames(const list<const Inspectable*>& inspectables, 
           mask[cnt] = true;
         } else
           mask[cnt] = false;
-        cnt++;
+        ++cnt;
       }
       cnt += printInspectableNames((*insp)->getInspectables(), cnt);
     }
@@ -334,14 +333,14 @@ PlotOption::printInspectables(const std::list<const Inspectable*>& inspectables,
     if (*insp) {
       l = (*insp)->getInternalParams();
       FOREACHC(Inspectable::iparamvallist, l, i) {
-        if (cnt >= (int)mask.size() || cnt < 0) {
+        if (cnt >= static_cast<int>(mask.size()) || cnt < 0) {
           fprintf(
             stderr, "PlotOption: mask to short: %zu <= %i", mask.size(), cnt); // should not happen
         } else {
           if (mask[cnt])
             fprintf(pipe, " %f", (*i));
         }
-        cnt++;
+        ++cnt;
       }
       cnt += printInspectables((*insp)->getInspectables(), cnt);
     }
@@ -374,7 +373,7 @@ PlotOption::printNetworkDescription(const string& name, const Inspectable* inspe
   for (list<Inspectable::ILayer>::iterator i = layers.begin(); i != layers.end(); ++i) {
     Inspectable::ILayer& l = (*i);
     fprintf(pipe, "#N layer %s %i\n", l.layername.c_str(), l.rank);
-    for (int n = 0; n < l.dimension; n++) {
+    for (int n = 0; n < l.dimension; ++n) {
       if (l.biasname.empty()) {
         fprintf(pipe, "#N neuron %s[%i]\n", l.vectorname.c_str(), n);
       } else {
@@ -396,8 +395,8 @@ PlotOption::printNetworkDescription(const string& name, const Inspectable* inspe
 
     Inspectable::ILayer& l1 = (*l1it);
     Inspectable::ILayer& l2 = (*l2it);
-    for (int j = 0; j < l1.dimension; j++) {
-      for (int k = 0; k < l2.dimension; k++) {
+    for (int j = 0; j < l1.dimension; ++j) {
+      for (int k = 0; k < l2.dimension; ++k) {
         fprintf(pipe,
                 "#N connection %s[%i,%i] %s[%i] %s[%i]\n",
                 c.matrixname.c_str(),

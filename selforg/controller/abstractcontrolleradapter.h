@@ -29,7 +29,7 @@
 #include <selforg/stl_adds.h>
 
 /**
- * Abstract adapter class (interface) for robot controller.
+ * Abstract adapter class static_cast<interface>(for) robot controller.
  * The controller gets a number of input sensor values each timestep
  *  and has to generate a number of output motor values.
  *
@@ -61,7 +61,7 @@ public:
     addInspectable(controller);
   }
 
-  virtual ~AbstractControllerAdapter() override {}
+  virtual ~AbstractControllerAdapter() {}
 
   /****************************************************************************/
   /*        AbstractControllerAdapter must implement the following classes:                */

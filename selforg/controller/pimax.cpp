@@ -7,7 +7,7 @@
  *   LICENSE:                                                              *
  *   This work is licensed under the Creative Commons                      *
  *   Attribution-NonCommercial-ShareAlike 2.5 License. To view a copy of   *
- *   this license, visit http://creativecommons.org/licenses/by-nc-sa/2.5/ *
+ *   this license, visit http:__PLACEHOLDER_46__
  *   or send a letter to Creative Commons, 543 Howard Street, 5th Floor,   *
  *   San Francisco, California, 94105, USA.                                *
  *                                                                         *
@@ -109,7 +109,7 @@ PiMax::init(int sensornumber, int motornumber, RandGen* randGen) {
 
   s.set(number_sensors, 1);
   s_smooth.set(number_sensors, 1);
-  for (unsigned int k = 0; k < buffersize; k++) {
+  for (unsigned int k = 0; k < buffersize; ++k) {
     s_buffer[k].set(number_sensors, 1);
     a_buffer[k].set(number_motors, 1);
     xi_buffer[k].set(number_sensors, 1);
@@ -165,14 +165,14 @@ PiMax::step(const sensor* s_, int number_sensors, motor* a_, int number_motors) 
     learn();
 
   // update step counter
-  t++;
+  ++t;
 };
 
 // performs one step without learning. Calulates motor commands from sensor inputs.
 void
 PiMax::stepNoLearning(const sensor* s_, int number_sensors, motor* a_, int number_motors) {
-  assert((unsigned)number_sensors <= this->number_sensors &&
-         (unsigned)number_motors <= this->number_motors);
+  assert(static_cast<unsigned>(number_sensors) <= this->number_sensors &&
+         static_cast<unsigned>(number_motors) <= this->number_motors);
 
   s.set(number_sensors, 1, s_); // store sensor values
 
@@ -195,13 +195,13 @@ PiMax::stepNoLearning(const sensor* s_, int number_sensors, motor* a_, int numbe
   a.convertToBuffer(a_, number_motors);
 
   // update step counter
-  t++;
+  ++t;
 };
 
 void
 PiMax::motorBabblingStep(const sensor* s_, int number_sensors, const motor* a_, int number_motors) {
-  assert((unsigned)number_sensors <= this->number_sensors &&
-         (unsigned)number_motors <= this->number_motors);
+  assert(static_cast<unsigned>(number_sensors) <= this->number_sensors &&
+         static_cast<unsigned>(number_motors) <= this->number_motors);
   s.set(number_sensors, 1, s_);
   s_buffer[t % buffersize] = s;
   Matrix a(number_motors, 1, a_);
@@ -229,7 +229,7 @@ PiMax::motorBabblingStep(const sensor* s_, int number_sensors, const motor* a_, 
   h += (delta * (epsC * factor * factorH)).mapP(0.1, clip);
   C_native = C;
   A_native = A;
-  t++;
+  ++t;
 }
 
 // learn values h,C,A,b,S
@@ -248,7 +248,7 @@ PiMax::learn() {
   const Matrix& g_prime = z.map(g_s);
   gs_buffer[(t - 1) % buffersize] = g_prime;
 
-  L = A * (C & g_prime) + S;
+  L = A * (const C& g_prime) + S;
   L_buffer[(t - 1) % buffersize] = L;
 
   if (tau < 2)
@@ -282,14 +282,14 @@ PiMax::learn() {
     du[1] = ds[0];
   }
 
-  for (int l = 2; l < tau; l++) {
+  for (int l = 2; l < tau; ++l) {
     du[l] = (L_buffer[(t - l) % buffersize] ^ T) * du[l - 1];
   }
   if (epsC > 0) {
     double epsCN = epsC / (100.0 * (tau - 1));
     // l means: time point t-l
     // x,y, L and g' are to be taken at t-l
-    for (int l = 1; l < tau; l++) {
+    for (int l = 1; l < tau; ++l) {
 
       const Matrix& al = a_buffer[(t - l) % buffersize];
       const Matrix& sl = s_buffer[(t - l) % buffersize];
@@ -299,8 +299,8 @@ PiMax::learn() {
 
       const Matrix& metric = useMetric ? gs.map(one_over).map(sqr) : gs.mapP(1, constant);
 
-      C += (((dmu * (ds[l] ^ T) - (epsrel & al) * (sl ^ T)) & metric) * epsCN).mapP(.015, clip);
-      h += ((((epsrel & al)) & metric) * (-epsCN * factorH)).mapP(.05, clip);
+      C += (((dmu * (ds[l] ^ T) - (const epsrel& al) * (sl ^ T)) & metric) * epsCN).mapP(.015, clip);
+      h += ((((const epsrel& al)) & metric) * (-epsCN * factorH)).mapP(.05, clip);
     }
     if (damping)
       C += (((C_native - C).map(power3)) * damping).mapP(.05, clip);
@@ -367,7 +367,7 @@ PiMax::setParameters(const list<Matrix>& params) {
     else
       return false;
   } else {
-    fprintf(stderr, "setParameters wrong len %i!=2\n", (int)params.size());
+    fprintf(stderr, "setParameters wrong len %i!=2\n", static_cast<int>(params.size()));
     return false;
   }
   return true;

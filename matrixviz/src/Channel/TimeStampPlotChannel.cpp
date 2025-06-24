@@ -1,7 +1,7 @@
 
 #include "TimeStampPlotChannel.h"
 
-TimeStampPlotChannel::TimeStampPlotChannel(std::string name) : AbstractPlotChannel ( name )
+TimeStampPlotChannel::TimeStampPlotChannel(const std::string& name) : AbstractPlotChannel ( name )
 {
   
 }

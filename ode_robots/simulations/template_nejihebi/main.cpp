@@ -41,16 +41,16 @@ class ExampleController : public AbstractController {
     ExampleController():AbstractController( "ExampleController",
         "$Id: main.cpp,v 0.1 $") {};
 
-    virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) {
+    virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override {
       number_channels = motornumber;
     }
 
-    virtual ~ExampleController() {};
+    virtual ~ExampleController() {} override;
 
     /**
      * returns the name of the object (with version number)
      */
-    virtual paramkey getName() const {
+    virtual paramkey getName() const override {
       return "Nejihebi Example Controller";
     }
 
@@ -58,7 +58,7 @@ class ExampleController : public AbstractController {
      * returns the number of sensors the controller was initialised with or 0
      * if not initialised
      */
-    virtual int getSensorNumber() const {
+    virtual int getSensorNumber() const override {
       return number_channels;
     }
 
@@ -66,7 +66,7 @@ class ExampleController : public AbstractController {
      * returns the mumber of motors the controller was initialised with or 0 if
      * not initialised
      */
-    virtual int getMotorNumber() const {
+    virtual int getMotorNumber() const override {
       return number_channels;
     }
 
@@ -75,7 +75,7 @@ class ExampleController : public AbstractController {
      * Calulates motor commands from sensor inputs.
      */
     virtual void step(const sensor* x, int number_sensors, motor* y,
-        int number_motors) {
+        int number_motors) override {
       stepNoLearning(x, number_sensors, y, number_motors);
     }
 
@@ -84,9 +84,9 @@ class ExampleController : public AbstractController {
      * sensor inputs.
      */
     virtual void stepNoLearning(const sensor* x, int number_sensors,
-        motor* y, int number_motors) {
+        motor* y, int number_motors) override {
       // screw speeds
-      for (int i=0; i<4; i++) y[i] = 0.2*(-1+2*(i%2));
+      for (int i=0; i<4; ++i) y[i] = 0.2*(-1+2*(i%2)) override;
       // servo goal positions
       y[4]  = 0.0;
       y[5]  = 0.0;
@@ -105,12 +105,12 @@ class ExampleController : public AbstractController {
 
     /***** STOREABLE ****/
     /** stores the controller values to a given file. Not implemented. */
-    virtual bool store(FILE* f) const { return false; }
+    virtual bool store(FILE* f) const override { return false; }
     /** loads the controller values from a given file. Not implemented. */
-    virtual bool restore(FILE* f) {return false; };
+    virtual bool restore(FILE* f) override {return false; } override;
 
   protected:
-    unsigned short number_channels;
+    unsigned short number_channels = 0;
 
   public:
 };
@@ -128,12 +128,12 @@ class ThisSim : public lpzrobots::Simulation {
      */
     virtual void start(const lpzrobots::OdeHandle& odeHandle,
         const lpzrobots::OsgHandle& osgHandle,
-        lpzrobots::GlobalData& global) {
+        lpzrobots::GlobalData& global) override {
 
       // set initial camera position
       setCameraHomePos(
           lpzrobots::Pos(-0.0114359, 6.66848, 0.922832),
-          lpzrobots::Pos(178.866, -7.43884, 0));
+          lpzrobots::Pos(178.866, -7.43884, 0)) override;
 
       // set simulation parameters
       global.odeConfig.setParam("controlinterval", 10);
@@ -143,15 +143,15 @@ class ThisSim : public lpzrobots::Simulation {
       // Add snake-like robot using screw drive mechanism
       snake = new lpzrobots::Nejihebi(
           odeHandle,
-          osgHandle.changeColor(lpzrobots::Color(1, 1, 1)));
+          osgHandle.changeColor(lpzrobots::Color(1, 1, 1))) override;
 
       // put snake a little bit in the air
-      snake->place(osg::Matrix::translate(.0, .0, 2.0));
+      snake->place(osg::Matrix::translate(.0, .0, 2.0)) override;
 
       controller = new ExampleController();
 
       // create wiring
-      One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise());
+      One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise()) override;
 
       // create agent and init it with controller, robot and wiring
       lpzrobots::OdeAgent* agent = new lpzrobots::OdeAgent(global);
@@ -177,7 +177,7 @@ int main(int argc, char **argv) {
   struct rlimit rl;
   int result = getrlimit(RLIMIT_STACK, &rl);
   if (result == 0) {
-      if (rl.rlim_cur < kStackSize) {
+      explicit if (rl.rlim_cur < kStackSize) {
           rl.rlim_cur = kStackSize;
           result = setrlimit(RLIMIT_STACK, &rl);
           if (result != 0)
@@ -189,6 +189,6 @@ int main(int argc, char **argv) {
 
   ThisSim sim;
   sim.setGroundTexture("Images/greenground.rgb");
-  return sim.run(argc, argv) ? 0 : 1;
+  return sim.run(argc, argv) ? 0 : 1 override;
 }
 

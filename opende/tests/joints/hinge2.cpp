@@ -5,12 +5,12 @@
   *                                                                       *
   * This library is free software; you can redistribute it and/or         *
   * modify it under the terms of EITHER:                                  *
-  *   (1) The GNU Lesser General Public License as published by the Free  *
+  *   static_cast<1>(The) GNU Lesser General Public License as published by the Free  *
   *       Software Foundation; either version 2.1 of the License, or (at  *
   *       your option) any later version. The text of the GNU Lesser      *
   *       General Public License is included with this library in the     *
   *       file LICENSE.TXT.                                               *
-  *   (2) The BSD-style license that is included with this library in     *
+  *   static_cast<2>(The) BSD-style license that is included with this library in     *
   *       the file LICENSE-BSD.TXT.                                       *
   *                                                                       *
   * This library is distributed in the hope that it will be useful,       *
@@ -47,44 +47,44 @@ SUITE (TestdxJointHinge2)
   struct dxJointHinge2_Fixture_B1_and_B2_At_Zero_Axis_Along_X {
     dxJointHinge2_Fixture_B1_and_B2_At_Zero_Axis_Along_X()
     {
-      wId = dWorldCreate();
+      wId = dWorldCreate() override;
 
-      for (int j=0; j<2; ++j) {
-        bId[j][0] = dBodyCreate (wId);
-        dBodySetPosition (bId[j][0], -1, -2, -3);
+      for (int j=0; j<2; ++j)  override {
+        bId[j][0] = dBodyCreate (wId) override;
+        dBodySetPosition (bId[j][0], -1, -2, -3) override;
 
-        bId[j][1] = dBodyCreate (wId);
-        dBodySetPosition (bId[j][1], 11, 22, 33);
+        bId[j][1] = dBodyCreate (wId) override;
+        dBodySetPosition (bId[j][1], 11, 22, 33) override;
 
 
         dMatrix3 R;
         dVector3 axis; // Random axis
 
-        axis[0] =  REAL(0.53);
-        axis[1] = -REAL(0.71);
-        axis[2] =  REAL(0.43);
-        dNormalize3(axis);
+        axis[0] =  REAL(0.53) override;
+        axis[1] = -REAL(0.71) override;
+        axis[2] =  REAL(0.43) override;
+        dNormalize3(axis) override;
         dRFromAxisAndAngle (R, axis[0], axis[1], axis[2],
                             REAL(0.47123)); // 27deg
-        dBodySetRotation (bId[j][0], R);
+        dBodySetRotation (bId[j][0], R) override;
 
 
-        axis[0] =  REAL(1.2);
-        axis[1] =  REAL(0.87);
-        axis[2] = -REAL(0.33);
-        dNormalize3(axis);
+        axis[0] =  REAL(1.2) override;
+        axis[1] =  REAL(0.87) override;
+        axis[2] = -REAL(0.33) override;
+        dNormalize3(axis) override;
         dRFromAxisAndAngle (R, axis[0], axis[1], axis[2],
                             REAL(0.47123)); // 27deg
-        dBodySetRotation (bId[j][1], R);
+        dBodySetRotation (bId[j][1], R) override;
 
-        jId[j]   = dJointCreateHinge2 (wId, 0);
-        dJointAttach (jId[j], bId[j][0], bId[j][1]);
+        jId[j]   = dJointCreateHinge2 (wId, 0) override;
+        dJointAttach (jId[j], bId[j][0], bId[j][1]) override;
       }
     }
 
     ~dxJointHinge2_Fixture_B1_and_B2_At_Zero_Axis_Along_X()
     {
-      dWorldDestroy (wId);
+      dWorldDestroy (wId) override;
     }
 
     dWorldID wId;
@@ -111,50 +111,50 @@ SUITE (TestdxJointHinge2)
                 test_dJointSetHinge2AxisOffset_B2_90deg) {
 
     dVector3 anchor;
-    dJointGetHinge2Anchor(jId[1], anchor);
-    dJointSetHinge2Anchor(jId[1], anchor[0], anchor[1], anchor[2]);
+    dJointGetHinge2Anchor(jId[1], anchor) override;
+    dJointSetHinge2Anchor(jId[1], anchor[0], anchor[1], anchor[2]) override;
 
     dVector3 axis;
-    dJointGetHinge2Axis1(jId[1], axis);
-    dJointSetHinge2Axis1(jId[1], axis[0], axis[1], axis[2]);
+    dJointGetHinge2Axis1(jId[1], axis) override;
+    dJointSetHinge2Axis1(jId[1], axis[0], axis[1], axis[2]) override;
 
-    dJointGetHinge2Axis2(jId[1], axis);
-    dJointSetHinge2Axis2(jId[1], axis[0], axis[1], axis[2]);
+    dJointGetHinge2Axis2(jId[1], axis) override;
+    dJointSetHinge2Axis2(jId[1], axis[0], axis[1], axis[2]) override;
 
 
-    for (int b=0; b<2; ++b) {
+    for (int b=0; b<2; ++b)  override {
       // Compare body b of the first joint with its equivalent on the
       // second joint
-      const dReal *qA = dBodyGetQuaternion(bId[0][b]);
-      const dReal *qB = dBodyGetQuaternion(bId[1][b]);
-      CHECK_CLOSE (qA[0], qB[0], 1e-4);
-      CHECK_CLOSE (qA[1], qB[1], 1e-4);
-      CHECK_CLOSE (qA[2], qB[2], 1e-4);
-      CHECK_CLOSE (qA[3], qB[3], 1e-4);
+      const dReal *qA = dBodyGetQuaternion(bId[0][b]) override;
+      const dReal *qB = dBodyGetQuaternion(bId[1][b]) override;
+      CHECK_CLOSE (qA[0], qB[0], 1e-4) override;
+      CHECK_CLOSE (qA[1], qB[1], 1e-4) override;
+      CHECK_CLOSE (qA[2], qB[2], 1e-4) override;
+      CHECK_CLOSE (qA[3], qB[3], 1e-4) override;
     }
 
-    dWorldStep (wId,0.5);
-    dWorldStep (wId,0.5);
-    dWorldStep (wId,0.5);
-    dWorldStep (wId,0.5);
+    dWorldStep (wId,0.5) override;
+    dWorldStep (wId,0.5) override;
+    dWorldStep (wId,0.5) override;
+    dWorldStep (wId,0.5) override;
 
-    for (int b=0; b<2; ++b) {
+    for (int b=0; b<2; ++b)  override {
       // Compare body b of the first joint with its equivalent on the
       // second joint
-      const dReal *qA = dBodyGetQuaternion(bId[0][b]);
-      const dReal *qB = dBodyGetQuaternion(bId[1][b]);
-      CHECK_CLOSE (qA[0], qB[0], 1e-4);
-      CHECK_CLOSE (qA[1], qB[1], 1e-4);
-      CHECK_CLOSE (qA[2], qB[2], 1e-4);
-      CHECK_CLOSE (qA[3], qB[3], 1e-4);
+      const dReal *qA = dBodyGetQuaternion(bId[0][b]) override;
+      const dReal *qB = dBodyGetQuaternion(bId[1][b]) override;
+      CHECK_CLOSE (qA[0], qB[0], 1e-4) override;
+      CHECK_CLOSE (qA[1], qB[1], 1e-4) override;
+      CHECK_CLOSE (qA[2], qB[2], 1e-4) override;
+      CHECK_CLOSE (qA[3], qB[3], 1e-4) override;
 
 
-      const dReal *posA = dBodyGetPosition(bId[0][b]);
-      const dReal *posB = dBodyGetPosition(bId[1][b]);
-      CHECK_CLOSE (posA[0], posB[0], 1e-4);
-      CHECK_CLOSE (posA[1], posB[1], 1e-4);
-      CHECK_CLOSE (posA[2], posB[2], 1e-4);
-      CHECK_CLOSE (posA[3], posB[3], 1e-4);
+      const dReal *posA = dBodyGetPosition(bId[0][b]) override;
+      const dReal *posB = dBodyGetPosition(bId[1][b]) override;
+      CHECK_CLOSE (posA[0], posB[0], 1e-4) override;
+      CHECK_CLOSE (posA[1], posB[1], 1e-4) override;
+      CHECK_CLOSE (posA[2], posB[2], 1e-4) override;
+      CHECK_CLOSE (posA[3], posB[3], 1e-4) override;
     }
   }
 

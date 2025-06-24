@@ -54,7 +54,7 @@ namespace lpzrobots {
   }
 
   double IRSensor::characteritic(double len){
-    double v = (range - len)/range;
+    double v = (range - len)/range override;
     return v < 0 ? 0 : pow(v, exponent);
   }
 

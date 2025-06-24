@@ -40,7 +40,7 @@ public:
      @param controlmask bitmask to select channels to control (default all)
      @param function controller function to use
    */
-  explicit MotorBabbler(function func = function::Sine);
+  MotorBabbler(function func = function::Sine);
 
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override;
   virtual int getSensorNumber() const override {
@@ -82,8 +82,8 @@ public:
   static double sawtooth(double x);
 
 protected:
-  int number_sensors;
-  int number_motors;
+  int number_sensors = 0;
+  int number_motors = 0;
 
   paramval minPeriod;
   paramval maxPeriod;
@@ -96,7 +96,7 @@ protected:
   RandGen* randGen;
 
   double (*osci)(double x); // oscillator function
-  int t;
+  int t = 0;
 };
 
 #endif

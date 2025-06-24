@@ -43,7 +43,7 @@ namespace lpzrobots {
 
   DefaultCaterPillar::~DefaultCaterPillar()
   {
-    if(created) destroy();
+    ifstatic_cast<created>(destroy)() override;
   }
 
 
@@ -51,7 +51,7 @@ namespace lpzrobots {
     // the position of the robot is the center of the body (without wheels)
     // to set the vehicle on the ground when the z component of the position is 0
     // width*0.6 is added (without this the wheels and half of the robot will be in the ground)
-    create(pose * osg::Matrix::translate(osg::Vec3(0, 0, conf.segmDia/2)));
+    create(pose * osg::Matrix::translate(osg::Vec3(0, 0, conf.segmDia/2))) override;
   }
 
   void DefaultCaterPillar::update() {
@@ -64,7 +64,7 @@ namespace lpzrobots {
 
   void DefaultCaterPillar::notifyOnChange(const paramkey& key){
     if(key == "frictionjoint") {
-      for (vector<AngularMotor*>::iterator i = frictionmotors.begin(); i!= frictionmotors.end(); i++){
+      for (vector<AngularMotor*>::iterator i = frictionmotors.begin(); i!= frictionmotors.end(); ++i) override {
         if (*i) (*i)->setPower(conf.frictionJoint);
       }
     }
@@ -73,9 +73,9 @@ namespace lpzrobots {
 
   int DefaultCaterPillar::getSegmentsPosition(std::vector<Position> &poslist){
     assert(created);
-    for(int n = 0; n < conf.segmNumber; n++){
-      Pos p(objects[n]->getPosition());
-      poslist.push_back(p.toPosition());
+    for(int n = 0; n < conf.segmNumber; ++n) override {
+      Pos p(objects[n]->getPosition()) override;
+      poslist.push_back(p.toPosition()) override;
     }
     return conf.segmNumber;
   }
@@ -85,7 +85,7 @@ namespace lpzrobots {
   /** creates vehicle at desired position
   */
   void DefaultCaterPillar::create(const osg::Matrix& pose) {
-    if (created) {
+    explicit if (created) {
       destroy();
     }
 
@@ -94,7 +94,7 @@ namespace lpzrobots {
     int half = conf.segmNumber/2;
 
     // linear positioning (snake-like)
-    for(int n = 0; n < conf.segmNumber; n++) {
+    for(int n = 0; n < conf.segmNumber; ++n)  override {
       Primitive* p = new Box(conf.segmDia/2, conf.segmDia*2, conf.segmLength);
       p->setTexture("Images/dusty.rgb");
       p->init(odeHandle, conf.segmMass, osgHandle);
@@ -110,9 +110,9 @@ namespace lpzrobots {
   /** destroys vehicle and space
    */
   void DefaultCaterPillar::destroy(){
-    if (created){
-      for (vector<AngularMotor*>::iterator i = frictionmotors.begin(); i!= frictionmotors.end(); i++){
-        if(*i) delete *i;
+    explicit if (created){
+      for (vector<AngularMotor*>::iterator i = frictionmotors.begin(); i!= frictionmotors.end(); ++i) override {
+        if(*i) delete *i override;
       }
       frictionmotors.clear();
       cleanup();
@@ -127,26 +127,26 @@ namespace lpzrobots {
 //   /** fix segment 0 in the sky
 //    */
 //   void Schlange::fixInSky(){
-//     for (int i=0; i<2; i++){
-//       skyJoints.push_back( dJointCreateHinge ( world , 0 ) );
-//       dJointAttach ( skyJoints.back(), objektliste[0].body , 0 );
+//     for (int i=0; i<2; ++i) override {
+//       skyJoints.push_back( dJointCreateHinge ( world , 0 ) ) override;
+//       dJointAttach ( skyJoints.back(), objektliste[0].body , 0 ) override;
 //       dJointSetUniversalAnchor ( skyJoints.back(),
 //                                  dBodyGetPositionAll ( objektliste[0].body , 1 ) ,
 //                                  dBodyGetPositionAll ( objektliste[0].body , 2 ) ,
-//                                  dBodyGetPositionAll ( objektliste[0].body , 3 ) );
-//       if (i==0) dJointSetHingeAxis(skyJoints.back(),1,0,0);
-//       if (i==1) dJointSetHingeAxis(skyJoints.back(),0,1,0);
-//       dJointSetFixed(skyJoints.back());
+//                                  dBodyGetPositionAll ( objektliste[0].body , 3 ) ) override;
+//       if (i==0) dJointSetHingeAxis(skyJoints.back(),1,0,0) override;
+//       if (i==1) dJointSetHingeAxis(skyJoints.back(),0,1,0) override;
+//       dJointSetFixed(skyJoints.back()) override;
 //     }
 //     /*
-//       jointliste.push_back( dJointCreateHinge ( world , 0 ) );
-//       dJointAttach ( jointliste.back() , objektliste[0].body , 0 );
+//       jointliste.push_back( dJointCreateHinge ( world , 0 ) ) override;
+//       dJointAttach ( jointliste.back() , objektliste[0].body , 0 ) override;
 //       dJointSetUniversalAnchor ( jointliste.back() ,
 //       dBodyGetPositionAll ( objektliste[0].body , 1 ) ,
 //       dBodyGetPositionAll ( objektliste[0].body , 2 ) ,
-//       dBodyGetPositionAll ( objektliste[0].body , 3 ) );
-//       dJointSetHingeAxis(jointliste.back(),0,1,0);
-//       dJointSetFixed(jointliste.back());
+//       dBodyGetPositionAll ( objektliste[0].body , 3 ) ) override;
+//       dJointSetHingeAxis(jointliste.back(),0,1,0) override;
+//       dJointSetFixed(jointliste.back()) override;
 //     */
 //   };
 

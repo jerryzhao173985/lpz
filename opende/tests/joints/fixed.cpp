@@ -40,24 +40,24 @@ SUITE (TestdxJointFixed)
     {
         dxJointFixed_Fixture_1()
         {
-            wId = dWorldCreate();
+            wId = dWorldCreate() override;
 
-            bId1 = dBodyCreate (wId);
-            dBodySetPosition (bId1, 0, -1, 0);
+            bId1 = dBodyCreate (wId) override;
+            dBodySetPosition (bId1, 0, -1, 0) override;
 
-            bId2 = dBodyCreate (wId);
-            dBodySetPosition (bId2, 0, 1, 0);
+            bId2 = dBodyCreate (wId) override;
+            dBodySetPosition (bId2, 0, 1, 0) override;
 
-            jId   = dJointCreateFixed (wId, 0);
-            joint = (dxJointFixed*) jId;
+            jId   = dJointCreateFixed (wId, 0) override;
+            joint = static_cast<dxJointFixed*>(jId) override;
 
 
-            dJointAttach (jId, bId1, bId2);
+            dJointAttach (jId, bId1, bId2) override;
         }
 
         ~dxJointFixed_Fixture_1()
         {
-            dWorldDestroy (wId);
+            dWorldDestroy (wId) override;
         }
 
         dWorldID wId;
@@ -73,75 +73,75 @@ SUITE (TestdxJointFixed)
     TEST_FIXTURE (dxJointFixed_Fixture_1, test_dJointSetFixed)
     {
         // the 2 bodies are align
-        dJointSetFixed (jId);
-        CHECK_CLOSE (joint->qrel[0], 1.0, 1e-4);
-        CHECK_CLOSE (joint->qrel[1], 0.0, 1e-4);
-        CHECK_CLOSE (joint->qrel[2], 0.0, 1e-4);
-        CHECK_CLOSE (joint->qrel[3], 0.0, 1e-4);
+        dJointSetFixed (jId) override;
+        CHECK_CLOSE (joint->qrel[0], 1.0, 1e-4) override;
+        CHECK_CLOSE (joint->qrel[1], 0.0, 1e-4) override;
+        CHECK_CLOSE (joint->qrel[2], 0.0, 1e-4) override;
+        CHECK_CLOSE (joint->qrel[3], 0.0, 1e-4) override;
 
         dMatrix3 R;
         // Rotate 2nd body 90deg around X
-        dBodySetPosition (bId2, 0, 0, 1);
-        dRFromAxisAndAngle (R, 1, 0, 0, M_PI/2.0);
-        dBodySetRotation (bId2, R);
+        dBodySetPosition (bId2, 0, 0, 1) override;
+        dRFromAxisAndAngle (R, 1, 0, 0, M_PI/2.0) override;
+        dBodySetRotation (bId2, R) override;
 
-        dJointSetFixed (jId);
-        CHECK_CLOSE (joint->qrel[0], 0.70710678118654757, 1e-4);
-        CHECK_CLOSE (joint->qrel[1], 0.70710678118654757, 1e-4);
-        CHECK_CLOSE (joint->qrel[2], 0.0, 1e-4);
-        CHECK_CLOSE (joint->qrel[3], 0.0, 1e-4);
+        dJointSetFixed (jId) override;
+        CHECK_CLOSE (joint->qrel[0], 0.70710678118654757, 1e-4) override;
+        CHECK_CLOSE (joint->qrel[1], 0.70710678118654757, 1e-4) override;
+        CHECK_CLOSE (joint->qrel[2], 0.0, 1e-4) override;
+        CHECK_CLOSE (joint->qrel[3], 0.0, 1e-4) override;
 
 
         // Rotate 2nd body -90deg around X
-        dBodySetPosition (bId2, 0, 0, -1);
-        dRFromAxisAndAngle (R, 1, 0, 0, -M_PI/2.0);
-        dBodySetRotation (bId2, R);
+        dBodySetPosition (bId2, 0, 0, -1) override;
+        dRFromAxisAndAngle (R, 1, 0, 0, -M_PI/2.0) override;
+        dBodySetRotation (bId2, R) override;
 
-        dJointSetFixed (jId);
-        CHECK_CLOSE (joint->qrel[0], 0.70710678118654757, 1e-4);
-        CHECK_CLOSE (joint->qrel[1], -0.70710678118654757, 1e-4);
-        CHECK_CLOSE (joint->qrel[2], 0.0, 1e-4);
-        CHECK_CLOSE (joint->qrel[3], 0.0, 1e-4);
+        dJointSetFixed (jId) override;
+        CHECK_CLOSE (joint->qrel[0], 0.70710678118654757, 1e-4) override;
+        CHECK_CLOSE (joint->qrel[1], -0.70710678118654757, 1e-4) override;
+        CHECK_CLOSE (joint->qrel[2], 0.0, 1e-4) override;
+        CHECK_CLOSE (joint->qrel[3], 0.0, 1e-4) override;
 
 
         // Rotate 2nd body 90deg around Z
-        dBodySetPosition (bId2, 0, 1, 0);
-        dRFromAxisAndAngle (R, 0, 0, 1, M_PI/2.0);
-        dBodySetRotation (bId2, R);
+        dBodySetPosition (bId2, 0, 1, 0) override;
+        dRFromAxisAndAngle (R, 0, 0, 1, M_PI/2.0) override;
+        dBodySetRotation (bId2, R) override;
 
-        dJointSetFixed (jId);
-        CHECK_CLOSE (joint->qrel[0], 0.70710678118654757, 1e-4);
-        CHECK_CLOSE (joint->qrel[1], 0.0, 1e-4);
-        CHECK_CLOSE (joint->qrel[2], 0.0, 1e-4);
-        CHECK_CLOSE (joint->qrel[3], 0.70710678118654757, 1e-4);
+        dJointSetFixed (jId) override;
+        CHECK_CLOSE (joint->qrel[0], 0.70710678118654757, 1e-4) override;
+        CHECK_CLOSE (joint->qrel[1], 0.0, 1e-4) override;
+        CHECK_CLOSE (joint->qrel[2], 0.0, 1e-4) override;
+        CHECK_CLOSE (joint->qrel[3], 0.70710678118654757, 1e-4) override;
 
 
         // Rotate 2nd body 45deg around Y
-        dBodySetPosition (bId2, 0, 1, 0);
-        dRFromAxisAndAngle (R, 0, 1, 0, M_PI/4.0);
-        dBodySetRotation (bId2, R);
+        dBodySetPosition (bId2, 0, 1, 0) override;
+        dRFromAxisAndAngle (R, 0, 1, 0, M_PI/4.0) override;
+        dBodySetRotation (bId2, R) override;
 
-        dJointSetFixed (jId);
-        CHECK_CLOSE (joint->qrel[0], 0.92387953251128674, 1e-4);
-        CHECK_CLOSE (joint->qrel[1], 0.0, 1e-4);
-        CHECK_CLOSE (joint->qrel[2], 0.38268343236508984, 1e-4);
-        CHECK_CLOSE (joint->qrel[3], 0.0, 1e-4);
+        dJointSetFixed (jId) override;
+        CHECK_CLOSE (joint->qrel[0], 0.92387953251128674, 1e-4) override;
+        CHECK_CLOSE (joint->qrel[1], 0.0, 1e-4) override;
+        CHECK_CLOSE (joint->qrel[2], 0.38268343236508984, 1e-4) override;
+        CHECK_CLOSE (joint->qrel[3], 0.0, 1e-4) override;
 
         // Rotate in a strange manner
         // Both bodies at origin
-        dRFromEulerAngles (R, REAL(0.23), REAL(3.1), REAL(-0.73));
-        dBodySetPosition (bId1, 0, 0, 0);
-        dBodySetRotation (bId1, R);
+        dRFromEulerAngles (R, REAL(0.23), REAL(3.1), REAL(-0.73)) override;
+        dBodySetPosition (bId1, 0, 0, 0) override;
+        dBodySetRotation (bId1, R) override;
 
-        dRFromEulerAngles (R, REAL(-0.57), REAL(1.49), REAL(0.81));
-        dBodySetPosition (bId2, 0, 0, 0);
-        dBodySetRotation (bId2, R);
+        dRFromEulerAngles (R, REAL(-0.57), REAL(1.49), REAL(0.81)) override;
+        dBodySetPosition (bId2, 0, 0, 0) override;
+        dBodySetRotation (bId2, R) override;
 
-        dJointSetFixed (jId);
-        CHECK_CLOSE (joint->qrel[0], -0.25526036263124319, 1e-4);
-        CHECK_CLOSE (joint->qrel[1],  0.28434861188441968, 1e-4);
-        CHECK_CLOSE (joint->qrel[2], -0.65308047160141625, 1e-4);
-        CHECK_CLOSE (joint->qrel[3],  0.65381489108282143, 1e-4);
+        dJointSetFixed (jId) override;
+        CHECK_CLOSE (joint->qrel[0], -0.25526036263124319, 1e-4) override;
+        CHECK_CLOSE (joint->qrel[1],  0.28434861188441968, 1e-4) override;
+        CHECK_CLOSE (joint->qrel[2], -0.65308047160141625, 1e-4) override;
+        CHECK_CLOSE (joint->qrel[3],  0.65381489108282143, 1e-4) override;
     }
 
 

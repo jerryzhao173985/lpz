@@ -19,7 +19,7 @@ namespace lpzrobots {
   class RangeFinder : public RaySensorBank{
   public:
 
-    RangeFinder() : own(nullptr) {};
+    RangeFinder() : own(nullptr) {} override;
 
     virtual void init(Primitive* own, Joint* joint = 0);
 

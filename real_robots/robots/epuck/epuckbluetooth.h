@@ -112,14 +112,14 @@ namespace lpzrobots{
     void disconnectConnection();
     void init();
 
-    virtual int getSensors(sensor* sensors, int _sensorCount);
-    virtual void setMotors(const motor* motors, int _motorCount);
-    virtual int getSensorNumber(){ return sensorCount; } /** returns number of sensors */
-    virtual int getMotorNumber() { return motorCount; }/** returns number of motors */
+    virtual int getSensors(sensor* sensors, int _sensorCount) override;
+    virtual void setMotors(const motor* motors, int _motorCount) override;
+    virtual int getSensorNumber() const { return sensorCount; } /** returns number of sensors */
+    virtual int getMotorNumber() const { return motorCount; }/** returns number of motors */
     /* the following are not used here, you can ignore them but keep them*/
-    virtual Position getPosition()     const {return Position(0,0,0);}
-    virtual Position getSpeed()        const {return Position(0,0,0);}
-    virtual Position getAngularSpeed() const {return Position(0,0,0);}
+    virtual Position getPosition()     const override {return Position(0,0,0);}
+    virtual Position getSpeed()        const override {return Position(0,0,0);}
+    virtual Position getAngularSpeed() const override {return Position(0,0,0);}
     virtual matrix::Matrix getOrientation() const {            matrix::Matrix m(3,3);            m.toId();            return m;        }
     virtual void processSensors(sensor* pSensor){};/*Default sensors processing*/
     virtual void processSensorsKOH(sensor* pSensor){};/*Your own sensors processing*/

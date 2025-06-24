@@ -160,13 +160,13 @@ public: // Functions
 
   /** returns number of sensors
    */
-  virtual int getSensorNumberIntern(){
+  virtual int getSensorNumberIntern() override {
     return sensorno;
   };
 
   /** returns number of motors
    */
-  virtual int getMotorNumberIntern(){
+  virtual int getMotorNumberIntern() override {
     return motorno;
   };
 
@@ -181,13 +181,13 @@ public: // Functions
     like space-internal collision detection, sensor resets/update etc.
     @param globalData structure that contains global data from the simulation environment
   */
-  virtual void doInternalStuff(GlobalData& globalData);
+  virtual void doInternalStuff(const GlobalData& globalData);
 
-  virtual void sense(GlobalData &globalData);
+  virtual void sense(const GlobalData& globalData);
 
-  virtual double& getSumForce() { return sumForce; }
+  virtual double& getSumForce() const override { return sumForce; }
 
-  virtual double& getContactPoints() { return contactPoints; }
+  virtual double& getContactPoints() const override { return contactPoints; }
 
 protected: // Functions
   /** creates vehicle at desired pose
@@ -224,24 +224,23 @@ protected: // Functions
   // getTorqueSensorData
   sensor getTorqueData(TorqueSensor*  torqueSensor);
 
-  // convert Pose Matrix(Quatanion) to the roll, pitch, yaw angle (rad)
-  osg::Vec3d convert_Quat_to_RollPitchYaw(osg::Quat quat);
+  // convert Pose Matrixstatic_cast<Quatanion>(to) the roll, pitch, yaw angle static_cast<rad>(osg)::Vec3d convert_Quat_to_RollPitchYaw(osg::Quat quat);
 
   // calculate COG Position
-  osg::Vec3d calc_COGPosition(void);
+  osg::Vec3d calc_COGPositionstatic_cast<void>(override);
 
 
   /**
    * Inspectable interface
    */
   /*
-  virtual std::list<iparamkey> getInternalParamNames() const  { return std::list<iparamkey>(); }
+  virtual std::list<iparamkey> getInternalParamNames() const override { return std::list<iparamkey>(); }
 
-  virtual std::list<iparamval> getInternalParams() const { return std::list<iparamval>(); }*/
+  virtual std::list<iparamval> getInternalParams() const override { return std::list<iparamval>(); }*/
   /*
-  virtual std::list<Inspectable::iparamkey> getInternalParamNames() const;
+  virtual std::list<Inspectable::iparamkey> getInternalParamNames() const override;
 
-  virtual std::list<Inspectable::iparamval> getInternalParams() const;
+  virtual std::list<Inspectable::iparamval> getInternalParams() const override;
   */
 
 protected: // Values
@@ -251,7 +250,7 @@ protected: // Values
   //! Leg struct
   // Contains Objects, joints and servos for each Leg
   struct Leg{
-    Leg(); // constructor, it make all of the value "0" !!
+    Leg(); // constructor, it make all of the value __PLACEHOLDER_5__ !!
     HingeJoint* tcJoint;
     HingeJoint* ctJoint;
     HingeJoint* ftJoint;
@@ -273,7 +272,7 @@ protected: // Values
   // Contains Objects for Body (two hexagonal plate)
 
   struct Trunk{
-    Trunk(); // constructor, it make all of the value "0"
+    Trunk(); // constructor, it make all of the value __PLACEHOLDER_6__
     Primitive* tPlate[2];
     Primitive* tTrans;
     ImpTransform2* tUpTrans;

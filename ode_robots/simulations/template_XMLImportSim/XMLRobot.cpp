@@ -41,7 +41,7 @@ XMLRobot::~XMLRobot() {
         like acting and sensing of internal motors/sensors etc.
         @param globalData structure that contains global data from the simulation environment
  */
-  void XMLRobot::doInternalStuff(GlobalData& globalData) {
+  void XMLRobot::doInternalStuff(const GlobalData& globalData) {
 
   }
 

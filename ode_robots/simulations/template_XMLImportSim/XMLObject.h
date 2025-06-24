@@ -12,9 +12,9 @@
 
 class XMLObject {
 public:
-        XMLObject(XMLParserEngine& xmlEngine) : xmlEngine(xmlEngine) {}
+        explicit XMLObject(const XMLParserEngine& xmlEngine_) : xmlEngine(xmlEngine_) {}
 
-        virtual ~XMLObject() override;
+        virtual ~XMLObject();
 
 protected:
         XMLParserEngine& xmlEngine;

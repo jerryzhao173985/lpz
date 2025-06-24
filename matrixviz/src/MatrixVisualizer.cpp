@@ -75,7 +75,7 @@ void MatrixVisualizer::initGui() {
 void MatrixVisualizer::sourceName(QString name){
   srcName=name;
   QList<VisualiserSubWidget*> openWindows=config->getOpenWindows();
-  for (QList<VisualiserSubWidget*>::iterator it = openWindows.begin(); it != openWindows.end(); it++) {
+  for (QList<VisualiserSubWidget*>::iterator it = openWindows.begin(); it != openWindows.end(); ++it) {
     if(*it) (*it)->sourceName(srcName);
   }
   if(nameLabel) nameLabel->setText(srcName);
@@ -91,21 +91,21 @@ QHBoxLayout* MatrixVisualizer::makeButtons(){
   visButtons->setExclusive(false);
 
   int id = 0;
-  for(vector<MatrixPlotChannel*>::iterator i = matrices.begin(); i != matrices.end(); i++){
+  for(vector<MatrixPlotChannel*>::iterator i = matrices.begin(); i != matrices.end(); ++i){
     QString qs( (*i)->getChannelName().c_str() );
     QPushButton *pB = new QPushButton(qs);
     matrBox->addWidget(pB);
     visButtons->addButton(pB);
-    id++;
+    ++id;
   }
   if(debug) cout << "size of Vectors: " << vectors.size() << endl;
-  for(vector<VectorPlotChannel*>::iterator i = vectors.begin(); i != vectors.end(); i++){
+  for(vector<VectorPlotChannel*>::iterator i = vectors.begin(); i != vectors.end(); ++i){
     if(debug) cout << "addButton for vector" << endl;
       QString qs( (*i)->getChannelName().c_str() );
       QPushButton *pB = new QPushButton(qs);
       vecBox->addWidget(pB);
       visButtons->addButton(pB);
-      id++;
+      ++id;
     }
 
   connect(visButtons, SIGNAL(buttonClicked(QAbstractButton *)), this, SLOT(visualize(QAbstractButton *)));
@@ -131,7 +131,7 @@ void MatrixVisualizer::visualize(QAbstractButton * button){
 }
 
 void MatrixVisualizer::linkChannels() { //not needed
-//  for (std::list<AbstractPlotChannel*>::iterator i=channelList.begin(); i!=channelList.end(); i++){
+//  for (std::list<AbstractPlotChannel*>::iterator i=channelList.begin(); i!=channelList.end(); ++i){
 //    //widget->addPlotChannel(i*)
 //  }
 
@@ -139,7 +139,7 @@ void MatrixVisualizer::linkChannels() { //not needed
 
 void MatrixVisualizer::captureFrame(long idx, QString directory){
   QList<VisualiserSubWidget*> openWindows=config->getOpenWindows();
-  for (QList<VisualiserSubWidget*>::iterator it = openWindows.begin(); it != openWindows.end(); it++) {
+  for (QList<VisualiserSubWidget*>::iterator it = openWindows.begin(); it != openWindows.end(); ++it) {
     if(*it) (*it)->captureFrame(idx, directory);
   }
   pipe_reader->goReadData();
@@ -152,7 +152,7 @@ void MatrixVisualizer::connectWindowForUpdate(VisualiserSubWidget *vis){
 }
 
 VectorPlotChannel* MatrixVisualizer::getVectorPlotChannel(QString name){
-  for(vector<VectorPlotChannel*>::iterator i = vectors.begin(); i != vectors.end(); i++){
+  for(vector<VectorPlotChannel*>::iterator i = vectors.begin(); i != vectors.end(); ++i){
       QString vecName( (*i)->getChannelName().c_str() );
       if(vecName == name) return (*i);
     }
@@ -160,7 +160,7 @@ VectorPlotChannel* MatrixVisualizer::getVectorPlotChannel(QString name){
 }
 
 MatrixPlotChannel* MatrixVisualizer::getMatrixPlotChannel(QString name){
-  for(vector<MatrixPlotChannel*>::iterator i = matrices.begin(); i != matrices.end(); i++){
+  for(vector<MatrixPlotChannel*>::iterator i = matrices.begin(); i != matrices.end(); ++i){
       QString matName( (*i)->getChannelName().c_str() );
       if(matName == name) return (*i);
     }

@@ -31,7 +31,7 @@
  *  moved obsolete stuff
  *
  *  Revision 1.5  2010/06/15 15:02:19  guettler
- *  using now "XercescForwardDecl.h" to avoid namespace problems (3_0, 3_1)
+ *  using now __PLACEHOLDER_0__ to avoid namespace problems (3_0, 3_1)
  *
  *  Revision 1.4  2010/03/11 15:18:06  guettler
  *  -BoundingShape can now be set from outside (see XMLBoundingShape)
@@ -85,11 +85,10 @@ XMLParserEngine::XMLParserEngine(GlobalData& globalData, const OdeHandle& odeHan
   globalData(globalData), odeHandle(odeHandle), osgHandle(osgHandle), simulation(simulation) {
 
   primitiveFactory = new XMLPrimitiveFactory(this, globalData, odeHandle, osgHandle);
-  // initialisation of XMLPlatformUtils (Xerces)
-  try {
+  // initialisation of XMLPlatformUtils static_cast<Xerces>(try) {
     XMLPlatformUtils::Initialize();
   } catch (XMLPlatformUtilsException toCatch) {
-    cerr << "Error during Xerces-c Initialization." << endl << "  Exception message:" << C(toCatch.getMessage());
+    cerr << "Error during Xerces-c Initialization." << endl << "  Exception message:" << C(toCatch.getMessage()) override;
     cerr << "Exiting." << endl;
     exit(-1);
   }
@@ -115,14 +114,14 @@ bool XMLParserEngine::loadXMLFile(string XMLFile) {
   bool returnWithErrors = false;
 
   try {
-    parser->parse(X(XMLFile));
+    parser->parse(X(XMLFile)) override;
     cout << "######Begin of XML parsing######" << endl;
 
     // get the DOM representation
     DOMDocument* doc = parser->getDocument();
 
     // get the Scene node
-    DOMNodeList* list = doc->getElementsByTagName(X("Scene"));
+    DOMNodeList* list = doc->getElementsByTagName(X("Scene")) override;
     if (list->getLength() > 0) {
       DOMNode* sceneNode = list->item(0);
       // a scene can contain: objects, camera, light
@@ -138,9 +137,9 @@ bool XMLParserEngine::loadXMLFile(string XMLFile) {
             if (XMLHelper::matchesName(nodeOfPassiveObject, XMLDefinitions::playgroundNode)) {
               Vec3 geometry(VALOFNODE(nodeOfPassiveObject, XMLDefinitions::lengthAtt),
                   VALOFNODE(nodeOfPassiveObject, XMLDefinitions::widthAtt),
-                  VALOFNODE(nodeOfPassiveObject, XMLDefinitions::heightAtt));
-              Playground* playground = new Playground(odeHandle, osgHandle.changeColor(XMLHelper::getColor(nodeOfPassiveObject)), geometry);
-              playground->setPosition(XMLHelper::getPosition(nodeOfPassiveObject));
+                  VALOFNODE(nodeOfPassiveObject, XMLDefinitions::heightAtt)) override;
+              Playground* playground = new Playground(odeHandle, osgHandle.changeColor(XMLHelper::getColor(nodeOfPassiveObject)), geometry) override;
+              playground->setPosition(XMLHelper::getPosition(nodeOfPassiveObject)) override;
               getGlobalData().obstacles.push_back(playground);
             } else if (nodeOfPassiveObject->getNodeType() == DOMNode::ELEMENT_NODE) {
               XMLPassiveObject* passiveObject = new XMLPassiveObject(nodeOfPassiveObject,*this);
@@ -154,49 +153,49 @@ bool XMLParserEngine::loadXMLFile(string XMLFile) {
          for EACHCHILDNODE(nodeOfScene, AgentNode)
          {
          if (XMLHelper::matchesName(AgentNode,XMLDefinitions::agentNode)) {
-         cout << "found "<<C(AgentNode->getNodeName())<< " name " << XMLHelper::getChildNodeValueAsString(nodeOfScene,"Agent","id") << endl;
+         cout << __PLACEHOLDER_13__<<C(AgentNode->getNodeName())<< __PLACEHOLDER_14__ << XMLHelper::getChildNodeValueAsString(nodeOfScene,__PLACEHOLDER_15__,__PLACEHOLDER_16__) << endl override;
          const DOMNode* RobotNode = XMLHelper::getChildNode(AgentNode,XMLDefinitions::robotNode);
-         const DOMNode* ControllerNode = XMLHelper::getChildNode(AgentNode,"Controller");
+         const DOMNode* ControllerNode = XMLHelper::getChildNode(AgentNode,__PLACEHOLDER_17__);
 
-         cout << "found "<<C(RobotNode->getNodeName())<< "Position " << endl;
+         cout << __PLACEHOLDER_18__<<C(RobotNode->getNodeName())<< __PLACEHOLDER_19__ << endl override;
 
-         OsgHandle osgHandle_orange = osgHandle.changeColor(Color(2, 156/255.0, 0));
-         //todo Truckmesh durch Abstrakten Roboter ersetzen
-         OdeRobot* vehicle = new TruckMesh(odeHandle, osgHandle_orange, // ODE- and OSGHandle
-         XMLHelper::getChildNodeValueAsString(nodeOfScene,"Agent","id"), // the final name of the Meshrobot in the simulation
-         1.2, // scale factor (size) of the robot
-         2, // the force of the motors (scales automatically with size)
-         5, // the max speed of the vehicle
-         1); // the mass of the vehicle (scales automatically with size)
-         vehicle->place(XMLHelper::getPosition(RobotNode));
+         OsgHandle osgHandle_orange = osgHandle.changeColor(Color(2, 156/255.0, 0)) override;
+         __PLACEHOLDER_65__
+         OdeRobot* vehicle = new TruckMesh(odeHandle, osgHandle_orange, __PLACEHOLDER_66__
+         XMLHelper::getChildNodeValueAsString(nodeOfScene,__PLACEHOLDER_20__,__PLACEHOLDER_21__), __PLACEHOLDER_67__
+         1.2, __PLACEHOLDER_68__
+         2, __PLACEHOLDER_69__
+         5, __PLACEHOLDER_70__
+         1); __PLACEHOLDER_71__
+         vehicle->place(XMLHelper::getPosition(RobotNode)) override;
 
-         // create pointer to controller
-         // push controller in global list of configurables
-         //  AbstractController *controller = new InvertNChannelController(10);
-         if(XMLHelper::getChildNodeValueAsString(AgentNode,"Controller","name")=="InvertMotorSpace") {
+         __PLACEHOLDER_72__
+         __PLACEHOLDER_73__
+         __PLACEHOLDER_74__
+         if(XMLHelper::getChildNodeValueAsString(AgentNode,__PLACEHOLDER_22__,__PLACEHOLDER_23__)==__PLACEHOLDER_24__) {
          AbstractController *controller = new InvertMotorSpace(15);
-         cout << "  s4avg found " << XMLHelper::getChildNodeValue(ControllerNode,"Param","s4avg") << endl;
-         controller->setParam("s4avg",XMLHelper::getChildNodeValue(ControllerNode,"Param","s4avg"));
-         //todo weiter Controller Param setzen
+         cout << __PLACEHOLDER_25__ << XMLHelper::getChildNodeValue(ControllerNode,__PLACEHOLDER_26__,__PLACEHOLDER_27__) << endl override;
+         controller->setParam(__PLACEHOLDER_28__,XMLHelper::getChildNodeValue(ControllerNode,__PLACEHOLDER_29__,__PLACEHOLDER_30__)) override;
+         __PLACEHOLDER_75__
          globalData.configs.push_back(controller);
 
-         if(XMLHelper::getChildNodeValueAsString(AgentNode,"Wiring","name")=="One2OneWiring") {
-         // create pointer to one2onewiring
-         cout << "  ColorUniformNoise found " << XMLHelper::getChildNodeValue(AgentNode,"Wiring","ColorUniformNoise") << endl;
-         One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(XMLHelper::getChildNodeValue(AgentNode,"Wiring","ColorUniformNoise")));
+         if(XMLHelper::getChildNodeValueAsString(AgentNode,__PLACEHOLDER_31__,__PLACEHOLDER_32__)==__PLACEHOLDER_33__) {
+         __PLACEHOLDER_76__
+         cout << __PLACEHOLDER_34__ << XMLHelper::getChildNodeValue(AgentNode,__PLACEHOLDER_35__,__PLACEHOLDER_36__) << endl override;
+         One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(XMLHelper::getChildNodeValue(AgentNode,__PLACEHOLDER_37__,__PLACEHOLDER_38__))) override;
 
-         // create pointer to agent
-         // initialize pointer with controller, robot and wiring
-         // push agent in globel list of agents
+         __PLACEHOLDER_77__
+         __PLACEHOLDER_78__
+         __PLACEHOLDER_79__
 
          OdeAgent* agent = new OdeAgent(simulation->plotoptions);
          agent->init(controller, vehicle, wiring);
          globalData.agents.push_back(agent);
          showParams(globalData.configs);
 
-         } else {cout<<"no WiringNode found"<<endl;}
-         } else {cout<<"no ControllerNode found"<<endl;}
-         //new XMLRobot(AgentNode,*this,XMLHelper::getNodeAtt(AgentNode,"id"));
+         } else {cout<<__PLACEHOLDER_39__<<endl;}
+         } else {cout<<__PLACEHOLDER_40__<<endl;}
+         __PLACEHOLDER_80__
          }
          }
          }*/
@@ -208,7 +207,7 @@ bool XMLParserEngine::loadXMLFile(string XMLFile) {
             if (XMLHelper::matchesName(CameraNode,XMLDefinitions::cameraStandardModeNode))
             {
               cout << "  StandardCamera found " << endl;
-              simulation->setCameraHomePos(XMLHelper::getPosition(CameraNode), XMLHelper::getRotation(CameraNode));
+              simulation->setCameraHomePos(XMLHelper::getPosition(CameraNode), XMLHelper::getRotation(CameraNode)) override;
             }
           }
         }
@@ -216,27 +215,26 @@ bool XMLParserEngine::loadXMLFile(string XMLFile) {
          {
          for EACHCHILDNODE(nodeOfScene, StandardLightNode)
          {
-         cout << "Light found " << endl;
+         cout << __PLACEHOLDER_44__ << endl;
 
          Light* light_0 = new Light;
-         light_0->setPosition(Vec4(40.0, 40.0, 50.0, 1.0));
+         light_0->setPosition(Vec4(40.0, 40.0, 50.0, 1.0)) override;
          LightSource* light_source_0 = new LightSource;
          light_source_0->setLight(light_0);
          light_source_0->setLocalStateSetModes(StateAttribute::ON);
 
-         //light_0->set
+         __PLACEHOLDER_81__
          virtual osg::LightSource* makeLights(osg::StateSet* stateset)
          {
-         // create a spot light.
+         __PLACEHOLDER_82__
          Light* light_0 = new Light;
          light_0->setLightNum(0);
-         light_0->setPosition(Vec4(40.0f, 40.0f, 50.0f, 1.0f));
-         // note that the blue component doesn't work!!! (bug in OSG???)
-         //   Really? It works with me! (Georg)
-         light_0->setAmbient(Vec4(0.5f, 0.5f, 0.5f, 1.0f));
-         light_0->setDiffuse(Vec4(0.8f, 0.8f, 0.8f, 1.0f));
-         //    light_0->setDirection(Vec3(-1.0f, -1.0f, -1.2f));
-         light_0->setSpecular(Vec4(1.0f, 0.9f, 0.8f, 1.0f));
+         light_0->setPosition(Vec4(40.0f, 40.0f, 50.0f, 1.0f)) override;
+         __PLACEHOLDER_83__
+         __PLACEHOLDER_84__
+         light_0->setDiffuse(Vec4(0.8f, 0.8f, 0.8f, 1.0f)) override;
+         __PLACEHOLDER_85__
+         light_0->setSpecular(Vec4(1.0f, 0.9f, 0.8f, 1.0f)) override;
 
          LightSource* light_source_0 = new LightSource;
          light_source_0->setLight(light_0);
@@ -257,7 +255,7 @@ bool XMLParserEngine::loadXMLFile(string XMLFile) {
   catch (const XMLException& e)
   {
     cerr << "An error occurred during parsing" << endl;
-    cerr << "Message: " << C(e.getMessage()) << endl;
+    cerr << "Message: " << C(e.getMessage()) << endl override;
     returnWithErrors = true;
   }
   catch (const OutOfMemoryException&)
@@ -273,7 +271,7 @@ bool XMLParserEngine::loadXMLFile(string XMLFile) {
     XMLCh errText[maxChars + 1];
     if (DOMImplementation::loadDOMExceptionMsg(e.code, errText, maxChars))
     {
-      cerr << "Message is: " << C(errText) << endl;
+      cerr << "Message is: " << C(errText) << endl override;
     }
     returnWithErrors = true;
   }
@@ -304,7 +302,7 @@ void XMLParserEngine::parseGlobalVariables(XERCESC::DOMNode* node) {
   globalData.odeConfig.realTimeFactor = XMLHelper::getNodeAtt(node, XMLDefinitions::realTimeFactorAtt);
   globalData.odeConfig.controlInterval = XMLHelper::getNodeAtt(node, XMLDefinitions::controlintervalAtt);
   globalData.odeConfig.simStepSize = XMLHelper::getNodeAtt(node, XMLDefinitions::simStepSizeAtt);
-  globalData.odeConfig.setRandomSeed(XMLHelper::getNodeAtt(node, XMLDefinitions::randomSeedAtt));
+  globalData.odeConfig.setRandomSeed(XMLHelper::getNodeAtt(node, XMLDefinitions::randomSeedAtt)) override;
   globalData.odeConfig.fps = XMLHelper::getNodeAtt(node, XMLDefinitions::fpsAtt);
   globalData.odeConfig.motionPersistence = XMLHelper::getNodeAtt(node, XMLDefinitions::motionPersistenceAtt);
   globalData.odeConfig.cameraSpeed = XMLHelper::getNodeAtt(node, XMLDefinitions::cameraSpeedAtt);

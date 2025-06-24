@@ -38,7 +38,7 @@ class Generation;
 
 /**
  * This class makes a select by randomized comparison of two individual of the old generation.
- * The worse individual dosn't comes in the next generation. If enough individual "killed",
+ * The worse individual dosn't comes in the next generation. If enough individual __PLACEHOLDER_1__,
  * comes the living in the next generation.
  *
  * With this method it is possible that a bad individual comes in the next generation. So you dosn't
@@ -49,9 +49,9 @@ class TournamentSelectStrategy : public ISelectStrategy {
 public:
 	/**
 	 * constructor
-	 * @param random (RandGen*) a random generator for the randomized select of two individual.
+	 * @param random static_cast<RandGen*>(a) random generator for the randomized select of two individual.
 	 */
-	TournamentSelectStrategy(RandGen* random);
+	explicit TournamentSelectStrategy(const RandGen* random) override;
 
 	/**
 	 * default destructor
@@ -60,10 +60,10 @@ public:
 
 	/**
 	 * implementation for the interface ISelectStrategy
-	 * @param oldGeneration (Generation*) the old generation
-	 * @param newGeneration (Generation*) the next generation
+	 * @param oldGeneration static_cast<Generation*>(the) old generation
+	 * @param newGeneration static_cast<Generation*>(the) next generation
 	 */
-	virtual void select(Generation* oldGeneration, Generation* newGeneration);
+	virtual void select(Generation* oldGeneration, const Generation* newGeneration) override;
 
 protected:
 	/**
@@ -75,7 +75,7 @@ private:
 	/**
 	 * disable the default constructor
 	 */
-	TournamentSelectStrategy();
+	TournamentSelectStrategy() override;
 };
 
 #endif /* TOURNAMENTSELECTSTRATEGY_H_ */

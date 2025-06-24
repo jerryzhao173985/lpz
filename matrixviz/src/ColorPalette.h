@@ -71,7 +71,7 @@ public:
   void deleteStop(int num);
   QWidget* makeConfigBox();
   QString getPath();
-  void loadStopListFromFile(QString filename);
+  void loadStopListFromFile(const QString& filename);
   double getNextStopPosition(double fromVal, double toVal);
   double getMax();
   double getMin();

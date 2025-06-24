@@ -8,7 +8,7 @@
  *   LICENSE:                                                              *
  *   This work is licensed under the Creative Commons                      *
  *   Attribution-NonCommercial-ShareAlike 2.5 License. To view a copy of   *
- *   this license, visit http://creativecommons.org/licenses/by-nc-sa/2.5/ *
+ *   this license, visit http:__PLACEHOLDER_0__
  *   or send a letter to Creative Commons, 543 Howard Street, 5th Floor,   *
  *   San Francisco, California, 94105, USA.                                *
  *                                                                         *
@@ -80,7 +80,7 @@
 typedef struct DerLinInvertMPIConf {
   int buffersize;  ///< buffersize size of the time-buffer for x,y,eta
   double cInit;    ///< cInit size of the C matrix to initialised with.
-  double cNonDiag; ///< cNonDiag is the size of the nondiagonal elements in respect to the diagonal (cInit) ones
+  double cNonDiag; ///< cNonDiag is the size of the nondiagonal elements in respect to the diagonal static_cast<cInit>(ones)
   bool modelInit;  ///< size of the unit-map strenght of the model
   bool useS;    ///< useS decides whether to use the S matrix in addition to the A matrix
   bool someInternalParams;  ///< someInternalParams if true only some internal parameters are exported, otherwise all
@@ -104,30 +104,30 @@ typedef struct DerLinInvertMPIConf {
 class DerLinInvertMPI : public InvertMotorController {
 
 public:
-  DerLinInvertMPI(const DerLinInvertMPIConf& conf = getDefaultConf());
-  virtual void init(int sensornumber, int motornumber, RandGen* randg) override;
+  DerLinInvertMPI(const DerLinInvertMPIConf& conf = getDefaultConf()) override;
+  virtual void init(int sensornumber, int motornumber, RandGen* randg);
 
-  virtual ~DerLinInvertMPI() override;
+  virtual ~DerLinInvertMPI();
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
-  virtual int getSensorNumber() const { return number_sensors; }
+  virtual int getSensorNumber() const override { return number_sensors; }
   /// returns the mumber of motors the controller was initialised with or 0 if not initialised
-  virtual int getMotorNumber() const  { return number_motors; }
+  virtual int getMotorNumber() const override { return number_motors; }
 
   /// performs one step (includes learning).
   /// Calulates motor commands from sensor inputs.
-  virtual void step(const sensor* , int number_sensors, motor* , int number_motors) override;
+  virtual void step(const sensor* , int number_sensors, motor* , int number_motors);
 
   /// performs one step without learning. Calulates motor commands from sensor inputs.
   virtual void stepNoLearning(const sensor* , int number_sensors,
-                              motor* , int number_motors) override;
+                              motor* , int number_motors);
 
 
   /**************  STOREABLE **********************************/
   /** stores the controller values to a given file. */
   virtual bool store(FILE* f) const override;
   /** loads the controller values from a given file. */
-  virtual bool restore(FILE* f) override;
+  virtual bool restore(FILE* f);
 
   /************** INSPECTABLE ********************************/
   virtual iparamkeylist getInternalParamNames() const override;
@@ -141,16 +141,16 @@ public:
       Please note, that the teaching signal has to be given each timestep
        for a continuous teaching process.
    */
-  virtual void setMotorTeachingSignal(const motor* teaching, int len) override;
+  virtual void setMotorTeachingSignal(const motor* teaching, int len);
 
   /** The given sensor teaching signal (distal learning) is used for this timestep.
       First the belonging motor teachung signal is calculated by the inverse model.
       See setMotorTeachingSignal
    */
-  virtual void setSensorTeachingSignal(const sensor* teaching, int len) override;
+  virtual void setSensorTeachingSignal(const sensor* teaching, int len);
 
 
-  static DerLinInvertMPIConf getDefaultConf(){
+  static DerLinInvertMPIConf getDefaultConf() const {
     DerLinInvertMPIConf c;
     c.buffersize = 50;
     c.cInit = -1.05;
@@ -170,8 +170,8 @@ public:
   void getLastMotors(motor* motors, int len);
 
 protected:
-  unsigned short number_sensors;
-  unsigned short number_motors;
+  unsigned short number_sensors = 0;
+  unsigned short number_motors = 0;
 
   matrix::Matrix A; ///< Model Matrix (motors to sensors)
   matrix::Matrix A0;
@@ -197,14 +197,14 @@ protected:
   matrix::Matrix CCT_inv;
   matrix::Matrix CST;
   matrix::Matrix xsi; ///< current output error
-  double xsi_norm; ///< norm of matrix
-  double xsi_norm_avg; ///< average norm of xsi (used to define whether Modell learns)
-  double pain;         ///< if the modelling error (xsi) is too high we have a pain signal
-  double TLE; // TimeLoopError
-  double grang1; //GrangerCausality
-  double grang2; //GrangerCausality
-  double causal; //GrangerCausality
-  double causalfactor; //GrangerCausality
+  double xsi_norm = 0; ///< norm of matrix
+  double xsi_norm_avg = 0; ///< average norm of xsi (used to define whether Modell learns)
+  double pain;         ///< if the modelling error static_cast<xsi>(is) too high we have a pain signal
+  double TLE = 0; // TimeLoopError
+  double grang1 = 0; //GrangerCausality
+  double grang2 = 0; //GrangerCausality
+  double causal = 0; //GrangerCausality
+  double causalfactor = 0; //GrangerCausality
   matrix::Matrix* x_buffer;
   matrix::Matrix* y_buffer;
   matrix::Matrix* ysat_buffer;
@@ -227,15 +227,15 @@ protected:
   MultiLayerFFNN* sat; ///< satilite network, that learns and teaches
 
   matrix::Matrix y_teaching; ///< teaching motor signal
-  bool useTeaching; ///< flag whether there is an actual teachning signal or not
+  bool useTeaching = false; ///< flag whether there is an actual teachning signal or not
 
   matrix::Matrix x_intern;  ///< fantasy sensor values
-  int fantControl;     ///< interval length for fantasising
-  int fantControlLen;  ///< length of fantasy control
-  int fantReset;       ///< number of fantasy control events before reseting internal state
+  int fantControl = 0;     ///< interval length for fantasising
+  int fantControlLen = 0;  ///< length of fantasy control
+  int fantReset = 0;       ///< number of fantasy control events before reseting internal state
 
-  int t_rand; ///< initial random time to avoid syncronous management of all controllers
-  int managementInterval; ///< interval between subsequent management function calls
+  int t_rand = 0; ///< initial random time to avoid syncronous management of all controllers
+  int managementInterval = 0; ///< interval between subsequent management function calls
   paramval dampS;     ///< damping of S matrix
   paramval dampC;     ///< damping of C matrix
   paramval dampH;     ///< damping of H vector
@@ -252,23 +252,23 @@ protected:
   /// puts the sensors in the ringbuffer, generate controller values and put them in the
   //  ringbuffer as well
   virtual void fillBuffersAndControl(const sensor* x_, int number_sensors,
-                             motor* y_, int number_motors) override;
+                             motor* y_, int number_motors);
 
 /** learn values H,C
     This is the implementation uses a better formula for g^-1 using Mittelwertsatz
     @param delay 0 for no delay and n>0 for n timesteps delay in the SML (s4delay)
 */
-  virtual void learnController(int delay) override;
+  virtual void learnController(int delay);
 
   /// learn conf.model, (and S) using motors y and corresponding sensors x
   //  @param delay 0 for no delay and n>0 for n timesteps delay in the time loop
-  virtual void learnModel(int delay) override;
+  virtual void learnModel(int delay);
 
   /// handles inhibition damping etc.
-  virtual void management() override;
+  virtual void management();
 
   /// returns controller output for given sensor values
-  virtual matrix::Matrix calculateControllerValues(const matrix::Matrix& x_smooth) override;
+  virtual matrix::Matrix calculateControllerValues(const matrix::Matrix& x_smooth);
 
   /** Calculates first and second derivative and returns both in on matrix (above).
       We use simple discrete approximations:
@@ -280,8 +280,8 @@ protected:
 
 public:
 
-  /// calculates the city block distance (abs) norm of the matrix. (abs sum of absolutes / size of matrix)
-     virtual double calcMatrixNorm(const matrix::Matrix& m) override;
+  /// calculates the city block distance static_cast<abs>(norm) of the matrix. (abs sum of absolutes / size of matrix)
+     virtual double calcMatrixNorm(const matrix::Matrix& m);
 
 
 };

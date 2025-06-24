@@ -7,7 +7,7 @@
  *   LICENSE:                                                              *
  *   This work is licensed under the Creative Commons                      *
  *   Attribution-NonCommercial-ShareAlike 2.5 License. To view a copy of   *
- *   this license, visit http://creativecommons.org/licenses/by-nc-sa/2.5/ *
+ *   this license, visit http:__PLACEHOLDER_0__
  *   or send a letter to Creative Commons, 543 Howard Street, 5th Floor,   *
  *   San Francisco, California, 94105, USA.                                *
  *                                                                         *
@@ -51,17 +51,9 @@
 
 
 typedef struct SeMoXHebModConf {
-  int buffersize;   ///< buffersize size of the time-buffer for x,y,eta
   matrix::Matrix initialC; ///< initialC initial controller matrix (if null matrix then automatic, see cInit)
-  double cInit;     ///< cInit initial size of the diagonals of the C matrix (if C is not given)
-  double cNonDiag;  ///< cNonDiag initial size of the non-diagonal elements of the C matrix (if C is not given)
-  double aInit;     ///< aInit initial size of the diagonals of the A matrix
-  double sInit;     ///< sInit initial size of the diagonals of the S matrix
-  bool modelExt;    ///< modelExt if true then additional matrix S is used in world model (sees sensors)
   /** number of context sensors (considered at the end of the sensor
       vector, which are only feed to the model extended model */
-  int numContext;
-  bool someInternalParams;  ///< someInternalParams if true only some internal parameters are exported
 } SeMoXHebModConf;
 
 /**
@@ -80,10 +72,10 @@ typedef struct SeMoXHebModConf {
 class SeMoXHebMod : public HomeokinBase, public Teachable {
   friend class ThisSim;
 public:
-  SeMoXHebMod(const SeMoXHebModConf& conf = getDefaultConf());
+  SeMoXHebMod(const SeMoXHebModConf& conf = getDefaultConf()) override;
 
   /// returns the default configuration
-  static SeMoXHebModConf getDefaultConf(){
+  static SeMoXHebModConf getDefaultConf() const {
     SeMoXHebModConf c;
     c.buffersize = 50;
     // c.initialC // remains 0x0
@@ -97,28 +89,28 @@ public:
     return c;
   }
 
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
 
-  virtual ~SeMoXHebMod() override;
+  virtual ~SeMoXHebMod();
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
-  virtual int getSensorNumber() const { return number_sensors; }
+  virtual int getSensorNumber() const override { return number_sensors; }
   /// returns the mumber of motors the controller was initialised with or 0 if not initialised
-  virtual int getMotorNumber() const  { return number_motors; }
+  virtual int getMotorNumber() const override { return number_motors; }
 
   /// performs one step (includes learning).
   /// Calulates motor commands from sensor inputs.
-  virtual void step(const sensor* , int number_sensors, motor* , int number_motors) override;
+  virtual void step(const sensor* , int number_sensors, motor* , int number_motors);
 
   /// performs one step without learning. Calulates motor commands from sensor inputs.
   virtual void stepNoLearning(const sensor* , int number_sensors,
-                              motor* , int number_motors) override;
+                              motor* , int number_motors);
 
   /**** STOREABLE ****/
   /** stores the controller values to a given file. */
   virtual bool store(FILE* f) const override;
   /** loads the controller values from a given file. */
-  virtual bool restore(FILE* f) override;
+  virtual bool restore(FILE* f);
 
   /**** INSPECTABLE ****/
   virtual std::list<ILayer> getStructuralLayers() const override;
@@ -131,7 +123,7 @@ public:
        for a continuous teaching process.
      @param teaching: matrix with dimensions (motornumber,1)
    */
-  virtual void setMotorTeaching(const matrix::Matrix& teaching) override;
+  virtual void setMotorTeaching(const matrix::Matrix& teaching);
 
   ////// TEST of HEBBIAN Model for teaching
   /** The given sensor teaching signal (distal learning)
@@ -139,16 +131,16 @@ public:
       and then converted to motor error using the hebbian model
      @param teaching: matrix with dimensions (sensornumber,1)
    */
-  virtual void setSensorTeaching(const matrix::Matrix& teaching) override;
+  virtual void setSensorTeaching(const matrix::Matrix& teaching);
   /// returns the last motor values (useful for cross motor coupling)
-  virtual matrix::Matrix getLastMotorValues() override;
+  virtual matrix::Matrix getLastMotorValues();
   /// returns the last sensor values (useful for cross sensor coupling)
-  virtual matrix::Matrix getLastSensorValues() override;
+  virtual matrix::Matrix getLastSensorValues();
 
 
 protected:
-  unsigned short number_sensors;
-  unsigned short number_motors;
+  unsigned short number_sensors = 0;
+  unsigned short number_motors = 0;
 
   // NEW
   matrix::Matrix M; ///< Hebbian Model Matrix (motors to sensors)
@@ -166,9 +158,9 @@ protected:
   NoiseGenerator* BNoiseGen; ///< Noisegenerator for noisy bias
   paramval modelNoise;       ///< strength of noisy bias
 
-  double xsi_norm;     ///< norm of matrix
-  double xsi_norm_avg; ///< average norm of xsi (used to define whether Modell learns)
-  double pain;         ///< if the modelling error (xsi) is too high we have a pain signal
+  double xsi_norm = 0;     ///< norm of matrix
+  double xsi_norm_avg = 0; ///< average norm of xsi (used to define whether Modell learns)
+  double pain;         ///< if the modelling error static_cast<xsi>(is) too high we have a pain signal
 
   matrix::Matrix* x_buffer;
   matrix::Matrix* x_c_buffer; ///< buffer for sensors with context sensors
@@ -188,36 +180,36 @@ protected:
   SeMoXHebModConf conf;
 
   // internal
-  bool intern_useTeaching; ///< flag whether there is an actual teachning signal or not
-  int t_rand; ///< initial random time to avoid syncronous management of all controllers
-  int managementInterval; ///< interval between subsequent management function calls
+  bool intern_useTeaching = false; ///< flag whether there is an actual teachning signal or not
+  int t_rand = 0; ///< initial random time to avoid syncronous management of all controllers
+  int managementInterval = 0; ///< interval between subsequent management function calls
   parambool _modelExt_copy; ///< copy of modelExtension variable (to achieve readonly)
 
   /// puts the sensors in the ringbuffer, generate controller values and put them in the
   //  ringbuffer as well
   virtual void fillBuffersAndControl(const sensor* x_, int number_sensors,
-                             motor* y_, int number_motors) override;
+                             motor* y_, int number_motors);
 
   /// calculates xsi for the current time step using the delayed y values
   //  and x delayed by one
   //  @param delay 0 for no delay and n>0 for n timesteps delay in the time loop
-  virtual void calcXsi(int delay) override;
+  virtual void calcXsi(int delay);
 
   /// learn H,C with motors y and corresponding sensors x
-  virtual void learnController() override;
+  virtual void learnController();
 
   /// learn A, (and S) using motors y and corresponding sensors x
   //  @param delay 0 for no delay and n>0 for n timesteps delay in the time loop
-  virtual void learnModel(int delay) override;
+  virtual void learnModel(int delay);
 
   /// calculates the predicted sensor values
-  virtual matrix::Matrix model(const matrix::Matrix* x_buffer, int delay, const matrix::Matrix& y) override;
+  virtual matrix::Matrix model(const matrix::Matrix* x_buffer, int delay, const matrix::Matrix& y);
 
   /// handles inhibition damping etc.
-  virtual void management() override;
+  virtual void management();
 
   /// returns controller output for given sensor values
-  virtual matrix::Matrix calculateControllerValues(const matrix::Matrix& x_smooth) override;
+  virtual matrix::Matrix calculateControllerValues(const matrix::Matrix& x_smooth);
 
 protected:
   static double regularizedInverse(double v);

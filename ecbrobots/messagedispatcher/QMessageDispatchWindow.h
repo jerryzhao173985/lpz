@@ -90,7 +90,7 @@ namespace lpzrobots {
     Q_OBJECT
 
     public:
-      QMessageDispatchWindow(QString applicationPath);
+      explicit QMessageDispatchWindow(const QString& applicationPath);
       virtual ~QMessageDispatchWindow();
 
       virtual QAbstractMessageDispatchServer* getQMessageDispatchServer() {
@@ -109,7 +109,7 @@ namespace lpzrobots {
       void sig_quitServer();
 
     private slots:
-      void sl_TextLog(QString s);
+      void sl_TextLog(const QString& s);
       void sl_eventHandler(int eventCode);
       void sl_statusLabelTimerExpired();
       void sl_Close();
@@ -127,10 +127,10 @@ namespace lpzrobots {
       // TODO:
       // the future is to combine the two methods ...
       // first is to rewrite the protocoll of the isp-adapter
-      void DispatchMessage(QByteArray msg);
+      void DispatchMessage(const QByteArray& msg);
 
       void setMode(int mode);
-      int getDefaultBaudrateByName(QString actDeviceName);
+      int getDefaultBaudrateByName(const QString& actDeviceName);
 
       QTabWidget *tabWidget;
       QLogViewWidget *logView;

@@ -20,7 +20,7 @@ class AbstractPipeFilter : public QObject {
 
     public:
 
-    AbstractPipeFilter(AbstractPipeReader* apr) : apr(apr)
+    explicit AbstractPipeFilter(AbstractPipeReader* apr_) : apr(apr_)
     {
     };
     virtual ~AbstractPipeFilter() {
@@ -74,16 +74,16 @@ class AbstractPipeFilter : public QObject {
     std::list<AbstractPlotChannel*>::const_iterator channel_it=channelList.begin();
 
     int tmp_i=0;
-    for(std::list<double>::iterator i=dataList.begin(); i != dataList.end(); i++) {
+    for(std::list<double>::iterator i=dataList.begin(); i != dataList.end(); ++i) {
       printf("[% .1f]",(*i));
       if (tmp_i > 5) break;
-      tmp_i++;
+      ++tmp_i;
     }
     printf("\r\n");
 
     int printedIndex = 0;
 
-    for(std::list<double>::iterator i=dataList.begin(); i != dataList.end() && index_it!=channelIndexList.end() && channel_it!=channelList.end(); i++)
+    for(std::list<double>::iterator i=dataList.begin(); i != dataList.end() && index_it!=channelIndexList.end() && channel_it!=channelList.end(); ++i)
     {
       if (index == (*index_it))
       {
@@ -92,20 +92,20 @@ class AbstractPipeFilter : public QObject {
         if ( ((*i) <= 1.) && ((*i) >= -1.) ) {
           (*channel_it)->setValue((*i));
 
-          if (printedIndex < 7) {
+          explicit if (printedIndex < 7) {
             printf("[ %3d]",index);
-            printedIndex++;
+            ++printedIndex;
           }
         }
         else //the old value has to be
         printf("[old~]");
 
-        channel_it++;
-        index_it++;
+        ++channel_it;
+        ++index_it;
       }
       //       else std::cout << "[  - ]";
 
-      index++;
+      ++index;
     }
     //     std::cout << ")" << std::endl;
     printf("\r\n");
@@ -135,15 +135,15 @@ class AbstractPipeFilter : public QObject {
       // first element of comming dataLine is always the timestamp
       tmp_list.push_back("timestamp");
       // channel iterator must be increment to jump over this timestamp
-      it_channel++;
+      ++it_channel;
 
       if(debug) std::cout << "tmp_list: [timestamp,";
 
       for (std::list<std::string>::iterator it_description = description_list.begin(); it_description
-          != description_list.end(); it_description++) {
+          != description_list.end(); ++it_description) {
         if(debug) printf("%s,", (*it_description).c_str());
         tmp_list.push_back((*it_description));
-        it_channel++;
+        ++it_channel;
       }
 
       for (; it_channel != channel_list.end(); it_channel++) {
@@ -156,7 +156,7 @@ class AbstractPipeFilter : public QObject {
       // jump to second position
       //    it++;
       /*
-       for (std::list<std::string>::iterator i=tmp_list2.begin(); i!=tmp_list2.end(); i++) {
+       for (std::list<std::string>::iterator i=tmp_list2.begin(); i!=tmp_list2.end(); ++i) {
 
        it = tmp_list.erase(it);
        it = tmp_list.insert(it, (*i));
@@ -165,7 +165,7 @@ class AbstractPipeFilter : public QObject {
        }
        */
       //     printf("PipeFilter: [");
-      //     for(std::list<std::string>::iterator i=tmp_list.begin(); i != tmp_list.end(); i++)
+      //     for(std::list<std::string>::iterator i=tmp_list.begin(); i != tmp_list.end(); ++i)
       //     {
       //       printf("%s-",(*i).c_str());
       //
@@ -182,7 +182,7 @@ class AbstractPipeFilter : public QObject {
 
       if(debug) std::cout << "(" << std::endl;
       int index = 0;
-      for (std::list<std::string>::iterator i = tmp_list.begin(); i != tmp_list.end(); i++) {
+      for (std::list<std::string>::iterator i = tmp_list.begin(); i != tmp_list.end(); ++i) {
         AbstractPlotChannel* newChannel = createChannel((*i));
         // not all channels are in the process of interests
         if (newChannel != 0) {
@@ -192,13 +192,13 @@ class AbstractPipeFilter : public QObject {
         } else
           if(debug) std::cout << "-[" << (*i) << "]";
 
-        index++;
+        ++index;
       }
 
       if(debug) std::cout << ")" << std::endl;
     }
 
-    virtual AbstractPlotChannel* createChannel(std::string name) = 0;
+    virtual AbstractPlotChannel* createChannel(const std::string& name) = 0;
 
   private:
     static const bool debug = false;

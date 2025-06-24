@@ -1,0 +1,58 @@
+/** \file
+ * This file is used for the doxygen documentation.
+ */
+
+/**
+
+\dir ga_tools
+
+The ga_tools directory contains a toolkit for evolutionary algorithms. 
+This includes evolutionary strategies as well as the implementation
+ of genetic algorithms and genetic programming.
+The class \ref SingletonGenAlgAPI represents the API for the toolkit which 
+ you can use to access the package.
+The class \ref SingletonGenEngine is the engine performing the genetic operations.
+The class \ref IValue makes it possible to create all kinds of genes that are then handled automatically. This can be a number, a binary code, a program or a graphical primitive.
+The class \ref IRandomStrategy is needed to create random individuals with your own gene types.
+The class \ref IFitnessStrategy is designed to help you creating your own fitness strategy.
+With these and other strategies is it possible to customize 
+ and prepare the algorithm for your own needs.
+
+The following subdirectories are included:
+ - \ref ga_tools/Values : The interface and one special implementation for the gene values. It contains the \ref IValue class.
+ - \ref ga_tools/SelectionStrategies : The selection strategy interface and some implementations (tournament select, random select and elitism select).
+ - \ref ga_tools/RandomStrategies : The random strategy interface and an implementation to create double values for the \ref IValue class implementation.
+ - \ref ga_tools/MutationStrategies : The mutation strategy interface and some implementation. Here you can implement your own mutation for your own gene-values.
+ - \ref ga_tools/MutationFactorStrategies : Only for the specified \ref ValueMutationStrategy, here you can make your own optimization for the value mutation.
+ - \ref ga_tools/GenerationSizeStrategy : A strategy to change the size of the generation, for more information about this, look for selection force.
+ - \ref ga_tools/FitnessStrategy : Contains a helper class that allows you
+ to convert your own fitness function from a maximum-value-is-good to a 
+  minimum-value-is-good version as it is required by the algorithm.
+ - \ref ga_tools/include : All header files. Do not modify this directory (automatically generated).
+ - \ref ga_tools/simulation : Some example templates and simulations, which use the ga_tools package in combination with \ref ode_robots and \ref selforg.
+
+\par Examples
+
+The usage of this package is actually very easy even though it might look complicated  at the first glance. To begin with you have to check which classes you have to overload
+ to implement your problem. This means which strategies must be changed. In the best case you only have to alter the fitness strategy. Then you write your own versions of this class like in template_cycled_GA_Simulation. Now you have to initiate the algorithm. For this you need some of the following information:
+ - mutation probability in one/thousand (a low value of 3% - 5% is written as 30 or 50)
+ - number of individual at start
+ - number of children (must be greater or equal than the number of individual at start
+ - number of generation
+With this information you create and set the strategies. First the generation size strategy, then the selection strategy, then fitness, mutation and finally the random strategy. After this you have to create the prototypes of the genes and register them. That's all. Now you can work with the algorithm.
+If you think this is a lot of work, then keep in mind that all the rest goes now very smoothly. You only have to call a create function to get the strategy and then apply it -- only two calls per strategy.
+
+You can find out how to work with the algorithm and the initialization 
+ by considering one of the simulations in the ga_tools folder e.g.
+
+ - template_cycled_GA_Simulation/main.cpp
+ A simple example for the usage of the restart function for ga_tools inside the ode_robots simulation.
+ See also \ref ode_robots
+
+ - template_tasked_GA_Simulation/main.cpp
+ An example for the usage of the tasked simulation with ga_tools for a scalable set of simulation on many CPU's.
+ So the ga_tool can simulate every individual in one separate thread!
+
+ - robot_chain_tasked_GA_Simulation/main.cpp
+ A simple example which calculate the neuron values for the robot chain with the template_tasked_GA_Simulation.
+

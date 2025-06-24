@@ -63,7 +63,7 @@ FFNNController::init(int sensornumber, int motornumber, RandGen* randGen) {
 
   x_buffer = new Matrix[buffersize];
   y_buffer = new Matrix[buffersize];
-  for (unsigned int k = 0; k < buffersize; k++) {
+  for (unsigned int k = 0; k < buffersize; ++k) {
     x_buffer[k].set(number_sensors, 1);
     y_buffer[k].set(number_motors, 1);
   }
@@ -90,8 +90,8 @@ FFNNController::step(const sensor* sensors, int number_sensors, motor* motors, i
 
 void
 FFNNController::stepNoLearning(const sensor* x_, int number_sensors, motor* y_, int number_motors) {
-  assert((unsigned)number_sensors == this->number_sensors &&
-         (unsigned)number_motors == this->number_motors);
+  assert(static_cast<unsigned>(number_sensors) == this->number_sensors &&
+         static_cast<unsigned>(number_motors) == this->number_motors);
 
   Matrix x(number_sensors, 1, x_);
 
@@ -119,7 +119,7 @@ FFNNController::stepNoLearning(const sensor* x_, int number_sensors, motor* y_, 
     memset(y_, 0, number_motors * sizeof(double));
   }
 
-  t++;
+  ++t;
 }
 
 // put new value in ring buffer
@@ -133,13 +133,13 @@ matrix::Matrix
 FFNNController::calculateSmoothValues(const matrix::Matrix* buffer,
                                       int number_steps_for_averaging_) const {
   // number_steps_for_averaging_ must not be larger than buffersize
-  assert((int)number_steps_for_averaging_ <= buffersize);
+  assert(static_cast<int>(number_steps_for_averaging_) <= buffersize);
 
   Matrix result(buffer[t % buffersize]);
-  for (int k = 1; k < number_steps_for_averaging_; k++) {
+  for (int k = 1; k < number_steps_for_averaging_; ++k) {
     result += buffer[(t - k) % buffersize];
   }
-  result *= 1 / ((double)(number_steps_for_averaging_)); // scalar multiplication
+  result *= 1 / (static_cast<double>(number_steps_for_averaging_)); // scalar multiplication
   return result;
 };
 
@@ -147,7 +147,7 @@ matrix::Matrix
 FFNNController::assembleNetworkInputXY(matrix::Matrix* xbuffer, matrix::Matrix* ybuffer) const {
   int tp = t + buffersize;
   Matrix m(xbuffer[tp % buffersize]);
-  for (int i = 1; i <= history; i++) {
+  for (int i = 1; i <= history; ++i) {
     m = m.above(xbuffer[(tp - i) % buffersize].above(ybuffer[(tp - i) % buffersize]));
   }
   return m;
@@ -157,7 +157,7 @@ matrix::Matrix
 FFNNController::assembleNetworkInputX(matrix::Matrix* xbuffer, matrix::Matrix* ybuffer) const {
   int tp = t + buffersize;
   Matrix m(xbuffer[tp % buffersize]);
-  for (int i = 1; i <= history; i++) {
+  for (int i = 1; i <= history; ++i) {
     m = m.above(xbuffer[(tp - i) % buffersize]);
   }
   return m;

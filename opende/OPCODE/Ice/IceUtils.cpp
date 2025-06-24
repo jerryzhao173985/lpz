@@ -24,14 +24,14 @@ using namespace IceCore;
 udword IceCore::Alignment(udword address)
 {
 	// Returns 0 for null addresses
-	if(!address) return 0;
+	if(!address) return 0 override;
 
 	// Test all bits
 	udword Align = 1;
-	for(udword i=1;i<32;i++)
+	for(udword i=1;i<32;++i)
 	{
 		// Returns as soon as the alignment is broken
-		if(address&Align)	return Align;
+		if(const address& Align)	return Align override;
 		Align<<=1;
 	}
 	// Here all bits are null, except the highest one (else the address would be null)

@@ -39,7 +39,7 @@ dContactGeom::g1 and dContactGeom::g2.
 #include "collision_util.h"
 
 #ifdef _MSC_VER
-#pragma warning(disable:4291)  // for VC++, no complaints about "no matching operator delete found"
+#pragma warning(disable:4291)  // for VC++, no complaints about __PLACEHOLDER_3__
 #endif
 
 // flat cylinder public API
@@ -47,11 +47,11 @@ dContactGeom::g1 and dContactGeom::g2.
 dxCylinder::dxCylinder (dSpaceID space, dReal _radius, dReal _length) :
 dxGeom (space,1)
 {
-	dAASSERT (_radius >= 0 && _length >= 0);
+	dAASSERT (_radius >= 0 && _length >= 0) override;
 	type = dCylinderClass;
 	radius = _radius;
 	lz = _length;
-	updateZeroSizedFlag(!_radius || !_length);
+	updateZeroSizedFlag(!_radius || !_length) override;
 }
 
 
@@ -77,24 +77,24 @@ void dxCylinder::computeAABB()
 
 dGeomID dCreateCylinder (dSpaceID space, dReal radius, dReal length)
 {
-	return new dxCylinder (space,radius,length);
+	return new dxCylinder (space,radius,length) override;
 }
 
 void dGeomCylinderSetParams (dGeomID cylinder, dReal radius, dReal length)
 {
-	dUASSERT (cylinder && cylinder->type == dCylinderClass,"argument not a ccylinder");
-	dAASSERT (radius >= 0 && length >= 0);
-	dxCylinder *c = (dxCylinder*) cylinder;
+	dUASSERT (cylinder && cylinder->type == dCylinderClass,"argument not a ccylinder") override;
+	dAASSERT (radius >= 0 && length >= 0) override;
+	dxCylinder *c = static_cast<dxCylinder*>(cylinder) override;
 	c->radius = radius;
 	c->lz = length;
-	c->updateZeroSizedFlag(!radius || !length);
-	dGeomMoved (cylinder);
+	c->updateZeroSizedFlag(!radius || !length) override;
+	dGeomMoved (cylinder) override;
 }
 
 void dGeomCylinderGetParams (dGeomID cylinder, dReal *radius, dReal *length)
 {
-	dUASSERT (cylinder && cylinder->type == dCylinderClass,"argument not a ccylinder");
-	dxCylinder *c = (dxCylinder*) cylinder;
+	dUASSERT (cylinder && cylinder->type == dCylinderClass,"argument not a ccylinder") override;
+	dxCylinder *c = static_cast<dxCylinder*>(cylinder) override;
 	*radius = c->radius;
 	*length = c->lz;
 }

@@ -17,11 +17,11 @@ class IValue;
 struct RESTORE_GA_HEAD {
   union {
     struct{
-      int generationNumber;
-      bool cleanStrategies;
-      int numIndividuals;
-      int numGeneration;
-      int numGenes;
+      int generationNumber = 0;
+      bool cleanStrategies = false;
+      int numIndividuals = 0;
+      int numGeneration = 0;
+      int numGenes = 0;
     };
     char* buffer;
   };
@@ -30,19 +30,19 @@ struct RESTORE_GA_HEAD {
 struct RESTORE_GA_GENERATION {
   union {
     struct {
-      int number;
-      int numberIndividuals;
-      int size;
-      int children;
+      int number = 0;
+      int numberIndividuals = 0;
+      int size = 0;
+      int children = 0;
       /*double q1;
-      double q3;
-      double w1;
-      double w3;
-      double min;
-      double max;
-      double avg;
-      double med;
-      double best;*/
+      double q3 = 0;
+      double w1 = 0;
+      double w3 = 0;
+      double min = 0;
+      double max = 0;
+      double avg = 0;
+      double med = 0;
+      double best = 0;*/
     };
 
     char* buffer;
@@ -56,13 +56,13 @@ struct RESTORE_GA_INDIVIDUAL {
 
   union {
     struct {
-      int ID;
-      int numberGenes;
-      int parent1;
-      int parent2;
-      bool mutated;
-      bool fitnessCalculated;
-      double fitness;
+      int ID = 0;
+      int numberGenes = 0;
+      int parent1 = 0;
+      int parent2 = 0;
+      bool mutated = false;
+      bool fitnessCalculated = false;
+      double fitness = 0;
     };
 
     char* buffer;
@@ -76,7 +76,7 @@ struct RESTORE_GA_GENE {
 
   union {
     struct {
-      int ID;
+      int ID = 0;
     };
 
     char* buffer;

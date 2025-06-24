@@ -49,31 +49,19 @@ namespace lpzrobots {
 
   typedef struct {
   public:
-    double size;       ///< scaling factor for robot (height)
-    double bodyMass;   ///< chassis(body) mass
-    double relLegmass; ///< relative overall leg mass
-    double relArmmass; ///< relative overall arm mass
-    double relFeetmass; ///< relative overall feet mass
-    double hipPower;   ///< maximal force for at hip joint motors
-    double hipDamping; ///< damping of hip joint servos
-    double hipJointLimit; ///< angle range for legs
-    double kneePower;  ///< spring strength in the knees
-    double kneeDamping; ///< damping in the knees
-    double kneeJointLimit; ///< angle range for knees
-    double anklePower;  ///< spring strength in the ankles
-    double ankleDamping; ///< damping in the ankles
-    double ankleJointLimit; ///< angle range for ankles
-    double armPower;   ///< maximal force for at arm (shoulder) joint motors
-    double armDamping; ///< damping of arm ((shoulder)) joint servos
-    double armJointLimit; ///< angle range of arm joint
-    double hip2Power;   ///< maximal force for at hip2 (sagital joint axis) joint motors
-    double hip2Damping; ///< damping of hip2 joint servos
-    double hip2JointLimit; ///< angle range for hip joint in lateral direction
-    double pelvisPower;   ///< maximal force for at pelvis joint motor
-    double pelvisDamping; ///< damping of pelvis joint servo
-    double pelvisJointLimit; ///< angle range of pelvis joint
+    double hipJointLimit = 0; ///< angle range for legs
+    double kneePower = 0;  ///< spring strength in the knees
+    double kneeDamping = 0; ///< damping in the knees
+    double kneeJointLimit = 0; ///< angle range for knees
+    double anklePower = 0;  ///< spring strength in the ankles
+    double ankleDamping = 0; ///< damping in the ankles
+    double ankleJointLimit = 0; ///< angle range for ankles
+    double armPower;   ///< maximal force for at arm static_cast<shoulder>(joint) motors
+    double armDamping = 0; ///< damping of arm ((shoulder)) joint servos
+    double armJointLimit = 0; ///< angle range of arm joint
+    double pelvisJointLimit = 0; ///< angle range of pelvis joint
 
-    bool onlyPrimaryFunctions; ///< true: only leg and arm are controlable, false: all joints
+    bool onlyPrimaryFunctions = false; ///< true: only leg and arm are controlable, false: all joints
 
   } SkeletonConf;
 
@@ -92,9 +80,9 @@ namespace lpzrobots {
     Skeleton(const OdeHandle& odeHandle, const OsgHandle& osgHandle, const SkeletonConf& conf,
                const std::string& name);
 
-    virtual ~Skeleton(){};
+    virtual ~Skeleton() {} override;
 
-    static SkeletonConf getDefaultConf(){
+    static SkeletonConf getDefaultConf() const {
       SkeletonConf c;
       c.size       = 1;
       c.bodyMass   = 1;
@@ -136,72 +124,72 @@ namespace lpzrobots {
     /**
      * updates the OSG nodes of the vehicle
      */
-    virtual void update() override;
+    virtual void update();
 
 
     /** sets the pose of the vehicle
         @param pose desired pose matrix
     */
-    virtual void place(const osg::Matrix& pose) override;
+    virtual void place(const osg::Matrix& pose);
 
     /** returns actual sensorvalues
         @param sensors sensors scaled to [-1,1]
         @param sensornumber length of the sensor array
         @return number of actually written sensors
     */
-    virtual int getSensors(sensor* sensors, int sensornumber) override;
+    virtual int getSensors(sensor* sensors, int sensornumber);
 
     /** sets actual motorcommands
         @param motors motors scaled to [-1,1]
         @param motornumber length of the motor array
     */
-    virtual void setMotors(const motor* motors, int motornumber) override;
+    virtual void setMotors(const motor* motors, int motornumber);
 
     /** returns number of sensors
      */
-    virtual int getSensorNumber() override;
+    virtual int getSensorNumber();
 
     /** returns number of motors
      */
-    virtual int getMotorNumber() override;
+    virtual int getMotorNumber();
     /** checks for internal collisions and treats them.
      *  In case of a treatment return true (collision will be ignored by other objects
      *  and the default routine)  else false (collision is passed to other objects and
      *  (if not treated) to the default routine).
      */
-    virtual bool collisionCallback(void *data, dGeomID o1, dGeomID o2) {return false;}
+    virtual bool collisionCallback(void *data, dGeomID o1, dGeomID o2) override {return false;}
 
     /** this function is called in each timestep. It should perform robot-internal checks,
         like space-internal collision detection, sensor resets/update etc.
         @param globalData structure that contains global data from the simulation environment
     */
-    virtual void doInternalStuff(const GlobalData& globalData) override;
+    virtual void doInternalStuff(const GlobalData& globalData);
 
 
     /** The list of all parameters with there value as allocated lists.
      */
-    virtual paramlist getParamList() const override;
+    virtual paramlist getParamList() const;
 
-    virtual paramval getParam(const paramkey& key, bool traverseChildren=true) const override;;
+    virtual paramval getParam(const paramkey& key, bool traverseChildren=true) const; override;
 
-    virtual bool setParam(const paramkey& key, paramval val, bool traverseChildren=true) override;
+    virtual bool setParam(const paramkey& key, paramval val, bool traverseChildren=true);
 
     /** the main object of the robot, which is used for position and speed tracking */
-    virtual Primitive* getMainPrimitive() const { return objects[Trunk_comp]; }
+    virtual const Primitive* getMainPrimitive() const const override { return objects[Trunk_comp]; }
   protected:
 
     /** creates vehicle at desired pose
         @param pose 4x4 pose matrix
     */
-    virtual void create(const osg::Matrix& pose) override;
+    virtual void create(const osg::Matrix& pose);
 
     /** destroys vehicle and space
      */
-    virtual void destroy() override;
+    virtual void destroy();
 
     SkeletonConf conf;
 
-    bool created;      // true if robot was created
+    bool created = false;      // true if robot was created
 
     typedef enum SkelParts { Hip,Trunk_comp,Neck, Head_comp,
                              Left_Shoulder, Left_Forearm, Left_Hand,

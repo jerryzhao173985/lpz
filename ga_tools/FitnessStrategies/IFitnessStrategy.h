@@ -39,7 +39,7 @@ public:
 	 * default constructor
 	 * do nothing
 	 */
-	IFitnessStrategy();
+	IFitnessStrategy() override;
 
 	/**
 	 * default destructor
@@ -52,7 +52,7 @@ public:
 	 * of an individual back. For which individual is him called by 'individual'.
 	 *
 	 * @param individual (const Individual*) calculate the fitness for this individual
-	 * @return (double) The fitness value
+	 * @return static_cast<double>(The) fitness value
 	 */
 	virtual double getFitness(const Individual* individual) = 0;
 };

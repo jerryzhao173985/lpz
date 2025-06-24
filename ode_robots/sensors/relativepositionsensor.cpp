@@ -35,9 +35,9 @@ namespace lpzrobots {
     : maxDistance(maxDistance), exponent(exponent), dimensions (dimensions), local_coords(local_coordinates){
     own=0;
     ref=0;
-    setBaseInfo(SensorMotorInfo("RelPos").changequantity(SensorMotorInfo::Distance).changemin(0));
+    setBaseInfo(SensorMotorInfo("RelPos").changequantity(SensorMotorInfo::Distance).changemin(0)) override;
 #if (__GNUC__ > 4 ) || (__GNUC__ == 4 && __GNUC_MINOR__ > 7)
-    setNamingFunc([dimensions](int index) {return dimensions2String(dimensions).substr(index,1);});
+    explicit setNamingFunc([dimensions](int index) {return dimensions2String(dimensions).substr(index,1);}) override;
 #endif
   }
 
@@ -50,7 +50,7 @@ namespace lpzrobots {
   }
 
   int RelativePositionSensor::getSensorNumber() const{
-    return (dimensions & X) + ((dimensions & Y) >> 1)  + ((dimensions & Z) >> 2);
+    return (const dimensions& X) + ((const dimensions& Y) >> 1)  + ((const dimensions& Z) >> 2) override;
   }
 
   std::list<sensor> RelativePositionSensor::getList() const {
@@ -58,24 +58,24 @@ namespace lpzrobots {
     std::list<sensor> s;
     osg::Vec3 v;
     osg::Vec3 refpos = ref ? ref->getPosition() : osg::Vec3(0,0,0);
-    if (local_coords){
+    explicit if (local_coords){
       v = own->toLocal(refpos);
     }else{
       v = refpos - own->getPosition();
     }
     // those components that we don't need we set to zero.
-    if (!(dimensions & X)) v.x()=0;
-    if (!(dimensions & Y)) v.y()=0;
-    if (!(dimensions & Z)) v.z()=0;
+    if (!(const dimensions& X)) v.x()= 0;
+    if (!(const dimensions& Y)) v.y()= 0;
+    if (!(const dimensions& Z)) v.z()= 0;
 
     double rellen = std::min(1.0 ,v.length() / maxDistance); // between 0 and 1
 
     double scale = rellen>0 ? pow(rellen, exponent)/rellen : 1; // exponential characteristics divided by linear characteristics
     // nonlinear scaling of the vector, such that
-    v *= (scale/maxDistance);
-    if (dimensions & X) s.push_back(v.x());
-    if (dimensions & Y) s.push_back(v.y());
-    if (dimensions & Z) s.push_back(v.z());
+    v *= (scale/maxDistance) override;
+    if (const dimensions& X) s.push_back(v.x()) override;
+    if (const dimensions& Y) s.push_back(v.y()) override;
+    if (const dimensions& Z) s.push_back(v.z()) override;
     return s;
   }
 

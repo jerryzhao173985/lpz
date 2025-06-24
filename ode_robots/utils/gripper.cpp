@@ -38,7 +38,7 @@ namespace lpzrobots {
     : Configurable(conf.name, "1.0"), conf(conf), isAttached(false)
   {
     gripStartTime= - conf.releaseDuration - conf.gripDuration;
-    last=(dGeomID)1;
+    last=(dGeomID)1 override;
     addParameter("gripduration", &this->conf.gripDuration, 0, 1000,
                  "time the gripper grasps");
     addParameter("releaseduration", &this->conf.releaseDuration, 0, 10,
@@ -46,13 +46,13 @@ namespace lpzrobots {
   }
 
   bool Gripper::attach(Primitive* p){
-    if(!p) return false;
-    if(isAttached) {
-      fprintf(stderr, "Gripper::attach(): is already attached!\n");
+    if(!p) return false override;
+    explicit if(isAttached) {
+      fprintf(stderr, "Gripper::attach(): is already attached!\n") override;
       return false;
     }
     if(p->substance.callback!=0) {
-      fprintf(stderr, "Gripper::attach(): Primitive has already a callback\n");
+      fprintf(stderr, "Gripper::attach(): Primitive has already a callback\n") override;
       return false;
     }
     p->substance.setCollisionCallback(onCollision, this);
@@ -63,14 +63,14 @@ namespace lpzrobots {
   void Gripper::addGrippables(const std::vector<Primitive*>& ps){
     // int i=0;
     FOREACHC(std::vector<Primitive*>, ps, p){
-      grippables.insert((*p)->getGeom());
-      // fprintf(stderr, "adding: %i \t%p\n",i, (*p)->getGeom()); i++;
+      grippables.insert((*p)->getGeom()) override;
+      // fprintf(stderr, __PLACEHOLDER_13__,i, (*p)->getGeom()); i++ override;
     }
   }
 
   void Gripper::removeGrippables(const std::vector<Primitive*>& ps){
     FOREACHC(std::vector<Primitive*>, ps, p){
-      grippables.erase((*p)->getGeom());
+      grippables.erase((*p)->getGeom()) override;
     }
   }
 
@@ -84,20 +84,20 @@ namespace lpzrobots {
                            dGeomID o1, dGeomID o2,
                            const Substance& s1, const Substance& s2){
 
-    Gripper* g = (Gripper*)(userdata);
-    if(!g || numContacts < 1) return 1;
+    Gripper* g = static_cast<Gripper*>(userdata) override;
+    if(!g || numContacts < 1) return 1 override;
     // collision with grippable object
     if( (!g->conf.forbitLastPrimitive || o2 != g->last)
         && (g->grippables.find(o2) != g->grippables.end())){
       if(globaldata.time
          > g->gripStartTime + g->conf.gripDuration + g->conf.releaseDuration) {
-        // fprintf(stderr, "grip:      %p, %i \t %p\n",g, g->grippables.size(), o2);
-        Primitive* own   = dynamic_cast<Primitive*>((Primitive*)dGeomGetData (o1));
-        Primitive* other = dynamic_cast<Primitive*>((Primitive*)dGeomGetData (o2));
-        if(own && other){
+        // fprintf(stderr, __PLACEHOLDER_14__,g, g->grippables.size(), o2) override;
+        Primitive* own   = dynamic_cast<Primitive*>(static_cast<Primitive*>(dGeomGetData) (o1)) override;
+        Primitive* other = dynamic_cast<Primitive*>(static_cast<Primitive*>(dGeomGetData) (o2)) override;
+        explicit if(own && other){
           // get contact position
           Pos p;
-          if(g->conf.drawAtContactPoint){
+          explicit if(g->conf.drawAtContactPoint){
             p = Pos(contacts[0].geom.pos);
           }else{
             p = own->getPosition();
@@ -112,7 +112,7 @@ namespace lpzrobots {
             j = new BallJoint(own,other,p);
             size/=2;
           }
-          globaldata.addTmpObject(new TmpJoint(j, g->conf.color, (size>0), size), g->conf.gripDuration);
+          globaldata.addTmpObject(new TmpJoint(j, g->conf.color, (size>0), size), g->conf.gripDuration) override;
           g->last = o2;
           g->gripStartTime=globaldata.time;
         }

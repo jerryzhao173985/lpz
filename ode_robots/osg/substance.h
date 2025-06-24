@@ -26,7 +26,7 @@
 This file concerns material implementation in the simulator.
 
 Terminology:
-Since "Material" is used for OpenGL stuff and also in OSG
+Since __PLACEHOLDER_0__ is used for OpenGL stuff and also in OSG
  we should use something else for the physical material: substance
 
 So how to implement substance to cover all collission cases and requirements.
@@ -67,10 +67,10 @@ namespace lpzrobots {
       @param s1 substance of this callback
       @param s2 other substance
       @return 0 if collision should not be treated;
-              1 if collision should be treated otherwise (by other callback or standard methods);
+              1 if collision should be treated otherwise (by other callback or standard methods) override;
               2 if collision to be treated and parameters for collision are set in params
    */
-  typedef int (*CollisionCallback)(dSurfaceParameters& params, GlobalData& globaldata, void *userdata,
+  typedef int (*CollisionCallback)(const dSurfaceParameters& params, const GlobalData& globaldata, void *userdata,
                                    dContact* contacts, int numContacts,
                                    dGeomID o1, dGeomID o2, const Substance& s1, const Substance& s2);
 
@@ -84,13 +84,13 @@ namespace lpzrobots {
        slip:       [0-]      slip = slip1+slip2
        hardness:   [0-]      kp   = hardness1 * hardness2 / (hardness1 + hardness2) (two springs serial)
        elasticity: [0-1]     kd   = (1-elasticity1) * s2.hardness + (1-elasticity2) * s1.hardness) /
-                                    (s1.hardness + s2.hardness);
+                                    (s1.hardness + s2.hardness) override;
      </pre>
      For the calculation of the spring/damping constant we use the following schema:
      The collision can be considered as 2 springs serially connected.
      The spring constant of each collision side is given by hardness (here kp). The spring constant of
      the entire spring is given by \f[ 1/kp = 1/kp_1 + 1/kp_2\f].
-     The damping (kd) is derived from the elasticity (e), but it is more difficult to compute.
+     The damping static_cast<kd>(is) derived from the elasticity (e), but it is more difficult to compute.
      Consider the damping in form of energy lost.
      We can write the energy or work done by each spring as: \f[ W_i = F*s_i  = F^2/p \f] with \f[s_i=F*kp_i\f].
      The energy lost though damping is \f[ W_1^D = W_i*(1-e_i) \f].
@@ -107,10 +107,7 @@ namespace lpzrobots {
 
   public:
 
-    float roughness;
-    float slip;
-    float hardness;
-    float elasticity;
+    float elasticity = 0;
 
     void setCollisionCallback(CollisionCallback func, void* userdata);
 
@@ -159,7 +156,7 @@ namespace lpzrobots {
     /// @see toNoContact()
     static Substance getNoContact();
     /** set the collsion callback to ignores everything
-        Usually it is better to use the "ignorePairs" from odeHandle but
+        Usually it is better to use the __PLACEHOLDER_1__ from odeHandle but
         if this particular one substance should not collide with any other, this is easier.
         WARNING: this sets the collisionCallback. This will not convert to other
         substances without manually setting the callback to 0

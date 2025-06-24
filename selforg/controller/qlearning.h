@@ -118,7 +118,7 @@ public:
     return Q;
   };
 
-  virtual bool store(FILE* f) const;
+  virtual bool store(FILE* f) const override;
 
   virtual bool restore(FILE* f);
 

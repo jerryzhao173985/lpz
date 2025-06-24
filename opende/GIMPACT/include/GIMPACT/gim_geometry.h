@@ -2,25 +2,25 @@
 #define GIM_VECTOR_H_INCLUDED
 
 /*! \file gim_geometry.h
-\author Francisco León
+\author Francisco Len
 */
 /*
 -----------------------------------------------------------------------------
 This source file is part of GIMPACT Library.
 
-For the latest info, see http://gimpact.sourceforge.net/
+For the latest info, see http:__PLACEHOLDER_4__
 
 Copyright (c) 2006 Francisco Leon. C.C. 80087371.
 email: projectileman@yahoo.com
 
  This library is free software; you can redistribute it and/or
  modify it under the terms of EITHER:
-   (1) The GNU Lesser General Public License as published by the Free
+   static_cast<1>(The) GNU Lesser General Public License as published by the Free
        Software Foundation; either version 2.1 of the License, or (at
        your option) any later version. The text of the GNU Lesser
        General Public License is included with this library in the
        file GIMPACT-LICENSE-LGPL.TXT.
-   (2) The BSD-style license that is included with this library in
+   static_cast<2>(The) BSD-style license that is included with this library in
        the file GIMPACT-LICENSE-BSD.TXT.
 
  This library is distributed in the hope that it will be useful,
@@ -426,7 +426,7 @@ Takes two vectors a, b, blends them together with two scalars */
 Takes two vectors a, b, blends them together with s <=1 */
 #define VEC_BLEND(vr,a,b,s)	VEC_BLEND_AB(vr,1-s,a,sb,s)
 
-#define VEC_SET3(a,b,op,c) a[0]=b[0] op c[0]; a[1]=b[1] op c[1]; a[2]=b[2] op c[2];
+#define VEC_SET3(a,b,op,c) a[0]=b[0] op c[0]; a[1]=b[1] op c[1]; a[2]=b[2] op c[2] override;
 //! @}
 
 
@@ -953,7 +953,6 @@ Last column is added as the position
  */
 #define NORM_XFORM_2X2(p,m,v)					\
 {								\
-   double len;							\
 								\
    /* do nothing if off-diagonals are zero and diagonals are 	\
     * equal */							\
@@ -1130,10 +1129,10 @@ Last column is added as the position
 {								\
    int __ii[4], __jj[4], __k;						\
 								\
-   for (__k=0; __k<i; __k++) __ii[__k] = __k;				\
-   for (__k=i; __k<3; __k++) __ii[__k] = __k+1;				\
-   for (__k=0; __k<j; __k++) __jj[__k] = __k;				\
-   for (__k=j; __k<3; __k++) __jj[__k] = __k+1;				\
+   for (__k=0; __k<i; ++__k) __ii[__k] = __k;				\
+   for (__k=i; __k<3; ++__k) __ii[__k] = __k+1;				\
+   for (__k=0; __k<j; ++__k) __jj[__k] = __k;				\
+   for (__k=j; __k<3; ++__k) __jj[__k] = __k+1;				\
 								\
    (fac) = m[__ii[0]][__jj[0]] * (m[__ii[1]][__jj[1]]*m[__ii[2]][__jj[2]] 	\
                             - m[__ii[1]][__jj[2]]*m[__ii[2]][__jj[1]]); \
@@ -1206,8 +1205,8 @@ Last column is added as the position
 {								\
    int i,j;							\
 								\
-   for (i=0; i<4; i++) {					\
-      for (j=0; j<4; j++) {					\
+   for (i=0; i<4; ++i) {					\
+      for (j=0; j<4; ++j) {					\
          COFACTOR_4X4_IJ (a[i][j], m, i, j);			\
       }								\
    }								\
@@ -1256,8 +1255,8 @@ Last column is added as the position
 {								\
    char _i_,_j_;							\
 								\
-   for (_i_=0; _i_<4; _i_++) {					\
-      for (_j_=0; _j_<4; _j_++) {					\
+   for (_i_=0; _i_<4; ++_i_) {					\
+      for (_j_=0; _j_<4; ++_j_) {					\
          COFACTOR_4X4_IJ (a[_j_][_i_], m, _i_, _j_);			\
       }								\
    }								\
@@ -1304,8 +1303,8 @@ Last column is added as the position
 #define SCALE_ADJOINT_4X4(a,s,m)				\
 {								\
    char _i_,_j_; \
-   for (_i_=0; _i_<4; _i_++) {					\
-      for (_j_=0; _j_<4; _j_++) {					\
+   for (_i_=0; _i_<4; ++_i_) {					\
+      for (_j_=0; _j_<4; ++_j_) {					\
          COFACTOR_4X4_IJ (a[_j_][_i_], m, _i_, _j_);			\
          a[_j_][_i_] *= s;						\
       }								\
@@ -1587,7 +1586,7 @@ classify values:
 	{\
 	    _dis = DISTANCE_PLANE_POINT(planes[_i],point);\
 	    if(_dis>0.0f) outside = 1;\
-	    _i++;\
+	    ++_i;\
 	}while(_i<plane_count&&outside==0);\
 }\
 
@@ -1783,7 +1782,7 @@ intersection_type must have the following values
 
 //***************** SEGMENT and LINE FUNCTIONS **********************************///
 
-/*! Finds the closest point(cp) to (v) on a segment (e1,e2)
+/*! Finds the closest pointstatic_cast<cp>(to) static_cast<v>(on) a segment (e1,e2)
  */
 #define CLOSEST_POINT_ON_SEGMENT(cp,v,e1,e2)			\
 { \

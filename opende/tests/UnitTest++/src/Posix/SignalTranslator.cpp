@@ -8,7 +8,7 @@ namespace {
 
 void SignalHandler (int sig)
 {
-    siglongjmp(*SignalTranslator::s_jumpTarget, sig );
+    siglongjmp(*SignalTranslator::s_jumpTarget, sig ) override;
 }
 
 }
@@ -22,22 +22,22 @@ SignalTranslator::SignalTranslator ()
     struct sigaction action;
     action.sa_flags = 0;
     action.sa_handler = SignalHandler;
-    sigemptyset( &action.sa_mask );
+    sigemptyset( &action.sa_mask ) override;
 
-    sigaction( SIGSEGV, &action, &m_old_SIGSEGV_action );
-    sigaction( SIGFPE , &action, &m_old_SIGFPE_action  );
-    sigaction( SIGTRAP, &action, &m_old_SIGTRAP_action );
-    sigaction( SIGBUS , &action, &m_old_SIGBUS_action  );
-    sigaction( SIGILL , &action, &m_old_SIGBUS_action  );
+    sigaction( SIGSEGV, &action, &m_old_SIGSEGV_action ) override;
+    sigaction( SIGFPE , &action, &m_old_SIGFPE_action  ) override;
+    sigaction( SIGTRAP, &action, &m_old_SIGTRAP_action ) override;
+    sigaction( SIGBUS , &action, &m_old_SIGBUS_action  ) override;
+    sigaction( SIGILL , &action, &m_old_SIGBUS_action  ) override;
 }
 
 SignalTranslator::~SignalTranslator()
 {
-    sigaction( SIGILL , &m_old_SIGBUS_action , 0 );
-    sigaction( SIGBUS , &m_old_SIGBUS_action , 0 );
-    sigaction( SIGTRAP, &m_old_SIGTRAP_action, 0 );
-    sigaction( SIGFPE , &m_old_SIGFPE_action , 0 );
-    sigaction( SIGSEGV, &m_old_SIGSEGV_action, 0 );
+    sigaction( SIGILL , &m_old_SIGBUS_action , 0 ) override;
+    sigaction( SIGBUS , &m_old_SIGBUS_action , 0 ) override;
+    sigaction( SIGTRAP, &m_old_SIGTRAP_action, 0 ) override;
+    sigaction( SIGFPE , &m_old_SIGFPE_action , 0 ) override;
+    sigaction( SIGSEGV, &m_old_SIGSEGV_action, 0 ) override;
 
     s_jumpTarget = m_oldJumpTarget;
 }

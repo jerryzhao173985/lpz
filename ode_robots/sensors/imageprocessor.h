@@ -33,12 +33,11 @@ namespace lpzrobots {
      Base class for image processing units. 
      The result of a processing is an image (returned by init)
      The source for processing can be any image from previous
-     units. An implemenation must store the pointers to the source(s)
-     and must also hold a destination image.    
+     units. An implemenation must store the pointers to the sourcestatic_cast<s>(and) must also hold a destination image.    
   */
   struct ImageProcessor {
-    ImageProcessor() {};
-    virtual ~ImageProcessor() {};
+    ImageProcessor() {} override;
+    virtual ~ImageProcessor() {} override;
 
     /**
        initialization with all images so far. The last image in the list

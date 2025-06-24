@@ -154,7 +154,7 @@ DiscreteControllerAdapter::init(int sensornumber, int motornumber, RandGen* rand
   // allocate memory for discreteSensors
   this->discreteSensors = static_cast<sensor*>(malloc(sizeof(sensor) * sensornumber));
   // register sensors as inspectable values
-  for (int i = 0; i < sensornumber; i++)
+  for (int i = 0; i < sensornumber; ++i)
     addInspectableValue(string("x_dis[").append(itos(i)).append("]"),
                         &discreteSensors[i],
                         "discretisized sensor value");
@@ -172,7 +172,7 @@ DiscreteControllerAdapter::doDiscretisizeSensorValues(const sensor* sensors, int
   // second find lowest and highest sensor values
   this->findMinAndMaxSensorValues(sensors, sensornumber);
 
-  for (int i = 0; i < sensornumber; i++) {
+  for (int i = 0; i < sensornumber; ++i) {
     discreteSensors[i] = this->discretisizeValue(sensors[i],
                                                  automaticSensorRange,
                                                  minSensorRange,
@@ -191,7 +191,7 @@ DiscreteControllerAdapter::doDiscretisizeMotorValues(motor* motors, int motornum
   // second find lowest and highest motor values
   this->findMinAndMaxMotorValues(motors, motornumber);
 
-  for (int i = 0; i < motornumber; i++) {
+  for (int i = 0; i < motornumber; ++i) {
     motors[i] = this->discretisizeValue(motors[i],
                                         automaticMotorRange,
                                         minMotorRange,
@@ -210,7 +210,7 @@ DiscreteControllerAdapter::findMinAndMaxSensorRange(const sensor* sensors, int s
     this->maxSensorRange = sensors[0];
   }
   if (this->automaticSensorRange) {
-    for (int i = 0; i < sensornumber; i++) {
+    for (int i = 0; i < sensornumber; ++i) {
       if (sensors[i] < this->minSensorRange)
         this->minSensorRange = sensors[i];
       if (sensors[i] > this->maxSensorRange)
@@ -226,7 +226,7 @@ DiscreteControllerAdapter::findMinAndMaxMotorRange(motor* motors, int motornumbe
     this->maxMotorRange = motors[0];
   }
   if (this->automaticMotorRange) {
-    for (int i = 0; i < motornumber; i++) {
+    for (int i = 0; i < motornumber; ++i) {
       if (motors[i] < this->minMotorRange)
         this->minMotorRange = motors[i];
       if (motors[i] > this->maxMotorRange)
@@ -242,7 +242,7 @@ DiscreteControllerAdapter::findMinAndMaxSensorValues(const sensor* sensors, int 
     this->maxSensorValue = sensors[0];
   }
   if (this->mapToSensorInterval) {
-    for (int i = 0; i < sensornumber; i++) {
+    for (int i = 0; i < sensornumber; ++i) {
       if (sensors[i] < this->minSensorValue)
         this->minSensorValue = sensors[i];
       if (sensors[i] > maxSensorValue)
@@ -259,7 +259,7 @@ DiscreteControllerAdapter::findMinAndMaxMotorValues(motor* motors, int motornumb
     this->firstStep = false;
   }
   if (this->mapToMotorInterval) {
-    for (int i = 0; i < motornumber; i++) {
+    for (int i = 0; i < motornumber; ++i) {
       if (motors[i] < minMotorValue)
         this->minMotorValue = motors[i];
       if (motors[i] > this->maxMotorValue)

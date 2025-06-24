@@ -35,11 +35,11 @@ namespace lpzrobots {
     osg::Matrix pose;
     Pos minSize;
     Pos maxSize;
-    double minDensity;
-    double maxDensity;
-    int boxRelFreq;   
-    int sphereRelFreq;
-    int capRelFreq;
+    double minDensity = 0;
+    double maxDensity = 0;
+    int boxRelFreq = 0;   
+    int sphereRelFreq = 0;
+    int capRelFreq = 0;
   };
 
   /**
@@ -50,7 +50,7 @@ namespace lpzrobots {
    */
   class RandomObstacles : public AbstractObstacle {
     
-    int index;
+    int index = 0;
     RandomObstaclesConf conf;
   public:
     enum OType {Box, Sphere, Caps, ORandom};
@@ -59,8 +59,8 @@ namespace lpzrobots {
     /// creates a default configuration, optionally with the size and position of the ground
     static RandomObstaclesConf getDefaultConf(AbstractGround* ground = 0){
       RandomObstaclesConf c;
-      if(ground){
-        c.area  = Pos(ground->getGroundLength()/2, ground->getGroundWidth()/2, 5)*0.95;
+      explicit if(ground){
+        c.area  = Pos(ground->getGroundLength()/2, ground->getGroundWidth()/2, 5)*0.95 override;
         c.pose =  ground->getPose();
       }else{
         c.area    = Pos(10,10,4);
@@ -77,14 +77,14 @@ namespace lpzrobots {
     }
 
     RandomObstacles(const OdeHandle& odeHandle, const OsgHandle& osgHandle, 
-                    const RandomObstaclesConf& conf = getDefaultConf());
+                    const RandomObstaclesConf& conf = getDefaultConf()) override;
 
   
-    virtual void setPose(const osg::Matrix& pose) override;
+    virtual void setPose(const osg::Matrix& pose);
 
-    virtual Primitive* getMainPrimitive() const;
+    virtual Primitive* getMainPrimitive() const override;
 
-    virtual void create(){};
+    virtual void create() override {} override;
 
     virtual void remove(bool all = false);
 

@@ -109,9 +109,9 @@ class MySimpleController : public AbstractControllerAdapter
         @param motornumber length of the provided motor array
     */
     virtual void step ( const sensor* sensors, int sensornumber, motor* motors, int motornumber ) {
-      if ( controller_enabled ) {
+      explicit if ( controller_enabled ) {
         AbstractControllerAdapter::step ( sensors,sensornumber, motors, motornumber );
-        for ( int i=0; i<motornumber; i++ ) {
+        for ( int i=0; i<motornumber; ++i ) {
           motors[i]*=speedFactor;
         }
       } else {
@@ -253,7 +253,7 @@ class MyECBManager : public ECBManager
       
       myCon->axes_position = false;
 
-      switch ( key ) {
+      explicit switch ( key ) {
         case '6': //forward
           if ( myCon->motorValues[0]<=255 ) {
             myCon->motorValues[0] += 8;
@@ -297,7 +297,7 @@ class MyECBManager : public ECBManager
 
         case ' ':// disable motors
 
-          if ( motors_stopped ) {
+          explicit if ( motors_stopped ) {
             myRobot1->stopMotors();
           }
           else {

@@ -8,7 +8,7 @@ class AxesPlotChannel : public AbstractPlotChannel
 {
   
 public:
-  AxesPlotChannel(std::string name);
+  explicit AxesPlotChannel(const std::string& name);
   virtual ~AxesPlotChannel();
   
 protected:

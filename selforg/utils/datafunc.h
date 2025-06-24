@@ -62,7 +62,7 @@ matrix::Matrix
 tm1_to_20(const std::vector<matrix::Matrix>& data, int time) {
   assert(time > 19);
   matrix::Matrix rv = data[time - 1];
-  for (int i = 2; i <= 20; i++) {
+  for (int i = 2; i <= 20; ++i) {
     rv = rv.above(data[time - i]);
   }
   return rv;
@@ -74,7 +74,7 @@ matrix::Matrix
 ts01m1_to_10(const std::vector<matrix::Matrix>& data, int time) {
   assert(time > 9);
   matrix::Matrix rv = data[time].rows(0, 1);
-  for (int i = 1; i <= 10; i++) {
+  for (int i = 1; i <= 10; ++i) {
     rv = rv.above(data[time - i]);
   }
   return rv;
@@ -84,7 +84,7 @@ matrix::Matrix
 tm0_to_10s01(const std::vector<matrix::Matrix>& data, int time) {
   assert(time > 9);
   matrix::Matrix rv = data[time].rows(0, 1);
-  for (int i = 1; i <= 10; i++) {
+  for (int i = 1; i <= 10; ++i) {
     rv = rv.above(data[time - i].rows(0, 1));
   }
   return rv;

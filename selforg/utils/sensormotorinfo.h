@@ -34,7 +34,7 @@ public:
   enum Type { Continuous, Discrete, Binary };
   enum Quantity { Position, Velocity, Force, Distance, Other };
 
-  explicit SensorMotorInfo(std::string name = std::string())
+  SensorMotorInfo(const std::string& name = std::string())
     : name(name)
     , min(-1.0)
     , max(1.0)
@@ -49,9 +49,9 @@ public:
   CHANGER(SensorMotorInfo, Type, type);
 
   std::string name;
-  double min;
-  double max;
-  int index; // index within one Sensor
+  double min = 0;
+  double max = 0;
+  int index = 0; // index within one Sensor
   Quantity quantity;
   Type type;
 };

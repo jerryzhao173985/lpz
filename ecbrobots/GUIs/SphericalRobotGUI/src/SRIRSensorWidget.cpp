@@ -30,7 +30,7 @@
     this->setMinimumSize ( 200,200 );
   
     // init viewable sensor values
-    for ( int i=0;i<NUMBER_IR_SENSORS;i++ ) {
+    for ( int i=0;i<NUMBER_IR_SENSORS;++i ) {
       ir_sensors[i] = 300;
     }
   
@@ -45,7 +45,7 @@
   
     //   std::cout << "SIRSensorWidget: updateIRSensors()" << std::endl;
     //   int j=0;
-    for ( std::list<AbstractPlotChannel*>::iterator i=channelList.begin(); i!=channelList.end(); i++ ) {
+    for ( std::list<AbstractPlotChannel*>::iterator i=channelList.begin(); i!=channelList.end(); ++i ) {
       if ( ( ( *i )->getChannelName() ) == "ir0" )
         ir_sensors[0] = convertToByte ( ( *i )->getValue() );
       
@@ -123,7 +123,7 @@
     */
   
   
-    for ( int nr=0;nr<NUMBER_IR_SENSORS;nr++ ) {
+    for ( int nr=0;nr<NUMBER_IR_SENSORS;++nr ) {
       if ( ( ir_sensors[nr]>=0 ) && ( ir_sensors[nr]<128 ) )
         ir_color[nr].setRgb ( ir_sensors[nr]*2,255,0 );
       else if ( ( ir_sensors[nr]>=128 ) && ( ir_sensors[nr]<=255 ) )

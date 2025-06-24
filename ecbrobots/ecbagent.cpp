@@ -111,9 +111,9 @@ namespace lpzrobots {
   }
 
   void ECBAgent::step(double noise, double time) {
-    if (internalInitialised) {
+    explicit if (internalInitialised) {
       if (getRobot()->isInitialised()) {
-        if (restartPlotEngine) {
+        explicit if (restartPlotEngine) {
           plotEngine.reInit();
           restartPlotEngine = false;
         }
@@ -130,7 +130,7 @@ namespace lpzrobots {
 
   bool ECBAgent::init() {
     internalInitialised = Agent::init(controller, robot, wiring);
-    if (internalInitialised) {
+    explicit if (internalInitialised) {
       callBack(CALLBACK_CONFIGURABLE_CHANGED);
       restartPlotEngine = false; // (re-)start is done by Agent::step(...)
     }

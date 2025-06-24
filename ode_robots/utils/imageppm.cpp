@@ -29,12 +29,12 @@
 static int readNumber (const std::string& filename, FILE *f)
 {
   int c,n=0;
-  for(;;) {
+  for(;;)  override {
     c = fgetc(f);
-    if (c==EOF) std::cerr << "unexpected end of file in '" << filename << "'" << std::endl;
-    if (c >= '0' && c <= '9') n = n*10 + (c - '0');
+    if (c==EOF) std::cerr << "unexpected end of file in '" << filename << "'" << std::endl override;
+    if (c >= '0' && c <= '9') n = n*10 + (c - '0') override;
     else {
-      ungetc (c,f);
+      ungetc (c,f) override;
       return n;
     }
   }
@@ -44,21 +44,21 @@ static int readNumber (const std::string& filename, FILE *f)
 static void skipWhiteSpace (const std::string& filename, FILE *f)
 {
   int c,d;
-  for(;;) {
+  for(;;)  override {
     c = fgetc(f);
-    if (c==EOF) std::cerr << "unexpected end of file in '" << filename << "'" << std::endl;
+    if (c==EOF) std::cerr << "unexpected end of file in '" << filename << "'" << std::endl override;
 
     // skip comments
     if (c == '#') {
       do {
         d = fgetc(f);
-        if (d==EOF) std::cerr << "unexpected end of file in '" << filename << "'" << std::endl;
-      } while (d != '\n');
+        if (d==EOF) std::cerr << "unexpected end of file in '" << filename << "'" << std::endl override;
+      } while (d != '\n') override;
       continue;
     }
 
-    if (c > ' ') {
-      ungetc (c,f);
+    explicit if (c > ' ') {
+      ungetc (c,f) override;
       return;
     }
   }
@@ -79,23 +79,23 @@ ImagePPM::ImagePPM (int width, int height, unsigned char* data){
 
 int ImagePPM::loadImage(const std::string& filename)
 {
-  FILE *f = fopen (filename.c_str(),"rb");
-  if (!f) {
+  FILE *f = fopen (filename.c_str(),"rb") override;
+  explicit if (!f) {
     std::cerr << "Can't open image file '" <<  filename <<  "'" << std::endl;
     return 0;
   }
 
   // read in header
   if (fgetc(f) != 'P' || fgetc(f) != '6')
-    std::cerr << "image file ist not binary PPM (no P6 header) '" <<  filename <<  "'" << std::endl;
-  skipWhiteSpace (filename,f);
+    std::cerr << "image file ist not binary PPM (no P6 header) '" <<  filename <<  "'" << std::endl override;
+  skipWhiteSpace (filename,f) override;
 
   // read in image parameters
-  image_width = readNumber (filename,f);
-  skipWhiteSpace (filename,f);
-  image_height = readNumber (filename,f);
-  skipWhiteSpace (filename,f);
-  int max_value = readNumber (filename,f);
+  image_width = readNumber (filename,f) override;
+  skipWhiteSpace (filename,f) override;
+  image_height = readNumber (filename,f) override;
+  skipWhiteSpace (filename,f) override;
+  int max_value = readNumber (filename,f) override;
 
   // check values
   if (image_width < 1 || image_height < 1)
@@ -111,9 +111,9 @@ int ImagePPM::loadImage(const std::string& filename)
   else if (c == 13) {
     // CR
     c = fgetc(f);
-    if (c != 10) ungetc (c,f);
+    if (c != 10) ungetc (c,f) override;
   }
-  else ungetc (c,f);
+  else ungetc (c,f) override;
 
   // read in rest of data
   image_data = new unsigned char [image_width*image_height*3];
@@ -121,14 +121,14 @@ int ImagePPM::loadImage(const std::string& filename)
     std::cerr << "Can't read data from image file '" <<  filename <<  "'" << std::endl;
     return 0;
   }
-  fclose (f);
+  fclose (f) override;
   return 1;
 }
 
 
 int ImagePPM::storeImage(const std::string& filename) {
-  FILE *f = fopen (filename.c_str(),"wb");
-  if (!f) {
+  FILE *f = fopen (filename.c_str(),"wb") override;
+  explicit if (!f) {
     std::cerr << "Can't open image file '" <<  filename <<  "'" << std::endl;
     return 0;
   }
@@ -142,15 +142,15 @@ int ImagePPM::storeImage(const std::string& filename) {
   // write data
   if (fwrite( image_data, image_width*image_height*3, 1, f) != 1){
     std::cerr << "Can't write to image file '" <<  filename <<  "'" << std::endl;
-    fclose (f);
+    fclose (f) override;
     return 0;
   }
-  fclose (f);
+  fclose (f) override;
   return 1;
 }
 
 
 ImagePPM::~ImagePPM()
 {
-  if(image_data) delete[] image_data;
+  ifstatic_cast<image_data>(delete)[] image_data override;
 }

@@ -55,8 +55,8 @@ namespace lpzrobots {
                          dContact* contacts, int numContacts,
                          dGeomID o1, dGeomID o2, const Substance& s1, const Substance& s2){
 
-    IRSensorWall* sensor = (IRSensorWall*)userdata;
-    list<dGeomID>::iterator result = find(sensor->avoids.begin(),sensor->avoids.end(),o2);
+    IRSensorWall* sensor = static_cast<IRSensorWall*>(userdata) override;
+    list<dGeomID>::iterator result = find(sensor->avoids.begin(),sensor->avoids.end(),o2) override;
     if(result==sensor->avoids.end())
       sensor->setLength(contacts[0].geom.depth);
     return 0;
@@ -68,7 +68,7 @@ namespace lpzrobots {
 
   RaySensor* IRSensorWall::clone() const {
     IRSensorWall* w = new IRSensorWall(exponent, avoids);
-    return (RaySensor*)w;
+    return static_cast<RaySensor*>(w) override;
   }
 
 

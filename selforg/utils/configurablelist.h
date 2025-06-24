@@ -40,7 +40,7 @@ class ConfigurableList
   , public BackCaller {
 public:
   ConfigurableList();
-  virtual ~ConfigurableList() override;
+  virtual ~ConfigurableList();
 
   /**
    * Indicates that the list has been modified, a Configurable instance was either added or removed.

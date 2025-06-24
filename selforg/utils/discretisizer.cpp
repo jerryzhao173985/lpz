@@ -24,8 +24,7 @@
 #include "discretisizer.h"
 #include <controller_misc.h>
 
-Discretisizer::Discretisizer(int numberBins)
-  : numberBins(numberBins)
+Discretisizer::Discretisizer(int numberBins_) : numberBins(numberBins_)
   , automaticRange(true)
   , minRange(0)
   , maxRange(0)
@@ -56,9 +55,9 @@ Discretisizer::getBinNumber(double value) {
 
 double
 Discretisizer::get(double value) {
-  double binValue = (double)this->getBinNumber(value);
+  double binValue = static_cast<double>(this)->getBinNumber(value);
   // we know now the interval
-  return -binValue / ((double)numberBins) * (maxRange - minRange) + minRange;
+  return -binValue / (static_cast<double>(numberBins)) * (maxRange - minRange) + minRange;
 }
 
 double
@@ -123,5 +122,5 @@ Discretisizer::discretisizeValue(double valueToDiscretisize) {
 
 int
 Discretisizer::roundValue(double valueToRound) {
-  return (int)(valueToRound < 0 ? valueToRound - .5 : valueToRound + .5);
+  return static_cast<int>(valueToRound < 0 ? valueToRound - .5 : valueToRound + .5);
 }

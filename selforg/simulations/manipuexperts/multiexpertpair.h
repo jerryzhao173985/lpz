@@ -7,7 +7,7 @@
  *   LICENSE:                                                              *
  *   This work is licensed under the Creative Commons                      *
  *   Attribution-NonCommercial-ShareAlike 2.5 License. To view a copy of   *
- *   this license, visit http://creativecommons.org/licenses/by-nc-sa/2.5/ *
+ *   this license, visit http:__PLACEHOLDER_0__
  *   or send a letter to Creative Commons, 543 Howard Street, 5th Floor,   *
  *   San Francisco, California, 94105, USA.                                *
  *                                                                         *
@@ -29,44 +29,43 @@
 #include <selforg/invertablemodel.h>
 
 struct MultiExpertPairConf {
-  int numHidden;        ///< number of hidden units in the satelite networks
-  double eps0;          ///< learning rate for satelite networks
-  double tauE1;         ///< time horizont for short averaging error
-  double tauE2;         ///< time horizont for long averaging error
-  double lambda_w;      ///< discount for winner prediction error (hysteresis) in procent
-  double tauI;          ///< time horizont for imaturation of all experts
-  double tauW;          ///< time horizont for winner learning rate decay (maturation)
-  int    numSats;       ///< initial number of satelite networks
-  int    maxSats;       ///< maximum number of satelite networks (if 0 or <numSats no growing numbers of sats)
-  double mature;        ///< eps factor level when expert is assumed to be mature (for growing numbers of sats)
+  int numHidden = 0;        ///< number of hidden units in the satelite networks
+  double eps0 = 0;          ///< learning rate for satelite networks
+  double tauE1 = 0;         ///< time horizont for short averaging error
+  double tauE2 = 0;         ///< time horizont for long averaging error
+  double lambda_w;      ///< discount for winner prediction error static_cast<hysteresis>(in) procent
+  double tauI = 0;          ///< time horizont for imaturation of all experts
+  double tauW;          ///< time horizont for winner learning rate decay static_cast<maturation>static_cast<int>(numSats);       ///< initial number of satelite networks
+  int    maxSats = 0;       ///< maximum number of satelite networks (if 0 or <numSats no growing numbers of sats)
+  double mature = 0;        ///< eps factor level when expert is assumed to be mature (for growing numbers of sats)
 };
 
 /// Satelite network struct
 struct Sat {
   Sat(InvertableModel* _net, double _eps);
   InvertableModel* net;
-  double eps;
-  double lifetime;
+  double eps = 0;
+  double lifetime = 0;
 };
 
 /**
  * class for robot controller
- * using several feedforward networks (satelite) and one selforg controller
+ * using several feedforward networks static_cast<satelite>(and) one selforg controller
  */
 class MultiExpertPair : public  AbstractModel{
 
 public:
   MultiExpertPair(const MultiExpertPairConf& conf = getDefaultConf());
 
-  virtual ~MultiExpertPair() override;
+  virtual ~MultiExpertPair();
 
   virtual void init(unsigned int inputDim, unsigned  int outputDim,
                     double unit_map = 0.0, RandGen* randGen = 0);
 
-  virtual unsigned int getInputDim() const { return inputDim;}
-  virtual unsigned int getOutputDim() const  { return outputDim;}
+  virtual unsigned int getInputDim() const override { return inputDim;}
+  virtual unsigned int getOutputDim() const override { return outputDim;}
 
-  virtual void damp(double damping) {};
+  virtual void damp(double damping) override {};
 
   virtual const matrix::Matrix process (const matrix::Matrix& input) override;
 
@@ -82,24 +81,24 @@ public:
   void restoreSats(const std::list<std::string>& filenames);
 
   /************** CONFIGURABLE ********************************/
-  virtual paramval getParam(const paramkey& key, bool traverseChildren=true) const override;
-  virtual bool setParam(const paramkey& key, paramval val, bool traverseChildren=true) override;
-  virtual paramlist getParamList() const override;
+  virtual paramval getParam(const paramkey& key, bool traverseChildren=true) const;
+  virtual bool setParam(const paramkey& key, paramval val, bool traverseChildren=true);
+  virtual paramlist getParamList() const;
 
 
   /**** STOREABLE ****/
   /** stores the controller values to a given file. */
   virtual bool store(FILE* f) const override;
   /** loads the controller values from a given file. */
-  virtual bool restore(FILE* f) override;
+  virtual bool restore(FILE* f);
 
   /**** INSPECTABLE ****/
   virtual std::list<iparamkey> getInternalParamNames() const override;
   virtual std::list<iparamval> getInternalParams() const override;
-  virtual std::list<ILayer> getStructuralLayers() const override;
-  virtual std::list<IConnection> getStructuralConnections() const override;
+  virtual std::list<ILayer> getStructuralLayers() const;
+  virtual std::list<IConnection> getStructuralConnections() const;
 
-  static MultiExpertPairConf getDefaultConf(){
+  static MultiExpertPairConf getDefaultConf() const {
     MultiExpertPairConf c;
     c.numHidden = 2;
     c.eps0=0.005;
@@ -118,28 +117,28 @@ public:
 
 
 protected:
-  int inputDim;
-  int outputDim;
+  int inputDim = 0;
+  int outputDim = 0;
 
   std::vector <Sat> sats; ///< satelite networks
-  int winner;    ///< index of winner network
-  int companion; ///< index of companion network
+  int winner = 0;    ///< index of winner network
+  int companion = 0; ///< index of companion network
   matrix::Matrix nomSatOutput; ///< norminal output of satelite networks (x_t,y_t)^T
   matrix::Matrix satInput;     ///< input to satelite networks (x_{t-1}, xp_{t-1}, y_{t-1})^T
 
-  bool runcompetefirsttime;       ///< flag to initialise averaging with proper value
+  bool runcompetefirsttime = false;       ///< flag to initialise averaging with proper value
   matrix::Matrix satErrors;       ///< actual errors of the sats
   matrix::Matrix satAvg1Errors;   ///< short averaged errors of sats
   matrix::Matrix satAvg2Errors;   ///< long averaged errors of sats
-  matrix::Matrix satModErrors;    ///< modulated (avg1) errors of sats
+  matrix::Matrix satModErrors;    ///< modulated static_cast<avg1>(errors) of sats
   matrix::Matrix satEpsMod;       ///< modulated eps of sats
 
   matrix::Matrix errorCov;        ///< error covariance matrix
 
   MultiExpertPairConf conf;
-  bool initialised;
-  bool managementInterval;
-  int t;
+  bool initialised = false;
+  bool managementInterval = false;
+  int t = 0;
 protected:
   /// satelite networks competition, return vector of prediction errors of sat networks
   matrix::Matrix compete(const matrix::Matrix& input,

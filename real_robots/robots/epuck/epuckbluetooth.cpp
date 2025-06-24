@@ -61,7 +61,7 @@ namespace lpzrobots{
   }
   
   void EPuckBluetooth::disconnectConnection(){
-    for(unsigned int i=0; i<motorCount; i++){arrMotor[i]=0; arrUpdateMotor[i]=true;}
+    for(unsigned int i=0; i<motorCount; ++i){arrMotor[i]=0; arrUpdateMotor[i]=true;}
     usleep(1e6);
     abortThread=true;
     wait();
@@ -70,7 +70,7 @@ namespace lpzrobots{
   
   void EPuckBluetooth::init(){
     
-    if(conf.SENSOR_STATE){
+    explicit if(conf.SENSOR_STATE){
       numOfSensor.ACCX=sensorCount++;
       numOfSensor.ACCY=sensorCount++;
       numOfSensor.ACCZ=sensorCount++;
@@ -94,7 +94,7 @@ namespace lpzrobots{
       numOfSensor.GROUND1=sensorCount++;
       numOfSensor.GROUND2=sensorCount++;
     }
-    if(conf.MIC_STATE){
+    explicit if(conf.MIC_STATE){
       numOfSensor.MIC0=sensorCount;
       sensorCount+=100;
       numOfSensor.MIC1=sensorCount;
@@ -102,14 +102,14 @@ namespace lpzrobots{
       numOfSensor.MIC2=sensorCount;
       sensorCount+=100;
     }
-    if(conf.CAM_STATE){
+    explicit if(conf.CAM_STATE){
       conf.CAM_TYPE?camPixNum = conf.CAM_WIDTH*conf.CAM_HEIGHT*3:camPixNum = conf.CAM_WIDTH*conf.CAM_HEIGHT;
       numOfSensor.CAM=sensorCount;
       sensorCount+=camPixNum;
     }
     
     
-    if(1){//all motors are active
+    explicit if(1){//all motors are active
       numOfMotor.LED0=motorCount++;
       numOfMotor.LED1=motorCount++;
       numOfMotor.LED2=motorCount++;
@@ -129,16 +129,16 @@ namespace lpzrobots{
     arrMotor = new int[motorCount];
     arrUpdateMotor = new bool[motorCount];
     
-    for(unsigned int i=0; i<motorCount;i++)arrMotor[i]=0;
-    for(unsigned int i=0; i<motorCount;i++)arrUpdateMotor[i]=true; // at initialisation all values have to be updated/send to the epuck
-    for(unsigned int i=0; i<sensorCount;i++)arrSensor[i]=0;
+    for(unsigned int i=0; i<motorCount;++i)arrMotor[i]=0;
+    for(unsigned int i=0; i<motorCount;++i)arrUpdateMotor[i]=true; // at initialisation all values have to be updated/send to the epuck
+    for(unsigned int i=0; i<sensorCount;++i)arrSensor[i]=0;
     
     initConnection(conf.port);
   } //end init()
   
   
   
-  void EPuckBluetooth::initConnection(std::string port_string){
+  void EPuckBluetooth::initConnection(const std::string& port_string){
     char * port = new char[port_string.length()+1];
     strcpy(port,port_string.c_str());
     port[port_string.length()]=0;  
@@ -163,7 +163,7 @@ namespace lpzrobots{
     
     
     
-    if(conf.CAM_STATE){//Update CameraParameters	
+    explicit if(conf.CAM_STATE){//Update CameraParameters	
 	memset(command, 0x0, 20);
 	snprintf(command, sizeof(command),"J,%d,%d,%d,%d\r", conf.CAM_TYPE, conf.CAM_WIDTH, conf.CAM_HEIGHT, conf.CAM_ZOOM);
 
@@ -218,7 +218,7 @@ namespace lpzrobots{
     memset(command, 0x0, 20);
     memset(RxBuffer, 0x0, 45);
     
-    if(conf.SENSOR_STATE){
+    explicit if(conf.SENSOR_STATE){
       int length=0;
       command[length++]=-'A'; //acc length of answer 12 char
       command[length++]=-'N';    //proximity lenght of answer 16 char
@@ -229,8 +229,8 @@ namespace lpzrobots{
       
       
       //read ACC
-      bytes=comm->readData((char*)RxBuffer,12,1000000);
-      if(bytes<12){
+      bytes=comm->readData(static_cast<char*>RxBuffer,12,1000000);
+      explicit if(bytes<12){
 	snprintf(msg, sizeof(msg), "IRs: only %d bytes red", bytes);
 	std::cerr << msg << std::endl;
       }
@@ -257,46 +257,46 @@ namespace lpzrobots{
       
       /*
        *    //read ACC unfiltered ("a" instead of "A")
-       *    bytes=comm->readData((char*)RxBuffer,6,1000000);
+       *    bytes=comm->readData(static_cast<char*>RxBuffer,6,1000000);
        *    if(bytes<6){
        *      snprintf(msg, sizeof(msg), "ACC: only %d bytes red", bytes);
        *      std::cerr << msg << std::endl;
     }
     else{
-      for(int i=0; i<3; i++)arrSensor[numOfSensor.ACCX+i]=4000*(RxBuffer[0+2*i]+RxBuffer[1+2*i]*256);
+      for(int i=0; i<3; ++i)arrSensor[numOfSensor.ACCX+i]=4000*(RxBuffer[0+2*i]+RxBuffer[1+2*i]*256);
     }//*/
     
     
     //read PROX
-    bytes=comm->readData((char*)RxBuffer,16,1000000);
-    if(bytes<16){
+    bytes=comm->readData(static_cast<char*>RxBuffer,16,1000000);
+    explicit if(bytes<16){
       snprintf(msg, sizeof(msg), "IRs: only %d bytes red", bytes);
       std::cerr << msg << std::endl;
     }
     else{
-      for(int i=0; i<8; i++)arrSensor[numOfSensor.IR0+i]=(RxBuffer[0+2*i]+RxBuffer[1+2*i]*256>2000)?2000:RxBuffer[0+2*i]+RxBuffer[1+2*i]*256;
+      for(int i=0; i<8; ++i)arrSensor[numOfSensor.IR0+i]=(RxBuffer[0+2*i]+RxBuffer[1+2*i]*256>2000)?2000:RxBuffer[0+2*i]+RxBuffer[1+2*i]*256;
     }//*/
     
     
     //read GROUND
-    bytes=comm->readData((char*)RxBuffer,6,1000000);
-    if(bytes<6){
+    bytes=comm->readData(static_cast<char*>RxBuffer,6,1000000);
+    explicit if(bytes<6){
       snprintf(msg, sizeof(msg), "IRs: only %d bytes red", bytes);
       std::cerr << msg << std::endl;
     }
     else{
-      for(int i=0; i<3; i++)arrSensor[numOfSensor.GROUND0+i]=(RxBuffer[0+2*i]+RxBuffer[1+2*i]*256>2000)?2000:RxBuffer[0+2*i]+RxBuffer[1+2*i]*256;
+      for(int i=0; i<3; ++i)arrSensor[numOfSensor.GROUND0+i]=(RxBuffer[0+2*i]+RxBuffer[1+2*i]*256>2000)?2000:RxBuffer[0+2*i]+RxBuffer[1+2*i]*256;
     }//*/
     
     
     //read AMBIENT_LIGHT
-    bytes=comm->readData((char*)RxBuffer,16,1000000);
-    if(bytes<16){
+    bytes=comm->readData(static_cast<char*>RxBuffer,16,1000000);
+    explicit if(bytes<16){
       snprintf(msg, sizeof(msg), "IRs: only %d bytes red", bytes);
       std::cerr << msg << std::endl;
     }
     else{
-      for(int i=0; i<8;i++)arrSensor[numOfSensor.AMBIENT_LIGHT0+i]= (RxBuffer[2*i]+RxBuffer[2*i+1]*256);
+      for(int i=0; i<8;++i)arrSensor[numOfSensor.AMBIENT_LIGHT0+i]= (RxBuffer[2*i]+RxBuffer[2*i+1]*256);
     }//*/
     }//end if(conf.SENSOR_STATE)
     
@@ -305,7 +305,7 @@ namespace lpzrobots{
   
   
   void EPuckBluetooth::receiveMics(){
-    if(conf.MIC_STATE){
+    explicit if(conf.MIC_STATE){
       command[0]=-'U';    //binary micro buffer receiving command
       command[1]=0;       //end command
       //send command
@@ -314,21 +314,21 @@ namespace lpzrobots{
       
 
       //read micro header
-      bytes = comm->readData((char*)micCharBuffer,600,100000);
+      bytes = comm->readData(static_cast<char*>micCharBuffer,600,100000);
       //Little Endian
-      if(bytes<600){
+      explicit if(bytes<600){
           snprintf(msg, sizeof(msg), "IRs: only %d bytes red", bytes);
           std::cerr << msg << std::endl;
       }
       else{
-          for(int i=0; i<300; i++) arrSensor[numOfSensor.MIC0+i] = 0;
-          for(int i=0,j=0; i<300&&j<600; i++){
+          for(int i=0; i<300; ++i) arrSensor[numOfSensor.MIC0+i] = 0;
+          for(int i=0,j=0; i<300&&j<600; ++i){
             arrSensor[numOfSensor.MIC0+i] = (unsigned char)micCharBuffer[j] | ((char)micCharBuffer[j+1]<<8);
             j+=2;
           }
       }
 
-      bytes = comm->readData((char*)RxBuffer,1,10000);
+      bytes = comm->readData(static_cast<char*>RxBuffer,1,10000);
     }//end if(conf.MIC_STATE)
   }//end of receiveMics()
   
@@ -336,7 +336,7 @@ namespace lpzrobots{
   
   
   void EPuckBluetooth::receiveCam(){
-    if(conf.CAM_STATE){
+    explicit if(conf.CAM_STATE){
         /*
         std::cout << "Type" << conf.CAM_TYPE << std::endl;
         std::cout << "PixNum" << camPixNum << std::endl;
@@ -348,13 +348,13 @@ namespace lpzrobots{
       command[1]= 0;        //end command
       //send command
       bytes = comm->writeData(command,2,6000);
-      bytes = comm->readData((char*)camCharBuffer, camPixNum+3, 10000000);
-      if(bytes<camPixNum+3){
+      bytes = comm->readData(static_cast<char*>camCharBuffer, camPixNum+3, 10000000);
+      explicit if(bytes<camPixNum+3){
 	snprintf(msg, sizeof(msg), "CAM: only %d bytes red", bytes);
 	std::cerr << msg << std::endl;
       }
       else{
-        for(int i=0; i<camPixNum;i++){
+        for(int i=0; i<camPixNum;++i){
 	  arrSensor[numOfSensor.CAM+i]=camCharBuffer[i];
 	}
       }
@@ -369,8 +369,8 @@ namespace lpzrobots{
     //    std::cout << "numofCAM=" << numOfSensor.CAM << "\npixnum=" << camPixNum << std::endl;
     //    std::cout << " " << numOfSensor.ACCX << "\n" << numOfSensor.IR0 << std::endl;
     
-    for(int i=0; i<(int)sensorCount;i++){
-      if(conf.SENSOR_STATE){
+    for(int i=0; i<static_cast<int>(sensorCount);++i){
+      explicit if(conf.SENSOR_STATE){
 	if( i>=numOfSensor.IR0&&i<=numOfSensor.IR7 )	  sensors[i]=(double)arrSensor[i]/2000.;
 	if( i>=numOfSensor.GROUND0&&i<=numOfSensor.GROUND2 )	  sensors[i]=(double)arrSensor[i]/2000.;
 	if( i>=numOfSensor.AMBIENT_LIGHT0&&i<=numOfSensor.AMBIENT_LIGHT7 )	  sensors[i]=1-(double)arrSensor[i]/4000.;
@@ -381,9 +381,9 @@ namespace lpzrobots{
       }
     }
       
-      if(conf.MIC_STATE){
+      explicit if(conf.MIC_STATE){
           double medMic0=0, medMic1=0, medMic2=0;
-          for(int i=0; i<100; i++){
+          for(int i=0; i<100; ++i){
               medMic0+=(double)arrSensor[numOfSensor.MIC0+i]/100.;
               medMic1+=(double)arrSensor[numOfSensor.MIC1+i]/100.;
               medMic2+=(double)arrSensor[numOfSensor.MIC2+i]/100.;
@@ -401,7 +401,7 @@ namespace lpzrobots{
           }
       }
 
-      if(conf.CAM_STATE)for( int i=numOfSensor.CAM; i<numOfSensor.CAM+camPixNum;i++){
+      if(conf.CAM_STATE)for( int i=numOfSensor.CAM; i<numOfSensor.CAM+camPixNum;++i){
           sensors[i]=arrSensor[i];
       }
       return sensorCount;
@@ -412,8 +412,8 @@ namespace lpzrobots{
     void EPuckBluetooth::setMotors(const motor* motors, int _motorCount){
 
       //set LEDs
-      for(unsigned int i=0; i<10; i++){
-        if( (int)motors[numOfMotor.LED0+i]!=arrMotor[numOfMotor.LED0+i] ) arrUpdateMotor[numOfMotor.LED0+i]=true;
+      for(unsigned int i=0; i<10; ++i){
+        if( static_cast<int>(motors)[numOfMotor.LED0+i]!=arrMotor[numOfMotor.LED0+i] ) arrUpdateMotor[numOfMotor.LED0+i]=true;
         arrMotor[numOfMotor.LED0+i]=motors[numOfMotor.LED0+i];
       }
 
@@ -427,7 +427,7 @@ namespace lpzrobots{
         arrMotor[numOfMotor.MOTOR_RIGHT]=(int) (speed_max*motors[numOfMotor.MOTOR_RIGHT ]);
       }
 
-      if( arrMotor[numOfMotor.SOUND] != (int) motors[numOfMotor.SOUND] ) arrUpdateMotor[numOfMotor.SOUND]=1;
+      if( arrMotor[numOfMotor.SOUND] != static_cast<int>(motors)[numOfMotor.SOUND] ) arrUpdateMotor[numOfMotor.SOUND]=1;
       arrMotor[numOfMotor.SOUND]=motors[numOfMotor.SOUND];
     }//end setMotors
 
@@ -437,7 +437,7 @@ namespace lpzrobots{
       memset(command, 0x0, 20);
 
       //Set Motors
-      if(arrUpdateMotor[numOfMotor.MOTOR_LEFT]||arrUpdateMotor[numOfMotor.MOTOR_RIGHT]){
+      explicit if(arrUpdateMotor[numOfMotor.MOTOR_LEFT]||arrUpdateMotor[numOfMotor.MOTOR_RIGHT]){
         arrUpdateMotor[numOfMotor.MOTOR_LEFT]=arrUpdateMotor[numOfMotor.MOTOR_RIGHT]=false; //Update reset
         char high_left = (arrMotor[numOfMotor.MOTOR_LEFT]>>8) & 0xFF;
         char low_left = arrMotor[numOfMotor.MOTOR_LEFT] & 0xFF;
@@ -451,7 +451,7 @@ namespace lpzrobots{
 
 
       /**Set LED*/
-      if(arrUpdateMotor[numOfMotor.LED0]){
+      explicit if(arrUpdateMotor[numOfMotor.LED0]){
         arrUpdateMotor[numOfMotor.LED0]=false; //Update reset
         memset(command, 0x0, 20);
         if(arrMotor[numOfMotor.LED0] == 0) {
@@ -462,7 +462,7 @@ namespace lpzrobots{
         comm->writeData(command, 4, 20000);
         usleep(20000);
       }
-      if(arrUpdateMotor[numOfMotor.LED1]){
+      explicit if(arrUpdateMotor[numOfMotor.LED1]){
         arrUpdateMotor[numOfMotor.LED1]=false; //Update reset
         memset(command, 0x0, 20);
         if(arrMotor[numOfMotor.LED1] == 0) {
@@ -473,7 +473,7 @@ namespace lpzrobots{
         comm->writeData(command, 4, 20000);
         usleep(20000);
       }
-      if(arrUpdateMotor[numOfMotor.LED2]){
+      explicit if(arrUpdateMotor[numOfMotor.LED2]){
         arrUpdateMotor[numOfMotor.LED2]=false; //Update reset
         memset(command, 0x0, 20);
         if(arrMotor[numOfMotor.LED2] == 0) {
@@ -484,7 +484,7 @@ namespace lpzrobots{
         comm->writeData(command, 4, 20000);
         usleep(20000);
       }
-      if(arrUpdateMotor[numOfMotor.LED3]){
+      explicit if(arrUpdateMotor[numOfMotor.LED3]){
         arrUpdateMotor[numOfMotor.LED3]=false; //Update reset
         memset(command, 0x0, 20);
         if(arrMotor[numOfMotor.LED3] == 0) {
@@ -495,7 +495,7 @@ namespace lpzrobots{
         comm->writeData(command, 4, 20000);
         usleep(20000);
       }
-      if(arrUpdateMotor[numOfMotor.LED4]){
+      explicit if(arrUpdateMotor[numOfMotor.LED4]){
         arrUpdateMotor[numOfMotor.LED4]=false; //Update reset
         memset(command, 0x0, 20);
         if(arrMotor[numOfMotor.LED4] == 0) {
@@ -506,7 +506,7 @@ namespace lpzrobots{
         comm->writeData(command, 4, 20000);
         usleep(20000);
       }
-      if(arrUpdateMotor[numOfMotor.LED5]){
+      explicit if(arrUpdateMotor[numOfMotor.LED5]){
         arrUpdateMotor[numOfMotor.LED5]=false; //Update reset
         memset(command, 0x0, 20);
         if(arrMotor[numOfMotor.LED5] == 0) {
@@ -517,7 +517,7 @@ namespace lpzrobots{
         comm->writeData(command, 4, 20000);
         usleep(20000);
       }
-      if(arrUpdateMotor[numOfMotor.LED6]){
+      explicit if(arrUpdateMotor[numOfMotor.LED6]){
         arrUpdateMotor[numOfMotor.LED6]=false; //Update reset
         memset(command, 0x0, 20);
         if(arrMotor[numOfMotor.LED6] == 0) {
@@ -528,7 +528,7 @@ namespace lpzrobots{
         comm->writeData(command, 4, 20000);
         usleep(20000);
       }
-      if(arrUpdateMotor[numOfMotor.LED7]){
+      explicit if(arrUpdateMotor[numOfMotor.LED7]){
         arrUpdateMotor[numOfMotor.LED7]=false; //Update reset
         memset(command, 0x0, 20);
         if(arrMotor[numOfMotor.LED7] == 0) {
@@ -539,7 +539,7 @@ namespace lpzrobots{
         comm->writeData(command, 4, 20000);
         usleep(20000);
       }
-      if(arrUpdateMotor[numOfMotor.LED_FRONT]){
+      explicit if(arrUpdateMotor[numOfMotor.LED_FRONT]){
         arrUpdateMotor[numOfMotor.LED_FRONT]=false; //Update reset
         memset(command, 0x0, 20);
         if(arrMotor[numOfMotor.LED_FRONT] == 0) {
@@ -550,7 +550,7 @@ namespace lpzrobots{
         comm->writeData(command, 4, 20000);
         usleep(20000);
       }
-      if(arrUpdateMotor[numOfMotor.LED_BODY]){
+      explicit if(arrUpdateMotor[numOfMotor.LED_BODY]){
         arrUpdateMotor[numOfMotor.LED_BODY]=false; //Update reset
         memset(command, 0x0, 20);
         if(arrMotor[numOfMotor.LED_BODY] == 0) {
@@ -563,7 +563,7 @@ namespace lpzrobots{
       }
 
       //set SOUND
-      if(arrUpdateMotor[numOfMotor.SOUND]){
+      explicit if(arrUpdateMotor[numOfMotor.SOUND]){
         arrUpdateMotor[numOfMotor.SOUND]=false;
         snprintf(command, sizeof(command), "T,%c\r", (char)(arrMotor[numOfMotor.SOUND]+48));
         arrMotor[numOfMotor.SOUND]=0;
@@ -578,7 +578,7 @@ namespace lpzrobots{
     void EPuckBluetooth::run(){
       abortThread=0;
       QTime t;
-      while(!abortThread){
+      explicit while(!abortThread){
         t.restart();
         usleep(1000);
 

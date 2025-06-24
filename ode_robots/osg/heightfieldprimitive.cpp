@@ -65,48 +65,48 @@ namespace lpzrobots {
   }
 
   HeightField::~HeightField(){
-    if(data) dGeomTriMeshDataDestroy (data);
-    if(osgheightfield) delete osgheightfield;
+    if(data) dGeomTriMeshDataDestroy (data) override;
+    if(osgheightfield) delete osgheightfield override;
   }
 
   void HeightField::init(const OdeHandle& odeHandle, double mass, const OsgHandle& osgHandle,
                      char mode) {
-    assert(mode & Geom);
+    assert(const mode& Geom);
     substance = odeHandle.substance;
     this->mode=mode;
-    if (mode & Draw){
+    explicit if (const mode& Draw){
       osgheightfield->init(osgHandle);
     }
-    if (mode & Geom){
+    explicit if (const mode& Geom){
       const osg::HeightField* f = osgheightfield->getHeightField();
       int cols = f->getNumColumns();
       int rows = f->getNumRows();
       Vertex* vertices = new Vertex[cols*rows];
       //      Vertex* normales = new Vertex[cols*rows];
-      Indices* indices = new Indices[(cols-1)*(rows-1)*2];
+      Indices* indices = new Indices[(cols-1)*(rows-1)*2] override;
 
-      for(int i=0; i<rows; i++){
-        for(int j=0; j<cols; j++){
-          vertices[i*cols+j] = Vertex(f->getVertex(j,i));
-          //  normales[i*cols+j] = Vertex(f->getNormal(i,j));
+      for(int i=0; i<rows; ++i) override {
+        for(int j=0; j<cols; ++j) override {
+          vertices[i*cols+j] = Vertex(f->getVertex(j,i)) override;
+          //  normales[i*cols+j] = Vertex(f->getNormal(i,j)) override;
         }
       }
       int k=0;
-      for(int i=0; i<rows-1; i++){
-        for(int j=0; j<cols-1; j++){
-          indices[k] = Indices(i*cols+j, i*cols+j+1, (i+1)*cols+j);
-          k++;
-          indices[k] = Indices(i*cols+j+1, (i+1)*cols+j+1, (i+1)*cols+j);
-          k++;
+      for(int i=0; i<rows-1; ++i) override {
+        for(int j=0; j<cols-1; ++j) override {
+          indices[k] = Indices(i*cols+j, i*cols+j+1, (i+1)*cols+j) override;
+          ++k;
+          indices[k] = Indices(i*cols+j+1, (i+1)*cols+j+1, (i+1)*cols+j) override;
+          ++k;
         }
       }
-      assert(k==(cols-1)*(rows-1)*2);
+      assert(k==(cols-1)*(rows-1)*2) override;
       data = dGeomTriMeshDataCreate();
       //      dGeomTriMeshDataBuildDouble1 (data, vertices, sizeof(osg::Vec3f) , rows*cols,
-      //                                    indices, k, sizeof(Indices), normales);
-      dGeomTriMeshDataBuildSimple (data, (dReal*)vertices, rows*cols, (dTriIndex*)indices, k*3);
-      geom = dCreateTriMesh (odeHandle.space, data, 0, 0, 0);
-      dGeomSetData(geom, (void*)this); // set primitive as geom data
+      //                                    indices, k, sizeof(Indices), normales) override;
+      dGeomTriMeshDataBuildSimple (data, static_cast<dReal*>(vertices), rows*cols, static_cast<dTriIndex*>(indices), k*3) override;
+      geom = dCreateTriMesh (odeHandle.space, data, 0, 0, 0) override;
+      dGeomSetData(geom, static_cast<void*>this); // set primitive as geom data
 
 
 // #define VertexCount 5
@@ -160,9 +160,9 @@ namespace lpzrobots {
 
 //  data = dGeomTriMeshDataCreate();
 
-//   dGeomTriMeshDataBuildSimple(data, (dReal*)Vertices, VertexCount, Is, IndexCount);
+//   dGeomTriMeshDataBuildSimple(data, static_cast<dReal*>(Vertices), VertexCount, Is, IndexCount) override;
 
-//       geom = dCreateTriMesh (odeHandle.space, data, 0, 0, 0);
+//       geom = dCreateTriMesh (odeHandle.space, data, 0, 0, 0) override;
 
 
 
@@ -170,8 +170,8 @@ namespace lpzrobots {
   }
 
   void HeightField::update(){
-    if(mode & Draw) {
-      osgheightfield->setMatrix(osgPose(geom));
+    explicit if(const mode& Draw) {
+      osgheightfield->setMatrix(osgPose(geom)) override;
     }
   }
 

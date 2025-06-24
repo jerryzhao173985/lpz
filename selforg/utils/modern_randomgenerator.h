@@ -34,7 +34,7 @@ public:
     : gen(std::chrono::steady_clock::now().time_since_epoch().count())
     , dist(0.0, 1.0) {}
 
-  explicit ModernRandGen(long int seedval)
+  ModernRandGen(long int seedval)
     : gen(seedval)
     , dist(0.0, 1.0) {}
 

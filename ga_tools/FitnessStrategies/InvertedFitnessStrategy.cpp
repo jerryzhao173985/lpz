@@ -30,7 +30,7 @@ InvertedFitnessStrategy::InvertedFitnessStrategy() {
         // nothing
 }
 
-InvertedFitnessStrategy::InvertedFitnessStrategy(IFitnessStrategy* strategy) : m_strategy(strategy) {
+InvertedFitnessStrategy::InvertedFitnessStrategy(const IFitnessStrategy* strategy) : m_strategy(strategy) {
         // nothing
 }
 
@@ -39,5 +39,5 @@ InvertedFitnessStrategy::~InvertedFitnessStrategy() {
 }
 
 double InvertedFitnessStrategy::getFitness(const Individual* individual) {
-        return 1.0 / m_strategy->getFitness(individual);
+        return 1.0 / m_strategy->getFitness(individual) override;
 }

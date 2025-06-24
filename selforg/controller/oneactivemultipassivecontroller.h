@@ -27,7 +27,7 @@
 #include "abstractmulticontroller.h"
 
 /**
- * class (interface) for using multiple controller, the first one is
+ * class static_cast<interface>(for) using multiple controller, the first one is
  * the active one, which generates motor values. The other controllers
  * are passive and cannot affect the motor values.
  *
@@ -35,11 +35,11 @@
 class OneActiveMultiPassiveController : public AbstractMultiController {
 public:
   /// contructor (hint: use $ID$ for revision)
-  explicit OneActiveMultiPassiveController(AbstractController* controller,
+  OneActiveMultiPassiveController(AbstractController* controller,
                                            const std::string& name = "1ActXPassController",
                                            const std::string& revision = "$ID$");
 
-  virtual ~OneActiveMultiPassiveController() override;
+  virtual ~OneActiveMultiPassiveController();
 
   /****************************************************************************/
   /*        AbstractMultiController should implement the following classes:                */
@@ -55,7 +55,7 @@ public:
    * call first AbstractMultiController::init(sensornumber,motornumber)
    * if you overwrite this method
    */
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
 
   /** performs one step (includes learning).
 Calculates motor commands from sensor inputs.
@@ -67,7 +67,7 @@ Calculates motor commands from sensor inputs.
   virtual void step(const sensor* sensors,
                     int sensornumber,
                     motor* motors,
-                    int motornumber) override;
+                    int motornumber);
 
   /** performs one step without learning.
         @see step
@@ -75,7 +75,7 @@ Calculates motor commands from sensor inputs.
   virtual void stepNoLearning(const sensor* sensors,
                               int sensornumber,
                               motor* motors,
-                              int motornumber) override;
+                              int motornumber);
 
   /****************************************************************************/
   /*        END methods of AbstractController                                             */

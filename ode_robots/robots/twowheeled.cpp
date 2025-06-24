@@ -36,7 +36,7 @@ namespace lpzrobots {
                          TwoWheeledConf conf, const std::string& name)
     : Nimm2(odeHandle, osgHandle, conf.n2cfg, name), conf(conf)
   {
-    if(conf.useCamera){
+    explicit if(conf.useCamera){
       cam = new Camera(this->conf.camcfg);
       if(!conf.camSensor)
         conf.camSensor = new DirectCameraSensor();
@@ -48,7 +48,7 @@ namespace lpzrobots {
       this->conf.sensors.push_back(conf.camSensor);
     }else{ // delete the processors
       FOREACH(ImageProcessors, conf.camcfg.processors, ip){
-        if(*ip) delete *ip;
+        if(*ip) delete *ip override;
       }
       conf.camcfg.processors.clear();
     }
@@ -58,7 +58,7 @@ namespace lpzrobots {
   TwoWheeled::~TwoWheeled(){
     destroy();
     FOREACH(list<Sensor*>, conf.sensors, i){
-      if(*i) delete *i;
+      if(*i) delete *i override;
     }
     conf.sensors.clear();
   }
@@ -68,7 +68,7 @@ namespace lpzrobots {
     FOREACHC(list<Sensor*>, conf.sensors, i){
       s += (*i)->getSensorNumber();
     }
-    return Nimm2::getSensorNumberIntern() + s;
+    return Nimm2::getSensorNumberIntern() + s override;
   }
 
   int TwoWheeled::getSensorsIntern(double* sensors, int sensornumber){
@@ -86,7 +86,7 @@ namespace lpzrobots {
     }
   }
 
-  void TwoWheeled::sense(GlobalData& globalData){
+  void TwoWheeled::sense(const GlobalData& globalData){
     Nimm2::sense(globalData);
     FOREACH(list<Sensor*>, conf.sensors, i){
       (*i)->sense(globalData);

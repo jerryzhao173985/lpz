@@ -1,0 +1,1258 @@
+================================================================================
+LPZRobots Warning Analysis Report
+================================================================================
+
+Total issues found: 869
+
+Summary by Warning Type:
+----------------------------------------
+Potential variable shadowing: 10048 issues
+  Affected files: 942
+Potentially uninitialized member variables: 853 issues
+  Affected files: 197
+C headers instead of C++ headers: 260 issues
+  Affected files: 211
+Getter methods not marked const: 230 issues
+  Affected files: 97
+NULL instead of nullptr: 165 issues
+  Affected files: 50
+Range-based for loops with auto& that might need const auto&: 33 issues
+  Affected files: 9
+C-style casts instead of C++ casts: 12 issues
+  Affected files: 10
+Virtual functions without override keyword: 4 issues
+  Affected files: 4
+
+
+Most Problematic Files:
+----------------------------------------
+ode_robots/include/ode_robots/hexabot.h: 17 issues
+ode_robots/robots/hexabot.h: 17 issues
+ode_robots/include/ode_robots/ashigaru.h: 16 issues
+ode_robots/simulations/multiexperts/multisat_3c.h: 16 issues
+ode_robots/simulations/multiarm/multisat_rl.h: 16 issues
+ode_robots/robots/ashigaru.h: 16 issues
+ode_robots/simulations/multiexperts/multisat_2b.h: 15 issues
+ode_robots/simulations/multiexperts/multisat_3b.h: 15 issues
+ode_robots/simulations/multiexperts/multisat_2c.h: 15 issues
+ode_robots/simulations/multiexperts/multisat_2d.h: 15 issues
+ode_robots/simulations/multiexperts/create_sphere_ir_sats/multisat.h: 15 issues
+ode_robots/simulations/multiexperts/sats_analyse/multisat_checksats.h: 15 issues
+ode_robots/simulations/multiarm/multisat.h: 15 issues
+selforg/controller/old_stuff/naglaa/robotlearncontrol.h: 14 issues
+ode_robots/simulations/multiexperts/multisat_3a.h: 14 issues
+ode_robots/simulations/multiexperts/multisat_5b.h: 14 issues
+ode_robots/simulations/multiexperts/multisat.h: 14 issues
+ode_robots/simulations/multiexperts/multisat_5a.h: 14 issues
+ode_robots/include/ode-dbl/threading.h: 13 issues
+ode_robots/include/ode_robots/amos4legs.h: 13 issues
+
+
+Detailed Issues by File:
+----------------------------------------
+
+ode_robots/examples/basic/differential.h:
+  Line 49: Potentially uninitialized - double bodyRadius
+  Line 50: Potentially uninitialized - double bodyHeight
+  Line 51: Potentially uninitialized - double bodyMass
+  Line 52: Potentially uninitialized - double wheelRadius
+  Line 53: Potentially uninitialized - double wheelHeight
+  Line 54: Potentially uninitialized - double wheelMass
+  Line 55: Potentially uninitialized - double wheelMotorPower
+  Line 56: Potentially uninitialized - double wheelMotorMaxSpeed
+  Line 57: Potentially uninitialized - double irRange
+
+ode_robots/examples/sphericalrobot/main.cpp:
+  Line 53: Potentially uninitialized - AbstractController* controller
+  Line 54: Potentially uninitialized - OdeRobot* robot
+
+ode_robots/include/ode-dbl/collision.h:
+  Line 1499: Potentially uninitialized - dGetColliderFnFn *collider
+  Line 1500: Potentially uninitialized - dGetAABBFn *aabb
+  Line 1501: Potentially uninitialized - dAABBTestFn *aabb_test
+  Line 1502: Potentially uninitialized - dGeomDtorFn *dtor
+
+ode_robots/include/ode-dbl/common.h:
+  Line 410: Potentially uninitialized - int mode
+
+ode_robots/include/ode-dbl/contact.h:
+  Line 57: Potentially uninitialized - int   mode
+
+ode_robots/include/ode-dbl/objects.h:
+  Line 328: Potentially uninitialized - float reserve_factor
+  Line 330: Potentially uninitialized - unsigned reserve_minimum
+  Line 382: Potentially uninitialized - unsigned struct_size
+
+ode_robots/include/ode-dbl/threading.h:
+  Line 376: Potentially uninitialized - unsigned struct_size
+  Line 378: Potentially uninitialized - dMutexGroupAllocFunction *alloc_mutex_group
+  Line 380: Potentially uninitialized - dMutexGroupFreeFunction *free_mutex_group
+  Line 381: Potentially uninitialized - dMutexGroupMutexLockFunction *lock_group_mutex
+  Line 382: Potentially uninitialized - dMutexGroupMutexUnlockFunction *unlock_group_mutex
+  Line 383: Potentially uninitialized - dThreadedCallWaitAllocFunction *alloc_call_wait
+  Line 385: Potentially uninitialized - dThreadedCallWaitResetFunction *reset_call_wait
+  Line 386: Potentially uninitialized - dThreadedCallWaitFreeFunction *free_call_wait
+  Line 387: Potentially uninitialized - dThreadedCallPostFunction *post_call
+  Line 389: Potentially uninitialized - dThreadedCallDependenciesCountAlterFunction *alter_call_dependencies_count
+  ... and 3 more issues
+
+ode_robots/include/ode_robots/amos4legs.h:
+  Line 446: Potentially uninitialized - HingeJoint * tcJoint
+  Line 447: Potentially uninitialized - HingeJoint * ctrJoint
+  Line 448: Potentially uninitialized - HingeJoint * ftiJoint
+  Line 449: Potentially uninitialized - SliderJoint * footJoint
+  Line 450: Potentially uninitialized - OneAxisServo * tcServo
+  Line 451: Potentially uninitialized - OneAxisServo * ctrServo
+  Line 452: Potentially uninitialized - OneAxisServo * ftiServo
+  Line 453: Potentially uninitialized - Spring * footSpring
+  Line 454: Potentially uninitialized - Primitive * shoulder
+  Line 455: Potentially uninitialized - Primitive * coxa
+  ... and 3 more issues
+
+ode_robots/include/ode_robots/amosII.h:
+  Line 459: Potentially uninitialized - HingeJoint * tcJoint
+  Line 460: Potentially uninitialized - HingeJoint * ctrJoint
+  Line 461: Potentially uninitialized - HingeJoint * ftiJoint
+  Line 463: Potentially uninitialized - OneAxisServo * tcServo
+  Line 464: Potentially uninitialized - OneAxisServo * ctrServo
+  Line 465: Potentially uninitialized - OneAxisServo * ftiServo
+  Line 466: Potentially uninitialized - Spring * footSpring
+  Line 467: Potentially uninitialized - Primitive * shoulder
+  Line 468: Potentially uninitialized - Primitive * coxa
+  Line 469: Potentially uninitialized - Primitive * second
+  ... and 2 more issues
+
+ode_robots/include/ode_robots/ashigaru.h:
+  Line 317: Potentially uninitialized - HingeJoint* tcJoint
+  Line 318: Potentially uninitialized - HingeJoint* ctJoint
+  Line 319: Potentially uninitialized - HingeJoint* ftJoint
+  Line 320: Potentially uninitialized - SliderJoint* footJoint
+  Line 321: Potentially uninitialized - OneAxisServo* tcServo
+  Line 322: Potentially uninitialized - OneAxisServo* ctServo
+  Line 323: Potentially uninitialized - OneAxisServo* ftServo
+  Line 324: Potentially uninitialized - Spring* footSpring
+  Line 325: Potentially uninitialized - ImpTransform* shoulder
+  Line 326: Potentially uninitialized - Primitive* shoulderBox
+  ... and 6 more issues
+
+ode_robots/include/ode_robots/ashigarusensormotordefinition.h:
+  Line 213: Potentially uninitialized - double rate
+  Line 215: Potentially uninitialized - double massRate
+  Line 216: Potentially uninitialized - double connectLength
+  Line 217: Potentially uninitialized - double wholeMass
+
+ode_robots/include/ode_robots/boundingshape.h:
+  Line 93: Potentially uninitialized - Primitive* parent
+
+ode_robots/include/ode_robots/camerasensor.h:
+  Line 89: Potentially uninitialized - Camera* camera
+
+ode_robots/include/ode_robots/closedplayground.h:
+  Line 35: Potentially uninitialized - Box* roof
+
+ode_robots/include/ode_robots/defaultCaterpillar.h:
+  Line 52: Potentially uninitialized - int    segmNumber
+  Line 53: Potentially uninitialized - double segmLength
+  Line 54: Potentially uninitialized - double segmDia
+  Line 55: Potentially uninitialized - double segmMass
+  Line 56: Potentially uninitialized - double motorPower
+  Line 57: Potentially uninitialized - double sensorFactor
+  Line 58: Potentially uninitialized - double frictionGround
+  Line 59: Potentially uninitialized - double frictionJoint
+  Line 60: Potentially uninitialized - double jointLimit
+  Line 61: Potentially uninitialized - int firstJoint
+
+ode_robots/include/ode_robots/hand.h:
+  Line 62: Potentially uninitialized - double factorSensor
+  Line 63: Potentially uninitialized - bool fix_palm_joint
+  Line 64: Potentially uninitialized - bool one_finger_as_one_motor
+  Line 65: Potentially uninitialized - bool draw_joints
+  Line 66: Potentially uninitialized - bool showFingernails
+  Line 67: Potentially uninitialized - double fingerJointBendAngle
+  Line 68: Potentially uninitialized - bool initWithOpenHand
+
+ode_robots/include/ode_robots/hexabot.h:
+  Line 254: Potentially uninitialized - HingeJoint* tcJoint
+  Line 255: Potentially uninitialized - HingeJoint* ctJoint
+  Line 256: Potentially uninitialized - HingeJoint* ftJoint
+  Line 257: Potentially uninitialized - SliderJoint* footJoint
+  Line 258: Potentially uninitialized - OneAxisServo* tcServo
+  Line 259: Potentially uninitialized - OneAxisServo* ctServo
+  Line 260: Potentially uninitialized - OneAxisServo* ftServo
+  Line 261: Potentially uninitialized - Spring* footSpring
+  Line 262: Potentially uninitialized - ImpTransform2* shoulder
+  Line 263: Potentially uninitialized - Primitive* shoulderBox
+  ... and 7 more issues
+
+ode_robots/include/ode_robots/hexabotsensormotordefinition.h:
+  Line 240: Potentially uninitialized - double rate
+  Line 242: Potentially uninitialized - double massRate
+  Line 243: Potentially uninitialized - double wholeMass
+  Line 244: Potentially uninitialized - double x_trans_center
+  Line 245: Potentially uninitialized - double y_trans_center
+
+ode_robots/include/ode_robots/hexapod.h:
+  Line 51: Potentially uninitialized - double percentageBodyMass
+  Line 79: Potentially uninitialized - double *v
+  Line 87: Potentially uninitialized - int *legContacts
+
+ode_robots/include/ode_robots/joint.h:
+  Line 206: Potentially uninitialized - OSGPrimitive* visual
+  Line 238: Potentially uninitialized - OSGPrimitive* visual
+  Line 271: Potentially uninitialized - OSGPrimitive* visual1
+  Line 272: Potentially uninitialized - OSGPrimitive* visual2
+  Line 328: Potentially uninitialized - OSGPrimitive* visual
+
+ode_robots/include/ode_robots/meshobstacle.h:
+  Line 42: Potentially uninitialized - OSGMesh* mesh
+  Line 43: Potentially uninitialized - Sphere* bound
+  Line 44: Potentially uninitialized - BoundingShape* boundshape
+
+ode_robots/include/ode_robots/nejihebi.h:
+  Line 334: Potentially uninitialized - Cylinder * screwBase
+  Line 336: Potentially uninitialized - Box * innerPart
+  Line 337: Potentially uninitialized - HingeJoint * joint
+
+ode_robots/include/ode_robots/osghandle.h:
+  Line 97: Potentially uninitialized - OsgConfig* cfg
+  Line 99: Potentially uninitialized - OsgScene*  scene
+  Line 139: Potentially uninitialized - int color_set
+
+ode_robots/include/ode_robots/passivebox.h:
+  Line 40: Potentially uninitialized - Box* box
+
+ode_robots/include/ode_robots/passivecapsule.h:
+  Line 38: Potentially uninitialized - Capsule* capsule
+
+ode_robots/include/ode_robots/passivemesh.h:
+  Line 41: Potentially uninitialized - Mesh* mesh
+
+ode_robots/include/ode_robots/passivesphere.h:
+  Line 39: Potentially uninitialized - Sphere* sphere
+
+ode_robots/include/ode_robots/primitive.h:
+  Line 261: Potentially uninitialized - OSGPlane* osgplane
+  Line 283: Potentially uninitialized - OSGBoxTex* osgbox
+  Line 303: Potentially uninitialized - OSGSphere* osgsphere
+  Line 321: Potentially uninitialized - OSGCapsule* osgcapsule
+  Line 338: Potentially uninitialized - OSGCylinder* osgcylinder
+  Line 366: Potentially uninitialized - OSGPrimitive* osgprimitive
+  Line 395: Potentially uninitialized - OSGMesh* osgmesh
+  Line 398: Potentially uninitialized - BoundingShape* boundshape
+
+ode_robots/include/ode_robots/robotcameramanager.h:
+  Line 52: Potentially uninitialized - Camera* cam
+
+ode_robots/include/ode_robots/skeleton.h:
+  Line 41: Potentially uninitialized - double size
+  Line 69: Potentially uninitialized - double armPower
+  Line 73: Potentially uninitialized - double elbowPower
+
+ode_robots/include/ode_robots/sliderwheelie.h:
+  Line 64: Potentially uninitialized - Primitive* center
+
+ode_robots/include/ode_robots/substance.h:
+  Line 115: Potentially uninitialized - void* userdata
+
+ode_robots/include/ode_robots/tmpprimitive.h:
+  Line 59: Potentially uninitialized - Primitive* item
+  Line 127: Potentially uninitialized - Joint* joint
+
+ode_robots/include/ode_robots/torquesensor.h:
+  Line 58: Potentially uninitialized - Joint* joint
+
+ode_robots/obstacles/closedplayground.h:
+  Line 35: Potentially uninitialized - Box* roof
+
+ode_robots/obstacles/meshobstacle.h:
+  Line 42: Potentially uninitialized - OSGMesh* mesh
+  Line 43: Potentially uninitialized - Sphere* bound
+  Line 44: Potentially uninitialized - BoundingShape* boundshape
+
+ode_robots/obstacles/passivebox.h:
+  Line 40: Potentially uninitialized - Box* box
+
+ode_robots/obstacles/passivecapsule.h:
+  Line 38: Potentially uninitialized - Capsule* capsule
+
+ode_robots/obstacles/passivemesh.h:
+  Line 41: Potentially uninitialized - Mesh* mesh
+
+ode_robots/obstacles/passivesphere.h:
+  Line 39: Potentially uninitialized - Sphere* sphere
+
+ode_robots/osg/boundingshape.h:
+  Line 93: Potentially uninitialized - Primitive* parent
+
+ode_robots/osg/joint.h:
+  Line 206: Potentially uninitialized - OSGPrimitive* visual
+  Line 238: Potentially uninitialized - OSGPrimitive* visual
+  Line 271: Potentially uninitialized - OSGPrimitive* visual1
+  Line 272: Potentially uninitialized - OSGPrimitive* visual2
+  Line 328: Potentially uninitialized - OSGPrimitive* visual
+
+ode_robots/osg/primitive.h:
+  Line 261: Potentially uninitialized - OSGPlane* osgplane
+  Line 283: Potentially uninitialized - OSGBoxTex* osgbox
+  Line 303: Potentially uninitialized - OSGSphere* osgsphere
+  Line 321: Potentially uninitialized - OSGCapsule* osgcapsule
+  Line 338: Potentially uninitialized - OSGCylinder* osgcylinder
+  Line 366: Potentially uninitialized - OSGPrimitive* osgprimitive
+  Line 395: Potentially uninitialized - OSGMesh* osgmesh
+  Line 398: Potentially uninitialized - BoundingShape* boundshape
+
+ode_robots/osg/robotcameramanager.h:
+  Line 52: Potentially uninitialized - Camera* cam
+
+ode_robots/osg/substance.h:
+  Line 115: Potentially uninitialized - void* userdata
+
+ode_robots/robots/amos4legs.h:
+  Line 446: Potentially uninitialized - HingeJoint * tcJoint
+  Line 447: Potentially uninitialized - HingeJoint * ctrJoint
+  Line 448: Potentially uninitialized - HingeJoint * ftiJoint
+  Line 449: Potentially uninitialized - SliderJoint * footJoint
+  Line 450: Potentially uninitialized - OneAxisServo * tcServo
+  Line 451: Potentially uninitialized - OneAxisServo * ctrServo
+  Line 452: Potentially uninitialized - OneAxisServo * ftiServo
+  Line 453: Potentially uninitialized - Spring * footSpring
+  Line 454: Potentially uninitialized - Primitive * shoulder
+  Line 455: Potentially uninitialized - Primitive * coxa
+  ... and 3 more issues
+
+ode_robots/robots/amosII.h:
+  Line 459: Potentially uninitialized - HingeJoint * tcJoint
+  Line 460: Potentially uninitialized - HingeJoint * ctrJoint
+  Line 461: Potentially uninitialized - HingeJoint * ftiJoint
+  Line 463: Potentially uninitialized - OneAxisServo * tcServo
+  Line 464: Potentially uninitialized - OneAxisServo * ctrServo
+  Line 465: Potentially uninitialized - OneAxisServo * ftiServo
+  Line 466: Potentially uninitialized - Spring * footSpring
+  Line 467: Potentially uninitialized - Primitive * shoulder
+  Line 468: Potentially uninitialized - Primitive * coxa
+  Line 469: Potentially uninitialized - Primitive * second
+  ... and 2 more issues
+
+ode_robots/robots/ashigaru.cpp:
+  Line 907: Potentially uninitialized - return *it
+
+ode_robots/robots/ashigaru.h:
+  Line 317: Potentially uninitialized - HingeJoint* tcJoint
+  Line 318: Potentially uninitialized - HingeJoint* ctJoint
+  Line 319: Potentially uninitialized - HingeJoint* ftJoint
+  Line 320: Potentially uninitialized - SliderJoint* footJoint
+  Line 321: Potentially uninitialized - OneAxisServo* tcServo
+  Line 322: Potentially uninitialized - OneAxisServo* ctServo
+  Line 323: Potentially uninitialized - OneAxisServo* ftServo
+  Line 324: Potentially uninitialized - Spring* footSpring
+  Line 325: Potentially uninitialized - ImpTransform* shoulder
+  Line 326: Potentially uninitialized - Primitive* shoulderBox
+  ... and 6 more issues
+
+ode_robots/robots/ashigarusensormotordefinition.h:
+  Line 213: Potentially uninitialized - double rate
+  Line 215: Potentially uninitialized - double massRate
+  Line 216: Potentially uninitialized - double connectLength
+  Line 217: Potentially uninitialized - double wholeMass
+
+ode_robots/robots/defaultCaterpillar.h:
+  Line 52: Potentially uninitialized - int    segmNumber
+  Line 53: Potentially uninitialized - double segmLength
+  Line 54: Potentially uninitialized - double segmDia
+  Line 55: Potentially uninitialized - double segmMass
+  Line 56: Potentially uninitialized - double motorPower
+  Line 57: Potentially uninitialized - double sensorFactor
+  Line 58: Potentially uninitialized - double frictionGround
+  Line 59: Potentially uninitialized - double frictionJoint
+  Line 60: Potentially uninitialized - double jointLimit
+  Line 61: Potentially uninitialized - int firstJoint
+
+ode_robots/robots/hand.h:
+  Line 62: Potentially uninitialized - double factorSensor
+  Line 63: Potentially uninitialized - bool fix_palm_joint
+  Line 64: Potentially uninitialized - bool one_finger_as_one_motor
+  Line 65: Potentially uninitialized - bool draw_joints
+  Line 66: Potentially uninitialized - bool showFingernails
+  Line 67: Potentially uninitialized - double fingerJointBendAngle
+  Line 68: Potentially uninitialized - bool initWithOpenHand
+
+ode_robots/robots/hexabot.cpp:
+  Line 1027: Potentially uninitialized - return *it
+
+ode_robots/robots/hexabot.h:
+  Line 254: Potentially uninitialized - HingeJoint* tcJoint
+  Line 255: Potentially uninitialized - HingeJoint* ctJoint
+  Line 256: Potentially uninitialized - HingeJoint* ftJoint
+  Line 257: Potentially uninitialized - SliderJoint* footJoint
+  Line 258: Potentially uninitialized - OneAxisServo* tcServo
+  Line 259: Potentially uninitialized - OneAxisServo* ctServo
+  Line 260: Potentially uninitialized - OneAxisServo* ftServo
+  Line 261: Potentially uninitialized - Spring* footSpring
+  Line 262: Potentially uninitialized - ImpTransform2* shoulder
+  Line 263: Potentially uninitialized - Primitive* shoulderBox
+  ... and 7 more issues
+
+ode_robots/robots/hexabotsensormotordefinition.h:
+  Line 240: Potentially uninitialized - double rate
+  Line 242: Potentially uninitialized - double massRate
+  Line 243: Potentially uninitialized - double wholeMass
+  Line 244: Potentially uninitialized - double x_trans_center
+  Line 245: Potentially uninitialized - double y_trans_center
+
+ode_robots/robots/hexapod.h:
+  Line 51: Potentially uninitialized - double percentageBodyMass
+  Line 79: Potentially uninitialized - double *v
+  Line 87: Potentially uninitialized - int *legContacts
+
+ode_robots/robots/nejihebi.h:
+  Line 334: Potentially uninitialized - Cylinder * screwBase
+  Line 336: Potentially uninitialized - Box * innerPart
+  Line 337: Potentially uninitialized - HingeJoint * joint
+
+ode_robots/robots/schlangeservo.cpp:
+  Line 98: Potentially uninitialized - HingeServo* servo
+
+ode_robots/robots/schlangeservo2.cpp:
+  Line 101: Potentially uninitialized - UniversalServo* servo
+
+ode_robots/robots/skeleton.h:
+  Line 41: Potentially uninitialized - double size
+  Line 69: Potentially uninitialized - double armPower
+  Line 73: Potentially uninitialized - double elbowPower
+
+ode_robots/robots/sliderwheelie.h:
+  Line 64: Potentially uninitialized - Primitive* center
+
+ode_robots/sensors/camerasensor.h:
+  Line 89: Potentially uninitialized - Camera* camera
+
+ode_robots/sensors/torquesensor.h:
+  Line 58: Potentially uninitialized - Joint* joint
+
+ode_robots/simulations/MI_Simu/main.cpp:
+  Line 142: Potentially uninitialized - StatisticTools* stats
+  Line 144: Potentially uninitialized - Nimm2* myNimm2
+  Line 145: Potentially uninitialized - MutualInformationController* mic
+  Line 146: Potentially uninitialized - StatisticMeasure* convTest0
+  Line 148: Potentially uninitialized - StatisticMeasure* convTest1
+
+ode_robots/simulations/bambi/Archiv/skeleton.h:
+  Line 107: Potentially uninitialized - double size
+  Line 133: Potentially uninitialized - double armPower
+  Line 137: Potentially uninitialized - double elbowPower
+
+ode_robots/simulations/bambi/Archiv/skeleton_notorsion.h:
+  Line 106: Potentially uninitialized - double size
+  Line 132: Potentially uninitialized - double armPower
+  Line 136: Potentially uninitialized - double elbowPower
+
+ode_robots/simulations/bambi/main.cpp:
+  Line 223: Potentially uninitialized - Joint* fixator
+  Line 226: Potentially uninitialized - Joint* reckLeft
+  Line 227: Potentially uninitialized - Joint* reckRight
+  Line 228: Potentially uninitialized - Primitive* reck
+  Line 229: Potentially uninitialized - Playground* playground
+  Line 234: Potentially uninitialized - Primitive* forcepoint
+
+ode_robots/simulations/bambi/skeleton.h:
+  Line 110: Potentially uninitialized - double size
+  Line 136: Potentially uninitialized - double armPower
+  Line 140: Potentially uninitialized - double elbowPower
+
+ode_robots/simulations/barrel/homeostatic/main.cpp:
+  Line 156: Potentially uninitialized - AbstractController *controller
+  Line 157: Potentially uninitialized - OdeRobot* sphere1
+  Line 159: Potentially uninitialized - Sensor* sensor
+
+ode_robots/simulations/barrel/main.cpp:
+  Line 57: Potentially uninitialized - AbstractController *controller
+  Line 58: Potentially uninitialized - OdeRobot* sphere1
+  Line 60: Potentially uninitialized - Sensor* sensor
+
+ode_robots/simulations/bigmodel/main.cpp:
+  Line 91: Potentially uninitialized - InvertMotorBigModel* controller
+
+ode_robots/simulations/dblcontingency/main.cpp:
+  Line 81: Potentially uninitialized - AbstractController* controller
+  Line 83: Potentially uninitialized - Speaker* myspeaker
+  Line 113: Potentially uninitialized - AbstractWiring* wiring
+  Line 114: Potentially uninitialized - OdeAgent* agent
+  Line 131: Potentially uninitialized - ForcedSphere* sphere1
+
+ode_robots/simulations/der_zweibeiner/derskeleton.h:
+  Line 59: Potentially uninitialized - double armPower
+
+ode_robots/simulations/der_zweibeiner/main.cpp:
+  Line 143: Potentially uninitialized - Joint* fixator
+  Line 146: Potentially uninitialized - AbstractObstacle* playground
+
+ode_robots/simulations/der_zweibeiner/skeleton.h:
+  Line 64: Potentially uninitialized - double armPower
+
+ode_robots/simulations/discus/main.cpp:
+  Line 160: Potentially uninitialized - AbstractController *controller
+  Line 161: Potentially uninitialized - OdeRobot* robot
+  Line 162: Potentially uninitialized - Sensor* sensor
+
+ode_robots/simulations/entropy/main.cpp:
+  Line 189: Potentially uninitialized - StatisticTools* stats
+  Line 191: Potentially uninitialized - Nimm2* nimm2
+  Line 192: Potentially uninitialized - MutualInformationController* mic
+  Line 194: Potentially uninitialized - StatisticMeasure* convTest0
+  Line 196: Potentially uninitialized - StatisticMeasure* convTest1
+  Line 197: Potentially uninitialized - StatisticMeasure* convTest2
+  Line 198: Potentially uninitialized - StatisticMeasure* convTest3
+  Line 199: Potentially uninitialized - StatisticMeasure* convTest4
+  Line 200: Potentially uninitialized - StatisticMeasure* convTest5
+  Line 201: Potentially uninitialized - TrackableMeasure* trackableEntropy
+  ... and 1 more issues
+
+ode_robots/simulations/guidingCMC/Armband/main.cpp:
+  Line 91: Potentially uninitialized - InvertMotorNStep* controller
+  Line 93: Potentially uninitialized - OdeRobot* vehicle
+
+ode_robots/simulations/guidingCMC/Armband_4talk/main.cpp:
+  Line 101: Potentially uninitialized - CrossMotorCoupling* controller
+  Line 105: Potentially uninitialized - OdeRobot* vehicle
+
+ode_robots/simulations/guidingCMC/Armband_new/main.cpp:
+  Line 154: Potentially uninitialized - CrossMotorCoupling* controller
+  Line 158: Potentially uninitialized - OdeRobot* vehicle
+
+ode_robots/simulations/guidingCMC/Hexapod/hexapod.h:
+  Line 63: Potentially uninitialized - double *v
+  Line 66: Potentially uninitialized - int *legContacts
+
+ode_robots/simulations/guidingCMC/Hexapod/main.cpp:
+  Line 136: Potentially uninitialized - AbstractController* controller
+  Line 139: Potentially uninitialized - OdeRobot* vehicle
+
+ode_robots/simulations/guidingCMC/Snake/main.cpp:
+  Line 77: Potentially uninitialized - Joint* fixator
+  Line 78: Potentially uninitialized - CrossMotorCoupling* controller
+  Line 80: Potentially uninitialized - OdeRobot* vehicle
+
+ode_robots/simulations/hand/invertnchannelcontrollerhebbh.h:
+  Line 143: C-style cast - (unsigned)
+
+ode_robots/simulations/hand/invertnchannelcontrollerhebbhhand.h:
+  Line 121: C-style cast - (unsigned)
+
+ode_robots/simulations/hand/invertnchannelcontrollerhebbxsi.h:
+  Line 113: C-style cast - (unsigned)
+
+ode_robots/simulations/hand/invertnchannelcontrollerhebbxsihand.h:
+  Line 118: C-style cast - (unsigned)
+
+ode_robots/simulations/hand/main.cpp:
+  Line 171: Potentially uninitialized - PassiveBox* box
+  Line 173: Potentially uninitialized - Joint* fixator
+  Line 189: Potentially uninitialized - OdeRobot *hand
+
+ode_robots/simulations/hexapod/main.cpp:
+  Line 68: Potentially uninitialized - AbstractController* controller
+  Line 72: Potentially uninitialized - OdeRobot* vehicle
+
+ode_robots/simulations/hexapod/old/2/hexapod.h:
+  Line 63: Potentially uninitialized - double *v
+  Line 66: Potentially uninitialized - int *legContacts
+
+ode_robots/simulations/hexapod/old/hexapod.h:
+  Line 63: Potentially uninitialized - double *v
+  Line 66: Potentially uninitialized - int *legContacts
+
+ode_robots/simulations/homeok_vs_static/main.cpp:
+  Line 168: Potentially uninitialized - AbstractController *controller
+
+ode_robots/simulations/homeok_vs_static/main_working_invertnchannel.cpp:
+  Line 160: Potentially uninitialized - AbstractController *controller
+
+ode_robots/simulations/homeok_vs_static/main_working_single_staticController.cpp:
+  Line 168: Potentially uninitialized - AbstractController *controller
+
+ode_robots/simulations/humanoid/derlininvertmpi.h:
+  Line 80: Potentially uninitialized - int buffersize
+  Line 82: Potentially uninitialized - double cInit
+  Line 83: Potentially uninitialized - double cNonDiag
+  Line 84: Potentially uninitialized - bool modelInit
+  Line 85: Potentially uninitialized - bool useS
+  Line 86: Potentially uninitialized - bool someInternalParams
+  Line 87: Potentially uninitialized - double modelCompliant
+  Line 89: Potentially uninitialized - bool useFantasy
+  Line 90: Potentially uninitialized - InvertableModel* model
+  Line 92: Potentially uninitialized - InvertableModel* sat
+
+ode_robots/simulations/humanoid/derskeleton.h:
+  Line 59: Potentially uninitialized - double armPower
+
+ode_robots/simulations/humanoid/main.cpp:
+  Line 217: Potentially uninitialized - Joint* fixator
+  Line 220: Potentially uninitialized - Joint* reckLeft
+  Line 221: Potentially uninitialized - Joint* reckRight
+  Line 222: Potentially uninitialized - Primitive* reck
+  Line 223: Potentially uninitialized - Playground* playground
+  Line 228: Potentially uninitialized - Primitive* forcepoint
+
+ode_robots/simulations/humanoid/skeleton.h:
+  Line 111: Potentially uninitialized - double size
+  Line 137: Potentially uninitialized - double armPower
+  Line 141: Potentially uninitialized - double elbowPower
+
+ode_robots/simulations/humanoid_DEP/main.cpp:
+  Line 219: Potentially uninitialized - Joint* fixator
+  Line 221: Potentially uninitialized - Joint* leftHandJoint
+  Line 222: Potentially uninitialized - Joint* rightHandJoint
+  Line 223: Potentially uninitialized - PassiveCapsule* reck
+  Line 225: Potentially uninitialized - Playground* playground
+
+ode_robots/simulations/humanoid_DEP/randomdyn.h:
+  Line 35: Potentially uninitialized - NoiseGenerator* noiseGenC
+  Line 36: Potentially uninitialized - NoiseGenerator* noiseGenh
+
+ode_robots/simulations/humanoid_DEP/skeleton.h:
+  Line 41: Potentially uninitialized - double size
+  Line 69: Potentially uninitialized - double armPower
+  Line 73: Potentially uninitialized - double elbowPower
+
+ode_robots/simulations/hunde/main.cpp:
+  Line 133: Potentially uninitialized - Joint* fixator
+  Line 136: Potentially uninitialized - AbstractObstacle* playground
+  Line 139: Potentially uninitialized - AbstractController *teachcontroller
+
+ode_robots/simulations/life_vs_copy/main.cpp:
+  Line 84: Potentially uninitialized - Joint* fixator
+  Line 86: Potentially uninitialized - Joint* reckLeft
+  Line 87: Potentially uninitialized - Joint* reckRight
+  Line 88: Potentially uninitialized - PassiveCapsule* reck
+  Line 89: Potentially uninitialized - Playground* playground
+
+ode_robots/simulations/meshsim/main.cpp:
+  Line 176: Potentially uninitialized - char* meshfile
+
+ode_robots/simulations/multiarm/main.cpp:
+  Line 84: Potentially uninitialized - MultiSat* multisat
+
+ode_robots/simulations/multiarm/multisat.h:
+  Line 82: Potentially uninitialized - AbstractController* controller
+  Line 85: Potentially uninitialized - int numHidden
+  Line 86: Potentially uninitialized - double eps0
+  Line 87: Potentially uninitialized - double tauE1
+  Line 88: Potentially uninitialized - double tauE2
+  Line 89: Potentially uninitialized - double tauC
+  Line 91: Potentially uninitialized - double deltaMin
+  Line 92: Potentially uninitialized - int    numContext
+  Line 93: Potentially uninitialized - int    numSats
+  Line 94: Potentially uninitialized - bool   useDerive
+  ... and 5 more issues
+
+ode_robots/simulations/multiarm/multisat_rl.h:
+  Line 76: Potentially uninitialized - AbstractController* controller
+  Line 79: Potentially uninitialized - int numHidden
+  Line 80: Potentially uninitialized - double eps0
+  Line 81: Potentially uninitialized - double tauE
+  Line 82: Potentially uninitialized - double tauC
+  Line 83: Potentially uninitialized - double lambda_comp
+  Line 84: Potentially uninitialized - double deltaMin
+  Line 85: Potentially uninitialized - int    numSomPerDim
+  Line 86: Potentially uninitialized - int    numContext
+  Line 87: Potentially uninitialized - int    numSats
+  ... and 6 more issues
+
+ode_robots/simulations/multiexperts/create_sphere_ir_sats/main.cpp:
+  Line 75: Potentially uninitialized - AbstractController *controller
+  Line 76: Potentially uninitialized - MultiSat* multisat
+  Line 77: Potentially uninitialized - AbstractWiring* wiring
+  Line 78: Potentially uninitialized - OdeAgent* agent
+  Line 79: Potentially uninitialized - OdeRobot* sphere
+
+ode_robots/simulations/multiexperts/create_sphere_ir_sats/multisat.h:
+  Line 83: Potentially uninitialized - AbstractController* controller
+  Line 86: Potentially uninitialized - int numHidden
+  Line 87: Potentially uninitialized - double eps0
+  Line 88: Potentially uninitialized - double tauE1
+  Line 89: Potentially uninitialized - double tauE2
+  Line 90: Potentially uninitialized - double tauC
+  Line 92: Potentially uninitialized - double tauW
+  Line 93: Potentially uninitialized - double deltaMin
+  Line 94: Potentially uninitialized - int    numContext
+  Line 95: Potentially uninitialized - bool   useDerive
+  ... and 5 more issues
+
+ode_robots/simulations/multiexperts/main.cpp:
+  Line 66: Potentially uninitialized - OdeRobot* robot
+  Line 67: Potentially uninitialized - AbstractController *controller
+  Line 68: Potentially uninitialized - MultiSat *multisat
+  Line 69: Potentially uninitialized - AbstractGround* playground
+
+ode_robots/simulations/multiexperts/multisat.h:
+  Line 87: Potentially uninitialized - AbstractController* controller
+  Line 90: Potentially uninitialized - int numHidden
+  Line 91: Potentially uninitialized - double eps0
+  Line 92: Potentially uninitialized - double tauE1
+  Line 93: Potentially uninitialized - double tauE2
+  Line 94: Potentially uninitialized - double lambda_w
+  Line 95: Potentially uninitialized - double deltaMin
+  Line 96: Potentially uninitialized - int    numSats
+  Line 97: Potentially uninitialized - bool   useDerive
+  Line 98: Potentially uninitialized - bool   useY
+  ... and 4 more issues
+
+ode_robots/simulations/multiexperts/multisat_2.h:
+  Line 60: Potentially uninitialized - AbstractController* controller
+  Line 63: Potentially uninitialized - int numHidden
+  Line 64: Potentially uninitialized - double eps0
+  Line 65: Potentially uninitialized - double tauE
+  Line 66: Potentially uninitialized - double tauC
+  Line 67: Potentially uninitialized - double lambda_comp
+  Line 68: Potentially uninitialized - double deltaMin
+  Line 69: Potentially uninitialized - int    numSomPerDim
+  Line 70: Potentially uninitialized - int    numContext
+  Line 71: Potentially uninitialized - int    numSats
+  ... and 3 more issues
+
+ode_robots/simulations/multiexperts/multisat_2b.h:
+  Line 64: Potentially uninitialized - AbstractController* controller
+  Line 67: Potentially uninitialized - int numHidden
+  Line 68: Potentially uninitialized - double eps0
+  Line 69: Potentially uninitialized - double tauE
+  Line 70: Potentially uninitialized - double tauC
+  Line 71: Potentially uninitialized - double lambda_comp
+  Line 72: Potentially uninitialized - double deltaMin
+  Line 73: Potentially uninitialized - int    numSomPerDim
+  Line 74: Potentially uninitialized - int    numContext
+  Line 75: Potentially uninitialized - int    numSats
+  ... and 5 more issues
+
+ode_robots/simulations/multiexperts/multisat_2c.h:
+  Line 68: Potentially uninitialized - AbstractController* controller
+  Line 71: Potentially uninitialized - int numHidden
+  Line 72: Potentially uninitialized - double eps0
+  Line 73: Potentially uninitialized - double tauE
+  Line 74: Potentially uninitialized - double tauC
+  Line 75: Potentially uninitialized - double lambda_comp
+  Line 76: Potentially uninitialized - double deltaMin
+  Line 77: Potentially uninitialized - int    numSomPerDim
+  Line 78: Potentially uninitialized - int    numContext
+  Line 79: Potentially uninitialized - int    numSats
+  ... and 5 more issues
+
+ode_robots/simulations/multiexperts/multisat_2d.h:
+  Line 75: Potentially uninitialized - AbstractController* controller
+  Line 78: Potentially uninitialized - int numHidden
+  Line 79: Potentially uninitialized - double eps0
+  Line 80: Potentially uninitialized - double tauE
+  Line 81: Potentially uninitialized - double tauC
+  Line 82: Potentially uninitialized - double lambda_comp
+  Line 83: Potentially uninitialized - double deltaMin
+  Line 84: Potentially uninitialized - int    numSomPerDim
+  Line 85: Potentially uninitialized - int    numContext
+  Line 86: Potentially uninitialized - int    numSats
+  ... and 5 more issues
+
+ode_robots/simulations/multiexperts/multisat_3a.h:
+  Line 81: Potentially uninitialized - AbstractController* controller
+  Line 84: Potentially uninitialized - int numHidden
+  Line 85: Potentially uninitialized - double eps0
+  Line 86: Potentially uninitialized - double tauE1
+  Line 87: Potentially uninitialized - double tauE2
+  Line 88: Potentially uninitialized - double tauC
+  Line 90: Potentially uninitialized - double deltaMin
+  Line 91: Potentially uninitialized - int    numContext
+  Line 92: Potentially uninitialized - bool   useDerive
+  Line 93: Potentially uninitialized - double penalty
+  ... and 4 more issues
+
+ode_robots/simulations/multiexperts/multisat_3b.h:
+  Line 83: Potentially uninitialized - AbstractController* controller
+  Line 86: Potentially uninitialized - int numHidden
+  Line 87: Potentially uninitialized - double eps0
+  Line 88: Potentially uninitialized - double tauE1
+  Line 89: Potentially uninitialized - double tauE2
+  Line 90: Potentially uninitialized - double tauC
+  Line 92: Potentially uninitialized - double tauW
+  Line 93: Potentially uninitialized - double deltaMin
+  Line 94: Potentially uninitialized - int    numContext
+  Line 95: Potentially uninitialized - bool   useDerive
+  ... and 5 more issues
+
+ode_robots/simulations/multiexperts/multisat_3c.h:
+  Line 87: Potentially uninitialized - AbstractController* controller
+  Line 90: Potentially uninitialized - int numHidden
+  Line 91: Potentially uninitialized - double eps0
+  Line 92: Potentially uninitialized - double tauE1
+  Line 93: Potentially uninitialized - double tauE2
+  Line 94: Potentially uninitialized - double tauC
+  Line 96: Potentially uninitialized - double tauW
+  Line 97: Potentially uninitialized - double deltaMin
+  Line 98: Potentially uninitialized - int    numContext
+  Line 99: Potentially uninitialized - bool   useDerive
+  ... and 6 more issues
+
+ode_robots/simulations/multiexperts/multisat_5a.h:
+  Line 79: Potentially uninitialized - AbstractController* controller
+  Line 82: Potentially uninitialized - int numHidden
+  Line 83: Potentially uninitialized - double eps0
+  Line 84: Potentially uninitialized - double tauE1
+  Line 85: Potentially uninitialized - double tauE2
+  Line 86: Potentially uninitialized - double lambda_w
+  Line 87: Potentially uninitialized - double deltaMin
+  Line 88: Potentially uninitialized - int    numSats
+  Line 89: Potentially uninitialized - bool   useDerive
+  Line 90: Potentially uninitialized - bool   useY
+  ... and 4 more issues
+
+ode_robots/simulations/multiexperts/multisat_5b.h:
+  Line 87: Potentially uninitialized - AbstractController* controller
+  Line 90: Potentially uninitialized - int numHidden
+  Line 91: Potentially uninitialized - double eps0
+  Line 92: Potentially uninitialized - double tauE1
+  Line 93: Potentially uninitialized - double tauE2
+  Line 94: Potentially uninitialized - double lambda_w
+  Line 95: Potentially uninitialized - double deltaMin
+  Line 96: Potentially uninitialized - int    numSats
+  Line 97: Potentially uninitialized - bool   useDerive
+  Line 98: Potentially uninitialized - bool   useY
+  ... and 4 more issues
+
+ode_robots/simulations/multiexperts/multisat_epscomp.h:
+  Line 38: Potentially uninitialized - InvertMotorNStep* controller
+  Line 41: Potentially uninitialized - int numberHidden
+  Line 42: Potentially uninitialized - double eps0
+  Line 43: Potentially uninitialized - double lambda_time
+  Line 44: Potentially uninitialized - double lambda_comp
+  Line 45: Potentially uninitialized - double tau
+  Line 51: Potentially uninitialized - MultiLayerFFNN* net
+  Line 52: Potentially uninitialized - double sigma
+  Line 53: Potentially uninitialized - double error
+  Line 54: Potentially uninitialized - double avg_error
+
+ode_robots/simulations/multiexperts/networkcontrol/main.cpp:
+  Line 133: Potentially uninitialized - AbstractController *controller
+  Line 134: Potentially uninitialized - OdeRobot* sphere1
+
+ode_robots/simulations/multiexperts/reinforcement/main.cpp:
+  Line 460: Potentially uninitialized - AbstractController *controller
+  Line 461: Potentially uninitialized - AbstractController* multirein
+  Line 462: Potentially uninitialized - AbstractWiring* wiring
+  Line 463: Potentially uninitialized - OdeAgent* agent
+  Line 464: Potentially uninitialized - OdeRobot* sphere
+  Line 466: Potentially uninitialized - QLearning* qlearning
+  Line 467: Potentially uninitialized - AbstractGround* playground
+  Line 470: Potentially uninitialized - FILE* log
+
+ode_robots/simulations/multiexperts/reinforcement/multireinforce.h:
+  Line 56: Potentially uninitialized - int    numContext
+  Line 57: Potentially uninitialized - int    numSats
+  Line 58: Potentially uninitialized - bool   useDerive
+  Line 59: Potentially uninitialized - bool   useY
+  Line 60: Potentially uninitialized - double tauE1
+  Line 61: Potentially uninitialized - double tauH
+  Line 62: Potentially uninitialized - double tauI
+  Line 63: Potentially uninitialized - int reinforce_interval
+  Line 64: Potentially uninitialized - QLearning* qlearning
+  Line 72: Potentially uninitialized - MultiLayerFFNN* net
+  ... and 2 more issues
+
+ode_robots/simulations/multiexperts/reinforcement_nimm4/main.cpp:
+  Line 316: Potentially uninitialized - AbstractController *controller
+  Line 318: Potentially uninitialized - AbstractWiring* wiring
+  Line 319: Potentially uninitialized - OdeAgent* agent
+  Line 320: Potentially uninitialized - OdeRobot* robot
+  Line 321: Potentially uninitialized - QLearning* qlearning
+  Line 322: Potentially uninitialized - AbstractGround* playground
+  Line 324: Potentially uninitialized - FILE* log
+
+ode_robots/simulations/multiexperts/reinforcement_nimm4/multireinforce.h:
+  Line 60: Potentially uninitialized - int    numContext
+  Line 61: Potentially uninitialized - int    numSats
+  Line 62: Potentially uninitialized - bool   useDerive
+  Line 63: Potentially uninitialized - bool   useY
+  Line 64: Potentially uninitialized - double tauE1
+  Line 65: Potentially uninitialized - double tauH
+  Line 66: Potentially uninitialized - double tauI
+  Line 67: Potentially uninitialized - int reinforce_interval
+  Line 68: Potentially uninitialized - QLearning* qlearning
+  Line 76: Potentially uninitialized - MultiLayerFFNN* net
+  ... and 2 more issues
+
+ode_robots/simulations/multiexperts/sat_initialcond/main.cpp:
+  Line 135: Potentially uninitialized - AbstractController *controller
+  Line 136: Potentially uninitialized - AbstractWiring* wiring
+  Line 137: Potentially uninitialized - OdeAgent* agent
+  Line 138: Potentially uninitialized - OdeRobot* sphere
+  Line 140: Potentially uninitialized - SpeedSensor* speedsensor
+
+ode_robots/simulations/multiexperts/sats_analyse/main.cpp:
+  Line 146: Potentially uninitialized - OdeRobot* sphere1
+  Line 147: Potentially uninitialized - AbstractController *controller
+  Line 148: Potentially uninitialized - MultiSatCheck *multisat
+
+ode_robots/simulations/multiexperts/sats_analyse/multisat_checksats.h:
+  Line 80: Potentially uninitialized - AbstractController* controller
+  Line 83: Potentially uninitialized - int numHidden
+  Line 84: Potentially uninitialized - double eps0
+  Line 85: Potentially uninitialized - double tauE1
+  Line 86: Potentially uninitialized - double tauE2
+  Line 87: Potentially uninitialized - double tauC
+  Line 89: Potentially uninitialized - double tauW
+  Line 90: Potentially uninitialized - double deltaMin
+  Line 91: Potentially uninitialized - int    numContext
+  Line 92: Potentially uninitialized - bool   useDerive
+  ... and 5 more issues
+
+ode_robots/simulations/nimm2_hebb/invertnchannelcontrollerhebbh.h:
+  Line 143: C-style cast - (unsigned)
+
+ode_robots/simulations/nimm2_hebb/invertnchannelcontrollerhebbxsi.h:
+  Line 113: C-style cast - (unsigned)
+
+ode_robots/simulations/pid_test/main.cpp:
+  Line 83: Potentially uninitialized - AbstractController *controller
+  Line 84: Potentially uninitialized - Primitive* sphere1
+  Line 86: Potentially uninitialized - Primitive* box1
+  Line 87: Potentially uninitialized - Primitive* box2
+  Line 88: Potentially uninitialized - Primitive* box3
+  Line 89: Potentially uninitialized - SliderServo* servo
+  Line 90: Potentially uninitialized - SliderServo* servo2
+  Line 91: Potentially uninitialized - SliderServo* servo3
+  Line 92: Potentially uninitialized - SliderJoint* joint
+  Line 93: Potentially uninitialized - SliderJoint* joint2
+  ... and 1 more issues
+
+ode_robots/simulations/reinforcement/main.cpp:
+  Line 135: Potentially uninitialized - AbstractController *controller
+  Line 136: Potentially uninitialized - OdeRobot* robot1
+
+ode_robots/simulations/rhoenrad/rhoenrad.h:
+  Line 42: Potentially uninitialized - double size
+  Line 74: Potentially uninitialized - double armPower
+  Line 78: Potentially uninitialized - double elbowPower
+
+ode_robots/simulations/ros_connection/main.cpp:
+  Line 59: Potentially uninitialized - AbstractController *controller
+  Line 60: Potentially uninitialized - OdeRobot* sphere1
+  Line 62: Potentially uninitialized - Sensor* sensor
+
+ode_robots/simulations/schlangeservo/main.cpp:
+  Line 119: Potentially uninitialized - Joint* fixator
+  Line 120: Potentially uninitialized - InvertMotorNStep* controller
+  Line 123: Potentially uninitialized - double* teachingSignal
+  Line 125: Potentially uninitialized - double* dteachingSignal
+
+ode_robots/simulations/simple_barrel/main.cpp:
+  Line 136: Potentially uninitialized - use_java_controller* jcontroller1
+  Line 155: Potentially uninitialized - use_java_controller* Jcontroller
+
+ode_robots/simulations/soxworld/hexapod.h:
+  Line 51: Potentially uninitialized - double percentageBodyMass
+  Line 79: Potentially uninitialized - double *v
+  Line 87: Potentially uninitialized - int *legContacts
+
+ode_robots/simulations/soxworld/skeleton.h:
+  Line 41: Potentially uninitialized - double size
+  Line 67: Potentially uninitialized - double armPower
+  Line 71: Potentially uninitialized - double elbowPower
+
+ode_robots/simulations/sphericalrobot/main.cpp:
+  Line 205: Potentially uninitialized - AbstractController *controller
+  Line 206: Potentially uninitialized - OdeRobot* sphere1
+  Line 207: Potentially uninitialized - Sensor* sensor
+
+ode_robots/simulations/swing/swing.h:
+  Line 42: Potentially uninitialized - double size
+  Line 76: Potentially uninitialized - double armPower
+  Line 80: Potentially uninitialized - double elbowPower
+
+ode_robots/simulations/teaching/main.cpp:
+  Line 108: Potentially uninitialized - InvertMotorNStep*controller
+  Line 110: Potentially uninitialized - OdeRobot* vehicle
+
+ode_robots/simulations/template_XMLImportSim/XMLHelper.h:
+  Line 77: Potentially uninitialized - XMLCh* unicodeChars
+  Line 78: Potentially uninitialized - char* cChars
+
+ode_robots/simulations/template_XMLImportSim/XMLParserEngine.cpp:
+  Line 227: Missing override - virtual osg::LightSource* makeLights(osg::StateSet* stateset)
+         {
+
+ode_robots/simulations/template_XMLImportSim/XMLPrimitiveFactory.h:
+  Line 177: Potentially uninitialized - XMLParserEngine* engine
+
+ode_robots/simulations/template_XMLImportSim/main.cpp:
+  Line 194: Potentially uninitialized - char* meshfile
+
+ode_robots/simulations/template_XMLImportSim/main_old.cpp:
+  Line 178: Potentially uninitialized - char* meshfile
+
+ode_robots/simulations/template_amosii/tripodgait18dof.h:
+  Line 37: Potentially uninitialized - double WeightH1_H1
+  Line 39: Potentially uninitialized - double WeightH2_H2
+  Line 40: Potentially uninitialized - double WeightH1_H2
+  Line 41: Potentially uninitialized - double WeightH2_H1
+  Line 42: Potentially uninitialized - double fact
+  Line 43: Potentially uninitialized - double direction
+  Line 44: Potentially uninitialized - double bias
+
+ode_robots/simulations/template_ashigaru/main.cpp:
+  Line 49: Potentially uninitialized - AbstractController* controller
+  Line 50: Potentially uninitialized - OdeRobot* robot
+
+ode_robots/simulations/template_camera/main.cpp:
+  Line 103: Potentially uninitialized - AbstractObstacle* playground
+
+ode_robots/simulations/template_cycledSimulation/main.cpp:
+  Line 82: Potentially uninitialized - OdeRobot* vehicle
+  Line 84: Potentially uninitialized - OdeAgent* agent
+
+ode_robots/simulations/template_hand/main.cpp:
+  Line 62: Potentially uninitialized - AbstractController* controller
+  Line 63: Potentially uninitialized - OdeRobot* hand
+  Line 66: Potentially uninitialized - Joint* fixator
+  Line 69: Potentially uninitialized - PassiveCapsule* passive_capsule
+
+ode_robots/simulations/template_hexabot/tripodgait18dof.h:
+  Line 37: Potentially uninitialized - double WeightH1_H1
+  Line 39: Potentially uninitialized - double WeightH2_H2
+  Line 40: Potentially uninitialized - double WeightH1_H2
+  Line 41: Potentially uninitialized - double WeightH2_H1
+  Line 42: Potentially uninitialized - double fact
+  Line 43: Potentially uninitialized - double direction
+  Line 44: Potentially uninitialized - double bias
+
+ode_robots/simulations/template_kuka_lwr/main.cpp:
+  Line 61: Potentially uninitialized - Kuka* arm
+  Line 117: Potentially uninitialized - Joint* fixator
+
+ode_robots/simulations/template_sphererobot/main.cpp:
+  Line 105: Potentially uninitialized - AbstractController* controller
+  Line 106: Potentially uninitialized - Sphererobot3Masses* sphere1
+
+ode_robots/simulations/template_taskedSimulations/main.cpp:
+  Line 116: Potentially uninitialized - OdeRobot* vehicle
+  Line 118: Potentially uninitialized - OdeAgent* agent
+
+ode_robots/simulations/tests/camera/main.cpp:
+  Line 90: Potentially uninitialized - AbstractObstacle* playground
+  Line 95: Potentially uninitialized - OSGBoxTex* b
+  Line 96: Potentially uninitialized - PassiveBox* box
+  Line 98: Potentially uninitialized - Camera* cam
+  Line 99: Potentially uninitialized - Camera* cam2
+
+ode_robots/simulations/tests/contact_sensor/main.cpp:
+  Line 75: Potentially uninitialized - ContactSensor* cs
+
+ode_robots/simulations/tests/graphics/main.cpp:
+  Line 95: Potentially uninitialized - AbstractObstacle* playground
+  Line 100: Potentially uninitialized - OSGBoxTex* b
+  Line 101: Potentially uninitialized - OSGBox* b2
+
+ode_robots/simulations/tests/ir_sensor/main.cpp:
+  Line 138: Potentially uninitialized - StatisticTools* stats
+  Line 140: Potentially uninitialized - Nimm2* nimm2
+
+ode_robots/simulations/tests/penetration/main.cpp:
+  Line 70: Potentially uninitialized - AbstractGround* playground
+  Line 79: Potentially uninitialized - AbstractObstacle* o
+
+ode_robots/simulations/tests/ray_sensor/main.cpp:
+  Line 41: Potentially uninitialized - PassiveBox* b1
+  Line 42: Potentially uninitialized - PassiveBox* b2
+  Line 43: Potentially uninitialized - RaySensor* rs
+  Line 44: Potentially uninitialized - IRSensor* ir
+
+ode_robots/simulations/tests/sound_sensor/main.cpp:
+  Line 61: Potentially uninitialized - Speaker* speaker
+
+ode_robots/simulations/tests/speed_pos_sensor/main.cpp:
+  Line 74: Potentially uninitialized - Sensor* s
+
+ode_robots/simulations/tests/texture_rendering_off_sync/async_texture_rendering.cpp:
+  Line 182: Missing override - virtual void operator () (const osg::Camera& /*camera*/) const
+  {
+
+ode_robots/simulations/tests/texture_rendering_off_sync/test_georg.cpp:
+  Line 51: Missing override - virtual void operator () (const osg::Camera& /*camera*/) const
+    {
+
+ode_robots/simulations/tests/torque_sensor/main.cpp:
+  Line 63: Potentially uninitialized - TorqueSensor* ts
+  Line 66: Potentially uninitialized - AngularMotor* amotor
+
+ode_robots/simulations/vierbeiner/main.cpp:
+  Line 137: Potentially uninitialized - Joint* fixator
+  Line 140: Potentially uninitialized - AbstractGround* playground
+  Line 143: Potentially uninitialized - AbstractController *teachcontroller
+
+ode_robots/simulations/vierbeiner_old/main.cpp:
+  Line 111: Potentially uninitialized - Joint* fixator
+  Line 114: Potentially uninitialized - AbstractObstacle* playground
+
+ode_robots/simulations/vision/2Wheeled_OpticalFlow/main.cpp:
+  Line 83: Potentially uninitialized - AbstractObstacle* playground
+
+ode_robots/simulations/wheelie/main.cpp:
+  Line 109: Potentially uninitialized - AbstractController *controller
+  Line 110: Potentially uninitialized - OdeRobot* robot
+
+ode_robots/simulations/wheelieDEP/main.cpp:
+  Line 111: Potentially uninitialized - AbstractController *controller
+  Line 112: Potentially uninitialized - OdeRobot* robot
+
+ode_robots/simulations/zweibeiner/main.cpp:
+  Line 127: Potentially uninitialized - Joint* fixator
+  Line 130: Potentially uninitialized - AbstractObstacle* playground
+
+ode_robots/simulations/zweibeiner/skeleton.h:
+  Line 63: Potentially uninitialized - double armPower
+
+ode_robots/utils/console.cpp:
+  Line 121: Potentially uninitialized - char *r
+
+ode_robots/utils/osghandle.h:
+  Line 97: Potentially uninitialized - OsgConfig* cfg
+  Line 99: Potentially uninitialized - OsgScene*  scene
+  Line 139: Potentially uninitialized - int color_set
+
+ode_robots/utils/tmpprimitive.h:
+  Line 59: Potentially uninitialized - Primitive* item
+  Line 127: Potentially uninitialized - Joint* joint
+
+selforg/controller/derbigcontroller.h:
+  Line 43: Potentially uninitialized - InvertableModel* model
+
+selforg/controller/derlininvert.h:
+  Line 44: Potentially uninitialized - InvertableModel* model
+  Line 46: Potentially uninitialized - InvertableModel* sat
+
+selforg/controller/derlinunivers.h:
+  Line 56: Potentially uninitialized - Elman* net
+
+selforg/controller/derpseudosensor.h:
+  Line 46: Potentially uninitialized - InvertableModel* model
+  Line 48: Potentially uninitialized - InvertableModel* sat
+
+selforg/controller/dinvert3channelcontroller.h:
+  Line 49: Potentially uninitialized - double* x_smooth
+  Line 51: Potentially uninitialized - double* x_effective
+  Line 52: Potentially uninitialized - double* y_effective
+  Line 56: Potentially uninitialized - double* z
+  Line 61: Potentially uninitialized - double* h
+  Line 67: Potentially uninitialized - double* xsi4E
+  Line 69: Potentially uninitialized - double* xsi4Model
+
+selforg/controller/discretecontrolleradapter.h:
+  Line 190: Potentially uninitialized - sensor* discreteSensors
+
+selforg/controller/invertmotorbigmodel.h:
+  Line 43: Potentially uninitialized - InvertableModel* model
+
+selforg/controller/invertmotornstep.h:
+  Line 40: Potentially uninitialized - bool
+    useS
+
+selforg/controller/multireinforce.h:
+  Line 35: Potentially uninitialized - int numContext
+  Line 43: Potentially uninitialized - QLearning* qlearning
+  Line 51: Potentially uninitialized - MultiLayerFFNN* net
+
+selforg/controller/mutualinformationcontroller.h:
+  Line 209: C-style cast - (double)
+  Line 210: C-style cast - (double)
+
+selforg/controller/old_stuff/3Channel/noisegenerator.h:
+  Line 14: Potentially uninitialized - double tau_uniform
+  Line 17: Potentially uninitialized - double tau_normal
+
+selforg/controller/old_stuff/3Channel/robotlearncontrol.h:
+  Line 14: Potentially uninitialized - double rho
+  Line 17: Potentially uninitialized - double delta
+  Line 19: Potentially uninitialized - int    number_steps_of_delay
+  Line 20: Potentially uninitialized - int    number_steps_for_averaging
+  Line 21: Potentially uninitialized - int    t
+  Line 22: Potentially uninitialized - double m
+  Line 23: Potentially uninitialized - double a_factor
+  Line 510: Potentially uninitialized - double tau_uniform
+  Line 513: Potentially uninitialized - double tau_normal
+
+selforg/controller/old_stuff/3Channel/robotlearncontrol_gnu.h:
+  Line 7: Potentially uninitialized - int t
+
+selforg/controller/old_stuff/3Channel/robotlearncontroltarget.h:
+  Line 12: Potentially uninitialized - double eps_target
+
+selforg/controller/old_stuff/3Channel/robotlearncontroltarget_gnu.h:
+  Line 7: Potentially uninitialized - int t
+
+selforg/controller/old_stuff/dersimple.h:
+  Line 41: Potentially uninitialized - InvertableModel* model
+
+selforg/controller/old_stuff/naglaa/robotlearncontrol.h:
+  Line 7: Potentially uninitialized - double epsilon_it
+  Line 8: Potentially uninitialized - int  number_it
+  Line 10: Potentially uninitialized - double detC
+  Line 11: Potentially uninitialized - double detA
+  Line 12: Potentially uninitialized - double  detL
+  Line 16: Potentially uninitialized - double rho
+  Line 19: Potentially uninitialized - double delta
+  Line 21: Potentially uninitialized - int    number_steps_of_delay
+  Line 22: Potentially uninitialized - int    number_steps_for_averaging
+  Line 23: Potentially uninitialized - int    t
+  ... and 4 more issues
+
+selforg/controller/oneactivemultipassivecontroller.h:
+  Line 109: Potentially uninitialized - motor* passiveMotors
+
+selforg/controller/semox.h:
+  Line 33: Potentially uninitialized - bool
+    modelExt
+  Line 37: Potentially uninitialized - bool
+    someInternalParams
+
+selforg/controller/universalcontroller.h:
+  Line 39: Potentially uninitialized - Elman* net
+
+selforg/matrix/matrix.cpp:
+  Line 972: C-style cast - (double)
+
+selforg/matrix/matrix.h:
+  Line 294: Potentially uninitialized - return *this
+
+selforg/simulations/manipuexperts/multiexpertpair.h:
+  Line 36: Potentially uninitialized - double lambda_w
+  Line 38: Potentially uninitialized - double tauW
+  Line 46: Potentially uninitialized - InvertableModel* net
+
+selforg/simulations/manipuexperts/multiexpertsubopt.h:
+  Line 64: Potentially uninitialized - InvertableModel* net
+
+selforg/statistictools/dataanalysation/templatevalueanalysation.h:
+  Line 140: C-style cast - (double)
+
+selforg/statistictools/measure/complexmeasure.h:
+  Line 91: Potentially uninitialized - int *binNumberHistory
+  Line 93: Potentially uninitialized - int *historyIndexList
+
+selforg/utils/avrtypes.h:
+  Line 41: Potentially uninitialized - paramval* val
+  Line 52: Potentially uninitialized - iparamval* val
+
+selforg/utils/mediatorcollegue.h:
+  Line 61: Potentially uninitialized - Mediator* myMediator
+
+selforg/utils/plotoptionengine.h:
+  Line 117: Potentially uninitialized - AbstractController* maybe_controller
+
+selforg/utils/quickmp.h:
+  Line 154: C-style cast - (void*)
+  Line 499: C-style cast - (void*)
+  Line 293: Potentially uninitialized - PlatformThreadObjects* mPlatform
+  Line 298: Potentially uninitialized - ParallelTask* mCurrentTask
+  Line 301: Potentially uninitialized - int* mTaskFirstIndices
+  Line 302: Potentially uninitialized - int* mTaskLastIndices
+
+selforg/wirings/one2onewiring.h:
+  Line 77: Potentially uninitialized - motor* blindmotors
+
+selforg/wirings/selectiveone2onewiring.h:
+  Line 39: Missing override - virtual bool operator()( int index,  int len) {
+  Line 77: Potentially uninitialized - select_predicate* sel_sensor

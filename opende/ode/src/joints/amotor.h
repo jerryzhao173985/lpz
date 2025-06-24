@@ -5,12 +5,12 @@
  *                                                                       *
  * This library is free software; you can redistribute it and/or         *
  * modify it under the terms of EITHER:                                  *
- *   (1) The GNU Lesser General Public License as published by the Free  *
+ *   static_cast<1>(The) GNU Lesser General Public License as published by the Free  *
  *       Software Foundation; either version 2.1 of the License, or (at  *
  *       your option) any later version. The text of the GNU Lesser      *
  *       General Public License is included with this library in the     *
  *       file LICENSE.TXT.                                               *
- *   (2) The BSD-style license that is included with this library in     *
+ *   static_cast<2>(The) BSD-style license that is included with this library in     *
  *       the file LICENSE-BSD.TXT.                                       *
  *                                                                       *
  * This library is distributed in the hope that it will be useful,       *
@@ -30,8 +30,8 @@
 
 struct dxJointAMotor : public dxJoint
 {
-    int num;                // number of axes (0..3)
-    int mode;               // a dAMotorXXX constant
+    int num = 0;                // number of axes (0..3)
+    int mode = 0;               // a dAMotorXXX constant
     int rel[3];             // what the axes are relative to (global,b1,b2)
     dVector3 axis[3];       // three axes
     dxJointLimitMotor limot[3]; // limit+motor info for axes
@@ -41,16 +41,16 @@ struct dxJointAMotor : public dxJoint
     dVector3 reference2;    // original axis[0], relative to body 2
 
 
-    void computeGlobalAxes( dVector3 ax[3] );
-    void computeEulerAngles( dVector3 ax[3] );
-    void setEulerReferenceVectors();
+    void computeGlobalAxes( dVector3 ax[3] ) override;
+    void computeEulerAngles( dVector3 ax[3] ) override;
+    void setEulerReferenceVectors() override;
 
 
-    dxJointAMotor( dxWorld *w );
-    virtual void getInfo1( Info1* info );
-    virtual void getInfo2( Info2* info );
-    virtual dJointType type() const;
-    virtual size_t size() const;
+    dxJointAMotor( dxWorld *w ) override;
+    virtual void getInfo1( Info1* info ) override;
+    virtual void getInfo2( Info2* info ) override;
+    virtual dJointType type() const override;
+    virtual size_t size() const override;
 };
 
 

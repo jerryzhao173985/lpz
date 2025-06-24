@@ -33,11 +33,11 @@
 class Storeable {
 public:
   virtual ~Storeable() {}
-  /** stores the object to the given file stream (ASCII preferred).
+  /** stores the object to the given file stream(const ASCII& preferred).
    */
   virtual bool store(FILE* f) const = 0;
 
-  /** loads the object from the given file stream (ASCII preferred).
+  /** loads the object from the given file stream(const ASCII& preferred).
    */
   virtual bool restore(FILE* f) = 0;
 

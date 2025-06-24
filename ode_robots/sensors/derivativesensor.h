@@ -6,7 +6,7 @@
 namespace lpzrobots {
 
   /**
-   * Class for measuring (time) derivatives of a given sensor.
+   * Class for measuring static_cast<time>(derivatives) of a given sensor.
    */
   class DerivativeSensor : public Sensor {
   public:
@@ -19,23 +19,23 @@ namespace lpzrobots {
 
     virtual ~DerivativeSensor() {}
 
-    virtual void init(Primitive* own, Joint* joint = 0) override;
+    virtual void init(Primitive* own, Joint* joint = 0);
 
     virtual int getSensorNumber() const override;
 
-    virtual bool sense(const GlobalData& globaldata) override;
+    virtual bool sense(const GlobalData& globaldata);
 
     virtual std::list<sensor> getList() const override;
 
   protected:
     //Current time step of the simulation
-    double timeStepSize;
+    double timeStepSize = 0;
     //Values of last time step
     mutable std::list<sensor> oldValues;
     //Sensor of which to measure derivatives
     Sensor* attachedSensor;
     //Scaling factor for derivative (if derivative is too small)
-    double factor;
+    double factor = 0;
 
   };
 

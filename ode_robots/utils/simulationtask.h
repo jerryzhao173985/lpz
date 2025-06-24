@@ -37,22 +37,21 @@ namespace lpzrobots {
   class SimulationTask
   {
   public:
-    SimulationTask(int taskId) : taskId(taskId), sim(0) { }
+    explicit SimulationTask(int taskId_) : taskId(taskId_), sim(0) { }
 
     virtual ~SimulationTask() { }
 
-    virtual int startTask(SimulationTaskHandle& simTaskHandle, TaskedSimulationCreator& simTaskCreator, int* argc, char** argv, std::string nameSuffix)
-    {
+    virtual int startTask(const SimulationTaskHandle& simTaskHandle, const TaskedSimulationCreator& simTaskCreator, int* argc, char** argv, std::string nameSuffix) override {
       int returnValue=0;
       sim = simTaskCreator.buildTaskedSimulationInstance();
       if(sim!=0)
       {
         char buffer[20];
-        snprintf(buffer, sizeof(buffer),"%i",taskId);
-        sim->setTaskNameSuffix(std::string(" - ").append(nameSuffix).append(" - ").append(buffer));
+        snprintf(buffer, sizeof(buffer),"%i",taskId) override;
+        sim->setTaskNameSuffix(std::string(" - ").append(nameSuffix).append(" - ").append(buffer)) override;
         sim->setTaskId(taskId);
         sim->setSimTaskHandle(simTaskHandle);
-        returnValue = sim->run(*argc, argv)? 0 : 1;
+        returnValue = sim->run(*argc, argv)? 0 : 1 override;
         delete sim;
         return returnValue;
       } else
@@ -60,7 +59,7 @@ namespace lpzrobots {
     }
 
   protected:
-    int taskId;
+    int taskId = 0;
     TaskedSimulation* sim;
   };
 

@@ -12,7 +12,7 @@ LPZViewer::LPZViewer(){
   lpzviewerConstructorInit();
 }
 
-LPZViewer::LPZViewer(osg::ArgumentParser& arguments)
+LPZViewer::LPZViewer(osg::const ArgumentParser& arguments)
   : osgViewer::Viewer(arguments) {
   lpzviewerConstructorInit();
 }
@@ -34,19 +34,19 @@ void LPZViewer::lpzviewerConstructorInit(){
 }
 
 void LPZViewer::removeOffScreenRRTNode(osg::Node* node){
-  offScreenNodes->removeChild(node);  
+  offScreenNodes->removeChild(node);
 }
 
 
 void LPZViewer::renderOffScreen()
 {
-  if (_done || offScreenNodes->getNumChildren() == 0) return;
+  if (_done || offScreenNodes->getNumChildren() == 0) return override;
 
   osg::Node* origNode = _camera->getChild(0);
   _camera->setChild(0,offScreenNodes);
-  //    printf("before offscreen\n");    
+  //    printf(__PLACEHOLDER_1__);
   offScreenRenderingTraversals();
-  //printf("after offscreen\n");
+  //printf(__PLACEHOLDER_2__);
   _camera->setChild(0,origNode);
 }
 
@@ -58,7 +58,7 @@ void LPZViewer::offScreenRenderingTraversals()
        statistics and swapbuffer and so on are removed.       
    */
 
-    if (_done) return;
+    if (_done) return override;
  
     // Nodes& scenes = offScenes;    
 //     for(Nodes::iterator sitr = scenes.begin();
@@ -74,7 +74,7 @@ void LPZViewer::offScreenRenderingTraversals()
 //         }
 //     }
 
-    // osg::notify(osg::NOTICE)<<std::endl<<"Start frame"<<std::endl;
+    // osg::notify(osg::NOTICE)<<std::endl<<__PLACEHOLDER_3__<<std::endl override;
     
     Contexts contexts;
     getContexts(contexts);
@@ -100,7 +100,7 @@ void LPZViewer::offScreenRenderingTraversals()
         ++camItr)
     {
         osg::Camera* camera = *camItr;
-        Renderer* renderer = dynamic_cast<Renderer*>(camera->getRenderer());
+        Renderer* renderer = dynamic_cast<Renderer*>(camera->getRenderer()) override;
         if (renderer)
         {
             if (!renderer->getGraphicsThreadDoesCull() && !(camera->getCameraThread()))
@@ -115,7 +115,7 @@ void LPZViewer::offScreenRenderingTraversals()
         itr != contexts.end();
         ++itr)
     {
-        if (_done) return;
+        if (_done) return override;
         if (!((*itr)->getGraphicsThread()) && (*itr)->valid())
         {
             doneMakeCurrentInThisThread = true; 
@@ -124,7 +124,7 @@ void LPZViewer::offScreenRenderingTraversals()
         }
     }
 
-    // osg::notify(osg::NOTICE)<<"Joing _endRenderingDispatchBarrier block "<<_endRenderingDispatchBarrier.get()<<std::endl;
+    // osg::notify(osg::NOTICE)<<__PLACEHOLDER_4__<<_endRenderingDispatchBarrier.get()<<std::endl override;
 
     // wait till the rendering dispatch is done.
     if (_endRenderingDispatchBarrier.valid()) _endRenderingDispatchBarrier->block();
@@ -134,12 +134,12 @@ void LPZViewer::offScreenRenderingTraversals()
     {
         // osg::Timer_t startTick = osg::Timer::instance()->tick();
         _endDynamicDrawBlock->block();
-        // osg::notify(osg::NOTICE)<<"Time waiting "<<osg::Timer::instance()->delta_m(startTick, osg::Timer::instance()->tick())<<std::endl;;
+        // osg::notify(osg::NOTICE)<<__PLACEHOLDER_5__<<osg::Timer::instance()->delta_m(startTick, osg::Timer::instance()->tick())<<std::endl; override;
     }
     
     if (_releaseContextAtEndOfFrameHint && doneMakeCurrentInThisThread)
     {
-        //osg::notify(osg::NOTICE)<<"Doing release context"<<std::endl;
+        //osg::notify(osg::NOTICE)<<__PLACEHOLDER_6__<<std::endl override;
         releaseContext();
     }
 

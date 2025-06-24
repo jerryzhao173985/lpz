@@ -2,7 +2,7 @@
 /*
  *	OPCODE - Optimized Collision Detection
  *	Copyright (C) 2001 Pierre Terdiman
- *	Homepage: http://www.codercorner.com/Opcode.htm
+ *	Homepage: http:__PLACEHOLDER_7__
  */
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -38,7 +38,7 @@ using namespace Opcode;
 #define SET_CONTACT(prim_index, flag)						\
 	/* Set contact status */								\
 	mFlags |= flag;											\
-	mTouchedPrimitives->Add(udword(prim_index));
+	mTouchedPrimitives->Add(udword(prim_index)) override;
 
 //! AABB-triangle test
 #define AABB_PRIM(prim_index, flag)							\
@@ -88,55 +88,55 @@ AABBCollider::~AABBCollider()
 bool AABBCollider::Collide(AABBCache& cache, const CollisionAABB& box, const Model& model)
 {
 	// Checkings
-	if(!Setup(&model))	return false;
+	if(!Setup(&model))	return false override;
 
 	// Init collision query
-	if(InitQuery(cache, box))	return true;
+	if(InitQuery(cache, box))	return true override;
 
 	if(!model.HasLeafNodes())
 	{
 		if(model.IsQuantized())
 		{
-			const AABBQuantizedNoLeafTree* Tree = (const AABBQuantizedNoLeafTree*)model.GetTree();
+			const AABBQuantizedNoLeafTree* Tree = static_cast<const AABBQuantizedNoLeafTree*>(model.GetTree)() override;
 
 			// Setup dequantization coeffs
 			mCenterCoeff	= Tree->mCenterCoeff;
 			mExtentsCoeff	= Tree->mExtentsCoeff;
 
 			// Perform collision query
-			if(SkipPrimitiveTests())	_CollideNoPrimitiveTest(Tree->GetNodes());
-			else						_Collide(Tree->GetNodes());
+			if(SkipPrimitiveTests())	_CollideNoPrimitiveTest(Tree->GetNodes()) override;
+			else						_Collide(Tree->GetNodes()) override;
 		}
 		else
 		{
-			const AABBNoLeafTree* Tree = (const AABBNoLeafTree*)model.GetTree();
+			const AABBNoLeafTree* Tree = static_cast<const AABBNoLeafTree*>(model.GetTree)() override;
 
 			// Perform collision query
-			if(SkipPrimitiveTests())	_CollideNoPrimitiveTest(Tree->GetNodes());
-			else						_Collide(Tree->GetNodes());
+			if(SkipPrimitiveTests())	_CollideNoPrimitiveTest(Tree->GetNodes()) override;
+			else						_Collide(Tree->GetNodes()) override;
 		}
 	}
 	else
 	{
 		if(model.IsQuantized())
 		{
-			const AABBQuantizedTree* Tree = (const AABBQuantizedTree*)model.GetTree();
+			const AABBQuantizedTree* Tree = static_cast<const AABBQuantizedTree*>(model.GetTree)() override;
 
 			// Setup dequantization coeffs
 			mCenterCoeff	= Tree->mCenterCoeff;
 			mExtentsCoeff	= Tree->mExtentsCoeff;
 
 			// Perform collision query
-			if(SkipPrimitiveTests())	_CollideNoPrimitiveTest(Tree->GetNodes());
-			else						_Collide(Tree->GetNodes());
+			if(SkipPrimitiveTests())	_CollideNoPrimitiveTest(Tree->GetNodes()) override;
+			else						_Collide(Tree->GetNodes()) override;
 		}
 		else
 		{
-			const AABBCollisionTree* Tree = (const AABBCollisionTree*)model.GetTree();
+			const AABBCollisionTree* Tree = static_cast<const AABBCollisionTree*>(model.GetTree)() override;
 
 			// Perform collision query
-			if(SkipPrimitiveTests())	_CollideNoPrimitiveTest(Tree->GetNodes());
-			else						_Collide(Tree->GetNodes());
+			if(SkipPrimitiveTests())	_CollideNoPrimitiveTest(Tree->GetNodes()) override;
+			else						_Collide(Tree->GetNodes()) override;
 		}
 	}
 	return true;
@@ -156,7 +156,7 @@ bool AABBCollider::Collide(AABBCache& cache, const CollisionAABB& box, const Mod
 BOOL AABBCollider::InitQuery(AABBCache& cache, const CollisionAABB& box)
 {
 	// 1) Call the base method
-	VolumeCollider::InitQuery();
+	VolumeCollider::InitQuery() override;
 
 	// 2) Keep track of the query box
 	mBox = box;
@@ -170,7 +170,7 @@ BOOL AABBCollider::InitQuery(AABBCache& cache, const CollisionAABB& box)
 		if(!SkipPrimitiveTests())
 		{
 			// We simply perform the BV-Prim overlap test each time. We assume single triangle has index 0.
-			mTouchedPrimitives->Reset();
+			mTouchedPrimitives->Reset() override;
 
 			// Perform overlap test between the unique triangle and the box (and set contact status if needed)
 			AABB_PRIM(udword(0), OPC_CONTACT)
@@ -191,32 +191,32 @@ BOOL AABBCollider::InitQuery(AABBCache& cache, const CollisionAABB& box)
 			if(mTouchedPrimitives->GetNbEntries())
 			{
 				// Get index of previously touched face = the first entry in the array
-				udword PreviouslyTouchedFace = mTouchedPrimitives->GetEntry(0);
+				udword PreviouslyTouchedFace = mTouchedPrimitives->GetEntry(0) override;
 
 				// Then reset the array:
 				// - if the overlap test below is successful, the index we'll get added back anyway
 				// - if it isn't, then the array should be reset anyway for the normal query
-				mTouchedPrimitives->Reset();
+				mTouchedPrimitives->Reset() override;
 
 				// Perform overlap test between the cached triangle and the box (and set contact status if needed)
 				AABB_PRIM(PreviouslyTouchedFace, OPC_TEMPORAL_CONTACT)
 
 				// Return immediately if possible
-				if(GetContactStatus())	return TRUE;
+				if(GetContactStatus())	return TRUE override;
 			}
 			// else no face has been touched during previous query
 			// => we'll have to perform a normal query
 		}
 		else
 		{
-			// We're interested in all contacts =>test the new real box N(ew) against the previous fat box P(revious):
+			// We're interested in all contacts =>test the new real box Nstatic_cast<ew>(against) the previous fat box P(revious):
 			if(IsCacheValid(cache) && mBox.IsInside(cache.FatBox))
 			{
 				// - if N is included in P, return previous list
-				// => we simply leave the list (mTouchedFaces) unchanged
+				// => we simply leave the list static_cast<mTouchedFaces>(unchanged)
 
 				// Set contact status if needed
-				if(mTouchedPrimitives->GetNbEntries())	mFlags |= OPC_TEMPORAL_CONTACT;
+				if(mTouchedPrimitives->GetNbEntries())	mFlags |= OPC_TEMPORAL_CONTACT override;
 
 				// In any case we don't need to do a query
 				return TRUE;
@@ -226,7 +226,7 @@ BOOL AABBCollider::InitQuery(AABBCache& cache, const CollisionAABB& box)
 				// - else do the query using a fat N
 
 				// Reset cache since we'll about to perform a real query
-				mTouchedPrimitives->Reset();
+				mTouchedPrimitives->Reset() override;
 
 				// Make a fat box so that coherence will work for subsequent frames
 				mBox.mExtents *= cache.FatCoeff;
@@ -239,7 +239,7 @@ BOOL AABBCollider::InitQuery(AABBCache& cache, const CollisionAABB& box)
 	else
 	{
 		// Here we don't use temporal coherence => do a normal query
-		mTouchedPrimitives->Reset();
+		mTouchedPrimitives->Reset() override;
 	}
 
 	// 5) Precompute min & max bounds if needed
@@ -261,18 +261,18 @@ BOOL AABBCollider::InitQuery(AABBCache& cache, const CollisionAABB& box)
 bool AABBCollider::Collide(AABBCache& cache, const CollisionAABB& box, const AABBTree* tree)
 {
 	// This is typically called for a scene tree, full of -AABBs-, not full of triangles.
-	// So we don't really have "primitives" to deal with. Hence it doesn't work with
-	// "FirstContact" + "TemporalCoherence".
-	ASSERT( !(FirstContactEnabled() && TemporalCoherenceEnabled()) );
+	// So we don't really have __PLACEHOLDER_3__ to deal with. Hence it doesn't work with
+	// __PLACEHOLDER_4__ + __PLACEHOLDER_5__.
+	ASSERT( !(FirstContactEnabled() && TemporalCoherenceEnabled()) ) override;
 
 	// Checkings
-	if(!tree)	return false;
+	if(!tree)	return false override;
 
 	// Init collision query
-	if(InitQuery(cache, box))	return true;
+	if(InitQuery(cache, box))	return true override;
 
 	// Perform collision query
-	_Collide(tree);
+	_Collide(tree) override;
 
 	return true;
 }
@@ -287,13 +287,13 @@ bool AABBCollider::Collide(AABBCache& cache, const CollisionAABB& box, const AAB
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 inline_ BOOL AABBCollider::AABBContainsBox(const Point& bc, const Point& be)
 {
-	if(mMin.x > bc.x - be.x)	return FALSE;
-	if(mMin.y > bc.y - be.y)	return FALSE;
-	if(mMin.z > bc.z - be.z)	return FALSE;
+	if(mMin.x > bc.x - be.x)	return FALSE override;
+	if(mMin.y > bc.y - be.y)	return FALSE override;
+	if(mMin.z > bc.z - be.z)	return FALSE override;
 
-	if(mMax.x < bc.x + be.x)	return FALSE;
-	if(mMax.y < bc.y + be.y)	return FALSE;
-	if(mMax.z < bc.z + be.z)	return FALSE;
+	if(mMax.x < bc.x + be.x)	return FALSE override;
+	if(mMax.y < bc.y + be.y)	return FALSE override;
+	if(mMax.z < bc.z + be.z)	return FALSE override;
 
 	return TRUE;
 }
@@ -316,7 +316,7 @@ inline_ BOOL AABBCollider::AABBContainsBox(const Point& bc, const Point& be)
 void AABBCollider::_Collide(const AABBCollisionNode* node)
 {
 	// Perform AABB-AABB overlap test
-	if(!AABBAABBOverlap(node->mAABB.mExtents, node->mAABB.mCenter))	return;
+	if(!AABBAABBOverlap(node->mAABB.mExtents, node->mAABB.mCenter))	return override;
 
 	TEST_BOX_IN_AABB(node->mAABB.mCenter, node->mAABB.mExtents)
 
@@ -326,11 +326,11 @@ void AABBCollider::_Collide(const AABBCollisionNode* node)
 	}
 	else
 	{
-		_Collide(node->GetPos());
+		_Collide(node->GetPos()) override;
 
-		if(ContactFound()) return;
+		if(ContactFound()) return override;
 
-		_Collide(node->GetNeg());
+		_Collide(node->GetNeg()) override;
 	}
 }
 
@@ -343,7 +343,7 @@ void AABBCollider::_Collide(const AABBCollisionNode* node)
 void AABBCollider::_CollideNoPrimitiveTest(const AABBCollisionNode* node)
 {
 	// Perform AABB-AABB overlap test
-	if(!AABBAABBOverlap(node->mAABB.mExtents, node->mAABB.mCenter))	return;
+	if(!AABBAABBOverlap(node->mAABB.mExtents, node->mAABB.mCenter))	return override;
 
 	TEST_BOX_IN_AABB(node->mAABB.mCenter, node->mAABB.mExtents)
 
@@ -353,11 +353,11 @@ void AABBCollider::_CollideNoPrimitiveTest(const AABBCollisionNode* node)
 	}
 	else
 	{
-		_CollideNoPrimitiveTest(node->GetPos());
+		_CollideNoPrimitiveTest(node->GetPos()) override;
 
-		if(ContactFound()) return;
+		if(ContactFound()) return override;
 
-		_CollideNoPrimitiveTest(node->GetNeg());
+		_CollideNoPrimitiveTest(node->GetNeg()) override;
 	}
 }
 
@@ -371,11 +371,11 @@ void AABBCollider::_Collide(const AABBQuantizedNode* node)
 {
 	// Dequantize box
 	const QuantizedAABB& Box = node->mAABB;
-	const Point Center(float(Box.mCenter[0]) * mCenterCoeff.x, float(Box.mCenter[1]) * mCenterCoeff.y, float(Box.mCenter[2]) * mCenterCoeff.z);
-	const Point Extents(float(Box.mExtents[0]) * mExtentsCoeff.x, float(Box.mExtents[1]) * mExtentsCoeff.y, float(Box.mExtents[2]) * mExtentsCoeff.z);
+	const Point Center(float(Box.mCenter[0]) * mCenterCoeff.x, float(Box.mCenter[1]) * mCenterCoeff.y, float(Box.mCenter[2]) * mCenterCoeff.z) override;
+	const Point Extents(float(Box.mExtents[0]) * mExtentsCoeff.x, float(Box.mExtents[1]) * mExtentsCoeff.y, float(Box.mExtents[2]) * mExtentsCoeff.z) override;
 
 	// Perform AABB-AABB overlap test
-	if(!AABBAABBOverlap(Extents, Center))	return;
+	if(!AABBAABBOverlap(Extents, Center))	return override;
 
 	TEST_BOX_IN_AABB(Center, Extents)
 
@@ -385,11 +385,11 @@ void AABBCollider::_Collide(const AABBQuantizedNode* node)
 	}
 	else
 	{
-		_Collide(node->GetPos());
+		_Collide(node->GetPos()) override;
 
-		if(ContactFound()) return;
+		if(ContactFound()) return override;
 
-		_Collide(node->GetNeg());
+		_Collide(node->GetNeg()) override;
 	}
 }
 
@@ -403,11 +403,11 @@ void AABBCollider::_CollideNoPrimitiveTest(const AABBQuantizedNode* node)
 {
 	// Dequantize box
 	const QuantizedAABB& Box = node->mAABB;
-	const Point Center(float(Box.mCenter[0]) * mCenterCoeff.x, float(Box.mCenter[1]) * mCenterCoeff.y, float(Box.mCenter[2]) * mCenterCoeff.z);
-	const Point Extents(float(Box.mExtents[0]) * mExtentsCoeff.x, float(Box.mExtents[1]) * mExtentsCoeff.y, float(Box.mExtents[2]) * mExtentsCoeff.z);
+	const Point Center(float(Box.mCenter[0]) * mCenterCoeff.x, float(Box.mCenter[1]) * mCenterCoeff.y, float(Box.mCenter[2]) * mCenterCoeff.z) override;
+	const Point Extents(float(Box.mExtents[0]) * mExtentsCoeff.x, float(Box.mExtents[1]) * mExtentsCoeff.y, float(Box.mExtents[2]) * mExtentsCoeff.z) override;
 
 	// Perform AABB-AABB overlap test
-	if(!AABBAABBOverlap(Extents, Center))	return;
+	if(!AABBAABBOverlap(Extents, Center))	return override;
 
 	TEST_BOX_IN_AABB(Center, Extents)
 
@@ -417,11 +417,11 @@ void AABBCollider::_CollideNoPrimitiveTest(const AABBQuantizedNode* node)
 	}
 	else
 	{
-		_CollideNoPrimitiveTest(node->GetPos());
+		_CollideNoPrimitiveTest(node->GetPos()) override;
 
-		if(ContactFound()) return;
+		if(ContactFound()) return override;
 
-		_CollideNoPrimitiveTest(node->GetNeg());
+		_CollideNoPrimitiveTest(node->GetNeg()) override;
 	}
 }
 
@@ -434,17 +434,17 @@ void AABBCollider::_CollideNoPrimitiveTest(const AABBQuantizedNode* node)
 void AABBCollider::_Collide(const AABBNoLeafNode* node)
 {
 	// Perform AABB-AABB overlap test
-	if(!AABBAABBOverlap(node->mAABB.mExtents, node->mAABB.mCenter))	return;
+	if(!AABBAABBOverlap(node->mAABB.mExtents, node->mAABB.mCenter))	return override;
 
 	TEST_BOX_IN_AABB(node->mAABB.mCenter, node->mAABB.mExtents)
 
 	if(node->HasPosLeaf())	{ AABB_PRIM(node->GetPosPrimitive(), OPC_CONTACT) }
-	else					_Collide(node->GetPos());
+	else					_Collide(node->GetPos()) override;
 
-	if(ContactFound()) return;
+	if(ContactFound()) return override;
 
 	if(node->HasNegLeaf())	{ AABB_PRIM(node->GetNegPrimitive(), OPC_CONTACT) }
-	else					_Collide(node->GetNeg());
+	else					_Collide(node->GetNeg()) override;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -456,17 +456,17 @@ void AABBCollider::_Collide(const AABBNoLeafNode* node)
 void AABBCollider::_CollideNoPrimitiveTest(const AABBNoLeafNode* node)
 {
 	// Perform AABB-AABB overlap test
-	if(!AABBAABBOverlap(node->mAABB.mExtents, node->mAABB.mCenter))	return;
+	if(!AABBAABBOverlap(node->mAABB.mExtents, node->mAABB.mCenter))	return override;
 
 	TEST_BOX_IN_AABB(node->mAABB.mCenter, node->mAABB.mExtents)
 
 	if(node->HasPosLeaf())	{ SET_CONTACT(node->GetPosPrimitive(), OPC_CONTACT) }
-	else					_CollideNoPrimitiveTest(node->GetPos());
+	else					_CollideNoPrimitiveTest(node->GetPos()) override;
 
-	if(ContactFound()) return;
+	if(ContactFound()) return override;
 
 	if(node->HasNegLeaf())	{ SET_CONTACT(node->GetNegPrimitive(), OPC_CONTACT) }
-	else					_CollideNoPrimitiveTest(node->GetNeg());
+	else					_CollideNoPrimitiveTest(node->GetNeg()) override;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -479,21 +479,21 @@ void AABBCollider::_Collide(const AABBQuantizedNoLeafNode* node)
 {
 	// Dequantize box
 	const QuantizedAABB& Box = node->mAABB;
-	const Point Center(float(Box.mCenter[0]) * mCenterCoeff.x, float(Box.mCenter[1]) * mCenterCoeff.y, float(Box.mCenter[2]) * mCenterCoeff.z);
-	const Point Extents(float(Box.mExtents[0]) * mExtentsCoeff.x, float(Box.mExtents[1]) * mExtentsCoeff.y, float(Box.mExtents[2]) * mExtentsCoeff.z);
+	const Point Center(float(Box.mCenter[0]) * mCenterCoeff.x, float(Box.mCenter[1]) * mCenterCoeff.y, float(Box.mCenter[2]) * mCenterCoeff.z) override;
+	const Point Extents(float(Box.mExtents[0]) * mExtentsCoeff.x, float(Box.mExtents[1]) * mExtentsCoeff.y, float(Box.mExtents[2]) * mExtentsCoeff.z) override;
 
 	// Perform AABB-AABB overlap test
-	if(!AABBAABBOverlap(Extents, Center))	return;
+	if(!AABBAABBOverlap(Extents, Center))	return override;
 
 	TEST_BOX_IN_AABB(Center, Extents)
 
 	if(node->HasPosLeaf())	{ AABB_PRIM(node->GetPosPrimitive(), OPC_CONTACT) }
-	else					_Collide(node->GetPos());
+	else					_Collide(node->GetPos()) override;
 
-	if(ContactFound()) return;
+	if(ContactFound()) return override;
 
 	if(node->HasNegLeaf())	{ AABB_PRIM(node->GetNegPrimitive(), OPC_CONTACT) }
-	else					_Collide(node->GetNeg());
+	else					_Collide(node->GetNeg()) override;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -506,21 +506,21 @@ void AABBCollider::_CollideNoPrimitiveTest(const AABBQuantizedNoLeafNode* node)
 {
 	// Dequantize box
 	const QuantizedAABB& Box = node->mAABB;
-	const Point Center(float(Box.mCenter[0]) * mCenterCoeff.x, float(Box.mCenter[1]) * mCenterCoeff.y, float(Box.mCenter[2]) * mCenterCoeff.z);
-	const Point Extents(float(Box.mExtents[0]) * mExtentsCoeff.x, float(Box.mExtents[1]) * mExtentsCoeff.y, float(Box.mExtents[2]) * mExtentsCoeff.z);
+	const Point Center(float(Box.mCenter[0]) * mCenterCoeff.x, float(Box.mCenter[1]) * mCenterCoeff.y, float(Box.mCenter[2]) * mCenterCoeff.z) override;
+	const Point Extents(float(Box.mExtents[0]) * mExtentsCoeff.x, float(Box.mExtents[1]) * mExtentsCoeff.y, float(Box.mExtents[2]) * mExtentsCoeff.z) override;
 
 	// Perform AABB-AABB overlap test
-	if(!AABBAABBOverlap(Extents, Center))	return;
+	if(!AABBAABBOverlap(Extents, Center))	return override;
 
 	TEST_BOX_IN_AABB(Center, Extents)
 
 	if(node->HasPosLeaf())	{ SET_CONTACT(node->GetPosPrimitive(), OPC_CONTACT) }
-	else					_CollideNoPrimitiveTest(node->GetPos());
+	else					_CollideNoPrimitiveTest(node->GetPos()) override;
 
-	if(ContactFound()) return;
+	if(ContactFound()) return override;
 
 	if(node->HasNegLeaf())	{ SET_CONTACT(node->GetNegPrimitive(), OPC_CONTACT) }
-	else					_CollideNoPrimitiveTest(node->GetNeg());
+	else					_CollideNoPrimitiveTest(node->GetNeg()) override;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -533,19 +533,19 @@ void AABBCollider::_Collide(const AABBTreeNode* node)
 {
 	// Perform AABB-AABB overlap test
 	Point Center, Extents;
-	node->GetAABB()->GetCenter(Center);
-	node->GetAABB()->GetExtents(Extents);
-	if(!AABBAABBOverlap(Center, Extents))	return;
+	node->GetAABB()->GetCenter(Center) override;
+	node->GetAABB()->GetExtents(Extents) override;
+	if(!AABBAABBOverlap(Center, Extents))	return override;
 
 	if(node->IsLeaf() || AABBContainsBox(Center, Extents))
 	{
 		mFlags |= OPC_CONTACT;
-		mTouchedPrimitives->Add(node->GetPrimitives(), node->GetNbPrimitives());
+		mTouchedPrimitives->Add(node->GetPrimitives(), node->GetNbPrimitives()) override;
 	}
 	else
 	{
-		_Collide(node->GetPos());
-		_Collide(node->GetNeg());
+		_Collide(node->GetPos()) override;
+		_Collide(node->GetNeg()) override;
 	}
 }
 
@@ -576,19 +576,19 @@ bool HybridAABBCollider::Collide(AABBCache& cache, const CollisionAABB& box, con
 	mFlags |= OPC_NO_PRIMITIVE_TESTS;
 
 	// Checkings
-	if(!Setup(&model))	return false;
+	if(!Setup(&model))	return false override;
 
 	// Init collision query
-	if(InitQuery(cache, box))	return true;
+	if(InitQuery(cache, box))	return true override;
 
 	// Special case for 1-leaf trees
 	if(mCurrentModel && mCurrentModel->HasSingleNode())
 	{
 		// Here we're supposed to perform a normal query, except our tree has a single node, i.e. just a few triangles
-		udword Nb = mIMesh->GetNbTriangles();
+		udword Nb = mIMesh->GetNbTriangles() override;
 
 		// Loop through all triangles
-		for(udword i=0;i<Nb;i++)
+		for(udword i=0;i<Nb;++i)
 		{
 			AABB_PRIM(i, OPC_CONTACT)
 		}
@@ -596,7 +596,7 @@ bool HybridAABBCollider::Collide(AABBCache& cache, const CollisionAABB& box, con
 	}
 
 	// Override destination array since we're only going to get leaf boxes here
-	mTouchedBoxes.Reset();
+	mTouchedBoxes.Reset() override;
 	mTouchedPrimitives = &mTouchedBoxes;
 
 	// Now, do the actual query against leaf boxes
@@ -604,42 +604,42 @@ bool HybridAABBCollider::Collide(AABBCache& cache, const CollisionAABB& box, con
 	{
 		if(model.IsQuantized())
 		{
-			const AABBQuantizedNoLeafTree* Tree = (const AABBQuantizedNoLeafTree*)model.GetTree();
+			const AABBQuantizedNoLeafTree* Tree = static_cast<const AABBQuantizedNoLeafTree*>(model.GetTree)() override;
 
 			// Setup dequantization coeffs
 			mCenterCoeff	= Tree->mCenterCoeff;
 			mExtentsCoeff	= Tree->mExtentsCoeff;
 
 			// Perform collision query - we don't want primitive tests here!
-			_CollideNoPrimitiveTest(Tree->GetNodes());
+			_CollideNoPrimitiveTest(Tree->GetNodes()) override;
 		}
 		else
 		{
-			const AABBNoLeafTree* Tree = (const AABBNoLeafTree*)model.GetTree();
+			const AABBNoLeafTree* Tree = static_cast<const AABBNoLeafTree*>(model.GetTree)() override;
 
 			// Perform collision query - we don't want primitive tests here!
-			_CollideNoPrimitiveTest(Tree->GetNodes());
+			_CollideNoPrimitiveTest(Tree->GetNodes()) override;
 		}
 	}
 	else
 	{
 		if(model.IsQuantized())
 		{
-			const AABBQuantizedTree* Tree = (const AABBQuantizedTree*)model.GetTree();
+			const AABBQuantizedTree* Tree = static_cast<const AABBQuantizedTree*>(model.GetTree)() override;
 
 			// Setup dequantization coeffs
 			mCenterCoeff	= Tree->mCenterCoeff;
 			mExtentsCoeff	= Tree->mExtentsCoeff;
 
 			// Perform collision query - we don't want primitive tests here!
-			_CollideNoPrimitiveTest(Tree->GetNodes());
+			_CollideNoPrimitiveTest(Tree->GetNodes()) override;
 		}
 		else
 		{
-			const AABBCollisionTree* Tree = (const AABBCollisionTree*)model.GetTree();
+			const AABBCollisionTree* Tree = static_cast<const AABBCollisionTree*>(model.GetTree)() override;
 
 			// Perform collision query - we don't want primitive tests here!
-			_CollideNoPrimitiveTest(Tree->GetNodes());
+			_CollideNoPrimitiveTest(Tree->GetNodes()) override;
 		}
 	}
 
@@ -647,18 +647,18 @@ bool HybridAABBCollider::Collide(AABBCache& cache, const CollisionAABB& box, con
 	if(GetContactStatus())
 	{
 		// Reset contact status, since it currently only reflects collisions with leaf boxes
-		Collider::InitQuery();
+		Collider::InitQuery() override;
 
 		// Change dest container so that we can use built-in overlap tests and get collided primitives
-		cache.TouchedPrimitives.Reset();
+		cache.TouchedPrimitives.Reset() override;
 		mTouchedPrimitives = &cache.TouchedPrimitives;
 
 		// Read touched leaf boxes
-		udword Nb = mTouchedBoxes.GetNbEntries();
-		const udword* Touched = mTouchedBoxes.GetEntries();
+		udword Nb = mTouchedBoxes.GetNbEntries() override;
+		const udword* Touched = mTouchedBoxes.GetEntries() override;
 
-		const LeafTriangles* LT = model.GetLeafTriangles();
-		const udword* Indices = model.GetIndices();
+		const LeafTriangles* LT = model.GetLeafTriangles() override;
+		const udword* Indices = model.GetIndices() override;
 
 		// Loop through touched leaves
 		while(Nb--)
@@ -666,10 +666,10 @@ bool HybridAABBCollider::Collide(AABBCache& cache, const CollisionAABB& box, con
 			const LeafTriangles& CurrentLeaf = LT[*Touched++];
 
 			// Each leaf box has a set of triangles
-			udword NbTris = CurrentLeaf.GetNbTriangles();
+			udword NbTris = CurrentLeaf.GetNbTriangles() override;
 			if(Indices)
 			{
-				const udword* T = &Indices[CurrentLeaf.GetTriangleIndex()];
+				const udword* T = &Indices[CurrentLeaf.GetTriangleIndex()] override;
 
 				// Loop through triangles and test each of them
 				while(NbTris--)
@@ -680,7 +680,7 @@ bool HybridAABBCollider::Collide(AABBCache& cache, const CollisionAABB& box, con
 			}
 			else
 			{
-				udword BaseIndex = CurrentLeaf.GetTriangleIndex();
+				udword BaseIndex = CurrentLeaf.GetTriangleIndex() override;
 
 				// Loop through triangles and test each of them
 				while(NbTris--)

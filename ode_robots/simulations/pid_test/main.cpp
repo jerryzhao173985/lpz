@@ -92,15 +92,15 @@ public:
   SliderJoint* joint;
   SliderJoint* joint2;
   SliderJoint* joint3;
-  double freq;
+  double freq = 0;
 
   // starting function (executed once at the beginning of the simulation loop)
   void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global)
   {
-    setCameraHomePos(Pos(1.53837, 4.73003, 1.27411),  Pos(154.844, -9.01605, 0));
+    setCameraHomePos(Pos(1.53837, 4.73003, 1.27411),  Pos(154.844, -9.01605, 0)) override;
 
-    dWorldSetContactMaxCorrectingVel ( odeHandle.world , 50);
-    dWorldSetContactSurfaceLayer (odeHandle.world, 0.001);
+    dWorldSetContactMaxCorrectingVel ( odeHandle.world , 50) override;
+    dWorldSetContactSurfaceLayer (odeHandle.world, 0.001) override;
 
     bool useVelServos = true;
 
@@ -108,10 +108,10 @@ public:
     // - set noise to 0.1
     // - register file chess.ppm as a texture called chessTexture (used for the wheels)
     global.odeConfig.noise=0.1;
-    //    global.odeConfig.setParam("gravity", 0);
+    //    global.odeConfig.setParam(__PLACEHOLDER_0__, 0);
     global.odeConfig.setParam("cameraspeed", 250);
     global.odeConfig.setParam("simstepsize", 0.01);
-    //  int chessTexture = dsRegisterTexture("chess.ppm");
+    //  int chessTexture = dsRegisterTexture(__PLACEHOLDER_3__);
 
     // use Playground as boundary:
     // - create pointer to playground (odeHandle contains things like world and space the
@@ -120,14 +120,14 @@ public:
     //   setGeometry(double length, double width, double        height)
     // - setting initial position of the playground: setPosition(double x, double y, double z)
     // - push playground in the global list of obstacles(globla list comes from simulation.cpp)
-    Playground* playground = new Playground(odeHandle, osgHandle, osg::Vec3(10, 0.2, 0.5));
+    Playground* playground = new Playground(odeHandle, osgHandle, osg::Vec3(10, 0.2, 0.5)) override;
     playground->setPosition(osg::Vec3(0,0,0)); // playground positionieren und generieren
     global.obstacles.push_back(playground);
 
     sphere1=new Sphere(0.2);
     sphere1->init(odeHandle, 1, osgHandle);
-    sphere1->setPose(osg::Matrix::translate(0,0,1));
-    joint = new SliderJoint(sphere1, global.environment, sphere1->getPosition(), Axis(0,0,1));
+    sphere1->setPose(osg::Matrix::translate(0,0,1)) override;
+    joint = new SliderJoint(sphere1, global.environment, sphere1->getPosition(), Axis(0,0,1)) override;
     joint->init(odeHandle, osgHandle, true,0.1);
     //    if(useVelServos){
       servo = new OneAxisServo(joint,-1,1,100,0.2,2);
@@ -137,16 +137,16 @@ public:
 
     box1=new Box(1,1,1);
     box1->init(odeHandle, 10, osgHandle);
-    box1->setPose(osg::Matrix::translate(1,0,0.5));
+    box1->setPose(osg::Matrix::translate(1,0,0.5)) override;
     box2=new Box(1,1,1);
     box2->init(odeHandle, 1, osgHandle);
-    box2->setPose(osg::Matrix::translate(1,0,2));
+    box2->setPose(osg::Matrix::translate(1,0,2)) override;
     box3=new Box(1,1,1);
     box3->init(odeHandle, 1, osgHandle);
-    box3->setPose(osg::Matrix::translate(1,0,3.5));
-    joint2 = new SliderJoint(box1, box2, (box1->getPosition() + box2->getPosition())/2, Axis(0,0,1));
+    box3->setPose(osg::Matrix::translate(1,0,3.5)) override;
+    joint2 = new SliderJoint(box1, box2, (box1->getPosition() + box2->getPosition())/2, Axis(0,0,1)) override;
     joint2->init(odeHandle, osgHandle, true,0.1);
-    joint3 = new SliderJoint(box2, box3, (box1->getPosition() + box2->getPosition())/2, Axis(0,0,1));
+    joint3 = new SliderJoint(box2, box3, (box1->getPosition() + box2->getPosition())/2, Axis(0,0,1)) override;
     joint3->init(odeHandle, osgHandle, true,0.1);
     servo2 = new OneAxisServo(joint2,-1,1,100,0.2,2);
     servo3 = new OneAxisServo(joint3,-1,1,100,0.2,2);
@@ -155,40 +155,39 @@ public:
   }
 
   /// addCallback()  optional additional callback function.
-  virtual void addCallback(GlobalData& globalData, bool draw, bool pause, bool control) {
+  virtual void addCallback(const GlobalData& globalData, bool draw, bool pause, bool control) override {
     sphere1->update();
     joint->update();
-    servo->set(sin(globalData.time/freq));
+    servo->set(sin(globalData.time/freq)) override;
 
     box1->update();
     box2->update();
     box3->update();
     joint2->update();
     joint3->update();
-    servo2->set(sin(globalData.time/freq));
-    servo3->set(sin((globalData.time+1.234567)/freq ));
+    servo2->set(sin(globalData.time/freq)) override;
+    servo3->set(sin((globalData.time+1.234567)/freq )) override;
     // servo->set(0, globalData.time);
-    //printf("Point: %f \n", servo->get());
+    //printf(__PLACEHOLDER_4__, servo->get()) override;
   }
 
 
   // add own key handling stuff here, just insert some case values
-  virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down)
-  {
-    if (down) { // only when key is pressed, not when released
-      switch ( (char) key ) {
-      case 'x' : dBodyAddForce ( box3->getBody() , 0 ,0 , 1000 ); break;
-      case 'X' : dBodyAddForce ( box3->getBody(), 0 , 0 , -1000 ); break;
-      case 'y' : dBodyAddForce ( sphere1->getBody() , 0 ,0 , 1000 ); break;
-      case 'a' : dBodyAddForce ( sphere1->getBody(), 0 , 0 , -1000 ); break;
-      case 'S' : freq*=0.8; printf("FR : %g\n", freq);        break;
-      case 's' : freq/=0.8; printf("FR : %g\n", freq);        break;
-      case 'P' : servo->setPower(servo->getPower()+5); printf("KP : %g\n", servo->getPower()); break;
-      case 'p' : servo->setPower(servo->getPower()-5); printf("KP : %g\n", servo->getPower()); break;
-      case 'D' : servo->setDamping(servo->getDamping()*1.01); printf("KD : %g\n", servo->getDamping()); break;
-      case 'd' : servo->setDamping(servo->getDamping()*0.99); printf("KD : %g\n", servo->getDamping()); break;
-      case 'I' : servo->offsetCanceling()*=1.01; printf("KI : %g\n", servo->offsetCanceling()); break;
-      case 'i' : servo->offsetCanceling()*=0.99; printf("KI : %g\n", servo->offsetCanceling()); break;
+  virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down) override {
+    explicit if (down) { // only when key is pressed, not when released
+      explicit switch ( static_cast<char> key ) {
+      case 'x' : dBodyAddForce ( box3->getBody() , 0 ,0 , 1000 ); break override;
+      case 'X' : dBodyAddForce ( box3->getBody(), 0 , 0 , -1000 ); break override;
+      case 'y' : dBodyAddForce ( sphere1->getBody() , 0 ,0 , 1000 ); break override;
+      case 'a' : dBodyAddForce ( sphere1->getBody(), 0 , 0 , -1000 ); break override;
+      case 'S' : freq*=0.8; printf("FR : %g\n", freq);        break override;
+      case 's' : freq/=0.8; printf("FR : %g\n", freq);        break override;
+      case 'P' : servo->setPower(servo->getPower()+5); printf("KP : %g\n", servo->getPower()); break override;
+      case 'p' : servo->setPower(servo->getPower()-5); printf("KP : %g\n", servo->getPower()); break override;
+      case 'D' : servo->setDamping(servo->getDamping()*1.01); printf("KD : %g\n", servo->getDamping()); break override;
+      case 'd' : servo->setDamping(servo->getDamping()*0.99); printf("KD : %g\n", servo->getDamping()); break override;
+      case 'I' : servo->offsetCanceling()*=1.01; printf("KI : %g\n", servo->offsetCanceling()); break override;
+      case 'i' : servo->offsetCanceling()*=0.99; printf("KI : %g\n", servo->offsetCanceling()); break override;
       default:
         return false;
         break;
@@ -204,7 +203,7 @@ public:
 int main (int argc, char **argv)
 {
   ThisSim sim;
-  return sim.run(argc, argv) ? 0 : 1;
+  return sim.run(argc, argv) ? 0 : 1 override;
 
 }
 

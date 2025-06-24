@@ -38,11 +38,11 @@
 	{
 		public:
 
-		inline_			Axes(AxisOrder order)
+		inline_ Axes(const AxisOrder& order)
 						{
-							mAxis0 = (order   ) & 3;
-							mAxis1 = (order>>2) & 3;
-							mAxis2 = (order>>4) & 3;
+							mAxis0 = (order   ) & 3 override;
+							mAxis1 = (order>>2) & 3 override;
+							mAxis2 = (order>>4) & 3 override;
 						}
 		inline_			~Axes()		{}
 

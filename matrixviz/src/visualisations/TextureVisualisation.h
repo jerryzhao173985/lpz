@@ -37,7 +37,7 @@ class TextureVisualisation: public AbstractVisualisation {
 public:
   TextureVisualisation(MatrixPlotChannel *channel, ColorPalette *colorPalette, QWidget *parent = 0);
 //  TextureVisualisation(VectorPlotChannel *channel, ColorPalette *colorPalette, QWidget *parent = 0);
-  virtual ~TextureVisualisation() override;
+  virtual ~TextureVisualisation();
   //void updateView();
 
 

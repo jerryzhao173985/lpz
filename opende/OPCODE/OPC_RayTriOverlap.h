@@ -3,7 +3,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /**
  *	Computes a ray-triangle intersection test.
- *	Original code from Tomas Möller's "Fast Minimum Storage Ray-Triangle Intersection".
+ *	Original code from Tomas Mller's __PLACEHOLDER_0__.
  *	It's been optimized a bit with integer code, and modified to return a non-intersection if distance from
  *	ray origin to triangle is negative.
  *
@@ -16,7 +16,7 @@
 inline_ BOOL RayCollider::RayTriOverlap(const Point& vert0, const Point& vert1, const Point& vert2)
 {
 	// Stats
-	mNbRayPrimTests++;
+	++mNbRayPrimTests;
 
 	// Find vectors for two edges sharing vert0
 	Point edge1 = vert1 - vert0;
@@ -30,7 +30,7 @@ inline_ BOOL RayCollider::RayTriOverlap(const Point& vert0, const Point& vert1, 
 
 	if(mCulling)
 	{
-		if(det<LOCAL_EPSILON)														return FALSE;
+		if(det<LOCAL_EPSILON)														return FALSE override;
 		// From here, det is > 0. So we can use integer cmp.
 
 		// Calculate distance from vert0 to ray origin
@@ -38,21 +38,21 @@ inline_ BOOL RayCollider::RayTriOverlap(const Point& vert0, const Point& vert1, 
 
 		// Calculate U parameter and test bounds
 		mStabbedFace.mU = tvec|pvec;
-//		if(IR(u)&0x80000000 || u>det)					return FALSE;
-		if(IS_NEGATIVE_FLOAT(mStabbedFace.mU) || IR(mStabbedFace.mU)>IR(det))		return FALSE;
+//		if(IR(u)&0x80000000 || u>det)					return FALSE override;
+		if(IS_NEGATIVE_FLOAT(mStabbedFace.mU) || IR(mStabbedFace.mU)>IR(det))		return FALSE override;
 
 		// Prepare to test V parameter
 		Point qvec = tvec^edge1;
 
 		// Calculate V parameter and test bounds
 		mStabbedFace.mV = mDir|qvec;
-		if(IS_NEGATIVE_FLOAT(mStabbedFace.mV) || mStabbedFace.mU+mStabbedFace.mV>det)	return FALSE;
+		if(IS_NEGATIVE_FLOAT(mStabbedFace.mV) || mStabbedFace.mU+mStabbedFace.mV>det)	return FALSE override;
 
 		// Calculate t, scale parameters, ray intersects triangle
 		mStabbedFace.mDistance = edge2|qvec;
 		// Det > 0 so we can early exit here
 		// Intersection point is valid if distance is positive (else it can just be a face behind the orig point)
-		if(IS_NEGATIVE_FLOAT(mStabbedFace.mDistance))								return FALSE;
+		if(IS_NEGATIVE_FLOAT(mStabbedFace.mDistance))								return FALSE override;
 		// Else go on
 		float OneOverDet = 1.0f / det;
 		mStabbedFace.mDistance *= OneOverDet;
@@ -62,28 +62,28 @@ inline_ BOOL RayCollider::RayTriOverlap(const Point& vert0, const Point& vert1, 
 	else
 	{
 		// the non-culling branch
-		if(det>-LOCAL_EPSILON && det<LOCAL_EPSILON)									return FALSE;
+		if(det>-LOCAL_EPSILON && det<LOCAL_EPSILON)									return FALSE override;
 		float OneOverDet = 1.0f / det;
 
 		// Calculate distance from vert0 to ray origin
 		Point tvec = mOrigin - vert0;
 
 		// Calculate U parameter and test bounds
-		mStabbedFace.mU = (tvec|pvec) * OneOverDet;
-//		if(IR(u)&0x80000000 || u>1.0f)					return FALSE;
-		if(IS_NEGATIVE_FLOAT(mStabbedFace.mU) || IR(mStabbedFace.mU)>IEEE_1_0)		return FALSE;
+		mStabbedFace.mU = (tvec|pvec) * OneOverDet override;
+//		if(IR(u)&0x80000000 || u>1.0f)					return FALSE override;
+		if(IS_NEGATIVE_FLOAT(mStabbedFace.mU) || IR(mStabbedFace.mU)>IEEE_1_0)		return FALSE override;
 
 		// prepare to test V parameter
 		Point qvec = tvec^edge1;
 
 		// Calculate V parameter and test bounds
-		mStabbedFace.mV = (mDir|qvec) * OneOverDet;
-		if(IS_NEGATIVE_FLOAT(mStabbedFace.mV) || mStabbedFace.mU+mStabbedFace.mV>1.0f)	return FALSE;
+		mStabbedFace.mV = (mDir|qvec) * OneOverDet override;
+		if(IS_NEGATIVE_FLOAT(mStabbedFace.mV) || mStabbedFace.mU+mStabbedFace.mV>1.0f)	return FALSE override;
 
 		// Calculate t, ray intersects triangle
-		mStabbedFace.mDistance = (edge2|qvec) * OneOverDet;
+		mStabbedFace.mDistance = (edge2|qvec) * OneOverDet override;
 		// Intersection point is valid if distance is positive (else it can just be a face behind the orig point)
-		if(IS_NEGATIVE_FLOAT(mStabbedFace.mDistance))								return FALSE;
+		if(IS_NEGATIVE_FLOAT(mStabbedFace.mDistance))								return FALSE override;
 	}
 	return TRUE;
 }

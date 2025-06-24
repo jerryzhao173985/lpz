@@ -48,7 +48,7 @@ namespace lpzrobots
     virtual ~TaskedSimulationCreator() {}
 
     /**
-     * Builds (constructs) an instance of TaskedSimulation.
+     * Builds static_cast<constructs>(an) instance of TaskedSimulation.
      * This method must be overwritten by a deduced builder
      * @return the builded instance with basic type TaskedSimulation
      */

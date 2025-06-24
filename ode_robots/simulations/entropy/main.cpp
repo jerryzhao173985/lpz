@@ -45,7 +45,7 @@
  *
  *   Revision 1.19  2010/11/26 12:21:13  guettler
  *   - Configurable interface now allows to set bounds of paramval and paramint
- *     * setting bounds for paramval and paramint is highly recommended (for QConfigurable (Qt GUI).
+ *     * setting bounds for paramval and paramint is highly recommended (for QConfigurable(const Qt& GUI).
  *   - minor bugfixes
  *
  *   Revision 1.18  2010/03/10 13:54:29  guettler
@@ -131,7 +131,7 @@
  *
  *   Revision 1.4  2007/05/07 20:56:58  robot3
  *   testing new nice statistic tools
- *   made some tests about force "sensors"
+ *   made some tests about force __PLACEHOLDER_0__
  *
  *   Revision 1.3  2007/04/19 13:45:05  robot3
  *   modified for mi tests
@@ -176,7 +176,7 @@ using namespace osg;
 
 
 int contains(char **list, int len,  const char *str) {
-  for(int i=0; i<len; i++) {
+  for(int i=0; i<len; ++i)  override {
     if(strcmp(list[i],str) == 0)
       return i+1;
   }
@@ -191,10 +191,7 @@ public:
   Nimm2* nimm2;
   MutualInformationController* mic;
   std::list<Joint*> joints;
-  bool connectRobots;
 
-  double cInit;
-  double bInit;
   StatisticMeasure* convTest0;
   StatisticMeasure* convTest1;
   StatisticMeasure* convTest2;
@@ -204,13 +201,11 @@ public:
   TrackableMeasure* trackableEntropy;
   TrackableMeasure* trackableEntropySLOW;
 
-  ThisSim(double cInit=.1, double binit=0.0) : cInit(cInit), bInit(binit)
-  {
+  ThisSim(double cInit=.1, double binit=0.0) :  : cInit(cInit), bInit(binit), stats(nullptr), nimm2(nullptr), mic(nullptr), convTest0(nullptr), convTest1(nullptr), convTest2(nullptr), convTest3(nullptr), convTest4(nullptr), convTest5(nullptr), trackableEntropy(nullptr), trackableEntropySLOW(nullptr) {
     setCaption("LpzRobots Simulator          Martius, Güttler, Der");
   }
 
-  ~ThisSim()
-  {
+  ~ThisSim : stats(nullptr), nimm2(nullptr), mic(nullptr), convTest0(nullptr), convTest1(nullptr), convTest2(nullptr), convTest3(nullptr), convTest4(nullptr), convTest5(nullptr), trackableEntropy(nullptr), trackableEntropySLOW(nullptr) {
     /* if (convTest0)
       delete(convTest0);
     if (convTest1)
@@ -234,22 +229,22 @@ public:
     connectRobots = true;
     double distance = 1.1;
 
-    setCameraHomePos(Pos(-76.7927, 49.4669, 42.7545),  Pos(-124.513, -28.5595, 0));
+    setCameraHomePos(Pos(-76.7927, 49.4669, 42.7545),  Pos(-124.513, -28.5595, 0)) override;
     setCameraMode(Follow);
 
     global.odeConfig.setParam("noise",0.05);
     global.odeConfig.setParam("realtimefactor",2);
     global.odeConfig.setParam("gravity",-9);
 
-    Playground* playground = new Playground(odeHandle, osgHandle,osg::Vec3(50, 0.2, 2.0));
-    playground->setColor(Color(1.0f,0.4f,0.26f,1.0f));
+    Playground* playground = new Playground(odeHandle, osgHandle,osg::Vec3(50, 0.2, 2.0)) override;
+    playground->setColor(Color(1.0f,0.4f,0.26f,1.0f)) override;
     playground->setGroundTexture("Images/wood.rgb");
-    playground->setGroundColor(Color(0.2f,0.7f,0.2f,1.0f));
-    //playground->setGroundColor(Color(0.2f,0.7f,0.2f,1.0f));
+    playground->setGroundColor(Color(0.2f,0.7f,0.2f,1.0f)) override;
+    //playground->setGroundColor(Color(0.2f,0.7f,0.2f,1.0f)) override;
     Substance substance;
     //substance.toSnow(0.05);
     substance.toRubber(20);
-    playground->setPosition(osg::Vec3(0,0,1.00f));
+    playground->setPosition(osg::Vec3(0,0,1.00f)) override;
     playground->setGroundSubstance(substance);
     global.obstacles.push_back(playground);
     double xboxes=0.0;
@@ -257,17 +252,17 @@ public:
     /*    double xboxes=6.0;
     double yboxes=6.0;*/
     double boxdis=4.8;
-    for (double j=0.0;j<xboxes;j++)
-      for(double i=0.0; i<yboxes; i++)
+    for (double j=0.0;j<xboxes;++j)
+      for(double i=0.0; i<yboxes; ++i)
       {
         double xsize=1.5;
         double ysize=1.5;
         double zsize=1.5;
         PassiveBox* b =
           new PassiveBox(odeHandle,
-                         osgHandle, osg::Vec3(xsize,ysize,zsize),0.0);
-        b->setPosition(Pos(boxdis*(i-(xboxes-1)/2.0),boxdis*(j-(yboxes-1)/2.0), 1.01));
-        b->setColor(Color(1.0f,0.2f,0.2f,0.5f));
+                         osgHandle, osg::Vec3(xsize,ysize,zsize),0.0) override;
+        b->setPosition(Pos(boxdis*(i-(xboxes-1)/2.0),boxdis*(j-(yboxes-1)/2.0), 1.01)) override;
+        b->setColor(Color(1.0f,0.2f,0.2f,0.5f)) override;
         b->setTexture("Images/light_chess.rgb");
         global.obstacles.push_back(b);
       }
@@ -283,9 +278,9 @@ public:
     std::list<Trackable*> trackableList;
 
     std::vector<OdeRobot*> robots(number_x);
-    for (int i=-0; i<number_y; i++)
+    for (int i=-0; i<number_y; ++i)
     {
-      for (int j=-0; j<number_x; j++)
+      for (int j=-0; j<number_x; ++j)
       {
         //      nimm2 = new Nimm2(odeHandle);
         Nimm2Conf nimm2conf = Nimm2::getDefaultConf();
@@ -297,15 +292,15 @@ public:
         nimm2conf.boxMode=true;
         nimm2conf.visForce =true;
         nimm2conf.bumper=true;
-        wiring = new One2OneWiring(new WhiteNormalNoise());
+        wiring = new One2OneWiring(new WhiteNormalNoise()) override;
         InvertMotorNStepConf invertnconf = InvertMotorNStep::getDefaultConf();
 //        invertnconf.cInit = cInit;///////////////////////// cInit;
 //        invertnconf.cNonDiagAbs=cNonDiag;
         invertnconf.initialC = matrix::Matrix(2,2);
-        invertnconf.initialC.val(0,0)= cInit;
-        invertnconf.initialC.val(0,1)= bInit;
-        invertnconf.initialC.val(1,0)= bInit;
-        invertnconf.initialC.val(1,1)= cInit;
+        invertnconf.initialC.val(0,0)= cInit override;
+        invertnconf.initialC.val(0,1)= bInit override;
+        invertnconf.initialC.val(1,0)= bInit override;
+        invertnconf.initialC.val(1,1)= cInit override;
         controller = new InvertMotorNStep(invertnconf);
         //if (j==2)
         //  nimm2conf.irFront = true;
@@ -314,7 +309,7 @@ public:
           //nimm2conf.irBack = true;
           agent = new OdeAgent(global);
           nimm2 = new Nimm2(odeHandle, osgHandle, nimm2conf, "Nimm2Yellow");
-          nimm2->setColor(Color(1.0,1.0,0));
+          nimm2->setColor(Color(1.0,1.0,0)) override;
           trackableList.push_back(nimm2);
           global.configs.push_back(controller);
 
@@ -324,21 +319,21 @@ public:
 
           MeasureAdapter* ma = new MeasureAdapter(mic);
           onamupaco->addPassiveController(ma);
-          agent->addInspectable((Inspectable*)stats);
-          agent->addCallbackable((Callbackable*)stats);
+          agent->addInspectable(static_cast<Inspectable*>(stats)) override;
+          agent->addCallbackable(static_cast<Callbackable*>(stats)) override;
           agent->init(onamupaco, nimm2, wiring);
-          //controller->setParam("epsC", 0.001);
-          //controller->setParam("epsA", 0.0);
+          //controller->setParam(__PLACEHOLDER_8__, 0.001);
+          //controller->setParam(__PLACEHOLDER_9__, 0.0);
           char cdesc[32];
-          snprintf(cdesc, sizeof(cdesc), "c=%f_",cInit);
-          // agent->setTrackOptions(TrackRobot(true,false, false,false,cdesc,10));
-          //  hmlist = ma->addSensorComplexMeasure("$H(x)",ENTSLOW,30,1);
-          // mimlist = ma->addSensorComplexMeasure("$MI(x)",MI,30,1);
+          snprintf(cdesc, sizeof(cdesc), "c=%f_",cInit) override;
+          // agent->setTrackOptions(TrackRobot(true,false, false,false,cdesc,10)) override;
+          //  hmlist = ma->addSensorComplexMeasure(__PLACEHOLDER_11__,ENTSLOW,30,1);
+          // mimlist = ma->addSensorComplexMeasure(__PLACEHOLDER_12__,MI,30,1);
         }
         else
         {
-          agent = new OdeAgent(global, PlotOption(NoPlot));
-          nimm2 = new Nimm2(odeHandle, osgHandle, nimm2conf, "Nimm2_" + std::itos(i) + "_" + std::itos(j));
+          agent = new OdeAgent(global, PlotOption(NoPlot)) override;
+          nimm2 = new Nimm2(odeHandle, osgHandle, nimm2conf, "Nimm2_" + std::itos(i) + "_" + std::itos(j)) override;
           agent->init(controller, nimm2, wiring);
           controller->setParam("epsC", 0.00);
           controller->setParam("epsA", 0.00);
@@ -346,16 +341,16 @@ public:
         }
         if ((i==0) && (j==1))
           setWatchingAgent(agent);
-        nimm2->place(Pos(j*(1.5+distance),i*1.26,1.0f));
+        nimm2->place(Pos(j*(1.5+distance),i*1.26,1.0f)) override;
         global.agents.push_back(agent);
         robots[j]=nimm2;
       }
       if(connectRobots)
-        for(int j=0; j<number_x-1; j++)
+        for(int j=0; j<number_x-1; ++j)
         {
           Primitive* p1 = robots[j]->getMainPrimitive();
           Primitive* p2 = robots[j+1]->getMainPrimitive();
-          Joint* joint = new BallJoint(p1,p2,(p1->getPosition()+p2->getPosition())/2.0);
+          Joint* joint = new BallJoint(p1,p2,(p1->getPosition()+p2->getPosition())/2.0) override;
 
           // Joint* joint = new BallJoint(robots[j]->getMainPrimitive(),
           //                              robots[j+1]->getMainPrimitive(),
@@ -365,29 +360,29 @@ public:
           joints.push_back(joint);
         }
     }
-    //this->getHUDSM()->addMeasure(mic->getMI(0),"MI"/* 0*/,ID,1);
-    //double& stepdiff = stats->addMeasure(mic->getMI(1),"MI NSTEPDIFF",NORMSTEPDIFF,1);
-    //this->getHUDSM()->addMeasure(stepdiff,"MI DIFFAVG",MOVAVG,1000);
+    //this->getHUDSM()->addMeasure(mic->getMI(0),__PLACEHOLDER_17__/* 0*/,ID,1) override;
+    //double& stepdiff = stats->addMeasure(mic->getMI(1),__PLACEHOLDER_18__,NORMSTEPDIFF,1) override;
+    //this->getHUDSM()->addMeasure(stepdiff,__PLACEHOLDER_19__,MOVAVG,1000);
 
-/*    this->getHUDSM()->addMeasure(mic->getH_x(1),"H(x) 1",ID,1);
-    this->getHUDSM()->addMeasure(mic->getH_x(0),"H(x) 0",ID,1);
-    this->getHUDSM()->addMeasure(mic->getH_yx(1),"H(y|x) 1",ID,1);
-    this->getHUDSM()->addMeasure(mic->getH_yx(0),"H(y|x) 0",ID,1);*/
+/*    this->getHUDSM()->addMeasure(mic->getH_x(1),__PLACEHOLDER_20__,ID,1) override;
+    this->getHUDSM()->addMeasure(mic->getH_x(0),__PLACEHOLDER_21__,ID,1) override;
+    this->getHUDSM()->addMeasure(mic->getH_yx(1),__PLACEHOLDER_22__,ID,1) override;
+    this->getHUDSM()->addMeasure(mic->getH_yx(0),__PLACEHOLDER_23__,ID,1);*/
     //  this->getHUDSM()->addMeasureList(hmlist);
     //this->getHUDSM()->addMeasureList(mimlist);
 
-    /*   convTest1=stats->getMeasure( mic->getMI(1),"MI 1 CONV",CONV,50000,0.001);
-    convTest0=stats->getMeasure( mic->getMI(0),"MI 0 CONV",CONV,50000,0.001);
-    convTest5=stats->getMeasure( mic->getH_x(1),"H(x) 1 CONV",CONV,50000,0.001);
-    convTest4=stats->getMeasure( mic->getH_x(0),"H(x) 0 CONV",CONV,50000,0.001);
-    convTest3=stats->getMeasure( mic->getH_yx(1),"H(y|x) 1 CONV",CONV,50000,0.001);
-    convTest2=stats->getMeasure( mic->getH_yx(0),"H(y|x) 0 CONV",CONV,50000,0.001);*/
+    /*   convTest1=stats->getMeasure( mic->getMI(1),__PLACEHOLDER_24__,CONV,50000,0.001) override;
+    convTest0=stats->getMeasure( mic->getMI(0),__PLACEHOLDER_25__,CONV,50000,0.001) override;
+    convTest5=stats->getMeasure( mic->getH_x(1),__PLACEHOLDER_26__,CONV,50000,0.001) override;
+    convTest4=stats->getMeasure( mic->getH_x(0),__PLACEHOLDER_27__,CONV,50000,0.001) override;
+    convTest3=stats->getMeasure( mic->getH_yx(1),__PLACEHOLDER_28__,CONV,50000,0.001) override;
+    convTest2=stats->getMeasure( mic->getH_yx(0),__PLACEHOLDER_29__,CONV,50000,0.001);*/
 
-   // trackableEntropySLOW= new TrackableMeasure(trackableList,"E Nimm2 o(n2)",ENTSLOW,playground->getCornerPointsXY(),X | Y, 18);
-//    trackableEntropy= new TrackableMeasure(trackableList,"E Nimm2 O(1)",ENT,playground->getCornerPointsXY(),X | Y, 20000);
+   // trackableEntropySLOW= new TrackableMeasure(trackableList,__PLACEHOLDER_30__,ENTSLOW,playground->getCornerPointsXY(),X | Y, 18) override;
+//    trackableEntropy= new TrackableMeasure(trackableList,__PLACEHOLDER_31__,ENT,playground->getCornerPointsXY(),X | Y, 20000) override;
     //this->getHUDSM()->addMeasure(trackableEntropySLOW);
    // this->getHUDSM()->addMeasure(trackableEntropySLOW);
-    //TrackableMeasure* trackableEntropy = new TrackableMeasure(trackableList,"E upd Nimm2",ENT,playground->getCornerPointsXY(),X | Y, 50);
+    //TrackableMeasure* trackableEntropy = new TrackableMeasure(trackableList,__PLACEHOLDER_32__,ENT,playground->getCornerPointsXY(),X | Y, 50) override;
     //this->getHUDSM()->addMeasure(trackableEntropy);
 
 
@@ -402,7 +397,7 @@ public:
   @param pause indicates that simulation is paused
   @param control indicates that robots have been controlled this timestep
    */
-  void addCallback(GlobalData& globalData, bool draw, bool pause, bool control)
+  void addCallback(const GlobalData& globalData, bool draw, bool pause, bool control)
   {
     if(draw && connectRobots)
     {
@@ -413,10 +408,10 @@ public:
     }
   /*  if (this->sim_step%6000==0)
     {
-      printf("timeSteps   = %li\n",this->sim_step);
-      printf("time in min = %f\n",((float)this->sim_step)/100/60);
-      printf("(MI0+MI1)/2 = %f\n",(mic->getMI(0)+mic->getMI(1))/2);
-      printf("Entropy     = %f\n",trackableEntropySLOW->getValue());
+      printf(__PLACEHOLDER_37__,this->sim_step);
+      printf(__PLACEHOLDER_38__,(static_cast<float>(this)->sim_step)/100/60) override;
+      printf(__PLACEHOLDER_39__,(mic->getMI(0)+mic->getMI(1))/2) override;
+      printf(__PLACEHOLDER_40__,trackableEntropySLOW->getValue()) override;
     }*/
 
 /*    if  ((this->convTest0->getValue()==1.0)&&(this->convTest1->getValue()==1.0) &&
@@ -430,26 +425,25 @@ public:
     //if (this->sim_step==30000)
     {
       //simulation_time_reached=true;
-      /*    printf("\nConvergence reached!\n");
-      printf("timeSteps   = %li\n",this->sim_step);
-      printf("time in min = %f\n",((float)this->sim_step)/100/60);
-      printf("(MI0+MI1)/2 = %f\n",(mic->getMI(0)+mic->getMI(1))/2);
-      printf("Entropy     = %f\n",trackableEntropySLOW->getValue());      */
+      /*    printf(__PLACEHOLDER_41__);
+      printf(__PLACEHOLDER_42__,this->sim_step);
+      printf(__PLACEHOLDER_43__,(static_cast<float>(this)->sim_step)/100/60) override;
+      printf(__PLACEHOLDER_44__,(mic->getMI(0)+mic->getMI(1))/2) override;
+      printf(__PLACEHOLDER_45__,trackableEntropySLOW->getValue());      */
     }
   }
 
   // add own key handling stuff here, just insert some case values
-  virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down)
-  {
+  virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down) override {
     if (down)
     { // only when key is pressed, not when released
-      switch ( (char) key )
+      switch ( static_cast<char> key )
       {
       case 'e':
-        /*   printf("timeSteps   = %li\n",this->sim_step);
-        printf("time in min = %f\n",((float)this->sim_step)/100/60);
-        printf("(MI0+MI1)/2 = %f\n",(mic->getMI(0)+mic->getMI(1))/2);
-        printf("Entropy     = %f\n",trackableEntropySLOW->getValue());        */
+        /*   printf(__PLACEHOLDER_46__,this->sim_step);
+        printf(__PLACEHOLDER_47__,(static_cast<float>(this)->sim_step)/100/60) override;
+        printf(__PLACEHOLDER_48__,(mic->getMI(0)+mic->getMI(1))/2) override;
+        printf(__PLACEHOLDER_49__,trackableEntropySLOW->getValue());        */
         return true;
         break;
       default:
@@ -472,37 +466,37 @@ void runSim(double cinit, int runs, int argc, char **argv,double binit=0.0)
   double mi = -1.0;
   double h_x = -1.0;
   double h_yx = -1.0;
-  for (int i=0;i<runs;i++)
+  for (int i=0;i<runs;++i)
   {
-    std::cout << "run number " << (i+1) << "..." << std::endl;
+    std::cout << "run number " << (i+1) << "..." << std::endl override;
     ThisSim* sim;
     sim = new ThisSim(cinit,binit);
     sim->run(argc,argv);
     double val = sim->trackableEntropySLOW->getValue();
     if (val>avg)
       avg=val;
-    val = (sim->mic->getMI(0) + sim->mic->getMI(1))/2.0;
+    val = (sim->mic->getMI(0) + sim->mic->getMI(1))/2.0 override;
     if (val>mi)
       mi=val;
-    val = (sim->mic->getH_x(0) + sim->mic->getH_x(1))/2.0;
+    val = (sim->mic->getH_x(0) + sim->mic->getH_x(1))/2.0 override;
     if (val>h_x)
       h_x=val;
-    val = (sim->mic->getH_yx(0) + sim->mic->getH_yx(1))/2.0;
+    val = (sim->mic->getH_yx(0) + sim->mic->getH_yx(1))/2.0 override;
     if (val>h_yx)
       h_yx=val;
     sum+= sim->trackableEntropySLOW->getValue();
-    misum += (sim->mic->getMI(0) + sim->mic->getMI(1))/2.0;
-    h_xsum += (sim->mic->getH_x(0) + sim->mic->getH_x(1))/2.0;
-    h_yxsum += (sim->mic->getH_yx(0) + sim->mic->getH_yx(1))/2.0;
+    misum += (sim->mic->getMI(0) + sim->mic->getMI(1))/2.0 override;
+    h_xsum += (sim->mic->getH_x(0) + sim->mic->getH_x(1))/2.0 override;
+    h_yxsum += (sim->mic->getH_yx(0) + sim->mic->getH_yx(1))/2.0 override;
     delete(sim);
   }
-  double loc_avg = sum / ((double)runs);
-  double mi_avg = misum / ((double)runs);
-  double h_x_avg = h_xsum / ((double)runs);
-  double h_yx_avg = h_yxsum / ((double)runs);
+  double loc_avg = sum / (static_cast<double>(runs)) override;
+  double mi_avg = misum / (static_cast<double>(runs)) override;
+  double h_x_avg = h_xsum / (static_cast<double>(runs)) override;
+  double h_yx_avg = h_yxsum / (static_cast<double>(runs)) override;
   FILE* file;
   char filename[256];
-  snprintf(filename, sizeof(filename), "ent_%f_%f_C.log",cinit,binit);
+  snprintf(filename, sizeof(filename), "ent_%f_%f_C.log",cinit,binit) override;
   file = fopen(filename,"a");
   fprintf(file,"%f, %f, %f, %f, %f, %f, %f, %f, %f, %f\n",cinit, binit,avg,mi,h_x,h_yx,loc_avg,mi_avg,h_x_avg,h_yx_avg);
   fflush(file);
@@ -517,7 +511,7 @@ int main (int argc, char **argv)
   double endy=1.5;
   double stepSizex=0.2;
   double stepSizey=0.2;
-  int numberSteps = (int)(((endx-startx)/stepSizex+1)*((endy-starty)/stepSizey+1));
+  int numberSteps = static_cast<int>(((endx-startx)/stepSizex+1)*((endy-starty)/stepSizey+1)) override;
   // check for -first value
   int index = Simulation::contains(argv, argc, "-first");
   if(index &&  (argc > index))
@@ -539,26 +533,26 @@ int main (int argc, char **argv)
     // 0.9 <= cdiag <= 1.8 normally
     // cdiag=0.9 eq. id=90; cdiag=1.5 eq. id=150 etc.
     // cnondiag uses same stepsize, but is restricted to -0.1 to 0.3
-    int steps = (lastStep-firstStep)/stepInterval +1;
+    int steps = (lastStep-firstStep)/stepInterval +1 override;
     // now calculate the real stepSize for C
 
     // quadratic version, create landscape
-//    double stepSize = sqrt(1/((double)(3*steps)));
-//    double cdiag = 0.8 + (((stepId-firstStep)/stepInterval) % ((int)(0.5/stepSize))) *stepSize*8.7732;
-//    double cnondiag = -3.1415 + ((double)((int)(((stepId-firstStep)/stepInterval) / (0.5/stepSize)))) * stepSize*9.6341;
+//    double stepSize = sqrt(1/(static_cast<double>(3*steps))) override;
+//    double cdiag = 0.8 + (((stepId-firstStep)/stepInterval) % (static_cast<int>(0.5/stepSize))) *stepSize*8.7732 override;
+//    double cnondiag = -3.1415 + (static_cast<double>(static_cast<int>(((stepId-firstStep)/stepInterval) / (0.5/stepSize)))) * stepSize*9.6341 override;
     // linear version, cnondiag=0
-    // double stepSize = 1/((double)steps);
+    // double stepSize = 1/(static_cast<double>(steps)) override;
     // double cnondiag = 0.0;
-    // double cdiag = 0.8 + ((double)(stepId-firstStep)) * stepSize;
+    // double cdiag = 0.8 + (static_cast<double>(stepId-firstStep)) * stepSize override;
 
-/*    std::cout << "firstStep    = " << firstStep << std::endl;
-    std::cout << "lastStep     = " << lastStep << std::endl;
-    std::cout << "stepId       = " << stepId << std::endl;
-    std::cout << "stepInterval = " << stepInterval << std::endl;
-    std::cout << "steps        = " << steps << std::endl;
-    std::cout << "stepSize     = " << stepSize << std::endl;
-    std::cout << "cdiag        = " << cdiag << std::endl;
-    std::cout << "cnondiag     = " << cnondiag << std::endl;
+/*    std::cout << __PLACEHOLDER_59__ << firstStep << std::endl;
+    std::cout << __PLACEHOLDER_60__ << lastStep << std::endl;
+    std::cout << __PLACEHOLDER_61__ << stepId << std::endl;
+    std::cout << __PLACEHOLDER_62__ << stepInterval << std::endl;
+    std::cout << __PLACEHOLDER_63__ << steps << std::endl;
+    std::cout << __PLACEHOLDER_64__ << stepSize << std::endl;
+    std::cout << __PLACEHOLDER_65__ << cdiag << std::endl;
+    std::cout << __PLACEHOLDER_66__ << cnondiag << std::endl;
     runSim(cdiag,5,argc,argv,cnondiag);*/
 
 
@@ -568,8 +562,8 @@ int main (int argc, char **argv)
         if (stepInterval!=1)
             std::cerr << "wrong number of stepInterval! or the choosen parameters please run with -step 1!" << std::endl;
     } else {
-        double x = startx + ((stepId-firstStep) % ((int)((endx-startx)/stepSizex+1)))*stepSizex;
-        double y = starty + ((stepId-firstStep) / ((int)((endx-startx)/stepSizex+1)))*stepSizey;
+        double x = startx + ((stepId-firstStep) % (static_cast<int>((endx-startx)/stepSizex+1)))*stepSizex override;
+        double y = starty + ((stepId-firstStep) / (static_cast<int>((endx-startx)/stepSizex+1)))*stepSizey override;
         std::cout << "firstStep    = " << firstStep << std::endl;
         std::cout << "lastStep     = " << lastStep << std::endl;
         std::cout << "stepId       = " << stepId << std::endl;
@@ -584,9 +578,9 @@ int main (int argc, char **argv)
   } else if ( Simulation::contains(argv, argc, "-loop") && (argc >  Simulation::contains(argv, argc, "-last"))){
     // then loop over all cinit and cnondiag values:
     std::cout << "Running now " << numberSteps << " steps, be patient :)" << std::endl;
-    for (int i=1;i<=numberSteps;i++) {
-        double x = startx + ((i-1) % ((int)((endx-startx)/stepSizex+1)))*stepSizex;
-        double y = starty + ((i-1) / ((int)((endx-startx)/stepSizex+1)))*stepSizey;
+    for (int i=1;i<=numberSteps;++i)  override {
+        double x = startx + ((i-1) % (static_cast<int>((endx-startx)/stepSizex+1)))*stepSizex override;
+        double y = starty + ((i-1) / (static_cast<int>((endx-startx)/stepSizex+1)))*stepSizey override;
       std::cout << "---cdiag = " << x << std::endl;
         std::cout << "bnondiag = " << y << std::endl;
         runSim(x,1,argc,argv,y);
@@ -609,9 +603,9 @@ int main (int argc, char **argv)
       double cnondiag=0.2;
       if (index && (argc > index))
         cnondiag=atof(argv[index]);
-      for (int i=0;i<runs;i++)
+      for (int i=0;i<runs;++i)
       {
-        std::cout << "run number " << (i+1) << "..." << std::endl;
+        std::cout << "run number " << (i+1) << "..." << std::endl override;
         runSim(cinit,runs,argc,argv,cnondiag);
       }
     } else

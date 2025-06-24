@@ -46,10 +46,10 @@ class ThisSim : public lpzrobots::Simulation {
     addPaletteFile("colors/UrbanExtraColors.gpl");
     addColorAliasFile("colors/UrbanColorSchema.txt");
     // you can replace color mappings in your own file, see colors/UrbanColorSchema.txt
-    // addColorAliasFile("myColorSchema.txt");
+    // addColorAliasFile(__PLACEHOLDER_3__);
     setGroundTexture("Images/whiteground.jpg"); // gets its color from the schema
-    //setTitle("centered text");
-    //setCaption("right aligned text");
+    //setTitle(__PLACEHOLDER_5__);
+    //setCaption(__PLACEHOLDER_6__);
   }
 
     /**
@@ -57,11 +57,11 @@ class ThisSim : public lpzrobots::Simulation {
      */
     virtual void start(const lpzrobots::OdeHandle& odeHandle,
         const lpzrobots::OsgHandle& osgHandle,
-        lpzrobots::GlobalData& global) {
+        lpzrobots::GlobalData& global) override {
       // set initial camera position
       setCameraHomePos(
           lpzrobots::Pos(-0.0114359, 6.66848, 0.922832),
-          lpzrobots::Pos(178.866, -7.43884, 0));
+          lpzrobots::Pos(178.866, -7.43884, 0)) override;
 
       // set simulation parameters
       global.odeConfig.setParam("controlinterval", 30);
@@ -70,9 +70,9 @@ class ThisSim : public lpzrobots::Simulation {
       // add playground
       lpzrobots::Playground* playground 
         = new lpzrobots::Playground(odeHandle, osgHandle, 
-                                    osg::Vec3(10, 0.2, 0.3)); 
-      playground->setTexture(0,0,lpzrobots::TextureDescr("Images/wall_bw.jpg",-1.5,-3));
-      playground->setPosition(osg::Vec3(0,0,.0));
+                                    osg::Vec3(10, 0.2, 0.3)) override;
+      playground->setTexture(0,0,lpzrobots::TextureDescr("Images/wall_bw.jpg",-1.5,-3)) override;
+      playground->setPosition(osg::Vec3(0,0,.0)) override;
       global.obstacles.push_back(playground);
 
       // Add Hexabot robot
@@ -85,11 +85,11 @@ class ThisSim : public lpzrobots::Simulation {
           hexabotConf, "Hexabot");
 
       // put hexabot a little bit in the air
-      hexabot->place(osg::Matrix::translate(.0, .0, 1.));
+      hexabot->place(osg::Matrix::translate(.0, .0, 1.)) override;
 
       controller = new TripodGait18DOF();
       // create wiring
-      One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise());
+      One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise()) override;
 
       // create agent and init it with controller, robot and wiring
       lpzrobots::OdeAgent* agent = new lpzrobots::OdeAgent(global);
@@ -120,15 +120,14 @@ class ThisSim : public lpzrobots::Simulation {
         const lpzrobots::OsgHandle&,
         lpzrobots::GlobalData& globalData,
         int key,
-        bool down)
-        {
-      if (down) { // only when key is pressed, not when released
+        bool down) override {
+      explicit if (down) { // only when key is pressed, not when released
         switch (char(key)) {
           case 'x':
-            if (robotfixator) {
+            explicit if (robotfixator) {
               std::cout << "dropping robot" << std::endl;
               delete robotfixator;
-              robotfixator = NULL;
+              robotfixator = nullptr;
             }
             break;
           default:
@@ -148,6 +147,6 @@ int main(int argc, char **argv)
     {
   ThisSim sim;
   sim.setGroundTexture("Images/greenground.rgb");
-  return sim.run(argc, argv) ? 0 : 1;
+  return sim.run(argc, argv) ? 0 : 1 override;
 }
 

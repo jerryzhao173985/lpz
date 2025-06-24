@@ -55,12 +55,11 @@ namespace lpzrobots {
 
   void BoundingShape::setPose(const osg::Matrix& pose) {
     // update only if not attached to parent Body
-    if (attachedToParentBody)
-      return;
+    if static_cast<attachedToParentBody>(return) override;
     vector<osg::Matrix>::const_iterator poseIt = boundingPrimitivePoseList.begin();
     FOREACH(vector<Primitive*>, boundingPrimitiveList, primIt) {
       if (*primIt && poseIt!=boundingPrimitivePoseList.end()) {
-        const osg::Matrix primPose = (*poseIt);
+        const osg::Matrix primPose = (*poseIt) override;
         (*primIt)->setPose(pose * primPose);
       }
       ++poseIt;
@@ -74,8 +73,8 @@ namespace lpzrobots {
     parentSpace = odeHandle.space;
     odeHandle.createNewSimpleSpace(parentSpace,true);
     std::string filenamepath = osgDB::findDataFile(filename);
-    FILE* f = fopen(filenamepath.c_str(),"r");
-    if(!f) return false;
+    FILE* f = fopen(filenamepath.c_str(),"r") override;
+    if(!f) return false override;
     char buffer[128];
     float r,h,x,y,z,l,w;
     double a,b,c;
@@ -84,7 +83,7 @@ namespace lpzrobots {
         if(sscanf(buffer+7, "%g (%g,%g,%g)", &r, &x, &y, &z)==4){
           Sphere* s = new Sphere(r * scale);
           Primitive* Trans = new Transform(parent,s,osgRotate(a*M_PI/180.0f,b*M_PI/180.0f,c*M_PI/180.0f)
-                                           *osg::Matrix::translate(scale*x,scale*y,scale*z));
+                                           *osg::Matrix::translate(scale*x,scale*y,scale*z)) override;
           Trans->init(odeHandle, 0, osgHandle,mode);
           active=true;
         } else{ fprintf(stderr, "Syntax error : %s", buffer); }
@@ -92,7 +91,7 @@ namespace lpzrobots {
         if(sscanf(buffer+7, "%g %g (%g,%g,%g) (%lg,%lg,%lg)", &r, &h, &x, &y, &z, &a, &b, &c)==8){
           Capsule* ca = new Capsule(r * scale,h * scale);
           Primitive* Trans = new Transform(parent,ca,osgRotate(a*M_PI/180.0f,b*M_PI/180.0f,c*M_PI/180.0f)
-                                           *osg::Matrix::translate(scale*x,scale*y,scale*z));
+                                           *osg::Matrix::translate(scale*x,scale*y,scale*z)) override;
           Trans->init(odeHandle, 0, osgHandle,mode);
           active=true;
         } else{ fprintf(stderr, "Syntax error : %s", buffer); }
@@ -100,7 +99,7 @@ namespace lpzrobots {
         if(sscanf(buffer+8, "%g %g (%g,%g,%g) (%lg,%lg,%lg)", &r, &h, &x, &y, &z, &a, &b, &c)==8){
           Cylinder* cy = new Cylinder(r * scale,h * scale);
           Primitive* Trans = new Transform(parent,cy,osgRotate(a*M_PI/180.0f,b*M_PI/180.0f,c*M_PI/180.0f)
-                                           *osg::Matrix::translate(scale*x,scale*y,scale*z));
+                                           *osg::Matrix::translate(scale*x,scale*y,scale*z)) override;
           Trans->init(odeHandle, 0, osgHandle,mode);
           active=true;
         } else{ fprintf(stderr, "Syntax error : %s", buffer); }
@@ -108,7 +107,7 @@ namespace lpzrobots {
         if(sscanf(buffer+3, "%g %g %g (%g,%g,%g) (%lg,%lg,%lg)", &l, &w, &h, &x, &y, &z, &a, &b, &c)==9){
           Box* box = new Box(l * scale,w * scale, h * scale);
           Primitive* Trans = new Transform(parent,box,osgRotate(a*M_PI/180.0f,b*M_PI/180.0f,c*M_PI/180.0f)
-                                           *osg::Matrix::translate(scale*x,scale*y,scale*z));
+                                           *osg::Matrix::translate(scale*x,scale*y,scale*z)) override;
           Trans->init(odeHandle, 0, osgHandle,mode);
           active=true;
         } else{ fprintf(stderr, "Syntax error : %s", buffer); }

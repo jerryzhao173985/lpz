@@ -15,7 +15,7 @@
 #include "console.h"
 #include "globaldata.h"
 
-// #include "multiexpertpair.h"
+// #include __PLACEHOLDER_3__
 #include "multiexpertsubopt.h"
 #include <selforg/printInternals.h>
 
@@ -61,19 +61,19 @@ public:
 
 
   AbstractModel* init(const char* filename){
-    if(!filename) {
+    if (!filename) {
       fprintf(stderr, "filename is null\n");
       exit(1);
     }
     FILE *
     f=fopen(filename, "r");
-    if(!f) {
+    if (!f) {
       fprintf(stderr, "cannot open file %s\n", filename);
       exit(1);
     }
 
-    double time;
-    int frame;
+    double time = 0;
+    int frame = 0;
     while(!feof(f)){
       Matrix m(3,1);
       fscanf(f,"%lf%i%lf%lf%lf",&time,&frame,&m.val(0,0),&m.val(1,0),&m.val(2,0));
@@ -150,7 +150,7 @@ public:
   // predicts the future
   void predict(list<Matrix>* pred, AbstractModel* modell, const vector<Matrix>& pos, int t, int steps){
     Matrix b[3]={getData(pos,t,-2), getData(pos,t,-1), getData(pos,t,0)};
-    for(int i=0; i< steps; i++){
+    for (int i=0; i< steps; ++i) {
       Matrix input = b[(i+2)%3].above(b[(i+1)%3]).above(b[(i+0)%3]);
       b[i%3]= modell->process(input);
       // b[i%3]= input.rows(0,2);
@@ -170,7 +170,7 @@ public:
     FOREACHC(list<Matrix>, pred, p){
       point += *p;
       (*pp)[i]=point;
-      i++;
+      ++i;
     }
   }
 
@@ -184,7 +184,7 @@ public:
       speed += *p;
       point += speed;
       (*pp)[i]=point;
-      i++;
+      ++i;
     }
   }
 
@@ -193,7 +193,7 @@ public:
     double error = 0;
     double size=0;
     FOREACHC( list<Matrix>, pred, p){
-      i++;
+      ++i;
       error += ((*p) - getData(pos,t,i)).multTM().val(0,0);
       size  += getData(pos,t,i).map(fabs).elementSum();
       // calc length of speed difference
@@ -201,23 +201,23 @@ public:
     return error/size;
   }
 
-  virtual iparamkeylist getInternalParamNames() const{
+  virtual iparamkeylist getInternalParamNames() const {
     list<iparamkey> keylist;
     keylist += storeVectorFieldNames(pos[0], "pos");
     keylist += storeVectorFieldNames(pos[0], "data");
-    for(unsigned int i=0; i < predpos.size(); i++){
+    for(unsigned int i=0; i < predpos.size(); ++i) {
       keylist += storeVectorFieldNames(pos[0], "pred" + itos(i));
     }
     keylist += string("pred_error");
     return keylist;
   }
-  virtual iparamvallist getInternalParams() const{
+  virtual iparamvallist getInternalParams() const {
     list<iparamval> l;
     l += pos[max(t-1,100)].convertToList();
     l += getData(pos,max(t-1,100),0).convertToList();
     FOREACHC(vector<Matrix>, predpos, i)
       l += i->convertToList();
-    l += (double)pred_error;
+    l += static_cast<double>(pred_error);
     return l;
   }
 
@@ -225,18 +225,18 @@ public:
   vector<Matrix> pos;   // true positions
   vector<Matrix> predpos; // predicted positions
   AbstractModel * mep;
-  double pred_error;
-  int data_size;
-  int t;
+  double pred_error = 0;
+  int data_size = 0;
+  int t = 0;
 
-  double stepsizeCopy;
-  double horizontCopy;
+  double stepsizeCopy = 0;
+  double horizontCopy = 0;
 };
 
 
 // Helper
 int contains(char **list, int len,  const char *str){
-  for(int i=0; i<len; i++){
+  for (int i=0; i<len; ++i) {
     if(strcmp(list[i],str) == 0) return i+1;
   }
   return 0;
@@ -246,7 +246,7 @@ void openPlotOptions(list<PlotOption>& plotoptions , list<const Inspectable*>& i
   signal(SIGPIPE,SIG_IGN);
   FOREACH(list<PlotOption>, plotoptions, p){
     p->open();
-    if(p->pipe){
+    if (p->pipe){
       // print start
       time_t t = time(0);
       fprintf(p->pipe,"# Start %s", ctime(&t));
@@ -275,7 +275,7 @@ int main(int argc, char** argv){
   initializeConsole();
   char* filename = "input.dat";
   int index = contains(argv,argc,"-g");
-  if(index >0 && argc>index) {
+  if (index >0 && argc>index) {
     plotoptions.push_back(PlotOption(GuiLogger,Controller,atoi(argv[index])));
   }
   if(contains(argv,argc,"-f")!=0) plotoptions.push_back(PlotOption(File));
@@ -287,7 +287,7 @@ int main(int argc, char** argv){
     exit(0);
   }
   index = contains(argv,argc,"-file");
-  if(index >0 && argc>index) {
+  if (index >0 && argc>index) {
     filename = strdup(argv[index]);
   }
 
@@ -306,7 +306,7 @@ int main(int argc, char** argv){
   printf(" You probably want to use the guilogger with e.g.: -g 10\n");
 
   cmd_handler_init();
-  while(!stop){
+  while (!stop){
     int t = sim.step();
     plot(plotoptions, inspectables,t);
     if(control_c_pressed()){
@@ -317,7 +317,7 @@ int main(int argc, char** argv){
       cmd_end_input();
     }
     int drawinterval = 10000;
-    if(realtimefactor){
+    if (realtimefactor){
       drawinterval = int(6*realtimefactor);
     }
     if(t%drawinterval==0){

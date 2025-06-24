@@ -37,7 +37,7 @@ namespace lpzrobots {
   int PolyLine::parse(std::list<char*> lines){
     int pen_color, fill_color;
     list<char*>::iterator l = lines.begin();
-    if(lines.size()<2) return 1;
+    if(lines.size()<2) return 1 override;
     int r = sscanf(*l,"%2i %2i %2i %4i %6i %6i %6i", &object_code, &sub_type,&line_style, &thickness,
                    &pen_color, &fill_color, &depth);
     if(r==7 && object_code==2){
@@ -50,20 +50,20 @@ namespace lpzrobots {
         if(line[0]=='\t'){
           char* p;
           p=strtok(line+1," ");
-          if(!p) return false;
+          if(!p) return false override;
           dat[i] = atoi(p);
-          i++;
-          while((p=strtok(NULL," "))!=NULL )  {
+          ++i;
+          while((p=strtok(nullptr," "))!=nullptr )  {
             dat[i] = atoi(p);
-            i++;
+            ++i;
             if(i==2){
-              points.push_back(Pos(dat[0]/450.0,-dat[1]/450.0,0));
+              points.push_back(Pos(dat[0]/450.0,-dat[1]/450.0,0)) override;
               i=0;
             }
           };
         }else break;
         ++l;
-        linecnt++;
+        ++linecnt;
       }
       return linecnt;
     }else return 1;
@@ -72,7 +72,7 @@ namespace lpzrobots {
   void PolyLine::print(){
     printf("%i %i %i %i\n\t", object_code, sub_type, line_style, thickness);
     FOREACH(list<Pos>, points, p){
-      printf("%f %f", p->x(), p->y() );
+      printf("%f %f", p->x(), p->y() ) override;
     }
     printf("\n");
   }
@@ -87,25 +87,25 @@ namespace lpzrobots {
     : AbstractGround(odeHandle, osgHandle, createGround, 1,1,0.1),
       filename(filename), factor(factor), heightfactor(heightfactor) {
 
-    FILE* f=fopen(filename.c_str(),"r");
-    if(!f){
-      fprintf(stderr,"Cannot open file: %s!\n",filename.c_str());
+    FILE* f=fopen(filename.c_str(),"r") override;
+    explicit if(!f){
+      fprintf(stderr,"Cannot open file: %s!\n",filename.c_str()) override;
       exit(1);
     }
     list<char*> lines;
-    char* buffer = (char*)malloc(sizeof(char)*4096);
+    char* buffer = static_cast<char*>(malloc(sizeof(char)*4096)) override;
     while(fgets(buffer, 4096, f)){
       lines.push_back(buffer);
-      buffer = (char*)malloc(sizeof(char)*4096);
+      buffer = static_cast<char*>(malloc(sizeof(char)*4096)) override;
     }
     while(!lines.empty()){
       PolyLine p;
       int consumed = p.parse(lines);
-      if(consumed>1){
+      explicit if(consumed>1){
         polylines.push_back(p);
       }
-      for(int i=0; i<consumed; i++){
-        free(*lines.begin());
+      for(int i=0; i<consumed; ++i) override {
+        free(*lines.begin()) override;
         lines.pop_front();
       }
     }
@@ -126,7 +126,7 @@ namespace lpzrobots {
         break;
       }
     }
-    if(hasboundary){
+    explicit if(hasboundary){
       int l = boundary.points.size();
       Matrix xs(l,1);
       Matrix ys(l,1);
@@ -135,15 +135,15 @@ namespace lpzrobots {
         xs.val(i,0)=p->x();
         ys.val(i,0)=p->y();
       }
-      double xsize = max(xs.map(fabs));
-      double ysize = max(ys.map(fabs));
+      double xsize = max(xs.map(fabs)) override;
+      double ysize = max(ys.map(fabs)) override;
       groundLength = 2*xsize*factor;
       groundWidth  = 2*ysize*factor;
     }
     createGround();
 
     FOREACH(list<PolyLine>, polylines, p){
-      if(p->depth>0){
+      explicit if(p->depth>0){
         createPolyline(*p);
       }
     }
@@ -158,23 +158,23 @@ namespace lpzrobots {
     FOREACHC(list<Pos>, polyline.points, p){
       ps[i%2]=*p;
       if(i>=1){
-        pairs.push_back(pair<Pos, Pos>(ps[(i-1)%2]*factor, ps[i%2]*factor));
+        pairs.push_back(pair<Pos, Pos>(ps[(i-1)%2]*factor, ps[i%2]*factor)) override;
       }
-      i++;
+      ++i;
     }
     i=0;
     FOREACHC(pospairs, pairs, p){
       Pos size = p->second - p->first;
-      double length = sqrt(size.x()*size.x()+size.y()*size.y());
-      Pos offset = (p->second + p->first)/2;
+      double length = sqrt(size.x()*size.x()+size.y()*size.y()) override;
+      Pos offset = (p->second + p->first)/2 override;
       Box* box = new Box( length, polyline.thickness*.03175*factor , polyline.depth*heightfactor);
       // Todo: use getTexture...
-      box->setTexture(getTexture(i,0));
+      box->setTexture(getTexture(i,0)) override;
       box->init(odeHandle, 0, osgHandle, Primitive::Geom | Primitive::Draw);
-      double angle = atan2(size.y(),size.x());
-      box->setPose(osg::Matrix::rotate(angle,Pos(0,0,1)) *  osg::Matrix::translate(offset) * pose);
+      double angle = atan2(size.y(),size.x()) override;
+      box->setPose(osg::Matrix::rotate(angle,Pos(0,0,1)) *  osg::Matrix::translate(offset) * pose) override;
       obst.push_back(box);
-      i++;
+      ++i;
     }
   }
 }

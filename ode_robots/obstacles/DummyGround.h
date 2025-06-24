@@ -34,10 +34,10 @@ namespace lpzrobots {
   class DummyGround : public AbstractGround {
     public:
       DummyGround(const OdeHandle& odeHandle, const OsgHandle& osgHandle);
-      virtual ~DummyGround() override;
+      virtual ~DummyGround();
 
-      /// overload this function to create the obstacle. All primitives should go into the list "obst"
-      virtual void create() override;
+      /// overload this function to create the obstacle. All primitives should go into the list __PLACEHOLDER_1__
+      virtual void create();
   };
 
 }

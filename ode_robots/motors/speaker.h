@@ -29,7 +29,7 @@
 namespace lpzrobots {
 
   /**
-     This "motor" emulates a speaker or piezo element to produce sound.
+     This __PLACEHOLDER_1__ emulates a speaker or piezo element to produce sound.
      The sound can be detected by sound sensors (@see SoundSensor).
      Note that obstacles do not interact with the sound in any way.
    */
@@ -39,28 +39,28 @@ namespace lpzrobots {
       : own(0), frequency(frequency), intensity(0.0),
         visualSize(visualSize), visualOffset(visualOffset) {
     }
-    virtual ~Speaker() {};
+    virtual ~Speaker() {} override;
 
-    virtual void init(Primitive* own, Joint* joint = 0){
+    virtual void init(Primitive* own, Joint* joint = 0) override {
       this->own=own;
     }
 
-    virtual int getMotorNumber() const{
+    virtual int getMotorNumber() const override {
       return 1;
     };
 
-    virtual bool act(GlobalData& globaldata){
+    virtual bool act(const GlobalData& globaldata) override {
       Sound s = Sound(globaldata.time, own->getPosition(),
-                      intensity,frequency, (void*)own);
+                      intensity,frequency, static_cast<void*>(own)) override;
       globaldata.sounds.push_back(s);
       s.createVisual(globaldata, visualSize, visualOffset);
 
       return true;
     }
 
-    virtual int set(const motor* values, int length){
+    virtual int set(const motor* values, int length) override {
       if(length>0)
-        intensity=std::max(std::min(values[0],1.0),0.0);
+        intensity=std::max(std::min(values[0],1.0),0.0) override;
       return 1;
     };
 

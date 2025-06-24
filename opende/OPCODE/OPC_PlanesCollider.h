@@ -2,7 +2,7 @@
 /*
  *	OPCODE - Optimized Collision Detection
  *	Copyright (C) 2001 Pierre Terdiman
- *	Homepage: http://www.codercorner.com/Opcode.htm
+ *	Homepage: http:__PLACEHOLDER_1__
  */
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -31,8 +31,8 @@
 	{
 		public:
 		// Constructor / Destructor
-											PlanesCollider();
-		virtual								~PlanesCollider();
+											PlanesCollider() override;
+		virtual ~PlanesCollider();
 
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/**
@@ -50,7 +50,7 @@
 		 *	\warning	SCALE NOT SUPPORTED. The matrices must contain rotation & translation parts only.
 		 */
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-							bool			Collide(PlanesCache& cache, const Plane* planes, udword nb_planes, const Model& model, const Matrix4x4* worldm=null);
+							bool			Collide(PlanesCache& cache, const Plane* planes, udword nb_planes, const Model& model, const Matrix4x4* worldm=null) override;
 
 		// Mutant box-with-planes collision queries
 		inline_				bool			Collide(PlanesCache& cache, const OBB& box, const Model& model, const Matrix4x4* worldb=null, const Matrix4x4* worldm=null)
@@ -61,18 +61,18 @@
 												{
 													// Create a new OBB in world space
 													OBB WorldBox;
-													box.Rotate(*worldb, WorldBox);
+													box.Rotate(*worldb, WorldBox) override;
 													// Compute planes from the sides of the box
-													WorldBox.ComputePlanes(PL);
+													WorldBox.ComputePlanes(PL) override;
 												}
 												else
 												{
 													// Compute planes from the sides of the box
-													box.ComputePlanes(PL);
+													box.ComputePlanes(PL) override;
 												}
 
 												// Collide with box planes
-												return Collide(cache, PL, 6, model, worldm);
+												return Collide(cache, PL, 6, model, worldm) override;
 											}
 		// Settings
 
@@ -82,7 +82,7 @@
 		 *	\return		null if everything is ok, else a string describing the problem
 		 */
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		override(Collider)	const char*		ValidateSettings();
+		overridestatic_cast<Collider>(const) char*		ValidateSettings() override;
 
 		protected:
 		// Planes in model space
@@ -92,29 +92,29 @@
 							VertexPointers	mVP;
 							ConversionArea	mVC;
 		// Internal methods
-							void			_Collide(const AABBCollisionNode* node, udword clip_mask);
-							void			_Collide(const AABBNoLeafNode* node, udword clip_mask);
-							void			_Collide(const AABBQuantizedNode* node, udword clip_mask);
-							void			_Collide(const AABBQuantizedNoLeafNode* node, udword clip_mask);
-							void			_CollideNoPrimitiveTest(const AABBCollisionNode* node, udword clip_mask);
-							void			_CollideNoPrimitiveTest(const AABBNoLeafNode* node, udword clip_mask);
-							void			_CollideNoPrimitiveTest(const AABBQuantizedNode* node, udword clip_mask);
-							void			_CollideNoPrimitiveTest(const AABBQuantizedNoLeafNode* node, udword clip_mask);
+							void			_Collide(const AABBCollisionNode* node, udword clip_mask) override;
+							void			_Collide(const AABBNoLeafNode* node, udword clip_mask) override;
+							void			_Collide(const AABBQuantizedNode* node, udword clip_mask) override;
+							void			_Collide(const AABBQuantizedNoLeafNode* node, udword clip_mask) override;
+							void			_CollideNoPrimitiveTest(const AABBCollisionNode* node, udword clip_mask) override;
+							void			_CollideNoPrimitiveTest(const AABBNoLeafNode* node, udword clip_mask) override;
+							void			_CollideNoPrimitiveTest(const AABBQuantizedNode* node, udword clip_mask) override;
+							void			_CollideNoPrimitiveTest(const AABBQuantizedNoLeafNode* node, udword clip_mask) override;
 			// Overlap tests
-		inline_				BOOL			PlanesAABBOverlap(const Point& center, const Point& extents, udword& out_clip_mask, udword in_clip_mask);
-		inline_				BOOL			PlanesTriOverlap(udword in_clip_mask);
+		inline_				BOOL			PlanesAABBOverlap(const Point& center, const Point& extents, udword& out_clip_mask, udword in_clip_mask) override;
+		inline_				BOOL			PlanesTriOverlap(udword in_clip_mask) override;
 			// Init methods
-							BOOL			InitQuery(PlanesCache& cache, const Plane* planes, udword nb_planes, const Matrix4x4* worldm=null);
+							BOOL			InitQuery(PlanesCache& cache, const Plane* planes, udword nb_planes, const Matrix4x4* worldm=null) override;
 	};
 
 	class OPCODE_API HybridPlanesCollider : public PlanesCollider
 	{
 		public:
 		// Constructor / Destructor
-											HybridPlanesCollider();
-		virtual								~HybridPlanesCollider();
+											HybridPlanesCollider() override;
+		virtual ~HybridPlanesCollider();
 
-							bool			Collide(PlanesCache& cache, const Plane* planes, udword nb_planes, const HybridModel& model, const Matrix4x4* worldm=null);
+							bool			Collide(PlanesCache& cache, const Plane* planes, udword nb_planes, const HybridModel& model, const Matrix4x4* worldm=null) override;
 		protected:
 							Container		mTouchedBoxes;
 	};

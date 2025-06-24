@@ -51,7 +51,7 @@ namespace lpzrobots {
     Nimm4(const OdeHandle& odeHandle, const OsgHandle& osgHandle, const std::string& name,
           double size=1, double force=3, double speed=15, bool sphereWheels=true);
 
-    virtual ~Nimm4(){
+    virtual ~Nimm4() {
       destroy();
     };
 
@@ -81,13 +81,13 @@ namespace lpzrobots {
 
     /** returns number of sensors
      */
-    virtual int getSensorNumberIntern(){
+    virtual int getSensorNumberIntern() override {
       return sensorno;
     };
 
     /** returns number of motors
      */
-    virtual int getMotorNumberIntern(){
+    virtual int getMotorNumberIntern() override {
       return motorno;
     };
 

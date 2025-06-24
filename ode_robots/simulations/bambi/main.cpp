@@ -176,7 +176,7 @@
 
 // used robot
 #include "skeleton.h"
-//#include "derskeleton.h"
+//#include __PLACEHOLDER_1__
 
 // used arena
 #include <ode_robots/playground.h>
@@ -228,12 +228,9 @@ public:
   Primitive* reck;
   Playground* playground;
   //  AbstractObstacle* playground;
-  double hardness;
+  double hardness = 0;
   Substance s;
-  bool reckturner;
   osg::Vec3 center;
-  double centerforce;
-  double forwardforce;
 
   Primitive* forcepoint;
 
@@ -241,7 +238,7 @@ public:
   // starting function (executed once at the beginning of the simulation loop)
   void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global)
   {
-    setCameraHomePos (Pos(22.4468, 25.8365, 2.74255),  Pos(157.862, -12.7123, 0));
+    setCameraHomePos (Pos(22.4468, 25.8365, 2.74255),  Pos(157.862, -12.7123, 0)) override;
 
   // Set number of robots:
 
@@ -278,13 +275,13 @@ public:
     // initialization
     // - set noise to 0.0
     // - register file chess.ppm as a texture called chessTexture (used for the wheels)
-    global.odeConfig.setParam("controlinterval",2);//4);
+    global.odeConfig.setParam("controlinterval",2);//4) override;
     global.odeConfig.setParam("noise",0.0);
     global.odeConfig.setParam("realtimefactor",1);
-    global.odeConfig.setParam("simstepsize",0.004);//0.004);
+    global.odeConfig.setParam("simstepsize",0.004);//0.004) override;
         global.odeConfig.setParam("gravity", -6);
-    //    global.odeConfig.setParam("cameraspeed", 250);
-    //  int chessTexture = dsRegisterTexture("chess.ppm");
+    //    global.odeConfig.setParam(__PLACEHOLDER_9__, 250);
+    //  int chessTexture = dsRegisterTexture(__PLACEHOLDER_10__);
 
     // use Playground as boundary:
     // - create pointer to playground (odeHandle contains things like world and space the
@@ -297,20 +294,20 @@ public:
      // Neuer Playground klein innen
         //   double diam=.5, internaldiameter=.9*diam, offset=1.0*internaldiameter;
 
-//       OctaPlayground* playground2 = new OctaPlayground(odeHandle, osgHandle, osg::Vec3(/*Diameter.8*/100.3*diam, 0.2,/*Height*/ 10), 12,false);
-//           playground2->setTexture("Images/whitemetal_farbig.rgb");
-//         playground2->setColor(Color(0.4,0.8,0.4,0.1));
+//       OctaPlayground* playground2 = new OctaPlayground(odeHandle, osgHandle, osg::Vec3(/*Diameter.8*/100.3*diam, 0.2,/*Height*/ 10), 12,false) override;
+//           playground2->setTexture(__PLACEHOLDER_11__);
+//         playground2->setColor(Color(0.4,0.8,0.4,0.1)) override;
 //          playground2->setPosition(osg::Vec3(0,0,0)); // playground positionieren und generieren
 //         global.obstacles.push_back(playground2);
 //         playground->setGroundSubstance(s);
 
    //  int anzgrounds=2;
-//     for (int i=0; i< anzgrounds; i++){
-//       //    playground = new Playground(odeHandle, osgHandle, osg::Vec3(30+4*i, .2, .95+0.15*i), 1, i==(anzgrounds-1));
-//       playground = new Playground(odeHandle, osgHandle, osg::Vec3(50+4*i, .2, 3.95+0.15*i), 1, i==(anzgrounds-1));
+//     for (int i=0; i< anzgrounds; ++i) override {
+//       //    playground = new Playground(odeHandle, osgHandle, osg::Vec3(30+4*i, .2, .95+0.15*i), 1, i==(anzgrounds-1)) override;
+//       playground = new Playground(odeHandle, osgHandle, osg::Vec3(50+4*i, .2, 3.95+0.15*i), 1, i==(anzgrounds-1)) override;
 //       OdeHandle myhandle = odeHandle;
 //       //      myhandle.substance.toFoam(10);
-//       // playground = new Playground(myhandle, osgHandle, osg::Vec3(/*base length=*/50.5,/*wall = */.1, /*height=*/1));
+//       // playground = new Playground(myhandle, osgHandle, osg::Vec3(/*base length=*/50.5,/*wall = */.1, /*height=*/1)) override;
 //       playground->setPosition(osg::Vec3(0,0,0.2)); // playground positionieren und generieren
 //       playground->setSubstance(s);
 //       // playground->setPosition(osg::Vec3(i,-i,0)); // playground positionieren und generieren
@@ -319,12 +316,12 @@ public:
 //     global.obstacles.push_back(playground);
 
 //     int anzgrounds=1;
-//     for (int armPower = 15;//5i=0; i< anzgrounds; i++){
-//       playground = new Playground(odeHandle, osgHandle, osg::Vec3(10.05+4*i, 10, .75+0.15*i), 1, i==(anzgrounds-1));
+//     for (int armPower = 15;//5i=0; i< anzgrounds; i++) override {
+//       playground = new Playground(odeHandle, osgHandle, osg::Vec3(10.05+4*i, 10, .75+0.15*i), 1, i==(anzgrounds-1)) override;
 //       OdeHandle myhandle = odeHandle;
 //       //      myhandle.substance.toFoam(10);
-//       // playground = new Playground(myhandle, osgHandle, osg::Vec3(/*base length=*/50.5,/*wall = */.1, /*height=*/1));
-//          playground->setColor(Color(0.9,0.1,0.1,0.99));
+//       // playground = new Playground(myhandle, osgHandle, osg::Vec3(/*base length=*/50.5,/*wall = */.1, /*height=*/1)) override;
+//          playground->setColor(Color(0.9,0.1,0.1,0.99)) override;
 //       playground->setPosition(osg::Vec3(0,0,0.2)); // playground positionieren und generieren
 //       //s.toRubber(100);
 //            s.toPlastic(90);
@@ -335,20 +332,20 @@ public:
 //     global.obstacles.push_back(playground);
 
 // //     //
-// //     AbstractObstacle* m = new PassiveMesh(odeHandle, osgHandle, "Meshes/skeleton/Chest_center.wrl",0.4,1);
-// //     m->setPosition(osg::Vec3(1,1,1));
+// //     AbstractObstacle* m = new PassiveMesh(odeHandle, osgHandle, __PLACEHOLDER_12__,0.4,1);
+// //     m->setPosition(osg::Vec3(1,1,1)) override;
 // //     global.obstacles.push_back(m);
 
-   if(narrow){
-     Playground* playground = new Playground(odeHandle, osgHandle,osg::Vec3(widthground, 0.208, heightground));
-     playground->setColor(Color(1.,1.,1.,.99));
-     //     playground->setTexture("Images/really_white.rgb");
-     //     playground->setGroundTexture("Images/dusty.rgb");
-     //playground->setGroundColor(Color(1.,1.,1.,1.));
-     playground->setPosition(osg::Vec3(20,20,.1));
-     //      Playground* playground = new Playground(odeHandle, osgHandle,osg::Vec3(1.0875, 8.8, 1.3975));
-     //       playground->setColor(Color(0.88f,0.4f,0.26f,1));
-     // playground->setPosition(osg::Vec3(20,20,.5));
+   explicit if(narrow){
+     Playground* playground = new Playground(odeHandle, osgHandle,osg::Vec3(widthground, 0.208, heightground)) override;
+     playground->setColor(Color(1.,1.,1.,.99)) override;
+     //     playground->setTexture(__PLACEHOLDER_13__);
+     //     playground->setGroundTexture(__PLACEHOLDER_14__);
+     //playground->setGroundColor(Color(1.,1.,1.,1.)) override;
+     playground->setPosition(osg::Vec3(20,20,.1)) override;
+     //      Playground* playground = new Playground(odeHandle, osgHandle,osg::Vec3(1.0875, 8.8, 1.3975)) override;
+     //       playground->setColor(Color(0.88f,0.4f,0.26f,1)) override;
+     // playground->setPosition(osg::Vec3(20,20,.5)) override;
      Substance substance;
      substance.toRubber(5);
      //   substance.toMetal(1);
@@ -359,29 +356,29 @@ public:
      double xboxes=15;//19.0;
      double yboxes=15;
      double boxdis=.9;//.45;//1.6;
-     for (double j=0.0;j<xboxes;j++)
-       for(double i=0.0; i<yboxes; i++) {
+     for (double j=0.0;j<xboxes;++j)
+       for(double i=0.0; i<yboxes; ++i)  override {
          double xsize= .6;//1.0;
          double ysize= .5;//.25;
          double zsize=.4;
          PassiveBox* b =
            new PassiveBox(odeHandle,
-                          osgHandle, osg::Vec3(xsize,ysize,zsize),0.0);
-         b->setPosition(Pos(20+boxdis*(i-(xboxes-1)/2.0),20+boxdis*(j-(yboxes-1)/2.0), 0.01));
-         //         b->setColor(Color(1.0f,0.2f,0.2f,0.5f));
-         //         b->setTexture("Images/light_chess.rgb");
+                          osgHandle, osg::Vec3(xsize,ysize,zsize),0.0) override;
+         b->setPosition(Pos(20+boxdis*(i-(xboxes-1)/2.0),20+boxdis*(j-(yboxes-1)/2.0), 0.01)) override;
+         //         b->setColor(Color(1.0f,0.2f,0.2f,0.5f)) override;
+         //         b->setTexture(__PLACEHOLDER_15__);
          global.obstacles.push_back(b);
        }
    }
 
 
-   for (int i=0; i< humanoids; i++){ //Several humans
-     if (i>0) reckturner=false;
+   for (int i=0; i< humanoids; ++i){ //Several humans
+     if (i>0) reckturner=false override;
 
      //       ZweiBeinerConf conf = ZweiBeiner::getDefaultConf();
 
-     //       ZweiBeiner* human = new ZweiBeiner(odeHandle, osgHandle,conf, "Humanoid");
-     //       human->place(osg::Matrix::translate(4*i,0,2));
+     //       ZweiBeiner* human = new ZweiBeiner(odeHandle, osgHandle,conf, __PLACEHOLDER_16__);
+     //       human->place(osg::Matrix::translate(4*i,0,2)) override;
      //       global.configs.push_back(human);
 
      //       Primitive* trunk = human->getMainPrimitive();
@@ -400,10 +397,10 @@ public:
 
      //       conf.ankleJointLimit=0.001; //!
      //     conf.pelvisPower=20;
-     // if(reckturner)      conf.armPower = 30;
+     // if(reckturner)      conf.armPower = 30 override;
 
      conf.powerfactor = .15;// .95;//.65;//5;
-     if (reckturner) conf.powerfactor *=.2;
+     if (reckturner) conf.powerfactor *=.2 override;
      if (i==0)
        conf.trunkColor=Color(0.1, 0.3, 0.8);
      else
@@ -416,11 +413,11 @@ public:
 
      //     conf.irSensors = true;
 
-     //    conf.bodyTexture="Images/whitemetal_farbig_small.rgb";
+     //    conf.bodyTexture=__PLACEHOLDER_17__;
      //     conf.bodyColor=Color(1.0,1.0,0.0);
      std::list<Sensor*> sensors;
      // additional sensor
-     //     sensors.push_back(new AxisOrientationSensor(AxisOrientationSensor::OnlyZAxis));
+     //     sensors.push_back(new AxisOrientationSensor(AxisOrientationSensor::OnlyZAxis)) override;
      OdeHandle skelHandle=odeHandle;
      // skelHandle.substance.toMetal(1);
     //     skelHandle.substance.toPlastic(.5);//TEST sonst 40
@@ -429,24 +426,24 @@ public:
      AddSensors2RobotAdapter* human =
        new AddSensors2RobotAdapter(skelHandle, osgHandle, human0, sensors);
      human->place(osg::Matrix::rotate(M_PI_2,1,0,0)*osg::Matrix::rotate(M_PI,0,0,1)
-                  //   *osg::Matrix::translate(-.2 +2.9*i,0,1));
-                  *osg::Matrix::translate(.2*i+20,2*i+20,.841/*7*/ +2*i));
+                  //   *osg::Matrix::translate(-.2 +2.9*i,0,1)) override;
+                  *osg::Matrix::translate(.2*i+20,2*i+20,.841/*7*/ +2*i)) override;
      global.configs.push_back(human0);
 
 
-     if( fixedInAir){
+     explicit if( fixedInAir){
        Primitive* trunk = human->getMainPrimitive();
 
        fixator = new FixedJoint(trunk, global.environment);
-       //       // fixator = new UniversalJoint(trunk, global.environment, Pos(0, 1.2516, 0.0552) ,                    Axis(0,0,1), Axis(0,1,0));
+       //       // fixator = new UniversalJoint(trunk, global.environment, Pos(0, 1.2516, 0.0552) ,                    Axis(0,0,1), Axis(0,1,0)) override;
        fixator->init(odeHandle, osgHandle);
      }else if(reckturner){
-       Primitive* leftHand = human0->getAllPrimitives()[Skeleton::Left_Hand];
-       Primitive* rightHand = human0->getAllPrimitives()[Skeleton::Right_Hand];
+       Primitive* leftHand = human0->getAllPrimitives()[Skeleton::Left_Hand] override;
+       Primitive* rightHand = human0->getAllPrimitives()[Skeleton::Right_Hand] override;
 
-       reckLeft = new SliderJoint(leftHand, global.environment, leftHand->getPosition(), Axis(1,0,0));
+       reckLeft = new SliderJoint(leftHand, global.environment, leftHand->getPosition(), Axis(1,0,0)) override;
        reckLeft->init(odeHandle, osgHandle,false);
-       reckRight = new SliderJoint(rightHand, global.environment, rightHand->getPosition(), Axis(1,0,0));
+       reckRight = new SliderJoint(rightHand, global.environment, rightHand->getPosition(), Axis(1,0,0)) override;
        reckRight->init(odeHandle, osgHandle,false);
      }
 
@@ -465,14 +462,14 @@ public:
      vector<Layer> layers;
      layers.push_back(Layer(20,0.5,FeedForwardNN::tanh)); // hidden layer
      // size of output layer is automatically set
-     layers.push_back(Layer(1,1,FeedForwardNN::linear));
+     layers.push_back(Layer(1,1,FeedForwardNN::linear)) override;
      MultiLayerFFNN* net = new MultiLayerFFNN(0.0, layers, false);// false means no bypass.
      cc.model = net;
 
      //           layers.clear();
      //           layers.push_back(Layer(3,0.5,FeedForwardNN::tanhr)); // hidden layer
      //           // size of output layer is automatically set
-     //           layers.push_back(Layer(1,0.5,FeedForwardNN::tanhr));
+     //           layers.push_back(Layer(1,0.5,FeedForwardNN::tanhr)) override;
      //           MultiLayerFFNN* sat = new MultiLayerFFNN(1.0, layers, false);
      //           cc.sat   = sat;
 
@@ -480,7 +477,7 @@ public:
      layers.clear();
      layers.push_back(Layer(40,0.5,Elman::tanhr)); // hidden layer
      // size of output layer is automatically set
-     layers.push_back(Layer(1,0.5,Elman::tanh));
+     layers.push_back(Layer(1,0.5,Elman::tanh)) override;
      Elman* sat = new Elman(1, layers,true,true, false);
      cc.sat   = sat;
 
@@ -491,14 +488,14 @@ public:
    //   AbstractController* controller = new SineController(1<<14); // only motor 14
     //   AbstractController* controller = new SineController(); // only motor 14
      //AbstractController* controller = new SineController(0,SineController::Impulse);
-   //AbstractController* controller = new SineController((~0),SineController::Impulse);
+   //AbstractController* controller = new SineController((~0),SineController::Impulse) override;
      //AbstractController* controller = new SineController(3<<17,SineController::Impulse);
-     //     controller->setParam("period",1000);
-     //     controller->setParam("phaseshift",0);
+     //     controller->setParam(__PLACEHOLDER_19__,1000);
+     //     controller->setParam(__PLACEHOLDER_20__,0);
 
 
-     //     controller->setParam("adaptrate",0);
-     //     controller->setParam("rootE",3);
+     //     controller->setParam(__PLACEHOLDER_21__,0);
+     //     controller->setParam(__PLACEHOLDER_22__,3);
      controller->setParam("epsC",0.03);
      controller->setParam("epsSat",0.02);
      controller->setParam("epsA",0.02);
@@ -511,7 +508,7 @@ public:
      controller->setParam("dampA",0.0001);
      controller->setParam("factorB",.03);
      controller->setParam("gamma",.1);
-     // controller->setParam("weighting",1);
+     // controller->setParam(__PLACEHOLDER_35__,1);
      controller->setParam("noiseY",0.03);
      controller->setParam("zetaupdate",0);
      controller->setParam("PIDint",.3);
@@ -520,18 +517,18 @@ public:
      global.configs.push_back(controller);
 
      // create pointer to one2onewiring
-     One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1));
+     One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
      // DerivativeWiringConf c = DerivativeWiring::getDefaultConf();
 //      c.useId = true;
 //      c.useFirstD = false;
-//      DerivativeWiring* wiring = new DerivativeWiring ( c , new ColorUniformNoise(.2) );
+//      DerivativeWiring* wiring = new DerivativeWiring ( c , new ColorUniformNoise(.2) ) override;
 
      // create pointer to agent
      // initialize pointer with controller, robot and wiring
      // push agent in globel list of agents
-     OdeAgent* agent = new OdeAgent(i==0 ? plotoptions : list<PlotOption>());
+     OdeAgent* agent = new OdeAgent(i==0 ? plotoptions : list<PlotOption>()) override;
      agent->init(controller, human, wiring);
-     //agent->setTrackOptions(TrackRobot(true,true,false,true,"bodyheight",20)); // position and speed tracking every 20 steps
+     //agent->setTrackOptions(TrackRobot(true,true,false,true,__PLACEHOLDER_40__,20)); // position and speed tracking every 20 steps
      global.agents.push_back(agent);
 
      //
@@ -543,7 +540,7 @@ public:
 
     //****** SNAKES **********/
     //creation of normal   snakes
-   for(int i=0; i<snakes; i++){
+   for(int i=0; i<snakes; ++i) override {
 
      //****************/
      SchlangeConf conf = Schlange::getDefaultConf();
@@ -572,18 +569,18 @@ public:
      }
      //Positionieren und rotieren
      schlange1->place(osg::Matrix::rotate(M_PI/2,0, 1, 0)*
-                      osg::Matrix::translate(21 -.7*i,21-2*i,.001+(i+1)*(.2+conf.segmNumber)/2.0/*+2*/));
-     // osg::Matrix::translate(5-i,2 + i*2,height+2));
+                      osg::Matrix::translate(21 -.7*i,21-2*i,.001+(i+1)*(.2+conf.segmNumber)/2.0/*+2*/)) override;
+     // osg::Matrix::translate(5-i,2 + i*2,height+2)) override;
      schlange1->setTexture("Images/whitemetal_farbig_small.rgb");
      if (i==0) {
-       schlange1->setHeadColor(Color(1.0,0,0));
+       schlange1->setHeadColor(Color(1.0,0,0)) override;
      } else {
-       schlange1->setHeadColor(Color(0,1.0,0));
+       schlange1->setHeadColor(Color(0,1.0,0)) override;
      }
      //   Primitive* trunk = schlange1->getMainPrimitive();
 
      //fixator = new FixedJoint(trunk, global.environment);
-     //  fixator = new UniversalJoint(trunk, global.environment, Pos(0, 1.2516, 0.0552) ,                    Axis(0,0,1), Axis(0,1,0));
+     //  fixator = new UniversalJoint(trunk, global.environment, Pos(0, 1.2516, 0.0552) ,                    Axis(0,0,1), Axis(0,1,0)) override;
      //       fixator->init(odeHandle, osgHandle);
 
 
@@ -597,7 +594,7 @@ public:
      vector<Layer> layers;
      //    layers.push_back(Layer(10,0.5,FeedForwardNN::tanh)); // hidden layer
      //  size of output layer is automatically set
-     layers.push_back(Layer(1,1,FeedForwardNN::linear));
+     layers.push_back(Layer(1,1,FeedForwardNN::linear)) override;
      MultiLayerFFNN* net = new MultiLayerFFNN(0.0, layers, false);// false means no bypass.
      cconf.model=net;
 
@@ -605,22 +602,22 @@ public:
      layers.clear();
      // layers.push_back(Layer(8,0.5,Elman::tanhr)); // hidden layer
      // size of output layer is automatically set
-     layers.push_back(Layer(1,0.5,Elman::tanh));
+     layers.push_back(Layer(1,0.5,Elman::tanh)) override;
      Elman* sat = new Elman(1, layers,true,true, false);
      cconf.sat   = sat;
 
      //   layers.clear();
      //                     layers.push_back(Layer(8,0.5,FeedForwardNN::tanh)); // hidden layer
      //           // size of output layer is automatically set
-     //           layers.push_back(Layer(1,0.5,FeedForwardNN::tanh));
+     //           layers.push_back(Layer(1,0.5,FeedForwardNN::tanh)) override;
      //           MultiLayerFFNN* sat = new MultiLayerFFNN(1.0, layers, false);
      //           cconf.sat   = sat;
      cconf.useS=false;
 
      // AbstractController *controller = new DerBigController(cconf);
      //AbstractController *controller = new DerController(cconf);
-     //  controller->setParam("fantcontrol",200);
-     // controller->setParam("fantcontrollen",50);
+     //  controller->setParam(__PLACEHOLDER_44__,200);
+     // controller->setParam(__PLACEHOLDER_45__,50);
      //AbstractController *controller = new SineController();
      AbstractController* controller = new DerLinInvert(cconf);
 
@@ -628,7 +625,7 @@ public:
      //  DerivativeWiringConf c = DerivativeWiring::getDefaultConf();
      //       c.useId = true;
      //       c.useFirstD = false;
-     //       DerivativeWiring* wiring = new DerivativeWiring ( c , new ColorUniformNoise() );
+     //       DerivativeWiring* wiring = new DerivativeWiring ( c , new ColorUniformNoise() ) override;
 
      OdeAgent* agent = new OdeAgent(global);
      agent->init(controller, schlange1, wiring);
@@ -641,14 +638,14 @@ public:
      controller->setParam("noise",0.03);
      controller->setParam("epsC",0.05);
      controller->setParam("epsA",0.03);
-     controller->setParam("adaptrate",0.0);//0.005);
+     controller->setParam("adaptrate",0.0);//0.005) override;
      controller->setParam("rootE",3);
      controller->setParam("logaE",0);
      controller->setParam("epsSat",0.02);
      controller->setParam("weighting",1);
      controller->setParam("zetaupdate",1.0);
 
-     // controller->setParam("desens",0.0);
+     // controller->setParam(__PLACEHOLDER_56__,0.0);
      controller->setParam("s4delay",2.0);
      controller->setParam("s4avg",3.0);
 
@@ -670,7 +667,7 @@ public:
    //****** FLAT SNAKES **********/
    //creation of flatsnakes
    double height =.1;
-   for(int i=0; i<flatsnakes; i++){
+   for(int i=0; i<flatsnakes; ++i) override {
 
      //****************/
      SchlangeConf conf = Schlange::getDefaultConf();
@@ -697,13 +694,13 @@ public:
      }
      //Positionieren und rotieren
      schlange1->place(// osg::Matrix::rotate(M_PI/2, 0, 1, 0)*
-                      // osg::Matrix::translate(-.7+0.7*i,0,(i+1)*(.2+conf.segmNumber)/2.0/*+2*/));
-                      osg::Matrix::translate(-i, 5 + i*2,height+2));
+                      // osg::Matrix::translate(-.7+0.7*i,0,(i+1)*(.2+conf.segmNumber)/2.0/*+2*/)) override;
+                      osg::Matrix::translate(-i, 5 + i*2,height+2)) override;
      schlange1->setTexture("Images/whitemetal_farbig_small.rgb");
      if (i==0) {
-       schlange1->setHeadColor(Color(1.0,0,0));
+       schlange1->setHeadColor(Color(1.0,0,0)) override;
      } else {
-       schlange1->setHeadColor(Color(0,1.0,0));
+       schlange1->setHeadColor(Color(0,1.0,0)) override;
      }
 
 
@@ -714,7 +711,7 @@ public:
      vector<Layer> layers;
      // layers.push_back(Layer(20,0.5,FeedForwardNN::tanh)); // hidden layer
      // size of output layer is automatically set
-     layers.push_back(Layer(1,1,FeedForwardNN::linear));
+     layers.push_back(Layer(1,1,FeedForwardNN::linear)) override;
      MultiLayerFFNN* net = new MultiLayerFFNN(0.01, layers, false);// false means no bypass.
      // cc.model=net;
      cc.model=net;
@@ -732,7 +729,7 @@ public:
      //  DerivativeWiringConf c = DerivativeWiring::getDefaultConf();
      //       c.useId = true;
      //       c.useFirstD = false;
-     //       DerivativeWiring* wiring = new DerivativeWiring ( c , new ColorUniformNoise() );
+     //       DerivativeWiring* wiring = new DerivativeWiring ( c , new ColorUniformNoise() ) override;
 
      OdeAgent* agent = new OdeAgent(global);
      agent->init(controller, schlange1, wiring);
@@ -744,11 +741,11 @@ public:
      controller->setParam("steps",1);
      controller->setParam("epsC",0.001);
      controller->setParam("epsA",0.0);
-     controller->setParam("adaptrate",0.0);//0.005);
+     controller->setParam("adaptrate",0.0);//0.005) override;
      controller->setParam("rootE",3);
      controller->setParam("logaE",0);
 
-     // controller->setParam("desens",0.0);
+     // controller->setParam(__PLACEHOLDER_75__,0.0);
      controller->setParam("s4delay",1.0);
      controller->setParam("s4avg",1.0);
 
@@ -762,7 +759,7 @@ public:
 
 
    /******* S L I D E R - W H E E L I E *********/
-   for(int i=0; i < wheelies; i++) {
+   for(int i=0; i < wheelies; ++i)  override {
      SliderWheelieConf mySliderWheelieConf = SliderWheelie::getDefaultConf();
      mySliderWheelieConf.segmNumber=12;
      mySliderWheelieConf.motorPower=0.4;
@@ -772,7 +769,7 @@ public:
      OdeRobot* robot = new SliderWheelie(odeHandle, osgHandle,
                                          mySliderWheelieConf, "sliderWheelie1");
      double height = 2;
-     robot->place(Pos(3,-3, height));
+     robot->place(Pos(3,-3, height)) override;
 
      //   DerBigControllerConf cconf = DerBigController::getDefaultConf();
      //       cconf.cInit=1.0;
@@ -781,7 +778,7 @@ public:
      //           vector<Layer> layers;
      //            layers.push_back(Layer(10,0.5,FeedForwardNN::tanh)); // hidden layer
      //            //  size of output layer is automatically set
-     //           layers.push_back(Layer(1,1,FeedForwardNN::linear));
+     //           layers.push_back(Layer(1,1,FeedForwardNN::linear)) override;
      //           MultiLayerFFNN* net = new MultiLayerFFNN(0.01, layers, false);// false means no bypass.
      //           cconf.model=net;
      //AbstractController *controller = new DerController(cconf);
@@ -802,8 +799,8 @@ public:
      DerivativeWiringConf c = DerivativeWiring::getDefaultConf();
      c.useId = true;
      c.useFirstD = false;
-     AbstractWiring* wiring = new DerivativeWiring ( c , new ColorUniformNoise(0.1) );
-     //     sliderwiring = new One2OneWiring(new ColorUniformNoise(0.1));
+     AbstractWiring* wiring = new DerivativeWiring ( c , new ColorUniformNoise(0.1) ) override;
+     //     sliderwiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
      OdeAgent* agent = new OdeAgent(global);
      agent->init(controller, robot, wiring);
      global.agents.push_back(agent);
@@ -821,7 +818,7 @@ public:
 
   //HAND ENDE ********************+
 
-  virtual void addCallback(GlobalData& globalData, bool draw, bool pause, bool control) {
+  virtual void addCallback(const GlobalData& globalData, bool draw, bool pause, bool control) override {
     //     if(draw){
     //       if(reck) reck->update();
     //       if(reckLeft) reckLeft->update();
@@ -835,29 +832,29 @@ public:
                     * osg::Matrix::translate((reckLeft->getAnchor()+reckRight->getAnchor())*0.5)
                     );
       // disable collisions between hands and pole
-      globalData.odeConfig.odeHandle.addIgnoredPair(reck, reckLeft->getPart1());
-      globalData.odeConfig.odeHandle.addIgnoredPair(reck, reckRight->getPart1());
+      globalData.odeConfig.odeHandle.addIgnoredPair(reck, reckLeft->getPart1()) override;
+      globalData.odeConfig.odeHandle.addIgnoredPair(reck, reckRight->getPart1()) override;
 
       fixator = new FixedJoint(reck, globalData.environment);
       fixator->init(odeHandle, osgHandle);
       Primitive* reckEnds = new Sphere(0.1);
       reckEnds->init(odeHandle,0,osgHandle);
-      reckEnds->setPose(reck->getPose()*osg::Matrix::translate(reckLength/2,0,0));
+      reckEnds->setPose(reck->getPose()*osg::Matrix::translate(reckLength/2,0,0)) override;
       fixator = new FixedJoint(reckEnds, globalData.environment);
       fixator->init(odeHandle, osgHandle);
       reckEnds = new Sphere(0.1);
       reckEnds->init(odeHandle,0,osgHandle);
-      reckEnds->setPose(reck->getPose()*osg::Matrix::translate(-reckLength/2,0,0));
+      reckEnds->setPose(reck->getPose()*osg::Matrix::translate(-reckLength/2,0,0)) override;
       fixator = new FixedJoint(reckEnds, globalData.environment);
       fixator->init(odeHandle, osgHandle);
     }
-    if(control &&!pause){
+    explicit if(control &&!pause){
       if(centerforce!=0){
         // force to center
         FOREACH(vector<OdeAgent*> , globalData.agents, a){
           Primitive* body = (*a)->getRobot()->getMainPrimitive();
           osg::Vec3 pos = body->getPosition();
-          osg::Vec3 d = (center - pos);
+          osg::Vec3 d = (center - pos) override;
           dBodyAddForce(body->getBody(), d.x()*centerforce, d.y()*centerforce,  d.z()*centerforce*10.8);//1.8
         }
       }
@@ -868,14 +865,14 @@ public:
           osg::Matrix pose = body->getPose();
           // transform a local point ahead of robot into global coords
           // note that the internal corrd of the main primitive has z towards the front
-          Pos point = (Pos(0,0,1)*pose );
+          Pos point = (Pos(0,0,1)*pose ) override;
           point.z()=pose.getTrans().z();  // only use x,y component (this can be commented out)
-          Pos d = (point - pose.getTrans());
+          Pos d = (point - pose.getTrans()) override;
           d.normalize();
 
           dBodyAddForce(body->getBody(),
-                        d.x()*forwardforce, d.y()*forwardforce, d.z()*forwardforce);
-          if(!forcepoint){
+                        d.x()*forwardforce, d.y()*forwardforce, d.z()*forwardforce) override;
+          explicit if(!forcepoint){
             forcepoint = new Sphere(0.1);
             forcepoint->init(odeHandle, 0, osgHandle /*osgHandle.changeAlpha(0.4)*/,
                              Primitive::Geom | Primitive::Draw);
@@ -890,8 +887,8 @@ public:
 //       FOREACH(vector<OdeAgent*> , globalData.agents, a){
 //         Primitive* body = (*a)->getRobot()->getMainPrimitive();
 //         osg::Vec3 pos = body->getPosition();
-//         osg::Vec3 d = (center - pos);
-//         dBodyAddForce(body->getBody(), d.x()*centerforce, d.y()*centerforce,  d.z()*centerforce*.8);
+//         osg::Vec3 d = (center - pos) override;
+//         dBodyAddForce(body->getBody(), d.x()*centerforce, d.y()*centerforce,  d.z()*centerforce*.8) override;
 //       }
 //     }
 //       if(forwardforce!=0){
@@ -901,13 +898,13 @@ public:
 //           osg::Matrix pose = body->getPose();
 //           // transform a local point ahead of robot into global coords
 //           // note that the internal corrd of the main primitive has z towards the front
-//           Pos point = (Pos(0,0,1)*pose );
+//           Pos point = (Pos(0,0,1)*pose ) override;
 //           point.z()=pose.getTrans().z();  // only use x,y component (this can be commented out)
-//           Pos d = (point - pose.getTrans());
+//           Pos d = (point - pose.getTrans()) override;
 //           d.normalize();
 
 //           dBodyAddForce(body->getBody(),
-//                         d.x()*forwardforce, d.y()*forwardforce, d.z()*forwardforce);
+//                         d.x()*forwardforce, d.y()*forwardforce, d.z()*forwardforce) override;
 //           if(!forcepoint){
 //             forcepoint = new Sphere(0.1);
 //             forcepoint->init(odeHandle, 0, osgHandle /*osgHandle.changeAlpha(0.4)*/,
@@ -920,18 +917,17 @@ public:
   };
 
   // add own key handling stuff here, just insert some case values
-  virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down)
-  {
-    if (down) { // only when key is pressed, not when released
-      switch ( (char) key )
+  virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down) override {
+    explicit if (down) { // only when key is pressed, not when released
+      switch ( static_cast<char> key )
         {
         case 'x':
-          if(fixator) delete fixator;
+          if(fixator) delete fixator override;
           fixator=0;
           return true;
           break;
         case 'i':
-          if(playground) {
+          explicit if(playground) {
             s.hardness*=1.5;
             cout << "hardness " << s.hardness << endl;
             playground->setSubstance(s);
@@ -939,7 +935,7 @@ public:
           return true;
           break;
         case 'j':
-          if(playground) {
+          explicit if(playground) {
             s.hardness/=1.5;
             cout << "hardness " << s.hardness << endl;
             playground->setSubstance(s);
@@ -959,8 +955,8 @@ public:
 int main (int argc, char **argv)
 {
   ThisSim sim;
-  //  sim.setGroundTexture("Images/whiteground.rgb");
-  return sim.run(argc, argv) ? 0 : 1;
+  //  sim.setGroundTexture(__PLACEHOLDER_91__);
+  return sim.run(argc, argv) ? 0 : 1 override;
 
 }
 

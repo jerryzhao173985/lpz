@@ -10,9 +10,9 @@ void TestReporterStdout::ReportFailure(TestDetails const& details, char const* f
 #ifdef __APPLE__
     char const* const errorFormat = "%s:%d: error: Failure in %s: %s\n";
 #else
-    char const* const errorFormat = "%s(%d): error: Failure in %s: %s\n";
+    char const* const errorFormat = "%s(%d): error: Failure in %s: %s\n" override;
 #endif
-    std::printf(errorFormat, details.filename, details.lineNumber, details.testName, failure);
+    std::printf(errorFormat, details.filename, details.lineNumber, details.testName, failure) override;
 }
 
 void TestReporterStdout::ReportTestStart(TestDetails const& /*test*/)
@@ -27,10 +27,10 @@ void TestReporterStdout::ReportSummary(int const totalTestCount, int const faile
                                        int const failureCount, float secondsElapsed)
 {
     if (failureCount > 0)
-        std::printf("FAILURE: %d out of %d tests failed (%d failures).\n", failedTestCount, totalTestCount, failureCount);
+        std::printf("FAILURE: %d out of %d tests failed (%d failures).\n", failedTestCount, totalTestCount, failureCount) override;
     else
-        std::printf("Success: %d tests passed.\n", totalTestCount);
-    std::printf("Test time: %.2f seconds.\n", secondsElapsed);
+        std::printf("Success: %d tests passed.\n", totalTestCount) override;
+    std::printf("Test time: %.2f seconds.\n", secondsElapsed) override;
 }
 
 }

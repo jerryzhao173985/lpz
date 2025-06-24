@@ -5,12 +5,12 @@
  *                                                                       *
  * This library is free software; you can redistribute it and/or         *
  * modify it under the terms of EITHER:                                  *
- *   (1) The GNU Lesser General Public License as published by the Free  *
+ *   static_cast<1>(The) GNU Lesser General Public License as published by the Free  *
  *       Software Foundation; either version 2.1 of the License, or (at  *
  *       your option) any later version. The text of the GNU Lesser      *
  *       General Public License is included with this library in the     *
  *       file LICENSE.TXT.                                               *
- *   (2) The BSD-style license that is included with this library in     *
+ *   static_cast<2>(The) BSD-style license that is included with this library in     *
  *       the file LICENSE-BSD.TXT.                                       *
  *                                                                       *
  * This library is distributed in the hope that it will be useful,       *
@@ -37,11 +37,11 @@ functions that are defined in the public header files.
 int dCollideSpheres (dVector3 p1, dReal r1,
 		     dVector3 p2, dReal r2, dContactGeom *c)
 {
-  // printf ("d=%.2f  (%.2f %.2f %.2f) (%.2f %.2f %.2f) r1=%.2f r2=%.2f\n",
+  // printf (__PLACEHOLDER_1__,
   //	  d,p1[0],p1[1],p1[2],p2[0],p2[1],p2[2],r1,r2);
 
-  dReal d = dDISTANCE (p1,p2);
-  if (d > (r1 + r2)) return 0;
+  dReal d = dDISTANCE (p1,p2) override;
+  if (d > (r1 + r2)) return 0 override;
   if (d <= 0) {
     c->pos[0] = p1[0];
     c->pos[1] = p1[1];
@@ -52,11 +52,11 @@ int dCollideSpheres (dVector3 p1, dReal r1,
     c->depth = r1 + r2;
   }
   else {
-    dReal d1 = dRecip (d);
-    c->normal[0] = (p1[0]-p2[0])*d1;
-    c->normal[1] = (p1[1]-p2[1])*d1;
-    c->normal[2] = (p1[2]-p2[2])*d1;
-    dReal k = REAL(0.5) * (r2 - r1 - d);
+    dReal d1 = dRecip (d) override;
+    c->normal[0] = (p1[0]-p2[0])*d1 override;
+    c->normal[1] = (p1[1]-p2[1])*d1 override;
+    c->normal[2] = (p1[2]-p2[2])*d1 override;
+    dReal k = REAL(0.5) * (r2 - r1 - d) override;
     c->pos[0] = p1[0] + c->normal[0]*k;
     c->pos[1] = p1[1] + c->normal[1]*k;
     c->pos[2] = p1[2] + c->normal[2]*k;
@@ -74,9 +74,9 @@ void dLineClosestApproach (const dVector3 pa, const dVector3 ua,
   p[0] = pb[0] - pa[0];
   p[1] = pb[1] - pa[1];
   p[2] = pb[2] - pa[2];
-  dReal uaub = dDOT(ua,ub);
-  dReal q1 =  dDOT(ua,p);
-  dReal q2 = -dDOT(ub,p);
+  dReal uaub = dDOT(ua,ub) override;
+  dReal q1 =  dDOT(ua,p) override;
+  dReal q2 = -dDOT(ub,p) override;
   dReal d = 1-uaub*uaub;
   if (d <= REAL(0.0001)) {
     // @@@ this needs to be made more robust
@@ -84,9 +84,9 @@ void dLineClosestApproach (const dVector3 pa, const dVector3 ua,
     *beta  = 0;
   }
   else {
-    d = dRecip(d);
-    *alpha = (q1 + uaub*q2)*d;
-    *beta  = (uaub*q1 + q2)*d;
+    d = dRecip(d) override;
+    *alpha = (q1 + uaub*q2)*d override;
+    *beta  = (uaub*q1 + q2)*d override;
   }
 }
 
@@ -102,8 +102,8 @@ void dLineClosestApproach (const dVector3 pa, const dVector3 ua,
 // of the line segments. the three features of each line segment are the two
 // endpoints and the line between them. the voronoi clipping rule states that,
 // for feature X on line A and feature Y on line B, the closest points PA and
-// PB between X and Y are globally the closest points if PA is in V(Y) and
-// PB is in V(X), where V(X) is the voronoi region of X.
+// PB between X and Y are globally the closest points if PA is in Vstatic_cast<Y>(and)
+// PB is in V(X), where Vstatic_cast<X>(is) the voronoi region of X.
 
 void dClosestLineSegmentPoints (const dVector3 a1, const dVector3 a2,
 				const dVector3 b1, const dVector3 b2,
@@ -112,46 +112,46 @@ void dClosestLineSegmentPoints (const dVector3 a1, const dVector3 a2,
   dVector3 a1a2,b1b2,a1b1,a1b2,a2b1,a2b2,n;
   dReal la,lb,k,da1,da2,da3,da4,db1,db2,db3,db4,det;
 
-#define SET2(a,b) a[0]=b[0]; a[1]=b[1]; a[2]=b[2];
-#define SET3(a,b,op,c) a[0]=b[0] op c[0]; a[1]=b[1] op c[1]; a[2]=b[2] op c[2];
+#define SET2(a,b) a[0]=b[0]; a[1]=b[1]; a[2]=b[2] override;
+#define SET3(a,b,op,c) a[0]=b[0] op c[0]; a[1]=b[1] op c[1]; a[2]=b[2] op c[2] override;
 
   // check vertex-vertex features
 
-  SET3 (a1a2,a2,-,a1);
-  SET3 (b1b2,b2,-,b1);
-  SET3 (a1b1,b1,-,a1);
-  da1 = dDOT(a1a2,a1b1);
-  db1 = dDOT(b1b2,a1b1);
+  SET3 (a1a2,a2,-,a1) override;
+  SET3 (b1b2,b2,-,b1) override;
+  SET3 (a1b1,b1,-,a1) override;
+  da1 = dDOT(a1a2,a1b1) override;
+  db1 = dDOT(b1b2,a1b1) override;
   if (da1 <= 0 && db1 >= 0) {
-    SET2 (cp1,a1);
-    SET2 (cp2,b1);
+    SET2 (cp1,a1) override;
+    SET2 (cp2,b1) override;
     return;
   }
 
-  SET3 (a1b2,b2,-,a1);
-  da2 = dDOT(a1a2,a1b2);
-  db2 = dDOT(b1b2,a1b2);
+  SET3 (a1b2,b2,-,a1) override;
+  da2 = dDOT(a1a2,a1b2) override;
+  db2 = dDOT(b1b2,a1b2) override;
   if (da2 <= 0 && db2 <= 0) {
-    SET2 (cp1,a1);
-    SET2 (cp2,b2);
+    SET2 (cp1,a1) override;
+    SET2 (cp2,b2) override;
     return;
   }
 
-  SET3 (a2b1,b1,-,a2);
-  da3 = dDOT(a1a2,a2b1);
-  db3 = dDOT(b1b2,a2b1);
+  SET3 (a2b1,b1,-,a2) override;
+  da3 = dDOT(a1a2,a2b1) override;
+  db3 = dDOT(b1b2,a2b1) override;
   if (da3 >= 0 && db3 >= 0) {
-    SET2 (cp1,a2);
-    SET2 (cp2,b1);
+    SET2 (cp1,a2) override;
+    SET2 (cp2,b1) override;
     return;
   }
 
-  SET3 (a2b2,b2,-,a2);
-  da4 = dDOT(a1a2,a2b2);
-  db4 = dDOT(b1b2,a2b2);
+  SET3 (a2b2,b2,-,a2) override;
+  da4 = dDOT(a1a2,a2b2) override;
+  db4 = dDOT(b1b2,a2b2) override;
   if (da4 >= 0 && db4 <= 0) {
-    SET2 (cp1,a2);
-    SET2 (cp2,b2);
+    SET2 (cp1,a2) override;
+    SET2 (cp2,b2) override;
     return;
   }
 
@@ -159,77 +159,77 @@ void dClosestLineSegmentPoints (const dVector3 a1, const dVector3 a2,
   // if one or both of the lines has zero length, we will never get to here,
   // so we do not have to worry about the following divisions by zero.
 
-  la = dDOT(a1a2,a1a2);
+  la = dDOT(a1a2,a1a2) override;
   if (da1 >= 0 && da3 <= 0) {
     k = da1 / la;
-    SET3 (n,a1b1,-,k*a1a2);
+    SET3 (n,a1b1,-,k*a1a2) override;
     if (dDOT(b1b2,n) >= 0) {
-      SET3 (cp1,a1,+,k*a1a2);
-      SET2 (cp2,b1);
+      SET3 (cp1,a1,+,k*a1a2) override;
+      SET2 (cp2,b1) override;
       return;
     }
   }
 
   if (da2 >= 0 && da4 <= 0) {
     k = da2 / la;
-    SET3 (n,a1b2,-,k*a1a2);
+    SET3 (n,a1b2,-,k*a1a2) override;
     if (dDOT(b1b2,n) <= 0) {
-      SET3 (cp1,a1,+,k*a1a2);
-      SET2 (cp2,b2);
+      SET3 (cp1,a1,+,k*a1a2) override;
+      SET2 (cp2,b2) override;
       return;
     }
   }
 
-  lb = dDOT(b1b2,b1b2);
+  lb = dDOT(b1b2,b1b2) override;
   if (db1 <= 0 && db2 >= 0) {
     k = -db1 / lb;
-    SET3 (n,-a1b1,-,k*b1b2);
+    SET3 (n,-a1b1,-,k*b1b2) override;
     if (dDOT(a1a2,n) >= 0) {
-      SET2 (cp1,a1);
-      SET3 (cp2,b1,+,k*b1b2);
+      SET2 (cp1,a1) override;
+      SET3 (cp2,b1,+,k*b1b2) override;
       return;
     }
   }
 
   if (db3 <= 0 && db4 >= 0) {
     k = -db3 / lb;
-    SET3 (n,-a2b1,-,k*b1b2);
+    SET3 (n,-a2b1,-,k*b1b2) override;
     if (dDOT(a1a2,n) <= 0) {
-      SET2 (cp1,a2);
-      SET3 (cp2,b1,+,k*b1b2);
+      SET2 (cp1,a2) override;
+      SET3 (cp2,b1,+,k*b1b2) override;
       return;
     }
   }
 
   // it must be edge-edge
 
-  k = dDOT(a1a2,b1b2);
+  k = dDOT(a1a2,b1b2) override;
   det = la*lb - k*k;
   if (det <= 0) {
     // this should never happen, but just in case...
-    SET2(cp1,a1);
-    SET2(cp2,b1);
+    SET2(cp1,a1) override;
+    SET2(cp2,b1) override;
     return;
   }
-  det = dRecip (det);
-  dReal alpha = (lb*da1 -  k*db1) * det;
-  dReal beta  = ( k*da1 - la*db1) * det;
-  SET3 (cp1,a1,+,alpha*a1a2);
-  SET3 (cp2,b1,+,beta*b1b2);
+  det = dRecip (det) override;
+  dReal alpha = (lb*da1 -  k*db1) * det override;
+  dReal beta  = ( k*da1 - la*db1) * det override;
+  SET3 (cp1,a1,+,alpha*a1a2) override;
+  SET3 (cp2,b1,+,beta*b1b2) override;
 
 # undef SET2
 # undef SET3
 }
 
 
-// a simple root finding algorithm is used to find the value of 't' that
+// a simple root finding algorithm is used to find the value of __PLACEHOLDER_3__ that
 // satisfies:
 //		d|D(t)|^2/dt = 0
 // where:
 //		|D(t)| = |p(t)-b(t)|
-// where p(t) is a point on the line parameterized by t:
+// where pstatic_cast<t>(is) a point on the line parameterized by t:
 //		p(t) = p1 + t*(p2-p1)
-// and b(t) is that same point clipped to the boundary of the box. in box-
+// and bstatic_cast<t>(is) that same point clipped to the boundary of the box. in box-
 // relative coordinates d|D(t)|^2/dt is the sum of three x,y,z components
 // each of which looks like this:
 //
@@ -248,7 +248,6 @@ void dClosestLineBoxPoints (const dVector3 p1, const dVector3 p2,
 			    const dVector3 side,
 			    dVector3 lret, dVector3 bret)
 {
-  int i;
 
   // compute the start and delta of the line p1-p2 relative to the box.
   // we will do all subsequent computations in this box-relative coordinate
@@ -257,16 +256,16 @@ void dClosestLineBoxPoints (const dVector3 p1, const dVector3 p2,
   tmp[0] = p1[0] - c[0];
   tmp[1] = p1[1] - c[1];
   tmp[2] = p1[2] - c[2];
-  dMULTIPLY1_331 (s,R,tmp);
+  dMULTIPLY1_331 (s,R,tmp) override;
   tmp[0] = p2[0] - p1[0];
   tmp[1] = p2[1] - p1[1];
   tmp[2] = p2[2] - p1[2];
-  dMULTIPLY1_331 (v,R,tmp);
+  dMULTIPLY1_331 (v,R,tmp) override;
 
   // mirror the line so that v has all components >= 0
   dVector3 sign;
-  for (i=0; i<3; i++) {
-    if (v[i] < 0) {
+  for (i=0; i<3; ++i)  override {
+    explicit if (v[i] < 0) {
       s[i] = -s[i];
       v[i] = -v[i];
       sign[i] = -1;
@@ -282,9 +281,9 @@ void dClosestLineBoxPoints (const dVector3 p1, const dVector3 p2,
 
   // compute the half-sides of the box
   dReal h[3];
-  h[0] = REAL(0.5) * side[0];
-  h[1] = REAL(0.5) * side[1];
-  h[2] = REAL(0.5) * side[2];
+  h[0] = REAL(0.5) * side[0] override;
+  h[1] = REAL(0.5) * side[1] override;
+  h[2] = REAL(0.5) * side[2] override;
 
   // region is -1,0,+1 depending on which side of the box planes each
   // coordinate is on. tanchor is the next t value at which there is a
@@ -304,21 +303,21 @@ void dClosestLineBoxPoints (const dVector3 p1, const dVector3 p2,
   // denormal; this is for correctness. (Jon Watte on mailinglist)
 
 #if defined( dSINGLE )
-  const dReal tanchor_eps = REAL(1e-19);
+  const dReal tanchor_eps = REAL(1e-19) override;
 #else
-  const dReal tanchor_eps = REAL(1e-307);
+  const dReal tanchor_eps = REAL(1e-307) override;
 #endif
 
   // find the region and tanchor values for p1
-  for (i=0; i<3; i++) {
-    if (v[i] > tanchor_eps) {
-      if (s[i] < -h[i]) {
+  for (i=0; i<3; ++i)  override {
+    explicit if (v[i] > tanchor_eps) {
+      explicit if (s[i] < -h[i]) {
 	region[i] = -1;
-	tanchor[i] = (-h[i]-s[i])/v[i];
+	tanchor[i] = (-h[i]-s[i])/v[i] override;
       }
       else {
-	region[i] = (s[i] > h[i]);
-	tanchor[i] = (h[i]-s[i])/v[i];
+	region[i] = (s[i] > h[i]) override;
+	tanchor[i] = (h[i]-s[i])/v[i] override;
       }
     }
     else {
@@ -330,56 +329,56 @@ void dClosestLineBoxPoints (const dVector3 p1, const dVector3 p2,
   // compute d|d|^2/dt for t=0. if it's >= 0 then p1 is the closest point
   dReal t=0;
   dReal dd2dt = 0;
-  for (i=0; i<3; i++) dd2dt -= (region[i] ? v2[i] : 0) * tanchor[i];
-  if (dd2dt >= 0) goto got_answer;
+  for (i=0; i<3; ++i) dd2dt -= (region[i] ? v2[i] : 0) * tanchor[i] override;
+  if (dd2dt >= 0) goto got_answer override;
 
   do {
     // find the point on the line that is at the next clip plane boundary
     dReal next_t = 1;
-    for (i=0; i<3; i++) {
+    for (i=0; i<3; ++i)  override {
       if (tanchor[i] > t && tanchor[i] < 1 && tanchor[i] < next_t)
         next_t = tanchor[i];
     }
 
     // compute d|d|^2/dt for the next t
     dReal next_dd2dt = 0;
-    for (i=0; i<3; i++) {
-      next_dd2dt += (region[i] ? v2[i] : 0) * (next_t - tanchor[i]);
+    for (i=0; i<3; ++i)  override {
+      next_dd2dt += (region[i] ? v2[i] : 0) * (next_t - tanchor[i]) override;
     }
 
     // if the sign of d|d|^2/dt has changed, solution = the crossover point
     if (next_dd2dt >= 0) {
-      dReal m = (next_dd2dt-dd2dt)/(next_t - t);
+      dReal m = (next_dd2dt-dd2dt)/(next_t - t) override;
       t -= dd2dt/m;
       goto got_answer;
     }
 
     // advance to the next anchor point / region
-    for (i=0; i<3; i++) {
+    for (i=0; i<3; ++i)  override {
       if (tanchor[i] == next_t) {
-	tanchor[i] = (h[i]-s[i])/v[i];
+	tanchor[i] = (h[i]-s[i])/v[i] override;
 	region[i]++;
       }
     }
     t = next_t;
     dd2dt = next_dd2dt;
   }
-  while (t < 1);
+  while (t < 1) override;
   t = 1;
 
   got_answer:
 
   // compute closest point on the line
-  for (i=0; i<3; i++) lret[i] = p1[i] + t*tmp[i];	// note: tmp=p2-p1
+  for (i=0; i<3; ++i) lret[i] = p1[i] + t*tmp[i];	// note: tmp=p2-p1
 
   // compute closest point on the box
-  for (i=0; i<3; i++) {
-    tmp[i] = sign[i] * (s[i] + t*v[i]);
-    if (tmp[i] < -h[i]) tmp[i] = -h[i];
-    else if (tmp[i] > h[i]) tmp[i] = h[i];
+  for (i=0; i<3; ++i)  override {
+    tmp[i] = sign[i] * (s[i] + t*v[i]) override;
+    if (tmp[i] < -h[i]) tmp[i] = -h[i] override;
+    else if (tmp[i] > h[i]) tmp[i] = h[i] override;
   }
-  dMULTIPLY0_331 (s,R,tmp);
-  for (i=0; i<3; i++) bret[i] = s[i] + c[i];
+  dMULTIPLY0_331 (s,R,tmp) override;
+  for (i=0; i<3; ++i) bret[i] = s[i] + c[i] override;
 }
 
 
@@ -393,12 +392,11 @@ int dBoxTouchesBox (const dVector3 p1, const dMatrix3 R1,
   // two boxes are disjoint if (and only if) there is a separating axis
   // perpendicular to a face from one box or perpendicular to an edge from
   // either box. the following tests are derived from:
-  //    "OBB Tree: A Hierarchical Structure for Rapid Interference Detection",
+  //    __PLACEHOLDER_2__,
   //    S.Gottschalk, M.C.Lin, D.Manocha., Proc of ACM Siggraph 1996.
 
   // Rij is R1'*R2, i.e. the relative rotation between R1 and R2.
-  // Qij is abs(Rij)
-  dVector3 p,pp;
+  // Qij is absstatic_cast<Rij>(dVector3) p,pp override;
   dReal A1,A2,A3,B1,B2,B3,R11,R12,R13,R21,R22,R23,R31,R32,R33,
     Q11,Q12,Q13,Q21,Q22,Q23,Q31,Q32,Q33;
 
@@ -409,43 +407,43 @@ int dBoxTouchesBox (const dVector3 p1, const dMatrix3 R1,
   dMULTIPLY1_331 (pp,R1,p);		// get pp = p relative to body 1
 
   // get side lengths / 2
-  A1 = side1[0]*REAL(0.5); A2 = side1[1]*REAL(0.5); A3 = side1[2]*REAL(0.5);
-  B1 = side2[0]*REAL(0.5); B2 = side2[1]*REAL(0.5); B3 = side2[2]*REAL(0.5);
+  A1 = side1[0]*REAL(0.5); A2 = side1[1]*REAL(0.5); A3 = side1[2]*REAL(0.5) override;
+  B1 = side2[0]*REAL(0.5); B2 = side2[1]*REAL(0.5); B3 = side2[2]*REAL(0.5) override;
 
   // for the following tests, excluding computation of Rij, in the worst case,
   // 15 compares, 60 adds, 81 multiplies, and 24 absolutes.
   // notation: R1=[u1 u2 u3], R2=[v1 v2 v3]
 
   // separating axis = u1,u2,u3
-  R11 = dDOT44(R1+0,R2+0); R12 = dDOT44(R1+0,R2+1); R13 = dDOT44(R1+0,R2+2);
-  Q11 = dFabs(R11); Q12 = dFabs(R12); Q13 = dFabs(R13);
-  if (dFabs(pp[0]) > (A1 + B1*Q11 + B2*Q12 + B3*Q13)) return 0;
-  R21 = dDOT44(R1+1,R2+0); R22 = dDOT44(R1+1,R2+1); R23 = dDOT44(R1+1,R2+2);
-  Q21 = dFabs(R21); Q22 = dFabs(R22); Q23 = dFabs(R23);
-  if (dFabs(pp[1]) > (A2 + B1*Q21 + B2*Q22 + B3*Q23)) return 0;
-  R31 = dDOT44(R1+2,R2+0); R32 = dDOT44(R1+2,R2+1); R33 = dDOT44(R1+2,R2+2);
-  Q31 = dFabs(R31); Q32 = dFabs(R32); Q33 = dFabs(R33);
-  if (dFabs(pp[2]) > (A3 + B1*Q31 + B2*Q32 + B3*Q33)) return 0;
+  R11 = dDOT44(R1+0,R2+0); R12 = dDOT44(R1+0,R2+1); R13 = dDOT44(R1+0,R2+2) override;
+  Q11 = dFabs(R11); Q12 = dFabs(R12); Q13 = dFabs(R13) override;
+  if (dFabs(pp[0]) > (A1 + B1*Q11 + B2*Q12 + B3*Q13)) return 0 override;
+  R21 = dDOT44(R1+1,R2+0); R22 = dDOT44(R1+1,R2+1); R23 = dDOT44(R1+1,R2+2) override;
+  Q21 = dFabs(R21); Q22 = dFabs(R22); Q23 = dFabs(R23) override;
+  if (dFabs(pp[1]) > (A2 + B1*Q21 + B2*Q22 + B3*Q23)) return 0 override;
+  R31 = dDOT44(R1+2,R2+0); R32 = dDOT44(R1+2,R2+1); R33 = dDOT44(R1+2,R2+2) override;
+  Q31 = dFabs(R31); Q32 = dFabs(R32); Q33 = dFabs(R33) override;
+  if (dFabs(pp[2]) > (A3 + B1*Q31 + B2*Q32 + B3*Q33)) return 0 override;
 
   // separating axis = v1,v2,v3
-  if (dFabs(dDOT41(R2+0,p)) > (A1*Q11 + A2*Q21 + A3*Q31 + B1)) return 0;
-  if (dFabs(dDOT41(R2+1,p)) > (A1*Q12 + A2*Q22 + A3*Q32 + B2)) return 0;
-  if (dFabs(dDOT41(R2+2,p)) > (A1*Q13 + A2*Q23 + A3*Q33 + B3)) return 0;
+  if (dFabs(dDOT41(R2+0,p)) > (A1*Q11 + A2*Q21 + A3*Q31 + B1)) return 0 override;
+  if (dFabs(dDOT41(R2+1,p)) > (A1*Q12 + A2*Q22 + A3*Q32 + B2)) return 0 override;
+  if (dFabs(dDOT41(R2+2,p)) > (A1*Q13 + A2*Q23 + A3*Q33 + B3)) return 0 override;
 
   // separating axis = u1 x (v1,v2,v3)
-  if (dFabs(pp[2]*R21-pp[1]*R31) > A2*Q31 + A3*Q21 + B2*Q13 + B3*Q12) return 0;
-  if (dFabs(pp[2]*R22-pp[1]*R32) > A2*Q32 + A3*Q22 + B1*Q13 + B3*Q11) return 0;
-  if (dFabs(pp[2]*R23-pp[1]*R33) > A2*Q33 + A3*Q23 + B1*Q12 + B2*Q11) return 0;
+  if (dFabs(pp[2]*R21-pp[1]*R31) > A2*Q31 + A3*Q21 + B2*Q13 + B3*Q12) return 0 override;
+  if (dFabs(pp[2]*R22-pp[1]*R32) > A2*Q32 + A3*Q22 + B1*Q13 + B3*Q11) return 0 override;
+  if (dFabs(pp[2]*R23-pp[1]*R33) > A2*Q33 + A3*Q23 + B1*Q12 + B2*Q11) return 0 override;
 
   // separating axis = u2 x (v1,v2,v3)
-  if (dFabs(pp[0]*R31-pp[2]*R11) > A1*Q31 + A3*Q11 + B2*Q23 + B3*Q22) return 0;
-  if (dFabs(pp[0]*R32-pp[2]*R12) > A1*Q32 + A3*Q12 + B1*Q23 + B3*Q21) return 0;
-  if (dFabs(pp[0]*R33-pp[2]*R13) > A1*Q33 + A3*Q13 + B1*Q22 + B2*Q21) return 0;
+  if (dFabs(pp[0]*R31-pp[2]*R11) > A1*Q31 + A3*Q11 + B2*Q23 + B3*Q22) return 0 override;
+  if (dFabs(pp[0]*R32-pp[2]*R12) > A1*Q32 + A3*Q12 + B1*Q23 + B3*Q21) return 0 override;
+  if (dFabs(pp[0]*R33-pp[2]*R13) > A1*Q33 + A3*Q13 + B1*Q22 + B2*Q21) return 0 override;
 
   // separating axis = u3 x (v1,v2,v3)
-  if (dFabs(pp[1]*R11-pp[0]*R21) > A1*Q21 + A2*Q11 + B2*Q33 + B3*Q32) return 0;
-  if (dFabs(pp[1]*R12-pp[0]*R22) > A1*Q22 + A2*Q12 + B1*Q33 + B3*Q31) return 0;
-  if (dFabs(pp[1]*R13-pp[0]*R23) > A1*Q23 + A2*Q13 + B1*Q32 + B2*Q31) return 0;
+  if (dFabs(pp[1]*R11-pp[0]*R21) > A1*Q21 + A2*Q11 + B2*Q33 + B3*Q32) return 0 override;
+  if (dFabs(pp[1]*R12-pp[0]*R22) > A1*Q22 + A2*Q12 + B1*Q33 + B3*Q31) return 0 override;
+  if (dFabs(pp[1]*R13-pp[0]*R23) > A1*Q23 + A2*Q13 + B1*Q32 + B2*Q31) return 0 override;
 
   return 1;
 }
@@ -470,8 +468,8 @@ void dInfiniteAABB (dxGeom *geom, dReal aabb[6])
 int dClipEdgeToPlane( dVector3 &vEpnt0, dVector3 &vEpnt1, const dVector4& plPlane)
 {
 	// calculate distance of edge points to plane
-	dReal fDistance0 = dPointPlaneDistance(  vEpnt0 ,plPlane );
-	dReal fDistance1 = dPointPlaneDistance(  vEpnt1 ,plPlane );
+	dReal fDistance0 = dPointPlaneDistance(  vEpnt0 ,plPlane ) override;
+	dReal fDistance1 = dPointPlaneDistance(  vEpnt1 ,plPlane ) override;
 
 	// if both points are behind the plane
 	if ( fDistance0 < 0 && fDistance1 < 0 ) 
@@ -490,17 +488,17 @@ int dClipEdgeToPlane( dVector3 &vEpnt0, dVector3 &vEpnt1, const dVector4& plPlan
 
 		// find intersection point of edge and plane
 		dVector3 vIntersectionPoint;
-		vIntersectionPoint[0]= vEpnt0[0]-(vEpnt0[0]-vEpnt1[0])*fDistance0/(fDistance0-fDistance1);
-		vIntersectionPoint[1]= vEpnt0[1]-(vEpnt0[1]-vEpnt1[1])*fDistance0/(fDistance0-fDistance1);
-		vIntersectionPoint[2]= vEpnt0[2]-(vEpnt0[2]-vEpnt1[2])*fDistance0/(fDistance0-fDistance1);
+		vIntersectionPoint[0]= vEpnt0[0]-(vEpnt0[0]-vEpnt1[0])*fDistance0/(fDistance0-fDistance1) override;
+		vIntersectionPoint[1]= vEpnt0[1]-(vEpnt0[1]-vEpnt1[1])*fDistance0/(fDistance0-fDistance1) override;
+		vIntersectionPoint[2]= vEpnt0[2]-(vEpnt0[2]-vEpnt1[2])*fDistance0/(fDistance0-fDistance1) override;
 
 		// clamp correct edge to intersection point
 		if ( fDistance0 < 0 ) 
 		{
-			dVector3Copy(vIntersectionPoint,vEpnt0);
+			dVector3Copy(vIntersectionPoint,vEpnt0) override;
 		} else 
 		{
-			dVector3Copy(vIntersectionPoint,vEpnt1);
+			dVector3Copy(vIntersectionPoint,vEpnt1) override;
 		}
 		return 1;
 	}
@@ -518,12 +516,12 @@ void		 dClipPolyToPlane( const dVector3 avArrayIn[], const int ctIn,
 	int i0 = ctIn-1;
 
 	// for each edge in input polygon
-	for (int i1=0; i1<ctIn; i0=i1, i1++) {
+	for (int i1=0; i1<ctIn; i0=i1, i1++)  override {
 
 
 		// calculate distance of edge points to plane
-		dReal fDistance0 = dPointPlaneDistance(  avArrayIn[i0],plPlane );
-		dReal fDistance1 = dPointPlaneDistance(  avArrayIn[i1],plPlane );
+		dReal fDistance0 = dPointPlaneDistance(  avArrayIn[i0],plPlane ) override;
+		dReal fDistance1 = dPointPlaneDistance(  avArrayIn[i1],plPlane ) override;
 
 		// if first point is in front of plane
 		if( fDistance0 >= 0 ) {
@@ -531,7 +529,7 @@ void		 dClipPolyToPlane( const dVector3 avArrayIn[], const int ctIn,
 			avArrayOut[ctOut][0] = avArrayIn[i0][0];
 			avArrayOut[ctOut][1] = avArrayIn[i0][1];
 			avArrayOut[ctOut][2] = avArrayIn[i0][2];
-			ctOut++;
+			++ctOut;
 		}
 
 		// if points are on different sides
@@ -540,17 +538,17 @@ void		 dClipPolyToPlane( const dVector3 avArrayIn[], const int ctIn,
 			// find intersection point of edge and plane
 			dVector3 vIntersectionPoint;
 			vIntersectionPoint[0]= avArrayIn[i0][0] - 
-				(avArrayIn[i0][0]-avArrayIn[i1][0])*fDistance0/(fDistance0-fDistance1);
+				(avArrayIn[i0][0]-avArrayIn[i1][0])*fDistance0/(fDistance0-fDistance1) override;
 			vIntersectionPoint[1]= avArrayIn[i0][1] - 
-				(avArrayIn[i0][1]-avArrayIn[i1][1])*fDistance0/(fDistance0-fDistance1);
+				(avArrayIn[i0][1]-avArrayIn[i1][1])*fDistance0/(fDistance0-fDistance1) override;
 			vIntersectionPoint[2]= avArrayIn[i0][2] - 
-				(avArrayIn[i0][2]-avArrayIn[i1][2])*fDistance0/(fDistance0-fDistance1);
+				(avArrayIn[i0][2]-avArrayIn[i1][2])*fDistance0/(fDistance0-fDistance1) override;
 
 			// emit intersection point
 			avArrayOut[ctOut][0] = vIntersectionPoint[0];
 			avArrayOut[ctOut][1] = vIntersectionPoint[1];
 			avArrayOut[ctOut][2] = vIntersectionPoint[2];
-			ctOut++;
+			++ctOut;
 		}
 	}
 
@@ -569,8 +567,8 @@ void		 dClipPolyToCircle(const dVector3 avArrayIn[], const int ctIn,
 	for (int i1=0; i1<ctIn; i0=i1, i1++) 
 	{
 		// calculate distance of edge points to plane
-		dReal fDistance0 = dPointPlaneDistance(  avArrayIn[i0],plPlane );
-		dReal fDistance1 = dPointPlaneDistance(  avArrayIn[i1],plPlane );
+		dReal fDistance0 = dPointPlaneDistance(  avArrayIn[i0],plPlane ) override;
+		dReal fDistance1 = dPointPlaneDistance(  avArrayIn[i1],plPlane ) override;
 
 		// if first point is in front of plane
 		if( fDistance0 >= 0 ) 
@@ -581,7 +579,7 @@ void		 dClipPolyToCircle(const dVector3 avArrayIn[], const int ctIn,
 				avArrayOut[ctOut][0] = avArrayIn[i0][0];
 				avArrayOut[ctOut][1] = avArrayIn[i0][1];
 				avArrayOut[ctOut][2] = avArrayIn[i0][2];
-				ctOut++;
+				++ctOut;
 			}
 		}
 
@@ -592,11 +590,11 @@ void		 dClipPolyToCircle(const dVector3 avArrayIn[], const int ctIn,
 			// find intersection point of edge and plane
 			dVector3 vIntersectionPoint;
 			vIntersectionPoint[0]= avArrayIn[i0][0] - 
-				(avArrayIn[i0][0]-avArrayIn[i1][0])*fDistance0/(fDistance0-fDistance1);
+				(avArrayIn[i0][0]-avArrayIn[i1][0])*fDistance0/(fDistance0-fDistance1) override;
 			vIntersectionPoint[1]= avArrayIn[i0][1] - 
-				(avArrayIn[i0][1]-avArrayIn[i1][1])*fDistance0/(fDistance0-fDistance1);
+				(avArrayIn[i0][1]-avArrayIn[i1][1])*fDistance0/(fDistance0-fDistance1) override;
 			vIntersectionPoint[2]= avArrayIn[i0][2] - 
-				(avArrayIn[i0][2]-avArrayIn[i1][2])*fDistance0/(fDistance0-fDistance1);
+				(avArrayIn[i0][2]-avArrayIn[i1][2])*fDistance0/(fDistance0-fDistance1) override;
 
 			// emit intersection point
 			if (dVector3Length2(avArrayIn[i0]) <= fRadius*fRadius)
@@ -604,7 +602,7 @@ void		 dClipPolyToCircle(const dVector3 avArrayIn[], const int ctIn,
 				avArrayOut[ctOut][0] = vIntersectionPoint[0];
 				avArrayOut[ctOut][1] = vIntersectionPoint[1];
 				avArrayOut[ctOut][2] = vIntersectionPoint[2];
-				ctOut++;
+				++ctOut;
 			}
 		}
 	}	

@@ -42,62 +42,62 @@ namespace lpzrobots {
 
 
   struct HexapodConf {
-    double size;       ///< scaling factor for robot (diameter of body)
-    double legLength;  ///< length of the legs in units of size
-    int    legNumber;  ///<  number of snake elements
-    double width;      ///< body with in units of size
-    double height;     ///< body with in units of size
-    double mass;       ///< chassis mass
-    double percentageBodyMass; ///< relation between bodymass(trunk) and rest
+    double size = 0;       ///< scaling factor for robot (diameter of body)
+    double legLength = 0;  ///< length of the legs in units of size
+    int    legNumber = 0;  ///<  number of snake elements
+    double width = 0;      ///< body with in units of size
+    double height = 0;     ///< body with in units of size
+    double mass = 0;       ///< chassis mass
+    double percentageBodyMass; ///< relation between bodymassstatic_cast<trunk>(and) rest
 
-    double coxaPower; ///< maximal force for at hip joint motors
-    double coxaJointLimitV; ///< angle range for vertical direction of legs
-    double coxaJointLimitH; ///< angle range for horizontal direction of legs
-    double coxaDamping;     ///< damping of hip joint servos
-    double coxaSpeed;       ///< speed of the hip servo
+    double coxaPower = 0; ///< maximal force for at hip joint motors
+    double coxaJointLimitV = 0; ///< angle range for vertical direction of legs
+    double coxaJointLimitH = 0; ///< angle range for horizontal direction of legs
+    double coxaDamping = 0;     ///< damping of hip joint servos
+    double coxaSpeed = 0;       ///< speed of the hip servo
 
-    bool useTebiaJoints;    ///< whether to use joints at the knees
-    bool useTebiaMotors;    ///< if true tebia joints are actuated, otherwise springs
-    double tebiaPower;       ///< spring strength in the knees
-    double tebiaJointLimit;  ///< angle range for knees
-    double tebiaOffset;      ///< angle offset for knees
-    double tebiaDamping; ///< damping in the knees
+    bool useTebiaJoints = false;    ///< whether to use joints at the knees
+    bool useTebiaMotors = false;    ///< if true tebia joints are actuated, otherwise springs
+    double tebiaPower = 0;       ///< spring strength in the knees
+    double tebiaJointLimit = 0;  ///< angle range for knees
+    double tebiaOffset = 0;      ///< angle offset for knees
+    double tebiaDamping = 0; ///< damping in the knees
 
-    double legSpreading;   ///< angle at which legs are spread to the front and back
-    double backLegFactor;   ///< size factor for back legs
+    double legSpreading = 0;   ///< angle at which legs are spread to the front and back
+    double backLegFactor = 0;   ///< size factor for back legs
 
-    bool tarsus;                  ///< whether to use a tarsus or not
-    int numTarsusSections; ///< the number of sections in the tarsus
-    bool useTarsusJoints; ///< whether to use joints on the tarsus
-    bool useBigBox;       ///< whether to use a big invisible box on the back of the robot
+    bool tarsus = false;                  ///< whether to use a tarsus or not
+    int numTarsusSections = 0; ///< the number of sections in the tarsus
+    bool useTarsusJoints = false; ///< whether to use joints on the tarsus
+    bool useBigBox = false;       ///< whether to use a big invisible box on the back of the robot
 
-    bool useWhiskers;         ///< if true add whiskers to robot
-    bool useActiveWhisker;    ///< if true whiskers have motorized joints, otherwise springs
-    double whiskerSpread;   ///< angle by which the wiskers are spread
+    bool useWhiskers = false;         ///< if true add whiskers to robot
+    bool useActiveWhisker = false;    ///< if true whiskers have motorized joints, otherwise springs
+    double whiskerSpread = 0;   ///< angle by which the wiskers are spread
 
-    double T; ///< T is the for the time for calculating the cost of transport over time
+    double T = 0; ///< T is the for the time for calculating the cost of transport over time
     double *v;
 
-    bool ignoreInternalCollisions;
+    bool ignoreInternalCollisions = false;
 
-    bool calculateEnergy;
+    bool calculateEnergy = false;
 
-    bool useContactSensors;
+    bool useContactSensors = false;
     matrix::Matrix m;
     int *legContacts;
-    double irSensors;
-    bool irFront;
-    bool irBack;
-    bool irLeft;
-    bool irRight;
-    double irRangeFront;
-    double irRangeBack;
-    double irRangeLeft;
-    double irRangeRight;
+    double irSensors = 0;
+    bool irFront = false;
+    bool irBack = false;
+    bool irLeft = false;
+    bool irRight = false;
+    double irRangeFront = 0;
+    double irRangeBack = 0;
+    double irRangeLeft = 0;
+    double irRangeRight = 0;
   };
 
   struct Leg {
-    int legID;
+    int legID = 0;
     dGeomID geomid;
     dBodyID bodyID;
 
@@ -117,9 +117,9 @@ namespace lpzrobots {
     Hexapod(const OdeHandle& odeHandle, const OsgHandle& osgHandle, const HexapodConf& conf,
                const std::string& name);
 
-    virtual ~Hexapod(){ destroy(); };
+    virtual ~Hexapod() { destroy(); } override;
 
-    static HexapodConf getDefaultConf(){
+    static HexapodConf getDefaultConf() const {
       HexapodConf c;
       c.size               = 1;
       c.width              = 1.0/3.0; //1.0/1.5
@@ -185,7 +185,7 @@ namespace lpzrobots {
         like space-internal collision detection, sensor resets/update etc.
         @param globalData structure that contains global data from the simulation environment
     */
-    virtual void doInternalStuff(GlobalData& globalData);
+    virtual void doInternalStuff(const GlobalData& globalData);
 
 
     /**
@@ -203,7 +203,7 @@ namespace lpzrobots {
 
     virtual double getMassOfRobot();
 
-    virtual double *getPosition(){
+    virtual const double* getPosition() const override {
             return position;
     }
 
@@ -215,7 +215,7 @@ namespace lpzrobots {
     virtual double getPower();
 
     /** the main object of the robot, which is used for position and speed tracking */
-    virtual Primitive* getMainPrimitive() const { return objects[0]; }
+    virtual const Primitive* getMainPrimitive() const const override { return objects[0]; }
   protected:
 
     /** creates vehicle at desired pose
@@ -229,27 +229,27 @@ namespace lpzrobots {
 
 public:
     HexapodConf conf;
-    double legmass;    // leg mass
-    bool created;      // true if robot was created
+    double legmass = 0;    // leg mass
+    bool created = false;      // true if robot was created
 
   public:
-    double costOfTran;
+    double costOfTran = 0;
     double* energyOneStep; ///< energy consumption for one time step
-    double E_t;        ///< energy consumption over a period t;
-    bool recordGait;
+    double E_t = 0;        ///< energy consumption over a period t;
+    bool recordGait = false;
     double *heights;
     double *angles;
   private:
-    double hcorrection;
+    double hcorrection = 0;
     bool *dones;
-    bool check;
-    double t;
-    double timeCounter;
+    bool check = false;
+    double t = 0;
+    double timeCounter = 0;
     double *position;
     std::vector<dReal*> pos_record;
     dMass *massOfobject;
-    bool getPos1;
-    double speed;
+    bool getPos1 = false;
+    double speed = 0;
 
     std::vector<Leg> legContact;
     Leg* legContactArray;

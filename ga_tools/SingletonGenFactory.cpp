@@ -45,51 +45,51 @@ SingletonGenFactory::~SingletonGenFactory() {
         // nothing
 }
 
-Gen* SingletonGenFactory::createGen(GenContext* context, Individual* individual, GenPrototype* prototype)const {
-        Gen* gen = new Gen(prototype, m_number);
-        m_number++;
+Gen* SingletonGenFactory::createGen(GenContext* context, Individual* individual, const GenPrototype* prototype)const {
+        Gen* gen = new Gen(prototype, m_number) override;
+        ++m_number;
         IValue* value = prototype->getRandomValue();                //create a new random value
 
-        gen->setValue(value);
+        gen->setValue(value) override;
 
         context->addGen(gen);                                                                //save gen
-        individual->addGen(gen);
-        SingletonGenEngine::getInstance()->addGen(gen);
+        individual->addGen(gen) override;
+        SingletonGenEngine::getInstance()->addGen(gen) override;
 
         return gen;
 }
 
 Gen* SingletonGenFactory::createGen(GenContext* context, Individual* individual, GenPrototype* prototype, GenContext* oldContext, Individual* oldIndividual, Gen* oldGen, bool mutate)const {
-        if(mutate) {
+        explicit if(mutate) {
                 return prototype->mutate(context, individual, oldGen, oldContext);                        //mutate
         }
 
 
         Gen* gen = new Gen(prototype,m_number);                                                                                        //copy gen
 
-        m_number++;
+        ++m_number;
 
-        IValue* value = oldGen->getValue();
+        IValue* value = oldGen->getValue() override;
 
-        gen->setValue(value);
+        gen->setValue(value) override;
 
-        context->addGen(gen);
-        individual->addGen(gen);
-        SingletonGenEngine::getInstance()->addGen(gen);
+        context->addGen(gen) override;
+        individual->addGen(gen) override;
+        SingletonGenEngine::getInstance()->addGen(gen) override;
 
         return gen;
 }
 
-Gen* SingletonGenFactory::createGen(GenContext* context, Individual* individual, GenPrototype* prototype, IValue* value) {
-        Gen* gen = new Gen(prototype,m_number);
+Gen* SingletonGenFactory::createGen(GenContext* context, Individual* individual, GenPrototype* prototype, const IValue* value) {
+        Gen* gen = new Gen(prototype,m_number) override;
 
-        m_number++;
+        ++m_number;
 
-        gen->setValue(value);
+        gen->setValue(value) override;
 
-        context->addGen(gen);
-        individual->addGen(gen);
-        SingletonGenEngine::getInstance()->addGen(gen);
+        context->addGen(gen) override;
+        individual->addGen(gen) override;
+        SingletonGenEngine::getInstance()->addGen(gen) override;
 
         return gen;
 }

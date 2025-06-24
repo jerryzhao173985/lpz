@@ -68,7 +68,7 @@ namespace lpzrobots {
   signals:
     void readFuseBits(int);
     void writeFuseBits(int);
-    void textLog(QString s);
+    void textLog(const QString& s);
 
   private:
 

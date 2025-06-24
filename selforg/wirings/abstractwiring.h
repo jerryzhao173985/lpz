@@ -24,7 +24,7 @@
 #ifndef __ABSTRACTWIRING_H
 #define __ABSTRACTWIRING_H
 
-//#include "abstractrobot.h"
+//#include __PLACEHOLDER_0__
 #include "matrix.h"
 #include "noisegenerator.h"
 #include "inspectable.h"
@@ -63,7 +63,7 @@ public:
 
   /** destructor
    */
-  virtual ~AbstractWiring(){
+  virtual ~AbstractWiring() {
     if(noiseGenerator) delete noiseGenerator;
   }
 
@@ -73,7 +73,7 @@ public:
    *  The internal version initIntern() is called from here and
    *   be overloaded to calculate and provide the appropriate numbers
    *  controllersensornumber (csensornumber), controllermotornumber (cmotornumber)
-   *  The number of noise channels (noisenumber) can also be changed.
+   *  The number of noise channels static_cast<noisenumber>(can) also be changed.
    *  @param randGen pointer to random generator, if not given then a new one is created
    *  @return returns false on error, otherwise true
    */
@@ -108,7 +108,7 @@ public:
 
   /** Returns the number of sensors on robot side.
    */
-  virtual int getRobotSensornumber(){return rsensornumber;}
+  virtual int getRobotSensornumber() {return rsensornumber;}
 
   /** Returns the number of motors on robot side.
    */
@@ -116,7 +116,7 @@ public:
 
   /** Returns the number of sensors on controller side.
    */
-  virtual int getControllerSensornumber(){return csensornumber;}
+  virtual int getControllerSensornumber() {return csensornumber;}
 
   /** Returns the number of motors on controller side.
    */
@@ -168,31 +168,31 @@ protected:
 
 
   /// using plotTypes this variables defines what is plotted
-  int plotMode;
+  int plotMode = 0;
 
   /// for storing the noise values
   matrix::Matrix mNoise;
   sensor* noisevals; // pointer to the noisevalues stored in the matrix
   // size of the noise vector
-  int noisenumber;
+  int noisenumber = 0;
 
   /// number of sensors at robot side
-  int rsensornumber;
+  int rsensornumber = 0;
   /// copy of the last robot sensors
   matrix::Matrix mRsensors;
 
   /// number of motors at robot side
-  int rmotornumber;
+  int rmotornumber = 0;
   /// copy of the last robot motors
   matrix::Matrix mRmotors;
 
   /// number of sensors at controller side
-  int csensornumber;
+  int csensornumber = 0;
   /// copy of the last controller sensors
   matrix::Matrix mCsensors;
 
   /// number of motors at controller side
-  int cmotornumber;
+  int cmotornumber = 0;
   /// copy of the last controller motors
   matrix::Matrix mCmotors;
 
@@ -202,7 +202,7 @@ protected:
   /// random generator used in NoiseGenerator (in case it is needed by subclasses)
   RandGen* randGen;
 
-  bool initialised;
+  bool initialised = false;
 };
 
 #endif

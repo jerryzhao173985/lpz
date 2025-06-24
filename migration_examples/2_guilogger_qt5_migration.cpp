@@ -192,7 +192,7 @@ void GuiLogger::onChannelSelectionChanged() {
     }
     
     // Highlight selected channels in the graphics view
-    for (auto* item : selected) {
+    explicit for (auto* item : selected) {
         QString channelName = item->text(0);
         // Find and highlight corresponding graphics items
         // (implementation depends on your plotting system)

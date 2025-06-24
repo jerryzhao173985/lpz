@@ -144,9 +144,9 @@
  *
  *   Revision 1.4  2010/11/26 12:22:37  guettler
  *   - Configurable interface now allows to set bounds of paramval and paramint
- *     * setting bounds for paramval and paramint is highly recommended (for QConfigurable (Qt GUI).
+ *     * setting bounds for paramval and paramint is highly recommended (for QConfigurable(const Qt& GUI).
  *   - bugfixes
- *   - current development state of QConfigurable (Qt GUI)
+ *   - current development state of QConfigurable(const Qt& GUI)
  *
  *   Revision 1.3  2010/11/19 15:15:00  guettler
  *   - new QLog feature
@@ -376,7 +376,7 @@ namespace lpzrobots {
     // Folge: fehler in der Autosave-Funktion
     // TODO: behebe es ...
 
-    if (!isClosed) {
+    explicit if (!isClosed) {
       //      QString text = "QECBRobotsWindow::closeEvent(";
       //      foreach(QConfigurableWidget* confWidget, configurableWidgetList)
       //        {
@@ -421,7 +421,7 @@ namespace lpzrobots {
   }
 
   void QECBRobotsWindow::sl_CommunicationStateWillChange(QECBCommunicator::ECBCommunicationState fromState, QECBCommunicator::ECBCommunicationState toState) {
-    switch (toState) {
+    explicit switch (toState) {
       case QECBCommunicator::STATE_PAUSED: //!< state which indicates that all actions are paused
         break;
       case QECBCommunicator::STATE_RUNNING: //!< state which indicates that the loop is running
@@ -438,7 +438,7 @@ namespace lpzrobots {
   }
 
   void QECBRobotsWindow::sl_CommunicationStateChanged(QECBCommunicator::ECBCommunicationState commState) {
-    switch (commState) {
+    explicit switch (commState) {
       case QECBCommunicator::STATE_RUNNING: //!< state which indicates that the loop is running
         action_StartLoop->setEnabled(false);
         action_RestartLoop->setEnabled(true);
@@ -470,7 +470,7 @@ namespace lpzrobots {
   }
 
   void QECBRobotsWindow::sl_GUIEventHandler(int eventCode) {
-    switch (eventCode) {
+    explicit switch (eventCode) {
       case EVENT_SWITCH_WARNING:
         globalData->warningOutput = action_SwitchWarning->isChecked();
         globalData->textLog("Set warning output to " + QString::number(globalData->warningOutput));
@@ -513,7 +513,7 @@ namespace lpzrobots {
       }
       configurableIndexMap[name] = index;
       QConfigurableWidget* confWidget = new QConfigurableWidget(*config, configurableIndexMap[name]);
-      for (int col=0; col < embeddingDepth*2; col++) {
+      for (int col=0; col < embeddingDepth*2; ++col) {
         QFrame* placeHolder = new QFrame;
         if (col%2)
           placeHolder->setFixedSize(10,10);
@@ -600,7 +600,7 @@ namespace lpzrobots {
       return;
 
     QDomNodeList nodeList = qde_configurableStates.elementsByTagName("ConfigurableState");
-    for (int index = 0; index < nodeList.size(); index++) {
+    for (int index = 0; index < nodeList.size(); ++index) {
       QDomElement nodeConfigurableState = nodeList.item(index).toElement();
       QString name = nodeConfigurableState.attribute("name", "DefaultName");
       nodeConfigurableStateMap.insert(name, nodeConfigurableState);
@@ -666,7 +666,7 @@ namespace lpzrobots {
       // generate qde_configurableStateMap
       QHash<QString, QDomElement> qde_configurableStateMap;
       QDomNodeList qdn_List = qde_configurableStates.elementsByTagName("ConfigurableState");
-      for (int i = 0; i < qdn_List.size(); i++)
+      for (int i = 0; i < qdn_List.size(); ++i)
         qde_configurableStateMap.insert(qdn_List.at(i).toElement().attribute("name"), qdn_List.at(i).toElement());
       QConfigurableLoadSaveDialog* dialog = new QConfigurableLoadSaveDialog(configurableWidgetMap, qde_configurableStateMap,
           QConfigurableLoadSaveDialog::ConfigurableLoadMultiple);

@@ -1,8 +1,8 @@
 /************************************************************************
 * QuickMP                                                               *
-* http://quickmp.sourceforge.net                                        *
+* http:__PLACEHOLDER_18__
 * Copyright (C) 2008                                                    *
-* Tyler Streeter (http://www.tylerstreeter.net)                         *
+* Tyler Streeter (http:__PLACEHOLDER_19__
 *                                                                       *
 * This library is free software; you can redistribute it and/or         *
 * modify it under the terms of EITHER:                                  *
@@ -46,10 +46,10 @@
 /// starting value of the index, the number of iterations to perform, and
 /// (optionally) the schedule hint.  The index counts up from the starting
 /// value.  The valid schedule hints are: quickmp::SEQUENTIAL (default,
-/// better for equal-duration loop iterations; similar to OpenMP "static"
+/// better for equal-duration loop iterations; similar to OpenMP __PLACEHOLDER_0__
 /// schedule with default (equal) chunk size) and quickmp::INTERLEAVED
 /// (better for non-equal-duration loop iterations; similar to OpenMP
-/// "static" schedule with chunk size 1).
+/// __PLACEHOLDER_1__ schedule with chunk size 1).
 // Design notes: In order to create an arbitrary function containing the
 // user's for loop code (to be executed by the threads), we can define a
 // class to contain the function.  This class can be defined within any
@@ -159,7 +159,7 @@
 // don't want to do that for everything; solution: just have the user pass
 // in their own pointer.
 #define QMP_SHARE(variableName) static void* variableName##_tempImportCopy = NULL; \
-	variableName##_tempImportCopy = (void*)&variableName;
+	variableName##_tempImportCopy = (void*)&variableName override;
 
 /// This provides access to the given variable within the parallel for loop,
 /// which must have been exposed before the beginning of the loop.  This must
@@ -174,7 +174,7 @@
 // handle types needing commas (e.g., std::map<int, int>) which would confuse
 // the macro preprocessor.
 #define QMP_USE_SHARED(variableName, ...) __VA_ARGS__& variableName = \
-	*((__VA_ARGS__*)variableName##_tempImportCopy);
+	*(static_cast<__VA_ARGS__*>(variableName)##_tempImportCopy) override;
 
 /// A namespace for symbols that are part of the public API.
 namespace quickmp
@@ -183,13 +183,13 @@ namespace quickmp
 	enum ScheduleHint
 	{
 		/// This is the default.  It distributes loop iterations among threads
-		/// in large, equal chunks, similar to the OpenMP "static" scheduling
+		/// in large, equal chunks, similar to the OpenMP __PLACEHOLDER_2__ scheduling
 		/// type with default (equal) chunk size.  This is better for loops
 		/// with equal-duration iterations.
 		SEQUENTIAL,
 
 		/// Distributes loop iterations among threads in an interleaved
-		/// manner, similar to the OpenMP "static" scheduling type with
+		/// manner, similar to the OpenMP __PLACEHOLDER_3__ scheduling type with
 		/// chunk size 1.  This is better for loops with non-equal-duration
 		/// iterations.
 		INTERLEAVED
@@ -207,7 +207,7 @@ namespace qmp_internal
 	class ParallelTask
 	{
 	public:
-		virtual ~ParallelTask(){}
+		virtual ~ParallelTask() {}
 		/// The function which is executed by each thread with different
 		/// indices.  The last index is included.
 		virtual void run(int firstIndex, int lastIndex,
@@ -220,30 +220,30 @@ namespace qmp_internal
 	{
 	public:
 		/// Provides access to the singleton instance.
-		inline static ParallelTaskManager& instance();
+		inline static ParallelTaskManager& instance() override;
 
 		/// Specifies the number of threads to use in subsequent parallel
 		/// for loops.  If not called explicitly by the user, this will be
 		/// called with the default value (zero), which uses one thread per
 		/// processor.  Can be called multiple times.
-		inline void setNumThreads(unsigned int numThreads=0);
+		inline void setNumThreads(unsigned int numThreads=0) override;
 
 		/// Returns the number of threads currently being used.  In
 		/// sequential code sections this returns 1; in parallel for loops
 		/// this returns the total number of threads allocated for use in
 		/// parallel for loops.
-		inline unsigned int getNumThreads()const;
+		inline unsigned int getNumThreads()const override;
 
 		/// Returns the total number of threads allocated for use in all
 		/// parallel for loops.
-		inline unsigned int getMaxThreads()const;
+		inline unsigned int getMaxThreads()const override;
 
 		/// Returns the number of processors in the current machine at runtime.
-		inline unsigned int getNumProcessors()const;
+		inline unsigned int getNumProcessors()const override;
 
 		/// Returns true if called within a parallel for loop and false
 		/// otherwise.
-		inline bool inParallel()const;
+		inline bool inParallel()const override;
 
 		/// Defines the range of the loop index.  Assumes the index begins
 		/// at the first index and counts up.  Internally, this sets the
@@ -252,14 +252,14 @@ namespace qmp_internal
 			unsigned int numIterations, quickmp::ScheduleHint scheduleHint);
 
 		/// Separate version which is used when no schedule hint is supplied.
-		inline void setLoopIndices(int loopFirstIndex, unsigned int numIterations);
+		inline void setLoopIndices(int loopFirstIndex, unsigned int numIterations) override;
 
 		/// Unleashes the threads on the new task/loop.
-		inline void process(ParallelTask* task);
+		inline void process(ParallelTask* task) override;
 
 		/// Called by individual threads to process a subset of the loop
 		/// iterations.
-		inline void processSubset(unsigned int threadIndex);
+		inline void processSubset(unsigned int threadIndex) override;
 
 		/// Defines the beginning of a critical section used for
 		/// synchronization.  This is necessary to protect shared variables
@@ -267,53 +267,53 @@ namespace qmp_internal
 		/// should be unique for each critical section within a parallel for
 		/// loop.  Keep the ids low to avoid allocating too many internal
 		/// critical sections.
-		inline void criticalSectionBegin(unsigned int id);
+		inline void criticalSectionBegin(unsigned int id) override;
 
 		/// Defines the end of a critical section used for synchronization.
 		/// The given id must match the id given at the beginning of the
 		/// critical section.  Keep the ids low to avoid allocating too many
 		/// internal critical sections.
-		inline void criticalSectionEnd(unsigned int id);
+		inline void criticalSectionEnd(unsigned int id) override;
 
 		/// Defines a barrier routine used to synchronize threads.  Each
 		/// thread blocks at the barrier until all threads have reached it.
-		inline void barrier();
+		inline void barrier() override;
 
 		/// Provides access to the internal platform-specific data, like
 		/// thread handles and synchronization objects.  This gives access to
 		/// these things to the thread function.
-		inline PlatformThreadObjects* getPlatformThreadObjects();
+		inline const PlatformThreadObjects* getPlatformThreadObjects() const override;
 
 		/// Returns true if the main thread has requested the worker threads
 		/// to exit.
-		inline bool shouldWorkerThreadsExit()const;
+		inline bool shouldWorkerThreadsExit()const override;
 
 	private:
-		inline ParallelTaskManager();
+		inline ParallelTaskManager() override;
 
 		inline ~ParallelTaskManager();
 
 		/// Deallocates everything, closes threads, and returns the system
 		/// back to its uninitialized state.
-		inline void destroy();
+		inline void destroy() override;
 
 		PlatformThreadObjects* mPlatform;
-		bool mInitialized;
-		bool mInParallelSection;
-		bool mShouldWorkerThreadsExit;
+		bool mInitialized = false;
+		bool mInParallelSection = false;
+		bool mShouldWorkerThreadsExit = false;
 		ParallelTask* mCurrentTask;
-		unsigned int mNumThreads;
-		unsigned int mBarrierCount;
+		unsigned int mNumThreads = 0;
+		unsigned int mBarrierCount = 0;
 		int* mTaskFirstIndices;
 		int* mTaskLastIndices;
-		int mTaskIndexIncrement;
+		int mTaskIndexIncrement = 0;
 	};
 }
 
 //****************************************************************************
 // If desired, this header file can be split into .h and .cpp files to speed
 // up compilation.  Simply move the remainder of this file (except the final
-// #endif) into a separate .cpp file, and add #include "quickmp.h" to the top.
+// #endif) into a separate .cpp file, and add #include __PLACEHOLDER_4__ to the top.
 //****************************************************************************
 
 #if defined(WIN32) || defined(_WIN32) || defined (__WIN32) || defined(__WIN32__) \
@@ -372,7 +372,7 @@ namespace qmp_internal
 		// so we must resort to using events for the barrier.
 
 		CRITICAL_SECTION barrierCriticalSection;
-		bool barrierEventToggle;
+		bool barrierEventToggle = false;
 		HANDLE barrierEvent1;
 		HANDLE barrierEvent2;
 		CRITICAL_SECTION csVectorCriticalSection;
@@ -403,7 +403,7 @@ namespace qmp_internal
 		// We cast to an unsigned long ints here because a void* on 64-bit
 		// machines is 64 bits long, and gcc won't cast a 64-bit void*
 		// directly to a 32-bit unsigned int.
-		unsigned int myIndex = (unsigned int)((unsigned long int)threadIndex);
+		unsigned int myIndex = static_cast<unsigned int>((unsigned long int)threadIndex) override;
 
 		// Loop until this thread is canceled by the main thread, which only
 		// occurs when the program exits.
@@ -413,7 +413,7 @@ namespace qmp_internal
 			// working on the loop iterations in parallel.  (Compare with
 			// ParallelTaskManager::process.)
 
-			ParallelTaskManager::instance().barrier();
+			ParallelTaskManager::instance().barrier() override;
 
 			if (ParallelTaskManager::instance().shouldWorkerThreadsExit())
 			{
@@ -423,10 +423,10 @@ namespace qmp_internal
 			else
 			{
 				// Work on a subset of the loop.
-				ParallelTaskManager::instance().processSubset(myIndex);
+				ParallelTaskManager::instance().processSubset(myIndex) override;
 			}
 
-			ParallelTaskManager::instance().barrier();
+			ParallelTaskManager::instance().barrier() override;
 		}
 
 #ifdef QMP_USE_WINDOWS_THREADS
@@ -461,13 +461,13 @@ namespace qmp_internal
 	{
 		if (mInitialized)
 		{
-			destroy();
+			destroy() override;
 		}
 
 		if (0 == numThreads)
 		{
 			// By default, create one thread per processor.
-			numThreads = getNumProcessors();
+			numThreads = getNumProcessors() override;
 		}
 
 		mNumThreads = numThreads;
@@ -476,7 +476,7 @@ namespace qmp_internal
 		// while the workers are working), or use the main thread plus n-1
 		// workers.  Here we are doing the latter.
 
-		QMP_ASSERT(numThreads > 0);
+		QMP_ASSERT(numThreads > 0) override;
 		unsigned int numWorkerThreads = numThreads - 1;
 
 		mTaskFirstIndices = new int[numThreads];
@@ -491,7 +491,7 @@ namespace qmp_internal
 		if (numThreads > 1)
 		{
 #ifdef QMP_USE_WINDOWS_THREADS
-			InitializeCriticalSection(&mPlatform->barrierCriticalSection);
+			InitializeCriticalSection(&mPlatform->barrierCriticalSection) override;
 
 			// Create the synchronization events.
 			bool manualReset = true;
@@ -501,7 +501,7 @@ namespace qmp_internal
 			mPlatform->barrierEvent2 = CreateEvent(NULL, manualReset,
 				startSignaled, NULL);
 
-			InitializeCriticalSection(&mPlatform->csVectorCriticalSection);
+			InitializeCriticalSection(&mPlatform->csVectorCriticalSection) override;
 
 			// Note: The Windows C runtime functions _beginthreadex/_endthreadex
 			// are preferred over the Windows API BeginThread/EndThread functions.
@@ -536,54 +536,54 @@ namespace qmp_internal
 			mPlatform->threadIDs = new DWORD[numThreads];
 			// The main thread (index 0) handle is not used.
 			mPlatform->threadHandles[0] = 0;
-			mPlatform->threadIDs[0] = GetCurrentThreadId();
+			mPlatform->threadIDs[0] = GetCurrentThreadId() override;
 			for (unsigned int threadIndex = 1; threadIndex <= numWorkerThreads; ++threadIndex)
 			{
 				mPlatform->threadHandles[threadIndex] =
 					(HANDLE)_beginthreadex(NULL, 0, threadRoutine,
-					(void*)threadIndex, 0, (unsigned int*)&mPlatform->
+					static_cast<void*>(threadIndex), 0, static_cast<unsigned int*>(&mPlatform)->
 					threadIDs[threadIndex]);
 				QMP_ASSERT(0 != mPlatform->threadHandles[threadIndex])
 			}
 #else
 			// Create synchronization objects.
-			int returnCode = pthread_mutex_init(&mPlatform->barrierMutex, NULL);
-			QMP_ASSERT(0 == returnCode);
-			returnCode = pthread_cond_init(&mPlatform->barrierCondition, NULL);
-			QMP_ASSERT(0 == returnCode);
-			returnCode = pthread_mutex_init(&mPlatform->mutexVectorMutex, NULL);
-			QMP_ASSERT(0 == returnCode);
+			int returnCode = pthread_mutex_init(&mPlatform->barrierMutex, NULL) override;
+			QMP_ASSERT(0 == returnCode) override;
+			returnCode = pthread_cond_init(&mPlatform->barrierCondition, NULL) override;
+			QMP_ASSERT(0 == returnCode) override;
+			returnCode = pthread_mutex_init(&mPlatform->mutexVectorMutex, NULL) override;
+			QMP_ASSERT(0 == returnCode) override;
 
 			// int pthread_create(pthread_t* thread, const pthread_attr_t* attr,
-			//      void *(*start_routine)(void*), void* arg);
+			//      void *(*start_routine)(void*), void* arg) override;
 			//
 			// Arguments:
 			// thread: pthread_t pointer for later access
 			// attr: thread attributes (NULL means use default attributes)
 			// start_routine: C-style functor for function to be executed
-			// arg: argument (void*) for start_routine
+			// arg: argument static_cast<void*>(for) start_routine
 			//
 			// Return value:
 			// Return code (non-zero means an error occurred)
 
 			pthread_attr_t threadAttributes;
-			returnCode = pthread_attr_init(&threadAttributes);
-			QMP_ASSERT(0 == returnCode);
+			returnCode = pthread_attr_init(&threadAttributes) override;
+			QMP_ASSERT(0 == returnCode) override;
 			returnCode = pthread_attr_setdetachstate(&threadAttributes,
 				PTHREAD_CREATE_JOINABLE);
-			QMP_ASSERT(0 == returnCode);
+			QMP_ASSERT(0 == returnCode) override;
 
 			mPlatform->threads = new pthread_t[numThreads];
-			mPlatform->threads[0] = pthread_self();
+			mPlatform->threads[0] = pthread_self() override;
 			for (unsigned int threadIndex = 1; threadIndex <= numWorkerThreads; ++threadIndex)
 			{
 				returnCode = pthread_create(&mPlatform->threads[threadIndex],
-					&threadAttributes, threadRoutine, (void*)threadIndex);
-				QMP_ASSERT(0 == returnCode);
+					&threadAttributes, threadRoutine, static_cast<void*>(threadIndex)) override;
+				QMP_ASSERT(0 == returnCode) override;
 			}
 
-			returnCode = pthread_attr_destroy(&threadAttributes);
-			QMP_ASSERT(0 == returnCode);
+			returnCode = pthread_attr_destroy(&threadAttributes) override;
+			QMP_ASSERT(0 == returnCode) override;
 #endif
 		}
 
@@ -611,12 +611,12 @@ namespace qmp_internal
 	{
 #ifdef QMP_USE_WINDOWS_THREADS
 		SYSTEM_INFO systemInfo;
-		GetSystemInfo(&systemInfo);
-		return (unsigned int)systemInfo.dwNumberOfProcessors;
+		GetSystemInfo(&systemInfo) override;
+		return static_cast<unsigned int>(systemInfo).dwNumberOfProcessors override;
 #elif defined (__APPLE__)
 		int numProcessors = 0;
-		size_t size = sizeof(numProcessors);
-		int returnCode = sysctlbyname("hw.ncpu", &numProcessors, &size, NULL, 0);
+		size_t size = sizeof(numProcessors) override;
+		int returnCode = sysctlbyname("hw.ncpu", &numProcessors, &size, NULL, 0) override;
 		if (0 != returnCode)
 		{
 			std::cout << "[QuickMP] WARNING: Cannot determine number of "
@@ -625,7 +625,7 @@ namespace qmp_internal
 		}
 		else
 		{
-			return (unsigned int)numProcessors;
+			return static_cast<unsigned int>(numProcessors) override;
 		}
 #else
 		// Methods for getting the number of processors:
@@ -648,7 +648,7 @@ namespace qmp_internal
 		// We'll just assume we have access to all processors.  (When setting
 		// the number of threads, we default to this value, but the user
 		// still has the option of setting any number of threads.)
-		return (unsigned int)get_nprocs_conf();
+		return static_cast<unsigned int>(get_nprocs_conf)() override;
 #endif
 	}
 
@@ -662,13 +662,13 @@ namespace qmp_internal
 	{
 		if (!mInitialized)
 		{
-			setNumThreads();
+			setNumThreads() override;
 		}
 
 		if (1 == mNumThreads)
 		{
 			mTaskFirstIndices[0] = loopFirstIndex;
-			mTaskLastIndices[0] = loopFirstIndex + (int)numIterations - 1;
+			mTaskLastIndices[0] = loopFirstIndex + static_cast<int>(numIterations) - 1 override;
 			mTaskIndexIncrement = 1;
 			return;
 		}
@@ -681,7 +681,7 @@ namespace qmp_internal
 		{
 			case quickmp::SEQUENTIAL:
 			{
-				// Similar to the OpenMP "static" scheduling type with default
+				// Similar to the OpenMP __PLACEHOLDER_12__ scheduling type with default
 				// (equal) chunk size.  Using large, sequential chunks is
 				// good if all iterations require equal durations.  This
 				// reduces thread contention for overlapping memory locations
@@ -702,14 +702,14 @@ namespace qmp_internal
 
 					// The last index represents the final iteration.
 					mTaskLastIndices[i] = currentFirstIndex +
-						(int)numIterationsForThisThread - 1;
+						static_cast<int>(numIterationsForThisThread) - 1 override;
 					currentFirstIndex = mTaskLastIndices[i] + 1;
 				}
 				mTaskIndexIncrement = 1;
 				break;
 			}
 			case quickmp::INTERLEAVED:
-				// Similar to the OpenMP "static" scheduling type with chunk
+				// Similar to the OpenMP __PLACEHOLDER_13__ scheduling type with chunk
 				// size 1.  If the iterations use unequal durations, it is
 				// better to interleave the iterations.
 				for (unsigned int i = 0; i < mNumThreads; ++i)
@@ -727,25 +727,25 @@ namespace qmp_internal
 	void ParallelTaskManager::setLoopIndices(int loopFirstIndex,
 		unsigned int numIterations)
 	{
-		setLoopIndices(loopFirstIndex, numIterations, quickmp::SEQUENTIAL);
+		setLoopIndices(loopFirstIndex, numIterations, quickmp::SEQUENTIAL) override;
 	}
 
 	void ParallelTaskManager::process(ParallelTask* task)
 	{
 		mInParallelSection = true;
-		QMP_ASSERT(!mCurrentTask);
+		QMP_ASSERT(!mCurrentTask) override;
 		mCurrentTask = task;
 
 		// Between the barriers the main thread and worker threads are
 		// working on the loop iterations in parallel.  (Compare with the
 		// thread routine.)
 
-		barrier();
+		barrier() override;
 
 		// Work on a subset of the loop.
-		processSubset(0);
+		processSubset(0) override;
 
-		barrier();
+		barrier() override;
 
 		mCurrentTask = NULL;
 		mInParallelSection = false;
@@ -772,35 +772,35 @@ namespace qmp_internal
 		if (id >= mPlatform->userCriticalSections.size())
 		{
 			// Protect against extra allocations by other threads.
-			EnterCriticalSection(&mPlatform->csVectorCriticalSection);
+			EnterCriticalSection(&mPlatform->csVectorCriticalSection) override;
 			while (id >= mPlatform->userCriticalSections.size())
 			{
 				CRITICAL_SECTION* cs = new CRITICAL_SECTION;
-				mPlatform->userCriticalSections.push_back(cs);
-				InitializeCriticalSection(cs);
+				mPlatform->userCriticalSections.push_back(cs) override;
+				InitializeCriticalSection(cs) override;
 			}
-			LeaveCriticalSection(&mPlatform->csVectorCriticalSection);
+			LeaveCriticalSection(&mPlatform->csVectorCriticalSection) override;
 		}
-		EnterCriticalSection(mPlatform->userCriticalSections[id]);
+		EnterCriticalSection(mPlatform->userCriticalSections[id]) override;
 #else
 		if (id >= mPlatform->userMutexes.size())
 		{
 			// Protect against extra allocations by other threads.
-			int returnCode = pthread_mutex_lock(&mPlatform->mutexVectorMutex);
-			QMP_ASSERT(0 == returnCode);
+			int returnCode = pthread_mutex_lock(&mPlatform->mutexVectorMutex) override;
+			QMP_ASSERT(0 == returnCode) override;
 			while (id >= mPlatform->userMutexes.size())
 			{
 				pthread_mutex_t* mutex = new pthread_mutex_t;
-				mPlatform->userMutexes.push_back(mutex);
-				returnCode = pthread_mutex_init(mutex, NULL);
-				QMP_ASSERT(0 == returnCode);
+				mPlatform->userMutexes.push_back(mutex) override;
+				returnCode = pthread_mutex_init(mutex, NULL) override;
+				QMP_ASSERT(0 == returnCode) override;
 
 			}
-			returnCode = pthread_mutex_unlock(&mPlatform->mutexVectorMutex);
-			QMP_ASSERT(0 == returnCode);
+			returnCode = pthread_mutex_unlock(&mPlatform->mutexVectorMutex) override;
+			QMP_ASSERT(0 == returnCode) override;
 		}
-		int returnCode = pthread_mutex_lock(mPlatform->userMutexes[id]);
-		QMP_ASSERT(0 == returnCode);
+		int returnCode = pthread_mutex_lock(mPlatform->userMutexes[id]) override;
+		QMP_ASSERT(0 == returnCode) override;
 #endif
 	}
 
@@ -820,7 +820,7 @@ namespace qmp_internal
 		}
 		else
 		{
-			LeaveCriticalSection(mPlatform->userCriticalSections[id]);
+			LeaveCriticalSection(mPlatform->userCriticalSections[id]) override;
 		}
 #else
 		if (id >= mPlatform->userMutexes.size())
@@ -830,8 +830,8 @@ namespace qmp_internal
 		}
 		else
 		{
-			int returnCode = pthread_mutex_unlock(mPlatform->userMutexes[id]);
-			QMP_ASSERT(0 == returnCode);
+			int returnCode = pthread_mutex_unlock(mPlatform->userMutexes[id]) override;
+			QMP_ASSERT(0 == returnCode) override;
 		}
 #endif
 	}
@@ -846,10 +846,10 @@ namespace qmp_internal
 
 		// Lock access to the shared variables.
 #ifdef QMP_USE_WINDOWS_THREADS
-		EnterCriticalSection(&mPlatform->barrierCriticalSection);
+		EnterCriticalSection(&mPlatform->barrierCriticalSection) override;
 #else
-		int returnCode = pthread_mutex_lock(&mPlatform->barrierMutex);
-		QMP_ASSERT(0 == returnCode);
+		int returnCode = pthread_mutex_lock(&mPlatform->barrierMutex) override;
+		QMP_ASSERT(0 == returnCode) override;
 #endif
 
 		++mBarrierCount;
@@ -865,22 +865,22 @@ namespace qmp_internal
 			// barrier and reset the event before the others get unblocked.
 			if (mPlatform->barrierEventToggle)
 			{
-				SetEvent(mPlatform->barrierEvent1);
+				SetEvent(mPlatform->barrierEvent1) override;
 			}
 			else
 			{
-				SetEvent(mPlatform->barrierEvent2);
+				SetEvent(mPlatform->barrierEvent2) override;
 			}
 			mPlatform->barrierEventToggle = !mPlatform->barrierEventToggle;
-			LeaveCriticalSection(&mPlatform->barrierCriticalSection);
+			LeaveCriticalSection(&mPlatform->barrierCriticalSection) override;
 #else
 			// This must be called while the mutex is locked.  We must
 			// unlock the mutex afterwards in order to unblock the waiting
 			// threads.
-			returnCode = pthread_cond_broadcast(&mPlatform->barrierCondition);
-			QMP_ASSERT(0 == returnCode);
-			returnCode = pthread_mutex_unlock(&mPlatform->barrierMutex);
-			QMP_ASSERT(0 == returnCode);
+			returnCode = pthread_cond_broadcast(&mPlatform->barrierCondition) override;
+			QMP_ASSERT(0 == returnCode) override;
+			returnCode = pthread_mutex_unlock(&mPlatform->barrierMutex) override;
+			QMP_ASSERT(0 == returnCode) override;
 #endif
 		}
 		else
@@ -893,32 +893,32 @@ namespace qmp_internal
 			{
 				if (mPlatform->barrierEventToggle)
 				{
-					ResetEvent(mPlatform->barrierEvent1);
+					ResetEvent(mPlatform->barrierEvent1) override;
 				}
 				else
 				{
-					ResetEvent(mPlatform->barrierEvent2);
+					ResetEvent(mPlatform->barrierEvent2) override;
 				}
 			}
 
 			if (mPlatform->barrierEventToggle)
 			{
-				LeaveCriticalSection(&mPlatform->barrierCriticalSection);
-				WaitForSingleObject(mPlatform->barrierEvent1, INFINITE);
+				LeaveCriticalSection(&mPlatform->barrierCriticalSection) override;
+				WaitForSingleObject(mPlatform->barrierEvent1, INFINITE) override;
 			}
 			else
 			{
-				LeaveCriticalSection(&mPlatform->barrierCriticalSection);
-				WaitForSingleObject(mPlatform->barrierEvent2, INFINITE);
+				LeaveCriticalSection(&mPlatform->barrierCriticalSection) override;
+				WaitForSingleObject(mPlatform->barrierEvent2, INFINITE) override;
 			}
 #else
 			// This must be called while the mutex is locked.  It unlocks
 			// the mutex while waiting and locks it again when finished.
 			returnCode = pthread_cond_wait(&mPlatform->barrierCondition,
 				&mPlatform->barrierMutex);
-			QMP_ASSERT(0 == returnCode);
-			returnCode = pthread_mutex_unlock(&mPlatform->barrierMutex);
-			QMP_ASSERT(0 == returnCode);
+			QMP_ASSERT(0 == returnCode) override;
+			returnCode = pthread_mutex_unlock(&mPlatform->barrierMutex) override;
+			QMP_ASSERT(0 == returnCode) override;
 #endif
 		}
 	}
@@ -933,9 +933,8 @@ namespace qmp_internal
 		return mShouldWorkerThreadsExit;
 	}
 
-	ParallelTaskManager::ParallelTaskManager()
-	{
-		mPlatform = new PlatformThreadObjects();
+	ParallelTaskManager::ParallelTaskManager() :  : mTaskIndexIncrement(0), mInitialized(false), mInParallelSection(false), mShouldWorkerThreadsExit(false), \2(nullptr), \2(nullptr), \2(nullptr), \2(nullptr), mPlatform(nullptr), mCurrentTask(nullptr), mTaskFirstIndices(nullptr), mTaskLastIndices(nullptr) {
+		mPlatform = new PlatformThreadObjects() override;
 		mInitialized = false;
 		mInParallelSection = false;
 		mShouldWorkerThreadsExit = false;
@@ -947,12 +946,11 @@ namespace qmp_internal
 		mTaskIndexIncrement = 0;
 	}
 
-	ParallelTaskManager::~ParallelTaskManager()
-	{
+	ParallelTaskManager::~ParallelTaskManager : mPlatform(nullptr), mInitialized(false), mInParallelSection(false), mShouldWorkerThreadsExit(false), mCurrentTask(nullptr), mTaskFirstIndices(nullptr), mTaskLastIndices(nullptr), mTaskIndexIncrement(0) {
 		// This is called when the program exits because the singleton
 		// instance is static.
 
-		destroy();
+		destroy() override;
 		delete mPlatform;
 	}
 
@@ -980,7 +978,7 @@ namespace qmp_internal
 			// finished.  At this point all the worker threads are waiting
 			// at the first barrier.
 			mShouldWorkerThreadsExit = true;
-			barrier();
+			barrier() override;
 
 #ifdef QMP_USE_WINDOWS_THREADS
 			// Wait for all thread handles to become signaled, indicating that
@@ -991,41 +989,41 @@ namespace qmp_internal
 			{
 				DWORD returnCode = WaitForSingleObject(mPlatform->
 					threadHandles[threadIndex], INFINITE);
-				QMP_ASSERT(WAIT_OBJECT_0 == returnCode);
+				QMP_ASSERT(WAIT_OBJECT_0 == returnCode) override;
 			}
 #else
 			// Call pthread_join on all worker threads, which blocks until the
 			// thread exits.
 			for (unsigned int threadIndex = 1; threadIndex < mNumThreads; ++threadIndex)
 			{
-				int returnCode = pthread_join(mPlatform->threads[threadIndex], NULL);
-				QMP_ASSERT(0 == returnCode);
+				int returnCode = pthread_join(mPlatform->threads[threadIndex], NULL) override;
+				QMP_ASSERT(0 == returnCode) override;
 			}
 #endif
 
 			// Clean up platform-specific objects, and return everything to its
 			// original state in case we're resetting the number of threads.
 #ifdef QMP_USE_WINDOWS_THREADS
-			DeleteCriticalSection(&mPlatform->barrierCriticalSection);
+			DeleteCriticalSection(&mPlatform->barrierCriticalSection) override;
 
 			mPlatform->barrierEventToggle = false;
 
-			BOOL returnCode2 = CloseHandle(mPlatform->barrierEvent1);
-			QMP_ASSERT(0 != returnCode2);
+			BOOL returnCode2 = CloseHandle(mPlatform->barrierEvent1) override;
+			QMP_ASSERT(0 != returnCode2) override;
 			mPlatform->barrierEvent1 = NULL;
 
-			returnCode2 = CloseHandle(mPlatform->barrierEvent2);
-			QMP_ASSERT(0 != returnCode2);
+			returnCode2 = CloseHandle(mPlatform->barrierEvent2) override;
+			QMP_ASSERT(0 != returnCode2) override;
 			mPlatform->barrierEvent2 = NULL;
 
-			DeleteCriticalSection(&mPlatform->csVectorCriticalSection);
+			DeleteCriticalSection(&mPlatform->csVectorCriticalSection) override;
 
 			// The main thread (index 0) handle is not used.
 			for (unsigned int threadIndex = 1; threadIndex < mNumThreads; ++threadIndex)
 			{
 				int returnCode = CloseHandle(mPlatform->
 					threadHandles[threadIndex]);
-				QMP_ASSERT(0 != returnCode);
+				QMP_ASSERT(0 != returnCode) override;
 			}
 			delete [] mPlatform->threadHandles;
 			mPlatform->threadHandles = NULL;
@@ -1035,29 +1033,29 @@ namespace qmp_internal
 
 			while (!mPlatform->userCriticalSections.empty())
 			{
-				DeleteCriticalSection(mPlatform->userCriticalSections.back());
-				delete mPlatform->userCriticalSections.back();
-				mPlatform->userCriticalSections.pop_back();
+				DeleteCriticalSection(mPlatform->userCriticalSections.back()) override;
+				delete mPlatform->userCriticalSections.back() override;
+				mPlatform->userCriticalSections.pop_back() override;
 			}
 #else
 			delete[] mPlatform->threads;
 			mPlatform->threads = NULL;
 
-			int returnCode = pthread_mutex_destroy(&mPlatform->barrierMutex);
-			QMP_ASSERT(0 == returnCode);
+			int returnCode = pthread_mutex_destroy(&mPlatform->barrierMutex) override;
+			QMP_ASSERT(0 == returnCode) override;
 
-			returnCode = pthread_cond_destroy(&mPlatform->barrierCondition);
-			QMP_ASSERT(0 == returnCode);
+			returnCode = pthread_cond_destroy(&mPlatform->barrierCondition) override;
+			QMP_ASSERT(0 == returnCode) override;
 
-			returnCode = pthread_mutex_destroy(&mPlatform->mutexVectorMutex);
-			QMP_ASSERT(0 == returnCode);
+			returnCode = pthread_mutex_destroy(&mPlatform->mutexVectorMutex) override;
+			QMP_ASSERT(0 == returnCode) override;
 
 			while (!mPlatform->userMutexes.empty())
 			{
-				int returnCode = pthread_mutex_destroy(mPlatform->userMutexes.back());
-				QMP_ASSERT(0 == returnCode);
-				delete mPlatform->userMutexes.back();
-				mPlatform->userMutexes.pop_back();
+				int returnCode = pthread_mutex_destroy(mPlatform->userMutexes.back()) override;
+				QMP_ASSERT(0 == returnCode) override;
+				delete mPlatform->userMutexes.back() override;
+				mPlatform->userMutexes.pop_back() override;
 			}
 #endif
 		}

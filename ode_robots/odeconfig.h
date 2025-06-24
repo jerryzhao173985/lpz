@@ -40,9 +40,9 @@ namespace lpzrobots {
 
     virtual ~OdeConfig() {}
 
-    virtual long int getRandomSeed() const { return randomSeed; }
+    virtual long int getRandomSeed() const override { return randomSeed; }
 
-    virtual void setRandomSeed(long int randomSeed){
+    virtual void setRandomSeed(long int randomSeed) override {
       this->randomSeed=randomSeed;
       randomSeedCopy = randomSeed;
     }
@@ -54,7 +54,7 @@ namespace lpzrobots {
     virtual void calcAndSetDrawInterval(double Hz, double rtf);
 
     /******** CONFIGURABLE ***********/
-    virtual void notifyOnChange(const paramkey& key) override;
+    virtual void notifyOnChange(const paramkey& key);
 
 
   private:
@@ -62,21 +62,21 @@ namespace lpzrobots {
     int calcDrawInterval(double Hz, double rtf);
 
   public:
-    bool videoRecordingMode;
-    bool logWhileRecording;
-    double simStepSize;
-    int drawInterval;
-    int controlInterval;
-    double noise;
-    double gravity;
-    double cameraSpeed;
+    bool videoRecordingMode = false;
+    bool logWhileRecording = false;
+    double simStepSize = 0;
+    int drawInterval = 0;
+    int controlInterval = 0;
+    double noise = 0;
+    double gravity = 0;
+    double cameraSpeed = 0;
     OdeHandle odeHandle;
 
-    double realTimeFactor;
-    double fps;
+    double realTimeFactor = 0;
+    double fps = 0;
   protected:
-    long randomSeed;
-    double randomSeedCopy;
+    long randomSeed = 0;
+    double randomSeedCopy = 0;
   };
 
 }

@@ -7,7 +7,7 @@
  *   LICENSE:                                                              *
  *   This work is licensed under the Creative Commons                      *
  *   Attribution-NonCommercial-ShareAlike 2.5 License. To view a copy of   *
- *   this license, visit http://creativecommons.org/licenses/by-nc-sa/2.5/ *
+ *   this license, visit http:__PLACEHOLDER_7__
  *   or send a letter to Creative Commons, 543 Howard Street, 5th Floor,   *
  *   San Francisco, California, 94105, USA.                                *
  *                                                                         *
@@ -45,8 +45,8 @@ public:
   /**
      @param controller actual controller
      @param teachable also pointer to the controller, must be equal to controller.
-       This trick is used to ensure that the controller is both "AbstractController" and
-     "Teachable".
+       This trick is used to ensure that the controller is both __PLACEHOLDER_2__ and
+     __PLACEHOLDER_3__.
      @param threshold value below which (absolute) no cross motor teaching is done
       (avoids suppression of activity)
    */
@@ -59,32 +59,32 @@ public:
     //  also moves the pointer for the other vtable (tricky!)
     // That is why we need dynamic_cast here
     Teachable* t2 = dynamic_cast<Teachable*>(controller);
-    (void)t2; // this is to avoid a "unused variable" in -DNDEBUG mode
+    static_cast<void>(t2); // this is to avoid a __PLACEHOLDER_6__ in -DNDEBUG mode
     assert(static_cast<void*>(t2) == static_cast<void*>(teachable));
   }
 
   virtual void step(const sensor* sensors,
                     int sensornumber,
                     motor* motors,
-                    int motornumber) override;
+                    int motornumber);
 
   virtual void setCMC(const CMC& cmc);
   virtual CMC getCMC();
 
   /**** TEACHABLE Interface pass through ****/
 
-  virtual void setMotorTeaching(const matrix::Matrix& teaching) override {
+  virtual void setMotorTeaching(const matrix::Matrix& teaching) {
     teachable->setMotorTeaching(teaching);
   }
 
-  virtual void setSensorTeaching(const matrix::Matrix& teaching) override {
+  virtual void setSensorTeaching(const matrix::Matrix& teaching) {
     teachable->setSensorTeaching(teaching);
   }
-  virtual matrix::Matrix getLastMotorValues() override {
+  virtual matrix::Matrix getLastMotorValues() {
     return teachable->getLastMotorValues();
   }
 
-  virtual matrix::Matrix getLastSensorValues() override {
+  virtual matrix::Matrix getLastSensorValues() {
     return teachable->getLastSensorValues();
   }
 
@@ -98,7 +98,7 @@ public:
 protected:
   CMC cmc;
   Teachable* teachable;
-  double threshold; ///< treshhold below which not cmc-teaching is done
+  double threshold = 0; ///< treshhold below which not cmc-teaching is done
 };
 
 #endif

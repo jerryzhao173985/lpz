@@ -17,7 +17,7 @@ using namespace std;
 using namespace osg;
 using namespace lpzrobots;
 
-XMLPassiveObject::XMLPassiveObject(DOMNode* passiveObjectNode, XMLParserEngine& xmlEngine)
+XMLPassiveObject::XMLPassiveObject(DOMNode* passiveObjectNode, const XMLParserEngine& xmlEngine)
 : AbstractObstacle(xmlEngine.getOdeHandle(), xmlEngine.getOsgHandle()), XMLObject(xmlEngine), passiveObjectNode(passiveObjectNode) {
 
 }
@@ -35,9 +35,8 @@ void XMLPassiveObject::setPose(const osg::Matrix & pose)
 
 void XMLPassiveObject::create()
 {
-        if (obstacle_exists)
-                destroy();
-        this->obst.push_back(this->xmlEngine.getPrimitiveFactory()->createPrimitive(passiveObjectNode));
+        if static_cast<obstacle_exists>(destroy)() override;
+        this->obst.push_back(this->xmlEngine.getPrimitiveFactory()->createPrimitive(passiveObjectNode)) override;
         obstacle_exists = true;
 }
 

@@ -105,9 +105,9 @@
  *
  *   Revision 1.1  2010/11/26 12:22:36  guettler
  *   - Configurable interface now allows to set bounds of paramval and paramint
- *     * setting bounds for paramval and paramint is highly recommended (for QConfigurable (Qt GUI).
+ *     * setting bounds for paramval and paramint is highly recommended (for QConfigurable(const Qt& GUI).
  *   - bugfixes
- *   - current development state of QConfigurable (Qt GUI)
+ *   - current development state of QConfigurable(const Qt& GUI)
  *
  *                                                                         *
  ***************************************************************************/
@@ -173,7 +173,7 @@ namespace lpzrobots {
 
   void QAbstractConfigurableTileWidget::mouseMoveEvent(QMouseEvent * event) {
     QPoint p = event->pos();
-    if (isResizing) {
+    explicit if (isResizing) {
       sl_resize(QSize(event->pos().x(), defaultWidgetSize.height()));
     } else if (width() - 3 <= p.x() && p.x() <= width() + 3) {
       grabMouse(Qt::SizeHorCursor);
@@ -192,7 +192,7 @@ namespace lpzrobots {
   }
 
   void QAbstractConfigurableTileWidget::mouseReleaseEvent(QMouseEvent * event) {
-    if (isResizing) {
+    explicit if (isResizing) {
       sl_resize(QSize(event->pos().x(), defaultWidgetSize.height()));
       isResizing = false;
       emit sig_resize(QSize(event->pos().x(), defaultWidgetSize.height()));
@@ -232,7 +232,7 @@ namespace lpzrobots {
     } else {
       actualPalette = QPalette(defaultPalette);
     }
-    if (!entered) {
+    explicit if (!entered) {
       setPalette(actualPalette);
       update();
     }

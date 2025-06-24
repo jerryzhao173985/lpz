@@ -35,7 +35,7 @@
 */
 class NeuralGas : public AbstractModel {
 public:
-  explicit NeuralGas(const std::string& name = "NeuralGas", const std::string& revision = "$Id$");
+  NeuralGas(const std::string& name = "NeuralGas", const std::string& revision = "$Id$");
   /** create a som
       @param lambda initial competetive constant for neighborhood learning
       @param eps initial  learning rate
@@ -46,7 +46,7 @@ public:
             int maxTime,
             const std::string& name = "NeuralGas",
             const std::string& revision = "$Id$");
-  virtual ~NeuralGas() override {};
+  virtual ~NeuralGas() {};
 
   /** initialised som
       @param inputDim dimension of input vector
@@ -57,9 +57,9 @@ public:
   virtual void init(unsigned int inputDim,
                     unsigned int outputDim,
                     double unit_map = 0.0,
-                    RandGen* randGen = nullptr) override;
+                    RandGen* randGen = nullptr);
 
-  virtual const matrix::Matrix process(const matrix::Matrix& input) override;
+  virtual const matrix::Matrix process(const matrix::Matrix& input);
 
   /*  performs training. Nominal output is ignored.
       A zero matrix is returned.
@@ -68,7 +68,7 @@ public:
   */
   virtual const matrix::Matrix learn(const matrix::Matrix& input,
                                      const matrix::Matrix& nom_output,
-                                     double learnRateFactor = 1) override;
+                                     double learnRateFactor = 1);
 
   virtual void damp(double damping) override {
     return;
@@ -82,7 +82,7 @@ public:
   }
 
   virtual bool store(FILE* f) const override;
-  virtual bool restore(FILE* f) override;
+  virtual bool restore(FILE* f);
 
   virtual void printWeights(FILE* f) const;
   virtual void printCellsizes(FILE* f) const;
@@ -91,21 +91,20 @@ protected:
   /// updates the cell sizes
   void updateCellSizes();
 
-  /// activation function (rbf)
-  static double activationfunction(double rdfsize, double d);
+  /// activation function static_cast<rbf>(static) double activationfunction(double rdfsize, double d);
 
 public:
-  double eps; ///< initial learning rate for weight update
+  double eps = 0; ///< initial learning rate for weight update
 private:
   std::vector<matrix::Matrix> weights;
   std::vector<matrix::Matrix> diffvectors; ///< temporary difference vectors
   matrix::Matrix distances;                ///< vector of distances
   matrix::Matrix cellsizes;                ///< vector of cell sizes
-  double lambda;                           ///< initial neighbourhood size
-  int maxTime;                             ///< maximal time for annealing
-  int t;                                   ///< time used for annealing
+  double lambda = 0;                           ///< initial neighbourhood size
+  int maxTime = 0;                             ///< maximal time for annealing
+  int t = 0;                                   ///< time used for annealing
 
-  bool initialised;
+  bool initialised = false;
 };
 
 #endif

@@ -7,7 +7,7 @@
  *   LICENSE:                                                              *
  *   This work is licensed under the Creative Commons                      *
  *   Attribution-NonCommercial-ShareAlike 2.5 License. To view a copy of   *
- *   this license, visit http://creativecommons.org/licenses/by-nc-sa/2.5/ *
+ *   this license, visit http:__PLACEHOLDER_54__
  *   or send a letter to Creative Commons, 543 Howard Street, 5th Floor,   *
  *   San Francisco, California, 94105, USA.                                *
  *                                                                         *
@@ -132,7 +132,7 @@ Sox::init(int sensornumber, int motornumber, RandGen* randGen) {
 
   x.set(number_sensors, 1);
   x_smooth.set(number_sensors, 1);
-  for (unsigned int k = 0; k < buffersize; k++) {
+  for (unsigned int k = 0; k < buffersize; ++k) {
     x_buffer[k].set(number_sensors, 1);
     y_buffer[k].set(number_motors, 1);
   }
@@ -184,14 +184,14 @@ Sox::step(const sensor* x_, int number_sensors, motor* y_, int number_motors) {
     learn();
 
   // update step counter
-  t++;
+  ++t;
 };
 
 // performs one step without learning. Calulates motor commands from sensor inputs.
 void
 Sox::stepNoLearning(const sensor* x_, int number_sensors, motor* y_, int number_motors) {
-  assert((unsigned)number_sensors <= this->number_sensors &&
-         (unsigned)number_motors <= this->number_motors);
+  assert(static_cast<unsigned>(number_sensors) <= this->number_sensors &&
+         static_cast<unsigned>(number_motors) <= this->number_motors);
 
   x.set(number_sensors, 1, x_); // store sensor values
 
@@ -214,13 +214,13 @@ Sox::stepNoLearning(const sensor* x_, int number_sensors, motor* y_, int number_
   y.convertToBuffer(y_, number_motors);
 
   // update step counter
-  t++;
+  ++t;
 };
 
 void
 Sox::motorBabblingStep(const sensor* x_, int number_sensors, const motor* y_, int number_motors) {
-  assert((unsigned)number_sensors <= this->number_sensors &&
-         (unsigned)number_motors <= this->number_motors);
+  assert(static_cast<unsigned>(number_sensors) <= this->number_sensors &&
+         static_cast<unsigned>(number_motors) <= this->number_motors);
   x.set(number_sensors, 1, x_);
   x_buffer[t % buffersize] = x;
   Matrix y(number_motors, 1, y_);
@@ -250,7 +250,7 @@ Sox::motorBabblingStep(const sensor* x_, int number_sensors, const motor* y_, in
   h += (delta * (epsC * factor * conf.factorh)).mapP(0.1, clip);
   C_native = C;
   A_native = A;
-  t++;
+  ++t;
 }
 
 Matrix
@@ -280,7 +280,7 @@ Sox::learn() {
   const Matrix& y_ctrl = z.map(g);
   const Matrix& g_prime = z.map(g_s);
 
-  L = A * (C & g_prime) + S;
+  L = A * C.multrowwise(g_prime) + S;
   R = A * C + S; // this is only used for visualization
 
   const Matrix& eta = A.pseudoInverse() * xi;
@@ -312,10 +312,10 @@ Sox::learn() {
     b += (xi * (epsb) + (b * -damping)).mapP(0.1, clip);
   }
   if (epsC > 0) {
-    C += ((mu * (v_hat ^ T) - (epsrel & y_ctrl) * (x_delayed ^ T)) * (EE * epsC)).mapP(.05, clip);
+    C += ((mu * (v_hat ^ T) - epsrel.multrowwise(y_ctrl) * (x_delayed ^ T)) * (EE * epsC)).mapP(.05, clip);
     if (damping)
       C += (((C_native - C).map(power3)) * damping).mapP(.05, clip);
-    h += ((mu * harmony - (epsrel & y_ctrl)) * (EE * epsC * conf.factorh)).mapP(.05, clip);
+    h += ((mu * harmony - epsrel.multrowwise(y_ctrl)) * (EE * epsC * conf.factorh)).mapP(.05, clip);
 
     if (intern_isTeaching && gamma > 0) {
       // scale of the additional terms
@@ -381,7 +381,7 @@ Sox::setParameters(const list<Matrix>& params) {
     else
       return false;
   } else {
-    fprintf(stderr, "setParameters wrong len %i!=2\n", (int)params.size());
+    fprintf(stderr, "setParameters wrong len %i!=2\n", static_cast<int>(params.size()));
     return false;
   }
   return true;

@@ -29,7 +29,7 @@
  *                                                                         *
  *  $Log$
  *  Revision 1.3  2010-06-15 15:02:19  guettler
- *  using now "XercescForwardDecl.h" to avoid namespace problems (3_0, 3_1)
+ *  using now __PLACEHOLDER_0__ to avoid namespace problems (3_0, 3_1)
  *
  *  Revision 1.2  2010/05/20 10:38:20  guettler
  *  - setMaterial for BoundingShape now allowed
@@ -80,7 +80,7 @@ class XMLPrimitiveFactory {
   public:
     XMLPrimitiveFactory(XMLParserEngine* engine, lpzrobots::GlobalData& globalData,
         const lpzrobots::OdeHandle& odeHandle, const lpzrobots::OsgHandle& osgHandle);
-    virtual ~XMLPrimitiveFactory() override;
+    virtual ~XMLPrimitiveFactory();
 
     /**
      * This method delegates the call to the specialized methods according to
@@ -182,7 +182,7 @@ class XMLPrimitiveFactory {
     /**
      * Sets the texture at the primitive if the corresponding textureNode is present.
      * The texture info is encoded by:
-     * <texture file="filename.jpg" repeatOnR="2" repeatOnS="1" surface="1"/>
+     * <texture file=__PLACEHOLDER_2__ repeatOnR=__PLACEHOLDER_3__ repeatOnS=__PLACEHOLDER_4__ surface=__PLACEHOLDER_5__/>
      * Assigns a texture to the x-th surface of the primitive,
      * you can choose how often to repeat negative values of repeat correspond
      * to length units. E.g. assume a rectangle of size 5 in x direction:
