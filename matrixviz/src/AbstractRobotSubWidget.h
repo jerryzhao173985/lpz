@@ -29,16 +29,7 @@
 #include <QtWidgets>
 #include <QWidget>
 
-class AbstractPlotChannel;
-
-#include "AbstractPlotChannel.h"
-
-#include <list>
-#include <iostream>
-#include <string>
-
-class AbstractRobotSubWidget: public QWidget
-{
+class AbstractPlotChannel{
 
         Q_OBJECT
 
@@ -48,7 +39,7 @@ public:
                 //      channelList.clear();
         };
 
-        void addPlotChannel(AbstractPlotChannel* c)
+        void explicit addPlotChannel(AbstractPlotChannel* c)
         { // default variant
                 this->channelList.push_back(c);
         }

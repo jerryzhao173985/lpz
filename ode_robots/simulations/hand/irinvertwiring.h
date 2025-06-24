@@ -37,7 +37,7 @@
 /** Implements one to one wireing of robot sensors to inputs of the controller
     and controller outputs to robot motors.
  */
-class IRInvertWiring :public One2OneWiring{
+class IRInvertWiring{
 public:
   /** constructor
       @param noise NoiseGenerator that is used for adding noise to sensor values

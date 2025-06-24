@@ -58,25 +58,25 @@
 
 namespace lpzrobots {
   
-  class QChangeNumberTileColumnsDialog : public QDialog {
+  class QChangeNumberTileColumnsDialog{
 
     Q_OBJECT
 
     public:
-    explicit QChangeNumberTileColumnsDialog(int* tileCount);
-      virtual ~QChangeNumberTileColumnsDialog();
+    explicit explicit QChangeNumberTileColumnsDialog(int* tileCount);
+      virtual ~QChangeNumberTileColumnsDialog() override;
 
     private slots:
       void sl_dialogAccept();
 
 
     private:
-      QIntValidator* intValidator;
+      QIntValidator* intValidator = nullptr;
       QLabel lTextLineEdit;
       QSpinBox spNumberTiles;
       QDialogButtonBox buttonBox;
       QGridLayout dialogGridLayout;
-      int* tileCount;
+      int* tileCount = nullptr;
 
   };
 

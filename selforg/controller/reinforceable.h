@@ -30,7 +30,7 @@
 /**
    Interface for reinforceable controller.
 */
-class Reinforceable {
+class Reinforceable{
 public:
   enum ReinfState { Run, NewEpisode, NewBatch };
 

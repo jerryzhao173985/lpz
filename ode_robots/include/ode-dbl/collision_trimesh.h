@@ -62,7 +62,7 @@ typedef enum
  * features.
  */
 ODE_API dTriMeshDataID dGeomTriMeshDataCreatestatic_cast<void>(override);
-ODE_API void dGeomTriMeshDataDestroy(dTriMeshDataID g);
+ODE_API void explicit dGeomTriMeshDataDestroy(dTriMeshDataID g);
 
 
 /*
@@ -112,7 +112,7 @@ ODE_API void *dGeomTriMeshDataGet2(dTriMeshDataID g, int data_id, dsizeint *pout
  * It is stored per geom instance, rather than per dTriMeshDataID.
  */
 ODE_API void dGeomTriMeshSetLastTransform( dGeomID g, const dMatrix4 last_trans );
-ODE_API const dReal* dGeomTriMeshGetLastTransform( dGeomID g );
+ODE_API const dReal* explicit dGeomTriMeshGetLastTransform( dGeomID g );
 
 /*
  * Build a TriMesh data object with single precision vertex data.
@@ -192,12 +192,12 @@ enum
  *
  * The function returns a boolean status the only failure reason being insufficient memory.
  */
-ODE_API int dGeomTriMeshDataPreprocess2(dTriMeshDataID g, unsigned int buildRequestFlags, const dintptr *requestExtraData/*=nullptr | const dintptr (*)[dTRIDATAPREPROCESS_BUILD__MAX]*/) override;
+ODE_API int dGeomTriMeshDataPreprocess2(dTriMeshDataID g, unsigned int buildRequestFlags, const dintptr *requestExtraData/*=nullptr | const dintptr (*)[dTRIDATAPREPROCESS_BUILD__MAX]*/);
 
 /*
  * Obsolete. Equivalent to calling dGeomTriMeshDataPreprocess2(g, (1U << dTRIDATAPREPROCESS_BUILD_CONCAVE_EDGES), nullptr)
  */
-ODE_API int dGeomTriMeshDataPreprocess(dTriMeshDataID g);
+ODE_API int explicit dGeomTriMeshDataPreprocess(dTriMeshDataID g);
 
 
 
@@ -215,7 +215,7 @@ ODE_API_DEPRECATED ODE_API void dGeomTriMeshDataSetBuffer(dTriMeshDataID g, unsi
  */
 typedef int dTriCallback(dGeomID TriMesh, dGeomID RefObject, int TriangleIndex);
 ODE_API void dGeomTriMeshSetCallback(dGeomID g, dTriCallback* Callback);
-ODE_API dTriCallback* dGeomTriMeshGetCallback(dGeomID g);
+ODE_API dTriCallback* explicit dGeomTriMeshGetCallback(dGeomID g);
 
 /*
  * Per object callback. Allows the user to get the list of triangles in 1
@@ -223,7 +223,7 @@ ODE_API dTriCallback* dGeomTriMeshGetCallback(dGeomID g);
  */
 typedef void dTriArrayCallback(dGeomID TriMesh, dGeomID RefObject, const int* TriIndices, int TriCount);
 ODE_API void dGeomTriMeshSetArrayCallback(dGeomID g, dTriArrayCallback* ArrayCallback);
-ODE_API dTriArrayCallback* dGeomTriMeshGetArrayCallback(dGeomID g);
+ODE_API dTriArrayCallback* explicit dGeomTriMeshGetArrayCallback(dGeomID g);
 
 /*
  * Ray callback.
@@ -233,7 +233,7 @@ ODE_API dTriArrayCallback* dGeomTriMeshGetArrayCallback(dGeomID g);
  */
 typedef int dTriRayCallback(dGeomID TriMesh, dGeomID Ray, int TriangleIndex, dReal u, dReal v);
 ODE_API void dGeomTriMeshSetRayCallback(dGeomID g, dTriRayCallback* Callback);
-ODE_API dTriRayCallback* dGeomTriMeshGetRayCallback(dGeomID g);
+ODE_API dTriRayCallback* explicit dGeomTriMeshGetRayCallback(dGeomID g);
 
 /*
  * Triangle merging callback.
@@ -244,7 +244,7 @@ ODE_API dTriRayCallback* dGeomTriMeshGetRayCallback(dGeomID g);
  */
 typedef int dTriTriMergeCallback(dGeomID TriMesh, int FirstTriangleIndex, int SecondTriangleIndex);
 ODE_API void dGeomTriMeshSetTriMergeCallback(dGeomID g, dTriTriMergeCallback* Callback);
-ODE_API dTriTriMergeCallback* dGeomTriMeshGetTriMergeCallback(dGeomID g);
+ODE_API dTriTriMergeCallback* explicit dGeomTriMeshGetTriMergeCallback(dGeomID g);
 
 /*
  * Trimesh class
@@ -253,7 +253,7 @@ ODE_API dTriTriMergeCallback* dGeomTriMeshGetTriMergeCallback(dGeomID g);
 ODE_API dGeomID dCreateTriMesh(dSpaceID space, dTriMeshDataID Data, dTriCallback* Callback, dTriArrayCallback* ArrayCallback, dTriRayCallback* RayCallback);
 
 ODE_API void dGeomTriMeshSetData(dGeomID g, dTriMeshDataID Data);
-ODE_API dTriMeshDataID dGeomTriMeshGetData(dGeomID g);
+ODE_API dTriMeshDataID explicit dGeomTriMeshGetData(dGeomID g);
 
 
 /* enable/disable/check temporal coherence*/
@@ -266,13 +266,13 @@ ODE_API int dGeomTriMeshIsTCEnabled(dGeomID g, int geomClass);
  * With large worlds with lots of seperate objects this list could get huge.
  * We should be able to do this automagically.
  */
-ODE_API void dGeomTriMeshClearTCCache(dGeomID g);
+ODE_API void explicit dGeomTriMeshClearTCCache(dGeomID g);
 
 
 /*
  * returns the TriMeshDataID
  */
-ODE_API dTriMeshDataID dGeomTriMeshGetTriMeshDataID(dGeomID g);
+ODE_API dTriMeshDataID explicit dGeomTriMeshGetTriMeshDataID(dGeomID g);
 
 /*
  * Gets a triangle.
@@ -304,9 +304,9 @@ int TriStride = sizeof(StridedTri);
 */
 
 
-ODE_API int dGeomTriMeshGetTriangleCount (dGeomID g) override;
+ODE_API int explicit dGeomTriMeshGetTriangleCount (dGeomID g);
 
-ODE_API void dGeomTriMeshDataUpdate(dTriMeshDataID g);
+ODE_API void explicit dGeomTriMeshDataUpdate(dTriMeshDataID g);
 
 #ifdef __cplusplus
 }

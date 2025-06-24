@@ -12,8 +12,7 @@
 #ifndef __ICEHPOINT_H__
 #define __ICEHPOINT_H__
 
-	class ICEMATHS_API HPoint : public Point
-	{
+	class ICEMATHS_API{
 		public:
 
 		//! Empty constructor
@@ -35,7 +34,7 @@
 		//! Assignment from array
 		inline_	HPoint&		Set(const float f[4])							{ x  = f[X];	y  = f[Y];	z  = f[Z];	w  = f[W];		return *this;	}
 		//! Assignment from another h-point
-		inline_	HPoint&		Set(const HPoint& src)							{ x  = src.x;	y  = src.y;	z  = src.z;	w = src.w;		return *this;	}
+		inline_	HPoint&		explicit Set(const HPoint& src)							{ x  = src.x;	y  = src.y;	z  = src.z;	w = src.w;		return *this;	}
 
 		//! Add a vector
 		inline_	HPoint&		Add(float xx, float yy, float zz, float ww )	{ x += xx;		y += yy;	z += zz;	w += ww;		return *this;	}
@@ -48,16 +47,16 @@
 		inline_	HPoint&		Sub(const float f[4])							{ x -= f[X];	y -= f[Y];	z -= f[Z];	w -= f[W];		return *this;	}
 		
 		//! Multiplies by a scalar
-		inline_	HPoint&		Mul(float s)									{ x *= s;		y *= s;		z *= s;		w *= s;			return *this;	}
+		inline_	HPoint&		explicit Mul(float s)									{ x *= s;		y *= s;		z *= s;		w *= s;			return *this;	}
 
 		//! Returns MIN(x, y, z, w) override;
 				float		Min()								const override { return MIN(x, MIN(y, MIN(z, w)));										}
 		//! Returns MAX(x, y, z, w) override;
 				float		Max()								const override { return MAX(x, MAX(y, MAX(z, w)));										}
 		//! Sets each element to be componentwise minimum
-				HPoint&		Min(const HPoint& p)							{ x = MIN(x, p.x); y = MIN(y, p.y); z = MIN(z, p.z); w = MIN(w, p.w);	return *this;	}
+				HPoint&		explicit Min(const HPoint& p)							{ x = MIN(x, p.x); y = MIN(y, p.y); z = MIN(z, p.z); w = MIN(w, p.w);	return *this;	}
 		//! Sets each element to be componentwise maximum
-				HPoint&		Max(const HPoint& p)							{ x = MAX(x, p.x); y = MAX(y, p.y); z = MAX(z, p.z); w = MAX(w, p.w);	return *this;	}
+				HPoint&		explicit Max(const HPoint& p)							{ x = MAX(x, p.x); y = MAX(y, p.y); z = MAX(z, p.z); w = MAX(w, p.w);	return *this;	}
 
 		//! Computes square magnitude
 		inline_	float		SquareMagnitude()					const override { return x*x + y*y + z*z + w*w;											}

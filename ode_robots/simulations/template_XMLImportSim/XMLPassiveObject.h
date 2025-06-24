@@ -14,10 +14,10 @@
 
 
 
-class XMLPassiveObject: public lpzrobots::AbstractObstacle, public XMLObject {
+class XMLPassiveObject{
 public:
         XMLPassiveObject(XERCESC::DOMNode* passiveObjectNode, const XMLParserEngine& xmlEngine);
-        virtual ~XMLPassiveObject();
+        virtual ~XMLPassiveObject() override;
 
           /**
            * sets position of the obstacle and creates/recreates obstacle if necessary

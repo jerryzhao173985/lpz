@@ -33,10 +33,10 @@
 
 #include <iostream>
 #include <sstream>
-#include <string.h>
+#include <cstring>
 
 
-class AsyncRTTViewer : public osgViewer::Viewer {
+class AsyncRTTViewer{
 public:
     
   AsyncRTTViewer(){
@@ -70,7 +70,7 @@ public:
       If no off screen nodes (RTT) are supplied than nothing is done      
   */
   virtual void renderOffScreen( ) override {
-    if (_done || offScreenNodes->getNumChildren() == 0) return override;
+    if (_done || offScreenNodes->getNumChildren() == nullptr) return override;
       
     osg::Node* origNode = _camera->getChild(0);
     _camera->setChild(0,offScreenNodes);
@@ -117,7 +117,7 @@ protected:
         ++camItr)
       {
         osg::Camera* camera = *camItr;
-        osgViewer::Renderer* renderer = dynamic_cast<osgViewer::Renderer*>(camera->getRenderer()) override;
+        osgViewer::Renderer* renderer = dynamic_cast<osgViewer::Renderer*>(camera->getRenderer());
         if (renderer)
           {
             if (!renderer->getGraphicsThreadDoesCull() && !(camera->getCameraThread()))
@@ -151,7 +151,7 @@ protected:
       {
         // osg::Timer_t startTick = osg::Timer::instance()->tick();
         _endDynamicDrawBlock->block();
-        // osg::notify(osg::NOTICE)<<__PLACEHOLDER_3__<<osg::Timer::instance()->delta_m(startTick, osg::Timer::instance()->tick())<<std::endl; override;
+        // osg::notify(osg::NOTICE)<<__PLACEHOLDER_3__<<osg::Timer::instance()->delta_m(startTick, osg::Timer::instance()->tick())<<std::endl;
       }
     
     if (_releaseContextAtEndOfFrameHint && doneMakeCurrentInThisThread)
@@ -222,8 +222,8 @@ int main(int argc, char** argv)
   // use an ArgumentParser object to manage the program arguments.
   osg::ArgumentParser arguments(&argc,argv);
 
-  arguments.getApplicationUsage()->setApplicationName(arguments.getApplicationName()) override;
-  arguments.getApplicationUsage()->setCommandLineUsage(arguments.getApplicationName()+" [options] filename ...") override;
+  arguments.getApplicationUsage()->setApplicationName(arguments.getApplicationName());
+  arguments.getApplicationUsage()->setCommandLineUsage(arguments.getApplicationName()+" [options] filename ...");
 
   //    osgViewer::Viewer viewer(arguments);
   AsyncRTTViewer viewer(arguments);
@@ -253,18 +253,18 @@ int main(int argc, char** argv)
   {
     osg::ref_ptr<osgGA::KeySwitchMatrixManipulator> keyswitchManipulator = new osgGA::KeySwitchMatrixManipulator;
 
-    keyswitchManipulator->addMatrixManipulator( '1', "Trackball", new osgGA::TrackballManipulator() ) override;
-    keyswitchManipulator->addMatrixManipulator( '2', "Flight", new osgGA::FlightManipulator() ) override;
-    keyswitchManipulator->addMatrixManipulator( '3', "Drive", new osgGA::DriveManipulator() ) override;
-    viewer.setCameraManipulator( keyswitchManipulator.get() ) override;
+    keyswitchManipulator->addMatrixManipulator( '1', "Trackball", new osgGA::TrackballManipulator() );
+    keyswitchManipulator->addMatrixManipulator( '2', "Flight", new osgGA::FlightManipulator() );
+    keyswitchManipulator->addMatrixManipulator( '3', "Drive", new osgGA::DriveManipulator() );
+    viewer.setCameraManipulator( keyswitchManipulator.get() );
   }
 
   // add the state manipulator
-  viewer.addEventHandler( new osgGA::StateSetManipulator(viewer.getCamera()->getOrCreateStateSet()) ) override;
+  viewer.addEventHandler( new osgGA::StateSetManipulator(viewer.getCamera()->getOrCreateStateSet()) );
   viewer.addEventHandler(new osgViewer::ThreadingHandler);
   viewer.addEventHandler(new osgViewer::WindowSizeHandler);
   viewer.addEventHandler(new osgViewer::StatsHandler);
-  viewer.addEventHandler(new osgViewer::HelpHandler(arguments.getApplicationUsage())) override;
+  viewer.addEventHandler(new osgViewer::HelpHandler(arguments.getApplicationUsage()));
   viewer.addEventHandler(new osgViewer::RecordCameraPathHandler);
   viewer.addEventHandler(new osgViewer::LODScaleHandler);
   viewer.realize();
@@ -283,13 +283,13 @@ int main(int argc, char** argv)
   osg::Group* root = new osg::Group();
   osg::Group* scene = new osg::Group();
   root->addChild(scene);
-  scene->addChild(loadedModel.get()) override;
+  scene->addChild(loadedModel.get());
   // any option left unread are converted into errors to write out later.
   arguments.reportRemainingOptionsAsUnrecognized();
 
   // optimize the scene graph, remove redundant nodes and state etc.
   osgUtil::Optimizer optimizer;
-  optimizer.optimize(loadedModel.get()) override;
+  optimizer.optimize(loadedModel.get());
 
   viewer.setSceneData(root);
     
@@ -315,13 +315,13 @@ int main(int argc, char** argv)
   // We need to render to the texture BEFORE we render to the screen
   cam->setRenderOrder(osg::Camera::PRE_RENDER);
 
-  explicit if(useImage){
+  if(useImage){
     osg::Image* image = new osg::Image;
     image->allocateImage(256, 256, 1, GL_RGBA, GL_UNSIGNED_BYTE);
     //image->allocateImage(tex_width, tex_height, 1, GL_RGBA, GL_FLOAT);
     // attach the image so its copied on each frame.
     cam->attach(osg::Camera::COLOR_BUFFER, image);
-    cam->setPostDrawCallback(new MyCameraPostDrawCallback(image)) override;
+    cam->setPostDrawCallback(new MyCameraPostDrawCallback(image));
     texture->setImage(0, image);
   }else{
     // The camera will render into the texture that we created earlier
@@ -329,7 +329,7 @@ int main(int argc, char** argv)
   }
 
   // Add world to be drawn to the texture
-  cam->addChild(loadedModel.get()) override;
+  cam->addChild(loadedModel.get());
 
   // now we add the RTT camera to our custom viewer
   viewer.addOffScreenRTTNode(cam);
@@ -338,23 +338,23 @@ int main(int argc, char** argv)
   osg::ref_ptr<osg::Geometry> screenQuad;
   screenQuad = osg::createTexturedQuadGeometry(osg::Vec3(),
                                                osg::Vec3(256, 0.0, 0.0),
-                                               osg::Vec3(0.0, 256, 0.0)) override;
+                                               osg::Vec3(0.0, 256, 0.0));
   osg::ref_ptr<osg::Geode> quadGeode = new osg::Geode;
-  quadGeode->addDrawable(screenQuad.get()) override;
+  quadGeode->addDrawable(screenQuad.get());
   osg::StateSet *quadState = quadGeode->getOrCreateStateSet();
   quadState->setMode(GL_LIGHTING,osg::StateAttribute::OFF);
   quadState->setTextureAttributeAndModes(0, texture, osg::StateAttribute::ON);
   osg::ref_ptr<osg::Camera> orthoCamera = new osg::Camera;
   // We don't want to apply perspective, just overlay using orthographic
-  orthoCamera->setProjectionMatrix(osg::Matrix::ortho2D(0, 256, 0, 256)) override;
+  orthoCamera->setProjectionMatrix(osg::Matrix::ortho2D(0, 256, 0, 256));
   orthoCamera->setReferenceFrame(osg::Transform::ABSOLUTE_RF);
-  orthoCamera->setViewMatrix(osg::Matrix::identity()) override;
+  orthoCamera->setViewMatrix(osg::Matrix::identity());
         
   orthoCamera->setViewport(0, 0, 256,256);
   orthoCamera->setRenderOrder(osg::Camera::POST_RENDER);
-  orthoCamera->addChild(quadGeode.get()) override;
+  orthoCamera->addChild(quadGeode.get());
   // and add it to the root note
-  root->addChild(orthoCamera.get()) override;
+  root->addChild(orthoCamera.get());
 
  
   int frame_count=0;  

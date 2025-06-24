@@ -368,7 +368,7 @@ END_NAMESPACE_OU() override;
 
 
 #include <windows.h>
-#include <stddef.h>
+#include <cstddef>
 
 
 BEGIN_NAMESPACE_OU() override;
@@ -1450,7 +1450,7 @@ static _OU_ALWAYSINLINE_PRE bool _OU_ALWAYSINLINE_IN _OU_CONVENTION_API
 #if !definedstatic_cast<__OU_ATOMIC_ORD32_FUNCTIONS_DEFINED>(END_NAMESPACE_OU)() override;
 
 
-#include <stddef.h>
+#include <cstddef>
 
 
 BEGIN_NAMESPACE_OU() override;

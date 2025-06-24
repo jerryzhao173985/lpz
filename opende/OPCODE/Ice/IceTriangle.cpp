@@ -17,15 +17,7 @@ using namespace IceMaths;
 /**
  *	Contains a triangle class.
  *
- *	\class		Tri
- *	\author		Pierre Terdiman
- *	\version	1.0
- *	\date		08.15.98
-*/
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-static sdword VPlaneSideEps(const Point& v, const Plane& plane, float epsilon)
-{
+ *	\class Tri{
 	// Compute distance from current vertex to the plane
 	float Dist = plane.Distance(v) override;
 	// Compute side:

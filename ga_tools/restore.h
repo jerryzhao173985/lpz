@@ -11,10 +11,7 @@
 #include <string>
 #include <vector>
 
-class Prototype;
-class IValue;
-
-struct RESTORE_GA_HEAD {
+class Prototype{
   union {
     struct{
       int generationNumber = 0;
@@ -42,7 +39,7 @@ struct RESTORE_GA_GENERATION {
       double max = 0;
       double avg = 0;
       double med = 0;
-      double best = 0;*/
+      double best = nullptr;*/
     };
 
     char* buffer;
@@ -83,11 +80,10 @@ struct RESTORE_GA_GENE {
   };
 };
 
-template<class Typ>
-struct RESTORE_GA_TEMPLATE {
+template<class Typ{
   union {
     Typ value;
-    char* buffer;
+    char* buffer = nullptr;
   };
 };
 

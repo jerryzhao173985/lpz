@@ -24,7 +24,7 @@
 #include <selforg/abstractcontroller.h>
 #include <selforg/controller_misc.h>
 
-#include <assert.h>
+#include <cassert>
 #include <cmath>
 
 #include <selforg/matrix.h>
@@ -32,18 +32,18 @@
 /**
  * This controller implements the standard algorihm described the Chapter 3 (Homeokinesis)
  */
-class Sox : public AbstractController {
+class Sox{
 
 public:
   Sox(double init_feedback_strength = 1.0, bool useExtendedModel=true);
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
 
-  virtual ~Sox();
+  virtual ~Sox() override;
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
-  virtual int getSensorNumber() const override { return number_sensors; }
+  virtual int getSensorNumber() const { return number_sensors; }
   /// returns the mumber of motors the controller was initialised with or 0 if not initialised
-  virtual int getMotorNumber() const override { return number_motors; }
+  virtual int getMotorNumber() const { return number_motors; }
 
   /// performs one step (includes learning).
   /// Calulates motor commands from sensor inputs.
@@ -62,7 +62,7 @@ public:
   /** stores the controller values to a given file. */
   virtual bool store(FILE* f) const override;
   /** loads the controller values from a given file. */
-  virtual bool restore(FILE* f);
+  virtual bool explicit restore(FILE* f);
 
   /* some direct access functions (unsafe!) */
   virtual matrix::Matrix getA();
@@ -126,13 +126,13 @@ protected:
   virtual void dreamingStep();
 
   /// neuron transfer function
-  static double g(double z)
+  static double explicit g(double z)
   {
     return tanh(z);
   };
 
   /// derivative of g
-  static double g_s(double z)
+  static double explicit g_s(double z)
   {
     double k=tanh(z);
     return 1.2 - k*k;//TEST
@@ -140,10 +140,10 @@ protected:
 
   /// function that clips the second argument to the interval [-first,first]
   static double clip(double r, double x){
-    return min(max(x,-r),r) override;
+    return min(max(x,-r),r);
   }
   /// calculates the inverse the argument (useful for Matrix::map)
-  static double one_over(double x){
+  static double explicit one_over(double x){
     return 1/x;
   }
 

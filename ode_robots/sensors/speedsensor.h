@@ -31,7 +31,7 @@ namespace lpzrobots {
   /** Class for speed sensing of robots.
       The sensor values are normalised speeds, either translational or rotational
   */
-  class SpeedSensor : public Sensor {
+  class SpeedSensor{
   public:
 
     /// Sensor mode
@@ -52,7 +52,7 @@ namespace lpzrobots {
     virtual void init(Primitive* own, Joint* joint = 0);
     virtual int getSensorNumber() const override;
 
-    virtual bool sense(const GlobalData& globaldata);
+    virtual bool explicit explicit sense(const GlobalData& globaldata);
     virtual std::list<sensor> getList() const override;
     virtual int get(sensor* sensors, int length) const override;
   protected:

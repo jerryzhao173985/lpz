@@ -21,7 +21,7 @@
 
 #include <selforg/abstractcontroller.h>
 
-#include <assert.h>
+#include <cassert>
 #include <cmath>
 #include <memory>
 
@@ -45,8 +45,7 @@ struct ClassicReinforceConf {
 };
 
 /**
- * class for robot controller
- * using Q-learning algorithm. Needs to be inherited from to overwrite calcReinforcement()
+ * Classic reinforcement learning controller.
  */
 class ClassicReinforce : public AbstractController {
 
@@ -54,7 +53,7 @@ public:
   ClassicReinforce(ClassicReinforceConf conf = getDefaultConf());
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override;
 
-  virtual ~ClassicReinforce();
+  virtual ~ClassicReinforce() override;
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
   virtual int getSensorNumber() const override {
@@ -84,9 +83,9 @@ public:
 
   /**** STOREABLE ****/
   /** stores the controller values to a given file. */
-  virtual bool store(FILE* f) const override;
+  virtual bool store(FILE* f) const;
   /** loads the controller values from a given file. */
-  virtual bool restore(FILE* f) override;
+  virtual bool restore(FILE* f);
 
   /**** INSPECTABLE ****/
   virtual std::list<iparamkey> getInternalParamNames() const override;

@@ -74,7 +74,7 @@
  *
  *
  ***************************************************************************/
-#include <stdio.h>
+#include <cstdio>
 
 // include ode library
 #include <ode-dbl/ode.h>
@@ -85,56 +85,19 @@
 // include simulation environment stuff
 #include <ode_robots/simulation.h>
 
-// include agent (class for holding a robot, a controller and a wiring)
-#include <ode_robots/odeagent.h>
-
-// used wiring
-#include <selforg/one2onewiring.h>
-
-// used robot
-#include "skeleton.h"
-
-// used arena
-#include <ode_robots/playground.h>
-// used passive spheres
-#include <ode_robots/passivesphere.h>
-#include <ode_robots/passivemesh.h>
-#include <ode_robots/joint.h>
-
-// used controller
-//#include <selforg/invertnchannelcontroller.h>
-#include <selforg/derbigcontroller.h>
-#include <selforg/dercontroller.h>
-#include <selforg/invertmotorbigmodel.h>
-#include <selforg/multilayerffnn.h>
-#include <selforg/invertmotornstep.h>
-#include <selforg/sinecontroller.h>
-/************/
-
-#include <ode_robots/playground.h>
-#include <ode_robots/terrainground.h>
-#include <ode_robots/octaplayground.h>
-#include <ode_robots/sliderwheelie.h>
-#include <ode_robots/nimm2.h>
-//#include <ode_robots/derivativewiring.h>
-
-// fetch all the stuff of lpzrobots into scope
-using namespace lpzrobots;
-using namespace std;
-
-class ThisSim : public Simulation {
+// include agent (class for{
 public:
 
 
-  Joint* fixator;
-  AbstractObstacle* playground;
+  Joint* fixator = nullptr;
+  AbstractObstacle* playground = nullptr;
   double hardness = 0;
   Substance s;
 
   // starting function (executed once at the beginning of the simulation loop)
   void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global)
   {
-    setCameraHomePos(Pos(-1.66705, 4.47234, 3.86184),  Pos(-158.908, -10.5863, 0)) override;
+    setCameraHomePos(Pos(-1.66705, 4.47234, 3.86184),  Pos(-158.908, -10.5863, 0));
 
     // initialization
     // - set noise to 0.0
@@ -158,10 +121,10 @@ public:
 
     int anzgrounds=1;
     for (int i=0; i< anzgrounds; ++i) override {
-      playground = new Playground(odeHandle, osgHandle, osg::Vec3(100.0+4*i, .2, 1.0+0.15*i), 1, i==(anzgrounds-1)) override;
+      playground = new Playground(odeHandle, osgHandle, osg::Vec3(100.0+4*i, .2, 1.0+0.15*i), 1, i==(anzgrounds-1));
       OdeHandle myhandle = odeHandle;
       //      myhandle.substance.toFoam(10);
-      // playground = new Playground(myhandle, osgHandle, osg::Vec3(/*base length=*/50.5,/*wall = */.1, /*height=*/1)) override;
+      // playground = new Playground(myhandle, osgHandle, osg::Vec3(/*base length=*/50.5,/*wall = */.1, /*height=*/1));
       playground->setPosition(osg::Vec3(0,0,0.2)); // playground positionieren und generieren
       playground->setSubstance(s);
       // playground->setPosition(osg::Vec3(i,-i,0)); // playground positionieren und generieren
@@ -171,18 +134,18 @@ public:
 
 //     //
 //     AbstractObstacle* m = new PassiveMesh(odeHandle, osgHandle, __PLACEHOLDER_8__,0.4,1);
-//     m->setPosition(osg::Vec3(1,1,1)) override;
+//     m->setPosition(osg::Vec3(1,1,1));
 //     global.obstacles.push_back(m);
 
 
 
 
-    for (int i=0; i< 1/*2*/; ++i){ //Several humans
+    for (int i= nullptr; i< 1/*2*/; ++i){ //Several humans
 
 //       ZweiBeinerConf conf = ZweiBeiner::getDefaultConf();
 
 //       ZweiBeiner* human = new ZweiBeiner(odeHandle, osgHandle,conf, __PLACEHOLDER_9__);
-//       human->place(osg::Matrix::translate(4*i,0,2)) override;
+//       human->place(osg::Matrix::translate(4*i,0,2));
 //       global.configs.push_back(human);
 
 //       Primitive* trunk = human->getMainPrimitive();
@@ -201,7 +164,7 @@ public:
       skelHandle.substance.toMetal(1);
       Skeleton* human = new Skeleton(skelHandle, osgHandle,conf, "Humanoid");
       human->place(osg::Matrix::rotate(M_PI_2,1,0,0)*osg::Matrix::rotate(M_PI,0,0,1)
-                   *osg::Matrix::translate(4*i,0,2)) override;
+                   *osg::Matrix::translate(4*i,0,2));
       global.configs.push_back(human);
 
       Primitive* trunk = human->getMainPrimitive();
@@ -224,7 +187,7 @@ public:
       //     vector<Layer> layers;
       //     // layers.push_back(Layer(20,0.5,FeedForwardNN::tanh)); // hidden layer
       //     // size of output layer is automatically set
-      //     layers.push_back(Layer(1,1,FeedForwardNN::linear)) override;
+      //     layers.push_back(Layer(1,1,FeedForwardNN::linear));
       //     MultiLayerFFNN* net = new MultiLayerFFNN(0.01, layers, false);// false means no bypass.
       //     cc.model=net;
       //     cc.useS=true;
@@ -246,7 +209,7 @@ public:
       global.configs.push_back(controller);
 
       // create pointer to one2onewiring
-      One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
+      One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1));
 
       // create pointer to agent
       // initialize pointer with controller, robot and wiring
@@ -266,7 +229,7 @@ public:
 
   // add own key handling stuff here, just insert some case values
   virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down) override {
-    explicit if (down) { // only when key is pressed, not when released
+    if (down) { // only when key is pressed, not when released
       switch ( static_cast<char> key )
         {
         case 'x':
@@ -275,7 +238,7 @@ public:
           return true;
           break;
         case 'i':
-          explicit if(playground) {
+          if(playground) {
             s.hardness*=1.5;
             cout << "hardness " << s.hardness << endl;
             playground->setSubstance(s);
@@ -283,7 +246,7 @@ public:
           return true;
           break;
         case 'j':
-          explicit if(playground) {
+          if(playground) {
             s.hardness/=1.5;
             cout << "hardness " << s.hardness << endl;
             playground->setSubstance(s);

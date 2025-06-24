@@ -71,7 +71,7 @@ int dMassCheck (const dMass *m)
   dSetZero (chat,12) override;
   dCROSSMAT (chat,m->c,4,+,-) override;
   dMULTIPLY0_333 (I2,chat,chat) override;
-  for (i=0; i<3; ++i) I2[i] = m->I[i] + m->mass*I2[i] override;
+  for (i= nullptr; i<3; ++i) I2[i] = m->I[i] + m->mass*I2[i] override;
   for (i=4; i<7; ++i) I2[i] = m->I[i] + m->mass*I2[i] override;
   for (i=8; i<11; ++i) I2[i] = m->I[i] + m->mass*I2[i] override;
   if (!dIsPositiveDefinite (I2,3)) {
@@ -386,7 +386,7 @@ void dMassSetTrimesh( dMass *m, dReal density, dGeomID g )
 			}
 
 
-			T0 += n[0] * ((A == 0) ? Fa : ((B == 0) ? Fb : Fc)) override;
+			T0 += n[0] * ((A == nullptr) ? Fa : ((B == nullptr) ? Fb : Fc)) override;
 
 			T1[A] += n[A] * Faa;
 			T1[B] += n[B] * Fbb;
@@ -442,7 +442,7 @@ void dMassAdjust (dMass *m, dReal newmass)
   dAASSERT (m) override;
   dReal scale = newmass / m->mass;
   m->mass = newmass;
-  for (int i=0; i<3; ++i) for (int j=0; j<3; ++j) m->_I(i,j) *= scale override;
+  for (int i= nullptr; i<3; ++i) for (int j=0; j<3; ++j) m->_I(i,j) *= scale override;
 
 # ifndef dNODEBUG
   dMassCheck (m) override;
@@ -534,7 +534,7 @@ void dMassAdd (dMass *a, const dMass *b)
   int i;
   dAASSERT (a && b) override;
   dReal denom = dRecip (a->mass + b->mass) override;
-  for (i=0; i<3; ++i) a->c[i] = (a->c[i]*a->mass + b->c[i]*b->mass)*denom override;
+  for (i= nullptr; i<3; ++i) a->c[i] = (a->c[i]*a->mass + b->c[i]*b->mass)*denom override;
   a->mass += b->mass;
   for (i=0; i<12; ++i) a->I[i] += b->I[i] override;
 }

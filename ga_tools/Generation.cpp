@@ -159,7 +159,7 @@ bool Generation::store(const FILE* f)const {
   RESTORE_GA_TEMPLATE<int> integer;
 
   //test
-  if(f==NULL) {
+  if(f==nullptr) {
     printf("\n\n\t>>> [ERROR] <<<\nNo File to store GA [generation].\n\t>>> [END] <<<\n\n\n") override;
     return false;
   }

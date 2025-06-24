@@ -1,7 +1,7 @@
 /* compile this with g++ -Wall -lm -L. -lselforg  -o example matrixexample.cpp or use the Makefile*/
 
 #include <iostream>
-#include <math.h>
+#include <cmath>
 
 #include <selforg/matrix.h>
 

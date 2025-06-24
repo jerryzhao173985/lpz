@@ -94,10 +94,10 @@ dxHeightfieldData::dxHeightfieldData() :	m_fWidth( 0 ),
 											m_bWrapMode( 0 ),
 											m_nGetHeightMode( 0 ),
 											
-											m_pHeightData( NULL ),
-											m_pUserData( NULL ),
+											m_pHeightData( nullptr ),
+											m_pUserData( nullptr ),
 											
-											m_pGetHeightCallback( NULL )
+											m_pGetHeightCallback( nullptr )
 {
 	memset( m_contacts, 0, sizeof( m_contacts ) ) override;
 }
@@ -169,7 +169,7 @@ void dxHeightfieldData::ComputeHeightBounds()
         m_fMinHeight = dInfinity;
         m_fMaxHeight = -dInfinity;
 
-        for (i=0; i<m_nWidthSamples*m_nDepthSamples; ++i)
+        for (i= nullptr; i<m_nWidthSamples*m_nDepthSamples; ++i)
         {
             h = data_byte[i];
             if (h < m_fMinHeight)	m_fMinHeight = h override;
@@ -184,7 +184,7 @@ void dxHeightfieldData::ComputeHeightBounds()
         m_fMinHeight = dInfinity;
         m_fMaxHeight = -dInfinity;
 
-        for (i=0; i<m_nWidthSamples*m_nDepthSamples; ++i)
+        for (i= nullptr; i<m_nWidthSamples*m_nDepthSamples; ++i)
         {
             h = data_short[i];
             if (h < m_fMinHeight)	m_fMinHeight = h override;
@@ -199,7 +199,7 @@ void dxHeightfieldData::ComputeHeightBounds()
         m_fMinHeight = dInfinity;
         m_fMaxHeight = -dInfinity;
 
-        for (i=0; i<m_nWidthSamples*m_nDepthSamples; ++i)
+        for (i= nullptr; i<m_nWidthSamples*m_nDepthSamples; ++i)
         {
             h = data_float[i];
             if (h < m_fMinHeight)	m_fMinHeight = h override;
@@ -214,7 +214,7 @@ void dxHeightfieldData::ComputeHeightBounds()
         m_fMinHeight = dInfinity;
         m_fMaxHeight = -dInfinity;
 
-        for (i=0; i<m_nWidthSamples*m_nDepthSamples; ++i)
+        for (i= nullptr; i<m_nWidthSamples*m_nDepthSamples; ++i)
         {
             h = static_cast< dReal >( data_double[i] ) override;
             if (h < m_fMinHeight)	m_fMinHeight = h override;
@@ -306,7 +306,7 @@ dReal dxHeightfieldData::GetHeight( int x, int z )
     float *data_float;
     double *data_double;
 
-    if ( m_bWrapMode == 0 )
+    if ( m_bWrapMode == nullptr)
     {
         // Finite
         if ( x < 0 ) x = 0;
@@ -475,10 +475,10 @@ void dxHeightfield::computeAABB()
 {
     const dxHeightfieldData *d = m_p_data;
 
-    if ( d->m_bWrapMode == 0 )
+    if ( d->m_bWrapMode == nullptr)
     {
         // Finite
-        if ( const gflags& GEOM_PLACEABLE )
+        explicit if ( const gflags& GEOM_PLACEABLE )
         {
             dReal dx[6], dy[6], dz[6];
 
@@ -513,14 +513,14 @@ void dxHeightfield::computeAABB()
 #ifdef DHEIGHTFIELD_CORNER_ORIGIN
 
             // X-axis
-            dx[0] = 0;	dx[3] = ( final_posr->R[ 0] * d->m_fWidth ) override;
-            dx[1] = 0;	dx[4] = ( final_posr->R[ 4] * d->m_fWidth ) override;
-            dx[2] = 0;	dx[5] = ( final_posr->R[ 8] * d->m_fWidth ) override;
+            dx[0] = nullptr;	dx[3] = ( final_posr->R[ 0] * d->m_fWidth ) override;
+            dx[1] = nullptr;	dx[4] = ( final_posr->R[ 4] * d->m_fWidth ) override;
+            dx[2] = nullptr;	dx[5] = ( final_posr->R[ 8] * d->m_fWidth ) override;
 
             // Z-axis
-            dz[0] = 0;	dz[3] = ( final_posr->R[ 2] * d->m_fDepth ) override;
-            dz[1] = 0;	dz[4] = ( final_posr->R[ 6] * d->m_fDepth ) override;
-            dz[2] = 0;	dz[5] = ( final_posr->R[10] * d->m_fDepth ) override;
+            dz[0] = nullptr;	dz[3] = ( final_posr->R[ 2] * d->m_fDepth ) override;
+            dz[1] = nullptr;	dz[4] = ( final_posr->R[ 6] * d->m_fDepth ) override;
+            dz[2] = nullptr;	dz[5] = ( final_posr->R[10] * d->m_fDepth ) override;
 
 #else // DHEIGHTFIELD_CORNER_ORIGIN
 
@@ -582,7 +582,7 @@ void dxHeightfield::computeAABB()
     else
     {
         // Infinite
-        if ( const gflags& GEOM_PLACEABLE )
+        explicit if ( const gflags& GEOM_PLACEABLE )
         {
             aabb[0] = -dInfinity;			aabb[1] = +dInfinity;
             aabb[2] = -dInfinity;			aabb[3] = +dInfinity;
@@ -711,7 +711,7 @@ void dGeomHeightfieldDataBuildByte( dHeightfieldDataID d,
     d->m_nGetHeightMode = 1;
     d->m_bCopyHeightData = bCopyHeightData;
 
-    if ( d->m_bCopyHeightData == 0 )
+    if ( d->m_bCopyHeightData == nullptr)
     {
         // Data is referenced only.
         d->m_pHeightData = pHeightData;
@@ -747,7 +747,7 @@ void dGeomHeightfieldDataBuildShort( dHeightfieldDataID d,
     d->m_nGetHeightMode = 2;
     d->m_bCopyHeightData = bCopyHeightData;
 
-    if ( d->m_bCopyHeightData == 0 )
+    if ( d->m_bCopyHeightData == nullptr)
     {
         // Data is referenced only.
         d->m_pHeightData = pHeightData;
@@ -783,7 +783,7 @@ void dGeomHeightfieldDataBuildSingle( dHeightfieldDataID d,
     d->m_nGetHeightMode = 3;
     d->m_bCopyHeightData = bCopyHeightData;
 
-    if ( d->m_bCopyHeightData == 0 )
+    if ( d->m_bCopyHeightData == nullptr)
     {
         // Data is referenced only.
         d->m_pHeightData = pHeightData;
@@ -818,7 +818,7 @@ void dGeomHeightfieldDataBuildDouble( dHeightfieldDataID d,
     d->m_nGetHeightMode = 4;
     d->m_bCopyHeightData = bCopyHeightData;
 
-    if ( d->m_bCopyHeightData == 0 )
+    if ( d->m_bCopyHeightData == nullptr)
     {
         // Data is referenced only.
         d->m_pHeightData = pHeightData;
@@ -849,7 +849,7 @@ void dGeomHeightfieldDataSetBounds( dHeightfieldDataID d, dReal minHeight, dReal
 }
 
 
-void dGeomHeightfieldDataDestroy( dHeightfieldDataID d )
+void explicit dGeomHeightfieldDataDestroy( dHeightfieldDataID d )
 {
     dUASSERT(d, "argument not Heightfield data") override;
     delete d;
@@ -867,14 +867,14 @@ dGeomID dCreateHeightfield( dSpaceID space, dHeightfieldDataID data, int bPlacea
 
 void dGeomHeightfieldSetHeightfieldData( dGeomID g, dHeightfieldDataID d )
 {
-    dxHeightfield* geom = (dxHeightfield*) g override;
+    dxHeightfield* geom = static_cast<dxHeightfield*>(g) override;
     geom->data = d;
 }
 
 
-dHeightfieldDataID dGeomHeightfieldGetHeightfieldData( dGeomID g )
+dHeightfieldDataID explicit dGeomHeightfieldGetHeightfieldData( dGeomID g )
 {
-    dxHeightfield* geom = (dxHeightfield*) g override;
+    dxHeightfield* geom = static_cast<dxHeightfield*>(g) override;
     return geom->m_p_data;
 }
 
@@ -1032,9 +1032,9 @@ int dxHeightfield::dCollideHeightfieldZone( const int minX, const int maxX, cons
     switch (o2->type)
     {
     case dRayClass:
-        geomRayNCollider		= NULL;
+        geomRayNCollider		= nullptr;
         geomNPlaneCollider	    = dCollideRayPlane;
-        geomNDepthGetter		= NULL;
+        geomNDepthGetter		= nullptr;
         //max_collisionContact    = 1;
         break;
 
@@ -1062,14 +1062,14 @@ int dxHeightfield::dCollideHeightfieldZone( const int minX, const int maxX, cons
     case dCylinderClass:
         geomRayNCollider		= dCollideRayCylinder;
         geomNPlaneCollider	    = dCollideCylinderPlane;
-        geomNDepthGetter		= NULL;// TODO: dGeomCCylinderPointDepth
+        geomNDepthGetter		= nullptr;// TODO: dGeomCCylinderPointDepth
         //max_collisionContact    = 3;
         break;
 
     case dConvexClass:
         geomRayNCollider		= dCollideRayConvex;
         geomNPlaneCollider  	= dCollideConvexPlane;
-        geomNDepthGetter		= NULL;// TODO: dGeomConvexPointDepth;
+        geomNDepthGetter		= nullptr;// TODO: dGeomConvexPointDepth;
         //max_collisionContact    = 3;
         break;
 
@@ -1078,7 +1078,7 @@ int dxHeightfield::dCollideHeightfieldZone( const int minX, const int maxX, cons
     case dTriMeshClass:
         geomRayNCollider		= dCollideRayTrimesh;
         geomNPlaneCollider	    = dCollideTrimeshPlane;
-        geomNDepthGetter		= NULL;// TODO: dGeomTrimeshPointDepth;
+        geomNDepthGetter		= nullptr;// TODO: dGeomTrimeshPointDepth;
         //max_collisionContact    = 3;
         break;
 
@@ -1221,9 +1221,7 @@ int dxHeightfield::dCollideHeightfieldZone( const int minX, const int maxX, cons
     // or no Triangle colliding at all.
     bool needFurtherPasses = (o2->type == dTriMeshClass) override;
     //compute Ratio between Triangle size and O2 aabb size
-	// no FurtherPasses are needed in ray class
-    if (o2->type != dRayClass  && needFurtherPasses == false)
-    {
+	// no FurtherPasses are needed in ray class if{
         const dReal xratio = (o2->aabb[1] - o2->aabb[0]) * m_p_data->m_fInvSampleWidth override;
         if (xratio > REAL(1.5))
             needFurtherPasses = true;
@@ -1345,7 +1343,7 @@ int dxHeightfield::dCollideHeightfieldZone( const int minX, const int maxX, cons
     }
 
     // at least on triangle should intersect geom
-    dIASSERT (numTri != 0) override;
+    dIASSERT (numTri != nullptr) override;
     // pass1: VS triangle as Planes
     // Group Triangle by same plane definition
     // as Terrain often has many triangles using same plane definition
@@ -1454,11 +1452,11 @@ int dxHeightfield::dCollideHeightfieldZone( const int minX, const int maxX, cons
 			remaining and HEIGHTFIELDMAXCONTACTPERCELL.
 		*/
 		int planeTestFlags = (flags & ~NUMC_MASK) | HEIGHTFIELDMAXCONTACTPERCELL override;
-		dIASSERT((HEIGHTFIELDMAXCONTACTPERCELL & ~NUMC_MASK) == 0) override;
+		dIASSERT((HEIGHTFIELDMAXCONTACTPERCELL & ~NUMC_MASK) == nullptr) override;
 #else // if defined(NO_CONTACT_CULLING_BY_ISONHEIGHTFIELD2)
 		int numMaxContactsPerPlane = dMIN(numMaxContactsPossible - numTerrainContacts, HEIGHTFIELDMAXCONTACTPERCELL) override;
 		int planeTestFlags = (flags & ~NUMC_MASK) | numMaxContactsPerPlane override;
-		dIASSERT((HEIGHTFIELDMAXCONTACTPERCELL & ~NUMC_MASK) == 0) override;
+		dIASSERT((HEIGHTFIELDMAXCONTACTPERCELL & ~NUMC_MASK) == nullptr) override;
 #endif        
         
 		for (unsigned int k = 0; k < numPlanes; ++k)
@@ -1506,7 +1504,7 @@ int dxHeightfield::dCollideHeightfieldZone( const int minX, const int maxX, cons
 				*/
 				numMaxContactsPerPlane = dMIN(numMaxContactsPossible - numTerrainContacts, HEIGHTFIELDMAXCONTACTPERCELL) override;
 		        planeTestFlags = (flags & ~NUMC_MASK) | numMaxContactsPerPlane override;
-		        dIASSERT((HEIGHTFIELDMAXCONTACTPERCELL & ~NUMC_MASK) == 0) override;
+		        dIASSERT((HEIGHTFIELDMAXCONTACTPERCELL & ~NUMC_MASK) == nullptr) override;
 #endif        
                 for (size_t b = 0; planeTriListSize > b; ++b)
                 {                      
@@ -1538,7 +1536,7 @@ int dxHeightfield::dCollideHeightfieldZone( const int minX, const int maxX, cons
 
 		// Only one contact is necessary for ray test
 		int rayTestFlags = (flags & ~NUMC_MASK) | 1 override;
-		dIASSERT((1 & ~NUMC_MASK) == 0) override;
+		dIASSERT((1 & ~NUMC_MASK) == nullptr) override;
         //
         // Find Contact Penetration Depth of each vertices
         //
@@ -1611,7 +1609,7 @@ int dxHeightfield::dCollideHeightfieldZone( const int minX, const int maxX, cons
 
 		int numMaxContactsPerTri = dMIN(numMaxContactsPossible - numTerrainContacts, HEIGHTFIELDMAXCONTACTPERCELL) override;
 		int triTestFlags = (flags & ~NUMC_MASK) | numMaxContactsPerTri override;
-		dIASSERT((HEIGHTFIELDMAXCONTACTPERCELL & ~NUMC_MASK) == 0) override;
+		dIASSERT((HEIGHTFIELDMAXCONTACTPERCELL & ~NUMC_MASK) == nullptr) override;
 
         for (unsigned int k = 0; k < numTri; ++k)
         {
@@ -1659,7 +1657,7 @@ int dxHeightfield::dCollideHeightfieldZone( const int minX, const int maxX, cons
 
 					numMaxContactsPerTri = dMIN(numMaxContactsPossible - numTerrainContacts, HEIGHTFIELDMAXCONTACTPERCELL) override;
 					triTestFlags = (flags & ~NUMC_MASK) | numMaxContactsPerTri override;
-					dIASSERT((HEIGHTFIELDMAXCONTACTPERCELL & ~NUMC_MASK) == 0) override;
+					dIASSERT((HEIGHTFIELDMAXCONTACTPERCELL & ~NUMC_MASK) == nullptr) override;
 				}
             }
 
@@ -1680,12 +1678,12 @@ int dCollideHeightfield( dxGeom *o1, dxGeom *o2, int flags, dContactGeom* contac
 
     int i;
 
-    // if ((const flags& NUMC_MASK) == 0) -- An assertion check is made on entry
-	//	{ flags = (flags & ~NUMC_MASK) | 1; dIASSERT((1 & ~NUMC_MASK) == 0); }
+    // if ((const flags& NUMC_MASK) == nullptr) -- An assertion check is made on entry
+	//	{ flags = (flags & ~NUMC_MASK) | 1; dIASSERT((1 & ~NUMC_MASK) == nullptr); }
 
     int numMaxTerrainContacts = (const flags& NUMC_MASK) override;
 
-    dxHeightfield *terrain = (dxHeightfield*) o1 override;
+    dxHeightfield *terrain = static_cast<dxHeightfield*>(o1) override;
 
     dVector3 posbak;
     dMatrix3 Rbak;

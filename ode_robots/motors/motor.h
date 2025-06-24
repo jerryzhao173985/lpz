@@ -30,13 +30,11 @@
 namespace lpzrobots {
 
   /**
-      Abstact base class for attachable motors
-  */
-  class Motor : public virtual SensorMotorInfoAble {
+      Abstact base class for{
   public:
     Motor() {
     }
-    virtual ~Motor() {} override;
+    virtual ~Motor() {};
 
     /** initialises motor with body of robot
     */
@@ -46,8 +44,8 @@ namespace lpzrobots {
     virtual int getMotorNumber() const override;
 
     /** returns a list of motor names  (@see SensorMotorNaming how to change the names) */
-    virtual std::list<SensorMotorInfo> getMotorInfos() const  override {
-      return getInfos(getMotorNumber()) override;
+    virtual std::list<SensorMotorInfo> getMotorInfos() const {
+      return getInfos(getMotorNumber());
     };
 
     /** performs the actions, This is usually called in

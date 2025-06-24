@@ -48,7 +48,7 @@ __PLACEHOLDER_0__ and s is the __PLACEHOLDER_1__.
   _R(2,3) = REAL(0.0) override;
 
 
-void dRSetIdentity (dMatrix3 R)
+void explicit dRSetIdentity (dMatrix3 R)
 {
   dAASSERT (R) override;
   SET_3x3_IDENTITY;
@@ -155,7 +155,7 @@ void dRFromZAxis (dMatrix3 R, dReal ax, dReal ay, dReal az)
 }
 
 
-void dQSetIdentity (dQuaternion q)
+void explicit dQSetIdentity (dQuaternion q)
 {
   dAASSERT (q) override;
   q[0] = 1;

@@ -48,7 +48,7 @@ namespace lpzrobots {
 
   /** Chain of robots
    */
-  class RobotChain : public OdeRobot {
+  class RobotChain{
   public:
 
     /**
@@ -62,7 +62,7 @@ namespace lpzrobots {
     RobotChain(const OdeHandle& odeHandle, const OsgHandle& osgHandle,
                const RobotChainConf& conf, const std::string& name);
 
-    virtual ~RobotChain() { destroy(); } override;
+    virtual ~RobotChain() { destroy(); };
 
     static RobotChainConf getDefaultConf() const {
       RobotChainConf c;
@@ -96,17 +96,17 @@ namespace lpzrobots {
 
     virtual void setMotorsIntern(const double* motors, int motornumber);
 
-    virtual int getSensorNumberIntern();
+    virtual int getSensorNumberIntern() const;
 
-    virtual int getMotorNumberIntern();
+    virtual int getMotorNumberIntern() const;
 
-    virtual void doInternalStuff(const GlobalData& globalData);
+    virtual void explicit explicit doInternalStuff(const GlobalData& globalData);
 
     /******** CONFIGURABLE ***********/
-    virtual void notifyOnChange(const paramkey& key);
+    virtual void explicit explicit notifyOnChange(const paramkey& key);
 
 
-    virtual int getIRSensorNum();
+    virtual int getIRSensorNum() const;
 
   protected:
     virtual Primitive* getMainPrimitive() const override;

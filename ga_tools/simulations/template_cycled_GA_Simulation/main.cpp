@@ -23,7 +23,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  *                                                                         *
  ***************************************************************************/
-#include <stdio.h>
+#include <cstdio>
 #include <vector>
 
 // include noisegenerator (used for adding noise to sensorvalues)
@@ -32,55 +32,7 @@
 // include simulation environment stuff
 #include <ode_robots/simulation.h>
 
-// include agent (class for holding a robot, a controller and a wiring)
-#include <ode_robots/odeagent.h>
-
-// used wiring
-#include <selforg/one2onewiring.h>
-#include <selforg/derivativewiring.h>
-#include <selforg/invertmotornstep.h>
-
-// used robot
-#include <ode_robots/nimm2.h>
-#include <ode_robots/nimm4.h>
-
-// used arena
-#include <ode_robots/playground.h>
-// used passive spheres
-#include <ode_robots/passivesphere.h>
-
-// used controller
-#include <selforg/invertmotorspace.h>
-
-// used ga_tools
-#include <ga_tools/SingletonGenAlgAPI.h>
-#include <ga_tools/Generation.h>
-#include <ga_tools/Individual.h>
-#include <ga_tools/Gen.h>
-#include <ga_tools/TemplateValue.h>
-// only for deleting
-#include <ga_tools/ValueMutationStrategy.h>
-#include <ga_tools/StandartMutationFactorStrategy.h>
-#include <ga_tools/DoubleRandomStrategy.h>
-
-#include "TemplateCycledGaSimulationFitnessStrategy.h"
-
-#include <selforg/trackablemeasure.h>
-#include <selforg/statistictools.h>
-
-// fetch all the stuff of lpzrobots into scope
-using namespace lpzrobots;
-
-//this 3 PlotOptions are needed for some measures. They will bring us some data on the screen and save all to a log file.
-PlotOption opt1(GuiLogger); // a plot Option for the generation measure to guilogger
-PlotOption opt2(File); // a plot Option for the generation measure to file
-PlotOption optGen(File); // a plot Option for gene measure to file
-
-/**
- * This class is our simulation. It simulate the robots in there playground
- */
-class ThisSim : public Simulation
-{
+// include agent (class for{
 public:
   /**
    * constructor
@@ -343,7 +295,7 @@ public:
   virtual void
   addCallback(const GlobalData& globalData, bool draw, bool pause, bool control) override {
     // if 100 steps over, 1s is over
-    if (globalData.sim_step % 100 == 0)
+    if (globalData.sim_step % 100 == nullptr)
     {
       std::cout << "time: " << globalData.sim_step / 100 << "s" << std::endl;
     }
@@ -383,7 +335,7 @@ private:
    * This function creates the robots and agents for one simulation.
    * @param global
    */
-  void createBots(const GlobalData& global)
+  void explicit createBots(const GlobalData& global)
   {
     OdeRobot* vehicle; // the robot
     OdeAgent* agent; // the agent

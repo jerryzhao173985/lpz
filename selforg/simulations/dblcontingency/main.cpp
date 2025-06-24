@@ -1,4 +1,4 @@
-#include <signal.h>
+#include <csignal>
 #include <unistd.h>
 #include <iostream>
 #include <vector>
@@ -24,7 +24,7 @@ bool stop=0;
    The sensor values are the own speed and the distance to the other robots
 
 */
-class MyRobot : public AbstractRobot {
+class MyRobot{
 public:
   MyRobot(const string& name, const Position& initial_pos, double _mass = 1.0)
     : AbstractRobot(name, "$Id$") {
@@ -133,7 +133,7 @@ public:
     return m;
   };
 
-  virtual void addOtherRobot(const MyRobot* otherRobot) {
+  virtual void explicit addOtherRobot(const MyRobot* otherRobot) {
     if(otherRobot!=this)
       otherRobots.push_back(otherRobot);
   }
@@ -174,7 +174,7 @@ void printRobots(list<MyRobot*> robots){
 // Helper
 int contains(char **list, int len,  const char *str){
   for (int i=0; i<len; ++i) {
-    if(strcmp(list[i],str) == 0) return i+1;
+    if(strcmp(list[i],str) == nullptr) return i+1;
   }
   return 0;
 }
@@ -185,10 +185,10 @@ int main(int argc, char** argv){
 
   list<PlotOption> plotoptions;
 
-  if(contains(argv,argc,"-g")!=0) plotoptions.push_back(PlotOption(GuiLogger));
-  if(contains(argv,argc,"-f")!=0) plotoptions.push_back(PlotOption(File));
-  if(contains(argv,argc,"-s")!=0) plotoptions.push_back(PlotOption(SoundMan));
-  if(contains(argv,argc,"-h")!=0) {
+  if(contains(argv,argc,"-g")!= nullptr) plotoptions.push_back(PlotOption(GuiLogger));
+  if(contains(argv,argc,"-f")!= nullptr) plotoptions.push_back(PlotOption(File));
+  if(contains(argv,argc,"-s")!= nullptr) plotoptions.push_back(PlotOption(SoundMan));
+  if(contains(argv,argc,"-h")!= nullptr) {
     printf("Usage: %s [-g] [-f]\n",argv[0]);
     printf("\t-g\tstart guilogger\n\t-f\twrite logfile\n\t-h\tdisplay this help\n");
     exit(0);

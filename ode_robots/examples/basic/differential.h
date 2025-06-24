@@ -25,43 +25,26 @@
 #ifndef __DIFFERENTIAL_H
 #define __DIFFERENTIAL_H
 
-// Include ODE Robot class to inherit from it
-#include <ode_robots/oderobot.h>
-
-// ODE primitives
-#include <ode_robots/primitive.h>
-
-// ODE joints for objects
-#include <ode_robots/joint.h>
-
-// ODE angular motors
-#include <ode_robots/angularmotor.h>
-
-// ODE infrared distance sensors
-#include <ode_robots/raysensorbank.h>
-#include <ode_robots/irsensor.h>
-
-// Using name space lpzrobots
-namespace lpzrobots{
+// Include ODE Robot class to{
 
   // structure to hold configuration of the robot
   typedef struct{
-    double bodyRadius;          // Radius of the cylinder defining the body
-    double bodyHeight;          // Height of the cylinder defining the body
-    double bodyMass;            // Mass of the body
-    double wheelRadius;         // Radius of the cylinder defining the wheel
-    double wheelHeight;         // Height of the cylinder defining the wheel
-    double wheelMass;           // Mass of the wheel
-    double wheelMotorPower;     // Maximum power allowed to the motor to reach MaxSpeed
-    double wheelMotorMaxSpeed;  // Maximum speed of the wheel
-    double irRange;             // Range (max distance) of the infra-red sensors
+    double bodyRadius = 0.0;          // Radius of the cylinder defining the body
+    double bodyHeight = 0.0;          // Height of the cylinder defining the body
+    double bodyMass = 0.0;            // Mass of the body
+    double wheelRadius = 0.0;         // Radius of the cylinder defining the wheel
+    double wheelHeight = 0.0;         // Height of the cylinder defining the wheel
+    double wheelMass = 0.0;           // Mass of the wheel
+    double wheelMotorPower = 0.0;     // Maximum power allowed to the motor to reach MaxSpeed
+    double wheelMotorMaxSpeed = 0.0;  // Maximum speed of the wheel
+    double irRange = 0.0;             // Range (max distance) of the infra-red sensors
   } DifferentialConf;
 
   /**
    * Differential robot: two separated wheel on each side of the body
    * Inherit from OdeRobot
    */
-  class Differential: public OdeRobot {
+  class Differential{
     public:
       // Structure to hold the configuration of the robot
       DifferentialConf conf;
@@ -93,7 +76,7 @@ namespace lpzrobots{
       /**
        * Destructor
        */
-      virtual ~Differential();
+      virtual ~Differential() override;
 
       /**
        * Place the robot in the desired pose

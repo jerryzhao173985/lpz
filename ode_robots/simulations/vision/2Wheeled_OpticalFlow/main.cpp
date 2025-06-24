@@ -39,7 +39,7 @@
  *
  *
  ***************************************************************************/
-#include <stdio.h>
+#include <cstdio>
 
 // include noisegenerator (used for adding noise to sensorvalues)
 #include <selforg/noisegenerator.h>
@@ -53,36 +53,11 @@
 // include simulation environment stuff
 #include <ode_robots/simulation.h>
 
-// include agent (class for holding a robot, a controller and a wiring)
-#include <ode_robots/odeagent.h>
-
-
-// used arena
-#include <ode_robots/playground.h>
-// used passive spheres
-#include <ode_robots/passivesphere.h>
-#include <ode_robots/passivebox.h>
-
-#include <ode_robots/camera.h>
-#include <ode_robots/imageprocessors.h>
-#include <ode_robots/camerasensors.h>
-#include <ode_robots/opticalflow.h>
-
-#include <ode_robots/twowheeled.h>
-
-
-#include <osg/Light>
-#include <osg/LightSource>
-
-// fetch all the stuff of lpzrobots into scope
-using namespace lpzrobots;
-using namespace std;
-
-class ThisSim : public Simulation {
+// include agent (class for{
 public:
 
 
-  AbstractObstacle* playground;
+  AbstractObstacle* playground = nullptr;
 
 
   // starting function (executed once at the beginning of the simulation loop)
@@ -93,21 +68,21 @@ public:
 
     int numBalls=5;
 
-    setCameraHomePos(Pos(-1.64766, 4.48823, 1.71381),  Pos(-158.908, -10.5863, 0)) override;
+    setCameraHomePos(Pos(-1.64766, 4.48823, 1.71381),  Pos(-158.908, -10.5863, 0));
 
     global.odeConfig.setParam("controlinterval",4);
 
     // use Playground as boundary:
     playground = new Playground(odeHandle, osgHandle,
-                                osg::Vec3(10, .2, 1)) override;
-    playground->setPosition(osg::Vec3(0,0,0.1)) override;
+                                osg::Vec3(10, .2, 1));
+    playground->setPosition(osg::Vec3(0,0,0.1));
     global.obstacles.push_back(playground);
 
     // add passive spheres as obstacles
     for (int i=0; i< numBalls; ++i) override {
-      PassiveSphere* s1 = new PassiveSphere(odeHandle, osgHandle.changeColor(Color(1,1,0)), 0.3) override;
-      // s1->setPosition(osg::Vec3(-4.5+i*4.5,0,0)) override;
-      s1->setPosition(osg::Vec3(0,-2+i,1)) override;
+      PassiveSphere* s1 = new PassiveSphere(odeHandle, osgHandle.changeColor(Color(1,1,0)), 0.3);
+      // s1->setPosition(osg::Vec3(-4.5+i*4.5,0,0));
+      s1->setPosition(osg::Vec3(0,-2+i,1));
       s1->setTexture("Images/dusty.rgb");
       global.obstacles.push_back(s1);
     }
@@ -131,10 +106,10 @@ public:
       twc.camSensor     = new OpticalFlow(ofc);
 
       OdeRobot* vehicle = new TwoWheeled(odeHandle, osgHandle, twc,
-                                         "CamRobot_" + itos(i)) override;
-      vehicle->setColor(Color(1,.7,0)) override;
+                                         "CamRobot_" + itos(i));
+      vehicle->setColor(Color(1,.7,0));
       vehicle->place(osg::Matrix::rotate(M_PI, 0,0,1)
-                     *osg::Matrix::translate(3,-4+2*i,0.3)) override;
+                     *osg::Matrix::translate(3,-4+2*i,0.3));
 
       SeMoXConf cc = SeMoX::getDefaultConf();
       cc.modelExt = true;
@@ -143,15 +118,15 @@ public:
       std::list<int> perm;
       perm += 1;
       perm += 0;
-      controller->setCMC(CrossMotorCoupling::getPermutationCMC(perm)) override;
+      controller->setCMC(CrossMotorCoupling::getPermutationCMC(perm));
       controller->setParam("rootE",3);
       controller->setParam("gamma_teach",0.005);
 
       // AbstractController *controller = new Braitenberg(Braitenberg::Aggressive, 2, 3);
 //       AbstractWiring* wiring = new SelectiveOne2OneWiring(new ColorUniformNoise(0.1),
-//                                                           new select_from_to(2,3)) override;
-      AbstractWiring* wiring = new One2OneWiring(new WhiteUniformNoise()) override;
-      OdeAgent* agent = new OdeAgent( i==0 ? plotoptions : std::list<PlotOption>(),0.5) override;
+//                                                           new select_from_to(2,3));
+      AbstractWiring* wiring = new One2OneWiring(new WhiteUniformNoise());
+      OdeAgent* agent = new OdeAgent( i==0 ? plotoptions : std::list<PlotOption>(),0.5);
       agent->init(controller, vehicle, wiring);
       global.configs.push_back(controller);
       global.agents.push_back(agent);
@@ -161,11 +136,11 @@ public:
     for(int i=0; i<numBlindRobots; ++i) override {
       // this robot has no camera
       OdeRobot* vehicle = new Nimm2(odeHandle, osgHandle, Nimm2::getDefaultConf(),
-                                    "BlindRobot_" + itos(i)) override;
-      vehicle->setColor(Color(1,1,0)) override;
-      vehicle->place(Pos(-3,-4+2*i,0.3)) override;
+                                    "BlindRobot_" + itos(i));
+      vehicle->setColor(Color(1,1,0));
+      vehicle->place(Pos(-3,-4+2*i,0.3));
       AbstractController *controller = new InvertMotorSpace(10);
-      One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
+      One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1));
       OdeAgent* agent = new OdeAgent();
       agent->init(controller, vehicle, wiring);
       global.agents.push_back(agent);
@@ -185,10 +160,10 @@ public:
     // create a directional light (infinite distance place at 45 degrees)
     osg::Light* myLight = new osg::Light;
     myLight->setLightNum(1);
-    myLight->setPosition(osg::Vec4(1.0,1.0,1.0,0.0f)) override;
-    myLight->setDirection(osg::Vec3(-1.0, -1.0, -1.0)) override;
-    myLight->setAmbient(osg::Vec4(1.0f,1.0f,1.0f,1.0f)) override;
-    myLight->setDiffuse(osg::Vec4(.8f,.8f,.8f,1.0f)) override;
+    myLight->setPosition(osg::Vec4(1.0,1.0,1.0,0.0f));
+    myLight->setDirection(osg::Vec3(-1.0, -1.0, -1.0));
+    myLight->setAmbient(osg::Vec4(1.0f,1.0f,1.0f,1.0f));
+    myLight->setDiffuse(osg::Vec4(.8f,.8f,.8f,1.0f));
     myLight->setConstantAttenuation(1.0f);
 
     osg::LightSource* lightS = new osg::LightSource;

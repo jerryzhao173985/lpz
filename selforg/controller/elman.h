@@ -29,7 +29,7 @@
 #include "multilayerffnn.h"
 
 /// updates for network
-class NetUpdate {
+class NetUpdate{
 public:
   NetUpdate() {}
   NetUpdate(int numweights, int numbias, int numothers)
@@ -57,7 +57,7 @@ Example of 2 hidden layer network with both, elman and jordan context units.
 +-^-^-^         ^-^-^--<--+
 }
  */
-class Elman : public MultiLayerFFNN {
+class Elman{
 public:
   /**
      @param eps learning rate
@@ -111,7 +111,7 @@ public:
 
   /** applies the weight increments to the weight (and bias) matrices
       with the learningrate and the learnRateFactor */
-  virtual void updateWeights(const NetUpdate& updates);
+  virtual void explicit explicit updateWeights(const NetUpdate& updates);
 
   /* Is implemented in multilayerfnn
      virtual const matrix::Matrix response(const matrix::Matrix& input) const;

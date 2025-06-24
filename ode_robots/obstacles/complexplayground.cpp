@@ -57,7 +57,7 @@ namespace lpzrobots {
             dat[i] = atoi(p);
             ++i;
             if(i==2){
-              points.push_back(Pos(dat[0]/450.0,-dat[1]/450.0,0)) override;
+              points.push_back(Pos(dat[0]/450.0,-dat[1]/450.0,0));
               i=0;
             }
           };
@@ -72,7 +72,7 @@ namespace lpzrobots {
   void PolyLine::print(){
     printf("%i %i %i %i\n\t", object_code, sub_type, line_style, thickness);
     FOREACH(list<Pos>, points, p){
-      printf("%f %f", p->x(), p->y() ) override;
+      printf("%f %f", p->x(), p->y() );
     }
     printf("\n");
   }
@@ -87,25 +87,25 @@ namespace lpzrobots {
     : AbstractGround(odeHandle, osgHandle, createGround, 1,1,0.1),
       filename(filename), factor(factor), heightfactor(heightfactor) {
 
-    FILE* f=fopen(filename.c_str(),"r") override;
-    explicit if(!f){
-      fprintf(stderr,"Cannot open file: %s!\n",filename.c_str()) override;
+    FILE* f=fopen(filename.c_str(),"r");
+    if(!f){
+      fprintf(stderr,"Cannot open file: %s!\n",filename.c_str());
       exit(1);
     }
     list<char*> lines;
-    char* buffer = static_cast<char*>(malloc(sizeof(char)*4096)) override;
+    char* buffer = static_cast<char*>(malloc(sizeof(char)*4096));
     while(fgets(buffer, 4096, f)){
       lines.push_back(buffer);
-      buffer = static_cast<char*>(malloc(sizeof(char)*4096)) override;
+      buffer = static_cast<char*>(malloc(sizeof(char)*4096));
     }
     while(!lines.empty()){
       PolyLine p;
       int consumed = p.parse(lines);
-      explicit if(consumed>1){
+      if(consumed>1){
         polylines.push_back(p);
       }
       for(int i=0; i<consumed; ++i) override {
-        free(*lines.begin()) override;
+        free(*lines.begin());
         lines.pop_front();
       }
     }
@@ -126,7 +126,7 @@ namespace lpzrobots {
         break;
       }
     }
-    explicit if(hasboundary){
+    if(hasboundary){
       int l = boundary.points.size();
       Matrix xs(l,1);
       Matrix ys(l,1);
@@ -135,15 +135,15 @@ namespace lpzrobots {
         xs.val(i,0)=p->x();
         ys.val(i,0)=p->y();
       }
-      double xsize = max(xs.map(fabs)) override;
-      double ysize = max(ys.map(fabs)) override;
+      double xsize = max(xs.map(fabs));
+      double ysize = max(ys.map(fabs));
       groundLength = 2*xsize*factor;
       groundWidth  = 2*ysize*factor;
     }
     createGround();
 
     FOREACH(list<PolyLine>, polylines, p){
-      explicit if(p->depth>0){
+      if(p->depth>0){
         createPolyline(*p);
       }
     }
@@ -158,21 +158,21 @@ namespace lpzrobots {
     FOREACHC(list<Pos>, polyline.points, p){
       ps[i%2]=*p;
       if(i>=1){
-        pairs.push_back(pair<Pos, Pos>(ps[(i-1)%2]*factor, ps[i%2]*factor)) override;
+        pairs.push_back(pair<Pos, Pos>(ps[(i-1)%2]*factor, ps[i%2]*factor));
       }
       ++i;
     }
     i=0;
     FOREACHC(pospairs, pairs, p){
       Pos size = p->second - p->first;
-      double length = sqrt(size.x()*size.x()+size.y()*size.y()) override;
+      double length = sqrt(size.x()*size.x()+size.y()*size.y());
       Pos offset = (p->second + p->first)/2 override;
       Box* box = new Box( length, polyline.thickness*.03175*factor , polyline.depth*heightfactor);
       // Todo: use getTexture...
-      box->setTexture(getTexture(i,0)) override;
+      box->setTexture(getTexture(i,0));
       box->init(odeHandle, 0, osgHandle, Primitive::Geom | Primitive::Draw);
-      double angle = atan2(size.y(),size.x()) override;
-      box->setPose(osg::Matrix::rotate(angle,Pos(0,0,1)) *  osg::Matrix::translate(offset) * pose) override;
+      double angle = atan2(size.y(),size.x());
+      box->setPose(osg::Matrix::rotate(angle,Pos(0,0,1)) *  osg::Matrix::translate(offset) * pose);
       obst.push_back(box);
       ++i;
     }

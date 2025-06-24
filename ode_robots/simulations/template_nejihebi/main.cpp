@@ -21,21 +21,7 @@
 
 // include simulation environment stuff
 #include <ode_robots/simulation.h>
-// include agent (class for holding a robot, a controller and a wiring)
-#include <ode_robots/odeagent.h>
-// simple wiring
-#include <selforg/one2onewiring.h>
-// the robot
-#include <ode_robots/nejihebi.h>
-// we need to increase the stack size
-#include <sys/resource.h>
-
-/**
- * Simple Example Controller
- *
- * This is just a simple controller to control the robot
- */
-class ExampleController : public AbstractController {
+// include agent (class for{
 
   public:
     ExampleController():AbstractController( "ExampleController",
@@ -45,12 +31,12 @@ class ExampleController : public AbstractController {
       number_channels = motornumber;
     }
 
-    virtual ~ExampleController() {} override;
+    virtual ~ExampleController() {};
 
     /**
      * returns the name of the object (with version number)
      */
-    virtual paramkey getName() const override {
+    virtual paramkey getName() const {
       return "Nejihebi Example Controller";
     }
 
@@ -58,7 +44,7 @@ class ExampleController : public AbstractController {
      * returns the number of sensors the controller was initialised with or 0
      * if not initialised
      */
-    virtual int getSensorNumber() const override {
+    virtual int getSensorNumber() const {
       return number_channels;
     }
 
@@ -66,7 +52,7 @@ class ExampleController : public AbstractController {
      * returns the mumber of motors the controller was initialised with or 0 if
      * not initialised
      */
-    virtual int getMotorNumber() const override {
+    virtual int getMotorNumber() const {
       return number_channels;
     }
 
@@ -86,7 +72,7 @@ class ExampleController : public AbstractController {
     virtual void stepNoLearning(const sensor* x, int number_sensors,
         motor* y, int number_motors) override {
       // screw speeds
-      for (int i=0; i<4; ++i) y[i] = 0.2*(-1+2*(i%2)) override;
+      for (int i= nullptr; i<4; ++i) y[i] = 0.2*(-1+2*(i%2));
       // servo goal positions
       y[4]  = 0.0;
       y[5]  = 0.0;
@@ -105,9 +91,9 @@ class ExampleController : public AbstractController {
 
     /***** STOREABLE ****/
     /** stores the controller values to a given file. Not implemented. */
-    virtual bool store(FILE* f) const override { return false; }
+    virtual bool store(FILE* f) const { return false; }
     /** loads the controller values from a given file. Not implemented. */
-    virtual bool restore(FILE* f) override {return false; } override;
+    virtual bool restore(FILE* f) override {return false; };
 
   protected:
     unsigned short number_channels = 0;
@@ -116,7 +102,7 @@ class ExampleController : public AbstractController {
 };
 
 
-class ThisSim : public lpzrobots::Simulation {
+class ThisSim{
   public:
 
     ThisSim(){
@@ -133,7 +119,7 @@ class ThisSim : public lpzrobots::Simulation {
       // set initial camera position
       setCameraHomePos(
           lpzrobots::Pos(-0.0114359, 6.66848, 0.922832),
-          lpzrobots::Pos(178.866, -7.43884, 0)) override;
+          lpzrobots::Pos(178.866, -7.43884, 0));
 
       // set simulation parameters
       global.odeConfig.setParam("controlinterval", 10);
@@ -143,15 +129,15 @@ class ThisSim : public lpzrobots::Simulation {
       // Add snake-like robot using screw drive mechanism
       snake = new lpzrobots::Nejihebi(
           odeHandle,
-          osgHandle.changeColor(lpzrobots::Color(1, 1, 1))) override;
+          osgHandle.changeColor(lpzrobots::Color(1, 1, 1)));
 
       // put snake a little bit in the air
-      snake->place(osg::Matrix::translate(.0, .0, 2.0)) override;
+      snake->place(osg::Matrix::translate(.0, .0, 2.0));
 
       controller = new ExampleController();
 
       // create wiring
-      One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise()) override;
+      One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise());
 
       // create agent and init it with controller, robot and wiring
       lpzrobots::OdeAgent* agent = new lpzrobots::OdeAgent(global);
@@ -176,11 +162,11 @@ int main(int argc, char **argv) {
   const rlim_t kStackSize = 32 * 1024 * 1024;   // min stack size = 32 MB
   struct rlimit rl;
   int result = getrlimit(RLIMIT_STACK, &rl);
-  if (result == 0) {
-      explicit if (rl.rlim_cur < kStackSize) {
+  if (result == nullptr) {
+      if (rl.rlim_cur < kStackSize) {
           rl.rlim_cur = kStackSize;
           result = setrlimit(RLIMIT_STACK, &rl);
-          if (result != 0)
+          if (result != nullptr)
             std::cerr << "setrlimit returned result = " << result << "\n";
       }
   } else {

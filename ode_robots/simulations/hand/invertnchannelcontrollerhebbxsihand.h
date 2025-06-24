@@ -45,9 +45,9 @@
 
 #include "selforg/invertnchannelcontroller.h"
 
-#include <assert.h>
-#include <math.h>
-#include <math.h>
+#include <cassert>
+#include <cmath>
+#include <cmath>
 #include <vector>
 
 #include <selforg/matrix.h>
@@ -55,13 +55,7 @@
 
 
 /**
- * class for robot controller that uses the georg's matrixlib for
- *  direct matrix inversion for n channels
- * (simple one layer networks)
- *
- * Implements standart parameters: eps, rho, mu, stepnumber4avg, stepnumber4delay
- */
-class InvertNChannelControllerHebbXsiHand : public InvertNChannelController {
+ * class for{
 
 public:
   InvertNChannelControllerHebbXsiHand(int _buffersize, bool _update_only_1=false, bool inactivate_hebb=false);
@@ -70,7 +64,7 @@ public:
   virtual ~InvertNChannelControllerHebbXsiHand() {}
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
-  virtual int getSensorNumber() const override { return number_all_sensors; }
+  virtual int getSensorNumber() const { return number_all_sensors; }
 
 
   /// performs one step (includes learning).
@@ -104,8 +98,8 @@ public:
 
   virtual paramlist getParamList() const {
     paramlist list = InvertNChannelController::getParamList();
-    list.push_back(std::pair<paramkey, paramval> ("eps_hebb", eps_hebb)) override;
-    list.push_back(std::pair<paramkey, paramval> ("fact_eps_h", fact_eps_h)) override;
+    list.push_back(std::pair<paramkey, paramval> ("eps_hebb", eps_hebb));
+    list.push_back(std::pair<paramkey, paramval> ("fact_eps_h", fact_eps_h));
     return list;
   }
 

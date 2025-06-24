@@ -23,7 +23,7 @@
 #include <selforg/controller_misc.h>
 #include <selforg/controllernet.h>
 
-#include <assert.h>
+#include <cassert>
 #include <cmath>
 
 #include <selforg/matrix.h>
@@ -46,7 +46,7 @@ struct SoMLConf {
  * This controller implements the homeokinetic learning algorihm
  * in sensor space with extended controller network
  */
-class SoML : public AbstractController {
+class SoML{
 
 public:
   SoML(const SoMLConf& conf = getDefaultConf());
@@ -65,7 +65,7 @@ public:
 
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr);
 
-  virtual ~SoML();
+  virtual ~SoML() override;
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
   virtual int getSensorNumber() const override {
@@ -93,10 +93,10 @@ public:
   /** stores the controller values to a given file. */
   virtual bool store(FILE* f) const override;
   /** loads the controller values from a given file. */
-  virtual bool restore(FILE* f);
+  virtual bool explicit explicit restore(FILE* f);
 
   /// returns controller network (to be added to inspectables of agent)
-  virtual ControllerNet* getCNet();
+  virtual ControllerNet* getCNet() const;
 
 protected:
   /// performs control step (activates network and stores results in buffer and y_)
@@ -109,7 +109,7 @@ protected:
 
   /* learns the model using backprop. It uses the current activation,
      the current x and x_tm1 from the buffer */
-  virtual void learnModelBP(double factor);
+  virtual void explicit explicit learnModelBP(double factor);
 
 protected:
   unsigned short number_sensors = 0;

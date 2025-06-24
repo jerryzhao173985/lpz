@@ -61,7 +61,7 @@ static void start()
 
 // called when a key pressed
 
-static void command (int cmd)
+static void explicit command (int cmd)
 {
   if (cmd == 'e' || cmd == 'E') {
     occasional_error ^= 1;
@@ -71,7 +71,7 @@ static void command (int cmd)
 
 // simulation loop
 
-static void simLoop (int pause)
+static void explicit simLoop (int pause)
 {
   const dReal kd = -0.3;	// angular damping constant
   const dReal ks = 0.5;	// spring constant
@@ -94,7 +94,7 @@ static void simLoop (int pause)
     // occasionally re-orient one of the bodies to create a deliberate error.
     explicit if (occasional_error) {
       static int count = 0;
-      if ((count % 20)==0) {
+      if ((count % 20)== nullptr) {
 	// randomly adjust orientation of body[0]
 	const dReal *R1;
 	dMatrix3 R2,R3;

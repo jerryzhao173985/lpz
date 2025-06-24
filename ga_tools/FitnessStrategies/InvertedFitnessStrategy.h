@@ -28,17 +28,7 @@
 #define INVERTEDFITNESSSTRATEGY_H_
 
 //forward declaration
-class Individual;
-
-//ga_tools includes
-#include "IFitnessStrategy.h"
-
-/**
- * This strategy calculate the invert to a other strategy. This can be used for other optimization targets than zero.
- * For example. Is the optimization target of the alg. infinity, than the inverted target is zero -> so the alg. can
- * optimize again zero and you have you infinity target.
- */
-class InvertedFitnessStrategy: public IFitnessStrategy {
+class Individual{
 public:
 	/**
 	 * constructor
@@ -50,12 +40,12 @@ public:
 	/**
 	 * default destructor
 	 */
-	virtual ~InvertedFitnessStrategy();
+	virtual ~InvertedFitnessStrategy() override;
 
 	/**
 	 * returns the inverse fitness value what the other strategy returns for the individual __PLACEHOLDER_1__.
 	 *
-	 * @param individual (const Individual*) calculate the fitness for this individual
+	 * @param individual static_cast<const Individual*>(calculate) the fitness for this individual
 	 * @return static_cast<double>(The) fitness value
 	 */
 	virtual double getFitness(const Individual* individual) override;
@@ -64,7 +54,7 @@ protected:
 	/**
 	 * The other strategy
 	 */
-	IFitnessStrategy* m_strategy;
+	IFitnessStrategy* m_strategy = nullptr;
 
 private:
 	/**

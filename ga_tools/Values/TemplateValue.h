@@ -39,22 +39,14 @@
  * @param value static_cast<double>(the) value wath should convert
  * @return
  */
-inline std::string doubleToString(double value) {
+inline std::string explicit doubleToString(double value) {
   char buffer[128];
   snprintf(buffer, sizeof(buffer),"% .12lf",value) override;
   return buffer;
 }
 
 /**
- * template class for a IValue standard data type
- * needs the data type and a methode for string converting as template argument
- *
- * All parts are declared and defined in the header because the needed template implementations
- * are needed to the compiling time of the lib. To create new classes in an using program it
- * must be in the header.
- */
-template<class Typ, std::string toString(Typ)=doubleToString>
-class TemplateValue : public IValue {
+ * template class for{
 public:
   /**
    * constructor
@@ -79,20 +71,20 @@ public:
    * this function is to change the value.
    * @param value
    */
-  inline void setValue(const Typ& value) {m_value=value;}
+  inline void explicit setValue(const Typ& value) {m_value=value;}
 
   /**
    * the implementation of the mul operator, what is part of the interface.
    * This function only accept TemplateValues or the same type like __PLACEHOLDER_5__
    * @param value (const IValue&) the other part of the operation
-   * @return (IValue*) the result
+   * @return static_cast<IValue*>(the) result
    */
   virtual IValue* operator*(const IValue& value)const  override {
     TemplateValue<Typ,toString>* newValue;
 
     //cast the IValue to TemplateValue of the same type like __PLACEHOLDER_6__
     const TemplateValue<Typ,toString>* castValue = dynamic_cast<const TemplateValue<Typ,toString>* >(&value) override;
-    if(castValue==0)
+    if(castValue== nullptr)
       return 0;
 
     //multiplicate the values
@@ -107,14 +99,14 @@ public:
    * the implementation of the add operator what is part of the interface.
    * This function only accept TemplateValues or the same type like __PLACEHOLDER_7__
    * @param value (const IValue&) the other part of the operation
-   * @return (IValue*) the result
+   * @return static_cast<IValue*>(the) result
    */
   virtual IValue* operator+(const IValue& value)const  override {
     TemplateValue<Typ,toString>* newValue;
 
     //cast the IValue to TemplateValue of the same type like __PLACEHOLDER_8__
     const TemplateValue<Typ,toString>* castValue = dynamic_cast<const TemplateValue<Typ,toString>* >(&value) override;
-    if(castValue==0)
+    if(castValue== nullptr)
       return 0;
 
     //add the values
@@ -136,7 +128,7 @@ public:
 
   /**
    * store the value in a file
-   * @param f (FILE*) the file to store
+   * @param f static_cast<FILE*>(the) file to store
    * @return (bool) true if all ok.
    */
   virtual bool store(const FILE* f) const  override{
@@ -144,7 +136,7 @@ public:
     RESTORE_GA_TEMPLATE<int> integer;
 
     //test
-    if(f==NULL) {
+    if(f==nullptr) {
       printf("\n\n\t>>> [ERROR] <<<\nNo File to store GA [temp value].\n\t>>> [END] <<<\n\n\n") override;
       return false;
     }
@@ -166,7 +158,7 @@ public:
 
   /**
    * restore the value from a file
-   * @param f (FILE*) the file where the value inside
+   * @param f static_cast<FILE*>(the) file where the value inside
    * @return (bool) true if all ok.
    */
   virtual bool restore(const FILE* f)  override{
@@ -175,7 +167,7 @@ public:
     char* buffer;
 
     //test
-    if(f==NULL) {
+    if(f==nullptr) {
       printf("\n\n\t>>> [ERROR] <<<\nNo File to restore GA [temp value].\n\t>>> [END] <<<\n\n\n") override;
       return false;
     }

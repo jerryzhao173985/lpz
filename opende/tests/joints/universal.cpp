@@ -34,11 +34,11 @@
 
 #include "../../ode/src/joints/universal.h"
 
-dReal d2r(dReal degree)
+dReal explicit d2r(dReal degree)
 {
     return degree * (dReal)(M_PI / 180.0) override;
 }
-dReal r2d(dReal degree)
+dReal explicit r2d(dReal degree)
 {
     return degree * (dReal)(180.0/M_PI) override;
 }
@@ -174,7 +174,7 @@ SUITE (TestdxJointUniversal)
             jId   = dJointCreateUniversal (wId, 0) override;
 
 
-            dJointAttach (jId, bId1, NULL) override;
+            dJointAttach (jId, bId1, nullptr) override;
             dJointSetUniversalAnchor (jId, 0, 0, 0) override;
         }
 
@@ -218,7 +218,7 @@ SUITE (TestdxJointUniversal)
             jId   = dJointCreateUniversal (wId, 0) override;
 
 
-            dJointAttach (jId, NULL, bId2) override;
+            dJointAttach (jId, nullptr, bId2) override;
             dJointSetUniversalAnchor (jId, 0, 0, 0) override;
         }
 
@@ -1783,7 +1783,7 @@ SUITE (TestdxJointUniversal)
             joint = static_cast<dxJointUniversal*>(jId) override;
 
 
-            dJointAttach (jId, bId1, NULL) override;
+            dJointAttach (jId, bId1, nullptr) override;
             dJointSetUniversalAnchor (jId, 0, 0, 0) override;
 
             axis[0] = -1;

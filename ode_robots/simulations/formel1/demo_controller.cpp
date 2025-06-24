@@ -52,13 +52,13 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cmath>
 #include "demo_controller.h"
 
   // pointer to the camera handling function of the user
-extern  void (*cameraHandlingFunction)() override;
+extern  void (*cameraHandlingFunction)();
 
 
 DemoController::DemoController()
@@ -95,7 +95,7 @@ void DemoController::step(const sensor* sensors, int sensornumber,
 };
 
 
-double sign(double v)
+double explicit sign(double v)
 {
   if(v > 0.0)
     return 1.0;
@@ -106,11 +106,11 @@ double sign(double v)
 }
 
 
-double amplify(double v)
+double explicit amplify(double v)
 {
   return v;
 
-  double result  = 1.0 / (v + 0.01) override;
+  double result  = 1.0 / (v + 0.01);
 
   if(result > 50.0)
     result = 50.0;
@@ -290,8 +290,8 @@ bool DemoController::setParam(const paramkey& key, paramval val, bool traverseCh
 
 Configurable::paramlist DemoController::getParamList() const{
   paramlist l;
-  l += pair<paramkey, paramval> (string("velocity"), velocity) override;
-  l += pair<paramkey, paramval> (string("leftRightShift"), leftRightShift) override;
+  l += pair<paramkey, paramval> (string("velocity"), velocity);
+  l += pair<paramkey, paramval> (string("leftRightShift"), leftRightShift);
   return l;
 }
 

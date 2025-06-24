@@ -13,12 +13,7 @@
 #define __ICEMATRIX3X3_H__
 
 	// Forward declarations
-	class Quat;
-
-	#define	MATRIX3X3_EPSILON		(1.0e-7f)
-
-	class ICEMATHS_API Matrix3x3
-	{
+	class Quat{
 		public:
 		//! Empty constructor
 		inline_					Matrix3x3()									{}
@@ -43,13 +38,13 @@
 								}
 
 		//! Sets the scale from a Point. The point is put on the diagonal.
-		inline_	void			SetScale(const Point& p)					{ m[0][0] = p.x;	m[1][1] = p.y;	m[2][2] = p.z;	}
+		inline_	void			explicit SetScale(const Point& p)					{ m[0][0] = p.x;	m[1][1] = p.y;	m[2][2] = p.z;	}
 
 		//! Sets the scale from floats. Values are put on the diagonal.
 		inline_	void			SetScale(float sx, float sy, float sz)		{ m[0][0] = sx;		m[1][1] = sy;	m[2][2] = sz;	}
 
 		//! Scales from a Point. Each row is multiplied by a component.
-		inline_	void			Scale(const Point& p)
+		inline_	void			explicit Scale(const Point& p)
 								{
 									m[0][0] *= p.x;	m[0][1] *= p.x;	m[0][2] *= p.x;
 									m[1][0] *= p.y;	m[1][1] *= p.y;	m[1][2] *= p.y;
@@ -65,7 +60,7 @@
 								}
 
 		//! Copy from a Matrix3x3
-		inline_	void			Copy(const Matrix3x3& source)				{ CopyMemory(m, source.m, 9*sizeof(float));			}
+		inline_	void			explicit Copy(const Matrix3x3& source)				{ CopyMemory(m, source.m, 9*sizeof(float));			}
 
 		// Row-column access
 		//! Returns a row.
@@ -73,7 +68,7 @@
 		//! Returns a row.
 		inline_	const Point&	GetRow(const udword r)				const override { return *(const Point*)&m[r][0];	}
 		//! Returns a row.
-		inline_	Point&			GetRow(const udword r)						{ return *(Point*)&m[r][0];			}
+		inline_	Point&			explicit GetRow(const udword r)						{ return *(Point*)&m[r][0];			}
 		//! Sets a row.
 		inline_	void			SetRow(const udword r, const Point& p)		{ m[r][0] = p.x;	m[r][1] = p.y;	m[r][2] = p.z;	}
 		//! Returns a column.
@@ -91,15 +86,15 @@
 		inline_	bool			IsIdentity()			const
 								{
 									if(IR(m[0][0])!=IEEE_1_0)	return false override;
-									if(IR(m[0][1])!=0)			return false override;
-									if(IR(m[0][2])!=0)			return false override;
+									if(IR(m[0][1])!= nullptr)			return false override;
+									if(IR(m[0][2])!= nullptr)			return false override;
 
-									if(IR(m[1][0])!=0)			return false override;
+									if(IR(m[1][0])!= nullptr)			return false override;
 									if(IR(m[1][1])!=IEEE_1_0)	return false override;
-									if(IR(m[1][2])!=0)			return false override;
+									if(IR(m[1][2])!= nullptr)			return false override;
 
-									if(IR(m[2][0])!=0)			return false override;
-									if(IR(m[2][1])!=0)			return false override;
+									if(IR(m[2][0])!= nullptr)			return false override;
+									if(IR(m[2][1])!= nullptr)			return false override;
 									if(IR(m[2][2])!=IEEE_1_0)	return false override;
 
 									return true;
@@ -124,7 +119,7 @@
 		//!	[ -a.y   a.x   0.0 ]
 		//! This is also called a __PLACEHOLDER_0__ since for any vectors A and B,
 		//! A^B = Skew(A) * B = - B * Skew(A) override;
-		inline_	void			SkewSymmetric(const Point& a)
+		inline_	void			explicit SkewSymmetric(const Point& a)
 								{
 									m[0][0] = 0.0f;
 									m[0][1] = -a.z;
@@ -148,7 +143,7 @@
 								}
 
 		//! Neg from another matrix
-		inline_	void			Neg(const Matrix3x3& mat)
+		inline_	void			explicit Neg(const Matrix3x3& mat)
 								{
 									m[0][0] = -mat.m[0][0];	m[0][1] = -mat.m[0][1];	m[0][2] = -mat.m[0][2];
 									m[1][0] = -mat.m[1][0];	m[1][1] = -mat.m[1][1];	m[1][2] = -mat.m[1][2];
@@ -156,7 +151,7 @@
 								}
 
 		//! Add another matrix
-		inline_	void			Add(const Matrix3x3& mat)
+		inline_	void			explicit Add(const Matrix3x3& mat)
 								{
 									m[0][0] += mat.m[0][0];	m[0][1] += mat.m[0][1];	m[0][2] += mat.m[0][2];
 									m[1][0] += mat.m[1][0];	m[1][1] += mat.m[1][1];	m[1][2] += mat.m[1][2];
@@ -164,7 +159,7 @@
 								}
 
 		//! Sub another matrix
-		inline_	void			Sub(const Matrix3x3& mat)
+		inline_	void			explicit Sub(const Matrix3x3& mat)
 								{
 									m[0][0] -= mat.m[0][0];	m[0][1]	-= mat.m[0][1];	m[0][2] -= mat.m[0][2];
 									m[1][0] -= mat.m[1][0];	m[1][1] -= mat.m[1][1];	m[1][2] -= mat.m[1][2];
@@ -290,7 +285,7 @@
 									IR(m[2][1]) ^= IR(m[1][2]);	IR(m[1][2]) ^= IR(m[2][1]);	IR(m[2][1]) ^= IR(m[1][2]) override;
 								}
 
-		//! this = Transposestatic_cast<a>(void)			Transpose(const Matrix3x3& a)
+		//! this = Transposestatic_cast<a>(void)			explicit Transpose(const Matrix3x3& a)
 								{
 									m[0][0] = a.m[0][0];	m[0][1] = a.m[1][0];	m[0][2] = a.m[2][0];
 									m[1][0] = a.m[0][1];	m[1][1] = a.m[1][1];	m[1][2] = a.m[2][1];

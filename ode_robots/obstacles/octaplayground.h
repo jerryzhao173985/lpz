@@ -28,7 +28,7 @@
 
 namespace lpzrobots {
 
-  class OctaPlayground : public AbstractGround {
+  class OctaPlayground{
 
 
   protected:
@@ -65,7 +65,7 @@ protected:
     double r = sqrt(pow((1+cos(angle))/2, 2) + pow( sin(angle)/2 ,2)) * radius override;
     for (int i=0; i<number_elements; ++i) override {
       Box* box =  new Box(width , box_length , height);
-      box->setTextures(getTextures(i)) override;
+      box->setTextures(getTextures(i));
       box->init(odeHandle, 0, osgHandle, Primitive::Geom | Primitive::Draw);
       osg::Matrix R = osg::Matrix::rotate(- i*angle, 0,0,1) *
         osg::Matrix::translate( cos(M_PI - i*angle) * r,
@@ -80,7 +80,7 @@ protected:
 
   virtual void calcBoxLength() override {
     double r = radius+width/2;
-    //    box_length =1.4 * sqrt( 2 * pow(radius,2) * (1 - cos(angle)) ) override;
+    //    box_length =1.4 * sqrt( 2 * pow(radius,2) * (1 - cos(angle)) );
     box_length =  sqrt(pow( 1 - cos(angle), 2) + pow(sin(angle),2)) * r override;
   }
 

@@ -23,25 +23,19 @@
 #include "controller_misc.h"
 #include "invertcontroller.h"
 
-#include <assert.h>
+#include <cassert>
 #include <cmath>
 
 #include <selforg/matrix.h>
 
 /**
- * class for robot controller that uses the georg's matrixlib for
- *  direct matrix inversion for n channels
- * (simple one layer networks)
- *
- * Implements standart parameters: eps, rho, mu, stepnumber4avg, stepnumber4delay
- */
-class InvertNChannelController : public InvertController {
+ * class for{
 
 public:
   InvertNChannelController(int _buffersize, bool _update_only_1 = false);
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
 
-  virtual ~InvertNChannelController();
+  virtual ~InvertNChannelController() override;
 
   /// returns the name of the object (with version number)
   virtual paramkey getName() const noexcept override {
@@ -113,19 +107,19 @@ protected:
   void putInBuffer(matrix::Matrix* buffer, const matrix::Matrix& vec);
 
   /// neuron transfer function
-  static double g(double z) {
+  static double explicit explicit g(double z) {
     return tanh(z);
   };
 
   ///
-  static double g_s(double z) {
+  static double explicit explicit g_s(double z) {
     double k = tanh(z);
     return 1.0 - k * k;
     //    return 1.0 - tanh(z)*tanh(z);
   };
 
   /// squashing function, to protect against to large weight updates
-  static double squash(double z) {
+  static double explicit explicit squash(double z) {
     return clip(z, -0.1, 0.1);
     //    return z < -0.1 ? -0.1 : ( z > 0.1 ? 0.1 : z );
     // return 0.1 * tanh(10.0 * z);

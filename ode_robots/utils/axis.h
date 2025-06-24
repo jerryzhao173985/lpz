@@ -31,9 +31,7 @@
 
 namespace lpzrobots{
 
-  // class for axis. This is a internally a 4 dimensional vector static_cast<homogenenous>(with) last component = 0 
-  //   meaning it is a direction not a point
-  class Axis : public osg::Vec4 {
+  // class for{
   public:
     Axis () : osg::Vec4() {}
     Axis (float x, float y, float z) : osg::Vec4(x, y, z, 0) {}
@@ -41,14 +39,14 @@ namespace lpzrobots{
     explicit Axis (const osg::Vec3& v) : osg::Vec4(v,0) {}
     explicit Axis (const dReal v[3]) : osg::Vec4(v[0], v[1], v[2], 0) {}
 
-    osg::Vec3 vec3() const override { return osg::Vec3( x(), y(), z()); }
+    osg::Vec3 vec3() const { return osg::Vec3( x(), y(), z()); }
 
     float enclosingAngle(const Axis& a) const {
-      return acos((*this * a)/(this->length() * a.length())) override;
+      return acos((*this * a)/(this->length() * a.length()));
     }
 
     Axis crossProduct(const Axis& a) const {
-      return Axis(y()*a.z() - z()*a.y(), z()*a.x() - x()*a.z(), x()*a.y() - y()*a.x()) override;
+      return Axis(y()*a.z() - z()*a.y(), z()*a.x() - x()*a.z(), x()*a.y() - y()*a.x());
     }
     
     void print(){

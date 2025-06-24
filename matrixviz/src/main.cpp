@@ -23,7 +23,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <signal.h>
+#include <csignal>
 #include <QApplication>
 #include "MatrixVisualizer.h"
 
@@ -46,7 +46,7 @@ void signal_handler_init(){
 
 int contains(char **list, int len,  const char *str) {
   for(int i=0; i<len; ++i) {
-    if(strcmp(list[i],str) == 0)
+    if(strcmp(list[i],str) == nullptr)
       return i+1;
   }
   return 0;
@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
 {
 
 
-  if(contains(argv,argc,"--help")!=0 || contains(argv,argc,"-h")!=0){
+  if(contains(argv,argc,"--help")!=0 || contains(argv,argc,"-h")!= nullptr){
     printf("Usage: yourprog | %s [-noCtrlC] [-novideo]\n",argv[0]);
     printf("\t-noCtrlC will catch ctrlC and the program only terminates via the pipe\n");
     printf("\t-novideo will not record frames on #V lines (because it slows down significantly)\n");

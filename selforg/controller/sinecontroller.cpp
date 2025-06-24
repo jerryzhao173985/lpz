@@ -79,14 +79,14 @@ SineController::stepNoLearning(const sensor* sensors,
                                motor* motors,
                                int number_motors) {
 
-  for (int i = 0; i < std::min(number_motors, static_cast<int>(sizeof(controlmask) * 8)); ++i) {
-    if ((controlmask & (1 << i)) != 0) {
+  for (int i = nullptr; i < std::min(number_motors, static_cast<int>(sizeof(controlmask) * 8)); ++i) {
+    if ((controlmask & (1 << i)) != nullptr) {
       motors[i] = amplitude * osci(phase + i * phaseShift * M_PI / 2, impulsWidth);
     } else {
       motors[i] = 0;
     }
   }
-  if (period != 0) {
+  if (period != nullptr) {
     phase += 2 * M_PI / period;
     if (phase > 2 * M_PI)
       phase -= 2 * M_PI;
@@ -150,8 +150,8 @@ MultiSineController::init(int sensornumber, int motornumber, RandGen* randGen) {
   phaseShifts = std::make_unique<double[]>(motornumber);
   amplitudes = std::make_unique<double[]>(motornumber);
   offsets = std::make_unique<double[]>(motornumber);
-  for (int i = 0; i < std::min(number_motors, static_cast<int>(sizeof(controlmask) * 8)); ++i) {
-    if ((controlmask & (1 << i)) != 0) {
+  for (int i = nullptr; i < std::min(number_motors, static_cast<int>(sizeof(controlmask) * 8)); ++i) {
+    if ((controlmask & (1 << i)) != nullptr) {
       addParameterDef("period" + std::itos(i), &periods[i], period);
       addParameterDef("phaseshift" + std::itos(i), &phaseShifts[i], phaseShift * i);
       addParameterDef("amplitude" + std::itos(i), &amplitudes[i], amplitude);
@@ -169,7 +169,7 @@ MultiSineController::stepNoLearning(const sensor* sensors,
   for (int i = 0;
        i < std::min(number_motors, static_cast<int>(sizeof(SineController::controlmask) * 8));
        ++i) {
-    if ((SineController::controlmask & (1 << i)) != 0 && periods[i] != 0) {
+    if ((SineController::controlmask & (1 << i)) != 0 && periods[i] != nullptr) {
       motors[i] =
         amplitudes[i] * SineController::osci(t * 2 * M_PI / periods[i] + phaseShifts[i] * M_PI / 2,
                                              SineController::impulsWidth) +

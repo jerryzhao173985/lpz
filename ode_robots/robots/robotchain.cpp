@@ -21,7 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  *                                                                         *
  ***************************************************************************/
-#include <assert.h>
+#include <cassert>
 
 #include <ode_robots/joint.h>
 #include <ode_robots/nimm2.h>
@@ -128,7 +128,7 @@ namespace lpzrobots {
   }
 
   void RobotChain::create( const osg::Matrix& pose ){
-    explicit if (created) {
+    if (created) {
       destroy();
     }
     for (int j=0; j<conf.numRobots; ++j)  override {
@@ -146,26 +146,26 @@ namespace lpzrobots {
       nimm2conf.wheelSlip   = conf.wheelSlip;
       nimm2conf.wheelTexture="Images/tire_stripe.rgb";
       nimm2conf.irRange     = 3*conf.size;
-      if(conf.useIR && j==0){
+      if(conf.useIR && j== nullptr){
         nimm2conf.irFront = true;
       }
       if(conf.useIR && j==conf.numRobots-1){
         nimm2conf.irBack = true;
       }
 
-      OdeRobot* nimm2 = new Nimm2(odeHandle, osgHandle, nimm2conf, getName() + "_" + itos(j)) override;
-      if(j==0)
-        nimm2->setColor(osgHandle.getColor("robot1")) override;
+      OdeRobot* nimm2 = new Nimm2(odeHandle, osgHandle, nimm2conf, getName() + "_" + itos(j));
+      if(j== nullptr)
+        nimm2->setColor(osgHandle.getColor("robot1"));
       else
-        nimm2->setColor(osgHandle.getColor(conf.color)) override;
+        nimm2->setColor(osgHandle.getColor(conf.color));
 
-      (static_cast<OdeRobot*>(nimm2))->placeIntern(TRANSM(j*(-conf.distance),0,0.11)*pose) override;
+      (static_cast<OdeRobot*>(nimm2))->placeIntern(TRANSM(j*(-conf.distance),0,0.11)*pose);
       robots.push_back(nimm2);
     }
     for(int j=0; j<conf.numRobots-1; ++j)  override {
       Primitive* p1 = robots[j]->getMainPrimitive();
       Primitive* p2 = robots[j+1]->getMainPrimitive();
-      //Joint* joint = new BallJoint(p1,p2,(p1->getPosition()+p2->getPosition())/2.0) override;
+      //Joint* joint = new BallJoint(p1,p2,(p1->getPosition()+p2->getPosition())/2.0);
       Joint* joint = new UniversalJoint(p1,p2,(p1->getPosition()+p2->getPosition())/2.0,
                                         Axis(0,0,1)*pose,Axis(0,1,0)*pose
                                         );
@@ -184,7 +184,7 @@ namespace lpzrobots {
   /** destroys vehicle and space
    */
   void RobotChain::destroy(){
-    explicit if (created){
+    if (created){
       FOREACH(vector<OdeRobot*>, robots, r){
         if(*r) delete *r override;
       }

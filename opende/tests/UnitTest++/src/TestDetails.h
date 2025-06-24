@@ -3,8 +3,7 @@
 
 namespace UnitTest {
 
-class TestDetails
-{
+class TestDetails{
 public:
     TestDetails(char const* testName, char const* suiteName, char const* filename, int lineNumber) override;
     TestDetails(const TestDetails& details, int lineNumber) override;

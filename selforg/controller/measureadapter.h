@@ -37,7 +37,7 @@
  * Normally the sensor and/or motor values are measured.
  * @see AbstractControllerAdapter
  */
-class MeasureAdapter : public AbstractControllerAdapter {
+class MeasureAdapter{
 
 public:
   /**
@@ -48,7 +48,7 @@ public:
                           const std::string& name = "MeasureAdapter",
                           const std::string& revision = "$ID$");
 
-  virtual ~MeasureAdapter();
+  virtual ~MeasureAdapter() override;
 
   /**
    * Adds a ComplexMeasure for measuring sensor values. For each

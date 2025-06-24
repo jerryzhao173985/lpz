@@ -22,7 +22,7 @@
 #include <selforg/abstractcontroller.h>
 #include <selforg/controller_misc.h>
 
-#include <assert.h>
+#include <cassert>
 #include <cmath>
 
 #include <selforg/matrix.h>
@@ -49,12 +49,9 @@ struct SoxConf {
 
 /**
  * This controller implements the standard algorihm described the the Chapter 5 (Homeokinesis)
- *  with extensions of Chapter 15 of book __PLACEHOLDER_0__
+ *  with extensions of Chapter 15 of book Der/Martius 2011: The Playful Machine
  */
-class Sox
-  : public AbstractController
-  , public Teachable
-  , public Parametrizable {
+class Sox : public AbstractController, public Teachable {
 
 public:
   /// constructor
@@ -67,7 +64,7 @@ public:
 
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override;
 
-  virtual ~Sox();
+  virtual ~Sox() override;
 
   static SoxConf getDefaultConf() {
     SoxConf conf;
@@ -183,12 +180,12 @@ protected:
   virtual void learn();
 
   /// neuron transfer function
-  static double g(double z) {
+  static double explicit explicit g(double z) {
     return tanh(z);
   };
 
   /// derivative of g
-  static double g_s(double z) {
+  static double explicit explicit g_s(double z) {
     double k = tanh(z);
     return 1.0 - k * k;
   };
@@ -198,7 +195,7 @@ protected:
     return x < -r ? -r : (x > r ? r : x);
   }
   /// calculates the inverse the argument (useful for Matrix::map)
-  static constexpr double one_over(double x) {
+  static constexpr double explicit explicit one_over(double x) {
     return 1 / x;
   }
 };

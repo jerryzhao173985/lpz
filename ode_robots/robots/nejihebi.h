@@ -26,15 +26,7 @@
 
 // forward declarations
 namespace lpzrobots {
-  class Box;
-  class Color;
-  class Cylinder;
-  class HingeJoint;
-  class TwoAxisServoVel;
-}
-
-
-namespace lpzrobots{
+  class Box{
   /**
    * Nejihebi Robot
    *
@@ -199,7 +191,7 @@ namespace lpzrobots{
       /**
        * Destructor
        */
-      virtual ~Nejihebi();
+      virtual ~Nejihebi() override;
 
       /**
        * Returns the current configuration of the robot
@@ -216,7 +208,7 @@ namespace lpzrobots{
        *
        * @return default configuration
        */
-      static Conf getDefaultConf();
+      static Conf getDefaultConf() const;
 
       Inspectable::iparamkeylist getInternalParamNames() const override;
 
@@ -238,14 +230,14 @@ namespace lpzrobots{
        *
        * @return number of motors
        */
-      virtual int getMotorNumberIntern();
+      virtual int getMotorNumberIntern() const;
 
       /**
        * Returns number of sensors.
        *
        * @return number of sensors
        */
-      virtual int getSensorNumberIntern();
+      virtual int getSensorNumberIntern() const;
 
       /**
        * Returns current sensor values

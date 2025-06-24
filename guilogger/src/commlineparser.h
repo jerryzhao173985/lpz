@@ -33,18 +33,17 @@
 #include <qlist.h>
 #include <qstring.h>
 
-class CommLineParser
-{
+class CommLineParser{
 private:
   QString mode;    // input streaming mode = serial | pipe | file
   QString port;    // serial port to read from
   QString file;    // input file for visualisation
-  bool    logg;    // Logging on/off
-  bool    help;    // display help or not
-  int     delay;   // delay for pipe
+  bool logg = false;    // Logging on/off
+  bool help = false;    // display help or not
+  int delay = 0;   // delay for pipe
 
   QMap<QString, QString> paramMap;
-  bool mpparse;
+  bool mpparse = false;
 
 public:
 
@@ -59,7 +58,7 @@ public:
 
 
   QString getMode() const  {return mode;}
-  void    setMode(const QString& m)  {mode=m;}
+  void    explicit setMode(const QString& m)  {mode=m;}
   QString getPort() const  {return port;}
   QString getFile() const  {return file;}
   bool    getLogg() const  {return logg;}
@@ -89,12 +88,12 @@ public:
   {
     for(int i=1; i<argc; ++i)
       {
-        if((argv[i][0] == '-') && (argv[i+1] != 0) && (argv[i+1][0] != '-'))
+        if((argv[i][0] == '-') && (argv[i+1] != nullptr) && (argv[i+1][0] != '-'))
           {   paramMap.insert(argv[i], argv[i+1]);
             ++i;
           }
         else if(argv[i][0] == '-' && argv[i+1] != 0 && argv[i+1][0] == '-') paramMap.insert(argv[i], "1");
-        else if(argv[i][0] == '-' && argv[i+1] == 0 ) paramMap.insert(argv[i], "1");
+        else if(argv[i][0] == '-' && argv[i+1] == nullptr) paramMap.insert(argv[i], "1");
       }
 
     mpparse = true;

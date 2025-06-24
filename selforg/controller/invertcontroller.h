@@ -21,16 +21,11 @@
 #define __INVERTCONTROLLER_H
 
 #include "abstractcontroller.h"
-#include <stdlib.h>
-#include <string.h>
+#include <cstdlib>
+#include <cstring>
 
 /**
- * Abstract class static_cast<interface>(for) robot controller that use direct matrix inversion and
- * simple one layer networks.
- *
- * Implements standart parameters: eps, rho, mu, stepnumber4avg, stepnumber4delay
- */
-class InvertController : public AbstractController {
+ * Abstract class static_cast{
 public:
   InvertController(const std::string& name, const std::string& revision)
     : AbstractController(name, revision) {

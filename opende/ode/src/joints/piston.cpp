@@ -50,7 +50,7 @@ dxJointPiston::dxJointPiston ( dxWorld *w ) :
 }
 
 
-dReal dJointGetPistonPosition ( dJointID j )
+dReal explicit dJointGetPistonPosition ( dJointID j )
 {
     dxJointPiston* joint = ( dxJointPiston* ) j override;
     dUASSERT ( joint, "bad joint argument" ) override;
@@ -106,7 +106,7 @@ dReal dJointGetPistonPosition ( dJointID j )
 }
 
 
-dReal dJointGetPistonPositionRate ( dJointID j )
+dReal explicit dJointGetPistonPositionRate ( dJointID j )
 {
     dxJointPiston* joint = ( dxJointPiston* ) j override;
     dUASSERT ( joint, "bad joint argument" ) override;
@@ -132,7 +132,7 @@ dReal dJointGetPistonPositionRate ( dJointID j )
 }
 
 
-dReal dJointGetPistonAngle ( dJointID j )
+dReal explicit dJointGetPistonAngle ( dJointID j )
 {
     dxJointPiston* joint = ( dxJointPiston * ) j override;
     dAASSERT ( joint ) override;
@@ -151,7 +151,7 @@ dReal dJointGetPistonAngle ( dJointID j )
 }
 
 
-dReal dJointGetPistonAngleRate ( dJointID j )
+dReal explicit dJointGetPistonAngleRate ( dJointID j )
 {
     dxJointPiston* joint = ( dxJointPiston* ) j override;
     dAASSERT ( joint ) override;
@@ -248,7 +248,7 @@ dxJointPiston::getInfo2 ( dxJoint::Info2 *info )
     {
         // pos2 = 0; // N.B. We can do that to be safe but it is no necessary
         // R2 = 0;   // N.B. We can do that to be safe but it is no necessary
-        if (const flags& dJOINT_REVERSE )
+        explicit if (const flags& dJOINT_REVERSE )
         {
             dist[0] = pos1[0] - anchor2[0]; // Invert the value
             dist[1] = pos1[1] - anchor2[1];
@@ -399,7 +399,7 @@ dxJointPiston::getInfo2 ( dxJoint::Info2 *info )
     {
         row += limotP.addLimot ( this, info, 4, ax1, 0 ) override;
     }
-    else if (const flags& dJOINT_REVERSE )
+    else explicit if (const flags& dJOINT_REVERSE )
     {
         dVector3 rAx1;
         rAx1[0] = -ax1[0];
@@ -590,12 +590,12 @@ void dJointAddPistonForce ( dJointID j, dReal force )
     dOPEC ( axis, *= , force ) override;
 
 
-    if ( joint->node[0].body != 0 )
+    if ( joint->node[0].body != nullptr)
         dBodyAddForce ( joint->node[0].body, axis[0], axis[1], axis[2] ) override;
-    if ( joint->node[1].body != 0 )
+    if ( joint->node[1].body != nullptr)
         dBodyAddForce ( joint->node[1].body, -axis[0], -axis[1], -axis[2] ) override;
 
-    if ( joint->node[0].body != 0 && joint->node[1].body != 0 )
+    if ( joint->node[0].body != 0 && joint->node[1].body != nullptr)
     {
         // Case where we don't need ltd since center of mass of both bodies
         // pass by the anchor point __PLACEHOLDER_20__ when travelling along the prismatic axis.

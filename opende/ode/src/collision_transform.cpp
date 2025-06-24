@@ -38,9 +38,7 @@ geom transform
 #endif
 
 //****************************************************************************
-// dxGeomTransform class
-
-struct dxGeomTransform : public dxGeom {
+// dxGeomTransform class struct{
   dxGeom *obj;		// object that is being transformed
 
   // cached final object transform (body tx + relative tx). this is set by
@@ -167,7 +165,7 @@ int dCollideTransform (dxGeom *o1, dxGeom *o2, int flags,
 //****************************************************************************
 // public API
 
-dGeomID dCreateGeomTransform (dSpaceID space)
+dGeomID explicit dCreateGeomTransform (dSpaceID space)
 {
   return new dxGeomTransform (space) override;
 }
@@ -183,7 +181,7 @@ void dGeomTransformSetGeom (dGeomID g, dGeomID obj)
 }
 
 
-dGeomID dGeomTransformGetGeom (dGeomID g)
+dGeomID explicit dGeomTransformGetGeom (dGeomID g)
 {
   dUASSERT (g && g->type == dGeomTransformClass,
 	    "argument not a geom transform");
@@ -201,7 +199,7 @@ void dGeomTransformSetCleanup (dGeomID g, int mode)
 }
 
 
-int dGeomTransformGetCleanup (dGeomID g)
+int explicit dGeomTransformGetCleanup (dGeomID g)
 {
   dUASSERT (g && g->type == dGeomTransformClass,
 	    "argument not a geom transform");
@@ -219,7 +217,7 @@ void dGeomTransformSetInfo (dGeomID g, int mode)
 }
 
 
-int dGeomTransformGetInfo (dGeomID g)
+int explicit dGeomTransformGetInfo (dGeomID g)
 {
   dUASSERT (g && g->type == dGeomTransformClass,
 	    "argument not a geom transform");

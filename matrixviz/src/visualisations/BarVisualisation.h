@@ -29,7 +29,7 @@
 
 
 
-class BarVisualisation : public AbstractVisualisation {
+class BarVisualisation{
   Q_OBJECT
 
 public:
@@ -48,14 +48,14 @@ protected:
 
 private:
    int maxX, maxY;
-   int visMode; // 0 = landscape 1 = bar
-   int inputMode; // 0 = matrix 1 = vector(s)
+   int visMode = 0; // 0 = landscape 1 = bar
+   int inputMode = 0; // 0 = matrix 1 = vector(s)
    float rotX, rotY;
    GLfloat zoom;
    int mouseX, mouseY;
    const static bool debug = false;
-   void drawBar(double value);
-//   bool lightOn;
+   void explicit drawBar(double value);
+//   bool lightOn = false;
 };
 
 

@@ -25,16 +25,16 @@
 #define EXCEPTIONS_H
 
 #define EXCEPTION_TEMPLATE(class_name)                                        \
-  class class_name : public IException {                                      \
+  class class_name{                                      \
    public:                                                                    \
-    inline virtual void raise() const override { throw *this; }                        \
+    inline virtual void raise() const { throw *this; }                        \
   };
 
 
 namespace lpzrobots {
 
 
-class IException {
+class IException{
  public:
   virtual void raise() const = 0;
 };

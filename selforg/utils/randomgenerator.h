@@ -24,7 +24,7 @@
 #ifndef __RANDOMGENERATOR_H
 #define __RANDOMGENERATOR_H
 
-#include <stdlib.h>
+#include <cstdlib>
 #ifndef _GNU_SOURCE
 #include "mac_drand48r.h"
 #endif

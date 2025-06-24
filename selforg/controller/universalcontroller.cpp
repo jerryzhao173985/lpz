@@ -25,7 +25,7 @@
 #include "universalcontroller.h"
 #include "regularisation.h"
 #include <cmath>
-#include <stdio.h>
+#include <cstdio>
 
 using namespace std;
 using namespace matrix;

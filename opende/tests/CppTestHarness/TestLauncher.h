@@ -3,11 +3,7 @@
 
 namespace CppTestHarness
 {
-class TestResults;
-class TestRegistry;
-
-class TestLauncher
-{
+class TestResults{
 public:
 	virtual void Launch(TestResults& results_) const = 0;
 
@@ -19,7 +15,7 @@ protected:
 	virtual ~TestLauncher();
 
 private:
-	TestLauncher const* m_next;
+	TestLauncher const* m_next = nullptr;
 
 	// revoked
 	TestLauncher() override;

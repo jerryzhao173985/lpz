@@ -34,7 +34,7 @@
  * Modern interface for objects that can be stored to and restored from files.
  * Uses C++17 features including std::filesystem, RAII, and std::optional.
  */
-class ModernStoreable {
+class ModernStoreable{
 public:
   virtual ~ModernStoreable() = default;
 
@@ -140,7 +140,7 @@ public:
 };
 
 // RAII wrapper for FILE* (for legacy code compatibility)
-class FileWrapper {
+class FileWrapper{
 public:
   FileWrapper(FILE* file)
     : file_(file) {}

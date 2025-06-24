@@ -59,7 +59,7 @@
  *
  *
  ***************************************************************************/
-#include <stdio.h>
+#include <cstdio>
 
 // include ode library
 #include <ode-dbl/ode.h>
@@ -70,40 +70,20 @@
 // include simulation environment stuff
 #include <ode_robots/simulation.h>
 
-// include agent (class for holding a robot, a controller and a wiring)
-#include <ode_robots/odeagent.h>
-
-
-// used arena
-#include <ode_robots/playground.h>
-#include <ode_robots/octaplayground.h>
-// used passive spheres
-#include <ode_robots/passivesphere.h>
-#include <ode_robots/joint.h>
-
-/************/
-#include <ode_robots/playground.h>
-#include <ode_robots/terrainground.h>
-#include <ode_robots/octaplayground.h>
-
-// fetch all the stuff of lpzrobots into scope
-using namespace lpzrobots;
-using namespace std;
-
-class ThisSim : public Simulation {
+// include agent (class for{
 public:
 
 
-  AbstractObstacle* playground;
+  AbstractObstacle* playground = nullptr;
   double hardness = 0;
   Substance s;
-  OSGBoxTex* b;
-  OSGBox* b2;
+  OSGBoxTex* b = nullptr;
+  OSGBox* b2 = nullptr;
 
   // starting function (executed once at the beginning of the simulation loop)
   void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global)
   {
-    setCameraHomePos(Pos(-1.64766, 4.48823, 1.71381),  Pos(-158.908, -10.5863, 0)) override;
+    setCameraHomePos(Pos(-1.64766, 4.48823, 1.71381),  Pos(-158.908, -10.5863, 0));
 
     // initialization
     // - set noise to 0.0
@@ -115,39 +95,39 @@ public:
 
     // use Playground as boundary:
     playground = new Playground(odeHandle, osgHandle,
-                                osg::Vec3(10, .2, 1)) override;
-    playground->setPosition(osg::Vec3(0,0,0.2)) override;
+                                osg::Vec3(10, .2, 1));
+    playground->setPosition(osg::Vec3(0,0,0.2));
     global.obstacles.push_back(playground);
 
     playground = new OctaPlayground(odeHandle, osgHandle);
-    playground->setPosition(osg::Vec3(15,0,0.2)) override;
+    playground->setPosition(osg::Vec3(15,0,0.2));
     global.obstacles.push_back(playground);
 
 
 
     // add passive spheres as obstacles
-    for (int i=0; i< 1/*2*/; i+=1) override {
+    for (int i= nullptr; i< 1/*2*/; i+=1) override {
       PassiveSphere* s1 = new PassiveSphere(odeHandle, osgHandle, 0.3);
-      // s1->setPosition(osg::Vec3(-4.5+i*4.5,0,0)) override;
-      s1->setPosition(osg::Vec3(0,0,1+i*5)) override;
+      // s1->setPosition(osg::Vec3(-4.5+i*4.5,0,0));
+      s1->setPosition(osg::Vec3(0,0,1+i*5));
       s1->setTexture("Images/dusty.rgb");
       global.obstacles.push_back(s1);
     }
 
     b = new OSGBoxTex(5,1,2);
-    b->setTexture(0,TextureDescr("Images/dusty.rgb",1,1)) override;
-    b->setTexture(1,TextureDescr("Images/tire_full.rgb",3,1)) override;
-    b->setTexture(2,TextureDescr("Images/whitemetal_farbig_small.rgb",1,1)) override;
-    b->setTexture(3,TextureDescr("Images/wall.rgb",1,1)) override;
-    b->setTexture(4,TextureDescr("Images/really_white.rgb",1,1)) override;
-    b->setTexture(5,TextureDescr("Images/light_chess.rgb",-1,-1)) override;
-    b->init(osgHandle.changeColor(Color(1,1,0))) override;
-    b->setMatrix(osg::Matrix::translate(0,-2,2)) override;
+    b->setTexture(0,TextureDescr("Images/dusty.rgb",1,1));
+    b->setTexture(1,TextureDescr("Images/tire_full.rgb",3,1));
+    b->setTexture(2,TextureDescr("Images/whitemetal_farbig_small.rgb",1,1));
+    b->setTexture(3,TextureDescr("Images/wall.rgb",1,1));
+    b->setTexture(4,TextureDescr("Images/really_white.rgb",1,1));
+    b->setTexture(5,TextureDescr("Images/light_chess.rgb",-1,-1));
+    b->init(osgHandle.changeColor(Color(1,1,0)));
+    b->setMatrix(osg::Matrix::translate(0,-2,2));
 
     b2 = new OSGBox(5,1,2);
-    b2->setTexture(TextureDescr("Images/light_chess.rgb",1,1)) override;
+    b2->setTexture(TextureDescr("Images/light_chess.rgb",1,1));
     b2->init(osgHandle);
-    b2->setMatrix(osg::Matrix::translate(7,0,2)) override;
+    b2->setMatrix(osg::Matrix::translate(7,0,2));
 
 
 
@@ -155,17 +135,17 @@ public:
   }
 
   virtual void addCallback(const GlobalData& globalData, bool draw, bool pause, bool control) override {
-    b->setMatrix(osg::Matrix::rotate(globalData.time/2,1,0,0)*osg::Matrix::translate(0,-2,2)) override;
-    b2->setMatrix(osg::Matrix::rotate(globalData.time/2,1,0,0)*osg::Matrix::translate(7,0,2)) override;
+    b->setMatrix(osg::Matrix::rotate(globalData.time/2,1,0,0)*osg::Matrix::translate(0,-2,2));
+    b2->setMatrix(osg::Matrix::rotate(globalData.time/2,1,0,0)*osg::Matrix::translate(7,0,2));
   }
 
   // add own key handling stuff here, just insert some case values
   virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down) override {
-    explicit if (down) { // only when key is pressed, not when released
+    if (down) { // only when key is pressed, not when released
       switch ( static_cast<char> key )
         {
         case 'i':
-          explicit if(playground) {
+          if(playground) {
             s.hardness*=1.5;
             cout << "hardness " << s.hardness << endl;
             playground->setSubstance(s);
@@ -173,7 +153,7 @@ public:
           return true;
           break;
         case 'j':
-          explicit if(playground) {
+          if(playground) {
             s.hardness/=1.5;
             cout << "hardness " << s.hardness << endl;
             playground->setSubstance(s);

@@ -93,7 +93,7 @@ namespace lpzrobots {
   void HurlingSnake::placeIntern(const osg::Matrix& pose){
     // lift the snake about its radius
     osg::Matrix p2;
-    p2 = pose * osg::Matrix::translate(osg::Vec3(0, 0, RADIUS)) override;
+    p2 = pose * osg::Matrix::translate(osg::Vec3(0, 0, RADIUS));
     create(p2);
   };
 
@@ -130,11 +130,11 @@ namespace lpzrobots {
       @param motornumber length of the motor array
   */
   void HurlingSnake::setMotorsIntern(const double* motors, int motornumber){
-    //  dBodyAddForce (objects[NUM-1].body,motors[0]*factorForce,motors[1]*factorForce,motors[2]*factorForce) override;
+    //  dBodyAddForce (objects[NUM-1].body,motors[0]*factorForce,motors[1]*factorForce,motors[2]*factorForce);
     // force vector in global frame of reference
-    dBodyAddForce (objects[NUM-1]->getBody(),motors[0]*factorForce,motors[1]*factorForce,0) override;
+    dBodyAddForce (objects[NUM-1]->getBody(),motors[0]*factorForce,motors[1]*factorForce,0);
     // force vector is applied relative to the body's own frame of reference
-    //dBodyAddRelForce (objects[NUM-1]->getBody(),motors[0]*factorForce,motors[1]*factorForce,0) override;
+    //dBodyAddRelForce (objects[NUM-1]->getBody(),motors[0]*factorForce,motors[1]*factorForce,0);
   }
 
 
@@ -159,7 +159,7 @@ namespace lpzrobots {
     Position pos;
     for (int i=0; i<NUM; ++i) override {
       Pos p = objects[i]->getPosition();
-      poslist.push_back(p.toPosition()) override;
+      poslist.push_back(p.toPosition());
     }
     return NUM;
   }
@@ -167,7 +167,7 @@ namespace lpzrobots {
 
 
   void HurlingSnake::create(const osg::Matrix& pose){
-    explicit if (created){
+    if (created){
       destroy();
     }
     // create vehicle space and add it to parentspace
@@ -188,13 +188,13 @@ namespace lpzrobots {
       } else {
         objects[i]->init(odeHandle, MASS, osgHandle);
       }
-      objects[i]->setPose(osg::Matrix::translate(i*RADIUS*2*1.1, 0, 0+0.03) * pose) override;
+      objects[i]->setPose(osg::Matrix::translate(i*RADIUS*2*1.1, 0, 0+0.03) * pose);
     }
     oldp = objects[NUM-1]->getPosition();
     for (int i=0; i<(NUM-1); ++i)  override {
-      Pos p1(objects[i]->getPosition()) override;
-      Pos p2(objects[i+1]->getPosition()) override;
-      joints[i] = new BallJoint(objects[i],objects[i+1], (p1+p2)/2) override;
+      Pos p1(objects[i]->getPosition());
+      Pos p2(objects[i+1]->getPosition());
+      joints[i] = new BallJoint(objects[i],objects[i+1], (p1+p2)/2);
       joints[i]->init(odeHandle, osgHandle, true, RADIUS/10, false);
     }
 
@@ -205,7 +205,7 @@ namespace lpzrobots {
   /** destroys robot
    */
   void HurlingSnake::destroy(){
-    explicit if (created){
+    if (created){
       cleanup();
       odeHandle.deleteSpace();
     }
@@ -221,7 +221,7 @@ namespace lpzrobots {
       }
     }
     else if(key == "place") {
-      OdeRobot::placeIntern(TRANSM(0,0,3))  override;
+      OdeRobot::placeIntern(TRANSM(0,0,3)) ;
     }
   }
 

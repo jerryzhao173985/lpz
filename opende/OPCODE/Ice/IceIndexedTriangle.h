@@ -22,8 +22,7 @@
 #endif
 
 	// An indexed triangle class.
-	class ICEMATHS_API IndexedTriangle
-	{
+	class ICEMATHS_API{
 		public:
 
 		//! Constructor

@@ -28,15 +28,7 @@
 #define FIXGENERATIONSIZESTRATEGY_H_
 
 //forward declaration
-class Generation;
-
-//ga_tools includes
-#include "IGenerationSizeStrategy.h"
-
-/**
- * This class implements the generation size strategy with a fix value which is over the constructor given
- */
-class FixGenerationSizeStrategy: public IGenerationSizeStrategy {
+class Generation{
 public:
 	/**
 	 * constructor
@@ -47,7 +39,7 @@ public:
 	/**
 	 * default destructor
 	 */
-	virtual ~FixGenerationSizeStrategy();
+	virtual ~FixGenerationSizeStrategy() override;
 
 	/**
 	 * gives the fix value m_size as new generation size back.

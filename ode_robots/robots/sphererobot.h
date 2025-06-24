@@ -30,11 +30,7 @@
 
 namespace lpzrobots {
 
-  class Primitive;
-  class Joint;
-  class SliderJoint;
-
-  typedef struct {
+  class Primitive{
   public:
     double diameter = 0;
     double spheremass = 0;
@@ -50,12 +46,7 @@ namespace lpzrobots {
 
   /**
    *This is a class, which models a snake like robot. It consists of a number of equal elements, each linked
-   *by a joint. This class is based upon the class roboter by the same author.
-   *@author Marcel Kretschmann
-   *@version beta
-   **/
-  class Sphererobot : public OdeRobot
-  {
+   *by a joint. This class is{
   public:
     /* typedef */ enum objects { Base, Pendular, Pole1Bot, Pole2Bot, Pole3Bot,
                            Pole1Top , Pole2Top, Pole3Top, Last};
@@ -77,7 +68,7 @@ namespace lpzrobots {
     Sphererobot ( const OdeHandle& odeHandle, const OsgHandle& osgHandle,
                   const SphererobotConf& conf, const std::string& name );
 
-    virtual ~Sphererobot();
+    virtual ~Sphererobot() override;
 
     static SphererobotConf getDefaultConf() const {
       SphererobotConf c;
@@ -120,20 +111,20 @@ namespace lpzrobots {
      *Returns the number of motors used by the snake.
      *@return number of motors
      **/
-    virtual int getMotorNumberIntern();
+    virtual int getMotorNumberIntern() const;
 
     /**
      *Returns the number of sensors used by the robot.
      *@return number of sensors
      **/
-    virtual int getSensorNumberIntern();
+    virtual int getSensorNumberIntern() const;
 
     /** returns a vector with the positions of all segments of the robot
     */
     virtual int getSegmentsPosition(std::vector<Position> &poslist);
 
     /** the main object of the robot, which is used for position and speed tracking */
-    virtual Primitive* getMainPrimitive() const override { return object[Base]; }
+    virtual Primitive* getMainPrimitive() const { return object[Base]; }
 
   protected:
     /** creates vehicle at desired pose

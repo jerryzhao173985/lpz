@@ -67,20 +67,20 @@ typedef std::list<int> IndexList;
 
 typedef QVector<MultiChannel> MultiChannels;
 
-class ChannelData : public QObject{
+class ChannelData{
   Q_OBJECT
 public:
 
-  explicit ChannelData(int buffersize);
+  explicit explicit ChannelData(int buffersize);
 
-  int getBuffersize();
-  void setBufferSize(int newBuffersize);
+  int getBuffersize() const;
+  void explicit setBufferSize(int newBuffersize);
 
   /// sets a new information about a channel (also works before initialization)
-  void setChannelInfo(const ChannelInfo& info);
+  void explicit setChannelInfo(const ChannelInfo& info);
 
   /// sets the channels (and initialized the data buffer)
-  void setChannels(const QStringList& channels);
+  void explicit setChannels(const QStringList& channels);
 
   /// returns the list of channels
   const QVector<ChannelName >& getChannels() const;
@@ -125,18 +125,18 @@ public:
   int getTime() const { return time; }
 
 public slots:
-  void receiveRawData(const QString& line);
+  void explicit receiveRawData(const QString& line);
 
 protected:
   /// extracts a multichannel from the channels starting from position i (i is advanced)
-  MultiChannel extractMultiChannel(int* i);
+  MultiChannel explicit extractMultiChannel(int* i);
   /// returns the name without the index specifiers e.g. for A[0][3] it returns A
   QString getChannelNameRoot(const ChannelName& name) const ;
 signals:
   void quit();
   void channelsChanged();
   void update();
-  void rootNameUpdate(const QString& name);
+  void explicit rootNameUpdate(const QString& name);
 
 private:
   /** first array is the ring buffer

@@ -50,15 +50,10 @@
 
 namespace lpzrobots {
 
-  class QConfigurator;
-
-  /**
-   * Proxy which controls the creation process of the QConfigurator
-   */
-  class ConfiguratorProxy : public Callbackable {
+  class QConfigurator{
     public:
-      explicit ConfiguratorProxy(ConfigurableList& configList);
-      virtual ~ConfiguratorProxy();
+      explicit explicit ConfiguratorProxy(ConfigurableList& configList);
+      virtual ~ConfiguratorProxy() override;
 
       virtual void doOnCallBack(BackCaller* source, BackCaller::CallbackableType type = BackCaller::DEFAULT_CALLBACKABLE_TYPE);
 
@@ -67,7 +62,7 @@ namespace lpzrobots {
     private:
       ConfigurableList& configList;
       pthread_t configuratorThread;
-      QConfigurator* configurator;
+      QConfigurator* configurator = nullptr;
 
   };
 

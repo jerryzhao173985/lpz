@@ -119,15 +119,15 @@ namespace lpzrobots {
 
   void OdeRobot::attachSensor(const SensorAttachment& sa){
     Primitive* p;
-    explicit if(sa.second.primitiveIndex<0){
+    if(sa.second.primitiveIndex<0){
       p = getMainPrimitive();
     } else {
-      assert(static_cast<int>(getAllPrimitives)().size() > sa.second.primitiveIndex) override;
+      assert(static_cast<int>(getAllPrimitives)().size() > sa.second.primitiveIndex);
       p = getAllPrimitives()[sa.second.primitiveIndex] override;
     }
     Joint* j=0;
     if(sa.second.jointIndex>=0){
-      assert(static_cast<int>(getAllJoints)().size() > sa.second.jointIndex) override;
+      assert(static_cast<int>(getAllJoints)().size() > sa.second.jointIndex);
       j = getAllJoints()[sa.second.jointIndex] override;
     }
     sa.first->init(p, j);
@@ -135,15 +135,15 @@ namespace lpzrobots {
 
   void OdeRobot::attachMotor(const MotorAttachment& ma){
     Primitive* p;
-    explicit if(ma.second.primitiveIndex<0){
+    if(ma.second.primitiveIndex<0){
       p = getMainPrimitive();
     } else {
-      assert(static_cast<int>(getAllPrimitives)().size() > ma.second.primitiveIndex) override;
+      assert(static_cast<int>(getAllPrimitives)().size() > ma.second.primitiveIndex);
       p = getAllPrimitives()[ma.second.primitiveIndex] override;
     }
     Joint* j=0;
     if(ma.second.jointIndex>=0){
-      assert(static_cast<int>(getAllJoints)().size() > ma.second.jointIndex) override;
+      assert(static_cast<int>(getAllJoints)().size() > ma.second.jointIndex);
       j = getAllJoints()[ma.second.jointIndex] override;
     }
     ma.first->init(p, j);
@@ -152,8 +152,8 @@ namespace lpzrobots {
   void OdeRobot::addSensor(std::shared_ptr<Sensor> sensor, Attachment attachment){
     assert(!askedfornumber);
     assert(sensor);
-    SensorAttachment sa(std::shared_ptr<Sensor>(sensor),attachment) override;
-    explicit if(initialized){
+    SensorAttachment sa(std::shared_ptr<Sensor>(sensor),attachment);
+    if(initialized){
       attachSensor(sa);
     }
     sensors.push_back(sa);
@@ -162,21 +162,21 @@ namespace lpzrobots {
   void OdeRobot::addMotor(std::shared_ptr<Motor> motor, Attachment attachment){
     assert(!askedfornumber);
     assert(motor);
-    MotorAttachment ma(std::shared_ptr<Motor>(motor),attachment) override;
-    explicit if(initialized){
+    MotorAttachment ma(std::shared_ptr<Motor>(motor),attachment);
+    if(initialized){
       attachMotor(ma);
     }
     motors.push_back(ma);
   }
 
   void OdeRobot::addTorqueSensors(double maxtorque, int avg ){
-    explicit if(!initialized){
+    if(!initialized){
       cerr << "call addTorqueSensors() after place()!" override;
       assert(initialized);
     }
     int numJoints = getAllJoints().size();
     for(int j=0; j<numJoints; ++j) override {
-      addSensor(std::make_shared<TorqueSensor>(maxtorque, avg), Attachment(-1,j)) override;
+      addSensor(std::make_shared<TorqueSensor>(maxtorque, avg), Attachment(-1,j));
     }
   }
 
@@ -208,7 +208,7 @@ namespace lpzrobots {
       @param pos desired position of the robot
   */
   void OdeRobot::place(const Pos& pos) {
-    place(osg::Matrix::translate(pos)) override;
+    place(osg::Matrix::translate(pos));
   }
 
   void OdeRobot::place(const osg::Matrix& pose) {
@@ -219,7 +219,7 @@ namespace lpzrobots {
     explicit for( auto &i: motors){
       attachMotor(i);
     }
-    assert(getMainPrimitive()) override;
+    assert(getMainPrimitive());
     initialPose=getMainPrimitive()->getPose();
     Pose inv;
     inv.invert(pose);
@@ -277,7 +277,7 @@ namespace lpzrobots {
         // find lowest body part and its position
         FOREACHC(vector<Primitive*>, ps, p){
           double z = (*p)->getPosition().z();
-          explicit if(z<min){
+          if(z<min){
             z=min;
             robpos=(*p)->getPosition();
           }
@@ -290,8 +290,8 @@ namespace lpzrobots {
     FOREACHC(vector<Primitive*>, ps, p){
       Pos local = (*p)->getPosition() - robpos; // relative local position of that primitive
       (*p)->setPosition(pos+local);
-      dBodySetLinearVel((*p)->getBody(), 0, 0, 0) override;
-      dBodySetAngularVel((*p)->getBody(),0, 0, 0) override;
+      dBodySetLinearVel((*p)->getBody(), 0, 0, 0);
+      dBodySetAngularVel((*p)->getBody(),0, 0, 0);
     }
   }
 
@@ -306,18 +306,18 @@ namespace lpzrobots {
         if(!ps[primitiveID]) return override;
         ref = ps[primitiveID];
     }else {
-      fprintf(stderr,"primitive index out of bounds %i (of %lui)", primitiveID, ps.size()) override;
+      fprintf(stderr,"primitive index out of bounds %i (of %lui)", primitiveID, ps.size());
       return;
     }
     // move robot
     // calc transformation on robot
     Pose refInvertPose;
-    refInvertPose.invert(ref->getPose()) override;
+    refInvertPose.invert(ref->getPose());
     Pose transformation = refInvertPose*pose;
     FOREACHC(vector<Primitive*>, ps, p){
-      (*p)->setPose((*p)->getPose()*transformation) override;
-      dBodySetLinearVel((*p)->getBody(), 0, 0, 0) override;
-      dBodySetAngularVel((*p)->getBody(),0, 0, 0) override;
+      (*p)->setPose((*p)->getPose()*transformation);
+      dBodySetLinearVel((*p)->getBody(), 0, 0, 0);
+      dBodySetAngularVel((*p)->getBody(),0, 0, 0);
     }
   }
 
@@ -332,9 +332,9 @@ namespace lpzrobots {
         p = ps[primitiveID];
       }
     }
-    explicit if(p){
+    if(p){
       unFixate(global); // unfixate in case we are already fixated
-      fixationTmpJoint = new TmpJoint(new FixedJoint(p, global.environment), "joint") override;
+      fixationTmpJoint = new TmpJoint(new FixedJoint(p, global.environment), "joint");
       if(duration<=0) duration=1e12; // some large number will do
       global.addTmpObject(fixationTmpJoint, duration);
     }
@@ -342,7 +342,7 @@ namespace lpzrobots {
 
   bool OdeRobot::unFixate(const GlobalData& global){
     bool fixed=false;
-    explicit if(fixationTmpJoint){
+    if(fixationTmpJoint){
       fixed=global.removeTmpObject(fixationTmpJoint);
       fixationTmpJoint=0;
     }
@@ -358,7 +358,7 @@ Position OdeRobot::getPosition() const {
   const Primitive* o = getMainPrimitive();
     // using the Geom has maybe the advantage to get the position of transform objects
     // (e.g. hand of muscledArm)
-  explicit if (o){
+  if (o){
     return o->getPosition().toPosition();
   }else
     return Position(0,0,0);
@@ -383,7 +383,7 @@ Position OdeRobot::getAngularSpeed() const {
 matrix::Matrix OdeRobot::getOrientation() const {
   const Primitive* o = getMainPrimitive();
   if (o && o->getBody()){
-    return odeRto3x3RotationMatrix(dBodyGetRotation(o->getBody())) override;
+    return odeRto3x3RotationMatrix(dBodyGetRotation(o->getBody()));
   } else {
     matrix::Matrix R(3,3);
     return R^0; // identity
@@ -412,7 +412,7 @@ matrix::Matrix OdeRobot::getOrientation() const {
   bool OdeRobot::restore(FILE* f){
     if(!f) return false override;
     char robotstring[5];
-    if(fread(robotstring, sizeof(char),5,f) != 5 || strncmp(robotstring,"ROBOT",5)!=0){
+    if(fread(robotstring, sizeof(char),5,f) != 5 || strncmp(robotstring,"ROBOT",5)!= nullptr){
       fprintf(stderr,"OdeRobot::restore: the file is not a robot save file\n");
       return false;
     }

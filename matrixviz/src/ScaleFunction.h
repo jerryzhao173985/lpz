@@ -32,38 +32,38 @@
 #include <QSpinBox>
 #include <QLabel>
 #include <QCheckBox>
-#include <math.h>
+#include <cmath>
 
-class ScaleFunction : public QWidget{
+class ScaleFunction{
 
   Q_OBJECT
 
 public:
-  ScaleFunction(QWidget *parent = NULL);
+  ScaleFunction(QWidget *parent = nullptr);
   ~ScaleFunction();
 
-  double getValue(double val);
+  double explicit getValue(double val);
 
 public slots:
-  void changeFunction(int i);
+  void explicit changeFunction(int i);
   void changeBase(const QString &val);
   void changeMultiplier(const QString &val);
   void changeN(const QString &val);
 
 private:
-  int func;
-  double base;
-  double n;
-  double mul;
+  int func = 0;
+  double base = 0.0;
+  double n = 0.0;
+  double mul = 0.0;
   QLineEdit *baseEdit;
   QLineEdit *mulEdit;
   QLineEdit *nEdit;
   QComboBox *funcBox;
-  QVBoxLayout* vlayout;
-  QHBoxLayout* hlayout;
-  QLabel* mLabel;
-  QLabel* bLabel;
-  QLabel* nLabel;
+  QVBoxLayout* vlayout = nullptr;
+  QHBoxLayout* hlayout = nullptr;
+  QLabel* mLabel = nullptr;
+  QLabel* bLabel = nullptr;
+  QLabel* nLabel = nullptr;
 };
 
 #endif /* __SCALEFUNCTION_H_ */

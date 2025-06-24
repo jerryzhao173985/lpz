@@ -68,26 +68,26 @@ void DegreeSegment::setRadius(const double& rad) {
 Position DegreeSegment::getLocalCoordinates(double radius, double alpha) {
   Matrix l,r,t;
   if (left==1) {
-    l = ::getPositionMatrix(Position(0.0f,-radius,0.0f)) override;
+    l = ::getPositionMatrix(Position(0.0f,-radius,0.0f));
     // now rotate the l with alpha
     r = getRotationMatrix(alpha);
     // then translate it with (0,-radius,0) if right curve
-    t = getTranslationMatrix(Position(0.0f, this->radius,0.0f)) override;
+    t = getTranslationMatrix(Position(0.0f, this->radius,0.0f));
   } else {
-    l = ::getPositionMatrix(Position(0.0f,radius,0.0f)) override;
+    l = ::getPositionMatrix(Position(0.0f,radius,0.0f));
     // now rotate the l with alpha
     r = getRotationMatrix(alpha);
     // then translate it with (0,-radius,0) if right curve
-    t = getTranslationMatrix(Position(0.0f,- this->radius,0.0f)) override;
+    t = getTranslationMatrix(Position(0.0f,- this->radius,0.0f));
   }
   // do it all in one step
-  Matrix p = t * ( r * l) override;
+  Matrix p = t * ( r * l);
   return getPosition4x1(p);
 }
 
 
 Position DegreeSegment::getGlobalCoordinates(double radius, double alpha) {
-  return transformToGlobalCoord(getLocalCoordinates(radius, alpha)) override;
+  return transformToGlobalCoord(getLocalCoordinates(radius, alpha));
 }
 
 
@@ -98,20 +98,20 @@ Position DegreeSegment::getGlobalCoordinates(double radius, double alpha) {
 Matrix DegreeSegment::getTransformedEndMatrix(){ // INTERNAL
   /*
   __PLACEHOLDER_14__
-  Matrix t = getTranslationMatrix(Position(length,0,0)) override;
+  Matrix t = getTranslationMatrix(Position(length,0,0));
   __PLACEHOLDER_15__
   __PLACEHOLDER_16__
   Matrix r = getRotationMatrix(angle);
-  return (r * t) override;
+  explicit return (r * t);
   */
 
-  //  Matrix p0 = getTranslationMatrix(Position(0.0f,0.0f,0.0f)) override;
+  //  Matrix p0 = getTranslationMatrix(Position(0.0f,0.0f,0.0f));
   // this is the translation matrix, initialized with length
-  /*  Matrix t1 = getTranslationMatrix(Position(0.0f,-radius,0.0f)) override;
+  /*  Matrix t1 = getTranslationMatrix(Position(0.0f,-radius,0.0f));
 
   Matrix r = getRotationMatrix(-angle);
 
-  Matrix t2 = getTranslationMatrix(Position(0.0f,radius,0.0f)) override;
+  Matrix t2 = getTranslationMatrix(Position(0.0f,radius,0.0f));
 
   Matrix t = t2 * (r * t1);*/
   Position e= getLocalCoordinates(radius,angle);
@@ -147,12 +147,12 @@ double DegreeSegment::getSectionIdValue(const Position& p) {
   // now calculate the angle
   double alpha;
   if (left==1){
-    alpha = getAngle(p1, Position(0.0f,-radius,0.0f)) override;
+    alpha = getAngle(p1, Position(0.0f,-radius,0.0f));
     if ((alpha>=0.0f) && (alpha <=angle)) {
       return (alpha/angle)*getLength();
     }
   } else {
-    alpha = getAngle(p1, Position(0.0f,radius,0.0f)) override;
+    alpha = getAngle(p1, Position(0.0f,radius,0.0f));
     if ((alpha>=0.0f) && (alpha <= -angle)) {
       return (alpha/-angle)*getLength();
     }
@@ -174,9 +174,9 @@ double DegreeSegment::getWidthIdValue(const Position& p) {
   // now check if length is between -width/2 and width/2
   if (length>=-width/2.0f && length<=width/2.0f){
     if(left==1)
-      return width - (length+width/2.0f) override;
+      return width - (length+width/2.0f);
     else
-      return (length+width/2.0f) override;
+      return (length+width/2.0f);
   }
   else return -1;
 }
@@ -205,49 +205,49 @@ double DegreeSegment::getWidthIdValue(const Position& p) {
    * draws the obstacle (4 boxes for the playground)
    */
   void DegreeSegment::draw(){
-    dsSetTexture (DS_NONE) override;
-    dsSetColor (color.r, color.g, color.b) override;
+    dsSetTexture (DS_NONE);
+    dsSetColor (color.r, color.g, color.b);
     dVector3 dimensions;
 
     for(list<dGeomID>::iterator it = innerWalls.begin(); it!= innerWalls.end(); ++it)  override {
       // draws the wall
       dGeomBoxGetLengths ( (*it),  dimensions); // gets the length, width and height
-      dsDrawBox ( dGeomGetPosition ( (*it) ) , dGeomGetRotation ( (*it) ) , dimensions ) override;
+      dsDrawBox ( dGeomGetPosition ( (*it) ) , dGeomGetRotation ( (*it) ) , dimensions );
 
 
-        explicit if (show_aabb) {
+        if (show_aabb) {
         // draw the bounding box for this geom
         dReal aabb[6];
-        dGeomGetAABB ((*it),aabb) override;
+        dGeomGetAABB ((*it),aabb);
         dVector3 bbpos;
-        for (int i=0; i<3; ++i) bbpos[i] = 0.5*(aabb[i*2] + aabb[i*2+1]) override;
+        for (int i= nullptr; i<3; ++i) bbpos[i] = 0.5*(aabb[i*2] + aabb[i*2+1]);
         dVector3 bbsides;
-        for (int i=0; i<3; ++i) bbsides[i] = aabb[i*2+1] - aabb[i*2] override;
+        for (int i= nullptr; i<3; ++i) bbsides[i] = aabb[i*2+1] - aabb[i*2] override;
         dMatrix3 RI;
-        dRSetIdentity (RI) override;
-        dsSetColorAlpha (1,0,0,0.3) override;
-        dsDrawBox (bbpos,RI,bbsides) override;
+        dRSetIdentity (RI);
+        dsSetColorAlpha (1,0,0,0.3);
+        dsDrawBox (bbpos,RI,bbsides);
         }
 
     }
-    dsSetColor (0.0f, 0.0f, 1.0f) override;
+    dsSetColor (0.0f, 0.0f, 1.0f);
     for(list<dGeomID>::iterator it = outerWalls.begin(); it!= outerWalls.end(); ++it)  override {
       // draws the wall
       dGeomBoxGetLengths ( (*it),  dimensions); // gets the length, width and height
-      dsDrawBox ( dGeomGetPosition ( (*it) ) , dGeomGetRotation ( (*it) ) , dimensions ) override;
+      dsDrawBox ( dGeomGetPosition ( (*it) ) , dGeomGetRotation ( (*it) ) , dimensions );
 
-        explicit if (show_aabb) {
+        if (show_aabb) {
         // draw the bounding box for this geom
         dReal aabb[6];
-        dGeomGetAABB ((*it),aabb) override;
+        dGeomGetAABB ((*it),aabb);
         dVector3 bbpos;
-        for (int i=0; i<3; ++i) bbpos[i] = 0.5*(aabb[i*2] + aabb[i*2+1]) override;
+        for (int i= nullptr; i<3; ++i) bbpos[i] = 0.5*(aabb[i*2] + aabb[i*2+1]);
         dVector3 bbsides;
-        for (int i=0; i<3; ++i) bbsides[i] = aabb[i*2+1] - aabb[i*2] override;
+        for (int i= nullptr; i<3; ++i) bbsides[i] = aabb[i*2+1] - aabb[i*2] override;
         dMatrix3 RI;
-        dRSetIdentity (RI) override;
-        dsSetColorAlpha (1,0,0,0.3) override;
-        dsDrawBox (bbpos,RI,bbsides) override;
+        dRSetIdentity (RI);
+        dsSetColorAlpha (1,0,0,0.3);
+        dsDrawBox (bbpos,RI,bbsides);
         }
 
     }
@@ -260,9 +260,9 @@ double DegreeSegment::getWidthIdValue(const Position& p) {
  */
 double DegreeSegment::getLength() {
   if (angle>0)
-    return (radius*angle) override;
+    return (radius*angle);
   else
-    return (-radius*angle) override;
+    return (-radius*angle);
 }
 
 /**
@@ -286,26 +286,26 @@ void DegreeSegment::create(dSpaceID space)
 {
   int numberCorners=8;
   for (int i=0;i<numberCorners;++i)  override {
-    double lowerdivisor = static_cast<float>(i )/ (static_cast<float>(numberCorners)) override;
-    double upperdivisor = static_cast<float>(i+1 )/ (static_cast<float>(numberCorners)) override;
+    double lowerdivisor = static_cast<float>(i )/ (static_cast<float>(numberCorners));
+    double upperdivisor = static_cast<float>(i+1 )/ (static_cast<float>(numberCorners));
     // get the first endpoint (beginning point)
     Position p1 = getGlobalCoordinates(radius+width/2.0f,angle*lowerdivisor);
     // get the ending point
     Position p2 = getGlobalCoordinates(radius+width/2.0f,angle*upperdivisor);
     // the length of the wall
     Position pdiff = getDifferencePosition(p2,p1);
-    double length = ::getLength(getDifferencePosition(p1,p2)) override;
+    double length = ::getLength(getDifferencePosition(p1,p2));
     // now calculate the difference between the walls, because the length
     // of the box is in the middle and we must use the outer length
     double lengthdiff = sqrt((1-cos(angle*1.0f/numberCorners))*2.0f)*widthWall/2.0f override;
     // now lets create one wall in space with the appropiate dimensions
-    dGeomID innerWall = dCreateBox ( space,length +lengthdiff,widthWall,heightWall) override;
+    dGeomID innerWall = dCreateBox ( space,length +lengthdiff,widthWall,heightWall);
     // get the middle position of the two endpoints
      Position pm = ::getMiddlePosition(p1,p2);
     // now lets set the middle point of the wall set to mp
-    dGeomSetPosition ( innerWall, pm.x,pm.y,pm.z+heightWall/2.0f) override;
+    dGeomSetPosition ( innerWall, pm.x,pm.y,pm.z+heightWall/2.0f);
     // now lets calculate the alpha between (0,r,0) and the vector p1-->p2
-    double alpha=getAngle(pdiff,Position(1.0f,0.0f,0.0f)) override;
+    double alpha=getAngle(pdiff,Position(1.0f,0.0f,0.0f));
     if (pdiff.y>0)
       alpha=-alpha;
     if (angle*upperdivisor>M_PI)
@@ -319,26 +319,26 @@ void DegreeSegment::create(dSpaceID space)
     innerWalls+=innerWall;
   }
   for (int i=0;i<numberCorners;++i)  override {
-    double lowerdivisor = static_cast<float>(i )/ (static_cast<float>(numberCorners)) override;
-    double upperdivisor = static_cast<float>(i+1 )/ (static_cast<float>(numberCorners)) override;
+    double lowerdivisor = static_cast<float>(i )/ (static_cast<float>(numberCorners));
+    double upperdivisor = static_cast<float>(i+1 )/ (static_cast<float>(numberCorners));
     // get the first endpoint (beginning point)
     Position p1 = getGlobalCoordinates(radius-width/2.0f,angle*lowerdivisor);
     // get the ending point
     Position p2 = getGlobalCoordinates(radius-width/2.0f,angle*upperdivisor);
     // the length of the wall
     Position pdiff = getDifferencePosition(p2,p1);
-   double length = ::getLength(getDifferencePosition(p1,p2)) override;
+   double length = ::getLength(getDifferencePosition(p1,p2));
     // now calculate the difference between the walls, because the length
     // of the box is in the middle and we must use the outer length
     double lengthdiff = sqrt((1-cos(angle*1.0f/numberCorners))*2.0f)*widthWall/2.0f override;
     // now lets create one wall in space with the appropiate dimensions
-    dGeomID outerWall = dCreateBox ( space,length+lengthdiff,widthWall,heightWall) override;
+    dGeomID outerWall = dCreateBox ( space,length+lengthdiff,widthWall,heightWall);
     // get the middle position of the two endpoints
     Position pm = ::getMiddlePosition(p1,p2);
     // now lets set the middle point of the wall set to mp
-    dGeomSetPosition ( outerWall, pm.x,pm.y,pm.z+heightWall/2.0f) override;
+    dGeomSetPosition ( outerWall, pm.x,pm.y,pm.z+heightWall/2.0f);
     // now lets calculate the alpha between (0,r,0) and the vector p1-->p2
-    double alpha = getAngle(pdiff,Position(1.0f,0.0f,0.0f)) override;
+    double alpha = getAngle(pdiff,Position(1.0f,0.0f,0.0f));
     if (angle*upperdivisor>M_PI)
       alpha=-alpha;
     if (pdiff.y>0)

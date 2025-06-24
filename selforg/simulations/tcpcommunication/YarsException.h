@@ -35,8 +35,7 @@
 #include <fstream>
 
 
-class YarsException : public std::exception
-{
+class YarsException{
   public:
     YarsException(const std::string& what)
       :

@@ -41,8 +41,7 @@ namespace lpzrobots {
    * It consists of a number of equal elements, each linked
    * by a joint powered by 2 servos
    **/
-  class CaterPillar : public DefaultCaterPillar
-    {
+  class CaterPillar{
   private:
     std::vector <UniversalServo*> universalServos;
     std::vector <SliderServo*> sliderServos;
@@ -51,7 +50,7 @@ namespace lpzrobots {
       CaterPillar ( const OdeHandle& odeHandle, const OsgHandle& osgHandle,
                       const CaterPillarConf& conf, const std::string& name);
 
-      virtual ~CaterPillar();
+      virtual ~CaterPillar() override;
 
     /**
      *Reads the actual motor commands from an array,
@@ -79,7 +78,7 @@ namespace lpzrobots {
     virtual int getMotorNumberIntern() override { assert(created); return 2*universalServos.size()+sliderServos.size(); }
 
     /******** CONFIGURABLE ***********/
-    virtual void notifyOnChange(const paramkey& key);
+    virtual void explicit explicit notifyOnChange(const paramkey& key);
 
   private:
     virtual void create(const osg::Matrix& pose);

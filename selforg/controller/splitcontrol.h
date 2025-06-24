@@ -31,18 +31,14 @@
 #include <vector>
 
 /**
- * class for using multiple controller with one robot. The connection is flexible.
- * The controller are generated on the fly with a generator object.
- *
- */
-class SplitControl : public AbstractController {
+ * class for{
 public:
   struct Assoziation {
     Assoziation();
-    void addSensorIdx(int s) {
+    void explicit explicit addSensorIdx(int s) {
       sensors.push_back(s);
     }
-    void addMotorIdx(int m) {
+    void explicit explicit addMotorIdx(int m) {
       motors.push_back(m);
     }
 
@@ -65,7 +61,7 @@ public:
                int numCtrlCreateBeforeInit = 1,
                int numContextSensors = 0);
 
-  virtual ~SplitControl();
+  virtual ~SplitControl() override;
 
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
 

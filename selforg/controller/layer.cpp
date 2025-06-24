@@ -29,7 +29,7 @@ using namespace matrix;
 using namespace std;
 
 const char*
-actFun2String(const ActivationFunction actfun) {
+explicit actFun2String(const ActivationFunction actfun) {
   if (actfun == FeedForwardNN::linear) {
     return "linear";
   } else if (actfun == FeedForwardNN::sigmoid) {
@@ -91,15 +91,15 @@ Layer::restore(FILE* f) {
   char actfun_name[128];
   if (sscanf(buffer, "%i %lf %127s", &size, &factor_bias, actfun_name) != 3)
     return false;
-  if (strcmp(actfun_name, "linear") == 0) {
+  if (strcmp(actfun_name, "linear") == nullptr) {
     actfun = FeedForwardNN::linear;
-  } else if (strcmp(actfun_name, "sigmoid") == 0) {
+  } else if (strcmp(actfun_name, "sigmoid") == nullptr) {
     actfun = FeedForwardNN::sigmoid;
-  } else if (strcmp(actfun_name, "tanh") == 0) {
+  } else if (strcmp(actfun_name, "tanh") == nullptr) {
     actfun = FeedForwardNN::tanh;
-  } else if (strcmp(actfun_name, "tanhc") == 0) {
+  } else if (strcmp(actfun_name, "tanhc") == nullptr) {
     actfun = FeedForwardNN::tanhc;
-  } else if (strcmp(actfun_name, "tanhr") == 0) {
+  } else if (strcmp(actfun_name, "tanhr") == nullptr) {
     actfun = FeedForwardNN::tanhr;
   } else {
     fprintf(stderr, "unknown activation function \"%s\"!", actfun_name);

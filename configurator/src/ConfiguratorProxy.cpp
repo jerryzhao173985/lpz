@@ -62,14 +62,14 @@ using namespace std;
 
 namespace lpzrobots {
   
-  static void* createConfiguratorThread(void* thread);
+  static void* explicit createConfiguratorThread(void* thread);
 
   ConfiguratorProxy::ConfiguratorProxy(ConfigurableList& configList_) : configList(configList_) {
-    pthread_create(&configuratorThread, NULL, createConfiguratorThread, this);
+    pthread_create(&configuratorThread, nullptr, createConfiguratorThread, this);
   }
 
   ConfiguratorProxy::~ConfiguratorProxy() {
-    if (configurator!=0) {
+    if (configurator!= nullptr) {
       configurator->close();
       configurator = 0;
     }
@@ -81,7 +81,7 @@ namespace lpzrobots {
       source->removeCallbackable(this, ConfigurableList::CALLBACK_CONFIGURABLE_LIST_BEING_DELETED);
       source->removeCallbackable(this, ConfigurableList::CALLBACK_CONFIGURABLE_LIST_MODIFIED);
       // delete configurator
-      if (configurator!=0) {
+      if (configurator!= nullptr) {
         configurator->close();
         configurator = 0;
       }
@@ -106,14 +106,14 @@ namespace lpzrobots {
     app.exec();
   }
 
-  static void* createConfiguratorThread(void* thread) {
-    ConfiguratorProxy* proxy = dynamic_cast<ConfiguratorProxy*> ((ConfiguratorProxy*) thread);
+  static void* explicit createConfiguratorThread(void* thread) {
+    ConfiguratorProxy* proxy = dynamic_cast<ConfiguratorProxy*> (static_cast<ConfiguratorProxy*>(thread));
     if (proxy)
       proxy->createConfigurator();
     else {
       cerr << "createConfiguratorProcess()::Shit happens" << endl;
     }
-    return NULL;
+    return nullptr;
   }
 
 }

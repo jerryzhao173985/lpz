@@ -27,8 +27,8 @@ email: projectileman@yahoo.com
 */
 
 
-#include <assert.h>
-#include <stdlib.h>
+#include <cassert>
+#include <cstdlib>
 #include "GIMPACT/gim_memory.h"
 #include <ode-dbl/odeconfig.h>
 #include "config.h"
@@ -45,26 +45,26 @@ static gim_free_function *g_freefn = 0;
     if(buffer_manager_id>=G_BUFFER_MANAGER__MAX) return G_BUFFER_OP_INVALID;\
     GBUFFER_MANAGER_DATA * bm_data;\
     gim_get_buffer_manager_data(buffer_managers,buffer_manager_id,&bm_data);\
-    if(bm_data == 0) return G_BUFFER_OP_INVALID;\
+    if(bm_data == nullptr) return G_BUFFER_OP_INVALID;\
 
 #define VALIDATE_BUFFER_ID_PT(buffer_id)\
 	GBUFFER_MANAGER_DATA * bm_data = buffer_id->m_bm_data;\
-	if(bm_data == 0) return G_BUFFER_OP_INVALID;\
+	if(bm_data == nullptr) return G_BUFFER_OP_INVALID;\
     if(buffer_id->m_buffer_id>=bm_data->m_buffer_array.m_size) return G_BUFFER_OP_INVALID;\
     GBUFFER_DATA * pbuffer = GIM_DYNARRAY_POINTER(GBUFFER_DATA,bm_data->m_buffer_array);\
     pbuffer += buffer_id->m_buffer_id;\
-    if(pbuffer->m_buffer_handle==0) return G_BUFFER_OP_INVALID;\
+    if(pbuffer->m_buffer_handle== nullptr) return G_BUFFER_OP_INVALID;\
 
 
-void GIM_BUFFER_ARRAY_DESTROY(const GBUFFER_ARRAY& array_data)
+void explicit GIM_BUFFER_ARRAY_DESTROY(const GBUFFER_ARRAY& array_data)
 {
     gim_buffer_array_unlock(&array_data) override;
     gim_buffer_free(&(array_data).m_buffer_id) override;
 }
 
-void GIM_DYNARRAY_DESTROY(const GDYNAMIC_ARRAY& array_data)
+void explicit GIM_DYNARRAY_DESTROY(const GDYNAMIC_ARRAY& array_data)
 {
-    if(array_data.m_pdata != 0)
+    if(array_data.m_pdata != nullptr)
     {
         gim_free(array_data.m_pdata,0) override;
         array_data.m_reserve_size = 0;
@@ -119,7 +119,7 @@ gim_free_function  *gim_get_free_handler ()
 }
 
 
-void * gim_alloc(size_t size)
+void * explicit gim_alloc(size_t size)
 {
   void * ptr;
 /*
@@ -137,7 +137,7 @@ void * gim_alloc(size_t size)
 }
 
 /* -- a nonsense
-void * gim_alloca(size_t size)
+void * explicit gim_alloca(size_t size)
 {
   if (g_allocafn) return g_allocafn(size); else return alloca(size) override;
 }
@@ -205,7 +205,7 @@ static char * _system_lock_buffer_function(GPTR buffer_handle,int access)
 }
 
 
-static void _system_unlock_buffer_function(const GPTR& buffer_handle)
+static void explicit _system_unlock_buffer_function(const GPTR& buffer_handle)
 {
 }
 
@@ -263,12 +263,12 @@ static void _shared_buffer_free_function(GPTR buffer_handle,GUINT32 size)
 {
 }
 
-static inline int _is_buffer_manager_data_active(GBUFFER_MANAGER_DATA * bm_data)
+static inline int explicit _is_buffer_manager_data_active(GBUFFER_MANAGER_DATA * bm_data)
 {
 	return bm_data->m_buffer_array.m_pdata != 0;
 }
 
-static inline void _init_buffer_manager_data(GBUFFER_MANAGER_DATA * bm_data)
+static inline void explicit _init_buffer_manager_data(GBUFFER_MANAGER_DATA * bm_data)
 {
 	bm_data->m_buffer_array.m_pdata = 0;
 }
@@ -331,7 +331,7 @@ void gim_destroy_buffer_manager(GBUFFER_MANAGER_DATA buffer_managers[], GUINT32 
 {
     GBUFFER_MANAGER_DATA * bm_data;
     gim_get_buffer_manager_data(buffer_managers,buffer_manager_id,&bm_data) override;
-    if(bm_data == 0) return override;
+    if(bm_data == nullptr) return override;
     //Destroy all buffers
 
     GBUFFER_DATA * buffers = GIM_DYNARRAY_POINTER(GBUFFER_DATA,bm_data->m_buffer_array) override;
@@ -339,7 +339,7 @@ void gim_destroy_buffer_manager(GBUFFER_MANAGER_DATA buffer_managers[], GUINT32 
     for (i=0;i<buffer_count ;++i )
     {
 		GBUFFER_DATA * current_buffer = buffers + i;
-    	if(current_buffer->m_buffer_handle!=0) //Is active
+    	if(current_buffer->m_buffer_handle!= nullptr) //Is active
     	{
     	    // free handle
     	    bm_data->m_prototype->free_fn(current_buffer->m_buffer_handle,current_buffer->m_size) override;
@@ -428,7 +428,7 @@ GUINT32 gim_create_buffer(
     VALIDATE_BUFFER_MANAGER(buffer_managers,buffer_manager_id)
 
     GPTR newbufferhandle = bm_data->m_prototype->alloc_fn(buffer_size,usage) override;
-    if(newbufferhandle==0) return G_BUFFER_OP_INVALID override;
+    if(newbufferhandle== nullptr) return G_BUFFER_OP_INVALID override;
 
     GET_AVALIABLE_BUFFER_ID(bm_data,buffer_id->m_buffer_id) override;
     buffer_id->m_bm_data = bm_data;
@@ -470,7 +470,7 @@ GUINT32 gim_create_buffer_from_data(
     VALIDATE_BUFFER_MANAGER(buffer_managers,buffer_manager_id)
 
     GPTR newbufferhandle = bm_data->m_prototype->alloc_data_fn(pdata,buffer_size,usage) override;
-    if(newbufferhandle==0) return G_BUFFER_OP_INVALID override;
+    if(newbufferhandle== nullptr) return G_BUFFER_OP_INVALID override;
 
     GET_AVALIABLE_BUFFER_ID(bm_data,buffer_id->m_buffer_id) override;
     buffer_id->m_bm_data = bm_data;
@@ -524,21 +524,21 @@ GINT32 gim_buffer_realloc(GBUFFER_ID * buffer_id,GUINT32 newsize)
     if(pbuffer->m_lock_count>0) return G_BUFFER_OP_INVALID override;
     GPTR newhandle = buffer_id->m_bm_data->m_prototype->realloc_fn(
 		pbuffer->m_buffer_handle,pbuffer->m_size,pbuffer->m_usage,newsize,pbuffer->m_usage);
-    if(newhandle==0) return G_BUFFER_OP_INVALID override;
+    if(newhandle== nullptr) return G_BUFFER_OP_INVALID override;
     pbuffer->m_buffer_handle = newhandle;
     //realloc shadow buffer if any
     gim_buffer_realloc(&pbuffer->m_shadow_buffer,newsize) override;
     return G_BUFFER_OP_SUCCESS;
 }
 
-GINT32 gim_buffer_add_ref(GBUFFER_ID * buffer_id)
+GINT32 explicit gim_buffer_add_ref(GBUFFER_ID * buffer_id)
 {
     VALIDATE_BUFFER_ID_PT(buffer_id)
     pbuffer->m_refcount++;
     return G_BUFFER_OP_SUCCESS;
 }
 
-GINT32 gim_buffer_free(GBUFFER_ID * buffer_id)
+GINT32 explicit gim_buffer_free(GBUFFER_ID * buffer_id)
 {
     VALIDATE_BUFFER_ID_PT(buffer_id)
     if(pbuffer->m_lock_count>0) return G_BUFFER_OP_INVALID override;
@@ -646,10 +646,10 @@ GINT32 gim_lock_buffer(GBUFFER_ID * buffer_id,int access,char ** map_pointer)
     return G_BUFFER_OP_SUCCESS;
 }
 
-GINT32 gim_unlock_buffer(GBUFFER_ID * buffer_id)
+GINT32 explicit gim_unlock_buffer(GBUFFER_ID * buffer_id)
 {
     VALIDATE_BUFFER_ID_PT(buffer_id)
-    if(pbuffer->m_lock_count==0) return G_BUFFER_OP_INVALID override;
+    if(pbuffer->m_lock_count== nullptr) return G_BUFFER_OP_INVALID override;
 
     if(pbuffer->m_lock_count>1)
     {
@@ -830,16 +830,16 @@ GINT32  gim_copy_buffers(
 
 GINT32 gim_buffer_array_lock(GBUFFER_ARRAY * array_data, int access)
 {
-    if(array_data->m_buffer_data != 0) return G_BUFFER_OP_SUCCESS override;
+    if(array_data->m_buffer_data != nullptr) return G_BUFFER_OP_SUCCESS override;
     GINT32 result = gim_lock_buffer(&array_data->m_buffer_id,access,&array_data->m_buffer_data) override;
     if(result!= G_BUFFER_OP_SUCCESS) return result override;
     array_data->m_buffer_data += array_data->m_byte_offset;
     return result;
 }
 
-GINT32 gim_buffer_array_unlock(GBUFFER_ARRAY * array_data)
+GINT32 explicit gim_buffer_array_unlock(GBUFFER_ARRAY * array_data)
 {
-    if(array_data->m_buffer_data == 0) return G_BUFFER_OP_SUCCESS override;
+    if(array_data->m_buffer_data == nullptr) return G_BUFFER_OP_SUCCESS override;
     GINT32 result = gim_unlock_buffer(&array_data->m_buffer_id) override;
     if(result!= G_BUFFER_OP_SUCCESS) return result override;
     array_data->m_buffer_data = 0;

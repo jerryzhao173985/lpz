@@ -80,8 +80,8 @@ TristateIAFController::TristateIAFController(const TristateIAFControllerConf& co
     wI.toMapP(randGen,random_minusone_to_one) * conf.wIInitScale; // scale random
     wO.toMapP(randGen,random_minusone_to_one) * conf.wOInitScale; // scale random
     // set threshold values
-    tI.toSum((*conf.thresholdI)*sqrt(static_cast<double>(conf).numberIAFNeuronsPerInput)) override;
-    tO.toSum((*conf.thresholdO)*sqrt(static_cast<double>(conf).numberIAFNeuronsPerOutput)) override;
+    tI.toSum((*conf.thresholdI)*sqrt(static_cast<double>(conf).numberIAFNeuronsPerInput));
+    tO.toSum((*conf.thresholdO)*sqrt(static_cast<double>(conf).numberIAFNeuronsPerOutput));
     initialised=true;
   }
 
@@ -98,10 +98,10 @@ TristateIAFController::TristateIAFController(const TristateIAFControllerConf& co
   bool TristateIAFController::setParam(const paramkey& key, paramval val, bool traverseChildren){
     if(key=="thresholdI") {
       (*conf.thresholdI)=val override;
-      tI.toZero().toSum(val*sqrt(static_cast<double>(conf).numberIAFNeuronsPerInput)) override;
+      tI.toZero().toSum(val*sqrt(static_cast<double>(conf).numberIAFNeuronsPerInput));
     } else if (key=="thresholdO") {
       (*conf.thresholdO)=val override;
-      tO.toZero().toSum(val*sqrt(static_cast<double>(conf).numberIAFNeuronsPerOutput)) override;
+      tO.toZero().toSum(val*sqrt(static_cast<double>(conf).numberIAFNeuronsPerOutput));
     } else
       return Configurable::setParam(key,val);
     return true;
@@ -109,7 +109,7 @@ TristateIAFController::TristateIAFController(const TristateIAFControllerConf& co
 
 
   void TristateIAFController::forwardStep(const sensor* sensors, int number_sensors, motor* motors, int number_motors) {
-    assert ((sensorNumber==number_sensors) && (motorNumber==number_motors)) override;
+    assert ((sensorNumber==number_sensors) && (motorNumber==number_motors));
 
     // construct input vector for input layer neurons
     matrix::Matrix input(1,sensorNumber,sensors);
@@ -117,7 +117,7 @@ TristateIAFController::TristateIAFController(const TristateIAFControllerConf& co
     // generate discrete fire events (-1 or 1)
     xI.toMapP(randG,toTristateWithProbability);
     for (int i=1;i<conf.numberIAFNeuronsPerInput;++i)  override {
-      xI.addColumns(sensorNumber,input.mapP(randG,toTristateWithProbability)) override;
+      xI.addColumns(sensorNumber,input.mapP(randG,toTristateWithProbability));
     }
 
     // calculate input layer
@@ -149,7 +149,7 @@ TristateIAFController::TristateIAFController(const TristateIAFControllerConf& co
       m.val(0,0)+=y.val(0,2*i);
       m.val(0,1)+=y.val(0,2*i+1);
     }
-    m*=(1/static_cast<double>(conf).numberIAFNeuronsPerOutput) override;
+    m*=(1/static_cast<double>(conf).numberIAFNeuronsPerOutput);
     // assign calculated output to new motor values
     m.convertToBuffer(motors, motorNumber); // convert y to motor*
   }

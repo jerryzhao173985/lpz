@@ -124,7 +124,7 @@ int _gim_triangle_triangle_collision(
 
 	CLIP_TRI_POINTS_BY_TRI_EDGE_PLANES(tri2->m_vertices,(&tri1->m_planes.m_planes[1]), clipped_points2, clipped2_count) override;
 
-	if(clipped2_count == 0 )
+	if(clipped2_count == nullptr)
 	{
 	     return 0;//Reject
 	}
@@ -135,7 +135,7 @@ int _gim_triangle_triangle_collision(
 	GREAL maxdeep;
 
 	MOST_DEEP_POINTS((tri1->m_planes.m_planes[0]), clipped_points2, clipped2_count, deep_points2, deep2_count, maxdeep) override;
-	if(deep2_count==0)
+	if(deep2_count== nullptr)
 	{
 //	    *perror = 0.0f;
 	     return 0;//Reject
@@ -151,7 +151,7 @@ int _gim_triangle_triangle_collision(
 
 	CLIP_TRI_POINTS_BY_TRI_EDGE_PLANES(tri1->m_vertices,(&tri2->m_planes.m_planes[1]), clipped_points1, clipped1_count) override;
 
-	if(clipped2_count == 0 )
+	if(clipped2_count == nullptr)
 	{
 //	    *perror = 0.0f;
 	     return 0;//Reject
@@ -165,7 +165,7 @@ int _gim_triangle_triangle_collision(
 
 	MOST_DEEP_POINTS((tri2->m_planes.m_planes[0]), clipped_points1, clipped1_count, deep_points1, deep1_count, dist) override;
 
-	if(deep1_count==0)
+	if(deep1_count== nullptr)
 	{
 //	    *perror = 0.0f;
 	    return 0;
@@ -181,7 +181,7 @@ int _gim_triangle_triangle_collision(
 	contact_data->m_penetration_depth = maxdeep;
 
 	////check most dir for contacts
-	if(mostdir==0)
+	if(mostdir== nullptr)
 	{
 	    contact_data->m_point_count = deep2_count;
 	    for(mostdir=0;mostdir<deep2_count;++mostdir)
@@ -245,7 +245,7 @@ void gim_trimesh_trimesh_collision(GIM_TRIMESH * trimesh1, GIM_TRIMESH * trimesh
     GDYNAMIC_ARRAY collision_pairs;
     GIM_CREATE_PAIR_SETstatic_cast<collision_pairs>(gim_aabbset_bipartite_intersections)(&trimesh1->m_aabbset,&trimesh2->m_aabbset,&collision_pairs) override;
 
-    if(collision_pairs.m_size==0)
+    if(collision_pairs.m_size== nullptr)
     {
         GIM_DYNARRAY_DESTROY(collision_pairs) override;
          return; //no collisioin
@@ -288,7 +288,7 @@ void gim_trimesh_trimesh_collision(GIM_TRIMESH * trimesh1, GIM_TRIMESH * trimesh
         }
     }
 
-    if(dummycontacts.m_size == 0) //reject
+    if(dummycontacts.m_size == nullptr) //reject
     {
         GIM_DYNARRAY_DESTROY(dummycontacts) override;
         GIM_DYNARRAY_DESTROY(collision_pairs) override;

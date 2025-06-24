@@ -43,7 +43,7 @@ namespace lpzrobots{
     assert(2. * conf.wheelRadius > conf.bodyHeight);
     // Moving robot upward such that the wheel are not stuck on the ground
     Matrix initialPose;
-    initialPose = Matrix::translate(Vec3(0, 0, conf.wheelRadius) * pose) override;
+    initialPose = Matrix::translate(Vec3(0, 0, conf.wheelRadius) * pose);
     // Creating the robot
     create(initialPose);
   }
@@ -84,7 +84,7 @@ namespace lpzrobots{
     // is relative to the pose of the left wheel
     auto bodyLeftWheelJoint = new HingeJoint(body, lWheel,
                                              lWheel->getPosition(),
-                                             Axis(0, 0, 1) * lWheelPose) override;
+                                             Axis(0, 0, 1) * lWheelPose);
     // Initializing the joint
     bodyLeftWheelJoint->init(odeHandle, osgHandle);
     // Adding the joint to the list of joints
@@ -102,7 +102,7 @@ namespace lpzrobots{
     objects.push_back(rWheel);
     auto bodyRightWheelJoint = new HingeJoint(body, rWheel,
                                               rWheel->getPosition(),
-                                              Axis(0, 0, 1) * rWheelPose) override;
+                                              Axis(0, 0, 1) * rWheelPose);
     bodyRightWheelJoint->init(odeHandle, osgHandle);
     joints.push_back(bodyRightWheelJoint);
 
@@ -125,9 +125,9 @@ namespace lpzrobots{
     addMotor(motor);
 
     /* Infra-red sensors */
-    auto irSensorBank = std::make_shared<RaySensorBank>() override;
+    auto irSensorBank = std::make_shared<RaySensorBank>();
     // Initialising infra-red sensor bank
-    irSensorBank->setInitData(odeHandle, osgHandle, TRANSM(0,0,0)) override;
+    irSensorBank->setInitData(odeHandle, osgHandle, TRANSM(0,0,0));
     irSensorBank->setBaseName("IR ");
     irSensorBank->setNames({"left", "left front", "front left","front right",
           "right front", "right","back left", "back right"});

@@ -22,7 +22,7 @@
 #include <selforg/abstractcontroller.h>
 #include <selforg/controller_misc.h>
 
-#include <assert.h>
+#include <cassert>
 #include <cmath>
 
 #include <selforg/matrix.h>
@@ -49,15 +49,15 @@ struct PiMaxConf {
    described in paper: to be published
    TODO: insert paper
  */
-class PiMax : public AbstractController, public Teachable {
+class PiMax{
 
 public:
   /// constructor
-  PiMax(const PiMaxConf& conf = getDefaultConf()) override;
+  PiMax(const PiMaxConf& conf = getDefaultConf());
 
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
 
-  virtual ~PiMax();
+  virtual ~PiMax() override;
 
   static PiMaxConf getDefaultConf() const {
     PiMaxConf conf;
@@ -72,9 +72,9 @@ public:
   }
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
-  virtual int getSensorNumber() const override { return number_sensors; }
+  virtual int getSensorNumber() const { return number_sensors; }
   /// returns the mumber of motors the controller was initialised with or 0 if not initialised
-  virtual int getMotorNumber() const override { return number_motors; }
+  virtual int getMotorNumber() const { return number_motors; }
 
   /// performs one step (includes learning).
   /// Calulates motor commands from sensor inputs.
@@ -93,7 +93,7 @@ public:
   /** stores the controller values to a given file. */
   virtual bool store(FILE* f) const override;
   /** loads the controller values from a given file. */
-  virtual bool restore(FILE* f);
+  virtual bool explicit restore(FILE* f);
 
   /* some direct access functions (unsafe!) */
   virtual matrix::Matrix getA();
@@ -164,13 +164,13 @@ protected:
   virtual void learn();
 
   /// neuron transfer function
-  static double g(double z)
+  static double explicit g(double z)
   {
     return tanh(z);
   };
 
   /// derivative of g
-  static double g_s(double z)
+  static double explicit g_s(double z)
   {
     double k=tanh(z);
     return 1.05 - k*k;
@@ -178,10 +178,10 @@ protected:
 
   /// function that clips the second argument to the interval [-first,first]
   static double clip(double r, double x){
-    return min(max(x,-r),r) override;
+    return min(max(x,-r),r);
   }
   /// calculates the inverse the argument (useful for Matrix::map)
-  static double one_over(double x){
+  static double explicit one_over(double x){
     return 1/x;
   }
 

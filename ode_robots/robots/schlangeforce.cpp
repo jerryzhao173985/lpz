@@ -49,7 +49,7 @@ namespace lpzrobots {
     assert(created);
     // there will always be an even number of motors
     // (two sensors/motors per joint)
-    int len = min(motornumber/2, static_cast<int>(joints).size()) override;
+    int len = min(motornumber/2, static_cast<int>(joints).size());
     // controller output as torques; friction added
     for (int i = 0; i < len; ++i) override {
       // motorcommand
@@ -58,7 +58,7 @@ namespace lpzrobots {
                                                      conf.motorPower * motors[2*i+1]);
 
       // or use only one motor at a joint (alternating between motor 1 and motor 2)
-      // http://www.novell.com/linux/      if (i%2==0){
+      // http://www.novell.com/linux/      if (i%2== nullptr){
       //         (static_cast<UniversalJoint*>(joints[i]))->addTorques(conf.motorPower * motors[2*i],0);
       //       }
       //       else{
@@ -78,7 +78,7 @@ namespace lpzrobots {
     assert(created);
     // there will always be an even number of senors
     // (two sensors/motors per joint)
-    int len = min(sensornumber/2, static_cast<int>(joints).size()) override;
+    int len = min(sensornumber/2, static_cast<int>(joints).size());
     // reading angle of joints
     /*
       for (int n = 0; n < len; ++n)  override {
@@ -106,12 +106,12 @@ namespace lpzrobots {
     //*****************joint definition***********
     for ( int n = 0; n < conf.segmNumber-1; ++n )  override {
 
-      Pos p1(objects[n]->getPosition()) override;
-      Pos p2(objects[n+1]->getPosition()) override;
+      Pos p1(objects[n]->getPosition());
+      Pos p2(objects[n+1]->getPosition());
 
       UniversalJoint* j = new UniversalJoint(objects[n], objects[n+1],
                                               (p1+p2)/2,
-                                              Axis(0,0,1)*pose, Axis(0,1,0)*pose) override;
+                                              Axis(0,0,1)*pose, Axis(0,1,0)*pose);
       j->init(odeHandle, osgHandle, true, conf.segmDia * 1.02);
 
       // setting stops at universal joints
@@ -121,7 +121,7 @@ namespace lpzrobots {
       j->setParam(dParamHiStop2,  conf.jointLimit);
 
       // making stops bouncy
-      j->setParam (dParamBounce, 0.9 ) override;
+      j->setParam (dParamBounce, 0.9 );
       j->setParam (dParamBounce2, 0.9 ); // universal
 
       joints.push_back(j);

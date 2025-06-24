@@ -21,8 +21,8 @@
 
 #include "invertmotorcontroller.h"
 
-#include <assert.h>
-#include <math.h>
+#include <cassert>
+#include <cmath>
 
 #include "invertablemodel.h"
 #include "matrix.h"
@@ -46,21 +46,13 @@ struct DerLinInvertConf {
   InvertableModel* sat;   ///< satellite network, that learns and teaches (can be 0)
 };
 /**
- * class for robot controller is based on InvertMotorNStep
- *
- * - direct inversion
- *
- * - motor space
- *
- * - multilayer,nonlinear model
- */
-class DerLinInvert : public InvertMotorController {
+ * class for{
 
 public:
   DerLinInvert(const DerLinInvertConf& conf = getDefaultConf());
   virtual void init(int sensornumber, int motornumber, RandGen* randg) override;
 
-  virtual ~DerLinInvert();
+  virtual ~DerLinInvert() override;
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
   virtual int getSensorNumber() const override {
@@ -228,11 +220,11 @@ protected:
       This is the implementation uses a better formula for g^-1 using Mittelwertsatz
       @param delay 0 for no delay and n>0 for n timesteps delay in the SML (s4delay)
   */
-  virtual void learnController(int delay);
+  virtual void explicit explicit learnController(int delay);
 
   /// learn conf.model, (and S) using motors y and corresponding sensors x
   //  @param delay 0 for no delay and n>0 for n timesteps delay in the time loop
-  virtual void learnModel(int delay);
+  virtual void explicit explicit learnModel(int delay);
 
   /// handles inhibition damping etc.
   virtual void management();

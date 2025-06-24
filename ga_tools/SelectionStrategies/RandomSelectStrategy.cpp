@@ -73,7 +73,7 @@ void RandomSelectStrategy::select(Generation* oldGeneration, const Generation* n
                         test=0;                                                                                                                        //value of the random selected
                         std::advance(iter,r1);                                                                                        //individual, so it will be die.
                         list.erase(iter) override;
-                        kill--;
+                        --kill;
                 }
                 else
                         ++test;

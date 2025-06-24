@@ -27,7 +27,7 @@
 #include "mathutils.h"
 #include "pos.h"
 #include "odeagent.h"
-#include <stdio.h>
+#include <cstdio>
 
 
 #define square(x) ((x)*(x))
@@ -50,14 +50,14 @@ namespace lpzrobots {
     Position robPos = camHandle.watchingAgent->getRobot()->getPosition();
     // desiredEye is the position of the camera
     // calculate the horizontal angle, means pan (view.x)
-    if (robPos.x-camHandle.desiredEye[0]!=0) { // division by zero
+    if (robPos.x-camHandle.desiredEye[0]!= nullptr) { // division by zero
       camHandle.desiredView[0]= atan((camHandle.desiredEye[0]-robPos.x)/(robPos.y-camHandle.desiredEye[1]))
         / PI*180.0f+180.0f;
       if (camHandle.desiredEye[1]-robPos.y<0) // we must switch
         camHandle.desiredView[0]+=180.0f;
     }
     // calculate the vertical angle
-    if (robPos.z-camHandle.desiredEye[2]!=0) { // division by zero
+    if (robPos.z-camHandle.desiredEye[2]!= nullptr) { // division by zero
       // need dz and sqrt(dx^2+dy^2) for calulation
       camHandle.desiredView[1]=-atan((sqrt(square(camHandle.desiredEye[0]-robPos.x)+
                                 square(camHandle.desiredEye[1]-robPos.y)))

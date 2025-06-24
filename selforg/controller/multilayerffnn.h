@@ -146,18 +146,18 @@ public:
 
   /**************  STOREABLE **********************************/
   /// stores the layer binary into file stream
-  bool store(FILE* f) const override;
+  bool store(FILE* f) const;
   /// restores the layer binary from file stream
-  bool restore(FILE* f) override;
+  bool restore(FILE* f);
 
   /// writes the layer ASCII into file stream (not in the storable interface)
   bool write(FILE* f) const;
 
   /************** Inspectable **********************************/
-  virtual iparamkeylist getInternalParamNames() const override;
-  virtual iparamvallist getInternalParams() const override;
-  virtual ilayerlist getStructuralLayers() const override;
-  virtual iconnectionlist getStructuralConnections() const override;
+  virtual std::list<iparamkey> getInternalParamNames() const override;
+  virtual std::list<iparamval> getInternalParams() const override;
+  virtual std::list<ILayer> getStructuralLayers() const override;
+  virtual std::list<IConnection> getStructuralConnections() const override;
 
   virtual void setSomeInternalParams(bool someInternalParams) {
     assert(!initialised);
@@ -172,7 +172,7 @@ public:
    * @param actfun the activation function to be used
    * @return the activation functions which where used until now
    */
-  virtual std::vector<ActivationFunction> setActivationFunction(ActivationFunction actfun);
+  virtual std::vector<ActivationFunction> explicit explicit setActivationFunction(ActivationFunction actfun);
 
   /**
    * sets the activation functions (and derivative and inversion too) for all layers.
@@ -180,7 +180,7 @@ public:
    * activation functions, which are set back with this function
    * @param actfunList the list of actfuns to be used
    */
-  virtual void setActivationFunctions(std::vector<ActivationFunction> actfunList);
+  virtual void setActivationFunctions(const std::vector<ActivationFunction>& actfunList);
 
 protected:
   std::vector<Layer> layers;

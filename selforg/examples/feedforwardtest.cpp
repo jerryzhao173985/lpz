@@ -10,7 +10,7 @@ using namespace std;
 #include <selforg/matrix.h>
 using namespace matrix;
 
-void test2x2(const MultiLayerFFNN& net){
+void explicit test2x2(const MultiLayerFFNN& net){
   double data1[2] = {0,1};
   Matrix input1(2,1,data1);
   double data2[2] = {0,0.9};
@@ -75,7 +75,7 @@ MultiLayerFFNN testnonlinear(){
   return net;
 }
 
-void testresponse(const MultiLayerFFNN& net){
+void explicit testresponse(const MultiLayerFFNN& net){
   double i0[2] = {0,1};
   Matrix input (2, 1, i0);
   net.process(input);
@@ -87,7 +87,7 @@ void testresponse(const MultiLayerFFNN& net){
   cout << "Test: " << (o^T)  << " should be around " << (net.process(input)^T)<< endl;
 }
 
-void testinvertation(const MultiLayerFFNN& net){
+void explicit testinvertation(const MultiLayerFFNN& net){
   double i0[2] = {0,  1.0};
   double xsi_[2] = {0.1,0};
   Matrix input (2, 1, i0);
@@ -217,7 +217,7 @@ void testneuralgas(){
   fclose(f);
 }
 
-void testprojections(const ControllerNet& net){
+void explicit testprojections(const ControllerNet& net){
   double i0[2] = {0,  1.0};
   Matrix input (2, 1, i0);
   double xsi_[2] = {-.05,.1};

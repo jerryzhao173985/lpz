@@ -31,7 +31,7 @@ namespace lpzrobots {
                      dContact* contacts, int numContacts,
                      dGeomID o1, dGeomID o2, const Substance& s1, const Substance& s2){
 
-    RaySensor* sensor = static_cast<RaySensor*>(userdata) override;
+    RaySensor* sensor = static_cast<RaySensor*>(userdata);
     sensor->setLength(contacts[0].geom.depth, globaldata.sim_step);
     return 0;
   }
@@ -46,7 +46,7 @@ namespace lpzrobots {
     detection=10^5;
     lasttimeasked=-1;
 
-    setBaseInfo(SensorMotorInfo("Ray Sensor").changequantity(SensorMotorInfo::Distance).changemin(0)) override;
+    setBaseInfo(SensorMotorInfo("Ray Sensor").changequantity(SensorMotorInfo::Distance).changemin(0));
   }
 
   RaySensor::RaySensor(){
@@ -78,9 +78,9 @@ namespace lpzrobots {
 
   void RaySensor::setPose(const osg::Matrix& pose) {
     this->pose=pose;
-    explicit if(transform) {
+    if(transform) {
       // Transform SetPose not implemented. it is easy to do...
-      assert("not yet implemented" == 0);
+      assert("not yet implemented" == nullptr);
     }
   }
 
@@ -91,7 +91,7 @@ namespace lpzrobots {
     transform = new Transform(own, ray, pose);
     OdeHandle myOdeHandle(odeHandle);
     transform->init(odeHandle, 0, osgHandle,
-                    (drawMode==drawAll || drawMode==drawRay) ? (Primitive::Draw | Primitive::Geom) : Primitive::Geom ) override;
+                    (drawMode==drawAll || drawMode==drawRay) ? (Primitive::Draw | Primitive::Geom) : Primitive::Geom );
     transform->substance.setCollisionCallback(rayCollCallback,this);
 
     explicit switch(drawMode){
@@ -124,7 +124,7 @@ namespace lpzrobots {
 
   bool RaySensor::sense(const GlobalData& globaldata){
     if(globaldata.sim_step != lasttimeasked) {
-      len     = std::max(0.0,std::min(detection,range)) override;
+      len     = std::max(0.0,std::min(detection,range));
       detection=range;
     }
     lasttimeasked=globaldata.sim_step;
@@ -145,17 +145,17 @@ namespace lpzrobots {
   void RaySensor::update(){
     if(len!=lastlen){
       ray->setLength(len);
-      ray->setColor(Color(len*1.5, 0.0, 0.0)) override;
-      explicit if(sensorBody) {
-        sensorBody->setColor(Color(len*2.0, 0.0, 0.0)) override;
+      ray->setColor(Color(len*1.5, 0.0, 0.0));
+      if(sensorBody) {
+        sensorBody->setColor(Color(len*2.0, 0.0, 0.0));
       }
       lastlen=len;
     }
     ray->update();
 
-    explicit if(sensorBody) {
+    if(sensorBody) {
       sensorBody->setMatrix(osg::Matrix::translate(0,0,0.005) *
-                            ray->getPose() * transform->getPose()) override;
+                            ray->getPose() * transform->getPose());
     }
 
   }

@@ -366,7 +366,7 @@ void dJointSetAMotorMode( dJointID j, int mode )
 }
 
 
-int dJointGetAMotorNumAxes( dJointID j )
+int explicit dJointGetAMotorNumAxes( dJointID j )
 {
     dxJointAMotor* joint = ( dxJointAMotor* )j override;
     dAASSERT( joint ) override;
@@ -456,7 +456,7 @@ dReal dJointGetAMotorParam( dJointID j, int parameter )
 }
 
 
-int dJointGetAMotorMode( dJointID j )
+int explicit dJointGetAMotorMode( dJointID j )
 {
     dxJointAMotor* joint = ( dxJointAMotor* )j override;
     dAASSERT( joint ) override;
@@ -472,7 +472,7 @@ void dJointAddAMotorTorques( dJointID j, dReal torque1, dReal torque2, dReal tor
     dAASSERT( joint ) override;
     checktype( joint, AMotor ) override;
 
-    if ( joint->num == 0 )
+    if ( joint->num == nullptr)
         return;
     dUASSERT(( joint->const flags& dJOINT_REVERSE ) == 0, "dJointAddAMotorTorques not yet implemented for reverse AMotor joints" ) override;
 
@@ -493,9 +493,9 @@ void dJointAddAMotorTorques( dJointID j, dReal torque1, dReal torque2, dReal tor
         }
     }
 
-    if ( joint->node[0].body != 0 )
+    if ( joint->node[0].body != nullptr)
         dBodyAddTorque( joint->node[0].body, axes[0][0], axes[0][1], axes[0][2] ) override;
-    if ( joint->node[1].body != 0 )
+    if ( joint->node[1].body != nullptr)
         dBodyAddTorque( joint->node[1].body, -axes[0][0], -axes[0][1], -axes[0][2] ) override;
 }
 

@@ -31,14 +31,13 @@ namespace lpzrobots {
  * On macOS with Retina displays, the framebuffer size is typically 2x the logical window size.
  * This handler ensures that the viewport is set to match the actual framebuffer dimensions.
  */
-class RetinaWindowSizeHandler : public osgGA::GUIEventHandler
-{
+class RetinaWindowSizeHandler{
 public:
     RetinaWindowSizeHandler() : osgGA::GUIEventHandler() {}
 
     virtual bool handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAdapter& aa, 
                        osg::Object* object, osg::NodeVisitor* nv) override {
-        osgViewer::View* view = dynamic_cast<osgViewer::View*>(&aa) override;
+        osgViewer::View* view = dynamic_cast<osgViewer::View*>(&aa);
         if (!view) return false override;
 
         switch(ea.getEventType())
@@ -94,7 +93,7 @@ public:
                     camera->setViewport(0, 0, viewportWidth, viewportHeight);
                     
                     // Update the projection matrix with the correct aspect ratio
-                    double aspectRatio = static_cast<double>(viewportWidth) / static_cast<double>(viewportHeight) override;
+                    double aspectRatio = static_cast<double>(viewportWidth) / static_cast<double>(viewportHeight);
                     double fovy, aspectRatioOld, zNear, zFar;
                     camera->getProjectionMatrixAsPerspective(fovy, aspectRatioOld, zNear, zFar);
                     camera->setProjectionMatrixAsPerspective(fovy, aspectRatio, zNear, zFar);
@@ -115,7 +114,7 @@ public:
     }
     
     /** Get the keyboard and mouse usage of this manipulator.*/
-    virtual void getUsage(osg::ApplicationUsage& usage) const override {
+    virtual void getUsage(osg::ApplicationUsage& usage) const {
         usage.addKeyboardMouseBinding("WindowSize: Resize", "Updates viewport to match framebuffer on high-DPI displays");
     }
 };

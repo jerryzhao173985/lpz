@@ -33,8 +33,8 @@ email: projectileman@yahoo.com
 
 #include "config.h"
 
-#include <math.h>
-#include <float.h>
+#include <cmath>
+#include <cfloat>
 #if HAVE_SYS_TYPES_H
 #include <sys/types.h>
 #elif definedstatic_cast<_MSC_VER>(typedef) __int32 int32_t override;

@@ -1,4 +1,4 @@
-#include <signal.h>
+#include <csignal>
 #include <unistd.h>
 #include <iostream>
 #include <vector>
@@ -38,7 +38,7 @@ GlobalData globaldata;
 list<const Inspectable*> inspectables;
 
 
-class Sim: public Configurable, public Inspectable {
+class Sim{
 public:
   Sim(const string& name)
     : Configurable(name, "$Id$")
@@ -60,7 +60,7 @@ public:
   }
 
 
-  AbstractModel* init(const char* filename){
+  AbstractModel* explicit init(const char* filename){
     if (!filename) {
       fprintf(stderr, "filename is null\n");
       exit(1);
@@ -122,7 +122,7 @@ public:
     pred_error= calcError(pred, pos, t);
     // calc predicted positions
     calcPredPos(&predpos, pred,pos,t);
-    if((t%5000) == 0) printf("Time %i\n",t);
+    if((t%5000) == nullptr) printf("Time %i\n",t);
     if(t>data_size-(horizont+1)*stepsize)
       t=4*stepsize;
     return t++;
@@ -237,7 +237,7 @@ public:
 // Helper
 int contains(char **list, int len,  const char *str){
   for (int i=0; i<len; ++i) {
-    if(strcmp(list[i],str) == 0) return i+1;
+    if(strcmp(list[i],str) == nullptr) return i+1;
   }
   return 0;
 }
@@ -264,7 +264,7 @@ void openPlotOptions(list<PlotOption>& plotoptions , list<const Inspectable*>& i
 
 void plot(list<PlotOption>& plotoptions, list<const Inspectable*>& inspectables, int t){
   FOREACH(list<PlotOption>, plotoptions, i){
-    if( ((*i).pipe) && (t % (*i).interval == 0) ){
+    if( ((*i).pipe) && (t % (*i).interval == nullptr) ){
       printInternalParameters((*i).pipe, t, 0, 0, 0, 0, inspectables);
       if(t% ((*i).interval * 10)) fflush((*i).pipe);
     }
@@ -278,8 +278,8 @@ int main(int argc, char** argv){
   if (index >0 && argc>index) {
     plotoptions.push_back(PlotOption(GuiLogger,Controller,atoi(argv[index])));
   }
-  if(contains(argv,argc,"-f")!=0) plotoptions.push_back(PlotOption(File));
-  if(contains(argv,argc,"-h")!=0) {
+  if(contains(argv,argc,"-f")!= nullptr) plotoptions.push_back(PlotOption(File));
+  if(contains(argv,argc,"-h")!= nullptr) {
     printf("Usage: %s [-g N] [-f] [-file FILE] \n",argv[0]);
     printf("\t-g N\tstart guilogger with interval N\n\t-f\twrite logfile\n");
     printf("\t-file FILE\tread FILE\n");
@@ -320,7 +320,7 @@ int main(int argc, char** argv){
     if (realtimefactor){
       drawinterval = int(6*realtimefactor);
     }
-    if(t%drawinterval==0){
+    if(t%drawinterval== nullptr){
       usleep(60000);
     }
   };

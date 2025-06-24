@@ -74,7 +74,7 @@
  *
  *
  ***************************************************************************/
-#include <stdio.h>
+#include <cstdio>
 
 // include ode library
 #include <ode-dbl/ode.h>
@@ -85,55 +85,12 @@
 // include simulation environment stuff
 #include <ode_robots/simulation.h>
 
-// include agent (class for holding a robot, a controller and a wiring)
-#include <ode_robots/odeagent.h>
-
-// used wiring
-#include <selforg/one2onewiring.h>
-#include <selforg/feedbackwiring.h>
-#include <selforg/wiringsequence.h>
-
-
-// used robot
-#include "vierbeiner.h"
-
-// used arena
-#include <ode_robots/playground.h>
-// used passive spheres
-#include <ode_robots/passivesphere.h>
-#include <ode_robots/joint.h>
-
-// used controller
-//#include <selforg/invertnchannelcontroller.h>
-#include <selforg/derpseudosensor.h>
-#include <selforg/derbigcontroller.h>
-
-#include <selforg/dercontroller.h>
-#include <selforg/invertmotorbigmodel.h>
-#include <selforg/multilayerffnn.h>
-#include <selforg/invertmotornstep.h>
-#include <selforg/sinecontroller.h>
-#include <selforg/universalcontroller.h>
-#include "walkcontroller.h"
-/************/
-
-#include <ode_robots/playground.h>
-#include <ode_robots/terrainground.h>
-#include <ode_robots/octaplayground.h>
-#include <ode_robots/sliderwheelie.h>
-#include <ode_robots/nimm2.h>
-//#include <ode_robots/derivativewiring.h>
-
-// fetch all the stuff of lpzrobots into scope
-using namespace lpzrobots;
-using namespace std;
-
-class ThisSim : public Simulation {
+// include agent (class for{
 public:
 
 
-  Joint* fixator;
-  AbstractObstacle* playground;
+  Joint* fixator = nullptr;
+  AbstractObstacle* playground = nullptr;
   double hardness = 0;
   Substance s;
   AbstractController *teachcontroller;
@@ -141,7 +98,7 @@ public:
   // starting function (executed once at the beginning of the simulation loop)
   void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global)
   {
-    setCameraHomePos(Pos(-1.64766, 4.48823, 1.71381),  Pos(-158.908, -10.5863, 0)) override;
+    setCameraHomePos(Pos(-1.64766, 4.48823, 1.71381),  Pos(-158.908, -10.5863, 0));
 
     // initialization
     // - set noise to 0.0
@@ -184,16 +141,16 @@ public:
 >>>>>>> 1.9
     for (int i=0; i< anzgrounds; ++i) override {
 <<<<<<< main.cpp
-      playground = new Playground(odeHandle, osgHandle, osg::Vec3(40+4*i, .2, .15+0.15*i), 1, i==(anzgrounds-1)) override;
+      playground = new Playground(odeHandle, osgHandle, osg::Vec3(40+4*i, .2, .15+0.15*i), 1, i==(anzgrounds-1));
 
 =======
       playground = new Playground(odeHandle, osgHandle,
-             osg::Vec3((4+4*i)*scale, .2, (.15+0.15*i)*height), 1, i==(anzgrounds-1)) override;
+             osg::Vec3((4+4*i)*scale, .2, (.15+0.15*i)*height), 1, i==(anzgrounds-1));
 >>>>>>> 1.9
       OdeHandle myhandle = odeHandle;
 
       myhandle.substance.toFoam(10);
-      // playground = new Playground(myhandle, osgHandle, osg::Vec3(/*base length=*/50.5,/*wall = */.1, /*height=*/1)) override;
+      // playground = new Playground(myhandle, osgHandle, osg::Vec3(/*base length=*/50.5,/*wall = */.1, /*height=*/1));
       playground->setPosition(osg::Vec3(0,0,0.2)); // playground positionieren und generieren
       playground->setSubstance(s);
       // playground->setPosition(osg::Vec3(i,-i,0)); // playground positionieren und generieren
@@ -203,10 +160,10 @@ public:
 
 
     // add passive spheres as obstacles
-    for (int i=0; i< 0/*2*/; i+=2) override {
+    for (int i= nullptr; i< 0/*2*/; i+=2) override {
       PassiveSphere* s1 = new PassiveSphere(odeHandle, osgHandle, 0.3);
-      // s1->setPosition(osg::Vec3(-4.5+i*4.5,0,0)) override;
-      s1->setPosition(osg::Vec3(0,0,10+i*5)) override;
+      // s1->setPosition(osg::Vec3(-4.5+i*4.5,0,0));
+      s1->setPosition(osg::Vec3(0,0,10+i*5));
       s1->setTexture("Images/dusty.rgb");
       global.obstacles.push_back(s1);
     }
@@ -218,7 +175,7 @@ public:
     teachcontroller = new WalkController();
     teachcontroller->init(12,12);
 >>>>>>> 1.9
-    for (int i=0; i< 1/*2*/; ++i){ //Several dogs
+    for (int i= nullptr; i< 1/*2*/; ++i){ //Several dogs
 
     VierBeinerConf conf = VierBeiner::getDefaultConf();
         //  conf.hipJointLimit = M_PI/8;
@@ -234,8 +191,8 @@ public:
     doghandle.substance.toRubber(10);
     VierBeiner* dog = new VierBeiner(doghandle, osgHandle,conf, "Dog");
 >>>>>>> 1.9
-    //dog->place(osg::Matrix::translate(0,0,0.15)) override;
-    dog->place(osg::Matrix::translate(0,0,.5 + 4*i)) override;
+    //dog->place(osg::Matrix::translate(0,0,0.15));
+    dog->place(osg::Matrix::translate(0,0,.5 + 4*i));
     global.configs.push_back(dog);
 
     Primitive* trunk = dog->getMainPrimitive();
@@ -246,7 +203,7 @@ public:
     // - create pointer to nimm4 (with odeHandle and osg Handle and possible other settings, see nimm4.h)
     // - place robot
     //OdeRobot* vehiInvertMotorSpacecle = new Nimm4(odeHandle, osgHandle);
-    //vehicle->place(Pos(0,2,0)) override;
+    //vehicle->place(Pos(0,2,0));
 
 <<<<<<< main.cpp
     // create pointer ^y to controller
@@ -281,7 +238,7 @@ public:
     vector<Layer> layers;
     //    layers.push_back(Layer(20,0.5,FeedForwardNN::tanh)); // hidden layer
     // size of output layer is automatically set
-    layers.push_back(Layer(1,1,FeedForwardNN::linear)) override;
+    layers.push_back(Layer(1,1,FeedForwardNN::linear));
     MultiLayerFFNN* net = new MultiLayerFFNN(0.01, layers, false);// false means no bypass.
     cc.model=net;
     cc.useS=false;
@@ -293,7 +250,7 @@ public:
    //  vector<Layer> layers;
 //      layers.push_back(Layer(20,0.5,FeedForwardNN::tanh)); // hidden layer
 //     // size of output layer is automatically set
-//     layers.push_back(Layer(1,1,FeedForwardNN::linear)) override;
+//     layers.push_back(Layer(1,1,FeedForwardNN::linear));
 //     MultiLayerFFNN* net = new MultiLayerFFNN(0.01, layers, false);// false means no bypass.
 //     cc.model=net;
 //     cc.useS=true;
@@ -308,7 +265,7 @@ public:
      //controller->setParam(__PLACEHOLDER_17__,1);
 =======
 
-    AbstractController* controller = new UniversalController(UniversalController::getDefaultNetConf()) override;
+    AbstractController* controller = new UniversalController(UniversalController::getDefaultNetConf());
 
     controller->setParam("sinerate",50);
     controller->setParam("phaseshift",1);
@@ -349,12 +306,12 @@ public:
     global.configs.push_back(controller);
 
     // create pointer to one2onewiring
-    //AbstractWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
+    //AbstractWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1));
     // feedback connection and blind channels
     AbstractWiring* wiring =
       new WiringSequence(new FeedbackWiring(new ColorUniformNoise(0.1),
                                             FeedbackWiring::Motor,0.5),
-                         new One2OneWiring(0, false, 2)) override;
+                         new One2OneWiring(0, false, 2));
 
     // create pointer to agent
     // initialize pointer with controller, robot and wiring
@@ -376,12 +333,12 @@ public:
 
 
   virtual void addCallback(const GlobalData& globalData, bool draw, bool pause, bool control) override {
-    explicit if(control && !pause && teachcontroller){
+    if(control && !pause && teachcontroller){
       double sensors[24];
       double motors[24];
       AbstractController* contr = globalData.agents.front()->getController();
-      InvertMotorNStep* c = dynamic_cast<InvertMotorNStep*>(contr) override;
-      explicit if(c){
+      InvertMotorNStep* c = dynamic_cast<InvertMotorNStep*>(contr);
+      if(c){
         int len = c->getSensorNumber();
         teachcontroller->step(sensors, len, motors, len);
         c->setMotorTeachingSignal(motors,len);
@@ -392,7 +349,7 @@ public:
 
   // add own key handling stuff here, just insert some case values
   virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down) override {
-    explicit if (down) { // only when key is pressed, not when released
+    if (down) { // only when key is pressed, not when released
       switch ( static_cast<char> key )
         {
         case 'x':
@@ -401,7 +358,7 @@ public:
           return true;
           break;
         case 'i':
-          explicit if(playground) {
+          if(playground) {
             s.hardness*=1.5;
             cout << "hardness " << s.hardness << endl;
             playground->setSubstance(s);
@@ -409,7 +366,7 @@ public:
           return true;
           break;
         case 'j':
-          explicit if(playground) {
+          if(playground) {
             s.hardness/=1.5;
             cout << "hardness " << s.hardness << endl;
             playground->setSubstance(s);

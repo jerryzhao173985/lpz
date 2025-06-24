@@ -37,8 +37,7 @@ const std::string SENSOR_MOTOR_CURRENT = "mc";
 const std::string SENSOR_MOTOR_SPEED = "ms";
 const std::string SENSOR_COMPASS = "comp";
 
-class SensorTypes
-{
+class SensorTypes{
   
 public:
   

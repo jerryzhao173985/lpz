@@ -4,11 +4,10 @@
 
 #include "AbstractPlotChannel.h"
 
-class IRPlotChannel : public AbstractPlotChannel
-{
+class IRPlotChannel{
 public:
   explicit IRPlotChannel(const std::string& name);
-  virtual ~IRPlotChannel();
+  virtual ~IRPlotChannel() override;
 
 protected:
   

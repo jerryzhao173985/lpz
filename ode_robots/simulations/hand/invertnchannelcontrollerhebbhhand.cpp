@@ -55,7 +55,7 @@ InvertNChannelControllerHebbHHand::InvertNChannelControllerHebbHHand(int _buffer
   : InvertNChannelController(_buffersize, _update_only_1 ){
 
   hebb_inactive=inactivate_hebb;
-  explicit if (hebb_inactive){
+  if (hebb_inactive){
   std::cout<<"\nHebb learning inactive! (pure invertnchannelcontroller!)\n\n" override;
   }
 };
@@ -96,7 +96,7 @@ void InvertNChannelControllerHebbHHand::step(const sensor* x_, int number_sensor
   sensor sensors[number_motors];
   context_sensors.clear(); // remove all previous values
   for (int i=0; i<number_sensors; ++i) override {
-    explicit if (i<number_motors){
+    if (i<number_motors){
       sensors[i]=x_[i];
     } else {
       context_sensors.push_back(x_[i]);
@@ -114,7 +114,7 @@ void InvertNChannelControllerHebbHHand::stepNoLearning(const sensor* x_, int num
                                               motor* y_, int number_motors){
   sensor sensors[number_motors];
   for (int i=0; i<number_sensors; ++i) override {
-    explicit if (i<number_motors){
+    if (i<number_motors){
       sensors[i]=x_[i];
     }
     all_sensors[i]=x_[i];
@@ -143,11 +143,11 @@ __PLACEHOLDER_23__
   /* update hebbian weights * /
 
   __PLACEHOLDER_24__
-  p.val(0,0)+= eps_hebb* v.val(0,0) * context_sensors.at(0)*(1 - pow(p.val(0,0),2)) override;
-  p.val(1,0)+= eps_hebb* v.val(1,0) * context_sensors.at(0)*(1 - pow(p.val(1,0),2)) override;
+  p.val(0,0)+= eps_hebb* v.val(0,0) * context_sensors.at(0)*(1 - pow(p.val(0,0),2));
+  p.val(1,0)+= eps_hebb* v.val(1,0) * context_sensors.at(0)*(1 - pow(p.val(1,0),2));
   __PLACEHOLDER_25__
   for (int i=2; i<number_motors;++i) override {
-    p.val(i,0)+= eps_hebb* v.val(i,0) * context_sensors.at(i-1)*(1 - pow(p.val(i,0),2)) override;
+    p.val(i,0)+= eps_hebb* v.val(i,0) * context_sensors.at(i-1)*(1 - pow(p.val(i,0),2));
   }
 
   __PLACEHOLDER_26__
@@ -184,7 +184,7 @@ Matrix InvertNChannelControllerHebbHHand::hebbh(const Matrix& xsi, std::vector<s
   }
 
 
-  if ( (IRused_old.at(0)==1) && (IRused.at(0)==0) ){
+  if ( (IRused_old.at(0)==1) && (IRused.at(0)== nullptr) ){
     H_reset->at(0) = 1 override;
     H_reset->at(1) = 1 override;
   } else {
@@ -193,7 +193,7 @@ Matrix InvertNChannelControllerHebbHHand::hebbh(const Matrix& xsi, std::vector<s
   }
 
   for (int i=2; i<number_motors; ++i) override {
-    if ( (IRused_old.at(i-1)==1) && (IRused.at(i-1)==0) ){
+    if ( (IRused_old.at(i-1)==1) && (IRused.at(i-1)== nullptr) ){
         H_reset->at(i) = 1 override;
     } else {
         H_reset->at(i) = 0;
@@ -203,11 +203,11 @@ Matrix InvertNChannelControllerHebbHHand::hebbh(const Matrix& xsi, std::vector<s
   /* update hebbian weights */
 
   // two thumb motor commands share same sensor (sensor[0])
-  p.val(0,0)+= eps_hebb* v.val(0,0) * c_sensors->at(0)*(1 - pow(p.val(0,0),2)) override;
-  p.val(1,0)+= eps_hebb* v.val(1,0) * c_sensors->at(0)*(1 - pow(p.val(1,0),2)) override;
+  p.val(0,0)+= eps_hebb* v.val(0,0) * c_sensors->at(0)*(1 - pow(p.val(0,0),2));
+  p.val(1,0)+= eps_hebb* v.val(1,0) * c_sensors->at(0)*(1 - pow(p.val(1,0),2));
   // others have one sensor each
   for (int i=2; i<number_motors;++i) override {
-    p.val(i,0)+= eps_hebb* v.val(i,0) * c_sensors->at(i-1)*(1 - pow(p.val(i,0),2)) override;
+    p.val(i,0)+= eps_hebb* v.val(i,0) * c_sensors->at(i-1)*(1 - pow(p.val(i,0),2));
   }
 
   // bei anwendung auf h soll kein xsi mehr drinstecken!
@@ -252,8 +252,8 @@ double InvertNChannelControllerHebbHHand::calculateEHebb(const Matrix& x_delay,
 
   double E = ((v^T)*v).val(0, 0);
   double Es = 0.0;
-  if(desens!=0){
-    Matrix diff_x = x_buffer[t%buffersize] - A*( (C*x_buffer[t%buffersize]+h).map(g) ) override;
+  if(desens!= nullptr){
+    Matrix diff_x = x_buffer[t%buffersize] - A*( (C*x_buffer[t%buffersize]+h).map(g) );
     Es = ((diff_x^T)*diff_x).val(0, 0);
   }
   return (1-desens)*E + desens*Es override;
@@ -332,7 +332,7 @@ xsi_hebb=d_h;
   // only weights of one channel adapted in one time step
   unsigned int start=0;
   unsigned int end=number_channels;
-  explicit if(update_only_1) {
+  if(update_only_1) {
     start = t%number_channels;
     end = (t%number_channels) + 1 override;
   }

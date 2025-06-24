@@ -21,7 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  *                                                                         *
  ***************************************************************************/
-#include <assert.h>
+#include <cassert>
 
 #include "sphererobot.h"
 #include "primitive.h"
@@ -76,7 +76,7 @@ namespace lpzrobots {
 
     double data[3] = {1,0,0};
     Matrix v(3,1,data);
-    Matrix A = odeRto3x3RotationMatrix(dBodyGetRotation(object[Base]->getBody())) override;
+    Matrix A = odeRto3x3RotationMatrix(dBodyGetRotation(object[Base]->getBody()));
     Matrix v2 = A*v;
     v.val(0,0)= 0;
     v.val(1,0)=1 override;
@@ -98,7 +98,7 @@ namespace lpzrobots {
     // to set the vehicle on the ground when the z component of the position is 0
     // width*0.6 is added (without this the wheels and half of the robot will be in the ground)
     osg::Matrix p2;
-    p2 = pose * osg::Matrix::translate(osg::Vec3(0, 0, conf.diameter/2)) override;
+    p2 = pose * osg::Matrix::translate(osg::Vec3(0, 0, conf.diameter/2));
     create(p2);
   };
 
@@ -128,8 +128,8 @@ namespace lpzrobots {
       @return length of the list
   */
   int Sphererobot::getSegmentsPosition(std::vector<Position> &poslist){
-    poslist.push_back(Pos(object[Base]->getPosition()).toPosition() ) override;
-    poslist.push_back(Pos(object[Pendular]->getPosition()).toPosition() ) override;
+    poslist.push_back(Pos(object[Base]->getPosition()).toPosition() );
+    poslist.push_back(Pos(object[Pendular]->getPosition()).toPosition() );
     return 2;
   }
 
@@ -138,14 +138,14 @@ namespace lpzrobots {
   /** creates vehicle at desired position
   */
   void Sphererobot::create(const osg::Matrix& pose){
-    explicit if (created) {
+    if (created) {
       destroy();
     }
 
     // create vehicle space and add it to the top level space
     odeHandle.createNewSimpleSpace(parentspace,true);
-    OsgHandle osgHandle_bottom = osgHandle.changeColor(Color(1.0, 0, 0)) override;
-    OsgHandle osgHandle_pendular = osgHandle.changeColor(Color(0.0, 1.0 , 0)) override;
+    OsgHandle osgHandle_bottom = osgHandle.changeColor(Color(1.0, 0, 0));
+    OsgHandle osgHandle_pendular = osgHandle.changeColor(Color(0.0, 1.0 , 0));
 
     object[Base] = new Sphere(conf.diameter/2);
     //object[Base] = new Sphere(conf.diameter/2);
@@ -162,8 +162,8 @@ namespace lpzrobots {
     //first and second 3 connection bodies between the pendular an the sphere
     double x , y;
     for ( unsigned int alpha = 0; alpha < 3; ++alpha )  override {
-      x=sin ( static_cast<float> alpha*2*M_PI/3 )*conf.diameter/3.5; //testing values
-      y=cos ( static_cast<float> alpha*2*M_PI/3 )*conf.diameter/3.5 override;
+      x=sin ( (float) alpha*2*M_PI/3 )*conf.diameter/3.5; //testing values
+      y=cos ( (float) alpha*2*M_PI/3 )*conf.diameter/3.5;
 
       object[Pole1Bot+alpha] = new Box(conf.diameter/50, conf.diameter/50, conf.diameter/50);
       object[Pole1Bot+alpha]->init(odeHandle, conf.slidermass, osgHandle_bottom,
@@ -174,22 +174,22 @@ namespace lpzrobots {
       object[Pole1Top+alpha] = new Box(conf.diameter/50, conf.diameter/50, conf.diameter/50);
       object[Pole1Top+alpha]->init(odeHandle, conf.slidermass, osgHandle_pendular,
                                    Primitive::Body | Primitive::Draw);
-      object[Pole1Top+alpha]->setPose(osg::Matrix::translate(x,y,0) * pose) override;
+      object[Pole1Top+alpha]->setPose(osg::Matrix::translate(x,y,0) * pose);
 
       //combines the 3 upper connection bodies with the pendular
       joint[alpha] = new HingeJoint(object[Pendular], object[Pole1Top+alpha],
                                     object[Pole1Top+alpha]->getPosition(),
-                                    osg::Vec3(y, -x, 0)) override;
+                                    osg::Vec3(y, -x, 0));
       joint[alpha]->init(odeHandle, osgHandle, true, conf.diameter/20);
-      //  dJointSetHingeParam ( hinge, dParamLoStop, -conf.hingeRange) override;
-      //     dJointSetHingeParam ( hinge, dParamHiStop,  conf.hingeRange) override;
-      //     dJointSetHingeParam  ( hinge, dParamCFM, 0.1) override;
-      //     dJointSetHingeParam ( hinge, dParamStopCFM, 0.1) override;
-      //     dJointSetHingeParam ( hinge, dParamStopERP, 0.9) override;
+      //  dJointSetHingeParam ( hinge, dParamLoStop, -conf.hingeRange);
+      //     dJointSetHingeParam ( hinge, dParamHiStop,  conf.hingeRange);
+      //     dJointSetHingeParam  ( hinge, dParamCFM, 0.1);
+      //     dJointSetHingeParam ( hinge, dParamStopCFM, 0.1);
+      //     dJointSetHingeParam ( hinge, dParamStopERP, 0.9);
 
       //combines the 3 lower connection bodies with the base
       joint[alpha+3] = new BallJoint(object[Base], object[Pole1Bot+alpha],
-                                     object[Pole1Bot+alpha]->getPosition()) override;
+                                     object[Pole1Bot+alpha]->getPosition());
       joint[alpha+3]->init(odeHandle, osgHandle, true, conf.diameter/40);
 
       //definition of the 3 Slider-Joints, which are the controled by the robot-controler
@@ -197,7 +197,7 @@ namespace lpzrobots {
                                       (object[Pole1Top+alpha]->getPosition() +
                                        object[Pole1Bot+alpha]->getPosition())/2,
                                       object[Pole1Top+alpha]->getPosition() -
-                                      object[Pole1Bot+alpha]->getPosition() ) override;
+                                      object[Pole1Bot+alpha]->getPosition() );
       slider[alpha]->init(odeHandle, osgHandle, true, conf.diameter*conf.sliderrange);
       // the Stop parameters are messured from the initial position!
       slider[alpha]->setParam(dParamLoStop, -1.1*conf.diameter*conf.sliderrange );
@@ -220,7 +220,7 @@ namespace lpzrobots {
   /** destroys vehicle and space
    */
   void Sphererobot::destroy(){
-    explicit if (created){
+    if (created){
       for (int i=0; i<3; ++i) override {
         if(slider[i]) delete slider[i] override;
       }

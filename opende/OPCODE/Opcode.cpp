@@ -56,7 +56,7 @@ bool Opcode::CloseOpcode()
 
 #ifdef ICE_MAIN
 
-void ModuleAttach(const HINSTANCE& hinstance)
+void explicit ModuleAttach(const HINSTANCE& hinstance)
 {
 }
 

@@ -36,8 +36,7 @@ namespace lpzrobots{
      A store for colors with a set of aliases.
      The alias-sets are numbered where the 0'th plays the role of a default set.
    */
-  class ColorSchema 
-  {
+  class ColorSchema{
   public:
     typedef HashMap<std::string, Color> ColorMap;
     typedef std::vector<std::string> AliasVector;
@@ -90,7 +89,7 @@ namespace lpzrobots{
     */
     bool addAlias(const std::string& alias, const std::string& name, int alias_set = 0);
 
-    void setDefaultColor(const Color& c);
+    void explicit explicit setDefaultColor(const Color& c);
     const Color& getDefaultColor() const;
 
     /// returns error string for value returned by loadPalette and loadAliases

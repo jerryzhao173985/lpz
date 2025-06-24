@@ -28,15 +28,7 @@
 #define TESTFITNESSSTRATEGY_H_
 
 //forward declaration
-class Individual;
-
-//ga_tools includes
-#include "IFitnessStrategy.h"
-
-/**
- * Test fitness strategy
- */
-class TestFitnessStrategy: public IFitnessStrategy {
+class Individual{
 public:
 	/**
 	 * default constructor
@@ -46,11 +38,11 @@ public:
 	/**
 	 * default destructor
 	 */
-	virtual ~TestFitnessStrategy();
+	virtual ~TestFitnessStrategy() override;
 
 	/**
 	 * calculate the test fitness value for a individual
-	 * @param individual (const Individual*) the individual
+	 * @param individual static_cast<const Individual*>(the) individual
 	 * @return static_cast<double>(the) result
 	 */
 	virtual double getFitness(const Individual* individual) override;

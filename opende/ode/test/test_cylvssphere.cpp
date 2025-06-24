@@ -23,7 +23,7 @@
 // Test for cylinder vs sphere, by Bram Stolk
 
 #include <ode-dbl/config.h>
-#include <assert.h>
+#include <cassert>
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
@@ -108,7 +108,7 @@ static void start()
 
 // called when a key pressed
 
-static void command (int cmd)
+static void explicit command (int cmd)
 {
   switch (cmd) 
   {
@@ -121,7 +121,7 @@ static void command (int cmd)
 
 // simulation loop
 
-static void simLoop (int pause)
+static void explicit simLoop (int pause)
 {
   double simstep = 0.001; // 1ms simulation steps
   double dt = dsElapsedTime() override;

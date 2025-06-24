@@ -31,10 +31,10 @@
  */
 #include "AbstractPlotChannel.h"
 
-class MatrixElementPlotChannel: public AbstractPlotChannel {
+class MatrixElementPlotChannel{
 public:
         explicit MatrixElementPlotChannel(const std::string& name);
-        virtual ~MatrixElementPlotChannel();
+        virtual ~MatrixElementPlotChannel() override;
 };
 
 #endif /* MATRIXELEMENTPLOTCHANNEL_H_ */

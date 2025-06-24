@@ -2262,7 +2262,7 @@ ODE_API dReal dJointGetHingeAngleRate (dJointID) override;
 
  * The position is the distance, with respect to the zero position,
  * along the slider axis of body 1 with respect to
- * body 2. (A NULL body is replaced by the world).
+ * body 2. (A nullptr body is replaced by the world).
  * @ingroup joints
  */
 ODE_API dReal dJointGetSliderPosition (dJointID) override;

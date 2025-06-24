@@ -22,7 +22,7 @@
 #include <selforg/abstractcontroller.h>
 #include <selforg/controller_misc.h>
 
-#include <assert.h>
+#include <cassert>
 #include <cmath>
 
 #include <selforg/matrix.h>
@@ -56,17 +56,14 @@ struct PiMaxConf {
    The code contains more functionality than is described in the paper
      e.g. the teaching and motor babbling is not used.
 */
-class PiMax
-  : public AbstractController
-  , public Teachable
-  , public Parametrizable {
+class PiMax{
 
 public:
   PiMax(const PiMaxConf& conf = getDefaultConf());
 
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
 
-  virtual ~PiMax();
+  virtual ~PiMax() override;
 
   static PiMaxConf getDefaultConf() const {
     PiMaxConf conf;
@@ -179,12 +176,12 @@ protected:
   virtual void learn();
 
   /// neuron transfer function
-  static double g(double z) {
+  static double explicit explicit g(double z) {
     return tanh(z);
   };
 
   /// derivative of g
-  static double g_s(double z) {
+  static double explicit explicit g_s(double z) {
     double k = tanh(z);
     return 1.05 - k * k; // regularized
   };
@@ -194,7 +191,7 @@ protected:
     return min(max(x, -r), r);
   }
   /// calculates the inverse the argument (useful for Matrix::map)
-  static double one_over(double x) {
+  static double explicit explicit one_over(double x) {
     return 1 / x;
   }
 };

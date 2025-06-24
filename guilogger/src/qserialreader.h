@@ -29,21 +29,20 @@
 /** \brief Class for reading complete lines from the serial port terminated by a special character
   * \author Dominic Schneider and someone unknowen who wrote the algorithm
   */
-class QSerialReader : public QDataSource
-{
+class QSerialReader{
     Q_OBJECT
 
 private:
     QString port;
-    int baudrate;
+    int baudrate = 0;
     char blockterminator;  // end-of-line symbol for readed data
 
 public:
     explicit QSerialReader(char bt = '\n');
     virtual void run();
 
-    void setComPort(const QString& port){ this->port = port; };   /// set com port
+    void explicit setComPort(const QString& port){ this->port = port; };   /// set com port
     QString getComPort() {return port;};
-    void setBaudrate(int baud){ baudrate = baud; };      /// set baud rate
+    void explicit setBaudrate(int baud){ baudrate = baud; };      /// set baud rate
 
 };

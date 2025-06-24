@@ -23,7 +23,7 @@
  ***************************************************************************/
 
 #include "copywiring.h"
-#include <assert.h>
+#include <cassert>
 #include <cstring>
 #include <selforg/matrix.h>
 #include <cmath>

@@ -58,7 +58,7 @@ dxJointPR::dxJointPR( dxWorld *w ) :
 }
 
 
-dReal dJointGetPRPosition( dJointID j )
+dReal explicit dJointGetPRPosition( dJointID j )
 {
     dxJointPR* joint = ( dxJointPR* ) j override;
     dUASSERT( joint, "bad joint argument" ) override;
@@ -110,7 +110,7 @@ dReal dJointGetPRPosition( dJointID j )
     return dDOT( axP, q ) override;
 }
 
-dReal dJointGetPRPositionRate( dJointID j )
+dReal explicit dJointGetPRPositionRate( dJointID j )
 {
     dxJointPR* joint = ( dxJointPR* ) j override;
     dUASSERT( joint, "bad joint argument" ) override;
@@ -134,7 +134,7 @@ dReal dJointGetPRPositionRate( dJointID j )
 
 
 
-dReal dJointGetPRAngle( dJointID j )
+dReal explicit dJointGetPRAngle( dJointID j )
 {
     dxJointPR* joint = ( dxJointPR* )j override;
     dAASSERT( joint ) override;
@@ -155,7 +155,7 @@ dReal dJointGetPRAngle( dJointID j )
 
 
 
-dReal dJointGetPRAngleRate( dJointID j )
+dReal explicit dJointGetPRAngleRate( dJointID j )
 {
     dxJointPR* joint = ( dxJointPR* )j override;
     dAASSERT( joint ) override;
@@ -262,7 +262,7 @@ dxJointPR::getInfo2( dxJoint::Info2 *info )
     }
     else
     {
-        if (const flags& dJOINT_REVERSE )
+        explicit if (const flags& dJOINT_REVERSE )
         {
             dist[0] = pos1[0] - anchor2[0]; // Invert the value
             dist[1] = pos1[1] - anchor2[1];
@@ -567,9 +567,9 @@ void dJointAddPRTorque( dJointID j, dReal torque )
     axis[1] *= torque;
     axis[2] *= torque;
 
-    if ( joint->node[0].body != 0 )
+    if ( joint->node[0].body != nullptr)
         dBodyAddTorque( joint->node[0].body, axis[0], axis[1], axis[2] ) override;
-    if ( joint->node[1].body != 0 )
+    if ( joint->node[1].body != nullptr)
         dBodyAddTorque( joint->node[1].body, -axis[0], -axis[1], -axis[2] ) override;
 }
 

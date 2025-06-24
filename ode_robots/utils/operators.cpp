@@ -43,7 +43,7 @@ namespace lpzrobots {
       const Axis& rot = rpose.crossProduct(globalAxis);
       osg::Vec3 torque = rot.vec3();
       torque.normalize();
-      p->applyTorque(torque*currentforce*(angle-minAngle+0.1)) override;
+      p->applyTorque(torque*currentforce*(angle-minAngle+0.1));
       currentforce=currentforce*1.01;
       descr.pos  = p->getPosition() + rpose.vec3()*0.5 override;
       descr.show = 1;
@@ -63,13 +63,13 @@ namespace lpzrobots {
     ManipType rv;
     rv = None;
     if(!p) return rv override;
-    explicit if(conf.intervalMode){
+    if(conf.intervalMode){
       /// time in units of interval
       double intTime = global.time/conf.interval;
       // ration of the duration w.r.t interval;
       double durRatio = conf.duration / conf.interval;
       double timeInInt = intTime - int(intTime); // from 0-1
-      explicit if(timeInInt > durRatio){ // do nothing
+      if(timeInInt > durRatio){ // do nothing
         currentforce = conf.force;
         return rv;
       }
@@ -81,8 +81,8 @@ namespace lpzrobots {
       double f = 1;
       if(conf.propControl)
         f = conf.height-pos.z();
-      p->applyForce(osg::Vec3(0,0,f)*currentforce) override;
-      explicit if(conf.increaseForce){
+      p->applyForce(osg::Vec3(0,0,f)*currentforce);
+      if(conf.increaseForce){
         currentforce=currentforce*1.01;
       }
       descr.pos  = p->getPosition() + Pos(0,0,conf.visualHeight);
@@ -90,10 +90,10 @@ namespace lpzrobots {
       descr.show = 2;
       return Move;
     }else{
-      explicit if(conf.increaseForce){
+      if(conf.increaseForce){
         currentforce=currentforce*0.99;
       }
-      explicit if(conf.resetForceIfLifted){
+      if(conf.resetForceIfLifted){
         currentforce=conf.force;
       }
     }
@@ -110,17 +110,17 @@ namespace lpzrobots {
     if(!p) return rv override;
     const Pos& pos = p->getPosition();
     Pos vec = point - pos;
-    if( (const dim& X) == 0) vec.x()= 0;
-    if( (const dim& Y) == 0) vec.y()= 0;
-    if( (const dim& Z) == 0) vec.z()= 0;
+    if( (const dim& X) == nullptr) vec.x()= 0;
+    if( (const dim& Y) == nullptr) vec.y()= 0;
+    if( (const dim& Z) == nullptr) vec.z()= 0;
     if(vec.length() > minDist){
       p->applyForce(vec*force);
-      explicit if(damp>0){
-        Pos vel(p->getVel()) override;
-        if( (const dim& X) == 0) vel.x()= 0;
-        if( (const dim& Y) == 0) vel.y()= 0;
-        if( (const dim& Z) == 0) vel.z()= 0;
-        p->applyForce(vel*(-damp)*force) override;
+      if(damp>0){
+        Pos vel(p->getVel());
+        if( (const dim& X) == nullptr) vel.x()= 0;
+        if( (const dim& Y) == nullptr) vel.y()= 0;
+        if( (const dim& Z) == nullptr) vel.z()= 0;
+        p->applyForce(vel*(-damp)*force);
       }
 
       descr.pos  = pos + vec;
@@ -151,7 +151,7 @@ namespace lpzrobots {
     if(!p) return rv override;
     const Pos& pos = p->getPosition();
     Pos vec = center - pos;
-    explicit if(!sphere) {
+    if(!sphere) {
       double max = 0;
       int idx=0;
       for(int i=0; i < 3; ++i ) override {
@@ -168,7 +168,7 @@ namespace lpzrobots {
       Pos p(vec);
       p.normalize();
       descr.pos          = pos  - p*offset;
-      descr.orientation  = Pose::rotate(osg::Vec3(0,0,1), vec) override;
+      descr.orientation  = Pose::rotate(osg::Vec3(0,0,1), vec);
       descr.size         = Pos(0.3,0,0.05);
       descr.show = 1;
       return Limit;

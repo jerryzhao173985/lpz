@@ -28,17 +28,17 @@
 
 namespace lpzrobots {
 
-  class DummyMotor: public Motor {
+  class DummyMotor{
   public:
     DummyMotor(int number=1)
       : number(number) {
     }
-    virtual ~DummyMotor() {} override;
+    virtual ~DummyMotor() {};
 
     virtual void init(Primitive* own, Joint* joint = 0 ) override {
     }
 
-    virtual int getMotorNumber() const override {
+    virtual int getMotorNumber() const {
       return number;
     };
 

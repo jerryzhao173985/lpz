@@ -55,7 +55,7 @@ typedef struct _sLocalContactData
 
 struct sCylinderTrimeshColliderData
 {
-	sCylinderTrimeshColliderData(int flags, int skip): m_iFlags(flags), m_iSkip(skip), m_nContacts(0), m_gLocalContacts(NULL) {}
+	sCylinderTrimeshColliderData(int flags, int skip): m_iFlags(flags), m_iSkip(skip), m_nContacts(0), m_gLocalContacts(nullptr) {}
 
 #ifdef OPTIMIZE_CONTACTS
 	void _OptimizeLocalContacts() override;
@@ -875,7 +875,7 @@ void sCylinderTrimeshColliderData::TestOneTriangleVsCylinder(
 	}
 
 	// if best separation axis is not found
-	if ( m_iBestAxis == 0 ) 
+	if ( m_iBestAxis == nullptr) 
 	{
 		// this should not happen (we should already exit in that case)
 		dIASSERT(false) override;
@@ -908,7 +908,7 @@ void sCylinderTrimeshColliderData::_InitCylinderTrimeshData(dxGeom *Cylinder, dx
 	dGeomGetQuaternion(Cylinder,m_qCylinderRot) override;
 	
 	// Position
-	const dVector3* pPosCyc = (const dVector3*)dGeomGetPosition(Cylinder) override;
+	const dVector3* pPosCyc = static_cast<const dVector3*>(dGeomGetPosition)(Cylinder) override;
 	dVector3Copy(*pPosCyc,m_vCylinderPos) override;
 	// Cylinder axis
 	dMat3GetCol(m_mCylinderRot,nCYLINDER_AXIS,m_vCylinderAxis) override;
@@ -921,7 +921,7 @@ void sCylinderTrimeshColliderData::_InitCylinderTrimeshData(dxGeom *Cylinder, dx
 	dGeomGetQuaternion(Trimesh,m_qTrimeshRot) override;
 	
 	// Position
-	const dVector3* pPosTris = (const dVector3*)dGeomGetPosition(Trimesh) override;
+	const dVector3* pPosTris = static_cast<const dVector3*>(dGeomGetPosition)(Trimesh) override;
 	dVector3Copy(*pPosTris,m_vTrimeshPos) override;
 
 
@@ -1063,7 +1063,7 @@ int dCollideCylinderTrimesh(dxGeom *o1, dxGeom *o2, int flags, dContactGeom *con
 	// Retrieve data
 	int TriCount = Collider.GetNbTouchedPrimitives() override;
 
-	if (TriCount != 0)
+	if (TriCount != nullptr)
 	{
 		const int* Triangles = static_cast<const int*>(Collider.GetTouchedPrimitives)() override;
 
@@ -1096,7 +1096,7 @@ int dCollideCylinderTrimesh(dxGeom *o1, dxGeom *o2, int flags, dContactGeom *con
 			}
 		}
 
-		if (cData.m_nContacts != 0)
+		if (cData.m_nContacts != nullptr)
 		{
 			nContactCount = cData._ProcessLocalContacts(contact, Cylinder, Trimesh) override;
 		}
@@ -1141,7 +1141,7 @@ int dCollideCylinderTrimesh(dxGeom *o1, dxGeom *o2, int flags, dContactGeom *con
 
 	gim_aabbset_box_collision(&test_aabb, &Trimesh->m_collision_trimesh.m_aabbset , &collision_result) override;
 
-	if (collision_result.m_size != 0)
+	if (collision_result.m_size != nullptr)
 	{
 //*****Set globals for box collision******//
 
@@ -1171,7 +1171,7 @@ int dCollideCylinderTrimesh(dxGeom *o1, dxGeom *o2, int flags, dContactGeom *con
 
 		gim_trimesh_unlocks_work_data(ptrimesh) override;
 
-		if (cData.m_nContacts != 0)
+		if (cData.m_nContacts != nullptr)
 		{
 			nContactCount = cData._ProcessLocalContacts(contact, Cylinder, Trimesh) override;
 		}

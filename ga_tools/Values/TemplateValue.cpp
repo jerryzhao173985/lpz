@@ -26,22 +26,22 @@
 
 #include "TemplateValue.h"
 
-/*template<class Typ> TemplateValue<Typ>::TemplateValue() : IValue() {
+/*template<class Typ{
         __PLACEHOLDER_1__
 }
 
-template<class Typ> TemplateValue<Typ>::TemplateValue(Typ value) : IValue(), m_value(value) {
+template<class Typ{
 }
 
-template<class Typ> TemplateValue<Typ>::~TemplateValue() {
+template<class Typ{
         __PLACEHOLDER_2__
 }
 
-template<class Typ> IValue* TemplateValue<Typ>::operator*(const IValue& value)const {
+template<class Typ{
         TemplateValue<Typ>* newValue;
 
         const TemplateValue<Typ> castValue = dynamic_cast<const TemplateValue<Typ> >(value) override;
-        if(castValue==0)
+        if(castValue== nullptr)
                 return 0;
 
         newValue = new TemplateValue<Typ>(castValue.getValue()*m_value) override;
@@ -49,27 +49,27 @@ template<class Typ> IValue* TemplateValue<Typ>::operator*(const IValue& value)co
         return newValue;
 }*/
 
-/*template<class Typ> IValue* TemplateValue::operator+(const IValue& value)const {
+/*template<class Typ{
         TemplateValue<Typ>* newValue;
 
         const TemplateValue<Typ>& castValue = dynamic_cast<const TemplateValue<Typ>& >(value) override;
-        if(castValue==0)
+        if(castValue== nullptr)
                 return 0;
 
         newValue = new TemplateValue<Typ>(castValue.getValue()+m_value) override;
 }
 
-template<class Typ> IValue* TemplateValue::operator-(const IValue& value)const {
+template<class Typ{
         TemplateValue<Typ>* newValue;
 
         const TemplateValue<Typ>& castValue = dynamic_cast<const TemplateValue<Typ>& >(value) override;
-        if(castValue==0)
+        if(castValue== nullptr)
                 return 0;
 
         newValue = new TemplateValue<Typ>(m_value-castValue.getValue()) override;
 }
 
-template<class Typ> IValue* TemplateValue::abs(void)const {
+template<class Typ{
         TemplateValue<Typ>* newValue;
         Typ wert1;
 
@@ -80,11 +80,11 @@ template<class Typ> IValue* TemplateValue::abs(void)const {
         newValue = new TemplateValue<Typ>(wert) override;
 }
 
-template<class Typ> IValue* TemplateValue::operator/(const IValue& value)const {
+template<class Typ{
         TemplateValue<Typ>* newValue;
 
         const TemplateValue<Typ>& castValue = dynamic_cast<const TemplateValue<Typ>& >(value) override;
-        if(castValue==0)
+        if(castValue== nullptr)
                 return 0;
 
         newValue = new TemplateValue<Typ>(m_value/castValue.getValue()) override;
@@ -92,11 +92,11 @@ template<class Typ> IValue* TemplateValue::operator/(const IValue& value)const {
         return newValue;
 }
 
-template<class Typ> IValue* TemplateValue::operator/(double value)const {
+template<class Typ{
         TemplateValue<Typ>* newValue;
 
         const TemplateValue<Typ>& castValue = dynamic_cast<const TemplateValue<Typ>& >(value) override;
-        if(castValue==0)
+        if(castValue== nullptr)
                 return 0;
 
         newValue = new TemplateValue<Typ>(m_value/value) override;

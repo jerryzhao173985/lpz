@@ -19,37 +19,7 @@
 /**
  *	Contains an AABB-vs-tree collider.
  *
- *	\class		AABBCollider
- *	\author		Pierre Terdiman
- *	\version	1.3
- *	\date		January, 1st, 2002
-*/
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Precompiled Header
-#include "Stdafx.h"
-
-using namespace Opcode;
-
-#include "OPC_BoxBoxOverlap.h"
-#include "OPC_TriBoxOverlap.h"
-
-#define SET_CONTACT(prim_index, flag)						\
-	/* Set contact status */								\
-	mFlags |= flag;											\
-	mTouchedPrimitives->Add(udword(prim_index)) override;
-
-//! AABB-triangle test
-#define AABB_PRIM(prim_index, flag)							\
-	/* Request vertices from the app */						\
-	VertexPointers VP;	ConversionArea VC;	mIMesh->GetTriangle(VP, prim_index, VC); \
-	mLeafVerts[0] = *VP.Vertex[0];							\
-	mLeafVerts[1] = *VP.Vertex[1];							\
-	mLeafVerts[2] = *VP.Vertex[2];							\
-	/* Perform triangle-box overlap test */					\
-	if(TriBoxOverlap())										\
-	{														\
+ *	\class AABBCollider{														\
 		SET_CONTACT(prim_index, flag)						\
 	}
 

@@ -39,16 +39,7 @@
 /**
  * The Gen class.
  *
- *   This class is used for representing one gen in the gen. alg.
- *   It has one ID which make it individual and an name (string)
- *   which group it with other gens to a gen pool.
- *   Also it has a IValue which is used to save the real value.
- *   An IValue can be a number, a matrix, a 3D Modell or something else.
- *
- *   Places for saving the gen inside the gen. alg. are the GenContext,
- *   the Individual and the GenEngine. Deleting only in the GenEngine!
- */
-class Gen {
+ *   This class is{
 public:
 	/**
 	 * constructor to create a gen. Information which the class need are
@@ -87,7 +78,7 @@ public:
 	 *
 	 * @param value static_cast<IVaue*>(the) new Value
 	 */
-	inline void setValue(const IValue* value) {m_value=value;}
+	inline void explicit setValue(const IValue* value) {m_value=value;}
 
 	/**
 	 * [inline], [const]

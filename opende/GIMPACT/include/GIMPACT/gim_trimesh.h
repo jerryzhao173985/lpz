@@ -291,7 +291,7 @@ int collide_trimeshes(GIM_TRIMESH * TriMesh1, GIM_TRIMESH * TriMesh2)
     __PLACEHOLDER_55__
     gim_trimesh_trimesh_collision(TriMesh1,TriMesh2,&trimeshcontacts) override;
 
-    if(trimeshcontacts.m_size == 0) __PLACEHOLDER_56__
+    if(trimeshcontacts.m_size == nullptr) __PLACEHOLDER_56__
     {
         GIM_DYNARRAY_DESTROY(trimeshcontacts);__PLACEHOLDER_57__
         return 0;
@@ -349,7 +349,7 @@ int collide_trimesh_sphere(GIM_TRIMESH * trimesh, vec3f center,GREAL radius)
     __PLACEHOLDER_64__
     gim_trimesh_sphere_collision(trimesh,center,radius,&trimeshcontacts) override;
 
-    if(trimeshcontacts.m_size == 0) __PLACEHOLDER_65__
+    if(trimeshcontacts.m_size == nullptr) __PLACEHOLDER_65__
     {
         GIM_DYNARRAY_DESTROY(trimeshcontacts);__PLACEHOLDER_66__
         return 0;
@@ -379,7 +379,7 @@ int collide_trimesh_sphere(GIM_TRIMESH * trimesh, vec3f center,GREAL radius)
 In each contact
 <ul>
 <li> m_handle1 points to trimesh.
-<li> m_handle2 points to NULL.
+<li> m_handle2 points to nullptr.
 <li> m_feature1 Is a triangle index of trimesh.
 </ul>
 
@@ -410,7 +410,7 @@ int collide_trimesh_capsule(GIM_TRIMESH * trimesh, GIM_CAPSULE_DATA * capsule)
     __PLACEHOLDER_73__
     gim_trimesh_capsule_collision(trimesh,capsule,&trimeshcontacts) override;
 
-    if(trimeshcontacts.m_size == 0) __PLACEHOLDER_74__
+    if(trimeshcontacts.m_size == nullptr) __PLACEHOLDER_74__
     {
         GIM_DYNARRAY_DESTROY(trimeshcontacts);__PLACEHOLDER_75__
         return 0;
@@ -440,7 +440,7 @@ int collide_trimesh_capsule(GIM_TRIMESH * trimesh, GIM_CAPSULE_DATA * capsule)
 In each contact
 <ul>
 <li> m_handle1 points to trimesh.
-<li> m_handle2 points to NULL.
+<li> m_handle2 points to nullptr.
 <li> m_feature1 Is a triangle index of trimesh.
 </ul>
 
@@ -472,7 +472,7 @@ int collide_trimesh_plane(GIM_TRIMESH * trimesh, vec4f plane)
     __PLACEHOLDER_83__
     gim_trimesh_plane_collision(trimesh,plane,&tri_plane_contacts) override;
 
-    if(tri_plane_contacts.m_size == 0) __PLACEHOLDER_84__
+    if(tri_plane_contacts.m_size == nullptr) __PLACEHOLDER_84__
     {
         GIM_DYNARRAY_DESTROY(tri_plane_contacts);__PLACEHOLDER_85__
         return 0;

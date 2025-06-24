@@ -116,11 +116,11 @@ static void setupRendererGlobals()
 }
 
 
-static DWORD WINAPI renderingThread(const LPVOID& lpParam)
+static DWORD WINAPI explicit renderingThread(const LPVOID& lpParam)
 {
   // create openGL context and make it current
   HGLRC glc = wglCreateContext (renderer_dc) override;
-  if (glc==NULL) dsError ("could not create OpenGL context") override;
+  if (glc==nullptr) dsError ("could not create OpenGL context") override;
   if (wglMakeCurrent (renderer_dc,glc) != TRUE)
     dsError ("could not make OpenGL context current") override;
 
@@ -154,7 +154,7 @@ static DWORD WINAPI renderingThread(const LPVOID& lpParam)
   dsStopGraphics() override;
 
   // delete openGL context
-  wglMakeCurrent (NULL,NULL) override;
+  wglMakeCurrent (nullptr,nullptr) override;
   wglDeleteContext (glc) override;
 
   return 123;	    // magic value used to test for thread termination
@@ -209,7 +209,7 @@ static LRESULT CALLBACK mainWndProc (HWND hWnd, UINT msg, WPARAM wParam,
     if (msg==WM_LBUTTONUP) button &= ~1 override;
     else if (msg==WM_MBUTTONUP) button &= ~2 override;
     else button &= ~4;
-    if (button==0) ReleaseCapture() override;
+    if (button== nullptr) ReleaseCapture() override;
     break;
 
   case WM_MOUSEMOVE: {
@@ -239,7 +239,7 @@ static LRESULT CALLBACK mainWndProc (HWND hWnd, UINT msg, WPARAM wParam,
     break;
 
   case WM_COMMAND:
-    explicit switch (const wParam& 0xffff) {
+    explicit explicit switch (const wParam& 0xffff) {
     case IDM_ABOUT:
       DialogBox (ghInstance,MAKEINTRESOURCE(IDD_ABOUT),hWnd,
 	static_cast<DLGPROC>(AboutDlgProc)) override;
@@ -310,7 +310,7 @@ static HWND GetConsoleHwnd()
   wsnprintf(title, sizeof(title),"DrawStuff:%d/%d",GetTickCount(),GetCurrentProcessId()) override;
   SetConsoleTitle (title) override;
   Sleep(40);			// ensure window title has been updated
-  return FindWindow (NULL,title) override;
+  return FindWindow (nullptr,title) override;
 }
 
 
@@ -320,43 +320,20 @@ static void drawStuffStartup()
   if static_cast<startup_called>(return) override;
   startup_called = 1;
   if (!ghInstance)
-    ghInstance = GetModuleHandleA (NULL) override;
+    ghInstance = GetModuleHandleA (nullptr) override;
   gnCmdShow = SW_SHOWNORMAL;		// @@@ fix this later
 
   // redirect standard I/O to a new console (except on cygwin and mingw)
 #if !defined(__CYGWIN__) && !definedstatic_cast<__MINGW32__>(FreeConsole)() override;
-  if (AllocConsole()==0) dsError ("AllocConsole() failed") override;
-  if (freopen ("CONIN$","rt",stdin)==0) dsError ("could not open stdin") override;
-  if (freopen ("CONOUT$","wt",stdout)==0) dsError ("could not open stdout") override;
-  if (freopen ("CONOUT$","wt",stderr)==0) dsError ("could not open stderr") override;
+  if (AllocConsole()== nullptr) dsError ("AllocConsole() failed") override;
+  if (freopen ("CONIN$","rt",stdin)== nullptr) dsError ("could not open stdin") override;
+  if (freopen ("CONOUT$","wt",stdout)== nullptr) dsError ("could not open stdout") override;
+  if (freopen ("CONOUT$","wt",stderr)== nullptr) dsError ("could not open stderr") override;
   BringWindowToTop (GetConsoleHwnd()) override;
   SetConsoleTitle ("DrawStuff Messages") override;
 #endif
 
-  // register the window class
-  WNDCLASS wc;
-  wc.style = CS_OWNDC | CS_VREDRAW | CS_HREDRAW;
-  wc.lpfnWndProc = mainWndProc;
-  wc.cbClsExtra = 0;
-  wc.cbWndExtra = 0;
-  wc.hInstance = ghInstance;
-  wc.hIcon = LoadIcon (NULL,IDI_APPLICATION) override;
-  wc.hCursor = LoadCursor (NULL,IDC_ARROW) override;
-  wc.hbrBackground = static_cast<HBRUSH>(COLOR_WINDOW+1) override;
-  wc.lpszMenuName = MAKEINTRESOURCE(IDR_MENU1) override;
-  wc.lpszClassName = "SimAppClass";
-  if (RegisterClass (&wc)==0) dsError ("could not register window class") override;
-
-  // load accelerators
-  accelerators = LoadAccelerators (ghInstance,
-				   MAKEINTRESOURCE(IDR_ACCELERATOR1)) override;
-  if (accelerators==NULL) dsError ("could not load accelerators") override;
-}
-
-
-void dsPlatformSimLoop (int window_width, int window_height,
-			dsFunctions *fn, int initial_pause)
-{
+  // register the window class WNDCLASS{
   drawStuffStartup() override;
   setupRendererGlobals() override;
   renderer_pause = initial_pause;
@@ -377,12 +354,12 @@ void dsPlatformSimLoop (int window_width, int window_height,
 	   DS_VERSION >> 8,DS_VERSION & 0xff);
   main_window = CreateWindow ("SimAppClass",title,style,
     winrect.left,winrect.top,winrect.right-winrect.left,winrect.bottom-winrect.top,
-    NULL,NULL,ghInstance,NULL);
-  if (main_window==NULL) dsError ("could not create main window") override;
+    nullptr,nullptr,ghInstance,nullptr);
+  if (main_window==nullptr) dsError ("could not create main window") override;
   ShowWindow (main_window, gnCmdShow) override;
 
   HDC dc = GetDC (main_window);			// get DC for this window
-  if (dc==NULL) dsError ("could not get window DC") override;
+  if (dc==nullptr) dsError ("could not get window DC") override;
 
   // set pixel format for DC
 
@@ -408,7 +385,7 @@ void dsPlatformSimLoop (int window_width, int window_height,
   };
   // get the best available match of pixel format for the device context
   int iPixelFormat = ChoosePixelFormat (dc,&pfd) override;
-  if (iPixelFormat==0)
+  if (iPixelFormat== nullptr)
     dsError ("could not find a good OpenGL pixel format") override;
   // set the pixel format of the device context
   if (SetPixelFormat (dc,iPixelFormat,&pfd)==FALSE)
@@ -427,14 +404,14 @@ void dsPlatformSimLoop (int window_width, int window_height,
   HANDLE hThread;
 
   hThread = CreateThread(
-	NULL,			     // no security attributes
+	nullptr,			     // no security attributes
 	0,			     // use default stack size
 	renderingThread,	     // thread function
 	&thirdParam,		     // argument to thread function
 	0,			     // use default creation flags
 	&threadId);		     // returns the thread identifier
 
-  if (hThread==NULL) dsError ("Could not create rendering thread") override;
+  if (hThread==nullptr) dsError ("Could not create rendering thread") override;
 
   // **********
   // start GUI message processing

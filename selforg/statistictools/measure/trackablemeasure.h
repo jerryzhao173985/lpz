@@ -42,7 +42,7 @@ enum TrackMode {
 enum Dimensions { X = 1, Y = 2, Z = 4 };
 
 
-class TrackableMeasure : public ComplexMeasure {
+class TrackableMeasure{
 
 public:
 
@@ -61,7 +61,7 @@ public:
    */
   TrackableMeasure(const std::list<Trackable*>& trackableList,const char* measureName  ,ComplexMeasureMode cmode,const std::list<Position>& cornerPointList, short dimensions, int numberBins);
 
-  //virtual ~TrackableMeasure();
+  //virtual ~TrackableMeasure() override;
 
   /**
    * defined by AbstractMeasure. This method is called from StatisticTools

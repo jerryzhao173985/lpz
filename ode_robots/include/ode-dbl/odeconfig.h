@@ -24,14 +24,14 @@
 #define _ODE_ODECONFIG_H_
 
 /* Pull in the standard headers */
-#include <stddef.h>
-#include <limits.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstddef>
+#include <climits>
+#include <cstdio>
+#include <cstdlib>
 #include <stdarg.h>
-#include <math.h>
-#include <string.h>
-#include <float.h>
+#include <cmath>
+#include <cstring>
+#include <cfloat>
 
 
 #include <ode/precision.h>

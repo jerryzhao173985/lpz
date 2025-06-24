@@ -20,7 +20,7 @@
 #define __MULTIEXPERTPAIR_H
 
 
-#include <assert.h>
+#include <cassert>
 #include <cmath>
 #include <vector>
 
@@ -49,15 +49,12 @@ struct Sat {
 };
 
 /**
- * class for robot controller
- * using several feedforward networks static_cast<satelite>(and) one selforg controller
- */
-class MultiExpertPair : public  AbstractModel{
+ * class for{
 
 public:
   MultiExpertPair(const MultiExpertPairConf& conf = getDefaultConf());
 
-  virtual ~MultiExpertPair();
+  virtual ~MultiExpertPair() override;
 
   virtual void init(unsigned int inputDim, unsigned  int outputDim,
                     double unit_map = 0.0, RandGen* randGen = 0);
@@ -76,7 +73,7 @@ public:
   // !!!!!!!!!!!!!!!!!!! MISC STUFF !!!!!!!!
 
   /// stores the sat networks into seperate files
-  void storeSats(const char* filestem);
+  void explicit storeSats(const char* filestem);
   /// restore the sat networks from seperate files
   void restoreSats(const std::list<std::string>& filenames);
 
@@ -90,7 +87,7 @@ public:
   /** stores the controller values to a given file. */
   virtual bool store(FILE* f) const override;
   /** loads the controller values from a given file. */
-  virtual bool restore(FILE* f);
+  virtual bool explicit restore(FILE* f);
 
   /**** INSPECTABLE ****/
   virtual std::list<iparamkey> getInternalParamNames() const override;
@@ -147,7 +144,7 @@ protected:
   /** adds a new Sat network to the system and returns its index
       @param copySat index of existing sat network to copy
    */
-  int addSat(int copySat);
+  int explicit addSat(int copySat);
 
   void management();
 

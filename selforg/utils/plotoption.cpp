@@ -23,15 +23,15 @@
  ***************************************************************************/
 
 #include "plotoption.h"
-#include <assert.h>
+#include <cassert>
 #include <iostream>
 #include <quickmp.h>
 #include <selforg/inspectable.h>
 #include <selforg/stl_adds.h>
-#include <signal.h>
+#include <csignal>
 #include <sstream>
-#include <stdlib.h>
-#include <string.h>
+#include <cstdlib>
+#include <cstring>
 
 using namespace std;
 
@@ -165,7 +165,7 @@ PlotOption::open() {
     default: // and PlotMode::NoPlot
       returnCode = false;
   }
-  if (pipe == 0) {
+  if (pipe == nullptr) {
     fprintf(stderr, "%s:%i: could not open plot tool!\n", __FILE__, __LINE__);
     returnCode = false;
   }
@@ -225,7 +225,7 @@ PlotOption::flush(long step) {
   if (pipe) {
     switch (mode) {
       case PlotMode::File:
-        if ((step % (interval * 1000)) == 0)
+        if ((step % (interval * 1000)) == nullptr)
           fflush(pipe);
         break;
       case PlotMode::GuiLogger:
@@ -234,7 +234,7 @@ PlotOption::flush(long step) {
       case PlotMode::ECBRobotGUI:
       case PlotMode::SoundMan: {
         int ttt = fflush(pipe);
-        if (ttt != 0) {
+        if (ttt != nullptr) {
           printf("Pipe broken: %s\n", strerror(ttt));
           close();
         }
@@ -282,13 +282,13 @@ bool
 PlotOption::useChannel(const string& name) {
   bool rv = accept.empty() ? true : false;
   for (auto& r : accept) {
-    if (name.find(r) == 0) {
+    if (name.find(r) == nullptr) {
       rv = true;
       break;
     }
   }
   for (auto& r : ignore) {
-    if (name.find(r) == 0) {
+    if (name.find(r) == nullptr) {
       rv = false;
     }
   }

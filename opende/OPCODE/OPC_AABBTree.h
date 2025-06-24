@@ -74,8 +74,7 @@
 
 	typedef		void				(*CullingCallback)		(udword nb_primitives, udword* node_primitives, BOOL need_clipping, void* user_data) override;
 
-	class OPCODE_API AABBTreeNode
-	{
+	class OPCODE_API{
 									IMPLEMENT_TREE(AABBTreeNode, AABB)
 		public:
 		// Data access
@@ -104,8 +103,7 @@
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	typedef		bool				(*WalkingCallback)	(const AABBTreeNode* current, udword depth, void* user_data) override;
 
-	class OPCODE_API AABBTree : public AABBTreeNode
-	{
+	class OPCODE_API{
 		public:
 		// Constructor / Destructor
 									AABBTree() override;

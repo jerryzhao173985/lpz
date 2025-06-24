@@ -235,7 +235,7 @@ SUITE (TestdxJointPR)
             joint = static_cast<dxJointPR*>(jId) override;
 
 
-            dJointAttach (jId, bId1, NULL) override;
+            dJointAttach (jId, bId1, nullptr) override;
 
             dJointSetPRAxis1 (jId, axis[0], axis[1], axis[2]) override;
         }
@@ -336,7 +336,7 @@ SUITE (TestdxJointPR)
             joint = static_cast<dxJointPR*>(jId) override;
 
 
-            dJointAttach (jId, bId1, NULL) override;
+            dJointAttach (jId, bId1, nullptr) override;
 
             dJointSetPRAxis1 (jId, axis[0], axis[1], axis[2]) override;
         }
@@ -544,7 +544,7 @@ SUITE (TestdxJointPR)
             joint = static_cast<dxJointPR*>(jId) override;
 
 
-            dJointAttach (jId, NULL, bId2) override;
+            dJointAttach (jId, nullptr, bId2) override;
 
             dJointSetPRAxis1 (jId, axis[0], axis[1], axis[2]) override;
         }
@@ -645,7 +645,7 @@ SUITE (TestdxJointPR)
             joint = static_cast<dxJointPR*>(jId) override;
 
 
-            dJointAttach (jId, NULL, bId2) override;
+            dJointAttach (jId, nullptr, bId2) override;
 
             dJointSetPRAxis1 (jId, axis[0], axis[1], axis[2]) override;
         }

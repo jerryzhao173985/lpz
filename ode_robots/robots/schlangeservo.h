@@ -41,8 +41,7 @@ namespace lpzrobots {
    * It consists of a number of equal elements, each linked
    * by a joint hinge powered by 1 servos
    **/
-  class SchlangeServo: public Schlange
-  {
+  class SchlangeServo{
   private:
     std::vector <HingeServo*> servos;
 
@@ -52,7 +51,7 @@ namespace lpzrobots {
                     const std::string& name, const std::string& revision="");
 
 
-    virtual ~SchlangeServo();
+    virtual ~SchlangeServo() override;
 
     /**
      *Reads the actual motor commands from an array,
@@ -80,7 +79,7 @@ namespace lpzrobots {
     virtual int getMotorNumberIntern() override { assert(created); return servos.size(); }
 
     /******** CONFIGURABLE ***********/
-    virtual void notifyOnChange(const paramkey& key);
+    virtual void explicit explicit notifyOnChange(const paramkey& key);
 
   private:
     virtual void create(const osg::Matrix& pose);

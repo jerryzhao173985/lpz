@@ -8,8 +8,7 @@
 namespace UnitTest
 {
 
-class XmlTestReporter : public DeferredTestReporter
-{
+class XmlTestReporter{
 public:
     explicit XmlTestReporter(std::const ostream& ostream) override;
 

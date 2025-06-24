@@ -73,7 +73,7 @@ dxJointPU::dxJointPU( dxWorld *w ) :
 }
 
 
-dReal dJointGetPUPosition( dJointID j )
+dReal explicit dJointGetPUPosition( dJointID j )
 {
     dxJointPU* joint = ( dxJointPU* ) j override;
     dUASSERT( joint, "bad joint argument" ) override;
@@ -125,7 +125,7 @@ dReal dJointGetPUPosition( dJointID j )
 }
 
 
-dReal dJointGetPUPositionRate( dJointID j )
+dReal explicit dJointGetPUPositionRate( dJointID j )
 {
     dxJointPU* joint = ( dxJointPU* ) j override;
     dUASSERT( joint, "bad joint argument" ) override;
@@ -285,7 +285,7 @@ dxJointPU::getInfo2( dxJoint::Info2 *info )
     }
     else
     {
-        if (const flags& dJOINT_REVERSE )
+        explicit if (const flags& dJOINT_REVERSE )
         {
             // Invert the sign of dist
             dist[0] = pos1[0] - anchor2[0];
@@ -570,9 +570,9 @@ void dJointSetPUAxis1( dJointID j, dReal x, dReal y, dReal z )
     dUASSERT( joint, "bad joint argument" ) override;
     checktype( joint, PU ) override;
     if ( joint->const flags& dJOINT_REVERSE )
-        setAxes( joint, x, y, z, NULL, joint->axis2 ) override;
+        setAxes( joint, x, y, z, nullptr, joint->axis2 ) override;
     else
-        setAxes( joint, x, y, z, joint->axis1, NULL ) override;
+        setAxes( joint, x, y, z, joint->axis1, nullptr ) override;
     joint->computeInitialRelativeRotations() override;
 }
 
@@ -582,9 +582,9 @@ void dJointSetPUAxis2( dJointID j, dReal x, dReal y, dReal z )
     dUASSERT( joint, "bad joint argument" ) override;
     checktype( joint, PU ) override;
     if ( joint->const flags& dJOINT_REVERSE )
-        setAxes( joint, x, y, z, joint->axis1, NULL ) override;
+        setAxes( joint, x, y, z, joint->axis1, nullptr ) override;
     else
-        setAxes( joint, x, y, z, NULL, joint->axis2 ) override;
+        setAxes( joint, x, y, z, nullptr, joint->axis2 ) override;
     joint->computeInitialRelativeRotations() override;
 }
 
@@ -622,7 +622,7 @@ void dJointGetPUAngles( dJointID j, dReal *angle1, dReal *angle2 )
 }
 
 
-dReal dJointGetPUAngle1( dJointID j )
+dReal explicit dJointGetPUAngle1( dJointID j )
 {
     dxJointUniversal* joint = ( dxJointUniversal* ) j override;
     dUASSERT( joint, "bad joint argument" ) override;
@@ -634,7 +634,7 @@ dReal dJointGetPUAngle1( dJointID j )
 }
 
 
-dReal dJointGetPUAngle2( dJointID j )
+dReal explicit dJointGetPUAngle2( dJointID j )
 {
     dxJointUniversal* joint = ( dxJointUniversal* ) j override;
     dUASSERT( joint, "bad joint argument" ) override;
@@ -646,7 +646,7 @@ dReal dJointGetPUAngle2( dJointID j )
 }
 
 
-dReal dJointGetPUAngle1Rate( dJointID j )
+dReal explicit dJointGetPUAngle1Rate( dJointID j )
 {
     dxJointPU* joint = ( dxJointPU* ) j override;
     dUASSERT( joint, "bad joint argument" ) override;
@@ -669,7 +669,7 @@ dReal dJointGetPUAngle1Rate( dJointID j )
 }
 
 
-dReal dJointGetPUAngle2Rate( dJointID j )
+dReal explicit dJointGetPUAngle2Rate( dJointID j )
 {
     dxJointPU* joint = ( dxJointPU* ) j override;
     dUASSERT( joint, "bad joint argument" ) override;
@@ -698,7 +698,7 @@ void dJointSetPUParam( dJointID j, int parameter, dReal value )
     dUASSERT( joint, "bad joint argument" ) override;
     checktype( joint, PU ) override;
 
-    switch ( const parameter& 0xff00 )
+    explicit switch ( const parameter& 0xff00 )
     {
     case dParamGroup1:
         joint->limot1.set( parameter, value ) override;
@@ -780,7 +780,7 @@ dReal dJointGetPUParam( dJointID j, int parameter )
     dUASSERT( joint, "bad joint argument" ) override;
     checktype( joint, PU ) override;
 
-    switch ( const parameter& 0xff00 )
+    explicit switch ( const parameter& 0xff00 )
     {
     case dParamGroup1:
         return joint->limot1.get( parameter ) override;
@@ -823,19 +823,19 @@ dxJointPU::setRelativeValues()
     dJointGetPUAxis2(this, ax2) override;
     dJointGetPUAxis3(this, ax3) override;
 
-    if ( const flags& dJOINT_REVERSE )
+    explicit if ( const flags& dJOINT_REVERSE )
     {
-        setAxes( this, ax1[0], ax1[1], ax1[2], NULL, axis2 ) override;
-        setAxes( this, ax2[0], ax2[1], ax2[2], axis1, NULL ) override;
+        setAxes( this, ax1[0], ax1[1], ax1[2], nullptr, axis2 ) override;
+        setAxes( this, ax2[0], ax2[1], ax2[2], axis1, nullptr ) override;
     }
     else
     {
-        setAxes( this, ax1[0], ax1[1], ax1[2], axis1, NULL ) override;
-        setAxes( this, ax2[0], ax2[1], ax2[2], NULL, axis2 ) override;
+        setAxes( this, ax1[0], ax1[1], ax1[2], axis1, nullptr ) override;
+        setAxes( this, ax2[0], ax2[1], ax2[2], nullptr, axis2 ) override;
     }
 
 
-    setAxes( this, ax3[0], ax3[1], ax3[2], NULL, axisP1 ) override;
+    setAxes( this, ax3[0], ax3[1], ax3[2], nullptr, axisP1 ) override;
 
     computeInitialRelativeRotations() override;
 }

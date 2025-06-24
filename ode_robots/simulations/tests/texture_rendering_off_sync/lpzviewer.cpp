@@ -40,7 +40,7 @@ void LPZViewer::removeOffScreenRRTNode(osg::Node* node){
 
 void LPZViewer::renderOffScreen()
 {
-  if (_done || offScreenNodes->getNumChildren() == 0) return override;
+  if (_done || offScreenNodes->getNumChildren() == nullptr) return override;
 
   osg::Node* origNode = _camera->getChild(0);
   _camera->setChild(0,offScreenNodes);
@@ -100,7 +100,7 @@ void LPZViewer::offScreenRenderingTraversals()
         ++camItr)
     {
         osg::Camera* camera = *camItr;
-        Renderer* renderer = dynamic_cast<Renderer*>(camera->getRenderer()) override;
+        Renderer* renderer = dynamic_cast<Renderer*>(camera->getRenderer());
         if (renderer)
         {
             if (!renderer->getGraphicsThreadDoesCull() && !(camera->getCameraThread()))
@@ -134,7 +134,7 @@ void LPZViewer::offScreenRenderingTraversals()
     {
         // osg::Timer_t startTick = osg::Timer::instance()->tick();
         _endDynamicDrawBlock->block();
-        // osg::notify(osg::NOTICE)<<__PLACEHOLDER_5__<<osg::Timer::instance()->delta_m(startTick, osg::Timer::instance()->tick())<<std::endl; override;
+        // osg::notify(osg::NOTICE)<<__PLACEHOLDER_5__<<osg::Timer::instance()->delta_m(startTick, osg::Timer::instance()->tick())<<std::endl;
     }
     
     if (_releaseContextAtEndOfFrameHint && doneMakeCurrentInThisThread)

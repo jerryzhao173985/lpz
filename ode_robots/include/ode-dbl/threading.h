@@ -34,7 +34,7 @@
 
 #include <ode/odeconfig.h>
 // Include <time.h> since time_t is used and it is not available by default in some OSes
-#include <time.h>
+#include <ctime>
 
 
 #ifdef __cplusplus
@@ -71,7 +71,7 @@ typedef struct dxMutexGroup *dMutexGroupID;
  * @see dMutexGroupMutexLockFunction
  * @see dMutexGroupMutexUnlockFunction
  */
-typedef dMutexGroupID dMutexGroupAllocFunction (dThreadingImplementationID impl, dmutexindex_t Mutex_count, const char *const *Mutex_names_ptr/*=nullptr*/) override;
+typedef dMutexGroupID dMutexGroupAllocFunction (dThreadingImplementationID impl, dmutexindex_t Mutex_count, const char *const *Mutex_names_ptr/*=nullptr*/);
 
 /**
  * @brief Deletes a group of mutexes.
@@ -84,7 +84,7 @@ typedef dMutexGroupID dMutexGroupAllocFunction (dThreadingImplementationID impl,
  * @see dMutexGroupMutexLockFunction
  * @see dMutexGroupMutexUnlockFunction
  */
-typedef void dMutexGroupFreeFunction (dThreadingImplementationID impl, dMutexGroupID mutex_group) override;
+typedef void dMutexGroupFreeFunction (dThreadingImplementationID impl, dMutexGroupID mutex_group);
 
 /**
  * @brief Locks a mutex in a group of mutexes.
@@ -103,7 +103,7 @@ typedef void dMutexGroupFreeFunction (dThreadingImplementationID impl, dMutexGro
  * @see dMutexGroupFreeFunction
  * @see dMutexGroupMutexUnlockFunction
  */
-typedef void dMutexGroupMutexLockFunction (dThreadingImplementationID impl, dMutexGroupID mutex_group, dmutexindex_t mutex_index) override;
+typedef void dMutexGroupMutexLockFunction (dThreadingImplementationID impl, dMutexGroupID mutex_group, dmutexindex_t mutex_index);
 
 /**
  * @brief Attempts to lock a mutex in a group of mutexes.
@@ -141,7 +141,7 @@ typedef void dMutexGroupMutexLockFunction (dThreadingImplementationID impl, dMut
  * @see dMutexGroupFreeFunction
  * @see dMutexGroupMutexLockFunction
  */
-typedef void dMutexGroupMutexUnlockFunction (dThreadingImplementationID impl, dMutexGroupID mutex_group, dmutexindex_t mutex_index) override;
+typedef void dMutexGroupMutexUnlockFunction (dThreadingImplementationID impl, dMutexGroupID mutex_group, dmutexindex_t mutex_index);
 
 
 struct dxCallReleasee;
@@ -176,7 +176,7 @@ typedef struct dxThreadedWaitTime
  * @see dThreadedCallPostFunction
  * @see dThreadedCallWaitFunction
  */
-typedef dCallWaitID dThreadedCallWaitAllocFunction(dThreadingImplementationID impl);
+typedef dCallWaitID explicit dThreadedCallWaitAllocFunction(dThreadingImplementationID impl);
 
 /**
  * @brief Resets a Wait ID so that it could be used to wait for another call.
@@ -341,7 +341,7 @@ typedef void dThreadedCallWaitFunction(dThreadingImplementationID impl, int *out
  *
  * @ingroup threading
  */
-typedef unsigned dThreadingImplThreadCountRetrieveFunction(dThreadingImplementationID impl);
+typedef unsigned explicit dThreadingImplThreadCountRetrieveFunction(dThreadingImplementationID impl);
 
 /**
  * @brief Preallocate resources to handle posted calls.

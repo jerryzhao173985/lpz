@@ -34,10 +34,7 @@
 
 
 namespace osg {
-class Image;
-}
-
-namespace lpzrobots {
+class Image{
 
   class OSGCylinder;
   class OSGBox;
@@ -66,7 +63,7 @@ namespace lpzrobots {
 
   /** A Robot Camera. Implements a simulated camera with full OpenGL rendering.
    */
-  class Camera {
+  class Camera{
   public:
     struct PostDrawCallback : public osg::Camera::DrawCallback {
       explicit PostDrawCallback(Camera* cam_) : cam(cam_) { }
@@ -77,7 +74,7 @@ namespace lpzrobots {
 
     /// structure to store the image data and information for display
     struct CameraImage{
-      CameraImage(){} override;
+      CameraImage(){};
       CameraImage(osg::Image* img, bool show, float scale, const std::string& name)
         : img(img), show(show), scale(scale), name(name){
       }
@@ -96,7 +93,7 @@ namespace lpzrobots {
         usually the processors use the last image in this list (result of last processing).
      */
 
-    Camera( const CameraConf& conf = getDefaultConf() ) override;
+    Camera( const CameraConf& conf = getDefaultConf() );
 
     static CameraConf getDefaultConf() const {
       CameraConf c;
@@ -113,7 +110,7 @@ namespace lpzrobots {
       return c;
     }
 
-    virtual ~Camera();
+    virtual ~Camera() override;
 
     /** initializes the camera. The OSG camera is created and the
         raw image and the imageprocessor is initialized.
@@ -129,13 +126,13 @@ namespace lpzrobots {
     /// relative pose of the camera
     virtual osg::Matrix getPose();
 
-    // virtual bool sense(const GlobalData& globaldata);
+    // virtual bool explicit explicit sense(const GlobalData& globaldata);
 
     /// all images (raw and processed)
-    virtual const CameraImages& getImages() const override { return cameraImages;}
+    virtual const CameraImages& getImages() const { return cameraImages;}
 
     /// last image of processing stack
-    virtual const osg::Image* getImage() const override { return cameraImages.back().img;}
+    virtual const osg::Image* getImage() const { return cameraImages.back().img;}
 
     virtual osg::Camera* getRRTCam() const { return cam;}
 

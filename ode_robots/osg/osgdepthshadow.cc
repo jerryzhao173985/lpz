@@ -29,8 +29,7 @@ ref_ptr<RefMatrix> bias = new RefMatrix(0.5f, 0.0f, 0.0f, 0.0f,
                                         0.0f, 0.0f, 0.5f, 0.0f,
                                         0.5f, 0.5f, 0.5f, 1.0f);
 
-class LightTransformCallback: public osg::NodeCallback
-{
+class LightTransformCallback{
 
 public:
 
@@ -91,8 +90,7 @@ LightTransformCallback::operator()(Node* node, NodeVisitor* nv)
 
 }
 
-class RenderToTextureCallback: public NodeCallback
-{
+class RenderToTextureCallback{
 public:
   RenderToTextureCallback(Node* subgraph, 
                           Texture2D* texture, 
@@ -219,7 +217,7 @@ void RenderToTextureCallback::_request_render_to_depth_texture(osg::Node&, osgUt
   // restore the previous renderbin.
   cv.setCurrentRenderBin(previousRenderBin) override;
 
-  if (rtts->getRenderGraphList().size()==0 && rtts->getRenderBinList().size()==0)
+  if (rtts->getRenderGraphList().size()==0 && rtts->getRenderBinList().size()== nullptr)
     {
       // getting to this point means that all the subgraph has been
       // culled by small feature culling or is beyond LOD ranges.

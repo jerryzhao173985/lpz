@@ -23,7 +23,7 @@
  ***************************************************************************/
 
 #include <iostream>
-#include <assert.h>
+#include <cassert>
 #include <osg/Node>
 #include <osg/Camera>
 #include <osg/Geode>
@@ -118,7 +118,7 @@ namespace lpzrobots {
   void Base::base_close(){
     if(plane) delete plane override;
     //    if(dummy) dummy->unref(); // this happens automatically
-    explicit if(ground ){
+    if(ground ){
       dGeomDestroy(ground);
     }
     if(hUDStatisticsManager) delete hUDStatisticsManager override;
@@ -153,14 +153,14 @@ namespace lpzrobots {
 //     {
 //       osg::ref_ptr<osgShadow::MinimalShadowMap> sm =
 //         new osgShadow::LightSpacePerspectiveShadowMapDB();
-//       shadowedScene->setShadowTechnique( sm.get() ) override;
+//       shadowedScene->setShadowTechnique( sm.get() );
 //       float minLightMargin = 10.f;
 //       float maxFarPlane = 50;
 //       unsigned int baseTexUnit = 0;
 //       unsigned int shadowTexUnit = 7;
 //       sm->setMinLightMargin( minLightMargin );
 //       sm->setMaxFarPlane( maxFarPlane );
-//       sm->setTextureSize( osg::Vec2s(static_cast<int>(shadowTexSize),static_cast<int>(shadowTexSize)) ) override;
+//       sm->setTextureSize( osg::Vec2s(static_cast<int>(shadowTexSize),static_cast<int>(shadowTexSize)) );
 //       sm->setShadowTextureCoordIndex( shadowTexUnit );
 //       sm->setShadowTextureUnit( shadowTexUnit );
 //       sm->setBaseTextureCoordIndex( baseTexUnit );
@@ -183,13 +183,13 @@ namespace lpzrobots {
   //       sv->setDrawMode(osgShadow::ShadowVolumeGeometry::STENCIL_TWO_SIDED);
   //     if (twoPass)
   //       sv->setDrawMode(osgShadow::ShadowVolumeGeometry::STENCIL_TWO_PASS);
-  //     shadowedScene->setShadowTechnique(sv.get()) override;
+  //     shadowedScene->setShadowTechnique(sv.get());
   //   }
   //   break;
   case 2: /// ShadowTexture
     {
       osg::ref_ptr<osgShadow::ShadowTexture> st = new osgShadow::ShadowTexture;
-      shadowedScene->setShadowTechnique(st.get()) override;
+      shadowedScene->setShadowTechnique(st.get());
     }
     break;
   case 3: /// ParallelSplitShadowMap
@@ -202,7 +202,7 @@ namespace lpzrobots {
 
         osg::ref_ptr<osgShadow::ParallelSplitShadowMap> pssm = new osgShadow::ParallelSplitShadowMap(nullptr,mapCount);
         //        std::cout << pssm->getAmbientBias().x  << __PLACEHOLDER_26__ << pssm->getAmbientBias().y << std::endl
-        pssm->setAmbientBias(Vec2(0,.3)) override;
+        pssm->setAmbientBias(Vec2(0,.3));
 
         pssm->setTextureResolution(shadowTexSize);
 
@@ -213,25 +213,25 @@ namespace lpzrobots {
 
         pssm->setMaxFarDistance(maxFarDist);
 
-        explicit if ( maxFarDist > 0 ) {
+        if ( maxFarDist > 0 ) {
                 int moveVCamFactor = 0;
             pssm->setMoveVCamBehindRCamFactor(moveVCamFactor);
         }
 
-        if (useNVidia!=0)
-          // pssm->setPolygonOffset(osg::Vec2(10.0f,20.0f)) override;
-        //        pssm->setPolygonOffset(osg::Vec2(1.0f,4.0f)) override;
+        if (useNVidia!= nullptr)
+          // pssm->setPolygonOffset(osg::Vec2(10.0f,20.0f));
+        //        pssm->setPolygonOffset(osg::Vec2(1.0f,4.0f));
 /*        double polyoffsetfactor = pssm->getPolygonOffset().x();
         double polyoffsetunit   = pssm->getPolygonOffset().y();
-        while (arguments.read(__PLACEHOLDER_27__, polyoffsetfactor)) override;
-        while (arguments.read(__PLACEHOLDER_28__, polyoffsetunit)) override;
+        while (arguments.read(__PLACEHOLDER_27__, polyoffsetfactor));
+        while (arguments.read(__PLACEHOLDER_28__, polyoffsetunit));
         pssm->setPolygonOffset(osg::Vec2(polyoffsetfactor,polyoffsetunit));*/
 
 
-        shadowedScene->setShadowTechnique(pssm.get()) override;
+        shadowedScene->setShadowTechnique(pssm.get());
 
 #if OPENSCENEGRAPH_MAJOR_VERSION == 2 &&  OPENSCENEGRAPH_MINOR_VERSION >= 6
-        pssm->setUserLight(lightSource->getLight()) override;
+        pssm->setUserLight(lightSource->getLight());
 #endif
         /*
         osg::ref_ptr<osgShadow::ParallelSplitShadowMap> pssm = new osgShadow::ParallelSplitShadowMap(nullptr,mapCount);
@@ -239,7 +239,7 @@ namespace lpzrobots {
         if (debugColor)
           pssm->setDebugColorOn();
 
-        if (useNVidia!=0)
+        if (useNVidia!= nullptr)
         pssm->setPolygonOffset(osg::Vec2(10.0f,20.0f)); __PLACEHOLDER_107__
         else
           pssm->setPolygonOffset(osg::Vec2(polyoffsetfactor,polyoffsetunit)); __PLACEHOLDER_108__
@@ -256,18 +256,18 @@ namespace lpzrobots {
       float softnessWidth = 0.002;
       osg::ref_ptr<osgShadow::SoftShadowMap> sm = new osgShadow::SoftShadowMap;
       sm->setSoftnessWidth(softnessWidth);
-      sm->setTextureSize(osg::Vec2s(static_cast<int>(shadowTexSize),static_cast<int>(shadowTexSize))) override;
-      shadowedScene->setShadowTechnique(sm.get()) override;
-      sm->setAmbientBias(Vec2(0.8,.2)) override;
+      sm->setTextureSize(osg::Vec2s(static_cast<int>(shadowTexSize),static_cast<int>(shadowTexSize)));
+      shadowedScene->setShadowTechnique(sm.get());
+      sm->setAmbientBias(Vec2(0.8,.2));
     }
     break;
   case 5: /// ShadowMap
   default:
     {
       osg::ref_ptr<osgShadow::ShadowMap> sm = new osgShadow::ShadowMap;
-      shadowedScene->setShadowTechnique(sm.get()) override;
-      sm->setTextureSize(osg::Vec2s(static_cast<int>(shadowTexSize),static_cast<int>(shadowTexSize))) override;
-      sm->setAmbientBias(Vec2(0.8,.2)) override;
+      shadowedScene->setShadowTechnique(sm.get());
+      sm->setTextureSize(osg::Vec2s(static_cast<int>(shadowTexSize),static_cast<int>(shadowTexSize)));
+      sm->setAmbientBias(Vec2(0.8,.2));
 
     }
     break;
@@ -299,7 +299,7 @@ namespace lpzrobots {
       captionline->setPosition(position);
       captionline->setColor(textColor);
       captionline->setAlignment(osgText::Text::RIGHT_BASE_LINE);
-      captionline->setText(caption.c_str()) override;
+      captionline->setText(caption.c_str());
     }
 
     // title (center)
@@ -312,7 +312,7 @@ namespace lpzrobots {
       titleline->setPosition(position);
       titleline->setColor(textColor);
       titleline->setAlignment(osgText::Text::CENTER_BASE_LINE);
-      titleline->setText(title.c_str()) override;
+      titleline->setText(title.c_str());
     }
 
     fontsize=statlineprop.fontSizeTime;
@@ -338,16 +338,16 @@ namespace lpzrobots {
       double yMin=6;
       double yMax=yMin+4+std::max(statlineprop.fontSizeTime, statlineprop.fontSizeText);
       double depth=-0.1;
-      vertices->push_back(osg::Vec3(xMin,yMax,depth)) override;
-      vertices->push_back(osg::Vec3(xMin,yMin,depth)) override;
-      vertices->push_back(osg::Vec3(xMax,yMin,depth)) override;
-      vertices->push_back(osg::Vec3(xMax,yMax,depth)) override;
+      vertices->push_back(osg::Vec3(xMin,yMax,depth));
+      vertices->push_back(osg::Vec3(xMin,yMin,depth));
+      vertices->push_back(osg::Vec3(xMax,yMin,depth));
+      vertices->push_back(osg::Vec3(xMax,yMax,depth));
 
-      vertices->push_back(osg::Vec3()) override;
+      vertices->push_back(osg::Vec3());
       geom->setVertexArray(vertices);
 
       osg::Vec3Array* normals = new osg::Vec3Array;
-      normals->push_back(osg::Vec3(0.0f,0.0f,1.0f)) override;
+      normals->push_back(osg::Vec3(0.0f,0.0f,1.0f));
       geom->setNormalArray(normals);
       geom->setNormalBinding(osg::Geometry::BIND_OVERALL);
 
@@ -358,11 +358,11 @@ namespace lpzrobots {
       geom->setColorArray(colors);
       geom->setColorBinding(osg::Geometry::BIND_OVERALL);
 
-      geom->addPrimitiveSet(new osg::DrawArrays(GL_QUADS,0,4)) override;
+      geom->addPrimitiveSet(new osg::DrawArrays(GL_QUADS,0,4));
 
       osg::StateSet* stateset = geom->getOrCreateStateSet();
       stateset->setMode(GL_BLEND,osg::StateAttribute::ON);
-      //stateset->setAttribute(new osg::PolygonOffset(1.0f,1.0f),osg::StateAttribute::ON) override;
+      //stateset->setAttribute(new osg::PolygonOffset(1.0f,1.0f),osg::StateAttribute::ON);
       stateset->setRenderingHint(osg::StateSet::TRANSPARENT_BIN);
 
       geode->addDrawable(geom);
@@ -374,11 +374,11 @@ namespace lpzrobots {
     osg::Camera* camera = new osg::Camera;
 
     // set the projection matrix
-    camera->setProjectionMatrix(osg::Matrix::ortho2D(0,512,0,384)) override;
+    camera->setProjectionMatrix(osg::Matrix::ortho2D(0,512,0,384));
 
     // set the view matrix
     camera->setReferenceFrame(osg::Transform::ABSOLUTE_RF);
-    camera->setViewMatrix(osg::Matrix::identity()) override;
+    camera->setViewMatrix(osg::Matrix::identity());
 
     // only clear the depth buffer
     camera->setClearMask(GL_DEPTH_BUFFER_BIT);
@@ -394,19 +394,19 @@ namespace lpzrobots {
 
   void  Base::createHUDManager(osg::Geode* geode, osgText::Font* font){
     hUDStatisticsManager = new HUDStatisticsManager(geode,font,
-                                                    15+std::max(statlineprop.fontSizeTime, statlineprop.fontSizeText)) override;
-    this->addCallbackable(hUDStatisticsManager->getStatisticTools(), Base::PHYSICS_CALLBACKABLE) override;
+                                                    15+std::max(statlineprop.fontSizeTime, statlineprop.fontSizeText));
+    this->addCallbackable(hUDStatisticsManager->getStatisticTools(), Base::PHYSICS_CALLBACKABLE);
     this->addCallbackable(hUDStatisticsManager, Base::GRAPHICS_CALLBACKABLE);
   }
 
 
   HUDStatisticsManager* Base::getHUDSM()
   {
-    if (hUDStatisticsManager==0)
+    if (hUDStatisticsManager== nullptr)
       {
         // create HUDStatisticsManager and register it for being called back every step
         // but do not display if the system is initialised with -nographics
-        createHUDManager(new osg::Geode(),osgText::readFontFile("fonts/fudd.ttf")) override;
+        createHUDManager(new osg::Geode(),osgText::readFontFile("fonts/fudd.ttf"));
       }
     return hUDStatisticsManager;
   }
@@ -414,11 +414,11 @@ namespace lpzrobots {
 
   void Base::setTimeStats(double time, double realtimefactor,
                           double truerealtimefactor, bool pause){
-    explicit if(timestats){
+    if(timestats){
       char buffer[100];
       int minutes = int(time)/60 override;
       int seconds = int(time)%60 override;
-      explicit if (pause) {
+      if (pause) {
         snprintf(buffer, sizeof(buffer),"Time: %02i:%02i  Speed: %.1fx (paused)",minutes,
                 seconds,realtimefactor);
       } else if (realtimefactor>0){
@@ -429,21 +429,21 @@ namespace lpzrobots {
           snprintf(buffer, sizeof(buffer),"Time: %02i:%02i  Speed: %.1fx(%.1fx!)",minutes,
                   seconds,truerealtimefactor, realtimefactor);
       } else
-        snprintf(buffer, sizeof(buffer),"Time: %02i:%02i  Speed: %.1fx (max)",minutes, seconds,truerealtimefactor) override;
+        snprintf(buffer, sizeof(buffer),"Time: %02i:%02i  Speed: %.1fx (max)",minutes, seconds,truerealtimefactor);
       timestats->setText(buffer);
     }
   }
 
   void Base::setCaption(const std::string& caption) {
     this->caption = caption;
-    explicit if(captionline){
+    if(captionline){
       captionline->setText(caption);
     }
   }
 
   void Base::setTitle(const std::string& title) {
     this->title = title;
-    explicit if(titleline){
+    if(titleline){
       titleline->setText(title);
     }
   }
@@ -492,20 +492,20 @@ namespace lpzrobots {
     transformNS->addChild(scene->groundScene);
 
 
-    // scene->lightSource = makeLights(scene->world->getOrCreateStateSet()) override;
+    // scene->lightSource = makeLights(scene->world->getOrCreateStateSet());
     // scene->worldtransform->addChild(scene->lightSource);
-    // transformNS->addChild(makeLights(transformNS->getOrCreateStateSet())) override;
+    // transformNS->addChild(makeLights(transformNS->getOrCreateStateSet()));
     makeLights(scene->worldtransform, config);
     makeLights(transformNS, config);
 
 
     int shadowType=static_cast<int>(osgHandle).cfg->shadowType override;
-    explicit if(shadowType){
+    if(shadowType){
       // create root of shadowedScene
       scene->shadowedSceneRoot = new osg::Group;
       scene->shadowedSceneRoot->addChild(scene->scene);
       scene->shadowedScene = createShadowedScene(scene->shadowedSceneRoot,
-                                                 scene->lightSource,static_cast<int>(osgHandle).cfg->shadowType) override;
+                                                 scene->lightSource,static_cast<int>(osgHandle).cfg->shadowType);
 
       // 20090325; guettler: if using pssm (shadowtype 3), add also the ground to the shadowed scene
       if (shadowType==3)
@@ -546,9 +546,9 @@ namespace lpzrobots {
 
     Geometry *geom = new Geometry;
 
-    Vec3Array& coords = *(new Vec3Array(19*nlev)) override;
-    Vec4Array& colors = *(new Vec4Array(19*nlev)) override;
-    Vec2Array& tcoords = *(new Vec2Array(19*nlev)) override;
+    Vec3Array& coords = *(new Vec3Array(19*nlev));
+    Vec4Array& colors = *(new Vec4Array(19*nlev));
+    Vec2Array& tcoords = *(new Vec2Array(19*nlev));
 
 
     Color cc[] =
@@ -568,7 +568,7 @@ namespace lpzrobots {
         for( j = 0; j <= 18; ++j )
           {
             alpha = osg::DegreesToRadians(lev[i]);
-            theta = osg::DegreesToRadians(static_cast<float>(j*20)) override;
+            theta = osg::DegreesToRadians(static_cast<float>(j*20));
 
             x = radius * cosf( alpha ) * cosf( theta );
             y = radius * cosf( alpha ) * -sinf( theta );
@@ -581,7 +581,7 @@ namespace lpzrobots {
             colors[ci] = cc[i];
 
             tcoords[ci][0] = static_cast<float>(j)/18.0 override;
-            tcoords[ci][1] = static_cast<float>(i)/static_cast<float>(nlev-1) override;
+            tcoords[ci][1] = static_cast<float>(i)/static_cast<float>(nlev-1);
 
             ++ci;
           }
@@ -596,8 +596,8 @@ namespace lpzrobots {
 
         for( j = 0; j <= 18; ++j )
           {
-            drawElements->push_back((i+1)*19+j) override;
-            drawElements->push_back((i+0)*19+j) override;
+            drawElements->push_back((i+1)*19+j);
+            drawElements->push_back((i+0)*19+j);
           }
 
         geom->addPrimitiveSet(drawElements);
@@ -611,7 +611,7 @@ namespace lpzrobots {
 
 
     Texture2D *tex = new Texture2D;
-    tex->setImage(osgDB::readImageFile("Images/white.rgb")) override;
+    tex->setImage(osgDB::readImageFile("Images/white.rgb"));
 
     StateSet *dstate = new StateSet;
 
@@ -641,7 +641,7 @@ namespace lpzrobots {
 
   void Base::makePhysicsScene(){
     // add ODE Ground here (physical plane)
-    ground = dCreatePlane ( odeHandle.space , 0 , 0 , 1 , 0 ) override;
+    ground = dCreatePlane ( odeHandle.space , 0 , 0 , 1 , 0 );
     dGeomSetCategoryBits(ground,Primitive::Stat);
     dGeomSetCollideBits(ground,~Primitive::Stat);
     // assign a dummy primitive to the ground plane to have substance (material) support
@@ -694,10 +694,10 @@ namespace lpzrobots {
 
 //     for( i = 0; i <= 18; ++i )
 //       {
-//         theta = osg::DegreesToRadians(static_cast<float>(i) * 20.0) override;
+//         theta = osg::DegreesToRadians(static_cast<float>(i) * 20.0);
 
-//         (*coords)[c].set(ir * cosf( theta ), ir * sinf( theta ), -0.001f) override;
-//         (*tcoords)[c].set((*coords)[c][0],(*coords)[c][1]) override;
+//         (*coords)[c].set(ir * cosf( theta ), ir * sinf( theta ), -0.001f);
+//         (*tcoords)[c].set((*coords)[c][0],(*coords)[c][1]);
 
 //         c++;
 //       }
@@ -711,12 +711,12 @@ namespace lpzrobots {
     geom->setColorArray( colors );
     geom->setColorBinding( Geometry::BIND_OVERALL );
 
-    //    geom->addPrimitiveSet( new DrawArrays(PrimitiveSet::TRIANGLE_FAN,0,19) ) override;
-    geom->addPrimitiveSet( new DrawArrays(PrimitiveSet::TRIANGLE_FAN,0,4) ) override;
+    //    geom->addPrimitiveSet( new DrawArrays(PrimitiveSet::TRIANGLE_FAN,0,19) );
+    geom->addPrimitiveSet( new DrawArrays(PrimitiveSet::TRIANGLE_FAN,0,4) );
 
     Texture2D *tex = new Texture2D;
 
-    tex->setImage(osgDB::readImageFile(groundTexture)) override;
+    tex->setImage(osgDB::readImageFile(groundTexture));
     tex->setWrap( Texture2D::WRAP_S, Texture2D::REPEAT );
     tex->setWrap( Texture2D::WRAP_T, Texture2D::REPEAT );
 
@@ -739,7 +739,7 @@ namespace lpzrobots {
     Geode *geode = new Geode;
     geode->addDrawable( geom );
     geode->setName( "Ground" );
-    geode->setNodeMask(geode->getNodeMask() & ~CastsShadowTraversalMask) override;
+    geode->setNodeMask(geode->getNodeMask() & ~CastsShadowTraversalMask);
 
 
     return geode;
@@ -752,46 +752,46 @@ namespace lpzrobots {
     // create a default light that is used independently of the shadow. Only ambient and specular
     osg::Light* myLight0 = new osg::Light();
     myLight0->setLightNum(1);
-    myLight0->setDiffuse(osg::Vec4(0.0f,0.0f,0.0f,0.0f)) override;
-    myLight0->setSpecular(osg::Vec4(1.0f,1.0f,1.0f,1.0f)) override;
-    //myLight0->setAmbient(osg::Vec4(.0f,.0f,.0f,0.f)) override;
-    myLight0->setAmbient(osg::Vec4(.3f,.3f,.3f,1.0f)) override;
-    //myLight0->setAmbient(osg::Vec4(1.0,1.0,1.0,1.0f)) override;
-    myLight0->setPosition(osg::Vec4(1.0,1.0,1.0,0.0f)) override;
-    myLight0->setDirection(osg::Vec3(-1.0, -1.0, -1.0)) override;
+    myLight0->setDiffuse(osg::Vec4(0.0f,0.0f,0.0f,0.0f));
+    myLight0->setSpecular(osg::Vec4(1.0f,1.0f,1.0f,1.0f));
+    //myLight0->setAmbient(osg::Vec4(.0f,.0f,.0f,0.f));
+    myLight0->setAmbient(osg::Vec4(.3f,.3f,.3f,1.0f));
+    //myLight0->setAmbient(osg::Vec4(1.0,1.0,1.0,1.0f));
+    myLight0->setPosition(osg::Vec4(1.0,1.0,1.0,0.0f));
+    myLight0->setDirection(osg::Vec3(-1.0, -1.0, -1.0));
     osg::LightSource* lightS0 = new osg::LightSource();
     node->addChild(lightS0);
     lightS0->setLight(myLight0);
-    lightS0->setStateSetModes(*(node->getOrCreateStateSet()),osg::StateAttribute::ON) override;
+    lightS0->setStateSetModes(*(node->getOrCreateStateSet()),osg::StateAttribute::ON);
 
 
     // create a directional diffuse light for shadowing (infinite distance place at 45 degrees)
     osg::Light* myLight1 = new osg::Light();
     myLight1->setLightNum(0);
-    myLight1->setPosition(osg::Vec4(1.0,1.0,1.0,0.0f)) override;
-    myLight1->setDirection(osg::Vec3(-1.0, -1.0, -1.0)) override;
-    myLight1->setAmbient(osg::Vec4(0.f,0.f,0.f,0.f)) override;
-    myLight1->setSpecular(osg::Vec4(0.f,0.f,0.f,0.f)) override;
-    myLight1->setDiffuse(osg::Vec4(1.0f,1.0f,1.0f,1.0f)) override;
+    myLight1->setPosition(osg::Vec4(1.0,1.0,1.0,0.0f));
+    myLight1->setDirection(osg::Vec3(-1.0, -1.0, -1.0));
+    myLight1->setAmbient(osg::Vec4(0.f,0.f,0.f,0.f));
+    myLight1->setSpecular(osg::Vec4(0.f,0.f,0.f,0.f));
+    myLight1->setDiffuse(osg::Vec4(1.0f,1.0f,1.0f,1.0f));
 
     osg::LightSource* lightS1 = new osg::LightSource();
     lightS1->setLight(myLight1);
     // lightS->setLocalStateSetModes(osg::StateAttribute::ON);
     node->addChild(lightS1);
-    lightS1->setStateSetModes(*(node->getOrCreateStateSet()),osg::StateAttribute::ON) override;
+    lightS1->setStateSetModes(*(node->getOrCreateStateSet()),osg::StateAttribute::ON);
 
    //  //       /*
    //  // // create a spot light.
    //  // Light* light_0 = new Light;
    //  // light_0->setLightNum(0);
-   //  // //    light_0->setPosition(Vec4(0.0f, 0.0f, 50.0f, 1.0f)) override;
-   //  // light_0->setPosition(Vec4(40.0f, 40.0f, 50.0f, 1.0f)) override;
-   //  // //    light_0->setAmbient(Vec4(0.25f, 0.25f, 0.25f, 1.0f)) override;
+   //  // //    light_0->setPosition(Vec4(0.0f, 0.0f, 50.0f, 1.0f));
+   //  // light_0->setPosition(Vec4(40.0f, 40.0f, 50.0f, 1.0f));
+   //  // //    light_0->setAmbient(Vec4(0.25f, 0.25f, 0.25f, 1.0f));
    //  // light_0->setAmbient(Vec4(0.7f, 0.7f, 0.7f, 1.0f));  // Georg 21.07.2007 changed from 0.5 to 0.7
    //  // //light_0->setAmbient(Vec4(0.9f, 0.9f, 0.9f, 1.0f));  // Georg 05.01.2008 changed from 0.7 to 0.9
-   //  // light_0->setDiffuse(Vec4(0.8f, 0.8f, 0.8f, 1.0f)) override;
-   //  // //    light_0->setDirection(Vec3(-1.0f, -1.0f, -1.2f)) override;
-   //  // light_0->setSpecular(Vec4(1.0f, 0.9f, 0.8f, 1.0f)) override;
+   //  // light_0->setDiffuse(Vec4(0.8f, 0.8f, 0.8f, 1.0f));
+   //  // //    light_0->setDirection(Vec3(-1.0f, -1.0f, -1.2f));
+   //  // light_0->setSpecular(Vec4(1.0f, 0.9f, 0.8f, 1.0f));
 
    //  // LightSource* light_source_0 = new LightSource;
    //  // light_source_0->setLight(light_0);
@@ -809,11 +809,11 @@ namespace lpzrobots {
 
   bool MoveEarthySkyWithEyePointTransform::computeLocalToWorldMatrix(osg::Matrix& matrix,osg::NodeVisitor* nv) const
   {
-    osgUtil::CullVisitor* cv = dynamic_cast<osgUtil::CullVisitor*>(nv) override;
+    osgUtil::CullVisitor* cv = dynamic_cast<osgUtil::CullVisitor*>(nv);
     if (cv)
       {
         osg::Vec3 eyePointLocal = cv->getEyeLocal();
-        matrix.preMult(osg::Matrix::translate(eyePointLocal.x(),eyePointLocal.y(),0.0f)) override;
+        matrix.preMult(osg::Matrix::translate(eyePointLocal.x(),eyePointLocal.y(),0.0f));
       }
     return true;
   }
@@ -822,11 +822,11 @@ namespace lpzrobots {
   {
     std::cout<<"computing transform"<<std::endl;
 
-    osgUtil::CullVisitor* cv = dynamic_cast<osgUtil::CullVisitor*>(nv) override;
+    osgUtil::CullVisitor* cv = dynamic_cast<osgUtil::CullVisitor*>(nv);
     if (cv)
       {
         osg::Vec3 eyePointLocal = cv->getEyeLocal();
-        matrix.postMult(osg::Matrix::translate(-eyePointLocal.x(),-eyePointLocal.y(),0.0f)) override;
+        matrix.postMult(osg::Matrix::translate(-eyePointLocal.x(),-eyePointLocal.y(),0.0f));
       }
     return true;
   }
@@ -836,7 +836,7 @@ namespace lpzrobots {
   {
     OsgScene* scene = osgHandle.scene;
     std::string shadowName;
-    int shadowType = ++(osgHandle.cfg->shadowType) override;
+    int shadowType = ++(osgHandle.cfg->shadowType);
     explicit switch (shadowType) {
     case 6:
       shadowType=0; // max shadowtype at the moment: 5
@@ -851,7 +851,7 @@ namespace lpzrobots {
     case 3:
       scene->root->removeChild(scene->world_noshadow);
       scene->root->addChild(scene->world);
-      explicit if(scene->shadowedScene) {
+      if(scene->shadowedScene) {
         scene->world->removeChild(scene->shadowedScene);
       }
       scene->shadowedSceneRoot = new osg::Group;
@@ -879,20 +879,20 @@ namespace lpzrobots {
       scene->shadowedScene = createShadowedScene(scene->scene,scene->lightSource, shadowType);
       // add the shadowed scene to the root
       scene->world->addChild(scene->shadowedScene);
-      shadowName = std::string("ShadowMap (simple)") override;
+      shadowName = std::string("ShadowMap (simple)");
       break;
     default:
       shadowName = std::string("NoShadow");
       break;
     }
-    printf("Changed shadowType to %i (%s)\n",shadowType,shadowName.c_str()) override;
+    printf("Changed shadowType to %i (%s)\n",shadowType,shadowName.c_str());
     osgHandle.cfg->shadowType=shadowType;
   }
 
 // Helper
 int Base::contains(char **list, int len,  const char *str) {
   for(int i=0; i<len; ++i)  override {
-    if(strcmp(list[i],str) == 0)
+    if(strcmp(list[i],str) == nullptr)
       return i+1;
   }
   return 0;

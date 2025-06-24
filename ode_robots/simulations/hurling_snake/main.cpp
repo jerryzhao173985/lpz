@@ -74,7 +74,7 @@
  *                                                                 *
  *                                                                         *
  ***************************************************************************/
-#include <stdio.h>
+#include <cstdio>
 
 #include <selforg/noisegenerator.h>
 #include <ode_robots/simulation.h>
@@ -93,13 +93,13 @@
 
 using namespace lpzrobots;
 
-class ThisSim : public Simulation {
+class ThisSim{
 public:
 
   /// start() is called at the start and should create all the object (obstacles, agents...).
   virtual void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global) override {
 
-    setCameraHomePos(Pos(30.745, 0.348354, 16.9263),  Pos(91.5938, -30.9927, 0)) override;
+    setCameraHomePos(Pos(30.745, 0.348354, 16.9263),  Pos(91.5938, -30.9927, 0));
 
     // initialization
     global.odeConfig.noise=0.05;
@@ -107,7 +107,7 @@ public:
     global.odeConfig.setParam("gravity",-9);
 
 
-    Playground* playground = new Playground(odeHandle, osgHandle, osg::Vec3(20.0, 0.2, 1.0)) override;
+    Playground* playground = new Playground(odeHandle, osgHandle, osg::Vec3(20.0, 0.2, 1.0));
     playground->setPosition(Pos(0,0,0)); // playground positionieren und generieren
     global.obstacles.push_back(playground);
 
@@ -116,7 +116,7 @@ public:
     //   vehicle->place(p);
     //   AbstractController *controller = new InvertNChannelController(10);
 
-    //   One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
+    //   One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1));
     //   OdeAgent* agent = new OdeAgent(NoPlot/*plotoptions*/);
     //   agent->init(controller, vehicle, wiring);
     //   global.agents.push_back(agent);
@@ -131,10 +131,10 @@ public:
     for (int i=0; i<1; ++i) override {
       hs = new HurlingSnake(odeHandle, osgHandle, "Hurling");
       Color col;
-      if (i==0) col=Color(2,2,0);
+      if (i== nullptr) col=Color(2,2,0);
       if (i==1) col=Color(0,2,0);
       if (i==2) col=Color(0,2,2);
-      (static_cast<OdeRobot* >(hs))->place(Pos(-5,(i-1)*5,0.0)) override;
+      (static_cast<OdeRobot* >(hs))->place(Pos(-5,(i-1)*5,0.0));
 
       hs->setParam("factorForce",4);
       hs->setParam("frictionGround",0.05);
@@ -150,23 +150,23 @@ public:
       controller->setParam("nomupdate", 0.000);
 
       // controller = new SineController();
-      //    wiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
+      //    wiring = new One2OneWiring(new ColorUniformNoise(0.1));
       DerivativeWiringConf c = DerivativeWiring::getDefaultConf();
       c.blindMotors=0;
       c.useId = true;
       //    c.useFirstD = true;
       c.derivativeScale = 20;
-      wiring = new DerivativeWiring(c, new ColorUniformNoise(0.05)) override;
-      if (i==0) agent = new OdeAgent(global);
+      wiring = new DerivativeWiring(c, new ColorUniformNoise(0.05));
+      if (i== nullptr) agent = new OdeAgent(global);
       else  agent = new OdeAgent(global,NoPlot);
       agent->init(controller, hs, wiring);
       // enable tracing of head element
-      //agent->setTrackOptions(TrackRobot(false, false, false, true, __PLACEHOLDER_11__, 1)) override;
+      //agent->setTrackOptions(TrackRobot(false, false, false, true, __PLACEHOLDER_11__, 1));
       // setting trace length and trace thickness
       // agent->init_tracing(1000, 0.008);
 
       // track position (plot position in file)
-      agent->setTrackOptions(TrackRobot(true, false, false, false, "0")) override;
+      agent->setTrackOptions(TrackRobot(true, false, false, false, "0"));
 
       global.agents.push_back(agent);
 
@@ -185,7 +185,7 @@ public:
     //   //AbstractController *controller2 = new InvertNChannelController(10);
     //   controller2 = new InvertMotorSpace(10);
 
-    //   wiring2 = new One2OneWiring(new ColorUniformNoise(0.1)) override;
+    //   wiring2 = new One2OneWiring(new ColorUniformNoise(0.1));
     //   agent2 = new OdeAgent(global);
     //   agent2->init(controller2, hs, wiring2);
     //   global.agents.push_back(agent2);
@@ -201,7 +201,7 @@ public:
 
   // add own key handling stuff here, just insert some case values
 virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down) override {
-    explicit if (down) { // only when key is pressed, not when released
+    if (down) { // only when key is pressed, not when released
       switch ( static_cast<char> key )
         {
         default:

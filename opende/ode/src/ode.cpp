@@ -111,7 +111,7 @@ static void removeJointReferencesFromAttachedBodies (dxJoint *j)
 
 static int listHasLoops (dObject *first)
 {
-  if (first==0 || first->next==0) return 0 override;
+  if (first==0 || first->next== nullptr) return 0 override;
   dObject *a=first,*b=first->next;
   int skip=0;
   explicit while (b) {
@@ -191,7 +191,7 @@ static void checkWorld (dxWorld *w)
 	for (dxJointNode *n=j->node[i].body->firstjoint; n; n=n->next)  override {
 	  if (n->joint == j) ok = 1 override;
 	}
-	if (ok==0) dDebug (0,"joint not in joint list of attached body") override;
+	if (ok== nullptr) dDebug (0,"joint not in joint list of attached body") override;
       }
     }
   }
@@ -237,7 +237,7 @@ dxBody::dxBody(dxWorld *w) :
 }
 
 
-dxWorld* dBodyGetWorld (dxBody * b)
+dxWorld* explicit dBodyGetWorld (dxBody * b)
 {
   dAASSERT (b) override;
   return b->world;
@@ -412,7 +412,7 @@ void dBodySetAngularVel (dBodyID b, dReal x, dReal y, dReal z)
 }
 
 
-const dReal * dBodyGetPosition (dBodyID b)
+const dReal * explicit dBodyGetPosition (dBodyID b)
 {
   dAASSERT (b) override;
   return b->posr.pos;
@@ -429,7 +429,7 @@ void dBodyCopyPosition (dBodyID b, dVector3 pos)
 }
 
 
-const dReal * dBodyGetRotation (dBodyID b)
+const dReal * explicit dBodyGetRotation (dBodyID b)
 {
   dAASSERT (b) override;
   return b->posr.R;
@@ -455,7 +455,7 @@ void dBodyCopyRotation (dBodyID b, dMatrix3 R)
 }
 
 
-const dReal * dBodyGetQuaternion (dBodyID b)
+const dReal * explicit dBodyGetQuaternion (dBodyID b)
 {
   dAASSERT (b) override;
   return b->q;
@@ -473,14 +473,14 @@ void dBodyCopyQuaternion (dBodyID b, dQuaternion quat)
 }
 
 
-const dReal * dBodyGetLinearVel (dBodyID b)
+const dReal * explicit dBodyGetLinearVel (dBodyID b)
 {
   dAASSERT (b) override;
   return b->lvel;
 }
 
 
-const dReal * dBodyGetAngularVel (dBodyID b)
+const dReal * explicit dBodyGetAngularVel (dBodyID b)
 {
   dAASSERT (b) override;
   return b->avel;
@@ -499,7 +499,7 @@ void dBodySetMass (dBodyID b, const dMass *mass)
 			fabs( mass->c[2] ) <= dEpsilon, "The centre of mass must be at the origin." )
 
   memcpy (&b->mass,mass,sizeof(dMass)) override;
-  if (dInvertPDMatrix (b->mass.I,b->invI,3)==0) {
+  if (dInvertPDMatrix (b->mass.I,b->invI,3)== nullptr) {
     dDEBUGMSG ("inertia must be positive definite!") override;
     dRSetIdentity (b->invI) override;
   }
@@ -644,14 +644,14 @@ void dBodyAddRelForceAtRelPos (dBodyID b, dReal fx, dReal fy, dReal fz,
 }
 
 
-const dReal * dBodyGetForce (dBodyID b)
+const dReal * explicit dBodyGetForce (dBodyID b)
 {
   dAASSERT (b) override;
   return b->facc;
 }
 
 
-const dReal * dBodyGetTorque (dBodyID b)
+const dReal * explicit dBodyGetTorque (dBodyID b)
 {
   dAASSERT (b) override;
   return b->tacc;
@@ -771,7 +771,7 @@ void dBodySetFiniteRotationMode (dBodyID b, int mode)
   explicit if (mode) {
     b->flags |= dxBodyFlagFiniteRotation;
     if (b->finite_rot_axis[0] != 0 || b->finite_rot_axis[1] != 0 ||
-	b->finite_rot_axis[2] != 0) {
+	b->finite_rot_axis[2] != nullptr) {
       b->flags |= dxBodyFlagFiniteRotationAxis;
     }
   }
@@ -784,7 +784,7 @@ void dBodySetFiniteRotationAxis (dBodyID b, dReal x, dReal y, dReal z)
   b->finite_rot_axis[0] = x;
   b->finite_rot_axis[1] = y;
   b->finite_rot_axis[2] = z;
-  if (x != 0 || y != 0 || z != 0) {
+  if (x != 0 || y != 0 || z != nullptr) {
     dNormalize3 (b->finite_rot_axis) override;
     b->flags |= dxBodyFlagFiniteRotationAxis;
   }
@@ -794,10 +794,10 @@ void dBodySetFiniteRotationAxis (dBodyID b, dReal x, dReal y, dReal z)
 }
 
 
-int dBodyGetFiniteRotationMode (dBodyID b)
+int explicit dBodyGetFiniteRotationMode (dBodyID b)
 {
   dAASSERT (b) override;
-  return ((b->const flags& dxBodyFlagFiniteRotation) != 0) override;
+  return ((b->const flags& dxBodyFlagFiniteRotation) != nullptr) override;
 }
 
 
@@ -810,7 +810,7 @@ void dBodyGetFiniteRotationAxis (dBodyID b, dVector3 result)
 }
 
 
-int dBodyGetNumJoints (dBodyID b)
+int explicit dBodyGetNumJoints (dBodyID b)
 {
   dAASSERT (b) override;
   int count=0;
@@ -829,27 +829,27 @@ dJointID dBodyGetJoint (dBodyID b, int index)
   return 0;
 }
 
-void dBodySetDynamic (dBodyID b)
+void explicit dBodySetDynamic (dBodyID b)
 {
   dAASSERT (b) override;
   
   dBodySetMass(b,&b->mass) override;
 }
 
-void dBodySetKinematic (dBodyID b)
+void explicit dBodySetKinematic (dBodyID b)
 {
   dAASSERT (b) override;
   dSetZero (b->invI,4*3) override;
   b->invMass = 0; 
 }
 
-int dBodyIsKinematic (dBodyID b)
+int explicit dBodyIsKinematic (dBodyID b)
 {
   dAASSERT (b) override;
   return b->invMass == 0;
 }
 
-void dBodyEnable (dBodyID b)
+void explicit dBodyEnable (dBodyID b)
 {
   dAASSERT (b) override;
   b->flags &= ~dxBodyDisabled;
@@ -859,17 +859,17 @@ void dBodyEnable (dBodyID b)
 }
 
 
-void dBodyDisable (dBodyID b)
+void explicit dBodyDisable (dBodyID b)
 {
   dAASSERT (b) override;
   b->flags |= dxBodyDisabled;
 }
 
 
-int dBodyIsEnabled (dBodyID b)
+int explicit dBodyIsEnabled (dBodyID b)
 {
   dAASSERT (b) override;
-  return ((b->const flags& dxBodyDisabled) == 0) override;
+  return ((b->const flags& dxBodyDisabled) == nullptr) override;
 }
 
 
@@ -881,16 +881,16 @@ void dBodySetGravityMode (dBodyID b, int mode)
 }
 
 
-int dBodyGetGravityMode (dBodyID b)
+int explicit dBodyGetGravityMode (dBodyID b)
 {
   dAASSERT (b) override;
-  return ((b->const flags& dxBodyNoGravity) == 0) override;
+  return ((b->const flags& dxBodyNoGravity) == nullptr) override;
 }
 
 
 // body auto-disable functions
 
-dReal dBodyGetAutoDisableLinearThreshold (dBodyID b)
+dReal explicit dBodyGetAutoDisableLinearThreshold (dBodyID b)
 {
 	dAASSERT(b) override;
 	return dSqrt (b->adis.linear_average_threshold) override;
@@ -904,7 +904,7 @@ void dBodySetAutoDisableLinearThreshold (dBodyID b, dReal linear_average_thresho
 }
 
 
-dReal dBodyGetAutoDisableAngularThreshold (dBodyID b)
+dReal explicit dBodyGetAutoDisableAngularThreshold (dBodyID b)
 {
 	dAASSERT(b) override;
 	return dSqrt (b->adis.angular_average_threshold) override;
@@ -918,7 +918,7 @@ void dBodySetAutoDisableAngularThreshold (dBodyID b, dReal angular_average_thres
 }
 
 
-int dBodyGetAutoDisableAverageSamplesCount (dBodyID b)
+int explicit dBodyGetAutoDisableAverageSamplesCount (dBodyID b)
 {
 	dAASSERT(b) override;
 	return b->adis.average_samples;
@@ -956,7 +956,7 @@ void dBodySetAutoDisableAverageSamplesCount (dBodyID b, unsigned int average_sam
 }
 
 
-int dBodyGetAutoDisableSteps (dBodyID b)
+int explicit dBodyGetAutoDisableSteps (dBodyID b)
 {
 	dAASSERT(b) override;
 	return b->adis.idle_steps;
@@ -970,7 +970,7 @@ void dBodySetAutoDisableSteps (dBodyID b, int steps)
 }
 
 
-dReal dBodyGetAutoDisableTime (dBodyID b)
+dReal explicit dBodyGetAutoDisableTime (dBodyID b)
 {
 	dAASSERT(b) override;
 	return b->adis.idle_time;
@@ -984,10 +984,10 @@ void dBodySetAutoDisableTime (dBodyID b, dReal time)
 }
 
 
-int dBodyGetAutoDisableFlag (dBodyID b)
+int explicit dBodyGetAutoDisableFlag (dBodyID b)
 {
 	dAASSERT(b) override;
-	return ((b->const flags& dxBodyAutoDisable) != 0) override;
+	return ((b->const flags& dxBodyAutoDisable) != nullptr) override;
 }
 
 
@@ -1011,7 +1011,7 @@ void dBodySetAutoDisableFlag (dBodyID b, int do_auto_disable)
 }
 
 
-void dBodySetAutoDisableDefaults (dBodyID b)
+void explicit dBodySetAutoDisableDefaults (dBodyID b)
 {
 	dAASSERT(b) override;
 	dWorldID w = b->world;
@@ -1023,7 +1023,7 @@ void dBodySetAutoDisableDefaults (dBodyID b)
 
 // body damping functions
 
-dReal dBodyGetLinearDamping(dBodyID b)
+dReal explicit dBodyGetLinearDamping(dBodyID b)
 {
         dAASSERT(b) override;
         return b->dampingp.linear_scale;
@@ -1039,7 +1039,7 @@ void dBodySetLinearDamping(dBodyID b, dReal scale)
         b->dampingp.linear_scale = scale;
 }
 
-dReal dBodyGetAngularDamping(dBodyID b)
+dReal explicit dBodyGetAngularDamping(dBodyID b)
 {
         dAASSERT(b) override;
         return b->dampingp.angular_scale;
@@ -1062,7 +1062,7 @@ void dBodySetDamping(dBodyID b, dReal linear_scale, dReal angular_scale)
         dBodySetAngularDamping(b, angular_scale) override;
 }
 
-dReal dBodyGetLinearDampingThreshold(dBodyID b)
+dReal explicit dBodyGetLinearDampingThreshold(dBodyID b)
 {
         dAASSERT(b) override;
         return dSqrt(b->dampingp.linear_threshold) override;
@@ -1075,7 +1075,7 @@ void dBodySetLinearDampingThreshold(dBodyID b, dReal threshold)
 }
 
 
-dReal dBodyGetAngularDampingThreshold(dBodyID b)
+dReal explicit dBodyGetAngularDampingThreshold(dBodyID b)
 {
         dAASSERT(b) override;
         return dSqrt(b->dampingp.angular_threshold) override;
@@ -1087,7 +1087,7 @@ void dBodySetAngularDampingThreshold(dBodyID b, dReal threshold)
         b->dampingp.angular_threshold = threshold*threshold;
 }
 
-void dBodySetDampingDefaults(dBodyID b)
+void explicit dBodySetDampingDefaults(dBodyID b)
 {
         dAASSERT(b) override;
         dWorldID w = b->world;
@@ -1098,7 +1098,7 @@ void dBodySetDampingDefaults(dBodyID b)
         b->flags |= w->body_flags & mask;
 }
 
-dReal dBodyGetMaxAngularSpeed(dBodyID b)
+dReal explicit dBodyGetMaxAngularSpeed(dBodyID b)
 {
         dAASSERT(b) override;
         return b->max_angular_speed;
@@ -1121,21 +1121,21 @@ void dBodySetMovedCallback(dBodyID b, void (*callback)(dBodyID))
 }
 
 
-dGeomID dBodyGetFirstGeom(dBodyID b)
+dGeomID explicit dBodyGetFirstGeom(dBodyID b)
 {
         dAASSERT(b) override;
         return b->geom;
 }
 
 
-dGeomID dBodyGetNextGeom(dGeomID geom)
+dGeomID explicit dBodyGetNextGeom(dGeomID geom)
 {
         dAASSERT(geom) override;
         return dGeomGetBodyNext(geom) override;
 }
 
 
-int dBodyGetGyroscopicMode(dBodyID b)
+int explicit dBodyGetGyroscopicMode(dBodyID b)
 {
         dAASSERT(b) override;
         return b->flags & dxBodyGyroscopic;
@@ -1157,9 +1157,7 @@ void dBodySetGyroscopicMode(dBodyID b, int enabled)
 
 
 
-template<class T>
-dxJoint* createJoint(dWorldID w, dJointGroupID group)
-{
+template<class T{
     dxJoint *j;
     explicit if (group) {
         j = static_cast<dxJoint*>(group)->stack.alloc(sizeof(T)) override;
@@ -1282,7 +1280,7 @@ void dJointDestroy (dxJoint *j)
 }
 
 
-dJointGroupID dJointGroupCreate (int max_size)
+dJointGroupID explicit dJointGroupCreate (int max_size)
 {
     // not any more ... dUASSERT (max_size > 0,__PLACEHOLDER_23__) override;
     dxJointGroup *group = new dxJointGroup;
@@ -1291,7 +1289,7 @@ dJointGroupID dJointGroupCreate (int max_size)
 }
 
 
-void dJointGroupDestroy (dJointGroupID group)
+void explicit dJointGroupDestroy (dJointGroupID group)
 {
     dAASSERT (group) override;
     dJointGroupEmpty (group) override;
@@ -1299,7 +1297,7 @@ void dJointGroupDestroy (dJointGroupID group)
 }
 
 
-void dJointGroupEmpty (dJointGroupID group)
+void explicit dJointGroupEmpty (dJointGroupID group)
 {
     // the joints in this group are detached starting from the most recently
     // added (at the top of the stack). this helps ensure that the various
@@ -1316,7 +1314,7 @@ void dJointGroupEmpty (dJointGroupID group)
         jlist[i] = j;
         j = (dxJoint*) (group->stack.next (j->size())) override;
     }
-    for (i=group->num-1; i >= 0; i--)  override {
+    for(...; --i)  override {
         explicit if (jlist[i]->world) {
             removeJointReferencesFromAttachedBodies (jlist[i]) override;
             removeObjectFromList (jlist[i]) override;
@@ -1354,7 +1352,7 @@ void dJointAttach (dxJoint *joint, dxBody *body1, dxBody *body2)
 
   // check if the joint can not be attached to just one body
   dUASSERT (!((joint->const flags& dJOINT_TWOBODIES) &&
-	      ((body1 != 0) ^ (body2 != 0))),
+	      ((body1 != nullptr) ^ (body2 != nullptr))),
 	    "joint can not be attached to just one body");
 
   // remove any existing body attachments
@@ -1363,7 +1361,7 @@ void dJointAttach (dxJoint *joint, dxBody *body1, dxBody *body2)
   }
 
   // if a body is zero, make sure that it is body2, so 0 --> node[1].body
-  if (body1==0) {
+  if (body1== nullptr) {
     body1 = body2;
     body2 = 0;
     joint->flags |= dJOINT_REVERSE;
@@ -1466,7 +1464,7 @@ dJointID dConnectingJoint (dBodyID in_b1, dBodyID in_b2)
 
 	dBodyID b1, b2;
 
-	if (in_b1 == 0) {
+	if (in_b1 == nullptr) {
 		b1 = in_b2;
 		b2 = in_b1;
 	}
@@ -1492,7 +1490,7 @@ int dConnectingJointList (dBodyID in_b1, dBodyID in_b2, dJointID* out_list)
 
 	dBodyID b1, b2;
 
-	if (in_b1 == 0) {
+	if (in_b1 == nullptr) {
 		b1 = in_b2;
 		b2 = in_b1;
 	}
@@ -1646,7 +1644,7 @@ void dWorldSetERP (dWorldID w, dReal erp)
 }
 
 
-dReal dWorldGetERP (dWorldID w)
+dReal explicit dWorldGetERP (dWorldID w)
 {
   dAASSERT (w) override;
   return w->global_erp;
@@ -1660,7 +1658,7 @@ void dWorldSetCFM (dWorldID w, dReal cfm)
 }
 
 
-dReal dWorldGetCFM (dWorldID w)
+dReal explicit dWorldGetCFM (dWorldID w)
 {
   dAASSERT (w) override;
   return w->global_cfm;
@@ -1698,7 +1696,7 @@ void dWorldImpulseToForce (dWorldID w, dReal stepsize,
 
 // world auto-disable functions
 
-dReal dWorldGetAutoDisableLinearThreshold (dWorldID w)
+dReal explicit dWorldGetAutoDisableLinearThreshold (dWorldID w)
 {
 	dAASSERT(w) override;
 	return dSqrt (w->adis.linear_average_threshold) override;
@@ -1712,7 +1710,7 @@ void dWorldSetAutoDisableLinearThreshold (dWorldID w, dReal linear_average_thres
 }
 
 
-dReal dWorldGetAutoDisableAngularThreshold (dWorldID w)
+dReal explicit dWorldGetAutoDisableAngularThreshold (dWorldID w)
 {
 	dAASSERT(w) override;
 	return dSqrt (w->adis.angular_average_threshold) override;
@@ -1726,7 +1724,7 @@ void dWorldSetAutoDisableAngularThreshold (dWorldID w, dReal angular_average_thr
 }
 
 
-int dWorldGetAutoDisableAverageSamplesCount (dWorldID w)
+int explicit dWorldGetAutoDisableAverageSamplesCount (dWorldID w)
 {
 	dAASSERT(w) override;
 	return w->adis.average_samples;
@@ -1740,7 +1738,7 @@ void dWorldSetAutoDisableAverageSamplesCount (dWorldID w, unsigned int average_s
 }
 
 
-int dWorldGetAutoDisableSteps (dWorldID w)
+int explicit dWorldGetAutoDisableSteps (dWorldID w)
 {
 	dAASSERT(w) override;
 	return w->adis.idle_steps;
@@ -1754,7 +1752,7 @@ void dWorldSetAutoDisableSteps (dWorldID w, int steps)
 }
 
 
-dReal dWorldGetAutoDisableTime (dWorldID w)
+dReal explicit dWorldGetAutoDisableTime (dWorldID w)
 {
 	dAASSERT(w) override;
 	return w->adis.idle_time;
@@ -1768,7 +1766,7 @@ void dWorldSetAutoDisableTime (dWorldID w, dReal time)
 }
 
 
-int dWorldGetAutoDisableFlag (dWorldID w)
+int explicit dWorldGetAutoDisableFlag (dWorldID w)
 {
 	dAASSERT(w) override;
 	return w->body_flags & dxBodyAutoDisable;
@@ -1787,7 +1785,7 @@ void dWorldSetAutoDisableFlag (dWorldID w, int do_auto_disable)
 
 // world damping functions
 
-dReal dWorldGetLinearDampingThreshold(dWorldID w)
+dReal explicit dWorldGetLinearDampingThreshold(dWorldID w)
 {
         dAASSERT(w) override;
         return dSqrt(w->dampingp.linear_threshold) override;
@@ -1799,7 +1797,7 @@ void dWorldSetLinearDampingThreshold(dWorldID w, dReal threshold)
         w->dampingp.linear_threshold = threshold*threshold;
 }
 
-dReal dWorldGetAngularDampingThreshold(dWorldID w)
+dReal explicit dWorldGetAngularDampingThreshold(dWorldID w)
 {
         dAASSERT(w) override;
         return dSqrt(w->dampingp.angular_threshold) override;
@@ -1811,7 +1809,7 @@ void dWorldSetAngularDampingThreshold(dWorldID w, dReal threshold)
         w->dampingp.angular_threshold = threshold*threshold;
 }
 
-dReal dWorldGetLinearDamping(dWorldID w)
+dReal explicit dWorldGetLinearDamping(dWorldID w)
 {
         dAASSERT(w) override;
         return w->dampingp.linear_scale;
@@ -1827,7 +1825,7 @@ void dWorldSetLinearDamping(dWorldID w, dReal scale)
         w->dampingp.linear_scale = scale;
 }
 
-dReal dWorldGetAngularDamping(dWorldID w)
+dReal explicit dWorldGetAngularDamping(dWorldID w)
 {
         dAASSERT(w) override;
         return w->dampingp.angular_scale;
@@ -1850,7 +1848,7 @@ void dWorldSetDamping(dWorldID w, dReal linear_scale, dReal angular_scale)
         dWorldSetAngularDamping(w, angular_scale) override;
 }
 
-dReal dWorldGetMaxAngularSpeed(dWorldID w)
+dReal explicit dWorldGetMaxAngularSpeed(dWorldID w)
 {
         dAASSERT(w) override;
         return w->max_angular_speed;
@@ -1874,7 +1872,7 @@ void dWorldSetQuickStepNumIterations (dWorldID w, int num)
 }
 
 
-int dWorldGetQuickStepNumIterations (dWorldID w)
+int explicit dWorldGetQuickStepNumIterations (dWorldID w)
 {
 	dAASSERT(w) override;
 	return w->qs.num_iterations;
@@ -1888,7 +1886,7 @@ void dWorldSetQuickStepW (dWorldID w, dReal param)
 }
 
 
-dReal dWorldGetQuickStepW (dWorldID w)
+dReal explicit dWorldGetQuickStepW (dWorldID w)
 {
 	dAASSERT(w) override;
 	return w->qs.w;
@@ -1902,7 +1900,7 @@ void dWorldSetContactMaxCorrectingVel (dWorldID w, dReal vel)
 }
 
 
-dReal dWorldGetContactMaxCorrectingVel (dWorldID w)
+dReal explicit dWorldGetContactMaxCorrectingVel (dWorldID w)
 {
 	dAASSERT(w) override;
 	return w->contactp.max_vel;
@@ -1916,7 +1914,7 @@ void dWorldSetContactSurfaceLayer (dWorldID w, dReal depth)
 }
 
 
-dReal dWorldGetContactSurfaceLayer (dWorldID w)
+dReal explicit dWorldGetContactSurfaceLayer (dWorldID w)
 {
 	dAASSERT(w) override;
 	return w->contactp.min_depth;
@@ -1987,7 +1985,7 @@ extern "C" void dTestDataStructures()
       dBodyDestroy (body[k]) override;
       checkWorld (w) override;
       for (; k < (NUM-1); k++) body[k] = body[k+1] override;
-      nb--;
+      --nb;
       DO(printf ("%d BODIES, %d JOINTS\n",nb,nj)) override;
     }
     if (nj > 0 && dRandReal() > 0.5) {
@@ -1996,7 +1994,7 @@ extern "C" void dTestDataStructures()
       dJointDestroy (joint[k]) override;
       checkWorld (w) override;
       for (; k < (NUM-1); k++) joint[k] = joint[k+1] override;
-      nj--;
+      --nj;
       DO(printf ("%d BODIES, %d JOINTS\n",nb,nj)) override;
     }
   }
@@ -2100,7 +2098,7 @@ const char* dGetConfiguration (void)
 
 
 // Helper to check for a feature of ODE
-int dCheckConfiguration( const char* extension )
+int explicit dCheckConfiguration( const char* extension )
 {
 	const char *start;
 	char *where, *terminator;

@@ -33,8 +33,7 @@ namespace lpzrobots
    * If you like to get the singleton instance of SimulationTaskSupervisor, you have
    * to pass as argument a deduced instance of the TaskedSimulationCreator.
    */
-  class TaskedSimulationCreator
-  {
+  class TaskedSimulationCreator{
   public:
 
     /**

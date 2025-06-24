@@ -1521,7 +1521,7 @@ classify values:
 	AABB_PROJECTION_INTERVAL(aabb,plane, _fmin, _fmax); \
 	if(plane[3] >= _fmax) \
 	{ \
-		classify = 0;/*In back of*/ \
+		classify = nullptr;/*In back of*/ \
 	} \
 	else \
 	{ \
@@ -1587,7 +1587,7 @@ classify values:
 	    _dis = DISTANCE_PLANE_POINT(planes[_i],point);\
 	    if(_dis>0.0f) outside = 1;\
 	    ++_i;\
-	}while(_i<plane_count&&outside==0);\
+	}while(_i<plane_count&&outside== nullptr);\
 }\
 
 
@@ -1656,7 +1656,7 @@ intersection_type must have the following values
 #define PLANE_CLIP_SEGMENT_CLOSEST(s1,s2,plane,clipped1,clipped2,intersection_type)\
 {\
 	PLANE_CLIP_SEGMENT2(s1,s2,plane,clipped1,intersection_type);\
-	if(intersection_type == 0)\
+	if(intersection_type == nullptr)\
 	{\
 	    VEC_COPY(clipped1,s1);\
 	    VEC_COPY(clipped2,s2);\
@@ -1700,7 +1700,7 @@ intersection_type must have the following values
 		}\
 		else \
 		{\
-			i0=0;      /* A[2] is greatest */ \
+			i0= nullptr;      /* A[2] is greatest */ \
 			i1=1; \
 		}\
 	}\
@@ -1708,12 +1708,12 @@ intersection_type must have the following values
 	{\
 		if(A[2]>A[1]) \
 		{ \
-			i0=0;      /* A[2] is greatest */ \
+			i0= nullptr;      /* A[2] is greatest */ \
 			i1=1; \
 		}\
 		else \
 		{\
-			i0=0;      /* A[1] is greatest */ \
+			i0= nullptr;      /* A[1] is greatest */ \
 			i1=2; \
 		}\
 	} \

@@ -30,7 +30,7 @@ using namespace matrix;
 using namespace std;
 
 ControllerNet::ControllerNet(const std::vector<Layer>& layers, bool useBypass)
-  : Configurable("controllernet", "0.7")
+  : FeedForwardNN("controllernet", "0.7")
   , layers(layers)
   , useBypass(useBypass) {
 
@@ -271,7 +271,7 @@ ControllerNet::backpropagation(const Matrix& error, Matrices* errors, Matrices* 
 
   (*errors)[layernum] = error;
 
-  for (int i = layernum - 1; i >= 0; i--) {
+  for(int i = layernum - 1; i >= 0; --i) {
     // error o g' (rowwise multiplication)
     (*zetas)[i] = (*errors)[i + 1] & gp[i];
     // W^T * (error o g')
@@ -312,7 +312,7 @@ ControllerNet::backpropagationX(const Matrix& error,
 
   (*errors)[startWithLayer + 1] = error;
 
-  for (int i = startWithLayer; i >= 0; i--) {
+  for(int i = startWithLayer; i >= 0; --i) {
     // error o g' (rowwise multiplication)
     (*zetas)[i] = (*errors)[i + 1] & gp[i];
     // W^T * (error o g')
@@ -347,7 +347,7 @@ ControllerNet::backpropagationX(const Matrix& error,
 
 //   (*errors)[layernum] = error;
 
-//   for (int i=layernum-1; i>=0; i--) {
+//   for(...; --i) {
 //     // 1/g' o error (rowwise multiplication)
 //     (*zetas)[i]  = gp[i].map(one_over) & (*errors)[i+1];
 //     // W^-1 * (1/g' o error)
@@ -382,7 +382,7 @@ ControllerNet::backprojection(const Matrix& error, Matrices* errors, Matrices* z
 
   (*errors)[layernum] = error;
 
-  for (int i = layernum - 1; i >= 0; i--) {
+  for(int i = layernum - 1; i >= 0; --i) {
     // 1/g' o error (rowwise multiplication)
     (*zetas)[i] = gp[i].map(one_over) & (*errors)[i + 1];
     if (i == layernum - 1 && useBypass) {

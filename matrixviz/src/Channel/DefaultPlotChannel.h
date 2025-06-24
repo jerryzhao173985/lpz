@@ -4,12 +4,11 @@
 
 #include "AbstractPlotChannel.h"
 
-class DefaultPlotChannel : public AbstractPlotChannel
-{
+class DefaultPlotChannel{
 public:
   
   explicit DefaultPlotChannel(const std::string& name);
-  virtual ~DefaultPlotChannel();
+  virtual ~DefaultPlotChannel() override;
   
 protected:
   

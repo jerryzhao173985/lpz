@@ -27,23 +27,18 @@
 #ifndef EUCLIDICDISTANCEFITNESSSTRATEGY_H_
 #define EUCLIDICDISTANCEFITNESSSTRATEGY_H_
 
+#include "IFitnessStrategy.h"
+
 //forward declaration
 class Individual;
 
-//ga_tools include
-#include "IFitnessStrategy.h"
-
-/**
- * This fitness strategy calculate from all double gens (IValue<double>) the euclidic
- * distance to zero.
- */
-class EuclidicDistanceFitnessStrategy: public IFitnessStrategy {
+class EuclidicDistanceFitnessStrategy : public IFitnessStrategy {
 public:
 	/**
 	 * default constructor
 	 * do nothing
 	 */
-	EuclidicDistanceFitnessStrategy() override;
+	EuclidicDistanceFitnessStrategy();
 
 	/**
 	 * default destructor
@@ -54,8 +49,8 @@ public:
 	/**
 	 * this function calculate the euclidic distance of all double gen which
 	 * individual has.
-	 * @param individual (const Individual*) the Individual
-	 * @return static_cast<double>(the) distance
+	 * @param individual the Individual
+	 * @return the distance
 	 */
 	virtual double getFitness(const Individual* individual) override;
 };

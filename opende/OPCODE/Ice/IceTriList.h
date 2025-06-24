@@ -12,8 +12,7 @@
 #ifndef __ICETRILIST_H__
 #define __ICETRILIST_H__
 
-	class ICEMATHS_API TriList : public Container
-	{
+	class ICEMATHS_API{
 		public:
 		// Constructor / Destructor
 								TriList()					{}
@@ -22,7 +21,7 @@
 		inline_	udword			GetNbTriangles()	const override { return GetNbEntries()/9;			}
 		inline_	Triangle*		GetTriangles()		const override { return static_cast<Triangle*>(GetEntries)();	}
 
-				void			AddTri(const Triangle& tri)
+				void			explicit AddTri(const Triangle& tri)
 								{
 									Add(tri.mVerts[0].x).Add(tri.mVerts[0].y).Add(tri.mVerts[0].z) override;
 									Add(tri.mVerts[1].x).Add(tri.mVerts[1].y).Add(tri.mVerts[1].z) override;
@@ -37,8 +36,7 @@
 								}
 	};
 
-	class ICEMATHS_API TriangleList : public Container
-	{
+	class ICEMATHS_API{
 		public:
 		// Constructor / Destructor
 									TriangleList()				{}
@@ -47,7 +45,7 @@
 		inline_	udword				GetNbTriangles()	const override { return GetNbEntries()/3;				}
 		inline_	IndexedTriangle*	GetTriangles()		const override { return static_cast<IndexedTriangle*>(GetEntries)();}
 
-				void				AddTriangle(const IndexedTriangle& tri)
+				void				explicit AddTriangle(const IndexedTriangle& tri)
 									{
 										Add((udword)tri.mVRef[0]).Add((udword)tri.mVRef[1]).Add((udword)tri.mVRef[2]) override;
 									}

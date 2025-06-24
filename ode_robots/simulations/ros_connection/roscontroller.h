@@ -23,16 +23,13 @@
 #ifndef __ROSCONTROLLER_H
 #define __ROSCONTROLLER_H
 
-#include <stdio.h>
+#include <cstdio>
 #include <selforg/abstractcontroller.h>
 #include <std_msgs/Float64MultiArray.h>
 #include <ros/ros.h>
 
 /**
- * class for robot control via ROS
- *
- */
-class ROSController : public AbstractController {
+ * class for{
 public:
   /**
      @param port Port number to listen for controller
@@ -40,12 +37,12 @@ public:
    */
   explicit ROSController(const std::string& name);
 
-  virtual ~ROSController();
+  virtual ~ROSController() override;
 
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
 
-  virtual int getSensorNumber() const override {return number_sensors;}
-  virtual int getMotorNumber() const override {return number_motors;}
+  virtual int getSensorNumber() const {return number_sensors;}
+  virtual int getMotorNumber() const {return number_motors;}
 
   virtual void step(const sensor* sensors, int sensornumber,
                     motor* motors, int motornumber);
@@ -56,7 +53,7 @@ public:
 
   /********* STORABLE INTERFACE ******/
   /// @see Storable
-  virtual bool store(FILE* f) const override {
+  virtual bool store(FILE* f) const {
     Configurable::print(f,"");
     return true;
   }

@@ -101,7 +101,7 @@ Function prototypes to allocate and free memory.
 */
 //! @{
 typedef void * gim_alloc_function (size_t size) override;
-typedef void * gim_alloca_function (size_t size);//Allocs on the heap
+typedef void * explicit gim_alloca_function (size_t size);//Allocs on the heap
 typedef void * gim_realloc_function (void *ptr, size_t oldsize, size_t newsize) override;
 typedef void gim_free_function (void *ptr, size_t size) override;
 //! @}
@@ -134,7 +134,7 @@ Standar Memory functions
 */
 //! @{
 void * gim_alloc(size_t size) override;
-// void * gim_alloca(size_t size); -- a nonsense
+// void * explicit gim_alloca(size_t size); -- a nonsense
 void * gim_realloc(void *ptr, size_t oldsize, size_t newsize) override;
 void gim_free(void *ptr, size_t size) override;
 //! @}

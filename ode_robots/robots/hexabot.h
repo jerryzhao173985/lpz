@@ -58,15 +58,15 @@ namespace lpzrobots {
 // This is the improved Transform class
 //  The aim is to get the position and some information of child object
 //
-class ImpTransform2 : public Transform{
+class ImpTransform2{
 public:
   // constructor
   ImpTransform2(Primitive* parent, Primitive* child, const Pose& pose);
   // destructor
-  virtual ~ImpTransform2();
+  virtual ~ImpTransform2() override;
 
   // get Child pose
-  Pose getChildPose();
+  Pose getChildPose() const;
 };
 
 
@@ -88,7 +88,7 @@ public:
 /** Robot HEXABOT :-)
     3 legged robot which could be easily connected each other.
 */
-class Hexabot : public OdeRobot, public Inspectable {
+class Hexabot{
 public:
   // Leg location enum
   enum LegPos {
@@ -121,13 +121,13 @@ public: // Functions
   Hexabot(const OdeHandle& odehandle, const OsgHandle& osgHandle,
           const HexabotConf& conf, const std::string& name);
   // get default configuration (static func because it could be used before construction of the class)
-  static HexabotConf getDefaultConf();
+  static HexabotConf getDefaultConf() const;
 
   // get Motor name from legPos and joint name
   static MotorName getMotorName(LegPos leg, LegJointType joint);
 
   //destructor
-  virtual ~Hexabot();
+  virtual ~Hexabot() override;
 
   /**
    * updates the OSG nodes of the vehicle
@@ -142,7 +142,7 @@ public: // Functions
   /** gets Primitives of Leg tibia
       @param LegPos Number
   */
-  Primitive* getTibiaPrimitive(LegPos leg);
+  Primitive* explicit explicit getTibiaPrimitive(LegPos leg);
 
 
   /** returns actual sensorvalues
@@ -181,13 +181,13 @@ public: // Functions
     like space-internal collision detection, sensor resets/update etc.
     @param globalData structure that contains global data from the simulation environment
   */
-  virtual void doInternalStuff(const GlobalData& globalData);
+  virtual void explicit explicit doInternalStuff(const GlobalData& globalData);
 
-  virtual void sense(const GlobalData& globalData);
+  virtual void explicit explicit sense(const GlobalData& globalData);
 
-  virtual double& getSumForce() const override { return sumForce; }
+  virtual double& getSumForce() override { return sumForce; }
 
-  virtual double& getContactPoints() const override { return contactPoints; }
+  virtual double& getContactPoints() override { return contactPoints; }
 
 protected: // Functions
   /** creates vehicle at desired pose
@@ -222,21 +222,21 @@ protected: // Functions
 
 
   // getTorqueSensorData
-  sensor getTorqueData(TorqueSensor*  torqueSensor);
+  sensor explicit explicit getTorqueData(TorqueSensor*  torqueSensor);
 
   // convert Pose Matrixstatic_cast<Quatanion>(to) the roll, pitch, yaw angle static_cast<rad>(osg)::Vec3d convert_Quat_to_RollPitchYaw(osg::Quat quat);
 
   // calculate COG Position
-  osg::Vec3d calc_COGPositionstatic_cast<void>(override);
+  osg::Vec3d calc_COGPosition();
 
 
   /**
    * Inspectable interface
    */
   /*
-  virtual std::list<iparamkey> getInternalParamNames() const override { return std::list<iparamkey>(); }
+  virtual std::list<iparamkey> getInternalParamNames() const { return std::list<iparamkey>(); }
 
-  virtual std::list<iparamval> getInternalParams() const override { return std::list<iparamval>(); }*/
+  virtual std::list<iparamval> getInternalParams() const { return std::list<iparamval>(); }*/
   /*
   virtual std::list<Inspectable::iparamkey> getInternalParamNames() const override;
 

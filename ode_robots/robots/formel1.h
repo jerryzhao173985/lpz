@@ -28,19 +28,13 @@
 
 namespace lpzrobots {
 
-  class Primitive;
-  class Joint;
-
-  /** Robot that looks like a Nimm 2 Bonbon :-)
-      4 wheels and a capsule like body
-  */
-  class Formel1 : public OdeRobot{
+  class Primitive{
   public:
 
     Formel1(const OdeHandle& odeHandle, const OsgHandle& osgHandle,
           double size=1, double force=3, double speed=15, bool sphereWheels=true);
 
-    virtual ~Formel1() {} override;
+    virtual ~Formel1() {};
 
     /**
      * updates the OSG nodes of the vehicle
@@ -81,7 +75,7 @@ namespace lpzrobots {
 
   protected:
     /** the main object of the robot, which is used for position and speed tracking */
-    virtual Primitive* getMainPrimitive() const override { return object[0]; }
+    virtual Primitive* getMainPrimitive() const { return object[0]; }
 
     /** creates vehicle at desired pose
         @param pose 4x4 pose matrix

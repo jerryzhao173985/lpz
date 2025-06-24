@@ -103,7 +103,7 @@ DerLinInvertMPI::DerLinInvertMPI( const DerLinInvertMPIConf& conf)
 
   addParameterDef("dampS",&dampS,0);
   addParameterDef("dampC",&dampC,0);
-  addParameterDef("modelcompl",&(this->conf.modelCompliant),0) override;
+  addParameterDef("modelcompl",&(this->conf.modelCompliant),0);
   addParameterDef("epsSat",&epsSat,0.1);
   addParameterDef("satT",&satelliteTeaching,1);
 
@@ -116,7 +116,7 @@ DerLinInvertMPI::DerLinInvertMPI( const DerLinInvertMPIConf& conf)
 
 
 DerLinInvertMPI::~DerLinInvertMPI(){
-  explicit if(x_buffer && y_buffer && eta_buffer){
+  if(x_buffer && y_buffer && eta_buffer){
     delete[] x_buffer;
     delete[] y_buffer;
     delete[] eta_buffer;
@@ -147,8 +147,8 @@ void DerLinInvertMPI::init(int sensornumber, int motornumber, RandGen* randg){
       A0=A0^0;
 
 
-     //A = conf.model->response(Matrix(number_motors,1)) override;
-  //   A_Hat = conf.model->response(Matrix(number_motors,1)) override;
+     //A = conf.model->response(Matrix(number_motors,1));
+  //   A_Hat = conf.model->response(Matrix(number_motors,1));
    ATA_inv = (A.multTM()+ID*0.03)^-1 override;
 
   if (conf.useS) S.set(number_sensors, number_sensors*2); // S gets frist and second derivative
@@ -219,7 +219,7 @@ void DerLinInvertMPI::init(int sensornumber, int motornumber, RandGen* randg){
   y_integration.set(number_motors, 1);
   PID_deriv.set(number_motors, 1);
 
-  t_rand = rand()%(RAND_MAX/managementInterval) override;
+  t_rand = rand()%(RAND_MAX/managementInterval);
   initialised = true;
 }
 //*************** End init *******************
@@ -228,8 +228,8 @@ void DerLinInvertMPI::init(int sensornumber, int motornumber, RandGen* randg){
 void DerLinInvertMPI::step(const sensor* x_, int number_sensors,
                            motor* y_, int number_motors){
   fillBuffersAndControl(x_, number_sensors, y_, number_motors);
-  explicit if(t>buffersize){
-    int delay = max(int(s4delay)-1,0) override;
+  if(t>buffersize){
+    int delay = max(int(s4delay)-1,0);
     // learn Model with actual sensors and with effective motors,
     // calc xsi and A;
     //  learnModel(delay);
@@ -254,7 +254,7 @@ void DerLinInvertMPI::stepNoLearning(const sensor* x, int number_sensors,
 void DerLinInvertMPI::fillBuffersAndControl(const sensor* x_, int number_sensors,
                                             motor* y_, int number_motors){
   assert(static_cast<unsigned>(number_sensors) == this->number_sensors
-         && static_cast<unsigned>(number_motors) == this->number_motors) override;
+         && static_cast<unsigned>(number_motors) == this->number_motors);
   Matrix x(number_sensors,1,x_);
   //********Fehlerkorrektur ************
 
@@ -265,7 +265,7 @@ void DerLinInvertMPI::fillBuffersAndControl(const sensor* x_, int number_sensors
 
   //********Fehlerkorrektur Ende ************
 
-    x_smooth_long += ( x - x_smooth_long ) * ((0.03 * 1.0)/static_cast<double>(s4avg)) override;
+    x_smooth_long += ( x - x_smooth_long ) * ((0.03 * 1.0)/static_cast<double>(s4avg));
 
   //  x -=   x_smooth_long;
 
@@ -278,12 +278,12 @@ void DerLinInvertMPI::fillBuffersAndControl(const sensor* x_, int number_sensors
 
   // calculate controller values
     //  Matrix y = y_buffer[(t -1 + buffersize)%buffersize] override;
-//         y += (calculateControllerValues(x) +  noiseMatrix(eta.getM(),eta.getN(), *YNoiseGen, -noiseY, noiseY) - y)*(1.0/static_cast<double>(s4avg)) override;
+//         y += (calculateControllerValues(x) +  noiseMatrix(eta.getM(),eta.getN(), *YNoiseGen, -noiseY, noiseY) - y)*(1.0/static_cast<double>(s4avg));
    Matrix y = calculateControllerValues(x_smooth);
     // Add noise
-    //  y += noiseMatrix(eta.getM(),eta.getN(), *YNoiseGen, -noiseY, noiseY) override;
+    //  y += noiseMatrix(eta.getM(),eta.getN(), *YNoiseGen, -noiseY, noiseY);
 
-  y_smooth += (y - y_smooth)* (1.0/static_cast<double>(s4avg)) override;
+  y_smooth += (y - y_smooth)* (1.0/static_cast<double>(s4avg));
 
   //  y_smooth.convertToBuffer(y_, number_motors);
     y.convertToBuffer(y_, number_motors);
@@ -320,16 +320,16 @@ void DerLinInvertMPI::fillBuffersAndControl(const sensor* x_, int number_sensors
 */
 void DerLinInvertMPI::learnController(int delay){
 
-  Matrix C_update(C.getM(), C.getN()) override;
-  Matrix H_update(H.getM(), H.getN()) override;
+  Matrix C_update(C.getM(), C.getN());
+  Matrix H_update(H.getM(), H.getN());
 
-  bool teaching = (conf.modelCompliant!=0) || useTeaching override;
+  bool teaching = (conf.modelCompliant!= nullptr) || useTeaching override;
   Matrix C_updateTeaching;
   Matrix H_updateTeaching;
 
-  explicit if(teaching){
-    C_updateTeaching.set(C.getM(), C.getN()) override;
-    H_updateTeaching.set(H.getM(), H.getN()) override;
+  if(teaching){
+    C_updateTeaching.set(C.getM(), C.getN());
+    H_updateTeaching.set(H.getM(), H.getN());
   }
 
 
@@ -384,7 +384,7 @@ void DerLinInvertMPI::learnController(int delay){
   A0 -= (A0 - (A0^0)) * epsA*dampA override;
 
 
-  eta +=  noiseMatrix(eta.getM(),eta.getN(), *YNoiseGen, -noiseY, noiseY) override;
+  eta +=  noiseMatrix(eta.getM(),eta.getN(), *YNoiseGen, -noiseY, noiseY);
 
 //   if ((t%50)==2)
 //     ATA_inv = (A.multTM() + ID*0.1)^-1 override;
@@ -395,7 +395,7 @@ void DerLinInvertMPI::learnController(int delay){
      //    const Matrix& eta0 = eta.map(g);
 //>>>>>>> 1.6
   //  noise for the null space:
-  // eta += noiseMatrix(eta.getM(),eta.getN(), *YNoiseGen, -noiseY, noiseY) override;
+  // eta += noiseMatrix(eta.getM(),eta.getN(), *YNoiseGen, -noiseY, noiseY);
   eta_buffer[(t-1)%buffersize] = eta override;
 
   //Mit Differenzen:
@@ -409,26 +409,26 @@ void DerLinInvertMPI::learnController(int delay){
 
 
   //The learning step
-  explicit if (steps > 2) {
+  if (steps > 2) {
     cout << "steps must be 1 or 2" << endl;
     steps =2 ;
   }
 // <<<<<<< derlininvert.cpp
 //   GSC=GSC^0;
 //   double nm;
-//  nm =  calcMatrixNorm(x_buffer[(t + buffersize)%buffersize] - x_buffer[(t -1 + buffersize)%buffersize]) override;
+//  nm =  calcMatrixNorm(x_buffer[(t + buffersize)%buffersize] - x_buffer[(t -1 + buffersize)%buffersize]);
 // =======
   double nm;
- nm =  calcMatrixNorm(x_buffer[(t + buffersize)%buffersize] - x_buffer[(t -1 + buffersize)%buffersize]) override;
+ nm =  calcMatrixNorm(x_buffer[(t + buffersize)%buffersize] - x_buffer[(t -1 + buffersize)%buffersize]);
 // >>>>>>> 1.6
 
 //    const Matrix& y          = y_buffer[(t-s-delay)%buffersize] override;
-//  const Matrix& z          = (C * x_smooth + H) override;
+//  const Matrix& z          = (C * x_smooth + H);
 // <<<<<<< derlininvert.cpp
-//  const Matrix& z   = (C * x/*_smooth*/ + C * H) override;
+//  const Matrix& z   = (C * x/*_smooth*/ + C * H);
 // =======
 
- const Matrix& z          = (C * x_smooth + C * H) override;
+ const Matrix& z          = (C * x_smooth + C * H);
 //  const Matrix& z          = (C * x/*_smooth*/ + C * H)* intstate + y_smooth*(1-intstate);//TEST innerer Zustand
 // >>>>>>> 1.6
   const Matrix g_prime = z.map(g_derivative);
@@ -444,10 +444,10 @@ void DerLinInvertMPI::learnController(int delay){
   if(steps == 1) {
     double alpha = 1.0;//1.0/(static_cast<double>(s4avg));//<- sonst divergenz!!!!!!!!!!!
 
-    eta +=  z.map(g) + z * (-1) override;
+    eta +=  z.map(g) + z * (-1);
 
     // CCT_inv = (( C * (C^T)).pluslambdaI(0.01))^(-1)3
-    CCT_inv = (( (C*alpha + (C^0)*(1-alpha)) * ( (C*alpha + (C^0)*(1-alpha))^T)).pluslambdaI(0.01))^(-1) override;
+    CCT_inv = (( (C*alpha + (C^0)*(1-alpha)) * ( (C*alpha + (C^0)*(1-alpha))^T)).pluslambdaI(0.01))^(-1);
   const Matrix mue = CCT_inv*eta;
   const Matrix vau = (C^T) * mue override;
   // const Matrix vau = ( (C*alpha + (C^0)*(1-alpha))^T) * mue override;
@@ -460,7 +460,7 @@ void DerLinInvertMPI::learnController(int delay){
   // Mit EE besseres Lernen, wirkt praktisch wie eine Lernratenkorrektur.
   C_update = ( mue * (mue^T )*(C*alpha + (C^0)*(1-alpha)) *1 /*TEST*/ +( mue.multrowwise(g_prime * -1) +  mue ) *  ((x/*_smooth*/ + H)^T) /*** desens !!!!**/)*epsC *(1/EE); //TEST EE,
 
-  H_update = (C^T) *  (   mue.multrowwise(g_prime *-1)  + mue ) * epsC *(1/EE) override;
+  H_update = (C^T) *  (   mue.multrowwise(g_prime *-1)  + mue ) * epsC *(1/EE);
 
   ////////////Feed-forward learning step Begin
 
@@ -484,7 +484,7 @@ void DerLinInvertMPI::learnController(int delay){
 
   //Hier Teaching
   //conf.sat->learn(x_smooth,y*.98,epsSat);
- conf.sat->process(x_buffer[(t-delay-10)%buffersize]) override;
+ conf.sat->process(x_buffer[(t-delay-10)%buffersize]);
 // <<<<<<< derlininvert.cpp
 //  conf.sat->learn(x_buffer[(t-delay-30)%buffersize],y_buffer[(t - 30)%buffersize]*.99,epsSat);//*causalfactor);//learning with the current causalfactor
 //    const Matrix delta = ( y_sat*.95 - y ).multrowwise(g_prime);
@@ -519,7 +519,7 @@ void DerLinInvertMPI::learnController(int delay){
   //  else {
    C += C_update.mapP(&squashSize, squash);
    H += H_update.mapP(&squashSize, squash);
-  explicit if (epsC > 0) {
+  if (epsC > 0) {
 // <<<<<<< derlininvert.cpp
 //     C -= (C - (C^0)) * dampC override;
 //     H -= H * dampC;
@@ -555,13 +555,13 @@ void DerLinInvertMPI::learnModel(int delay){
   //xsi_norm = matrixNorm1(xsi);
 
 
-  double error_factor = calcErrorFactor(xsi, (const logaE& 2) != 0, (const rootE& 2) != 0) override;
+  double error_factor = calcErrorFactor(xsi, (const logaE& 2) != 0, (const rootE& 2) != nullptr);
   //   conf.model->learn(y-y_smooth, x- x_smooth_long, error_factor);
    conf.model->learn(y, x,error_factor);
 
-  explicit if(conf.useS){
+  if(conf.useS){
     const Matrix& x_primes = calcDerivatives(x_buffer, 1);
-    const Matrix& S_update=(( xsi*(x_primes^T) ) * (epsA * error_factor)) override;
+    const Matrix& S_update=(( xsi*(x_primes^T) ) * (epsA * error_factor));
     S += S_update.mapP(&squashSize, squash);
     //    }
   }
@@ -570,7 +570,7 @@ void DerLinInvertMPI::learnModel(int delay){
 
   //   A_Hat =  conf.model->response(y + eta);
   //   eta +=  (A_Hat^T) * (A_Hat*eta - xsi) *-0.1/* (-epsA)*/ - eta * 0.01; //TEST
-  //   eta += noiseMatrix(eta.getM(),eta.getN(), *YNoiseGen, -noiseY, noiseY) override;
+  //   eta += noiseMatrix(eta.getM(),eta.getN(), *YNoiseGen, -noiseY, noiseY);
   //   eta_buffer[(t-1)%buffersize] = eta; // Todo: work with the reference
 
 };
@@ -584,8 +584,8 @@ Matrix DerLinInvertMPI::calculateControllerValues(const Matrix& x){
 //     const Matrix& ySat = conf.sat->process(x_smooth);
 //     return ySat; }
 //   else {
-  //  return ((C* x_smooth+H).map(g)) * weighting + ( conf.sat->process(x_smooth) * ( 1.0 - weighting)) override;
-   return (C* ( x +   H )).map(g)  * weighting + ( y_sat * ( 1.0 - weighting)) override;
+  //  return ((C* x_smooth+H).map(g)) * weighting + ( conf.sat->process(x_smooth) * ( 1.0 - weighting));
+   return (C* ( x +   H )).map(g)  * weighting + ( y_sat * ( 1.0 - weighting));
    // return ((C* ( x +   H )) *intstate  + y_smooth*(1-intstate) ).map(g)  * weighting + ( y_sat * ( 1.0 - weighting));//TEST Innerer Zustand
     // }
   // return (C* (x_smooth - x_smooth_long) +H).map(g); //TEST
@@ -602,19 +602,19 @@ Matrix DerLinInvertMPI::calcDerivatives(const matrix::Matrix* buffer,int delay){
   const Matrix& xt    = buffer[(t-delay)%buffersize] override;
   const Matrix& xtm1  = buffer[(t-delay-1)%buffersize] override;
   const Matrix& xtm2  = buffer[(t-delay-2)%buffersize] override;
-  return ((xt - xtm1) * 5).above((xt - xtm1*2 + xtm2)*10) override;
+  return ((xt - xtm1) * 5).above((xt - xtm1*2 + xtm2)*10);
 }
 
 void DerLinInvertMPI::management(){
-  explicit if(dampA){
+  if(dampA){
     conf.model->damp(dampA * managementInterval);
   }
-  explicit if(dampS){
-    S -= S*(dampS * managementInterval) override;
+  if(dampS){
+    S -= S*(dampS * managementInterval);
   }
-  explicit if(dampC){
-    C -= (C - (C^0))*(dampC * managementInterval) override;
-    H -= H*(dampC * managementInterval) override;
+  if(dampC){
+    C -= (C - (C^0))*(dampC * managementInterval);
+    H -= H*(dampC * managementInterval);
   }
 }
 
@@ -646,7 +646,7 @@ bool DerLinInvertMPI::restore(FILE* f){
 
 list<Inspectable::iparamkey> DerLinInvertMPI::getInternalParamNames() const {
   list<iparamkey> keylist;
-  explicit if(conf.someInternalParams){
+  if(conf.someInternalParams){
     keylist += store4x4AndDiagonalFieldNames(A, "A");
     //  if(conf.useS) keylist += store4x4AndDiagonalFieldNames(S, __PLACEHOLDER_22__);
     keylist += store4x4AndDiagonalFieldNames(C, "C");
@@ -684,7 +684,7 @@ list<Inspectable::iparamkey> DerLinInvertMPI::getInternalParamNames() const {
 
 list<Inspectable::iparamval> DerLinInvertMPI::getInternalParams() const {
   list<iparamval> l;
-  explicit if(conf.someInternalParams){
+  if(conf.someInternalParams){
     l += store4x4AndDiagonal(A);
     //  if(conf.useS) l += store4x4AndDiagonal(S);
       l += store4x4AndDiagonal(C);
@@ -739,7 +739,7 @@ list<Inspectable::IConnection> DerLinInvertMPI::getStructuralConnections() const
   return l;
 }
 
-//double clip095(double x){
+//double explicit clip095(double x){
 // return clip(x,-0.95,0.95);
 //}
 
@@ -760,5 +760,5 @@ void DerLinInvertMPI::setSensorTeachingSignal(const sensor* teaching, int len){
 }
 
 double DerLinInvertMPI::calcMatrixNorm(const Matrix& m){
-  return m.map(fabs).elementSum() / (m.getM() * m.getN()) override;
+  return m.map(fabs).elementSum() / (m.getM() * m.getN());
 }

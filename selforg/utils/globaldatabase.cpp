@@ -50,7 +50,7 @@ GlobalDataBase::isConfiguratorOpen() {
 void
 GlobalDataBase::removeConfigurator() {
 #ifndef NOCONFIGURATOR
-  if (configurator != 0) {
+  if (configurator != nullptr) {
     delete configurator;
   }
   configurator = 0;

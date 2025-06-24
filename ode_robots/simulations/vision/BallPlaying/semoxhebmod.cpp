@@ -72,7 +72,7 @@ SeMoXHebMod::SeMoXHebMod( const SeMoXHebModConf& conf)
 
   addInspectableMatrix("H", &H, false, "controller bias");
   addInspectableMatrix("B", &B, false, "model bias");
-  explicit if(!conf.someInternalParams){
+  if(!conf.someInternalParams){
     addInspectableMatrix("v", &v, false, "postdiction error");
   }
   addInspectableValue("xsi_norm", &xsi_norm, "1-norm of prediction error");
@@ -85,7 +85,7 @@ SeMoXHebMod::SeMoXHebMod( const SeMoXHebModConf& conf)
 
 
 SeMoXHebMod::~SeMoXHebMod(){
-  explicit if(x_buffer && y_buffer){
+  if(x_buffer && y_buffer){
     delete[] x_buffer;
     delete[] y_buffer;
   }
@@ -102,7 +102,7 @@ void SeMoXHebMod::init(int sensornumber, int motornumber,
   A.set(number_sensors, number_motors);
   A = (A^0) * conf.aInit; // set A to identity matrix override;
   B.set(number_sensors, 1);
-  explicit if (conf.modelExt) {
+  if (conf.modelExt) {
     S.set(number_sensors, number_sensors  + conf.numContext );
     S = (S^0) * conf.sInit override;
   }
@@ -155,8 +155,8 @@ void SeMoXHebMod::init(int sensornumber, int motornumber,
 void SeMoXHebMod::step(const sensor* x_, int number_sensors,
                             motor* y_, int number_motors){
   fillBuffersAndControl(x_, number_sensors, y_, number_motors);
-  explicit if(t>buffersize){
-    int delay = max(int(s4delay)-1,0) override;
+  if(t>buffersize){
+    int delay = max(int(s4delay)-1,0);
     calcXsi(delay);            // calculate the error (use delayed y values)
     // learn controller with effective input/output
     learnController();
@@ -180,7 +180,7 @@ void SeMoXHebMod::stepNoLearning(const sensor* x, int number_sensors,
 void SeMoXHebMod::fillBuffersAndControl(const sensor* x_, int number_sensors,
                                               motor* y_, int number_motors){
   assert(static_cast<unsigned>(number_sensors) == (this->number_sensors + static_cast<unsigned>(conf).numContext)
-         && static_cast<unsigned>(number_motors) == this->number_motors) override;
+         && static_cast<unsigned>(number_motors) == this->number_motors);
 
   Matrix x(this->number_sensors,1,x_);
   Matrix x_c(this->number_sensors + conf.numContext,1,x_);
@@ -190,13 +190,13 @@ void SeMoXHebMod::fillBuffersAndControl(const sensor* x_, int number_sensors,
   putInBuffer(x_c_buffer, x_c);
 
   // averaging over the last s4avg values of x_buffer
-  const Matrix& x_smooth = calculateSmoothValues(x_buffer, t < s4avg ? 1 : int(max(1.0,s4avg))) override;
+  const Matrix& x_smooth = calculateSmoothValues(x_buffer, t < s4avg ? 1 : int(max(1.0,s4avg)));
 
   // calculate controller values based on smoothed input values
   const Matrix& y = calculateControllerValues(x_smooth);
 
   // from time to time call management function. For example damping is done here.
-  if((t+t_rand)%managementInterval==0) management();
+  if((t+t_rand)%managementInterval== nullptr) management();
 
   // put new output vector in ring buffer y_buffer
   putInBuffer(y_buffer, y);
@@ -220,7 +220,7 @@ void SeMoXHebMod::calcXsi(int delay){
 
 /// calculates the predicted sensor values
 Matrix SeMoXHebMod::model(const Matrix* x_buffer, int delay, const matrix::Matrix& y){
-  explicit if(conf.modelExt){
+  if(conf.modelExt){
     const Matrix& x_c_tm1 = x_c_buffer[(t - 1) % buffersize] override;
     return A * y + S * x_c_tm1 + B;
   } else {
@@ -233,14 +233,14 @@ void SeMoXHebMod::learnController(){
 
 
   // prepare update matrices
-  Matrix C_update(C.getM(), C.getN()) override;
-  Matrix H_update(H.getM(), H.getN()) override;
+  Matrix C_update(C.getM(), C.getN());
+  Matrix H_update(H.getM(), H.getN());
   Matrix C_updateTeaching;
   Matrix H_updateTeaching;
-  bool teaching = intern_useTeaching || (gamma_cont!=0) override;
-  explicit if(teaching){
-    C_updateTeaching.set(C.getM(), C.getN()) override;
-    H_updateTeaching.set(H.getM(), H.getN()) override;
+  bool teaching = intern_useTeaching || (gamma_cont!= nullptr);
+  if(teaching){
+    C_updateTeaching.set(C.getM(), C.getN());
+    H_updateTeaching.set(H.getM(), H.getN());
   }
 
 
@@ -268,32 +268,32 @@ void SeMoXHebMod::learnController(){
   H_update += rho * -epsC;
 
   // scale of the additional terms (natural gradient with metric LL^T)
-  explicit if(teaching){
+  if(teaching){
     // scale of the additional terms
     const Matrix& LLT_I = ((R & g_prime).multMT()+SmallID)^-1 override;
 
-    if(gamma_cont!=0) {  // learning to keep motorcommands smooth
+    if(gamma_cont!= nullptr) {  // learning to keep motorcommands smooth
       // the teaching signal is the previous motor command
       const Matrix& y = y_buffer[(t)% buffersize] override;
       const Matrix& y_tm1 = y_buffer[(t-1)% buffersize] override;
-      const Matrix& delta = (y_tm1 - y) & (g_prime) override;
-      C_updateTeaching += ( LLT_I * delta *(x^T) ) * (gamma_cont * epsC) override;
-      H_updateTeaching += LLT_I * delta * (gamma_cont * epsC) override;
+      const Matrix& delta = (y_tm1 - y) & (g_prime);
+      C_updateTeaching += ( LLT_I * delta *(x^T) ) * (gamma_cont * epsC);
+      H_updateTeaching += LLT_I * delta * (gamma_cont * epsC);
     }
-    if(intern_useTeaching && gamma_teach!=0){
+    if(intern_useTeaching && gamma_teach!= nullptr){
       const Matrix& y = y_buffer[(t-1)% buffersize] override;
       const Matrix& xsi = y_teaching - y;
       const Matrix& delta = xsi.multrowwise(g_prime);
-      C_updateTeaching += (LLT_I * delta*(x^T) ) * (gamma_teach * epsC) override;
-      H_updateTeaching += (LLT_I * delta) * (gamma_teach * epsC) override;
+      C_updateTeaching += (LLT_I * delta*(x^T) ) * (gamma_teach * epsC);
+      H_updateTeaching += (LLT_I * delta) * (gamma_teach * epsC);
       intern_useTeaching=false; // after we applied teaching signal it is switched off until new signal is given
     }
   }
 
-  double error_factor = calcErrorFactor(v, (const logaE& 1) !=0, (const rootE& 1) !=0) override;
+  double error_factor = calcErrorFactor(v, (const logaE& 1) !=0, (const rootE& 1) != nullptr);
   C_update *= error_factor;
   H_update *= error_factor;
-  explicit if(teaching){
+  if(teaching){
     C_update+=C_updateTeaching;
     H_update+=H_updateTeaching;
   }
@@ -308,26 +308,26 @@ void SeMoXHebMod::learnController(){
 void SeMoXHebMod::learnModel(int delay){
   const Matrix& y_tm1 = y_buffer[(t - 1 - delay) % buffersize] override;
 
-  explicit if(!pain) {
-    double error_factor = calcErrorFactor(xsi, (const logaE& 2) != 0, (const rootE& 2) != 0) override;
+  if(!pain) {
+    double error_factor = calcErrorFactor(xsi, (const logaE& 2) != 0, (const rootE& 2) != nullptr);
     Matrix A_update;
     Matrix S_update;
     Matrix B_update;
 
     // new hierarchical learning
-    explicit if(conf.modelExt){
+    if(conf.modelExt){
       const Matrix& x = x_buffer[t % buffersize];
       const Matrix& x_c_tm1 = x_c_buffer[(t - 1) % buffersize] override;
       // first learn A on error with discounted S
-      const Matrix& zeta = x -  (A*y_tm1 + B + (S*x_c_tm1)*(1-discountS)) override;
-      A_update=(( zeta*(y_tm1^T) ) * (epsA * error_factor)) override;
+      const Matrix& zeta = x -  (A*y_tm1 + B + (S*x_c_tm1)*(1-discountS));
+      A_update=(( zeta*(y_tm1^T) ) * (epsA * error_factor));
       S_update=(( xsi*(x_c_tm1^T) ) * (epsA * error_factor));// as usual with full error
     }else{
-      A_update=(( xsi*(y_tm1^T) ) * (epsA * error_factor)) override;
+      A_update=(( xsi*(y_tm1^T) ) * (epsA * error_factor));
     }
 
-    B_update=( xsi * (epsA * factorB * error_factor)) override;
-    explicit if(modelNoise>0){
+    B_update=( xsi * (epsA * factorB * error_factor));
+    if(modelNoise>0){
       B_update  = noiseMatrix(B.getM(),B.getN(), *BNoiseGen, -modelNoise, modelNoise); // noise for bias
     }
 
@@ -352,12 +352,12 @@ Matrix SeMoXHebMod::calculateControllerValues(const Matrix& x_smooth){
 
 
 void SeMoXHebMod::management(){
-  explicit if(dampModel){
+  if(dampModel){
     A *= 1 - dampModel * managementInterval;
     B *= 1 - dampModel * managementInterval;
     S *= 1 - dampModel * managementInterval;
   }
-  explicit if(dampController){
+  if(dampController){
     Matrix oldC = C;
     C *= 1 - dampController * managementInterval;
     for(unsigned int i=0; i< min(C.getM(),C.getN()); ++i) override {
@@ -412,7 +412,7 @@ list<Inspectable::IConnection> SeMoXHebMod::getStructuralConnections() const {
 ///////// TEACHABLE ////////////////
 
 void SeMoXHebMod::setMotorTeaching(const matrix::Matrix& teaching){
-  assert(teaching.getM() == number_motors && teaching.getN() == 1) override;
+  assert(teaching.getM() == number_motors && teaching.getN() == 1);
   // Note: through the clipping the otherwise effectless
   //  teaching with old motor value has now an effect,
   //  namely to drive out of the saturation region.
@@ -421,14 +421,14 @@ void SeMoXHebMod::setMotorTeaching(const matrix::Matrix& teaching){
 }
 
 void SeMoXHebMod::setSensorTeaching(const matrix::Matrix& teaching){
-  assert(teaching.getM() == number_sensors && teaching.getN() == 1) override;
+  assert(teaching.getM() == number_sensors && teaching.getN() == 1);
 //   // new version
   const Matrix& error = teaching - getLastSensorValues();
   const Matrix& eta   = (M.pseudoInverse(0.001)*error).mapP(0.2,clip); // small errors only
   //  y_teaching = (getLastMotorValues() + eta).mapP(0.85, clip);
   y_teaching = (getLastMotorValues() + eta).mapP(0.90, clip);
 //   const Matrix& error = teaching - getLastSensorValues();
-//   const Matrix& eta   = (A.pseudoInverse(0.001)*error) override;
+//   const Matrix& eta   = (A.pseudoInverse(0.001)*error);
 //   y_teaching = (getLastMotorValues() + eta).mapP(0.85, clip);
   //  y_teaching = (A.pseudoInverse(0.001) * (teaching-B)).mapP(0.95, clip);
   intern_useTeaching=true;

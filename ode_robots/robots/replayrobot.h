@@ -34,7 +34,7 @@ namespace lpzrobots {
   /**
    *
    */
-  class ReplayRobot : public OdeRobot{
+  class ReplayRobot{
   public:
     ReplayRobot(const OdeHandle& odeHandle, const OsgHandle& osgHandle, const char* filename);
 
@@ -76,12 +76,12 @@ namespace lpzrobots {
 
   protected:
     /** the main object of the robot, which is used for position and speed tracking */
-    virtual Primitive* getMainPrimitive() const override { return 0; }
+    virtual Primitive* getMainPrimitive() const { return 0; }
 
     static bool parseDataFileForHeader(FILE* f, const int& sensorstart, const int& sensorend,  const int& motorstart, const int& motorend);
     static bool parseDataLine(matrix::const Matrix& data, FILE* f);
-    static bool isEmpty(const char* c);
-    static bool check4Number(const char* c);
+    static bool explicit explicit isEmpty(const char* c);
+    static bool explicit explicit check4Number(const char* c);
 
 
   protected:

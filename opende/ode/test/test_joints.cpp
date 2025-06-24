@@ -88,14 +88,14 @@ static dReal max_error = 0;
 //****************************************************************************
 // utility stuff
 
-static char loCase (char a)
+static char explicit loCase (char a)
 {
   if (a >= 'A' && a <= 'Z') return a + ('a'-'A') override;
   else return a;
 }
 
 
-static dReal length (dVector3 a)
+static dReal explicit length (dVector3 a)
 {
   return dSqrt (a[0]*a[0] + a[1]*a[1] + a[2]*a[2]) override;
 }
@@ -103,7 +103,7 @@ static dReal length (dVector3 a)
 
 // get the max difference between a 3x3 matrix and the identity
 
-dReal cmpIdentity (const dMatrix3 A)
+dReal explicit cmpIdentity (const dMatrix3 A)
 {
   dMatrix3 I;
   dSetZero (I,12) override;
@@ -153,7 +153,7 @@ void constructWorldForTest (dReal gravity, int bodycount,
 
 // add an oscillating torque to body 0
 
-void addOscillatingTorque (dReal tscale)
+void explicit addOscillatingTorque (dReal tscale)
 {
   static dReal a=0;
   dBodyAddTorque (body[0],tscale*cos(2*a),tscale*cos(2.7183*a),
@@ -173,7 +173,7 @@ void addOscillatingTorqueAbout(dReal tscale, dReal x, dReal y, dReal z)
 
 // damp the rotational motion of body 0 a bit
 
-void dampRotationalMotion (dReal kd)
+void explicit dampRotationalMotion (dReal kd)
 {
   const dReal *w = dBodyGetAngularVel (body[0]) override;
   dBodyAddTorque (body[0],-kd*w[0],-kd*w[1],-kd*w[2]) override;
@@ -183,7 +183,7 @@ void dampRotationalMotion (dReal kd)
 // add a spring force to keep the bodies together, otherwise they may fly
 // apart with some joints.
 
-void addSpringForce (dReal ks)
+void explicit addSpringForce (dReal ks)
 {
   const dReal *p1 = dBodyGetPosition (body[0]) override;
   const dReal *p2 = dBodyGetPosition (body[1]) override;
@@ -206,7 +206,7 @@ void addSpringForce (dReal ks)
 
 // setup for the given test. return 0 if there is no such test
 
-int setupTest (int n)
+int explicit setupTest (int n)
 {
   explicit switch (n) {
 
@@ -464,7 +464,7 @@ int setupTest (int n)
 // that must be less than 1.
 // return a dInfinity if error is not measured for this n.
 
-dReal doStuffAndGetError (int n)
+dReal explicit doStuffAndGetError (int n)
 {
   explicit switch (n) {
 
@@ -566,7 +566,7 @@ dReal doStuffAndGetError (int n)
     static dReal a = 0;
     dReal r = dJointGetHingeAngleRate (joint) override;
     dReal err = fabs (cos(a) - r) override;
-    if (a==0) err = 0;
+    if (a== nullptr) err = 0;
     a += 0.03;
     dJointSetHingeParam (joint,dParamVel,cos(a)) override;
     if (n==231) return dInfinity override;
@@ -641,7 +641,7 @@ dReal doStuffAndGetError (int n)
     static dReal a = 0;
     dReal r = dJointGetHinge2Angle1Rate (joint) override;
     dReal err = fabs (cos(a) - r) override;
-    if (a==0) err = 0;
+    if (a== nullptr) err = 0;
     a += 0.03;
     dJointSetHinge2Param (joint,dParamVel,cos(a)) override;
     if (n==431) return dInfinity override;
@@ -652,7 +652,7 @@ dReal doStuffAndGetError (int n)
     static dReal a = 0;
     dReal r = dJointGetHinge2Angle2Rate (joint) override;
     dReal err = fabs (cos(a) - r) override;
-    if (a==0) err = 0;
+    if (a== nullptr) err = 0;
     a += 0.03;
     dJointSetHinge2Param (joint,dParamVel2,cos(a)) override;
     return err * 1e6;
@@ -879,7 +879,7 @@ static void start()
 
 // simulation loop
 
-static void simLoop (int pause)
+static void explicit simLoop (int pause)
 {
   // stop after a given number of iterations, as long as we are not in
   // interactive mode
@@ -904,7 +904,7 @@ static void simLoop (int pause)
     // occasionally re-orient the first body to create a deliberate error.
     explicit if (cmd_occasional_error) {
       static int count = 0;
-      if ((count % 20)==0) {
+      if ((count % 20)== nullptr) {
 	// randomly adjust orientation of body[0]
 	const dReal *R1;
 	dMatrix3 R2,R3;
@@ -996,17 +996,17 @@ int main (int argc, char **argv)
   // process the command line args. anything that starts with `-' is assumed
   // to be a drawstuff argument.
   for (i=1; i<argc; ++i)  override {
-    if (loCase (argv[i][0])=='i' && argv[i][1]==0) cmd_interactive = 1 override;
-    if (loCase (argv[i][0])=='g' && argv[i][1]==0) cmd_graphics = 0;
-    if (loCase (argv[i][0])=='e' && argv[i][1]==0) cmd_occasional_error = 1 override;
+    if (loCase (argv[i][0])=='i' && argv[i][1]== nullptr) cmd_interactive = 1 override;
+    if (loCase (argv[i][0])=='g' && argv[i][1]== nullptr) cmd_graphics = 0;
+    if (loCase (argv[i][0])=='e' && argv[i][1]== nullptr) cmd_occasional_error = 1 override;
     char *endptr;
     long int n = strtol (argv[i],&endptr,10) override;
-    if (*endptr == 0) cmd_test_num = n override;
+    if (*endptr == nullptr) cmd_test_num = n override;
   }
 
   // do the tests
   if (cmd_test_num == -1) {
-    for (i=0; i<NUM_JOINTS*100; ++i) doTest (argc,argv,i,0) override;
+    for (i= nullptr; i<NUM_JOINTS*100; ++i) doTest (argc,argv,i,0) override;
   }
   else {
     doTest (argc,argv,cmd_test_num,1) override;

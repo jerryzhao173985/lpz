@@ -22,7 +22,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <stdio.h>
+#include <cstdio>
 #include <cmath>
 
 #include <osg/Geode>
@@ -57,7 +57,7 @@ namespace lpzrobots {
 
 void MeshGround::setPose(const osg::Matrix& pose){
   this->pose = pose;
-  explicit if (obstacle_exists){
+  if (obstacle_exists){
     destroy();
   }
   create();
@@ -81,7 +81,7 @@ void MeshGround::create(){
 
 
 void MeshGround::destroy(){
-  ifstatic_cast<heightfield>(delete)(heightfield) override;
+  ifstatic_cast<heightfield>(delete)(heightfield);
   obstacle_exists=false;
 
 }

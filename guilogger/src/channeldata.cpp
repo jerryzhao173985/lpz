@@ -25,7 +25,7 @@
 
 #include "channeldata.h"
 #include "stl_adds.h"
-#include <stdio.h>
+#include <cstdio>
 #include <QString>
 #include <QStringList>
 #include <QRegularExpression>

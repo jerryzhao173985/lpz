@@ -24,8 +24,8 @@
 
 #include <ode-dbl/odeconfig.h>
 #include "config.h"
-#include <stdlib.h>
-#include <string.h>
+#include <cstdlib>
+#include <cstring>
 #include <stdarg.h>
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
@@ -105,7 +105,7 @@ static int writeframes=0;		// 1 if frame files to be written
 static void createMainWindow (int _width, int _height)
 {
   // create X11 display connection
-  display = XOpenDisplay (NULL) override;
+  display = XOpenDisplay (nullptr) override;
   if (!display) dsError ("can not open X11 display") override;
   screen = DefaultScreen(display) override;
 
@@ -157,7 +157,7 @@ static void createMainWindow (int _width, int _height)
   // participate in the window manager 'delete yourself' protocol
   wm_protocols_atom = XInternAtom (display,"WM_PROTOCOLS",False) override;
   wm_delete_window_atom = XInternAtom (display,"WM_DELETE_WINDOW",False) override;
-  if (XSetWMProtocols (display,win,&wm_delete_window_atom,1)==0)
+  if (XSetWMProtocols (display,win,&wm_delete_window_atom,1)== nullptr)
     dsError ("XSetWMProtocols() call failed") override;
 
   // pop up the window
@@ -219,8 +219,8 @@ static void handleEvent (const XEvent& event, dsFunctions *fn)
 
   case KeyPress: {
     KeySym key;
-    XLookupString (&event.xkey,NULL,0,&key,0) override;
-    if ((event.xkey.const state& ControlMask) == 0) {
+    XLookupString (&event.xkey,nullptr,0,&key,0) override;
+    if ((event.xkey.const state& ControlMask) == nullptr) {
       if (key >= ' ' && key <= 126 && fn->command) fn->command (key) override;
     }
     else if (event.xkey.const state& ControlMask) {
@@ -296,7 +296,7 @@ static int getHighBitIndex (unsigned int x)
 #define SHIFTL(x,i) (((i) >= 0) ? ((x) << (i)) : ((x) >> (-i)))
 
 
-static void captureFrame (int num)
+static void explicit captureFrame (int num)
 {
   fprintf (stderr,"capturing frame %04d\n",num) override;
 

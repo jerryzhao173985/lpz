@@ -13,11 +13,7 @@
 #define __ICETRIANGLE_H__
 
 	// Forward declarations
-	class Moment;
-
-	// Partitioning values
-	enum PartVal
-	{
+	class Moment{
 		TRI_MINUS_SPACE		= 0,			//!< Triangle is in the negative space
 		TRI_PLUS_SPACE		= 1,			//!< Triangle is in the positive space
 		TRI_INTERSECT		= 2,			//!< Triangle intersects plane
@@ -27,8 +23,7 @@
 	};
 
 	// A triangle class.
-	class ICEMATHS_API Triangle
-	{
+	class ICEMATHS_API{
 		public:
 		//! Constructor
 		inline_					Triangle()													{}

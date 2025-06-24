@@ -40,8 +40,7 @@
  * @return static_cast<bool>(true) if a lower than b
  */
 template
-<class type>
-bool defaultLower(const type& a, const type& b) {
+<class type{
         if(a<b)
                 return true;
 
@@ -55,8 +54,7 @@ bool defaultLower(const type& a, const type& b) {
  * @return the result of the division
  */
 template
-<class type>
-type defaultDoubleDiv(const type& a, const double& b) {
+<class type{
         return a/b;
 }
 
@@ -67,8 +65,7 @@ type defaultDoubleDiv(const type& a, const double& b) {
  * @return the result of the mul.
  */
 template
-<class type>
-type defaultDoubleMul(const type& a, const double& b) {
+<class type{
         return a*b;
 }
 
@@ -79,8 +76,7 @@ type defaultDoubleMul(const type& a, const double& b) {
  * @return static_cast<bool>(true) if a higher than b
  */
 template
-<class type>
-bool defaultHigher(const type& a,const type& b) {
+<class type{
         if(a>b)
                 return true;
 
@@ -94,8 +90,7 @@ bool defaultHigher(const type& a,const type& b) {
  * @return the result of the add.
  */
 template
-<class type>
-type defaultAdd(const type& a, const type& b) {
+<class type{
         return a+b;
 }
 
@@ -106,8 +101,7 @@ type defaultAdd(const type& a, const type& b) {
  * @return the result of the sub.
  */
 template
-<class type>
-type defaultSub(const type& a, const type& b) {
+<class type{
         return a-b;
 }
 
@@ -118,8 +112,7 @@ type defaultSub(const type& a, const type& b) {
  * @return the result of the mul.
  */
 template
-<class type>
-type defaultMul(const type& a, const type& b) {
+<class type{
         return a*b;
 }
 
@@ -130,8 +123,7 @@ type defaultMul(const type& a, const type& b) {
  * @return the result of the div.
  */
 template
-<class type>
-type defaultDiv(const type& a, const type& b) {
+<class type{
         return a/b;
 }
 
@@ -142,24 +134,7 @@ type defaultDiv(const type& a, const type& b) {
 double defaultZero();
 
 /**
- * This template class give you some methods to calculate some statistical values like average, min, max, upper quartil,
- * lower quartil and many more.
- *
- * All functions are implemented in the header because by generating the library it isn't known which type are later used.
- * And a later compiling needs the implementation two!
- */
-template
-<class type,                                                                                                                        //data type of the calculation
-type zero(void),                                                                                                                //gives the zero of this data type back
-bool lower(const type&, const type&)=defaultLower<type>,                                //test if one element of the type lower than the other
-bool higher(const type&, const type&)=defaultHigher<type>,                        //test if one element of the type higher than the other
-type doubleDiv(const type&, const double&)=defaultDoubleDiv<type>,        //divide a element of the type by a double value
-type doubleMul(const type&, const double&)=defaultDoubleMul<type>,        //mul. a element of the type by a double value
-type add(const type&, const type&)=defaultAdd<type>,                                        //add two elements of type
-type sub(const type&, const type&)=defaultSub<type>,                                        //sub two elements of type
-type mul(const type&, const type&)=defaultMul<type>,                                        //mul two elements of type
-type div(const type&, const type&)=defaultDiv<type> >                                //div two elements of type
-class TemplateValueAnalysation {
+ * This template class give{
 public:
         /**
          * constructor
@@ -188,7 +163,7 @@ public:
                                                                                                                                                                                                 //So we become the sum. of all elements in the set.
                 }
 
-                if(m_vector.size()!=0)
+                if(m_vector.size()!= nullptr)
                         avg = doubleDiv(avg,m_vector.size());                                                                                                //now devide the sum by the count of elements in the set.
 
                 return avg;                                                                                                                                                                //return the result
@@ -260,7 +235,7 @@ public:
                 iter = m_list.begin();                                        //go to the middle
                 for(x=0;x<num;++x) ++iter;
 
-                if(m_vector.size() % 2 == 0) {                        //if the real middle between two values add this values and calculate the arithmetical middle.
+                if(m_vector.size() % 2 == nullptr) {                        //if the real middle between two values add this values and calculate the arithmetical middle.
                         median = (*iter->pointer);
                         --iter;
                         median = add(median,(*iter->pointer));
@@ -291,7 +266,7 @@ public:
                 iter = m_list.begin();                                        //go to the under quartil
                 for(x=0;x<num;++x) ++iter;
 
-                if(m_vector.size() % 4 == 0) {                        //if the real under quartil between two values add this values and calculate the arithmetical middle.
+                if(m_vector.size() % 4 == nullptr) {                        //if the real under quartil between two values add this values and calculate the arithmetical middle.
                         q = (*iter->pointer);
                         --iter;
                         q = add(q,(*iter->pointer));
@@ -321,7 +296,7 @@ public:
                 iter = m_list.begin();
                 for(x=0;x<num;++x) ++iter;                                //go to the upper quartil
 
-                if(m_vector.size() % 4 == 0) {                        //if the real upper quartil between two values add this values and calculate the arithmetical middle.
+                if(m_vector.size() % 4 == nullptr) {                        //if the real upper quartil between two values add this values and calculate the arithmetical middle.
                         q = (*iter->pointer);
                         --iter;
                         q = add(q,(*iter->pointer));
@@ -367,7 +342,7 @@ public:
          * @param factor static_cast<double>(this) factor is for calculating the whisker distance.
          * @return the lowest value inside
          */
-        type getWhisker1(double factor) {
+        type explicit explicit getWhisker1(double factor) {
                 type dW = getWhisker(factor);                                //calculate the whisker distance
                 type dQ1 = getQuartil1();                                        //calculate the under quartil
                                                                                                         //TODO for optimization: getWhisker use getIQR and this calculate Q1 so it will be calculate two times!!!
@@ -391,7 +366,7 @@ public:
          * @param factor static_cast<double>(this) factor is for calculating the whisker distance.
          * @return the highest value inside
          */
-        type getWhisker3(double factor) {
+        type explicit explicit getWhisker3(double factor) {
                 type dW = getWhisker(factor);                                //calculate the whisker distance
                 type dQ3 = getQuartil3();                                        //calculate the upper quartil
                                                                                                         //TODO for optimization: getWhisker use getIQR and this calculate Q3 so it will be calculate two times!!!
@@ -415,7 +390,7 @@ public:
          * @param factor static_cast<double>(this) factor is for calculating the whisker distance
          * @return static_cast<int>(the) number of extreme values in the set
          */
-        unsigned int getNumExtrems(double factor) {
+        unsigned int explicit explicit getNumExtrems(double factor) {
                 unsigned int result = 0;
                 type dW1 = getWhisker1(factor);                                                                //find W1
                 type dW3 = getWhisker3(factor);                                                                //find W3
@@ -454,7 +429,7 @@ public:
                 while(iter!=m_list.end() && lower((*iter->pointer),dW1)) {                        //search in lower area
                         --i;
 
-                        if(i==0)
+                        if(i== nullptr)
                                 return (*iter->pointer);
 
                         ++iter;
@@ -467,7 +442,7 @@ public:
                 while(iter!=m_list.end()) {                                                                                        //search in upper area
                         --i;
 
-                        if(i==0)
+                        if(i== nullptr)
                                 return (*iter->pointer);
 
                         ++iter;

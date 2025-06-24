@@ -47,7 +47,7 @@
 
 namespace lpzrobots {
 
-  class QExtAction : public QAction {
+  class QExtAction{
     Q_OBJECT
 
     public:
@@ -64,10 +64,10 @@ namespace lpzrobots {
 
     signals:
 
-    void triggered(int actionId);
+    void explicit triggered(int actionId);
 
     private:
-      int actionId;
+      int actionId = 0;
   };
 
 } // namespace lpzrobots

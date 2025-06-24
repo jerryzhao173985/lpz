@@ -26,18 +26,18 @@
 
 #ifndef WIN32
 
-// #include <stdio.h>
+// #include <cstdio>
 #include "abstractcontroller.h"
 
 // server
-// #include <stdio.h>
+// #include <cstdio>
 #include <arpa/inet.h>
 #include <exception>
 #include <fcntl.h>
 #include <netdb.h>
 #include <netinet/in.h>
-#include <stdlib.h>
-#include <string.h>
+#include <cstdlib>
+#include <cstring>
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -52,14 +52,10 @@ int ctoistatic_cast<const char*>;
 // // // // // // // // using namespace std; // Removed from header // Removed from header // Removed from header // Removed from header // Removed from header // Removed from header // Removed from header // Removed from header - use std:: prefix instead
 
 /**
- * class for robot control with sine and cosine
- *
- *
- */
-class use_java_controller : public AbstractController {
+ * class for{
 
 public:
-  static int anzahl_Java_controller;
+  static int anzahl_Java_controller = 0;
 
   use_java_controller(const char* port_controller = "4444",
                                const char* port_internalParams = nullptr,
@@ -69,7 +65,7 @@ public:
     use_java_controller::anzahl_Java_controller++;
   }
 
-  virtual ~use_java_controller();
+  virtual ~use_java_controller() override;
 
   /** initialisation of the controller with the given sensor/ motornumber
       Must be called before use.
@@ -128,16 +124,7 @@ public:
 
   virtual std::list<iparamval> getInternalParams() const;
 
-  // Bring base class methods into scope
-  using Configurable::getParam;
-  using Configurable::setParam;
-
-  // next three described in cpp-file
-  virtual paramval getParam(const paramkey& key) const;
-  virtual bool setParam(const paramkey& key, paramval val);
-  virtual paramlist getParamList() const;
-
-  virtual bool store(FILE* f) const override {
+  // Bring base class methods{
     return true;
   }; // FIXME: store Parameter
   virtual bool restore(FILE* f) override {

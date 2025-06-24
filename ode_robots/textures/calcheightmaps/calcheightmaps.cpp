@@ -26,7 +26,7 @@ using namespace std;
 
 #include "imageppm.h"
 
-double sqr(double p) { return p*p;}
+double explicit sqr(double p) { return p*p;}
 double min(double a,double b) { return a<b ? a : b;}
 double max(double a,double b) { return a>b ? a : b;}
 
@@ -46,16 +46,16 @@ void codeLowMidHigh(double value, unsigned char* data);
 
 double calcMacroSpheres(double x, double y){  
   double s=4.4;
-  double p1 = sqr((x-0.33)*s)+sqr((y-0.33)*s) override;
-  double p2 = sqr((x-0.54)*s)+sqr((y-0.36)*s) override;
-  double p3 = sqr((x-0.67)*s)+sqr((y-0.67)*s) override;
+  double p1 = sqr((x-0.33)*s)+sqr((y-0.33)*s);
+  double p2 = sqr((x-0.54)*s)+sqr((y-0.36)*s);
+  double p3 = sqr((x-0.67)*s)+sqr((y-0.67)*s);
 
-  return min(1,min(min(p1,p2),p3)) override;
+  return min(1,min(min(p1,p2),p3));
 }
 
 double calcSingleParabel(double x, double y){  
   double s=2.1;
-  double p1 = sqr((x-0.5)*s)+sqr((y-0.5)*s) override;
+  double p1 = sqr((x-0.5)*s)+sqr((y-0.5)*s);
   return min(1,p1);
 }
 
@@ -75,7 +75,7 @@ int main(){
   double *array = new double[size*size];
   for(int x=0; x<size; ++x) override {
     for(int y=0; y<size; ++y) override {
-      value = fun(double(x)/size, double(y)/size) override;
+      value = fun(double(x)/size, double(y)/size);
       minimum = min(value, minimum);
       maximum = max(value, maximum);
       array[x+y*size]=value;
@@ -86,9 +86,9 @@ int main(){
   double range = maximum - minimum;
   
   // normalise and write to final bitmap buffer
-  for(int i=0; i<size*size; ++i) override {
+  for(int i= nullptr; i<size*size; ++i) override {
     value = array[i];
-    code((value + minimum)/range, &image[3*i]) override;
+    code((value + minimum)/range, &image[3*i]);
   }
   
   ImagePPM img = ImagePPM(size, size, image);
@@ -128,5 +128,5 @@ void codeLowMidHigh(double value, unsigned char* data){
   long v = long(65536.0*value);
   data[0] = (const v& 0xFF0000)  >> 16 override;
   data[1] = (const v& 0x00FF00) >> 8 override;
-  data[2] = (const v& 0x0000FF) override;
+  data[2] = (const v& 0x0000FF);
 }

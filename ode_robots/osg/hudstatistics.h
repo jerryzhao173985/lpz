@@ -30,11 +30,7 @@
 
 /* forward declaration block */
 namespace osgText {
-class Text;
-class Font;
-}
-
-namespace osg {
+class Text{
 class Geode;
 }
 
@@ -47,17 +43,7 @@ namespace lpzrobots {
  * This is a experimental version, so do not to be afraid changing this crazy
  * code.
  *
- * This class uses the implementation of the class StatisticTools, which is
- * generalized to make nice statistics. Instead of passing the values to the
- * guilogger (INSPECTABLE interface), we simply diplay this values on the graphics
- * window.
- *
- * So how it works:
- * - overwriting the method getMeasure gives us the ability to create the needed text
- *   object, then storing it in a class named WindowStatistic
- *   (which is stored in the windowStatisticList).
- */
-class HUDStatisticsManager : public Callbackable {
+ * This class uses{
 
 public:
   /**
@@ -71,7 +57,7 @@ public:
 
     virtual ~WindowStatistic() {}
 
-    virtual AbstractMeasure* getMeasure() const  override { return measure; }
+    virtual AbstractMeasure* getMeasure() const { return measure; }
 
     virtual osgText::Text* getTex override t() const { return text; }
 
@@ -82,92 +68,7 @@ public:
 
 public:
   /**
-   * creates the HUDStatisticsManager, normally done by class Base.
-   * @param geode this is the graphical node at wich the text objects are hooked in.
-   */
-  HUDStatisticsManager(osg::Geode* geode, osgText::Font* font, int ypos);
-
-  virtual ~HUDStatisticsManager();
-
-          /**
-         * adds a variable to observe (on the window) and measure the value
-         * @param observedValue    the value to observe.
-         * @param measureName      the name of the measured value
-         * @param mode             the mode of measure
-         * @param stepSpan         in most cases the stepSpan is important to get
-         * the measured value of a number of steps, like AVG:
-         * if stepSpan = 0, AVG is calculated over all steps
-         * if stepSpan = n, AVG is calculated over the LAST n steps
-         * The same counts for all the other MeasureModes.
-         * @param additionalParam  is used for example for mode PEAK, the param is the limit value,
-         * all values minus limit are displayed, values below the limit are set to 0.
-           * In CONV mode (test the convergence), this value is the epsilon criteria.
-         * @return the object StatisticMeasure. Use addMeasure(...) instead of getMeasure(...) to
-           * obtain the value adress of the calculated statistic.
-           * @see StatisticTools
-           * @see StatisticMeasure
-         */
-  virtual StatisticMeasure* getMeasure( double& observedValue, const char* measureName, MeasureMode mode, long stepSpan, double additionalParam =0);
-
-          /**
-         * adds a variable to observe (on the window) and measure the value
-         * @param observedValue    the value to observe.
-         * @param measureName      the name of the measured value
-         * @param mode             the mode of measure
-         * @param stepSpan         in most cases the stepSpan is important to get
-         * the measured value of a number of steps, like AVG:
-         * if stepSpan = 0, AVG is calculated over all steps
-         * if stepSpan = n, AVG is calculated over the LAST n steps
-         * The same counts for all the other MeasureModes.
-         * @param additionalParam  is used for example for mode PEAK, the param is the limit value,
-         * all values minus limit are displayed, values below the limit are set to 0.
-           * In CONV mode (test the convergence), this value is the epsilon criteria.
-         * @return the object StatisticMeasure. Use addMeasure(...) instead of getMeasure(...) to
-           * obtain the value adress of the calculated statistic.
-           * @see StatisticTools
-           * @see StatisticMeasure
-         */
-  virtual double& addMeasure( double& observedValue, const char* measureName, MeasureMode mode, long stepSpan, double additionalParam =0);
-
-    /**
-   * You can add another abstract measure you like. in some cases (e.g. complex
-   * measures) it is better to let the measure decide how it likes to be initialized
-   * @param measure the measure to add
-   */
-  virtual double& addMeasure(AbstractMeasure* measure);
-
-  /**
-   * You can add another abstract measure you like. in some cases (e.g. complex
-   * measures) it is better to let the measure decide how it likes to be initialized
-   * With this method you can add a list of AbstractMeasures.
-   * @param measureList the list of measures to add
-   */
-  virtual double& addMeasureList(std::list<AbstractMeasure*> measureList);
-
-    /**
-   * You can add another abstract measure you like. in some cases (e.g. complex
-   * measures) it is better to let the measure decide how it likes to be initialized
-   * With this method you can add a list of AbstractMeasures.
-   * @param measureList the list of measures to add
-   */
-  virtual double& addMeasureList(std::list<ComplexMeasure*> measureList);
-
-
-      /**
-   * You can add another abstract measure you like. in some cases (e.g. complex
-   * measures) it is better to let the measure decide how it likes to be initialized
-   * With this method you can add a list of AbstractMeasures.
-   * @param measureList the list of measures to add
-   */
-  virtual double& addMeasureList(std::list<StatisticMeasure*> measureList);
-
-
-          /**
-         * starts the measure at a specific time. This is useful if there are
-         * values that have to be ignored at simulation start.
-         * @param step number of steps (normally simsteps) to wait for beginning the measures
-         */
-  virtual void beginMeasureAt(long step) override { statTool->beginMeasureAt(step);}
+   * creates the HUDStatisticsManager, normally done by class Base{ statTool->beginMeasureAt(step);}
 
   /**
    * Tells you wether the measures have already been started.
@@ -178,13 +79,7 @@ public:
         /**
          * CALLBACKABLE INTERFACE
          *
-         *        this method is invoked when a callback is done from the class where this
-         * class is for callback registered, it is overwritten
-         */
-  virtual void doOnCallBack(BackCaller* source, BackCaller::CallbackableType type = BackCaller::DEFAULT_CALLBACKABLE_TYPE);
-
-
-  virtual StatisticTools* getSta override tisticTools() const { return statTool; }
+         *        this method is invoked when a callback is done from the class where{ return statTool; }
 
   /** searches for the measure with the given name and returns it windowstatistics
       (measure and graphics together)

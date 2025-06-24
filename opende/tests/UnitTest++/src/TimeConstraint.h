@@ -5,11 +5,7 @@
 
 namespace UnitTest {
 
-class TestResults;
-class TestDetails;
-
-class TimeConstraint
-{
+class TestResults{
 public:
     TimeConstraint(int ms, TestResults& result, TestDetails const& details) override;
     ~TimeConstraint();

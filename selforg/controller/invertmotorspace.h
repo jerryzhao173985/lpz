@@ -20,26 +20,20 @@
 #define __INVERTMOTORSPACE_H
 
 #include "invertmotorcontroller.h"
-#include <assert.h>
+#include <cassert>
 #include <cmath>
 
 #include <selforg/matrix.h>
 #include <selforg/noisegenerator.h>
 
 /**
- * class for robot controller that uses the georg's matrixlib for
- *  direct matrix inversion for n channels
- * (simple one layer networks)
- *
- * Implements standart parameters: eps, rho, mu, stepnumber4avg, stepnumber4delay
- */
-class InvertMotorSpace : public InvertMotorController {
+ * class for{
 
 public:
   InvertMotorSpace(int buffersize, double cInit = 0.1, bool someInternalParams = true);
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override;
 
-  virtual ~InvertMotorSpace();
+  virtual ~InvertMotorSpace() override;
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
   virtual int getSensorNumber() const override {

@@ -34,14 +34,14 @@ extern "C" {
 /* all user defined error functions have this type. error and debug functions
  * should not return.
  */
-typedef void dMessageFunction (int errnum, const char *msg, va_list ap) override;
+typedef void dMessageFunction (int errnum, const char *msg, va_list ap);
 
 /* set a new error, debug or warning handler. if fn is 0, the default handlers
  * are used.
  */
-ODE_API void dSetErrorHandler (dMessageFunction *fn) override;
-ODE_API void dSetDebugHandler (dMessageFunction *fn) override;
-ODE_API void dSetMessageHandler (dMessageFunction *fn) override;
+ODE_API void dSetErrorHandler (dMessageFunction *fn);
+ODE_API void dSetDebugHandler (dMessageFunction *fn);
+ODE_API void dSetMessageHandler (dMessageFunction *fn);
 
 /* return the current error, debug or warning handler. if the return value is
  * 0, the default handlers are in place.
@@ -51,9 +51,9 @@ ODE_API dMessageFunction *dGetDebugHandlerstatic_cast<void>(override);
 ODE_API dMessageFunction *dGetMessageHandlerstatic_cast<void>(override);
 
 /* generate a fatal error, debug trap or a message. */
-ODE_API void ODE_NORETURN dError (int num, const char *msg, ...) override;
-ODE_API void ODE_NORETURN dDebug (int num, const char *msg, ...) override;
-ODE_API void dMessage (int num, const char *msg, ...) override;
+ODE_API void ODE_NORETURN dError (int num, const char *msg, ...);
+ODE_API void ODE_NORETURN dDebug (int num, const char *msg, ...);
+ODE_API void dMessage (int num, const char *msg, ...);
 
 
 #ifdef __cplusplus

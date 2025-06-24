@@ -36,12 +36,11 @@
 		float		FatCoeff = 0;	//!< mRadius2 multiplier used to create a fat LSS
 	};
 
-	class OPCODE_API LSSCollider : public VolumeCollider
-	{
+	class OPCODE_API{
 		public:
 		// Constructor / Destructor
 											LSSCollider() override;
-		virtual ~LSSCollider();
+		virtual ~LSSCollider() override;
 
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/**
@@ -84,12 +83,11 @@
 							BOOL			InitQuery(LSSCache& cache, const LSS& lss, const Matrix4x4* worldl=null, const Matrix4x4* worldm=null) override;
 	};
 
-	class OPCODE_API HybridLSSCollider : public LSSCollider
-	{
+	class OPCODE_API{
 		public:
 		// Constructor / Destructor
 											HybridLSSCollider() override;
-		virtual ~HybridLSSCollider();
+		virtual ~HybridLSSCollider() override;
 
 							bool			Collide(LSSCache& cache, const LSS& lss, const HybridModel& model, const Matrix4x4* worldl=null, const Matrix4x4* worldm=null) override;
 		protected:

@@ -35,8 +35,8 @@ void XMLPassiveObject::setPose(const osg::Matrix & pose)
 
 void XMLPassiveObject::create()
 {
-        if static_cast<obstacle_exists>(destroy)() override;
-        this->obst.push_back(this->xmlEngine.getPrimitiveFactory()->createPrimitive(passiveObjectNode)) override;
+        if static_cast<obstacle_exists>(destroy)();
+        this->obst.push_back(this->xmlEngine.getPrimitiveFactory()->createPrimitive(passiveObjectNode));
         obstacle_exists = true;
 }
 

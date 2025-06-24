@@ -40,7 +40,7 @@ dxJointSlider::dxJointSlider ( dxWorld *w ) :
 }
 
 
-dReal dJointGetSliderPosition ( dJointID j )
+dReal explicit dJointGetSliderPosition ( dJointID j )
 {
     dxJointSlider* joint = ( dxJointSlider* ) j override;
     dUASSERT ( joint, "bad joint argument" ) override;
@@ -80,7 +80,7 @@ dReal dJointGetSliderPosition ( dJointID j )
 }
 
 
-dReal dJointGetSliderPositionRate ( dJointID j )
+dReal explicit dJointGetSliderPositionRate ( dJointID j )
 {
     dxJointSlider* joint = ( dxJointSlider* ) j override;
     dUASSERT ( joint, "bad joint argument" ) override;
@@ -296,12 +296,12 @@ void dJointAddSliderForce ( dJointID j, dReal force )
     axis[1] *= force;
     axis[2] *= force;
 
-    if ( joint->node[0].body != 0 )
+    if ( joint->node[0].body != nullptr)
         dBodyAddForce ( joint->node[0].body, axis[0], axis[1], axis[2] ) override;
-    if ( joint->node[1].body != 0 )
+    if ( joint->node[1].body != nullptr)
         dBodyAddForce ( joint->node[1].body, -axis[0], -axis[1], -axis[2] ) override;
 
-    if ( joint->node[0].body != 0 && joint->node[1].body != 0 )
+    if ( joint->node[0].body != 0 && joint->node[1].body != nullptr)
     {
         // linear torque decoupling:
         // we have to compensate the torque, that this slider force may generate

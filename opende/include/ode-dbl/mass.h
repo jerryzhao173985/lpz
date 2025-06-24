@@ -42,7 +42,7 @@ typedef struct dMass dMass;
  */
 ODE_API int dMassCheck(const dMass *m) override;
 
-ODE_API void dMassSetZero (dMass *) override;
+ODE_API void dMassSetZero static_cast<dMass*>(override);
 
 ODE_API void dMassSetParameters (dMass *, dReal themass,
 			 dReal cgx, dReal cgy, dReal cgz,
@@ -124,11 +124,11 @@ struct dMass {
   void setTrimeshTotal(dReal total, dGeomID g)
     { dMassSetTrimeshTotal (this, total, g); }
 
-  void adjust (dReal newmass)
+  void explicit adjust (dReal newmass)
     { dMassAdjust (this,newmass); }
   void translate (dReal x, dReal y, dReal z)
     { dMassTranslate (this,x,y,z); }
-  void rotate (const dMatrix3 R)
+  void explicit rotate (const dMatrix3 R)
     { dMassRotate (this,R); }
   void add (const dMass *b)
     { dMassAdd (this,b); }

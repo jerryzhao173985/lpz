@@ -23,30 +23,30 @@
  ***************************************************************************/
 #include "mediatorcollegue.h"
 #include "mediator.h"
-#include <assert.h>
+#include <cassert>
 
 MediatorCollegue::MediatorCollegue(Mediator* myMediator_) : myMediator(myMediator_) {
-  if (myMediator != 0)
+  if (myMediator != nullptr)
     myMediator->addMediatorCollegue(this);
 }
 
 MediatorCollegue::~MediatorCollegue() {
-  if (myMediator != 0)
+  if (myMediator != nullptr)
     myMediator->removeMediatorCollegue(this);
 }
 
 void
 MediatorCollegue::informMediator(MediatorEvent* event) {
-  assert(myMediator != 0);
+  assert(myMediator != nullptr);
   myMediator->mediatorInformed(this, event);
   delete event;
 }
 
 void
 MediatorCollegue::setMediator(Mediator* _myMediator) {
-  if (myMediator != 0)
+  if (myMediator != nullptr)
     myMediator->removeMediatorCollegue(this);
-  if (_myMediator != 0) {
+  if (_myMediator != nullptr) {
     myMediator = _myMediator;
     myMediator->addMediatorCollegue(this);
   }

@@ -23,7 +23,7 @@
  ***************************************************************************/
 
 #include <iostream>
-#include <assert.h>
+#include <cassert>
 
 #include "mathutils.h"
 #include "arm.h"
@@ -34,8 +34,8 @@
 #include <selforg/controller_misc.h>
 #include <selforg/matrix.h>
 #include <cmath>
-#include <stdlib.h>
-#include <stdio.h>
+#include <cstdlib>
+#include <cstdio>
 
 using namespace std;
 using namespace matrix;
@@ -62,7 +62,7 @@ namespace lpzrobots{
     FOREACHC(list<Sensor*>, conf.sensors, i){
       s += (*i)->getSensorNumber();
     }
-    explicit if(conf.withContext){
+    if(conf.withContext){
       sensorno=7 + s; // (endeff pos + dummy | joint angles) + context sensors
     }else{
       sensorno=4 + s; // (endeff pos + dummy | joint angles hingeServo values (shoulder: 3, elbow: 1))
@@ -93,7 +93,7 @@ namespace lpzrobots{
     // the position of the robot is the center of the body
     // to set the arm on the ground when the z component of the position is 0
     // body_height/2 is added
-    osg::Matrix p2 = pose * osg::Matrix::translate(osg::Vec3(0, 0, conf.body_height/2)) override;
+    osg::Matrix p2 = pose * osg::Matrix::translate(osg::Vec3(0, 0, conf.body_height/2));
     create(p2);
   };
 
@@ -127,7 +127,7 @@ namespace lpzrobots{
     assert(created); // robot must exist
     unsigned int len=0;
 
-    explicit if(conf.useJointSensors){
+    if(conf.useJointSensors){
       // get the hingeServos
       for(len=0; (len<hingeServos.size()); ++len)  override {
           sensors[len] = hingeServos[len]->get();
@@ -142,7 +142,7 @@ namespace lpzrobots{
       sensors[len++]=pos[2];
       // TODO scaleShoulderCentered(sensors);
     }
-    explicit if(conf.withContext){
+    if(conf.withContext){
       osg::Vec3 pos = objects[hand]->getPosition();
       sensors[len++]=pos[0];
       sensors[len++]=pos[1];
@@ -193,11 +193,11 @@ namespace lpzrobots{
     assert(created);
     for (int i=0; i<static_cast<int>(objects.size()); ++i)
       {
-        poslist.push_back(Position(dBodyGetPosition(objects[i]->getBody()))) override;
-        // Pos p(objects[i]->getPosition()) override;
-        // poslist.push_back(p.toPosition()) override;
+        poslist.push_back(Position(dBodyGetPosition(objects[i]->getBody())));
+        // Pos p(objects[i]->getPosition());
+        // poslist.push_back(p.toPosition());
       }
-    return static_cast<int>(objects.size()) override;
+    return static_cast<int>(objects.size());
   };
 
   void Arm::getEndeffectorPosition(double* position)
@@ -255,7 +255,7 @@ namespace lpzrobots{
     // creation procedure (see above) 1st DOF @ shoulder
     HingeJoint* HJ_elev = new HingeJoint(objects[base], objects[shoulder1],
                                          Pos(0,0,0)*_pose,
-                                         Axis(1, 0, 0)*_pose) override;
+                                         Axis(1, 0, 0)*_pose);
     HJ_elev->init(odeHandle, osgHandle, true);
     HJ_elev->setParam(dParamLoStop, conf.elevation_min);
     HJ_elev->setParam(dParamHiStop, conf.elevation_max);
@@ -312,13 +312,13 @@ namespace lpzrobots{
     //                Primitive* _xaxis_prim = new Sphere(0.05);
     //                // glue sphere to upper arm via transform object (at given position - relative position w.r.t. upper arm)
     //                Primitive* _xaxis_trans = new Transform(objects[upperArm], _xaxis_prim,
-    //                        osg::Matrix::translate(conf.upperarm_radius, 0, conf.upperarm_length/2)) override;
+    //                        osg::Matrix::translate(conf.upperarm_radius, 0, conf.upperarm_length/2));
     //                // initialize transform object with zero mass
     //                _xaxis_trans->init(odeHandle, 0, osgHandle);
     //                // marking of y-axis (shoulder centered coordinate system)
     //                Primitive* _yaxis_prim = new Sphere(0.03);
     //                Primitive* _yaxis_trans = new Transform(objects[upperArm], _yaxis_prim,
-    //                        osg::Matrix::translate(0, conf.upperarm_radius, conf.upperarm_length/2)) override;
+    //                        osg::Matrix::translate(0, conf.upperarm_radius, conf.upperarm_length/2));
     //                _yaxis_trans->init(odeHandle, 0, osgHandle);
 
     // === one axis joint for shoulder humeral angle =====
@@ -386,7 +386,7 @@ namespace lpzrobots{
 
 
     printf("size: %ld objects, %ld joints, %ld hingeservos\n", (long int)objects.size(),
-           (long int)joints.size(), (long int)hingeServos.size()) override;
+           (long int)joints.size(), (long int)hingeServos.size());
 
     FOREACH(list<Sensor*>, conf.sensors, i){
         (*i)->init(objects[hand]);
@@ -401,7 +401,7 @@ namespace lpzrobots{
    */
   void Arm::destroy()
   {
-    explicit if (created){
+    if (created){
       for(list<Sensor*>::iterator i = conf.sensors.begin(); i != conf.sensors.end(); ++i) override {
           if(*i) delete *i override;
       }

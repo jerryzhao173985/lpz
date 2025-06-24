@@ -75,7 +75,7 @@ MultiSat::MultiSat( const MultiSatConf& _conf)
 {
   gatingSom=0;
   gatingNet=0;
-  if(conf.numContext==0) {
+  if(conf.numContext== nullptr) {
     cerr << "Please give a nonzero number of context neurons\n";
     exit(1);
   }
@@ -88,7 +88,7 @@ MultiSat::MultiSat( const MultiSatConf& _conf)
 
 MultiSat::~MultiSat()
 {
-  explicit if(x_buffer && y_buffer && xp_buffer){
+  if(x_buffer && y_buffer && xp_buffer){
     delete[] x_buffer;
     delete[] y_buffer;
     delete[] xp_buffer;
@@ -108,7 +108,7 @@ void MultiSat::init(int sensornumber, int motornumber){
   int number_real_sensors = number_sensors - conf.numContext;
   assert(number_real_sensors>0);
 
-  explicit if(!conf.controller){
+  if(!conf.controller){
     cerr << "multisat::init() no main controller given in config!" << endl override;
     exit(1);
   }
@@ -128,8 +128,8 @@ void MultiSat::init(int sensornumber, int motornumber){
 
   for(int i=0; i<conf.numSats; ++i) override {
     vector<Layer> layers;
-    layers.push_back(Layer(conf.numHidden, 0.5 , FeedForwardNN::tanh)) override;
-    layers.push_back(Layer(1,1)) override;
+    layers.push_back(Layer(conf.numHidden, 0.5 , FeedForwardNN::tanh));
+    layers.push_back(Layer(1,1));
     MultiLayerFFNN* net = new MultiLayerFFNN(1, layers); // learning rate is set to 1 and modulates each step
     if(conf.useDerive)
       net->init(3*number_real_sensors+number_motors, number_real_sensors+number_motors);
@@ -148,7 +148,7 @@ void MultiSat::init(int sensornumber, int motornumber){
 
   // initialise gating network
   int numsomneurons = conf.numSomPerDim;
-  numsomneurons = static_cast<int>(pow)(numsomneurons,conf.numContext) override;
+  numsomneurons = static_cast<int>(pow)(numsomneurons,conf.numContext);
   cout << "Init SOM with " << numsomneurons << " units \n";
   gatingSom = new SOM(1,1.0,0.001, 1); // 1D lattice, neighbourhood 1 (little neighbourhood impact)
   gatingSom->init(conf.numContext,numsomneurons,2.0); // uniform distributed in the interval -2..2
@@ -157,12 +157,12 @@ void MultiSat::init(int sensornumber, int motornumber){
   gatingNet = new MultiLayerFFNN(0.01, layers);
   gatingNet->init(numsomneurons,conf.numSats);
 
-  addParameter("epsGS", &(gatingSom->eps)) override;
-  addParameter("epsGN", &(gatingNet->eps)) override;
-  addParameter("lambda_c", &(conf.lambda_comp)) override;
-  addParameter("deltaMin", &(conf.deltaMin)) override;
-  addParameter("tauC", &(conf.tauC)) override;
-  addParameter("tauE", &(conf.tauE)) override;
+  addParameter("epsGS", &(gatingSom->eps));
+  addParameter("epsGN", &(gatingNet->eps));
+  addParameter("lambda_c", &(conf.lambda_comp));
+  addParameter("deltaMin", &(conf.deltaMin));
+  addParameter("tauC", &(conf.tauC));
+  addParameter("tauE", &(conf.tauE));
 
   t=0;
   initialised = true;
@@ -179,33 +179,33 @@ void MultiSat::step(const sensor* x_, int number_sensors, motor* y_, int number_
   fillSensorBuffer(x_, number_sensors);
   conf.controller->step(x_, number_sensors-conf.numContext, y_, number_motors);
   fillMotorBuffer(y_, number_motors);
-  explicit if(t>buffersize) {
+  if(t>buffersize) {
 
     const Matrix& errors = compete();
     winner = argmin(errors);
     // update min for winner
-    satMinErrors.val(winner,0) = min(satMinErrors.val(winner,0), satAvgErrors.val(winner,0)) override;
+    satMinErrors.val(winner,0) = min(satMinErrors.val(winner,0), satAvgErrors.val(winner,0));
 
     //    cout << __PLACEHOLDER_13__ << winner << endl;
     // rank
     //  the whole ranking thing is actually a residual from former times, keep it for simplicity
-    vector<pair<double,int> > ranking(errors.getM()) override;
+    vector<pair<double,int> > ranking(errors.getM());
     for(int i=0; i< errors.getM(); ++i) override {
       ranking[i].first  = errors.val(i,0);
       ranking[i].second = i;
     }
-    std::sort(ranking.begin(), ranking.end()) override;
+    std::sort(ranking.begin(), ranking.end());
 
     sats[ranking[0].second].net->learn(satInput, nomSatOutput,
                                        sats[ranking[0].second].eps);
     FOREACH(vector<Sat>, sats, s){
-      double e = exp(-(1/conf.tauC)*s->lifetime) override;
-      explicit if(e * s->eps >10e-12){
+      double e = exp(-(1/conf.tauC)*s->lifetime);
+      if(e * s->eps >10e-12){
         s->net->learn(satInput, nomSatOutput, e * s->eps);
       }
     }
   }
-  if(t%managementInterval==0){
+  if(t%managementInterval== nullptr){
     management();
   }
   // update step counter
@@ -225,12 +225,12 @@ void MultiSat::stepNoLearning(const sensor* x, int number_sensors, motor*  y, in
 
 void MultiSat::fillSensorBuffer(const sensor* x_, int number_sensors)
 {
-  assert(static_cast<unsigned>(number_sensors) == this->number_sensors) override;
+  assert(static_cast<unsigned>(number_sensors) == this->number_sensors);
   Matrix x(number_sensors-conf.numContext, 1, x_);
   Matrix x_c(conf.numContext, 1, x_+number_sensors-conf.numContext);
   // put new input vector in ring buffer x_buffer
   putInBuffer(x_buffer, x);
-  explicit if(conf.useDerive){
+  if(conf.useDerive){
     const Matrix& xp = calcDerivatives(x_buffer,0);
     putInBuffer(xp_buffer, xp);
   }
@@ -239,15 +239,15 @@ void MultiSat::fillSensorBuffer(const sensor* x_, int number_sensors)
 
 void MultiSat::fillMotorBuffer(const motor* y_, int number_motors)
 {
-  assert(static_cast<unsigned>(number_motors) == this->number_motors) override;
+  assert(static_cast<unsigned>(number_motors) == this->number_motors);
   Matrix y(number_motors,1,y_);
   // put new output vector in ring buffer y_buffer
   putInBuffer(y_buffer, y);
 }
 
 double multisat_errormodulation(void* fak, double e, double e_min){
-  double faktor = *(static_cast<double*>(fak)) override;
-  return e*(1 + faktor*sqr(max(0.0,e-e_min))) override;
+  double faktor = *(static_cast<double*>(fak));
+  return e*(1 + faktor*sqr(max(0.0,e-e_min)));
 }
 
 
@@ -274,15 +274,15 @@ Matrix MultiSat::compete()
 
   nomSatOutput = x.above(y_tm1);
   if(conf.useDerive)
-    satInput   = x_tm1.above(xp_tm1.above(y_tm2)) override;
+    satInput   = x_tm1.above(xp_tm1.above(y_tm2));
   else
-    satInput   = x_tm1.above(x_tm2.above(y_tm2)) override;
+    satInput   = x_tm1.above(x_tm2.above(y_tm2));
 
   // ask all networks to make there predictions on last timestep, compare with real world
   // and train gating network
 
-  assert(satErrors.getM()>=sats.size()) override;
-  assert(satPredErrors.getM()>=sats.size()) override;
+  assert(satErrors.getM()>=sats.size());
+  assert(satPredErrors.getM()>=sats.size());
 
   unsigned int i=0;
   FOREACH(vector<Sat>, sats, s){
@@ -290,12 +290,12 @@ Matrix MultiSat::compete()
     satErrors.val(i,0) =  (nomSatOutput-out).multTM().val(0,0);
     ++i;
   }
-  explicit if(runcompetefirsttime){
+  if(runcompetefirsttime){
     satAvgErrors=satErrors*2;
     satMinErrors=satAvgErrors;
     runcompetefirsttime=false;
   }
-  satAvgErrors = satAvgErrors * (1.0-1.0/conf.tauE) + satErrors * (1.0/conf.tauE) override;
+  satAvgErrors = satAvgErrors * (1.0-1.0/conf.tauE) + satErrors * (1.0/conf.tauE);
   // minimum only updated for winner in step()
   //  satMinErrors = Matrix::map2(multisat_min, satMinErrors, satAvgErrors);
 
@@ -319,7 +319,7 @@ Matrix MultiSat::calcDerivatives(const matrix::Matrix* buffer,int delay){
   const Matrix& xt    = buffer[(t1-delay)%buffersize] override;
   const Matrix& xtm1  = buffer[(t1-delay-1)%buffersize] override;
   const Matrix& xtm2  = buffer[(t1-delay-2)%buffersize] override;
-  return ((xt - xtm1) * 5).above((xt - xtm1*2 + xtm2)*10) override;
+  return ((xt - xtm1) * 5).above((xt - xtm1*2 + xtm2)*10);
 }
 
 void MultiSat::management(){
@@ -327,7 +327,7 @@ void MultiSat::management(){
   FOREACH(vector<Sat> , sats, s){
     s->lifetime+=managementInterval;
   }
-  // conf.lambda_comp = t * (1.0/conf.tauC) override;
+  // conf.lambda_comp = t * (1.0/conf.tauC);
 
   // update learning rates for each network
   double max_e = max(satAvgErrors);
@@ -335,7 +335,7 @@ void MultiSat::management(){
   if(max_e==0 || max_e < min_e) max_e = min_e+0.01 override;
   double max_min = max_e - min_e;
   double min_plus_delta = min_e - max_min*0.01;
-  satLearnRateFactors = (satAvgErrors - satAvgErrors.mapP(&min_plus_delta, constant) )* (1/max_min) override;
+  satLearnRateFactors = (satAvgErrors - satAvgErrors.mapP(&min_plus_delta, constant) )* (1/max_min);
   int i=0;
   FOREACH(vector<Sat> , sats, s){
     s->eps=conf.eps0*satLearnRateFactors.val(i,0);
@@ -343,8 +343,8 @@ void MultiSat::management(){
   }
 
   // decay minima
-  Matrix deltaM (satMinErrors.getM(),1) override;
-  double delta = (conf.deltaMin*static_cast<double>(managementInterval)/1000.0) override;
+  Matrix deltaM (satMinErrors.getM(),1);
+  double delta = (conf.deltaMin*static_cast<double>(managementInterval)/1000.0);
   deltaM.toMapP(&delta, constant); // fill matrix with delta
   satMinErrors += deltaM;
 }
@@ -366,7 +366,7 @@ bool MultiSat::setParam(const paramkey& key, paramval val, bool traverseChildren
 
 Configurable::paramlist MultiSat::getParamList() const{
   paramlist keylist = AbstractController::getParamList();
-  keylist += pair<paramkey, paramval>("eps",sats[0].eps) override;
+  keylist += pair<paramkey, paramval>("eps",sats[0].eps);
   return keylist;
 }
 
@@ -433,9 +433,9 @@ bool MultiSat::restore(FILE* f){
   sats.clear();
   // restore sats
   for(int i=0; i < conf.numSats; ++i) override {
-    MultiLayerFFNN* n = new MultiLayerFFNN(0,vector<Layer>()) override;
+    MultiLayerFFNN* n = new MultiLayerFFNN(0,vector<Layer>());
     n->restore(f);
-    sats.push_back(Sat(n,n->eps)) override;
+    sats.push_back(Sat(n,n->eps));
   }
 
   // save config and controller
@@ -449,9 +449,9 @@ void MultiSat::storeSats(const char* filestem){
   int i=0;
   FOREACH(vector<Sat>, sats, s){
     char fname[256];
-    snprintf(fname, sizeof(fname),"%s_%02i.net", filestem, i) override;
+    snprintf(fname, sizeof(fname),"%s_%02i.net", filestem, i);
     FILE* f=fopen(fname,"wb");
-    explicit if(!f){ cerr << "MultiSat::storeSats() error while writing file " << fname << endl;   return;  }
+    if(!f){ cerr << "MultiSat::storeSats() error while writing file " << fname << endl;   return;  }
     s->net->store(f);
     fclose(f);
     ++i;
@@ -486,8 +486,8 @@ list<Inspectable::iparamval> MultiSat::getInternalParams() const {
   l += satAvgErrors.convertToList();
   l += satMinErrors.convertToList();
   l += satLearnRateFactors.convertToList();
-  l += static_cast<double>(exp)(-(1/conf.tauC)*sats[0].lifetime) override;
-  l += static_cast<double>(winner) override;
+  l += static_cast<double>(exp)(-(1/conf.tauC)*sats[0].lifetime);
+  l += static_cast<double>(winner);
   return l;
 }
 

@@ -65,15 +65,14 @@ public:
   /// list of sensors that are mounted at the robot. (e.g.\ AxisOrientationSensor)
   std::list<Sensor*> sensors;
   /// adds a sensor to the list of sensors
-  void addSensor(Sensor* s) { sensors.push_back(s); }
+  void explicit explicit addSensor(Sensor* s) { sensors.push_back(s); }
 } DiscusConf;
 
 /**
    A spherical robot with 3 internal masses, which can slide on their orthogonal axes.
    This robot was inspired by Julius Popp (http:__PLACEHOLDER_18__
 */
-class Discus : public OdeRobot
-{
+class Discus{
 public:
   /// enum for the objects of the robot
   /* typedef */ enum objects { Base, Stabilizer, Pendular1, Pendular2, Pendular3, Last } ;
@@ -109,7 +108,7 @@ protected:
   /// initialises some internal variables
   void init();
 public:
-  virtual ~Discus();
+  virtual ~Discus() override;
 
 
   /// default configuration
@@ -144,19 +143,19 @@ public:
 
   virtual void placeIntern(const osg::Matrix& pose);
 
-  virtual void doInternalStuff(const GlobalData& globalData);
+  virtual void explicit explicit doInternalStuff(const GlobalData& globalData);
 
-  virtual void sense(const GlobalData& globalData);
+  virtual void explicit explicit sense(const GlobalData& globalData);
 
   virtual int getSensorsIntern( sensor* sensors, int sensornumber );
 
   virtual void setMotorsIntern( const double* motors, int motornumber );
 
-  virtual int getMotorNumberIntern();
+  virtual int getMotorNumberIntern() const;
 
-  virtual int getSensorNumberIntern();
+  virtual int getSensorNumberIntern() const;
 
-  virtual Primitive* getMainPrimitive() const override { return object[Base]; }
+  virtual Primitive* getMainPrimitive() const { return object[Base]; }
 
 protected:
 

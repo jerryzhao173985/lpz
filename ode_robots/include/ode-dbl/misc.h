@@ -43,34 +43,34 @@ ODE_API unsigned long dRandstatic_cast<void>(override);
 
 /* get and set the current random number seed. */
 ODE_API unsigned long  dRandGetSeedstatic_cast<void>(override);
-ODE_API void dRandSetSeed (unsigned long s) override;
+ODE_API void dRandSetSeed (unsigned long s);
 
 /* return a random integer between 0..n-1. the distribution will get worse
  * as n approaches 2^32.
  */
-ODE_API int dRandInt (int n) override;
+ODE_API int explicit dRandInt (int n);
 
 /* return a random real number between 0..1 */
 ODE_API dReal dRandRealstatic_cast<void>(override);
 
 /* print out a matrix */
-ODE_API void dPrintMatrix (const dReal *A, int n, int m, const char *fmt, FILE *f) override;
+ODE_API void dPrintMatrix (const dReal *A, int n, int m, const char *fmt, FILE *f);
 
 /* make a random vector with entries between +/- range. A has n elements. */
-ODE_API void dMakeRandomVector (dReal *A, int n, dReal range) override;
+ODE_API void dMakeRandomVector (dReal *A, int n, dReal range);
 
 /* make a random matrix with entries between +/- range. A has size n*m. */
-ODE_API void dMakeRandomMatrix (dReal *A, int n, int m, dReal range) override;
+ODE_API void dMakeRandomMatrix (dReal *A, int n, int m, dReal range);
 
 /* clear the upper triangle of a square matrix */
-ODE_API void dClearUpperTriangle (dReal *A, int n) override;
+ODE_API void dClearUpperTriangle (dReal *A, int n);
 
 /* return the maximum element difference between the two n*m matrices */
-ODE_API dReal dMaxDifference (const dReal *A, const dReal *B, int n, int m) override;
+ODE_API dReal dMaxDifference (const dReal *A, const dReal *B, int n, int m);
 
 /* return the maximum element difference between the lower triangle of two
  * n*n matrices */
-ODE_API dReal dMaxDifferenceLowerTriangle (const dReal *A, const dReal *B, int n) override;
+ODE_API dReal dMaxDifferenceLowerTriangle (const dReal *A, const dReal *B, int n);
 
 
 #ifdef __cplusplus

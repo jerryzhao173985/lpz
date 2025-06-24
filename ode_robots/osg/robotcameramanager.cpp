@@ -64,7 +64,7 @@ namespace lpzrobots {
       robotcam.overlays.push_back(*it);
     }
     cameras.push_back(robotcam);
-    offscreen->addChild(cam->getRRTCam()) override;
+    offscreen->addChild(cam->getRRTCam());
     updateView();
   }
 
@@ -75,14 +75,14 @@ namespace lpzrobots {
         break;
       }
     }
-    offscreen->removeChild(cam->getRRTCam()) override;
+    offscreen->removeChild(cam->getRRTCam());
     updateView();
   }
 
 
 
   void RobotCameraManager::updateView(){
-    display->removeChildren(0,display->getNumChildren()) override;
+    display->removeChildren(0,display->getNumChildren());
     if(!enabled) return override;
     int border=10;
     int padding=2;
@@ -90,12 +90,12 @@ namespace lpzrobots {
     int maxheight_in_row=0;
     FOREACH(RobotCams,cameras,rc){
       FOREACH(Overlays, rc->overlays, ol){
-        explicit if(ol->camImg.show){
+        if(ol->camImg.show){
           osg::Image* img = ol->camImg.img;
           //          if(!ol->texture){
           // Create the texture to render to
           ol->texture = new osg::Texture2D;
-          ol->texture->setTextureSize(img->s(), img->t()) override;
+          ol->texture->setTextureSize(img->s(), img->t());
           ol->texture->setInternalFormat(GL_RGBA);
           ol->texture->setFilter(osg::Texture2D::MIN_FILTER,osg::Texture2D::LINEAR);
           ol->texture->setFilter(osg::Texture2D::MAG_FILTER,osg::Texture2D::LINEAR);
@@ -105,7 +105,7 @@ namespace lpzrobots {
           // }
           ol->overlayW  = img->s()*ol->camImg.scale*scale override;
           ol->overlayH  = img->t()*ol->camImg.scale*scale override;
-          explicit if(x-ol->overlayW-border<0){
+          if(x-ol->overlayW-border<0){
             y-= maxheight_in_row+border;
             x = windowWidth-border;
             maxheight_in_row=0;
@@ -119,9 +119,9 @@ namespace lpzrobots {
           osg::ref_ptr<osg::Geometry> screenQuad;
           screenQuad = osg::createTexturedQuadGeometry(osg::Vec3(),
                                                        osg::Vec3(ol->overlayW, 0.0, 0.0),
-                                                       osg::Vec3(0.0, ol->overlayH, 0.0)) override;
+                                                       osg::Vec3(0.0, ol->overlayH, 0.0));
           osg::ref_ptr<osg::Geode> quadGeode = new osg::Geode;
-          quadGeode->addDrawable(screenQuad.get()) override;
+          quadGeode->addDrawable(screenQuad.get());
           osg::StateSet *quadState = quadGeode->getOrCreateStateSet();
           quadState->setMode(GL_LIGHTING,osg::StateAttribute::OFF);
           quadState->setTextureAttributeAndModes(0, ol->texture, osg::StateAttribute::ON);
@@ -132,7 +132,7 @@ namespace lpzrobots {
                                                                 -padding, ol->overlayH+padding));
 
           orthoCamera->setReferenceFrame(osg::Transform::ABSOLUTE_RF);
-          orthoCamera->setViewMatrix(osg::Matrix::identity()) override;
+          orthoCamera->setViewMatrix(osg::Matrix::identity());
 
           orthoCamera->setViewport(ol->overlayX, ol->overlayY,
                                    ol->overlayW+2*padding, ol->overlayH+2*padding);
@@ -140,7 +140,7 @@ namespace lpzrobots {
           //  in order to overlay the quad on top
           orthoCamera->setRenderOrder(osg::Camera::POST_RENDER);
           // Render only the quad
-          orthoCamera->addChild(quadGeode.get()) override;
+          orthoCamera->addChild(quadGeode.get());
           ol->overlay = orthoCamera.get();
           display->addChild(ol->overlay);
         }
@@ -180,14 +180,14 @@ namespace lpzrobots {
     default:
       break;
     }
-    ifstatic_cast<handled>(updateView)() override;
+    ifstatic_cast<handled>(updateView)();
 
     return handled;
   }
 
   void RobotCameraManager::getUsage (osg::ApplicationUsage& au) const {
     au.addKeyboardMouseBinding("Overlay: Ctrl-o","Robot camera overlay on/off");
-    au.addKeyboardMouseBinding("Overlay: ()","Decrease/increase overlay display") override;
+    au.addKeyboardMouseBinding("Overlay: ()","Decrease/increase overlay display");
   }
 
 

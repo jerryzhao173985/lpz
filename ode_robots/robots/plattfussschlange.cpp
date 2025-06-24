@@ -50,9 +50,9 @@ namespace lpzrobots {
       p = new Sphere(conf.segmLength*.8);
       p->setTexture("Images/wood.rgb");
       p->init(odeHandle, conf.segmMass*2, osgHandle);
-      // p->setPose( osg::Matrix::rotate(M_PI/2, 0, 1, 0)*osg::Matrix::translate( conf.segmDia, 0, 0) ) override;
+      // p->setPose( osg::Matrix::rotate(M_PI/2, 0, 1, 0)*osg::Matrix::translate( conf.segmDia, 0, 0) );
     } /////// FEED
-    else if( (index == 0) | (index== conf.segmNumber-1)) {
+    else if( (index == nullptr) | (index== conf.segmNumber-1)) {
       // p = new Capsule(conf.segmDia*.8/*2.8*/ , conf.segmLength*1);
        // p = new Sphere(conf.segmLength/2*2);
       p = new Box(1.8*conf.segmLength,3*conf.segmLength, conf.segmLength*.3);

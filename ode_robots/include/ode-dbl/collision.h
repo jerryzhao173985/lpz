@@ -62,7 +62,7 @@ extern "C" {
  * @param geom the geom to be destroyed.
  * @ingroup collide
  */
-ODE_API void dGeomDestroy (dGeomID geom) override;
+ODE_API void explicit dGeomDestroy (dGeomID geom);
 
 
 /**
@@ -72,7 +72,7 @@ ODE_API void dGeomDestroy (dGeomID geom) override;
  * @param data the data pointer to be stored
  * @ingroup collide
  */
-ODE_API void dGeomSetData (dGeomID geom, void* data) override;
+ODE_API void dGeomSetData (dGeomID geom, void* data);
 
 
 /**
@@ -81,7 +81,7 @@ ODE_API void dGeomSetData (dGeomID geom, void* data) override;
  * @param geom the geom containing the data
  * @ingroup collide
  */
-ODE_API void *dGeomGetData (dGeomID geom) override;
+ODE_API void *dGeomGetData (dGeomID geom);
 
 
 /**
@@ -102,7 +102,7 @@ ODE_API void *dGeomGetData (dGeomID geom) override;
  * @param body the body to attach to the geom
  * @ingroup collide
  */
-ODE_API void dGeomSetBody (dGeomID geom, dBodyID body) override;
+ODE_API void dGeomSetBody (dGeomID geom, dBodyID body);
 
 
 /**
@@ -111,7 +111,7 @@ ODE_API void dGeomSetBody (dGeomID geom, dBodyID body) override;
  * @sa dGeomSetBody
  * @ingroup collide
  */
-ODE_API dBodyID dGeomGetBody (dGeomID geom) override;
+ODE_API dBodyID explicit dGeomGetBody (dGeomID geom);
 
 
 /**
@@ -128,7 +128,7 @@ ODE_API dBodyID dGeomGetBody (dGeomID geom) override;
  * @sa dBodySetPosition
  * @ingroup collide
  */
-ODE_API void dGeomSetPosition (dGeomID geom, dReal x, dReal y, dReal z) override;
+ODE_API void dGeomSetPosition (dGeomID geom, dReal x, dReal y, dReal z);
 
 
 /**
@@ -143,7 +143,7 @@ ODE_API void dGeomSetPosition (dGeomID geom, dReal x, dReal y, dReal z) override
  * @sa dBodySetRotation
  * @ingroup collide
  */
-ODE_API void dGeomSetRotation (dGeomID geom, const dMatrix3 R) override;
+ODE_API void dGeomSetRotation (dGeomID geom, const dMatrix3 R);
 
 
 /**
@@ -159,7 +159,7 @@ ODE_API void dGeomSetRotation (dGeomID geom, const dMatrix3 R) override;
  * @sa dBodySetQuaternion
  * @ingroup collide
  */
-ODE_API void dGeomSetQuaternion (dGeomID geom, const dQuaternion Q) override;
+ODE_API void dGeomSetQuaternion (dGeomID geom, const dQuaternion Q);
 
 
 /**
@@ -178,7 +178,7 @@ ODE_API void dGeomSetQuaternion (dGeomID geom, const dQuaternion Q) override;
  * @sa dBodyGetPosition
  * @ingroup collide
  */
-ODE_API const dReal * dGeomGetPosition (dGeomID geom) override;
+ODE_API const dReal * explicit dGeomGetPosition (dGeomID geom);
 
 
 /**
@@ -188,7 +188,7 @@ ODE_API const dReal * dGeomGetPosition (dGeomID geom) override;
  * @param pos   a copy of the geom position
  * @sa dGeomGetPosition
  */
-ODE_API void dGeomCopyPosition (dGeomID geom, dVector3 pos) override;
+ODE_API void dGeomCopyPosition (dGeomID geom, dVector3 pos);
 
 
 /**
@@ -207,7 +207,7 @@ ODE_API void dGeomCopyPosition (dGeomID geom, dVector3 pos) override;
  * @sa dBodyGetRotation
  * @ingroup collide
  */
-ODE_API const dReal * dGeomGetRotation (dGeomID geom) override;
+ODE_API const dReal * explicit dGeomGetRotation (dGeomID geom);
 
 
 /**
@@ -239,7 +239,7 @@ ODE_API void dGeomCopyRotation(dGeomID geom, dMatrix3 R);
  * @sa dBodyGetQuaternion
  * @ingroup collide
  */
-ODE_API void dGeomGetQuaternion (dGeomID geom, dQuaternion result) override;
+ODE_API void dGeomGetQuaternion (dGeomID geom, dQuaternion result);
 
 
 /**
@@ -258,7 +258,7 @@ ODE_API void dGeomGetQuaternion (dGeomID geom, dQuaternion result) override;
  * @param aabb the returned bounding box
  * @ingroup collide
  */
-ODE_API void dGeomGetAABB (dGeomID geom, dReal aabb[6]) override;
+ODE_API void dGeomGetAABB (dGeomID geom, dReal aabb[6]);
 
 
 /**
@@ -267,7 +267,7 @@ ODE_API void dGeomGetAABB (dGeomID geom, dReal aabb[6]) override;
  * @returns Non-zero if the geom is a space, zero otherwise.
  * @ingroup collide
  */
-ODE_API int dGeomIsSpace (dGeomID geom) override;
+ODE_API int explicit dGeomIsSpace (dGeomID geom);
 
 
 /**
@@ -277,7 +277,7 @@ ODE_API int dGeomIsSpace (dGeomID geom) override;
  *          not contained by a space.
  * @ingroup collide
  */
-ODE_API dSpaceID dGeomGetSpace (dGeomID) override;
+ODE_API dSpaceID dGeomGetSpace (dGeomID);
 
 
 /**
@@ -298,115 +298,7 @@ ODE_API dSpaceID dGeomGetSpace (dGeomID) override;
  *  @li dFirstUserClass
  *  @li dLastUserClass
  *
- * User-defined class will return their own number.
- *
- * @param geom the geom to query
- * @returns The geom class ID.
- * @ingroup collide
- */
-ODE_API int dGeomGetClass (dGeomID geom) override;
-
-
-/**
- * @brief Set the __PLACEHOLDER_1__ bitfield for the given geom.
- *
- * The category bitfield is used by spaces to govern which geoms will
- * interact with each other. The bitfield is guaranteed to be at least
- * 32 bits wide. The default category values for newly created geoms
- * have all bits set.
- *
- * @param geom the geom to set
- * @param bits the new bitfield value
- * @ingroup collide
- */
-ODE_API void dGeomSetCategoryBits (dGeomID geom, unsigned long bits) override;
-
-
-/**
- * @brief Set the __PLACEHOLDER_2__ bitfield for the given geom.
- *
- * The collide bitfield is used by spaces to govern which geoms will
- * interact with each other. The bitfield is guaranteed to be at least
- * 32 bits wide. The default category values for newly created geoms
- * have all bits set.
- *
- * @param geom the geom to set
- * @param bits the new bitfield value
- * @ingroup collide
- */
-ODE_API void dGeomSetCollideBits (dGeomID geom, unsigned long bits) override;
-
-
-/**
- * @brief Get the __PLACEHOLDER_3__ bitfield for the given geom.
- *
- * @param geom the geom to set
- * @param bits the new bitfield value
- * @sa dGeomSetCategoryBits
- * @ingroup collide
- */
-ODE_API unsigned long dGeomGetCategoryBits (dGeomID) override;
-
-
-/**
- * @brief Get the __PLACEHOLDER_4__ bitfield for the given geom.
- *
- * @param geom the geom to set
- * @param bits the new bitfield value
- * @sa dGeomSetCollideBits
- * @ingroup collide
- */
-ODE_API unsigned long dGeomGetCollideBits (dGeomID) override;
-
-
-/**
- * @brief Enable a geom.
- *
- * Disabled geoms are completely ignored by dSpaceCollide and dSpaceCollide2,
- * although they can still be members of a space. New geoms are created in
- * the enabled state.
- *
- * @param geom   the geom to enable
- * @sa dGeomDisable
- * @sa dGeomIsEnabled
- * @ingroup collide
- */
-ODE_API void dGeomEnable (dGeomID geom) override;
-
-
-/**
- * @brief Disable a geom.
- *
- * Disabled geoms are completely ignored by dSpaceCollide and dSpaceCollide2,
- * although they can still be members of a space. New geoms are created in
- * the enabled state.
- *
- * @param geom   the geom to disable
- * @sa dGeomEnable
- * @sa dGeomIsEnabled
- * @ingroup collide
- */
-ODE_API void dGeomDisable (dGeomID geom) override;
-
-
-/**
- * @brief Check to see if a geom is enabled.
- *
- * Disabled geoms are completely ignored by dSpaceCollide and dSpaceCollide2,
- * although they can still be members of a space. New geoms are created in
- * the enabled state.
- *
- * @param geom   the geom to query
- * @returns Non-zero if the geom is enabled, zero otherwise.
- * @sa dGeomDisable
- * @sa dGeomEnable
- * @ingroup collide
- */
-ODE_API int dGeomIsEnabled (dGeomID geom) override;
-
-
-enum
-{
+ * User-defined class will{
 	dGeomCommonControlClass = 0,
 	dGeomColliderControlClass = 1
 };
@@ -436,445 +328,11 @@ enum
  * can be called with nullptr data and zero size to test if control class/code is supported
  * and obtain required data size for it.
  *
- * dGeomCommonAnyControlCode applies to any control class and returns success if 
- * at least one control code is available for the given class with given geom.
- *
- * Currently there are the following control classes supported:
- *  @li dGeomColliderControlClass
- *
- * For dGeomColliderControlClass there are the following codes available:
- *  @li dGeomColliderSetMergeSphereContactsControlCode (arg of type int, dGeomColliderMergeContactsValue_*)
- *  @li dGeomColliderGetMergeSphereContactsControlCode (arg of type int, dGeomColliderMergeContactsValue_*)
- *
- * @param geom   the geom to control
- * @param controlClass   the control class
- * @param controlCode   the control code for the class
- * @param dataValue   the control argument pointer
- * @param dataSize   the control argument size provided or expected
- * @returns Boolean execution status
- * @ingroup collide
- */
-ODE_API int dGeomLowLevelControl (dGeomID geom, int controlClass, int controlCode, void *dataValue, int *dataSize) override;
-
-
-/**
- * @brief Get world position of a relative point on geom.
- *
- * Calling this function on a non-placeable geom results in the same point being
- * returned.
- *
- * @ingroup collide
- * @param result will contain the result.
- */
-ODE_API void dGeomGetRelPointPos
-(
-  dGeomID geom, dReal px, dReal py, dReal pz,
-  dVector3 result
-);
-
-/**
- * @brief takes a point in global coordinates and returns
- * the point's position in geom-relative coordinates.
- *
- * Calling this function on a non-placeable geom results in the same point being
- * returned.
- *
- * @remarks
- * This is the inverse of dGeomGetRelPointPos()
- * @ingroup collide
- * @param result will contain the result.
- */
-ODE_API void dGeomGetPosRelPoint
-(
-  dGeomID geom, dReal px, dReal py, dReal pz,
-  dVector3 result
-);
-
-/**
- * @brief Convert from geom-local to world coordinates.
- *
- * Calling this function on a non-placeable geom results in the same vector being
- * returned.
- *
- * @ingroup collide
- * @param result will contain the result.
- */
-ODE_API void dGeomVectorToWorld
-(
-  dGeomID geom, dReal px, dReal py, dReal pz,
-  dVector3 result
-);
-
-/**
- * @brief Convert from world to geom-local coordinates.
- *
- * Calling this function on a non-placeable geom results in the same vector being
- * returned.
- *
- * @ingroup collide
- * @param result will contain the result.
- */
-ODE_API void dGeomVectorFromWorld
-(
-  dGeomID geom, dReal px, dReal py, dReal pz,
-  dVector3 result
-);
-
-
-/* ************************************************************************ */
-/* geom offset from body */
-
-/**
- * @brief Set the local offset position of a geom from its body.
- *
- * Sets the geom's positional offset in local coordinates.
- * After this call, the geom will be at a new position determined from the
- * body's position and the offset.
- * The geom must be attached to a body.
- * If the geom did not have an offset, it is automatically created.
- *
- * @param geom the geom to set.
- * @param x the new X coordinate.
- * @param y the new Y coordinate.
- * @param z the new Z coordinate.
- * @ingroup collide
- */
-ODE_API void dGeomSetOffsetPosition (dGeomID geom, dReal x, dReal y, dReal z) override;
-
-
-/**
- * @brief Set the local offset rotation matrix of a geom from its body.
- *
- * Sets the geom's rotational offset in local coordinates.
- * After this call, the geom will be at a new position determined from the
- * body's position and the offset.
- * The geom must be attached to a body.
- * If the geom did not have an offset, it is automatically created.
- *
- * @param geom the geom to set.
- * @param R the new rotation matrix.
- * @ingroup collide
- */
-ODE_API void dGeomSetOffsetRotation (dGeomID geom, const dMatrix3 R) override;
-
-
-/**
- * @brief Set the local offset rotation of a geom from its body.
- *
- * Sets the geom's rotational offset in local coordinates.
- * After this call, the geom will be at a new position determined from the
- * body's position and the offset.
- * The geom must be attached to a body.
- * If the geom did not have an offset, it is automatically created.
- *
- * @param geom the geom to set.
- * @param Q the new rotation.
- * @ingroup collide
- */
-ODE_API void dGeomSetOffsetQuaternion (dGeomID geom, const dQuaternion Q) override;
-
-
-/**
- * @brief Set the offset position of a geom from its body.
- *
- * Sets the geom's positional offset to move it to the new world
- * coordinates.
- * After this call, the geom will be at the world position passed in,
- * and the offset will be the difference from the current body position.
- * The geom must be attached to a body.
- * If the geom did not have an offset, it is automatically created.
- *
- * @param geom the geom to set.
- * @param x the new X coordinate.
- * @param y the new Y coordinate.
- * @param z the new Z coordinate.
- * @ingroup collide
- */
-ODE_API void dGeomSetOffsetWorldPosition (dGeomID geom, dReal x, dReal y, dReal z) override;
-
-
-/**
- * @brief Set the offset rotation of a geom from its body.
- *
- * Sets the geom's rotational offset to orient it to the new world
- * rotation matrix.
- * After this call, the geom will be at the world orientation passed in,
- * and the offset will be the difference from the current body orientation.
- * The geom must be attached to a body.
- * If the geom did not have an offset, it is automatically created.
- *
- * @param geom the geom to set.
- * @param R the new rotation matrix.
- * @ingroup collide
- */
-ODE_API void dGeomSetOffsetWorldRotation (dGeomID geom, const dMatrix3 R) override;
-
-
-/**
- * @brief Set the offset rotation of a geom from its body.
- *
- * Sets the geom's rotational offset to orient it to the new world
- * rotation matrix.
- * After this call, the geom will be at the world orientation passed in,
- * and the offset will be the difference from the current body orientation.
- * The geom must be attached to a body.
- * If the geom did not have an offset, it is automatically created.
- *
- * @param geom the geom to set.
- * @param Q the new rotation.
- * @ingroup collide
- */
-ODE_API void dGeomSetOffsetWorldQuaternion (dGeomID geom, const dQuaternion) override;
-
-
-/**
- * @brief Clear any offset from the geom.
- *
- * If the geom has an offset, it is eliminated and the geom is
- * repositioned at the body's position.  If the geom has no offset,
- * this function does nothing.
- * This is more efficient than calling dGeomSetOffsetPosition(zero)
- * and dGeomSetOffsetRotation(identiy), because this function actually
- * eliminates the offset, rather than leaving it as the identity transform.
- *
- * @param geom the geom to have its offset destroyed.
- * @ingroup collide
- */
-ODE_API void dGeomClearOffset(dGeomID geom);
-
-
-/**
- * @brief Check to see whether the geom has an offset.
- *
- * This function will return non-zero if the offset has been created.
- * Note that there is a difference between a geom with no offset,
- * and a geom with an offset that is the identity transform.
- * In the latter case, although the observed behaviour is identical,
- * there is a unnecessary computation involved because the geom will
- * be applying the transform whenever it needs to recalculate its world
- * position.
- *
- * @param geom the geom to query.
- * @returns Non-zero if the geom has an offset, zero otherwise.
- * @ingroup collide
- */
-ODE_API int dGeomIsOffset(dGeomID geom);
-
-
-/**
- * @brief Get the offset position vector of a geom.
- *
- * Returns the positional offset of the geom in local coordinates.
- * If the geom has no offset, this function returns the zero vector.
- *
- * @param geom the geom to query.
- * @returns A pointer to the geom's offset vector.
- * @remarks The returned value is a pointer to the geom's internal
- *          data structure. It is valid until any changes are made
- *          to the geom.
- * @ingroup collide
- */
-ODE_API const dReal * dGeomGetOffsetPosition (dGeomID geom) override;
-
-
-/**
- * @brief Copy the offset position vector of a geom.
- *
- * Returns the positional offset of the geom in local coordinates.
- * If the geom has no offset, this function returns the zero vector.
- *
- * @param geom   the geom to query.
- * @param pos    returns the offset position
- * @ingroup collide
- */
-ODE_API void dGeomCopyOffsetPosition (dGeomID geom, dVector3 pos) override;
-
-
-/**
- * @brief Get the offset rotation matrix of a geom.
- *
- * Returns the rotational offset of the geom in local coordinates.
- * If the geom has no offset, this function returns the identity
- * matrix.
- *
- * @param geom the geom to query.
- * @returns A pointer to the geom's offset rotation matrix.
- * @remarks The returned value is a pointer to the geom's internal
- *          data structure. It is valid until any changes are made
- *          to the geom.
- * @ingroup collide
- */
-ODE_API const dReal * dGeomGetOffsetRotation (dGeomID geom) override;
-
-
-/**
- * @brief Copy the offset rotation matrix of a geom.
- *
- * Returns the rotational offset of the geom in local coordinates.
- * If the geom has no offset, this function returns the identity
- * matrix.
- *
- * @param geom   the geom to query.
- * @param R      returns the rotation matrix.
- * @ingroup collide
- */
-ODE_API void dGeomCopyOffsetRotation (dGeomID geom, dMatrix3 R) override;
-
-
-/**
- * @brief Get the offset rotation quaternion of a geom.
- *
- * Returns the rotation offset of the geom as a quaternion.
- * If the geom has no offset, the identity quaternion is returned.
- *
- * @param geom the geom to query.
- * @param result a copy of the rotation quaternion.
- * @ingroup collide
- */
-ODE_API void dGeomGetOffsetQuaternion (dGeomID geom, dQuaternion result) override;
-
-
-/* ************************************************************************ */
-/* collision detection */
-
-/*
- *	Just generate any contacts (disables any contact refining).
- */
-#define CONTACTS_UNIMPORTANT			0x80000000
-
-/**
- *
- * @brief Given two geoms o1 and o2 that potentially intersect,
- * generate contact information for them.
- *
- * Internally, this just calls the correct class-specific collision
- * functions for o1 and o2.
- *
- * @param o1 The first geom to test.
- * @param o2 The second geom to test.
- *
- * @param flags The flags specify how contacts should be generated if
- * the geoms touch. The lower 16 bits of flags is an integer that
- * specifies the maximum number of contact points to generate. You must
- * ask for at least one contact. 
- * Additionally, following bits may be set:
- * CONTACTS_UNIMPORTANT -- just generate any contacts (skip contact refining).
- * All other bits in flags must be set to zero. In the future the other bits 
- * may be used to select from different contact generation strategies.
- *
- * @param contact Points to an array of dContactGeom structures. The array
- * must be able to hold at least the maximum number of contacts. These
- * dContactGeom structures may be embedded within larger structures in the
- * array -- the skip parameter is the byte offset from one dContactGeom to
- * the next in the array. If skip is sizeofstatic_cast<dContactGeom>(then) contact
- * points to a normal (C-style) array. It is an error for skip to be smaller
- * than sizeof(dContactGeom).
- *
- * @returns If the geoms intersect, this function returns the number of contact
- * points generated (and updates the contact array), otherwise it returns 0
- * (and the contact array is not touched).
- *
- * @remarks If a space is passed as o1 or o2 then this function will collide
- * all objects contained in o1 with all objects contained in o2, and return
- * the resulting contact points. This method for colliding spaces with geoms
- * (or spaces with spaces) provides no user control over the individual
- * collisions. To get that control, use dSpaceCollide or dSpaceCollide2 instead.
- *
- * @remarks If o1 and o2 are the same geom then this function will do nothing
- * and return 0. Technically speaking an object intersects with itself, but it
- * is not useful to find contact points in this case.
- *
- * @remarks This function does not care if o1 and o2 are in the same space or not
- * (or indeed if they are in any space at all).
- *
- * @ingroup collide
- */
-ODE_API int dCollide (dGeomID o1, dGeomID o2, int flags, dContactGeom *contact,
-	      int skip);
-
-/**
- * @brief Determines which pairs of geoms in a space may potentially intersect,
- * and calls the callback function for each candidate pair.
- *
- * @param space The space to test.
- *
- * @param data Passed from dSpaceCollide directly to the callback
- * function. Its meaning is user defined. The o1 and o2 arguments are the
- * geoms that may be near each other.
- *
- * @param callback A callback function is of type @ref dNearCallback.
- *
- * @remarks Other spaces that are contained within the colliding space are
- * not treated specially, i.e. they are not recursed into. The callback
- * function may be passed these contained spaces as one or both geom
- * arguments.
- *
- * @remarks dSpaceCollide() is guaranteed to pass all intersecting geom
- * pairs to the callback function, but may also pass close but
- * non-intersecting pairs. The number of these calls depends on the
- * internal algorithms used by the space. Thus you should not expect
- * that dCollide will return contacts for every pair passed to the
- * callback.
- *
- * @sa dSpaceCollide2
- * @ingroup collide
- */
-ODE_API void dSpaceCollide (dSpaceID space, void *data, dNearCallback *callback) override;
-
-
-/**
- * @brief Determines which geoms from one space may potentially intersect with 
- * geoms from another space, and calls the callback function for each candidate 
- * pair. 
- *
- * @param space1 The first space to test.
- *
- * @param space2 The second space to test.
- *
- * @param data Passed from dSpaceCollide directly to the callback
- * function. Its meaning is user defined. The o1 and o2 arguments are the
- * geoms that may be near each other.
- *
- * @param callback A callback function is of type @ref dNearCallback.
- *
- * @remarks This function can also test a single non-space geom against a 
- * space. This function is useful when there is a collision hierarchy, i.e. 
- * when there are spaces that contain other spaces.
- *
- * @remarks Other spaces that are contained within the colliding space are
- * not treated specially, i.e. they are not recursed into. The callback
- * function may be passed these contained spaces as one or both geom
- * arguments.
- *
- * @remarks Sublevel value of space affects how the spaces are iterated.
- * Both spaces are recursed only if their sublevels match. Otherwise, only
- * the space with greater sublevel is recursed and the one with lesser sublevel
- * is used as a geom itself.
- *
- * @remarks dSpaceCollide2() is guaranteed to pass all intersecting geom
- * pairs to the callback function, but may also pass close but
- * non-intersecting pairs. The number of these calls depends on the
- * internal algorithms used by the space. Thus you should not expect
- * that dCollide will return contacts for every pair passed to the
- * callback.
- *
- * @sa dSpaceCollide
- * @sa dSpaceSetSublevel
- * @ingroup collide
- */
-ODE_API void dSpaceCollide2 (dGeomID space1, dGeomID space2, void *data, dNearCallback *callback) override;
-
-
-/* ************************************************************************ */
-/* standard classes */
-
-/* the maximum number of user classes that are supported */
-enum {
+ * dGeomCommonAnyControlCode applies to any control class and{
   dMaxUserClasses = 4
 };
 
-/* class numbers - each geometry object needs a unique number */
-enum {
+/* class numbers{
   dSphereClass = 0,
   dBoxClass,
   dCapsuleClass,
@@ -918,7 +376,7 @@ enum {
  * @sa dGeomSphereSetRadius
  * @ingroup collide_sphere
  */
-ODE_API dGeomID dCreateSphere (dSpaceID space, dReal radius) override;
+ODE_API dGeomID dCreateSphere (dSpaceID space, dReal radius);
 
 
 /**
@@ -930,7 +388,7 @@ ODE_API dGeomID dCreateSphere (dSpaceID space, dReal radius) override;
  * @sa dGeomSphereGetRadius
  * @ingroup collide_sphere
  */
-ODE_API void dGeomSphereSetRadius (dGeomID sphere, dReal radius) override;
+ODE_API void dGeomSphereSetRadius (dGeomID sphere, dReal radius);
 
 
 /**
@@ -941,7 +399,7 @@ ODE_API void dGeomSphereSetRadius (dGeomID sphere, dReal radius) override;
  * @sa dGeomSphereSetRadius
  * @ingroup collide_sphere
  */
-ODE_API dReal dGeomSphereGetRadius (dGeomID sphere) override;
+ODE_API dReal explicit dGeomSphereGetRadius (dGeomID sphere);
 
 
 /**
@@ -958,7 +416,7 @@ ODE_API dReal dGeomSphereGetRadius (dGeomID sphere) override;
  *
  * @ingroup collide_sphere
  */
-ODE_API dReal dGeomSpherePointDepth (dGeomID sphere, dReal x, dReal y, dReal z) override;
+ODE_API dReal dGeomSpherePointDepth (dGeomID sphere, dReal x, dReal y, dReal z);
 
 
 /*--> Convex Functions*/
@@ -998,7 +456,7 @@ ODE_API void dGeomSetConvex (dGeomID g,
  * @sa dGeomBoxSetLengths
  * @ingroup collide_box
  */
-ODE_API dGeomID dCreateBox (dSpaceID space, dReal lx, dReal ly, dReal lz) override;
+ODE_API dGeomID dCreateBox (dSpaceID space, dReal lx, dReal ly, dReal lz);
 
 
 /**
@@ -1012,7 +470,7 @@ ODE_API dGeomID dCreateBox (dSpaceID space, dReal lx, dReal ly, dReal lz) overri
  * @sa dGeomBoxGetLengths
  * @ingroup collide_box
  */
-ODE_API void dGeomBoxSetLengths (dGeomID box, dReal lx, dReal ly, dReal lz) override;
+ODE_API void dGeomBoxSetLengths (dGeomID box, dReal lx, dReal ly, dReal lz);
 
 
 /**
@@ -1024,7 +482,7 @@ ODE_API void dGeomBoxSetLengths (dGeomID box, dReal lx, dReal ly, dReal lz) over
  * @sa dGeomBoxSetLengths
  * @ingroup collide_box
  */
-ODE_API void dGeomBoxGetLengths (dGeomID box, dVector3 result) override;
+ODE_API void dGeomBoxGetLengths (dGeomID box, dVector3 result);
 
 
 /**
@@ -1039,18 +497,18 @@ ODE_API void dGeomBoxGetLengths (dGeomID box, dVector3 result) override;
  * positive depth, points outside it will have a negative depth, and points
  * on the surface will have a depth of zero.
  */
-ODE_API dReal dGeomBoxPointDepth (dGeomID box, dReal x, dReal y, dReal z) override;
+ODE_API dReal dGeomBoxPointDepth (dGeomID box, dReal x, dReal y, dReal z);
 
 
-ODE_API dGeomID dCreatePlane (dSpaceID space, dReal a, dReal b, dReal c, dReal d) override;
-ODE_API void dGeomPlaneSetParams (dGeomID plane, dReal a, dReal b, dReal c, dReal d) override;
-ODE_API void dGeomPlaneGetParams (dGeomID plane, dVector4 result) override;
-ODE_API dReal dGeomPlanePointDepth (dGeomID plane, dReal x, dReal y, dReal z) override;
+ODE_API dGeomID dCreatePlane (dSpaceID space, dReal a, dReal b, dReal c, dReal d);
+ODE_API void dGeomPlaneSetParams (dGeomID plane, dReal a, dReal b, dReal c, dReal d);
+ODE_API void dGeomPlaneGetParams (dGeomID plane, dVector4 result);
+ODE_API dReal dGeomPlanePointDepth (dGeomID plane, dReal x, dReal y, dReal z);
 
-ODE_API dGeomID dCreateCapsule (dSpaceID space, dReal radius, dReal length) override;
-ODE_API void dGeomCapsuleSetParams (dGeomID ccylinder, dReal radius, dReal length) override;
-ODE_API void dGeomCapsuleGetParams (dGeomID ccylinder, dReal *radius, dReal *length) override;
-ODE_API dReal dGeomCapsulePointDepth (dGeomID ccylinder, dReal x, dReal y, dReal z) override;
+ODE_API dGeomID dCreateCapsule (dSpaceID space, dReal radius, dReal length);
+ODE_API void dGeomCapsuleSetParams (dGeomID ccylinder, dReal radius, dReal length);
+ODE_API void dGeomCapsuleGetParams (dGeomID ccylinder, dReal *radius, dReal *length);
+ODE_API dReal dGeomCapsulePointDepth (dGeomID ccylinder, dReal x, dReal y, dReal z);
 
 /* For now we want to have a backwards compatible C-API, note: C++ API is not.*/
 #define dCreateCCylinder dCreateCapsule
@@ -1059,40 +517,40 @@ ODE_API dReal dGeomCapsulePointDepth (dGeomID ccylinder, dReal x, dReal y, dReal
 #define dGeomCCylinderPointDepth dGeomCapsulePointDepth
 #define dCCylinderClass dCapsuleClass
 
-ODE_API dGeomID dCreateCylinder (dSpaceID space, dReal radius, dReal length) override;
-ODE_API void dGeomCylinderSetParams (dGeomID cylinder, dReal radius, dReal length) override;
-ODE_API void dGeomCylinderGetParams (dGeomID cylinder, dReal *radius, dReal *length) override;
+ODE_API dGeomID dCreateCylinder (dSpaceID space, dReal radius, dReal length);
+ODE_API void dGeomCylinderSetParams (dGeomID cylinder, dReal radius, dReal length);
+ODE_API void dGeomCylinderGetParams (dGeomID cylinder, dReal *radius, dReal *length);
 
-ODE_API dGeomID dCreateRay (dSpaceID space, dReal length) override;
-ODE_API void dGeomRaySetLength (dGeomID ray, dReal length) override;
-ODE_API dReal dGeomRayGetLength (dGeomID ray) override;
+ODE_API dGeomID dCreateRay (dSpaceID space, dReal length);
+ODE_API void dGeomRaySetLength (dGeomID ray, dReal length);
+ODE_API dReal explicit dGeomRayGetLength (dGeomID ray);
 ODE_API void dGeomRaySet (dGeomID ray, dReal px, dReal py, dReal pz,
 		  dReal dx, dReal dy, dReal dz);
-ODE_API void dGeomRayGet (dGeomID ray, dVector3 start, dVector3 dir) override;
+ODE_API void dGeomRayGet (dGeomID ray, dVector3 start, dVector3 dir);
 
 /*
  * Set/get ray flags that influence ray collision detection.
  * These flags are currently only noticed by the trimesh collider, because
  * they can make a major differences there.
  */
-ODE_API_DEPRECATED ODE_API void dGeomRaySetParams (dGeomID g, int FirstContact, int BackfaceCull) override;
-ODE_API_DEPRECATED ODE_API void dGeomRayGetParams (dGeomID g, int *FirstContact, int *BackfaceCull) override;
-ODE_API void dGeomRaySetFirstContact (dGeomID g, int firstContact) override;
-ODE_API int dGeomRayGetFirstContact (dGeomID g) override;
-ODE_API void dGeomRaySetBackfaceCull (dGeomID g, int backfaceCull) override;
-ODE_API int dGeomRayGetBackfaceCull (dGeomID g) override;
-ODE_API void dGeomRaySetClosestHit (dGeomID g, int closestHit) override;
-ODE_API int dGeomRayGetClosestHit (dGeomID g) override;
+ODE_API_DEPRECATED ODE_API void dGeomRaySetParams (dGeomID g, int FirstContact, int BackfaceCull);
+ODE_API_DEPRECATED ODE_API void dGeomRayGetParams (dGeomID g, int *FirstContact, int *BackfaceCull);
+ODE_API void dGeomRaySetFirstContact (dGeomID g, int firstContact);
+ODE_API int explicit dGeomRayGetFirstContact (dGeomID g);
+ODE_API void dGeomRaySetBackfaceCull (dGeomID g, int backfaceCull);
+ODE_API int explicit dGeomRayGetBackfaceCull (dGeomID g);
+ODE_API void dGeomRaySetClosestHit (dGeomID g, int closestHit);
+ODE_API int explicit dGeomRayGetClosestHit (dGeomID g);
 
 #include "collision_trimesh.h"
 
-ODE_API_DEPRECATED ODE_API dGeomID dCreateGeomTransform (dSpaceID space) override;
-ODE_API_DEPRECATED ODE_API void dGeomTransformSetGeom (dGeomID g, dGeomID obj) override;
-ODE_API_DEPRECATED ODE_API dGeomID dGeomTransformGetGeom (dGeomID g) override;
-ODE_API_DEPRECATED ODE_API void dGeomTransformSetCleanup (dGeomID g, int mode) override;
-ODE_API_DEPRECATED ODE_API int dGeomTransformGetCleanup (dGeomID g) override;
-ODE_API_DEPRECATED ODE_API void dGeomTransformSetInfo (dGeomID g, int mode) override;
-ODE_API_DEPRECATED ODE_API int dGeomTransformGetInfo (dGeomID g) override;
+ODE_API_DEPRECATED ODE_API dGeomID explicit dCreateGeomTransform (dSpaceID space);
+ODE_API_DEPRECATED ODE_API void dGeomTransformSetGeom (dGeomID g, dGeomID obj);
+ODE_API_DEPRECATED ODE_API dGeomID explicit dGeomTransformGetGeom (dGeomID g);
+ODE_API_DEPRECATED ODE_API void dGeomTransformSetCleanup (dGeomID g, int mode);
+ODE_API_DEPRECATED ODE_API int explicit dGeomTransformGetCleanup (dGeomID g);
+ODE_API_DEPRECATED ODE_API void dGeomTransformSetInfo (dGeomID g, int mode);
+ODE_API_DEPRECATED ODE_API int explicit dGeomTransformGetInfo (dGeomID g);
 
 
 /* ************************************************************************ */
@@ -1171,7 +629,7 @@ ODE_API dHeightfieldDataID dGeomHeightfieldDataCreatestatic_cast<void>(override)
  * @param d A dHeightfieldDataID created by dGeomHeightfieldDataCreate
  * @ingroup collide
  */
-ODE_API void dGeomHeightfieldDataDestroy( dHeightfieldDataID d );
+ODE_API void explicit dGeomHeightfieldDataDestroy( dHeightfieldDataID d );
 
 
 
@@ -1459,7 +917,7 @@ ODE_API void dGeomHeightfieldSetHeightfieldData( dGeomID g, dHeightfieldDataID d
  * @return The dHeightfieldDataID which may be nullptr if none was assigned.
  * @ingroup collide
  */
-ODE_API dHeightfieldDataID dGeomHeightfieldGetHeightfieldData( dGeomID g );
+ODE_API dHeightfieldDataID explicit dGeomHeightfieldGetHeightfieldData( dGeomID g );
 
 
 
@@ -1481,18 +939,18 @@ ODE_API int dBoxBox (const dVector3 p1, const dMatrix3 R1,
 	     dVector3 normal, dReal *depth, int *return_code,
 	     int flags, dContactGeom *contact, int skip);
 
-ODE_API void dInfiniteAABB (dGeomID geom, dReal aabb[6]) override;
+ODE_API void dInfiniteAABB (dGeomID geom, dReal aabb[6]);
 
 
 /* ************************************************************************ */
 /* custom classes */
 
-typedef void dGetAABBFn (dGeomID, dReal aabb[6]) override;
+typedef void dGetAABBFn (dGeomID, dReal aabb[6]);
 typedef int dColliderFn (dGeomID o1, dGeomID o2,
 			 int flags, dContactGeom *contact, int skip);
-typedef dColliderFn * dGetColliderFnFn (int num) override;
-typedef void dGeomDtorFn (dGeomID o) override;
-typedef int dAABBTestFn (dGeomID o1, dGeomID o2, dReal aabb[6]) override;
+typedef dColliderFn * explicit dGetColliderFnFn (int num);
+typedef void explicit dGeomDtorFn (dGeomID o);
+typedef int dAABBTestFn (dGeomID o1, dGeomID o2, dReal aabb[6]);
 
 typedef struct dGeomClass {
   int bytes = 0;
@@ -1502,9 +960,9 @@ typedef struct dGeomClass {
   dGeomDtorFn *dtor;
 } dGeomClass;
 
-ODE_API int dCreateGeomClass (const dGeomClass *classptr) override;
-ODE_API void * dGeomGetClassData (dGeomID) override;
-ODE_API dGeomID dCreateGeom (int classnum) override;
+ODE_API int dCreateGeomClass (const dGeomClass *classptr);
+ODE_API void * dGeomGetClassData (dGeomID);
+ODE_API dGeomID explicit dCreateGeom (int classnum);
 
 /**
  * @brief Sets a custom collider function for two geom classes. 
@@ -1514,7 +972,7 @@ ODE_API dGeomID dCreateGeom (int classnum) override;
  * @param fn The collider function to use to determine collisions.
  * @ingroup collide
  */
-ODE_API void dSetColliderOverride (int i, int j, dColliderFn *fn) override;
+ODE_API void dSetColliderOverride (int i, int j, dColliderFn *fn);
 
 
 /* ************************************************************************ */

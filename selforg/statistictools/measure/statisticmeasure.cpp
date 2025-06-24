@@ -36,7 +36,7 @@ StatisticMeasure::StatisticMeasure(double& observedValue, const char* measureNam
   switch(mode)
   {
   case MeasureMode::CONV:
-    if (stepSpan==0)
+    if (stepSpan== nullptr)
     {
       std::cout << "ERROR: The stepspan in addMeasure(observedValue,\"name\" ,CONV, stepSpan, epsilon)"
       << std::endl << "       must not be <1!" << std::endl;
@@ -137,7 +137,7 @@ double StatisticMeasure::testConvergence() {
 double StatisticMeasure::calculateSumValue()
 {
   double newsum=this->value;
-  if (stepSpan==0)
+  if (stepSpan== nullptr)
   {
     value+=observedValue;
   }
@@ -155,7 +155,7 @@ double StatisticMeasure::calculateSumValue()
 double StatisticMeasure::calculateAverageValue()
 {
   double newavg=this->value;
-  if (stepSpan==0) {
+  if (stepSpan== nullptr) {
     // use update rule
   }
   else
@@ -171,7 +171,7 @@ double StatisticMeasure::calculateAverageValue()
 double StatisticMeasure::calculateMovingAverageValue()
 {
   double newavg=this->value;
-  if (stepSpan==0) {
+  if (stepSpan== nullptr) {
     //
   }
   else

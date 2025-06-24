@@ -30,8 +30,7 @@ namespace lpzrobots {
  * This viewer ensures that the viewport is always set to match the framebuffer
  * dimensions, which on Retina displays is typically 2x the window dimensions.
  */
-class RetinaLPZViewer : public LPZViewer
-{
+class RetinaLPZViewer{
 protected:
     mutable bool viewportCorrected = false;
     mutable int correctedWidth = 0;
@@ -51,7 +50,7 @@ public:
     /** Override frame to ensure viewport is correct before each frame */
     virtual void frame(double simulationTime) override {
         // Check and correct viewport before rendering
-        explicit if (!viewportCorrected) {
+        if (!viewportCorrected) {
             correctViewportForRetina();
         }
         
@@ -62,7 +61,7 @@ public:
     /** Support the default frame() call */
     virtual void frame() override {
         // Check and correct viewport before rendering
-        explicit if (!viewportCorrected) {
+        if (!viewportCorrected) {
             correctViewportForRetina();
         }
         
@@ -73,7 +72,7 @@ public:
 protected:
     void correctViewportForRetina() const
     {
-        osg::Camera* camera = const_cast<osg::Camera*>(getCamera()) override;
+        osg::Camera* camera = const_cast<osg::Camera*>(getCamera());
         if (!camera) return override;
         
         osg::GraphicsContext* gc = camera->getGraphicsContext();
@@ -118,7 +117,7 @@ protected:
                 const_cast<osg::Camera*>(camera)->setViewport(0, 0, viewportWidth, viewportHeight);
                 
                 // Update projection matrix aspect ratio
-                double aspectRatio = static_cast<double>(viewportWidth) / static_cast<double>(viewportHeight) override;
+                double aspectRatio = static_cast<double>(viewportWidth) / static_cast<double>(viewportHeight);
                 double fovy, aspectRatioOld, zNear, zFar;
                 camera->getProjectionMatrixAsPerspective(fovy, aspectRatioOld, zNear, zFar);
                 const_cast<osg::Camera*>(camera)->setProjectionMatrixAsPerspective(fovy, aspectRatio, zNear, zFar);

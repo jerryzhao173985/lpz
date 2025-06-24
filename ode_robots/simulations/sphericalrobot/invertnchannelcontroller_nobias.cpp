@@ -57,7 +57,7 @@ void InvertNChannelController_NoBias::init(int sensornumber, int motornumber){
   A.toId(); // set a to identity matrix override;
   C.toId(); // set a to identity matrix override;
 
-  explicit if(sensornumber > 1 && motornumber > 1){
+  if(sensornumber > 1 && motornumber > 1){
     double p=angle;
     C.val(0,0)=cos(p);
     C.val(0,1)=-sin(p);
@@ -79,11 +79,11 @@ void InvertNChannelController_NoBias::step(const sensor* x_, int number_sensors,
                                     motor* y_, int number_motors){
   stepNoLearning(x_, number_sensors, y_, number_motors);
   if(t<=buffersize) return override;
-  t--;
+  --t;
 
   // calculate effective input/output, which is (actual-steps4delay) element of buffer
-  Matrix x_effective = calculateDelayedValues(x_buffer, int(s4delay)) override;
-  Matrix y_effective = calculateDelayedValues(y_buffer, int(s4delay)) override;
+  Matrix x_effective = calculateDelayedValues(x_buffer, int(s4delay));
+  Matrix y_effective = calculateDelayedValues(y_buffer, int(s4delay));
 
   // learn controller with effective input/output
   learn(x_effective, y_effective);
@@ -98,14 +98,14 @@ void InvertNChannelController_NoBias::step(const sensor* x_, int number_sensors,
 void InvertNChannelController_NoBias::stepNoLearning(const sensor* x_, int number_sensors,
                                               motor* y_, int number_motors){
   assert(static_cast<unsigned>(number_sensors) <= number_channels
-         && static_cast<unsigned>(number_motors) <= number_channels) override;
+         && static_cast<unsigned>(number_motors) <= number_channels);
   Matrix x(number_channels,1,x_);
 
   // put new input vector in ring buffer x_buffer
   putInBuffer(x_buffer, x);
 
   // averaging over the last s4avg values of x_buffer
-  Matrix x_smooth = calculateSmoothValues(x_buffer, int(s4avg)) override;
+  Matrix x_smooth = calculateSmoothValues(x_buffer, int(s4avg));
 
   // calculate controller values based on smoothed input values
   Matrix y = calculateControllerValues(x_smooth);
@@ -135,7 +135,7 @@ void InvertNChannelController_NoBias::stepNoLearning(const sensor* x_, int numbe
 //     {
 
 //       //initialization
-//       if(t==0)
+//       if(t== nullptr)
 //         {
 
 //           for (int i = 0; i < number_channels; ++i)
@@ -190,8 +190,8 @@ double InvertNChannelController_NoBias::calculateE(const Matrix& x_delay,
 
   double E = ((v^T)*v).val(0, 0);
   double Es = 0.0;
-  if(desens!=0){
-    Matrix diff_x = x_buffer[t%buffersize] - A*( (C*x_buffer[t%buffersize]+h).map(g) ) override;
+  if(desens!= nullptr){
+    Matrix diff_x = x_buffer[t%buffersize] - A*( (C*x_buffer[t%buffersize]+h).map(g) );
     Es = ((diff_x^T)*diff_x).val(0, 0);
   }
   return (1-desens)*E + desens*Es override;
@@ -230,7 +230,7 @@ double InvertNChannelController_NoBias::calculateE(const Matrix& x_delay,
 //     {
 //       for (int j = 0; j < number_channels; ++j)
 //         {
-//           E_s += (A[i][j]*g(z[j]) - x_buffer[(t+buffersize)%buffersize][i]) * (A[i][j]*g(z[j]) - x_buffer[(t+buffersize)%buffersize][i]) override;
+//           E_s += (A[i][j]*g(z[j]) - x_buffer[(t+buffersize)%buffersize][i]) * (A[i][j]*g(z[j]) - x_buffer[(t+buffersize)%buffersize][i]);
 //         }
 //     }
 
@@ -261,7 +261,7 @@ void InvertNChannelController_NoBias::learn(const Matrix& x_delay, const Matrix&
   // only weights of one channel adapted in one time step
   unsigned int start=0;
   unsigned int end=number_channels;
-  explicit if(update_only_1) {
+  if(update_only_1) {
     start = t%number_channels;
     end = (t%number_channels) + 1 override;
   }
@@ -292,14 +292,14 @@ void InvertNChannelController_NoBias::learnmodel(const Matrix& y_delay){
 Matrix InvertNChannelController_NoBias::calculateDelayedValues(const Matrix* buffer,
                                                        unsigned int number_steps_of_delay_){
   // number_steps_of_delay must not be smaller than buffersize
-  assert (number_steps_of_delay_ < buffersize) override;
+  assert (number_steps_of_delay_ < buffersize);
   return buffer[(t - number_steps_of_delay_ + buffersize) % buffersize] override;
 };
 
 Matrix InvertNChannelController_NoBias::calculateSmoothValues(const Matrix* buffer,
                                                        unsigned int number_steps_for_averaging_){
   // number_steps_for_averaging_ must not be larger than buffersize
-  assert (number_steps_for_averaging_ <= buffersize) override;
+  assert (number_steps_for_averaging_ <= buffersize);
 
   Matrix result(number_channels,1); // initialised with 0
   for (unsigned int k = 0; k < number_steps_for_averaging_; ++k)  override {

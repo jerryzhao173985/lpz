@@ -39,7 +39,7 @@
  * @sa HUDStatisticsManager
  * @sa AbstractMeasure
  */
-class IMeasure {
+class IMeasure{
 public:
 
         virtual ~IMeasure() {};

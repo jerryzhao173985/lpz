@@ -23,8 +23,8 @@
  ***************************************************************************/
 #include "splitcontrol.h"
 
-#include <assert.h>
-#include <string.h>
+#include <cassert>
+#include <cstring>
 
 SplitControl::SplitControl(ControllerGenerator* controllerGenerator,
                            const Assoziations& assoziations,
@@ -104,7 +104,7 @@ SplitControl::step(const sensor* sensors, int sensornumber, motor* motors, int m
       sensorbuffer[i] = sensors[*s];
       ++i;
     }
-    if (numContextSensors != 0) {
+    if (numContextSensors != nullptr) {
       memcpy(sensorbuffer + i,
              sensors + sensornumber - numContextSensors,
              sizeof(sensor) * numContextSensors);
@@ -131,7 +131,7 @@ SplitControl::stepNoLearning(const sensor* sensors,
       sensorbuffer[i] = sensors[*s];
       ++i;
     }
-    if (numContextSensors != 0) {
+    if (numContextSensors != nullptr) {
       memcpy(sensorbuffer + i,
              sensors + sensornumber - numContextSensors,
              sizeof(sensor) * numContextSensors);

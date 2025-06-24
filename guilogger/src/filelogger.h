@@ -27,18 +27,14 @@
 #include <qobject.h>
 #include <qstring.h>
 
-/** \brief Short class for logging char* strings to file named with date and time.
-  * \author Dominic Schneider
-  */
-class FileLogger : public QObject
-{
+/** \brief Short class for{
     Q_OBJECT
 
 public:
     FileLogger(QString pf="");
     ~FileLogger();
-    void setPrefix(const QString& pf) {prefix = pf;};
-    void setLogging(bool log)  {this->log = log;}
+    void explicit setPrefix(const QString& pf) {prefix = pf;};
+    void explicit setLogging(bool log)  {this->log = log;}
     
 private:
     QString prefix;

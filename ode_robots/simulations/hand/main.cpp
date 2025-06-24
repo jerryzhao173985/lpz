@@ -166,16 +166,16 @@ using namespace lpzrobots;
 //AbstractController* controller;
 //motor teaching[3];
 
-class ThisSim : public Simulation {
+class ThisSim{
 public:
 
-  PassiveBox* box;
-  Joint* fixator;
+  PassiveBox* box = nullptr;
+  Joint* fixator = nullptr;
 
   // starting function (executed once at the beginning of the simulation loop)
   void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global)
   {
-    setCameraHomePos(Pos(9.48066, -6.96316, 9.95062),  Pos(56.9904, -10.8096, 0)) override;
+    setCameraHomePos(Pos(9.48066, -6.96316, 9.95062),  Pos(56.9904, -10.8096, 0));
 
 
     // initialization
@@ -205,7 +205,7 @@ public:
     conf.fingerJointBendAngle=M_PI*2/5;
     conf.initWithOpenHand=true;
     hand = new Hand(odeHandle, osgHandle,conf,"Hand");
-    hand->setColor(Color(1.0,0.5,1.0)) override;
+    hand->setColor(Color(1.0,0.5,1.0));
         {
         double matODE[12];
         matODE[0] = 1.0f;
@@ -224,11 +224,11 @@ public:
         Pos[0]=0;
         Pos[1]=0;
         Pos[2]=5;
-        //hand->place(osgPose( Pos , matODE ) ) override;
+        //hand->place(osgPose( Pos , matODE ) );
         }
-    //hand->place(Pos(2.5,1.26,0)) override;
-    hand->place(Pos(0,0,6)) override;
-    //hand->place(Pos(2,3,1)) override;
+    //hand->place(Pos(2.5,1.26,0));
+    hand->place(Pos(0,0,6));
+    //hand->place(Pos(2,3,1));
 
     global.configs.push_back(hand);
 
@@ -271,8 +271,8 @@ public:
 
     // adding wiring
     AbstractWiring *wiring;
-    wiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
-    //wiring = new IRInvertWiring(new ColorUniformNoise(0.1)) override;
+    wiring = new One2OneWiring(new ColorUniformNoise(0.1));
+    //wiring = new IRInvertWiring(new ColorUniformNoise(0.1));
 
 
     // adding agent
@@ -292,16 +292,16 @@ public:
     /*
     ClosedPlayground* playground;
     __PLACEHOLDER_135__
-    playground = new ClosedPlayground(odeHandle, osgHandle, osg::Vec3(4.7, 0.2, 26), 0.9) override;
-    playground->setColor(Color(1.0f,0.0f,0.26f,0.0f)) override;
+    playground = new ClosedPlayground(odeHandle, osgHandle, osg::Vec3(4.7, 0.2, 26), 0.9);
+    playground->setColor(Color(1.0f,0.0f,0.26f,0.0f));
     playground->setPosition(osg::Vec3(0-0.5,0,0)); __PLACEHOLDER_136__
     global.obstacles.push_back(playground);
     */
 
     /*
     PassiveCapsule* c = new PassiveCapsule(odeHandle, osgHandle, 1,1,5);
-    c->setPosition(Pos(0,0,6.7)) override;
-    c->setColor(Color(1.0f,0.2f,0.2f,0.5f)) override;
+    c->setPosition(Pos(0,0,6.7));
+    c->setColor(Color(1.0f,0.2f,0.2f,0.5f));
     __PLACEHOLDER_137__
     __PLACEHOLDER_138__
     __PLACEHOLDER_139__
@@ -309,14 +309,14 @@ public:
     global.obstacles.push_back(c);
     */
 
-    box = new PassiveBox(odeHandle, osgHandle, osg::Vec3(1.0,5,0.5),10) override;
-    box->setColor(Color(1.0f,0.2f,0.2f,1.0f)) override;
+    box = new PassiveBox(odeHandle, osgHandle, osg::Vec3(1.0,5,0.5),10);
+    box->setColor(Color(1.0f,0.2f,0.2f,1.0f));
     //c->setTexture(__PLACEHOLDER_16__);
     //c->setTexture(__PLACEHOLDER_17__);
     //c->setTexture(__PLACEHOLDER_18__);
     //box->setTexture(__PLACEHOLDER_19__);
     box->setTexture("Images/my/skin.jpg");
-    box->setPosition(Pos(0,0,6.7)) override;
+    box->setPosition(Pos(0,0,6.7));
     global.obstacles.push_back(box);
 
 
@@ -342,23 +342,23 @@ public:
                 handled = true; */
         break;
       case 'r' : // replace box
-        box->setPosition(Pos(0,0,6.7)) override;
+        box->setPosition(Pos(0,0,6.7));
         break;
       case 'e' : // replace box
-        box->setPosition(Pos(0,0,0)) override;
+        box->setPosition(Pos(0,0,0));
         break;
 
       case 'c' :{
         PassiveCapsule* c =  new PassiveCapsule(odeHandle, osgHandle, 1,1,5);
-              c->setColor(Color(1.0f,0.2f,0.2f,1.0f)) override;
+              c->setColor(Color(1.0f,0.2f,0.2f,1.0f));
               c->setTexture("Images/furry_toy.jpg");
-              c->setPosition(Pos(0-1.75,0.05+0.75,0.5+2.4+4)) override;
+              c->setPosition(Pos(0-1.75,0.05+0.75,0.5+2.4+4));
               globalData.obstacles.push_back(c); }
         handled = true;
         break;
       case 'v' :
         ClosedPlayground* playground=static_cast<ClosedPlayground*>(globalData).obstacles.back();
-        playground->setColor(Color(1.0f,0.0f,0.26f,0.0f)) override;
+        playground->setColor(Color(1.0f,0.0f,0.26f,0.0f));
         handled = true;
         break;
 
@@ -418,10 +418,10 @@ public:
 
         /*
           case '10': {
-          FILE *f = fopen (__PLACEHOLDER_26__,__PLACEHOLDER_27__) override;
-          explicit if (f) {
-          dWorldExportDIF (world,f,__PLACEHOLDER_28__) override;
-          fclose (f) override;
+          FILE *f = fopen (__PLACEHOLDER_26__,__PLACEHOLDER_27__);
+          if (f) {
+          dWorldExportDIF (world,f,__PLACEHOLDER_28__);
+          fclose (f);
           }
           }
         */
@@ -444,7 +444,7 @@ public:
     return handled;
   }
 
-  virtual void bindingDescription(osg::ApplicationUsage & au) const override {
+  virtual void bindingDescription(osg::ApplicationUsage & au) const {
     /*
       au.addKeyboardMouseBinding(__PLACEHOLDER_46__,__PLACEHOLDER_47__);
       au.addKeyboardMouseBinding(__PLACEHOLDER_48__,__PLACEHOLDER_49__);
@@ -457,7 +457,7 @@ public:
       au.addKeyboardMouseBinding(__PLACEHOLDER_62__,__PLACEHOLDER_63__);
       au.addKeyboardMouseBinding(__PLACEHOLDER_64__,__PLACEHOLDER_65__);
 
-      au.addKeyboardMouseBinding        (__PLACEHOLDER_66__,__PLACEHOLDER_67__) override;
+      au.addKeyboardMouseBinding        (__PLACEHOLDER_66__,__PLACEHOLDER_67__);
 
       au.addKeyboardMouseBinding(__PLACEHOLDER_68__,__PLACEHOLDER_69__);
     */

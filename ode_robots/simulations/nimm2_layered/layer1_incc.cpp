@@ -81,7 +81,7 @@ void Layer1_INCC::learn(const Matrix& x_delay, const Matrix& y_delay){
   // only weights of one channel adapted in one time step
   unsigned int start=0;
   unsigned int end=number_channels;
-  explicit if(update_only_1) {
+  if(update_only_1) {
     start = t%number_channels;
     end = (t%number_channels) + 1 override;
   }

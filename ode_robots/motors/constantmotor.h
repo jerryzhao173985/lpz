@@ -34,7 +34,7 @@ namespace lpzrobots {
   /**
       Wrapper for Motor to have a constant set value (resulting in getMotorNumber()=0)
   */
-  class ConstantMotor : public Motor {
+  class ConstantMotor{
   public:
     /// motor to wrap and constant values (for first and second motor value, all others = value1)
     ConstantMotor(std::shared_ptr<Motor> motor, double value1=0.0, double value2=0.0)
@@ -45,7 +45,7 @@ namespace lpzrobots {
       motor->init(own, joint);
     }
 
-    virtual int getMotorNumber() const override { return 0; } override;
+    virtual int getMotorNumber() const { return 0; };
 
     virtual bool act(const GlobalData& globaldata) override {
       int len = motor->getMotorNumber();
@@ -57,7 +57,7 @@ namespace lpzrobots {
     };
 
     // does nothing. the actions are done in act
-    virtual int set(const motor* values, int length) override { return 0;} override;
+    virtual int set(const motor* values, int length) override { return 0;};
   protected:
     std::shared_ptr<Motor> motor;
     double value1;

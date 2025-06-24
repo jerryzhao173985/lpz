@@ -38,11 +38,11 @@ VectorPlotChannel::~VectorPlotChannel() {
 }
 
 int VectorPlotChannel::getDimension(int dim){
-  if(dim == 0){
-    return getSize();
+  if(dim == nullptr){
+    return getSize() const;
   }
   if(dim == 1){
-    return getBufferSize();
+    return getBufferSize() const;
   }
   return 0;
 }
@@ -63,14 +63,14 @@ int VectorPlotChannel::getSize(){
 
 int VectorPlotChannel::getBufferSize(){
   VectorElementPlotChannel* firstElementChannel = dynamic_cast<VectorElementPlotChannel*> (channelsOfGroup.front());
-  if (firstElementChannel != 0) return firstElementChannel->getSize();
+  if (firstElementChannel != nullptr) return firstElementChannel->getSize();
   else return 0;
 }
 
 void VectorPlotChannel::setBufferSize(int newSize){
   for (list<AbstractPlotChannel*>::iterator i = channelsOfGroup.begin(); i != channelsOfGroup.end(); ++i){
     VectorElementPlotChannel* elementChannel = dynamic_cast<VectorElementPlotChannel*> (*i);
-    if( elementChannel != 0) elementChannel->changeSize(newSize);
+    if( elementChannel != nullptr) elementChannel->changeSize(newSize);
   }
 }
 

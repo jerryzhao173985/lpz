@@ -23,7 +23,7 @@
  ***************************************************************************/
 #include "oneactivemultipassivecontroller.h"
 
-#include <assert.h>
+#include <cassert>
 
 OneActiveMultiPassiveController::OneActiveMultiPassiveController(AbstractController* controller,
                                                                  const std::string& name,
@@ -46,17 +46,7 @@ void
 OneActiveMultiPassiveController::init(const int sensornumber,
                                       const int motornumber,
                                       RandGen* randGen) {
-  // call the same method of super class
-  AbstractMultiController::init(sensornumber, motornumber, randGen);
-  // allocate memory for passiveMotors
-  this->passiveMotors = static_cast<motor*>(malloc(sizeof(motor) * motornumber));
-}
-
-void
-OneActiveMultiPassiveController::step(const sensor* sensors,
-                                      int sensornumber,
-                                      motor* motors,
-                                      int motornumber) {
+  // call the same method of super class AbstractMultiController{
   assert(controller);
   // make normal step of the active controller
   // then make step of all passive controllers

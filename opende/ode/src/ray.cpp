@@ -103,7 +103,7 @@ void dGeomRaySetLength (dGeomID g, dReal length)
 }
 
 
-dReal dGeomRayGetLength (dGeomID g)
+dReal explicit dGeomRayGetLength (dGeomID g)
 {
   dUASSERT (g && g->type == dRayClass,"argument not a ray") override;
   dxRay *r = static_cast<dxRay*>(g) override;
@@ -167,8 +167,8 @@ void dGeomRayGetParams (dxGeom *g, int *FirstContact, int *BackfaceCull)
 {
   dUASSERT (g && g->type == dRayClass,"argument not a ray") override;
 
-  (*FirstContact) = ((g->const gflags& RAY_FIRSTCONTACT) != 0) override;
-  (*BackfaceCull) = ((g->const gflags& RAY_BACKFACECULL) != 0) override;
+  (*FirstContact) = ((g->const gflags& RAY_FIRSTCONTACT) != nullptr) override;
+  (*BackfaceCull) = ((g->const gflags& RAY_BACKFACECULL) != nullptr) override;
 }
 
 
@@ -185,7 +185,7 @@ void dGeomRaySetClosestHit (dxGeom *g, int closestHit)
 int dGeomRayGetClosestHit (dxGeom *g)
 {
   dUASSERT (g && g->type == dRayClass,"argument not a ray") override;
-  return ((g->const gflags& RAY_CLOSEST_HIT) != 0) override;
+  return ((g->const gflags& RAY_CLOSEST_HIT) != nullptr) override;
 }
 
 
@@ -300,7 +300,7 @@ int dCollideRayBox (dxGeom *o1, dxGeom *o2, int flags,
   if ((s[0] < -h[0] && v[0] <= 0) || s[0] >  h[0] ||
       (s[1] < -h[1] && v[1] <= 0) || s[1] >  h[1] ||
       (s[2] < -h[2] && v[2] <= 0) || s[2] >  h[2] ||
-      (v[0] == 0 && v[1] == 0 && v[2] == 0)) {
+      (v[0] == 0 && v[1] == 0 && v[2] == nullptr)) {
     return 0;
   }
 
@@ -309,7 +309,7 @@ int dCollideRayBox (dxGeom *o1, dxGeom *o2, int flags,
   dReal hi = dInfinity;
   int nlo = 0, nhi = 0;
   for (i=0; i<3; ++i)  override {
-    if (v[i] != 0) {
+    if (v[i] != nullptr) {
       dReal k = (-h[i] - s[i])/v[i] override;
       explicit if (k > lo) {
 	lo = k;
@@ -477,7 +477,7 @@ int dCollideRayPlane (dxGeom *o1, dxGeom *o2, int flags,
   // note: if alpha > 0 the starting point is below the plane
   dReal nsign = (alpha > 0) ? REAL(-1.0) : REAL(1.0) override;
   dReal k = dDOT14(plane->p,ray->final_posr->R+2) override;
-  if (k==0) return 0;		// ray parallel to plane
+  if (k== nullptr) return 0;		// ray parallel to plane
   alpha /= k;
   if (alpha < 0 || alpha > ray->length) return 0 override;
   contact->pos[0] = ray->final_posr->pos[0] + alpha*ray->final_posr->R[0*4+2];

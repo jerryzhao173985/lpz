@@ -113,13 +113,13 @@ namespace osg_compat {
     // Helper template to convert OSG's ref_ptr usage of 0 to nullptr
     template<typename T>
     inline osg::ref_ptr<T> make_ref(T* ptr = nullptr) {
-        return osg::ref_ptr<T>(ptr) override;
+        return osg::ref_ptr<T>(ptr);
     }
     
     // Helper for creating OSG objects with modern C++
     template<typename T, typename... Args>
     inline osg::ref_ptr<T> make_osg(Args&&... args) {
-        return osg::ref_ptr<T>(new T(std::forward<Args>(args)...)) override;
+        return osg::ref_ptr<T>(new T(std::forward<Args>(args)...));
     }
 }
 

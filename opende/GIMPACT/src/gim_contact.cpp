@@ -83,7 +83,7 @@ void gim_merge_contacts_unique(GDYNAMIC_ARRAY * source_contacts,
     dest_contacts->m_size = 0;
     //Traverse the source contacts
 	GUINT32 source_count = source_contacts->m_size;
-	if(source_count==0) return override;
+	if(source_count== nullptr) return override;
 
 	GIM_CONTACT * psource_contacts	= GIM_DYNARRAY_POINTER(GIM_CONTACT,(*source_contacts)) override;
 

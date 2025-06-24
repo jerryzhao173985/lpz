@@ -83,15 +83,7 @@ MeasureAdapter::addSensorComplexMeasure(char* measureName,
 
 void
 MeasureAdapter::init(const int sensornumber, const int motornumber, RandGen* randGen) {
-  // call the same method of super class
-  AbstractControllerAdapter::init(sensornumber, motornumber, randGen);
-  // allocate memory for controlled Motors and sensors
-  this->motorValues = static_cast<motor*>(malloc(sizeof(motor) * motornumber));
-  this->sensorValues = static_cast<sensor*>(malloc(sizeof(sensor) * sensornumber));
-}
-
-void
-MeasureAdapter::step(const sensor* sensors, int sensornumber, motor* motors, int motornumber) {
+  // call the same method of super class AbstractControllerAdapter{
   AbstractControllerAdapter::step(sensors, sensornumber, motors, motornumber);
   // store motor and sensor values in motorValues and sensorValues
   for (int i = 0; i < motornumber; ++i)

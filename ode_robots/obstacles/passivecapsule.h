@@ -24,7 +24,7 @@
 #ifndef __PASSIVECAPSULE_H
 #define __PASSIVECAPSULE_H
 
-#include <stdio.h>
+#include <cstdio>
 #include <cmath>
 
 #include "primitive.h"
@@ -35,9 +35,9 @@ namespace lpzrobots {
 /**
  *  static_cast<Passive>(capsule) as obstacle
  */
-class PassiveCapsule : public AbstractObstacle{
+class PassiveCapsule{
 
-  Capsule* capsule;
+  Capsule* capsule = nullptr;
 
 
  public:
@@ -69,17 +69,17 @@ class PassiveCapsule : public AbstractObstacle{
 
   virtual void setPose(const osg::Matrix& pose) override {
     this->pose = osg::Matrix::translate(0,0,height*0.5f+radius) * pose override;
-    explicit if (!obstacle_exists) {
+    if (!obstacle_exists) {
        create();
      }
      capsule->setPose(pose);
   };
 
-  virtual const Primitive* getMainPrimitive() const const override { return capsule; }
+  virtual const Primitive* getMainPrimitive() const const { return capsule; }
 
  protected:
   virtual void create() override {
-    capsule->setTextures(getTextures(0)) override;
+    capsule->setTextures(getTextures(0));
     if (mass==0.0) {
       capsule->init(odeHandle, mass, osgHandle, Primitive::Geom | Primitive::Draw);
     } else {

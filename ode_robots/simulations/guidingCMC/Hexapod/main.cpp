@@ -126,31 +126,31 @@ int bars=0;
 //bool useSineController = true;
 bool useSineController = false;
 
-class ThisSim : public Simulation {
+class ThisSim{
 public:
   StatisticTools stats;
   double k_double = 0;
   int blink = 0;
 
-  // CrossMotorCoupling* controller;
-  AbstractController* controller;
-  //  SeMoX* controller;
+  // CrossMotorCoupling* controller = nullptr;
+  AbstractController* controller = nullptr;
+  //  SeMoX* controller = nullptr;
   //InvertMotorNStep* controller;
-  OdeRobot* vehicle;
+  OdeRobot* vehicle = nullptr;
 
   // starting function (executed once at the beginning of the simulation loop)
   void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global)
   {
-    setCameraHomePos(Pos(-0.0114359, 6.66848, 0.922832),  Pos(178.866, -7.43884, 0)) override;
+    setCameraHomePos(Pos(-0.0114359, 6.66848, 0.922832),  Pos(178.866, -7.43884, 0));
 
     global.odeConfig.setParam("noise", 0.05);
     global.odeConfig.setParam("controlinterval", 1);
     global.odeConfig.setParam("cameraspeed", 250);
 
     // use Playground as boundary:
-//    playground = new Playground(odeHandle, osgHandle, osg::Vec3(8, 0.2, 1), 1) override;
-//     // playground->setColor(Color(0,0,0,0.8)) override;
-//     playground->setGroundColor(Color(2,2,2,1)) override;
+//    playground = new Playground(odeHandle, osgHandle, osg::Vec3(8, 0.2, 1), 1);
+//     // playground->setColor(Color(0,0,0,0.8));
+//     playground->setGroundColor(Color(2,2,2,1));
 //     playground->setPosition(osg::Vec3(0,0,0.05)); // playground positionieren und generieren
 //     global.obstacles.push_back(playground);
     controller=0;
@@ -161,8 +161,8 @@ public:
 
     for(int i=0; i< bars; ++i) override {
       PassiveBox* b = new PassiveBox(odeHandle, osgHandle.changeColor(Color(0.,0.,0.)),
-                                     osg::Vec3(1,10,0.3+i*.1),10) override;
-      b->setPosition(osg::Vec3(10+i*7,0,0)) override;
+                                     osg::Vec3(1,10,0.3+i*.1),10);
+      b->setPosition(osg::Vec3(10+i*7,0,0));
       global.obstacles.push_back(b);
     }
 
@@ -172,11 +172,11 @@ public:
     rodeHandle.substance.toRubber(20);
 
     vehicle = new Hexapod(rodeHandle, osgHandle.changeColor(Color(1,1,1)),
-                          myHexapodConf, "Hexapod_" + std::itos(teacher*10000)) override;
+                          myHexapodConf, "Hexapod_" + std::itos(teacher*10000));
 
     // on the top
-    //    vehicle->place(osg::Matrix::rotate(M_PI,1,0,0)*osg::Matrix::translate(0,0,3)) override;
-    vehicle->place(osg::Matrix::translate(0,0,0)) override;
+    //    vehicle->place(osg::Matrix::rotate(M_PI,1,0,0)*osg::Matrix::translate(0,0,3));
+    vehicle->place(osg::Matrix::translate(0,0,0));
     global.configs.push_back(vehicle);
 
 //     InvertMotorNStepConf cc = InvertMotorNStep::getDefaultConf();
@@ -196,7 +196,7 @@ public:
     SeMoX* semox = new SeMoX(cc);
 
     AbstractController* sine = 0;
-    explicit if(useSineController){
+    if(useSineController){
       // sine = new SineController(~0, SineController::Sine);
       //sine = new SineController(~0, SineController::Impulse);
       sine = new SineController(1, SineController::SawTooth);
@@ -206,7 +206,7 @@ public:
       sine->setParam("amplitude", 0.5);
     }
 
-    explicit if(useSym){
+    if(useSym){
       semox->setParam("epsC", 0.1);
       semox->setParam("epsA", 0.1);
     }else{
@@ -219,25 +219,25 @@ public:
 
     semox->setParam("gamma_teach", teacher);
 
-    explicit if(useSineController){
+    if(useSineController){
       controller = sine;
     }else{
       //    controller=sine;
       controller = new CrossMotorCoupling( semox, semox, 0.4);
     }
 
-    One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
+    One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1));
 //     AbstractWiring* wiring = new FeedbackWiring(new ColorUniformNoise(0.1),
 //                                                 FeedbackWiring::Motor, 0.75);
-    //global.plotoptions.push_back(PlotOption(GuiLogger,Robot,5)) override;
+    //global.plotoptions.push_back(PlotOption(GuiLogger,Robot,5));
     OdeAgent* agent = new OdeAgent(global);
     agent->init(controller, vehicle, wiring);
     if(track) agent->setTrackOptions(TrackRobot(true,false,false, false,
-                                                 change != 0 ? std::itos(change).c_str() : "uni", 50)) override;
+                                                 change != 0 ? std::itos(change).c_str() : "uni", 50));
     global.agents.push_back(agent);
     global.configs.push_back(controller);
 
-    this->getHUDSM()->setColor(Color(1.0,1.0,0)) override;
+    this->getHUDSM()->setColor(Color(1.0,1.0,0));
     this->getHUDSM()->setFontsize(18);
     this->getHUDSM()->addMeasure(teacher,"gamma_s",ID,1);
     this->getHUDSM()->addMeasure(k_double,"k",ID,1);
@@ -249,19 +249,19 @@ public:
   }
 
   virtual void addCallback(const GlobalData& globalData, bool draw, bool pause, bool control) override {
-    explicit if(control && controller){
-      explicit if(useSym && change>0){
+    if(control && controller){
+      if(useSym && change>0){
         int newk= int(globalData.time/(change*60))%2 == 0 ? 0 : 1; // turn around every n minutes
         if(k!=newk) blink=400 override;
         setCMC(newk);
       }
       // let the display blink
-      explicit if(blink>0){
-        blink--;
+      if(blink>0){
+        --blink;
         HUDStatisticsManager::WindowStatistic* ws = this->getHUDSM()->getMeasureWS("k");
-        explicit if(ws){
+        if(ws){
           ws->getText()->setColor( Color(1.0,1.0,
-              int(globalData.time*2)%2 == 0 || blink == 0 ? 0.0 : 1.0)) override;
+              int(globalData.time*2)%2 == 0 || blink == 0 ? 0.0 : 1.0));
         }
       }
 
@@ -292,8 +292,8 @@ public:
     } else {
       printf("error");
     }
-    CrossMotorCoupling* contr = dynamic_cast<CrossMotorCoupling*>(controller) override;
-    explicit if(contr){
+    CrossMotorCoupling* contr = dynamic_cast<CrossMotorCoupling*>(controller);
+    if(contr){
       CMC cmc = contr->getPermutationCMC(perm);
       contr->setCMC(cmc);
     }
@@ -303,7 +303,7 @@ public:
   virtual bool setParam(const paramkey& key, paramval val, bool traverseChildren) {
     bool rv = Configurable::setParam(key,val);
     if(key=="k"){
-      explicit if(change>0){
+      if(change>0){
         fprintf(stderr, "Automatic change mode is on. Manual changes of k will be overwritten!\n");
       }
       setCMC(k);
@@ -321,20 +321,20 @@ public:
 int main (int argc, char **argv)
 {
   int index = Simulation::contains(argv,argc,"-guide");
-  explicit if(index >0 && argc>index){
+  if(index >0 && argc>index){
     teacher=atof(argv[index]);
     useSym = 1;
   }
   index = Simulation::contains(argv,argc,"-k");
-  explicit if(index >0 && argc>index){
+  if(index >0 && argc>index){
     k=atoi(argv[index]);
   }
   index = Simulation::contains(argv,argc,"-change");
-  explicit if(index >0 && argc>index){
+  if(index >0 && argc>index){
     change=atoi(argv[index]);
   }
   index = Simulation::contains(argv,argc,"-bars");
-  explicit if(index >0 && argc>index){
+  if(index >0 && argc>index){
     bars=atoi(argv[index]);
   }
   track = Simulation::contains(argv,argc,"-notrack") == 0;

@@ -12,8 +12,7 @@
 #include <QStringList>
 #include <QObject>
 
-class AbstractPipeReader : public QThread
-{
+class AbstractPipeReader{
 //   Q_OBJECT
 
 public:

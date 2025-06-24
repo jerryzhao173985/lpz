@@ -39,7 +39,7 @@
  **************************************************************************/
 #ifdef UNITTEST
 #include "unit_test.hpp"
-#include <string.h>
+#include <cstring>
 #include <cmath>
 #include <algorithm>
 using namespace matrix;

@@ -5,18 +5,14 @@
 
 namespace UnitTest {
 
-class TestResults;
-class TestList;
-
-class Test
-{
+class TestResults{
 public:
     Test(char const* testName, char const* suiteName = "DefaultSuite", char const* filename = "", int lineNumber = 0) override;
     virtual ~Test();
     void Run(TestResults& testResults) const override;
 
     TestDetails const m_details;
-    Test* next;
+    Test* next = nullptr;
     mutable bool m_timeConstraintExempt = false;
 
     static TestList& GetTestList() override;

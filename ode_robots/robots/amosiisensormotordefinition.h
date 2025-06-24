@@ -47,9 +47,11 @@ enum AmosIISensorNames{
         L2_fs= 24, //Left hind foot
 
         // US sensors (AMOSII v1 and v2)
-        FR_us=25, //Front Ultrasonic sensor static_cast<right>(FL_us)=26, //Front Ultrasonic sensor (left)
+        FR_us=25, //Front Ultrasonic sensor (right)
+        FL_us=26, //Front Ultrasonic sensor (left)
 
-        // IR reflex sensors at legs static_cast<AMOSIIv2>(R0_irs)=31,
+        // IR reflex sensors at legs (AMOSIIv2)
+        R0_irs=31,
         R1_irs=29,
         R2_irs=27,
         L0_irs=32,

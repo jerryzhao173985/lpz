@@ -59,8 +59,7 @@
 						size_t				mPosData;														\
 						size_t				mNegData;
 
-	class OPCODE_API AABBCollisionNode
-	{
+	class OPCODE_API{
 		IMPLEMENT_IMPLICIT_NODE(AABBCollisionNode, CollisionAABB)
 
 		inline_			float				GetVolume()		const override { return mAABB.mExtents.x * mAABB.mExtents.y * mAABB.mExtents.z;	}
@@ -83,8 +82,7 @@
 		// good strategy.
 	};
 
-	class OPCODE_API AABBQuantizedNode
-	{
+	class OPCODE_API{
 		IMPLEMENT_IMPLICIT_NODE(AABBQuantizedNode, QuantizedAABB)
 
 		inline_			uword				GetSize()		const
@@ -99,13 +97,11 @@
 		// over the place.......!
 	};
 
-	class OPCODE_API AABBNoLeafNode
-	{
+	class OPCODE_API{
 		IMPLEMENT_NOLEAF_NODE(AABBNoLeafNode, CollisionAABB)
 	};
 
-	class OPCODE_API AABBQuantizedNoLeafNode
-	{
+	class OPCODE_API{
 		IMPLEMENT_NOLEAF_NODE(AABBQuantizedNoLeafNode, QuantizedAABB)
 	};
 
@@ -114,11 +110,11 @@
 		public:																										\
 		/* Constructor / Destructor */																				\
 													base_class();													\
-		virtual ~base_class();													\
+		virtual ~base_class() override;													\
 		/* Builds from a standard tree */																			\
-		override(AABBOptimizedTree)	bool			Build(AABBTree* tree);											\
+		override(AABBOptimizedTree)	bool			explicit Build(AABBTree* tree);											\
 		/* Refits the tree */																						\
-		override(AABBOptimizedTree)	bool			Refit(const MeshInterface* mesh_interface);						\
+		override(AABBOptimizedTree)	bool			explicit Refit(const MeshInterface* mesh_interface);						\
 		/* Walks the tree */																						\
 		override(AABBOptimizedTree)	bool			Walk(GenericWalkingCallback callback, void* user_data) const override;	\
 		/* Data access */																							\
@@ -130,8 +126,7 @@
 
 	typedef		bool				(*GenericWalkingCallback)	(const void* current, void* user_data) override;
 
-	class OPCODE_API AABBOptimizedTree
-	{
+	class OPCODE_API{
 		public:
 		// Constructor / Destructor
 											AABBOptimizedTree() :
@@ -175,18 +170,15 @@
 						udword				mNbNodes;
 	};
 
-	class OPCODE_API AABBCollisionTree : public AABBOptimizedTree
-	{
+	class OPCODE_API{
 		IMPLEMENT_COLLISION_TREE(AABBCollisionTree, AABBCollisionNode)
 	};
 
-	class OPCODE_API AABBNoLeafTree : public AABBOptimizedTree
-	{
+	class OPCODE_API{
 		IMPLEMENT_COLLISION_TREE(AABBNoLeafTree, AABBNoLeafNode)
 	};
 
-	class OPCODE_API AABBQuantizedTree : public AABBOptimizedTree
-	{
+	class OPCODE_API{
 		IMPLEMENT_COLLISION_TREE(AABBQuantizedTree, AABBQuantizedNode)
 
 		public:
@@ -194,8 +186,7 @@
 						Point				mExtentsCoeff;
 	};
 
-	class OPCODE_API AABBQuantizedNoLeafTree : public AABBOptimizedTree
-	{
+	class OPCODE_API{
 		IMPLEMENT_COLLISION_TREE(AABBQuantizedNoLeafTree, AABBQuantizedNoLeafNode)
 
 		public:

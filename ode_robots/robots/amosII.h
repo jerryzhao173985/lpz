@@ -37,21 +37,7 @@
  * forward declarations
  */
 namespace lpzrobots {
-  class HingeJoint;
-  class IRSensor;
-  class Joint;
-  class OneAxisServo;
-  class Primitive;
-  class RaySensorBank;
-  class SliderJoint;
-  class SpeedSensor;
-  class Spring;
-  class TwoAxisServo;
-  // Added sound sensors static_cast<2>(class)
-  class SoundSensor;
-}
-
-namespace lpzrobots {
+  class HingeJoint{
 
   struct AmosIIConf {
       /**
@@ -304,7 +290,7 @@ namespace lpzrobots {
 
   };
 
-  class AmosII : public OdeRobot, public Inspectable {
+  class AmosII{
     public:
       enum LegPos {
         L0, L1, L2, R0, R1, R2, LEG_POS_MAX
@@ -356,7 +342,7 @@ namespace lpzrobots {
       AmosII(const OdeHandle& odeHandle, const OsgHandle& osgHandle, const AmosIIConf& conf = getDefaultConf(),
           const std::string& name = "AmosII robot");
 
-      virtual ~AmosII();
+      virtual ~AmosII() override;
 
       /**
        * updates the OSG nodes of the vehicle
@@ -387,12 +373,12 @@ namespace lpzrobots {
       /**
        * returns number of sensors
        */
-      virtual int getSensorNumberIntern();
+      virtual int getSensorNumberIntern() const;
 
       /**
        * returns number of motors
        */
-      virtual int getMotorNumberIntern();
+      virtual int getMotorNumberIntern() const;
 
       /**
        * this function is called in each timestep. It should perform
@@ -405,7 +391,7 @@ namespace lpzrobots {
 
       virtual void sense(const GlobalData& globalData);
 
-      virtual double getMassOfRobot();
+      virtual double getMassOfRobot() const;
 
       void setLegPosUsage(LegPos leg, LegPosUsage usage);
 
@@ -416,7 +402,7 @@ namespace lpzrobots {
        * the main object of the robot, which is used for position and speed
        * tracking
        */
-      virtual const Primitive* getMainPrimitive() const const override;
+      virtual const Primitive* getMainPrimitive() const override;
 
       /**
        * returns the MotorName enum value for the given joint at the given

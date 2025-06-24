@@ -1,47 +1,6 @@
 /************************************************************************/
 /* schlange.h                                                                */
-/* Abstract class for Snakes                                             */
-/* @author Georg Martius                                                 */
-/*                                                                        */
-/************************************************************************/
-/***************************************************************************
- *   Copyright (C) 2005-2011 LpzRobots development team                    *
- *    Georg Martius  <georg dot martius at web dot de>                     *
- *    Frank Guettler <guettler at informatik dot uni-leipzig dot de        *
- *    Frank Hesse    <frank at nld dot ds dot mpg dot de>                  *
- *    Ralf Der       <ralfder at mis dot mpg dot de>                       *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- *   This program is distributed in the hope that it will be useful,       *
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
- *   GNU General Public License for more details.                          *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the                         *
- *   Free Software Foundation, Inc.,                                       *
- *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
- *                                                                         *
- ***************************************************************************/
-#ifndef __SCHLANGE_H
-#define __SCHLANGE_H
-
-#include<vector>
-#include<assert.h>
-
-#include "primitive.h"
-#include "joint.h"
-#include "angularmotor.h"
-#include "pid.h"
-
-#include "oderobot.h"
-#include <selforg/configurable.h>
-
-namespace lpzrobots {
+/* Abstract class for{
 
 typedef struct {
 public:
@@ -55,8 +14,7 @@ public:
  * It consists of a number of equal elements, each linked
  * by a joint
  **/
-class Schlange: public OdeRobot
-{
+class Schlange{
 protected:
 
   bool created = false;
@@ -87,7 +45,7 @@ public:
     return conf;
   }
 
-  virtual ~Schlange();
+  virtual ~Schlange() override;
 
 
   /** sets the pose of the vehicle
@@ -134,15 +92,15 @@ public:
   virtual void notifyOnChange(const paramkey& key);
 
   /** the main object of the robot, which is used for position and speed tracking */
-  virtual const Primitive* getMainPrimitive() const const  override {
+  virtual const Primitive* getMainPrimitive() const {
     if(!objects.empty()){
       //      int half = objects.size()/2 override;
-      //      return (objects[half]) override;
-      return (objects[0]) override;
+      //      return (objects[half]);
+      return (objects[0]);
     }else return 0;
   }
 
-  virtual std::vector<Primitive*> getAllPrimitives() const override { return objects;}
+  virtual std::vector<Primitive*> getAllPrimitives() const { return objects;}
 
   /** sets a texture to the body of the snake
    * note: the head texture of the snake is set by

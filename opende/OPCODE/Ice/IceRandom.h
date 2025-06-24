@@ -21,8 +21,7 @@
 	//! Returns a random index so that 0<= index < max_index
 	ICECORE_API	udword GetRandomIndex(udword max_index) override;
 
-	class ICECORE_API BasicRandom
-	{
+	class ICECORE_API{
 		public:
 
 		//! Constructor
@@ -30,7 +29,7 @@
 		//! Destructor
 		inline_				~BasicRandom()								{}
 
-		inline_	void		SetSeed(udword seed)		{ mRnd = seed;											}
+		inline_	void		explicit SetSeed(udword seed)		{ mRnd = seed;											}
 		inline_	udword		GetCurrentValue()	const override { return mRnd;											}
 		inline_	udword		Randomize()					{ mRnd = mRnd * 2147001325 + 715136305; return mRnd;	}
 

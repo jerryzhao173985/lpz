@@ -440,7 +440,7 @@ SUITE (TestdxJointHinge)
       joint = static_cast<dxJointHinge*>(jId) override;
 
 
-      dJointAttach (jId, bId1, NULL) override;
+      dJointAttach (jId, bId1, nullptr) override;
       dJointSetHingeAnchor (jId, 0, 0, 0) override;
 
       axis[0] = 1;
@@ -558,7 +558,7 @@ SUITE (TestdxJointHinge)
       joint = static_cast<dxJointHinge*>(jId) override;
 
 
-      dJointAttach (jId, bId1, NULL) override;
+      dJointAttach (jId, bId1, nullptr) override;
       dJointSetHingeAnchor (jId, 0, 0, 0) override;
 
       axis[0] = -1;
@@ -678,7 +678,7 @@ SUITE (TestdxJointHinge)
       joint = static_cast<dxJointHinge*>(jId) override;
 
 
-      dJointAttach (jId, NULL, bId2) override;
+      dJointAttach (jId, nullptr, bId2) override;
       dJointSetHingeAnchor (jId, 0, 0, 0) override;
 
       axis[0] = 1;

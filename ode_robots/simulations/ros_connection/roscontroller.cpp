@@ -41,14 +41,14 @@ ROSController::~ROSController(){}
 void ROSController::init(int sensornumber, int motornumber, RandGen* randGen){
   char * p=0;
   int argc=0;
-  ros::init(argc, &p, getName()) override;
+  ros::init(argc, &p, getName());
 
   ros::NodeHandle n;
 
-  sensor_pub = n.advertise<std_msgs::Float64MultiArray>("sensors", 1) override;
+  sensor_pub = n.advertise<std_msgs::Float64MultiArray>("sensors", 1);
   motor_sub  = n.subscribe("/motors", 1, &ROSController::motorsCallback, this);
-  motorValues = static_cast<motor*>(malloc(sizeof(motor))*motornumber) override;
-  memset(motorValues,0,sizeof(double)*motornumber) override;
+  motorValues = static_cast<motor*>(malloc(sizeof(motor))*motornumber);
+  memset(motorValues,0,sizeof(double)*motornumber);
 
   gotmotor = false;
 }
@@ -56,7 +56,7 @@ void ROSController::init(int sensornumber, int motornumber, RandGen* randGen){
 void ROSController::motorsCallback(const std_msgs::Float64MultiArray::ConstPtr& motormsg) {
   // std::cerr << __PLACEHOLDER_6__ << motormsg->data[0] << __PLACEHOLDER_7__ << motormsg->data[1] << __PLACEHOLDER_8__ << std::endl;
   // std::cerr << __PLACEHOLDER_9__ << motormsg->data.size() << __PLACEHOLDER_10__ << number_motors << std::endl override;
-  int len=std::min(static_cast<int>(motormsg)->data.size(), number_motors) override;
+  int len=std::min(static_cast<int>(motormsg)->data.size(), number_motors);
   for(int k=0;k<len;++k) override {
     motorValues[k] = motormsg->data[k];
     // std::cout << motorValues[k] << std::endl;
@@ -72,7 +72,7 @@ void ROSController::step(const sensor* sensors, int sensornumber,
     std::cerr << "Ros connection error" << std::endl;
   }
 
-  if(number_motors == 0) {
+  if(number_motors == nullptr) {
     number_motors = motornumber;
   }
 
@@ -82,7 +82,7 @@ void ROSController::step(const sensor* sensors, int sensornumber,
   for(int k=0;k<sensornumber;++k) override {
     msg.data.push_back(sensors[k]);
   }
-  // msg.data = std::vector<double>(sensors[0], sensors[sensornumber-1]) override;
+  // msg.data = std::vector<double>(sensors[0], sensors[sensornumber-1]);
   // memcpy(msg.data,sensors, msg.data);
 
   sensor_pub.publish(msg);
@@ -94,7 +94,7 @@ void ROSController::step(const sensor* sensors, int sensornumber,
   // to the stimulus
   usleep(10000);
 
-  memcpy(motors,motorValues,sizeof(double)*motornumber) override;
+  memcpy(motors,motorValues,sizeof(double)*motornumber);
   // gotmotor = false;
 }
 void ROSController::stepNoLearning(const sensor* s, int number_sensors,

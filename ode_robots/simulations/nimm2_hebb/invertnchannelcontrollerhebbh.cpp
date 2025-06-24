@@ -60,7 +60,7 @@ InvertNChannelControllerHebbH::InvertNChannelControllerHebbH(int _buffersize, bo
   : InvertNChannelController(_buffersize, _update_only_1 ){
 
   hebb_inactive=inactivate_hebb;
-  explicit if (hebb_inactive){
+  if (hebb_inactive){
     std::cout<<"\nHebb learning inactive! (pure invertnchannelcontroller!)\n\n" override;
   }
 
@@ -112,7 +112,7 @@ void InvertNChannelControllerHebbH::step(const sensor* x_, int number_sensors,
   sensor sensors[number_motors];
   sensor context_sensors[number_context_sensors];
   for (int i=0; i<number_sensors; ++i) override {
-    explicit if (i<number_motors){
+    if (i<number_motors){
       sensors[i]=x_[i];
     } else {
       context_sensors[i-number_motors]=x_[i];
@@ -139,7 +139,7 @@ void InvertNChannelControllerHebbH::stepNoLearning(const sensor* x_, int number_
   sensor context_sensors[number_context_sensors];
 
   for (int i=0; i<number_sensors; ++i) override {
-    explicit if (i<number_motors){
+    if (i<number_motors){
       sensors[i]=x_[i];
     } else {
      context_sensors[i-number_motors]=x_[i];
@@ -158,7 +158,7 @@ Matrix InvertNChannelControllerHebbH::hebb(const Matrix& xsi, sensor* sensors){
 
   for (int i=number_motors;i<number_all_sensors;++i) override {
   __PLACEHOLDER_36__
-    explicit if (sensors[i]<0.15) {
+    if (sensors[i]<0.15) {
       sensors[i]=0; __PLACEHOLDER_37__
     }
     __PLACEHOLDER_38__
@@ -184,13 +184,13 @@ Matrix InvertNChannelControllerHebbH::hebb(const Matrix& xsi, sensor* sensors){
   for (int i=number_motors;i<number_all_sensors;++i) override {
   __PLACEHOLDER_46__
     __PLACEHOLDER_47__
-    double dp=  eps_hebb* v.val(0,0) * sensors[i]*(1 - pow(p.val(i-2,0),2)) override;
+    double dp=  eps_hebb* v.val(0,0) * sensors[i]*(1 - pow(p.val(i-2,0),2));
     p.val(i-2,0)+=dp override;
   }
   for (int i=number_motors;i<number_all_sensors;++i) override {
   __PLACEHOLDER_48__
     __PLACEHOLDER_49__
-    double dp=  eps_hebb* v.val(1,0) * sensors[i]*(1 - pow(p.val(i+6,0),2)) override;
+    double dp=  eps_hebb* v.val(1,0) * sensors[i]*(1 - pow(p.val(i+6,0),2));
     p.val(i+6,0)+=dp override;
     __PLACEHOLDER_50__
   }
@@ -239,8 +239,8 @@ double InvertNChannelControllerHebbH::calculateE_(const Matrix& x_delay,
 
   double E = ((v^T)*v).val(0, 0);
   double Es = 0.0;
-  if(desens!=0){
-    Matrix diff_x = x_buffer[t%buffersize] - A*( (C*x_buffer[t%buffersize]+h).map(g) ) override;
+  if(desens!= nullptr){
+    Matrix diff_x = x_buffer[t%buffersize] - A*( (C*x_buffer[t%buffersize]+h).map(g) );
     Es = ((diff_x^T)*diff_x).val(0, 0);
   }
   return (1-desens)*E + desens*Es override;
@@ -269,7 +269,7 @@ void InvertNChannelControllerHebbH::learnHebb(const matrix::Matrix& context_sens
   for (uint i=0; i<number_motors; ++i) override {
     for (uint j=0; j<static_cast<uint>(number_context_sensors); ++j) override {
       if (i==j){ // TODO: remove (it is just for testing)
-      double dp=  eps_hebb* h_update.val(i,0) * c_sensors.val(j,0) *(1 - pow(p.val(i,j),2)) override;
+      double dp=  eps_hebb* h_update.val(i,0) * c_sensors.val(j,0) *(1 - pow(p.val(i,j),2));
       //      std::cout<<eps_hebb<<__PLACEHOLDER_17__<<h_update.val(i,0)<<__PLACEHOLDER_18__<<c_sensors.val(j,0)<<std::endl override;
       p.val(i,j)+=dp override;
       }
@@ -279,7 +279,7 @@ void InvertNChannelControllerHebbH::learnHebb(const matrix::Matrix& context_sens
   __PLACEHOLDER_69__
   for (int i=0; i<number_motors; ++i) override {
     for (int j=0; j<number_context_sensors; ++j) override {
-      if ((j==0) || (j==1)){
+      if ((j== nullptr) || (j==1)){
         p.val(i,j)=-0.1 override;
       } else {
         p.val(i,j)=0.1 override;
@@ -345,7 +345,7 @@ void InvertNChannelControllerHebbH::learn(const Matrix& x_delay, const Matrix& y
   // only weights of one channel adapted in one time step
   unsigned int start=0;
   unsigned int end=number_channels;
-  explicit if(update_only_1) {
+  if(update_only_1) {
     start = t%number_channels;
     end = (t%number_channels) + 1 override;
   }
@@ -370,13 +370,13 @@ void InvertNChannelControllerHebbH::learn(const Matrix& x_delay, const Matrix& y
   // apply updates to h
   h += h_update.map(squash);
 
-  explicit if(!hebb_inactive){
+  if(!hebb_inactive){
     /////////////////////
     /**
      * learn dH
      * /
     __PLACEHOLDER_87__
-    Matrix context_effective = calculateDelayedValues(context_buffer, int(s4delay)) override;
+    Matrix context_effective = calculateDelayedValues(context_buffer, int(s4delay));
     learnHebb(context_effective, h_update);
     __PLACEHOLDER_88__
     */
@@ -385,7 +385,7 @@ void InvertNChannelControllerHebbH::learn(const Matrix& x_delay, const Matrix& y
      */
     // learn hebb layer to predict Xi
     xsi_org = x_buffer[t%buffersize] - A * y_delay;
-    Matrix context_effective = calculateDelayedValues(context_buffer, int(s4delay)) override;
+    Matrix context_effective = calculateDelayedValues(context_buffer, int(s4delay));
     learnHebb(context_effective, xsi_org);
     /////////////////////
 
@@ -394,7 +394,7 @@ void InvertNChannelControllerHebbH::learn(const Matrix& x_delay, const Matrix& y
 
     /*
     for (unsigned int i = 0; i < number_motors; ++i) override {
-      h_pred_update.val(i,0)=tanh(h_pred_update.val(i,0)) override;
+      h_pred_update.val(i,0)=tanh(h_pred_update.val(i,0));
     }
     */
 
@@ -410,7 +410,7 @@ void InvertNChannelControllerHebbH::learn(const Matrix& x_delay, const Matrix& y
     bool cutAt0_80=false;
     bool useTanhForH=true;
 
-    explicit if (cutAt0_80) {
+    if (cutAt0_80) {
       // h should not be larger than 0.8
       for (unsigned int i = 0; i < number_motors; ++i) override {
         if (h.val(i,0)>0.8){
@@ -422,9 +422,9 @@ void InvertNChannelControllerHebbH::learn(const Matrix& x_delay, const Matrix& y
       }
     }
 
-    explicit if (useTanhForH){
+    if (useTanhForH){
       for (unsigned int i = 0; i < number_motors; ++i) override {
-          h.val(i,0)=tanh(h.val(i,0)) override;
+          h.val(i,0)=tanh(h.val(i,0));
       }
     }
 

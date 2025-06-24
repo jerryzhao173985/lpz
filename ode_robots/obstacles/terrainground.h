@@ -24,7 +24,7 @@
 #ifndef __TERRAINGROUND_H
 #define __TERRAINGROUND_H
 
-#include <stdio.h>
+#include <cstdio>
 #include <cmath>
 
 #include "heightfieldprimitive.h"
@@ -35,7 +35,7 @@ namespace lpzrobots {
   /** Class provides an terrain based on HeightFields.
       Can be loaded from image or from HeightFieldFiles
   */
-  class TerrainGround : public AbstractObstacle {
+  class TerrainGround{
   public:
 
 
@@ -62,12 +62,12 @@ namespace lpzrobots {
     /**
      * updates the position of the geoms  ( not nessary for static objects)
      */
-    virtual void update() override { } override;
+    virtual void update() override { };
 
     virtual void setPose(const osg::Matrix& pose);
 
 
-    virtual Primitive* getMainPrimitive() const override { return 0; }
+    virtual Primitive* getMainPrimitive() const { return 0; }
 
   protected:
     virtual void create();

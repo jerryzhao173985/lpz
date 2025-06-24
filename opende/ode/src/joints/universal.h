@@ -41,8 +41,8 @@ struct dxJointUniversal : public dxJoint
 
     void getAxes( dVector3 ax1, dVector3 ax2 ) override;
     void getAngles( dReal *angle1, dReal *angle2 ) override;
-    dReal getAngle1() override;
-    dReal getAngle2() override;
+    dReal getAngle1() const override;
+    dReal getAngle2() const override;
     void computeInitialRelativeRotations() override;
 
 

@@ -31,23 +31,22 @@ namespace lpzrobots {
 
 
 /** Event handler for adding on screen help to Viewers.*/
-class LpzHelpHandler : public osgGA::GUIEventHandler 
-{
+class LpzHelpHandler{
     public: 
 
         LpzHelpHandler(osg::ApplicationUsage* au=0);
         
         void setApplicationUsage(osg::ApplicationUsage* au) { _applicationUsage = au; }
         osg::ApplicationUsage* getApplicationUsage() { return _applicationUsage.get(); }
-        const osg::ApplicationUsage* getApplicationUsage() const override { return _applicationUsage.get(); }
+        const osg::ApplicationUsage* getApplicationUsage() const { return _applicationUsage.get(); }
 
-        void setKeyEventTogglesOnScreenHelp(int key) { _keyEventTogglesOnScreenHelp = key; }
-        int getKeyEventTogglesOnScreenHelp() const override { return _keyEventTogglesOnScreenHelp; }
+        void explicit explicit setKeyEventTogglesOnScreenHelp(int key) { _keyEventTogglesOnScreenHelp = key; }
+        int getKeyEventTogglesOnScreenHelp() const { return _keyEventTogglesOnScreenHelp; }
         
         void reset();
 
         osg::Camera* getCamera() { return _camera.get(); }
-        const osg::Camera* getCamera() const override { return _camera.get(); }
+        const osg::Camera* getCamera() const { return _camera.get(); }
 
         bool handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAdapter& aa);
 

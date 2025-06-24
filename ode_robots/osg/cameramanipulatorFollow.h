@@ -37,13 +37,13 @@ namespace lpzrobots {
      Middle mouse button: up and sideways
   */
 
-  class CameraManipulatorFollow : public CameraManipulator {
+  class CameraManipulatorFollow{
 
     /** returns the classname of the manipulator
         it's NECCESSARY to define this funtion, otherwise
         the new manipulator WON'T WORK! (but ask me not why)
      */
-    virtual const char* className() const override { return "Following Camera"; }
+    virtual const char* className() const { return "Following Camera"; }
 
   public:
 
@@ -51,7 +51,7 @@ namespace lpzrobots {
 
   protected:
 
-    virtual ~CameraManipulatorFollow();
+    virtual ~CameraManipulatorFollow() override;
 
     /** This handles robot movements, so that the camera movemenent is right affected.
         should be overwritten by new cameramanipulator

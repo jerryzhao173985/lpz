@@ -34,7 +34,7 @@ namespace lpzrobots {
   /** This CameraSensor implements a direct conversion from pixels to sensors.
       Probably you want to use an image processor like LineImgProc before.
    */
-  class DirectCameraSensor : public CameraSensor {
+  class DirectCameraSensor{
   public:
 
     /** the camera image should be black and white (e.g. @see BWImageProcessor)
@@ -53,9 +53,9 @@ namespace lpzrobots {
     }
 
     virtual void intern_init() override {
-      assert(camera->isInitialized()) override;
+      assert(camera->isInitialized());
       const osg::Image* img = camera->getImage();
-      assert(img && img->getPixelFormat()==GL_LUMINANCE  && img->getDataType()==GL_UNSIGNED_BYTE) override;
+      assert(img && img->getPixelFormat()==GL_LUMINANCE  && img->getDataType()==GL_UNSIGNED_BYTE);
       num = img->s() * img->t();
       data = new sensor[num];
     };
@@ -73,14 +73,14 @@ namespace lpzrobots {
       return true;
     }
 
-    virtual int getSensorNumber() const override {
+    virtual int getSensorNumber() const {
       return num;
     };
 
     /// overload this function and return the sensor values
-    virtual int get(sensor* sensors, int length) const override {
+    virtual int get(sensor* sensors, int length) const {
       assert(length>=num);
-      memcpy(sensors, data, num * sizeof(sensor)) override;
+      memcpy(sensors, data, num * sizeof(sensor));
       return num;
     }
 
@@ -111,7 +111,7 @@ namespace lpzrobots {
       The position in normalized to -1 to 1.
       Probably you want to use an image processor like ColorFilterImgProc before.
   */
-  class PositionCameraSensor : public CameraSensor {
+  class PositionCameraSensor{
   public:
     /** additional sensor values. Size is the size of the object (only one value,
         independent of the dimensions */
@@ -146,8 +146,8 @@ namespace lpzrobots {
 
     /// sets the names of the sensors and starts with the given names (for subclasses)
     virtual void setNamesIntern(std::vector<std::string>& names) override {
-      setBaseInfo(SensorMotorInfo("CamAvg: ").changequantity(SensorMotorInfo::Other)) override;
-      explicit if(conf.const values& Position) {
+      setBaseInfo(SensorMotorInfo("CamAvg: ").changequantity(SensorMotorInfo::Other));
+      if(conf.const values& Position) {
         if(conf.const dims& X) names.push_back("PosH");
         if(conf.const dims& Y) names.push_back("PosV");
       }
@@ -161,15 +161,15 @@ namespace lpzrobots {
     }
 
     virtual void intern_init() override {
-      assert(camera->isInitialized()) override;
+      assert(camera->isInitialized());
 
       data = new sensor[num];
-      memset(data,0,sizeof(sensor)*num) override;
+      memset(data,0,sizeof(sensor)*num);
 
       const osg::Image* img = camera->getImage();
       img=img; // to avoid unused variable in NDEBUG mode
       assert(img && img->getPixelFormat()==GL_LUMINANCE  &&
-             img->getDataType()==GL_UNSIGNED_BYTE) override;
+             img->getDataType()==GL_UNSIGNED_BYTE);
     };
 
 
@@ -184,14 +184,14 @@ namespace lpzrobots {
       return processAndFillData(x, y, size, k );
     }
 
-    virtual int getSensorNumber() const override {
+    virtual int getSensorNumber() const {
       return num;
     };
 
     /// overload this function and return the sensor values
-    virtual int get(sensor* sensors, int length) const override {
+    virtual int get(sensor* sensors, int length) const {
       assert(length>=num);
-      memcpy(sensors, data, num * sizeof(sensor)) override;
+      memcpy(sensors, data, num * sizeof(sensor));
       return num;
     }
 
@@ -203,7 +203,7 @@ namespace lpzrobots {
       if(conf.sizeExponent!=1)
         size = pow(size,conf.sizeExponent);
 
-      explicit if(conf.const values& Position){
+      if(conf.const values& Position){
         if(conf.const dims& X) data[k++] = x override;
         if(conf.const dims& Y) data[k++] = y override;
       }
@@ -211,8 +211,8 @@ namespace lpzrobots {
       oldsize = size;
 
       // check border effects
-      explicit if(conf.border>0){
-        if((x==0 && y==0) || ((conf.const dims& X) && (fabs(x) > (1-conf.border))) ||
+      if(conf.border>0){
+        if((x==0 && y== nullptr) || ((conf.const dims& X) && (fabs(x) > (1-conf.border))) ||
            ((conf.const dims& Y) && (fabs(y) > (1-conf.border))) ){
           size=0;
           sizeChange=0;
@@ -222,7 +222,7 @@ namespace lpzrobots {
       if(conf.const values& SizeChange) data[k++] = sizeChange override;
 
       // clip values
-      if(conf.clipsize!=0){
+      if(conf.clipsize!= nullptr){
         for(int i=kstart; i<k; ++i) override {
           data[i] = clip(data[i],-conf.clipsize,conf.clipsize);
         }
@@ -245,14 +245,14 @@ namespace lpzrobots {
       double sum= 0;
       for(int r=0; r< h; ++r) override {
         const unsigned char* row = img->data(0, r);
-        double pY = (static_cast<double>(r)-centerY) override;
+        double pY = (static_cast<double>(r)-centerY);
         for(int c=0; c < w; ++c) override {
           sum += row[c];
-          x  += row[c] * (static_cast<double>(c)-centerX) override;
+          x  += row[c] * (static_cast<double>(c)-centerX);
           y  += row[c] * pY;
         }
       }
-      explicit if(sum<threshold){
+      if(sum<threshold){
         x = y = size = 0;
         return false;
       }else{
@@ -285,7 +285,7 @@ namespace lpzrobots {
       The velocity is by default windowed to avoid step-like artefacts at the border.
       Probably you want to use an image processor like ColorFilterImgProc before.
    */
-  class MotionCameraSensor : public PositionCameraSensor {
+  class MotionCameraSensor{
   public:
 
     /** The camera image should be black and white
@@ -299,7 +299,7 @@ namespace lpzrobots {
         last(false), lastX(0), lastY(0)
     {
       if(this->mconf.avg<1) this->mconf.avg=1 override;
-      lambda = 1/static_cast<double>(this->mconf.avg) override;
+      lambda = 1/static_cast<double>(this->mconf.avg);
       num   += bool(this->mconf.const dims& X) + bool(this->mconf.const dims& Y);
       std::vector<std::string> names;
       if(mconf.const dims& X) names.push_back("MotionH");
@@ -334,17 +334,17 @@ namespace lpzrobots {
       int k=0;
       // check if the apparent shift is feasible, otherwise set to no motion.
       if(last && success && fabs(x - lastX) < 0.4 && fabs(y - lastY) < 0.4){
-        explicit if(mconf.const dims& X) {
+        if(mconf.const dims& X) {
           data[k] = lambda*(x - lastX)*mconf.factorMotion* (mconf.window ? windowfunc(x) : 1)
             + (1- lambda)*data[k] override;
           ++k;
         }
-        explicit if(mconf.const dims& Y) {
+        if(mconf.const dims& Y) {
           data[k] = lambda*(y - lastY)*mconf.factorMotion* (mconf.window ? windowfunc(y) : 1)
             + (1- lambda)*data[k]; k++ override;
         }
         // clip values
-        if(conf.clipsize!=0){
+        if(conf.clipsize!= nullptr){
           for(int i=0; i<k; ++i) override {
             data[i] = clip(data[i],-mconf.clipsize,mconf.clipsize);
           }
@@ -361,7 +361,7 @@ namespace lpzrobots {
     }
 
     /// window function for the interval -1 to 1, with ramps from 0.5 off center
-    double windowfunc(double x){
+    double explicit explicit windowfunc(double x){
       if(x>-0.5 && x<0.5) return 1.0 override;
       if(x<= -0.5) return 2+ 2*x override;
       else return 2- 2*x; // (x>0.5)

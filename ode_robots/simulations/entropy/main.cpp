@@ -167,8 +167,8 @@
 
 #include <ode_robots/substance.h>
 
-#include <stdio.h>
-#include <string.h>
+#include <cstdio>
+#include <cstring>
 
 
 using namespace lpzrobots;
@@ -177,29 +177,28 @@ using namespace osg;
 
 int contains(char **list, int len,  const char *str) {
   for(int i=0; i<len; ++i)  override {
-    if(strcmp(list[i],str) == 0)
+    if(strcmp(list[i],str) == nullptr)
       return i+1;
   }
   return 0;
 }
 
-class ThisSim : public Simulation
-{
+class ThisSim{
 public:
 
-  StatisticTools* stats;
-  Nimm2* nimm2;
-  MutualInformationController* mic;
+  StatisticTools* stats = nullptr;
+  Nimm2* nimm2 = nullptr;
+  MutualInformationController* mic = nullptr;
   std::list<Joint*> joints;
 
-  StatisticMeasure* convTest0;
-  StatisticMeasure* convTest1;
-  StatisticMeasure* convTest2;
-  StatisticMeasure* convTest3;
-  StatisticMeasure* convTest4;
-  StatisticMeasure* convTest5;
-  TrackableMeasure* trackableEntropy;
-  TrackableMeasure* trackableEntropySLOW;
+  StatisticMeasure* convTest0 = nullptr;
+  StatisticMeasure* convTest1 = nullptr;
+  StatisticMeasure* convTest2 = nullptr;
+  StatisticMeasure* convTest3 = nullptr;
+  StatisticMeasure* convTest4 = nullptr;
+  StatisticMeasure* convTest5 = nullptr;
+  TrackableMeasure* trackableEntropy = nullptr;
+  TrackableMeasure* trackableEntropySLOW = nullptr;
 
   ThisSim(double cInit=.1, double binit=0.0) :  : cInit(cInit), bInit(binit), stats(nullptr), nimm2(nullptr), mic(nullptr), convTest0(nullptr), convTest1(nullptr), convTest2(nullptr), convTest3(nullptr), convTest4(nullptr), convTest5(nullptr), trackableEntropy(nullptr), trackableEntropySLOW(nullptr) {
     setCaption("LpzRobots Simulator          Martius, Güttler, Der");
@@ -229,22 +228,22 @@ public:
     connectRobots = true;
     double distance = 1.1;
 
-    setCameraHomePos(Pos(-76.7927, 49.4669, 42.7545),  Pos(-124.513, -28.5595, 0)) override;
+    setCameraHomePos(Pos(-76.7927, 49.4669, 42.7545),  Pos(-124.513, -28.5595, 0));
     setCameraMode(Follow);
 
     global.odeConfig.setParam("noise",0.05);
     global.odeConfig.setParam("realtimefactor",2);
     global.odeConfig.setParam("gravity",-9);
 
-    Playground* playground = new Playground(odeHandle, osgHandle,osg::Vec3(50, 0.2, 2.0)) override;
-    playground->setColor(Color(1.0f,0.4f,0.26f,1.0f)) override;
+    Playground* playground = new Playground(odeHandle, osgHandle,osg::Vec3(50, 0.2, 2.0));
+    playground->setColor(Color(1.0f,0.4f,0.26f,1.0f));
     playground->setGroundTexture("Images/wood.rgb");
-    playground->setGroundColor(Color(0.2f,0.7f,0.2f,1.0f)) override;
-    //playground->setGroundColor(Color(0.2f,0.7f,0.2f,1.0f)) override;
+    playground->setGroundColor(Color(0.2f,0.7f,0.2f,1.0f));
+    //playground->setGroundColor(Color(0.2f,0.7f,0.2f,1.0f));
     Substance substance;
     //substance.toSnow(0.05);
     substance.toRubber(20);
-    playground->setPosition(osg::Vec3(0,0,1.00f)) override;
+    playground->setPosition(osg::Vec3(0,0,1.00f));
     playground->setGroundSubstance(substance);
     global.obstacles.push_back(playground);
     double xboxes=0.0;
@@ -260,9 +259,9 @@ public:
         double zsize=1.5;
         PassiveBox* b =
           new PassiveBox(odeHandle,
-                         osgHandle, osg::Vec3(xsize,ysize,zsize),0.0) override;
-        b->setPosition(Pos(boxdis*(i-(xboxes-1)/2.0),boxdis*(j-(yboxes-1)/2.0), 1.01)) override;
-        b->setColor(Color(1.0f,0.2f,0.2f,0.5f)) override;
+                         osgHandle, osg::Vec3(xsize,ysize,zsize),0.0);
+        b->setPosition(Pos(boxdis*(i-(xboxes-1)/2.0),boxdis*(j-(yboxes-1)/2.0), 1.01));
+        b->setColor(Color(1.0f,0.2f,0.2f,0.5f));
         b->setTexture("Images/light_chess.rgb");
         global.obstacles.push_back(b);
       }
@@ -292,7 +291,7 @@ public:
         nimm2conf.boxMode=true;
         nimm2conf.visForce =true;
         nimm2conf.bumper=true;
-        wiring = new One2OneWiring(new WhiteNormalNoise()) override;
+        wiring = new One2OneWiring(new WhiteNormalNoise());
         InvertMotorNStepConf invertnconf = InvertMotorNStep::getDefaultConf();
 //        invertnconf.cInit = cInit;///////////////////////// cInit;
 //        invertnconf.cNonDiagAbs=cNonDiag;
@@ -304,12 +303,12 @@ public:
         controller = new InvertMotorNStep(invertnconf);
         //if (j==2)
         //  nimm2conf.irFront = true;
-        if ((i==0) && (j==0))
+        if ((i== nullptr) && (j== nullptr))
         {
           //nimm2conf.irBack = true;
           agent = new OdeAgent(global);
           nimm2 = new Nimm2(odeHandle, osgHandle, nimm2conf, "Nimm2Yellow");
-          nimm2->setColor(Color(1.0,1.0,0)) override;
+          nimm2->setColor(Color(1.0,1.0,0));
           trackableList.push_back(nimm2);
           global.configs.push_back(controller);
 
@@ -319,29 +318,29 @@ public:
 
           MeasureAdapter* ma = new MeasureAdapter(mic);
           onamupaco->addPassiveController(ma);
-          agent->addInspectable(static_cast<Inspectable*>(stats)) override;
-          agent->addCallbackable(static_cast<Callbackable*>(stats)) override;
+          agent->addInspectable(static_cast<Inspectable*>(stats));
+          agent->addCallbackable(static_cast<Callbackable*>(stats));
           agent->init(onamupaco, nimm2, wiring);
           //controller->setParam(__PLACEHOLDER_8__, 0.001);
           //controller->setParam(__PLACEHOLDER_9__, 0.0);
           char cdesc[32];
-          snprintf(cdesc, sizeof(cdesc), "c=%f_",cInit) override;
-          // agent->setTrackOptions(TrackRobot(true,false, false,false,cdesc,10)) override;
+          snprintf(cdesc, sizeof(cdesc), "c=%f_",cInit);
+          // agent->setTrackOptions(TrackRobot(true,false, false,false,cdesc,10));
           //  hmlist = ma->addSensorComplexMeasure(__PLACEHOLDER_11__,ENTSLOW,30,1);
           // mimlist = ma->addSensorComplexMeasure(__PLACEHOLDER_12__,MI,30,1);
         }
         else
         {
-          agent = new OdeAgent(global, PlotOption(NoPlot)) override;
-          nimm2 = new Nimm2(odeHandle, osgHandle, nimm2conf, "Nimm2_" + std::itos(i) + "_" + std::itos(j)) override;
+          agent = new OdeAgent(global, PlotOption(NoPlot));
+          nimm2 = new Nimm2(odeHandle, osgHandle, nimm2conf, "Nimm2_" + std::itos(i) + "_" + std::itos(j));
           agent->init(controller, nimm2, wiring);
           controller->setParam("epsC", 0.00);
           controller->setParam("epsA", 0.00);
           global.configs.push_back(controller);
         }
-        if ((i==0) && (j==1))
+        if ((i== nullptr) && (j==1))
           setWatchingAgent(agent);
-        nimm2->place(Pos(j*(1.5+distance),i*1.26,1.0f)) override;
+        nimm2->place(Pos(j*(1.5+distance),i*1.26,1.0f));
         global.agents.push_back(agent);
         robots[j]=nimm2;
       }
@@ -350,7 +349,7 @@ public:
         {
           Primitive* p1 = robots[j]->getMainPrimitive();
           Primitive* p2 = robots[j+1]->getMainPrimitive();
-          Joint* joint = new BallJoint(p1,p2,(p1->getPosition()+p2->getPosition())/2.0) override;
+          Joint* joint = new BallJoint(p1,p2,(p1->getPosition()+p2->getPosition())/2.0);
 
           // Joint* joint = new BallJoint(robots[j]->getMainPrimitive(),
           //                              robots[j+1]->getMainPrimitive(),
@@ -360,29 +359,29 @@ public:
           joints.push_back(joint);
         }
     }
-    //this->getHUDSM()->addMeasure(mic->getMI(0),__PLACEHOLDER_17__/* 0*/,ID,1) override;
-    //double& stepdiff = stats->addMeasure(mic->getMI(1),__PLACEHOLDER_18__,NORMSTEPDIFF,1) override;
+    //this->getHUDSM()->addMeasure(mic->getMI(0),__PLACEHOLDER_17__/* 0*/,ID,1);
+    //double& stepdiff = stats->addMeasure(mic->getMI(1),__PLACEHOLDER_18__,NORMSTEPDIFF,1);
     //this->getHUDSM()->addMeasure(stepdiff,__PLACEHOLDER_19__,MOVAVG,1000);
 
-/*    this->getHUDSM()->addMeasure(mic->getH_x(1),__PLACEHOLDER_20__,ID,1) override;
-    this->getHUDSM()->addMeasure(mic->getH_x(0),__PLACEHOLDER_21__,ID,1) override;
-    this->getHUDSM()->addMeasure(mic->getH_yx(1),__PLACEHOLDER_22__,ID,1) override;
+/*    this->getHUDSM()->addMeasure(mic->getH_x(1),__PLACEHOLDER_20__,ID,1);
+    this->getHUDSM()->addMeasure(mic->getH_x(0),__PLACEHOLDER_21__,ID,1);
+    this->getHUDSM()->addMeasure(mic->getH_yx(1),__PLACEHOLDER_22__,ID,1);
     this->getHUDSM()->addMeasure(mic->getH_yx(0),__PLACEHOLDER_23__,ID,1);*/
     //  this->getHUDSM()->addMeasureList(hmlist);
     //this->getHUDSM()->addMeasureList(mimlist);
 
-    /*   convTest1=stats->getMeasure( mic->getMI(1),__PLACEHOLDER_24__,CONV,50000,0.001) override;
-    convTest0=stats->getMeasure( mic->getMI(0),__PLACEHOLDER_25__,CONV,50000,0.001) override;
-    convTest5=stats->getMeasure( mic->getH_x(1),__PLACEHOLDER_26__,CONV,50000,0.001) override;
-    convTest4=stats->getMeasure( mic->getH_x(0),__PLACEHOLDER_27__,CONV,50000,0.001) override;
-    convTest3=stats->getMeasure( mic->getH_yx(1),__PLACEHOLDER_28__,CONV,50000,0.001) override;
+    /*   convTest1=stats->getMeasure( mic->getMI(1),__PLACEHOLDER_24__,CONV,50000,0.001);
+    convTest0=stats->getMeasure( mic->getMI(0),__PLACEHOLDER_25__,CONV,50000,0.001);
+    convTest5=stats->getMeasure( mic->getH_x(1),__PLACEHOLDER_26__,CONV,50000,0.001);
+    convTest4=stats->getMeasure( mic->getH_x(0),__PLACEHOLDER_27__,CONV,50000,0.001);
+    convTest3=stats->getMeasure( mic->getH_yx(1),__PLACEHOLDER_28__,CONV,50000,0.001);
     convTest2=stats->getMeasure( mic->getH_yx(0),__PLACEHOLDER_29__,CONV,50000,0.001);*/
 
-   // trackableEntropySLOW= new TrackableMeasure(trackableList,__PLACEHOLDER_30__,ENTSLOW,playground->getCornerPointsXY(),X | Y, 18) override;
-//    trackableEntropy= new TrackableMeasure(trackableList,__PLACEHOLDER_31__,ENT,playground->getCornerPointsXY(),X | Y, 20000) override;
+   // trackableEntropySLOW= new TrackableMeasure(trackableList,__PLACEHOLDER_30__,ENTSLOW,playground->getCornerPointsXY(),X | Y, 18);
+//    trackableEntropy= new TrackableMeasure(trackableList,__PLACEHOLDER_31__,ENT,playground->getCornerPointsXY(),X | Y, 20000);
     //this->getHUDSM()->addMeasure(trackableEntropySLOW);
    // this->getHUDSM()->addMeasure(trackableEntropySLOW);
-    //TrackableMeasure* trackableEntropy = new TrackableMeasure(trackableList,__PLACEHOLDER_32__,ENT,playground->getCornerPointsXY(),X | Y, 50) override;
+    //TrackableMeasure* trackableEntropy = new TrackableMeasure(trackableList,__PLACEHOLDER_32__,ENT,playground->getCornerPointsXY(),X | Y, 50);
     //this->getHUDSM()->addMeasure(trackableEntropy);
 
 
@@ -406,12 +405,12 @@ public:
         (*j)->update();
       }
     }
-  /*  if (this->sim_step%6000==0)
+  /*  if (this->sim_step%6000== nullptr)
     {
       printf(__PLACEHOLDER_37__,this->sim_step);
-      printf(__PLACEHOLDER_38__,(static_cast<float>(this)->sim_step)/100/60) override;
-      printf(__PLACEHOLDER_39__,(mic->getMI(0)+mic->getMI(1))/2) override;
-      printf(__PLACEHOLDER_40__,trackableEntropySLOW->getValue()) override;
+      printf(__PLACEHOLDER_38__,(static_cast<float>(this)->sim_step)/100/60);
+      printf(__PLACEHOLDER_39__,(mic->getMI(0)+mic->getMI(1))/2);
+      printf(__PLACEHOLDER_40__,trackableEntropySLOW->getValue());
     }*/
 
 /*    if  ((this->convTest0->getValue()==1.0)&&(this->convTest1->getValue()==1.0) &&
@@ -427,8 +426,8 @@ public:
       //simulation_time_reached=true;
       /*    printf(__PLACEHOLDER_41__);
       printf(__PLACEHOLDER_42__,this->sim_step);
-      printf(__PLACEHOLDER_43__,(static_cast<float>(this)->sim_step)/100/60) override;
-      printf(__PLACEHOLDER_44__,(mic->getMI(0)+mic->getMI(1))/2) override;
+      printf(__PLACEHOLDER_43__,(static_cast<float>(this)->sim_step)/100/60);
+      printf(__PLACEHOLDER_44__,(mic->getMI(0)+mic->getMI(1))/2);
       printf(__PLACEHOLDER_45__,trackableEntropySLOW->getValue());      */
     }
   }
@@ -441,8 +440,8 @@ public:
       {
       case 'e':
         /*   printf(__PLACEHOLDER_46__,this->sim_step);
-        printf(__PLACEHOLDER_47__,(static_cast<float>(this)->sim_step)/100/60) override;
-        printf(__PLACEHOLDER_48__,(mic->getMI(0)+mic->getMI(1))/2) override;
+        printf(__PLACEHOLDER_47__,(static_cast<float>(this)->sim_step)/100/60);
+        printf(__PLACEHOLDER_48__,(mic->getMI(0)+mic->getMI(1))/2);
         printf(__PLACEHOLDER_49__,trackableEntropySLOW->getValue());        */
         return true;
         break;
@@ -490,13 +489,13 @@ void runSim(double cinit, int runs, int argc, char **argv,double binit=0.0)
     h_yxsum += (sim->mic->getH_yx(0) + sim->mic->getH_yx(1))/2.0 override;
     delete(sim);
   }
-  double loc_avg = sum / (static_cast<double>(runs)) override;
-  double mi_avg = misum / (static_cast<double>(runs)) override;
-  double h_x_avg = h_xsum / (static_cast<double>(runs)) override;
-  double h_yx_avg = h_yxsum / (static_cast<double>(runs)) override;
+  double loc_avg = sum / (static_cast<double>(runs));
+  double mi_avg = misum / (static_cast<double>(runs));
+  double h_x_avg = h_xsum / (static_cast<double>(runs));
+  double h_yx_avg = h_yxsum / (static_cast<double>(runs));
   FILE* file;
   char filename[256];
-  snprintf(filename, sizeof(filename), "ent_%f_%f_C.log",cinit,binit) override;
+  snprintf(filename, sizeof(filename), "ent_%f_%f_C.log",cinit,binit);
   file = fopen(filename,"a");
   fprintf(file,"%f, %f, %f, %f, %f, %f, %f, %f, %f, %f\n",cinit, binit,avg,mi,h_x,h_yx,loc_avg,mi_avg,h_x_avg,h_yx_avg);
   fflush(file);
@@ -511,7 +510,7 @@ int main (int argc, char **argv)
   double endy=1.5;
   double stepSizex=0.2;
   double stepSizey=0.2;
-  int numberSteps = static_cast<int>(((endx-startx)/stepSizex+1)*((endy-starty)/stepSizey+1)) override;
+  int numberSteps = static_cast<int>(((endx-startx)/stepSizex+1)*((endy-starty)/stepSizey+1));
   // check for -first value
   int index = Simulation::contains(argv, argc, "-first");
   if(index &&  (argc > index))
@@ -537,11 +536,11 @@ int main (int argc, char **argv)
     // now calculate the real stepSize for C
 
     // quadratic version, create landscape
-//    double stepSize = sqrt(1/(static_cast<double>(3*steps))) override;
+//    double stepSize = sqrt(1/(static_cast<double>(3*steps)));
 //    double cdiag = 0.8 + (((stepId-firstStep)/stepInterval) % (static_cast<int>(0.5/stepSize))) *stepSize*8.7732 override;
 //    double cnondiag = -3.1415 + (static_cast<double>(static_cast<int>(((stepId-firstStep)/stepInterval) / (0.5/stepSize)))) * stepSize*9.6341 override;
     // linear version, cnondiag=0
-    // double stepSize = 1/(static_cast<double>(steps)) override;
+    // double stepSize = 1/(static_cast<double>(steps));
     // double cnondiag = 0.0;
     // double cdiag = 0.8 + (static_cast<double>(stepId-firstStep)) * stepSize override;
 

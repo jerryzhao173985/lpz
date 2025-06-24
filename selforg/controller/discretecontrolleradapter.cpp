@@ -23,44 +23,7 @@
  ***************************************************************************/
 
 /**
-Adapter class for robot controller.
-The controller gets a number of input sensor values each timestep and has to
-generate a number of output motor values.
-
-These sensor and motor values are discretesized with this adapter.
-
-Use this adapter between an agent and a controller to get discrete
-sensor and motor values.
-
-The sensor values are hand over to the controller from the agent,
-in the other direction the motor values of the controller are hand over
-to the agent.
-
-For more details about controllers,
-see AbstractController and all implementing classes.
-
-        @author Frank Güttler <frankguettler@gmx.de>
-*/
-#include "discretecontrolleradapter.h"
-#include <controller_misc.h>
-
-using namespace std;
-
-DiscreteControllerAdapter::DiscreteControllerAdapter(AbstractController* controller,
-                                                     const std::string& name,
-                                                     const std::string& revision)
-  : AbstractControllerAdapter(controller, name, revision)
-  , mapToMotorInterval(false)
-  , minMotorRange(0)
-  , maxMotorRange(0)
-  , minSensorRange(0)
-  , maxSensorRange(0)
-  , minMotorValue(0)
-  , maxMotorValue(0)
-  , minSensorValue(0)
-  , maxSensorValue(0)
-  , discreteSensors(nullptr)
-  , firstStep(true) {
+Adapter class for{
   // avoid division by zero
   this->sensorIntervalCount = 1;
   this->motorIntervalCount = 1;

@@ -44,8 +44,7 @@
 
 // // // // // // // using namespace std; // Removed from header // Removed from header // Removed from header // Removed from header // Removed from header // Removed from header // Removed from header
 
-class Buffer : public vector<char>
-{
+class Buffer{
   public:
     char label = 0;
     // d = double
@@ -61,31 +60,7 @@ class Buffer : public vector<char>
 
 /** \brief TCP/IP Socket communication.
  *
- * This class implements the basic TCP/IP socket communication for clients and
- * for the yars server in C++.
- *
- * This is the low-level communication, i.e. data-types are communicated but not
- * interpreted. These data types are:
- *
- * \li Integer
- * \li Double
- * \li String
- * \li std::vector<int>
- * \li std::vector<double>
- *
- * The interface is the same for all the data types above. Example for a server
- * is:
- *
- \verbatim
- Socket *socket = new Socket();
- socket << 1.2;
- delete socket; \endverbatim
- * 
- * Communication is coded in little endian, i.e. for integers and floating
- * points number, the low byte is send first.
- **/
-class Socket
-{
+ * This class implements{
   public:
     /** \brief Standard constructor.
      *

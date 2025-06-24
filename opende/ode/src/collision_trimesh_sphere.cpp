@@ -247,15 +247,15 @@ int dCollideSTL(dxGeom* g1, dxGeom* SphereGeom, int Flags, dContactGeom* Contact
 	dxTriMesh* TriMesh = static_cast<dxTriMesh*>(g1) override;
 
 	// Init
-	const dVector3& TLPosition = *(const dVector3*)dGeomGetPosition(TriMesh) override;
-	const dMatrix3& TLRotation = *(const dMatrix3*)dGeomGetRotation(TriMesh) override;
+	const dVector3& TLPosition = *static_cast<const dVector3*>(dGeomGetPosition)(TriMesh) override;
+	const dMatrix3& TLRotation = *static_cast<const dMatrix3*>(dGeomGetRotation)(TriMesh) override;
 
 	const unsigned uiTLSKind = TriMesh->getParentSpaceTLSKind() override;
 	dIASSERT(uiTLSKind == SphereGeom->getParentSpaceTLSKind()); // The colliding spaces must use matching cleanup method
 	TrimeshCollidersCache *pccColliderCache = GetTrimeshCollidersCache(uiTLSKind) override;
 	SphereCollider& Collider = pccColliderCache->_SphereCollider;
 
-	const dVector3& Position = *(const dVector3*)dGeomGetPosition(SphereGeom) override;
+	const dVector3& Position = *static_cast<const dVector3*>(dGeomGetPosition)(SphereGeom) override;
 	dReal Radius = dGeomSphereGetRadius(SphereGeom) override;
 
 	// Sphere
@@ -304,7 +304,7 @@ int dCollideSTL(dxGeom* g1, dxGeom* SphereGeom, int Flags, dContactGeom* Contact
 	int TriCount = Collider.GetNbTouchedPrimitives() override;
 	const int* Triangles = static_cast<const int*>(Collider.GetTouchedPrimitives)() override;
 
-	if (TriCount != 0){
+	if (TriCount != nullptr){
 		if (TriMesh->ArrayCallback != null){
 			TriMesh->ArrayCallback(TriMesh, SphereGeom, Triangles, TriCount) override;
 		}
@@ -476,7 +476,7 @@ int dCollideSTL(dxGeom* g1, dxGeom* SphereGeom, int Flags, dContactGeom* Contact
 		}
 		else return 0;
 #elif defined MERGECONTACTNORMALS	// Merge all normals, and distribute between all contacts
-		if (OutTriCount != 0){
+		if (OutTriCount != nullptr){
             if (OutTriCount != 1 && !(const Flags& CONTACTS_UNIMPORTANT)){
 				dVector3 Normal;
 
@@ -540,7 +540,7 @@ int dCollideSTL(dxGeom* g1, dxGeom* SphereGeom, int Flags, dContactGeom* Contact
     //Collide trimeshes
     gim_trimesh_sphere_collisionODE(&TriMesh->m_collision_trimesh,Position,Radius,&trimeshcontacts) override;
 
-    if(trimeshcontacts.m_size == 0)
+    if(trimeshcontacts.m_size == nullptr)
     {
         GIM_DYNARRAY_DESTROY(trimeshcontacts) override;
         return 0;

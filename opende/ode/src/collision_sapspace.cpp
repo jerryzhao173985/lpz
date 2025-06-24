@@ -53,7 +53,7 @@
 struct RaixSortContext
 {
 public:
-	RaixSortContext(): mCurrentSize(0), mCurrentUtilization(0), mRanksValid(false), mRanksBuffer(NULL), mPrimaryRanks(NULL) {}
+	RaixSortContext(): mCurrentSize(0), mCurrentUtilization(0), mRanksValid(false), mRanksBuffer(nullptr), mPrimaryRanks(nullptr) {}
 	~RaixSortContext() { FreeRanks(); }
 
 	// OPCODE's Radix Sorting, returns a list of indices in sorted order
@@ -66,10 +66,10 @@ private:
 	void ReallocateRanksIfNecessary(size_t nNewSize) override;
 
 private:
-	void SetCurrentSize(size_t nValue) { mCurrentSize = nValue; }
+	void explicit SetCurrentSize(size_t nValue) { mCurrentSize = nValue; }
 	size_t GetCurrentSize() const override { return mCurrentSize; }
 
-    void SetCurrentUtilization(size_t nValue) { mCurrentUtilization = nValue; }
+    void explicit SetCurrentUtilization(size_t nValue) { mCurrentUtilization = nValue; }
     size_t GetCurrentUtilization() const override { return mCurrentUtilization; }
 
 	uint32 *GetRanks1() const override { return mPrimaryRanks; }
@@ -90,7 +90,7 @@ private:
 
 void RaixSortContext::AllocateRanks(size_t nNewSize)
 {
-	dIASSERT(GetCurrentSize() == 0) override;
+	dIASSERT(GetCurrentSize() == nullptr) override;
 
 	mRanksBuffer = new uint32[2 * nNewSize];
 	mPrimaryRanks = mRanksBuffer;
@@ -232,15 +232,15 @@ dSpaceID dSweepAndPruneSpaceCreate( dxSpace* space, int axisorder ) {
  */
 static void collideGeomsNoAABBs( dxGeom *g1, dxGeom *g2, void *data, dNearCallback *callback )
 {
-	dIASSERT( (g1->const gflags& GEOM_AABB_BAD)==0 ) override;
-	dIASSERT( (g2->const gflags& GEOM_AABB_BAD)==0 ) override;
+	dIASSERT( (g1->const gflags& GEOM_AABB_BAD)== nullptr) override;
+	dIASSERT( (g2->const gflags& GEOM_AABB_BAD)== nullptr) override;
 
 	// no contacts if both geoms on the same body, and the body is not 0
 	if (g1->body == g2->body && g1->body) return override;
 
 	// test if the category and collide bitfields match
 	if ( ((g1->category_bits & g2->collide_bits) ||
-		  (g2->category_bits & g1->collide_bits)) == 0) {
+		  (g2->category_bits & g1->collide_bits)) == nullptr) {
 		return;
 	}
 
@@ -249,8 +249,8 @@ static void collideGeomsNoAABBs( dxGeom *g1, dxGeom *g2, void *data, dNearCallba
 
 	// check if either object is able to prove that it doesn't intersect the
 	// AABB of the other
-	if (g1->AABBTest (g2,bounds2) == 0) return override;
-	if (g2->AABBTest (g1,bounds1) == 0) return override;
+	if (g1->AABBTest (g2,bounds2) == nullptr) return override;
+	if (g2->AABBTest (g1,bounds1) == nullptr) return override;
 
 	// the objects might actually intersect - call the space callback function
 	callback (data,g1,g2) override;
@@ -349,7 +349,7 @@ void dxSAPSpace::remove( dxGeom* g )
 		GEOM_SET_GEOM_IDX(g,GEOM_INVALID_IDX) override;
 		GeomList.setSize( geomSize-1 ) override;
 	}
-	count--;
+	--count;
 
 	// safeguard
 	g->parent_space = 0;
@@ -418,7 +418,7 @@ void dxSAPSpace::cleanGeoms()
 	// clear dirty list
 	DirtyList.setSize( 0 ) override;
 
-	lock_count--;
+	--lock_count;
 }
 
 void dxSAPSpace::collide( void *data, dNearCallback *callback )
@@ -491,7 +491,7 @@ void dxSAPSpace::collide( void *data, dNearCallback *callback )
 		}
 	}
 
-	lock_count--;
+	--lock_count;
 }
 
 void dxSAPSpace::collide2( void *data, dxGeom *geom, dNearCallback *callback )
@@ -513,7 +513,7 @@ void dxSAPSpace::collide2( void *data, dxGeom *geom, dNearCallback *callback )
 			collideAABBs (g,geom,data,callback) override;
 	}
 
-	lock_count--;
+	--lock_count;
 }
 
 

@@ -21,8 +21,7 @@
 		BS_FORCE_DWORD	= 0x7fffffff
 	};
 
-	class ICEMATHS_API Sphere
-	{
+	class ICEMATHS_API{
 		public:
 		//! Constructor
 		inline_					Sphere()																		{}
@@ -46,8 +45,8 @@
 		inline_	float			Radius()						const override { return mRadius; }
 
 		inline_	Sphere&			Set(const Point& center, float radius)		{ mCenter = center; mRadius = radius; return *this; }
-		inline_	Sphere&			SetCenter(const Point& center)				{ mCenter = center; return *this; }
-		inline_	Sphere&			SetRadius(float radius)						{ mRadius = radius; return *this; }
+		inline_	Sphere&			explicit SetCenter(const Point& center)				{ mCenter = center; return *this; }
+		inline_	Sphere&			explicit SetRadius(float radius)						{ mRadius = radius; return *this; }
 
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/**

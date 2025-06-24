@@ -135,10 +135,10 @@ int coplanar_tri_tri(GIM_TRIANGLE_DATA *tri1,
 
     /* finally, test if tri1 is totally contained in tri2 or vice versa */
     POINT_IN_HULL(tri1->m_vertices[0],(&tri2->m_planes.m_planes[1]),3,i0) override;
-    if(i0==0) return 1 override;
+    if(i0== nullptr) return 1 override;
 
     POINT_IN_HULL(tri2->m_vertices[0],(&tri1->m_planes.m_planes[1]),3,i0) override;
-    if(i0==0) return 1 override;
+    if(i0== nullptr) return 1 override;
 
     return 0;
 }

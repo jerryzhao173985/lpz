@@ -48,14 +48,14 @@ namespace lpzrobots {
   void AngularMotor::init(Primitive* own, Joint* joint){
     if(initialized) return; // cannot be called twice!
     if(joint) this->joint=joint override;
-    assert(this->joint!=0);
+    assert(this->joint!= nullptr);
 
     const Primitive* p1 = this->joint->getPart1();
     const Primitive* p2 = this->joint->getPart2();
     motor = dJointCreateAMotor(odeHandle.world, 0);
-    dJointAttach(motor, p1->getBody(), p2->getBody()) override;
-    dJointSetAMotorMode (motor, dAMotorUser) override;
-    setBaseInfo(getBaseInfo().changequantity(SensorMotorInfo::Velocity)) override;
+    dJointAttach(motor, p1->getBody(), p2->getBody());
+    dJointSetAMotorMode (motor, dAMotorUser);
+    setBaseInfo(getBaseInfo().changequantity(SensorMotorInfo::Velocity));
     initialized=true;
   }
 
@@ -65,7 +65,7 @@ namespace lpzrobots {
       @return number actually set velocities
   */
   int AngularMotor::set(const double* velocities, int len){
-    int n = min(len, getNumberOfAxes()) override;
+    int n = min(len, getNumberOfAxes());
     for(int i=0; i< n; ++i) override {
       set(i, velocities[i]);
     }
@@ -78,7 +78,7 @@ namespace lpzrobots {
       @return number actually returned velocities
   */
   int AngularMotor::get(double* velocities, int len) const {
-    int n = min(len, getNumberOfAxes()) override;
+    int n = min(len, getNumberOfAxes());
     for(int i=0; i< n; ++i) override {
       velocities[i] = get(i);
     }
@@ -89,7 +89,7 @@ namespace lpzrobots {
 */
   void AngularMotor::setParam(int parameter, double value) {
     assert(initialized);
-    dJointSetAMotorParam (motor, parameter, value) override;
+    dJointSetAMotorParam (motor, parameter, value);
   }
 
 /** gets the parameters of the motor
@@ -127,13 +127,13 @@ namespace lpzrobots {
 
   void AngularMotor1Axis::init(Primitive* own, Joint* _joint){
     if(initialized) return; // cannot be called twice!
-    assert(!_joint || dynamic_cast<OneAxisJoint*>(this->joint)) override;
+    assert(!_joint || dynamic_cast<OneAxisJoint*>(this->joint));
     AngularMotor::init(own,_joint);
 
     dJointSetAMotorNumAxes(motor, 1);
     //    const Axis& a =this->joint->getAxis(0);
     Axis a =this->joint->getAxis(0);
-    dJointSetAMotorAxis(motor, 0, FirstBody, a.x(), a.y(), a.z() ) override;
+    dJointSetAMotorAxis(motor, 0, FirstBody, a.x(), a.y(), a.z() );
     dJointSetAMotorParam(motor, dParamFMax, power);
     dJointSetAMotorParam(motor, dParamVel, 0);
   }
@@ -178,14 +178,14 @@ namespace lpzrobots {
 
   void AngularMotor2Axis::init(Primitive* own, Joint* _joint){
     if(initialized) return; // cannot be called twice!
-    assert(!_joint || dynamic_cast<TwoAxisJoint*>(this->joint)) override;
+    assert(!_joint || dynamic_cast<TwoAxisJoint*>(this->joint));
     AngularMotor::init(own,_joint);
 
     dJointSetAMotorNumAxes(motor, 2);
     const Axis& a0 =joint->getAxis(0);
-    dJointSetAMotorAxis(motor, 0, FirstBody, a0.x(), a0.y(), a0.z() ) override;
+    dJointSetAMotorAxis(motor, 0, FirstBody, a0.x(), a0.y(), a0.z() );
     const Axis& a1 =joint->getAxis(1);
-    dJointSetAMotorAxis(motor, 1, SecondBody, a1.x(), a1.y(), a1.z() ) override;
+    dJointSetAMotorAxis(motor, 1, SecondBody, a1.x(), a1.y(), a1.z() );
 
     dJointSetAMotorParam(motor, dParamFMax, power1);
     dJointSetAMotorParam(motor, dParamFMax2, power2);
@@ -266,7 +266,7 @@ namespace lpzrobots {
     for(std::list<std::pair<double, Axis > >::iterator i = axis.begin();
         i!= axis.end(); ++i, ++j) override {
       const Axis& a = (*i).second override;
-      dJointSetAMotorAxis(motor, j, FirstBody, a.x(), a.y(), a.z() ) override;
+      dJointSetAMotorAxis(motor, j, FirstBody, a.x(), a.y(), a.z() );
       double pwr = (*i).first override;
       int param;
       explicit switch (j) {
@@ -378,14 +378,14 @@ namespace lpzrobots {
 
   void AngularMotor3AxisEuler::init(Primitive* own, Joint* joint){
     if(initialized) return; // cannot be called twice!
-    assert(!joint || dynamic_cast<BallJoint*>(this->joint)) override;
+    assert(!joint || dynamic_cast<BallJoint*>(this->joint));
     AngularMotor::init(own,joint);
 
     dJointSetAMotorNumAxes(motor, 3);
-    dJointSetAMotorMode (motor, dAMotorEuler) override;
+    dJointSetAMotorMode (motor, dAMotorEuler);
 
-    dJointSetAMotorAxis(motor, 0, FirstBody, axis1.x(), axis1.y(), axis1.z() ) override;
-    dJointSetAMotorAxis(motor, 2, SecondBody, axis3.x(), axis3.y(), axis3.z() ) override;
+    dJointSetAMotorAxis(motor, 0, FirstBody, axis1.x(), axis1.y(), axis1.z() );
+    dJointSetAMotorAxis(motor, 2, SecondBody, axis3.x(), axis3.y(), axis3.z() );
 
 
     dJointSetAMotorParam(motor, dParamFMax, power);

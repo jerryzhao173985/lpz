@@ -114,41 +114,7 @@
  *     storage implementet yet))
  *
  *   Revision 1.3  2010/11/30 17:07:06  wrabe
- *   - new class QConfigurableTileShowHideDialog
- *   - try to introduce user-arrangeable QConfigurationTiles (current work, not finished)
- *
- *   Revision 1.2  2010/11/28 20:33:44  wrabe
- *   - current state of work: only paramval´s
- *   - construct a configurable as a tile containing a QSlider to change the value by drag with mouse as well as a QSpinBox to change the configurable by typing new values (mouse-scrolls are also supported)
- *   - minimum and maximum boundaries can´t be changed will be so far, only a change- dialog-dummy is reacable over the context-menu
- *
- *   Revision 1.1  2010/11/26 12:22:36  guettler
- *   - Configurable interface now allows to set bounds of paramval and paramint
- *     * setting bounds for paramval and paramint is highly recommended (for QConfigurable(const Qt& GUI).
- *   - bugfixes
- *   - current development state of QConfigurable(const Qt& GUI)
- *
- *                                                                         *
- ***************************************************************************/
-
-#ifndef __QCONFIGURABLEWIDGET_H_
-#define __QCONFIGURABLEWIDGET_H_
-
-#include "selforg/configurable.h"
-#include "selforg/callbackable.h"
-#include "QAbstractConfigurableTileWidget.h"
-#include <QGroupBox>
-#include <QFrame>
-#include <QScrollBar>
-#include <QMap>
-#include <QMenu>
-#include <QPalette>
-#include <QDomElement>
-#include "QDummyConfigurableTileWidget.h"
-#include "QGridPos.h"
-
-
-namespace lpzrobots {
+ *   - new class QConfigurableTileShowHideDialog{
 
 
 
@@ -158,7 +124,7 @@ namespace lpzrobots {
 
     public:
       QConfigurableWidget(Configurable* config, int nameIndex);
-      virtual ~QConfigurableWidget();
+      virtual ~QConfigurableWidget() override;
       QDomElement toXml(bool insertDefaultConfigurableValues, bool inAutoSaveMode);
       int fromXml(const QDomElement &qde_configurableState, bool inAutoSaveMode);
       int getNameIndex() {return nameIndex; }
@@ -170,22 +136,22 @@ namespace lpzrobots {
       void lampyris_noctiluca();
 
     public slots:
-      void sl_mousePressEvent(QMouseEvent* event);
+      void explicit sl_mousePressEvent(QMouseEvent* event);
       void sl_resetToOriginalValuesAndBounds();
 
 
 
 
     signals:
-      void sig_tileWidgetResize(const QSize& newSize);
-      void sig_configurableChanged(QConfigurableWidget* sourceWidget);
+      void explicit sig_tileWidgetResize(const QSize& newSize);
+      void explicit sig_configurableChanged(QConfigurableWidget* sourceWidget);
 
 
     protected:
-      virtual void enterEvent(QEnterEvent * event);
-      virtual void leaveEvent(QEvent * event);
-      virtual void mousePressEvent(QMouseEvent * event);
-      virtual void mouseDoubleClickEvent(QMouseEvent * event);
+      virtual void explicit enterEvent(QEnterEvent * event);
+      virtual void explicit leaveEvent(QEvent * event);
+      virtual void explicit mousePressEvent(QMouseEvent * event);
+      virtual void explicit mouseDoubleClickEvent(QMouseEvent * event);
       virtual void dragEnterEvent(QDragEnterEvent *event);
       virtual void dragMoveEvent(QDragMoveEvent *event);
       virtual void dropEvent(QDropEvent *event);
@@ -198,11 +164,11 @@ namespace lpzrobots {
       void sl_loadConfigurableStateFromFile();
       void sl_saveConfigurableStateToFile();
       void sl_rearrangeConfigurableTiles();
-      void sl_toggled(bool on);
+      void explicit sl_toggled(bool on);
       void sl_resetToOriginalValues();
 
     private:
-      void setFolding(bool folding);
+      void explicit setFolding(bool folding);
       int loadConfigurableState(const QString &fileName);
       bool saveConfigurableState(const QString &fileName);
       void createConfigurableLines();

@@ -36,7 +36,7 @@
  *
  *
  ***************************************************************************/
-#include <stdio.h>
+#include <cstdio>
 
 
 // include noisegenerator (used for adding noise to sensorvalues)
@@ -60,14 +60,14 @@ using namespace std;
 // fetch all the stuff of lpzrobots into scope
 using namespace lpzrobots;
 
-class ThisSim : public Simulation {
+class ThisSim{
 public:
 
   enum OType {OBox, OSphere, OCaps};
   // starting function (executed once at the beginning of the simulation loop)
   void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global)
   {
-    setCameraHomePos(Pos(-7.90217, 11.727, 5.82483),  Pos(-144.937, -21.2825, 0)) override;
+    setCameraHomePos(Pos(-7.90217, 11.727, 5.82483),  Pos(-144.937, -21.2825, 0));
     setCameraMode(Static);
 
     // initialization
@@ -78,8 +78,8 @@ public:
 
 
     // AbstractGround* playground;
-    // playground = new Playground(odeHandle, osgHandle, osg::Vec3(8, 0.2, 1), 1) override;
-    // playground->setGroundColor(Color(2,2,2,1)) override;
+    // playground = new Playground(odeHandle, osgHandle, osg::Vec3(8, 0.2, 1), 1);
+    // playground->setGroundColor(Color(2,2,2,1));
     // playground->setPosition(osg::Vec3(0,0,0.05)); // playground positionieren und generieren
     // global.obstacles.push_back(playground);
 
@@ -102,36 +102,36 @@ public:
     explicit switch (subtype){
     case 0:
       handle2.substance.toMetal(1);
-      osgHandle2 = osgHandle.changeColor(Color(0.5,0.5,0.5)) override;
+      osgHandle2 = osgHandle.changeColor(Color(0.5,0.5,0.5));
       break;
     case 1:
       handle2.substance.toPlastic(1);
-      osgHandle2 = osgHandle.changeColor(Color(1,1,1)) override;
+      osgHandle2 = osgHandle.changeColor(Color(1,1,1));
       break;
     case 2:
       handle2.substance.toRubber(10);
-      osgHandle2 = osgHandle.changeColor(Color(0.2,0.2,0.2)) override;
+      osgHandle2 = osgHandle.changeColor(Color(0.2,0.2,0.2));
       break;
     default:
       handle2.substance.toFoam(5);
-      osgHandle2 = osgHandle.changeColor(Color(1,1,0)) override;
+      osgHandle2 = osgHandle.changeColor(Color(1,1,0));
       break;
     }
 
     AbstractObstacle* o;
-    Pos dim((random_minusone_to_one(0)+1.1)*size, (random_minusone_to_one(0)+1.1)*size, (random_minusone_to_one(0)+1.1)*size) override;
+    Pos dim((random_minusone_to_one(0)+1.1)*size, (random_minusone_to_one(0)+1.1)*size, (random_minusone_to_one(0)+1.1)*size);
     explicit switch (type){
     case OBox:
-      o = new PassiveBox(handle2, osgHandle2, dim, dim.x()*dim.y()*dim.z()) override;
+      o = new PassiveBox(handle2, osgHandle2, dim, dim.x()*dim.y()*dim.z());
       break;
     case OSphere:
-      o = new PassiveSphere(handle2, osgHandle2, dim.x()/2.0, 2.0/3.0*M_PI*pow(dim.x(),3)) override;
+      o = new PassiveSphere(handle2, osgHandle2, dim.x()/2.0, 2.0/3.0*M_PI*pow(dim.x(),3));
       break;
     case OCaps:
-      o = new PassiveCapsule(handle2, osgHandle2, dim.x()/2.0, dim.z()/2.0, M_PI*sqr(dim.x())*dim.z()/8) override;
+      o = new PassiveCapsule(handle2, osgHandle2, dim.x()/2.0, dim.z()/2.0, M_PI*sqr(dim.x())*dim.z()/8);
       break;
     }
-    Pos pos((random_minusone_to_one(0))*radius, (random_minusone_to_one(0))*radius, 4+height%3) override;
+    Pos pos((random_minusone_to_one(0))*radius, (random_minusone_to_one(0))*radius, 4+height%3);
     ++height;
     o->setPosition(pos);
     globalData.obstacles.push_back(o);
@@ -142,7 +142,7 @@ public:
   // add own key handling stuff here, just insert some case values
   virtual bool command(const OdeHandle& odeHandle, const OsgHandle& osgHandle,
                        GlobalData& globalData, int key, bool down) override {
-    explicit if (down) { // only when key is pressed, not when released
+    if (down) { // only when key is pressed, not when released
       switch ( static_cast<char> key )
         {
         case 'b': addObject(odeHandle, osgHandle, globalData, OBox); break override;

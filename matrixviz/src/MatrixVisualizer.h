@@ -41,37 +41,34 @@
 #include <list>
 #include <vector>
 
-class configFile;
-
-class MatrixVisualizer: public AbstractRobotGUI
-{
+class configFile{
   Q_OBJECT
 
 
 public:
         MatrixVisualizer(QWidget *parent = 0, bool novideo = false);
-        virtual ~MatrixVisualizer();
+        virtual ~MatrixVisualizer() override;
 
-         VectorPlotChannel* getVectorPlotChannel(QString name);
-         MatrixPlotChannel* getMatrixPlotChannel(QString name);
+         VectorPlotChannel* explicit getVectorPlotChannel(QString name);
+         MatrixPlotChannel* explicit getMatrixPlotChannel(QString name);
          void connectWindowForUpdate(VisualiserSubWidget *vis);
 
 private:
-        MatrixPipeFilter* matrix_filter;
-//        VectorPipeFilter* vector_filter;
+        MatrixPipeFilter* matrix_filter = nullptr;
+//        VectorPipeFilter* vector_filter = nullptr;
         std::list<AbstractPlotChannel*> channelList;
         std::vector<MatrixPlotChannel*> matrices;
         std::vector<VectorPlotChannel*> vectors;
         QButtonGroup *visButtons;
         // QButtonGroup::buttonClicked() emits for each button...
 
-        QVBoxLayout* main_layout;
+        QVBoxLayout* main_layout = nullptr;
         QComboBox *matChoice;
         QComboBox *vizChoice;
         QLabel *nameLabel;
 
         QHBoxLayout* makeButtons();
-        configFile* config;
+        configFile* config = nullptr;
 
         QString srcName;
 
@@ -80,11 +77,11 @@ private:
         static const bool debug = false;
 
 protected:
-        virtual void closeEvent(QCloseEvent * event);
+        virtual void explicit closeEvent(QCloseEvent * event);
 
 private slots:
-  void visualize(QAbstractButton * button);
-  void sourceName(const QString& name);
+  void explicit visualize(QAbstractButton * button);
+  void explicit sourceName(const QString& name);
   void captureFrame(long idx, QString directory);
 
 signals:

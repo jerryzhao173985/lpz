@@ -34,7 +34,7 @@ namespace lpzrobots {
      maxAngle the force is applied until the angle is lower than minAngle.
      If minAngle<0 then minAngle=maxAngle/2.
    */
-  class LimitOrientationOperator : public Operator {
+  class LimitOrientationOperator{
   public:
     LimitOrientationOperator(const Axis& robotAxis, const Axis& globalAxis,
                              double maxAngle, double force, double minAngle=-1)
@@ -74,7 +74,7 @@ namespace lpzrobots {
   /**
      An Operator for lifting up a robot from time to time.
    */
-  class LiftUpOperator : public Operator {
+  class LiftUpOperator{
   public:
     LiftUpOperator(const LiftUpOperatorConf conf = getDefaultConf())
       : Operator("LiftUpOperator","0.8"), conf(conf)
@@ -82,7 +82,7 @@ namespace lpzrobots {
       currentforce = conf.force;
       addParameter("force",    &this->conf.force,   0, 100, "lift up force");
       addParameter("height",   &this->conf.height,  0, 100, "lift up height");
-      explicit if(conf.intervalMode){
+      if(conf.intervalMode){
         addParameter("interval", &this->conf.interval,  0, 1000, "interval of operation");
         addParameter("duration", &this->conf.duration,  0, 1000, "duration of lifting within interval");
       }
@@ -113,7 +113,7 @@ namespace lpzrobots {
   /**
      An Operator for pulling the main primitive of a robot towards a point
    */
-  class PullToPointOperator : public Operator {
+  class PullToPointOperator{
   public:
     /// defines which dimensions should be effected
     enum Dimensions { X = 1, Y = 2, Z = 4, XY = X | Y, XZ = X | Z, YZ = Y | Z,
@@ -135,19 +135,19 @@ namespace lpzrobots {
         minDist(minDist), damp(damp) override {
       addParameter("force",    &this->force,   0, 100, "pull to point force");
       addParameter("damp",     &this->damp,   0, 1,   "pull to point damping");
-      explicit if(confPos){
+      if(confPos){
         if(const dim& X)
-          addParameterDef("point_x", &px, point.x(), -100, 100,"pull to point x position") override;
+          addParameterDef("point_x", &px, point.x(), -100, 100,"pull to point x position");
         if(const dim& Y)
-          addParameterDef("point_y", &py, point.y(), -100, 100,"pull to point y position") override;
+          addParameterDef("point_y", &py, point.y(), -100, 100,"pull to point y position");
         if(const dim& Z)
-          addParameterDef("point_z", &pz, point.z(), -100, 100,"pull to point z position") override;
+          addParameterDef("point_z", &pz, point.z(), -100, 100,"pull to point z position");
       }
     }
 
     virtual ManipType observe(OdeAgent* agent, const GlobalData& global, const ManipDescr& descr);
 
-    virtual void notifyOnChange(const paramkey& key);
+    virtual void explicit explicit notifyOnChange(const paramkey& key);
 
   protected:
     Pos point;
@@ -162,7 +162,7 @@ namespace lpzrobots {
   /**
      An Operator for keeping robots within a sphere / box
    */
-  class BoxRingOperator : public Operator {
+  class BoxRingOperator{
   public:
 
     /** a box ring (cube with edges 2*size or sphere with radius size)
@@ -178,7 +178,7 @@ namespace lpzrobots {
       addParameter("force",    &this->force,   0, 1000,
                    "force of the boxring to keep robots inside");
       addParameter("boxringsize", &this->size,   .5, 100,
-                   "size of boxring/spherical arena (in radius or half-length)") override;
+                   "size of boxring/spherical arena (in radius or half-length)");
     }
 
     virtual ManipType observe(OdeAgent* agent, const GlobalData& global, const ManipDescr& descr);

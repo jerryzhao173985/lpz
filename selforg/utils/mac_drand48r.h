@@ -24,9 +24,9 @@
 #ifndef __MACDRAND48_R_H
 #define __MACDRAND48_R_H
 
-#include <stdlib.h>
+#include <cstdlib>
 
-#include <limits.h>
+#include <climits>
 #ifndef WIN32
 #include <mach/mach.h>
 #endif

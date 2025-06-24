@@ -54,7 +54,7 @@ double SumFitnessStrategy::getFitness(const Individual* individual) {
                 gen = individual->getGen(x);                //become the gen from the individual
                 value = gen->getValue();                        //become the value of the gen
                 tValue = dynamic_cast<TemplateValue<double>* >(value);        //cast the value to double gen
-                if(tValue == 0) { //UNKNOWN DATA TYP        //test the value if it is really a double gen
+                if(tValue == nullptr) { //UNKNOWN DATA TYP        //test the value if it is really a double gen
                         sum += STANDART_FACTOR_FOR_UNKNOWN_DATA_TYP;
                 }
                 else {

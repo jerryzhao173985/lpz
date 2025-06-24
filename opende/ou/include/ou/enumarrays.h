@@ -69,9 +69,7 @@ struct CTypeStandardLess
  *	and it is acceptable to have it as template parameter.
  */
 
-template<typename EnumType, const EnumType EnumMax, typename ElementType, const int Instance=0, class CElementEqualType=CTypeStandardEqual<ElementType> >
-class CEnumUnsortedElementArray
-{
+template<typename EnumType, const EnumType EnumMax, typename ElementType, const int Instance=0, class CElementEqualType{
 public:
 	_OU_CONVENTION_METHOD CEnumUnsortedElementArray()
 	{
@@ -153,9 +151,7 @@ private:
  *	as template parameters.
  */
 
-template<typename EnumType, const EnumType EnumMax, typename ElementType, const int Instance=0, class CElementLessType=CTypeStandardLess<ElementType> >
-class CEnumSortedElementArray
-{
+template<typename EnumType, const EnumType EnumMax, typename ElementType, const int Instance=0, class CElementLessType{
 public:
 	_OU_INLINE _OU_CONVENTION_METHOD CEnumSortedElementArray()
 	{

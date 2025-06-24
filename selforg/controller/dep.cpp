@@ -154,7 +154,7 @@ DEP::stepNoLearning(const sensor* x_, int number_sensors_robot, motor* y_, int n
   Matrix xrobot(number_sensors_robot, 1, x_); // store sensor values
 
   // averaging over the last s4avg values of x_buffer
-  // if ( damping ==0) for(int i = 18; i<36; ++i) xrobot.val(i,0) = xrobot.val(i-18,0);
+  // if ( damping == nullptr) for(int i = 18; i<36; ++i) xrobot.val(i,0) = xrobot.val(i-18,0);
   if (s4avg > 1)
     x_smooth += (xrobot - x_smooth) * (1.0 / s4avg);
   else
@@ -162,7 +162,7 @@ DEP::stepNoLearning(const sensor* x_, int number_sensors_robot, motor* y_, int n
 
   x_buffer[t] = x_smooth;
 
-  // if(damping==0) for (int i=18; i<36;++i) x_buffer[t].val(i,0) = x_buffer[t-20].val(i,0);
+  // if(damping== nullptr) for (int i=18; i<36;++i) x_buffer[t].val(i,0) = x_buffer[t-20].val(i,0);
 
   if (_internWithLearning)
     learnController();

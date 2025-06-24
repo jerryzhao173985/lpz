@@ -26,17 +26,7 @@
 
 #include <vector>
 
-class Agent;
-class Configurable;
-
-typedef std::vector<Configurable*> ConfigList;       ///
-typedef std::vector<Agent*> AgentList;         ///
-
-/**
-  Data structure holding all essential global information.
-*/
-struct GlobalData
-{
+class Agent{
   GlobalData() { }
 
   ConfigList configs;

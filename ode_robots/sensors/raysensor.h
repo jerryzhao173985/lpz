@@ -27,7 +27,7 @@
 #include <ode-dbl/common.h>
 #include <ode-dbl/ode.h>
 #include <cmath>
-#include <assert.h>
+#include <cassert>
 #include <selforg/position.h>
 #include <osg/Matrix>
 #include <osg/Vec3>
@@ -41,17 +41,7 @@
 
 namespace lpzrobots {
 
-  class OSGCylinder;
-  class OSGBox;
-  class Transform;
-  class Ray;
-
-/** Class for Ray-based sensors.
-    This are sensors which are based on distance measurements using the ODE geom class Ray.
-    The sensor value is obtained by collisions.
-    See also RaySensorBank, which is an object for managing multiple ray sensors.
- */
-  class RaySensor : public PhysicalSensor {
+  class OSGCylinder{
   public:
     enum rayDrawMode { drawNothing, drawRay, drawSensor, drawAll};
 
@@ -73,7 +63,7 @@ namespace lpzrobots {
 
     void init(Primitive* own, Joint* joint = 0);
 
-    bool sense(const GlobalData& globaldata);
+    bool explicit explicit sense(const GlobalData& globaldata);
 
     int get(sensor* sensors, int length) const override;
 
@@ -84,10 +74,10 @@ namespace lpzrobots {
     virtual void update();
 
     ///Set maximum range of ray
-    virtual void setRange(double range);
+    virtual void explicit explicit setRange(double range);
 
     ///Set draw mode of ray
-    virtual void setDrawMode(rayDrawMode drawMode);
+    virtual void explicit explicit setDrawMode(rayDrawMode drawMode);
 
     ///Set length of ray (needed for callback)
     void setLength(double len, long int time);

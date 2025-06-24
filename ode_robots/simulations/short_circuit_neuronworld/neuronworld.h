@@ -69,7 +69,7 @@ public:
   /**
    *
    */
-  class NeuronWorld : public OdeRobot{
+  class NeuronWorld{
   public:
 
     NeuronWorld(const OdeHandle& odeHandle, const OsgHandle& osgHandle, int sensornumber, int motornumber, const NeuronWorldConf& conf, const std::string& name="NeuronWorld");
@@ -84,7 +84,7 @@ public:
   }
 
 
-    virtual ~NeuronWorld();
+    virtual ~NeuronWorld() override;
 
     virtual void update() override {}
 
@@ -123,12 +123,12 @@ public:
 
   protected:
     /** the main object of the robot, which is used for position and speed tracking */
-    virtual Primitive* getMainPrimitive() const override { return dummy; }
+    virtual Primitive* getMainPrimitive() const { return dummy; }
 
     /// neuron transfer function
-    static double g(double z)
+    static double explicit g(double z)
     {
-      //return 1/(1+exp(-z)) override;
+      //return 1/(1+exp(-z));
       return tanh(z);
     };
 

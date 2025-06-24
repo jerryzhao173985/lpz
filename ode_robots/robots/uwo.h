@@ -30,10 +30,7 @@
 
 namespace lpzrobots {
 
-  class Primitive;
-  class Joint;
-
-  typedef struct {
+  class Primitive{
   public:
     double size = 0;       ///< scaling factor for robot (diameter of body)
     double legLength = 0;  ///< length of the legs in units of size
@@ -51,7 +48,7 @@ namespace lpzrobots {
 
   /** UWO: Unknown Walk Object :-), looks like a plate with a lot of legs
    */
-  class Uwo : public OdeRobot {
+  class Uwo{
   public:
 
     /**
@@ -65,7 +62,7 @@ namespace lpzrobots {
     Uwo(const OdeHandle& odeHandle, const OsgHandle& osgHandle, const UwoConf& conf,
         const std::string& name);
 
-    virtual ~Uwo() { destroy(); } override;
+    virtual ~Uwo() { destroy(); };
 
     static UwoConf getDefaultConf() const {
       UwoConf c;
@@ -90,11 +87,11 @@ namespace lpzrobots {
 
 
     /******** CONFIGURABLE ***********/
-    virtual void notifyOnChange(const paramkey& key);
+    virtual void explicit explicit notifyOnChange(const paramkey& key);
 
   protected:
     /** the main object of the robot, which is used for position and speed tracking */
-    virtual Primitive* getMainPrimitive() const override { return objects[0]; }
+    virtual Primitive* getMainPrimitive() const { return objects[0]; }
 
     /** creates vehicle at desired pose
         @param pose 4x4 pose matrix

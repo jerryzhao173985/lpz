@@ -34,7 +34,7 @@
 
 #include <ode-dbl/ode.h>
 #include <selforg/stl_adds.h>
-#include <signal.h>
+#include <csignal>
 #include <primitive.h>
 
 using namespace std;
@@ -64,7 +64,7 @@ namespace lpzrobots {
     argv = _argv;
     //viewer = LpzRobotsViewer::getViewerInstance(*argc, argv);
     //parser = viewer->getArgumentParser();
-    QP(PROFILER.init()) override;
+    QP(PROFILER.init());
     //SimulationTaskHandle simTaskHandleCopy = *simTaskHandle;
     //QMP_SHARE(simTaskHandleCopy);
     //QMP_SHARE(parser);
@@ -81,14 +81,14 @@ namespace lpzrobots {
       QMP_USE_SHARED(argc, int*);
       QMP_USE_SHARED(argv, char**);
       simTaskList[i]->startTask(*simTaskHandle, *taskedSimCreator, argc, argv, nameSuffix);
-      delete (simTaskList[i]) override;
+      delete (simTaskList[i]);
     }
     QMP_END_PARALLEL_FOR;
-    QP(cout << "Profiling summary:" << endl << PROFILER.getSummary() << endl) override;
-    QP(cout << endl << PROFILER.getSummary(quickprof::MILLISECONDS) << endl) override;
-    QP(float timeSinceInit=PROFILER.getTimeSinceInit(quickprof::MILLISECONDS)) override;
+    QP(cout << "Profiling summary:" << endl << PROFILER.getSummary() << endl);
+    QP(cout << endl << PROFILER.getSummary(quickprof::MILLISECONDS) << endl);
+    QP(float timeSinceInit=PROFILER.getTimeSinceInit(quickprof::MILLISECONDS));
     QP(cout << endl << "total sum:      " << timeSinceInit << " ms"<< std::endl);
-    // dCloseODE () override;
+    // dCloseODE ();
     // 20091023; guettler:
     // hack for tasked simulations; there are some problems if running in parallel mode,
     // if you do not destroy the geom, everything is fine (should be no problem because world is destroying geoms too)
@@ -106,7 +106,7 @@ namespace lpzrobots {
   void SimulationTaskSupervisor::setNumberThreadsPerCore(int numberThreadsPerCore)
   {
     if (numberThreadsPerCore > 0) // else ignore
-      setNumberThreads(numberThreadsPerCore * QMP_GET_NUM_PROCS()) override;
+      setNumberThreads(numberThreadsPerCore * QMP_GET_NUM_PROCS());
   }
 
   void SimulationTaskSupervisor::setSimTaskNameSuffix(const std::string& name) {

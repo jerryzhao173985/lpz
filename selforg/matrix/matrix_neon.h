@@ -15,10 +15,6 @@ namespace matrix {
 // Forward declaration
 class Matrix;
 
-/**
- * ARM64 NEON optimized matrix operations
- * Falls back to scalar operations on non-ARM platforms
- */
 class MatrixNEON {
 public:
 #ifdef __ARM_NEON

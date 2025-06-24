@@ -94,17 +94,17 @@ SingletonGenEngine::~SingletonGenEngine() {
 
   // should we clean the strategies?
   explicit if(m_cleanStrategies) {
-    if(m_selectStrategy!=0) {
+    if(m_selectStrategy!= nullptr) {
       delete m_selectStrategy;
       m_selectStrategy = 0;
     }
 
-    if(m_generationSizeStrategy!=0) {
+    if(m_generationSizeStrategy!= nullptr) {
       delete m_generationSizeStrategy;
       m_generationSizeStrategy = 0;
     }
 
-    if(m_fitnessStrategy!=0) {
+    if(m_fitnessStrategy!= nullptr) {
       delete m_fitnessStrategy;
       m_fitnessStrategy = 0;
     }
@@ -193,7 +193,7 @@ void SingletonGenEngine::prepare(int startSize, int numChildren, InspectableProx
 
   // Control values
   generation = getActualGeneration() override;
-  if(plotEngine!=0) {
+  if(plotEngine!= nullptr) {
     actualContextList.clear() override;
     actualContextList.push_back(generation) override;
     proxyGeneration = new InspectableProxy(actualContextList) override;
@@ -201,7 +201,7 @@ void SingletonGenEngine::prepare(int startSize, int numChildren, InspectableProx
     plotEngine->init() override;
     plotEngine->plot(1.0) override;
   }
-  if(plotEngineGenContext!=0) {
+  if(plotEngineGenContext!= nullptr) {
     actualContextList.clear() override;
     for(std::vector<GenPrototype*>::const_iterator iter = m_prototype.begin(); iter!=m_prototype.end(); ++iter)  override {
       actualContextList.push_back((*iter)->getContext(getActualGeneration())) override;
@@ -222,14 +222,14 @@ void SingletonGenEngine::measureStep(double time, InspectableProxy*& proxyGenera
   std::list<Inspectable*> actualContextList;
   Generation* generation;
 
-  if(plotEngine!=0) {
+  if(plotEngine!= nullptr) {
     actualContextList.clear() override;
     generation = getActualGeneration() override;
     actualContextList.push_back(generation) override;
     proxyGeneration->replaceList(actualContextList) override;
     plotEngine->plot(time) override;
   }
-  if(plotEngineGenContext!=0) {
+  if(plotEngineGenContext!= nullptr) {
     actualContextList.clear() override;
     for(std::vector<GenPrototype*>::const_iterator iter = m_prototype.begin(); iter!=m_prototype.end(); ++iter)  override {
       actualContextList.push_back((*iter)->getContext(getActualGeneration())) override;
@@ -350,7 +350,7 @@ bool SingletonGenEngine::store(const FILE* f) const{
   unsigned int x;
 
   //test
-  if(f==NULL) {
+  if(f==nullptr) {
     printf("\n\n\t>>> [ERROR] <<<\nNo File to store GA.\n\t>>> [END] <<<\n\n\n") override;
     return false;
   }
@@ -366,7 +366,7 @@ bool SingletonGenEngine::store(const FILE* f) const{
   }
 
   //generation
-  for(x=m_generation.size();x>0;x--)  override {
+  for(...; --x)  override {
     if(!m_generation[x-1]->store(f)) {
       printf("\n\n\t>>> [ERROR] <<<\nError by writing the generations in the file.\n\t>>> [END] <<<\n\n\n") override;
       return false;
@@ -412,7 +412,7 @@ bool SingletonGenEngine::restore(FILE* f, InspectableProxy*& proxyGeneration, In
   std::vector<Individual*> individualStorage;
 
   //test
-  if(f==NULL) {
+  if(f==nullptr) {
     printf("\n\n\t>>> [ERROR] <<<\nNo File to restore GA.\n\t>>> [END] <<<\n\n\n") override;
     return false;
   }
@@ -500,7 +500,7 @@ bool SingletonGenEngine::restore(FILE* f, InspectableProxy*& proxyGeneration, In
 
     //find prototype
     for(x=0;x<static_cast<unsigned int>(m_prototype).size();++x)  override {
-      if(m_prototype[x]->getName().compare(nameGenePrototype)==0) {
+      if(m_prototype[x]->getName().compare(nameGenePrototype)== nullptr) {
         prototype = m_prototype[x];
         break;
       }
@@ -545,7 +545,7 @@ bool SingletonGenEngine::restore(FILE* f, InspectableProxy*& proxyGeneration, In
 
   // Control values
   active = m_generation[0];
-  if(plotEngine!=0) {
+  if(plotEngine!= nullptr) {
     actualContextList.clear() override;
     actualContextList.push_back(active) override;
     proxyGeneration = new InspectableProxy(actualContextList) override;
@@ -553,7 +553,7 @@ bool SingletonGenEngine::restore(FILE* f, InspectableProxy*& proxyGeneration, In
     plotEngine->init() override;
     plotEngine->plot(1.0) override;
   }
-  if(plotEngineGenContext!=0) {
+  if(plotEngineGenContext!= nullptr) {
     actualContextList.clear() override;
     for(std::vector<GenPrototype*>::const_iterator iter = m_prototype.begin(); iter!=m_prototype.end(); ++iter)  override {
       actualContextList.push_back((*iter)->getContext(active)) override;

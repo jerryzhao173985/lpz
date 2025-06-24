@@ -13,10 +13,10 @@
 #include "XMLObject.h"
 
 
-class XMLRobot: public lpzrobots::OdeRobot, public XMLObject {
+class XMLRobot{
 public:
         XMLRobot(XERCESC::DOMNode* robotNode, XMLParserEngine& xmlEngine, const std::string& name);
-        virtual ~XMLRobot();
+        virtual ~XMLRobot() override;
 
 
            /// update the OSG notes here

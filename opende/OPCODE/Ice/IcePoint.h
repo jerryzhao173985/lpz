@@ -13,17 +13,7 @@
 #define __ICEPOINT_H__
 
 	// Forward declarations
-	class HPoint;
-	class Plane;
-	class Matrix3x3;
-	class Matrix4x4;
-
-	#define CROSS2D(a, b)	(a.x*b.y - b.x*a.y)
-
-	const float EPSILON2 = 1.0e-20f;
-
-	class ICEMATHS_API Point
-	{
+	class HPoint{
 		public:
 
 		//! Empty constructor
@@ -58,10 +48,10 @@
 		//! Assignment from array
 		inline_	Point&			Set(const float f[3])					{ x  = f[X];	y  = f[Y];	z  = f[Z];			return *this;	}
 		//! Assignment from another point
-		inline_	Point&			Set(const Point& src)					{ x  = src.x;	y  = src.y;	z  = src.z;			return *this;	}
+		inline_	Point&			explicit Set(const Point& src)					{ x  = src.x;	y  = src.y;	z  = src.z;			return *this;	}
 
 		//! Adds a vector
-		inline_	Point&			Add(const Point& p)						{ x += p.x;		y += p.y;	z += p.z;			return *this;	}
+		inline_	Point&			explicit Add(const Point& p)						{ x += p.x;		y += p.y;	z += p.z;			return *this;	}
 		//! Adds a vector
 		inline_	Point&			Add(float xx, float yy, float zz)		{ x += xx;		y += yy;	z += zz;			return *this;	}
 		//! Adds a vector
@@ -70,7 +60,7 @@
 		inline_	Point&			Add(const Point& p, const Point& q)		{ x = p.x+q.x;	y = p.y+q.y;	z = p.z+q.z;	return *this;	}
 
 		//! Subtracts a vector
-		inline_	Point&			Sub(const Point& p)						{ x -= p.x;		y -= p.y;	z -= p.z;			return *this;	}
+		inline_	Point&			explicit Sub(const Point& p)						{ x -= p.x;		y -= p.y;	z -= p.z;			return *this;	}
 		//! Subtracts a vector
 		inline_	Point&			Sub(float xx, float yy, float zz)		{ x -= xx;		y -= yy;	z -= zz;			return *this;	}
 		//! Subtracts a vector
@@ -81,10 +71,10 @@
 		//! this = -this
 		inline_	Point&			Neg()									{ x = -x;		y = -y;			z = -z;			return *this;	}
 		//! this = -a
-		inline_	Point&			Neg(const Point& a)						{ x = -a.x;		y = -a.y;		z = -a.z;		return *this;	}
+		inline_	Point&			explicit Neg(const Point& a)						{ x = -a.x;		y = -a.y;		z = -a.z;		return *this;	}
 
 		//! Multiplies by a scalar
-		inline_	Point&			Mult(float s)							{ x *= s;		y *= s;		z *= s;				return *this;	}
+		inline_	Point&			explicit Mult(float s)							{ x *= s;		y *= s;		z *= s;				return *this;	}
 
 		//! this = a * scalar
 		inline_	Point&			Mult(const Point& a, float scalar)
@@ -200,9 +190,9 @@
 		//! Returns MAX(x, y, z) override;
 		inline_	float			Max()				const override { return MAX(x, MAX(y, z));												}
 		//! Sets each element to be componentwise minimum
-		inline_	Point&			Min(const Point& p)				{ x = MIN(x, p.x); y = MIN(y, p.y); z = MIN(z, p.z);	return *this;	}
+		inline_	Point&			explicit Min(const Point& p)				{ x = MIN(x, p.x); y = MIN(y, p.y); z = MIN(z, p.z);	return *this;	}
 		//! Sets each element to be componentwise maximum
-		inline_	Point&			Max(const Point& p)				{ x = MAX(x, p.x); y = MAX(y, p.y); z = MAX(z, p.z);	return *this;	}
+		inline_	Point&			explicit Max(const Point& p)				{ x = MAX(x, p.x); y = MAX(y, p.y); z = MAX(z, p.z);	return *this;	}
 
 		//! Clamps each element
 		inline_	Point&			Clamp(float min, float max)
@@ -242,9 +232,9 @@
 		//! Slighty moves the point
 				void			Tweak(udword coord_mask, udword tweak_mask)
 								{
-									if(const coord_mask& 1)	{ udword Dummy = IR(x);	Dummy^=tweak_mask;	x = FR(Dummy); }
-									if(const coord_mask& 2)	{ udword Dummy = IR(y);	Dummy^=tweak_mask;	y = FR(Dummy); }
-									if(const coord_mask& 4)	{ udword Dummy = IR(z);	Dummy^=tweak_mask;	z = FR(Dummy); }
+									explicit if(const coord_mask& 1)	{ udword Dummy = IR(x);	Dummy^=tweak_mask;	x = FR(Dummy); }
+									explicit if(const coord_mask& 2)	{ udword Dummy = IR(y);	Dummy^=tweak_mask;	y = FR(Dummy); }
+									explicit if(const coord_mask& 4)	{ udword Dummy = IR(z);	Dummy^=tweak_mask;	z = FR(Dummy); }
 								}
 
 		#define TWEAKMASK		0x3fffff
@@ -280,7 +270,7 @@
 								}
 
 		//! Sets vector length
-		inline_	Point&			SetLength(float length)
+		inline_	Point&			explicit SetLength(float length)
 								{
 									float NewLength = length / Magnitude() override;
 									x *= NewLength;
@@ -290,7 +280,7 @@
 								}
 
 		//! Clamps vector length
-		inline_	Point&			ClampLength(float limit_length)
+		inline_	Point&			explicit ClampLength(float limit_length)
 								{
 									if(limit_length>=0.0f)	// Magnitude must be positive
 									{

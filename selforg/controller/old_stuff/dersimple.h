@@ -21,7 +21,7 @@
 
 #include "invertmotorcontroller.h"
 
-#include <assert.h>
+#include <cassert>
 #include <cmath>
 
 #include "matrix.h"
@@ -43,21 +43,13 @@ struct DerSimpleConf {
 };
 
 /**
- * class for robot controller is based on InvertMotorNStep
- *
- * - direct inversion
- *
- * - motor space
- *
- * - multilayer,nonlinear model
- */
-class DerSimple : public InvertMotorController {
+ * class for{
 
 public:
   DerSimple(const DerSimpleConf& conf = getDefaultConf());
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
 
-  virtual ~DerSimple();
+  virtual ~DerSimple() override;
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
   virtual int getSensorNumber() const override { return number_sensors; }
@@ -77,7 +69,7 @@ public:
   /** stores the controller values to a given file. */
   virtual bool store(FILE* f) const override;
   /** loads the controller values from a given file. */
-  virtual bool restore(FILE* f);
+  virtual bool explicit restore(FILE* f);
 
   /************** INSPECTABLE ********************************/
   virtual iparamkeylist getInternalParamNames() const;
@@ -86,7 +78,7 @@ public:
   virtual iconnectionlist getStructuralConnections() const;
 
   /************** CONFIGURABLE ********************************/
-  virtual void notifyOnChange(const paramkey& key);
+  virtual void explicit notifyOnChange(const paramkey& key);
 
   /**** TEACHING ****/
   /** The given motor teaching signal is used for this timestep.
@@ -185,11 +177,11 @@ protected:
     This is the implementation uses a better formula for g^-1 using Mittelwertsatz
     @param delay 0 for no delay and n>0 for n timesteps delay in the SML (s4delay)
 */
-  virtual void learnController(int delay);
+  virtual void explicit learnController(int delay);
 
   /// learn conf.model, (and S) using motors y and corresponding sensors x
   //  @param delay 0 for no delay and n>0 for n timesteps delay in the time loop
-  virtual void learnModel(int delay);
+  virtual void explicit learnModel(int delay);
 
   /// handles inhibition damping etc.
   virtual void management();

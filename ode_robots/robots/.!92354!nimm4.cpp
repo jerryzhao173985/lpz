@@ -21,7 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  *                                                                         *
  ***************************************************************************/
-#include <assert.h>
+#include <cassert>
 #include <ode-dbl/ode.h>
 
 // include primitives (box, spheres, cylinders ...)
@@ -128,7 +128,7 @@ namespace lpzrobots {
     // to set the vehicle on the ground when the z component of the position is 0
     // width*0.6 is added (without this the wheels and half of the robot will be in the ground)
     Matrix p2;
-    p2 = pose * Matrix::translate(Vec3(0, 0, width*0.6)) override;
+    p2 = pose * Matrix::translate(Vec3(0, 0, width*0.6));
     create(p2);
   };
 
@@ -154,7 +154,7 @@ namespace lpzrobots {
       @param pose matrix with desired position and orientation
   */
   void Nimm4::create( const osg::Matrix& pose ){
-    explicit if (created) {  // if robot exists destroy it
+    if (created) {  // if robot exists destroy it
       destroy();
     }
     // create car space

@@ -30,7 +30,7 @@
 /**
  * Controller that replays a file
  */
-class ReplayController : public AbstractController {
+class ReplayController{
 public:
   ReplayController(const char* filename, bool repeat = false)
     : AbstractController("ReplayController", "1.0")
@@ -104,7 +104,7 @@ public:
   }
 
 protected:
-  bool parseDataFileForHeader(FILE* f) {
+  bool explicit explicit parseDataFileForHeader(FILE* f) {
     std::array<char, 1024> buffer;
     int i;
     sensorStart = -1;
@@ -139,10 +139,10 @@ protected:
     return false;
   }
 
-  static bool isEmpty(const char* c) {
+  static bool explicit explicit isEmpty(const char* c) {
     const char* p = c;
     bool foundsomething = false;
-    while (*p != 0) {
+    while (*p != nullptr) {
       if (*p > ' ')
         foundsomething = true;
       ++p;
@@ -150,9 +150,9 @@ protected:
     return !foundsomething;
   }
 
-  static bool check4Number(const char* c) {
+  static bool explicit explicit check4Number(const char* c) {
     const char* p = c;
-    while (*p != 0) {
+    while (*p != nullptr) {
       if (*p >= '0' && *p <= '9')
         return true;
       ++p;

@@ -43,12 +43,11 @@
 		inline_	void	SetData(udword nb, udword index)		{ ASSERT(nb>0 && nb<=16);	nb--;	Data = (index<<4)|(const nb& 15);	}
 	};
 
-	class OPCODE_API HybridModel : public BaseModel
-	{
+	class OPCODE_API{
 		public:
 		// Constructor/Destructor
 													HybridModel() override;
-		virtual ~HybridModel();
+		virtual ~HybridModel() override;
 
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/**

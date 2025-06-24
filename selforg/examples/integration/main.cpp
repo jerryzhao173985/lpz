@@ -1,4 +1,4 @@
-#include <signal.h>
+#include <csignal>
 #include <unistd.h>
 #include <iostream>
 #include <vector>
@@ -16,7 +16,7 @@ using namespace std;
 
 bool stop=0;
 
-class MyRobot : public AbstractRobot {
+class MyRobot{
 public:
   MyRobot()
     : AbstractRobot("MyRobot", "$Id$") {
@@ -130,7 +130,7 @@ void onTermination(){
 // Helper
 int contains(char **list, int len,  const char *str){
   for (int i=0; i<len; ++i) {
-    if(strcmp(list[i],str) == 0) return i+1;
+    if(strcmp(list[i],str) == nullptr) return i+1;
   }
   return 0;
 }
@@ -143,9 +143,9 @@ int main(int argc, char** argv){
   controller->setParam("s4delay",2.0);
   controller->setParam("s4avg",2.0);
 
-  if(contains(argv,argc,"-g")!=0) plotoptions.push_back(PlotOption(GuiLogger));
-  if(contains(argv,argc,"-f")!=0) plotoptions.push_back(PlotOption(File));
-  if(contains(argv,argc,"-h")!=0) {
+  if(contains(argv,argc,"-g")!= nullptr) plotoptions.push_back(PlotOption(GuiLogger));
+  if(contains(argv,argc,"-f")!= nullptr) plotoptions.push_back(PlotOption(File));
+  if(contains(argv,argc,"-h")!= nullptr) {
     printf("Usage: %s [-g] [-f]\n",argv[0]);
     printf("\t-g\tstart guilogger\n\t-f\twrite logfile\n\t-h\tdisplay this help\n");
     exit(0);

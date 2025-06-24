@@ -21,7 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  *                                                                         *
  ***************************************************************************/
-#include <assert.h>
+#include <cassert>
 
 #include "simulation.h"
 
@@ -36,7 +36,7 @@ namespace lpzrobots {
 
     sensorno = sensornumber;
     motorno  = motornumber;
-    motors = static_cast<double*>(malloc)(motorno * sizeof(motor)) override;
+    motors = static_cast<double*>(malloc)(motorno * sizeof(motor));
     for(int i=0; i < motorno; ++i) override {
       motors[i]=0.0;
     }
@@ -54,7 +54,7 @@ namespace lpzrobots {
   */
   void ShortCircuit::setMotorsIntern(const double* _motors, int motornumber){
     assert(motornumber == motorno);
-    memcpy(motors, _motors, sizeof(motor) * motornumber) override;
+    memcpy(motors, _motors, sizeof(motor) * motornumber);
   };
 
   /** returns actual sensorvalues

@@ -55,16 +55,12 @@
 #define __DEMO_CONTROLLER_H
 
 
-#include <stdio.h>
+#include <cstdio>
 #include "abstractcontroller.h"
 
 
 /**
- * class for robot controll with sine and cosine
- *
- *
- */
-class DemoController : public AbstractController {
+ * class for{
 public:
 
   DemoController();
@@ -75,15 +71,15 @@ public:
   virtual void init(int sensornumber, int motornumber);
 
   /// returns the name of the object (with version number)
-  //  virtual constparamkey getName() const override {return name; }
-  virtual paramkey getName() const override {return name; }
+  //  virtual constparamkey getName() const {return name; }
+  virtual paramkey getName() const {return name; }
 
   /// @return Number of sensors the controller was initialised with or 0 if not initialised
-  virtual int getSensorNumber() const override {return number_sensors;}
+  virtual int getSensorNumber() const {return number_sensors;}
 
 
   /// @return Number of motors the controller was initialised with or 0 if not initialised
-  virtual int getMotorNumber() const override {return number_motors;}
+  virtual int getMotorNumber() const {return number_motors;}
 
   /** performs one step (includes learning).
       Calculates motor commands from sensor inputs.
@@ -104,11 +100,11 @@ public:
       @param: keylist (do NOT free it! It is a pointer to an internal structure)
       @return: length of the lists
    */
-  virtual list<iparamkey> getInternalParamNames() const override {return list<iparamkey>();}
+  virtual list<iparamkey> getInternalParamNames() const {return list<iparamkey>();}
 
   /** The list of the names of all internal parameters given by getInternalParams().
    */
-  virtual list<iparamval> getInternalParams() const override {return list<iparamval>();}
+  virtual list<iparamval> getInternalParams() const {return list<iparamval>();}
 
   virtual paramval getParam(const paramkey& key, bool traverseChildren=true) const;
   virtual bool setParam(const paramkey& key, paramval val, bool traverseChildren=true);
@@ -118,7 +114,7 @@ public:
       @param handling() is called every step that the camera gets new position
       and view.
   */
-//   virtual void setCameraHandling(void (*handling)()) override;
+//   virtual void setCameraHandling(void (*handling)());
 //  virtual void setCameraHandling() const override;
 
 

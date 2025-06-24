@@ -24,7 +24,7 @@
 #ifndef __PASSIVEMESH_H
 #define __PASSIVEMESH_H
 
-#include <stdio.h>
+#include <cstdio>
 #include <cmath>
 
 #include "primitive.h"
@@ -36,10 +36,10 @@ namespace lpzrobots {
 /**
  *  static_cast<Passive>(mesh) as obstacle
  */
-class PassiveMesh : public AbstractObstacle{
+class PassiveMesh{
   std::string filename;
 
-  Mesh* mesh;
+  Mesh* mesh = nullptr;
 
  public:
 
@@ -73,14 +73,14 @@ class PassiveMesh : public AbstractObstacle{
 
   virtual void setPose(const osg::Matrix& pose) override {
     this->pose = pose;
-    explicit if (obstacle_exists){
+    if (obstacle_exists){
       destroy();
     }
     create();
   };
 
 
-  virtual const Primitive* getMainPrimitive() const const override { return mesh; }
+  virtual const Primitive* getMainPrimitive() const const { return mesh; }
 
  protected:
 

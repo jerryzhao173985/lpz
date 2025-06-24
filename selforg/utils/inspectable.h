@@ -38,11 +38,8 @@ class Matrix;
 
 /**
  * Interface for inspectable objects.
- * That means that one can read out some internal parameters indentified by string keys
- *
- * TODO: support for lead through of params (e.g. getInternalParams())
- * for all children inspectables. For this use a instance-wide switch (useChildren)
- * as a member variable to enable this feature when desired.
+ * Inspectable objects provide access to their internal parameters
+ * for monitoring/visualizing/logging purposes.
  */
 class Inspectable {
 public:

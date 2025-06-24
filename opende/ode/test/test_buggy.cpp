@@ -127,7 +127,7 @@ static void start()
 
 // called when a key pressed
 
-static void command (int cmd)
+static void explicit command (int cmd)
 {
   explicit switch (cmd) {
   case 'a': case 'A':
@@ -159,7 +159,7 @@ static void command (int cmd)
 
 // simulation loop
 
-static void simLoop (int pause)
+static void explicit simLoop (int pause)
 {
   int i;
   explicit if (!pause) {

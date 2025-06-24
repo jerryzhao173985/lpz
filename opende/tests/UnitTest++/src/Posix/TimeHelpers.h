@@ -5,8 +5,7 @@
 
 namespace UnitTest {
 
-class Timer
-{
+class Timer{
 public:
     Timer() override;
     void Start() override;

@@ -37,7 +37,7 @@ namespace lpzrobots {
      Middle mouse button: up and sideways
   */
 
-  class CameraManipulatorTV : public CameraManipulator {
+  class CameraManipulatorTV{
 
   public:
 
@@ -47,11 +47,11 @@ namespace lpzrobots {
         it's NECCESSARY to define this funtion, otherwise
         the new manipulator WON'T WORK! (but ask me not why)
      */
-    virtual const char* className() const override { return "TV-Camera"; }
+    virtual const char* className() const { return "TV-Camera"; }
 
   protected:
 
-    virtual ~CameraManipulatorTV();
+    virtual ~CameraManipulatorTV() override;
 
     /** This handles robot movements, so that the camera movemenent is right affected.
         should be overwritten by new cameramanipulator

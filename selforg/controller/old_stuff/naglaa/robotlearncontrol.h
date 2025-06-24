@@ -13,15 +13,15 @@ protected:
   double A[NUMBER_CHANNELS][NUMBER_CHANNELS];    ///< model matrix
   double C[NUMBER_CHANNELS][NUMBER_CHANNELS];    ///< controller matrix
   double h[NUMBER_CHANNELS];       ///< bias vector
-  double rho;        ///< regularisation
+  double rho = 0.0;        ///< regularisation
   double x_buffer[BUFFER_SIZE][NUMBER_CHANNELS]; ///< buffer for input values, x[t%buffersize]=actual value, x[(t-1+buffersize)%buffersize]=x(t-1)
   double y_buffer[BUFFER_SIZE][NUMBER_CHANNELS]; ///< buffer for output values, y[t%buffersize]=actual value(if already calculated!), y[(t-1+buffersize)%buffersize]=y(t-1)
 
-  double delta;   ///< delta
-  int    number_steps_of_delay;     ///< number of steps for delay
-  int    number_steps_for_averaging;    ///< number of steps for averaging when calculating x_effective
-  int    t;       ///< number of steps, needed for ringbuffer x_buffer
-  double m;  ///< factor between E and E_s
+  double delta = 0.0;   ///< delta
+  int number_steps_of_delay = 0;     ///< number of steps for delay
+  int number_steps_for_averaging = 0;    ///< number of steps for averaging when calculating x_effective
+  int t = 0;       ///< number of steps, needed for ringbuffer x_buffer
+  double m = 0.0;  ///< factor between E and E_s
   double factor_a  ;
 
     /*double Determinant(double L[3][3] )
@@ -250,7 +250,7 @@ protected:
     {
 
      //initialization
-      if(t==0)
+      if(t== nullptr)
         {
 
          for (int i = 0; i < NUMBER_CHANNELS; ++i)
@@ -527,21 +527,21 @@ protected:
 
 
   /// neuron transfer function
-  virtual double g(double z) {
+  virtual double explicit g(double z) {
     return tanh(z);
   };
 
 
 
   ///
-  virtual double g_s(double z) {
+  virtual double explicit g_s(double z) {
     return 1.0 - tanh(z) * tanh(z);
   };
 
 
 
   /// squashing function, to protect against to large weight updates
-  virtual double squash(double z) {
+  virtual double explicit squash(double z) {
     return 0.1 * tanh(10.0 * z);
   };
 
@@ -637,17 +637,17 @@ public:
 
 
 
-  virtual void setEps(double x) {
+  virtual void explicit setEps(double x) {
     eps = x;
   };
   virtual double getEps() {
     return (eps);
   };
-   virtual void setFactor_a(double x) {
+   virtual void explicit setFactor_a(double x) {
     factor_a = x;
   };
 
-   virtual void setNumber_it(int x) {
+   virtual void explicit setNumber_it(int x) {
     number_it= x;
   };
 
@@ -655,7 +655,7 @@ public:
     return (number_it);
   };
 
-   virtual void setEps_it(double x) {
+   virtual void explicit setEps_it(double x) {
     epsilon_it= x;
   };
 
@@ -667,28 +667,28 @@ public:
     return (factor_a);
   };
 
-  virtual void setRho(double x) {
+  virtual void explicit setRho(double x) {
     rho = x;
   };
   virtual double getRho() {
     return (rho);
   };
 
-  virtual void setDelta(double x) {
+  virtual void explicit setDelta(double x) {
     delta = x;
   };
   virtual double getDelta() {
     return (delta);
   };
 
-  virtual void setNumberStepsForAveraging(int x) {
+  virtual void explicit setNumberStepsForAveraging(int x) {
     number_steps_for_averaging = x;
   };
   virtual int getNumberStepsForAveraging() {
     return (number_steps_for_averaging);
   };
 
-  virtual void setNumberStepsOfDelay(int x) {
+  virtual void explicit setNumberStepsOfDelay(int x) {
     number_steps_of_delay = x;
   };
   virtual int getNumberStepsOfDelay() {
@@ -696,7 +696,7 @@ public:
   };
 
 
-  virtual void setM(double x) {
+  virtual void explicit setM(double x) {
     m = x;
   };
   virtual double getM() {
@@ -721,8 +721,8 @@ protected:
   double normal_mean[NUMBER_CHANNELS];   // storage for adding colored normally distributed noise to values
 
 
-  double tau_uniform; // smoothing paramter for uniformly distibuted random numbers
-  double tau_normal;  // smoothing paramter for normally distibuted random numbers
+  double tau_uniform = 0.0; // smoothing paramter for uniformly distibuted random numbers
+  double tau_normal = 0.0;  // smoothing paramter for normally distibuted random numbers
 
 public:
   NoiseGenerator(double tau_uniform=0.3, double tau_normal=0.3): : tau_uniform(tau_uniform), tau_normal(tau_normal), uniform_mean(0), normal_mean(0) {

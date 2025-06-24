@@ -29,7 +29,7 @@
 
 /** Implements a sequence of wirings
  */
-class WiringSequence :public AbstractWiring{
+class WiringSequence{
 public:
 
   /** constructor: The wirings given in the list
@@ -56,7 +56,7 @@ protected:
 public:
 
   /** adds a wiring to the list of wirings*/
-  virtual void addWiring(AbstractWiring* wiring);
+  virtual void explicit explicit addWiring(AbstractWiring* wiring);
 
 
 protected:

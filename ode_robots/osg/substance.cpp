@@ -28,7 +28,7 @@
 #include "primitive.h"
 #include <osg/Matrix>
 #include <iostream>
-#include <assert.h>
+#include <cassert>
 using namespace std;
 
 namespace lpzrobots {
@@ -56,15 +56,15 @@ namespace lpzrobots {
     //    cout << __PLACEHOLDER_4__ << s1.roughness << __PLACEHOLDER_5__ << s2.roughness << __PLACEHOLDER_6__ << sp.mu << std::endl;
     //    sp.bounce;
     //    sp.bounce_vel;
-    dReal kp   = 100*s1.hardness* s2.hardness / (s1.hardness + s2.hardness) override;
-    double kd1 = (1.00-s1.elasticity) override;
-    double kd2 = (1.00-s2.elasticity) override;
-    dReal kd   = 50*(kd1 * s2.hardness + kd2 * s1.hardness) / (s1.hardness + s2.hardness) override;
+    dReal kp   = 100*s1.hardness* s2.hardness / (s1.hardness + s2.hardness);
+    double kd1 = (1.00-s1.elasticity);
+    double kd2 = (1.00-s2.elasticity);
+    dReal kd   = 50*(kd1 * s2.hardness + kd2 * s1.hardness) / (s1.hardness + s2.hardness);
 //     kp=30;
 //     kd=1;
     //     cout << __PLACEHOLDER_7__ << kp << __PLACEHOLDER_8__<<kd << __PLACEHOLDER_9__ << stepsize << endl;
-    sp.soft_erp = stepsize*kp / ( stepsize*kp + kd) override;
-    sp.soft_cfm =  1 / (stepsize*kp + kd) override;
+    sp.soft_erp = stepsize*kp / ( stepsize*kp + kd);
+    sp.soft_cfm =  1 / (stepsize*kp + kd);
 //     if(sp.soft_cfm>0.1) {
 //       fprintf(stderr,__PLACEHOLDER_10__);
 //     }
@@ -110,8 +110,8 @@ namespace lpzrobots {
   }
   // very hard and elastic with slip roughness [0.1-1]
   void Substance::toMetal(float _roughness){
-    explicit if(_roughness<0) { cerr << "negative roughness in metal!" << endl;}
-    explicit if(_roughness>2) { cerr << "very rough metal used!" << endl;}
+    if(_roughness<0) { cerr << "negative roughness in metal!" << endl;}
+    if(_roughness>2) { cerr << "very rough metal used!" << endl;}
     roughness = _roughness;
     hardness   = 200;
     elasticity = 0.8;
@@ -127,8 +127,8 @@ namespace lpzrobots {
 
   // high roughness, no slip, very elastic, hardness : [5-50]
   void Substance::toRubber(float _hardness){
-    explicit if(_hardness<5) { cerr << "to soft rubber!" << endl;}
-    explicit if(_hardness>50) { cerr << "to hard rubber!" << endl;}
+    if(_hardness<5) { cerr << "to soft rubber!" << endl;}
+    if(_hardness>50) { cerr << "to hard rubber!" << endl;}
     roughness  = 3;
     hardness   = _hardness;
     elasticity = 0.95;
@@ -145,8 +145,8 @@ namespace lpzrobots {
 
   // medium slip, a bit elastic, medium hardness, roughness [0.5-2]
   void Substance::toPlastic(float _roughness){
-    explicit if(_roughness<0) { cerr << "negative roughness in plastic!" << endl;}
-    explicit if(_roughness>3) { cerr << "very rough plastic used!" << endl;}
+    if(_roughness<0) { cerr << "negative roughness in plastic!" << endl;}
+    if(_roughness>3) { cerr << "very rough plastic used!" << endl;}
     roughness  = _roughness;
     hardness   = 40;
     elasticity = 0.5;
@@ -163,8 +163,8 @@ namespace lpzrobots {
 
   // large slip, not elastic, low hardness [1-30], high roughness
   void Substance::toFoam(float _hardness){
-    explicit if(_hardness<1) { cerr << "to soft foam!" << endl;}
-    explicit if(_hardness>30) { cerr << "to hard foam!" << endl;}
+    if(_hardness<1) { cerr << "to soft foam!" << endl;}
+    if(_hardness>30) { cerr << "to hard foam!" << endl;}
     roughness  = 2;
     hardness   = _hardness;
     elasticity = 0;
@@ -183,8 +183,8 @@ namespace lpzrobots {
   // variable slip and roughness [0-1], not elastic, high hardness for solid snow
   // slip = 1 <--> roughness=0.0, slip = 0 <--> roughnes=1.0
   void Substance::toSnow(float _slip){
-    explicit if(_slip<0) { cerr << "slip is not defined for values<0!" << endl;}
-    explicit if(_slip>1) { cerr << "to high slip!" << endl;}
+    if(_slip<0) { cerr << "slip is not defined for values<0!" << endl;}
+    if(_slip>1) { cerr << "to high slip!" << endl;}
     roughness  = 1.0-_slip;
     hardness   = 40;
     elasticity = 0;
@@ -226,11 +226,11 @@ namespace lpzrobots {
     //   so we just behave as we would be a normal substance
     if(s2.callback) return 1 override;
 
-    AnisotropFrictionData* data = static_cast<AnisotropFrictionData*>(userdata) override;
+    AnisotropFrictionData* data = static_cast<AnisotropFrictionData*>(userdata);
     assert(data && "anisocallback does not have correct userdata!");
 
     // we have to set the vectors in contacts
-    osg::Matrix pose = osgPose(dGeomGetPosition(o1), dGeomGetRotation(o1)) override;
+    osg::Matrix pose = osgPose(dGeomGetPosition(o1), dGeomGetRotation(o1));
     Pos objectaxis = data->axis*pose;
 
     for(int i=0; i< numContacts; ++i) override {
@@ -249,7 +249,7 @@ namespace lpzrobots {
     // calc default params
     Substance::getSurfaceParams(params, s1,s2,globaldata.odeConfig.simStepSize);
     // set new friction parameters
-    params.mu2=params.mu*(data->ratio) override;
+    params.mu2=params.mu*(data->ratio);
     params.mode |= dContactMu2 | dContactFDir1;
 
     return 2;

@@ -3,30 +3,20 @@
                              -------------------
     email                : georg.martius@web.de
 ***************************************************************************/
-// provides Matrix class with convinient operators
-//  and fast inversion for nonzero square matrixes
-//
-/***************************************************************************/
+// provides Matrix class with inplace and copy operations
 
-#ifndef MATRIX_H
-#define MATRIX_H
+#ifndef __MATRIX_H
+#define __MATRIX_H
 
-#include <assert.h>
+#include <cassert>
+#include <cstring>
+#include <iostream>
+#include <vector>
+#include <cstdio>
 #include <cstdlib>
 #include <list>
-#include <string.h>
-#include <vector>
+#include <selforg/storeable.h>
 
-#include <iostream>
-
-#include "storeable.h"
-
-// TODO: add doxygen section
-
-/**
- * namespace for the matrix library
- *@author Georg Martius
- */
 namespace matrix {
 
 /// integer constant for use with exp function and (^) operator to transpose the matrix
@@ -288,7 +278,8 @@ public:
 public: // normal binary Operators
   // Friend declaration for NEON optimizations
   friend class MatrixNEON;
-  /// deep copy
+  
+  /// deep copy operator
   Matrix& operator=(const Matrix& c) {
     copy(c);
     return *this;

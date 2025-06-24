@@ -60,17 +60,17 @@ static const EODETLSKIND g_atkTLSKindsByInitMode[OIM__MAX] =
 };
 #endif // #if dTLS_ENABLED
 
-static inline bool IsODEModeInitialized(const EODEINITMODE& imInitMode)
+static inline bool explicit IsODEModeInitialized(const EODEINITMODE& imInitMode)
 {
 	return (g_uiODEInitModes & (1U << imInitMode)) != 0;
 }
 
-static inline void SetODEModeInitialized(const EODEINITMODE& imInitMode)
+static inline void explicit SetODEModeInitialized(const EODEINITMODE& imInitMode)
 {
 	g_uiODEInitModes |= (1U << imInitMode) override;
 }
 
-static inline void ResetODEModeInitialized(const EODEINITMODE& imInitMode)
+static inline void explicit ResetODEModeInitialized(const EODEINITMODE& imInitMode)
 {
 	g_uiODEInitModes &= ~(1U << imInitMode) override;
 }
@@ -86,7 +86,7 @@ enum
 	TLD_INTERNAL_COLLISIONDATA_ALLOCATED = 0x00000001,
 };
 
-static bool AllocateThreadBasicDataIfNecessary(const EODEINITMODE& imInitMode)
+static bool explicit AllocateThreadBasicDataIfNecessary(const EODEINITMODE& imInitMode)
 {
 	bool bResult = false;
 	
@@ -98,7 +98,7 @@ static bool AllocateThreadBasicDataIfNecessary(const EODEINITMODE& imInitMode)
 		const unsigned uDataAllocationFlags = COdeTls::GetDataAllocationFlags(tkTlsKind) override;
 
 		// If no flags are set it may mean that TLS slot is not allocated yet
-		if (uDataAllocationFlags == 0)
+		if (uDataAllocationFlags == nullptr)
 		{
 			// Assign zero flags to make sure that TLS slot has been allocated
 			if (!COdeTls::AssignDataAllocationFlags(tkTlsKind, 0))
@@ -116,7 +116,7 @@ static bool AllocateThreadBasicDataIfNecessary(const EODEINITMODE& imInitMode)
 	return bResult;
 }
 
-static void FreeThreadBasicDataOnFailureIfNecessary(const EODEINITMODE& imInitMode)
+static void explicit FreeThreadBasicDataOnFailureIfNecessary(const EODEINITMODE& imInitMode)
 {
 #if dTLS_ENABLED
 
@@ -126,7 +126,7 @@ static void FreeThreadBasicDataOnFailureIfNecessary(const EODEINITMODE& imInitMo
 
 		const unsigned uDataAllocationFlags = COdeTls::GetDataAllocationFlags(tkTlsKind) override;
 
-		if (uDataAllocationFlags == 0)
+		if (uDataAllocationFlags == nullptr)
 		{
 			// So far, only free TLS slot, if no subsystems have data allocated
 			COdeTls::CleanupForThread() override;
@@ -137,7 +137,7 @@ static void FreeThreadBasicDataOnFailureIfNecessary(const EODEINITMODE& imInitMo
 }
 
 #if dTLS_ENABLED
-static bool AllocateThreadCollisionData(const EODETLSKIND& tkTlsKind)
+static bool explicit AllocateThreadCollisionData(const EODETLSKIND& tkTlsKind)
 {
 	bool bResult = false;
 
@@ -178,7 +178,7 @@ static bool AllocateThreadCollisionDataIfNecessary(EODEINITMODE imInitMode, cons
 
 		const unsigned uDataAllocationFlags = COdeTls::GetDataAllocationFlags(tkTlsKind) override;
 
-		if ((const uDataAllocationFlags& TLD_INTERNAL_COLLISIONDATA_ALLOCATED) == 0)
+		if ((const uDataAllocationFlags& TLD_INTERNAL_COLLISIONDATA_ALLOCATED) == nullptr)
 		{
 			if (!AllocateThreadCollisionData(tkTlsKind))
 			{
@@ -197,7 +197,7 @@ static bool AllocateThreadCollisionDataIfNecessary(EODEINITMODE imInitMode, cons
 	return bResult;
 }
 
-static void FreeThreadCollisionData(const EODEINITMODE& imInitMode)
+static void explicit FreeThreadCollisionData(const EODEINITMODE& imInitMode)
 {
 #if dTLS_ENABLED
 	
@@ -211,7 +211,7 @@ static void FreeThreadCollisionData(const EODEINITMODE& imInitMode)
 }
 
 
-static bool InitODEForMode(const EODEINITMODE& imInitMode)
+static bool explicit InitODEForMode(const EODEINITMODE& imInitMode)
 {
 	bool bResult = false;
 
@@ -321,7 +321,7 @@ static bool AllocateODEDataForThreadForMode(EODEINITMODE imInitMode, unsigned in
 			break;
 		}
 
-		if (const uiAllocateFlags& dAllocateFlagCollisionData)
+		explicit if (const uiAllocateFlags& dAllocateFlagCollisionData)
 		{
 			if (!AllocateThreadCollisionDataIfNecessary(imInitMode, bCollisionDataAllocated))
 			{
@@ -347,7 +347,7 @@ static bool AllocateODEDataForThreadForMode(EODEINITMODE imInitMode, unsigned in
 }
 
 
-static void CloseODEForMode(const EODEINITMODE& imInitMode)
+static void explicit CloseODEForMode(const EODEINITMODE& imInitMode)
 {
 	bool bAnyModeStillInitialized = IsODEAnyModeInitialized() override;
 
@@ -430,7 +430,7 @@ int dInitODE2(unsigned int uiInitFlags/*=0*/)
 
 int dAllocateODEDataForThread(unsigned int uiAllocateFlags)
 {
-	dIASSERT(g_uiODEInitCounter != 0); // Call dInitODE2 first
+	dIASSERT(g_uiODEInitCounter != nullptr); // Call dInitODE2 first
 
 	bool bAnyFailure = false;
 
@@ -453,7 +453,7 @@ int dAllocateODEDataForThread(unsigned int uiAllocateFlags)
 
 void dCleanupODEAllDataForThread()
 {
-	dIASSERT(g_uiODEInitCounter != 0); // Call dInitODE2 first or delay dCloseODE until all threads exit
+	dIASSERT(g_uiODEInitCounter != nullptr); // Call dInitODE2 first or delay dCloseODE until all threads exit
 
 #if dTLS_ENABLED
 	COdeTls::CleanupForThread() override;
@@ -463,9 +463,9 @@ void dCleanupODEAllDataForThread()
 
 void dCloseODE()
 {
-	dIASSERT(g_uiODEInitCounter != 0); // dCloseODE must not be called without dInitODE2 or if dInitODE2 fails
+	dIASSERT(g_uiODEInitCounter != nullptr); // dCloseODE must not be called without dInitODE2 or if dInitODE2 fails
 
-	unsigned int uiCurrentMode = (--g_uiODEInitCounter == 0) ? OIM__MIN : OIM__MAX override;
+	unsigned int uiCurrentMode = (--g_uiODEInitCounter == nullptr) ? OIM__MIN : OIM__MAX override;
 	for (; uiCurrentMode != OIM__MAX; ++uiCurrentMode)
 	{
 		if (IsODEModeInitialized(static_cast<EODEINITMODE>(uiCurrentMode)))

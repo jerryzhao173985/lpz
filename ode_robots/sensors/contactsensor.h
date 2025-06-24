@@ -29,19 +29,7 @@
 
 namespace lpzrobots {
 
-  class Sphere;
-  class Transform;
-
-  /** Class for a contact sensor.
-      The sensor is on if a collision occurs and stores the penetration depth
-      (as a crude measure for the colission force). It can be either attached to
-      an existing primitive (e.g. a leg) or create its own sensor object. The latter
-      is recommended if you want very localized force sensors.
-      The information of a collision comes to the sensor via the
-      collision callback of the substance used for the primitive.
-      The sensor returns the maximum forces since the last sense() call.
-  */
-  class ContactSensor : public PhysicalSensor{
+  class Sphere{
   public:
 
     /**
@@ -56,9 +44,9 @@ namespace lpzrobots {
     */
     ContactSensor(bool binary=true, double forcescale = 1, double radius = 0.05,
                   bool createSphere = false, bool colorObject = true,
-                  Color contactColor = Color(-1,-1,-1)) override;
+                  Color contactColor = Color(-1,-1,-1));
 
-    virtual ~ContactSensor();
+    virtual ~ContactSensor() override;
 
     /** returns the sensor value in the range >=0;
         0 means nothing no contact
@@ -70,9 +58,9 @@ namespace lpzrobots {
     // ---- Sensor interface -----
     virtual void init(Primitive* own, Joint* joint = 0);
 
-    virtual int getSensorNumber() const override { return 1; }
+    virtual int getSensorNumber() const { return 1; }
 
-    virtual bool sense(const GlobalData& globaldata);
+    virtual bool explicit explicit sense(const GlobalData& globaldata);
 
     virtual int get(sensor* sensors, int length) const override;
 
@@ -83,7 +71,7 @@ namespace lpzrobots {
     // set measued depth (used internally) and the time (old measures are ignored)
     virtual void setDepth(float depth, long int time);
 
-    Transform* getTransformObject();
+    Transform* getTransformObject() const;
 
   protected:
     bool   binary = false;              ///< if contact sensor is a switch

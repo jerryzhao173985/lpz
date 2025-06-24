@@ -29,10 +29,10 @@
 void StatisticTools::doOnCallBack(BackCaller* source, BackCaller::CallbackableType type /* = BackCaller::DEFAULT_CALLBACKABLE_TYPE */) {
     // update all statistic measures
     if (beginMeasureCounter>0)
-        beginMeasureCounter--;
+        --beginMeasureCounter;
     else
         for (std::list<AbstractMeasure*>::iterator i=activeMeasures.begin();i!=activeMeasures.end();++i) {
-          if (((*i)->getActualStep())%((*i)->getStepSize())==0)
+          if (((*i)->getActualStep())%((*i)->getStepSize())== nullptr)
             (*i)->step();
         }
 }
@@ -94,32 +94,12 @@ void StatisticTools::beginMeasureAt(long step) {
 
 
 /*template
-<class type,
-type zero(void),
-bool lower(const type&, const type&),
-bool higher(const type&, const type&),
-type doubleDiv(const type&, const double&),
-type doubleMul(const type&, const double&),
-type add(const type&, const type&),
-type sub(const type&, const type&),
-type mul(const type&, const type&),
-type div(const type&, const type&)>
-DOUBLE_ANALYSATION_CONTEXT* StatisticTools::getAnalysation(std::vector<type> values) {
+<class type{
         return new DOUBLE_ANALYSATION_CONTEXT(values);
 }*/
 
 /*template
-<class type,
-type zero(void),
-bool lower(const type&, const type&),
-bool higher(const type&, const type&),
-type doubleDiv(const type&, const double&),
-type doubleMul(const type&, const double&),
-type add(const type&, const type&),
-type sub(const type&, const type&),
-type mul(const type&, const type&),
-type div(const type&, const type&)>
-type StatisticTools::getAnalisation(DOUBLE_ANALYSATION_CONTEXT* tvAnalysation,        AnalysationMode mode, unsigned int feature) {
+<class type{
         switch (mode){
         case AM_AVG:
                 return tvAnalysation->getAvg();
@@ -151,17 +131,7 @@ type StatisticTools::getAnalisation(DOUBLE_ANALYSATION_CONTEXT* tvAnalysation,  
 }*/
 
 /*template
-<class type,
-type zero(void),
-bool lower(const type&, const type&),
-bool higher(const type&, const type&),
-type doubleDiv(const type&, const double&),
-type doubleMul(const type&, const double&),
-type add(const type&, const type&),
-type sub(const type&, const type&),
-type mul(const type&, const type&),
-type div(const type&, const type&)>
-type StatisticTools::getAnalisation(std::vector<type> values, AnalysationMode mode, unsigned int feature) {
+<class type{
         DOUBLE_ANALYSATION_CONTEXT* context = GET_TYPE_ANALYSATION(type)(values);
         return GET_TYPE_ANALYSATION(type)(context,mode,feature);
 }*/

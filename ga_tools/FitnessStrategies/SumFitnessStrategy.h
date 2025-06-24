@@ -28,15 +28,7 @@
 #define SUMFITNESSSTRATEGY_H_
 
 //forward declaration
-class Individual;
-
-//ga_tools includes
-#include "IFitnessStrategy.h"
-
-/**
- * Test implementation.
- */
-class SumFitnessStrategy : public IFitnessStrategy {
+class Individual{
 public:
 	/**
 	 * default constructor
@@ -46,11 +38,11 @@ public:
 	/**
 	 * default destructor
 	 */
-	virtual ~SumFitnessStrategy();
+	virtual ~SumFitnessStrategy() override;
 
 	/**
 	 * implements the getFitness function of IFitnessStrategy. Calculate the Sum of all double gens.
-	 * @param individual (const Individual*) the individual
+	 * @param individual static_cast<const Individual*>(the) individual
 	 * @return static_cast<double>(the) result
 	 */
 	virtual double getFitness(const Individual* individual) override;

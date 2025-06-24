@@ -33,13 +33,13 @@ namespace lpzrobots {
 
   /** Abstract angular motor class. This is a wrapper for ODE's AMotor.
    */
-  class AngularMotor : virtual public Sensor, virtual public Motor  {
+  class AngularMotor{
   public:
     /// creates a AMotor attached to the same bodies as the given joint.
     AngularMotor(const OdeHandle& odeHandle, Joint* joint);
 
     // destroys the AMotor
-    virtual ~AngularMotor();
+    virtual ~AngularMotor() override;
 
     /// returns the number of Axis of this Motor
     virtual int getNumberOfAxes() const = 0;
@@ -47,15 +47,15 @@ namespace lpzrobots {
     // --- Sensor interface ---
     virtual void init(Primitive* own, Joint* joint = 0);
 
-    virtual bool sense(const GlobalData& globaldata) override { return true;} override;
-    virtual int getSensorNumber() const override {
-      return getNumberOfAxes();
+    virtual bool sense(const GlobalData& globaldata) override { return true;};
+    virtual int getSensorNumber() const {
+      return getNumberOfAxes() const;
     }
-    virtual std::list<sensor> getList() const  override { return getListOfArray();} override;
+    virtual std::list<sensor> getList() const { return getListOfArray() const;};
     virtual int get(sensor* sensors, int length) const override;
 
     // --- Motor interface ---
-    virtual int getMotorNumber() const override { return getNumberOfAxes();} override;
+    virtual int getMotorNumber() const { return getNumberOfAxes() const;};
 
     virtual bool act(const GlobalData& globaldata) override {
       return true;
@@ -81,22 +81,22 @@ namespace lpzrobots {
     virtual void setPower(double power)  = 0;
 
     /// return the maximal force
-    virtual double getPower();
+    virtual double getPower() const;
 
     /// returns the joint to which this motor is attached
-    virtual const Joint* getJoint() co override nst const { return joint; } override;
+    virtual const Joint* getJoint() co override nst const { return joint; };
 
     //sets the parameter for a motor
     virtual void setParam(int parameter, double value);
 
     /// return the ODE joint parameter (see ODE manual)
-    virtual double getParam(int parameter);
+    virtual double explicit explicit getParam(int parameter);
 
     /// sets factor for velocity
-    virtual void setVelovityFactor(double factor);
+    virtual void explicit explicit setVelovityFactor(double factor);
 
     /// retuns factor for velocity
-    virtual double getVelovityFactor(double factor);
+    virtual double explicit explicit getVelovityFactor(double factor);
 
   protected:
     dJointID motor;
@@ -108,7 +108,7 @@ namespace lpzrobots {
 
 
   /// Angular motor for OneAxisJoints
-  class AngularMotor1Axis : public AngularMotor {
+  class AngularMotor1Axis{
   public:
     /** Constuct a motor attached to a OneAxisJoint. It will its axis of course.
         @param power The maximum force or torque that the motor will use to achieve the desired velocity.
@@ -120,7 +120,7 @@ namespace lpzrobots {
 
     virtual void init(Primitive* own, Joint* joint = 0);
 
-    virtual int getNumberOfAxes() const override { return 1; } override;
+    virtual int getNumberOfAxes() const { return 1; };
 
     /** sets the desired speed of the motor at the given axis.
         @param axisNumber is ignored because have only one axis
@@ -132,12 +132,12 @@ namespace lpzrobots {
      */
     virtual double get(int axisNumber) const override;
 
-    virtual void setPower(double power);
+    virtual void explicit explicit setPower(double power);
   protected:
   };
 
   /// Angular motor for TwoAxisJoints
-  class AngularMotor2Axis : public AngularMotor {
+  class AngularMotor2Axis{
   public:
     /** Constuct a motor attached to a TwoAxisJoint. It will its two axis of course.
         @param power The maximum force or torque that the motor will use to achieve the desired velocity.
@@ -150,7 +150,7 @@ namespace lpzrobots {
     virtual void init(Primitive* own, Joint* joint = 0);
 
     /// returns the number of Axis of this Motor
-    virtual int getNumberOfAxes() const override { return 2; } override;
+    virtual int getNumberOfAxes() const { return 2; };
 
     /** sets the desired speed of the motor at the given axis.
         @param axisNumber either 0 or 1
@@ -159,11 +159,11 @@ namespace lpzrobots {
     virtual void set(int axisNumber, double velocity);
     virtual double get(int axisNumber) const override;
 
-    virtual void setPower(double power);
+    virtual void explicit explicit setPower(double power);
     virtual void setPower(double power1, double power2);
 
     /// return the maximal force
-    virtual double getPower2();
+    virtual double getPower2() const;
   protected:
     double power1 = 0;
     double power2 = 0;
@@ -171,7 +171,7 @@ namespace lpzrobots {
 
 
   /// Angular motor for Ball Joints with Euler control
-  class AngularMotor3AxisEuler : public AngularMotor {
+  class AngularMotor3AxisEuler{
   public:
     /** Constuct a motor attached to a BallJoint.
         @param axis1 axis relative to body 1
@@ -187,7 +187,7 @@ namespace lpzrobots {
     virtual void init(Primitive* own, Joint* joint = 0);
 
     /// returns the number of Axis of this Motor
-    virtual int getNumberOfAxes() const override { return 3; } override;
+    virtual int getNumberOfAxes() const { return 3; };
 
     /** sets the desired speed of the motor at the given axis.
         @param axisNumber either 0 or 1
@@ -199,14 +199,14 @@ namespace lpzrobots {
 
     /**  sets the maximal force the motor has
      */
-    virtual void setPower(double power);
+    virtual void explicit explicit setPower(double power);
   protected:
     Axis axis1;
     Axis axis3;
   };
 
   /// Angular motor for arbitrary Joints with custom axis (up to 3)
-  class AngularMotorNAxis : public AngularMotor {
+  class AngularMotorNAxis{
   public:
     /** Constuct a motor attached to any Joint (not Sliders!).
         The axis have to be provided by the user.
@@ -235,7 +235,7 @@ namespace lpzrobots {
      */
     virtual double get(int axisNumber) const override;
 
-    virtual void setPower(double power);
+    virtual void explicit explicit setPower(double power);
   protected:
     std::list<std::pair<double, Axis > > axis;
   };

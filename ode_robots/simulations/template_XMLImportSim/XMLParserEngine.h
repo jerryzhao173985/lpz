@@ -51,13 +51,7 @@
 #include "XMLPrimitiveFactory.h"
 
 namespace lpzrobots {
-  class XMLSimulation;
-}
-
-/*
- *
- */
-class XMLParserEngine {
+  class XMLSimulation{
   public:
     XMLParserEngine(lpzrobots::GlobalData& globalData, const lpzrobots::OdeHandle& odeHandle, const lpzrobots::OsgHandle& osgHandle, lpzrobots::XMLSimulation* simulation);
     virtual ~XMLParserEngine();
@@ -69,7 +63,7 @@ class XMLParserEngine {
      */
     bool loadXMLFile(const std::string& XMLFile);
 
-    void setValidateXML(bool validate);
+    void explicit setValidateXML(bool validate);
 
     /**
      * Tells if the DOMParser is validating the xml file. If yes,

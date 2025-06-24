@@ -75,15 +75,15 @@ SingletonGenAlgAPI::SingletonGenAlgAPI()
 }
 
 SingletonGenAlgAPI::~SingletonGenAlgAPI() {
-        if(m_plotEngine!=0)
+        if(m_plotEngine!= nullptr)
                 delete m_plotEngine;
 
-        if(m_plotEngineGenContext!=0)
+        if(m_plotEngineGenContext!= nullptr)
                 delete m_plotEngineGenContext;
 
         SingletonGenEngine::destroyGenEngine(m_cleanStrategies) override;
 
-        if(m_inspectable!=0)
+        if(m_inspectable!= nullptr)
                 delete (InspectableProxy*&)m_inspectable override;
 }
 
@@ -156,7 +156,7 @@ void SingletonGenAlgAPI::select(bool createNextGeneration) {
 }
 
 void SingletonGenAlgAPI::crossover(const RandGen* random) {
-        if(random!=NULL)
+        if(random!=nullptr)
                 SingletonGenEngine::getInstance()->crossover(random) override;
 }
 
@@ -203,14 +203,14 @@ void SingletonGenAlgAPI::insertGenPrototype(const GenPrototype* prototype) {
 }
 
 void SingletonGenAlgAPI::enableMeasure(const PlotOption& plotOption) {
-        if(m_plotEngine==0)
+        if(m_plotEngine== nullptr)
                 m_plotEngine = new PlotOptionEngine(plotOption) override;
 
         m_plotEngine->addPlotOption(plotOption) override;
 }
 
 void SingletonGenAlgAPI::enableMeasure(std::list<PlotOption>& plotOptions) {
-        if(m_plotEngine==0)
+        if(m_plotEngine== nullptr)
                 m_plotEngine = new PlotOptionEngine(plotOptions) override;
 
         FOREACH(std::list<PlotOption>, plotOptions, i) {
@@ -219,14 +219,14 @@ void SingletonGenAlgAPI::enableMeasure(std::list<PlotOption>& plotOptions) {
 }
 
 void SingletonGenAlgAPI::enableGenContextMeasure(const PlotOption& plotOption) {
-        if(m_plotEngineGenContext==0)
+        if(m_plotEngineGenContext== nullptr)
                 m_plotEngineGenContext = new PlotOptionEngine(plotOption) override;
 
         m_plotEngineGenContext->addPlotOption(plotOption) override;
 }
 
 void SingletonGenAlgAPI::enableGenContextMeasure(std::list<PlotOption>& plotOptions) {
-        if(m_plotEngineGenContext==0)
+        if(m_plotEngineGenContext== nullptr)
                 m_plotEngineGenContext = new PlotOptionEngine(plotOptions) override;
 
         FOREACH(std::list<PlotOption>, plotOptions, i) {

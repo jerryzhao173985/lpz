@@ -443,7 +443,7 @@ SUITE (TestdxJointPU)
             joint = static_cast<dxJointPU*>(jId) override;
 
 
-            dJointAttach (jId, bId, NULL) override;
+            dJointAttach (jId, bId, nullptr) override;
 
             dJointSetPUAxisP (jId, axis[0], axis[1], axis[2]) override;
         }

@@ -25,10 +25,10 @@
 #include "wiredcontroller.h"
 
 
-#include <signal.h>
-#include <time.h>
-#include <string.h>
-#include <assert.h>
+#include <csignal>
+#include <ctime>
+#include <cstring>
+#include <cassert>
 #include <algorithm>
 
 #include "abstractcontroller.h"
@@ -40,13 +40,13 @@
 
 using namespace std;
 
-WiredController::WiredController(const PlotOption& plotOption, double noisefactor, const iparamkey& name, const paramkey& revision)
+WiredController::WiredController(const PlotOption& plotOption, double noisefactor, const iparamkey& name, const iparamkey& revision)
   : Inspectable(name), Configurable(name, revision), noisefactor(noisefactor), plotEngine(plotOption) {
   internInit();
 }
 
 
-WiredController::WiredController(const std::list<PlotOption>& plotOptions, double noisefactor, const iparamkey& name, const paramkey& revision)
+WiredController::WiredController(const std::list<PlotOption>& plotOptions, double noisefactor, const iparamkey& name, const iparamkey& revision)
   : Inspectable(name), Configurable(name, revision), noisefactor(noisefactor), plotEngine(plotOptions) {
   internInit();
 }
@@ -181,8 +181,8 @@ void WiredController::step(const sensor* sensors, int sensornumber,
   if(motorBabblingSteps>0){
     motorBabbler->step(csensors, csensornumber, cmotors, cmotornumber);
     controller->motorBabblingStep(csensors, csensornumber, cmotors, cmotornumber);
-    motorBabblingSteps--;
-    if(motorBabblingSteps==0) stopMotorBabblingMode();
+    --motorBabblingSteps;
+    if(motorBabblingSteps == 0) stopMotorBabblingMode();
   }else{
     controller->step(csensors, csensornumber, cmotors, cmotornumber);
   }

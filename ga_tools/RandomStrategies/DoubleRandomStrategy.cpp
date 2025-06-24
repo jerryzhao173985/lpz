@@ -40,7 +40,7 @@ DoubleRandomStrategy::DoubleRandomStrategy(RandGen* random, double base, double 
 }
 
 DoubleRandomStrategy::~DoubleRandomStrategy() {
-        m_random = NULL;
+        m_random = nullptr;
 }
 
 IValue* DoubleRandomStrategy::getRandomValue(void) {

@@ -24,8 +24,7 @@
     namespace Name
 
 #define TEST_EX(Name, List)                                                \
-    class Test##Name : public UnitTest::Test                               \
-    {                                                                      \
+    class Test{                                                                      \
     public:                                                                \
 		Test##Name() : Test(#Name, UnitTestSuite::GetSuiteName(), __FILE__, __LINE__) {}  \
     private:                                                               \
@@ -41,8 +40,7 @@
 
 
 #define TEST_FIXTURE_EX(Fixture, Name, List)                                         \
-    class Fixture##Name##Helper : public Fixture									 \
-	{																				 \
+    class Fixture{																				 \
 	public:																			 \
         Fixture##Name##Helper(UnitTest::TestDetails const& details) : m_details(details) {} \
         void RunTest(UnitTest::const TestResults& testResults_);                           \
@@ -52,8 +50,7 @@
         Fixture##Name##Helper& operator =(Fixture##Name##Helper const&);             \
     };                                                                               \
 																					 \
-    class Test##Fixture##Name : public UnitTest::Test                                \
-    {                                                                                \
+    class Test{                                                                                \
     public:                                                                          \
 	    Test##Fixture##Name() : Test(#Name, UnitTestSuite::GetSuiteName(), __FILE__, __LINE__) {} \
     private:                                                                         \

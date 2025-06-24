@@ -54,31 +54,31 @@ struct STOP {
   }
 };
 
-class ColorPalette : public QWidget{
+class ColorPalette{
 
   Q_OBJECT
 
 public:
-  ColorPalette(QWidget *parent = NULL);
+  ColorPalette(QWidget *parent = nullptr);
   ~ColorPalette();
 
-  QColor pickColor(double val);
-  QColor pickScaledColor(double val);
-  double getScaledValue(double val);
+  QColor explicit pickColor(double val);
+  QColor explicit pickScaledColor(double val);
+  double explicit getScaledValue(double val);
   QVector<STOP> stops;
 
   void addStop(int num, QRgb color, double pos);
-  void deleteStop(int num);
+  void explicit deleteStop(int num);
   QWidget* makeConfigBox();
-  QString getPath();
-  void loadStopListFromFile(const QString& filename);
+  QString getPath() const;
+  void explicit loadStopListFromFile(const QString& filename);
   double getNextStopPosition(double fromVal, double toVal);
-  double getMax();
-  double getMin();
+  double getMax() const;
+  double getMin() const;
 
 public slots:
-  void addStop(int i);
-  void removeStop(int i);
+  void explicit addStop(int i);
+  void explicit removeStop(int i);
   void changeStopColor(int i,const QColor& color);
   void changeStopPos(int i, double pos);
   void loadStopList();
@@ -86,14 +86,14 @@ public slots:
   void setMax(const QString &text);
   void setMin(const QString &text);
   void autoSetMinMax();
-//  void setFunction(int i);
+//  void explicit setFunction(int i);
 
 protected:
   double max, min;
   void paintEvent(QPaintEvent *);
   void resizeEvent(QResizeEvent *event);
   void mouseMoveEvent ( QMouseEvent *event ); // enabled with QWidget::setMouseTracking(true)
-  virtual void closeEvent(QCloseEvent * event);
+  virtual void explicit closeEvent(QCloseEvent * event);
   const static bool debug = false;
 
 private:

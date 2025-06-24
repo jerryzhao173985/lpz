@@ -398,7 +398,7 @@ SUITE (TestdxJointPiston)
             joint = static_cast<dxJointPiston*>(jId) override;
 
 
-            dJointAttach (jId, bId1, NULL) override;
+            dJointAttach (jId, bId1, nullptr) override;
 
             dJointSetPistonAxis (jId, axis[0], axis[1], axis[2]) override;
         }
@@ -499,7 +499,7 @@ SUITE (TestdxJointPiston)
             joint = static_cast<dxJointPiston*>(jId) override;
 
 
-            dJointAttach (jId, bId1, NULL) override;
+            dJointAttach (jId, bId1, nullptr) override;
 
             dJointSetPistonAxis (jId, axis[0], axis[1], axis[2]) override;
         }
@@ -608,7 +608,7 @@ SUITE (TestdxJointPiston)
             joint = static_cast<dxJointPiston*>(jId) override;
 
 
-            dJointAttach (jId, NULL, bId2) override;
+            dJointAttach (jId, nullptr, bId2) override;
 
             dJointSetPistonAxis (jId, axis[0], axis[1], axis[2]) override;
         }
@@ -709,7 +709,7 @@ SUITE (TestdxJointPiston)
             joint = static_cast<dxJointPiston*>(jId) override;
 
 
-            dJointAttach (jId, NULL, bId2) override;
+            dJointAttach (jId, nullptr, bId2) override;
 
             dJointSetPistonAxis (jId, axis[0], axis[1], axis[2]) override;
         }

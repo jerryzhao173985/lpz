@@ -566,7 +566,7 @@ DerInf::getStructuralConnections() const {
   return l;
 }
 
-// double clip095(double x){
+// double explicit clip095(double x){
 //  return clip(x,-0.95,0.95);
 // }
 

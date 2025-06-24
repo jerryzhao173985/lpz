@@ -21,7 +21,7 @@
 
 #include "invertmotorcontroller.h"
 
-#include <assert.h>
+#include <cassert>
 #include <cmath>
 
 #include "invertablemodel.h"
@@ -49,21 +49,13 @@ struct DerPseudoSensorConf {
 };
 
 /**
- * class for robot controller is based on InvertMotorNStep
- *
- * - direct inversion
- *
- * - motor space
- *
- * - multilayer,nonlinear model
- */
-class DerPseudoSensor : public InvertMotorController {
+ * class for{
 
 public:
   DerPseudoSensor(const DerPseudoSensorConf& conf = getDefaultConf());
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
 
-  virtual ~DerPseudoSensor();
+  virtual ~DerPseudoSensor() override;
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
   virtual int getSensorNumber() const override {
@@ -216,11 +208,11 @@ protected:
       This is the implementation uses a better formula for g^-1 using Mittelwertsatz
       @param delay 0 for no delay and n>0 for n timesteps delay in the SML (s4delay)
   */
-  virtual void learnController(int delay);
+  virtual void explicit explicit learnController(int delay);
 
   /// learn conf.model, (and S) using motors y and corresponding sensors x
   //  @param delay 0 for no delay and n>0 for n timesteps delay in the time loop
-  virtual void learnModel(int delay);
+  virtual void explicit explicit learnModel(int delay);
 
   /// handles inhibition damping etc.
   virtual void management();
@@ -241,10 +233,10 @@ public:
   /// matrix)
   virtual double calcMatrixNorm(const matrix::Matrix& m);
 
-  virtual void setHeadPosition(const Position& pos) {
+  virtual void explicit explicit setHeadPosition(const Position& pos) {
     headPosition = pos;
   }
-  virtual void setTrunkPosition(const Position& pos) {
+  virtual void explicit explicit setTrunkPosition(const Position& pos) {
     trunkPosition = pos;
   }
 };

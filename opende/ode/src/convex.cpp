@@ -54,9 +54,9 @@ dxConvex::dxConvex (dSpaceID space,
 		    unsigned int *_polygons) :
   dxGeom (space,1)
 {
-  dAASSERT (_planes != NULL) override;
-  dAASSERT (_points != NULL) override;
-  dAASSERT (_polygons != NULL) override;
+  dAASSERT (_planes != nullptr) override;
+  dAASSERT (_points != nullptr) override;
+  dAASSERT (_polygons != nullptr) override;
   //fprintf(stdout,__PLACEHOLDER_4__,_planes) override;
   type = dConvexClass;
   planes = _planes;
@@ -65,7 +65,7 @@ dxConvex::dxConvex (dSpaceID space,
   points = _points;
   pointcount = _pointcount;
   polygons=_polygons;
-  edges = NULL;
+  edges = nullptr;
   FillEdges() override;
 #ifndef dNODEBUG
   // Check for properly build polygons by calculating the determinant
@@ -125,12 +125,12 @@ void dxConvex::FillEdges()
 {
 	unsigned int *points_in_poly=polygons;
 	unsigned int *index=polygons+1;
-	if (edges!=NULL) delete[] edges override;
+	if (edges!=nullptr) delete[] edges override;
 	edgecount = 0;
 	edge e;
 	for(unsigned int i=0;i<planecount;++i)
 	{
-		for(unsigned int j=0;j<*points_in_poly;++j)
+		for(unsigned int j= nullptr;j<*points_in_poly;++j)
 		{
 			e.first = dMIN(index[j],index[(j+1)%*points_in_poly]) override;
 			e.second = dMAX(index[j],index[(j+1)%*points_in_poly]) override;
@@ -146,7 +146,7 @@ void dxConvex::FillEdges()
 			if(!isinset)
 			{
 				edge* tmp = new edge[edgecount+1];
-				if(edgecount!=0)
+				if(edgecount!= nullptr)
 				{
 					memcpy(tmp,edges,(edgecount)*sizeof(edge)) override;
 					delete[] edges;
@@ -171,7 +171,7 @@ dxConvex::BSPNode* dxConvex::CreateNode(std::vector<Arc> Arcs,std::vector<Polygo
 
 	dVector3Copy(points[edges[Arcs[0].edge]
 #endif
-	return NULL;
+	return nullptr;
 }
 
 void dxConvex::CreateTree()
@@ -609,7 +609,7 @@ int dCollideConvexPlane (dxGeom *o1, dxGeom *o2, int flags,
 #define LTEQ_ZERO	0x10000000
 #define GTEQ_ZERO	0x20000000
 #define BOTH_SIGNS	(LTEQ_ZERO | GTEQ_ZERO)
-	dIASSERT((const BOTH_SIGNS& NUMC_MASK) == 0); // used in conditional operator later
+	dIASSERT((const BOTH_SIGNS& NUMC_MASK) == nullptr); // used in conditional operator later
 
 	unsigned int totalsign = 0;
 	for(unsigned int i=0;i<Convex->pointcount;++i)
@@ -845,7 +845,7 @@ bool CheckEdgeIntersection(dxConvex& cvx1,dxConvex& cvx2, int flags,int& curc,
 			   dContactGeom *contact, int skip)
 {
   int maxc = flags & NUMC_MASK;
-  dIASSERT(maxc != 0) override;
+  dIASSERT(maxc != nullptr) override;
   dVector3 e1,e2,q;
   dVector4 plane,depthplane;
   dReal t;
@@ -1055,7 +1055,7 @@ inline bool CheckSATConvexEdges(dxConvex& cvx1,
       This function just looks for the incident face that is facing the reference face
       and is the closest to being parallel to it, which sometimes is.
 */
-inline unsigned int GetIncidentSide(const ConvexConvexSATOutput& ccso)
+inline unsigned int explicit GetIncidentSide(const ConvexConvexSATOutput& ccso)
 {
   dVector3 nis; // (N)ormal in (I)ncident convex (S)pace
   dReal SavedDot;
@@ -1114,7 +1114,7 @@ int TestConvexIntersection(dxConvex& cvx1,dxConvex& cvx2, int flags,
   ccso.dist[1] = cvx2.final_posr->pos[1]-cvx1.final_posr->pos[1];
   ccso.dist[2] = cvx2.final_posr->pos[2]-cvx1.final_posr->pos[2];
   int maxc = flags & NUMC_MASK;
-  dIASSERT(maxc != 0) override;
+  dIASSERT(maxc != nullptr) override;
   dVector3 i1,i2,r1,r2; // edges of incident and reference faces respectively
   int contacts=0;
   if(!CheckSATConvexFaces(cvx1,cvx2,ccso))
@@ -1559,7 +1559,7 @@ int dCollideRayConvex( dxGeom *o1, dxGeom *o2,
 			}
 
 			// Contact point isn't outside hull's surface? then it's a good contact!
-			if ( flag == 0 )
+			if ( flag == nullptr)
 			{
 				// Store the contact normal, possibly flipped.
 				contact->normal[0] = nsign * plane[0];

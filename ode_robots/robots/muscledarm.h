@@ -49,7 +49,7 @@ namespace lpzrobots{
 
   } MuscledArmConf;
 
-  class MuscledArm : public OdeRobot{
+  class MuscledArm{
   public:
 
     /* Enumeration of different parts and joints */
@@ -114,7 +114,7 @@ namespace lpzrobots{
       return conf;
     }
 
-    virtual ~MuscledArm() {} override;
+    virtual ~MuscledArm() {};
 
 
     /** sets the pose of the vehicle
@@ -163,15 +163,15 @@ namespace lpzrobots{
         like space-internal collision detection, sensor resets/update etc.
         @param globalData structure that contains global data from the simulation environment
     */
-    virtual void doInternalStuff(const GlobalData& globalData);
+    virtual void explicit explicit doInternalStuff(const GlobalData& globalData);
 
 
     virtual Primitive* getMainObject() const override;
 
   protected:
     /** the main object of the robot, which is used for position and speed tracking */
-    //virtual Primitive* getMainPrimitive() const override { return object[lowerArm]; }
-    virtual Primitive* getMainPrimitive() const override { return object[hand]; }
+    //virtual Primitive* getMainPrimitive() const { return object[lowerArm]; }
+    virtual Primitive* getMainPrimitive() const { return object[hand]; }
 
     /** creates vehicle at desired pose
         @param pose 4x4 pose matrix
@@ -184,8 +184,8 @@ namespace lpzrobots{
 
     static void mycallback(void *data, dGeomID o1, dGeomID o2);
 
-    double dBodyGetPositionAll ( dBodyID basis , int para ) override;
-    double dGeomGetPositionAll ( dGeomID basis , int para ) override;
+    double dBodyGetPositionAll ( dBodyID basis , int para );
+    double dGeomGetPositionAll ( dGeomID basis , int para );
 
     void BodyCreate(int n, dMass m, dReal x, dReal y, dReal z,
                     dReal qx, dReal qy, dReal qz, dReal qangle);

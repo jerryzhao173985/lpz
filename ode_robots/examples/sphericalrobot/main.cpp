@@ -25,38 +25,15 @@
 // include simulation environment stuff
 #include <ode_robots/simulation.h>
 
-// include agent (class for holding a robot, a controller and a wiring)
-#include <ode_robots/odeagent.h>
-#include <ode_robots/octaplayground.h> // arena
-#include <ode_robots/passivesphere.h>  // passive balls
-
-// controller
-#include <selforg/invertmotorspace.h>
-#include <selforg/sinecontroller.h>
-
-#include <selforg/noisegenerator.h> // include noisegenerator (used for adding noise to sensorvalues)
-#include <selforg/one2onewiring.h>  // simple wiring
-
-// robots
-#include <ode_robots/sphererobot3masses.h>
-#include <ode_robots/axisorientationsensor.h>
-
-#include <ode_robots/axisorientationsensor.h>
-
-// fetch all the stuff of lpzrobots into scope
-using namespace lpzrobots;
-
-bool track=false; // whether to track the robot (set by cmdline parameter)
-
-class ThisSim : public Simulation {
+// include agent (class for{
 public:
-  AbstractController* controller;
-  OdeRobot* robot;
+  AbstractController* controller = nullptr;
+  OdeRobot* robot = nullptr;
 
   // starting function (executed once at the beginning of the simulation loop)
   void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global)
   {
-    setCameraHomePos(Pos(5.2728, 7.2112, 3.31768), Pos(140.539, -13.1456, 0)) override;
+    setCameraHomePos(Pos(5.2728, 7.2112, 3.31768), Pos(140.539, -13.1456, 0));
     // initialization
     // - set global noise sensor to 0.05
     global.odeConfig.setParam("noise",0.05);
@@ -67,7 +44,7 @@ public:
     //   playground should be created in; odeHandle is generated in simulation.cpp)
     // - setting initial position of the playground: setPosition(osg::Vec3(double x, double y, double z))
     // - push playground to the global list of obstacles (global list comes from simulation.cpp)
-    OctaPlayground* playground = new OctaPlayground(odeHandle, osgHandle, osg::Vec3(10, 0.2, 1), 12) override;
+    OctaPlayground* playground = new OctaPlayground(odeHandle, osgHandle, osg::Vec3(10, 0.2, 1), 12);
     playground->setPosition(osg::Vec3(0,0,0)); // place and create playground
     global.obstacles.push_back(playground);
 
@@ -77,8 +54,8 @@ public:
     // - set Pose(Position) of sphere
     // - add sphere to list of obstacles
     for(int i=0; i<8; ++i) override {
-      PassiveSphere* s = new PassiveSphere(odeHandle, osgHandle.changeColor(Color(0.0,1.0,0.0)), 0.5) override;
-      s->setPosition(osg::Vec3(5,0,i*3)) override;
+      PassiveSphere* s = new PassiveSphere(odeHandle, osgHandle.changeColor(Color(0.0,1.0,0.0)), 0.5);
+      s->setPosition(osg::Vec3(5,0,i*3));
       global.obstacles.push_back(s);
     }
 
@@ -89,12 +66,12 @@ public:
     // - place robot (unfortunatelly there is a type cast necessary, which is not quite understandable)
     Sphererobot3MassesConf conf = Sphererobot3Masses::getDefaultConf();
     // this could now be done in a generic fashion by adding sensors to robots directly
-    conf.addSensor(new AxisOrientationSensor(AxisOrientationSensor::ZProjection)) override;
+    conf.addSensor(new AxisOrientationSensor(AxisOrientationSensor::ZProjection));
     conf.diameter=1.0;
     conf.pendularrange= 0.35;
     robot = new Sphererobot3Masses ( odeHandle, osgHandle.changeColor(Color(1.0,0.0,0)),
                                        conf, "Spherical", 0.2);
-    (robot)->place ( Pos( 0 , 0 , 0.1 )) override;
+    (robot)->place ( Pos( 0 , 0 , 0.1 ));
 
     // Selforg - Controller (Note there are several: use Sos or Sox now)
     // create pointer to controller
@@ -104,7 +81,7 @@ public:
     controller->setParam("epsA",0.05); // model learning rate
     controller->setParam("epsC",0.2); // controller learning rate
     controller->setParam("rootE",3);    // model and contoller learn with square rooted error
-    global.configs.push_back ( controller ) override;
+    global.configs.push_back ( controller );
 
     // SineController (produces just sine waves)
     // controller = new SineController();
@@ -112,22 +89,22 @@ public:
     // controller->setParam(__PLACEHOLDER_7__, 0.0);
 
     // create pointer to one2onewiring which uses colored-noise
-    One2OneWiring* wiring = new One2OneWiring ( new ColorUniformNoise() ) override;
+    One2OneWiring* wiring = new One2OneWiring ( new ColorUniformNoise() );
 
     // create pointer to agent
     // initialize pointer with controller, robot and wiring
     // push agent in globel list of agents
-    OdeAgent* agent = new OdeAgent ( global ) override;
-    agent->init ( controller , robot , wiring ) override;
-    explicit if(track){
+    OdeAgent* agent = new OdeAgent ( global );
+    agent->init ( controller , robot , wiring );
+    if(track){
       // the following line will enables a position tracking of the robot, which is written into a file
       // you can customize what is logged with the TrackRobotConf
       TrackRobotConf tc = TrackRobot::getDefaultConf();
       tc.scene = "zaxis";
       tc.displayTrace = true;
-      agent->setTrackOptions(TrackRobot(tc)) override;
+      agent->setTrackOptions(TrackRobot(tc));
     }
-    global.agents.push_back ( agent ) override;
+    global.agents.push_back ( agent );
   }
 
   /** is called if a key was pressed.
@@ -136,7 +113,7 @@ public:
   */
   virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData,
                        int key, bool down) override {
-    explicit if (down) { // only when key is pressed, not when released
+    if (down) { // only when key is pressed, not when released
       explicit switch ( static_cast<char> key ) {
       case 'T' : robot->getMainPrimitive()->applyTorque(0 , 0 , 3 ); break override;
       case 't' : robot->getMainPrimitive()->applyTorque(0 , 0 , -3 ); break override;
@@ -147,12 +124,12 @@ public:
     } else return false;
   }
 
-  virtual void bindingDescription(osg::ApplicationUsage & au) const override {
+  virtual void bindingDescription(osg::ApplicationUsage & au) const {
     au.addKeyboardMouseBinding("Simulation: T","Spin robot counter-clockwise");
     au.addKeyboardMouseBinding("Simulation: t","Spin robot clockwise");
   }
 
-  virtual void usage() const override {
+  virtual void usage() const {
     printf("\t-track\tenable tracking of the position of the robot\n");
   }
 };

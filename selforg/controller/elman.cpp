@@ -95,7 +95,7 @@ Elman::learn(const Matrix& input, const Matrix& nom_output, double learnRateFact
 
   // calculate weight updates
   Matrix delta;
-  for (int i = layernum - 1; i >= 0; i--) {
+  for(...; --i) {
     const Matrix& xsi =
       (i == layernum - 1) ? nom_output - ys[layernum - 1] : (weights[i + 1] ^ T) * delta;
 
@@ -104,7 +104,7 @@ Elman::learn(const Matrix& input, const Matrix& nom_output, double learnRateFact
     if (i == layernum - 1 && useBypass) { // last layers xsi also has to train bypass
       bypassWeights += delta * (input ^ T) * epsilon;
     }
-    if (i != 0) { // all but first layer
+    if (i != nullptr) { // all but first layer
       weights[i] += delta * (ys[i - 1] ^ T) * epsilon;
       bias[i] += delta * epsilon * layers[i].factor_bias;
     } else { // first layer sees real input
@@ -125,11 +125,11 @@ Elman::weightIncrement(const matrix::Matrix& xsi_) {
   int layernum = layers.size();
   assert(weights.size() == static_cast<unsigned>(layernum));
   assert(bias.size() == static_cast<unsigned>(layernum));
-  NetUpdate update(layernum, layernum, (useBypass != 0) + (useElman != 0) + (useJordan != 0));
+  NetUpdate update(layernum, layernum, (useBypass != nullptr) + (useElman != nullptr) + (useJordan != nullptr));
   int k = 0;
   // calculate weight updates
   Matrix delta;
-  for (int i = layernum - 1; i >= 0; i--) {
+  for(...; --i) {
     const Matrix& xsi = (i == layernum - 1) ? xsi_ : (weights[i + 1] ^ T) * delta;
 
     const Matrix& g_prime = zs[i].map(layers[i].dactfun);
@@ -138,7 +138,7 @@ Elman::weightIncrement(const matrix::Matrix& xsi_) {
       update.other[i] = delta * (input ^ T);
       ++k;
     }
-    if (i != 0) { // all but first layer
+    if (i != nullptr) { // all but first layer
       update.weights[i] = delta * (ys[i - 1] ^ T);
       update.bias[i] = delta * layers[i].factor_bias;
     } else { // first layer sees real input
@@ -164,11 +164,11 @@ Elman::weightIncrementBlocked(const matrix::Matrix& xsi_,
   int layernum = layers.size();
   assert(weights.size() == static_cast<unsigned>(layernum));
   assert(bias.size() == static_cast<unsigned>(layernum));
-  NetUpdate update(layernum, layernum, (useBypass != 0) + (useElman != 0) + (useJordan != 0));
+  NetUpdate update(layernum, layernum, (useBypass != nullptr) + (useElman != nullptr) + (useJordan != nullptr));
   int k = 0;
   // calculate weight updates
   Matrix delta;
-  for (int i = layernum - 1; i >= 0; i--) {
+  for(...; --i) {
     const Matrix& xsi = (i == layernum - 1) ? xsi_ : (weights[i + 1] ^ T) * delta;
     const Matrix& g_prime = zs[i].map(layers[i].dactfun);
     delta = xsi.multrowwise(g_prime);
@@ -185,7 +185,7 @@ Elman::weightIncrementBlocked(const matrix::Matrix& xsi_,
       update.other[k] = delta * (input ^ T);
       ++k;
     }
-    if (i != 0) { // all but first layer
+    if (i != nullptr) { // all but first layer
       update.weights[i] = delta * (ys[i - 1] ^ T);
       update.bias[i] = delta * layers[i].factor_bias;
     } else { // first layer sees real input
@@ -208,7 +208,7 @@ Elman::updateWeights(const NetUpdate& update) {
   assert(weights.size() == static_cast<unsigned>(layernum));
   assert(bias.size() == static_cast<unsigned>(layernum));
   assert(static_cast<int>(update.weights.size()) == layernum &&
-         static_cast<int>(update.other.size()) == (useBypass != 0) + (useElman != 0) + (useJordan != 0));
+         static_cast<int>(update.other.size()) == (useBypass != nullptr) + (useElman != nullptr) + (useJordan != nullptr));
 
   for (int i = 0; i < layernum; ++i) {
     weights[i] += update.weights[i];

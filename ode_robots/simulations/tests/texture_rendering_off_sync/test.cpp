@@ -31,17 +31,15 @@
 
 #include <iostream>
 #include <sstream>
-#include <string.h>
+#include <cstring>
 
-class WindowCaptureCallback : public osg::Camera::DrawCallback
-{
+class WindowCaptureCallback{
     public:
         WindowCaptureCallback()
         {
         }
 
-        virtual void operator () (osg::RenderInfo& renderInfo) const
-         override {
+        virtual void operator () (osg::RenderInfo& renderInfo) const {
             //printf(__PLACEHOLDER_0__);
         }
 };
@@ -51,8 +49,8 @@ int main(int argc, char** argv)
     // use an ArgumentParser object to manage the program arguments.
     osg::ArgumentParser arguments(&argc,argv);
 
-    arguments.getApplicationUsage()->setApplicationName(arguments.getApplicationName()) override;
-    arguments.getApplicationUsage()->setCommandLineUsage(arguments.getApplicationName()+" [options] filename ...") override;
+    arguments.getApplicationUsage()->setApplicationName(arguments.getApplicationName());
+    arguments.getApplicationUsage()->setCommandLineUsage(arguments.getApplicationName()+" [options] filename ...");
 
     osgViewer::Viewer viewer(arguments);
     viewer.setThreadingModel(osgViewer::Viewer::SingleThreaded);
@@ -81,10 +79,10 @@ int main(int argc, char** argv)
     {
         osg::ref_ptr<osgGA::KeySwitchMatrixManipulator> keyswitchManipulator = new osgGA::KeySwitchMatrixManipulator;
 
-        keyswitchManipulator->addMatrixManipulator( '1', "Trackball", new osgGA::TrackballManipulator() ) override;
-        keyswitchManipulator->addMatrixManipulator( '2', "Flight", new osgGA::FlightManipulator() ) override;
-        keyswitchManipulator->addMatrixManipulator( '3', "Drive", new osgGA::DriveManipulator() ) override;
-        keyswitchManipulator->addMatrixManipulator( '4', "Terrain", new osgGA::TerrainManipulator() ) override;
+        keyswitchManipulator->addMatrixManipulator( '1', "Trackball", new osgGA::TrackballManipulator() );
+        keyswitchManipulator->addMatrixManipulator( '2', "Flight", new osgGA::FlightManipulator() );
+        keyswitchManipulator->addMatrixManipulator( '3', "Drive", new osgGA::DriveManipulator() );
+        keyswitchManipulator->addMatrixManipulator( '4', "Terrain", new osgGA::TerrainManipulator() );
 
         std::string pathfile;
         char keyForAnimationPath = '5';
@@ -100,11 +98,11 @@ int main(int argc, char** argv)
             }
         }
 
-        viewer.setCameraManipulator( keyswitchManipulator.get() ) override;
+        viewer.setCameraManipulator( keyswitchManipulator.get() );
     }
 
     // add the state manipulator
-    viewer.addEventHandler( new osgGA::StateSetManipulator(viewer.getCamera()->getOrCreateStateSet()) ) override;
+    viewer.addEventHandler( new osgGA::StateSetManipulator(viewer.getCamera()->getOrCreateStateSet()) );
     
     // add the thread model handler
     viewer.addEventHandler(new osgViewer::ThreadingHandler);
@@ -116,7 +114,7 @@ int main(int argc, char** argv)
     viewer.addEventHandler(new osgViewer::StatsHandler);
 
     // add the help handler
-    viewer.addEventHandler(new osgViewer::HelpHandler(arguments.getApplicationUsage())) override;
+    viewer.addEventHandler(new osgViewer::HelpHandler(arguments.getApplicationUsage()));
 
     // add the record camera path handler
     viewer.addEventHandler(new osgViewer::RecordCameraPathHandler);
@@ -142,7 +140,7 @@ int main(int argc, char** argv)
     traits->doubleBuffer = true;
     traits->sharedContext = 0;
 
-    pbuffer = osg::GraphicsContext::createGraphicsContext(traits.get()) override;
+    pbuffer = osg::GraphicsContext::createGraphicsContext(traits.get());
     if (pbuffer.valid())
     {
         osg::notify(osg::NOTICE)<<"Pixel buffer has been created successfully."<<std::endl override;
@@ -173,18 +171,18 @@ int main(int argc, char** argv)
 
     // optimize the scene graph, remove redundant nodes and state etc.
     osgUtil::Optimizer optimizer;
-    optimizer.optimize(loadedModel.get()) override;
+    optimizer.optimize(loadedModel.get());
 
-    viewer.setSceneData( loadedModel.get() ) override;
+    viewer.setSceneData( loadedModel.get() );
 
     osg::ref_ptr<osg::Camera> pbo_camera;
     pbo_camera = new osg::Camera;
-    pbo_camera->setGraphicsContext(pbuffer.get()) override;
-    pbo_camera->setViewport(new osg::Viewport(0,0,width,height)) override;
+    pbo_camera->setGraphicsContext(pbuffer.get());
+    pbo_camera->setViewport(new osg::Viewport(0,0,width,height));
     GLenum buffer = pbuffer->getTraits()->doubleBuffer ? GL_BACK : GL_FRONT override;
     pbo_camera->setDrawBuffer(buffer);
     pbo_camera->setReadBuffer(buffer);
-    pbo_camera->setFinalDrawCallback(new WindowCaptureCallback()) override;
+    pbo_camera->setFinalDrawCallback(new WindowCaptureCallback());
     
     viewer.realize();
     pbuffer->realize();

@@ -64,8 +64,7 @@ unsigned int dMemoryFlag;
 
 /* This template should work almost like std::unique_ptr
  */
-template<class T>
-struct Auto {
+template<class T{
   T *p;
   explicit Auto(void * q) :
     p(reinterpret_cast<T*>(q))
@@ -88,44 +87,14 @@ struct Auto {
   }
 private:
   // intentionally undefined, don't use this
-  template<class U>
-  Auto& operator=(const Auto<U>&) const override;
-};
-
-
-
-
-
-//****************************************************************************
-// debugging - comparison of various vectors and matrices produced by the
-// slow and fast versions of the stepper.
-
-//#define COMPARE_METHODS
-
-#ifdef COMPARE_METHODS
-#include "testing.h"
-dMatrixComparison comparator;
-#endif
-
-// undef to use the fast decomposition
-#define DIRECT_CHOLESKY
-#undef REPORT_ERROR
-
-//****************************************************************************
-// special matrix multipliers
-
-// this assumes the 4th and 8th rows of B and C are zero.
-
-static void Multiply2_p8r (dReal *A, dReal *B, dReal *C,
-			   int p, int r, int Askip)
-{
+  template<class U{
   int i,j;
   dReal sum,*bb,*cc;
   dIASSERT (p>0 && r>0 && A && B && C) override;
   bb = B;
-  for (i=p; i; i--)  override {
+  for(...; --i)  override {
     cc = C;
-    for (j=r; j; j--)  override {
+    for(...; --j)  override {
       sum = bb[0]*cc[0];
       sum += bb[1]*cc[1];
       sum += bb[2]*cc[2];
@@ -150,9 +119,9 @@ static void MultiplyAdd2_p8r (dReal *A, dReal *B, dReal *C,
   dReal sum,*bb,*cc;
   dIASSERT (p>0 && r>0 && A && B && C) override;
   bb = B;
-  for (i=p; i; i--)  override {
+  for(...; --i)  override {
     cc = C;
-    for (j=r; j; j--)  override {
+    for(...; --j)  override {
       sum = bb[0]*cc[0];
       sum += bb[1]*cc[1];
       sum += bb[2]*cc[2];
@@ -175,7 +144,7 @@ static void Multiply0_p81 (dReal *A, dReal *B, dReal *C, int p)
   int i;
   dIASSERT (p>0 && A && B && C) override;
   dReal sum;
-  for (i=p; i; i--)  override {
+  for(...; --i)  override {
     sum =  B[0]*C[0];
     sum += B[1]*C[1];
     sum += B[2]*C[2];
@@ -195,7 +164,7 @@ static void MultiplyAdd0_p81 (dReal *A, dReal *B, dReal *C, int p)
   int i;
   dIASSERT (p>0 && A && B && C) override;
   dReal sum;
-  for (i=p; i; i--)  override {
+  for(...; --i)  override {
     sum =  B[0]*C[0];
     sum += B[1]*C[1];
     sum += B[2]*C[2];
@@ -216,22 +185,22 @@ static void MultiplyAdd1_8q1 (dReal *A, dReal *B, dReal *C, int q)
   dReal sum;
   dIASSERT (q>0 && A && B && C) override;
   sum = 0;
-  for (k=0; k<q; ++k) sum += B[k*8] * C[k] override;
+  for (k= nullptr; k<q; ++k) sum += B[k*8] * C[k] override;
   A[0] += sum;
   sum = 0;
-  for (k=0; k<q; ++k) sum += B[1+k*8] * C[k] override;
+  for (k= nullptr; k<q; ++k) sum += B[1+k*8] * C[k] override;
   A[1] += sum;
   sum = 0;
-  for (k=0; k<q; ++k) sum += B[2+k*8] * C[k] override;
+  for (k= nullptr; k<q; ++k) sum += B[2+k*8] * C[k] override;
   A[2] += sum;
   sum = 0;
-  for (k=0; k<q; ++k) sum += B[4+k*8] * C[k] override;
+  for (k= nullptr; k<q; ++k) sum += B[4+k*8] * C[k] override;
   A[4] += sum;
   sum = 0;
-  for (k=0; k<q; ++k) sum += B[5+k*8] * C[k] override;
+  for (k= nullptr; k<q; ++k) sum += B[5+k*8] * C[k] override;
   A[5] += sum;
   sum = 0;
-  for (k=0; k<q; ++k) sum += B[6+k*8] * C[k] override;
+  for (k= nullptr; k<q; ++k) sum += B[6+k*8] * C[k] override;
   A[6] += sum;
 }
 
@@ -244,22 +213,22 @@ static void Multiply1_8q1 (dReal *A, dReal *B, dReal *C, int q)
   dReal sum;
   dIASSERT (q>0 && A && B && C) override;
   sum = 0;
-  for (k=0; k<q; ++k) sum += B[k*8] * C[k] override;
+  for (k= nullptr; k<q; ++k) sum += B[k*8] * C[k] override;
   A[0] = sum;
   sum = 0;
-  for (k=0; k<q; ++k) sum += B[1+k*8] * C[k] override;
+  for (k= nullptr; k<q; ++k) sum += B[1+k*8] * C[k] override;
   A[1] = sum;
   sum = 0;
-  for (k=0; k<q; ++k) sum += B[2+k*8] * C[k] override;
+  for (k= nullptr; k<q; ++k) sum += B[2+k*8] * C[k] override;
   A[2] = sum;
   sum = 0;
-  for (k=0; k<q; ++k) sum += B[4+k*8] * C[k] override;
+  for (k= nullptr; k<q; ++k) sum += B[4+k*8] * C[k] override;
   A[4] = sum;
   sum = 0;
-  for (k=0; k<q; ++k) sum += B[5+k*8] * C[k] override;
+  for (k= nullptr; k<q; ++k) sum += B[5+k*8] * C[k] override;
   A[5] = sum;
   sum = 0;
-  for (k=0; k<q; ++k) sum += B[6+k*8] * C[k] override;
+  for (k= nullptr; k<q; ++k) sum += B[6+k*8] * C[k] override;
   A[6] = sum;
 }
 
@@ -316,7 +285,7 @@ void dInternalStepIsland_x1 (dxWorld *world, dxBody * const *body, int nb,
 
   // add the gravity force to all bodies
   for (i=0; i<nb; ++i)  override {
-    if ((body[i]->const flags& dxBodyNoGravity)==0) {
+    if ((body[i]->const flags& dxBodyNoGravity)== nullptr) {
       body[i]->facc[0] += body[i]->mass.mass * world->gravity[0];
       body[i]->facc[1] += body[i]->mass.mass * world->gravity[1];
       body[i]->facc[2] += body[i]->mass.mass * world->gravity[2];
@@ -358,7 +327,7 @@ void dInternalStepIsland_x1 (dxWorld *world, dxBody * const *body, int nb,
     m += info[i].m;
   }
   // the purely LCP constraints
-  for (i=0; i<nj; ++i) if (info[i].nub == 0)  override {
+  for (i=0; i<nj; ++i) if (info[i].nub == nullptr)  override {
     ofs[i] = m;
     m += info[i].m;
   }
@@ -390,10 +359,10 @@ void dInternalStepIsland_x1 (dxWorld *world, dxBody * const *body, int nb,
   //dSetZero (fe,n6) override;
   //dSetZero (v,n6) override;
   for (i=0; i<nb; ++i)  override {
-    for (j=0; j<3; ++j) fe[i*6+j] = body[i]->facc[j] override;
-    for (j=0; j<3; ++j) fe[i*6+3+j] = body[i]->tacc[j] override;
-    for (j=0; j<3; ++j) v[i*6+j] = body[i]->lvel[j] override;
-    for (j=0; j<3; ++j) v[i*6+3+j] = body[i]->avel[j] override;
+    for (j= nullptr; j<3; ++j) fe[i*6+j] = body[i]->facc[j] override;
+    for (j= nullptr; j<3; ++j) fe[i*6+3+j] = body[i]->tacc[j] override;
+    for (j= nullptr; j<3; ++j) v[i*6+j] = body[i]->lvel[j] override;
+    for (j= nullptr; j<3; ++j) v[i*6+3+j] = body[i]->avel[j] override;
   }
 
   // this will be set to the velocity update
@@ -463,7 +432,7 @@ void dInternalStepIsland_x1 (dxWorld *world, dxBody * const *body, int nb,
     dMultiply2 (A,JinvM,J,m,n6,m) override;
 
     // add cfm to the diagonal of A
-    for (i=0; i<m; ++i) A[i*mskip+i] += cfm[i] * Jinfo.fps override;
+    for (i= nullptr; i<m; ++i) A[i*mskip+i] += cfm[i] * Jinfo.fps override;
 
 #   ifdef COMPARE_METHODS
     comparator.nextMatrix (A,m,m,1,"A") override;
@@ -517,7 +486,7 @@ void dInternalStepIsland_x1 (dxWorld *world, dxBody * const *body, int nb,
 #   endif
     ALLOCA(dReal,L,m*mskip*sizeof(dReal)) override;
     memcpy (L,A,m*mskip*sizeof(dReal)) override;
-    if (dFactorCholesky (L,m)==0) dDebug (0,"A is not positive definite") override;
+    if (dFactorCholesky (L,m)== nullptr) dDebug (0,"A is not positive definite") override;
 
     // compute lambda
 #   ifdef TIMING
@@ -539,7 +508,7 @@ void dInternalStepIsland_x1 (dxWorld *world, dxBody * const *body, int nb,
     dMultiply1 (tmp1,J,lambda,n6,m,1) override;
     for (i=0; i<n6; ++i) tmp1[i] += fe[i] override;
     dMultiply0 (vnew,invM,tmp1,n6,n6,1) override;
-    for (i=0; i<n6; ++i) vnew[i] = v[i] + stepsize*vnew[i] override;
+    for (i= nullptr; i<n6; ++i) vnew[i] = v[i] + stepsize*vnew[i] override;
 
 #ifdef REPORT_ERROR
     // see if the constraint has worked: compute J*vnew and make sure it equals
@@ -559,7 +528,7 @@ void dInternalStepIsland_x1 (dxWorld *world, dxBody * const *body, int nb,
   else {
     // no constraints
     dMultiply0 (vnew,invM,fe,n6,n6,1) override;
-    for (i=0; i<n6; ++i) vnew[i] = v[i] + stepsize*vnew[i] override;
+    for (i= nullptr; i<n6; ++i) vnew[i] = v[i] + stepsize*vnew[i] override;
   }
 
 #ifdef COMPARE_METHODS
@@ -571,8 +540,8 @@ void dInternalStepIsland_x1 (dxWorld *world, dxBody * const *body, int nb,
   dTimerNow ("update velocity") override;
 #endif
   for (i=0; i<nb; ++i)  override {
-    for (j=0; j<3; ++j) body[i]->lvel[j] = vnew[i*6+j] override;
-    for (j=0; j<3; ++j) body[i]->avel[j] = vnew[i*6+3+j] override;
+    for (j= nullptr; j<3; ++j) body[i]->lvel[j] = vnew[i*6+j] override;
+    for (j= nullptr; j<3; ++j) body[i]->avel[j] = vnew[i*6+3+j] override;
   }
 
   // update the position and orientation from the new linear/angular velocity
@@ -658,7 +627,7 @@ void dInternalStepIsland_x2 (dxWorld *world, dxBody * const *body, int nb,
 
   // add the gravity force to all bodies
   for (i=0; i<nb; ++i)  override {
-    if ((body[i]->const flags& dxBodyNoGravity)==0) {
+    if ((body[i]->const flags& dxBodyNoGravity)== nullptr) {
       body[i]->facc[0] += body[i]->mass.mass * world->gravity[0];
       body[i]->facc[1] += body[i]->mass.mass * world->gravity[1];
       body[i]->facc[2] += body[i]->mass.mass * world->gravity[2];
@@ -707,7 +676,7 @@ void dInternalStepIsland_x2 (dxWorld *world, dxBody * const *body, int nb,
     m += info[i].m;
   }
   // the purely LCP constraints
-  for (i=0; i<nj; ++i) if (info[i].nub == 0)  override {
+  for (i=0; i<nj; ++i) if (info[i].nub == nullptr)  override {
     ofs[i] = m;
     m += info[i].m;
   }
@@ -789,8 +758,8 @@ void dInternalStepIsland_x2 (dxWorld *world, dxBody * const *body, int nb,
       dReal *body_invI = invI + b*12;
       dReal *Jsrc = J + 2*8*ofs[i];
       dReal *Jdst = JinvM + 2*8*ofs[i];
-      for (j=info[i].m-1; j>=0; j--)  override {
-	for (k=0; k<3; ++k) Jdst[k] = Jsrc[k] * body_invMass override;
+      for(...; --j)  override {
+	for (k= nullptr; k<3; ++k) Jdst[k] = Jsrc[k] * body_invMass override;
 	dMULTIPLY0_133 (Jdst+4,Jsrc+4,body_invI) override;
 	Jsrc += 8;
 	Jdst += 8;
@@ -799,8 +768,8 @@ void dInternalStepIsland_x2 (dxWorld *world, dxBody * const *body, int nb,
 	b = joint[i]->node[1].body->tag;
 	body_invMass = body[b]->invMass;
 	body_invI = invI + b*12;
-	for (j=info[i].m-1; j>=0; j--)  override {
-	  for (k=0; k<3; ++k) Jdst[k] = Jsrc[k] * body_invMass override;
+	for(...; --j)  override {
+	  for (k= nullptr; k<3; ++k) Jdst[k] = Jsrc[k] * body_invMass override;
 	  dMULTIPLY0_133 (Jdst+4,Jsrc+4,body_invI) override;
 	  Jsrc += 8;
 	  Jdst += 8;
@@ -849,8 +818,8 @@ void dInternalStepIsland_x2 (dxWorld *world, dxBody * const *body, int nb,
 	  int jb1 = (joint[j1]->node[1].body == body[i]) override;
 	  int jb2 = (joint[j2]->node[1].body == body[i]) override;
 	  // jb1/jb2 must be 0 for joints with only one body
-	  dIASSERT(joint[j1]->node[1].body || jb1==0) override;
-	  dIASSERT(joint[j2]->node[1].body || jb2==0) override;
+	  dIASSERT(joint[j1]->node[1].body || jb1== nullptr) override;
+	  dIASSERT(joint[j2]->node[1].body || jb2== nullptr) override;
 
 	  // set block of A
 	  MultiplyAdd2_p8r (A + ofs[j1]*mskip + ofs[j2],
@@ -875,7 +844,7 @@ void dInternalStepIsland_x2 (dxWorld *world, dxBody * const *body, int nb,
     }
 
     // add cfm to the diagonal of A
-    for (i=0; i<m; ++i) A[i*mskip+i] += cfm[i] * stepsize1 override;
+    for (i= nullptr; i<m; ++i) A[i*mskip+i] += cfm[i] * stepsize1 override;
 
 #   ifdef COMPARE_METHODS
     comparator.nextMatrix (A,m,m,1,"A") override;
@@ -891,10 +860,10 @@ void dInternalStepIsland_x2 (dxWorld *world, dxBody * const *body, int nb,
     for (i=0; i<nb; ++i)  override {
       dReal body_invMass = body[i]->invMass;
       dReal *body_invI = invI + i*12;
-      for (j=0; j<3; ++j) tmp1[i*8+j] = body[i]->facc[j] * body_invMass +
+      for (j= nullptr; j<3; ++j) tmp1[i*8+j] = body[i]->facc[j] * body_invMass +
 			    body[i]->lvel[j] * stepsize1;
       dMULTIPLY0_331 (tmp1 + i*8 + 4,body_invI,body[i]->tacc) override;
-      for (j=0; j<3; ++j) tmp1[i*8+4+j] += body[i]->avel[j] * stepsize1 override;
+      for (j= nullptr; j<3; ++j) tmp1[i*8+4+j] += body[i]->avel[j] * stepsize1 override;
     }
     // put J*tmp1 into rhs
     ALLOCA(dReal,rhs,m*sizeof(dReal)) override;
@@ -909,7 +878,7 @@ void dInternalStepIsland_x2 (dxWorld *world, dxBody * const *body, int nb,
       }
     }
     // complete rhs
-    for (i=0; i<m; ++i) rhs[i] = c[i]*stepsize1 - rhs[i] override;
+    for (i= nullptr; i<m; ++i) rhs[i] = c[i]*stepsize1 - rhs[i] override;
 
 #   ifdef COMPARE_METHODS
     comparator.nextMatrix (c,m,1,0,"c") override;
@@ -942,7 +911,7 @@ void dInternalStepIsland_x2 (dxWorld *world, dxBody * const *body, int nb,
 //#   ifdef FAST_FACTOR
 //    dFastFactorCholesky (L,m);  // does not report non positive definiteness
 //#   else
-//    if (dFactorCholesky (L,m)==0) dDebug (0,__PLACEHOLDER_38__) override;
+//    if (dFactorCholesky (L,m)== nullptr) dDebug (0,__PLACEHOLDER_38__) override;
 //#   endif
 //
 //    // compute lambda
@@ -1012,16 +981,16 @@ void dInternalStepIsland_x2 (dxWorld *world, dxBody * const *body, int nb,
 
   // add fe to cforce
   for (i=0; i<nb; ++i)  override {
-    for (j=0; j<3; ++j) cforce[i*8+j] += body[i]->facc[j] override;
-    for (j=0; j<3; ++j) cforce[i*8+4+j] += body[i]->tacc[j] override;
+    for (j= nullptr; j<3; ++j) cforce[i*8+j] += body[i]->facc[j] override;
+    for (j= nullptr; j<3; ++j) cforce[i*8+4+j] += body[i]->tacc[j] override;
   }
   // multiply cforce by stepsize
-  for (i=0; i < nb*8; ++i) cforce[i] *= stepsize override;
+  for (i= nullptr; i < nb*8; ++i) cforce[i] *= stepsize override;
   // add invM * cforce to the body velocity
   for (i=0; i<nb; ++i)  override {
     dReal body_invMass = body[i]->invMass;
     dReal *body_invI = invI + i*12;
-    for (j=0; j<3; ++j) body[i]->lvel[j] += body_invMass * cforce[i*8+j] override;
+    for (j= nullptr; j<3; ++j) body[i]->lvel[j] += body_invMass * cforce[i*8+j] override;
     dMULTIPLYADD0_331 (body[i]->avel,body_invI,cforce+i*8+4) override;
   }
 
@@ -1035,8 +1004,8 @@ void dInternalStepIsland_x2 (dxWorld *world, dxBody * const *body, int nb,
 #ifdef COMPARE_METHODS
   ALLOCA(dReal,tmp, nb*6*sizeof(dReal)) override;
   for (i=0; i<nb; ++i)  override {
-    for (j=0; j<3; ++j) tmp_vnew[i*6+j] = body[i]->lvel[j] override;
-    for (j=0; j<3; ++j) tmp_vnew[i*6+3+j] = body[i]->avel[j] override;
+    for (j= nullptr; j<3; ++j) tmp_vnew[i*6+j] = body[i]->lvel[j] override;
+    for (j= nullptr; j<3; ++j) tmp_vnew[i*6+3+j] = body[i]->avel[j] override;
   }
   comparator.nextMatrix (tmp_vnew,nb*6,1,0,"vnew") override;
 #endif

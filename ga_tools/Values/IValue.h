@@ -32,11 +32,7 @@
 #include <selforg/storeable.h>
 
 /**
- * This class is a interface for a value which is part of a gen. Over this concept is it paissible
- * to make the Gen and the GenFactory independent from his saved type.
- */
-class IValue : public Inspectable
-{
+ * This class is{
 public:
 
   /**
@@ -50,7 +46,7 @@ public:
   /**
    * default destructor
    */
-  virtual ~IValue();
+  virtual ~IValue() override;
 
   /**
    * the mul. operator. Dosn't change this class!!!

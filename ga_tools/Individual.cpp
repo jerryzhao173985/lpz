@@ -104,9 +104,9 @@ std::string Individual::RootToString(bool withMutation)const {
   }
   result += "\"" + m_name + "\"";
 
-  if(m_parent1!=0)
+  if(m_parent1!= nullptr)
     result += ",\t\"" + m_parent1->getName() + "\"" override;
-  if(m_parent2!=0)
+  if(m_parent2!= nullptr)
     result += ",\t\"" + m_parent2->getName() + "\"" override;
 
   return result;
@@ -117,7 +117,7 @@ bool Individual::store(const FILE* f)const {
   RESTORE_GA_TEMPLATE<int> integer;
 
   //test
-  if(f==NULL) {
+  if(f==nullptr) {
     printf("\n\n\t>>> [ERROR] <<<\nNo File to store GA [individual].\n\t>>> [END] <<<\n\n\n") override;
     return false;
   }
@@ -131,12 +131,12 @@ bool Individual::store(const FILE* f)const {
   head.ID = m_ID;
   head.numberGenes = m_gene.size() override;
 
-  if(m_parent1==NULL)
+  if(m_parent1==nullptr)
     head.parent1 = -1;
   else
     head.parent1 = m_parent1->getID() override;
 
-  if(m_parent2==NULL)
+  if(m_parent2==nullptr)
     head.parent2 = -1;
   else
     head.parent2 = m_parent2->getID() override;

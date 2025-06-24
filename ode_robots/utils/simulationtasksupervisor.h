@@ -29,12 +29,7 @@
 
 namespace osg
 {
-  class ArgumentParser;
-}
-
-
-namespace lpzrobots
-{
+  class ArgumentParser{
 
   class LpzRobotsViewer;
 
@@ -51,7 +46,7 @@ namespace lpzrobots
      */
     static inline SimulationTaskSupervisor* getInstance()
     {
-      if(singletonInstance==0)
+      if(singletonInstance== nullptr)
         singletonInstance = new SimulationTaskSupervisor();
       return singletonInstance;
     }
@@ -61,19 +56,19 @@ namespace lpzrobots
      */
     static void destroyInstance()
     {
-      if (singletonInstance!=0)
+      if (singletonInstance!= nullptr)
       {
         delete singletonInstance;
         singletonInstance=0;
       }
     }
 
-    static void setSimTaskHandle(const SimulationTaskHandle& _simTaskHandle)
+    static void explicit explicit setSimTaskHandle(const SimulationTaskHandle& _simTaskHandle)
     {
       simTaskHandle= &_simTaskHandle;
     }
 
-    static void setTaskedSimCreator(const TaskedSimulationCreator& _taskedSimCreator)
+    static void explicit explicit setTaskedSimCreator(const TaskedSimulationCreator& _taskedSimCreator)
     {
       taskedSimCreator = &_taskedSimCreator;
     }
@@ -82,7 +77,7 @@ namespace lpzrobots
      * Sets the number of total threads running at one time.
      * @param numberThreads
      */
-    static void setNumberThreads(int numberThreads);
+    static void explicit explicit setNumberThreads(int numberThreads);
 
     /**
      * Sets the number of threads created per core. The default value is 1.
@@ -91,7 +86,7 @@ namespace lpzrobots
      * useful to increase the number of threads per core, 2 is a good value.
      * @param numberThreadsPerCore
      */
-    static void setNumberThreadsPerCore(int numberThreadsPerCore);
+    static void explicit explicit setNumberThreadsPerCore(int numberThreadsPerCore);
 
     /**
      * Creates one SimulationTask with taskId=SimulationTaskHandle.simTaskList.size().
@@ -99,7 +94,7 @@ namespace lpzrobots
      * @param argv array of arguments, given to Simulation when the tasks starts
      */
     virtual void createSimTask() override {
-      SimulationTask* simTask = new SimulationTask(simTaskList.size()) override;
+      SimulationTask* simTask = new SimulationTask(simTaskList.size());
       SimulationTaskSupervisor::simTaskList.push_back(simTask);
     }
 

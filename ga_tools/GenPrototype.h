@@ -32,27 +32,7 @@
 #include <map>
 
 // forward declarations
-class Generation;
-class GenContext;
-class IValue;
-class Gen;
-
-// gen. alg. includes
-#include "IRandomStrategy.h"
-#include "IMutationStrategy.h"
-#include "restore.h"
-
-/**
- * The GenPrototype class.
- *
- *   This class is used for group some gens and is needed from the
- *   genFactory. It saves all GenContexte which are use this prototype.
- *   The group of gens becomes whit it an name.
- *
- *   The prototypes inside the gen. alg. are saved in the GenContext, in
- *   the Gen and in the GenEngine (only here can be deleted!!!).
- */
-class GenPrototype {
+class Generation{
 public:
 	/**
 	 * constructor to create a GenPrototype. Information which the class need are

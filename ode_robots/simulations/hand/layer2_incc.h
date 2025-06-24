@@ -46,7 +46,7 @@
 
 #include "invertnchannelcontrollerhebbh.h"
 
-#include <assert.h>
+#include <cassert>
 #include <cmath>
 
 #include <selforg/matrix.h>
@@ -54,18 +54,12 @@
 
 
 /**
- * class for robot controller that uses georg's matrixlib for 
- *  direct matrix inversion for n channels 
- * (simple one layer networks)
- * This derivative is used as a basic layer of a two layered control structure.
- * 
- */
-class Layer2_INCC : public InvertNChannelControllerHebbH {
+ * class for{
 
 public:
   Layer2_INCC(int _buffersize, bool _update_only_1=false);
 
-  //  virtual ~InvertNChannelControllerHebbH();
+  //  virtual ~InvertNChannelControllerHebbH() override;
 
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
 

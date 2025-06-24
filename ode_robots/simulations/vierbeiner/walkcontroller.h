@@ -34,32 +34,32 @@
 #define __WALKCONTROLLER_H
 
 
-#include <stdio.h>
+#include <cstdio>
 #include <selforg/abstractcontroller.h>
 
 /**
  * robot controller for vierbeiner walk (hard coded)
  */
-class WalkController : public AbstractController {
+class WalkController{
 public:
 
   WalkController();
 
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
-  virtual int getSensorNumber() const override {return number_sensors;}
-  virtual int getMotorNumber() const override {return number_motors;}
+  virtual int getSensorNumber() const {return number_sensors;}
+  virtual int getMotorNumber() const {return number_motors;}
   virtual void step(const sensor* sensors, int sensornumber,
                     motor* motors, int motornumber);
   virtual void stepNoLearning(const sensor* , int number_sensors,
                               motor* , int number_motors);
 
-  virtual std::list<iparamkey> getInternalParamNames()const override { return std::list<iparamkey>(); }
+  virtual std::list<iparamkey> getInternalParamNames()const { return std::list<iparamkey>(); }
 
-  virtual std::list<iparamval> getInternalParams() const override { return std::list<iparamval>(); }
+  virtual std::list<iparamval> getInternalParams() const { return std::list<iparamval>(); }
 
   /********* STORABLE INTERFACE ******/
   /// @see Storable
-  virtual bool store(FILE* f) const override {
+  virtual bool store(FILE* f) const {
     Configurable::print(f,"");
     return true;
   }

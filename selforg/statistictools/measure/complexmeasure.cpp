@@ -28,7 +28,7 @@
 #include "sparsearray.h"
 #include <cmath>
 #include "stl_adds.h"
-#include <assert.h>
+#include <cassert>
 #include <cstdlib>
 
 
@@ -57,12 +57,12 @@ ComplexMeasure::~ComplexMeasure()
 
 void ComplexMeasure::step()
 {
-  /*if (actualStep%1000==0)
+  /*if (actualStep%1000== nullptr)
   {
     std::cout << __PLACEHOLDER_4__ << static_cast<float>(F).getRealSize() /1024 << __PLACEHOLDER_5__;
     std::cout << __PLACEHOLDER_6__ << sizeof(int) * F.size() / 1024 << __PLACEHOLDER_7__ << F.size() << __PLACEHOLDER_8__ << std::endl;
   }*/
-  if (observedValueList.size()==0)
+  if (observedValueList.size()== nullptr)
     return;
   int valNumber = 0;
   int binNumber=0;

@@ -13,8 +13,8 @@ protected:
   double normal_mean[NUMBER_CHANNELS];   // storage for adding colored normally distributed noise to values  
 
   
-  double tau_uniform; // smoothing paramter for uniformly distibuted random numbers
-  double tau_normal;  // smoothing paramter for normally distibuted random numbers  
+  double tau_uniform = 0.0; // smoothing paramter for uniformly distibuted random numbers
+  double tau_normal = 0.0;  // smoothing paramter for normally distibuted random numbers  
 
 public:  
   NoiseGenerator(double tau_uniform=0.3, double tau_normal=0.3): : tau_uniform(tau_uniform), tau_normal(tau_normal), uniform_mean(0), normal_mean(0) {

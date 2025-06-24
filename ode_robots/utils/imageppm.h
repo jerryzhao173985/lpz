@@ -26,21 +26,21 @@
 
 #include <string>
 
-class ImagePPM {
+class ImagePPM{
 
 private:
   int image_width, image_height;
   unsigned char *image_data;
 
 public:
-  ImagePPM () override;
+  ImagePPM ();
   /// data must contain width*height*3 static_cast<RGB>(values)!
-  ImagePPM (int width, int height, unsigned char* data) override;
+  ImagePPM (int width, int height, unsigned char* data);
   ~ImagePPM();
   int loadImage(const std::string& filename); // load from PPM file (returns 0 if error)
   int storeImage(const std::string& filename); // store to PPM file (returns 0 if error)
-  int width() const override { return image_width;  }
-  int height() const override { return image_height; }
+  int width() const { return image_width;  }
+  int height() const { return image_height; }
   unsigned char *data() { return image_data;   }
 
 };

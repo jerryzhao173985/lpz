@@ -64,19 +64,7 @@
  *     storage implementet yet))
  *
  *   Revision 1.1  2010/11/30 17:07:06  wrabe
- *   - new class QConfigurableTileShowHideDialog
- *   - try to introduce user-arrangeable QConfigurationTiles (current work, not finished)
- *
- *                                                                         *
- ***************************************************************************/
-
-#include "QConfigurableTileShowHideDialog.h"
-#include <QDialogButtonBox>
-#include <QRegion>
-#include <QMessageBox>
-// #include <QLinkedList> // Not used, removed for Qt6 compatibility
-
-namespace lpzrobots {
+ *   - new class QConfigurableTileShowHideDialog{
   
   QConfigurableTileShowHideDialog::QConfigurableTileShowHideDialog(QMap<QString, QAbstractConfigurableTileWidget*>& configLineWidgetMap, QMap<QGridPos,
       QAbstractConfigurableTileWidget*>& tileIndexConfigWidgetMap, int numberOfTilesPerRow) :
@@ -143,7 +131,7 @@ namespace lpzrobots {
     foreach(QCheckBox* cb, checkBoxConfiguableShowHideList)
       {
         QAbstractConfigurableTileWidget* configurableTile = configTileWidgetMap[cb->text()];
-        if (configurableTile == 0)
+        if (configurableTile == nullptr)
           continue;
 
         if (cb->checkState() == Qt::Checked) {
@@ -156,7 +144,7 @@ namespace lpzrobots {
                 == configurableTile)
               configurableTile->show(); // just show
             else { // set to next highest possible place (place behind all other visible tileWidgets)
-              if (++highestColumn % numberOfTilesPerRow == 0) {
+              if (++highestColumn % numberOfTilesPerRow == nullptr) {
                 highestColumn = 0;
                 ++highestRow;
               }

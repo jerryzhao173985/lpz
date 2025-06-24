@@ -23,8 +23,8 @@
  ***************************************************************************/
 #include "onecontrollerperchannel.h"
 
-#include <assert.h>
-#include <string.h>
+#include <cassert>
+#include <cstring>
 
 OneControllerPerChannel::OneControllerPerChannel(ControllerGenerator* controllerGenerator,
                                                  std::string controllerName,
@@ -81,7 +81,7 @@ OneControllerPerChannel::step(const sensor* sensors,
                               motor* motors,
                               int motornumber) {
   assert(static_cast<int>(ctrl.size()) == motornumber);
-  if (numContextSensors == 0) {
+  if (numContextSensors == nullptr) {
     for (int i = 0; i < motornumber; ++i) {
       ctrl[i]->step(sensors + i, 1, motors + i, 1);
     }
@@ -103,7 +103,7 @@ OneControllerPerChannel::stepNoLearning(const sensor* sensors,
                                         int motornumber) {
   assert(static_cast<int>(ctrl.size()) == motornumber);
 
-  if (numContextSensors == 0) {
+  if (numContextSensors == nullptr) {
     for (int i = 0; i < motornumber; ++i) {
       ctrl[i]->stepNoLearning(sensors + i, 1, motors + i, 1);
     }

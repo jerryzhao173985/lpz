@@ -24,7 +24,7 @@
 	{
 		const Point*	Vertex[3];
 
-		bool BackfaceCulling(const Point& source)
+		bool explicit BackfaceCulling(const Point& source)
 		{
 			const Point& p0 = *Vertex[0];
 			const Point& p1 = *Vertex[1];
@@ -52,8 +52,7 @@
 	typedef void	(*RequestCallback)	(udword triangle_index, const VertexPointers& triangle, void* user_data) override;
 #endif
 
-	class OPCODE_API MeshInterface
-	{
+	class OPCODE_API{
 		public:
 		// Constructor / Destructor
 											MeshInterface() override;
@@ -61,8 +60,8 @@
 		// Common settings
 		inline_			udword				GetNbTriangles()	const override { return mNbTris;	}
 		inline_			udword				GetNbVertices()		const override { return mNbVerts;	}
-		inline_			void				SetNbTriangles(udword nb)	{ mNbTris = nb;		}
-		inline_			void				SetNbVertices(udword nb)	{ mNbVerts = nb;	}
+		inline_			void				explicit SetNbTriangles(udword nb)	{ mNbTris = nb;		}
+		inline_			void				explicit SetNbVertices(udword nb)	{ mNbVerts = nb;	}
 
 #ifdef OPC_USE_CALLBACKS
 		// Callback settings
@@ -114,7 +113,7 @@
 		*	\param		value		[in] Indicates if mesh data is provided as array of \c single values. If \c false, data is expected to contain \c double elements.
 		*/
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		inline_			void				SetSingle(bool value) { mFetchTriangle = (value ? &MeshInterface::FetchTriangleFromSingles : &MeshInterface::FetchTriangleFromDoubles); }
+		inline_			void				explicit SetSingle(bool value) { mFetchTriangle = (value ? &MeshInterface::FetchTriangleFromSingles : &MeshInterface::FetchTriangleFromDoubles); }
 
 	#endif
 #endif

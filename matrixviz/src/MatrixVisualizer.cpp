@@ -121,7 +121,7 @@ void MatrixVisualizer::visualize(QAbstractButton * button){
   QString name = button->text();
   VectorPlotChannel *vectorPlotChannel = getVectorPlotChannel(name);
   VisualiserSubWidget *vis;
-  if(vectorPlotChannel == 0){
+  if(vectorPlotChannel == nullptr){
     vis = new VisualiserSubWidget(getMatrixPlotChannel(name));
   }else
     vis = new VisualiserSubWidget(vectorPlotChannel);

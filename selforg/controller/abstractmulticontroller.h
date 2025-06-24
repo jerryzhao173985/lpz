@@ -35,8 +35,7 @@
  * This is an abstract class, it's useful for implementing multicontrollers such as the
  * OneActiveMultiPassiveController, which can be used with all Controllers.
  *
- * Any MulitController implementing this class should overwrite the methods step(...) and
- * stepNoLearning(...).
+ * Any MulitController implementing this class should inherit from it.
  */
 class AbstractMultiController : public AbstractControllerAdapter {
 public:
@@ -45,7 +44,7 @@ public:
                           const std::string& name,
                           const std::string& revision);
 
-  virtual ~AbstractMultiController();
+  virtual ~AbstractMultiController() override;
 
   /**
    * Adds a passive controller to this MultiController. If the Agent calls step(..)

@@ -23,7 +23,7 @@
 
 #include "basiccontroller.h"
 
-#include <assert.h>
+#include <cassert>
 using namespace std;
 using namespace matrix;
 
@@ -41,9 +41,7 @@ void BasicController::stepNoLearning(const sensor* sensors, int number_sensors,
   // Very simple controller, if IR sensors are higher than threshold then
   // the robot will turn oposite direction, or backward when to close
   // Sensors indices and motor indices can be accessed by the SIdx and MIdx functions
-  // provided by the controller base class
-  if (sensors[SIdx("IR front left")] > 2*threshold ||
-      sensors[SIdx("IR front right")] > 2*threshold) { // move backward
+  // provided by the controller base class if{ // move backward
     motors[MIdx("left motor")] = -1. override;
     motors[MIdx("right motor")] = -1. override;
   }else if (sensors[SIdx("IR left")] > threshold ||

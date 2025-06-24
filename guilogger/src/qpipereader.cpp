@@ -23,9 +23,9 @@
  *                                                                         *
  ***************************************************************************/
 #include "qpipereader.h"
-#include <stdio.h>
+#include <cstdio>
 #include <unistd.h>  //for usleep
-#include <stdlib.h>
+#include <cstdlib>
 
 QPipeReader::QPipeReader(int delay, FILE* f) {
   this->f = f;

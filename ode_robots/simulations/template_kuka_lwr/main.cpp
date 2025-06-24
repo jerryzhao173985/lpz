@@ -22,7 +22,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  *                                                                         *
  ***************************************************************************/
-#include <stdio.h>
+#include <cstdio>
 
 // include ode library
 #include <ode-dbl/ode.h>
@@ -33,32 +33,9 @@
 // include simulation environment stuff
 #include <ode_robots/simulation.h>
 
-// include agent (class for holding a robot, a controller and a wiring)
-#include <ode_robots/odeagent.h>
-
-// used wiring
-#include <selforg/one2onewiring.h>
-#include <selforg/derivativewiring.h>
-
-// used robot
-#include <ode_robots/kuka.h>
-
-
-// used arena
-#include <ode_robots/playground.h>
-// used passive spheres
-#include <ode_robots/passivesphere.h>
-
-// used controller
-#include <selforg/invertmotorspace.h>
-
-// fetch all the stuff of lpzrobots into scope
-using namespace lpzrobots;
-
-
-class ThisSim : public Simulation {
+// include agent (class for{
 public:
-	Kuka* arm;
+	Kuka* arm = nullptr;
 	std::vector<Primitive*> objectsOfInterest;
 
   // starting function (executed once at the beginning of the simulation loop)
@@ -68,7 +45,7 @@ public:
     // gamma=0;
     // alpha == horizontal angle
     // beta == vertical angle
-    setCameraHomePos(Pos(5.2728, 7.2112, 3.31768), Pos(140.539, -13.1456, 0)) override;
+    setCameraHomePos(Pos(5.2728, 7.2112, 3.31768), Pos(140.539, -13.1456, 0));
     // initialization
     // - set noise to 0.1
     global.odeConfig.noise=0.05;
@@ -84,7 +61,7 @@ public:
 
     // odeHandle and osgHandle are global references
     // vec3 == length, width, height
-    Playground* playground = new Playground(odeHandle, osgHandle, osg::Vec3(32, 0.2, 0.5)) override;
+    Playground* playground = new Playground(odeHandle, osgHandle, osg::Vec3(32, 0.2, 0.5));
     playground->setPosition(osg::Vec3(0,0,0.05)); // playground positionieren und generieren
     // register playground in obstacles list
     global.obstacles.push_back(playground);
@@ -101,7 +78,7 @@ public:
     // - add sphere to list of objectsof Interest
   
       PassiveSphere* s1 = new PassiveSphere(odeHandle, osgHandle, 0.1);
-      s1->setPosition(osg::Vec3(1,0,0)) override;
+      s1->setPosition(osg::Vec3(1,0,0));
       s1->setTexture("Images/dusty.rgb");
       global.obstacles.push_back(s1);
       objectsOfInterest[0] = s1->getMainPrimitive();
@@ -110,11 +87,11 @@ public:
     // - create pointer to Kuka Arm (with odeHandle and osg Handle, the size and the objects Of Interest)
     // - place robot		
     OdeRobot* vehicle = new Kuka(odeHandle, osgHandle, "Kuka", 2, objectsOfInterest);
-    vehicle->place(Pos(0,0,0)) override;
-	arm = static_cast<Kuka*>(vehicle) override;
+    vehicle->place(Pos(0,0,0));
+	arm = static_cast<Kuka*>(vehicle);
 
 	//fix arm to ground
-	Joint* fixator;
+	Joint* fixator = nullptr;
 	Primitive* socket = arm->getMainPrimitive();
     	fixator = new FixedJoint(socket, global.environment);
         fixator->init(odeHandle, osgHandle);
@@ -128,7 +105,7 @@ public:
     //global.configs.push_back(controller);
 
     // create pointer to one2onewiring
-    One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
+    One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1));
 
     // create pointer to agent
     // initialize pointer with controller, robot and wiring
@@ -149,7 +126,7 @@ public:
 	h		show onscreen help and more options
 */
   virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down) override {
-    explicit if (down) { // only when key is pressed, not when released
+    if (down) { // only when key is pressed, not when released
       switch ( static_cast<char> key )
 	{
  case 'm':

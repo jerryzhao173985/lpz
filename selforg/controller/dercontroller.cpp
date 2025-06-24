@@ -223,7 +223,7 @@ DerController::calcEtaAndBufferIt(int delay) {
   //  Matrix eta = eta_smooth;
   //     eta += noiseMatrix(eta.getM(),eta.getN(), *YNoiseGen, -noiseY, noiseY); // noise for the
   //     null space!!!!!!!!!
-  if (relativeE != 0) { // divide eta by |y|  == relative error
+  if (relativeE != false) { // divide eta by |y|  == relative error
     // const Matrix& y = y_buffer[t % buffersize];
     //   eta = eta.multrowwise(y.map(regularizedInverse2)); //TODO Pr�fen was das macht.
   }
@@ -547,7 +547,7 @@ DerController::setTeachingMode(bool onOff) {
 }
 
 bool
-DerController::getTeachingMode() {
+DerController::getTeachingMode() const {
   return conf.useTeaching;
 }
 

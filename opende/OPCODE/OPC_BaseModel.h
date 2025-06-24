@@ -47,8 +47,7 @@
 		OPC_SINGLE_NODE	= (1<<2)	//!< Special case for 1-node models
 	};
 
-	class OPCODE_API BaseModel
-	{
+	class OPCODE_API{
 		public:
 		// Constructor/Destructor
 											BaseModel() override;
@@ -160,7 +159,7 @@
 		 *	\param		imesh		[in] mesh interface
 		 */
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		inline_			void				SetMeshInterface(const MeshInterface* imesh)	{ mIMesh = imesh;	}
+		inline_			void				explicit SetMeshInterface(const MeshInterface* imesh)	{ mIMesh = imesh;	}
 
 		protected:
 				const	MeshInterface*		mIMesh;			//!< User-defined mesh interface

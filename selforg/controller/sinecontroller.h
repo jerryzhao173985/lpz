@@ -29,12 +29,7 @@
 #include <memory>
 
 /**
- * class for robot control with sine, sawtooth and impuls
- *
- * period is the length of the period in steps and
- * phaseshift is the phase difference between channels given in Pi/2
- */
-class SineController : public AbstractController {
+ * class for{
 public:
   enum class function { Sine, SawTooth, Impulse };
 
@@ -116,11 +111,11 @@ protected:
   double (*osci)(double x, double param); // oscillator function
 };
 
-class MultiSineController : public SineController {
+class MultiSineController{
 public:
   MultiSineController(unsigned long int controlmask = (~0),
                                function func = function::Sine);
-  virtual ~MultiSineController();
+  virtual ~MultiSineController() override;
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr);
   virtual void stepNoLearning(const sensor*,
                               int number_sensors,

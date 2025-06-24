@@ -24,7 +24,7 @@
 
 #include "wiringsequence.h"
 #include "controller_misc.h"
-#include <assert.h>
+#include <cassert>
 
 using namespace std;
 
@@ -91,7 +91,7 @@ bool WiringSequence::wireSensorsIntern(const sensor* rsensors, int rsensornumber
       sensorbuf = new sensor[d];
     }
     wirings[i]->wireSensors(inp, inp_s, sensorbuf, d, noiseStrength);
-    if(i!=0) delete[] inp; // delete buffer, but not in first round
+    if(i!= nullptr) delete[] inp; // delete buffer, but not in first round
     inp   = sensorbuf;
     inp_s = d;
   }
@@ -107,9 +107,9 @@ bool WiringSequence::wireMotorsIntern(motor* rmotors, int rmotornumber,
   int inp_s = cmotornumber;
   motor* motorbuf;
   int num = wirings.size();
-  for (int i=num-1; i>=0; i--) {
+  for(...; --i) {
     int d = wirings[i]->getRobotMotornumber();
-    if(i==0){
+    if(i== nullptr){
       motorbuf = rmotors;
       assert(d == rmotornumber);
     }else{

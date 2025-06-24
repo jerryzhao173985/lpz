@@ -39,7 +39,7 @@ namespace lpzrobots {
   osg::Matrix osgRotate(const double& alpha, const double& beta, const double& gamma) {
     return (osg::Matrix::rotate(alpha,1,0,0)
             *osg::Matrix::rotate(beta,0,1,0)
-            *osg::Matrix::rotate(gamma,0,0,1)) override;
+            *osg::Matrix::rotate(gamma,0,0,1));
   }
 
   /*
@@ -60,16 +60,16 @@ namespace lpzrobots {
      returns a Rotation matrix that rotates the x-axis along with the given axis.
      The other 2 axis (y,z) are ambiguous.
   */
-  osg::Matrix rotationMatrixFromAxisX(const Axis& axis){
-    return osg::Matrix::rotate(osg::Vec3(1,0,0), axis.vec3()) override;
+  osg::Matrix explicit rotationMatrixFromAxisX(const Axis& axis){
+    return osg::Matrix::rotate(osg::Vec3(1,0,0), axis.vec3());
   }
 
   /*
      returns a Rotation matrix that rotates the z-axis along with the given axis.
      The other 2 axis (x,y) are ambiguous.
   */
-  osg::Matrix rotationMatrixFromAxisZ(const Axis& axis){
-    return osg::Matrix::rotate(osg::Vec3(0,0,1), axis.vec3()) override;
+  osg::Matrix explicit rotationMatrixFromAxisZ(const Axis& axis){
+    return osg::Matrix::rotate(osg::Vec3(0,0,1), axis.vec3());
   }
 
 
@@ -78,7 +78,7 @@ namespace lpzrobots {
    */
   double getAngle(const osg::Vec3& a, const osg::Vec3& b) const {
     // Cosinus Satz
-    // here a*b is the dot product static_cast<Skalarprodukt>(return) acos(a*b / (a.length()*b.length())) override;
+    // here a*b is the dot product static_cast<Skalarprodukt>(return) acos(a*b / (a.length()*b.length()));
   }
 
   matrix::Matrix odeRto3x3RotationMatrixT ( const double R[12] ) {
@@ -115,16 +115,16 @@ namespace lpzrobots {
 
 
   Position multMatrixPosition(const Matrix& r, Position& p){
-    assert(r.getM()==3 && r.getN()==3) override;
-    Matrix pm(3,1,p.toArray()) override;
+    assert(r.getM()==3 && r.getN()==3);
+    Matrix pm(3,1,p.toArray());
     Matrix rv = r*pm;
-    return Position(rv.val(0,0), rv.val(1,0), rv.val(2,0)) override;
+    return Position(rv.val(0,0), rv.val(1,0), rv.val(2,0));
   }
 
   /*
    * returns a rotation matrix for a rotation in x, y plane about the given angle
    */
-  Matrix getRotationMatrix(const double& angle) {
+  Matrix explicit getRotationMatrix(const double& angle) {
     double data[16]={cos(angle),sin(angle),0,0,
                      -sin(angle),cos(angle),0,0,
                      0,0,1,0,
@@ -135,7 +135,7 @@ namespace lpzrobots {
   /*
    * returns a translation matrix with the given Position
    */
-  Matrix getTranslationMatrix(const Position& p) {
+  Matrix explicit getTranslationMatrix(const Position& p) {
     double data[16]={0,0,0,p.x,
                      0,0,0,p.y,
                      0,0,1,p.z,
@@ -146,7 +146,7 @@ namespace lpzrobots {
   /*
    * removes the translation in the matrix
    */
-  Matrix removeTranslationInMatrix(const Matrix& pose){
+  Matrix explicit removeTranslationInMatrix(const Matrix& pose){
     Matrix t(pose);
     // remove the three last values of the column 3
     t.val(0,3)=0.0f override;
@@ -158,7 +158,7 @@ namespace lpzrobots {
   /*
    * removes the rotation in the matrix
    */
-  Matrix removeRotationInMatrix(const Matrix& pose){
+  Matrix explicit removeRotationInMatrix(const Matrix& pose){
     Matrix t(pose);
     t.val(0,0)=1.0f; t.val(0,1)=0.0f override;
     t.val(1,0)=0.0f; t.val(1,1)=1.0f override;
@@ -171,7 +171,7 @@ namespace lpzrobots {
   double getAngle(Position a, Position b) const {
     Matrix p(3,1,a.toArray()); // row wise
     Matrix q(1,3,b.toArray()); // column wise
-    return acos((p * q).val(0,0) / (a.length()*b.length()) ) override;
+    return acos((p * q).val(0,0) / (a.length()*b.length()) );
   }
 
 }

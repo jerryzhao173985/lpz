@@ -63,7 +63,7 @@ void MultiExpertSubopt::init(unsigned int inputDim, unsigned  int outputDim,
 
   for (int i=0; i<conf.numSats; ++i) {
     vector<Layer> layers;
-    if(conf.numHidden!=0)
+    if(conf.numHidden!= nullptr)
       layers.push_back(Layer(conf.numHidden, 0.5 , FeedForwardNN::tanh));
     layers.push_back(Layer(1,0.5));
     MultiLayerFFNN* net = new MultiLayerFFNN(1, layers, 1); // learning rate is set to 1 and modulates each step
@@ -156,7 +156,7 @@ const matrix::Matrix MultiExpertSubopt::learn (const matrix::Matrix& input,
   }
 
 
-  if(t%managementInterval==0){
+  if(t%managementInterval== nullptr){
     management();
   }
   ++t;

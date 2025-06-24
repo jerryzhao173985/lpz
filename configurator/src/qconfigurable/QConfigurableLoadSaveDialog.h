@@ -51,28 +51,7 @@
  *     storage implementet yet))
  *
  *   Revision 1.1  2010/11/30 17:07:06  wrabe
- *   - new class QConfigurableLoadSaveDialog
- *   - try to introduce user-arrangeable QConfigurationTiles (current work, not finished)
- *
- *                                                                         *
- ***************************************************************************/
-
-#ifndef __QCONFIGURABLE_LOAD_SAVE_DIALOG_H_
-#define __QCONFIGURABLE_LOAD_SAVE_DIALOG_H_
-#include <QDialog>
-#include <QCheckBox>
-#include <QRadioButton>
-#include <QScrollArea>
-#include <QFrame>
-#include <QMap>
-#include <QGridLayout>
-#include <QDialogButtonBox>
-#include <QPushButton>
-#include <QDomElement>
-
-#include "QConfigurableWidget.h"
-
-namespace lpzrobots {
+ *   - new class QConfigurableLoadSaveDialog{
   
   class QConfigurableLoadSaveDialog : public QDialog {
 
@@ -86,8 +65,8 @@ namespace lpzrobots {
       QConfigurableLoadSaveDialog(QMap<QString, QConfigurableWidget*> configurableWidgetMap);
       QConfigurableLoadSaveDialog(QMap<QString, QConfigurableWidget*> configurableWidgetMap, QHash<QString, QDomElement> qde_configurableStateMap,
           DialogFunction function);
-      virtual ~QConfigurableLoadSaveDialog();
-      //void setConfigurableTileNames(const QStringList& configurabelTileName);
+      virtual ~QConfigurableLoadSaveDialog() override;
+      //void explicit setConfigurableTileNames(const QStringList& configurabelTileName);
 
     private slots:
       void sl_dialogAccept();

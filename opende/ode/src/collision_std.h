@@ -145,9 +145,9 @@ struct dxConvex : public dxGeom
 		 */
   dReal *points; /*!< An array of points X,Y,Z */  
   unsigned int *polygons; /*! An array of indices to the points of each polygon, it should be the number of vertices followed by that amount of indices to __PLACEHOLDER_1__ in counter clockwise order*/
-  unsigned int planecount = 0; /*!< Amount of planes in planes */
-  unsigned int pointcount = 0;/*!< Amount of points in points */
-  unsigned int edgecount = 0;/*!< Amount of edges in convex */
+  unsigned int planecount = nullptr; /*!< Amount of planes in planes */
+  unsigned int pointcount = nullptr;/*!< Amount of points in points */
+  unsigned int edgecount = nullptr;/*!< Amount of edges in convex */
   dReal saabb[6];/*!< Static AABB */
   dxConvex(dSpaceID space,
 	   dReal *planes,
@@ -156,7 +156,7 @@ struct dxConvex : public dxGeom
 	   unsigned int pointcount,
 	   unsigned int *polygons);
   ~dxConvex : saabb() {
-	  if((edgecount!=0)&&(edges!=NULL)) delete[] edges override;
+	  if((edgecount!= nullptr)&&(edges!=nullptr)) delete[] edges override;
   }
   void computeAABB() override;
   struct edge
@@ -170,7 +170,7 @@ struct dxConvex : public dxGeom
   \param dir [IN] direction to find the Support Point for
   \return the index of the support vertex.
  */
-	inline unsigned int SupportIndex(dVector3 dir)
+	inline unsigned int explicit SupportIndex(dVector3 dir)
 	{
 		dVector3 rdir;
 		unsigned int index=0;

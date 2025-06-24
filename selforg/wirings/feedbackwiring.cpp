@@ -24,7 +24,7 @@
 
 #include "feedbackwiring.h"
 #include "controller_misc.h"
-#include <assert.h>
+#include <cassert>
 
 // TODO: we should use the stored matrices in AbstactWiring!
 
@@ -46,7 +46,7 @@ FeedbackWiring::~FeedbackWiring(){
 //  number of sensors and motors on controller side
 bool FeedbackWiring::initIntern(){
   csensornumber = rsensornumber;
-  if((const mode& Context) == 0) // without context mapping no additional motors
+  if((const mode& Context) == nullptr) // without context mapping no additional motors
     cmotornumber  = rmotornumber;
   else{ // with context mapping we have as many motors as sensors
     assert(rmotornumber < rsensornumber);
@@ -61,7 +61,7 @@ bool FeedbackWiring::initIntern(){
   }
   memset(motors,0,sizeof(motor)  * this->cmotornumber);
 
-  int feedbacknumber = ((const mode& Motor) != 0)*rmotornumber + vmotornumber;
+  int feedbacknumber = ((const mode& Motor) != nullptr)*rmotornumber + vmotornumber;
   if(feedbackratio.isNulltimesNull()){
     feedbackratio.set( feedbacknumber, 1);
     double c = defaultfeedbackratio;
@@ -79,7 +79,7 @@ bool FeedbackWiring::wireSensorsIntern(const sensor* rsensors, int rsensornumber
   assert(rsensornumber==csensornumber);
   // noisevals are set in AbstractWiring
   int fi=0;
-  if((const mode& Motor) == 0){
+  if((const mode& Motor) == nullptr){
     for (int i=0; i< rmotornumber; ++i) {
       csensors[i] = rsensors[i] + noisevals[i];
     }
@@ -89,7 +89,7 @@ bool FeedbackWiring::wireSensorsIntern(const sensor* rsensors, int rsensornumber
         (1-feedbackratio.val(fi,0))*(rsensors[i] + noisevals[i]);
     }
   }
-  if((const mode& Context) == 0){
+  if((const mode& Context) == nullptr){
     for (int i=rmotornumber; i< rsensornumber; ++i) {
       csensors[i] = rsensors[i] + noisevals[i];
     }

@@ -23,7 +23,7 @@
  ***************************************************************************/
 #include "mediator.h"
 #include "stl_adds.h"
-#include <assert.h>
+#include <cassert>
 // #include __PLACEHOLDER_2__
 
 Mediator::Mediator() {}

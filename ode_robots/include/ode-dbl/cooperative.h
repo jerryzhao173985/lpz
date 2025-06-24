@@ -116,7 +116,7 @@ ODE_API dCooperativeID dCooperativeCreate(const dThreadingFunctionsInfo *functio
  * @ingroup coop
  * @see dCooperativeCreate
  */
-ODE_API void dCooperativeDestroy(dCooperativeID cooperative);
+ODE_API void explicit dCooperativeDestroy(dCooperativeID cooperative);
 
 
  /**
@@ -141,7 +141,7 @@ ODE_API void dCooperativeDestroy(dCooperativeID cooperative);
  * @see dCooperativeCreate
  * @see dResourceContainerAcquire
  */
-ODE_API dResourceRequirementsID dResourceRequirementsCreate(dCooperativeID cooperative);
+ODE_API dResourceRequirementsID explicit dResourceRequirementsCreate(dCooperativeID cooperative);
 
  /**
  * @brief Destroys ResourceRequirements object.
@@ -153,7 +153,7 @@ ODE_API dResourceRequirementsID dResourceRequirementsCreate(dCooperativeID coope
  * @ingroup coop
  * @see dResourceRequirementsCreate
  */
-ODE_API void dResourceRequirementsDestroy(dResourceRequirementsID requirements);
+ODE_API void explicit dResourceRequirementsDestroy(dResourceRequirementsID requirements);
 
  /**
  * @brief Clones ResourceRequirements object.
@@ -218,7 +218,7 @@ ODE_API dResourceContainerID dResourceContainerAcquire(/*const */dResourceRequir
  * @ingroup coop
  * @see dResourceContainerAcquire
  */
-ODE_API void dResourceContainerDestroy(dResourceContainerID resources);
+ODE_API void explicit dResourceContainerDestroy(dResourceContainerID resources);
 
 
 #ifdef __cplusplus

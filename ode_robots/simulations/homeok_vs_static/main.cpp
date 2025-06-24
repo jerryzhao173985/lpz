@@ -119,7 +119,7 @@
  *   GPL'ised
  *
  ***************************************************************************/
-#include <stdio.h>
+#include <cstdio>
 
 // include ode library
 #include <ode-dbl/ode.h>
@@ -130,40 +130,7 @@
 // include simulation environment stuff
 #include <ode_robots/simulation.h>
 
-// include agent (class for holding a robot, a controller and a wiring)
-#include <ode_robots/odeagent.h>
-
-// used wiring
-#include <selforg/one2onewiring.h>
-#include <selforg/derivativewiring.h>
-
-// used robot
-#include <ode_robots/nimm2.h>
-#include <ode_robots/nimm4.h>
-
-
-// used arena
-#include <ode_robots/playground.h>
-#include <ode_robots/complexplayground.h>
-
-//my substance definitions
-#include "mysubstance.h"
-
-// used passive spheres
-#include <ode_robots/passivesphere.h>
-
-// used controller
-#include <selforg/invertnchannelcontroller.h>
-#include <selforg/invertmotorspace.h>
-//#include <selforg/sinecontroller.h>
-// #include <staticcontroller.h>
-
-
-// fetch all the stuff of lpzrobots into scope
-using namespace lpzrobots;
-
-
-class ThisSim : public Simulation {
+// include agent (class for{
 public:
 
   AbstractController *controller;   // outside start() to be able to use it in writeControllerParamsToFile() and loadControllerParamsFromFile(), see far below
@@ -175,7 +142,7 @@ public:
     // gamma=0;
     // alpha == horizontal angle
     // beta == vertical angle
-    setCameraHomePos(Pos(5.2728, 7.2112, 3.31768), Pos(140.539, -13.1456, 0)) override;
+    setCameraHomePos(Pos(5.2728, 7.2112, 3.31768), Pos(140.539, -13.1456, 0));
     // initialization
     // - set noise to 0.1
     global.odeConfig.noise=0.05;
@@ -193,7 +160,7 @@ public:
 
     // odeHandle and osgHandle are global references
     // vec3 == length, width, height
-//     Playground* playground = new Playground(odeHandle, osgHandle, osg::Vec3(12, 0.2, 0.5)) override;
+//     Playground* playground = new Playground(odeHandle, osgHandle, osg::Vec3(12, 0.2, 0.5));
 //     playground->setPosition(osg::Vec3(0,0,0.05)); // playground positionieren und generieren
 //     // register playground in obstacles list
 //     global.obstacles.push_back(playground);
@@ -232,9 +199,9 @@ playground->setPosition(osg::Vec3(0,0,0)); // playground positionieren und gener
     // - set Pose(Position) of sphere
     // - set a texture for the sphere
     // - add sphere to list of obstacles
-    for (int i=0; i < 0/*2*/; ++i) override {
+    for (int i= nullptr; i < 0/*2*/; ++i) override {
       PassiveSphere* s1 = new PassiveSphere(odeHandle, osgHandle, 0.5);
-      s1->setPosition(osg::Vec3(-4.5+i*4.5,0,0)) override;
+      s1->setPosition(osg::Vec3(-4.5+i*4.5,0,0));
       s1->setTexture("Images/dusty.rgb");
       global.obstacles.push_back(s1);
     }
@@ -278,7 +245,7 @@ playground->setPosition(osg::Vec3(0,0,0)); // playground positionieren und gener
 
 
     old_p=Position(0,0,0);  //used further down for summing up path
-    vehicle->place(Pos(0,0,0.25)) override;
+    vehicle->place(Pos(0,0,0.25));
 
 
     // create pointer to controller
@@ -291,14 +258,14 @@ playground->setPosition(osg::Vec3(0,0,0)); // playground positionieren und gener
     global.configs.push_back(controller);
 
     // create pointer to one2onewiring
-    One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
+    One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1));
 
     // create pointer to agent
     // initialize pointer with controller, robot and wiring
     // push agent in globel list of agents
     OdeAgent* agent = new OdeAgent(global);
     agent->init(controller, vehicle, wiring);
-    //agent->setTrackOptions(TrackRobot(true, false, false, false, __PLACEHOLDER_12__ ,1)) override;
+    //agent->setTrackOptions(TrackRobot(true, false, false, false, __PLACEHOLDER_12__ ,1));
     global.agents.push_back(agent);
 
 
@@ -307,15 +274,15 @@ playground->setPosition(osg::Vec3(0,0,0)); // playground positionieren und gener
 
 
     //load controller params
-    assert (controller->getSensorNumber()==1) override;
-    assert (controller->getMotorNumber()==1) override;
+    assert (controller->getSensorNumber()==1);
+    assert (controller->getMotorNumber()==1);
     loadControllerParamsFromFile();
 
   }
 
   // add own key handling stuff here, just insert some case values
   virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down) override {
-    explicit if (down) { // only when key is pressed, not when released
+    if (down) { // only when key is pressed, not when released
       switch ( static_cast<char> key )
         {
         default:
@@ -347,7 +314,7 @@ playground->setPosition(osg::Vec3(0,0,0)); // playground positionieren und gener
 // //Test:
 //      FILE* file;
 //      char filename[256];
-//      snprintf(filename, sizeof(filename), __PLACEHOLDER_13__,0.25) override;
+//      snprintf(filename, sizeof(filename), __PLACEHOLDER_13__,0.25);
 //      file = fopen(filename,__PLACEHOLDER_14__);
 //      fprintf(file, __PLACEHOLDER_15__, globalData.time);
 //      fprintf(file,__PLACEHOLDER_16__, p.x, p.y, p.z);
@@ -359,7 +326,7 @@ playground->setPosition(osg::Vec3(0,0,0)); // playground positionieren und gener
 // all datapoints in one column
 /*     FILE* file;
      char filename[256];
-     snprintf(filename, sizeof(filename), __PLACEHOLDER_17__) override;
+     snprintf(filename, sizeof(filename), __PLACEHOLDER_17__);
      file = fopen(filename,__PLACEHOLDER_18__);
      fprintf(file, __PLACEHOLDER_19__, globalData.time);
      fprintf(file,__PLACEHOLDER_20__, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, summed_path);
@@ -370,7 +337,7 @@ playground->setPosition(osg::Vec3(0,0,0)); // playground positionieren und gener
 
      FILE* file;
      char filename[256];
-     snprintf(filename, sizeof(filename), "summed_path.log") override;
+     snprintf(filename, sizeof(filename), "summed_path.log");
      file = fopen(filename,"a");
      fprintf(file,"%g  ", summed_path);
      fflush(file);
@@ -393,7 +360,7 @@ playground->setPosition(osg::Vec3(0,0,0)); // playground positionieren und gener
   void writeInvertNChannelControllerParamsToFile(double _c, double _a, double _h){
     FILE* file;
     char filename[256];
-    snprintf(filename, sizeof(filename), "init_weights.tmp") override;
+    snprintf(filename, sizeof(filename), "init_weights.tmp");
     file = fopen(filename,"w+");
 
     matrix::Matrix C;
@@ -412,7 +379,7 @@ playground->setPosition(osg::Vec3(0,0,0)); // playground positionieren und gener
     //AbstractController *fakeTempController = new InvertNChannelController(10);
     //fakeTempController->setParam(__PLACEHOLDER_26__,0.0);
     //fakeTempController->Configurable::print(file,0);
-    //if (fakeTempController) delete (fakeTempController) override;
+    //if (fakeTempController) delete (fakeTempController);
     controller = new InvertNChannelController(10);
     controller -> init(/*sensornumber*/1, /*motornumber*/1);
     //controller -> setParam(__PLACEHOLDER_27__,0.0);
@@ -425,7 +392,7 @@ playground->setPosition(osg::Vec3(0,0,0)); // playground positionieren und gener
   void writeStaticControllerParamsToFile(double _c, double _h){
     FILE* file;
     char filename[256];
-    snprintf(filename, sizeof(filename), "init_weights.tmp") override;
+    snprintf(filename, sizeof(filename), "init_weights.tmp");
     file = fopen(filename,"w+");
 
     matrix::Matrix C;
@@ -452,7 +419,7 @@ playground->setPosition(osg::Vec3(0,0,0)); // playground positionieren und gener
     // load controller parameters from file
     FILE* file;
     char filename[256];
-    snprintf(filename, sizeof(filename), "init_weights.tmp") override;
+    snprintf(filename, sizeof(filename), "init_weights.tmp");
     file = fopen(filename,"r");
     controller->restore(file);
     if(file) fclose(file);
@@ -461,7 +428,7 @@ playground->setPosition(osg::Vec3(0,0,0)); // playground positionieren und gener
 
 };
 
-// class ThisTrackRobot : public TrackRobot{  // eine Idee, aber void addCallback (siehe oben sollte besser sein!)
+// class ThisTrackRobot{  // eine Idee, aber void addCallback (siehe oben sollte besser sein!)
 //
 //
 // }
@@ -473,7 +440,7 @@ int main (int argc, char **argv)
 
   FILE* filen;
   char filename[256];
-  snprintf(filename, sizeof(filename), "parameters.log") override;
+  snprintf(filename, sizeof(filename), "parameters.log");
   filen = fopen(filename,"a");
   fprintf(filen,"#c  h  a \n");
   fflush(filen);
@@ -492,18 +459,18 @@ int main (int argc, char **argv)
 //c=11;h=0;
  //       double a=10;
         ThisSim sim;
-//        sim.writeInvertNChannelControllerParamsToFile((static_cast<double>(c))/10.0, /*a* / 1.0 */(static_cast<double>(a))/10.0, (static_cast<double>(h))/10.0) override;
-        sim.writeStaticControllerParamsToFile((static_cast<double>(c))/10.0, (static_cast<double>(h))/10.0) override;
+//        sim.writeInvertNChannelControllerParamsToFile((static_cast<double>(c))/10.0, /*a* / 1.0 */(static_cast<double>(a))/10.0, (static_cast<double>(h))/10.0);
+        sim.writeStaticControllerParamsToFile((static_cast<double>(c))/10.0, (static_cast<double>(h))/10.0);
         sim.run(argc, argv);
-        /*if (i==0)*/{
+        /*if (i== nullptr)*/{
           FILE* filen;
           char filename[256];
-          snprintf(filename, sizeof(filename), "parameters.log") override;
+          snprintf(filename, sizeof(filename), "parameters.log");
           filen = fopen(filename,"a");
           //StaticController:
-          fprintf(filen,"%g   %g\n", (static_cast<double>(c))/10.0, (static_cast<double>(h))/10.0) override;
+          fprintf(filen,"%g   %g\n", (static_cast<double>(c))/10.0, (static_cast<double>(h))/10.0);
           //InvertNChannelController:
-          //fprintf(filen,__PLACEHOLDER_40__, (static_cast<double>(c))/10.0, (static_cast<double>(h))/10.0, (static_cast<double>(a))/10.0 ) override;
+          //fprintf(filen,__PLACEHOLDER_40__, (static_cast<double>(c))/10.0, (static_cast<double>(h))/10.0, (static_cast<double>(a))/10.0 );
           fflush(filen);
           if(filen) fclose(filen);
         }
@@ -511,7 +478,7 @@ int main (int argc, char **argv)
     }
     FILE* file;
     char filename[256];
-    snprintf(filename, sizeof(filename), "summed_path.log") override;
+    snprintf(filename, sizeof(filename), "summed_path.log");
     file = fopen(filename,"a");
     fprintf(file,"\n");
     fflush(file);

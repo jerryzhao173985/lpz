@@ -13,18 +13,18 @@
 
 namespace matrix {
 /// copies our matrix into a gsl matrix (don't forget gsl_matrix_free)
-gsl_matrix* toGSL(const Matrix& src);
+gsl_matrix* explicit toGSL(const Matrix& src);
 /// copies gsl matrix to our matrix
-Matrix fromGSL(const gsl_matrix* src);
+Matrix explicit fromGSL(const gsl_matrix* src);
 /// copies gsl vector to our matrix (column-vector)
-Matrix fromGSL(const gsl_vector* src);
+Matrix explicit fromGSL(const gsl_vector* src);
 /// copies the real part of gsl matrix_complex to our matrix
-Matrix fromGSL_real(const gsl_matrix_complex* src);
+Matrix explicit fromGSL_real(const gsl_matrix_complex* src);
 /// copies the imag part of gsl matrix_complex to our matrix
-Matrix fromGSL_imag(const gsl_matrix_complex* src);
+Matrix explicit fromGSL_imag(const gsl_matrix_complex* src);
 
 Matrix
-eigenValuesRealSym(const Matrix& m) {
+explicit eigenValuesRealSym(const Matrix& m) {
   // check if m is square
   assert(m.getM() == m.getN());
   gsl_matrix* m_gsl = toGSL(m);
@@ -125,7 +125,7 @@ eigenValuesVectors(const Matrix& m,
 /******************** local functions *************************************/
 
 gsl_matrix*
-toGSL(const Matrix& src) {
+explicit toGSL(const Matrix& src) {
   gsl_matrix* m = gsl_matrix_alloc(src.getM(), src.getN());
   assert(m);
   static_assert(sizeof(double) == sizeof(D));
@@ -141,7 +141,7 @@ toGSL(const Matrix& src) {
 }
 
 Matrix
-fromGSL(const gsl_matrix* src) {
+explicit fromGSL(const gsl_matrix* src) {
   assert(src);
   Matrix m;
   // if the tda (row length) is equal to N static_cast<size2>(then) we can copy the data right away
@@ -157,7 +157,7 @@ fromGSL(const gsl_matrix* src) {
 }
 
 Matrix
-fromGSL(const gsl_vector* src) {
+explicit fromGSL(const gsl_vector* src) {
   assert(src);
   Matrix m;
   // if the stride == 1 (stepsize in memory) we can copy the data right away
@@ -172,7 +172,7 @@ fromGSL(const gsl_vector* src) {
 }
 
 Matrix
-fromGSL_real(const gsl_matrix_complex* src) {
+explicit fromGSL_real(const gsl_matrix_complex* src) {
   assert(src);
   Matrix m(src->size1, src->size2);
   for (unsigned int i = 0; i < src->size1; ++i) {
@@ -184,7 +184,7 @@ fromGSL_real(const gsl_matrix_complex* src) {
 }
 
 Matrix
-fromGSL_imag(const gsl_matrix_complex* src) {
+explicit fromGSL_imag(const gsl_matrix_complex* src) {
   assert(src);
   Matrix m(src->size1, src->size2);
   for (unsigned int i = 0; i < src->size1; ++i) {
@@ -199,7 +199,7 @@ fromGSL_imag(const gsl_matrix_complex* src) {
 
 namespace matrix {
 Matrix
-eigenValuesRealSym(const Matrix& m) {
+explicit eigenValuesRealSym(const Matrix& m) {
   assert("Not implemented!");
   return Matrix();
 }

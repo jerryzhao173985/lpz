@@ -25,22 +25,7 @@
 #define _STATISTIC_TOOLS_H
 
 // begin forward declarations
-class AbstractMeasure;
-class StatisticMeasure;
-class ComplexMeasure;
-// end forward declarations
-
-#include <string>
-
-#include "inspectable.h"
-#include "callbackable.h"
-#include "measuremodes.h"
-#include "analysationmodes.h"
-#include "templatevalueanalysation.h"
-
-#define GET_TYPE_ANALYSATIONstatic_cast<type>(getAnalysation)<type,defaultZero,defaultLower<type>,defaultHigher<type>,defaultDoubleDiv<type>,defaultDoubleMul<type>,defaultAdd<type>,defaultSub<type>,defaultMul<type>,defaultDiv<type> >
-#define GET_DOUBLE_ANALYSATION GET_TYPE_ANALYSATIONstatic_cast<double>(/// TODO: add possibility to pass description of a measure)
-class StatisticTools : public Inspectable, public Callbackable {
+class AbstractMeasure{
 
 public:
   StatisticTools(const std::string& name = "StatisticTools") : Inspectable(name), beginMeasureCounter(0) { }
@@ -77,7 +62,7 @@ public:
    * @param measure the measure to add
    * @return the address value of the measure
    */
-  virtual double& addMeasure(AbstractMeasure* measure);
+  virtual double& explicit explicit addMeasure(AbstractMeasure* measure);
 
   /**
    * You can add another abstract measure you like. in some cases (e.g. complex
@@ -115,7 +100,7 @@ public:
          * values that have to be ignored at simulation start.
          * @param step number of steps (normally simsteps) to wait for beginning the measures
          */
-        virtual void beginMeasureAt(long step);
+        virtual void explicit explicit beginMeasureAt(long step);
 
   /**
    * Tells you wether the measures have already been started.
@@ -127,60 +112,12 @@ public:
         /**
          * CALLBACKABLE INTERFACE
          *
-         *        this method is invoked when a callback is done from the class where this
-         * class is for callback registered
-         */
-        virtual void doOnCallBack(BackCaller* source, BackCaller::CallbackableType type = BackCaller::DEFAULT_CALLBACKABLE_TYPE);
-
-
-protected:
-        std::list<AbstractMeasure*> activeMeasures;
-        long beginMeasureCounter = 0;
-};
-
-
-/**
- * use this function if you want more than one value analysed
- * class type must implement following operators:
- *
- * @param values (vector<type>) values for the analysation
- * @return static_cast<TemplateValueAnalysation>(the) analysation context
- */
-template
-<class type,
-type zero(void),
-bool lower(const type&, const type&),
-bool higher(const type&, const type&),
-type doubleDiv(const type&, const double&),
-type doubleMul(const type&, const double&),
-type add(const type&, const type&),
-type sub(const type&, const type&),
-type mul(const type&, const type&),
-type div(const type&, const type&)>
-ANALYSATION_CONTEXT* getAnalysation(std::vector<type> values) {
+         *        this method is invoked when a callback is done from the class where{
         return new ANALYSATION_CONTEXT(values);
 }
 
 /**
- * class type must implement following operators:
- *
- * @param tvAnalysation static_cast<TemplateValueAnalysation>(the) analysation context
- * @param mode static_cast<AnalysationMode>(what) value you want
- * @param feature static_cast<unsigned int>(special) param. for mode
- * @return static_cast<type>(the) value you want
- */
-template
-<class type,
-type zero(void),
-bool lower(const type&, const type&),
-bool higher(const type&, const type&),
-type doubleDiv(const type&, const double&),
-type doubleMul(const type&, const double&),
-type add(const type&, const type&),
-type sub(const type&, const type&),
-type mul(const type&, const type&),
-type div(const type&, const type&)>
-type getAnalysation(ANALYSATION_CONTEXT* tvAnalysation, AnalysationMode mode, unsigned int feature = 0) const {
+ * class type{
         switch (mode){
         case AM_AVG:
                 return tvAnalysation->getAvg();
@@ -216,25 +153,7 @@ type getAnalysation(ANALYSATION_CONTEXT* tvAnalysation, AnalysationMode mode, un
 }
 
 /**
- * class type must implement following operators:
- *
- * @param values (vector<type>) values for the analysation
- * @param mode static_cast<AnalysationMode>(what) value you want
- * @param feature static_cast<unsigned int>(special) param. for mode
- * @return static_cast<type>(the) value you want
- */
-template
-<class type,
-type zero(void),
-bool lower(const type&, const type&),
-bool higher(const type&, const type&),
-type doubleDiv(const type&, const double&),
-type doubleMul(const type&, const double&),
-type add(const type&, const type&),
-type sub(const type&, const type&),
-type mul(const type&, const type&),
-type div(const type&, const type&)>
-type getAnalysation(std::vector<type> values, AnalysationMode mode, unsigned int feature = 0) const {
+ * class type{
         ANALYSATION_CONTEXT* context = GET_TYPE_ANALYSATION(type)(values);
         type result = GET_TYPE_ANALYSATION(type)(context,mode,feature);
         delete context;

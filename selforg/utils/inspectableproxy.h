@@ -30,10 +30,7 @@
 #include <list>
 
 /**
- * This class is a proxy for the inspectable class. It __PLACEHOLDER_1__ the inspectable interface  from the
- * inspected object
- */
-class InspectableProxy : public Inspectable {
+ * This class is{
 public:
   /**
    * constructor
@@ -48,7 +45,7 @@ public:
   /**
    * default destructor
    */
-  virtual ~InspectableProxy();
+  virtual ~InspectableProxy() override;
 
   /**
    * this function is for replacing the old list

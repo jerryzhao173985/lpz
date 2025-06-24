@@ -22,8 +22,8 @@
 #include <selforg/abstractcontroller.h>
 #include <selforg/multilayerffnn.h>
 
-#include <assert.h>
-#include <math.h>
+#include <cassert>
+#include <cmath>
 
 #include <selforg/matrix.h>
 #include <selforg/multilayerffnn.h>
@@ -32,7 +32,8 @@
 
 struct MultiReinforceConf {
   unsigned short buffersize = 0;       ///< size of the ringbuffers for sensors, motors,...
-  int numContext;                  ///< number of context sensors static_cast<ignored>(std)::list<std::string> satFiles; /// filenames for sat networks
+  int numContext;                  ///< number of context sensors (ignored)
+  std::list<std::string> satFiles; /// filenames for sat networks
   int numSats = 0;                     ///< number of satelite networks (derived from length of files
   bool useDerive = false;                  ///< input to sat network includes derivatives
   bool useY = false;                       ///< input to sat network includes y (motor values)
@@ -54,16 +55,13 @@ struct Sat {
 };
 
 /**
- * class for robot controller
- * using several feedforward networks static_cast<satelite>(and) one selforg controller
- */
-class MultiReinforce : public AbstractController {
+ * class for{
 
 public:
   MultiReinforce(const MultiReinforceConf& conf = getDefaultConf());
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
 
-  virtual ~MultiReinforce();
+  virtual ~MultiReinforce() override;
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
   virtual int getSensorNumber() const override {

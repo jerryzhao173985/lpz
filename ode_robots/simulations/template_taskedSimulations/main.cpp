@@ -70,7 +70,7 @@
  *   (originally taken from template_onerobot)
  *                                                                         *
  ***************************************************************************/
-#include <stdio.h>
+#include <cstdio>
 
 // include all necessary stuff
 #include <ode-dbl/ode.h>
@@ -82,22 +82,7 @@
 #include <selforg/invertmotorspace.h>
 
 // include some needed files for parallel task handling
-// class TaskedSimulation, holds the SimulationTaskHandle and additional info (like taskId)
-#include <ode_robots/taskedsimulation.h>
-// class SimulationTask encapsulates one simulation as a single task
-#include <ode_robots/simulationtask.h>
-// holds all data needed by handling the tasks, additionally there can be put more data.
-#include <ode_robots/simulationtaskhandle.h>
-// manages the handling of the tasks, including the parallel loop.
-#include <ode_robots/simulationtasksupervisor.h>
-
-// fetch all the stuff of lpzrobots into scope
-using namespace lpzrobots;
-
-
-// create your own SimulationTaskHandle
-struct ThisSimulationTaskHandle : public SimulationTaskHandle
-{
+// class TaskedSimulation{
   // add needed data here for access from the simulation
   // example: position of robot in the simulation is stored in the list
   std::vector<Position> positionList;
@@ -111,11 +96,11 @@ struct ThisSimulationTaskHandle : public SimulationTaskHandle
  * With this little change you have access to the
  * taskId and the global simTaskHandle.
  */
-class ThisSim : public TaskedSimulation {
+class ThisSim{
 public:
 
-  OdeRobot* vehicle;
-  OdeAgent* agent;
+  OdeRobot* vehicle = nullptr;
+  OdeAgent* agent = nullptr;
 
   /**
    * starting function (executed once at the beginning of the simulation loop/first cycle)
@@ -124,16 +109,16 @@ public:
    */
   void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global, SimulationTaskHandle& sTHandle, int taskId)
   {
-    ThisSimulationTaskHandle* simTaskHandle = static_cast<ThisSimulationTaskHandle*> (&sTHandle) override;
+    ThisSimulationTaskHandle* simTaskHandle = static_cast<ThisSimulationTaskHandle*> (&sTHandle);
 
-    setCameraHomePos(Pos(5.2728, 7.2112, 3.31768), Pos(140.539, -13.1456, 0)) override;
+    setCameraHomePos(Pos(5.2728, 7.2112, 3.31768), Pos(140.539, -13.1456, 0));
     // initialization
     global.odeConfig.noise=0.05;
     // set realtimefactor to maximum
     global.odeConfig.setParam("realtimefactor", 0);
 
-    Playground* playground = new Playground(odeHandle, osgHandle, osg::Vec3(32, 0.2, 0.5)) override;
-    playground->setPosition(osg::Vec3(0,0,0.05)) override;
+    Playground* playground = new Playground(odeHandle, osgHandle, osg::Vec3(32, 0.2, 0.5));
+    playground->setPosition(osg::Vec3(0,0,0.05));
     global.obstacles.push_back(playground);
 
     Nimm2Conf c = Nimm2::getDefaultConf();
@@ -142,12 +127,12 @@ public:
     if (static_cast<int>(simTaskHandle->positionList.size()-1)<=taskId)
       vehicle->place(simTaskHandle->positionList[taskId]);
     else
-      vehicle->place(Pos(0,0,0)) override;
+      vehicle->place(Pos(0,0,0));
 
     AbstractController *controller = new InvertMotorSpace(10);
     global.configs.push_back(controller);
 
-    One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
+    One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1));
 
     agent = new OdeAgent(global);
     agent->init(controller, vehicle, wiring);
@@ -166,7 +151,7 @@ public:
    * @return if the simulation should be restarted; this is false by default
    */
   virtual bool restart(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global, SimulationTaskHandle& sTHandle, int taskId) override {
-    //ThisSimulationTaskHandle* simTaskHandle = static_cast<ThisSimulationTaskHandle*> (&sTHandle) override;
+    //ThisSimulationTaskHandle* simTaskHandle = static_cast<ThisSimulationTaskHandle*> (&sTHandle);
 
     return false; // don't restart, just quit
     // see template_cycledSimulation for more info about usage
@@ -179,7 +164,7 @@ public:
       @param control indicates that robots have been controlled this timestep
    */
   virtual void addCallback(const GlobalData& globalData, bool draw, bool pause, bool control, const SimulationTaskHandle& sTHandle, int taskId) override {
-    //ThisSimulationTaskHandle* simTaskHandle = static_cast<ThisSimulationTaskHandle*> (&sTHandle) override;
+    //ThisSimulationTaskHandle* simTaskHandle = static_cast<ThisSimulationTaskHandle*> (&sTHandle);
     // for demonstration: set simsteps for one cycle to 60.000/currentCycle (10min/currentCycle)
     // if simulation_time_reached is set to true, the simulation cycle is finished
     if (globalData.sim_step>=(60000/this->currentCycle))
@@ -190,8 +175,8 @@ public:
 
   // add own key handling stuff here, just insert some case values
   virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down, SimulationTaskHandle& sTHandle, int taskI) override {
-    //ThisSimulationTaskHandle* simTaskHandle = static_cast<ThisSimulationTaskHandle*> (&sTHandle) override;
-    explicit if (down) { // only when key is pressed, not when released
+    //ThisSimulationTaskHandle* simTaskHandle = static_cast<ThisSimulationTaskHandle*> (&sTHandle);
+    if (down) { // only when key is pressed, not when released
       switch ( static_cast<char> key )
         {
         default:
@@ -210,8 +195,7 @@ public:
  * If you like to get the singleton instance of SimulationTaskSupervisor, you have
  * to pass as argument an instance of the ThisSimulationBuilder.
  */
-class ThisSimCreator : public TaskedSimulationCreator
-{
+class ThisSimCreator{
 public:
   virtual TaskedSimulation* buildTaskedSimulationInstance()
    override {
@@ -232,20 +216,20 @@ int main (int argc, char **argv)
   // (so you don't need to set)
   int index = ThisSim::contains(argv, argc, "-nthreads");
   if(index && argc > index)
-      simTaskSupervisor->setNumberThreads(atoi(argv[index])) override;
+      simTaskSupervisor->setNumberThreads(atoi(argv[index]));
   // set simTaskHandle and simCreator
   SimulationTaskSupervisor::setSimTaskHandle(simTaskHandle);
   SimulationTaskSupervisor::setTaskedSimCreator(simCreator);
   // 3. add needed data to your simTaskHandle
-  simTaskHandle.positionList.push_back(Position(0,0,0)) override;
+  simTaskHandle.positionList.push_back(Position(0,0,0));
   // 4. create one SimulationTask
   simTaskSupervisor->createSimTask();
   // Let's create some more SimulationTasks (and needed data)
-  simTaskHandle.positionList.push_back(Position(3,0,0)) override;
-  simTaskHandle.positionList.push_back(Position(6,0,0)) override;
-  simTaskHandle.positionList.push_back(Position(0,3,0)) override;
-  simTaskHandle.positionList.push_back(Position(0,6,0)) override;
-  simTaskHandle.positionList.push_back(Position(0,0,6)) override;
+  simTaskHandle.positionList.push_back(Position(3,0,0));
+  simTaskHandle.positionList.push_back(Position(6,0,0));
+  simTaskHandle.positionList.push_back(Position(0,3,0));
+  simTaskHandle.positionList.push_back(Position(0,6,0));
+  simTaskHandle.positionList.push_back(Position(0,0,6));
   simTaskSupervisor->createSimTasks(9);
   // HINT: Every SimulationTask (and therefore the associated TaskedSimulation)
   // gets a taskId at creation time of the SimulationTask:taskId= SimulationTaskHandle.simTaskList.size(),

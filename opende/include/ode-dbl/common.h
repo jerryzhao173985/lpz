@@ -24,7 +24,7 @@
 #define _ODE_COMMON_H_
 #include <ode-dbl/odeconfig.h>
 #include <ode-dbl/error.h>
-#include <math.h>
+#include <cmath>
 
 #ifdef __cplusplus
 extern "C" {

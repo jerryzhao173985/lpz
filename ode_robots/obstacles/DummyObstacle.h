@@ -31,10 +31,10 @@ namespace lpzrobots {
   /**
    * DummyObstacle which holds a DummyPrimitive (so getMainPrimitive() works).
    */
-  class DummyObstacle : public lpzrobots::AbstractObstacle {
+  class DummyObstacle{
     public:
       DummyObstacle(const OdeHandle& odeHandle, const OsgHandle& osgHandle);
-      virtual ~DummyObstacle();
+      virtual ~DummyObstacle() override;
 
       /**
        * sets position of the obstacle and creates/recreates obstacle if necessary

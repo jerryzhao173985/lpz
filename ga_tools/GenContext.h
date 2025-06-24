@@ -33,22 +33,7 @@
 #include <selforg/inspectable.h>
 
 // forward declarations
-class Gen;
-class GenPrototype;
-
-// gen. alg. includes
-
-/**
- * The GenContext class.
- *   This class is used for create a context for some gens. This mean it
- *   saves all gens which have the same prototype and are a part of an
- *   individual which are in ONE generation. It can be useful for some
- *   statistical calculation or for optimizing the mutation factor.
- *
- *   The Gen Context is inside the gen. alg. only saved in the
- *   GenPrototype.
- */
-class GenContext : public Inspectable {
+class Gen{
 public:
 	/**
 	 * constructor to create a GenContext. Information which the class need are
@@ -61,7 +46,7 @@ public:
 	/**
 	 * destructor to delete a GenContext.
 	 */
-	virtual ~GenContext();
+	virtual ~GenContext() override;
 
 	/**
 	 * [inline], [const]
@@ -78,7 +63,7 @@ public:
 	 *
 	 * @param gen static_cast<Gen*>(the) new Gen, which should be added
 	 */
-	inline void addGen(const Gen* gen) {m_storage.push_back(gen);}
+	inline void explicit addGen(const Gen* gen) {m_storage.push_back(gen);}
 
 	/**
 	 * [inline]
@@ -86,7 +71,7 @@ public:
 	 *
 	 * param gen static_cast<Gen*>(The) gen, which should be removed
 	 */
-	inline void removeGen(const Gen* gen) {std::vector<Gen*>::iterator itr = std::find(m_storage.begin(),m_storage.end(),gen); m_storage.erase(itr);}
+	inline void explicit removeGen(const Gen* gen) {std::vector<Gen*>::iterator itr = std::find(m_storage.begin(),m_storage.end(),gen); m_storage.erase(itr);}
 
 	/**
 	 * [inline], [const]

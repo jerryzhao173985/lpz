@@ -5,12 +5,12 @@
 #include <errno.h>
 #include <sys/time.h>
 #include <sys/types.h>
-#include <stdio.h>
+#include <cstdio>
 #include <iostream>
 #include <errno.h>
 
 
-static void* CSerialThread_run(void* p);
+static void* explicit CSerialThread_run(void* p);
 
 /// start serial communication
 void CSerialThread::start(){
@@ -151,7 +151,7 @@ bool CSerialThread::run(){
     if (addr == -1) continue;
     int len = readB();
     if (len == -1) continue;
-    if(addr==0){
+    if(addr== nullptr){
       int i = 0;
       for (i=0; i<len; ++i) {
         int b =readB();
@@ -461,7 +461,7 @@ int CSerialThread::receiveData(uint8 adr, uint8 *cmd, uint8 *data, uint8 maxlen,
 
 
 /// redirection function, because we can't call member function direct
-static void* CSerialThread_run(void* p)
+static void* explicit CSerialThread_run(void* p)
 {
 
   bool rv = (static_cast<CSerialThread*>(p))->run();

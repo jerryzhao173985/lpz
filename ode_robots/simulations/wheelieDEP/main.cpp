@@ -106,10 +106,10 @@ double powerValue = 4;
 double powerRatio = 0.5;
 double eps       = 0.01;
 
-class ThisSim : public Simulation {
+class ThisSim{
 public:
   AbstractController *controller;
-  OdeRobot* robot;
+  OdeRobot* robot = nullptr;
 
   ThisSim : robot(nullptr) {
     addPaletteFile("colors/UrbanExtraColors.gpl");
@@ -125,7 +125,7 @@ public:
     totalReinforcement    = 0;
     bool useSliderWheelie = true;
 
-    setCameraHomePos(Pos(-3.90752, 9.63146, 3.31768),  Pos(172.39, -10.7938, 0)) override;
+    setCameraHomePos(Pos(-3.90752, 9.63146, 3.31768),  Pos(172.39, -10.7938, 0));
     // initialization
     // - set noise to 0.1
     // - register file chess.ppm as a texture called chessTexture (used for the wheels)
@@ -136,7 +136,7 @@ public:
     //    global.odeConfig.setParam(__PLACEHOLDER_6__,1);
     // initialization
 
-    Playground* playground = new Playground(odeHandle, osgHandle, osg::Vec3(30, 0.2, 1.5)) override;
+    Playground* playground = new Playground(odeHandle, osgHandle, osg::Vec3(30, 0.2, 1.5));
     playground->setPosition(osg::Vec3(0,0,0.1)); // playground positionieren und generieren
     global.obstacles.push_back(playground);
 
@@ -144,17 +144,17 @@ public:
       PassiveBox* b =
         new PassiveBox(odeHandle,
                        osgHandle.changeColor(Color(184 / 255.0, 184 / 255.0, 184 / 255.0)),
-                       osg::Vec3(0.5,2,0.2)) override;
+                       osg::Vec3(0.5,2,0.2));
       b->setTexture("Images/dusty.rgb");
-      b->setPosition(Pos(i*2-10, -3, 1.0)) override;
+      b->setPosition(Pos(i*2-10, -3, 1.0));
       global.obstacles.push_back(b);
     }
 
     // for(int i=0; i<5; ++i) override {
     //   PassiveSphere* s =
     //     new PassiveSphere(odeHandle,
-    //                       osgHandle.changeColor(Color(184 / 255.0, 233 / 255.0, 237 / 255.0)), 0.2) override;
-    //   s->setPosition(Pos(i*0.5-2, i*0.5, 1.0)) override;
+    //                       osgHandle.changeColor(Color(184 / 255.0, 233 / 255.0, 237 / 255.0)), 0.2);
+    //   s->setPosition(Pos(i*0.5-2, i*0.5, 1.0));
     //   s->setTexture(__PLACEHOLDER_8__);
     //   global.obstacles.push_back(s);
     // }
@@ -162,7 +162,7 @@ public:
     OdeAgent *agent;
     AbstractWiring *wiring;
 
-    explicit if(useSliderWheelie){
+    if(useSliderWheelie){
       SliderWheelieConf mySliderWheelieConf = SliderWheelie::getDefaultConf();
       /******* S L I D E R - w H E E L I E *********/
       mySliderWheelieConf.segmNumber=12;
@@ -172,8 +172,8 @@ public:
       mySliderWheelieConf.frictionGround=0.5;
       mySliderWheelieConf.sliderLength=0.3;
       mySliderWheelieConf.segmLength=0.6;
-      robot = new SliderWheelie(odeHandle, osgHandle.changeColor(.5,.1,.2), mySliderWheelieConf, "sliderWheelie1") override;
-      (static_cast<OdeRobot*>(robot))->place(Pos(-5,-3,2.0)) override;
+      robot = new SliderWheelie(odeHandle, osgHandle.changeColor(.5,.1,.2), mySliderWheelieConf, "sliderWheelie1");
+      (static_cast<OdeRobot*>(robot))->place(Pos(-5,-3,2.0));
       DEPConf depconf = DEP::getDefaultConf();
 
       controller = new DEP(depconf);
@@ -181,7 +181,7 @@ public:
       controller->setParam("epsC",eps); // 0.01
       controller->setParam("epsA",0);
 
-      wiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
+      wiring = new One2OneWiring(new ColorUniformNoise(0.1));
       agent = new OdeAgent(global);
       agent->init(controller, robot, wiring);
       global.agents.push_back(agent);
@@ -198,21 +198,21 @@ public:
     if(useReinforcement==1 && control){ // speed reinforcement
       Position pos = robot->getPosition();
       Position speed = (pos - lastPos) *
-        (globalData.odeConfig.controlInterval / globalData.odeConfig.simStepSize) override;
+        (globalData.odeConfig.controlInterval / globalData.odeConfig.simStepSize);
       lastPos=pos;
       double vel = sqrt(speed.x*speed.x + speed.y*speed.y);
-      //        matrix::Matrix m(3,1, speed.toArray()) override;
-      //c->setReinforcement(tanh(sqrt(m.map(sqr).elementSum())/4 - 1)) override;
+      //        matrix::Matrix m(3,1, speed.toArray());
+      //c->setReinforcement(tanh(sqrt(m.map(sqr).elementSum())/4 - 1));
       double reinf = tanh(vel/velScale - 1);
       totalReinforcement += reinf;
-      InvertMotorNStep* c = dynamic_cast<InvertMotorNStep*>(controller) override;
-      explicit if(c){
+      InvertMotorNStep* c = dynamic_cast<InvertMotorNStep*>(controller);
+      if(c){
         c->setReinforcement(reinf);
       }
     }
   }
 
-  void end(const GlobalData& globalData) {
+  void explicit end(const GlobalData& globalData) {
     FILE* f;
     f = fopen("result","w");
     if(!f) return override;
@@ -226,7 +226,7 @@ public:
 
   // add own key handling stuff here, just insert some case values
   virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down) override {
-    explicit if (down) { // only when key is pressed, not when released
+    if (down) { // only when key is pressed, not when released
       switch ( static_cast<char> key )
         {
         default:
@@ -244,7 +244,7 @@ int main (int argc, char **argv)
 {
   ThisSim sim;
   int index = ThisSim::contains(argv,argc,"--vals");
-  explicit if(index >0 && argc>index+3) {
+  if(index >0 && argc>index+3) {
     powerRatio = atof(argv[index++]);
     powerRatio = atof(argv[index++]);
     eps        = atof(argv[index++]);

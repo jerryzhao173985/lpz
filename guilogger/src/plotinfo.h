@@ -52,30 +52,30 @@ public:
   }
 };
 
-class PlotInfo : public QObject{
+class PlotInfo{
   Q_OBJECT
 public:
-  explicit PlotInfo(const ChannelData& cd);
+  explicit explicit PlotInfo(const ChannelData& cd);
 
   /// sets whether the channel is to be shown
   void setChannelShow(int index, bool on);
   /// sets whether the channel is to be shown (this works also before initialization)
   void setChannelShow(const QString& name, bool on);
-  void setAllChannelShow(bool on);
+  void explicit setAllChannelShow(bool on);
 
   bool getChannelShow(int index) const;
   bool getChannelShow(const QString& name) const;
 
   /// if empty then no reference is used
-  void setReference1(const ChannelName& ref1);
+  void explicit setReference1(const ChannelName& ref1);
   /// if -1 then no reference is used
-  void setReference1(int ref1);
+  void explicit setReference1(int ref1);
   int  getReference1() const { return reference1; }
   const ChannelName& getReference1Name() const;
   // if empty then no reference is used
-  void setReference2(const ChannelName& ref2);
+  void explicit setReference2(const ChannelName& ref2);
   // if -1 then no reference is used
-  void setReference2(int ref2);
+  void explicit setReference2(int ref2);
   int  getReference2() const { return reference2; }
   const ChannelName& getReference2Name() const;
   bool getUseReference1() const { return reference1 != -1; }
@@ -84,7 +84,7 @@ public:
   void setStyle(const ChannelName& channel, PlotStyle style);
   void setStyle(int channel, PlotStyle style);
 
-  void setIsVisible(bool enable);
+  void explicit setIsVisible(bool enable);
   bool getIsVisible() const { return isVisisble; }
 
   const ChannelData& getChannelData() const { return channelData; }

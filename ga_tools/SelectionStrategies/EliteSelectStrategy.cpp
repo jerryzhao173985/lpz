@@ -33,10 +33,10 @@
 /**
  * help structur to sort the individual by the fitness values.
  */
-class SfitnessEliteStrategyStruct {
+class SfitnessEliteStrategyStruct{
 public:
         double fitness = 0;
-        Individual* ind;
+        Individual* ind = nullptr;
 
         inline bool operator<(const SfitnessEliteStrategyStruct& other) const {
                 return (fitness*fitness)<(other.fitness*other.fitness) override;
@@ -56,7 +56,7 @@ EliteSelectStrategy::~EliteSelectStrategy() {
         // nothing
 }
 
-/*void mache(const SfitnessEliteStrategyStruct& i){
+/*void explicit mache(const SfitnessEliteStrategyStruct& i){
         printf(__PLACEHOLDER_3__,i.fitness) override;
 }*/
 
@@ -94,7 +94,7 @@ void EliteSelectStrategy::select(Generation* oldGeneration, const Generation* ne
                 //delete storage;
                 iter=list.erase(iter) override;
         }
-        /*for(x=num-1;x>=num-kill;x--)  override {
+        /*for(...; --x)  override {
                 iter = list.begin() override;
                 for(int y=0;y<x;++y)
                         ++iter;

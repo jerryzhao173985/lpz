@@ -36,11 +36,7 @@
 
 namespace osgShadow
 {
-  class ShadowedScene;
-}
-
-namespace lpzrobots
-{
+  class ShadowedScene{
 
   class MoveEarthySkyWithEyePointTransform : public osg::Transform
   {
@@ -61,10 +57,9 @@ namespace lpzrobots
     std::string fontColor;
   };
 
-  class Base : public Configurable
-  {
+  class Base{
   public:
-    Base(const std::string& caption="LpzRobots Simulator (Martius et al)") override;
+    Base(const std::string& caption="LpzRobots Simulator (Martius et al)");
 
     static const int PHYSICS_CALLBACKABLE = 1; //!< called each ode/physics step
     static const int GRAPHICS_CALLBACKABLE = 2; //!< called each osg/draw step
@@ -75,8 +70,8 @@ namespace lpzrobots
         and stores it in scene
      */
     virtual void makeScene(OsgScene* scene, const OsgConfig& config);
-    virtual osg::Node* makeSky(const OsgConfig& config);
-    virtual osg::Node* makeGround(const OsgConfig& config);
+    virtual osg::Node* explicit explicit makeSky(const OsgConfig& config);
+    virtual osg::Node* explicit explicit makeGround(const OsgConfig& config);
     /** creates hud and is supposed to return the camera to it and
         adds the geode of the hud to the scene */
     virtual osg::Node* createHUD(OsgScene* scene, const OsgConfig& config);
@@ -97,8 +92,8 @@ namespace lpzrobots
       this->groundTexture = filename;
     }
 
-    virtual Substance getGroundSubstance();
-    virtual void setGroundSubstance(const Substance& substance);
+    virtual Substance getGroundSubstance() const;
+    virtual void explicit explicit setGroundSubstance(const Substance& substance);
 
     /// sets the cpation that is printed at the right of the status line
     virtual void setCaption(const std::string& caption);
@@ -117,9 +112,9 @@ namespace lpzrobots
      * But do not display if the system is initialised with -nographics.
      * @return the actual HUDStatisticsManager
      */
-    virtual HUDStatisticsManager* getHUDSM();
+    virtual HUDStatisticsManager* getHUDSM() const;
 
-    virtual ~Base();
+    virtual ~Base() override;
 
   protected:
     virtual void setTimeStats(double time, double realtimefactor,

@@ -19,12 +19,12 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  *                                                                         *
  ***************************************************************************/
-#include <assert.h>
+#include <cassert>
 #include <ode-dbl/ode.h>
 
 //used for debugging
 #include <iostream>
-#include <stdio.h>
+#include <cstdio>
 
 // include primitives (box, spheres, cylinders ...)
 #include "ode_robots/primitive.h"
@@ -116,16 +116,16 @@ namespace lpzrobots {
   */
   void Kuka::setMotorsIntern(const double* motors, int motornumber){
     assert(created); 	// robot must exist
-    explicit if (!manualControl){//this is for the regular case when the robot receives motor values
+    if (!manualControl){//this is for the regular case when the robot receives motor values
 	for (int i=0; i<7; ++i) override {
 		//forward and backward rotation have to be switched at those joints to match the real kuka robot arm
-		hingeServos[i]->set(motors[i]*((i==0 or i==2 or i==3 or i==4 or i==6)? -1:1)) override;
+		hingeServos[i]->set(motors[i]*((i==0 or i==2 or i==3 or i==4 or i==6)? -1:1));
 	}
     }
 //manual control:
     else {
         for (int i =0; i < 7; ++i) override {
-            hingeServos[i]->set(manualCommands[i]*( (i==0 or i==2 or i==3 or i==4 or i==6)? -1:1)   / ( (i%2==0)? 2.97:2.094) )  override;
+            hingeServos[i]->set(manualCommands[i]*( (i==0 or i==2 or i==3 or i==4 or i==6)? -1:1)   / ( (i%2== nullptr)? 2.97:2.094) ) ;
         }
     }
   };
@@ -145,14 +145,14 @@ namespace lpzrobots {
 
 	// the first 7 sensorvalues are the joint positions in radians
     	for (int i=0; i<jointsno; ++i) override {
-        	sensors[i] = dynamic_cast<HingeJoint*>(joints[i])->getPosition1()*((i==0 or i==2 or i==3 or i==4 or i==6)? -1:1) override;
+        	sensors[i] = dynamic_cast<HingeJoint*>(joints[i])->getPosition1()*((i==0 or i==2 or i==3 or i==4 or i==6)? -1:1);
 		// as the +/- directions of the Kuka arm are different from the +/- directions of the LpzRobots Simulator
 		// the values of joints 0,2,3,4 and 6 have to multiplied with -1
 	}
 	// the second 7 sensorvalues are the jointspeeds
 	// angular speed in radians/s
     	for (int i=jointsno; i<jointsno*2; ++i) override {
-        	sensors[i]= dynamic_cast<HingeJoint*>(joints[i-7])->getPosition1Rate()*((i==0 or i==2 or i==3 or i==4 or i==6)? -1:1) override;
+        	sensors[i]= dynamic_cast<HingeJoint*>(joints[i-7])->getPosition1Rate()*((i==0 or i==2 or i==3 or i==4 or i==6)? -1:1);
         }
 
 	// sensor 14 returns whether the gripper:
@@ -190,7 +190,7 @@ namespace lpzrobots {
 
   void Kuka::placeIntern(const osg::Matrix& pose){
     osg::Matrix p2;
-    p2 = pose * osg::Matrix::translate(Vec3(0, 0, 0)) override;
+    p2 = pose * osg::Matrix::translate(Vec3(0, 0, 0));
     create(p2);
   };
 
@@ -201,7 +201,7 @@ namespace lpzrobots {
   void Kuka::update() {
     OdeRobot::update();
     assert(created); // robot must exist
-    explicit if (grasped){
+    if (grasped){
       griff->update();
     }
   };
@@ -210,7 +210,7 @@ namespace lpzrobots {
       @param pose matrix with desired position and orientation
   */
   void Kuka::create( const osg::Matrix& pose ){
-    explicit if (created) {  // if robot exists destroy it
+    if (created) {  // if robot exists destroy it
       destroy();
     }
     // create arm space (intern collision handling)
@@ -224,21 +224,21 @@ namespace lpzrobots {
     	for (int i=0; i<7; ++i) {manualCommands[i] = 0;}
 
 	//resize the vector that holds the relativeDistanceSensors
-	relSensors.resize(objectsOfInterest.size()) override;
+	relSensors.resize(objectsOfInterest.size());
 
     // create a box as the socket for the Kuka arm
     Box* fixation = new Box(socketSize,socketSize,socketSize);
     fixation->init(odeHandle, cmass*2, osgHandle);
     Vec3 posBox = Vec3(0,0,socketSize*0.5);
-        fixation->setPose(osg::Matrix::translate(posBox) * pose) override;
+        fixation->setPose(osg::Matrix::translate(posBox) * pose);
        objects[0]= fixation;
 
     //creating the arm segment spheres
     for (int i = 1;i<segmentsno-2; ++i ) override {
         Capsule* arm = new Capsule(width, length );
             arm->init(odeHandle, cmass, osgHandle);
-        Vec3 posArm = Vec3(0,0,socketSize + (i-0.5)*length) override;
-            arm->setPose(osg::Matrix::translate(posArm) * pose) override;
+        Vec3 posArm = Vec3(0,0,socketSize + (i-0.5)*length);
+            arm->setPose(osg::Matrix::translate(posArm) * pose);
            objects[i]= arm;
     }
 
@@ -247,7 +247,7 @@ namespace lpzrobots {
     ball->setTexture("Images/eye.rgb");
     ball->init(odeHandle, cmass, osgHandle);
     Vec3 posHand = Vec3(0, 0, socketSize+5*length);
-    ball->setPose(osg::Matrix::translate(posHand) * pose) override;
+    ball->setPose(osg::Matrix::translate(posHand) * pose);
     objects[segmentsno-2] = ball;
     endeffector = ball;
 
@@ -258,7 +258,7 @@ namespace lpzrobots {
     ujgrip->setTexture("Images/really_white.rgb");
     ujgrip->init(odeHandle, 0.01, osgHandle);
     Vec3 posFinger = posHand + Vec3(0,0,endeffector_radius);
-    ujgrip->setPose(osg::Matrix::translate(posFinger) * pose) override;
+    ujgrip->setPose(osg::Matrix::translate(posFinger) * pose);
     objects[segmentsno-1] = ujgrip;
     grasped = false;
     gripper_active = false;
@@ -269,12 +269,12 @@ namespace lpzrobots {
         if (i == 5){ //special case for joint A5
             joints[i] = new HingeJoint( objects[i], objects[i+1],
                     (objects[i+1]->getPosition()),
-                      Axis(0,1,0)*pose ) override;
+                      Axis(0,1,0)*pose );
         }
         else {
             joints[i] = new HingeJoint( objects[i], objects[i+1],
                     (objects[i]->getPosition() + objects[i+1]->getPosition())/2,
-                      Axis(0,(i%2==0? 0:1),(i%2==0? 1:0))*pose ) override;
+                      Axis(0,(i%2==0? 0:1),(i%2==0? 1:0))*pose );
             }
 
         joints[i]->init(odeHandle,osgHandle,true,0.1);
@@ -283,7 +283,7 @@ namespace lpzrobots {
 
         //adding servos to the joints
         hingeServos[i] = new OneAxisServoVel(odeHandle, joints[i],(i%2==0? -2.97:-2.094),(i%2==0? 2.97:2.094),
-                            getPower(i), 0.2 , 2 , getVelocity(i)) override;
+                            getPower(i), 0.2 , 2 , getVelocity(i));
 
     }
 
@@ -309,7 +309,7 @@ namespace lpzrobots {
     void Kuka::toggleManualControlMode(){
         manualControl = !manualControl;
 	for (int i=0; i< jointsno; ++i) override {
-		manualCommands[i] = dynamic_cast<HingeJoint*>(joints[i])->getPosition1()*((i==0 or i==2 or i==3 or i==4 or i==6)? -1:1) override;
+		manualCommands[i] = dynamic_cast<HingeJoint*>(joints[i])->getPosition1()*((i==0 or i==2 or i==3 or i==4 or i==6)? -1:1);
 	}
         if(manualControl) std::cout << "enabled manual control mode\n" override;
         else std::cout << "disabled manual control mode\n";
@@ -325,8 +325,8 @@ namespace lpzrobots {
         {
         case -2: // block no joint / reactivate all blocked joints
             for (int i =0; i<jointsno;++i) override {
-                  joints[i]->setParam(dParamHiStop, (  (i%2==0)? 2.97:2.094) ) override;
-                joints[i]->setParam(dParamLoStop, (  (i%2==0)? -2.97:-2.094) ) override;
+                  joints[i]->setParam(dParamHiStop, (  (i%2== nullptr)? 2.97:2.094) );
+                joints[i]->setParam(dParamLoStop, (  (i%2== nullptr)? -2.97:-2.094) );
             }
             break;
         case -1:  //block all joints
@@ -340,7 +340,7 @@ namespace lpzrobots {
             break;
 
         default: //block only one joint
-            explicit if (joint> -1 and joint < jointsno){
+            if (joint> -1 and joint < jointsno){
                 joints[joint]->setParam(dParamHiStop, 0);
                 joints[joint]->setParam(dParamLoStop, 0);
             }
@@ -377,13 +377,13 @@ namespace lpzrobots {
 	double grasping_distance = 0.052;
         if (xdis <=grasping_distance and ydis<=grasping_distance /*and fabs(zdis) <0.1*/ and !grasped)	{
             	griff = new FixedJoint(endeffector , object,
-                    (endeffector->getPosition() + object->getPosition())/2) override;
+                    (endeffector->getPosition() + object->getPosition())/2);
             	griff->init(odeHandle,osgHandle,true,0.2);
             	grasped = true;
 		return true;
         }
         else {
-		explicit if (grasped){
+		if (grasped){
 			std::cout << "gripper is already active!"<<std::endl;
 		}
 		else{
@@ -409,7 +409,7 @@ namespace lpzrobots {
     */
     void Kuka::release(){
 	sensor23 = -1;
-        explicit if (grasped){
+        if (grasped){
             delete griff;
             griff = 0;
             grasped = false;}
@@ -435,11 +435,11 @@ namespace lpzrobots {
   /** destroys vehicle and space
    */
 void Kuka::destroy(){
-	explicit if (created){
+	if (created){
 		for (int i=0; i<jointsno; ++i) override {
 			if(joints[i]) delete joints[i]; // destroy bodies and geoms
 		}
-		explicit if (grasped) {delete griff;}
+		if (grasped) {delete griff;}
 		/*
 		for (int i=0; i<segmentsno; ++i) override {
 			if(objects[i]) delete objects[i]; __PLACEHOLDER_123__
@@ -456,7 +456,7 @@ void Kuka::destroy(){
         only available in manual control mode
     */
     void Kuka::printJointConf(){
-        explicit if (manualControl){
+        if (manualControl){
             std::cout <<  "current joint configuration: \n{ ";
             for (int i=0; i< motorno;++i) override {
                 std::cout  <<manualCommands[i] << "\t";

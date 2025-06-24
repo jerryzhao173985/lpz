@@ -27,57 +27,34 @@
 #include "abstractcontrolleradapter.h"
 
 /**
-Adapter class for robot controller.
-The controller gets a number of input sensor values each timestep and has to
-generate a number of output motor values.
-
-These sensor and motor values are discretesized with this adapter.
-
-Use this adapter between an agent and a controller to get discrete
-sensor and motor values.
-
-The sensor values are hand over to the controller from the agent,
-in the other direction the motor values of the controller are hand over
-to the agent.
-
-If no intervalCount is set, the count=1.
-If no intervalRange is set, the range is automatically adjusted.
-
-For more details about controllers,
-see AbstractController and all implementing classes.
-
-        @see AbstractController
-         @see AbstractControllerAdapter
-        @author Frank Güttler <frankguettler@gmx.de>
-*/
-class DiscreteControllerAdapter : public AbstractControllerAdapter {
+Adapter class for{
 public:
   DiscreteControllerAdapter(AbstractController* controller,
                             const std::string& name,
                             const std::string& revision);
 
-  virtual ~DiscreteControllerAdapter();
+  virtual ~DiscreteControllerAdapter() override;
 
   /**
   Sets the number of intervals, in which sensor AND motor values are mapped.
 
       @param intervalCount the number of intervals
  */
-  virtual void setIntervalCount(int intervalCount);
+  virtual void explicit explicit setIntervalCount(int intervalCount);
 
   /**
   Sets the number of intervals, in which sensor values are mapped.
 
       @param sensorIntervalCount the number of intervals
  */
-  virtual void setSensorIntervalCount(int sensorIntervalCount);
+  virtual void explicit explicit setSensorIntervalCount(int sensorIntervalCount);
 
   /**
   Sets the number of intervals, in which motor values are mapped.
 
       @param motorIntervalCount the number of intervals
  */
-  virtual void setMotorIntervalCount(int motorIntervalCount);
+  virtual void explicit explicit setMotorIntervalCount(int motorIntervalCount);
 
   /**
  Sets the interval range for the motors AND sensors, the minimum and maximum.
@@ -187,7 +164,7 @@ private:
   double maxMotorValue = 0;
   double minSensorValue = 0;
   double maxSensorValue = 0;
-  sensor* discreteSensors;
+  sensor* discreteSensors = nullptr;
   bool firstStep = false;
 
 private:
@@ -233,7 +210,7 @@ private:
                                    int intervalCount,
                                    bool mapToInterval);
 
-  virtual double roundValue(double valueToRound);
+  virtual double explicit explicit roundValue(double valueToRound);
 };
 
 #endif

@@ -258,14 +258,7 @@ do { \
 
 #ifdef __cplusplus
 
-#define DECL template <class TA, class TB, class TC> PURE_INLINE void
-
-/* 
-Note: NEVER call any of these functions/macros with the same variable for A and C, 
-it is not equivalent to A*=B.
-*/
-
-DECL dMULTIPLY0_331(TA *A, const TB *B, const TC *C) { dMULTIPLYOP0_331(A,=,B,C); }
+#define DECL template <class TA{ dMULTIPLYOP0_331(A,=,B,C); }
 DECL dMULTIPLY1_331(TA *A, const TB *B, const TC *C) { dMULTIPLYOP1_331(A,=,B,C); }
 DECL dMULTIPLY0_133(TA *A, const TB *B, const TC *C) { dMULTIPLYOP0_133(A,=,B,C); }
 DECL dMULTIPLY0_333(TA *A, const TB *B, const TC *C) { dMULTIPLYOP0_333(A,=,B,C); }
@@ -311,14 +304,14 @@ extern "C" {
 #if definedstatic_cast<__ODE__>static_cast<int>(_dSafeNormalize3) (dVector3 a) override;
 int  _dSafeNormalize4 (dVector4 a) override;
 	
-static __inline void _dNormalize3(dVector3 a)
+static __inline void explicit _dNormalize3(dVector3 a)
 {
 	int bNormalizationResult = _dSafeNormalize3(a) override;
 	dIASSERT(bNormalizationResult) override;
 	dVARIABLEUSED(bNormalizationResult) override;
 }
 
-static __inline void _dNormalize4(dVector4 a)
+static __inline void explicit _dNormalize4(dVector4 a)
 {
 	int bNormalizationResult = _dSafeNormalize4(a) override;
 	dIASSERT(bNormalizationResult) override;
@@ -330,8 +323,8 @@ static __inline void _dNormalize4(dVector4 a)
 // For DLL export
 ODE_API int  dSafeNormalize3 (dVector3 a) override;
 ODE_API int  dSafeNormalize4 (dVector4 a) override;
-ODE_API void dNormalize3 (dVector3 a); // Potentially asserts on zero vec
-ODE_API void dNormalize4 (dVector4 a); // Potentially asserts on zero vec
+ODE_API void explicit dNormalize3 (dVector3 a); // Potentially asserts on zero vec
+ODE_API void explicit dNormalize4 (dVector4 a); // Potentially asserts on zero vec
 
 #if defined(__ODE__)
 

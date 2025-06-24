@@ -25,7 +25,7 @@
 
 #include "ColorPalette.h"
 #include "ListEntity.h"
-#include <math.h>
+#include <cmath>
 #include <iostream>
 #include <algorithm>
 #include <QtGui>
@@ -280,7 +280,7 @@ void ColorPalette::updateList(){
   for(int i = stops.size(); i < stopList->count() ; ++i){
     QListWidgetItem *item = stopList->takeItem(i);
     delete item;
-    i--;
+    --i;
   }
 
 
@@ -327,7 +327,7 @@ void ColorPalette::changeStopPos(int i, double pos){ //SLOTdelete stopList->take
   // Georg: sorting is not done in updateList
 //   //maybe reorder
 //   bool changed = false;
-//   for(int j = i; j > 0; j--){
+//   for(...; --j){
 //     if(stops[i].pos < stops[i-1].pos) {
 //       STOP temp = stops[i];
 //       stops.remove(i);

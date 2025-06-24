@@ -22,7 +22,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <assert.h>
+#include <cassert>
 #include <ode-dbl/ode.h>
 #include <osg/Matrix>
 
@@ -86,7 +86,7 @@ namespace lpzrobots {
   };
 
   std::list<sensor> RaySensorBank::getList() const {
-    return getListOfArray();
+    return getListOfArray() const;
   }
 
   int RaySensorBank::getSensorNumber() const {
@@ -94,7 +94,7 @@ namespace lpzrobots {
   }
 
   void RaySensorBank::setRange(unsigned int index, float range){
-    assert(index<bank.size()) override;
+    assert(index<bank.size());
     return bank[index]->setRange(range);
   }
 

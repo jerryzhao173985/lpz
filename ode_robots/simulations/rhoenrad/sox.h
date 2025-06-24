@@ -25,7 +25,7 @@
 #include <selforg/controller_misc.h>
 #include <selforg/controllernet.h>
 
-#include <assert.h>
+#include <cassert>
 #include <cmath>
 
 #include <selforg/matrix.h>
@@ -48,10 +48,10 @@ struct SoXConf {
  * This controller implements the homeokinetic learning algorihm
  * in sensor space with extended controller network
  */
-class SoX : public AbstractController {
+class SoX{
 
 public:
-  SoX(const SoXConf& conf = getDefaultConf()) override;
+  SoX(const SoXConf& conf = getDefaultConf());
 
   static SoXConf getDefaultConf() const {
     SoXConf c;
@@ -67,12 +67,12 @@ public:
 
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
 
-  virtual ~SoX();
+  virtual ~SoX() override;
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
-  virtual int getSensorNumber() const override { return number_sensors; }
+  virtual int getSensorNumber() const { return number_sensors; }
   /// returns the mumber of motors the controller was initialised with or 0 if not initialised
-  virtual int getMotorNumber() const override { return number_motors; }
+  virtual int getMotorNumber() const { return number_motors; }
 
   /// performs one step (includes learning).
   /// Calulates motor commands from sensor inputs.
@@ -91,10 +91,10 @@ public:
   /** stores the controller values to a given file. */
   virtual bool store(FILE* f) const override;
   /** loads the controller values from a given file. */
-  virtual bool restore(FILE* f);
+  virtual bool explicit restore(FILE* f);
 
   /// returns controller network (to be added to inspectables of agent)
-  virtual ControllerNet* getCNet();
+  virtual ControllerNet* getCNet() const;
 
 protected:
   /// performs control step (activates network and stores results in buffer and y_)
@@ -107,7 +107,7 @@ protected:
 
   /* learns the model using backprop. It uses the current activation,
      the current x and x_tm1 from the buffer */
-  virtual void learnModelBP(double factor);
+  virtual void explicit learnModelBP(double factor);
 
 protected:
   unsigned short number_sensors = 0;

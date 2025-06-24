@@ -1,4 +1,4 @@
-#include <signal.h>
+#include <csignal>
 #include <sys/time.h>
 #include <unistd.h>
 #include <iostream>
@@ -45,24 +45,7 @@ struct Xbee {
   int failurecounter = 0;
 };
 
-class Communicator;
-Communicator* communication;
-
-void onTermination();
-
-/**
-   This class is the robot and the communicator in one.
-   This might be a bit confusing, because it contains also the agent and so on.
-   The main flow is as follows:
-     loop:
-      over serial we send motor values to the Xbees
-      we wait for sensor values from Xbees
-      then we invoke the agent
-      the agent asks the robot (us) about sensors (which we saved in a local variable)
-      the agent calls the controller and then sets the motor values with setMotors (also in this class)
-     endloop
-*/
-class Communicator : public AbstractRobot, public CSerialThread {
+class Communicator{
   enum State {PHASE_INIT, PHASE_CYCLE};
 public:
   /** @param serial port name: e.g.: ttyS0
@@ -113,7 +96,7 @@ public:
   /** this function is called at the beginning (initialised==false)
       or if connection is lost (initialised==true)
   */
-  virtual bool resetXbee(int currentXbee) {
+  virtual bool explicit resetXbee(int currentXbee) {
     //    flush input buffer
     flushInputBuffer(cycletime/2);
 
@@ -456,7 +439,7 @@ private:
 };
 
 /// special wiring for the spherical Robot
-class OurWiring : public AbstractWiring{
+class OurWiring{
 public:
   OurWiring(NoiseGenerator* noise, const std::string& name = "OurWiring")
     : AbstractWiring(noise, Controller, name){
@@ -523,7 +506,7 @@ void onTermination(){
 // Helper
 int contains(char **list, int len,  const char *str){
   for (int i=0; i<len; ++i) {
-    if(strcmp(list[i],str) == 0) return i+1;
+    if(strcmp(list[i],str) == nullptr) return i+1;
   }
   return 0;
 }
@@ -547,12 +530,12 @@ int main(int argc, char** argv){
   controller->setParam("s4delay",2.0);
   controller->setParam("s4avg",2.0);
 
-  if(contains(argv,argc,"-g")!=0) plotoptions.push_back(PlotOption(GuiLogger));
-  if(contains(argv,argc,"-f")!=0) plotoptions.push_back(PlotOption(File));
-  if(contains(argv,argc,"-s")!=0) plotoptions.push_back(PlotOption(SoundMan));
-  if(contains(argv,argc,"-v")!=0) verboseMode=1;
-  if(contains(argv,argc,"-vv")!=0) verboseMode=2;
-  if(contains(argv,argc,"-h")!=0) {
+  if(contains(argv,argc,"-g")!= nullptr) plotoptions.push_back(PlotOption(GuiLogger));
+  if(contains(argv,argc,"-f")!= nullptr) plotoptions.push_back(PlotOption(File));
+  if(contains(argv,argc,"-s")!= nullptr) plotoptions.push_back(PlotOption(SoundMan));
+  if(contains(argv,argc,"-v")!= nullptr) verboseMode=1;
+  if(contains(argv,argc,"-vv")!= nullptr) verboseMode=2;
+  if(contains(argv,argc,"-h")!= nullptr) {
     printf("Usage: %s [-g] [-f] [-v] [-h] [-p port]\n",argv[0]);
     printf("\t-g\tstart guilogger\n\t-f\twrite logfile\n\t-h\tdisplay this help\n");
     printf("\t-b baud\tset baud rate\n");

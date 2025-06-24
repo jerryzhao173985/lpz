@@ -35,9 +35,7 @@
 #include <selforg/globaldatabase.h>
 #include <selforg/backcallervector.h>
 
-class Configurable;
-
-namespace lpzrobots {
+class Configurable{
 
   class OdeAgent;
   class AbstractObstacle;
@@ -77,7 +75,7 @@ namespace lpzrobots {
       long int sim_step; ///< time steps since start
 
       /// returns the list of all agents
-      virtual AgentList& getAgents();
+      virtual AgentList& getAgents() const;
 
 
       /// adds a temporary display item with given life duration in sec
@@ -87,7 +85,7 @@ namespace lpzrobots {
       virtual void initializeTmpObjects(const OdeHandle& odeHandle,
                                         const OsgHandle& osgHandle);
       /// called by Simulation to update tmp objects
-      virtual void updateTmpObjects(const OsgHandle& osgHandle);
+      virtual void explicit explicit updateTmpObjects(const OsgHandle& osgHandle);
 
       /** called by Simulation to removes all expired sounds and temporary objects.
           Optionally a time can be specified otherwise the internal time is used.
@@ -96,7 +94,7 @@ namespace lpzrobots {
 
       /** removes a particular temporary display item even if it is not yet expired
           @return true if it was deleted (found) */
-      virtual bool removeTmpObject(TmpObject* i);
+      virtual bool explicit explicit removeTmpObject(TmpObject* i);
 
 
     private:

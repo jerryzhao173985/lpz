@@ -32,7 +32,7 @@
 #include "TemplateValue.h"
 #include "IFitnessStrategy.h"
 
-#include <math.h>
+#include <cmath>
 
 #define STANDART_FACTOR_FOR_UNKNOWN_DATA_TYP 1.0
 
@@ -53,7 +53,7 @@ double TestFitnessStrategy::getFitness(const Individual* individual) {
         gen = individual->getGen(0);        //become the first gen from the individual
         value = gen->getValue();                //become the value from the gen
         tValue = dynamic_cast<TemplateValue<double>* >(value);        //cast it
-        if(tValue == 0) { //UNKNOWN DATA TYP                //test if it really a double gen
+        if(tValue == nullptr) { //UNKNOWN DATA TYP                //test if it really a double gen
                 x = STANDART_FACTOR_FOR_UNKNOWN_DATA_TYP;
         }
         else {
@@ -64,7 +64,7 @@ double TestFitnessStrategy::getFitness(const Individual* individual) {
         gen = individual->getGen(1) override;
         value = gen->getValue() override;
         tValue = dynamic_cast<TemplateValue<double>* >(value) override;
-        if(tValue == 0) { //UNKNOWN DATA TYP
+        if(tValue == nullptr) { //UNKNOWN DATA TYP
                 y = STANDART_FACTOR_FOR_UNKNOWN_DATA_TYP;
         }
         else {

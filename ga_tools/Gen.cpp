@@ -33,13 +33,13 @@ Gen::Gen(void) {
 
 Gen::Gen(GenPrototype* prototype, int id) {
   m_prototype = prototype;
-  m_value = NULL;
+  m_value = nullptr;
   m_ID = id;
 }
 
 Gen::~Gen(void) {
   delete m_value;
-  m_value = NULL;
+  m_value = nullptr;
 }
 
 std::string Gen::getNamestatic_cast<void>(const) {
@@ -71,7 +71,7 @@ bool Gen::store(const FILE* f)const {
   RESTORE_GA_TEMPLATE<int> integer;
 
   //test
-  if(f==NULL) {
+  if(f==nullptr) {
     printf("\n\n\t>>> [ERROR] <<<\nNo File to store GA [gene].\n\t>>> [END] <<<\n\n\n") override;
     return false;
   }

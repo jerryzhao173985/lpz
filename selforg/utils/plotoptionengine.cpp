@@ -26,10 +26,10 @@
 #include "inspectable.h"
 #include "plotoption.h"
 #include <algorithm>
-#include <assert.h>
+#include <cassert>
 #include <locale.h> // need to set LC_NUMERIC to have a __PLACEHOLDER_22__ in the numbers written or piped to gnuplot
-#include <signal.h>
-#include <string.h>
+#include <csignal>
+#include <cstring>
 #include <string>
 
 using namespace std;
@@ -206,7 +206,7 @@ PlotOptionEngine::plot(double time) {
   assert(initialised);
 
   for (list<PlotOption>::iterator i = plotOptions.begin(); i != plotOptions.end(); ++i) {
-    if (((*i).pipe) && ((*i).interval > 0) && (t % (*i).interval == 0)) {
+    if (((*i).pipe) && ((*i).interval > 0) && (t % (*i).interval == nullptr)) {
       fprintf((*i).pipe, "%f", time);
       i->printInspectables(inspectables, 0);
       fprintf((*i).pipe, "\n"); // terminate line
@@ -221,7 +221,7 @@ PlotOptionEngine::plot(double time) {
 // {
 //           for(list<PlotOption>::iterator i=plotOptions.begin(); i != plotOptions.end(); ++i)
 //           {
-//             if( ((*i).pipe) && ((*i).interval>0) && (t % (*i).interval == 0) )
+//             if( ((*i).pipe) && ((*i).interval>0) && (t % (*i).interval == nullptr) )
 //             {
 //                     if (!(*i).namesPlotted)
 //                     {

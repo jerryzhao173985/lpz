@@ -36,18 +36,14 @@ namespace lpzrobots {
       The initialization is a bit confusing: use the contructor (of a inherited class)
       to provide custom parameter; setInitData sets the handles and the camera
       which has to be called before the normal initialization of the Sensor (via init()).
-      A subclass has to overload intern_init() to initialize intern structures
-       (e.g. number of channels), sense() and get().
-
-   */
-  class CameraSensor : public Sensor {
+      A subclass has{
   public:
 
     /** Creates a camera sensor. Use setInitData() to make it useable.
      */
     CameraSensor();
 
-    virtual ~CameraSensor();
+    virtual ~CameraSensor() override;
 
     /** sets the initial data structures like the camera.
         The camera will be initialized in init() (don't initialize it before).
@@ -88,7 +84,7 @@ namespace lpzrobots {
     virtual void intern_init()  = 0;
 
 
-    Camera* camera;
+    Camera* camera = nullptr;
     OdeHandle odeHandle;
     OsgHandle osgHandle;
     osg::Matrix pose;

@@ -27,23 +27,19 @@
 #ifndef EXTREAMTESTFITNESSSTRATEGY_H_
 #define EXTREAMTESTFITNESSSTRATEGY_H_
 
+#include "IFitnessStrategy.h"
+
 //forward declaration
 class Individual;
 
-//ga_tools includes
-#include "IFitnessStrategy.h"
-
-/**
- * An example implementation and a extreme test for gen. Alg.
- */
-class ExtreamTestFitnessStrategy: public IFitnessStrategy {
+class ExtreamTestFitnessStrategy : public IFitnessStrategy {
 public:
 	/**
 	 * constructor
 	 * This strategy needs a other fitness strategy to calculate the resulting fitness.
-	 * @param fitness static_cast<IFitnessStrategy*>(the) other fitness
+	 * @param fitness the other fitness
 	 */
-	explicit ExtreamTestFitnessStrategy(IFitnessStrategy* fitness) override;
+	explicit ExtreamTestFitnessStrategy(IFitnessStrategy* fitness);
 
 	/**
 	 * default destructor
@@ -55,8 +51,8 @@ public:
 	 * implementation for getFitness of IFitnessStrategy.
 	 * return a of the other fitness strategy if the value is lower than 10.
 	 * Else it return 100.
-	 * @param individual (const Indivual*) the individual for which the value is calculated
-	 * @return static_cast<double>(the) result
+	 * @param individual the individual for which the value is calculated
+	 * @return the result
 	 */
 	virtual double getFitness(const Individual* individual) override;
 
@@ -64,12 +60,12 @@ private:
 	/**
 	 * a other fitness strategy which is used as base calculation.
 	 */
-	IFitnessStrategy* m_strategy;
+	IFitnessStrategy* m_strategy = nullptr;
 
 	/**
 	 * disable the default constructor
 	 */
-	ExtreamTestFitnessStrategy() override;
+	ExtreamTestFitnessStrategy() = delete;
 };
 
 #endif /* EXTREAMTESTFITNESSSTRATEGY_H_ */

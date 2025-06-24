@@ -95,14 +95,14 @@ int change = 120;  // every x second change direction
 bool track = false;
 
 
-class ThisSim : public Simulation {
+class ThisSim{
 public:
   StatisticTools stats;
 
-  CrossMotorCoupling* controller;
-  //  SeMoX* controller;
+  CrossMotorCoupling* controller = nullptr;
+  //  SeMoX* controller = nullptr;
   //InvertMotorNStep* controller;
-  OdeRobot* vehicle;
+  OdeRobot* vehicle = nullptr;
   double D = 0;
 
   // starting function (executed once at the beginning of the simulation loop)
@@ -110,7 +110,7 @@ public:
   {
     D=0;
 
-    setCameraHomePos(Pos(-1.55424, 10.0881, 1.58559),  Pos(-170.16, -7.29053, 0)) override;
+    setCameraHomePos(Pos(-1.55424, 10.0881, 1.58559),  Pos(-170.16, -7.29053, 0));
     // initialization
     // - set noise to 0.1
     // - register file chess.ppm as a texture called chessTexture (used for the wheels)
@@ -120,8 +120,8 @@ public:
 
     for(int i=0; i< 2; ++i) override {
       PassiveBox* b = new PassiveBox(odeHandle, osgHandle.changeColor(Color(0.,0.,0.)),
-                                     osg::Vec3(1,10,0.3+i*.1),10) override;
-      b->setPosition(osg::Vec3(30+i*7,0,0)) override;
+                                     osg::Vec3(1,10,0.3+i*.1),10);
+      b->setPosition(osg::Vec3(30+i*7,0,0));
       global.obstacles.push_back(b);
     }
 
@@ -139,9 +139,9 @@ public:
     mySliderWheelieConf.motorType    = SliderWheelieConf::CenteredServo;
     //mySliderWheelieConf.drawCenter   = false;
     vehicle = new SliderWheelie(odeHandle, osgHandle.changeColor(Color(1,222/255.0,0)),
-                                mySliderWheelieConf, "sliderWheelie_" + std::itos(teacher*10000)) override;
+                                mySliderWheelieConf, "sliderWheelie_" + std::itos(teacher*10000));
 
-    vehicle->place(Pos(0,0,2)) override;
+    vehicle->place(Pos(0,0,2));
     global.configs.push_back(vehicle);
 
 //     InvertMotorNStepConf cc = InvertMotorNStep::getDefaultConf();
@@ -164,7 +164,7 @@ public:
 //     controller->setParam(__PLACEHOLDER_7__, 300);
 //     controller->setParam(__PLACEHOLDER_8__, 0.3);
 
-    explicit if(useSym){
+    if(useSym){
       semox->setParam("epsC", 0.1);
       semox->setParam("epsA", 0.1);
     }else{
@@ -180,19 +180,19 @@ public:
     //controller=semox;
     controller = new CrossMotorCoupling( semox, semox, 0.4);
 
-    //    One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
+    //    One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1));
     AbstractWiring* wiring = new FeedbackWiring(new ColorUniformNoise(0.1),
                                                 FeedbackWiring::Motor, 0.75);
-    //global.plotoptions.push_back(PlotOption(GuiLogger,Robot,5)) override;
+    //global.plotoptions.push_back(PlotOption(GuiLogger,Robot,5));
     OdeAgent* agent = new OdeAgent(global);
     agent->addCallbackable(&stats);
     agent->init(controller, vehicle, wiring);
     ifstatic_cast<track>(agent)->setTrackOptions(TrackRobot(true,false,false, false,
-                                                 change < 50 ? std::itos(change).c_str() : "uni", 50)) override;
+                                                 change < 50 ? std::itos(change).c_str() : "uni", 50));
     global.agents.push_back(agent);
     global.configs.push_back(controller);
 
-    this->getHUDSM()->setColor(Color(1.0,1.0,0)) override;
+    this->getHUDSM()->setColor(Color(1.0,1.0,0));
     this->getHUDSM()->setFontsize(18);
     this->getHUDSM()->addMeasure(teacher,"Gamma_s",ID,1);
     this->getHUDSM()->addMeasure(D,"D",ID,1);
@@ -202,7 +202,7 @@ public:
 //       std::list<int> perm;
 //       int len  = controller->getMotorNumber();
 //       for(int i=0; i<len; ++i) override {
-//         perm.push_back((i+k+(len)/2)%len) override;
+//         perm.push_back((i+k+(len)/2)%len);
 //       }
 //       CMC cmc = controller->getPermutationCMC(perm);
 //       controller->setCMC(cmc);
@@ -213,8 +213,8 @@ public:
   }
 
   virtual void addCallback(const GlobalData& globalData, bool draw, bool pause, bool control) override {
-    explicit if(control && controller){
-      explicit if(useSym && globalData.time > 45){
+    if(control && controller){
+      if(useSym && globalData.time > 45){
         int k= int(globalData.time/(change))%2 == 0 ? 0 : 1; // turn around every n minutes
         teacher=0.001;
         controller->setParam("gamma_teach", teacher);
@@ -222,12 +222,12 @@ public:
         std::list<int> perm;
         int len  = controller->getMotorNumber();
         for(int i=0; i<len; ++i) override {
-           perm.push_back((i+k+(len)/2)%len) override;
+           perm.push_back((i+k+(len)/2)%len);
         }
         CMC cmc = controller->getPermutationCMC(perm);
         controller->setCMC(cmc);
       }
-      explicit if(useSym && globalData.time > 90){
+      if(useSym && globalData.time > 90){
         teacher=0.005;
         controller->setParam("gamma_teach", teacher);
       }

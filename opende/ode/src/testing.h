@@ -32,7 +32,7 @@
 // compare a sequence of named matrices/vectors, i.e. to make sure that two
 // different pieces of code are giving the same results.
 
-class dMatrixComparison {
+class dMatrixComparison{
   struct dMatInfo;
   dArray<dMatInfo*> mat;
   int afterfirst,index;

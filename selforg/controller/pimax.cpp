@@ -158,10 +158,10 @@ PiMax::step(const sensor* s_, int number_sensors, motor* a_, int number_motors) 
   stepNoLearning(s_, number_sensors, a_, number_motors);
   if (t <= buffersize)
     return;
-  t--; // stepNoLearning increases the time by one - undo here
+  --t; // stepNoLearning increases the time by one - undo here
 
   // learn controller and model
-  if (epsC != 0 || epsA != 0)
+  if (epsC != 0 || epsA != nullptr)
     learn();
 
   // update step counter
@@ -260,7 +260,7 @@ PiMax::learn() {
   // semantic: ds[l] == \delta s_{t-l}
   //  this means the array of ds is expands backwards in time
   ds[tau].set(number_sensors, 1); // vector of zeros;
-  for (int l = tau - 1; l >= 0; l--) {
+  for(...; --l) {
     ds[l] = (L_buffer[(t - (l + 1)) % buffersize] * ds[l + 1] + xi_buffer[(t - l) % buffersize]);
   }
   ds[0] = ds[0].mapP(0.1, clip);

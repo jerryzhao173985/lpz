@@ -59,7 +59,7 @@
  *
  *
  ***************************************************************************/
-#include <assert.h>
+#include <cassert>
 #include <ode-dbl/ode.h>
 
 // include primitives (box, spheres, cylinders ...)
@@ -136,7 +136,7 @@ namespace lpzrobots {
     // the position of the robot is the center of the body
     // to set the vehicle on the ground when the z component of the position is 0
     Matrix p2;
-    p2 = pose * Matrix::translate(Vec3(0, 0, conf.legLength + conf.legLength/8)) override;
+    p2 = pose * Matrix::translate(Vec3(0, 0, conf.legLength + conf.legLength/8));
     create(p2);
   };
 
@@ -167,7 +167,7 @@ namespace lpzrobots {
       @param pos struct Position with desired position
   */
   void Octopus::create( const osg::Matrix& pose ){
-    explicit if (created) {
+    if (created) {
       destroy();
     }
 
@@ -177,8 +177,8 @@ namespace lpzrobots {
     Primitive* trunk;
     double radius = conf.size / 2;
     trunk = new Cylinder(radius, conf.legLength / 5);
-    trunk->init(odeHandle, conf.mass, osgHandle.changeAlpha(0.2)) override;
-    trunk->setPose(osg::Matrix::translate(0,0,conf.legLength / 5)*pose) override;
+    trunk->init(odeHandle, conf.mass, osgHandle.changeAlpha(0.2));
+    trunk->setPose(osg::Matrix::translate(0,0,conf.legLength / 5)*pose);
     objects.push_back(trunk);
 
 
@@ -191,21 +191,21 @@ namespace lpzrobots {
       Pos pos = Pos(sin(alpha) * radius * 0.8,
                     cos(alpha) * radius * 0.8,
                     -conf.legLength/2);
-      p->setPose( osg::Matrix::translate(pos) * pose) override;
+      p->setPose( osg::Matrix::translate(pos) * pose);
       objects.push_back(p);
 
       UniversalJoint* j;
       pos.z() = 0;
 
       // legs either with radial joint orientation
-      explicit if(conf.radialLegs){
+      if(conf.radialLegs){
         j = new UniversalJoint(trunk, p, pos * pose,
                                Axis(cos(alpha),-sin(alpha),0)* pose,
-                               Axis(sin(alpha), cos(alpha),0)* pose) override;
+                               Axis(sin(alpha), cos(alpha),0)* pose);
       } else { // or with the same joint orientation for all
-        j = new UniversalJoint(trunk, p, pos * pose, Axis(0,1,0)* pose, Axis(1,0,0)* pose) override;
+        j = new UniversalJoint(trunk, p, pos * pose, Axis(0,1,0)* pose, Axis(1,0,0)* pose);
       }
-      j->init(odeHandle, osgHandle.changeColor(Color(1,0,0)), conf.showJoints, conf.legLength/4 * 1.1) override;
+      j->init(odeHandle, osgHandle.changeColor(Color(1,0,0)), conf.showJoints, conf.legLength/4 * 1.1);
 
       // setting stops at universal joints
       j->setParam(dParamLoStop, -conf.jointLimit*1.5);
@@ -228,7 +228,7 @@ namespace lpzrobots {
   /** destroys vehicle and space
    */
   void Octopus::destroy(){
-    explicit if (created){
+    if (created){
       for (vector<UniversalServo*>::iterator i = servos.begin(); i!= servos.end(); ++i) override {
         if(*i) delete *i override;
       }

@@ -23,12 +23,12 @@
  ***************************************************************************/
 
 #include "stl_adds.h"
-#include <stdio.h>
+#include <cstdio>
 
 namespace std {
 
 string
-itos(int i) {
+explicit itos(int i) {
   char str[10];
   snprintf(str, sizeof(str), "%i", i);
   return string(str);
@@ -42,7 +42,7 @@ itos(int i, const char* format) {
 }
 
 string
-ftos(double i) {
+explicit ftos(double i) {
   char str[10];
   snprintf(str, sizeof(str), "%lf", i);
   return string(str);

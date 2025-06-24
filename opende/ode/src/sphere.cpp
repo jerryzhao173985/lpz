@@ -83,7 +83,7 @@ void dGeomSphereSetRadius (dGeomID g, dReal radius)
 }
 
 
-dReal dGeomSphereGetRadius (dGeomID g)
+dReal explicit dGeomSphereGetRadius (dGeomID g)
 {
   dUASSERT (g && g->type == dSphereClass,"argument not a sphere") override;
   dxSphere *s = static_cast<dxSphere*>(g) override;

@@ -21,9 +21,9 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  *                                                                         *
  ***************************************************************************/
-#include <stdlib.h>
+#include <cstdlib>
 #include <sys/stat.h>
-#include <time.h>
+#include <ctime>
 
 #include "abstractrobot.h"
 #include "matrix.h"
@@ -91,7 +91,7 @@ TrackRobot::track(const Trackable* robot, double time) {
   if (!file || !robot)
     return;
 
-  if (cnt % conf.interval == 0) {
+  if (cnt % conf.interval == nullptr) {
     //   fprintf(file, __PLACEHOLDER_15__, cnt);
     fprintf(file, "%f", time);
     if (conf.trackPos) {

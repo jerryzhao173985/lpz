@@ -1,0 +1,47 @@
+Checking ga_tools/FitnessStrategies/EuclidicDistanceFitnessStrategy.cpp ...
+ga_tools/FitnessStrategies/EuclidicDistanceFitnessStrategy.h:52:11: style: The destructor '~EuclidicDistanceFitnessStrategy' overrides a destructor in a base class but is not marked with a 'override' specifier. [missingOverride]
+ virtual ~EuclidicDistanceFitnessStrategy();
+          ^
+ga_tools/FitnessStrategies/IFitnessStrategy.h:48:11: note: Virtual destructor in base class
+ virtual ~IFitnessStrategy();
+          ^
+ga_tools/FitnessStrategies/EuclidicDistanceFitnessStrategy.h:52:11: note: Destructor in derived class
+ virtual ~EuclidicDistanceFitnessStrategy();
+          ^
+1/37 files checked 1% done
+Checking ga_tools/FitnessStrategies/ExtreamTestFitnessStrategy.cpp ...
+ga_tools/FitnessStrategies/ExtreamTestFitnessStrategy.h:52:11: style: The destructor '~ExtreamTestFitnessStrategy' overrides a destructor in a base class but is not marked with a 'override' specifier. [missingOverride]
+ virtual ~ExtreamTestFitnessStrategy();
+          ^
+ga_tools/FitnessStrategies/IFitnessStrategy.h:48:11: note: Virtual destructor in base class
+ virtual ~IFitnessStrategy();
+          ^
+ga_tools/FitnessStrategies/ExtreamTestFitnessStrategy.h:52:11: note: Destructor in derived class
+ virtual ~ExtreamTestFitnessStrategy();
+          ^
+2/37 files checked 2% done
+Checking ga_tools/FitnessStrategies/IFitnessStrategy.cpp ...
+3/37 files checked 3% done
+Checking ga_tools/FitnessStrategies/InvertedFitnessStrategy.cpp ...
+ga_tools/FitnessStrategies/InvertedFitnessStrategy.h:53:11: style: The destructor '~InvertedFitnessStrategy' overrides a destructor in a base class but is not marked with a 'override' specifier. [missingOverride]
+ virtual ~InvertedFitnessStrategy();
+          ^
+ga_tools/FitnessStrategies/IFitnessStrategy.h:48:11: note: Virtual destructor in base class
+ virtual ~IFitnessStrategy();
+          ^
+ga_tools/FitnessStrategies/InvertedFitnessStrategy.h:53:11: note: Destructor in derived class
+ virtual ~InvertedFitnessStrategy();
+          ^
+4/37 files checked 4% done
+Checking ga_tools/FitnessStrategies/SumFitnessStrategy.cpp ...
+ga_tools/FitnessStrategies/SumFitnessStrategy.h:49:11: style: The destructor '~SumFitnessStrategy' overrides a destructor in a base class but is not marked with a 'override' specifier. [missingOverride]
+ virtual ~SumFitnessStrategy();
+          ^
+ga_tools/FitnessStrategies/IFitnessStrategy.h:48:11: note: Virtual destructor in base class
+ virtual ~IFitnessStrategy();
+          ^
+ga_tools/FitnessStrategies/SumFitnessStrategy.h:49:11: note: Destructor in derived class
+ virtual ~SumFitnessStrategy();
+          ^
+5/37 files checked 6% done
+Checking ga_tools/FitnessStrategies/TestFitnessStrategy.cpp ...

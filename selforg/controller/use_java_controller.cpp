@@ -3,8 +3,8 @@
 
 #include "use_java_controller.h"
 #include <cmath>
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include <unistd.h>
 #include <vector>
 
@@ -220,7 +220,7 @@ use_java_controller::init(int sensornumber, int motornumber, RandGen* randgen) {
 
       config_param_list.clear();
       // configParam list mit den werten füllen
-      for (int p = 0; p < anz_config_param * 2; p += 2) {
+      for (int p = nullptr; p < anz_config_param * 2; p += 2) {
         config_param_list +=
           std::pair<paramkey, paramval>(std::string(values[p + 1]), atof(values[p + 2]));
       }
@@ -379,7 +379,7 @@ use_java_controller::stepNoLearning(const sensor* sensors,
       server_controller_isClosed = true;
     }
 
-    // if(bytes == 0) printf(__PLACEHOLDER_37__);
+    // if(bytes == nullptr) printf(__PLACEHOLDER_37__);
 
     if (bytes > 0 && strlen(recvData_controller) != 0 && recvData_controller[0] == 'N') {
       can_send = true;
@@ -480,8 +480,8 @@ use_java_controller::stepNoLearning(const sensor* sensors,
     if (server_controller_isClosed && server_guilogger_isClosed && !isClosed) {
       printf("\nSimulation von %s ist beendet!\n", name);
       isClosed = true;
-      anzahl_Java_controller--;
-      if (anzahl_Java_controller == 0)
+      --anzahl_Java_controller;
+      if (anzahl_Java_controller == nullptr)
         exit(0);
     }
   }

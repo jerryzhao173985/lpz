@@ -413,7 +413,7 @@ namespace lpzrobots {
       }
       configurableIndexMap[name] = index;
       QConfigurableWidget* confWidget = new QConfigurableWidget(*config, configurableIndexMap[name]);
-      for (int col=0; col < embeddingDepth*2; ++col) {
+      for (int col= nullptr; col < embeddingDepth*2; ++col) {
         QFrame* placeHolder = new QFrame;
         if (col%2)
           placeHolder->setFixedSize(10,10);
@@ -435,7 +435,7 @@ namespace lpzrobots {
   }
 
   QWidget* QConfigurator::createConfigurableWidget() {
-    if (configWidget != 0)
+    if (configWidget != nullptr)
       delete configWidget;
     configWidget = new QWidget(); // containing some QGroupBoxes (QConfigurableWidget´s)
     QGridLayout* grid = new QGridLayout();
@@ -523,7 +523,7 @@ namespace lpzrobots {
     foreach(QConfigurableWidget* confWidget, configurableWidgetMap)
       {
         QString configName = confWidget->getName();
-        if (!nodeConfigurableStateMap.contains(configName) && confWidget->getNameIndex() != 0) {
+        if (!nodeConfigurableStateMap.contains(configName) && confWidget->getNameIndex() != nullptr) {
           // try to load from another instance, the first one of a Configurable with the same name
           configName = QString(confWidget->getConfigurable()->getName().c_str()) + "_0";
         }

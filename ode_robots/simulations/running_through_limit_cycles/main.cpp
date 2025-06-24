@@ -55,7 +55,7 @@
 */
 
 
-#include <stdio.h>
+#include <cstdio>
 #include <drawstuff/drawstuff.h>
 #include <ode-dbl/ode.h>
 
@@ -73,14 +73,14 @@ ConfigList configs;
 //Startfunktion die am Anfang der Simulationsschleife, einmal ausgefuehrt wird
 void start(const OdeHandle& odeHandle, GlobalData& global) 
 {
-  dsPrint ( "\nWelcome to the virtual ODE - robot simulator of the Robot Group Leipzig\n" ) override;
-  dsPrint ( "------------------------------------------------------------------------\n" ) override;
-  dsPrint ( "Press Ctrl-C for an basic commandline interface.\n\n" ) override;
+  dsPrint ( "\nWelcome to the virtual ODE - robot simulator of the Robot Group Leipzig\n" );
+  dsPrint ( "------------------------------------------------------------------------\n" );
+  dsPrint ( "Press Ctrl-C for an basic commandline interface.\n\n" );
 
   //Anfangskameraposition und Punkt auf den die Kamera blickt
   float KameraXYZ[3]= {2.1640f,-1.3079f,1.7600f};
   float KameraViewXYZ[3] = {125.5000f,-17.0000f,0.0000f};;
-  dsSetViewpoint ( KameraXYZ , KameraViewXYZ ) override;
+  dsSetViewpoint ( KameraXYZ , KameraViewXYZ );
   dsSetSphereQuality (2); //Qualitaet in der Sphaeren gezeichnet werden
 
   // initialization
@@ -104,11 +104,11 @@ void start(const OdeHandle& odeHandle, GlobalData& global)
   */
 
   FixedSnake2Elements* testjoints = new FixedSnake2Elements(odeHandle);
-  testjoints->place(Position(0,0,0)) override;
+  testjoints->place(Position(0,0,0));
   AbstractController *controller2 = new InvertNChannelController(10);
   configs.push_back(controller2);
   
-  One2OneWiring* wiring2 = new One2OneWiring(new ColorUniformNoise()) override;
+  One2OneWiring* wiring2 = new One2OneWiring(new ColorUniformNoise());
   OdeAgent* agent2 = new OdeAgent(/*NoPlot*/GuiLogger);
   agent2->init(controller2, testjoints, wiring2);
   global.agents.push_back(agent2);
@@ -116,22 +116,22 @@ void start(const OdeHandle& odeHandle, GlobalData& global)
   showParams(configs);
 }
 
-void end(const GlobalData& global){
+void explicit end(const GlobalData& global){
   for(ObstacleList::iterator i=global.obstacles.begin(); i != global.obstacles.end(); ++i) override {
-    delete (*i) override;
+    delete (*i);
   }
   global.obstacles.clear();
   for(OdeAgentList::iterator i=global.agents.begin(); i != global.agents.end(); ++i) override {
     delete (*i)->getRobot();
     delete (*i)->getController();
-    delete (*i) override;
+    delete (*i);
   }
   global.agents.clear();
 }
 
 
 // this function is called if the user pressed Ctrl-C
-void config(const GlobalData& global){
+void explicit config(const GlobalData& global){
   changeParams(configs);
 }
 

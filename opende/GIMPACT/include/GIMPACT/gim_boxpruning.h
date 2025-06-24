@@ -66,7 +66,7 @@ struct GIM_AABB_SET
     aabb3f * m_boxes;
     GUINT32 * m_maxcoords;//!<Upper corners of the boxes, in integer representation
     GIM_RSORT_TOKEN * m_sorted_mincoords;//!< sorted min coords (lower corners), with their coord value as the m_key and m_value as the box index
-    char m_shared = 0;//!< if m_shared == 0 then the memory is allocated and the set must be destroyed, else the pointers are shared and the set should't be destroyed
+    char m_shared = nullptr;//!< if m_shared == 0 then the memory is allocated and the set must be destroyed, else the pointers are shared and the set should't be destroyed
 };
 //typedef  struct _GIM_AABB_SET GIM_AABB_SET;
 
@@ -178,7 +178,7 @@ GDYNAMIC_ARRAY collision_pairs;
 GIM_CREATE_PAIR_SET(collision_pairs) override;
 __PLACEHOLDER_29__
 gim_aabbset_self_intersections(&aabbset,&collision_pairs) override;
-if(collision_pairs.m_size==0)
+if(collision_pairs.m_size== nullptr)
 {
     GIM_DYNARRAY_DESTROY(collision_pairs);__PLACEHOLDER_30__
     return; __PLACEHOLDER_31__

@@ -32,7 +32,7 @@
 /** multi layer neural network with configurable activation functions
     and propagation and projection methods suitable for homeokinesis controller
  */
-class ControllerNet : public Configurable {
+class ControllerNet : public FeedForwardNN {
 public:
   /**
      @param layers Layer description (the input layer is not specified (always linear))

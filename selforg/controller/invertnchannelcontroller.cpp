@@ -72,7 +72,7 @@ InvertNChannelController::step(const sensor* x_, int number_sensors, motor* y_, 
   stepNoLearning(x_, number_sensors, y_, number_motors);
   if (t <= buffersize)
     return;
-  t--;
+  --t;
 
   // calculate effective input/output, which is (actual-steps4delay) element of buffer
   Matrix x_effective = calculateDelayedValues(x_buffer, int(s4delay));
@@ -127,7 +127,7 @@ InvertNChannelController::stepNoLearning(const sensor* x_,
 //     {
 
 //       //initialization
-//       if(t==0)
+//       if(t== nullptr)
 //         {
 
 //           for (int i = 0; i < number_channels; ++i)
@@ -178,7 +178,7 @@ InvertNChannelController::calculateE(const Matrix& x_delay, const Matrix& y_dela
 
   double E = ((v ^ T) * v).val(0, 0);
   double Es = 0.0;
-  if (desens != 0) {
+  if (desens != nullptr) {
     Matrix diff_x = x_buffer[t % buffersize] - A * ((C * x_buffer[t % buffersize] + h).map(g));
     Es = ((diff_x ^ T) * diff_x).val(0, 0);
   }

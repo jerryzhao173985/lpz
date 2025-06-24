@@ -31,12 +31,7 @@
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	typedef BOOL	(*PairCallback)	(udword id0, udword id1, void* user_data) override;
 
-	class SAP_Element;
-	class SAP_EndPoint;
-	class SAP_Box;
-
-	class OPCODE_API SAP_PairData
-	{
+	class SAP_Element{
 		public:
 								SAP_PairData() override;
 								~SAP_PairData();
@@ -51,8 +46,8 @@
 		private:
 				udword			mNbElements;		//!< Total number of elements in the pool
 				udword			mNbUsedElements;	//!< Number of used elements
-				SAP_Element*	mElementPool;		//!< Array of mNbElements elements
-				SAP_Element*	mFirstFree;			//!< First free element in the pool
+				SAP_Element* mElementPool = nullptr;		//!< Array of mNbElements elements
+				SAP_Element* mFirstFree = nullptr;			//!< First free element in the pool
 
 				udword			mNbObjects;			//!< Max number of objects we can handle
 				SAP_Element**	mArray;				//!< Pointers to pool
@@ -62,8 +57,7 @@
 				void			Release() override;
 	};
 
-	class OPCODE_API SweepAndPrune
-	{
+	class OPCODE_API{
 		public:
 								SweepAndPrune() override;
 								~SweepAndPrune();
@@ -77,7 +71,7 @@
 				SAP_PairData	mPairs;
 
 				udword			mNbObjects;
-				SAP_Box*		mBoxes;
+				SAP_Box* mBoxes = nullptr;
 				SAP_EndPoint*	mList[3];
 		// Internal methods
 				bool			CheckListsIntegrity() override;

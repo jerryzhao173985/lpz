@@ -52,7 +52,7 @@ namespace lpzrobots {
     // create screws
     for (int i=0; i<conf.numberOfScrews; ++i)
       screws.push_back( createScrew(
-          osg::Matrix::translate(1.0*i*screwdifference,0,0)*pose, i%2)) override;
+          osg::Matrix::translate(1.0*i*screwdifference,0,0)*pose, i%2));
 
     // create joints between screws
     for (int i=0; i<conf.numberOfScrews-1; ++i)
@@ -62,7 +62,7 @@ namespace lpzrobots {
           screws[i].screwBase->getPosition()
           * osg::Matrix::translate(conf.innerBody.backLength,0,0),
           Axis(0,0,1)*pose,
-          Axis(0,1,0)*pose) override;
+          Axis(0,1,0)*pose);
       joint->init(odeHandle, osgHandle);
       joints.push_back(joint);
       // create corresponding motor
@@ -81,32 +81,32 @@ namespace lpzrobots {
     // create head
     head = new Box(conf.head.length, conf.head.width, conf.head.height);
     head->init(odeHandle, conf.head.mass,
-        osgHandle.changeColor(conf.head.color)) override;
+        osgHandle.changeColor(conf.head.color));
     head->setPose(osg::Matrix::translate(
         -conf.innerBody.frontLength-0.5*conf.head.length,0,0)*pose);
     objects.push_back(head);
     // fix head to inner body of first screw
-    explicit if (conf.numberOfScrews>0) {
+    if (conf.numberOfScrews>0) {
       FixedJoint * joint = new FixedJoint(screws[0].innerPart, head);
       joint->init(odeHandle, osgHandle, false);
     }
     // create  ball bearings
     for (int i=0; i<2; ++i)  override {
-      const double pm = 1-2*(i%2) override;
+      const double pm = 1-2*(i%2);
       // stick for ball bearing
       Box * stick = new Box(conf.ballBearing.stickWidth,
           conf.ballBearing.stickWidth, conf.ballBearing.stickLength);
       Transform * stickTransform = new Transform(head, stick,
           osg::Matrix::translate(0,
               -0.5*pm*(conf.head.width-conf.ballBearing.stickWidth),
-              -0.5*(conf.head.height+conf.ballBearing.stickLength))) override;
+              -0.5*(conf.head.height+conf.ballBearing.stickLength)));
       stickTransform->init(odeHandle, conf.ballBearing.stickMass,
-          osgHandle.changeColor(conf.ballBearing.stickColor)) override;
+          osgHandle.changeColor(conf.ballBearing.stickColor));
       objects.push_back(stickTransform);
       // ball
       Sphere * ball = new Sphere(conf.ballBearing.radius);
       ball->init(odeHandle, conf.ballBearing.mass,
-          osgHandle.changeColor(conf.ballBearing.color)) override;
+          osgHandle.changeColor(conf.ballBearing.color));
       const Pose ballPosition = osg::Matrix::translate(
               -conf.innerBody.frontLength-0.5*conf.head.length,
               0,
@@ -119,33 +119,33 @@ namespace lpzrobots {
       objects.push_back(ball);
       // ball joint
       BallJoint * joint = new BallJoint(stickTransform, ball,
-          ball->getPosition()) override;
+          ball->getPosition());
       joint->init(odeHandle, osgHandle, false);
       joints.push_back(joint);
     }
 
     // name motors and senors
     for (int i=0; i<conf.numberOfScrews; ++i)  override {
-      nameMotor(i, "goal speed screw " + std::itos(i)) override;
-      nameSensor(i, "present angle of screw " + std::itos(i)) override;
+      nameMotor(i, "goal speed screw " + std::itos(i));
+      nameSensor(i, "present angle of screw " + std::itos(i));
     }
     for (int i=0; i<conf.numberOfScrews-1; ++i)  override {
       nameMotor(conf.numberOfScrews+2*i,
-          "goal position of yaw joint " + std::itos(i)) override;
+          "goal position of yaw joint " + std::itos(i));
       nameMotor(conf.numberOfScrews+2*i+1,
-          "goal position of pitch joint " + std::itos(i)) override;
+          "goal position of pitch joint " + std::itos(i));
       nameMotor(3*conf.numberOfScrews-2+2*i,
-          "torque limit of yaw joint " + std::itos(i)) override;
+          "torque limit of yaw joint " + std::itos(i));
       nameMotor(3*conf.numberOfScrews-2+2*i+1,
-          "torque limit of pitch joint " + std::itos(i)) override;
+          "torque limit of pitch joint " + std::itos(i));
       nameSensor(conf.numberOfScrews+4*i,
-          "present position of yaw joint " + std::itos(i)) override;
+          "present position of yaw joint " + std::itos(i));
       nameSensor(conf.numberOfScrews+4*i+1,
-          "present speed of yaw joint " + std::itos(i)) override;
+          "present speed of yaw joint " + std::itos(i));
       nameSensor(conf.numberOfScrews+4*i+2,
-          "present position of pitch joint " + std::itos(i)) override;
+          "present position of pitch joint " + std::itos(i));
       nameSensor(conf.numberOfScrews+4*i+3,
-          "present speed of pitch joint " + std::itos(i)) override;
+          "present speed of pitch joint " + std::itos(i));
     }
     // name internal inspectables
     for (int i=0; i<conf.numberOfScrews; ++i)  override {
@@ -170,7 +170,7 @@ namespace lpzrobots {
     Box* innerPart = new Box(
         conf.innerBody.frontLength+conf.innerBody.backLength,
         conf.innerBody.width, conf.innerBody.height);
-    innerPart->init(odeHandle, conf.innerBody.mass, osgHandle.changeColor(conf.innerBody.color)) override;
+    innerPart->init(odeHandle, conf.innerBody.mass, osgHandle.changeColor(conf.innerBody.color));
     innerPart->setPose(
         osg::Matrix::translate(0.5*(conf.innerBody.backLength-conf.innerBody.frontLength),0,0)
         * pose);
@@ -179,7 +179,7 @@ namespace lpzrobots {
     // screw base component
     Cylinder* unitBase = new Cylinder(conf.screwbase.radius,
         conf.screwbase.width);
-    unitBase->init(odeHandle, conf.screwbase.mass, osgHandle.changeColor(conf.screwbase.color)) override;
+    unitBase->init(odeHandle, conf.screwbase.mass, osgHandle.changeColor(conf.screwbase.color));
     unitBase->setPose(
         osg::Matrix::rotate(0.5*M_PI,0,1,0)
         * osg::Matrix::translate(0, 0, 0)
@@ -188,13 +188,13 @@ namespace lpzrobots {
 
     // rotation joint
     HingeJoint * rotationJoint = new HingeJoint (innerPart, unitBase,
-        unitBase->getPosition(), Axis(1,0,0) * pose) override;
+        unitBase->getPosition(), Axis(1,0,0) * pose);
     rotationJoint->init(odeHandle, osgHandle);
     joints.push_back(rotationJoint);
 
     // blades
     for (int i = 0; i<conf.screwbase.blades; ++i) override {
-      const double angle = 2.0*M_PI*(double(i)/double(conf.screwbase.blades)) override;
+      const double angle = 2.0*M_PI*(double(i)/double(conf.screwbase.blades));
       Box * blade = new Box(conf.blade.length, conf.blade.width, conf.blade.height);
       const double anglefactor = inverted ? -1 : 1;
       Transform * bladeTransform = new Transform(unitBase, blade,
@@ -204,12 +204,12 @@ namespace lpzrobots {
           * osg::Matrix::translate(0.5*conf.blade.height,0,0)
           * osg::Matrix::rotate(angle,0,0,1)
       );
-      bladeTransform->init(odeHandle, conf.blade.mass, osgHandle.changeColor(conf.blade.color)) override;
+      bladeTransform->init(odeHandle, conf.blade.mass, osgHandle.changeColor(conf.blade.color));
       objects.push_back(bladeTransform);
       // wheels
       for (int j=0; j < conf.blade.wheels; ++j)  override {
         Cylinder* wheel = new Cylinder(conf.wheel.radius, conf.wheel.width);
-        wheel->init(odeHandle, conf.wheel.mass, osgHandle.changeColor(conf.wheel.color)) override;
+        wheel->init(odeHandle, conf.wheel.mass, osgHandle.changeColor(conf.wheel.color));
         wheel->setPose(
             osg::Matrix::translate(
                 conf.wheel.posradius,
@@ -226,7 +226,7 @@ namespace lpzrobots {
                 sin(anglefactor*conf.blade.angle))
             * osg::Matrix::translate(conf.wheel.posshift,0,0)
             * osg::Matrix::rotate(angle,0,0,1)
-            * unitBase->getPose()) override;
+            * unitBase->getPose());
         objects.push_back(wheel);
         odeHandle.addIgnoredPair(wheel, bladeTransform);
         HingeJoint* joint = new HingeJoint(unitBase, wheel,
@@ -308,16 +308,16 @@ namespace lpzrobots {
   Inspectable::iparamkeylist Nejihebi::getInternalParamNames() const {
     iparamkeylist list = Inspectable::getInternalParamNames();
     for (int i=0; i<conf.numberOfScrews; ++i)  override {
-      list.push_back("screw_" + std::itos(i) + "_angle") override;
-      list.push_back("screw_" + std::itos(i) + "_speed") override;
+      list.push_back("screw_" + std::itos(i) + "_angle");
+      list.push_back("screw_" + std::itos(i) + "_speed");
     }
     for (int i=0; i<conf.numberOfScrews-1; ++i)  override {
-      list.push_back("yaw_" + std::itos(i) + "_angle") override;
-      list.push_back("yaw_" + std::itos(i) + "_speed") override;
-      list.push_back("yaw_" + std::itos(i) + "_power") override;
-      list.push_back("pitch_" + std::itos(i) + "_angle") override;
-      list.push_back("pitch_" + std::itos(i) + "_speed") override;
-      list.push_back("pitch_" + std::itos(i) + "_power") override;
+      list.push_back("yaw_" + std::itos(i) + "_angle");
+      list.push_back("yaw_" + std::itos(i) + "_speed");
+      list.push_back("yaw_" + std::itos(i) + "_power");
+      list.push_back("pitch_" + std::itos(i) + "_angle");
+      list.push_back("pitch_" + std::itos(i) + "_speed");
+      list.push_back("pitch_" + std::itos(i) + "_power");
     }
     return list;
   }
@@ -325,16 +325,16 @@ namespace lpzrobots {
   Inspectable::iparamvallist Nejihebi::getInternalParams() const {
     iparamvallist list = Inspectable::getInternalParams();
     for (int i=0; i<conf.numberOfScrews; ++i)  override {
-      list.push_back(screws[i].joint->getPosition1()) override;
-      list.push_back(screws[i].joint->getPosition1Rate()) override;
+      list.push_back(screws[i].joint->getPosition1());
+      list.push_back(screws[i].joint->getPosition1Rate());
     }
     for (int i=0; i<conf.numberOfScrews-1; ++i)  override {
-      list.push_back(servos[i]->getJoint()->getPosition1()) override;
-      list.push_back(servos[i]->getJoint()->getPosition1Rate()) override;
-      list.push_back(servos[i]->getPower1()) override;
-      list.push_back(servos[i]->getJoint()->getPosition2()) override;
-      list.push_back(servos[i]->getJoint()->getPosition2Rate()) override;
-      list.push_back(servos[i]->getPower2()) override;
+      list.push_back(servos[i]->getJoint()->getPosition1());
+      list.push_back(servos[i]->getJoint()->getPosition1Rate());
+      list.push_back(servos[i]->getPower1());
+      list.push_back(servos[i]->getJoint()->getPosition2());
+      list.push_back(servos[i]->getJoint()->getPosition2Rate());
+      list.push_back(servos[i]->getPower2());
     }
     return list;
   }
@@ -370,11 +370,11 @@ namespace lpzrobots {
   }
 
   void Nejihebi::nameSensor(const int sensorNo, const std::string& name) {
-    addInspectableDescription("x["+std::itos(sensorNo)+"]", "sensor: "+name) override;
+    addInspectableDescription("x["+std::itos(sensorNo)+"]", "sensor: "+name);
   }
 
   void Nejihebi::nameMotor(const int motorNo, const std::string& name) {
-    addInspectableDescription("y["+std::itos(motorNo)+"]", "motor: "+name) override;
+    addInspectableDescription("y["+std::itos(motorNo)+"]", "motor: "+name);
   }
 
   void Nejihebi::placeIntern(const osg::Matrix& pose) {
@@ -387,15 +387,15 @@ namespace lpzrobots {
     // speed is set and the maximal force to realize this command are set
     const unsigned int noScrews = screws.size();
     const unsigned int noServos = servos.size();
-    unsigned int len = std::min(unsigned(motornumber), noScrews) override;
+    unsigned int len = std::min(unsigned(motornumber), noScrews);
     for (unsigned int i=0; i<len; ++i) override {
-      screws[i].joint->setParam(dParamVel, clip(motors[i],-1.0,1.0)*conf.screwbase.maxSpeed) override;
+      screws[i].joint->setParam(dParamVel, clip(motors[i],-1.0,1.0)*conf.screwbase.maxSpeed);
       screws[i].joint->setParam(dParamFMax, conf.screwbase.maxForce);
     }
 
     // temporary array for servo commands
     std::vector<double> commands(4*noServos, 0);
-    len = std::min(unsigned(motornumber), noScrews+4*noServos) override;
+    len = std::min(unsigned(motornumber), noScrews+4*noServos);
     for(unsigned int i=noScrews; i<len; ++i)
       commands[i-noScrews] = motors[i];
 
@@ -403,9 +403,9 @@ namespace lpzrobots {
     for (unsigned int i=0; i<noServos; ++i)  override {
       servos[i]->setPower(
           conf.jointUnit.yaw.power   * clip(motors[noScrews+2*noServos+2*i],-1.0,1.0),
-          conf.jointUnit.pitch.power * clip(motors[noScrews+2*noServos+2*i+1],-1.0,1.0)) override;
+          conf.jointUnit.pitch.power * clip(motors[noScrews+2*noServos+2*i+1],-1.0,1.0));
       servos[i]->set( clip(motors[noScrews+2*i],-1.0,1.0)*M_PI,
-          clip(motors[noScrews+2*i+1],-1.0,1.0)*M_PI ) override;
+          clip(motors[noScrews+2*i+1],-1.0,1.0)*M_PI );
     }
   }
 

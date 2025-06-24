@@ -4,13 +4,12 @@
 
 #include <string>
 
-class AbstractPlotChannel
-{
+class AbstractPlotChannel{
 public:
   explicit AbstractPlotChannel(const std::string& name_) : name(name_), channelValue(0) {};
 //   virtual ~AbstractPlotChannel() {};
   
-  virtual void setValue(double v) { channelValue=v; }
+  virtual void explicit setValue(double v) { channelValue=v; }
   
   virtual double getValue() const { return channelValue; }
   

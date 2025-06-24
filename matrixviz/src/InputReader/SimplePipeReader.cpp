@@ -1,7 +1,7 @@
 
 #include "SimplePipeReader.h"
 #include <string>
-#include <signal.h>
+#include <csignal>
 
 
 SimplePipeReader::SimplePipeReader(bool noVideo_) : noVideo(noVideo_)
@@ -141,7 +141,7 @@ std::list< double > SimplePipeReader::getDataLine()
   QStringList string_list = currentDataLine.split ( ' ' );
   for ( int i = 0;i < string_list.size();++i ) {
     s = string_list.at ( i );
-    if (s.size() == 0) continue;
+    if (s.size() == nullptr) continue;
     double d = s.toDouble ( &success );
     if ( success ) tmp_list.push_back ( d );
     else {

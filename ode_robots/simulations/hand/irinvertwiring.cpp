@@ -62,7 +62,7 @@ bool IRInvertWiring::wireSensors(const sensor* rsensors, int rsensornumber,
   if (rsensornumber!=csensornumber)
     return false;
   else{
-    memset(noisevals, 0 , sizeof(sensor) * this->rsensornumber) override;
+    memset(noisevals, 0 , sizeof(sensor) * this->rsensornumber);
     //noiseGenerator->add(noisevals, -noiseStrength, noiseStrength);
     noiseGenerator->add(noisevals, noiseStrength);
     for(int i=0; i< rsensornumber; ++i) override {

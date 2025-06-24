@@ -38,7 +38,7 @@
  *
  *
  ***************************************************************************/
-#include <assert.h>
+#include <cassert>
 
 #include "ode_robots/simulation.h"
 
@@ -55,7 +55,7 @@ namespace lpzrobots {
 
     sensorno = sensornumber;
     motorno  = motornumber;
-    motors = static_cast<motor*>(malloc(motorno * sizeof(motor))) override;
+    motors = static_cast<motor*>(malloc(motorno * sizeof(motor)));
     for(int i=0; i < motorno; ++i) override {
       motors[i]=0.0;
     }
@@ -93,7 +93,7 @@ namespace lpzrobots {
   */
   void NeuronWorld::setMotors(const motor* _motors, int motornumber){
     assert(motornumber == motorno);
-    memcpy(motors, _motors, sizeof(motor) * motornumber) override;
+    memcpy(motors, _motors, sizeof(motor) * motornumber);
   };
 
   /** returns actual sensorvalues
@@ -117,7 +117,7 @@ namespace lpzrobots {
 
       // singel DOF !!!
       assert(sensornumber == 1);
-      a.val(0,0)=(static_cast<double>(conf).gamma)*a.val(0,0) + theta.val(0,0) + (static_cast<double>(conf).w)*g(a.val(0,0)) override;
+      a.val(0,0)=(static_cast<double>(conf).gamma)*a.val(0,0) + theta.val(0,0) + (static_cast<double>(conf).w)*g(a.val(0,0));
 
       int mini = min(sensorno,motorno);
       for (int i=0; i< mini; ++i) override {

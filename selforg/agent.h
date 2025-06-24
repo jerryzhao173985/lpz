@@ -24,45 +24,34 @@
 #ifndef __AGENT_H
 #define __AGENT_H
 
-#include <stdio.h>
+#include <cstdio>
 #include <list>
 #include <string>
 
 #include "wiredcontroller.h"
 #include "randomgenerator.h"
-
-class AbstractRobot;
-
-#include "types.h"
+#include "abstractrobot.h"
 #include "trackrobots.h"
 
-/** The Agent contains a controller, a robot and a wiring, which connects robot and controller.
-    Additionally there are some ways to keep track of internal information.
-    You have the possibility to keep track of sensor values,
-     motor values and internal parameters of the controller with PlotOptions.
-    The name PlotOptions is a bit missleaded, it should be __PLACEHOLDER_4__,
-     however you can write the data into a file or send it to visialisation tools like
-     guilogger or neuronviz.
-
-    If want to log the position, speed and orienation of your robot
-    you can use setTrackOptions().
-    Please be aware that the Agent inherits from WiredController. You
-     might also find useful functions there.
+/**
+ * The Agent contains a controller, a robot and a wiring, which connects both.
+ * Additionally there is a plotOptionEngine to output information about the
+ * controller, robot and wiring.
  */
 class Agent : public WiredController {
 public:
   /** constructor. PlotOption as output setting.
       noisefactor is used to set the relative noise strength of this agent
    */
-  Agent(const PlotOption& plotOption = PlotOption(PlotMode::NoPlot), double noisefactor = 1, const iparamkey& name = "Agent", const paramkey& revision = "$ID");
+  Agent(const PlotOption& plotOption = PlotOption(PlotMode::NoPlot), double noisefactor = 1, const iparamkey& name = "Agent", const iparamkey& revision = "$ID");
   /** constructor. A list of PlotOption can given.
       noisefactor is used to set the relative noise strength of this agent
    */
-  Agent(const std::list<PlotOption>& plotOptions, double noisefactor = 1, const iparamkey& name = "Agent", const paramkey& revision = "$ID");
+  Agent(const std::list<PlotOption>& plotOptions, double noisefactor = 1, const iparamkey& name = "Agent", const iparamkey& revision = "$ID");
 
   /** destructor
    */
-  virtual ~Agent();
+  virtual ~Agent() override;
 
   // Bring base class methods into scope to avoid hiding
   using WiredController::init;

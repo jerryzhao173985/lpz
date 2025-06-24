@@ -210,14 +210,14 @@ SoML::learn(const Matrix& x, const Matrix& y) {
       ((mu[l] * (v[l] ^ T) * (epsC * E)) - ((y_layer * (y_lm1 ^ T)) & epsl * (2 * factor)))
         .mapP(0.03, clip);
     cNet->getBias(l) += (y_layer & epsl * (-2 * factor)).mapP(0.03, clip);
-    if (epsC != 0) {
+    if (epsC != nullptr) {
       cNet->getBias(l) +=
         cNet->getBias(l).map(random_minusone_to_one) * biasnoise - cNet->getBias(l) * 0.001;
     }
   }
 
   // Harmony
-  if (harmony != 0) {
+  if (harmony != nullptr) {
     Matrices delta;
     cNet->backpropagation(chi, 0, &delta);
     for (unsigned int l = 0; l < cNet->getLayerNum(); ++l) {

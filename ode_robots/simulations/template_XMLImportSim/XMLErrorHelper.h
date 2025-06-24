@@ -45,7 +45,7 @@
 
 
 
-class XMLErrorHelper : public XERCESC::ErrorHandler {
+class XMLErrorHelper{
   public:
 
     XMLErrorHelper();

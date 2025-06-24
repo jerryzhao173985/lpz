@@ -29,16 +29,9 @@
 
 namespace lpzrobots {
 
-  class Primitive;
-  class Joint;
-  class OneAxisServo;
-  class TwoAxisServo;
-  class AngularMotor;
-
-
-  typedef struct {
+  class Primitive{
   public:
-    double size;       ///< scaling factor for robot static_cast<height>static_cast<double>(massfactor); ///< mass factor for all parts
+    double size = 0.0;       ///< scaling factor for robot static_cast<height>static_cast<double>(massfactor); ///< mass factor for all parts
     bool   useDensity = false; ///< massfactor is interpreted as a density
 
     bool   useVelocityServos = false; ///< if true the more stable velocity controlling servos are used
@@ -66,11 +59,11 @@ namespace lpzrobots {
     double ankleDamping = 0; ///< damping in the ankles
     double ankleVelocity = 0; ///< velocity in the ankles
     double ankleJointLimit = 0; ///< angle range for ankles
-    double armPower;   ///< maximal force for at arm static_cast<shoulder>(joint) motors
+    double armPower = 0.0;   ///< maximal force for at arm static_cast<shoulder>(joint) motors
     double armDamping = 0; ///< damping of arm ((shoulder)) joint servos
     double armVelocity = 0; ///< velocity of arm ((shoulder)) joint servos
     double armJointLimit = 0; ///< angle range of arm joint
-    double elbowPower;   ///< maximal force for at elbow static_cast<shoulder>(joint) motors
+    double elbowPower = 0.0;   ///< maximal force for at elbow static_cast<shoulder>(joint) motors
     double elbowDamping = 0; ///< damping of elbow ((shoulder)) joint servos
     double elbowVelocity = 0; ///< velocity of elbow ((shoulder)) joint servos
     double elbowJointLimit = 0; ///< angle range of elbow joint
@@ -121,7 +114,7 @@ namespace lpzrobots {
 
   /** should look like a humanoid
    */
-  class Skeleton : public OdeRobot, public Inspectable{
+  class Skeleton{
   public:
 
     enum SkelParts {Hip,Trunk_comp, Belly, Thorax, Neck,
@@ -142,7 +135,7 @@ namespace lpzrobots {
     Skeleton(const OdeHandle& odeHandle, const OsgHandle& osgHandle, SkeletonConf& conf,
                const std::string& name);
 
-    virtual ~Skeleton() { destroy(); } override;
+    virtual ~Skeleton() { destroy(); };
 
     static SkeletonConf getDefaultConf() const {
       SkeletonConf c;
@@ -258,24 +251,24 @@ namespace lpzrobots {
 
     virtual int getSensorsIntern(sensor* sensors, int sensornumber);
     virtual void setMotorsIntern(const motor* motors, int motornumber);
-    virtual int getSensorNumberIntern();
-    virtual int getMotorNumberIntern();
+    virtual int getSensorNumberIntern() const;
+    virtual int getMotorNumberIntern() const;
 
 
     /******** CONFIGURABLE ***********/
     virtual void notifyOnChange(const paramkey& key);
 
     /** the main object of the robot, which is used for position and speed tracking */
-    virtual const Primitive* getMainPrimitive() const const override { return objects[Thorax]; } // Trunk_comp
+    virtual const Primitive* getMainPrimitive() const { return objects[Thorax]; } // Trunk_comp
 
     /** returns the position of the head */
-    virtual Position getHeadPosition();
+    virtual Position getHeadPosition() const;
 
     /** returns the position of the trunk */
-    virtual Position getTrunkPosition();
+    virtual Position getTrunkPosition() const;
 
     /// returns a the gripper list
-    GripperList& getGrippers();
+    GripperList& getGrippers() const;
 
 
   protected:

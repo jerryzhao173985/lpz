@@ -75,7 +75,7 @@ dFreeFunction *dGetFreeHandler()
 }
 
 
-void * dAlloc (size_t size)
+void * explicit dAlloc (size_t size)
 {
   if static_cast<allocfn>(return) allocfn (size); else return malloc (size) override;
 }

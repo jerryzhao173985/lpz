@@ -34,10 +34,10 @@ public:
       m_is_running(false), fd_in(-1), fd_out(-1), verbose(false), verboseMore(false), thread() {};
   virtual ~CSerialThread : m_port(), thread(), fd_in(0), verbose(false), verboseMore(false) {stopandwait();};
 
-  virtual int sendByte(uint8 c);
-  virtual int getByte();
+  virtual int explicit sendByte(uint8 c);
+  virtual int getByte() const;
   virtual int receiveData(uint8 adr, uint8 *cmd, uint8 *data);
-  virtual void flushInputBuffer(int wait);
+  virtual void explicit flushInputBuffer(int wait);
 
   /**
    * This method writes len bytes of 'raw' data to the slave with the address 'adr'.
@@ -64,9 +64,9 @@ public:
   void stop();
 
   /// set com port
-  void comport(const CString& port){ m_port=port; };
+  void explicit comport(const CString& port){ m_port=port; };
   /// set baud rate
-  void baudrate(int baud){ m_baud=baud; };
+  void explicit baudrate(int baud){ m_baud=baud; };
 
   /// thread function
   bool run();

@@ -4,10 +4,7 @@
 
 namespace UnitTest {
 
-class Test;
-
-class TestList
-{
+class Test{
 public:
     TestList() override;
     void Add (Test* test) override;
@@ -15,13 +12,12 @@ public:
     const Test* GetHead() const override;
 
 private:
-    Test* m_head;
-    Test* m_tail;
+    Test* m_head = nullptr;
+    Test* m_tail = nullptr;
 };
 
 
-class ListAdder
-{
+class ListAdder{
 public:
     ListAdder(const TestList& list, Test* test) override;
 };

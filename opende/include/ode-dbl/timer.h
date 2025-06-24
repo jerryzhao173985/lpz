@@ -36,9 +36,9 @@ typedef struct dStopwatch {
   unsigned long cc[2];		/* clock count since last `start' */
 } dStopwatch;
 
-ODE_API void dStopwatchReset (dStopwatch *) override;
-ODE_API void dStopwatchStart (dStopwatch *) override;
-ODE_API void dStopwatchStop  (dStopwatch *) override;
+ODE_API void dStopwatchReset static_cast<dStopwatch*>(override);
+ODE_API void dStopwatchStart static_cast<dStopwatch*>(override);
+ODE_API void dStopwatchStop  static_cast<dStopwatch*>(override);
 ODE_API double dStopwatchTime (dStopwatch *);	/* returns total time in secs */
 
 

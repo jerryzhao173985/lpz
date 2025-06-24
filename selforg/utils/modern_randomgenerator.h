@@ -28,7 +28,7 @@
 #include <random>
 
 /// Modern C++17 random generator using Mersenne Twister
-class ModernRandGen {
+class ModernRandGen{
 public:
   ModernRandGen()
     : gen(std::chrono::steady_clock::now().time_since_epoch().count())

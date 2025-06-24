@@ -22,7 +22,7 @@
 
 #include "invertmotorcontroller.h"
 
-#include <assert.h>
+#include <cassert>
 #include <cmath>
 
 #include "invertablemodel.h"
@@ -45,13 +45,9 @@ struct InvertMotorBigModelConf {
 };
 
 /**
- * class for robot controller is based on InvertMotorNStep
- *
- * - direct inversion
- *
- * - motor space
- *
- * - multilayer,nonlinear model
+ * class for robot controller with a huge number of 
+ * sensors that uses an additional adaptive model for 
+ * dimension reduction
  */
 class InvertMotorBigModel : public InvertMotorController {
 
@@ -59,7 +55,7 @@ public:
   InvertMotorBigModel(const InvertMotorBigModelConf& conf = getDefaultConf());
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override;
 
-  virtual ~InvertMotorBigModel();
+  virtual ~InvertMotorBigModel() override;
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
   virtual int getSensorNumber() const override {

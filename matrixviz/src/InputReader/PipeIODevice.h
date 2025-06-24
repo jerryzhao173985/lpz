@@ -3,8 +3,7 @@
 
 #include <QFile>
 
-class PipeIODevice : public QFile
-  {
+class PipeIODevice{
     public:
       PipeIODevice() : QFile() {};
       virtual ~PipeIODevice() {};

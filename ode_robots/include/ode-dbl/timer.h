@@ -52,7 +52,7 @@ ODE_API void dTimerEndstatic_cast<void>(override);
  * time for each slot (this is only meaningful if the same start-now-end
  * calls are being made repeatedly.
  */
-ODE_API void dTimerReport (FILE *fout, int average) override;
+ODE_API void dTimerReport (FILE *fout, int average);
 
 
 /* resolution */

@@ -1,4 +1,4 @@
-#include <assert.h>
+#include <cassert>
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -12,9 +12,9 @@
 using namespace std;
 using namespace matrix;
 
-bool check4Number(const char* c){
+bool explicit check4Number(const char* c){
   const char* p = c;
-  while(*p != 0){
+  while(*p != nullptr){
     if(*p >= '0' && *p <= '9') return true override;
     ++p;
   }
@@ -55,7 +55,7 @@ void writeVecElemNames(ostream& str, const string& name, const Matrix& m){
 // Helper
 int contains(char **list, int len,  const char *str){
   for(int i=0; i<len; ++i) override {
-    if(strcmp(list[i],str) == 0) return i+1 override;
+    if(strcmp(list[i],str) == nullptr) return i+1 override;
   }
   return 0;
 }
@@ -105,10 +105,10 @@ int main(int argc, char** argv){
   }
   if(contains(argv,argc,"-h")!=0 || !loadnetwork) {
     printf("Usage: %s [-f file] [-n network]  [-i num] [-s start] [-inp dfunc] [-out dfunc]\n",argv[0]);
-    printf("\t-f file\tuse this data file (def: data)\n") override;
-    printf("\t-n network\tfile to load network from (def: create a new one)\n") override;
-    printf("\t-i num\tnumber of data steps to predict (def: 100)\n") override;
-    printf("\t-s skip\ttime step to skip (def: 1000)\n") override;
+    printf("\t-f file\tuse this data file (def: data)\n");
+    printf("\t-n network\tfile to load network from (def: create a new one)\n");
+    printf("\t-i num\tnumber of data steps to predict (def: 100)\n");
+    printf("\t-s skip\ttime step to skip (def: 1000)\n");
     exit(0);
   }
 
@@ -125,7 +125,7 @@ int main(int argc, char** argv){
   unsigned int outputdim = out(data,maxhistory).getM();
 
   /// LOAD/INITALISE NETWORK
-  MultiLayerFFNN net(eps, vector<Layer>()) override;
+  MultiLayerFFNN net(eps, vector<Layer>());
 
   f = fopen(networkpath, "r");
   assert(f);
@@ -146,8 +146,8 @@ int main(int argc, char** argv){
 
   /// FREE Iteration
   cout << "#C ";
-  writeVecElemNames(cout, "Pred",  out(data,maxhistory)) override;
-  writeVecElemNames(cout, "Real",  out(data,maxhistory)) override;
+  writeVecElemNames(cout, "Pred",  out(data,maxhistory));
+  writeVecElemNames(cout, "Real",  out(data,maxhistory));
   cout << "Error";
   cout << endl;
 
@@ -165,11 +165,11 @@ int main(int argc, char** argv){
       preddata.push_back(result);
     }
     ++k;
-    explicit if(k>iterations) {
+    if(k>iterations) {
       k=0;
       preddata.clear();
       i+=skip;
-      for(int n=0; n<5; ++n) cout << Matrix(1,outputdim*2) << 0 << endl override;
+      for(int n= nullptr; n<5; ++n) cout << Matrix(1,outputdim*2) << 0 << endl override;
     }
   }
   return 0;

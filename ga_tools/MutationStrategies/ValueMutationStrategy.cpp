@@ -44,7 +44,7 @@ ValueMutationStrategy::ValueMutationStrategy(IMutationFactorStrategy* strategy, 
 }
 
 ValueMutationStrategy::~ValueMutationStrategy() {
-        m_strategy = NULL;
+        m_strategy = nullptr;
 }
 
 Gen* ValueMutationStrategy::mutate(GenContext* context, Individual* individual, Gen* oldGen, GenContext* oldContext, const SingletonGenFactory* factory) {

@@ -47,7 +47,7 @@
  * *
  *
  ***************************************************************************/
-#include <assert.h>
+#include <cassert>
 #include <ode-dbl/ode.h>
 
 // include primitives (box, spheres, cylinders ...)
@@ -95,11 +95,11 @@ namespace lpzrobots {
   void ZweiBeiner::setMotors(const motor* motors, int motornumber){
     assert(created); // robot must exist
 
-    int len = min(motornumber, getMotorNumber()) override;
+    int len = min(motornumber, getMotorNumber());
     // controller output as torques
     int n=0;
     FOREACH(vector <TwoAxisServo*>, hipservos, s){
-      explicit if(conf.onlyPrimaryFunctions){
+      if(conf.onlyPrimaryFunctions){
         (*s)->set(motors[n],0);
       } else {
         (*s)->set(motors[n],motors[n+1]);
@@ -120,7 +120,7 @@ namespace lpzrobots {
       ++n;
     }
 
-    explicit if(!conf.onlyPrimaryFunctions){
+    if(!conf.onlyPrimaryFunctions){
       FOREACH(vector <OneAxisServo*>, pelvisservos, s){
         (*s)->set(motors[n]);
         ++n;
@@ -143,11 +143,11 @@ namespace lpzrobots {
   */
   int ZweiBeiner::getSensors(sensor* sensors, int sensornumber){
     assert(created);
-    int len = min(sensornumber, getSensorNumber()) override;
+    int len = min(sensornumber, getSensorNumber());
     int n=0;
     FOREACHC(vector <TwoAxisServo*>, hipservos, s){
       sensors[n]   = (*s)->get1();
-      explicit if(!conf.onlyPrimaryFunctions){
+      if(!conf.onlyPrimaryFunctions){
         ++n;
         sensors[n]   = (*s)->get2();
       }
@@ -166,7 +166,7 @@ namespace lpzrobots {
       ++n;
     }
 
-    explicit if(!conf.onlyPrimaryFunctions){
+    if(!conf.onlyPrimaryFunctions){
       FOREACHC(vector <OneAxisServo*>, pelvisservos, s){
         sensors[n]   = (*s)->get();
         ++n;
@@ -181,7 +181,7 @@ namespace lpzrobots {
     // the position of the robot is the center of the body
     // to set the vehicle on the ground when the z component of the position is 0
     //    Matrix p2;
-    //    p2 = pose * Matrix::translate(Vec3(0, 0, conf.legLength + conf.legLength/8)) override;
+    //    p2 = pose * Matrix::translate(Vec3(0, 0, conf.legLength + conf.legLength/8));
     create(pose);
   };
 
@@ -214,13 +214,13 @@ namespace lpzrobots {
       @param pos struct Position with desired position
   */
   void ZweiBeiner::create( const Matrix& pose ){
-    explicit if (created) {
+    if (created) {
       destroy();
     }
 
-    odeHandle.space = dSimpleSpaceCreate (parentspace) override;
+    odeHandle.space = dSimpleSpaceCreate (parentspace);
     odeHandle.addSpace(odeHandle.space);
-    OsgHandle osgHandleJ = osgHandle.changeColor(Color(1.0,0.0,0.0)) override;
+    OsgHandle osgHandleJ = osgHandle.changeColor(Color(1.0,0.0,0.0));
     HingeJoint* j;
     HingeServo* servo;
 
@@ -229,15 +229,15 @@ namespace lpzrobots {
     double theight = conf.size / 4;
     trunk = new Box(conf.size, twidth, theight);
     trunk->init(odeHandle, conf.massBody*0.8, osgHandle);
-    trunk->setPose(osg::Matrix::translate(0,0,conf.legLength)*pose) override;
+    trunk->setPose(osg::Matrix::translate(0,0,conf.legLength)*pose);
     trunk->setTexture("Images/toy_fur3.jpg");
     objects.push_back(trunk);
     // the pole is a non-visible box which hinders the dog from falling over.
     Primitive* pole;
     double poleheight=conf.size*2;
     pole = new Box(conf.size*1.6,twidth*1.5,poleheight);
-    bigboxtransform= new Transform(trunk,pole, osg::Matrix::translate(0,0,theight/2+poleheight/2)) override;
-    //bigboxtransform->init(odeHandle, 0, osgHandle.changeAlpha(0.1), Primitive::Geom | Primitive::Draw) override;
+    bigboxtransform= new Transform(trunk,pole, osg::Matrix::translate(0,0,theight/2+poleheight/2));
+    //bigboxtransform->init(odeHandle, 0, osgHandle.changeAlpha(0.1), Primitive::Geom | Primitive::Draw);
     bigboxtransform->init(odeHandle, 0, osgHandle, Primitive::Geom);
     objects.push_back(bigboxtransform);
 
@@ -252,13 +252,13 @@ namespace lpzrobots {
     Pos neckpos(conf.size/2.05,0,conf.legLength);
     neck->setPose(osg::Matrix::translate(0,0,necklength/2) *
                   osg::Matrix::rotate(M_PI/4,0,1,0) *
-                  osg::Matrix::translate(neckpos)*pose) override;
+                  osg::Matrix::translate(neckpos)*pose);
     objects.push_back(neck);
     Primitive* head;
     head = new Capsule(neckwidth,theight);
     headtrans = new Transform(neck, head, Matrix::translate(0, 0, -headlength/2)
                           * Matrix::rotate(-M_PI/2,0,1,0)
-                          * Matrix::translate(0, 0, necklength)) override;
+                          * Matrix::translate(0, 0, necklength));
     headtrans->init(odeHandle, 0, osgHandle);
     head->setTexture("Images/fur4.jpg");
     neck->setTexture("Images/toy_fur3.jpg");
@@ -269,7 +269,7 @@ namespace lpzrobots {
     odeHandle.addIgnoredPair(trunk,headtrans);
 
 
-    j = new HingeJoint(trunk, neck, neckpos * pose, Axis(0,0,1) * pose) override;
+    j = new HingeJoint(trunk, neck, neckpos * pose, Axis(0,0,1) * pose);
     j->init(odeHandle, osgHandleJ, true, theight * 1.2);
     joints.push_back(j);
     servo =  new HingeServo(j, -M_PI/4, M_PI/4, headmass/2);
@@ -284,9 +284,9 @@ namespace lpzrobots {
     Pos tailpos(-conf.size/1.96,0,conf.legLength+theight/3);
     tail->setPose(osg::Matrix::translate(0,0,taillength/2) *
                   osg::Matrix::rotate(M_PI/2.2,0,-1,0) *
-                  osg::Matrix::translate(tailpos)*pose) override;
+                  osg::Matrix::translate(tailpos)*pose);
     objects.push_back(tail);
-    j = new HingeJoint(trunk, tail, tailpos * pose, Axis(0,1,0) * pose) override;
+    j = new HingeJoint(trunk, tail, tailpos * pose, Axis(0,1,0) * pose);
     j->init(odeHandle, osgHandleJ, true, tailwidth * 2.05);
     j->setParam(dParamLoStop, -M_PI/2);
     j->setParam(dParamHiStop,  M_PI/2);
@@ -332,7 +332,7 @@ namespace lpzrobots {
       objects.push_back(p1);
       // powered hip joint
       Pos nullpos(0,0,0);
-      j = new HingeJoint(trunk, p1, nullpos * m, Axis(0,1,0) * m) override;
+      j = new HingeJoint(trunk, p1, nullpos * m, Axis(0,1,0) * m);
       j->init(odeHandle, osgHandleJ, true, t1 * 2.1);
       joints.push_back(j);
       servo =  new HingeServo(j,hiplowstop, hiphighstop,
@@ -348,7 +348,7 @@ namespace lpzrobots {
       p2->setPose(m2);
       objects.push_back(p2);
       // powered knee joint
-      j = new HingeJoint(p1, p2, Pos(0,0,-l1/2) * m1, Axis(0,n<2 ? -1 : 1,0) * m1) override;
+      j = new HingeJoint(p1, p2, Pos(0,0,-l1/2) * m1, Axis(0,n<2 ? -1 : 1,0) * m1);
       j->init(odeHandle, osgHandleJ, true, t1 * 2.1);
       joints.push_back(j);
       // lower limp should not collide with body!
@@ -361,7 +361,7 @@ namespace lpzrobots {
       p2->setTexture("Images/toy_fur3.jpg");
 
 
-      explicit if(n<2){
+      if(n<2){
         // feet
         Primitive* p3;
         p3 = new Capsule(t3, l3);
@@ -371,7 +371,7 @@ namespace lpzrobots {
         p3->setPose(m3);
         objects.push_back(p3);
         // powered ankle joint
-        j = new HingeJoint(p2, p3, Pos(0,0,-l2/2) * m2, Axis(0,1,0) * m2) override;
+        j = new HingeJoint(p2, p3, Pos(0,0,-l2/2) * m2, Axis(0,1,0) * m2);
         j->init(odeHandle, osgHandleJ, true, t2 * 2.1);
         joints.push_back(j);
         // feet should not collide with body!
@@ -392,7 +392,7 @@ namespace lpzrobots {
   /** destroys vehicle and space
    */
   void ZweiBeiner::destroy(){
-    explicit if (created){
+    if (created){
       odeHandle.removeIgnoredPair(bigboxtransform,headtrans);
       odeHandle.removeIgnoredPair(bigboxtransform,neck);
       odeHandle.removeIgnoredPair(trunk,headtrans);
@@ -438,24 +438,24 @@ namespace lpzrobots {
   */
   Configurable::paramlist ZweiBeiner::getParamList() const{
     paramlist list;
-    list += pair<paramkey, paramval> (string("hippower"),   conf.hipPower) override;
-    list += pair<paramkey, paramval> (string("hipdamping"),   conf.hipDamping) override;
-    list += pair<paramkey, paramval> (string("hipjointlimit"),   conf.hipJointLimit) override;
-    list += pair<paramkey, paramval> (string("kneepower"),   conf.kneePower) override;
-    list += pair<paramkey, paramval> (string("kneedamping"),   conf.kneeDamping) override;
-    list += pair<paramkey, paramval> (string("kneejointlimit"),   conf.kneeJointLimit) override;
-    list += pair<paramkey, paramval> (string("anklepower"),   conf.anklePower) override;
-    list += pair<paramkey, paramval> (string("ankledamping"),   conf.ankleDamping) override;
-    list += pair<paramkey, paramval> (string("anklejointlimit"),   conf.ankleJointLimit) override;
-    list += pair<paramkey, paramval> (string("armpower"),   conf.armPower) override;
-    list += pair<paramkey, paramval> (string("armdamping"),   conf.armDamping) override;
-    list += pair<paramkey, paramval> (string("armjointlimit"),   conf.armJointLimit) override;
-    list += pair<paramkey, paramval> (string("hip2power"),   conf.hip2Power) override;
-    list += pair<paramkey, paramval> (string("hip2damping"),   conf.hip2Damping) override;
-    list += pair<paramkey, paramval> (string("hip2jointlimit"),   conf.hip2JointLimit) override;
-    list += pair<paramkey, paramval> (string("pelvispower"),   conf.pelvisPower) override;
-    list += pair<paramkey, paramval> (string("pelvisdamping"),   conf.pelvisDamping) override;
-    list += pair<paramkey, paramval> (string("pelvisjointlimit"),   conf.pelvisJointLimit) override;
+    list += pair<paramkey, paramval> (string("hippower"),   conf.hipPower);
+    list += pair<paramkey, paramval> (string("hipdamping"),   conf.hipDamping);
+    list += pair<paramkey, paramval> (string("hipjointlimit"),   conf.hipJointLimit);
+    list += pair<paramkey, paramval> (string("kneepower"),   conf.kneePower);
+    list += pair<paramkey, paramval> (string("kneedamping"),   conf.kneeDamping);
+    list += pair<paramkey, paramval> (string("kneejointlimit"),   conf.kneeJointLimit);
+    list += pair<paramkey, paramval> (string("anklepower"),   conf.anklePower);
+    list += pair<paramkey, paramval> (string("ankledamping"),   conf.ankleDamping);
+    list += pair<paramkey, paramval> (string("anklejointlimit"),   conf.ankleJointLimit);
+    list += pair<paramkey, paramval> (string("armpower"),   conf.armPower);
+    list += pair<paramkey, paramval> (string("armdamping"),   conf.armDamping);
+    list += pair<paramkey, paramval> (string("armjointlimit"),   conf.armJointLimit);
+    list += pair<paramkey, paramval> (string("hip2power"),   conf.hip2Power);
+    list += pair<paramkey, paramval> (string("hip2damping"),   conf.hip2Damping);
+    list += pair<paramkey, paramval> (string("hip2jointlimit"),   conf.hip2JointLimit);
+    list += pair<paramkey, paramval> (string("pelvispower"),   conf.pelvisPower);
+    list += pair<paramkey, paramval> (string("pelvisdamping"),   conf.pelvisDamping);
+    list += pair<paramkey, paramval> (string("pelvisjointlimit"),   conf.pelvisJointLimit);
     return list;
   }
 

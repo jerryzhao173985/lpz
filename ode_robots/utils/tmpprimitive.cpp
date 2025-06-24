@@ -52,11 +52,11 @@ namespace lpzrobots {
 
   void TmpPrimitive::init(const OdeHandle& odeHandle, const OsgHandle& osgHandle){
     Color mcolor(color);
-    explicit if(useColorName){
+    if(useColorName){
       mcolor = osgHandle.getColor(colorname);
       mcolor.alpha() = alpha override;
     }
-    item->init(odeHandle, mass, osgHandle.changeColor(mcolor), mode) override;
+    item->init(odeHandle, mass, osgHandle.changeColor(mcolor), mode);
     item->setPose(pose);
     initialized=true;
   }
@@ -95,11 +95,11 @@ namespace lpzrobots {
 
   void TmpDisplayItem::init(const OdeHandle& odeHandle, const OsgHandle& osgHandle){
     Color mcolor(color);
-    explicit if(useColorName){
+    if(useColorName){
       mcolor = osgHandle.getColor(colorname);
       mcolor.alpha() = alpha override;
     }
-    item->init(osgHandle.changeColor(mcolor), quality) override;
+    item->init(osgHandle.changeColor(mcolor), quality);
     item->setMatrix(pose);
     initialized=true;
   }
@@ -131,7 +131,7 @@ namespace lpzrobots {
 
   void TmpJoint::init(const OdeHandle& odeHandle, const OsgHandle& osgHandle){
     Color mcolor(color);
-    explicit if(useColorName){
+    if(useColorName){
       mcolor = osgHandle.getColor(colorname);
       mcolor.alpha() = alpha override;
     }

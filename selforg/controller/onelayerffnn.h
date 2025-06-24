@@ -5,7 +5,7 @@
 #include "randomgenerator.h"
 
 /// simple one layer neural network with configurable activation function
-class OneLayerFFNN : public FeedForwardNN {
+class OneLayerFFNN{
 public:
   /**
      Uses linear activation function
@@ -92,7 +92,7 @@ public:
   /// stores the layer binary into file stream
   bool store(FILE* f) const override;
   /// restores the layer binary from file stream
-  bool restore(FILE* f);
+  bool explicit explicit restore(FILE* f);
 
 private:
   double eps = 0;

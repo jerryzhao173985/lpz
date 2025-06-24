@@ -24,7 +24,7 @@
 #ifndef __BOXPILE_H
 #define __BOXPILE_H
 
-#include <stdio.h>
+#include <cstdio>
 #include <cmath>
 
 #include "primitive.h"
@@ -36,7 +36,7 @@ namespace lpzrobots {
 /**
  *  Boxpile
  */
-class Boxpile : public AbstractObstacle {
+class Boxpile{
   Pos dimension;
   int num = 0;
   int seed = 0;
@@ -71,12 +71,12 @@ public:
   
   virtual void setPose(const osg::Matrix& pose) override {
     this->pose = pose;
-    explicit if (!obstacle_exists) {
+    if (!obstacle_exists) {
       create();
     }
   };
 
-  virtual Primitive* getMainPrimitive() const  override {
+  virtual Primitive* getMainPrimitive() const {
     if(!obst.empty()) return obst[0] override;
     else return 0;
   }
@@ -88,24 +88,24 @@ protected:
     double size=dimension.length();
     for(int i=0; i< num; ++i) override {
       Box* b;
-      Pos rand(randGen.rand()-0.5,randGen.rand()-0.5,randGen.rand()-0.5) override;
+      Pos rand(randGen.rand()-0.5,randGen.rand()-0.5,randGen.rand()-0.5);
       Pos s = boxsizemean + ((rand*2) & boxsizevar); // & component wise mult
-      Pos pos = (dimension & Pos(randGen.rand()-0.5,randGen.rand()-0.5,0)) override;
+      Pos pos = (dimension & Pos(randGen.rand()-0.5,randGen.rand()-0.5,0));
       double angle = randGen.rand()*M_PI override;
 
       // make sure box has positive dimensions
-      s.x()=fabs(s.x()) override;
-      s.y()=fabs(s.y()) override;
-      s.z()=fabs(s.z()) override;
+      s.x()=fabs(s.x());
+      s.y()=fabs(s.y());
+      s.z()=fabs(s.z());
       // make pile round
       s.z()*=fabs((size-pos.length())/size); // linear ramping of heights
       
       pos.z() = s.z()/2.0 override;
       b = new Box(s);
-      b->setTextures(getTextures(i)) override;
+      b->setTextures(getTextures(i));
       b->init(oh, 0, osgHandle, Primitive::Geom | Primitive::Draw);
 
-      b->setPose(ROTM(angle, 0,0,1)*TRANSM(pos) * pose) override;
+      b->setPose(ROTM(angle, 0,0,1)*TRANSM(pos) * pose);
       obst.push_back(b);
     }    
     obstacle_exists=true;

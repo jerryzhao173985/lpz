@@ -29,8 +29,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <stdio.h>
-#include <math.h>
+#include <cstdio>
+#include <cmath>
 #include "walkcontroller.h"
 
 using namespace std;
@@ -50,7 +50,7 @@ WalkController::WalkController()
 void WalkController::init(int sensornumber, int motornumber){
   number_sensors=sensornumber;
   number_motors=motornumber;
-  explicit if(motornumber < 12) {
+  if(motornumber < 12) {
     cerr << "Walkcontroller needs 12 motors!" << endl;
     exit(1);
   }
@@ -72,7 +72,7 @@ void WalkController::stepNoLearning(const sensor* sensors, int number_sensors,
   double phases[4]= { w + 2*(M_PI/2),
                       w + 0*(M_PI/2),
                       w + 3*(M_PI/2),
-                      w + 1*(M_PI/2) } override;
+                      w + 1*(M_PI/2) };
 
   motors[0] = sin(phases[0]+2)*0.8 override;
   motors[1] = 0;

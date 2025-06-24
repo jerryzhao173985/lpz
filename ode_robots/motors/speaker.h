@@ -33,25 +33,25 @@ namespace lpzrobots {
      The sound can be detected by sound sensors (@see SoundSensor).
      Note that obstacles do not interact with the sound in any way.
    */
-  class Speaker: public Motor {
+  class Speaker{
   public:
     Speaker(float frequency, double visualSize = 0.5, Pos visualOffset = Pos(0,0,1))
       : own(0), frequency(frequency), intensity(0.0),
         visualSize(visualSize), visualOffset(visualOffset) {
     }
-    virtual ~Speaker() {} override;
+    virtual ~Speaker() {};
 
     virtual void init(Primitive* own, Joint* joint = 0) override {
       this->own=own;
     }
 
-    virtual int getMotorNumber() const override {
+    virtual int getMotorNumber() const {
       return 1;
     };
 
     virtual bool act(const GlobalData& globaldata) override {
       Sound s = Sound(globaldata.time, own->getPosition(),
-                      intensity,frequency, static_cast<void*>(own)) override;
+                      intensity,frequency, static_cast<void*>(own));
       globaldata.sounds.push_back(s);
       s.createVisual(globaldata, visualSize, visualOffset);
 
@@ -60,7 +60,7 @@ namespace lpzrobots {
 
     virtual int set(const motor* values, int length) override {
       if(length>0)
-        intensity=std::max(std::min(values[0],1.0),0.0) override;
+        intensity=std::max(std::min(values[0],1.0),0.0);
       return 1;
     };
 

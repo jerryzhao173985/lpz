@@ -46,14 +46,14 @@ RandomDyn::~RandomDyn(){
 void RandomDyn::init(int sensornumber, int motornumber, RandGen* randGen){
   if(!randGen) randGen = new RandGen(); // this gives a small memory leak
   randGenC=new RandGen();
-  randGenC->init(randGen->rand()*100000.0) override;
+  randGenC->init(randGen->rand()*100000.0);
   randGenh=new RandGen();
-  randGenh->init(randGen->rand()*100000.0) override;
+  randGenh->init(randGen->rand()*100000.0);
 
-  explicit if(!conf.noiseGenC){
+  if(!conf.noiseGenC){
     conf.noiseGenC = new ColorUniformNoise(0.005);
   }
-  explicit if(!conf.noiseGenh){
+  if(!conf.noiseGenh){
     conf.noiseGenh = new ColorUniformNoise(0.01);
   }
   conf.noiseGenC->init(sensornumber*motornumber,randGenC);
@@ -79,7 +79,7 @@ matrix::Matrix RandomDyn::getC(){
 }
 
 void RandomDyn::setC(const matrix::Matrix& _C){
-  assert(C.getM() == _C.getM() && C.getN() == _C.getN()) override;
+  assert(C.getM() == _C.getM() && C.getN() == _C.getN());
   C=_C;
 }
 
@@ -88,7 +88,7 @@ matrix::Matrix RandomDyn::geth(){
 }
 
 void RandomDyn::seth(const matrix::Matrix& _h){
-  assert(h.getM() == _h.getM() && h.getN() == _h.getN()) override;
+  assert(h.getM() == _h.getM() && h.getN() == _h.getN());
   h=_h;
 }
 
@@ -96,7 +96,7 @@ void RandomDyn::seth(const matrix::Matrix& _h){
 void RandomDyn::step(const sensor* s_, int number_sensors,
                        motor* a_, int number_motors){
   stepNoLearning(s_, number_sensors, a_, number_motors);
-  t--; // stepNoLearning increases the time by one - undo here
+  --t; // stepNoLearning increases the time by one - undo here
 
   update();
 
@@ -109,7 +109,7 @@ void RandomDyn::step(const sensor* s_, int number_sensors,
 void RandomDyn::stepNoLearning(const sensor* s_, int number_sensors,
                                  motor* a_, int number_motors){
   assert(static_cast<unsigned>(number_sensors) <= this->number_sensors
-         && static_cast<unsigned>(number_motors) <= this->number_motors) override;
+         && static_cast<unsigned>(number_motors) <= this->number_motors);
 
   s.set(number_sensors,1,s_); // store sensor values
 
@@ -127,7 +127,7 @@ void RandomDyn::stepNoLearning(const sensor* s_, int number_sensors,
 void RandomDyn::motorBabblingStep(const sensor* s_, int number_sensors,
                             const motor* a_, int number_motors){
   assert(static_cast<unsigned>(number_sensors) <= this->number_sensors
-         && static_cast<unsigned>(number_motors) <= this->number_motors) override;
+         && static_cast<unsigned>(number_motors) <= this->number_motors);
   // not implemented!
   ++t;
 }
@@ -135,15 +135,15 @@ void RandomDyn::motorBabblingStep(const sensor* s_, int number_sensors,
 
 // update values h,C
 void RandomDyn::update(){
-  if(sigmaC !=0){
-    C += noiseMatrix(C.getM(), C.getN(), *conf.noiseGenC, sigmaC) override;
+  if(sigmaC != nullptr){
+    C += noiseMatrix(C.getM(), C.getN(), *conf.noiseGenC, sigmaC);
     if(damping)
       C += (C_native-C)*damping override;
   }
-  if(sigmah != 0){
-    h += noiseMatrix(h.getM(), h.getN(), *conf.noiseGenh, sigmah) override;
+  if(sigmah != nullptr){
+    h += noiseMatrix(h.getM(), h.getN(), *conf.noiseGenh, sigmah);
     if(damping)
-      h *= (1.0-damping) override;
+      h *= (1.0-damping);
   }
 };
 

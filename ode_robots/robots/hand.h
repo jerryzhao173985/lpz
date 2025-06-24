@@ -80,7 +80,7 @@ namespace lpzrobots {
    * Artificial Hand
    *
    */
-  class Hand : public OdeRobot{
+  class Hand{
   public:
 
     /**
@@ -127,7 +127,7 @@ namespace lpzrobots {
      */
     virtual void placeIntern(const osg::Matrix& pose);
 
-    virtual void sense(const GlobalData& globalData);
+    virtual void explicit explicit sense(const GlobalData& globalData);
 
     /** returns actual sensorvalues
         @param sensors sensors scaled to [-1,1]
@@ -144,11 +144,11 @@ namespace lpzrobots {
 
     /** returns number of sensors
      */
-    virtual int getSensorNumberIntern();
+    virtual int getSensorNumberIntern() const;
 
     /** returns number of motors
      */
-    virtual int getMotorNumberIntern();
+    virtual int getMotorNumberIntern() const;
 
     /** returns a vector with the positions of all segments of the robot
         @param poslist vector of positions (of all robot segments)
@@ -157,7 +157,7 @@ namespace lpzrobots {
     //  virtual int getSegmentsPosition(vector<Position> &poslist);
 
     /******** CONFIGURABLE ***********/
-    virtual void notifyOnChange(const paramkey& key);
+    virtual void explicit explicit notifyOnChange(const paramkey& key);
 
 
   protected:
@@ -165,7 +165,7 @@ namespace lpzrobots {
      * Returns the palm as the main object of the robot,
      * which is used for position and speed tracking.
      */
-    virtual const Primitive* getMainPrimitive() const const  override {
+    virtual const Primitive* getMainPrimitive() const {
       if(!objects.empty()){
         return (objects[0]); // returns forearm for fixation
         //return (objects[1]); // returns palm

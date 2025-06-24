@@ -54,10 +54,7 @@
 
 namespace lpzrobots {
 
-  class Primitive;
-  class Joint;
-
-  typedef struct {
+  class Primitive{
   public:
     double size = 0;       ///< scaling factor for robot (diameter of body)
     double legLength = 0;  ///< length of the legs in units of size
@@ -74,7 +71,7 @@ namespace lpzrobots {
 
   /** OCTOPUS: Unknown Walk Object :-), looks like a plate with a lot of legs
    */
-  class Octopus : public OdeRobot {
+  class Octopus{
   public:
 
     /**
@@ -88,7 +85,7 @@ namespace lpzrobots {
     Octopus(const OdeHandle& odeHandle, const OsgHandle& osgHandle, const OctopusConf& conf,
         const std::string& name);
 
-    virtual ~Octopus() {} override;
+    virtual ~Octopus() {};
 
     static OctopusConf getDefaultConf() const {
       OctopusConf c;
@@ -144,11 +141,11 @@ namespace lpzrobots {
         like space-internal collision detection, sensor resets/update etc.
         @param globalData structure that contains global data from the simulation environment
     */
-    virtual void doInternalStuff(const GlobalData& globalData);
+    virtual void explicit doInternalStuff(const GlobalData& globalData);
 
   protected:
     /** the main object of the robot, which is used for position and speed tracking */
-    virtual Primitive* getMainPrimitive() const override { return objects[0]; }
+    virtual Primitive* getMainPrimitive() const { return objects[0]; }
 
     /** creates vehicle at desired pose
         @param pose 4x4 pose matrix

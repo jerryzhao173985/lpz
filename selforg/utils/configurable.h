@@ -37,50 +37,12 @@
 #include <utility>
 
 /**
- Abstact class for configurable objects. Sort of Hashmap interface. Parameters are double, int or
- boolean values
-
- The Configurator is a static_cast<planned>(external) tool that can be used for changing the values of
- configurable objects.
-
- * Protocoll for Configurator:
- \code
- To Configurator(const BNF& notation):
- Conf         := <Comp>*
- Comp         := <CompName> <Pair>*
- CompName     := [<string>][<int>]<newline>
- Pair         := <alphanum>=<double><newline>
- \endcode
- the remaining tags are self explanatory
-
- Example
- \code
- [Component name which can contain spaces and digits and .,- ][ID1]
- key1 = value1
- key2 = value2
- .
- .
- [Other Component name which can contain spaces and digits and .,- ][ID2]
- key3 = value3
- \endcode
-
- Answer: (from Communicator to Simulation environment)\n
- 1. On change of a parameter:
- \code
- [ID] key=newvalue
- \endcode
- or
- \code
- key=newvalue
- \endcode
- the latter one means that the parameter is changed in all components
-
- 2. Request of the description as defined above.
- \code
- #Something I don\'t care
- \endcode
+ * Abstract class for configurable objects
+ * (mainly controllers, but also obstacles and the like)
+ * 
+ * Provides a uniform way to handle configurable parameters 
+ * with a key/value interface with caching, bounds checking, and more
  */
-
 class Configurable : public BackCaller {
 public:
   using paramkey = std::string;

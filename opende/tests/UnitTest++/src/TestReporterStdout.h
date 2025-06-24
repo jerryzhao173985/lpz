@@ -5,8 +5,7 @@
 
 namespace UnitTest {
 
-class TestReporterStdout : public TestReporter
-{
+class TestReporterStdout{
 private:
     virtual void ReportTestStart(TestDetails const& test) override;
     virtual void ReportFailure(TestDetails const& test, char const* failure) override;

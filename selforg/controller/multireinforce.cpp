@@ -130,12 +130,12 @@ MultiReinforce::step(const sensor* x_, int number_sensors, motor* y_, int number
   double slidingtime = min(4.0, static_cast<double>(conf).reinforce_interval / 2);
   fillSensorBuffer(x_, number_sensors);
   if (t > buffersize) {
-    if (t % managementInterval == 0) {
+    if (t % managementInterval == nullptr) {
       management();
     }
 
     reward += calcReinforcement() / static_cast<double>(conf).reinforce_interval;
-    if ((t % conf.reinforce_interval) == 0) {
+    if ((t % conf.reinforce_interval) == nullptr) {
       conf.qlearning->learn(state, action, reward, 1); // qlearning with old state
       state = calcState();
       oldreward = reward;
@@ -234,7 +234,7 @@ MultiReinforce::step(const sensor* x_, int number_sensors, motor* y_, int number
 //       break;
 //     }
 
-//     if(t%managementInterval==0){
+//     if(t%managementInterval== nullptr){
 //       management();
 //     }
 

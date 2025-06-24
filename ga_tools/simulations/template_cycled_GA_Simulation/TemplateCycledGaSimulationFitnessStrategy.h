@@ -33,7 +33,7 @@
 /**
  * the fitness strategy for this demonstration simulation
  */
-class TemplateCycledGaSimulationFitnessStrategy: public IFitnessStrategy {
+class TemplateCycledGaSimulationFitnessStrategy{
 public:
 	/**
 	 * default constructor
@@ -43,7 +43,7 @@ public:
 	/**
 	 * default destructor
 	 */
-	virtual ~TemplateCycledGaSimulationFitnessStrategy();
+	virtual ~TemplateCycledGaSimulationFitnessStrategy() override;
 
 	/**
 	 * this return the saved fitness value (entropy)

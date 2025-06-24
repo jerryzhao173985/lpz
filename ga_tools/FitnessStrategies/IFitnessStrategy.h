@@ -30,16 +30,13 @@
 // forward declaration
 class Individual;
 
-/**
- * The interface for the fitness strategy of an individual.
- */
 class IFitnessStrategy {
 public:
 	/**
 	 * default constructor
 	 * do nothing
 	 */
-	IFitnessStrategy() override;
+	IFitnessStrategy();
 
 	/**
 	 * default destructor
@@ -51,8 +48,8 @@ public:
 	 * declaration of the function getFitness. This function will give the fitness value
 	 * of an individual back. For which individual is him called by 'individual'.
 	 *
-	 * @param individual (const Individual*) calculate the fitness for this individual
-	 * @return static_cast<double>(The) fitness value
+	 * @param individual calculate the fitness for this individual
+	 * @return The fitness value
 	 */
 	virtual double getFitness(const Individual* individual) = 0;
 };

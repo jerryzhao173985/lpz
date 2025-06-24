@@ -4,12 +4,11 @@
 
 #include "AbstractPlotChannel.h"
 
-class TimeStampPlotChannel : public AbstractPlotChannel
-{
+class TimeStampPlotChannel{
 
 public:
   explicit TimeStampPlotChannel ( const std::string& name );
-  virtual ~TimeStampPlotChannel();
+  virtual ~TimeStampPlotChannel() override;
 protected:
 
 private:

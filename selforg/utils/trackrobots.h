@@ -24,18 +24,17 @@
 #ifndef __TRACKROBOTS_H
 #define __TRACKROBOTS_H
 
-#include <stdio.h>
+#include <cstdio>
 #include <string>
 
 #include <selforg/trackable.h>
 
+// Forward declarations
 class AbstractRobot;
-class Agent;
-
 namespace lpzrobots {
-class OdeAgent;
-class TraceDrawer;
-} // namespace lpzrobots
+  class OdeAgent;
+  class TraceDrawer;
+}
 
 struct TrackRobotConf {
   bool trackPos = true;              ///< whether to track position
@@ -53,10 +52,8 @@ struct TrackRobotConf {
 };
 
 /**
-   This class provides tracking possibilies of a robot.
-   The position, speed, and orientation can be logged.
-   This is used by the agent class, @see Agent::setTrackOptions()
-*/
+ * This class provides tracking capabilities for robots.
+ */
 class TrackRobot {
 public:
   friend class Agent;

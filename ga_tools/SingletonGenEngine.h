@@ -36,32 +36,7 @@
 //#include <selforg/storeable.h> not possible because the restore function need more information!!!
 
 //forward declaration
-class Gen;
-class GenPrototype;
-class GenContext;
-class Individual;
-class Generation;
-class IMutationStrategy;
-class IMutationFactorStrategy;
-class ISelectStrategy;
-class IGenerationSizeStrategy;
-class IRandomStrategy;
-class IValue;
-class IFitnessStrategy;
-struct RESTORE_GA_GENERATION;
-struct RESTORE_GA_INDIVIDUAL;
-struct RESTORE_GA_GENE;
-template<class Typ>struct RESTORE_GA_TEMPLATE;
-
-//forward declaration for LPZROBOTS
-class PlotOptionEngine;
-
-/**
- * This is the engine of the gen. alg.
- *
- * Over this is the class as singleton concepted. Only one engine for a run.
- */
-class SingletonGenEngine{
+class Gen{
 public:
 	/**
 	 * this function returns a set of all registered GenPrototypes.
@@ -80,7 +55,7 @@ public:
 	 * @param x static_cast<int>(the) index of the Generation which is searched
 	 * @return static_cast<Generation*>(the) searched Generation. If x not a right index, than the result is zero.
 	 */
-	inline Generation* getGeneration(int x) {if(x<getNumGeneration())return m_generation[x];return NULL;}
+	inline Generation* explicit getGeneration(int x) {if(x<getNumGeneration())return m_generation[x];return nullptr;}
 
 	/**
 	 * returns the actual generation number, on which the alg. work
@@ -105,38 +80,38 @@ public:
 	 * @param x static_cast<int>(index) of the individual which is searched.
 	 * @return static_cast<Individual*>(the) searched individual
 	 */
-	inline Individual* getIndividual(int x) const override {if(x<getNumIndividual())return m_individual[x];return NULL;}
+	inline Individual* getIndividual(int x) const override {if(x<getNumIndividual())return m_individual[x];return nullptr;}
 
 	/**
 	 * registered a GenPrototype in the engine.
 	 * @param prototype static_cast<GenPrototype*>(the) prototype which should be registered.
 	 */
-	inline void addGenPrototype(const GenPrototype* prototype) {m_prototype.push_back(prototype);}
+	inline void explicit addGenPrototype(const GenPrototype* prototype) {m_prototype.push_back(prototype);}
 
 	/**
 	 * registered a Gen in the engine.  Normal only used by the alg. self.
 	 * @param gen static_cast<Gen*>(the) Gen which should be registered.
 	 */
-	inline void addGen(const Gen* gen) {m_gen.push_back(gen);}
+	inline void explicit addGen(const Gen* gen) {m_gen.push_back(gen);}
 
 	/**
 	 * returns one gene
 	 * @param x static_cast<int>(index) of the gene which is searched
 	 * @return static_cast<Gen*>(the) searched gene
 	 */
-	inline Gen* getGen(int x)const override {if(static_cast<unsigned int>(x)<m_gen.size())return m_gen[x];return NULL;}
+	inline Gen* getGen(int x)const override {if(static_cast<unsigned int>(x)<m_gen.size())return m_gen[x];return nullptr;}
 
 	/**
 	 * registered a individual in the engine.  Normal only used by the alg. self.
 	 * @param individual static_cast<Individual*>(the) individual
 	 */
-	inline void addIndividual(const Individual* individual) {m_individual.push_back(individual);}
+	inline void explicit addIndividual(const Individual* individual) {m_individual.push_back(individual);}
 
 	/**
 	 * add a Generation to the alg. Normal only used by the alg. self.
 	 * @param generation static_cast<Generation*>(the) generation
 	 */
-	inline void addGeneration(const Generation* generation) {m_generation.push_back(generation);}
+	inline void explicit addGeneration(const Generation* generation) {m_generation.push_back(generation);}
 
 	/**
 	 * prepare the alg. and create his fisrt generation.
@@ -171,7 +146,7 @@ public:
 	 * return the size of the next generation.
 	 * @return static_cast<int>(the) size
 	 */
-	int getNextGenerationSize() override;
+	int getNextGenerationSize() const override;
 
 	/**
 	 * makes a step in the measure
@@ -214,19 +189,19 @@ public:
 	 * decid the select strategy
 	 * @param strategy static_cast<ISelectStrategy*>(the) select strategy of the alg.
 	 */
-	inline void setSelectStrategy(const ISelectStrategy* strategy) {m_selectStrategy = strategy;}
+	inline void explicit setSelectStrategy(const ISelectStrategy* strategy) {m_selectStrategy = strategy;}
 
 	/**
 	 * decide the generation size strategy.
 	 * @param strategy static_cast<IGenerationSizeStrategy*>(the) generation size strategy of the alg.
 	 */
-	inline void setGenerationSizeStrategy(const IGenerationSizeStrategy* strategy) {m_generationSizeStrategy = strategy;}
+	inline void explicit setGenerationSizeStrategy(const IGenerationSizeStrategy* strategy) {m_generationSizeStrategy = strategy;}
 
 	/**
 	 * decide the fitness strategy.
 	 * @param strategy static_cast<IFitnessStrategy*>(the) fitness strategy of the alg.
 	 */
-	inline void setFitnessStrategy(const IFitnessStrategy* strategy) {m_fitnessStrategy = strategy;}
+	inline void explicit setFitnessStrategy(const IFitnessStrategy* strategy) {m_fitnessStrategy = strategy;}
 
 	/**
 	 * calculate for a individual the fitness value.
@@ -266,12 +241,12 @@ public:
 	 * returns the only existing engine.
 	 * @return static_cast<SingletonGenEngine*>(the) engine
 	 */
-	inline static SingletonGenEngine* getInstance(void) { if(m_engine==0) m_engine = new SingletonGenEngine();return m_engine; }
+	inline static SingletonGenEngine* getInstance(void) { if(m_engine== nullptr) m_engine = new SingletonGenEngine();return m_engine; }
 
 	/**
 	 * destroy the only existing engine.
 	 */
-	inline static void destroyGenEngine(bool cleanStrategies=false) {getInstance()->m_cleanStrategies=cleanStrategies; if(m_engine!=0){delete m_engine;m_engine=0;}}
+	inline static void destroyGenEngine(bool cleanStrategies=false) {getInstance()->m_cleanStrategies=cleanStrategies; if(m_engine!= nullptr){delete m_engine;m_engine=0;}}
 
 protected:
 	/**

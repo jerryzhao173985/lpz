@@ -49,7 +49,7 @@ public:
 	 * default destructor
 	 * do nothing
 	 */
-	virtual ~ExtreamTestFitnessStrategy();
+	virtual ~ExtreamTestFitnessStrategy() override;
 
 	/**
 	 * implementation for getFitness of IFitnessStrategy.

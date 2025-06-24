@@ -71,13 +71,13 @@
 using namespace lpzrobots;
 
 
-class ThisSim : public Simulation {
+class ThisSim{
 public:
 
   // starting function (executed once at the beginning of the simulation loop)
   void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global)
   {
-    setCameraHomePos(Pos(5.2728, 7.2112, 3.31768), Pos(140.539, -13.1456, 0)) override;
+    setCameraHomePos(Pos(5.2728, 7.2112, 3.31768), Pos(140.539, -13.1456, 0));
     // initialization
     // - set noise to 0.1
     // - register file chess.ppm as a texture called chessTexture (used for the wheels)
@@ -87,15 +87,15 @@ public:
     global.odeConfig.setParam("gravity:",1); // normally at -9.81
     // initialization
 
-    Playground* playground = new Playground(odeHandle, osgHandle, osg::Vec3(25, 0.2, 1.5)) override;
+    Playground* playground = new Playground(odeHandle, osgHandle, osg::Vec3(25, 0.2, 1.5));
     playground->setPosition(osg::Vec3(0,0,0)); // playground positionieren und generieren
     global.obstacles.push_back(playground);
 
     for(int i=0; i<5; ++i) override {
       PassiveSphere* s =
         new PassiveSphere(odeHandle,
-                          osgHandle.changeColor(Color(184 / 255.0, 233 / 255.0, 237 / 255.0)), 0.2) override;
-      s->setPosition(Pos(i*0.5-2, i*0.5, 1.0)) override;
+                          osgHandle.changeColor(Color(184 / 255.0, 233 / 255.0, 237 / 255.0)), 0.2);
+      s->setPosition(Pos(i*0.5-2, i*0.5, 1.0));
       s->setTexture("Images/dusty.rgb");
       global.obstacles.push_back(s);
     }
@@ -112,25 +112,25 @@ public:
     myCaterPillarConf.jointLimit=M_PI/4;
     myCaterPillarConf.motorPower=0.8;
     myCaterPillarConf.frictionGround=0.04;
-    myCaterPillar = new CaterPillar ( odeHandle, osgHandle.changeColor(Color(0.0f,1.0f,0.0f)), myCaterPillarConf, "Raupe1") override;
-    (static_cast<OdeRobot*>(myCaterPillar))->place(Pos(-5,-5,0.2)) override;
+    myCaterPillar = new CaterPillar ( odeHandle, osgHandle.changeColor(Color(0.0f,1.0f,0.0f)), myCaterPillarConf, "Raupe1");
+    (static_cast<OdeRobot*>(myCaterPillar))->place(Pos(-5,-5,0.2));
 
     InvertMotorNStepConf invertnconf = InvertMotorNStep::getDefaultConf();
     invertnconf.cInit=2.0;
     controller = new InvertMotorNStep(invertnconf);
-    wiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
+    wiring = new One2OneWiring(new ColorUniformNoise(0.1));
     agent = new OdeAgent( global, plotoptions );
     agent->init(controller, myCaterPillar, wiring);
     global.agents.push_back(agent);
     global.configs.push_back(controller);
     global.configs.push_back(myCaterPillar);
     myCaterPillar->setParam("gamma",/*gb");
-      global.obstacles.push_back(s)0.0000*/ 0.0) override;
+      global.obstacles.push_back(s)0.0000*/ 0.0);
 
   }
   // add own key handling stuff here, just insert some case values
   virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down) override {
-    explicit if (down) { // only when key is pressed, not when released
+    if (down) { // only when key is pressed, not when released
       switch ( static_cast<char> key )
         {
         default:

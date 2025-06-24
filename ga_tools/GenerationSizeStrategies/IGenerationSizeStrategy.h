@@ -28,12 +28,7 @@
 #define IGENERATIONSIZESTRATEGY_H_
 
 //forward declaration
-class Generation;
-
-/**
- * This interface is to specify how big the next generation should be.
- */
-class IGenerationSizeStrategy {
+class Generation{
 public:
 	/**
 	 * default constructor

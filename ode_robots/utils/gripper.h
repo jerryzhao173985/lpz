@@ -46,7 +46,7 @@ namespace lpzrobots {
     */
     /** if true the last grasped object cannot be directly grasped again
      */
-    //     bool incOrExc; ///< include static_cast<false>(or) exclude static_cast<true>(grippables) override;
+    //     bool incOrExc; ///< include static_cast<false>(or) exclude static_cast<true>(grippables);
   };
 
   /**
@@ -59,7 +59,7 @@ namespace lpzrobots {
       in order to set call the addGrippables from there
       (e.g. with otherrobot->getAllPrimitives()), see Skeleton.
    */
-  class Gripper : public Configurable {
+  class Gripper{
   public:
     /**
        @param gripDuration time in seconds for how long the gripper grasps
@@ -68,7 +68,7 @@ namespace lpzrobots {
        @param size diameter of the drawn sphere (if 0 nothing is drawn)
        @param drawAtContactPoint sphere is drawn at contact point static_cast<true>(or) at center of attached primitive (false)
     */
-    Gripper(const GripperConf& conf = getDefaultConf()) override;
+    Gripper(const GripperConf& conf = getDefaultConf());
 
     static GripperConf getDefaultConf() const {
       GripperConf conf;
@@ -84,7 +84,7 @@ namespace lpzrobots {
     }
 
     /// call this to attach the gripper to the given primitive
-    bool attach(Primitive* p);
+    bool explicit explicit attach(Primitive* p);
 
     virtual void addGrippables(const std::vector<Primitive*>& ps);
     virtual void removeGrippables(const std::vector<Primitive*>& ps);

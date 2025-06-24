@@ -10,7 +10,7 @@
 
 #include "XMLParserEngine.h"
 
-class XMLObject {
+class XMLObject{
 public:
         explicit XMLObject(const XMLParserEngine& xmlEngine_) : xmlEngine(xmlEngine_) {}
 

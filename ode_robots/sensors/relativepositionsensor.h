@@ -31,7 +31,7 @@ namespace lpzrobots {
   /** Class for relative (or absolute) position sensing.
       The sensor values are the normalised relative position to some given object ( setReference() ) or the origin.
   */
-  class RelativePositionSensor : public Sensor {
+  class RelativePositionSensor{
   public:
     /**
        @param maxDistance maximal distance that is expected used for normalisation of sensor value
@@ -46,7 +46,7 @@ namespace lpzrobots {
     virtual void init(Primitive* own, Joint* joint = 0);
     virtual int getSensorNumber() const override;
 
-    virtual bool sense(const GlobalData& globaldata);
+    virtual bool explicit explicit sense(const GlobalData& globaldata);
     virtual std::list<sensor> getList() const override;
 
     /**
@@ -55,7 +55,7 @@ namespace lpzrobots {
        This can be another robot an obstacle (light source) and such like
        This must be called before first sense() or get() call.
     */
-    virtual void setReference(Primitive* ref);
+    virtual void explicit explicit setReference(Primitive* ref);
 
   private:
     double maxDistance = 0;

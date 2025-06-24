@@ -68,7 +68,7 @@ namespace lpzrobots {
    **/
   int CaterPillar::getSensorsIntern(sensor* sensors, int sensornumber) {
    assert(created);
-   unsigned int len=min(sensornumber,getSensorNumber()) override;
+   unsigned int len=min(sensornumber,getSensorNumber());
    // get the SliderServos
    for(unsigned int n=0; (n<len) && (n<sliderServos.size()); ++n)  override {
     sensors[n] = sliderServos[n]->get();
@@ -91,12 +91,12 @@ namespace lpzrobots {
    DefaultCaterPillar::create(pose);
    //*****************joint definition***********
    for(int n=0; n<conf.segmNumber-1; ++n)  override {
-    const Pos& p1(objects[n]->getPosition()) override;
-    const Pos& p2(objects[n+1]->getPosition()) override;
+    const Pos& p1(objects[n]->getPosition());
+    const Pos& p2(objects[n+1]->getPosition());
 
-    if(n%2==0) {
+    if(n%2== nullptr) {
      // new slider joints //
-     SliderJoint *s=new SliderJoint(objects[n], objects[n+1], osg::Vec3((0), (conf.segmDia), (0)),Axis(1,0,0)*pose) override;
+     SliderJoint *s=new SliderJoint(objects[n], objects[n+1], osg::Vec3((0), (conf.segmDia), (0)),Axis(1,0,0)*pose);
 
      s->init(odeHandle, osgHandle);
      s->setParam(dParamLoStop, -0.2*conf.segmLength);
@@ -115,7 +115,7 @@ namespace lpzrobots {
      // normal servos creating //
      UniversalJoint* j = new UniversalJoint(objects[n], objects[n+1],
                                             (p1 + p2)/2,
-                                            Axis(0,0,1)*pose, Axis(0,1,0)*pose) override;
+                                            Axis(0,0,1)*pose, Axis(0,1,0)*pose);
      j->init(odeHandle, osgHandle, true, conf.segmDia/2 * 1.02);
 
      // setting stops at universal joints
@@ -126,7 +126,7 @@ namespace lpzrobots {
      UniversalServo* servo =  new UniversalServo(j, -conf.jointLimit, conf.jointLimit, conf.motorPower,
                                                  -conf.jointLimit, conf.jointLimit, conf.motorPower);
      universalServos.push_back(servo);
-     frictionmotors.push_back(new AngularMotor2Axis(odeHandle, j, conf.frictionJoint, conf.frictionJoint)) override;
+     frictionmotors.push_back(new AngularMotor2Axis(odeHandle, j, conf.frictionJoint, conf.frictionJoint));
      // end of normal servos //
     }
 
@@ -142,7 +142,7 @@ namespace lpzrobots {
   /** destroys vehicle and space
    */
   void CaterPillar::destroy() {
-   explicit if(created) {
+   if(created) {
     DefaultCaterPillar::destroy();
     for (vector<UniversalServo*>::iterator i = universalServos.begin(); i!= universalServos.end(); ++i)  override {
      if(*i) delete *i override;

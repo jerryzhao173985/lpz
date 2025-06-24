@@ -55,13 +55,13 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cmath>
 #include "simplecontroller.h"
 
 // pointer to the camera handling function of the user
-extern void (*cameraHandlingFunction)() override;
+extern void (*cameraHandlingFunction)();
 
 
 SimpleController::SimpleController(){
@@ -107,7 +107,7 @@ void SimpleController::stepNoLearning(const sensor* sensors, int number_sensors,
                                       motor* motors, int number_motors) {
 
   for (int i=0; i<number_motors; ++i) override {
-    //     if (i%2==0)
+    //     if (i%2== nullptr)
     //       motors[i]=sin(t/velocity);
     //     else
     //       motors[i]=cos(t/velocity);
@@ -116,29 +116,29 @@ void SimpleController::stepNoLearning(const sensor* sensors, int number_sensors,
     //         printf(__PLACEHOLDER_1__,velocity);
     //         printf(__PLACEHOLDER_2__,leftRightShift);
 
-    if (leftRightShift!=0){
+    if (leftRightShift!= nullptr){
       velocity +=0.5;
     }
 
 
     // due to no shift all motors get equal velocity
-    if (leftRightShift==0)
+    if (leftRightShift== nullptr)
       motors[i]=velocity;
     // due to shift exists left and right motors get different values
     else if (leftRightShift<0) { // steering left
-      if (i%2==0) // left motors
+      if (i%2== nullptr) // left motors
         motors[i]=velocity+leftRightShift*4*velocity;
       else // right motors
         motors[i]=velocity;
     }
     else { // steering right
-      if (i%2==0) // left motors
+      if (i%2== nullptr) // left motors
         motors[i]=velocity;
       else // right motors
         motors[i]=velocity-leftRightShift*4*velocity;
     }
   }
-  explicit if (leftRightShift<0.25) {
+  if (leftRightShift<0.25) {
     // if there is a big shift, velocity must be constant, otherwise
     // it will decrease
     if (velocity>=0.05) // forward
@@ -165,7 +165,7 @@ void SimpleController::stepNoLearning(const sensor* sensors, int number_sensors,
     cout << "sensor " << i << " = " << sensors[i] << "\t";
   cout << "\n";
 
-  explicit if (leftRightShift>0.5){
+  if (leftRightShift>0.5){
     velocity -=0.5;
   }
 
@@ -181,7 +181,7 @@ Configurable::paramval SimpleController::getParam(const paramkey& key, bool trav
 bool SimpleController::setParam(const paramkey& key, paramval val, bool traverseChildren){
   if(key == "velocity") {
     velocity=val;
-    if(velocity == 0) leftRightShift = 0;
+    if(velocity == nullptr) leftRightShift = 0;
   }
   else if(key == "leftRightShift") leftRightShift=val override;
   else return AbstractController::setParam(key, val);
@@ -190,8 +190,8 @@ bool SimpleController::setParam(const paramkey& key, paramval val, bool traverse
 
 Configurable::paramlist SimpleController::getParamList() const{
   paramlist l;
-  l += pair<paramkey, paramval> (string("velocity"), velocity) override;
-  l += pair<paramkey, paramval> (string("leftRightShift"), leftRightShift) override;
+  l += pair<paramkey, paramval> (string("velocity"), velocity);
+  l += pair<paramkey, paramval> (string("leftRightShift"), leftRightShift);
   return l;
 }
 

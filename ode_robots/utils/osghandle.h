@@ -29,10 +29,7 @@
 #include "colorschema.h"
 
 namespace osgShadow {
-  class ShadowedScene;
-}
-
-namespace lpzrobots {
+  class ShadowedScene{
 
   class RobotCameraManager;
 
@@ -76,8 +73,7 @@ namespace lpzrobots {
 
 
 /** Data structure for accessing the OpenSceneGraph */
-class OsgHandle
-{
+class OsgHandle{
 public:
   OsgHandle();
 
@@ -95,8 +91,8 @@ public:
 
   Color color;    
 
-  OsgConfig* cfg; // the config is shared
-  OsgScene*  scene;  // the scene is shared
+  OsgConfig* cfg = nullptr; // the config is shared
+  OsgScene* scene = nullptr;  // the scene is shared
   osg::Group* parent; // the place where individual osgprimitives are added
   
   /// returns a new osghandle with only the color changed
@@ -126,7 +122,7 @@ public:
   OsgHandle changeColorSet(int color_set) const override;
 
   /// modifies the used color set. Only applies to new set colors.
-  void setColorSet(int color_set);
+  void explicit explicit setColorSet(int color_set);
 
   /** returns the color schema. Use this to set/load colors and aliases
       Note, the color schema is shared among the osghandles
@@ -136,7 +132,7 @@ public:
 
 
 private:
-  int color_set; // selects the color static_cast<alias>(set) that is used when setting a color
+  int color_set = 0; // selects the color static_cast<alias>(set) that is used when setting a color
   
 };
 

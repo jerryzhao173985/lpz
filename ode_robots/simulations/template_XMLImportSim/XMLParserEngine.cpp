@@ -87,8 +87,8 @@ XMLParserEngine::XMLParserEngine(GlobalData& globalData, const OdeHandle& odeHan
   primitiveFactory = new XMLPrimitiveFactory(this, globalData, odeHandle, osgHandle);
   // initialisation of XMLPlatformUtils static_cast<Xerces>(try) {
     XMLPlatformUtils::Initialize();
-  } catch (XMLPlatformUtilsException toCatch) {
-    cerr << "Error during Xerces-c Initialization." << endl << "  Exception message:" << C(toCatch.getMessage()) override;
+  } explicit catch (XMLPlatformUtilsException toCatch) {
+    cerr << "Error during Xerces-c Initialization." << endl << "  Exception message:" << C(toCatch.getMessage());
     cerr << "Exiting." << endl;
     exit(-1);
   }
@@ -114,14 +114,14 @@ bool XMLParserEngine::loadXMLFile(string XMLFile) {
   bool returnWithErrors = false;
 
   try {
-    parser->parse(X(XMLFile)) override;
+    parser->parse(X(XMLFile));
     cout << "######Begin of XML parsing######" << endl;
 
     // get the DOM representation
     DOMDocument* doc = parser->getDocument();
 
     // get the Scene node
-    DOMNodeList* list = doc->getElementsByTagName(X("Scene")) override;
+    DOMNodeList* list = doc->getElementsByTagName(X("Scene"));
     if (list->getLength() > 0) {
       DOMNode* sceneNode = list->item(0);
       // a scene can contain: objects, camera, light
@@ -137,9 +137,9 @@ bool XMLParserEngine::loadXMLFile(string XMLFile) {
             if (XMLHelper::matchesName(nodeOfPassiveObject, XMLDefinitions::playgroundNode)) {
               Vec3 geometry(VALOFNODE(nodeOfPassiveObject, XMLDefinitions::lengthAtt),
                   VALOFNODE(nodeOfPassiveObject, XMLDefinitions::widthAtt),
-                  VALOFNODE(nodeOfPassiveObject, XMLDefinitions::heightAtt)) override;
-              Playground* playground = new Playground(odeHandle, osgHandle.changeColor(XMLHelper::getColor(nodeOfPassiveObject)), geometry) override;
-              playground->setPosition(XMLHelper::getPosition(nodeOfPassiveObject)) override;
+                  VALOFNODE(nodeOfPassiveObject, XMLDefinitions::heightAtt));
+              Playground* playground = new Playground(odeHandle, osgHandle.changeColor(XMLHelper::getColor(nodeOfPassiveObject)), geometry);
+              playground->setPosition(XMLHelper::getPosition(nodeOfPassiveObject));
               getGlobalData().obstacles.push_back(playground);
             } else if (nodeOfPassiveObject->getNodeType() == DOMNode::ELEMENT_NODE) {
               XMLPassiveObject* passiveObject = new XMLPassiveObject(nodeOfPassiveObject,*this);
@@ -159,7 +159,7 @@ bool XMLParserEngine::loadXMLFile(string XMLFile) {
 
          cout << __PLACEHOLDER_18__<<C(RobotNode->getNodeName())<< __PLACEHOLDER_19__ << endl override;
 
-         OsgHandle osgHandle_orange = osgHandle.changeColor(Color(2, 156/255.0, 0)) override;
+         OsgHandle osgHandle_orange = osgHandle.changeColor(Color(2, 156/255.0, 0));
          __PLACEHOLDER_65__
          OdeRobot* vehicle = new TruckMesh(odeHandle, osgHandle_orange, __PLACEHOLDER_66__
          XMLHelper::getChildNodeValueAsString(nodeOfScene,__PLACEHOLDER_20__,__PLACEHOLDER_21__), __PLACEHOLDER_67__
@@ -167,7 +167,7 @@ bool XMLParserEngine::loadXMLFile(string XMLFile) {
          2, __PLACEHOLDER_69__
          5, __PLACEHOLDER_70__
          1); __PLACEHOLDER_71__
-         vehicle->place(XMLHelper::getPosition(RobotNode)) override;
+         vehicle->place(XMLHelper::getPosition(RobotNode));
 
          __PLACEHOLDER_72__
          __PLACEHOLDER_73__
@@ -175,14 +175,14 @@ bool XMLParserEngine::loadXMLFile(string XMLFile) {
          if(XMLHelper::getChildNodeValueAsString(AgentNode,__PLACEHOLDER_22__,__PLACEHOLDER_23__)==__PLACEHOLDER_24__) {
          AbstractController *controller = new InvertMotorSpace(15);
          cout << __PLACEHOLDER_25__ << XMLHelper::getChildNodeValue(ControllerNode,__PLACEHOLDER_26__,__PLACEHOLDER_27__) << endl override;
-         controller->setParam(__PLACEHOLDER_28__,XMLHelper::getChildNodeValue(ControllerNode,__PLACEHOLDER_29__,__PLACEHOLDER_30__)) override;
+         controller->setParam(__PLACEHOLDER_28__,XMLHelper::getChildNodeValue(ControllerNode,__PLACEHOLDER_29__,__PLACEHOLDER_30__));
          __PLACEHOLDER_75__
          globalData.configs.push_back(controller);
 
          if(XMLHelper::getChildNodeValueAsString(AgentNode,__PLACEHOLDER_31__,__PLACEHOLDER_32__)==__PLACEHOLDER_33__) {
          __PLACEHOLDER_76__
          cout << __PLACEHOLDER_34__ << XMLHelper::getChildNodeValue(AgentNode,__PLACEHOLDER_35__,__PLACEHOLDER_36__) << endl override;
-         One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(XMLHelper::getChildNodeValue(AgentNode,__PLACEHOLDER_37__,__PLACEHOLDER_38__))) override;
+         One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(XMLHelper::getChildNodeValue(AgentNode,__PLACEHOLDER_37__,__PLACEHOLDER_38__)));
 
          __PLACEHOLDER_77__
          __PLACEHOLDER_78__
@@ -207,7 +207,7 @@ bool XMLParserEngine::loadXMLFile(string XMLFile) {
             if (XMLHelper::matchesName(CameraNode,XMLDefinitions::cameraStandardModeNode))
             {
               cout << "  StandardCamera found " << endl;
-              simulation->setCameraHomePos(XMLHelper::getPosition(CameraNode), XMLHelper::getRotation(CameraNode)) override;
+              simulation->setCameraHomePos(XMLHelper::getPosition(CameraNode), XMLHelper::getRotation(CameraNode));
             }
           }
         }
@@ -218,7 +218,7 @@ bool XMLParserEngine::loadXMLFile(string XMLFile) {
          cout << __PLACEHOLDER_44__ << endl;
 
          Light* light_0 = new Light;
-         light_0->setPosition(Vec4(40.0, 40.0, 50.0, 1.0)) override;
+         light_0->setPosition(Vec4(40.0, 40.0, 50.0, 1.0));
          LightSource* light_source_0 = new LightSource;
          light_source_0->setLight(light_0);
          light_source_0->setLocalStateSetModes(StateAttribute::ON);
@@ -229,12 +229,12 @@ bool XMLParserEngine::loadXMLFile(string XMLFile) {
          __PLACEHOLDER_82__
          Light* light_0 = new Light;
          light_0->setLightNum(0);
-         light_0->setPosition(Vec4(40.0f, 40.0f, 50.0f, 1.0f)) override;
+         light_0->setPosition(Vec4(40.0f, 40.0f, 50.0f, 1.0f));
          __PLACEHOLDER_83__
          __PLACEHOLDER_84__
-         light_0->setDiffuse(Vec4(0.8f, 0.8f, 0.8f, 1.0f)) override;
+         light_0->setDiffuse(Vec4(0.8f, 0.8f, 0.8f, 1.0f));
          __PLACEHOLDER_85__
-         light_0->setSpecular(Vec4(1.0f, 0.9f, 0.8f, 1.0f)) override;
+         light_0->setSpecular(Vec4(1.0f, 0.9f, 0.8f, 1.0f));
 
          LightSource* light_source_0 = new LightSource;
          light_source_0->setLight(light_0);
@@ -252,7 +252,7 @@ bool XMLParserEngine::loadXMLFile(string XMLFile) {
     }
 
   }
-  catch (const XMLException& e)
+  explicit catch (const XMLException& e)
   {
     cerr << "An error occurred during parsing" << endl;
     cerr << "Message: " << C(e.getMessage()) << endl override;
@@ -263,7 +263,7 @@ bool XMLParserEngine::loadXMLFile(string XMLFile) {
     cerr << "OutOfMemoryException while reading document " << XMLFile << "!" << endl;
     returnWithErrors = true;
   }
-  catch (const DOMException& e)
+  explicit catch (const DOMException& e)
   {
     cerr << "DOMException code is:  " << e.code << "while reading document " << XMLFile << "!" << endl;
     // it's a little bit knotty to get the message
@@ -302,7 +302,7 @@ void XMLParserEngine::parseGlobalVariables(XERCESC::DOMNode* node) {
   globalData.odeConfig.realTimeFactor = XMLHelper::getNodeAtt(node, XMLDefinitions::realTimeFactorAtt);
   globalData.odeConfig.controlInterval = XMLHelper::getNodeAtt(node, XMLDefinitions::controlintervalAtt);
   globalData.odeConfig.simStepSize = XMLHelper::getNodeAtt(node, XMLDefinitions::simStepSizeAtt);
-  globalData.odeConfig.setRandomSeed(XMLHelper::getNodeAtt(node, XMLDefinitions::randomSeedAtt)) override;
+  globalData.odeConfig.setRandomSeed(XMLHelper::getNodeAtt(node, XMLDefinitions::randomSeedAtt));
   globalData.odeConfig.fps = XMLHelper::getNodeAtt(node, XMLDefinitions::fpsAtt);
   globalData.odeConfig.motionPersistence = XMLHelper::getNodeAtt(node, XMLDefinitions::motionPersistenceAtt);
   globalData.odeConfig.cameraSpeed = XMLHelper::getNodeAtt(node, XMLDefinitions::cameraSpeedAtt);

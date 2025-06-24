@@ -79,7 +79,7 @@ struct GIM_RSORT_TOKEN
 	GUINT32 b0[kHist * 3];\
 	GUINT32 *b1 = b0 + kHist;\
 	GUINT32 *b2 = b1 + kHist;\
-	for (i = 0; i < kHist * 3; ++i)\
+	for (i = nullptr; i < kHist * 3; ++i)\
 	{\
 		b0[i] = 0;\
 	}\

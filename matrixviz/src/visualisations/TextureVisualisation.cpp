@@ -46,7 +46,7 @@ TextureVisualisation::TextureVisualisation(MatrixPlotChannel *channel, ColorPale
 
 TextureVisualisation::~TextureVisualisation(){
   if(debug) cout << "TextureVisualisation Destruktor" << endl;
-  if(object != 0) {
+  if(object != nullptr) {
     makeCurrent();
     glDeleteLists( object, 1 );
   }
@@ -158,7 +158,7 @@ void TextureVisualisation::mouseMoveEvent ( QMouseEvent *event ){
   if(m < 0) m=0;
 
   VectorPlotChannel *vectorPC = dynamic_cast<VectorPlotChannel *> (channel);
-  if ( vectorPC == NULL){
+  if ( vectorPC == nullptr){
     MatrixElementPlotChannel *elem = channel->getChannel(n, m);
     tTip = QString(elem->getChannelName().c_str()) + ": " + QString::number(elem->getValue());
 

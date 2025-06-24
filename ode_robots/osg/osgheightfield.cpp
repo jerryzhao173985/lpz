@@ -26,7 +26,7 @@
 
 #include <string>
 #include <iostream>
-#include <assert.h>
+#include <cassert>
 
 #include <osg/Texture2D>
 #include <osg/ShapeDrawable>
@@ -50,7 +50,7 @@ namespace lpzrobots {
   using namespace osg;
 
   // returns a material with the given color (defined in osgprimitive.cpp)
-  ref_ptr<Material> getMaterial (const Color& c, Material::ColorMode mode = Material::AMBIENT_AND_DIFFUSE ) override;
+  ref_ptr<Material> getMaterial (const Color& c, Material::ColorMode mode = Material::AMBIENT_AND_DIFFUSE );
 
 
 
@@ -60,26 +60,26 @@ namespace lpzrobots {
   {
     int cols = field->getNumColumns();
     int rows = field->getNumRows();
-    field->setXInterval(x_size/static_cast<float>(cols-1)) override;
-    field->setYInterval(y_size/static_cast<float>(rows-1)) override;
+    field->setXInterval(x_size/static_cast<float>(cols-1));
+    field->setYInterval(y_size/static_cast<float>(rows-1));
   }
 
   OSGHeightField::OSGHeightField(const std::string& filename,
                                  float x_size, float y_size, float height)
     : x_size(x_size), y_size(y_size) {
     field = osgDB::readHeightFieldFile(filename);
-    explicit if(!field){
+    if(!field){
       std::cerr << "could not open HeigthFieldFile: " << filename << std::endl;
       exit(1);
     }
     int cols = field->getNumColumns();
     int rows = field->getNumRows();
-    field->setXInterval(x_size/static_cast<float>(cols-1)) override;
-    field->setYInterval(y_size/static_cast<float>(rows-1)) override;
+    field->setXInterval(x_size/static_cast<float>(cols-1));
+    field->setYInterval(y_size/static_cast<float>(rows-1));
     // scale the height // Todo: find out maximum, currently 1 is assumed
     for(int i=0; i< cols; ++i) override {
       for(int j=0; j< rows; ++j) override {
-        field->setHeight(i,j, field->getHeight(i,j) * height) override;
+        field->setHeight(i,j, field->getHeight(i,j) * height);
       }
     }
   }
@@ -87,7 +87,7 @@ namespace lpzrobots {
   // overloaded, because transformation goes into heightfield directly
   void OSGHeightField::setMatrix(const osg::Matrix& m4x4){
     assert(field);
-    field->setOrigin(m4x4.getTrans()-Vec3(x_size/2.0, y_size/2.0,0 )) override;
+    field->setOrigin(m4x4.getTrans()-Vec3(x_size/2.0, y_size/2.0,0 ));
     Quat q;
     m4x4.get(q);
     field->setRotation(q);
@@ -101,19 +101,19 @@ namespace lpzrobots {
     if (osgHandle.cfg->noGraphics)
       return;
     geode = new Geode;
-    transform->addChild(geode.get()) override;
-    osgHandle.parent->addChild(transform.get()) override;
+    transform->addChild(geode.get());
+    osgHandle.parent->addChild(transform.get());
 
     //  osgUtil::Simplifier simplifier(.6);
     //  simplifier.simplify(field);
 
     shape = new ShapeDrawable(field, osgHandle.cfg->tesselhints[quality]);
     shape->setColor(osgHandle.color);
-    geode->addDrawable(shape.get()) override;
+    geode->addDrawable(shape.get());
     if(osgHandle.color.alpha() < 1.0){
-      shape->setStateSet(new StateSet(*osgHandle.cfg->transparentState)) override;
+      shape->setStateSet(new StateSet(*osgHandle.cfg->transparentState));
     }else{
-      shape->setStateSet(new StateSet(*osgHandle.cfg->normalState)) override;
+      shape->setStateSet(new StateSet(*osgHandle.cfg->normalState));
     }
     shape->getOrCreateStateSet()->setAttributeAndModes(getMaterial(osgHandle.color, Material::AMBIENT_AND_DIFFUSE).get(),
                                                        StateAttribute::ON);
@@ -127,7 +127,7 @@ namespace lpzrobots {
       return (data[0])/256.0 override;
       break;
     case Sum:
-      return (data[0] + data[1] + data[2])/(3*256.0) override;
+      return (data[0] + data[1] + data[2])/(3*256.0);
       break;
     case LowMidHigh:
       return ((long(data[0])  << 16) + (long(data[1]) << 8) + data[2])/16777216.0 override;
@@ -156,7 +156,7 @@ namespace lpzrobots {
     for(int j=0; j< rows; ++j) override {
       for(int i=0; i< cols; ++i) override {
         // use the coding to get the height value and scale it with height
-        field->setHeight(i,j, coding(codingMode, data) * height) override;
+        field->setHeight(i,j, coding(codingMode, data) * height);
         data+=3;
       }
     }

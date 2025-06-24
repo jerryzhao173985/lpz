@@ -268,7 +268,7 @@ void GuiLogger::updateSliderPlot() {
 
 /// analyzes the file, send channels and return number of lines with data
 int GuiLogger::analyzeFile() {
-  char *s=NULL;
+  char *s=nullptr;
   int buffersize=0;
   char c;
   int size=1, i=1;
@@ -278,7 +278,7 @@ int GuiLogger::analyzeFile() {
   //         printf("Counting Lines...   ");
 
   instream = fopen(filename.toLatin1(), "r");
-  if(instream == NULL)
+  if(instream == nullptr)
     {   printf("Cannot open input file.\n");
       return 0;
     }
@@ -320,7 +320,7 @@ int GuiLogger::analyzeFile() {
   //    linecount = (linecount-250 > 0)?linecount:0;  // um in einem Datensatz < Buffersize nicht scrollen zu k�nnen
 
   //         printf("%i\n", linecount);
-  if(s != NULL) free(s);
+  if(s != nullptr) free(s);
   return linecount;
 }
 

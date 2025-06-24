@@ -35,22 +35,7 @@
 #include <selforg/inspectable.h>
 
 // forward declarations
-class Individual;
-struct RESTORE_GA_GENERATION;
-
-// gen. alg. includes
-
-/**
- * The Generation class
- *
- *   This class is used for grouping some individuals which representing
- *   one step in the gen. alg. (called generation). For this it save all
- *   individual which are part of this generation. Also it have an Number
- *   like a ID, which make this generation individual.
- *
- *   All Generations inside the gen.alg. are only saved in the GenEngine.
- */
-class Generation : public Inspectable {
+class Individual{
 public:
 	/**
 	 * constructor to create a Generation. Information which the class need are
@@ -66,7 +51,7 @@ public:
 	/**
 	 * destructor to delete a GenContext.
 	 */
-	virtual ~Generation();
+	virtual ~Generation() override;
 
 	/**
 	 * [inline], [const]
@@ -108,7 +93,7 @@ public:
 	 *
 	 * @return static_cast<Individual*>(The) individual. If 0, if the param x is not inside the index range
 	 */
-	inline Individual* getIndividual(int x)const override {if(x<getCurrentSize())return m_individual[x];return NULL;}
+	inline Individual* getIndividual(int x)const override {if(x<getCurrentSize())return m_individual[x];return nullptr;}
 
 	/**
 	 * [inline], [const]

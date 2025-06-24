@@ -1,6 +1,6 @@
 #include "multi_controller.h"
 
-void (*cameraHandlingFunction)() override;
+void (*cameraHandlingFunction)();
 
 MultiController::MultiController()
 {

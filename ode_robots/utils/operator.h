@@ -33,13 +33,7 @@ namespace lpzrobots {
   /**
      An Operator observes an agent static_cast<robot>(and) manipulates it if necessary.
      For instance if the robot is falled over the operator can flip it back.
-     This is an abstract base class and subclasses should overload at least
-     observe().
-   */
-
-  class OdeAgent;
-
-  class Operator : public Configurable {
+     This is an abstract base class and{
   public:
     /** type of manipulation of the robot (for display) and or operation
         RemoveOperator means that the operator should be removed

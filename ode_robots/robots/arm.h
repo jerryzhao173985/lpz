@@ -30,7 +30,7 @@
 #include <vector>
 #include <cmath>
 
-#include <string.h>
+#include <cstring>
 #include <iostream>
 
 #include <selforg/matrix.h>
@@ -88,8 +88,7 @@ namespace lpzrobots{
 
   } ArmConf;
 
-  class Arm : public OdeRobot
-  {
+  class Arm{
   public:
 
     /* Enumeration of different parts and joints */
@@ -146,9 +145,9 @@ namespace lpzrobots{
       return conf;
     }
 
-    virtual ~Arm() {} override;
+    virtual ~Arm() override {}
 
-    virtual paramkey getName() const override {return "Arm";} override;
+    virtual paramkey getName() const {return "Arm";}
 
     /**
      * sets the pose of the vehicle
@@ -201,32 +200,31 @@ namespace lpzrobots{
      * returns the position of the endeffector (hand)
      * @param position vector position vector
      */
-    void getEndeffectorPosition(double* position);
+    void explicit explicit getEndeffectorPosition(double* position);
 
     /**
      * this function is called in each timestep. It should perform robot-internal checks,
      * like space-internal collision detection, sensor resets/update etc.
      * @param globalData structure that contains global data from the simulation environment
      */
-    virtual void doInternalStuff(const GlobalData& globalData);
+    virtual void explicit explicit doInternalStuff(const GlobalData& globalData);
 
     /******** CONFIGURABLE ***********/
-    virtual void notifyOnChange(const paramkey& key);
+    virtual void explicit explicit notifyOnChange(const paramkey& key);
 
-    virtual Primitive* getMainObject() const override {
+    virtual Primitive* getMainObject() const {
       return objects[base];
     }
 
     /**
      * the main object of the robot, which is used for position and speed tracking
      */
-    virtual Primitive* getMainPrimitive() const
-     override {
+    virtual Primitive* getMainPrimitive() const {
       return objects[hand];
     }
 
-    void setDlearnTargetHack(double* post);
-    void setDmotorTargetHack(double* post);
+    void explicit explicit setDlearnTargetHack(double* post);
+    void explicit explicit setDmotorTargetHack(double* post);
 
   protected:
 
@@ -246,8 +244,8 @@ namespace lpzrobots{
 
     void hitTarget();
 
-    double dBodyGetPositionAll ( dBodyID basis , int para ) override;
-    double dGeomGetPositionAll ( dGeomID basis , int para ) override;
+    double dBodyGetPositionAll ( dBodyID basis , int para );
+    double dGeomGetPositionAll ( dGeomID basis , int para );
 
     void BodyCreate(int n, dMass m, dReal x, dReal y, dReal z, dReal qx, dReal qy, dReal qz, dReal qangle);
 

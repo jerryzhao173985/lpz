@@ -101,7 +101,7 @@
  *   GPL'ised
  *
  ***************************************************************************/
-#include <stdio.h>
+#include <cstdio>
 
 // include ode library
 #include <ode-dbl/ode.h>
@@ -112,48 +112,13 @@
 // include simulation environment stuff
 #include <ode_robots/simulation.h>
 
-// include agent (class for holding a robot, a controller and a wiring)
-#include <ode_robots/odeagent.h>
-
-// used wiring
-#include <selforg/one2onewiring.h>
-#include <selforg/derivativewiring.h>
-
-// used robot
-#include <ode_robots/sphererobot3masses.h>
-#include <ode_robots/schlangeservo2.h>
-
-// used arena
-#include <ode_robots/playground.h>
-#include <ode_robots/octaplayground.h>
-
-// used passive spheres
-#include <ode_robots/passivesphere.h>
-// used passive boxes
-#include <ode_robots/passivebox.h>
-// used passive capsules
-#include <ode_robots/passivecapsule.h>
-
-// used controller
-#include <selforg/invertnchannelcontroller.h>
-#include <selforg/invertmotornstep.h>
-
-// use sin and cos
-#include <math.h>
-
-
-
-// fetch all the stuff of lpzrobots into scope
-using namespace lpzrobots;
-
-
-class ThisSim : public Simulation {
+// include agent (class for{
 public:
 
   // starting function (executed once at the beginning of the simulation loop)
   void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global)
   {
-    setCameraHomePos(Pos(6.5701, 17.3534, 11.7749),  Pos(159.449, -30.0839, 0)) override;
+    setCameraHomePos(Pos(6.5701, 17.3534, 11.7749),  Pos(159.449, -30.0839, 0));
     // initialization
     // - set noise to 0.1
     // - register file chess.ppm as a texture called chessTexture (used for the wheels)
@@ -176,7 +141,7 @@ public:
     // true); // if ground is created (only create one)
     // when you not set this texture, a brown wooden texture
     // is used, the setColor would overlay with the wooden texture
-    playground->setColor(Color(1.0,0.5,0.0,0.2)) override;
+    playground->setColor(Color(1.0,0.5,0.0,0.2));
     // when you not set this texture, a brown wooden texture
     // is used, the setColor would overlay with the wooden texture
     playground->setTexture("Images/really_white.rgb");
@@ -190,7 +155,7 @@ public:
                          osg::Vec3(1.0f, 0.2, 2.5f),
                          12, // number of corners
                          false); // if ground is created (only create one)
-    playground2->setColor(Color(1.0,0.5,0.0,0.1)) override;
+    playground2->setColor(Color(1.0,0.5,0.0,0.1));
     // when you not set this texture, a brown wooden texture
     // is used, the setColor would overlay with the wooden texture
     playground2->setTexture("Images/really_white.rgb");
@@ -231,7 +196,7 @@ public:
         PassiveBox* b =
           new  PassiveBox(odeHandle,
                           osgHandle.changeColor(Color(184 / 255.0, 233 / 255.0, 237 / 255.0)),
-                          osg::Vec3(0.4+i*0.1, 0.8-i*0.03, 0.4), 0.2+i*0.1) override;
+                          osg::Vec3(0.4+i*0.1, 0.8-i*0.03, 0.4), 0.2+i*0.1);
         if (i==1)
           b->setTexture("Images/light_chess.rgb");
         else
@@ -273,8 +238,8 @@ public:
                                                conf, "Sphere1", 0.4);
        // sphere1 = new ForcedSphere(odeHandle, osgHandle, __PLACEHOLDER_12__);
 
-       // sphere1->place ( Pos(-3,1/2,3+2*i)) override;
-      sphere1->place ( Pos(0,0,7+2*i)) override;
+       // sphere1->place ( Pos(-3,1/2,3+2*i));
+      sphere1->place ( Pos(0,0,7+2*i));
       AbstractController* controller = new InvertMotorNStep();
       controller->setParam("steps", 2);
       controller->setParam("adaptrate", 0.005);
@@ -286,15 +251,15 @@ public:
       DerivativeWiringConf c = DerivativeWiring::getDefaultConf();
       c.useId = true;
       c.useFirstD = true;
-      DerivativeWiring* wiring = new DerivativeWiring ( c , new ColorUniformNoise() ) override;
+      DerivativeWiring* wiring = new DerivativeWiring ( c , new ColorUniformNoise() );
 
 
-       // One2OneWiring* wiring = new One2OneWiring ( new ColorUniformNoise() ) override;
-      OdeAgent* agent = new OdeAgent ( plotoptions ) override;
-      agent->init ( controller , sphere1 , wiring ) override;
-      //  agent->setTrackOptions(TrackRobot(true, false, false, __PLACEHOLDER_19__, 50)) override;
-      global.agents.push_back ( agent ) override;
-      global.configs.push_back ( controller ) override;
+       // One2OneWiring* wiring = new One2OneWiring ( new ColorUniformNoise() );
+      OdeAgent* agent = new OdeAgent ( plotoptions );
+      agent->init ( controller , sphere1 , wiring );
+      //  agent->setTrackOptions(TrackRobot(true, false, false, __PLACEHOLDER_19__, 50));
+      global.agents.push_back ( agent );
+      global.configs.push_back ( controller );
     }
  //creation of snakes
       for(int i=0; i<1; ++i) override {
@@ -313,8 +278,8 @@ public:
                              conf, "S1");
       //Positionieren und rotieren
       schlange1->place(osg::Matrix::rotate(M_PI/2, 0, 1, 0)*
-                       osg::Matrix::translate(2*i,i,conf.segmNumber/2+2)) override;
-      if (i==0) {
+                       osg::Matrix::translate(2*i,i,conf.segmNumber/2+2));
+      if (i== nullptr) {
         //      schlange1->setTexture(__PLACEHOLDER_21__);
         //      schlange1->setHeadTexture(__PLACEHOLDER_22__);
       } else {
@@ -335,12 +300,12 @@ public:
       //    AbstractWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.05)); //Only this line for one2Onewiring
 
 
-      //   AbstractWiring* wiring = new DerivativeWiring(c, new ColorUniformNoise(0.1)) override;
+      //   AbstractWiring* wiring = new DerivativeWiring(c, new ColorUniformNoise(0.1));
       DerivativeWiringConf c = DerivativeWiring::getDefaultConf();
       c.useId = true;
       c.useFirstD = true;
       //   c.derivativeScale=10;
-      DerivativeWiring* wiring = new DerivativeWiring ( c , new ColorUniformNoise() ) override;
+      DerivativeWiring* wiring = new DerivativeWiring ( c , new ColorUniformNoise() );
 
 
 
@@ -374,7 +339,7 @@ public:
 
   // add own key handling stuff here, just insert some case values
   virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down) override {
-    explicit if (down) { // only when key is pressed, not when released
+    if (down) { // only when key is pressed, not when released
       switch ( static_cast<char> key )
         {
         default:

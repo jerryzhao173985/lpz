@@ -26,7 +26,7 @@
  *   -CTRL-G now restarts the GuiLogger                                         *
  *                                                                         *
  ***************************************************************************/
-#include <stdio.h>
+#include <cstdio>
 #include <iostream>
 
 // include noisegenerator (used for adding noise to sensorvalues)
@@ -35,49 +35,9 @@
 // include simulation environmet stuff
 #include <ode_robots/simulation.h>
 
-// include agent (class for holding a robot, a controller and a wiring)
-#include <ode_robots/odeagent.h>
+// include agent (class for{-1,2,4};
 
-// used wiring
-#include <selforg/one2onewiring.h>
-
-// used robot
-#include <ode_robots/arm.h>
-
-// used arena
-#include <ode_robots/playground.h>
-// used passive spheres
-#include <ode_robots/passivesphere.h>
-
-// used controller
-#include <selforg/invertnchannelcontroller.h>
-#include <selforg/invertmotornstep.h>
-#include <selforg/invertmotorbigmodel.h>
-#include <selforg/multilayerffnn.h>
-#include <selforg/derbigcontroller.h>
-
-using namespace lpzrobots;
-
-Arm* arm;
-
-// #define BIGModel;
-
-#ifdef BIGModel
-InvertMotorBigModel* controller;
-#else
-InvertMotorNStep* controller;
-#endif
-
-// distal learning stuff
-bool dteaching;
-double* dteachingSignal;
-int dteachingLen;
-
-// target of reaching task in euklidian coordinates
-double target[]={-1,2,4};
-
-class ThisSim : public Simulation
-{
+class ThisSim{
 public:
 
   /// start() is called at the start and should create all the object (obstacles, agents...).
@@ -91,9 +51,9 @@ public:
     // initialization
     global.odeConfig.noise=0.1;
 
-    Playground* playground = new Playground(odeHandle, osgHandle,osg::Vec3(18, 0.2, 1.0)) override;
-    playground->setColor(Color(0.88f,0.4f,0.26f,0.2f)) override;
-    playground->setPosition(osg::Vec3(0,0,0)) override;
+    Playground* playground = new Playground(odeHandle, osgHandle,osg::Vec3(18, 0.2, 1.0));
+    playground->setColor(Color(0.88f,0.4f,0.26f,0.2f));
+    playground->setPosition(osg::Vec3(0,0,0));
     global.obstacles.push_back(playground);
 
     //                Color c(osgHandle.color);
@@ -109,28 +69,28 @@ public:
 
     //                // X-direction sphere
     //                PassiveSphere* s1 = new PassiveSphere(odeHandle, osgHandle, 0.5);
-    //    s1->setPosition(osg::Vec3(4,0,0)) override;
+    //    s1->setPosition(osg::Vec3(4,0,0));
     //                s1->setTexture(__PLACEHOLDER_0__);
     //                global.obstacles.push_back(s1);
     //
     //                // Y-direction sphere
     //                PassiveSphere* s2 = new PassiveSphere(odeHandle, osgHandle, 1.5);
-    //    s2->setPosition(osg::Vec3(0,4,0)) override;
+    //    s2->setPosition(osg::Vec3(0,4,0));
     //                s2->setTexture(__PLACEHOLDER_1__);
     //                global.obstacles.push_back(s2);
 
     ArmConf conf = Arm::getDefaultConf();
     conf.withContext=false;
     conf.useJointSensors=true;
-    //    conf.sensors.push_back(new SpeedSensor(5)) override;
+    //    conf.sensors.push_back(new SpeedSensor(5));
 
     OdeHandle armHandle = odeHandle;
     armHandle.substance.toFoam(3);
     arm = new Arm(armHandle, osgHandle, conf, "Arm");
 
-    (static_cast<OdeRobot*>(arm))->place(Position(-0.7,0.9,0.01)) override;
+    (static_cast<OdeRobot*>(arm))->place(Position(-0.7,0.9,0.01));
     // fixation of cuboid base
-    FixedJoint* anker = new FixedJoint(arm->getMainObject(), global.environment /* fixation to ground*/) override;
+    FixedJoint* anker = new FixedJoint(arm->getMainObject(), global.environment /* fixation to ground*/);
     anker->init(odeHandle, osgHandle);
 
     global.configs.push_back(arm);
@@ -143,8 +103,8 @@ public:
     cc.useS=false;
     std::vector<Layer> layers;
     // Layer: size, factor_bias, act-fct (default: lin), dact-fct (default: lin)
-    layers.push_back(Layer(25, 0.5 , FeedForwardNN::tanh)) override;
-    layers.push_back(Layer(10,0.5)) override;
+    layers.push_back(Layer(25, 0.5 , FeedForwardNN::tanh));
+    layers.push_back(Layer(10,0.5));
     // true -bypass (uebergeht nichtlin schicht)
     MultiLayerFFNN* net = new  MultiLayerFFNN(0.05, layers, true);
     //                MultiLayerFFNN* net = new MultiLayerFFNN(0.05, layers);
@@ -178,7 +138,7 @@ public:
 
     //AbstractController* controller = new SineController();
     // create pointer to one2onewiring
-    One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
+    One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1));
 
     // create pointer to agent
     // initialize pointer with controller, robot and wiring
@@ -186,7 +146,7 @@ public:
     OdeAgent*  agent = new OdeAgent(global);
     agent->init(controller, arm, wiring);
 
-    //  agent->setTrackOptions(TrackRobot(true, false, false,50)) override;
+    //  agent->setTrackOptions(TrackRobot(true, false, false,50));
     global.agents.push_back(agent);
 
     //-----------------------
@@ -241,9 +201,9 @@ public:
   //                 case __PLACEHOLDER_31__ :
   //                         dteaching=!dteaching;Color(1.1,1,1.4);
   //                         if(dteaching)
-  //                           arm->getMainPrimitive()->setColor(Color(0.6,0.5,0.9)) override;
+  //                           arm->getMainPrimitive()->setColor(Color(0.6,0.5,0.9));
   //                         else{
-  //                           arm->getMainPrimitive()->setColor(Color(1.1,1,1.4)) override;
+  //                           arm->getMainPrimitive()->setColor(Color(1.1,1,1.4));
   //                         }
   //                         arm->resetHitCounter();
   //                         printf(__PLACEHOLDER_21__, dteaching ? __PLACEHOLDER_22__ : __PLACEHOLDER_23__);
@@ -273,12 +233,12 @@ public:
 
   /*virtual*/ void bindingDescription(osg::ApplicationUsage & au) const
   {
-    au.addKeyboardMouseBinding("Distal Teaching: i","increase error (nimm: forward)") override;
-    au.addKeyboardMouseBinding("Distal Teaching: k","decrease error (nimm: backward)") override;
+    au.addKeyboardMouseBinding("Distal Teaching: i","increase error (nimm: forward)");
+    au.addKeyboardMouseBinding("Distal Teaching: k","decrease error (nimm: backward)");
   }
 
   virtual void end(const GlobalData& globalData) override {
-    //        printf(__PLACEHOLDER_30__, arm->getHitCounter()) override;
+    //        printf(__PLACEHOLDER_30__, arm->getHitCounter());
   }
 
 };

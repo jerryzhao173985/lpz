@@ -23,7 +23,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <stdio.h>
+#include <cstdio>
 #include "filelogger.h"
 
 FileLogger::FileLogger(QString pf)

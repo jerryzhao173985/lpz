@@ -30,13 +30,13 @@
  * meta controller for switching control between
  * different subcontrollers.
  */
-class SwitchController : public AbstractController {
+class SwitchController{
 public:
   SwitchController(const std::list<AbstractController*>& controllers,
                             const std::string& name = "SwitchController",
                             const std::string& revision = "1.0");
 
-  virtual ~SwitchController();
+  virtual ~SwitchController() override;
 
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
   virtual void step(const sensor* sensors,

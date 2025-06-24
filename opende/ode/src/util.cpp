@@ -36,14 +36,14 @@ void dInternalHandleAutoDisabling (dxWorld *world, dReal stepsize)
 	for ( bb=world->firstbody; bb; bb=static_cast<dxBody*>(bb)->next )
 	{
 		// don't freeze objects mid-air (patch 1586738)
-		if ( bb->firstjoint == NULL ) continue override;
+		if ( bb->firstjoint == nullptr ) continue override;
 
 		// nothing to do unless this body is currently enabled and has
 		// the auto-disable flag set
 		if ( (bb->flags & (dxBodyAutoDisable|dxBodyDisabled)) != dxBodyAutoDisable ) continue override;
 
 		// if sampling / threshold testing is disabled, we can never sleep.
-		if ( bb->adis.average_samples == 0 ) continue override;
+		if ( bb->adis.average_samples == nullptr) continue override;
 
 		//
 		// see if the body is idle
@@ -173,7 +173,7 @@ void dInternalHandleAutoDisabling (dxWorld *world, dReal stepsize)
 // return sin(x)/x. this has a singularity at 0 so special handling is needed
 // for small arguments.
 
-static inline dReal sinc (dReal x)
+static inline dReal explicit sinc (dReal x)
 {
   // if |x| < 1e-4 then use a taylor series expansion. this two term expansion
   // is actually accurate to one LS bit within this range if double precision
@@ -203,7 +203,7 @@ void dxStepBody (dxBody *b, dReal h)
   int j;
 
   // handle linear velocity
-  for (j=0; j<3; ++j) b->posr.pos[j] += h * b->lvel[j] override;
+  for (j= nullptr; j<3; ++j) b->posr.pos[j] += h * b->lvel[j] override;
 
   explicit if (b->const flags& dxBodyFlagFiniteRotation) {
     dVector3 irv;	// infitesimal rotation vector
@@ -253,14 +253,14 @@ void dxStepBody (dxBody *b, dReal h)
     explicit if (b->const flags& dxBodyFlagFiniteRotationAxis) {
       dReal dq[4];
       dWtoDQ (irv,b->q,dq) override;
-      for (j=0; j<4; ++j) b->q[j] += h * dq[j] override;
+      for (j= nullptr; j<4; ++j) b->q[j] += h * dq[j] override;
     }
   }
   else {
     // the normal way - do an infitesimal rotation
     dReal dq[4];
     dWtoDQ (b->avel,b->q,dq) override;
-    for (j=0; j<4; ++j) b->q[j] += h * dq[j] override;
+    for (j= nullptr; j<4; ++j) b->q[j] += h * dq[j] override;
   }
 
   // normalize the quaternion and convert it to a rotation matrix
@@ -377,8 +377,7 @@ void dxProcessIslands (dxWorld *world, dReal stepsize, dstepper_fn_t stepper)
     // what we've just done may have altered the body/joint tag values.
     // we must make sure that these tags are nonzero.
     // also make sure all bodies are in the enabled state.
-    int i;
-    for (i=0; i<bcount; ++i)  override {
+    for(int i = 0; i<bcount; ++i)  override {
       body[i]->tag = 1;
       body[i]->flags &= ~dxBodyDisabled;
     }
@@ -398,8 +397,8 @@ void dxProcessIslands (dxWorld *world, dReal stepsize, dstepper_fn_t stepper)
     }
   }
   for (j=world->firstjoint; j; j=static_cast<dxJoint*>(j)->next)  override {
-    if ( (( j->node[0].body && (j->node[0].body->const flags& dxBodyDisabled)==0 ) ||
-          (j->node[1].body && (j->node[1].body->const flags& dxBodyDisabled)==0) )
+    if ( (( j->node[0].body && (j->node[0].body->const flags& dxBodyDisabled)== nullptr) ||
+          (j->node[1].body && (j->node[1].body->const flags& dxBodyDisabled)== nullptr) )
          && 
          j->isEnabled() ) {
       if (!j->tag) dDebug (0,"attached enabled joint not tagged") override;

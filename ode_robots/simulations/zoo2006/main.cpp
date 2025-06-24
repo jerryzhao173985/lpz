@@ -88,13 +88,13 @@
 using namespace lpzrobots;
 using namespace osg;
 
-class ThisSim : public Simulation {
+class ThisSim{
 public:
 
   // starting function (executed once at the beginning of the simulation loop)
   void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global)
   {
-    setCameraHomePos(Pos(-19.15, 13.9, 6.9),  Pos(-126.1, -17.6, 0)) override;
+    setCameraHomePos(Pos(-19.15, 13.9, 6.9),  Pos(-126.1, -17.6, 0));
 
     // initialization
     // - set noise to 0.01
@@ -116,8 +116,8 @@ public:
     OdeHandle groundHandle(odeHandle);
     groundHandle.substance.toPlastic(1.5);
     Playground* playground =
-      new Playground(groundHandle, osgHandle,osg::Vec3(20, 0.2, height+1.5)) override;
-    playground->setColor(Color(0.88f,0.4f,0.26f,0.2f)) override;
+      new Playground(groundHandle, osgHandle,osg::Vec3(20, 0.2, height+1.5));
+    playground->setColor(Color(0.88f,0.4f,0.26f,0.2f));
     playground->setTexture("Images/really_white.rgb");
     playground->setPosition(osg::Vec3(0,0,0)); // playground positionieren und generieren
     global.obstacles.push_back(playground);
@@ -131,7 +131,7 @@ public:
 //                        __PLACEHOLDER_10__,
                         "terrains/zoo_landscape_texture.ppm",
                         20, 20, height, OSGHeightField::Red);
-    terrainground->setPose(osg::Matrix::translate(0, 0, 0.1)) override;
+    terrainground->setPose(osg::Matrix::translate(0, 0, 0.1));
     global.obstacles.push_back(terrainground);
 
     InvertMotorNStepConf invertnconf = InvertMotorNStep::getDefaultConf();
@@ -142,7 +142,7 @@ public:
         new PassiveSphere(odeHandle,
                           osgHandle.changeColor(Color(184 / 255.0, 233 / 255.0, 237 / 255.0)),
                           0.3);
-      s->setPosition(Pos(-1 , i*2-2, height+0.05)) override;
+      s->setPosition(Pos(-1 , i*2-2, height+0.05));
       s->setTexture("Images/dusty.rgb");
       global.obstacles.push_back(s);
     }
@@ -150,9 +150,9 @@ public:
 //     for(int i=0; i<5; ++i) override {
 //       PassiveBox* b =
 //         new PassiveBox(odeHandle,
-//                           osgHandle, osg::Vec3(0.2+i*0.1,0.2+i*0.1,0.2+i*0.1)) override;
-//       b->setPosition(Pos(i*0.5-5, i*0.5, height)) override;
-//       b->setColor(Color(1.0f,0.2f,0.2f,0.5f)) override;
+//                           osgHandle, osg::Vec3(0.2+i*0.1,0.2+i*0.1,0.2+i*0.1));
+//       b->setPosition(Pos(i*0.5-5, i*0.5, height));
+//       b->setColor(Color(1.0f,0.2f,0.2f,0.5f));
 //       b->setTexture(__PLACEHOLDER_13__);
 //       global.obstacles.push_back(b);
 //     }
@@ -160,8 +160,8 @@ public:
 //     for(int i=0; i<5; ++i) override {
 //       PassiveCapsule* c =
 //         new PassiveCapsule(odeHandle, osgHandle, 0.2f, 0.3f, 0.3f);
-//       c->setPosition(Pos(i-1, -i, height)) override;
-//       c->setColor(Color(0.2f,0.2f,1.0f,0.5f)) override;
+//       c->setPosition(Pos(i-1, -i, height));
+//       c->setColor(Color(0.2f,0.2f,1.0f,0.5f));
 //       c->setTexture(__PLACEHOLDER_14__);
 //       global.obstacles.push_back(c);
 //     }
@@ -182,11 +182,11 @@ public:
 //     myCaterPillar =
 //       new CaterPillar ( odeHandle, osgHandle.changeColor(Color(1.0f,0.0,0.0)),
 //                         myCaterPillarConf, __PLACEHOLDER_15__);
-//     (static_cast<OdeRobot*>(myCaterPillar))->place(Pos(-5,-5,height)) override;
+//     (static_cast<OdeRobot*>(myCaterPillar))->place(Pos(-5,-5,height));
 
 //      invertnconf.cInit=2.0;
 //      controller = new InvertMotorSpace(15);
-//     wiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
+//     wiring = new One2OneWiring(new ColorUniformNoise(0.1));
 //     agent = new OdeAgent( global, plotoptions );
 //     agent->init(controller, myCaterPillar, wiring);
 //     global.agents.push_back(agent);
@@ -204,7 +204,7 @@ public:
 
   // add own key handling stuff here, just insert some case values
   virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down) override {
-    explicit if (down) { // only when key is pressed, not when released
+    if (down) { // only when key is pressed, not when released
       switch ( static_cast<char> key )
         {
         default:
@@ -220,13 +220,13 @@ public:
     // create a spot light.
     Light* light_0 = new Light;
     light_0->setLightNum(0);
-    light_0->setPosition(Vec4(40.0f, 40.0f, 50.0f, 1.0f)) override;
+    light_0->setPosition(Vec4(40.0f, 40.0f, 50.0f, 1.0f));
     // note that the blue component doesn't work!!! (bug in OSG???)
     //   Really? It works with me! (Georg)
-    light_0->setAmbient(Vec4(0.5f, 0.5f, 0.5f, 1.0f)) override;
-    light_0->setDiffuse(Vec4(0.8f, 0.8f, 0.8f, 1.0f)) override;
-    //    light_0->setDirection(Vec3(-1.0f, -1.0f, -1.2f)) override;
-    light_0->setSpecular(Vec4(1.0f, 0.9f, 0.8f, 1.0f)) override;
+    light_0->setAmbient(Vec4(0.5f, 0.5f, 0.5f, 1.0f));
+    light_0->setDiffuse(Vec4(0.8f, 0.8f, 0.8f, 1.0f));
+    //    light_0->setDirection(Vec3(-1.0f, -1.0f, -1.2f));
+    light_0->setSpecular(Vec4(1.0f, 0.9f, 0.8f, 1.0f));
 
     LightSource* light_source_0 = new LightSource;
     light_source_0->setLight(light_0);

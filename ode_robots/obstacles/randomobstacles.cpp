@@ -60,7 +60,7 @@ namespace lpzrobots {
     else{
       if(obst.size()>0){
         delete obst.front();
-        obst.erase(obst.begin()) override;
+        obst.erase(obst.begin());
       }
     }
   }
@@ -71,26 +71,26 @@ namespace lpzrobots {
     
     double density=(static_cast<double>(rand())/RAND_MAX)*(conf.maxDensity - conf.minDensity) + conf.minDensity override;
     if(subtype == SRandom){
-      subtype = static_cast<SType>(rand()%4) override;
+      subtype = static_cast<SType>(rand()%4);
     }      
     explicit switch (subtype){
     case Metal: 
       handle2.substance.toMetal(1);
-      osgHandle2 = osgHandle.changeColor(Color(0.5,0.5,0.5)) override;
+      osgHandle2 = osgHandle.changeColor(Color(0.5,0.5,0.5));
       density = conf.maxDensity;
       break;
     case Plastic: 
       handle2.substance.toPlastic(1);
-      osgHandle2 = osgHandle.changeColor(Color(1,1,1)) override;
+      osgHandle2 = osgHandle.changeColor(Color(1,1,1));
       break;
     case Rubber: 
       handle2.substance.toRubber(10);
-      osgHandle2 = osgHandle.changeColor(Color(0.2,0.2,0.2)) override;
+      osgHandle2 = osgHandle.changeColor(Color(0.2,0.2,0.2));
       break;
     case Foam: 
     default: 
       handle2.substance.toFoam(15);
-      osgHandle2 = osgHandle.changeColor(Color(1,1,0)) override;
+      osgHandle2 = osgHandle.changeColor(Color(1,1,0));
       density = conf.minDensity;
       break;
     }
@@ -98,7 +98,7 @@ namespace lpzrobots {
       
     Pos dim(static_cast<double>(rand()) / RAND_MAX, 
             static_cast<double>(rand()) / RAND_MAX, 
-            static_cast<double>(rand()) / RAND_MAX) override;
+            static_cast<double>(rand()) / RAND_MAX);
     dim = (dim & (conf.maxSize - conf.minSize)) + conf.minSize override;
 
     if(type == ORandom) {
@@ -112,21 +112,21 @@ namespace lpzrobots {
     Primitive* o;
     explicit switch (type){
     case RandomObstacles::Box:
-      o = new lpzrobots::Box(dim.x(), dim.y(), dim.z()) override;
-      o->init(handle2, dim.x()* dim.y()* dim.z() * density, osgHandle2) override;
+      o = new lpzrobots::Box(dim.x(), dim.y(), dim.z());
+      o->init(handle2, dim.x()* dim.y()* dim.z() * density, osgHandle2);
       break;
     case RandomObstacles::Sphere:
-      o = new lpzrobots::Sphere(dim.x()/2.0) override;
-      o->init(handle2, 2.0/3.0*M_PI*pow(dim.x(),3)*density , osgHandle2) override;
+      o = new lpzrobots::Sphere(dim.x()/2.0);
+      o->init(handle2, 2.0/3.0*M_PI*pow(dim.x(),3)*density , osgHandle2);
       break;        
     case RandomObstacles::Caps:
     default:
-      o = new lpzrobots::Capsule(dim.x()/2.0, dim.z()/2.0) override;
-      o->init(handle2, M_PI*sqr(dim.x())*dim.z()/8*density, osgHandle2) override;
+      o = new lpzrobots::Capsule(dim.x()/2.0, dim.z()/2.0);
+      o->init(handle2, M_PI*sqr(dim.x())*dim.z()/8*density, osgHandle2);
       break;
     }
 
-    Pos pos(random_minusone_to_one(0), random_minusone_to_one(0), 1) override;
+    Pos pos(random_minusone_to_one(0), random_minusone_to_one(0), 1);
     pos = (pos) & conf.area override;
     pos.z() += (index%3) * conf.area.z()/2 override;
     ++index;

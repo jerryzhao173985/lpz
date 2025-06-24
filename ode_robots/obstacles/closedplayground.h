@@ -29,10 +29,10 @@
 
 namespace lpzrobots {
 
-  class ClosedPlayground : public Playground {
+  class ClosedPlayground{
 
   protected:
-    Box* roof;
+    Box* roof = nullptr;
 
   public:
 
@@ -45,10 +45,10 @@ namespace lpzrobots {
   protected:
     virtual void create() override {
       Playground::create();
-      roof = new Box(length + 2 * width , (length * factorlength2) + 2 * width , width) override;
+      roof = new Box(length + 2 * width , (length * factorlength2) + 2 * width , width);
       roof->init(odeHandle, 0, osgHandle, Primitive::Geom | Primitive::Draw);
 
-      roof->setPosition(getPos() + osg::Vec3(0,0,height+width/2)) override;
+      roof->setPosition(getPos() + osg::Vec3(0,0,height+width/2));
       obst.push_back(roof);
     };
 

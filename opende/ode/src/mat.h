@@ -29,7 +29,7 @@
 #include <ode-dbl/common.h>
 
 
-class dMatrix {
+class dMatrix{
   int n,m;		// matrix dimension, n,m >= 0
   dReal *data;		// if nonzero, n*m elements allocated on the heap
 

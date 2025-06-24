@@ -21,11 +21,11 @@
 #ifndef __RINGBUFFER_H
 #define __RINGBUFFER_H
 
-#include <assert.h>
+#include <cassert>
 #include <vector>
 
 template<typename T>
-class RingBuffer {
+class RingBuffer{
 public:
   RingBuffer()
     : buffersize(0) {}

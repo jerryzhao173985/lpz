@@ -52,39 +52,33 @@
 #define __LAYEREDCONTROLLER_H
 
 #include <selforg/abstractcontroller.h>
-#include <stdlib.h>
-#include <string.h>
+#include <cstdlib>
+#include <cstring>
 
 #include <selforg/controller_misc.h>
 #include "layer1_incc.h"
 #include "layer2_incc.h"
 
-#include <assert.h>
+#include <cassert>
 #include <cmath>
 
 #include <selforg/matrix.h>
 
 /**
- * class for robot controller that uses the georg's matrixlib for
- *  direct matrix inversion for n channels
- * (simple one layer networks)
- *
- * Implements standart parameters: eps, rho, mu, stepnumber4avg, stepnumber4delay
- */
-class LayeredController : public AbstractController {
+ * class for{
 
 public:
   LayeredController(int _buffersize, bool _update_only_1=false);
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
 
-  virtual ~LayeredController();
+  virtual ~LayeredController() override;
 
   /// returns the name of the object (with version number)
-  virtual paramkey getName() const override {return name; }
+  virtual paramkey getName() const {return name; }
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
-  virtual int getSensorNumber() const override { return number_channels; }
+  virtual int getSensorNumber() const { return number_channels; }
   /// returns the mumber of motors the controller was initialised with or 0 if not initialised
-  virtual int getMotorNumber() const override { return number_channels; }
+  virtual int getMotorNumber() const { return number_channels; }
 
   /// performs one step (includes learning).
   /// Calulates motor commands from sensor inputs.
@@ -100,7 +94,7 @@ public:
   /** stores the controller values to a given file. */
   virtual bool store(FILE* f) const override;
   /** loads the controller values from a given file. */
-  virtual bool restore(FILE* f);
+  virtual bool explicit restore(FILE* f);
 
   // inspectable interface
   virtual std::list<iparamkey> getInternalParamNames() const override;

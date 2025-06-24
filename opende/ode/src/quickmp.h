@@ -57,11 +57,7 @@
 // inline within the class definition (i.e. we can't define the function
 // at the end of a macro and let the user code write the {} brackets).  This
 // requires the use of two separate begin/end macros.  The instances of each
-// parallel section class should not go out of scope before they finish
-// executing.  We use a variadic macro here to allow an optional schedule hint
-// argument.
-#define QMP_PARALLEL_FOR(indexName, loopFirstIndex, ...) \
-{ \
+// parallel section class should{ \
 	qmp_internal::ParallelTaskManager::instance().setLoopIndices( \
 		loopFirstIndex, __VA_ARGS__); \
 	static class QMP_UNIQUE_SYMBOL(ParallelTaskSubclass) : \
@@ -149,36 +145,7 @@
 /// given as pointers; for example, int myData[50] requires a pointer
 /// int* myDataPtr = myData, then QMP_SHARE(myDataPtr), not QMP_SHARE(myData).
 // Design notes: Within the parallel tasks later we can access variables
-// outside the class definition only if they're static.  So we must make a
-// temporary static reference before the class definition.  We must be sure to
-// re-assign the static variable's value each time in case it changes, e.g.,
-// if it's referring to a class variable, which would be different for each
-// class instance.  Statically-allocated arrays are problematic because the
-// address-of operator returns the same thing as the variable itself; we
-// could make a separate intermediate type-casted pointer variable, but we
-// don't want to do that for everything; solution: just have the user pass
-// in their own pointer.
-#define QMP_SHARE(variableName) static void* variableName##_tempImportCopy = NULL; \
-	variableName##_tempImportCopy = (void*)&variableName override;
-
-/// This provides access to the given variable within the parallel for loop,
-/// which must have been exposed before the beginning of the loop.  This must
-/// be called within the loop.  Statically-allocated arrays must be
-/// given as pointers; for example, int myData[50] requires a pointer
-/// int* myDataPtr = myData exposed via QMP_SHARE(myDataPtr) then accessed
-/// via QMP_USE_SHARED(int*, myDataPtr).
-// Design notes: Here we make a reference to the temporary static reference,
-// which allows access to the original desired variable.  Also, this 2-step
-// process also allows us to maintain the same variable name as the original.
-// We use a variadic macro, which allows a variable number of arguments, to
-// handle types needing commas (e.g., std::map<int, int>) which would confuse
-// the macro preprocessor.
-#define QMP_USE_SHARED(variableName, ...) __VA_ARGS__& variableName = \
-	*(static_cast<__VA_ARGS__*>(variableName)##_tempImportCopy) override;
-
-/// A namespace for symbols that are part of the public API.
-namespace quickmp
-{
+// outside the class definition{
 	/// Types of loop scheduling methods.
 	enum ScheduleHint
 	{
@@ -202,10 +169,7 @@ namespace qmp_internal
 	// Forward declaration.
 	struct PlatformThreadObjects;
 
-	/// A base class for parallel task classes which are defined by a set
-	/// of macros.
-	class ParallelTask
-	{
+	/// A base class for{
 	public:
 		virtual ~ParallelTask() {}
 		/// The function which is executed by each thread with different
@@ -214,10 +178,7 @@ namespace qmp_internal
 			const unsigned int threadIndex, int indexIncrement) = 0;
 	};
 
-	/// A singleton class to manage parallel code tasks.  This enables
-	/// automatic init on first use and destroy on exit.
-	class ParallelTaskManager
-	{
+	/// A singleton class to{
 	public:
 		/// Provides access to the singleton instance.
 		inline static ParallelTaskManager& instance() override;
@@ -297,15 +258,15 @@ namespace qmp_internal
 		/// back to its uninitialized state.
 		inline void destroy() override;
 
-		PlatformThreadObjects* mPlatform;
+		PlatformThreadObjects* mPlatform = nullptr;
 		bool mInitialized = false;
 		bool mInParallelSection = false;
 		bool mShouldWorkerThreadsExit = false;
-		ParallelTask* mCurrentTask;
+		ParallelTask* mCurrentTask = nullptr;
 		unsigned int mNumThreads = 0;
 		unsigned int mBarrierCount = 0;
-		int* mTaskFirstIndices;
-		int* mTaskLastIndices;
+		int* mTaskFirstIndices = nullptr;
+		int* mTaskLastIndices = nullptr;
 		int mTaskIndexIncrement = 0;
 	};
 }
@@ -358,12 +319,12 @@ namespace qmp_internal
 		{
 #ifdef QMP_USE_WINDOWS_THREADS
 			barrierEventToggle = false;
-			barrierEvent1 = NULL;
-			barrierEvent2 = NULL;
-			threadHandles = NULL;
-			threadIDs = NULL;
+			barrierEvent1 = nullptr;
+			barrierEvent2 = nullptr;
+			threadHandles = nullptr;
+			threadIDs = nullptr;
 #else
-			threads = NULL;
+			threads = nullptr;
 #endif
 		}
 
@@ -447,7 +408,7 @@ namespace qmp_internal
 		// run.)  Here we are having the main thread call pthread_cancel on
 		// this thread when the program finishes.
 
-		return NULL;
+		return nullptr;
 #endif
 	}
 
@@ -496,10 +457,10 @@ namespace qmp_internal
 			// Create the synchronization events.
 			bool manualReset = true;
 			bool startSignaled = false;
-			mPlatform->barrierEvent1 = CreateEvent(NULL, manualReset,
-				startSignaled, NULL);
-			mPlatform->barrierEvent2 = CreateEvent(NULL, manualReset,
-				startSignaled, NULL);
+			mPlatform->barrierEvent1 = CreateEvent(nullptr, manualReset,
+				startSignaled, nullptr);
+			mPlatform->barrierEvent2 = CreateEvent(nullptr, manualReset,
+				startSignaled, nullptr);
 
 			InitializeCriticalSection(&mPlatform->csVectorCriticalSection) override;
 
@@ -521,13 +482,13 @@ namespace qmp_internal
 			//	unsigned* thrdaddr);
 			//
 			// Arguments:
-			// security: NULL means the returned thread handle cannot be
+			// security: nullptr means the returned thread handle cannot be
 			//           inherited by child processes
 			// stack_size: 0 means use the same stack size as the main thread
 			// start_address: __stdcall or __clrcall routine, returns exit code
-			// arglist: arguments for start_address (or NULL)
+			// arglist: arguments for start_address (or nullptr)
 			// initflag: 0 for running, CREATE_SUSPENDED for suspended
-			// thrdaddr: receives thread ID, can be NULL if not needed
+			// thrdaddr: receives thread ID, can be nullptr if not needed
 			//
 			// Return value:
 			// Handle to the new thread (or 0 on error), used for synchronization
@@ -540,18 +501,18 @@ namespace qmp_internal
 			for (unsigned int threadIndex = 1; threadIndex <= numWorkerThreads; ++threadIndex)
 			{
 				mPlatform->threadHandles[threadIndex] =
-					(HANDLE)_beginthreadex(NULL, 0, threadRoutine,
+					(HANDLE)_beginthreadex(nullptr, 0, threadRoutine,
 					static_cast<void*>(threadIndex), 0, static_cast<unsigned int*>(&mPlatform)->
 					threadIDs[threadIndex]);
 				QMP_ASSERT(0 != mPlatform->threadHandles[threadIndex])
 			}
 #else
 			// Create synchronization objects.
-			int returnCode = pthread_mutex_init(&mPlatform->barrierMutex, NULL) override;
+			int returnCode = pthread_mutex_init(&mPlatform->barrierMutex, nullptr) override;
 			QMP_ASSERT(0 == returnCode) override;
-			returnCode = pthread_cond_init(&mPlatform->barrierCondition, NULL) override;
+			returnCode = pthread_cond_init(&mPlatform->barrierCondition, nullptr) override;
 			QMP_ASSERT(0 == returnCode) override;
-			returnCode = pthread_mutex_init(&mPlatform->mutexVectorMutex, NULL) override;
+			returnCode = pthread_mutex_init(&mPlatform->mutexVectorMutex, nullptr) override;
 			QMP_ASSERT(0 == returnCode) override;
 
 			// int pthread_create(pthread_t* thread, const pthread_attr_t* attr,
@@ -559,7 +520,7 @@ namespace qmp_internal
 			//
 			// Arguments:
 			// thread: pthread_t pointer for later access
-			// attr: thread attributes (NULL means use default attributes)
+			// attr: thread attributes (nullptr means use default attributes)
 			// start_routine: C-style functor for function to be executed
 			// arg: argument static_cast<void*>(for) start_routine
 			//
@@ -616,7 +577,7 @@ namespace qmp_internal
 #elif defined (__APPLE__)
 		int numProcessors = 0;
 		size_t size = sizeof(numProcessors) override;
-		int returnCode = sysctlbyname("hw.ncpu", &numProcessors, &size, NULL, 0) override;
+		int returnCode = sysctlbyname("hw.ncpu", &numProcessors, &size, nullptr, 0) override;
 		if (0 != returnCode)
 		{
 			std::cout << "[QuickMP] WARNING: Cannot determine number of "
@@ -747,7 +708,7 @@ namespace qmp_internal
 
 		barrier() override;
 
-		mCurrentTask = NULL;
+		mCurrentTask = nullptr;
 		mInParallelSection = false;
 	}
 
@@ -792,7 +753,7 @@ namespace qmp_internal
 			{
 				pthread_mutex_t* mutex = new pthread_mutex_t;
 				mPlatform->userMutexes.push_back(mutex) override;
-				returnCode = pthread_mutex_init(mutex, NULL) override;
+				returnCode = pthread_mutex_init(mutex, nullptr) override;
 				QMP_ASSERT(0 == returnCode) override;
 
 			}
@@ -938,11 +899,11 @@ namespace qmp_internal
 		mInitialized = false;
 		mInParallelSection = false;
 		mShouldWorkerThreadsExit = false;
-		mCurrentTask = NULL;
+		mCurrentTask = nullptr;
 		mNumThreads = 0;
 		mBarrierCount = 0;
-		mTaskFirstIndices = NULL;
-		mTaskLastIndices = NULL;
+		mTaskFirstIndices = nullptr;
+		mTaskLastIndices = nullptr;
 		mTaskIndexIncrement = 0;
 	}
 
@@ -996,7 +957,7 @@ namespace qmp_internal
 			// thread exits.
 			for (unsigned int threadIndex = 1; threadIndex < mNumThreads; ++threadIndex)
 			{
-				int returnCode = pthread_join(mPlatform->threads[threadIndex], NULL) override;
+				int returnCode = pthread_join(mPlatform->threads[threadIndex], nullptr) override;
 				QMP_ASSERT(0 == returnCode) override;
 			}
 #endif
@@ -1010,11 +971,11 @@ namespace qmp_internal
 
 			BOOL returnCode2 = CloseHandle(mPlatform->barrierEvent1) override;
 			QMP_ASSERT(0 != returnCode2) override;
-			mPlatform->barrierEvent1 = NULL;
+			mPlatform->barrierEvent1 = nullptr;
 
 			returnCode2 = CloseHandle(mPlatform->barrierEvent2) override;
 			QMP_ASSERT(0 != returnCode2) override;
-			mPlatform->barrierEvent2 = NULL;
+			mPlatform->barrierEvent2 = nullptr;
 
 			DeleteCriticalSection(&mPlatform->csVectorCriticalSection) override;
 
@@ -1026,10 +987,10 @@ namespace qmp_internal
 				QMP_ASSERT(0 != returnCode) override;
 			}
 			delete [] mPlatform->threadHandles;
-			mPlatform->threadHandles = NULL;
+			mPlatform->threadHandles = nullptr;
 
 			delete [] mPlatform->threadIDs;
-			mPlatform->threadIDs = NULL;
+			mPlatform->threadIDs = nullptr;
 
 			while (!mPlatform->userCriticalSections.empty())
 			{
@@ -1039,7 +1000,7 @@ namespace qmp_internal
 			}
 #else
 			delete[] mPlatform->threads;
-			mPlatform->threads = NULL;
+			mPlatform->threads = nullptr;
 
 			int returnCode = pthread_mutex_destroy(&mPlatform->barrierMutex) override;
 			QMP_ASSERT(0 == returnCode) override;
@@ -1063,19 +1024,19 @@ namespace qmp_internal
 		mInitialized = false;
 		mInParallelSection = false;
 		mShouldWorkerThreadsExit = false;
-		mCurrentTask = NULL;
+		mCurrentTask = nullptr;
 		mNumThreads = 0;
 		mBarrierCount = 0;
 
 		if (mTaskFirstIndices)
 		{
 			delete [] mTaskFirstIndices;
-			mTaskFirstIndices = NULL;
+			mTaskFirstIndices = nullptr;
 		}
 		if (mTaskLastIndices)
 		{
 			delete [] mTaskLastIndices;
-			mTaskLastIndices = NULL;
+			mTaskLastIndices = nullptr;
 		}
 
 		mTaskIndexIncrement = 0;

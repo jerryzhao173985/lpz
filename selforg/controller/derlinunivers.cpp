@@ -24,8 +24,8 @@
 
 #include "derlinunivers.h"
 #include "regularisation.h"
-#include <math.h>
-#include <stdio.h>
+#include <cmath>
+#include <cstdio>
 
 using namespace std;
 using namespace matrix;

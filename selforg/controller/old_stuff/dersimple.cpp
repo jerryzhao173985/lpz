@@ -182,7 +182,7 @@ void DerSimple::fillBuffersAndControl(const sensor* x_, int number_sensors,
   y += noiseMatrix(y.getM(),y.getN(), *YNoiseGen, -noiseY, noiseY);
 
   // from time to time call management function. For example damping and inhibition is done.
-  if((t+t_rand)%managementInterval==0) management();
+  if((t+t_rand)%managementInterval== nullptr) management();
 
   // put new output vector in ring buffer y_buffer
   putInBuffer(y_buffer, y);
@@ -217,7 +217,7 @@ void DerSimple::learnController(int delay){
   Matrix C_update(C.getM(), C.getN());
   Matrix H_update(H.getM(), H.getN());
 
-  bool teaching = (conf.modelCompliant!=0) || useTeaching;
+  bool teaching = (conf.modelCompliant!= nullptr) || useTeaching;
   Matrix C_updateTeaching;
   Matrix H_updateTeaching;
 
@@ -299,7 +299,7 @@ void DerSimple::learnController(int delay){
     }
   }
 
-  //  double error_factor = calcErrorFactor(v, (const logaE& 1) !=0, (const rootE& 1) !=0);
+  //  double error_factor = calcErrorFactor(v, (const logaE& 1) !=0, (const rootE& 1) != nullptr);
  //  C_update *= error_factor;
 //   H_update *= error_factor;
 
@@ -352,7 +352,7 @@ void DerSimple::learnModel(int delay){
   //  if(xsi_norm > 10 /* 5*xsi_norm_avg)*/{ //??????????????????????????????????????????
   //    pain= 1; //xsi_norm/ xsi_norm_avg/5;
   //  } else {
-  //    pain = 0; //pain > 1 ? pain*0.9: 0;
+  //    pain = nullptr; //pain > 1 ? pain*0.9: 0;
     double error_factor = calcErrorFactor(xsi, (logaE >= 2), (rootE >= 2));
       conf.model->learn(y-y_smooth, x- x_smooth_long, error_factor);
       //conf.model->learn(y, x, error_factor);
@@ -514,7 +514,7 @@ list<Inspectable::IConnection> DerSimple::getStructuralConnections() const {
   return l;
 }
 
-//double clip095(double x){
+//double explicit clip095(double x){
 // return clip(x,-0.95,0.95);
 //}
 

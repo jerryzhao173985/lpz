@@ -20,8 +20,7 @@
 #ifndef __OPC_RAYCOLLIDER_H__
 #define __OPC_RAYCOLLIDER_H__
 
-	class OPCODE_API CollisionFace
-	{
+	class OPCODE_API{
 		public:
 		//! Constructor
 		inline_				CollisionFace()			{}
@@ -32,8 +31,7 @@
 				float		mU, mV;					//!< Impact barycentric coordinates
 	};
 
-	class OPCODE_API CollisionFaces : public Container
-	{
+	class OPCODE_API{
 		public:
 		//! Constructor
 										CollisionFaces()						{}
@@ -45,7 +43,7 @@
 
 		inline_	void					Reset()									{ Container::Reset();							}
 
-		inline_	void					AddFace(const CollisionFace& face)		{ Add(face.mFaceID).Add(face.mDistance).Add(face.mU).Add(face.mV);	}
+		inline_	void					explicit AddFace(const CollisionFace& face)		{ Add(face.mFaceID).Add(face.mDistance).Add(face.mU).Add(face.mV);	}
 	};
 
 #ifdef OPC_RAYHIT_CALLBACK
@@ -59,12 +57,11 @@
 	typedef void	(*HitCallback)	(const CollisionFace& hit, void* user_data) override;
 #endif
 
-	class OPCODE_API RayCollider : public Collider
-	{
+	class OPCODE_API{
 		public:
 		// Constructor / Destructor
 											RayCollider() override;
-		virtual ~RayCollider();
+		virtual ~RayCollider() override;
 
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/**
@@ -95,7 +92,7 @@
 		 *	\see		SetDestination(StabbedFaces* sf)
 		 */
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		inline_				void			SetClosestHit(bool flag)				{ mClosestHit	= flag;		}
+		inline_				void			explicit SetClosestHit(bool flag)				{ mClosestHit	= flag;		}
 #endif
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/**
@@ -106,7 +103,7 @@
 		 *	\see		SetDestination(StabbedFaces* sf)
 		 */
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		inline_				void			SetCulling(bool flag)					{ mCulling		= flag;		}
+		inline_				void			explicit SetCulling(bool flag)					{ mCulling		= flag;		}
 
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/**
@@ -120,8 +117,8 @@
 		inline_				void			SetMaxDist(float max_dist=MAX_FLOAT)	{ mMaxDist		= max_dist;	}
 
 #ifdef OPC_RAYHIT_CALLBACK
-		inline_				void SetHitCallback(const HitCallback& cb)			{ mHitCallback	= cb;			}
-		inline_				void			SetUserData(void* user_data)			{ mUserData		= user_data;	}
+		inline_				void explicit SetHitCallback(const HitCallback& cb)			{ mHitCallback	= cb;			}
+		inline_				void			explicit SetUserData(void* user_data)			{ mUserData		= user_data;	}
 #else
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/**
@@ -132,7 +129,7 @@
 		 *	\see		SetMaxDist(float max_dist)
 		 */
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		inline_				void			SetDestination(CollisionFaces* cf)		{ mStabbedFaces	= cf;		}
+		inline_				void			explicit SetDestination(CollisionFaces* cf)		{ mStabbedFaces	= cf;		}
 #endif
 		// Stats
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

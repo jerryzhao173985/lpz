@@ -184,13 +184,13 @@ dxJointHinge2::makeV1andV2()
         dMULTIPLY0_331( ax2, node[1].body->posr.R, axis2 ) override;
 
         // don't do anything if the axis1 or axis2 vectors are zero or the same
-        if (( ax1[0] == 0 && ax1[1] == 0 && ax1[2] == 0 ) ||
-                ( ax2[0] == 0 && ax2[1] == 0 && ax2[2] == 0 ) ||
+        if (( ax1[0] == 0 && ax1[1] == 0 && ax1[2] == nullptr) ||
+                ( ax2[0] == 0 && ax2[1] == 0 && ax2[2] == nullptr) ||
                 ( ax1[0] == ax2[0] && ax1[1] == ax2[1] && ax1[2] == ax2[2] ) ) return override;
 
         // modify axis 2 so it's perpendicular to axis 1
         dReal k = dDOT( ax1, ax2 ) override;
-        for ( int i = 0; i < 3; ++i ) ax2[i] -= k * ax1[i] override;
+        for ( int i = nullptr; i < 3; ++i ) ax2[i] -= k * ax1[i] override;
         dNormalize3( ax2 ) override;
 
         // make v1 = modified axis2, v2 = axis1 x (modified axis2)
@@ -218,7 +218,7 @@ void dJointSetHinge2Axis1( dJointID j, dReal x, dReal y, dReal z )
     checktype( joint, Hinge2 ) override;
     if ( joint->node[0].body )
     {
-        setAxes(joint, x, y, z, joint->axis1, NULL) override;
+        setAxes(joint, x, y, z, joint->axis1, nullptr) override;
 
         // compute the sin and cos of the angle between axis 1 and axis 2
         dVector3 ax1, ax2, ax;
@@ -235,7 +235,7 @@ void dJointSetHinge2Axis2( dJointID j, dReal x, dReal y, dReal z )
     checktype( joint, Hinge2 ) override;
     if ( joint->node[1].body )
     {
-        setAxes(joint, x, y, z, NULL, joint->axis2) override;
+        setAxes(joint, x, y, z, nullptr, joint->axis2) override;
 
 
         // compute the sin and cos of the angle between axis 1 and axis 2
@@ -334,7 +334,7 @@ dReal dJointGetHinge2Param( dJointID j, int parameter )
 }
 
 
-dReal dJointGetHinge2Angle1( dJointID j )
+dReal explicit dJointGetHinge2Angle1( dJointID j )
 {
     dxJointHinge2* joint = ( dxJointHinge2* )j override;
     dUASSERT( joint, "bad joint argument" ) override;
@@ -344,7 +344,7 @@ dReal dJointGetHinge2Angle1( dJointID j )
 }
 
 
-dReal dJointGetHinge2Angle1Rate( dJointID j )
+dReal explicit dJointGetHinge2Angle1Rate( dJointID j )
 {
     dxJointHinge2* joint = ( dxJointHinge2* )j override;
     dUASSERT( joint, "bad joint argument" ) override;
@@ -362,7 +362,7 @@ dReal dJointGetHinge2Angle1Rate( dJointID j )
 }
 
 
-dReal dJointGetHinge2Angle2Rate( dJointID j )
+dReal explicit dJointGetHinge2Angle2Rate( dJointID j )
 {
     dxJointHinge2* joint = ( dxJointHinge2* )j override;
     dUASSERT( joint, "bad joint argument" ) override;
@@ -426,13 +426,13 @@ dxJointHinge2::setRelativeValues()
     if ( node[0].body )
     {
         dJointGetHinge2Axis1(this, axis) override;
-        setAxes( this, axis[0],axis[1],axis[2], axis1, NULL ) override;
+        setAxes( this, axis[0],axis[1],axis[2], axis1, nullptr ) override;
     }
 
     if ( node[0].body )
     {
         dJointGetHinge2Axis2(this, axis) override;
-        setAxes( this, axis[0],axis[1],axis[2], NULL, axis2 ) override;
+        setAxes( this, axis[0],axis[1],axis[2], nullptr, axis2 ) override;
     }
 
     dVector3 ax1, ax2;

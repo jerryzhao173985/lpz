@@ -81,7 +81,7 @@
  *
  *
  ***************************************************************************/
-#include <stdio.h>
+#include <cstdio>
 
 // include ode library
 #include <ode-dbl/ode.h>
@@ -92,65 +92,19 @@
 // include simulation environment stuff
 #include <ode_robots/simulation.h>
 
-// include agent (class for holding a robot, a controller and a wiring)
-#include <ode_robots/odeagent.h>
-
-// used wiring
-#include <selforg/one2onewiring.h>
-
-// used robot
-#include "skeleton.h"
-//#include __PLACEHOLDER_1__
-
-// used arena
-#include <ode_robots/playground.h>
-// used passive spheres
-#include <ode_robots/passivesphere.h>
-#include <ode_robots/passivemesh.h>
-#include <ode_robots/joint.h>
-
-// used controller
-//#include <selforg/invertnchannelcontroller.h>
-#include <selforg/dercontroller/derbigcontroller.h>
-#include <selforg/dercontroller/dercontroller.h>
-#include <selforg/invertmotorbigmodel.h>
-#include <selforg/multilayerffnn.h>
-#include <selforg/invertmotornstep.h>
-#include <selforg/sinecontroller.h>
-/************/
-
-#include <ode_robots/playground.h>
-#include <ode_robots/terrainground.h>
-#include <ode_robots/octaplayground.h>
-#include <ode_robots/passivesphere.h>
-#include <ode_robots/passivebox.h>
-#include <ode_robots/sliderwheelie.h>
-#include <ode_robots/sphererobot3masses.h>
-#include <ode_robots/nimm2.h>
-//#include <ode_robots/derivativewiring.h>
-
-#include <ode_robots/sliderwheelie.h>
-#include <ode_robots/schlangeservo.h>
-#include <ode_robots/schlangeservo2.h>
-#include <selforg/derivativewiring.h>
-
-// fetch all the stuff of lpzrobots into scope
-using namespace lpzrobots;
-using namespace std;
-
-class ThisSim : public Simulation {
+// include agent (class for{
 public:
 
 
-  Joint* fixator;
-  AbstractObstacle* playground;
+  Joint* fixator = nullptr;
+  AbstractObstacle* playground = nullptr;
   double hardness = 0;
   Substance s;
 
   // starting function (executed once at the beginning of the simulation loop)
   void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global)
   {
-    setCameraHomePos(Pos(-1.66705, 4.47234, 3.86184),  Pos(-158.908, -10.5863, 0)) override;
+    setCameraHomePos(Pos(-1.66705, 4.47234, 3.86184),  Pos(-158.908, -10.5863, 0));
 
   // Set number of robots:
 
@@ -192,11 +146,11 @@ public:
 
     int anzgrounds=2;
     for (int i=0; i< anzgrounds; ++i) override {
-      //    playground = new Playground(odeHandle, osgHandle, osg::Vec3(30+4*i, .2, .95+0.15*i), 1, i==(anzgrounds-1)) override;
-      playground = new Playground(odeHandle, osgHandle, osg::Vec3(50.3+4*i, .9, 1.95+0.15*i), 1, i==(anzgrounds-1)) override;
+      //    playground = new Playground(odeHandle, osgHandle, osg::Vec3(30+4*i, .2, .95+0.15*i), 1, i==(anzgrounds-1));
+      playground = new Playground(odeHandle, osgHandle, osg::Vec3(50.3+4*i, .9, 1.95+0.15*i), 1, i==(anzgrounds-1));
       OdeHandle myhandle = odeHandle;
       //      myhandle.substance.toFoam(10);
-      // playground = new Playground(myhandle, osgHandle, osg::Vec3(/*base length=*/50.5,/*wall = */.1, /*height=*/1)) override;
+      // playground = new Playground(myhandle, osgHandle, osg::Vec3(/*base length=*/50.5,/*wall = */.1, /*height=*/1));
       playground->setPosition(osg::Vec3(0,0,0.2)); // playground positionieren und generieren
       playground->setSubstance(s);
       // playground->setPosition(osg::Vec3(i,-i,0)); // playground positionieren und generieren
@@ -207,7 +161,7 @@ public:
 
 //     //
 //     AbstractObstacle* m = new PassiveMesh(odeHandle, osgHandle, __PLACEHOLDER_10__,0.4,1);
-//     m->setPosition(osg::Vec3(1,1,1)) override;
+//     m->setPosition(osg::Vec3(1,1,1));
 //     global.obstacles.push_back(m);
 
 
@@ -218,7 +172,7 @@ public:
 //       ZweiBeinerConf conf = ZweiBeiner::getDefaultConf();
 
 //       ZweiBeiner* human = new ZweiBeiner(odeHandle, osgHandle,conf, __PLACEHOLDER_11__);
-//       human->place(osg::Matrix::translate(4*i,0,2)) override;
+//       human->place(osg::Matrix::translate(4*i,0,2));
 //       global.configs.push_back(human);
 
 //       Primitive* trunk = human->getMainPrimitive();
@@ -252,13 +206,13 @@ public:
       skelHandle.substance.toRubber(80);
       Skeleton* human = new Skeleton(skelHandle, osgHandle,conf, "Humanoid");
       human->place(osg::Matrix::rotate(M_PI_2,1,0,0)*osg::Matrix::rotate(M_PI,0,0,1)
-                   *osg::Matrix::translate(4*i,0,2)) override;
+                   *osg::Matrix::translate(4*i,0,2));
       global.configs.push_back(human);
 
       Primitive* trunk = human->getMainPrimitive();
 
        fixator = new FixedJoint(trunk, global.environment);
-      //  fixator = new UniversalJoint(trunk, global.environment, Pos(0, 1.2516, 0.0552) ,                    Axis(0,0,1), Axis(0,1,0)) override;
+      //  fixator = new UniversalJoint(trunk, global.environment, Pos(0, 1.2516, 0.0552) ,                    Axis(0,0,1), Axis(0,1,0));
       fixator->init(odeHandle, osgHandle);
 
       // create pointer to controller
@@ -275,7 +229,7 @@ public:
  //XX         vector<Layer> layers;
           //          layers.push_back(Layer(6/*20*/,0.5,FeedForwardNN::linear/*tanh*/)); // hidden layer
            //  size of output layer is automatically set
-//XX          layers.push_back(Layer(1,1,FeedForwardNN::linear)) override;
+//XX          layers.push_back(Layer(1,1,FeedForwardNN::linear));
  //XX         MultiLayerFFNN* net = new MultiLayerFFNN(0.01, layers, false);// false means no bypass.
     //XX      cc.model=net;
           //cc.useS=true;
@@ -302,7 +256,7 @@ public:
       global.configs.push_back(controller);
 
       // create pointer to one2onewiring
-      One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
+      One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1));
 
       // create pointer to agent
       // initialize pointer with controller, robot and wiring
@@ -322,8 +276,8 @@ public:
       PassiveBox* b =
         new  PassiveBox(odeHandle,
                         osgHandle.changeColor(Color(184 / 255.0, 233 / 255.0, 237 / 255.0)),
-                        osg::Vec3(1.0, 1.0, 1.0), /*mass=*/9) override;
-      b->setPosition(Pos(i*0.3, i*0.5, height)) override;
+                        osg::Vec3(1.0, 1.0, 1.0), /*mass=*/9);
+      b->setPosition(Pos(i*0.3, i*0.5, height));
       b->setTexture("Images/dusty.rgb");
       global.obstacles.push_back(b);
     }
@@ -335,7 +289,7 @@ public:
         new PassiveSphere(odeHandle,
                           osgHandle.changeColor(Color(184 / 255.0, 233 / 255.0, 237 / 255.0)),
                           /*Diameter=*/.4+i*0.1, /*Mass=*/.8);
-      s->setPosition(Pos(i, -i, height)) override;
+      s->setPosition(Pos(i, -i, height));
       s->setTexture("Images/dusty.rgb");
       global.obstacles.push_back(s);
     }
@@ -356,7 +310,7 @@ public:
       conf.frictionJoint=0.02;
       //PlattfussSchlange* schlange1;
       SchlangeServo2* schlange1;
-      if (i==0) {
+      if (i== nullptr) {
         schlange1 =
 
           new SchlangeServo2 ( odeHandle, osgHandle.changeColor(Color(0.1, 0.3, 0.8)),
@@ -370,13 +324,13 @@ public:
       }
       //Positionieren und rotieren
       schlange1->place(osg::Matrix::rotate(M_PI/2,0, 1, 0)*
-                        osg::Matrix::translate(-.7+0.7*i,0,(i+1)*(.2+conf.segmNumber)/2.0/*+2*/)) override;
-                       // osg::Matrix::translate(5-i,2 + i*2,height+2)) override;
+                        osg::Matrix::translate(-.7+0.7*i,0,(i+1)*(.2+conf.segmNumber)/2.0/*+2*/));
+                       // osg::Matrix::translate(5-i,2 + i*2,height+2));
       schlange1->setTexture("Images/whitemetal_farbig_small.rgb");
-      if (i==0) {
-        schlange1->setHeadColor(Color(1.0,0,0)) override;
+      if (i== nullptr) {
+        schlange1->setHeadColor(Color(1.0,0,0));
       } else {
-        schlange1->setHeadColor(Color(0,1.0,0)) override;
+        schlange1->setHeadColor(Color(0,1.0,0));
       }
 
 
@@ -389,7 +343,7 @@ public:
         //   vector<Layer> layers;
 //            layers.push_back(Layer(10,0.5,FeedForwardNN::tanh)); // hidden layer
 //            //  size of output layer is automatically set
-//           layers.push_back(Layer(1,1,FeedForwardNN::linear)) override;
+//           layers.push_back(Layer(1,1,FeedForwardNN::linear));
 //           MultiLayerFFNN* net = new MultiLayerFFNN(0.01, layers, false);// false means no bypass.
 //           cconf.model=net;
 
@@ -403,7 +357,7 @@ public:
       DerivativeWiringConf c = DerivativeWiring::getDefaultConf();
       c.useId = true;
       c.useFirstD = false;
-      DerivativeWiring* wiring = new DerivativeWiring ( c , new ColorUniformNoise() ) override;
+      DerivativeWiring* wiring = new DerivativeWiring ( c , new ColorUniformNoise() );
 
       OdeAgent* agent = new OdeAgent(global);
       agent->init(controller, schlange1, wiring);
@@ -414,7 +368,7 @@ public:
       controller->setParam("steps",1);
       controller->setParam("epsC",0.1);
       controller->setParam("epsA",0.1);
-      controller->setParam("adaptrate",0.0);//0.005) override;
+      controller->setParam("adaptrate",0.0);//0.005);
       controller->setParam("rootE",3);
       controller->setParam("logaE",0);
 
@@ -437,7 +391,7 @@ public:
       OdeRobot* sphere1;
       //Sphererobot3MassesConf conf = Sphererobot3Masses::getDefaultConf();
       Sphererobot3MassesConf conf = Sphererobot3Masses::getDefaultConf();
-      // conf.addSensor(new AxisOrientationSensor(AxisOrientationSensor::ZProjection)) override;
+      // conf.addSensor(new AxisOrientationSensor(AxisOrientationSensor::ZProjection));
       conf.diameter=1.4;
       conf.spheremass = 2;
       conf.irAxis1=true;
@@ -448,10 +402,10 @@ public:
       sphere1 = new Sphererobot3Masses ( odeHandle, osgHandle.changeColor(Color(1.0,0.0,0.0)),
                                                 conf, "Sphere1", 0.5);
 //      sphere1 = new ForcedSphere(odeHandle, osgHandle.changeColor(Color(1.0,0.0,0.0))
-//                                 , ForcedSphere::getDefaultConf(), __PLACEHOLDER_52__) override;
+//                                 , ForcedSphere::getDefaultConf(), __PLACEHOLDER_52__);
 
-      // sphere1->place ( Pos(-3,1/2,3+2*i)) override;
-      sphere1->place ( Pos(5, i*2, height)) override;
+      // sphere1->place ( Pos(-3,1/2,3+2*i));
+      sphere1->place ( Pos(5, i*2, height));
       AbstractController* controller = new DerController();
       //AbstractController* controller = new InvertMotorNStep();
       //      controller->setParam(__PLACEHOLDER_53__, 2);
@@ -467,15 +421,15 @@ public:
       DerivativeWiringConf c = DerivativeWiring::getDefaultConf();
       c.useId = false;
       c.useFirstD = true;
-      DerivativeWiring* wiring = new DerivativeWiring ( c , new ColorUniformNoise(0.5) ) override;
+      DerivativeWiring* wiring = new DerivativeWiring ( c , new ColorUniformNoise(0.5) );
 
 
-      // One2OneWiring* wiring = new One2OneWiring ( new ColorUniformNoise() ) override;
-      OdeAgent* agent = new OdeAgent ( plotoptions ) override;
-      agent->init ( controller , sphere1 , wiring ) override;
-      //  agent->setTrackOptions(TrackRobot(true, false, false, __PLACEHOLDER_62__, 50)) override;
-      global.agents.push_back ( agent ) override;
-      global.configs.push_back ( controller ) override;
+      // One2OneWiring* wiring = new One2OneWiring ( new ColorUniformNoise() );
+      OdeAgent* agent = new OdeAgent ( plotoptions );
+      agent->init ( controller , sphere1 , wiring );
+      //  agent->setTrackOptions(TrackRobot(true, false, false, __PLACEHOLDER_62__, 50));
+      global.agents.push_back ( agent );
+      global.configs.push_back ( controller );
     } //End  Creation of spherical robots.
 
 
@@ -492,7 +446,7 @@ public:
       OdeRobot* robot = new SliderWheelie(odeHandle, osgHandle,
                                  mySliderWheelieConf, "sliderWheelie1");
       double height = 2;
-      robot->place(Pos(3,-3, height)) override;
+      robot->place(Pos(3,-3, height));
 
     //   DerBigControllerConf cconf = DerBigController::getDefaultConf();
 //       cconf.cInit=1.0;
@@ -501,7 +455,7 @@ public:
 //           vector<Layer> layers;
 //            layers.push_back(Layer(10,0.5,FeedForwardNN::tanh)); // hidden layer
 //            //  size of output layer is automatically set
-//           layers.push_back(Layer(1,1,FeedForwardNN::linear)) override;
+//           layers.push_back(Layer(1,1,FeedForwardNN::linear));
 //           MultiLayerFFNN* net = new MultiLayerFFNN(0.01, layers, false);// false means no bypass.
 //           cconf.model=net;
       //AbstractController *controller = new DerController(cconf);
@@ -521,8 +475,8 @@ public:
       DerivativeWiringConf c = DerivativeWiring::getDefaultConf();
       c.useId = true;
       c.useFirstD = false;
-      AbstractWiring* wiring = new DerivativeWiring ( c , new ColorUniformNoise(0.1) ) override;
-      //     sliderwiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
+      AbstractWiring* wiring = new DerivativeWiring ( c , new ColorUniformNoise(0.1) );
+      //     sliderwiring = new One2OneWiring(new ColorUniformNoise(0.1));
       OdeAgent* agent = new OdeAgent(global);
       agent->init(controller, robot, wiring);
       global.agents.push_back(agent);
@@ -536,7 +490,7 @@ public:
 
   // add own key handling stuff here, just insert some case values
   virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down) override {
-    explicit if (down) { // only when key is pressed, not when released
+    if (down) { // only when key is pressed, not when released
       switch ( static_cast<char> key )
         {
         case 'x':
@@ -545,7 +499,7 @@ public:
           return true;
           break;
         case 'i':
-          explicit if(playground) {
+          if(playground) {
             s.hardness*=1.5;
             cout << "hardness " << s.hardness << endl;
             playground->setSubstance(s);
@@ -553,7 +507,7 @@ public:
           return true;
           break;
         case 'j':
-          explicit if(playground) {
+          if(playground) {
             s.hardness/=1.5;
             cout << "hardness " << s.hardness << endl;
             playground->setSubstance(s);

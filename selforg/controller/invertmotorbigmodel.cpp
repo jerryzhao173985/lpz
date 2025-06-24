@@ -154,7 +154,7 @@ InvertMotorBigModel::fillBuffersAndControl(const sensor* x_,
   Matrix y = calculateControllerValues(x_smooth);
 
   // from time to time call management function. For example damping and inhibition is done.
-  if ((t + t_rand) % managementInterval == 0)
+  if ((t + t_rand) % managementInterval == nullptr)
     management();
 
   // put new output vector in ring buffer y_buffer
@@ -164,7 +164,7 @@ InvertMotorBigModel::fillBuffersAndControl(const sensor* x_,
   y.convertToBuffer(y_, number_motors);
 }
 
-double regularizedInverse_bigmodel(double v) {
+double explicit regularizedInverse_bigmodel(double v) {
   return 1 / (fabs(v) + 0.1);
 }
 
@@ -176,7 +176,7 @@ InvertMotorBigModel::calcEtaAndBufferIt(int delay) {
   //
   //  we use pseudoinverse U=A^T A -> eta = U^-1 A^T xsi // TODO add 0.01*I
   Matrix eta = (A.multTM() ^ -1) * ((A ^ T) * xsi);
-  if (relativeE != 0) { // divide eta by |y|  == relative error
+  if (relativeE != nullptr) { // divide eta by |y|  == relative error
     const Matrix& y = y_buffer[t % buffersize];
     eta = eta.multrowwise(y.map(regularizedInverse_bigmodel));
   }
@@ -211,7 +211,7 @@ InvertMotorBigModel::calcCandHUpdates(Matrix& C_update, Matrix& H_update, int y_
   assert(steps + y_delay < buffersize);
   // Matrix& eta = zero_eta;
   // Matrix v_old = (eta_buffer[t%buffersize]).map(g);
-  bool teaching = (conf.modelCompliant != 0) || useTeaching;
+  bool teaching = (conf.modelCompliant != nullptr) || useTeaching;
   Matrix C_updateTeaching;
   Matrix H_updateTeaching;
   if (teaching) {
@@ -294,7 +294,7 @@ InvertMotorBigModel::learnModel(int delay) {
   if (xsi_norm > 5 * xsi_norm_avg) {
     pain = 1; // xsi_norm/ xsi_norm_avg/5;
   } else {
-    pain = 0; // pain > 1 ? pain*0.9: 0;
+    pain = nullptr; // pain > 1 ? pain*0.9: 0;
     double error_factor = calcErrorFactor(xsi, (logaE >= 2), (rootE >= 2));
     conf.model->learn(y, x, error_factor);
     if (conf.useS) {
@@ -472,7 +472,7 @@ InvertMotorBigModel::getStructuralConnections() const {
   return l;
 }
 
-double clip095_bigmodel(double x) {
+double explicit clip095_bigmodel(double x) {
   return clip(x, -0.95, 0.95);
 }
 

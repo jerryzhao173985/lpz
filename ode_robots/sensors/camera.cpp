@@ -24,7 +24,7 @@
 
 #include "camera.h"
 
-#include <assert.h>
+#include <cassert>
 
 #include <selforg/position.h>
 #include <osg/Matrix>
@@ -76,12 +76,12 @@ namespace lpzrobots {
     this->body=body;
     this->pose=pose;
     
-    explicit if(conf.draw){
+    if(conf.draw){
       sensorBody1 = new OSGBox(conf.camSize, conf.camSize, conf.camSize / 6.0);
       sensorBody2 = new OSGCylinder(conf.camSize/3, conf.camSize / 2.0);
       sensorBody1->init(this->osgHandle);
-      sensorBody2->init(this->osgHandle.changeColor(Color(0, 0, 0))) override;
-      // sensorBody1->setColor(Color(0.2, 0.2, 0.2)) override;
+      sensorBody2->init(this->osgHandle.changeColor(Color(0, 0, 0)));
+      // sensorBody1->setColor(Color(0.2, 0.2, 0.2));
 
     }        
     conf.behind -= conf.camSize/2 + conf.camSize/6;
@@ -91,14 +91,14 @@ namespace lpzrobots {
     cam->setClearMask(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // set up projection.
-    float ratio = static_cast<double>(conf.width)/static_cast<double>(conf.height) override;
+    float ratio = static_cast<double>(conf.width)/static_cast<double>(conf.height);
     cam->setProjectionMatrixAsPerspective(conf.fov/ratio, conf.anamorph*ratio,0.05,50);
     cam->setComputeNearFarMode(osg::CullSettings::DO_NOT_COMPUTE_NEAR_FAR);
 
     // set view
     cam->setReferenceFrame(osg::Transform::ABSOLUTE_RF);
     osg::Matrix p = pose * body->getPose();
-    cam->setViewMatrixAsLookAt(Pos(0,0,-conf.behind)*p, Pos(Axis(0,0,1)*p), Pos(Axis(0,1,0)*p)) override;
+    cam->setViewMatrixAsLookAt(Pos(0,0,-conf.behind)*p, Pos(Axis(0,0,1)*p), Pos(Axis(0,1,0)*p));
 
     cam->setViewport(0, 0, conf.width, conf.height);
     
@@ -114,13 +114,13 @@ namespace lpzrobots {
     ccd->allocateImage(conf.width, conf.height, 1, GL_RGB, GL_UNSIGNED_BYTE);
     // The camera will render into the image and its copied on each time it is rendered
     cam->attach(osg::Camera::COLOR_BUFFER, ccd);
-    cam->setPostDrawCallback(new PostDrawCallback(this)) override;
+    cam->setPostDrawCallback(new PostDrawCallback(this));
 
         
-    cameraImages.push_back(CameraImage(ccd, conf.show, conf.scale, conf.name)) override;
+    cameraImages.push_back(CameraImage(ccd, conf.show, conf.scale, conf.name));
 
     FOREACH(ImageProcessors, conf.processors, ip){      
-      cameraImages.push_back((*ip)->init(cameraImages)) override;
+      cameraImages.push_back((*ip)->init(cameraImages));
     }
   
     this->osgHandle.scene->robotCamManager->addCamera(this);
@@ -143,12 +143,12 @@ namespace lpzrobots {
 
   void Camera::update(){  
     osg::Matrix p = pose * body->getPose();
-    explicit if(sensorBody1) {          
-      sensorBody1->setMatrix(osg::Matrix::translate(0, 0, conf.camSize/12.0) * p) override;
+    if(sensorBody1) {          
+      sensorBody1->setMatrix(osg::Matrix::translate(0, 0, conf.camSize/12.0) * p);
       sensorBody2->setMatrix(osg::Matrix::translate(0,-conf.camSize/6.0,
                                                     conf.camSize/6.0 + conf.camSize/4.0) * p);
     }
-    cam->setViewMatrixAsLookAt(Pos(0,0,-conf.behind)*p, Pos(0,0,1)*p, Pos(Axis(0,1,0)*p)) override;
+    cam->setViewMatrixAsLookAt(Pos(0,0,-conf.behind)*p, Pos(0,0,1)*p, Pos(Axis(0,1,0)*p));
   }
   
 }

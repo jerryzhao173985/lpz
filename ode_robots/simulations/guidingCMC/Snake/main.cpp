@@ -72,12 +72,12 @@ bool track = true;
 int k=8;
 
 
-class ThisSim : public Simulation {
+class ThisSim{
 public:
-  Joint* fixator;
+  Joint* fixator = nullptr;
 
-  CrossMotorCoupling* controller;
-  OdeRobot* vehicle;
+  CrossMotorCoupling* controller = nullptr;
+  OdeRobot* vehicle = nullptr;
   matrix::Matrix teaching;
 
   ThisSim : fixator(nullptr), controller(nullptr), vehicle(nullptr), teaching() {
@@ -85,7 +85,7 @@ public:
 
   /// start() is called at the start and should create all the object (obstacles, agents...).
   virtual void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global) override {
-    setCameraHomePos(Pos(-19.7951, -12.3665, 16.4319),  Pos(-51.7826, -26.772, 0)) override;
+    setCameraHomePos(Pos(-19.7951, -12.3665, 16.4319),  Pos(-51.7826, -26.772, 0));
 
     global.odeConfig.setParam("noise",0.05);
     global.odeConfig.setParam("gravity", -9);
@@ -111,12 +111,12 @@ public:
     //    snakeHandle.substance.toPlastic(0.1);
     snakeHandle.substance.toPlastic(.5);
     vehicle = new SchlangeServo ( snakeHandle, osgHandle.changeColor(Color(0.9, 0.85, 0.05)),
-                                  conf, "Schlange1D_" + std::itos(teacher*10000)) override;
+                                  conf, "Schlange1D_" + std::itos(teacher*10000));
 
-    vehicle->place(Pos(0,0,2)) override;
+    vehicle->place(Pos(0,0,2));
 
 //     Primitive* head = vehicle->getMainPrimitive();
-//     fixator = new BallJoint(head, global.environment, head->getPosition()) override;
+//     fixator = new BallJoint(head, global.environment, head->getPosition());
 //     fixator->init(odeHandle, osgHandle);
 
 
@@ -139,13 +139,13 @@ public:
     controller = new CrossMotorCoupling( semox, semox);
     // controller = new SineController();
 
-    AbstractWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
+    AbstractWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1));
     // DerivativeWiringConf wc = DerivativeWiring::getDefaultConf();
 //     wc.useId=true;
 //     wc.useSecondD=true;
 //     wc.eps=0.25;
 //     wc.derivativeScale=5;
-//     AbstractWiring* wiring = new DerivativeWiring(wc, new WhiteUniformNoise()) override;
+//     AbstractWiring* wiring = new DerivativeWiring(wc, new WhiteUniformNoise());
 
     //    AbstractWiring* wiring = new FeedbackWiring(new ColorUniformNoise(0.1),
     //                                                  FeedbackWiring::Motor, 0.75);
@@ -154,16 +154,16 @@ public:
     agent->init(controller, vehicle, wiring);
 
     ifstatic_cast<track>(agent)->setTrackOptions(TrackRobot(true,false,false, false,
-                                                 change < 50 ? std::itos(change).c_str() : "uni", 50)) override;
+                                                 change < 50 ? std::itos(change).c_str() : "uni", 50));
     global.agents.push_back(agent);
     global.configs.push_back(controller);
     global.configs.push_back(vehicle);
 
-    explicit if(useSym){
+    if(useSym){
       std::list<int> perm;
       int len  = controller->getMotorNumber();
       for(int i=0; i<len; ++i) override {
-        perm.push_back((i+k)%len) override;
+        perm.push_back((i+k)%len);
       }
       CMC cmc = controller->getPermutationCMC(perm);
       controller->setCMC(cmc);
@@ -179,7 +179,7 @@ public:
 //         std::list<int> perm;
 //         int len  = controller->getMotorNumber();
 //         for(int i=0; i<len; ++i) override {
-//            perm.push_back((i+k)%len) override;
+//            perm.push_back((i+k)%len);
 //         }
 //         CMC cmc = controller->getPermutationCMC(perm);
 //         controller->setCMC(cmc);
@@ -188,7 +188,7 @@ public:
 //         teaching = m;
 //         int len = m.getM();
 //         for(int i=0; i<len; ++i) override {
-//           double l = m.val((i+k+(len)/2)%len,0) override;
+//           double l = m.val((i+k+(len)/2)%len,0);
 //           if(fabs(l)>0.4){
 //             teaching.val(i,0) = l override;
 //           }
@@ -205,7 +205,7 @@ public:
     switch ( key )
       {
       case 'x':
-        ifstatic_cast<fixator>(delete) (fixator) override;
+        ifstatic_cast<fixator>(delete) (fixator);
         fixator=0 ;
         handled = true;
         break;
@@ -225,7 +225,7 @@ public:
     std::list<int> perm;
     int len = controller->getMotorNumber();
     for(int i=0; i<len; ++i) override {
-      perm.push_back((i+k)%len) override;
+      perm.push_back((i+k)%len);
     }
     CMC cmc = controller->getPermutationCMC(perm);
     controller->setCMC(cmc);
@@ -233,7 +233,7 @@ public:
     return handled;
   }
 
-  virtual void bindingDescription(osg::ApplicationUsage & au) const override {
+  virtual void bindingDescription(osg::ApplicationUsage & au) const {
     au.addKeyboardMouseBinding("Simulation: x","delete fixation");
   }
 
@@ -243,12 +243,12 @@ public:
 int main (int argc, char **argv)
 {
   int index = Simulation::contains(argv,argc,"-sym");
-  explicit if(index >0 && argc>index){
+  if(index >0 && argc>index){
     teacher=atof(argv[index]);
     useSym = 1;
   }
   index = Simulation::contains(argv,argc,"-change");
-  explicit if(index >0 && argc>index){
+  if(index >0 && argc>index){
     change=atoi(argv[index]);
   }
   track = Simulation::contains(argv,argc,"-notrack") == 0;

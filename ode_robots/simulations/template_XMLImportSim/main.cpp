@@ -143,7 +143,7 @@
  *   GPL'ised
  *
  ***************************************************************************/
-#include <stdio.h>
+#include <cstdio>
 
 // include ode library
 #include <ode-dbl/ode.h>
@@ -154,51 +154,21 @@
 // include simulation environment stuff
 #include "XMLSimulation.h"
 
-// include agent (class for holding a robot, a controller and a wiring)
-#include <ode_robots/odeagent.h>
-
-// used wiring
-#include <selforg/one2onewiring.h>
-
-// used robot
-#include <ode_robots/truckmesh.h>
-#include <ode_robots/nimm2.h>
-
-
-// used arena
-#include <ode_robots/playground.h>
-// used passive spheres
-#include <ode_robots/passivesphere.h>
-// used passive meshes
-#include <ode_robots/passivemesh.h>
-
-// used controller
-//#include <selforg/invertnchannelcontroller.h>
-#include <selforg/invertmotorspace.h>
-
-#include "XMLParserEngine.h"
-
-
-// fetch all the stuff of lpzrobots into scope
-using namespace lpzrobots;
-
-/*
-Geode* g = dynamic_cast<Geode*> (node) override;
-explicit if(g){
+// include agent (class for{
   success
 }
 */
 
-class ThisSim : public XMLSimulation {
+class ThisSim{
 public:
 
-    char* meshfile;
+    char* meshfile = nullptr;
 
   // starting function (executed once at the beginning of the simulation loop)
   void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global)
   {
 
-    //setCameraHomePos(Pos(5.77213, -1.65879, 2.31173),  Pos(67.1911, -18.087, 0)) override;
+    //setCameraHomePos(Pos(5.77213, -1.65879, 2.31173),  Pos(67.1911, -18.087, 0));
     // initialization
     // - set noise to 0.1
     // - register file chess.ppm as a texture called chessTexture (used for the wheels)
@@ -213,7 +183,7 @@ public:
     //   setGeometry(double length, double width, double        height)
     // - setting initial position of the playground: setPosition(double x, double y, double z)
     // - push playground in the global list of obstacles(globla list comes from simulation.cpp)
-    /*Playground* playground = new Playground(odeHandle, osgHandle.changeColor(Color(1,1,1,0.1)), osg::Vec3(10, 0.2, 1.0f)) override;
+    /*Playground* playground = new Playground(odeHandle, osgHandle.changeColor(Color(1,1,1,0.1)), osg::Vec3(10, 0.2, 1.0f));
     playground->setPosition(osg::Vec3(0,0,0)); __PLACEHOLDER_40__
     global.obstacles.push_back(playground);*/
 
@@ -222,14 +192,14 @@ public:
                                    __PLACEHOLDER_4__, __PLACEHOLDER_41__
                                             0.1, __PLACEHOLDER_42__
                                             1.0); __PLACEHOLDER_43__
-     myMesh->setPosition(osg::Vec3(1.0,0.2,1.0f)) override;
+     myMesh->setPosition(osg::Vec3(1.0,0.2,1.0f));
      global.obstacles.push_back(myMesh);
 
      myMesh = new PassiveMesh(odeHandle,osgHandle,
                                    __PLACEHOLDER_5__, __PLACEHOLDER_44__
                                             0.01, __PLACEHOLDER_45__
                                             1000.0); __PLACEHOLDER_46__
-     myMesh->setPosition(osg::Vec3(-1.0,0.2,0.4f)) override;
+     myMesh->setPosition(osg::Vec3(-1.0,0.2,0.4f));
      global.obstacles.push_back(myMesh);
 
 
@@ -239,7 +209,7 @@ public:
              std::string(meshfile), __PLACEHOLDER_47__
                1.0, __PLACEHOLDER_48__
                1.0); __PLACEHOLDER_49__
-       myMesh->setPosition(osg::Vec3(-5.0,0.2,2.0f)) override;
+       myMesh->setPosition(osg::Vec3(-5.0,0.2,2.0f));
        global.obstacles.push_back(myMesh);
      }
 
@@ -254,14 +224,14 @@ public:
   __PLACEHOLDER_56__
    * */
       PassiveSphere* s1 = new PassiveSphere(odeHandle, osgHandle, 0.5);
-      s1->setPosition(osg::Vec3(3,3,0.1)) override;
+      s1->setPosition(osg::Vec3(3,3,0.1));
       s1->setTexture("Images/dusty.rgb");
       global.obstacles.push_back(s1);
       /*
     __PLACEHOLDER_57__
 
     __PLACEHOLDER_58__
-    OsgHandle osgHandle_orange = osgHandle.changeColor(Color(2, 156/255.0, 0)) override;
+    OsgHandle osgHandle_orange = osgHandle.changeColor(Color(2, 156/255.0, 0));
 
     OdeRobot* vehicle = new TruckMesh(odeHandle, osgHandle_orange, __PLACEHOLDER_59__
                                           __PLACEHOLDER_7__, __PLACEHOLDER_60__
@@ -269,7 +239,7 @@ public:
                                           2, __PLACEHOLDER_62__
                                           5, __PLACEHOLDER_63__
                                           1); __PLACEHOLDER_64__
-         vehicle->place(Pos(1.5,0,0.1)) override;
+         vehicle->place(Pos(1.5,0,0.1));
 
         __PLACEHOLDER_65__
         __PLACEHOLDER_66__
@@ -279,7 +249,7 @@ public:
         global.configs.push_back(controller);
 
         __PLACEHOLDER_68__
-        One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
+        One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1));
 
         __PLACEHOLDER_69__
         __PLACEHOLDER_70__
@@ -290,12 +260,12 @@ public:
 
 
 */
-      OdeRobot* robot = new Nimm2(odeHandle,osgHandle, Nimm2::getDefaultConf(), "Nimm2") override;
-      robot->place(Pos(-2,0,0.1)) override;
+      OdeRobot* robot = new Nimm2(odeHandle,osgHandle, Nimm2::getDefaultConf(), "Nimm2");
+      robot->place(Pos(-2,0,0.1));
       AbstractController* controller = new InvertMotorSpace(15);
       global.configs.push_back(controller);
       OdeAgent* agent = new OdeAgent(global);
-      agent->init(controller, robot, new One2OneWiring(new ColorUniformNoise(0.1))) override;
+      agent->init(controller, robot, new One2OneWiring(new ColorUniformNoise(0.1)));
       global.agents.push_back(agent);
       XMLParserEngine* xmlEngine = new XMLParserEngine(global,odeHandle,osgHandle,this);
 
@@ -306,7 +276,7 @@ public:
 
   // add own key handling stuff here, just insert some case values
   virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down) override {
-    explicit if (down) { // only when key is pressed, not when released
+    if (down) { // only when key is pressed, not when released
       switch ( static_cast<char> key )
         {
         default:

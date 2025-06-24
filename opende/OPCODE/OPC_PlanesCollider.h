@@ -27,12 +27,11 @@
 					}
 	};
 
-	class OPCODE_API PlanesCollider : public VolumeCollider
-	{
+	class OPCODE_API{
 		public:
 		// Constructor / Destructor
 											PlanesCollider() override;
-		virtual ~PlanesCollider();
+		virtual ~PlanesCollider() override;
 
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/**
@@ -107,12 +106,11 @@
 							BOOL			InitQuery(PlanesCache& cache, const Plane* planes, udword nb_planes, const Matrix4x4* worldm=null) override;
 	};
 
-	class OPCODE_API HybridPlanesCollider : public PlanesCollider
-	{
+	class OPCODE_API{
 		public:
 		// Constructor / Destructor
 											HybridPlanesCollider() override;
-		virtual ~HybridPlanesCollider();
+		virtual ~HybridPlanesCollider() override;
 
 							bool			Collide(PlanesCache& cache, const Plane* planes, udword nb_planes, const HybridModel& model, const Matrix4x4* worldm=null) override;
 		protected:

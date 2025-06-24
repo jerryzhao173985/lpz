@@ -112,7 +112,7 @@ Sos::step(const sensor* x_, int number_sensors, motor* y_, int number_motors) {
   stepNoLearning(x_, number_sensors, y_, number_motors);
   if (t <= buffersize)
     return;
-  t--; // stepNoLearning increases the time by one - undo here
+  --t; // stepNoLearning increases the time by one - undo here
 
   // learn controller and model
   learn();

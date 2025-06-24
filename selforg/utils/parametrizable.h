@@ -36,7 +36,7 @@ using ParameterList = std::list<matrix::Matrix>;
    Interface for parametrizable controller.
    Which expose a set of parameters that be set from outside.
 */
-class Parametrizable {
+class Parametrizable{
 public:
   virtual ~Parametrizable() {}
 

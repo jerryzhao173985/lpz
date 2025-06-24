@@ -47,7 +47,7 @@
  *
  *
  ***************************************************************************/
-#include <stdio.h>
+#include <cstdio>
 
 // include ode library
 #include <ode-dbl/ode.h>
@@ -58,54 +58,17 @@
 // include simulation environment stuff
 #include <ode_robots/simulation.h>
 
-// include agent (class for holding a robot, a controller and a wiring)
-#include <ode_robots/odeagent.h>
-
-// used wiring
-#include <selforg/one2onewiring.h>
-
-// used robot
-#include <ode_robots/barrel2masses2nd.h>
-
-//server
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netdb.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <unistd.h>
-
-
-// used arena
-#include <ode_robots/playground.h>
-
-// used controller
-#include <selforg/sinecontroller.h>
-#include <selforg/invertmotornstep.h>
-#include <selforg/use_java_controller.h>
-
-
-
-//int use_java_controller::anzahl_Java_controller = 2;
-
-// fetch all the stuff of lpzrobots into scope
-using namespace lpzrobots;
-
-class ThisSim : public Simulation
-{
+// include agent (class for{
 public:
 
   // starting function (executed once at the beginning of the simulation loop)
   void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global)
   {
 
-    setCameraHomePos(Pos(5.2728, 7.2112, 3.31768), Pos(140.539, -13.1456, 0)) override;
+    setCameraHomePos(Pos(5.2728, 7.2112, 3.31768), Pos(140.539, -13.1456, 0));
     global.odeConfig.noise=0.05;
 
-    Playground* playground = new Playground(odeHandle, osgHandle, osg::Vec3(10, 0.2, 0.5),1,true) override;
+    Playground* playground = new Playground(odeHandle, osgHandle, osg::Vec3(10, 0.2, 0.5),1,true);
     playground->setPosition(osg::Vec3(0,0,0)); // playground positionieren und generieren
 
     global.obstacles.push_back(playground);
@@ -123,24 +86,24 @@ public:
 
 
     // zusaetzlich das rauschen, gibt weisses und color...
-    One2OneWiring* wiring1 = new One2OneWiring ( new ColorUniformNoise() ) override;
-    One2OneWiring* wiring2 = new One2OneWiring ( new ColorUniformNoise() ) override;
+    One2OneWiring* wiring1 = new One2OneWiring ( new ColorUniformNoise() );
+    One2OneWiring* wiring2 = new One2OneWiring ( new ColorUniformNoise() );
 
 
     //Kugel 1 ***********************************************
 
-    Sphererobot3Masses* myBarrel_1 = new Sphererobot3Masses ( odeHandle, osgHandle.changeColor(Color(1.0,0.0,1.0)),conf, "Rocco-Kugel-1-Java-Controller") override;
-    (static_cast<OdeRobot*>(myBarrel_1))->place (Pos( 1.3,0,0.1)) override;
+    Sphererobot3Masses* myBarrel_1 = new Sphererobot3Masses ( odeHandle, osgHandle.changeColor(Color(1.0,0.0,1.0)),conf, "Rocco-Kugel-1-Java-Controller");
+    (static_cast<OdeRobot*>(myBarrel_1))->place (Pos( 1.3,0,0.1));
 
     //Controller Kugel 1
 
-        use_java_controller* jcontroller1;
+        use_java_controller* jcontroller1 = nullptr;
     jcontroller1 = new use_java_controller("4811","4812","robot2");
 
     OdeAgent* agent_1 = new OdeAgent( global, plotoptions );
-    agent_1->init ( jcontroller1 , myBarrel_1 , wiring1 ) override;
-    global.agents.push_back ( agent_1 ) override;
-    global.configs.push_back ( jcontroller1 ) override;
+    agent_1->init ( jcontroller1 , myBarrel_1 , wiring1 );
+    global.agents.push_back ( agent_1 );
+    global.configs.push_back ( jcontroller1 );
 
     // ENDE****************************************************
 
@@ -148,20 +111,20 @@ public:
 
 
     //Kugel 2 ***********************************************
-    Sphererobot3Masses* myBarrel_2 = new Sphererobot3Masses ( odeHandle, osgHandle.changeColor(Color(0.0,0.0,1.0)),conf, "Rocco-Kugel-2-Java-Controller") override;
-    myBarrel_2->place ( osg::Matrix::rotate(M_PI/2, 1,0,0)) override;
+    Sphererobot3Masses* myBarrel_2 = new Sphererobot3Masses ( odeHandle, osgHandle.changeColor(Color(0.0,0.0,1.0)),conf, "Rocco-Kugel-2-Java-Controller");
+    myBarrel_2->place ( osg::Matrix::rotate(M_PI/2, 1,0,0));
 
     //Controller Kugel 2
 
-    use_java_controller* Jcontroller;
+    use_java_controller* Jcontroller = nullptr;
     //SineController* Jcontroller;
    Jcontroller = new use_java_controller("4711","4712","robot1");
    //Jcontroller = new SineController();
 
     OdeAgent* agent_2 = new OdeAgent( global, plotoptions);
-    agent_2->init ( Jcontroller , myBarrel_2 , wiring2) override;
-    global.agents.push_back ( agent_2 ) override;
-    global.configs.push_back ( Jcontroller ) override;
+    agent_2->init ( Jcontroller , myBarrel_2 , wiring2);
+    global.agents.push_back ( agent_2 );
+    global.configs.push_back ( Jcontroller );
     // ENDE****************************************************
 
 

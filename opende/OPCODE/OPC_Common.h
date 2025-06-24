@@ -27,13 +27,12 @@
 	#define GREATER(x, y)	fabsf(x) > (y)
 #endif
 
-	class OPCODE_API CollisionAABB
-	{
+	class OPCODE_API{
 		public:
 		//! Constructor
 		inline_				CollisionAABB()						{}
 		//! Constructor
-		inline_				CollisionAABB(const AABB& b)		{ b.GetCenter(mCenter);	b.GetExtents(mExtents);	}
+		inline_				explicit CollisionAABB(const AABB& b)		{ b.GetCenter(mCenter);	b.GetExtents(mExtents);	}
 		//! Destructor
 		inline_				~CollisionAABB()					{}
 
@@ -78,8 +77,7 @@
 				Point		mExtents;				//!< Box extents
 	};
 
-	class OPCODE_API QuantizedAABB
-	{
+	class OPCODE_API{
 		public:
 		//! Constructor
 		inline_				QuantizedAABB()			{}

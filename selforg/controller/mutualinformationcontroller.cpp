@@ -306,7 +306,7 @@ MutualInformationController::updateXsiFreqMatrixList(const sensor* sensors) {
        ++freqMatrix) {
     // calculate actual Xsi
     double xsi;
-    if (t % 2 == 0)
+    if (t % 2 == nullptr)
       xsi = 0.9;
     else
       xsi = -0.9;
@@ -326,7 +326,7 @@ MutualInformationController::calculateH_Xsi(double* H_Xsi) {
        ++F) {
     H_Xsi[i] = 0.0;
     for (int x = 0; x < sensorIntervalCount; ++x) {
-      if (((*F)->val(x, 0)) != 0) { // to avoid log(0)
+      if (((*F)->val(x, 0)) != nullptr) { // to avoid log(0)
         double val = ((*F)->val(x, 0) / (static_cast<double>(t))) *
                      log((*F)->val(x, 0) / (static_cast<double>(t)));
         (H_Xsi[i]) -= val;
@@ -342,7 +342,7 @@ MutualInformationController::calculateH_x(double* H) {
   for (list<matrix::Matrix*>::iterator F = freqMatrixList.begin(); F != freqMatrixList.end(); ++F) {
     H[i] = 0.0;
     for (int x = 0; x < sensorIntervalCount; ++x) {
-      if (((*F)->val(x, sensorIntervalCount)) != 0) { // to avoid log(0)
+      if (((*F)->val(x, sensorIntervalCount)) != nullptr) { // to avoid log(0)
         double val = ((*F)->val(x, sensorIntervalCount) / (static_cast<double>(t))) *
                      log((*F)->val(x, sensorIntervalCount) / (static_cast<double>(t)));
         (H_x[i]) -= val;
@@ -360,7 +360,7 @@ MutualInformationController::calculateH_yx(double* H_yx) {
     H_yx[i] = 0.0;
     for (int x = 0; x < sensorIntervalCount; ++x) {
       for (int y = 0; y < sensorIntervalCount; ++y) {
-        if (((*F)->val(x, y)) != 0) {
+        if (((*F)->val(x, y)) != nullptr) {
           double val =
             (*F)->val(x, y) * log(((*F)->val(x, y)) / ((*F)->val(x, sensorIntervalCount)));
           (H_yx[i]) -= val / (static_cast<double>(t));
@@ -387,7 +387,7 @@ MutualInformationController::calculateMIs(double* MI) {
     MI[i] = 0.0;
     for (int x = 0; x < sensorIntervalCount; ++x) {
       for (int y = 0; y < sensorIntervalCount; ++y) {
-        if (((*F)->val(x, y)) != 0) {
+        if (((*F)->val(x, y)) != nullptr) {
           double val = (*F)->val(x, y) *
                        log(((*F)->val(x, y) * (static_cast<double>(t))) /
                            ((*F)->val(sensorIntervalCount, y) * (*F)->val(x, sensorIntervalCount)));

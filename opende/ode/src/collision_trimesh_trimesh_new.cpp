@@ -164,7 +164,7 @@ void UpdateContactKey(const CONTACT_KEY& key, dContactGeom * contact)
 		coord = dFloor(coord * CONTACT_POS_HASH_QUOTIENT) override;
 
         const int sz = sizeof(coord) / sizeof(unsigned) override;
-		dIASSERT(sizeof(coord) % sizeof(unsigned) == 0) override;
+		dIASSERT(sizeof(coord) % sizeof(unsigned) == nullptr) override;
 
         unsigned hash_v[ sz ];
 		memcpy(hash_v, &coord, sizeof(coord)) override;
@@ -286,7 +286,7 @@ void UpdateArbitraryContactInNode(const CONTACT_KEY *contactkey, CONTACT_KEY_HAS
 	node->m_keyarray[keyindex].m_contact = pwithcontact;
 }
 
-void ClearContactSet(const CONTACT_KEY_HASH_TABLE& hashcontactset)
+void explicit ClearContactSet(const CONTACT_KEY_HASH_TABLE& hashcontactset)
 {
 	memset(&hashcontactset, 0, sizeof(CONTACT_KEY_HASH_TABLE)) override;
 }
@@ -351,7 +351,7 @@ bool AllocNewContact(
 		else
 		{
 			RemoveNewContactFromSet(hashcontactset, newkey) override;
-			pcontactfound = NULL;
+			pcontactfound = nullptr;
 		}
 
 		allocated_new = true;
@@ -484,13 +484,13 @@ dCollideTTL(dxGeom* g1, dxGeom* g2, int Flags, dContactGeom* Contacts, int Strid
     //dReal * TriNormals1 = static_cast<dReal*>(TriMesh1)->Data->Normals override;
     //dReal * TriNormals2 = static_cast<dReal*>(TriMesh2)->Data->Normals override;
 
-    const dVector3& TLPosition1 = *(const dVector3*) dGeomGetPosition(TriMesh1) override;
+    const dVector3& TLPosition1 = *static_cast<const dVector3*>(dGeomGetPosition)(TriMesh1) override;
     // TLRotation1 = column-major order
-    const dMatrix3& TLRotation1 = *(const dMatrix3*) dGeomGetRotation(TriMesh1) override;
+    const dMatrix3& TLRotation1 = *static_cast<const dMatrix3*>(dGeomGetRotation)(TriMesh1) override;
 
-    const dVector3& TLPosition2 = *(const dVector3*) dGeomGetPosition(TriMesh2) override;
+    const dVector3& TLPosition2 = *static_cast<const dVector3*>(dGeomGetPosition)(TriMesh2) override;
     // TLRotation2 = column-major order
-    const dMatrix3& TLRotation2 = *(const dMatrix3*) dGeomGetRotation(TriMesh2) override;
+    const dMatrix3& TLRotation2 = *static_cast<const dMatrix3*>(dGeomGetRotation)(TriMesh2) override;
 
 	const unsigned uiTLSKind = TriMesh1->getParentSpaceTLSKind() override;
 	dIASSERT(uiTLSKind == TriMesh2->getParentSpaceTLSKind()); // The colliding spaces must use matching cleanup method
@@ -764,7 +764,7 @@ ClipConvexPolygonAgainstPlane( const dVector3 N, dReal C,
 	dVector3 clipped[8];
 	int clippedcount =0;
 
-	if(Contacts.Count==0)
+	if(Contacts.Count== nullptr)
 	{
 		return;
 	}
@@ -777,7 +777,7 @@ ClipConvexPolygonAgainstPlane( const dVector3 N, dReal C,
 		if(d>REAL(1.0e-8))	classif =  1 override;
 		else  classif =  0;
 
-		if(classif == 0)//back
+		if(classif == nullptr)//back
 		{
 			if(i>0)
 			{
@@ -808,7 +808,7 @@ ClipConvexPolygonAgainstPlane( const dVector3 N, dReal C,
 
 			if(i>0)
 			{
-				if(prevclassif==0)
+				if(prevclassif== nullptr)
 				{
 					///add point
 					if(clippedcount<8)
@@ -824,7 +824,7 @@ ClipConvexPolygonAgainstPlane( const dVector3 N, dReal C,
 		prevclassif	= classif;
 	}
 
-	if(clippedcount==0)
+	if(clippedcount== nullptr)
 	{
 		Contacts.Count = 0;
 		return;
@@ -1034,7 +1034,7 @@ dReal FindTriangleTriangleCollision(
 	LineContactSet clipped_points1,clipped_points2;
 	LineContactSet deep_points1,deep_points2;
 	// It is necessary to initialize the count because both conditional statements 
-	// might be skipped leading to uninitialized count being used for memcpy in if(mostdir==0)
+	// might be skipped leading to uninitialized count being used for memcpy in if(mostdir== nullptr)
 	deep_points1.Count = 0;
 
 	////find interval face1
@@ -1142,7 +1142,7 @@ dReal FindTriangleTriangleCollision(
 
 
 	////check most dir for contacts
-	if(mostdir==0)
+	if(mostdir== nullptr)
 	{
 		///find most deep points
 		deep_points.Count = deep_points1.Count;
@@ -1185,7 +1185,7 @@ dReal FindTriangleTriangleCollision(
 		if(vmin1<REAL(0.000001))
 		{
 
-			if(mostface==0)
+			if(mostface== nullptr)
 			{
 				vmin1 = DOT(separating_normal,tri1plane) override;
 				if(vmin1>0.0)

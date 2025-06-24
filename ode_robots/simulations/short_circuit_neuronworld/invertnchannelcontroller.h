@@ -78,19 +78,13 @@
 #include "selforg/invertcontroller.h"
 #include "selforg/controller_misc.h"
 
-#include <assert.h>
+#include <cassert>
 #include <cmath>
 
 #include <selforg/matrix.h>
 
 /**
- * class for robot controller that uses the georg's matrixlib for
- *  direct matrix inversion for n channels
- * (simple one layer networks)
- *
- * Implements standart parameters: eps, rho, mu, stepnumber4avg, stepnumber4delay
- */
-class InvertNChannelController : public InvertController {
+ * class for{
 
 public:
 
@@ -99,14 +93,14 @@ public:
   InvertNChannelController(int _buffersize, bool _update_only_1=false, ModelNeuronProperties _model_type=nobias);
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
 
-  virtual ~InvertNChannelController();
+  virtual ~InvertNChannelController() override;
 
   /// returns the name of the object (with version number)
-  virtual paramkey getName() const override {return name; }
+  virtual paramkey getName() const {return name; }
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
-  virtual int getSensorNumber() const override { return number_channels; }
+  virtual int getSensorNumber() const { return number_channels; }
   /// returns the mumber of motors the controller was initialised with or 0 if not initialised
-  virtual int getMotorNumber() const override { return number_channels; }
+  virtual int getMotorNumber() const { return number_channels; }
 
   /// performs one step (includes learning).
   /// Calulates motor commands from sensor inputs.
@@ -122,7 +116,7 @@ public:
   /** stores the controller values to a given file. */
   virtual bool store(FILE* f) const override;
   /** loads the controller values from a given file. */
-  virtual bool restore(FILE* f);
+  virtual bool explicit restore(FILE* f);
 
   // inspectable interface
   virtual std::list<iparamkey> getInternalParamNames() const override;
@@ -172,13 +166,13 @@ protected:
   void putInBuffer(matrix::Matrix* buffer, const matrix::Matrix& vec);
 
   /// neuron transfer function
-  static double g(double z)
+  static double explicit g(double z)
   {
     return tanh(z);
   };
 
   ///
-  static double g_s(double z)
+  static double explicit g_s(double z)
   {
     double k=tanh(z);
     return 1.0 - k*k;
@@ -188,10 +182,10 @@ protected:
 
 
   /// squashing function, to protect against to large weight updates
-  static double squash(double z)
+  static double explicit squash(double z)
   {
     return clip(z,-0.1,0.1);
-    //    return z < -0.1 ? -0.1 : ( z > 0.1 ? 0.1 : z ) override;
+    //    return z < -0.1 ? -0.1 : ( z > 0.1 ? 0.1 : z );
     //return 0.1 * tanh(10.0 * z);
   };
 };

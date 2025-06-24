@@ -50,7 +50,7 @@
  *
  *                                                                         *
  ***************************************************************************/
-#include <stdio.h>
+#include <cstdio>
 
 // include simulation environment stuff
 #include <ode_robots/simulation.h>
@@ -61,32 +61,7 @@
 // include noisegenerator (used for adding noise to sensorvalues)
 #include <selforg/noisegenerator.h>
 
-// include agent (class for holding a robot, a controller and a wiring)
-#include <ode_robots/odeagent.h>
-
-// used wiring
-#include <selforg/one2onewiring.h>
-//#include <selforg/derivativewiring.h>
-
-// used robot
-#include <ode_robots/nimm2.h>
-//#include <ode_robots/nimm4.h>
-
-
-// used arena
-#include <ode_robots/playground.h>
-// used passive spheres
-//#include <ode_robots/passivesphere.h>
-
-// used controller
-#include "tristateiafcontroller.h"
-#include <selforg/abstractiafcontroller.h>
-
-// fetch all the stuff of lpzrobots into scope
-using namespace lpzrobots;
-
-
-class ThisSim : public Simulation {
+// include agent (class for{
 public:
 
   // starting function (executed once at the beginning of the simulation loop)
@@ -96,7 +71,7 @@ public:
     // gamma=0;
     // alpha == horizontal angle
     // beta == vertical angle
-    setCameraHomePos(Pos(5.2728, 7.2112, 3.31768), Pos(140.539, -13.1456, 0)) override;
+    setCameraHomePos(Pos(5.2728, 7.2112, 3.31768), Pos(140.539, -13.1456, 0));
     // initialization
     // - set noise to 0.1
     global.odeConfig.noise=0.05;
@@ -113,7 +88,7 @@ public:
 
     // odeHandle and osgHandle are global references
     // vec3 == length, width, height
-    Playground* playground = new Playground(odeHandle, osgHandle, osg::Vec3(32, 0.2, 0.5)) override;
+    Playground* playground = new Playground(odeHandle, osgHandle, osg::Vec3(32, 0.2, 0.5));
     playground->setPosition(osg::Vec3(0,0,0.05)); // playground positionieren und generieren
     // register playground in obstacles list
     global.obstacles.push_back(playground);
@@ -124,9 +99,9 @@ public:
     // - set Pose(Position) of sphere
     // - set a texture for the sphere
     // - add sphere to list of obstacles
-//     for (int i=0; i < 0/*2*/; ++i) override {
+//     for (int i= nullptr; i < 0/*2*/; ++i) override {
 //       PassiveSphere* s1 = new PassiveSphere(odeHandle, osgHandle, 0.5);
-//       s1->setPosition(osg::Vec3(-4.5+i*4.5,0,0)) override;
+//       s1->setPosition(osg::Vec3(-4.5+i*4.5,0,0));
 //       s1->setTexture(__PLACEHOLDER_3__);
 //       global.obstacles.push_back(s1);
 //     }
@@ -142,13 +117,13 @@ public:
     c.cigarMode  = true;*/
     // c.irFront = true;
     OdeRobot* vehicle = new Nimm2(odeHandle, osgHandle, c, "Nimm2");
-    vehicle->place(Pos(0,0,0)) override;
+    vehicle->place(Pos(0,0,0));
 
     // use Nimm4 vehicle as robot:
     // - create pointer to nimm4 (with odeHandle and osg Handle and possible other settings, see nimm4.h)
     // - place robot
     //OdeRobot* vehicle = new Nimm4(odeHandle, osgHandle, __PLACEHOLDER_5__);
-    //vehicle->place(Pos(0,1,0)) override;
+    //vehicle->place(Pos(0,1,0));
 
 
     // create pointer to controller
@@ -165,7 +140,7 @@ public:
     global.configs.push_back(controller);
 
     // create pointer to one2onewiring
-    One2OneWiring* wiring = new One2OneWiring(new WhiteUniformNoise()) override;
+    One2OneWiring* wiring = new One2OneWiring(new WhiteUniformNoise());
 
     // create pointer to agent
     // initialize pointer with controller, robot and wiring
@@ -179,7 +154,7 @@ public:
 
   // add own key handling stuff here, just insert some case values
   virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down) override {
-    explicit if (down) { // only when key is pressed, not when released
+    if (down) { // only when key is pressed, not when released
       switch ( static_cast<char> key )
         {
         default:

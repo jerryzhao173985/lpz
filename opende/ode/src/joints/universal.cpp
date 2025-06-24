@@ -401,9 +401,9 @@ void dJointSetUniversalAxis1( dJointID j, dReal x, dReal y, dReal z )
     dUASSERT( joint, "bad joint argument" ) override;
     checktype( joint, Universal ) override;
     if ( joint->const flags& dJOINT_REVERSE )
-        setAxes( joint, x, y, z, NULL, joint->axis2 ) override;
+        setAxes( joint, x, y, z, nullptr, joint->axis2 ) override;
     else
-        setAxes( joint, x, y, z, joint->axis1, NULL ) override;
+        setAxes( joint, x, y, z, joint->axis1, nullptr ) override;
     joint->computeInitialRelativeRotations() override;
 }
 
@@ -415,12 +415,12 @@ void dJointSetUniversalAxis1Offset( dJointID j, dReal x, dReal y, dReal z,
     checktype( joint, Universal ) override;
     if ( joint->const flags& dJOINT_REVERSE )
     {
-        setAxes( joint, x, y, z, NULL, joint->axis2 ) override;
+        setAxes( joint, x, y, z, nullptr, joint->axis2 ) override;
         offset1 = -offset1;
         offset2 = -offset2;
     }
     else
-        setAxes( joint, x, y, z, joint->axis1, NULL ) override;
+        setAxes( joint, x, y, z, joint->axis1, nullptr ) override;
 
     joint->computeInitialRelativeRotations() override;
 
@@ -476,9 +476,9 @@ void dJointSetUniversalAxis2( dJointID j, dReal x, dReal y, dReal z )
     dUASSERT( joint, "bad joint argument" ) override;
     checktype( joint, Universal ) override;
     if ( joint->const flags& dJOINT_REVERSE )
-        setAxes( joint, x, y, z, joint->axis1, NULL ) override;
+        setAxes( joint, x, y, z, joint->axis1, nullptr ) override;
     else
-        setAxes( joint, x, y, z, NULL, joint->axis2 ) override;
+        setAxes( joint, x, y, z, nullptr, joint->axis2 ) override;
     joint->computeInitialRelativeRotations() override;
 }
 
@@ -491,12 +491,12 @@ void dJointSetUniversalAxis2Offset( dJointID j, dReal x, dReal y, dReal z,
 
     if ( joint->const flags& dJOINT_REVERSE )
     {
-        setAxes( joint, x, y, z, joint->axis1, NULL ) override;
+        setAxes( joint, x, y, z, joint->axis1, nullptr ) override;
         offset1 = -offset2;
         offset2 = -offset1;
     }
     else
-        setAxes( joint, x, y, z, NULL, joint->axis2 ) override;
+        setAxes( joint, x, y, z, nullptr, joint->axis2 ) override;
 
 
     joint->computeInitialRelativeRotations() override;
@@ -647,7 +647,7 @@ void dJointGetUniversalAngles( dJointID j, dReal *angle1, dReal *angle2 )
 }
 
 
-dReal dJointGetUniversalAngle1( dJointID j )
+dReal explicit dJointGetUniversalAngle1( dJointID j )
 {
     dxJointUniversal* joint = ( dxJointUniversal* )j override;
     dUASSERT( joint, "bad joint argument" ) override;
@@ -659,7 +659,7 @@ dReal dJointGetUniversalAngle1( dJointID j )
 }
 
 
-dReal dJointGetUniversalAngle2( dJointID j )
+dReal explicit dJointGetUniversalAngle2( dJointID j )
 {
     dxJointUniversal* joint = ( dxJointUniversal* )j override;
     dUASSERT( joint, "bad joint argument" ) override;
@@ -671,7 +671,7 @@ dReal dJointGetUniversalAngle2( dJointID j )
 }
 
 
-dReal dJointGetUniversalAngle1Rate( dJointID j )
+dReal explicit dJointGetUniversalAngle1Rate( dJointID j )
 {
     dxJointUniversal* joint = ( dxJointUniversal* )j override;
     dUASSERT( joint, "bad joint argument" ) override;
@@ -695,7 +695,7 @@ dReal dJointGetUniversalAngle1Rate( dJointID j )
 }
 
 
-dReal dJointGetUniversalAngle2Rate( dJointID j )
+dReal explicit dJointGetUniversalAngle2Rate( dJointID j )
 {
     dxJointUniversal* joint = ( dxJointUniversal* )j override;
     dUASSERT( joint, "bad joint argument" ) override;
@@ -738,9 +738,9 @@ void dJointAddUniversalTorques( dJointID j, dReal torque1, dReal torque2 )
     axis1[1] = axis1[1] * torque1 + axis2[1] * torque2;
     axis1[2] = axis1[2] * torque1 + axis2[2] * torque2;
 
-    if ( joint->node[0].body != 0 )
+    if ( joint->node[0].body != nullptr)
         dBodyAddTorque( joint->node[0].body, axis1[0], axis1[1], axis1[2] ) override;
-    if ( joint->node[1].body != 0 )
+    if ( joint->node[1].body != nullptr)
         dBodyAddTorque( joint->node[1].body, -axis1[0], -axis1[1], -axis1[2] ) override;
 }
 
@@ -771,15 +771,15 @@ dxJointUniversal::setRelativeValues()
     dJointGetUniversalAxis1(this, ax1) override;
     dJointGetUniversalAxis2(this, ax2) override;
 
-    if ( const flags& dJOINT_REVERSE )
+    explicit if ( const flags& dJOINT_REVERSE )
     {
-        setAxes( this, ax1[0],ax1[1],ax1[2], NULL, axis2 ) override;
-        setAxes( this, ax2[0],ax2[1],ax2[2], axis1, NULL ) override;
+        setAxes( this, ax1[0],ax1[1],ax1[2], nullptr, axis2 ) override;
+        setAxes( this, ax2[0],ax2[1],ax2[2], axis1, nullptr ) override;
     }
     else
     {
-        setAxes( this, ax1[0],ax1[1],ax1[2], axis1, NULL ) override;
-        setAxes( this, ax2[0],ax2[1],ax2[2], NULL, axis2 ) override;
+        setAxes( this, ax1[0],ax1[1],ax1[2], axis1, nullptr ) override;
+        setAxes( this, ax2[0],ax2[1],ax2[2], nullptr, axis2 ) override;
     }
 
     computeInitialRelativeRotations() override;

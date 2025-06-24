@@ -59,8 +59,7 @@ ODE interface to OU library functions.
 using namespace _OU_NAMESPACE;
 
 
-class COdeOu
-{
+class COdeOu{
 public:
 	static bool DoOUCustomizations() override;
 	static void UndoOUCustomizations() override;

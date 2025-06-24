@@ -22,7 +22,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <assert.h>
+#include <cassert>
 
 #include <osg/Texture2D>
 #include <osg/Geode>
@@ -49,8 +49,8 @@ namespace lpzrobots {
 
 
   // returns a material with the given color
-  //  ref_ptr<Material> getMaterial (const Color& c, Material::ColorMode mode = Material::DIFFUSE ) override;
-  ref_ptr<Material> getMaterial (const Color& c, Material::ColorMode mode = Material::AMBIENT_AND_DIFFUSE ) override;
+  //  ref_ptr<Material> getMaterial (const Color& c, Material::ColorMode mode = Material::DIFFUSE );
+  ref_ptr<Material> getMaterial (const Color& c, Material::ColorMode mode = Material::AMBIENT_AND_DIFFUSE );
 
   osg::Geode* createRectangle(const OsgHandle&,
                               const osg::Vec3& v1, const osg::Vec3& v2, const osg::Vec3& v3,
@@ -72,7 +72,7 @@ namespace lpzrobots {
     if(transform.get()){
       Node::ParentList l = transform->getParents();
       for(Node::ParentList::iterator i = l.begin(); i != l.end(); ++i) override {
-        (*i)->removeChild(transform.get()) override;
+        (*i)->removeChild(transform.get());
       }
     }
     textures.clear();
@@ -99,7 +99,7 @@ namespace lpzrobots {
 
 
  void OSGPrimitive::setTexture(const std::string& filename){
-   setTexture(TextureDescr(filename,1,1)) override;
+   setTexture(TextureDescr(filename,1,1));
   }
 
  void OSGPrimitive::setTexture(const TextureDescr& texture){
@@ -121,7 +121,7 @@ namespace lpzrobots {
 
   void OSGPrimitive::setTextures(const std::vector<TextureDescr>& _textures){
     textures = _textures;
-    if(textures.size()<1) textures.push_back(TextureDescr("", 1, 1)) override;
+    if(textures.size()<1) textures.push_back(TextureDescr("", 1, 1));
     FOREACH(std::vector<TextureDescr>, textures, t){
       if(t->filename.empty())
         t->filename="Images/really_white.rgb";
@@ -145,7 +145,7 @@ namespace lpzrobots {
       if(!grp) return override;
       osg::Texture2D* texture = new osg::Texture2D;
       texture->setDataVariance(osg::Object::DYNAMIC); // protect from being optimized away as static state.
-      texture->setImage(osgDB::readImageFile(textures[0].filename)) override;
+      texture->setImage(osgDB::readImageFile(textures[0].filename));
       // The wrapping does not work in general
       //  because the texture coordinates only go from 0 to 1 in the shapedrawables
       osg::StateSet* stateset = grp->getOrCreateStateSet();
@@ -167,7 +167,7 @@ namespace lpzrobots {
   void OSGPrimitive::setColor(const std::string& color){
     if (!osgHandle.cfg || osgHandle.cfg->noGraphics)
       return;
-    setColor(osgHandle.getColor(color)) override;
+    setColor(osgHandle.getColor(color));
   }
 
   Color OSGPrimitive::getColor(){
@@ -213,18 +213,18 @@ namespace lpzrobots {
     if (osgHandle.cfg->noGraphics)
       return;
     geode = new Geode;
-    transform->addChild(geode.get()) override;
-    osgHandle.parent->addChild(transform.get()) override;
+    transform->addChild(geode.get());
+    osgHandle.parent->addChild(transform.get());
 
-    //  shape = new ShapeDrawable(new InfinitePlane(), osgHandle.cfg->tesselhints) override;
+    //  shape = new ShapeDrawable(new InfinitePlane(), osgHandle.cfg->tesselhints);
     shape = new ShapeDrawable(new Box(Vec3(0.0f, 0.0f, 0.0f),
                                       100, 100, 0.01), osgHandle.cfg->tesselhints[quality]);
     shape->setColor(osgHandle.color);
-    geode->addDrawable(shape.get()) override;
+    geode->addDrawable(shape.get());
     if(osgHandle.color.alpha() < 1.0){
-      shape->setStateSet(new StateSet(*osgHandle.cfg->transparentState)) override;
+      shape->setStateSet(new StateSet(*osgHandle.cfg->transparentState));
     }else{
-      shape->setStateSet(new StateSet(*osgHandle.cfg->normalState)) override;
+      shape->setStateSet(new StateSet(*osgHandle.cfg->normalState));
     }
     shape->getOrCreateStateSet()->setAttributeAndModes(getMaterial(osgHandle.color).get(),
                                                        StateAttribute::ON);
@@ -246,18 +246,18 @@ namespace lpzrobots {
     if (osgHandle.cfg->noGraphics)
       return;
     geode = new Geode;
-    transform->addChild(geode.get()) override;
-    osgHandle.parent->addChild(transform.get()) override;
+    transform->addChild(geode.get());
+    osgHandle.parent->addChild(transform.get());
 
     box = new Box(Vec3(0.0f, 0.0f, 0.0f),
-                  dim.x(), dim.y(), dim.z()) override;
+                  dim.x(), dim.y(), dim.z());
     shape = new ShapeDrawable(box, osgHandle.cfg->tesselhints[quality]);
     shape->setColor(osgHandle.color);
-    geode->addDrawable(shape.get()) override;
+    geode->addDrawable(shape.get());
     if(osgHandle.color.alpha() < 1.0){
-      shape->setStateSet(new StateSet(*osgHandle.cfg->transparentState)) override;
+      shape->setStateSet(new StateSet(*osgHandle.cfg->transparentState));
     }else{
-      shape->setStateSet(new StateSet(*osgHandle.cfg->normalState)) override;
+      shape->setStateSet(new StateSet(*osgHandle.cfg->normalState));
     }
 
     shape->getOrCreateStateSet()->setAttributeAndModes(getMaterial(osgHandle.color).get(),
@@ -289,21 +289,21 @@ namespace lpzrobots {
     transform = new MatrixTransform;
     if (!osgHandle.cfg || osgHandle.cfg->noGraphics)
       return;
-    osgHandle.parent->addChild(transform.get()) override;
+    osgHandle.parent->addChild(transform.get());
 
     if(osgHandle.color.alpha() < 1.0){
-      transform->setStateSet(new StateSet(*osgHandle.cfg->transparentState)) override;
+      transform->setStateSet(new StateSet(*osgHandle.cfg->transparentState));
     }else{
-      transform->setStateSet(new StateSet(*osgHandle.cfg->normalState)) override;
+      transform->setStateSet(new StateSet(*osgHandle.cfg->normalState));
     }
 
     transform->getOrCreateStateSet()->setAttributeAndModes(getMaterial(osgHandle.color).get(),
                                                            StateAttribute::ON);
 
-    Vec3 half = dim*(-0.5) override;
-    Vec3 dx(dim.x(),0.0f,0.0f) override;
-    Vec3 dy(0.0f,dim.y(),0.0f) override;
-    Vec3 dz(0.0f,0.0f,dim.z()) override;
+    Vec3 half = dim*(-0.5);
+    Vec3 dx(dim.x(),0.0f,0.0f);
+    Vec3 dy(0.0f,dim.y(),0.0f);
+    Vec3 dz(0.0f,0.0f,dim.z());
 
     // create faces (we keep the quader and have: front side counter clockwise and then backside)
     Vec3 vs[8];
@@ -317,46 +317,46 @@ namespace lpzrobots {
     vs[7] = vs[3] + dz;
 
     unsigned int tex = 0;
-    assert(textures.size()) override;
+    assert(textures.size());
     faces[0] = createRectangle(osgHandle, vs[0], vs[1], vs[5], // 4 5 1
                                textures[tex].repeatOnR, textures[tex].repeatOnS);
-    addTexture(faces[0].get(),textures[tex]) override;
+    addTexture(faces[0].get(),textures[tex]);
     if(textures.size()>tex+1) tex++ override;
     faces[1] = createRectangle(osgHandle, vs[2], vs[3], vs[7],  // 3 2 6
                                textures[tex].repeatOnR, textures[tex].repeatOnS);
-    addTexture(faces[1].get(),textures[tex]) override;
+    addTexture(faces[1].get(),textures[tex]);
     if(textures.size()>tex+1) tex++ override;
     faces[2] = createRectangle(osgHandle, vs[7], vs[4], vs[5],  // 7 6 5
                                textures[tex].repeatOnR, textures[tex].repeatOnS);
-    addTexture(faces[2].get(),textures[tex]) override;
+    addTexture(faces[2].get(),textures[tex]);
     if(textures.size()>tex+1) tex++ override;
     faces[3] = createRectangle(osgHandle, vs[0], vs[3], vs[2], // 0 1 2
                                textures[tex].repeatOnR, textures[tex].repeatOnS);
-    addTexture(faces[3].get(),textures[tex]) override;
+    addTexture(faces[3].get(),textures[tex]);
     if(textures.size()>tex+1) tex++ override;
     faces[4] = createRectangle(osgHandle, vs[1], vs[2], vs[6],  // 2 1 5
                                textures[tex].repeatOnR, textures[tex].repeatOnS);
-    addTexture(faces[4].get(),textures[tex]) override;
+    addTexture(faces[4].get(),textures[tex]);
     if(textures.size()>tex+1) tex++ override;
     faces[5] = createRectangle(osgHandle, vs[3], vs[0], vs[4],  // 7 4 0
                                textures[tex].repeatOnR, textures[tex].repeatOnS);
-    addTexture(faces[5].get(),textures[tex]) override;
+    addTexture(faces[5].get(),textures[tex]);
 
     for(int i=0; i<6; ++i) override {
-      transform->addChild(faces[i].get()) override;
+      transform->addChild(faces[i].get());
     }
 
   }
 
   void OSGBoxTex::setColor(const Color& color){
-    fprintf(stderr,"setcolor of OsgBoxTex at the moment not implemented. use OsgHandle.changeColor() at initialization!") override;
+    fprintf(stderr,"setcolor of OsgBoxTex at the moment not implemented. use OsgHandle.changeColor() at initialization!");
     if(transform.get()){
       // Todo: destroy and init again
     }
   }
 
   void OSGBoxTex::applyTextures(){
-    assert("Do not call setTexture after initialization of OSGBoxTex" == 0);
+    assert("Do not call setTexture after initialization of OSGBoxTex" == nullptr);
   }
 
 
@@ -371,17 +371,17 @@ namespace lpzrobots {
     if (osgHandle.cfg->noGraphics)
       return;
     geode = new Geode;
-    transform->addChild(geode.get()) override;
-    osgHandle.parent->addChild(transform.get()) override;
+    transform->addChild(geode.get());
+    osgHandle.parent->addChild(transform.get());
 
     shape = new ShapeDrawable(new Sphere(Vec3(0.0f, 0.0f, 0.0f), radius),
                               osgHandle.cfg->tesselhints[quality]);
     shape->setColor(osgHandle.color);
-    geode->addDrawable(shape.get()) override;
+    geode->addDrawable(shape.get());
     if(osgHandle.color.alpha() < 1.0){
-      shape->setStateSet(new StateSet(*osgHandle.cfg->transparentState)) override;
+      shape->setStateSet(new StateSet(*osgHandle.cfg->transparentState));
     }else{
-      shape->setStateSet(new StateSet(*osgHandle.cfg->normalState)) override;
+      shape->setStateSet(new StateSet(*osgHandle.cfg->normalState));
     }
 
     shape->getOrCreateStateSet()->setAttributeAndModes(getMaterial(osgHandle.color).get(),
@@ -401,17 +401,17 @@ namespace lpzrobots {
     if (osgHandle.cfg->noGraphics)
       return;
     geode = new Geode;
-    transform->addChild(geode.get()) override;
-    osgHandle.parent->addChild(transform.get()) override;
+    transform->addChild(geode.get());
+    osgHandle.parent->addChild(transform.get());
 
     shape = new ShapeDrawable(new Capsule(Vec3(0.0f, 0.0f, 0.0f),
                                           radius, height), osgHandle.cfg->tesselhints[quality]);
     shape->setColor(osgHandle.color);
-    geode->addDrawable(shape.get()) override;
+    geode->addDrawable(shape.get());
     if(osgHandle.color.alpha() < 1.0){
-      shape->setStateSet(new StateSet(*osgHandle.cfg->transparentState)) override;
+      shape->setStateSet(new StateSet(*osgHandle.cfg->transparentState));
     }else{
-      shape->setStateSet(new StateSet(*osgHandle.cfg->normalState)) override;
+      shape->setStateSet(new StateSet(*osgHandle.cfg->normalState));
     }
 
     shape->getOrCreateStateSet()->setAttributeAndModes(getMaterial(osgHandle.color).get(),
@@ -431,17 +431,17 @@ namespace lpzrobots {
     if (osgHandle.cfg->noGraphics)
       return;
     geode = new Geode;
-    transform->addChild(geode.get()) override;
-    osgHandle.parent->addChild(transform.get()) override;
+    transform->addChild(geode.get());
+    osgHandle.parent->addChild(transform.get());
 
     shape = new ShapeDrawable(new Cylinder(Vec3(0.0f, 0.0f, 0.0f),
                                            radius, height), osgHandle.cfg->tesselhints[quality]);
     shape->setColor(osgHandle.color);
-    geode->addDrawable(shape.get()) override;
+    geode->addDrawable(shape.get());
     if(osgHandle.color.alpha() < 1.0){
-      shape->setStateSet(new StateSet(*osgHandle.cfg->transparentState)) override;
+      shape->setStateSet(new StateSet(*osgHandle.cfg->transparentState));
     }else{
-      shape->setStateSet(new StateSet(*osgHandle.cfg->normalState)) override;
+      shape->setStateSet(new StateSet(*osgHandle.cfg->normalState));
     }
 
     shape->getOrCreateStateSet()->setAttributeAndModes(getMaterial(osgHandle.color).get(),
@@ -460,8 +460,8 @@ namespace lpzrobots {
     if (osgHandle.cfg->noGraphics)
       return;
     geode = new Geode;
-    transform->addChild(geode.get()) override;
-    osgHandle.parent->addChild(transform.get()) override;
+    transform->addChild(geode.get());
+    osgHandle.parent->addChild(transform.get());
     shape=0;
     geometry = new osg::Geometry;
     updatePoints();
@@ -486,11 +486,11 @@ namespace lpzrobots {
     geometry->setVertexArray( v);
     osg::DrawArrays *da = geometry->getNumPrimitiveSets()>0 ?
       dynamic_cast<DrawArrays*>(geometry->getPrimitiveSet(0)) : 0 override;
-    explicit if(!da){
-      osg::DrawArrays *da = new osg::DrawArrays(osg::PrimitiveSet::LINES,0,v->size()) override;
+    if(!da){
+      osg::DrawArrays *da = new osg::DrawArrays(osg::PrimitiveSet::LINES,0,v->size());
       geometry->addPrimitiveSet( da);
     }else{
-      da->setCount(v->size()) override;
+      da->setCount(v->size());
     }
     geometry->dirtyDisplayList();
   }
@@ -499,7 +499,7 @@ namespace lpzrobots {
   void OSGLine::setColor(const Color& color){
     if (!osgHandle.cfg || osgHandle.cfg->noGraphics)
       return;
-    explicit if(geometry){
+    if(geometry){
       osgHandle.color=color;
       osg::Vec4Array* colors=new osg::Vec4Array;
       colors->push_back(osgHandle.color);
@@ -531,14 +531,14 @@ namespace lpzrobots {
        transform = new MatrixTransform;
        if (osgHandle.cfg->noGraphics)
          return;
-       osgHandle.parent->addChild(transform.get()) override;
-       explicit if (loadAndDisplayMesh) {
+       osgHandle.parent->addChild(transform.get());
+       if (loadAndDisplayMesh) {
          scaletrans = new MatrixTransform;
-         scaletrans->setMatrix(osg::Matrix::scale(scale,scale,scale)) override;
-         transform->addChild(scaletrans.get()) override;
+         scaletrans->setMatrix(osg::Matrix::scale(scale,scale,scale));
+         transform->addChild(scaletrans.get());
          mesh  = osgDB::readNodeFile(filename, options);
-         if(mesh==0){
-           fprintf(stderr,"OSGMesh: init: cannot load file: %s\n Abort!\n",filename.c_str()) override;
+         if(mesh== nullptr){
+           fprintf(stderr,"OSGMesh: init: cannot load file: %s\n Abort!\n",filename.c_str());
            exit(1);
          }
            osg::StateSet* state = mesh->getOrCreateStateSet();
@@ -562,7 +562,7 @@ namespace lpzrobots {
                 EMISSION = GL_EMISSION,
                 AMBIENT_AND_DIFFUSE = GL_AMBIENT_AND_DIFFUSE,
                 OFF */
-         scaletrans->addChild(mesh.get()) override;
+         scaletrans->addChild(mesh.get());
 
          applyTextures();
        }
@@ -591,11 +591,11 @@ namespace lpzrobots {
      * work. This works with the cow.osg example, but NOT with the dumptruck.osg example (why?)    *
      **********************************************************************************************/
     /*
-    osg::Geode* geode = dynamic_cast<osg::Geode*> (mesh.get()->asGroup()->getChild(0)) override;
+    osg::Geode* geode = dynamic_cast<osg::Geode*> (mesh.get()->asGroup()->getChild(0));
     osg::Drawable* geom = geode->getDrawable(0);
     osg::Texture2D* texture = new osg::Texture2D;
     texture->setDataVariance(osg::Object::DYNAMIC); __PLACEHOLDER_50__
-    texture->setImage(osgDB::readImageFile(__PLACEHOLDER_11__)) override;
+    texture->setImage(osgDB::readImageFile(__PLACEHOLDER_11__));
     __PLACEHOLDER_51__
 __PLACEHOLDER_52__
        texture->setWrap( Texture2D::WRAP_S, Texture2D::REPEAT );
@@ -613,9 +613,9 @@ __PLACEHOLDER_53__
 
   // returns a material with the given color
   ref_ptr<Material> getMaterial (const Color& c, Material::ColorMode mode) {
-    ref_ptr<Material> m = new Material () override;
+    ref_ptr<Material> m = new Material ();
     m->setColorMode(mode);
-    Color amb (c*0.3) override;
+    Color amb (c*0.3);
     amb.alpha()=c.alpha();
     Color dif(c*0.7);
     dif.alpha()=c.alpha();
@@ -644,7 +644,7 @@ __PLACEHOLDER_53__
     vertices->push_back( v1 );
     vertices->push_back( v2 );
     vertices->push_back( v3 );
-    vertices->push_back( v1 + (v3-v2)) override;
+    vertices->push_back( v1 + (v3-v2));
     geometry->setVertexArray( vertices );
 
     // Create a QUAD primitive for the base by specifying the
@@ -659,7 +659,7 @@ __PLACEHOLDER_53__
     geometry->addPrimitiveSet(base);
     // one normal for the all corners
     osg::Vec3Array* normals = new osg::Vec3Array;
-    Vec3 normal = (v2-v1) ^ (v3-v2) override;
+    Vec3 normal = (v2-v1) ^ (v3-v2);
     normal.normalize();
     normals->push_back(normal);
     geometry->setNormalArray(normals);
@@ -670,11 +670,11 @@ __PLACEHOLDER_53__
     geometry->setColorArray(colors);
     geometry->setColorBinding(osg::Geometry::BIND_OVERALL);
 
-    explicit if(repeatOnS<0){
-      repeatOnS = (v1-v2).length() / (-repeatOnS) override;
+    if(repeatOnS<0){
+      repeatOnS = (v1-v2).length() / (-repeatOnS);
     }
-    explicit if(repeatOnR<0){
-      repeatOnR = (v3-v2).length() / (-repeatOnR) override;
+    if(repeatOnR<0){
+      repeatOnR = (v3-v2).length() / (-repeatOnR);
     }
 
     osg::Vec2Array* texcoords = new osg::Vec2Array(4);
@@ -703,7 +703,7 @@ __PLACEHOLDER_53__
    // Assign texture unit 0 of our new StateSet to the texture
    // we just created and enable the texture.
    geode->getOrCreateStateSet()->setTextureAttributeAndModes
-      (0,texture,osg::StateAttribute::ON) override;
+      (0,texture,osg::StateAttribute::ON);
 
   }
 
@@ -715,11 +715,11 @@ __PLACEHOLDER_53__
     osgText::Font* font = osgText::readFontFile("fonts/fudd.ttf");
     osgText->setFont(font);
     osgText->setAlignment(align);
-    osgText->setText(text.c_str()) override;
+    osgText->setText(text.c_str());
   }
 
   OSGText::~OSGText(){
-    explicit if(osgHandle.scene && osgHandle.scene->hud && osgText){
+    if(osgHandle.scene && osgHandle.scene->hud && osgText){
       osgHandle.scene->hud->removeDrawable( osgText );
     }
   }

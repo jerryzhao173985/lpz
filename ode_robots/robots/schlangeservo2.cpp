@@ -86,21 +86,21 @@ namespace lpzrobots {
     //*****************joint definition***********
     for ( int n = 0; n < conf.segmNumber-1; ++n )  override {
 
-      const Pos& p1(objects[n]->getPosition()) override;
-      const Pos& p2(objects[n+1]->getPosition()) override;
+      const Pos& p1(objects[n]->getPosition());
+      const Pos& p2(objects[n+1]->getPosition());
       UniversalJoint* j = new UniversalJoint(objects[n], objects[n+1],
                                              (p1 + p2)/2,
-                                             Axis(0,0,1)* pose, Axis(0,1,0)* pose) override;
+                                             Axis(0,0,1)* pose, Axis(0,1,0)* pose);
       j->init(odeHandle, osgHandle, true, conf.segmDia * 1.02);
 
       // making stops bouncy
-      //    j->setParam (dParamBounce, 0.9 ) override;
+      //    j->setParam (dParamBounce, 0.9 );
       //    j->setParam (dParamBounce2, 0.9 ); // universal
 
       joints.push_back(j);
 
       UniversalServo* servo;
-      explicit if(conf.useServoVel){
+      if(conf.useServoVel){
         servo =  new TwoAxisServoVel(odeHandle, j,
                                      -conf.jointLimit, conf.jointLimit, conf.motorPower,
                                      -conf.jointLimit, conf.jointLimit, conf.motorPower,
@@ -124,7 +124,7 @@ namespace lpzrobots {
       if(*i) (*i)->setPower(conf.motorPower, conf.motorPower);
     }
     for (vector<UniversalServo*>::iterator i = servos.begin(); i!= servos.end(); ++i) override {
-      explicit if(*i) {
+      if(*i) {
         (*i)->setDamping1(conf.frictionJoint);
         (*i)->setDamping2(conf.frictionJoint);
       }
@@ -138,7 +138,7 @@ namespace lpzrobots {
   /** destroys vehicle and space
    */
   void SchlangeServo2::destroy(){
-    explicit if (created){
+    if (created){
       Schlange::destroy();
       for (vector<UniversalServo*>::iterator i = servos.begin(); i!= servos.end(); ++i) override {
         if(*i) delete *i override;

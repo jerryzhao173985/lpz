@@ -26,11 +26,10 @@
 
 #include "abstractcontroller.h"
 #include "matrix.h"
-#include <stdio.h>
+#include <cstdio>
 
 /**
- * class for robot control that does motor babbling, e.g. sine waves
- * with different frequencies and phaseshift
+ * Class for motor babbling - generates pseudo-random motor patterns.
  */
 class MotorBabbler : public AbstractController {
 public:
@@ -65,13 +64,13 @@ public:
 
   /********* STORABLE INTERFACE ******/
   /// @see Storable
-  virtual bool store(FILE* f) const override {
+  virtual bool store(FILE* f) const {
     Configurable::print(f, "");
     return true;
   }
 
   /// @see Storable
-  virtual bool restore(FILE* f) override {
+  virtual bool restore(FILE* f) {
     Configurable::parse(f);
     return true;
   }

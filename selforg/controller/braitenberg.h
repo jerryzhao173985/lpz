@@ -25,14 +25,14 @@
 #define __BRAITENBERG_H
 
 #include <selforg/abstractcontroller.h>
-#include <stdio.h>
+#include <cstdio>
 
 /**
  * simple braitenberg controler type 2 a and b (Aggressive,Cowardly)
  *
  * assumes a linecamera (see LineImgProc), left and right sensor are specified in the constructor
  */
-class Braitenberg : public AbstractController {
+class Braitenberg{
 public:
   enum Type { Aggressive, Cowardly };
 

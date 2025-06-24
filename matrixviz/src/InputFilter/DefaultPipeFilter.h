@@ -5,8 +5,7 @@
 
 #include "AbstractPipeFilter.h"
 
-class DefaultPipeChannel
-{
+class DefaultPipeChannel{
 public:
   
   explicit DefaultPipeChannel(AbstractPipeFilter* apr) : AbstractPipeFilter(apr) {};

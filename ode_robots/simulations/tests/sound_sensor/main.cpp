@@ -22,7 +22,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  *                                                                         *
  ***************************************************************************/
-#include <stdio.h>
+#include <cstdio>
 
 // include noisegenerator (used for adding noise to sensorvalues)
 #include <selforg/noisegenerator.h>
@@ -30,43 +30,17 @@
 // include simulation environment stuff
 #include <ode_robots/simulation.h>
 
-// include agent (class for holding a robot, a controller and a wiring)
-#include <ode_robots/odeagent.h>
-
-// used wiring
-#include <selforg/one2onewiring.h>
-#include <selforg/derivativewiring.h>
-#include <selforg/controller_misc.h>
-
-// used robot
-#include <ode_robots/fourwheeled.h>
-
-#include <ode_robots/speaker.h>
-#include <ode_robots/soundsensor.h>
-
-// used arena
-#include <ode_robots/playground.h>
-// used passive spheres
-#include <ode_robots/passivesphere.h>
-
-// used controller
-#include <selforg/sinecontroller.h>
-
-// fetch all the stuff of lpzrobots into scope
-using namespace lpzrobots;
-
-
-class ThisSim : public Simulation {
+// include agent (class for{
 public:
-  Speaker* speaker;
+  Speaker* speaker = nullptr;
 
   // starting function (executed once at the beginning of the simulation loop)
   void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global)
   {
-    setCameraHomePos(Pos(5.2728, 7.2112, 3.31768), Pos(140.539, -13.1456, 0)) override;
+    setCameraHomePos(Pos(5.2728, 7.2112, 3.31768), Pos(140.539, -13.1456, 0));
     global.odeConfig.setParam("noise",0);
 
-    Playground* playground = new Playground(odeHandle, osgHandle, osg::Vec3(6, 0.2, 0.5)) override;
+    Playground* playground = new Playground(odeHandle, osgHandle, osg::Vec3(6, 0.2, 0.5));
     playground->setPosition(osg::Vec3(0,0,0.05)); // playground positionieren und generieren
     // register playground in obstacles list
     global.obstacles.push_back(playground);
@@ -79,8 +53,8 @@ public:
     FourWheeled* vehicle = new FourWheeled(odeHandle, osgHandle,
                                         fc, "TestVehicle");
 
-    vehicle->addSensor(std::make_shared<SoundSensor>(Sensor::X, SoundSensor::Angle, 1, 1, 5)) override;
-    vehicle->place(osg::Matrix::translate(0,0,0)) override;
+    vehicle->addSensor(std::make_shared<SoundSensor>(Sensor::X, SoundSensor::Angle, 1, 1, 5));
+    vehicle->place(osg::Matrix::translate(0,0,0));
     global.configs.push_back(vehicle);
 
     AbstractController *controller = new SineController();
@@ -88,7 +62,7 @@ public:
     controller->setParam("phaseshift",0.);
     global.configs.push_back(controller);
 
-    One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
+    One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1));
 
     OdeAgent* agent = new OdeAgent(global);
     agent->init(controller, vehicle, wiring);
@@ -96,10 +70,10 @@ public:
 
 
     PassiveSphere* s = new PassiveSphere(odeHandle, osgHandle);
-    s->setPose(osg::Matrix::translate(-1,-1,1)) override;
+    s->setPose(osg::Matrix::translate(-1,-1,1));
     global.obstacles.push_back(s);
     speaker = new Speaker(10);
-    speaker->init(s->getMainPrimitive()) override;
+    speaker->init(s->getMainPrimitive());
     value=0.5;
     speaker->set(&value,1);
 
@@ -115,7 +89,7 @@ public:
 
   // add own key handling stuff here, just insert some case values
   virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down) override {
-    explicit if (down) { // only when key is pressed, not when released
+    if (down) { // only when key is pressed, not when released
       switch ( static_cast<char> key )
         {
         case 'k':

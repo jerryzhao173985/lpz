@@ -30,9 +30,7 @@
 #include "storeable.h"
 
 /// implements QLearning
-class QLearning
-  : public Configurable
-  , public Storeable {
+class QLearning : public Configurable, public Storeable {
 public:
   /**
      \param eps learning rate (typically 0.1)
@@ -118,9 +116,9 @@ public:
     return Q;
   };
 
-  virtual bool store(FILE* f) const override;
+  virtual bool store(FILE* f) const;
 
-  virtual bool restore(FILE* f) override;
+  virtual bool restore(FILE* f);
 
 protected:
   double eps;

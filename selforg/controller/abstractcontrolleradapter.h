@@ -29,25 +29,8 @@
 #include <selforg/stl_adds.h>
 
 /**
- * Abstract adapter class static_cast<interface>(for) robot controller.
- * The controller gets a number of input sensor values each timestep
- *  and has to generate a number of output motor values.
- *
- * Interface assumes the following usage:
- *  - init() is called first to initialise the dimension of sensor- and motor space
- *  - each time step
- *     either step() or stepNoLearning() is called to ask the controller for motor values.
- *
- * With the adapter class you can easily overwrite e.g. init(), step().
- *
- * This is an abstract adapter class, it's useful for implementing adapters such as the
- * DescreteController, which can be used with all Controllers.
- *
- * Note that the configureable and inspectable classes are registered at this
- *  adapter class.
- *
- *  The store and restore-functionality is lead through, thus only store() and restore()
- *  from
+ * Abstract adapter class for robot controller.
+ * Implements a wrapper for controllers.
  */
 class AbstractControllerAdapter : public AbstractController {
 public:
@@ -147,13 +130,23 @@ public:
 
   /********* STORABLE INTERFACE ******/
   /// @see Storable
-  virtual bool store(FILE* f) const override {
-    return controller->store(f);
+  virtual bool store(FILE* f) const {
+    // Since AbstractController doesn't inherit from Storeable,
+    // we need to check if the controller supports it
+    if (auto* storable = dynamic_cast<const Storeable*>(controller)) {
+      return storable->store(f);
+    }
+    return false;
   }
 
   /// @see Storable
-  virtual bool restore(FILE* f) override {
-    return controller->restore(f);
+  virtual bool restore(FILE* f) {
+    // Since AbstractController doesn't inherit from Storeable,
+    // we need to check if the controller supports it
+    if (auto* storable = dynamic_cast<Storeable*>(controller)) {
+      return storable->restore(f);
+    }
+    return false;
   }
 
   /****************************************************************************/

@@ -132,7 +132,7 @@ ODE_API const dThreadingFunctionsInfo *dThreadingImplementationGetFunctions(dThr
  * @see dThreadingAllocateMultiThreadedImplementation
  * @see dThreadingImplementationCleanupForRestart
  */
-ODE_API void dThreadingImplementationShutdownProcessing(dThreadingImplementationID impl);
+ODE_API void explicit dThreadingImplementationShutdownProcessing(dThreadingImplementationID impl);
 
 /**
  * @brief Restores built-in implementation's state to let it be reused after shutdown.
@@ -150,7 +150,7 @@ ODE_API void dThreadingImplementationShutdownProcessing(dThreadingImplementation
  * @see dThreadingAllocateMultiThreadedImplementation
  * @see dThreadingImplementationShutdownProcessing
  */
-ODE_API void dThreadingImplementationCleanupForRestart(dThreadingImplementationID impl);
+ODE_API void explicit dThreadingImplementationCleanupForRestart(dThreadingImplementationID impl);
 
 /**
  * @brief Deletes an instance of built-in threading implementation.
@@ -164,10 +164,10 @@ ODE_API void dThreadingImplementationCleanupForRestart(dThreadingImplementationI
  * @ingroup threading
  * @see dThreadingAllocateMultiThreadedImplementation
  */
-ODE_API void dThreadingFreeImplementation(dThreadingImplementationID impl);
+ODE_API void explicit dThreadingFreeImplementation(dThreadingImplementationID impl);
 
 
-typedef void (dThreadReadyToServeCallback)(void *callback_context) override;
+typedef void (dThreadReadyToServeCallback)(void *callback_context);
 
 /**
  * @brief An entry point for external threads that would like to serve a built-in 
@@ -267,7 +267,7 @@ ODE_API void dThreadingThreadPoolServeMultiThreadedImplementation(dThreadingThre
  * @see dThreadingImplementationShutdownProcessing
  * @see dThreadingFreeThreadPool
  */
-ODE_API void dThreadingThreadPoolWaitIdleState(dThreadingThreadPoolID pool);
+ODE_API void explicit dThreadingThreadPoolWaitIdleState(dThreadingThreadPoolID pool);
 
 /**
  * @brief Deletes a built-in thread pool instance.
@@ -282,7 +282,7 @@ ODE_API void dThreadingThreadPoolWaitIdleState(dThreadingThreadPoolID pool);
  * @see dThreadingAllocateThreadPool
  * @see dThreadingImplementationShutdownProcessing
  */
-ODE_API void dThreadingFreeThreadPool(dThreadingThreadPoolID pool);
+ODE_API void explicit dThreadingFreeThreadPool(dThreadingThreadPoolID pool);
 
 
 #ifdef __cplusplus

@@ -38,15 +38,14 @@ namespace lpzrobots {
    * It consists of a number of equal elements, each linked
    * by a joint powered by torques added to joints
    **/
-  class SchlangeForce: public Schlange
-    {
+  class SchlangeForce{
     public:
       SchlangeForce ( const OdeHandle& odeHandle, const OsgHandle& osgHandle,
                       const SchlangeConf& conf,
                       const std::string& name, const std::string& revision);
 
 
-      virtual ~SchlangeForce();
+      virtual ~SchlangeForce() override;
 
       /**
        *Reads the actual motor commands from an array,

@@ -30,11 +30,8 @@
 #include "randomgenerator.h"
 #include "storeable.h"
 
-/// abstract class static_cast<interface>(for) a model that can be used by a controller
-class AbstractModel
-  : public Configurable
-  , public Storeable
-  , public Inspectable {
+/// abstract class for models
+class AbstractModel : public Configurable, public Inspectable, public Storeable {
 public:
   // 20110317, guettler: disabled default constructor since it is not needed and would cause
   // difficulties

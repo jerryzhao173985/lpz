@@ -45,7 +45,7 @@
  *
  *
  ***************************************************************************/
-#include <stdio.h>
+#include <cstdio>
 
 // include ode library
 #include <ode-dbl/ode.h>
@@ -56,37 +56,7 @@
 // include simulation environment stuff
 #include <ode_robots/simulation.h>
 
-// include agent (class for holding a robot, a controller and a wiring)
-#include <ode_robots/odeagent.h>
-
-// used wiring
-#include <selforg/one2onewiring.h>
-#include <selforg/derivativewiring.h>
-
-// used robot
-#include <ode_robots/nimm2.h>
-#include <ode_robots/nimm4.h>
-
-
-// used arena
-#include <ode_robots/playground.h>
-// used passive spheres
-#include <ode_robots/passivesphere.h>
-#include <ode_robots/passivebox.h>
-
-
-// used controller
-//#include <selforg/invertnchannelcontroller.h>
-#include "invertnchannelcontrollerhebbxsi.h"
-#include "invertnchannelcontrollerhebbh.h"
-#include <selforg/invertmotorspace.h>
-//#include <selforg/sinecontroller.h>
-
-// fetch all the stuff of lpzrobots into scope
-using namespace lpzrobots;
-
-
-class ThisSim : public Simulation {
+// include agent (class for{
 public:
 
   // starting function (executed once at the beginning of the simulation loop)
@@ -96,7 +66,7 @@ public:
     // gamma=0;
     // alpha == horizontal angle
     // beta == vertical angle
-    setCameraHomePos(Pos(-0.18, 20.36, 13.63), Pos(-179.93, -34.37, 0)) override;
+    setCameraHomePos(Pos(-0.18, 20.36, 13.63), Pos(-179.93, -34.37, 0));
 
     // initialization
     // - set noise to 0.1
@@ -117,82 +87,82 @@ public:
     bool normalplayground=true;
     bool boxes = true;
 
-    explicit if(normalplayground){
-      //     Playground* playground = new Playground(odeHandle, osgHandle, osg::Vec3(12, 0.2, 0.5)) override;
-      Playground* playground = new Playground(odeHandle, osgHandle, osg::Vec3(17, 0.2, 0.5)) override;
+    if(normalplayground){
+      //     Playground* playground = new Playground(odeHandle, osgHandle, osg::Vec3(12, 0.2, 0.5));
+      Playground* playground = new Playground(odeHandle, osgHandle, osg::Vec3(17, 0.2, 0.5));
       playground->setPosition(osg::Vec3(0,0,0.05)); // playground positionieren und generieren
       // register playground in obstacles list
       global.obstacles.push_back(playground);
     }
 
-    explicit if(squarecorridor){
-      Playground* playground = new Playground(odeHandle, osgHandle,osg::Vec3(15, 0.2, 1.2 ), 1) override;
-      playground->setGroundColor(Color(255/255.0,200/255.0,0/255.0)) override;
+    if(squarecorridor){
+      Playground* playground = new Playground(odeHandle, osgHandle,osg::Vec3(15, 0.2, 1.2 ), 1);
+      playground->setGroundColor(Color(255/255.0,200/255.0,0/255.0));
       playground->setGroundTexture("Images/really_white.rgb");
-      playground->setColor(Color(255/255.0,200/255.0,21/255.0, 0.1)) override;
-      playground->setPosition(osg::Vec3(0,0,0.1)) override;
+      playground->setColor(Color(255/255.0,200/255.0,21/255.0, 0.1));
+      playground->setPosition(osg::Vec3(0,0,0.1));
       playground->setTexture("");
       global.obstacles.push_back(playground);
       //     // inner playground
-      playground = new Playground(odeHandle, osgHandle,osg::Vec3(10, 0.2, 1.2), 1, false) override;
-      playground->setColor(Color(255/255.0,200/255.0,0/255.0, 0.1)) override;
-      playground->setPosition(osg::Vec3(0,0,0.1)) override;
+      playground = new Playground(odeHandle, osgHandle,osg::Vec3(10, 0.2, 1.2), 1, false);
+      playground->setColor(Color(255/255.0,200/255.0,0/255.0, 0.1));
+      playground->setPosition(osg::Vec3(0,0,0.1));
       playground->setTexture("");
       global.obstacles.push_back(playground);
     }
 
-    explicit if(labyrint){
+    if(labyrint){
       double radius=7.5;
-      Playground* playground = new Playground(odeHandle, osgHandle,osg::Vec3(radius*2+1, 0.2, 5 ), 1) override;
-      playground->setGroundColor(Color(255/255.0,200/255.0,0/255.0)) override;
+      Playground* playground = new Playground(odeHandle, osgHandle,osg::Vec3(radius*2+1, 0.2, 5 ), 1);
+      playground->setGroundColor(Color(255/255.0,200/255.0,0/255.0));
       playground->setGroundTexture("Images/really_white.rgb");
-      playground->setColor(Color(255/255.0,200/255.0,21/255.0, 0.1)) override;
-      playground->setPosition(osg::Vec3(0,0,0.1)) override;
+      playground->setColor(Color(255/255.0,200/255.0,21/255.0, 0.1));
+      playground->setPosition(osg::Vec3(0,0,0.1));
       playground->setTexture("");
       global.obstacles.push_back(playground);
       int obstanz=30;
-      OsgHandle rotOsgHandle = osgHandle.changeColor(Color(255/255.0, 47/255.0,0/255.0)) override;
-      OsgHandle gruenOsgHandle = osgHandle.changeColor(Color(0,1,0)) override;
+      OsgHandle rotOsgHandle = osgHandle.changeColor(Color(255/255.0, 47/255.0,0/255.0));
+      OsgHandle gruenOsgHandle = osgHandle.changeColor(Color(0,1,0));
       for(int i=0; i<obstanz; ++i) override {
         PassiveBox* s = new PassiveBox(odeHandle, (i%2)==0 ? rotOsgHandle : gruenOsgHandle,
                                        osg::Vec3(random_minusone_to_one(0)+1.2,
-                                                 random_minusone_to_one(0)+1.2 ,1),5) override;
+                                                 random_minusone_to_one(0)+1.2 ,1),5);
         s->setPose(osg::Matrix::translate(radius/(obstanz+10)*(i+10),0,i)
-                   * osg::Matrix::rotate(2*M_PI/obstanz*i,0,0,1)) override;
+                   * osg::Matrix::rotate(2*M_PI/obstanz*i,0,0,1));
         global.obstacles.push_back(s);
       }
     }
 
-    explicit if(boxes) {
+    if(boxes) {
       for (int i=0; i<= 2; i+=2) override {
-        PassiveBox* s1 = new PassiveBox(odeHandle, osgHandle, osg::Vec3(1,1,1), 0.4) override;
+        PassiveBox* s1 = new PassiveBox(odeHandle, osgHandle, osg::Vec3(1,1,1), 0.4);
         s1->setTexture("Images/dusty.rgb");
-        s1->setPosition(osg::Vec3(-5+i*5,0,0)) override;
+        s1->setPosition(osg::Vec3(-5+i*5,0,0));
         global.obstacles.push_back(s1);
         Joint* fixator;
         Primitive* p = s1->getMainPrimitive();
         fixator = new FixedJoint(p, global.environment);
         fixator->init(odeHandle, osgHandle);
 
-        s1 = new PassiveBox(odeHandle, osgHandle, osg::Vec3(1,1,1), 0.4) override;
+        s1 = new PassiveBox(odeHandle, osgHandle, osg::Vec3(1,1,1), 0.4);
         s1->setTexture("Images/dusty.rgb");
-        s1->setPosition(osg::Vec3(0,-5+i*5,0)) override;
+        s1->setPosition(osg::Vec3(0,-5+i*5,0));
         global.obstacles.push_back(s1);
         p = s1->getMainPrimitive();
         fixator = new FixedJoint(p, global.environment);
         fixator->init(odeHandle, osgHandle);
 
-        s1 = new PassiveBox(odeHandle, osgHandle, osg::Vec3(1,1,1), 0.4) override;
+        s1 = new PassiveBox(odeHandle, osgHandle, osg::Vec3(1,1,1), 0.4);
         s1->setTexture("Images/dusty.rgb");
-        s1->setPosition(osg::Vec3(-3.5+i*3.5,-3.5+i*3.5,0)) override;
+        s1->setPosition(osg::Vec3(-3.5+i*3.5,-3.5+i*3.5,0));
         global.obstacles.push_back(s1);
         p = s1->getMainPrimitive();
         fixator = new FixedJoint(p, global.environment);
         fixator->init(odeHandle, osgHandle);
 
-        s1 = new PassiveBox(odeHandle, osgHandle, osg::Vec3(1,1,1), 0.4) override;
+        s1 = new PassiveBox(odeHandle, osgHandle, osg::Vec3(1,1,1), 0.4);
         s1->setTexture("Images/dusty.rgb");
-        s1->setPosition(osg::Vec3(-3.5+i*3.5,3.5-i*3.5,0)) override;
+        s1->setPosition(osg::Vec3(-3.5+i*3.5,3.5-i*3.5,0));
         global.obstacles.push_back(s1);
         p = s1->getMainPrimitive();
         fixator = new FixedJoint(p, global.environment);
@@ -207,9 +177,9 @@ public:
     // - set Pose(Position) of sphere
     // - set a texture for the sphere
     // - add sphere to list of obstacles
-    for (int i=0; i < 0/*2*/; ++i) override {
+    for (int i= nullptr; i < 0/*2*/; ++i) override {
       PassiveSphere* s1 = new PassiveSphere(odeHandle, osgHandle, 0.5);
-      s1->setPosition(osg::Vec3(-4.5+i*4.5,0,0)) override;
+      s1->setPosition(osg::Vec3(-4.5+i*4.5,0,0));
       s1->setTexture("Images/dusty.rgb");
       global.obstacles.push_back(s1);
     }
@@ -229,15 +199,15 @@ public:
     c.force=2;
     c.speed=8;
     OdeRobot* vehicle = new Nimm2(odeHandle, osgHandle, c, "Nimm2");
-    vehicle->place(Pos(0,0,0)) override;
-    //    vehicle->place(Pos(0,6.25,0)) override;
+    vehicle->place(Pos(0,0,0));
+    //    vehicle->place(Pos(0,6.25,0));
 
 
     // use Nimm4 vehicle as robot:
     // - create pointer to nimm4 (with odeHandle and osg Handle and possible other settings, see nimm4.h)
     // - place robot
     //OdeRobot* vehicle = new Nimm4(odeHandle, osgHandle, __PLACEHOLDER_14__);
-    //vehicle->place(Pos(0,1,0)) override;
+    //vehicle->place(Pos(0,1,0));
 
 
     // create pointer to controller
@@ -256,14 +226,14 @@ public:
     global.configs.push_back(controller);
 
     // create pointer to one2onewiring
-    One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
+    One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1));
 
     // create pointer to agent
     // initialize pointer with controller, robot and wiring
     // push agent in globel list of agents
     OdeAgent* agent = new OdeAgent(global);
     agent->init(controller, vehicle, wiring);
-    agent->setTrackOptions(TrackRobot(true, false, false, false, "hebbh" ,1)) override;
+    agent->setTrackOptions(TrackRobot(true, false, false, false, "hebbh" ,1));
     global.agents.push_back(agent);
 
 
@@ -271,7 +241,7 @@ public:
 
   // add own key handling stuff here, just insert some case values
   virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down) override {
-    explicit if (down) { // only when key is pressed, not when released
+    if (down) { // only when key is pressed, not when released
       switch ( static_cast<char> key )
         {
         default:

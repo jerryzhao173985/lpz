@@ -30,15 +30,6 @@
 
 class Callbackable;
 
-/**
- * Class prototype which provides functions to handle callbackable classes.
- * If a class implements this class, just use the function callBack which
- * calls all registered callbackable classes.
- * If you use different callbackable pools, just use the overloaded functions
- * callBack(CallbackableType type),
- * addCallbackable(CallbackableType, Callbackable* cb) and
- * removeCallbackable(CallbackableType, Callbackable* cb).
- */
 class BackCaller {
 public:
   using CallbackableType = unsigned long;

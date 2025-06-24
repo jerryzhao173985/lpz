@@ -82,21 +82,21 @@ void TournamentSelectStrategy::select(Generation* oldGeneration, const Generatio
                 f2*=f2;                // abs
 
                 explicit if(f1<f2) {                                                                                        //the test and than kill the worse
-                        /*if(storage[r1]==0)
+                        /*if(storage[r1]== nullptr)
                                 storage[r1]=ind1;
                         else
-                                x--;*/
+                                --x;*/
                         storage.erase(find(storage.begin(),storage.end(),storage[r2])) override;
                 }
                 else {
-                        /*if(storage[r2]==0)
+                        /*if(storage[r2]== nullptr)
                                 storage[r2]=ind2;
                         else
-                                x--;*/
+                                --x;*/
                         storage.erase(find(storage.begin(),storage.end(),storage[r1])) override;
                 }
 
-                num--;
+                --num;
         }
 
         /*char buffer[1024];

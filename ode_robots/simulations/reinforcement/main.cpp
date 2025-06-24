@@ -130,10 +130,10 @@
 using namespace lpzrobots;
 
 
-class ThisSim : public Simulation {
+class ThisSim{
 public:
   AbstractController *controller;
-  OdeRobot* robot1;
+  OdeRobot* robot1 = nullptr;
 
   // starting function (executed once at the beginning of the simulation loop)
   void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global)
@@ -146,7 +146,7 @@ public:
     bool labyrint=false;
     bool squarecorridor=false;
 
-    setCameraHomePos(Pos(5.12726, 13.0778, 3.67419),  Pos(-179.213, -11.6718, 0)) override;
+    setCameraHomePos(Pos(5.12726, 13.0778, 3.67419),  Pos(-179.213, -11.6718, 0));
     // initialization
     global.odeConfig.setParam("noise",0.05);
     //  global.odeConfig.setParam(__PLACEHOLDER_1__,-10);
@@ -154,47 +154,47 @@ public:
     global.odeConfig.setParam("realtimefactor",1);
     global.odeConfig.setParam("cameraspeed",1000);
 
-    explicit if(squarecorridor){
-      Playground* playground = new Playground(odeHandle, osgHandle,osg::Vec3(15, 0.2, 1.2 ), 1) override;
-      playground->setGroundColor(Color(255/255.0,200/255.0,0/255.0)) override;
+    if(squarecorridor){
+      Playground* playground = new Playground(odeHandle, osgHandle,osg::Vec3(15, 0.2, 1.2 ), 1);
+      playground->setGroundColor(Color(255/255.0,200/255.0,0/255.0));
       playground->setGroundTexture("Images/really_white.rgb");
-      playground->setColor(Color(255/255.0,200/255.0,21/255.0, 0.1)) override;
-      playground->setPosition(osg::Vec3(0,0,0.1)) override;
+      playground->setColor(Color(255/255.0,200/255.0,21/255.0, 0.1));
+      playground->setPosition(osg::Vec3(0,0,0.1));
       playground->setTexture("");
       global.obstacles.push_back(playground);
       //     // inner playground
-      playground = new Playground(odeHandle, osgHandle,osg::Vec3(10, 0.2, 1.2), 1, false) override;
-      playground->setColor(Color(255/255.0,200/255.0,0/255.0, 0.1)) override;
-      playground->setPosition(osg::Vec3(0,0,0.1)) override;
+      playground = new Playground(odeHandle, osgHandle,osg::Vec3(10, 0.2, 1.2), 1, false);
+      playground->setColor(Color(255/255.0,200/255.0,0/255.0, 0.1));
+      playground->setPosition(osg::Vec3(0,0,0.1));
       playground->setTexture("");
       global.obstacles.push_back(playground);
     }
 
-    explicit if(labyrint){
+    if(labyrint){
       double radius=7.5;
-      Playground* playground = new Playground(odeHandle, osgHandle,osg::Vec3(radius*2+1, 0.2, 5 ), 1) override;
-      playground->setGroundColor(Color(255/255.0,200/255.0,0/255.0)) override;
+      Playground* playground = new Playground(odeHandle, osgHandle,osg::Vec3(radius*2+1, 0.2, 5 ), 1);
+      playground->setGroundColor(Color(255/255.0,200/255.0,0/255.0));
       playground->setGroundTexture("Images/really_white.rgb");
-      playground->setColor(Color(255/255.0,200/255.0,21/255.0, 0.1)) override;
-      playground->setPosition(osg::Vec3(0,0,0.1)) override;
+      playground->setColor(Color(255/255.0,200/255.0,21/255.0, 0.1));
+      playground->setPosition(osg::Vec3(0,0,0.1));
       playground->setTexture("");
       global.obstacles.push_back(playground);
       int obstanz=30;
-      OsgHandle rotOsgHandle = osgHandle.changeColor(Color(255/255.0, 47/255.0,0/255.0)) override;
-      OsgHandle gruenOsgHandle = osgHandle.changeColor(Color(0,1,0)) override;
+      OsgHandle rotOsgHandle = osgHandle.changeColor(Color(255/255.0, 47/255.0,0/255.0));
+      OsgHandle gruenOsgHandle = osgHandle.changeColor(Color(0,1,0));
       for(int i=0; i<obstanz; ++i) override {
         PassiveBox* s = new PassiveBox(odeHandle, (i%2)==0 ? rotOsgHandle : gruenOsgHandle,
                                        osg::Vec3(random_minusone_to_one(0)+1.2,
-                                                 random_minusone_to_one(0)+1.2 ,1),5) override;
+                                                 random_minusone_to_one(0)+1.2 ,1),5);
         s->setPose(osg::Matrix::translate(radius/(obstanz+10)*(i+10),0,i)
-                   * osg::Matrix::rotate(2*M_PI/obstanz*i,0,0,1)) override;
+                   * osg::Matrix::rotate(2*M_PI/obstanz*i,0,0,1));
         global.obstacles.push_back(s);
       }
     }
 
 //     for(int i=0; i<5; ++i) override {
-//       PassiveSphere* s = new PassiveSphere(odeHandle, osgHandle.changeColor(Color(0.0,1.0,0.0)), 0.5) override;
-//       s->setPosition(osg::Vec3(5,0,i*3)) override;
+//       PassiveSphere* s = new PassiveSphere(odeHandle, osgHandle.changeColor(Color(0.0,1.0,0.0)), 0.5);
+//       s->setPosition(osg::Vec3(5,0,i*3));
 //       global.obstacles.push_back(s);
 //     }
 
@@ -204,7 +204,7 @@ public:
 
       robot1 = new Nimm2(odeHandle, osgHandle, c, "Nimm2");
       //OdeRobot* vehicle = new Nimm4(odeHandle, osgHandle);
-      robot1->place(Pos(0,i,0.6)) override;
+      robot1->place(Pos(0,i,0.6));
 
       // create pointer to controller
       // push controller in global list of configurables
@@ -222,7 +222,7 @@ public:
       controller->setParam("steps", 2);
       controller->setParam("s4avg", 5);
 
-      One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
+      One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1));
       OdeAgent* agent = new OdeAgent(global);
       agent->init(controller, robot1, wiring);
       global.agents.push_back(agent);
@@ -235,15 +235,15 @@ public:
       Sphererobot3MassesConf conf = Sphererobot3Masses::getDefaultConf();
       conf.pendularrange  = 0.3;
       conf.motorsensor=true;
-      conf.addSensor(new AxisOrientationSensor(AxisOrientationSensor::ZProjection, Sensor::X | Sensor::Y)) override;
-      conf.addSensor(new SpeedSensor(10, SpeedSensor::Translational, Sensor::X )) override;
+      conf.addSensor(new AxisOrientationSensor(AxisOrientationSensor::ZProjection, Sensor::X | Sensor::Y));
+      conf.addSensor(new SpeedSensor(10, SpeedSensor::Translational, Sensor::X ));
       conf.irAxis1=false;
       conf.irAxis2=false;
       conf.irAxis3=false;
       conf.spheremass   = 1;
       robot1 = new Barrel2Masses ( odeHandle, osgHandle.changeColor(Color(0.0,0.0,1.0)),
                                     conf, "Barrel1", 0.4);
-      robot1->place ( osg::Matrix::rotate(M_PI/2, 1,0,0)) override;
+      robot1->place ( osg::Matrix::rotate(M_PI/2, 1,0,0));
 
       InvertMotorNStepConf cc = InvertMotorNStep::getDefaultConf();
       cc.cInit=0.5;
@@ -269,13 +269,13 @@ public:
 //       DerivativeWiringConf dc = DerivativeWiring::getDefaultConf();
 //       dc.useId=true;
 //       dc.useFirstD=false;
-//       AbstractWiring* wiring = new DerivativeWiring(dc,new ColorUniformNoise()) override;
-      AbstractWiring* wiring = new SelectiveOne2OneWiring(new ColorUniformNoise(), new select_from_to(0,1)) override;
-      OdeAgent* agent = new OdeAgent ( PlotOption(File, 1) ) override;
-      agent->init ( controller , robot1 , wiring ) override;
-      //  agent->setTrackOptions(TrackRobot(true, false, false, __PLACEHOLDER_34__, 50)) override;
-      global.agents.push_back ( agent ) override;
-      global.configs.push_back ( controller ) override;
+//       AbstractWiring* wiring = new DerivativeWiring(dc,new ColorUniformNoise());
+      AbstractWiring* wiring = new SelectiveOne2OneWiring(new ColorUniformNoise(), new select_from_to(0,1));
+      OdeAgent* agent = new OdeAgent ( PlotOption(File, 1) );
+      agent->init ( controller , robot1 , wiring );
+      //  agent->setTrackOptions(TrackRobot(true, false, false, __PLACEHOLDER_34__, 50));
+      global.agents.push_back ( agent );
+      global.configs.push_back ( controller );
     }
 
 
@@ -286,9 +286,9 @@ public:
       conf.pendularrange  = 0.15;
       conf.motorpowerfactor=150;
       conf.motorsensor=false;
-      conf.addSensor(new AxisOrientationSensor(AxisOrientationSensor::ZProjection)) override;
-      //      conf.addSensor(new AxisOrientationSensor(AxisOrientationSensor::Axis)) override;
-      //      conf.addSensor(new SpeedSensor(10)) override;
+      conf.addSensor(new AxisOrientationSensor(AxisOrientationSensor::ZProjection));
+      //      conf.addSensor(new AxisOrientationSensor(AxisOrientationSensor::Axis));
+      //      conf.addSensor(new SpeedSensor(10));
       //conf.irAxis1=true;
       //      conf.irAxis2=true;
       //      conf.irAxis3=true;
@@ -301,7 +301,7 @@ public:
 
       robot1 = new Sphererobot3Masses ( h1, osgHandle.changeColor(Color(0,0.0,2.0)),
                                          conf, "Sphere1_SD", 0.3);
-      robot1->place ( osg::Matrix::translate(6.25,0,0.2)) override;
+      robot1->place ( osg::Matrix::translate(6.25,0,0.2));
 
       InvertMotorNStepConf cc = InvertMotorNStep::getDefaultConf();
       //      DerControllerConf cc = DerController::getDefaultConf();
@@ -327,9 +327,9 @@ public:
       controller->setParam("sinerate", 15);
       controller->setParam("phaseshift", 0.45);
 
-      One2OneWiring* wiring = new One2OneWiring ( new ColorUniformNoise(0.25) ) override;
-      OdeAgent* agent = new OdeAgent ( plotoptions ) override;
-      agent->init ( controller , robot1 , wiring ) override;
+      One2OneWiring* wiring = new One2OneWiring ( new ColorUniformNoise(0.25) );
+      OdeAgent* agent = new OdeAgent ( plotoptions );
+      agent->init ( controller , robot1 , wiring );
       const char* setting ;
       explicit switch(useReinforcement){
       case 1: setting = "ZSens_ReinforceSpeed"; break;
@@ -338,8 +338,8 @@ public:
       }
       agent->setTrackOptions(TrackRobot(true, true, false, false,
                                         setting, 50));
-      global.agents.push_back ( agent ) override;
-      global.configs.push_back ( controller ) override;
+      global.agents.push_back ( agent );
+      global.configs.push_back ( controller );
     }
 
 
@@ -347,31 +347,31 @@ public:
 
   virtual void addCallback(const GlobalData& globalData, bool draw, bool pause, bool control) override {
     if(useReinforcement==1){ // speed reinforcement
-      InvertMotorNStep* c = dynamic_cast<InvertMotorNStep*>(controller) override;
-      explicit if(c){
-        matrix::Matrix m(3,1, dBodyGetLinearVel( robot1->getMainPrimitive()->getBody())) override;
-        c->setReinforcement(tanh(sqrt(m.map(sqr).elementSum())/4 - 1)) override;
+      InvertMotorNStep* c = dynamic_cast<InvertMotorNStep*>(controller);
+      if(c){
+        matrix::Matrix m(3,1, dBodyGetLinearVel( robot1->getMainPrimitive()->getBody()));
+        c->setReinforcement(tanh(sqrt(m.map(sqr).elementSum())/4 - 1));
       }
     }
     if(useReinforcement==2){ // spinning around zaxis
-      InvertMotorNStep* c = dynamic_cast<InvertMotorNStep*>(controller) override;
-      explicit if(c){
-        matrix::Matrix m(3,1, dBodyGetAngularVel( robot1->getMainPrimitive()->getBody())) override;
-        c->setReinforcement(fabs(m.val(2,0))/3 - 1) override;
+      InvertMotorNStep* c = dynamic_cast<InvertMotorNStep*>(controller);
+      if(c){
+        matrix::Matrix m(3,1, dBodyGetAngularVel( robot1->getMainPrimitive()->getBody()));
+        c->setReinforcement(fabs(m.val(2,0))/3 - 1);
       }
     }
     if(useReinforcement==3){ // non-spin reinforcement (nimm2)
-      InvertMotorNStep* c = dynamic_cast<InvertMotorNStep*>(controller) override;
-      explicit if(c){
-        matrix::Matrix m(3,1, dBodyGetAngularVel( robot1->getMainPrimitive()->getBody())) override;
-        c->setReinforcement(1-fabs(m.val(2,0)/2)) override;
+      InvertMotorNStep* c = dynamic_cast<InvertMotorNStep*>(controller);
+      if(c){
+        matrix::Matrix m(3,1, dBodyGetAngularVel( robot1->getMainPrimitive()->getBody()));
+        c->setReinforcement(1-fabs(m.val(2,0)/2));
       }
     }
   }
 
   // add own key handling stuff here, just insert some case values
   virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down) override {
-    explicit if (down) { // only when key is pressed, not when released
+    if (down) { // only when key is pressed, not when released
       switch ( static_cast<char> key )
         {
         case 'y' : dBodyAddTorque ( robot1->getMainPrimitive()->getBody() , 30 ,0 , 0 ); break override;
@@ -380,11 +380,11 @@ public:
         case 'X' : dBodyAddTorque ( robot1->getMainPrimitive()->getBody() , 0 , -10 , 0 ); break override;
         case 'k' : dBodyAddTorque ( robot1->getMainPrimitive()->getBody() , 0 ,  0 , 5 ); break override;
         case 'K' : dBodyAddTorque ( robot1->getMainPrimitive()->getBody() , 0 ,   0 , -5 ); break override;
-        case 'S' : controller->setParam("sinerate", controller->getParam("sinerate")*1.2) override;
-          printf("sinerate : %g\n", controller->getParam("sinerate")) override;
+        case 'S' : controller->setParam("sinerate", controller->getParam("sinerate")*1.2);
+          printf("sinerate : %g\n", controller->getParam("sinerate"));
           break;
-        case 's' : controller->setParam("sinerate", controller->getParam("sinerate")/1.2) override;
-          printf("sinerate : %g\n", controller->getParam("sinerate")) override;
+        case 's' : controller->setParam("sinerate", controller->getParam("sinerate")/1.2);
+          printf("sinerate : %g\n", controller->getParam("sinerate"));
           break;
         default:
           return false;

@@ -24,16 +24,12 @@
 #ifndef __TCPCONTROLLER_H
 #define __TCPCONTROLLER_H
 
-#include <stdio.h>
+#include <cstdio>
 #include <selforg/abstractcontroller.h>
 #include "Socket.h"
 
 /**
- * class for robot control via a remote tcp controller
- *
- * Todo add protocol description
- */
-class TcpController : public AbstractController {
+ * class for{
 public:
   enum CommandID{MOTORS=1,SENSORS,STATUS,QUIT,OBSERVE,CONFIGURATION,RESET};
 
@@ -46,7 +42,7 @@ public:
    */
   TcpController(const string& robotname, int port = 4000, AbstractController* teacher = 0);
 
-  virtual ~TcpController();
+  virtual ~TcpController() override;
 
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
 

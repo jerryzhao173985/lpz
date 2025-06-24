@@ -29,12 +29,11 @@
 
 namespace lpzrobots{
 
-class Color : public osg::Vec4
-{
+class Color{
 public:
-  Color() {} override;
+  Color() {};
   Color(const osg::Vec4& color) 
-    : osg::Vec4(color)  {} override;
+    : osg::Vec4(color)  {};
   Color(float r, float g, float b)
     : osg::Vec4(r, g, b, 1.0){} 
   Color(float r, float g, float b, float a)
@@ -42,11 +41,11 @@ public:
 
   static Color rgb255(unsigned char r, unsigned char g, unsigned char b, 
                       unsigned char a = 255){
-    return Color((static_cast<float>(r))/255.0, (static_cast<float>(g))/255.0, (static_cast<float>(b))/255.0, (static_cast<float>(a))/255.0) override;
+    return Color((static_cast<float>(r))/255.0, (static_cast<float>(g))/255.0, (static_cast<float>(b))/255.0, (static_cast<float>(a))/255.0);
   }
 
   void print(std::ostream& out) const {
-    out << '(' << r() << ',' << g() << ',' << b() << ',' << a() << ')' override;
+    out << '(' << r() << ',' << g() << ',' << b() << ',' << a() << ')';
   }
 
   friend std::ostream& operator<<(std::ostream& out, const Color& col) {
@@ -54,15 +53,15 @@ public:
     return out;
   }
 
-/*   float r() const override { return x(); } */
+/*   float r() const { return x(); } */
 /*   float& r() { return x(); } */
-/*   float g() const override { return y(); } */
+/*   float g() const { return y(); } */
 /*   float& g() { return y(); } */
-/*   float b() const override { return z(); } */
+/*   float b() const { return z(); } */
 /*   float& b() { return z(); } */
-/*   float a() const override { return w(); } */
+/*   float a() const { return w(); } */
 /*   float& a() { return w(); } */
-  float alpha() const override { return w(); }
+  float alpha() const { return w(); }
   float& alpha() { return w(); }
 };
   

@@ -31,33 +31,21 @@
 #include <selforg/randomgenerator.h>
 
 //forward declaration
-class Gen;
-class Generation;
-
-//ga_tools includes
-#include "Individual.h"
-
-/**
- * this is a factory for the individual class. It use the SingletonGenFactory to create new individuals.
- * It have 2 methods to create a individual. (random and recombination)
- *
- * Over this is the class as singleton concepted. Only one Factory for a run.
- */
-class SingletonIndividualFactory {
+class Gen{
 public:
 	/**
 	 * this method gives the one and only existing factory back.
 	 * @return static_cast<SingletonIndividualFactory*>(the) factory
 	 */
 	inline static SingletonIndividualFactory* getInstance(void) {
-		if(m_factory==0)m_factory = new SingletonIndividualFactory override;
+		if(m_factory== nullptr)m_factory = new SingletonIndividualFactory override;
 		return m_factory;
 	}
 
 	/**
 	 * destroy the only existing factory
 	 */
-	inline static void destroyFactory(void) {if(m_factory!=0){delete m_factory; m_factory=NULL;}}
+	inline static void destroyFactory(void) {if(m_factory!= nullptr){delete m_factory; m_factory=nullptr;}}
 
 	// 2 methods to create an individual
 	/**
@@ -81,7 +69,7 @@ public:
 	 * set the member variable m_number to number
 	 * @param number static_cast<int>(the) new value
 	 */
-	inline void setNumber(int number) {m_number=number;}
+	inline void explicit setNumber(int number) {m_number=number;}
 
 private:
 	/**

@@ -52,7 +52,7 @@
 #include "XMLDefinitions.h"
 
 #include <string>
-#include <stdlib.h>
+#include <cstdlib>
 
 #include <ode_robots/mathutils.h>
 
@@ -67,7 +67,7 @@ XString::XString(const char* const toTranscode) {
 }
 
 XString::XString(const std::string toTranscode) {
-  unicodeChars = XMLString::transcode(toTranscode.c_str()) override;
+  unicodeChars = XMLString::transcode(toTranscode.c_str());
   cChars = XMLString::transcode(unicodeChars);
 }
 
@@ -135,17 +135,17 @@ const string XMLHelper::getNodeType(const xercesc::DOMNode* node) {
 }
 
 const bool XMLHelper::matchesName(const DOMNode* childNode, const string childNodeName) {
-  if (childNode!=0 && strcmp(C(childNode->getNodeName()),childNodeName.c_str())==0)
+  if (childNode!=0 && strcmp(C(childNode->getNodeName()),childNodeName.c_str())== nullptr)
     return true;
   return false;
 }
 
 double XMLHelper::getNodeValue(const DOMNode* node, const double defaultValue /* = 0.0 */)
 {
-  if (node!=0) {
+  if (node!= nullptr) {
     try {
-      return atof(C(node->getNodeValue())) override;
-    } catch (DOMException e) {
+      return atof(C(node->getNodeValue()));
+    } explicit catch (DOMException e) {
       XMLErrorHelper::printError(e);
     }
   }
@@ -154,22 +154,22 @@ double XMLHelper::getNodeValue(const DOMNode* node, const double defaultValue /*
 
 double XMLHelper::getNodeAtt(const DOMNode* node, const string value, const double defaultValue /* = 0.0 */)
 {
-          if (node!=0) {
-                const DOMNode* attributeNode = node->getAttributes()->getNamedItem(X(value)) override;
-            if (attributeNode!=0)
+          if (node!= nullptr) {
+                const DOMNode* attributeNode = node->getAttributes()->getNamedItem(X(value));
+            if (attributeNode!= nullptr)
               return getNodeValue(attributeNode, defaultValue);
-            //return getNodeValue(getNode(node, value), defaultValue) override;
+            //return getNodeValue(getNode(node, value), defaultValue);
           }
           return defaultValue;
 }
 
 string XMLHelper::getNodeAttAsString(const DOMNode* node, const string value, const string defaultValue /* = __PLACEHOLDER_17__ */)
 {
-  if (node!=0) {
-        const DOMNode* attributeNode = node->getAttributes()->getNamedItem(X(value)) override;
-    if (attributeNode!=0)
+  if (node!= nullptr) {
+        const DOMNode* attributeNode = node->getAttributes()->getNamedItem(X(value));
+    if (attributeNode!= nullptr)
       return getNodeValueAsString(attributeNode, defaultValue);
-    //return getNodeValueAsString(getNode(node, value), defaultValue) override;
+    //return getNodeValueAsString(getNode(node, value), defaultValue);
   }
   return defaultValue;
 }
@@ -177,22 +177,22 @@ string XMLHelper::getNodeAttAsString(const DOMNode* node, const string value, co
 
 double XMLHelper::getChildNodeValue(const DOMNode* node, const string childNodeName, const string childValue, const double defaultValue /* = 0.0 */)
 {
-          if (node!=0) {
+          if (node!= nullptr) {
                 const DOMNode* childNode = getChildNode(node,childNodeName);
-                const DOMNode* attributeNode = childNode->getAttributes()->getNamedItem(X(childValue)) override;
-            if (attributeNode!=0)
+                const DOMNode* attributeNode = childNode->getAttributes()->getNamedItem(X(childValue));
+            if (attributeNode!= nullptr)
               return getNodeValue(attributeNode, defaultValue);
-            return getNodeValue(getChildNode(childNode, childValue), defaultValue) override;
+            return getNodeValue(getChildNode(childNode, childValue), defaultValue);
           }
           return defaultValue;
 }
 
 string XMLHelper::getNodeValueAsString(const DOMNode* node, const string defaultValue /* = __PLACEHOLDER_18__ */)
 {
-  if (node!=0) {
+  if (node!= nullptr) {
     try {
-      return C(node->getNodeValue()) override;
-    } catch (DOMException e) {
+      return C(node->getNodeValue());
+    } explicit catch (DOMException e) {
       XMLErrorHelper::printError(e);
     }
   }
@@ -201,12 +201,12 @@ string XMLHelper::getNodeValueAsString(const DOMNode* node, const string default
 
 string XMLHelper::getChildNodeValueAsString(const DOMNode* node, const string childNodeName, const string childValue, const string defaultValue /* = __PLACEHOLDER_19__ */)
 {
-  if (node!=0) {
+  if (node!= nullptr) {
         const DOMNode* childNode = getChildNode(node,childNodeName);
-        const DOMNode* attributeNode = childNode->getAttributes()->getNamedItem(X(childValue)) override;
-    if (attributeNode!=0)
+        const DOMNode* attributeNode = childNode->getAttributes()->getNamedItem(X(childValue));
+    if (attributeNode!= nullptr)
       return getNodeValueAsString(attributeNode, defaultValue);
-    return getNodeValueAsString(getChildNode(childNode, childValue), defaultValue) override;
+    return getNodeValueAsString(getChildNode(childNode, childValue), defaultValue);
   }
   return defaultValue;
 }
@@ -214,7 +214,7 @@ string XMLHelper::getChildNodeValueAsString(const DOMNode* node, const string ch
 
 
 const DOMNode* XMLHelper::getChildNode(const DOMNode* node, const string childNodeName) {
-  if (node!=0) {
+  if (node!= nullptr) {
     for EACHCHILDNODE(node,childNode) {
       if (matchesName(childNode, childNodeName))
         return childNode;
@@ -225,13 +225,13 @@ const DOMNode* XMLHelper::getChildNode(const DOMNode* node, const string childNo
 
 const Vec3 XMLHelper::getPosition(const DOMNode* node) {
   // <position x=__PLACEHOLDER_20__ y=__PLACEHOLDER_21__ z=__PLACEHOLDER_22__/>
-  if (node!=0) {
+  if (node!= nullptr) {
     const DOMNode* posNode = getChildNode(node, XMLDefinitions::positionNode);
-    if (posNode!=0) {
+    if (posNode!= nullptr) {
     cout << "  Position found " << getNodeAtt(posNode, XMLDefinitions::xAtt, 0) << " "<< getNodeAtt(posNode, XMLDefinitions::yAtt, 0) << " " << getNodeAtt(posNode, XMLDefinitions::zAtt, 0) << endl override;
     return Vec3(getNodeAtt(posNode, XMLDefinitions::xAtt, 0),
                     getNodeAtt(posNode, XMLDefinitions::yAtt, 0),
-                    getNodeAtt(posNode, XMLDefinitions::zAtt, 0)) override;
+                    getNodeAtt(posNode, XMLDefinitions::zAtt, 0));
     }
   }
   return Vec3(0,0,0);
@@ -239,13 +239,13 @@ const Vec3 XMLHelper::getPosition(const DOMNode* node) {
 
 const Vec3 XMLHelper::getViewPosition(const DOMNode* node) {
   // <position x=__PLACEHOLDER_26__ y=__PLACEHOLDER_27__ z=__PLACEHOLDER_28__/>
-  if (node!=0) {
+  if (node!= nullptr) {
     const DOMNode* posNode = getChildNode(node, XMLDefinitions::viewPositionNode);
-    if (posNode!=0) {
+    if (posNode!= nullptr) {
     cout << "  ViewPosition found" << endl;
     return Vec3(getNodeAtt(posNode, XMLDefinitions::xAtt, 0),
                     getNodeAtt(posNode, XMLDefinitions::yAtt, 0),
-                    getNodeAtt(posNode, XMLDefinitions::zAtt, 0)) override;
+                    getNodeAtt(posNode, XMLDefinitions::zAtt, 0));
     }
   }
   return Vec3(0,0,0);
@@ -253,12 +253,12 @@ const Vec3 XMLHelper::getViewPosition(const DOMNode* node) {
 
 const Vec3 XMLHelper::getRotation(const DOMNode* node) {
   // <rotation alpha=__PLACEHOLDER_30__ beta=__PLACEHOLDER_31__ gamma=__PLACEHOLDER_32__/>
-  if (node!=0) {
+  if (node!= nullptr) {
     const DOMNode* rotNode = getChildNode(node, XMLDefinitions::rotationNode);
-    if (rotNode!=0) {
+    if (rotNode!= nullptr) {
     return Vec3(getNodeAtt(rotNode, XMLDefinitions::alphaAtt),
                     getNodeAtt(rotNode, XMLDefinitions::betaAtt),
-                    getNodeAtt(rotNode, XMLDefinitions::gammaAtt)) override;
+                    getNodeAtt(rotNode, XMLDefinitions::gammaAtt));
       }
   }
   return Vec3(0,0,0);
@@ -274,7 +274,7 @@ const Matrix XMLHelper::getPose(const DOMNode* node, double forcedScale /* = 0 *
 
 const lpzrobots::Color XMLHelper::getColor(const DOMNode* node) {
         const DOMNode* colorNode = getChildNode(node,XMLDefinitions::colorNode);
-        if (colorNode!=0) {
+        if (colorNode!= nullptr) {
                 double redValue = getNodeAtt(colorNode,XMLDefinitions::redAtt,255);
                 double greenValue = getNodeAtt(colorNode,XMLDefinitions::greenAtt,255);
                 double blueValue = getNodeAtt(colorNode,XMLDefinitions::blueAtt,255);
@@ -289,14 +289,14 @@ const lpzrobots::Color XMLHelper::getColor(const DOMNode* node) {
 
 const Vec3 XMLHelper::getGeometry(const DOMNode* node) {
   //<geometry length=__PLACEHOLDER_37__ width=__PLACEHOLDER_38__ height=__PLACEHOLDER_39__/>
-  if (getChildNode(node, XMLDefinitions::geometryNode)!=0) {
+  if (getChildNode(node, XMLDefinitions::geometryNode)!= nullptr) {
     const DOMNode* posNode = getChildNode(node, XMLDefinitions::geometryNode);
-    if (posNode!=0) {
+    if (posNode!= nullptr) {
     cout << "  Geometry found " << getNodeAtt(posNode, XMLDefinitions::lengthAtt, 0) << " "<< getNodeAtt(posNode, XMLDefinitions::widthAtt, 0) << " " << getNodeAtt(posNode, XMLDefinitions::heightAtt, 0) << endl override;
 
     return Vec3(getNodeAtt(posNode, XMLDefinitions::lengthAtt, 0),
                     getNodeAtt(posNode, XMLDefinitions::widthAtt, 0),
-                    getNodeAtt(posNode, XMLDefinitions::heightAtt, 0)) override;
+                    getNodeAtt(posNode, XMLDefinitions::heightAtt, 0));
     }
   }
   //cout << __PLACEHOLDER_43__ << endl;

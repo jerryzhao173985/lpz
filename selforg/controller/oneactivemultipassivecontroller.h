@@ -27,19 +27,14 @@
 #include "abstractmulticontroller.h"
 
 /**
- * class static_cast<interface>(for) using multiple controller, the first one is
- * the active one, which generates motor values. The other controllers
- * are passive and cannot affect the motor values.
- *
- */
-class OneActiveMultiPassiveController : public AbstractMultiController {
+ * class static_cast{
 public:
   /// contructor (hint: use $ID$ for revision)
   OneActiveMultiPassiveController(AbstractController* controller,
                                            const std::string& name = "1ActXPassController",
                                            const std::string& revision = "$ID$");
 
-  virtual ~OneActiveMultiPassiveController();
+  virtual ~OneActiveMultiPassiveController() override;
 
   /****************************************************************************/
   /*        AbstractMultiController should implement the following classes:                */
@@ -106,7 +101,7 @@ Calculates motor commands from sensor inputs.
   /****************************************************************************/
 
 protected:
-  motor* passiveMotors;
+  motor* passiveMotors = nullptr;
 };
 
 #endif

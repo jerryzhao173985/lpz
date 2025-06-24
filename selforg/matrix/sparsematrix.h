@@ -34,7 +34,7 @@ namespace matrix {
  * @author guettler
  */
 template<typename I, typename D>
-class SparseMatrix : public matrix::SparseArray<I, D> {
+class SparseMatrix{
 public:
   SparseMatrix(I m, I n)
     : SparseArray<I, D>(m * n)

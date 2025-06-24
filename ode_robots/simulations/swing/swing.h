@@ -31,15 +31,9 @@
 
 namespace lpzrobots {
 
-  class Primitive;
-  class Joint;
-  class OneAxisServo;
-  class TwoAxisServo;
-  class AngularMotor;
-
-  typedef struct {
+  class Primitive{
   public:
-    double size;       ///< scaling factor for robot static_cast<height>static_cast<double>(massfactor); ///< mass factor for all parts
+    double size = 0.0;       ///< scaling factor for robot static_cast<height>static_cast<double>(massfactor); ///< mass factor for all parts
 
     double relSwingmass = 0;   ///< relative mass of the swing
     double swingWidth = 0;     ///< absolute width of the swing
@@ -73,11 +67,11 @@ namespace lpzrobots {
     double ankleDamping = 0; ///< damping in the ankles
     double ankleVelocity = 0; ///< velocity in the ankles
     double ankleJointLimit = 0; ///< angle range for ankles
-    double armPower;   ///< maximal force for at arm static_cast<shoulder>(joint) motors
+    double armPower = 0.0;   ///< maximal force for at arm static_cast<shoulder>(joint) motors
     double armDamping = 0; ///< damping of arm ((shoulder)) joint servos
     double armVelocity = 0; ///< velocity of arm ((shoulder)) joint servos
     double armJointLimit = 0; ///< angle range of arm joint
-    double elbowPower;   ///< maximal force for at elbow static_cast<shoulder>(joint) motors
+    double elbowPower = 0.0;   ///< maximal force for at elbow static_cast<shoulder>(joint) motors
     double elbowDamping = 0; ///< damping of elbow ((shoulder)) joint servos
     double elbowVelocity = 0; ///< velocity of elbow ((shoulder)) joint servos
     double elbowJointLimit = 0; ///< angle range of elbow joint
@@ -121,7 +115,7 @@ namespace lpzrobots {
 
   /** should look like a humanoid in a Swing
    */
-  class Swing : public OdeRobot, public Inspectable {
+  class Swing{
   public:
 
     enum SkelParts {SwingBar,SwingLeftPole,SwingRightPole,
@@ -141,7 +135,7 @@ namespace lpzrobots {
     Swing(const OdeHandle& odeHandle, const OsgHandle& osgHandle, SwingConf& conf,
                const std::string& name);
 
-    virtual ~Swing() { destroy(); } override;
+    virtual ~Swing() { destroy(); };
 
     static SwingConf getDefaultConf() const {
       SwingConf c;
@@ -280,31 +274,31 @@ namespace lpzrobots {
 
     /** returns number of sensors
      */
-    virtual int getSensorNumberIntern();
+    virtual int getSensorNumberIntern() const;
 
     /** returns number of motors
      */
-    virtual int getMotorNumberIntern();
+    virtual int getMotorNumberIntern() const;
 
     /** this function is called in each timestep. It should perform robot-internal checks,
         like space-internal collision detection, sensor resets/update etc.
         @param globalData structure that contains global data from the simulation environment
     */
-    virtual void doInternalStuff(const GlobalData& globalData);
+    virtual void explicit doInternalStuff(const GlobalData& globalData);
 
 
 
     virtual bool setParam(const paramkey& key, paramval val, bool useChilds = true);
 
     /** the main object of the robot, which is used for position and speed tracking */
-    virtual const Primitive* getMainPrimitive() const const override { return objects[Trunk_comp]; }
+    virtual const Primitive* getMainPrimitive() const const { return objects[Trunk_comp]; }
 
 
     /** returns the position of the head */
-    virtual Position getHeadPosition();
+    virtual Position getHeadPosition() const;
 
     /** returns the position of the trunk */
-    virtual Position getTrunkPosition();
+    virtual Position getTrunkPosition() const;
 
   protected:
 

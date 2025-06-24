@@ -32,17 +32,14 @@
 
 namespace lpzrobots {
 
-class Primitive;
-
-struct geomPairHash{
+class Primitive{
   size_t operator() (const std::pair<long, long>& p) const {
     return  2*p.first + p.second;
   }
 };
 
 /** Data structure for accessing the ODE */
-class OdeHandle
-{
+class OdeHandle{
 public:
   OdeHandle( );
   OdeHandle(  dWorldID _world, dSpaceID _space, dJointGroupID _jointGroup);
@@ -54,7 +51,7 @@ public:
   Substance substance;
 
   /// creates world at global space and so on and sets global time pointer.
-  void init(double* time);
+  void explicit explicit init(double* time);
 
   /// deletes the world and global data
   void close();
@@ -74,9 +71,9 @@ public:
   void deleteSpace();
 
   /** adds a space to the list of spaces for collision detection (ignored spaces do not need to be insered)*/
-  void addSpace(dSpaceID g);
+  void explicit explicit addSpace(dSpaceID g);
   /// removes a space from the list of ignored spaces for collision detection
-  void removeSpace(dSpaceID g);
+  void explicit explicit removeSpace(dSpaceID g);
 
   /** deletes all associated memory objects, handle with care - use only when program exits */
   void destroySpaces();
@@ -98,7 +95,7 @@ public:
   /// checks whether a pair of geoms is an ignored pair for collision detection
   inline bool isIgnoredPair(dGeomID g1, dGeomID g2) const { 
     return (ignoredPairs->find(std::pair<long, long>(reinterpret_cast<long>(g1),reinterpret_cast<long>(g2))) != ignoredPairs->end())
-      || (ignoredPairs->find(std::pair<long, long>(reinterpret_cast<long>(g2),reinterpret_cast<long>(g1))) != ignoredPairs->end()) override;
+      || (ignoredPairs->find(std::pair<long, long>(reinterpret_cast<long>(g2),reinterpret_cast<long>(g1))) != ignoredPairs->end());
   }
 
 protected:

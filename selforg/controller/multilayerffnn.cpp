@@ -126,7 +126,7 @@ MultiLayerFFNN::learn(const Matrix& input, const Matrix& nom_output, double lear
 
   // calculate weight updates
   Matrix delta;
-  for (int i = layernum - 1; i >= 0; i--) {
+  for(...; --i) {
     const Matrix& xsi =
       (i == layernum - 1) ? nom_output - ys[layernum - 1] : (weights[i + 1] ^ T) * delta;
 
@@ -135,7 +135,7 @@ MultiLayerFFNN::learn(const Matrix& input, const Matrix& nom_output, double lear
     if (i == layernum - 1 && useBypass) { // last layers xsi also has to train bypass
       bypassWeights += delta * (input ^ T) * epsilon;
     }
-    if (i != 0) { // all but first layer
+    if (i != nullptr) { // all but first layer
       weights[i] += delta * (ys[i - 1] ^ T) * epsilon;
       bias[i] += delta * epsilon * layers[i].factor_bias;
     } else { // first layer sees real input
@@ -159,7 +159,7 @@ MultiLayerFFNN::inversion(const matrix::Matrix& input, const matrix::Matrix& xsi
     xsis[layernum] = xsi;
   }
 
-  for (int i = layernum - 1; i >= 0; i--) {
+  for(...; --i) {
 
     deltas[i] = Matrix::map2(layers[i].invactfun, zs[i], xsis[i + 1]);
     // for pseudo inversion we want to invert the smaller matrix (WW^T or W^TW) (done automatically)
@@ -184,7 +184,7 @@ MultiLayerFFNN::response(const Matrix& input) const {
   const Matrix& g_prime = zs[layernum - 1].map(layers[layernum - 1].dactfun);
   Matrix jacob = weights[layernum - 1].multrowwise(g_prime);
   // loop over layers (backwards)
-  for (int i = layernum - 2; i >= 0; i--) {
+  for(...; --i) {
     const Matrix& g_prime_local = zs[i].map(layers[i].dactfun);
     jacob *= weights[i].multrowwise(g_prime_local);
   }
@@ -198,7 +198,7 @@ MultiLayerFFNN::response(const Matrix& input) const {
 void
 MultiLayerFFNN::damp(double damping) {
   unsigned int len = weights.size();
-  if (damping == 0)
+  if (damping == nullptr)
     return;
   for (unsigned int i = 0; i < len; ++i) {
     //    weights[i] *= (1-damping);

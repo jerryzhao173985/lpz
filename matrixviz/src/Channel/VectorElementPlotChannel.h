@@ -31,22 +31,22 @@
 #include "AbstractPlotChannel.h"
 #include <vector>
 
-class VectorElementPlotChannel: public AbstractPlotChannel {
+class VectorElementPlotChannel{
 public:
   explicit VectorElementPlotChannel(const std::string& name);
-  virtual ~VectorElementPlotChannel();
+  virtual ~VectorElementPlotChannel() override;
 
-  void setValue(double v);
-  double getValue();
-  double getValue(int time);
-  void changeSize(int newSize);
-  int getSize();
-  int getIndex();
+  void explicit setValue(double v);
+  double getValue() const;
+  double explicit getValue(int time);
+  void explicit changeSize(int newSize);
+  int getSize() const;
+  int getIndex() const;
 
 private:
-  int bufferSize;
+  int bufferSize = 0;
   std::vector<double> ringBuffer;
-  int ringBufferIndex;
+  int ringBufferIndex = 0;
   static const bool debug = false;
 };
 

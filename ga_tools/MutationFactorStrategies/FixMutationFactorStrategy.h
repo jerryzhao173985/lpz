@@ -31,16 +31,7 @@
 #include <vector>
 
 //forward declaration
-class IValue;
-class Gen;
-
-//ga_tools includes
-#include "IMutationFactorStrategy.h"
-
-/**
- * This strategy implementation return a fix value for the mutation factor.
- */
-class FixMutationFactorStrategy : public IMutationFactorStrategy {
+class IValue{
 public:
 	/**
 	 * constructor
@@ -51,7 +42,7 @@ public:
 	/**
 	 * default destructor
 	 */
-	virtual ~FixMutationFactorStrategy();
+	virtual ~FixMutationFactorStrategy() override;
 
 	/**
 	 * returns the fix value as mutation value
@@ -64,7 +55,7 @@ protected:
 	/**
 	 * the saved fix value which is giving back.
 	 */
-	IValue* m_value;
+	IValue* m_value = nullptr;
 
 private:
 	/**

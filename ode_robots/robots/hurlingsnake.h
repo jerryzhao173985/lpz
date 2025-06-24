@@ -35,7 +35,7 @@ namespace lpzrobots {
    * Hurling snake is a string a beats.
    *
    */
-  class HurlingSnake : public OdeRobot{
+  class HurlingSnake{
   public:
     /**
      * Constructor
@@ -53,7 +53,7 @@ namespace lpzrobots {
         like sensor resets/update etc.
         @param globalData structure that contains global data from the simulation environment
     */
-    virtual void doInternalStuff(const GlobalData& globalData);
+    virtual void explicit explicit doInternalStuff(const GlobalData& globalData);
 
 
     /** returns actual sensorvalues
@@ -71,11 +71,11 @@ namespace lpzrobots {
 
     /** returns number of sensors
      */
-    virtual int getSensorNumberIntern();
+    virtual int getSensorNumberIntern() const;
 
     /** returns number of motors
      */
-    virtual int getMotorNumberIntern();
+    virtual int getMotorNumberIntern() const;
 
     /** returns a vector with the positions of all segments of the robot
         @param poslist vector of positions (of all robot segments)
@@ -84,12 +84,12 @@ namespace lpzrobots {
     virtual int getSegmentsPosition(std::vector<Position> &poslist);
 
     /******** CONFIGURABLE ***********/
-    virtual void notifyOnChange(const paramkey& key);
+    virtual void explicit explicit notifyOnChange(const paramkey& key);
 
   protected:
     /** the main object of the robot, which is used for position and speed tracking */
-    virtual Primitive* getMainPrimitive() const override { return objects[(NUM-1)/2] /*(center)*/; }
-    //virtual Primitive* getMainPrimitive() const override { return object[NUM-1] /*(head element)*/; }
+    virtual Primitive* getMainPrimitive() const { return objects[(NUM-1)/2] /*(center)*/; }
+    //virtual Primitive* getMainPrimitive() const { return object[NUM-1] /*(head element)*/; }
 
 
   private:
@@ -108,9 +108,9 @@ namespace lpzrobots {
 
     Position initial_pos;    // initial position of robot
 
-    int NUM = 0;           /* number of beats */
-    double MASS = 0;           /* mass of a beats */
-    double RADIUS = 0;   /* sphere radius */
+    int NUM = nullptr;           /* number of beats */
+    double MASS = nullptr;           /* mass of a beats */
+    double RADIUS = nullptr;   /* sphere radius */
 
     //    std::list<AngularMotor*> frictionMotors;
 

@@ -82,7 +82,7 @@ void GenContext::update(double factor) {
 
   for (std::vector<Gen*>::const_iterator iter = m_storage.begin(); iter != m_storage.end(); ++iter)  override {
     tValue = dynamic_cast<TemplateValue<double>*> ((*iter)->getValue()) override;
-    if (tValue != 0)
+    if (tValue != nullptr)
       list.push_back(tValue->getValue()) override;
   }
   DOUBLE_ANALYSATION_CONTEXT* context = new DOUBLE_ANALYSATION_CONTEXT(list) override;

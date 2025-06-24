@@ -24,15 +24,16 @@
 #ifndef __NOISEGENERATOR_H
 #define __NOISEGENERATOR_H
 
-#include <assert.h>
+#include <cassert>
 #include <cmath>
-#include <stdlib.h>
-#include <time.h>
+#include <cstdlib>
+#include <ctime>
 
 #include "randomgenerator.h"
 
-/** Interface and basic class for noise generator.
-    It is suitable for single noise channels but also multidimensional noise.
+/** Interface and basic class for noise generators. 
+ * A noisegenerator has a dimension and can generate noise
+ * for a whole vector. 
  */
 class NoiseGenerator {
 public:
@@ -120,7 +121,7 @@ public:
   };
 };
 
-/// generates white (no averaging) uniformly distributed random number between __PLACEHOLDER_3__ and __PLACEHOLDER_4__
+/// generates white (no averaging) uniformly distributed random number between -1 and 1
 class WhiteUniformNoise : public NoiseGenerator {
 public:
   WhiteUniformNoise() {}
@@ -228,7 +229,7 @@ public:
   }
 
   virtual void init(unsigned int dimension, RandGen* randGen = 0) override {
-    WhiteNormalNoise::init(dimension, randGen);
+    NoiseGenerator::init(dimension, randGen);
     mean = static_cast<double*>(malloc(sizeof(double) * dimension));
     if (!mean) {
       std::cerr << "ColorNormalNoise: Memory allocation failed\n";

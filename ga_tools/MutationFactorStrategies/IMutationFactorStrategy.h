@@ -31,13 +31,7 @@
 #include <vector>
 
 //forward declarations
-class Gen;
-class IValue;
-
-/**
- * This is a interface for a strategy, which is used by ValueMutationStrategy
- */
-class IMutationFactorStrategy {
+class Gen{
 public:
 	/**
 	 * default constructor

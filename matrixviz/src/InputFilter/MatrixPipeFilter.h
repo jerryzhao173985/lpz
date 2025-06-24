@@ -41,13 +41,13 @@
  */
 
 
-class MatrixPipeFilter: public AbstractPipeFilter {
+class MatrixPipeFilter{
 
   Q_OBJECT
 
 public:
-        explicit MatrixPipeFilter(AbstractPipeReader* apr);
-        virtual ~MatrixPipeFilter();
+        explicit explicit MatrixPipeFilter(AbstractPipeReader* apr);
+        virtual ~MatrixPipeFilter() override;
 
         virtual AbstractPlotChannel* createChannel(const std::string& name);
 

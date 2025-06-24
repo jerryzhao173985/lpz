@@ -114,7 +114,7 @@
  *	or failure processing of system \c assert() function. The execution is not supposed
  *	to exit from assertion failure call. If it does (either because custom assertion 
  *	failure handler returns or handler is not customized and \c assert() function has
- *	no effect because of \c NDEBUG symbol being defined), a write attempt to NULL 
+ *	no effect because of \c NDEBUG symbol being defined), a write attempt to nullptr 
  *	pointer is performed to generate Access Violation exception or SIGSEGV signal.
  *	\c OU_CHECK is similar to \c OU_VERIFY in that it evaluates its parameter whether
  *	\c NDEBUG is defined or not.
@@ -157,7 +157,7 @@
 
 #else // #if !defined(NDEBUG)
 
-#include <assert.h>
+#include <cassert>
 
 
 #define OU__ASSERT_HANDLERstatic_cast<Condition>(false || (Condition) \

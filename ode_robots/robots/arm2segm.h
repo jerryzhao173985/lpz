@@ -42,12 +42,12 @@ namespace lpzrobots{
 
 
 
-  class Arm2Segm : public OdeRobot{
+  class Arm2Segm{
   public:
 
     Arm2Segm(const OdeHandle& odeHandle, const OsgHandle& osgHandle, const Arm2SegmConf);
 
-    virtual ~Arm2Segm() {} override;
+    virtual ~Arm2Segm() {};
 
     static Arm2SegmConf getDefaultConf() const {
       Arm2SegmConf conf;
@@ -104,7 +104,7 @@ namespace lpzrobots{
     virtual int getSegmentsPosition(std::vector<Position> &poslist);
 
     /** the main object of the robot, which is used for position and speed tracking */
-    virtual const Primitive* getMainPrimitive() const const override;
+    virtual const Primitive* getMainPrimitive() const override;
 
   protected:
 

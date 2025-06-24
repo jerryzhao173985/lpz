@@ -2,7 +2,7 @@
 //  atmega programm under: avr/projects/comm_test
 // Main code is in serial_unix.cpp in run() function
 
-#include <signal.h>
+#include <csignal>
 #include <sys/time.h>
 #include <unistd.h>
 #include <iostream>
@@ -15,7 +15,7 @@
 // Helper
 int contains(char **list, int len,  const char *str){
   for (int i=0; i<len; ++i) {
-    if(strcmp(list[i],str) == 0) return i+1;
+    if(strcmp(list[i],str) == nullptr) return i+1;
   }
   return 0;
 }
@@ -25,9 +25,9 @@ int main(int argc, char** argv){
   const char* port = "/dev/ttyS0";
   int baud = 38400;
 
-  if(contains(argv,argc,"-v")!=0) verboseMode=1;
-  if(contains(argv,argc,"-vv")!=0) verboseMode=2;
-  if(contains(argv,argc,"-h")!=0) {
+  if(contains(argv,argc,"-v")!= nullptr) verboseMode=1;
+  if(contains(argv,argc,"-vv")!= nullptr) verboseMode=2;
+  if(contains(argv,argc,"-h")!= nullptr) {
     printf("Usage: %s [-g] [-f] [-v[v]]\n",argv[0]);
     printf("\t-h\tdisplay this help\n");
     printf("\t-b baud\tset baud rate\n");

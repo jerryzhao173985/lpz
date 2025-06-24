@@ -23,7 +23,7 @@
  *                                                                         *
  *
  ***************************************************************************/
-#include <stdio.h>
+#include <cstdio>
 
 // include noisegenerator (used for adding noise to sensorvalues)
 #include <selforg/noisegenerator.h>
@@ -31,44 +31,18 @@
 // include simulation environment stuff
 #include <ode_robots/simulation.h>
 
-// include agent (class for holding a robot, a controller and a wiring)
-#include <ode_robots/odeagent.h>
-
-// used wiring
-#include <selforg/one2onewiring.h>
-#include <selforg/derivativewiring.h>
-
-// used robot
-#include <ode_robots/fourwheeled.h>
-
-#include <ode_robots/torquesensor.h>
-#include <ode_robots/angularmotor.h>
-#include <ode_robots/joint.h>
-
-// used arena
-#include <ode_robots/playground.h>
-// used passive spheres
-#include <ode_robots/passivesphere.h>
-
-// used controller
-#include <selforg/sinecontroller.h>
-
-// fetch all the stuff of lpzrobots into scope
-using namespace lpzrobots;
-
-
-class ThisSim : public Simulation {
+// include agent (class for{
 public:
   double value = 0;
-  TorqueSensor* ts;
+  TorqueSensor* ts = nullptr;
   std::list<Joint*> joints;
   std::list<Primitive*> primitives;
-  AngularMotor* amotor;
+  AngularMotor* amotor = nullptr;
 
   // starting function (executed once at the beginning of the simulation loop)
   void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global)
   {
-    setCameraHomePos(Pos(5.2728, 7.2112, 3.31768), Pos(140.539, -13.1456, 0)) override;
+    setCameraHomePos(Pos(5.2728, 7.2112, 3.31768), Pos(140.539, -13.1456, 0));
     global.odeConfig.setParam("noise",0);
 
     bool fixed=false;
@@ -80,38 +54,38 @@ public:
     value=0;
     value2=0;
 
-    explicit if(fixed){
+    if(fixed){
       Box* b1 = new Box(1,1,1);
       Box* b2 = new Box(1,1,1);
       Box* b3 = new Box(1,1,1);
       b1->init(odeHandle,1, osgHandle, Primitive::Geom | Primitive::Draw);
       b2->init(odeHandle,1, osgHandle);
       b3->init(odeHandle,1, osgHandle);
-      b1->setPose(TRANSM(0,0,0.5)) override;
-      b2->setPose(TRANSM(0,0,1.7)); // *ROTM(M_PI/10,1,0,0)) override;
-      b3->setPose(TRANSM(-0.5,-0.5,4)) override;
+      b1->setPose(TRANSM(0,0,0.5));
+      b2->setPose(TRANSM(0,0,1.7)); // *ROTM(M_PI/10,1,0,0));
+      b3->setPose(TRANSM(-0.5,-0.5,4));
       primitives.push_back(b1);
       primitives.push_back(b2);
       primitives.push_back(b3);
-      FixedJoint* j = new FixedJoint(b2,b1,(b1->getPosition()+b2->getPosition())*0.5) override;
+      FixedJoint* j = new FixedJoint(b2,b1,(b1->getPosition()+b2->getPosition())*0.5);
       j->init(odeHandle,osgHandle,true);
       joints.push_back(j);
       ts = new TorqueSensor(1);
       ts->init(b1, j);
     }
 
-    explicit if(hinge){
+    if(hinge){
       Box* b1 = new Box(1,1,1);
       Box* b2 = new Box(1,1,1);
       b1->init(odeHandle,1, osgHandle, Primitive::Geom | Primitive::Draw);
       b2->init(odeHandle,1, osgHandle);
       Pose m = ROTM(M_PI/10,0,0,1);
-      b1->setPose(TRANSM(0,0,3)*m) override;
-      b2->setPose(TRANSM(0,0,1)*m); // *ROTM(M_PI/10,1,0,0)) override;
+      b1->setPose(TRANSM(0,0,3)*m);
+      b2->setPose(TRANSM(0,0,1)*m); // *ROTM(M_PI/10,1,0,0));
       primitives.push_back(b1);
       primitives.push_back(b2);
       HingeJoint* j = new HingeJoint(b2,b1,(b1->getPosition()+b2->getPosition())*0.5,
-                                     Axis(1,0,0)*m) override;
+                                     Axis(1,0,0)*m);
       j->init(odeHandle,osgHandle,true);
       joints.push_back(j);
       ts = new TorqueSensor(1);
@@ -121,18 +95,18 @@ public:
     }
 
     // bug of amotor with fixed object
-    explicit if(universalfixed){
+    if(universalfixed){
       Box* b1 = new Box(1,1,1);
       Box* b2 = new Box(1,1,1);
       b1->init(odeHandle,1, osgHandle, Primitive::Geom | Primitive::Draw);
       b2->init(odeHandle,1, osgHandle);
       Pose m = ROTM(M_PI/10,0,0,1);
-      b1->setPose(TRANSM(0,0,3)*m) override;
-      b2->setPose(TRANSM(0,0,1)*m); // *ROTM(M_PI/10,1,0,0)) override;
+      b1->setPose(TRANSM(0,0,3)*m);
+      b2->setPose(TRANSM(0,0,1)*m); // *ROTM(M_PI/10,1,0,0));
       primitives.push_back(b1);
       primitives.push_back(b2);
       UniversalJoint* j = new UniversalJoint(b2,b1,(b1->getPosition()+b2->getPosition())*0.5,
-                                             Axis(0,1,0)*m, Axis(1,0,0)*m) override;
+                                             Axis(0,1,0)*m, Axis(1,0,0)*m);
       j->init(odeHandle,osgHandle,true);
       joints.push_back(j);
       ts = new TorqueSensor(1);
@@ -141,18 +115,18 @@ public:
       amotor = new AngularMotor2Axis(odeHandle,j,10,10);
     }
 
-    explicit if(universal){
+    if(universal){
       Box* b1 = new Box(1,1,1);
       Box* b2 = new Box(1,1,1);
       b1->init(odeHandle,1, osgHandle);
       b2->init(odeHandle,10, osgHandle);
       Pose m = ROTM(M_PI/10,0,0,1);
-      b1->setPose(TRANSM(0,0,4)*m) override;
-      b2->setPose(TRANSM(0,0,0.5)*m); // *ROTM(M_PI/10,1,0,0)) override;
+      b1->setPose(TRANSM(0,0,4)*m);
+      b2->setPose(TRANSM(0,0,0.5)*m); // *ROTM(M_PI/10,1,0,0));
       primitives.push_back(b1);
       primitives.push_back(b2);
       UniversalJoint* j = new UniversalJoint(b2,b1,Pos(0,0,3)*m,
-                                             Axis(0,1,0)*m, Axis(1,0,0)*m) override;
+                                             Axis(0,1,0)*m, Axis(1,0,0)*m);
       j->init(odeHandle,osgHandle,true);
       joints.push_back(j);
       ts = new TorqueSensor(10,8);
@@ -163,7 +137,7 @@ public:
 
 
 
-    explicit if(vehicle){
+    if(vehicle){
       // use FourWheeled vehicle as robot:
       FourWheeledConf fc = FourWheeled::getDefaultConf();
       fc.twoWheelMode = true;
@@ -173,8 +147,8 @@ public:
                                         fc, "TestVehicle");
       ts = new TorqueSensor(1);
       // attach to main primitive (does not matter) and to 0th joint
-      fw->addSensor(std::shared_ptr<Sensor>(ts), Attachement(-1,0)) override;
-      fw->place(osg::Matrix::translate(0,0,0)) override;
+      fw->addSensor(std::shared_ptr<Sensor>(ts), Attachement(-1,0));
+      fw->place(osg::Matrix::translate(0,0,0));
       global.configs.push_back(fw);
 
       AbstractController *controller = new SineController();
@@ -182,7 +156,7 @@ public:
       controller->setParam("phaseshift",0.);
       global.configs.push_back(controller);
 
-      One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
+      One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1));
 
       OdeAgent* agent = new OdeAgent(global);
       agent->init(controller, fw, wiring);
@@ -198,7 +172,7 @@ public:
       (*p)->update();
     }
     ts->sense(globalData);
-    explicit if(control){
+    if(control){
       std::list<sensor> ss = ts->getList();
       printf("Sensor: ");
       FOREACHC(std::list<sensor>, ss,s){
@@ -211,7 +185,7 @@ public:
 
   // add own key handling stuff here, just insert some case values
   virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down) override {
-    explicit if (down) { // only when key is pressed, not when released
+    if (down) { // only when key is pressed, not when released
       switch ( static_cast<char> key )
         {
         case 'k':

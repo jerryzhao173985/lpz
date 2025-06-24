@@ -28,20 +28,7 @@
 #define VALUEMUTATIONSTRATEGY_H_
 
 //forward declarations
-class Gen;
-class Individual;
-class GenContext;
-class SingletonGenFactory;
-class IMutationFactorStrategy;
-
-//ga_tools includes
-#include "IMutationStrategy.h"
-
-/**
- * this mutation strategy clculate a mutation factor by using a
- * mutation factor strategy an add this factor to the old gen.
- */
-class ValueMutationStrategy : public IMutationStrategy {
+class Gen{
 public:
 	/**
 	 * constructor
@@ -53,7 +40,7 @@ public:
 	/**
 	 * default destructor
 	 */
-	virtual ~ValueMutationStrategy();
+	virtual ~ValueMutationStrategy() override;
 
 	/**
 	 * mutate a gen
@@ -76,7 +63,7 @@ protected:
 	/**
 	 * the mutation factor strategy
 	 */
-	IMutationFactorStrategy* m_strategy;
+	IMutationFactorStrategy* m_strategy = nullptr;
 
 	/**
 	 * the mutation probability

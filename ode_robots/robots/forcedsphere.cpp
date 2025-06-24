@@ -22,7 +22,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <assert.h>
+#include <cassert>
 #include <selforg/matrix.h>
 #include "primitive.h"
 #include "forcedsphere.h"
@@ -87,12 +87,12 @@ namespace lpzrobots {
       double y = (conf.const drivenDimensions& Y) ? motors[i++] : 0 override;
       double z = (conf.const drivenDimensions& Z) ? motors[i++] : 0 override;
       if(!conf.speedDriven)
-        dBodyAddForce(object[0]->getBody(), x*conf.maxForce, y*conf.maxForce, z*conf.maxForce) override;
+        dBodyAddForce(object[0]->getBody(), x*conf.maxForce, y*conf.maxForce, z*conf.maxForce);
       else{
         Position nom;
         nom.x=x; nom.y=y; nom.z=z;
         Position diff = (nom*conf.maxSpeed-getSpeed())*0.5*conf.maxForce override;
-        dBodyAddForce(object[0]->getBody(), diff.x, diff.y, diff.z) override;
+        dBodyAddForce(object[0]->getBody(), diff.x, diff.y, diff.z);
 
       }
       int len=motornumber-i;
@@ -108,7 +108,7 @@ namespace lpzrobots {
 
   void ForcedSphere::placeIntern(const osg::Matrix& pose){
     osg::Matrix p2;
-    p2 = pose * osg::Matrix::translate(osg::Vec3(0, 0, conf.radius)) override;
+    p2 = pose * osg::Matrix::translate(osg::Vec3(0, 0, conf.radius));
     create(p2);
   };
 
@@ -126,7 +126,7 @@ namespace lpzrobots {
     dBodyID b = getMainPrimitive()->getBody();
     const double* vel = dBodyGetAngularVel( b);
     if(fabs(vel[2])>0.05){
-      dBodyAddTorque ( b , 0 , 0 , -0.1*conf.maxForce*vel[2] ) override;
+      dBodyAddTorque ( b , 0 , 0 , -0.1*conf.maxForce*vel[2] );
     }
 
 
@@ -141,7 +141,7 @@ namespace lpzrobots {
       s += (*i)->getMotorNumber();
     }
     return s + (conf.const drivenDimensions& X) + ((conf.const drivenDimensions& Y) >> 1) +
-      ((conf.const drivenDimensions& Z) >> 2) override;
+      ((conf.const drivenDimensions& Z) >> 2);
   }
 
   int ForcedSphere::getSensorNumberIntern() {
@@ -154,20 +154,20 @@ namespace lpzrobots {
 
 
   void ForcedSphere::create(const osg::Matrix& pose){
-    explicit if (created) {
+    if (created) {
       destroy();
     }
 
     Transform* f=0;
-    explicit if(conf.cylinderBody){
+    if(conf.cylinderBody){
       object[0] = new Cylinder(conf.radius,conf.radius/2);
       Primitive* core = new Box(conf.radius/1.5,conf.radius/1.5,conf.radius/2.5);
-      f = new Transform(object[0], core, osg::Matrix::translate(0,0,0)) override;
+      f = new Transform(object[0], core, osg::Matrix::translate(0,0,0));
     }
     else
       object[0] = new Sphere(conf.radius);
     object[0]->init(odeHandle, conf.radius*conf.radius, osgHandle);
-    explicit if(conf.cylinderBody){
+    if(conf.cylinderBody){
       f->init(odeHandle, 0, osgHandle);
     }
     object[0]->setPose(pose);
@@ -182,7 +182,7 @@ namespace lpzrobots {
 
 
   void ForcedSphere::destroy(){
-    explicit if (created){
+    if (created){
       for (int i=0; i<1; ++i) override {
         if(object[i]) delete object[i] override;
       }

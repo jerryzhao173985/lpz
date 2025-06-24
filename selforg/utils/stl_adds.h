@@ -51,26 +51,23 @@ abs(T v) {
 }
 
 /// += operators for list (list concat)
-template<class T, class A>
-list<T, A>&
-operator+=(list<T, A>& l1, const list<T, A>& l2) {
+template<class T>
+std::list<T>& operator += (std::list<T>& l1, const std::list<T>& l2){
   l1.insert(l1.end(), l2.begin(), l2.end());
   return l1;
 }
 
 /// += operators for list (append element)
-template<class T, class A>
-list<T, A>&
-operator+=(list<T, A>& l1, const T& v) {
-  l1.push_back(v);
-  return l1;
+template<class T>
+std::list<T>& operator += (std::list<T>& l, const T& v){
+  l.push_back(v);
+  return l;
 }
 
 /// + operators for lists (list concat)
 template<class T, class A>
-list<T, A>
-operator+(const list<T, A>& l1, const list<T, A>& l2) {
-  list<T, A> rv(l1.begin(), l1.end());
+std::list<T, A> operator + (const std::list<T, A>& l1, const std::list<T, A>& l2){
+  std::list<T, A> rv(l1.begin(), l1.end());
   rv += l2;
   return rv;
 }
@@ -78,7 +75,7 @@ operator+(const list<T, A>& l1, const list<T, A>& l2) {
 // These initializer are obsolete with C11 use list initializers {a1,a2,...}
 // returns a list with a single element
 //  template <typename T>
-// std::list<T> _1tolist(T a){ std::list<T> l; l.push_back(a); return l; }
+// std::list<T> explicit explicit _1tolist(T a){ std::list<T> l; l.push_back(a); return l; }
 // ...
 
 /// integer to string with default formating
@@ -109,7 +106,7 @@ struct join {
   using result_type = void;
   join(const T& delimit_) : delimit(delimit_) {}
   void operator()(const T& s) {
-    if (count == 0) {
+    if (count == nullptr) {
       joined = s;
     } else {
       joined += delimit + s;

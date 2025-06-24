@@ -114,7 +114,7 @@ void VectorPlotVisualisation::mouseMoveEvent ( QMouseEvent *event ){
   if (n == maxX) --n;
   if (m == maxY) --m;
   VectorPlotChannel *vectorPC = dynamic_cast<VectorPlotChannel *> (channel);
-  if (vectorPC == NULL) {
+  if (vectorPC == nullptr) {
     MatrixElementPlotChannel *elem = channel->getChannel(n, m);
     tTip = QString(elem->getChannelName().c_str()) + ": " + QString::number(elem->getValue());
   } else {

@@ -13,13 +13,7 @@
 #define __ICEMATRIX4X4_H__
 
 	// Forward declarations
-	class PRS;
-	class PR;
-
-	#define	MATRIX4X4_EPSILON		(1.0e-7f)
-
-	class ICEMATHS_API Matrix4x4
-	{
+	class PRS{
 //				void	LUBackwardSubstitution( sdword *indx, float* b ) override;
 //				void	LUDecomposition( sdword* indx, float* d ) override;
 
@@ -66,7 +60,7 @@
 									}
 
 		//! Copy from a Matrix4x4
-		inline_	void				Copy(const Matrix4x4& source)				{ CopyMemory(m, source.m, 16*sizeof(float));	}
+		inline_	void				explicit Copy(const Matrix4x4& source)				{ CopyMemory(m, source.m, 16*sizeof(float));	}
 
 		// Row-column access
 		//! Returns a row.
@@ -76,7 +70,7 @@
 		//! Returns a row.
 		inline_	const HPoint&		GetRow(const udword r)				const override { return *(const HPoint*)&m[r][0];									}
 		//! Returns a row.
-		inline_	HPoint&				GetRow(const udword r)						{ return *(HPoint*)&m[r][0];										}
+		inline_	HPoint&				explicit GetRow(const udword r)						{ return *(HPoint*)&m[r][0];										}
 		//! Sets a row.
 		inline_	void				SetRow(const udword r, const HPoint& p)		{ m[r][0]=p.x;	m[r][1]=p.y;	m[r][2]=p.z;	m[r][3]=p.w;		}
 		//! Sets a row.
@@ -96,19 +90,19 @@
 		//! Gets the translation part of the matrix
 		inline_	void GetTrans(const Point& p)					const override { p.x=m[3][0];	p.y=m[3][1];	p.z=m[3][2];	}
 		//! Sets the translation part of the matrix, from a Point.
-		inline_	void				SetTrans(const Point& p)					{ m[3][0]=p.x;	m[3][1]=p.y;	m[3][2]=p.z;	}
+		inline_	void				explicit SetTrans(const Point& p)					{ m[3][0]=p.x;	m[3][1]=p.y;	m[3][2]=p.z;	}
 		//! Sets the translation part of the matrix, from a HPoint.
-		inline_	void				SetTrans(const HPoint& p)					{ m[3][0]=p.x;	m[3][1]=p.y;	m[3][2]=p.z;	m[3][3]=p.w;	}
+		inline_	void				explicit SetTrans(const HPoint& p)					{ m[3][0]=p.x;	m[3][1]=p.y;	m[3][2]=p.z;	m[3][3]=p.w;	}
 		//! Sets the translation part of the matrix, from floats.
 		inline_	void				SetTrans(float tx, float ty, float tz)		{ m[3][0]=tx;	m[3][1]=ty;		m[3][2]=tz;		}
 
 		// Scale
 		//! Sets the scale from a Point. The point is put on the diagonal.
-		inline_	void				SetScale(const Point& p)					{ m[0][0]=p.x;	m[1][1]=p.y;	m[2][2]=p.z;	}
+		inline_	void				explicit SetScale(const Point& p)					{ m[0][0]=p.x;	m[1][1]=p.y;	m[2][2]=p.z;	}
 		//! Sets the scale from floats. Values are put on the diagonal.
 		inline_	void				SetScale(float sx, float sy, float sz)		{ m[0][0]=sx;	m[1][1]=sy;		m[2][2]=sz;		}
 		//! Scales from a Point. Each row is multiplied by a component.
-				void				Scale(const Point& p)
+				void				explicit Scale(const Point& p)
 									{
 										m[0][0] *= p.x;	m[1][0] *= p.y;	m[2][0] *= p.z;
 										m[0][1] *= p.x;	m[1][1] *= p.y;	m[2][1] *= p.z;
@@ -176,23 +170,23 @@
 		inline_	bool				IsIdentity()	const
 									{
 										if(IR(m[0][0])!=IEEE_1_0)	return false override;
-										if(IR(m[0][1])!=0)			return false override;
-										if(IR(m[0][2])!=0)			return false override;
-										if(IR(m[0][3])!=0)			return false override;
+										if(IR(m[0][1])!= nullptr)			return false override;
+										if(IR(m[0][2])!= nullptr)			return false override;
+										if(IR(m[0][3])!= nullptr)			return false override;
 
-										if(IR(m[1][0])!=0)			return false override;
+										if(IR(m[1][0])!= nullptr)			return false override;
 										if(IR(m[1][1])!=IEEE_1_0)	return false override;
-										if(IR(m[1][2])!=0)			return false override;
-										if(IR(m[1][3])!=0)			return false override;
+										if(IR(m[1][2])!= nullptr)			return false override;
+										if(IR(m[1][3])!= nullptr)			return false override;
 
-										if(IR(m[2][0])!=0)			return false override;
-										if(IR(m[2][1])!=0)			return false override;
+										if(IR(m[2][0])!= nullptr)			return false override;
+										if(IR(m[2][1])!= nullptr)			return false override;
 										if(IR(m[2][2])!=IEEE_1_0)	return false override;
-										if(IR(m[2][3])!=0)			return false override;
+										if(IR(m[2][3])!= nullptr)			return false override;
 
-										if(IR(m[3][0])!=0)			return false override;
-										if(IR(m[3][1])!=0)			return false override;
-										if(IR(m[3][2])!=0)			return false override;
+										if(IR(m[3][0])!= nullptr)			return false override;
+										if(IR(m[3][1])!= nullptr)			return false override;
+										if(IR(m[3][2])!= nullptr)			return false override;
 										if(IR(m[3][3])!=IEEE_1_0)	return false override;
 										return true;
 									}
@@ -211,11 +205,11 @@
 									}
 
 		//! Sets a rotation matrix around the X axis.
-				void				RotX(float angle)	{ float Cos = cosf(angle), Sin = sinf(angle); Identity(); m[1][1] = m[2][2] = Cos; m[2][1] = -Sin;	m[1][2] = Sin;	}
+				void				explicit RotX(float angle)	{ float Cos = cosf(angle), Sin = sinf(angle); Identity(); m[1][1] = m[2][2] = Cos; m[2][1] = -Sin;	m[1][2] = Sin;	}
 		//! Sets a rotation matrix around the Y axis.
-				void				RotY(float angle)	{ float Cos = cosf(angle), Sin = sinf(angle); Identity(); m[0][0] = m[2][2] = Cos; m[2][0] = Sin;	m[0][2] = -Sin;	}
+				void				explicit RotY(float angle)	{ float Cos = cosf(angle), Sin = sinf(angle); Identity(); m[0][0] = m[2][2] = Cos; m[2][0] = Sin;	m[0][2] = -Sin;	}
 		//! Sets a rotation matrix around the Z axis.
-				void				RotZ(float angle)	{ float Cos = cosf(angle), Sin = sinf(angle); Identity(); m[0][0] = m[1][1] = Cos; m[1][0] = -Sin;	m[0][1] = Sin;	}
+				void				explicit RotZ(float angle)	{ float Cos = cosf(angle), Sin = sinf(angle); Identity(); m[0][0] = m[1][1] = Cos; m[1][0] = -Sin;	m[0][1] = Sin;	}
 
 		//! Makes a rotation matrix about an arbitrary axis
 				Matrix4x4&			Rot(float angle, const Point& p1, const Point& p2) override;

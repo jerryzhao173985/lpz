@@ -20,16 +20,14 @@
 #define __FFNNCONTROLLER_H
 
 #include "abstractcontroller.h"
-#include <assert.h>
+#include <cassert>
 #include <cmath>
 
 #include <selforg/matrix.h>
 #include <selforg/multilayerffnn.h>
 
 /**
- * class for robot controller with a fixed neural network
- */
-class FFNNController : public AbstractController {
+ * class for{
 
 public:
   /** @param networkfilename file to load the network
@@ -55,7 +53,7 @@ public:
 
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
 
-  virtual ~FFNNController();
+  virtual ~FFNNController() override;
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
   virtual int getSensorNumber() const override {

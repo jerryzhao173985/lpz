@@ -31,9 +31,7 @@
 
 namespace lpzrobots {
 
-  class Primitive;
-
-  class ForcedSphereConf {
+  class Primitive{
   public:
     ForcedSphereConf();
     ~ForcedSphereConf();
@@ -53,16 +51,15 @@ namespace lpzrobots {
     /// list of sensors that are mounted at the robot. (e.g.\ AxisOrientationSensor)
     std::list<Sensor*> sensors;
     /// adds a sensor to the list of sensors
-    void addSensor(Sensor* s) { sensors.push_back(s); }
+    void explicit explicit addSensor(Sensor* s) { sensors.push_back(s); }
     /// list of motors that are mounted at the robot. (e.g.\ Speaker)
     std::list<Motor*> motors;
     /// adds a motor to the list of motors
-    void addMotor(Motor* m) { motors.push_back(m); }
+    void explicit explicit addMotor(Motor* m) { motors.push_back(m); }
 
   };
 
-  class ForcedSphere : public OdeRobot
-  {
+  class ForcedSphere{
   protected:
     Primitive* object[1];
     bool created = false;
@@ -81,7 +78,7 @@ namespace lpzrobots {
     ForcedSphere ( const OdeHandle& odeHandle, const OsgHandle& osgHandle,
                    const ForcedSphereConf& ForcedSphereConf, const std::string& name);
 
-    virtual ~ForcedSphere();
+    virtual ~ForcedSphere() override;
 
     static ForcedSphereConf getDefaultConf() const {
       ForcedSphereConf c;
@@ -98,14 +95,14 @@ namespace lpzrobots {
 
     virtual void placeIntern(const osg::Matrix& pose);
 
-    virtual void doInternalStuff(const GlobalData& globalData);
+    virtual void explicit explicit doInternalStuff(const GlobalData& globalData);
 
     virtual int getSensorsIntern( sensor* sensors, int sensornumber );
     virtual void setMotorsIntern( const double* motors, int motornumber );
-    virtual int getMotorNumberIntern();
-    virtual int getSensorNumberIntern();
+    virtual int getMotorNumberIntern() const;
+    virtual int getSensorNumberIntern() const;
 
-    virtual Primitive* getMainPrimitive() const override { return object[0]; }
+    virtual Primitive* getMainPrimitive() const { return object[0]; }
 
   protected:
 

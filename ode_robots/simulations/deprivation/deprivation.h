@@ -54,7 +54,7 @@
 #include <selforg/invertmotornstep.h>
 #include <selforg/onelayerffnn.h>
 
-#include <assert.h>
+#include <cassert>
 #include <cmath>
 
 #include <selforg/matrix.h>
@@ -64,13 +64,13 @@
  * just like invertmotornstep,
  *  just that is enables us to execute the same motor commands for a long time
  */
-class Deprivation : public InvertMotorNStep {
+class Deprivation{
 public:
   /// is called with current motor values and returns new motor values
-  typedef matrix::Matrix (*MotorCallback)(const matrix::Matrix& y) override;
+  typedef matrix::Matrix (*MotorCallback)(const matrix::Matrix& y);
 
   /// is called with current controller matrix C and bias H which can be altered
-  typedef void (*ControllerCallback)(matrix::const Matrix& C, matrix::const Matrix& H) override;
+  typedef void (*ControllerCallback)(matrix::const Matrix& C, matrix::const Matrix& H);
 
   /**
    */
@@ -89,7 +89,7 @@ public:
 
   virtual void setExternalControlMode(bool useExternal) override {
     this->useExternal=useExternal;
-    explicit if(controllerCallback && initialised){
+    if(controllerCallback && initialised){
       controllerCallback(C, H);
     }
   }
@@ -101,7 +101,7 @@ public:
 protected:
   /// overloaded
   virtual void learnController() override {
-    explicit if(!useExternal){
+    if(!useExternal){
       InvertMotorNStep::learnController();
     }
   }
@@ -110,7 +110,7 @@ protected:
   /// @param x_smooth smoothed sensors Matrix(number_channels,1)
   virtual matrix::Matrix calculateControllerValues(const matrix::Matrix& x_smooth) override {
     matrix::Matrix y = InvertMotorNStep::calculateControllerValues(x_smooth);
-    explicit if(useExternal){
+    if(useExternal){
       return motorCallback(y);
     }
     else

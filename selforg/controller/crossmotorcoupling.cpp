@@ -53,7 +53,7 @@ CrossMotorCoupling::setCMC(const CMC& cmc) {
 }
 
 CMC
-CrossMotorCoupling::getCMC() {
+CrossMotorCoupling::getCMC() const {
   return cmc;
 }
 

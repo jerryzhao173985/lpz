@@ -41,19 +41,7 @@
 
 namespace lpzrobots {
   // forward declaration
-  class OSGPrimitive;
-
-  /**
-     CameraManipulator is a MatrixManipulator which provides a flying camera
-     updating of the camera position & orientation.
-     Left mouse button: Pan and tilt
-     Right mouse button: forward and sideways
-     Middle mouse button: up and sideways
-
-     It also enables to manipulate agents with forces
-  */
-  class CameraManipulator : public OSGCameraManipulator, public Callbackable
-    {
+  class OSGPrimitive{
     public:
 
       CameraManipulator(osg::Node* node, const GlobalData& global, const CameraHandle& cameraHandle);
@@ -63,14 +51,14 @@ namespace lpzrobots {
           it's NECCESSARY to define this funtion, otherwise
           the new manipulator WON'T WORK! (but ask me not why)
       */
-      virtual const char* className() const override { return "Default Camera"; }
+      virtual const char* className() const { return "Default Camera"; }
 
       /** set the position of the matrix manipulator using a 4x4 Matrix.*/
       virtual void setByMatrix(const osg::Matrixd& matrix);
 
       /** set the position of the matrix manipulator using a 4x4 Matrix.*/
       virtual void setByInverseMatrix(const osg::Matrixd& matrix) override {
-        setByMatrix(osg::Matrixd::inverse(matrix)) override;
+        setByMatrix(osg::Matrixd::inverse(matrix));
       }
 
       /** get the position of the manipulator as 4x4 Matrix.*/
@@ -116,16 +104,16 @@ namespace lpzrobots {
       /** manipulate agent if Manipulation is active
           (should be called every simulation step)
       */
-      virtual void manipulateAgent( const OsgHandle& osgHandle);
+      virtual void explicit explicit manipulateAgent( const OsgHandle& osgHandle);
 
       /**
        * Sets the agent to be watched with the camera.
        * @param agent to set
        */
-      virtual void setWatchedAgent(OdeAgent* agent);
+      virtual void explicit explicit setWatchedAgent(OdeAgent* agent);
 
       /// returns watched agent
-      virtual OdeAgent* getWatchedAgent();
+      virtual OdeAgent* getWatchedAgent() const;
 
       /// called if agents list changed
       virtual void doOnCallBack(BackCaller* source, BackCaller::CallbackableType type
@@ -133,7 +121,7 @@ namespace lpzrobots {
 
     protected:
 
-      virtual ~CameraManipulator();
+      virtual ~CameraManipulator() override;
 
       /** Reset the internal GUIEvent stack.*/
       virtual void flushMouseEventStack();
@@ -176,7 +164,7 @@ namespace lpzrobots {
       /** This manages the robots, switching between them and so on
           Is normally called from handle(...)
       */
-      virtual void manageAgents(const int& fkey);
+      virtual void explicit explicit manageAgents(const int& fkey);
 
 
       /** This handles robot movements, so that the camera movemenent is right affected.

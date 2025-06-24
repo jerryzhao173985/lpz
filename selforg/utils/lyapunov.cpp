@@ -83,7 +83,7 @@ Lyapunov::SlidingMatrix::step(int t,
                               const matrix::Matrix* invbuffer,
                               int buffersize) {
   if (horizon <= 0) { // infinite horizon, we count the length negatively
-    horizon--;
+    --horizon;
   } else { // for a finite horizon we have to divide by the old matrix
     int h = t - horizon;
     if (h >= 0) {

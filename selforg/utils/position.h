@@ -27,7 +27,7 @@
 #include <cmath>
 #include <iostream>
 
-class Position {
+class Position{
 public:
   Position() {
     x = y = z = 0;
@@ -39,7 +39,7 @@ public:
     z = _z;
   }
   ///  p MUST have a size of at least 3
-  Position(const double* p) {
+  explicit Position(const double* p) {
     x = p[0];
     y = p[1];
     z = p[2];

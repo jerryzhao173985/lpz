@@ -50,8 +50,7 @@
 
 
 
-class XMLParserEngine;
-namespace lpzrobots {
+class XMLParserEngine{
   class Primitive;
   class Box;
   class Capsule;
@@ -76,7 +75,7 @@ namespace lpzrobots {
  * Furthermore the created Primitives are stored in a map with key=id and value = Primitive
  * to obtain the Primitive by id
  */
-class XMLPrimitiveFactory {
+class XMLPrimitiveFactory{
   public:
     XMLPrimitiveFactory(XMLParserEngine* engine, lpzrobots::GlobalData& globalData,
         const lpzrobots::OdeHandle& odeHandle, const lpzrobots::OsgHandle& osgHandle);
@@ -174,7 +173,7 @@ class XMLPrimitiveFactory {
     static void setMaterial(const XERCESC::DOMNode* node, lpzrobots::Primitive* primitive);
 
   private:
-    XMLParserEngine* engine;
+    XMLParserEngine* engine = nullptr;
     lpzrobots::GlobalData& globalData;
     const lpzrobots::OdeHandle& odeHandle;
     const lpzrobots::OsgHandle& osgHandle;

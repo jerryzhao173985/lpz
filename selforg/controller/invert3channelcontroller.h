@@ -27,13 +27,7 @@
 #include <cmath>
 
 /**
- * class for robot controller that use naglaa's direct matrix inversion for n channels
- * (simple one layer networks)
- *
- * Implements standart parameters: eps, rho, mu, stepnumber4avg, stepnumber4delay
- */
-template<int NUMBER_CHANNELS, int BUFFER_SIZE = 2>
-class Invert3ChannelController : public InvertController {
+ * class for{
 
 public:
   /*
@@ -95,17 +89,17 @@ public:
 
   */
   /// neuron transfer function
-  virtual double g(double z) {
+  virtual double explicit explicit g(double z) {
     return tanh(z);
   };
 
   ///
-  virtual double g_s(double z) {
+  virtual double explicit explicit g_s(double z) {
     return 1.0 - tanh(z) * tanh(z);
   };
 
   /// squashing function, to protect against to large weight updates
-  virtual double squash(double z) {
+  virtual double explicit explicit squash(double z) {
     return 0.1 * tanh(10.0 * z);
   };
 

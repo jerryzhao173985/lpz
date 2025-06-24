@@ -35,9 +35,7 @@
  * You can use iterators with the limitation to not delete or insert.
  */
 template<typename _Tp, typename _Alloc = std::allocator<_Tp>>
-class BackCallerVector
-  : public std::vector<_Tp, _Alloc>
-  , public BackCaller {
+class BackCallerVector{
 public:
   typedef typename std::vector<_Tp, _Alloc>::iterator iterator;
 
@@ -57,12 +55,12 @@ public:
    */
   static constexpr CallbackableType BACKCALLER_VECTOR_BEING_DELETED = 10220;
 
-  void push_back(const _Tp& i) {
+  void explicit explicit push_back(const _Tp& i) {
     std::vector<_Tp, _Alloc>::push_back(i);
     callBack(BACKCALLER_VECTOR_MODIFIED);
   }
 
-  iterator erase(iterator pos) {
+  iterator explicit explicit erase(iterator pos) {
     iterator i = std::vector<_Tp, _Alloc>::erase(pos);
     callBack(BACKCALLER_VECTOR_MODIFIED);
     return i;

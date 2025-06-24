@@ -1,12 +1,12 @@
 #include "robotlearncontrol.h"
 #include "plotlog.h"
 
-template <int N, int buffer_size=1> class RobotLearnControl_Gnu:public RobotLearnControl<N, buffer_size>{
+template <int N, int buffer_size=1> class RobotLearnControl_Gnu{
 
 protected:
-         int t;
+         int t = 0;
 
-        inline std::string intToStr(int value)
+        inline std::string explicit intToStr(int value)
         {
           std::ostringstream stream;
           stream << value;

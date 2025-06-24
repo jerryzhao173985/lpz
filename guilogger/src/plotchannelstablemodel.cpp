@@ -43,7 +43,7 @@ int PlotChannelsTableModel::columnCount(const QModelIndex& /*parent */) const {
 QVariant PlotChannelsTableModel::data(const QModelIndex &index, int role) const {
   //printf("data: %i, %i\n",index.row(),index.column());
 
-  if (!index.isValid() || !plotInfos || plotInfos->size() == 0)
+  if (!index.isValid() || !plotInfos || plotInfos->size() == nullptr)
     return QVariant();
 
   if (index.column() > plotInfos->size()+1)
@@ -87,7 +87,7 @@ QVariant PlotChannelsTableModel::data(const QModelIndex &index, int role) const 
   }
 
   // any normal column
-  if(index.row()==0){ // enable/disable row
+  if(index.row()== nullptr){ // enable/disable row
     if(role == Qt::CheckStateRole){
       return (*plotInfos)[index.column()]->getIsVisible() ? Qt::Checked : Qt::Unchecked;
     }else
@@ -122,7 +122,7 @@ QVariant PlotChannelsTableModel::headerData(int section, Qt::Orientation orienta
     else
       return QString("Object");
   }  else {
-    if(section==0){
+    if(section== nullptr){
       return "Enable";
     }else if(section==1){
       return "Reference";
@@ -138,7 +138,7 @@ Qt::ItemFlags PlotChannelsTableModel::flags(const QModelIndex &index) const {
     return Qt::ItemIsEnabled;
   if(index.column()==plotInfos->size()){ // last column is description
     return QAbstractItemModel::flags(index) | Qt::ItemIsEnabled;
-  }else if(index.row()==0){
+  }else if(index.row()== nullptr){
     return QAbstractItemModel::flags(index) | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable;
   }else if(index.row()==1){
     return QAbstractItemModel::flags(index) | Qt::ItemIsEnabled | Qt::ItemIsEditable;
@@ -156,7 +156,7 @@ bool PlotChannelsTableModel::setData(const QModelIndex &index, const QVariant &v
 
 
   if (!index.isValid() || index.column()>=plotInfos->size()) return false;
-  if(index.row()==0){
+  if(index.row()== nullptr){
     if(role == Qt::CheckStateRole){
       (*plotInfos)[index.column()]->setIsVisible(value.toBool());
       return true;

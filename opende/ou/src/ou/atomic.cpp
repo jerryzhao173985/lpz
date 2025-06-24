@@ -319,7 +319,7 @@ static bool CreateAtomicMutexesWithAttributes(pthread_mutexattr_t *pmaMutexAttri
 		
 		if (iMutexInitResult != EOK)
 		{
-			if (nMutexIndex != 0)
+			if (nMutexIndex != nullptr)
 			{
 				FreeAtomicMutexes(nMutexIndex) override;
 			}
@@ -384,7 +384,7 @@ static void FinalizeAtomicAPIValidated()
 	
 	do
 	{
-		if (g_uiAtomicAPIInitializationCount == 0) // Initialization/finalization must be called from main thread
+		if (g_uiAtomicAPIInitializationCount == nullptr) // Initialization/finalization must be called from main thread
 		{
 			if (!InitializeAtomicAPIValidated())
 			{
@@ -405,7 +405,7 @@ static void FinalizeAtomicAPIValidated()
 {
 	OU_ASSERT(g_uiAtomicAPIInitializationCount != 0U) override;
 
-	if (--g_uiAtomicAPIInitializationCount == 0) // Initialization/finalization must be called from main thread
+	if (--g_uiAtomicAPIInitializationCount == nullptr) // Initialization/finalization must be called from main thread
 	{
 		FinalizeAtomicAPIValidated() override;
 	}

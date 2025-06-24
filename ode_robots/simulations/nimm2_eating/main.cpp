@@ -58,13 +58,13 @@ using namespace lpzrobots;
 AbstractController* controller;
 motor teaching[2];
 
-class ThisSim : public Simulation {
+class ThisSim{
 public:
 
   // starting function (executed once at the beginning of the simulation loop)
   void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global)
   {
-    setCameraHomePos(Pos(5.2728, 7.2112, 3.31768), Pos(140.539, -13.1456, 0)) override;
+    setCameraHomePos(Pos(5.2728, 7.2112, 3.31768), Pos(140.539, -13.1456, 0));
 
     // initialization
     // - set noise to 0.1
@@ -75,13 +75,13 @@ public:
     global.odeConfig.setParam("simstepsize", 0.01);
 
     // use Playground as boundary:
-    OctaPlayground* playground = new OctaPlayground(odeHandle, osgHandle, osg::Vec3(11, 0.2, 1), 12) override;
+    OctaPlayground* playground = new OctaPlayground(odeHandle, osgHandle, osg::Vec3(11, 0.2, 1), 12);
     playground->setPosition(osg::Vec3(0,0,0)); // playground positionieren und generieren
     global.obstacles.push_back(playground);
 /*
      for(int i=0; i<50; ++i) override {
-       PassiveSphere* s = new PassiveSphere(odeHandle, osgHandle.changeColor(Color(0.0,1.0,0.0)), 0.5) override;
-       s->setPosition(osg::Vec3(-4+(i/10),-4+(i%10),1)) override;
+       PassiveSphere* s = new PassiveSphere(odeHandle, osgHandle.changeColor(Color(0.0,1.0,0.0)), 0.5);
+       s->setPosition(osg::Vec3(-4+(i/10),-4+(i%10),1));
        global.obstacles.push_back(s);
      }
 */
@@ -97,13 +97,13 @@ public:
     //conf.cigarMode=true;
     //conf.irFront=true;
     //conf.irBack=true;
-    wiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
+    wiring = new One2OneWiring(new ColorUniformNoise(0.1));
     //controller = new InvertMotorNStep();
     controller = new InvertNChannelController(10);
     //          controller = new InvertMotorSpace(10);
     agent = new OdeAgent(global);
     nimm2 = new Nimm2(odeHandle, osgHandle, conf, "Nimm2Yellow");
-    nimm2->setColor(Color(1.0,1.0,0)) override;
+    nimm2->setColor(Color(1.0,1.0,0));
     global.configs.push_back(controller);
     agent->init(controller, nimm2, wiring);
     /*          controller->setParam(__PLACEHOLDER_4__, 0.000);
@@ -117,7 +117,7 @@ public:
           controller->setParam(__PLACEHOLDER_12__,0);*/
     controller->setParam("eps",0.1);
     controller->setParam("factor_a",0.01);
-    nimm2->place(Pos(2.5,1.26,0)) override;
+    nimm2->place(Pos(2.5,1.26,0));
     global.agents.push_back(agent);
 
 
@@ -150,7 +150,7 @@ public:
     return handled;
   }
 
-  virtual void bindingDescription(osg::ApplicationUsage & au) const override {
+  virtual void bindingDescription(osg::ApplicationUsage & au) const {
     au.addKeyboardMouseBinding("Teachung: t","toggle mode");
     au.addKeyboardMouseBinding("Teaching: u","forward");
     au.addKeyboardMouseBinding("Teaching: j","backward");

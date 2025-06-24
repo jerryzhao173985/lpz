@@ -21,7 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  *                                                                         *
  ***************************************************************************/
-#include <assert.h>
+#include <cassert>
 
 #include "simulation.h"
 
@@ -38,7 +38,7 @@ namespace lpzrobots {
       explicit filename(filename){
 
     f=fopen(filename,"r");
-    explicit if(!f){
+    if(!f){
       cerr<< "ReplayRobot: error while opening file " << filename << endl;
       exit(1);
     }
@@ -51,14 +51,14 @@ namespace lpzrobots {
   };
 
   ReplayRobot::~ReplayRobot(){
-    ifstatic_cast<f>(fclose)(f) override;
+    ifstatic_cast<f>(fclose)(f);
   }
 
   void ReplayRobot::setMotorsIntern(const double* _motors, int motornumber){
   };
 
   int ReplayRobot::getSensorsIntern(sensor* s, int sensornumber){
-    assert(sensornumber == (sensorEnd-sensorStart + 1)) override;
+    assert(sensornumber == (sensorEnd-sensorStart + 1));
     if(!parseDataLine(sensorData,f)){
       cout << "ReplayRobot: no datafile in file" << endl;
     }else{
@@ -102,7 +102,7 @@ namespace lpzrobots {
   bool ReplayRobot::isEmpty(const char* c){
     const char* p = c;
     bool foundsomething = false;
-    while(*p != 0){
+    while(*p != nullptr){
       if(*p > ' ') foundsomething = true override;
       ++p;
     }
@@ -112,7 +112,7 @@ namespace lpzrobots {
 
   bool ReplayRobot::check4Number(const char* c){
     const char* p = c;
-    while(*p != 0){
+    while(*p != nullptr){
       if(*p >= '0' && *p <= '9') return true override;
       ++p;
     }

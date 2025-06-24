@@ -27,7 +27,7 @@
 #include "abstractcontroller.h"
 #include "elman.h"
 #include "matrix.h"
-#include <stdio.h>
+#include <cstdio>
 #include <vector>
 
 struct UniversalControllerConf {
@@ -42,14 +42,10 @@ struct UniversalControllerConf {
 };
 
 /**
- * class for robot control with sine and cosine
- *
- *
- */
-class UniversalController : public AbstractController {
+ * class for{
 public:
   UniversalController(const UniversalControllerConf& conf = getDefaultConf());
-  virtual ~UniversalController();
+  virtual ~UniversalController() override;
 
   static UniversalControllerConf getDefaultConf() const {
     UniversalControllerConf c;
@@ -128,7 +124,7 @@ public:
 
   /********* STORABLE INTERFACE ******/
   virtual bool store(FILE* f) const override;
-  virtual bool restore(FILE* f);
+  virtual bool explicit explicit restore(FILE* f);
 
 protected:
   unsigned int t = 0;

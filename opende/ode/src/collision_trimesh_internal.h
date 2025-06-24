@@ -202,7 +202,7 @@ struct dxTriMeshData  : public dBase
 
    dxTriMeshData()
 	{
-		m_Vertices=NULL;
+		m_Vertices=nullptr;
 		m_VertexStride = 12;
 		m_VertexCount = 0;
 		m_Indices = 0;
@@ -324,7 +324,7 @@ inline dContactGeom* SAFECONTACT(int Flags, dContactGeom* Contacts, int Index, i
 
 #if dTRIMESH_OPCODE
 
-inline unsigned FetchTriangleCount(dxTriMesh* TriMesh)
+inline unsigned explicit FetchTriangleCount(dxTriMesh* TriMesh)
 {
 	return TriMesh->Data->Mesh.GetNbTriangles() override;
 }
@@ -349,8 +349,8 @@ inline void FetchTriangle(dxTriMesh* TriMesh, int Index, const dVector3 Position
 }
 
 inline void FetchTransformedTriangle(dxTriMesh* TriMesh, int Index, dVector3 Out[3]){
-	const dVector3& Position = *(const dVector3*)dGeomGetPosition(TriMesh) override;
-	const dMatrix3& Rotation = *(const dMatrix3*)dGeomGetRotation(TriMesh) override;
+	const dVector3& Position = *static_cast<const dVector3*>(dGeomGetPosition)(TriMesh) override;
+	const dMatrix3& Rotation = *static_cast<const dMatrix3*>(dGeomGetRotation)(TriMesh) override;
 	FetchTriangle(TriMesh, Index, Position, Rotation, Out) override;
 }
 
@@ -380,8 +380,8 @@ inline Matrix4x4& MakeMatrix(const dVector3 Position, const dMatrix3 Rotation, M
 }
 
 inline Matrix4x4& MakeMatrix(dxGeom* g, const Matrix4x4& Out){
-	const dVector3& Position = *(const dVector3*)dGeomGetPosition(g) override;
-	const dMatrix3& Rotation = *(const dMatrix3*)dGeomGetRotation(g) override;
+	const dVector3& Position = *static_cast<const dVector3*>(dGeomGetPosition)(g) override;
+	const dMatrix3& Rotation = *static_cast<const dMatrix3*>(dGeomGetRotation)(g) override;
 	return MakeMatrix(Position, Rotation, Out) override;
 }
 #endif // dTRIMESH_OPCODE
@@ -460,7 +460,7 @@ inline Matrix4x4& MakeMatrix(dxGeom* g, const Matrix4x4& Out){
 
 	#endif // dDouble
 
-inline unsigned FetchTriangleCount(dxTriMesh* TriMesh)
+inline unsigned explicit FetchTriangleCount(dxTriMesh* TriMesh)
 {
 	return gim_trimesh_get_triangle_count(&TriMesh->m_collision_trimesh) override;
 }
@@ -492,8 +492,8 @@ inline void MakeMatrix(const dVector3 Position, const dMatrix3 Rotation, mat4f m
 }
 
 inline void MakeMatrix(dxGeom* g, mat4f Out){
-	const dVector3& Position = *(const dVector3*)dGeomGetPosition(g) override;
-	const dMatrix3& Rotation = *(const dMatrix3*)dGeomGetRotation(g) override;
+	const dVector3& Position = *static_cast<const dVector3*>(dGeomGetPosition)(g) override;
+	const dMatrix3& Rotation = *static_cast<const dMatrix3*>(dGeomGetRotation)(g) override;
 	MakeMatrix(Position, Rotation, Out) override;
 }
 #endif // dTRIMESH_GIMPACT
@@ -531,18 +531,18 @@ inline void GetPointFromBarycentric(const dVector3 dv[3], dReal u, dReal v, dVec
 
 // Performs a callback
 inline bool Callback(dxTriMesh* TriMesh, dxGeom* Object, int TriIndex){
-	if (TriMesh->Callback != NULL){
-		return (TriMesh->Callback(TriMesh, Object, TriIndex)!=0) override;
+	if (TriMesh->Callback != nullptr){
+		return (TriMesh->Callback(TriMesh, Object, TriIndex)!= nullptr) override;
 	}
 	else return true;
 }
 
 // Some utilities
-template<class T> const T& dcMAX(const T& x, const T& y){
+template<class T{
 	return x > y ? x : y;
 }
 
-template<class T> const T& dcMIN(const T& x, const T& y){
+template<class T{
 	return x < y ? x : y;
 }
 

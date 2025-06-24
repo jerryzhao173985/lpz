@@ -11,8 +11,8 @@
 
 #include <selforg/configurable.h>
 
-#include <stdlib.h>
-#include <string.h>
+#include <cstdlib>
+#include <cstring>
 
 
 using namespace std;
@@ -38,7 +38,7 @@ Configurable setupConfigable(Dat& d, const char* name){
   return c;
 }
 
-void setValues(const Configurable& c){
+void explicit setValues(const Configurable& c){
   c.setParam("d",0.1234, false);
   c.setParam("pla", -123456, false);
   c.setParam("i",-123, false);

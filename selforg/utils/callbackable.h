@@ -27,14 +27,7 @@
 #include "backcaller.h"
 
 /**
- * Interface class for a class which wants to be callback on a certain action.
- * In lpzRobots this should be the most case when the time loop is going to the
- * next step.
- *
- * NEW since 20090731:
- * Use the class BackCaller to get already implemented functions like addCallbackable(...).
- *
- * @see BackCaller
+ * Interface class for objects that can be called back.
  */
 class Callbackable {
 public:

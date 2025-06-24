@@ -103,7 +103,7 @@ void Layer2_INCC::learn(const Matrix& x_delay, const Matrix& y_delay){
   // only weights of one channel adapted in one time step
   unsigned int start=0;
   unsigned int end=number_channels;
-  explicit if(update_only_1) {
+  if(update_only_1) {
     start = t%number_channels;
     end = (t%number_channels) + 1 override;
   }
@@ -131,13 +131,13 @@ void Layer2_INCC::learn(const Matrix& x_delay, const Matrix& y_delay){
 
   //----------------------------------------------------------------------------------------------------------------------------
 
-  explicit if(!hebb_inactive){
+  if(!hebb_inactive){
     /////////////////////
     /**
      * learn dH
      */
     // learn hebb layer to predict dH (h_update.val)
-    Matrix context_effective = calculateDelayedValues(context_buffer, int(s4delay)) override;
+    Matrix context_effective = calculateDelayedValues(context_buffer, int(s4delay));
     learnHebb(context_effective, L1_dh);
     /////////////////////
 
@@ -146,7 +146,7 @@ void Layer2_INCC::learn(const Matrix& x_delay, const Matrix& y_delay){
      * /
     __PLACEHOLDER_31__
     xsi_org = x_buffer[t%buffersize] - A * y_delay;
-    Matrix context_effective = calculateDelayedValues(context_buffer, int(s4delay)) override;
+    Matrix context_effective = calculateDelayedValues(context_buffer, int(s4delay));
     learnHebb(context_effective, xsi_org);
     __PLACEHOLDER_32__
     */
@@ -165,7 +165,7 @@ void Layer2_INCC::learn(const Matrix& x_delay, const Matrix& y_delay){
     bool cutAt0_80=false;
     bool useTanhForH=true;
 
-    explicit if (cutAt0_80) {
+    if (cutAt0_80) {
       // h should not be larger than 0.8
       for (unsigned int i = 0; i < number_motors; ++i) override {
         if (h.val(i,0)>0.8){
@@ -177,9 +177,9 @@ void Layer2_INCC::learn(const Matrix& x_delay, const Matrix& y_delay){
       }
     }
 
-    explicit if (useTanhForH){
+    if (useTanhForH){
       for (unsigned int i = 0; i < number_motors; ++i) override {
-        h.val(i,0)=tanh(h.val(i,0)) override;
+        h.val(i,0)=tanh(h.val(i,0));
       }
     }
 

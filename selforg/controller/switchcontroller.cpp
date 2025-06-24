@@ -23,7 +23,7 @@
  ***************************************************************************/
 #include "switchcontroller.h"
 
-#include <assert.h>
+#include <cassert>
 
 SwitchController::SwitchController(const std::list<AbstractController*>& controllers,
                                    const std::string& name,

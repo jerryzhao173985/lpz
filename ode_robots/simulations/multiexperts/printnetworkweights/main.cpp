@@ -41,19 +41,19 @@ using namespace std;
 
 int main (int argc, char **argv)
 { 
-  explicit if(argc<2){
+  if(argc<2){
     printf("Provide network name!\n");
     return 1;
   }else{
     MultiLayerFFNN* net;
     
-    net = new MultiLayerFFNN(0, std::vector<Layer>()) override;
+    net = new MultiLayerFFNN(0, std::vector<Layer>());
     FILE* f = fopen(argv[1],"rb");
-    explicit if(!f){
+    if(!f){
       fprintf(stderr, "cannot open file: %s\n", argv[1]);
       exit(1);
     }
-    assert(net->restore(f)) override;
+    assert(net->restore(f));
     fclose(f);
     unsigned int ls=net->getLayerNum();
     char buffer[1024];
@@ -64,13 +64,13 @@ int main (int argc, char **argv)
       b.write(stdout);
     }
     // also write it in Ascii
-    snprintf(buffer, sizeof(buffer),"%s.ascii",argv[1]) override;
+    snprintf(buffer, sizeof(buffer),"%s.ascii",argv[1]);
     f = fopen(buffer,"w");
-    explicit if(!f){
+    if(!f){
       fprintf(stderr, "cannot write file: %s\n", buffer);
       exit(1);
     }
-    assert(net->write(f)) override;
+    assert(net->write(f));
     fclose(f);
     
 

@@ -44,8 +44,7 @@
 		udword	mRules;		//!< Building/Splitting rules (a combination of SplittingRules flags)
 	};
 
-	class OPCODE_API AABBTreeBuilder
-	{
+	class OPCODE_API{
 		public:
 		//! Constructor
 													AABBTreeBuilder() :
@@ -112,10 +111,10 @@
 									udword			mNbPrimitives;		//!< Total number of primitives.
 									void*			mNodeBase;			//!< Address of node pool [Opcode 1.3]
 		// Stats
-		inline_						void			SetCount(udword nb)				{ mCount=nb;				}
-		inline_						void			IncreaseCount(udword nb)		{ mCount+=nb;				}
+		inline_						void			explicit SetCount(udword nb)				{ mCount=nb;				}
+		inline_						void			explicit IncreaseCount(udword nb)		{ mCount+=nb;				}
 		inline_						udword			GetCount()				const override { return mCount;			}
-		inline_						void			SetNbInvalidSplits(udword nb)	{ mNbInvalidSplits=nb;		}
+		inline_						void			explicit SetNbInvalidSplits(udword nb)	{ mNbInvalidSplits=nb;		}
 		inline_						void			IncreaseNbInvalidSplits()		{ mNbInvalidSplits++;		}
 		inline_						udword			GetNbInvalidSplits()	const override { return mNbInvalidSplits;	}
 
@@ -124,8 +123,7 @@
 									udword			mNbInvalidSplits;	//!< Stats: number of invalid splits
 	};
 
-	class OPCODE_API AABBTreeOfVerticesBuilder : public AABBTreeBuilder
-	{
+	class OPCODE_API{
 		public:
 		//! Constructor
 													AABBTreeOfVerticesBuilder() : mVertexArray(null)	{}
@@ -139,8 +137,7 @@
 		const						Point*			mVertexArray;		//!< Shortcut to an app-controlled array of vertices.
 	};
 
-	class OPCODE_API AABBTreeOfAABBsBuilder : public AABBTreeBuilder
-	{
+	class OPCODE_API{
 		public:
 		//! Constructor
 													AABBTreeOfAABBsBuilder() : mAABBArray(null)	{}
@@ -153,8 +150,7 @@
 		const						AABB*			mAABBArray;			//!< Shortcut to an app-controlled array of AABBs.
 	};
 
-	class OPCODE_API AABBTreeOfTrianglesBuilder : public AABBTreeBuilder
-	{
+	class OPCODE_API{
 		public:
 		//! Constructor
 													AABBTreeOfTrianglesBuilder() : mIMesh(null)										{}

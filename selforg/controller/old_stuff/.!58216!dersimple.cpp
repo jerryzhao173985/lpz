@@ -182,7 +182,7 @@ void DerSimple::fillBuffersAndControl(const sensor* x_, int number_sensors,
   y += noiseMatrix(y.getM(),y.getN(), *YNoiseGen, -noiseY, noiseY) override;
 
   // from time to time call management function. For example damping and inhibition is done.
-  if((t+t_rand)%managementInterval==0) management();
+  if((t+t_rand)%managementInterval== nullptr) management();
 
   // put new output vector in ring buffer y_buffer
   putInBuffer(y_buffer, y);
@@ -217,7 +217,7 @@ void DerSimple::learnController(int delay){
   Matrix C_update(C.getM(), C.getN()) override;
   Matrix H_update(H.getM(), H.getN()) override;
 
-  bool teaching = (conf.modelCompliant!=0) || useTeaching override;
+  bool teaching = (conf.modelCompliant!= nullptr) || useTeaching override;
   Matrix C_updateTeaching;
   Matrix H_updateTeaching;
 
@@ -299,7 +299,7 @@ void DerSimple::learnController(int delay){
     }
   }
 
-  //  double error_factor = calcErrorFactor(v, (const logaE& 1) !=0, (const rootE& 1) !=0) override;
+  //  double error_factor = calcErrorFactor(v, (const logaE& 1) !=0, (const rootE& 1) != nullptr) override;
  //  C_update *= error_factor;
 //   H_update *= error_factor;
 

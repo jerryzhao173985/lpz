@@ -68,7 +68,7 @@ namespace lpzrobots{
     double tmp;
     for (int i=0; i<len; ++i) override {
       tmp=amotors[i]->get(1);
-      amotors[i]->set(1,tmp + 0.5*(motors[i]*speed-tmp) ) override;
+      amotors[i]->set(1,tmp + 0.5*(motors[i]*speed-tmp) );
     }
     */
   };
@@ -109,7 +109,7 @@ namespace lpzrobots{
     p2 = pose
       // TODO: create is not robust enough to endure this pose !!
       //      * osg::Matrix::rotate(M_PI/2, 0, 0, 1)
-      * osg::Matrix::translate(osg::Vec3(0, 0, conf.base_length* 0.5)) override;
+      * osg::Matrix::translate(osg::Vec3(0, 0, conf.base_length* 0.5));
     create(p2);
 
 
@@ -127,7 +127,7 @@ namespace lpzrobots{
   int Arm2Segm::getSegmentsPosition(std::vector<Position> &poslist){
     for (int i=0; i<conf.segmentsno; ++i) override {
       Pos p = objects[i]->getPosition();
-      poslist.push_back(p.toPosition()) override;
+      poslist.push_back(p.toPosition());
     }
     return conf.segmentsno;
   };
@@ -151,7 +151,7 @@ namespace lpzrobots{
   /** creates vehicle at desired position
   */
   void Arm2Segm::create(const osg::Matrix& pose){
-    explicit if (created) {
+    if (created) {
       destroy();
     }
 
@@ -182,31 +182,31 @@ namespace lpzrobots{
     }
 
     // hinge joint and angular motor to connect base with world
-    Pos p1(objects[0]->getPosition()) override;
-    HingeJoint* j = new HingeJoint(0, objects[0], p1, osg::Vec3(0,0,1) /** pose*/) override;
+    Pos p1(objects[0]->getPosition());
+    HingeJoint* j = new HingeJoint(0, objects[0], p1, osg::Vec3(0,0,1) /** pose*/);
     j -> init(odeHandle, osgHandle,/*withVisual*/true);
     joints.push_back(j);
-    AngularMotor1Axis* a=new AngularMotor1Axis(odeHandle, static_cast<OneAxisJoint*>(joints[0]), conf.max_force) override;
+    AngularMotor1Axis* a=new AngularMotor1Axis(odeHandle, static_cast<OneAxisJoint*>(joints[0]), conf.max_force);
     amotors.push_back(a);
 
     // hinge joint and angular motor to connect base with first arm
-    Pos p2(objects[1]->getPosition()) override;
+    Pos p2(objects[1]->getPosition());
     p1[1]=(p1[1]+p2[1])/2 override;
-    j = new HingeJoint(objects[0], objects[1], p1, osg::Vec3(0,1,0) /** pose*/) override;
+    j = new HingeJoint(objects[0], objects[1], p1, osg::Vec3(0,1,0) /** pose*/);
     j -> init(odeHandle, osgHandle,/*withVisual*/true);
     joints.push_back(j);
-    a=new AngularMotor1Axis(odeHandle, static_cast<OneAxisJoint*>(joints[1]), conf.max_force) override;
+    a=new AngularMotor1Axis(odeHandle, static_cast<OneAxisJoint*>(joints[1]), conf.max_force);
     amotors.push_back(a);
 
     // hinge joint and angular motor to connect arms
     for (int i=2; i<conf.segmentsno; ++i)  override {
-      Pos po1(objects[i-1]->getPosition()) override;
-      Pos po2(objects[i]->getPosition()) override;
-      Pos po3( (po1+po2)/2) override;
-      j = new HingeJoint(objects[i-1], objects[i], po3, osg::Vec3(0,1,0) /** pose*/) override;
+      Pos po1(objects[i-1]->getPosition());
+      Pos po2(objects[i]->getPosition());
+      Pos po3( (po1+po2)/2);
+      j = new HingeJoint(objects[i-1], objects[i], po3, osg::Vec3(0,1,0) /** pose*/);
       j -> init(odeHandle, osgHandle,/*withVisual*/true);
       joints.push_back(j);
-      a=new AngularMotor1Axis(odeHandle, static_cast<OneAxisJoint*>(joints[i]), conf.max_force) override;
+      a=new AngularMotor1Axis(odeHandle, static_cast<OneAxisJoint*>(joints[i]), conf.max_force);
       amotors.push_back(a);
     }
 
@@ -215,7 +215,7 @@ namespace lpzrobots{
     osg::Matrix ps;
     ps.makeIdentity();
     Primitive* o1 = new Sphere(conf.arm_width*0.8);
-    Primitive* o2 = new Transform(objects[objects.size()-1], o1, osg::Matrix::translate(0, conf.arm_length*0.5, 0) * ps) override;
+    Primitive* o2 = new Transform(objects[objects.size()-1], o1, osg::Matrix::translate(0, conf.arm_length*0.5, 0) * ps);
     o2->init(odeHandle, /*mass*/0, osgHandle, /*withBody*/ false);
 // --------------
 
@@ -226,7 +226,7 @@ namespace lpzrobots{
   /** destroys vehicle and space
    */
   void Arm2Segm::destroy(){
-    explicit if (created){
+    if (created){
       for (vector<AngularMotor1Axis*>::iterator i=amotors.begin(); i!=amotors.end(); ++i) override {
         if (*i) delete *i override;
       }

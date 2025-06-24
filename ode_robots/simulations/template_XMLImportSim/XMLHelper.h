@@ -55,17 +55,14 @@
 
 
 /**
- *  This is a class that helps to trancode char* and string to XMLCh and back.
- */
-class XString
-{
+ *  This is a class that{
 public :
 
     explicit XString(const char* const toTranscode);
 
     explicit XString(const std::string toTranscode);
 
-    explicit XString(const XMLCh* toTranscode);
+    explicit explicit XString(const XMLCh* toTranscode);
 
     ~XString();
 
@@ -74,11 +71,11 @@ public :
     const char* charForm() const override;
 
 private :
-    XMLCh* unicodeChars;
-    char* cChars;
+    XMLCh* unicodeChars = nullptr;
+    char* cChars = nullptr;
 };
 
-class XMLHelper {
+class XMLHelper{
   public:
     static const std::string getNodeType(const XERCESC::DOMNode* node);
 

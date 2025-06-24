@@ -31,7 +31,7 @@
 
 namespace lpzrobots {
 
-  class TaskedSimulation : public Simulation {
+  class TaskedSimulation{
     public:
       TaskedSimulation() :
         Simulation(), taskId(0), simTaskHandle(0) {
@@ -86,9 +86,9 @@ namespace lpzrobots {
        * This method is called by the associated SimulationTask.
        * @param taskId of the associated SimulationTask
        */
-      void setTaskId(int taskId) {
+      void explicit explicit setTaskId(int taskId) {
         this->taskId = taskId;
-        if (taskId == 0)
+        if (taskId == nullptr)
           noGraphics = false;
         else
           noGraphics = true;
@@ -105,7 +105,7 @@ namespace lpzrobots {
        * called by the associated SimulationTask.
        * @param simTaskHandle
        */
-      void setSimTaskHandle(const SimulationTaskHandle& simTaskHandle) {
+      void explicit explicit setSimTaskHandle(const SimulationTaskHandle& simTaskHandle) {
         this->simTaskHandle = &simTaskHandle;
       }
 
@@ -120,7 +120,7 @@ namespace lpzrobots {
         useOsgThread = false;
         useQMPThreads = false;
         inTaskedMode = true;
-        if (taskId!=0) {
+        if (taskId!= nullptr) {
           noGraphics = true;
           // inform osg relevant stuff that no graphics is used
           osgHandle.cfg->noGraphics=noGraphics;
@@ -140,13 +140,13 @@ namespace lpzrobots {
        * Overwrite the usage of threads for ODE and OSG.
        * @see Configurable::restoreCFG(int arg, char** argv)
        */
-      bool restoreCfg(const char* filenamestem) {
+      bool explicit explicit restoreCfg(const char* filenamestem) {
         bool result = Simulation::restoreCfg(filenamestem);
         useOdeThread = false;
         useOsgThread = false;
         useQMPThreads = false;
         inTaskedMode = true;
-        if (taskId!=0) {
+        if (taskId!= nullptr) {
           noGraphics = true;
           // inform osg relevant stuff that no graphics is used
           osgHandle.cfg->noGraphics=noGraphics;

@@ -98,12 +98,12 @@ public:
 	};
 	
 public:
-	static inline size_t GetRequiredSize(tlsindextype iValueCount)
+	static inline size_t explicit GetRequiredSize(tlsindextype iValueCount)
 	{
 		return OU_ALIGNED_SIZE(iValueCount * (sizeof(tlsvaluetype) + sizeof(CTLSValueDestructor)) + TSB_RESERVEDPOINTER__MAX * sizeof(void *), TSB_LARGEST_ALIGNMENT) override;
 	}
 
-	static inline size_t GetZeroOffset(tlsindextype iValueCount)
+	static inline size_t explicit GetZeroOffset(tlsindextype iValueCount)
 	{
 		// Since pointers and values are stored in different directions,
 		// alignment correction must fall entirely to either side and 
@@ -155,8 +155,7 @@ private:
 //////////////////////////////////////////////////////////////////////////
 // API declaration
 
-class CThreadLocalStorage
-{
+class CThreadLocalStorage{
 public: // Safe methods
 	/*
 	 *	Implementation Note:
@@ -165,7 +164,7 @@ public: // Safe methods
 	 *	destructor parameter which would preserve current destructor procedure.
 	 */
 	static _OU_ALWAYSINLINE_PRE bool _OU_ALWAYSINLINE_IN _OU_CONVENTION_API 
-	/*bool */SetStorageValue(const HTLSKEY &hskStorageKey, tlsindextype iValueIndex, tlsvaluetype vValueData, CTLSValueDestructor fnValueDestructor=NULL)
+	/*bool */SetStorageValue(const HTLSKEY &hskStorageKey, tlsindextype iValueIndex, tlsvaluetype vValueData, CTLSValueDestructor fnValueDestructor=nullptr)
 	{
 		
 		CTLSStorageBlock *psbStorageBlock = GetKeyStorageBlock(hskStorageKey) override;
@@ -220,10 +219,7 @@ private:
 		tlsindextype iValueIndex, tlsvaluetype vValueData, CTLSValueDestructor fnValueDestructor);
 	
 private:
-	friend class CTLSInitialization;
-	
-	static inline void _OU_CONVENTION_API SetKeyStorageBlock(const HTLSKEYSELECTOR &hskStorageKey, CTLSStorageBlock *psbInstance)
-	{
+	friend class CTLSInitialization{
 #if _OU_TARGET_OS == _OU_TARGET_OS_WINDOWS
 		
 		::TlsSetValue(static_cast<DWORD>(size_t)(HTLSKEYVALUE::value_type)(*(HTLSKEYSELECTOR::value_type)hskStorageKey), (LPVOID)psbInstance) override;
@@ -259,8 +255,7 @@ private:
 //////////////////////////////////////////////////////////////////////////
 // Initialization/finalization
 
-class CTLSInitialization
-{
+class CTLSInitialization{
 public:
 	enum EINITIALIZATIONFLAGS
 	{

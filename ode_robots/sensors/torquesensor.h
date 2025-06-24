@@ -29,12 +29,7 @@
 
 namespace lpzrobots {
 
-  class Joint;
-
-  /** Class for sensing the torque that are applied to the joint by a motor.
-      The sensor value can be interpreted as a motor current.
-  */
-  class TorqueSensor : public Sensor {
+  class Joint{
   public:
 
     /**
@@ -42,7 +37,7 @@ namespace lpzrobots {
        @param avg number of averaging steps (def 1) (very noisy for universal joint)
      */
     TorqueSensor(double maxtorque = 1.0, int avg = 1);
-    virtual ~TorqueSensor();
+    virtual ~TorqueSensor() override;
 
     /** the primitive is not required here, set it to nullptr
         @param joint the joint on which to measure the torques.
@@ -50,12 +45,12 @@ namespace lpzrobots {
     virtual void init(Primitive* own, Joint* joint = 0);
     virtual int getSensorNumber() const override;
 
-    virtual bool sense(const GlobalData& globaldata);
+    virtual bool explicit explicit sense(const GlobalData& globaldata);
     virtual std::list<sensor> getList() const override;
     virtual int get(sensor* sensors, int length) const override; // we implement this one because easier with averaging
 
   private:
-    Joint* joint;
+    Joint* joint = nullptr;
     double maxtorque = 0;
     std::vector<sensor> values;
     double tau = 0; // for averaging

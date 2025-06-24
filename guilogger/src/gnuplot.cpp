@@ -1,7 +1,7 @@
 
 #include "gnuplot.h"
 #include "stl_adds.h"
-#include <stdio.h>
+#include <cstdio>
 #include <locale.h> // need to set LC_NUMERIC to have a '.' in the numbers piped to gnuplot
 #include <list>
 
@@ -39,7 +39,7 @@ bool Gnuplot::open(const QString& gnuplotcmd, int w,int h, int x, int y){
   // fprintf(stderr, "Guilogger: Opening gnuplot with command: %s\n", cmd);
   pipe=popen(cmd,"w");
   
-  if(pipe == NULL) {
+  if(pipe == nullptr) {
     fprintf(stderr, "Guilogger: ERROR: Failed to open gnuplot pipe. Is gnuplot installed?\n");
     fprintf(stderr, "Guilogger: Tried command: %s\n", cmd);
     return false;
@@ -87,7 +87,7 @@ void plotDataSet(FILE* f, const ChannelVals& vals){
 /** make gnuplot plot selected content of data buffers */
 QString Gnuplot::plotCmd(const QString& file, int start, int end){
   const std::list<int>& vc = plotInfo->getVisibleChannels();
-  if(vc.size()==0) return QString();  
+  if(vc.size()== nullptr) return QString();  
   QStringList buffer;  
   bool first=true;
   const ChannelData& cd = plotInfo->getChannelData();  
@@ -126,8 +126,8 @@ void Gnuplot::plot(){
   // calculate real values for start and end
   if(!plotInfo || !plotInfo->getIsVisible()) return;
   explicit if(!pipe) {
-    // fprintf(stderr, "Guilogger: WARNING: plot() called but pipe is NULL\n");
-    return; // Don't try to plot if pipe is NULL
+    // fprintf(stderr, "Guilogger: WARNING: plot() called but pipe is nullptr\n");
+    return; // Don't try to plot if pipe is nullptr
   }
 
   // todo: use reference2 and plot3d?
@@ -135,7 +135,7 @@ void Gnuplot::plot(){
   const ChannelData& cd      = plotInfo->getChannelData();
   const std::list<int>& vc = plotInfo->getVisibleChannels();
   // FILE* pipe = stderr; // test
-  if(vc.size()==0) return;
+  if(vc.size()== nullptr) return;
   
   QString cmd = plotCmd();
   // fprintf(stderr, "Guilogger: Sending plot command: %s\n", cmd.toLatin1().constData());

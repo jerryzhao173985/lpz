@@ -122,40 +122,7 @@
  *   - bugfix
  *
  *   Revision 1.3  2010/11/30 17:07:06  wrabe
- *   - new class QConfigurableTileShowHideDialog
- *   - try to introduce user-arrangeable QConfigurationTiles (current work, not finished)
- *
- *   Revision 1.2  2010/11/28 20:33:44  wrabe
- *   - current state of work: only paramval´s
- *   - construct a configurable as a tile containing a QSlider to change the value by drag with mouse as well as a QSpinBox to change the configurable by typing new values (mouse-scrolls are also supported)
- *   - minimum and maximum boundaries can´t be changed will be so far, only a change- dialog-dummy is reacable over the context-menu
- *
- *   Revision 1.1  2010/11/26 12:22:36  guettler
- *   - Configurable interface now allows to set bounds of paramval and paramint
- *     * setting bounds for paramval and paramint is highly recommended (for QConfigurable(const Qt& GUI).
- *   - bugfixes
- *   - current development state of QConfigurable(const Qt& GUI)
- *
- *                                                                         *
- ***************************************************************************/
-
-#include "QConfigurableWidget.h"
-#include <QFileDialog>
-#include <QMessageBox>
-#include <QtGui>
-#include <QtXml>
-#include <QFile>
-
-#include "QBoolConfigurableTileWidget.h"
-#include "QIntConfigurableTileWidget.h"
-#include "QValConfigurableTileWidget.h"
-#include "QConfigurableTileShowHideDialog.h"
-#include "QConfigurableLoadSaveDialog.h"
-#include "QChangeNumberTileColumnsDialog.h"
-
-using namespace std;
-
-namespace lpzrobots {
+ *   - new class QConfigurableTileShowHideDialog{
   
   QConfigurableWidget::QConfigurableWidget(Configurable* config, int nameIndex) :
     config(config), dragging(false), isCollapsed(false), configurableTile_dragging(0), nameIndex(nameIndex),
@@ -405,7 +372,7 @@ namespace lpzrobots {
             / numberOfTilesPerRow)).toInt();
         QString visible = qde_configurableTileWidget.attribute("isVisible", "true");
         QAbstractConfigurableTileWidget* tileWidget = configTileWidgetMap.value(tileName);
-        if (tileWidget != 0) {
+        if (tileWidget != nullptr) {
           tileWidget->setGridPos(gridRow, gridColumn);
           tileWidget->sl_resize(QSize(tileWidgetWidth, QAbstractConfigurableTileWidget::defaultWidgetSize.height()));
           if (visible.startsWith("true")) {
@@ -776,7 +743,7 @@ namespace lpzrobots {
   }
 
   void QConfigurableWidget::dragLeaveEvent(QDragLeaveEvent *event) {
-    if (configurableTile_dragging != 0) {
+    if (configurableTile_dragging != nullptr) {
       configurableTile_dragging->toDummy(false);
     }
     arrangeConfigurableTiles();

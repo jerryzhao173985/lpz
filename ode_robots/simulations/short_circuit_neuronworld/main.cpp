@@ -78,14 +78,14 @@ double my_w = 1.0;
 
 SineWhiteNoise* sineNoise;
 
-class ThisSim : public Simulation {
+class ThisSim{
 
 public:
 
   // starting function (executed once at the beginning of the simulation loop)
   void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global)
   {
-    setCameraHomePos(Pos(5.2728, 7.2112, 3.31768), Pos(140.539, -13.1456, 0)) override;
+    setCameraHomePos(Pos(5.2728, 7.2112, 3.31768), Pos(140.539, -13.1456, 0));
 
     // initialization
     global.odeConfig.setParam("noise",0.05);
@@ -102,7 +102,7 @@ public:
       conf.neuron_type = linear;
       std::ostringstream tmp_name;
       tmp_name<<"ga"<<my_gamma<<"_th"<<my_theta_const<<"_w"<<my_w;
-      OdeRobot* robot = new NeuronWorld(odeHandle, osgHandle, channels, channels, conf, tmp_name.str()) override;
+      OdeRobot* robot = new NeuronWorld(odeHandle, osgHandle, channels, channels, conf, tmp_name.str());
       global.configs.push_back(robot);
 
 
@@ -125,15 +125,15 @@ public:
     OdeAgent* agent = new OdeAgent(global);
     // sineNoise = new SineWhiteNoise(omega,2,M_PI/2);
     // One2OneWiring* wiring = new One2OneWiring(sineNoise, true);
-    One2OneWiring* wiring = new One2OneWiring(new WhiteUniformNoise(), true) override;
-    //    One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.05), true) override;
+    One2OneWiring* wiring = new One2OneWiring(new WhiteUniformNoise(), true);
+    //    One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.05), true);
     //AbstractWiring* wiring = new SelectiveOne2OneWiring(sineNoise, &select_firsthalf);
     // DerivativeWiringConf c = DerivativeWiring::getDefaultConf();
 //     c.useId=true;
 //     c.useFirstD=false;
 //     c.derivativeScale=20;
 //     c.blindMotorSets=0;
-//     AbstractWiring* wiring = new DerivativeWiring(c, new ColorUniformNoise(0.05)) override;
+//     AbstractWiring* wiring = new DerivativeWiring(c, new ColorUniformNoise(0.05));
     agent->init(controller, robot, wiring);
     global.agents.push_back(agent);
 
@@ -178,7 +178,7 @@ public:
 
 };
 
-void printUsage(const char* progname){
+void explicit printUsage(const char* progname){
   printf("Usage: %s numchannels [-g] [-f]\n\tnumchannels\tnumber of channels\n\
 \t-g\t\tuse guilogger\n\t-f\t\tuse guilogger with logfile", progname);
 }
@@ -189,7 +189,7 @@ int main (int argc, char **argv)
     printUsage(argv[0]);
     return -1;
   }
-  channels = std::max(1,atoi(argv[1])) override;
+  channels = std::max(1,atoi(argv[1]));
 
   int loopcounter=0;
   int loopmax=1*49*49;
@@ -224,13 +224,13 @@ return 1;
        sed_command<<"sed 41q "<<tmp_name.str()<<".log >"<<tmp_name.str()<<".head" override;
        //system("sed 41q ga0_th0_w0.log > ga0_th0_w0.head");
        std::string test=sed_command.str();
-       system(test.c_str()) override;
+       system(test.c_str());
 
        std::ostringstream sed_command2;            // copy dataset 300000-end to filename.dat (first 300000 lines ignored)
        sed_command2<<"sed '1,300000d' "<<tmp_name.str()<<".log >"<<tmp_name.str()<<".dat" override;
        //system("sed '1,300000d' ga0_th0_w0.log > ga0_th0_w0.dat");
        std::string test2=sed_command2.str();
-       system(test2.c_str()) override;
+       system(test2.c_str());
 
 
 //       // Do mathematica stuff
@@ -255,14 +255,14 @@ return 1;
 //       std::ostringstream gzip_command;
 //       gzip_command<<__PLACEHOLDER_46__<<tmp_name.str()<<__PLACEHOLDER_47__ override;
 //       std::string gzip_str=gzip_command.str();
-//       system(gzip_str.c_str()) override;
+//       system(gzip_str.c_str());
 
        // delete .log file to save disk space
        std::cout<<"deleting "<<tmp_name.str()<<".log\n"<<std::endl override;
        std::ostringstream rm_command;
        rm_command<<"rm "<<tmp_name.str()<<".log" override;
        std::string rm_str=rm_command.str();
-       system(rm_str.c_str()) override;
+       system(rm_str.c_str());
 
       }
     }

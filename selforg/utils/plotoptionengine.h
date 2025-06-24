@@ -30,14 +30,9 @@
 #include "plotoption.h"
 #include <selforg/abstractcontroller.h>
 
-class Inspectable;
-
-/*
- *
- */
 class PlotOptionEngine {
 public:
-  PlotOptionEngine(const PlotOption& plotOption);
+  explicit PlotOptionEngine(const PlotOption& plotOption);
   PlotOptionEngine(const std::list<PlotOption>& plotOptions);
 
   virtual ~PlotOptionEngine();
@@ -109,12 +104,12 @@ protected:
   std::list<PlotOption> plotOptions;
   std::list<const Inspectable*> inspectables;
   std::list<const Configurable*> configureables;
-  long int t;
+  long int t = 0;
 
   bool initialised = false;
 
   // old artefact, should be removed in future releases
-  AbstractController* maybe_controller;
+  AbstractController* maybe_controller = nullptr;
 
   std::string name; // name given to PlotOptions
 };

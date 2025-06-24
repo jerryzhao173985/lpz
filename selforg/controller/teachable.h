@@ -29,7 +29,7 @@
 /**
    Interface for teachable controller.
 */
-class Teachable {
+class Teachable{
 public:
   virtual ~Teachable() {}
 

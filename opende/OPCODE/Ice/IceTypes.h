@@ -45,7 +45,7 @@
 	#define	SQRT3				1.73205080757f											//!< sqrt(3)
 	#define	INVSQRT3			0.577350269189f											//!< 1 / sqrt(3)
 
-	#define null				0														//!< our own NULL pointer
+	#define null				0														//!< our own nullptr pointer
 
 	// Custom types used in ICE
 	typedef signed char			sbyte;		//!< sizeofstatic_cast<sbyte>(must) be 1
@@ -137,10 +137,10 @@
 	#define		MAX(a, b)       ((a) > (b) ? (a) : (b))			//!< Returns the max value between a and b
 	#define		MAXMAX(a,b,c)   ((a) > (b) ? MAX (a,c) : MAX (b,c))	//!<	Returns the max value between a, b and c
 
-	template<class T>	inline_ const T&	TMin	(const T& a, const T& b)	{ return b < a ? b : a;	}
-	template<class T>	inline_ const T&	TMax	(const T& a, const T& b)	{ return a < b ? b : a;	}
-	template<class T>	inline_ void		TSetMin	(T& a, const T& b)			{ if(a>b)	a = b;		}
-	template<class T>	inline_ void		TSetMax	(T& a, const T& b)			{ if(a<b)	a = b;		}
+	template<class T{ return b < a ? b : a;	}
+	template<class T{ return a < b ? b : a;	}
+	template<class T{ if(a>b)	a = b;		}
+	template<class T{ if(a<b)	a = b;		}
 
 	#define		SQR(x)			((x)*(x))						//!< Returns x square
 	#define		CUBE(x)			((x)*(x)*(x))					//!< Returns x cube

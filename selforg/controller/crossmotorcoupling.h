@@ -38,9 +38,7 @@ using CMC = std::vector<std::list<int>>;
  * cross motor coupling, see dissertation of Georg Martius
  *
  */
-class CrossMotorCoupling
-  : public AbstractControllerAdapter
-  , public Teachable {
+class CrossMotorCoupling : public AbstractControllerAdapter {
 public:
   /**
      @param controller actual controller
@@ -59,7 +57,7 @@ public:
     //  also moves the pointer for the other vtable (tricky!)
     // That is why we need dynamic_cast here
     Teachable* t2 = dynamic_cast<Teachable*>(controller);
-    static_cast<void>(t2); // this is to avoid a __PLACEHOLDER_6__ in -DNDEBUG mode
+    (void)(t2); // this is to avoid a warning in -DNDEBUG mode
     assert(static_cast<void*>(t2) == static_cast<void*>(teachable));
   }
 
@@ -69,7 +67,7 @@ public:
                     int motornumber);
 
   virtual void setCMC(const CMC& cmc);
-  virtual CMC getCMC();
+  virtual CMC getCMC() const;
 
   /**** TEACHABLE Interface pass through ****/
 

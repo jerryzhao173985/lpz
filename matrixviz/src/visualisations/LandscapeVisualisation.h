@@ -35,7 +35,7 @@ struct VERTEX {
     VERTEX( GLfloat x, GLfloat y, GLfloat z): x(x), y(y), z(z) {};
 };
 
-class LandscapeVisualisation : public AbstractVisualisation {
+class LandscapeVisualisation{
   Q_OBJECT
 
 public:
@@ -59,13 +59,13 @@ private:
    GLuint object;
    int maxX, maxY;
    float rotX, rotY;
-   double plateauRadius;
+   double plateauRadius = 0.0;
    GLfloat zoom;
    int mouseX, mouseY;
    const static bool debug = false;
    VERTEX getNormal(const VERTEX& v1, const VERTEX& v2, const VERTEX& v3);
 
-   double clip(double val);
+   double explicit clip(double val);
 
    inline void divideAndDrawTriangle(VERTEX& v1, VERTEX& v2, VERTEX& v3) {
      VERTEX n = getNormal(v1, v2, v3);

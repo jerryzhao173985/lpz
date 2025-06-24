@@ -28,30 +28,18 @@
 #define SINGLETONGENFACTORY_H_
 
 //forward declaration
-class GenContext;
-class Gen;
-class Individual;
-class GenPrototype;
-class IValue;
-
-/**
- * This is the factory for the class Gen. It gives 3 Methodes to generate new gens. (random,value and mutation)
- * Over this is the class as singleton concepted. Only one Factory for a run.
- *
- * It use by every method the GenPrototype to be independent from the type of the Gen.
- */
-class SingletonGenFactory {
+class GenContext{
 public:
 	/**
 	 * this method is to become the only existing factory
 	 * @return static_cast<SingletonGenFactory*>(the) one and only factory
 	 */
-	inline static SingletonGenFactory* getInstance(void) {if(m_factory==0)m_factory = new SingletonGenFactory();return m_factory;}
+	inline static SingletonGenFactory* getInstance(void) {if(m_factory== nullptr)m_factory = new SingletonGenFactory();return m_factory;}
 
 	/**
 	 * this method is to destroy the one and only factory.
 	 */
-	inline static void destroyGenFactory(void) {if(m_factory!=0){delete m_factory;m_factory=0;}}
+	inline static void destroyGenFactory(void) {if(m_factory!= nullptr){delete m_factory;m_factory=0;}}
 
 	// 3 methodes to create an Gen
 	/**
@@ -89,7 +77,7 @@ public:
    * set the member variable m_number to number
    * @param number static_cast<int>(the) new value
    */
-  inline void setNumber(int number) {m_number=number;}
+  inline void explicit setNumber(int number) {m_number=number;}
 
 private:
 	/**

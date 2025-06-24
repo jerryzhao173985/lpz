@@ -6,8 +6,7 @@
 namespace CppTestHarness
 {
 
-class TestReporter
-{
+class TestReporter{
 public:
 	virtual ~TestReporter();
 

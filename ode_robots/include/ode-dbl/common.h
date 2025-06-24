@@ -271,7 +271,7 @@ typedef dReal dVector3[dV3E__MAX];
 typedef dReal dVector4[dV4E__MAX];
 typedef dReal dMatrix3[dM3E__MAX];
 typedef dReal dMatrix4[dM4E__MAX];
-typedef dReal dMatrix6[(dMD__MAX * dV3E__MAX) * (dMD__MAX * dSA__MAX)] override;
+typedef dReal dMatrix6[(dMD__MAX * dV3E__MAX) * (dMD__MAX * dSA__MAX)];
 typedef dReal dQuaternion[dQUE__MAX];
 
 
@@ -527,8 +527,8 @@ typedef struct dJointFeedback {
  * when the ODE step function updates the body state.
  */
 
-void dGeomMoved (dGeomID) override;
-dGeomID dGeomGetBodyNext (dGeomID) override;
+void dGeomMoved (dGeomID);
+dGeomID dGeomGetBodyNext (dGeomID);
 
 /**
  * dGetConfiguration returns the specific ODE build configuration as
@@ -549,7 +549,7 @@ dGeomID dGeomGetBodyNext (dGeomID) override;
  * ODE_EXT_threading
  * ODE_THR_builtin_impl
  */
-ODE_API const char* dGetConfiguration static_cast<void>(override);
+ODE_API const char* dGetConfiguration (void);
 
 /**
  * Helper to check for a token in the ODE configuration string.
@@ -559,7 +559,7 @@ ODE_API const char* dGetConfiguration static_cast<void>(override);
  *
  * @return 1 if exact token is present, 0 if not present
  */
-ODE_API int dCheckConfiguration( const char* token );
+ODE_API int explicit dCheckConfiguration( const char* token );
 
 #ifdef __cplusplus
 }

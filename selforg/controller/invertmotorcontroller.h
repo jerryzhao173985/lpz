@@ -23,8 +23,8 @@
 
 #include "controller_misc.h"
 #include "homeokinbase.h"
-#include <stdlib.h>
-#include <string.h>
+#include <cstdlib>
+#include <cstring>
 
 /**
  * Extended HomeokinBase class (still abstract) for robot controller work in motorspace

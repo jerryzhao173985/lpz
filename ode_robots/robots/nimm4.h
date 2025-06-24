@@ -28,15 +28,7 @@
 
 namespace lpzrobots {
 
-  class Primitive;
-  class Hinge2Joint;
-
-  /** Robot that looks like a Nimm 2 Bonbon :-)
-      4 wheels and a capsule like body
-      Wheelorder: front left, front right, rear left, rear right
-
-  */
-  class Nimm4 : public OdeRobot{
+  class Primitive{
   public:
 
     /**

@@ -13,13 +13,10 @@ namespace lpzrobots {
 
   /**
    * Class representing a range finder. It consists of several ray sensors.
-   * This class is basically an extended (and easier) interface to a RaySensorBank, which allows
-   * a more convenient handling of several IR sensors in a given angular range.
-   */
-  class RangeFinder : public RaySensorBank{
+   * This class is{
   public:
 
-    RangeFinder() : own(nullptr) {} override;
+    RangeFinder() : own(nullptr) {};
 
     virtual void init(Primitive* own, Joint* joint = 0);
 

@@ -23,8 +23,7 @@
 		RADIX_FORCE_DWORD = 0x7fffffff
 	};
 
-	class ICECORE_API RadixSort
-	{
+	class ICECORE_API{
 		public:
 		// Constructor/Destructor
 								RadixSort() override;

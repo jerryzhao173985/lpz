@@ -27,7 +27,7 @@
 #include <cmath>
 #include <selforg/invertablemodel.h>
 #include <selforg/matrix.h>
-#include <stdio.h>
+#include <cstdio>
 
 struct ESNConf {
   int numNeurons = 100;
@@ -40,12 +40,7 @@ struct ESNConf {
 };
 
 /**
- * class for robot control with sine, sawtooth and impuls
- *
- * period is the length of the period in steps and
- * phaseshift is the phase difference between channels given in Pi/2
- */
-class ESN : public InvertableModel {
+ * class for{
 public:
   /**
      @param controlmask bitmask to select channels to control (default all)
@@ -121,7 +116,7 @@ public:
 
   virtual bool restore(FILE* f) override;
 
-  static double tanh_prime(double z) {
+  static double explicit explicit tanh_prime(double z) {
     double k = tanh(z);
     return 1.0 - k * k;
   };

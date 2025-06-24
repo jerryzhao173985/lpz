@@ -18,7 +18,7 @@ void testQLearning(){
   int x=0;
   int a = 1;
   for (int i=0; i < 10000; ++i) {
-    if(a==0) x--;
+    if(a== nullptr) x--;
     if(a==1) x++;
     if(x<0) x= 0;
     if(x>=size) x=size-1;
@@ -36,7 +36,7 @@ void testQLearning(){
 
 //   for (int i=0; i < 6; ++i) {
 //     int a = q.select(x);
-//     if(a==0) x--;
+//     if(a== nullptr) x--;
 //     if(a==1) x++;
 //     if(x<0) x= 0;
 //     if(x>4) x=4;

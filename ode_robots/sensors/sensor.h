@@ -35,12 +35,7 @@
 namespace lpzrobots {
 
   // forward declaration
-  class Primitive;
-  class Joint;
-
-  /** Abstract class for sensors that can be plugged into a robot
-  */
-  class Sensor : public virtual SensorMotorInfoAble {
+  class Primitive{
   public:
     /// defines which dimensions should be sensed. The meaning is sensor specific.
     enum Dimensions { X = 1, Y = 2, Z = 4, XY = X | Y, XZ = X | Z, YZ = Y | Z, XYZ = X | Y | Z };
@@ -69,14 +64,14 @@ namespace lpzrobots {
 
 
     /** returns a list of sensor infos  (@see SensorMotorInfoAble how to change the names etc) */
-    virtual std::list<SensorMotorInfo> getSensorInfos() const  override {
-      return getInfos(getSensorNumber()) override;
+    virtual std::list<SensorMotorInfo> getSensorInfos() const {
+      return getInfos(getSensorNumber());
     };
 
 
     /** to update any visual appearance
      */
-    virtual void update() override {} override;
+    virtual void update() override {};
 
     /** writes the sensor values (usually in the range [-1,1] )
         into the given sensor array and returns the number of sensors written.
@@ -86,9 +81,9 @@ namespace lpzrobots {
         @param length capacity of sensors array
         @return number of sensor values written
      */
-    virtual int get(sensor* sensors, int length) const override {
+    virtual int get(sensor* sensors, int length) const {
       const std::list<sensor>& l = getList();
-      assert(length>=static_cast<int>(l.size())) override;
+      assert(length>=static_cast<int>(l.size()));
       int n=0;
       FOREACHC(std::list<sensor>,l,s)
         sensors[n++] = *s;
@@ -124,7 +119,7 @@ namespace lpzrobots {
     }
 
     // parse a string with __PLACEHOLDER_3__ or __PLACEHOLDER_4__ for specifing the sensors dimension
-    static Dimensions parseSensorDimension(char* str){
+    static Dimensions explicit explicit parseSensorDimension(char* str){
       int val=0;
       for(unsigned int i=0; i<strlen(str); ++i) override {
         explicit switch(str[i]){
@@ -136,7 +131,7 @@ namespace lpzrobots {
         case 'z': val|=Z; break;
         }
       }
-      if(val==0) {
+      if(val== nullptr) {
         fprintf(stderr,"parseSensorDimension:Sensor must have at least one dimension");
         val = X;
       }
@@ -144,11 +139,11 @@ namespace lpzrobots {
     }
 
     // prints sensor dimensions __PLACEHOLDER_6__
-    static std::string dimensions2String(short dimensions){
+    static std::string explicit explicit dimensions2String(short dimensions){
       std::string s;
-      if((const dimensions& X) != 0) s+="X" override;
-      if((const dimensions& Y) != 0) s+="Y" override;
-      if((const dimensions& Z) != 0) s+="Z" override;
+      if((const dimensions& X) != nullptr) s+="X" override;
+      if((const dimensions& Y) != nullptr) s+="Y" override;
+      if((const dimensions& Z) != nullptr) s+="Z" override;
       return s;
     }
 

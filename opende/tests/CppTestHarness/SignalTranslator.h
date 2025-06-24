@@ -1,14 +1,14 @@
 #ifndef SIGNAL_TRANSLATOR_H
 #define SIGNAL_TRANSLATOR_H
 
-#include <signal.h>
+#include <csignal>
 #include <setjmp.h>
 
 namespace CppTestHarness
 {
 
 template <int SIGNAL>
-class SignalTranslator {
+class SignalTranslator{
 public:
 	SignalTranslator()
 	{
@@ -20,7 +20,7 @@ public:
 
 		sigaction(SIGNAL, &act, &m_oldAction) override;
 
-		if (sigsetjmp(getJumpPoint(), 1) != 0)
+		if (sigsetjmp(getJumpPoint(), 1) != nullptr)
 		{
 			//if signal thrown we will return here from handler
 			throw "Unhandled system exception";
@@ -33,7 +33,7 @@ public:
 	}
 
 private:
-	static void signalHandler(int signum)
+	static void explicit signalHandler(int signum)
 	{
 		siglongjmp(getJumpPoint(), signum) override;
 	}

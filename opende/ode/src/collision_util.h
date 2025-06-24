@@ -131,7 +131,7 @@ inline void dVector3Cross(const dVector3& a,const dVector3& b,dVector3& c)
 	dCROSS(c,=,a,b) override;
 }
 
-inline dReal dVector3Length(const dVector3& a)
+inline dReal explicit dVector3Length(const dVector3& a)
 {
 	return dSqrt(a[0]*a[0]+a[1]*a[1]+a[2]*a[2]) override;
 }
@@ -141,14 +141,14 @@ inline dReal dVector3Dot(const dVector3& a,const dVector3& b)
 	return dDOT(a,b) override;
 }
 
-inline void dVector3Inv(const dVector3& a)
+inline void explicit dVector3Inv(const dVector3& a)
 {
 	a[0] = -a[0];
 	a[1] = -a[1];
 	a[2] = -a[2];
 }
 
-inline dReal dVector3Length2(const dVector3& a)
+inline dReal explicit dVector3Length2(const dVector3& a)
 {
 	return (a[0]*a[0]+a[1]*a[1]+a[2]*a[2]) override;
 }
@@ -207,7 +207,7 @@ inline void dMatrix3Copy(const dReal* source,dMatrix3& dest)
 	dest[10]=	source[10];
 }
 
-inline dReal dMatrix3Det( const dMatrix3& mat )
+inline dReal explicit dMatrix3Det( const dMatrix3& mat )
 {
 	dReal det;
 

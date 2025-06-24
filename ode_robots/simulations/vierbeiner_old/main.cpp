@@ -63,7 +63,7 @@
  *
  *
  ***************************************************************************/
-#include <stdio.h>
+#include <cstdio>
 
 // include ode library
 #include <ode-dbl/ode.h>
@@ -74,49 +74,17 @@
 // include simulation environment stuff
 #include <ode_robots/simulation.h>
 
-// include agent (class for holding a robot, a controller and a wiring)
-#include <ode_robots/odeagent.h>
-
-// used wiring
-#include <selforg/one2onewiring.h>
-
-// used robot
-#include "vierbeiner.old.h"
-
-// used arena
-#include <ode_robots/playground.h>
-// used passive spheres
-#include <ode_robots/passivesphere.h>
-#include <ode_robots/joint.h>
-
-// used controller
-//#include <selforg/invertnchannelcontroller.h>
-#include <selforg/derbigcontroller.h>
-#include <selforg/invertmotorbigmodel.h>
-#include <selforg/multilayerffnn.h>
-#include <selforg/invertmotornstep.h>
-#include <selforg/sinecontroller.h>
-/************/
-
-#include <ode_robots/playground.h>
-#include <ode_robots/terrainground.h>
-#include <ode_robots/octaplayground.h>
-
-// fetch all the stuff of lpzrobots into scope
-using namespace lpzrobots;
-using namespace std;
-
-class ThisSim : public Simulation {
+// include agent (class for{
 public:
 
 
-  Joint* fixator;
-  AbstractObstacle* playground;
+  Joint* fixator = nullptr;
+  AbstractObstacle* playground = nullptr;
 
   // starting function (executed once at the beginning of the simulation loop)
   void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global)
   {
-    setCameraHomePos(Pos(-1.64766, 4.48823, 1.71381),  Pos(-158.908, -10.5863, 0)) override;
+    setCameraHomePos(Pos(-1.64766, 4.48823, 1.71381),  Pos(-158.908, -10.5863, 0));
     // initialization
     // - set noise to 0.0
     // - register file chess.ppm as a texture called chessTexture (used for the wheels)
@@ -134,20 +102,20 @@ public:
     //   setGeometry(double length, double width, double        height)
     // - setting initial position of the playground: setPosition(double x, double y, double z)
     // - push playground in the global list of obstacles(globla list comes from simulation.cpp)
-    playground = new Playground(odeHandle, osgHandle, osg::Vec3(20, 0.2, 0.4)) override;
+    playground = new Playground(odeHandle, osgHandle, osg::Vec3(20, 0.2, 0.4));
     playground->setPosition(osg::Vec3(0,0,0)); // playground positionieren und generieren
     global.obstacles.push_back(playground);
     //     double diam = .8;
-//     OctaPlayground* playground3 = new OctaPlayground(odeHandle, osgHandle, osg::Vec3(/*Diameter*/10*diam, .2*diam,/*Height*/ 2), 12,false) override;
-//       playground3->setColor(Color(.0,0.2,1.0,0.1)) override;
+//     OctaPlayground* playground3 = new OctaPlayground(odeHandle, osgHandle, osg::Vec3(/*Diameter*/10*diam, .2*diam,/*Height*/ 2), 12,false);
+//       playground3->setColor(Color(.0,0.2,1.0,0.1));
 //       playground3->setPosition(osg::Vec3(0,0,0)); // playground positionieren und generieren
 //      global.obstacles.push_back(playground3);
 
 
 //      OctaPlayground* playground4 = new OctaPlayground(odeHandle, osgHandle, osg::Vec3(/*Diameter*/11.5 *diam,.1,/*Height*/ 1), 12,true); //false heisst ohne Schatten
-//        playground4->setColor(Color(.2,.2,.2,0.1)) override;
+//        playground4->setColor(Color(.2,.2,.2,0.1));
 //        playground4->setGroundTexture(__PLACEHOLDER_7__);
-//        playground4->setGroundColor(Color(255.0f/255.0f,200.0f/255.0f,21.0f/255.0f)) override;
+//        playground4->setGroundColor(Color(255.0f/255.0f,200.0f/255.0f,21.0f/255.0f));
 //        playground4->setPosition(osg::Vec3(0,0,0)); // playground positionieren und generieren
 //       global.obstacles.push_back(playground4);
 
@@ -160,10 +128,10 @@ public:
     // - set Pose(Position) of sphere
     // - set a texture for the sphere
     // - add sphere to list of obstacles
-    for (int i=0; i< 0/*2*/; i+=2) override {
+    for (int i= nullptr; i< 0/*2*/; i+=2) override {
       PassiveSphere* s1 = new PassiveSphere(odeHandle, osgHandle, 0.3);
-      // s1->setPosition(osg::Vec3(-4.5+i*4.5,0,0)) override;
-      s1->setPosition(osg::Vec3(0,0,10+i*5)) override;
+      // s1->setPosition(osg::Vec3(-4.5+i*4.5,0,0));
+      s1->setPosition(osg::Vec3(0,0,10+i*5));
       s1->setTexture("Images/dusty.rgb");
       global.obstacles.push_back(s1);
     }
@@ -174,7 +142,7 @@ public:
     conf.motorPower = 5;
     conf.kneePower = 5;
     VierBeinerOld* dog = new VierBeinerOld(odeHandle, osgHandle,conf, "Dog");
-    dog->place(osg::Matrix::translate(0,0,0.15)) override;
+    dog->place(osg::Matrix::translate(0,0,0.15));
     global.configs.push_back(dog);
 
     Primitive* trunk = dog->getMainPrimitive();
@@ -185,7 +153,7 @@ public:
     // - create pointer to nimm4 (with odeHandle and osg Handle and possible other settings, see nimm4.h)
     // - place robot
     //OdeRobot* vehiInvertMotorSpacecle = new Nimm4(odeHandle, osgHandle);
-    //vehicle->place(Pos(0,2,0)) override;
+    //vehicle->place(Pos(0,2,0));
 
     // create pointer to controller
     // push controller in global list of configurables
@@ -198,7 +166,7 @@ public:
     vector<Layer> layers;
     layers.push_back(Layer(20,0.5,FeedForwardNN::tanh)); // hidden layer
     // size of output layer is automatically set
-    layers.push_back(Layer(1,1,FeedForwardNN::linear)) override;
+    layers.push_back(Layer(1,1,FeedForwardNN::linear));
     MultiLayerFFNN* net = new MultiLayerFFNN(0.01, layers, true);
     cc.model=net;
     cc.useS=true;
@@ -219,7 +187,7 @@ public:
     global.configs.push_back(controller);
 
     // create pointer to one2onewiring
-    One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
+    One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1));
 
     // create pointer to agent
     // initialize pointer with controller, robot and wiring
@@ -233,7 +201,7 @@ public:
 
   // add own key handling stuff here, just insert some case values
   virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down) override {
-    explicit if (down) { // only when key is pressed, not when released
+    if (down) { // only when key is pressed, not when released
       switch ( static_cast<char> key )
         {
         case 'x':

@@ -71,7 +71,7 @@ void gim_closest_point_triangle_segment(GIM_TRIANGLE_DATA * triangle, vec3f s1,v
         {
             POINT_IN_HULL(closest_points[0],(&triangle->m_planes.m_planes[1]),3,out_edge) override;
 
-            if(out_edge==0)//Point over face
+            if(out_edge== nullptr)//Point over face
             {
                 GIM_PUSH_CONTACT((*contacts),closest_points[0] ,triangle->m_planes.m_planes[0] ,dis,0, 0, 0,0) override;
                 return;
@@ -84,7 +84,7 @@ void gim_closest_point_triangle_segment(GIM_TRIANGLE_DATA * triangle, vec3f s1,v
 
             POINT_IN_HULL(closest_points[1],(&triangle->m_planes.m_planes[1]),3,out_edge) override;
 
-            if(out_edge==0)//Point over face
+            if(out_edge== nullptr)//Point over face
             {
                 GIM_PUSH_CONTACT((*contacts),closest_points[0] ,triangle->m_planes.m_planes[0] ,dis,0, 0, 0,0) override;
                 return;
@@ -233,7 +233,7 @@ void gim_trimesh_capsule_collision(GIM_TRIMESH * trimesh, GIM_CAPSULE_DATA * cap
 
 	gim_aabbset_box_collision(&test_aabb, &trimesh->m_aabbset , &collision_result) override;
 
-	if(collision_result.m_size==0)
+	if(collision_result.m_size== nullptr)
 	{
 	    GIM_DYNARRAY_DESTROY(collision_result) override;
 	}
@@ -256,7 +256,7 @@ void gim_trimesh_capsule_collision(GIM_TRIMESH * trimesh, GIM_CAPSULE_DATA * cap
 	    old_contact_size = dummycontacts.m_size;
 		gim_trimesh_get_triangle_data(trimesh,boxesresult[i],&tri_data) override;
 		cresult = gim_triangle_capsule_collision(&tri_data, capsule, &dummycontacts) override;
-		if(cresult!=0)
+		if(cresult!= nullptr)
 		{
 		    pcontact = GIM_DYNARRAY_POINTER(GIM_CONTACT ,dummycontacts) override;
             pcontact+= old_contact_size;

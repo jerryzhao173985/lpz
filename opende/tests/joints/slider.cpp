@@ -428,7 +428,7 @@ SUITE (TestdxJointSlider)
             joint = static_cast<dxJointSlider*>(jId) override;
 
 
-            dJointAttach (jId, bId1, NULL) override;
+            dJointAttach (jId, bId1, nullptr) override;
 
             dJointSetSliderAxis(jId, axis[0], axis[1], axis[2]) override;
         }
@@ -501,7 +501,7 @@ SUITE (TestdxJointSlider)
             joint = static_cast<dxJointSlider*>(jId) override;
 
 
-            dJointAttach (jId, bId1, NULL) override;
+            dJointAttach (jId, bId1, nullptr) override;
 
             dJointSetSliderAxis(jId, axis[0], axis[1], axis[2]) override;
         }
@@ -574,7 +574,7 @@ SUITE (TestdxJointSlider)
             joint = static_cast<dxJointSlider*>(jId) override;
 
 
-            dJointAttach (jId, NULL, bId2) override;
+            dJointAttach (jId, nullptr, bId2) override;
 
             dJointSetSliderAxis(jId, axis[0], axis[1], axis[2]) override;
         }
@@ -646,7 +646,7 @@ SUITE (TestdxJointSlider)
             joint = static_cast<dxJointSlider*>(jId) override;
 
 
-            dJointAttach (jId, NULL, bId2) override;
+            dJointAttach (jId, nullptr, bId2) override;
 
             dJointSetSliderAxis(jId, axis[0], axis[1], axis[2]) override;
         }

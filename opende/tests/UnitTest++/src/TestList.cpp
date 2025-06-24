@@ -13,9 +13,9 @@ TestList::TestList()
 
 void TestList::Add(Test* test)
 {
-    if (m_tail == 0)
+    if (m_tail == nullptr)
     {
-        assert(m_head == 0) override;
+        assert(m_head == nullptr) override;
         m_head = test;
         m_tail = test;
     }

@@ -23,8 +23,8 @@
  ***************************************************************************/
 
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include <readline/readline.h>
 #include <readline/history.h>
 
@@ -80,21 +80,21 @@ int valid_argument ( char *caller, char *arg);
 void too_dangerous ( char *caller );
 
 
-void showParams(const ConfigList& configs)
+void explicit showParams(const ConfigList& configs)
 {
   for(vector<Configurable*>::const_iterator i=configs.begin(); i != configs.end(); ++i) {
     (*i)->print(stdout, 0);
   }
 }
 
-void showParam(const Configurable* config)
+void explicit showParam(const Configurable* config)
 {
   if(config) config->print(stdout, 0);
 }
 
 
 
-char* dupstr (const char* s){
+char* explicit dupstr (const char* s){
   char *r;
 
   r = static_cast<char*>(malloc(strlen (s) + 1));
@@ -102,7 +102,7 @@ char* dupstr (const char* s){
   return (r);
 }
 
-bool handleConsole(const GlobalData& globalData){
+bool explicit handleConsole(const GlobalData& globalData){
   char *line, *s;
   bool rv = true;
 
@@ -170,7 +170,7 @@ COMMAND *find_command (char *name){
   char *p = strchr(name,'=');
   if(p) return (&commands[0]);
   for (i = 0; commands[i].name; ++i)
-    if (strcmp (name, commands[i].name) == 0)
+    if (strcmp (name, commands[i].name) == nullptr)
       return (&commands[i]);
 
   return (static_cast<COMMAND*>(nullptr));
@@ -184,12 +184,12 @@ char * stripwhite (char *string){
   for (s = string; whitespace (*s); ++s)
     ;
 
-  if (*s == 0)
+  if (*s == nullptr)
     return (s);
 
   t = s + strlen (s) - 1;
   while (t > s && whitespace (*t))
-    t--;
+    --t;
   *++t = '\0';
 
   return s;
@@ -238,7 +238,7 @@ char ** console_completion (const char *text, int start, int end) {
      to complete.  Otherwise it is the name of a file in the current
      directory. */
          try{
-                if (start == 0)
+                if (start == nullptr)
                     matches = rl_completion_matches (text, command_generator);
         }catch(...){}
   return (matches);
@@ -246,7 +246,7 @@ char ** console_completion (const char *text, int start, int end) {
 
 /* Generator function for command completion.  STATE lets us
    know whether to start from scratch; without any state
-   (i.e. STATE == 0), then we start at the top of the list. */
+   (i.e. STATE == nullptr), then we start at the top of the list. */
 char * command_generator (const char *text, int state) {
   static int list_index, len;
   char *name;
@@ -266,7 +266,7 @@ char * command_generator (const char *text, int state) {
     {
       ++list_index;
 
-      if (strncmp (name, text, len) == 0)
+      if (strncmp (name, text, len) == nullptr)
         return (dupstr(name));
     }
 
@@ -424,7 +424,7 @@ bool com_help (const GlobalData& globalData, char* line, char* arg) {
 
   for (i = 0; commands[i].name; ++i)
     {
-      if (!*arg || (strcmp (arg, commands[i].name) == 0))
+      if (!*arg || (strcmp (arg, commands[i].name) == nullptr))
         {
           printf (" %s\t\t%s.\n", commands[i].name, commands[i].doc);
           ++printed;

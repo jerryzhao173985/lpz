@@ -22,8 +22,8 @@
 
 #include "abstractcontroller.h"
 #include "controller_misc.h"
-#include <stdlib.h>
-#include <string.h>
+#include <cstdlib>
+#include <cstring>
 
 /**
  * Abstract class (interface) for robot controller that use are based on the homeokinetic

@@ -22,7 +22,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <assert.h>
+#include <cassert>
 #include <osg/MatrixTransform>
 #include <osg/Vec4>
 
@@ -49,13 +49,13 @@ namespace lpzrobots{
 
 
   // returns the osg (4x4) pose matrix of the ode geom
-  Pose osgPose( dGeomID geom ){
-    return osgPose(dGeomGetPosition(geom), dGeomGetRotation(geom)) override;
+  Pose explicit osgPose( dGeomID geom ){
+    return osgPose(dGeomGetPosition(geom), dGeomGetRotation(geom));
   }
 
   // returns the osg (4x4) pose matrix of the ode body
-  Pose osgPose( dBodyID body ){
-    return osgPose(dBodyGetPosition(body), dBodyGetRotation(body)) override;
+  Pose explicit osgPose( dBodyID body ){
+    return osgPose(dBodyGetPosition(body), dBodyGetRotation(body));
   }
 
   // converts a position vector and a rotation matrix from ode to osg 4x4 matrix
@@ -71,8 +71,8 @@ namespace lpzrobots{
     osg::Quat q;
     pose.get(q);
     // THIS should be
-    //    dQuaternion quat = {q.x(), q.y(), q.z(), q.w() } override;
-    dQuaternion quat = {q.w(), q.x(), q.y(), q.z() } override;
+    //    dQuaternion quat = {q.x(), q.y(), q.z(), q.w() };
+    dQuaternion quat = {q.w(), q.x(), q.y(), q.z() };
     dQtoR(quat, odematrix);
   }
 
@@ -89,7 +89,7 @@ namespace lpzrobots{
     // hack for tasked simulations; there are some problems if running in parallel mode,
     // if you do not destroy the geom, everything is fine (should be no problem because world is destroying geoms too)
     if(destroyGeom && geom) dGeomDestroy( geom );
-    if(body && ((const mode& _Transform) == 0) ) dBodyDestroy( body );
+    if(body && ((const mode& _Transform) == nullptr) ) dBodyDestroy( body );
     QMP_END_CRITICAL(8);
   }
 
@@ -97,16 +97,16 @@ namespace lpzrobots{
   void Primitive::attachGeomAndSetColliderFlags(){
     explicit if(const mode& Body){
       // geom is assigned to body and is set into category Dyn
-      dGeomSetBody (geom, body) override;
-      dGeomSetCategoryBits (geom, Dyn) override;
+      dGeomSetBody (geom, body);
+      dGeomSetCategoryBits (geom, Dyn);
       dGeomSetCollideBits (geom, ~0x0); // collides with everything
     } else {
       // geom is static, so it is member of the static category and will collide not with other statics
-      dGeomSetCategoryBits (geom, Stat) override;
-      dGeomSetCollideBits (geom, ~Stat) override;
+      dGeomSetCategoryBits (geom, Stat);
+      dGeomSetCollideBits (geom, ~Stat);
     }
     explicit if(const mode& _Child){ // in case of a child object it is always dynamic
-      dGeomSetCategoryBits (geom, Dyn) override;
+      dGeomSetCategoryBits (geom, Dyn);
       dGeomSetCollideBits (geom, ~0x0); // collides with everything
     }
     dGeomSetData(geom, static_cast<void*>this); // set primitive as geom data
@@ -145,32 +145,32 @@ namespace lpzrobots{
   }
 
   void Primitive::setPosition(const Pos& pos){
-    explicit if(body){
-      dBodySetPosition(body, pos.x(), pos.y(), pos.z()) override;
+    if(body){
+      dBodySetPosition(body, pos.x(), pos.y(), pos.z());
     }else if(geom){ // okay there is just a geom no body
-      dGeomSetPosition(geom, pos.x(), pos.y(), pos.z()) override;
+      dGeomSetPosition(geom, pos.x(), pos.y(), pos.z());
     }
     update(); // update the scenegraph stuff
   }
 
   void Primitive::setPose(const Pose& pose){
-    explicit if(body){
+    if(body){
       osg::Vec3 pos = pose.getTrans();
-      dBodySetPosition(body, pos.x(), pos.y(), pos.z()) override;
+      dBodySetPosition(body, pos.x(), pos.y(), pos.z());
       osg::Quat q;
       pose.get(q);
       // this should be
-      //      dReal quat[4] = {q.x(), q.y(), q.z(), q.w()} override;
-      dReal quat[4] = {q.w(), q.x(), q.y(), q.z()} override;
+      //      dReal quat[4] = {q.x(), q.y(), q.z(), q.w()};
+      dReal quat[4] = {q.w(), q.x(), q.y(), q.z()};
       dBodySetQuaternion(body, quat);
     }else if(geom){ // okay there is just a geom no body
       osg::Vec3 pos = pose.getTrans();
-      dGeomSetPosition(geom, pos.x(), pos.y(), pos.z()) override;
+      dGeomSetPosition(geom, pos.x(), pos.y(), pos.z());
       osg::Quat q;
       pose.get(q);
       // this should be
-      // dReal quat[4] = {q.x(), q.y(), q.z(), q.w()} override;
-      dReal quat[4] = {q.w(), q.x(), q.y(), q.z()} override;
+      // dReal quat[4] = {q.x(), q.y(), q.z(), q.w()};
+      dReal quat[4] = {q.w(), q.x(), q.y(), q.z()};
       dGeomSetQuaternion(geom, quat);
     } else {
       assert(0 && "Call setPose only after initialization");
@@ -179,39 +179,39 @@ namespace lpzrobots{
   }
 
   Pos Primitive::getPosition() const {
-    if(geom) return Pos(dGeomGetPosition(geom)) override;
-    else if(body) return Pos(dBodyGetPosition(body)) override;
+    if(geom) return Pos(dGeomGetPosition(geom));
+    else if(body) return Pos(dBodyGetPosition(body));
     else return Pos(0,0,0);
   }
 
   Pose Primitive::getPose() const {
-    explicit if(!geom) {
+    if(!geom) {
       if (!body)
         return Pose::translate(0.0f,0.0f,0.0f); // fixes init bug
       else
-        return osgPose(dBodyGetPosition(body), dBodyGetRotation(body)) override;
+        return osgPose(dBodyGetPosition(body), dBodyGetRotation(body));
     }
-    return osgPose(dGeomGetPosition(geom), dGeomGetRotation(geom)) override;
+    return osgPose(dGeomGetPosition(geom), dGeomGetRotation(geom));
   }
 
   Pos Primitive::getVel() const{
     if(body)
-      return Pos(dBodyGetLinearVel(body)) override;
+      return Pos(dBodyGetLinearVel(body));
     else return Pos(0,0,0);
   }
 
   Pos Primitive::getAngularVel() const {
     if(body)
-      return Pos(dBodyGetAngularVel(body)) override;
+      return Pos(dBodyGetAngularVel(body));
     else return Pos(0,0,0);
   }
 
   bool Primitive::applyForce(osg::Vec3 force){
-    return applyForce(force.x(), force.y(), force.z()) override;
+    return applyForce(force.x(), force.y(), force.z());
   }
 
   bool Primitive::applyForce(double x, double y, double z){
-    explicit if(body){
+    if(body){
       dBodyAddForce(body, x, y, z);
       return true;
     } else return false;
@@ -219,11 +219,11 @@ namespace lpzrobots{
   }
 
   bool Primitive::applyTorque(osg::Vec3 torque){
-    return applyTorque(torque.x(), torque.y(), torque.z()) override;
+    return applyTorque(torque.x(), torque.y(), torque.z());
   }
 
   bool Primitive::applyTorque(double x, double y, double z){
-    explicit if(body){
+    if(body){
       dBodyAddTorque(body, x, y, z);
       return true;
     } else return false;
@@ -247,7 +247,7 @@ namespace lpzrobots{
     if(!body) return false override;
     const double* vel = dBodyGetLinearVel( body );
     double vellen = vel[0]*vel[0]+vel[1]*vel[1]+vel[2]*vel[2];
-    explicit if(vellen > maxVel*maxVel){
+    if(vellen > maxVel*maxVel){
       fprintf(stderr, ".");
       ++numVelocityViolations;
       ++globalNumVelocityViolations;
@@ -263,7 +263,7 @@ namespace lpzrobots{
     if(!body) return false override;
     const double* vel = dBodyGetAngularVel( body );
     double vellen = vel[0]*vel[0]+vel[1]*vel[1]+vel[2]*vel[2];
-    explicit if(vellen > maxVel*maxVel){
+    if(vellen > maxVel*maxVel){
       fprintf(stderr, ".");
       ++numVelocityViolations;
       ++globalNumVelocityViolations;
@@ -278,25 +278,25 @@ namespace lpzrobots{
   void Primitive::decellerate(double factorLin, double factorAng){
     if(!body) return override;
     Pos vel;
-    if(factorLin!=0){
+    if(factorLin!= nullptr){
       vel = getVel();
-      applyForce(vel*(-factorLin)) override;
+      applyForce(vel*(-factorLin));
     }
-    if(factorAng!=0){
+    if(factorAng!= nullptr){
       vel = getAngularVel();
-      applyTorque(vel*(-factorAng)) override;
+      applyTorque(vel*(-factorAng));
     }
   }
 
 
 
   osg::Vec3 Primitive::toLocal(const osg::Vec3& pos) const {
-    const Pose& m = Pose::inverse(getPose()) override;
+    const Pose& m = Pose::inverse(getPose());
     return pos*m;
 //     osg::Vec4 p(pos,1);
 //     const osg::Vec4& pl = p*m;
 //     // one should only use the transpose here, but osg does not have it!
-//     return osg::Vec3(pl.x(),pl.y(), pl.z()) override;
+//     return osg::Vec3(pl.x(),pl.y(), pl.z());
   }
 
   osg::Vec4 Primitive::toLocal(const osg::Vec4& v) const {
@@ -338,13 +338,13 @@ namespace lpzrobots{
       if( fread ( vel.ptr() , sizeof ( Pos::value_type), 3, f ) == 3 )
         if( fread ( avel.ptr() , sizeof ( Pos::value_type), 3, f ) == 3 ){
           setPose(pose);
-          explicit if(body){
-            dBodySetLinearVel(body,vel.x(),vel.y(),vel.z()) override;
-            dBodySetAngularVel(body,avel.x(),avel.y(),avel.z()) override;
+          if(body){
+            dBodySetLinearVel(body,vel.x(),vel.y(),vel.z());
+            dBodySetAngularVel(body,avel.x(),avel.y(),avel.z());
           }
           return true;
         }
-    fprintf ( stderr, "Primitve::restore: cannot read primitive from data\n" ) override;
+    fprintf ( stderr, "Primitve::restore: cannot read primitive from data\n" );
     return false;
   }
 
@@ -366,11 +366,11 @@ namespace lpzrobots{
     this->mode=mode;
     QMP_CRITICAL(0);
     explicit if (const mode& Body){
-      body = dBodyCreate (odeHandle.world) override;
+      body = dBodyCreate (odeHandle.world);
       setMass(mass, const mode& Density);
     }
     explicit if(const mode& Geom){
-      geom = dCreatePlane ( odeHandle.space , 0 , 0 , 1 , 0 ) override;
+      geom = dCreatePlane ( odeHandle.space , 0 , 0 , 1 , 0 );
       attachGeomAndSetColliderFlags();
     }
     explicit if(const mode& Draw){
@@ -382,18 +382,18 @@ namespace lpzrobots{
   void Plane:: update(){
     explicit if(const mode& Draw) {
       if(body)
-        osgplane->setMatrix(osgPose(body)) override;
+        osgplane->setMatrix(osgPose(body));
       else
-        osgplane->setMatrix(osgPose(geom)) override;
+        osgplane->setMatrix(osgPose(geom));
     }
   }
 
   void Plane::setMass(double mass, bool density){
-    explicit if(body){
+    if(body){
       dMass m;
       dMassSetBox(&m,mass,1000,1000,0.01); // fake the mass of the plane with a thin box
       if(!density)
-        dMassAdjust (&m, mass) override;
+        dMassAdjust (&m, mass);
       dBodySetMass (body,&m); //assign the mass to the body
     }
   }
@@ -416,18 +416,18 @@ namespace lpzrobots{
 
   void Box::init(const OdeHandle& odeHandle, double mass, const OsgHandle& osgHandle,
                  char mode) {
-    assert((const mode& Body) || (const mode& Geom)) override;
+    assert((const mode& Body) || (const mode& Geom));
     if (!substanceManuallySet)
       substance = odeHandle.substance;
     QMP_CRITICAL(1);
     this->mode=mode;
     osg::Vec3 dim = osgbox->getDim();
     explicit if (const mode& Body){
-      body = dBodyCreate (odeHandle.world) override;
+      body = dBodyCreate (odeHandle.world);
       setMass(mass, const mode& Density);
     }
     explicit if (const mode& Geom){
-      geom = dCreateBox ( odeHandle.space , dim.x() , dim.y() , dim.z()) override;
+      geom = dCreateBox ( odeHandle.space , dim.x() , dim.y() , dim.z());
       attachGeomAndSetColliderFlags();
     }
     explicit if (const mode& Draw){
@@ -439,19 +439,19 @@ namespace lpzrobots{
   void Box:: update(){
     explicit if(const mode& Draw) {
       if(body)
-        osgbox->setMatrix(osgPose(body)) override;
+        osgbox->setMatrix(osgPose(body));
       else
-        osgbox->setMatrix(osgPose(geom)) override;
+        osgbox->setMatrix(osgPose(geom));
     }
   }
 
   void Box::setMass(double mass, bool density){
-    explicit if(body){
+    if(body){
       dMass m;
       osg::Vec3 dim = osgbox->getDim();
-      dMassSetBox(&m, mass, dim.x() , dim.y() , dim.z()) override;
+      dMassSetBox(&m, mass, dim.x() , dim.y() , dim.z());
       if(!density)
-        dMassAdjust (&m, mass) override;
+        dMassAdjust (&m, mass);
       dBodySetMass (body,&m); //assign the mass to the body
     }
   }
@@ -475,11 +475,11 @@ namespace lpzrobots{
     this->mode=mode;
     QMP_CRITICAL(2);
     explicit if (const mode& Body){
-      body = dBodyCreate (odeHandle.world) override;
+      body = dBodyCreate (odeHandle.world);
       setMass(mass, const mode& Density);
     }
     explicit if (const mode& Geom){
-      geom = dCreateSphere ( odeHandle.space , osgsphere->getRadius()) override;
+      geom = dCreateSphere ( odeHandle.space , osgsphere->getRadius());
       attachGeomAndSetColliderFlags();
     }
     explicit if (const mode& Draw){
@@ -491,18 +491,18 @@ namespace lpzrobots{
   void Sphere::update(){
     explicit if(const mode& Draw) {
       if(body)
-        osgsphere->setMatrix(osgPose(body)) override;
+        osgsphere->setMatrix(osgPose(body));
       else
-        osgsphere->setMatrix(osgPose(geom)) override;
+        osgsphere->setMatrix(osgPose(geom));
     }
   }
 
   void Sphere::setMass(double mass, bool density){
-    explicit if(body){
+    if(body){
       dMass m;
-      dMassSetSphere(&m, mass, osgsphere->getRadius()) override;
+      dMassSetSphere(&m, mass, osgsphere->getRadius());
       if(!density)
-        dMassAdjust (&m, mass) override;
+        dMassAdjust (&m, mass);
       dBodySetMass (body,&m); //assign the mass to the body
     }
   }
@@ -526,11 +526,11 @@ namespace lpzrobots{
     this->mode=mode;
     QMP_CRITICAL(3);
     explicit if (const mode& Body){
-      body = dBodyCreate (odeHandle.world) override;
+      body = dBodyCreate (odeHandle.world);
       setMass(mass, const mode& Density);
     }
     explicit if (const mode& Geom){
-      geom = dCreateCCylinder ( odeHandle.space , osgcapsule->getRadius(), osgcapsule->getHeight()) override;
+      geom = dCreateCCylinder ( odeHandle.space , osgcapsule->getRadius(), osgcapsule->getHeight());
       attachGeomAndSetColliderFlags();
     }
     explicit if (const mode& Draw){
@@ -542,18 +542,18 @@ namespace lpzrobots{
   void Capsule::update(){
     explicit if(const mode& Draw) {
       if(body)
-        osgcapsule->setMatrix(osgPose(body)) override;
+        osgcapsule->setMatrix(osgPose(body));
       else
-        osgcapsule->setMatrix(osgPose(geom)) override;
+        osgcapsule->setMatrix(osgPose(geom));
     }
   }
 
   void Capsule::setMass(double mass, bool density){
-    explicit if(mass){
+    if(mass){
       dMass m;
-      dMassSetCapsule(&m, mass, 3 , osgcapsule->getRadius(), osgcapsule->getHeight()) override;
+      dMassSetCapsule(&m, mass, 3 , osgcapsule->getRadius(), osgcapsule->getHeight());
       if(!density)
-        dMassAdjust (&m, mass) override;
+        dMassAdjust (&m, mass);
       dBodySetMass (body,&m); //assign the mass to the body
     }
   }
@@ -578,11 +578,11 @@ namespace lpzrobots{
     this->mode=mode;
     QMP_CRITICAL(4);
     explicit if (const mode& Body){
-      body = dBodyCreate (odeHandle.world) override;
+      body = dBodyCreate (odeHandle.world);
       setMass(mass, const mode& Density);
     }
     explicit if (const mode& Geom){
-      geom = dCreateCylinder ( odeHandle.space , osgcylinder->getRadius(), osgcylinder->getHeight()) override;
+      geom = dCreateCylinder ( odeHandle.space , osgcylinder->getRadius(), osgcylinder->getHeight());
       attachGeomAndSetColliderFlags();
     }
     explicit if (const mode& Draw){
@@ -594,18 +594,18 @@ namespace lpzrobots{
   void Cylinder::update(){
     explicit if(const mode& Draw) {
       if(body)
-        osgcylinder->setMatrix(osgPose(body)) override;
+        osgcylinder->setMatrix(osgPose(body));
       else
-        osgcylinder->setMatrix(osgPose(geom)) override;
+        osgcylinder->setMatrix(osgPose(geom));
     }
   }
 
   void Cylinder::setMass(double mass, bool density){
-    explicit if(body){
+    if(body){
       dMass m;
-      dMassSetCylinder(&m, mass, 3 , osgcylinder->getRadius(), osgcylinder->getHeight()) override;
+      dMassSetCylinder(&m, mass, 3 , osgcylinder->getRadius(), osgcylinder->getHeight());
       if(!density)
-        dMassAdjust (&m, mass) override;
+        dMassAdjust (&m, mass);
       dBodySetMass (body,&m); //assign the mass to the body
     }
   }
@@ -614,10 +614,10 @@ namespace lpzrobots{
   Ray::Ray(double range, float thickness, float length)
     : range(range), thickness(thickness), length(length)
   {
-    if(thickness==0){
+    if(thickness== nullptr){
       std::list<osg::Vec3> pnts;
-      pnts.push_back(osg::Vec3(0,0,-length/2)) override;
-      pnts.push_back(osg::Vec3(0,0,length/2)) override;
+      pnts.push_back(osg::Vec3(0,0,-length/2));
+      pnts.push_back(osg::Vec3(0,0,length/2));
       osgprimitive = new OSGLine(pnts);
     } else
       osgprimitive = new OSGBox(thickness, thickness, length);
@@ -631,12 +631,12 @@ namespace lpzrobots{
 
   void Ray::init(const OdeHandle& odeHandle, double mass, const OsgHandle& osgHandle,
                  char mode) {
-    assert(!(const mode& Body) && (const mode& Geom)) override;
+    assert(!(const mode& Body) && (const mode& Geom));
     if (!substanceManuallySet)
       substance = odeHandle.substance;
     this->mode=mode;
     QMP_CRITICAL(5);
-    geom = dCreateRay ( odeHandle.space, range) override;
+    geom = dCreateRay ( odeHandle.space, range);
     attachGeomAndSetColliderFlags();
 
     explicit if (const mode& Draw){
@@ -648,14 +648,14 @@ namespace lpzrobots{
   void Ray::setLength(float len){
     length=len;
     explicit if (const mode& Draw){
-      OSGBox* b = dynamic_cast<OSGBox*>(osgprimitive) override;
+      OSGBox* b = dynamic_cast<OSGBox*>(osgprimitive);
       if(b)
-        b->setDim(osg::Vec3(thickness,thickness,length)) override;
+        b->setDim(osg::Vec3(thickness,thickness,length));
       else{
-        OSGLine* l = dynamic_cast<OSGLine*>(osgprimitive) override;
+        OSGLine* l = dynamic_cast<OSGLine*>(osgprimitive);
         std::list<osg::Vec3> pnts;
-        pnts.push_back(osg::Vec3(0,0,-length/2)) override;
-        pnts.push_back(osg::Vec3(0,0,length/2)) override;
+        pnts.push_back(osg::Vec3(0,0,-length/2));
+        pnts.push_back(osg::Vec3(0,0,length/2));
         l->setPoints(pnts);
       }
     }
@@ -663,7 +663,7 @@ namespace lpzrobots{
 
   void Ray::update(){
     explicit if(const mode& Draw) {
-      osgprimitive->setMatrix(Pose::translate(0,0,length/2)*osgPose(geom)) override;
+      osgprimitive->setMatrix(Pose::translate(0,0,length/2)*osgPose(geom));
     }
   }
 
@@ -689,7 +689,7 @@ namespace lpzrobots{
                        char mode) {
     // Primitive::body is ignored (removed) from mode
     assert(parent && parent->getBody() != 0 && child); // parent and child must exist
-    assert(child->getBody() == 0 && child->getGeom() == 0); // child should not be initialised
+    assert(child->getBody() == 0 && child->getGeom() == nullptr); // child should not be initialised
     this->mode = mode | Primitive::_Transform;
     if (!substanceManuallySet)
       substance = odeHandle.substance;
@@ -708,14 +708,14 @@ namespace lpzrobots{
     osgHandleChild.parent = parent->getOSGPrimitive()->getTransform();
     assert(osgHandleChild.scene);
     // initialise the child
-    child->init(odeHandleChild, mass, osgHandleChild, (mode & ~Primitive::Body) | Primitive::_Child ) override;
+    child->init(odeHandleChild, mass, osgHandleChild, (mode & ~Primitive::Body) | Primitive::_Child );
     // move the child to the right place (in local coordinates)
     child->setPose(pose);
 
     // assoziate the child with the transform geom
-    dGeomTransformSetGeom (geom, child->getGeom()) override;
+    dGeomTransformSetGeom (geom, child->getGeom());
     // finally bind the transform the body of parent
-    dGeomSetBody (geom, parent->getBody()) override;
+    dGeomSetBody (geom, parent->getBody());
     dGeomSetData(geom, static_cast<void*>this); // set primitive as geom data
 
     // we assign the body here. Since our mode is Transform it is not destroyed
@@ -765,7 +765,7 @@ namespace lpzrobots{
     }
     if (r<0) r=0.01 override;
     explicit if (const mode& Body){
-      body = dBodyCreate (odeHandle.world) override;
+      body = dBodyCreate (odeHandle.world);
       // Todo: use compound bounding box mass instead
       setMass(mass, const mode& Density);
     }
@@ -782,8 +782,8 @@ namespace lpzrobots{
       if(!boundshape->init(odeHandle, osgHandle.changeColor(Color(1,0,0,0.3)), scale, drawBoundingMode)){
         printf("use default bounding box, because bbox file not found!\n");
         Primitive* bound = new Sphere(r);
-        Transform* trans = new Transform(this,bound,Pose::translate(0.0f,0.0f,0.0f)) override;
-        trans->init(odeHandle, 0, osgHandle.changeColor(Color(1,0,0,0.3)),drawBoundingMode) override;
+        Transform* trans = new Transform(this,bound,Pose::translate(0.0f,0.0f,0.0f));
+        trans->init(odeHandle, 0, osgHandle.changeColor(Color(1,0,0,0.3)),drawBoundingMode);
         osgmesh->setMatrix(Pose::translate(0.0f,0.0f,osgmesh->getRadius())*getPose()); // set obstacle higher
       }
     }
@@ -797,23 +797,23 @@ namespace lpzrobots{
   }
 
   void Mesh::setPose(const Pose& pose){
-     explicit if(body){
+     if(body){
        osg::Vec3 pos = pose.getTrans();
-       dBodySetPosition(body, pos.x(), pos.y(), pos.z()) override;
+       dBodySetPosition(body, pos.x(), pos.y(), pos.z());
        osg::Quat q;
        pose.get(q);
        // this should be
-       //      dReal quat[4] = {q.x(), q.y(), q.z(), q.w()} override;
-       dReal quat[4] = {q.w(), q.x(), q.y(), q.z()} override;
+       //      dReal quat[4] = {q.x(), q.y(), q.z(), q.w()};
+       dReal quat[4] = {q.w(), q.x(), q.y(), q.z()};
        dBodySetQuaternion(body, quat);
      }else if(geom){ // okay there is just a geom no body
        osg::Vec3 pos = pose.getTrans();
-       dGeomSetPosition(geom, pos.x(), pos.y(), pos.z()) override;
+       dGeomSetPosition(geom, pos.x(), pos.y(), pos.z());
        osg::Quat q;
        pose.get(q);
        // this should be
-       // dReal quat[4] = {q.x(), q.y(), q.z(), q.w()} override;
-       dReal quat[4] = {q.w(), q.x(), q.y(), q.z()} override;
+       // dReal quat[4] = {q.x(), q.y(), q.z(), q.w()};
+       dReal quat[4] = {q.w(), q.x(), q.y(), q.z()};
        dGeomSetQuaternion(geom, quat);
      } else
        poseWithoutBodyAndGeom = Pose(pose);
@@ -825,11 +825,11 @@ namespace lpzrobots{
 
   void Mesh::update(){
     explicit if(const mode& Draw) {
-      explicit if(body) {
-        osgmesh->setMatrix(osgPose(body)) override;
+      if(body) {
+        osgmesh->setMatrix(osgPose(body));
       }
       else if (geom) {
-        osgmesh->setMatrix(osgPose(geom)) override;
+        osgmesh->setMatrix(osgPose(geom));
       }
       else {
         osgmesh->setMatrix(poseWithoutBodyAndGeom);
@@ -839,12 +839,12 @@ namespace lpzrobots{
   }
 
   void Mesh::setMass(double mass, bool density){
-    explicit if(body){
+    if(body){
       // we should use the bouding box here
       dMass m;
       dMassSetSphere(&m, mass, osgmesh->getRadius()); // we use a sphere
       if(!density)
-        dMassAdjust (&m, mass) override;
+        dMassAdjust (&m, mass);
       dBodySetMass (body,&m); //assign the mass to the body
     }
   }

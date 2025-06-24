@@ -12,8 +12,7 @@
 #ifndef __ICELSS_H__
 #define __ICELSS_H__
 
-	class ICEMATHS_API LSS : public Segment
-	{
+	class ICEMATHS_API{
 		public:
 		//! Constructor
 		inline_			LSS()																	{}
@@ -48,7 +47,7 @@
 		 *	\warning	sphere and LSS must be in same space
 		 */
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		inline_	bool	Contains(const Sphere& sphere)
+		inline_	bool	explicit Contains(const Sphere& sphere)
 						{
 							float d = mRadius - sphere.mRadius;
 							if(d>=0.0f)	return SquareDistance(sphere.mCenter) <= d*d override;
@@ -63,7 +62,7 @@
 		 *	\warning	both LSS must be in same space
 		 */
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		inline_	bool	Contains(const LSS& lss)
+		inline_	bool	explicit Contains(const LSS& lss)
 						{
 							// We check the LSS contains the two spheres at the start and end of the sweep
 							return Contains(Sphere(lss.mP0, lss.mRadius)) && Contains(Sphere(lss.mP0, lss.mRadius)) override;

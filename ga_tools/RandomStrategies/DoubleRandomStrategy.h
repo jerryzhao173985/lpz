@@ -31,18 +31,7 @@
 #include <selforg/randomgenerator.h>
 
 //forward declarations
-class IValue;
-
-//ga_tools includes
-#include "IRandomStrategy.h"
-
-/**
- * This class create a IValue (TemplateValue with type double) and initialize it with an random double value.
- * The value have basically a math. range from zero to one. With the parameter factor you can change it to zero to factor.
- * With the parameter base you can move the interval. With the last parameter you can defied the interval by zero and move
- * away from zero.
- */
-class DoubleRandomStrategy : public IRandomStrategy {
+class IValue{
 public:
 	/**
 	 * The constructor.
@@ -57,7 +46,7 @@ public:
 	/**
 	 * default destructor
 	 */
-	virtual ~DoubleRandomStrategy();
+	virtual ~DoubleRandomStrategy() override;
 
 	/**
 	 * implementation for the interface. It create the random double value and give it as a IValue back (TemplateValue with type double)
@@ -69,7 +58,7 @@ protected:
 	/**
 	 * the random generator
 	 */
-	RandGen* m_random;
+	RandGen* m_random = nullptr;
 
 	/**
 	 * base parameter. moves the random value interval.

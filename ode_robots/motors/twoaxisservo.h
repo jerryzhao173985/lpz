@@ -35,7 +35,7 @@ namespace lpzrobots {
 
   /** general servo motor for 2 axis joints
    */
-  class TwoAxisServo  : virtual public Sensor, virtual public Motor {
+  class TwoAxisServo{
   public:
     /** min and max values are understood as travel bounds. Min should be less than 0.*/
 
@@ -44,7 +44,7 @@ namespace lpzrobots {
                  double damp=0.2, double integration=2, double maxVel=10.0,
                  double jointLimit = 1.3, bool minmaxCheck=true);
 
-    virtual ~TwoAxisServo();
+    virtual ~TwoAxisServo() override;
 
     /** sets the set point of the servo.
         Position must be between -1 and 1. It is scaled to fit into min, max
@@ -52,9 +52,9 @@ namespace lpzrobots {
     virtual void set(double pos1, double pos2);
 
     /** returns the position of the servo (joint) of 1. axis in ranges [-1, 1] (scaled by min1, max1)*/
-    virtual double get1() const override {
+    virtual double get1() const {
       double pos =  joint->getPosition1();
-      explicit if(pos > 0){
+      if(pos > 0){
         pos /= max1;
       }else{
         pos /= -min1;
@@ -63,9 +63,9 @@ namespace lpzrobots {
     }
 
     /** returns the position of the servo (joint) of 2. axis in ranges [-1, 1] (scaled by min2, max2)*/
-    virtual double get2() const override {
+    virtual double get2() const {
       double pos =  joint->getPosition2();
-      explicit if(pos > 0){
+      if(pos > 0){
         pos /= max2;
       }else{
         pos /= -min2;
@@ -81,18 +81,18 @@ namespace lpzrobots {
 
     // --- Sensor interface ---
     virtual void init(Primitive* own, Joint* joint = 0) override { // and Motor interface
-      if(joint!=0) {
-        this->joint=dynamic_cast<TwoAxisJoint*>(joint) override;
+      if(joint!= nullptr) {
+        this->joint=dynamic_cast<TwoAxisJoint*>(joint);
       }
       assert(this->joint);
     }
 
-    virtual bool sense(const GlobalData& globaldata) override { return true;} override;
-    virtual int getSensorNumber() const override {
+    virtual bool sense(const GlobalData& globaldata) override { return true;};
+    virtual int getSensorNumber() const {
       return 2;
     }
-    virtual std::list<sensor> getList() const  override { return getListOfArray();} override;
-    virtual int get(sensor* sensors, int length) const override {
+    virtual std::list<sensor> getList() const { return getListOfArray() const;};
+    virtual int get(sensor* sensors, int length) const {
       assert(length>1);
       sensors[0]=get1();
       sensors[1]=get2();
@@ -100,7 +100,7 @@ namespace lpzrobots {
     }
 
     // --- Motor interface ---
-    virtual int getMotorNumber() const override { return 2;} override;
+    virtual int getMotorNumber() const { return 2;};
 
     virtual bool act(const GlobalData& globaldata) override {
       // here we should apply the forces etc, but due to backwards compatibility this remains in set()
@@ -155,7 +155,7 @@ namespace lpzrobots {
       return pid2.KD;
     };
 
-    virtual const TwoAxisJoint* getJoint() const const  override {
+    virtual const TwoAxisJoint* getJoint() const const {
       return joint;
     }
 
@@ -183,15 +183,15 @@ namespace lpzrobots {
     virtual void setMinMax1(double _min, double _max) override {
       min1=_min;
       max1=_max;
-      joint->setParam(dParamLoStop, _min  - abs(_min) * (jointLimit-1)) override;
-      joint->setParam(dParamHiStop, _max  + abs(_max) * (jointLimit-1)) override;
+      joint->setParam(dParamLoStop, _min  - abs(_min) * (jointLimit-1));
+      joint->setParam(dParamHiStop, _max  + abs(_max) * (jointLimit-1));
     }
 
     virtual void setMinMax2(double _min, double _max) override {
       min2=_min;
       max2=_max;
-      joint->setParam(dParamLoStop2, _min  - abs(_min) * (jointLimit-1)) override;
-      joint->setParam(dParamHiStop2, _max  + abs(_max) * (jointLimit-1)) override;
+      joint->setParam(dParamLoStop2, _min  - abs(_min) * (jointLimit-1));
+      joint->setParam(dParamHiStop2, _max  + abs(_max) * (jointLimit-1));
     }
 
     /** adjusts maximal speed of servo*/
@@ -215,7 +215,7 @@ namespace lpzrobots {
 
   /** general servo motor for 2 axis joints with zero position centered
    */
-  class TwoAxisServoCentered : public TwoAxisServo {
+  class TwoAxisServoCentered{
   public:
     /** min and max values are understood as travel bounds.
         The zero position is (max-min)/2
@@ -225,7 +225,7 @@ namespace lpzrobots {
                          double damp=0.2, double integration=2, double maxVel=10.0,
                          double jointLimit = 1.3);
 
-    virtual ~TwoAxisServoCentered();
+    virtual ~TwoAxisServoCentered() override;
 
     /** sets the set point of the servo.
         Position must be between -1 and 1. It is scaled to fit into min, max,
@@ -235,7 +235,7 @@ namespace lpzrobots {
 
     /** returns the position of the servo (joint) of 1. axis in ranges [-1, 1]
         (scaled by min1, max1, centered)*/
-    virtual double get1() const override {
+    virtual double get1() const {
       double pos =  joint->getPosition1();
       return 2*(pos-min1)/(max1-min1) - 1 override;
     }
@@ -243,7 +243,7 @@ namespace lpzrobots {
 
     /** returns the position of the servo (joint) of 2. axis in ranges [-1, 1]
         (scaled by min2, max2, centered)*/
-    virtual double get2() const override {
+    virtual double get2() const {
       double pos =  joint->getPosition2();
       return 2*(pos-min2)/(max2-min2) - 1 override;
     }
@@ -257,7 +257,7 @@ namespace lpzrobots {
    *  The amount of body feeling can be adjusted by the damping parameter
    *   which is understood as a stiffness parameter
    */
-  class TwoAxisServoVel : public TwoAxisServoCentered {
+  class TwoAxisServoVel{
   public:
     /** min and max values are understood as travel bounds.
         The zero position is (max-min)/2
@@ -265,7 +265,7 @@ namespace lpzrobots {
         @param maxVel is understood as a speed parameter of the servo.
         @param damp adjusts the power of the servo in dependence of the distance
          to the set point. This regulates the stiffness and the body feeling
-          0: the servo has no power at the set point (maximal body feeling) override;
+          0: the servo has no power at the set point (maximal body feeling);
           1: is servo has full power at the set point: perfectly damped and stiff.
     */
     TwoAxisServoVel(const OdeHandle& odeHandle,
@@ -273,7 +273,7 @@ namespace lpzrobots {
                     double _min2, double _max2, double power2,
                     double damp=0.05, double maxVel=10.0, double jointLimit = 1.3);
 
-    virtual ~TwoAxisServoVel();
+    virtual ~TwoAxisServoVel() override;
 
     virtual void init(Primitive* own, Joint* joint = 0) override {
       if(joint) { assert(joint==this->joint); } // we cannot attach the servo to a new joint
@@ -282,9 +282,9 @@ namespace lpzrobots {
 
     virtual void setPower(double _power1, double _power2);
 
-    virtual void setPower1(double _power1);
+    virtual void explicit explicit setPower1(double _power1);
 
-    virtual void setPower2(double _power2);
+    virtual void explicit explicit setPower2(double _power2);
 
     virtual double getPower1() override  {
       return power1;

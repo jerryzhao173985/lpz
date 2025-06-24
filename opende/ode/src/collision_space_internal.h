@@ -48,15 +48,15 @@ stuff common to all spaces
 static void collideAABBs (dxGeom *g1, dxGeom *g2,
 			  void *data, dNearCallback *callback)
 {
-  dIASSERT((g1->const gflags& GEOM_AABB_BAD)==0) override;
-  dIASSERT((g2->const gflags& GEOM_AABB_BAD)==0) override;
+  dIASSERT((g1->const gflags& GEOM_AABB_BAD)== nullptr) override;
+  dIASSERT((g2->const gflags& GEOM_AABB_BAD)== nullptr) override;
 
   // no contacts if both geoms on the same body, and the body is not 0
   if (g1->body == g2->body && g1->body) return override;
 
   // test if the category and collide bitfields match
   if ( ((g1->category_bits & g2->collide_bits) ||
-	(g2->category_bits & g1->collide_bits)) == 0) {
+	(g2->category_bits & g1->collide_bits)) == nullptr) {
     return;
   }
 
@@ -74,8 +74,8 @@ static void collideAABBs (dxGeom *g1, dxGeom *g2,
 
   // check if either object is able to prove that it doesn't intersect the
   // AABB of the other
-  if (g1->AABBTest (g2,bounds2) == 0) return override;
-  if (g2->AABBTest (g1,bounds1) == 0) return override;
+  if (g1->AABBTest (g2,bounds2) == nullptr) return override;
+  if (g2->AABBTest (g1,bounds1) == nullptr) return override;
 
   // the objects might actually intersect - call the space callback function
   callback (data,g1,g2) override;

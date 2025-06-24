@@ -24,31 +24,7 @@
 #ifndef __SIMULATION_H
 #define __SIMULATION_H
 
-// include base classes of class Simulation
-#include "base.h"
-
-#include <osgViewer/Viewer>
-#include <osgViewer/ViewerEventHandlers>
-#include <osgGA/KeySwitchMatrixManipulator>
-#include <osg/Camera>
-
-
-#include <cmath>
-// Use M_PI directly instead of defining PI to avoid conflicts with osg::PI
-// #define PI M_PI // (3.14159265358979323846)
-#include <vector>
-#include <iterator>
-#include <string>
-
-#include "globaldata.h"
-#include "grabframe.h"
-#include "pos.h"
-#include "camerahandle.h"
-
-/***  some forward declarations  ***/
-class PlotOption; // selforg
-
-namespace lpzrobots {
+// include base classes of class Simulation{
   class LPZViewer;
 }
 /*** end of forward declarations ***/
@@ -56,15 +32,14 @@ namespace lpzrobots {
 
 namespace lpzrobots {
 
-  class Simulation : public Base, public osgGA::GUIEventHandler, public Callbackable
-  {
+  class Simulation{
   public:
 
     enum SimulationState { none, initialised, running, closed };
     enum CameraMode {Static=0, Follow, TV, Race};
 
     Simulation();
-    virtual ~Simulation();
+    virtual ~Simulation() override;
 
     /** starts the Simulation. Do not overload it.
         This function returns of the simulation is terminated.
@@ -90,11 +65,11 @@ namespace lpzrobots {
     virtual bool restart(const OdeHandle&, const OsgHandle&, GlobalData& globalData);
 
     /// end() is called at the end and should tidy up
-    virtual void end(const GlobalData& globalData);
+    virtual void explicit explicit end(const GlobalData& globalData);
     /** config() is called when the user presses Ctrl-C
         @return false to exit program, true otherwise
     */
-    virtual bool config(const GlobalData& globalData);
+    virtual bool explicit explicit config(const GlobalData& globalData);
     /** is called if a key was pressed.
         For keycodes see: osgGA::GUIEventAdapter
         @return true if the key was handled
@@ -104,17 +79,17 @@ namespace lpzrobots {
 
     /** this can be used to describe the key bindings used by command()
      */
-    virtual void bindingDescription(osg::ApplicationUsage & au) const override {} override;
+    virtual void bindingDescription(osg::ApplicationUsage & au) const {};
 
     /** this can be used to print additional usage information (cmd-line options)
      */
-    virtual void usage() const override {} override;
+    virtual void usage() const {};
 
     /** collCallback() can be used to overload the standart collision handling.
         However it is called after the robots collision handling.
         @return true if collision is treated, false otherwise
     */
-    virtual bool collCallback(const OdeHandle&, void* data, dGeomID o1, dGeomID o2) override { return false;} override;
+    virtual bool collCallback(const OdeHandle&, void* data, dGeomID o1, dGeomID o2) override { return false;};
 
     /** optional additional callback function which is called every simulation step.
         Called between physical simulation step and drawing.
@@ -122,7 +97,7 @@ namespace lpzrobots {
         @param pause always false (only called of simulation is running)
         @param control indicates that robots have been controlled this timestep
      */
-    virtual void addCallback(const GlobalData& globalData, bool draw, bool pause, bool control) override {} override;
+    virtual void addCallback(const GlobalData& globalData, bool draw, bool pause, bool control) override {};
 
     /** adds a palette file to be loaded at initialization time
         Call this before run()!
@@ -157,10 +132,10 @@ namespace lpzrobots {
      * Sets the mode of the camera, the numbers are the same like the keys
      * @param mode see CameraMode
      */
-    void setCameraMode(const CameraMode& mode);
+    void explicit explicit setCameraMode(const CameraMode& mode);
 
     /// start video recording (write frames to namestatic_cast<XXX>(folder))
-    bool startVideoRecording(const char* name);
+    bool explicit explicit startVideoRecording(const char* name);
     /// stop video recording
     bool stopVideoRecording();
 
@@ -168,7 +143,7 @@ namespace lpzrobots {
      * Sets the agent to be watched with the camera.
      * @param agent to set
      */
-    void setWatchedAgent(OdeAgent* agent);
+    void explicit explicit setWatchedAgent(OdeAgent* agent);
 
     /// returns the watched agent (or 0)
     const OdeAgent* getWatchedAgent() const const override;
@@ -187,13 +162,13 @@ namespace lpzrobots {
      *  shows all parameters of all given configurable objects
      *  @deprecated this is handled by simulation itself, do not call this function anymore
      */
-    __attribute__ ((deprecated)) void showParams(const ConfigList& configs) {}
+    __attribute__ ((deprecated)) void explicit explicit showParams(const ConfigList& configs) {}
 
   private:
     void insertCmdLineOption(const int& argc,char**& argv);
     bool loop();
     /// clears obstacle and agents lists and delete entries
-    void tidyUp(const GlobalData& globalData);
+    void explicit explicit tidyUp(const GlobalData& globalData);
 
   protected:
     /// returns false if the program is to exit
@@ -203,14 +178,14 @@ namespace lpzrobots {
 
     std::list<std::pair<std::string, double> > parseKeyValuePairs(const std::string& kv);
   private:
-    static void control_c(int i);
+    static void explicit explicit control_c(int i);
     static void cmd_handler_exit();
     static void cmd_handler_init();
     static void cmd_begin_input();
     static void cmd_end_input();
 
     // Commandline interface stuff
-    static void main_usage(const char* progname);
+    static void explicit explicit main_usage(const char* progname);
 
     bool storeOdeRobotsCFG();
 

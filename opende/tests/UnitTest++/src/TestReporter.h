@@ -3,10 +3,7 @@
 
 namespace UnitTest {
 
-class TestDetails;
-
-class TestReporter
-{
+class TestDetails{
 public:
     virtual ~TestReporter();
 

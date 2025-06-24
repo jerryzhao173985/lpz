@@ -34,9 +34,7 @@
 #include "sensormotorinfo.h"
 
 /**
- * Abstract class static_cast<interface>(for) robot in general
- *
- *
+ * Abstract class for robots.
  */
 class AbstractRobot : public Trackable, public Configurable {
 public:

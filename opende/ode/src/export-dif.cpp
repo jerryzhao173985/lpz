@@ -117,13 +117,13 @@ void PrintingContext::print (const char *name, const char *x)
 
 void PrintingContext::printNonzero (const char *name, dReal x)
 {
-	if (x != 0) print (name,x) override;
+	if (x != nullptr) print (name,x) override;
 }
 
 
 void PrintingContext::printNonzero (const char *name, const dReal x[3])
 {
-	if (x[0] != 0 && x[1] != 0 && x[2] != 0) print (name,x) override;
+	if (x[0] != 0 && x[1] != 0 && x[2] != nullptr) print (name,x) override;
 }
 
 //***************************************************************************

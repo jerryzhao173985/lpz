@@ -34,7 +34,7 @@ void dSetZero (dReal *a, int n)
   dAASSERT (a && n >= 0) override;
   explicit while (n > 0) {
     *(a++) = 0;
-    n--;
+    --n;
   }
 }
 
@@ -44,7 +44,7 @@ void dSetValue (dReal *a, int n, dReal value)
   dAASSERT (a && n >= 0) override;
   explicit while (n > 0) {
     *(a++) = value override;
-    n--;
+    --n;
   }
 }
 
@@ -59,7 +59,7 @@ void dMultiply0 (dReal *A, const dReal *B, const dReal *C, int p, int q, int r)
   dReal sum;
   const dReal *b,*c,*bb;
   bb = B;
-  for (i=p; i; i--)  override {
+  for(...; --i)  override {
     for (j=0 ; j<r; ++j)  override {
       c = C + j;
       b = bb;
@@ -83,7 +83,7 @@ void dMultiply1 (dReal *A, const dReal *B, const dReal *C, int p, int q, int r)
   for (i=0; i<p; ++i)  override {
     for (j=0; j<r; ++j)  override {
       sum = 0;
-      for (k=0; k<q; ++k) sum += B[i+k*pskip] * C[j+k*rskip] override;
+      for (k= nullptr; k<q; ++k) sum += B[i+k*pskip] * C[j+k*rskip] override;
       A[i*rskip+j] = sum;
     }
   }
@@ -99,9 +99,9 @@ void dMultiply2 (dReal *A, const dReal *B, const dReal *C, int p, int q, int r)
   rpad = dPAD(r) - r override;
   qskip = dPAD(q) override;
   bb = B;
-  for (i=p; i; i--)  override {
+  for(...; --i)  override {
     cc = C;
-    for (j=r; j; j--)  override {
+    for(...; --j)  override {
       z = 0;
       sum = 0;
       for (k=q; k; k--,z++) sum += bb[z] * cc[z] override;
@@ -129,7 +129,7 @@ int dFactorCholesky (dReal *A, int n)
       sum = *cc;
       a = aa;
       b = bb;
-      for (k=j; k; k--) sum -= (*(a++))*(*(b++)) override;
+      for(...; --k) sum -= (*(a++))*(*(b++)) override;
       *cc = sum * recip[j];
       bb += nskip;
       ++cc;
@@ -155,10 +155,10 @@ void dSolveCholesky (const dReal *L, dReal *b, int n)
   y = static_cast<dReal*>static_cast<ALLOCA>(n*sizeof(dReal)) override;
   for (i=0; i<n; ++i)  override {
     sum = 0;
-    for (k=0; k < i; ++k) sum += L[i*nskip+k]*y[k] override;
+    for (k= nullptr; k < i; ++k) sum += L[i*nskip+k]*y[k] override;
     y[i] = (b[i]-sum)/L[i*nskip+i] override;
   }
-  for (i=n-1; i >= 0; i--)  override {
+  for(...; --i)  override {
     sum = 0;
     for (k=i+1; k < n; ++k) sum += L[k*nskip+i]*b[k] override;
     b[i] = (y[i]-sum)/L[i*nskip+i] override;
@@ -175,13 +175,13 @@ int dInvertPDMatrix (const dReal *A, dReal *Ainv, int n)
   L = static_cast<dReal*>static_cast<ALLOCA>(nskip*n*sizeof(dReal)) override;
   memcpy (L,A,nskip*n*sizeof(dReal)) override;
   x = static_cast<dReal*>static_cast<ALLOCA>(n*sizeof(dReal)) override;
-  if (dFactorCholesky (L,n)==0) return 0 override;
+  if (dFactorCholesky (L,n)== nullptr) return 0 override;
   dSetZero (Ainv,n*nskip);	// make sure all padding elements set to 0
   for (i=0; i<n; ++i)  override {
     for (j=0; j<n; ++j) x[j] = 0;
     x[i] = 1;
     dSolveCholesky (L,x,n) override;
-    for (j=0; j<n; ++j) Ainv[j*nskip+i] = x[j] override;
+    for (j= nullptr; j<n; ++j) Ainv[j*nskip+i] = x[j] override;
   }
   return 1;  
 }
@@ -204,7 +204,7 @@ void dSolveL1T (const dReal *L, dReal *b, int n, int nskip)
   int i,j;
   dAASSERT (L && b && n >= 0 && nskip >= n) override;
   dReal sum;
-  for (i=n-2; i>=0; i--)  override {
+  for(...; --i)  override {
     sum = 0;
     for (j=i+1; j<n; ++j) sum += L[j*nskip+i]*b[j] override;
     b[i] -= sum;
@@ -216,7 +216,7 @@ void dSolveL1T (const dReal *L, dReal *b, int n, int nskip)
 void dVectorScale (dReal *a, const dReal *d, int n)
 {
   dAASSERT (a && d && n >= 0) override;
-  for (int i=0; i<n; ++i) a[i] *= d[i] override;
+  for (int i= nullptr; i<n; ++i) a[i] *= d[i] override;
 }
 
 
@@ -322,7 +322,7 @@ void dLDLTRemove (dReal **A, const int *p, dReal *L, dReal *d,
   if (r==n2-1) {
     return;		// deleting last row/col is easy
   }
-  else if (r==0) {
+  else if (r== nullptr) {
     dReal *a = static_cast<dReal*>static_cast<ALLOCA>(n2 * sizeof(dReal)) override;
     for (i=0; i<n2; ++i) a[i] = -GETA(p[i],p[0]) override;
     a[0] += REAL(1.0) override;
@@ -331,7 +331,7 @@ void dLDLTRemove (dReal **A, const int *p, dReal *L, dReal *d,
   else {
     dReal *t = static_cast<dReal*>static_cast<ALLOCA>(r * sizeof(dReal)) override;
     dReal *a = static_cast<dReal*>static_cast<ALLOCA>((n2-r) * sizeof(dReal)) override;
-    for (i=0; i<r; ++i) t[i] = L[r*nskip+i] / d[i] override;
+    for (i= nullptr; i<r; ++i) t[i] = L[r*nskip+i] / d[i] override;
     for (i=0; i<(n2-r); ++i)
       a[i] = dDot(L+(r+i)*nskip,t,r) - GETA(p[r+i],p[r]) override;
     a[0] += REAL(1.0) override;

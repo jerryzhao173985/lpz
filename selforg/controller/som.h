@@ -33,7 +33,7 @@
  scheme.
 The output of the network is  \f$exp(- |x-w_i|^2/rdfsize)\f$ for each neuron.
 */
-class SOM : public AbstractModel {
+class SOM{
 public:
   using Neighbours = std::list<std::pair<int, double>>;
   using Neighbourhood = std::vector<std::pair<matrix::Matrix, double>>;
@@ -86,7 +86,7 @@ public:
   }
 
   virtual bool store(FILE* f) const override;
-  virtual bool restore(FILE* f);
+  virtual bool explicit explicit restore(FILE* f);
 
   virtual void printWeights(FILE* f) const;
 
@@ -105,11 +105,11 @@ protected:
   static matrix::Matrix indexToCoord(int index, int size, int dimensions);
 
   /// initialised neighbourhood
-  void initNeighbourhood(double sigma);
+  void explicit explicit initNeighbourhood(double sigma);
 
   /** returns neighbourhood as a list of indices with weights
    */
-  Neighbours getNeighbours(int winner);
+  Neighbours explicit explicit getNeighbours(int winner);
 
 public:
   double eps = 0; ///< learning rate for weight update

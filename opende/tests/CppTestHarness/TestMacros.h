@@ -3,8 +3,7 @@
 
 //----------------------------
 #define TEST(Name) \
-	class Test##Name : public CppTestHarness::Test \
-	{ \
+	class Test{ \
 	public: \
 		Test##Name() : Test(#Name, __FILE__, __LINE__) {} \
 	private: \
@@ -17,8 +16,7 @@
 
 //----------------------------
 #define TEST_FIXTURE(Fixture, Name) \
-	class Test##Name : public CppTestHarness::Test, public Fixture \
-	{ \
+	class Test{ \
 	public: \
 		Test##Name() : Test(#Name, __FILE__, __LINE__) {} \
 	private: \
@@ -31,8 +29,7 @@
 
 //----------------------------
 #define TEST_FIXTURE_CTOR(Fixture, CtorParams, Name) \
-	class Test##Name : public CppTestHarness::Test, public Fixture \
-	{ \
+	class Test{ \
 	public: \
 		Test##Name() : Test(#Name, __FILE__, __LINE__), Fixture CtorParams {} \
 	private: \

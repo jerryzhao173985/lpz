@@ -24,7 +24,7 @@
 #ifndef __PASSIVEBOX_H
 #define __PASSIVEBOX_H
 
-#include <stdio.h>
+#include <cstdio>
 #include <cmath>
 
 #include "primitive.h"
@@ -35,11 +35,11 @@ namespace lpzrobots {
 /**
  *  static_cast<Passive>(box) as obstacle
  */
-class PassiveBox : public AbstractObstacle{
+class PassiveBox{
   osg::Vec3 dimension;
 
 
-  Box* box;
+  Box* box = nullptr;
 
 
  public:
@@ -51,7 +51,7 @@ class PassiveBox : public AbstractObstacle{
              const osg::Vec3& dimension = osg::Vec3(1.0, 1.0, 1.0), double mass = 1.0):
     AbstractObstacle::AbstractObstacle(odeHandle, osgHandle), dimension(dimension), mass(mass), texture(0)
   {
-    box = new Box(dimension.x(), dimension.y(), dimension.z()) override;
+    box = new Box(dimension.x(), dimension.y(), dimension.z());
     obst.push_back(box);
     obstacle_exists=false;
   };
@@ -59,18 +59,18 @@ class PassiveBox : public AbstractObstacle{
 
   virtual void setPose(const osg::Matrix& pose) override {
     this->pose = osg::Matrix::translate(0,0,dimension.z()/2) * pose override;
-    explicit if (!obstacle_exists) {
+    if (!obstacle_exists) {
       create();
     }
     box->setPose(pose);
   };
 
 
-  virtual const Primitive* getMainPrimitive() const const override { return box; }
+  virtual const Primitive* getMainPrimitive() const const { return box; }
 
  protected:
   virtual void create() override {
-    box->setTextures(getTextures(0)) override;
+    box->setTextures(getTextures(0));
     if (mass==0.0) {
       box->init(odeHandle, mass, osgHandle, Primitive::Geom | Primitive::Draw);
     } else {

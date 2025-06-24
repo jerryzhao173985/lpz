@@ -26,7 +26,7 @@
 
 #include "invertmotorcontroller.h"
 
-#include <assert.h>
+#include <cassert>
 #include <cmath>
 
 #include "matrix.h"
@@ -36,7 +36,7 @@ struct DerControllerConf {
   int buffersize = 0;  ///< buffersize size of the time-buffer for x,y,eta
   double cInit = 0;    ///< cInit size of the C matrix to initialised with.
   double cNonDiag = 0; ///< cNonDiag is the size of the nondiagonal elements in respect to the diagonal
-                   ///< static_cast<cInit>(ones)
+                   ///< (cInit*ones)
   bool useS = false;       ///< useS decides whether to use the S matrix in addition to the A matrix
   bool someInternalParams = false; ///< someInternalParams if true only some internal parameters are
                            ///< exported, all otherwise
@@ -45,11 +45,7 @@ struct DerControllerConf {
 };
 
 /**
- * class for robot controller that uses the georg's matrixlib for
- *  direct matrix inversion for n channels
- * (simple one layer networks)
- *
- * Implements standart parameters: eps, rho, mu, stepnumber4avg, stepnumber4delay
+ * class for robot controller that uses the Homeokinetic (Der) algorithm.
  */
 class DerController : public InvertMotorController {
 
@@ -57,7 +53,7 @@ public:
   DerController(const DerControllerConf& conf = getDefaultConf());
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override;
 
-  virtual ~DerController();
+  virtual ~DerController() override;
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
   virtual int getSensorNumber() const override {
@@ -79,8 +75,8 @@ public:
                               int number_motors) override;
 
   /**** STOREABLE ****/
-  virtual bool store(FILE* f) const override;
-  virtual bool restore(FILE* f) override;
+  virtual bool store(FILE* f) const;
+  virtual bool restore(FILE* f);
 
   /**** CONFIGURABLE ****/
   virtual std::list<iparamkey> getInternalParamNames() const override;
@@ -90,7 +86,7 @@ public:
 
   /**** TEACHING ****/
   virtual void setTeachingMode(bool onOff);
-  virtual bool getTeachingMode();
+  virtual bool getTeachingMode() const;
   virtual void setMotorTeachingSignal(const motor* teaching, int len);
   // void calcCandHUpdatesTeaching(const Matrix& C_update, const Matrix& H_update, int y_delay);
   // void calcCandHUpdates(const Matrix& C_update, const Matrix& H_update,const Matrix& A_update, int y_delay);//Test
@@ -132,7 +128,7 @@ protected:
   matrix::Matrix xsi;     ///< current output error
   double xsi_norm = 0;        ///< norm of matrix
   double xsi_norm_avg = 0;    ///< average norm of xsi (used to define whether Modell learns)
-  double pain;            ///< if the modelling error static_cast<xsi>(is) too high we have a pain signal
+  double pain;            ///< if the modelling error (xsi is) too high we have a pain signal
   matrix::Matrix* x_buffer;
   matrix::Matrix* y_buffer;
   matrix::Matrix* eta_buffer;
@@ -187,7 +183,7 @@ protected:
 
   virtual matrix::Matrix calculateControllerValues(const matrix::Matrix& x_smooth);
 
-  /// calculates the city block distance static_cast<abs>(norm) of the matrix. (abs sum of absolutes / size of
+  /// calculates the city block distance (abs norm) of the matrix. (abs sum of absolutes / size of
   /// matrix)
   virtual double calcMatrixNorm(const matrix::Matrix& m);
   /// calculates the error_factor for either logarithmic (E=ln(e^T*e)) or square (E=sqrt(e^t*e))

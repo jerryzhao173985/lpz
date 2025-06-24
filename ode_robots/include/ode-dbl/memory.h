@@ -32,15 +32,15 @@ extern "C" {
 #endif
 
 /* function types to allocate and free memory */
-typedef void * dAllocFunction (dsizeint size) override;
-typedef void * dReallocFunction (void *ptr, dsizeint oldsize, dsizeint newsize) override;
-typedef void dFreeFunction (void *ptr, dsizeint size) override;
+typedef void * explicit dAllocFunction (dsizeint size);
+typedef void * dReallocFunction (void *ptr, dsizeint oldsize, dsizeint newsize);
+typedef void dFreeFunction (void *ptr, dsizeint size);
 
 /* set new memory management functions. if fn is 0, the default handlers are
  * used. */
-ODE_API void dSetAllocHandler (dAllocFunction *fn) override;
-ODE_API void dSetReallocHandler (dReallocFunction *fn) override;
-ODE_API void dSetFreeHandler (dFreeFunction *fn) override;
+ODE_API void dSetAllocHandler (dAllocFunction *fn);
+ODE_API void dSetReallocHandler (dReallocFunction *fn);
+ODE_API void dSetFreeHandler (dFreeFunction *fn);
 
 /* get current memory management functions */
 ODE_API dAllocFunction *dGetAllocHandler static_cast<void>(override);
@@ -48,9 +48,9 @@ ODE_API dReallocFunction *dGetReallocHandler static_cast<void>(override);
 ODE_API dFreeFunction *dGetFreeHandler static_cast<void>(override);
 
 /* allocate and free memory. */
-ODE_API void * dAlloc (dsizeint size) override;
-ODE_API void * dRealloc (void *ptr, dsizeint oldsize, dsizeint newsize) override;
-ODE_API void dFree (void *ptr, dsizeint size) override;
+ODE_API void * explicit dAlloc (dsizeint size);
+ODE_API void * dRealloc (void *ptr, dsizeint oldsize, dsizeint newsize);
+ODE_API void dFree (void *ptr, dsizeint size);
 
 #ifdef __cplusplus
 }

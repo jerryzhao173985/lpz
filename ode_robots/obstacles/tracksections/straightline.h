@@ -27,9 +27,7 @@
 #include "abstracttracksection.h"
 
 /**
- *  Abstract class static_cast<interface>(for) obstacles
- */
-class StraightLine : public AbstractTrackSection {
+ *  Abstract class static_cast{
 
 public:
 
@@ -41,11 +39,11 @@ public:
   /**
    * Constructor
    */
-  explicit StraightLine(const Matrix& pose);
+  explicit explicit StraightLine(const Matrix& pose);
 
   virtual ~StraightLine() {}
 
-  void setCurveAngle(double alpha);
+  void explicit setCurveAngle(double alpha);
 
   /**
    * gives the position and rotationstatic_cast<angle>(of) the segment at the
@@ -53,18 +51,18 @@ public:
    * if you want to place the new segment, you must muliplicate:
    * getTransformedEndMatrix()*getPositionMatrix();
    */
-  virtual Matrix getTransformedEndMatrix();
+  virtual Matrix getTransformedEndMatrix() const;
 
 
   /**
    * returns true if the real coordinates lay inside of the segment
    */
-  virtual bool isInside(const Position& p);
+  virtual bool explicit isInside(const Position& p);
 
 
-  virtual double getSectionIdValue(const Position& p);
+  virtual double explicit getSectionIdValue(const Position& p);
 
-  virtual double getWidthIdValue(const Position& p);
+  virtual double explicit getWidthIdValue(const Position& p);
 
 
   /**
@@ -72,17 +70,17 @@ public:
    * here it is the length of the arc
    * formula is: radius * angle;
    */
-  virtual double getLength();
+  virtual double getLength() const;
   
   /**
    * returns the width of the segment,
    */
-  virtual double getWidth();
+  virtual double getWidth() const;
   
   /**
    * sets the width of the segment,
    */
-  virtual void setWidth(double w);
+  virtual void explicit setWidth(double w);
   
   
   /**
@@ -90,7 +88,7 @@ public:
    */
   virtual void draw();
   
-  virtual void create(dSpaceID space);
+  virtual void explicit create(dSpaceID space);
   
   virtual void destroy();
   

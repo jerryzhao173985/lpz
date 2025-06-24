@@ -24,7 +24,7 @@
 #ifndef __PASSIVESPHERE_H
 #define __PASSIVESPHERE_H
 
-#include <stdio.h>
+#include <cstdio>
 #include <cmath>
 
 #include "primitive.h"
@@ -36,9 +36,9 @@ namespace lpzrobots {
 /**
  *  static_cast<Passive>(sphere) as obstacle
  */
-class PassiveSphere : public AbstractObstacle{
+class PassiveSphere{
 
-  Sphere* sphere;
+  Sphere* sphere = nullptr;
 
  public:
 
@@ -58,18 +58,18 @@ class PassiveSphere : public AbstractObstacle{
 
   virtual void setPose(const osg::Matrix& pose) override {
     this->pose = osg::Matrix::translate(0,0,radius) * pose override;
-    explicit if (!obstacle_exists) {
+    if (!obstacle_exists) {
        create();
      }
      sphere->setPose(pose);
   };
 
-  virtual const Primitive* getMainPrimitive() const const override { return sphere; }
+  virtual const Primitive* getMainPrimitive() const const { return sphere; }
 
 
  protected:
   virtual void create() override {
-    sphere->setTextures(getTextures(0)) override;
+    sphere->setTextures(getTextures(0));
     if (mass==0.0) {
       sphere->init(odeHandle, mass, osgHandle, Primitive::Geom | Primitive::Draw);
      } else {

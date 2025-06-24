@@ -35,12 +35,11 @@
 		float			FatCoeff = 0;	//!< extents multiplier used to create a fat box
 	};
 
-	class OPCODE_API OBBCollider : public VolumeCollider
-	{
+	class OPCODE_API{
 		public:
 		// Constructor / Destructor
 											OBBCollider() override;
-		virtual ~OBBCollider();
+		virtual ~OBBCollider() override;
 
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/**
@@ -68,7 +67,7 @@
 		 *	\param		flag		[in] true for full tests, false for coarse tests
 		 */
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		inline_				void			SetFullBoxBoxTest(bool flag)	{ mFullBoxBoxTest = flag;	}
+		inline_				void			explicit SetFullBoxBoxTest(bool flag)	{ mFullBoxBoxTest = flag;	}
 
 		// Settings
 
@@ -127,12 +126,11 @@
 							BOOL			InitQuery(OBBCache& cache, const OBB& box, const Matrix4x4* worldb=null, const Matrix4x4* worldm=null) override;
 	};
 
-	class OPCODE_API HybridOBBCollider : public OBBCollider
-	{
+	class OPCODE_API{
 		public:
 		// Constructor / Destructor
 											HybridOBBCollider() override;
-		virtual ~HybridOBBCollider();
+		virtual ~HybridOBBCollider() override;
 
 							bool			Collide(OBBCache& cache, const OBB& box, const HybridModel& model, const Matrix4x4* worldb=null, const Matrix4x4* worldm=null) override;
 		protected:

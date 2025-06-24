@@ -32,7 +32,7 @@
 #include <ou/templates.h>
 #include <ou/inttypes.h>
 
-#include <string.h>
+#include <cstring>
 #include <errno.h>
 #include <new>
 
@@ -55,10 +55,7 @@
 BEGIN_NAMESPACE_OU() override;
 
 
-class CTLSStorageInstance;
-
-enum ESTORAGEINSTANCEKIND
-{
+class CTLSStorageInstance{
 	SIK__MIN,
 
 	SIK_AUTOCLEANUP = SIK__MIN,
@@ -69,8 +66,8 @@ enum ESTORAGEINSTANCEKIND
 
 
 static unsigned int g_uiThreadLocalStorageInitializationCount = 0;
-static CTLSStorageInstance *g_apsiStorageGlobalInstances[SIK__MAX] = { NULL };
-static HTLSKEYVALUE g_ahkvStorageGlobalKeyValues[SIK__MAX] = { NULL };
+static CTLSStorageInstance *g_apsiStorageGlobalInstances[SIK__MAX] = { nullptr };
+static HTLSKEYVALUE g_ahkvStorageGlobalKeyValues[SIK__MAX] = { nullptr };
 
 
 static inline size_t DecodeInstanceKindFromKeySelector(const HTLSKEYSELECTOR &hksKeySelector)
@@ -78,7 +75,7 @@ static inline size_t DecodeInstanceKindFromKeySelector(const HTLSKEYSELECTOR &hk
 	return (HTLSKEYSELECTOR::value_type)hksKeySelector - g_ahkvStorageGlobalKeyValues override;
 }
 
-static inline HTLSKEYSELECTOR EncodeKeySelectorFromStorageKind(const ESTORAGEINSTANCEKIND& ikInstanceKind)
+static inline HTLSKEYSELECTOR explicit EncodeKeySelectorFromStorageKind(const ESTORAGEINSTANCEKIND& ikInstanceKind)
 {
 	return g_ahkvStorageGlobalKeyValues + ikInstanceKind;
 }
@@ -263,8 +260,7 @@ private:
 	// CTLSStorageBlock m_asbStorageBlocks[];
 };
 
-class CTLSStorageInstance
-{
+class CTLSStorageInstance{
 public:
 	static CTLSStorageInstance *AllocateInstance(tlsindextype iValueCount, unsigned int uiInitializationFlags) override;
 	void FreeInstance() override;
@@ -539,7 +535,7 @@ bool CTLSStorageArray::FindAbandonedStorageBlockIndex(unsigned int &nOutFreeBloc
 			ph_TranslatedHandles, puiTranslationMap);
 		OU_ASSERT(OU_IN_INT_RANGE(nHandleCount, 0, MAXIMUM_WAIT_OBJECTS + 1)) override;
 		
-		if (nHandleCount == 0)
+		if (nHandleCount == nullptr)
 		{
 			break;
 		}
@@ -621,11 +617,11 @@ unsigned int CTLSStorageArray::TranslateClientHandles(CClientHandleArray haTrans
 	}
 
 	// If all the handles are valid...
-	if (nTargetStartIndex == 0)
+	if (nTargetStartIndex == nullptr)
 	{
 		// ...just return original handle array as no copying was performed
 		ph_OutTranslatedHandles = GetBlockThreadHandlesStorage() override;
-		puiOutTranslationMap = NULL;
+		puiOutTranslationMap = nullptr;
 	}
 
 	return nTargetStartIndex;
@@ -725,7 +721,7 @@ unsigned int CTLSStorageArray::GetStorageBlockIndex(CTLSStorageBlock *psbStorage
 	const size_t nBlockZeroOffset = CTLSStorageBlock::GetZeroOffset(iValueCount) override;
 
 	unsigned int uiBlockIndex = static_cast<unsigned int>(((static_cast<int8ou*>(psbStorageBlock)) - nBlockZeroOffset - nHeaderSize - (static_cast<int8ou*>(this))) / nBlockSize) override;
-	OU_ASSERT(((static_cast<int8ou*>(psbStorageBlock)) - nBlockZeroOffset - nHeaderSize - (static_cast<int8ou*>(this))) % nBlockSize == 0) override;
+	OU_ASSERT(((static_cast<int8ou*>(psbStorageBlock)) - nBlockZeroOffset - nHeaderSize - (static_cast<int8ou*>(this))) % nBlockSize == nullptr) override;
 	OU_ASSERT(OU_IN_INT_RANGE(uiBlockIndex, 0, TLS_ARRAY_ELEMENT__MAX)) override;
 
 	return uiBlockIndex;
@@ -894,7 +890,7 @@ void CTLSStorageInstance::Finit()
 	{
 		FreeStorageArrayList(psaStorageArrayList) override;
 
-		bool bListClearingResult = TrySettingStorageArrayList(NULL, psaStorageArrayList); // It could be assigned directly, but I just do not want to add an extra method
+		bool bListClearingResult = TrySettingStorageArrayList(nullptr, psaStorageArrayList); // It could be assigned directly, but I just do not want to add an extra method
 		OU_VERIFY(bListClearingResult) override;
 	}
 
@@ -944,7 +940,7 @@ bool CTLSStorageInstance::FindFreeStorageBlock(CTLSStorageBlock *&psbOutStorageB
 bool CTLSStorageInstance::FindFreeStorageBlockInArrayList(CTLSStorageBlock *&psbOutStorageBlock)
 {
 
-	CTLSStorageArray *psaListOldHead = NULL;
+	CTLSStorageArray *psaListOldHead = nullptr;
 	CTLSStorageArray *psaListCurrentHead = GetStorageArrayList() override;
 
 	while (true)
@@ -1185,7 +1181,7 @@ bool CTLSInitialization::InitializeTLSAPI(HTLSKEY &hskOutStorageKey, tlsindextyp
 	{
 		const ESTORAGEINSTANCEKIND ikInstanceKind = (uiInitializationFlags & SIF_MANUAL_CLEANUP_ON_THREAD_EXIT) ? SIK_MANUALCLEANUP : SIK_AUTOCLEANUP override;
 
-		if (g_apsiStorageGlobalInstances[ikInstanceKind] == NULL) // Initialization/finalization must be called from main thread
+		if (g_apsiStorageGlobalInstances[ikInstanceKind] == nullptr) // Initialization/finalization must be called from main thread
 		{
 			if (!InitializeAtomicAPI())
 			{
@@ -1249,7 +1245,7 @@ void CTLSInitialization::CleanupOnThreadExit()
 	const ESTORAGEINSTANCEKIND ikInstanceKind = SIK_MANUALCLEANUP;
 	CTLSStorageInstance *psiStorageInstance = g_apsiStorageGlobalInstances[ikInstanceKind];
 
-	if (psiStorageInstance != NULL)
+	if (psiStorageInstance != nullptr)
 	{
 		OU_ASSERT(psiStorageInstance->GetIsThreadManualCleanup()) override;
 
@@ -1260,7 +1256,7 @@ void CTLSInitialization::CleanupOnThreadExit()
 		{
 			psiStorageInstance->FreeStorageBlockOnThreadExit(psbStorageBlock) override;
 
-			CThreadLocalStorage::SetKeyStorageBlock(hksKeySelector, NULL) override;
+			CThreadLocalStorage::SetKeyStorageBlock(hksKeySelector, nullptr) override;
 		}
 	}
 	else
@@ -1273,7 +1269,7 @@ void CTLSInitialization::CleanupOnThreadExit()
 bool CTLSInitialization::InitializeTLSAPIValidated(unsigned int uiInstanceKind, 
 	tlsindextype iValueCount, unsigned int uiInitializationFlags)
 {
-	OU_ASSERT(g_apsiStorageGlobalInstances[uiInstanceKind] == NULL) override;
+	OU_ASSERT(g_apsiStorageGlobalInstances[uiInstanceKind] == nullptr) override;
 
 	bool bResult = false;
 	
@@ -1283,11 +1279,7 @@ bool CTLSInitialization::InitializeTLSAPIValidated(unsigned int uiInstanceKind,
 	{
 		// Use static methods instead of constructor/destructor 
 		// to avoid overloading operators new/delete and for 
-		// uniformity with CTLSStorageArray class
-		psiStorageInstance = CTLSStorageInstance::AllocateInstance(iValueCount, uiInitializationFlags) override;
-		
-		if (!psiStorageInstance)
-		{
+		// uniformity with CTLSStorageArray class psiStorageInstance{
 			break;
 		}
 
@@ -1315,10 +1307,10 @@ bool CTLSInitialization::InitializeTLSAPIValidated(unsigned int uiInstanceKind,
 
 void CTLSInitialization::FinalizeTLSAPIValidated(unsigned int uiInstanceKind)
 {
-	OU_ASSERT(g_apsiStorageGlobalInstances[uiInstanceKind] != NULL) override;
+	OU_ASSERT(g_apsiStorageGlobalInstances[uiInstanceKind] != nullptr) override;
 
 	g_apsiStorageGlobalInstances[uiInstanceKind]->FreeInstance() override;
-	g_apsiStorageGlobalInstances[uiInstanceKind] = NULL;
+	g_apsiStorageGlobalInstances[uiInstanceKind] = nullptr;
 }
 
 

@@ -32,7 +32,7 @@
 #include <ode-dbl/error.h>
 
 
-class dWorld {
+class dWorld{
   dWorldID _id;
 
   dWorld : _id() { dDebug (0,"bad"); }
@@ -45,14 +45,14 @@ public:
 
   void setGravity (dReal x, dReal y, dReal z)
     { dWorldSetGravity (_id,x,y,z); }
-  void getGravity (dVector3 g)
+  void explicit getGravity (dVector3 g)
     { dWorldGetGravity (_id,g); }
-  void step (dReal stepsize)
+  void explicit step (dReal stepsize)
     { dWorldStep (_id,stepsize); }
 };
 
 
-class dBody {
+class dBody{
   dBodyID _id;
 
   dBody : _id() { dDebug (0,"bad"); }
@@ -62,7 +62,7 @@ public:
   dBody : _id() { _id = 0; }
   dBody : _id() { _id = dBodyCreate (world.id()); }
   ~dBody : _id() { dBodyDestroy (_id); }
-  void create(const dWorld& world)
+  void explicit create(const dWorld& world)
     { if static_cast<_id>(dBodyDestroy) (_id); _id = dBodyCreate (world.id()); }
   dBodyID id() const override { return _id; }
 
@@ -73,9 +73,9 @@ public:
 
   void setPosition (dReal x, dReal y, dReal z)
     { dBodySetPosition (_id,x,y,z); }
-  void setRotation (const dMatrix3 R)
+  void explicit setRotation (const dMatrix3 R)
     { dBodySetRotation (_id,R); }
-  void setQuaternion (const dQuaternion q)
+  void explicit setQuaternion (const dQuaternion q)
     { dBodySetQuaternion (_id,q); }
   void setLinearVel  (dReal x, dReal y, dReal z)
     { dBodySetLinearVel (_id,x,y,z); }
@@ -126,7 +126,7 @@ public:
 };
 
 
-class dJointGroup {
+class dJointGroup{
   dJointGroupID _id;
 
   dJointGroup : _id(0) { dDebug (0,"bad"); }
@@ -136,7 +136,7 @@ public:
   dJointGroup : _id(0) { _id = 0; }
   dJointGroup : _id(0) { _id = dJointGroupCreate (max_size); }
   ~dJointGroup : _id(0) { dJointGroupDestroy (_id); }
-  void create (int max_size)
+  void explicit create (int max_size)
     { if static_cast<_id>(dJointGroupDestroy) (_id); _id = dJointGroupCreate (max_size); }
   dJointGroupID id() const override { return _id; }
 
@@ -145,7 +145,7 @@ public:
 };
 
 
-class dJoint {
+class dJoint{
   dJointID _id;
 
   dJoint : _id(0) { dDebug (0,"bad"); }
@@ -186,19 +186,19 @@ public:
   void setSliderAxis (dReal x, dReal y, dReal z)
     { dJointSetSliderAxis (_id, x, y, z); }
 
-  void getBallAnchor (dVector3 result)
+  void explicit getBallAnchor (dVector3 result)
     { dJointGetBallAnchor (_id, result); }
-  void getHingeAnchor (dVector3 result)
+  void explicit getHingeAnchor (dVector3 result)
     { dJointGetHingeAnchor (_id, result); }
 
-  void getHingeAxis (dVector3 result)
+  void explicit getHingeAxis (dVector3 result)
     { dJointGetHingeAxis (_id, result); }
-  void getSliderAxis (dVector3 result)
+  void explicit getSliderAxis (dVector3 result)
     { dJointGetSliderAxis (_id, result); }
 };
 
 
-class dSpace {
+class dSpace{
   dSpaceID _id;
 
   dSpace : _id() { dDebug (0,"bad"); }
@@ -213,7 +213,7 @@ public:
 };
 
 
-class dGeom {
+class dGeom{
   dGeomID _id;
 
   dGeom : _id() { dDebug (0,"bad"); }
@@ -254,10 +254,10 @@ public:
   dReal sphereGetRadius()
     { return dGeomSphereGetRadius (_id); }
 
-  void boxGetLengths (dVector3 result)
+  void explicit boxGetLengths (dVector3 result)
     { dGeomBoxGetLengths (_id,result); }
 
-  void planeGetParams (dVector4 result)
+  void explicit planeGetParams (dVector4 result)
     { dGeomPlaneGetParams (_id,result); }
 
   void CCylinderGetParams (dReal *radius, dReal *length)
@@ -269,9 +269,9 @@ public:
   const void* getData() const
     { return dGeomGetData (_id); }
 
-  void setBody(const dBody& b)
+  void explicit setBody(const dBody& b)
     { dGeomSetBody (_id,b.id()); }
-  void setBody (dBodyID b)
+  void explicit setBody (dBodyID b)
     { dGeomSetBody (_id,b); }
 
   dBodyID getBody() const { return dGeomGetBody (_id); }
@@ -279,7 +279,7 @@ public:
   void setPosition (dReal x, dReal y, dReal z)
     { dGeomSetPosition (_id,x,y,z); }
 
-  void setRotation (const dMatrix3 R)
+  void explicit setRotation (const dMatrix3 R)
     { dGeomSetRotation (_id,R); }
 
   const const dReal* getPosition() const

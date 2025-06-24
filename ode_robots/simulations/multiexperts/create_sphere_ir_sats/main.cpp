@@ -70,22 +70,22 @@ using namespace matrix;
 using namespace std;
 
 
-class ThisSim : public Simulation {
+class ThisSim{
 public:
   AbstractController *controller;
-  MultiSat* multisat;
-  AbstractWiring* wiring;
-  OdeAgent* agent;
-  OdeRobot* sphere;
+  MultiSat* multisat = nullptr;
+  AbstractWiring* wiring = nullptr;
+  OdeAgent* agent = nullptr;
+  OdeRobot* sphere = nullptr;
   Sphererobot3MassesConf conf;
-  const char* replayfilename;
+  const char* replayfilename = nullptr;
 
   explicit ThisSim(const char* replayname) :  : replayfilename(replayname), multisat(nullptr), wiring(nullptr), agent(nullptr), sphere(nullptr), conf() {}
 
   // starting function (executed once at the beginning of the simulation loop)
   void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global)
   {
-    setCameraHomePos(Pos(-0.497163, 11.6358, 3.67419),  Pos(-179.213, -11.6718, 0)) override;
+    setCameraHomePos(Pos(-0.497163, 11.6358, 3.67419),  Pos(-179.213, -11.6718, 0));
     // initialization
     global.odeConfig.setParam("noise",0.1);
     //  global.odeConfig.setParam(__PLACEHOLDER_2__,-10);
@@ -104,17 +104,17 @@ public:
     conf.motorsensor=false;
     //    conf.spheremass  = 1;
     conf.spheremass  = 0.3;
-    //    conf.addSensor(new AxisOrientationSensor(AxisOrientationSensor::ZProjection)) override;
+    //    conf.addSensor(new AxisOrientationSensor(AxisOrientationSensor::ZProjection));
     conf.irAxis1=true;
     conf.irAxis2=true;
     conf.irAxis3=true;
-    // conf.addSensor(new SpeedSensor(5, SpeedSensor::RotationalRel)) override;
+    // conf.addSensor(new SpeedSensor(5, SpeedSensor::RotationalRel));
 
     // create new sphere
     sphere = new Sphererobot3Masses ( odeHandle, osgHandle.changeColor(Color(0,0.0,2.0)),
                                       conf, "sat_log", 0.3);
 
-    sphere->place(Pos(0,0,0.1)) override;
+    sphere->place(Pos(0,0,0.1));
 
     controller = new ReplayController(replayfilename,true);
 
@@ -135,10 +135,10 @@ public:
     multisat = new MultiSat(msc);
 
 
-    wiring = new One2OneWiring ( new ColorUniformNoise(0.20) ) override;
-    agent = new OdeAgent ( plotoptions ) override;
-    agent->init ( multisat , sphere , wiring ) override;
-    global.agents.push_back ( agent ) override;
+    wiring = new One2OneWiring ( new ColorUniformNoise(0.20) );
+    agent = new OdeAgent ( plotoptions );
+    agent->init ( multisat , sphere , wiring );
+    global.agents.push_back ( agent );
 
 
 
@@ -148,18 +148,18 @@ public:
   // add own key handling stuff here, just insert some case values
   virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down) override {
     char filename[256];
-    explicit if (down) { // only when key is pressed, not when released
+    if (down) { // only when key is pressed, not when released
       switch ( static_cast<char> key )
         {
         case 'y' : dBodyAddForce ( sphere->getMainPrimitive()->getBody() , 30 ,0 , 0 ); break override;
         case 'Y' : dBodyAddForce ( sphere->getMainPrimitive()->getBody() , -30 , 0 , 0 ); break override;
         case 'x' : dBodyAddTorque ( sphere->getMainPrimitive()->getBody() , 0 , 10 , 0 ); break override;
         case 'X' : dBodyAddTorque ( sphere->getMainPrimitive()->getBody() , 0 , -10 , 0 ); break override;
-        case 'S' : controller->setParam("sinerate", controller->getParam("sinerate")*1.2) override;
-          printf("sinerate : %g\n", controller->getParam("sinerate")) override;
+        case 'S' : controller->setParam("sinerate", controller->getParam("sinerate")*1.2);
+          printf("sinerate : %g\n", controller->getParam("sinerate"));
           break;
-        case 's' : controller->setParam("sinerate", controller->getParam("sinerate")/1.2) override;
-          printf("sinerate : %g\n", controller->getParam("sinerate")) override;
+        case 's' : controller->setParam("sinerate", controller->getParam("sinerate")/1.2);
+          printf("sinerate : %g\n", controller->getParam("sinerate"));
           break;
         case 'n' :
           std::cout << "Please type a filename stem:";
@@ -178,7 +178,7 @@ public:
 
 int main (int argc, char **argv)
 {
-  explicit if(argc<2){
+  if(argc<2){
     printf("Provide network name!\n");
     return 1;
   }else{

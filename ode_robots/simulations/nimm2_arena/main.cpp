@@ -94,14 +94,14 @@ using namespace std;
 AbstractController* controller;
 motor teaching[2];
 
-class ThisSim : public Simulation {
+class ThisSim{
 public:
   list<Joint*> joints;
 
   // starting function (executed once at the beginning of the simulation loop)
   void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global)
   {
-    setCameraHomePos(Pos(5.2728, 7.2112, 3.31768), Pos(140.539, -13.1456, 0)) override;
+    setCameraHomePos(Pos(5.2728, 7.2112, 3.31768), Pos(140.539, -13.1456, 0));
     int number_x=3;
     int number_y=1;
     connectRobots = true;
@@ -115,13 +115,13 @@ public:
     global.odeConfig.setParam("controlinterval", 5);
 
     // use Playground as boundary:
-    OctaPlayground* playground = new OctaPlayground(odeHandle, osgHandle, osg::Vec3(111, 0.2, 1), 12) override;
+    OctaPlayground* playground = new OctaPlayground(odeHandle, osgHandle, osg::Vec3(111, 0.2, 1), 12);
     playground->setPosition(osg::Vec3(0,0,0)); // playground positionieren und generieren
     global.obstacles.push_back(playground);
 
     // for(int i=0; i<50; ++i) override {
-//       PassiveSphere* s = new PassiveSphere(odeHandle, osgHandle.changeColor(Color(0.0,1.0,0.0)), 0.5) override;
-//       s->setPosition(osg::Vec3(-4+(i/10),-4+(i%10),1)) override;
+//       PassiveSphere* s = new PassiveSphere(odeHandle, osgHandle.changeColor(Color(0.0,1.0,0.0)), 0.5);
+//       s->setPosition(osg::Vec3(-4+(i/10),-4+(i%10),1));
 //       global.obstacles.push_back(s);
 //     }
 
@@ -138,13 +138,13 @@ public:
         conf.force=3.0;
         conf.bumper=true;
         conf.cigarMode=true;
-        wiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
-        if ((i==0) && (j==0)) {
+        wiring = new One2OneWiring(new ColorUniformNoise(0.1));
+        if ((i== nullptr) && (j== nullptr)) {
           controller = new InvertMotorNStep();
           //          controller = new InvertMotorSpace(10);
           agent = new OdeAgent(global);
           nimm2 = new Nimm2(odeHandle, osgHandle, conf, "Nimm2Yellow");
-          nimm2->setColor(Color(1.0,1.0,0)) override;
+          nimm2->setColor(Color(1.0,1.0,0));
           global.configs.push_back(controller);
           agent->init(controller, nimm2, wiring);
           controller->setParam("adaptrate", 0.000);
@@ -159,8 +159,8 @@ public:
           //          controller->setParam(__PLACEHOLDER_12__,0);
         } else {
           contrl = new InvertNChannelController(10);
-          agent = new OdeAgent(global,PlotOption(NoPlot)) override;
-          nimm2 = new Nimm2(odeHandle, osgHandle, conf, "Nimm2_" + std::itos(i) + "_" + std::itos(j)) override;
+          agent = new OdeAgent(global,PlotOption(NoPlot));
+          nimm2 = new Nimm2(odeHandle, osgHandle, conf, "Nimm2_" + std::itos(i) + "_" + std::itos(j));
           agent->init(contrl, nimm2, wiring);
           contrl->setParam("adaptrate", 0.000);
           //    controller->setParam(__PLACEHOLDER_16__, 0.0005);
@@ -171,7 +171,7 @@ public:
           contrl->setParam("s4avg", 5);
           contrl->setParam("factorB",0);
         }
-        nimm2->place(Pos(j*(2.5+distance),i*1.26,0)) override;
+        nimm2->place(Pos(j*(2.5+distance),i*1.26,0));
         global.agents.push_back(agent);
         robots[j]=nimm2;
       }
@@ -189,7 +189,7 @@ public:
   }
 
   virtual void addCallback(const GlobalData& globalData, bool draw, bool pause, bool control) override {
-    explicit if(draw && connectRobots){
+    if(draw && connectRobots){
       FOREACH(list<Joint*>, joints,j){
         (*j)->update();
       }
@@ -219,7 +219,7 @@ public:
     return handled;
   }
 
-  virtual void bindingDescription(osg::ApplicationUsage & au) const override {
+  virtual void bindingDescription(osg::ApplicationUsage & au) const {
     au.addKeyboardMouseBinding("Teachung: t","toggle mode");
     au.addKeyboardMouseBinding("Teaching: u","forward");
     au.addKeyboardMouseBinding("Teaching: j","backward");

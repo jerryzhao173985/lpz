@@ -28,12 +28,7 @@
 #define IRANDOMSTRATEGY_H_
 
 // forward declaration
-class IValue;
-
-/**
- * this interface is to create a random IValue.
- */
-class IRandomStrategy {
+class IValue{
 public:
 	/**
 	 * default constructor

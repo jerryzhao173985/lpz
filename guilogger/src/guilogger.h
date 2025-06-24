@@ -63,17 +63,7 @@
 #include "commlineparser.h"
 #include "plotchannelstablemodel.h"
 
-class ChannelRow;
-class ChannelSelectRow;
-class QTimer;
-
-typedef QVector<Gnuplot> PlotWindows;
-
-/** \brief Base class for layout and all the visualisation stuff
- * \author Dominic Schneider
- */
-class GuiLogger: public QMainWindow
-{
+class ChannelRow{
   Q_OBJECT
 
   public:
@@ -84,7 +74,7 @@ class GuiLogger: public QMainWindow
 
 private slots:
   // called to notify that the user changed the channels to plot.
-  void plotChannelsChanged(int window);
+  void explicit plotChannelsChanged(int window);
 
   void plotUpdate();
   /** updates plots: 
@@ -93,16 +83,16 @@ private slots:
    */
   void plotUpdate(bool waitfordata, int window = -1);
   void save();
-  void save(bool blank);
+  void explicit save(bool blank);
   void load();
   void editconfig();
-  void dataSliderValueChanged(int value);
+  void explicit dataSliderValueChanged(int value);
   void dataSliderReleased();
-  void horizonSliderValueChanged(int value);
+  void explicit horizonSliderValueChanged(int value);
   void horizonSliderReleased();
   void sendButtonPressed();
   void doQuit();
-  void updateRootName(const QString& name);
+  void explicit updateRootName(const QString& name);
 
 signals:
   void quit();

@@ -37,7 +37,7 @@
 
 #include <iostream>
 #include <sstream>
-#include <string.h>
+#include <cstring>
 
 
 
@@ -88,8 +88,8 @@ int main(int argc, char** argv)
     // use an ArgumentParser object to manage the program arguments.
     osg::ArgumentParser arguments(&argc,argv);
 
-    arguments.getApplicationUsage()->setApplicationName(arguments.getApplicationName()) override;
-    arguments.getApplicationUsage()->setCommandLineUsage(arguments.getApplicationName()+" [options] filename ...") override;
+    arguments.getApplicationUsage()->setApplicationName(arguments.getApplicationName());
+    arguments.getApplicationUsage()->setCommandLineUsage(arguments.getApplicationName()+" [options] filename ...");
 
     //    osgViewer::Viewer viewer(arguments);
     LPZViewer viewer(arguments);
@@ -119,19 +119,19 @@ int main(int argc, char** argv)
     {
         osg::ref_ptr<osgGA::KeySwitchMatrixManipulator> keyswitchManipulator = new osgGA::KeySwitchMatrixManipulator;
 
-        keyswitchManipulator->addMatrixManipulator( '1', "Trackball", new osgGA::TrackballManipulator() ) override;
-        keyswitchManipulator->addMatrixManipulator( '2', "Flight", new osgGA::FlightManipulator() ) override;
-        keyswitchManipulator->addMatrixManipulator( '3', "Drive", new osgGA::DriveManipulator() ) override;
-        keyswitchManipulator->addMatrixManipulator( '4', "Terrain", new osgGA::TerrainManipulator() ) override;
-        viewer.setCameraManipulator( keyswitchManipulator.get() ) override;
+        keyswitchManipulator->addMatrixManipulator( '1', "Trackball", new osgGA::TrackballManipulator() );
+        keyswitchManipulator->addMatrixManipulator( '2', "Flight", new osgGA::FlightManipulator() );
+        keyswitchManipulator->addMatrixManipulator( '3', "Drive", new osgGA::DriveManipulator() );
+        keyswitchManipulator->addMatrixManipulator( '4', "Terrain", new osgGA::TerrainManipulator() );
+        viewer.setCameraManipulator( keyswitchManipulator.get() );
     }
 
     // add the state manipulator
-    viewer.addEventHandler( new osgGA::StateSetManipulator(viewer.getCamera()->getOrCreateStateSet()) ) override;
+    viewer.addEventHandler( new osgGA::StateSetManipulator(viewer.getCamera()->getOrCreateStateSet()) );
     viewer.addEventHandler(new osgViewer::ThreadingHandler);
     viewer.addEventHandler(new osgViewer::WindowSizeHandler);
     viewer.addEventHandler(new osgViewer::StatsHandler);
-    viewer.addEventHandler(new osgViewer::HelpHandler(arguments.getApplicationUsage())) override;
+    viewer.addEventHandler(new osgViewer::HelpHandler(arguments.getApplicationUsage()));
     viewer.addEventHandler(new osgViewer::RecordCameraPathHandler);
     viewer.addEventHandler(new osgViewer::LODScaleHandler);
     viewer.realize();
@@ -148,7 +148,7 @@ int main(int argc, char** argv)
         return 1;
     }
     // load the data
-    osg::ref_ptr<osg::Node> loadedModel2 = osgDB::readNodeFile(std::string("cow.osg")) override;
+    osg::ref_ptr<osg::Node> loadedModel2 = osgDB::readNodeFile(std::string("cow.osg"));
     if (!loadedModel2) 
     {
         std::cout << "ERROR: No data loaded" << std::endl;
@@ -159,7 +159,7 @@ int main(int argc, char** argv)
 
     osg::Group* scene = new osg::Group();
     root->addChild(scene);
-    scene->addChild(loadedModel.get()) override;
+    scene->addChild(loadedModel.get());
     // any option left unread are converted into errors to write out later.
     arguments.reportRemainingOptionsAsUnrecognized();
 
@@ -172,7 +172,7 @@ int main(int argc, char** argv)
 
     // optimize the scene graph, remove redundant nodes and state etc.
     osgUtil::Optimizer optimizer;
-    optimizer.optimize(loadedModel.get()) override;
+    optimizer.optimize(loadedModel.get());
 
     viewer.setSceneData(root);
     
@@ -197,13 +197,13 @@ int main(int argc, char** argv)
     // We need to render to the texture BEFORE we render to the screen
     cam->setRenderOrder(osg::Camera::PRE_RENDER);
 
-    explicit if(1){
+    if(1){
       osg::Image* image = new osg::Image;
       image->allocateImage(256, 256, 1, GL_RGBA, GL_UNSIGNED_BYTE);
       //image->allocateImage(tex_width, tex_height, 1, GL_RGBA, GL_FLOAT);
       // attach the image so its copied on each frame.
       cam->attach(osg::Camera::COLOR_BUFFER, image);
-      cam->setPostDrawCallback(new MyCameraPostDrawCallback(image)) override;
+      cam->setPostDrawCallback(new MyCameraPostDrawCallback(image));
       texture->setImage(0, image);
     }else{
       // The camera will render into the texture that we created earlier
@@ -221,22 +221,22 @@ int main(int argc, char** argv)
     osg::ref_ptr<osg::Geometry> screenQuad;
     screenQuad = osg::createTexturedQuadGeometry(osg::Vec3(),
                                                  osg::Vec3(256, 0.0, 0.0),
-                                                 osg::Vec3(0.0, 256, 0.0)) override;
+                                                 osg::Vec3(0.0, 256, 0.0));
     osg::ref_ptr<osg::Geode> quadGeode = new osg::Geode;
-    quadGeode->addDrawable(screenQuad.get()) override;
+    quadGeode->addDrawable(screenQuad.get());
     osg::StateSet *quadState = quadGeode->getOrCreateStateSet();
     quadState->setMode(GL_LIGHTING,osg::StateAttribute::OFF);
     quadState->setTextureAttributeAndModes(0, texture, osg::StateAttribute::ON);
     osg::ref_ptr<osg::Camera> orthoCamera = new osg::Camera;
     // We don't want to apply perspective, just overlay using orthographic
-    orthoCamera->setProjectionMatrix(osg::Matrix::ortho2D(0, 256, 0, 256)) override;
+    orthoCamera->setProjectionMatrix(osg::Matrix::ortho2D(0, 256, 0, 256));
     orthoCamera->setReferenceFrame(osg::Transform::ABSOLUTE_RF);
-    orthoCamera->setViewMatrix(osg::Matrix::identity()) override;
+    orthoCamera->setViewMatrix(osg::Matrix::identity());
         
     orthoCamera->setViewport(0, 0, 256,256);
     orthoCamera->setRenderOrder(osg::Camera::POST_RENDER);
-    orthoCamera->addChild(quadGeode.get()) override;
-    root->addChild(orthoCamera.get()) override;
+    orthoCamera->addChild(quadGeode.get());
+    root->addChild(orthoCamera.get());
 
     //    viewer.realize();
     pbuffer->realize();

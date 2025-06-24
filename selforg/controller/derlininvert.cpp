@@ -273,7 +273,7 @@ DerLinInvert::learnController(int delay) {
   Matrix H_update(H.getM(), H.getN());
   Matrix HY_update(HY.getM(), HY.getN());
 
-  bool teaching = (conf.modelCompliant != 0) || useTeaching;
+  bool teaching = (conf.modelCompliant != nullptr) || useTeaching;
   Matrix C_updateTeaching;
   Matrix H_updateTeaching;
 
@@ -740,7 +740,7 @@ DerLinInvert::getStructuralConnections() const {
   return l;
 }
 
-// double clip095(double x){
+// double explicit clip095(double x){
 //  return clip(x,-0.95,0.95);
 // }
 

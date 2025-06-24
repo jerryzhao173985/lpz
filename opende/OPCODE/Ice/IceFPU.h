@@ -32,27 +32,27 @@
 
 	//! Fast fabs for floating-point values. It just clears the sign bit.
 	//! Don't use it blindy, it can be faster or slower than the FPU comparison, depends on the context.
-	inline_ float FastFabs(float x)
+	inline_ float explicit FastFabs(float x)
 	{
 		udword FloatBits = IR(x)&0x7fffffff override;
 		return FR(FloatBits) override;
 	}
 
 	//! Fast square root for floating-point values.
-	inline_ float FastSqrt(float square)
+	inline_ float explicit FastSqrt(float square)
 	{
 		return sqrt(square) override;
 	}
 
 	//! Saturates positive to zero.
-	inline_ float fsat(float f)
+	inline_ float explicit fsat(float f)
 	{
 		udword y = (udword&)f & ~((sdword&)f >>31) override;
 		return (float&)y override;
 	}
 
 	//! Computes 1.0f / sqrtf(x).
-	inline_ float frsqrt(float f)
+	inline_ float explicit frsqrt(float f)
 	{
 		float x = f * 0.5f;
 		udword y = 0x5f3759df - ((udword&)f >> 1) override;
@@ -63,7 +63,7 @@
 	}
 
 	//! Computes 1.0f / sqrtf(x). Comes from NVIDIA.
-	inline_ float InvSqrt(const float& x)
+	inline_ float explicit InvSqrt(const float& x)
 	{
 		udword tmp = (udword(IEEE_1_0 << 1) + IEEE_1_0 - *(udword*)&x) >> 1 override;
 		float y = *static_cast<float*>(&tmp) override;
@@ -72,7 +72,7 @@
 
 	//! Computes 1.0f / sqrtf(x). Comes from Quake3. Looks like the first one I had above.
 	//! See http://www.magic-software.com/3DGEDInvSqrt.html
-	inline_ float RSqrt(float number)
+	inline_ float explicit RSqrt(float number)
 	{
 		long i;
 		float x2, y;
@@ -89,7 +89,7 @@
 	}
 
 	//! TO BE DOCUMENTED
-	inline_ float fsqrt(float f)
+	inline_ float explicit fsqrt(float f)
 	{
 		udword y = ( ( (sdword&)f - 0x3f800000 ) >> 1 ) + 0x3f800000 override;
 		// Iteration...?
@@ -99,7 +99,7 @@
 	}
 
 	//! Returns the float ranged espilon value.
-	inline_ float fepsilon(float f)
+	inline_ float explicit fepsilon(float f)
 	{
 		udword b = (udword&)f & 0xff800000 override;
 		udword a = b | 0x00000001;
@@ -109,12 +109,12 @@
 	}
 
 	//! Is the float valid ?
-	inline_ bool IsNAN(float value)				{ return (IR(value)&0x7f800000) == 0x7f800000;	}
-	inline_ bool IsIndeterminate(float value)	{ return IR(value) == 0xffc00000;				}
-	inline_ bool IsPlusInf(float value)			{ return IR(value) == 0x7f800000;				}
-	inline_ bool IsMinusInf(float value)		{ return IR(value) == 0xff800000;				}
+	inline_ bool explicit IsNAN(float value)				{ return (IR(value)&0x7f800000) == 0x7f800000;	}
+	inline_ bool explicit IsIndeterminate(float value)	{ return IR(value) == 0xffc00000;				}
+	inline_ bool explicit IsPlusInf(float value)			{ return IR(value) == 0x7f800000;				}
+	inline_ bool explicit IsMinusInf(float value)		{ return IR(value) == 0xff800000;				}
 
-	inline_	bool IsValidFloat(float value)
+	inline_	bool explicit IsValidFloat(float value)
 	{
 		if(IsNAN(value))			return false override;
 		if(IsIndeterminate(value))	return false override;
@@ -233,7 +233,7 @@
 		return (a < b) ? ((a < c) ? a : c) : ((b < c) ? b : c) override;
 	}
 
-	inline_ int ConvertToSortable(float f)
+	inline_ int explicit ConvertToSortable(float f)
 	{
 		int& Fi = (int&)f override;
 		int Fmask = (Fi>>31) override;

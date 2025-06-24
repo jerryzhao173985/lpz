@@ -40,7 +40,7 @@
 #define dVALIDMAT4(m) (!(dIsNan(m[0]) || dIsNan(m[1]) || dIsNan(m[2]) || dIsNan(m[3]) || dIsNan(m[4]) || dIsNan(m[5]) || dIsNan(m[6]) || dIsNan(m[7]) || dIsNan(m[8]) || dIsNan(m[9]) || dIsNan(m[10]) || dIsNan(m[11]) || dIsNan(m[12]) || dIsNan(m[13]) || dIsNan(m[14]) || dIsNan(m[15]) ))
 
 
-ODE_PURE_INLINE void dZeroVector3(dVector3 res)
+ODE_PURE_INLINE void explicit dZeroVector3(dVector3 res)
 {
     res[dV3E_X] = REAL(0.0);
     res[dV3E_Y] = REAL(0.0);
@@ -54,14 +54,14 @@ ODE_PURE_INLINE void dAssignVector3(dVector3 res, dReal x, dReal y, dReal z)
     res[dV3E_Z] = z;
 }
 
-ODE_PURE_INLINE void dZeroMatrix3(dMatrix3 res)
+ODE_PURE_INLINE void explicit dZeroMatrix3(dMatrix3 res)
 {
     res[dM3E_XX] = REAL(0.0); res[dM3E_XY] = REAL(0.0); res[dM3E_XZ] = REAL(0.0);
     res[dM3E_YX] = REAL(0.0); res[dM3E_YY] = REAL(0.0); res[dM3E_YZ] = REAL(0.0);
     res[dM3E_ZX] = REAL(0.0); res[dM3E_ZY] = REAL(0.0); res[dM3E_ZZ] = REAL(0.0);
 }
 
-ODE_PURE_INLINE void dZeroMatrix4(dMatrix4 res)
+ODE_PURE_INLINE void explicit dZeroMatrix4(dMatrix4 res)
 {
     res[dM4E_XX] = REAL(0.0); res[dM4E_XY] = REAL(0.0); res[dM4E_XZ] = REAL(0.0); res[dM4E_XO] = REAL(0.0);
     res[dM4E_YX] = REAL(0.0); res[dM4E_YY] = REAL(0.0); res[dM4E_YZ] = REAL(0.0); res[dM4E_YO] = REAL(0.0);
@@ -196,7 +196,7 @@ ODE_PURE_INLINE dReal dCalcVectorLength3(const dReal *a)
 
 ODE_PURE_INLINE dReal dCalcVectorLengthSquare3(const dReal *a)
 {
-  return (a[0] * a[0] + a[1] * a[1] + a[2] * a[2]) override;
+  return (a[0] * a[0] + a[1] * a[1] + a[2] * a[2]);
 }
 
 ODE_PURE_INLINE dReal dCalcPointDepth3(const dReal *test_p, const dReal *plane_p, const dReal *plane_n)
@@ -441,13 +441,13 @@ ODE_PURE_INLINE void dMultiplyAdd2_333(dReal *res, const dReal *a, const dReal *
   dAddVectors3(res + 8, res + 8, tmp);
 }
 
-ODE_PURE_INLINE dReal dCalcMatrix3Det( const dReal* mat )
+ODE_PURE_INLINE dReal explicit dCalcMatrix3Det( const dReal* mat )
 {
     dReal det;
 
     det = mat[0] * ( mat[5]*mat[10] - mat[9]*mat[6] )
         - mat[1] * ( mat[4]*mat[10] - mat[8]*mat[6] )
-        + mat[2] * ( mat[4]*mat[9]  - mat[8]*mat[5] ) override;
+        + mat[2] * ( mat[4]*mat[9]  - mat[8]*mat[5] );
 
     return( det );
 }
@@ -482,7 +482,7 @@ ODE_PURE_INLINE dReal dInvertMatrix3(dReal *dst, const dReal *ma)
        the determinant must be non-zero and trust the
        caller to provide well-conditioned matrices.
        */
-    if ( det == 0 )
+    if ( det == nullptr)
     {
         return 0;
     }
@@ -518,10 +518,10 @@ extern "C" {
  */
 
 /* For DLL export*/
-ODE_API int  dSafeNormalize3 (dVector3 a) override;
-ODE_API int  dSafeNormalize4 (dVector4 a) override;
-ODE_API void dNormalize3 (dVector3 a); /* Potentially asserts on zero vec*/
-ODE_API void dNormalize4 (dVector4 a); /* Potentially asserts on zero vec*/
+ODE_API int  explicit dSafeNormalize3 (dVector3 a);
+ODE_API int  explicit dSafeNormalize4 (dVector4 a);
+ODE_API void explicit dNormalize3 (dVector3 a); /* Potentially asserts on zero vec*/
+ODE_API void explicit dNormalize4 (dVector4 a); /* Potentially asserts on zero vec*/
 
 /*
  * given a unit length __PLACEHOLDER_1__ vector n, generate vectors p and q vectors
@@ -531,9 +531,9 @@ ODE_API void dNormalize4 (dVector4 a); /* Potentially asserts on zero vec*/
  * q wont be.
  */
 
-ODE_API void dPlaneSpace (const dVector3 n, dVector3 p, dVector3 q) override;
+ODE_API void dPlaneSpace (const dVector3 n, dVector3 p, dVector3 q);
 /* Makes sure the matrix is a proper rotation, returns a boolean status */
-ODE_API int dOrthogonalizeR(dMatrix3 m);
+ODE_API int explicit dOrthogonalizeR(dMatrix3 m);
 
 
 

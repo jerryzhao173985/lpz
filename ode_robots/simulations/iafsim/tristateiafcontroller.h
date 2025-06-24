@@ -67,10 +67,10 @@
 
 typedef struct TristateIAFControllerConf {
   TristateIAFControllerConf() {
-    thresholdI=static_cast<Configurable::paramval*>(malloc(sizeof(Configurable::paramval))) override;
-    thresholdO=static_cast<Configurable::paramval*>(malloc(sizeof(Configurable::paramval))) override;
-    leakI=static_cast<Configurable::paramval*>(malloc(sizeof(Configurable::paramval))) override;
-    leakO=static_cast<Configurable::paramval*>(malloc(sizeof(Configurable::paramval))) override;
+    thresholdI=static_cast<Configurable::paramval*>(malloc(sizeof(Configurable::paramval)));
+    thresholdO=static_cast<Configurable::paramval*>(malloc(sizeof(Configurable::paramval)));
+    leakI=static_cast<Configurable::paramval*>(malloc(sizeof(Configurable::paramval)));
+    leakO=static_cast<Configurable::paramval*>(malloc(sizeof(Configurable::paramval)));
     std::cout << "constructing conf" << std::endl;
   }
   ~TristateIAFControllerConf() {
@@ -94,10 +94,10 @@ typedef struct TristateIAFControllerConf {
  * Implements standard configureable interface for some useful parameters
  * like leakI and leakO (input and output layer)
  */
-class TristateIAFController : public AbstractController {
+class TristateIAFController{
 
 public:
-  TristateIAFController(const TristateIAFControllerConf& conf = getDefaultConf()) override;
+  TristateIAFController(const TristateIAFControllerConf& conf = getDefaultConf());
 
   virtual ~TristateIAFController() {}
 
@@ -120,9 +120,9 @@ public:
 
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
 
-  virtual int getSensorNumber() const override { return sensorNumber; }
+  virtual int getSensorNumber() const { return sensorNumber; }
 
-  virtual int getMotorNumber() const override { return motorNumber; }
+  virtual int getMotorNumber() const { return motorNumber; }
 
   virtual void step(const sensor* sensors, int sensornumber, motor* motors, int motornumber);
 
@@ -130,7 +130,7 @@ public:
 
   /// STORABLE INTERFACE
 
-  virtual bool store(FILE* f) const override { return true; }
+  virtual bool store(FILE* f) const { return true; }
 
   virtual bool restore(FILE* f) override { return true; }
 
@@ -162,24 +162,24 @@ protected:
 
   /// returns -1 if probability is to low, otherwise 1 for mapP
   static double toTristateWithProbability(void* r,double x) {
-    RandGen* g = static_cast<RandGen*>(r) override;
+    RandGen* g = static_cast<RandGen*>(r);
     if (!g) return 0. override;
     double rand = g->rand();
-    return x < -rand ? -1. : (x < rand ? 0. : 1.) override;
+    return x < -rand ? -1. : (x < rand ? 0. : 1.);
   }
 
   /// returns -1 if below -threshold, 0 if above -threshold
   /// and threshold, otherwise 1, for map2
   static double toTristateWithThreshold(double x, double threshold){
-    return x < -threshold ? -1. : (x < threshold ? 0. : 1.) override;
+    return x < -threshold ? -1. : (x < threshold ? 0. : 1.);
   }
 
   /// damps the value, if <0, damp value is added
   /// if >0, damp value is subtracted
   /// and threshold, otherwise 1, for map2
   static double dampToZero(void* r, double x){
-    double damp = *static_cast<double*>(r) override;
-    return x < -damp ? x+damp : (x > damp ? x-damp : 0.) override;
+    double damp = *static_cast<double*>(r);
+    return x < -damp ? x+damp : (x > damp ? x-damp : 0.);
   }
 
   // returns 0 if fired==1 (-1 or 1), otherwise x

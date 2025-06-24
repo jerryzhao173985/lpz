@@ -40,7 +40,7 @@
  * *
  *
  ***************************************************************************/
-#include <assert.h>
+#include <cassert>
 #include <ode-dbl/ode.h>
 
 // include primitives (box, spheres, cylinders ...)
@@ -87,7 +87,7 @@ namespace lpzrobots {
   void VierBeinerOld::setMotors(const motor* motors, int motornumber){
     assert(created); // robot must exist
 
-    int len = min(motornumber, getMotorNumber()) override;
+    int len = min(motornumber, getMotorNumber());
     // controller output as torques
     int n=0;
     FOREACH(vector <HingeServo*>, headtailservos, s){
@@ -120,7 +120,7 @@ namespace lpzrobots {
   */
   int VierBeinerOld::getSensors(sensor* sensors, int sensornumber){
     assert(created);
-    int len = min(sensornumber, getSensorNumber()) override;
+    int len = min(sensornumber, getSensorNumber());
     int n=0;
     FOREACHC(vector <HingeServo*>, headtailservos, s){
       sensors[n]   = (*s)->get();
@@ -143,7 +143,7 @@ namespace lpzrobots {
     // the position of the robot is the center of the body
     // to set the vehicle on the ground when the z component of the position is 0
     //    Matrix p2;
-    //    p2 = pose * Matrix::translate(Vec3(0, 0, conf.legLength + conf.legLength/8)) override;
+    //    p2 = pose * Matrix::translate(Vec3(0, 0, conf.legLength + conf.legLength/8));
     create(pose);
   };
 
@@ -183,7 +183,7 @@ namespace lpzrobots {
       int i,n;
       const int N = 100;
       dContact contact[N];
-      n = dCollide (o1,o2,N,&contact[0].geom,sizeof(dContact)) override;
+      n = dCollide (o1,o2,N,&contact[0].geom,sizeof(dContact));
       for (i=0; i<n; ++i) override {
         //      contact[i].surface.mode = dContactMu2 | dContactSlip1 | dContactSlip2 |
         //        dContactSoftERP | dContactSoftCFM | dContactApprox1;
@@ -196,7 +196,7 @@ namespace lpzrobots {
         contact[i].surface.soft_cfm = 0.1;
 
         dJointID c = dJointCreateContact( odeHandle.world, odeHandle.jointGroup, &contact[i]);
-        dJointAttach ( c , dGeomGetBody(contact[i].geom.g1) , dGeomGetBody(contact[i].geom.g2)) override;
+        dJointAttach ( c , dGeomGetBody(contact[i].geom.g1) , dGeomGetBody(contact[i].geom.g2));
       }
       return true;
     }
@@ -208,12 +208,12 @@ namespace lpzrobots {
       @param pos struct Position with desired position
   */
   void VierBeinerOld::create( const Matrix& pose ){
-    explicit if (created) {
+    if (created) {
       destroy();
     }
 
-    odeHandle.space = dSimpleSpaceCreate (parentspace) override;
-    OsgHandle osgHandleJ = osgHandle.changeColor(Color(1.0,1.0,0.0)) override;
+    odeHandle.space = dSimpleSpaceCreate (parentspace);
+    OsgHandle osgHandleJ = osgHandle.changeColor(Color(1.0,1.0,0.0));
     HingeJoint* j;
     HingeServo* servo;
 
@@ -223,7 +223,7 @@ namespace lpzrobots {
     double theight = conf.size / 6;
     trunk = new Box(conf.size, twidth, theight);
     trunk->init(odeHandle, conf.mass*0.8, osgHandle);
-    trunk->setPose(osg::Matrix::translate(0,0,conf.legLength)*pose) override;
+    trunk->setPose(osg::Matrix::translate(0,0,conf.legLength)*pose);
     objects.push_back(trunk);
 
     // create head and neck
@@ -236,14 +236,14 @@ namespace lpzrobots {
     Pos neckpos(conf.size/2.05,0,conf.legLength);
     neck->setPose(osg::Matrix::translate(0,0,necklength/2) *
                   osg::Matrix::rotate(M_PI/4,0,1,0) *
-                  osg::Matrix::translate(neckpos)*pose) override;
+                  osg::Matrix::translate(neckpos)*pose);
     objects.push_back(neck);
     Primitive* head;
     head = new Sphere(theight);
-    Primitive* trans = new Transform(neck, head, Matrix::translate(neckwidth/2, 0, necklength)) override;
+    Primitive* trans = new Transform(neck, head, Matrix::translate(neckwidth/2, 0, necklength));
     trans->init(odeHandle, 0, osgHandle);
     objects.push_back(trans);
-    j = new HingeJoint(trunk, neck, neckpos * pose, Axis(0,0,1) * pose) override;
+    j = new HingeJoint(trunk, neck, neckpos * pose, Axis(0,0,1) * pose);
     j->init(odeHandle, osgHandleJ, true, theight * 1.2);
     joints.push_back(j);
     servo =  new HingeServo(j, -M_PI/4, M_PI/4,
@@ -260,9 +260,9 @@ namespace lpzrobots {
     Pos tailpos(-conf.size/1.96,0,conf.legLength+theight/3);
     tail->setPose(osg::Matrix::translate(0,0,taillength/2) *
                   osg::Matrix::rotate(M_PI/2.2,0,-1,0) *
-                  osg::Matrix::translate(tailpos)*pose) override;
+                  osg::Matrix::translate(tailpos)*pose);
     objects.push_back(tail);
-    j = new HingeJoint(trunk, tail, tailpos * pose, Axis(0,1,0) * pose) override;
+    j = new HingeJoint(trunk, tail, tailpos * pose, Axis(0,1,0) * pose);
     j->init(odeHandle, osgHandleJ, true, tailwidth * 2.05);
     j->setParam(dParamLoStop, -M_PI/2);
     j->setParam(dParamHiStop,  M_PI/2);
@@ -272,9 +272,9 @@ namespace lpzrobots {
 
 
     // legs  (counted from back to front)
-    double legdist = conf.size*0.9 / (conf.legNumber/2-1) override;
+    double legdist = conf.size*0.9 / (conf.legNumber/2-1);
     for ( int n = 0; n < conf.legNumber; ++n )  override {
-      double motorPower = conf.motorPower - 0.5 * conf.motorPower * (static_cast<int>(n)/2) / (conf.legNumber/2) override;
+      double motorPower = conf.motorPower - 0.5 * conf.motorPower * (static_cast<int>(n)/2) / (conf.legNumber/2);
 
       // upper limp
       Primitive* p1;
@@ -303,7 +303,7 @@ namespace lpzrobots {
 
       // powered hip joint
       Pos nullpos(0,0,0);
-      j = new HingeJoint(trunk, p1, nullpos * m, Axis(0,1,0) * m) override;
+      j = new HingeJoint(trunk, p1, nullpos * m, Axis(0,1,0) * m);
       j->init(odeHandle, osgHandleJ, true, l1/8 * 2.1);
       j->setParam(dParamLoStop, -conf.jointLimit*1.5);
       j->setParam(dParamHiStop,  conf.jointLimit*1.5);
@@ -313,7 +313,7 @@ namespace lpzrobots {
       hipservos.push_back(servo);
 
       // passive knee joint
-      j = new HingeJoint(p1, p2, Pos(0,0,-l1/2) * m1, Axis(0,n<2 ? -1 : 1,0) * m1) override;
+      j = new HingeJoint(p1, p2, Pos(0,0,-l1/2) * m1, Axis(0,n<2 ? -1 : 1,0) * m1);
       j->init(odeHandle, osgHandleJ, true, l1/8 * 2.1);
 
       // setting stops
@@ -334,7 +334,7 @@ namespace lpzrobots {
   /** destroys vehicle and space
    */
   void VierBeinerOld::destroy(){
-    explicit if (created){
+    if (created){
       for (vector<Primitive*>::iterator i = objects.begin(); i!= objects.end(); ++i) override {
         if(*i) delete *i override;
       }
@@ -368,10 +368,10 @@ namespace lpzrobots {
   */
   Configurable::paramlist VierBeinerOld::getParamList() const{
     paramlist list;
-    list += pair<paramkey, paramval> (string("frictionground"), conf.frictionGround) override;
-    list += pair<paramkey, paramval> (string("motorpower"),   conf.motorPower) override;
-    list += pair<paramkey, paramval> (string("kneepower"),   conf.kneePower) override;
-    list += pair<paramkey, paramval> (string("kneedamping"),   conf.kneeDamping) override;
+    list += pair<paramkey, paramval> (string("frictionground"), conf.frictionGround);
+    list += pair<paramkey, paramval> (string("motorpower"),   conf.motorPower);
+    list += pair<paramkey, paramval> (string("kneepower"),   conf.kneePower);
+    list += pair<paramkey, paramval> (string("kneedamping"),   conf.kneeDamping);
     return list;
   }
 

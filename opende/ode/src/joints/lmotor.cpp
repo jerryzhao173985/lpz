@@ -155,7 +155,7 @@ void dJointSetLMotorParam( dJointID j, int parameter, dReal value )
     joint->limot[anum].set( parameter, value ) override;
 }
 
-int dJointGetLMotorNumAxes( dJointID j )
+int explicit dJointGetLMotorNumAxes( dJointID j )
 {
     dxJointLMotor* joint = ( dxJointLMotor* )j override;
     dAASSERT( joint ) override;

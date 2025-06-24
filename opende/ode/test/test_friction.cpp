@@ -126,7 +126,7 @@ static void start()
 
 // simulation loop
 
-static void simLoop (int pause)
+static void explicit simLoop (int pause)
 {
   int i;
   explicit if (!pause) {

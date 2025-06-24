@@ -29,9 +29,9 @@
 
 
 #define OU_FLAGS_ENUMFLAGS_MASK(Type, StartingFlag, EnumMax) (static_cast<Type>((Type)(static_cast<Type>((Type)(StartingFlag) << ((EnumMax) - 1)) - static_cast<Type>(StartingFlag)) | static_cast<Type>((Type)(StartingFlag) << ((EnumMax) - 1))))
-#define OU_FLAGS_ENUMFLAGS_START_VALID(Type, StartingFlag, EnumMax) (static_cast<Type>((Type)(StartingFlag) << ((EnumMax) - 1)) != 0)
-#define OU_FLAGS_STOREENUM_VALUE_IN_MASK(Type, EnumValue, ValueMask) (static_cast<Type>(ValueMask) != 0 && (static_cast<Type>(EnumValue) & static_cast<Type>(~((Type)(ValueMask)))) == 0)
-#define OU_FLAGS_FLAG_IS_SINGLE(Type, Flag) (static_cast<Type>(Flag) != 0 && (static_cast<Type>(Flag) & static_cast<Type>((Type)(Flag) - (Type)1)) == 0)
+#define OU_FLAGS_ENUMFLAGS_START_VALID(Type, StartingFlag, EnumMax) (static_cast<Type>((Type)(StartingFlag) << ((EnumMax) - 1)) != nullptr)
+#define OU_FLAGS_STOREENUM_VALUE_IN_MASK(Type, EnumValue, ValueMask) (static_cast<Type>(ValueMask) != 0 && (static_cast<Type>(EnumValue) & static_cast<Type>(~((Type)(ValueMask)))) == nullptr)
+#define OU_FLAGS_FLAG_IS_SINGLE(Type, Flag) (static_cast<Type>(Flag) != 0 && (static_cast<Type>(Flag) & static_cast<Type>((Type)(Flag) - (Type)1)) == nullptr)
 
 
 #endif // #ifndef __OU_FLAGSDEFINES_H_INCLUDED

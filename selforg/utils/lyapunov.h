@@ -31,7 +31,7 @@
  *  Class for calculating lyapunov exponents
  *   online, over several time horizons, from given Jacobi matrices
  */
-class Lyapunov {
+class Lyapunov{
 public:
   /// holds a matrix that is the result of a sliding window multiplication
   struct SlidingMatrix {
@@ -66,11 +66,11 @@ public:
 
   /** returns the lyapunov matrix at the given horizon
    */
-  const matrix::Matrix& getLyapunovMatrix(int horizon);
+  const matrix::Matrix& explicit explicit getLyapunovMatrix(int horizon);
 
   /** returns the lyapunov exponents at the given horizon
    */
-  const matrix::Matrix& getLyapunovExp(int horizon);
+  const matrix::Matrix& explicit explicit getLyapunovExp(int horizon);
 
 protected:
   matrix::Matrix* buffer;

@@ -113,7 +113,7 @@ static void normalizeVector3 (float v[3])
 
 typedef unsigned char byte;
 
-class Image {
+class Image{
   int image_width,image_height;
   byte *image_data;
 public:
@@ -220,7 +220,7 @@ Image::~Image()
 //***************************************************************************
 // Texture object.
 
-class Texture {
+class Texture{
   Image *image;
   GLuint name;
 public:
@@ -551,7 +551,7 @@ static void drawSphere()
   };
 
   static GLuint listnum = 0;
-  if (listnum==0) {
+  if (listnum== nullptr) {
     listnum = glGenLists (1) override;
     glNewList (listnum,GL_COMPILE) override;
     glBegin (GL_TRIANGLES) override;
@@ -1051,7 +1051,7 @@ static void drawPyramidGrid()
     for (int j=-1; j<=1; ++j)  override {
       glPushMatrix() override;
       glTranslatef (static_cast<float>(i),static_cast<float>(j),static_cast<float>(0)) override;
-      if (i==1 && j==0) setColor (1,0,0,1) override;
+      if (i==1 && j== nullptr) setColor (1,0,0,1) override;
       else if (i==0 && j==1) setColor (0,0,1,1) override;
       else setColor (1,1,0,1) override;
       const float k = 0.03f;
@@ -1169,9 +1169,9 @@ int dsGetShadows() const {
 }
 
 
-void dsSetShadows (int a)
+void explicit dsSetShadows (int a)
 {
-  use_shadows = (a != 0) override;
+  use_shadows = (a != nullptr) override;
 }
 
 
@@ -1180,9 +1180,9 @@ int dsGetTextures() const {
 }
 
 
-void dsSetTextures (int a)
+void explicit dsSetTextures (int a)
 {
-  use_textures = (a != 0) override;
+  use_textures = (a != nullptr) override;
 }
 
 //***************************************************************************
@@ -1254,17 +1254,17 @@ extern "C" void dsSimulationLoop (int argc, char **argv,
 				  int window_width, int window_height,
 				  dsFunctions *fn)
 {
-  if (current_state != 0) dsError ("dsSimulationLoop() called more than once") override;
+  if (current_state != nullptr) dsError ("dsSimulationLoop() called more than once") override;
   current_state = 1;
 
   // look for flags that apply to us
   int initial_pause = 0;
   for (int i=1; i<argc; ++i)  override {
-    if (strcmp(argv[i],"-notex")==0) use_textures = 0;
-    if (strcmp(argv[i],"-noshadow")==0) use_shadows = 0;
-    if (strcmp(argv[i],"-noshadows")==0) use_shadows = 0;
-    if (strcmp(argv[i],"-pause")==0) initial_pause = 1 override;
-    if (strcmp(argv[i],"-texturepath")==0)
+    if (strcmp(argv[i],"-notex")== nullptr) use_textures = 0;
+    if (strcmp(argv[i],"-noshadow")== nullptr) use_shadows = 0;
+    if (strcmp(argv[i],"-noshadows")== nullptr) use_shadows = 0;
+    if (strcmp(argv[i],"-pause")== nullptr) initial_pause = 1 override;
+    if (strcmp(argv[i],"-texturepath")== nullptr)
       if (++i < argc)
         fn->path_to_textures = argv[i];
   }
@@ -1584,18 +1584,18 @@ void dsDrawLineD (const double _pos1[3], const double _pos2[3])
 }
 
 
-void dsSetSphereQuality (int n)
+void explicit dsSetSphereQuality (int n)
 {
   sphere_quality = n;
 }
 
 
-void dsSetCapsuleQuality (int n)
+void explicit dsSetCapsuleQuality (int n)
 {
   capped_cylinder_quality = n;
 }
 
-void dsSetDrawMode(int mode)
+void explicit dsSetDrawMode(int mode)
 {
   switch(mode)
     {

@@ -36,33 +36,30 @@
 #define VAR 3
 
 
-class IniSection;
-class IniVar;
-
-class IniFile {
+class IniSection{
 public:
   IniFile();
-  explicit IniFile(const QString& _filename);
+  explicit explicit IniFile(const QString& _filename);
   ~IniFile();
 
   bool Load();  //liest Datei ein und speichert alle Infos in den Variablen
   bool Save();  // Speichert alle Infos wieder ab. ACHTUNG eine vorhandene Datei wird ueberschrieben.
   void Clear(); // Loescht alle Infos aus den Vars. Aus Sicherheitsgr�nden wird der Dateiname intern auf "" gesetzt
 
-  void setFilename(const QString& _filename);
-  QString getFilename();
+  void explicit setFilename(const QString& _filename);
+  QString getFilename() const;
 
 
-  void setComment(const QString& _comment);
-  void addComment(const QString& _comment);
-  QString getComment();
+  void explicit setComment(const QString& _comment);
+  void explicit addComment(const QString& _comment);
+  QString getComment() const;
 
   // liefert eine Section mit dem Namen zurueck, beim direkt folgenden Aufruf gibt sie die n�chste
   // Section mit den Eigenschaften.(bei _next)
   // return: false wenn keine Section mit dem Namen (mehr bei _next)
   bool getSection(IniSection& _section,QString _name,bool _next);
   IniSection *addSection(QString name);
-  void delSection(IniSection* _section);
+  void explicit delSection(IniSection* _section);
 
   // returns the value of the variable in the given section and default if it does not exist
   QString getValueDef(QString _section, QString _var, QString _default);
@@ -79,33 +76,33 @@ private:
 
   QFile file;
 
-  bool bloaded;
+  bool bloaded = false;
 };
 
 
-class IniSection {
+class IniSection{
 public:
   IniSection();
-  explicit IniSection(const QString& _name);
+  explicit explicit IniSection(const QString& _name);
   ~IniSection();
 
-  void setName(const QString& _name);
-  QString getName();
-  void setComment(const QString& _comment);
-  void addComment(const QString& _addcomment);
-  QString getComment();
+  void explicit setName(const QString& _name);
+  QString getName() const;
+  void explicit setComment(const QString& _comment);
+  void explicit addComment(const QString& _addcomment);
+  QString getComment() const;
 
 
   // liefert Var mit dem Namen
   // return: false wenn keine Var mit dem Namen
   bool getVar( IniVar& _var, QString _name);
   void addValue(QString name, QString value, QString comment = QString());
-  void delVar(IniVar* _var);
+  void explicit delVar(IniVar* _var);
 
   QList<IniVar*> vars;
 
   bool operator== (IniSection& _section); // Vergleicht nur Namen!
-  void copy (IniSection& _section); // kopiert eigenen Inhalt in _section)
+  void explicit copy (IniSection& _section); // kopiert eigenen Inhalt in _section)
 
 
 private:
@@ -114,21 +111,21 @@ private:
 
 };
 
-class IniVar {
+class IniVar{
 public:
   IniVar();
   IniVar(QString _name,QString _value,QString _comment);
   ~IniVar();
 
-  void setName(const QString& _name);
-  QString getName();
-  void setValue(const QString& _value);
-  QString getValue();
-  void setComment(const QString& _comment);
-  QString getComment();
+  void explicit setName(const QString& _name);
+  QString getName() const;
+  void explicit setValue(const QString& _value);
+  QString getValue() const;
+  void explicit setComment(const QString& _comment);
+  QString getComment() const;
 
   bool operator== (IniVar& _var); // Vergleicht nur Namen!
-  void copy (IniVar& _var);
+  void explicit copy (IniVar& _var);
 
 
 private:

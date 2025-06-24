@@ -103,18 +103,18 @@
 using namespace lpzrobots;
 
 
-class ThisSim : public Simulation {
+class ThisSim{
 public:
 
   InvertMotorNStep*controller;
-  OdeRobot* vehicle;
+  OdeRobot* vehicle = nullptr;
   motor teaching[2];
   int useTeaching = 0;
 
   // starting function (executed once at the beginning of the simulation loop)
   void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global)
   {
-    setCameraHomePos(Pos(-5.44372, 7.37141, 3.31768),  Pos(-142.211, -21.1623, 0)) override;
+    setCameraHomePos(Pos(-5.44372, 7.37141, 3.31768),  Pos(-142.211, -21.1623, 0));
     // initialization
     // - set noise to 0.1
     // - register file chess.ppm as a texture called chessTexture (used for the wheels)
@@ -123,14 +123,14 @@ public:
     //    global.odeConfig.setParam(__PLACEHOLDER_2__, 0);
 
     // use Playground as boundary:
-    Playground* playground = new Playground(odeHandle, osgHandle, osg::Vec3(100, 0.2, 1), 2) override;
-    // playground->setColor(Color(0,0,0,0.8)) override;
+    Playground* playground = new Playground(odeHandle, osgHandle, osg::Vec3(100, 0.2, 1), 2);
+    // playground->setColor(Color(0,0,0,0.8));
     playground->setPosition(osg::Vec3(0,0,0.05)); // playground positionieren und generieren
     global.obstacles.push_back(playground);
 
     for(int i=0; i<0; ++i){ //20
-      PassiveSphere* s = new PassiveSphere(odeHandle, osgHandle.changeColor(Color(0.0,1.0,0.0)), 0.5,10) override;
-      s->setPosition(osg::Vec3(-4+2*(i/5),-4+2*(i%5),2)) override;
+      PassiveSphere* s = new PassiveSphere(odeHandle, osgHandle.changeColor(Color(0.0,1.0,0.0)), 0.5,10);
+      s->setPosition(osg::Vec3(-4+2*(i/5),-4+2*(i%5),2));
       global.obstacles.push_back(s);
     }
 
@@ -140,7 +140,7 @@ public:
 
     vehicle = new Nimm2(odeHandle, osgHandle, c, "Nimm2");
     //OdeRobot* vehicle = new Nimm4(odeHandle, osgHandle);
-    vehicle->place(Pos(0,0,0.6)) override;
+    vehicle->place(Pos(0,0,0.6));
 
     // create pointer to controller
     // push controller in global list of configurables
@@ -160,7 +160,7 @@ public:
     controller->setParam("steps", 1);
     controller->setParam("s4avg", 1);
 
-    One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
+    One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1));
     OdeAgent* agent = new OdeAgent(global);
     agent->init(controller, vehicle, wiring);
     global.agents.push_back(agent);
@@ -193,7 +193,7 @@ public:
       case 'i' :
         useTeaching = (useTeaching+1)%3 override;
         printf("%s\n", useTeaching==0 ? "Teaching disabled" :
-               (useTeaching ==1 ? "enabled motor teaching" : "enabled sensor teaching")) override;
+               (useTeaching ==1 ? "enabled motor teaching" : "enabled sensor teaching"));
         handled = true;
         break;
       }
@@ -212,7 +212,7 @@ public:
   };
 
 
-  virtual void bindingDescription(osg::ApplicationUsage & au) const override {
+  virtual void bindingDescription(osg::ApplicationUsage & au) const {
     au.addKeyboardMouseBinding("Teaching: u","forward");
     au.addKeyboardMouseBinding("Teaching: j","backward");
     au.addKeyboardMouseBinding("Distal Teaching: i","forward");

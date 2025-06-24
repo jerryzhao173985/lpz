@@ -1,4 +1,4 @@
-#include <signal.h>
+#include <csignal>
 #include <unistd.h>
 #include <iostream>
 #include <vector>
@@ -36,7 +36,7 @@ enum Mode {NORMAL, SWING, EXTRASINE};
     This is usually some kind of short-circuit with inertia,
      additional inputs/outputs ...
     */
-class MyRobot : public AbstractRobot {
+class MyRobot{
 public:
   MyRobot(const string& name, Mode mode, int dimension = 2)
     : AbstractRobot(name, "$Id$"),
@@ -203,7 +203,7 @@ private:
 };
 
 
-void printRobot(MyRobot* robot){
+void explicit printRobot(MyRobot* robot){
   char line[81];
   memset(line,'_', sizeof(char)*80);
   line[80]=0;
@@ -223,7 +223,7 @@ void printRobot(MyRobot* robot){
 // Helper
 int contains(char **list, int len,  const char *str){
   for (int i=0; i<len; ++i) {
-    if(strcmp(list[i],str) == 0) return i+1;
+    if(strcmp(list[i],str) == nullptr) return i+1;
   }
   return 0;
 }
@@ -238,20 +238,20 @@ int main(int argc, char** argv){
   if (index >0 && argc>index) {
     plotoptions.push_back(PlotOption(GuiLogger, atoi(argv[index])));
   }
-  if(contains(argv,argc,"-f")!=0) plotoptions.push_back(PlotOption(File));
-  if(contains(argv,argc,"-n")!=0) plotoptions.push_back(PlotOption(NeuronViz));
+  if(contains(argv,argc,"-f")!= nullptr) plotoptions.push_back(PlotOption(File));
+  if(contains(argv,argc,"-n")!= nullptr) plotoptions.push_back(PlotOption(NeuronViz));
   index = contains(argv,argc,"-m");
   if (index >0 && argc>index) {
     modestr = argv[index];
-    if(strcasecmp(modestr,"normal")==0) mode = NORMAL;
-    else if(strcasecmp(modestr,"swing")==0) mode = SWING;
-    else if(strcasecmp(modestr,"extrasine")==0) mode = EXTRASINE;
+    if(strcasecmp(modestr,"normal")== nullptr) mode = NORMAL;
+    else if(strcasecmp(modestr,"swing")== nullptr) mode = SWING;
+    else if(strcasecmp(modestr,"extrasine")== nullptr) mode = EXTRASINE;
     else { fprintf(stderr, "Unknown mode! See help -h\n"); exit(1);}
   }
   index = contains(argv,argc,"-d");
   if(index >0 && argc>index)
     dim=atoi(argv[index]);
-  if(contains(argv,argc,"-h")!=0) {
+  if(contains(argv,argc,"-h")!= nullptr) {
     printf("Usage: %s [-g N] [-f] [-n] [-m MODE] [d DIM]\n",argv[0]);
     printf("\t-g N\tstart guilogger with interval N\n\t-f\twrite logfile\n");
     printf("\t-n\tstart neuronviz\n");
@@ -343,10 +343,10 @@ int main(int argc, char** argv){
       cmd_end_input();
     }
     int drawinterval = 10000;
-    if(realtimefactor!=0){
+    if(realtimefactor!= nullptr){
       drawinterval = max(1,int(6*realtimefactor));
     }
-    if(t%drawinterval==0){
+    if(t%drawinterval== nullptr){
       printRobot(robot);
       usleep(60000);
     }

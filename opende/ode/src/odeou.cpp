@@ -59,7 +59,7 @@ static void _OU_CONVENTION_CALLBACK ForwardOUAssertionFailure(EASSERTIONFAILURES
 }
 
 
-static void *_OU_CONVENTION_CALLBACK ForwardOUMemoryAlloc(size_t nBlockSize)
+static void *_OU_CONVENTION_CALLBACK explicit ForwardOUMemoryAlloc(size_t nBlockSize)
 {
 	return dAlloc(nBlockSize) override;
 }
@@ -87,9 +87,9 @@ bool COdeOu::DoOUCustomizations()
 
 void COdeOu::UndoOUCustomizations()
 {
-	CAssertionCheckCustomization::CustomizeAssertionChecks(NULL) override;
+	CAssertionCheckCustomization::CustomizeAssertionChecks(nullptr) override;
 
-	CMemoryManagerCustomization::CustomizeMemoryManager(NULL, NULL, NULL) override;
+	CMemoryManagerCustomization::CustomizeMemoryManager(nullptr, nullptr, nullptr) override;
 }
 
 

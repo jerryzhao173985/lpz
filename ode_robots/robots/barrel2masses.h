@@ -45,7 +45,7 @@ namespace lpzrobots {
     conf.spheremass   = 1;
     sphere1 = new Barrel2Masses ( odeHandle, osgHandle.changeColor(Color(0.0,0.0,1.0)),
                                   conf, __PLACEHOLDER_6__, 0.2);
-    sphere1->placeIntern( osg::Matrix::rotate(M_PI/2, 1,0,0)) override;
+    sphere1->placeIntern( osg::Matrix::rotate(M_PI/2, 1,0,0));
 
     controller = new InvertMotorNStep();
     controller->setParam(__PLACEHOLDER_7__, 2);
@@ -55,7 +55,7 @@ namespace lpzrobots {
     controller->setParam(__PLACEHOLDER_11__, 3);
     controller->setParam(__PLACEHOLDER_12__, 0);
 
-    One2OneWiring* wiring = new One2OneWiring ( new ColorUniformNoise() ) override;
+    One2OneWiring* wiring = new One2OneWiring ( new ColorUniformNoise() );
 
 */
 
@@ -64,8 +64,7 @@ namespace lpzrobots {
    It is the small brother of the Sphererobot3Masses.
    This robot was inspired by Julius Popp (http:__PLACEHOLDER_13__
 */
-class Barrel2Masses : public Sphererobot3Masses
-{
+class Barrel2Masses{
 public:
 
   /**
@@ -75,7 +74,7 @@ public:
   Barrel2Masses ( const OdeHandle& odeHandle, const OsgHandle& osgHandle,
                        const Sphererobot3MassesConf& conf, const std::string& name, double transparency=0.5 );
 
-  virtual ~Barrel2Masses();
+  virtual ~Barrel2Masses() override;
 
   /** default configuration for Barrel2Masses. It has no sensors.
       Use addSensor(std::make_shared<Sensor>(AxisOrientationSensor(ZProjectionXY)) for example.*/

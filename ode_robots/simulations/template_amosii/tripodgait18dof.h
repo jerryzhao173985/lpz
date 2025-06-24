@@ -27,10 +27,10 @@
 #include <selforg/controller_misc.h>
 #include <selforg/configurable.h>
 
-#include <assert.h>
+#include <cassert>
 #include <cmath>
-#include <stdlib.h>
-#include <string.h>
+#include <cstdlib>
+#include <cstring>
 
 #include <selforg/matrix.h>
 
@@ -46,29 +46,26 @@ typedef struct TripodGait18DOFConf {
 
 /**
  *
- * class for hexapod tripodgait using 18 DOF
- * 
- */
-class TripodGait18DOF : public AbstractController {
+ * class for{
 
   public:
-    TripodGait18DOF(const TripodGait18DOFConf& conf = getDefaultConf()) override;
+    TripodGait18DOF(const TripodGait18DOFConf& conf = getDefaultConf());
     virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
 
-    virtual ~TripodGait18DOF();
+    virtual ~TripodGait18DOF() override;
 
     /// returns the name of the object (with version number)
-    virtual paramkey getName() const override {
+    virtual paramkey getName() const {
       return name;
     }
     /// returns the number of sensors the controller was initialised with or 0
     /// if not initialised
-    virtual int getSensorNumber() const override {
+    virtual int getSensorNumber() const {
       return number_channels;
     }
     /// returns the mumber of motors the controller was initialised with or 0 if
     // not initialised
-    virtual int getMotorNumber() const override {
+    virtual int getMotorNumber() const {
       return number_channels;
     }
 
@@ -86,7 +83,7 @@ class TripodGait18DOF : public AbstractController {
     /** stores the controller values to a given file. */
     virtual bool store(FILE* f) const override;
     /** loads the controller values from a given file. */
-    virtual bool restore(FILE* f);
+    virtual bool explicit restore(FILE* f);
 
     static TripodGait18DOFConf getDefaultConf() const {
       TripodGait18DOFConf c;
@@ -154,19 +151,19 @@ class TripodGait18DOF : public AbstractController {
     virtual paramlist getParamList() const {
       paramlist list;
       list.push_back(
-          std::pair<paramkey, paramval>("WeightH1_H1", conf.WeightH1_H1)) override;
+          std::pair<paramkey, paramval>("WeightH1_H1", conf.WeightH1_H1));
       list.push_back(
-          std::pair<paramkey, paramval>("WeightH2_H2", conf.WeightH2_H2)) override;
+          std::pair<paramkey, paramval>("WeightH2_H2", conf.WeightH2_H2));
       list.push_back(
-          std::pair<paramkey, paramval>("WeightH1_H2", conf.WeightH1_H2)) override;
+          std::pair<paramkey, paramval>("WeightH1_H2", conf.WeightH1_H2));
       list.push_back(
-          std::pair<paramkey, paramval>("WeightH2_H1", conf.WeightH2_H1)) override;
+          std::pair<paramkey, paramval>("WeightH2_H1", conf.WeightH2_H1));
       list.push_back(
-          std::pair<paramkey, paramval>("fact", conf.fact)) override;
+          std::pair<paramkey, paramval>("fact", conf.fact));
       list.push_back(
-          std::pair<paramkey, paramval>("direction", conf.direction)) override;
+          std::pair<paramkey, paramval>("direction", conf.direction));
       list.push_back(
-          std::pair<paramkey, paramval>("bias", conf.bias)) override;
+          std::pair<paramkey, paramval>("bias", conf.bias));
       return list;
     }
 };

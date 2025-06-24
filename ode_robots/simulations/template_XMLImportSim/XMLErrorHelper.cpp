@@ -39,8 +39,8 @@
 #include <xercesc/dom/DOMException.hpp>
 
 #include <iostream>
-#include <stdlib.h>
-#include <string.h>
+#include <cstdlib>
+#include <cstring>
 
 #include "XMLHelper.h"
 

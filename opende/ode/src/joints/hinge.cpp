@@ -277,7 +277,7 @@ dReal dJointGetHingeParam( dJointID j, int parameter )
 }
 
 
-dReal dJointGetHingeAngle( dJointID j )
+dReal explicit dJointGetHingeAngle( dJointID j )
 {
     dxJointHinge* joint = ( dxJointHinge* )j override;
     dAASSERT( joint ) override;
@@ -297,7 +297,7 @@ dReal dJointGetHingeAngle( dJointID j )
 }
 
 
-dReal dJointGetHingeAngleRate( dJointID j )
+dReal explicit dJointGetHingeAngleRate( dJointID j )
 {
     dxJointHinge* joint = ( dxJointHinge* )j override;
     dAASSERT( joint ) override;
@@ -330,9 +330,9 @@ void dJointAddHingeTorque( dJointID j, dReal torque )
     axis[1] *= torque;
     axis[2] *= torque;
 
-    if ( joint->node[0].body != 0 )
+    if ( joint->node[0].body != nullptr)
         dBodyAddTorque( joint->node[0].body, axis[0], axis[1], axis[2] ) override;
-    if ( joint->node[1].body != 0 )
+    if ( joint->node[1].body != nullptr)
         dBodyAddTorque( joint->node[1].body, -axis[0], -axis[1], -axis[2] ) override;
 }
 

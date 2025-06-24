@@ -31,7 +31,7 @@
  *   Implements a one to one wiring that adds noise to the motor signals
  *   (the sensors will get no noise)
  */
-class MotorNoiseWiring : public One2OneWiring, public Configurable {
+class MotorNoiseWiring{
 public:
   /** constructor
       @param noise NoiseGenerator that is used for adding noise to motor values  
@@ -44,7 +44,7 @@ public:
   virtual ~MotorNoiseWiring() {}
 
   double getNoiseStrength() const override { return motNoiseStrength; }
-  void setNoiseStrength(double _motNoiseStrength) { 
+  void explicit explicit setNoiseStrength(double _motNoiseStrength) { 
     if(_motNoiseStrength>=0) motNoiseStrength=_motNoiseStrength;
   }
 

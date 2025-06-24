@@ -27,9 +27,7 @@
 #include "abstracttracksection.h"
 
 /**
- *  class for degree segments
- */
-class DegreeSegment : public AbstractTrackSection {
+ *  class for{
 
  public:
 
@@ -42,7 +40,7 @@ class DegreeSegment : public AbstractTrackSection {
   /**
    * Constructor
    */
-  explicit DegreeSegment(const Matrix& position);
+  explicit explicit DegreeSegment(const Matrix& position);
 
   virtual ~DegreeSegment() {}
 
@@ -52,22 +50,22 @@ class DegreeSegment : public AbstractTrackSection {
  * here it is the length of the arc
  */
 
-virtual double getLength();
+virtual double getLength() const;
 
 /**
  * returns the width of the segment,
  */
- virtual double getWidth();
+ virtual double getWidth() const;
 
 /**
  * sets the width of the segment,
  */
- virtual void setWidth(double w);
+ virtual void explicit setWidth(double w);
 
 
-virtual void setCurveAngle(const double& alpha);
+virtual void explicit setCurveAngle(const double& alpha);
 
-virtual void setRadius(const double& rad);
+virtual void explicit setRadius(const double& rad);
 
   /**
    * gives the position and rotationstatic_cast<angle>(of) the segment at the
@@ -75,13 +73,13 @@ virtual void setRadius(const double& rad);
    * if you want to place the new segment, you must muliplicate:
    * getTransformedEndMatrix()*getPositionMatrix();
    */
-  virtual Matrix getTransformedEndMatrix();
+  virtual Matrix getTransformedEndMatrix() const;
 
 
 /**
  * returns true if the real coordinates lay inside of the segment
  */
-virtual bool isInside(const Position& p);
+virtual bool explicit isInside(const Position& p);
 
 
 /**
@@ -91,7 +89,7 @@ virtual bool isInside(const Position& p);
  * 100 means you are at the end
  * returns -1 if no IdValue can be given
  */
-virtual double getSectionIdValue(const Position& p);
+virtual double explicit getSectionIdValue(const Position& p);
 
 
 /**
@@ -102,7 +100,7 @@ virtual double getSectionIdValue(const Position& p);
  * 100 means you are on the right
  * returns -1 if no WidthValue can be given
  */
-virtual double getWidthIdValue(const Position& p);
+virtual double explicit getWidthIdValue(const Position& p);
 
 
 /**
@@ -112,7 +110,7 @@ virtual double getWidthIdValue(const Position& p);
 
 
 
-virtual void create(dSpaceID space);
+virtual void explicit create(dSpaceID space);
 
 
 virtual  void destroy();

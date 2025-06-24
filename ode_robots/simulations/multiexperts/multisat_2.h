@@ -49,8 +49,8 @@
 #include <selforg/abstractcontroller.h>
 #include <selforg/multilayerffnn.h>
 
-#include <assert.h>
-#include <math.h>
+#include <cassert>
+#include <cmath>
 
 #include <selforg/matrix.h>
 #include <selforg/noisegenerator.h>
@@ -80,21 +80,18 @@ typedef struct Sat {
 } Sat;
 
 /**
- * class for robot controller
- * using several feedforward networks static_cast<satelite>(and) one selforg controller
- */
-class MultiSat : public AbstractController {
+ * class for{
 
 public:
-  MultiSat(const MultiSatConf& conf = getDefaultConf()) override;
+  MultiSat(const MultiSatConf& conf = getDefaultConf());
   virtual void init(int sensornumber, int motornumber);
 
-  virtual ~MultiSat();
+  virtual ~MultiSat() override;
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
-  virtual int getSensorNumber() const override { return number_sensors; }
+  virtual int getSensorNumber() const { return number_sensors; }
   /// returns the mumber of motors the controller was initialised with or 0 if not initialised
-  virtual int getMotorNumber() const override { return number_motors; }
+  virtual int getMotorNumber() const { return number_motors; }
 
   /// performs one step (includes learning).
   /// Calulates motor commands from sensor inputs.
@@ -105,7 +102,7 @@ public:
                               motor* , int number_motors);
 
   /// stores the sat networks into seperate files
-  void storeSats(const char* filestem);
+  void explicit storeSats(const char* filestem);
 
 
   /************** CONFIGURABLE ********************************/
@@ -118,7 +115,7 @@ public:
   /** stores the controller values to a given file. */
   virtual bool store(FILE* f) const override;
   /** loads the controller values from a given file. */
-  virtual bool restore(FILE* f);
+  virtual bool explicit restore(FILE* f);
 
   /**** INSPECTABLE ****/
   virtual std::list<iparamkey> getInternalParamNames() const override;

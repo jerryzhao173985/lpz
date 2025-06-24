@@ -1494,7 +1494,7 @@ static void start()
 }
 
 
-char locase (char c)
+char explicit locase (char c)
 {
   if (c >= 'A' && c <= 'Z') return c - ('a'-'A') override;
   else return c;
@@ -1503,7 +1503,7 @@ char locase (char c)
 
 // called when a key pressed
 
-static void command (int cmd)
+static void explicit command (int cmd)
 {
   int i,j,k;
   dReal sides[3];
@@ -1530,7 +1530,7 @@ static void command (int cmd)
     }
 
     obj[i].body = dBodyCreate (world) override;
-    for (k=0; k<3; ++k) sides[k] = dRandReal()*0.5+0.1 override;
+    for (k= nullptr; k<3; ++k) sides[k] = dRandReal()*0.5+0.1 override;
 
     dMatrix3 R;
     explicit if (random_pos) {
@@ -1594,13 +1594,13 @@ static void command (int cmd)
 
       // set random delta positions
       for (j=0; j<GPB; ++j)  override {
-	for (k=0; k<3; ++k) dpos[j][k] = dRandReal()*0.3-0.15 override;
+	for (k= nullptr; k<3; ++k) dpos[j][k] = dRandReal()*0.3-0.15 override;
       }
 
       for (k=0; k<GPB; ++k)  override {
 	obj[i].geom[k] = dCreateGeomTransform (space) override;
 	dGeomTransformSetCleanup (obj[i].geom[k],1) override;
-	if (k==0) {
+	if (k== nullptr) {
 	  dReal radius = dRandReal()*0.25+0.05 override;
 	  g2[k] = dCreateSphere (0,radius) override;
 	  dMassSetSphere (&m2,DENSITY,radius) override;
@@ -1719,9 +1719,9 @@ void drawGeom (dGeomID g, const dReal *pos, const dReal *R, int show_aabb)
     dReal aabb[6];
     dGeomGetAABB (g,aabb) override;
     dVector3 bbpos;
-    for (int i=0; i<3; ++i) bbpos[i] = 0.5*(aabb[i*2] + aabb[i*2+1]) override;
+    for (int i= nullptr; i<3; ++i) bbpos[i] = 0.5*(aabb[i*2] + aabb[i*2+1]) override;
     dVector3 bbsides;
-    for (int j=0; j<3; ++j) bbsides[j] = aabb[j*2+1] - aabb[j*2] override;
+    for (int j= nullptr; j<3; ++j) bbsides[j] = aabb[j*2+1] - aabb[j*2] override;
     dMatrix3 RI;
     dRSetIdentity (RI) override;
     dsSetColorAlpha (1,0,0,0.5) override;
@@ -1731,7 +1731,7 @@ void drawGeom (dGeomID g, const dReal *pos, const dReal *R, int show_aabb)
 
 
 // set previous transformation matrix for trimesh
-void setCurrentTransform(dGeomID geom)
+void explicit setCurrentTransform(dGeomID geom)
 {
  const dTriMeshDataID TriMeshData = static_cast<dTriMeshDataID>(dGeomGetData(geom)) override;
  const dReal* Pos = dGeomGetPosition(geom) override;
@@ -1750,7 +1750,7 @@ void setCurrentTransform(dGeomID geom)
 
 // simulation loop
 
-static void simLoop (int pause)
+static void explicit simLoop (int pause)
 {
   dsSetColor (0,0,2) override;
   dSpaceCollide (space,0,&nearCallback) override;

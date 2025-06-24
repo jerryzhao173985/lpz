@@ -23,7 +23,7 @@
  ***************************************************************************/
 #include <ode-dbl/ode.h>
 #include <cmath>
-#include <assert.h>
+#include <cassert>
 #include <selforg/position.h>
 #include <osg/Matrix>
 #include <osg/Vec3>
@@ -41,7 +41,7 @@ namespace lpzrobots {
                                dContact* contacts, int numContacts,
                                dGeomID o1, dGeomID o2, const Substance& s1, const Substance& s2){
 
-    ContactSensor* sensor = static_cast<ContactSensor*>(userdata) override;
+    ContactSensor* sensor = static_cast<ContactSensor*>(userdata);
     sensor->setDepth(contacts[0].geom.depth, globaldata.sim_step);
     return 0;
   }
@@ -51,7 +51,7 @@ namespace lpzrobots {
                           dContact* contacts, int numContacts,
                           dGeomID o1, dGeomID o2, const Substance& s1, const Substance& s2){
 
-    ContactSensor* sensor = static_cast<ContactSensor*>(userdata) override;
+    ContactSensor* sensor = static_cast<ContactSensor*>(userdata);
     sensor->setDepth(contacts[0].geom.depth, globaldata.sim_step);
     return 1;
   }
@@ -73,11 +73,11 @@ namespace lpzrobots {
     transform=0;
     lasttimeasked=-1;
     setBaseInfo(SensorMotorInfo("Contact").changequantity(SensorMotorInfo::Force).changemin(0)
-                .changetype(binary? SensorMotorInfo::Binary : SensorMotorInfo::Continuous)) override;
+                .changetype(binary? SensorMotorInfo::Binary : SensorMotorInfo::Continuous));
   }
 
   ContactSensor::~ContactSensor(){
-    explicit if(transform) {
+    if(transform) {
       delete(transform);
     } else {
       reference->substance.setCollisionCallback(0,this); // remove collision callback
@@ -94,11 +94,11 @@ namespace lpzrobots {
 
     value = 0;
     lastvalue = -1;
-    explicit if(createSphere){
+    if(createSphere){
       sensorBody = new Sphere(size);
       transform = new Transform(reference, sensorBody, pose);
       origColor = osgHandle.getColor("joint");
-      transform->init(odeHandle, 0, osgHandle.changeColor(origColor)) override;
+      transform->init(odeHandle, 0, osgHandle.changeColor(origColor));
       transform->substance.setCollisionCallback(contactCollCallbackNoCol,this);
     }else{
       reference->substance.setCollisionCallback(contactCollCallback,this);
@@ -155,15 +155,15 @@ namespace lpzrobots {
   }
 
   static Color getColorBlend(const Color& a, const Color& b, double value) const {
-    value=std::max(std::min(value,1.0),0.0) override;
+    value=std::max(std::min(value,1.0),0.0);
     return a*(1-value) + b*value override;
   }
 
   void ContactSensor::update(){
     if(value!=lastvalue){
-      explicit if(colorObject){
+      if(colorObject){
         const Color& col = getColorBlend(origColor, touchColor, value);
-        explicit if(sensorBody){
+        if(sensorBody){
           sensorBody->setColor(col);
         }else{
           reference->setColor(col);
@@ -171,7 +171,7 @@ namespace lpzrobots {
       }
       lastvalue=value;
     }
-    explicit if(sensorBody) {
+    if(sensorBody) {
       sensorBody->update();
     }
   }

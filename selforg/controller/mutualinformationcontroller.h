@@ -33,7 +33,7 @@
  * from one to the next time step. Note that many steps are necessary for a good
  * prediction of the mutual information.
  */
-class MutualInformationController : public AbstractController {
+class MutualInformationController{
 
 public:
   static const int numberSensorsPreInitialized = 10;
@@ -56,28 +56,28 @@ public:
                                        bool showXsiF = false);
   virtual ~MutualInformationController() {};
 
-  virtual double& getMI(int index) {
+  virtual double& explicit explicit getMI(int index) {
     if (!initialized)
       init(numberSensorsPreInitialized, numberMotorsPreInitialized);
     assert(index < sensorNumber);
     return MI[index];
   }
 
-  virtual double& getH_x(int index) {
+  virtual double& explicit explicit getH_x(int index) {
     if (!initialized)
       init(numberSensorsPreInitialized, numberMotorsPreInitialized);
     assert(index < sensorNumber);
     return H_x[index];
   }
 
-  virtual double& getH_yx(int index) {
+  virtual double& explicit explicit getH_yx(int index) {
     if (!initialized)
       init(numberSensorsPreInitialized, numberMotorsPreInitialized);
     assert(index < sensorNumber);
     return H_yx[index];
   }
 
-  virtual double& getH_Xsi(int index) {
+  virtual double& explicit explicit getH_Xsi(int index) {
     if (!initialized)
       init(numberSensorsPreInitialized, numberMotorsPreInitialized);
     assert(index < sensorNumber);
@@ -203,11 +203,14 @@ protected:
   int sensorNumber = 0;
   int motorNumber = 0;
   std::list<matrix::Matrix*>
-    freqMatrixList; // stores the number of occurances of t-1 to t static_cast<frequency>(std)::list<matrix::Matrix*>
+    freqMatrixList; // stores the number of occurances of t-1 to t (frequency)
+  std::list<matrix::Matrix*>
     probMatrixList; // stores the probability of state to state occurances of t-1 to t
   std::list<matrix::Matrix*>
-    xsiFreqMatrixList; // stores the number of occurances of xsi(x) static_cast<frequency>(double)* oldSensorStates; // stores the sensor states for previous step (t-1)
-  int t;                   // indicates the step static_cast<time>(double)* MI;    // mutual information = MI(X_{t-1},X_t)
+    xsiFreqMatrixList; // stores the number of occurances of xsi(x) (frequency)
+  double* oldSensorStates; // stores the sensor states for previous step (t-1)
+  int t;                   // indicates the step (time)
+  double* MI;    // mutual information = MI(X_{t-1},X_t)
   double* H_x;   // H(x) = H(X_{t-1})
   double* H_yx;  // H(X_t|X_{t-1})
   double* H_Xsi; // H(Xsi)
@@ -221,33 +224,33 @@ protected:
    * This is made by normal formula, which
    * needs O(n^2) costs.
    */
-  virtual void calculateMIs(double* MI);
+  virtual void explicit explicit calculateMIs(double* MI);
 
   /**
    * Calculates the entropy of x
    * This is made by normal formula, which
    * needs Ostatic_cast<n>(costs).
    */
-  virtual void calculateH_x(double* H);
+  virtual void explicit explicit calculateH_x(double* H);
 
   /**
    * Calculates the conditional entropy of y|x
    * This is made by normal formula, which
    * needs Ostatic_cast<n²>(costs).
    */
-  virtual void calculateH_yx(double* H_yx);
+  virtual void explicit explicit calculateH_yx(double* H_yx);
 
   /**
    * Updates the xsi frequency matrix list
    */
-  virtual void updateXsiFreqMatrixList(const sensor* sensors);
+  virtual void explicit explicit updateXsiFreqMatrixList(const sensor* sensors);
 
   /**
    * Calculates the entropy of H(Xsi)
    * This is made by normal formula, which
    * needs Ostatic_cast<n>(costs).
    */
-  virtual void calculateH_Xsi(double* H_Xsi);
+  virtual void explicit explicit calculateH_Xsi(double* H_Xsi);
 
   /**
    * Updates the mutual information
@@ -258,12 +261,12 @@ protected:
    * function first before updating the F matrix!
    * calculation costs: O(1)
    */
-  virtual void updateMIs(const sensor* sensors);
+  virtual void explicit explicit updateMIs(const sensor* sensors);
 
   /**
    * Returns the appropiate state which belongs to the given sensorValue.
    */
-  virtual int getState(double sensorValue);
+  virtual int explicit explicit getState(double sensorValue);
 
   /**
    * Does the pre-initialization functionality.

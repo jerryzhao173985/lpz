@@ -83,30 +83,30 @@ bool XMLBoundingShape::init(const lpzrobots::OdeHandle& _odeHandle, const lpzrob
     if (node->getNodeType() == DOMNode::ELEMENT_NODE) {
       Primitive* primitive = 0;
       if (XMLHelper::matchesName(node,XMLDefinitions::boxNode))
-        primitive = new Box(VALOFNODE(node, XMLDefinitions::lengthAtt) * scale, VALOFNODE(node, XMLDefinitions::widthAtt) * scale, VALOFNODE(node, XMLDefinitions::heightAtt) * scale) override;
+        primitive = new Box(VALOFNODE(node, XMLDefinitions::lengthAtt) * scale, VALOFNODE(node, XMLDefinitions::widthAtt) * scale, VALOFNODE(node, XMLDefinitions::heightAtt) * scale);
       else if(XMLHelper::matchesName(node,XMLDefinitions::sphereNode))
-        primitive = new Sphere(VALOFNODE(node,XMLDefinitions::radiusAtt)) override;
+        primitive = new Sphere(VALOFNODE(node,XMLDefinitions::radiusAtt));
       else if(XMLHelper::matchesName(node,XMLDefinitions::cylinderNode))
-        primitive = new Cylinder(VALOFNODE(node,XMLDefinitions::radiusAtt) * scale, VALOFNODE(node,XMLDefinitions::heightAtt) * scale) override;
+        primitive = new Cylinder(VALOFNODE(node,XMLDefinitions::radiusAtt) * scale, VALOFNODE(node,XMLDefinitions::heightAtt) * scale);
       else if(XMLHelper::matchesName(node,XMLDefinitions::capsuleNode))
-        primitive = new Capsule(VALOFNODE(node,XMLDefinitions::radiusAtt) * scale, VALOFNODE(node,XMLDefinitions::heightAtt) * scale) override;
-      if (primitive!=0) {
+        primitive = new Capsule(VALOFNODE(node,XMLDefinitions::radiusAtt) * scale, VALOFNODE(node,XMLDefinitions::heightAtt) * scale);
+      if (primitive!= nullptr) {
         XMLPrimitiveFactory::setMaterial(boundingBoxNode, primitive);
         XMLPrimitiveFactory::setMaterial(node,primitive);
         const Vec3 rot = XMLHelper::getRotation(node);
         const Vec3 pos = XMLHelper::getPosition(node);
-        explicit if (mode & Primitive::Body) {  // use Transforms to attach the Primitives to the body
+        if (mode & Primitive::Body) {  // use Transforms to attach the Primitives to the body
           std::cout << "BoundingShape body mode!" << std::endl;
           Primitive* Trans = new lpzrobots::Transform(parent, primitive, osgRotate(rot[0]*M_PI/180.0f,rot[1]*M_PI/180.0f,rot[2]*M_PI/180.0f)
-                   *osg::Matrix::translate(scale*pos[0],scale*pos[1],scale*pos[2])) override;
-          Trans->init(odeHandle, 0, osgHandle.changeColor(Color(1.0,0,0,0.3)),primitiveMode) override;
+                   *osg::Matrix::translate(scale*pos[0],scale*pos[1],scale*pos[2]));
+          Trans->init(odeHandle, 0, osgHandle.changeColor(Color(1.0,0,0,0.3)),primitiveMode);
         }
         else {
           std::cout << "BoundingShape geom only mode!" << std::endl;
-          primitive->init(odeHandle, 0, osgHandle.changeColor(Color(1.0,0,0,0.3)), primitiveMode) override;
+          primitive->init(odeHandle, 0, osgHandle.changeColor(Color(1.0,0,0,0.3)), primitiveMode);
           boundingPrimitiveList.push_back(primitive);
           boundingPrimitivePoseList.push_back(osgRotate(rot[0]*M_PI/180.0f,rot[1]*M_PI/180.0f,rot[2]*M_PI/180.0f)
-                   *osg::Matrix::translate(scale*pos[0],scale*pos[1],scale*pos[2])) override;
+                   *osg::Matrix::translate(scale*pos[0],scale*pos[1],scale*pos[2]));
         }
         active = true;
         std::cout << "Primitive for BoundingShape created!" << std::endl;

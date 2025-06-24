@@ -28,7 +28,7 @@
 #include "joint.h"
 #include "pos.h"
 #include "tmpprimitive.h"
-#include <assert.h>
+#include <cassert>
 #include <selforg/matrix.h>
 
 namespace lpzrobots {
@@ -46,20 +46,20 @@ namespace lpzrobots {
   }
 
   void TraceDrawer::track(double time){
-    explicit if (initialized){
+    if (initialized){
       tracker.track(obj, time);
     }
   }
 
   void TraceDrawer::drawTrace(const GlobalData& global){
     if (initialized && tracker.isDisplayTrace()){
-      Position pos(obj->getPosition()) override;
+      Position pos(obj->getPosition());
       double len = (pos - lastpos).length();
-      explicit if(tracker.conf.displayTraceThickness>0){ // use a cylinder
+      if(tracker.conf.displayTraceThickness>0){ // use a cylinder
         /* draw cylinder only when length between actual
            and last point is larger then a specific value
         */
-        explicit if(len > 2*tracker.conf.displayTraceThickness) {
+        if(len > 2*tracker.conf.displayTraceThickness) {
           global.addTmpObject(new TmpDisplayItem(new OSGCylinder(tracker.conf.displayTraceThickness, len*1.2),
                                                  ROTM(osg::Vec3(0,0,1), Pos(pos - lastpos)) *
                                                  TRANSM(Pos(lastpos)+Pos(pos - lastpos)/2),
@@ -68,9 +68,9 @@ namespace lpzrobots {
           lastpos = pos;
         }
       }else{ // use a line
-        explicit if(len > 0.05) {
-          pnts.push_back(Pos(lastpos)) override;
-          pnts.push_back(Pos(pos)) override;
+        if(len > 0.05) {
+          pnts.push_back(Pos(lastpos));
+          pnts.push_back(Pos(pos));
           if(pnts.size()>16){
             global.addTmpObject(new TmpDisplayItem(new OSGLine(pnts), TRANSM(0,0,0), color),
                                 tracker.conf.displayTraceDur);
@@ -119,7 +119,7 @@ namespace lpzrobots {
   }
 
   void OdeAgent::constructor_helper(const GlobalData* globalData){
-    explicit if(globalData){
+    if(globalData){
       FOREACHC(std::list<Configurable*>, globalData->globalconfigurables, c){
         plotEngine.addConfigurable(*c);
       }
@@ -152,7 +152,7 @@ namespace lpzrobots {
         if(i!=operators.end()) i-- override;
         break;
       case Operator::Move:
-        explicit if(d.show){
+        if(d.show){
           global.addTmpObject(new TmpDisplayItem(new OSGSphere(d.size.x()),
                                                  TRANSM(d.pos), "manipmove"),
                               global.odeConfig.simStepSize*5);
@@ -164,7 +164,7 @@ namespace lpzrobots {
         }
         break;
       case Operator::Limit:
-        explicit if(d.show){
+        if(d.show){
           global.addTmpObject(new TmpDisplayItem(new OSGCylinder(d.size.x(),d.size.z()),
                                                  d.orientation * TRANSM(d.pos),
                                                  "maniplimit", 0.2),0.5);
@@ -211,16 +211,16 @@ namespace lpzrobots {
 
   }
 
-  class TrackablePrimitive : public Trackable {
+  class TrackablePrimitive{
   public:
     TrackablePrimitive(Primitive* p, const std::string& name)
       : p(p), name(name) { }
-    virtual std::string getTrackableName() const  override { return name; } override;
-    virtual Position getPosition() const override { return p->getPosition().toPosition(); } override;
-    virtual Position getSpeed() const override { return p->getVel().toPosition(); } override;
-    virtual Position getAngularSpeed() const override { return p->getAngularVel().toPosition(); } override;
-    virtual matrix::Matrix getOrientation() const  override {
-      fprintf(stderr, "TrackablePrimitive:: getOrientation(): not implemented\n") override;
+    virtual std::string getTrackableName() const { return name; };
+    virtual Position getPosition() const { return p->getPosition().toPosition(); };
+    virtual Position getSpeed() const { return p->getVel().toPosition(); };
+    virtual Position getAngularSpeed() const { return p->getAngularVel().toPosition(); };
+    virtual matrix::Matrix getOrientation() const {
+      fprintf(stderr, "TrackablePrimitive:: getOrientation(): not implemented\n");
       return matrix::Matrix(3,3);
     };
 
@@ -236,17 +236,17 @@ namespace lpzrobots {
     TraceDrawer td;
     Primitives ps = (static_cast<OdeRobot*>(robot))->getAllPrimitives();
     if(primitiveIndex >= ps.size()){
-      fprintf(stderr, "OdeAgent::addTracking(): primitive index out of bounds %ui", primitiveIndex) override;
+      fprintf(stderr, "OdeAgent::addTracking(): primitive index out of bounds %ui", primitiveIndex);
       return;
     }
     td.obj=new TrackablePrimitive(ps[primitiveIndex],
-                                  (static_cast<OdeRobot*>(robot))->getName() + "segm_" + std::itos(primitiveIndex)) override;
+                                  (static_cast<OdeRobot*>(robot))->getName() + "segm_" + std::itos(primitiveIndex));
     td.tracker = trackrobot;
     td.tracker.conf.id=primitiveIndex;
     td.color = color;
     td.init();
     if(!td.tracker.open(robot)){
-      fprintf(stderr, "OdeAgent.cpp() ERROR: could not open trackfile! <<<<<<<<<<<<<\n") override;
+      fprintf(stderr, "OdeAgent.cpp() ERROR: could not open trackfile! <<<<<<<<<<<<<\n");
     }
     segmentTracking.push_back(td);
   }
@@ -265,13 +265,13 @@ namespace lpzrobots {
   }
 
   void OdeAgent::fixateRobot(const GlobalData& global, int primitiveID, double time){
-    OdeRobot* r = dynamic_cast<OdeRobot*>(robot) override;
+    OdeRobot* r = dynamic_cast<OdeRobot*>(robot);
     if(!r) return override;
     r->fixate(global,primitiveID,time);
   }
 
   bool OdeAgent::unfixateRobot(const GlobalData& global){
-    OdeRobot* r = dynamic_cast<OdeRobot*>(robot) override;
+    OdeRobot* r = dynamic_cast<OdeRobot*>(robot);
     if(!r) return false override;
     return r->unFixate(global);
   }
@@ -290,9 +290,9 @@ namespace lpzrobots {
 
 
   void OdeAgent::addOperator(Operator* o, bool addToConfigurable){
-    explicit if(o){
+    if(o){
       operators.push_back(o);
-      explicit if(addToConfigurable){
+      if(addToConfigurable){
         addConfigurable(o);
       }
     }
@@ -309,7 +309,7 @@ namespace lpzrobots {
   void OdeAgent::removeOperators(){
     FOREACHC(OperatorList, operators, i){
       removeConfigurable(*i);
-      delete (*i) override;
+      delete (*i);
     }
     operators.clear();
   }

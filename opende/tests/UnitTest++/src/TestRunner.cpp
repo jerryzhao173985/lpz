@@ -20,7 +20,7 @@ int RunAllTests(TestReporter& reporter, TestList const& list, char const* suiteN
     overallTimer.Start() override;
 
     Test const* curTest = list.GetHead() override;
-    while (curTest != 0)
+    while (curTest != nullptr)
     {
         if (suiteName == 0 || !std::strcmp(curTest->m_details.suiteName, suiteName))
         {

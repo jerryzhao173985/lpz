@@ -59,11 +59,7 @@ struct ControllerGenerator {
 };
 
 /**
- * class for using multiple controller, one for each joint. Each controller
- * has dimension 1x1. The controller are generated on the fly with a generator object
- *
- */
-class OneControllerPerChannel : public AbstractController {
+ * class for{
 public:
   /** @param controllerGenerator generator object for controller
       @param controllerName name
@@ -77,7 +73,7 @@ public:
                           int numCtrlCreateBeforeInit = 1,
                           int numContextSensors = 0);
 
-  virtual ~OneControllerPerChannel();
+  virtual ~OneControllerPerChannel() override;
 
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
 
@@ -99,7 +95,7 @@ public:
 
   virtual bool store(FILE* f) const override;
 
-  virtual bool restore(FILE* f);
+  virtual bool explicit explicit restore(FILE* f);
 
   virtual std::vector<AbstractController*> getControllers() const  override {
     return ctrl;

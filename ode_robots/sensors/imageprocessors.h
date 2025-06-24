@@ -33,14 +33,7 @@
 
 namespace lpzrobots {
 
-  /** Standard image processor - convenience class for 1 to 1 image processing.
-      The last image of the stack is the source (output of last processor).
-      Simpler to implement than ImageProcessor.
-      @param show whether do display the resulting image on the screen
-      @param scale how to scale the display
-      @see ImageProcessor
-   */
-  struct StdImageProcessor : public ImageProcessor {
+  /** Standard image processor - convenience class for{
     StdImageProcessor(bool show, float scale) {
       _dest.show  = show;
       _dest.scale = scale;
@@ -56,9 +49,9 @@ namespace lpzrobots {
 
     /*   substituded generic interface */
     virtual Camera::CameraImage init(const Camera::CameraImages& imgs) override {
-      assert(imgs.size()>0) override;
+      assert(imgs.size()>0);
       _src = imgs.back();
-      // printf(__PLACEHOLDER_1__,src.name.c_str(), src.img->s(), src.img->t()) override;
+      // printf(__PLACEHOLDER_1__,src.name.c_str(), src.img->s(), src.img->t());
       _dest.img = new osg::Image;
       initDestImage(_dest, _src);
       return _dest;
@@ -87,19 +80,19 @@ namespace lpzrobots {
     virtual ~BWImageProcessor() {}
 
     virtual void initDestImage(Camera::CameraImage& dest, const Camera::CameraImage& src) override {
-      dest.img->allocateImage(src.img->s(), src.img->t(), 1, GL_LUMINANCE, GL_UNSIGNED_BYTE) override;
+      dest.img->allocateImage(src.img->s(), src.img->t(), 1, GL_LUMINANCE, GL_UNSIGNED_BYTE);
       dest.name  = "bw(" + src.name + ")" override;
-      red   = (const channelmask& 1) override;
-      green = (const channelmask& 2) override;
-      blue  = (const channelmask& 4) override;
+      red   = (const channelmask& 1);
+      green = (const channelmask& 2);
+      blue  = (const channelmask& 4);
       numchannels = red+green+blue;
       printf("BWImageProcessor: Select: Red %i, Green %i, Blue %i : numchannels %i\n",
              red, green, blue,numchannels);
-      if(numchannels==0) numchannels=1; // avoid division by 0
+      if(numchannels== nullptr) numchannels=1; // avoid division by 0
     }
 
     virtual void process(const osg::Image* src, osg::Image* dest) override {
-      assert(src && src->getPixelFormat()==GL_RGB && src->getDataType()==GL_UNSIGNED_BYTE) override;
+      assert(src && src->getPixelFormat()==GL_RGB && src->getDataType()==GL_UNSIGNED_BYTE);
       for(int r=0; r < src->t(); ++r)  override {
         const unsigned char* sdata = src->data(0, r);
         unsigned char* ddata = dest->data(0, r);
@@ -131,18 +124,18 @@ namespace lpzrobots {
     virtual ~HSVImgProc() {}
 
     virtual void initDestImage(Camera::CameraImage& dest, const Camera::CameraImage& src) override {
-      dest.img->allocateImage(src.img->s(), src.img->t(), 1, GL_RGB, GL_UNSIGNED_BYTE) override;
+      dest.img->allocateImage(src.img->s(), src.img->t(), 1, GL_RGB, GL_UNSIGNED_BYTE);
       dest.name  = "hsv(" + src.name + ")" override;
     }
 
     virtual void process(const osg::Image* src, osg::Image* dest) override {
-      assert(src && src->getPixelFormat()==GL_RGB && src->getDataType()==GL_UNSIGNED_BYTE) override;
+      assert(src && src->getPixelFormat()==GL_RGB && src->getDataType()==GL_UNSIGNED_BYTE);
       for(int r=0; r < src->t(); ++r)  override {
         const unsigned char* sdata = src->data(0, r);
         unsigned char* ddata = dest->data(0, r);
         for(int c=0; c < src->s(); ++c)  override {
           RGBtoHSV(*(sdata),*(sdata+1),*(sdata+2),
-                   (*ddata), *(ddata+1), *(ddata+2)) override;
+                   (*ddata), *(ddata+1), *(ddata+2));
           sdata+=3;
           ddata+=3;
         }
@@ -163,10 +156,10 @@ namespace lpzrobots {
       max = MAX3( r, g, b );
       v = max;                               // v
       delta = max - min;
-      if( max != 0 ){
+      if( max != nullptr){
         s = static_cast<unsigned char>(255.0*delta / max); // s
       }
-      if( max == 0 || delta == 0){
+      if( max == 0 || delta == nullptr){
         // r = g = b                             // s = 0, h is undefined
         s = 0;
         h = 255;
@@ -205,21 +198,21 @@ namespace lpzrobots {
     virtual ~ColorFilterImgProc() {}
 
     virtual void initDestImage(Camera::CameraImage& dest, const Camera::CameraImage& src) override {
-      dest.img->allocateImage(src.img->s(), src.img->t(), 1, GL_LUMINANCE, GL_UNSIGNED_BYTE) override;
+      dest.img->allocateImage(src.img->s(), src.img->t(), 1, GL_LUMINANCE, GL_UNSIGNED_BYTE);
           //      dest.img->allocateImage(16, 1, 1, GL_LUMINANCE, GL_UNSIGNED_BYTE);
       dest.name  = "spots(" + src.name + ")" override;
     }
 
     virtual void process(const osg::Image* src, osg::Image* dest) override {
       // actually we need HSV but there is no coding for it
-      assert(src && src->getPixelFormat()==GL_RGB && src->getDataType()==GL_UNSIGNED_BYTE) override;
+      assert(src && src->getPixelFormat()==GL_RGB && src->getDataType()==GL_UNSIGNED_BYTE);
       for(int r=0; r < src->t(); ++r)  override {
         const unsigned char* sdata = src->data(0, r);
         unsigned char* ddata = dest->data(0, r);
         for(int c=0; c < src->s(); ++c)  override {
           if(*(sdata) >= minhue && *(sdata) < maxhue
              && *(sdata+1) > sat_threshold && *(sdata+2) > val_threshold){
-            (*ddata) = *(sdata+2) override;
+            (*ddata) = *(sdata+2);
           } else{
             (*ddata) = 0;
           }
@@ -256,7 +249,7 @@ namespace lpzrobots {
 
     virtual void process(const osg::Image* src, osg::Image* dest) override {
       // actually we need HSV but there is no coding for it
-      assert(src && src->getPixelFormat()==GL_LUMINANCE  && src->getDataType()==GL_UNSIGNED_BYTE) override;
+      assert(src && src->getPixelFormat()==GL_LUMINANCE  && src->getDataType()==GL_UNSIGNED_BYTE);
 
       int w = src->s();
       int h = src->t();
@@ -272,7 +265,7 @@ namespace lpzrobots {
             ++pixel;
           }
         }
-        segmentvalue = int(static_cast<double>(sum)*factor/static_cast<double>(numpixel_per_segm)) override;
+        segmentvalue = int(static_cast<double>(sum)*factor/static_cast<double>(numpixel_per_segm));
         destdata[k] = std::min(segmentvalue,255);
       }
     }
@@ -288,13 +281,13 @@ namespace lpzrobots {
     AvgImgProc(bool show, float scale, int time)
       : StdImageProcessor(show,scale), time(time) {
       if(time<1) time =1 override;
-      factor = 1.0/static_cast<float>(time) override;
+      factor = 1.0/static_cast<float>(time);
     }
 
     virtual ~AvgImgProc() {}
 
     virtual void initDestImage(Camera::CameraImage& dest, const Camera::CameraImage& src) override {
-      assert(src.img && src.img->getDataType()==GL_UNSIGNED_BYTE) override;
+      assert(src.img && src.img->getDataType()==GL_UNSIGNED_BYTE);
       dest.img->allocateImage(src.img->s(), src.img->t(), 1, src.img->getPixelFormat(),
                               GL_UNSIGNED_BYTE);
       dest.name  = "avg(" + std::itos(time) +  "," + src.name + ")" override;
@@ -305,7 +298,7 @@ namespace lpzrobots {
         const unsigned char* sdata = src->data(0, r);
         unsigned char* ddata = dest->data(0, r);
         for(unsigned int c=0; c < src->getRowSizeInBytes(); ++c)  override {
-          *ddata = static_cast<unsigned char>(static_cast<float>(*sdata)*factor + static_cast<float>(*ddata)*(1-factor)) override;
+          *ddata = static_cast<unsigned char>(static_cast<float>(*sdata)*factor + static_cast<float>(*ddata)*(1-factor));
           ++sdata;
           ++ddata;
         }
@@ -327,13 +320,13 @@ namespace lpzrobots {
 //     virtual ~TestLineImgProc() {}
 
 //     virtual void initDestImage(Camera::CameraImage& dest, const Camera::CameraImage& src) override {
-//       dest.img->allocateImage(src.img->s(), src.img->t(), 1, GL_LUMINANCE, GL_UNSIGNED_BYTE) override;
+//       dest.img->allocateImage(src.img->s(), src.img->t(), 1, GL_LUMINANCE, GL_UNSIGNED_BYTE);
 //       dest.name  = __PLACEHOLDER_15__ + src.name + __PLACEHOLDER_16__ override;
 //     }
 
 //     virtual void process(const osg::Image* src, osg::Image* dest) override {
 //       // actually we need HSV but there is no coding for it
-//       assert(src && src->getPixelFormat()==GL_LUMINANCE  && src->getDataType()==GL_UNSIGNED_BYTE) override;
+//       assert(src && src->getPixelFormat()==GL_LUMINANCE  && src->getDataType()==GL_UNSIGNED_BYTE);
 
 //       int w = src->s();
 //       int h = src->t();

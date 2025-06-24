@@ -35,18 +35,17 @@
 
 /**
  * Abstract class for robot controller (with some basic functionality).
- * The controller gets a number of input sensor values each timestep
- *  and has to generate a number of output motor values.
+ * The controller gets a number of sensor values each timestep
+ * and has to generate a number of motor values.
  *
  * Interface assumes the following usage:
- *  - init() is called first to initialise the dimension of sensor- and motor space
- *  - each time step
- *     either step() or stepNoLearning() is called to ask the controller for motor values.
+ *  - init() is called first to initialise the controller with the given
+ *  number of sensors and motors
+ *  - step() is called for each timestep with the current sensor values
+ *  and returns the motor values to be used
+ *  - for special purposes you can use stepNoLearning()
  */
-class AbstractController
-  : public Configurable
-  , public Inspectable
-  , public Storeable {
+class AbstractController : public Configurable, public Inspectable {
 public:
   using sensor = double;
   using motor = double;

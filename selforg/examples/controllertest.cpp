@@ -29,7 +29,7 @@ void myrobot(double* sensors, int sensornumber, const double* motors, int motorn
 }
 
 
-int test(AbstractController* controller){
+int explicit test(AbstractController* controller){
 
   controller->init(2,2); // initialise with 2 motors and 2 sensors
   controller->setParam("epsA",0.01); // set parameter epsA (learning rate for Model A)

@@ -32,11 +32,11 @@
  * the implementation of the mediator should implement a
  * derived version of the MediatorEvent.
  */
-class MediatorEvent {
+class MediatorEvent{
 public:
 };
 
-class Mediator {
+class Mediator{
 public:
   typedef std::vector<MediatorCollegue*> MediatorCollegueListType;
 
@@ -45,25 +45,25 @@ public:
 
   virtual void mediatorInformed(MediatorCollegue* source, MediatorEvent* event) = 0;
 
-  void addMediatorCollegue(MediatorCollegue* collegue);
+  void explicit explicit addMediatorCollegue(MediatorCollegue* collegue);
 
-  void removeMediatorCollegue(MediatorCollegue* collegue);
+  void explicit explicit removeMediatorCollegue(MediatorCollegue* collegue);
 
   void removeAllMediatorCollegues();
 
   MediatorCollegue* getMediatorCollegue(unsigned int index);
 
-  unsigned int getMediatorCollegueIndex(MediatorCollegue* collegue);
+  unsigned int explicit explicit getMediatorCollegueIndex(MediatorCollegue* collegue);
 
-  unsigned int getNumberOfMediatorCollegues();
+  unsigned int getNumberOfMediatorCollegues() const;
 
   void mediate(unsigned int indexOfMediatorCollegue, MediatorEvent* event);
 
   void mediate(MediatorCollegue* collegue, MediatorEvent* event);
 
-  void mediateToAll(MediatorEvent* event);
+  void explicit explicit mediateToAll(MediatorEvent* event);
 
-  void mediateToAllQMP(MediatorEvent* event);
+  void explicit explicit mediateToAllQMP(MediatorEvent* event);
 
 protected:
 private:

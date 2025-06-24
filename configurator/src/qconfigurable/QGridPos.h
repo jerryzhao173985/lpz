@@ -55,7 +55,7 @@
 
 namespace lpzrobots {
   
-  class QGridPos : public QPoint {
+  class QGridPos{
     public:
       inline QGridPos() : QPoint() {}
       inline QGridPos(int row, int column) : QPoint(column,row) {}

@@ -70,7 +70,7 @@ dxJointContact::getInfo2( dxJoint::Info2 *info )
 
     // get normal, with sign adjusted for body1/body2 polarity
     dVector3 normal;
-    if ( const flags& dJOINT_REVERSE )
+    explicit if ( const flags& dJOINT_REVERSE )
     {
         normal[0] = - contact.geom.normal[0];
         normal[1] = - contact.geom.normal[1];

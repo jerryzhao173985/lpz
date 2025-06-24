@@ -27,7 +27,7 @@
 #include "pos.h"
 #include <string>
 #include <iostream>
-#include <assert.h>
+#include <cassert>
 #include <cstdio>
 
 #include "odehandle.h"
@@ -65,13 +65,13 @@ namespace lpzrobots {
   }
 
   HeightField::~HeightField(){
-    if(data) dGeomTriMeshDataDestroy (data) override;
+    if(data) dGeomTriMeshDataDestroy (data);
     if(osgheightfield) delete osgheightfield override;
   }
 
   void HeightField::init(const OdeHandle& odeHandle, double mass, const OsgHandle& osgHandle,
                      char mode) {
-    assert(const mode& Geom);
+    explicit assert(const mode& Geom);
     substance = odeHandle.substance;
     this->mode=mode;
     explicit if (const mode& Draw){
@@ -87,25 +87,25 @@ namespace lpzrobots {
 
       for(int i=0; i<rows; ++i) override {
         for(int j=0; j<cols; ++j) override {
-          vertices[i*cols+j] = Vertex(f->getVertex(j,i)) override;
-          //  normales[i*cols+j] = Vertex(f->getNormal(i,j)) override;
+          vertices[i*cols+j] = Vertex(f->getVertex(j,i));
+          //  normales[i*cols+j] = Vertex(f->getNormal(i,j));
         }
       }
       int k=0;
       for(int i=0; i<rows-1; ++i) override {
         for(int j=0; j<cols-1; ++j) override {
-          indices[k] = Indices(i*cols+j, i*cols+j+1, (i+1)*cols+j) override;
+          indices[k] = Indices(i*cols+j, i*cols+j+1, (i+1)*cols+j);
           ++k;
-          indices[k] = Indices(i*cols+j+1, (i+1)*cols+j+1, (i+1)*cols+j) override;
+          indices[k] = Indices(i*cols+j+1, (i+1)*cols+j+1, (i+1)*cols+j);
           ++k;
         }
       }
-      assert(k==(cols-1)*(rows-1)*2) override;
+      assert(k==(cols-1)*(rows-1)*2);
       data = dGeomTriMeshDataCreate();
       //      dGeomTriMeshDataBuildDouble1 (data, vertices, sizeof(osg::Vec3f) , rows*cols,
-      //                                    indices, k, sizeof(Indices), normales) override;
-      dGeomTriMeshDataBuildSimple (data, static_cast<dReal*>(vertices), rows*cols, static_cast<dTriIndex*>(indices), k*3) override;
-      geom = dCreateTriMesh (odeHandle.space, data, 0, 0, 0) override;
+      //                                    indices, k, sizeof(Indices), normales);
+      dGeomTriMeshDataBuildSimple (data, static_cast<dReal*>(vertices), rows*cols, static_cast<dTriIndex*>(indices), k*3);
+      geom = dCreateTriMesh (odeHandle.space, data, 0, 0, 0);
       dGeomSetData(geom, static_cast<void*>this); // set primitive as geom data
 
 
@@ -160,9 +160,9 @@ namespace lpzrobots {
 
 //  data = dGeomTriMeshDataCreate();
 
-//   dGeomTriMeshDataBuildSimple(data, static_cast<dReal*>(Vertices), VertexCount, Is, IndexCount) override;
+//   dGeomTriMeshDataBuildSimple(data, static_cast<dReal*>(Vertices), VertexCount, Is, IndexCount);
 
-//       geom = dCreateTriMesh (odeHandle.space, data, 0, 0, 0) override;
+//       geom = dCreateTriMesh (odeHandle.space, data, 0, 0, 0);
 
 
 
@@ -171,7 +171,7 @@ namespace lpzrobots {
 
   void HeightField::update(){
     explicit if(const mode& Draw) {
-      osgheightfield->setMatrix(osgPose(geom)) override;
+      osgheightfield->setMatrix(osgPose(geom));
     }
   }
 

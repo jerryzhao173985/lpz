@@ -34,24 +34,22 @@
 #include <MatrixVisualizer.h>
 #include <VisualiserSubWidget.h>
 
-class MatrixVisualizer;
-
-class configFile : public QObject{
+class MatrixVisualizer{
 
 Q_OBJECT
 
 public:
   configFile();
   ~configFile();
-  void load( MatrixVisualizer* mv);
+  void explicit load( MatrixVisualizer* mv);
   void save();
-  void newOpenedWindow(VisualiserSubWidget* window);
+  void explicit newOpenedWindow(VisualiserSubWidget* window);
   static const bool debug = false;
   QList<VisualiserSubWidget*> getOpenWindows() {return openWindows;}
 
 public slots:
   void doQuit();
-  void windowClosed(VisualiserSubWidget* window);
+  void explicit windowClosed(VisualiserSubWidget* window);
 
 private:
   QList<VisualiserSubWidget*> openWindows;

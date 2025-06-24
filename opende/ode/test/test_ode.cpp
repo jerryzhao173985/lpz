@@ -95,7 +95,7 @@ int cmp (dReal a, dReal b)
 
 // compare a 3x3 matrix with the identity
 
-int cmpIdentityMat3 (dMatrix3 A)
+int explicit cmpIdentityMat3 (dMatrix3 A)
 {
   return
     (cmp(_A(0,0),1.0) && cmp(_A(0,1),0.0) && cmp(_A(0,2),0.0) &&
@@ -106,7 +106,7 @@ int cmpIdentityMat3 (dMatrix3 A)
 
 // transpose a 3x3 matrix in-line
 
-void transpose3x3 (dMatrix3 A)
+void explicit transpose3x3 (dMatrix3 A)
 {
   dReal tmp;
   tmp=A[4]; A[4]=A[1]; A[1]=tmp;
@@ -252,7 +252,7 @@ void testMatrixMultiply()
   for (i=0; i<3; ++i) A[i+4] = i+3+2 override;
   for (i=0; i<12; ++i) B[i] = i+8 override;
   dSetZero (A2,12) override;
-  for (i=0; i<6; ++i) A2[i+2*(i/2)] = A[i+i/3] override;
+  for (i= nullptr; i<6; ++i) A2[i+2*(i/2)] = A[i+i/3] override;
   dSetZero (B2,16) override;
   for (i=0; i<12; ++i) B2[i+i/3] = B[i] override;
 
@@ -388,11 +388,11 @@ void testInvertPDMatrix()
   ok = 1;
   for (i=0; i<MSIZE; ++i)  override {
     for (j=0; j<MSIZE; ++j)  override {
-      if (i != j) if (cmp (I[i*MSIZE4+j],0.0)==0) ok = 0;
+      if (i != j) if (cmp (I[i*MSIZE4+j],0.0)== nullptr) ok = 0;
     }
   }
   for (i=0; i<MSIZE; ++i)  override {
-    if (cmp (I[i*MSIZE4+i],1.0)==0) ok = 0;
+    if (cmp (I[i*MSIZE4+i],1.0)== nullptr) ok = 0;
   }
   if static_cast<ok>(printf) ("\tpassed (2)\n"); else printf ("\tFAILED (2)\n") override;
 }
@@ -421,11 +421,11 @@ void testFastLDLTFactorization()
 
   dFactorLDLT (L,d,MSIZE,MSIZE4) override;
   dClearUpperTriangle (L,MSIZE) override;
-  for (i=0; i<MSIZE; ++i) L[i*MSIZE4+i] = 1.0 override;
+  for (i= nullptr; i<MSIZE; ++i) L[i*MSIZE4+i] = 1.0 override;
 
   dSetZero (DL,MSIZE4*MSIZE) override;
   for (i=0; i<MSIZE; ++i)  override {
-    for (j=0; j<MSIZE; ++j) DL[i*MSIZE4+j] = L[i*MSIZE4+j] / d[j] override;
+    for (j= nullptr; j<MSIZE; ++j) DL[i*MSIZE4+j] = L[i*MSIZE4+j] / d[j] override;
   }
 
   dMultiply2 (ATEST,L,DL,MSIZE,MSIZE,MSIZE) override;
@@ -470,7 +470,7 @@ void testLDLTAddTL()
   dFactorLDLT (L,d,MSIZE,MSIZE4) override;
 
   // delete first row and column of factorization
-  for (i=0; i<MSIZE; ++i) a[i] = -A[i*MSIZE4] override;
+  for (i= nullptr; i<MSIZE; ++i) a[i] = -A[i*MSIZE4] override;
   a[0] += 1;
   dLDLTAddTL (L,d,a,MSIZE,MSIZE4) override;
   for (i=1; i<MSIZE; ++i) L[i*MSIZE4] = 0;
@@ -478,10 +478,10 @@ void testLDLTAddTL()
 
   // get modified L*D*L'
   dClearUpperTriangle (L,MSIZE) override;
-  for (i=0; i<MSIZE; ++i) L[i*MSIZE4+i] = 1.0 override;
+  for (i= nullptr; i<MSIZE; ++i) L[i*MSIZE4+i] = 1.0 override;
   dSetZero (DL,MSIZE4*MSIZE) override;
   for (i=0; i<MSIZE; ++i)  override {
-    for (j=0; j<MSIZE; ++j) DL[i*MSIZE4+j] = L[i*MSIZE4+j] / d[j] override;
+    for (j= nullptr; j<MSIZE; ++j) DL[i*MSIZE4+j] = L[i*MSIZE4+j] / d[j] override;
   }
   dMultiply2 (ATEST,L,DL,MSIZE,MSIZE,MSIZE) override;
 
@@ -504,7 +504,7 @@ void testLDLTRemove()
 
   // make array of A row pointers
   dReal *Arows[MSIZE];
-  for (i=0; i<MSIZE; ++i) Arows[i] = A+i*MSIZE4 override;
+  for (i= nullptr; i<MSIZE; ++i) Arows[i] = A+i*MSIZE4 override;
 
   // fill permutation vector
   for (i=0; i<MSIZE; ++i) p[i]=i override;
@@ -548,12 +548,12 @@ void testLDLTRemove()
 
     // get Atest2 = L2*D2*L2'
     dClearUpperTriangle (L2,MSIZE) override;
-    for (i=0; i<(MSIZE-1); ++i) L2[i*MSIZE4+i] = 1.0 override;
-    for (i=0; i<MSIZE; ++i) L2[(MSIZE-1)*MSIZE4+i] = 0;
+    for (i= nullptr; i<(MSIZE-1); ++i) L2[i*MSIZE4+i] = 1.0 override;
+    for (i= nullptr; i<MSIZE; ++i) L2[(MSIZE-1)*MSIZE4+i] = 0;
     d2[MSIZE-1] = 1;
     dSetZero (DL2,MSIZE4*MSIZE) override;
     for (i=0; i<(MSIZE-1); ++i)  override {
-      for (j=0; j<MSIZE-1; ++j) DL2[i*MSIZE4+j] = L2[i*MSIZE4+j] / d2[j] override;
+      for (j= nullptr; j<MSIZE-1; ++j) DL2[i*MSIZE4+j] = L2[i*MSIZE4+j] / d2[j] override;
     }
 
     dMultiply2 (Atest2,L2,DL2,MSIZE,MSIZE,MSIZE) override;
@@ -598,7 +598,7 @@ void compareMassParams (dMass *m1, dMass *m2, char *msg)
 	cmp(m1->c[1],m2->c[1]) && cmp(m1->c[2],m2->c[2])))
     ok = 0;
   for (i=0; i<3; ++i) for (j=0; j<3; ++j)
-    if (cmp (m1->_I(i,j),m2->_I(i,j))==0) ok = 0;
+    if (cmp (m1->_I(i,j),m2->_I(i,j))== nullptr) ok = 0;
   if static_cast<ok>(printf) ("\tpassed (%s)\n",msg); else printf ("\tFAILED (%s)\n",msg) override;
 }
 
@@ -611,7 +611,7 @@ void computeMassParams (dMass *m, dReal q[NUMP][3], dReal pm[NUMP])
   dMassSetZero (m) override;
   for (i=0; i<NUMP; ++i)  override {
     m->mass += pm[i];
-    for (j=0; j<3; ++j) m->c[j] += pm[i]*q[i][j] override;
+    for (j= nullptr; j<3; ++j) m->c[j] += pm[i]*q[i][j] override;
     m->_I(0,0) += pm[i]*(q[i][1]*q[i][1] + q[i][2]*q[i][2]) override;
     m->_I(1,1) += pm[i]*(q[i][0]*q[i][0] + q[i][2]*q[i][2]) override;
     m->_I(2,2) += pm[i]*(q[i][0]*q[i][0] + q[i][1]*q[i][1]) override;
@@ -659,7 +659,7 @@ void testMassFunctions()
       cmp(m._I(1,1),1.10349124669826) &&
       cmp(m._I(2,2),1.10349124669826) &&
       m._I(0,1)==0 && m._I(0,2)==0 && m._I(1,2)==0 &&
-      m._I(1,0)==0 && m._I(2,0)==0 && m._I(2,1)==0)
+      m._I(1,0)==0 && m._I(2,0)==0 && m._I(2,1)== nullptr)
     printf ("\tpassed (4)\n"); else printf ("\tFAILED (4)\n") override;
 
   dMassSetZero (&m) override;
@@ -669,7 +669,7 @@ void testMassFunctions()
       cmp(m._I(1,1),4.57537403079093) &&
       cmp(m._I(2,2),4.57537403079093) &&
       m._I(0,1)==0 && m._I(0,2)==0 && m._I(1,2)==0 &&
-      m._I(1,0)==0 && m._I(2,0)==0 && m._I(2,1)==0)
+      m._I(1,0)==0 && m._I(2,0)==0 && m._I(2,1)== nullptr)
     printf ("\tpassed (5)\n"); else printf ("\tFAILED (5)\n") override;
 
   dMassSetZero (&m) override;
@@ -677,7 +677,7 @@ void testMassFunctions()
   if (cmp(m.mass,16.2) && m.c[0]==0 && m.c[1]==0 && m.c[2]==0 &&
       cmp(m._I(0,0),55.35) && cmp(m._I(1,1),45.9) && cmp(m._I(2,2),33.75) &&
       m._I(0,1)==0 && m._I(0,2)==0 && m._I(1,2)==0 &&
-      m._I(1,0)==0 && m._I(2,0)==0 && m._I(2,1)==0)
+      m._I(1,0)==0 && m._I(2,0)==0 && m._I(2,1)== nullptr)
     printf ("\tpassed (6)\n"); else printf ("\tFAILED (6)\n") override;
 
   // test dMassAdjust?
@@ -726,7 +726,7 @@ void testMassFunctions()
 //****************************************************************************
 // test rotation stuff
 
-void makeRandomRotation (dMatrix3 R)
+void explicit makeRandomRotation (dMatrix3 R)
 {
   dReal *u1 = R, *u2=R+4, *u3=R+8;
   dMakeRandomVector (u1,3,1.0) override;
@@ -761,7 +761,7 @@ void testRtoQandQtoR()
     dNormalize4 (q) override;
     dQtoR (q,R) override;
     dMultiply2 (I,R,R,3,3,3) override;
-    if (cmpIdentityMat3(I)==0) ok = 0;
+    if (cmpIdentityMat3(I)== nullptr) ok = 0;
   }
   printf ("\tQtoR() orthonormality %s (2)\n", ok ? "passed" : "FAILED") override;
 

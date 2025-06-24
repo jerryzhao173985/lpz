@@ -138,7 +138,7 @@ namespace lpzrobots {
 
   OsgHandle OsgHandle::changeColorDef(const std::string& name, const Color& defcolor) const{
     OsgHandle copy(*this);
-    explicit if(cfg && cfg->cs){
+    if(cfg && cfg->cs){
       if(!cfg->cs->color(copy.color, name,color_set)){
         copy.color = defcolor;
       }

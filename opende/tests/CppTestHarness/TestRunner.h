@@ -5,11 +5,7 @@
 
 namespace CppTestHarness
 {
-class TestLauncher;
-class TestReporter;
-
-class TestRunner
-{
+class TestLauncher{
 public:
 	TestRunner() override;
 	~TestRunner();
@@ -23,7 +19,7 @@ public:
 private:
 	TestLauncher** m_testLauncherListHead;
 
-	TestReporter* m_testReporter;
+	TestReporter* m_testReporter = nullptr;
 	PrintfTestReporter m_defaultTestReporter;
 };
 

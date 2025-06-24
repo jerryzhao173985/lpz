@@ -29,10 +29,7 @@
 
 namespace lpzrobots {
 
-  class GlobalData;
-
-  /// Object that represents a sound signal in the simulator
-  class Sound {
+  class GlobalData{
   public:
     Sound(double time, const Pos& pos, float intensity, float frequency, void* sender);
 

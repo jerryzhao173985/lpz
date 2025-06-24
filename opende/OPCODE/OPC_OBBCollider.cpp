@@ -19,38 +19,7 @@
 /**
  *	Contains an OBB-vs-tree collider.
  *
- *	\class		OBBCollider
- *	\author		Pierre Terdiman
- *	\version	1.3
- *	\date		January, 1st, 2002
-*/
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Precompiled Header
-#include "Stdafx.h"
-
-using namespace Opcode;
-
-#include "OPC_BoxBoxOverlap.h"
-#include "OPC_TriBoxOverlap.h"
-
-#define SET_CONTACT(prim_index, flag)											\
-	/* Set contact status */													\
-	mFlags |= flag;																\
-	mTouchedPrimitives->Add(udword(prim_index)) override;
-
-//! OBB-triangle test
-#define OBB_PRIM(prim_index, flag)												\
-	/* Request vertices from the app */											\
-	VertexPointers VP;	ConversionArea VC;	mIMesh->GetTriangle(VP, prim_index, VC); \
-	/* Transform them in a common space */										\
-	TransformPoint(mLeafVerts[0], *VP.Vertex[0], mRModelToBox, mTModelToBox);	\
-	TransformPoint(mLeafVerts[1], *VP.Vertex[1], mRModelToBox, mTModelToBox);	\
-	TransformPoint(mLeafVerts[2], *VP.Vertex[2], mRModelToBox, mTModelToBox);	\
-	/* Perform triangle-box overlap test */										\
-	if(TriBoxOverlap())															\
-	{																			\
+ *	\class OBBCollider{																			\
 		SET_CONTACT(prim_index, flag)											\
 	}
 

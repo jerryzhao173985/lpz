@@ -10,9 +10,7 @@
 
 #include <ode_robots/simulation.h>
 
-class XMLParserEngine;
-
-namespace lpzrobots {
+class XMLParserEngine{
   
   /**
    * Wrapper class to get access to protected areas without manipulating the class Simulation
@@ -25,7 +23,7 @@ namespace lpzrobots {
       using Base::osgHandle;
 
       XMLSimulation();
-      virtual ~XMLSimulation();
+      virtual ~XMLSimulation() override;
   };
 
 }

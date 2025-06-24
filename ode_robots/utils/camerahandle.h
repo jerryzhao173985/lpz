@@ -31,12 +31,7 @@
 // forward declarations
 namespace lpzrobots
 {
-  class OSGPrimitive;
-  class OdeAgent;
-}
-
-namespace osg
-{
+  class OSGPrimitive{
   class Vec3f;
   typedef Vec3f Vec3;
   class Camera;
@@ -51,8 +46,7 @@ namespace lpzrobots
    * The avoidance of static variables enables multithreaded (tasked)
    * simulations.
    */
-  class CameraHandle
-  {
+  class CameraHandle{
   public:
     enum ManipulationType { No, Translational, TranslationalHorizontal , Rotational};
 

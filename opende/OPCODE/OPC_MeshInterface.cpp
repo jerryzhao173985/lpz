@@ -21,42 +21,7 @@
  *	to return 3 vertices to OPCODE (36 bytes) but only 3 pointers (12 bytes). It seems better but I never profiled
  *	the alternative.
  *
- *	\class		VertexPointers
- *	\author		Pierre Terdiman
- *	\version	1.3
- *	\date		March, 20, 2001
-*/
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/**
- *	This class is an interface between us and user-defined meshes. Meshes can be defined in a lot of ways, and here we
- *	try to support most of them.
- *
- *	Basically you have two options:
- *	- callbacks, if OPC_USE_CALLBACKS is defined in OPC_Settings.h.
- *	- else pointers.
- *
- *	If using pointers, you can also use strides or not. Strides are used when OPC_USE_STRIDE is defined.
- *
- *
- *	CALLBACKS:
- *
- *	Using callbacks is the most generic way to feed OPCODE with your meshes. Indeed, you just have to give
- *	access to three vertices at the end of the day. It's up to you to fetch them from your database, using
- *	whatever method you want. Hence your meshes can lie in system memory or AGP, be indexed or not, use 16
- *	or 32-bits indices, you can decompress them on-the-fly if needed, etc. On the other hand, a callback is
- *	called each time OPCODE needs access to a particular triangle, so there might be a slight overhead.
- *
- *	To make things clear: geometry & topology are NOT stored in the collision system,
- *	in order to save some ram. So, when the system needs them to perform accurate intersection
- *	tests, you're requested to provide the triangle-vertices corresponding to a given face index.
- *
- *	Ex:
- *
- *	\code
- *		static void ColCallback(udword triangle_index, const VertexPointers& triangle, udword user_data)
- *		{
+ *	\class VertexPointers{
  *			__PLACEHOLDER_13__
  *			Mesh* MyMesh = static_cast<Mesh*>(user_data) override;
  *			__PLACEHOLDER_14__
@@ -107,40 +72,7 @@
  *	In any case, compilation flags are here to select callbacks/pointers/strides at compile time, so
  *	choose what's best for your application. All of this has been wrapped into this MeshInterface.
  *
- *	\class		MeshInterface
- *	\author		Pierre Terdiman
- *	\version	1.3
- *	\date		November, 27, 2002
-*/
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Precompiled Header
-#include "Stdafx.h"
-
-using namespace Opcode;
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/**
- *	Constructor.
- */
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-MeshInterface::MeshInterface() :
-	mNbTris			(0),
-	mNbVerts		(0),
-#ifdef OPC_USE_CALLBACKS
-	mUserData		(null),
-	mObjCallback	(null)
-#else
-	#ifdef OPC_USE_STRIDE
-	mTriStride		(sizeof(IndexedTriangle)),
-	mVertexStride	(sizeof(Point)),
-	mFetchTriangle	(&MeshInterface::FetchTriangleFromSingles),
-	#endif
-	mTris			(null),
-	mVerts			(null)
-#endif
-{
+ *	\class MeshInterface{
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

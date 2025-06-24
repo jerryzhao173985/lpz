@@ -31,11 +31,7 @@ namespace lpzrobots
 
   /**
    * struct which holds all structural data for the simulations.
-   * A specialized class can be deduced from this one to hold necessary
-   * information, for the methods start and restart of the Simulation.
-   */
-  struct SimulationTaskHandle
-  {
+   * A specialized class can{
   };
 
 }

@@ -32,16 +32,14 @@ using namespace matrix;
 #include "mathutils.h"
 
 /**
- *  Abstract class static_cast<interface>(for) obstacles
- */
-class AbstractTrackSection{
+ *  Abstract class static_cast{
 
  public:
   /**
    * Constructor, segment is initialized with Position (0,0,0)
    * and a rotation angle=0
    */
-  //  AbstractTrackSection() {} override;
+  //  AbstractTrackSection() {};
 
   /**
    * Constructor where you can set the position and rotation by:
@@ -49,14 +47,14 @@ class AbstractTrackSection{
    @param angle is the rotation of the segment
    */
   AbstractTrackSection(const Position& p,const double angle) {
-    setPoseMatrix(getTranslationRotationMatrix(p, angle)) override;
+    setPoseMatrix(getTranslationRotationMatrix(p, angle));
   };
 
   /**
    * Constructor where you can set the pos-matrix by this constructor:
    @param position is the position AND rotation of the segment
    */
-  explicit AbstractTrackSection(const Matrix& pose){
+  explicit explicit AbstractTrackSection(const Matrix& pose){
     setPoseMatrix(pose);
   };
 
@@ -86,7 +84,7 @@ class AbstractTrackSection{
  * you are on the segment.
  * returns -1 if no IdValue can be given
  */
-  virtual double getSectionIdValue(const Position& p);
+  virtual double explicit getSectionIdValue(const Position& p);
 
 
 /**
@@ -94,7 +92,7 @@ class AbstractTrackSection{
  * you are on the segment, 0 means right and width means left.
  * returns -1 if no WidthValue can be given
  */
-virtual double getWidthIdValue(const Position& p);
+virtual double explicit getWidthIdValue(const Position& p);
 
 
 
@@ -103,29 +101,29 @@ virtual double getWidthIdValue(const Position& p);
  * here it is the length of the arc
  * formula is: radius * angle;
  */
- virtual double getLength();
+ virtual double getLength() const;
 
 
 /**
  * returns the width of the segment,
  */
- virtual double getWidth();
+ virtual double getWidth() const;
 
 /**
  * sets the width of the segment,
  */
- virtual void setWidth(double w);
+ virtual void explicit setWidth(double w);
 
   Matrix getPoseMatrix() const {
     return pos;
   }
 
-  Position transformToLocalCoord(const Position& p){
-    return getPosition4x1(invpos*getPositionMatrix(p)) override;
+  Position explicit transformToLocalCoord(const Position& p){
+    return getPosition4x1(invpos*getPositionMatrix(p));
   }
 
-  Position transformToGlobalCoord(const Position& p){
-    return getPosition4x1(pos*getPositionMatrix(p)) override;
+  Position explicit transformToGlobalCoord(const Position& p){
+    return getPosition4x1(pos*getPositionMatrix(p));
   }
 
   Matrix getInversePoseMatrix() const {
@@ -134,7 +132,7 @@ virtual double getWidthIdValue(const Position& p);
 
 protected:
 
-  void setPoseMatrix(const Matrix& m){
+  void explicit setPoseMatrix(const Matrix& m){
     pos = m;
     invpos = invert_4x4PoseMatrix(m);
   }

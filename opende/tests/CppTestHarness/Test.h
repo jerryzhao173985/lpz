@@ -5,10 +5,7 @@
 
 namespace CppTestHarness
 {
-class TestResults;
-
-class Test
-{
+class TestResults{
 public:
 	virtual ~Test();
 	void Run(const TestResults& testResults) override;
@@ -27,7 +24,7 @@ private:
 	std::string const m_filename;
 	int const m_lineNumber;
 
-	Test* m_listNext;
+	Test* m_listNext = nullptr;
 
 	// revoked
 	Test(Test const&) override;

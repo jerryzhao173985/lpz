@@ -34,33 +34,7 @@
 namespace lpzrobots {
 
   /**
-     class for reading bounding shape description files (.bbox) and to create appropriate geoms
-
-     File Format: Lines wise, every line stands for one primitive.
-
-     Possible lines are:
-     - sphere radius (x,y,z)
-     - cylinder radius height (x,y,z) (alpha, beta, gamma)
-     - capsule radius height (x,y,z) (alpha, beta, gamma)
-     - box length width height (x,y,z) (alpha, beta, gamma)
-
-     (x,y,z) is the position vector and (alpha, beta, gamma) are
-     the rotation angles about x,y,z axis respectively
-
-     Example:
-     \code
-cylinder 6.5 50 (0,0,25) (0,0,0)
-cylinder 50 15 (0,0,28) (0,0,0)
-cylinder 40 30 (0,0,50) (0,0,0)
-cylinder 30 20 (0,0,75) (0,0,0)
-cylinder 20 30 (0,0,100) (0,0,0)
-cylinder 13 30 (0,0,125) (0,0,0)
-cylinder 8 30 (0,0,150) (0,0,0)
-cylinder 5 30 (0,0,175) (0,0,0)
-     \endcode
-  */
-
-  class BoundingShape{
+     class for{
 
   public:
     /**
@@ -90,7 +64,7 @@ cylinder 5 30 (0,0,175) (0,0,0)
   protected:
     std::string filename;
     bool active = false;
-    Primitive* parent;
+    Primitive* parent = nullptr;
     bool attachedToParentBody = false; // true as default, false not yet implemented by BoundingShape
     std::vector<Primitive*> boundingPrimitiveList; // used if not attached to a body
     std::vector<osg::Matrix> boundingPrimitivePoseList; // stores the relative pose of each primitive

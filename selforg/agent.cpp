@@ -23,10 +23,10 @@
  ***************************************************************************/
 
 #include "agent.h"
-#include <signal.h>
-#include <assert.h>
-#include <time.h>
-#include <string.h>
+#include <csignal>
+#include <cassert>
+#include <ctime>
+#include <cstring>
 
 #include "abstractrobot.h"
 #include "abstractcontroller.h"
@@ -36,15 +36,15 @@
 
 using namespace std;
 
-Agent::Agent(const PlotOption& plotOption, double noisefactor, const iparamkey& name, const paramkey& revision)
+Agent::Agent(const PlotOption& plotOption, double noisefactor, const iparamkey& name, const iparamkey& revision)
   : WiredController(plotOption, noisefactor, name, revision) {
   robot      = 0;
   rsensors=0; rmotors=0;
 }
 
 
-Agent::Agent(const std::list<PlotOption>& plotOptions, double noisefactor, const iparamkey& name, const paramkey& revision)
-  : WiredController(plotOptions, noisefactor, name, revision){
+Agent::Agent(const std::list<PlotOption>& plotOptions, double noisefactor, const iparamkey& name, const iparamkey& revision)
+  : WiredController(plotOptions, noisefactor, name, revision) {
   robot      = 0;
   rsensors=0; rmotors=0;
 }

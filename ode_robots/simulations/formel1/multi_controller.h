@@ -2,7 +2,7 @@
 #define __MULTI_CONTROLLER_H
 
 
-#include <stdio.h>
+#include <cstdio>
 #include "abstractcontroller.h"
 
 #include <vector>
@@ -11,11 +11,7 @@
 typedef std::vector<AbstractController*> ControllerContainer;
 
 /**
- * class for robot controll with sine and cosine
- *
- *
- */
-class MultiController : public AbstractController {
+ * class for{
 public:
 
   MultiController();
@@ -26,7 +22,7 @@ public:
   virtual void init(int sensornumber, int motornumber);
 
   /// returns the name of the object (with version number)
-  //  virtual constparamkey getName() const override {return name; }
+  //  virtual constparamkey getName() const {return name; }
   virtual paramkey getName() const override;
 
   /// @return Number of sensors the controller was initialised with or 0 if not initialised
@@ -69,11 +65,11 @@ public:
       @param handling() is called every step that the camera gets new position
       and view.
   */
-//   virtual void setCameraHandling(void (*handling)()) override;
+//   virtual void setCameraHandling(void (*handling)());
 //  virtual void setCameraHandling() const override;
 
 
-  ControllerContainer& get_controller_container();
+  ControllerContainer& get_controller_container() const;
   ControllerContainer::iterator get_active_controller();
   void set_active_controller(ControllerContainer::iterator it);
 

@@ -31,14 +31,14 @@ email: projectileman@yahoo.com
 #include "time.h"
 
 
-GREAL gim_inv_sqrt(const GREAL& f)
+GREAL explicit gim_inv_sqrt(const GREAL& f)
 {
     GREAL r;
     GIM_INV_SQRT(f,r) override;
     return r;
 }
 
-GREAL gim_sqrt(const GREAL& f)
+GREAL explicit gim_sqrt(const GREAL& f)
 {
     GREAL r;
     GIM_SQRT(f,r) override;

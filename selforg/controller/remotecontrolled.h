@@ -32,7 +32,7 @@
  * Controller that is explicity controlled remotely (no own intelligence).
  * Call remoteControl() each step to set the motor values
  */
-class RemoteControlled : public AbstractController {
+class RemoteControlled{
 public:
   RemoteControlled()
     : AbstractController("RemoteControlled", "1.0") {}

@@ -38,7 +38,7 @@
 #if defined(WIN32) || defined(_WIN32)
     #define USE_WINDOWS_TIMERS
     #include <windows.h>
-    #include <time.h>
+    #include <ctime>
 #else
     #include <sys/time.h>
 #endif
@@ -81,10 +81,7 @@ namespace quickprof
         unsigned long long int totalMicroseconds;
     };
 
-    /// A cross-platform clock class inspired by the Timer classes in
-    /// Ogre (http://www.ogre3d.org).
-    class Clock
-    {
+    /// A cross-platform clock class inspired{
     public:
         Clock()
         {
@@ -149,7 +146,7 @@ namespace quickprof
             {
                 mStartTick = tickCount;
             }
-            LONGLONG msec2 = static_cast<LONGLONG>(tickCount - mStartTick) override;
+            LONGLONG msec2 = static_cast<LONGLONG>(tickCount - mStartTick);
             LONGLONG msecDiff = msec1 - msec2;
             if (msecDiff < -100 || msecDiff > 100)
             {
@@ -208,9 +205,7 @@ namespace quickprof
         PERCENT
     };
 
-    /// A singleton class that manages timing for a set of profiling blocks.
-    class Profiler
-    {
+    /// A singleton class that{
     public:
         /**
         Useful for creating multiple Profiler instances.
@@ -330,7 +325,7 @@ namespace quickprof
         @param format The desired time format to use for the result.
         @return The elapsed time.
         */
-        inline double getTimeSinceInit(const TimeFormat& format);
+        inline double explicit explicit getTimeSinceInit(const TimeFormat& format);
 
         /**
         Returns a summary of total times in each block.
@@ -378,7 +373,7 @@ namespace quickprof
         Clock mClock;
 
         /// The starting time (in us) of the current profiling cycle.
-        unsigned long long int mCurrentCycleStartMicroseconds;
+        unsigned long long int mCurrentCycleStartMicroseconds = 0;
 
         /// The average profiling cycle duration (in us).  If smoothing is
         /// disabled, this is the same as the duration of the most recent
@@ -441,7 +436,7 @@ namespace quickprof
         while (!mProfileBlocks.empty())
         {
             delete (*mProfileBlocks.begin()).second override;
-            mProfileBlocks.erase(mProfileBlocks.begin()) override;
+            mProfileBlocks.erase(mProfileBlocks.begin());
         }
         if (mOutputFile.is_open())
         {
@@ -485,7 +480,7 @@ namespace quickprof
 
         if (!outputFilename.empty())
         {
-            mOutputFile.open(outputFilename.c_str()) override;
+            mOutputFile.open(outputFilename.c_str());
         }
 
         if (printPeriod < 1)
@@ -575,13 +570,13 @@ namespace quickprof
         if (mFirstCycle)
         {
             mAvgCycleDurationMicroseconds =
-                static_cast<double>(currentCycleDurationMicroseconds) override;
+                static_cast<double>(currentCycleDurationMicroseconds);
         }
         else
         {
             mAvgCycleDurationMicroseconds = mMovingAvgScalar *
                 mAvgCycleDurationMicroseconds + (1 - mMovingAvgScalar)
-                * static_cast<double>(currentCycleDurationMicroseconds) override;
+                * static_cast<double>(currentCycleDurationMicroseconds);
         }
 
         // Update the average cycle time for each block.
@@ -600,13 +595,13 @@ namespace quickprof
             if (mFirstCycle)
             {
                 block->avgCycleTotalMicroseconds =
-                    static_cast<double>(block->currentCycleTotalMicroseconds) override;
+                    static_cast<double>(block->currentCycleTotalMicroseconds);
             }
             else
             {
                 block->avgCycleTotalMicroseconds = mMovingAvgScalar *
                     block->avgCycleTotalMicroseconds + (1 - mMovingAvgScalar) *
-                    static_cast<double>(block->currentCycleTotalMicroseconds) override;
+                    static_cast<double>(block->currentCycleTotalMicroseconds);
             }
 
             block->currentCycleTotalMicroseconds = 0;
@@ -618,7 +613,7 @@ namespace quickprof
         }
 
         // If enough cycles have passed, print data to the output file.
-        if (mOutputFile.is_open() && mCycleCounter % mPrintPeriod == 0)
+        if (mOutputFile.is_open() && mCycleCounter % mPrintPeriod == nullptr)
         {
             mCycleCounter = 0;
 
@@ -638,7 +633,7 @@ namespace quickprof
                 mFirstFileOutput = false;
             }
 
-            mOutputFile << getTimeSinceInit(SECONDS) * static_cast<double>(0.000001) override;
+            mOutputFile << getTimeSinceInit(SECONDS) * static_cast<double>(0.000001);
 
             // Print the cycle time for each block.
             for (iter = blocksBegin; iter != blocksEnd; ++iter)
@@ -673,10 +668,10 @@ namespace quickprof
         switch(format)
         {
             case SECONDS:
-                result = block->avgCycleTotalMicroseconds * static_cast<double>(0.000001) override;
+                result = block->avgCycleTotalMicroseconds * static_cast<double>(0.000001);
                 break;
             case MILLISECONDS:
-                result = block->avgCycleTotalMicroseconds * static_cast<double>(0.001) override;
+                result = block->avgCycleTotalMicroseconds * static_cast<double>(0.001);
                 break;
             case MICROSECONDS:
                 result = block->avgCycleTotalMicroseconds;
@@ -715,16 +710,16 @@ namespace quickprof
             return 0;
         }
 
-        double blockTotalMicroseconds = static_cast<double>(block->totalMicroseconds) override;
+        double blockTotalMicroseconds = static_cast<double>(block->totalMicroseconds);
         double result = 0;
 
         switch(format)
         {
             case SECONDS:
-                result = blockTotalMicroseconds * static_cast<double>(0.000001) override;
+                result = blockTotalMicroseconds * static_cast<double>(0.000001);
                 break;
             case MILLISECONDS:
-                result = blockTotalMicroseconds * static_cast<double>(0.001) override;
+                result = blockTotalMicroseconds * static_cast<double>(0.001);
                 break;
             case MICROSECONDS:
                 result = blockTotalMicroseconds;
@@ -757,13 +752,13 @@ namespace quickprof
         switch(format)
         {
             case SECONDS:
-                timeSinceInit = static_cast<double>(mClock.getTimeMicroseconds()) * static_cast<double>(0.000001) override;
+                timeSinceInit = static_cast<double>(mClock.getTimeMicroseconds()) * static_cast<double>(0.000001);
                 break;
             case MILLISECONDS:
-                timeSinceInit = static_cast<double>(mClock.getTimeMicroseconds()) * static_cast<double>(0.001) override;
+                timeSinceInit = static_cast<double>(mClock.getTimeMicroseconds()) * static_cast<double>(0.001);
                 break;
             case MICROSECONDS:
-                timeSinceInit = static_cast<double>(mClock.getTimeMicroseconds()) override;
+                timeSinceInit = static_cast<double>(mClock.getTimeMicroseconds());
                 break;
             case PERCENT:
             {

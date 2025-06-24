@@ -59,7 +59,7 @@
 
 namespace lpzrobots {
   
-  class QConfigurableSetBoundsDialog : public QDialog {
+  class QConfigurableSetBoundsDialog{
 
     Q_OBJECT
 
@@ -70,7 +70,7 @@ namespace lpzrobots {
       };
 
       QConfigurableSetBoundsDialog(Configurable* config, Configurable::paramkey& key, dialogMode mode);
-      virtual ~QConfigurableSetBoundsDialog();
+      virtual ~QConfigurableSetBoundsDialog() override;
 
     private slots:
       void sl_dialogAccept();

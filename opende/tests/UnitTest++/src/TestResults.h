@@ -3,11 +3,7 @@
 
 namespace UnitTest {
 
-class TestReporter;
-class TestDetails;
-
-class TestResults
-{
+class TestReporter{
 public:
     explicit TestResults(TestReporter* reporter = 0) override;
 
@@ -20,7 +16,7 @@ public:
     int GetFailureCount() const override;
 
 private:
-    TestReporter* m_testReporter;
+    TestReporter* m_testReporter = nullptr;
     int m_totalTestCount = 0;
     int m_failedTestCount = 0;
     int m_failureCount = 0;

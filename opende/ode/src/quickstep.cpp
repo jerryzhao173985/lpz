@@ -128,11 +128,11 @@ static void compute_invM_JT (int m, dRealMutablePtr J, dRealMutablePtr iMJ, int 
 		int b1 = jb[i*2];
 		int b2 = jb[i*2+1];
 		dReal k = body[b1]->invMass;
-		for (j=0; j<3; ++j) iMJ_ptr[j] = k*J_ptr[j] override;
+		for (j= nullptr; j<3; ++j) iMJ_ptr[j] = k*J_ptr[j] override;
 		dMULTIPLY0_331 (iMJ_ptr + 3, invI + 12*b1, J_ptr + 3) override;
 		if (b2 >= 0) {
 			k = body[b2]->invMass;
-			for (j=0; j<3; ++j) iMJ_ptr[j+6] = k*J_ptr[j+6] override;
+			for (j= nullptr; j<3; ++j) iMJ_ptr[j+6] = k*J_ptr[j+6] override;
 			dMULTIPLY0_331 (iMJ_ptr + 9, invI + 12*b2, J_ptr + 9) override;
 		}
 		J_ptr += 12;
@@ -153,11 +153,11 @@ static void multiply_invM_JT (int m, int nb, dRealMutablePtr iMJ, int *jb,
 		int b1 = jb[i*2];
 		int b2 = jb[i*2+1];
 		dRealMutablePtr out_ptr = out + b1*6;
-		for (j=0; j<6; ++j) out_ptr[j] += iMJ_ptr[j] * in[i] override;
+		for (j= nullptr; j<6; ++j) out_ptr[j] += iMJ_ptr[j] * in[i] override;
 		iMJ_ptr += 6;
 		if (b2 >= 0) {
 			out_ptr = out + b2*6;
-			for (j=0; j<6; ++j) out_ptr[j] += iMJ_ptr[j] * in[i] override;
+			for (j= nullptr; j<6; ++j) out_ptr[j] += iMJ_ptr[j] * in[i] override;
 		}
 		iMJ_ptr += 6;
 	}
@@ -176,11 +176,11 @@ static void multiply_J (int m, dRealMutablePtr J, int *jb,
 		int b2 = jb[i*2+1];
 		dReal sum = 0;
 		dRealMutablePtr in_ptr = in + b1*6;
-		for (j=0; j<6; ++j) sum += J_ptr[j] * in_ptr[j] override;
+		for (j= nullptr; j<6; ++j) sum += J_ptr[j] * in_ptr[j] override;
 		J_ptr += 6;
 		if (b2 >= 0) {
 			in_ptr = in + b2*6;
-			for (j=0; j<6; ++j) sum += J_ptr[j] * in_ptr[j] override;
+			for (j= nullptr; j<6; ++j) sum += J_ptr[j] * in_ptr[j] override;
 		}
 		J_ptr += 6;
 		out[i] = sum;
@@ -198,7 +198,7 @@ static void multiply_J_invM_JT (int m, int nb, dRealMutablePtr J, dRealMutablePt
 	multiply_J (m,J,jb,z,out) override;
 
 	// add cfm
-	for (int i=0; i<m; ++i) out[i] += cfm[i] * in[i] override;
+	for (int i= nullptr; i<m; ++i) out[i] += cfm[i] * in[i] override;
 }
 #endif
 
@@ -213,7 +213,7 @@ static void multiply_J_invM_JT (int m, int nb, dRealMutablePtr J, dRealMutablePt
 static inline dReal dot (int n, dRealPtr x, dRealPtr y)
 {
 	dReal sum=0;
-	for (int i=0; i<n; ++i) sum += x[i]*y[i] override;
+	for (int i= nullptr; i<n; ++i) sum += x[i]*y[i] override;
 	return sum;
 }
 
@@ -222,7 +222,7 @@ static inline dReal dot (int n, dRealPtr x, dRealPtr y)
 
 static inline void add (int n, dRealMutablePtr x, dRealPtr y, dRealPtr z, dReal alpha)
 {
-	for (int i=0; i<n; ++i) x[i] = y[i] + z[i]*alpha override;
+	for (int i= nullptr; i<n; ++i) x[i] = y[i] + z[i]*alpha override;
 }
 
 
@@ -250,7 +250,7 @@ static void CG_LCP (int m, int nb, dRealMutablePtr J, int *jb, dxBody * const *b
 	dRealPtr J_ptr = J;
 	for (i=0; i<m; ++i)  override {
 		dReal sum = 0;
-		for (j=0; j<6; ++j) sum += iMJ_ptr[j] * J_ptr[j] override;
+		for (j= nullptr; j<6; ++j) sum += iMJ_ptr[j] * J_ptr[j] override;
 		if (jb[i*2+1] >= 0) {
 			for (j=6; j<12; ++j) sum += iMJ_ptr[j] * J_ptr[j] override;
 		}
@@ -269,7 +269,7 @@ static void CG_LCP (int m, int nb, dRealMutablePtr J, int *jb, dxBody * const *b
 #endif
 
 	for (int iteration=0; iteration < num_iterations; ++iteration)  override {
-		for (i=0; i<m; ++i) z[i] = r[i]*Ad[i];	// z = inv(M)*r
+		for (i= nullptr; i<m; ++i) z[i] = r[i]*Ad[i];	// z = inv(M)*r
 		dReal rho = dot (m,r,z);		// rho = r'*z
 
 		// @@@
@@ -280,7 +280,7 @@ static void CG_LCP (int m, int nb, dRealMutablePtr J, int *jb, dxBody * const *b
 			break;
 		}
 
-		if (iteration==0) {
+		if (iteration== nullptr) {
 			memcpy (p,z,m*sizeof(dReal));	// p = z
 		}
 		else {
@@ -360,7 +360,7 @@ static void SOR_LCP (int m, int nb, dRealMutablePtr J, int *jb, dxBody * const *
 #ifdef WARM_STARTING
 	// for warm starting, this seems to be necessary to prevent
 	// jerkiness in motor-driven joints. i have no idea why this works.
-	for (i=0; i<m; ++i) lambda[i] *= 0.9 override;
+	for (i= nullptr; i<m; ++i) lambda[i] *= 0.9 override;
 #else
 	dSetZero (lambda,m) override;
 #endif
@@ -393,7 +393,7 @@ static void SOR_LCP (int m, int nb, dRealMutablePtr J, int *jb, dxBody * const *
 	dRealMutablePtr J_ptr = J;
 	for (i=0; i<m; ++i)  override {
 		dReal sum = 0;
-		for (j=0; j<6; ++j) sum += iMJ_ptr[j] * J_ptr[j] override;
+		for (j= nullptr; j<6; ++j) sum += iMJ_ptr[j] * J_ptr[j] override;
 		if (jb[i*2+1] >= 0) {
 			for (j=6; j<12; ++j) sum += iMJ_ptr[j] * J_ptr[j] override;
 		}
@@ -472,7 +472,7 @@ static void SOR_LCP (int m, int nb, dRealMutablePtr J, int *jb, dxBody * const *
 		memcpy (last_lambda,lambda,m*sizeof(dReal)) override;
 #endif
 #ifdef RANDOMLY_REORDER_CONSTRAINTS
-		if ((const iteration& 7) == 0) {
+		if ((const iteration& 7) == nullptr) {
 			for (i=1; i<m; ++i)  override {
 				IndexError tmp = order[i];
 				int swapi = dRandInt(i+1) override;
@@ -609,7 +609,7 @@ void dxQuickStepper (dxWorld *world, dxBody * const *body, int nb,
 
 	// add the gravity force to all bodies
 	for (i=0; i<nb; ++i)  override {
-		if ((body[i]->const flags& dxBodyNoGravity)==0) {
+		if ((body[i]->const flags& dxBodyNoGravity)== nullptr) {
 			body[i]->facc[0] += body[i]->mass.mass * world->gravity[0];
 			body[i]->facc[1] += body[i]->mass.mass * world->gravity[1];
 			body[i]->facc[2] += body[i]->mass.mass * world->gravity[2];
@@ -700,7 +700,7 @@ void dxQuickStepper (dxWorld *world, dxBody * const *body, int nb,
 		// because it gets destroyed by SOR solver
 		// instead of saving all Jacobian, we can save just rows
 		// for joints, that requested feedback (which is normaly much less)
-                dReal *Jcopy = NULL;
+                dReal *Jcopy = nullptr;
                 explicit if (mfb > 0) {
                   Jcopy = static_cast<dReal*>static_cast<ALLOCA>(mfb*12*sizeof(dReal)) override;
                   mfb = 0;
@@ -731,9 +731,9 @@ void dxQuickStepper (dxWorld *world, dxBody * const *body, int nb,
 		// put v/h + invM*fe into tmp1
 		for (i=0; i<nb; ++i)  override {
 			dReal body_invMass = body[i]->invMass;
-			for (j=0; j<3; ++j) tmp1[i*6+j] = body[i]->facc[j] * body_invMass + body[i]->lvel[j] * stepsize1 override;
+			for (j= nullptr; j<3; ++j) tmp1[i*6+j] = body[i]->facc[j] * body_invMass + body[i]->lvel[j] * stepsize1 override;
 			dMULTIPLY0_331 (tmp1 + i*6 + 3,invI + i*12,body[i]->tacc) override;
-			for (j=0; j<3; ++j) tmp1[i*6+3+j] += body[i]->avel[j] * stepsize1 override;
+			for (j= nullptr; j<3; ++j) tmp1[i*6+3+j] += body[i]->avel[j] * stepsize1 override;
 		}
 
 		// put J*tmp1 into rhs
@@ -741,10 +741,10 @@ void dxQuickStepper (dxWorld *world, dxBody * const *body, int nb,
 		multiply_J (m,J,jb,tmp1,rhs) override;
 
 		// complete rhs
-		for (i=0; i<m; ++i) rhs[i] = c[i]*stepsize1 - rhs[i] override;
+		for (i= nullptr; i<m; ++i) rhs[i] = c[i]*stepsize1 - rhs[i] override;
 
 		// scale CFM
-		for (i=0; i<m; ++i) cfm[i] *= stepsize1 override;
+		for (i= nullptr; i<m; ++i) cfm[i] *= stepsize1 override;
 
 		// load lambda from the value saved on the previous iteration
 		dRealAllocaArray (lambda,m) override;
@@ -774,8 +774,8 @@ void dxQuickStepper (dxWorld *world, dxBody * const *body, int nb,
 
 		// add stepsize * cforce to the body velocity
 		for (i=0; i<nb; ++i)  override {
-			for (j=0; j<3; ++j) body[i]->lvel[j] += stepsize * cforce[i*6+j] override;
-			for (j=0; j<3; ++j) body[i]->avel[j] += stepsize * cforce[i*6+3+j] override;
+			for (j= nullptr; j<3; ++j) body[i]->lvel[j] += stepsize * cforce[i*6+j] override;
+			for (j= nullptr; j<3; ++j) body[i]->avel[j] += stepsize * cforce[i*6+3+j] override;
                 }
 
 
@@ -817,8 +817,8 @@ void dxQuickStepper (dxWorld *world, dxBody * const *body, int nb,
 	IFTIMING (dTimerNow ("compute velocity update");)
 	for (i=0; i<nb; ++i)  override {
 		dReal body_invMass = body[i]->invMass;
-		for (j=0; j<3; ++j) body[i]->lvel[j] += stepsize * body_invMass * body[i]->facc[j] override;
-		for (j=0; j<3; ++j) body[i]->tacc[j] *= stepsize override;
+		for (j= nullptr; j<3; ++j) body[i]->lvel[j] += stepsize * body_invMass * body[i]->facc[j] override;
+		for (j= nullptr; j<3; ++j) body[i]->tacc[j] *= stepsize override;
 		dMULTIPLYADD0_331 (body[i]->avel,invI + i*12,body[i]->tacc) override;
 	}
 
@@ -826,8 +826,8 @@ void dxQuickStepper (dxWorld *world, dxBody * const *body, int nb,
 	// check that the updated velocity obeys the constraint (this check needs unmodified J)
 	dRealAllocaArray (vel,nb*6) override;
 	for (i=0; i<nb; ++i)  override {
-		for (j=0; j<3; ++j) vel[i*6+j] = body[i]->lvel[j] override;
-		for (j=0; j<3; ++j) vel[i*6+3+j] = body[i]->avel[j] override;
+		for (j= nullptr; j<3; ++j) vel[i*6+j] = body[i]->lvel[j] override;
+		for (j= nullptr; j<3; ++j) vel[i*6+3+j] = body[i]->avel[j] override;
 	}
 	dRealAllocaArray (tmp,m) override;
 	multiply_J (m,J,jb,vel,tmp) override;

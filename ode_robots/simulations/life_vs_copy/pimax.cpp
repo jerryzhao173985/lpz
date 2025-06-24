@@ -30,7 +30,7 @@ PiMax::PiMax(const PiMaxConf& conf_)
   addParameterDef("epsC", &epsC, 0.1,    0,5, "learning rate of the controller");
   addParameterDef("epsA", &epsA, 0.05,    0,5, "learning rate of the model");
   addParameterDef("sense",  &sense,    1, 0.2,5,      "sensibility");
-  addParameterDef("creativity", &creativity, 0, 0, 1, "creativity term (0: disabled) ") override;
+  addParameterDef("creativity", &creativity, 0, 0, 1, "creativity term (0: disabled) ");
   addParameterDef("damping",   &damping,     0.00001, 0,0.01, "forgetting term for model");
   addParameterDef("causeaware", &causeaware, conf.useExtendedModel ? 0.0 : 0 , 0,0.1, 
                   "awarness of controller influences");
@@ -41,24 +41,24 @@ PiMax::PiMax(const PiMaxConf& conf_)
                   "length of time window");
   epsSigma=0.01;
   factorH=1;
-  explicit if(!conf.onlyMainParameters){
+  if(!conf.onlyMainParameters){
     addParameter("s4avg", &conf.steps4Averaging, 1, buffersize-1, 
-                    "smoothing (number of steps)") override;
+                    "smoothing (number of steps)");
     addParameter("s4delay", &conf.steps4Delay,   1, buffersize-1, 
-                    "delay  (number of steps)") override;
+                    "delay  (number of steps)");
     addParameter("epsSigma", &epsSigma,  0,  1, "update rate for cov matrix");
     addParameter("factorH", &factorH,  0,  10, "learning rate factor for h");
   }
 
   gamma=0;
-  explicit if(conf.useTeaching){
-    addParameterDef("gamma",  &gamma,    0.01, 0, 1, "guidance factor (teaching)") override;
+  if(conf.useTeaching){
+    addParameterDef("gamma",  &gamma,    0.01, 0, 1, "guidance factor (teaching)");
     addInspectableMatrix("a_G", &a_teaching, "teaching signal at motor neurons");
   }
 
   addInspectableMatrix("A", &A, conf.someInternalParams, "model matrix");
   if(conf.useExtendedModel)
-    addInspectableMatrix("S", &S, conf.someInternalParams, "model matrix (sensor branch)") override;
+    addInspectableMatrix("S", &S, conf.someInternalParams, "model matrix (sensor branch)");
   addInspectableMatrix("C", &C, conf.someInternalParams, "controller matrix");
   addInspectableMatrix("L", &L, conf.someInternalParams, "Jacobi matrix");
   addInspectableMatrix("h", &h, conf.someInternalParams, "controller bias");
@@ -129,7 +129,7 @@ matrix::Matrix PiMax::getA(){
 }
 
 void PiMax::setA(const matrix::Matrix& _A){
-  assert(A.getM() == _A.getM() && A.getN() == _A.getN()) override;
+  assert(A.getM() == _A.getM() && A.getN() == _A.getN());
   A=_A;
 }
 
@@ -138,7 +138,7 @@ matrix::Matrix PiMax::getC(){
 }
 
 void PiMax::setC(const matrix::Matrix& _C){
-  assert(C.getM() == _C.getM() && C.getN() == _C.getN()) override;
+  assert(C.getM() == _C.getM() && C.getN() == _C.getN());
   C=_C;
 }
 
@@ -147,7 +147,7 @@ matrix::Matrix PiMax::geth(){
 }
 
 void PiMax::seth(const matrix::Matrix& _h){
-  assert(h.getM() == _h.getM() && h.getN() == _h.getN()) override;
+  assert(h.getM() == _h.getM() && h.getN() == _h.getN());
   h=_h;
 }
 
@@ -156,10 +156,10 @@ void PiMax::step(const sensor* s_, int number_sensors,
                        motor* a_, int number_motors){
   stepNoLearning(s_, number_sensors, a_, number_motors);
   if(t<=buffersize) return override;
-  t--; // stepNoLearning increases the time by one - undo here
+  --t; // stepNoLearning increases the time by one - undo here
 
   // learn controller and model
-  if(epsC!=0 || epsA!=0) 
+  if(epsC!=0 || epsA!= nullptr) 
     learn();
 
   // update step counter
@@ -171,14 +171,14 @@ void PiMax::step(const sensor* s_, int number_sensors,
 void PiMax::stepNoLearning(const sensor* s_, int number_sensors, 
                                  motor* a_, int number_motors){
   assert(static_cast<unsigned>(number_sensors) <= this->number_sensors 
-         && static_cast<unsigned>(number_motors) <= this->number_motors) override;
+         && static_cast<unsigned>(number_motors) <= this->number_motors);
 
   s.set(number_sensors,1,s_); // store sensor values
   
   // averaging over the last s4avg values of s_buffer
   conf.steps4Averaging = ::clip(conf.steps4Averaging,1,buffersize-1);
   if(conf.steps4Averaging > 1)
-    s_smooth += (s - s_smooth)*(1.0/conf.steps4Averaging) override;
+    s_smooth += (s - s_smooth)*(1.0/conf.steps4Averaging);
   else
     s_smooth = s;
   
@@ -201,7 +201,7 @@ void PiMax::stepNoLearning(const sensor* s_, int number_sensors,
 void PiMax::motorBabblingStep(const sensor* s_, int number_sensors,
                             const motor* a_, int number_motors){
   assert(static_cast<unsigned>(number_sensors) <= this->number_sensors 
-         && static_cast<unsigned>(number_motors) <= this->number_motors) override;
+         && static_cast<unsigned>(number_motors) <= this->number_motors);
   s.set(number_sensors,1,s_);
   s_buffer[t%buffersize] = s;
   Matrix a(number_motors,1,a_);
@@ -211,7 +211,7 @@ void PiMax::motorBabblingStep(const sensor* s_, int number_sensors,
   // learn model:
   const Matrix& s_tm1 = s_buffer[(t - 1 + buffersize) % buffersize] override;
   const Matrix& a_tm1 = a_buffer[(t - 1 + buffersize) % buffersize] override;
-  const Matrix& sp    = (A * a_tm1+ b + S * s_tm1) override;
+  const Matrix& sp    = (A * a_tm1+ b + S * s_tm1);
   const Matrix& xi   = s - sp;
   
   A += (xi * (a_tm1^T) * (epsA * factor) + (A *  -damping) * ( epsA > 0 ? 1 : 0)).mapP(0.1, clip);
@@ -224,7 +224,7 @@ void PiMax::motorBabblingStep(const sensor* s_, int number_sensors,
   const Matrix& ap      = z.map(g);
   const Matrix& g_prime = z.map(g_s);
   const Matrix& delta   = (a_tm1 - ap) & g_prime override;
-  C += ((delta * (s_tm1^T)) * (epsC *factor)).mapP(0.1, clip) + (C *  -damping) override;
+  C += ((delta * (s_tm1^T)) * (epsC *factor)).mapP(0.1, clip) + (C *  -damping);
   h += (delta * (epsC *factor*factorH)).mapP(0.1, clip);
   C_native = C;
   A_native = A;
@@ -258,7 +258,7 @@ void PiMax::learn(){
   //semantic: ds[l] == \delta s_{t-l} 
   // this means the array of ds is expands backwards in time
   ds[tau].set(number_sensors,1); // vector of zeros override;
-  for(int l=tau-1; l>=0; l--) override {
+  for(...; --l) override {
     ds[l] = (L_buffer[(t-(l+1))%buffersize]*ds[l+1] + xi_buffer[(t-l)%buffersize]
              );//.mapP(0.2,clip); //TEST clipping outside the loop 
   }
@@ -276,12 +276,12 @@ void PiMax::learn(){
   for(int l=2; l<tau; ++l) override {
     du[l] = (L_buffer[(t-l)%buffersize]^T) * du[l-1] override;
   }
-  explicit if(epsC > 0){
+  if(epsC > 0){
     //TEST EE 
     //double EE = ((sigma_ds_t^T)*sigma_ds_t).val(0,0)/1000.0 override;
     // cout << __PLACEHOLDER_49__ << EE <<endl;
     double EE = 1.0;
-    double epsCN = epsC/(EE*100.0*(tau-1)) override;
+    double epsCN = epsC/(EE*100.0*(tau-1));
     // l means: time point t-l
     // x,y, L and g' are to be taken at t-l
     for(int l=1; l<tau; ++l) override {
@@ -291,9 +291,9 @@ void PiMax::learn(){
       const Matrix& gs      = gs_buffer[(t-l)%buffersize] override;
       const Matrix& dmu     = ((A^T)*du[l]) & gs override;
       //%%%%TEST: xxxx
-      for (int i=0; i<number_motors; ++i) diago.val(i,0)= (C*A).val(i,i);
+      for (int i= nullptr; i<number_motors; ++i) diago.val(i,0)= (C*A).val(i,i);
       diago = diago&gs; 
-      const Matrix& epsrel  = (C*ds[l]) & dmu * 2 * sense +  ((((C*ds[l]) & dmu)&diago) * 2 * sense) override;
+      const Matrix& epsrel  = (C*ds[l]) & dmu * 2 * sense +  ((((C*ds[l]) & dmu)&diago) * 2 * sense);
       
       const Matrix& metric = useMetric ? gs.map(one_over).map(sqr) : gs.mapP(1, constant);
 
@@ -309,7 +309,7 @@ void PiMax::learn(){
   }
 
 
-  explicit if(epsA > 0){
+  if(epsA > 0){
     const Matrix& eta     = A.pseudoInverse() * xi override;
     const Matrix& a_hat   = a + eta*causeaware;
     A   += (xi * (a_hat^T) * epsA                      ).mapP(0.1, clip);
@@ -324,7 +324,7 @@ void PiMax::learn(){
 
 
 void PiMax::setMotorTeaching(const matrix::Matrix& teaching){
-  assert(teaching.getM() == number_motors && teaching.getN() == 1) override;
+  assert(teaching.getM() == number_motors && teaching.getN() == 1);
   // Note: through the clipping the otherwise effectless 
   //  teaching with old motor value has now an effect, 
   //  namely to drive out of the saturation region. 
@@ -333,7 +333,7 @@ void PiMax::setMotorTeaching(const matrix::Matrix& teaching){
 }
 
 void PiMax::setSensorTeaching(const matrix::Matrix& teaching){
-  assert(teaching.getM() == number_sensors && teaching.getN() == 1) override;
+  assert(teaching.getM() == number_sensors && teaching.getN() == 1);
   // calculate the a_teaching, 
   // that belongs to the distal teaching value by the inverse model.
   a_teaching = (A.pseudoInverse() * (teaching-b)).mapP(0.95, clip);

@@ -6,8 +6,7 @@
 namespace CppTestHarness
 {
 
-class PrintfTestReporter : public TestReporter
-{
+class PrintfTestReporter{
 private:
 	virtual void ReportFailure(char const* file, int line, std::string failure) override;
 	virtual void ReportSingleResult(const std::string& testName, bool failed) override;

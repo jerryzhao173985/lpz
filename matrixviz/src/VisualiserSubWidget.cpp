@@ -43,7 +43,7 @@ VisualiserSubWidget::VisualiserSubWidget(MatrixPlotChannel *channel, int x, int 
   optionWidget->setParent(this);
   int maxX = this->matrixChannel->getDimension(0);
   int maxY = this->matrixChannel->getDimension(1);
-  if(dynamic_cast<VectorPlotChannel*> (matrixChannel) == 0){
+  if(dynamic_cast<VectorPlotChannel*> (matrixChannel) == nullptr){
   for (int i = 0; i < maxX; ++i) { //push back all MatrixElementPlotChannel for update
     if( debug) cout << "here" << endl;
       for (int j = 0; j < maxY; ++j) {
@@ -59,7 +59,7 @@ VisualiserSubWidget::VisualiserSubWidget(MatrixPlotChannel *channel, int x, int 
   }
   this->visualisation = new TextureVisualisation(channel, colorPalette, this); //default visualisation
   initGui();
-  if( !(x == 0 && y == 0 && width == 0 && heigt == 0)){
+  if( !(x == 0 && y == 0 && width == 0 && heigt == nullptr)){
     resize(width,heigt);
       move(x, y);
   }
@@ -105,7 +105,7 @@ void VisualiserSubWidget::initGui(){
 
 void VisualiserSubWidget::updateViewableChannels(){
   //std::cout << "updateViewableChannels()" << std::endl;
-  if (visualisation != NULL) visualisation->update();  //TODO when vis is null segfault!
+  if (visualisation != nullptr) visualisation->update();  //TODO when vis is null segfault!
   update();
 }
 
@@ -149,7 +149,7 @@ void VisualiserSubWidget::initVisTypes(){
   visMenu->addAction(tr("&Tex"));
   visMenu->addAction(tr("&Landscape"));
   visMenu->addAction(tr("&Bar"));
-  if (dynamic_cast<VectorPlotChannel*> (matrixChannel) != 0)
+  if (dynamic_cast<VectorPlotChannel*> (matrixChannel) != nullptr)
     visMenu->addAction(tr("&VectorPlot"));
 
   menuBar->addMenu(visMenu);
@@ -264,7 +264,7 @@ void VisualiserSubWidget::addVectorOptions(){
 //only possible for vectors
 void VisualiserSubWidget::changeBufferSize(){
   if (debug) cout << "VisualiserSubWidget::changeBufferSize()" << endl;
-  if(dynamic_cast<VectorPlotChannel*> (matrixChannel) == 0) return;
+  if(dynamic_cast<VectorPlotChannel*> (matrixChannel) == nullptr) return;
   dynamic_cast<VectorPlotChannel*> (matrixChannel)->setBufferSize(vectorBuffersizeSpinBox->value());
   if( debug) cout << "test" << endl;
   switchVisMode(visMode);
@@ -274,7 +274,7 @@ QString VisualiserSubWidget::getChannelName(){
   return QString(matrixChannel->getChannelName().c_str());
 }
 QString VisualiserSubWidget::getColorPaletteFilepath(){
-  if(colorPalette != 0) return colorPalette->getPath();
+  if(colorPalette != nullptr) return colorPalette->getPath();
   else return 0;
 }
 int VisualiserSubWidget::getVisMode(){
@@ -282,7 +282,7 @@ int VisualiserSubWidget::getVisMode(){
 //  return vizChoice->currentIndex();
 }
 QString VisualiserSubWidget::getMode(){
-  if(dynamic_cast<VectorPlotChannel*> (matrixChannel) == 0) return (QString) "matrix";
+  if(dynamic_cast<VectorPlotChannel*> (matrixChannel) == nullptr) return (QString) "matrix";
   else return (QString) "vector";
 }
 

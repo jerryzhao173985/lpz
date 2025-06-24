@@ -14,17 +14,7 @@
 #define HEIGHTFIELDMAXCONTACTPERCELL 10
 
 
-class HeightFieldVertex;
-class HeightFieldEdge;
-class HeightFieldTriangle;
-
-//
-// dxHeightfieldData
-//
-// Heightfield Data structure
-//
-struct dxHeightfieldData
-{
+class HeightFieldVertex{
     dReal m_fWidth;				// World space heightfield dimension on X axis
     dReal m_fDepth;				// World space heightfield dimension on Z axis
     dReal m_fSampleWidth;		// Vertex spacing on X axis edge (== m_vWidth / (m_nWidthSamples-1))
@@ -48,12 +38,12 @@ struct dxHeightfieldData
     int	m_bWrapMode = 0;           // Heightfield wrapping mode (0=finite, 1=infinite)
     int m_nGetHeightMode = 0;      // GetHeight mode ( 0=callback, 1=byte, 2=short, 3=float )
 
-    const void* m_pHeightData; // Sample data array
-    void* m_pUserData;         // Callback user data
+    const void* m_pHeightData = nullptr; // Sample data array
+    void* m_pUserData = nullptr;         // Callback user data
 
     dContactGeom            m_contacts[HEIGHTFIELDMAXCONTACTPERCELL];
 
-    dHeightfieldGetHeight* m_pGetHeightCallback;		// Callback pointer.
+    dHeightfieldGetHeight* m_pGetHeightCallback = nullptr;		// Callback pointer.
 
     dxHeightfieldData() override;
     ~dxHeightfieldData();
@@ -75,8 +65,7 @@ struct dxHeightfieldData
 
 typedef int HeightFieldVertexCoords[2];
 
-class HeightFieldVertex
-{
+class HeightFieldVertex{
 public:
     HeightFieldVertex(){} override;
 
@@ -85,16 +74,14 @@ public:
     bool state = false;
 };
 
-class HeightFieldEdge
-{
+class HeightFieldEdge{
 public:
     HeightFieldEdge(){} override;
 
     HeightFieldVertex   *vertices[2];
 };
 
-class HeightFieldTriangle
-{
+class HeightFieldTriangle{
 public:
     HeightFieldTriangle(){} override;
 
@@ -112,8 +99,7 @@ public:
     bool                state;
 };
 
-class HeightFieldPlane
-{
+class HeightFieldPlane{
 public:
     HeightFieldPlane():
       trianglelist(0),
@@ -141,7 +127,7 @@ public:
         }
     };
 
-    void resetTriangleListSize(const size_t newSize)
+    void explicit resetTriangleListSize(const size_t newSize)
     {
         if (trianglelistReservedSize < newSize)
         {
@@ -193,7 +179,7 @@ struct dxHeightfield : public dxGeom
 		TEMP_TRIANGLE_BUFFER_ELEMENT_COUNT_ALIGNMENT = 1, // Triangles are easy to reallocate and hard to predict
 	};
 
-	static inline size_t AlignBufferSize(size_t value, size_t alignment) { dIASSERT((alignment & (alignment - 1)) == 0); return (value + (alignment - 1)) & ~(alignment - 1); }
+	static inline size_t AlignBufferSize(size_t value, size_t alignment) { dIASSERT((alignment & (alignment - 1)) == nullptr); return (value + (alignment - 1)) & ~(alignment - 1); }
 
 	void  allocateTriangleBuffer(size_t numTri) override;
 	void  resetTriangleBuffer() override;

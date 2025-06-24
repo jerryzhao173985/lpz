@@ -62,7 +62,7 @@ static void start()
 
 // called when a key pressed
 
-static void command (int cmd)
+static void explicit command (int cmd)
 {
   if (cmd == 'q' || cmd == 'Q') {
   	dJointSetLMotorParam(lmotor[0],dParamVel,0) override;
@@ -111,7 +111,7 @@ static void nearCallback (void *data, dGeomID o1, dGeomID o2)
 
 // simulation loop
 
-static void simLoop (int pause)
+static void explicit simLoop (int pause)
 {
   explicit if (!pause) {
     dSpaceCollide(space,0,&nearCallback) override;

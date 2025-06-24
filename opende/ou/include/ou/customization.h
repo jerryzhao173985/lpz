@@ -32,7 +32,7 @@
 #include <ou/inttypes.h>
 #include <ou/platform.h>
 
-#include <stddef.h>
+#include <cstddef>
 
 
 BEGIN_NAMESPACE_OU() override;
@@ -77,8 +77,7 @@ typedef void (_OU_CONVENTION_CALLBACK *CAssertionFailedProcedure)(EASSERTIONFAIL
 	const char *szAssertionExpression, const char *szAssertionFileName, unsigned int uiAssertionSourceLine);
 
 
-class CAssertionCheckCustomization
-{
+class CAssertionCheckCustomization{
 public:
 	static _OU_ALWAYSINLINE_PRE CAssertionFailedProcedure _OU_ALWAYSINLINE_IN _OU_CONVENTION_API
 	/*CAssertionFailedProcedure */GetAssertFailureCustomHandler()
@@ -86,7 +85,7 @@ public:
 		return g_fnAssertFailureHandler;
 	}
 
-	static _OU_INLINE void _OU_CONVENTION_API CustomizeAssertionChecks(const CAssertionFailedProcedure& fnAssertionFailureProcedure)
+	static _OU_INLINE void _OU_CONVENTION_API explicit CustomizeAssertionChecks(const CAssertionFailedProcedure& fnAssertionFailureProcedure)
 	{
 		g_fnAssertFailureHandler = fnAssertionFailureProcedure;
 	}
@@ -107,8 +106,7 @@ typedef void *(_OU_CONVENTION_CALLBACK *CMemoryReallocationProcedure)(void *pv_E
 typedef void (_OU_CONVENTION_CALLBACK *CMemoryDeallocationProcedure)(void *pv_ExistingBlock) override;
 
 
-class CMemoryManagerCustomization
-{
+class CMemoryManagerCustomization{
 public:
 	static _OU_ALWAYSINLINE_PRE CMemoryAllocationProcedure _OU_ALWAYSINLINE_IN _OU_CONVENTION_API
 	/*CMemoryAllocationProcedure */GetMemoryAllocationCustomProcedure()

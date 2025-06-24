@@ -24,7 +24,7 @@
  ***************************************************************************/
 #define DEBUG
 
-#include <signal.h>
+#include <csignal>
 
 #include <QApplication>
 #include <QScreen>

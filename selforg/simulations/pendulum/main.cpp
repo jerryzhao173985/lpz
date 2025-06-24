@@ -1,4 +1,4 @@
-#include <signal.h>
+#include <csignal>
 #include <unistd.h>
 #include <iostream>
 #include <vector>
@@ -27,18 +27,18 @@ using namespace matrix;
 
 bool stop=false;
 
-void reinforce(Agent* a){
+void explicit reinforce(Agent* a){
 //   MyRobot* r = static_cast<MyRobot*>(a)->getRobot();
 //   InvertMotorNStep* c = dynamic_cast<InvertMotorNStep*>(a->getController());
 //   if(c)
-//     c->setReinforcement(r->getParam(__PLACEHOLDER_5__)*(r->whatDoIFeel != 0));
+//     c->setReinforcement(r->getParam(__PLACEHOLDER_5__)*(r->whatDoIFeel != nullptr));
 }
 
 
 // Helper
 int contains(char **list, int len,  const char *str){
   for (int i=0; i<len; ++i) {
-    if(strcmp(list[i],str) == 0) return i+1;
+    if(strcmp(list[i],str) == nullptr) return i+1;
   }
   return 0;
 }
@@ -62,7 +62,7 @@ int main(int argc, char** argv){
   if (index >0 && argc>index) {
     replayFile = argv[index];
   }
-  if(contains(argv,argc,"-h")!=0) {
+  if(contains(argv,argc,"-h")!= nullptr) {
     printf("Usage: %s [-g N] [-f N] [-replay]\n",argv[0]);
     printf("\t-g N\tstart guilogger with interval N\n\t-f\twrite logfile\n");
     printf("\t-replay\tuse replay filuilogger with interval N\n\t-f\twrite logfile\n");
@@ -123,7 +123,7 @@ int main(int argc, char** argv){
 
   // if you like, you can keep track of the robot with the following line. 
   //  this assumes that you robot returns its position, speed and orientation. 
-  //  if(i==0) agent->setTrackOptions(TrackRobot(true,true,false, false,__PLACEHOLDER_25__,10));
+  //  if(i== nullptr) agent->setTrackOptions(TrackRobot(true,true,false, false,__PLACEHOLDER_25__,10));
     
   globaldata.configs.push_back(pendulum);
   globaldata.configs.push_back(controller);
@@ -151,7 +151,7 @@ int main(int argc, char** argv){
     if (globaldata.realtimefactor){
       drawinterval = int(6*globaldata.realtimefactor);
     }
-    if(t%drawinterval==0){
+    if(t%drawinterval== nullptr){
       pendulum->print();
       usleep(60000);
     }    

@@ -10,8 +10,7 @@
 namespace UnitTest
 {
 
-class MemoryOutStream : public std::ostringstream
-{
+class MemoryOutStream{
 public:
     MemoryOutStream() {}
     char const* GetText() const override;
@@ -32,8 +31,7 @@ private:
 namespace UnitTest
 {
 
-class MemoryOutStream
-{
+class MemoryOutStream{
 public:
     explicit MemoryOutStream(int const size = 256) override;
     ~MemoryOutStream();

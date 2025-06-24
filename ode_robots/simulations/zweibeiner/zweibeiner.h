@@ -42,12 +42,7 @@
 
 namespace lpzrobots {
 
-  class Primitive;
-  class Joint;
-  class OneAxisServo;
-  class TwoAxisServo;
-
-  typedef struct {
+  class Primitive{
   public:
     double hipJointLimit = 0; ///< angle range for legs
     double pelvisPower = 0;   ///< maximal force for at pelvis joint motor
@@ -61,7 +56,7 @@ namespace lpzrobots {
 
   /** should look like a dog
    */
-  class ZweiBeiner : public OdeRobot {
+  class ZweiBeiner{
   public:
 
     /**
@@ -73,7 +68,7 @@ namespace lpzrobots {
     ZweiBeiner(const OdeHandle& odeHandle, const OsgHandle& osgHandle, const ZweiBeinerConf& conf,
                const std::string& name);
 
-    virtual ~ZweiBeiner() {} override;
+    virtual ~ZweiBeiner() {};
 
     static ZweiBeinerConf getDefaultConf() const {
       ZweiBeinerConf c;
@@ -133,29 +128,29 @@ namespace lpzrobots {
 
     /** returns number of sensors
      */
-    virtual int getSensorNumber();
+    virtual int getSensorNumber() const;
 
     /** returns number of motors
      */
-    virtual int getMotorNumber();
+    virtual int getMotorNumber() const;
 
     /** this function is called in each timestep. It should perform robot-internal checks,
         like space-internal collision detection, sensor resets/update etc.
         @param globalData structure that contains global data from the simulation environment
     */
-    virtual void doInternalStuff(const GlobalData& globalData);
+    virtual void explicit doInternalStuff(const GlobalData& globalData);
 
 
     /** The list of all parameters with there value as allocated lists.
      */
     virtual paramlist getParamList() const;
 
-    virtual paramval getParam(const paramkey& key, bool traverseChildren=true) const; override;
+    virtual paramval getParam(const paramkey& key, bool traverseChildren=true) const;
 
     virtual bool setParam(const paramkey& key, paramval val, bool traverseChildren=true);
 
     /** the main object of the robot, which is used for position and speed tracking */
-    virtual const Primitive* getMainPrimitive() const const override { return objects[0]; }
+    virtual const Primitive* getMainPrimitive() const const { return objects[0]; }
   protected:
 
     /** creates vehicle at desired pose

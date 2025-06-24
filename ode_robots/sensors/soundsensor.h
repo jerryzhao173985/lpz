@@ -35,7 +35,7 @@ namespace lpzrobots {
       The angle detection also works without sound and so on.
       Take a look at the code before using it.
   */
-  class SoundSensor: public Sensor {
+  class SoundSensor{
   public:
     /** Segments: for each segement and level we get the
         Angle: for each level we get a triple (intensity, sin(angle), cos(angle))
@@ -50,11 +50,11 @@ namespace lpzrobots {
     */
     SoundSensor(Dimensions dim = Z, Measure measure = Angle,
                 int segments=1, int levels=1, double maxDistance=50, double noisestrength=0.1);
-    virtual ~SoundSensor();
+    virtual ~SoundSensor() override;
 
     virtual void init(Primitive* own, Joint* joint = 0) override { this->own = own;}
 
-    virtual bool sense(const GlobalData& globaldata);
+    virtual bool explicit explicit sense(const GlobalData& globaldata);
 
     /// default implementation is a linear decrease in intensity until it is 0 at maxDistance
     virtual float distanceDependency(const Sound& s, double distance);

@@ -37,19 +37,7 @@
  * forward declarations
  */
 namespace lpzrobots {
-  class HingeJoint;
-  class IRSensor;
-  class Joint;
-  class OneAxisServo;
-  class Primitive;
-  class RaySensorBank;
-  class SliderJoint;
-  class SpeedSensor;
-  class Spring;
-  class TwoAxisServo;
-}
-
-namespace lpzrobots {
+  class HingeJoint{
 
   struct AmosFourConf {
       /**
@@ -295,7 +283,7 @@ namespace lpzrobots {
 
   };
 
-  class AmosFour : public OdeRobot, public Inspectable {
+  class AmosFour{
     public:
 //      enum LegPos {
 //        L0, L1, L2, R0, R1, R2, LEG_POS_MAX
@@ -343,7 +331,7 @@ namespace lpzrobots {
       AmosFour(const OdeHandle& odeHandle, const OsgHandle& osgHandle, const AmosFourConf& conf = getDefaultConf(),
           const std::string& name = "AmosII robot");
 
-      virtual ~AmosFour();
+      virtual ~AmosFour() override;
 
       /**
        * updates the OSG nodes of the vehicle
@@ -374,12 +362,12 @@ namespace lpzrobots {
       /**
        * returns number of sensors
        */
-      virtual int getSensorNumberIntern();
+      virtual int getSensorNumberIntern() const;
 
       /**
        * returns number of motors
        */
-      virtual int getMotorNumberIntern();
+      virtual int getMotorNumberIntern() const;
 
       /**
        * this function is called in each timestep. It should perform
@@ -388,11 +376,11 @@ namespace lpzrobots {
        * @param globalData structure that contains global data from the
        *                   simulation environment
        */
-      virtual void doInternalStuff(const GlobalData& globalData);
+      virtual void explicit explicit doInternalStuff(const GlobalData& globalData);
 
-      virtual void sense(const GlobalData& globalData);
+      virtual void explicit explicit sense(const GlobalData& globalData);
 
-      virtual double getMassOfRobot();
+      virtual double getMassOfRobot() const;
 
       void setLegPosUsage(LegPos leg, LegPosUsage usage);
 

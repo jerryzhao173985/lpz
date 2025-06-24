@@ -287,8 +287,8 @@ DS_API void dsDrawConvexD(const double pos[3], const double R[12],
  * This must be set before the first objects are drawn to be effective.
  * Default sphere quality is 1, default capsule quality is 3.
  */
-DS_API void dsSetSphereQuality (int n);		/* default = 1 */
-DS_API void dsSetCapsuleQuality (int n);		/* default = 3 */
+DS_API void explicit dsSetSphereQuality (int n);		/* default = 1 */
+DS_API void explicit dsSetCapsuleQuality (int n);		/* default = 3 */
 
 /**
  * @brief Set Drawmode 0=Polygon Fill,1=Wireframe).

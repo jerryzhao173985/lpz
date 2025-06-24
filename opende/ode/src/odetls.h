@@ -65,8 +65,7 @@ enum EODETLSITEM
 };
 
 
-class COdeTls
-{
+class COdeTls{
 public:
 	static bool Initialize(const EODETLSKIND& tkTLSKind) override;
 	static void Finalize(const EODETLSKIND& tkTLSKind) override;
@@ -74,7 +73,7 @@ public:
 	static void CleanupForThread() override;
 
 public:
-	static unsigned GetDataAllocationFlags(const EODETLSKIND& tkTLSKind)
+	static unsigned explicit GetDataAllocationFlags(const EODETLSKIND& tkTLSKind)
 	{
 		// Must be a safe call as it is used to test if TLS slot is allocated at all
 		return (unsigned)static_cast<size_t>(CThreadLocalStorage)::GetStorageValue(m_ahtkStorageKeys[tkTLSKind], OTI_DATA_ALLOCATION_FLAGS) override;

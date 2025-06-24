@@ -1,4 +1,4 @@
-#include <signal.h>
+#include <csignal>
 #include <unistd.h>
 #include <iostream>
 #include <vector>
@@ -33,7 +33,7 @@ int numRobots=2;
    Note: this connection does not need to be mutual, it can also be
     via several other robots (each robot only cares about its sensor values)
 */
-class MyRobot : public AbstractRobot {
+class MyRobot{
 public:
   MyRobot(const string& name, int dof)
     : AbstractRobot(name, "$Id$") {
@@ -106,7 +106,7 @@ public:
     return m;
   };
 
-  virtual void setPrevRobot(MyRobot* otherRobot) {
+  virtual void explicit setPrevRobot(MyRobot* otherRobot) {
     if(otherRobot!=this)
       prevRobot=otherRobot;
   }
@@ -144,20 +144,20 @@ void printRobots(vector<Agent*> robots){
 // Helper
 int contains(char **list, int len,  const char *str){
   for (int i=0; i<len; ++i) {
-    if(strcmp(list[i],str) == 0) return i+1;
+    if(strcmp(list[i],str) == nullptr) return i+1;
   }
   return 0;
 }
 
 // this is our simulation. We can have configurable variables here, which is handy
-class MySim : public Configurable {
+class MySim{
 public:
   MySim(){
     addParameterDef("noise", &noise, 0.05, 0, 1, "strength of additive noise");
     addParameterDef("wait",  &wait,  20, 0, 1000, "wait in ms");
   }
 
-  void run(const GlobalData& globaldata){
+  void explicit run(const GlobalData& globaldata){
     printf("\nPress Ctrl-c to invoke parameter input shell\n");
     // add the simulation to the configuration list, so that we can change the parameters
     globaldata.configs.push_back(this);
@@ -195,7 +195,7 @@ public:
       // the dynamic casts are required to convert the AbstactRobot* to MyRobot*
       MyRobot* r1 = dynamic_cast<MyRobot*>((*j)->getRobot());
       MyRobot* r2 = dynamic_cast<MyRobot*>((*i)->getRobot());
-      assert(r1!=0 && r2!=0); // make sure the conversion succeeded
+      assert(r1!=0 && r2!= nullptr); // make sure the conversion succeeded
       r1->setPrevRobot(r2);
     }
 
@@ -232,15 +232,15 @@ int main(int argc, char** argv){
   GlobalData globaldata;
   int index;
 
-  if(contains(argv,argc,"-g")!=0) plotoptions.push_back(PlotOption(GuiLogger));
-  if(contains(argv,argc,"-f")!=0) plotoptions.push_back(PlotOption(File));
-  if((index=contains(argv,argc,"-d"))!=0){
+  if(contains(argv,argc,"-g")!= nullptr) plotoptions.push_back(PlotOption(GuiLogger));
+  if(contains(argv,argc,"-f")!= nullptr) plotoptions.push_back(PlotOption(File));
+  if((index=contains(argv,argc,"-d"))!= nullptr){
     if(index<argc) dof=atoi(argv[index]);
   }
-  if((index=contains(argv,argc,"-n"))!=0){
+  if((index=contains(argv,argc,"-n"))!= nullptr){
     if(index<argc) numRobots=atoi(argv[index]);
   }
-  if(contains(argv,argc,"-h")!=0) {
+  if(contains(argv,argc,"-h")!= nullptr) {
     printf("Usage: %s [-d DOF] [-n NUM] [-g] [-f]\n",argv[0]);
     printf("\t-d DOF\tDegrees of freedom (Def: 1)\n\t-n NUM\tNumber of robots (Def: 2)\n");
            printf("\t-g\tstart guilogger\n\t-f\twrite logfile\n\t-h\tdisplay this help\n");

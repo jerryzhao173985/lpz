@@ -27,17 +27,17 @@
 #include <cmath>
 #include <selforg/controller_misc.h>
 
-double inline sqr(double x) {
+inline double sqr(double x) {
   return x * x;
 }
 
 /// neuron transfer function
-double inline g(double z) {
+inline double g(double z) {
   return tanh(z);
 };
 
 /// first dervative
-double inline g_s(double z) {
+inline double g_s(double z) {
   double k = tanh(z);
   return 1.025 - k * k;
   //  return 1/((1+0.5 * z*z)*(1+0.5 * z*z));    // softer
@@ -45,12 +45,12 @@ double inline g_s(double z) {
 };
 
 /// first dervative with smoothing for large z
-double inline g_derivative(double z) {
+inline double g_derivative(double z) {
   return 1 / ((1 + 0.5 * z * z) * (1 + 0.5 * z * z));
 };
 
 /// inverse of the first derivative
-double inline g_s_inv(double z) {
+inline double g_s_inv(double z) {
   double k = tanh(z);
   return 1 / (1.025 - k * k);
   // return 1+z*z; // softer
@@ -118,7 +118,7 @@ double inline g_ss_div_s_expand2(double z, double xsi) {
 }
 
 /// squashing function (-0.1 to 0.1), to protect against to large weight updates
-double inline squash(double z) {
+inline double squash(double z) {
   return clip(z, -0.1, 0.1);
   // return 0.1 * tanh(10.0 * z);
 };

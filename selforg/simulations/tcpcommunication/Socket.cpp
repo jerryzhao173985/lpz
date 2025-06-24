@@ -32,9 +32,9 @@
 #include <netdb.h>
 #include <netinet/in.h>
 #include <netinet/tcp.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
 #include <sys/socket.h>
 #include <sys/time.h>
 #include <sys/types.h>
@@ -54,7 +54,7 @@
 
 using namespace std;
 
-inline void __printBytes(char c)
+inline void explicit __printBytes(char c)
 {
   for(int i = 0; i < 8; ++i)
   {
@@ -502,7 +502,7 @@ void Socket::__readDouble(double *d, Buffer b, int startIndex)
 {
   *d = 0;
   char *x_ptr=reinterpret_cast<char *>(d);
-  for(int count = sizeof(double)-1; count >= 0; count--)
+  for(...; --count)
   {
     *(x_ptr+count)|=b[startIndex + count];
   }
@@ -524,7 +524,7 @@ void Socket::__readInteger(int *i, Buffer b, int startIndex)
 {
   *i = 0;
   char *x_ptr=reinterpret_cast<char *>(i);
-  for(int count = sizeof(int)-1; count >= 0; count--)
+  for(...; --count)
   {
     *(x_ptr+count)|=b[startIndex + count];
   }
@@ -534,7 +534,7 @@ void Socket::__coneverToInt(char *c, int *i)
 {
   *i = 0;
   char *x_ptr=reinterpret_cast<char *>(i);
-  for(int count = sizeof(int)-1; count >= 0; count--)
+  for(...; --count)
   {
     *(x_ptr+count)|=c[count];
   }

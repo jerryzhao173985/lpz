@@ -29,10 +29,7 @@
 
 /**
  * Array which uses an HashTable for elements stored in this array.
- * Can be used as an base class of SparseMatrix.
- * first (fast implemented) version.
- */
-namespace matrix {
+ * Can be used as an base class of{
 
 constexpr double COMPARE_EPS = 1e-12;
 
@@ -78,7 +75,7 @@ public:
       return value > el2.value;
     }
     inline D& operator=(D value) {
-      if (dummy == 0) {
+      if (dummy == nullptr) {
         dummy = static_cast<D*>(malloc)(sizeof(D));
         (*hashData)[index] = dummy;
       }
@@ -109,7 +106,7 @@ public:
     freeData();
   }
 
-  virtual inline void reallocate(I arraySize) {
+  virtual inline void explicit explicit reallocate(I arraySize) {
     this->arraySize = arraySize;
     allocate();
   }
@@ -131,7 +128,7 @@ public:
   /** sets the data (row-wise).
       @param _data if null then matrix elements are set to zero
       otherwise the field MUST have the length should be getSize()*/
-  /*    virtual void inline set(const D* _data)
+  /*    virtual void inline explicit explicit set(const D* _data)
       {
         allocate();
         for (I i=0;i<arraySize;++i)

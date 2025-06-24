@@ -28,15 +28,7 @@
 #define ELITESELECTSTRATEGY_H_
 
 //forward declaration
-class Generation;
-
-//ga_tools includes
-#include "ISelectStrategy.h"
-
-/**
- * This class makes a elite select and bring only the best individual in the next generation.
- */
-class EliteSelectStrategy :public ISelectStrategy {
+class Generation{
 public:
 	/**
 	 * default constructor

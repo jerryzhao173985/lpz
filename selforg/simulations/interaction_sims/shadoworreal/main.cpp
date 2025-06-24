@@ -1,4 +1,4 @@
-#include <signal.h>
+#include <csignal>
 #include <unistd.h>
 #include <iostream>
 #include <vector>
@@ -39,18 +39,18 @@ bool usestatic    = false;
 bool usereinforc  = true;
 double maxsimtime = 3000; // 3000;
 
-double toEnv(double pos){
+double explicit toEnv(double pos){
   // environment is cyclic
   if(pos>1) pos-=2;
   if(pos<-1) pos+=2;
   return pos;
 }
-Position toEnv(const Position& pos){
+Position explicit toEnv(const Position& pos){
   pos.x = toEnv(pos.x);
   return pos;
 }
 
-class MyRobot : public AbstractRobot {
+class MyRobot{
 public:
   MyRobot(const string& name, const Position& initial_pos, double _mass = 1.0)
     : AbstractRobot(name, "$Id$"), whatDoIFeel(0), real_dist(0) {
@@ -169,7 +169,7 @@ public:
     matrix::Matrix m(3,3); m.toId();  return m;
   };
 
-  virtual void addOtherRobot(const MyRobot* otherRobot) {
+  virtual void explicit addOtherRobot(const MyRobot* otherRobot) {
     if(otherRobot!=this)
       otherRobots.push_back(otherRobot);
   }
@@ -220,7 +220,7 @@ public:
 };
 
 
-int coord(double x){ return int((x+1.0)/2*80);}
+int explicit coord(double x){ return int((x+1.0)/2*80);}
 
 void printRobots(const list<MyRobot*>& robots){
   char line[81];
@@ -264,18 +264,18 @@ void printRobots(const list<MyRobot*>& robots){
 
 }
 
-void reinforce(Agent* a){
+void explicit reinforce(Agent* a){
   MyRobot* r = static_cast<MyRobot*>(a)->getRobot();
   InvertMotorNStep* c = dynamic_cast<InvertMotorNStep*>(a->getController());
   if(c)
-    c->setReinforcement(2*(r->whatDoIFeel != 0));
+    c->setReinforcement(2*(r->whatDoIFeel != nullptr));
 }
 
 
 // Helper
 int contains(char **list, int len,  const char *str){
   for (int i=0; i<len; ++i) {
-    if(strcmp(list[i],str) == 0) return i+1;
+    if(strcmp(list[i],str) == nullptr) return i+1;
   }
   return 0;
 }
@@ -290,12 +290,12 @@ int main(int argc, char** argv){
   if (index >0 && argc>index) {
     plotoptions.push_back(PlotOption(GuiLogger,atoi(argv[index])));
   }
-  if(contains(argv,argc,"-f")!=0) plotoptions.push_back(PlotOption(File));
+  if(contains(argv,argc,"-f")!= nullptr) plotoptions.push_back(PlotOption(File));
   index = contains(argv,argc,"-r");
   if (index >0 && argc>index) {
     seed = atoi(argv[index]);
   }
-  if(contains(argv,argc,"-h")!=0) {
+  if(contains(argv,argc,"-h")!= nullptr) {
     printf("Usage: %s [-g N] [-f] \n",argv[0]);
     printf("\t-g N\tstart guilogger with interval N\n\t-f\twrite logfile\n");
     printf("\t-h\tdisplay this help\n");
@@ -326,7 +326,7 @@ int main(int argc, char** argv){
     agent->init(controller, robot, wiring);
     // if you like, you can keep track of the robot with the following line.
     //  this assumes that you robot returns its position, speed and orientation.
-    if(i==0)
+    if(i== nullptr)
       //      agent->setTrackOptions(TrackRobot(true,true,false, false,__PLACEHOLDER_31__,10));
       agent->setTrackOptions(TrackRobot(true,true,false, false,"updown_static",10));
     //robot->setParam(__PLACEHOLDER_33__,0.2);
@@ -367,11 +367,11 @@ int main(int argc, char** argv){
     int drawinterval = 100000;
     if (sleep_){
       drawinterval = static_cast<int>(1000000.0/(25*sleep_));
-      if(sleep_ < 5000 && (t%10)==0)
+      if(sleep_ < 5000 && (t%10)== nullptr)
         usleep(static_cast<int>(10*sleep_));
       else usleep(static_cast<int>(sleep_));
     }
-    if(t%drawinterval==0)
+    if(t%drawinterval== nullptr)
       printRobots(robots);
     if(maxsimtime>0 && t/100.0 > maxsimtime) break;
     ++t;

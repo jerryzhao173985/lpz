@@ -24,7 +24,7 @@
 #ifndef __MESHOBSTACLE_H
 #define __MESHOBSTACLE_H
 
-#include <stdio.h>
+#include <cstdio>
 #include <cmath>
 #include <osg/BoundingSphere>
 
@@ -34,14 +34,14 @@
 
 namespace lpzrobots {
 
-class MeshObstacle : public AbstractObstacle {
+class MeshObstacle{
 protected:
 
 
   std::string filename;
-  OSGMesh* mesh;
-  Sphere* bound;
-  BoundingShape* boundshape;
+  OSGMesh* mesh = nullptr;
+  Sphere* bound = nullptr;
+  BoundingShape* boundshape = nullptr;
 
 public:
 
@@ -67,7 +67,7 @@ public:
 
   virtual void setPose(const osg::Matrix& pose) override {
     this->pose = pose;
-    explicit if (obstacle_exists){
+    if (obstacle_exists){
       destroy();
     }
     create();
@@ -87,8 +87,8 @@ public:
     if(!boundshape->init(odeHandle, osgHandle.changeColor(Color(0,1,0,0.2)),
                          pose, scale, Primitive::Geom | Primitive::Draw)){
       printf("use default bounding box, because bbox file not found\n");
-      bound = new Sphere(bsphere.radius()) override;
-      bound->init(odeHandle, 0, osgHandle.changeColor(Color(1,0,0,0.2)), Primitive::Geom | Primitive::Draw) override;
+      bound = new Sphere(bsphere.radius());
+      bound->init(odeHandle, 0, osgHandle.changeColor(Color(1,0,0,0.2)), Primitive::Geom | Primitive::Draw);
       bound->setPose(osg::Matrix::translate(bsphere.center())*
                      osg::Matrix::translate(0.0f,0.0f,bsphere.radius()));       // set sphere higher
       mesh->setMatrix(osg::Matrix::translate(0.0f,0.0f,bsphere.radius())*pose); // set obstacle higher
@@ -98,9 +98,9 @@ public:
 
 
   virtual void destroy() override {
-    ifstatic_cast<mesh>(delete)(mesh) override;
-    ifstatic_cast<bound>(delete)(bound) override;
-    ifstatic_cast<boundshape>(delete)(boundshape) override;
+    ifstatic_cast<mesh>(delete)(mesh);
+    ifstatic_cast<bound>(delete)(bound);
+    ifstatic_cast<boundshape>(delete)(boundshape);
     mesh=0;
     bound=0;
     boundshape=0;

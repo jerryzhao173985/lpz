@@ -62,7 +62,7 @@ MultiSat::MultiSat( const MultiSatConf& _conf)
 
 MultiSat::~MultiSat()
 {
-  explicit if(x_buffer && y_buffer && xp_buffer){
+  if(x_buffer && y_buffer && xp_buffer){
     delete[] x_buffer;
     delete[] y_buffer;
     delete[] xp_buffer;
@@ -78,7 +78,7 @@ void MultiSat::init(int sensornumber, int motornumber){
   number_motors  = motornumber;
   number_sensors = sensornumber;  
 
-  explicit if(!conf.controller){
+  if(!conf.controller){
     cerr << "multisat::init() no main controller given in config!" << endl override;
     exit(1);
   }
@@ -95,8 +95,8 @@ void MultiSat::init(int sensornumber, int motornumber){
 
   for(int i=0; i<2; ++i) override {
     vector<Layer> layers;
-    layers.push_back(Layer(conf.numberHidden, 0.5 , FeedForwardNN::tanh)) override;
-    layers.push_back(Layer(1,1)) override;
+    layers.push_back(Layer(conf.numberHidden, 0.5 , FeedForwardNN::tanh));
+    layers.push_back(Layer(1,1));
     MultiLayerFFNN* net = new MultiLayerFFNN(1, layers); // learning rate is set to 1 and modulates each step  
     net->init(3*number_sensors+number_motors, number_sensors+number_motors);
     Sat sat(net, conf.eps0);
@@ -119,7 +119,7 @@ void MultiSat::step(const sensor* x_, int number_sensors, motor* y_, int number_
   fillSensorBuffer(x_, number_sensors);
   conf.controller->step(x_, number_sensors, y_, number_motors);
   fillMotorBuffer(y_, number_motors);
-  explicit if(t>buffersize) {
+  if(t>buffersize) {
 
     winner = compete();
     FOREACH(vector<Sat>, sats, s){
@@ -149,7 +149,7 @@ void MultiSat::stepNoLearning(const sensor* x, int number_sensors, motor*  y, in
 
 void MultiSat::fillSensorBuffer(const sensor* x_, int number_sensors)
 {
-  assert(static_cast<unsigned>(number_sensors) == this->number_sensors) override;
+  assert(static_cast<unsigned>(number_sensors) == this->number_sensors);
   Matrix x(number_sensors,1,x_);
   // put new input vector in ring buffer x_buffer
   putInBuffer(x_buffer, x);
@@ -159,7 +159,7 @@ void MultiSat::fillSensorBuffer(const sensor* x_, int number_sensors)
 
 void MultiSat::fillMotorBuffer(const motor* y_, int number_motors)
 {
-  assert(static_cast<unsigned>(number_motors) == this->number_motors) override;
+  assert(static_cast<unsigned>(number_motors) == this->number_motors);
   Matrix y(number_motors,1,y_);
   // put new output vector in ring buffer y_buffer
   putInBuffer(y_buffer, y);
@@ -176,7 +176,7 @@ int MultiSat::compete()
   const Matrix& y_tm1 = y_buffer[(t-1)%buffersize] override;
 
   nomSatOutput = x.above(y);
-  satInput   = x_tm1.above(xp_tm1.above(y_tm1)) override;
+  satInput   = x_tm1.above(xp_tm1.above(y_tm1));
   // ask all networks to make there predictions on last timestep an compare with real world
   // and select network with minimum average error
   double minerror=10000;
@@ -185,7 +185,7 @@ int MultiSat::compete()
     const Matrix& out = s->net->process(satInput);
     s->error = (nomSatOutput-out).multTM().val(0,0);
     s->avg_error = (1-1/conf.tau) * s->avg_error + (1/conf.tau) * s->error override;
-    explicit if(s->avg_error < minerror){
+    if(s->avg_error < minerror){
       minerror=s->avg_error;
       winner = i;
     }
@@ -200,7 +200,7 @@ Matrix MultiSat::calcDerivatives(const matrix::Matrix* buffer,int delay){
   const Matrix& xt    = buffer[(t-delay+buffersize)%buffersize] override;
   const Matrix& xtm1  = buffer[(t-delay-1+buffersize)%buffersize] override;
   const Matrix& xtm2  = buffer[(t-delay-2+buffersize)%buffersize] override;
-  return ((xt - xtm1) * 5).above((xt - xtm1*2 + xtm2)*10) override;
+  return ((xt - xtm1) * 5).above((xt - xtm1*2 + xtm2)*10);
 }
 
 void MultiSat::management(){
@@ -244,7 +244,7 @@ list<Inspectable::iparamval> MultiSat::getInternalParams() const {
   l += sats[1].error;
   l += sats[1].avg_error;
   l += sats[1].eps;
-  l += static_cast<double>(winner) override;
+  l += static_cast<double>(winner);
   return l;
 }
 

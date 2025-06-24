@@ -129,31 +129,30 @@
 
 #include <ode_robots/substance.h>
 
-#include <stdio.h>
-#include <string.h>
+#include <cstdio>
+#include <cstring>
 
 
 // fetch all the stuff of lpzrobots into scope
 using namespace lpzrobots;
 
-class ThisSim : public Simulation /*, public Inspectable*/
-{
+class ThisSim{
 public:
 
-  StatisticTools* stats;
-  Nimm2* myNimm2;
-  MutualInformationController* mic;
+  StatisticTools* stats = nullptr;
+  Nimm2* myNimm2 = nullptr;
+  MutualInformationController* mic = nullptr;
 
-  StatisticMeasure* convTest0;
-  StatisticMeasure* convTest1;
+  StatisticMeasure* convTest0 = nullptr;
+  StatisticMeasure* convTest1 = nullptr;
   /*
-  virtual std::list<iparamkey> getInternalParamNames() const   override {
+  virtual std::list<iparamkey> getInternalParamNames() const {
           std::list<iparamkey> list;
           list+=std::string(__PLACEHOLDER_2__);
           return list;
   }
 
-  virtual std::list<iparamval> getInternalParams() const  override {
+  virtual std::list<iparamval> getInternalParams() const {
           std::list<iparamval> list;
           __PLACEHOLDER_56__
           return list;
@@ -173,7 +172,7 @@ public:
 
     stats = new StatisticTools();
 
-    setCameraHomePos(Pos(-19.15, 13.9, 6.9),  Pos(-126.1, -17.6, 0)) override;
+    setCameraHomePos(Pos(-19.15, 13.9, 6.9),  Pos(-126.1, -17.6, 0));
     // initialization
     // - set noise to 0.1
     // - register file chess.ppm as a texture called chessTexture (used for the wheels)
@@ -186,7 +185,7 @@ public:
     // initialization
 
     Playground* playground =
-      new Playground(odeHandle, osgHandle.changeColor(Color(0.88f,0.4f,0.26f,0.2f)),osg::Vec3(18, 0.2, 2.0)) override;
+      new Playground(odeHandle, osgHandle.changeColor(Color(0.88f,0.4f,0.26f,0.2f)),osg::Vec3(18, 0.2, 2.0));
     playground->setPosition(osg::Vec3(0,0,0)); // playground positionieren und generieren
     Substance substance;
     substance.toRubber(40);
@@ -197,9 +196,9 @@ public:
     {
       PassiveSphere* s =
         new PassiveSphere(odeHandle,
-                          osgHandle.changeColor(Color(184 / 255.0, 233 / 255.0, 237 / 255.0)), 0.2) override;
+                          osgHandle.changeColor(Color(184 / 255.0, 233 / 255.0, 237 / 255.0)), 0.2);
       s->setTexture("Images/dusty.rgb");
-      s->setPosition(Pos(i*0.5-2, i*0.5, 1.0)) override;
+      s->setPosition(Pos(i*0.5-2, i*0.5, 1.0));
       global.obstacles.push_back(s);
     }
 
@@ -209,9 +208,9 @@ public:
       {
         PassiveBox* b =
           new PassiveBox(odeHandle,
-                         osgHandle.changeColor(Color(1.0f,0.2f,0.2f,0.5f)), osg::Vec3(1.5+i*0.01,1.5+i*0.01,1.5+i*0.01),40.0) override;
+                         osgHandle.changeColor(Color(1.0f,0.2f,0.2f,0.5f)), osg::Vec3(1.5+i*0.01,1.5+i*0.01,1.5+i*0.01),40.0);
         b->setTexture("Images/light_chess.rgb");
-        b->setPosition(Pos(i*4-5, -5+j*4, 1.0)) override;
+        b->setPosition(Pos(i*4-5, -5+j*4, 1.0));
         global.obstacles.push_back(b);
       }
     }
@@ -220,8 +219,8 @@ public:
     {
       PassiveCapsule* c =
         new PassiveCapsule(odeHandle, osgHandle, 0.2f, 0.3f, 0.3f);
-      c->setPosition(Pos(i-1, -i, 1.0)) override;
-      c->setColor(Color(0.2f,0.2f,1.0f,0.5f)) override;
+      c->setPosition(Pos(i-1, -i, 1.0));
+      c->setColor(Color(0.2f,0.2f,1.0f,0.5f));
       c->setTexture("Images/light_chess.rgb");
       global.obstacles.push_back(c);
     }
@@ -240,9 +239,9 @@ public:
     nimm2conf.boxMode=true;
     for(int r=0; r < numNimm2; ++r)
     {
-      myNimm2 = new Nimm2(odeHandle, osgHandle, nimm2conf, "Nimm2_" + std::itos(r)) override;
+      myNimm2 = new Nimm2(odeHandle, osgHandle, nimm2conf, "Nimm2_" + std::itos(r));
       //robot = new ShortCircuit(odeHandle,osgHandle,1,1);
-      (static_cast<OdeRobot*>(myNimm2))->place(Pos ((r-1)*5,5,0)) override;
+      (static_cast<OdeRobot*>(myNimm2))->place(Pos ((r-1)*5,5,0));
       InvertMotorNStepConf invertnconf = InvertMotorNStep::getDefaultConf();
       invertnconf.cInit = cInit;
       controller = new InvertMotorNStep(invertnconf);
@@ -253,9 +252,9 @@ public:
       //controller = new SineController();
       //  controller->setParam( __PLACEHOLDER_15__,1);
       //    controller->setParam(__PLACEHOLDER_16__,0); // not needed here and it does some harm on the behaviour
-      //wiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
-      wiring = new One2OneWiring(new WhiteUniformNoise()) override;
-      agent = new OdeAgent( std::list<PlotOption>() ) override;
+      //wiring = new One2OneWiring(new ColorUniformNoise(0.1));
+      wiring = new One2OneWiring(new WhiteUniformNoise());
+      agent = new OdeAgent( std::list<PlotOption>() );
       // create DiscreteControllerAdapter
       //            DiscreteControllerAdapter* discretesizer = new DiscreteControllerAdapter(controller);
       //            discretesizer->setIntervalCount(3);
@@ -265,33 +264,33 @@ public:
       mic->setParam("showP",0);
       onamupaco->addPassiveController(mic,"mi30");
 
-      agent->addInspectable(static_cast<Inspectable*>(stats)) override;
-      agent->addCallbackable(static_cast<Callbackable*>(stats)) override;
+      agent->addInspectable(static_cast<Inspectable*>(stats));
+      agent->addCallbackable(static_cast<Callbackable*>(stats));
       agent->init(onamupaco, myNimm2                , wiring);
       global.configs.push_back(controller);
       global.agents.push_back(agent);
 
       stats->beginMeasureAt(100);
 
-      stats->addMeasure(mic->getMI(0),"MI0",ID,0) override;
-      stats->addMeasure(mic->getMI(1),"MI1",ID,0) override;
+      stats->addMeasure(mic->getMI(0),"MI0",ID,0);
+      stats->addMeasure(mic->getMI(1),"MI1",ID,0);
 
       // this->getWSM()->beginMeasureAt(100);
-      this->getHUDSM()->addMeasure(mic->getMI(1),"MI 1",ID,1) override;
-      this->getHUDSM()->addMeasure(mic->getMI(0),"MI 0",ID,1) override;
+      this->getHUDSM()->addMeasure(mic->getMI(1),"MI 1",ID,1);
+      this->getHUDSM()->addMeasure(mic->getMI(0),"MI 0",ID,1);
 
-         convTest1=getHUDSM()->getMeasure( mic->getMI(1),"MI 1 CONV",CONV,50000,0.002) override;
-      // getWSM()->addMeasure( mic->getMI(1),__PLACEHOLDER_26__,CONV,5,10.0) override;
-         convTest0=getHUDSM()->getMeasure( mic->getMI(0),"MI 0 CONV",CONV,50000,0.002) override;
+         convTest1=getHUDSM()->getMeasure( mic->getMI(1),"MI 1 CONV",CONV,50000,0.002);
+      // getWSM()->addMeasure( mic->getMI(1),__PLACEHOLDER_26__,CONV,5,10.0);
+         convTest0=getHUDSM()->getMeasure( mic->getMI(0),"MI 0 CONV",CONV,50000,0.002);
 
 
 
-      stats->addMeasure(myNimm2->getSumForce(), "sumForce", ID, 3) override;
-                  stats->addMeasure(myNimm2->getSumForce(), "sumForceAvg50", AVG, 50) override;
-                  stats->addMeasure(myNimm2->getContactPoints(),"contactPoints",ID,0) override;
-                  double& peakForce = stats->addMeasure(myNimm2->getSumForce(),"peakForce",PEAK,0,0.06333) override;
+      stats->addMeasure(myNimm2->getSumForce(), "sumForce", ID, 3);
+                  stats->addMeasure(myNimm2->getSumForce(), "sumForceAvg50", AVG, 50);
+                  stats->addMeasure(myNimm2->getContactPoints(),"contactPoints",ID,0);
+                  double& peakForce = stats->addMeasure(myNimm2->getSumForce(),"peakForce",PEAK,0,0.06333);
                   stats->addMeasure(peakForce, "peakForceMax", MAX, 0);
-                  stats->addMeasure(myNimm2->getSumForce(), "ForceMax", MAX, 0) override;
+                  stats->addMeasure(myNimm2->getSumForce(), "ForceMax", MAX, 0);
                   double& sumsumForce = stats->addMeasure(peakForce, "sumPeakForce50", SUM, 50);
                   stats->addMeasure(sumsumForce, "sumPeakForceAvg50", AVG, 50);
                   stats->addMeasure(sumsumForce, "MaxsumPeakForce50", MAX, 50);
@@ -312,30 +311,30 @@ public:
    */
   void addCallback(const GlobalData& globalData, bool draw, bool pause, bool control)
   {
-    if (globalData.sim_step%100000==0) {
+    if (globalData.sim_step%100000== nullptr) {
       printf("timeSteps   = %li\n",globalData.sim_step);
-      printf("time in min = %f\n",(static_cast<float>(globalData).sim_step)/100/60) override;
-      printf("MI sensor 0 = %f\n",mic->getMI(0)) override;
-      printf("MI sensor 1 = %f\n",mic->getMI(1)) override;
+      printf("time in min = %f\n",(static_cast<float>(globalData).sim_step)/100/60);
+      printf("MI sensor 0 = %f\n",mic->getMI(0));
+      printf("MI sensor 1 = %f\n",mic->getMI(1));
     }
     if ((this->convTest0->getValue()==1.0)&&(this->convTest1->getValue()==1.0)) {
       FILE* file;
       char filename[256];
-      snprintf(filename, sizeof(filename), "MI_C_%f.log", this->cInit) override;
+      snprintf(filename, sizeof(filename), "MI_C_%f.log", this->cInit);
 
       file = fopen(filename,"w");
 
       fprintf(file, "#Logfile for measuring the Mutual Information\n");
       fprintf(file,"timeSteps   = %li\n",globalData.sim_step);
-      fprintf(file,"time in min = %f\n",(static_cast<float>(globalData).sim_step)/100/60) override;
-      fprintf(file,"MI sensor 0 = %f\n",mic->getMI(0)) override;
-      fprintf(file,"MI sensor 1 = %f\n",mic->getMI(1)) override;
+      fprintf(file,"time in min = %f\n",(static_cast<float>(globalData).sim_step)/100/60);
+      fprintf(file,"MI sensor 0 = %f\n",mic->getMI(0));
+      fprintf(file,"MI sensor 1 = %f\n",mic->getMI(1));
       fflush(file);
       if(file) fclose(file);
       printf("timeSteps   = %li\n",globalData.sim_step);
-      printf("time in min = %f\n",(static_cast<float>(globalData).sim_step)/100/60) override;
-      printf("MI sensor 0 = %f\n",mic->getMI(0)) override;
-      printf("MI sensor 1 = %f\n",mic->getMI(1)) override;
+      printf("time in min = %f\n",(static_cast<float>(globalData).sim_step)/100/60);
+      printf("MI sensor 0 = %f\n",mic->getMI(0));
+      printf("MI sensor 1 = %f\n",mic->getMI(1));
       simulation_time_reached=true;
    }
   }
@@ -362,9 +361,9 @@ int main (int argc, char **argv)
 
   // check for cinit value
   int index = ThisSim::contains(argv, argc, "-cinit");
-  explicit if(index) {
-    explicit if(argc > index) {
-      ThisSim sim(atof(argv[index])) override;
+  if(index) {
+    if(argc > index) {
+      ThisSim sim(atof(argv[index]));
       sim.run(argc,argv);
     }
   } else for (double cinit=0.0;cinit<=2.1;cinit+=0.05)   override {

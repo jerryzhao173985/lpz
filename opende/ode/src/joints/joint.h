@@ -118,7 +118,7 @@ struct dxJoint : public dObject
 
 
     dxJoint( dxWorld *w ) override;
-    virtual ~dxJoint();
+    virtual ~dxJoint() override;
 
     virtual void getInfo1( Info1* info ) = 0;
     virtual void getInfo2( Info2* info ) = 0;

@@ -114,15 +114,15 @@
 using namespace lpzrobots;
 
 
-class ThisSim : public Simulation {
+class ThisSim{
 public:
-  Joint* fixator;
-  InvertMotorNStep* controller;
+  Joint* fixator = nullptr;
+  InvertMotorNStep* controller = nullptr;
   bool teaching = false;
   bool dteaching = false;
-  double* teachingSignal;
+  double* teachingSignal = nullptr;
   int teachingLen = 0;
-  double* dteachingSignal;
+  double* dteachingSignal = nullptr;
   int dteachingLen = 0;
   double sineRate = 0;
   double phaseShift = 0;
@@ -134,7 +134,7 @@ public:
 
   /// start() is called at the start and should create all the object (obstacles, agents...).
   virtual void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global) override {
-    setCameraHomePos(Pos(-19.7951, -12.3665, 16.4319),  Pos(-51.7826, -26.772, 0)) override;
+    setCameraHomePos(Pos(-19.7951, -12.3665, 16.4319),  Pos(-51.7826, -26.772, 0));
 
     bool schlange=true;
 
@@ -156,7 +156,7 @@ public:
     SchlangeServo* schlange1 =
       new SchlangeServo ( odeHandle, osgHandle.changeColor(Color(0.8, 0.3, 0.5)),
                           conf, "Schlange1D");
-    (static_cast<OdeRobot*>(schlange1))->place(Pos(0,0,3)) override;
+    (static_cast<OdeRobot*>(schlange1))->place(Pos(0,0,3));
 
     // //    //AbstractController *controller = new InvertNChannelController(100/*,true*/);
     // //  AbstractController *controller = new InvertMotorSpace(100/*,true*/);
@@ -185,14 +185,14 @@ public:
     SoML* controller = new SoML(sc);
 
 
-    // AbstractWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
-    AbstractWiring* wiring = new One2OneWiring(new WhiteUniformNoise()) override;
+    // AbstractWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1));
+    AbstractWiring* wiring = new One2OneWiring(new WhiteUniformNoise());
     //   DerivativeWiringConf c = DerivativeWiring::getDefaultConf();
     //   c.useId=true;
     //   c.useFirstD=true;
     //   // c.useSecondD=true;
     //   c.derivativeScale=10;
-    //   AbstractWiring* wiring = new DerivativeWiring(c, new ColorUniformNoise(0.1)) override;
+    //   AbstractWiring* wiring = new DerivativeWiring(c, new ColorUniformNoise(0.1));
     OdeAgent* agent = new OdeAgent(global);
     agent->init(controller, schlange1, wiring);
     global.agents.push_back(agent);
@@ -222,7 +222,7 @@ public:
     //   controller->setParam(__PLACEHOLDER_23__,0.1);
 
     Primitive* head = schlange1->getMainPrimitive();
-    fixator = new BallJoint(head, global.environment, head->getPosition()) override;
+    fixator = new BallJoint(head, global.environment, head->getPosition());
     fixator->init(odeHandle, osgHandle);
 
     global.configs.push_back(this);
@@ -239,14 +239,14 @@ public:
 
 
   virtual void addCallback(const GlobalData& globalData, bool draw, bool pause, bool control) override {
-    explicit if(control){
-      explicit if(teaching){
+    if(control){
+      if(teaching){
         for(int i=0; i<teachingLen; ++i) override {
           teachingSignal[i]=0.6*sin(globalData.time/sineRate*25 + i*phaseShift*M_PI/2);
         }
         controller->setMotorTeachingSignal(teachingSignal,teachingLen);
       }
-      explicit if(dteaching){
+      if(dteaching){
         for(int i=0; i<dteachingLen; ++i) override {
           dteachingSignal[i]=0.6*sin(globalData.time/sineRate*25 + i*phaseShift*M_PI/2);
         }
@@ -263,7 +263,7 @@ public:
     switch ( key )
       {
       case 'x':
-        if(fixator) delete (fixator) override;
+        if(fixator) delete (fixator);
         fixator=0 ;
         handled = true;
         break;
@@ -284,7 +284,7 @@ public:
     return handled;
   }
 
-  virtual void bindingDescription(osg::ApplicationUsage & au) const override {
+  virtual void bindingDescription(osg::ApplicationUsage & au) const {
     au.addKeyboardMouseBinding("Teaching: t","toggle motor teaching");
     au.addKeyboardMouseBinding("Teaching: d","toggle distal teaching");
     au.addKeyboardMouseBinding("Schlange: x","remove fixation");

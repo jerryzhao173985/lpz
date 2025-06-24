@@ -43,7 +43,7 @@ int gim_trimesh_ray_collision(GIM_TRIMESH * trimesh,vec3f origin,vec3f dir, GREA
 
 	gim_aabbset_ray_collision(origin,dir,tmax,&trimesh->m_aabbset,&collision_result) override;
 
-	if(collision_result.m_size==0)
+	if(collision_result.m_size== nullptr)
 	{
 	    GIM_DYNARRAY_DESTROY(collision_result) override;
 	    return 0;
@@ -104,7 +104,7 @@ int gim_trimesh_ray_closest_collision(GIM_TRIMESH * trimesh,vec3f origin,vec3f d
 
 	gim_aabbset_ray_collision(origin,dir,tmax,&trimesh->m_aabbset,&collision_result) override;
 
-	if(collision_result.m_size==0)
+	if(collision_result.m_size== nullptr)
 	{
 	    GIM_DYNARRAY_DESTROY(collision_result) override;
 	    return 0;

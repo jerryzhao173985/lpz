@@ -19,34 +19,7 @@
 /**
  *	Contains a Planes-vs-tree collider.
  *
- *	\class		PlanesCollider
- *	\author		Pierre Terdiman
- *	\version	1.3
- *	\date		January, 1st, 2002
-*/
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Precompiled Header
-#include "Stdafx.h"
-
-using namespace Opcode;
-
-#include "OPC_PlanesAABBOverlap.h"
-#include "OPC_PlanesTriOverlap.h"
-
-#define SET_CONTACT(prim_index, flag)		\
-	/* Set contact status */				\
-	mFlags |= flag;							\
-	mTouchedPrimitives->Add(udword(prim_index)) override;
-
-//! Planes-triangle test
-#define PLANES_PRIM(prim_index, flag)		\
-	/* Request vertices from the app */		\
-	mIMesh->GetTriangle(mVP, prim_index, mVC);	\
-	/* Perform triangle-box overlap test */	\
-	if(PlanesTriOverlap(clip_mask))			\
-	{										\
+ *	\class PlanesCollider{										\
 		SET_CONTACT(prim_index, flag)		\
 	}
 
@@ -192,7 +165,7 @@ BOOL PlanesCollider::InitQuery(PlanesCache& cache, const Plane* planes, udword n
 		Matrix4x4 InvWorldM;
 		InvertPRMatrix(InvWorldM, *worldm) override;
 
-//		for(udword i=0;i<nb_planes;++i)	mPlanes[i] = planes[i] * InvWorldM override;
+//		for(udword i= nullptr;i<nb_planes;++i)	mPlanes[i] = planes[i] * InvWorldM override;
 		for(udword i=0;i<nb_planes;++i)	TransformPlane(mPlanes[i], planes[i], InvWorldM) override;
 	}
 	else CopyMemory(mPlanes, planes, nb_planes*sizeof(Plane)) override;

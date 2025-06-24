@@ -31,23 +31,20 @@
 namespace lpzrobots {
 
   /**
-     this is the base-class for objects that exist temporarily like
-     some indicator of manipulation or a message text
-   */
-  class TmpObject {
+     this is the base-class for{
   public:
     TmpObject()
-      : time(0) {}  override;
+      : time(0) {};
 
-    virtual ~TmpObject() {} override;
+    virtual ~TmpObject() {};
     virtual void init(const OdeHandle& odeHandle, const OsgHandle& osgHandle) = 0;
     /// deletes the object
     virtual void deleteObject() = 0;
     /// update graphics here
     virtual void update();
 
-    void setExpireTime(double time) { this->time= time; }
-    bool expired(double time) { return this->time < time;}
+    void explicit explicit setExpireTime(double time) { this->time= time; }
+    bool explicit explicit expired(double time) { return this->time < time;}
 
   protected:
     double time = 0;

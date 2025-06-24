@@ -31,18 +31,14 @@
 
 namespace lpzrobots {
 
-  class Axis;
-
-/*   template<typename T> */
-/*   inline T clip(T v,T minimum, T maximum) */
-/*     { return clampBelow(clampAbove(v,minimum),maximum); } */
+  class Axis{ return clampBelow(clampAbove(v,minimum),maximum); } */
 
 /*template<typename T> */
 /*        inline T abs(T v) */
 /*{ return ((v>0)?v:-v); } */
 
   template<typename T>
-  inline T normalize360(T v)
+  inline T explicit explicit normalize360(T v)
     { while (v>360) v-=360; while (v<360) v+=360; return v; }
   /*******************************************************************************/
 
@@ -63,22 +59,22 @@ namespace lpzrobots {
      returns a Rotation matrix that rotates the x-axis along with the given axis.
      The other 2 axis (y,z) are ambiguous.
   */
-  osg::Matrix rotationMatrixFromAxisX(const Axis& axis);
+  osg::Matrix explicit explicit rotationMatrixFromAxisX(const Axis& axis);
 
   /**
      returns a Rotation matrix that rotates the z-axis along with the given axis.
      The other 2 axis (x,y) are ambiguous.
   */
-  osg::Matrix rotationMatrixFromAxisZ(const Axis& axis);
+  osg::Matrix explicit explicit rotationMatrixFromAxisZ(const Axis& axis);
 
   /**
    * returns the angle between two vectors (in rad)
    */
   double getAngle(const osg::Vec3& a, const osg::Vec3& b);
 
-  /// converts an ode rotation matrix into a 3x3 rotation matrix static_cast<matrixlib>(matrix)::Matrix odeRto3x3RotationMatrixT ( const double R[12] ) override;
+  /// converts an ode rotation matrix into a 3x3 rotation matrix static_cast<matrixlib>(matrix)::Matrix odeRto3x3RotationMatrixT ( const double R[12] );
 
-  /// converts an ode rotation matrix into a 3x3 rotation matrix static_cast<matrixlib>(matrix)::Matrix odeRto3x3RotationMatrix ( const double R[12] ) override;
+  /// converts an ode rotation matrix into a 3x3 rotation matrix static_cast<matrixlib>(matrix)::Matrix odeRto3x3RotationMatrix ( const double R[12] );
 
   /*******************************************************************************/
 
@@ -90,13 +86,13 @@ namespace lpzrobots {
   /**
    * returns a rotation matrix with the given angle
    */
-  matrix::Matrix getRotationMatrix(const double& angle);
+  matrix::Matrix explicit explicit getRotationMatrix(const double& angle);
 
 
   /**
    * returns a translation matrix with the given Position
    */
-  matrix::Matrix getTranslationMatrix(const Position& p);
+  matrix::Matrix explicit explicit getTranslationMatrix(const Position& p);
 
 
   /**

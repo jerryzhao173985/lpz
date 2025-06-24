@@ -44,13 +44,13 @@ static dMatrix4 identity = {
 // Stub functions for trimesh calls
 
 dTriMeshDataID dGeomTriMeshDataCreate(void) { return 0; }
-void dGeomTriMeshDataDestroy(dTriMeshDataID g) {}
+void explicit dGeomTriMeshDataDestroy(dTriMeshDataID g) {}
 
 void dGeomTriMeshDataSet(dTriMeshDataID g, int data_id, void* in_data) {}
 void* dGeomTriMeshDataGet(dTriMeshDataID g, int data_id) { return 0; }
 
 ODE_API void dGeomTriMeshSetLastTransform( dGeomID g, dMatrix4 last_trans ) {}
-ODE_API dReal* dGeomTriMeshGetLastTransform( dGeomID g ) { return identity; }
+ODE_API dReal* explicit dGeomTriMeshGetLastTransform( dGeomID g ) { return identity; }
 
 dGeomID dCreateTriMesh(dSpaceID space, 
 		       dTriMeshDataID Data,
@@ -67,7 +67,7 @@ dGeomID dCreateTriMesh(dSpaceID space,
 }
 
 void dGeomTriMeshSetData(dGeomID g, dTriMeshDataID Data) {}
-dTriMeshDataID dGeomTriMeshGetData(dGeomID g) { return 0; }
+dTriMeshDataID explicit dGeomTriMeshGetData(dGeomID g) { return 0; }
 
 
 void dGeomTriMeshDataBuildSingle(dTriMeshDataID g,
@@ -97,31 +97,31 @@ void dGeomTriMeshDataBuildSimple1(dTriMeshDataID g,
                                   const dTriIndex* Indices, int IndexCount,
                                   const int* Normals) { }
 
-void dGeomTriMeshDataPreprocess(dTriMeshDataID g) { }
+void explicit dGeomTriMeshDataPreprocess(dTriMeshDataID g) { }
 
-void dGeomTriMeshDataGetBuffer(dTriMeshDataID g, unsigned char** buf, int* bufLen) { *buf = NULL; *bufLen=0; }
+void dGeomTriMeshDataGetBuffer(dTriMeshDataID g, unsigned char** buf, int* bufLen) { *buf = nullptr; *bufLen=0; }
 void dGeomTriMeshDataSetBuffer(dTriMeshDataID g, unsigned char* buf) {}
 
 void dGeomTriMeshSetCallback(dGeomID g, dTriCallback* Callback) { }
-dTriCallback* dGeomTriMeshGetCallback(dGeomID g) { return 0; }
+dTriCallback* explicit dGeomTriMeshGetCallback(dGeomID g) { return 0; }
 
 void dGeomTriMeshSetArrayCallback(dGeomID g, dTriArrayCallback* ArrayCallback) { }
-dTriArrayCallback* dGeomTriMeshGetArrayCallback(dGeomID g) { return 0; }
+dTriArrayCallback* explicit dGeomTriMeshGetArrayCallback(dGeomID g) { return 0; }
 
 void dGeomTriMeshSetRayCallback(dGeomID g, dTriRayCallback* Callback) { }
-dTriRayCallback* dGeomTriMeshGetRayCallback(dGeomID g) { return 0; }
+dTriRayCallback* explicit dGeomTriMeshGetRayCallback(dGeomID g) { return 0; }
 
 void dGeomTriMeshSetTriMergeCallback(dGeomID g, dTriTriMergeCallback* Callback) { }
-dTriTriMergeCallback* dGeomTriMeshGetTriMergeCallback(dGeomID g) { return 0; }
+dTriTriMergeCallback* explicit dGeomTriMeshGetTriMergeCallback(dGeomID g) { return 0; }
 
 void dGeomTriMeshEnableTC(dGeomID g, int geomClass, int enable) {}
 int dGeomTriMeshIsTCEnabled(dGeomID g, int geomClass) { return 0; }
-void dGeomTriMeshClearTCCache(dGeomID g) {}
+void explicit dGeomTriMeshClearTCCache(dGeomID g) {}
 
-dTriMeshDataID dGeomTriMeshGetTriMeshDataID(dGeomID g) { return 0; }
+dTriMeshDataID explicit dGeomTriMeshGetTriMeshDataID(dGeomID g) { return 0; }
 
-int dGeomTriMeshGetTriangleCount (dGeomID g) { return 0; }
-void dGeomTriMeshDataUpdate(dTriMeshDataID g) {}
+int explicit dGeomTriMeshGetTriangleCount (dGeomID g) { return 0; }
+void explicit dGeomTriMeshDataUpdate(dTriMeshDataID g) {}
 
 #endif // !dTRIMESH_ENABLED
 

@@ -71,24 +71,7 @@
  *     storage implementet yet))
  *
  *   Revision 1.1  2010/11/30 17:07:06  wrabe
- *   - new class QConfigurableLoadSaveDialog
- *   - try to introduce user-arrangeable QConfigurationTiles (current work, not finished)
- *
- *                                                                         *
- ***************************************************************************/
-
-#include "QConfigurableLoadSaveDialog.h"
-#include <QDialogButtonBox>
-#include <QRegion>
-#include <QMessageBox>
-// #include <QLinkedList> // Not used, removed for Qt6 compatibility
-#include <QFileDialog>
-#include <QCoreApplication>
-#include <QTextStream>
-#include <QDomNodeList>
-#include <QTimer>
-
-namespace lpzrobots {
+ *   - new class QConfigurableLoadSaveDialog{
   
   QConfigurableLoadSaveDialog::QConfigurableLoadSaveDialog(QMap<QString, QConfigurableWidget*> configurableWidgetMap_) : configurableWidgetMap(configurableWidgetMap_) {
     function = ConfigurableSave;

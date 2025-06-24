@@ -35,10 +35,7 @@
 
 
 // forward declarations
-class AbstractPipeReader;
-
-
-class AbstractRobotGUI : public QWidget {
+class AbstractPipeReader{
 
 Q_OBJECT
 
@@ -53,7 +50,7 @@ public slots:
   void closeGUI();
 
 protected:
-  AbstractPipeReader* pipe_reader;
+  AbstractPipeReader* pipe_reader = nullptr;
 
   virtual void initGui() = 0;
   virtual void linkChannels() = 0;

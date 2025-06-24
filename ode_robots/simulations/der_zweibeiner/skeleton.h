@@ -47,12 +47,7 @@
 
 namespace lpzrobots {
 
-  class Primitive;
-  class Joint;
-  class OneAxisServo;
-  class TwoAxisServo;
-
-  typedef struct {
+  class Primitive{
   public:
     double hipJointLimit = 0; ///< angle range for legs
     double kneePower = 0;  ///< spring strength in the knees
@@ -61,7 +56,7 @@ namespace lpzrobots {
     double anklePower = 0;  ///< spring strength in the ankles
     double ankleDamping = 0; ///< damping in the ankles
     double ankleJointLimit = 0; ///< angle range for ankles
-    double armPower;   ///< maximal force for at arm static_cast<shoulder>(joint) motors
+    double armPower = 0.0;   ///< maximal force for at arm static_cast<shoulder>(joint) motors
     double armDamping = 0; ///< damping of arm ((shoulder)) joint servos
     double armJointLimit = 0; ///< angle range of arm joint
     double pelvisJointLimit = 0; ///< angle range of pelvis joint
@@ -73,7 +68,7 @@ namespace lpzrobots {
 
   /** should look like a dog
    */
-  class Skeleton : public OdeRobot {
+  class Skeleton{
   public:
 
     /**
@@ -85,7 +80,7 @@ namespace lpzrobots {
     Skeleton(const OdeHandle& odeHandle, const OsgHandle& osgHandle, const SkeletonConf& conf,
                const std::string& name);
 
-    virtual ~Skeleton() {} override;
+    virtual ~Skeleton() {};
 
     static SkeletonConf getDefaultConf() const {
       SkeletonConf c;
@@ -152,11 +147,11 @@ namespace lpzrobots {
 
     /** returns number of sensors
      */
-    virtual int getSensorNumber();
+    virtual int getSensorNumber() const;
 
     /** returns number of motors
      */
-    virtual int getMotorNumber();
+    virtual int getMotorNumber() const;
     /** checks for internal collisions and treats them.
      *  In case of a treatment return true (collision will be ignored by other objects
      *  and the default routine)  else false (collision is passed to other objects and
@@ -168,19 +163,19 @@ namespace lpzrobots {
         like space-internal collision detection, sensor resets/update etc.
         @param globalData structure that contains global data from the simulation environment
     */
-    virtual void doInternalStuff(const GlobalData& globalData);
+    virtual void explicit doInternalStuff(const GlobalData& globalData);
 
 
     /** The list of all parameters with there value as allocated lists.
      */
     virtual paramlist getParamList() const;
 
-    virtual paramval getParam(const paramkey& key, bool traverseChildren=true) const; override;
+    virtual paramval getParam(const paramkey& key, bool traverseChildren=true) const;
 
     virtual bool setParam(const paramkey& key, paramval val, bool traverseChildren=true);
 
     /** the main object of the robot, which is used for position and speed tracking */
-    virtual const Primitive* getMainPrimitive() const const override { return objects[Trunk_comp]; }
+    virtual const Primitive* getMainPrimitive() const const { return objects[Trunk_comp]; }
   protected:
 
     /** creates vehicle at desired pose

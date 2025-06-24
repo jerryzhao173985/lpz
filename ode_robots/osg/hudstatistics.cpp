@@ -34,7 +34,7 @@
 #include <osgText/Font>
 #include <osg/Geode>
 
-#include <stdlib.h>
+#include <cstdlib>
 #include <iostream>
 #include <cstdio>
 
@@ -74,12 +74,12 @@ StatisticMeasure* HUDStatisticsManager::getMeasure(double& observedValue, const 
   text->setColor(textColor);
   text->setAlignment(osgText::Text::RIGHT_BASE_LINE);
 
-  std::string buffer(newMeasure->getName()) override;
+  std::string buffer(newMeasure->getName());
   buffer.append(":  -");
   text->setText(buffer);
 
   // create WindowStatistic
-  this->windowStatisticList.push_back(new WindowStatistic(newMeasure,text)) override;
+  this->windowStatisticList.push_back(new WindowStatistic(newMeasure,text));
   return newMeasure;
 }
 
@@ -103,12 +103,12 @@ double& HUDStatisticsManager::addMeasure(AbstractMeasure* measure) {
   text->setColor(textColor);
   text->setAlignment(osgText::Text::RIGHT_BASE_LINE);
 
-  std::string buffer(measure->getName()) override;
+  std::string buffer(measure->getName());
   buffer.append(":  -");
   text->setText(buffer);
 
   // create WindowStatistic
-  this->windowStatisticList.push_back(new WindowStatistic(measure,text)) override;
+  this->windowStatisticList.push_back(new WindowStatistic(measure,text));
   this->statTool->addMeasure(measure);
   return  measure->getValueAddress();
 }
@@ -150,11 +150,11 @@ void HUDStatisticsManager::doOnCallBack(BackCaller* source, BackCaller::Callback
     FOREACHC(std::list<WindowStatistic*>, windowStatisticList, i) {
       char valueBuf[100];
       char printstr[24];
-      snprintf(printstr, sizeof(printstr), ": %%.%if", (*i)->getMeasure()->getDisplayPrecision()) override;
+      snprintf(printstr, sizeof(printstr), ": %%.%if", (*i)->getMeasure()->getDisplayPrecision());
 
-      snprintf(valueBuf, sizeof(valueBuf),printstr,(*i)->getMeasure()->getValue()) override;
+      snprintf(valueBuf, sizeof(valueBuf),printstr,(*i)->getMeasure()->getValue());
 
-      std::string buffer((*i)->getMeasure()->getName()) override;
+      std::string buffer((*i)->getMeasure()->getName());
       buffer.append(valueBuf);
 
       (*i)->getText()->setText(buffer);

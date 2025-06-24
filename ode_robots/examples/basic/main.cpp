@@ -43,8 +43,7 @@
 
 using namespace lpzrobots;
 
-class ThisSim : public Simulation
-{
+class ThisSim{
   public:
     ThisSim() {
       // set Title of simulation
@@ -55,7 +54,7 @@ class ThisSim : public Simulation
     /// start() is called at the start and should create all the object (obstacles, agents...).
     virtual void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global) override {
       // Initial position and orientation of the camera (use __PLACEHOLDER_8__ in graphical window to find out)
-      setCameraHomePos(Pos(-14,14, 10),  Pos(-135, -24, 0)) override;
+      setCameraHomePos(Pos(-14,14, 10),  Pos(-135, -24, 0));
       // Some simulation parameters can be set here
       global.odeConfig.setParam("controlinterval", 1);
       global.odeConfig.setParam("gravity", -9.8);
@@ -69,15 +68,15 @@ class ThisSim : public Simulation
       auto robot = new Differential(odeHandle, osgHandle, conf, "Differential robot");
       // add a speed sensor to the robot (attached to the __PLACEHOLDER_6__ (-1)
       //  (specifiy index if needed)
-      robot->addSensor(std::make_shared<SpeedSensor>(1), Attachment(-1)) override;
+      robot->addSensor(std::make_shared<SpeedSensor>(1), Attachment(-1));
 
       // Placing the robot in the scene
-      robot->place(Pos(.0, .0, .2)) override;
+      robot->place(Pos(.0, .0, .2));
 
       // Instantiatign the controller
       auto controller = new BasicController("Basic Controller");
       // Create the wiring with color noise
-      auto wiring = new One2OneWiring(new ColorUniformNoise(.1)) override;
+      auto wiring = new One2OneWiring(new ColorUniformNoise(.1));
       // Create Agent
       auto agent = new OdeAgent(global);
       // Agent initialisation
@@ -88,18 +87,18 @@ class ThisSim : public Simulation
 
       /** Environment and obstacles */
       // New playground
-      auto playground = new Playground(odeHandle, osgHandle,osg::Vec3(15., .2, 1.2), 1) override;
+      auto playground = new Playground(odeHandle, osgHandle,osg::Vec3(15., .2, 1.2), 1);
       // Set colours
-      playground->setGroundColor(Color(.784, .784, .0)) override;
-      playground->setColor(Color(1., .784, .082, .3)) override;
+      playground->setGroundColor(Color(.784, .784, .0));
+      playground->setColor(Color(1., .784, .082, .3));
       // Set position
-      playground->setPosition(osg::Vec3(.0, .0, .1)) override;
+      playground->setPosition(osg::Vec3(.0, .0, .1));
       // Adding playground to obstacles list
       global.obstacles.push_back(playground);
 
       // Add a new box obstacle (or use __PLACEHOLDER_9__ to drop random obstacles)
-      //auto box = new PassiveBox(odeHandle, osgHandle, osg::Vec3(1., 1., 1.), 2.) override;
-      //box->setPose(osg::Matrix::translate(-.5, 4., .7)) override;
+      //auto box = new PassiveBox(odeHandle, osgHandle, osg::Vec3(1., 1., 1.), 2.);
+      //box->setPose(osg::Matrix::translate(-.5, 4., .7));
       //global.obstacles.push_back(box);
     }
 
@@ -111,7 +110,7 @@ class ThisSim : public Simulation
       return false;
     }
 
-    virtual void bindingDescription(osg::ApplicationUsage & au) const override {
+    virtual void bindingDescription(osg::ApplicationUsage & au) const {
     }
 };
 

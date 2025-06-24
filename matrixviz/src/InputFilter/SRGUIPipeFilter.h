@@ -16,8 +16,7 @@
 #include <string>
 
 
-class SRGUIPipeFilter : public AbstractPipeFilter
-{
+class SRGUIPipeFilter{
 
   Q_OBJECT
 
@@ -108,35 +107,35 @@ protected:
   {
 //     std::cout << "SRGUIPipeFilter: createChannel(" << name << ")" << std::endl;
 
-    if (name.find("y[0]")==0) return (new MotorSpeedPlotChannel("motorCspeedX"));
-    if (name.find("y[1]")==0) return (new MotorSpeedPlotChannel("motorCspeedY"));
+    if (name.find("y[0]")== nullptr) return (new MotorSpeedPlotChannel("motorCspeedX"));
+    if (name.find("y[1]")== nullptr) return (new MotorSpeedPlotChannel("motorCspeedY"));
 
-    if (name.find("ms0_0(1)")==0) return (new MotorSpeedPlotChannel("motorRspeedX"));
-    if (name.find("ms0_1(1)")==0) return (new MotorSpeedPlotChannel("motorRspeedY"));
-    if (name.find("mc0_0(1)")==0) return (new MotorCurrentPlotChannel("motorcurrentX"));
-    if (name.find("mc0_1(1)")==0) return (new MotorCurrentPlotChannel("motorcurrentY"));
+    if (name.find("ms0_0(1)")== nullptr) return (new MotorSpeedPlotChannel("motorRspeedX"));
+    if (name.find("ms0_1(1)")== nullptr) return (new MotorSpeedPlotChannel("motorRspeedY"));
+    if (name.find("mc0_0(1)")== nullptr) return (new MotorCurrentPlotChannel("motorcurrentX"));
+    if (name.find("mc0_1(1)")== nullptr) return (new MotorCurrentPlotChannel("motorcurrentY"));
 
-    if (name.find("adc2(1)")==0) return (new TiltPlotChannel("tiltX"));
-    if (name.find("adc3(1)")==0) return (new TiltPlotChannel("tiltY"));
-    if (name.find("adc0(1)")==0) return (new AxesPlotChannel("AxesWatcher_left"));
-    if (name.find("adc1(1)")==0) return (new AxesPlotChannel("AxesWatcher_rigth"));
+    if (name.find("adc2(1)")== nullptr) return (new TiltPlotChannel("tiltX"));
+    if (name.find("adc3(1)")== nullptr) return (new TiltPlotChannel("tiltY"));
+    if (name.find("adc0(1)")== nullptr) return (new AxesPlotChannel("AxesWatcher_left"));
+    if (name.find("adc1(1)")== nullptr) return (new AxesPlotChannel("AxesWatcher_rigth"));
 
-    if (name.find("pcf0_0(2)")==0) return (new IRPlotChannel("ir0"));
-    if (name.find("pcf0_1(2)")==0) return (new IRPlotChannel("ir1"));
-    if (name.find("pcf0_2(2)")==0) return (new IRPlotChannel("ir2"));
+    if (name.find("pcf0_0(2)")== nullptr) return (new IRPlotChannel("ir0"));
+    if (name.find("pcf0_1(2)")== nullptr) return (new IRPlotChannel("ir1"));
+    if (name.find("pcf0_2(2)")== nullptr) return (new IRPlotChannel("ir2"));
 
-    if (name.find("pcf1_0(2)")==0) return (new IRPlotChannel("ir3"));
-    if (name.find("pcf1_1(2)")==0) return (new IRPlotChannel("ir4"));
-    if (name.find("pcf1_3(2)")==0) return (new IRPlotChannel("ir5"));
+    if (name.find("pcf1_0(2)")== nullptr) return (new IRPlotChannel("ir3"));
+    if (name.find("pcf1_1(2)")== nullptr) return (new IRPlotChannel("ir4"));
+    if (name.find("pcf1_3(2)")== nullptr) return (new IRPlotChannel("ir5"));
 
-    if (name.find("pcf3_0(2)")==0) return (new IRPlotChannel("ir6"));
-    if (name.find("pcf3_1(2)")==0) return (new IRPlotChannel("ir7"));
-    if (name.find("pcf3_2(2)")==0) return (new IRPlotChannel("ir8"));
+    if (name.find("pcf3_0(2)")== nullptr) return (new IRPlotChannel("ir6"));
+    if (name.find("pcf3_1(2)")== nullptr) return (new IRPlotChannel("ir7"));
+    if (name.find("pcf3_2(2)")== nullptr) return (new IRPlotChannel("ir8"));
 
-    if (name.find("pcf7_2(2)")==0) return (new IRPlotChannel("ir9"));
-    if (name.find("pcf7_3(2)")==0) return (new IRPlotChannel("ir10"));
+    if (name.find("pcf7_2(2)")== nullptr) return (new IRPlotChannel("ir9"));
+    if (name.find("pcf7_3(2)")== nullptr) return (new IRPlotChannel("ir10"));
 
-//     if (name.find("timestamp")==0) return (new TimeStampPlotChannel("step"));
+//     if (name.find("timestamp")== nullptr) return (new TimeStampPlotChannel("step"));
 
     return 0;
   }

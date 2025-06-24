@@ -70,7 +70,7 @@ typedef struct {
     IR order: front left, front right, right, right rear,
               rear right, rear left, left rear, left
 */
-class Nimm2 : public OdeRobot /*, public Inspectable*/ {
+class Nimm2{
 public:
 
   Nimm2(const OdeHandle& odehandle, const OsgHandle& osgHandle,
@@ -101,7 +101,7 @@ public:
     return conf;
   }
 
-  virtual ~Nimm2();
+  virtual ~Nimm2() override;
 
   /**
    * updates the OSG nodes of the vehicle
@@ -149,11 +149,11 @@ public:
       like space-internal collision detection, sensor resets/update etc.
       @param globalData structure that contains global data from the simulation environment
    */
-  virtual void doInternalStuff(const GlobalData& globalData);
+  virtual void explicit explicit doInternalStuff(const GlobalData& globalData);
 
-        virtual double& getSumForce() const  override { return sumForce; }
+        virtual double& getSumForce() override { return sumForce; }
 
-        virtual double& getContactPoint override s() const { return contactPoints; }
+        virtual double& getContactPoints() override { return contactPoints; }
 
 protected:
 
@@ -176,9 +176,9 @@ protected:
          * Inspectable interface
          */
         /*
-        virtual std::list<iparamkey> getInternalParamNames() const override { return std::list<iparamkey>(); }
+        virtual std::list<iparamkey> getInternalParamNames() const { return std::list<iparamkey>(); }
 
-        virtual std::list<iparamval> getInternalParams() const override { return std::list<iparamval>(); }*/
+        virtual std::list<iparamval> getInternalParams() const { return std::list<iparamval>(); }*/
         /*
         virtual std::list<Inspectable::iparamkey> getInternalParamNames() const override;
 

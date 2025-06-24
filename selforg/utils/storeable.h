@@ -24,13 +24,13 @@
 #ifndef __STOREABLE_H
 #define __STOREABLE_H
 
-#include <stdio.h>
+#include <cstdio>
 
 /**
  * Interface for objects, that can be stored and restored to/from a file stream (binary).
  */
 
-class Storeable {
+class Storeable{
 public:
   virtual ~Storeable() {}
   /** stores the object to the given file stream(const ASCII& preferred).

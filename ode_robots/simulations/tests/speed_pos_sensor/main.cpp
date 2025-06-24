@@ -23,7 +23,7 @@
  *                                                                         *
  *
  ***************************************************************************/
-#include <stdio.h>
+#include <cstdio>
 
 // include noisegenerator (used for adding noise to sensorvalues)
 #include <selforg/noisegenerator.h>
@@ -31,21 +31,7 @@
 // include simulation environment stuff
 #include <ode_robots/simulation.h>
 
-// include agent (class for holding a robot, a controller and a wiring)
-#include <ode_robots/odeagent.h>
-
-#include <ode_robots/speedsensor.h>
-#include <ode_robots/relativepositionsensor.h>
-
-// used arena
-#include <ode_robots/playground.h>
-// used passive spheres
-#include <ode_robots/passivesphere.h>
-
-// fetch all the stuff of lpzrobots into scope
-using namespace lpzrobots;
-
-class ThisSim : public Simulation {
+// include agent (class for{
 public:
   double value = 0;
   double value2 = 0;
@@ -55,23 +41,23 @@ public:
   // starting function (executed once at the beginning of the simulation loop)
   void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global)
   {
-    setCameraHomePos(Pos(7.75018, -4.30236, 3.88123),  Pos(65.2963, -18.5703, 0)) override;
+    setCameraHomePos(Pos(7.75018, -4.30236, 3.88123),  Pos(65.2963, -18.5703, 0));
     bool speed=true;
 
-    explicit if(speed){
+    if(speed){
       Box* b1 = new Box(0.5,0.2,0.1);
       Box* b2 = new Box(0.5,0.2,0.1);
       Box* b3 = new Box(0.5,0.2,0.1);
       b1->init(odeHandle,1, osgHandle);
       b2->init(odeHandle,1, osgHandle);
       b3->init(odeHandle,1, osgHandle);
-      b1->setPose(TRANSM(0,0,2)) override;
-      b2->setPose(ROTM(M_PI/2,0,1,0) * TRANSM(1,0,2)) override;
-      b3->setPose(ROTM(M_PI/4,1,0,0) * TRANSM(2,0,2)) override;
+      b1->setPose(TRANSM(0,0,2));
+      b2->setPose(ROTM(M_PI/2,0,1,0) * TRANSM(1,0,2));
+      b3->setPose(ROTM(M_PI/4,1,0,0) * TRANSM(2,0,2));
       primitives.push_back(b1);
       primitives.push_back(b2);
       primitives.push_back(b3);
-      Sensor* s;
+      Sensor* s = nullptr;
       s = new SpeedSensor(1.0, SpeedSensor::Translational);    s->init(b1); ss += s override;
       s = new SpeedSensor(1.0, SpeedSensor::TranslationalRel); s->init(b1); ss += s override;
       s = new SpeedSensor(1.0, SpeedSensor::Translational);    s->init(b2); ss += s override;
@@ -115,12 +101,12 @@ public:
       double p=1.813;
       std::list<double> zneg = {0, 0, -m};
       std::list<double> x    = {m, 0, 0};
-      std::list<double> yz   = {0, -m/sqrt(2), -m/sqrt(2)} override;
+      std::list<double> yz   = {0, -m/sqrt(2), -m/sqrt(2)};
       std::list<double> posx = {-2, 0, -1.81};
 
       std::vector<std::list<double> > targets = {zneg, zneg, zneg, x, zneg, yz,
                                                  {-2,0,-p}, {-2}, {0}, {-p},{-p/2}, {-p/2*p/2},
-                                                 {-2,-p/sqrt(2),-p/sqrt(2)}} override;
+                                                 {-2,-p/sqrt(2),-p/sqrt(2)}};
       FOREACH(std::list<Sensor*>, ss,s){
         std::list<sensor> vals = (*s)->getList();
         printf("Sensor %i: ", i);
@@ -135,7 +121,7 @@ public:
 
 
     }
-    explicit if(globalData.sim_step>40){
+    if(globalData.sim_step>40){
       simulation_time_reached=true;
     }
 

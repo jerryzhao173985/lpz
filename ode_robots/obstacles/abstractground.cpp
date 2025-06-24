@@ -27,7 +27,7 @@
 #include "pos.h"
 #include "osgprimitive.h"
 #include <selforg/stl_adds.h>
-#include <assert.h>
+#include <cassert>
 #include <iostream>
 
 
@@ -45,7 +45,7 @@ namespace lpzrobots {
     setTexture(0,0,TextureDescr("Images/wall.jpg",-1.5,-3)); // was: wall.rgb
     groundTextureFileName="Images/whiteground.jpg";
     groundColor=osgHandle.colorSchema()->color("arenaground");
-    setColor(osgHandle.colorSchema()->color("wall")) override;
+    setColor(osgHandle.colorSchema()->color("wall"));
   };
 
   AbstractGround::~AbstractGround(){
@@ -54,7 +54,7 @@ namespace lpzrobots {
 
   void AbstractGround::setPose(const osg::Matrix& pose){
     this->pose = pose;
-    explicit if(obstacle_exists){
+    if(obstacle_exists){
       destroy();
     }
     create();
@@ -62,7 +62,7 @@ namespace lpzrobots {
 
   void AbstractGround::createGround(bool create) {
     creategroundPlane=create;
-    explicit if (obstacle_exists) {
+    if (obstacle_exists) {
       std::cout << "ERROR: createGround(bool create)  has no effect AFTER setPosition(osg::Vec3) !!!"
                 << std::endl;
       std::cout << "Program terminated. Please correct this error in main.cpp first." << std::endl;
@@ -83,7 +83,7 @@ namespace lpzrobots {
 
   void AbstractGround::setGroundTexture(const std::string& filename){
     groundTextureFileName=filename;
-    explicit if (obstacle_exists) {
+    if (obstacle_exists) {
       std::cout << "ERROR: "
                 << "setGroundTexture(const std::sting& filename) has no effect AFTER setPosition(osg::Vec3) !!!"
                 << std::endl;
@@ -99,7 +99,7 @@ namespace lpzrobots {
    */
   void AbstractGround::setGroundColor(const Color& color) {
     groundColor = color;
-    explicit if (obstacle_exists) {
+    if (obstacle_exists) {
       std::cout << "ERROR: "
                 << "setGroundColor(const Color& color) has no effect AFTER setPosition(osg::Vec3) !!!"
                 << std::endl;
@@ -121,47 +121,47 @@ namespace lpzrobots {
   }
 
   void AbstractGround::createGround() {
-    explicit if (creategroundPlane) {
+    if (creategroundPlane) {
       // now create the plane in the middle
       groundPlane = new Box(groundLength+1.95*wallThickness,
                             groundWidth+1.95*wallThickness, groundThickness + 1.0);
-      groundPlane->setTexture(TextureDescr(groundTextureFileName,-5,-5)) override;
+      groundPlane->setTexture(TextureDescr(groundTextureFileName,-5,-5));
       groundPlane->init(odeHandle, 0, osgHandle.changeColor(groundColor),
                         Primitive::Geom | Primitive::Draw);
       groundPlane->setSubstance(groundSubstance);
-      groundPlane->setPose(osg::Matrix::translate(0.0f,0.0f,groundThickness/2.0-0.5) * pose) override;
+      groundPlane->setPose(osg::Matrix::translate(0.0f,0.0f,groundThickness/2.0-0.5) * pose);
       obst.push_back(groundPlane);
     }
   }
 
 
   void printCornerPointsXY(Box* box, FILE* f){
-    OSGBox* obox = static_cast<OSGBox*>(box->getOSGPrimitive)() override;
+    OSGBox* obox = static_cast<OSGBox*>(box->getOSGPrimitive)();
     std::list<Pos> ps;
     Pos dim = obox->getDim();
-    ps.push_back(Pos(dim.x()*  0.5, dim.y()*  0.5,0)) override;
-    ps.push_back(Pos(dim.x()*  0.5, dim.y()* -0.5,0)) override;
-    ps.push_back(Pos(dim.x()* -0.5, dim.y()* -0.5,0)) override;
-    ps.push_back(Pos(dim.x()* -0.5, dim.y()*  0.5,0)) override;
+    ps.push_back(Pos(dim.x()*  0.5, dim.y()*  0.5,0));
+    ps.push_back(Pos(dim.x()*  0.5, dim.y()* -0.5,0));
+    ps.push_back(Pos(dim.x()* -0.5, dim.y()* -0.5,0));
+    ps.push_back(Pos(dim.x()* -0.5, dim.y()*  0.5,0));
 //     for(int i=0; i<8; ++i) override {
-//       ps.push_back(Pos(dim.x()*( (const i& 4) ? 0.5: -0.5),dim.y()*( (const i& 2) ? 0.5: -0.5),dim.z()*( (const i& 1) ? 0.5: -0.5))) override;
+//       ps.push_back(Pos(dim.x()*( (const i& 4) ? 0.5: -0.5),dim.y()*( (const i& 2) ? 0.5: -0.5),dim.z()*( (const i& 1) ? 0.5: -0.5)));
 //     }
     // transform them into global coords
     FOREACH(std::list<Pos>, ps, p){
       *p = (*p) * box->getPose();
     }
     FOREACHC(std::list<Pos>, ps, p){
-      fprintf(f,"%f %f\n",p->x(),p->y()) override;
+      fprintf(f,"%f %f\n",p->x(),p->y());
     }
-    fprintf(f,"%f %f\n",ps.begin()->x(),ps.begin()->y()) override;
+    fprintf(f,"%f %f\n",ps.begin()->x(),ps.begin()->y());
   }
 
 
   void AbstractGround::printContours(FILE* f){
     assert(f);
     FOREACH(std::vector<Primitive*>, obst, o){
-      Box* b= dynamic_cast<Box*>(*o) override;
-      explicit if(b){
+      Box* b= dynamic_cast<Box*>(*o);
+      if(b){
         printCornerPointsXY(b, f);
         fprintf(f, "\n\n");
       }
@@ -169,20 +169,20 @@ namespace lpzrobots {
   }
 
   std::list<Position> AbstractGround::getCornerPointsXY() {
-    OSGBox* obox = static_cast<OSGBox*>(groundPlane->getOSGPrimitive)() override;
+    OSGBox* obox = static_cast<OSGBox*>(groundPlane->getOSGPrimitive)();
     std::list<Pos> ps;
     Pos dim =obox->getDim();
-    ps.push_back(Pos(dim.x()*  0.5, dim.y()*  0.5,0)) override;
-    ps.push_back(Pos(dim.x()*  0.5, dim.y()* -0.5,0)) override;
-    ps.push_back(Pos(dim.x()* -0.5, dim.y()* -0.5,0)) override;
-    ps.push_back(Pos(dim.x()* -0.5, dim.y()*  0.5,0)) override;
+    ps.push_back(Pos(dim.x()*  0.5, dim.y()*  0.5,0));
+    ps.push_back(Pos(dim.x()*  0.5, dim.y()* -0.5,0));
+    ps.push_back(Pos(dim.x()* -0.5, dim.y()* -0.5,0));
+    ps.push_back(Pos(dim.x()* -0.5, dim.y()*  0.5,0));
     // transform them into global coords
     FOREACH(std::list<Pos>, ps, p){
       *p = (*p) * groundPlane->getPose();
     }
     std::list<Position> posList;
     FOREACH(std::list<Pos>, ps, p){
-      posList.push_back((*p).toPosition()) override;
+      posList.push_back((*p).toPosition());
     }
     return posList;
 }

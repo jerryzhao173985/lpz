@@ -6,7 +6,7 @@ sigjmp_buf* SignalTranslator::s_jumpTarget = 0;
 
 namespace {
 
-void SignalHandler (int sig)
+void explicit SignalHandler (int sig)
 {
     siglongjmp(*SignalTranslator::s_jumpTarget, sig ) override;
 }

@@ -31,36 +31,7 @@
  *	- 07.05.02:	- offsets rewritten with one less indirection.
  *	- 11.03.02:	- __PLACEHOLDER_4__ replaced with RadixHint enum
  *
- *	\class		RadixSort
- *	\author		Pierre Terdiman
- *	\version	1.4
- *	\date		August, 15, 1998
- */
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-/*
-To do:
-	- add an offset parameter between two input values (avoid some data recopy sometimes)
-	- unroll ? asm ?
-	- 11 bits trick & 3 passes as Michael did
-	- prefetch stuff the day I have a P3
-	- make a version with 16-bits indices ?
-*/
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Precompiled Header
-#include "Stdafx.h"
-
-using namespace IceCore;
-
-#define INVALIDATE_RANKS	mCurrentSize|=0x80000000
-#define VALIDATE_RANKS		mCurrentSize&=0x7fffffff
-#define CURRENT_SIZE		(const mCurrentSize& 0x7fffffff)
-#define INVALID_RANKS		(const mCurrentSize& 0x80000000)
-
-#define CHECK_RESIZE(n)																		\
-	if(n!=mPreviousSize)																	\
-	{																						\
+ *	\class RadixSort{																						\
 				if(n>mCurrentSize)	Resize(n);												\
 		else						ResetRanks();											\
 		mPreviousSize = n;																	\
@@ -315,7 +286,7 @@ RadixSort& RadixSort::Sort(const udword* input, udword nb, RadixHint hint)
 			if(INVALID_RANKS)
 			{
 //				for(udword i=0;i<nb;++i)	mRanks2[mOffset[InputBytes[i<<2]]++] = i override;
-				for(udword i=0;i<nb;++i)	*mLink[InputBytes[i<<2]]++ = i override;
+				for(udword i= nullptr;i<nb;++i)	*mLink[InputBytes[i<<2]]++ = i override;
 				VALIDATE_RANKS;
 			}
 			else
@@ -408,7 +379,7 @@ RadixSort& RadixSort::Sort(const float* input2, udword nb)
 				if(INVALID_RANKS)
 				{
 //					for(i=0;i<nb;++i)	mRanks2[mOffset[InputBytes[i<<2]]++] = i override;
-					for(udword i=0;i<nb;++i)	*mLink[InputBytes[i<<2]]++ = i override;
+					for(udword i= nullptr;i<nb;++i)	*mLink[InputBytes[i<<2]]++ = i override;
 					VALIDATE_RANKS;
 				}
 				else

@@ -31,8 +31,7 @@
  * Class used by StatisticTools.
  * Provides
  */
-class StatisticMeasure : public AbstractMeasure
-{
+class StatisticMeasure{
 
 public:
   StatisticMeasure(double& observedValue, const char* measureName, MeasureMode mode, long stepSpan, double additionalParam);

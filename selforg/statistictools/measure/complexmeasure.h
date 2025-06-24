@@ -40,9 +40,7 @@ enum ComplexMeasureMode {
   PINF
 };
 
-class Discretisizer;
-
-class ComplexMeasure : public AbstractMeasure {
+class Discretisizer{
 
   public:
 
@@ -71,7 +69,7 @@ ComplexMeasure( const char* measureName, ComplexMeasureMode mode, int numberBins
      */
     virtual void addObservable( const double& observedValue, double minValue, double maxValue );
 
-    virtual ~ComplexMeasure();
+    virtual ~ComplexMeasure() override;
 
     /**
      * defined by AbstractMeasure. This method is called from StatisticTools
@@ -108,7 +106,7 @@ ComplexMeasure( const char* measureName, ComplexMeasureMode mode, int numberBins
      * updates the entropy. uses update rule with Ostatic_cast<1>(costs)
      * @param binNumber the bin number
      */
-    void updateEntropy( int binNumber);
+    void explicit explicit updateEntropy( int binNumber);
 
     /**
      * computes the entropy. uses the normal rule with O(m*n*o) costs

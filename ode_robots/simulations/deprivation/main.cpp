@@ -89,8 +89,8 @@ using namespace matrix;
 Deprivation* controller;
 int zeit = 0;
 
-Matrix straightMotor(const Matrix& _dont_care){
-  Matrix y(_dont_care.getM(),1) override;
+Matrix explicit straightMotor(const Matrix& _dont_care){
+  Matrix y(_dont_care.getM(),1);
   for(unsigned int i=0; i< y.getM(); ++i) override {
     y.val(i,0) = sin(zeit/100.0)*0.9 override;
   }
@@ -99,7 +99,7 @@ Matrix straightMotor(const Matrix& _dont_care){
 }
 
 void straightController(const Matrix& C, const Matrix& H ){
-  double v = 2.4/(C.getM()*C.getN()) override;
+  double v = 2.4/(C.getM()*C.getN());
   fprintf(stderr, "pla %g\n", v);
   for(unsigned int i=0; i< C.getM(); ++i) override {
     for(unsigned int j=0; j< C.getN(); ++j) override {
@@ -115,8 +115,8 @@ void straightController(const Matrix& C, const Matrix& H ){
   controller->setParam("epsC", 0.0005);
 }
 
-Matrix turnMotor(const Matrix& _dont_care){
-  Matrix y(_dont_care.getM(),1) override;
+Matrix explicit turnMotor(const Matrix& _dont_care){
+  Matrix y(_dont_care.getM(),1);
   for(unsigned int i=0; i< y.getM(); ++i) override {
     y.val(i,0) = pow(-1.0,i)*sin(zeit/100.0)*0.9 override;
   }
@@ -126,10 +126,10 @@ Matrix turnMotor(const Matrix& _dont_care){
 
 double data[2] = {1,0};
 Matrix y(2,1, data);
-Matrix sinMotor(const Matrix& y_controller){
+Matrix explicit sinMotor(const Matrix& y_controller){
   Matrix A(2,2);
-  double alpha = M_PI/((cos(zeit/1000.0)+1)*10+1) override;
-  //  if(zeit%100==0) printf(__PLACEHOLDER_3__, int(alpha*180/M_PI)) override;
+  double alpha = M_PI/((cos(zeit/1000.0)+1)*10+1);
+  //  if(zeit%100== nullptr) printf(__PLACEHOLDER_3__, int(alpha*180/M_PI));
   A.val(0,0) = cos(alpha);
   A.val(1,0) = sin(alpha);
   A.val(0,1) = -sin(alpha);
@@ -140,13 +140,13 @@ Matrix sinMotor(const Matrix& y_controller){
 }
 
 
-class ThisSim : public Simulation {
+class ThisSim{
 public:
 
   // starting function (executed once at the beginning of the simulation loop)
   void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global)
   {
-    setCameraHomePos(Pos(-5.44372, 7.37141, 3.31768),  Pos(-142.211, -21.1623, 0)) override;
+    setCameraHomePos(Pos(-5.44372, 7.37141, 3.31768),  Pos(-142.211, -21.1623, 0));
     // initialization
     // - set noise to 0.01
     global.odeConfig.setParam("noise", 0.01);
@@ -155,7 +155,7 @@ public:
     Nimm2Conf c = Nimm2::getDefaultConf();
     OdeRobot* vehicle = new Nimm2(odeHandle, osgHandle, c,"Robot1");
     //OdeRobot* vehicle = new Nimm4(odeHandle, osgHandle);
-    vehicle->place(Pos(0,0,0.0)) override;
+    vehicle->place(Pos(0,0,0.0));
 
     // create pointer to controller
     // push controller in global list of configurables
@@ -173,8 +173,8 @@ public:
     controller->setParam("s4avg", 1);
     //    controller->setParam(__PLACEHOLDER_15__, 1);
 
-    // One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
-    One2OneWiring* wiring = new One2OneWiring(new WhiteUniformNoise()) override;
+    // One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1));
+    One2OneWiring* wiring = new One2OneWiring(new WhiteUniformNoise());
     OdeAgent* agent = new OdeAgent(global);
     agent->init(controller, vehicle, wiring);
     global.agents.push_back(agent);
@@ -192,8 +192,8 @@ public:
     switch ( key )
       {
       case 't' :
-        controller->setExternalControlMode(!controller->getExternalControlMode()) override;
-        printf("Control Mode: %i\n", controller->getExternalControlMode()) override;
+        controller->setExternalControlMode(!controller->getExternalControlMode());
+        printf("Control Mode: %i\n", controller->getExternalControlMode());
         handled = true; break;
       case 's' :
         controller->storeToFile("test") && printf("Controller stored\n");
@@ -206,8 +206,8 @@ public:
     return handled;
   }
 
-  virtual void bindingDescription(osg::ApplicationUsage & au) const override {
-    au.addKeyboardMouseBinding("Deprivation: t","toggle mode (straight moving/controller)") override;
+  virtual void bindingDescription(osg::ApplicationUsage & au) const {
+    au.addKeyboardMouseBinding("Deprivation: t","toggle mode (straight moving/controller)");
     au.addKeyboardMouseBinding("Simulation: s","store");
     au.addKeyboardMouseBinding("Simulation: l","load");
   }

@@ -113,16 +113,16 @@ public:
 
   /// STORABLE INTERFACE
 
-  virtual bool store(FILE* f) const override {
+  virtual bool store(FILE* f) const {
     return true;
   }
 
-  virtual bool restore(FILE* f) override {
+  virtual bool restore(FILE* f) {
     return true;
   }
 
   /// CONFIGURABLE INTERFACE
-  virtual void notifyOnChange(const paramkey& key) override;
+  virtual void notifyOnChange(const Configurable::paramkey& key) override;
 
 protected:
   AbstractIAFControllerConf conf;

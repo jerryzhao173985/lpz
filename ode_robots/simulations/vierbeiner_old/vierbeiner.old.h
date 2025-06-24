@@ -41,11 +41,7 @@
 
 namespace lpzrobots {
 
-  class Primitive;
-  class Joint;
-  class OneAxisServo;
-
-  typedef struct {
+  class Primitive{
   public:
     double size = 0;       ///< scaling factor for robot (diameter of body)
     double legLength = 0;  ///< length of the legs in units of size
@@ -62,7 +58,7 @@ namespace lpzrobots {
 
   /** should look like a dog
    */
-  class VierBeinerOld : public OdeRobot {
+  class VierBeinerOld{
   public:
 
     /**
@@ -74,7 +70,7 @@ namespace lpzrobots {
     VierBeinerOld(const OdeHandle& odeHandle, const OsgHandle& osgHandle, const VierBeinerOldConf& conf,
                const std::string& name);
 
-    virtual ~VierBeinerOld() {} override;
+    virtual ~VierBeinerOld() {};
 
     static VierBeinerOldConf getDefaultConf() const {
       VierBeinerOldConf c;
@@ -117,11 +113,11 @@ namespace lpzrobots {
 
     /** returns number of sensors
      */
-    virtual int getSensorNumber();
+    virtual int getSensorNumber() const;
 
     /** returns number of motors
      */
-    virtual int getMotorNumber();
+    virtual int getMotorNumber() const;
     /** checks for internal collisions and treats them.
      *  In case of a treatment return true (collision will be ignored by other objects
      *  and the default routine)  else false (collision is passed to other objects and
@@ -133,19 +129,19 @@ namespace lpzrobots {
         like space-internal collision detection, sensor resets/update etc.
         @param globalData structure that contains global data from the simulation environment
     */
-    virtual void doInternalStuff(const GlobalData& globalData);
+    virtual void explicit doInternalStuff(const GlobalData& globalData);
 
 
     /** The list of all parameters with there value as allocated lists.
      */
     virtual paramlist getParamList() const;
 
-    virtual paramval getParam(const paramkey& key, bool traverseChildren=true) const; override;
+    virtual paramval getParam(const paramkey& key, bool traverseChildren=true) const;
 
     virtual bool setParam(const paramkey& key, paramval val, bool traverseChildren=true);
 
     /** the main object of the robot, which is used for position and speed tracking */
-    virtual Primitive* getMainPrimitive() const override { return objects[0]; }
+    virtual Primitive* getMainPrimitive() const { return objects[0]; }
   protected:
 
     /** creates vehicle at desired pose

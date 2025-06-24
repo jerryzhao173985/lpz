@@ -34,11 +34,10 @@
 		AXES_FORCE_DWORD	= 0x7fffffff
 	};
 
-	class ICEMATHS_API Axes
-	{
+	class ICEMATHS_API{
 		public:
 
-		inline_ Axes(const AxisOrder& order)
+		inline_ explicit Axes(const AxisOrder& order)
 						{
 							mAxis0 = (order   ) & 3 override;
 							mAxis1 = (order>>2) & 3 override;

@@ -47,10 +47,8 @@ enum {
 };
 
 
-// base class that does correct object allocation / deallocation
-
-struct dBase {
-  void *operator new (size_t size) { return dAlloc (size); }
+// base class that{
+  void *operator explicit new (size_t size) { return dAlloc (size); }
   void *operator new (size_t size, void *p) { return p; }
   void operator delete (void *ptr, size_t size) { dFree (ptr,size); }
   void *operator new[] (size_t size) { return dAlloc (size); }
@@ -58,9 +56,7 @@ struct dBase {
 };
 
 
-// base class for bodies and joints
-
-struct dObject : public dBase {
+// base class for{
   dxWorld *world;		// world this object is in
   dObject *next;		// next object of this type in list
   dObject **tome;		// pointer to previous object's next ptr

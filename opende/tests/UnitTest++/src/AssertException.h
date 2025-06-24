@@ -6,8 +6,7 @@
 
 namespace UnitTest {
 
-class AssertException : public std::exception
-{
+class AssertException{
 public:
     AssertException(char const* description, char const* filename, int lineNumber) override;
     virtual ~AssertException() throw();

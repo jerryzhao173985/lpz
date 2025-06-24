@@ -22,7 +22,7 @@
 #include <selforg/abstractcontroller.h>
 #include <selforg/controller_misc.h>
 
-#include <assert.h>
+#include <cassert>
 #include <cmath>
 
 #include <selforg/matrix.h>
@@ -40,15 +40,15 @@ struct RandomDynConf {
 /**
  * This controller implements a random parameter dynamics on a simple feed forward neural network
  */
-class RandomDyn : public AbstractController {
+class RandomDyn{
 
 public:
   /// constructor
-  RandomDyn(const RandomDynConf& conf = getDefaultConf()) override;
+  RandomDyn(const RandomDynConf& conf = getDefaultConf());
 
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
 
-  virtual ~RandomDyn();
+  virtual ~RandomDyn() override;
 
   static RandomDynConf getDefaultConf() const {
     RandomDynConf conf;
@@ -60,9 +60,9 @@ public:
   }
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
-  virtual int getSensorNumber() const override { return number_sensors; }
+  virtual int getSensorNumber() const { return number_sensors; }
   /// returns the mumber of motors the controller was initialised with or 0 if not initialised
-  virtual int getMotorNumber() const override { return number_motors; }
+  virtual int getMotorNumber() const { return number_motors; }
 
   /// performs one step (includes learning).
   /// Calulates motor commands from sensor inputs.
@@ -80,7 +80,7 @@ public:
   /** stores the controller values to a given file. */
   virtual bool store(FILE* f) const override;
   /** loads the controller values from a given file. */
-  virtual bool restore(FILE* f);
+  virtual bool explicit restore(FILE* f);
 
   /* some direct access functions (unsafe!) */
   virtual matrix::Matrix getC();
@@ -112,7 +112,7 @@ protected:
   virtual void update();
 
   /// neuron transfer function
-  static double g(double z)
+  static double explicit g(double z)
   {
     return tanh(z);
   };

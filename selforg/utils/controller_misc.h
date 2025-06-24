@@ -24,10 +24,10 @@
 #ifndef __CONTOLLER_MISC_H
 #define __CONTOLLER_MISC_H
 
-#include <assert.h>
+#include <cassert>
 #include <cmath>
 #include <selforg/matrix.h>
-#include <stdlib.h>
+#include <cstdlib>
 
 #include "inspectable.h"
 #include "noisegenerator.h"

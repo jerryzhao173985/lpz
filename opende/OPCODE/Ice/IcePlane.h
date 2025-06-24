@@ -14,8 +14,7 @@
 
 	#define PLANE_EPSILON		(1.0e-7f)
 
-	class ICEMATHS_API Plane
-	{
+	class ICEMATHS_API{
 		public:
 		//! Constructor
 		inline_			Plane()															{												}

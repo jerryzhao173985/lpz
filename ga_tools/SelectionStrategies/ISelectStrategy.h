@@ -28,12 +28,7 @@
 #define ISELECTSTRATEGY_H_
 
 //forward declaration
-class Generation;
-
-/**
- * this interface is for a select strategy of the generation class.
- */
-class ISelectStrategy {
+class Generation{
 public:
 	/**
 	 * default constructor

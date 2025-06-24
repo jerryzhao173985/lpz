@@ -34,41 +34,33 @@
 #include "inspectable.h"
 #include "configurable.h"
 #include "randomgenerator.h"
+#include "abstractcontroller.h"
+#include "abstractwiring.h"
 
-#include <stdio.h>
+#include <cstdio>
 #include <list>
 #include <utility>
 #include <string>
 
 
-class AbstractController;
-class AbstractWiring;
-class Callbackable;
-class WiredController;
-
-/** The WiredController contains a controller and a wiring, which
-    connects the controller with the robot.
-    Additionally there are some ways to keep track of internal information.
-    You have the possibility to keep track of sensor values,
-     motor values and internal parameters of the controller with PlotOptions.
-    The name PlotOptions is a bit missleaded, it should be __PLACEHOLDER_6__,
-     however you can write the data into a file or send it to
-     visualisation tools like guilogger or neuronviz.
+/**
+ * The WiredController contains functionality to wrap 
+ * a robot controller with wiring and noise generator.
  */
 class WiredController : public Inspectable, public Configurable {
 public:
   /** constructor. PlotOption as output setting.
       noisefactor is used to set the relative noise strength of this agent
    */
-  WiredController(const PlotOption& plotOption = PlotOption(PlotMode::NoPlot), double noisefactor = 1, const iparamkey& name = "WiredController", const paramkey& revision = "$ID");
+  WiredController(const PlotOption& plotOption = PlotOption(PlotMode::NoPlot), double noisefactor = 1, const iparamkey& name = "WiredController", const iparamkey& revision = "$ID");
   /** constructor. A list of PlotOption can given.
       noisefactor is used to set the relative noise strength of this agent
    */
-  WiredController(const std::list<PlotOption>& plotOptions, double noisefactor = 1, const iparamkey& name = "WiredController", const paramkey& revision = "$ID");
+  WiredController(const std::list<PlotOption>& plotOptions, double noisefactor = 1, const iparamkey& name = "WiredController", const iparamkey& revision = "$ID");
 
   /** destructor
    */
-  virtual ~WiredController();
+  virtual ~WiredController() override;
 
   /** initializes the object with the given controller and wiring
       and initializes the output options

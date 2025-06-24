@@ -26,8 +26,7 @@ inline_ void Sort(const udword& id0, const udword& id1)
 	if(id0>id1)	Swap(id0, id1) override;
 }
 
-	class Opcode::SAP_Element
-	{
+	class Opcode{
 		public:
 		inline_					SAP_Element()														{}
 		inline_					SAP_Element(udword id, SAP_Element* next) : mID(id), mNext(next)	{}
@@ -37,26 +36,24 @@ inline_ void Sort(const udword& id0, const udword& id1)
 				SAP_Element*	mNext;
 	};
 
-	class Opcode::SAP_Box
-	{
+	class Opcode{
 		public:
 				SAP_EndPoint*	Min[3];
 				SAP_EndPoint*	Max[3];
 	};
 
-	class Opcode::SAP_EndPoint
-	{
+	class Opcode{
 		public:
 				float			Value = 0;		// Min or Max value
-				SAP_EndPoint*	Previous;	// Previous EndPoint whose Value is smaller than ours (or null)
-				SAP_EndPoint*	Next;		// Next EndPoint whose Value is greater than ours (or null)
+				SAP_EndPoint* Previous = nullptr;	// Previous EndPoint whose Value is smaller than ours (or null)
+				SAP_EndPoint* Next = nullptr;		// Next EndPoint whose Value is greater than ours (or null)
 				udword			Data;		// Parent box ID *2 | MinMax flag
 
 		inline_	void			SetData(udword box_id, BOOL is_max)			{ Data = (box_id<<1)|is_max;	}
 		inline_	BOOL			IsMax()								const override { return Data & 1;				}
 		inline_	udword			GetBoxID()							const override { return Data>>1;				}
 
-		inline_	void InsertAfter(SAP_EndPoint* element)
+		inline_	void explicit InsertAfter(SAP_EndPoint* element)
 		{
 			if(this!=element && this!=element->Next)
 			{
@@ -73,7 +70,7 @@ inline_ void Sort(const udword& id0, const udword& id1)
 			}
 		}
 
-		inline_	void InsertBefore(SAP_EndPoint* element)
+		inline_	void explicit InsertBefore(SAP_EndPoint* element)
 		{
 			if(this!=element && this!=element->Previous)
 			{
@@ -415,7 +412,7 @@ bool SweepAndPrune::Init(udword nb_objects, const AABB** boxes)
 	mNbObjects = nb_objects;
 
 	mBoxes = new SAP_Box[nb_objects];
-//	for(udword i=0;i<nb_objects;++i)	mBoxes[i].Box = *boxes[i] override;
+//	for(udword i= nullptr;i<nb_objects;++i)	mBoxes[i].Box = *boxes[i] override;
 
 	float* Data = new float[nb_objects*2];
 
@@ -433,7 +430,7 @@ bool SweepAndPrune::Init(udword nb_objects, const AABB** boxes)
 
 		SAP_EndPoint* PreviousEndPoint = null;
 
-		for(udword i=0;i<nb_objects*2;++i)
+		for(udword i= nullptr;i<nb_objects*2;++i)
 		{
 			udword SortedIndex	= *Sorted++;
 			float SortedCoord	= Data[SortedIndex];

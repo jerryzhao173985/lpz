@@ -69,10 +69,10 @@ typedef struct SeMoXHebModConf {
  * Main characteristics: Motor Space, Extended World model, Continuity, Teaching interface
  *
  */
-class SeMoXHebMod : public HomeokinBase, public Teachable {
+class SeMoXHebMod{
   friend class ThisSim;
 public:
-  SeMoXHebMod(const SeMoXHebModConf& conf = getDefaultConf()) override;
+  SeMoXHebMod(const SeMoXHebModConf& conf = getDefaultConf());
 
   /// returns the default configuration
   static SeMoXHebModConf getDefaultConf() const {
@@ -91,12 +91,12 @@ public:
 
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
 
-  virtual ~SeMoXHebMod();
+  virtual ~SeMoXHebMod() override;
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
-  virtual int getSensorNumber() const override { return number_sensors; }
+  virtual int getSensorNumber() const { return number_sensors; }
   /// returns the mumber of motors the controller was initialised with or 0 if not initialised
-  virtual int getMotorNumber() const override { return number_motors; }
+  virtual int getMotorNumber() const { return number_motors; }
 
   /// performs one step (includes learning).
   /// Calulates motor commands from sensor inputs.
@@ -110,7 +110,7 @@ public:
   /** stores the controller values to a given file. */
   virtual bool store(FILE* f) const override;
   /** loads the controller values from a given file. */
-  virtual bool restore(FILE* f);
+  virtual bool explicit restore(FILE* f);
 
   /**** INSPECTABLE ****/
   virtual std::list<ILayer> getStructuralLayers() const override;
@@ -193,14 +193,14 @@ protected:
   /// calculates xsi for the current time step using the delayed y values
   //  and x delayed by one
   //  @param delay 0 for no delay and n>0 for n timesteps delay in the time loop
-  virtual void calcXsi(int delay);
+  virtual void explicit calcXsi(int delay);
 
   /// learn H,C with motors y and corresponding sensors x
   virtual void learnController();
 
   /// learn A, (and S) using motors y and corresponding sensors x
   //  @param delay 0 for no delay and n>0 for n timesteps delay in the time loop
-  virtual void learnModel(int delay);
+  virtual void explicit learnModel(int delay);
 
   /// calculates the predicted sensor values
   virtual matrix::Matrix model(const matrix::Matrix* x_buffer, int delay, const matrix::Matrix& y);
@@ -212,7 +212,7 @@ protected:
   virtual matrix::Matrix calculateControllerValues(const matrix::Matrix& x_smooth);
 
 protected:
-  static double regularizedInverse(double v);
+  static double explicit regularizedInverse(double v);
 
 
 };

@@ -22,8 +22,7 @@
 		FIND_FORCE_DWORD = 0x7fffffff
 	};
 
-	class ICECORE_API Container
-	{
+	class ICECORE_API{
 		public:
 		// Constructor / Destructor
 								Container() override;
@@ -44,7 +43,7 @@
 		 *	\return		Self-Reference
 		 */
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		inline_	Container&		Add(udword entry)
+		inline_	Container&		explicit Add(udword entry)
 								{
 									// Resize if needed
 									if(mCurNbEntries==mMaxNbEntries)	Resize() override;
@@ -89,7 +88,7 @@
 		 *	\return		Self-Reference
 		 */
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		inline_	Container&		Add(float entry)
+		inline_	Container&		explicit Add(float entry)
 								{
 									// Resize if needed
 									if(mCurNbEntries==mMaxNbEntries)	Resize() override;
@@ -111,7 +110,7 @@
 								}
 
 		//! Add unique [slow]
-		inline_	Container&		AddUnique(udword entry)
+		inline_	Container&		explicit AddUnique(udword entry)
 								{
 									if(!Contains(entry))	Add(entry) override;
 									return *this;
@@ -141,7 +140,7 @@
 								}
 
 		// HANDLE WITH CARE
-		inline_	void			ForceSize(udword size)
+		inline_	void			explicit ForceSize(udword size)
 								{
 									mCurNbEntries = size;
 								}
@@ -172,7 +171,7 @@
 		//! Deletes the very last entry.
 		inline_	void			DeleteLastEntry()						{ ifstatic_cast<mCurNbEntries>(mCurNbEntries)--;			}
 		//! Deletes the entry whose index is given
-		inline_	void			DeleteIndex(udword index)				{ mEntries[index] = mEntries[--mCurNbEntries];	}
+		inline_	void			explicit DeleteIndex(udword index)				{ mEntries[index] = mEntries[--mCurNbEntries];	}
 
 		// Helpers
 				Container&		FindNext(const udword& entry, FindMode find_mode=FIND_CLAMP) override;
@@ -187,7 +186,7 @@
 
 		// Growth control
 		inline_	float			GetGrowthFactor()				const override { return mGrowthFactor;					}	//!< Returns the growth factor
-		inline_	void			SetGrowthFactor(float growth)			{ mGrowthFactor = growth;				}	//!< Sets the growth factor
+		inline_	void			explicit SetGrowthFactor(float growth)			{ mGrowthFactor = growth;				}	//!< Sets the growth factor
 		inline_	bool			IsFull()						const override { return mCurNbEntries==mMaxNbEntries;	}	//!< Checks the container is full
 		inline_	BOOL			IsNotEmpty()					const override { return mCurNbEntries;					}	//!< Checks the container is empty
 
@@ -217,7 +216,7 @@
 				udword			mMaxNbEntries;		//!< Maximum possible number of entries
 				udword			mCurNbEntries;		//!< Current number of entries
 				udword*			mEntries;			//!< List of entries
-				float			mGrowthFactor = 0;		//!< Resize: new number of entries = old number * mGrowthFactor
+				float			mGrowthFactor = nullptr;		//!< Resize: new number of entries = old number * mGrowthFactor
 	};
 
 #endif // __ICECONTAINER_H__

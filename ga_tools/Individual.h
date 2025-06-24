@@ -40,9 +40,7 @@
 struct RESTORE_GA_INDIVIDUAL;
 
 /**
- * This class represent one individual of the complete gen. alg. It have some gens and a fitness.
- */
-class Individual {
+ * This class represent{
 public:
 	/**
 	 * constructor
@@ -80,15 +78,15 @@ public:
 	/**
 	 * return a gen of the individual
 	 * @param x (the index of the gen
-	 * @return static_cast<Gen*>(the) searched gen. NULL if the index isn't right
+	 * @return static_cast<Gen*>(the) searched gen. nullptr if the index isn't right
 	 */
-	inline Gen* getGen(int x)const override {if(x<getSize())return m_gene[x];return NULL;}
+	inline Gen* getGen(int x)const override {if(x<getSize())return m_gene[x];return nullptr;}
 
 	/**
 	 * add a gen to the individual.
 	 * @param gen static_cast<Gen*>(the) new gen
 	 */
-	inline void addGen(const Gen* gen) {m_gene.push_back(gen);}
+	inline void explicit addGen(const Gen* gen) {m_gene.push_back(gen);}
 
 	/**
 	 * returns all gens of the individual
@@ -112,7 +110,7 @@ public:
 	 * this function calculate the fitness value of the individual
 	 * @return fitness value
 	 */
-	double getFitness() override;
+	double getFitness() const override;
 
   /**
    * this function calculate the fitness value of the individual (const)

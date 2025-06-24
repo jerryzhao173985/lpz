@@ -32,7 +32,7 @@ namespace lpzrobots {
 
   TorqueSensor::TorqueSensor(double maxtorque, int avg)
     : joint(0), maxtorque(maxtorque) {
-    tau = 1.0/std::max(1.0,static_cast<double>(avg)) override;
+    tau = 1.0/std::max(1.0,static_cast<double>(avg));
   }
 
 
@@ -66,9 +66,9 @@ namespace lpzrobots {
       double p1 = t1 * a;
       double p2 = t2 * a;
       if(tau<1.0)
-        values[i] = values[i]*(1-tau) + (p1+p2)*(-tau/maxtorque) override;
+        values[i] = values[i]*(1-tau) + (p1+p2)*(-tau/maxtorque);
       else
-                                values[i] = (p1+p2)/(-maxtorque) override;
+                                values[i] = (p1+p2)/(-maxtorque);
     }
     // debugging:
     // std::cout << __PLACEHOLDER_3__; t1.print();
@@ -96,7 +96,7 @@ namespace lpzrobots {
 
 
   std::list<sensor> TorqueSensor::getList() const {
-    return getListOfArray();
+    return getListOfArray() const;
   }
 
 }

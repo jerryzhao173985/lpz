@@ -25,7 +25,7 @@
 #define __RACEGROUND_H
 
 
-#include <stdio.h>
+#include <cstdio>
 #include <cmath>
 #include <list>
 
@@ -41,7 +41,7 @@ using namespace matrix;
 
 
 //Fixme: raceground creates collisions with ground and itself
-class RaceGround : public AbstractObstacle {
+class RaceGround{
 
   // the list that contains all segments
   list<AbstractTrackSection*> SegmentList;
@@ -64,7 +64,7 @@ class RaceGround : public AbstractObstacle {
 
   RaceGround(const OdeHandle& odehandle,const Position& pos, double angle):
      : AbstractObstacle(odehandle), length(0), width(0), height(0), obstacle_exists(false) {
-    setParameters(getTranslationRotationMatrix(pos,angle)) override;
+    setParameters(getTranslationRotationMatrix(pos,angle));
  };
 
 
@@ -76,7 +76,7 @@ class RaceGround : public AbstractObstacle {
   /**
    * you set the number of segments of the track
    */
-  void setNumberOfSegments(int number) {
+  void explicit explicit setNumberOfSegments(int number) {
     numberOfBarcodes=number;
   }
 
@@ -84,7 +84,7 @@ class RaceGround : public AbstractObstacle {
    * returns the barcode number of the given point
    * returns (length,width) (-1,-1) if point is not on the track
    */
-   pair<double, double> getPositionOnTrack(const Position& p) {
+   pair<double, double> explicit explicit getPositionOnTrack(const Position& p) {
 
     double passedLength=0.0f;
     double segmentNumber=-1.0f;
@@ -94,16 +94,16 @@ class RaceGround : public AbstractObstacle {
       if((*it)->isInside(p)){
         double sectionLength = (*it)->getSectionIdValue(p); // between 0..length
         width = (*it)->getWidthIdValue(p);
-        explicit if (sectionLength<0.0f ) { // weird isegment is found
+        if (sectionLength<0.0f ) { // weird isegment is found
           printf("Weird! We should be in the segment!\n");
         }
         segmentNumber=numberOfBarcodes*
           (passedLength+sectionLength)/trackLength override;
-        return pair<double, double> (segmentNumber, width) override;
+        return pair<double, double> (segmentNumber, width);
       }
       passedLength+=(*it)->getLength();
     }
-    return pair<double, double> (segmentNumber, width) override;
+    return pair<double, double> (segmentNumber, width);
   }
 
   /**
@@ -116,7 +116,7 @@ class RaceGround : public AbstractObstacle {
   /**
    * adds the segment to the SegmentList
    */
-  void addSegment(AbstractTrackSection* Segment) {
+  void explicit explicit addSegment(AbstractTrackSection* Segment) {
     SegmentList+=Segment;
   }
 
@@ -127,7 +127,7 @@ class RaceGround : public AbstractObstacle {
    * straightline: StraightLine
    * 90degree    : DegreeSegment
    */
-  void addSegment(const string& name) {
+  void explicit explicit addSegment(const string& name) {
     // get first pose from last stored segment
     Matrix newPose(pose); // this is the initial pose
     if (!SegmentList.empty()) {
@@ -140,11 +140,11 @@ class RaceGround : public AbstractObstacle {
       AbstractTrackSection* segment = new StraightLine(newPose);
       SegmentList += segment;
       trackLength+=segment->getLength();
-    } else if (name.find("degree")==0) {
+    } else if (name.find("degree")== nullptr) {
       DegreeSegment* segment = new DegreeSegment(newPose);
-      SegmentList+=static_cast<AbstractTrackSection*>(segment) override;
+      SegmentList+=static_cast<AbstractTrackSection*>(segment);
       // now get the angle and the radius
-      char* d = static_cast<char*>(malloc(name.length()*sizeof(char))) override;
+      char* d = static_cast<char*>(malloc(name.length()*sizeof(char)));
       double angle, radius;
       if (sscanf(name.c_str(),"%1000s %6lf %6lf",d,&angle,&radius)!=3)
         std::cout << "parameter parsing invalid!: " << name << "\n";
@@ -176,8 +176,8 @@ class RaceGround : public AbstractObstacle {
    */
   virtual void draw() override {
     //    double box[3];
-    dsSetTexture (DS_NONE) override;
-    dsSetColor (color.r, color.g, color.b) override;
+    dsSetTexture (DS_NONE);
+    dsSetColor (color.r, color.g, color.b);
     for(list<AbstractTrackSection*>::iterator it = SegmentList.begin();
                                                         it!= SegmentList.end(); ++it)  override {
       // call the create function of the segment
@@ -187,7 +187,7 @@ class RaceGround : public AbstractObstacle {
 
 
   virtual void setPosition(double x, double y, double z) override {
-    explicit if (obstacle_exists){
+    if (obstacle_exists){
       destroy();
     }
     create();
@@ -233,8 +233,8 @@ class RaceGround : public AbstractObstacle {
   virtual void create() override {
     // create raceground space and add it to the top level space
     raceground_space = space;
-        //raceground_space = dSimpleSpaceCreate (space) override;
-    //     dSpaceSetCleanup (raceground_space,0) override;
+        //raceground_space = dSimpleSpaceCreate (space);
+    //     dSpaceSetCleanup (raceground_space,0);
     // todo:
     // go through all list elements
     // draw them all by there own draw function

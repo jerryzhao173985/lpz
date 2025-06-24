@@ -132,7 +132,7 @@ namespace lpzrobots {
 //         int     xnpoints ynpoints       (this will be the same as the 1st
 //                                         point for polygon and box)
 
-  class PolyLine {
+  class PolyLine{
   public:
     PolyLine(){
       object_code = 0;
@@ -160,7 +160,7 @@ namespace lpzrobots {
       depth is used as a height value and is multiplied with heightfactor.
       The entire size can be scaled with a global factor
   */
-  class ComplexPlayground : public AbstractGround {
+  class ComplexPlayground{
 
   protected:
 

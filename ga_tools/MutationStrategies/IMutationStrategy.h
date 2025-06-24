@@ -28,15 +28,7 @@
 #define IMUTATIONSTRATEGY_H_
 
 //forward declarations
-class Gen;
-class GenContext;
-class Individual;
-class SingletonGenFactory;
-
-/**
- * This interface gives the structur for the mutation of a gen.
- */
-class IMutationStrategy {
+class Gen{
 public:
 	/**
 	 * default constructor

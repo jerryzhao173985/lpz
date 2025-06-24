@@ -31,7 +31,7 @@
  * Implements a one to one wiring 
  *  and allows to select the noise strength per sensor channel
  */
-class SelectiveNoiseWiring : public One2OneWiring {
+class SelectiveNoiseWiring{
 public:
   /** constructor
       @param noise NoiseGenerator that is used for adding noise to motor values  

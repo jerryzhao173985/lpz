@@ -33,7 +33,7 @@ namespace lpzrobots {
   /**
      Graphical HeightField
   */
-  class OSGHeightField : public OSGPrimitive {
+  class OSGHeightField{
   public:
 
     /** height coding using in the read in bitmap.
@@ -50,7 +50,7 @@ namespace lpzrobots {
     virtual void setMatrix(const osg::Matrix& matrix);
     virtual void init(const OsgHandle& osgHandle, Quality quality = Middle);
 
-    virtual const osg::HeightField* getHeightField() const override { return field; }
+    virtual const osg::HeightField* getHeightField() const { return field; }
 
     /** loads an ppm image and returns the height field using the given coding and the height
         (maximal height of the heightfield)

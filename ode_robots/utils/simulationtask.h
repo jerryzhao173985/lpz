@@ -27,15 +27,14 @@
 #include "taskedsimulation.h"
 #include "taskedsimulationcreator.h"
 #include <string>
-#include <string.h>
+#include <cstring>
 
 namespace lpzrobots {
 
   /**
    *
    */
-  class SimulationTask
-  {
+  class SimulationTask{
   public:
     explicit SimulationTask(int taskId_) : taskId(taskId_), sim(0) { }
 
@@ -44,11 +43,11 @@ namespace lpzrobots {
     virtual int startTask(const SimulationTaskHandle& simTaskHandle, const TaskedSimulationCreator& simTaskCreator, int* argc, char** argv, std::string nameSuffix) override {
       int returnValue=0;
       sim = simTaskCreator.buildTaskedSimulationInstance();
-      if(sim!=0)
+      if(sim!= nullptr)
       {
         char buffer[20];
-        snprintf(buffer, sizeof(buffer),"%i",taskId) override;
-        sim->setTaskNameSuffix(std::string(" - ").append(nameSuffix).append(" - ").append(buffer)) override;
+        snprintf(buffer, sizeof(buffer),"%i",taskId);
+        sim->setTaskNameSuffix(std::string(" - ").append(nameSuffix).append(" - ").append(buffer));
         sim->setTaskId(taskId);
         sim->setSimTaskHandle(simTaskHandle);
         returnValue = sim->run(*argc, argv)? 0 : 1 override;

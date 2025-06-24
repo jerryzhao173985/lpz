@@ -34,15 +34,14 @@ namespace lpzrobots {
    * It consists of a number of equal elements, each linked
    * by a universal joint powered by 2 servos
    **/
-  class PlattfussSchlange: public SchlangeServo2
-  {
+  class PlattfussSchlange{
 
   public:
     PlattfussSchlange ( const OdeHandle& odeHandle, const OsgHandle& osgHandle,
                         const SchlangeConf& conf,
                         const std::string& name);
 
-    virtual ~PlattfussSchlange();
+    virtual ~PlattfussSchlange() override;
 
   private:
     virtual Primitive* createSegment(int index, const OdeHandle& odeHandle);

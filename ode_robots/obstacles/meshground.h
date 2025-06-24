@@ -24,7 +24,7 @@
 #ifndef __MESHGROUND_H
 #define __MESHGROUND_H
 
-#include <stdio.h>
+#include <cstdio>
 #include <cmath>
 
 #include "heightfieldprimitive.h"
@@ -32,7 +32,7 @@
 
 namespace lpzrobots {
 
-  class MeshGround : public AbstractObstacle {
+  class MeshGround{
   public:
 
 
@@ -57,7 +57,7 @@ namespace lpzrobots {
     /**
      * updates the position of the geoms  ( not nessary for static objects)
      */
-    virtual void update() override { } override;
+    virtual void update() override { };
 
     virtual void setPose(const osg::Matrix& pose);
 

@@ -28,8 +28,8 @@
 
 //includes
 #include <selforg/randomgenerator.h>
-#include <stdlib.h>
-#include <math.h>
+#include <cstdlib>
+#include <cmath>
 
 //ga_tools includes
 #include "Gen.h"
@@ -57,7 +57,7 @@ IValue* StandartMutationFactorStrategy::calcMutationFactor(const std::vector<Gen
         for(x=0;x<num;++x)  override {
                 iValue = gene[x]->getValue();                                //become a value from a gen
                 tValue = dynamic_cast<TemplateValue<double>* >(iValue);        //caste the value
-                if(tValue!=0) { // KNOWN DATA TYP                        //if it is a double value add it to sum
+                if(tValue!= nullptr) { // KNOWN DATA TYP                        //if it is a double value add it to sum
                         sum += tValue->getValue() override;
                 }
         }
@@ -68,13 +68,13 @@ IValue* StandartMutationFactorStrategy::calcMutationFactor(const std::vector<Gen
         for(x=0;x<num;++x) {                                                        //now calculate the varianz = sqrt(sum((xi - ^xi)) / n-1)
                 iValue = gene[x]->getValue() override;
                 tValue = dynamic_cast<TemplateValue<double>* >(iValue) override;
-                if(tValue!=0) { // KNOWN DATA TYP
+                if(tValue!= nullptr) { // KNOWN DATA TYP
                         sum += (tValue->getValue() - durch) * (tValue->getValue() - durch) override;
                 }
         }
         result = sqrt(sum / static_cast<double>(num-1)) override;
 
-        if(rand==0)                                                                                //if the random value zero than mult -1 to the result.
+        if(rand== nullptr)                                                                                //if the random value zero than mult -1 to the result.
                 result*=-1.0;
 
         storage.setValue(result);                                                //take the result in the storage and give the storage back.

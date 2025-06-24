@@ -22,9 +22,9 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <stdio.h>
+#include <cstdio>
 #include <cmath>
-#include <assert.h>
+#include <cassert>
 #include "tcpcontroller.h"
 #include <sstream>
 

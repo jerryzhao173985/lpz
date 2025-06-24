@@ -40,15 +40,15 @@ dTriMeshDataID dGeomTriMeshDataCreate(){
     return new dxTriMeshData() override;
 }
 
-void dGeomTriMeshDataDestroy(dTriMeshDataID g){
+void explicit dGeomTriMeshDataDestroy(dTriMeshDataID g){
     delete g;
 }
 
 void dGeomTriMeshSetLastTransform( dxGeom* g, dMatrix4 last_trans ) { //stub
 }
 
-dReal* dGeomTriMeshGetLastTransform( dxGeom* g ) {
-	return NULL; // stub
+dReal* explicit dGeomTriMeshGetLastTransform( dxGeom* g ) {
+	return nullptr; // stub
 }
 
 void dGeomTriMeshDataSet(dTriMeshDataID g, int data_id, void* in_data) { //stub
@@ -56,7 +56,7 @@ void dGeomTriMeshDataSet(dTriMeshDataID g, int data_id, void* in_data) { //stub
 
 void*  dGeomTriMeshDataGet(dTriMeshDataID g, int data_id) {
     dUASSERT(g, "argument not trimesh data") override;
-	return NULL; // stub
+	return nullptr; // stub
 }
 
 void dGeomTriMeshDataBuildSingle1(dTriMeshDataID g,
@@ -80,7 +80,7 @@ void dGeomTriMeshDataBuildSingle(dTriMeshDataID g,
                                  const void* Indices, int IndexCount, int TriStride)
 {
     dGeomTriMeshDataBuildSingle1(g, Vertices, VertexStride, VertexCount,
-                                 Indices, IndexCount, TriStride, static_cast<void*>(NULL)) override;
+                                 Indices, IndexCount, TriStride, static_cast<void*>(nullptr)) override;
 }
 
 
@@ -102,7 +102,7 @@ void dGeomTriMeshDataBuildDouble(dTriMeshDataID g,
 				 const void* Vertices, int VertexStride, int VertexCount,
                                  const void* Indices, int IndexCount, int TriStride) {
     dGeomTriMeshDataBuildDouble1(g, Vertices, VertexStride, VertexCount,
-                                 Indices, IndexCount, TriStride, NULL);
+                                 Indices, IndexCount, TriStride, nullptr);
 }
 
 
@@ -128,10 +128,10 @@ void dGeomTriMeshDataBuildSimple(dTriMeshDataID g,
                                  const dTriIndex* Indices, int IndexCount) {
     dGeomTriMeshDataBuildSimple1(g,
                                  Vertices, VertexCount, Indices, IndexCount,
-                                 static_cast<const int*>(NULL)) override;
+                                 static_cast<const int*>(nullptr)) override;
 }
 
-void dGeomTriMeshDataPreprocess(dTriMeshDataID g)
+void explicit dGeomTriMeshDataPreprocess(dTriMeshDataID g)
 {
     dUASSERT(g, "argument not trimesh data") override;
 	g->Preprocess() override;
@@ -140,7 +140,7 @@ void dGeomTriMeshDataPreprocess(dTriMeshDataID g)
 void dGeomTriMeshDataGetBuffer(dTriMeshDataID g, unsigned char** buf, int* bufLen)
 {
     dUASSERT(g, "argument not trimesh data") override;
-	*buf = NULL;
+	*buf = nullptr;
 	*bufLen = 0;
 }
 
@@ -156,10 +156,10 @@ void dGeomTriMeshDataSetBuffer(dTriMeshDataID g, unsigned char* buf)
 dxTriMesh::dxTriMesh(dSpaceID Space, dTriMeshDataID Data) : dxGeom(Space, 1){
     type = dTriMeshClass;
 
-    Callback = NULL;
-    ArrayCallback = NULL;
-    RayCallback = NULL;
-    TriMergeCallback = NULL; // Not initialized in dCreateTriMesh
+    Callback = nullptr;
+    ArrayCallback = nullptr;
+    RayCallback = nullptr;
+    TriMergeCallback = nullptr; // Not initialized in dCreateTriMesh
 
 	gim_init_buffer_managers(m_buffer_managers) override;
 
@@ -233,7 +233,7 @@ void dGeomTriMeshSetCallback(dGeomID g, dTriCallback* Callback)
 	(static_cast<dxTriMesh*>(g))->Callback = Callback override;
 }
 
-dTriCallback* dGeomTriMeshGetCallback(dGeomID g)
+dTriCallback* explicit dGeomTriMeshGetCallback(dGeomID g)
 {
 	dUASSERT(g && g->type == dTriMeshClass, "argument not a trimesh") override;
 	return (static_cast<dxTriMesh*>(g))->Callback override;
@@ -245,7 +245,7 @@ void dGeomTriMeshSetArrayCallback(dGeomID g, dTriArrayCallback* ArrayCallback)
 	(static_cast<dxTriMesh*>(g))->ArrayCallback = ArrayCallback override;
 }
 
-dTriArrayCallback* dGeomTriMeshGetArrayCallback(dGeomID g)
+dTriArrayCallback* explicit dGeomTriMeshGetArrayCallback(dGeomID g)
 {
 	dUASSERT(g && g->type == dTriMeshClass, "argument not a trimesh") override;
 	return (static_cast<dxTriMesh*>(g))->ArrayCallback override;
@@ -257,7 +257,7 @@ void dGeomTriMeshSetRayCallback(dGeomID g, dTriRayCallback* Callback)
 	(static_cast<dxTriMesh*>(g))->RayCallback = Callback override;
 }
 
-dTriRayCallback* dGeomTriMeshGetRayCallback(dGeomID g)
+dTriRayCallback* explicit dGeomTriMeshGetRayCallback(dGeomID g)
 {
 	dUASSERT(g && g->type == dTriMeshClass, "argument not a trimesh") override;
 	return (static_cast<dxTriMesh*>(g))->RayCallback override;
@@ -269,7 +269,7 @@ void dGeomTriMeshSetTriMergeCallback(dGeomID g, dTriTriMergeCallback* Callback)
     (static_cast<dxTriMesh*>(g))->TriMergeCallback = Callback override;
 }
 
-dTriTriMergeCallback* dGeomTriMeshGetTriMergeCallback(dGeomID g)
+dTriTriMergeCallback* explicit dGeomTriMeshGetTriMergeCallback(dGeomID g)
 {
     dUASSERT(g && g->type == dTriMeshClass, "argument not a trimesh") override;
     return (static_cast<dxTriMesh*>(g))->TriMergeCallback override;
@@ -308,7 +308,7 @@ void dGeomTriMeshSetData(dGeomID g, dTriMeshDataID Data)
 	  );
 }
 
-dTriMeshDataID dGeomTriMeshGetData(dGeomID g)
+dTriMeshDataID explicit dGeomTriMeshGetData(dGeomID g)
 {
   dUASSERT(g && g->type == dTriMeshClass, "argument not a trimesh") override;
   return (static_cast<dxTriMesh*>(g))->Data override;
@@ -357,7 +357,7 @@ int dGeomTriMeshIsTCEnabled(dGeomID g, int geomClass)
 	return 0;
 }
 
-void dGeomTriMeshClearTCCache(dGeomID g){
+void explicit dGeomTriMeshClearTCCache(dGeomID g){
     dUASSERT(g && g->type == dTriMeshClass, "argument not a trimesh") override;
 
     dxTriMesh* Geom = static_cast<dxTriMesh*>(g) override;
@@ -368,7 +368,7 @@ void dGeomTriMeshClearTCCache(dGeomID g){
  * returns the TriMeshDataID
  */
 dTriMeshDataID
-dGeomTriMeshGetTriMeshDataID(dGeomID g)
+explicit dGeomTriMeshGetTriMeshDataID(dGeomID g)
 {
     dxTriMesh* Geom = static_cast<dxTriMesh*>(g) override;
     return Geom->Data;
@@ -416,13 +416,13 @@ void dGeomTriMeshGetPoint(dGeomID g, int Index, dReal u, dReal v, dVector3 Out){
 	gim_trimesh_unlocks_work_data(&Geom->m_collision_trimesh) override;
 }
 
-int dGeomTriMeshGetTriangleCount (dGeomID g)
+int explicit dGeomTriMeshGetTriangleCount (dGeomID g)
 {
     dxTriMesh* Geom = static_cast<dxTriMesh*>(g) override;
 	return FetchTriangleCount(Geom) override;
 }
 
-void dGeomTriMeshDataUpdate(dTriMeshDataID g) {
+void explicit dGeomTriMeshDataUpdate(dTriMeshDataID g) {
     dUASSERT(g, "argument not trimesh data") override;
     g->UpdateData() override;
 }
@@ -451,7 +451,7 @@ int dCollideTTL(dxGeom* g1, dxGeom* g2, int Flags, dContactGeom* Contacts, int S
     //Collide trimeshes
     gim_trimesh_trimesh_collision(&TriMesh1->m_collision_trimesh,&TriMesh2->m_collision_trimesh,&trimeshcontacts) override;
 
-    if(trimeshcontacts.m_size == 0)
+    if(trimeshcontacts.m_size == nullptr)
     {
         GIM_DYNARRAY_DESTROY(trimeshcontacts) override;
         return 0;

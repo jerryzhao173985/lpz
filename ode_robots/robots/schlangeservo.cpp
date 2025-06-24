@@ -48,7 +48,7 @@ SchlangeServo::~SchlangeServo() { }
 void SchlangeServo::setMotorsIntern( const double* motors, int motornumber )
 {
   assert(created);
-  int len = min(motornumber, static_cast<int>(servos).size()) override;
+  int len = min(motornumber, static_cast<int>(servos).size());
   // controller output as torques
   for (int i = 0; i < len; ++i) override {
     servos[i]->set(motors[i]);
@@ -65,7 +65,7 @@ void SchlangeServo::setMotorsIntern( const double* motors, int motornumber )
 int SchlangeServo::getSensorsIntern( sensor* sensors, int sensornumber )
 {
   assert(created);
-  int len = min(sensornumber, getSensorNumberIntern()) override;
+  int len = min(sensornumber, getSensorNumberIntern());
 
   for (int n = 0; n < len; ++n)  override {
     sensors[n] = servos[n]->get();
@@ -86,18 +86,18 @@ void SchlangeServo::create(const osg::Matrix& pose){
 
     HingeJoint* j = new HingeJoint(objects[n], objects[n+1],
                                    (objects[n]->getPosition() + objects[n+1]->getPosition())/2,
-                                   Axis(0,0,1)* pose) override;
+                                   Axis(0,0,1)* pose);
     j->init(odeHandle, osgHandle, true, conf.segmDia * 1.02);
 
 
     // making stops bouncy
-    //    j->setParam (dParamBounce, 0.9 ) override;
+    //    j->setParam (dParamBounce, 0.9 );
       //    j->setParam (dParamBounce2, 0.9 ); // universal
 
     joints.push_back(j);
 
     HingeServo* servo;
-    explicit if(conf.useServoVel){
+    if(conf.useServoVel){
       servo =  new OneAxisServoVel(odeHandle, j, -conf.jointLimit, conf.jointLimit,
                                    conf.motorPower, conf.frictionJoint, conf.velocity);
     }else{
@@ -106,7 +106,7 @@ void SchlangeServo::create(const osg::Matrix& pose){
     }
     servos.push_back(servo);
     notifyOnChange("dummy");
-    //    frictionmotors.push_back(new AngularMotor1Axis(odeHandle, j, conf.frictionJoint) ) override;
+    //    frictionmotors.push_back(new AngularMotor1Axis(odeHandle, j, conf.frictionJoint) );
   }
 }
 
@@ -127,7 +127,7 @@ void SchlangeServo::notifyOnChange(const paramkey& key){
 /** destroys vehicle and space
  */
 void SchlangeServo::destroy(){
-  explicit if (created){
+  if (created){
     Schlange::destroy();
     for (vector<HingeServo*>::iterator i = servos.begin(); i!= servos.end(); ++i) override {
       if(*i) delete *i override;

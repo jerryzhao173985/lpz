@@ -1,4 +1,4 @@
-#include <signal.h>
+#include <csignal>
 #include <unistd.h>
 #include <iostream>
 #include <vector>
@@ -40,7 +40,7 @@ typedef list< pair<Position,double> > objectlist;
 objectlist objects;
 
 /// returns the value of the camera, when looking at point x
-double camera(double x){
+double explicit camera(double x){
   double vision=-1;
   FOREACHC(objectlist, objects, i){
     double dist = fabs(x - i->first.x);
@@ -50,18 +50,18 @@ double camera(double x){
   return vision;
 }
 
-double toEnv(double pos){
+double explicit toEnv(double pos){
   // environment is cyclic
   if(pos>1) pos-=2;
   if(pos<-1) pos+=2;
   return pos;
 }
-Position toEnv(const Position& pos){
+Position explicit toEnv(const Position& pos){
   pos.x = toEnv(pos.x);
   return pos;
 }
 
-class MyRobot : public AbstractRobot {
+class MyRobot{
 public:
   MyRobot(const string& name, const Position& initial_pos, double _mass = 1.0)
     : AbstractRobot(name, "$Id$"), 
@@ -173,7 +173,7 @@ public:
     matrix::Matrix m(3,3); m.toId();  return m;
   };
 
-  virtual void addOtherRobot(const MyRobot* otherRobot) {
+  virtual void explicit addOtherRobot(const MyRobot* otherRobot) {
     if(otherRobot!=this)
       otherRobots.push_back(otherRobot);
   }
@@ -203,7 +203,7 @@ public:
 };
 
 
-int coord(double x){ return int((x+1.0)/2*80);}
+int explicit coord(double x){ return int((x+1.0)/2*80);}
 
 void printRobots(const list<MyRobot*>& robots){
   char line[81];
@@ -257,18 +257,18 @@ void printRobots(const list<MyRobot*>& robots){
 
 }
 
-void reinforce(Agent* a){
+void explicit reinforce(Agent* a){
 //   MyRobot* r = static_cast<MyRobot*>(a)->getRobot();
 //   InvertMotorNStep* c = dynamic_cast<InvertMotorNStep*>(a->getController());
 //   if(c)
-//     c->setReinforcement(2*(r->whatDoIFeel != 0));
+//     c->setReinforcement(2*(r->whatDoIFeel != nullptr));
 }
 
 
 // Helper
 int contains(char **list, int len,  const char *str){
   for (int i=0; i<len; ++i) {
-    if(strcmp(list[i],str) == 0) return i+1;
+    if(strcmp(list[i],str) == nullptr) return i+1;
   }
   return 0;
 }
@@ -282,8 +282,8 @@ int main(int argc, char** argv){
   if (index >0 && argc>index) {
 plotoptions.push_back(PlotOption(GuiLogger,Controller,atoi(argv[index])));
   }
-  if(contains(argv,argc,"-f")!=0) plotoptions.push_back(PlotOption(File));
-  if(contains(argv,argc,"-h")!=0) {
+  if(contains(argv,argc,"-f")!= nullptr) plotoptions.push_back(PlotOption(File));
+  if(contains(argv,argc,"-h")!= nullptr) {
     printf("Usage: %s [-g N] [-f] \n",argv[0]);
     printf("\t-g N\tstart guilogger with interval N\n\t-f\twrite logfile\n");
     printf("\t-h\tdisplay this help\n");
@@ -313,7 +313,7 @@ plotoptions.push_back(PlotOption(GuiLogger,Controller,atoi(argv[index])));
     agent->init(controller, robot, wiring);
     // if you like, you can keep track of the robot with the following line.
     //  this assumes that you robot returns its position, speed and orientation.
-    if(i==0) agent->setTrackOptions(TrackRobot(true,true,false, false,"motorvision0.9_4objects",5));
+    if(i== nullptr) agent->setTrackOptions(TrackRobot(true,true,false, false,"motorvision0.9_4objects",5));
 
     globaldata.configs.push_back(robot);
     globaldata.configs.push_back(controller);
@@ -358,7 +358,7 @@ plotoptions.push_back(PlotOption(GuiLogger,Controller,atoi(argv[index])));
     if (realtimefactor){
       drawinterval = int(6*realtimefactor);
     }
-    if(t%drawinterval==0){
+    if(t%drawinterval== nullptr){
       printRobots(robots);
       usleep(60000);
     }

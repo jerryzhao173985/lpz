@@ -24,7 +24,7 @@
 #include <selforg/abstractcontroller.h>
 #include <selforg/controller_misc.h>
 
-#include <assert.h>
+#include <cassert>
 #include <cmath>
 
 #include <selforg/matrix.h>
@@ -69,13 +69,13 @@ struct DEPConf {
 /**
  * This controller implements a new very much simplified algorihm derived from TiPI maximization
  */
-class DEP : public AbstractController {
+class DEP : public AbstractController, public Storeable {
 
 public:
   DEP(const DEPConf& conf = getDefaultConf());
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
 
-  virtual ~DEP();
+  virtual ~DEP() override;
 
   static DEPConf getDefaultConf() {
     DEPConf conf;

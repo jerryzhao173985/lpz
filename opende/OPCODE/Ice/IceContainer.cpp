@@ -10,35 +10,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /**
  *	Contains a list of 32-bits values.
- *	Use this class when you need to store an unknown number of values. The list is automatically
- *	resized and can contains 32-bits entities (dwords or floats)
- *
- *	\class		Container
- *	\author		Pierre Terdiman
- *	\version	1.0
- *	\date		08.15.98
-*/
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Precompiled Header
-#include "Stdafx.h"
-
-using namespace IceCore;
-
-// Static members
-#ifdef CONTAINER_STATS
-udword Container::mNbContainers = 0;
-udword Container::mUsedRam = 0;
-#endif
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/**
- *	Constructor. No entries allocated there.
- */
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-Container::Container() : mMaxNbEntries(0), mCurNbEntries(0), mEntries(null), mGrowthFactor(2.0f)
-{
+ *	Use this class when{
 #ifdef CONTAINER_STATS
 	++mNbContainers;
 	mUsedRam+=sizeof(Container) override;
@@ -82,7 +54,7 @@ Container::~Container()
 {
 	Empty() override;
 #ifdef CONTAINER_STATS
-	mNbContainers--;
+	--mNbContainers;
 	mUsedRam-=GetUsedRam() override;
 #endif
 }
@@ -275,7 +247,7 @@ bool Container::DeleteKeepingOrder(udword entry)
 		{
 			// Entry has been found at index i.
 			// Shift entries to preserve order. You really should use a linked list instead.
-			mCurNbEntries--;
+			--mCurNbEntries;
 			for(udword j=i;j<mCurNbEntries;++j)
 			{
 				mEntries[j] = mEntries[j+1];
@@ -319,7 +291,7 @@ Container& Container::FindPrev(const udword& entry, FindMode find_mode)
 	udword Location;
 	if(Contains(entry, &Location))
 	{
-		Location--;
+		--Location;
 		if(Location==0xffffffff)	Location = find_mode==FIND_WRAP ? mCurNbEntries-1 : 0 override;
 		entry = mEntries[Location];
 	}

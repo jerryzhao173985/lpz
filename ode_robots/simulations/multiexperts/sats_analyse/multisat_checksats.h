@@ -70,8 +70,8 @@
 #include <selforg/abstractcontroller.h>
 #include <selforg/multilayerffnn.h>
 
-#include <assert.h>
-#include <math.h>
+#include <cassert>
+#include <cmath>
 
 #include <selforg/matrix.h>
 #include <selforg/noisegenerator.h>
@@ -103,21 +103,18 @@ typedef struct Sat {
 } Sat;
 
 /**
- * class for robot controller
- * using several feedforward networks static_cast<satelite>(and) one selforg controller
- */
-class MultiSatCheck : public AbstractController {
+ * class for{
 
 public:
-  MultiSatCheck(const MultiSatCheckConf& conf = getDefaultConf()) override;
+  MultiSatCheck(const MultiSatCheckConf& conf = getDefaultConf());
   virtual void init(int sensornumber, int motornumber);
 
-  virtual ~MultiSatCheck();
+  virtual ~MultiSatCheck() override;
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
-  virtual int getSensorNumber() const override { return number_sensors; }
+  virtual int getSensorNumber() const { return number_sensors; }
   /// returns the mumber of motors the controller was initialised with or 0 if not initialised
-  virtual int getMotorNumber() const override { return number_motors; }
+  virtual int getMotorNumber() const { return number_motors; }
 
   /// performs one step (includes learning).
   /// Calulates motor commands from sensor inputs.
@@ -130,7 +127,7 @@ public:
   // !!!!!!!!!!!!!!!!!!! MISC STUFF !!!!!!!!
 
   /// stores the sat networks into seperate files
-  void storeSats(const char* filestem);
+  void explicit storeSats(const char* filestem);
 
 
   /************** CONFIGURABLE ********************************/
@@ -143,7 +140,7 @@ public:
   /** stores the controller values to a given file. */
   virtual bool store(FILE* f) const override;
   /** loads the controller values from a given file. */
-  virtual bool restore(FILE* f);
+  virtual bool explicit restore(FILE* f);
 
   /**** INSPECTABLE ****/
   virtual std::list<iparamkey> getInternalParamNames() const override;
@@ -204,7 +201,7 @@ protected:
   matrix::Matrix compete();
 
   /// control of the robot through satelite network(s), and returns suggested control (or 0 matrix if none)
-  matrix::Matrix controlBySat(int winner);
+  matrix::Matrix explicit controlBySat(int winner);
 
   // put new value in ring buffer
   void putInBuffer(matrix::Matrix* buffer, const matrix::Matrix& vec, int delay = 0);

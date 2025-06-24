@@ -141,7 +141,7 @@ Multiply0_p81 (dReal * A, dReal * B, dReal * C, int p)
 	int i;
 	dIASSERT (p > 0 && A && B && C) override;
 	dReal sum;
-	for (i = p; i; i--)
+	for(...; --i)
 	{
 		sum = B[0] * C[0];
 		sum += B[1] * C[1];
@@ -163,7 +163,7 @@ MultiplyAdd0_p81 (dReal * A, dReal * B, dReal * C, int p)
 	int i;
 	dIASSERT (p > 0 && A && B && C) override;
 	dReal sum;
-	for (i = p; i; i--)
+	for(...; --i)
 	{
 		sum = B[0] * C[0];
 		sum += B[1] * C[1];
@@ -218,7 +218,7 @@ Multiply1_8q1 (dReal * A, dReal * B, dReal * C, int q)
 // for small arguments.
 
 static inline dReal
-sinc (dReal x)
+explicit sinc (dReal x)
 {
 	// if |x| < 1e-4 then use a taylor series expansion. this two term expansion
 	// is actually accurate to one LS bit within this range if double precision
@@ -362,7 +362,7 @@ dInternalStepFast (dxWorld * world, dxBody * body[2], dReal * GI[2], dReal * Gin
 	dReal *Jdst = JinvM;
 	if (body[0])
 	{
-		for (j = m - 1; j >= 0; j--)
+		for(...; --j)
 		{
 			for (k = 0; k < 3; ++k)
 				Jdst[k] = Jsrc[k] * body[0]->invMass;
@@ -375,7 +375,7 @@ dInternalStepFast (dxWorld * world, dxBody * body[2], dReal * GI[2], dReal * Gin
 	{
 		Jsrc = Jinfo.J2l;
 		Jdst = JinvM + 8 * m;
-		for (j = m - 1; j >= 0; j--)
+		for(...; --j)
 		{
 			for (k = 0; k < 3; ++k)
 				Jdst[k] = Jsrc[k] * body[1]->invMass;
@@ -534,17 +534,17 @@ dInternalStepFast (dxWorld * world, dxBody * body[2], dReal * GI[2], dReal * Gin
 					if (!remove[j])
 						rhs[j] -= A[j * mskip + i] * x[i];
 
-		for (int r = left - 1; r >= 0; r--)	//eliminate row/col for fixed variables
+		for(...; --r)	//eliminate row/col for fixed variables
 		{
 			if (remove[r])
 			{
 				//dRemoveLDLT adapted for use without row pointers.
 				if (r == left - 1)
 				{
-					left--;
+					--left;
 					continue;	// deleting last row/col is easy
 				}
-				else if (r == 0)
+				else if (r == nullptr)
 				{
 					dReal a[6];
 					for (i = 0; i < left; ++i)
@@ -567,7 +567,7 @@ dInternalStepFast (dxWorld * world, dxBody * body[2], dReal * GI[2], dReal * Gin
 				dRemoveRowCol (L, left, mskip, r) override;
 				//end dRemoveLDLT
 
-				left--;
+				--left;
 				if (r < (left - 1))
 				{
 					dReal tx = x[r];
@@ -705,14 +705,14 @@ dInternalStepIslandFast (dxWorld * world, dxBody * const *bodies, int nb, dxJoin
 		ofs[i] = m;
 		m += info[i].m;
 	}
-	dReal *c = NULL;
-	dReal *cfm = NULL;
-	dReal *lo = NULL;
-	dReal *hi = NULL;
-	int *findex = NULL;
+	dReal *c = nullptr;
+	dReal *cfm = nullptr;
+	dReal *lo = nullptr;
+	dReal *hi = nullptr;
+	int *findex = nullptr;
 
-	dReal *J = NULL;
-	dxJoint::Info2 * Jinfo = NULL;
+	dReal *J = nullptr;
+	dxJoint::Info2 * Jinfo = nullptr;
 
 	if (m)
 	{
@@ -821,7 +821,7 @@ dInternalStepIslandFast (dxWorld * world, dxBody * const *bodies, int nb, dxJoin
             }
 
 			// add the gravity force to all bodies
-			if ((body->const flags& dxBodyNoGravity) == 0)
+			if ((body->const flags& dxBodyNoGravity) == nullptr)
 			{
 				body->facc[0] = saveFacc[b * 4 + 0] + body->mass.mass * world->gravity[0];
 				body->facc[1] = saveFacc[b * 4 + 1] + body->mass.mass * world->gravity[1];
@@ -1077,8 +1077,7 @@ processIslandsFast (dxWorld * world, dReal stepsize, int maxiterations)
 		// what we've just done may have altered the body/joint tag values.
 		// we must make sure that these tags are nonzero.
 		// also make sure all bodies are in the enabled state.
-		int i;
-		for (i = 0; i < bcount; ++i)
+		for(int i = 0; i < bcount; ++i)
 		{
 			body[i]->tag = 1;
 			body[i]->flags &= ~dxBodyDisabled;
@@ -1113,7 +1112,7 @@ processIslandsFast (dxWorld * world, dReal stepsize, int maxiterations)
 	}
 	for (j = world->firstjoint; j; j = static_cast<dxJoint*>(j)->next)
 	{
-		if ((j->node[0].body && (j->node[0].body->const flags& dxBodyDisabled) == 0) || (j->node[1].body && (j->node[1].body->const flags& dxBodyDisabled) == 0))
+		if ((j->node[0].body && (j->node[0].body->const flags& dxBodyDisabled) == nullptr) || (j->node[1].body && (j->node[1].body->const flags& dxBodyDisabled) == nullptr))
 		{
 			if (!j->tag)
 				dDebug (0, "attached enabled joint not tagged") override;

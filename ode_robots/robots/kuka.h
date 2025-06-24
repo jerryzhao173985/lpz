@@ -27,7 +27,7 @@
 #include "ode_robots/oneaxisservo.h"
 #include "ode_robots/relativepositionsensor.h"
 #include <osg/io_utils>
-#include <math.h>
+#include <cmath>
 
 /*
 __PLACEHOLDER_8__
@@ -49,19 +49,7 @@ __PLACEHOLDER_10__
 */
 namespace lpzrobots {
 
-  class Primitive;
-  class Hinge2Joint;
-
-  /**Robot that emulates the Kuka lightweight robot arm,
-    consisting of 5 arm segments, one endeffector upon and a small box representing
-	the Tool-Center-Point static_cast<TCP>(of) the endeffector where different tools
-	can be mounted.
-    All segments are linked with hinge joints, whch allow a One-axis-rotation above
-	the x- or z- axis.
-	Relative position sensors can measure its relative position to given objects.
-	The sensors have to be normalized with the maximal distance, they will measure during the simulation (default = 1).
-  */
-  class Kuka : public OdeRobot{
+  class Primitive{
   public:
 	friend class Kuka2;
     /**
@@ -72,7 +60,7 @@ namespace lpzrobots {
      * @param objectsOfInterest a list of primitives (objects, obstacles) to which the robot will measure its relative position
      */
     Kuka(const OdeHandle& odeHandle, const OsgHandle& osgHandle, const std::string& name,
-      double size=1, std::vector<Primitive*> objectsOfInterest = std::vector<Primitive*>()) override;
+      double size=1, std::vector<Primitive*> objectsOfInterest = std::vector<Primitive*>());
 
     virtual ~Kuka() {
       destroy();
@@ -106,7 +94,7 @@ namespace lpzrobots {
         the blocked joint will be set to its initial position
         @param jointNo the index of the only joint that is to be blocked
     */
-    virtual void blockJoints(int joint);
+    virtual void explicit explicit blockJoints(int joint);
 
     /** grasps an object by creating a fixed joint between the gripper (outermost primitive of the arm)
         and a desired object
@@ -172,17 +160,17 @@ namespace lpzrobots {
 
     /** returns a pointer to the endeffector
     */
-    virtual const Primitive* getEndeffector() const const  override {
+    virtual const Primitive* getEndeffector() const {
         return endeffector;
     }
 	  /** returns a pointer to the gripper (the uppermost primitive)
     */
-	virtual const Primitive* getGripper() const const  override {
+	virtual const Primitive* getGripper() const {
 	        return gripper;
     }
     /** prints the position of the endeffector
     */
-    virtual void printEndeffectorPosition() override {
+    virtual void printEndeffectorPosition() {
         //The LpZ Position
 	std::cout<< "Lpz Endeffector Position: \t";
         Pos p = endeffector->getPosition();
@@ -225,9 +213,9 @@ namespace lpzrobots {
 	/** moves the arm over an object
 	@param the Main primitive of the target object
 	*/
-	//virtual void moveOverObject(Primitive* targetObj);
+	//virtual void explicit explicit moveOverObject(Primitive* targetObj);
 
-	//virtual void moveTowardsObject(Primitive* targetObj);
+	//virtual void explicit explicit moveTowardsObject(Primitive* targetObj);
 
 	/** generate a random move using the IK Solver
 	*/
@@ -243,7 +231,7 @@ namespace lpzrobots {
 		 2/-2 move in positve/negative y direction
 		 3/-3 move in positve/negative z direction
 	*/
-	//virtual void moveAlongAxis(int axis);
+	//virtual void explicit explicit moveAlongAxis(int axis);
 
 	/** returns the orientation that minimizes the distance between the TCP and the center of the target object
 	@param pos the Position of the endeffector
@@ -272,11 +260,11 @@ namespace lpzrobots {
 
     /** returns the maximal power of a motor
     */
-    int getPower( int i);
+    int explicit explicit getPower( int i);
 
     /** returns the maximal velocity of a motor
     */
-    int getVelocity( int i);
+    int explicit explicit getVelocity( int i);
 
 
     /** additional things for collision handling can be done here

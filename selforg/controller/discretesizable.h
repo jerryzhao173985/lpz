@@ -32,20 +32,7 @@
 // #include __PLACEHOLDER_0__
 
 /**
- * Abstact class for discretesizable controllers. Implements the methods
- * step(...) and stepNoLearning(...) and defines the methods dStep(...)
- * respectively dStepNoLearning(...), which are called from the implemented
- * one.
- *
- * Hint: Do not mistake dStep(...) for a method from the ODE.
- *
- * Additionally the controller implementing this interface must give the range
- * and intervalCount in the constructor of this interface for configuring the
- * discretization correctly.
- *
- * Note: This interface does only discretesize the sensor values.
- */
-class Discretesizable : public DiscreteControllerAdapter {
+ * Abstact class for{
 public:
   /** Initializes the discretization.
    * @param intervalCount sets the number of intervals

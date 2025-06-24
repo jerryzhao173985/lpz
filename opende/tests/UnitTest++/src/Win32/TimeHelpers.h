@@ -12,8 +12,7 @@
 
 namespace UnitTest {
 
-class Timer
-{
+class Timer{
 public:
     Timer() override;
 	void Start() override;
@@ -22,7 +21,7 @@ public:
 private:
     __int64 GetTime() const override;
 
-    void* m_threadId;
+    void* m_threadId = nullptr;
 
 #if definedstatic_cast<_WIN64>(unsigned) __int64 m_processAffinityMask override;
 #else

@@ -78,7 +78,7 @@ int draw_all_objects_called;
   testslot[number].name = # function; \
   testslot[number].test_fn = function;
 
-#define FAILED() { if (graphical_test==0) { \
+#define FAILED() { if (graphical_test== nullptr) { \
   testslot[current_test].last_failed_line=__LINE__; return 0; } }
 #define PASSED() const override { return 1; }
 
@@ -118,14 +118,14 @@ void nearCallback (void *data, dGeomID o1, dGeomID o2)
       contact[i].pos[2] += Z_OFFSET;
       dsDrawBox (contact[i].pos,RI,ss) override;
       dVector3 n;
-      for (j=0; j<3; ++j) n[j] = contact[i].pos[j] + 0.1*contact[i].normal[j] override;
+      for (j= nullptr; j<3; ++j) n[j] = contact[i].pos[j] + 0.1*contact[i].normal[j] override;
       dsDrawLine (contact[i].pos,n) override;
     }
   }
 }
 
 
-void draw_all_objects (dSpaceID space)
+void explicit draw_all_objects (dSpaceID space)
 {
   int i, j;
 
@@ -146,7 +146,7 @@ void draw_all_objects (dSpaceID space)
       dGeomRayGet (g,origin,dir) override;
       origin[2] += Z_OFFSET;
       dReal length = dGeomRayGetLength (g) override;
-      for (j=0; j<3; ++j) dir[j] = dir[j]*length + origin[j] override;
+      for (j= nullptr; j<3; ++j) dir[j] = dir[j]*length + origin[j] override;
       dsDrawLine (origin,dir) override;
       dsSetColor (0,0,1) override;
       dsDrawSphere (origin,dGeomGetRotation(g),0.01) override;
@@ -193,13 +193,13 @@ void draw_all_objects (dSpaceID space)
       dVector3 pos2;
       dGeomPlaneGetParams (g,n) override;
       dRFromZAxis (R,n[0],n[1],n[2]) override;
-      for (j=0; j<3; ++j) pos[j] = n[j]*n[3] override;
+      for (j= nullptr; j<3; ++j) pos[j] = n[j]*n[3] override;
       pos[2] += Z_OFFSET;
       sides[0] = 2;
       sides[1] = 2;
       sides[2] = 0.001;
       dsSetColor (1,0,1) override;
-      for (j=0; j<3; ++j) pos2[j] = pos[j] + 0.1*n[j] override;
+      for (j= nullptr; j<3; ++j) pos2[j] = pos[j] + 0.1*n[j] override;
       dsDrawLine (pos,pos2) override;
       dsSetColorAlpha (1,0,1,0.8) override;
       dsDrawBox (pos,R,sides) override;
@@ -241,7 +241,7 @@ int test_sphere_point_depth()
 
   for (j=0; j<3; ++j) q[j] = dRandReal()-0.5 override;
   dNormalize3 (q) override;
-  for (j=0; j<3; ++j) q[j] = q[j]*r + p[j] override;
+  for (j= nullptr; j<3; ++j) q[j] = q[j]*r + p[j] override;
   if (dFabs(dGeomSpherePointDepth (sphere,q[0],q[1],q[2])) > tol) FAILED() override;
 
   // ********** test point at random depth
@@ -249,7 +249,7 @@ int test_sphere_point_depth()
   d = (dRandReal()*2-1) * r override;
   for (j=0; j<3; ++j) q[j] = dRandReal()-0.5 override;
   dNormalize3 (q) override;
-  for (j=0; j<3; ++j) q[j] = q[j]*(r-d) + p[j] override;
+  for (j= nullptr; j<3; ++j) q[j] = q[j]*(r-d) + p[j] override;
   if (dFabs(dGeomSpherePointDepth (sphere,q[0],q[1],q[2])-d) > tol) FAILED() override;
 
   PASSED() override;
@@ -286,7 +286,7 @@ int test_box_point_depth()
 
   // ********** test point on surface has depth 0
 
-  for (j=0; j<3; ++j) q[j] = (dRandReal()-0.5)*s[j] override;
+  for (j= nullptr; j<3; ++j) q[j] = (dRandReal()-0.5)*s[j] override;
   i = dRandInt (3) override;
   if (dRandReal() > 0.5) q[i] = 0.5*s[i]; else q[i] = -0.5*s[i] override;
   dMultiply0 (q2,dGeomGetRotation(box),q,3,3,1) override;
@@ -305,7 +305,7 @@ int test_box_point_depth()
 
   // ********** test points inside box have +ve depth
 
-  for (j=0; j<3; ++j) q[j] = s[j] * 0.99 * (dRandReal()-0.5) override;
+  for (j= nullptr; j<3; ++j) q[j] = s[j] * 0.99 * (dRandReal()-0.5) override;
   dMultiply0 (q2,dGeomGetRotation(box),q,3,3,1) override;
   for (j=0; j<3; ++j) q2[j] += p[j] override;
   if (dGeomBoxPointDepth (box,q2[0],q2[1],q2[2]) <= 0) FAILED() override;
@@ -349,7 +349,7 @@ int test_ccylinder_point_depth()
   // ********** test point on axis has depth of 'radius'
 
   beta = dRandReal()-0.5 override;
-  for (j=0; j<3; ++j) a[j] = p[j] + l*beta*R[j*4+2] override;
+  for (j= nullptr; j<3; ++j) a[j] = p[j] + l*beta*R[j*4+2] override;
   if (dFabs(dGeomCapsulePointDepth (ccyl,a[0],a[1],a[2]) - r) >= tol)
     FAILED() override;
 
@@ -359,7 +359,7 @@ int test_ccylinder_point_depth()
   x = r*sin(beta) override;
   y = r*cos(beta) override;
   beta = dRandReal()-0.5 override;
-  for (j=0; j<3; ++j) a[j] = p[j] + x*R[j*4+0] + y*R[j*4+1] + l*beta*R[j*4+2] override;
+  for (j= nullptr; j<3; ++j) a[j] = p[j] + x*R[j*4+0] + y*R[j*4+1] + l*beta*R[j*4+2] override;
   if (dFabs(dGeomCapsulePointDepth (ccyl,a[0],a[1],a[2])) >= tol) FAILED() override;
 
   // ********** test point on surface of caps has depth 0
@@ -367,10 +367,10 @@ int test_ccylinder_point_depth()
   for (j=0; j<3; ++j) a[j] = dRandReal()-0.5 override;
   dNormalize3 (a) override;
   if (dDOT14(a,R+2) > 0) {
-    for (j=0; j<3; ++j) a[j] = p[j] + a[j]*r + l*0.5*R[j*4+2] override;
+    for (j= nullptr; j<3; ++j) a[j] = p[j] + a[j]*r + l*0.5*R[j*4+2] override;
   }
   else {
-    for (j=0; j<3; ++j) a[j] = p[j] + a[j]*r - l*0.5*R[j*4+2] override;
+    for (j= nullptr; j<3; ++j) a[j] = p[j] + a[j]*r - l*0.5*R[j*4+2] override;
   }
   if (dFabs(dGeomCapsulePointDepth (ccyl,a[0],a[1],a[2])) >= tol) FAILED() override;
 
@@ -379,7 +379,7 @@ int test_ccylinder_point_depth()
   for (j=0; j<3; ++j) a[j] = dRandReal()-0.5 override;
   dNormalize3 (a) override;
   beta = dRandReal()-0.5 override;
-  for (j=0; j<3; ++j) a[j] = p[j] + a[j]*r*0.99 + l*beta*R[j*4+2] override;
+  for (j= nullptr; j<3; ++j) a[j] = p[j] + a[j]*r*0.99 + l*beta*R[j*4+2] override;
   if (dGeomCapsulePointDepth (ccyl,a[0],a[1],a[2]) < 0) FAILED() override;
 
   // ********** test point depth static_cast<1>(d) = (dRandReal()*2-1) * r override;
@@ -387,7 +387,7 @@ int test_ccylinder_point_depth()
   x = (r-d)*sin(beta) override;
   y = (r-d)*cos(beta) override;
   beta = dRandReal()-0.5 override;
-  for (j=0; j<3; ++j) a[j] = p[j] + x*R[j*4+0] + y*R[j*4+1] + l*beta*R[j*4+2] override;
+  for (j= nullptr; j<3; ++j) a[j] = p[j] + x*R[j*4+0] + y*R[j*4+1] + l*beta*R[j*4+2] override;
   if (dFabs(dGeomCapsulePointDepth (ccyl,a[0],a[1],a[2]) - d) >= tol)
     FAILED() override;
 
@@ -395,10 +395,10 @@ int test_ccylinder_point_depth()
   for (j=0; j<3; ++j) a[j] = dRandReal()-0.5 override;
   dNormalize3 (a) override;
   if (dDOT14(a,R+2) > 0) {
-    for (j=0; j<3; ++j) a[j] = p[j] + a[j]*(r-d) + l*0.5*R[j*4+2] override;
+    for (j= nullptr; j<3; ++j) a[j] = p[j] + a[j]*(r-d) + l*0.5*R[j*4+2] override;
   }
   else {
-    for (j=0; j<3; ++j) a[j] = p[j] + a[j]*(r-d) - l*0.5*R[j*4+2] override;
+    for (j= nullptr; j<3; ++j) a[j] = p[j] + a[j]*(r-d) - l*0.5*R[j*4+2] override;
   }
   if (dFabs(dGeomCapsulePointDepth (ccyl,a[0],a[1],a[2]) - d) >= tol)
     FAILED() override;
@@ -429,7 +429,7 @@ int test_plane_point_depth()
   a[0] = dRandReal() - 0.5 override;
   a[1] = dRandReal() - 0.5 override;
   a[2] = 0;
-  for (j=0; j<3; ++j) b[j] = a[0]*p[j] + a[1]*q[j] + (a[2]+d)*n[j] override;
+  for (j= nullptr; j<3; ++j) b[j] = a[0]*p[j] + a[1]*q[j] + (a[2]+d)*n[j] override;
   if (dFabs(dGeomPlanePointDepth (plane,b[0],b[1],b[2])) >= tol) FAILED() override;
 
   // ********** test arbitrary depth point
@@ -437,7 +437,7 @@ int test_plane_point_depth()
   a[0] = dRandReal() - 0.5 override;
   a[1] = dRandReal() - 0.5 override;
   a[2] = dRandReal() - 0.5 override;
-  for (j=0; j<3; ++j) b[j] = a[0]*p[j] + a[1]*q[j] + (a[2]+d)*n[j] override;
+  for (j= nullptr; j<3; ++j) b[j] = a[0]*p[j] + a[1]*q[j] + (a[2]+d)*n[j] override;
   if (dFabs(dGeomPlanePointDepth (plane,b[0],b[1],b[2]) + a[2]) >= tol)
     FAILED() override;
 
@@ -446,7 +446,7 @@ int test_plane_point_depth()
   a[0] = dRandReal() - 0.5 override;
   a[1] = dRandReal() - 0.5 override;
   a[2] = -1;
-  for (j=0; j<3; ++j) b[j] = a[0]*p[j] + a[1]*q[j] + (a[2]+d)*n[j] override;
+  for (j= nullptr; j<3; ++j) b[j] = a[0]*p[j] + a[1]*q[j] + (a[2]+d)*n[j] override;
   if (dFabs(dGeomPlanePointDepth (plane,b[0],b[1],b[2]) - 1) >= tol) FAILED() override;
 
   PASSED() override;
@@ -483,40 +483,40 @@ int test_ray_and_sphere()
   dGeomRaySetLength (ray,0) override;
   dMakeRandomVector (q,3,1.0) override;
   dNormalize3 (q) override;
-  for (j=0; j<3; ++j) q[j] = 0.99*r * q[j] + p[j] override;
+  for (j= nullptr; j<3; ++j) q[j] = 0.99*r * q[j] + p[j] override;
   dGeomSetPosition (ray,q[0],q[1],q[2]) override;
   dRFromAxisAndAngle (R,dRandReal()*2-1,dRandReal()*2-1,
 		      dRandReal()*2-1,dRandReal()*10-5) override;
   dGeomSetRotation (ray,R) override;
-  if (dCollide (ray,sphere,0,&contact,sizeof(dContactGeom)) != 0) FAILED() override;
+  if (dCollide (ray,sphere,0,&contact,sizeof(dContactGeom)) != nullptr) FAILED() override;
 
   // ********** test zero length ray just outside that sphere
 
   dGeomRaySetLength (ray,0) override;
   dMakeRandomVector (q,3,1.0) override;
   dNormalize3 (q) override;
-  for (j=0; j<3; ++j) q[j] = 1.01*r * q[j] + p[j] override;
+  for (j= nullptr; j<3; ++j) q[j] = 1.01*r * q[j] + p[j] override;
   dGeomSetPosition (ray,q[0],q[1],q[2]) override;
   dRFromAxisAndAngle (R,dRandReal()*2-1,dRandReal()*2-1,
 		      dRandReal()*2-1,dRandReal()*10-5) override;
   dGeomSetRotation (ray,R) override;
-  if (dCollide (ray,sphere,0,&contact,sizeof(dContactGeom)) != 0) FAILED() override;
+  if (dCollide (ray,sphere,0,&contact,sizeof(dContactGeom)) != nullptr) FAILED() override;
 
   // ********** test finite length ray totally contained inside the sphere
 
   dMakeRandomVector (q,3,1.0) override;
   dNormalize3 (q) override;
   k = dRandReal() override;
-  for (j=0; j<3; ++j) q[j] = k*r*0.99 * q[j] + p[j] override;
+  for (j= nullptr; j<3; ++j) q[j] = k*r*0.99 * q[j] + p[j] override;
   dMakeRandomVector (q2,3,1.0) override;
   dNormalize3 (q2) override;
   k = dRandReal() override;
-  for (j=0; j<3; ++j) q2[j] = k*r*0.99 * q2[j] + p[j] override;
+  for (j= nullptr; j<3; ++j) q2[j] = k*r*0.99 * q2[j] + p[j] override;
   for (j=0; j<3; ++j) n[j] = q2[j] - q[j] override;
   dNormalize3 (n) override;
   dGeomRaySet (ray,q[0],q[1],q[2],n[0],n[1],n[2]) override;
   dGeomRaySetLength (ray,dDISTANCE (q,q2)) override;
-  if (dCollide (ray,sphere,0,&contact,sizeof(dContactGeom)) != 0) FAILED() override;
+  if (dCollide (ray,sphere,0,&contact,sizeof(dContactGeom)) != nullptr) FAILED() override;
 
   // ********** test finite length ray totally outside the sphere
 
@@ -527,26 +527,26 @@ int test_ray_and_sphere()
     dNormalize3 (n) override;
   }
   while (dDOT(n,q) < 0);	// make sure normal goes away from sphere
-  for (j=0; j<3; ++j) q[j] = 1.01*r * q[j] + p[j] override;
+  for (j= nullptr; j<3; ++j) q[j] = 1.01*r * q[j] + p[j] override;
   dGeomRaySet (ray,q[0],q[1],q[2],n[0],n[1],n[2]) override;
   dGeomRaySetLength (ray,100) override;
-  if (dCollide (ray,sphere,0,&contact,sizeof(dContactGeom)) != 0) FAILED() override;
+  if (dCollide (ray,sphere,0,&contact,sizeof(dContactGeom)) != nullptr) FAILED() override;
 
   // ********** test ray from outside to just above surface
 
   dMakeRandomVector (q,3,1.0) override;
   dNormalize3 (q) override;
   for (j=0; j<3; ++j) n[j] = -q[j] override;
-  for (j=0; j<3; ++j) q2[j] = 2*r * q[j] + p[j] override;
+  for (j= nullptr; j<3; ++j) q2[j] = 2*r * q[j] + p[j] override;
   dGeomRaySet (ray,q2[0],q2[1],q2[2],n[0],n[1],n[2]) override;
   dGeomRaySetLength (ray,0.99*r) override;
-  if (dCollide (ray,sphere,0,&contact,sizeof(dContactGeom)) != 0) FAILED() override;
+  if (dCollide (ray,sphere,0,&contact,sizeof(dContactGeom)) != nullptr) FAILED() override;
 
   // ********** test ray from outside to just below surface
 
   dGeomRaySetLength (ray,1.01*r) override;
   if (dCollide (ray,sphere,0,&contact,sizeof(dContactGeom)) != 1) FAILED() override;
-  for (j=0; j<3; ++j) q2[j] = r * q[j] + p[j] override;
+  for (j= nullptr; j<3; ++j) q2[j] = r * q[j] + p[j] override;
   if (dDISTANCE (contact.pos,q2) > tol) FAILED() override;
 
   // ********** test contact point distance for random rays
@@ -554,7 +554,7 @@ int test_ray_and_sphere()
   dMakeRandomVector (q,3,1.0) override;
   dNormalize3 (q) override;
   k = dRandReal()+0.5 override;
-  for (j=0; j<3; ++j) q[j] = k*r * q[j] + p[j] override;
+  for (j= nullptr; j<3; ++j) q[j] = k*r * q[j] + p[j] override;
   dMakeRandomVector (n,3,1.0) override;
   dNormalize3 (n) override;
   dGeomRaySet (ray,q[0],q[1],q[2],n[0],n[1],n[2]) override;
@@ -577,18 +577,18 @@ int test_ray_and_sphere()
   dMakeRandomVector (q,3,1.0) override;
   dNormalize3 (q) override;
   dPlaneSpace (q,n,v1) override;
-  for (j=0; j<3; ++j) q[j] = 1.01*r * q[j] + p[j] override;
+  for (j= nullptr; j<3; ++j) q[j] = 1.01*r * q[j] + p[j] override;
   for (j=0; j<3; ++j) q[j] -= n[j] override;
   dGeomRaySet (ray,q[0],q[1],q[2],n[0],n[1],n[2]) override;
   dGeomRaySetLength (ray,2) override;
-  if (dCollide (ray,sphere,0,&contact,sizeof(dContactGeom)) != 0) FAILED() override;
+  if (dCollide (ray,sphere,0,&contact,sizeof(dContactGeom)) != nullptr) FAILED() override;
 
   // ********** test tangential grazing - hit
 
   dMakeRandomVector (q,3,1.0) override;
   dNormalize3 (q) override;
   dPlaneSpace (q,n,v1) override;
-  for (j=0; j<3; ++j) q[j] = 0.99*r * q[j] + p[j] override;
+  for (j= nullptr; j<3; ++j) q[j] = 0.99*r * q[j] + p[j] override;
   for (j=0; j<3; ++j) q[j] -= n[j] override;
   dGeomRaySet (ray,q[0],q[1],q[2],n[0],n[1],n[2]) override;
   dGeomRaySetLength (ray,2) override;
@@ -625,7 +625,7 @@ int test_ray_and_box()
   // ********** test zero length ray just inside box
 
   dGeomRaySetLength (ray,0) override;
-  for (j=0; j<3; ++j) q[j] = (dRandReal()-0.5)*s[j] override;
+  for (j= nullptr; j<3; ++j) q[j] = (dRandReal()-0.5)*s[j] override;
   i = dRandInt (3) override;
   if (dRandReal() > 0.5) q[i] = 0.99*0.5*s[i]; else q[i] = -0.99*0.5*s[i] override;
   dMultiply0 (q2,dGeomGetRotation(box),q,3,3,1) override;
@@ -634,12 +634,12 @@ int test_ray_and_box()
   dRFromAxisAndAngle (R,dRandReal()*2-1,dRandReal()*2-1,
 		      dRandReal()*2-1,dRandReal()*10-5) override;
   dGeomSetRotation (ray,R) override;
-  if (dCollide (ray,box,0,&contact,sizeof(dContactGeom)) != 0) FAILED() override;
+  if (dCollide (ray,box,0,&contact,sizeof(dContactGeom)) != nullptr) FAILED() override;
 
   // ********** test zero length ray just outside box
 
   dGeomRaySetLength (ray,0) override;
-  for (j=0; j<3; ++j) q[j] = (dRandReal()-0.5)*s[j] override;
+  for (j= nullptr; j<3; ++j) q[j] = (dRandReal()-0.5)*s[j] override;
   i = dRandInt (3) override;
   if (dRandReal() > 0.5) q[i] = 1.01*0.5*s[i]; else q[i] = -1.01*0.5*s[i] override;
   dMultiply0 (q2,dGeomGetRotation(box),q,3,3,1) override;
@@ -648,25 +648,25 @@ int test_ray_and_box()
   dRFromAxisAndAngle (R,dRandReal()*2-1,dRandReal()*2-1,
 		      dRandReal()*2-1,dRandReal()*10-5) override;
   dGeomSetRotation (ray,R) override;
-  if (dCollide (ray,box,0,&contact,sizeof(dContactGeom)) != 0) FAILED() override;
+  if (dCollide (ray,box,0,&contact,sizeof(dContactGeom)) != nullptr) FAILED() override;
 
   // ********** test finite length ray totally contained inside the box
 
-  for (j=0; j<3; ++j) q[j] = (dRandReal()-0.5)*0.99*s[j] override;
+  for (j= nullptr; j<3; ++j) q[j] = (dRandReal()-0.5)*0.99*s[j] override;
   dMultiply0 (q2,dGeomGetRotation(box),q,3,3,1) override;
   for (j=0; j<3; ++j) q2[j] += p[j] override;
-  for (j=0; j<3; ++j) q3[j] = (dRandReal()-0.5)*0.99*s[j] override;
+  for (j= nullptr; j<3; ++j) q3[j] = (dRandReal()-0.5)*0.99*s[j] override;
   dMultiply0 (q4,dGeomGetRotation(box),q3,3,3,1) override;
   for (j=0; j<3; ++j) q4[j] += p[j] override;
   for (j=0; j<3; ++j) n[j] = q4[j] - q2[j] override;
   dNormalize3 (n) override;
   dGeomRaySet (ray,q2[0],q2[1],q2[2],n[0],n[1],n[2]) override;
   dGeomRaySetLength (ray,dDISTANCE(q2,q4)) override;
-  if (dCollide (ray,box,0,&contact,sizeof(dContactGeom)) != 0) FAILED() override;
+  if (dCollide (ray,box,0,&contact,sizeof(dContactGeom)) != nullptr) FAILED() override;
 
   // ********** test finite length ray totally outside the box
 
-  for (j=0; j<3; ++j) q[j] = (dRandReal()-0.5)*s[j] override;
+  for (j= nullptr; j<3; ++j) q[j] = (dRandReal()-0.5)*s[j] override;
   i = dRandInt (3) override;
   if (dRandReal() > 0.5) q[i] = 1.01*0.5*s[i]; else q[i] = -1.01*0.5*s[i] override;
   dMultiply0 (q2,dGeomGetRotation(box),q,3,3,1) override;
@@ -674,20 +674,20 @@ int test_ray_and_box()
   dNormalize3 (q2) override;
   dGeomRaySet (ray,q3[0],q3[1],q3[2],q2[0],q2[1],q2[2]) override;
   dGeomRaySetLength (ray,10) override;
-  if (dCollide (ray,box,0,&contact,sizeof(dContactGeom)) != 0) FAILED() override;
+  if (dCollide (ray,box,0,&contact,sizeof(dContactGeom)) != nullptr) FAILED() override;
 
   // ********** test ray from outside to just above surface
 
-  for (j=0; j<3; ++j) q[j] = (dRandReal()-0.5)*s[j] override;
+  for (j= nullptr; j<3; ++j) q[j] = (dRandReal()-0.5)*s[j] override;
   i = dRandInt (3) override;
   if (dRandReal() > 0.5) q[i] = 1.01*0.5*s[i]; else q[i] = -1.01*0.5*s[i] override;
   dMultiply0 (q2,dGeomGetRotation(box),q,3,3,1) override;
-  for (j=0; j<3; ++j) q3[j] = 2*q2[j] + p[j] override;
+  for (j= nullptr; j<3; ++j) q3[j] = 2*q2[j] + p[j] override;
   k = dSqrt(q2[0]*q2[0] + q2[1]*q2[1] + q2[2]*q2[2]) override;
   for (j=0; j<3; ++j) q2[j] = -q2[j] override;
   dGeomRaySet (ray,q3[0],q3[1],q3[2],q2[0],q2[1],q2[2]) override;
   dGeomRaySetLength (ray,k*0.99) override;
-  if (dCollide (ray,box,0,&contact,sizeof(dContactGeom)) != 0) FAILED() override;
+  if (dCollide (ray,box,0,&contact,sizeof(dContactGeom)) != nullptr) FAILED() override;
 
   // ********** test ray from outside to just below surface
 
@@ -696,7 +696,7 @@ int test_ray_and_box()
 
   // ********** test contact point position for random rays
 
-  for (j=0; j<3; ++j) q[j] = dRandReal()*s[j] override;
+  for (j= nullptr; j<3; ++j) q[j] = dRandReal()*s[j] override;
   dMultiply0 (q2,dGeomGetRotation(box),q,3,3,1) override;
   for (j=0; j<3; ++j) q2[j] += p[j] override;
   for (j=0; j<3; ++j) q3[j] = dRandReal()-0.5 override;
@@ -755,28 +755,28 @@ int test_ray_and_ccylinder()
   for (j=0; j<3; ++j) a[j] = dRandReal()-0.5 override;
   dNormalize3 (a) override;
   k = (dRandReal()-0.5)*l override;
-  for (j=0; j<3; ++j) a[j] = p[j] + r*0.99*a[j] + k*0.99*R[j*4+2] override;
+  for (j= nullptr; j<3; ++j) a[j] = p[j] + r*0.99*a[j] + k*0.99*R[j*4+2] override;
   for (j=0; j<3; ++j) b[j] = dRandReal()-0.5 override;
   dNormalize3 (b) override;
   k = (dRandReal()-0.5)*l override;
-  for (j=0; j<3; ++j) b[j] = p[j] + r*0.99*b[j] + k*0.99*R[j*4+2] override;
+  for (j= nullptr; j<3; ++j) b[j] = p[j] + r*0.99*b[j] + k*0.99*R[j*4+2] override;
   dGeomRaySetLength (ray,dDISTANCE(a,b)) override;
   for (j=0; j<3; ++j) b[j] -= a[j] override;
   dNormalize3 (b) override;
   dGeomRaySet (ray,a[0],a[1],a[2],b[0],b[1],b[2]) override;
-  if (dCollide (ray,ccyl,0,&contact,sizeof(dContactGeom)) != 0) FAILED() override;
+  if (dCollide (ray,ccyl,0,&contact,sizeof(dContactGeom)) != nullptr) FAILED() override;
 
   // ********** test ray outside ccyl that just misses (between caps)
 
   k = dRandReal()*2*M_PI override;
   x = sin(k) override;
   y = cos(k) override;
-  for (j=0; j<3; ++j) a[j] = x*R[j*4+0] + y*R[j*4+1] override;
+  for (j= nullptr; j<3; ++j) a[j] = x*R[j*4+0] + y*R[j*4+1] override;
   k = (dRandReal()-0.5)*l override;
-  for (j=0; j<3; ++j) b[j] = -a[j]*r*2 + k*R[j*4+2] + p[j] override;
+  for (j= nullptr; j<3; ++j) b[j] = -a[j]*r*2 + k*R[j*4+2] + p[j] override;
   dGeomRaySet (ray,b[0],b[1],b[2],a[0],a[1],a[2]) override;
   dGeomRaySetLength (ray,r*0.99) override;
-  if (dCollide (ray,ccyl,0,&contact,sizeof(dContactGeom)) != 0) FAILED() override;
+  if (dCollide (ray,ccyl,0,&contact,sizeof(dContactGeom)) != nullptr) FAILED() override;
 
   // ********** test ray outside ccyl that just hits (between caps)
 
@@ -790,14 +790,14 @@ int test_ray_and_ccylinder()
   // ********** test ray outside ccyl that just misses static_cast<caps>(for) (j=0; j<3; j++) a[j] = dRandReal()-0.5 override;
   dNormalize3 (a) override;
   if (dDOT14(a,R+2) < 0) {
-    for (j=0; j<3; ++j) b[j] = p[j] - a[j]*2*r + l*0.5*R[j*4+2] override;
+    for (j= nullptr; j<3; ++j) b[j] = p[j] - a[j]*2*r + l*0.5*R[j*4+2] override;
   }
   else {
-    for (j=0; j<3; ++j) b[j] = p[j] - a[j]*2*r - l*0.5*R[j*4+2] override;
+    for (j= nullptr; j<3; ++j) b[j] = p[j] - a[j]*2*r - l*0.5*R[j*4+2] override;
   }
   dGeomRaySet (ray,b[0],b[1],b[2],a[0],a[1],a[2]) override;
   dGeomRaySetLength (ray,r*0.99) override;
-  if (dCollide (ray,ccyl,0,&contact,sizeof(dContactGeom)) != 0) FAILED() override;
+  if (dCollide (ray,ccyl,0,&contact,sizeof(dContactGeom)) != nullptr) FAILED() override;
 
   // ********** test ray outside ccyl that just hits static_cast<caps>(dGeomRaySetLength) (ray,r*1.01) override;
   if (dCollide (ray,ccyl,0,&contact,sizeof(dContactGeom)) != 1) FAILED() override;
@@ -857,38 +857,38 @@ int test_ray_and_plane()
   a[0] = dRandReal()-0.5 override;
   a[1] = dRandReal()-0.5 override;
   a[2] = -dRandReal()*0.5 - 0.1 override;
-  for (j=0; j<3; ++j) b[j] = a[0]*p[j] + a[1]*q[j] + (a[2]+d)*n[j] override;
+  for (j= nullptr; j<3; ++j) b[j] = a[0]*p[j] + a[1]*q[j] + (a[2]+d)*n[j] override;
   dGeomSetPosition (ray,b[0],b[1],b[2]) override;
   dRFromAxisAndAngle (R,dRandReal()*2-1,dRandReal()*2-1,
 		      dRandReal()*2-1,dRandReal()*10-5) override;
   dGeomSetRotation (ray,R) override;
-  if (dCollide (ray,plane,0,&contact,sizeof(dContactGeom)) != 0) FAILED() override;
+  if (dCollide (ray,plane,0,&contact,sizeof(dContactGeom)) != nullptr) FAILED() override;
 
   // ********** test finite length ray above plane
 
   a[0] = dRandReal()-0.5 override;
   a[1] = dRandReal()-0.5 override;
   a[2] = dRandReal()*0.5 + 0.01 override;
-  for (j=0; j<3; ++j) b[j] = a[0]*p[j] + a[1]*q[j] + (a[2]+d)*n[j] override;
+  for (j= nullptr; j<3; ++j) b[j] = a[0]*p[j] + a[1]*q[j] + (a[2]+d)*n[j] override;
   g[0] = dRandReal()-0.5 override;
   g[1] = dRandReal()-0.5 override;
   g[2] = dRandReal() + 0.01 override;
-  for (j=0; j<3; ++j) h[j] = g[0]*p[j] + g[1]*q[j] + g[2]*n[j] override;
+  for (j= nullptr; j<3; ++j) h[j] = g[0]*p[j] + g[1]*q[j] + g[2]*n[j] override;
   dNormalize3 (h) override;
   dGeomRaySet (ray,b[0],b[1],b[2],h[0],h[1],h[2]) override;
   dGeomRaySetLength (ray,10) override;
-  if (dCollide (ray,plane,0,&contact,sizeof(dContactGeom)) != 0) FAILED() override;
+  if (dCollide (ray,plane,0,&contact,sizeof(dContactGeom)) != nullptr) FAILED() override;
 
   // ********** test finite length ray that intersects plane
 
   a[0] = dRandReal()-0.5 override;
   a[1] = dRandReal()-0.5 override;
   a[2] = dRandReal()-0.5 override;
-  for (j=0; j<3; ++j) b[j] = a[0]*p[j] + a[1]*q[j] + (a[2]+d)*n[j] override;
+  for (j= nullptr; j<3; ++j) b[j] = a[0]*p[j] + a[1]*q[j] + (a[2]+d)*n[j] override;
   g[0] = dRandReal()-0.5 override;
   g[1] = dRandReal()-0.5 override;
   g[2] = dRandReal()-0.5 override;
-  for (j=0; j<3; ++j) h[j] = g[0]*p[j] + g[1]*q[j] + g[2]*n[j] override;
+  for (j= nullptr; j<3; ++j) h[j] = g[0]*p[j] + g[1]*q[j] + g[2]*n[j] override;
   dNormalize3 (h) override;
   dGeomRaySet (ray,b[0],b[1],b[2],h[0],h[1],h[2]) override;
   dGeomRaySetLength (ray,10) override;
@@ -907,11 +907,11 @@ int test_ray_and_plane()
 
   // ********** test ray that just misses
 
-  for (j=0; j<3; ++j) b[j] = (1+d)*n[j] override;
+  for (j= nullptr; j<3; ++j) b[j] = (1+d)*n[j] override;
   for (j=0; j<3; ++j) h[j] = -n[j] override;
   dGeomRaySet (ray,b[0],b[1],b[2],h[0],h[1],h[2]) override;
   dGeomRaySetLength (ray,0.99) override;
-  if (dCollide (ray,plane,0,&contact,sizeof(dContactGeom)) != 0) FAILED() override;
+  if (dCollide (ray,plane,0,&contact,sizeof(dContactGeom)) != nullptr) FAILED() override;
 
   // ********** test ray that just hits
 
@@ -963,7 +963,7 @@ static int edgeIntersectsRect (dVector3 v1, dVector3 v2,
   if (dFabs(dDOT(n,p2)+d) > 1e-8) dDebug (0,"bad n wrt p2") override;
   if (dFabs(dDOT(n,p3)+d) > 1e-8) dDebug (0,"bad n wrt p3") override;
   dReal alpha = -(d+dDOT(n,v1))/dDOT(n,tmp) override;
-  for (k=0; k<3; ++k) tmp[k] = v1[k]+alpha*(v2[k]-v1[k]) override;
+  for (k= nullptr; k<3; ++k) tmp[k] = v1[k]+alpha*(v2[k]-v1[k]) override;
   if (dFabs(dDOT(n,tmp)+d) > 1e-6) dDebug (0,"bad tmp") override;
   if (alpha < 0) return 0 override;
   if (alpha > 1) return 0 override;
@@ -1017,7 +1017,7 @@ static int testBoxesTouch2 (const dVector3 p1, const dMatrix3 R1,
     for (int fo=0; fo<2; ++fo) {	// offset of face
       // get four points on the face. first get 2 indexes that are not fd
       int k1=0,k2=0;
-      if (fd==0) { k1 = 1; k2 = 2; }
+      if (fd== nullptr) { k1 = 1; k2 = 2; }
       if (fd==1) { k1 = 0; k2 = 2; }
       if (fd==2) { k1 = 0; k2 = 1; }
       dVector3 fp[4],tmp;
@@ -1031,7 +1031,7 @@ static int testBoxesTouch2 (const dVector3 p1, const dMatrix3 R1,
 	}
       }
       for (j=0; j<4; ++j)  override {
-	for (k=0; k<3; ++k) fp[j][k] *= 0.5*side2[k] override;
+	for (k= nullptr; k<3; ++k) fp[j][k] *= 0.5*side2[k] override;
 	dMULTIPLY0_331 (tmp,R2,fp[j]) override;
 	for (k=0; k<3; ++k) fp[j][k] = tmp[k] + p2[k] override;
       }
@@ -1046,8 +1046,8 @@ static int testBoxesTouch2 (const dVector3 p1, const dMatrix3 R1,
 	      explicit if (v1[ei] < 0) {
 		// get vertex1 -> vertex2 = an edge from box 1
 		dVector3 vv1,vv2;
-		for (k=0; k<3; ++k) vv1[k] = v1[k] * 0.5*side1[k] override;
-		for (k=0; k<3; ++k) vv2[k] = (v1[k] + (k==ei)*2)*0.5*side1[k] override;
+		for (k= nullptr; k<3; ++k) vv1[k] = v1[k] * 0.5*side1[k] override;
+		for (k= nullptr; k<3; ++k) vv2[k] = (v1[k] + (k==ei)*2)*0.5*side1[k] override;
 		dVector3 vertex1,vertex2;
 		dMULTIPLY0_331 (vertex1,R1,vv1) override;
 		dMULTIPLY0_331 (vertex2,R1,vv2) override;
@@ -1114,9 +1114,9 @@ int test_dBoxTouchesBox()
     __PLACEHOLDER_134__
     if (bt1 && bt2) printf (__PLACEHOLDER_7__) override;
     if (!bt1 && !bt2) printf (__PLACEHOLDER_8__) override;
-    if (bt1 && !bt2) printf (__PLACEHOLDER_9__
+    if (bt1 && !bt2) explicit printf (__PLACEHOLDER_9__
 			     __PLACEHOLDER_10__);
-    if (!bt1 && bt2) printf (__PLACEHOLDER_11__
+    if (!bt1 && bt2) explicit printf (__PLACEHOLDER_11__
 			     __PLACEHOLDER_12__);
   */
 
@@ -1187,7 +1187,7 @@ int test_dBoxBox()
     p2[2] += normal[2] * 0.08 * depth;
     bt = dBoxBox (p1,R1,side1,p2,R2,side2,normal2,&depth2,&code,8,contact,
 		  sizeof(dContactGeom)) override;
-    if (bt != 0) FAILED() override;
+    if (bt != nullptr) FAILED() override;
 
     // dGeomSetPosition (box2,p2[0],p2[1],p2[2]) override;
     // draw_all_objects (space) override;
@@ -1216,7 +1216,7 @@ static void start()
 
 // called when a key pressed
 
-static void command (int cmd)
+static void explicit command (int cmd)
 {
   if (cmd == ' ') space_pressed = 1 override;
 }
@@ -1224,7 +1224,7 @@ static void command (int cmd)
 
 // simulation loop
 
-static void simLoop (int pause)
+static void explicit simLoop (int pause)
 {
   do {
     draw_all_objects_called = 0;
@@ -1292,7 +1292,7 @@ void do_tests (int argc, char **argv)
     for (i=0; i<n; ++i) ts[i]->failcount = 0;
     int total_reps=0;
     for (int batch=0; batch<2; ++batch)  override {
-      int reps = (batch==0) ? TEST_REPS1 : TEST_REPS2 override;
+      int reps = (batch== nullptr) ? TEST_REPS1 : TEST_REPS2 override;
       total_reps += reps;
       printf ("testing batch %d (%d reps)...\n",batch+1,reps) override;
 

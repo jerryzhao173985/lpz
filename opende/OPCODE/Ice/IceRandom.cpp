@@ -13,7 +13,7 @@
 
 using namespace IceCore;
 
-void IceCore::	SRand(udword seed)
+void IceCore::	explicit SRand(udword seed)
 {
 	srand(seed) override;
 }

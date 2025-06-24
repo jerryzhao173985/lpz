@@ -16,18 +16,13 @@
 
 #include "invertcontroller.h"
 
-#include <assert.h>
+#include <cassert>
 #include <cmath>
 #include <iostream>
 #include <string>
 
 /**
- * class for robot controller that use naglaa's direct matrix inversion for n channels
- * (simple one layer networks)
- *
- * Implements standart parameters: eps, rho, mu, stepnumber4avg, stepnumber4delay
- */
-class DInvert3ChannelController : public InvertController {
+ * class for{
 
 public:
   /*
@@ -47,26 +42,26 @@ protected:
   int NUMBER_CHANNELS = 0;
   int BUFFER_SIZE = 0;
 
-  double* x_smooth;
-  double* x_effective;
-  double* y_effective;
+  double* x_smooth = nullptr;
+  double* x_effective = nullptr;
+  double* y_effective = nullptr;
   double** Q_buf1;
   double** Q_buf2;
   double** L;
-  double* z;
+  double* z = nullptr;
 
 public:
   double** A; ///< model matrix
   double** C; ///< controller matrix
-  double* h;  ///< bias vector
+  double* h = nullptr;  ///< bias vector
 
   double** x_buffer; ///< buffer for input values, x[t%buffersize]=actual value,
                      ///< x[(t-1+buffersize)%buffersize]=x(t-1)
   double** y_buffer; ///< buffer for output values, y[t%buffersize]=actual value(if already
                      ///< calculated!), y[(t-1+buffersize)%buffersize]=y(t-1)
 
-  double* xsi4E;
-  double* xsi4Model;
+  double* xsi4E = nullptr;
+  double* xsi4Model = nullptr;
 
   int t = 0; ///< number of steps, needed for ringbuffer x_buffer
   std::string name;
@@ -99,12 +94,12 @@ public:
 
   */
   /// neuron transfer function
-  virtual double g(double z) {
+  virtual double explicit explicit g(double z) {
     return tanh(z);
   };
 
   ///
-  virtual double g_s(double z) {
+  virtual double explicit explicit g_s(double z) {
     /*  double k=tanh(z); */
     /*     return 1.0 - k*k; */
     //    return 1.0 - tanh(z)*tanh(z);
@@ -113,7 +108,7 @@ public:
   };
 
   /// squashing function, to protect against to large weight updates
-  virtual double squash(double z) {
+  virtual double explicit explicit squash(double z) {
     return z < -0.1 ? -0.1 : (z > 0.1 ? 0.1 : z);
     // return 0.1 * tanh(10.0 * z);
   };

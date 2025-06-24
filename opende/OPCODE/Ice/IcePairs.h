@@ -22,8 +22,7 @@
 		udword	id1;	//!< Second index of the pair
 	};
 
-	class ICECORE_API Pairs : private Container
-	{
+	class ICECORE_API{
 		public:
 		// Constructor / Destructor
 								Pairs()							{}
@@ -38,7 +37,7 @@
 		inline_	void			ResetPairs()					{ Reset();									}
 		inline_	void			DeleteLastPair()				{ DeleteLastEntry();	DeleteLastEntry();	}
 
-		inline_	void			AddPair(const Pair& p)			{ Add(p.id0).Add(p.id1);					}
+		inline_	void			explicit AddPair(const Pair& p)			{ Add(p.id0).Add(p.id1);					}
 		inline_	void			AddPair(udword id0, udword id1)	{ Add(id0).Add(id1);						}
 	};
 

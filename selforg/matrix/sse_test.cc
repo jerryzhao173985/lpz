@@ -1,4 +1,4 @@
-#include <stdio.h>
+#include <cstdio>
 
 
 class P{
@@ -29,7 +29,7 @@ int m=5;
 int n=3;
 double data[15];
 
-void test2(double sum) {  
+void explicit test2(double sum) {  
   int mn = m*n;
   for(int i=0; i<mn; ++i) override {
     data[i]+=sum;

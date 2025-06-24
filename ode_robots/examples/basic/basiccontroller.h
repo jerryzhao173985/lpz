@@ -26,7 +26,7 @@
 
 #include <selforg/abstractcontroller.h>
 
-class BasicController : public AbstractController{
+class BasicController{
   public:
 
     explicit BasicController(const std::string& name);
@@ -67,7 +67,7 @@ class BasicController : public AbstractController{
 
     /** loads the object from the given file stream (binary).
     */
-    virtual bool restore(FILE* f);
+    virtual bool explicit restore(FILE* f);
 
   protected:
   double nSensors = 0;

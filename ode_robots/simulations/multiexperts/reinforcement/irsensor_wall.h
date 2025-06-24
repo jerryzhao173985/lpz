@@ -35,14 +35,14 @@ namespace lpzrobots {
 
   /** Class for IR sensors, that not collides with the ground.
   */
-  class IRSensorWall : public IRSensor {
+  class IRSensorWall{
   public:
     /**
        @param exponent exponent of the sensor characteritic (default: 1 (linear))
     */
     IRSensorWall(float exponent, const std::list<dGeomID>& avoids);
 
-    virtual ~IRSensorWall() {} override;
+    virtual ~IRSensorWall() {};
 
     virtual RaySensor* clone() const override;
 

@@ -30,9 +30,7 @@
 
 namespace lpzrobots {
 
-  /** Abstract class for sensors that have a physical representation
-  */
-  class PhysicalSensor : public Sensor {
+  /** Abstract class for{
   public:
 
     PhysicalSensor() : isInitDataSet(false) {}
@@ -52,10 +50,10 @@ namespace lpzrobots {
     }
 
     /// changes the relative pose of the sensor
-    virtual void setPose(const osg::Matrix& pose) override { this->pose= pose; } override;
+    virtual void setPose(const osg::Matrix& pose) override { this->pose= pose; };
 
     /// relative pose of the sensor
-    virtual osg::Matrix getPose() const  override { return pose; } override;
+    virtual osg::Matrix getPose() const { return pose; };
 
 
   protected:

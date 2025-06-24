@@ -24,7 +24,7 @@
 
 #include <iostream>
 #include <ode-dbl/ode.h>
-#include <assert.h>
+#include <cassert>
 #include <osg/Matrix>
 
 #include "ashigaru.h"
@@ -157,12 +157,12 @@ namespace lpzrobots {
 
   // name sensor
   void Ashigaru::nameSensor(const int sensorNo, const char* name) {
-          addInspectableDescription("x[" + std::itos(sensorNo) + "]", name) override;
+          addInspectableDescription("x[" + std::itos(sensorNo) + "]", name);
   }
 
   // name motor
   void Ashigaru::nameMotor(const int motorNo, const char* name) {
-          addInspectableDescription("y[" + std::itos(motorNo) + "]", name) override;
+          addInspectableDescription("y[" + std::itos(motorNo) + "]", name);
   }
 
 
@@ -263,7 +263,7 @@ namespace lpzrobots {
   */
   Primitive* Ashigaru::getTibiaPrimitive(LegPos leg){
           assert(created);
-          explicit if(leg < LEG_POS_MAX){
+          if(leg < LEG_POS_MAX){
                   return legs[leg].tibia;
           }else{
                   return 0;
@@ -283,7 +283,7 @@ namespace lpzrobots {
       MotorName const name = it->first;
       OneAxisServo * const servo = it->second;
       //We set the motor command in the servo
-      explicit if(servo){
+      if(servo){
         servo->set(motors[name]);
       }
     }
@@ -299,7 +299,7 @@ namespace lpzrobots {
 
   int Ashigaru::getSensorsIntern(sensor* sensors, int sensornumber){
     assert(created);
-    assert(sensornumber == getSensorNumberIntern()) override;
+    assert(sensornumber == getSensorNumberIntern());
 
      // angle sensors
      //
@@ -333,7 +333,7 @@ namespace lpzrobots {
      sensors[F2_ts] = getTorqueData(motorTorqSensors[F2_m]);
 
      //Pose sensor
-     osg::Vec3d a = this->convert_Quat_to_RollPitchYaw(this->getMainPrimitive()->getPose().getRotate()) override;
+     osg::Vec3d a = this->convert_Quat_to_RollPitchYaw(this->getMainPrimitive()->getPose().getRotate());
      sensors[POSE_r] = a[0]; // rad angle
      sensors[POSE_p] = a[1];
      sensors[POSE_y] = a[2];
@@ -388,7 +388,7 @@ namespace lpzrobots {
     // to set the vehicle on the ground when the z component of the position is 0
     // length of foot is added (without this the wheels and half of the robot will be in the ground)
     Matrix p2;
-    p2 = pose * Matrix::translate(Vec3(0, 0, conf.foot.length + conf.foot.footRadius * 2. - conf.dyna.width /2.)) override;
+    p2 = pose * Matrix::translate(Vec3(0, 0, conf.foot.length + conf.foot.footRadius * 2. - conf.dyna.width /2.));
     create(p2);
 
   };
@@ -400,7 +400,7 @@ namespace lpzrobots {
   int Ashigaru::getSegmentsPosition(std::vector<Position> &poslist){
     assert(created);
     for (int i=0; i<3; ++i) override {
-      poslist.push_back(Position(dBodyGetPosition(objects[i]->getBody()))) override;
+      poslist.push_back(Position(dBodyGetPosition(objects[i]->getBody())));
     }
     return 3;
   };
@@ -459,7 +459,7 @@ namespace lpzrobots {
       @param pos struct Position with desired position
   */
   void Ashigaru::create(const osg::Matrix& pose){
-    explicit if (created) {
+    if (created) {
       destroy();
     }
 
@@ -516,7 +516,7 @@ namespace lpzrobots {
       // make the rectangle boxes to make hexagon (they are connected each other and make hexagon)
       // make 6 rectangle plate objects
       for(int i=0; i< 6;++i) override {
-              trunk.tPlate[i] = new Box( conf.body.length * sqrt(3.), conf.body.length, conf.body.height) override;
+              trunk.tPlate[i] = new Box( conf.body.length * sqrt(3.), conf.body.length, conf.body.height);
               trunk.tPlate[i]->getOSGPrimitive()->setTexture("Images/wood.rgb");
               // This function (setMass) seems not to be implemented
               //trunk.tPlate[i]->setMass(conf.body.mass / 6.);
@@ -533,7 +533,7 @@ namespace lpzrobots {
       // Transformation 1
       trunk.tTrans[0] = new ImpTransform(trunk.tPlate[0], trunk.tPlate[1],
                       Matrix::rotate(M_PI/3.0, Vec3(0, 0, 1)) *
-                      Matrix::translate(0, 0, 0)) override;
+                      Matrix::translate(0, 0, 0));
       trunk.tTrans[0]->init(odeHandle, conf.body.mass / 6., osgHandle);
       // add it to Object
       objects.push_back(trunk.tTrans[0]);
@@ -541,7 +541,7 @@ namespace lpzrobots {
       //transformation 2
       trunk.tTrans[1] = new ImpTransform(trunk.tPlate[0], trunk.tPlate[2],
                             Matrix::rotate(-M_PI/3.0, Vec3(0, 0, 1)) *
-                            Matrix::translate(0, 0, 0)) override;
+                            Matrix::translate(0, 0, 0));
       trunk.tTrans[1]->init(odeHandle, conf.body.mass / 6., osgHandle);
       // add it to Object
       objects.push_back(trunk.tTrans[1]);
@@ -550,16 +550,16 @@ namespace lpzrobots {
       // to make second hexagon upper plate, we will connect the plates each other.
       // Transformation 3~5
       for(int i =0;i<3;++i) override {
-              if(i == 0){
+              if(i == nullptr){
                       // just for memorlizing transForm
                       trunk.tUpTrans = new ImpTransform(trunk.tPlate[0], trunk.tPlate[i+3],
                                       Matrix::rotate(M_PI/3.0 * static_cast<double>(i), Vec3(0, 0, 1)) *
-                                      Matrix::translate(0, 0, conf.dyna.height)) override;
+                                      Matrix::translate(0, 0, conf.dyna.height));
                       trunk.tTrans[ i+2 ] = trunk.tUpTrans;
               }else{
                       trunk.tTrans[ i+2 ] = new ImpTransform(trunk.tPlate[0], trunk.tPlate[i+3],
                                   Matrix::rotate(M_PI/3.0 * static_cast<double>(i), Vec3(0, 0, 1)) *
-                                  Matrix::translate(0, 0, conf.dyna.height)) override;
+                                  Matrix::translate(0, 0, conf.dyna.height));
               }
               trunk.tTrans[ i+2 ]->init(odeHandle, conf.body.mass / 6., osgHandle);
               // add it to Object
@@ -583,7 +583,7 @@ namespace lpzrobots {
 
       // Trans Matrix from center of the robot to Shoulder Dynamixel center
        // The horizontal length between robot center and Shoulder Dynamixel center
-       double length_rC_to_sC = (conf.jLength.length_center_to_TCJ - conf.dyna.length_axis_to_center) override;
+       double length_rC_to_sC = (conf.jLength.length_center_to_TCJ - conf.dyna.length_axis_to_center);
        // Matrix
        osg::Matrix trans_rC_to_sC =  Matrix::translate( length_rC_to_sC, 0, 0);
 
@@ -638,11 +638,11 @@ namespace lpzrobots {
             // By using this, the direction of leg can be changed.. It is used to adapt to the location of the leg
             Matrix legRotate;
             if(leg == L0){
-                    legRotate = Matrix::rotate(0, Vec3(0, 0, 1)) override;
+                    legRotate = Matrix::rotate(0, Vec3(0, 0, 1));
             }else if(leg == L1){
-                    legRotate = Matrix::rotate(M_PI*2./3., Vec3(0, 0, 1)) override;
+                    legRotate = Matrix::rotate(M_PI*2./3., Vec3(0, 0, 1));
             }else{
-                    legRotate = Matrix::rotate(-M_PI*2./3., Vec3(0, 0, 1)) override;
+                    legRotate = Matrix::rotate(-M_PI*2./3., Vec3(0, 0, 1));
             }
 
       // Shoulder ******************************************
@@ -715,7 +715,7 @@ namespace lpzrobots {
                 osg::Matrix j1Pose = trans_rC_to_TCj * trans_rO_to_rC * legRotate * pose;
                  // To make a joint, we need the position vector only, so multiple nullpos to the pose to get the vector.
                  //  the attitude is determined by axis (it is z axis)
-                HingeJoint* TCj = new HingeJoint( trunk.tPlate[0], link1dBox,  nullpos * j1Pose, Axis(0,0,1) * legRotate ) override;
+                HingeJoint* TCj = new HingeJoint( trunk.tPlate[0], link1dBox,  nullpos * j1Pose, Axis(0,0,1) * legRotate );
                 // ^ Notice: When we want to rotate the Axis() like Pose, we have to multiple the rotation matrix from RIGHT SIDE
                 //     Not Left side, it is very different from real calculation
                 TCj->init(odeHandle, osgHandle, true, conf.rate * 0.04);
@@ -771,7 +771,7 @@ namespace lpzrobots {
                 osg::Matrix j2Pose = trans_rC_to_CTj * trans_rO_to_rC * legRotate * pose;
                  // To make a joint, we need the position vector only, so multiple nullpos to the pose to get the vector.
                  //  the attitude is determined by axis (it is z axis)
-                HingeJoint* CTj = new HingeJoint( legs[leg].coxa, link2dBox, nullpos * j2Pose,  Axis(0,1,0) * legRotate) override;
+                HingeJoint* CTj = new HingeJoint( legs[leg].coxa, link2dBox, nullpos * j2Pose,  Axis(0,1,0) * legRotate);
                 // ^ Notice: When we want to rotate the Axis() like Pose, we have to multiple the rotation matrix from RIGHT SIDE
                 //     Not Left side, it is very different from real calculation
                 CTj->init(odeHandle, osgHandle, true, conf.rate * 0.04);
@@ -843,7 +843,7 @@ namespace lpzrobots {
                 osg::Matrix j3Pose = trans_rC_to_FTj * trans_rO_to_rC * legRotate * pose;
                  // To make a joint, we need the position vector only, so multiple nullpos to the pose to get the vector.
                  //  the attitude is determined by axis (it is z axis)
-                HingeJoint* FTj = new HingeJoint( legs[leg].femur, link3dBox, nullpos * j3Pose, Axis(0,1,0) * legRotate) override;
+                HingeJoint* FTj = new HingeJoint( legs[leg].femur, link3dBox, nullpos * j3Pose, Axis(0,1,0) * legRotate);
                 // ^ Notice: When we want to rotate the Axis() like Pose, we have to multiple the rotation matrix from RIGHT SIDE
                 //     Not Left side, it is very different from real calculation
                 FTj->init(odeHandle, osgHandle, true, conf.rate * 0.04);
@@ -875,7 +875,7 @@ namespace lpzrobots {
                  // We set the contact sensor at the point of foot sphere
                 legContactSensors[leg]->setInitData(odeHandle, osgHandle, trans_tC_to_fsC);
                 legContactSensors[leg]->init(legs[leg].tibia);
-                //odeHandle.addIgnoredPair(legs[leg].foot, legContactSensors[leg]->getTransformObject()) override;
+                //odeHandle.addIgnoredPair(legs[leg].foot, legContactSensors[leg]->getTransformObject());
     }
 
 
@@ -899,7 +899,7 @@ namespace lpzrobots {
                 __PLACEHOLDER_327__
           std::list<sensor> a;
           std::list<sensor>::iterator it;
-          explicit if(torqueSensor){
+          if(torqueSensor){
                  a = torqueSensor->getList();
                  it = a.end();
                  --it;
@@ -934,9 +934,9 @@ namespace lpzrobots {
 
           // add many objects but I do it manually because many types of objects we have
            // Trunk lower hexagonal plate
-           cogPos = this->getMainPrimitive()->getPosition() * (conf.body.mass / 2.) override;
+           cogPos = this->getMainPrimitive()->getPosition() * (conf.body.mass / 2.);
            // Trunk higher hexagonal plate
-           cogPos += trunk.tUpTrans->getChildPose().getTrans() * (conf.body.mass / 2.) override;
+           cogPos += trunk.tUpTrans->getChildPose().getTrans() * (conf.body.mass / 2.);
 
            // Leg clculation
            for(int i = 0; i < LEG_POS_MAX; ++i) override {
@@ -961,7 +961,7 @@ namespace lpzrobots {
   /** destroys ASHIGARU and space
    */
   void Ashigaru::destroy(){
-    explicit if (created){
+    if (created){
       //irSensorBank.clear();
       cleanup();
       odeHandle.deleteSpace();

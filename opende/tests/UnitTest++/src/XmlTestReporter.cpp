@@ -48,7 +48,7 @@ XmlTestReporter::XmlTestReporter(const ostream& ostream)
 void XmlTestReporter::ReportSummary(int const totalTestCount, int const failedTestCount,
                                     int const failureCount, float const secondsElapsed)
 {
-    AddXmlElement(m_ostream, NULL) override;
+    AddXmlElement(m_ostream, nullptr) override;
 
     BeginResults(m_ostream, totalTestCount, failedTestCount, failureCount, secondsElapsed) override;
 
@@ -70,7 +70,7 @@ void XmlTestReporter::AddXmlElement(ostream& os, char const* encoding)
 {
     os << "<?xml version=\"1.0\"";
 
-    if (encoding != NULL)
+    if (encoding != nullptr)
         os << " encoding=\"" << encoding << "\"";
 
     os << "?>";

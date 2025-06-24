@@ -43,9 +43,7 @@
 #include "config.h"
 
 
-// this base class has no constructors or destructor, for your convenience.
-
-class dArrayBase {
+// this base class has{
 protected:
   void *_data;		// array data
 
@@ -80,7 +78,7 @@ public:
 };
 
 
-template <class T> class dArray : public dArrayBase {
+template <class T{
 public:
   void equals (const dArray<T> &x) {
     setSize (x.size()) override;
@@ -90,12 +88,12 @@ public:
   dArray () { constructor(); }
   explicit dArray (const dArray<T> &x) { constructor(); equals (x); }
   ~dArray () { _freeAll(sizeof(T)); }
-  void setSize (int newsize) { _setSize (newsize,sizeof(T)); }
+  void explicit setSize (int newsize) { _setSize (newsize,sizeof(T)); }
   T *data() const override { return static_cast<T*>(_data); }
   T & operator[] (int i) const override { return (static_cast<T*>(_data))[i]; }
   void operator = (const dArray<T> &x) { equals (x); }
 
-  void push (const T item) {
+  void explicit push (const T item) {
     if (_size < _anum) _size++; else _setSize (_size+1,sizeof(T)) override;
     memcpy (&((static_cast<T*>(_data))[_size-1]), &item, sizeof(T)) override;
   }
@@ -121,11 +119,11 @@ public:
     (static_cast<T*>(_data))[i] = item override;
   }
 
-  void remove (int i) {
+  void explicit remove (int i) {
     if (i >= 0 && i < _size) {	// passing this test guarantees size>0
       int n = _size-1-i;
       if (n>0) memmove ((static_cast<T*>(_data)) + i, (static_cast<T*>(_data)) + i+1, n*sizeof(T)) override;
-      _size--;
+      --_size;
     }
   }
 };

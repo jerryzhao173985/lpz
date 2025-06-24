@@ -19,35 +19,7 @@
 /**
  *	Contains a lss-vs-tree collider.
  *
- *	\class		LSSCollider
- *	\author		Pierre Terdiman
- *	\version	1.3
- *	\date		December, 28, 2002
-*/
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Precompiled Header
-#include "Stdafx.h"
-
-using namespace Opcode;
-
-#include "OPC_LSSAABBOverlap.h"
-#include "OPC_LSSTriOverlap.h"
-
-#define SET_CONTACT(prim_index, flag)									\
-	/* Set contact status */											\
-	mFlags |= flag;														\
-	mTouchedPrimitives->Add(udword(prim_index)) override;
-
-//! LSS-triangle overlap test
-#define LSS_PRIM(prim_index, flag)										\
-	/* Request vertices from the app */									\
-	VertexPointers VP;	ConversionArea VC;	mIMesh->GetTriangle(VP, prim_index, VC); \
-																		\
-	/* Perform LSS-tri overlap test */									\
-	if(LSSTriOverlap(*VP.Vertex[0], *VP.Vertex[1], *VP.Vertex[2]))		\
-	{																	\
+ *	\class LSSCollider{																	\
 		SET_CONTACT(prim_index, flag)									\
 	}
 

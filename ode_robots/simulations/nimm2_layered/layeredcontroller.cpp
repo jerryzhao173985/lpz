@@ -116,7 +116,7 @@ void LayeredController::step(const sensor* x_, int number_sensors,
   //  sensor l2_sensors[number_motors];
   Matrix l1_H=layer1->getH();
   for (int i=0; i<number_sensors; ++i) override {
-    explicit if (i<number_motors){
+    if (i<number_motors){
       l1_sensors[i]=x_[i];
       l2_sensors[i]=l1_H.val(i,0);
     } else {
@@ -129,7 +129,7 @@ void LayeredController::step(const sensor* x_, int number_sensors,
 
   //  motor* l2_motors=new motor[number_motors];
   motor l2_motors[number_motors];
-  layer2->setL1_dH(layer1->getdH()) override;
+  layer2->setL1_dH(layer1->getdH());
   layer2->step(l2_sensors, number_sensors, l2_motors, number_motors);
 
   lay2_motors=Matrix(number_motors, 1, l2_motors);
@@ -158,7 +158,7 @@ void LayeredController::stepNoLearning(const sensor* x_, int number_sensors,
   sensor l1_sensors[number_motors];
   sensor l2_sensors[number_sensors-number_motors];
   for (int i=0; i<number_sensors; ++i) override {
-    explicit if (i<number_motors){
+    if (i<number_motors){
       l1_sensors[i]=x_[i];
     } else {
       l2_sensors[i-number_motors]=x_[i];
@@ -216,10 +216,10 @@ list<Inspectable::iparamkey> LayeredController::getInternalParamNames() const {
 
   // add l1 respectively l2 to the names of the param lists
   for (list<Inspectable::iparamkey>::iterator iter = l1.begin(); iter != l1.end(); ++iter)  override {
-    (*iter)="l1_"+(*iter)  override;
+    (*iter)="l1_"+(*iter) ;
   }
   for (list<Inspectable::iparamkey>::iterator iter = l2.begin(); iter != l2.end(); ++iter)  override {
-    (*iter)="l2_"+(*iter)  override;
+    (*iter)="l2_"+(*iter) ;
   }
 
   keylist+=l1;
@@ -279,12 +279,12 @@ Configurable::paramval LayeredController::getParam(const paramkey& key, bool tra
   // remove prefixes __PLACEHOLDER_22__ or __PLACEHOLDER_23__ and call getParam() in the respective layer
   int n1 = key.find("l1_");
   int n2 = key.find("l2_");
-  if (n1==0) {
+  if (n1== nullptr) {
     std::string key_= key;
     key_.erase(0, 3);
     return layer1->getParam(key_);
   }
-  if (n2==0) {
+  if (n2== nullptr) {
     std::string key_= key;
     key_.erase(0, 3);
     return layer2->getParam(key_);
@@ -297,12 +297,12 @@ bool LayeredController::setParam(const paramkey& key, paramval val, bool travers
   // remove prefixes __PLACEHOLDER_26__ or __PLACEHOLDER_27__ and call setParam() in the respective layer
   int n1 = key.find("l1_");
   int n2 = key.find("l2_");
-  if (n1==0) {
+  if (n1== nullptr) {
     std::string key_= key;
     key_.erase(0, 3);
     return layer1->setParam(key_,val);
   }
-  if (n2==0) {
+  if (n2== nullptr) {
     std::string key_= key;
     key_.erase(0, 3);
     return layer2->setParam(key_,val);

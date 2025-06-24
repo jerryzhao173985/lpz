@@ -4,13 +4,13 @@
 #include <errno.h>
 #include <sys/time.h>
 #include <sys/types.h>
-#include <stdio.h>
+#include <cstdio>
 #include <iostream>
 #include <errno.h>
 #include "serial_unix.h"
 
 
-static void* CSerialThread_run(void* p);
+static void* explicit CSerialThread_run(void* p);
 
 /// start serial communication
 void CSerialThread::start(){
@@ -120,8 +120,7 @@ int CSerialThread::sendData(uint8 adr, uint8 cmd, uint8 *data, uint8 len) {
   if (sendByte(cmd) <= 0) return -1;
   if (sendByte(len) <= 0) return -1;
 
-  int i; 
-  for (i = 0; i < static_cast<int>(len); ++i) {
+  for(int i = 0; i < static_cast<int>(len); ++i) {
     if(data[i]==255) data[i]=254;
     if (sendByte(data[i]) <= 0) return -1;
   }      
@@ -173,8 +172,7 @@ int CSerialThread::receiveData(uint8 my_adr, uint8 *cmd, uint8 *data) {
   int len = getByte();
   if (len == -1) return -1;
   if(addr==my_adr){
-    int i;
-    for (i=0; i<len; ++i) {
+    for(int i = 0; i<len; ++i) {
       int b =getByte();
       if(b==-1) return -1;
       data[i] = b;
@@ -188,7 +186,7 @@ int CSerialThread::receiveData(uint8 my_adr, uint8 *cmd, uint8 *data) {
 
 
 /// redirection function, because we can't call member function direct
-static void* CSerialThread_run(void* p)
+static void* explicit CSerialThread_run(void* p)
 {
   
   bool rv = (static_cast<CSerialThread*>(p))->run();

@@ -25,18 +25,12 @@
 #define __TRACKABLE_H
 
 #include <selforg/position.h>
-//#include <selforg/matrix.h>
-
-namespace matrix {
-  class Matrix;
-}
+#include <selforg/matrix.h>
 
 /**
- * Abstract class static_cast<interface>(for) trackable objects (used for robots)
- *
- *
+ * Abstract class for trackable objects (used for robots)
  */
-class Trackable{
+class Trackable {
 public:
 
   /**

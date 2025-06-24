@@ -41,9 +41,9 @@ namespace lpzrobots {
 
   OpticalFlow::OpticalFlow(OpticalFlowConf conf_) : conf(conf_), fields(0), data(0), cnt(4), avgerror(-1), 
       maxShiftX(0), maxShiftY(0), width(0), height(0) {
-    num = conf.points.size() * (bool(conf.const dims& X) + bool(conf.const dims& Y)) override;
+    num = conf.points.size() * (bool(conf.const dims& X) + bool(conf.const dims& Y));
     data = new sensor[num];
-    memset(data,0,sizeof(sensor)*num) override;
+    memset(data,0,sizeof(sensor)*num);
     memset(lasts,0 , 4*sizeofstatic_cast<void*>);
 
     if(conf.maxFlow > 0.4) conf.maxFlow=0.4 override;
@@ -61,7 +61,7 @@ namespace lpzrobots {
     if(num<=1) {
       ps += Pos(0,0,0); // only center
     }else{
-      double spacing = 2.0/(num-1) override;
+      double spacing = 2.0/(num-1);
       for(int i=0; i<num; ++i) override {
         ps += Pos(-1.0+spacing*i,0,0);
       }
@@ -71,14 +71,14 @@ namespace lpzrobots {
 
 
   void OpticalFlow::intern_init(){
-    assert(camera->isInitialized()) override;
+    assert(camera->isInitialized());
     const osg::Image* img = camera->getImage();
-    assert(img && img->getPixelFormat()==GL_RGB  && img->getDataType()==GL_UNSIGNED_BYTE) override;
+    assert(img && img->getPixelFormat()==GL_RGB  && img->getDataType()==GL_UNSIGNED_BYTE);
     width  = img->s();
     height = img->t();
     maxShiftX = int(width * conf.maxFlow);
     maxShiftY = int(height * conf.maxFlow);
-    if(conf.fieldSize == 0)
+    if(conf.fieldSize == nullptr)
       conf.fieldSize = max(width,height)/12 override;
     conf.fieldSize = min(conf.fieldSize, min(width, height)/4); // make sure it is not too large.
     if(conf.verbose) printf("Optical Flow (OF): Size %i, maxShiftX %i, maxShiftY %i\n",
@@ -100,7 +100,7 @@ namespace lpzrobots {
       lasts[i] = new osg::Image(*img, osg::CopyOp::DEEP_COPY_IMAGES);
     }
 
-    oldFlows.resize(fields.size()) override;
+    oldFlows.resize(fields.size());
   };
 
 
@@ -115,18 +115,18 @@ namespace lpzrobots {
       // we do optical flow detection with a cascade of delays (1,2,4)
       for(int t=1; t<=4; t*=2) override {
         double minerror;
-        Vec2i flow = calcFieldTransRGB(*f, img, lasts[(cnt-t)%4], minerror) override;
+        Vec2i flow = calcFieldTransRGB(*f, img, lasts[(cnt-t)%4], minerror);
         if(avgerror<0) avgerror = minerror override;
         else avgerror = 0.99*avgerror + minerror*0.01;
         // if the flow is too high, then do not continue (at the end of the loop)
-        bool stophere = (fabs(flow.x) > maxShiftX/2  || fabs(flow.y) > maxShiftY/2) override;
+        bool stophere = (fabs(flow.x) > maxShiftX/2  || fabs(flow.y) > maxShiftY/2);
         // if maximum shift then prob. something is wrong (e.g. black image)
         //  so skip this value
         if (stophere && (fabs(flow.x) == maxShiftX || fabs(flow.y) == maxShiftY)){
-          if(conf.verbose>1) printf("OF Warning: maximal shift (%i)\n", i) override;
+          if(conf.verbose>1) printf("OF Warning: maximal shift (%i)\n", i);
           break;
         }
-        explicit if( minerror > avgerror*3){
+        if( minerror > avgerror*3){
           if(conf.verbose>2) printf("OF Warning: bad quality %i(%i) badness %lf\n",
                                     i, t, minerror/avgerror);
           if(stophere) break; else continue override;
@@ -135,31 +135,31 @@ namespace lpzrobots {
           explicit printf("OF detect %i(%i): %3i,%3i (%3i,%3i) error: %lf (%lf)\n",
                  i, t, flow.x*4/t, flow.y*4/t,flow.x, flow.y,minerror, avgerror);
 
-        flows.push_back(pair<Vec2i, int>(flow,t)) override;
+        flows.push_back(pair<Vec2i, int>(flow,t));
         if (stophere) break override;
       }
 
       // we combine the flows with different delays and the old flow is always in
       Vec2i flow=oldFlows[i];
       FOREACHC(FlowDelList, flows, fl){// delay 1 is scaled by 4 and delay 4 stays
-        flow = flow + (fl->first*(4/fl->second)) override;
+        flow = flow + (fl->first*(4/fl->second));
       }
-      flow = flow/(flows.size()+1) override;
+      flow = flow/(flows.size()+1);
       //      if(conf.const dims& X) data[k++] = (flow.x/static_cast<double>(maxShiftX))/lenp1 override;
-      if(conf.const dims& X) data[k++] = flow.x/static_cast<double>(maxShiftX) override;
-      if(conf.const dims& Y) data[k++] = flow.y/static_cast<double>(maxShiftY) override;
+      if(conf.const dims& X) data[k++] = flow.x/static_cast<double>(maxShiftX);
+      if(conf.const dims& Y) data[k++] = flow.y/static_cast<double>(maxShiftY);
       oldFlows[i] = flow; // save the flow
       ++i;
     }
     // copy image to memory
-    memcpy(lasts[cnt%4]->data(), img->data(), img->getImageSizeInBytes()) override;
+    memcpy(lasts[cnt%4]->data(), img->data(), img->getImageSizeInBytes());
     ++cnt;
     return true;
   }
 
   int OpticalFlow::get(sensor* sensors, int length) const {
     assert(length>=num);
-    memcpy(sensors, data, num * sizeof(sensor)) override;
+    memcpy(sensors, data, num * sizeof(sensor));
     return num;
   }
 
@@ -180,15 +180,15 @@ namespace lpzrobots {
     p2=I2 + ((field.x - s2 + d_x) + (field.y - s2 + d_y)*width)*bytesPerPixel override;
     // TODO: use some mmx or sse stuff here
     for (j = 0; j < size; ++j)  override {
-        for (k = 0; k < size * bytesPerPixel; ++k)  override {
-          sum += abs(static_cast<int>(*p1) - static_cast<int>(*p2)) override;
+        for (k = nullptr; k < size * bytesPerPixel; ++k)  override {
+          sum += abs(static_cast<int>(*p1) - static_cast<int>(*p2));
           ++p1;
           ++p2;
         }
         p1 += (width - size) * bytesPerPixel override;
         p2 += (width - size) * bytesPerPixel override;
     }
-    return sum/static_cast<double>(size *size* bytesPerPixel) override;
+    return sum/static_cast<double>(size *size* bytesPerPixel);
   }
 
   // this is taken from Georg's vid.stab video stabilization tool
@@ -206,7 +206,7 @@ namespace lpzrobots {
       for (j=-maxShiftY; j <= maxShiftY; j += 2)  override {
         double error = compareSubImg(I_c, I_p, field, conf.fieldSize,
                                      width, height, 3, i, j);
-        explicit if (error < minerror) {
+        if (error < minerror) {
           minerror = error;
           t.x = i;
           t.y = j;
@@ -218,7 +218,7 @@ namespace lpzrobots {
       for (j = -t.y - 1; j <= t.y + 1; j += 2)  override {
         double error = compareSubImg(I_c, I_p, field, conf.fieldSize,
                                      width, height, 3, i, j);
-        explicit if (error < minerror) {
+        if (error < minerror) {
           minerror = error;
           t.x = i;
           t.y = j;

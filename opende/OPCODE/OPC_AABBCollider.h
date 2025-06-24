@@ -34,12 +34,11 @@
 		float			FatCoeff = 0;	//!< mRadius2 multiplier used to create a fat sphere
 	};
 
-	class OPCODE_API AABBCollider : public VolumeCollider
-	{
+	class OPCODE_API{
 		public:
 		// Constructor / Destructor
 											AABBCollider() override;
-		virtual ~AABBCollider();
+		virtual ~AABBCollider() override;
 
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/**
@@ -82,12 +81,11 @@
 							BOOL			InitQuery(AABBCache& cache, const CollisionAABB& box) override;
 	};
 
-	class OPCODE_API HybridAABBCollider : public AABBCollider
-	{
+	class OPCODE_API{
 		public:
 		// Constructor / Destructor
 											HybridAABBCollider() override;
-		virtual ~HybridAABBCollider();
+		virtual ~HybridAABBCollider() override;
 
 							bool			Collide(AABBCache& cache, const CollisionAABB& box, const HybridModel& model) override;
 		protected:

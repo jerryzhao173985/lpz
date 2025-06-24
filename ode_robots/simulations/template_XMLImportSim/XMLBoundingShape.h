@@ -49,7 +49,7 @@
  * Class which builds up the BoundingShape from a DOMNode instead
  * of an .bbox-file.
  */
-class XMLBoundingShape : public lpzrobots::BoundingShape, public XMLObject {
+class XMLBoundingShape{
   public:
   /**
    * @param boundingBoxNode which contains necessary information about the
@@ -57,7 +57,7 @@ class XMLBoundingShape : public lpzrobots::BoundingShape, public XMLObject {
    * @param parent primitive to which the BoundingShape is associated
    */
     XMLBoundingShape(const XERCESC::DOMNode* boundingBoxNode, XMLParserEngine& engine, lpzrobots::Mesh* parent);
-    virtual ~XMLBoundingShape();
+    virtual ~XMLBoundingShape() override;
 
      /// tries to open the bbox file and greates all geoms
      virtual bool init(const lpzrobots::OdeHandle& odeHandle, const lpzrobots::OsgHandle& osgHandle,

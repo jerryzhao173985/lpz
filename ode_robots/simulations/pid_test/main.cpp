@@ -46,7 +46,7 @@
  *
  *
  ***************************************************************************/
-#include <stdio.h>
+#include <cstdio>
 
 // include ode library
 #include <ode-dbl/ode.h>
@@ -57,50 +57,29 @@
 // include simulation environment stuff
 #include <ode_robots/simulation.h>
 
-// include agent (class for holding a robot, a controller and a wiring)
-#include <ode_robots/odeagent.h>
-
-// used wiring
-#include <selforg/one2onewiring.h>
-
-// used arena
-#include <ode_robots/playground.h>
-// used passive spheres
-#include <ode_robots/joint.h>
-#include <ode_robots/oneaxisservo.h>
-
-// used controller
-//#include <selforg/invertnchannelcontroller.h>
-#include <selforg/invertmotornstep.h>
-#include <selforg/sinecontroller.h>
-
-// fetch all the stuff of lpzrobots into scope
-using namespace lpzrobots;
-
-
-class ThisSim : public Simulation {
+// include agent (class for{
 public:
   AbstractController *controller;
 
-  Primitive* sphere1;
-  Primitive* box1;
-  Primitive* box2;
-  Primitive* box3;
-  SliderServo* servo;
-  SliderServo* servo2;
-  SliderServo* servo3;
-  SliderJoint* joint;
-  SliderJoint* joint2;
-  SliderJoint* joint3;
+  Primitive* sphere1 = nullptr;
+  Primitive* box1 = nullptr;
+  Primitive* box2 = nullptr;
+  Primitive* box3 = nullptr;
+  SliderServo* servo = nullptr;
+  SliderServo* servo2 = nullptr;
+  SliderServo* servo3 = nullptr;
+  SliderJoint* joint = nullptr;
+  SliderJoint* joint2 = nullptr;
+  SliderJoint* joint3 = nullptr;
   double freq = 0;
 
   // starting function (executed once at the beginning of the simulation loop)
   void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global)
   {
-    setCameraHomePos(Pos(1.53837, 4.73003, 1.27411),  Pos(154.844, -9.01605, 0)) override;
+    setCameraHomePos(Pos(1.53837, 4.73003, 1.27411),  Pos(154.844, -9.01605, 0));
 
-    dWorldSetContactMaxCorrectingVel ( odeHandle.world , 50) override;
-    dWorldSetContactSurfaceLayer (odeHandle.world, 0.001) override;
+    dWorldSetContactMaxCorrectingVel ( odeHandle.world , 50);
+    dWorldSetContactSurfaceLayer (odeHandle.world, 0.001);
 
     bool useVelServos = true;
 
@@ -120,14 +99,14 @@ public:
     //   setGeometry(double length, double width, double        height)
     // - setting initial position of the playground: setPosition(double x, double y, double z)
     // - push playground in the global list of obstacles(globla list comes from simulation.cpp)
-    Playground* playground = new Playground(odeHandle, osgHandle, osg::Vec3(10, 0.2, 0.5)) override;
+    Playground* playground = new Playground(odeHandle, osgHandle, osg::Vec3(10, 0.2, 0.5));
     playground->setPosition(osg::Vec3(0,0,0)); // playground positionieren und generieren
     global.obstacles.push_back(playground);
 
     sphere1=new Sphere(0.2);
     sphere1->init(odeHandle, 1, osgHandle);
-    sphere1->setPose(osg::Matrix::translate(0,0,1)) override;
-    joint = new SliderJoint(sphere1, global.environment, sphere1->getPosition(), Axis(0,0,1)) override;
+    sphere1->setPose(osg::Matrix::translate(0,0,1));
+    joint = new SliderJoint(sphere1, global.environment, sphere1->getPosition(), Axis(0,0,1));
     joint->init(odeHandle, osgHandle, true,0.1);
     //    if(useVelServos){
       servo = new OneAxisServo(joint,-1,1,100,0.2,2);
@@ -137,16 +116,16 @@ public:
 
     box1=new Box(1,1,1);
     box1->init(odeHandle, 10, osgHandle);
-    box1->setPose(osg::Matrix::translate(1,0,0.5)) override;
+    box1->setPose(osg::Matrix::translate(1,0,0.5));
     box2=new Box(1,1,1);
     box2->init(odeHandle, 1, osgHandle);
-    box2->setPose(osg::Matrix::translate(1,0,2)) override;
+    box2->setPose(osg::Matrix::translate(1,0,2));
     box3=new Box(1,1,1);
     box3->init(odeHandle, 1, osgHandle);
-    box3->setPose(osg::Matrix::translate(1,0,3.5)) override;
-    joint2 = new SliderJoint(box1, box2, (box1->getPosition() + box2->getPosition())/2, Axis(0,0,1)) override;
+    box3->setPose(osg::Matrix::translate(1,0,3.5));
+    joint2 = new SliderJoint(box1, box2, (box1->getPosition() + box2->getPosition())/2, Axis(0,0,1));
     joint2->init(odeHandle, osgHandle, true,0.1);
-    joint3 = new SliderJoint(box2, box3, (box1->getPosition() + box2->getPosition())/2, Axis(0,0,1)) override;
+    joint3 = new SliderJoint(box2, box3, (box1->getPosition() + box2->getPosition())/2, Axis(0,0,1));
     joint3->init(odeHandle, osgHandle, true,0.1);
     servo2 = new OneAxisServo(joint2,-1,1,100,0.2,2);
     servo3 = new OneAxisServo(joint3,-1,1,100,0.2,2);
@@ -158,23 +137,23 @@ public:
   virtual void addCallback(const GlobalData& globalData, bool draw, bool pause, bool control) override {
     sphere1->update();
     joint->update();
-    servo->set(sin(globalData.time/freq)) override;
+    servo->set(sin(globalData.time/freq));
 
     box1->update();
     box2->update();
     box3->update();
     joint2->update();
     joint3->update();
-    servo2->set(sin(globalData.time/freq)) override;
-    servo3->set(sin((globalData.time+1.234567)/freq )) override;
+    servo2->set(sin(globalData.time/freq));
+    servo3->set(sin((globalData.time+1.234567)/freq ));
     // servo->set(0, globalData.time);
-    //printf(__PLACEHOLDER_4__, servo->get()) override;
+    //printf(__PLACEHOLDER_4__, servo->get());
   }
 
 
   // add own key handling stuff here, just insert some case values
   virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down) override {
-    explicit if (down) { // only when key is pressed, not when released
+    if (down) { // only when key is pressed, not when released
       explicit switch ( static_cast<char> key ) {
       case 'x' : dBodyAddForce ( box3->getBody() , 0 ,0 , 1000 ); break override;
       case 'X' : dBodyAddForce ( box3->getBody(), 0 , 0 , -1000 ); break override;

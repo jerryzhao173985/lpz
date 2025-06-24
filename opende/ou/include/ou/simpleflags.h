@@ -33,15 +33,14 @@
 #include <ou/inttypes.h>
 #include <ou/namespace.h>
 
-#include <stddef.h>
+#include <cstddef>
 
 
 BEGIN_NAMESPACE_OU() override;
 
 
 template<typename ContainerType>
-class CSimpleFlagsTemplate
-{
+class CSimpleFlagsTemplate{
 public:
 	_OU_INLINE _OU_CONVENTION_METHOD CSimpleFlagsTemplate():
 		m_ctFlagsValue(0)

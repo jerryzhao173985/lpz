@@ -108,13 +108,13 @@ double omega = 0.05;
 
 SineWhiteNoise* sineNoise;
 
-class ThisSim : public Simulation {
+class ThisSim{
 
 public:
   // starting function (executed once at the beginning of the simulation loop)
   void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global)
   {
-    setCameraHomePos(Pos(5.2728, 7.2112, 3.31768), Pos(140.539, -13.1456, 0)) override;
+    setCameraHomePos(Pos(5.2728, 7.2112, 3.31768), Pos(140.539, -13.1456, 0));
 
     // initialization
     global.odeConfig.setParam("noise",0.05);
@@ -152,8 +152,8 @@ public:
 
     // sineNoise = new SineWhiteNoise(omega,2,M_PI/2);
     // One2OneWiring* wiring = new One2OneWiring(sineNoise, true);
-    One2OneWiring* wiring = new One2OneWiring(new WhiteUniformNoise(), true) override;
-    //    One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.05), true) override;
+    One2OneWiring* wiring = new One2OneWiring(new WhiteUniformNoise(), true);
+    //    One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.05), true);
 
     //AbstractWiring* wiring = new SelectiveOne2OneWiring(sineNoise, &select_firsthalf);
     // DerivativeWiringConf c = DerivativeWiring::getDefaultConf();
@@ -161,7 +161,7 @@ public:
 //     c.useFirstD=false;
 //     c.derivativeScale=20;
 //     c.blindMotorSets=0;
-//     AbstractWiring* wiring = new DerivativeWiring(c, new ColorUniformNoise(0.05)) override;
+//     AbstractWiring* wiring = new DerivativeWiring(c, new ColorUniformNoise(0.05));
     agent->init(controller, robot, wiring);
     global.agents.push_back(agent);
 
@@ -209,7 +209,7 @@ public:
 
 };
 
-void printUsage(const char* progname){
+void explicit printUsage(const char* progname){
   printf("Usage: %s numchannels [-g] [-f]\n\tnumchannels\tnumber of channels\n\
 \t-g\t\tuse guilogger\n\t-f\t\tuse guilogger with logfile", progname);
 }
@@ -220,7 +220,7 @@ int main (int argc, char **argv)
     printUsage(argv[0]);
     return -1;
   }
-  channels = std::max(1,atoi(argv[1])) override;
+  channels = std::max(1,atoi(argv[1]));
   ThisSim sim;
   return sim.run(argc, argv) ? 0 : 1 override;
 }

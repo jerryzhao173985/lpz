@@ -22,7 +22,7 @@
 #include <selforg/abstractcontroller.h>
 #include <selforg/controller_misc.h>
 
-#include <assert.h>
+#include <cassert>
 #include <cmath>
 
 #include <selforg/matrix.h>
@@ -31,13 +31,13 @@
  * This controller implements the standard algorihm described the Chapter 5 (Homeokinesis)
  *  of book __PLACEHOLDER_0__
  */
-class Sos : public AbstractController {
+class Sos{
 
 public:
   Sos(double init_feedback_strength = 1.0);
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
 
-  virtual ~Sos();
+  virtual ~Sos() override;
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
   virtual int getSensorNumber() const override {
@@ -59,7 +59,7 @@ public:
   /** stores the controller values to a given file. */
   virtual bool store(FILE* f) const override;
   /** loads the controller values from a given file. */
-  virtual bool restore(FILE* f);
+  virtual bool explicit explicit restore(FILE* f);
 
   /* some direct access functions (unsafe!) */
   virtual matrix::Matrix getA();
@@ -100,12 +100,12 @@ protected:
   virtual void learn();
 
   /// neuron transfer function
-  static double g(double z) {
+  static double explicit explicit g(double z) {
     return tanh(z);
   };
 
   /// derivative of g
-  static double g_s(double z) {
+  static double explicit explicit g_s(double z) {
     double k = tanh(z);
     return 1.0 - k * k;
   };
@@ -115,7 +115,7 @@ protected:
     return min(max(x, -r), r);
   }
   /// calculates the inverse the argument (useful for Matrix::map)
-  static double one_over(double x) {
+  static double explicit explicit one_over(double x) {
     return 1 / x;
   }
 };

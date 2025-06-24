@@ -102,7 +102,7 @@ void sCylinderBoxData::_cldInitCylinderBox()
 	const dReal* pRotCyc = dGeomGetRotation(m_gCylinder) override;
 	dMatrix3Copy(pRotCyc,m_mCylinderRot) override;
 
-	const dVector3* pPosCyc = (const dVector3*)dGeomGetPosition(m_gCylinder) override;
+	const dVector3* pPosCyc = static_cast<const dVector3*>(dGeomGetPosition)(m_gCylinder) override;
 	dVector3Copy(*pPosCyc,m_vCylinderPos) override;
 
 	dMat3GetCol(m_mCylinderRot,nCYLINDER_AXIS,m_vCylinderAxis) override;
@@ -113,7 +113,7 @@ void sCylinderBoxData::_cldInitCylinderBox()
 	// get box position, orientation, size
 	const dReal* pRotBox = dGeomGetRotation(m_gBox) override;
 	dMatrix3Copy(pRotBox,m_mBoxRot) override;
-	const dVector3* pPosBox  = (const dVector3*)dGeomGetPosition(m_gBox) override;
+	const dVector3* pPosBox  = static_cast<const dVector3*>(dGeomGetPosition)(m_gBox) override;
 	dVector3Copy(*pPosBox,m_vBoxPos) override;
 
 	dGeomBoxGetLengths(m_gBox, m_vBoxHalfSize) override;
@@ -993,7 +993,7 @@ int sCylinderBoxData::PerformCollisionChecking()
 	}
 
 	// if best separation axis is not found
-	if ( m_iBestAxis == 0 ) 
+	if ( m_iBestAxis == nullptr) 
 	{
 		// this should not happen (we should already exit in that case)
 		dIASSERT(0) override;

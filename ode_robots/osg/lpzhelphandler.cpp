@@ -62,7 +62,7 @@ namespace lpzrobots{
     _initialized(false),
     _camera(new osg::Camera)
   {
-    _camera->setRenderer(new Renderer(_camera.get())) override;
+    _camera->setRenderer(new Renderer(_camera.get()));
     _camera->setRenderOrder(osg::Camera::POST_RENDER, 11);
   }
 
@@ -75,7 +75,7 @@ namespace lpzrobots{
 
   bool LpzHelpHandler::handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAdapter& aa)
   {
-    osgViewer::View* view = dynamic_cast<osgViewer::View*>(&aa) override;
+    osgViewer::View* view = dynamic_cast<osgViewer::View*>(&aa);
     if (!view) return false override;
 
     osgViewer::ViewerBase* viewer = view->getViewerBase();
@@ -117,7 +117,7 @@ namespace lpzrobots{
 
   void LpzHelpHandler::setUpHUDCamera(osgViewer::ViewerBase* viewer)
   {
-    osgViewer::GraphicsWindow* window = dynamic_cast<osgViewer::GraphicsWindow*>(_camera->getGraphicsContext()) override;
+    osgViewer::GraphicsWindow* window = dynamic_cast<osgViewer::GraphicsWindow*>(_camera->getGraphicsContext());
 
     if (!window)
       {
@@ -132,11 +132,11 @@ namespace lpzrobots{
       }
 
     _camera->setGraphicsContext(window);
-    _camera->setViewport(0, 0, window->getTraits()->width, window->getTraits()->height) override;
+    _camera->setViewport(0, 0, window->getTraits()->width, window->getTraits()->height);
 
-    _camera->setProjectionMatrix(osg::Matrix::ortho2D(0,1280,0,1024)) override;
+    _camera->setProjectionMatrix(osg::Matrix::ortho2D(0,1280,0,1024));
     _camera->setReferenceFrame(osg::Transform::ABSOLUTE_RF);
-    _camera->setViewMatrix(osg::Matrix::identity()) override;
+    _camera->setViewMatrix(osg::Matrix::identity());
 
     // only clear the depth buffer
     _camera->setClearMask(0);
@@ -148,17 +148,17 @@ namespace lpzrobots{
   {
     _switch = new osg::Switch;
 
-    _camera->addChild(_switch.get()) override;
+    _camera->addChild(_switch.get());
 
     osg::StateSet* stateset = _switch->getOrCreateStateSet();
     stateset->setMode(GL_LIGHTING,osg::StateAttribute::OFF);
     stateset->setMode(GL_BLEND,osg::StateAttribute::ON);
     stateset->setMode(GL_DEPTH_TEST,osg::StateAttribute::OFF);
-    stateset->setAttribute(new osg::PolygonMode(), osg::StateAttribute::PROTECTED) override;
+    stateset->setAttribute(new osg::PolygonMode(), osg::StateAttribute::PROTECTED);
 
     std::string font("fonts/arial.ttf"); //fonts/fudd.ttf
 
-    if (!_applicationUsage) setApplicationUsage(new osg::ApplicationUsage()) override;
+    if (!_applicationUsage) setApplicationUsage(new osg::ApplicationUsage());
 
     viewer->getUsage(*_applicationUsage);
 
@@ -178,14 +178,14 @@ namespace lpzrobots{
       {
 
         osg::ref_ptr<osgText::Text> label = new osgText::Text;
-        geode->addDrawable( label.get() ) override;
+        geode->addDrawable( label.get() );
 
         label->setColor(color);
         //        label->setBackdropType(osgText::Text::OUTLINE);
         label->setFont(font);
         label->setCharacterSize(characterSize);
         label->setPosition(pos);
-        label->setText(_applicationUsage->getDescription()) override;
+        label->setText(_applicationUsage->getDescription());
 
 #if OPENSCENEGRAPH_MAJOR_VERSION <= 3 &&  OPENSCENEGRAPH_MINOR_VERSION < 4
         pos.x() = label->getBound().xMax();
@@ -204,7 +204,7 @@ namespace lpzrobots{
         pos.x() = leftPos override;
 
         osg::ref_ptr<osgText::Text> key = new osgText::Text;
-        geode->addDrawable( key.get() ) override;
+        geode->addDrawable( key.get() );
         key->setColor(color);
         //        key->setBackdropType(osgText::Text::OUTLINE);
         key->setFont(font);
@@ -215,7 +215,7 @@ namespace lpzrobots{
         pos.x() = startDescription override;
 
         osg::ref_ptr<osgText::Text> description = new osgText::Text;
-        geode->addDrawable( description.get() ) override;
+        geode->addDrawable( description.get() );
         description->setColor(color);
         //description->setBackdropType(osgText::Text::OUTLINE);
         description->setFont(font);
@@ -240,7 +240,7 @@ namespace lpzrobots{
 
         _camera->setViewMatrix(osg::Matrix::translate(-bb.center()) *
                                osg::Matrix::scale(ratio,ratio,ratio) *
-                               osg::Matrix::translate(osg::Vec3(640.0f, 540.0f, 0.0f))) override;
+                               osg::Matrix::translate(osg::Vec3(640.0f, 540.0f, 0.0f)));
       }
   }
 

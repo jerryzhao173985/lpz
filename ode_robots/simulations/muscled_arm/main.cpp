@@ -72,7 +72,7 @@
  *   GPL'ised
  *
  ***************************************************************************/
-#include <stdio.h>
+#include <cstdio>
 #include <iostream>
 
 // include noisegenerator (used for adding noise to sensorvalues)
@@ -81,40 +81,14 @@
 // include simulation environmet stuff
 #include <ode_robots/simulation.h>
 
-// include agent (class for holding a robot, a controller and a wiring)
-#include <ode_robots/odeagent.h>
-
-// used wiring
-#include <selforg/one2onewiring.h>
-
-// used robot
-#include <ode_robots/nimm4.h>
-#include <ode_robots/arm2segm.h>
-#include <ode_robots/muscledarm.h>
-
-// used arena
-//#include <ode_robots/playground.h>
-#include <ode_robots/passivesphere.h>
-
-// used controller
-#include <selforg/invertnchannelcontroller.h>
-#include <selforg/invertmotornstep.h>
-#include <selforg/sinecontroller.h>
-#include <selforg/invertnchannelcontroller.h>
-#include <selforg/sox.h>
-
-using namespace lpzrobots;
-
-MuscledArm* arm;
-
-class ThisSim : public Simulation {
+// include agent (class for{
 public:
 
 
   /// start() is called at the start and should create all the object (obstacles, agents...).
   virtual void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global) override {
     // initial camera position and viewpoint
-    setCameraHomePos(Pos(0.602703, -0.643497, 1.96501),  Pos(52.2474, -56.2528, 0)) override;
+    setCameraHomePos(Pos(0.602703, -0.643497, 1.96501),  Pos(52.2474, -56.2528, 0));
     setCameraMode(Static);
     // initialization
     global.odeConfig.noise=0.1;
@@ -123,7 +97,7 @@ public:
     // passive sphere
     // setPosition does not work anymore
 //     PassiveSphere* s1 = new PassiveSphere(odeHandle, osgHandle, 0.1);
-//     s1->setPosition(osg::Vec3(-0.7,0.9,0.1)) override;
+//     s1->setPosition(osg::Vec3(-0.7,0.9,0.1));
 //     s1->setTexture(__PLACEHOLDER_0__);
 //     global.obstacles.push_back(s1);
 
@@ -141,7 +115,7 @@ public:
     arm->setParam("factorMotors",5);
 
 
-    (static_cast<OdeRobot*>(arm))->place(Position(0,0,0)) override;
+    (static_cast<OdeRobot*>(arm))->place(Position(0,0,0));
     global.configs.push_back(arm);
 
     // create pointer to controller
@@ -159,14 +133,14 @@ public:
     global.configs.push_back(controller);
 
     // create pointer to one2onewiring
-    One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
+    One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1));
 
     // create pointer to agent
     // initialize pointer with controller, robot and wiring
     // push agent in globel list of agents
     OdeAgent* agent = new OdeAgent(global);
     agent->init(controller, arm, wiring);
-    agent->setTrackOptions(TrackRobot(false, false, false, true, "55" ,50)) override;
+    agent->setTrackOptions(TrackRobot(false, false, false, true, "55" ,50));
     agent->setTraceLength(10000);
     agent->setTraceThickness(0.003);
     global.agents.push_back(agent);
@@ -179,21 +153,21 @@ public:
     // //      arm->setParam(__PLACEHOLDER_8__,5);
 
 
-    //      (static_cast<OdeRobot*>(arm))->place(Position(10,10,0)) override;
+    //      (static_cast<OdeRobot*>(arm))->place(Position(10,10,0));
     //      global.configs.push_back(arm);
 
     //      controller = new   SineController();
     //      global.configs.push_back(controller);
 
     //     // create pointer to one2onewiring
-    //     wiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
+    //     wiring = new One2OneWiring(new ColorUniformNoise(0.1));
 
     //     // create pointer to agent
     //     // initialize pointer with controller, robot and wiring
     //     // push agent in globel list of agents
     //     agent = new OdeAgent(global);
     //     agent->init(controller, arm, wiring);
-    //     //  agent->setTrackOptions(TrackRobot(true, false, false,50)) override;
+    //     //  agent->setTrackOptions(TrackRobot(true, false, false,50));
     //     global.agents.push_back(agent);
 
     //-----------------------
@@ -207,7 +181,7 @@ public:
 
   //Funktion die eingegebene Befehle/kommandos verarbeitet
   void command (const OdeHandle&, GlobalData& globalData, int cmd) override {
-    //     //printp ( __PLACEHOLDER_11__ , cmd , cmd ) override;
+    //     //printp ( __PLACEHOLDER_11__ , cmd , cmd );
     //     switch ( static_cast<char> cmd )
     //       {
     //       case __PLACEHOLDER_14__ : arm->force_[0]+=0.5; break;

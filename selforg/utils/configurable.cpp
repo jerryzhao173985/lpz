@@ -24,11 +24,11 @@
 
 #include "configurable.h"
 #include "inspectable.h"
-#include <assert.h>
+#include <cassert>
 #include <cmath>
 #include <cstring>
 #include <locale.h> // need to set LC_NUMERIC to have a __PLACEHOLDER_28__ in the numbers written
-#include <stdio.h>
+#include <cstdio>
 
 using namespace std;
 
@@ -460,14 +460,14 @@ Configurable::parse(FILE* f, const char* prefix, bool traverseChildren) {
   int preLen = prefix == 0 ? 0 : strlen(prefix);
   std::string pre;
   bool rv = true;
-  if (prefix != 0)
+  if (prefix != nullptr)
     pre = prefix;
 
   assert(buffer);
-  while (fgets(buffer, 512, f) != 0) {
+  while (fgets(buffer, 512, f) != nullptr) {
     char* bufNoPrefix = buffer;
     if (preLen > 0) {
-      if (strncmp(buffer, pre.c_str(), preLen) == 0)
+      if (strncmp(buffer, pre.c_str(), preLen) == nullptr)
         bufNoPrefix = buffer + preLen;
       else {
         fprintf(stderr, "could not detect prefix: %s in line: %s\n", pre.c_str(), buffer);
@@ -475,10 +475,10 @@ Configurable::parse(FILE* f, const char* prefix, bool traverseChildren) {
         break;
       }
     }
-    if (strcmp(bufNoPrefix, "######\n") == 0)
+    if (strcmp(bufNoPrefix, "######\n") == nullptr)
       break;
     char* p = strchr(bufNoPrefix, '=');
-    if (p != 0) {
+    if (p != nullptr) {
       *p = '\0'; // terminate string (key) at = sign
       char* s = bufNoPrefix;
       while (*s == ' ')

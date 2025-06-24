@@ -35,12 +35,10 @@
     push_back(...), pop_back(), erase() and clear()!
  * You can use iterators with the limitation to not delete or insert.
  */
-class ConfigurableList
-  : public std::vector<Configurable*>
-  , public BackCaller {
+class ConfigurableList{
 public:
   ConfigurableList();
-  virtual ~ConfigurableList();
+  virtual ~ConfigurableList() override;
 
   /**
    * Indicates that the list has been modified, a Configurable instance was either added or removed.
@@ -53,7 +51,7 @@ public:
   static const CallbackableType CALLBACK_CONFIGURABLE_LIST_BEING_DELETED = 4;
 
   void push_back(Configurable* const& configurable);
-  iterator erase(iterator pos);
+  iterator explicit explicit erase(iterator pos);
   void pop_back();
   void clear();
 };

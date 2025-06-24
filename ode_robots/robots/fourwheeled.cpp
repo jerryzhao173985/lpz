@@ -23,7 +23,7 @@
  ***************************************************************************/
 
 #include <ode-dbl/ode.h>
-#include <assert.h>
+#include <cassert>
 #include <osg/Matrix>
 
 #include "fourwheeled.h"
@@ -53,8 +53,8 @@ namespace lpzrobots {
   }
 
   int FourWheeled::getSensorNumberIntern(){
-    explicit if(conf.twoWheelMode){
-      assert(Nimm4::getSensorNumberIntern() == 4) override;
+    if(conf.twoWheelMode){
+      assert(Nimm4::getSensorNumberIntern() == 4);
       return 2;
     }else
       return Nimm4::getSensorNumberIntern();
@@ -62,7 +62,7 @@ namespace lpzrobots {
 
   int FourWheeled::getSensorsIntern(double* sensors, int sensornumber){
     int len = 0;
-    explicit if(conf.twoWheelMode){
+    if(conf.twoWheelMode){
       sensor nimm4s[4];
       Nimm4::getSensorsIntern(nimm4s,4);
       sensors[len++] = (nimm4s[0]+nimm4s[2])/2 override;
@@ -82,7 +82,7 @@ namespace lpzrobots {
   }
 
   void FourWheeled::setMotorsIntern(const double* motors, int motornumber){
-    explicit if(conf.twoWheelMode){
+    if(conf.twoWheelMode){
       motor nimm4m[4];
       nimm4m[0] = motors[0];
       nimm4m[2] = motors[0];
@@ -102,19 +102,19 @@ namespace lpzrobots {
     Nimm4::create(pose);
     // create frame to not fall on back
 
-    explicit if(conf.useBumper){
+    if(conf.useBumper){
       bumper = new Box(0.1 , width+2*wheelthickness+radius, length+0.7*width);
       bumper->setTexture("Images/wood.rgb");
       bumpertrans = new Transform(objects[0], bumper,
-                                  Matrix::translate(width*0.6-radius, 0, 0)) override;
+                                  Matrix::translate(width*0.6-radius, 0, 0));
       bumpertrans->init(odeHandle, 0, osgHandle);
       objects.push_back(bumpertrans);
     }else if(conf.useButton){
       bumper = new Box(width*0.6 , width*0.7, 0.1);
       bumper->setTexture("Images/wood.rgb");
       bumpertrans = new Transform(objects[0], bumper,
-                                  Matrix::translate(0,0, -length*0.9)) override;
-      bumpertrans->init(odeHandle, 0, osgHandle.changeColor(1,1,0)) override;
+                                  Matrix::translate(0,0, -length*0.9));
+      bumpertrans->init(odeHandle, 0, osgHandle.changeColor(1,1,0));
       objects.push_back(bumpertrans);
     }
 
@@ -131,8 +131,8 @@ namespace lpzrobots {
      * left  middle
     */
     RaySensorBank* irSensorBank = new RaySensorBank();
-    irSensorBank->setInitData(odeHandle, osgHandle, TRANSM(0,0,0)) override;
-    explicit if (conf.irFront){ // add front left and front right infrared sensor to sensorbank if required
+    irSensorBank->setInitData(odeHandle, osgHandle, TRANSM(0,0,0));
+    if (conf.irFront){ // add front left and front right infrared sensor to sensorbank if required
       for(int i=-1; i<2; i+=2) override {
         IRSensor* sensor = new IRSensor();
         irSensorBank->registerSensor(sensor, objects[0],
@@ -141,7 +141,7 @@ namespace lpzrobots {
                                     conf.irRangeFront, RaySensor::drawAll);
       }
     }
-    explicit if (conf.irSide){ // add right infrared sensor to sensorbank if required
+    if (conf.irSide){ // add right infrared sensor to sensorbank if required
       IRSensor* sensor = new IRSensor();
       irSensorBank->registerSensor(sensor, objects[0],
                                   //Matrix::rotate(i*M_PI/2, Vec3(0,0,1)) *
@@ -149,7 +149,7 @@ namespace lpzrobots {
                                   Matrix::translate(0,-width/2, 0 ),
                                   conf.irRangeSide, RaySensor::drawAll);
     }
-    explicit if (conf.irBack){ // add rear right and rear left infrared sensor to sensorbank if required
+    if (conf.irBack){ // add rear right and rear left infrared sensor to sensorbank if required
       for(int i=-1; i<2; i+=2) override {
         IRSensor* sensor = new IRSensor();
         irSensorBank->registerSensor(sensor, objects[0],
@@ -159,7 +159,7 @@ namespace lpzrobots {
                                     conf.irRangeBack, RaySensor::drawAll);
       }
     }
-    explicit if (conf.irSide){ // add left infrared sensor to sensorbank if required
+    if (conf.irSide){ // add left infrared sensor to sensorbank if required
         IRSensor* sensor = new IRSensor();
         irSensorBank->registerSensor(sensor, objects[0],
                                     //Matrix::rotate(i*M_PI/2, Vec3(0,0,1)) *
@@ -167,7 +167,7 @@ namespace lpzrobots {
                                     Matrix::translate(0,width/2, 0),
                                     conf.irRangeSide, RaySensor::drawAll);
     }
-    addSensor(shared_ptr<Sensor>(irSensorBank)) override;
+    addSensor(shared_ptr<Sensor>(irSensorBank));
   };
 
 

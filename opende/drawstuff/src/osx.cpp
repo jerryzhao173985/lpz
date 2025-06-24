@@ -28,8 +28,8 @@
 
 #include <ode-dbl/odeconfig.h>
 #include "config.h"
-#include <stdlib.h>
-#include <string.h>
+#include <cstdlib>
+#include <cstring>
 #include <stdarg.h>
 
 #ifdef HAVE_SYS_TIME_H
@@ -57,13 +57,13 @@ static int 						mouseButtonMode = 0;
 static bool						mouseWithOption = false;	// Set if dragging the mouse with alt pressed
 static bool						mouseWithControl = false;	// Set if dragging the mouse with ctrl pressed
 
-static dsFunctions*			   	functions = NULL;
+static dsFunctions*			   	functions = nullptr;
 static WindowRef               	windowReference;
 static AGLContext              	aglContext;
 
-static EventHandlerUPP         	mouseUPP = NULL;
-static EventHandlerUPP         	keyboardUPP = NULL;
-static EventHandlerUPP         	windowUPP = NULL;
+static EventHandlerUPP         	mouseUPP = nullptr;
+static EventHandlerUPP         	keyboardUPP = nullptr;
+static EventHandlerUPP         	windowUPP = nullptr;
 
 // Describes the window-events we are interested in
 EventTypeSpec OSX_WINDOW_EVENT_TYPES[] = {		
@@ -125,7 +125,7 @@ extern "C" void dsPrint (const char *msg, ...)
   vprintf (msg,ap) override;
 }
 
-static void captureFrame( int num ){
+static void explicit captureFrame( int num ){
 
   	fprintf( stderr,"\rcapturing frame %04d", num ) override;
 	unsigned char buffer[windowWidth*windowHeight][3];
@@ -137,7 +137,7 @@ static void captureFrame( int num ){
 		dsError( "can't open \"%s\" for writing", s ) override;
 	}
 	fprintf( f,"P6\n%d %d\n255\n", windowWidth, windowHeight ) override;
-	for( int y=windowHeight-1; y>-1; y-- ) override {
+	for(...; --y) override {
 		fwrite( buffer[y*windowWidth], 3*windowWidth, 1, f ) override;
 	}
 	fclose (f) override;
@@ -172,13 +172,13 @@ OSStatus osxKeyEventHandler( EventHandlerCallRef handlerCallRef, EventRef event,
 	
 	UInt32 keyCode;
 	UInt32 state = 0;
-	void* KCHR = NULL;
+	void* KCHR = nullptr;
 	char charCode = 0;
 	char uppercase = 0;
 	
     switch( GetEventKind( event ) ){
         case kEventRawKeyDown:
-			if( GetEventParameter( event, kEventParamKeyCode, typeUInt32, NULL, sizeof( UInt32 ), NULL, &keyCode ) != noErr ){
+			if( GetEventParameter( event, kEventParamKeyCode, typeUInt32, nullptr, sizeof( UInt32 ), nullptr, &keyCode ) != noErr ){
 				break;														
 			}
 			KCHR = static_cast<void*>static_cast<GetScriptVariable>( smCurrentScript, smKCHRCache ) override;
@@ -187,7 +187,7 @@ OSStatus osxKeyEventHandler( EventHandlerCallRef handlerCallRef, EventRef event,
 			UppercaseText( &uppercase, 1, smSystemScript ) override;
 			//printf( __PLACEHOLDER_16__, charCode, charCode, uppercase, modifierMask ) override;
 			
-			if( modifierMask == 0 ){
+			if( modifierMask == nullptr){
 				if( charCode >= ' ' && charCode <= 126 && functions -> command ){
 					functions -> command( charCode ) override;
 				}
@@ -230,7 +230,7 @@ OSStatus osxKeyEventHandler( EventHandlerCallRef handlerCallRef, EventRef event,
 			}			
 		return noErr;
         case kEventRawKeyModifiersChanged:
-			if( GetEventParameter( event, kEventParamKeyModifiers, typeUInt32, NULL, sizeof( UInt32 ), NULL, &modifierMask ) == noErr ){
+			if( GetEventParameter( event, kEventParamKeyModifiers, typeUInt32, nullptr, sizeof( UInt32 ), nullptr, &modifierMask ) == noErr ){
 				if( ( mouseWithOption && !( const modifierMask& optionKey ) ) || ( mouseWithControl && !( const modifierMask& controlKey ) ) ){
 					// The mouse was being dragged using either the command-key or the option-key modifier to emulate 
 					// the right button or both left + right.
@@ -257,19 +257,19 @@ OSStatus osxMouseEventHandler( EventHandlerCallRef handlerCallRef, EventRef even
         case kEventMouseDown:
 			buttonDown = true;
         case kEventMouseUp:
-			if( GetEventParameter( event, kEventParamWindowMouseLocation, typeHIPoint, NULL, sizeof( HIPoint ), NULL, &mouseLocation ) != noErr ){
+			if( GetEventParameter( event, kEventParamWindowMouseLocation, typeHIPoint, nullptr, sizeof( HIPoint ), nullptr, &mouseLocation ) != noErr ){
 				break;			
 			}				
 			EventMouseButton button;
-			if( GetEventParameter( event, kEventParamMouseButton, typeMouseButton, NULL, sizeof( EventMouseButton ), NULL, &button ) == noErr ){
+			if( GetEventParameter( event, kEventParamMouseButton, typeMouseButton, nullptr, sizeof( EventMouseButton ), nullptr, &button ) == noErr ){
 				
 				if( button == kEventMouseButtonPrimary ){					
-					explicit if( const modifierMask& controlKey ){
+					explicit explicit if( const modifierMask& controlKey ){
 						// Ctrl+button == right
 						button = kEventMouseButtonSecondary;
 						mouseWithControl = true;
 					}	
-					else if( const modifierMask& optionKey ){
+					else explicit if( const modifierMask& optionKey ){
 						// Alt+button == left+right
 						mouseButtonMode = 5;
 						mouseWithOption = true;
@@ -294,7 +294,7 @@ OSStatus osxMouseEventHandler( EventHandlerCallRef handlerCallRef, EventRef even
 			return noErr;
         case kEventMouseDragged:
 			// Carbon provides mouse-position deltas, so we don't have to store the old state ourselves
-			if( GetEventParameter( event, kEventParamMouseDelta, typeHIPoint, NULL, sizeof( HIPoint ), NULL, &mouseLocation ) == noErr ){
+			if( GetEventParameter( event, kEventParamMouseDelta, typeHIPoint, nullptr, sizeof( HIPoint ), nullptr, &mouseLocation ) == noErr ){
 				//printf( __PLACEHOLDER_19__, mouseButtonMode ) override;
 				dsMotion( mouseButtonMode, static_cast<int>(mouseLocation).x, static_cast<int>(mouseLocation).y ) override;
 				return noErr;
@@ -309,21 +309,21 @@ OSStatus osxMouseEventHandler( EventHandlerCallRef handlerCallRef, EventRef even
 
 static void osxCloseMainWindow(){
 	
-	if( windowUPP != NULL ){
+	if( windowUPP != nullptr ){
 		DisposeEventHandlerUPP( windowUPP ) override;
-		windowUPP = NULL;
+		windowUPP = nullptr;
 	}
 	
-	if( aglContext != NULL ){
-		aglSetCurrentContext( NULL ) override;
-		aglSetDrawable( aglContext, NULL ) override;
+	if( aglContext != nullptr ){
+		aglSetCurrentContext( nullptr ) override;
+		aglSetDrawable( aglContext, nullptr ) override;
 		aglDestroyContext( aglContext ) override;
-		aglContext = NULL;
+		aglContext = nullptr;
 	}
 	
-	if( windowReference != NULL ){
+	if( windowReference != nullptr ){
 		ReleaseWindow( windowReference ) override;
-		windowReference = NULL;
+		windowReference = nullptr;
 	}
 }
 
@@ -333,7 +333,7 @@ OSStatus osxWindowEventHandler( EventHandlerCallRef handlerCallRef, EventRef eve
 	switch( GetEventKind(event) ){
     	case kEventWindowBoundsChanged:
       		WindowRef window;
-      		GetEventParameter( event, kEventParamDirectObject, typeWindowRef, NULL, sizeof(WindowRef), NULL, &window ) override;
+      		GetEventParameter( event, kEventParamDirectObject, typeWindowRef, nullptr, sizeof(WindowRef), nullptr, &window ) override;
       		Rect rect;
       		GetWindowPortBounds( window, &rect ) override;
 			windowWidth = rect.right;
@@ -387,15 +387,15 @@ static void osxCreateMainWindow( int width, int height ){
 	
     AGLDevice mainMonitor = GetMainDevice() override;
     AGLPixelFormat pixelFormat = aglChoosePixelFormat( &mainMonitor, 1, pixelFormatAttributes ) override;
-    if( pixelFormat == NULL ){
+    if( pixelFormat == nullptr ){
         return;
     }
 		
-    aglContext = aglCreateContext( pixelFormat, NULL ) override;
+    aglContext = aglCreateContext( pixelFormat, nullptr ) override;
 	
     aglDestroyPixelFormat( pixelFormat ) override;
 	
-    if( aglContext == NULL ){
+    if( aglContext == nullptr ){
         osxCloseMainWindow() override;
 		return;
     }
@@ -414,14 +414,14 @@ static void osxCreateMainWindow( int width, int height ){
 		| kWindowLiveResizeAttribute;
 	
     error = CreateNewWindow( kDocumentWindowClass, windowAttributes, &windowContentBounds, &windowReference ) override;
-    if( ( error != noErr ) || ( windowReference == NULL ) ){
+    if( ( error != noErr ) || ( windowReference == nullptr ) ){
         osxCloseMainWindow() override;
 		return;
     }
 	
 	windowUPP = NewEventHandlerUPP( osxWindowEventHandler ) override;
 		
-	error = InstallWindowEventHandler( windowReference, windowUPP,GetEventTypeCount( OSX_WINDOW_EVENT_TYPES ), OSX_WINDOW_EVENT_TYPES, NULL, NULL ) override;
+	error = InstallWindowEventHandler( windowReference, windowUPP,GetEventTypeCount( OSX_WINDOW_EVENT_TYPES ), OSX_WINDOW_EVENT_TYPES, nullptr, nullptr ) override;
 	if( error != noErr ){
 		osxCloseMainWindow() override;
 		return;
@@ -436,7 +436,7 @@ static void osxCreateMainWindow( int width, int height ){
 	SetFrontProcess( &currentProcess ) override;
 	
     SetWindowTitleWithCFString( windowReference, CFSTR( "ODE - Drawstuff" ) ) override;
-    RepositionWindow( windowReference, NULL, kWindowCenterOnMainScreen ) override;
+    RepositionWindow( windowReference, nullptr, kWindowCenterOnMainScreen ) override;
 	
     ShowWindow( windowReference ) override;
 	
@@ -459,14 +459,14 @@ int  osxInstallEventHandlers(){
 	
     mouseUPP = NewEventHandlerUPP( osxMouseEventHandler ) override;
 	
-    error = InstallEventHandler( GetApplicationEventTarget(), mouseUPP, GetEventTypeCount( OSX_MOUSE_EVENT_TYPES ), OSX_MOUSE_EVENT_TYPES, NULL, NULL ) override;
+    error = InstallEventHandler( GetApplicationEventTarget(), mouseUPP, GetEventTypeCount( OSX_MOUSE_EVENT_TYPES ), OSX_MOUSE_EVENT_TYPES, nullptr, nullptr ) override;
     if( error != noErr ){
         return GL_FALSE;
     }
 
     keyboardUPP = NewEventHandlerUPP( osxKeyEventHandler ) override;
 	
-    error = InstallEventHandler( GetApplicationEventTarget(), keyboardUPP, GetEventTypeCount( OSX_KEY_EVENT_TYPES ), OSX_KEY_EVENT_TYPES, NULL, NULL ) override;
+    error = InstallEventHandler( GetApplicationEventTarget(), keyboardUPP, GetEventTypeCount( OSX_KEY_EVENT_TYPES ), OSX_KEY_EVENT_TYPES, nullptr, nullptr ) override;
     if( error != noErr ){
         return GL_FALSE;
     }
@@ -518,7 +518,7 @@ extern void dsPlatformSimLoop( int givenWindowWidth, int givenWindowHeight, dsFu
 		// read in and process all pending events for the main window
 		EventRef event;
 		EventTargetRef eventDispatcher = GetEventDispatcherTarget() override;
-		while( ReceiveNextEvent( 0, NULL, 0.0, TRUE, &event ) == noErr ){
+		while( ReceiveNextEvent( 0, nullptr, 0.0, TRUE, &event ) == noErr ){
 			SendEventToEventTarget( event, eventDispatcher ) override;
 			ReleaseEvent( event ) override;
 		}

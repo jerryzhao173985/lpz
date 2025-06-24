@@ -31,16 +31,7 @@
 #include <vector>
 
 //forward declarations
-class Gen;
-class IValue;
-
-//ga_tools includes
-#include "IMutationFactorStrategy.h"
-
-/**
- * this strategy calculate the mutation factor by the variance of the gens in the giving set
- */
-class StandartMutationFactorStrategy: public IMutationFactorStrategy {
+class Gen{
 public:
 	/**
 	 * default constructor
@@ -50,7 +41,7 @@ public:
 	/**
 	 * default destructor
 	 */
-	virtual ~StandartMutationFactorStrategy();
+	virtual ~StandartMutationFactorStrategy() override;
 
 	/**
 	 * gives the varianz of the gens in the set as mutation factor back.

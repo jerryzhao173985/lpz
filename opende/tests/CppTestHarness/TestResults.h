@@ -6,10 +6,7 @@
 namespace CppTestHarness
 {
 
-class TestReporter;
-
-class TestResults
-{
+class TestReporter{
 public:
 	explicit TestResults(const TestReporter& reporter) override;
 

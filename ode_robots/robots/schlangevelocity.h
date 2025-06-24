@@ -38,8 +38,7 @@ namespace lpzrobots {
    * It consists of a number of equal elements, each linked
    * by a joint powered by directly setting the angular velocities of the joints
    **/
-  class SchlangeVelocity: public Schlange
-    {
+  class SchlangeVelocity{
     private:
       paramval factor_motors;
       paramval factor_sensors;
@@ -69,7 +68,7 @@ namespace lpzrobots {
         return conf;
       }
 
-      virtual ~SchlangeVelocity();
+      virtual ~SchlangeVelocity() override;
 
       /**
        *Reads the actual motor commands from an array,

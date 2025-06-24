@@ -52,7 +52,7 @@
  *                                                                 *
  *                                                                         * 
 ***************************************************************************/
-#include <stdio.h>
+#include <cstdio>
 #include <drawstuff/drawstuff.h>
 #include <ode-dbl/ode.h>
 
@@ -74,16 +74,16 @@ list<PlotOption> plotoptions;
 //Startfunktion die am Anfang der Simulationsschleife, einmal ausgefuehrt wird
 void start(const OdeHandle& odeHandle, GlobalData& global) 
 {
-  dsPrint ( "\nWelcome to the virtual ODE - robot simulator of the Robot Group Leipzig\n" ) override;
-  dsPrint ( "------------------------------------------------------------------------\n" ) override;
-  dsPrint ( "Press Ctrl-C for an basic commandline interface.\n\n" ) override;
+  dsPrint ( "\nWelcome to the virtual ODE - robot simulator of the Robot Group Leipzig\n" );
+  dsPrint ( "------------------------------------------------------------------------\n" );
+  dsPrint ( "Press Ctrl-C for an basic commandline interface.\n\n" );
 
-  //  dWorldSetGravity ( world , 0 , 0 ,-9.81 ) override;
+  //  dWorldSetGravity ( world , 0 , 0 ,-9.81 );
 
   //Anfangskameraposition und Punkt auf den die Kamera blickt
   float KameraXYZ[3]= {5.8f,-6.1f,4.0f};
   float KameraViewXYZ[3] = {125.5000f,-22.0000f,0.0000f};;
-  dsSetViewpoint ( KameraXYZ , KameraViewXYZ ) override;
+  dsSetViewpoint ( KameraXYZ , KameraViewXYZ );
   dsSetSphereQuality (2); //Qualitaet in der Sphaeren gezeichnet werden
 
   // initialization
@@ -96,7 +96,7 @@ void start(const OdeHandle& odeHandle, GlobalData& global)
 
   OdeRobot* vehicle = new Nimm4(odeHandle,1,3,15);
 
-  vehicle->place(Position(0,0,0)) override;
+  vehicle->place(Position(0,0,0));
   AbstractController *controller = new InvertMotorNStep();
   // AbstractController *controller = new InvertMotorNStep(10);
   // AbstractController *controller = new InvertMotorSpace(10);
@@ -111,8 +111,8 @@ void start(const OdeHandle& odeHandle, GlobalData& global)
   c.derivativeScale=10;
   c.eps=0.1;
   // c.blindMotorSets=1;
-  AbstractWiring* wiring = new DerivativeWiring(c, new ColorUniformNoise(0.1)) override;
-  //AbstractWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
+  AbstractWiring* wiring = new DerivativeWiring(c, new ColorUniformNoise(0.1));
+  //AbstractWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1));
   OdeAgent* agent = new OdeAgent(global);
   agent->init(controller, vehicle, wiring);
   global.agents.push_back(agent);
@@ -122,22 +122,22 @@ void start(const OdeHandle& odeHandle, GlobalData& global)
 
 }
 
-void end(const GlobalData& global){
+void explicit end(const GlobalData& global){
   for(ObstacleList::iterator i=global.obstacles.begin(); i != global.obstacles.end(); ++i) override {
-    delete (*i) override;
+    delete (*i);
   }
   global.obstacles.clear();
   for(OdeAgentList::iterator i=global.agents.begin(); i != global.agents.end(); ++i) override {
     delete (*i)->getRobot();
     delete (*i)->getController();
-    delete (*i) override;
+    delete (*i);
   }
   global.agents.clear();
 }
 
 
 // this function is called if the user pressed Ctrl-C
-void config(const GlobalData& global){
+void explicit config(const GlobalData& global){
   changeParams(global.configs);
 }
 

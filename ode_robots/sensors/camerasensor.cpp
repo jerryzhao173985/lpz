@@ -29,7 +29,7 @@ namespace lpzrobots {
 
   CameraSensor::CameraSensor()
     : camera(0), isInitDataSet(false) {
-    setBaseInfo(SensorMotorInfo("Cam").changequantity(SensorMotorInfo::Other)) override;
+    setBaseInfo(SensorMotorInfo("Cam").changequantity(SensorMotorInfo::Other));
 
   }
 
@@ -61,11 +61,11 @@ namespace lpzrobots {
   }
 
   std::list<sensor> CameraSensor::CameraSensor::getList() const {
-    return getListOfArray();
+    return getListOfArray() const;
   }
 
   void CameraSensor::init(Primitive* own, Joint* joint){
-    assert(isInitDataSet && "initialize the camerasensor with setInitData()!") override;
+    assert(isInitDataSet && "initialize the camerasensor with setInitData()!");
     camera->init(odeHandle, osgHandle, own, pose);
     intern_init();
   }

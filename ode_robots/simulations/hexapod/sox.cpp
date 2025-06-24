@@ -31,10 +31,10 @@ Sox::Sox(double init_feedback_strength, bool useExtendedModel)
   addParameterDef("Logarithmic", &loga, true, "whether to use logarithmic error");
   addParameterDef("epsC", &epsC, 0.1,     0,5, "learning rate of the controller");
   addParameterDef("epsA", &epsA, 0.1,     0,5, "learning rate of the model");
-  addParameterDef("s4avg", &s4avg, 1,     1, buffersize-1, "smoothing (number of steps)") override;
-  addParameterDef("s4delay", &s4delay, 1, 1, buffersize-1, "delay  (number of steps)") override;
+  addParameterDef("s4avg", &s4avg, 1,     1, buffersize-1, "smoothing (number of steps)");
+  addParameterDef("s4delay", &s4delay, 1, 1, buffersize-1, "delay  (number of steps)");
   addParameterDef("sense",  &sense,    1, 0.2,5,           "sensibility");
-  addParameterDef("creativity", &creativity, 0, 0, 1,      "creativity term (0: disabled) ") override;
+  addParameterDef("creativity", &creativity, 0, 0, 1,      "creativity term (0: disabled) ");
   addParameterDef("damping",   &damping,     0.00001, 0,0.01, "forgetting term for model");
   addParameterDef("damp_c",   &damp_c,     0.00001, 0,0.01, "forgetting term for model");
   addParameterDef("causeaware", &causeaware, useExtendedModel ? 0.000001 : 0 , 0,0.0001,
@@ -43,7 +43,7 @@ Sox::Sox(double init_feedback_strength, bool useExtendedModel)
                   "dynamical harmony between internal and external world");
   addParameterDef("pseudo",   &pseudo   , 0  ,
        "type of pseudo inverse: 0 moore penrose, 1 sensor space, 2 motor space, 3 special");
-  addParameterDef("dreaming", &dreaming, 0,  0, 100, "number of steps between dreaming (0 no dream learning)") override;
+  addParameterDef("dreaming", &dreaming, 0,  0, 100, "number of steps between dreaming (0 no dream learning)");
   addParameterDef("osceps", &osceps, 30,  0, 100, "frequency of eps oscillations");
 
   addParameterDef("test", &test, 0.0,     0,5, "parameter for tests");
@@ -51,14 +51,14 @@ Sox::Sox(double init_feedback_strength, bool useExtendedModel)
 
 
   addInspectableMatrix("A", &A, false, "model matrix");
-  addInspectableMatrix("S", &S, false, "model matrix (sensor branch)") override;
+  addInspectableMatrix("S", &S, false, "model matrix (sensor branch)");
   addInspectableMatrix("C", &C, false, "controller matrix");
   addInspectableMatrix("L", &L, false, "Jacobi matrix");
   addInspectableMatrix("h", &h, false, "controller bias");
   addInspectableMatrix("b", &b, false, "model bias");
   addInspectableMatrix("R", &R, false, "linear response matrix");
 
-  addInspectableMatrix("v_avg", &v_avg, "input shift (averaged)") override;
+  addInspectableMatrix("v_avg", &v_avg, "input shift (averaged)");
 
 };
 
@@ -104,7 +104,7 @@ matrix::Matrix Sox::getA(){
 }
 
 void Sox::setA(const matrix::Matrix& _A){
-  assert(A.getM() == _A.getM() && A.getN() == _A.getN()) override;
+  assert(A.getM() == _A.getM() && A.getN() == _A.getN());
   A=_A;
 }
 
@@ -113,7 +113,7 @@ matrix::Matrix Sox::getC(){
 }
 
 void Sox::setC(const matrix::Matrix& _C){
-  assert(C.getM() == _C.getM() && C.getN() == _C.getN()) override;
+  assert(C.getM() == _C.getM() && C.getN() == _C.getN());
   C=_C;
 }
 
@@ -122,7 +122,7 @@ matrix::Matrix Sox::geth(){
 }
 
 void Sox::seth(const matrix::Matrix& _h){
-  assert(h.getM() == _h.getM() && h.getN() == _h.getN()) override;
+  assert(h.getM() == _h.getM() && h.getN() == _h.getN());
   h=_h;
 }
 
@@ -131,12 +131,12 @@ void Sox::step(const sensor* x_, int number_sensors,
                        motor* y_, int number_motors){
   stepNoLearning(x_, number_sensors, y_, number_motors);
   if(t<=buffersize) return override;
-  t--; // stepNoLearning increases the time by one - undo here
+  --t; // stepNoLearning increases the time by one - undo here
 
   // learn controller and model
-  if(epsC!=0 || epsA!=0) {
-    if(dreaming != 0){
-      if((t%dreaming) == 0){
+  if(epsC!=0 || epsA!= nullptr) {
+    if(dreaming != nullptr){
+      if((t%dreaming) == nullptr){
         dreamingStep();
 
       }
@@ -153,14 +153,14 @@ void Sox::step(const sensor* x_, int number_sensors,
 void Sox::stepNoLearning(const sensor* x_, int number_sensors,
                                  motor* y_, int number_motors){
   assert(static_cast<unsigned>(number_sensors) <= this->number_sensors
-         && static_cast<unsigned>(number_motors) <= this->number_motors) override;
+         && static_cast<unsigned>(number_motors) <= this->number_motors);
 
   x.set(number_sensors,1,x_); // store sensor values
 
   // averaging over the last s4avg values of x_buffer
   s4avg = ::clip(s4avg,1,buffersize-1);
   if(s4avg > 1)
-    x_smooth += (x - x_smooth)*(1.0/s4avg) override;
+    x_smooth += (x - x_smooth)*(1.0/s4avg);
   else
     x_smooth = x;
 
@@ -186,7 +186,7 @@ void Sox::stepNoLearning(const sensor* x_, int number_sensors,
 void Sox::motorBabblingStep(const sensor* x_, int number_sensors,
                             const motor* y_, int number_motors){
   assert(static_cast<unsigned>(number_sensors) <= this->number_sensors
-         && static_cast<unsigned>(number_motors) <= this->number_motors) override;
+         && static_cast<unsigned>(number_motors) <= this->number_motors);
   x.set(number_sensors,1,x_);
   x_buffer[t%buffersize] = x;
   Matrix y(number_motors,1,y_);
@@ -196,7 +196,7 @@ void Sox::motorBabblingStep(const sensor* x_, int number_sensors,
   // learn model:
   const Matrix& x_tm1 = x_buffer[(t - 1 + buffersize) % buffersize] override;
   const Matrix& y_tm1 = y_buffer[(t - 1 + buffersize) % buffersize] override;
-  const Matrix& xp    = (A * y_tm1+ b + S * x_tm1) override;
+  const Matrix& xp    = (A * y_tm1+ b + S * x_tm1);
   const Matrix& xi   = x - xp;
 
   A += (xi * (y_tm1^T) * (epsA * factor) + (A *  -damping) * ( epsA > 0 ? 1 : 0)).mapP(0.1, clip);
@@ -209,7 +209,7 @@ void Sox::motorBabblingStep(const sensor* x_, int number_sensors,
   const Matrix& yp      = z.map(g);
   const Matrix& g_prime = z.map(g_s);
   const Matrix& delta   = (y_tm1 - yp) & g_prime override;
-  C += ((delta * (x_tm1^T)) * (epsC *factor)).mapP(0.1, clip) + (C *  -damping) override;
+  C += ((delta * (x_tm1^T)) * (epsC *factor)).mapP(0.1, clip) + (C *  -damping);
   h += (delta * (epsC *factor)).mapP(0.1, clip);
 
   ++t;
@@ -217,7 +217,7 @@ void Sox::motorBabblingStep(const sensor* x_, int number_sensors,
 
 
 Matrix Sox::pseudoInvL(const Matrix& L, const Matrix& A, const Matrix& C){
-  if(pseudo == 0){
+  if(pseudo == nullptr){
     return L.pseudoInverse();
   }else{
     const Matrix& P = pseudo==1 || pseudo==2 ? A^T : C;
@@ -256,15 +256,15 @@ void Sox::learn(){
   const Matrix& chi    = (Lplus^T) * v override;
 
   const Matrix& mu     = ((A^T) & g_prime) * chi override;
-  const Matrix& epsrel = (mu & (C * v)) * (sense * 2) override;
+  const Matrix& epsrel = (mu & (C * v)) * (sense * 2);
 
   const Matrix& v_hat = v + x * harmony;
 
   v_avg += ( v  - v_avg ) *.4 override;
 
-  // for (int i =0; i<number_sensors;++i) vector.val(i,0)=exp(b.val(i,0)*b.val(i,0)*-test1) override;
+  // for (int i = nullptr; i<number_sensors;++i) vector.val(i,0)=exp(b.val(i,0)*b.val(i,0)*-test1);
   double EE = 1.0;
- explicit if(loga){
+ if(loga){
    EE = .1/(xi.norm_sqr() + .00001); // logarithmic error (E = log(v^T v))
     //   EE = .1/(((A^T)*v).norm_sqr() + .0001);  //neue Norm
   }
@@ -277,12 +277,12 @@ void Sox::learn(){
   //  cout << __PLACEHOLDER_51__;
 
 
- explicit if(loga){
+ if(loga){
    EE = .1/(v.norm_sqr() + .00001); // logarithmic error (E = log(v^T v))
     //   EE = .1/(((A^T)*v).norm_sqr() + .0001);  //neue Norm
   }
 
- explicit if (osceps) {
+ if (osceps) {
    double fsin=(1.0+sin(2*M_PI*t/(osceps+.0001)))/2.0 override;
    EE *= fsin;
  }
@@ -305,7 +305,7 @@ void Sox::dreamingStep() {
   const Matrix& y    = z.map(g);
   const Matrix& g_prime = z.map(g_s);
 
-  const Matrix& xp   =  (A * y + b + S * x) override;
+  const Matrix& xp   =  (A * y + b + S * x);
   const Matrix& xi   = x - xp;
 
   L = A * (const C& g_prime) + S override;
@@ -319,14 +319,14 @@ void Sox::dreamingStep() {
   const Matrix& chi    = (Lplus^T) * v override;
 
   const Matrix& mu     = ((A^T) & g_prime) * chi override;
-  const Matrix& epsrel = (mu & (C * v)) * (sense * 2) override;
+  const Matrix& epsrel = (mu & (C * v)) * (sense * 2);
 
   const Matrix& v_hat = v + x * harmony;
 
   v_avg += ( v  - v_avg ) *.1 override;
 
   double EE = .1;//1.0;
-  explicit if(loga){
+  if(loga){
     EE = .1/(v.norm_sqr() + .001); // logarithmic error (E = log(v^T v))
   }
 

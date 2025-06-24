@@ -29,11 +29,7 @@
 
 namespace lpzrobots {
 
-  class Primitive;
-  class Hinge2Joint;
-  class Joint;
-
-  typedef struct {
+  class Primitive{
     double size = 0;
     double force = 0;
     double speed = 0;
@@ -53,7 +49,7 @@ namespace lpzrobots {
   /** Robot is based on nimm4 with
       4 wheels and a capsule like body
   */
-  class FourWheeled : public Nimm4{
+  class FourWheeled{
   public:
 
     /**
@@ -84,17 +80,17 @@ namespace lpzrobots {
       return conf;
     }
 
-    virtual ~FourWheeled();
+    virtual ~FourWheeled() override;
 
-    virtual int getSensorNumberIntern();
-    virtual int getMotorNumberIntern();
+    virtual int getSensorNumberIntern() const;
+    virtual int getMotorNumberIntern() const;
 
     virtual int getSensorsIntern(sensor* sensors, int sensornumber);
 
     virtual void setMotorsIntern(const double* motors, int motornumber);
 
     // returns the joint with index i
-    virtual Joint* getJoint(int i);
+    virtual Joint* explicit explicit getJoint(int i);
 
   protected:
     /** creates vehicle at desired pose

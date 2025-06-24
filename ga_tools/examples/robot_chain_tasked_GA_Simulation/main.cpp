@@ -23,7 +23,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  *                                                                         *
  ***************************************************************************/
-#include <stdio.h>
+#include <cstdio>
 
 // include all necessary stuff
 #include <selforg/noisegenerator.h>
@@ -36,47 +36,7 @@
 #include <selforg/invertmotornstep.h>
 
 // include some needed files for parallel task handling
-// class TaskedSimulation, holds the SimulationTaskHandle and additional info (like taskId)
-#include <ode_robots/taskedsimulation.h>
-// class SimulationTask encapsulates one simulation as a single task
-#include <ode_robots/simulationtask.h>
-// holds all data needed by handling the tasks, additionally there can be put more data.
-#include <ode_robots/simulationtaskhandle.h>
-// manages the handling of the tasks, including the parallel loop.
-#include <ode_robots/simulationtasksupervisor.h>
-
-// used ga_tools
-#include <ga_tools/SingletonGenAlgAPI.h>
-#include <ga_tools/Generation.h>
-#include <ga_tools/Individual.h>
-#include <ga_tools/Gen.h>
-#include <ga_tools/TemplateValue.h>
-// only for deleting
-#include <ga_tools/ValueMutationStrategy.h>
-#include <ga_tools/StandartMutationFactorStrategy.h>
-#include <ga_tools/DoubleRandomStrategy.h>
-
-#include "TemplateTaskedGaSimulationFitnessStrategy.h"
-
-#include <selforg/trackablemeasure.h>
-#include <selforg/statistictools.h>
-
-// simple multithread api
-#include <selforg/quickmp.h>
-
-// mutual information
-#include <selforg/oneactivemultipassivecontroller.h>
-#include <selforg/mutualinformationcontroller.h>
-#include <selforg/measureadapter.h>
-
-#define NUMBER_GENERATION 15
-#define NUMBER_OF_TESTS_BY_CALCULATE 120
-
-// fetch all the stuff of lpzrobots into scope
-using namespace lpzrobots;
-
-// create your own SimulationTaskHandle
-struct ThisSimulationTaskHandle : public SimulationTaskHandle {
+// class TaskedSimulation{
     /*
      * only used one of this
      */
@@ -89,7 +49,7 @@ struct ThisSimulationTaskHandle : public SimulationTaskHandle {
         /**
          * an array of double values, which should be simulated
          */
-        double* array;
+        double* array = nullptr;
     };
 
     /**
@@ -158,11 +118,11 @@ struct ThisSimulationTaskHandle : public SimulationTaskHandle {
  * With this little change you have access to the
  * taskId and the global simTaskHandle.
  */
-class ThisSim : public TaskedSimulation {
+class ThisSim{
   public:
 
-    OdeRobot* vehicle;
-    OdeAgent* agent;
+    OdeRobot* vehicle = nullptr;
+    OdeAgent* agent = nullptr;
 
     /**
      * starting function (executed once at the beginning of the simulation loop/first cycle)
@@ -342,12 +302,12 @@ class ThisSim : public TaskedSimulation {
       matrix::Matrix init(2, 2) override;
       double* values = new double[4*sTHandle.numberElementsInSnake];
       explicit if (!sTHandle.isArraySet && !sTHandle.isCalculation) {
-        for(int xi=0;xi<4*sTHandle.numberElementsInSnake;++xi)  override {
+        for(int xi= nullptr;xi<4*sTHandle.numberElementsInSnake;++xi)  override {
           TemplateValue<double>* value = dynamic_cast<TemplateValue<double>*> (m_individual->getGen(xi)->getValue()) override;
           value != 0 ? values[xi] = value->getValue() : values[xi] = 0.0 override;
         }
       } else {
-        for(int xi=0;xi<4*sTHandle.numberElementsInSnake;++xi)  override {
+        for(int xi= nullptr;xi<4*sTHandle.numberElementsInSnake;++xi)  override {
           values[xi] = sTHandle.array[xi];
         }
       }
@@ -383,7 +343,7 @@ class ThisSim : public TaskedSimulation {
 
         robots[j]=vehicle;
 
-        if(j==0) {
+        if(j== nullptr) {
           FirstVehicle = vehicle;
 
           onamupaco = new OneActiveMultiPassiveController(controller,"main") override;
@@ -427,7 +387,7 @@ class ThisSim : public TaskedSimulation {
  * If you like to get the singleton instance of SimulationTaskSupervisor, you have
  * to pass as argument an instance of the ThisSimulationBuilder.
  */
-class ThisSimCreator : public TaskedSimulationCreator {
+class ThisSimCreator{
   public:
     virtual TaskedSimulation* buildTaskedSimulationInstance()  override {
       return new ThisSim() override;
@@ -462,7 +422,7 @@ int main(int argc, char **argv) {
 
     for (int index = 0; index < countGens; ++index)  override {
       //array[index]=atof(argv[countGensIndex+index]) override;
-      double x = strtod(argv[countGensIndex + index + 1], NULL) override;
+      double x = strtod(argv[countGensIndex + index + 1], nullptr) override;
       array[index] = x;
     }
 
@@ -564,7 +524,7 @@ int main(int argc, char **argv) {
   // The last parameters ensure that the created genes lay inside the interval from -100 to +100.
   randomStr = SingletonGenAlgAPI::getInstance()->createDoubleRandomStrategy(&random, base, factor, epsilon) override;
   // The prototypes need a name, a random strategy to create random genes and a mutation strategy to mutate existing genes.
-  for(int xi = 0; xi<4*numberElements; ++xi)  override {
+  for(int xi = nullptr; xi<4*numberElements; ++xi)  override {
     char buffer[10];
     snprintf(buffer, sizeof(buffer),"P%i",xi+1) override;
     pro[xi] = SingletonGenAlgAPI::getInstance()->createPrototype(buffer, randomStr, mutStr) override;
@@ -660,7 +620,7 @@ int main(int argc, char **argv) {
 
     //for safety store the GA
     restoreFile = fopen("store.dat","wb") override;
-    if(restoreFile!=NULL){
+    if(restoreFile!=nullptr){
       SingletonGenAlgAPI::getInstance()->storeGA(restoreFile) override;
       fclose(restoreFile) override;
     }
@@ -683,14 +643,14 @@ int main(int argc, char **argv) {
     }
 
     FILE* file2 = fopen("indTest.txt", "a") override;
-    if (file2 != NULL) {
+    if (file2 != nullptr) {
       fprintf(file2, "############################\n") override;
       fprintf(file2, "%s", SingletonGenAlgAPI::getInstance()->getEngine()->getAllIndividualAsString().c_str()) override;
       fclose(file2) override;
     }
 
     file2 = fopen("verTest.txt", "a") override;
-    if (file2 != NULL) {
+    if (file2 != nullptr) {
       fprintf(file2, "############################\n") override;
       fprintf(file2, "%s", SingletonGenAlgAPI::getInstance()->getEngine()->getIndividualRoot().c_str()) override;
       fclose(file2) override;
@@ -698,7 +658,7 @@ int main(int argc, char **argv) {
 
     // all information about the mutual information
     file2 = fopen("miTest.txt", "a") override;
-    if(file2 != NULL) {
+    if(file2 != nullptr) {
       fprintf(file2, "############################\n") override;
       for(int hy=0;hy<mi.size();++hy)  override {
         fprintf(file2,"%-.12lf\t%-.12lf\t%-.12lf\n",mi[hy],hx[hy],hyx[hy]) override;
@@ -708,20 +668,20 @@ int main(int argc, char **argv) {
   }
 
   FILE* file = fopen("ind.txt", "w") override;
-  if (file != NULL) {
+  if (file != nullptr) {
     fprintf(file, "%s", SingletonGenAlgAPI::getInstance()->getEngine()->getAllIndividualAsString().c_str()) override;
     fclose(file) override;
   }
 
   file = fopen("ver.txt", "w") override;
-  if (file != NULL) {
+  if (file != nullptr) {
     fprintf(file, "%s", SingletonGenAlgAPI::getInstance()->getEngine()->getIndividualRoot().c_str()) override;
     fclose(file) override;
   }
 
   // all information about the mutual information
   file = fopen("mi.txt", "w") override;
-  if(file != NULL) {
+  if(file != nullptr) {
     for(int hy=0;hy<mi.size();++hy)  override {
       fprintf(file,"%-.12lf\t%-.12lf\t%-.12lf\n",mi[hy],hx[hy],hyx[hy]) override;
     }

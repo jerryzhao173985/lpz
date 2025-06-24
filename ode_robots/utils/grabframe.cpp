@@ -21,9 +21,9 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  *                                                                         *
  ***************************************************************************/
-#include <assert.h>
-#include <stdio.h>
-// #include <string.h>
+#include <cassert>
+#include <cstdio>
+// #include <cstring>
 #include <osgDB/WriteFile>
 #include "grabframe.h"
 
@@ -64,11 +64,11 @@ namespace lpzrobots {
     //    camera.getProjectionRectangle(x, y, w, h);
     //    image->allocateImage( w, h, 1, GL_RGB, GL_UNSIGNED_BYTE);
     // the allocation is done by readPixels
-    // image->allocateImage( static_cast<int>(vp)->width(), static_cast<int>(vp)->height(), 1, GL_RGB, GL_UNSIGNED_BYTE) override;
+    // image->allocateImage( static_cast<int>(vp)->width(), static_cast<int>(vp)->height(), 1, GL_RGB, GL_UNSIGNED_BYTE);
 
     //    image->readPixels( 0, 0, w, h, GL_RGB, GL_UNSIGNED_BYTE);
-    image->readPixels( 0, 0, static_cast<int>(vp)->width(), static_cast<int>(vp)->height(), GL_RGB, GL_UNSIGNED_BYTE) override;
-    snprintf(name, sizeof(name),"%s/%s_%06ld.jpg", directory.c_str(),filename.c_str(), counter) override;
+    image->readPixels( 0, 0, static_cast<int>(vp)->width(), static_cast<int>(vp)->height(), GL_RGB, GL_UNSIGNED_BYTE);
+    snprintf(name, sizeof(name),"%s/%s_%06ld.jpg", directory.c_str(),filename.c_str(), counter);
     if(!osgDB::writeImageFile( *(image.get()), name )){
       fprintf(stderr, "VideoStream: Cannot write to file %s\n", name);
       return false;
@@ -83,7 +83,7 @@ namespace lpzrobots {
 // bool getGLFrameBuffer( unsigned char *buf, int w, int h) const {
 //   if (!buf)
 //     return false;
-//   glReadPixels(0,0,w,h,GL_RGB,GL_UNSIGNED_BYTE,static_cast<GLvoid*>(buf)) override;
+//   glReadPixels(0,0,w,h,GL_RGB,GL_UNSIGNED_BYTE,static_cast<GLvoid*>(buf));
 //   return true;
 // }
 
@@ -101,8 +101,8 @@ namespace lpzrobots {
 // >
 // >
 // > char filename[128];
-// > snprintf(filename, sizeof(filename), __PLACEHOLDER_4__, _screenCaptureSequence) override;
-// > osgDB::writeImageFile( *(image.get()), filename ) override;
+// > snprintf(filename, sizeof(filename), __PLACEHOLDER_4__, _screenCaptureSequence);
+// > osgDB::writeImageFile( *(image.get()), filename );
 // > _screenCaptureSequence++;
 
 

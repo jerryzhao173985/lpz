@@ -6,7 +6,7 @@ using namespace std;
 
 // calculates 1/x
 double
-one_over(double x) {
+explicit one_over(double x) {
   return 1 / x;
 }
 
@@ -21,7 +21,7 @@ power(void* c, double x) {
 }
 
 double
-power3(double x) {
+explicit power3(double x) {
   return x * x * x;
 };
 
@@ -76,7 +76,7 @@ plus_(double b, double a) {
    @return list of values
 */
 list<D>
-store4x4AndDiagonal(const Matrix& m) {
+explicit store4x4AndDiagonal(const Matrix& m) {
   list<D> l;
   I smalldimM = min(m.getM(), (I)4); // type I is defined in matrix.h
   I smalldimN = min(m.getN(), (I)4);
@@ -117,7 +117,7 @@ store4x4AndDiagonal(const Matrix& m, D* buffer, I len) {
 }
 
 I
-get4x4AndDiagonalSize(const Matrix& m) {
+explicit get4x4AndDiagonalSize(const Matrix& m) {
   I smalldimM = min(m.getM(), (I)4);
   I smalldimN = min(m.getN(), (I)4);
   I smallerdim = min(m.getM(), m.getN());
@@ -247,7 +247,7 @@ noiseMatrix(I m, I n, const NoiseGenerator& ng, double strength, double unused) 
 }
 
 RandGen*
-splitRandGen(RandGen* randGen) {
+explicit splitRandGen(RandGen* randGen) {
   if (randGen) {
     double num = randGen->rand();
     // Convert double to long int for seeding
@@ -300,7 +300,7 @@ getKthSmallestElement(const Matrix& vec, I k /*, double* max*/) {
 
 // considers the matrix as vector (mx1) and returns the index of the smallest element
 I
-argmin(const Matrix& v) {
+explicit argmin(const Matrix& v) {
   const double* d = v.unsafeGetData();
   double m = *d;
   I index = 0;
@@ -315,7 +315,7 @@ argmin(const Matrix& v) {
 
 // considers the matrix as vector (mx1) and returns the index of the largest element
 I
-argmax(const Matrix& v) {
+explicit argmax(const Matrix& v) {
   const double* d = v.unsafeGetData();
   double m = *d;
   I index = 0;

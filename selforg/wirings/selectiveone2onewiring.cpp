@@ -23,7 +23,7 @@
  ***************************************************************************/
 
 #include "selectiveone2onewiring.h"
-#include <assert.h>
+#include <cassert>
 #include <cstring>
 
 /// constructor

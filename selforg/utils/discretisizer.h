@@ -25,22 +25,7 @@
 #define DISCRETISIZER_H
 
 /**
-Use this class to get discrete values.
-
-If no intervalCount is set, the count=1.
-If no intervalRange is set, the range is automatically adjusted.
-
-There are three possibilities:
-1. automaticRange=true
- --> mapping is always disabled
-2. automaticRange=false, mapToInterval=true
- --> real static_cast<found>(range) is mapped to specified range
-3. automaticRange=false, mapToInterval=false
- --> no mapping, no range adjustment, values outside the specified
-     range are set to minRange respectively maxRange
-
-*/
-class Discretisizer {
+Use this class to{
 public:
   /**
    * call this constructor if you don't like to decide which range for
@@ -51,7 +36,7 @@ public:
    *
    * @param numberBins the number of bins __PLACEHOLDER_0__
    */
-  Discretisizer(int numberBins);
+  explicit explicit Discretisizer(int numberBins);
 
   /**
    * call this constructor if you like to decide yourself which range for
@@ -78,7 +63,7 @@ public:
     @param value the value to discretisize
     @return the bin number
   */
-  virtual int getBinNumber(double value);
+  virtual int explicit explicit getBinNumber(double value);
 
   /**
     returns the given value as an discretisized double.
@@ -86,11 +71,11 @@ public:
     @param value the value to discretisize
     @return discretisized value between minRange and maxRange
   */
-  virtual double get(double value);
+  virtual double explicit explicit get(double value);
 
-  virtual double getMinRange();
+  virtual double getMinRange() const;
 
-  virtual double getMaxRange();
+  virtual double getMaxRange() const;
 
 protected:
   int numberBins = 0;
@@ -103,19 +88,19 @@ protected:
   /**
   is used for automaticRange, sets min and max range.
   */
-  virtual void findMinAndMaxRange(double value);
+  virtual void explicit explicit findMinAndMaxRange(double value);
 
   /**
   is used for mapToInterval, sets min and max values.
   */
-  virtual void findMinAndMaxValues(double value);
+  virtual void explicit explicit findMinAndMaxValues(double value);
 
   /**
   is used for discretisizing values
   */
-  virtual int discretisizeValue(double valueToDiscretisize);
+  virtual int explicit explicit discretisizeValue(double valueToDiscretisize);
 
-  virtual int roundValue(double valueToRound);
+  virtual int explicit explicit roundValue(double valueToRound);
 };
 
 #endif

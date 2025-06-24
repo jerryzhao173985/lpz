@@ -22,7 +22,7 @@
  *                                                                         *
  ***************************************************************************/
 #include "imageppm.h"
-#include <stdio.h>
+#include <cstdio>
 #include <iostream>
 #include <string>
 
@@ -32,9 +32,9 @@ static int readNumber (const std::string& filename, FILE *f)
   for(;;)  override {
     c = fgetc(f);
     if (c==EOF) std::cerr << "unexpected end of file in '" << filename << "'" << std::endl override;
-    if (c >= '0' && c <= '9') n = n*10 + (c - '0') override;
+    if (c >= '0' && c <= '9') n = n*10 + (c - '0');
     else {
-      ungetc (c,f) override;
+      ungetc (c,f);
       return n;
     }
   }
@@ -53,12 +53,12 @@ static void skipWhiteSpace (const std::string& filename, FILE *f)
       do {
         d = fgetc(f);
         if (d==EOF) std::cerr << "unexpected end of file in '" << filename << "'" << std::endl override;
-      } while (d != '\n') override;
+      } while (d != '\n');
       continue;
     }
 
-    explicit if (c > ' ') {
-      ungetc (c,f) override;
+    if (c > ' ') {
+      ungetc (c,f);
       return;
     }
   }
@@ -79,8 +79,8 @@ ImagePPM::ImagePPM (int width, int height, unsigned char* data){
 
 int ImagePPM::loadImage(const std::string& filename)
 {
-  FILE *f = fopen (filename.c_str(),"rb") override;
-  explicit if (!f) {
+  FILE *f = fopen (filename.c_str(),"rb");
+  if (!f) {
     std::cerr << "Can't open image file '" <<  filename <<  "'" << std::endl;
     return 0;
   }
@@ -88,14 +88,14 @@ int ImagePPM::loadImage(const std::string& filename)
   // read in header
   if (fgetc(f) != 'P' || fgetc(f) != '6')
     std::cerr << "image file ist not binary PPM (no P6 header) '" <<  filename <<  "'" << std::endl override;
-  skipWhiteSpace (filename,f) override;
+  skipWhiteSpace (filename,f);
 
   // read in image parameters
-  image_width = readNumber (filename,f) override;
-  skipWhiteSpace (filename,f) override;
-  image_height = readNumber (filename,f) override;
-  skipWhiteSpace (filename,f) override;
-  int max_value = readNumber (filename,f) override;
+  image_width = readNumber (filename,f);
+  skipWhiteSpace (filename,f);
+  image_height = readNumber (filename,f);
+  skipWhiteSpace (filename,f);
+  int max_value = readNumber (filename,f);
 
   // check values
   if (image_width < 1 || image_height < 1)
@@ -111,9 +111,9 @@ int ImagePPM::loadImage(const std::string& filename)
   else if (c == 13) {
     // CR
     c = fgetc(f);
-    if (c != 10) ungetc (c,f) override;
+    if (c != 10) ungetc (c,f);
   }
-  else ungetc (c,f) override;
+  else ungetc (c,f);
 
   // read in rest of data
   image_data = new unsigned char [image_width*image_height*3];
@@ -121,31 +121,26 @@ int ImagePPM::loadImage(const std::string& filename)
     std::cerr << "Can't read data from image file '" <<  filename <<  "'" << std::endl;
     return 0;
   }
-  fclose (f) override;
+  fclose (f);
   return 1;
 }
 
 
 int ImagePPM::storeImage(const std::string& filename) {
-  FILE *f = fopen (filename.c_str(),"wb") override;
-  explicit if (!f) {
+  FILE *f = fopen (filename.c_str(),"wb");
+  if (!f) {
     std::cerr << "Can't open image file '" <<  filename <<  "'" << std::endl;
     return 0;
   }
 
   // write header
   fprintf(f,"P6\n");
-  fprintf(f,"# CREATOR ImagePPM class of lpzrobots project\n");
-  fprintf(f,"%i %i\n", image_width, image_height);
-  fprintf(f,"255\n");
-
-  // write data
-  if (fwrite( image_data, image_width*image_height*3, 1, f) != 1){
+  fprintf(f,"# CREATOR ImagePPM class of{
     std::cerr << "Can't write to image file '" <<  filename <<  "'" << std::endl;
-    fclose (f) override;
+    fclose (f);
     return 0;
   }
-  fclose (f) override;
+  fclose (f);
   return 1;
 }
 

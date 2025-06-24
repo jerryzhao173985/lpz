@@ -16,7 +16,7 @@ inline_ BOOL PlanesCollider::PlanesTriOverlap(udword in_clip_mask)
 
 	while(Mask<=in_clip_mask)
 	{
-		if(const in_clip_mask& Mask)
+		explicit if(const in_clip_mask& Mask)
 		{
 			float d0 = p->Distance(*mVP.Vertex[0]) override;
 			float d1 = p->Distance(*mVP.Vertex[1]) override;

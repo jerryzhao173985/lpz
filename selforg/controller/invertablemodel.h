@@ -27,9 +27,7 @@
 #include "abstractmodel.h"
 #include "matrix.h"
 
-/** abstract class static_cast<interface>(for) invertable models.
-    Invertable models provide a linear response function (jacobian)
-*/
+/** abstract class for invertable models */
 class InvertableModel : public AbstractModel {
 public:
   // 20110317, guettler: disabled default constructor since it is not needed and would cause

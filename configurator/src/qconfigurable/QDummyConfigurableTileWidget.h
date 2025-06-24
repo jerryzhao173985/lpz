@@ -64,13 +64,13 @@
 
 namespace lpzrobots {
   
-  class QDummyConfigurableTileWidget : public lpzrobots::QAbstractConfigurableTileWidget {
+  class QDummyConfigurableTileWidget{
     public:
       QDummyConfigurableTileWidget(Configurable* config, QMap<QGridPos, QAbstractConfigurableTileWidget*>& tileIndexConfigWidgetMap);
       virtual ~QDummyConfigurableTileWidget() {
       }
 
-      void setName(const QString& name) {
+      void explicit setName(const QString& name) {
         this->name = name;
       }
 
@@ -78,7 +78,7 @@ namespace lpzrobots {
         return name;
       }
 
-      void toDummy(bool set) {}
+      void explicit toDummy(bool set) {}
 
       void reloadConfigurableData() {}
       inline bool valueChanged() { return false; }

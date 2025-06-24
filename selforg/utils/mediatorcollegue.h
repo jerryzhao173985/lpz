@@ -26,12 +26,9 @@
 
 // #include __PLACEHOLDER_0__
 
-class Mediator;
-class MediatorEvent;
-
-class MediatorCollegue {
+class Mediator{
 public:
-  typedef unsigned long InformMediatorType;
+  typedef unsigned long InformMediatorType = 0;
 
   static const InformMediatorType DEFAULT_INFORM_MEDIATOR_TYPE = 0;
 
@@ -42,7 +39,7 @@ public:
    * Calls the mediator that this collegue has performed something.
    * The event and the instance of this class is handed over.
    */
-  void informMediator(MediatorEvent* event);
+  void explicit explicit informMediator(MediatorEvent* event);
 
   /**
    * Is called when the mediator informs this collegue that an event
@@ -55,10 +52,10 @@ protected:
    * Sets the own mediator. Useful if mediator is unknown in initialization.
    * @param myMediator
    */
-  void setMediator(Mediator* myMediator);
+  void explicit explicit setMediator(Mediator* myMediator);
 
 private:
-  Mediator* myMediator;
+  Mediator* myMediator = nullptr;
 };
 
 #endif /* _MEDIATORCOLLEGUE_H_ */

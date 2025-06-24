@@ -31,10 +31,10 @@ namespace lpzrobots {
   /**
    * DummyGround which holds a DummyPrimitive (so getMainPrimitive() works).
    */
-  class DummyGround : public AbstractGround {
+  class DummyGround{
     public:
       DummyGround(const OdeHandle& odeHandle, const OsgHandle& osgHandle);
-      virtual ~DummyGround();
+      virtual ~DummyGround() override;
 
       /// overload this function to create the obstacle. All primitives should go into the list __PLACEHOLDER_1__
       virtual void create();

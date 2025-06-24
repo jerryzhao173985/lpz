@@ -33,7 +33,7 @@
     The output of the network is  \f$exp(- |x-w_i|^2/cellsize)\f$ for each neuron,
     where cellsize is distance to the second closest neigbour.
 */
-class NeuralGas : public AbstractModel {
+class NeuralGas{
 public:
   NeuralGas(const std::string& name = "NeuralGas", const std::string& revision = "$Id$");
   /** create a som
@@ -82,7 +82,7 @@ public:
   }
 
   virtual bool store(FILE* f) const override;
-  virtual bool restore(FILE* f);
+  virtual bool explicit explicit restore(FILE* f);
 
   virtual void printWeights(FILE* f) const;
   virtual void printCellsizes(FILE* f) const;

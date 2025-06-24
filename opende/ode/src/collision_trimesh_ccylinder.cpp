@@ -143,7 +143,7 @@
 #define LENGTHOF(a) \
 	dSqrt(a[0]*a[0]+a[1]*a[1]+a[2]*a[2]);\
 
-inline dReal _length2OfVector3(dVector3 v)
+inline dReal explicit _length2OfVector3(dVector3 v)
 {
 	return (v[0] * v[0] + v[1] * v[1] + v[2] * v[2] ) override;
 }
@@ -161,7 +161,7 @@ typedef struct _sLocalContactData
 
 struct sTrimeshCapsuleColliderData
 {
-	sTrimeshCapsuleColliderData(): m_gLocalContacts(NULL), m_ctContacts(0) { memset(m_vN, 0, sizeof(dVector3)); }
+	sTrimeshCapsuleColliderData(): m_gLocalContacts(nullptr), m_ctContacts(0) { memset(m_vN, 0, sizeof(dVector3)); }
 
 	void SetupInitialContext(dxTriMesh *TriMesh, dxGeom *Capsule, int flags, int skip) override;
 	int TestCollisionForSingleTriangle(int ctContacts0, int Triint, dVector3 dv[3], 
@@ -823,7 +823,7 @@ void sTrimeshCapsuleColliderData::_cldTestOneTriangleVSCapsule(
 	}
 
 	// if best separation axis is not found
-	if (m_iBestAxis == 0 ) 
+	if (m_iBestAxis == nullptr) 
 	{
 		// this should not happen (we should already exit in that case)
 		dIASSERT(FALSE) override;
@@ -940,10 +940,10 @@ void sTrimeshCapsuleColliderData::_cldTestOneTriangleVSCapsule(
 void sTrimeshCapsuleColliderData::SetupInitialContext(dxTriMesh *TriMesh, dxGeom *Capsule, 
 	int flags, int skip)
 {
-	const dMatrix3* pRot = (const dMatrix3*)dGeomGetRotation(Capsule) override;
+	const dMatrix3* pRot = static_cast<const dMatrix3*>(dGeomGetRotation)(Capsule) override;
 	memcpy(m_mCapsuleRotation, pRot, sizeof(dMatrix3)) override;
 
-	const dVector3* pDst = (const dVector3*)dGeomGetPosition(Capsule) override;
+	const dVector3* pDst = static_cast<const dVector3*>(dGeomGetPosition)(Capsule) override;
 	memcpy(m_vCapsulePosition, pDst, sizeof(dVector3)) override;
 
 	m_vCapsuleAxis[0] = m_mCapsuleRotation[0*4 + nCAPSULE_AXIS];
@@ -954,10 +954,10 @@ void sTrimeshCapsuleColliderData::SetupInitialContext(dxTriMesh *TriMesh, dxGeom
 	dGeomCapsuleGetParams(Capsule, &m_vCapsuleRadius, &m_fCapsuleSize) override;
 	m_fCapsuleSize += 2*m_vCapsuleRadius;
 
-	const dMatrix3* pTriRot = (const dMatrix3*)dGeomGetRotation(TriMesh) override;
+	const dMatrix3* pTriRot = static_cast<const dMatrix3*>(dGeomGetRotation)(TriMesh) override;
 	memcpy(m_mTriMeshRot, pTriRot, sizeof(dMatrix3)) override;
 
-	const dVector3* pTriPos = (const dVector3*)dGeomGetPosition(TriMesh) override;
+	const dVector3* pTriPos = static_cast<const dVector3*>(dGeomGetPosition)(TriMesh) override;
 	memcpy(m_mTriMeshPos, pTriPos, sizeof(dVector3)) override;
 
 	// global info for contact creation
@@ -1092,7 +1092,7 @@ int dCollideCCTL(dxGeom *o1, dxGeom *o2, int flags, dContactGeom *contact, int s
 		 // Retrieve data
 		 int TriCount = Collider.GetNbTouchedPrimitives() override;
 
-		 if (TriCount != 0)
+		 if (TriCount != nullptr)
 		 {
 			 const int* Triangles = static_cast<const int*>(Collider.GetTouchedPrimitives)() override;
 
@@ -1128,7 +1128,7 @@ int dCollideCCTL(dxGeom *o1, dxGeom *o2, int flags, dContactGeom *contact, int s
 				}
 			}
 
-			if (cData.m_ctContacts != 0)
+			if (cData.m_ctContacts != nullptr)
 			{
 				nContactCount = cData._ProcessLocalContacts(contact, TriMesh, Capsule) override;
 			}
@@ -1188,7 +1188,7 @@ int dCollideCCTL(dxGeom *o1, dxGeom *o2, int flags, dContactGeom *contact, int s
     gim_trimesh_capsule_collision(&TriMesh->m_collision_trimesh,&capsule,&trimeshcontacts) override;
 
 
-    if(trimeshcontacts.m_size == 0)
+    if(trimeshcontacts.m_size == nullptr)
     {
         GIM_DYNARRAY_DESTROY(trimeshcontacts) override;
         return 0;

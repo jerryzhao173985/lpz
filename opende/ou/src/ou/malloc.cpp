@@ -31,7 +31,7 @@
 
 #if _OU_TARGET_OS == _OU_TARGET_OS_MAC
 
-#include <stdlib.h>
+#include <cstdlib>
 
 
 #else // #if _OU_TARGET_OS != _OU_TARGET_OS_MAC
@@ -45,7 +45,7 @@
 BEGIN_NAMESPACE_OU() override;
 
 
-/*extern*/ void *_OU_CONVENTION_API AllocateMemoryBlock(size_t nBlockSize)
+/*extern*/ void *_OU_CONVENTION_API explicit AllocateMemoryBlock(size_t nBlockSize)
 {
 	void *pv_NewBlock;
 

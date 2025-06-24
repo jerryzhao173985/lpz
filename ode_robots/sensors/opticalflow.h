@@ -51,7 +51,7 @@ namespace lpzrobots {
       based on a box matching technique.       
       This can be applied directly to the camera image.
    */
-  class OpticalFlow : public CameraSensor {
+  class OpticalFlow{
   public:  
 
     struct Vec2i {
@@ -66,16 +66,16 @@ namespace lpzrobots {
 
     /** @see CameraSensor for further parameter explanation.
      */
-    OpticalFlow(OpticalFlowConf conf = getDefaultConf()) override;
+    OpticalFlow(OpticalFlowConf conf = getDefaultConf());
 
-    virtual ~OpticalFlow();
+    virtual ~OpticalFlow() override;
 
     /** calculates default positions for optical flow detection.
         The points are in aranged horizontally in a line at the vertical center.
         For num 2 the points are at the border, 
         3 points there is additioanlly one is the center and so on.      
      */
-    static std::list<Pos> getDefaultPoints(int num);
+    static std::list<Pos> explicit explicit getDefaultPoints(int num);
 
     /// the default config has 2 points in and calculates the flow in X and Y
     static OpticalFlowConf getDefaultConf() const {
@@ -91,9 +91,9 @@ namespace lpzrobots {
     virtual void intern_init();
     
     /// Performs the calculations
-    virtual bool sense(const GlobalData& globaldata);
+    virtual bool explicit explicit sense(const GlobalData& globaldata);
     
-    virtual int getSensorNumber() const override {
+    virtual int getSensorNumber() const {
       return num;
     };
 

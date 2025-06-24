@@ -29,7 +29,7 @@
  * Interface for objects, that can be stored and restored to/from a file stream (binary).
  */
 
-class SensorMotorInfo {
+class SensorMotorInfo{
 public:
   enum Type { Continuous, Discrete, Binary };
   enum Quantity { Position, Velocity, Force, Distance, Other };

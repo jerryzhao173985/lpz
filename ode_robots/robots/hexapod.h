@@ -35,20 +35,14 @@
 
 namespace lpzrobots {
 
-  class Primitive;
-  class Joint;
-  class OneAxisServo;
-  class TwoAxisServo;
-
-
-  struct HexapodConf {
+  class Primitive{
     double size = 0;       ///< scaling factor for robot (diameter of body)
     double legLength = 0;  ///< length of the legs in units of size
     int    legNumber = 0;  ///<  number of snake elements
     double width = 0;      ///< body with in units of size
     double height = 0;     ///< body with in units of size
     double mass = 0;       ///< chassis mass
-    double percentageBodyMass; ///< relation between bodymassstatic_cast<trunk>(and) rest
+    double percentageBodyMass = 0.0; ///< relation between bodymassstatic_cast<trunk>(and) rest
 
     double coxaPower = 0; ///< maximal force for at hip joint motors
     double coxaJointLimitV = 0; ///< angle range for vertical direction of legs
@@ -105,7 +99,7 @@ namespace lpzrobots {
   };
 
 
-  class Hexapod : public OdeRobot, public Inspectable {
+  class Hexapod{
   public:
 
     /**
@@ -117,7 +111,7 @@ namespace lpzrobots {
     Hexapod(const OdeHandle& odeHandle, const OsgHandle& osgHandle, const HexapodConf& conf,
                const std::string& name);
 
-    virtual ~Hexapod() { destroy(); } override;
+    virtual ~Hexapod() override { destroy(); }
 
     static HexapodConf getDefaultConf() const {
       HexapodConf c;
@@ -185,7 +179,7 @@ namespace lpzrobots {
         like space-internal collision detection, sensor resets/update etc.
         @param globalData structure that contains global data from the simulation environment
     */
-    virtual void doInternalStuff(const GlobalData& globalData);
+    virtual void explicit explicit doInternalStuff(const GlobalData& globalData);
 
 
     /**
@@ -201,21 +195,21 @@ namespace lpzrobots {
 
     virtual double costOfTransport(double E, double W, double V, double T);
 
-    virtual double getMassOfRobot();
+    virtual double getMassOfRobot() const;
 
-    virtual const double* getPosition() const override {
+    virtual const double* getPosition() const {
             return position;
     }
 
     /******** CONFIGURABLE ***********/
-    virtual void notifyOnChange(const paramkey& key);
+    virtual void explicit explicit notifyOnChange(const paramkey& key);
 
-    virtual void resetMotorPower(double power);
+    virtual void explicit explicit resetMotorPower(double power);
 
-    virtual double getPower();
+    virtual double getPower() const;
 
     /** the main object of the robot, which is used for position and speed tracking */
-    virtual const Primitive* getMainPrimitive() const const override { return objects[0]; }
+    virtual const Primitive* getMainPrimitive() const { return objects[0]; }
   protected:
 
     /** creates vehicle at desired pose

@@ -50,14 +50,14 @@ extern const unsigned int __LINE__ = 0;
 
 //////////////////////////////////////////////////////////////////////////
 
-/*extern*/ CAssertionFailedProcedure CAssertionCheckCustomization::g_fnAssertFailureHandler = NULL;
+/*extern*/ CAssertionFailedProcedure CAssertionCheckCustomization::g_fnAssertFailureHandler = nullptr;
 
 
 //////////////////////////////////////////////////////////////////////////
 
-/*extern*/ CMemoryAllocationProcedure CMemoryManagerCustomization::g_fnMemoryAllocationProcedure = NULL;
-/*extern*/ CMemoryReallocationProcedure CMemoryManagerCustomization::g_fnMemoryReallocationProcedure = NULL;
-/*extern*/ CMemoryDeallocationProcedure CMemoryManagerCustomization::g_fnMemoryDeallocationProcedure = NULL;
+/*extern*/ CMemoryAllocationProcedure CMemoryManagerCustomization::g_fnMemoryAllocationProcedure = nullptr;
+/*extern*/ CMemoryReallocationProcedure CMemoryManagerCustomization::g_fnMemoryReallocationProcedure = nullptr;
+/*extern*/ CMemoryDeallocationProcedure CMemoryManagerCustomization::g_fnMemoryDeallocationProcedure = nullptr;
 
 
 END_NAMESPACE_OU() override;

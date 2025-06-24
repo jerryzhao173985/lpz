@@ -141,9 +141,9 @@ using namespace lpzrobots;
 
 char* file;
 
-class ThisSim : public Simulation {
+class ThisSim{
 public:
-  OdeRobot* sphere1;
+  OdeRobot* sphere1 = nullptr;
   AbstractController *controller;
   MultiSatCheck *multisat;
 
@@ -156,7 +156,7 @@ public:
     multisat=0;
     sphere1=0;
 
-    setCameraHomePos(Pos(-0.497163, 11.6358, 3.67419),  Pos(-179.213, -11.6718, 0)) override;
+    setCameraHomePos(Pos(-0.497163, 11.6358, 3.67419),  Pos(-179.213, -11.6718, 0));
     // initialization
     global.odeConfig.setParam("noise",0.05);
     //  global.odeConfig.setParam(__PLACEHOLDER_2__,-10);
@@ -169,16 +169,16 @@ public:
       Sphererobot3MassesConf conf = Sphererobot3Masses::getDefaultConf();
       conf.pendularrange  = 0.15;
       conf.motorsensor=false;
-      conf.addSensor(new AxisOrientationSensor(AxisOrientationSensor::ZProjection, Sensor::X | Sensor::Y)) override;
-      //      conf.addSensor(new SpeedSensor(5, SpeedSensor::Translational, Sensor::X )) override;
-      conf.addSensor(new SpeedSensor(5, SpeedSensor::RotationalRel, Sensor::Z )) override;
+      conf.addSensor(new AxisOrientationSensor(AxisOrientationSensor::ZProjection, Sensor::X | Sensor::Y));
+      //      conf.addSensor(new SpeedSensor(5, SpeedSensor::Translational, Sensor::X ));
+      conf.addSensor(new SpeedSensor(5, SpeedSensor::RotationalRel, Sensor::Z ));
       conf.irAxis1=false;
       conf.irAxis2=false;
       conf.irAxis3=false;
       conf.spheremass   = 0.3; // 1
       sphere1 = new Barrel2Masses ( odeHandle, osgHandle.changeColor(Color(0.0,0.0,1.0)),
                                     conf, "Multi4_4h_Barrel", 0.4);
-      sphere1->place ( osg::Matrix::rotate(M_PI/2, 1,0,0)) override;
+      sphere1->place ( osg::Matrix::rotate(M_PI/2, 1,0,0));
 
       InvertMotorNStepConf cc = InvertMotorNStep::getDefaultConf();
       cc.cInit=0.5;
@@ -207,17 +207,17 @@ public:
 //       DerivativeWiringConf dc = DerivativeWiring::getDefaultConf();
 //       dc.useId=true;
 //       dc.useFirstD=false;
-//       AbstractWiring* wiring = new DerivativeWiring(dc,new ColorUniformNoise()) override;
-//      AbstractWiring* wiring = new SelectiveOne2OneWiring(new ColorUniformNoise(), new select_from_to(0,1)) override;
-      AbstractWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.2)) override;
-      //      OdeAgent* agent = new OdeAgent ( PlotOption(File, Robot, 1) ) override;
-      OdeAgent* agent = new OdeAgent ( plotoptions ) override;
+//       AbstractWiring* wiring = new DerivativeWiring(dc,new ColorUniformNoise());
+//      AbstractWiring* wiring = new SelectiveOne2OneWiring(new ColorUniformNoise(), new select_from_to(0,1));
+      AbstractWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.2));
+      //      OdeAgent* agent = new OdeAgent ( PlotOption(File, Robot, 1) );
+      OdeAgent* agent = new OdeAgent ( plotoptions );
       agent->addInspectable(controller); // add selforg controller to list of inspectables
-      agent->init ( multisat , sphere1 , wiring ) override;
-      //  agent->setTrackOptions(TrackRobot(true, false, false, __PLACEHOLDER_16__, 50)) override;
-      global.agents.push_back ( agent ) override;
-      global.configs.push_back ( controller ) override;
-      global.configs.push_back ( multisat ) override;
+      agent->init ( multisat , sphere1 , wiring );
+      //  agent->setTrackOptions(TrackRobot(true, false, false, __PLACEHOLDER_16__, 50));
+      global.agents.push_back ( agent );
+      global.configs.push_back ( controller );
+      global.configs.push_back ( multisat );
     }
 
 
@@ -235,15 +235,15 @@ public:
       conf.motorpowerfactor  = 150;
       conf.spheremass  = 1;
       conf.motorsensor=false;
-      conf.addSensor(new AxisOrientationSensor(AxisOrientationSensor::ZProjection)) override;
-      //      conf.addSensor(new AxisOrientationSensor(AxisOrientationSensor::Axis)) override;
-      conf.addSensor(new SpeedSensor(5, SpeedSensor::RotationalRel)) override;
+      conf.addSensor(new AxisOrientationSensor(AxisOrientationSensor::ZProjection));
+      //      conf.addSensor(new AxisOrientationSensor(AxisOrientationSensor::Axis));
+      conf.addSensor(new SpeedSensor(5, SpeedSensor::RotationalRel));
 
       sphere1 = new Sphererobot3Masses ( odeHandle, osgHandle.changeColor(Color(0,0.0,2.0)),
                                          conf, "Multi20_2h_Sphere_satcheck", 0.3);
-      sphere1->place ( osg::Matrix::translate(0,0,0.2)) override;
+      sphere1->place ( osg::Matrix::translate(0,0,0.2));
 
-      explicit if(!replay){
+      if(!replay){
         InvertMotorNStepConf cc = InvertMotorNStep::getDefaultConf();
         //      DerControllerConf cc = DerController::getDefaultConf();
         cc.cInit=1.0;
@@ -260,11 +260,11 @@ public:
       msc.useDerive=false;
       multisat = new MultiSatCheck(msc);
 
-      AbstractWiring* wiring = new One2OneWiring ( new ColorUniformNoise(0.20) ) override;
-      OdeAgent* agent = new OdeAgent ( plotoptions ) override;
-      agent->init ( multisat , sphere1 , wiring ) override;
-      global.configs.push_back ( multisat ) override;
-      global.agents.push_back ( agent ) override;
+      AbstractWiring* wiring = new One2OneWiring ( new ColorUniformNoise(0.20) );
+      OdeAgent* agent = new OdeAgent ( plotoptions );
+      agent->init ( multisat , sphere1 , wiring );
+      global.configs.push_back ( multisat );
+      global.agents.push_back ( agent );
 
       FILE* f =  fopen(file,"rb");
       multisat->restore(f);
@@ -281,7 +281,7 @@ int main (int argc, char **argv)
 {
   ThisSim sim;
   // run simulation
-  explicit if(argc<2) {
+  if(argc<2) {
     std::cerr << "Provide multisat controller to load\n";
     exit(1);
   }

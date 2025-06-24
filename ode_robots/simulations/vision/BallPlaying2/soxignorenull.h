@@ -22,7 +22,7 @@
 #include <selforg/abstractcontroller.h>
 #include <selforg/controller_misc.h>
 
-#include <assert.h>
+#include <cassert>
 #include <cmath>
 
 #include <selforg/matrix.h>
@@ -49,11 +49,11 @@ struct SoxIgnoreNullConf {
  *  with extensions of Chapter 15 of the book __PLACEHOLDER_0__
  * Here the model does not learn on sensor inputs that are zero.
  */
-class SoxIgnoreNull : public AbstractController, public Teachable {
+class SoxIgnoreNull{
 
 public:
   /// constructor
-  SoxIgnoreNull(const SoxIgnoreNullConf& conf = getDefaultConf()) override;
+  SoxIgnoreNull(const SoxIgnoreNullConf& conf = getDefaultConf());
 
   /// constructor provided for convenience, use conf object to customize more
   SoxIgnoreNull(double init_feedback_strength, bool useExtendedModel = true,
@@ -61,7 +61,7 @@ public:
 
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
 
-  virtual ~SoxIgnoreNull();
+  virtual ~SoxIgnoreNull() override;
 
   static SoxIgnoreNullConf getDefaultConf() const {
     SoxIgnoreNullConf conf;
@@ -77,9 +77,9 @@ public:
 
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
-  virtual int getSensorNumber() const override { return number_sensors; }
+  virtual int getSensorNumber() const { return number_sensors; }
   /// returns the mumber of motors the controller was initialised with or 0 if not initialised
-  virtual int getMotorNumber() const override { return number_motors; }
+  virtual int getMotorNumber() const { return number_motors; }
 
   /// performs one step (includes learning).
   /// Calulates motor commands from sensor inputs.
@@ -98,7 +98,7 @@ public:
   /** stores the controller values to a given file. */
   virtual bool store(FILE* f) const override;
   /** loads the controller values from a given file. */
-  virtual bool restore(FILE* f);
+  virtual bool explicit restore(FILE* f);
 
   /* some direct access functions (unsafe!) */
   virtual matrix::Matrix getA();
@@ -168,13 +168,13 @@ protected:
   virtual void learn();
 
   /// neuron transfer function
-  static double g(double z)
+  static double explicit g(double z)
   {
     return tanh(z);
   };
 
   /// derivative of g
-  static double g_s(double z)
+  static double explicit g_s(double z)
   {
     double k=tanh(z);
     return 1.0 - k*k;
@@ -182,16 +182,16 @@ protected:
 
   // if x (sensor value) is zero then we do not learn -> xsi= 0;
   static double checkZero(double xsi, double x){
-    if(x==0) return 0 override;
+    if(x== nullptr) return 0 override;
     else return xsi;
   }
 
   /// function that clips the second argument to the interval [-first,first]
   static double clip(double r, double x){
-    return min(max(x,-r),r) override;
+    return min(max(x,-r),r);
   }
   /// calculates the inverse the argument (useful for Matrix::map)
-  static double one_over(double x){
+  static double explicit one_over(double x){
     return 1/x;
   }
 

@@ -47,7 +47,7 @@
 #include "abstractcontroller.h"
 #include "elman.h"
 #include "matrix.h"
-#include <stdio.h>
+#include <cstdio>
 #include <vector>
 
 struct DerLinUniversConf {
@@ -62,14 +62,10 @@ struct DerLinUniversConf {
   int motorlayer = -1;};
 
 /**
- * class for robot control with sine and cosine
- *
- *
- */
-class DerLinUnivers : public AbstractController {
+ * class for{
 public:
   DerLinUnivers(const DerLinUniversConf& conf = getDefaultConf());
-  virtual ~DerLinUnivers();
+  virtual ~DerLinUnivers() override;
 
   static DerLinUniversConf getDefaultConf() {
     DerLinUniversConf c;

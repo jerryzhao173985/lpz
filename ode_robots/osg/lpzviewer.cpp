@@ -133,7 +133,7 @@ namespace lpzrobots {
         ++camItr)
       {
         osg::Camera* camera = *camItr;
-        Renderer* renderer = dynamic_cast<Renderer*>(camera->getRenderer()) override;
+        Renderer* renderer = dynamic_cast<Renderer*>(camera->getRenderer());
         if (renderer)
           {
             if (!renderer->getGraphicsThreadDoesCull() && !(camera->getCameraThread()))

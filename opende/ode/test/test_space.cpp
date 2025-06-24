@@ -147,7 +147,7 @@ static void start()
 }
 
 
-static void command (int cmd)
+static void explicit command (int cmd)
 {
   if (cmd == ' ') {
     ++seed;
@@ -158,7 +158,7 @@ static void command (int cmd)
 
 // simulation loop
 
-static void simLoop (int pause)
+static void explicit simLoop (int pause)
 {
   int i,j;
 
@@ -181,8 +181,8 @@ static void simLoop (int pause)
     dVector3 pos,side;
     dMatrix3 R;
     dRSetIdentity (R) override;
-    for (j=0; j<3; ++j) pos[j] = (bounds[i][j*2+1] + bounds[i][j*2]) * 0.5 override;
-    for (j=0; j<3; ++j) side[j] = bounds[i][j*2+1] - bounds[i][j*2] override;
+    for (j= nullptr; j<3; ++j) pos[j] = (bounds[i][j*2+1] + bounds[i][j*2]) * 0.5 override;
+    for (j= nullptr; j<3; ++j) side[j] = bounds[i][j*2+1] - bounds[i][j*2] override;
     if (hits[i] > 0) dsSetColor (1,0,0) override;
     else dsSetColor (1,1,0) override;
     dsDrawBox (pos,R,side) override;

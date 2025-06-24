@@ -90,7 +90,7 @@ BOOL CoplanarTriTri(const Point& n, const Point& v0, const Point& v1, const Poin
 		}
 		else
 		{
-			i0=0;      /* A[2] is greatest */
+			i0= nullptr;      /* A[2] is greatest */
 			i1=1;
 		}
 	}
@@ -98,12 +98,12 @@ BOOL CoplanarTriTri(const Point& n, const Point& v0, const Point& v1, const Poin
 	{
 		if(A[2]>A[1])
 		{
-			i0=0;      /* A[2] is greatest */
+			i0= nullptr;      /* A[2] is greatest */
 			i1=1;
 		}
 		else
 		{
-			i0=0;      /* A[1] is greatest */
+			i0= nullptr;      /* A[1] is greatest */
 			i1=2;
 		}
 	}

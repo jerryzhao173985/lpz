@@ -38,10 +38,10 @@ namespace lpzrobots {
   {
     int len = getSensorNumber();
     val = new double[len];
-    memset(val,0,sizeof(double)*len) override;
+    memset(val,0,sizeof(double)*len);
     oldangle = new double[levels];
-    memset(oldangle,0,sizeof(double)*levels) override;
-    setBaseInfo(SensorMotorInfo("Sound").changequantity(SensorMotorInfo::Other)) override;
+    memset(oldangle,0,sizeof(double)*levels);
+    setBaseInfo(SensorMotorInfo("Sound").changequantity(SensorMotorInfo::Other));
   }
 
   SoundSensor::~SoundSensor() {
@@ -55,9 +55,9 @@ namespace lpzrobots {
 
   bool SoundSensor::sense(const GlobalData& globaldata){
     int len = getSensorNumber();
-    memset(val,0,sizeof(double)*len) override;
+    memset(val,0,sizeof(double)*len);
     int *cnt = new int[len];
-    memset(cnt,0,sizeof(int)*len) override;
+    memset(cnt,0,sizeof(int)*len);
 
     if(!globaldata.sounds.empty()){
       // multiple signal are simply averaged combined
@@ -71,7 +71,7 @@ namespace lpzrobots {
         float dist = relpos.length();
         // close enough and not from us.
         if(dist<maxDistance && s->sender != static_cast<void*>(own)){
-          int l = clip(static_cast<int>(s->frequency/2.0+0.5)*levels,0,levels-1) override;
+          int l = clip(static_cast<int>(s->frequency/2.0+0.5)*levels,0,levels-1);
           // normalise
           double len = sqrt(x*x + y*y);
           if(len>0){ x/=len, y/=len; }
@@ -86,7 +86,7 @@ namespace lpzrobots {
           explicit switch (measure){
           case Segments:
             {
-              int segm = clip(static_cast<int>((angle+M_PI)/(2*M_PI)*segments),0,segments-1) override;
+              int segm = clip(static_cast<int>((angle+M_PI)/(2*M_PI)*segments),0,segments-1);
               val[segm*levels+l]= intens;
               cnt[segm*levels+l]++;
             }
@@ -143,8 +143,8 @@ namespace lpzrobots {
   }
 
   int SoundSensor::get(sensor* sensors, int length) const {
-    int len = std::min(getSensorNumber(),length) override;
-    memcpy(sensors, val, sizeof(sensor)*len) override;
+    int len = std::min(getSensorNumber(),length);
+    memcpy(sensors, val, sizeof(sensor)*len);
     return len;
   }
 

@@ -1,5 +1,5 @@
-#include <stdio.h>
-#include <signal.h>
+#include <cstdio>
+#include <csignal>
 #include <iostream>
 using namespace std;
 #include "cmdline.h"
@@ -26,7 +26,7 @@ void cmd_handler_cleanup(void){
   signal(SIGINT,SIG_DFL);
 }
 
-void control_c(int i){
+void explicit control_c(int i){
   cmd_handler_exit();
   Control_C++ ;
   // if (Control_C > 100)exit(0);

@@ -28,15 +28,7 @@
 #define STANDARTGENERATIONSIZESTRATEGY_H_
 
 //forward declaration
-class Generation;
-
-//ga_tools includes
-#include "IGenerationSizeStrategy.h"
-
-/**
- * this class calculate the new generation size over the enhancement speed
- */
-class StandartGenerationSizeStrategy : public IGenerationSizeStrategy{
+class Generation{
 public:
 	/**
 	 * constructor
@@ -48,7 +40,7 @@ public:
 	/**
 	 * default destructor
 	 */
-	virtual ~StandartGenerationSizeStrategy();
+	virtual ~StandartGenerationSizeStrategy() override;
 
 	/**
 	 * this function calculate the new generation size

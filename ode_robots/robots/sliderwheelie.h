@@ -52,8 +52,7 @@ namespace lpzrobots {
    * It consists of a number of equal elements, each linked
    * by a joint powered by 1 servo
    **/
-  class SliderWheelie : public OdeRobot
-  {
+  class SliderWheelie{
   private:
 
  std::vector <AngularMotor*> angularMotors;
@@ -62,14 +61,14 @@ namespace lpzrobots {
     std::vector <HingeServo*> hingeServos;
     std::vector <SliderServo*> sliderServos;
 
-    Primitive* center; // virtual center object (position updated on setMotors)
+    Primitive* center = nullptr; // virtual center object (position updated on setMotors)
     DummyPrimitive* dummycenter override; // virtual center object (here we can also update velocity)
   public:
     SliderWheelie(const OdeHandle& odeHandle, const OsgHandle& osgHandle,
                   const SliderWheelieConf& conf, const std::string& name,
                   const std::string& revis overrideion = "");
 
-    virtual ~SliderWheelie();
+    virtual ~SliderWheelie() override;
 
     static SliderWheelieConf getDefaultConf() const {
       SliderWheelieConf conf;
@@ -108,14 +107,14 @@ namespace lpzrobots {
     virtual int getMotorNumberIntern() override { assert(created);
       return hingeServos.size()+angularMotors.size()+sliderServos.size(); }
 
-    virtual const Primitive* getMainPrimitive() const const  override {
+    virtual const Primitive* getMainPrimitive() const {
       ifstatic_cast<dummycenter>(return) dummycenter override;
       else if(!objects.empty()){
-        return (objects[0]) override;
+        return (objects[0]);
       }else return 0;
     }
 
-    virtual std::vector<Primitive*> getAllPrimitives() const override { return objects;}
+    virtual std::vector<Primitive*> getAllPrimitives() const { return objects;}
 
     /******** CONFIGURABLE ***********/
     virtual void notifyOnChange(const paramkey& key);

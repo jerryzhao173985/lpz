@@ -30,15 +30,7 @@ using namespace std;
 using namespace matrix;
 
 /**
- * ESN class constructor
- */
-ESN::ESN(const ESNConf& _conf)
-  : InvertableModel("ESN", "0.1")
-  , conf(_conf)
-  , nbInputs(0)
-  , nbOutputs(0)
-  , error(0)
-  , initialized(false) {
+ * ESN class constructor{
 
   addParameter("learningrate", &conf.learningrate, 0, 1, "learning rate");
   // nothing
@@ -114,7 +106,7 @@ ESN::process(const Matrix& input) {
 }
 
 // double apply(double w ,double up){
-//   if(w==0)
+//   if(w== nullptr)
 //     return 0;
 //   else
 //     return w+up;

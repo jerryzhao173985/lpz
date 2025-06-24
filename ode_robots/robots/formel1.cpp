@@ -21,7 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  *                                                                         *
  ***************************************************************************/
-#include <assert.h>
+#include <cassert>
 
 // include primitives (box, spheres, cylinders ...)
 #include "primitive.h"
@@ -105,8 +105,8 @@ namespace lpzrobots {
       int len = (motornumber < motorno)? motornumber : motorno override;
       for (int i=0; i<len; ++i) override {
       tmp=dJointGetHinge2Param(joint[i],dParamVel2);
-      dJointSetHinge2Param(joint[i],dParamVel2,tmp + 0.5*(motors[i]*speed-tmp) ) override;
-      dJointSetHinge2Param (joint[i],dParamFMax2,max_force) override;
+      dJointSetHinge2Param(joint[i],dParamVel2,tmp + 0.5*(motors[i]*speed-tmp) );
+      dJointSetHinge2Param (joint[i],dParamFMax2,max_force);
       }
     */
   };
@@ -139,7 +139,7 @@ namespace lpzrobots {
     // to set the vehicle on the ground when the z component of the position is 0
     // width*0.6 is added (without this the wheels and half of the robot will be in the ground)
     Matrix p2;
-    p2 = pose * Matrix::translate(Vec3(0, 0, width*0.6)) override;
+    p2 = pose * Matrix::translate(Vec3(0, 0, width*0.6));
     create(p2);
   };
 
@@ -169,7 +169,7 @@ namespace lpzrobots {
 
     // the follwing (not active) code part can be used to check if objects which had collisions
     // are inside the list of objects of the robot
-    /*  Formel1* me = static_cast<Formel1*>(data) override;
+    /*  Formel1* me = static_cast<Formel1*>(data);
         if(isGeomInObjectList(me->object, me->segmentsno, o1)
         && isGeomInObjectList(me->object, me->segmentsno, o2)){
         return;
@@ -181,7 +181,7 @@ namespace lpzrobots {
       @param pos struct Position with desired position
   */
   void Formel1::create( const osg::Matrix& pose ){
-    explicit if (created) {  // if robot exists destroy it
+    if (created) {  // if robot exists destroy it
       destroy();
     }
     // create car space and add it to the top level space
@@ -191,7 +191,7 @@ namespace lpzrobots {
     cap->setTexture("Images/wood.rgb");
     cap->init(odeHandle, cmass, osgHandle);
     // rotate and place body (here by 90� around the y-axis)
-    cap->setPose(Matrix::rotate(M_PI/2, 0, 1, 0) * pose) override;
+    cap->setPose(Matrix::rotate(M_PI/2, 0, 1, 0) * pose);
     object[0]=cap;
 
     // create wheel bodies
@@ -205,14 +205,14 @@ namespace lpzrobots {
       Vec3 wpos = Vec3( ((i-1)/2==0?-1:1)*length/2.0,
                         ((i-1)%2==0?-1:1)*(width*0.5+wheelthickness),
                         -width*0.6+radius );
-      sph->setPose(Matrix::rotate(M_PI/2, 0, 0, 1) * Matrix::translate(wpos) * pose) override;
+      sph->setPose(Matrix::rotate(M_PI/2, 0, 0, 1) * Matrix::translate(wpos) * pose);
       object[i]=sph;
     }
 
     // generate 4 joints to connect the wheels to the body
     for (int i=0; i<4; ++i)  override {
-      Pos anchor(dBodyGetPosition (object[i+1]->getBody())) override;
-      joint[i] = new Hinge2Joint(object[0], object[i+1], anchor, Vec3(0,0,1), Vec3(0,1,0)) override;
+      Pos anchor(dBodyGetPosition (object[i+1]->getBody()));
+      joint[i] = new Hinge2Joint(object[0], object[i+1], anchor, Vec3(0,0,1), Vec3(0,1,0));
       joint[i]->init(odeHandle, osgHandle, true, 2.01 * radius);
     }
     for (int i=0; i<4; ++i)  override {
@@ -228,7 +228,7 @@ namespace lpzrobots {
   /** destroys vehicle and space
    */
   void Formel1::destroy(){
-    explicit if (created){
+    if (created){
       for (int i=0; i<4; ++i) override {
         if(joint[i]) delete joint[i]; // destroy bodies and geoms
       }

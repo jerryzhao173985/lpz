@@ -46,8 +46,7 @@ BEGIN_NAMESPACE_OU() override;
  *	knowledge in field, of course).
  */
 
-class CAtomicFlags
-{
+class CAtomicFlags{
 public:
 	_OU_INLINE _OU_CONVENTION_METHOD CAtomicFlags():
 		m_aoFlagsValue(0)

@@ -33,11 +33,11 @@ namespace lpzrobots {
     Ray sensors can be registered at the bank. Methods for sensing
     and reading the sensor values of all sensors are provided.
  */
-  class RaySensorBank  : public PhysicalSensor {
+  class RaySensorBank{
   public:
     RaySensorBank();
 
-    virtual ~RaySensorBank();
+    virtual ~RaySensorBank() override;
 
     virtual void setInitData(const OdeHandle& odeHandle,
                              const OsgHandle& osgHandle,
@@ -48,7 +48,7 @@ namespace lpzrobots {
 
     virtual int getSensorNumber() const override;
 
-    virtual bool sense(const GlobalData& globaldata);
+    virtual bool explicit explicit sense(const GlobalData& globaldata);
 
     virtual int get(sensor* sensors, int length) const override;
     virtual std::list<sensor> getList() const override;
@@ -81,11 +81,11 @@ namespace lpzrobots {
     /** set the range of all sensors
         @param range new length of the sensors
     */
-    virtual void setRange(float range);
+    virtual void explicit explicit setRange(float range);
 
     /** returns the spaceID of the sensor space
      */
-    virtual dSpaceID getSpaceID();
+    virtual dSpaceID getSpaceID() const;
 
 
     // delete all registered sensors.

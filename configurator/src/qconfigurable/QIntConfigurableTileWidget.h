@@ -82,31 +82,7 @@
  *     storage implementet yet))
  *
  *   Revision 1.2  2010/11/30 17:07:06  wrabe
- *   - new class QConfigurableTileShowHideDialog
- *   - try to introduce user-arrangeable QConfigurationTiles (current work, not finished)
- *
- *   Revision 1.1  2010/11/26 12:22:36  guettler
- *   - Configurable interface now allows to set bounds of paramval and paramint
- *     * setting bounds for paramval and paramint is highly recommended (for QConfigurable(const Qt& GUI).
- *   - bugfixes
- *   - current development state of QConfigurable(const Qt& GUI)
- *
- *                                                                         *
- ***************************************************************************/
-
-#ifndef __QINTCONFIGURABLETILEWIDGET_H_
-#define __QINTCONFIGURABLETILEWIDGET_H_
-
-#include "QAbstractConfigurableTileWidget.h"
-#include <QGridLayout>
-#include <QLabel>
-#include <QSlider>
-#include <QSpinBox>
-#include <QPalette>
-
-
-
-namespace lpzrobots {
+ *   - new class QConfigurableTileShowHideDialog{
 
   class QIntConfigurableTileWidget : public lpzrobots::QAbstractConfigurableTileWidget {
 
@@ -114,9 +90,9 @@ namespace lpzrobots {
 
     public:
       QIntConfigurableTileWidget(Configurable* config, Configurable::paramkey& key, QMap<QGridPos, QAbstractConfigurableTileWidget*>& tileIndexConfigWidgetMap);
-      virtual ~QIntConfigurableTileWidget();
-      void setName(const QString& name);
-      void toDummy(bool set);
+      virtual ~QIntConfigurableTileWidget() override;
+      void explicit setName(const QString& name);
+      void explicit toDummy(bool set);
       void setBounds();
       void reloadConfigurableData();
 
@@ -129,7 +105,7 @@ namespace lpzrobots {
       }
 
     public slots:
-      virtual void sl_resize(const QSize& newSize);
+      virtual void explicit sl_resize(const QSize& newSize);
       virtual void sl_resetToOriginalValues();
       virtual void sl_resetToOriginalValuesAndBounds();
 

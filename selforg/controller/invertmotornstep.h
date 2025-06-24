@@ -23,7 +23,7 @@
 #include "invertmotorcontroller.h"
 #include "teachable.h"
 
-#include <assert.h>
+#include <cassert>
 #include <cmath>
 
 #include <selforg/matrix.h>
@@ -50,22 +50,17 @@ struct InvertMotorNStepConf {
 };
 
 /**
- * class for robot controller that uses the georg's matrixlib for
- *  direct matrix inversion for n channels
- * (simple one layer networks)
- *
- * Implements standart parameters: eps, rho, mu, stepnumber4avg, stepnumber4delay
+ * class for robot controller that uses the homeokinetic learning algorithm
+ * with arbitrary extensions like teachable, motor babbling, and so on
  */
-class InvertMotorNStep
-  : public InvertMotorController
-  , public Teachable {
+class InvertMotorNStep : public InvertMotorController, public Teachable {
 
 public:
   InvertMotorNStep(const InvertMotorNStepConf& conf = getDefaultConf());
 
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override;
 
-  virtual ~InvertMotorNStep();
+  virtual ~InvertMotorNStep() override;
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
   virtual int getSensorNumber() const override {
@@ -88,9 +83,9 @@ public:
 
   /**** STOREABLE ****/
   /** stores the controller values to a given file. */
-  virtual bool store(FILE* f) const override;
+  virtual bool store(FILE* f) const;
   /** loads the controller values from a given file. */
-  virtual bool restore(FILE* f) override;
+  virtual bool restore(FILE* f);
 
   /**** INSPECTABLE ****/
   virtual std::list<ILayer> getStructuralLayers() const override;

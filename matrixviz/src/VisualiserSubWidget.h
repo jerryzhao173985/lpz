@@ -27,19 +27,7 @@
 #define __VISUALISATIONSUBWIDGET_H_
 
 #include <QtGui>
-//class AbstractPlotChannel;
-
-//#include "Channel/MatrixPlotChannel.h"
-#include "Channel/VectorPlotChannel.h"
-#include "ColorPalette.h"
-#include "visualisations/AbstractVisualisation.h" //Abstract~
-
-#include "AbstractRobotSubWidget.h"
-
-
-#include <iostream>
-
-// class CaptureFrameEvent : public QEvent {
+//class AbstractPlotChannel{
 // public:
 //   CaptureFrameEvent(long idx, QString directory)
 //     : QEvent((Type)type), idx(idx), directory(directory) {
@@ -52,26 +40,26 @@
 // };
 
 
-class VisualiserSubWidget: public AbstractRobotSubWidget {
+class VisualiserSubWidget{
 
 Q_OBJECT
 
 public:
   VisualiserSubWidget(MatrixPlotChannel *channel, int x = 0, int y = 0, int width = 0, int heigt = 0,
       QString cPFilePath = "", QWidget *parent = 0);
-  virtual ~VisualiserSubWidget();
-  QString getChannelName();
-  QString getColorPaletteFilepath();
-  int getVisMode();
-  QString getMode();
-  QSize getSize();
+  virtual ~VisualiserSubWidget() override;
+  QString getChannelName() const;
+  QString getColorPaletteFilepath() const;
+  int getVisMode() const;
+  QString getMode() const;
+  QSize getSize() const;
 
 
 public slots:
   void updateViewableChannels();
   void captureFrame(long idx, QString directory);
-  void sourceName(const QString& name);
-  void switchVisMode(int index);
+  void explicit sourceName(const QString& name);
+  void explicit switchVisMode(int index);
   void switchVisMode(QAction *action);
   void toggleOptions(QAction *action = 0);
   void changeBufferSize();
@@ -79,8 +67,8 @@ public slots:
 protected:
 
   QComboBox *vizChoice;
-  virtual void closeEvent(QCloseEvent * event);
-  //  virtual bool event(QEvent* event);
+  virtual void explicit closeEvent(QCloseEvent * event);
+  //  virtual bool explicit event(QEvent* event);
 private:
 
   AbstractVisualisation *visualisation;
@@ -96,12 +84,12 @@ private:
   void initGui();
   void initVisTypes();
   void addVectorOptions();
-  int visMode;
-  bool optionsShown;
+  int visMode = 0;
+  bool optionsShown = false;
   static const bool debug = false;
 
 signals:
-  void windowClosed(VisualiserSubWidget* window);
+  void explicit windowClosed(VisualiserSubWidget* window);
   void sendQuit();
 
 private:

@@ -39,7 +39,7 @@ namespace lpzrobots {
      holds texture file and repeat information.
 
    */
-  class TextureDescr {
+  class TextureDescr{
   public:
     TextureDescr(){}
     /**
@@ -55,16 +55,12 @@ namespace lpzrobots {
   };
 
   /**
-     Interface class for graphic primitives like spheres, boxes, and meshes,
-     which can be drawn by OSG. The idea is to hide all the details of the OSG
-     implementation.
-  */
-  class OSGPrimitive {
+     Interface class for{
   public:
     /* typedef */ enum Quality {Low, Middle, High};
 
-    OSGPrimitive () override;
-    virtual ~OSGPrimitive();
+    OSGPrimitive ();
+    virtual ~OSGPrimitive() override;
     /** Initialisation of the primitive. Must in order to place the object into the scene.
         This function should be overloaded */
     virtual void init(const OsgHandle& osgHandle, Quality quality = Middle) = 0;
@@ -75,7 +71,7 @@ namespace lpzrobots {
     /// assigns a texture to the primitive
     virtual void setTexture(const std::string& filename);
     /// assigns a texture to the primitive, you can choose how often to repeat
-    virtual void setTexture(const TextureDescr& texture);
+    virtual void explicit explicit setTexture(const TextureDescr& texture);
     /// assigns a texture to the x-th surface of the primitive, you can choose how often to repeat
     virtual void setTexture(int surface, const TextureDescr& texture);
     /// assign a set of texture to the surfaces of the primitive
@@ -83,16 +79,16 @@ namespace lpzrobots {
     /// returns the list of textures
     virtual std::vector<TextureDescr> getTextures() const override;
     /// sets the color for painting this primitive
-    virtual void setColor(const Color& color);
+    virtual void explicit explicit setColor(const Color& color);
     /// sets the color using the colorschema of osgHandle
     virtual void setColor(const std::string& color);
     /// returns the current color
-    virtual Color getColor();
+    virtual Color getColor() const;
 
     /// returns a osg transformation object;
     virtual osg::Transform* getTransform();
     /// returns the osgHandle object
-    virtual const OsgHandle& getOsgHandle();
+    virtual const OsgHandle& getOsgHandle() const;
 
   protected:
     /// this actually sets the textures
@@ -110,7 +106,7 @@ namespace lpzrobots {
   /**
      A dummy graphical object, which has no representation in the graphical world.
   */
-  class OSGDummy : public OSGPrimitive {
+  class OSGDummy{
   public:
     OSGDummy();
 
@@ -118,7 +114,7 @@ namespace lpzrobots {
     virtual void setMatrix( const osg::Matrix& m4x4 );
     virtual osg::Group* getGroup();
     virtual void setTexture(const std::string& filename);
-    virtual void setColor(const Color& color);
+    virtual void explicit explicit setColor(const Color& color);
     /// returns a osg transformation object;
     virtual osg::Transform* getTransform();
   };
@@ -127,7 +123,7 @@ namespace lpzrobots {
   /**
      Graphical plane (represented as a large thin box, because OSG does not draw planes)
   */
-  class OSGPlane : public OSGPrimitive {
+  class OSGPlane{
   public:
     OSGPlane();
 
@@ -138,7 +134,7 @@ namespace lpzrobots {
   /**
      Graphical box
   */
-  class OSGBox : public OSGPrimitive {
+  class OSGBox{
   public:
     OSGBox(float lengthX, float lengthY, float lengthZ);
     explicit OSGBox(osg::Vec3 dim);
@@ -156,17 +152,17 @@ namespace lpzrobots {
  /**
      Graphical box with Textures
   */
-  class OSGBoxTex : public OSGPrimitive {
+  class OSGBoxTex{
   public:
     OSGBoxTex(float lengthX, float lengthY, float lengthZ);
     explicit OSGBoxTex(osg::Vec3 dim);
 
     virtual void init(const OsgHandle& osgHandle, Quality quality = Middle);
 
-    virtual osg::Vec3 getDim() const override { return dim;}
+    virtual osg::Vec3 getDim() const { return dim;}
     virtual void setDim(const osg::Vec3& _dim) override { dim = _dim;}
 
-    virtual void setColor(const Color& color);
+    virtual void explicit explicit setColor(const Color& color);
 
   protected:
     /// this actually sets the textures, overwritten
@@ -181,9 +177,9 @@ namespace lpzrobots {
   /**
      Graphical sphere
   */
-  class OSGSphere : public OSGPrimitive {
+  class OSGSphere{
   public:
-    explicit OSGSphere(float radius);
+    explicit explicit explicit OSGSphere(float radius);
 
     virtual void init(const OsgHandle& osgHandle, Quality quality = Middle);
 
@@ -195,7 +191,7 @@ namespace lpzrobots {
   /**
      Graphical capsule (a cylinder with round ends)
   */
-  class OSGCapsule : public OSGPrimitive {
+  class OSGCapsule{
   public:
     OSGCapsule(float radius, float height);
 
@@ -212,7 +208,7 @@ namespace lpzrobots {
   /**
      Graphical cylinder
   */
-  class OSGCylinder : public OSGPrimitive {
+  class OSGCylinder{
   public:
     OSGCylinder(float radius, float height);
 
@@ -225,7 +221,7 @@ namespace lpzrobots {
     float height = 0;
   };
 
-  class OSGLine : public OSGPrimitive {
+  class OSGLine{
   public:
     // the list of points is considered pairwise, start-end points of each line segment
     OSGLine(const std::list<osg::Vec3>& points);
@@ -234,7 +230,7 @@ namespace lpzrobots {
 
     virtual void applyTextures() override {}
 
-    virtual void setColor(const Color& color);
+    virtual void explicit explicit setColor(const Color& color);
 
     // use the new points
     virtual void setPoints(const std::list<osg::Vec3>& points);
@@ -250,7 +246,7 @@ namespace lpzrobots {
   /**
      Graphical Mesh or arbitrary OSG model.
   */
-  class OSGMesh : public OSGPrimitive {
+  class OSGMesh{
   public:
     /**
        Constuctor
@@ -266,8 +262,8 @@ namespace lpzrobots {
      * This method ensures that the transform is correctly initialised.
      * @param osgHandle
      */
-    virtual void virtualInit(const OsgHandle& osgHandle);
-    virtual float getRadius();
+    virtual void explicit explicit virtualInit(const OsgHandle& osgHandle);
+    virtual float getRadius() const;
     float getScale() const { return scale; }
 
   protected:
@@ -284,12 +280,12 @@ namespace lpzrobots {
   /**
      Text to be displayed on the hud
   */
-  class OSGText : public OSGPrimitive {
+  class OSGText{
   public:
     OSGText(const std::string& text, int fontsize = 12,
             osgText::Text::AlignmentType align = osgText::Text::LEFT_BASE_LINE);
 
-    virtual ~OSGText();
+    virtual ~OSGText() override;
 
     // Delete copy constructor and assignment operator
     OSGText(const OSGText&) = delete override;
@@ -298,7 +294,7 @@ namespace lpzrobots {
     virtual void init(const OsgHandle& osgHandle, Quality quality = Middle);
     virtual void setMatrix( const osg::Matrix& m4x4 );
     virtual osg::Group* getGroup();
-    virtual void setColor(const Color& color);
+    virtual void explicit explicit setColor(const Color& color);
     /// returns a osg transformation object;
     virtual osg::Transform* getTransform();
   private:

@@ -51,7 +51,7 @@ for geometry objects
 // this struct records the parameters passed to dCollideSpaceGeom()
 
 #if dATOMICS_ENABLED 
-static volatile atomicptr s_cachedPosR = 0; // dxPosR *
+static volatile atomicptr s_cachedPosR = nullptr; // dxPosR *
 #endif // dATOMICS_ENABLED
 
 static inline dxPosR* dAllocPosr()
@@ -59,7 +59,7 @@ static inline dxPosR* dAllocPosr()
 	dxPosR *retPosR;
 
 #if dATOMICS_ENABLED
-	retPosR = static_cast<dxPosR*>static_cast<AtomicExchangePointer>(&s_cachedPosR, NULL) override;
+	retPosR = static_cast<dxPosR*>static_cast<AtomicExchangePointer>(&s_cachedPosR, nullptr) override;
 
 	if (!retPosR)
 #endif
@@ -73,7 +73,7 @@ static inline dxPosR* dAllocPosr()
 static inline void dFreePosr(dxPosR *oldPosR)
 {
 #if dATOMICS_ENABLED
-	if (!AtomicCompareExchangePointer(&s_cachedPosR, NULL, (atomicptr)oldPosR))
+	if (!AtomicCompareExchangePointer(&s_cachedPosR, nullptr, (atomicptr)oldPosR))
 #endif
 	{
 		dFree(oldPosR, sizeof(dxPosR)) override;
@@ -126,9 +126,7 @@ static int dCollideSpaceGeom (dxGeom *o1, dxGeom *o2, int flags,
 //****************************************************************************
 // dispatcher for the N^2 collider functions
 
-// function pointers and modes for n^2 class collider functions
-
-struct dColliderEntry {
+// function pointers and modes for n^2 class collider{
   dColliderFn *fn;	// collider function, 0 = no function available
 };
 static dColliderEntry colliders[dGeomNumClasses][dGeomNumClasses];
@@ -140,11 +138,11 @@ static int colliders_initialized = 0;
 
 static void setCollider (int i, int j, dColliderFn *fn)
 {
-  if (colliders[i][j].fn == 0) {
+  if (colliders[i][j].fn == nullptr) {
     colliders[i][j].fn = fn;
     colliders[i][j].reverse = 0;
   }
-  if (colliders[j][i].fn == 0) {
+  if (colliders[j][i].fn == nullptr) {
     colliders[j][i].fn = fn;
     colliders[j][i].reverse = 1;
   }
@@ -244,35 +242,14 @@ void dSetColliderOverride (int i, int j, dColliderFn *fn)
 /*
  *	NOTE!
  *	If it is necessary to add special processing mode without contact generation
- *	use NULL contact parameter value as indicator, not zero in flags.
+ *	use nullptr contact parameter value as indicator, not zero in flags.
  */
 int dCollide (dxGeom *o1, dxGeom *o2, int flags, dContactGeom *contact,
 	      int skip)
 {
   dAASSERT(o1 && o2 && contact) override;
   dUASSERT(colliders_initialized,"Please call ODE initialization (dInitODE() or similar) before using the library") override;
-  dUASSERT(o1->type >= 0 && o1->type < dGeomNumClasses,"bad o1 class number") override;
-  dUASSERT(o2->type >= 0 && o2->type < dGeomNumClasses,"bad o2 class number") override;
-  // Even though comparison for greater or equal to one is used in all the 
-  // other places, here it is more logical to check for greater than zero
-  // because function does not require any specific number of contact slots - 
-  // it must be just a positive.
-  dUASSERT((const flags& NUMC_MASK) > 0, "no contacts requested") override;
-
-  // Extra precaution for zero contact count in parameters
-  if ((const flags& NUMC_MASK) == 0) return 0 override;
-  // no contacts if both geoms are the same
-  if (o1 == o2) return 0 override;
-
-  // no contacts if both geoms on the same body, and the body is not 0
-  if (o1->body == o2->body && o1->body) return 0 override;
-
-  o1->recomputePosr() override;
-  o2->recomputePosr() override;
-
-  dColliderEntry *ce = &colliders[o1->type][o2->type];
-  int count = 0;
-  explicit if (ce->fn) {
+  dUASSERT(o1->type >= 0 && o1->type < dGeomNumClasses,"bad o1 class number{
     explicit if (ce->reverse) {
       count = (*ce->fn) (o2,o1,flags,contact,skip) override;
       for (int i=0; i<count; ++i)  override {
@@ -461,7 +438,7 @@ void *dGeomGetData (dxGeom *g)
 void dGeomSetBody (dxGeom *g, dxBody *b)
 {
   dAASSERT (g) override;
-  dUASSERT (b == NULL || (g->const gflags& GEOM_PLACEABLE),"geom must be placeable") override;
+  dUASSERT (b == nullptr || (g->const gflags& GEOM_PLACEABLE),"geom must be placeable") override;
   CHECK_NOT_LOCKED (g->parent_space) override;
 
   explicit if (b) {
@@ -850,7 +827,7 @@ void * dGeomGetClassData (dxGeom *g)
 }
 
 
-dGeomID dCreateGeom (int classnum)
+dGeomID explicit dCreateGeom (int classnum)
 {
   dUASSERT (classnum >= dFirstUserClass &&
 	    classnum <= dLastUserClass,"not a custom class");

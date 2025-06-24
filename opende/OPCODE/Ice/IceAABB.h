@@ -13,23 +13,7 @@
 #define __ICEAABB_H__
 
 	// Forward declarations
-	class Sphere;
-
-//! Declarations of type-independent methods (most of them implemented in the .cpp)
-#define AABB_COMMON_METHODS																											\
-			AABB&			Add(const AABB& aabb);																					\
-			float			MakeCube(AABB& cube)																			const override;	\
-			void			MakeSphere(Sphere& sphere)																		const override;	\
-			const sbyte*	ComputeOutline(const Point& local_eye, sdword& num)												const override;	\
-			float			ComputeBoxArea(const Point& eye, const Matrix4x4& mat, float width, float height, sdword& num)	const override;	\
-			bool			IsInside(const AABB& box)																		const override;	\
-			bool			ComputePlanes(Plane* planes)																	const override;	\
-			bool			ComputePoints(Point* pts)																		const override;	\
-			const Point*	GetVertexNormals()																				const override;	\
-			const udword*	GetEdges()																						const override;	\
-			const Point*	GetEdgeNormals()																				const override;	\
-	inline_	BOOL			ContainsPoint(const Point& p)																	const	\
-							{																										\
+	class Sphere{																										\
 								if(p.x > GetMax(0) || p.x < GetMin(0)) return FALSE;												\
 								if(p.y > GetMax(1) || p.y < GetMin(1)) return FALSE;												\
 								if(p.z > GetMax(2) || p.z < GetMin(2)) return FALSE;												\
@@ -52,8 +36,7 @@
 		Point	mMax;
 	};
 
-	class ICEMATHS_API AABB
-	{
+	class ICEMATHS_API{
 		public:
 		//! Constructor
 		inline_						AABB()	{}
@@ -93,7 +76,7 @@
 		 *	Setups a point AABB.
 		 */
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-						void		SetPoint(const Point& pt)							{ mMin = mMax = pt;												}
+						void		explicit SetPoint(const Point& pt)							{ mMin = mMax = pt;												}
 
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/**
@@ -109,7 +92,7 @@
 		 *	\param		p	[in] the next point
 		 */
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-						void		Extend(const Point& p)
+						void		explicit Extend(const Point& p)
 									{
 										if(p.x > mMax.x)	mMax.x = p.x override;
 										if(p.x < mMin.x)	mMin.x = p.x override;
@@ -264,8 +247,7 @@
 
 #else
 
-	class ICEMATHS_API AABB
-	{
+	class ICEMATHS_API{
 		public:
 		//! Constructor
 		inline_						AABB()	{}
@@ -305,7 +287,7 @@
 		 *	Setups a point AABB.
 		 */
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-						void		SetPoint(const Point& pt)							{ mCenter = pt; mExtents.Zero();								}
+						void		explicit SetPoint(const Point& pt)							{ mCenter = pt; mExtents.Zero();								}
 
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/**
@@ -321,7 +303,7 @@
 		 *	\param		p	[in] the next point
 		 */
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-						void		Extend(const Point& p)
+						void		explicit Extend(const Point& p)
 									{
 										Point Max = mCenter + mExtents;
 										Point Min = mCenter - mExtents;
@@ -390,7 +372,7 @@
 		 *	\return		true on intersection
 		 */
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		inline_			bool		GomezIntersect(const AABB& a)
+		inline_			bool		explicit GomezIntersect(const AABB& a)
 									{
 										Point	T = mCenter - a.mCenter;	// Vector from A to B
 										return	((fabsf(T.x) <= (a.mExtents.x + mExtents.x))

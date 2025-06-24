@@ -30,29 +30,26 @@
 
 namespace lpzrobots {
 
-  class Primitive;
-
-  // abstract class for any playground
-  class AbstractGround : public AbstractObstacle {
+  class Primitive{
 
 public:
 
     AbstractGround(const OdeHandle& odeHandle, const OsgHandle& osgHandle,
                    bool createGround, double groundLength, double groundWidth, double wallThickness);
 
-    virtual ~AbstractGround();
+    virtual ~AbstractGround() override;
 
 
     virtual void setPose(const osg::Matrix& pose);
 
-    virtual void createGround(bool create);
+    virtual void explicit explicit createGround(bool create);
 
     virtual Primitive* getMainPrimitive() const override;
 
     virtual void changeGeometry(double length, double width, double height, double factorxy);
 
     /// prints the contour of the boxes into the file
-    virtual void printContours(FILE* f);
+    virtual void explicit explicit printContours(FILE* f);
 
     /**
      * assigns the texture to the object
@@ -64,13 +61,13 @@ public:
      * should be called before setPosition()
      * @param color values in RGBA
      */
-    virtual void setGroundColor(const Color& color);
+    virtual void explicit explicit setGroundColor(const Color& color);
 
     /**
      * sets the substance of the ground.
      * @param substance description of the substance
      */
-    virtual void setGroundSubstance(const Substance& substance);
+    virtual void explicit explicit setGroundSubstance(const Substance& substance);
 
 
     /**
@@ -86,7 +83,7 @@ public:
 
     virtual double getGroundThickness() override { return groundThickness; }
 
-    virtual void   setGroundThickness(double thickness);
+    virtual void   explicit explicit setGroundThickness(double thickness);
 
   protected:
 

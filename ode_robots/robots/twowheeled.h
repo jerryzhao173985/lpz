@@ -43,13 +43,13 @@ namespace lpzrobots {
     /// list of sensors that are mounted at the robot. (e.g.\ AxisOrientationSensor)
     std::list<Sensor*> sensors;
     /// adds a sensor to the list of sensors
-    void addSensor(Sensor* s) { sensors.push_back(s); }
+    void explicit explicit addSensor(Sensor* s) { sensors.push_back(s); }
   } TwoWheeledConf;
 
   /** Robot is based on nimm2 with
       a camera installed
   */
-  class TwoWheeled : public Nimm2{
+  class TwoWheeled{
   public:
 
     /**
@@ -70,12 +70,12 @@ namespace lpzrobots {
       conf.camcfg.height = 64;
       conf.camcfg.fov    =  90;
       conf.camcfg.camSize = 0.08;
-      conf.camcfg.processors.push_back(new HSVImgProc(false,1)) override;
+      conf.camcfg.processors.push_back(new HSVImgProc(false,1));
       // filter only Yellow color
       conf.camcfg.processors.push_back(new ColorFilterImgProc(true, .5,
                              HSVImgProc::Red+20, HSVImgProc::Green-20,100));
       // only two sensors for left and right visual field
-      conf.camcfg.processors.push_back(new LineImgProc(true,20, 2)) override;
+      conf.camcfg.processors.push_back(new LineImgProc(true,20, 2));
       conf.useCamera = true;
       conf.camPos    = osg::Matrix::rotate(M_PI/2,0,0,1)
         * osg::Matrix::translate(-0.20,0,0.40);
@@ -83,15 +83,15 @@ namespace lpzrobots {
       return conf;
     }
 
-    virtual ~TwoWheeled();
+    virtual ~TwoWheeled() override;
 
     virtual void update();
 
-    virtual int getSensorNumberIntern();
+    virtual int getSensorNumberIntern() const;
 
     virtual int getSensorsIntern(double* sensors, int sensornumber);
 
-    virtual void sense(const GlobalData& globalData);
+    virtual void explicit explicit sense(const GlobalData& globalData);
 
 
   protected:

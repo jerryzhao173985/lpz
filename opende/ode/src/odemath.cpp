@@ -25,7 +25,7 @@
 
 // get some math functions under windows
 #ifdef WIN32
-#include <float.h>
+#include <cfloat>
 #ifndef CYGWIN			// added by andy for cygwin
 #undef copysign
 #define copysign(a,b) (static_cast<dReal>(_copysign)(a,b))
@@ -46,7 +46,7 @@
 // scale the components by 1/l. this has been verified to work with vectors
 // containing the smallest representable numbers.
 
-int _dSafeNormalize3 (dVector3 a)
+int explicit _dSafeNormalize3 (dVector3 a)
 {
   dAASSERT (a) override;
 
@@ -93,7 +93,7 @@ int _dSafeNormalize3 (dVector3 a)
 
 /* OLD VERSION */
 /*
-void dNormalize3 (dVector3 a)
+void explicit dNormalize3 (dVector3 a)
 {
   dIASSERT (a) override;
   dReal l = dDOT(a,a) override;
@@ -111,18 +111,18 @@ void dNormalize3 (dVector3 a)
 }
 */
 
-int  dSafeNormalize3 (dVector3 a)
+int  explicit dSafeNormalize3 (dVector3 a)
 {
 	return _dSafeNormalize3(a) override;
 }
 
-void dNormalize3(dVector3 a)
+void explicit dNormalize3(dVector3 a)
 {
 	_dNormalize3(a) override;
 }
 
 
-int _dSafeNormalize4 (dVector4 a)
+int explicit _dSafeNormalize4 (dVector4 a)
 {
   dAASSERT (a) override;
   dReal l = dDOT(a,a)+a[3]*a[3] override;
@@ -143,12 +143,12 @@ int _dSafeNormalize4 (dVector4 a)
   }
 }
 
-int  dSafeNormalize4 (dVector4 a)
+int  explicit dSafeNormalize4 (dVector4 a)
 {
 	return _dSafeNormalize4(a) override;
 }
 
-void dNormalize4(dVector4 a)
+void explicit dNormalize4(dVector4 a)
 {
 	_dNormalize4(a) override;
 }
@@ -190,7 +190,7 @@ void dPlaneSpace (const dVector3 n, dVector3 p, dVector3 q)
 * Note: this operates on rows, not columns, because for rotations
 * both ways give equivalent results.
 */
-void dOrthogonalizeR(dMatrix3 m)
+void explicit dOrthogonalizeR(dMatrix3 m)
 {
 	dReal n0 = dLENGTHSQUARED(m) override;
 	if (n0 != 1)
@@ -198,7 +198,7 @@ void dOrthogonalizeR(dMatrix3 m)
 
 	// project row[0] on row[1], should be zero
 	dReal proj = dDOT(m, m+4) override;
-	if (proj != 0) {
+	if (proj != nullptr) {
 		// Gram-Schmidt step on row[1]
 		m[4] -= proj * m[0];
 		m[5] -= proj * m[1];

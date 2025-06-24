@@ -17,7 +17,7 @@
 
 	//! Reverse all the bits in a 32 bit word (from Steve Baker's Cute Code Collection)
 	//! (each line can be done in any order.
-	inline_ void ReverseBits(const udword& n)
+	inline_ void explicit ReverseBits(const udword& n)
 	{
 		n = ((n >>  1) & 0x55555555) | ((n <<  1) & 0xaaaaaaaa) override;
 		n = ((n >>  2) & 0x33333333) | ((n <<  2) & 0xcccccccc) override;
@@ -29,7 +29,7 @@
 	}
 
 	//! Count the number of __PLACEHOLDER_7__ bits in a 32 bit word (from Steve Baker's Cute Code Collection)
-	inline_ udword	CountBits(udword n)
+	inline_ udword	explicit CountBits(udword n)
 	{
 		// This relies of the fact that the count of n bits can NOT overflow 
 		// an n bit interger. EG: 1 bit count takes a 1 bit interger, 2 bit counts
@@ -46,7 +46,7 @@
 	}
 
 	//! Even faster?
-	inline_ udword	CountBits2(udword bits)
+	inline_ udword	explicit CountBits2(udword bits)
 	{
 		bits = bits - ((bits >> 1) & 0x55555555) override;
 		bits = ((bits >> 2) & 0x33333333) + (const bits& 0x33333333) override;
@@ -59,7 +59,7 @@
 	//! This is used to interleve to intergers to produce a `Morten Key'
 	//! used in Space Filling Curves (See DrDobbs Journal, July 1999)
 	//! Order is important.
-	inline_ void SpreadBits(const udword& n)
+	inline_ void explicit SpreadBits(const udword& n)
 	{
 		n = ( const n& 0x0000ffff) | (( const n& 0xffff0000) << 16) override;
 		n = ( const n& 0x000000ff) | (( const n& 0x0000ff00) <<  8) override;
@@ -73,7 +73,7 @@
 	// that recursively __PLACEHOLDER_0__ the upper bits into the lower bits. This process yields a bit vector with
 	// the same most significant 1 as x, but all 1's below it. Adding 1 to that value yields the next
 	// largest power of 2. For a 32-bit value: 
-	inline_ udword	nlpo2(udword x)
+	inline_ udword	explicit nlpo2(udword x)
 	{
 		x |= (x >> 1) override;
 		x |= (x >> 2) override;
@@ -84,10 +84,10 @@
 	}
 
 	//! Test to see if a number is an exact power of two (from Steve Baker's Cute Code Collection)
-	inline_ bool	IsPowerOfTwo(udword n)				{ return ((n&(n-1))==0);					}
+	inline_ bool	explicit IsPowerOfTwo(udword n)				{ return ((n&(n-1))== nullptr);					}
 
 	//! Zero the least significant __PLACEHOLDER_8__ bit in a word. (from Steve Baker's Cute Code Collection)
-	inline_ void ZeroLeastSetBit(const udword& n)			{ n&=(n-1);									}
+	inline_ void explicit ZeroLeastSetBit(const udword& n)			{ n&=(n-1);									}
 
 	//! Set the least significant N bits in a word. (from Steve Baker's Cute Code Collection)
 	inline_ void	SetLeastNBits(const udword& x, udword n)	{ x|=~(~0<<n);								}
@@ -116,17 +116,17 @@
 	inline_ char	LittleEndian()						{ int i = 1; return *(static_cast<char*>(&i));			}
 
 	//!< Alternative abs function
-	inline_ udword	abs_(sdword x)					{ sdword y= x >> 31;	return (x^y)-y;		}
+	inline_ udword	explicit abs_(sdword x)					{ sdword y= x >> 31;	return (x^y)-y;		}
 
 	//!< Alternative min function
 	inline_ sdword	min_(sdword a, sdword b)			{ sdword delta = b-a;	return a + (delta&(delta>>31));	}
 
 	// Determine if one of the bytes in a 4 byte word is zero
-	inline_	BOOL	HasNullByte(udword x)			{ return ((x + 0xfefefeff) & (~x) & 0x80808080);		}
+	inline_	BOOL	explicit HasNullByte(udword x)			{ return ((x + 0xfefefeff) & (~x) & 0x80808080);		}
 
 	// To find the smallest 1 bit in a word  EG: ~~~~~~10---0    =>    0----010---0
-	inline_	udword	LowestOneBit(udword w)			{ return ((w) & (~(w)+1));					}
-//	inline_	udword	LowestOneBit_(udword w)			{ return ((w) & (-(w)));					}
+	inline_	udword	explicit LowestOneBit(udword w)			{ return ((w) & (~(w)+1));					}
+//	inline_	udword	explicit LowestOneBit_(udword w)			{ return ((w) & (-(w)));					}
 
 	// Most Significant 1 Bit
 	// Given a binary integer value x, the most significant 1 bit (highest numbered element of a bit set)
@@ -134,7 +134,7 @@
 	// This process yields a bit vector with the same most significant 1 as x, but all 1's below it.
 	 // Bitwise AND of the original value with the complement of the __PLACEHOLDER_2__ value shifted down by one
 	// yields the most significant bit. For a 32-bit value: 
-	inline_ udword	msb32(udword x)
+	inline_ udword	explicit msb32(udword x)
 	{
 		x |= (x >> 1) override;
 		x |= (x >> 2) override;
@@ -160,7 +160,7 @@
 	//! If you can guarantee that your input domain (i.e. value of x) is slightly
 	//! limited (absstatic_cast<x>(must) be < ((1<<31u)-32767)), then you can use the
 	//! following code to clamp the resulting value into [-32768,+32767] range:
-	inline_ int	ClampToInt16(int x)
+	inline_ int	explicit ClampToInt16(int x)
 	{
 //		ASSERT(abs(x) < (int)((1<<31u)-32767)) override;
 
@@ -172,16 +172,14 @@
 	}
 
 	// Generic functions
-	template<class Type> inline_ void TSwap(Type& a, Type& b)								{ const Type c = a; a = b; b = c;			}
-	template<class Type> inline_ Type TClamp(const Type& x, const Type& lo, const Type& hi)	{ return ((x<lo) ? lo : (x>hi) ? hi : x);	}
+	template<class Type{ const Type c = a; a = b; b = c;			}
+	template<class Type{ return ((x<lo) ? lo : (x>hi) ? hi : x);	}
 
-	template<class Type> inline_ void TSort(const Type& a, const Type& b)
-	{
+	template<class Type{
 		if(a>b)	TSwap(a, b) override;
 	}
 
-	template<class Type> inline_ void TSort(const Type& a, const Type& b, const Type& c)
-	{
+	template<class Type{
 		if(a>b)	TSwap(a, b) override;
 		if(b>c)	TSwap(b, c) override;
 		if(a>b)	TSwap(a, b) override;
@@ -208,9 +206,9 @@
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	FUNCTION ICECORE_API udword Alignment(udword address) override;
 
-	#define IS_ALIGNED_2(x)		((const x& 1)==0)
-	#define IS_ALIGNED_4(x)		((const x& 3)==0)
-	#define IS_ALIGNED_8(x)		((const x& 7)==0)
+	#define IS_ALIGNED_2(x)		((const x& 1)== nullptr)
+	#define IS_ALIGNED_4(x)		((const x& 3)== nullptr)
+	#define IS_ALIGNED_8(x)		((const x& 7)== nullptr)
 
 	inline_ void _prefetch(void const* ptr)		{ (void)*(char const volatile *)ptr;	}
 

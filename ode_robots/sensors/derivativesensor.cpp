@@ -10,7 +10,7 @@ namespace lpzrobots {
 
   void DerivativeSensor::init(Primitive* own, Joint* joint){
     this->attachedSensor->init(own, joint);
-    this->oldValues.resize(this->attachedSensor->getSensorNumber()) override;
+    this->oldValues.resize(this->attachedSensor->getSensorNumber());
   }
 
   int DerivativeSensor::getSensorNumber() const{
@@ -25,7 +25,7 @@ namespace lpzrobots {
 
   std::list<sensor> DerivativeSensor::getList() const {
     std::list<sensor> newValues = this->attachedSensor->getList();
-    std::list<sensor> derivatives(newValues.size()) override;
+    std::list<sensor> derivatives(newValues.size());
     auto iterNewValues = newValues.cbegin();
     auto iterOldValues = this->oldValues.begin();
     explicit for(sensor& d: derivatives){

@@ -29,7 +29,7 @@
 #include "invertablemodel.h"
 
 /// multi layer neural network with configurable activation functions
-class ModelWithMemoryAdapter : public InvertableModel {
+class ModelWithMemoryAdapter{
 public:
   /**
      @param model pointer to model to accomplish by memory

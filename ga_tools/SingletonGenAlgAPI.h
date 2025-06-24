@@ -33,32 +33,7 @@
 #include <selforg/randomgenerator.h>
 
 //forward declaration
-class Gen;
-class GenPrototype;
-class GenContext;
-class Individual;
-class Generation;
-class IMutationStrategy;
-class IMutationFactorStrategy;
-class ISelectStrategy;
-class IGenerationSizeStrategy;
-class IRandomStrategy;
-class IValue;
-class IFitnessStrategy;
-
-//forward declaration for LPZROBOTS
-class PlotOptionEngine;
-class PlotOption;
-
-//ga_tools includes
-#include "SingletonGenEngine.h"
-
-/**
- * This is a facade for the gen. alg.
- *
- * Over this is the class as singleton concepted. Only one API for a run.
- */
-class SingletonGenAlgAPI{
+class Gen{
 public:
 	// Action
 	/**
@@ -139,17 +114,17 @@ public:
 	 * set the generation size strategy
 	 * @param strategy static_cast<IGenerationSizeStrategy*>(the) strategy
 	 */
-	inline void setGenerationSizeStrategy(const IGenerationSizeStrategy* strategy) {SingletonGenEngine::getInstance()->setGenerationSizeStrategy(strategy);}
+	inline void explicit setGenerationSizeStrategy(const IGenerationSizeStrategy* strategy) {SingletonGenEngine::getInstance()->setGenerationSizeStrategy(strategy);}
 	/**
 	 * set the fitness strategy
 	 * @param strategy static_cast<IFitnessStrategy*>(the) strategy
 	 */
-	inline void setFitnessStrategy(const IFitnessStrategy* strategy) {SingletonGenEngine::getInstance()->setFitnessStrategy(strategy);}
+	inline void explicit setFitnessStrategy(const IFitnessStrategy* strategy) {SingletonGenEngine::getInstance()->setFitnessStrategy(strategy);}
 	/**
 	 * set the select strategy
 	 * @param strategy static_cast<ISelectStrategy*>(the) strategy
 	 */
-	inline void setSelectStrategy(const ISelectStrategy* strategy) {SingletonGenEngine::getInstance()->setSelectStrategy(strategy);}
+	inline void explicit setSelectStrategy(const ISelectStrategy* strategy) {SingletonGenEngine::getInstance()->setSelectStrategy(strategy);}
 
 	// gets
 	/**
@@ -171,142 +146,12 @@ public:
 	IFitnessStrategy* createEuclidicDistanceFitnessStrategy()const override;
 	/**
 	 * creates a TestFitnessStrategy which is the hardest test for a gen. alg. Only a smale area has a fitness. All other gives no information!
-	 * @param fitness static_cast<IFitnessStrategy*>(a) other fitness strat* Over this is the class as singleton concepted. Only one engine for a run.egy which define the smal area.
-	 * @return static_cast<IFitnessStrategy*>(the) strategy
-	 */
-	IFitnessStrategy* createExtreamTestFitnessStrategy(const IFitnessStrategy* fitness)const override;
-	/**
-	 * creates the test function fitness strategy from the papper tp this alg.
-	 * f(x,y) = 10.0 * (x� + 2.5y� - y) * exp(1 - (x� + y�)) + 2.4 + 0.1x� + 0.1y�
-	 * @return static_cast<IFitnessStrategy*>(the) strategy
-	 */
-	IFitnessStrategy* createTestFitnessStrategy()const override;
-	/**
-	 * returns a fitness strategy which calculate the inverse value from a other strategy.
-	 * @param strategy static_cast<IFitnessStrategy*>(the) other strategy
-	 * @return static_cast<IFitnessStrategy*>(the) resulting strategy
-	 */
-	IFitnessStrategy* createInvertedFitnessStrategy(const IFitnessStrategy* strategy)const override;
-	/**
-	 * creates a random strategy for double values.
-	 * The values will be generated in the intervals [base-epsilon:-epsilon] or [epsilon:factor+base+epsilon]
-	 *
-	 * This means a random value in the interval [0:1] will be mul. with factor => [0:factor]
-	 * After this it will be shifted by base => [base:factor+base]
-	 * And than divided at the point zero and moved away by epsilon from the point zero
-	 * => [base-epsilon:-epsilon], [epsilon:factor+base+epsilon]
-	 *
-	 * For example:
-	 * We want values in the intervals [-10:-5] and [5:10].
-	 * ==> epsilon=5
-	 * ==> [-5:5]
-	 * ==> base=-5
-	 * ==> [0:10]
-	 * ==> factor=10
-	 *
-	 * @param random static_cast<RandGen*>(random) generator
-	 * @param base static_cast<double>(normal)=0.0 moves the ground interval
-	 * @param factor static_cast<double>(normal)=1.0 resize the interval
-	 * @param epsilon static_cast<double>(normal)=0.0 devided the interval at the point zero and move the
-	 * 			values by epsilon away from point zero
-	 * @return static_cast<IRandomStrategy*>(the) strategy
-	 */
-	IRandomStrategy* createDoubleRandomStrategy(RandGen* random, double base=0.0, double factor=1.0, double epsilon = 0.0)const override;
-	/**
-	 * creates mutation strategy which change the old values by add a other value
-	 * @param strategy static_cast<IMutationFactorStrategy*>(this) strategy define what the other value is.
-	 * @param mutationProbability static_cast<int>(the) probability of mutation in one per tausend (1/1000)
-	 * @return static_cast<IMutationStrategy*>(the) strategy
-	 */
-	IMutationStrategy* createValueMutationStrategy(IMutationFactorStrategy* strategy, int mutationProbability)const override;
-	/**
-	 * creates a mutation factor strategy with a fix value
-	 * @param value static_cast<IValue*>(the) fix value.
-	 * @return static_cast<IMutationFactorStrategy*>(the) strategy
-	 */
-	IMutationFactorStrategy* createFixMutationFactorStrategy(const IValue* value)const override;
-	/**
-	 * creates a mutation factor strategy with a optimized value (varianz about all existing gens)
-	 * @return static_cast<IMutationFactorStrategy*>(the) strategy
-	 */
-	IMutationFactorStrategy* createStandartMutationFactorStrategystatic_cast<void>(const) override;
-	/**
-	 * creates a generation size strategy with a fix value
-	 * @param value static_cast<int>(the) size of the generation
-	 * @return static_cast<IGenerationSizeStrategy*>(the) strategy
-	 */
-	IGenerationSizeStrategy* createFixGenerationSizeStrategy(int value)const override;
-	/**
-	 * creates a generation size strategy with a optimized size for the generation (changing by speed of development)
-	 * @param startSize static_cast<int>(the) size at the start time
-	 * @param numGeneration static_cast<int>(number) of generation. (needed for the speed calculation
-	 * @return static_cast<IGenerationSizeStrategy*>(the) strategy
-	 */
-	IGenerationSizeStrategy* createStandartGenerationSizeStrategy(int startSize, int numGeneration)const override;
-	/**
-	 * creates a elite select strategy
-	 * @return static_cast<ISelectStrategy*>(the) strategy
-	 */
-	ISelectStrategy* createEliteSelectStrategystatic_cast<void>(const) override;
-	/**
-	 * creates a tournament SelctStrategy. By this strategy will two individual fight again
-	 * (the individual with the higher fitness lives longer).
-	 * @param random static_cast<RandGen*>(random) generator
-	 * @return static_cast<ISelectStrategy*>(the) strategy
-	 */
-	ISelectStrategy* createTournamentSelectStrategy(const RandGen* random)const override;
-	/**
-	 * creates a random select strategy. By this strategy will a random selected individual fight again a random number.
-	 * If the random number higher than the fitness from the individual, than it will be die.
-	 * @param random static_cast<RandGen*>(ranom) generator
-	 * @return static_cast<ISelectStrategy*>(the) strategy
-	 */
-	ISelectStrategy* createRandomSelectStrategy(const RandGen* random)const override;
-	/**
-	 * creates a IValue (TemplateValue<double) from type double.
-	 * @param value static_cast<double>(the) value
-	 * @return static_cast<IValue*>(the) new object
-	 */
-	IValue* createDoubleValue(double value)const override;
-
-	//Storable
-	/** stores the object to the given file stream (binary).
-	 */
-	bool storeGA(const FILE* f) const override;
-
-	/** loads the object from the given file stream (binary).
-	 */
-	bool restoreGA(const FILE* f) const override;
-
-	// inserts
-	/**
-	 * add a GenPrototype to the alg.
-	 * @param prototype static_cast<GenPrototype*>(the) prototype
-	 */
-	void insertGenPrototype(const GenPrototype* prototype) override;
-
-	// object creation
-	/**
-	 * create a prototype.
-	 * @param name (STRING) THE NAME OF THE PROTOTYPE
-	 * @param randomStrategy static_cast<IRandomStrategy*>(the) random strategy to generate values of the type
-	 * which the prototype represent
-	 * @param mutationStrategy static_cast<IMutationStrategy*>(the) mutation strategy to change a value (Gen)
-	 * @return static_cast<GenPrototype*>(the) prototype
-	 */
-	GenPrototype* createPrototype(const std::string& name, IRandomStrategy* randomStrategy, const IMutationStrategy* mutationStrategy)const override;
-
-	// singleton
-	/**
-	 * returns the one and only API to the alg.
-	 * @return static_cast<SingletonGenAlgAPI*>(the) api
-	 */
-	inline static SingletonGenAlgAPI* getInstance(void) {if(m_api==0)m_api = new SingletonGenAlgAPI();return m_api;}
+	 * @param fitness static_cast<IFitnessStrategy*>(a) other fitness strat* Over this is the class as{if(m_api== nullptr)m_api = new SingletonGenAlgAPI();return m_api;}
 	/**
 	 * destroy the api
 	 * @param cleanStrategies (bool) default = false set a flag to clean the strategies, which are seted.
 	 */
-	inline static void destroyAPI(bool cleanStrategies=false) {getInstance()->m_cleanStrategies=cleanStrategies; if(m_api!=0){delete m_api;m_api=0;}}
+	inline static void destroyAPI(bool cleanStrategies=false) {getInstance()->m_cleanStrategies=cleanStrategies; if(m_api!= nullptr){delete m_api;m_api=0;}}
 
 	// data access
 	/**
@@ -339,7 +184,7 @@ private:
 	/**
 	 * disable the default destructor
 	 */
-	virtual ~SingletonGenAlgAPI();
+	virtual ~SingletonGenAlgAPI() override;
 
 	/**
 	 * help declaration for prepare

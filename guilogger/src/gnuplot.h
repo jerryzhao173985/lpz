@@ -20,7 +20,7 @@
     in PlotInfo structure.
 */
 
-class Gnuplot {
+class Gnuplot{
 public: 
   Gnuplot() : plotInfo(0), windowNumber(0) {} 
   Gnuplot(const PlotInfo* plotinfo, int windowNumber = 0);
@@ -36,7 +36,7 @@ public:
 
   /** send arbitrary command to gnuplot.
       like "set zeroaxis" or other stuff */
-  void command(const QString& cmd);
+  void explicit command(const QString& cmd);
 
 
   /** make gnuplot plot channels */

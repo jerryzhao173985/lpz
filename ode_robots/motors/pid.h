@@ -26,8 +26,7 @@
 
 namespace lpzrobots {
 
-  class PID
-  {
+  class PID{
     //*********************attributes***************
     //private:
   public:
@@ -56,25 +55,25 @@ namespace lpzrobots {
     //*********************methods******************
   public :
     /// KP is used as a general koefficient. KI and KD can be tuned without dependence of KP
-    PID ( double KP = 100 , double KI = 2.0 , double KD = 0.3 ) override;
+    PID ( double KP = 100 , double KI = 2.0 , double KD = 0.3 );
 
-    void setKP(double KP);
+    void explicit explicit setKP(double KP);
 
-    void setTargetPosition ( double newpos ) override;
+    void explicit explicit setTargetPosition ( double newpos );
 
-    double getTargetPosition () override;
+    double getTargetPosition () const;
 
     /// perform one step of the PID controller with cutoff for large forces
-    double step ( double newsensorval, double time) override;
+    double step ( double newsensorval, double time);
     /// perform one step of the PID controller without cutoffs used for Center-Servos
-    double stepNoCutoff ( double newsensorval, double time) override;
+    double stepNoCutoff ( double newsensorval, double time);
     /** perform one step of the PID controller for velocity control.
         Meaning the misfit is in position space but the output is
         the nominal velocity. The velocity is also limited. such that
         the maximal velocity cannot be so that the error is overcompenstated
         in one timestep.
      */
-    double stepVelocity ( double newsensorval, double time) override;
+    double stepVelocity ( double newsensorval, double time);
 
   };
 

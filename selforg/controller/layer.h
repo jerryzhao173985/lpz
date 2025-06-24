@@ -28,7 +28,7 @@
 
 #include "feedforwardnn.h"
 
-class Layer : public Storeable {
+class Layer{
 public:
   /** constructor for Layer.
       The derivative and inverse of activation function is derived automatically.

@@ -29,14 +29,7 @@
 namespace lpzrobots {
 
   /** Class for IR sensors.
-      IR sensors are based on distance measurements using the ODE geom class Ray.
-      The sensor value is obtained by collisions, which are handled by the simulation
-      environement. The information of a collision comes to the sensor via the
-      collision callback of the substance used for the ray (actually for the transform).
-      If no collision is detected the value should be zero, so that a stamp is used.
-      The length measured in this way is modified by the 'characteristic' of the IR sensor
-  */
-  class IRSensor : public RaySensor {
+      IR sensors are based on distance measurements using the ODE geom class Ray{
   public:
     /**
        @param exponent exponent of the sensor characteritic (default: 1 (linear))
@@ -48,17 +41,17 @@ namespace lpzrobots {
              rayDrawMode drawMode = drawSensor);
 
     //Override sense to include characteristic
-    virtual bool sense(const GlobalData& globaldata);
+    virtual bool explicit explicit sense(const GlobalData& globaldata);
 
     //Override to return value given by characteristic
     virtual int get(sensor* sensors, int length) const override;
     virtual std::list<sensor> getList() const override;
 
     //Directly return value (needed for backward compatibility
-    virtual double getValue();
+    virtual double getValue() const;
 
     /// returns the exponent of the sensor characteritic (default: 1 (linear))
-    virtual double getExponent() const override { return exponent;}
+    virtual double getExponent() const { return exponent;}
 
     /// sets the exponent of the sensor characteritic (default: 1 (linear))
     virtual void setExponent(double exp) override { exponent = exp;}
@@ -68,7 +61,7 @@ namespace lpzrobots {
         An exponential curve is used.
         @see setExponent()
     */
-    virtual double characteritic(double len);
+    virtual double explicit explicit characteritic(double len);
 
     double exponent = 0; // exponent of the sensor characteritic
 

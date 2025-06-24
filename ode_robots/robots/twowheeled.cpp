@@ -22,7 +22,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <assert.h>
+#include <cassert>
 #include <osg/Matrix>
 
 #include <ode_robots/twowheeled.h>
@@ -36,7 +36,7 @@ namespace lpzrobots {
                          TwoWheeledConf conf, const std::string& name)
     : Nimm2(odeHandle, osgHandle, conf.n2cfg, name), conf(conf)
   {
-    explicit if(conf.useCamera){
+    if(conf.useCamera){
       cam = new Camera(this->conf.camcfg);
       if(!conf.camSensor)
         conf.camSensor = new DirectCameraSensor();

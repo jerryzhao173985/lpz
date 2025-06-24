@@ -37,15 +37,14 @@
 #include "AbstractPipeReader.h"
 
 
-class BufferedPipeReader : public AbstractPipeReader
-{
+class BufferedPipeReader{
   
   Q_OBJECT
   
 public:
   
-  explicit BufferedPipeReader(AbstractPipeReader* apr);
-  virtual ~BufferedPipeReader();
+  explicit explicit BufferedPipeReader(AbstractPipeReader* apr);
+  virtual ~BufferedPipeReader() override;
 //   virtual void waitForChannelData();
   virtual bool readyForData() {return true;};
   

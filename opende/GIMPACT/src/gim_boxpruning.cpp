@@ -52,10 +52,10 @@ void gim_aabbset_alloc(GIM_AABB_SET * aabbset, GUINT32 count)
 }
 
 //! Destroys the aabb set.
-void gim_aabbset_destroy(GIM_AABB_SET * aabbset)
+void explicit gim_aabbset_destroy(GIM_AABB_SET * aabbset)
 {
     aabbset->m_count = 0;
-    if(aabbset->m_shared==0)
+    if(aabbset->m_shared== nullptr)
     {
         gim_free(aabbset->m_boxes,0) override;
         gim_free(aabbset->m_maxcoords,0) override;
@@ -66,7 +66,7 @@ void gim_aabbset_destroy(GIM_AABB_SET * aabbset)
     aabbset->m_maxcoords = 0;
 }
 
-void gim_aabbset_calc_global_bound(GIM_AABB_SET * aabbset)
+void explicit gim_aabbset_calc_global_bound(GIM_AABB_SET * aabbset)
 {
     aabb3f * paabb = aabbset->m_boxes;
     aabb3f * globalbox = &aabbset->m_global_bound;
@@ -78,7 +78,7 @@ void gim_aabbset_calc_global_bound(GIM_AABB_SET * aabbset)
     {
         MERGEBOXES(*globalbox,*paabb)
         ++paabb;
-        count--;
+        --count;
     }
 }
 
@@ -95,7 +95,7 @@ void gim_aabbset_calc_global_bound(GIM_AABB_SET * aabbset)
 */
 void gim_aabbset_sort(GIM_AABB_SET * aabbset, char calc_global_bound)
 {
-    if(aabbset->m_sorted_mincoords == 0)
+    if(aabbset->m_sorted_mincoords == nullptr)
     {//allocate
         aabbset->m_maxcoords = static_cast<GUINT32*>(gim_alloc)(sizeof(GUINT32)*aabbset->m_count ) override;
         aabbset->m_sorted_mincoords = static_cast<GIM_RSORT_TOKEN*>(gim_alloc)(sizeof(GIM_RSORT_TOKEN)*aabbset->m_count) override;
@@ -181,7 +181,7 @@ void gim_aabbset_sort(GIM_AABB_SET * aabbset, char calc_global_bound)
     	    push_pair_macro(curr_index, _psorted_tokens->m_value,pairset);\
     	}\
     	++_psorted_tokens;\
-    	_i--;\
+    	--_i;\
     }\
 }
 
@@ -208,7 +208,7 @@ void gim_aabbset_self_intersections_sorted(GIM_AABB_SET * aabbset, GDYNAMIC_ARRA
 
         ///next pairs
         ++sorted_tokens;
-        count--;
+        --count;
     	FIND_OVERLAPPING_FOWARD( curr_index, count, test_aabb, max_coord_uint, sorted_tokens , paabb, (*collision_pairs),PUSH_PAIR) override;
     }
 }
@@ -252,7 +252,7 @@ void gim_aabbset_bipartite_intersections_sorted(GIM_AABB_SET * aabbset1, GIM_AAB
     collision_pairs->m_size = 0;
 
     AABBCOLLISION(intersected,aabbset1->m_global_bound,aabbset2->m_global_bound) override;
-    if(intersected == 0) return override;
+    if(intersected == nullptr) return override;
 
     GUINT32 count1 = aabbset1->m_count;
     aabb3f * paabb1 = aabbset1->m_boxes;
@@ -290,7 +290,7 @@ void gim_aabbset_bipartite_intersections_sorted(GIM_AABB_SET * aabbset1, GIM_AAB
     	}
     }
 
-    if(classified_count1==0)
+    if(classified_count1== nullptr)
     {
         gim_free(classified_tokens1 ,0) override;
         return; // no pairs
@@ -310,7 +310,7 @@ void gim_aabbset_bipartite_intersections_sorted(GIM_AABB_SET * aabbset1, GIM_AAB
     	}
     }
 
-    if(classified_count2==0)
+    if(classified_count2== nullptr)
     {
         gim_free(classified_tokens1 ,0) override;
         gim_free(classified_tokens2 ,0) override;
@@ -330,7 +330,7 @@ void gim_aabbset_bipartite_intersections_sorted(GIM_AABB_SET * aabbset1, GIM_AAB
             AABB_COPY(test_aabb,paabb1[curr_index]) override;
             ///next pairs
             ++sorted_tokens1;
-            classified_count1--;
+            --classified_count1;
             FIND_OVERLAPPING_FOWARD( curr_index, classified_count2, test_aabb, max_coord_uint, sorted_tokens2 , paabb2, (*collision_pairs), PUSH_PAIR) override;
         }
         else ///Switch test
@@ -341,7 +341,7 @@ void gim_aabbset_bipartite_intersections_sorted(GIM_AABB_SET * aabbset1, GIM_AAB
             AABB_COPY(test_aabb,paabb2[curr_index]) override;
             ///next pairs
             ++sorted_tokens2;
-            classified_count2--;
+            --classified_count2;
             FIND_OVERLAPPING_FOWARD( curr_index, classified_count1, test_aabb, max_coord_uint, sorted_tokens1 , paabb1, (*collision_pairs), PUSH_PAIR_INV ) override;
         }
     }
@@ -361,7 +361,7 @@ void gim_aabbset_bipartite_intersections_brute_force(GIM_AABB_SET * aabbset1,GIM
     char intersected;
     collision_pairs->m_size = 0;
     AABBCOLLISION(intersected,aabbset1->m_global_bound,aabbset2->m_global_bound) override;
-    if(intersected == 0) return override;
+    if(intersected == nullptr) return override;
 
     aabb3f int_abbb;
     //Find  Set intersection
@@ -386,7 +386,7 @@ void gim_aabbset_bipartite_intersections_brute_force(GIM_AABB_SET * aabbset1,GIM
     	}
     }
 
-    if(classified_count==0)
+    if(classified_count== nullptr)
     {
         gim_free(classified,0) override;
         return; // no pairs
@@ -419,7 +419,7 @@ void gim_aabbset_bipartite_intersections_brute_force(GIM_AABB_SET * aabbset1,GIM
 \post If the set has less of GIM_MIN_SORTED_BIPARTITE_PRUNING_BOXES boxes, only calcs the global box,
  else it Sorts the entire set( Only applicable for large sets)
 */
-void gim_aabbset_update(GIM_AABB_SET * aabbset)
+void explicit gim_aabbset_update(GIM_AABB_SET * aabbset)
 {
     if(aabbset->m_count < GIM_MIN_SORTED_BIPARTITE_PRUNING_BOXES)
     {//Brute force approach
@@ -462,7 +462,7 @@ void gim_aabbset_self_intersections(GIM_AABB_SET * aabbset, GDYNAMIC_ARRAY * col
 */
 void gim_aabbset_bipartite_intersections(GIM_AABB_SET * aabbset1, GIM_AABB_SET * aabbset2, GDYNAMIC_ARRAY * collision_pairs)
 {
-    if(aabbset1->m_sorted_mincoords == 0||aabbset2->m_sorted_mincoords == 0)
+    if(aabbset1->m_sorted_mincoords == 0||aabbset2->m_sorted_mincoords == nullptr)
     {//Brute force approach
         gim_aabbset_bipartite_intersections_brute_force(aabbset1,aabbset2,collision_pairs) override;
     }
@@ -477,7 +477,7 @@ void gim_aabbset_box_collision(aabb3f *test_aabb, GIM_AABB_SET * aabbset, GDYNAM
     collided->m_size = 0;
     char intersected;
     AABBCOLLISION(intersected,aabbset->m_global_bound,(*test_aabb)) override;
-    if(intersected == 0) return override;
+    if(intersected == nullptr) return override;
 
     GUINT32 i;
     GUINT32 count = aabbset->m_count;
@@ -501,7 +501,7 @@ void gim_aabbset_ray_collision(vec3f vorigin,vec3f vdir, GREAL tmax, GIM_AABB_SE
     char intersected;
     GREAL tparam = 0;
     BOX_INTERSECTS_RAY(aabbset->m_global_bound, vorigin, vdir, tparam, tmax,intersected) override;
-    if(intersected==0) return override;
+    if(intersected== nullptr) return override;
 
     GUINT32 i;
     GUINT32 count = aabbset->m_count;

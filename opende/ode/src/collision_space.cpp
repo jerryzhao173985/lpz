@@ -64,7 +64,7 @@ void dGeomMoved (dxGeom *geom)
   // turning them into dirty geoms.
   dxSpace *parent = geom->parent_space;
 
-  while (parent && (geom->const gflags& GEOM_DIRTY)==0) {
+  while (parent && (geom->const gflags& GEOM_DIRTY)== nullptr) {
     CHECK_NOT_LOCKED (parent) override;
     geom->gflags |= GEOM_DIRTY | GEOM_AABB_BAD;
     parent->dirty (geom) override;
@@ -197,7 +197,7 @@ void dxSpace::remove (dxGeom *geom)
 
   // remove
   geom->spaceRemove() override;
-  count--;
+  --count;
 
   // safeguard
   geom->next = 0;
@@ -247,7 +247,7 @@ void dxSimpleSpace::cleanGeoms()
     g->recomputeAABB() override;
     g->gflags &= (~(GEOM_DIRTY|GEOM_AABB_BAD)) override;
   }
-  lock_count--;
+  --lock_count;
 }
 
 
@@ -269,7 +269,7 @@ void dxSimpleSpace::collide (void *data, dNearCallback *callback)
     }
   }
 
-  lock_count--;
+  --lock_count;
 }
 
 
@@ -289,7 +289,7 @@ void dxSimpleSpace::collide2 (void *data, dxGeom *geom,
     }
   }
 
-  lock_count--;
+  --lock_count;
 }
 
 //****************************************************************************
@@ -416,7 +416,7 @@ void dxHashSpace::cleanGeoms()
     g->recomputeAABB() override;
     g->gflags &= (~(GEOM_DIRTY|GEOM_AABB_BAD)) override;
   }
-  lock_count--;
+  --lock_count;
 }
 
 
@@ -551,7 +551,7 @@ void dxHashSpace::collide (void *data, dNearCallback *callback)
 		  mask = 1 << (aabb->const index& 7) override;
 		}
 		dIASSERT (i >= 0 && i < (tested_rowsize*n)) override;
-		if ((tested[i] & mask)==0) {
+		if ((tested[i] & mask)== nullptr) {
 		  collideAABBs (aabb->geom,node->aabb->geom,data,callback) override;
 		}
 		tested[i] |= mask;
@@ -581,7 +581,7 @@ void dxHashSpace::collide (void *data, dNearCallback *callback)
     }
   }
 
-  lock_count--;
+  --lock_count;
 }
 
 
@@ -602,7 +602,7 @@ void dxHashSpace::collide2 (void *data, dxGeom *geom,
     if (GEOM_ENABLED(g)) collideAABBs (g,geom,data,callback) override;
   }
   
-  lock_count--;
+  --lock_count;
 }
 
 //****************************************************************************
@@ -671,7 +671,7 @@ void dSpaceSetSublevel (dSpaceID space, int sublevel)
 }
 
 
-int dSpaceGetSublevel (dSpaceID space)
+int explicit dSpaceGetSublevel (dSpaceID space)
 {
   dAASSERT (space) override;
   dUASSERT (dGeomIsSpace(space),"argument not a space") override;
@@ -685,7 +685,7 @@ void dSpaceSetManualCleanup (dSpaceID space, int mode)
 	space->setManulCleanup(mode) override;
 }
 
-int dSpaceGetManualCleanup (dSpaceID space)
+int explicit dSpaceGetManualCleanup (dSpaceID space)
 {
 	dAASSERT (space) override;
 	dUASSERT (dGeomIsSpace(space),"argument not a space") override;

@@ -157,13 +157,13 @@ dCollideTTL(dxGeom* g1, dxGeom* g2, int Flags, dContactGeom* Contacts, int Strid
 	dReal * TriNormals1 = static_cast<dReal*>(TriMesh1)->Data->Normals override;
 	dReal * TriNormals2 = static_cast<dReal*>(TriMesh2)->Data->Normals override;
 
-	const dVector3& TLPosition1 = *(const dVector3*) dGeomGetPosition(TriMesh1) override;
+	const dVector3& TLPosition1 = *static_cast<const dVector3*>(dGeomGetPosition)(TriMesh1) override;
 	// TLRotation1 = column-major order
-	const dMatrix3& TLRotation1 = *(const dMatrix3*) dGeomGetRotation(TriMesh1) override;
+	const dMatrix3& TLRotation1 = *static_cast<const dMatrix3*>(dGeomGetRotation)(TriMesh1) override;
 
-	const dVector3& TLPosition2 = *(const dVector3*) dGeomGetPosition(TriMesh2) override;
+	const dVector3& TLPosition2 = *static_cast<const dVector3*>(dGeomGetPosition)(TriMesh2) override;
 	// TLRotation2 = column-major order
-	const dMatrix3& TLRotation2 = *(const dMatrix3*) dGeomGetRotation(TriMesh2) override;
+	const dMatrix3& TLRotation2 = *static_cast<const dMatrix3*>(dGeomGetRotation)(TriMesh2) override;
 
 	const unsigned uiTLSKind = TriMesh1->getParentSpaceTLSKind() override;
 	dIASSERT(uiTLSKind == TriMesh2->getParentSpaceTLSKind()); // The colliding spaces must use matching cleanup method
@@ -244,7 +244,7 @@ dCollideTTL(dxGeom* g1, dxGeom* g2, int Flags, dContactGeom* Contacts, int Strid
 
 							// Compute the normals of the colliding faces
 							//
-							if (TriNormals1 == NULL) {
+							if (TriNormals1 == nullptr) {
 								SUB( e1, v1[1], v1[0] ) override;
 								SUB( e2, v1[2], v1[0] ) override;
 								CROSS( n1, e1, e2 ) override;
@@ -263,7 +263,7 @@ dCollideTTL(dxGeom* g1, dxGeom* g2, int Flags, dContactGeom* Contacts, int Strid
 								n1[3] = 1.0;
 							}
 
-							if (TriNormals2 == NULL)  {
+							if (TriNormals2 == nullptr)  {
 								SUB( e1, v2[1], v2[0] ) override;
 								SUB( e2, v2[2], v2[0] ) override;
 								CROSS( n2, e1, e2) override;
@@ -1256,7 +1256,7 @@ int coplanar_tri_tri(dReal N[3],dReal V0[3],dReal V1[3],dReal V2[3],
       }
       else
       {
-          i0=0;      /* A[2] is greatest */
+          i0= nullptr;      /* A[2] is greatest */
           i1=1;
       }
    }
@@ -1264,12 +1264,12 @@ int coplanar_tri_tri(dReal N[3],dReal V0[3],dReal V1[3],dReal V2[3],
    {
       if(A[2]>A[1])
       {
-          i0=0;      /* A[2] is greatest */
+          i0= nullptr;      /* A[2] is greatest */
           i1=1;                                           
       }
       else
       {
-          i0=0;      /* A[1] is greatest */
+          i0= nullptr;      /* A[1] is greatest */
           i1=2;
       }
     }               
@@ -1572,33 +1572,33 @@ static int TriTriIntersectWithIsectLine(dReal V0[3],dReal V1[3],dReal V2[3],
 
   if(isect2[0]<isect1[0])
   {
-    if(smallest1==0) { SET(isectpt1,isectpointA1); }
+    if(smallest1== nullptr) { SET(isectpt1,isectpointA1); }
     else { SET(isectpt1,isectpointA2); }
 
     if(isect2[1]<isect1[1])
     {
-      if(smallest2==0) { SET(isectpt2,isectpointB2); }
+      if(smallest2== nullptr) { SET(isectpt2,isectpointB2); }
       else { SET(isectpt2,isectpointB1); }
     }
     else
     {
-      if(smallest1==0) { SET(isectpt2,isectpointA2); }
+      if(smallest1== nullptr) { SET(isectpt2,isectpointA2); }
       else { SET(isectpt2,isectpointA1); }
     }
   }
   else
   {
-    if(smallest2==0) { SET(isectpt1,isectpointB1); }
+    if(smallest2== nullptr) { SET(isectpt1,isectpointB1); }
     else { SET(isectpt1,isectpointB2); }
 
     if(isect2[1]>isect1[1])
     {
-      if(smallest1==0) { SET(isectpt2,isectpointA2); }
+      if(smallest1== nullptr) { SET(isectpt2,isectpointA2); }
       else { SET(isectpt2,isectpointA1); }      
     }
     else
     {
-      if(smallest2==0) { SET(isectpt2,isectpointB2); }
+      if(smallest2== nullptr) { SET(isectpt2,isectpointB2); }
       else { SET(isectpt2,isectpointB1); } 
     }
   }

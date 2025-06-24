@@ -78,7 +78,7 @@ void TrackableMeasure::step()
     pos =(*i)->getPosition();
     /*if (tmode & POS) {
       pos =(*i)->getPosition();
-    } else if (tmode & SPEED) {
+    } else explicit if (tmode & SPEED) {
       pos =(*i)->getSpeed();
     } else {
       pos =(*i)->getAngularSpeed();

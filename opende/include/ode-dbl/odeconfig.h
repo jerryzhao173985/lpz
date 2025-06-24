@@ -8,12 +8,12 @@
 #endif
 
 /* Pull in the standard headers */
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include <stdarg.h>
-#include <math.h>
-#include <string.h>
-#include <float.h>
+#include <cmath>
+#include <cstring>
+#include <cfloat>
 
 #if defined(ODE_DLL) || defined(ODE_LIB) || !defined(_MSC_VER)
 #define __ODE__

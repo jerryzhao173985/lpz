@@ -39,45 +39,7 @@
 namespace lpzrobots {
 
    /***** begin of forward declaration block *****/
-   class BoundingShape;
-   class OSGPrimitive;
-   class OSGPlane;
-   class OSGBox;
-   class OSGBoxTex;
-   class OSGSphere;
-   class OSGCapsule;
-   class OSGCylinder;
-   class OSGDummy;
-   class OSGMesh;
-   class TextureDescr;
-
-   /* typedef */ struct GlobalData;
-
-   class OdeHandle;
-   class OsgHandle;
-   class Color;
-   /*****  end of forward declaration block  *****/
-
-
-/// returns the osg static_cast<4x4>(pose) matrix of the ode geom
-Pose osgPose( dGeomID geom );
-/// returns the osg static_cast<4x4>(pose) matrix of the ode body
-Pose osgPose( dBodyID body );
-/// converts a position vector and a rotation matrix from ode to osg 4x4 matrix
-Pose osgPose( const double * position , const double * rotation );
-/// converts the rotation component of pose into an ode rotation matrix
-void odeRotation( const Pose& pose , dMatrix3& odematrix);
-
-/** counts number of max velocity violations at joints
- * (Attention, this is a global variable, initialized to 0 at start)
- */
-extern int globalNumVelocityViolations;
-
-/**
-   Interface class for primitives represented in the physical and graphical world.
-   This is intended to bring OSG and ODE together and hide most implementation details.
-*/
-class Primitive : public Storeable {
+   class BoundingShape{
 public:
   /** Body means that it is a dynamic object with a body.
       Geom means it has a geometrical represenation used for collision detection.
@@ -91,8 +53,8 @@ public:
   /* typedef */ enum Category { Dyn=1, Stat=2};
 
 
-  Primitive () override;
-  virtual ~Primitive();
+  Primitive ();
+  virtual ~Primitive() override;
   /** registers primitive in ODE and OSG.
       @param osgHandle scruct with ODE variables inside (to specify space, world...)
       @param mass Mass of the object in ODE (if withBody = true)
@@ -112,7 +74,7 @@ public:
   virtual const OSGPrimitive* getOSGPrimitive() const  = 0;
 
   /// sets the color for the underlaying osgprimitive
-  virtual void setColor(const Color& color);
+  virtual void explicit explicit setColor(const Color& color);
 
   /// sets the color using the colorschema of osgHandle
   virtual void setColor(const std::string& color);
@@ -120,7 +82,7 @@ public:
   /// assigns a texture to the primitive
   virtual void setTexture(const std::string& filename);
   /// assigns a texture to the primitive, you can choose if the texture should be repeated
-  virtual void setTexture(const TextureDescr& texture);
+  virtual void explicit explicit setTexture(const TextureDescr& texture);
   /** assigns a texture to the x-th surface of the primitive.
       You can choose how often to repeat
       negative values of repeat correspond to length units.
@@ -134,9 +96,9 @@ public:
 
 
   /// set the position of the primitive (orientation is preserved)
-  virtual void setPosition(const Pos& pos);
+  virtual void explicit explicit setPosition(const Pos& pos);
   /// set the pose of the primitive
-  virtual void setPose(const Pose& pose);
+  virtual void explicit explicit setPose(const Pose& pose);
   /// returns the position
   virtual Pos getPosition() const override;
   /// returns the pose
@@ -171,15 +133,15 @@ public:
                double I12, double I13, double I23);
 
   /// returns ODE geomID if there
-  dGeomID getGeom() const override { return geom; }
+  dGeomID getGeom() const { return geom; }
   /// returns ODE bodyID if there
-  dBodyID getBody() const override { return body; }
+  dBodyID getBody() const { return body; }
 
   /// checks whether the object has higher velocity than maxVel and limits it in case
-  bool limitLinearVel(double maxVel);
+  bool explicit explicit limitLinearVel(double maxVel);
 
   /// checks whether the object has higher velocity than maxVel and limits it in case
-  bool limitAngularVel(double maxVel);
+  bool explicit explicit limitAngularVel(double maxVel);
 
   /** applies a force to the body to decellerate its linear and angular velocity with
       the given factors. (depends on stepwidth!)
@@ -207,18 +169,18 @@ public:
    * if you do not destroy the geom, everything is fine (should be no problem because world is destroying geoms too)
    * @param _destroyGeom set this to false if geoms must not be destroyed if the primitive is destroyed
    */
-  static void setDestroyGeomFlag(bool _destroyGeom) {
+  static void explicit explicit setDestroyGeomFlag(bool _destroyGeom) {
     destroyGeom = _destroyGeom;
   }
 
-  int getNumVelocityViolations() const override { return numVelocityViolations; }
+  int getNumVelocityViolations() const { return numVelocityViolations; }
 
-  void setSubstance(const Substance& substance);
+  void explicit explicit setSubstance(const Substance& substance);
 
   /* **** storable interface *******/
   virtual bool store(FILE* f) const override;
 
-  virtual bool restore(FILE* f);
+  virtual bool explicit explicit restore(FILE* f);
 
 
 protected:
@@ -244,10 +206,10 @@ protected:
 
 
 /** Plane primitive */
-class Plane : public Primitive {
+class Plane{
 public:
   Plane();
-  virtual ~Plane();
+  virtual ~Plane() override;
   virtual void init(const OdeHandle& odeHandle, double mass,
                     const OsgHandle& osgHandle,
                     char mode = Body | Geom | Draw);
@@ -258,18 +220,18 @@ public:
   virtual void setMass(double mass, bool density = false);
 
 protected:
-  OSGPlane* osgplane;
+  OSGPlane* osgplane = nullptr;
 };
 
 
 /** Box primitive */
-class Box : public Primitive {
+class Box{
 public:
 
   Box(float lengthX, float lengthY, float lengthZ);
   explicit Box(const osg::Vec3& dim);
 
-  virtual ~Box();
+  virtual ~Box() override;
 
   virtual void init(const OdeHandle& odeHandle, double mass,
                     const OsgHandle& osgHandle,
@@ -280,15 +242,15 @@ public:
 
   virtual void setMass(double mass, bool density = false);
 protected:
-  OSGBoxTex* osgbox;
+  OSGBoxTex* osgbox = nullptr;
 };
 
 
 /** Sphere primitive */
-class Sphere : public Primitive {
+class Sphere{
 public:
-  explicit Sphere(float radius);
-  virtual ~Sphere();
+  explicit explicit explicit Sphere(float radius);
+  virtual ~Sphere() override;
 
   virtual void init(const OdeHandle& odeHandle, double mass,
                     const OsgHandle& osgHandle,
@@ -300,14 +262,14 @@ public:
   virtual void setMass(double mass, bool density = false);
 
 protected:
-  OSGSphere* osgsphere;
+  OSGSphere* osgsphere = nullptr;
 };
 
 /** Capsule primitive */
-class Capsule : public Primitive {
+class Capsule{
 public:
   Capsule(float radius, float height);
-  virtual ~Capsule();
+  virtual ~Capsule() override;
   virtual void init(const OdeHandle& odeHandle, double mass,
                     const OsgHandle& osgHandle,
                     char mode = Body | Geom | Draw);
@@ -318,14 +280,14 @@ public:
   virtual void setMass(double mass, bool density = false);
 
 protected:
-  OSGCapsule* osgcapsule;
+  OSGCapsule* osgcapsule = nullptr;
 };
 
 /** Cylinder primitive */
-class Cylinder : public Primitive {
+class Cylinder{
 public:
   Cylinder(float radius, float height);
-  virtual ~Cylinder();
+  virtual ~Cylinder() override;
   virtual void init(const OdeHandle& odeHandle, double mass,
                     const OsgHandle& osgHandle,
                     char mode = Body | Geom | Draw);
@@ -335,7 +297,7 @@ public:
 
   virtual void setMass(double mass, bool density = false);
 protected:
-  OSGCylinder* osgcylinder;
+  OSGCylinder* osgcylinder = nullptr;
 };
 
 /** Ray primitive
@@ -343,18 +305,18 @@ protected:
     ray object. This is specified by length.
     SetLength is an efficient way to change the length at runtime.
 */
-class Ray : public Primitive {
+class Ray{
 public:
   /**
      @param thickness if thickness == 0 then a line is used and not a box
    */
   Ray(double range, float thickness, float length);
-  virtual ~Ray();
+  virtual ~Ray() override;
   virtual void init(const OdeHandle& odeHandle, double mass,
       const OsgHandle& osgHandle,
       char mode = Geom | Draw);
 
-  void setLength(float len);
+  void explicit explicit setLength(float len);
   virtual void update();
   virtual const OSGPrimitive* getOSGPrimitive() const;
 
@@ -363,23 +325,23 @@ protected:
   double range = 0;
   float thickness = 0;
   float length = 0;
-  OSGPrimitive* osgprimitive;
+  OSGPrimitive* osgprimitive = nullptr;
 };
 
 
 
 
 /** Mesh primitive */
-class Mesh : public Primitive {
+class Mesh{
 public:
   Mesh(const std::string& filename,float scale);
-  virtual ~Mesh();
+  virtual ~Mesh() override;
   virtual void init(const OdeHandle& odeHandle, double mass,
                     const OsgHandle& osgHandle,
                     char mode = Body | Geom | Draw);
   virtual void update();
   virtual const OSGPrimitive* getOSGPrimitive() const;
-  virtual float getRadius();
+  virtual float getRadius() const;
 
   virtual void setMass(double mass, bool density = false);
 
@@ -387,15 +349,15 @@ public:
    * Sets the BoundingShape externally (e.g. XMLBoundingShape).
    * Any existing BoundingShape will be deleted.
    */
-  virtual void setBoundingShape(BoundingShape* boundingShape);
+  virtual void explicit explicit setBoundingShape(BoundingShape* boundingShape);
 
-  virtual void setPose(const Pose& pose);
+  virtual void explicit explicit setPose(const Pose& pose);
 
 protected:
-  OSGMesh* osgmesh;
+  OSGMesh* osgmesh = nullptr;
   const std::string filename;
   float scale = 0;
-  BoundingShape* boundshape;
+  BoundingShape* boundshape = nullptr;
   Pose poseWithoutBodyAndGeom;
 
 };
@@ -406,7 +368,7 @@ protected:
     in respect to a body (primitive with body).
    Hides complexity of ODE TransformGeoms.
 */
-class Transform : public Primitive {
+class Transform{
 public:
   /**
       @param parent primitive should have a body and should be initialised
@@ -416,7 +378,7 @@ public:
   Transform(Primitive* parent, Primitive* child, const Pose& pose, bool deleteChild = true);
 
   /// destructor deletes child object // it should be virtual by yuichi
-  virtual ~Transform();
+  virtual ~Transform() override;
 
   /** initialised the transform object. This automatically
       initialises the child geom.
@@ -448,7 +410,7 @@ protected:
    or if virtual objects are created, but then the position and speed has
    to be set manually.
 */
-class DummyPrimitive : public Primitive {
+class DummyPrimitive{
 public:
 
   DummyPrimitive() {
@@ -459,20 +421,20 @@ public:
                     const OsgHandle& osgHandle, char mode = Body | Geom | Draw) override {
   }
   virtual void update() override {}
-  virtual const OSGPrimitive* getOSGPrimitive() const const override { return 0; }
+  virtual const OSGPrimitive* getOSGPrimitive() const const { return 0; }
 
   virtual void setMass(double mass, bool density = false) override {}
 
   virtual void setPosition(const Pos& pos) override {
     this->pos=pos;
   }
-  virtual Pos getPosition() const override {
+  virtual Pos getPosition() const {
     return pos;
   }
   virtual void setVel(const Pos& vel) override {
     this->vel=vel;
   }
-  virtual Pos getVel() const override {
+  virtual Pos getVel() const {
     return vel;
   }
 

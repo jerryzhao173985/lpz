@@ -32,7 +32,7 @@
 /** Implements a wiring where the motors are copied to several motors
     and the sensors are fusioned.
  */
-class CopyWiring: public AbstractWiring {
+class CopyWiring{
 public:
   typedef std::vector < std::list<int> > Assignment;
 
@@ -47,11 +47,11 @@ public:
 
   /** destructor
    */
-  virtual ~CopyWiring();
+  virtual ~CopyWiring() override;
 
   virtual void reset();
 
-  static Assignment motorFromSensorAssignment(const Assignment& sensor_assignment);
+  static Assignment explicit explicit motorFromSensorAssignment(const Assignment& sensor_assignment);
 
 protected:
 

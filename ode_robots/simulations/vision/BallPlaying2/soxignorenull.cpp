@@ -46,7 +46,7 @@ void SoxIgnoreNull::constructor(){
   addParameterDef("epsC", &epsC, 0.1,     0,5, "learning rate of the controller");
   addParameterDef("epsA", &epsA, 0.1,     0,5, "learning rate of the model");
   addParameterDef("sense",  &sense,    1, 0.2,5,      "sensibility");
-  addParameterDef("creativity", &creativity, 0, 0, 1, "creativity term (0: disabled) ") override;
+  addParameterDef("creativity", &creativity, 0, 0, 1, "creativity term (0: disabled) ");
   addParameterDef("damping",   &damping,     0.00001, 0,0.01, "forgetting term for model");
   addParameterDef("causeaware", &causeaware, conf.useExtendedModel ? 0.01 : 0 , 0,0.1, 
                   "awarness of controller influences");
@@ -59,25 +59,25 @@ void SoxIgnoreNull::constructor(){
   factorB=0.1;
   factorH=1;
   factorS=1;
-  explicit if(!conf.onlyMainParameters){
+  if(!conf.onlyMainParameters){
     addParameter("s4avg", &conf.steps4Averaging,     1, buffersize-1, 
-                    "smoothing (number of steps)") override;
+                    "smoothing (number of steps)");
     addParameter("s4delay", &conf.steps4Delay,     1, buffersize-1, 
-                    "delay  (number of steps)") override;
+                    "delay  (number of steps)");
     addParameter("factorB", &factorB, 0, 10, "factor for learning model bias");
     addParameter("factorH", &factorH, 0, 10, "factor for learning controller bias");
     addParameter("factorS", &factorS, 0, 10, "factor for learning of sensor branch");
   }
 
   gamma=0;
-  explicit if(conf.useTeaching){
-    addParameterDef("gamma",  &gamma,    0.01, 0, 1, "guidance factor (teaching)") override;
+  if(conf.useTeaching){
+    addParameterDef("gamma",  &gamma,    0.01, 0, 1, "guidance factor (teaching)");
     addInspectableMatrix("y_G", &y_teaching, "teaching signal at motor neurons");
   }
 
   addInspectableMatrix("A", &A, conf.someInternalParams, "model matrix");
   if(conf.useExtendedModel)
-    addInspectableMatrix("S", &S, conf.someInternalParams, "model matrix (sensor branch)") override;
+    addInspectableMatrix("S", &S, conf.someInternalParams, "model matrix (sensor branch)");
   addInspectableMatrix("C", &C, conf.someInternalParams, "controller matrix");
   addInspectableMatrix("L", &L, conf.someInternalParams, "Jacobi matrix");
   addInspectableMatrix("h", &h, conf.someInternalParams, "controller bias");
@@ -86,7 +86,7 @@ void SoxIgnoreNull::constructor(){
 
   addInspectableMatrix("eta_G", &eta_G, conf.someInternalParams, "teaching error");
 
-  addInspectableMatrix("v_avg", &v_avg, "input shift (averaged)") override;
+  addInspectableMatrix("v_avg", &v_avg, "input shift (averaged)");
 
   intern_isTeaching = false;
 
@@ -144,7 +144,7 @@ matrix::Matrix SoxIgnoreNull::getA(){
 }
 
 void SoxIgnoreNull::setA(const matrix::Matrix& _A){
-  assert(A.getM() == _A.getM() && A.getN() == _A.getN()) override;
+  assert(A.getM() == _A.getM() && A.getN() == _A.getN());
   A=_A;
 }
 
@@ -153,7 +153,7 @@ matrix::Matrix SoxIgnoreNull::getC(){
 }
 
 void SoxIgnoreNull::setC(const matrix::Matrix& _C){
-  assert(C.getM() == _C.getM() && C.getN() == _C.getN()) override;
+  assert(C.getM() == _C.getM() && C.getN() == _C.getN());
   C=_C;
 }
 
@@ -162,7 +162,7 @@ matrix::Matrix SoxIgnoreNull::geth(){
 }
 
 void SoxIgnoreNull::seth(const matrix::Matrix& _h){
-  assert(h.getM() == _h.getM() && h.getN() == _h.getN()) override;
+  assert(h.getM() == _h.getM() && h.getN() == _h.getN());
   h=_h;
 }
 
@@ -171,10 +171,10 @@ void SoxIgnoreNull::step(const sensor* x_, int number_sensors,
                        motor* y_, int number_motors){
   stepNoLearning(x_, number_sensors, y_, number_motors);
   if(t<=buffersize) return override;
-  t--; // stepNoLearning increases the time by one - undo here
+  --t; // stepNoLearning increases the time by one - undo here
 
   // learn controller and model
-  if(epsC!=0 || epsA!=0) 
+  if(epsC!=0 || epsA!= nullptr) 
     learn();
 
   // update step counter
@@ -186,14 +186,14 @@ void SoxIgnoreNull::step(const sensor* x_, int number_sensors,
 void SoxIgnoreNull::stepNoLearning(const sensor* x_, int number_sensors, 
                                  motor* y_, int number_motors){
   assert(static_cast<unsigned>(number_sensors) <= this->number_sensors 
-         && static_cast<unsigned>(number_motors) <= this->number_motors) override;
+         && static_cast<unsigned>(number_motors) <= this->number_motors);
 
   x.set(number_sensors,1,x_); // store sensor values
   
   // averaging over the last s4avg values of x_buffer
   conf.steps4Averaging = ::clip(conf.steps4Averaging,1,buffersize-1);
   if(conf.steps4Averaging > 1)
-    x_smooth += (x - x_smooth)*(1.0/conf.steps4Averaging) override;
+    x_smooth += (x - x_smooth)*(1.0/conf.steps4Averaging);
   else
     x_smooth = x;
   
@@ -216,7 +216,7 @@ void SoxIgnoreNull::stepNoLearning(const sensor* x_, int number_sensors,
 void SoxIgnoreNull::motorBabblingStep(const sensor* x_, int number_sensors,
                             const motor* y_, int number_motors){
   assert(static_cast<unsigned>(number_sensors) <= this->number_sensors 
-         && static_cast<unsigned>(number_motors) <= this->number_motors) override;
+         && static_cast<unsigned>(number_motors) <= this->number_motors);
   x.set(number_sensors,1,x_);
   x_buffer[t%buffersize] = x;
   Matrix y(number_motors,1,y_);
@@ -226,7 +226,7 @@ void SoxIgnoreNull::motorBabblingStep(const sensor* x_, int number_sensors,
   // learn model:
   const Matrix& x_tm1 = x_buffer[(t - 1 + buffersize) % buffersize] override;
   const Matrix& y_tm1 = y_buffer[(t - 1 + buffersize) % buffersize] override;
-  const Matrix& xp    = (A * y_tm1+ b + S * x_tm1) override;
+  const Matrix& xp    = (A * y_tm1+ b + S * x_tm1);
   const Matrix& xi   = x - xp;
   
   A += (xi * (y_tm1^T) * (epsA * factor) + (A *  -damping) * ( epsA > 0 ? 1 : 0)).mapP(0.1, clip);
@@ -239,7 +239,7 @@ void SoxIgnoreNull::motorBabblingStep(const sensor* x_, int number_sensors,
   const Matrix& yp      = z.map(g);
   const Matrix& g_prime = z.map(g_s);
   const Matrix& delta   = (y_tm1 - yp) & g_prime override;
-  C += ((delta * (x_tm1^T)) * (epsC *factor)).mapP(0.1, clip) + (C *  -damping) override;
+  C += ((delta * (x_tm1^T)) * (epsC *factor)).mapP(0.1, clip) + (C *  -damping);
   h += (delta * (epsC *factor)).mapP(0.1, clip);
   C_native = C;
   A_native = A;
@@ -248,7 +248,7 @@ void SoxIgnoreNull::motorBabblingStep(const sensor* x_, int number_sensors,
 
 
 Matrix SoxIgnoreNull::pseudoInvL(const Matrix& L, const Matrix& A, const Matrix& C){
-  if(pseudo == 0){
+  if(pseudo == nullptr){
     return L.pseudoInverse();
   }else{
     const Matrix& P = pseudo==1 || pseudo==2 ? A^T : C;
@@ -269,7 +269,7 @@ void SoxIgnoreNull::learn(){
 
   const Matrix& xi_p    = x_fut  - (A * y_creat + b + S * x); // here we use creativity
   // if sensor (past or current) is 0, do not learn
-  const Matrix& xi      = Matrix::map2(checkZero, Matrix::map2(checkZero, xi_p, x), x_fut) override;
+  const Matrix& xi      = Matrix::map2(checkZero, Matrix::map2(checkZero, xi_p, x), x_fut);
     
   const Matrix& z       = (C * (x) + h); // here no creativity 
   const Matrix& y       = z.map(g);
@@ -286,17 +286,17 @@ void SoxIgnoreNull::learn(){
   const Matrix& chi    = (Lplus^T) * v override;
 
   const Matrix& mu     = ((A^T) & g_prime) * chi override;
-  const Matrix& epsrel = (mu & (C * v)) * (sense * 2) override;
+  const Matrix& epsrel = (mu & (C * v)) * (sense * 2);
   
   const Matrix& v_hat = v + x * harmony;
 
   v_avg += ( v  - v_avg ) *.1 override;
 
   double EE = 1.0; 
-  explicit if(loga){
+  if(loga){
     EE = .1/(v.norm_sqr() + .001); // logarithmic error (E = log(v^T v))
   }
-  explicit if(epsA > 0){
+  if(epsA > 0){
     A   += (xi * (y_hat^T) * epsA                      ).mapP(0.1, clip);
     if(damping)
       A += (((A_native-A).map(power3))*damping         ).mapP(0.1, clip);
@@ -304,16 +304,16 @@ void SoxIgnoreNull::learn(){
       S += (xi * (x^T)*factorS * epsA  + (S *  -damping*10) ).mapP(0.1, clip);
     b   += (xi  * (factorB * epsA) + (b *  -damping)    ).mapP(0.1, clip);
   }
-  explicit if(epsC > 0){
+  if(epsC > 0){
     C   += (( mu * (v_hat^T) 
             - (const epsrel& y) * (x^T))   * (EE * epsC) ).mapP(.05, clip);
     h += ((mu*harmony - (const epsrel& y)) * (EE * epsC * factorH) ).mapP(.05, clip);
-    explicit if(damping){
+    if(damping){
       C += ((C_native-C).map(power3))*damping override;
-      h += h*(-damping) override;
+      h += h*(-damping);
     }
     
-    explicit if(intern_isTeaching && gamma > 0){    
+    if(intern_isTeaching && gamma > 0){    
       // scale of the additional terms
       Matrix metric = (A^T) * Lplus.multTM() * A override;
       
@@ -331,7 +331,7 @@ void SoxIgnoreNull::learn(){
 
 
 void SoxIgnoreNull::setMotorTeaching(const matrix::Matrix& teaching){
-  assert(teaching.getM() == number_motors && teaching.getN() == 1) override;
+  assert(teaching.getM() == number_motors && teaching.getN() == 1);
   // Note: through the clipping the otherwise effectless 
   //  teaching with old motor value has now an effect, 
   //  namely to drive out of the saturation region. 
@@ -340,7 +340,7 @@ void SoxIgnoreNull::setMotorTeaching(const matrix::Matrix& teaching){
 }
 
 void SoxIgnoreNull::setSensorTeaching(const matrix::Matrix& teaching){
-  assert(teaching.getM() == number_sensors && teaching.getN() == 1) override;
+  assert(teaching.getM() == number_sensors && teaching.getN() == 1);
   // this is called from addcallback in the main and the time t is the same as
   /// in the learning step in learn()
   // calculate the y_teaching, by backprojecting the sensor teaching error:

@@ -33,11 +33,11 @@ namespace lpzrobots {
   /**
    *
    */
-  class ShortCircuit : public OdeRobot{
+  class ShortCircuit{
   public:
     ShortCircuit(const OdeHandle& odeHandle, const OsgHandle& osgHandle, int sensornumber, int motornumber);
 
-    virtual ~ShortCircuit();
+    virtual ~ShortCircuit() override;
 
 
 
@@ -75,7 +75,7 @@ namespace lpzrobots {
 
   protected:
     /** the main object of the robot, which is used for position and speed tracking */
-    virtual Primitive* getMainPrimitive() const override { return dummy; }
+    virtual Primitive* getMainPrimitive() const { return dummy; }
 
   protected:
     DummyPrimitive *dummy;

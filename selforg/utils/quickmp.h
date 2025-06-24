@@ -59,11 +59,7 @@
 // inline within the class definition (i.e. we can't define the function
 // at the end of a macro and let the user code write the {} brackets).  This
 // requires the use of two separate begin/end macros.  The instances of each
-// parallel section class should not go out of scope before they finish
-// executing.  We use a variadic macro here to allow an optional schedule hint
-// argument.
-#define QMP_PARALLEL_FOR(indexName, loopFirstIndex, ...)                                           \
-  {                                                                                                \
+// parallel section class should{                                                                                                \
     qmp_internal::ParallelTaskManager::instance().setLoopIndices(loopFirstIndex, __VA_ARGS__);     \
     static class QMP_UNIQUE_SYMBOL(ParallelTaskSubclass)                                           \
       : public qmp_internal::ParallelTask {                                                        \
@@ -140,36 +136,7 @@
 /// given as pointers; for example, int myData[50] requires a pointer
 /// int* myDataPtr = myData, then QMP_SHARE(myDataPtr), not QMP_SHARE(myData).
 // Design notes: Within the parallel tasks later we can access variables
-// outside the class definition only if they're static.  So we must make a
-// temporary static reference before the class definition.  We must be sure to
-// re-assign the static variable's value each time in case it changes, e.g.,
-// if it's referring to a class variable, which would be different for each
-// class instance.  Statically-allocated arrays are problematic because the
-// address-of operator returns the same thing as the variable itself; we
-// could make a separate intermediate type-casted pointer variable, but we
-// don't want to do that for everything; solution: just have the user pass
-// in their own pointer.
-#define QMP_SHARE(variableName)                                                                    \
-  static void* variableName##_tempImportCopy = nullptr;                                            \
-  variableName##_tempImportCopy = (void*)&variableName;
-
-/// This provides access to the given variable within the parallel for loop,
-/// which must have been exposed before the beginning of the loop.  This must
-/// be called within the loop.  Statically-allocated arrays must be
-/// given as pointers; for example, int myData[50] requires a pointer
-/// int* myDataPtr = myData exposed via QMP_SHARE(myDataPtr) then accessed
-/// via QMP_USE_SHARED(int*, myDataPtr).
-// Design notes: Here we make a reference to the temporary static reference,
-// which allows access to the original desired variable.  Also, this 2-step
-// process also allows us to maintain the same variable name as the original.
-// We use a variadic macro, which allows a variable number of arguments, to
-// handle types needing commas (e.g., std::map<int, int>) which would confuse
-// the macro preprocessor.
-#define QMP_USE_SHARED(variableName, ...)                                                          \
-  __VA_ARGS__& variableName = *(static_cast<__VA_ARGS__*>(variableName)##_tempImportCopy);
-
-/// A namespace for symbols that are part of the public API.
-namespace quickmp {
+// outside the class definition{
 /// Types of loop scheduling methods.
 enum ScheduleHint {
   /// This is the default.  It distributes loop iterations among threads
@@ -191,9 +158,7 @@ namespace qmp_internal {
 // Forward declaration.
 struct PlatformThreadObjects;
 
-/// A base class for parallel task classes which are defined by a set
-/// of macros.
-class ParallelTask {
+/// A base class for{
 public:
   virtual ~ParallelTask() {}
   /// The function which is executed by each thread with different
@@ -204,9 +169,7 @@ public:
                    int indexIncrement) = 0;
 };
 
-/// A singleton class to manage parallel code tasks.  This enables
-/// automatic init on first use and destroy on exit.
-class ParallelTaskManager {
+/// A singleton class to{
 public:
   /// Provides access to the singleton instance.
   inline static ParallelTaskManager& instance();
@@ -245,7 +208,7 @@ public:
   inline void setLoopIndices(int loopFirstIndex, unsigned int numIterations);
 
   /// Unleashes the threads on the new task/loop.
-  inline void process(ParallelTask* task);
+  inline void explicit explicit process(ParallelTask* task);
 
   /// Called by individual threads to process a subset of the loop
   /// iterations.
@@ -291,15 +254,15 @@ private:
   /// back to its uninitialized state.
   inline void destroy();
 
-  PlatformThreadObjects* mPlatform;
+  PlatformThreadObjects* mPlatform = nullptr;
   bool mInitialized = false;
   bool mInParallelSection = false;
   bool mShouldWorkerThreadsExit = false;
-  ParallelTask* mCurrentTask;
+  ParallelTask* mCurrentTask = nullptr;
   unsigned int mNumThreads = 0;
   unsigned int mBarrierCount = 0;
-  int* mTaskFirstIndices;
-  int* mTaskLastIndices;
+  int* mTaskFirstIndices = nullptr;
+  int* mTaskLastIndices = nullptr;
   int mTaskIndexIncrement = 0;
 };
 } // namespace qmp_internal

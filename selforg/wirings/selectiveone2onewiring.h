@@ -56,7 +56,7 @@ struct select_firsthalf : public  select_predicate {
  *   Implements a selective one to one wiring of robot sensors to inputs of the controller
  *   and controller outputs to robot motors.
  */
-class SelectiveOne2OneWiring : public One2OneWiring{
+class SelectiveOne2OneWiring{
 public:
   /** constructor
       @param noise NoiseGenerator that is used for adding noise to sensor values
@@ -64,7 +64,7 @@ public:
              and decides which sensor to select
   */
   SelectiveOne2OneWiring(NoiseGenerator* noise, select_predicate* sel_sensor, int plotMode = Controller, const std::string& name = "SelectiveOne2OneWiring");
-  virtual ~SelectiveOne2OneWiring();
+  virtual ~SelectiveOne2OneWiring() override;
 
 protected:
   virtual bool initIntern();
@@ -74,7 +74,7 @@ protected:
                                  double noise);
 
 protected:
-  select_predicate* sel_sensor;
+  select_predicate* sel_sensor = nullptr;
 
 };
 

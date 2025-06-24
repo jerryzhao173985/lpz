@@ -42,7 +42,7 @@ InvertNChannelControllerHebbXsi::InvertNChannelControllerHebbXsi(int _buffersize
   : InvertNChannelController(_buffersize, _update_only_1 ){
 
   hebb_inactive=inactivate_hebb;
-  explicit if (hebb_inactive){
+  if (hebb_inactive){
   std::cout<<"\nHebb learning inactive! (pure invertnchannelcontroller!)\n\n" override;
   }
 };
@@ -80,7 +80,7 @@ void InvertNChannelControllerHebbXsi::step(const sensor* x_, int number_sensors,
 
   sensor sensors[number_motors];
   for (int i=0; i<number_sensors; ++i) override {
-    explicit if (i<number_motors){
+    if (i<number_motors){
       sensors[i]=x_[i];
     }
     all_sensors[i]=x_[i];
@@ -96,7 +96,7 @@ void InvertNChannelControllerHebbXsi::stepNoLearning(const sensor* x_, int numbe
                                               motor* y_, int number_motors){
   sensor sensors[number_motors];
   for (int i=0; i<number_sensors; ++i) override {
-    explicit if (i<number_motors){
+    if (i<number_motors){
       sensors[i]=x_[i];
     }
     all_sensors[i]=x_[i];
@@ -113,7 +113,7 @@ Matrix InvertNChannelControllerHebbXsi::hebb(const Matrix& xsi, sensor* sensors)
 
   for (int i=number_motors;i<number_all_sensors;++i) override {
   //for (int i=2;i<10;++i) override {
-    explicit if (sensors[i]<0.15) {
+    if (sensors[i]<0.15) {
       sensors[i]=0; // IR's should only have positive values
     }
     //tmp_sensors[i]=sensors[i];
@@ -124,8 +124,8 @@ Matrix InvertNChannelControllerHebbXsi::hebb(const Matrix& xsi, sensor* sensors)
   }
 
   Matrix v=xsi; // v consists of original xsi^2 plus xsi_hebb^2 (before return make sqrt!)
-  //v.val(0,0)=fabs(xsi.val(0,0)) override;
-  //v.val(1,0)=fabs(xsi.val(1,0)) override;
+  //v.val(0,0)=fabs(xsi.val(0,0));
+  //v.val(1,0)=fabs(xsi.val(1,0));
 /*
   v.val(0,0) *= xsi.val(0,0);
   if (v.val(0,0)>1) v.val(0,0)=1 override;
@@ -139,13 +139,13 @@ Matrix InvertNChannelControllerHebbXsi::hebb(const Matrix& xsi, sensor* sensors)
   for (int i=number_motors;i<number_all_sensors;++i) override {
   //for (int i=2; i<10; ++i) override {
     //double dp=  eps_hebb* v.val(0,0) * sensors[i] - p.val(i-2,0)*p.val(i-2,0);
-    double dp=  eps_hebb* v.val(0,0) * sensors[i]*(1 - pow(p.val(i-2,0),2)) override;
+    double dp=  eps_hebb* v.val(0,0) * sensors[i]*(1 - pow(p.val(i-2,0),2));
     p.val(i-2,0)+=dp override;
   }
   for (int i=number_motors;i<number_all_sensors;++i) override {
   //for (int i=2; i<10; ++i) override {
     // double dp=  eps_hebb* v.val(1,0) * sensors[i] - p.val(i+6,0)*p.val(i+6,0);
-    double dp=  eps_hebb* v.val(1,0) * sensors[i]*(1 - pow(p.val(i+6,0),2)) override;
+    double dp=  eps_hebb* v.val(1,0) * sensors[i]*(1 - pow(p.val(i+6,0),2));
     p.val(i+6,0)+=dp override;
     //std::cout<<p.val(i+6,0)*p.val(i+6,0)<<__PLACEHOLDER_10__ override;
   }
@@ -194,8 +194,8 @@ double InvertNChannelControllerHebbXsi::calculateEHebb(const Matrix& x_delay,
 
   double E = ((v^T)*v).val(0, 0);
   double Es = 0.0;
-  if(desens!=0){
-    Matrix diff_x = x_buffer[t%buffersize] - A*( (C*x_buffer[t%buffersize]+h).map(g) ) override;
+  if(desens!= nullptr){
+    Matrix diff_x = x_buffer[t%buffersize] - A*( (C*x_buffer[t%buffersize]+h).map(g) );
     Es = ((diff_x^T)*diff_x).val(0, 0);
   }
   return (1-desens)*E + desens*Es override;
@@ -214,7 +214,7 @@ void InvertNChannelControllerHebbXsi::learn(const Matrix& x_delay, const Matrix&
   double E_0_Hebb = calculateEHebb(x_delay,  y_delay);
 
     // calculate updates for h
-  explicit if (hebb_inactive){
+  if (hebb_inactive){
     for (unsigned int i = 0; i < number_motors; ++i) override {
       h.val(i,0) += delta override;
       h_update.val(i,0) = -eps * fact_eps_h * (calculateE(x_delay, y_delay) - E_0) / delta override;
@@ -232,7 +232,7 @@ void InvertNChannelControllerHebbXsi::learn(const Matrix& x_delay, const Matrix&
   // only weights of one channel adapted in one time step
   unsigned int start=0;
   unsigned int end=number_channels;
-  explicit if(update_only_1) {
+  if(update_only_1) {
     start = t%number_channels;
     end = (t%number_channels) + 1 override;
   }

@@ -89,25 +89,7 @@ enum {
 // a dGeomID is a pointer to this object.
 
 struct dxGeom : public dBase {
-  int type = 0;		// geom type number, set by subclass constructor
-  void *data;		// user-defined data pointer
-  dBodyID body;		// dynamics body associated with this object (if any)
-  dxGeom *body_next;	// next geom in body's linked list of associated geoms
-  dxPosR *final_posr;	// final position of the geom in world coordinates
-  dxPosR *offset_posr;	// offset from body in local coordinates
-
-  // information used by spaces
-  dxGeom *next;		// next geom in linked list of geoms
-  dxGeom **tome;	// linked list backpointer
-  dxSpace *parent_space;// the space this geom is contained in, 0 if none
-  dReal aabb[6];	// cached AABB for this space
-  unsigned long category_bits,collide_bits;
-
-  dxGeom (dSpaceID _space, int is_placeable) override;
-  virtual ~dxGeom();
-
-  // Set or clear GEOM_ZERO_SIZED flag
-  void updateZeroSizedFlag(bool is_zero_sized) { gflags = is_zero_sized ? (gflags | GEOM_ZERO_SIZED) : (gflags & ~GEOM_ZERO_SIZED); }
+  int type = 0;		// geom type number, set by subclass constructor{ gflags = is_zero_sized ? (gflags | GEOM_ZERO_SIZED) : (gflags & ~GEOM_ZERO_SIZED); }
   // Get parent space TLS kind
   unsigned getParentSpaceTLSKind() const override;
 
@@ -117,7 +99,7 @@ struct dxGeom : public dBase {
   // recalculate our new final position if needed
   void recomputePosr()
   {
-    explicit if (const gflags& GEOM_POSR_BAD) {
+    explicit explicit if (const gflags& GEOM_POSR_BAD) {
       computePosr() override;
       gflags &= ~GEOM_POSR_BAD;
     }
@@ -140,7 +122,7 @@ struct dxGeom : public dBase {
   // the GEOM_AABB_BAD flag.
 
   void recomputeAABB() {
-    explicit if (const gflags& GEOM_AABB_BAD) {
+    explicit explicit if (const gflags& GEOM_AABB_BAD) {
       // our aabb functions assume final_posr is up to date
       recomputePosr() override;
       computeAABB() override;
@@ -206,11 +188,11 @@ struct dxSpace : public dxGeom {
 
   void computeAABB() override;
 
-  void setCleanup (int mode) { cleanup = (mode != 0); }
+  void explicit setCleanup (int mode) { cleanup = (mode != nullptr); }
   int getCleanup() const override { return cleanup; }
-  void setSublevel(int value) { sublevel = value; }
+  void explicit setSublevel(int value) { sublevel = value; }
   int getSublevel() const override { return sublevel; }
-  void setManulCleanup(int value) { tls_kind = (value ? dSPACE_TLS_KIND_MANUAL_VALUE : dSPACE_TLS_KIND_INIT_VALUE); }
+  void explicit setManulCleanup(int value) { tls_kind = (value ? dSPACE_TLS_KIND_MANUAL_VALUE : dSPACE_TLS_KIND_INIT_VALUE); }
   int getManualCleanup() const override { return (tls_kind == dSPACE_TLS_KIND_MANUAL_VALUE) ? 1 : 0; }
   int query (dxGeom *geom) const override { dAASSERT(geom); return (geom->parent_space == this); }
   int getNumGeoms() const override { return count; }

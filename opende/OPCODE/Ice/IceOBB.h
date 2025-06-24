@@ -13,10 +13,7 @@
 #define __ICEOBB_H__
 
 	// Forward declarations
-	class LSS;
-
-	class ICEMATHS_API OBB
-	{
+	class LSS{
 		public:
 		//! Constructor
 		inline_						OBB()		{}

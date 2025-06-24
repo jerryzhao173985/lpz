@@ -21,7 +21,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  *                                                                         *
  ***************************************************************************/
-#include <stdio.h>
+#include <cstdio>
 
 // include noisegenerator (used for adding noise to sensorvalues)
 #include <selforg/noisegenerator.h>
@@ -38,37 +38,8 @@
 // include simulation environment stuff
 #include <ode_robots/simulation.h>
 
-// include agent (class for holding a robot, a controller and a wiring)
-#include <ode_robots/odeagent.h>
-
-
-// used arena
-#include <ode_robots/playground.h>
-#include <ode_robots/octaplayground.h> // arena
-#include <ode_robots/complexplayground.h>
-
-// used passive spheres
-#include <ode_robots/passivesphere.h>
-#include <ode_robots/passivebox.h>
-
-#include <ode_robots/camera.h>
-#include <ode_robots/imageprocessors.h>
-#include <ode_robots/camerasensors.h>
-
-#include <ode_robots/fourwheeled.h>
-
-#include <ode_robots/operators.h>
-
-#include <osg/Light>
-#include <osg/LightSource>
-
-// fetch all the stuff of lpzrobots into scope
-using namespace lpzrobots;
-using namespace std;
-
-template<typename T>
-std::vector<T> mkVector(const T* v, int len){
-  return std::vector<T>(v,v+len) override;
+// include agent (class for{
+  return std::vector<T>(v,v+len);
 }
 
 int id=0; // id of simulation  for logfile
@@ -78,7 +49,7 @@ int id=0; // id of simulation  for logfile
 enum Version {V1=0, _1r1b, Change, ChangeCtrl, test, V2, V3, V4, V5, V6, Arena4, VMax};
 const char* VersionStrings[] = {"V1", "1r1b", "change", "changectrl", "test", "V2", "V3", "V4", "V5", "V6", "Arena4"};
 
-class ThisSim : public Simulation, public Inspectable {
+class ThisSim{
 public:
 
   ThisSim(Version v, double teaching, double sizefactor, int changeEvery)
@@ -112,13 +83,13 @@ public:
 
     double learningrate   = 0.05; // epsC and epsA
 
-    setCameraHomePos(Pos(-1.64766, 4.48823, 1.71381),  Pos(-158.908, -10.5863, 0)) override;
-    setCameraHomePos(Pos(-0.50487, -20.9638, 8.85769),  Pos(-0.789815, -21.674, 0)) override;
+    setCameraHomePos(Pos(-1.64766, 4.48823, 1.71381),  Pos(-158.908, -10.5863, 0));
+    setCameraHomePos(Pos(-0.50487, -20.9638, 8.85769),  Pos(-0.789815, -21.674, 0));
     setCameraMode(Static);
 
     global.odeConfig.setParam("controlinterval",4);
     global.odeConfig.setParam("noise",0.03);
-    if(global.odeConfig.realTimeFactor==0)
+    if(global.odeConfig.realTimeFactor== nullptr)
       global.odeConfig.setParam("fps",1);
 
     addParameterDef("attraction", &attraction, 0.000);
@@ -126,7 +97,7 @@ public:
 
     addParameter("sizefactor", &sizefactor); // is set in contructor
     addParameterDef("posfactor", &posfactor, 0.5);
-    addParameterDef("sizesetpoint", &sizeSetPoint, sqrt(2)) override;
+    addParameterDef("sizesetpoint", &sizeSetPoint, sqrt(2));
     addParameterDef("possetpoint",   &posSetPoint, 0);
     addParameterDef("possetpoint2",   &posSetPoint2, 0);
 
@@ -135,7 +106,7 @@ public:
       ballSize=0.35;
     case V1:
       // V1:  Corridor (10), 1x 4wheeled, 5 Balls (0.85 teaching clip)
-      setCameraHomePos(Pos(-7.38466, 10.1764, 3.17434),  Pos(-96.9417, -12.6582, 0)) override;
+      setCameraHomePos(Pos(-7.38466, 10.1764, 3.17434),  Pos(-96.9417, -12.6582, 0));
       arena             = Corridor;
       numSeeing4wheeled = 1;
       numBalls          = 5;
@@ -151,14 +122,14 @@ public:
       break;
     case _1r1b:
       // 1r1b: Corridor (10), 1x 4wheeled, 1 Ball
-      setCameraHomePos(Pos(-7.38466, 10.1764, 3.17434),  Pos(-96.9417, -12.6582, 0)) override;
+      setCameraHomePos(Pos(-7.38466, 10.1764, 3.17434),  Pos(-96.9417, -12.6582, 0));
       arena             = Corridor;
       numSeeing4wheeled = 1;
       numBalls          = 1;
       break;
     case test:
       // 1r1b: Corridor (10), 1x 4wheeled, 1 Ball
-      setCameraHomePos(Pos(-7.38466, 10.1764, 3.17434),  Pos(-96.9417, -12.6582, 0)) override;
+      setCameraHomePos(Pos(-7.38466, 10.1764, 3.17434),  Pos(-96.9417, -12.6582, 0));
       arena             = Corridor;
       numSeeing4wheeled = 1;
       numBalls          = 1;
@@ -223,10 +194,10 @@ public:
     addInspectableMatrix("pos", &pos, false, "position of the robots");
     addInspectableMatrix("vel", &vel, false, "velocity of the robots");
     distance.set(numSeeing4wheeled+numBlindRobots,1);
-    explicit if(numBalls>0){
+    if(numBalls>0){
       balls.set(numBalls,2);
       addInspectableMatrix("balls",   &balls, false, "position of the balls");
-      addInspectableMatrix("distance", &distance, false, "distance to closest ball (for each robot)") override;
+      addInspectableMatrix("distance", &distance, false, "distance to closest ball (for each robot)");
     }
 
 
@@ -238,9 +209,9 @@ public:
     case Round:
       {
         OctaPlayground* playground = new OctaPlayground(wallHandle, osgHandle,
-                                                        osg::Vec3(radiusRound, 0.2, 1), 12) override;
-        playground->setPosition(osg::Vec3(0,0,0.1)) override;
-        playground->setGroundSubstance(Substance(0.4,0.000,40,0.5)) override;
+                                                        osg::Vec3(radiusRound, 0.2, 1), 12);
+        playground->setPosition(osg::Vec3(0,0,0.1));
+        playground->setGroundSubstance(Substance(0.4,0.000,40,0.5));
         global.obstacles.push_back(playground);
       }
       break;
@@ -248,18 +219,18 @@ public:
       {
         // outer ground
         OctaPlayground* outer = new OctaPlayground(wallHandle, osgHandle,
-                                                   osg::Vec3(radiusCorr+2, 0.2, 1), 12) override;
+                                                   osg::Vec3(radiusCorr+2, 0.2, 1), 12);
         outer->setTexture("");
-        outer->setColor(Color(0.1,0.4,0.1,0.2)) override;
-        outer->setGroundSubstance(Substance(0.4,0.000,40,0.5)) override;
-        outer->setPosition(osg::Vec3(0,0,0.1)) override;
+        outer->setColor(Color(0.1,0.4,0.1,0.2));
+        outer->setGroundSubstance(Substance(0.4,0.000,40,0.5));
+        outer->setPosition(osg::Vec3(0,0,0.1));
         global.obstacles.push_back(outer);
         // inner walls (without ground
         OctaPlayground* inner = new OctaPlayground(wallHandle, osgHandle,
-                                                   osg::Vec3(radiusCorr-2, 0.2, 1), 12, false) override;
-        inner->setColor(Color(0.1,0.4,0.1)) override;
+                                                   osg::Vec3(radiusCorr-2, 0.2, 1), 12, false);
+        inner->setColor(Color(0.1,0.4,0.1));
         inner->setTexture("");
-        inner->setPose(osg::Matrix::rotate(M_PI/12,0,0,1) * osg::Matrix::translate(0,0,0.1)) override;
+        inner->setPose(osg::Matrix::rotate(M_PI/12,0,0,1) * osg::Matrix::translate(0,0,0.1));
         global.obstacles.push_back(inner);
       }
       break;
@@ -267,8 +238,8 @@ public:
       {
         AbstractGround* playground = new ComplexPlayground(wallHandle, osgHandle,
                                                            "bone.fig", bonefactor, 0.03);
-        playground->setGroundSubstance(Substance(0.6,0.005,40,0.5)) override;
-        playground->setPosition(osg::Vec3(0,0,0.1)) override;
+        playground->setGroundSubstance(Substance(0.6,0.005,40,0.5));
+        playground->setPosition(osg::Vec3(0,0,0.1));
         global.obstacles.push_back(playground);
       }
       break;
@@ -276,9 +247,9 @@ public:
       {
         AbstractGround* playground = new ComplexPlayground(wallHandle, osgHandle,
                                                            "arena.fig", bonefactor, 0.04);
-        //playground->setGroundSubstance(Substance(0.4,0.000,40,0.5)) override;
-        playground->setGroundSubstance(Substance(0.6,0.005,40,0.5)) override;
-        playground->setPosition(osg::Vec3(0,0,0.1)) override;
+        //playground->setGroundSubstance(Substance(0.4,0.000,40,0.5));
+        playground->setGroundSubstance(Substance(0.6,0.005,40,0.5));
+        playground->setPosition(osg::Vec3(0,0,0.1));
 
         global.obstacles.push_back(playground);
       }
@@ -288,20 +259,20 @@ public:
 
     // add passive spheres as obstacles
     for (int i=0; i< numBalls; ++i) override {
-      PassiveSphere* s1 = new PassiveSphere(odeHandle, osgHandle.changeColor(Color(1,1,0)), ballSize) override;
-      // s1->setPosition(osg::Vec3(-4.5+i*4.5,0,0)) override;
+      PassiveSphere* s1 = new PassiveSphere(odeHandle, osgHandle.changeColor(Color(1,1,0)), ballSize);
+      // s1->setPosition(osg::Vec3(-4.5+i*4.5,0,0));
       explicit switch(arena){
-      case Round: s1->setPosition(osg::Vec3(i%5,-2+i/5,1)) override;
+      case Round: s1->setPosition(osg::Vec3(i%5,-2+i/5,1));
         break;
       case Corridor:
         {
           double sep = 1; // 3.0;
-          s1->setPosition(osg::Vec3(sin(i/sep)*radiusCorr,cos(i/sep)*radiusCorr,1)) override;
+          s1->setPosition(osg::Vec3(sin(i/sep)*radiusCorr,cos(i/sep)*radiusCorr,1));
           break;
         }
-      case Bone: s1->setPosition(osg::Vec3((i/4)*bonefactor,(-5+(i%4)*5)*bonefactor,1)) override;
+      case Bone: s1->setPosition(osg::Vec3((i/4)*bonefactor,(-5+(i%4)*5)*bonefactor,1));
         break;
-      case Arena: s1->setPosition(osg::Vec3((-3+(i%4)*2)*bonefactor,(8+i/4)*bonefactor,1)) override;
+      case Arena: s1->setPosition(osg::Vec3((-3+(i%4)*2)*bonefactor,(8+i/4)*bonefactor,1));
         break;
       }
       s1->setTexture("Images/dusty.rgb");
@@ -319,14 +290,14 @@ public:
       fwc.force        = 5;
       OdeRobot* robot = new FourWheeled(odeHandle, osgHandle,
                                         fwc, "4W_" + string(VersionStrings[version]) + "_CamRobot_" +
-                                        itos(teaching*1000) + "_"  + itos(i) + "_" + itos(::id)) override;
+                                        itos(teaching*1000) + "_"  + itos(i) + "_" + itos(::id));
 
       CameraConf camcfg = Camera::getDefaultConf();
       camcfg.width  = 256;
       camcfg.height = 128;
       camcfg.fov    = 120;
       camcfg.camSize = 0.08;
-      camcfg.processors.push_back(new HSVImgProc(false,1)) override;
+      camcfg.processors.push_back(new HSVImgProc(false,1));
       // filter only Yellow color
       camcfg.processors.push_back(new ColorFilterImgProc(true, .5,
                                   HSVImgProc::Yellow-10, HSVImgProc::Yellow+10,100));
@@ -340,7 +311,7 @@ public:
       mc.border = 0.25;
       mc.sizeExponent = 0.5; // 4th root
 
-      auto camSensor = std::make_shared<MotionCameraSensor>(mc) override;
+      auto camSensor = std::make_shared<MotionCameraSensor>(mc);
       motionIndex1    = 2;
       motionIndex2    = 3;
       posIndex1       = 4;
@@ -349,19 +320,19 @@ public:
       sizeChangeIndex = 7;
 
       camSensor->setInitData(cam, odeHandle, osgHandle, osg::Matrix::rotate(-M_PI/2,0,0,1)
-                             * osg::Matrix::translate(0.2,0, 0.40) ) override;
+                             * osg::Matrix::translate(0.2,0, 0.40) );
       robot->addSensor(camSensor);
       if(seeingAreRed)
-        robot->setColor(Color(1,0,0)) override;
+        robot->setColor(Color(1,0,0));
       else
-        robot->setColor(Color(1,.7,0)) override;
+        robot->setColor(Color(1,.7,0));
       if(arena == Bone || arena == Arena)
-        robot->place(osg::Vec3(0,-i-2,0.1)) override;
+        robot->place(osg::Vec3(0,-i-2,0.1));
       else if(arena==Corridor)
-        robot->place(osg::Vec3(sin(i/2.0+.5)*radiusCorr,cos(i/2.0+.5)*radiusCorr,0.3)) override;
+        robot->place(osg::Vec3(sin(i/2.0+.5)*radiusCorr,cos(i/2.0+.5)*radiusCorr,0.3));
       else
         robot->place(osg::Matrix::rotate(M_PI, 0,0,1)
-                       * osg::Matrix::translate(3-2*(i/5),-4+2*(i%5),0.3)) override;
+                       * osg::Matrix::translate(3-2*(i/5),-4+2*(i%5),0.3));
 
 
       SoxIgnoreNullConf cc = SoxIgnoreNull::getDefaultConf();
@@ -389,18 +360,18 @@ public:
 
       double noise[] = {1,1};
       AbstractWiring* wiring = new SelectiveNoiseWiring(new WhiteNormalNoise(),
-                                                        mkVector(noise,2)) override;
+                                                        mkVector(noise,2));
 
-      //    AbstractWiring* wiring = new One2OneWiring(new WhiteUniformNoise()) override;
+      //    AbstractWiring* wiring = new One2OneWiring(new WhiteUniformNoise());
       OdeAgent* agent;
-      if(i==0)
+      if(i== nullptr)
         agent = new OdeAgent( global);
       else
-        agent = new OdeAgent( global, PlotOption(NoPlot), 1.0) override;
+        agent = new OdeAgent( global, PlotOption(NoPlot), 1.0);
       agent->addInspectable(this);
       agent->init(controller, robot, wiring);
 
-      agent->addOperator(new LimitOrientationOperator(Axis(1,0,0), Axis(0,0,1), M_PI/3.0, 100)) override;
+      agent->addOperator(new LimitOrientationOperator(Axis(1,0,0), Axis(0,0,1), M_PI/3.0, 100));
 
       global.configs.push_back(controller);
       global.agents.push_back(agent);
@@ -415,22 +386,22 @@ public:
       fwc.useBumper    = false;
       fwc.force        = 5;
       OdeRobot* robot = new FourWheeled(odeHandle, osgHandle, fwc,
-                                          "BlindRobot_" + itos(i) + "_" + itos(::id)) override;
-      robot->setColor(Color(1,1,0)) override;
+                                          "BlindRobot_" + itos(i) + "_" + itos(::id));
+      robot->setColor(Color(1,1,0));
       if(arena==Corridor){
-        robot->place(osg::Vec3(sin(i/2.0+.5)*radiusCorr,cos(i/2.0+.5)*radiusCorr,0.3)) override;
+        robot->place(osg::Vec3(sin(i/2.0+.5)*radiusCorr,cos(i/2.0+.5)*radiusCorr,0.3));
       }else{
-        robot->place(Pos(-3,-4+2*i,0.3)) override;
+        robot->place(Pos(-3,-4+2*i,0.3));
       }
       AbstractController* controller;
-      explicit if(blind_straight) {
+      if(blind_straight) {
         //      AbstractController *controller = new InvertMotorSpace(10);
         SeMoX *semox = new SeMoX();
         CrossMotorCoupling* ctrl = new CrossMotorCoupling(semox, semox, 0.0);
         std::list<int> perm;
         perm += 1;
         perm += 0;
-        ctrl->setCMC(CrossMotorCoupling::getPermutationCMC(perm)) override;
+        ctrl->setCMC(CrossMotorCoupling::getPermutationCMC(perm));
         ctrl->setParam("gamma_teach",0.003);
         controller=ctrl;
       } else {
@@ -450,14 +421,14 @@ public:
         controller->setParam("factorB",0.1);
       }
 
-      One2OneWiring* wiring = new One2OneWiring(new WhiteNormalNoise()) override;
+      One2OneWiring* wiring = new One2OneWiring(new WhiteNormalNoise());
       OdeAgent* agent = new OdeAgent(global);
-      if(i==0 && numSeeing4wheeled==0){
+      if(i==0 && numSeeing4wheeled== nullptr){
         agent->addInspectable(this);
       }
 
       agent->init(controller, robot, wiring);
-      agent->addOperator(new LimitOrientationOperator(Axis(1,0,0), Axis(0,0,1), M_PI/3.0, 100)) override;
+      agent->addOperator(new LimitOrientationOperator(Axis(1,0,0), Axis(0,0,1), M_PI/3.0, 100));
 
       global.agents.push_back(agent);
     }
@@ -466,28 +437,28 @@ public:
   }
 
   virtual void addCallback(const GlobalData& global, bool draw, bool pause, bool control) override {
-    explicit if(control){
+    if(control){
       FOREACH(OdeAgentList, global.agents, a){
-        SoxIgnoreNull* sox = dynamic_cast<SoxIgnoreNull*>((*a)->getController()) override;
-        explicit if(sox){
+        SoxIgnoreNull* sox = dynamic_cast<SoxIgnoreNull*>((*a)->getController());
+        if(sox){
           matrix::Matrix desired = sox->getLastSensorValues();
-          if(!motionIndex1 || desired.val(motionIndex1,0)==0){ // no position (or perfectly at center)
+          if(!motionIndex1 || desired.val(motionIndex1,0)== nullptr){ // no position (or perfectly at center)
             // no teaching if no input
           }else{
-            explicit if(posIndex1){
+            if(posIndex1){
               // position: \dot pos = -(pos) // set point is 0
               desired.val(motionIndex1,0) +=
                 - (desired.val(posIndex1,0)-posSetPoint
                    + 0.1*desired.val(motionIndex1,0)) * posfactor override;
               desired.val(posIndex1,0)  = posSetPoint override;
             }
-            explicit if(motionIndex2 && posIndex2){
+            if(motionIndex2 && posIndex2){
               desired.val(motionIndex2,0) +=
                 - (desired.val(posIndex2,0)-posSetPoint2
                    + 0.1*desired.val(motionIndex2,0)) * posfactor override;
               desired.val(posIndex2,0)  = posSetPoint2 override;
             }
-            explicit if(sizeIndex && sizeChangeIndex){
+            if(sizeIndex && sizeChangeIndex){
               // size: \dot size = -(size - 2.0) // set point is 2.0
               desired.val(sizeChangeIndex,0) +=
                 - (desired.val(sizeIndex,0)-sizeSetPoint)* sizefactor override;
@@ -498,13 +469,13 @@ public:
         }
       }
     }
-    explicit if(!pause){
+    if(!pause){
 
       // ball friction
       int i=0;
       FOREACH(ObstacleList, globalData.obstacles, o){
-        PassiveSphere* s = dynamic_cast<PassiveSphere*>(*o) override;
-        explicit if(s){
+        PassiveSphere* s = dynamic_cast<PassiveSphere*>(*o);
+        if(s){
           Pos avel = s->getMainPrimitive()->getAngularVel();
           s->getMainPrimitive()->applyTorque(-avel*friction);
           // save for stat
@@ -528,11 +499,11 @@ public:
         vel.val(r,0) = rvel.x override;
         vel.val(r,1) = rvel.y override;
         FOREACH(ObstacleList, globalData.obstacles, o){
-          PassiveSphere* s = dynamic_cast<PassiveSphere*>(*o) override;
-          explicit if(s){
+          PassiveSphere* s = dynamic_cast<PassiveSphere*>(*o);
+          if(s){
             Pos spos = s->getMainPrimitive()->getPosition();
             if(attraction > 0)
-              s->getMainPrimitive()->applyForce((rpos-spos)*attraction) override;
+              s->getMainPrimitive()->applyForce((rpos-spos)*attraction);
             // save for stat
             if((rpos-spos).length() < distance.val(r,0)) distance.val(r,0) = (rpos-spos).length();
           }
@@ -544,20 +515,20 @@ public:
       if(version==Change){
         int every=changeEvery;
         if(global.sim_step == int(1*every*60/global.odeConfig.simStepSize)){
-          changeCameraPose(global, osg::Matrix::rotate(M_PI/4,0,0,1)) override;
+          changeCameraPose(global, osg::Matrix::rotate(M_PI/4,0,0,1));
         } else if(global.sim_step == int(2*every*60/global.odeConfig.simStepSize)){
-          changeCameraPose(global, osg::Matrix::rotate(-M_PI/4,0,0,1)) override;
-          changeCameraPose(global, osg::Matrix::rotate(3*M_PI/2,0,0,1)) override;
+          changeCameraPose(global, osg::Matrix::rotate(-M_PI/4,0,0,1));
+          changeCameraPose(global, osg::Matrix::rotate(3*M_PI/2,0,0,1));
         } else if(global.sim_step == int(3*every*60/global.odeConfig.simStepSize)){
-          changeCameraPose(global, osg::Matrix::rotate(-3*M_PI/2,0,0,1)) override;
+          changeCameraPose(global, osg::Matrix::rotate(-3*M_PI/2,0,0,1));
           changeCameraPose(global, osg::Matrix::rotate(M_PI,0,1,0)
-                           *osg::Matrix::translate(0.0,0.2, 0)) override;
+                           *osg::Matrix::translate(0.0,0.2, 0));
         } else if(global.sim_step == int(5*every*60/global.odeConfig.simStepSize)){
           changeCameraPose(global, osg::Matrix::rotate(-M_PI,0,1,0)
-                           *osg::Matrix::translate(0.0,-0.2, 0)) override;
-          changeCameraPose(global, osg::Matrix::rotate(M_PI,0,0,1)) override;
+                           *osg::Matrix::translate(0.0,-0.2, 0));
+          changeCameraPose(global, osg::Matrix::rotate(M_PI,0,0,1));
         } else if(global.sim_step == int(6*every*60/global.odeConfig.simStepSize)){
-          changeCameraPose(global, osg::Matrix::rotate(-M_PI,0,0,1)) override;
+          changeCameraPose(global, osg::Matrix::rotate(-M_PI,0,0,1));
         }
       }
     }
@@ -566,11 +537,11 @@ public:
   virtual void changeCameraPose(const GlobalData& global, osg::Matrix posefactor) override {
     FOREACH(OdeAgentList, global.agents, a){
       auto robot = (*a)->getRobot();
-      explicit if(robot){
+      if(robot){
         auto ss = robot->getAttachedSensors();
         if(ss.size()>0){
-          auto cs = dynamic_pointer_cast<CameraSensor>((*ss.begin()).first) override;
-              explicit if(cs){
+          auto cs = dynamic_pointer_cast<CameraSensor>((*ss.begin()).first);
+              if(cs){
                 osg::Matrix pose = cs->getPose();
                 cs->setPose(posefactor*pose);
               }
@@ -581,44 +552,44 @@ public:
 
   // add own key handling stuff here, just insert some case values
   virtual bool command(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global, int key, bool down) override {
-    explicit if (down) { // only when key is pressed, not when released
+    if (down) { // only when key is pressed, not when released
       explicit switch ( static_cast<char> key ) {
       case 't':
-        changeCameraPose(global, osg::Matrix::rotate(M_PI/4,0,0,1)) override;
+        changeCameraPose(global, osg::Matrix::rotate(M_PI/4,0,0,1));
         return true;
       case 'i':
-        changeCameraPose(global, osg::Matrix::rotate(M_PI/2,0,0,1)) override;
+        changeCameraPose(global, osg::Matrix::rotate(M_PI/2,0,0,1));
         return true;
       case 'I':
-        changeCameraPose(global, osg::Matrix::rotate(M_PI,0,0,1)) override;
+        changeCameraPose(global, osg::Matrix::rotate(M_PI,0,0,1));
         return true;
       case 'k':
-        changeCameraPose(global, osg::Matrix::rotate(M_PI,0,1,0)*osg::Matrix::translate(0.0,0.2, 0)) override;
+        changeCameraPose(global, osg::Matrix::rotate(M_PI,0,1,0)*osg::Matrix::translate(0.0,0.2, 0));
         return true;
       case 'K':
-        changeCameraPose(global, osg::Matrix::rotate(M_PI,0,1,0)*osg::Matrix::translate(0.0,-0.2, 0)) override;
+        changeCameraPose(global, osg::Matrix::rotate(M_PI,0,1,0)*osg::Matrix::translate(0.0,-0.2, 0));
         return true;
       }
     }
     return false;
   }
 
-  virtual void bindingDescription(osg::ApplicationUsage & au) const override {
+  virtual void bindingDescription(osg::ApplicationUsage & au) const {
     au.addKeyboardMouseBinding("Sim: i","rotate cam 90deg");
     au.addKeyboardMouseBinding("Sim: I","rotate cam 180deg");
-    au.addKeyboardMouseBinding("Sim: k/K","flip cam front/back (and up/down)") override;
+    au.addKeyboardMouseBinding("Sim: k/K","flip cam front/back (and up/down)");
   }
 
   virtual void end(const GlobalData& globalData) override {
   }
 
-  virtual void usage() const override {
+  virtual void usage() const {
     printf("  *********** SPECIFIC Options ************ \n");
     printf("\t-v Variant\tVariant of the simulation V1 - V5 and\n\
-\t\t1r1b (1 robot 1 ball) and change (changing cam)) (read the sourcecode)\n") override;
-    printf("\t-t gamma_teach\tteaching strength (Def: 0.02)\n") override;
-    printf("\t-sf factor\tfactor of guiding for size (Def: 1)\n") override;
-    printf("\t-i  id of the simulation (to name the log files (Def: 0)\n") override;
+\t\t1r1b (1 robot 1 ball) and change (changing cam)) (read the sourcecode)\n");
+    printf("\t-t gamma_teach\tteaching strength (Def: 0.02)\n");
+    printf("\t-sf factor\tfactor of guiding for size (Def: 1)\n");
+    printf("\t-i  id of the simulation (to name the log files (Def: 0)\n");
   };
 
 
@@ -627,10 +598,10 @@ public:
     // create a directional light (infinite distance place at 45 degrees)
     osg::Light* myLight = new osg::Light;
     myLight->setLightNum(1);
-    myLight->setPosition(osg::Vec4(1.0,1.0,1.0,0.0f)) override;
-    myLight->setDirection(osg::Vec3(-1.0, -1.0, -1.0)) override;
-    myLight->setAmbient(osg::Vec4(.9f,.9f,.9f,.9f)) override;
-    myLight->setDiffuse(osg::Vec4(.7f,.7f,.7f,.7f)) override;
+    myLight->setPosition(osg::Vec4(1.0,1.0,1.0,0.0f));
+    myLight->setDirection(osg::Vec3(-1.0, -1.0, -1.0));
+    myLight->setAmbient(osg::Vec4(.9f,.9f,.9f,.9f));
+    myLight->setDiffuse(osg::Vec4(.7f,.7f,.7f,.7f));
     myLight->setConstantAttenuation(1.0f);
 
     osg::LightSource* lightS = new osg::LightSource;
@@ -668,25 +639,25 @@ int main (int argc, char **argv)
   int    changeEvery = 5;
   int index;
   index= Simulation::contains(argv, argc, "-v");
-  explicit if( index > 0 && argc > index){
-    int pos = Simulation::contains((char**)VersionStrings, VMax , argv[index]) override;
+  if( index > 0 && argc > index){
+    int pos = Simulation::contains((char**)VersionStrings, VMax , argv[index]);
     if(pos > 0)
-      version=(Version)(pos-1) override;
+      version=(Version)(pos-1);
   }
   index= Simulation::contains(argv, argc, "-t");
-  explicit if( index > 0 && argc > index){
+  if( index > 0 && argc > index){
     teaching=atof(argv[index]);
   }
   index= Simulation::contains(argv, argc, "-e");
-  explicit if( index > 0 && argc > index){
+  if( index > 0 && argc > index){
     changeEvery=atof(argv[index]);
   }
   index= Simulation::contains(argv, argc, "-sf");
-  explicit if( index > 0 && argc > index){
+  if( index > 0 && argc > index){
     sizefactor=atof(argv[index]);
   }
   index= Simulation::contains(argv, argc, "-i");
-  explicit if( index > 0 && argc > index){
+  if( index > 0 && argc > index){
     id=atoi(argv[index]);
   }
   ThisSim sim(version, teaching, sizefactor, changeEvery);

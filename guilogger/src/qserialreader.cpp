@@ -32,8 +32,8 @@
 #include <errno.h>
 #include <sys/time.h>
 #include <sys/types.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 
 
 QSerialReader::QSerialReader( char bt)
@@ -76,7 +76,7 @@ void QSerialReader::run()
     tcsetattr(fd,TCSANOW,&newtio);
     tcflush(fd, TCIFLUSH);
 
-    char *s = NULL;
+    char *s = nullptr;
     int size = 0;
 
     while(1)    // main loop
@@ -91,9 +91,9 @@ void QSerialReader::run()
 
         ++size;
         char* tmp = static_cast<char*>(realloc( s, size+1));
-        if (tmp == NULL) {
+        if (tmp == nullptr) {
             free(s);
-            s = NULL;
+            s = nullptr;
             size = 0;
             continue;
         }
@@ -111,7 +111,7 @@ void QSerialReader::run()
             }
 
             free(s);
-            s = NULL;
+            s = nullptr;
             size=0;
         }
 

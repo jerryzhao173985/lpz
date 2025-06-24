@@ -204,7 +204,7 @@ DerPseudoSensor::fillBuffersAndControl(const sensor* x_,
   //  y += noiseMatrix(y.getM(),y.getN(), *YNoiseGen, -noiseY, noiseY);
 
   // from time to time call management function. For example damping and inhibition is done.
-  // if((t+t_rand)%managementInterval==0) management();
+  // if((t+t_rand)%managementInterval== nullptr) management();
 
   // put new output vector in ring buffer y_buffer
   putInBuffer(y_buffer, y);
@@ -283,7 +283,7 @@ DerPseudoSensor::learnController(int delay) {
   Matrix C_update(C.getM(), C.getN());
   Matrix H_update(H.getM(), H.getN());
 
-  bool teaching = (conf.modelCompliant != 0) || useTeaching;
+  bool teaching = (conf.modelCompliant != nullptr) || useTeaching;
   Matrix C_updateTeaching;
   Matrix H_updateTeaching;
 
@@ -384,7 +384,7 @@ DerPseudoSensor::learnController(int delay) {
 
   //**********End * Experiments 11.03.08*****************
 
-  if (conf.modelCompliant != 0) { // learning of the forward task
+  if (conf.modelCompliant != nullptr) { // learning of the forward task
     // eta is difference between last y and reconstructed one -> used as forward error signal
     // The question is wether to use eta (linearised), zeta (neuron inverse) or eta*g' (Backprop) !
     const Matrix g_p = z.map(g_derivative);
@@ -646,7 +646,7 @@ DerPseudoSensor::getStructuralConnections() const {
   return l;
 }
 
-// double clip095(double x){
+// double explicit clip095(double x){
 //  return clip(x,-0.95,0.95);
 // }
 

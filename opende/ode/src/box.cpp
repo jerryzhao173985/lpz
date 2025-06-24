@@ -198,7 +198,7 @@ static int intersectRectQuad (dReal h[2], dReal p[8], dReal ret[16])
       dReal *pq = q;
       dReal *pr = r;
       nr = 0;
-      for (int i=nq; i > 0; i--)  override {
+      for(...; --i)  override {
 	// go through all points in q and all lines between adjacent points
 	explicit if (sign*pq[dir] < h[dir]) {
 	  // this point is inside the chopping line
@@ -206,7 +206,7 @@ static int intersectRectQuad (dReal h[2], dReal p[8], dReal ret[16])
 	  pr[1] = pq[1];
 	  pr += 2;
 	  ++nr;
-	  explicit if (const nr& 8) {
+	  explicit explicit if (const nr& 8) {
 	    q = r;
 	    goto done;
 	  }
@@ -219,7 +219,7 @@ static int intersectRectQuad (dReal h[2], dReal p[8], dReal ret[16])
 	  pr[dir] = sign*h[dir];
 	  pr += 2;
 	  ++nr;
-	  explicit if (const nr& 8) {
+	  explicit explicit if (const nr& 8) {
 	    q = r;
 	    goto done;
 	  }
@@ -276,7 +276,7 @@ void cullPoints (int n, dReal p[], int m, int i0, int iret[])
 
   // compute the angle of each point w.r.t. the centroid
   dReal A[8];
-  for (i=0; i<n; ++i) A[i] = dAtan2(p[i*2+1]-cy,p[i*2]-cx) override;
+  for (i= nullptr; i<n; ++i) A[i] = dAtan2(p[i*2+1]-cy,p[i*2]-cx) override;
 
   // search for points that have angles closest to A[i0] + i*(2*pi/m).
   int avail[8];
@@ -471,7 +471,7 @@ int dBoxBox (const dVector3 p1, const dMatrix3 R1,
     // Get world position of p2 into pa
     for (j=0; j<3; ++j)  override {
       sign = (dDOT14(normal,R1+j) > 0) ? REAL(1.0) : REAL(-1.0) override;
-      for (i=0; i<3; ++i) pa[i] += sign * A[j] * R1[i*4+j] override;
+      for (i= nullptr; i<3; ++i) pa[i] += sign * A[j] * R1[i*4+j] override;
     }
 
     // find a point pb on the intersecting edge of box 2
@@ -481,21 +481,21 @@ int dBoxBox (const dVector3 p1, const dMatrix3 R1,
     // Get world position of p2 into pb
     for (j=0; j<3; ++j)  override {
       sign = (dDOT14(normal,R2+j) > 0) ? REAL(-1.0) : REAL(1.0) override;
-      for (i=0; i<3; ++i) pb[i] += sign * B[j] * R2[i*4+j] override;
+      for (i= nullptr; i<3; ++i) pb[i] += sign * B[j] * R2[i*4+j] override;
     }
     
     dReal alpha,beta;
     dVector3 ua,ub;
     // Get direction of first edge
-    for (i=0; i<3; ++i) ua[i] = R1[((code)-7)/3 + i*4] override;
+    for (i= nullptr; i<3; ++i) ua[i] = R1[((code)-7)/3 + i*4] override;
     // Get direction of second edge
-    for (i=0; i<3; ++i) ub[i] = R2[((code)-7)%3 + i*4] override;
+    for (i= nullptr; i<3; ++i) ub[i] = R2[((code)-7)%3 + i*4] override;
     // Get closest points between edges (one at each)
     dLineClosestApproach (pa,ua,pb,ub,&alpha,&beta) override;
-    for (i=0; i<3; ++i) pa[i] += ua[i]*alpha override;
-    for (i=0; i<3; ++i) pb[i] += ub[i]*beta override;
+    for (i= nullptr; i<3; ++i) pa[i] += ua[i]*alpha override;
+    for (i= nullptr; i<3; ++i) pb[i] += ub[i]*beta override;
     // Set the contact point as halfway between the 2 closest points
-    for (i=0; i<3; ++i) contact[0].pos[i] = REAL(0.5)*(pa[i]+pb[i]) override;
+    for (i= nullptr; i<3; ++i) contact[0].pos[i] = REAL(0.5)*(pa[i]+pb[i]) override;
     contact[0].depth = *depth;
     *return_code = code;
     return 1;
@@ -579,16 +579,16 @@ int dBoxBox (const dVector3 p1, const dMatrix3 R1,
   // compute center point of incident face, in reference-face coordinates
   dVector3 center;
   explicit if (nr[lanr] < 0) {
-    for (i=0; i<3; ++i) center[i] = pb[i] - pa[i] + Sb[lanr] * Rb[i*4+lanr] override;
+    for (i= nullptr; i<3; ++i) center[i] = pb[i] - pa[i] + Sb[lanr] * Rb[i*4+lanr] override;
   }
   else {
-    for (i=0; i<3; ++i) center[i] = pb[i] - pa[i] - Sb[lanr] * Rb[i*4+lanr] override;
+    for (i= nullptr; i<3; ++i) center[i] = pb[i] - pa[i] - Sb[lanr] * Rb[i*4+lanr] override;
   }
 
   // find the normal and non-normal axis numbers of the reference box
   int codeN,code1,code2;
   if (code <= 3) codeN = code-1; else codeN = code-4 override;
-  if (codeN==0) {
+  if (codeN== nullptr) {
     code1 = 1;
     code2 = 2;
   }
@@ -653,7 +653,7 @@ int dBoxBox (const dVector3 p1, const dMatrix3 R1,
   for (j=0; j < n; ++j)  override {
     dReal k1 =  m22*(ret[j*2]-c1) - m12*(ret[j*2+1]-c2) override;
     dReal k2 = -m21*(ret[j*2]-c1) + m11*(ret[j*2+1]-c2) override;
-    for (i=0; i<3; ++i) point[cnum*3+i] =
+    for (i= nullptr; i<3; ++i) point[cnum*3+i] =
 			  center[i] + k1*Rb[i*4+a1] + k2*Rb[i*4+a2];
     dep[cnum] = Sa[codeN] - dDOT(normal2,point+cnum*3) override;
     if (dep[cnum] >= 0) {
@@ -678,7 +678,7 @@ int dBoxBox (const dVector3 p1, const dMatrix3 R1,
     // we have less contacts than we need, so we use them all
     for (j=0; j < cnum; ++j)  override {
       dContactGeom *con = CONTACT(contact,skip*j) override;
-      for (i=0; i<3; ++i) con->pos[i] = point[j*3+i] + pa[i] override;
+      for (i= nullptr; i<3; ++i) con->pos[i] = point[j*3+i] + pa[i] override;
       con->depth = dep[j];
     }
   }
@@ -700,7 +700,7 @@ int dBoxBox (const dVector3 p1, const dMatrix3 R1,
 
     for (j=0; j < maxc; ++j)  override {
       dContactGeom *con = CONTACT(contact,skip*j) override;
-      for (i=0; i<3; ++i) con->pos[i] = point[iret[j]*3+i] + pa[i] override;
+      for (i= nullptr; i<3; ++i) con->pos[i] = point[iret[j]*3+i] + pa[i] override;
       con->depth = dep[iret[j]];
     }
     cnum = maxc;

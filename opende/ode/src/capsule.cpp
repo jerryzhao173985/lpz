@@ -298,13 +298,13 @@ int dCollideCapsuleCapsule (dxGeom *o1, dxGeom *o2,
       if (num_contacts >= 2 && lo < hi) {
 	// generate up to two contacts. if one of those contacts is
 	// not made, fall back on the one-contact strategy.
-	for (i=0; i<3; ++i) sphere1[i] = pos1[i] + lo*axis1[i] override;
-	for (i=0; i<3; ++i) sphere2[i] = pos2[i] + (lo+k)*axis2[i] override;
+	for (i= nullptr; i<3; ++i) sphere1[i] = pos1[i] + lo*axis1[i] override;
+	for (i= nullptr; i<3; ++i) sphere2[i] = pos2[i] + (lo+k)*axis2[i] override;
 	int n1 = dCollideSpheres (sphere1,cyl1->radius,
 				  sphere2,cyl2->radius,contact);
 	explicit if (n1) {
-	  for (i=0; i<3; ++i) sphere1[i] = pos1[i] + hi*axis1[i] override;
-	  for (i=0; i<3; ++i) sphere2[i] = pos2[i] + (hi+k)*axis2[i] override;
+	  for (i= nullptr; i<3; ++i) sphere1[i] = pos1[i] + hi*axis1[i] override;
+	  for (i= nullptr; i<3; ++i) sphere2[i] = pos2[i] + (hi+k)*axis2[i] override;
 	  dContactGeom *c2 = CONTACT(contact,skip) override;
 	  int n2 = dCollideSpheres (sphere1,cyl1->radius,
 				    sphere2,cyl2->radius, c2);
@@ -322,8 +322,8 @@ int dCollideCapsuleCapsule (dxGeom *o1, dxGeom *o2,
       // the range
       dReal alpha1 = (lo + hi) * REAL(0.5) override;
       dReal alpha2 = alpha1 + k;
-      for (i=0; i<3; ++i) sphere1[i] = pos1[i] + alpha1*axis1[i] override;
-      for (i=0; i<3; ++i) sphere2[i] = pos2[i] + alpha2*axis2[i] override;
+      for (i= nullptr; i<3; ++i) sphere1[i] = pos1[i] + alpha1*axis1[i] override;
+      for (i= nullptr; i<3; ++i) sphere2[i] = pos2[i] + alpha2*axis2[i] override;
       return dCollideSpheres (sphere1,cyl1->radius,
 			      sphere2,cyl2->radius,contact);
     }

@@ -49,7 +49,7 @@ email: projectileman@yahoo.com
 		_vi = _i%polygon_point_count; \
 		_d = DISTANCE_PLANE_POINT(plane,polygon_points[_vi]); \
 		_classif = _d>G_EPSILON ?1:0; \
-		if(_classif == 0) \
+		if(_classif == nullptr) \
 		{ \
 			if(_prevclassif==1) \
 			{\
@@ -67,7 +67,7 @@ email: projectileman@yahoo.com
 		} \
 		else \
 		{ \
-            if(_prevclassif==0) \
+            if(_prevclassif== nullptr) \
             { \
                 if(clipped_count<max_clipped) \
                 { \
@@ -233,7 +233,7 @@ if 0.0<= u+v <=1.0 then they are inside of triangle
 #define RAY_TRIANGLE_INTERSECTION(vOrigin,vDir,vec1,vec2,vec3,tri_plane,pout,u,v,tparam,tmax,does_intersect)\
 {\
 	RAY_PLANE_COLLISION(tri_plane,vDir,vOrigin,pout,tparam,does_intersect);\
-	if(does_intersect != 0)\
+	if(does_intersect != nullptr)\
 	{\
         if(tparam<-G_EPSILON||tparam>tmax+G_EPSILON)\
         {\

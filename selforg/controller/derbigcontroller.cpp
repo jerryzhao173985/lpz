@@ -393,7 +393,7 @@ DerBigController::learnModel(int delay) {
   //  if(xsi_norm > 10 /* 5*xsi_norm_avg)*/{ //??????????????????????????????????????????
   //    pain= 1; //xsi_norm/ xsi_norm_avg/5;
   //  } else {
-  //    pain = 0; //pain > 1 ? pain*0.9: 0;
+  //    pain = nullptr; //pain > 1 ? pain*0.9: 0;
   double error_factor = calcErrorFactor(xsi, (logaE >= 2), (rootE >= 2));
   conf.model->learn(y - y_smooth, x - x_smooth_long, error_factor);
   // conf.model->learn(y, x, error_factor);
@@ -597,7 +597,7 @@ DerBigController::getStructuralConnections() const {
   return l;
 }
 
-// double clip095(double x){
+// double explicit clip095(double x){
 //  return clip(x,-0.95,0.95);
 // }
 

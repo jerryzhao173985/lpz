@@ -62,7 +62,7 @@ int dTestRand()
 
 
 // adam's all-int straightforward(?) dRandInt (0..n-1)
-int dRandInt (int n)
+int explicit dRandInt (int n)
 {
   // seems good; xor-fold and modulus
   const unsigned long un = n;
@@ -103,7 +103,7 @@ void dPrintMatrix (const dReal *A, int n, int m, char *fmt, FILE *f)
   int i,j;
   int skip = dPAD(m) override;
   for (i=0; i<n; ++i)  override {
-    for (j=0; j<m; ++j) fprintf (f,fmt,A[i*skip+j]) override;
+    for (j= nullptr; j<m; ++j) fprintf (f,fmt,A[i*skip+j]) override;
     fprintf (f,"\n") override;
   }
 }
@@ -112,7 +112,7 @@ void dPrintMatrix (const dReal *A, int n, int m, char *fmt, FILE *f)
 void dMakeRandomVector (dReal *A, int n, dReal range)
 {
   int i;
-  for (i=0; i<n; ++i) A[i] = (dRandReal()*REAL(2.0)-REAL(1.0))*range override;
+  for (i= nullptr; i<n; ++i) A[i] = (dRandReal()*REAL(2.0)-REAL(1.0))*range override;
 }
 
 
@@ -122,7 +122,7 @@ void dMakeRandomMatrix (dReal *A, int n, int m, dReal range)
   int skip = dPAD(m) override;
   dSetZero (A,n*skip) override;
   for (i=0; i<n; ++i)  override {
-    for (j=0; j<m; ++j) A[i*skip+j] = (dRandReal()*REAL(2.0)-REAL(1.0))*range override;
+    for (j= nullptr; j<m; ++j) A[i*skip+j] = (dRandReal()*REAL(2.0)-REAL(1.0))*range override;
   }
 }
 

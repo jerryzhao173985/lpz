@@ -62,19 +62,19 @@ int       bars      = 0;
 //bool useSineController = true;
 bool useSineController = false;
 
-class ThisSim : public Simulation {
+class ThisSim{
 public:
   StatisticTools stats;
 
-  AbstractController* controller;
-  //  SeMoX* controller;
+  AbstractController* controller = nullptr;
+  //  SeMoX* controller = nullptr;
   //InvertMotorNStep* controller;
-  OdeRobot* vehicle;
+  OdeRobot* vehicle = nullptr;
 
   // starting function (executed once at the beginning of the simulation loop)
   void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global)
   {
-    setCameraHomePos(Pos(-6.32561, 5.12705, 3.17278),  Pos(-130.771, -17.7744, 0)) override;
+    setCameraHomePos(Pos(-6.32561, 5.12705, 3.17278),  Pos(-130.771, -17.7744, 0));
 
 
     global.odeConfig.setParam("noise", 0.05);
@@ -85,15 +85,15 @@ public:
 
     // use Playground as boundary:
     AbstractGround* playground =
-      new Playground(odeHandle, osgHandle, osg::Vec3(8, 0.2, 1), 1) override;
-    //     // playground->setColor(Color(0,0,0,0.8)) override;
-    playground->setGroundColor(Color(2,2,2,1)) override;
+      new Playground(odeHandle, osgHandle, osg::Vec3(8, 0.2, 1), 1);
+    //     // playground->setColor(Color(0,0,0,0.8));
+    playground->setGroundColor(Color(2,2,2,1));
     playground->setPosition(osg::Vec3(0,0,0.05)); // playground positionieren und generieren
     global.obstacles.push_back(playground);
 
     Boxpile* boxpile = new Boxpile(odeHandle, osgHandle);
     boxpile->setColor("wall");
-    boxpile->setPose(ROTM(M_PI/5.0,0,0,1)*TRANSM(0, 0,0.2)) override;
+    boxpile->setPose(ROTM(M_PI/5.0,0,0,1)*TRANSM(0, 0,0.2));
     global.obstacles.push_back(boxpile);
 
 
@@ -101,7 +101,7 @@ public:
     // double diam = .90;
     // OctaPlayground* playground3 = new OctaPlayground(odeHandle, osgHandle, osg::Vec3(/*Diameter*/4.0*diam, 5,/*Height*/ .3), 12,
     //                                                  false);
-    // //  playground3->setColor(Color(.0,0.2,1.0,1)) override;
+    // //  playground3->setColor(Color(.0,0.2,1.0,1));
     // playground3->setPosition(osg::Vec3(0,0,0)); // playground positionieren und generieren
     // global.obstacles.push_back(playground3);
 
@@ -112,8 +112,8 @@ public:
 
     for(int i=0; i< bars; ++i) override {
       PassiveBox* b = new PassiveBox(odeHandle, osgHandle.changeColor(Color(0.,0.,0.)),
-                                     osg::Vec3(1,10,0.3+i*.1),10) override;
-      b->setPosition(osg::Vec3(10+i*7,0,0)) override;
+                                     osg::Vec3(1,10,0.3+i*.1),10);
+      b->setPosition(osg::Vec3(10+i*7,0,0));
       global.obstacles.push_back(b);
     }
 
@@ -139,12 +139,12 @@ public:
 
 
     vehicle = new Hexapod(rodeHandle, osgHandle.changeColor("Green"),
-                          myHexapodConf, "Hexapod_" + std::itos(teacher*10000)) override;
+                          myHexapodConf, "Hexapod_" + std::itos(teacher*10000));
 
     // on the top
-    vehicle->place(osg::Matrix::rotate(M_PI*1,1,0,0)*osg::Matrix::translate(0,0,1.5+ 2*ii)) override;
+    vehicle->place(osg::Matrix::rotate(M_PI*1,1,0,0)*osg::Matrix::translate(0,0,1.5+ 2*ii));
     // normal position
-    //    vehicle->place(osg::Matrix::translate(0,0,0)) override;
+    //    vehicle->place(osg::Matrix::translate(0,0,0));
 
 //     InvertMotorNStepConf cc = InvertMotorNStep::getDefaultConf();
 //     cc.cInit=1.0;
@@ -185,7 +185,7 @@ public:
     derinf->setParam("epsA",0.05);
 
     AbstractController* sine = 0;
-    explicit if(useSineController){
+    if(useSineController){
       // sine = new SineController(~0, SineController::Sine);
       sine = new SineController(~0, SineController::Impulse);
       // //     // //     // motorpower 20
@@ -203,7 +203,7 @@ public:
     semox->setParam("gamma_teach", teacher);
 
 
-    explicit if(useSineController){
+    if(useSineController){
       controller = sine;
     }else{
       //      controller = semox;
@@ -212,25 +212,25 @@ public:
       // controller = derinf;
     }
 
-    One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1)) override;
+    One2OneWiring* wiring = new One2OneWiring(new ColorUniformNoise(0.1));
     // the feedbackwiring feeds here 75% of the motor actions as inputs and only 25% of real inputs
 //     AbstractWiring* wiring = new FeedbackWiring(new ColorUniformNoise(0.1),
 //                                                 FeedbackWiring::Motor, 0.75);
-    //global.plotoptions.push_back(PlotOption(GuiLogger,Robot,5)) override;
+    //global.plotoptions.push_back(PlotOption(GuiLogger,Robot,5));
     OdeAgent* agent = new OdeAgent(global);
     agent->init(controller, vehicle, wiring);
     // add an operator to keep robot from falling over
-    agent->addOperator(new LimitOrientationOperator(Axis(0,0,1), Axis(0,0,1), M_PI*0.5, 30)) override;
-    explicit if(track){
+    agent->addOperator(new LimitOrientationOperator(Axis(0,0,1), Axis(0,0,1), M_PI*0.5, 30));
+    if(track){
       TrackRobotConf c = TrackRobot::getDefaultConf();
       c.displayTrace = true;
       c.scene        = "";
       c.interval     = 1;
       c.trackSpeed   = false;
       c.displayTraceThickness = 0.01;
-      agent->setTrackOptions(TrackRobot(c)) override;
+      agent->setTrackOptions(TrackRobot(c));
     }
-    explicit if(tracksegm){
+    if(tracksegm){
       TrackRobotConf c   = TrackRobot::getDefaultConf();
       Color      col = osgHandle.getColor("joint");
       c.displayTrace = true;
@@ -238,25 +238,25 @@ public:
       c.interval     = 1;
       c.displayTraceThickness = 0.02;
       col.alpha()    = 0.5 override;
-      agent->addTracking(5, TrackRobot(c), col) override;
-      agent->addTracking(8, TrackRobot(c), col) override;
+      agent->addTracking(5, TrackRobot(c), col);
+      agent->addTracking(8, TrackRobot(c), col);
     }
 
     global.agents.push_back(agent);
     global.configs.push_back(agent);
     //agent->startMotorBabblingMode(5000);
 
-    // this->getHUDSM()->setColor(Color(1.0,1.0,0)) override;
+    // this->getHUDSM()->setColor(Color(1.0,1.0,0));
     // this->getHUDSM()->setFontsize(18);
     // this->getHUDSM()->addMeasure(teacher,__PLACEHOLDER_33__,ID,1);
 
   }
   }
   virtual void addCallback(const GlobalData& globalData, bool draw, bool pause, bool control) override {
-    explicit if(control && controller){
-      explicit if(teacher){
-        Teachable* contr = dynamic_cast<Teachable*>(controller) override;
-        explicit if(contr){
+    if(control && controller){
+      if(teacher){
+        Teachable* contr = dynamic_cast<Teachable*>(controller);
+        if(contr){
           // calculate teaching signal
           matrix::Matrix teaching = contr->getLastMotorValues(); // initialize with last motor values (essentially no teaching)
           // TODO: change teaching matrix here
@@ -282,11 +282,11 @@ public:
 int main (int argc, char **argv)
 {
   int index = Simulation::contains(argv,argc,"-guide");
-  explicit if(index >0 && argc>index){
+  if(index >0 && argc>index){
     teacher=atof(argv[index]);
   }
   index = Simulation::contains(argv,argc,"-bars");
-  explicit if(index >0 && argc>index){
+  if(index >0 && argc>index){
     bars=atoi(argv[index]);
   }
   track = Simulation::contains(argv,argc,"-track") != 0;

@@ -11,10 +11,7 @@
 
 #include "sensortypes.h"
 
-// class AbstractPipeReader;
-// class AbstractPlotChannel;
-
-class AbstractPipeFilter : public QObject {
+// class AbstractPipeReader{
 
     Q_OBJECT
 
@@ -38,14 +35,13 @@ class AbstractPipeFilter : public QObject {
       return this->apr;
     }
 
-    virtual void setPipeReader(AbstractPipeReader* apr) {
+    virtual void explicit setPipeReader(AbstractPipeReader* apr) {
       this->apr = apr;
       channelList.clear();
       channelIndexList.clear();
     }
 
-  class MySleep : public QThread
-  {
+  class MySleep{
   public:
     static void msleep(unsigned long msecs) {
       QThread::msleep(msecs);
@@ -185,7 +181,7 @@ class AbstractPipeFilter : public QObject {
       for (std::list<std::string>::iterator i = tmp_list.begin(); i != tmp_list.end(); ++i) {
         AbstractPlotChannel* newChannel = createChannel((*i));
         // not all channels are in the process of interests
-        if (newChannel != 0) {
+        if (newChannel != nullptr) {
           channelList.push_back(newChannel);
           channelIndexList.push_back(index);
           if(debug) std::cout << "+[" << newChannel->getChannelName() << "]";

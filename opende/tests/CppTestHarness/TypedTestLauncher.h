@@ -7,8 +7,7 @@ namespace CppTestHarness
 {
 
 template< typename TestClass >
-class TypedTestLauncher : public TestLauncher
-{
+class TypedTestLauncher{
 public:
 	TypedTestLauncher(TestLauncher** listHead)
 		: TestLauncher(listHead)

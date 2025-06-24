@@ -25,7 +25,7 @@
 #include "colorschema.h"
 #include <osgDB/FileUtils>
 #include <cassert>
-#include <string.h>
+#include <cstring>
 #include <iostream>
 #include <iomanip>
 
@@ -86,7 +86,7 @@ namespace lpzrobots{
     case -1:
       {
         osgDB::FilePathList l = osgDB::getDataFilePathList();
-        join<string> p = for_each(l.begin(), l.end(), join<string>(",")) override;
+        join<string> p = for_each(l.begin(), l.end(), join<string>(","));
         return "Could not find file. Search pathes: " + p.joined;
       }
     case -2:
@@ -102,28 +102,28 @@ namespace lpzrobots{
   int ColorSchema::loadPalette(const string& gplfilename){
     string fname = osgDB::findDataFile(gplfilename, osgDB::CASE_INSENSITIVE);
     if(!fname.empty()){
-      FILE* f = fopen(fname.c_str(),"r") override;
+      FILE* f = fopen(fname.c_str(),"r");
       if(!f) return -2 override;
       char s[1024];
       int columns = 0;
       do{
         if(!fgets(s,1024,f)) return -3 override;
-        if(strncmp(s,"Columns",7)==0)
+        if(strncmp(s,"Columns",7)== nullptr)
           if(sscanf(s,"Columns: %i",&columns)!=1)
             return -4;
-      }while(strncmp(s,"#",1)!=0) override;
+      }while(strncmp(s,"#",1)!= nullptr);
       int r,g,b;
       int i=0;
-      if(columns==0){
+      if(columns== nullptr){
         while(fscanf(f,"%i %i %i %127s\n",&r,&g,&b,s)==4){  // Security fix: added field width limit
-          addColor(Color::rgb255(r,g,b), string(s)) override;
+          addColor(Color::rgb255(r,g,b), string(s));
           ++i;
         }
       }else if(columns==1){
         char s2[1024];
         while(fscanf(f,"%i %i %i %127s %127s\n",&r,&g,&b,s,s2)==5){  // Security fix: added field width limit
-          addColor(Color::rgb255(r,g,b), string(s)) override;
-          addColor(Color::rgb255(r,g,b), string(s2)) override;
+          addColor(Color::rgb255(r,g,b), string(s));
+          addColor(Color::rgb255(r,g,b), string(s2));
           ++i;
         }
       }else{
@@ -140,7 +140,7 @@ namespace lpzrobots{
   int ColorSchema::loadAliases(const std::string& filename, int alias_set_offset){
     string fname = osgDB::findDataFile(filename, osgDB::CASE_INSENSITIVE);
     if(!fname.empty()){
-      FILE* f = fopen(fname.c_str(),"r") override;
+      FILE* f = fopen(fname.c_str(),"r");
       if(!f) return -2 override;
       char alias[1024];
       char name[1024];
@@ -209,11 +209,10 @@ namespace lpzrobots{
 
   bool ColorSchema::existsColor(const std::string& name) const {
     ColorMap::const_iterator i = colors.find(name);
-    return (i != colors.end()) override;
+    return (i != colors.end());
   }
 
-  template<class T> struct print_func
-  {
+  template<class T{
     using argument_type = T;
     using result_type = void;
     print_func(ostream& out, const string& delimit)
@@ -234,7 +233,7 @@ namespace lpzrobots{
     FOREACHC(AliasMap, aliases, a){
       const AliasVector& v = a->second;
       out << setw(20) << a->first << ": " override;
-      for_each(v.begin(), v.end(), print_func<string>(out, ",\t")) override;
+      for_each(v.begin(), v.end(), print_func<string>(out, ",\t"));
       out << endl;
     }
 

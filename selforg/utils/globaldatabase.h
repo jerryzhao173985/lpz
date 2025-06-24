@@ -30,13 +30,7 @@
 
 #ifndef NOCONFIGURATOR
 namespace lpzrobots {
-class ConfiguratorProxy;
-}
-#endif
-
-using AgentList = std::vector<Agent*>;
-
-class GlobalDataBase {
+class ConfiguratorProxy{
 public:
   GlobalDataBase();
 

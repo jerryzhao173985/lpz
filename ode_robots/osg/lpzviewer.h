@@ -34,7 +34,7 @@ namespace lpzrobots {
       that supports the rendering of offscreen RRT (render to texture) cameras
       at any time (without sync)
   */
-  class LPZViewer : public osgViewer::Viewer {
+  class LPZViewer{
   public:
 
     LPZViewer();
@@ -43,7 +43,7 @@ namespace lpzrobots {
 
     LPZViewer(const osgViewer::Viewer& viewer, const osg::CopyOp& copyop=osg::CopyOp::SHALLOW_COPY);
 
-    virtual ~LPZViewer();
+    virtual ~LPZViewer() override;
 
     ///overwritten to set cpu affinity back
     void setUpThreading();

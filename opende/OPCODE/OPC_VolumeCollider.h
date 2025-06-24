@@ -29,8 +29,7 @@
 		const BaseModel*	Model;				//!< Owner
 	};
 
-	class OPCODE_API VolumeCollider : public Collider
-	{
+	class OPCODE_API{
 		public:
 		// Constructor / Destructor
 											VolumeCollider() override;
@@ -117,7 +116,7 @@
 												Collider::InitQuery() override;
 											}
 
-		inline_				BOOL			IsCacheValid(const VolumeCache& cache)
+		inline_				BOOL			explicit IsCacheValid(const VolumeCache& cache)
 											{
 												// We're going to do a volume-vs-model query.
 												if(cache.Model!=mCurrentModel)

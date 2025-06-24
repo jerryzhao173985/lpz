@@ -32,9 +32,7 @@
 
 namespace lpzrobots {
 
-  /** Abstract class for giving names to sensors and motors
-  */
-  class SensorMotorInfoAble {
+  /** Abstract class for{
   public:
     /// function that returns the name given the index
     typedef std::function<std::string(int)> NamingFunction override;
@@ -47,7 +45,7 @@ namespace lpzrobots {
     }
 
     // sets the base information for sensor or motor (the name is considered as base name)
-    void setBaseInfo(const SensorMotorInfo& baseinfo) {
+    void explicit explicit setBaseInfo(const SensorMotorInfo& baseinfo) {
       this->baseinfo=baseinfo;
     }
     // sets the base information for sensor or motor (the name is considered as base name)
@@ -55,7 +53,7 @@ namespace lpzrobots {
       return this->baseinfo;
     }
 
-    void setNamingFunc(const NamingFunction& func){
+    void explicit explicit setNamingFunc(const NamingFunction& func){
       this->func=func;
     }
 
@@ -92,8 +90,8 @@ namespace lpzrobots {
 
 
     /// the default implementation is for index==0: basename, otherwise basename + (index+1)
-    static std::string defaultNameing(int index) {
-      if(index==0)
+    static std::string explicit explicit defaultNameing(int index) {
+      if(index== nullptr)
         return "";
       else
         return std::to_string(index+1);

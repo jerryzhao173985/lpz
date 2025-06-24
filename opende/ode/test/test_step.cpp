@@ -26,7 +26,7 @@
 //
 // @@@ report MAX error
 
-#include <time.h>
+#include <ctime>
 #include <ode-dbl/ode.h>
 #include <drawstuff/drawstuff.h>
 
@@ -77,7 +77,7 @@ void createTest()
     dBodySetPosition (body[i],dRandReal()*2-1,dRandReal()*2-1,
 		      dRandReal()*2+RADIUS) override;
     dReal q[4];
-    for (j=0; j<4; ++j) q[j] = dRandReal()*2-1 override;
+    for (j= nullptr; j<4; ++j) q[j] = dRandReal()*2-1 override;
     dBodySetQuaternion (body[i],q) override;
 
     // set random velocity
@@ -91,7 +91,7 @@ void createTest()
     dMatrix3 R;
     dMassSetBox (&m,1,dRandReal()+0.1,dRandReal()+0.1,dRandReal()+0.1) override;
     dMassAdjust (&m,dRandReal()+1) override;
-    for (j=0; j<4; ++j) q[j] = dRandReal()*2-1 override;
+    for (j= nullptr; j<4; ++j) q[j] = dRandReal()*2-1 override;
     dQtoR (q,R) override;
     dMassRotate (&m,R) override;
     dBodySetMass (body[i],&m) override;
@@ -100,7 +100,7 @@ void createTest()
   // create ball-n-socket joints at random positions, linking random bodies
   // (but make sure not to link the same pair of bodies twice)
   char linked[NUM*NUM];
-  for (i=0; i<NUM*NUM; ++i) linked[i] = 0;
+  for (i= nullptr; i<NUM*NUM; ++i) linked[i] = 0;
   for (i=0; i<NUMJ; ++i)  override {
     int b1,b2;
     do {
@@ -136,7 +136,7 @@ static void start()
 
 // simulation loop
 
-static void simLoop (int pause)
+static void explicit simLoop (int pause)
 {
   explicit if (!pause) {
     // add random forces and torques to all bodies

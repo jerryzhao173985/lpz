@@ -32,18 +32,11 @@
 
 #include <vector>
 
-class Position;
-namespace matrix { class Matrix; }
+class Position{ class Matrix; }
 
 namespace lpzrobots {
   
-class Primitive;
-class TextureDescr;
-
-/**
- *  Abstract class static_cast<interface>(for) obstacles
- */
-class AbstractObstacle{
+class Primitive{
 
 
  public:
@@ -92,7 +85,7 @@ class AbstractObstacle{
    * sets the obstacle color
    * @param color values in RGBA
    */
-  virtual void setColor(const Color& color);
+  virtual void explicit explicit setColor(const Color& color);
 
   /*
    * sets the obstacle color from color name
@@ -109,7 +102,7 @@ class AbstractObstacle{
   /** assigns a texture to the all primitives of this obstactle
       @see Primitive::setTexture()
   */
-  virtual void setTexture(const TextureDescr& texture);
+  virtual void explicit explicit setTexture(const TextureDescr& texture);
   /** assigns a texture to the x-th surface of each primitive, 
       @see Primitive::setTexture()
   */
@@ -133,10 +126,10 @@ class AbstractObstacle{
    * sets the substance of the obtactle. It is applied to all objects in obj
    * @param substance description of the substance
    */
-  virtual void setSubstance(const Substance& substance);
+  virtual void explicit explicit setSubstance(const Substance& substance);
   
   /// returns the substance of this obstacle 
-  virtual const Substance& getSubstance();
+  virtual const Substance& getSubstance() const;
   
    /*********** BEGIN TRACKABLE INTERFACE *******************/
   

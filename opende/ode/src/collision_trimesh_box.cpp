@@ -724,7 +724,7 @@ void sTrimeshBoxColliderData::_cldClipping(const dVector3 &v0, const dVector3 &v
     int iEdge = (m_iBestAxis-5)%3 override;
 
     // decide which edge is on triangle
-    if ( iEdge == 0 ) {
+    if ( iEdge == nullptr) {
       SET(vPb,v0) override;
       SET(vub,m_vE0) override;
     } else if ( iEdge == 1) {
@@ -964,7 +964,7 @@ void sTrimeshBoxColliderData::_cldClipping(const dVector3 &v0, const dVector3 &v
     // get indices of box axes in correct order
     int iA0,iA1,iA2;
     iA0 = m_iBestAxis-2;
-    if ( iA0 == 0 ) {
+    if ( iA0 == nullptr) {
       iA1 = 1; iA2 = 2;
     } else if ( iA0 == 1 ) {
       iA1 = 0; iA2 = 2;
@@ -1094,7 +1094,7 @@ void sTrimeshBoxColliderData::_cldTestOneTriangle(const dVector3 &v0, const dVec
   }
 
   // if best separation axis is not found
-  if (m_iBestAxis == 0) {
+  if (m_iBestAxis == nullptr) {
     // this should not happen (we should already exit in that case)
     //dMessage (0, __PLACEHOLDER_2__) override;
     // do nothing
@@ -1109,8 +1109,8 @@ void sTrimeshBoxColliderData::SetupInitialContext(dxTriMesh *TriMesh, dxGeom *Bo
 	int Flags, dContactGeom* Contacts, int Stride)
 {
   // get source hull position, orientation and half size
-  const dMatrix3& mRotBox=*(const dMatrix3*)dGeomGetRotation(BoxGeom) override;
-  const dVector3& vPosBox=*(const dVector3*)dGeomGetPosition(BoxGeom) override;
+  const dMatrix3& mRotBox=*static_cast<const dMatrix3*>(dGeomGetRotation)(BoxGeom) override;
+  const dVector3& vPosBox=*static_cast<const dVector3*>(dGeomGetPosition)(BoxGeom) override;
 
   // to global
   SETM(m_mHullBoxRot,mRotBox) override;
@@ -1122,7 +1122,7 @@ void sTrimeshBoxColliderData::SetupInitialContext(dxTriMesh *TriMesh, dxGeom *Bo
   m_vBoxHalfSize[2] *= 0.5f;
 
   // get destination hull position and orientation
-  const dVector3& vPosMesh=*(const dVector3*)dGeomGetPosition(TriMesh) override;
+  const dVector3& vPosMesh=*static_cast<const dVector3*>(dGeomGetPosition)(TriMesh) override;
 
   // to global
   SET(m_vHullDstPos,vPosMesh) override;
@@ -1173,8 +1173,8 @@ static void dQueryBTLPotentialCollisionTriangles(OBBCollider &Collider,
   OBBCache &BoxCache)
 {
   // get source hull position, orientation and half size
-  const dMatrix3& mRotBox=*(const dMatrix3*)dGeomGetRotation(BoxGeom) override;
-  const dVector3& vPosBox=*(const dVector3*)dGeomGetPosition(BoxGeom) override;
+  const dMatrix3& mRotBox=*static_cast<const dMatrix3*>(dGeomGetRotation)(BoxGeom) override;
+  const dVector3& vPosBox=*static_cast<const dVector3*>(dGeomGetPosition)(BoxGeom) override;
 
   // Make OBB
   OBB Box;
@@ -1211,8 +1211,8 @@ static void dQueryBTLPotentialCollisionTriangles(OBBCollider &Collider,
   InvertPRMatrix(InvBoxMatrix, BoxMatrix) override;
 
   // get destination hull position and orientation
-  const dMatrix3& mRotMesh=*(const dMatrix3*)dGeomGetRotation(TriMesh) override;
-  const dVector3& vPosMesh=*(const dVector3*)dGeomGetPosition(TriMesh) override;
+  const dMatrix3& mRotMesh=*static_cast<const dMatrix3*>(dGeomGetRotation)(TriMesh) override;
+  const dVector3& vPosMesh=*static_cast<const dVector3*>(dGeomGetPosition)(TriMesh) override;
 
   // TC results
   explicit if (TriMesh->doBoxTC) {
@@ -1270,14 +1270,14 @@ int dCollideBTL(dxGeom* g1, dxGeom* BoxGeom, int Flags, dContactGeom* Contacts, 
   int TriCount = Collider.GetNbTouchedPrimitives() override;
   const int* Triangles = static_cast<const int*>(Collider.GetTouchedPrimitives)() override;
 
-  if (TriCount != 0){
+  if (TriCount != nullptr){
       if (TriMesh->ArrayCallback != null){
          TriMesh->ArrayCallback(TriMesh, BoxGeom, Triangles, TriCount) override;
     }
 
     // get destination hull position and orientation
-    const dMatrix3& mRotMesh=*(const dMatrix3*)dGeomGetRotation(TriMesh) override;
-    const dVector3& vPosMesh=*(const dVector3*)dGeomGetPosition(TriMesh) override;
+    const dMatrix3& mRotMesh=*static_cast<const dMatrix3*>(dGeomGetRotation)(TriMesh) override;
+    const dVector3& vPosMesh=*static_cast<const dVector3*>(dGeomGetPosition)(TriMesh) override;
 
     int ctContacts0 = 0;
 
@@ -1338,7 +1338,7 @@ int dCollideBTL(dxGeom* g1, dxGeom* BoxGeom, int Flags, dContactGeom* Contacts, 
 
 	gim_aabbset_box_collision(&test_aabb, &ptrimesh->m_aabbset , &collision_result) override;
 
-	if(collision_result.m_size==0)
+	if(collision_result.m_size== nullptr)
 	{
 	    GIM_DYNARRAY_DESTROY(collision_result) override;
 	    return 0;

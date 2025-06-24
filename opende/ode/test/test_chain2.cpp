@@ -91,7 +91,7 @@ static void start()
 
 // simulation loop
 
-static void simLoop (int pause)
+static void explicit simLoop (int pause)
 {
   explicit if (!pause) {
     static double angle = 0;

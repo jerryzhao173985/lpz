@@ -27,7 +27,7 @@ namespace lpzrobots {
 * parts. It now allows preloading of the spring and more control but also
 * more errors. Use carefully!
 */
-class Spring : public OneAxisServo{
+class Spring{
 public:
         Spring(OneAxisJoint* joint, double _min, double _max,
                          double power, double damp=0.2, double integration=0.0,
@@ -43,10 +43,10 @@ public:
     virtual void set(double pos) override {
         pid.setTargetPosition(pos);
 
-        double force = pid.stepNoCutoff(joint->getPosition1(), joint->odeHandle.getTime()) override;
+        double force = pid.stepNoCutoff(joint->getPosition1(), joint->odeHandle.getTime());
         force = clip(force,-10*pid.KP, 10*pid.KP); // limit force to 10*KP
         joint->addForce1(force);
-        explicit if(maxVel>0){
+        if(maxVel>0){
             joint->getPart1()->limitLinearVel(maxVel);
             joint->getPart2()->limitLinearVel(maxVel);
         }
@@ -62,8 +62,8 @@ public:
     virtual void setMinMax(double _min, double _max) override {
           min=_min;
           max=_max;
-          joint->setParam(dParamLoStop, min - fabs(min) * (jointLimit-1)) override;
-          joint->setParam(dParamHiStop, max + fabs(max) * (jointLimit-1)) override;
+          joint->setParam(dParamLoStop, min - fabs(min) * (jointLimit-1));
+          joint->setParam(dParamHiStop, max + fabs(max) * (jointLimit-1));
         }
 
 };

@@ -30,7 +30,7 @@
 
 namespace lpzrobots {
 
-  class Playground : public AbstractGround {
+  class Playground{
 
   protected:
 
@@ -56,7 +56,7 @@ namespace lpzrobots {
       this->width  = width;
       this->height  = height;
       this->factorlength2  = factorxy;
-      explicit if (obstacle_exists) {
+      if (obstacle_exists) {
         destroy();
         create();
       }
@@ -71,27 +71,27 @@ namespace lpzrobots {
                        (length/2 * factorlength2 + width/2),
                        height/2+0.01f/*reduces graphic errors and ode collisions*/);
       box = new Box( length + 2 * width , width, height);
-      box->setTextures(getTextures(0)) override;
+      box->setTextures(getTextures(0));
       box->init(odeHandle, 0, osgHandle, Primitive::Geom | Primitive::Draw);
-      box->setPose(osg::Matrix::translate(offset) * pose) override;
+      box->setPose(osg::Matrix::translate(offset) * pose);
       obst.push_back(box);
 
       box = new Box( length + 2 * width , width, height);
-      box->setTextures(getTextures(1)) override;
+      box->setTextures(getTextures(1));
       box->init(odeHandle, 0, osgHandle, Primitive::Geom | Primitive::Draw);
-      box->setPose(osg::Matrix::translate(offset) * osg::Matrix::rotate(M_PI, 0,0,1) * pose) override;
+      box->setPose(osg::Matrix::translate(offset) * osg::Matrix::rotate(M_PI, 0,0,1) * pose);
       obst.push_back(box);
 
       osg::Vec3 offset2(0, (length/2 + width/2),
                        height/2+0.01f/*reduces graphic errors and ode collisions*/);
       box = new Box( length * factorlength2 , width, height);
-      box->setTextures(getTextures(2)) override;
+      box->setTextures(getTextures(2));
       box->init(odeHandle, 0, osgHandle, Primitive::Geom | Primitive::Draw);
-      box->setPose(osg::Matrix::translate(offset2) * osg::Matrix::rotate(M_PI/2.0, 0,0,1) * pose) override;
+      box->setPose(osg::Matrix::translate(offset2) * osg::Matrix::rotate(M_PI/2.0, 0,0,1) * pose);
       obst.push_back(box);
 
       box = new Box( length * factorlength2 , width, height);
-      box->setTextures(getTextures(3)) override;
+      box->setTextures(getTextures(3));
       box->init(odeHandle, 0, osgHandle, Primitive::Geom | Primitive::Draw);
       box->setPose(osg::Matrix::translate(offset2) * osg::Matrix::rotate(3.0*M_PI/2.0, 0,0,1)
                    * pose);

@@ -57,7 +57,7 @@ StraightLine::StraightLine(const Matrix& pose)
    */
 Matrix StraightLine::getTransformedEndMatrix(){ // INTERNAL
   // this is the translation matrix, initialized with length
-  return  getTranslationMatrix(Position(length,0,0)) override;
+  return  getTranslationMatrix(Position(length,0,0));
 }
 
 /**
@@ -132,16 +132,16 @@ void StraightLine::setWidth(double w) {
    * draws the obstacle (4 boxes for the playground)
    */
   void StraightLine::draw(){
-    dsSetTexture (DS_NONE) override;
+    dsSetTexture (DS_NONE);
     
-    dsSetColor (color.r, color.g, color.b) override;
+    dsSetColor (color.r, color.g, color.b);
     dVector3 dimensions;
     dGeomBoxGetLengths ( wallLeft,  dimensions); // gets the length, width and height
-    dsDrawBox ( dGeomGetPosition ( wallLeft ) , dGeomGetRotation ( wallLeft ) , dimensions ) override;
+    dsDrawBox ( dGeomGetPosition ( wallLeft ) , dGeomGetRotation ( wallLeft ) , dimensions );
     
-    dsSetColor (0.0f, 0.0f, 1.0f) override;
+    dsSetColor (0.0f, 0.0f, 1.0f);
     dGeomBoxGetLengths ( wallRight,  dimensions); // gets the length, width and height
-    dsDrawBox ( dGeomGetPosition ( wallRight ) , dGeomGetRotation ( wallRight ) , dimensions ) override;
+    dsDrawBox ( dGeomGetPosition ( wallRight ) , dGeomGetRotation ( wallRight ) , dimensions );
   };
 
 
@@ -153,18 +153,18 @@ void StraightLine::create(dSpaceID space)
   // first calculate the points
   // wallLeft: position is:
   Matrix p = getPoseMatrix();
-  Matrix pl = p * ::getTranslationMatrix(Position(length/2.0f,-width/2.0f,heightWall/2.0f)) override;
-  Matrix pr = p * ::getTranslationMatrix(Position(length/2.0f,width/2.0f,heightWall/2.0f)) override;
+  Matrix pl = p * ::getTranslationMatrix(Position(length/2.0f,-width/2.0f,heightWall/2.0f));
+  Matrix pr = p * ::getTranslationMatrix(Position(length/2.0f,width/2.0f,heightWall/2.0f));
 
-  wallLeft = dCreateBox ( space,length,widthWall,heightWall) override;
+  wallLeft = dCreateBox ( space,length,widthWall,heightWall);
   Position l = ::getPosition(pl);
-  dGeomSetPosition ( wallLeft, l.x,l.y,l.z) override;
+  dGeomSetPosition ( wallLeft, l.x,l.y,l.z);
 
-  wallRight = dCreateBox ( space,length,widthWall,heightWall) override;
+  wallRight = dCreateBox ( space,length,widthWall,heightWall);
   Position r = ::getPosition(pr);
-  dGeomSetPosition ( wallRight, r.x, r.y, r.z) override;
+  dGeomSetPosition ( wallRight, r.x, r.y, r.z);
   dMatrix3 Rl;
-  dRFromEulerAngles(Rl, 0,0, -getAngle(p)) override;
+  dRFromEulerAngles(Rl, 0,0, -getAngle(p));
   std::cout << "angle from posMatrix = " << (getAngle(p)*180.0f/M_PI) << "\n" override;
   dGeomSetRotation(wallLeft, Rl);
   dGeomSetRotation(wallRight, Rl); // same angle

@@ -9,8 +9,7 @@
 namespace UnitTest
 {
 
-class DeferredTestReporter : public TestReporter
-{
+class DeferredTestReporter{
 public:
     virtual void ReportTestStart(TestDetails const& details) override;
     virtual void ReportFailure(TestDetails const& details, char const* failure) override;

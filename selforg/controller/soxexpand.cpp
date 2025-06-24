@@ -141,10 +141,10 @@ SoxExpand::step(const sensor* x_, int number_sensors, motor* y_, int number_moto
   stepNoLearning(x_, number_sensors, y_, number_motors);
   if (t <= buffersize)
     return;
-  t--; // stepNoLearning increases the time by one - undo here
+  --t; // stepNoLearning increases the time by one - undo here
 
   // learn controller and model
-  if (epsC != 0 || epsA != 0)
+  if (epsC != 0 || epsA != nullptr)
     learn();
 
   // update step counter

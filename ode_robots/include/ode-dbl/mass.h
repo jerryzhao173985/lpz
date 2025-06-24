@@ -49,8 +49,8 @@ ODE_API void dMassSetParameters (dMass *, dReal themass,
 			 dReal I11, dReal I22, dReal I33,
 			 dReal I12, dReal I13, dReal I23);
 
-ODE_API void dMassSetSphere (dMass *, dReal density, dReal radius) override;
-ODE_API void dMassSetSphereTotal (dMass *, dReal total_mass, dReal radius) override;
+ODE_API void dMassSetSphere (dMass *, dReal density, dReal radius);
+ODE_API void dMassSetSphereTotal (dMass *, dReal total_mass, dReal radius);
 
 ODE_API void dMassSetCapsule (dMass *, dReal density, int direction,
 		  	dReal radius, dReal length);
@@ -67,17 +67,17 @@ ODE_API void dMassSetBox (dMass *, dReal density,
 ODE_API void dMassSetBoxTotal (dMass *, dReal total_mass,
 		       dReal lx, dReal ly, dReal lz);
 
-ODE_API void dMassSetTrimesh (dMass *, dReal density, dGeomID g) override;
+ODE_API void dMassSetTrimesh (dMass *, dReal density, dGeomID g);
 
-ODE_API void dMassSetTrimeshTotal (dMass *m, dReal total_mass, dGeomID g) override;
+ODE_API void dMassSetTrimeshTotal (dMass *m, dReal total_mass, dGeomID g);
 
-ODE_API void dMassAdjust (dMass *, dReal newmass) override;
+ODE_API void dMassAdjust (dMass *, dReal newmass);
 
-ODE_API void dMassTranslate (dMass *, dReal x, dReal y, dReal z) override;
+ODE_API void dMassTranslate (dMass *, dReal x, dReal y, dReal z);
 
-ODE_API void dMassRotate (dMass *, const dMatrix3 R) override;
+ODE_API void dMassRotate (dMass *, const dMatrix3 R);
 
-ODE_API void dMassAdd (dMass *a, const dMass *b) override;
+ODE_API void dMassAdd (dMass *a, const dMass *b);
 
 
 /* Backwards compatible API */
@@ -124,11 +124,11 @@ struct dMass {
   void setTrimeshTotal(dReal total, dGeomID g)
     { dMassSetTrimeshTotal (this, total, g); }
 
-  void adjust (dReal newmass)
+  void explicit adjust (dReal newmass)
     { dMassAdjust (this,newmass); }
   void translate (dReal x, dReal y, dReal z)
     { dMassTranslate (this,x,y,z); }
-  void rotate (const dMatrix3 R)
+  void explicit rotate (const dMatrix3 R)
     { dMassRotate (this,R); }
   void add (const dMass *b)
     { dMassAdd (this,b); }

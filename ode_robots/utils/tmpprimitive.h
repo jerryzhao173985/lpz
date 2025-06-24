@@ -29,13 +29,7 @@
 
 namespace lpzrobots {
 
-  class Primitive;
-  class Joint;
-
-  /**
-   holding a temporary primitive
-   */
-  class TmpPrimitive : public TmpObject {
+  class Primitive{
   public:
     /** creates a new item from the given primitives and initializes it.
         The lifetime is set when adding it to globalData
@@ -56,7 +50,7 @@ namespace lpzrobots {
     virtual void update();
 
   private:
-    Primitive* item;
+    Primitive* item = nullptr;
     char mode = 0;
     double mass = 0;
     Pose pose;
@@ -70,7 +64,7 @@ namespace lpzrobots {
   /**
    holding a temporary graphical item
    */
-  class TmpDisplayItem : public TmpObject {
+  class TmpDisplayItem{
   public:
     /** creates a new item from the given primitives and initializes it.
         The lifetime is set when adding it to globalData
@@ -106,7 +100,7 @@ namespace lpzrobots {
   /**
    holding a temporary joint
    */
-  class TmpJoint : public TmpObject {
+  class TmpJoint{
   public:
     /** creates a new tmporary object from the given joint and initializes it.
         The lifetime is set when adding it to globalData
@@ -124,7 +118,7 @@ namespace lpzrobots {
     virtual void update();
 
   private:
-    Joint* joint;
+    Joint* joint = nullptr;
     Color color;
     std::string colorname;
     bool useColorName = false;

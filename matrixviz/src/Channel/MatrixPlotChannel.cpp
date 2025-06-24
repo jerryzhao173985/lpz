@@ -47,10 +47,10 @@ int MatrixPlotChannel::getDimension(int dim)
 {
         assert(dim < 2);
 
-        if( dim == 0 ) return channelsOfGroup.size();
+        if( dim == nullptr) return channelsOfGroup.size();
         else{
           MatrixPlotChannel* chan = dynamic_cast<MatrixPlotChannel*> (channelsOfGroup.front());
-          if(chan == 0) { return 0; }else return chan->getDimension(0);
+          if(chan == nullptr) { return 0; }else return chan->getDimension(0);
         }
 }
 
@@ -65,12 +65,12 @@ MatrixElementPlotChannel* MatrixPlotChannel::getChannel(int row, int column){
   MatrixElementPlotChannel* chan;
 
   MatrixPlotChannel* mRow = dynamic_cast<MatrixPlotChannel*> (at(row));
-  if(mRow == 0){ //this is a row
+  if(mRow == nullptr){ //this is a row
     MatrixElementPlotChannel* element = dynamic_cast<MatrixElementPlotChannel*> (at(column));
     chan = element;
   }else{ //this is a matrix
     MatrixElementPlotChannel* element = dynamic_cast<MatrixElementPlotChannel*> (mRow->at(column));
-    /*(val != 0)?: */chan = element;
+    /*(val != nullptr)?: */chan = element;
   }
   //dynamic_cast<MatrixPlotChannel *>(channelsOfGroup).getRow(row)[column]; //sollte gehen NEIN!!
 
@@ -79,17 +79,17 @@ MatrixElementPlotChannel* MatrixPlotChannel::getChannel(int row, int column){
 
 GroupPlotChannel* MatrixPlotChannel::getRow(int row){
   GroupPlotChannel* gPlotCh = dynamic_cast<GroupPlotChannel*> (at(row));
-  if(gPlotCh == 0){
+  if(gPlotCh == nullptr){
     return 0;
   }else return gPlotCh;
 }
 
 GroupPlotChannel* MatrixPlotChannel::getLastRow(){
-  if(channelsOfGroup.back() == 0){
+  if(channelsOfGroup.back() == nullptr){
     return 0;
   }
   GroupPlotChannel* gPlotCh = dynamic_cast<GroupPlotChannel*> (channelsOfGroup.back());
-  if(gPlotCh == 0){
+  if(gPlotCh == nullptr){
     return 0;
   }else return gPlotCh;
 }

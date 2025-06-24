@@ -35,8 +35,7 @@
  * @sa HUDStatisticsManager
  * @sa IMeasure
  */
-class AbstractMeasure : public IMeasure
-{
+class AbstractMeasure{
 
 public:
 
@@ -58,7 +57,7 @@ public:
 
   virtual long getActualStep() const  override{ return actualStep; }
 
-  virtual void setDisplayPrecision(int digits) { displayPrecision=digits; }
+  virtual void explicit explicit setDisplayPrecision(int digits) { displayPrecision=digits; }
 
   virtual int getDisplayPrecision() const { return displayPrecision; }
 

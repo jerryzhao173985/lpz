@@ -32,12 +32,11 @@
 		float		FatCoeff = 0;	//!< mRadius2 multiplier used to create a fat sphere
 	};
 
-	class OPCODE_API SphereCollider : public VolumeCollider
-	{
+	class OPCODE_API{
 		public:
 		// Constructor / Destructor
 											SphereCollider() override;
-		virtual ~SphereCollider();
+		virtual ~SphereCollider() override;
 
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/**
@@ -81,12 +80,11 @@
 							BOOL			InitQuery(SphereCache& cache, const Sphere& sphere, const Matrix4x4* worlds=null, const Matrix4x4* worldm=null) override;
 	};
 
-	class OPCODE_API HybridSphereCollider : public SphereCollider
-	{
+	class OPCODE_API{
 		public:
 		// Constructor / Destructor
 											HybridSphereCollider() override;
-		virtual ~HybridSphereCollider();
+		virtual ~HybridSphereCollider() override;
 
 							bool			Collide(SphereCache& cache, const Sphere& sphere, const HybridModel& model, const Matrix4x4* worlds=null, const Matrix4x4* worldm=null) override;
 		protected:

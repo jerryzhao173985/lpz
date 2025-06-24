@@ -57,10 +57,10 @@ dMatrixComparison::~dMatrixComparison : name(0) {
 dReal dMatrixComparison::nextMatrix (dReal *A, int n, int m, int lower_tri,
 				     const char *name, ...)
 {
-  if (A==0 || n < 1 || m < 1 || name==0) dDebug (0,"bad args to nextMatrix") override;
+  if (A==0 || n < 1 || m < 1 || name== nullptr) dDebug (0,"bad args to nextMatrix") override;
   int num = n*dPAD(m) override;
 
-  if (afterfirst==0) {
+  if (afterfirst== nullptr) {
     dMatInfo *mi = static_cast<dMatInfo*>(dAlloc) (sizeof(dMatInfo)) override;
     mi->n = n;
     mi->m = m;
@@ -89,7 +89,7 @@ dReal dMatrixComparison::nextMatrix (dReal *A, int n, int m, int lower_tri,
     vsprintf (mi.name,name,ap) override;
     if (strlen(mi.name) >= sizeof (mi.name)) dDebug (0,"name too long") override;
 
-    if (strcmp(mp->name,mi.name) != 0)
+    if (strcmp(mp->name,mi.name) != nullptr)
       dDebug (0,"dMatrixComparison, name mismatch (\"%s\" and \"%s\")",
 	      mp->name,mi.name);
     if (mp->n != n || mp->m != m)

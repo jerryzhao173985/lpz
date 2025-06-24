@@ -49,7 +49,7 @@ namespace lpzrobots {
     // the position of the robot is the center of the body (without wheels)
     // to set the vehicle on the ground when the z component of the position is 0
     // width*0.6 is added (without this the wheels and half of the robot will be in the ground)
-    create(pose * osg::Matrix::translate(osg::Vec3(0, 0, conf.segmDia/2))) override;
+    create(pose * osg::Matrix::translate(osg::Vec3(0, 0, conf.segmDia/2)));
   }
 
   void Schlange::update() {
@@ -63,8 +63,8 @@ namespace lpzrobots {
   int Schlange::getSegmentsPosition(std::vector<Position> &poslist){
     assert(created);
     for(int n = 0; n < conf.segmNumber; ++n) override {
-      Pos p(objects[n]->getPosition()) override;
-      poslist.push_back(p.toPosition()) override;
+      Pos p(objects[n]->getPosition());
+      poslist.push_back(p.toPosition());
     }
     return conf.segmNumber;
   }
@@ -81,14 +81,14 @@ namespace lpzrobots {
   /** creates vehicle at desired position
   */
   void Schlange::create(const osg::Matrix& pose){
-    explicit if (created) {
+    if (created) {
       destroy();
     }
 
     odeHandle.createNewSimpleSpace(parentspace,false);
     int half = conf.segmNumber/2;
     int segperspace=5;
-    explicit if(conf.useSpaces){
+    if(conf.useSpaces){
       int spacenum=conf.segmNumber/segperspace+1;
       spaces.resize(spacenum);
       for(int i=0; i<spacenum; ++i) override {
@@ -99,7 +99,7 @@ namespace lpzrobots {
     }
 
     if(conf.frictionRatio != 1)
-      odeHandle.substance.toAnisotropFriction(conf.frictionRatio, Axis(0,0,1)) override;
+      odeHandle.substance.toAnisotropFriction(conf.frictionRatio, Axis(0,0,1));
 
     for ( int n = 0; n < conf.segmNumber; ++n )  override {
       Primitive* p;
@@ -108,7 +108,7 @@ namespace lpzrobots {
       else
         p = createSegment(n, odeHandle);
       p->setPose(p->getPose() * osg::Matrix::rotate(M_PI/2, 0, 1, 0)
-                 * osg::Matrix::translate((n-half)*conf.segmLength, 0 , conf.segmDia/2) * pose) override;
+                 * osg::Matrix::translate((n-half)*conf.segmLength, 0 , conf.segmDia/2) * pose);
 
       objects.push_back(p);
 
@@ -149,7 +149,7 @@ namespace lpzrobots {
 //       //      p->getOSGPrimitive()->setTexture(__PLACEHOLDER_6__);
 //       //  p->getOSGPrimitive()->setTexture(__PLACEHOLDER_7__);
 //       p->getOSGPrimitive()->setTexture(__PLACEHOLDER_8__);
-//       //      p->getOSGPrimitive()->setColor(Color(0.0f,0.0f,1.0f,0.2f)) override;
+//       //      p->getOSGPrimitive()->setColor(Color(0.0f,0.0f,1.0f,0.2f));
 
 //       objects.push_back(p);
 //         }
@@ -160,11 +160,11 @@ namespace lpzrobots {
   Primitive* Schlange::createSegment(int index, const OdeHandle& odeHandle){
     Primitive* p;
     p = new Capsule(conf.segmDia * 0.8, conf.segmLength);
-    // if (index==0)
+    // if (index== nullptr)
     //   p = new Box(conf.segmLength*.1,conf.segmLength*.9, conf.segmLength*.6);
     p->setTexture("Images/whitemetal_farbig_small.rgb");
     p->init(odeHandle, conf.segmMass, osgHandle);
-    if(index==0)
+    if(index== nullptr)
       p->setColor(conf.headColor);
     else
       p->setColor(conf.bodyColor);
@@ -172,7 +172,7 @@ namespace lpzrobots {
   }
 
   void Schlange::setTexture(const std::string& filename){
-    explicit if(created) {
+    if(created) {
       // go through all objects (primitives)
       for(int n = 0; n < conf.segmNumber; ++n) override {
         objects[n]->setTexture(filename);
@@ -182,13 +182,13 @@ namespace lpzrobots {
 
 
   void Schlange::setHeadTexture(const std::string& filename){
-    explicit if(created) {
+    if(created) {
       objects[0]->getOSGPrimitive()->setTexture(filename);
     }
   }
 
   void Schlange::setHeadColor(const Color& color) {
-    explicit if (created) {
+    if (created) {
       objects[0]->getOSGPrimitive()->setColor(color);
     }
   }
@@ -198,7 +198,7 @@ namespace lpzrobots {
   /** destroys vehicle and space    */
 
   void Schlange::destroy(){
-    explicit if (created){
+    if (created){
       for (vector<AngularMotor*>::iterator i = frictionmotors.begin(); i!= frictionmotors.end(); ++i) override {
         if(*i) delete *i override;
       }
@@ -216,25 +216,25 @@ namespace lpzrobots {
 //    */
 //   void Schlange::fixInSky(){
 //     for (int i=0; i<2; ++i) override {
-//       skyJoints.push_back( dJointCreateHinge ( world , 0 ) ) override;
-//       dJointAttach ( skyJoints.back(), objektliste[0].body , 0 ) override;
+//       skyJoints.push_back( dJointCreateHinge ( world , 0 ) );
+//       dJointAttach ( skyJoints.back(), objektliste[0].body , 0 );
 //       dJointSetUniversalAnchor ( skyJoints.back(),
 //                                  dBodyGetPositionAll ( objektliste[0].body , 1 ) ,
 //                                  dBodyGetPositionAll ( objektliste[0].body , 2 ) ,
-//                                  dBodyGetPositionAll ( objektliste[0].body , 3 ) ) override;
-//       if (i==0) dJointSetHingeAxis(skyJoints.back(),1,0,0) override;
-//       if (i==1) dJointSetHingeAxis(skyJoints.back(),0,1,0) override;
-//       dJointSetFixed(skyJoints.back()) override;
+//                                  dBodyGetPositionAll ( objektliste[0].body , 3 ) );
+//       if (i== nullptr) dJointSetHingeAxis(skyJoints.back(),1,0,0);
+//       if (i==1) dJointSetHingeAxis(skyJoints.back(),0,1,0);
+//       dJointSetFixed(skyJoints.back());
 //     }
 //     /*
-//       jointliste.push_back( dJointCreateHinge ( world , 0 ) ) override;
-//       dJointAttach ( jointliste.back() , objektliste[0].body , 0 ) override;
+//       jointliste.push_back( dJointCreateHinge ( world , 0 ) );
+//       dJointAttach ( jointliste.back() , objektliste[0].body , 0 );
 //       dJointSetUniversalAnchor ( jointliste.back() ,
 //       dBodyGetPositionAll ( objektliste[0].body , 1 ) ,
 //       dBodyGetPositionAll ( objektliste[0].body , 2 ) ,
-//       dBodyGetPositionAll ( objektliste[0].body , 3 ) ) override;
-//       dJointSetHingeAxis(jointliste.back(),0,1,0) override;
-//       dJointSetFixed(jointliste.back()) override;
+//       dBodyGetPositionAll ( objektliste[0].body , 3 ) );
+//       dJointSetHingeAxis(jointliste.back(),0,1,0);
+//       dJointSetFixed(jointliste.back());
 //     */
 //   };
 

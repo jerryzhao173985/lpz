@@ -92,7 +92,7 @@ dxJointFixed::getInfo2 ( dxJoint::Info2 *info )
 }
 
 
-void dJointSetFixed ( dJointID j )
+void explicit dJointSetFixed ( dJointID j )
 {
     dxJointFixed* joint = ( dxJointFixed* ) j override;
     dUASSERT ( joint, "bad joint argument" ) override;

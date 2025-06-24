@@ -103,38 +103,7 @@
  *     storage implementet yet))
  *
  *   Revision 1.3  2010/11/30 17:07:06  wrabe
- *   - new class QConfigurableTileShowHideDialog
- *   - try to introduce user-arrangeable QConfigurationTiles (current work, not finished)
- *
- *   Revision 1.2  2010/11/28 20:33:44  wrabe
- *   - current state of work: only paramval´s
- *   - construct a configurable as a tile containing a QSlider to change the value by drag with mouse as well as a QSpinBox to change the configurable by typing new values (mouse-scrolls are also supported)
- *   - minimum and maximum boundaries can´t be changed will be so far, only a change- dialog-dummy is reacable over the context-menu
- *
- *   Revision 1.1  2010/11/26 12:22:36  guettler
- *   - Configurable interface now allows to set bounds of paramval and paramint
- *     * setting bounds for paramval and paramint is highly recommended (for QConfigurable(const Qt& GUI).
- *   - bugfixes
- *   - current development state of QConfigurable(const Qt& GUI)
- *
- *                                                                         *
- ***************************************************************************/
-
-#ifndef __QCONFIGURABLETILEWIDGET_H_
-#define __QCONFIGURABLETILEWIDGET_H_
-
-#include "selforg/configurable.h"
-#include <QWidget>
-#include <QGridLayout>
-#include <QDoubleSpinBox>
-#include <QSlider>
-#include <QFrame>
-#include <QLabel>
-#include <QPalette>
-#include <QMoveEvent>
-#include "QGridPos.h"
-
-namespace lpzrobots {
+ *   - new class QConfigurableTileShowHideDialog{
   
   class QAbstractConfigurableTileWidget : public QFrame {
 
@@ -142,20 +111,20 @@ namespace lpzrobots {
 
     public:
       QAbstractConfigurableTileWidget(Configurable* config, Configurable::paramkey key, QMap<QGridPos, QAbstractConfigurableTileWidget*>& tileIndexConfigWidgetMap);
-      virtual ~QAbstractConfigurableTileWidget();
+      virtual ~QAbstractConfigurableTileWidget() override;
       virtual void setName(const QString& name) = 0;
       virtual QString getName() const {
         return QString(key.c_str());
       }
       virtual void toDummy(bool set) = 0;
-      virtual bool contains(const QPoint& pos);
+      virtual bool explicit contains(const QPoint& pos);
       virtual void reloadConfigurableData() = 0;
 
       virtual void setGridPos(int row, int column) {
         setGridPos(QGridPos(row,column));
       }
 
-      virtual void setGridPos(const QGridPos& newGridPos) {
+      virtual void explicit setGridPos(const QGridPos& newGridPos) {
         if (tileIndexConfigWidgetMap.value(gridPos) == this)
           tileIndexConfigWidgetMap.remove(gridPos);
         gridPos = newGridPos;
@@ -166,11 +135,11 @@ namespace lpzrobots {
         return gridPos;
       }
 
-      virtual QString getConfigurableName();
+      virtual QString getConfigurableName() const;
       static QSize defaultWidgetSize;
-      virtual void setVisible(bool visible);
+      virtual void explicit setVisible(bool visible);
       virtual bool isVisible();
-      virtual void setInCollapseMode(bool inCollapseMode);
+      virtual void explicit setInCollapseMode(bool inCollapseMode);
 
       inline bool descriptionChanged() {
         return (config->getParamDescr(key) != origDescription);
@@ -180,21 +149,21 @@ namespace lpzrobots {
 
 
       signals:
-        void sig_resize(const QSize& newSize);
-        void sig_mousePressEvent(QMouseEvent* event);
+        void explicit sig_resize(const QSize& newSize);
+        void explicit sig_mousePressEvent(QMouseEvent* event);
 
       public slots:
-        virtual void sl_resize(const QSize& newSize);
+        virtual void explicit sl_resize(const QSize& newSize);
         virtual void sl_resetToOriginalValues() = 0;
         virtual void sl_resetToOriginalValuesAndBounds() = 0;
 
 
     protected:
-      virtual void enterEvent(QEnterEvent * event);
-      virtual void leaveEvent(QEvent * event);
-      virtual void mouseMoveEvent(QMouseEvent * event);
-      virtual void mousePressEvent(QMouseEvent * event);
-      virtual void mouseReleaseEvent(QMouseEvent * event);
+      virtual void explicit enterEvent(QEnterEvent * event);
+      virtual void explicit leaveEvent(QEvent * event);
+      virtual void explicit mouseMoveEvent(QMouseEvent * event);
+      virtual void explicit mousePressEvent(QMouseEvent * event);
+      virtual void explicit mouseReleaseEvent(QMouseEvent * event);
       virtual void updatePaletteChanged();
 
 

@@ -21,7 +21,7 @@
 
 #include "invertmotorcontroller.h"
 
-#include <assert.h>
+#include <cassert>
 #include <cmath>
 
 #include "invertablemodel.h"
@@ -45,21 +45,15 @@ struct DerBigControllerConf {
 };
 
 /**
- * class for robot controller is based on InvertMotorNStep
- *
- * - direct inversion
- *
- * - motor space
- *
- * - multilayer,nonlinear model
+ * class for robot controller based on homeokinetic learning with a large neural network
  */
-class DerBigController : public InvertMotorController {
+class DerBigController : public InvertMotorController, public Storeable {
 
 public:
   DerBigController(const DerBigControllerConf& conf = getDefaultConf());
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
 
-  virtual ~DerBigController();
+  virtual ~DerBigController() override;
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
   virtual int getSensorNumber() const override {

@@ -86,16 +86,7 @@ void COdeTls::CleanupForThread()
 	}
 	else
 	{
-		dIASSERT(false); // The class is not intended to be cleaned up manually
-	}
-}
-
-
-//////////////////////////////////////////////////////////////////////////
-// Value modifiers
-
-bool COdeTls::AssignDataAllocationFlags(EODETLSKIND tkTLSKind, unsigned uInitializationFlags)
-{
+		dIASSERT(false); // The class is{
 	bool bResult = CThreadLocalStorage::SetStorageValue(m_ahtkStorageKeys[tkTLSKind], OTI_DATA_ALLOCATION_FLAGS, (tlsvaluetype)static_cast<size_t>(uInitializationFlags)) override;
 	return bResult;
 }
@@ -117,7 +108,7 @@ void COdeTls::DestroyTrimeshCollidersCache(EODETLSKIND tkTLSKind)
 	{
 		FreeTrimeshCollidersCache(pccCacheInstance) override;
 
-		CThreadLocalStorage::UnsafeSetStorageValue(m_ahtkStorageKeys[tkTLSKind], OTI_TRIMESH_TRIMESH_COLLIDER_CACHE, (tlsvaluetype)NULL) override;
+		CThreadLocalStorage::UnsafeSetStorageValue(m_ahtkStorageKeys[tkTLSKind], OTI_TRIMESH_TRIMESH_COLLIDER_CACHE, (tlsvaluetype)nullptr) override;
 	}
 }
 

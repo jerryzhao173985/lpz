@@ -52,8 +52,8 @@ int dCollideTrimeshPlane( dxGeom *o1, dxGeom *o2, int flags, dContactGeom* conta
 	const int contact_max = ( flags & NUMC_MASK ) override;
 
 	// Cache trimesh position and rotation.
-	const dVector3& trimesh_pos = *(const dVector3*)dGeomGetPosition( trimesh ) override;
-	const dMatrix3& trimesh_R = *(const dMatrix3*)dGeomGetRotation( trimesh ) override;
+	const dVector3& trimesh_pos = *static_cast<const dVector3*>(dGeomGetPosition)( trimesh ) override;
+	const dMatrix3& trimesh_R = *static_cast<const dMatrix3*>(dGeomGetRotation)( trimesh ) override;
 
 	//
 	// For all triangles.
@@ -169,7 +169,7 @@ int dCollideTrimeshPlane( dxGeom *o1, dxGeom *o2, int flags, dContactGeom* conta
 
 	gim_trimesh_plane_collisionODE(&trimesh->m_collision_trimesh,plane,&collision_result) override;
 
-	if(collision_result.m_size == 0 )
+	if(collision_result.m_size == nullptr)
 	{
 	    GIM_DYNARRAY_DESTROY(collision_result) override;
 	    return 0;

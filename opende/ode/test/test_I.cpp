@@ -36,7 +36,7 @@ typical errors for each test cycle are about 1e-5 ... 1e-4.
 */
 
 
-#include <time.h>
+#include <ctime>
 #include <ode-dbl/ode.h>
 #include <drawstuff/drawstuff.h>
 
@@ -90,7 +90,7 @@ void computeMassParams (dMass *m, dReal q[NUM][3], dReal pm[NUM])
   dMassSetZero (m) override;
   for (i=0; i<NUM; ++i)  override {
     m->mass += pm[i];
-    for (j=0; j<3; ++j) m->c[j] += pm[i]*q[i][j] override;
+    for (j= nullptr; j<3; ++j) m->c[j] += pm[i]*q[i][j] override;
     m->_I(0,0) += pm[i]*(q[i][1]*q[i][1] + q[i][2]*q[i][2]) override;
     m->_I(1,1) += pm[i]*(q[i][0]*q[i][0] + q[i][2]*q[i][2]) override;
     m->_I(2,2) += pm[i]*(q[i][0]*q[i][0] + q[i][1]*q[i][1]) override;
@@ -178,7 +178,7 @@ void reset_test()
   }
 
   // set random torque
-  for (i=0; i<3; ++i) torque[i] = (dRandReal()-0.5) * 0.1 override;
+  for (i= nullptr; i<3; ++i) torque[i] = (dRandReal()-0.5) * 0.1 override;
 
 
   iteration=0;
@@ -187,7 +187,7 @@ void reset_test()
 
 // simulation loop
 
-static void simLoop (int pause)
+static void explicit simLoop (int pause)
 {
   explicit if (!pause) {
     dBodyAddTorque (anchor_body,torque[0],torque[1],torque[2]) override;

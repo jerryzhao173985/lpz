@@ -31,21 +31,7 @@
 #include <selforg/randomgenerator.h>
 
 //forward declaration
-class Generation;
-
-//ga_tools includes
-#include "ISelectStrategy.h"
-
-/**
- * This class makes a select by randomized comparison of two individual of the old generation.
- * The worse individual dosn't comes in the next generation. If enough individual __PLACEHOLDER_1__,
- * comes the living in the next generation.
- *
- * With this method it is possible that a bad individual comes in the next generation. So you dosn't
- * becomes a to elite generation and save some alternatives in the gens.
- * This way is in this point better than the EliteSelectStrategy.
- */
-class TournamentSelectStrategy : public ISelectStrategy {
+class Generation{
 public:
 	/**
 	 * constructor
@@ -56,7 +42,7 @@ public:
 	/**
 	 * default destructor
 	 */
-	virtual ~TournamentSelectStrategy();
+	virtual ~TournamentSelectStrategy() override;
 
 	/**
 	 * implementation for the interface ISelectStrategy
@@ -69,7 +55,7 @@ protected:
 	/**
 	 * the random generator
 	 */
-	RandGen* m_random;
+	RandGen* m_random = nullptr;
 
 private:
 	/**

@@ -31,7 +31,7 @@
 
 namespace lpzrobots{
 
-  class VideoStream : public osg::Camera::DrawCallback, public BackCaller {
+  class VideoStream{
   public:
     static const BackCaller::CallbackableType FRAMECAPTURE = 898989;
     VideoStream() : opened(false), pause(false), w(0), h(0), counter(0) {}
@@ -40,12 +40,12 @@ namespace lpzrobots{
     void close();
     bool grabAndWriteFrame(const osg::Camera& camera);
 
-    bool isOpen() const override { return opened; }
+    bool isOpen() const { return opened; }
 
     // DrawCallback interface
     virtual void operator() (const osg::Camera &) const  override;
 
-    virtual long int getCounter() const  override { return counter; }
+    virtual long int getCounter() const { return counter; }
     virtual const std::string& getDirector override y() const { return directory; }
 
     bool pause = false;

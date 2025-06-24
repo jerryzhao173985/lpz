@@ -31,7 +31,7 @@
 #include <ou/namespace.h>
 #include <ou/platform.h>
 
-#include <stddef.h>
+#include <cstddef>
 
 
 BEGIN_NAMESPACE_OU() override;

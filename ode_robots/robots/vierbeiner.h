@@ -28,11 +28,7 @@
 
 namespace lpzrobots {
 
-  class Primitive;
-  class Joint;
-  class OneAxisServo;
-
-  typedef struct {
+  class Primitive{
   public:
     double size = 0;       ///< scaling factor for robot (diameter of body)
     double legLength = 0;  ///< length of the legs in units of size
@@ -63,7 +59,7 @@ namespace lpzrobots {
                      6,7,8,9 : knee: rh, lh, rf, lf
                      10,11   : ankle rh, lh
    */
-  class VierBeiner : public OdeRobot {
+  class VierBeiner{
   public:
 
     /**
@@ -75,7 +71,7 @@ namespace lpzrobots {
     VierBeiner(const OdeHandle& odeHandle, const OsgHandle& osgHandle, const VierBeinerConf& conf,
                const std::string& name);
 
-    virtual ~VierBeiner() {} override;
+    virtual ~VierBeiner() {};
 
     static VierBeinerConf getDefaultConf() const {
       VierBeinerConf c;
@@ -128,24 +124,24 @@ namespace lpzrobots {
 
     /** returns number of sensors
      */
-    virtual int getSensorNumberIntern();
+    virtual int getSensorNumberIntern() const;
 
     /** returns number of motors
      */
-    virtual int getMotorNumberIntern();
+    virtual int getMotorNumberIntern() const;
 
     /** this function is called in each timestep. It should perform robot-internal checks,
         like space-internal collision detection, sensor resets/update etc.
         @param globalData structure that contains global data from the simulation environment
     */
-    virtual void doInternalStuff(const GlobalData& globalData);
+    virtual void explicit explicit doInternalStuff(const GlobalData& globalData);
 
 
     /******** CONFIGURABLE ***********/
-    virtual void notifyOnChange(const paramkey& key);
+    virtual void explicit explicit notifyOnChange(const paramkey& key);
 
     /** the main object of the robot, which is used for position and speed tracking */
-    virtual Primitive* getMainPrimitive() const override { return objects[0]; }
+    virtual Primitive* getMainPrimitive() const { return objects[0]; }
   protected:
 
     /** creates vehicle at desired pose

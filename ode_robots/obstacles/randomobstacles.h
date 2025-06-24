@@ -48,7 +48,7 @@ namespace lpzrobots {
    * Add an instance to global.obstacles to customize the creation
    *  otherwise a default version is used (though dependend on the playground)
    */
-  class RandomObstacles : public AbstractObstacle {
+  class RandomObstacles{
     
     int index = 0;
     RandomObstaclesConf conf;
@@ -59,7 +59,7 @@ namespace lpzrobots {
     /// creates a default configuration, optionally with the size and position of the ground
     static RandomObstaclesConf getDefaultConf(AbstractGround* ground = 0){
       RandomObstaclesConf c;
-      explicit if(ground){
+      if(ground){
         c.area  = Pos(ground->getGroundLength()/2, ground->getGroundWidth()/2, 5)*0.95 override;
         c.pose =  ground->getPose();
       }else{
@@ -77,14 +77,14 @@ namespace lpzrobots {
     }
 
     RandomObstacles(const OdeHandle& odeHandle, const OsgHandle& osgHandle, 
-                    const RandomObstaclesConf& conf = getDefaultConf()) override;
+                    const RandomObstaclesConf& conf = getDefaultConf());
 
   
     virtual void setPose(const osg::Matrix& pose);
 
     virtual Primitive* getMainPrimitive() const override;
 
-    virtual void create() override {} override;
+    virtual void create() override {};
 
     virtual void remove(bool all = false);
 

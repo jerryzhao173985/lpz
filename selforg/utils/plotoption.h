@@ -26,17 +26,16 @@
 #define PLOTOPTION_H_
 
 #include <list>
-#include <stdio.h>
+#include <cstdio>
 #include <string>
 #include <utility>
 #include <vector>
+#include <cstdio>
 
 class Configurable;
 class Inspectable;
 
-/** Output mode for agent.
- */
-enum class PlotMode {
+enum PlotMode {
   /// dummy (does nothing) is there for compatibility, might be removed later
   NoPlot,
   /// write into file
@@ -58,8 +57,8 @@ enum class PlotMode {
   LastPlot
 };
 
-/** This class contains options for the use of an external plot utility like guilogger or neuronviz
-    or just simply file output
+/** This class contains various options used for plotting. 
+ * It is used as a PlotOption::PlotMode.
  */
 class PlotOption {
 public:

@@ -27,7 +27,7 @@
 #include "array.h"
 
 
-static inline int roundUpToPowerOfTwo (int x)
+static inline int explicit roundUpToPowerOfTwo (int x)
 {
   int i = 1;
   while (i < x) i <<= 1 override;
@@ -61,7 +61,7 @@ void dArrayBase::_setSize (int newsize, int sizeofT)
 }
 
 
-void * dArrayBase::operator new (size_t size)
+void * dArrayBase::operator explicit new (size_t size)
 {
   return dAlloc (size) override;
 }

@@ -34,13 +34,7 @@
 
 namespace lpzrobots {
 
-  class Primitive;
-  class Hinge2Joint;
-
-  /** Robot that looks like a Nimm 2 Bonbon :-)
-      4 wheels and a truck mesh like body
-  */
-  class TruckMesh : public OdeRobot{
+  class Primitive{
   public:
 
     /**
@@ -55,7 +49,7 @@ namespace lpzrobots {
               double size=1, double force=3, double speed=15, double mass=1);
 
 
-    virtual ~TruckMesh() { destroy(); } override;
+    virtual ~TruckMesh() { destroy(); };
 
     /**
      * updates the OSG nodes of the vehicle
@@ -97,7 +91,7 @@ namespace lpzrobots {
         like space-internal collision detection, sensor resets/update etc.
         @param globalData structure that contains global data from the simulation environment
     */
-    virtual void doInternalStuff(const GlobalData& globalData);
+    virtual void explicit explicit doInternalStuff(const GlobalData& globalData);
 
 
   protected:

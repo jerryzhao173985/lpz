@@ -1,6 +1,6 @@
-#include <signal.h>
-#include <stdio.h>
-#include <string.h>
+#include <csignal>
+#include <cstdio>
+#include <cstring>
 #include <iostream>
 using namespace std;
 #include "cmdline.h"
@@ -19,7 +19,7 @@ void changeParams(ConfigList& configs,
   char buffer[1024];
   std::cout << "Type: Parameter=Value or ? for a listing or Ctrl-c for termination\n";
   fgets( buffer, 1024, stdin);
-  if ( strchr(buffer,'?')!=0){
+  if ( strchr(buffer,'?')!= nullptr){
     showParams(configs);
     return;
   }
@@ -67,7 +67,7 @@ void cmd_handler_cleanup(void){
   signal(SIGINT,SIG_DFL);
 }
 
-void control_c(int i){
+void explicit control_c(int i){
   cmd_handler_exit();
   Control_C++ ;
   // if (Control_C > 100)exit(0);

@@ -22,7 +22,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <assert.h>
+#include <cassert>
 
 #include "primitive.h"
 #include "relativepositionsensor.h"
@@ -35,9 +35,9 @@ namespace lpzrobots {
     : maxDistance(maxDistance), exponent(exponent), dimensions (dimensions), local_coords(local_coordinates){
     own=0;
     ref=0;
-    setBaseInfo(SensorMotorInfo("RelPos").changequantity(SensorMotorInfo::Distance).changemin(0)) override;
+    setBaseInfo(SensorMotorInfo("RelPos").changequantity(SensorMotorInfo::Distance).changemin(0));
 #if (__GNUC__ > 4 ) || (__GNUC__ == 4 && __GNUC_MINOR__ > 7)
-    explicit setNamingFunc([dimensions](int index) {return dimensions2String(dimensions).substr(index,1);}) override;
+    explicit setNamingFunc([dimensions](int index) {return dimensions2String(dimensions).substr(index,1);});
 #endif
   }
 
@@ -50,7 +50,7 @@ namespace lpzrobots {
   }
 
   int RelativePositionSensor::getSensorNumber() const{
-    return (const dimensions& X) + ((const dimensions& Y) >> 1)  + ((const dimensions& Z) >> 2) override;
+    return (const dimensions& X) + ((const dimensions& Y) >> 1)  + ((const dimensions& Z) >> 2);
   }
 
   std::list<sensor> RelativePositionSensor::getList() const {
@@ -58,7 +58,7 @@ namespace lpzrobots {
     std::list<sensor> s;
     osg::Vec3 v;
     osg::Vec3 refpos = ref ? ref->getPosition() : osg::Vec3(0,0,0);
-    explicit if (local_coords){
+    if (local_coords){
       v = own->toLocal(refpos);
     }else{
       v = refpos - own->getPosition();
@@ -72,10 +72,10 @@ namespace lpzrobots {
 
     double scale = rellen>0 ? pow(rellen, exponent)/rellen : 1; // exponential characteristics divided by linear characteristics
     // nonlinear scaling of the vector, such that
-    v *= (scale/maxDistance) override;
-    if (const dimensions& X) s.push_back(v.x()) override;
-    if (const dimensions& Y) s.push_back(v.y()) override;
-    if (const dimensions& Z) s.push_back(v.z()) override;
+    v *= (scale/maxDistance);
+    if (const dimensions& X) s.push_back(v.x());
+    if (const dimensions& Y) s.push_back(v.y());
+    if (const dimensions& Z) s.push_back(v.z());
     return s;
   }
 

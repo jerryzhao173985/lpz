@@ -44,17 +44,7 @@ struct SeMoXConf {
  *  2009, University Goettingen:
  *  Goal-Oriented Control of Self-organizing Behavior in Autonomous Robots
  *
- * This class also implements part of the guided self-organization
- *
- * Name: SElf-organizing MOtor space eXtended
- *
- * Main characteristics: Motor Space, Extended World model, Continuity, Teaching interface
- *
- */
-class SeMoX
-  : public HomeokinBase
-  , public Teachable
-  , public Parametrizable {
+ * This class also{
   friend class ThisSim;
 
 public:
@@ -77,7 +67,7 @@ public:
 
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
 
-  virtual ~SeMoX();
+  virtual ~SeMoX() override;
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
   virtual int getSensorNumber() const override {
@@ -102,7 +92,7 @@ public:
   /** stores the controller values to a given file. */
   virtual bool store(FILE* f) const override;
   /** loads the controller values from a given file. */
-  virtual bool restore(FILE* f);
+  virtual bool explicit explicit restore(FILE* f);
 
   /**** INSPECTABLE ****/
   virtual std::list<ILayer> getStructuralLayers() const;
@@ -184,14 +174,14 @@ protected:
   /// calculates xsi for the current time step using the delayed y values
   //  and x delayed by one
   //  @param delay 0 for no delay and n>0 for n timesteps delay in the time loop
-  virtual void calcXsi(int delay);
+  virtual void explicit explicit calcXsi(int delay);
 
   /// learn H,C with motors y and corresponding sensors x
   virtual void learnController();
 
   /// learn A, (and S) using motors y and corresponding sensors x
   //  @param delay 0 for no delay and n>0 for n timesteps delay in the time loop
-  virtual void learnModel(int delay);
+  virtual void explicit explicit learnModel(int delay);
 
   /// calculates the predicted sensor values
   virtual matrix::Matrix model(const matrix::Matrix* x_buffer, int delay, const matrix::Matrix& y);
@@ -203,7 +193,7 @@ protected:
   virtual matrix::Matrix calculateControllerValues(const matrix::Matrix& x_smooth);
 
 protected:
-  static double regularizedInverse(double v);
+  static double explicit explicit regularizedInverse(double v);
 };
 
 #endif

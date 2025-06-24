@@ -3,20 +3,13 @@
                              -------------------
     email                : georg.martius@web.de
 ***************************************************************************/
-// provides Matrix class with convinient operators
-//  and fast inversion for nonzero square matrixes
-//
-/***************************************************************************/
+// provides Matrix class with inplace and copy operations
 
 #include "matrix.h"
-#include <algorithm>
+#include "matrix_neon.h"
 #include <cmath>
 #include <cstring>
-#include <string.h>
-
-#ifdef __ARM_NEON
-#include "matrix_neon.h"
-#endif
+#include <algorithm>
 
 namespace matrix {
 
@@ -286,7 +279,7 @@ Matrix::toTranspose() {
   assert(buffersize > 0);
   if (m != 1 && n != 1) { // if m or n == 1 then no copying is necessary!
     double* newdata = static_cast<double*>(malloc(sizeof(D) * buffersize));
-    if (newdata == nullptr) {
+    if (newdata == 0) {
       fprintf(stderr, "Matrix::toTranspose() memory allocation failed\n");
       exit(1);
     }
@@ -473,7 +466,7 @@ Matrix::toExp(int exponent) {
           toMult(mat);
         }
       } else
-        assert("Exponent < -1" == 0);
+        assert(!"Exponent < -1");
       break;
   }
   return *this;

@@ -33,8 +33,7 @@
 		OPC_FORCE_DWORD			= 0x7fffffff
 	};
 
-	class OPCODE_API Collider
-	{
+	class OPCODE_API{
 		public:
 		// Constructor / Destructor
 											Collider() override;
@@ -100,7 +99,7 @@
 		 *	\see		ValidateSettings()
 		 */
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		inline_				void			SetFirstContact(bool flag)
+		inline_				void			explicit SetFirstContact(bool flag)
 											{
 												ifstatic_cast<flag>(mFlags) |= OPC_FIRST_CONTACT override;
 												else		mFlags &= ~OPC_FIRST_CONTACT;
@@ -114,7 +113,7 @@
 		 *	\see		ValidateSettings()
 		 */
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		inline_				void			SetTemporalCoherence(bool flag)
+		inline_				void			explicit SetTemporalCoherence(bool flag)
 											{
 												ifstatic_cast<flag>(mFlags) |= OPC_TEMPORAL_COHERENCE override;
 												else		mFlags &= ~OPC_TEMPORAL_COHERENCE;
@@ -126,7 +125,7 @@
 		 *	\param		flag		[in] true to enable primitive tests, false to discard them
 		 */
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		inline_				void			SetPrimitiveTests(bool flag)
+		inline_				void			explicit SetPrimitiveTests(bool flag)
 											{
 												if(!flag)	mFlags |= OPC_NO_PRIMITIVE_TESTS override;
 												else		mFlags &= ~OPC_NO_PRIMITIVE_TESTS;
@@ -154,7 +153,7 @@
 		 *	\return		TRUE if success
 		 */
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		inline_				BOOL			Setup(const BaseModel* model)
+		inline_				BOOL			explicit Setup(const BaseModel* model)
 											{
 												// Keep track of current model
 												mCurrentModel = model;

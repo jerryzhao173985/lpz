@@ -28,16 +28,16 @@
 #include "AbstractPlotChannel.h"
 #include <list>
 
-class GroupPlotChannel: public AbstractPlotChannel {
+class GroupPlotChannel{
 public:
         explicit GroupPlotChannel(const std::string& name);
-        virtual ~GroupPlotChannel();
+        virtual ~GroupPlotChannel() override;
 
 
-        virtual void addPlotChannel(AbstractPlotChannel* channelToAdd);
+        virtual void explicit addPlotChannel(AbstractPlotChannel* channelToAdd);
 
         /* inherited from AbstractPlotChannel
-         virtual void setValue(double v) { channelValue=v; }
+         virtual void explicit setValue(double v) { channelValue=v; }
 
           virtual double getValue() const { return channelValue; }
 
@@ -51,7 +51,7 @@ public:
 
         virtual std::list<AbstractPlotChannel*> getChannelsOfGroup();
 
-        virtual AbstractPlotChannel* at(int pos);
+        virtual AbstractPlotChannel* explicit at(int pos);
 
 protected:
         std::list<AbstractPlotChannel*> channelsOfGroup;
