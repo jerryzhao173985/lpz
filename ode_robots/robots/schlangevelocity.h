@@ -50,14 +50,22 @@ namespace lpzrobots {
       SchlangeVelocity ( const OdeHandle& odeHandle, const OsgHandle& osgHandle,
                       const SchlangeConf& conf, const std::string& name);
 
-      static SchlangeConf getDefaultConf(){
+      static SchlangeConf getDefaultConfVelocity(){
         SchlangeConf conf;
         conf.segmNumber = 10;      //  number of snake elements
         conf.segmLength = 0.8;     // length of one snake element
         conf.segmDia    = 0.2;     //  diameter of a snake element
         conf.segmMass   = 0.4;     //  mass of one snake element
         conf.motorPower = 0.3;     //  power of motors
+        conf.sensorFactor = 1.0;  //  scale for sensors
+        conf.frictionJoint = 0.02; // friction within joint
+        conf.frictionRatio = 1.0;  // friction ratio
         conf.jointLimit =  M_PI/4;
+        conf.useServoVel = false;
+        conf.velocity = 20.0;      // maximal velocity of servos
+        conf.useSpaces = true;
+        conf.headColor = "robot2";
+        conf.bodyColor = "robot1";
         return conf;
       }
 

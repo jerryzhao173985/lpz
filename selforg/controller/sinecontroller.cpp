@@ -22,141 +22,161 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <stdio.h>
-#include <cmath>
-#include <assert.h>
 #include "sinecontroller.h"
 #include "controller_misc.h"
+#include <algorithm>
+#include <cassert>
+#include <cmath>
+#include <cstdio>
 
-using namespace std;
+// Removed using namespace std for better practice
 
 SineController::SineController(unsigned long int controlmask, function func)
-  : AbstractController("sinecontroller", "1.0"),
-    controlmask(controlmask),
-    individual(false) {
-  phase=0;
-  addParameterDef("period", &period,50);
+  : AbstractController("sinecontroller", "1.0")
+  , controlmask(controlmask)
+  , individual(false) {
+  phase = 0;
+  addParameterDef("period", &period, 50);
   addParameterDef("phaseshift", &phaseShift, 1);
-  if(func==Impulse)
+  if (func == function::Impulse)
     addParameterDef("impulswidth", &impulsWidth, 0.5);
   addParameterDef("amplitude", &amplitude, 1);
-  switch(func){
-  case Sine:
-    osci=sine; break;
-  case SawTooth:
-    osci=sawtooth; break;
-  case Impulse:
-    osci=impuls; break;
-  default:
-    assert("Unknown function type");
+  switch (func) {
+    case function::Sine:
+      osci = sine;
+      break;
+    case function::SawTooth:
+      osci = sawtooth;
+      break;
+    case function::Impulse:
+      osci = impuls;
+      break;
+    default:
+      assert("Unknown function type");
   }
 
-  number_sensors=0;
-  number_motors=0;
+  number_sensors = 0;
+  number_motors = 0;
 };
 
 /** initialisation of the controller with the given sensor/ motornumber
     Must be called before use.
 */
-void SineController::init(int sensornumber, int motornumber, RandGen* randGen){
-  number_sensors=sensornumber;
-  number_motors=motornumber;
+void
+SineController::init(int sensornumber, int motornumber, RandGen* randGen) {
+  number_sensors = sensornumber;
+  number_motors = motornumber;
 };
 
-void SineController::step(const sensor* sensors, int sensornumber,
-                          motor* motors, int motornumber) {
+void
+SineController::step(const sensor* sensors, int sensornumber, motor* motors, int motornumber) {
   stepNoLearning(sensors, sensornumber, motors, motornumber);
 };
 
-void SineController::stepNoLearning(const sensor* sensors, int number_sensors,
-                                    motor* motors, int number_motors) {
+void
+SineController::stepNoLearning(const sensor* sensors,
+                               int number_sensors,
+                               motor* motors,
+                               int number_motors) {
 
-  for (int i=0; i<min(number_motors,sizeof(controlmask)*8); i++){
-    if(controlmask & (1<<i)){
-      motors[i]=amplitude*osci(phase + i*phaseShift*M_PI/2, impulsWidth);
-    }else {
-      motors[i]=0;
+  for (int i = 0; i < std::min(number_motors, static_cast<int>(sizeof(controlmask) * 8)); i++) {
+    if ((controlmask & (1 << i)) != 0) {
+      motors[i] = amplitude * osci(phase + i * phaseShift * M_PI / 2, impulsWidth);
+    } else {
+      motors[i] = 0;
     }
   }
-  if(period!=0){
-    phase += 2*M_PI/period;
-    if(phase > 2*M_PI) phase -= 2*M_PI;
+  if (period != 0) {
+    phase += 2 * M_PI / period;
+    if (phase > 2 * M_PI)
+      phase -= 2 * M_PI;
   }
 };
 
-
-double SineController::sine(double x, double _unused){
+double
+SineController::sine(double x, double _unused) {
   return sin(x);
 }
 
-double SineController::sawtooth(double x, double _unused){
-  while(x>M_PI) x-=2*M_PI;
-  while(x<-M_PI) x+=2*M_PI;
+double
+SineController::sawtooth(double x, double _unused) {
+  while (x > M_PI)
+    x -= 2 * M_PI;
+  while (x < -M_PI)
+    x += 2 * M_PI;
   // x is centered around -PI and PI.
-  if(x>-M_PI/2 && x <= M_PI/2)
-    return x/M_PI;
-  else{
-    if(x<0)
-      return -(x+M_PI)/M_PI;
+  if (x > -M_PI / 2 && x <= M_PI / 2)
+    return x / M_PI;
+  else {
+    if (x < 0)
+      return -(x + M_PI) / M_PI;
     else
-      return -(x-M_PI)/M_PI;
+      return -(x - M_PI) / M_PI;
   }
 }
 
-
-double SineController::impuls(double x, double impulsWidth){
-  while(x>M_PI) x-=2*M_PI;
-  while(x<-M_PI) x+=2*M_PI;
+double
+SineController::impuls(double x, double impulsWidth) {
+  while (x > M_PI)
+    x -= 2 * M_PI;
+  while (x < -M_PI)
+    x += 2 * M_PI;
   // x is centered around -PI and PI.
   // +-1 for |x| in ((0.5-impulswidth/2)*M_PI,(0.5+impulswidth/2)*M_PI]
-  if(fabs(x) > (0.5-impulsWidth/2)*M_PI && fabs(x) < (0.5+impulsWidth/2)*M_PI)
+  if (fabs(x) > (0.5 - impulsWidth / 2) * M_PI && fabs(x) < (0.5 + impulsWidth / 2) * M_PI)
     return sign(x);
   else
     return 0;
 }
 
-
 MultiSineController::MultiSineController(unsigned long int controlmask, function func)
-  : SineController(controlmask, func),
-    periods(nullptr),
-    phaseShifts(nullptr),
-    amplitudes(nullptr),
-    offsets(nullptr),
-    t(0) {
+  : SineController(controlmask, func)
+  , t(0) {
   Configurable::setName("multisinecontroller");
   Inspectable::setNameOfInspectable("multisinecontroller");
 };
 
+MultiSineController::~MultiSineController() {
+  // Smart pointers automatically clean up
+}
+
 /** initialisation of the controller with the given sensor/ motornumber
     Must be called before use.
 */
-void MultiSineController::init(int sensornumber, int motornumber, RandGen* randGen){
+void
+MultiSineController::init(int sensornumber, int motornumber, RandGen* randGen) {
   SineController::init(sensornumber, motornumber, randGen);
-  periods     = new double[motornumber];
-  phaseShifts = new double[motornumber];
-  amplitudes  = new double[motornumber];
-  offsets     = new double[motornumber];
-  for (int i=0; i<min(number_motors,sizeof(controlmask)*8); i++){
-    if(controlmask & (1<<i)){
-      addParameterDef("period"     + itos(i), periods+i, period);
-      addParameterDef("phaseshift" + itos(i), phaseShifts+i, phaseShift*i);
-      addParameterDef("amplitude"  + itos(i), amplitudes+i, amplitude);
-      addParameterDef("offset"     + itos(i), offsets+i, 0);
+  periods = std::make_unique<double[]>(motornumber);
+  phaseShifts = std::make_unique<double[]>(motornumber);
+  amplitudes = std::make_unique<double[]>(motornumber);
+  offsets = std::make_unique<double[]>(motornumber);
+  for (int i = 0; i < std::min(number_motors, static_cast<int>(sizeof(controlmask) * 8)); i++) {
+    if ((controlmask & (1 << i)) != 0) {
+      addParameterDef("period" + std::itos(i), &periods[i], period);
+      addParameterDef("phaseshift" + std::itos(i), &phaseShifts[i], phaseShift * i);
+      addParameterDef("amplitude" + std::itos(i), &amplitudes[i], amplitude);
+      addParameterDef("offset" + std::itos(i), &offsets[i], 0);
     }
   }
 };
 
-void MultiSineController::stepNoLearning(const sensor* sensors, int number_sensors,
-                                         motor* motors, int number_motors) {
+void
+MultiSineController::stepNoLearning(const sensor* sensors,
+                                    int number_sensors,
+                                    motor* motors,
+                                    int number_motors) {
 
-  for (int i=0; i<min(number_motors,sizeof(controlmask)*8); i++){
-    if(controlmask & (1<<i) && periods[i]!=0){
-      motors[i]=amplitudes[i]*osci(t*2*M_PI/periods[i] + phaseShifts[i]*M_PI/2, impulsWidth) + offsets[i];
-    }else {
-      motors[i]=0;
+  for (int i = 0;
+       i < std::min(number_motors, static_cast<int>(sizeof(SineController::controlmask) * 8));
+       i++) {
+    if ((SineController::controlmask & (1 << i)) != 0 && periods[i] != 0) {
+      motors[i] =
+        amplitudes[i] * SineController::osci(t * 2 * M_PI / periods[i] + phaseShifts[i] * M_PI / 2,
+                                             SineController::impulsWidth) +
+        offsets[i];
+    } else {
+      motors[i] = 0;
     }
   }
   t++;
 };
-
-

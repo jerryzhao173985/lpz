@@ -23,112 +23,120 @@
  ***************************************************************************/
 
 #include "plotoptionengine.h"
-#include "plotoption.h"
 #include "inspectable.h"
-#include <signal.h>
-#include <string>
-#include <assert.h>
-#include <string.h>
+#include "plotoption.h"
 #include <algorithm>
+#include <assert.h>
 #include <locale.h> // need to set LC_NUMERIC to have a '.' in the numbers written or piped to gnuplot
+#include <signal.h>
+#include <string.h>
+#include <string>
 
 using namespace std;
 
-PlotOptionEngine::PlotOptionEngine(const PlotOption& plotOption) : maybe_controller(0), name("") {
-  if(plotOption.mode!=NoPlot)
+PlotOptionEngine::PlotOptionEngine(const PlotOption& plotOption)
+  : maybe_controller(0)
+  , name("") {
+  if (plotOption.mode != PlotMode::NoPlot)
     plotOptions.push_back(plotOption);
   initialised = false;
-  t=1;
+  t = 1;
 }
 
 PlotOptionEngine::PlotOptionEngine(const list<PlotOption>& plotOptions)
-  : plotOptions(plotOptions), maybe_controller(0), name("") {
+  : plotOptions(plotOptions)
+  , maybe_controller(0)
+  , name("") {
   initialised = false;
-  t=1;
+  t = 1;
 }
-
 
 PlotOptionEngine::~PlotOptionEngine() {
   closePipes();
 }
 
-
-bool PlotOptionEngine::init(AbstractController* maybe_controller){
-  setlocale(LC_NUMERIC,"en_US"); // set us type output
+bool
+PlotOptionEngine::init(AbstractController* maybe_controller) {
+  setlocale(LC_NUMERIC, "en_US"); // set us type output
 
   this->maybe_controller = maybe_controller;
 #ifdef SIGPIPE // is not defined on windows
   // this prevents the simulation to terminate if the child  closes
   // or if we fail to open it.
-  signal(SIGPIPE,SIG_IGN);
+  signal(SIGPIPE, SIG_IGN);
 #endif
-  FOREACH(list<PlotOption>, plotOptions, po){
+  FOREACH(list<PlotOption>, plotOptions, po) {
     initPlotOption(*po);
   }
   initialised = true;
   return true;
 }
 
-bool PlotOptionEngine::initPlotOption(PlotOption& po){
+bool
+PlotOptionEngine::initPlotOption(PlotOption& po) {
   po.open();
-  if(po.pipe){
+  if (po.pipe) {
     // print start
     time_t t = time(0);
-    fprintf(po.pipe,"# Start %s", ctime(&t));
-    if (po.getName().size()>0) // print name of PlotOption
+    fprintf(po.pipe, "# Start %s", ctime(&t));
+    if (po.getName().size() > 0) // print name of PlotOption
       fprintf(po.pipe, "#IN %s\n", po.getName().c_str());
     // print network description given by the structural information of the controller
-    if(maybe_controller){
+    if (maybe_controller) {
       po.printNetworkDescription(maybe_controller->getName(), maybe_controller);
     }
     // print interval
-    if(po.interval==1)
+    if (po.interval == 1)
       fprintf(po.pipe, "# Recording every dataset\n");
     else
       fprintf(po.pipe, "# Recording every %dth dataset\n", po.interval);
     // print all configureables
-    FOREACHC(list<const Configurable*>, configureables, i){
+    FOREACHC(list<const Configurable*>, configureables, i) {
       (*i)->print(po.pipe, "# ", 1000); // do not wrap descriptions (up to len 1000)
     }
     // print infolines of all inspectables
-    fprintf(po.pipe,"#I D t time (s)\n"); // add description for time
+    fprintf(po.pipe, "#I D t time (s)\n"); // add description for time
     po.printInspectableInfoLines(inspectables);
 
-    fprintf(po.pipe,"#######\n");
+    fprintf(po.pipe, "#######\n");
     // print head line with all parameter names
-    fprintf(po.pipe,"#C t");
-    po.printInspectableNames(inspectables,0);
-    fprintf(po.pipe,"\n"); // terminate line
+    fprintf(po.pipe, "#C t");
+    po.printInspectableNames(inspectables, 0);
+    fprintf(po.pipe, "\n"); // terminate line
     return true;
   } else {
-    fprintf(stderr,"Opening of pipe for PlotOption failed!\n");
+    fprintf(stderr, "Opening of pipe for PlotOption failed!\n");
     return false;
   }
 }
 
-bool PlotOptionEngine::reInit() {
+bool
+PlotOptionEngine::reInit() {
   closePipes();
   return init(maybe_controller);
 }
 
-void PlotOptionEngine::closePipes() {
+void
+PlotOptionEngine::closePipes() {
   if (initialised) {
     // closes all pipes of the agents due to pause mode or so
-    FOREACH(list<PlotOption>, plotOptions, po){
+    FOREACH(list<PlotOption>, plotOptions, po) {
       po->close();
     }
     initialised = false;
   }
 }
 
-void PlotOptionEngine::setName(const string& _name){
+void
+PlotOptionEngine::setName(const string& _name) {
   name = _name;
-  FOREACH(list<PlotOption>, plotOptions, po){
+  FOREACH(list<PlotOption>, plotOptions, po) {
     po->setName(_name);
   }
 }
 
-PlotOption& PlotOptionEngine::addPlotOption(const PlotOption& plotOption) {
+PlotOption&
+PlotOptionEngine::addPlotOption(const PlotOption& plotOption) {
   PlotOption po = plotOption;
   // set name of PlotOption if not existent
   if (po.getName().empty())
@@ -143,7 +151,8 @@ PlotOption& PlotOptionEngine::addPlotOption(const PlotOption& plotOption) {
   return plotOptions.back();
 }
 
-bool PlotOptionEngine::addAndInitPlotOption(const PlotOption& plotOption, bool forceInit) {
+bool
+PlotOptionEngine::addAndInitPlotOption(const PlotOption& plotOption, bool forceInit) {
   PlotOption& po = addPlotOption(plotOption);
   if (initialised || forceInit)
     return initPlotOption(po);
@@ -151,10 +160,11 @@ bool PlotOptionEngine::addAndInitPlotOption(const PlotOption& plotOption, bool f
     return true;
 }
 
-bool PlotOptionEngine::removePlotOption(PlotMode mode) {
+bool
+PlotOptionEngine::removePlotOption(PlotMode mode) {
   // if plotoption with the same mode exists -> delete it
   auto po = find_if(plotOptions.rbegin(), plotOptions.rend(), PlotOption::matchMode(mode));
-  if(po != plotOptions.rend()){
+  if (po != plotOptions.rend()) {
     (*po).close();
     plotOptions.erase(--po.base());
     return true;
@@ -162,54 +172,52 @@ bool PlotOptionEngine::removePlotOption(PlotMode mode) {
   return false;
 }
 
-void PlotOptionEngine::addInspectable(const Inspectable* inspectable, bool front){
+void
+PlotOptionEngine::addInspectable(const Inspectable* inspectable, bool front) {
   assert(!initialised);
-  if(front)
+  if (front)
     inspectables.push_front(inspectable);
   else
     inspectables.push_back(inspectable);
 }
 
-void PlotOptionEngine::addConfigurable(const Configurable* c){
+void
+PlotOptionEngine::addConfigurable(const Configurable* c) {
   assert(!initialised);
   configureables.push_back(c);
 }
 
-void PlotOptionEngine::writePlotComment(const char* cmt, bool addSpace){
+void
+PlotOptionEngine::writePlotComment(const char* cmt, bool addSpace) {
   assert(initialised);
-  for(auto &po : plotOptions){
-    if( (po.pipe) && (strlen(cmt)>0)){ // for the guilogger pipe
-      char last = cmt[strlen(cmt)-1];
-      if(addSpace)
+  for (auto& po : plotOptions) {
+    if ((po.pipe) && (strlen(cmt) > 0)) { // for the guilogger pipe
+      char last = cmt[strlen(cmt) - 1];
+      if (addSpace)
         fprintf(po.pipe, "# %s", cmt);
       else
         fprintf(po.pipe, "#%s", cmt);
-      if(last!=10 && last!=13) // print with or without new line
+      if (last != 10 && last != 13) // print with or without new line
         fprintf(po.pipe, "\n");
     }
   }
 }
 
 // Plots controller sensor- and motorvalues and internal controller parameters.
-void PlotOptionEngine::plot(double time)
-{
+void
+PlotOptionEngine::plot(double time) {
   assert(initialised);
 
-  for(list<PlotOption>::iterator i=plotOptions.begin(); i != plotOptions.end(); ++i)
-  {
-    if ( ((*i).pipe) && ((*i).interval>0) && (t % (*i).interval == 0) )
-    {
+  for (list<PlotOption>::iterator i = plotOptions.begin(); i != plotOptions.end(); ++i) {
+    if (((*i).pipe) && ((*i).interval > 0) && (t % (*i).interval == 0)) {
       fprintf((*i).pipe, "%f", time);
-      i->printInspectables(inspectables,0);
-      fprintf((*i).pipe,"\n"); // terminate line
+      i->printInspectables(inspectables, 0);
+      fprintf((*i).pipe, "\n"); // terminate line
       (*i).flush(t);
     }
   }
   t++;
 }
-
-
-
 
 // GEORG: it is better to plot it at initialization time!
 // void PlotOptionEngine::plotNames()

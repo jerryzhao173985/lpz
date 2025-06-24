@@ -651,7 +651,13 @@ int main (int argc, char **argv)
   track         = Base::contains(argv, argc, "-t");
   rareprint     = Base::contains(argv, argc, "-rare");
   if(Base::contains(argv, argc, "-nographics")){
-    absolutePath="/home/georg/sim/4Wheel_reinf/data/";
+    // Use environment variable or current directory
+    const char* dataPath = getenv("LPZROBOTS_DATA_PATH");
+    if(dataPath){
+      absolutePath = string(dataPath) + "/";
+    }else{
+      absolutePath = "./data/";
+    }
     realtimefactor=0;
   }
 

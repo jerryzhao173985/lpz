@@ -22,14 +22,13 @@
  *                                                                         *
  ***************************************************************************/
 
-
 #ifndef PLOTOPTION_H_
 #define PLOTOPTION_H_
 
-#include <stdio.h>
 #include <list>
-#include <utility>
+#include <stdio.h>
 #include <string>
+#include <utility>
 #include <vector>
 
 class Configurable;
@@ -37,7 +36,7 @@ class Inspectable;
 
 /** Output mode for agent.
  */
-enum PlotMode {
+enum class PlotMode {
   /// dummy (does nothing) is there for compatibility, might be removed later
   NoPlot,
   /// write into file
@@ -59,7 +58,6 @@ enum PlotMode {
   LastPlot
 };
 
-
 /** This class contains options for the use of an external plot utility like guilogger or neuronviz
     or just simply file output
  */
@@ -69,8 +67,10 @@ public:
   friend class PlotOptionEngine;
 
   PlotOption()
-    : pipe(0), interval(1), mode(NoPlot),  parameter("")
-  {
+    : pipe(0)
+    , interval(1)
+    , mode(PlotMode::NoPlot)
+    , parameter("") {
     mask.resize(256);
   }
 
@@ -83,21 +83,29 @@ public:
 
      Note: the argument whichSensor is removed. You can adjust this in the wirings now.
    */
-  explicit PlotOption( PlotMode mode, int interval = 1, const std::string& parameter=std::string(), const std::string& filter=std::string())
-    : pipe(0), interval(interval), mode(mode), parameter(parameter)
-  {
-    if(!filter.empty()){
+  explicit PlotOption(PlotMode mode,
+                      int interval = 1,
+                      const std::string& parameter = std::string(),
+                      const std::string& filter = std::string())
+    : pipe(0)
+    , interval(interval)
+    , mode(mode)
+    , parameter(parameter) {
+    if (!filter.empty()) {
       setFilter(filter);
     }
     mask.resize(256);
   }
 
-  virtual ~PlotOption(){}
+  virtual ~PlotOption() {}
 
-  virtual PlotMode getPlotOptionMode() const { return mode; }
+  virtual PlotMode getPlotOptionMode() const {
+    return mode;
+  }
 
   /// sets a filter to this plotoption: To export only selected channels
-  virtual void setFilter(const std::list<std::string>& accept, const std::list<std::string>& ignore);
+  virtual void setFilter(const std::list<std::string>& accept,
+                         const std::list<std::string>& ignore);
   /// sets a filter to this plotoption: syntax: +accept_substr -ignore_substr ...
   virtual void setFilter(const std::string& filter);
 
@@ -106,32 +114,38 @@ public:
 
   /// nice predicate function for finding by mode
   struct matchMode {
-    typedef const PlotOption& argument_type;
-    typedef bool result_type;
-    
-    matchMode(PlotMode mode) : mode(mode) {}
-    int mode;
-    bool operator()(const PlotOption& m) { return (m.mode == mode); }
+    using argument_type = const PlotOption&;
+    using result_type = bool;
 
+    matchMode(PlotMode mode)
+      : mode(static_cast<int>(mode)) {}
+    int mode;
+    bool operator()(const PlotOption& m) {
+      return (static_cast<int>(m.mode) == mode);
+    }
   };
 
   void addConfigurable(const Configurable*);
-  void setName(const std::string& name) { this->name = name;}
-  const std::string& getName() const { return name; }
+  void setName(const std::string& name) {
+    this->name = name;
+  }
+  const std::string& getName() const {
+    return name;
+  }
 
-  bool open(); ///< opens the connections to the plot tool
-  void close();///< closes the connections to the plot tool
+  bool open();  ///< opens the connections to the plot tool
+  void close(); ///< closes the connections to the plot tool
 
   virtual bool useChannel(const std::string& name);
 
-  virtual int printInspectables(const std::list<const Inspectable*>& inspectables, int cnt=0);
+  virtual int printInspectables(const std::list<const Inspectable*>& inspectables, int cnt = 0);
 
-  virtual int printInspectableNames(const std::list<const Inspectable*>& inspectables, int cnt=0);
+  virtual int printInspectableNames(const std::list<const Inspectable*>& inspectables, int cnt = 0);
 
-  virtual void printInspectableInfoLines( const std::list<const Inspectable*>& inspectables);
+  virtual void printInspectableInfoLines(const std::list<const Inspectable*>& inspectables);
 
-  /** prints a network description of the structure given by the inspectable object. (mostly unused now)
-    The network description syntax is as follow
+  /** prints a network description of the structure given by the inspectable object. (mostly unused
+    now) The network description syntax is as follow
     \code
     #N neural_net NETWORKNAME
     #N layer LAYERNAME1 RANK?
@@ -159,7 +173,7 @@ public:
 
 private:
   PlotMode mode;
-  std::string parameter; ///< additional parameter for external command
+  std::string parameter;         ///< additional parameter for external command
   std::list<std::string> accept; ///< channels to accept (use) (empty means all)
   std::list<std::string> ignore; ///< channels not ignore      (empty means ignore non)
   std::vector<bool> mask; ///< mask for accepting channels (calculated from accept and ignore)

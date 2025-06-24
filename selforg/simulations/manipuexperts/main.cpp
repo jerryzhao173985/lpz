@@ -42,13 +42,16 @@ class Sim: public Configurable, public Inspectable {
 public:
   Sim(const string& name)
     : Configurable(name, "$Id$")
-      , predpos(horizont) {
+      , predpos(horizont)
+      , mep(nullptr)
+      , pred_error(0)
+      , data_size(0)
+      , t(0) {
     horizontCopy=horizont;
     stepsizeCopy=stepsize;
     addParameter("realtimefactor", &realtimefactor);
     addParameter("stepsize", &stepsizeCopy);// actually not to change, only for documentation
     addParameter("horizont", &horizontCopy);// actually not to change, only for documentation
-    pred_error=0;
 
   }
 
@@ -58,6 +61,10 @@ public:
 
 
   AbstractModel* init(const char* filename){
+    if(!filename) {
+      fprintf(stderr, "filename is null\n");
+      exit(1);
+    }
     FILE *
     f=fopen(filename, "r");
     if(!f) {

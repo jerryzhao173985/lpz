@@ -25,35 +25,30 @@
 #include "mediator.h"
 #include <assert.h>
 
-MediatorCollegue::MediatorCollegue(Mediator* myMediator) : myMediator(myMediator)
-{
-  if (myMediator!=0)
+MediatorCollegue::MediatorCollegue(Mediator* myMediator)
+  : myMediator(myMediator) {
+  if (myMediator != 0)
     myMediator->addMediatorCollegue(this);
 }
 
 MediatorCollegue::~MediatorCollegue() {
-  if (myMediator!=0)
+  if (myMediator != 0)
     myMediator->removeMediatorCollegue(this);
 }
 
-void MediatorCollegue::informMediator(MediatorEvent* event)
-{
-  assert(myMediator!=0);
-  myMediator->mediatorInformed(this,event);
+void
+MediatorCollegue::informMediator(MediatorEvent* event) {
+  assert(myMediator != 0);
+  myMediator->mediatorInformed(this, event);
   delete event;
 }
 
-void MediatorCollegue::setMediator(Mediator* _myMediator) {
-  if (myMediator!=0)
+void
+MediatorCollegue::setMediator(Mediator* _myMediator) {
+  if (myMediator != 0)
     myMediator->removeMediatorCollegue(this);
-  if (_myMediator!=0)
-  {
+  if (_myMediator != 0) {
     myMediator = _myMediator;
     myMediator->addMediatorCollegue(this);
   }
 }
-
-
-
-
-

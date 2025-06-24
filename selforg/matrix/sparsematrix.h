@@ -26,34 +26,44 @@
 
 #include "sparsearray.h"
 
-namespace matrix
-{
+namespace matrix {
 
-  /**
-   * sparse matrix which uses an HashTable
-   * first (fast implemented) version
-   * @author guettler
-   */
-  template<typename I, typename D> class SparseMatrix : public matrix::SparseArray<I, D>
-  {
-  public:
-     SparseMatrix(I m, I n) : SparseArray<I, D>(m*n), m(m), n(n) {}
+/**
+ * sparse matrix which uses an HashTable
+ * first (fast implemented) version
+ * @author guettler
+ */
+template<typename I, typename D>
+class SparseMatrix : public matrix::SparseArray<I, D> {
+public:
+  SparseMatrix(I m, I n)
+    : SparseArray<I, D>(m * n)
+    , m(m)
+    , n(n) {}
 
-     virtual ~SparseMatrix() {}
+  virtual ~SparseMatrix() {}
 
-     virtual inline D val(I row, I column) const { return (*this)[row*m+column]; }
+  virtual inline D val(I row, I column) const {
+    return (*this)[row * m + column];
+  }
 
-     virtual inline D& val(I row, I column) { return (*this)[row*m+column]; }
+  virtual inline D& val(I row, I column) {
+    return (*this)[row * m + column];
+  }
 
-     virtual inline I getM() { return m; }
-     virtual inline I getN() { return n; }
+  virtual inline I getM() {
+    return m;
+  }
+  virtual inline I getN() {
+    return n;
+  }
 
-   protected:
-     I m;
-     I n;
-  };
+protected:
+  I m;
+  I n;
+};
 
-}
+} // namespace matrix
 
 #ifdef UNITTEST
 #include "sparsematrix.tests.hpp"

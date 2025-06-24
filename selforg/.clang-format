@@ -1,0 +1,31 @@
+---
+Language: Cpp
+BasedOnStyle: Mozilla
+IndentWidth: 2
+ColumnLimit: 100
+PointerAlignment: Left
+AlwaysBreakAfterReturnType: None
+BreakBeforeBraces: Custom
+BraceWrapping:
+  AfterClass: false
+  AfterControlStatement: false
+  AfterEnum: false
+  AfterFunction: false
+  AfterNamespace: false
+  AfterStruct: false
+  AfterUnion: false
+  BeforeCatch: false
+  BeforeElse: false
+  IndentBraces: false
+AllowShortFunctionsOnASingleLine: Empty
+AllowShortIfStatementsOnASingleLine: false
+AllowShortLoopsOnASingleLine: false
+AlignTrailingComments: true
+SpaceAfterCStyleCast: false
+SpacesInCStyleCastParentheses: false
+SpaceBeforeAssignmentOperators: true
+SpaceBeforeParens: ControlStatements
+SpaceInEmptyParentheses: false
+SpacesInParentheses: false
+Standard: c++17
+UseTab: Never

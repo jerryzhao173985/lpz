@@ -38,7 +38,8 @@ warn_on \
 thread \
 qt \
 console \
-c++11
+c++17 \
+sdk_no_version_check
 TARGET = bin/guilogger
 target.path = /usr/bin
 QT += core gui widgets

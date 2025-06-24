@@ -185,7 +185,7 @@ typedef std::vector< test_func > test_vector;
 #define UNIT_TEST_DEFINES \
   test_vector * add_test( test_func x ) { \
     static test_vector unit_tests; \
-    if( x != NULL ) unit_tests.push_back( x ); \
+    if( x != nullptr ) unit_tests.push_back( x ); \
     return &unit_tests; \
   }
 
@@ -256,7 +256,7 @@ int mainstatic_cast<void>({) \
 /** @brief Finish a Unit Test run section.
  */
 #define UNIT_TEST_END \
-  test_vector *_vector = add_test( NULL ); \
+  test_vector *_vector = add_test( nullptr ); \
   for( unsigned short i = 0; i < _vector->size(); i++ ) { \
      bool testresult = (*(*_vector)[i])(); \
      if( result == true && testresult == false ) { result = false; } \

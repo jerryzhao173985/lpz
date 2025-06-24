@@ -159,11 +159,12 @@ public:
          whatDoISee++;
       }
     }
-    if(controller && whatDoISee>0)
+    if(controller && whatDoISee>0) {
       neighboraction *= 1.0/whatDoISee;
       //    neighboraction *= 1.0/weights;
       controller->setMotorTeachingSignal(neighboraction.unsafeGetData(),
                                          neighboraction.size());
+    }
   }
 
   virtual void teaching2(){

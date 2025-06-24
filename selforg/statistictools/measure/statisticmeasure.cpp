@@ -35,7 +35,7 @@ StatisticMeasure::StatisticMeasure(double& observedValue, const char* measureNam
   /// use this section for defining individual constructor commands
   switch(mode)
   {
-  case CONV:
+  case MeasureMode::CONV:
     if (stepSpan==0)
     {
       std::cout << "ERROR: The stepspan in addMeasure(observedValue,\"name\" ,CONV, stepSpan, epsilon)"
@@ -69,39 +69,39 @@ void StatisticMeasure::step()
   // update the variable value from observedValue
   switch(mode)
   {
-  case ID: // return observed value itself
+  case MeasureMode::ID: // return observed value itself
     value=observedValue;
     break;
-  case AVG:
+  case MeasureMode::AVG:
     value=calculateAverageValue();
     break;
-  case MOVAVG:
+  case MeasureMode::MOVAVG:
     value=calculateMovingAverageValue();
     break;
-  case PEAK:
+  case MeasureMode::PEAK:
     if (observedValue>additionalParam)
       value=observedValue-additionalParam;
     else
       value=0;
     break;
-  case MAX:
+  case MeasureMode::MAX:
     if (observedValue>value) // TODO: include history
       value=observedValue;
     break;
-  case MIN:
+  case MeasureMode::MIN:
     if (observedValue<value) // TODO: include history
       value=observedValue;
     break;
-  case SUM:
+  case MeasureMode::SUM:
     value=calculateSumValue();
     break;
-  case CONV:
+  case MeasureMode::CONV:
     value=testConvergence();
     break;
-  case STEPDIFF:
+  case MeasureMode::STEPDIFF:
     value=calculateStepDifference();
     break;
-  case NORMSTEPDIFF:
+  case MeasureMode::NORMSTEPDIFF:
     value=calculateNormalizedStepDifference();
     break;    
   default: // not defined

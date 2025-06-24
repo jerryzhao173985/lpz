@@ -24,25 +24,33 @@
 #ifndef __QLEARNING_H
 #define __QLEARNING_H
 
-#include "matrix.h"
 #include "configurable.h"
-#include "storeable.h"
+#include "matrix.h"
 #include "randomgenerator.h"
+#include "storeable.h"
 
 /// implements QLearning
-class QLearning : public Configurable, public Storeable {
+class QLearning
+  : public Configurable
+  , public Storeable {
 public:
   /**
      \param eps learning rate (typically 0.1)
      \param discount discount factor for Q-values (typically 0.9)
      \param exploration exploration rate (typically 0.02)
      \param eligibility number of steps to update backwards in time
-     \param random_initQ if true Q table is filled with small random numbers at the start (default: false)
+     \param random_initQ if true Q table is filled with small random numbers at the start (default:
+     false)
      \param useSARSA if true, use SARSA strategy otherwise qlearning (default: false)
      \param tau number of time steps to average over reward for col_rew
    */
-  QLearning(double eps, double discount, double exploration, int eligibility,
-            bool random_initQ = false, bool useSARSA = false, int tau=1000);
+  QLearning(double eps,
+            double discount,
+            double exploration,
+            int eligibility,
+            bool random_initQ = false,
+            bool useSARSA = false,
+            int tau = 1000);
 
   virtual ~QLearning();
 
@@ -52,21 +60,21 @@ public:
       @param unit_map if 0 the parametes are choosen randomly.
       Otherwise the model is initialised to represent a unit_map with the given response strength.
   */
-  virtual void init(unsigned  int stateDim, unsigned int actionDim, RandGen* randGen = 0);
+  virtual void init(unsigned int stateDim, unsigned int actionDim, RandGen* randGen = 0);
 
   /** selection of action given current state.
       The policy is to take the actions with the highest value,
       or a random action at the rate of exploration
   */
-  virtual unsigned int select (unsigned int state);
+  virtual unsigned int select(unsigned int state);
 
   /** selection of action given current state.
       The policy is to sample from the above average actions, with bias
       to the old action (also exploration included).
   */
-  virtual unsigned int select_sample (unsigned int state);
+  virtual unsigned int select_sample(unsigned int state);
   /// select with preference to old (90% if good) and 30% second best
-  virtual unsigned int select_keepold (unsigned int state);
+  virtual unsigned int select_keepold(unsigned int state);
 
   /* performs learning and returns current expected reward.
      \param state current state
@@ -75,15 +83,14 @@ public:
      \param learnRateFactor can be given to modify eps for this
      learning step
   */
-  virtual double learn (unsigned int state,
-                        unsigned int action,
-                        double reward,
-                        double learnRateFactor = 1);
+  virtual double learn(unsigned int state,
+                       unsigned int action,
+                       double reward,
+                       double learnRateFactor = 1);
 
   /** returns the vector of values for all actions given the current state
    */
   matrix::Matrix getActionValues(unsigned int state);
-
 
   /** tells the q learning that the agent was reset, so that it
       forgets it memory. please note, that updating the Q-table is
@@ -91,7 +98,6 @@ public:
       more time before reset.
   */
   virtual void reset();
-
 
   /// returns the number of states
   virtual unsigned int getStateDim() const;
@@ -102,18 +108,19 @@ public:
   virtual double getCollectedReward() const;
 
   /// expects a list of value,range and returns the associated state
-  static int valInCrossProd(const std::list<std::pair<int,int> >& vals);
+  static int valInCrossProd(const std::list<std::pair<int, int>>& vals);
 
   /// expects a list of ranges and a state/action and return the configuration
   static std::list<int> ConfInCrossProd(const std::list<int>& ranges, int val);
 
   /// returns q table (mxn) == (states x actions)
-  virtual const matrix::Matrix& getQ() const {return Q;} ;
+  virtual const matrix::Matrix& getQ() const {
+    return Q;
+  };
 
   virtual bool store(FILE* f) const;
 
   virtual bool restore(FILE* f);
-
 
 protected:
   double eps;
@@ -121,24 +128,23 @@ protected:
   double exploration;
   double eligibility; // is used as integer (only for configration)
   bool random_initQ;
+
 public:
   bool useSARSA; ///< if true, use SARSA strategy otherwise qlearning
 protected:
-  int tau;       ///< time horizont for averaging the reward
+  int tau;          ///< time horizont for averaging the reward
   matrix::Matrix Q; /// < Q table (mxn) == (states x actions)
 
-
-  int* actions;    // ring buffer for actions
-  int* states;     // ring buffer for states
-  double* rewards; // ring buffer for rewards
-  int ringbuffersize; // size of ring buffers, eligibility + 1
+  int* actions;        // ring buffer for actions
+  int* states;         // ring buffer for states
+  double* rewards;     // ring buffer for rewards
+  int ringbuffersize;  // size of ring buffers, eligibility + 1
   double* longrewards; // long ring buffer for rewards for collectedReward
-  int t; // time for ring buffers
+  int t;               // time for ring buffers
   bool initialised;
   double collectedReward; // sum over collected reward
 
   RandGen* randGen;
 };
-
 
 #endif

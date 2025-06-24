@@ -30,7 +30,7 @@
 /**
  *  Class for calculating lyapunov exponents
  *   online, over several time horizons, from given Jacobi matrices
-*/
+ */
 class Lyapunov {
 public:
   /// holds a matrix that is the result of a sliding window multiplication
@@ -39,8 +39,7 @@ public:
         @param horizon for sliding window
      */
     SlidingMatrix(int dim, int horizon);
-    void step(int t, const matrix::Matrix* buffer,
-              const matrix::Matrix* invbuffer, int buffersize);
+    void step(int t, const matrix::Matrix* buffer, const matrix::Matrix* invbuffer, int buffersize);
     /** nominal size of sliding window
         (if <=0 then infinite and absolute value stands for the size so far) */
     int horizon;
@@ -48,7 +47,7 @@ public:
     matrix::Matrix Exp; ///< Lyapunov exponents
   };
 
-  typedef HashMap< int, SlidingMatrix* > Horizons;
+  typedef HashMap<int, SlidingMatrix*> Horizons;
 
 public:
   Lyapunov();
@@ -82,6 +81,4 @@ protected:
   Horizons horizons;
 };
 
-
 #endif
-

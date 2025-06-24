@@ -21,25 +21,28 @@
 
 #include <selforg/homeokinbase.h>
 #include <selforg/matrix.h>
-#include <selforg/teachable.h>
 #include <selforg/noisegenerator.h>
-#include <selforg/randomgenerator.h>
 #include <selforg/parametrizable.h>
+#include <selforg/randomgenerator.h>
+#include <selforg/teachable.h>
 
-
-typedef struct SeMoXConf {
-  int buffersize;   ///< buffersize size of the time-buffer for x,y,eta
-  matrix::Matrix initialC; ///< initialC initial controller matrix (if null matrix then automatic, see cInit)
-  double cInit;     ///< cInit initial size of the diagonals of the C matrix (if C is not given)
-  double cNonDiag;  ///< cNonDiag initial size of the non-diagonal elements of the C matrix (if C is not given)
-  double aInit;     ///< aInit initial size of the diagonals of the A matrix
-  double sInit;     ///< sInit initial size of the diagonals of the S matrix
-  bool modelExt;    ///< modelExt if true then additional matrix S is used in forward model (sees sensors)
+struct SeMoXConf {
+  int buffersize; ///< buffersize size of the time-buffer for x,y,eta
+  matrix::Matrix
+    initialC;   ///< initialC initial controller matrix (if null matrix then automatic, see cInit)
+  double cInit; ///< cInit initial size of the diagonals of the C matrix (if C is not given)
+  double cNonDiag; ///< cNonDiag initial size of the non-diagonal elements of the C matrix (if C is
+                   ///< not given)
+  double aInit;    ///< aInit initial size of the diagonals of the A matrix
+  double sInit;    ///< sInit initial size of the diagonals of the S matrix
+  bool
+    modelExt; ///< modelExt if true then additional matrix S is used in forward model (sees sensors)
   /** number of context sensors (considered at the end of the sensor
       vector, which are only feed to the model extended model */
   int numContext;
-  bool someInternalParams;  ///< someInternalParams if true only some internal parameters are exported
-} SeMoXConf;
+  bool
+    someInternalParams; ///< someInternalParams if true only some internal parameters are exported
+};
 
 /**
  * This controller follows the prinziple of homeokinesis and
@@ -54,13 +57,17 @@ typedef struct SeMoXConf {
  * Main characteristics: Motor Space, Extended World model, Continuity, Teaching interface
  *
  */
-class SeMoX : public HomeokinBase, public Teachable, public Parametrizable {
+class SeMoX
+  : public HomeokinBase
+  , public Teachable
+  , public Parametrizable {
   friend class ThisSim;
+
 public:
   explicit SeMoX(const SeMoXConf& conf = getDefaultConf());
 
   /// returns the default configuration
-  static SeMoXConf getDefaultConf(){
+  static SeMoXConf getDefaultConf() {
     SeMoXConf c;
     c.buffersize = 50;
     // c.initialC // remains 0x0
@@ -68,7 +75,7 @@ public:
     c.cNonDiag = 0;
     c.aInit = 1.0;
     c.sInit = 0.0;
-    c.modelExt  = true;
+    c.modelExt = true;
     c.someInternalParams = true;
     c.numContext = 0;
     return c;
@@ -79,17 +86,23 @@ public:
   virtual ~SeMoX();
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
-  virtual int getSensorNumber() const override { return number_sensors; }
+  virtual int getSensorNumber() const override {
+    return number_sensors;
+  }
   /// returns the mumber of motors the controller was initialised with or 0 if not initialised
-  virtual int getMotorNumber() const override { return number_motors; }
+  virtual int getMotorNumber() const override {
+    return number_motors;
+  }
 
   /// performs one step (includes learning).
   /// Calulates motor commands from sensor inputs.
-  virtual void step(const sensor* , int number_sensors, motor* , int number_motors) override;
+  virtual void step(const sensor*, int number_sensors, motor*, int number_motors) override;
 
   /// performs one step without learning. Calulates motor commands from sensor inputs.
-  virtual void stepNoLearning(const sensor* , int number_sensors,
-                              motor* , int number_motors) override;
+  virtual void stepNoLearning(const sensor*,
+                              int number_sensors,
+                              motor*,
+                              int number_motors) override;
 
   /**** STOREABLE ****/
   /** stores the controller values to a given file. */
@@ -129,15 +142,15 @@ protected:
   unsigned short number_sensors;
   unsigned short number_motors;
 
-  matrix::Matrix A; ///< Model Matrix (motors to sensors)
-  matrix::Matrix S; ///< additional Model Matrix (sensors derivatives to sensors)
-  matrix::Matrix C; ///< Controller Matrix
-  matrix::Matrix H; ///< Controller Bias
-  matrix::Matrix B; ///< Model Bias
-  matrix::Matrix R; ///< C*A
+  matrix::Matrix A;       ///< Model Matrix (motors to sensors)
+  matrix::Matrix S;       ///< additional Model Matrix (sensors derivatives to sensors)
+  matrix::Matrix C;       ///< Controller Matrix
+  matrix::Matrix H;       ///< Controller Bias
+  matrix::Matrix B;       ///< Model Bias
+  matrix::Matrix R;       ///< C*A
   matrix::Matrix SmallID; ///< small identity matrix in the dimension of R
-  matrix::Matrix v; ///< shift
-  matrix::Matrix xsi; ///< current output error
+  matrix::Matrix v;       ///< shift
+  matrix::Matrix xsi;     ///< current output error
 
   NoiseGenerator* BNoiseGen; ///< Noisegenerator for noisy bias
   paramval modelNoise;       ///< strength of noisy bias
@@ -156,21 +169,23 @@ protected:
   paramval gamma_teach; ///< strength of teaching
   paramval discountS;   ///< discount strength for hierachical model
 
-  paramval dampModel;       ///< damping of A and S matrices
-  paramval dampController;  ///< damping of C matrix
+  paramval dampModel;      ///< damping of A and S matrices
+  paramval dampController; ///< damping of C matrix
 
   SeMoXConf conf;
 
   // internal
   bool intern_useTeaching; ///< flag whether there is an actual teachning signal or not
-  int t_rand; ///< initial random time to avoid syncronous management of all controllers
+  int t_rand;             ///< initial random time to avoid syncronous management of all controllers
   int managementInterval; ///< interval between subsequent management function calls
   parambool _modelExt_copy; ///< copy of modelExtension variable (to achieve readonly)
 
   /// puts the sensors in the ringbuffer, generate controller values and put them in the
   //  ringbuffer as well
-  virtual void fillBuffersAndControl(const sensor* x_, int number_sensors,
-                             motor* y_, int number_motors);
+  virtual void fillBuffersAndControl(const sensor* x_,
+                                     int number_sensors,
+                                     motor* y_,
+                                     int number_motors);
 
   /// calculates xsi for the current time step using the delayed y values
   //  and x delayed by one
@@ -195,8 +210,6 @@ protected:
 
 protected:
   static double regularizedInverse(double v);
-
-
 };
 
 #endif

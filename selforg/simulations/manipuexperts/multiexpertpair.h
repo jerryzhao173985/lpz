@@ -28,7 +28,7 @@
 #include <selforg/noisegenerator.h>
 #include <selforg/invertablemodel.h>
 
-typedef struct MultiExpertPairConf {
+struct MultiExpertPairConf {
   int numHidden;        ///< number of hidden units in the satelite networks
   double eps0;          ///< learning rate for satelite networks
   double tauE1;         ///< time horizont for short averaging error
@@ -39,15 +39,15 @@ typedef struct MultiExpertPairConf {
   int    numSats;       ///< initial number of satelite networks
   int    maxSats;       ///< maximum number of satelite networks (if 0 or <numSats no growing numbers of sats)
   double mature;        ///< eps factor level when expert is assumed to be mature (for growing numbers of sats)
-} MultiExpertPairConf;
+};
 
 /// Satelite network struct
-typedef struct Sat {
+struct Sat {
   Sat(InvertableModel* _net, double _eps);
   InvertableModel* net;
   double eps;
   double lifetime;
-} Sat;
+};
 
 /**
  * class for robot controller

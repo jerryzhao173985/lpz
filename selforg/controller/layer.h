@@ -36,8 +36,9 @@ public:
       @param factor_bias size of bias neuron , if 0 no bias is used
       @param actfun activation function. see also FeedForwardNN
   */
-  explicit Layer(int size, double factor_bias=0.1,
-        ActivationFunction actfun = FeedForwardNN::linear);
+  explicit Layer(int size,
+                 double factor_bias = 0.1,
+                 ActivationFunction actfun = FeedForwardNN::linear);
 
   /** obsolete, use the other constructor for Layer.
       @param size number neurons
@@ -45,10 +46,10 @@ public:
       @param actfun activation function. see also FeedForwardNN
       @param dactfun derivative of activation function (should be consistent with actfun)
   */
-  Layer(int size, double factor_bias,
-        ActivationFunction actfun,
-        ActivationFunction dactfun) {
-    fprintf(stderr, "%s %s\n", "Layer::Layer(): this contructor is obsolete! ",
+  Layer(int size, double factor_bias, ActivationFunction actfun, ActivationFunction dactfun) {
+    fprintf(stderr,
+            "%s %s\n",
+            "Layer::Layer(): this contructor is obsolete! ",
             "Please use the one without dactfun now!\n");
     exit(1);
   }
@@ -64,12 +65,12 @@ public:
 
   int size;
   double factor_bias;
-  ActivationFunction actfun;  ///< callback activation function
-  ActivationFunction dactfun; ///< first derivative of the activation function
+  ActivationFunction actfun;       ///< callback activation function
+  ActivationFunction dactfun;      ///< first derivative of the activation function
   InvActivationFunction invactfun; ///< inversion of activation function
 
   // prints the Layer data-structure
-  friend std::ostream& operator<<(std::ostream& , const Layer&);
+  friend std::ostream& operator<<(std::ostream&, const Layer&);
 };
 
 #endif

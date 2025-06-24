@@ -39,7 +39,7 @@ private:
     char blockterminator;  // end-of-line symbol for readed data
 
 public:
-    QSerialReader(char bt = '\n');
+    explicit QSerialReader(char bt = '\n');
     virtual void run();
 
     void setComPort(QString port){ this->port = port; };   /// set com port

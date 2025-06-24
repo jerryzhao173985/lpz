@@ -32,14 +32,17 @@ Sat::Sat(InvertableModel* _net, double _eps){
 
 
 MultiExpertPair::MultiExpertPair( const MultiExpertPairConf& _conf)
-  : AbstractModel("MultiExpertPair", "$Id: "), conf(_conf)
+  : AbstractModel("MultiExpertPair", "$Id: ")
+  , inputDim(0)
+  , outputDim(0)
+  , winner(0)
+  , companion(1)
+  , runcompetefirsttime(true)
+  , conf(_conf)
+  , initialised(false)
+  , managementInterval(10)
+  , t(0)
 {
-  runcompetefirsttime=true;
-  winner=0;
-  companion=1;
-  t=0;
-  initialised = false;
-  managementInterval=10;
 };
 
 
@@ -314,7 +317,7 @@ bool MultiExpertPair::restore(FILE* f){
   conf.numHidden = atoi(buffer);
 
  // we need to use fgets in order to avoid spurious effects with following matrix (binary)
-  if((fgets(buffer,128, f))==NULL) return false;
+  if((fgets(buffer,128, f))==nullptr) return false;
   runcompetefirsttime = atoi(buffer);
 
   // restore matrix values

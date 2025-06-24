@@ -24,103 +24,104 @@
 #include "discretisizer.h"
 #include <controller_misc.h>
 
+Discretisizer::Discretisizer(int numberBins)
+  : numberBins(numberBins)
+  , automaticRange(true)
+  , minRange(0)
+  , maxRange(0)
+  , minValue(0)
+  , maxValue(0)
+  , mapToInterval(false)
+  , firstStep(true) {}
 
-Discretisizer::Discretisizer(int numberBins) 
-    : numberBins(numberBins),
-      automaticRange(true),
-      minRange(0),
-      maxRange(0),
-      minValue(0),
-      maxValue(0),
-      mapToInterval(false),
-      firstStep(true) {
-}
-
-
-Discretisizer::Discretisizer(int numberBins, double minRange, double maxRange, bool mapToInterval) 
-    : numberBins(numberBins), 
-      automaticRange(false),
-      minRange(minRange), 
-      maxRange(maxRange), 
-      minValue(0),
-      maxValue(0),
-      mapToInterval(mapToInterval),
-      firstStep(true) {
-}
+Discretisizer::Discretisizer(int numberBins, double minRange, double maxRange, bool mapToInterval)
+  : numberBins(numberBins)
+  , automaticRange(false)
+  , minRange(minRange)
+  , maxRange(maxRange)
+  , minValue(0)
+  , maxValue(0)
+  , mapToInterval(mapToInterval)
+  , firstStep(true) {}
 
 Discretisizer::~Discretisizer() {}
 
-int Discretisizer::getBinNumber(double value) {
-  this->findMinAndMaxRange(value); // first find lowest and highest sensor range
-  this->findMinAndMaxValues(value);// second find lowest and highest sensor values
-  this->firstStep=false;
+int
+Discretisizer::getBinNumber(double value) {
+  this->findMinAndMaxRange(value);  // first find lowest and highest sensor range
+  this->findMinAndMaxValues(value); // second find lowest and highest sensor values
+  this->firstStep = false;
   return this->discretisizeValue(value);
 }
 
-double Discretisizer::get(double value) {
-  double binValue = (double) this->getBinNumber(value);
+double
+Discretisizer::get(double value) {
+  double binValue = (double)this->getBinNumber(value);
   // we know now the interval
-  return -binValue/((double)numberBins)*(maxRange-minRange)+minRange;
+  return -binValue / ((double)numberBins) * (maxRange - minRange) + minRange;
 }
 
-
-double Discretisizer::getMinRange() {
-    return this->minRange;
+double
+Discretisizer::getMinRange() {
+  return this->minRange;
 }
 
-double Discretisizer::getMaxRange() {
-    return this->maxRange;
+double
+Discretisizer::getMaxRange() {
+  return this->maxRange;
 }
 
-
-void Discretisizer::findMinAndMaxRange(double value) {
-    if (automaticRange) {
-      if (firstStep) {
-        minRange=value;
-        maxRange=value;
-      }
-      if (value<minRange)
-            minRange=value;
-        if (value>maxRange)
-            maxRange=value;
+void
+Discretisizer::findMinAndMaxRange(double value) {
+  if (automaticRange) {
+    if (firstStep) {
+      minRange = value;
+      maxRange = value;
     }
+    if (value < minRange)
+      minRange = value;
+    if (value > maxRange)
+      maxRange = value;
+  }
 }
 
+void
+Discretisizer::findMinAndMaxValues(double value) {
+  if (mapToInterval) {
+    if (firstStep) {
+      minValue = value;
+      maxValue = value;
+    }
+    if (value < minValue)
+      minValue = value;
+    if (value > maxValue)
+      maxValue = value;
+  }
+}
 
-void Discretisizer::findMinAndMaxValues(double value) {
+int
+Discretisizer::discretisizeValue(double valueToDiscretisize) {
+  // if automatic range is enabled, then the new range is already set.
+  // This means, nothing more has to be considered.
+  if (!automaticRange) {
     if (mapToInterval) {
-      if (firstStep) {
-        minValue=value;
-        maxValue=value;
-      }
-      if (value<minValue)
-            minValue=value;
-        if (value>maxValue)
-            maxValue=value;
+      // then the values will be mapped:
+      // minValue eqv.to minRange,
+      // maxValue eqv.to maxRange
+      valueToDiscretisize =
+        (valueToDiscretisize - minValue) / (maxValue - minValue) * (maxRange - minRange) + minRange;
+    } else { // no mapping, ensure that value is in range
+      if (valueToDiscretisize < minRange)
+        valueToDiscretisize = minRange;
+      if (valueToDiscretisize > maxRange)
+        valueToDiscretisize = maxRange;
     }
+  }
+  // value is now in range
+  return roundValue((maxRange - valueToDiscretisize) * numberBins / (maxRange - minRange));
 }
 
-int Discretisizer::discretisizeValue(double valueToDiscretisize) {
-    // if automatic range is enabled, then the new range is already set.
-    // This means, nothing more has to be considered.
-    if (!automaticRange) {
-        if (mapToInterval) {
-            // then the values will be mapped:
-            // minValue eqv.to minRange,
-            // maxValue eqv.to maxRange
-            valueToDiscretisize=(valueToDiscretisize-minValue)/(maxValue-minValue)
-                                *(maxRange-minRange)+minRange;
-        } else { // no mapping, ensure that value is in range
-            if (valueToDiscretisize<minRange)
-                valueToDiscretisize=minRange;
-            if (valueToDiscretisize>maxRange)
-                valueToDiscretisize=maxRange;
-        }
-    }
-    // value is now in range
-   return roundValue((maxRange-valueToDiscretisize)*numberBins/(maxRange-minRange));
-}
-
-int Discretisizer::roundValue(double valueToRound) {
-    return (int)(valueToRound<0?valueToRound-.5:valueToRound+.5);
+int
+Discretisizer::roundValue(double valueToRound) {
+  return (int)(valueToRound < 0 ? valueToRound - .5 : valueToRound + .5);
 }

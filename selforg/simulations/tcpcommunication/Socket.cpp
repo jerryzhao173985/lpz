@@ -74,6 +74,7 @@ Socket::Socket()
 {
   _sock = -1;
   _mysock = -1;
+  _tcpClientSock = -1;
 }
 
 Socket::~Socket()
@@ -95,7 +96,7 @@ void Socket::connect(const std::string host, const int port) throw (YarsExceptio
     throw YarsException("Socket::connect: ECHOCLNT: Error creating listening socket.\n");
   }
 
-  if ((h = gethostbyname(host.c_str())) == NULL) {  // get the host info
+  if ((h = gethostbyname(host.c_str())) == nullptr) {  // get the host info
     herror("gethostbyname");
     throw YarsException("Socket::connect: gethostbyname, cannot resolve hostname");
   }
@@ -149,7 +150,7 @@ void Socket::accept(const int port) throw (YarsException)
     throw YarsException("Socket::accept ECHOSERV: Error calling listen()");
   }
 
-  if ( (_sock = ::accept(_mysock, NULL, NULL) ) < 0 ) { // ::accept != Socket::accept
+  if ( (_sock = ::accept(_mysock, nullptr, nullptr) ) < 0 ) { // ::accept != Socket::accept
     throw YarsException("Socket::accept ECHOSERV: Error calling accept()");
   }
 

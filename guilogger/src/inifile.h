@@ -42,7 +42,7 @@ class IniVar;
 class IniFile {
 public:
   IniFile();
-  IniFile(QString _filename);
+  explicit IniFile(QString _filename);
   ~IniFile();
 
   bool Load();  //liest Datei ein und speichert alle Infos in den Variablen
@@ -86,7 +86,7 @@ private:
 class IniSection {
 public:
   IniSection();
-  IniSection(QString _name);
+  explicit IniSection(QString _name);
   ~IniSection();
 
   void    setName(QString _name);

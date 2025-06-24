@@ -34,12 +34,16 @@ MultiExpertSubopt::Sat::Sat(InvertableModel* _net, double _eps){
 
 
 MultiExpertSubopt::MultiExpertSubopt( const MultiExpertSuboptConf& _conf)
-  : AbstractModel("MultiExpertSubopt", "$Id: "), conf(_conf)
+  : AbstractModel("MultiExpertSubopt", "$Id: ")
+  , inputDim(0)
+  , outputDim(0)
+  , winner(0)
+  , runcompetefirsttime(true)
+  , conf(_conf)
+  , initialised(false)
+  , managementInterval(10)
+  , t(0)
 {
-  runcompetefirsttime=true;
-  managementInterval=10;
-  winner=0;
-  initialised = false;
 };
 
 
@@ -148,7 +152,7 @@ const matrix::Matrix MultiExpertSubopt::learn (const matrix::Matrix& input,
 
 
   }else{
-    assert("" == "Not implemented version");
+    assert(false && "Not implemented version");
   }
 
 
@@ -251,7 +255,7 @@ bool MultiExpertSubopt::restore(FILE* f){
   conf.numHidden = atoi(buffer);
 
  // we need to use fgets in order to avoid spurious effects with following matrix (binary)
-  if((fgets(buffer,128, f))==NULL) return false;
+  if((fgets(buffer,128, f))==nullptr) return false;
   runcompetefirsttime = atoi(buffer);
 
   // restore matrix values

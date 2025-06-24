@@ -21,11 +21,18 @@ INCLUDEPATH += . \
                src/InputReader \
                src/tools \
                src/visualisations
-CONFIG += qt c++11
+CONFIG += qt c++17 sdk_no_version_check
 # debug
 CONFIG -= app_bundle
 
-LIBS += -lGLU
+QT += core gui widgets opengl xml
+
+# Remove GLU dependency on macOS
+macx {
+    LIBS += -framework OpenGL
+} else {
+    LIBS += -lGLU
+}
 
 # Input
 HEADERS += src/AbstractRobotGUI.h \

@@ -105,7 +105,7 @@ namespace lpzrobots{
       FILE* f = fopen(fname.c_str(),"r");
       if(!f) return -2;
       char s[1024];
-      int columns;
+      int columns = 0;
       do{
         if(!fgets(s,1024,f)) return -3;
         if(strncmp(s,"Columns",7)==0)
@@ -114,7 +114,7 @@ namespace lpzrobots{
       }while(strncmp(s,"#",1)!=0);
       int r,g,b;
       int i=0;
-      if(columns==nullptr){
+      if(columns==0){
         while(fscanf(f,"%i %i %i %127s\n",&r,&g,&b,s)==4){  // Security fix: added field width limit
           addColor(Color::rgb255(r,g,b), string(s));
           i++;
@@ -218,7 +218,7 @@ namespace lpzrobots{
     using result_type = void;
     print_func(ostream& out, const string& delimit)
       : os(out), count(0), delimit(delimit) {}
-    void operator() (T x) { os << x << delimit; ++count; }
+    void operator() (const T& x) { os << x << delimit; ++count; }
     ostream& os;
     int count;
     string delimit;

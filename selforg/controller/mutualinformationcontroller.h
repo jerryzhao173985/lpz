@@ -33,13 +33,11 @@
  * from one to the next time step. Note that many steps are necessary for a good
  * prediction of the mutual information.
  */
-class MutualInformationController : public AbstractController
-{
+class MutualInformationController : public AbstractController {
 
 public:
-
-    static const int numberSensorsPreInitialized = 10;
-    static const int numberMotorsPreInitialized  = 2;
+  static const int numberSensorsPreInitialized = 10;
+  static const int numberMotorsPreInitialized = 2;
 
   /**
    * Constructs the mutual information controller. At this time the
@@ -50,43 +48,47 @@ public:
    * @param maxSensorValue is the maximum value the sensors can become
    *
    */
-  explicit MutualInformationController(int sensorIntervalCount, double minSensorValue=-1, double maxSensorValue=1, bool showF =false, bool showP =false, bool showXsiF = false);
-  virtual ~MutualInformationController() {};
+  explicit MutualInformationController(int sensorIntervalCount,
+                                       double minSensorValue = -1,
+                                       double maxSensorValue = 1,
+                                       bool showF = false,
+                                       bool showP = false,
+                                       bool showXsiF = false);
+  virtual ~MutualInformationController() override {};
 
   virtual double& getMI(int index) {
     if (!initialized)
-      init(numberSensorsPreInitialized,numberMotorsPreInitialized);
-    assert(index<sensorNumber);
+      init(numberSensorsPreInitialized, numberMotorsPreInitialized);
+    assert(index < sensorNumber);
     return MI[index];
   }
 
   virtual double& getH_x(int index) {
     if (!initialized)
-      init(numberSensorsPreInitialized,numberMotorsPreInitialized);
-    assert(index<sensorNumber);
+      init(numberSensorsPreInitialized, numberMotorsPreInitialized);
+    assert(index < sensorNumber);
     return H_x[index];
   }
 
   virtual double& getH_yx(int index) {
     if (!initialized)
-      init(numberSensorsPreInitialized,numberMotorsPreInitialized);
-    assert(index<sensorNumber);
+      init(numberSensorsPreInitialized, numberMotorsPreInitialized);
+    assert(index < sensorNumber);
     return H_yx[index];
   }
 
   virtual double& getH_Xsi(int index) {
     if (!initialized)
-      init(numberSensorsPreInitialized,numberMotorsPreInitialized);
-    assert(index<sensorNumber);
+      init(numberSensorsPreInitialized, numberMotorsPreInitialized);
+    assert(index < sensorNumber);
     return H_Xsi[index];
   }
 
   /**
-  * we like to calculate the entropy of the xsi, therefore we need for the (self calculated) update rule
-  * x_t+1=-a * tanh(c * x_t) the a and c, which should be set in the main.cpp.
-  */
+   * we like to calculate the entropy of the xsi, therefore we need for the (self calculated) update
+   * rule x_t+1=-a * tanh(c * x_t) the a and c, which should be set in the main.cpp.
+   */
   virtual void setAandCandCalcH_xsi(double ainit, double cinit);
-
 
   /****************************************************************************/
   /*        BEGIN methods of AbstractController                                 */
@@ -101,11 +103,15 @@ public:
 
   /** @return Number of sensors the controller
       was initialised with or 0 if not initialised */
-  virtual int getSensorNumber() const  override{ return sensorNumber; }
+  virtual int getSensorNumber() const override {
+    return sensorNumber;
+  }
 
   /** @return Number of motors the controller
       was initialised with or 0 if not initialised */
-  virtual int getMotorNumber() const  override{ return motorNumber; }
+  virtual int getMotorNumber() const override {
+    return motorNumber;
+  }
 
   /** performs one step (includes learning).
       Calculates motor commands from sensor inputs.
@@ -114,19 +120,22 @@ public:
   @param motors motors outputs. MUST have enough space for motor values!
   @param motornumber length of the provided motor array
   */
-  virtual void step(const sensor* sensors, int sensornumber,
-                    motor* motors, int motornumber) override;
+  virtual void step(const sensor* sensors,
+                    int sensornumber,
+                    motor* motors,
+                    int motornumber) override;
 
   /** performs one step without learning.
   @see step
   */
-  virtual void stepNoLearning(const sensor* sensors , int sensornumber,
-                              motor* motors, int motornumber) override;
+  virtual void stepNoLearning(const sensor* sensors,
+                              int sensornumber,
+                              motor* motors,
+                              int motornumber) override;
 
   /****************************************************************************/
   /*        END methods of AbstractController                                   */
   /****************************************************************************/
-
 
   /****************************************************************************/
   /*        BEGIN methods of Inspectable                                                  */
@@ -137,11 +146,11 @@ public:
        and "A[i][j]" for matrices, where i, j start at 0.
   @return: list of keys
    */
-//  virtual iparamkeylist getInternalParamNames() const;
+  //  virtual iparamkeylist getInternalParamNames() const;
 
   /** @return: list of values
-  */
-//  virtual iparamvallist getInternalParams() const;
+   */
+  //  virtual iparamvallist getInternalParams() const;
 
   /****************************************************************************/
   /*        END methods of Inspectable                                                   */
@@ -152,32 +161,34 @@ public:
   /****************************************************************************/
 
   /** stores the object to the given file stream (binary).
-  */
-  virtual bool store(FILE* f) const override { return true; }
+   */
+  virtual bool store(FILE* f) const override {
+    return true;
+  }
 
   /** loads the object from the given file stream (binary).
-  */
-  virtual bool restore(FILE* f) override { return true; }
+   */
+  virtual bool restore(FILE* f) override {
+    return true;
+  }
 
   /****************************************************************************/
   /*        END methods of Storeable                                                      */
   /****************************************************************************/
 
-
   /****************************************************************************/
   /*        BEGIN methods of Configurable                                                      */
   /****************************************************************************/
 
-//  Configurable::paramval getParam(const paramkey& key) const;
+  //  Configurable::paramval getParam(const paramkey& key) const;
 
-//  bool setParam(const paramkey& key, paramval val);
+  //  bool setParam(const paramkey& key, paramval val);
 
-//  Configurable::paramlist getParamList() const;
+  //  Configurable::paramlist getParamList() const;
 
   /****************************************************************************/
   /*        END methods of Configurable                                                      */
   /****************************************************************************/
-
 
 protected:
   parambool showF;
@@ -191,16 +202,19 @@ protected:
   int sensorIntervalCount;
   int sensorNumber;
   int motorNumber;
-  std::list<matrix::Matrix*> freqMatrixList; // stores the number of occurances of t-1 to t (frequency)
-  std::list<matrix::Matrix*> probMatrixList; // stores the probability of state to state occurances of t-1 to t
-  std::list<matrix::Matrix*> xsiFreqMatrixList; // stores the number of occurances of xsi(x) (frequency)
+  std::list<matrix::Matrix*>
+    freqMatrixList; // stores the number of occurances of t-1 to t (frequency)
+  std::list<matrix::Matrix*>
+    probMatrixList; // stores the probability of state to state occurances of t-1 to t
+  std::list<matrix::Matrix*>
+    xsiFreqMatrixList; // stores the number of occurances of xsi(x) (frequency)
 
   double* oldSensorStates; // stores the sensor states for previous step (t-1)
-  int t; // indicates the step (time)
+  int t;                   // indicates the step (time)
 
-  double* MI; // mutual information = MI(X_{t-1},X_t)
-  double* H_x; // H(x) = H(X_{t-1})
-  double* H_yx; // H(X_t|X_{t-1})
+  double* MI;    // mutual information = MI(X_{t-1},X_t)
+  double* H_x;   // H(x) = H(X_{t-1})
+  double* H_yx;  // H(X_t|X_{t-1})
   double* H_Xsi; // H(Xsi)
 
   // the next two variables are only used if Xsi_x is calculated
@@ -214,13 +228,12 @@ protected:
    */
   virtual void calculateMIs(double* MI);
 
-    /**
+  /**
    * Calculates the entropy of x
    * This is made by normal formula, which
    * needs O(n) costs.
    */
   virtual void calculateH_x(double* H);
-
 
   /**
    * Calculates the conditional entropy of y|x
@@ -229,10 +242,9 @@ protected:
    */
   virtual void calculateH_yx(double* H_yx);
 
-
   /**
-  * Updates the xsi frequency matrix list
-  */
+   * Updates the xsi frequency matrix list
+   */
   virtual void updateXsiFreqMatrixList(const sensor* sensors);
 
   /**
@@ -241,8 +253,6 @@ protected:
    * needs O(n) costs.
    */
   virtual void calculateH_Xsi(double* H_Xsi);
-
-
 
   /**
    * Updates the mutual information
@@ -255,13 +265,10 @@ protected:
    */
   virtual void updateMIs(const sensor* sensors);
 
-
-
   /**
    * Returns the appropiate state which belongs to the given sensorValue.
    */
   virtual int getState(double sensorValue);
-
 
   /**
    * Does the pre-initialization functionality.
@@ -270,8 +277,6 @@ protected:
    * @param randGen
    */
   virtual void internalInit(int sensornumber, int motornumber, RandGen* randGen = 0);
-
-
 };
 
 #endif

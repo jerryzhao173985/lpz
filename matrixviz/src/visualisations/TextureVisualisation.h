@@ -37,16 +37,16 @@ class TextureVisualisation: public AbstractVisualisation {
 public:
   TextureVisualisation(MatrixPlotChannel *channel, ColorPalette *colorPalette, QWidget *parent = 0);
 //  TextureVisualisation(VectorPlotChannel *channel, ColorPalette *colorPalette, QWidget *parent = 0);
-  virtual ~TextureVisualisation();
+  virtual ~TextureVisualisation() override;
   //void updateView();
 
 
 protected:
-  void initializeGL();
-  void resizeGL(int w, int h);
-  void paintGL();
+  void initializeGL() override;
+  void resizeGL(int w, int h) override;
+  void paintGL() override;
   virtual GLuint   makeObject();
-  void mouseMoveEvent ( QMouseEvent *event );
+  void mouseMoveEvent ( QMouseEvent *event ) override;
 
 
 private:

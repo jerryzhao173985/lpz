@@ -29,7 +29,7 @@ using namespace std;
 DerSimple::DerSimple( const DerSimpleConf& conf)
   : InvertMotorController(conf.buffersize, "DerSimple", "$Id$"), conf(conf) {
 
-  assert(conf.model != NULL);
+  assert(conf.model != nullptr);
 
   fantControl = 50;
   fantControlLen = 0;
@@ -319,7 +319,7 @@ void DerSimple::learnController(int delay){
    if ( u*u > 1.25 *  q*q)      epsC *=0.95999999999999;
    else {
      C += C_update.mapP(&squashSize, squash) - C* dampC;
-     double H_squashSize = squashSize*2.0;//TEST: H soll sich schneller bewegen können.
+     double H_squashSize = squashSize*2.0;//TEST: H soll sich schneller bewegen kï¿½nnen.
      H += H_update.mapP(&H_squashSize, squash) - H * dampC; //Test; //Test - H*.001;
      // std::cout <<  "c_up=" << H_update.mapP(&H_squashSize, squash) << std::endl;
 

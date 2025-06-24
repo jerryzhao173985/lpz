@@ -59,12 +59,12 @@ namespace lpzrobots {
 
   int ReplayRobot::getSensorsIntern(sensor* s, int sensornumber){
     assert(sensornumber == (sensorEnd-sensorStart + 1));
-    if(!parseDataLine(sensors,f)){
+    if(!parseDataLine(sensorData,f)){
       cout << "ReplayRobot: no datafile in file" << endl;
     }else{
-      sensors=sensors.rows(sensorStart, sensorEnd);
+      sensorData=sensorData.rows(sensorStart, sensorEnd);
     }
-    sensors.convertToBuffer(s,sensorEnd-sensorStart + 1);
+    sensorData.convertToBuffer(s,sensorEnd-sensorStart + 1);
     return sensorEnd-sensorStart + 1;
   };
 

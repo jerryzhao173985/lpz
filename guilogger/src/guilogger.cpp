@@ -27,12 +27,12 @@
 #include "stl_adds.h"
 
 #include <utility>
-#include <qthread.h>
-#include <qapplication.h>
-#include <qmenubar.h>
-#include <qtimer.h>
-#include <qregexp.h>
-#include <qscrollarea.h>
+#include <QThread>
+#include <QApplication>
+#include <QMenuBar>
+#include <QTimer>
+#include <QRegularExpression>
+#include <QScrollArea>
 
 #include "quickmp.h"
 
@@ -420,7 +420,8 @@ void GuiLogger::save(bool blank){
         sec->addValue("Position", "-1 -1"," # set to any coordinate to place a window by hand, (-1 -1) means automatic. If calcPositions then this is ignored");
       }
       FOREACHC(std::list<int>, plotInfos[i]->getVisibleChannels(), c){
-        sec->addValue("Channel", channelData.getChannelName(*c));
+        QString channelName = channelData.getChannelName(*c);
+        sec->addValue("Channel", channelName);
         // todo maybe add style as well
       }
     }

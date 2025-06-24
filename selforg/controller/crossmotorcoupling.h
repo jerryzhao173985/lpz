@@ -20,8 +20,8 @@
 #ifndef __CROSSMOTORCOUPLING_H
 #define __CROSSMOTORCOUPLING_H
 
-#include "teachable.h"
 #include "abstractcontrolleradapter.h"
+#include "teachable.h"
 
 #include <list>
 #include <vector>
@@ -31,45 +31,51 @@
    CMC[i] contains the list of indices of motors,
    which are used as teaching signals for motor i.
 */
-using CMC = std::vector< std::list<int> >;
+using CMC = std::vector<std::list<int>>;
 
 /**
  * This is an adapter for a teachable controller to implement a
  * cross motor coupling, see dissertation of Georg Martius
- * 
+ *
  */
-class CrossMotorCoupling : public AbstractControllerAdapter, public Teachable {
+class CrossMotorCoupling
+  : public AbstractControllerAdapter
+  , public Teachable {
 public:
-
-
   /**
      @param controller actual controller
      @param teachable also pointer to the controller, must be equal to controller.
-       This trick is used to ensure that the controller is both "AbstractController" and "Teachable".
-     @param threshold value below which (absolute) no cross motor teaching is done      
+       This trick is used to ensure that the controller is both "AbstractController" and
+     "Teachable".
+     @param threshold value below which (absolute) no cross motor teaching is done
       (avoids suppression of activity)
    */
-  CrossMotorCoupling( AbstractController* controller, Teachable* teachable, double threshold = 0.4)
-    : AbstractControllerAdapter(controller, "CrossMotorCoupling", "$ID$"), teachable(teachable), threshold(threshold) {
+  CrossMotorCoupling(AbstractController* controller, Teachable* teachable, double threshold = 0.4)
+    : AbstractControllerAdapter(controller, "CrossMotorCoupling", "$ID$")
+    , teachable(teachable)
+    , threshold(threshold) {
     // We check whether controller and teachable are equally the same thing.
     // the pure pointer comparison does not work, because the type case
     //  also moves the pointer for the other vtable (tricky!)
     // That is why we need dynamic_cast here
-    Teachable* t2 = dynamic_cast<Teachable*>(controller);    
+    Teachable* t2 = dynamic_cast<Teachable*>(controller);
     (void)t2; // this is to avoid a "unused variable" in -DNDEBUG mode
-    assert(static_cast<void*>(t2)==static_cast<void*>(teachable));
+    assert(static_cast<void*>(t2) == static_cast<void*>(teachable));
   }
 
-  virtual void step(const sensor* sensors, int sensornumber, motor* motors, int motornumber) override;
-  
+  virtual void step(const sensor* sensors,
+                    int sensornumber,
+                    motor* motors,
+                    int motornumber) override;
+
   virtual void setCMC(const CMC& cmc);
-  virtual CMC getCMC();    
+  virtual CMC getCMC();
 
   /**** TEACHABLE Interface pass through ****/
 
   virtual void setMotorTeaching(const matrix::Matrix& teaching) override {
     teachable->setMotorTeaching(teaching);
-  }    
+  }
 
   virtual void setSensorTeaching(const matrix::Matrix& teaching) override {
     teachable->setSensorTeaching(teaching);
@@ -82,9 +88,9 @@ public:
     return teachable->getLastSensorValues();
   }
 
-  /** 
+  /**
       creates a permutation cross motor coupling, where for each motor
-      we define one cross motor connection. 
+      we define one cross motor connection.
       @param permutation permutation[i]=j means that motor i receives from motor j
    */
   static CMC getPermutationCMC(const std::list<int>& permutation);
@@ -93,7 +99,6 @@ protected:
   CMC cmc;
   Teachable* teachable;
   double threshold; ///< treshhold below which not cmc-teaching is done
- 
 };
 
 #endif

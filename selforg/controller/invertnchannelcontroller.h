@@ -20,8 +20,8 @@
 #ifndef __INVERTNCHANNELCONTROLLER_H
 #define __INVERTNCHANNELCONTROLLER_H
 
-#include "invertcontroller.h"
 #include "controller_misc.h"
+#include "invertcontroller.h"
 
 #include <assert.h>
 #include <cmath>
@@ -38,38 +38,43 @@
 class InvertNChannelController : public InvertController {
 
 public:
-  explicit InvertNChannelController(int _buffersize, bool _update_only_1=false);
+  explicit InvertNChannelController(int _buffersize, bool _update_only_1 = false);
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
 
-  virtual ~InvertNChannelController();
+  virtual ~InvertNChannelController() override;
 
   /// returns the name of the object (with version number)
-virtual paramkey getName() const override {return name; }
+  virtual paramkey getName() const noexcept override {
+    return name;
+  }
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
-  virtual int getSensorNumber() const  override{ return number_channels; }
+  virtual int getSensorNumber() const override {
+    return number_channels;
+  }
   /// returns the mumber of motors the controller was initialised with or 0 if not initialised
-  virtual int getMotorNumber() const   override{ return number_channels; }
+  virtual int getMotorNumber() const override {
+    return number_channels;
+  }
 
   /// performs one step (includes learning).
   /// Calulates motor commands from sensor inputs.
-virtual void step(const sensor* , int number_sensors, motor* , int number_motors) override;
-
+  virtual void step(const sensor*, int number_sensors, motor*, int number_motors) override;
 
   /// performs one step without learning. Calulates motor commands from sensor inputs.
-  virtual void stepNoLearning(const sensor* , int number_sensors,
-                              motor* , int number_motors) override;
-
+  virtual void stepNoLearning(const sensor*,
+                              int number_sensors,
+                              motor*,
+                              int number_motors) override;
 
   /***** STOREABLE ****/
   /** stores the controller values to a given file. */
-virtual bool store(FILE* f) const override;
+  virtual bool store(FILE* f) const override;
   /** loads the controller values from a given file. */
-virtual bool restore(FILE* f) override;
+  virtual bool restore(FILE* f) override;
 
   // inspectable interface
   virtual std::list<ILayer> getStructuralLayers() const override;
   virtual std::list<IConnection> getStructuralConnections() const override;
-
 
 protected:
   unsigned short number_channels;
@@ -85,23 +90,22 @@ protected:
   int t;
   paramkey name;
 
-
-/*   virtual void iteration(double *column, */
-/*                          double dommy[NUMBER_CHANNELS][NUMBER_CHANNELS], */
-/*                          double *improvment); */
+  /*   virtual void iteration(double *column, */
+  /*                          double dommy[NUMBER_CHANNELS][NUMBER_CHANNELS], */
+  /*                          double *improvment); */
 
   virtual double calculateE(const matrix::Matrix& x_delay, const matrix::Matrix& y_delay);
 
   /// learn values h,C
   virtual void learn(const matrix::Matrix& x_delay, const matrix::Matrix& y_delay);
 
-  virtual void learnmodel( const matrix::Matrix& y_delay);
+  virtual void learnmodel(const matrix::Matrix& y_delay);
 
   /// calculate delayed values
   virtual matrix::Matrix calculateDelayedValues(const matrix::Matrix* buffer,
-                                        unsigned int number_steps_of_delay_);
+                                                unsigned int number_steps_of_delay_);
   virtual matrix::Matrix calculateSmoothValues(const matrix::Matrix* buffer,
-                                       unsigned int number_steps_for_averaging_);
+                                               unsigned int number_steps_for_averaging_);
 
   matrix::Matrix calculateControllerValues(const matrix::Matrix& x_smooth);
 
@@ -109,30 +113,23 @@ protected:
   void putInBuffer(matrix::Matrix* buffer, const matrix::Matrix& vec);
 
   /// neuron transfer function
-  static double g(double z)
-  {
+  static double g(double z) {
     return tanh(z);
   };
 
   ///
-  static double g_s(double z)
-  {
-    double k=tanh(z);
-    return 1.0 - k*k;
+  static double g_s(double z) {
+    double k = tanh(z);
+    return 1.0 - k * k;
     //    return 1.0 - tanh(z)*tanh(z);
   };
 
-
-
   /// squashing function, to protect against to large weight updates
-  static double squash(double z)
-  {
-    return clip(z,-0.1,0.1);
+  static double squash(double z) {
+    return clip(z, -0.1, 0.1);
     //    return z < -0.1 ? -0.1 : ( z > 0.1 ? 0.1 : z );
-    //return 0.1 * tanh(10.0 * z);
+    // return 0.1 * tanh(10.0 * z);
   };
 };
 
 #endif
-
-

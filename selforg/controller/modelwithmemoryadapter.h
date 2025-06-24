@@ -37,22 +37,24 @@ public:
      @param numPatternsPerStep number of past patterns to learn each step
   */
   ModelWithMemoryAdapter(InvertableModel* model, int memorySize, int numPatternsPerStep);
-  virtual ~ModelWithMemoryAdapter() override{ }
+  virtual ~ModelWithMemoryAdapter() override {}
 
-  virtual void init(unsigned int inputDim, unsigned  int outputDim,
-                    double unit_map = 0.0, RandGen* randGen = 0) override;
+  virtual void init(unsigned int inputDim,
+                    unsigned int outputDim,
+                    double unit_map = 0.0,
+                    RandGen* randGen = 0) override;
 
   /**
      learn the input output mapping but also learn mappings from the memory.
      \see InvertableModel::learn
    */
-  virtual const matrix::Matrix learn (const matrix::Matrix& input,
-                                      const matrix::Matrix& nom_output,
-                                      double learnRateFactor = 1) override;
+  virtual const matrix::Matrix learn(const matrix::Matrix& input,
+                                     const matrix::Matrix& nom_output,
+                                     double learnRateFactor = 1) override;
 
   /* ********* Delegations *****************/
 
-  virtual const matrix::Matrix process (const matrix::Matrix& input) override {
+  virtual const matrix::Matrix process(const matrix::Matrix& input) override {
     return model->process(input);
   }
 
@@ -61,7 +63,7 @@ public:
   }
 
   virtual const matrix::Matrix inversion(const matrix::Matrix& input,
-                                         const matrix::Matrix& xsi) const override{
+                                         const matrix::Matrix& xsi) const override {
     return model->inversion(input, xsi);
   }
   virtual unsigned int getInputDim() const override {
@@ -70,39 +72,51 @@ public:
   virtual unsigned int getOutputDim() const override {
     return model->getOutputDim();
   }
-  virtual void damp(double damping)  override{ model->damp(damping);}
+  virtual void damp(double damping) override {
+    model->damp(damping);
+  }
 
   /* ************** Accessors **********************************/
 
-  Inspectable* getModel(){
+  Inspectable* getModel() {
     return model;
   }
   const Inspectable* getModel() const {
     return model;
   }
 
-
   /* *************  STOREABLE **********************************/
   /// stores the layer binary into file stream
-  bool store(FILE* f) const override { return model->store(f);}
+  bool store(FILE* f) const override {
+    return model->store(f);
+  }
   /// restores the layer binary from file stream
-  bool restore(FILE* f) override { return model->restore(f);}
+  bool restore(FILE* f) override {
+    return model->restore(f);
+  }
 
   /* ************* Inspectable **********************************/
-  virtual iparamkeylist getInternalParamNames() const override { return model->getInternalParamNames();}
-  virtual iparamvallist getInternalParams() const override { return model->getInternalParams();}
-  virtual ilayerlist getStructuralLayers() const override { return model->getStructuralLayers();}
+  virtual iparamkeylist getInternalParamNames() const override {
+    return model->getInternalParamNames();
+  }
+  virtual iparamvallist getInternalParams() const override {
+    return model->getInternalParams();
+  }
+  virtual ilayerlist getStructuralLayers() const override {
+    return model->getStructuralLayers();
+  }
   virtual iconnectionlist getStructuralConnections() const override {
     return model->getStructuralConnections();
   }
 
-
 protected:
   // Pattern
-  struct Pat{
-    Pat(){}
-    Pat(const matrix::Matrix& inp, const matrix::Matrix& out, const double& lrFactor):
-      inp(inp), out(out), lrFactor(lrFactor){}
+  struct Pat {
+    Pat() {}
+    Pat(const matrix::Matrix& inp, const matrix::Matrix& out, const double& lrFactor)
+      : inp(inp)
+      , out(out)
+      , lrFactor(lrFactor) {}
     matrix::Matrix inp;
     matrix::Matrix out;
     double lrFactor;
@@ -112,7 +126,7 @@ protected:
   int memorySize;
   int numPatternsPerStep;
   /// vector of input output mappings
-  std::vector <Pat> memory;
+  std::vector<Pat> memory;
   RandGen* randGen;
 };
 

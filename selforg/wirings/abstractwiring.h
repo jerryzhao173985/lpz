@@ -38,8 +38,8 @@
  */
 class AbstractWiring : public Inspectable {
 public:
-  typedef double sensor;
-  typedef double motor;
+  using sensor = double;
+  using motor = double;
 
   enum PlotTypes {Nothing=0, Robot=1, Controller=4, Noise=8};
 

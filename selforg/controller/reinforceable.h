@@ -32,7 +32,7 @@
 */
 class Reinforceable {
 public:
-  enum ReinfState { Run, NewEpisode, NewBatch};
+  enum ReinfState { Run, NewEpisode, NewBatch };
 
   virtual ~Reinforceable() {}
 

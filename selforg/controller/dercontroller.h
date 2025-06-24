@@ -33,13 +33,15 @@
 #include "noisegenerator.h"
 
 struct DerControllerConf {
-  int buffersize; ///< buffersize size of the time-buffer for x,y,eta
-  double cInit; ///< cInit size of the C matrix to initialised with.
-  double cNonDiag; ///< cNonDiag is the size of the nondiagonal elements in respect to the diagonal (cInit) ones
-  bool useS;    ///< useS decides whether to use the S matrix in addition to the A matrix
-  bool someInternalParams;  ///< someInternalParams if true only some internal parameters are exported, all otherwise
-  bool useTeaching;         ///< if true, the controller honors the teaching signal
-  bool useFantasy;           ///< if true fantasising is enabled
+  int buffersize;  ///< buffersize size of the time-buffer for x,y,eta
+  double cInit;    ///< cInit size of the C matrix to initialised with.
+  double cNonDiag; ///< cNonDiag is the size of the nondiagonal elements in respect to the diagonal
+                   ///< (cInit) ones
+  bool useS;       ///< useS decides whether to use the S matrix in addition to the A matrix
+  bool someInternalParams; ///< someInternalParams if true only some internal parameters are
+                           ///< exported, all otherwise
+  bool useTeaching;        ///< if true, the controller honors the teaching signal
+  bool useFantasy;         ///< if true fantasising is enabled
 };
 
 /**
@@ -52,25 +54,29 @@ struct DerControllerConf {
 class DerController : public InvertMotorController {
 
 public:
-
   explicit DerController(const DerControllerConf& conf = getDefaultConf());
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override;
 
-  virtual ~DerController();
+  virtual ~DerController() override;
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
-  virtual int getSensorNumber() const  override{ return number_sensors; }
+  virtual int getSensorNumber() const override {
+    return number_sensors;
+  }
   /// returns the mumber of motors the controller was initialised with or 0 if not initialised
-  virtual int getMotorNumber() const   override{ return number_motors; }
+  virtual int getMotorNumber() const override {
+    return number_motors;
+  }
 
   /// performs one step (includes learning).
   /// Calulates motor commands from sensor inputs.
-  virtual void step(const sensor* , int number_sensors, motor* , int number_motors) override;
+  virtual void step(const sensor*, int number_sensors, motor*, int number_motors) override;
 
   /// performs one step without learning. Calulates motor commands from sensor inputs.
-  virtual void stepNoLearning(const sensor* , int number_sensors,
-                              motor* , int number_motors) override;
-
+  virtual void stepNoLearning(const sensor*,
+                              int number_sensors,
+                              motor*,
+                              int number_motors) override;
 
   /**** STOREABLE ****/
   virtual bool store(FILE* f) const override;
@@ -86,17 +92,18 @@ public:
   virtual void setTeachingMode(bool onOff);
   virtual bool getTeachingMode();
   virtual void setMotorTeachingSignal(const motor* teaching, int len);
-  //void calcCandHUpdatesTeaching(Matrix& C_update, Matrix& H_update, int y_delay);
-  //void calcCandHUpdates(Matrix& C_update, Matrix& H_update,Matrix& A_update, int y_delay);//Test A
+  // void calcCandHUpdatesTeaching(Matrix& C_update, Matrix& H_update, int y_delay);
+  // void calcCandHUpdates(Matrix& C_update, Matrix& H_update,Matrix& A_update, int y_delay);//Test
+  // A
 
-  static DerControllerConf getDefaultConf(){
+  static DerControllerConf getDefaultConf() {
     DerControllerConf c;
     c.buffersize = 50;
     c.cInit = 1.2;
     c.cNonDiag = 0;
-    c.useS  = false;
-    //c.someInternalParams = true;//This is for gnuplout, only the first few nodiagonal elements
-    c.someInternalParams = false;//This is for gnuplout,to plot all matrix  elements
+    c.useS = false;
+    // c.someInternalParams = true;//This is for gnuplout, only the first few nodiagonal elements
+    c.someInternalParams = false; // This is for gnuplout,to plot all matrix  elements
     c.useTeaching = false;
     c.useFantasy = false;
     return c;
@@ -108,46 +115,47 @@ protected:
   unsigned short number_sensors;
   unsigned short number_motors;
 
-  matrix::Matrix A; ///< Model Matrix (motors to sensors)
-  matrix::Matrix S; ///< additional Model Matrix (sensors to sensors)
-  matrix::Matrix C; ///< Controller Matrix
-  matrix::Matrix DD; ///< Noise  Matrix
-  matrix::Matrix Dinverse; ///< Inverse  Noise  Matrix
-  matrix::Matrix H; ///< Controller Bias
-  matrix::Matrix B; ///< Model Bias
+  matrix::Matrix A;          ///< Model Matrix (motors to sensors)
+  matrix::Matrix S;          ///< additional Model Matrix (sensors to sensors)
+  matrix::Matrix C;          ///< Controller Matrix
+  matrix::Matrix DD;         ///< Noise  Matrix
+  matrix::Matrix Dinverse;   ///< Inverse  Noise  Matrix
+  matrix::Matrix H;          ///< Controller Bias
+  matrix::Matrix B;          ///< Model Bias
   NoiseGenerator* BNoiseGen; ///< Noisegenerator for noisy bias
   NoiseGenerator* YNoiseGen; ///< Noisegenerator for noisy motor values
-  matrix::Matrix R; ///< C*A
-  matrix::Matrix RRT; // R*R^T
-  matrix::Matrix AAT; // (A^T)*A
+  matrix::Matrix R;          ///< C*A
+  matrix::Matrix RRT;        // R*R^T
+  matrix::Matrix AAT;        // (A^T)*A
   //  matrix::Matrix Rm1; ///< R^-1
   matrix::Matrix SmallID; ///< small identity matrix in the dimension of R
-  matrix::Matrix xsi; ///< current output error
-  double xsi_norm; ///< norm of matrix
-  double xsi_norm_avg; ///< average norm of xsi (used to define whether Modell learns)
-  double pain;         ///< if the modelling error (xsi) is too high we have a pain signal
+  matrix::Matrix xsi;     ///< current output error
+  double xsi_norm;        ///< norm of matrix
+  double xsi_norm_avg;    ///< average norm of xsi (used to define whether Modell learns)
+  double pain;            ///< if the modelling error (xsi) is too high we have a pain signal
   matrix::Matrix* x_buffer;
   matrix::Matrix* y_buffer;
   matrix::Matrix* eta_buffer;
   matrix::Matrix zero_eta; // zero initialised eta
   matrix::Matrix x_smooth;
   //  matrix::Matrix v_smooth;
-   matrix::Matrix eta_smooth;
-
+  matrix::Matrix eta_smooth;
 
   matrix::Matrix y_teaching; ///< teaching motor signal
 
-  matrix::Matrix x_intern;  ///< fantasy sensor values
-  int fantControl;     ///< interval length for fantasising
-  int fantControlLen;  ///< length of fantasy control
-  int fantReset;       ///< number of fantasy control events before reseting internal state
+  matrix::Matrix x_intern; ///< fantasy sensor values
+  int fantControl;         ///< interval length for fantasising
+  int fantControlLen;      ///< length of fantasy control
+  int fantReset;           ///< number of fantasy control events before reseting internal state
 
   DerControllerConf conf;
 
   /// puts the sensors in the ringbuffer, generate controller values and put them in the
   //  ringbuffer as well
-  virtual void fillBuffersAndControl(const sensor* x_, int number_sensors,
-                             motor* y_, int number_motors);
+  virtual void fillBuffersAndControl(const sensor* x_,
+                                     int number_sensors,
+                                     motor* y_,
+                                     int number_motors);
 
   /// calculates the first shift into the motor space useing delayed motor values.
   //  @param delay 0 for no delay and n>0 for n timesteps delay in the time loop
@@ -167,19 +175,24 @@ protected:
   // @param y_delay timesteps to delay the y-values.  (usually 0)
   //  Please note that the delayed values are NOT used for the error calculation
   //  (this is done in calcXsi())
-  virtual void calcCandHandAUpdates(matrix::Matrix& C_update, matrix::Matrix& H_update,
-                                    matrix::Matrix& A_update, int y_delay);//Test A
+  virtual void calcCandHandAUpdates(matrix::Matrix& C_update,
+                                    matrix::Matrix& H_update,
+                                    matrix::Matrix& A_update,
+                                    int y_delay); // Test A
   /// updates the matrices C, H and A
-  virtual void updateCandHandA(const matrix::Matrix& C_update, const matrix::Matrix& H_update,
-                               const matrix::Matrix& A_update, double squashSize);//Test A
+  virtual void updateCandHandA(const matrix::Matrix& C_update,
+                               const matrix::Matrix& H_update,
+                               const matrix::Matrix& A_update,
+                               double squashSize); // Test A
 
   virtual matrix::Matrix calculateControllerValues(const matrix::Matrix& x_smooth);
 
-  /// calculates the city block distance (abs) norm of the matrix. (abs sum of absolutes / size of matrix)
+  /// calculates the city block distance (abs) norm of the matrix. (abs sum of absolutes / size of
+  /// matrix)
   virtual double calcMatrixNorm(const matrix::Matrix& m);
-  /// calculates the error_factor for either logarithmic (E=ln(e^T*e)) or square (E=sqrt(e^t*e)) error
+  /// calculates the error_factor for either logarithmic (E=ln(e^T*e)) or square (E=sqrt(e^t*e))
+  /// error
   virtual double calcErrorFactor(const matrix::Matrix& e, bool loga, bool root) override;
-
 };
 
 #endif

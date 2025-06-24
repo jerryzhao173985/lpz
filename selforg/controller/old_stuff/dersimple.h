@@ -28,7 +28,7 @@
 #include "noisegenerator.h"
 #include "invertablemodel.h"
 
-typedef struct DerSimpleConf {
+struct DerSimpleConf {
   int buffersize;  ///< buffersize size of the time-buffer for x,y,eta
   double cInit;    ///< cInit size of the C matrix to initialised with.
   double cNonDiag; ///< cNonDiag is the size of the nondiagonal elements in respect to the diagonal (cInit) ones
@@ -40,7 +40,7 @@ typedef struct DerSimpleConf {
   bool useFantasy;           ///< if true fantasising is enabled
 
   InvertableModel* model;   ///< model used as forward model
-} DerSimpleConf;
+};
 
 /**
  * class for robot controller is based on InvertMotorNStep

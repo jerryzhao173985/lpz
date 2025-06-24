@@ -22,81 +22,76 @@
  *                                                                         *
  ***************************************************************************/
 #include "mediator.h"
-#include <assert.h>
 #include "stl_adds.h"
-//#include "quickmp.h"
+#include <assert.h>
+// #include "quickmp.h"
 
 Mediator::Mediator() {}
 
 Mediator::~Mediator() {}
 
-void Mediator::removeAllMediatorCollegues()
-{
+void
+Mediator::removeAllMediatorCollegues() {
   collegueList.clear();
 }
 
-
-
-void Mediator::addMediatorCollegue(MediatorCollegue *collegue)
-{
+void
+Mediator::addMediatorCollegue(MediatorCollegue* collegue) {
   collegueList.push_back(collegue);
 }
 
-void Mediator::removeMediatorCollegue(MediatorCollegue *collegue)
-{
+void
+Mediator::removeMediatorCollegue(MediatorCollegue* collegue) {
   FOREACH(MediatorCollegueListType, collegueList, collIt) {
-    if ((*collIt)==collegue)
-    {
+    if ((*collIt) == collegue) {
       collegueList.erase(collIt);
       break;
     }
   }
 }
 
-
-MediatorCollegue* Mediator::getMediatorCollegue(unsigned int index)
-{
+MediatorCollegue*
+Mediator::getMediatorCollegue(unsigned int index) {
   assert(index < getNumberOfMediatorCollegues());
   return collegueList[index];
 }
 
-unsigned int Mediator::getMediatorCollegueIndex(MediatorCollegue* collegue)
-{
-  for (unsigned int index=0; index<collegueList.size(); index++)
-    if (collegueList[index]==collegue)
+unsigned int
+Mediator::getMediatorCollegueIndex(MediatorCollegue* collegue) {
+  for (unsigned int index = 0; index < collegueList.size(); index++)
+    if (collegueList[index] == collegue)
       return index;
   return -1;
 }
 
-unsigned int Mediator::getNumberOfMediatorCollegues()
-{
-  return (unsigned int) collegueList.size();
+unsigned int
+Mediator::getNumberOfMediatorCollegues() {
+  return (unsigned int)collegueList.size();
 }
 
-void Mediator::mediate(unsigned int indexOfMediatorCollegue, MediatorEvent* event)
-{
-  if (indexOfMediatorCollegue<getNumberOfMediatorCollegues())
+void
+Mediator::mediate(unsigned int indexOfMediatorCollegue, MediatorEvent* event) {
+  if (indexOfMediatorCollegue < getNumberOfMediatorCollegues())
     getMediatorCollegue(indexOfMediatorCollegue)->doOnMediatorCallBack(event);
   delete event;
 }
 
-void Mediator::mediate(MediatorCollegue* collegue, MediatorEvent* event)
-{
+void
+Mediator::mediate(MediatorCollegue* collegue, MediatorEvent* event) {
   collegue->doOnMediatorCallBack(event);
   delete event;
 }
 
-void Mediator::mediateToAll(MediatorEvent* event)
-{
-  FOREACHC(MediatorCollegueListType, collegueList, collegue)
-  {
+void
+Mediator::mediateToAll(MediatorEvent* event) {
+  FOREACHC(MediatorCollegueListType, collegueList, collegue) {
     (*collegue)->doOnMediatorCallBack(event);
   }
   delete event;
 }
 
-void Mediator::mediateToAllQMP(MediatorEvent* event)
-{
+void
+Mediator::mediateToAllQMP(MediatorEvent* event) {
   mediateToAll(event);
   /*
   unsigned int listSize = collegueList.size();

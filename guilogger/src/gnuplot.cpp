@@ -18,6 +18,10 @@ void Gnuplot::init(const QString& gnuplotcmd, int w,int h, int x, int y){
 }
 
 bool Gnuplot::open(const QString& gnuplotcmd, int w,int h, int x, int y){
+#if defined(WIN32) || defined(_WIN32) || defined (__WIN32) || defined(__WIN32__) \
+        || defined (_WIN64) || defined(__CYGWIN__) || defined(__MINGW32__) || defined(__APPLE__)
+  (void)w; (void)h; (void)x; (void)y; // unused on Windows/macOS
+#endif
   char cmd[512];
   setlocale(LC_NUMERIC,"C"); // set us type output
 //  setlocale(LC_NUMERIC,"en_US"); // set us type output

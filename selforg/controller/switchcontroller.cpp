@@ -25,14 +25,15 @@
 
 #include <assert.h>
 
-
 SwitchController::SwitchController(const std::list<AbstractController*>& controllers,
-                                   const std::string& name, const std::string& revision)
-  : AbstractController(name, revision), controllers(controllers) {
+                                   const std::string& name,
+                                   const std::string& revision)
+  : AbstractController(name, revision)
+  , controllers(controllers) {
 
-  addParameterDef("activecontroller",&activecontroller,0,0,10,"index of active controller");
-  assert(controllers.size()>0);
-  for(auto &c: controllers){
+  addParameterDef("activecontroller", &activecontroller, 0, 0, 10, "index of active controller");
+  assert(controllers.size() > 0);
+  for (auto& c : controllers) {
     addConfigurable(c);
     addInspectable(c);
   }
@@ -40,40 +41,46 @@ SwitchController::SwitchController(const std::list<AbstractController*>& control
 
 SwitchController::~SwitchController() {}
 
-void SwitchController::init(const int sensornumber, const int motornumber,
-                                           RandGen* randGen) {
-  for(auto &c: controllers){
+void
+SwitchController::init(const int sensornumber, const int motornumber, RandGen* randGen) {
+  for (auto& c : controllers) {
     c->init(sensornumber, motornumber, randGen);
   }
 }
 
-void SwitchController::step(const sensor* sensors, int sensornumber, motor* motors, int motornumber) {
+void
+SwitchController::step(const sensor* sensors, int sensornumber, motor* motors, int motornumber) {
   motor* dummy = static_cast<motor*>(malloc(sizeof(motor) * motornumber));
 
-  activecontroller = std::max(0,std::min(activecontroller,static_cast<int>(controllers.size())-1));
+  activecontroller =
+    std::max(0, std::min(activecontroller, static_cast<int>(controllers.size()) - 1));
 
-  FOREACHIa(controllers, c, i){
-    if(activecontroller==i){
-      (*c)->step(sensors,sensornumber,motors,motornumber);
-    }else{
-      (*c)->step(sensors,sensornumber,dummy,motornumber);
+  FOREACHIa(controllers, c, i) {
+    if (activecontroller == i) {
+      (*c)->step(sensors, sensornumber, motors, motornumber);
+    } else {
+      (*c)->step(sensors, sensornumber, dummy, motornumber);
     }
   }
   free(dummy);
 }
 
-void SwitchController::stepNoLearning(const sensor* sensors , int sensornumber, motor* motors, int motornumber){
+void
+SwitchController::stepNoLearning(const sensor* sensors,
+                                 int sensornumber,
+                                 motor* motors,
+                                 int motornumber) {
   motor* dummy = static_cast<motor*>(malloc(sizeof(motor) * motornumber));
 
-  activecontroller = std::max(0,std::min(activecontroller,static_cast<int>(controllers.size())-1));
+  activecontroller =
+    std::max(0, std::min(activecontroller, static_cast<int>(controllers.size()) - 1));
 
-  FOREACHIa(controllers, c, i){
-    if(activecontroller==i){
-      (*c)->stepNoLearning(sensors,sensornumber,motors,motornumber);
-    }else{
-      (*c)->stepNoLearning(sensors,sensornumber,dummy,motornumber);
+  FOREACHIa(controllers, c, i) {
+    if (activecontroller == i) {
+      (*c)->stepNoLearning(sensors, sensornumber, motors, motornumber);
+    } else {
+      (*c)->stepNoLearning(sensors, sensornumber, dummy, motornumber);
     }
   }
   free(dummy);
 }
-

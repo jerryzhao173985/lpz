@@ -24,8 +24,8 @@
 #ifndef __FEEDFORWARDNN_H
 #define __FEEDFORWARDNN_H
 
-#include "invertablemodel.h"
 #include "controller_misc.h"
+#include "invertablemodel.h"
 #include "regularisation.h"
 
 #include <cmath>
@@ -39,40 +39,68 @@ using InvActivationFunction = double (*)(double, double);
 
 /// abstract class (interface) for feed forward rate based neural networks
 class FeedForwardNN : public InvertableModel {
- public:
-  // 20110317, guettler: disabled default constructor since it is not needed and would cause difficulties
-  //FeedForwardNN() {}
+public:
+  // 20110317, guettler: disabled default constructor since it is not needed and would cause
+  // difficulties
+  // FeedForwardNN() {}
   FeedForwardNN(const std::string& name, const std::string& revision)
-    : InvertableModel(name, revision){};
-  virtual ~FeedForwardNN() override{};
+    : InvertableModel(name, revision) {};
+  virtual ~FeedForwardNN() override {};
 
   /// damps the weights and the biases by multiplying (1-damping)
-  virtual void damp(double damping) override =0 ;
+  virtual void damp(double damping) override = 0;
 
   /******** Activation functions and there derivative
             and inversion with certain output shift (regularised) */
-  static double linear(double z)   { return z;}
-  static double dlinear(double )   { return 1;}
-  static double invlinear(double z, double xsi) { return xsi;}
+  static double linear(double z) {
+    return z;
+  }
+  static double dlinear(double) {
+    return 1;
+  }
+  static double invlinear(double z, double xsi) {
+    return xsi;
+  }
 
-  static double tanh(double z)     { return ::tanh(z); }
-  static double dtanh(double z)    { double k = ::tanh(z); return 1-k*k; }
-  static double invtanh(double z, double xsi) { return g_s_expand2(z,xsi)*xsi; }
+  static double tanh(double z) {
+    return ::tanh(z);
+  }
+  static double dtanh(double z) {
+    double k = ::tanh(z);
+    return 1 - k * k;
+  }
+  static double invtanh(double z, double xsi) {
+    return g_s_expand2(z, xsi) * xsi;
+  }
 
   // clipped tanh
-  static double tanhc(double z)     { return ::tanh(z); }
-  static double dtanhc(double z) { double k = ::tanh(clip(z, -3.0, 3.0)); return 1-k*k; }
+  static double tanhc(double z) {
+    return ::tanh(z);
+  }
+  static double dtanhc(double z) {
+    double k = ::tanh(clip(z, -3.0, 3.0));
+    return 1 - k * k;
+  }
 
   // regularised tanh
-  static double tanhr(double z)     { return ::tanh(z); }
+  static double tanhr(double z) {
+    return ::tanh(z);
+  }
   // static double dtanhr(double z)    { double k = tanh(z); return 1.01-k*k; }
-  static double dtanhr(double z) { return 1.0/(1.0+z*z); }
+  static double dtanhr(double z) {
+    return 1.0 / (1.0 + z * z);
+  }
 
-
-  static double sigmoid(double z)  { return 1/(1+exp(-z)); }
-  static double dsigmoid(double z) { double k = sigmoid(clip(z, -3.0, 3.0)); return k*(1-k); }
-  static double invsigmoid(double z, double xsi) { return 1/(0.01+dsigmoid(z))*xsi;}
+  static double sigmoid(double z) {
+    return 1 / (1 + exp(-z));
+  }
+  static double dsigmoid(double z) {
+    double k = sigmoid(clip(z, -3.0, 3.0));
+    return k * (1 - k);
+  }
+  static double invsigmoid(double z, double xsi) {
+    return 1 / (0.01 + dsigmoid(z)) * xsi;
+  }
 };
-
 
 #endif

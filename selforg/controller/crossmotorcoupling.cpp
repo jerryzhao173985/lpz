@@ -17,53 +17,53 @@
  *                                                                         *
  ***************************************************************************/
 
-
 #include "crossmotorcoupling.h"
+#include <numeric>
 
 using namespace std;
 
-void CrossMotorCoupling::step(const sensor* sensors, int sensornumber,
-                              motor* motors, int motornumber) {
+void
+CrossMotorCoupling::step(const sensor* sensors, int sensornumber, motor* motors, int motornumber) {
 
   // teaching
   const matrix::Matrix& m = teachable->getLastMotorValues();
-  controller->step(sensors, sensornumber, motors,  motornumber);
+  controller->step(sensors, sensornumber, motors, motornumber);
   matrix::Matrix teaching = m; // default is to teach with the motor value itself
   unsigned int i = 0;
-  for(const auto& connections : cmc){
-    double incom=0;
-    for(const int& src : connections){
-      incom += m.val(src,0);
-    }
-    if(connections.size()>0){ // only if we have incomming connections...
-      incom/= connections.size();
-      if(abs(incom)>=threshold)
-        teaching.val(i,0)= incom/connections.size();
+  for (const auto& connections : cmc) {
+    double incom =
+      std::accumulate(connections.begin(), connections.end(), 0.0, [&m](double sum, int src) {
+        return sum + m.val(src, 0);
+      });
+    if (connections.size() > 0) { // only if we have incomming connections...
+      incom /= connections.size();
+      if (abs(incom) >= threshold)
+        teaching.val(i, 0) = incom / connections.size();
     }
     i++;
   }
-  if(cmc.size()){
+  if (cmc.size()) {
     teachable->setMotorTeaching(teaching);
   }
 }
 
-
-void CrossMotorCoupling::setCMC(const CMC& cmc){
-  this->cmc=cmc;
+void
+CrossMotorCoupling::setCMC(const CMC& cmc) {
+  this->cmc = cmc;
 }
 
-CMC CrossMotorCoupling::getCMC(){
+CMC
+CrossMotorCoupling::getCMC() {
   return cmc;
 }
 
-
-CMC CrossMotorCoupling::getPermutationCMC(const std::list<int>& permutation){
+CMC
+CrossMotorCoupling::getPermutationCMC(const std::list<int>& permutation) {
   CMC cmc(permutation.size());
-  unsigned int i=0;
-  FOREACHC(std::list<int>, permutation, p){
+  unsigned int i = 0;
+  FOREACHC(std::list<int>, permutation, p) {
     cmc[i].push_back(*p);
     i++;
   }
   return cmc;
 }
-

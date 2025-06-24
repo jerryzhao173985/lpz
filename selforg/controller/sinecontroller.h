@@ -24,9 +24,9 @@
 #ifndef __SINECONTROLLER_H
 #define __SINECONTROLLER_H
 
-
-#include <stdio.h>
 #include "abstractcontroller.h"
+#include <cstdio>
+#include <memory>
 
 /**
  * class for robot control with sine, sawtooth and impuls
@@ -36,13 +36,13 @@
  */
 class SineController : public AbstractController {
 public:
-  enum function {Sine, SawTooth, Impulse};
+  enum class function { Sine, SawTooth, Impulse };
 
   /**
      @param controlmask bitmask to select channels to control (default all)
      @param function controller function to use
    */
-  explicit SineController(unsigned long int controlmask = (~0), function func = Sine);
+  explicit SineController(unsigned long int controlmask = (~0), function func = function::Sine);
 
   /** initialisation of the controller with the given sensor/ motornumber
       Must be called before use.
@@ -51,12 +51,15 @@ public:
 
   /** @return Number of sensors the controller was initialised
       with or 0 if not initialised */
-  virtual int getSensorNumber() const  override{return number_sensors;}
-
+  virtual int getSensorNumber() const override {
+    return number_sensors;
+  }
 
   /** @return Number of motors the controller was initialised
       with or 0 if not initialised */
-  virtual int getMotorNumber() const  override{return number_motors;}
+  virtual int getMotorNumber() const override {
+    return number_motors;
+  }
 
   /** performs one step ( the same as StepNoLearning).
       Calculates motor commands from sensor inputs.
@@ -65,19 +68,22 @@ public:
       @param motors motors outputs. MUST have enough space for motor values!
       @param motornumber length of the provided motor array
   */
-  virtual void step(const sensor* sensors, int sensornumber,
-                    motor* motors, int motornumber) override;
+  virtual void step(const sensor* sensors,
+                    int sensornumber,
+                    motor* motors,
+                    int motornumber) override;
   /** performs one step.
       @see step
   */
-  virtual void stepNoLearning(const sensor* , int number_sensors,
-                              motor* , int number_motors) override;
-
+  virtual void stepNoLearning(const sensor*,
+                              int number_sensors,
+                              motor*,
+                              int number_motors) override;
 
   /********* STORABLE INTERFACE ******/
   /// @see Storable
   virtual bool store(FILE* f) const override {
-    Configurable::print(f,"");
+    Configurable::print(f, "");
     return true;
   }
 
@@ -95,7 +101,6 @@ public:
   static double impuls(double x, double impulsWidth);
 
 protected:
-
   std::string name;
   int number_sensors;
   int number_motors;
@@ -108,23 +113,26 @@ protected:
   double phase; // phase of oscillator
   paramval amplitude;
 
-  double (*osci) (double x, double param); // oscillator function
+  double (*osci)(double x, double param); // oscillator function
 };
 
 class MultiSineController : public SineController {
 public:
-  explicit MultiSineController(unsigned long int controlmask = (~0), function func = Sine);
+  explicit MultiSineController(unsigned long int controlmask = (~0),
+                               function func = function::Sine);
+  virtual ~MultiSineController() override;
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override;
-  virtual void stepNoLearning(const sensor* , int number_sensors,
-                              motor* , int number_motors) override;
+  virtual void stepNoLearning(const sensor*,
+                              int number_sensors,
+                              motor*,
+                              int number_motors) override;
+
 protected:
-  double* periods;
-  double* phaseShifts;
-  double* amplitudes;
-  double* offsets;
+  std::unique_ptr<double[]> periods;
+  std::unique_ptr<double[]> phaseShifts;
+  std::unique_ptr<double[]> amplitudes;
+  std::unique_ptr<double[]> offsets;
   long t;
 };
-
-
 
 #endif

@@ -33,11 +33,10 @@
    the contructor.
  */
 struct SoxExpandConf {
-  double initFeedbackStrength; ///< initial value of diagonals of C
+  double initFeedbackStrength;       ///< initial value of diagonals of C
   unsigned int numberContextSensors; ///< number of sensors considered as context sensors
-  matrix::Matrix contextCoupling; ///< coupling of context senors to bias
+  matrix::Matrix contextCoupling;    ///< coupling of context senors to bias
 };
-
 
 /**
  * This controller implements the standard algorihm described the Chapter 3 (Homeokinesis)
@@ -51,27 +50,28 @@ public:
 
   virtual ~SoxExpand();
 
-  static SoxExpandConf getDefaultConf(){
+  static SoxExpandConf getDefaultConf() {
     SoxExpandConf c;
-    c.initFeedbackStrength=1.0;
-    c.numberContextSensors=0;
+    c.initFeedbackStrength = 1.0;
+    c.numberContextSensors = 0;
     return c;
   }
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
-  virtual int getSensorNumber() const { return number_sensors; }
+  virtual int getSensorNumber() const {
+    return number_sensors;
+  }
   /// returns the mumber of motors the controller was initialised with or 0 if not initialised
-  virtual int getMotorNumber() const  { return number_motors; }
+  virtual int getMotorNumber() const {
+    return number_motors;
+  }
 
   /// performs one step (includes learning).
   /// Calulates motor commands from sensor inputs.
-  virtual void step(const sensor* , int number_sensors, motor* , int number_motors);
-
+  virtual void step(const sensor*, int number_sensors, motor*, int number_motors);
 
   /// performs one step without learning. Calulates motor commands from sensor inputs.
-  virtual void stepNoLearning(const sensor* , int number_sensors,
-                              motor* , int number_motors);
-
+  virtual void stepNoLearning(const sensor*, int number_sensors, motor*, int number_motors);
 
   /***** STOREABLE ****/
   /** stores the controller values to a given file. */
@@ -89,20 +89,19 @@ public:
   virtual matrix::Matrix getContextC();
   virtual void setContextC(const matrix::Matrix& CC);
 
-
 protected:
   unsigned short number_sensors;
   unsigned short number_motors;
-  static const unsigned short buffersize = 10;
+  static constexpr unsigned short buffersize = 10;
 
-  matrix::Matrix A; // Model Matrix
-  matrix::Matrix C; // Controller Matrix
-  matrix::Matrix S; // Model Matrix (sensor branch)
-  matrix::Matrix h; // Controller Bias
-  matrix::Matrix b; // Model Bias
-  matrix::Matrix L; // Jacobi Matrix
+  matrix::Matrix A;  // Model Matrix
+  matrix::Matrix C;  // Controller Matrix
+  matrix::Matrix S;  // Model Matrix (sensor branch)
+  matrix::Matrix h;  // Controller Bias
+  matrix::Matrix b;  // Model Bias
+  matrix::Matrix L;  // Jacobi Matrix
   matrix::Matrix AC; //
-  matrix::Matrix R; //
+  matrix::Matrix R;  //
 
   SoxExpandConf conf;
 
@@ -122,38 +121,31 @@ protected:
   paramval causeaware;
   paramval epsC;
   paramval epsA;
-  paramint s4avg;          // # of steps the sensors are averaged (1 means no averaging)
-  paramint s4delay;        // # of steps the motor values are delayed (1 means no delay)
-
+  paramint s4avg;   // # of steps the sensors are averaged (1 means no averaging)
+  paramint s4delay; // # of steps the motor values are delayed (1 means no delay)
 
   /// learn values model and controller (A,b,C,h)
   virtual void learn();
 
   /// neuron transfer function
-  static double g(double z)
-  {
+  static double g(double z) {
     return tanh(z);
   };
 
   /// derivative of g
-  static double g_s(double z)
-  {
-    double k=tanh(z);
-    return 1.0 - k*k;
+  static double g_s(double z) {
+    double k = tanh(z);
+    return 1.0 - k * k;
   };
 
   /// function that clips the second argument to the interval [-first,first]
-  static double clip(double r, double x){
-    return min(max(x,-r),r);
+  static double clip(double r, double x) {
+    return min(max(x, -r), r);
   }
   /// calculates the inverse the argument (useful for Matrix::map)
-  static double one_over(double x){
-    return 1/x;
+  static double one_over(double x) {
+    return 1 / x;
   }
-
-
 };
 
 #endif
-
-

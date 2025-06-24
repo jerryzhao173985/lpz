@@ -28,6 +28,7 @@
 #include <stdio.h>
 #include <QString>
 #include <QStringList>
+#include <QRegularExpression>
 
 ChannelData::ChannelData(int buffersize)
   : numchannels(0), buffersize(0), time(0), initialized(false){
@@ -77,12 +78,8 @@ void ChannelData::setChannels(const QStringList& newchannels){
     numchannels = newchannels.size();
     channels.resize(numchannels);
     int i=0;
-    QRegExp vectorRE;
-    vectorRE.setPatternSyntax(QRegExp::RegExp);
-    vectorRE.setPattern(".+\\[\\d+\\]"); // regexp for a vector (e.g. v[0])
-    QRegExp matrixRE;
-    matrixRE.setPatternSyntax(QRegExp::RegExp);
-    matrixRE.setPattern(".+\\[\\d+,\\d+\\]"); // regexp for a matrix (e.g. A[0,2])
+    QRegularExpression vectorRE(".+\\[\\d+\\]"); // regexp for a vector (e.g. v[0])
+    QRegularExpression matrixRE(".+\\[\\d+,\\d+\\]"); // regexp for a matrix (e.g. A[0,2])
     FOREACHC(QStringList, newchannels, n){
       if(preset.contains(*n)){
         channels[i] = preset[*n];
@@ -93,9 +90,9 @@ void ChannelData::setChannels(const QStringList& newchannels){
         channels[i].type  = AutoDetection;
       }
       if(channels[i].type == AutoDetection){
-        if(vectorRE.exactMatch(*n)){
+        if(vectorRE.match(*n).hasMatch()){
           channels[i].type  = VectorElement;
-        } else if(matrixRE.exactMatch(*n)){
+        } else if(matrixRE.match(*n).hasMatch()){
           channels[i].type  = MatrixElement;
         } else {
           channels[i].type  = Single;
@@ -132,9 +129,7 @@ void ChannelData::setChannels(const QStringList& newchannels){
 MultiChannel ChannelData::extractMultiChannel(int* i){
   MultiChannel mc;
   int index = *i;
-  QRegExp vectorRE;
-  vectorRE.setPatternSyntax(QRegExp::RegExp);
-  vectorRE.setPattern(".+\\[(\\d+)\\]"); // regexp for a vector (e.g. v[0])
+  QRegularExpression vectorRE(".+\\[(\\d+)\\]"); // regexp for a vector (e.g. v[0])
 
   if(channels[index].type == Single){ // just a normal channel
     mc.info=channels[index];
@@ -162,16 +157,14 @@ MultiChannel ChannelData::extractMultiChannel(int* i){
 
     if(channels[index].type == MatrixElement ){
       mc.info.type=Matrix;
-      QRegExp matrixRE;
-      matrixRE.setPatternSyntax(QRegExp::RegExp);
-      matrixRE.setPattern(".+\\[(\\d+),(\\d+)\\]"); // regexp for a matrix (e.g. A[0,2])
+      QRegularExpression matrixRE(".+\\[(\\d+),(\\d+)\\]"); // regexp for a matrix (e.g. A[0,2])
 
       // scan through
       while(index<numchannels && channels[index].name.startsWith(rootwithbracket)){ // one pass is assured
-        if(matrixRE.exactMatch(channels[index].name)){
-          QStringList matches = matrixRE.capturedTexts();
-          int col = matches[1].toInt();
-          int row = matches[2].toInt();
+        QRegularExpressionMatch match = matrixRE.match(channels[index].name);
+        if(match.hasMatch()){
+          int col = match.captured(1).toInt();
+          int row = match.captured(2).toInt();
           channels[index].row    = row;
           channels[index].column = col;
           if(channels[index].descr.isEmpty()) {
@@ -189,16 +182,14 @@ MultiChannel ChannelData::extractMultiChannel(int* i){
         index++;
       }
     }else{// A vector channel
-      QRegExp vectorRE;
-      vectorRE.setPatternSyntax(QRegExp::RegExp);
-      vectorRE.setPattern(".+\\[(\\d+)\\]"); // regexp for a matrix (e.g. v[0])
+      QRegularExpression vectorRE(".+\\[(\\d+)\\]"); // regexp for a vector (e.g. v[0])
       mc.info.type=Vector;
       mc.columns=1;
       // scan through
       while(index<numchannels && channels[index].name.startsWith(rootwithbracket)){ // one pass is assured
-        if(vectorRE.exactMatch(channels[index].name)){
-          QStringList matches = vectorRE.capturedTexts();
-          int row = matches[1].toInt();
+        QRegularExpressionMatch match = vectorRE.match(channels[index].name);
+        if(match.hasMatch()){
+          int row = match.captured(1).toInt();
           channels[index].row    = row;
           if(channels[index].descr.isEmpty()) {
             channels[index].descr = (mc.info.descr.isEmpty() ? root : mc.info.descr)
@@ -288,8 +279,8 @@ void ChannelData::setChannelDescription(const ChannelObjectName& objectName, con
 // inserts a new set of data into the ring buffer
 void ChannelData::setData(const QVector<double>& newdata){
   if(newdata.size() != numchannels) {
-    fprintf(stderr,"Number of data entries (%i) does not match number of channels (%i)",
-            newdata.size(),numchannels);
+    fprintf(stderr,"Number of data entries (%lld) does not match number of channels (%i)",
+            static_cast<long long>(newdata.size()),numchannels);
   }else{
     time++;
     int index = time%buffersize;

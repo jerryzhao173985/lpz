@@ -127,8 +127,6 @@ namespace lpzrobots{
      */
     virtual void destroy();
 
-    dSpaceID parentspace;
-
     Arm2SegmConf conf;
 
 

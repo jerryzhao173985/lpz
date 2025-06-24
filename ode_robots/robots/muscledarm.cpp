@@ -34,19 +34,49 @@ namespace lpzrobots{
 
   MuscledArm::MuscledArm(const OdeHandle& odeHandle, const OsgHandle& osgHandle,
                          const MuscledArmConf& conf, const std::string& name):
-    OdeRobot(odeHandle, osgHandle, name, "$Id$"), conf(conf){
+    OdeRobot(odeHandle, osgHandle, name, "$Id$"), 
+    conf(conf),
+    factorMotors(0.1),
+    factorSensors(0.0),
+    damping(1), // seems to be wrong! (too high)
+    print(0.0),
+    segmentsno(0),
+    gelenkabstand(0.0),
+    SOCKEL_LAENGE(0.0),
+    SOCKEL_BREITE(0.0),
+    SOCKEL_HOEHE(0.0),
+    SOCKEL_MASSE(0.0),
+    sensorno(0),
+    motorno(0),
+    created(false),
+    printed(0),
+    max_l(0.0),
+    max_r(0.0),
+    min_l(0.0),
+    min_r(0.0),
+    base_width(0.0),
+    base_length(0.0),
+    upperArm_width(0.0),
+    upperArm_length(0.0),
+    lowerArm_width(0.0),
+    lowerArm_length(0.0),
+    joint_offset(0.0),
+    mainMuscle_width(0.0){
+
+    // Initialize arrays
+    for(int i = 0; i < NUMParts; i++) {
+      object[i] = nullptr;
+    }
+    for(int i = 0; i < NUMJoints; i++) {
+      joint[i] = nullptr;
+    }
 
     parentspace=odeHandle.space;
-    factorMotors=0.1;
-    damping=1; // seems to be wrong! (too high)
 
     addParameter("factorMotors", &factorMotors, 0,50);
     addParameterDef("factorSensors", &factorSensors, 8.0,0,50);
     addParameter("damping", &damping, 0,1 );
     addParameterDef("print", &print, 3, 0,10 );
-
-
-    sensorno=0;
     if (conf.jointAngleSensors)
       sensorno+=2;
     if (conf.jointAngleRateSensors)

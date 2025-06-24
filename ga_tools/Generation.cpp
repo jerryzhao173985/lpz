@@ -30,14 +30,39 @@
 #include "Individual.h"
 #include <selforg/statistictools.h>
 
-Generation::Generation() : Inspectable("Generation") {
+Generation::Generation() : Inspectable("Generation"),
+  m_generationNumber(0),
+  m_size(0),
+  m_numChildren(0),
+  m_q1(0.0),
+  m_q3(0.0),
+  m_min(0.0),
+  m_max(0.0),
+  m_avg(0.0),
+  m_med(0.0),
+  m_w1(0.0),
+  m_w3(0.0),
+  m_best(0.0),
+  m_dSize(0.0),
+  m_dNumChildren(0.0) {
   // nothing
 }
 
-Generation::Generation(int generationNumber, int size, int numChildren)  : Inspectable("Generation") {
-  m_generationNumber = generationNumber;
-  m_size=size;
-  m_numChildren = numChildren;
+Generation::Generation(int generationNumber, int size, int numChildren)  : Inspectable("Generation"),
+  m_generationNumber(generationNumber),
+  m_size(size),
+  m_numChildren(numChildren),
+  m_q1(0.0),
+  m_q3(0.0),
+  m_min(0.0),
+  m_max(0.0),
+  m_avg(0.0),
+  m_med(0.0),
+  m_w1(0.0),
+  m_w3(0.0),
+  m_best(0.0),
+  m_dSize(0.0),
+  m_dNumChildren(0.0) {
 
 
   //adds some variable to the inspectable context
@@ -59,19 +84,17 @@ Generation::~Generation() {
 }
 
 void Generation::crossover(RandGen* random) {
-  int r1,r2;          // 2 random number, which the alg. need
-  Individual* ind;      // help variable to save an individual
   int count = 0;
   int active = getCurrentSize();
 
   while(getCurrentSize()<m_size*2+m_numChildren) {    //create new individual, how long the planed size isn t reached
-    r1 = ((int)(random->rand()*1000000.0))%active;    // the first random number
-    r2 = r1;                      // to come min one time inside the while loop
+    int r1 = ((int)(random->rand()*1000000.0))%active;    // the first random number
+    int r2 = r1;                      // to come min one time inside the while loop
     while(r1==r2)
       r2 = ((int)(random->rand()*1000000.0))%active;  // the second random number
 
     count++;
-    ind = SingletonIndividualFactory::getInstance()->createIndividual(m_individual[r1],m_individual[r2],random);  // create new individual with the 2 other individuals which are represented with the 2 random numbers
+    Individual* ind = SingletonIndividualFactory::getInstance()->createIndividual(m_individual[r1],m_individual[r2],random);  // create new individual with the 2 other individuals which are represented with the 2 random numbers
     addIndividual(ind);                                 // insert the new individual
   }
 }
@@ -83,7 +106,7 @@ void Generation::addIndividual(Individual* individual) {
 std::string Generation::getAllIndividualAsString(void)const {
   std::string result = "";
 
-  for(std::vector<Individual*>::const_iterator iter=m_individual.begin();iter!=m_individual.end();iter++) {
+  for(std::vector<Individual*>::const_iterator iter=m_individual.begin();iter!=m_individual.end();++iter) {
     result += (*iter)->IndividualToString() + "\n";
   }
 
@@ -93,7 +116,7 @@ std::string Generation::getAllIndividualAsString(void)const {
 std::vector<double>* Generation::getAllFitness(void)const {
   std::vector<double>* result = new std::vector<double>();
 
-  for(std::vector<Individual*>::const_iterator iter = m_individual.begin(); iter != m_individual.end(); iter++) {
+  for(std::vector<Individual*>::const_iterator iter = m_individual.begin(); iter != m_individual.end(); ++iter) {
     result->push_back((*iter)->getFitness());
   }
 
@@ -123,7 +146,7 @@ void Generation::update(double factor) {
 std::vector<Individual*>* Generation::getAllUnCalculatedIndividuals(void)const {
   std::vector<Individual*>* result = new std::vector<Individual*>;
 
-  for(std::vector<Individual*>::const_iterator iter = m_individual.begin(); iter != m_individual.end(); iter++) {
+  for(std::vector<Individual*>::const_iterator iter = m_individual.begin(); iter != m_individual.end(); ++iter) {
     if(!((*iter)->isFitnessCalculated()))
       result->push_back(*iter);
   }

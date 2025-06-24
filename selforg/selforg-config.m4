@@ -44,7 +44,26 @@ rpath=DEVORUSER([[-Wl,-rpath,$srcprefix]],[[-Wl,-rpath,$prefix/lib]])
 LIBBASE=selforg
 
 ## use -pg for profiling
-CBASEFLAGS="-std=c++17 -pthread ARM64FLAGS LINUXORMAC( ,-I/opt/local/include -I/opt/homebrew/include)"
+COMMENT(`Use environment variable LPZROBOTS_INCLUDE_PATH if set, otherwise use common macOS paths')
+CBASEFLAGS="-std=c++17 -pthread ARM64FLAGS"
+ifdef(`MAC',
+  `EXTRA_INCLUDES=""
+  if [ -n "$LPZROBOTS_INCLUDE_PATH" ]; then
+    EXTRA_INCLUDES="-I$LPZROBOTS_INCLUDE_PATH"
+  else
+    # Check for common macOS package manager paths
+    if [ -d "/opt/homebrew/include" ]; then
+      EXTRA_INCLUDES="$EXTRA_INCLUDES -I/opt/homebrew/include"
+    fi
+    if [ -d "/opt/local/include" ]; then
+      EXTRA_INCLUDES="$EXTRA_INCLUDES -I/opt/local/include"
+    fi
+    if [ -d "/usr/local/include" ]; then
+      EXTRA_INCLUDES="$EXTRA_INCLUDES -I/usr/local/include"
+    fi
+  fi
+  CBASEFLAGS="$CBASEFLAGS $EXTRA_INCLUDES"'
+)
 CPPFLAGS="$CBASEFLAGS"
 INTERNFLAGS="-g -O"
 LIBS="-lm -lreadline -lncurses -lpthread"
@@ -110,7 +129,7 @@ while test $# -gt 0; do
       else
         CONFIGURATORCLAGS=-DNOCONFIGURATOR
       fi
-      echo $CPPFLAGS DEVORUSER(-I"$srcprefix/include",-I"$prefix/include") LINUXORMAC( ,-I/opt/local/include -I/opt/homebrew/include) GSL(`gsl-config --cflags`, -DNO_GSL) $CONFIGURATORCLAGS $INTERNFLAGS
+      echo $CPPFLAGS DEVORUSER(-I"$srcprefix/include",-I"$prefix/include") GSL(`gsl-config --cflags`, -DNO_GSL) $CONFIGURATORCLAGS $INTERNFLAGS
       ;;
     --libs)
       if type configurator-config >/dev/null 2>&1; then

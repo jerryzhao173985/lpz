@@ -66,11 +66,12 @@
 
 SingletonGenAlgAPI* SingletonGenAlgAPI::m_api = 0;
 
-SingletonGenAlgAPI::SingletonGenAlgAPI() {
-        m_plotEngine           = 0;
-        m_plotEngineGenContext = 0;
-        m_inspectable          = 0;
-        m_cleanStrategies      = false;
+SingletonGenAlgAPI::SingletonGenAlgAPI() 
+  : m_plotEngine(0),
+    m_plotEngineGenContext(0),
+    m_inspectable(0),
+    m_generation(0),
+    m_cleanStrategies(false) {
 }
 
 SingletonGenAlgAPI::~SingletonGenAlgAPI() {

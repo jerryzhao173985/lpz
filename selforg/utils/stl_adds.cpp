@@ -22,33 +22,37 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <stdio.h>
 #include "stl_adds.h"
+#include <stdio.h>
 
 namespace std {
 
-  string itos(int i){
-    char str[10];
-    snprintf(str, sizeof(str),"%i", i);
-    return string(str);
-  }
+string
+itos(int i) {
+  char str[10];
+  snprintf(str, sizeof(str), "%i", i);
+  return string(str);
+}
 
-  string itos(int i, const char* format){
-    char str[128];
-    snprintf(str, sizeof(str),format, i);
-    return string(str);
-  }
+string
+itos(int i, const char* format) {
+  char str[128];
+  snprintf(str, sizeof(str), format, i);
+  return string(str);
+}
 
-  string ftos(double i){
-    char str[10];
-    snprintf(str, sizeof(str),"%lf", i);
-    return string(str);
-  }
+string
+ftos(double i) {
+  char str[10];
+  snprintf(str, sizeof(str), "%lf", i);
+  return string(str);
+}
 
-  string ftos(double i, const char* format){
-    char str[128];
-    snprintf(str, sizeof(str),format, i);
-    return string(str);
-  }
+string
+ftos(double i, const char* format) {
+  char str[128];
+  snprintf(str, sizeof(str), format, i);
+  return string(str);
+}
 
 }

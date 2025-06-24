@@ -31,9 +31,11 @@
 /// updates for network
 class NetUpdate {
 public:
-  NetUpdate(){}
+  NetUpdate() {}
   NetUpdate(int numweights, int numbias, int numothers)
-    : weights(numweights), bias(numweights), other(numothers) {}
+    : weights(numweights)
+    , bias(numweights)
+    , other(numothers) {}
   std::vector<matrix::Matrix> weights;
   std::vector<matrix::Matrix> bias;
   std::vector<matrix::Matrix> other;
@@ -62,28 +64,35 @@ public:
      @param layers Layer description (the input layer is not specified (always linear))
      @param lambda self-recurrent feedback strength of context neurons
   */
-  Elman(double eps, const std::vector<Layer>& layers,
-        bool useElman, bool useJordan=false, bool useBypass=false)
-    : MultiLayerFFNN(eps,layers,useBypass), useElman(useElman), useJordan(useJordan) {
+  Elman(double eps,
+        const std::vector<Layer>& layers,
+        bool useElman,
+        bool useJordan = false,
+        bool useBypass = false)
+    : MultiLayerFFNN(eps, layers, useBypass)
+    , useElman(useElman)
+    , useJordan(useJordan) {
 
     initialised = false;
   }
 
-  virtual ~Elman() override{ }
+  virtual ~Elman() override {}
 
   /// initialisation of the network with the given number of input and output units
-  virtual void init(unsigned int inputDim, unsigned  int outputDim,
-                    double unit_map = 0.0, RandGen* randGen = 0) override;
+  virtual void init(unsigned int inputDim,
+                    unsigned int outputDim,
+                    double unit_map = 0.0,
+                    RandGen* randGen = 0) override;
 
   /** passive processing of the input
       (this will be different for every input, since it is a recurrent network)
   */
-  virtual const matrix::Matrix process (const matrix::Matrix& input) override;
+  virtual const matrix::Matrix process(const matrix::Matrix& input) override;
 
   /// performs learning and returns the network output before learning
-  virtual const matrix::Matrix learn (const matrix::Matrix& input,
-                                      const matrix::Matrix& nom_output,
-                                      double learnRateFactor = 1) override;
+  virtual const matrix::Matrix learn(const matrix::Matrix& input,
+                                     const matrix::Matrix& nom_output,
+                                     double learnRateFactor = 1) override;
 
   /** determines the weight and bias updates
    */
@@ -97,13 +106,12 @@ public:
    */
   virtual NetUpdate weightIncrementBlocked(const matrix::Matrix& xsi_,
                                            int blockedlayer,
-                                           int blockfrom, int blockto);
-
+                                           int blockfrom,
+                                           int blockto);
 
   /** applies the weight increments to the weight (and bias) matrices
       with the learningrate and the learnRateFactor */
   virtual void updateWeights(const NetUpdate& updates);
-
 
   /* Is implemented in multilayerfnn
      virtual const matrix::Matrix response(const matrix::Matrix& input) const;
@@ -117,13 +125,10 @@ public:
   /// restores the layer binary from file stream
   bool restore(FILE* f) override;
 
-
   /************** CONFIGURABLE INTERFACE ************************/
-  virtual paramkey getName() const override {
+  virtual paramkey getName() const noexcept override {
     return std::string("elmanNN");
   }
-
-
 
   /************** Inspectable INTERFACE ************************/
   virtual iparamkeylist getInternalParamNames() const override;
@@ -138,7 +143,6 @@ protected:
   matrix::Matrix jordanContext;
   bool useElman;
   bool useJordan;
-
 };
 
 #endif

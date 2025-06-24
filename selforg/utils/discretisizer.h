@@ -26,10 +26,10 @@
 
 /**
 Use this class to get discrete values.
- 
+
 If no intervalCount is set, the count=1.
 If no intervalRange is set, the range is automatically adjusted.
- 
+
 There are three possibilities:
 1. automaticRange=true
  --> mapping is always disabled
@@ -37,93 +37,87 @@ There are three possibilities:
  --> real (found) range is mapped to specified range
 3. automaticRange=false, mapToInterval=false
  --> no mapping, no range adjustment, values outside the specified
-     range are set to minRange respectively maxRange 
- 
+     range are set to minRange respectively maxRange
+
 */
 class Discretisizer {
 public:
+  /**
+   * call this constructor if you don't like to decide which range for
+   * the values are used, therefore the range ist found automatically.
+   *
+   *
+   * Note: The adjustment of the range is enabled, if this method is called.
+   *
+   * @param numberBins the number of bins "created"
+   */
+  explicit Discretisizer(int numberBins);
 
-
-    /**
-    * call this constructor if you don't like to decide which range for
-    * the values are used, therefore the range ist found automatically.
-    *
-    *
-    * Note: The adjustment of the range is enabled, if this method is called.
-    * 
-    * @param numberBins the number of bins "created"
-    */
-    explicit Discretisizer(int numberBins);
-
-    /**
-    * call this constructor if you like to decide yourself which range for
-    * the values are used.
-    *
-    * The third parameter decides if the originally range should be completely
-    * mapped to the given interval range. If not, the values outside the given
-    * interval range are set to minRange respectively maxRange.
-    *
-    * Note: The adjustment of the range is disabled, if this method is called.
-    * 
-    * @param numberBins the number of bins "created"
-    * @param minRange the minimum of the interval
-    * @param maxRange the maximum of the interval
-    * @param mapToInterval decides if all values are mapped to the given
-    */
+  /**
+   * call this constructor if you like to decide yourself which range for
+   * the values are used.
+   *
+   * The third parameter decides if the originally range should be completely
+   * mapped to the given interval range. If not, the values outside the given
+   * interval range are set to minRange respectively maxRange.
+   *
+   * Note: The adjustment of the range is disabled, if this method is called.
+   *
+   * @param numberBins the number of bins "created"
+   * @param minRange the minimum of the interval
+   * @param maxRange the maximum of the interval
+   * @param mapToInterval decides if all values are mapped to the given
+   */
   Discretisizer(int numberBins, double minRange, double maxRange, bool mapToInterval);
 
-    virtual ~Discretisizer();
+  virtual ~Discretisizer();
 
-    /**
-      returns the given value as an discretisized integer.
-      this method returns a value between 0...numberbins-1.
-      @param value the value to discretisize
-      @return the bin number
-    */
-    virtual int getBinNumber(double value);
+  /**
+    returns the given value as an discretisized integer.
+    this method returns a value between 0...numberbins-1.
+    @param value the value to discretisize
+    @return the bin number
+  */
+  virtual int getBinNumber(double value);
 
-    /**
-      returns the given value as an discretisized double.
-      this method returns returns a value between minRange and maxRange
-      @param value the value to discretisize
-      @return discretisized value between minRange and maxRange
-    */
-    virtual double get
-        (double value);
+  /**
+    returns the given value as an discretisized double.
+    this method returns returns a value between minRange and maxRange
+    @param value the value to discretisize
+    @return discretisized value between minRange and maxRange
+  */
+  virtual double get(double value);
 
-    virtual double getMinRange();
+  virtual double getMinRange();
 
-    virtual double getMaxRange();
-
-
+  virtual double getMaxRange();
 
 protected:
-    int numberBins;
-    bool automaticRange;
-    double minRange;
-    double maxRange;
-    double minValue;
-    double maxValue;
-    bool mapToInterval;
-    bool firstStep;
+  int numberBins;
+  bool automaticRange;
+  double minRange;
+  double maxRange;
+  double minValue;
+  double maxValue;
+  bool mapToInterval;
+  bool firstStep;
 
+  /**
+  is used for automaticRange, sets min and max range.
+  */
+  virtual void findMinAndMaxRange(double value);
 
-    /**
-    is used for automaticRange, sets min and max range.
-    */
-    virtual void findMinAndMaxRange(double value);
+  /**
+  is used for mapToInterval, sets min and max values.
+  */
+  virtual void findMinAndMaxValues(double value);
 
-    /**
-    is used for mapToInterval, sets min and max values.
-    */
-    virtual void findMinAndMaxValues(double value);
+  /**
+  is used for discretisizing values
+  */
+  virtual int discretisizeValue(double valueToDiscretisize);
 
-    /**
-    is used for discretisizing values
-    */
-    virtual int discretisizeValue(double valueToDiscretisize);
-
-    virtual int roundValue(double valueToRound);
+  virtual int roundValue(double valueToRound);
 };
 
 #endif

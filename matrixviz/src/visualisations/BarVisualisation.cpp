@@ -31,7 +31,11 @@
 using namespace std;
 
 BarVisualisation::BarVisualisation(MatrixPlotChannel *channel, ColorPalette *colorPalette, QWidget *parent)
-: AbstractVisualisation(channel, colorPalette, parent){
+: AbstractVisualisation(channel, colorPalette, parent),
+  visMode(0),
+  inputMode(0),
+  mouseX(0),
+  mouseY(0) {
 
   if(debug) cout << "BarVisualisation Konstruktor" << endl;
   zoom = 1.;

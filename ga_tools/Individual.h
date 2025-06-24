@@ -52,7 +52,7 @@ public:
 	 * @param p1 (Individual*) parent 1 or zero if it random generate
 	 * @param p2 (Individual*) parent 2 or zero if it random generate
 	 */
-	Individual(std::string name, int id, Individual* p1=0, Individual* p2=0);
+	Individual(const std::string& name, int id, Individual* p1=0, Individual* p2=0);
 
 	/**
 	 * default destructor
@@ -69,7 +69,7 @@ public:
 	 * return the name of the individual
 	 * @return (string) the name
 	 */
-	inline std::string getName(void)const {return m_name;}
+	inline const std::string& getName(void)const {return m_name;}
 
 	/**
 	 * return the size of the individual. This mean the number of gens inside the individual.

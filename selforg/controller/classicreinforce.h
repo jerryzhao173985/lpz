@@ -23,18 +23,30 @@
 
 #include <assert.h>
 #include <cmath>
+#include <memory>
 
 #include <selforg/matrix.h>
 #include <selforg/noisegenerator.h>
 #include <selforg/qlearning.h>
 
-typedef struct ClassicReinforceConf {
+struct ClassicReinforceConf {
   unsigned short buffersize; ///< size of the ringbuffers for sensors, motors,...
-  int    numContext;    ///< number of context sensors (ignored)
-  int reinforce_interval; ///<  time between consecutive reinforcement selections
+  int numContext;            ///< number of context sensors (ignored)
+  int reinforce_interval;    ///<  time between consecutive reinforcement selections
 
-  QLearning* qlearning;      ///< QLearning instance
-} ClassicReinforceConf;
+  std::unique_ptr<QLearning> qlearning; ///< QLearning instance
+
+  // Rule of 5 for proper RAII
+  ClassicReinforceConf()
+    : buffersize(0)
+    , numContext(0)
+    , reinforce_interval(0) {}
+  ~ClassicReinforceConf() = default;
+  ClassicReinforceConf(const ClassicReinforceConf&) = delete;
+  ClassicReinforceConf& operator=(const ClassicReinforceConf&) = delete;
+  ClassicReinforceConf(ClassicReinforceConf&&) = default;
+  ClassicReinforceConf& operator=(ClassicReinforceConf&&) = default;
+};
 
 /**
  * class for robot controller
@@ -43,23 +55,26 @@ typedef struct ClassicReinforceConf {
 class ClassicReinforce : public AbstractController {
 
 public:
-  ClassicReinforce(const ClassicReinforceConf& conf = getDefaultConf());
+  ClassicReinforce(ClassicReinforceConf conf = getDefaultConf());
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr);
 
   virtual ~ClassicReinforce();
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
-  virtual int getSensorNumber() const { return number_sensors; }
+  virtual int getSensorNumber() const {
+    return number_sensors;
+  }
   /// returns the mumber of motors the controller was initialised with or 0 if not initialised
-  virtual int getMotorNumber() const  { return number_motors; }
+  virtual int getMotorNumber() const {
+    return number_motors;
+  }
 
   /// performs one step (includes learning).
   /// Calulates motor commands from sensor inputs.
-  virtual void step(const sensor* , int number_sensors, motor* , int number_motors);
+  virtual void step(const sensor*, int number_sensors, motor*, int number_motors);
 
   /// performs one step without learning. Calulates motor commands from sensor inputs.
-  virtual void stepNoLearning(const sensor* , int number_sensors,
-                              motor* , int number_motors);
+  virtual void stepNoLearning(const sensor*, int number_sensors, motor*, int number_motors);
 
   // !!!!!!!!!!!!!!!!!!! MISC STUFF !!!!!!!!
 
@@ -67,7 +82,6 @@ public:
       if mControl is false, action is ignored
    */
   void setManualControl(bool mControl, int action_ = 0);
-
 
   /************** CONFIGURABLE ********************************/
   virtual void notifyOnChange(const paramkey& key);
@@ -84,15 +98,14 @@ public:
   virtual std::list<ILayer> getStructuralLayers() const;
   virtual std::list<IConnection> getStructuralConnections() const;
 
-  static ClassicReinforceConf getDefaultConf(){
+  static ClassicReinforceConf getDefaultConf() {
     ClassicReinforceConf c;
-    c.buffersize=10;
-    c.numContext=0;
-    c.reinforce_interval=10;
-    c.qlearning=0;
+    c.buffersize = 10;
+    c.numContext = 0;
+    c.reinforce_interval = 10;
+    c.qlearning = nullptr;
     return c;
   }
-
 
 protected:
   unsigned short number_sensors;
@@ -100,22 +113,22 @@ protected:
 
   // sensor, sensor-derivative and motor values storage
   unsigned short buffersize;
-  matrix::Matrix* x_buffer;
-  matrix::Matrix* y_buffer;
-  matrix::Matrix* x_context_buffer;
+  std::unique_ptr<matrix::Matrix[]> x_buffer;
+  std::unique_ptr<matrix::Matrix[]> y_buffer;
+  std::unique_ptr<matrix::Matrix[]> x_context_buffer;
 
-  bool manualControl;          ///< True if actions (sats) are selected manually
+  bool manualControl; ///< True if actions (sats) are selected manually
 
-  int action;                  ///< action
-  int oldaction;               ///< old action
-  int state;                   ///< current state
-  double reward;               ///< current reward
-  double oldreward;            ///< old reward (nicer for plotting)
+  int action;       ///< action
+  int oldaction;    ///< old action
+  int state;        ///< current state
+  double reward;    ///< current reward
+  double oldreward; ///< old reward (nicer for plotting)
 
   ClassicReinforceConf conf;
   bool initialised;
   int t;
-  int managementInterval;       ///< interval between subsequent management calls
+  int managementInterval; ///< interval between subsequent management calls
 
   /// returns number of state, to be overwritten
   virtual int getStateNumber() = 0;
@@ -141,7 +154,6 @@ protected:
 
   /// handles inhibition damping etc.
   virtual void management();
-
 };
 
 #endif

@@ -26,99 +26,111 @@
 #include <assert.h>
 #include <string.h>
 
-
 OneControllerPerChannel::OneControllerPerChannel(ControllerGenerator* controllerGenerator,
-                                                 std::string controllerName, 
+                                                 std::string controllerName,
                                                  int numCtrlCreateBeforeInit,
                                                  int numContextSensors)
-  : AbstractController(controllerName, "1"), controllerGenerator(controllerGenerator),
-    numCtrlCreateBeforeInit (numCtrlCreateBeforeInit), numContextSensors(numContextSensors),
-    sensornumber(0), motornumber(0) {
-  for(int i=0; i<numCtrlCreateBeforeInit; i++){
+  : AbstractController(controllerName, "1")
+  , controllerGenerator(controllerGenerator)
+  , numCtrlCreateBeforeInit(numCtrlCreateBeforeInit)
+  , numContextSensors(numContextSensors)
+  , motornumber(0)
+  , sensornumber(0) {
+  for (int i = 0; i < numCtrlCreateBeforeInit; i++) {
     AbstractController* c = (*controllerGenerator)(i);
-    ctrl.push_back(c);    
+    ctrl.push_back(c);
     addConfigurable(c);
-  } 
-  sensorbuffer = new sensor[1+numContextSensors];
-
+  }
+  sensorbuffer = new sensor[1 + numContextSensors];
 }
 
 OneControllerPerChannel::~OneControllerPerChannel() {
-  FOREACH(std::vector<AbstractController*>, ctrl, c){
+  FOREACH(std::vector<AbstractController*>, ctrl, c) {
     delete *c;
   }
   delete[] sensorbuffer;
 }
 
-void OneControllerPerChannel::init(const int sensornumber, const int motornumber, 
-                                   RandGen* randGen) {
-  
-  if(sensornumber-numContextSensors!=motornumber){
-    fprintf(stderr,"sensor%i, context %i, motor: %i", sensornumber, numContextSensors, motornumber);
-    assert(sensornumber-numContextSensors==motornumber);
+void
+OneControllerPerChannel::init(const int sensornumber, const int motornumber, RandGen* randGen) {
+
+  if (sensornumber - numContextSensors != motornumber) {
+    fprintf(
+      stderr, "sensor%i, context %i, motor: %i", sensornumber, numContextSensors, motornumber);
+    assert(sensornumber - numContextSensors == motornumber);
   }
 
-  this->sensornumber=sensornumber;
-  this->motornumber=motornumber;
-  
-  for(int i=0; i<motornumber; i++){
-    if(i<numCtrlCreateBeforeInit){
+  this->sensornumber = sensornumber;
+  this->motornumber = motornumber;
+
+  for (int i = 0; i < motornumber; i++) {
+    if (i < numCtrlCreateBeforeInit) {
       ctrl[i]->init(1 + numContextSensors, 1);
-    }else{
+    } else {
       AbstractController* c = (*controllerGenerator)(i);
-      c->init(1 + numContextSensors, 1);      
+      c->init(1 + numContextSensors, 1);
       ctrl.push_back(c);
       addConfigurable(c);
     }
   }
 }
 
-void OneControllerPerChannel::step(const sensor* sensors, int sensornumber, 
-                                   motor* motors, int motornumber) {
-  assert((int)ctrl.size()==motornumber);
-  if(numContextSensors==nullptr){
-    for(int i=0; i<motornumber; i++){        
-      ctrl[i]->step(sensors+i,1,motors+i,1);    
+void
+OneControllerPerChannel::step(const sensor* sensors,
+                              int sensornumber,
+                              motor* motors,
+                              int motornumber) {
+  assert((int)ctrl.size() == motornumber);
+  if (numContextSensors == 0) {
+    for (int i = 0; i < motornumber; i++) {
+      ctrl[i]->step(sensors + i, 1, motors + i, 1);
     }
-  }else{
-    memcpy(sensorbuffer+1, sensors+sensornumber-numContextSensors, 
-           sizeof(sensor)*numContextSensors);
-    for(int i=0; i<motornumber; i++){        
-      sensorbuffer[0]=sensors[i];
-      ctrl[i]->step(sensorbuffer,1+numContextSensors,motors+i,1);
-    }    
+  } else {
+    memcpy(sensorbuffer + 1,
+           sensors + sensornumber - numContextSensors,
+           sizeof(sensor) * numContextSensors);
+    for (int i = 0; i < motornumber; i++) {
+      sensorbuffer[0] = sensors[i];
+      ctrl[i]->step(sensorbuffer, 1 + numContextSensors, motors + i, 1);
+    }
   }
 }
 
-void OneControllerPerChannel::stepNoLearning(const sensor* sensors , int sensornumber, 
-                                             motor* motors, int motornumber){
-  assert((int)ctrl.size()==motornumber);
+void
+OneControllerPerChannel::stepNoLearning(const sensor* sensors,
+                                        int sensornumber,
+                                        motor* motors,
+                                        int motornumber) {
+  assert((int)ctrl.size() == motornumber);
 
-  if(numContextSensors==nullptr){
-    for(int i=0; i<motornumber; i++){        
-      ctrl[i]->stepNoLearning(sensors+i,1,motors+i,1);    
+  if (numContextSensors == 0) {
+    for (int i = 0; i < motornumber; i++) {
+      ctrl[i]->stepNoLearning(sensors + i, 1, motors + i, 1);
     }
-  }else{
-    memcpy(sensorbuffer+1, sensors+sensornumber-numContextSensors, 
-           sizeof(sensor)*numContextSensors);
-    for(int i=0; i<motornumber; i++){        
-      sensorbuffer[0]=sensors[i];
-      ctrl[i]->stepNoLearning(sensorbuffer,1+numContextSensors,motors+i,1);
-    }    
+  } else {
+    memcpy(sensorbuffer + 1,
+           sensors + sensornumber - numContextSensors,
+           sizeof(sensor) * numContextSensors);
+    for (int i = 0; i < motornumber; i++) {
+      sensorbuffer[0] = sensors[i];
+      ctrl[i]->stepNoLearning(sensorbuffer, 1 + numContextSensors, motors + i, 1);
+    }
   }
 }
 
-bool OneControllerPerChannel::store(FILE* f) const {
-  bool rv=true;
-  FOREACHC(std::vector<AbstractController*>, ctrl, c){
+bool
+OneControllerPerChannel::store(FILE* f) const {
+  bool rv = true;
+  FOREACHC(std::vector<AbstractController*>, ctrl, c) {
     rv &= (*c)->store(f);
   }
   return rv;
 }
-  
-bool OneControllerPerChannel::restore(FILE* f){
-  bool rv=true;
-  FOREACH(std::vector<AbstractController*>, ctrl, c){
+
+bool
+OneControllerPerChannel::restore(FILE* f) {
+  bool rv = true;
+  FOREACH(std::vector<AbstractController*>, ctrl, c) {
     rv &= (*c)->restore(f);
   }
   return rv;

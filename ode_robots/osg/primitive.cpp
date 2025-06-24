@@ -614,7 +614,7 @@ namespace lpzrobots{
   Ray::Ray(double range, float thickness, float length)
     : range(range), thickness(thickness), length(length)
   {
-    if(thickness==nullptr){
+    if(thickness==0){
       std::list<osg::Vec3> pnts;
       pnts.push_back(osg::Vec3(0,0,-length/2));
       pnts.push_back(osg::Vec3(0,0,length/2));

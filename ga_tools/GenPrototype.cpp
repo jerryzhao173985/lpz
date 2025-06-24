@@ -36,10 +36,10 @@ GenPrototype::GenPrototype() {
         // nothing
 }
 
-GenPrototype::GenPrototype(std::string name, IRandomStrategy* randomStrategy, IMutationStrategy* mutationStrategy) {
-        m_name = name;
-        m_randomStrategy = randomStrategy;
-        m_mutationStrategy = mutationStrategy;
+GenPrototype::GenPrototype(const std::string& name, IRandomStrategy* randomStrategy, IMutationStrategy* mutationStrategy) 
+  : m_name(name),
+    m_randomStrategy(randomStrategy),
+    m_mutationStrategy(mutationStrategy) {
 }
 
 GenPrototype::~GenPrototype() {

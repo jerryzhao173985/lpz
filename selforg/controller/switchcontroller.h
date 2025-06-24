@@ -32,24 +32,36 @@
  */
 class SwitchController : public AbstractController {
 public:
+  explicit SwitchController(const std::list<AbstractController*>& controllers,
+                            const std::string& name = "SwitchController",
+                            const std::string& revision = "1.0");
 
-  explicit SwitchController(const std::list<AbstractController*>& controllers, const std::string& name = "SwitchController", const std::string& revision = "1.0");
-
-  virtual ~SwitchController();
+  virtual ~SwitchController() override;
 
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
-  virtual void step(const sensor* sensors, int sensornumber,
-                    motor* motors, int motornumber) override;
-  virtual void stepNoLearning(const sensor* sensors , int sensornumber,
-                              motor* motors, int motornumber) override;
+  virtual void step(const sensor* sensors,
+                    int sensornumber,
+                    motor* motors,
+                    int motornumber) override;
+  virtual void stepNoLearning(const sensor* sensors,
+                              int sensornumber,
+                              motor* motors,
+                              int motornumber) override;
 
-  virtual int getSensorNumber() const  override{ return controllers.front()->getSensorNumber();};
+  virtual int getSensorNumber() const override {
+    return controllers.front()->getSensorNumber();
+  };
 
-  virtual int getMotorNumber() const  override{ return controllers.front()->getMotorNumber();};
+  virtual int getMotorNumber() const override {
+    return controllers.front()->getMotorNumber();
+  };
 
-
-  virtual bool store(FILE* f) const override { return controllers.front()->store(f);};
-  virtual bool restore(FILE* f) override     { return controllers.front()->restore(f);};
+  virtual bool store(FILE* f) const override {
+    return controllers.front()->store(f);
+  };
+  virtual bool restore(FILE* f) override {
+    return controllers.front()->restore(f);
+  };
 
 protected:
   int activecontroller;

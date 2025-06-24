@@ -24,9 +24,8 @@
 #ifndef __BRAITENBERG_H
 #define __BRAITENBERG_H
 
-
-#include <stdio.h>
 #include <selforg/abstractcontroller.h>
+#include <stdio.h>
 
 /**
  * simple braitenberg controler type 2 a and b (Aggressive,Cowardly)
@@ -35,7 +34,7 @@
  */
 class Braitenberg : public AbstractController {
 public:
-  enum Type {Aggressive, Cowardly};
+  enum Type { Aggressive, Cowardly };
 
   /**
      @param type Braitenberg type
@@ -44,51 +43,57 @@ public:
      @param leftmotor index of motor of left wheel
      @param rightmotor index of motor of right wheel
    */
-  Braitenberg(Type type, int leftsensor, int rightsensor,
-              int leftmotor=0, int rightmotor=1)
-    : AbstractController("Braitenberg", "0.1"), type(type),
-      leftsensor(leftsensor), rightsensor(rightsensor),
-      leftmotor(leftmotor), rightmotor(rightmotor) {
+  Braitenberg(Type type, int leftsensor, int rightsensor, int leftmotor = 0, int rightmotor = 1)
+    : AbstractController("Braitenberg", "0.1")
+    , type(type)
+    , leftsensor(leftsensor)
+    , rightsensor(rightsensor)
+    , leftmotor(leftmotor)
+    , rightmotor(rightmotor) {
 
-    addParameterDef("strength", &strength,0.6);
-    addParameterDef("offset", &offset,0.0);
+    addParameterDef("strength", &strength, 0.6);
+    addParameterDef("offset", &offset, 0.0);
   }
 
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0){
-    number_sensors=sensornumber;
-    number_motors=motornumber;
-    assert(sensornumber>=2 && sensornumber>=leftsensor && sensornumber>=rightsensor);
-    assert(motornumber>=2  && motornumber>=leftmotor   && motornumber>=rightmotor);
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) {
+    number_sensors = sensornumber;
+    number_motors = motornumber;
+    assert(sensornumber >= 2 && sensornumber >= leftsensor && sensornumber >= rightsensor);
+    assert(motornumber >= 2 && motornumber >= leftmotor && motornumber >= rightmotor);
   }
 
-  virtual int getSensorNumber() const {return number_sensors;}
-
-  virtual int getMotorNumber() const {return number_motors;}
-
-  virtual void step(const sensor* sensors, int sensornumber,
-                    motor* motors, int motornumber) {
-    stepNoLearning(sensors, sensornumber, motors , motornumber);
+  virtual int getSensorNumber() const {
+    return number_sensors;
   }
 
-  virtual void stepNoLearning(const sensor* sensors, int sensornumber,
-                              motor* motors, int motornumber){
-    switch(type){
-    case Aggressive:
-      motors[leftmotor] = sensors[rightsensor] * strength + offset;
-      motors[rightmotor] = sensors[leftsensor] * strength + offset;
-      break;
-    case Cowardly:
-      motors[leftmotor] = sensors[leftsensor] * strength + offset;
-      motors[rightmotor] = sensors[rightsensor] * strength + offset;
-      break;
+  virtual int getMotorNumber() const {
+    return number_motors;
+  }
+
+  virtual void step(const sensor* sensors, int sensornumber, motor* motors, int motornumber) {
+    stepNoLearning(sensors, sensornumber, motors, motornumber);
+  }
+
+  virtual void stepNoLearning(const sensor* sensors,
+                              int sensornumber,
+                              motor* motors,
+                              int motornumber) {
+    switch (type) {
+      case Aggressive:
+        motors[leftmotor] = sensors[rightsensor] * strength + offset;
+        motors[rightmotor] = sensors[leftsensor] * strength + offset;
+        break;
+      case Cowardly:
+        motors[leftmotor] = sensors[leftsensor] * strength + offset;
+        motors[rightmotor] = sensors[rightsensor] * strength + offset;
+        break;
     }
   }
-
 
   /********* STORABLE INTERFACE ******/
   /// @see Storable
   virtual bool store(FILE* f) const {
-    Configurable::print(f,"");
+    Configurable::print(f, "");
     return true;
   }
 
@@ -99,7 +104,6 @@ public:
   }
 
 protected:
-
   Type type;
   int leftsensor;
   int rightsensor;

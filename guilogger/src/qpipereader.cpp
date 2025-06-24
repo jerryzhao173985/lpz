@@ -38,7 +38,7 @@ void QPipeReader::run() {
   // sufficient for big and many matrices.
   // allow up to 64MB usage of memory (*1024) instead of only 64KB, hence 4M elements are allowed (matrix: 2Kx2K)
   int size = 65536 * 1024;
-  char *s = (char*) malloc(size * sizeof(char));
+  char *s = static_cast<char*>(malloc(size * sizeof(char)));
 
   char* ctrl = s;
   while (ctrl) {

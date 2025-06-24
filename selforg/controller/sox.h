@@ -26,81 +26,89 @@
 #include <cmath>
 
 #include <selforg/matrix.h>
-#include <selforg/teachable.h>
 #include <selforg/parametrizable.h>
-
+#include <selforg/teachable.h>
 
 /// configuration object for Sox controller. Use Sox::getDefaultConf().
 struct SoxConf {
-  double initFeedbackStrength;  ///< initial strength of sensor to motor connection
-  bool   useExtendedModel;      ///< if true, the extended model (S matrix) is used
+  double initFeedbackStrength; ///< initial strength of sensor to motor connection
+  bool useExtendedModel;       ///< if true, the extended model (S matrix) is used
   /// if true the controller can be taught see teachable interface
-  bool   useTeaching;
+  bool useTeaching;
   /// # of steps the sensors are averaged (1 means no averaging)
-  int    steps4Averaging;
+  int steps4Averaging;
   /// # of steps the motor values are delayed (1 means no delay)
-  int    steps4Delay;
-  bool   someInternalParams;    ///< if true only some internal parameters are exported
-  bool   onlyMainParameters;    ///< if true only some configurable parameters are exported
+  int steps4Delay;
+  bool someInternalParams; ///< if true only some internal parameters are exported
+  bool onlyMainParameters; ///< if true only some configurable parameters are exported
 
-  double factorS;             ///< factor for learning rate of S
-  double factorb;             ///< factor for learning rate of b
-  double factorh;             ///< factor for learning rate of h
+  double factorS; ///< factor for learning rate of S
+  double factorb; ///< factor for learning rate of b
+  double factorh; ///< factor for learning rate of h
 };
-
 
 /**
  * This controller implements the standard algorihm described the the Chapter 5 (Homeokinesis)
  *  with extensions of Chapter 15 of book "The Playful Machine"
  */
-class Sox : public AbstractController, public Teachable, public Parametrizable {
+class Sox
+  : public AbstractController
+  , public Teachable
+  , public Parametrizable {
 
 public:
   /// constructor
   explicit Sox(const SoxConf& conf = getDefaultConf());
 
   /// constructor provided for convenience, use conf object to customize more
-  explicit Sox(double init_feedback_strength, bool useExtendedModel = true,
-      bool useTeaching = false );
+  explicit Sox(double init_feedback_strength,
+               bool useExtendedModel = true,
+               bool useTeaching = false);
 
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override;
 
   virtual ~Sox();
 
-  static SoxConf getDefaultConf(){
+  static SoxConf getDefaultConf() {
     SoxConf conf;
     conf.initFeedbackStrength = 1.0;
-    conf.useExtendedModel     = true;
-    conf.useTeaching          = false;
-    conf.steps4Averaging      = 1;
-    conf.steps4Delay          = 1;
-    conf.someInternalParams   = false;
-    conf.onlyMainParameters   = true;
+    conf.useExtendedModel = true;
+    conf.useTeaching = false;
+    conf.steps4Averaging = 1;
+    conf.steps4Delay = 1;
+    conf.someInternalParams = false;
+    conf.onlyMainParameters = true;
 
-    conf.factorS              = 1;
-    conf.factorb              = 1;
-    conf.factorh              = 1;
+    conf.factorS = 1;
+    conf.factorb = 1;
+    conf.factorh = 1;
     return conf;
   }
 
-
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
-  virtual int getSensorNumber() const override { return number_sensors; }
+  virtual int getSensorNumber() const override {
+    return number_sensors;
+  }
   /// returns the mumber of motors the controller was initialised with or 0 if not initialised
-  virtual int getMotorNumber() const override { return number_motors; }
+  virtual int getMotorNumber() const override {
+    return number_motors;
+  }
 
   /// performs one step (includes learning).
   /// Calulates motor commands from sensor inputs.
-  virtual void step(const sensor* , int number_sensors, motor* , int number_motors) override;
-
+  virtual void step(const sensor*, int number_sensors, motor*, int number_motors) override;
 
   /// performs one step without learning. Calulates motor commands from sensor inputs.
-  virtual void stepNoLearning(const sensor* , int number_sensors,
-                              motor* , int number_motors) override;
+  virtual void stepNoLearning(const sensor*,
+                              int number_sensors,
+                              motor*,
+                              int number_motors) override;
 
   /// called during babbling phase
-  virtual void motorBabblingStep(const sensor* , int number_sensors,
-                                 const motor* , int number_motors) override;
+  virtual void motorBabblingStep(const sensor*,
+                                 int number_sensors,
+                                 const motor*,
+                                 int number_motors) override;
 
   /***** STOREABLE ****/
   /** stores the controller values to a given file. */
@@ -129,17 +137,17 @@ public:
 protected:
   unsigned short number_sensors;
   unsigned short number_motors;
-  static const unsigned short buffersize = 10;
+  static constexpr unsigned short buffersize = 10;
 
-  matrix::Matrix A; // Model Matrix
-  matrix::Matrix C; // Controller Matrix
-  matrix::Matrix S; // Model Matrix (sensor branch)
-  matrix::Matrix h; // Controller Bias
-  matrix::Matrix b; // Model Bias
-  matrix::Matrix L; // Jacobi Matrix
-  matrix::Matrix R; //
-  matrix::Matrix C_native; // Controller Matrix obtained from motor babbling
-  matrix::Matrix A_native; // Model Matrix obtained from motor babbling
+  matrix::Matrix A;                    // Model Matrix
+  matrix::Matrix C;                    // Controller Matrix
+  matrix::Matrix S;                    // Model Matrix (sensor branch)
+  matrix::Matrix h;                    // Controller Bias
+  matrix::Matrix b;                    // Model Bias
+  matrix::Matrix L;                    // Jacobi Matrix
+  matrix::Matrix R;                    //
+  matrix::Matrix C_native;             // Controller Matrix obtained from motor babbling
+  matrix::Matrix A_native;             // Model Matrix obtained from motor babbling
   matrix::Matrix y_buffer[buffersize]; // buffer needed for delay
   matrix::Matrix x_buffer[buffersize]; // buffer of sensor values
   matrix::Matrix v_avg;
@@ -162,41 +170,37 @@ protected:
   paramval epsC;
   paramval epsA;
   paramval damping;
-  paramval gamma;          // teaching strength
+  paramval gamma; // teaching strength
 
   void constructor();
 
   // calculates the pseudo inverse of L in different ways, depending on pseudo
-  matrix::Matrix pseudoInvL(const matrix::Matrix& L, const matrix::Matrix& A, const matrix::Matrix& C);
+  matrix::Matrix pseudoInvL(const matrix::Matrix& L,
+                            const matrix::Matrix& A,
+                            const matrix::Matrix& C);
 
   /// learn values model and controller (A,b,C,h)
   virtual void learn();
 
   /// neuron transfer function
-  static double g(double z)
-  {
+  static double g(double z) {
     return tanh(z);
   };
 
   /// derivative of g
-  static double g_s(double z)
-  {
-    double k=tanh(z);
-    return 1.0 - k*k;
+  static double g_s(double z) {
+    double k = tanh(z);
+    return 1.0 - k * k;
   };
 
   /// function that clips the second argument to the interval [-first,first]
-  static double clip(double r, double x){
-    return min(max(x,-r),r);
+  static constexpr double clip(double r, double x) {
+    return x < -r ? -r : (x > r ? r : x);
   }
   /// calculates the inverse the argument (useful for Matrix::map)
-  static double one_over(double x){
-    return 1/x;
+  static constexpr double one_over(double x) {
+    return 1 / x;
   }
-
-
 };
 
 #endif
-
-

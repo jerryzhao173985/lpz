@@ -24,14 +24,12 @@
 #ifndef __DISCRETESIZABLE_H
 #define __DISCRETESIZABLE_H
 
-//#include <iostream>
-//#include <list>
-//#include <utility>
-//#include <string>
-//#include <map>
-//#include "stl_adds.h"
-
-
+// #include <iostream>
+// #include <list>
+// #include <utility>
+// #include <string>
+// #include <map>
+// #include "stl_adds.h"
 
 /**
  * Abstact class for discretesizable controllers. Implements the methods
@@ -49,45 +47,44 @@
  */
 class Discretesizable : public DiscreteControllerAdapter {
 public:
+  /** Initializes the discretization.
+   * @param intervalCount sets the number of intervals
+   * @param mapToInteger if true, all intervals are mapped to 0..(intervalCount-1)
+   * @param minSensorValue is neccessary if the sensor range is not in [-1,1]
+   * @param maxSensorValue is neccessary if the sensor range is not in [-1,1]
+   */
+  Discretesizable(int intervalCount,
+                  boolean mapToInteger = true,
+                  double minSensorValue = -1.0,
+                  double maxSensorValue = 1.0);
 
-        /** Initializes the discretization.
-         * @param intervalCount sets the number of intervals
-         * @param mapToInteger if true, all intervals are mapped to 0..(intervalCount-1)
-         * @param minSensorValue is neccessary if the sensor range is not in [-1,1]
-         * @param maxSensorValue is neccessary if the sensor range is not in [-1,1]
-         */
-        Discretesizable(int intervalCount, boolean mapToInteger=true, double minSensorValue=-1.0, double maxSensorValue=1.0);
+  virtual ~Discretesizable() {};
 
-        virtual        ~Discretesizable() {};
+  /** performs one step (includes learning).
+   * Calculates motor commands from sensor inputs.
+   * @note This method cannot be overwritten, use @see dStep instead.
+   * @param sensors sensors inputs scaled to [-1,1]
+   * @param sensornumber length of the sensor array
+   * @param motors motors outputs. MUST have enough space for motor values!
+   * @param motornumber length of the provided motor array
+   */
+  void step(const sensor* sensors, int sensornumber, motor* motors, int motornumber) {
+    DiscreteControllerAdapter::step(sensors, sensornumber, motors, motornumber);
+  }
 
-        /** performs one step (includes learning).
-         * Calculates motor commands from sensor inputs.
-         * @note This method cannot be overwritten, use @see dStep instead.
-         * @param sensors sensors inputs scaled to [-1,1]
-         * @param sensornumber length of the sensor array
-         * @param motors motors outputs. MUST have enough space for motor values!
-         * @param motornumber length of the provided motor array
-         */
-        void step(const sensor* sensors, int sensornumber, motor* motors, int motornumber) {
-                DiscreteControllerAdapter::step( sensors,sensornumber, motors, motornumber);
-        }
-
-        /** performs one step without learning.
-         * @see step
-         * @note This method cannot be overwritten, use @see dStepNoLearning
-         * instead.
-         */
-        void stepNoLearning(const sensor* sensors , int sensornumber,
-                            motor* motors, int motornumber) {
-                                    DiscreteControllerAdapter::step( sensors,sensornumber, motors, motornumber);
-                            }
+  /** performs one step without learning.
+   * @see step
+   * @note This method cannot be overwritten, use @see dStepNoLearning
+   * instead.
+   */
+  void stepNoLearning(const sensor* sensors, int sensornumber, motor* motors, int motornumber) {
+    DiscreteControllerAdapter::step(sensors, sensornumber, motors, motornumber);
+  }
 
 protected:
-        ;
+  ;
 
 private:
-
 };
-
 
 #endif

@@ -28,17 +28,24 @@
 
 #include <algorithm>
 
-Individual::Individual() {
-  // nothing
+Individual::Individual() 
+  : m_name(),
+    m_ID(0),
+    m_parent1(nullptr),
+    m_parent2(nullptr),
+    m_mutated(false),
+    m_fitness(0.0),
+    m_fitnessCalculated(false) {
 }
 
-Individual::Individual(std::string name, int id, Individual* p1, Individual* p2) {
-  m_name = name;
-  m_ID = id;
-  m_mutated = false;
-  m_parent1 = p1;
-  m_parent2 = p2;
-  m_fitnessCalculated = false;
+Individual::Individual(const std::string& name, int id, Individual* p1, Individual* p2) 
+  : m_name(name),
+    m_ID(id),
+    m_mutated(false),
+    m_parent1(p1),
+    m_parent2(p2),
+    m_fitness(0.0),
+    m_fitnessCalculated(false) {
 }
 
 Individual::~Individual() {

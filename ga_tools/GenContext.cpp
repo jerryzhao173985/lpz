@@ -34,13 +34,30 @@
 #include "Individual.h"
 
 GenContext::GenContext() :
-  Inspectable("GenContext") {
+  Inspectable("GenContext"),
+  m_prototype(nullptr),
+  m_min(0.0),
+  m_w1(0.0),
+  m_q1(0.0),
+  m_med(0.0),
+  m_avg(0.0),
+  m_q3(0.0),
+  m_w3(0.0),
+  m_max(0.0) {
   // nothing
 }
 
 GenContext::GenContext(GenPrototype* prototype) :
-  Inspectable(prototype->getName()) {
-  m_prototype = prototype;
+  Inspectable(prototype->getName()),
+  m_prototype(prototype),
+  m_min(0.0),
+  m_w1(0.0),
+  m_q1(0.0),
+  m_med(0.0),
+  m_avg(0.0),
+  m_q3(0.0),
+  m_w3(0.0),
+  m_max(0.0) {
 
   std::string name = prototype->getName();
 

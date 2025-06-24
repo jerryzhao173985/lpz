@@ -869,7 +869,13 @@ int main (int argc, char **argv)
   track         = Simulation::contains(argv, argc, "-t");
   rareprint     = Simulation::contains(argv, argc, "-rare");
   if(Simulation::contains(argv, argc, "-nographics")){
-    absolutePath="/home/georg/sim/Spherical_reinf/data/";
+    // Use environment variable or current directory
+    const char* dataPath = getenv("LPZROBOTS_DATA_PATH");
+    if(dataPath){
+      absolutePath = string(dataPath) + "/";
+    }else{
+      absolutePath = "./data/";
+    }
     realtimefactor=0;
   }
 

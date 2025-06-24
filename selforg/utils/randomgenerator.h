@@ -29,19 +29,18 @@
 #include "mac_drand48r.h"
 #endif
 
-
 /// random generator with 48bit integer arithmentic
-typedef struct _RandGen {
-  _RandGen(){
+struct _RandGen {
+  _RandGen() {
     init(::rand());
   }
-  void init(long int seedval){
+  void init(long int seedval) {
     srand48_r(seedval, &buffer);
   }
   /// returns a value in [0,1)
-  double rand(){
+  double rand() {
     double r;
-    drand48_r(&buffer,&r);
+    drand48_r(&buffer, &r);
     return r;
   }
   // See drand48_data structure:
@@ -64,12 +63,11 @@ typedef struct _RandGen {
   // This isn't the best way, but everything which isn't predictable
   // is in a random generator perfect. :o)
   union {
-          struct drand48_data buffer;
-          char dummy[24];
+    struct drand48_data buffer;
+    char dummy[24];
   };
-} RandGen;
+};
 
-
-
+using RandGen = _RandGen;
 
 #endif

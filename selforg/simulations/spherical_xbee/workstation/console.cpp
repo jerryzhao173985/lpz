@@ -69,7 +69,7 @@ COMMAND commands[] = {
   { "show", com_show, "[OBJECTID]: Lists paramters of OBJECTID or of all objects (if no id given)" },
   { "view", com_show, "Synonym for `show'" },
   { "quit", com_quit, "Quit program" },
-  { (char *)NULL, (commandfunc_t)NULL, (char *)NULL }
+  { (char *)nullptr, (commandfunc_t)nullptr, (char *)nullptr }
 };
 
 /* Forward declarations. */
@@ -164,7 +164,7 @@ bool execute_line (GlobalData& globalData, char *line) {
 }
 
 /* Look up NAME as the name of a command, and return a pointer to that
-   command.  Return a NULL pointer if NAME isn't a command name. */
+   command.  Return a nullptr pointer if NAME isn't a command name. */
 COMMAND *find_command (char *name){
   int i;
   char *p = strchr(name,'=');
@@ -173,7 +173,7 @@ COMMAND *find_command (char *name){
     if (strcmp (name, commands[i].name) == 0)
       return (&commands[i]);
 
-  return ((COMMAND *)NULL);
+  return ((COMMAND *)nullptr);
 }
 
 /* Strip whitespace from the start and end of STRING.  Return a pointer
@@ -228,11 +228,11 @@ void closeConsole(){
    bound the region of rl_line_buffer that contains the word to
    complete.  TEXT is the word to complete.  We can use the entire
    contents of rl_line_buffer in case we want to do some simple
-   parsing.  Returnthe array of matches, or NULL if there aren't any. */
+   parsing.  Returnthe array of matches, or nullptr if there aren't any. */
 char ** console_completion (const char *text, int start, int end) {
   char **matches;
 
-  matches = (char **)NULL;
+  matches = (char **)nullptr;
 
   /* If this word is at the start of the line, then it is a command
      to complete.  Otherwise it is the name of a file in the current
@@ -270,8 +270,8 @@ char * command_generator (const char *text, int state) {
         return (dupstr(name));
     }
 
-  /* If no names matched, then return NULL. */
-  return ((char *)NULL);
+  /* If no names matched, then return nullptr. */
+  return ((char *)nullptr);
 }
 
 /* **************************************************************** */
@@ -322,7 +322,7 @@ bool com_set (GlobalData& globalData, char* line, char* arg) {
 
     s_param = strchr(arg,' ');
     if(s_param) *s_param='\0'; // terminate first arg
-    if(s_param && strchr(arg,'=')==NULL){ // looks like two args (and no = in the first)
+    if(s_param && strchr(arg,'=')==nullptr){ // looks like two args (and no = in the first)
       s_param++;
       int id = atoi(arg);
       if(id>=0 && id < (signed)globalData.configs.size()){

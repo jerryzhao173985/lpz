@@ -121,7 +121,7 @@ void printConfig(const Configurable* config)
 char* dupstr (const char* s){
   char *r;
 
-  r = (char*)malloc (strlen (s) + 1);
+  r = static_cast<char*>(malloc (strlen (s) + 1));
   strcpy (r, s);
   return (r);
 }
@@ -130,7 +130,7 @@ char* dupstr (const char* s){
 char* dupstrpluseq (const char* s){
   char *r;
   int len = strlen (s);
-  r = (char*)malloc (strlen (s) + 2);
+  r = static_cast<char*>(malloc (strlen (s) + 2));
   strcpy (r, s);
   r[len]= '=';
   r[len+1]= 0;
@@ -190,6 +190,9 @@ bool execute_line (GlobalData& globalData, char *_line) {
   COMMAND *command;
   char *word;
   char *line = strdup(_line);
+  if (!line) {
+    return false;
+  }
 
   /* Isolate the command word. */
   i = 0;
@@ -326,13 +329,13 @@ char ** console_completion (const char *text, int start, int end) {
   int lCmd=getListLen(matchesCmd);
   int lPar=getListLen(matchesParams);
   if(lCmd+lPar > 0){
-    char **matches = (char **)malloc((lCmd+lPar+1)*sizeof(char*));
+    char **matches = static_cast<char **>(malloc((lCmd+lPar+1)*sizeof(char*)));
     memcpy(matches,matchesCmd,sizeof(char*)*lCmd);
     memcpy(matches+lCmd,matchesParams,sizeof(char*)*lPar);
-    matches[lCmd+lPar]=(char *)NULL;
+    matches[lCmd+lPar]=static_cast<char *>(NULL);
     return matches;
   } else
-    return (char **)NULL;
+    return static_cast<char **>(NULL);
 
 
 }

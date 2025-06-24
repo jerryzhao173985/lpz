@@ -26,26 +26,24 @@
 #include <cmath>
 
 #include <selforg/matrix.h>
-#include <selforg/teachable.h>
 #include <selforg/parametrizable.h>
-
+#include <selforg/teachable.h>
 
 /// configuration object for PiMax controller. Use PiMax::getDefaultConf().
 struct PiMaxConf {
-  double initFeedbackStrength;  ///< initial strength of sensor to motor connection
-  bool   useExtendedModel;      ///< if true, the extended model (S matrix) is used
+  double initFeedbackStrength; ///< initial strength of sensor to motor connection
+  bool useExtendedModel;       ///< if true, the extended model (S matrix) is used
   /// if true, the covariance matrix is learned otherwise a unit matrix is used
-  bool   useSigma;
+  bool useSigma;
   /// if true the controller can be taught see teachable interface
-  bool   useTeaching;
+  bool useTeaching;
   /// # of steps the sensors are averaged (1 means no averaging)
-  int    steps4Averaging;
+  int steps4Averaging;
   /// # of steps the motor values are delayed (1 means no delay)
-  int    steps4Delay;
-  bool   someInternalParams;    ///< if true only some internal parameters are exported
-  bool   onlyMainParameters;    ///< if true only some configurable parameters are exported
+  int steps4Delay;
+  bool someInternalParams; ///< if true only some internal parameters are exported
+  bool onlyMainParameters; ///< if true only some configurable parameters are exported
 };
-
 
 /**
  * This controller implements the predictive information maximization
@@ -58,7 +56,10 @@ struct PiMaxConf {
    The code contains more functionality than is described in the paper
      e.g. the teaching and motor babbling is not used.
 */
-class PiMax : public AbstractController, public Teachable, public Parametrizable {
+class PiMax
+  : public AbstractController
+  , public Teachable
+  , public Parametrizable {
 
 public:
   explicit PiMax(const PiMaxConf& conf = getDefaultConf());
@@ -67,36 +68,43 @@ public:
 
   virtual ~PiMax();
 
-  static PiMaxConf getDefaultConf(){
+  static PiMaxConf getDefaultConf() {
     PiMaxConf conf;
     conf.initFeedbackStrength = 1.0;
-    conf.useExtendedModel     = false;
-    conf.useSigma             = true;
-    conf.useTeaching          = false;
-    conf.steps4Averaging      = 1;
-    conf.steps4Delay          = 1;
-    conf.someInternalParams   = false;
-    conf.onlyMainParameters   = true;
+    conf.useExtendedModel = false;
+    conf.useSigma = true;
+    conf.useTeaching = false;
+    conf.steps4Averaging = 1;
+    conf.steps4Delay = 1;
+    conf.someInternalParams = false;
+    conf.onlyMainParameters = true;
     return conf;
   }
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
-  virtual int getSensorNumber() const override { return number_sensors; }
+  virtual int getSensorNumber() const override {
+    return number_sensors;
+  }
   /// returns the mumber of motors the controller was initialised with or 0 if not initialised
-  virtual int getMotorNumber() const override { return number_motors; }
+  virtual int getMotorNumber() const override {
+    return number_motors;
+  }
 
   /// performs one step (includes learning).
   /// Calulates motor commands from sensor inputs.
-  virtual void step(const sensor* , int number_sensors, motor* , int number_motors) override;
-
+  virtual void step(const sensor*, int number_sensors, motor*, int number_motors) override;
 
   /// performs one step without learning. Calulates motor commands from sensor inputs.
-  virtual void stepNoLearning(const sensor* , int number_sensors,
-			      motor* , int number_motors) override;
+  virtual void stepNoLearning(const sensor*,
+                              int number_sensors,
+                              motor*,
+                              int number_motors) override;
 
   /// called during babbling phase
-  virtual void motorBabblingStep(const sensor* , int number_sensors,
-				 const motor* , int number_motors) override;
+  virtual void motorBabblingStep(const sensor*,
+                                 int number_sensors,
+                                 const motor*,
+                                 int number_motors) override;
 
   /***** STOREABLE ****/
   /** stores the controller values to a given file. */
@@ -125,7 +133,7 @@ public:
 protected:
   unsigned short number_sensors;
   unsigned short number_motors;
-  static const unsigned short buffersize = 20;
+  static constexpr unsigned short buffersize = 20;
 
   matrix::Matrix A; // Model Matrix
   matrix::Matrix C; // Controller Matrix
@@ -136,22 +144,21 @@ protected:
 
   matrix::Matrix Sigma; // noise covariance matrix
 
-  matrix::Matrix ds0; //
+  matrix::Matrix ds0;      //
   matrix::Matrix C_native; // Controller Matrix obtained from motor babbling
   matrix::Matrix A_native; // Model Matrix obtained from motor babbling
 
-  matrix::Matrix a_buffer[buffersize]; // buffer needed for delay
-  matrix::Matrix s_buffer[buffersize]; // buffer of sensor values
+  matrix::Matrix a_buffer[buffersize];  // buffer needed for delay
+  matrix::Matrix s_buffer[buffersize];  // buffer of sensor values
   matrix::Matrix xi_buffer[buffersize]; // buffer of pred errors
   matrix::Matrix gs_buffer[buffersize]; // buffer of g'
-  matrix::Matrix L_buffer[buffersize]; // buffer of Jacobians
+  matrix::Matrix L_buffer[buffersize];  // buffer of Jacobians
 
   matrix::Matrix s;        // current sensor value vector
   matrix::Matrix s_smooth; // time average of s values
-  PiMaxConf conf; ///< configuration objects
+  PiMaxConf conf;          ///< configuration objects
 
   int t;
-
 
   bool intern_isTeaching;    // teaching signal available?
   matrix::Matrix a_teaching; // motor teaching  signal
@@ -164,39 +171,32 @@ protected:
   paramval epsSigma;
   paramval factorH;
   paramval damping;
-  paramval gamma;          // teaching strength
+  paramval gamma; // teaching strength
 
-  paramint tau;            // length of time window
-
+  paramint tau; // length of time window
 
   /// learn values model and controller (A,b,C,h)
   virtual void learn();
 
   /// neuron transfer function
-  static double g(double z)
-  {
+  static double g(double z) {
     return tanh(z);
   };
 
   /// derivative of g
-  static double g_s(double z)
-  {
-    double k=tanh(z);
-    return 1.05 - k*k; // regularized
+  static double g_s(double z) {
+    double k = tanh(z);
+    return 1.05 - k * k; // regularized
   };
 
   /// function that clips the second argument to the interval [-first,first]
-  static double clip(double r, double x){
-    return min(max(x,-r),r);
+  static double clip(double r, double x) {
+    return min(max(x, -r), r);
   }
   /// calculates the inverse the argument (useful for Matrix::map)
-  static double one_over(double x){
-    return 1/x;
+  static double one_over(double x) {
+    return 1 / x;
   }
-
-
 };
 
 #endif
-
-

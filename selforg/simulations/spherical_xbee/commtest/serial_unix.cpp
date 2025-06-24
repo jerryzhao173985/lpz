@@ -21,7 +21,7 @@ void CSerialThread::start(){
   fd_out=-1;
   // start thread using this static function
 
-  pthread_create(&thread,NULL,CSerialThread_run, this);
+  pthread_create(&thread,nullptr,CSerialThread_run, this);
 
 
 };
@@ -34,7 +34,7 @@ void CSerialThread::stopandwait(){
       terminated=true;
       pthread_testcancel();
       //      pthread_cancel(thread);
-      pthread_join(thread,NULL);
+      pthread_join(thread,nullptr);
       m_is_joined=true;
     }
 };

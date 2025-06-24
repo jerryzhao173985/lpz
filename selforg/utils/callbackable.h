@@ -36,24 +36,22 @@
  *
  * @see BackCaller
  */
-class Callbackable
-{
-  public:
+class Callbackable {
+public:
+  Callbackable() {};
 
-    Callbackable() {};
+  virtual ~Callbackable() {}
 
-    virtual ~Callbackable() {}
-
-    /**
-     * This method is invoked when a callback is done from the class where this
-     * class is for callback registered
-     * @param source the caller instance which did the callback.
-     * @param type this type can be used to differ from varying types of callback.
-     * @see BackCaller
-     */
-    virtual void doOnCallBack(BackCaller* source, BackCaller::CallbackableType type = BackCaller::DEFAULT_CALLBACKABLE_TYPE) = 0;
-
-
+  /**
+   * This method is invoked when a callback is done from the class where this
+   * class is for callback registered
+   * @param source the caller instance which did the callback.
+   * @param type this type can be used to differ from varying types of callback.
+   * @see BackCaller
+   */
+  virtual void doOnCallBack(
+    BackCaller* source,
+    BackCaller::CallbackableType type = BackCaller::DEFAULT_CALLBACKABLE_TYPE) = 0;
 };
 
 #endif

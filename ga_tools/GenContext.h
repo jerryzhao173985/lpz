@@ -56,7 +56,7 @@ public:
 	 *
 	 * @param prototype (GenPrototype*) Pointer to the prototype.
 	 */
-	GenContext(GenPrototype* prototype);
+	explicit GenContext(GenPrototype* prototype);
 
 	/**
 	 * destructor to delete a GenContext.

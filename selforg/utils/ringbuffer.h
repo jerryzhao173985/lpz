@@ -21,23 +21,22 @@
 #ifndef __RINGBUFFER_H
 #define __RINGBUFFER_H
 
-#include <vector>
 #include <assert.h>
+#include <vector>
 
-template <typename T>
+template<typename T>
 class RingBuffer {
 public:
   RingBuffer()
-    :buffersize(0)
-  { }
+    : buffersize(0) {}
 
   RingBuffer(int size)
-  : buffersize(size) {
+    : buffersize(size) {
     buffer.resize(size);
   }
 
   /// sets size of buffer and initializes buffer elements.
-  void init(int size, const T& t){
+  void init(int size, const T& t) {
     buffersize = size;
     buffer.resize(size, t);
   }
@@ -49,24 +48,26 @@ public:
   /** returns object at index.
       Index can be larger than buffersize, it will be wrapped. Negative index means 0.
   */
-  T& get(int index){
-    assert(buffersize>0);
-    if(index < 0) index=0;
-    return buffer[index%buffersize];
+  T& get(int index) {
+    assert(buffersize > 0);
+    if (index < 0)
+      index = 0;
+    return buffer[index % buffersize];
   }
 
   const T& get(int index) const {
-    assert(buffersize>0);
-    if(index < 0) index=0;
-    return buffer[index%buffersize];
+    assert(buffersize > 0);
+    if (index < 0)
+      index = 0;
+    return buffer[index % buffersize];
   }
 
   /// see get()
-  T& operator[] (int index){
+  T& operator[](int index) {
     return get(index);
   }
   /// see get()
-  const T& operator[] (int index) const {
+  const T& operator[](int index) const {
     return get(index);
   }
 

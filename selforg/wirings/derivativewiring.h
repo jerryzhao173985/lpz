@@ -29,14 +29,14 @@
 /**  Configuration object for DerivativeWiring.
      If all boolean parametes are false, id is set to true (equivalent to One2OneWiring)
 */
-typedef struct __DerivativeWiringConf {
+struct DerivativeWiringConf {
   bool useId;        //< include zeroth derivative
   bool useFirstD;   ///< include first derivative
   bool useSecondD;  ///< second include second derivative
   double eps;       ///< update rate for floating average (0 -> no sensor variation, 1 -> no smoothing)
   double derivativeScale;   ///< factor for the derivatives
   unsigned int blindMotors;   ///< number of motors that are blind (not given to robot)
-} DerivativeWiringConf;
+};
 
 
 /** Implements a wiring (between controller and robot)

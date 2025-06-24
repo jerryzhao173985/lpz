@@ -90,7 +90,7 @@ void QSerialReader::run()
         if(size > 0 && c=='#') size=0;  // neue Channel Zeile f�ngt mitten drinne irgendwie an
 
         size++;
-        char* tmp = (char*) realloc( s, size+1);
+        char* tmp = static_cast<char*>(realloc( s, size+1));
         if (tmp == NULL) {
             free(s);
             s = NULL;

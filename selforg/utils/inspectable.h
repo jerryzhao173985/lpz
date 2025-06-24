@@ -24,17 +24,16 @@
 #ifndef __INSPECTABLE_H
 #define __INSPECTABLE_H
 
-
+#include "stl_adds.h"
 #include <list>
 #include <map>
-#include <utility>
 #include <string>
-#include "stl_adds.h"
+#include <utility>
 
 #include <iostream>
 
 namespace matrix {
-  class Matrix;
+class Matrix;
 }
 
 /**
@@ -44,71 +43,79 @@ namespace matrix {
  * TODO: support for lead through of params (e.g. getInternalParams())
  * for all children inspectables. For this use a instance-wide switch (useChildren)
  * as a member variable to enable this feature when desired.
-*/
+ */
 class Inspectable {
 public:
-
   // TYPEDEFS BEGIN
 
-  typedef std::string iparamkey;
-  typedef double iparamval;
-  typedef std::pair<iparamkey,iparamval const*> iparampair;
+  using iparamkey = std::string;
+  using iparamval = double;
+  using iparampair = std::pair<iparamkey, iparamval const*>;
 
   // the bool says whether  only 4x4AndDiag is used
-  typedef std::pair<iparamkey,std::pair< const matrix::Matrix*, bool > > imatrixpair;
-  typedef std::list<iparamkey> iparamkeylist;
-  typedef std::list<std::string> infoLinesList;
-  typedef std::list<iparamval> iparamvallist;
-  typedef std::list<iparamval const *> iparamvalptrlist;
-  typedef std::list<iparampair> iparampairlist;
-  typedef std::list<imatrixpair> imatrixpairlist;
+  using imatrixpair = std::pair<iparamkey, std::pair<const matrix::Matrix*, bool>>;
+  using iparamkeylist = std::list<iparamkey>;
+  using infoLinesList = std::list<std::string>;
+  using iparamvallist = std::list<iparamval>;
+  using iparamvalptrlist = std::list<iparamval const*>;
+  using iparampairlist = std::list<iparampair>;
+  using imatrixpairlist = std::list<imatrixpair>;
 
   // the network stucture export will be discontinued soon
-  typedef struct ILayer{
-    ILayer(const std::string& vectorname, const std::string& biasname,
-           int dimension, int rank, const std::string& layername)
-      : vectorname(vectorname), biasname(biasname),
-         dimension(dimension), rank(rank), layername(layername) {}
-    std::string vectorname;  //< prefix of the internal parameter vector e.g. "v"
-    std::string biasname;    ///< prefix of the internal parameter vector used as bias for the neurons e.g. "h"
-    int dimension;      ///< length of the vector (number of units)
-    int rank;           ///< rank of the layer (0 are input layers)
-    std::string layername;   ///< name of the layer as displayed by the visualiser
-  }ILayer;
+  struct ILayer {
+    ILayer(const std::string& vectorname,
+           const std::string& biasname,
+           int dimension,
+           int rank,
+           const std::string& layername)
+      : vectorname(vectorname)
+      , biasname(biasname)
+      , dimension(dimension)
+      , rank(rank)
+      , layername(layername) {}
+    std::string vectorname; //< prefix of the internal parameter vector e.g. "v"
+    std::string
+      biasname; ///< prefix of the internal parameter vector used as bias for the neurons e.g. "h"
+    int dimension;         ///< length of the vector (number of units)
+    int rank;              ///< rank of the layer (0 are input layers)
+    std::string layername; ///< name of the layer as displayed by the visualiser
+  };
 
-  typedef struct IConnection{
-    IConnection(const std::string& matrixname, const std::string& vector1, const std::string& vector2)
-      : matrixname(matrixname), vector1(vector1), vector2(vector2) {}
+  struct IConnection {
+    IConnection(const std::string& matrixname,
+                const std::string& vector1,
+                const std::string& vector2)
+      : matrixname(matrixname)
+      , vector1(vector1)
+      , vector2(vector2) {}
     std::string matrixname; ///< matrix name is the prefix of the internal parameter matrix e.g. "A"
     std::string vector1;    ///< vectorname of input layer
     std::string vector2;    ///< vectorname of output layer
-  }IConnection;
+  };
 
-  typedef std::list<ILayer> ilayerlist;
-  typedef std::list<IConnection> iconnectionlist;
+  using ilayerlist = std::list<ILayer>;
+  using iconnectionlist = std::list<IConnection>;
 
   /// nice predicate function for finding a Layer with its vectorname
   struct matchName {
-    typedef ILayer argument_type;
-    typedef bool result_type;
-    
-    matchName(const std::string& name) : name(name) {}
+    using argument_type = ILayer;
+    using result_type = bool;
+
+    explicit matchName(const std::string& name)
+      : name(name) {}
     std::string name;
-    bool operator()(const ILayer& l) { return l.vectorname == name; }
+    bool operator()(const ILayer& l) {
+      return l.vectorname == name;
+    }
   };
 
-  typedef std::list<const Inspectable*> inspectableList;
-
-
+  using inspectableList = std::list<const Inspectable*>;
 
   /// TYPEDEFS END
 
-
   explicit Inspectable(const iparamkey& name = "");
 
-
   virtual ~Inspectable();
-
 
   /** The list of the names of all internal parameters given by getInternalParams().
       The naming convention is "v[i]" for vectors
@@ -117,8 +124,7 @@ public:
    */
   virtual iparamkeylist getInternalParamNames() const;
 
-
-/** @return: list of values
+  /** @return: list of values
    */
   virtual iparamvallist getInternalParams() const;
 
@@ -136,13 +142,11 @@ public:
    */
   virtual ilayerlist getStructuralLayers() const;
 
-
-  /** Specifies which parameter matrix forms a connection between layers (in terms of a neural network)
-      The orderning is not important.
+  /** Specifies which parameter matrix forms a connection between layers (in terms of a neural
+     network) The orderning is not important.
       @return: list of layer names with dimension
    */
   virtual iconnectionlist getStructuralConnections() const;
-
 
   /**
    * This is the new style for adding inspectable values. Just call this
@@ -152,9 +156,9 @@ public:
    * @param val the address of the value to inspect
    * @param descr description string to be exported (using infolines)
    */
-  virtual void addInspectableValue(const iparamkey& key, iparamval const * val,
+  virtual void addInspectableValue(const iparamkey& key,
+                                   iparamval const* val,
                                    const std::string& descr = std::string());
-
 
   /**
    * This is the new style for adding inspectable values. Just call this
@@ -171,8 +175,9 @@ public:
    * @note that you can change the structure of the matrix while
    * being inspected, but no after the getInternalParameterNames is called!
    */
-  virtual void addInspectableMatrix(const iparamkey& key, const matrix::Matrix* m,
-                                    bool only4x4AndDiag=true,
+  virtual void addInspectableMatrix(const iparamkey& key,
+                                    const matrix::Matrix* m,
+                                    bool only4x4AndDiag = true,
                                     const std::string& descr = std::string());
 
   /**
@@ -183,7 +188,6 @@ public:
    * @param descr descriptive string (no newlines allowed)
    */
   virtual void addInspectableDescription(const iparamkey& key, const std::string& descr);
-
 
   /**
    * Adds an info line to this inspectable instance. All infolines are plotted
@@ -232,11 +236,11 @@ public:
    */
   virtual void removeInspectable(Inspectable* insp);
 
-
   /// set the name of the inspectable
   virtual void setNameOfInspectable(const iparamkey& name);
 
-  /// return the name of the inspectable, getName() would conflict with Configurable::getName() too often
+  /// return the name of the inspectable, getName() would conflict with Configurable::getName() too
+  /// often
   virtual const iparamkey getNameOfInspectable() const;
 
   /**
@@ -262,8 +266,6 @@ private:
   inspectableList listOfInspectableChildren;
   // bool printParentName; // unused member
   Inspectable* parent;
-
-
 };
 
 #endif

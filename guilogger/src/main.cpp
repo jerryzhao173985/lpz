@@ -26,8 +26,7 @@
 
 #include <signal.h>
 
-#include <qapplication.h>
-#include <qdesktopwidget.h>
+#include <QApplication>
 #include <QScreen>
 #include <QGuiApplication>
 #include "guilogger.h"

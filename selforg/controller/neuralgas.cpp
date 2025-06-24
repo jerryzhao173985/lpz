@@ -28,159 +28,178 @@
 using namespace std;
 using namespace matrix;
 
-using rankingvector = vector<pair<double,int> >;
+using rankingvector = vector<pair<double, int>>;
 
-NeuralGas::NeuralGas(const std::string& name,
-    const std::string& revision) : AbstractModel(name, revision),
-    eps(0.1),
-    lambda(3),
-    maxTime(100),
-    t(0),
-    initialised(false) {
+NeuralGas::NeuralGas(const std::string& name, const std::string& revision)
+  : AbstractModel(name, revision)
+  , eps(0.1)
+  , lambda(3)
+  , maxTime(100)
+  , t(0)
+  , initialised(false) {}
+
+NeuralGas::NeuralGas(double lambda,
+                     double eps,
+                     int maxTime,
+                     const std::string& name,
+                     const std::string& revision)
+  : AbstractModel(name, revision)
+  , eps(eps)
+  , lambda(lambda)
+  , maxTime(maxTime) {
+  addParameter("eps", &eps);
+  t = 0;
+  initialised = false;
 }
 
-NeuralGas::NeuralGas(double lambda, double eps, int maxTime,
-      const std::string& name,
-      const std::string& revision)
-  : AbstractModel(name, revision), eps(eps), lambda(lambda),  maxTime(maxTime) {
-  addParameter("eps",&eps);
-  t=0;
-  initialised=false;
-}
-
-void NeuralGas::init(unsigned int inputDim, unsigned int outputDim,
-                     double unit_map, RandGen* randGen){
-  if(!randGen) randGen = new RandGen(); // this gives a small memory leak
+void
+NeuralGas::init(unsigned int inputDim, unsigned int outputDim, double unit_map, RandGen* randGen) {
+  if (!randGen)
+    randGen = new RandGen(); // this gives a small memory leak
   weights.resize(outputDim);
   diffvectors.resize(outputDim);
   double factor = (unit_map == 0) ? 1 : unit_map;
   // pure random initialised in the interval (-factor, factor) in all dimensions
-  for(unsigned int i=0; i< outputDim; i++){
-    weights[i].set(inputDim,1);
-    weights[i]=weights[i].mapP(randGen, random_minusone_to_one)*factor;
-    diffvectors[i].set(inputDim,1);
+  for (unsigned int i = 0; i < outputDim; i++) {
+    weights[i].set(inputDim, 1);
+    weights[i] = weights[i].mapP(randGen, random_minusone_to_one) * factor;
+    diffvectors[i].set(inputDim, 1);
   }
-  distances.set(outputDim,1);
+  distances.set(outputDim, 1);
 
-  cellsizes.set(outputDim,1);
+  cellsizes.set(outputDim, 1);
   updateCellSizes();
 
-  initialised=true;
+  initialised = true;
 }
 
-double NeuralGas::activationfunction(double rdfsize, double d){
+double
+NeuralGas::activationfunction(double rdfsize, double d) {
   //  return max(0.0,1-(2*d));
-  return exp(- d*d/rdfsize);
+  return exp(-d * d / rdfsize);
 }
 
-double ng_print_double(void* f, double d){
-  fprintf(static_cast<FILE*>(f),"%g ",d);
+double
+ng_print_double(void* f, double d) {
+  fprintf(static_cast<FILE*>(f), "%g ", d);
   return d;
 }
 
-void NeuralGas::printWeights(FILE* f) const {
-  int k=0;
-  fprintf(f,"# weight elements, cellsize\n");
-  FOREACHC(vector<Matrix>, weights, i){
-    i->mapP(f,ng_print_double);
-    fprintf(f,"\t%f\n", cellsizes.val(k,0));
+void
+NeuralGas::printWeights(FILE* f) const {
+  int k = 0;
+  fprintf(f, "# weight elements, cellsize\n");
+  FOREACHC(vector<Matrix>, weights, i) {
+    i->mapP(f, ng_print_double);
+    fprintf(f, "\t%f\n", cellsizes.val(k, 0));
     k++;
   }
 }
 
-void NeuralGas::printCellsizes(FILE* f) const {
-  cellsizes.mapP(f,ng_print_double);
+void
+NeuralGas::printCellsizes(FILE* f) const {
+  cellsizes.mapP(f, ng_print_double);
 }
 
-const Matrix NeuralGas::process (const Matrix& input){
+const Matrix
+NeuralGas::process(const Matrix& input) {
   unsigned int s = weights.size();
-  for(unsigned int i=0; i<s; i++){
+  for (unsigned int i = 0; i < s; i++) {
     diffvectors[i] = (input - weights[i]);
     double d = diffvectors[i].map(sqr).elementSum();
-    distances.val(i,0)= d;
+    distances.val(i, 0) = d;
   }
   return distances.map2(activationfunction, cellsizes, distances);
 }
 
-const Matrix NeuralGas::learn (const Matrix& input,
-                         const Matrix& nom_output,
-                         double learnRateFactor ){
+const Matrix
+NeuralGas::learn(const Matrix& input, const Matrix& nom_output, double learnRateFactor) {
   // "activation" of network already done in process
   // rank by distance
   rankingvector ranking(distances.getM());
-  for(int i=0; i< ((signed)distances.getM()); i++){
-    ranking[i].first  = distances.val(i,0);
+  for (int i = 0; i < ((signed)distances.getM()); i++) {
+    ranking[i].first = distances.val(i, 0);
     ranking[i].second = i;
   }
   std::sort(ranking.begin(), ranking.end());
 
-  int k=0;
-  double e = (maxTime==0) ? eps*learnRateFactor : eps*exp(-3.0*t/static_cast<double>(maxTime))*learnRateFactor;
-  double l = (maxTime==0) ? lambda : lambda*exp(-3.0*t/static_cast<double>(maxTime));
-  FOREACHC(rankingvector , ranking, i){
-    double e_l = exp(-k/l) * e;
-    if(e_l < e-9) break;
-    weights[i->second] = weights[i->second] + diffvectors[i->second]*e_l;
+  int k = 0;
+  double e = (maxTime == 0) ? eps * learnRateFactor
+                            : eps * exp(-3.0 * t / static_cast<double>(maxTime)) * learnRateFactor;
+  double l = (maxTime == 0) ? lambda : lambda * exp(-3.0 * t / static_cast<double>(maxTime));
+  FOREACHC(rankingvector, ranking, i) {
+    double e_l = exp(-k / l) * e;
+    if (e_l < e - 9)
+      break;
+    weights[i->second] = weights[i->second] + diffvectors[i->second] * e_l;
     k++;
   }
-  if(t%100==0)
+  if (t % 100 == 0)
     updateCellSizes();
   t++;
   return Matrix();
 }
 
-
-void NeuralGas::updateCellSizes(){
-  int k=0;
+void
+NeuralGas::updateCellSizes() {
+  int k = 0;
 
   unsigned int s = weights.size();
 
-  FOREACHC(vector<Matrix>, weights, w){
-    Matrix dists(s,1);
-    for(unsigned int i=0; i<s; i++){
+  FOREACHC(vector<Matrix>, weights, w) {
+    Matrix dists(s, 1);
+    for (unsigned int i = 0; i < s; i++) {
       diffvectors[i] = (*w - weights[i]);
       double d = diffvectors[i].map(sqr).elementSum();
-      dists.val(i,0)= d;
+      dists.val(i, 0) = d;
     }
-    double size = getKthSmallestElement(dists,3);
-    cellsizes.val(k,0)=size;
+    double size = getKthSmallestElement(dists, 3);
+    cellsizes.val(k, 0) = size;
     k++;
   }
 }
 
-bool NeuralGas::store(FILE* f) const{
-  fprintf(f,"%g\n", eps);
-  fprintf(f,"%g\n", lambda);
-  fprintf(f,"%i\n", maxTime);
-  fprintf(f,"%i\n", t);
-  fprintf(f,"%u\n", getOutputDim());
+bool
+NeuralGas::store(FILE* f) const {
+  fprintf(f, "%g\n", eps);
+  fprintf(f, "%g\n", lambda);
+  fprintf(f, "%i\n", maxTime);
+  fprintf(f, "%i\n", t);
+  fprintf(f, "%u\n", getOutputDim());
 
   distances.store(f);
   cellsizes.store(f);
-  FOREACHC(vector<Matrix>, weights, w){
+  FOREACHC(vector<Matrix>, weights, w) {
     w->store(f);
   }
   return true;
 }
 
-bool NeuralGas::restore(FILE* f){
+bool
+NeuralGas::restore(FILE* f) {
   char buffer[128];
-  if(fscanf(f,"%127s\n", buffer) != 1) return false;
+  if (fscanf(f, "%127s\n", buffer) != 1)
+    return false;
   eps = atof(buffer);
-  if(fscanf(f,"%127s\n", buffer) != 1) return false;
+  if (fscanf(f, "%127s\n", buffer) != 1)
+    return false;
   lambda = atof(buffer);
-  if(fscanf(f,"%127s\n", buffer) != 1) return false;
+  if (fscanf(f, "%127s\n", buffer) != 1)
+    return false;
   maxTime = atoi(buffer);
-  if(fscanf(f,"%127s\n", buffer) != 1) return false;
+  if (fscanf(f, "%127s\n", buffer) != 1)
+    return false;
   t = atoi(buffer);
-  if((fgets(buffer,128, f))==nullptr) return false; // we need to use fgets in order to avoid spurious effects with following matrix (binary)
+  if ((fgets(buffer, 128, f)) == nullptr)
+    return false; // we need to use fgets in order to avoid spurious effects with following matrix
+                  // (binary)
   int odim = atoi(buffer);
 
   distances.restore(f);
   cellsizes.restore(f);
   weights.clear();
   diffvectors.clear();
-  for(int i=0; i < odim; i++){
+  for (int i = 0; i < odim; i++) {
     Matrix w;
     w.restore(f);
     weights.push_back(w);
@@ -188,5 +207,3 @@ bool NeuralGas::restore(FILE* f){
   }
   return true;
 }
-
-

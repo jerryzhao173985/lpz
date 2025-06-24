@@ -5,7 +5,7 @@
 # Ensure ode-dbl-config is in PATH
 export PATH := /Users/jerry/lpzrobot_mac/opende:$(PATH)
 
-SELFORGCFG=`if type selforg-config >/dev/null 2>&1; then echo "selforg-config"; elif [ -x ../selforg/selforg-config ]; then echo "../selforg/selforg-config"; else echo "Cannot find selforg-config" 1>&2; fi`
+SELFORGCFG="/Users/jerry/lpzrobot_mac/selforg/selforg-config"
 
 
 INCLUDEDIR=include/ode_robots
@@ -45,7 +45,7 @@ HFILES   := $(filter-out %flymake.h, $(foreach dir,$(dirs),$(find_h_files)))
 UTILS = install_prefix.conf ode_robots-config
 
 # additional inc paths
-INC +=  -I. -Iinclude -Iinclude/ode_robots -I../selforg -I../selforg/include
+INC +=  -I. -Iinclude -Iinclude/ode_robots -I/Users/jerry/lpzrobot_mac/selforg -I/Users/jerry/lpzrobot_mac/selforg/include
 # INC += -include allincludes.h
 
 # use -pg for profiling

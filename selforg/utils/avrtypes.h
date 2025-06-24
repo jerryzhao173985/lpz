@@ -21,46 +21,41 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  *                                                                         *
  ***************************************************************************/
-#ifndef __AVRTYPES_H
-#define __AVRTYPES_H
+#ifndef AVRTYPES_H
+#define AVRTYPES_H
 
 #ifndef AVR
 
-        // USED IN CONFIGURABLE
-        const uint8_t maxNumberEntries = 5;
-        const uint8_t charLength = 8;
+// USED IN CONFIGURABLE
+const uint8_t maxNumberEntries = 5;
+const uint8_t charLength = 8;
 
-        typedef char charArray[maxNumberEntries];
+using charArray = char[maxNumberEntries];
 
-        // CONFIGURABLE
-        typedef charArray paramkey;
-        typedef double paramval;
+// CONFIGURABLE
+using paramkey = charArray;
+using paramval = double;
 
-         struct parampair {
-                 paramkey key;
-                 paramval* val;
-          };
+struct parampair {
+  paramkey key;
+  paramval* val;
+};
 
-         typedef parampair plist[maxNumberEntries];
+using plist = parampair[maxNumberEntries];
 
-        /// INSPECTABLE
-   typedef paramkey iparamkey;
-   typedef paramval iparamval;
+/// INSPECTABLE
+using iparamkey = paramkey;
+using iparamval = paramval;
 
-         struct iparampair {
-                 iparamkey key;
-                 iparamval* val;
-          };
+struct iparampair {
+  iparamkey key;
+  iparamval* val;
+};
 
-         typedef iparampair iplist[maxNumberEntries];
+using iplist = iparampair[maxNumberEntries];
 
-
-   typedef iparamkey iparamkeylist[maxNumberEntries];
-   typedef iparamval* iparamvallisttrue[maxNumberEntries];
-
-
-
-
+using iparamkeylist = iparamkey[maxNumberEntries];
+using iparamvallisttrue = iparamval* [maxNumberEntries];
 
 #endif
 

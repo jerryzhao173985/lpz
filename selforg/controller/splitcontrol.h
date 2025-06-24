@@ -27,9 +27,8 @@
 #include <selforg/abstractcontroller.h>
 #include <selforg/onecontrollerperchannel.h>
 
-#include <vector>
 #include <functional>
-
+#include <vector>
 
 /**
  * class for using multiple controller with one robot. The connection is flexible.
@@ -38,11 +37,14 @@
  */
 class SplitControl : public AbstractController {
 public:
-
   struct Assoziation {
     Assoziation();
-    void addSensorIdx(int s) { sensors.push_back(s);}
-    void addMotorIdx(int m)  { motors.push_back(m);}
+    void addSensorIdx(int s) {
+      sensors.push_back(s);
+    }
+    void addMotorIdx(int m) {
+      motors.push_back(m);
+    }
 
     std::list<int> sensors;
     std::list<int> motors;
@@ -52,7 +54,8 @@ public:
   /** @param controllerGenerator generator object for controller
       @param assoziations list decribing which sensors and motors are connected to each controller
       @param controllerName name
-      @param numCtrlCreateBeforeInit number of controller that are generated before the init function is called. Useful if they should be put into the inspectable list of the agent
+      @param numCtrlCreateBeforeInit number of controller that are generated before the init
+     function is called. Useful if they should be put into the inspectable list of the agent
       @param numContextSensors number of context sensors (counted from the end)
        passed to all controllers
    */
@@ -60,35 +63,42 @@ public:
                const Assoziations& assoziations,
                std::string controllerName,
                int numCtrlCreateBeforeInit = 1,
-               int numContextSensors = 0
-               );
+               int numContextSensors = 0);
 
   virtual ~SplitControl();
 
-
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
 
-  virtual void step(const sensor* sensors, int sensornumber,
-                    motor* motors, int motornumber);
+  virtual void step(const sensor* sensors, int sensornumber, motor* motors, int motornumber);
 
-  virtual void stepNoLearning(const sensor* sensors , int sensornumber,
-                                    motor* motors, int motornumber);
+  virtual void stepNoLearning(const sensor* sensors,
+                              int sensornumber,
+                              motor* motors,
+                              int motornumber);
 
-  virtual int getSensorNumber() const {return sensornumber; }
-  virtual int getMotorNumber() const  {return motornumber; }
+  virtual int getSensorNumber() const {
+    return sensornumber;
+  }
+  virtual int getMotorNumber() const {
+    return motornumber;
+  }
 
   /*********** STORABLE **************/
 
-  virtual bool store(FILE* f) const {return false;}
+  virtual bool store(FILE* f) const {
+    return false;
+  }
 
-  virtual bool restore(FILE* f) {return false;}
+  virtual bool restore(FILE* f) {
+    return false;
+  }
 
-
-  virtual std::vector<AbstractController*> getControllers() const { return ctrl;}
+  virtual std::vector<AbstractController*> getControllers() const {
+    return ctrl;
+  }
 
 protected:
   std::vector<AbstractController*> ctrl;
-
 
   ControllerGenerator* controllerGenerator;
   Assoziations assoz;

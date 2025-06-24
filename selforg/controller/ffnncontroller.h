@@ -34,32 +34,43 @@ class FFNNController : public AbstractController {
 public:
   /** @param networkfilename file to load the network
       @param history  number of time steps the network gets input (in sense of dimension of input)
-      @param input_only_x if true then the input vector is \f[ (x_{t},x_{t-1},...,x_{t-history})^T \f]
-       if false then also the y values are used: \f[ (x_{t}, y_{t-1}, x_{t-1},y_{t-2},...,x_{t-history})^T \f]
+      @param input_only_x if true then the input vector is \f[ (x_{t},x_{t-1},...,x_{t-history})^T
+     \f] if false then also the y values are used: \f[ (x_{t}, y_{t-1},
+     x_{t-1},y_{t-2},...,x_{t-history})^T \f]
       @param init_wait number of timesteps to wait before controlling
   */
-  FFNNController(const std::string& networkfilename, int history, bool input_only_x, unsigned int init_wait=0);
+  FFNNController(const std::string& networkfilename,
+                 int history,
+                 bool input_only_x,
+                 unsigned int init_wait = 0);
 
   /** @param net pointer to network (it must have the right dimensions)
       @param history  number of time steps the network gets input (in sense of dimension of input)
-      @param input_only_x if true then the input vector is \f[ (x_{t},x_{t-1},...,x_{t-history})^T \f]
-       if false then also the y values are used: \f[ (x_{t}, y_{t-1}, x_{t-1},y_{t-2},...,x_{t-history})^T \f]
+      @param input_only_x if true then the input vector is \f[ (x_{t},x_{t-1},...,x_{t-history})^T
+     \f] if false then also the y values are used: \f[ (x_{t}, y_{t-1},
+     x_{t-1},y_{t-2},...,x_{t-history})^T \f]
       @param init_wait number of timesteps to wait before controlling
   */
-  FFNNController(MultiLayerFFNN* net, int history, bool input_only_x, unsigned int init_wait=0);
+  FFNNController(MultiLayerFFNN* net, int history, bool input_only_x, unsigned int init_wait = 0);
 
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
 
-  virtual ~FFNNController();
+  virtual ~FFNNController() override;
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
-  virtual int getSensorNumber() const  override{ return number_sensors; }
+  virtual int getSensorNumber() const override {
+    return number_sensors;
+  }
   /// returns the mumber of motors the controller was initialised with or 0 if not initialised
-  virtual int getMotorNumber() const   override{ return number_motors; }
+  virtual int getMotorNumber() const override {
+    return number_motors;
+  }
 
-  virtual void step(const sensor* , int number_sensors, motor* , int number_motors) override;
-  virtual void stepNoLearning(const sensor* , int number_sensors,
-                              motor* , int number_motors) override;
+  virtual void step(const sensor*, int number_sensors, motor*, int number_motors) override;
+  virtual void stepNoLearning(const sensor*,
+                              int number_sensors,
+                              motor*,
+                              int number_motors) override;
 
   /**** CONFIGURABLE ****/
   void notifyOnChange(const paramkey& key) override;
@@ -71,20 +82,26 @@ public:
   virtual bool restore(FILE* f) override;
 
   // inspectable interface
-  virtual std::list<iparamkey> getInternalParamNames()const override { return std::list<iparamkey>(); }
-  virtual std::list<iparamval> getInternalParams() const override { return std::list<iparamval>(); }
+  virtual std::list<iparamkey> getInternalParamNames() const override {
+    return std::list<iparamkey>();
+  }
+  virtual std::list<iparamval> getInternalParams() const override {
+    return std::list<iparamval>();
+  }
 
 protected:
   void putInBuffer(matrix::Matrix* buffer, const matrix::Matrix& vec, int delay = 0);
 
-  matrix::Matrix calculateSmoothValues(const matrix::Matrix* buffer, int number_steps_for_averaging_) const;
+  matrix::Matrix calculateSmoothValues(const matrix::Matrix* buffer,
+                                       int number_steps_for_averaging_) const;
 
-  virtual matrix::Matrix assembleNetworkInputXY(matrix::Matrix* xbuffer, matrix::Matrix* ybuffer) const;
+  virtual matrix::Matrix assembleNetworkInputXY(matrix::Matrix* xbuffer,
+                                                matrix::Matrix* ybuffer) const;
 
-  virtual matrix::Matrix assembleNetworkInputX(matrix::Matrix* xbuffer, matrix::Matrix* ybuffer) const;
+  virtual matrix::Matrix assembleNetworkInputX(matrix::Matrix* xbuffer,
+                                               matrix::Matrix* ybuffer) const;
 
   virtual matrix::Matrix assembleNetworkOutput(const matrix::Matrix& output) const;
-
 
 protected:
   unsigned short number_motors;
@@ -102,7 +119,6 @@ protected:
 
   MultiLayerFFNN* net;
   bool initialised;
-
 };
 
 #endif

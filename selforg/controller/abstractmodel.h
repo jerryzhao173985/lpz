@@ -24,20 +24,25 @@
 #ifndef __ABSTRACTMODEL_H
 #define __ABSTRACTMODEL_H
 
-#include "matrix.h"
 #include "configurable.h"
-#include "storeable.h"
 #include "inspectable.h"
+#include "matrix.h"
 #include "randomgenerator.h"
+#include "storeable.h"
 
 /// abstract class (interface) for a model that can be used by a controller
-class AbstractModel : public Configurable, public Storeable, public Inspectable {
- public:
-  // 20110317, guettler: disabled default constructor since it is not needed and would cause difficulties
-  //AbstractModel() {};
+class AbstractModel
+  : public Configurable
+  , public Storeable
+  , public Inspectable {
+public:
+  // 20110317, guettler: disabled default constructor since it is not needed and would cause
+  // difficulties
+  // AbstractModel() {};
   AbstractModel(const std::string& name, const std::string& revision)
-    : Configurable(name, revision), Inspectable(name) {}
-  virtual ~AbstractModel(){};
+    : Configurable(name, revision)
+    , Inspectable(name) {}
+  virtual ~AbstractModel() {};
 
   /** initialisation of the network with the given number of input and output units
       @param inputDim length of input vector
@@ -47,32 +52,32 @@ class AbstractModel : public Configurable, public Storeable, public Inspectable 
              with the given response strength.
       @param randGen pointer to random generator, if 0 an new one is used
    */
-  virtual void init(unsigned int inputDim, unsigned  int outputDim,
-                    double unit_map = 0.0, RandGen* randGen = nullptr)  = 0;
+  virtual void init(unsigned int inputDim,
+                    unsigned int outputDim,
+                    double unit_map = 0.0,
+                    RandGen* randGen = nullptr) = 0;
 
   /** passive processing of the input
      (this function is not constant since a recurrent network
      for example might change internal states
   */
-  virtual const matrix::Matrix process (const matrix::Matrix& input)  = 0;
+  virtual const matrix::Matrix process(const matrix::Matrix& input) = 0;
 
   /* performs learning and returns the network output before learning.
      Neural networks process the input before. (no need to call process before)
      \param learnRateFactor can be given to modify eps for this learning step.
   */
-  virtual const matrix::Matrix learn (const matrix::Matrix& input,
-                                      const matrix::Matrix& nom_output,
-                                      double learnRateFactor = 1)  = 0;
+  virtual const matrix::Matrix learn(const matrix::Matrix& input,
+                                     const matrix::Matrix& nom_output,
+                                     double learnRateFactor = 1) = 0;
 
   /// damps the weights and the biases by multiplying (1-damping)
-  virtual void damp(double damping)  = 0;
+  virtual void damp(double damping) = 0;
 
   /// returns the number of input neurons
-  virtual unsigned int getInputDim() const  = 0;
+  virtual unsigned int getInputDim() const = 0;
   /// returns the number of output neurons
-  virtual unsigned int getOutputDim() const  = 0;
-
+  virtual unsigned int getOutputDim() const = 0;
 };
-
 
 #endif

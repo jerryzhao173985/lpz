@@ -90,7 +90,7 @@ namespace lpzrobots {
     int motorStart;
     int motorEnd;
 
-    matrix::Matrix sensors;
+    matrix::Matrix sensorData;
     const char* filename;
     FILE* f;
 

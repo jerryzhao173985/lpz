@@ -21,17 +21,17 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  *                                                                         *
  ***************************************************************************/
-#ifndef __ABSTRACTCONTROLLER_H
-#define __ABSTRACTCONTROLLER_H
+#ifndef ABSTRACTCONTROLLER_H
+#define ABSTRACTCONTROLLER_H
 
-#include <stdio.h>
-#include <list>
-#include <map>
 #include "configurable.h"
 #include "inspectable.h"
-#include "storeable.h"
 #include "randomgenerator.h"
 #include "sensormotorinfo.h"
+#include "storeable.h"
+#include <cstdio>
+#include <list>
+#include <map>
 
 /**
  * Abstract class for robot controller (with some basic functionality).
@@ -43,19 +43,26 @@
  *  - each time step
  *     either step() or stepNoLearning() is called to ask the controller for motor values.
  */
-class AbstractController : public Configurable, public Inspectable, public Storeable {
+class AbstractController
+  : public Configurable
+  , public Inspectable
+  , public Storeable {
 public:
   using sensor = double;
   using motor = double;
 
   /// contructor (hint: use $ID$ for revision)
   AbstractController(const std::string& name, const std::string& revision)
-    : Configurable(name, revision), Inspectable(name) {}
+    : Configurable(name, revision)
+    , Inspectable(name) {}
+
+  /// virtual destructor
+  ~AbstractController() override = default;
 
   /** initialisation of the controller with the given sensor/ motornumber
       Must be called before use. The random generator is optional.
   */
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr)= 0;
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) = 0;
 
   /** @return Number of sensors the controller
       was initialised with or 0 if not initialised */
@@ -72,20 +79,20 @@ public:
       @param motors motors outputs. MUST have enough space for motor values!
       @param motornumber length of the provided motor array
   */
-  virtual void step(const sensor* sensors, int sensornumber,
-                    motor* motors, int motornumber)= 0;
+  virtual void step(const sensor* sensors, int sensornumber, motor* motors, int motornumber) = 0;
   /** performs one step without learning.
       @see step
   */
-  virtual void stepNoLearning(const sensor* , int number_sensors,
-                              motor* , int number_motors)= 0;
+  virtual void stepNoLearning(const sensor*, int number_sensors, motor*, int number_motors) = 0;
 
   /** called in motor babbling phase.
       the motor values are given (by babbling controller) and
       this controller can learn the basic relations from observed sensors/motors
    */
-  virtual void motorBabblingStep(const sensor* /*unused*/, int number_sensors,
-                                 const motor* /*unused*/, int number_motors) {};
+  virtual void motorBabblingStep(const sensor* /*unused*/,
+                                 int number_sensors,
+                                 const motor* /*unused*/,
+                                 int number_motors) {};
 
   /** the controller is notified about the information on sensor.
       This is called after init and before step

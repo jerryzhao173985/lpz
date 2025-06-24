@@ -24,10 +24,9 @@
 #ifndef __ONECONTROLLERPERCHANNEL_H
 #define __ONECONTROLLERPERCHANNEL_H
 
+#include <functional>
 #include <selforg/abstractcontroller.h>
 #include <vector>
-#include <functional>
-
 
 /** generator for controller
 
@@ -55,10 +54,9 @@
 struct ControllerGenerator {
   using argument_type = int;
   using result_type = AbstractController*;
-  virtual ~ControllerGenerator(){}
-  virtual AbstractController* operator()( int index) = 0;
+  virtual ~ControllerGenerator() {}
+  virtual AbstractController* operator()(int index) = 0;
 };
-
 
 /**
  * class for using multiple controller, one for each joint. Each controller
@@ -67,32 +65,35 @@ struct ControllerGenerator {
  */
 class OneControllerPerChannel : public AbstractController {
 public:
-
   /** @param controllerGenerator generator object for controller
       @param controllerName name
-      @param numCtrlCreateBeforeInit number of controller that are generated before the init function is called. Useful if they should be put into the inspectable list of the agent
+      @param numCtrlCreateBeforeInit number of controller that are generated before the init
+     function is called. Useful if they should be put into the inspectable list of the agent
       @param numContextSensors number of context sensors (counted from the end)
        passed to all controllers
    */
   OneControllerPerChannel(ControllerGenerator* controllerGenerator,
                           std::string controllerName,
                           int numCtrlCreateBeforeInit = 1,
-                          int numContextSensors = 0
-                          );
+                          int numContextSensors = 0);
 
   virtual ~OneControllerPerChannel();
 
-
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
 
-  virtual void step(const sensor* sensors, int sensornumber,
-                    motor* motors, int motornumber);
+  virtual void step(const sensor* sensors, int sensornumber, motor* motors, int motornumber);
 
-  virtual void stepNoLearning(const sensor* sensors , int sensornumber,
-                                    motor* motors, int motornumber);
+  virtual void stepNoLearning(const sensor* sensors,
+                              int sensornumber,
+                              motor* motors,
+                              int motornumber);
 
-  virtual int getSensorNumber() const {return sensornumber; }
-  virtual int getMotorNumber() const  {return motornumber; }
+  virtual int getSensorNumber() const {
+    return sensornumber;
+  }
+  virtual int getMotorNumber() const {
+    return motornumber;
+  }
 
   /*********** STORABLE **************/
 
@@ -100,8 +101,9 @@ public:
 
   virtual bool restore(FILE* f);
 
-
-  virtual std::vector<AbstractController*> getControllers() const { return ctrl;}
+  virtual std::vector<AbstractController*> getControllers() const {
+    return ctrl;
+  }
 
 protected:
   std::vector<AbstractController*> ctrl;

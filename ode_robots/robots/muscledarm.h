@@ -222,7 +222,6 @@ namespace lpzrobots{
 
 
 
-    dSpaceID parentspace;
 
     int printed;
 

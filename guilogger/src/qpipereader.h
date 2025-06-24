@@ -37,7 +37,7 @@ private:
     FILE* f;
 
 public:
-    QPipeReader(int delay = 0, FILE* f=stdin);
+    explicit QPipeReader(int delay = 0, FILE* f=stdin);
     virtual void run();
     void setDelay(int delay) {this->delay = delay;}
     int  getDelay()  {return delay;}

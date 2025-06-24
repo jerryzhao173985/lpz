@@ -22,38 +22,47 @@
  *                                                                         *
  ***************************************************************************/
 #include <stdlib.h>
-#include <time.h>
 #include <sys/stat.h>
+#include <time.h>
 
-#include "trackrobots.h"
 #include "abstractrobot.h"
 #include "matrix.h"
+#include "trackrobots.h"
 
-bool TrackRobot::open(const Trackable* robot){
+bool
+TrackRobot::open(const Trackable* robot) {
 
-  if(!robot)
+  if (!robot)
     return false;
 
-  if(isTrackingSomething() && conf.writeFile)
-  {
+  if (isTrackingSomething() && conf.writeFile) {
 
-    if(file){
+    if (file) {
       fclose(file);
     }
 
     char filename[1024];
-    if(conf.autoFilename){
+    if (conf.autoFilename) {
       char date[128];
       time_t t = time(0);
       strftime(date, 128, "%F_%H-%M-%S", localtime(&t));
-      if(conf.id>=0)
-        snprintf(filename, sizeof(filename), "%s_track_%s_%i_%s.log",
-                robot->getTrackableName().c_str(), conf.scene.c_str(), conf.id, date);
+      if (conf.id >= 0)
+        snprintf(filename,
+                 sizeof(filename),
+                 "%s_track_%s_%i_%s.log",
+                 robot->getTrackableName().c_str(),
+                 conf.scene.c_str(),
+                 conf.id,
+                 date);
       else
-        snprintf(filename, sizeof(filename), "%s_track_%s_%s.log",
-                robot->getTrackableName().c_str(), conf.scene.c_str(), date);
-    }else{
-      if(conf.id>=0)
+        snprintf(filename,
+                 sizeof(filename),
+                 "%s_track_%s_%s.log",
+                 robot->getTrackableName().c_str(),
+                 conf.scene.c_str(),
+                 date);
+    } else {
+      if (conf.id >= 0)
         snprintf(filename, sizeof(filename), "%s_%i.log", conf.scene.c_str(), conf.id);
       else
         snprintf(filename, sizeof(filename), "%s.log", conf.scene.c_str());
@@ -61,42 +70,45 @@ bool TrackRobot::open(const Trackable* robot){
 
     file = fopen(filename, "w");
 
-    if(!file)
+    if (!file)
       return false;
 
     fprintf(file, "#C t");
-    if(conf.trackPos)   fprintf(file, " x y z");
-    if(conf.trackSpeed) fprintf(file, " vx vy vz wx wy wz");
-    if(conf.trackOrientation)  fprintf(file, " o11 o12 o13 o21 o22 o23 o31 o32 o33");
-    fprintf(file,"\n");
-    fprintf(file,"# Recorded every %ith time step\n", conf.interval);
+    if (conf.trackPos)
+      fprintf(file, " x y z");
+    if (conf.trackSpeed)
+      fprintf(file, " vx vy vz wx wy wz");
+    if (conf.trackOrientation)
+      fprintf(file, " o11 o12 o13 o21 o22 o23 o31 o32 o33");
+    fprintf(file, "\n");
+    fprintf(file, "# Recorded every %ith time step\n", conf.interval);
   }
   return true;
 }
 
-void TrackRobot::track(const Trackable* robot, double time)
-{
-  if(!file || !robot)
+void
+TrackRobot::track(const Trackable* robot, double time) {
+  if (!file || !robot)
     return;
 
-  if(cnt % conf.interval==0){
+  if (cnt % conf.interval == 0) {
     //   fprintf(file, "%li ", cnt);
     fprintf(file, "%f", time);
-    if(conf.trackPos){
+    if (conf.trackPos) {
       Position p = robot->getPosition();
       fprintf(file, " %g %g %g", p.x, p.y, p.z);
     }
-    if(conf.trackSpeed){
+    if (conf.trackSpeed) {
       Position s = robot->getSpeed();
       fprintf(file, " %g %g %g", s.x, s.y, s.z);
       s = robot->getAngularSpeed();
       fprintf(file, " %g %g %g", s.x, s.y, s.z);
     }
-    if( conf.trackOrientation){
+    if (conf.trackOrientation) {
       const matrix::Matrix& o = robot->getOrientation();
-      for(int i=0; i<3; i++){
-        for(int j=0; j<3; j++){
-          fprintf(file, " %g", o.val(i,j));
+      for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+          fprintf(file, " %g", o.val(i, j));
         }
       }
     }
@@ -105,9 +117,9 @@ void TrackRobot::track(const Trackable* robot, double time)
   cnt++;
 }
 
-void TrackRobot::close()
-{
-  if(file)
+void
+TrackRobot::close() {
+  if (file)
     fclose(file);
   file = 0;
 }
@@ -119,6 +131,3 @@ void TrackRobot::close()
 //   lhs.conf.id       = rhs.conf.id+100;
 //   lhs.file          = 0;
 // }
-
-
-

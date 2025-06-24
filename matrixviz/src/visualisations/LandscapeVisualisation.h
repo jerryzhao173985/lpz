@@ -41,19 +41,19 @@ class LandscapeVisualisation : public AbstractVisualisation {
 public:
   LandscapeVisualisation(MatrixPlotChannel *channel, ColorPalette *colorPalette, QWidget *parent = 0);
 //  LandscapeVisualisation(VectorPlotChannel *channel, ColorPalette *colorPalette, QWidget *parent = 0);
-   ~LandscapeVisualisation();
+   ~LandscapeVisualisation() override;
 
 protected:
 
-   void initializeGL();
-   void resizeGL(int w, int h);
-   void paintGL();
+   void initializeGL() override;
+   void resizeGL(int w, int h) override;
+   void paintGL() override;
    void divideAndDrawTriangle(VERTEX& v1, VERTEX& v2, VERTEX& v3, VERTEX& n);
    void drawTriangle(VERTEX& v1, VERTEX& v2, VERTEX& v3, VERTEX& n);
-   VERTEX getVertexBetween(VERTEX& v1, VERTEX& v2, double pos);
-   void mouseMoveEvent ( QMouseEvent *event ); // TODO mousePressed...
-   void wheelEvent(QWheelEvent * event);
-   void mousePressEvent ( QMouseEvent *event );
+   VERTEX getVertexBetween(const VERTEX& v1, const VERTEX& v2, double pos);
+   void mouseMoveEvent ( QMouseEvent *event ) override; // TODO mousePressed...
+   void wheelEvent(QWheelEvent * event) override;
+   void mousePressEvent ( QMouseEvent *event ) override;
 
 private:
    GLuint object;
@@ -63,7 +63,7 @@ private:
    GLfloat zoom;
    int mouseX, mouseY;
    const static bool debug = false;
-   VERTEX getNormal(VERTEX& v1, VERTEX& v2, VERTEX& v3);
+   VERTEX getNormal(const VERTEX& v1, const VERTEX& v2, const VERTEX& v3);
 
    double clip(double val);
 

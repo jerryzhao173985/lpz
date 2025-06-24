@@ -34,13 +34,12 @@
  */
 class ControllerNet : public Configurable {
 public:
-
   /**
      @param layers Layer description (the input layer is not specified (always linear))
      @param useBypass if true, then a connection from input to output layer is included
   */
-  explicit ControllerNet(const std::vector<Layer>& layers, bool useBypass=false);
-  virtual ~ControllerNet(){ }
+  explicit ControllerNet(const std::vector<Layer>& layers, bool useBypass = false);
+  virtual ~ControllerNet() {}
 
   /** initialisation of the network with the given number of input and output units.
       The dimensionality of the ouputlayer is automatically adjusted.
@@ -48,23 +47,26 @@ public:
        after initialisation (if unit_map=1 the weights are unit matrices).
       @param randGen pointer to random generator, if 0 an new one is used
    */
-  virtual void init(unsigned int inputDim, unsigned  int outputDim,
-                    double unit_map = 0.0, double rand = 0.2, RandGen* randGen = 0);
+  virtual void init(unsigned int inputDim,
+                    unsigned int outputDim,
+                    double unit_map = 0.0,
+                    double rand = 0.2,
+                    RandGen* randGen = 0);
 
   /** passive processing of the input.
-      This has to be done before calling reponse, and the back/forward propagation/projection functions.
-      The activations and the response matrix are stored internally.
+      This has to be done before calling reponse, and the back/forward propagation/projection
+     functions. The activations and the response matrix are stored internally.
    */
-  virtual const matrix::Matrix process (const matrix::Matrix& input);
+  virtual const matrix::Matrix process(const matrix::Matrix& input);
 
   /** like process just with the opportunity to overwrite the activation of
       a specific layer
       @param injections the input that is clamped at layer injectInLayer
       @param injectInLayer the injection is clamped at this layer
    */
-  virtual const matrix::Matrix processX (const matrix::Matrix& input,
-                                         const matrix::Matrix& injection,
-                                         unsigned int injectInLayer);
+  virtual const matrix::Matrix processX(const matrix::Matrix& input,
+                                        const matrix::Matrix& injection,
+                                        unsigned int injectInLayer);
 
   /// damps the weights and the biases by multiplying (1-damping)
   virtual void damp(double damping);
@@ -83,7 +85,6 @@ public:
       @param to index of layer to stop: -1: last layer, 0 first hidden layer ...
    */
   virtual matrix::Matrix responsePart(int from, int to) const;
-
 
   /** linear response matrix of neural network
   \f[  R = W_n W_{n-1} ... W_1 \f]
@@ -115,7 +116,6 @@ public:
                                                 matrix::Matrices* zetas = 0,
                                                 int startWithLayer = -1) const;
 
-
   /** backprojection of vector error through network.
       The storage for the intermediate values (errors, zetas) do not need to be given.
       The errors(layerwise) are at the output of the neurons
@@ -128,7 +128,6 @@ public:
                                               matrix::Matrices* errors = 0,
                                               matrix::Matrices* zetas = 0) const;
 
-
   /** forwardpropagation of vector error through network.
       The storage for the intermediate values (errors, zetas) do not need to be given.
       The errors(layerwise) are at the output of the neurons
@@ -138,8 +137,8 @@ public:
       @return errors[layernum] (result of forwardpropagation)
    */
   virtual const matrix::Matrix forwardpropagation(const matrix::Matrix& error,
-                                               matrix::Matrices* errors = 0,
-                                               matrix::Matrices* zetas = 0) const;
+                                                  matrix::Matrices* errors = 0,
+                                                  matrix::Matrices* zetas = 0) const;
 
   /** forwardprojection of vector error through network.
       The storage for the intermediate values (errors, zetas) do not need to be given.
@@ -150,8 +149,8 @@ public:
       @return errors[layernum] (result of forwardprojection)
    */
   virtual const matrix::Matrix forwardprojection(const matrix::Matrix& error,
-                                               matrix::Matrices* errors = 0,
-                                               matrix::Matrices* zetas = 0) const;
+                                                 matrix::Matrices* errors = 0,
+                                                 matrix::Matrices* zetas = 0) const;
 
   /// returns the number of input neurons
   virtual unsigned int getInputDim() const {
@@ -166,8 +165,9 @@ public:
       Negative values count from the end (-1 is the last layer)
    */
   virtual const matrix::Matrix& getLayerOutput(int layer) const {
-    if(layer<0) layer = layers.size() + layer;
-    assert(layer>=0 && layer < (int)layers.size());
+    if (layer < 0)
+      layer = layers.size() + layer;
+    assert(layer >= 0 && layer < (int)layers.size());
     return y[layer];
   }
 
@@ -192,8 +192,9 @@ public:
       Negative values count from the end (-1 is the last layer)
   */
   virtual const matrix::Matrix& getWeights(int to_layer) const {
-    if(to_layer<0) to_layer  = weights.size() - to_layer;
-    assert(to_layer>=0 && to_layer < (int)weights.size());
+    if (to_layer < 0)
+      to_layer = weights.size() - to_layer;
+    assert(to_layer >= 0 && to_layer < (int)weights.size());
     return weights[to_layer];
   }
 
@@ -201,12 +202,13 @@ public:
       Negative values count from the end (-1 is the last layer)
   */
   virtual matrix::Matrix& getWeights(int to_layer) {
-    if(to_layer<0) to_layer  = weights.size() - to_layer;
-    assert(to_layer>=0 && to_layer < (int)weights.size());
+    if (to_layer < 0)
+      to_layer = weights.size() - to_layer;
+    assert(to_layer >= 0 && to_layer < (int)weights.size());
     return weights[to_layer];
   }
 
-  virtual const matrix::Matrix& getByPass() const  {
+  virtual const matrix::Matrix& getByPass() const {
     assert(useBypass);
     return bypassWeights;
   }
@@ -220,8 +222,9 @@ public:
       Negative values count from the end (-1 is the last layer)
   */
   virtual const matrix::Matrix& getBias(int of_layer) const {
-    if(of_layer<0) of_layer  = bias.size() - of_layer;
-    assert(of_layer>=0 && of_layer < (int)bias.size());
+    if (of_layer < 0)
+      of_layer = bias.size() - of_layer;
+    assert(of_layer >= 0 && of_layer < (int)bias.size());
     return bias[of_layer];
   }
 
@@ -229,8 +232,9 @@ public:
       Negative values count from the end (-1 is the last layer)
   */
   virtual matrix::Matrix& getBias(int of_layer) {
-    if(of_layer<0) of_layer  = bias.size() - of_layer;
-    assert(of_layer>=0 && of_layer < (int)bias.size());
+    if (of_layer < 0)
+      of_layer = bias.size() - of_layer;
+    assert(of_layer >= 0 && of_layer < (int)bias.size());
     return bias[of_layer];
   }
 
@@ -247,7 +251,6 @@ protected:
   // actually calculate the jacobian and stores it in L, see response()
   virtual void calcResponseIntern();
 
-
 protected:
   std::vector<Layer> layers;
   std::vector<matrix::Matrix> weights;
@@ -258,14 +261,14 @@ protected:
   /*** storage variables ****/
   ///
   matrix::Matrix input;
-  matrix::Matrices y; // activations
-  matrix::Matrices z; // potentials
+  matrix::Matrices y;  // activations
+  matrix::Matrices z;  // potentials
   matrix::Matrices gp; // g'
 
   matrix::Matrix L; // jacobian (or response) matrix
   matrix::Matrix R; // linearized jacobian matrix
 
-  double lambda;   // regularisation value for pseudoinverse
+  double lambda; // regularisation value for pseudoinverse
   bool initialised;
 };
 

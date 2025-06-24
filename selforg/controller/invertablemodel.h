@@ -24,21 +24,23 @@
 #ifndef __INVERTABLENN_H
 #define __INVERTABLENN_H
 
-#include "matrix.h"
 #include "abstractmodel.h"
+#include "matrix.h"
 
-/** abstract class (interface) for invertable models. 
+/** abstract class (interface) for invertable models.
     Invertable models provide a linear response function (jacobian)
 */
 class InvertableModel : public AbstractModel {
- public: 
-  // 20110317, guettler: disabled default constructor since it is not needed and would cause difficulties
-  //InvertableModel() {};
+public:
+  // 20110317, guettler: disabled default constructor since it is not needed and would cause
+  // difficulties
+  // InvertableModel() {};
   InvertableModel(const std::string& name, const std::string& revision)
     : AbstractModel(name, revision) {}
-  virtual ~InvertableModel() override{};
+  virtual ~InvertableModel() override {};
 
-  /** calculates the partial derivative of the of the output with repect to the input (Jacobi matrix).
+  /** calculates the partial derivative of the of the output with repect to the input (Jacobi
+     matrix).
 
       \f[J_{ij} = \frac{\partial output_i}{\partial input_j}\f]
 
@@ -52,10 +54,8 @@ class InvertableModel : public AbstractModel {
 
       The result is a vector of dimension inputdim
    */
-  virtual const matrix::Matrix inversion(const matrix::Matrix& input, const matrix::Matrix& xsi) const = 0;
-
-
+  virtual const matrix::Matrix inversion(const matrix::Matrix& input,
+                                         const matrix::Matrix& xsi) const = 0;
 };
-
 
 #endif

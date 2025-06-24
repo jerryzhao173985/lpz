@@ -35,55 +35,66 @@ The output of the network is  \f$exp(- |x-w_i|^2/rdfsize)\f$ for each neuron.
 */
 class SOM : public AbstractModel {
 public:
-  using Neighbours = std::list< std::pair<int,double> >;
-  using Neighbourhood = std::vector<std::pair<matrix::Matrix,double> >;
+  using Neighbours = std::list<std::pair<int, double>>;
+  using Neighbourhood = std::vector<std::pair<matrix::Matrix, double>>;
 
-  explicit SOM(const std::string& name="SOM",
-      const std::string& revision = "$Id$");
+  explicit SOM(const std::string& name = "SOM", const std::string& revision = "$Id$");
 
   /** create a som
       @param dimensions number of dimensions of the neuron lattice
    */
-  SOM(unsigned int dimensions, double sigma, double eps, double rbfsize,
-      const std::string& name="SOM",
+  SOM(unsigned int dimensions,
+      double sigma,
+      double eps,
+      double rbfsize,
+      const std::string& name = "SOM",
       const std::string& revision = "$Id$");
-  virtual ~SOM() override{};
+  virtual ~SOM() override {};
 
   /** initialised som
       @param inputDim dimension of input vector
-      @param outputDim number of outputneurons (must be a multiple of "dimensions" given at constructor)
+      @param outputDim number of outputneurons (must be a multiple of "dimensions" given at
+     constructor)
       @param unit_map if zero then weights are randomly choosed, otherwise
              uniformly distributed in the inputspace of size (unit_map x unit_map x ...)
    */
-  virtual void init(unsigned int inputDim, unsigned  int outputDim,
-                    double unit_map = 0.0, RandGen* randGen = nullptr) override;
+  virtual void init(unsigned int inputDim,
+                    unsigned int outputDim,
+                    double unit_map = 0.0,
+                    RandGen* randGen = nullptr) override;
 
-  virtual const matrix::Matrix process (const matrix::Matrix& input) override;
+  virtual const matrix::Matrix process(const matrix::Matrix& input) override;
 
   /*  performs training. Nominal output is ignored.
       A zero-Matrix is returned.
       learnRateFactor can be given to modify eps for this learning step
       (process should be called before)
   */
-  virtual const matrix::Matrix learn (const matrix::Matrix& input,
-                                      const matrix::Matrix& nom_output,
-                                      double learnRateFactor = 1) override;
+  virtual const matrix::Matrix learn(const matrix::Matrix& input,
+                                     const matrix::Matrix& nom_output,
+                                     double learnRateFactor = 1) override;
 
-  virtual void damp(double damping)  override{ return;}
+  virtual void damp(double damping) override {
+    return;
+  }
 
-  virtual unsigned int getInputDim() const override { return weights[0].getM();}
-  virtual unsigned int getOutputDim() const override { return weights.size();}
-
+  virtual unsigned int getInputDim() const override {
+    return weights[0].getM();
+  }
+  virtual unsigned int getOutputDim() const override {
+    return weights.size();
+  }
 
   virtual bool store(FILE* f) const override;
   virtual bool restore(FILE* f) override;
 
   virtual void printWeights(FILE* f) const;
 
-  const Neighbourhood& getNeighbourhood(){return neighbourhood;}
+  const Neighbourhood& getNeighbourhood() {
+    return neighbourhood;
+  }
 
 protected:
-
   /// activation function (rbf)
   static double activationfunction(void* rdfsize, double d);
 
@@ -94,34 +105,28 @@ protected:
   /// converts coordinates to index (size is the size of the space)
   static matrix::Matrix indexToCoord(int index, int size, int dimensions);
 
-
   /// initialised neighbourhood
   void initNeighbourhood(double sigma);
 
   /** returns neighbourhood as a list of indices with weights
-  */
+   */
   Neighbours getNeighbours(int winner);
-
 
 public:
   double eps; ///< learning rate for weight update
 private:
-
   std::vector<matrix::Matrix> weights;
   std::vector<matrix::Matrix> diffvectors; ///< temporary difference vectors
-  matrix::Matrix distances; ///< vector of distances
-  int dimensions; ///< number of dimensions of lattice
-  double sigma; ///< neighbourhood size
-  double rbfsize; ///< size of rbf function
-  int size; ///< size of the lattice in each dimension
-
+  matrix::Matrix distances;                ///< vector of distances
+  int dimensions;                          ///< number of dimensions of lattice
+  double sigma;                            ///< neighbourhood size
+  double rbfsize;                          ///< size of rbf function
+  int size;                                ///< size of the lattice in each dimension
 
   /// list of vectors defining relative neighbourhood coordinates and weights
   Neighbourhood neighbourhood;
 
-
   bool initialised;
 };
-
 
 #endif

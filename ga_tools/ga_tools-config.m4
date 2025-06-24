@@ -41,7 +41,26 @@ type=DEVORUSER([[[[DEVEL]]]],[[[[USER]]]])
 LIBBASE=ga_tools
 
 ## use -pg for profiling
-CBASEFLAGS="-std=c++17 -pthread ARM64FLAGS LINUXORMAC( ,-I/opt/local/include -I/opt/homebrew/include)" 
+COMMENT(`Use environment variable LPZROBOTS_INCLUDE_PATH if set, otherwise use common macOS paths')
+CBASEFLAGS="-std=c++17 -pthread ARM64FLAGS"
+ifdef(`MAC',
+  `EXTRA_INCLUDES=""
+  if [ -n "$LPZROBOTS_INCLUDE_PATH" ]; then
+    EXTRA_INCLUDES="-I$LPZROBOTS_INCLUDE_PATH"
+  else
+    # Check for common macOS package manager paths
+    if [ -d "/opt/homebrew/include" ]; then
+      EXTRA_INCLUDES="$EXTRA_INCLUDES -I/opt/homebrew/include"
+    fi
+    if [ -d "/opt/local/include" ]; then
+      EXTRA_INCLUDES="$EXTRA_INCLUDES -I/opt/local/include"
+    fi
+    if [ -d "/usr/local/include" ]; then
+      EXTRA_INCLUDES="$EXTRA_INCLUDES -I/usr/local/include"
+    fi
+  fi
+  CBASEFLAGS="$CBASEFLAGS $EXTRA_INCLUDES"'
+) 
 CPPFLAGS="$CBASEFLAGS"
 INTERNFLAGS="-g -O"
 LIBS="-lm"
@@ -100,7 +119,7 @@ while test $# -gt 0; do
       ;;
     --cflags)
       if [ -z "$intern" ]; then INTERNFLAGS=; fi
-      echo $CPPFLAGS DEVORUSER(-I"$srcprefix/include",-I"$prefix/include") LINUXORMAC( ,-I/opt/local/include) $INTERNFLAGS
+      echo $CPPFLAGS DEVORUSER(-I"$srcprefix/include",-I"$prefix/include") $INTERNFLAGS
       ;;
     --libs)
       echo DEVORUSER(-L"$srcprefix/",-L"$prefix/lib") $STATICSTART -l$LIBBASE $STATICEND $LIBS `ode-dbl-config --libs`

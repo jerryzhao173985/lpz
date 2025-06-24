@@ -24,45 +24,41 @@
 #ifndef __MEDIATORCOLLEGUE_H_
 #define __MEDIATORCOLLEGUE_H_
 
-//#include "mediator.h"
+// #include "mediator.h"
 
 class Mediator;
 class MediatorEvent;
 
-class MediatorCollegue
-{
-  public:
-    typedef unsigned long InformMediatorType;
+class MediatorCollegue {
+public:
+  typedef unsigned long InformMediatorType;
 
-    static const InformMediatorType DEFAULT_INFORM_MEDIATOR_TYPE = 0;
+  static const InformMediatorType DEFAULT_INFORM_MEDIATOR_TYPE = 0;
 
-    MediatorCollegue(Mediator* myMediator = 0);
-    virtual ~MediatorCollegue();
+  MediatorCollegue(Mediator* myMediator = 0);
+  virtual ~MediatorCollegue();
 
-    /**
-     * Calls the mediator that this collegue has performed something.
-     * The event and the instance of this class is handed over.
-     */
-    void informMediator(MediatorEvent* event);
+  /**
+   * Calls the mediator that this collegue has performed something.
+   * The event and the instance of this class is handed over.
+   */
+  void informMediator(MediatorEvent* event);
 
-    /**
-     * Is called when the mediator informs this collegue that an event
-     * has to be performed by this collegue instance.
-     */
-    virtual void doOnMediatorCallBack(MediatorEvent* event) = 0;
+  /**
+   * Is called when the mediator informs this collegue that an event
+   * has to be performed by this collegue instance.
+   */
+  virtual void doOnMediatorCallBack(MediatorEvent* event) = 0;
 
-  protected:
+protected:
+  /**
+   * Sets the own mediator. Useful if mediator is unknown in initialization.
+   * @param myMediator
+   */
+  void setMediator(Mediator* myMediator);
 
-    /**
-     * Sets the own mediator. Useful if mediator is unknown in initialization.
-     * @param myMediator
-     */
-    void setMediator(Mediator* myMediator);
-
-
-  private:
-
-    Mediator* myMediator;
+private:
+  Mediator* myMediator;
 };
 
 #endif /* _MEDIATORCOLLEGUE_H_ */

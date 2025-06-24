@@ -23,21 +23,23 @@
 
 #include "abstractcontroller.h"
 
-#include <selforg/matrix.h>
 #include "controller_misc.h"
 #include <selforg/configurable.h>
+#include <selforg/matrix.h>
 
-typedef struct AbstractIAFControllerConf {
+struct AbstractIAFControllerConf {
   AbstractIAFControllerConf() {
-    thresholdI=static_cast<Configurable::paramval*>(malloc(sizeof(Configurable::paramval)));
-    thresholdO=static_cast<Configurable::paramval*>(malloc(sizeof(Configurable::paramval)));
-    leakI=static_cast<Configurable::paramval*>(malloc(sizeof(Configurable::paramval)));
-    leakO=static_cast<Configurable::paramval*>(malloc(sizeof(Configurable::paramval)));
-    restingPotential=static_cast<Configurable::paramval*>(malloc(sizeof(Configurable::paramval)));
-    wIInitScale=static_cast<Configurable::paramval*>(malloc(sizeof(Configurable::paramval)));
-    wOInitScale=static_cast<Configurable::paramval*>(malloc(sizeof(Configurable::paramval)));
-    numberIAFNeuronsPerInput=static_cast<Configurable::paramval*>(malloc(sizeof(Configurable::paramval)));
-    numberIAFNeuronsPerOutput=static_cast<Configurable::paramval*>(malloc(sizeof(Configurable::paramval)));
+    thresholdI = static_cast<Configurable::paramval*>(malloc(sizeof(Configurable::paramval)));
+    thresholdO = static_cast<Configurable::paramval*>(malloc(sizeof(Configurable::paramval)));
+    leakI = static_cast<Configurable::paramval*>(malloc(sizeof(Configurable::paramval)));
+    leakO = static_cast<Configurable::paramval*>(malloc(sizeof(Configurable::paramval)));
+    restingPotential = static_cast<Configurable::paramval*>(malloc(sizeof(Configurable::paramval)));
+    wIInitScale = static_cast<Configurable::paramval*>(malloc(sizeof(Configurable::paramval)));
+    wOInitScale = static_cast<Configurable::paramval*>(malloc(sizeof(Configurable::paramval)));
+    numberIAFNeuronsPerInput =
+      static_cast<Configurable::paramval*>(malloc(sizeof(Configurable::paramval)));
+    numberIAFNeuronsPerOutput =
+      static_cast<Configurable::paramval*>(malloc(sizeof(Configurable::paramval)));
   }
   ~AbstractIAFControllerConf() {
     /*  if(thresholdI) free(thresholdI);
@@ -47,16 +49,15 @@ typedef struct AbstractIAFControllerConf {
   }
   Configurable::paramval* numberIAFNeuronsPerInput;  ///< simulate a population if >1
   Configurable::paramval* numberIAFNeuronsPerOutput; ///< simulate a population if >1
-  Configurable::paramval* wIInitScale;            ///< scaling factor of weights, initialized random
-  Configurable::paramval* wOInitScale;            ///< between [-1*wInitScale,1*wInitScale]
+  Configurable::paramval* wIInitScale; ///< scaling factor of weights, initialized random
+  Configurable::paramval* wOInitScale; ///< between [-1*wInitScale,1*wInitScale]
   Configurable::paramval* thresholdI;
   Configurable::paramval* thresholdO;
   Configurable::paramval* leakI;
   Configurable::paramval* leakO;
   Configurable::paramval* restingPotential;
-  //Configurable::paramval* test;
-} AbstractIAFControllerConf;
-
+  // Configurable::paramval* test;
+};
 
 /**
  * Abstract class (interface) for robot controller that uses an integrate
@@ -71,45 +72,57 @@ class AbstractIAFController : public AbstractController {
 public:
   explicit AbstractIAFController(const AbstractIAFControllerConf& conf = getDefaultConf());
 
-  virtual ~AbstractIAFController() {}
+  virtual ~AbstractIAFController() override {}
 
-
-  static AbstractIAFControllerConf getDefaultConf(){
+  static AbstractIAFControllerConf getDefaultConf() {
     AbstractIAFControllerConf c;
-    *c.numberIAFNeuronsPerInput  = 10;
+    *c.numberIAFNeuronsPerInput = 10;
     *c.numberIAFNeuronsPerOutput = 10;
-    *c.wIInitScale= 0.5;
-    *c.wOInitScale= 0.5;
-    *c.thresholdI=0.5;
-    *c.thresholdO=0.5;
-    *c.leakI=0.01;
-    *c.leakO=0.01;
-    *c.restingPotential=0.0;
+    *c.wIInitScale = 0.5;
+    *c.wOInitScale = 0.5;
+    *c.thresholdI = 0.5;
+    *c.thresholdO = 0.5;
+    *c.leakI = 0.01;
+    *c.leakO = 0.01;
+    *c.restingPotential = 0.0;
 
     return c;
   }
-
 
   /// ABSTRACTCONTROLLER INTERFACE
 
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
 
-  virtual int getSensorNumber() const  override{ return sensorNumber; }
+  virtual int getSensorNumber() const override {
+    return sensorNumber;
+  }
 
-  virtual int getMotorNumber() const  override{ return motorNumber; }
+  virtual int getMotorNumber() const override {
+    return motorNumber;
+  }
 
-virtual void step(const sensor* sensors, int sensornumber, motor* motors, int motornumber) override;
+  virtual void step(const sensor* sensors,
+                    int sensornumber,
+                    motor* motors,
+                    int motornumber) override;
 
-virtual void stepNoLearning(const sensor* sensors, int sensornumber, motor* motors, int motornumber) override;
+  virtual void stepNoLearning(const sensor* sensors,
+                              int sensornumber,
+                              motor* motors,
+                              int motornumber) override;
 
   /// STORABLE INTERFACE
 
-virtual bool store(FILE* f) const override { return true; }
+  virtual bool store(FILE* f) const override {
+    return true;
+  }
 
-virtual bool restore(FILE* f) override { return true; }
+  virtual bool restore(FILE* f) override {
+    return true;
+  }
 
   /// CONFIGURABLE INTERFACE
-virtual void notifyOnChange(const paramkey& key) override;
+  virtual void notifyOnChange(const paramkey& key) override;
 
 protected:
   AbstractIAFControllerConf conf;
@@ -118,19 +131,22 @@ protected:
   int sensorNumber;
   int motorNumber;
   double range;
-  matrix::Matrix xI; // matrix with input for the input layer neurons
-  matrix::Matrix xO; // matrix with input for the output layer neurons
-  matrix::Matrix wI; // matrix with weights of the input layer neurons, incl.leak
-  matrix::Matrix wO; // matrix with weights of the output layer neurons, incl.leak
+  matrix::Matrix xI;   // matrix with input for the input layer neurons
+  matrix::Matrix xO;   // matrix with input for the output layer neurons
+  matrix::Matrix wI;   // matrix with weights of the input layer neurons, incl.leak
+  matrix::Matrix wO;   // matrix with weights of the output layer neurons, incl.leak
   matrix::Matrix sumI; // matrix with current sums of the input layer neurons
   matrix::Matrix sumO; // matrix with current sums of the output layer neurons
-  matrix::Matrix tI; // matrix with threshold value of the input layer neurons
-  matrix::Matrix tO; // matrix with threshold value of the output layer neurons
+  matrix::Matrix tI;   // matrix with threshold value of the input layer neurons
+  matrix::Matrix tO;   // matrix with threshold value of the output layer neurons
 
   /**
    * makes a forward step (without any learning)
    */
-  virtual void forwardStep(const sensor* sensors, int number_sensors, motor* motors, int number_motors);
+  virtual void forwardStep(const sensor* sensors,
+                           int number_sensors,
+                           motor* motors,
+                           int number_motors);
 
   /**
    * inits the internal used matrices
@@ -140,60 +156,53 @@ protected:
    */
   void initMatrices();
 
-
-
-
   /// returns -1 if probability is to low, otherwise 1 for mapP
-  static double toTristateWithProbability(void* r,double x) {
+  static double toTristateWithProbability(void* r, double x) {
     RandGen* g = static_cast<RandGen*>(r);
-    if (!g) return 0.;
+    if (!g)
+      return 0.;
     double rand = g->rand();
     return x < -rand ? -1. : (x < rand ? 0. : 1.);
   }
 
   /// returns -1 if below -threshold, 0 if above -threshold
   /// and threshold, otherwise 1, for map2
-  static double toTristateWithThreshold(double x, double threshold){
+  static double toTristateWithThreshold(double x, double threshold) {
     return x < -threshold ? -1. : (x < threshold ? 0. : 1.);
   }
 
   /// damps the value, if <0, damp value is added
   /// if >0, damp value is subtracted
   /// and threshold, otherwise 1, for map2
-  static double dampToZero(void* r, double x){
+  static double dampToZero(void* r, double x) {
     double damp = *static_cast<double*>(r);
-    return x < -damp ? x+damp : (x > damp ? x-damp : 0.);
+    return x < -damp ? x + damp : (x > damp ? x - damp : 0.);
   }
 
   // returns 0 if fired==1 (-1 or 1), otherwise x
   static double toZeroIfFired(double x, double fired) {
-    return (fired==1 || fired==-1) ? 0 : x ;
+    return (fired == 1 || fired == -1) ? 0 : x;
   }
 
-    // returns value if fired==1 (-1 or 1), otherwise x
-  static double toValueIfFired(void* r,double x, double fired) {
+  // returns value if fired==1 (-1 or 1), otherwise x
+  static double toValueIfFired(void* r, double x, double fired) {
     double value = *static_cast<double*>(r);
-    return (fired==1 || fired==-1) ? value : x ;
+    return (fired == 1 || fired == -1) ? value : x;
   }
-
 
   /// returns 0 if probability is to low, otherwise 1 for mapP
-  static double toDualStateWithProbability(void* r,double x) {
+  static double toDualStateWithProbability(void* r, double x) {
     RandGen* g = static_cast<RandGen*>(r);
-    if (!g) return 0.;
+    if (!g)
+      return 0.;
     double rand = g->rand();
     return x < rand ? 0. : 1.;
   }
 
-    /// returns 0 if below threshold, otherwise 1, for map2
-  static double toDualStateWithThreshold(double x, double threshold){
+  /// returns 0 if below threshold, otherwise 1, for map2
+  static double toDualStateWithThreshold(double x, double threshold) {
     return x < threshold ? 0. : 1.;
   }
-
-
-
-
 };
-
 
 #endif

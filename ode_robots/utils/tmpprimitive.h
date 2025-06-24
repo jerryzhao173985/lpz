@@ -83,6 +83,10 @@ namespace lpzrobots {
                    const std::string& colorname, float alpha = 1.0,
                    OSGPrimitive::Quality quality = OSGPrimitive::Middle);
 
+    // Delete copy constructor and assignment operator
+    TmpDisplayItem(const TmpDisplayItem&) = delete;
+    TmpDisplayItem& operator=(const TmpDisplayItem&) = delete;
+
     virtual void init(const OdeHandle& odeHandle, const OsgHandle& osgHandle);
 
     virtual void deleteObject();

@@ -24,84 +24,95 @@
 #include "lyapunov.h"
 #include "stl_adds.h"
 
-#include <iostream>
 #include <algorithm>
+#include <iostream>
 
 using namespace std;
 using namespace matrix;
 
-
-Lyapunov::Lyapunov(){
+Lyapunov::Lyapunov() {
   t = 0;
   buffersize = 0;
   buffer = 0;
   invbuffer = 0;
 }
 
-Lyapunov::~Lyapunov(){
-  if(buffer) delete[] buffer;
-  if(invbuffer) delete[] invbuffer;
-  FOREACH(Horizons, horizons, h){
+Lyapunov::~Lyapunov() {
+  if (buffer)
+    delete[] buffer;
+  if (invbuffer)
+    delete[] invbuffer;
+  FOREACH(Horizons, horizons, h) {
     delete (h->second);
   }
 }
 
-void Lyapunov::init(const std::list<int>& hs, int dim){
+void
+Lyapunov::init(const std::list<int>& hs, int dim) {
   list<int> myhs = hs;
-  if(myhs.empty()) myhs += 0; // add infinit horizon
+  if (myhs.empty())
+    myhs += 0; // add infinit horizon
   list<int>::const_iterator it = max_element(myhs.begin(), myhs.end());
   buffersize = *it;
-  if(buffersize < 1) buffersize = 1;
+  if (buffersize < 1)
+    buffersize = 1;
   buffer = new Matrix[buffersize];
   invbuffer = new Matrix[buffersize];
-  FOREACHC(list<int>, myhs, h){
-    horizons[*h]= new SlidingMatrix(dim, *h);
+  FOREACHC(list<int>, myhs, h) {
+    horizons[*h] = new SlidingMatrix(dim, *h);
   }
-
 }
 
-void Lyapunov::step(const Matrix& jacobi){
-  buffer[t%buffersize]=jacobi;
-  invbuffer[t%buffersize]=jacobi^(-1);
-  FOREACH(Horizons, horizons, h){
+void
+Lyapunov::step(const Matrix& jacobi) {
+  buffer[t % buffersize] = jacobi;
+  invbuffer[t % buffersize] = jacobi ^ (-1);
+  FOREACH(Horizons, horizons, h) {
     h->second->step(t, buffer, invbuffer, buffersize);
   }
   t++;
 }
 
 Lyapunov::SlidingMatrix::SlidingMatrix(int dim, int horizon)
-      : horizon(horizon), M(dim,dim), Exp(dim,1) {
+  : horizon(horizon)
+  , M(dim, dim)
+  , Exp(dim, 1) {
   M.toId();
 };
 
-void Lyapunov::SlidingMatrix::step(int t, const matrix::Matrix* buffer,
-                                   const matrix::Matrix* invbuffer, int buffersize){
-  if(horizon <= 0) { // infinite horizon, we count the length negatively
+void
+Lyapunov::SlidingMatrix::step(int t,
+                              const matrix::Matrix* buffer,
+                              const matrix::Matrix* invbuffer,
+                              int buffersize) {
+  if (horizon <= 0) { // infinite horizon, we count the length negatively
     horizon--;
-  }else{             // for a finite horizon we have to divide by the old matrix
-    int h = t-horizon;
-    if(h>=0){
-      M=invbuffer[h%buffersize]*M; // from leftside with inverse at beginning of window
+  } else { // for a finite horizon we have to divide by the old matrix
+    int h = t - horizon;
+    if (h >= 0) {
+      M = invbuffer[h % buffersize] * M; // from leftside with inverse at beginning of window
     }
   }
-  M=M*buffer[t%buffersize]; // current matrix
+  M = M * buffer[t % buffersize]; // current matrix
 }
 
-const Matrix& Lyapunov::getLyapunovMatrix(int horizon){
+const Matrix&
+Lyapunov::getLyapunovMatrix(int horizon) {
   Horizons::iterator h = horizons.find(horizon);
-  if(h != horizons.end()){
+  if (h != horizons.end()) {
     return h->second->M;
-  }else{
+  } else {
     cerr << "Lyapunov: cannot find horizon " << horizon << endl;
     return horizons.begin()->second->M;
   }
 }
 
-const Matrix& Lyapunov::getLyapunovExp(int horizon){
+const Matrix&
+Lyapunov::getLyapunovExp(int horizon) {
   Horizons::iterator h = horizons.find(horizon);
-  if(h != horizons.end()){
+  if (h != horizons.end()) {
     return h->second->Exp;
-  }else{
+  } else {
     cerr << "Lyapunov: cannot find horizon " << horizon << endl;
     return horizons.begin()->second->Exp;
   }

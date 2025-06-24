@@ -36,7 +36,7 @@ struct SoMLConf {
   bool useHiddenModel; ///< use a hiddenlayer in the model network?
   /// ratio of motor units and hidden units in the model (2 -> double amount of hidden unit)
   double hiddenModelUnitsRatio;
-  bool useS;         ///< direct connection from x_t to xp_t+1
+  bool useS;           ///< direct connection from x_t to xp_t+1
   bool initUnitMatrix; /// if true then the network is initialized with unit matrices
 
   bool someInternalParams; ///< only export some internal parameters
@@ -51,13 +51,13 @@ class SoML : public AbstractController {
 public:
   explicit SoML(const SoMLConf& conf = getDefaultConf());
 
-  static SoMLConf getDefaultConf(){
+  static SoMLConf getDefaultConf() {
     SoMLConf c;
     c.useHiddenContr = true;
     c.useHiddenModel = true;
-    c.hiddenContrUnitsRatio =  1.0;
+    c.hiddenContrUnitsRatio = 1.0;
     c.hiddenModelUnitsRatio = 1.0;
-    c.someInternalParams=false;
+    c.someInternalParams = false;
     c.useS = false;
     c.initUnitMatrix = true;
     return c;
@@ -68,22 +68,26 @@ public:
   virtual ~SoML();
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
-  virtual int getSensorNumber() const { return number_sensors; }
+  virtual int getSensorNumber() const {
+    return number_sensors;
+  }
   /// returns the mumber of motors the controller was initialised with or 0 if not initialised
-  virtual int getMotorNumber() const  { return number_motors; }
+  virtual int getMotorNumber() const {
+    return number_motors;
+  }
 
   /// performs one step (includes learning).
   /// Calulates motor commands from sensor inputs.
-  virtual void step(const sensor* , int number_sensors, motor* , int number_motors);
+  virtual void step(const sensor*, int number_sensors, motor*, int number_motors);
 
   /// performs one step without learning. Calulates motor commands from sensor inputs.
-  virtual void stepNoLearning(const sensor* , int number_sensors,
-                              motor* , int number_motors);
+  virtual void stepNoLearning(const sensor*, int number_sensors, motor*, int number_motors);
 
   // motor babbling: learn the basic relations from observed sensors/motors
-  virtual void motorBabblingStep(const sensor* , int number_sensors,
-                                 const motor* , int number_motors);
-
+  virtual void motorBabblingStep(const sensor*,
+                                 int number_sensors,
+                                 const motor*,
+                                 int number_motors);
 
   /***** STOREABLE ****/
   /** stores the controller values to a given file. */
@@ -110,36 +114,31 @@ protected:
 protected:
   unsigned short number_sensors;
   unsigned short number_motors;
-  static const unsigned short buffersize = 10;
+  static constexpr unsigned short buffersize = 10;
 
   matrix::Matrix y_buffer[buffersize]; ///< buffer needed for delay
   matrix::Matrix x_buffer[buffersize]; ///< buffer needed for delay
-  ControllerNet* cNet; ///< Controller network
-  unsigned int numControllerLayer; ///< number of controller layer
+  ControllerNet* cNet;                 ///< Controller network
+  unsigned int numControllerLayer;     ///< number of controller layer
 
   SoMLConf conf; ///< configuration object
 
   matrix::Matrix x;        // current sensor value vector
   matrix::Matrix x_smooth; // time average of x values
-  matrix::Matrix eta_avg;    // time average of shift (in motor space)
+  matrix::Matrix eta_avg;  // time average of shift (in motor space)
   int t;
   double E;
 
   paramval creativity;
   paramval epsC;
   paramval epsA;
-  paramval harmony;        ///< harmony
+  paramval harmony; ///< harmony
   paramval dampA;
-  paramval discountS;      ///< discount for S part of the model
-  paramint s4avg;          ///< # of steps the sensors are averaged (1 means no averaging)
-  paramint s4delay;        ///< # of steps the motor values are delayed (1 means no delay)
+  paramval discountS; ///< discount for S part of the model
+  paramint s4avg;     ///< # of steps the sensors are averaged (1 means no averaging)
+  paramint s4delay;   ///< # of steps the motor values are delayed (1 means no delay)
   paramval biasnoise;
-  parambool loga;          ///< # use logarithmic error
-
-
-
+  parambool loga; ///< # use logarithmic error
 };
 
 #endif
-
-

@@ -40,11 +40,11 @@ public:
 
   /** Modern store interface using streams */
   virtual bool store(std::ostream& stream) const = 0;
-  
+
   /** Modern restore interface using streams */
   virtual bool restore(std::istream& stream) = 0;
 
-  /** Store to file using std::filesystem 
+  /** Store to file using std::filesystem
    * @param filepath Path to the file (supports std::string_view)
    * @param binary Whether to open in binary mode (default: true)
    * @return true on success, false on failure
@@ -53,19 +53,19 @@ public:
     namespace fs = std::filesystem;
     try {
       fs::path path(filepath);
-      
+
       // Create parent directory if it doesn't exist
       if (auto parent = path.parent_path(); !parent.empty()) {
         fs::create_directories(parent);
       }
-      
+
       auto mode = std::ios::out | (binary ? std::ios::binary : std::ios::openmode{});
       std::ofstream file(path, mode);
-      
+
       if (!file) {
         return false;
       }
-      
+
       return store(file);
     } catch (const fs::filesystem_error&) {
       return false;
@@ -81,19 +81,19 @@ public:
     namespace fs = std::filesystem;
     try {
       fs::path path(filepath);
-      
+
       // Check if file exists
       if (!fs::exists(path)) {
         return false;
       }
-      
+
       auto mode = std::ios::in | (binary ? std::ios::binary : std::ios::openmode{});
       std::ifstream file(path, mode);
-      
+
       if (!file) {
         return false;
       }
-      
+
       return restore(file);
     } catch (const fs::filesystem_error&) {
       return false;
@@ -142,27 +142,29 @@ public:
 // RAII wrapper for FILE* (for legacy code compatibility)
 class FileWrapper {
 public:
-  explicit FileWrapper(FILE* file) : file_(file) {}
-  
+  explicit FileWrapper(FILE* file)
+    : file_(file) {}
+
   FileWrapper(std::string_view filepath, std::string_view mode) {
     file_ = std::fopen(std::string(filepath).c_str(), std::string(mode).c_str());
   }
-  
+
   ~FileWrapper() {
     if (file_) {
       std::fclose(file_);
     }
   }
-  
+
   // Delete copy operations
   FileWrapper(const FileWrapper&) = delete;
   FileWrapper& operator=(const FileWrapper&) = delete;
-  
+
   // Allow move operations
-  FileWrapper(FileWrapper&& other) noexcept : file_(other.file_) {
+  FileWrapper(FileWrapper&& other) noexcept
+    : file_(other.file_) {
     other.file_ = nullptr;
   }
-  
+
   FileWrapper& operator=(FileWrapper&& other) noexcept {
     if (this != &other) {
       if (file_) {
@@ -173,17 +175,21 @@ public:
     }
     return *this;
   }
-  
-  FILE* get() const { return file_; }
-  
-  explicit operator bool() const { return file_ != nullptr; }
-  
+
+  FILE* get() const {
+    return file_;
+  }
+
+  explicit operator bool() const {
+    return file_ != nullptr;
+  }
+
   FILE* release() {
     FILE* temp = file_;
     file_ = nullptr;
     return temp;
   }
-  
+
 private:
   FILE* file_ = nullptr;
 };

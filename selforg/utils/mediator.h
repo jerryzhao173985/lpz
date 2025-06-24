@@ -24,7 +24,6 @@
 #ifndef __MEDIATOR_H_
 #define __MEDIATOR_H_
 
-
 #include "mediatorcollegue.h"
 #include <vector>
 
@@ -33,48 +32,42 @@
  * the implementation of the mediator should implement a
  * derived version of the MediatorEvent.
  */
-class MediatorEvent
-{
-  public:
+class MediatorEvent {
+public:
 };
 
-class Mediator
-{
-  public:
-    typedef std::vector<MediatorCollegue*> MediatorCollegueListType;
+class Mediator {
+public:
+  typedef std::vector<MediatorCollegue*> MediatorCollegueListType;
 
-    Mediator();
-    virtual ~Mediator();
+  Mediator();
+  virtual ~Mediator();
 
-    virtual void mediatorInformed(MediatorCollegue* source, MediatorEvent* event) = 0;
+  virtual void mediatorInformed(MediatorCollegue* source, MediatorEvent* event) = 0;
 
-    void addMediatorCollegue(MediatorCollegue* collegue);
+  void addMediatorCollegue(MediatorCollegue* collegue);
 
-    void removeMediatorCollegue(MediatorCollegue *collegue);
+  void removeMediatorCollegue(MediatorCollegue* collegue);
 
-    void removeAllMediatorCollegues();
+  void removeAllMediatorCollegues();
 
-    MediatorCollegue* getMediatorCollegue(unsigned int index);
+  MediatorCollegue* getMediatorCollegue(unsigned int index);
 
-    unsigned int getMediatorCollegueIndex(MediatorCollegue* collegue);
+  unsigned int getMediatorCollegueIndex(MediatorCollegue* collegue);
 
-    unsigned int getNumberOfMediatorCollegues();
+  unsigned int getNumberOfMediatorCollegues();
 
-    void mediate(unsigned int indexOfMediatorCollegue, MediatorEvent* event);
+  void mediate(unsigned int indexOfMediatorCollegue, MediatorEvent* event);
 
-    void mediate(MediatorCollegue* collegue, MediatorEvent* event);
+  void mediate(MediatorCollegue* collegue, MediatorEvent* event);
 
-    void mediateToAll(MediatorEvent* event);
+  void mediateToAll(MediatorEvent* event);
 
-    void mediateToAllQMP(MediatorEvent* event);
+  void mediateToAllQMP(MediatorEvent* event);
 
-
-
-  protected:
-
-
-  private:
-    MediatorCollegueListType collegueList;
+protected:
+private:
+  MediatorCollegueListType collegueList;
 };
 
 #endif /* _MEDIATOR_H_ */

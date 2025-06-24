@@ -26,8 +26,8 @@
 
 #include "abstractcontrolleradapter.h"
 #include "backcaller.h"
-#include "statistictools.h"
 #include "complexmeasure.h"
+#include "statistictools.h"
 
 // begin forward declaration
 // end forward declaration
@@ -37,16 +37,16 @@
  * Normally the sensor and/or motor values are measured.
  * @see AbstractControllerAdapter
  */
-class MeasureAdapter : public AbstractControllerAdapter
-{
+class MeasureAdapter : public AbstractControllerAdapter {
 
 public:
-
   /**
    * Constructs the MeasureAdapter.
    *
    */
-  explicit MeasureAdapter(AbstractController* controller, const std::string& name = "MeasureAdapter", const std::string& revision = "$ID$");
+  explicit MeasureAdapter(AbstractController* controller,
+                          const std::string& name = "MeasureAdapter",
+                          const std::string& revision = "$ID$");
 
   virtual ~MeasureAdapter() override;
 
@@ -54,17 +54,20 @@ public:
    * Adds a ComplexMeasure for measuring sensor values. For each
    * sensor a ComplexMeasure is created.
    */
-  virtual std::list<ComplexMeasure*> addSensorComplexMeasure(char* measureName, ComplexMeasureMode mode,int numberBins, int stepSize);
+  virtual std::list<ComplexMeasure*> addSensorComplexMeasure(char* measureName,
+                                                             ComplexMeasureMode mode,
+                                                             int numberBins,
+                                                             int stepSize);
 
   /****************************************************************************/
   /*        BEGIN methods of AbstractController                                 */
   /****************************************************************************/
 
   /** initialisation of the controller with the given sensor/ motornumber
-  * Must NORMALLY be called before use. For all ControllerAdapters
-  * call first AbstractControllerAdapter::init(sensornumber,motornumber)
-  * if you overwrite this method
-  */
+   * Must NORMALLY be called before use. For all ControllerAdapters
+   * call first AbstractControllerAdapter::init(sensornumber,motornumber)
+   * if you overwrite this method
+   */
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
 
   /** performs one step (includes learning).
@@ -74,14 +77,18 @@ public:
   @param motors motors outputs. MUST have enough space for motor values!
   @param motornumber length of the provided motor array
   */
-  virtual void step(const sensor* sensors, int sensornumber,
-                    motor* motors, int motornumber) override;
+  virtual void step(const sensor* sensors,
+                    int sensornumber,
+                    motor* motors,
+                    int motornumber) override;
 
   /** performs one step without learning.
   @see step
   */
-  virtual void stepNoLearning(const sensor* sensors , int sensornumber,
-                              motor* motors, int motornumber) override;
+  virtual void stepNoLearning(const sensor* sensors,
+                              int sensornumber,
+                              motor* motors,
+                              int motornumber) override;
 
   /****************************************************************************/
   /*        END methods of AbstractController                                             */
@@ -105,15 +112,15 @@ public:
   /*        END methods of Inspectable                                                   */
   /****************************************************************************/
 
-
-  virtual StatisticTools* getStatisticTools() { return st; }
+  virtual StatisticTools* getStatisticTools() {
+    return st;
+  }
 
 protected:
   StatisticTools* st;
   bool initialized;
   motor* motorValues;
   sensor* sensorValues;
-
 };
 
 #endif

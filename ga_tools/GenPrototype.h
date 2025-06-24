@@ -63,7 +63,7 @@ public:
 	 * @param randomStrategy (IRandomStrategy*) the strategy for creating a gen
 	 * @param mutationStrategy (IMutationStrategy*) the strategy for mutating a gen
 	 */
-	GenPrototype(std::string name, IRandomStrategy* randomStrategy, IMutationStrategy* mutationStrategy);
+	GenPrototype(const std::string& name, IRandomStrategy* randomStrategy, IMutationStrategy* mutationStrategy);
 
 	/**
 	 * destructor to delete a GenContext.
@@ -76,7 +76,7 @@ public:
 	 *
 	 * @return (string) the name
 	 */
-	inline std::string getName(void)const {return m_name;}
+	inline const std::string& getName(void)const {return m_name;}
 
 	/**
 	 * [inline], [const]

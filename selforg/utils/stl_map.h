@@ -10,9 +10,9 @@
 #include <unordered_set>
 #define HashMap std::unordered_map
 #define HashSet std::unordered_set
-#elif __GNUC__ < 4 
-#include <ext/hash_set>
+#elif __GNUC__ < 4
 #include <ext/hash_map>
+#include <ext/hash_set>
 #define HashMap __gnu_cxx::hash_map
 #define HashSet __gnu_cxx::hash_set
 #else
@@ -21,6 +21,5 @@
 #define HashMap std::tr1::unordered_map
 #define HashSet std::tr1::unordered_set
 #endif
-
 
 #endif

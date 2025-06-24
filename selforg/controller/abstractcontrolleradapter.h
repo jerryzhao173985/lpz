@@ -51,22 +51,22 @@
  */
 class AbstractControllerAdapter : public AbstractController {
 public:
-
-  AbstractControllerAdapter(AbstractController* controller, const std::string& name, const std::string& revision)
-    : AbstractController(name, revision), controller(controller)
-  {
+  AbstractControllerAdapter(AbstractController* controller,
+                            const std::string& name,
+                            const std::string& revision)
+    : AbstractController(name, revision)
+    , controller(controller) {
     //  register the inspectable and configureable controller
     addConfigurable(controller);
     addInspectable(controller);
   }
 
-  virtual ~AbstractControllerAdapter() {}
+  virtual ~AbstractControllerAdapter() override {}
 
   /****************************************************************************/
   /*        AbstractControllerAdapter must implement the following classes:                */
   /*        AbstractController, Configurable, Inspectable, Storeable                    */
   /****************************************************************************/
-
 
   /****************************************************************************/
   /*        BEGIN methods of AbstractController                                         */
@@ -77,17 +77,21 @@ public:
    * call first AbstractControllerAdapter::init(sensornumber,motornumber)
    * if you overwrite this method
    */
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override{
-    controller->init(sensornumber,motornumber);
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override {
+    controller->init(sensornumber, motornumber);
   }
 
   /** @return Number of sensors the controller
       was initialised with or 0 if not initialised */
-  virtual int getSensorNumber() const  override{ return controller->getSensorNumber();}
+  virtual int getSensorNumber() const override {
+    return controller->getSensorNumber();
+  }
 
   /** @return Number of motors the controller
       was initialised with or 0 if not initialised */
-  virtual int getMotorNumber() const  override{  return controller->getMotorNumber();}
+  virtual int getMotorNumber() const override {
+    return controller->getMotorNumber();
+  }
 
   /** performs one step (includes learning).
       Calculates motor commands from sensor inputs.
@@ -96,17 +100,21 @@ public:
       @param motors motors outputs. MUST have enough space for motor values!
       @param motornumber length of the provided motor array
   */
-  virtual void step(const sensor* sensors, int sensornumber,
-                    motor* motors, int motornumber)  override {
-    controller->step(sensors, sensornumber, motors,  motornumber);
+  virtual void step(const sensor* sensors,
+                    int sensornumber,
+                    motor* motors,
+                    int motornumber) override {
+    controller->step(sensors, sensornumber, motors, motornumber);
   }
 
   /** performs one step without learning.
       @see step
   */
-  virtual void stepNoLearning(const sensor* sensors , int sensornumber,
-                              motor* motors, int motornumber)  override {
-    controller->stepNoLearning(sensors,sensornumber,motors,motornumber);
+  virtual void stepNoLearning(const sensor* sensors,
+                              int sensornumber,
+                              motor* motors,
+                              int motornumber) override {
+    controller->stepNoLearning(sensors, sensornumber, motors, motornumber);
   }
 
   /****************************************************************************/
@@ -139,24 +147,21 @@ public:
 
   /********* STORABLE INTERFACE ******/
   /// @see Storable
-virtual bool store(FILE* f) const  override {
+  virtual bool store(FILE* f) const override {
     return controller->store(f);
   }
 
   /// @see Storable
-virtual bool restore(FILE* f)  override {
+  virtual bool restore(FILE* f) override {
     return controller->restore(f);
   }
-
 
   /****************************************************************************/
   /*        END methods of Storable                                                    */
   /****************************************************************************/
 
-
 protected:
   AbstractController* controller; // the controller for the adapter to handle
-
 };
 
 #endif

@@ -1,0 +1,7 @@
+[
+  {
+    "directory": "/Users/jerry/lpzrobot_mac/selforg",
+    "command": "g++ -c -Wall -pipe -fpic -I./. -I./controller -I./wirings -I./utils -I./matrix -I./statistictools -I./statistictools/measure -I./statistictools/dataanalysation -Iinclude -Iinclude/selforg -std=c++17 -pthread -I/opt/local/include -I/opt/homebrew/include -I./include -I/opt/local/include -I/opt/homebrew/include -I/opt/homebrew/Cellar/gsl/2.8/include -DNOCONFIGURATOR -g -O controller/abstractcontroller.cpp",
+    "file": "controller/abstractcontroller.cpp"
+  }
+]

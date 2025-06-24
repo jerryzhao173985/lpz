@@ -24,24 +24,21 @@
 #ifndef __ESN_H
 #define __ESN_H
 
-
-#include <stdio.h>
 #include <cmath>
 #include <selforg/invertablemodel.h>
 #include <selforg/matrix.h>
-
+#include <stdio.h>
 
 struct ESNConf {
-  int numNeurons;            ///< number of neurons in the reservoir
-  double inputStrength;      ///< strength of input to reservoir connections
-  double inputRatio;         ///< ratio of input connections w.r.t full connectivity
-  double connectionRatio;    ///< ratio of internal connections w.r.t full connectivity
-  double spectralRadius;     ///< largest eigenvalue of internal weights
+  int numNeurons;         ///< number of neurons in the reservoir
+  double inputStrength;   ///< strength of input to reservoir connections
+  double inputRatio;      ///< ratio of input connections w.r.t full connectivity
+  double connectionRatio; ///< ratio of internal connections w.r.t full connectivity
+  double spectralRadius;  ///< largest eigenvalue of internal weights
   double learningrate;
   /// switch on to get the internal weights and activations inspectabe
-  bool   inspectInternals;
+  bool inspectInternals;
 };
-
 
 /**
  * class for robot control with sine, sawtooth and impuls
@@ -51,7 +48,6 @@ struct ESNConf {
  */
 class ESN : public InvertableModel {
 public:
-
   /**
      @param controlmask bitmask to select channels to control (default all)
      @param function controller function to use
@@ -64,9 +60,9 @@ public:
     c.inputStrength = 0.1;
     c.inputRatio = 1;
     c.connectionRatio = 0.1;
-    c.spectralRadius  = 0.9;
+    c.spectralRadius = 0.9;
     c.inspectInternals = false;
-    c.learningrate=0.01;
+    c.learningrate = 0.01;
     return c;
   }
 
@@ -78,24 +74,27 @@ public:
              with the given response strength.
       @param randGen pointer to random generator, if 0 an new one is used
    */
-  virtual void init(unsigned int inputDim, unsigned  int outputDim,
-                    double unit_map = 0.0, RandGen* randGen = nullptr);
+  virtual void init(unsigned int inputDim,
+                    unsigned int outputDim,
+                    double unit_map = 0.0,
+                    RandGen* randGen = nullptr);
 
   /** passive processing of the input
      (this function is not constant since a recurrent network
      for example might change internal states
   */
-  virtual const matrix::Matrix process (const matrix::Matrix& input);
+  virtual const matrix::Matrix process(const matrix::Matrix& input);
 
   /* performs learning and returns the network output before learning.
      Neural networks process the input before. (no need to call process before)
      \param learnRateFactor can be given to modify eps for this learning step.
   */
-  virtual const matrix::Matrix learn (const matrix::Matrix& input,
-                                      const matrix::Matrix& nom_output,
-                                      double learnRateFactor = 1);
+  virtual const matrix::Matrix learn(const matrix::Matrix& input,
+                                     const matrix::Matrix& nom_output,
+                                     double learnRateFactor = 1);
 
-  /* calculates the partial derivative of the of the output with repect to the input (Jacobi matrix).
+  /* calculates the partial derivative of the of the output with repect to the input (Jacobi
+     matrix).
 
       \f[J_{ij} = \frac{\partial output_i}{\partial input_j}\f]
 
@@ -109,7 +108,8 @@ public:
 
       The input is ignored, the network must  be processed or learned before!
    */
-  virtual const matrix::Matrix inversion(const matrix::Matrix& input, const matrix::Matrix& xsi) const;
+  virtual const matrix::Matrix inversion(const matrix::Matrix& input,
+                                         const matrix::Matrix& xsi) const;
 
   /// damps the weights and the biases by multiplying (1-damping)
   virtual void damp(double damping);
@@ -123,15 +123,12 @@ public:
 
   virtual bool restore(FILE*);
 
-
-  static double tanh_prime(double z)
-  {
-    double k=tanh(z);
-    return 1.0 - k*k;
+  static double tanh_prime(double z) {
+    double k = tanh(z);
+    return 1.0 - k * k;
   };
 
 protected:
-
   ESNConf conf;
 
   int nbInputs;
@@ -149,4 +146,3 @@ protected:
 };
 
 #endif
-

@@ -60,7 +60,7 @@ public:
   /** constructor. PlotOption as output setting.
       noisefactor is used to set the relative noise strength of this agent
    */
-  explicit WiredController(const PlotOption& plotOption = PlotOption(NoPlot), double noisefactor = 1, const iparamkey& name = "WiredController", const paramkey& revision = "$ID");
+  explicit WiredController(const PlotOption& plotOption = PlotOption(PlotMode::NoPlot), double noisefactor = 1, const iparamkey& name = "WiredController", const paramkey& revision = "$ID");
   /** constructor. A list of PlotOption can given.
       noisefactor is used to set the relative noise strength of this agent
    */

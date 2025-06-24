@@ -33,22 +33,23 @@ class AbstractRobot;
 class Agent;
 
 namespace lpzrobots {
-  class OdeAgent;
-  class TraceDrawer;
-}
+class OdeAgent;
+class TraceDrawer;
+} // namespace lpzrobots
 
 struct TrackRobotConf {
-  bool   trackPos;
-  bool   trackSpeed;
-  bool   trackOrientation;
-  bool   displayTrace;
+  bool trackPos;
+  bool trackSpeed;
+  bool trackOrientation;
+  bool displayTrace;
   double displayTraceDur;       ///< duration in second to display the trace
-  double displayTraceThickness; ///< if thickkness is 0 (default) then a line is used otherwise a cylinder
+  double displayTraceThickness; ///< if thickkness is 0 (default) then a line is used otherwise a
+                                ///< cylinder
 
-  bool   writeFile;             ///< whether to write a log file
-  int    interval;              ///< every how many control steps a record is written
-  std::string scene;            ///< used as part of the filename (used as is (+id), if autoFilename=false)
-  bool   autoFilename;          ///< whether to create a unique filename with date, scene and robotname
+  bool writeFile;    ///< whether to write a log file
+  int interval;      ///< every how many control steps a record is written
+  std::string scene; ///< used as part of the filename (used as is (+id), if autoFilename=false)
+  bool autoFilename; ///< whether to create a unique filename with date, scene and robotname
   int id;
 };
 
@@ -59,68 +60,69 @@ struct TrackRobotConf {
 */
 class TrackRobot {
 public:
-
   friend class Agent;
   friend class lpzrobots::OdeAgent;
   friend class lpzrobots::TraceDrawer;
 
   /// constructor for no tracking at all
   explicit TrackRobot(TrackRobotConf conf = getDefaultConf())
-    : conf(conf),
-      enabledDuringVideo(false),
-      file(0),
-      cnt(1)
-  {
-  }
+    : conf(conf)
+    , enabledDuringVideo(false)
+    , file(0)
+    , cnt(1) {}
 
-  static TrackRobotConf getDefaultConf(){
+  static TrackRobotConf getDefaultConf() {
     TrackRobotConf conf;
-    conf.trackPos              = true;
-    conf.trackSpeed            = false;
-    conf.trackOrientation      = false;
-    conf.displayTrace          = false;
-    conf.displayTraceDur       = 60;
+    conf.trackPos = true;
+    conf.trackSpeed = false;
+    conf.trackOrientation = false;
+    conf.displayTrace = false;
+    conf.displayTraceDur = 60;
     conf.displayTraceThickness = 0.0;
-    conf.interval              = 1;
-    conf.writeFile             = true;
+    conf.interval = 1;
+    conf.writeFile = true;
     //    conf.scene           = "";
-    conf.id                    = -1; // disabled
-    conf.autoFilename          = true;
+    conf.id = -1; // disabled
+    conf.autoFilename = true;
     return conf;
   }
 
-
   /** Constructor that allows individial setting of tracking options.
-      The tracked data is written into a file with the current date and time appended by a name given by scene.
+      The tracked data is written into a file with the current date and time appended by a name
+     given by scene.
       @param trackPos if true the trace (position vectors) of the robot are logged
       @param trackSpeed if true the speed vectors (linear and angular) of the robot are logged
       @param trackOrientation if true the orientation matrices  of the robot are logged
-      @param displayTrace if true the trace of the robot should be displayed (used in ODE simulations)
+      @param displayTrace if true the trace of the robot should be displayed (used in ODE
+     simulations)
       @param scene name of the scene (is appended to log file name)
       @param interval timesteps between consequent logging events (default 1)
    */
-  TrackRobot(bool trackPos, bool trackSpeed, bool trackOrientation, bool displayTrace,
-             const char* scene = "", int interval = 1)
-  {
+  TrackRobot(bool trackPos,
+             bool trackSpeed,
+             bool trackOrientation,
+             bool displayTrace,
+             const char* scene = "",
+             int interval = 1) {
     conf = getDefaultConf();
-    conf.trackPos         = trackPos;
-    conf.trackSpeed          = trackSpeed;
+    conf.trackPos = trackPos;
+    conf.trackSpeed = trackSpeed;
     conf.trackOrientation = trackOrientation;
-    conf.displayTrace     = displayTrace;
-    conf.interval          = interval;
-    conf.scene            = scene;
-    conf.id               = -1; // whole robot, not individual parts
+    conf.displayTrace = displayTrace;
+    conf.interval = interval;
+    conf.scene = scene;
+    conf.id = -1; // whole robot, not individual parts
     file = 0;
-    cnt  = 1;
+    cnt = 1;
     enabledDuringVideo = false;
   }
 
-  ~TrackRobot()
-  {
-  }
+  ~TrackRobot() {}
 
   /// returns whether tracing is activated
-  bool isDisplayTrace() const {return conf.displayTrace;};
+  bool isDisplayTrace() const {
+    return conf.displayTrace;
+  };
 
   /// returns whether something is to be tracked
   bool isTrackingSomething() const {
@@ -128,22 +130,21 @@ public:
   };
 
   bool isEnabled() {
-    return file!=0 && isTrackingSomething();
+    return file != 0 && isTrackingSomething();
   }
 
   TrackRobotConf conf;
 
   bool enabledDuringVideo;
- protected:
+
+protected:
   bool open(const Trackable* robot);
   void track(const Trackable* robot, double time);
   void close();
 
- protected:
+protected:
   FILE* file;
   long cnt;
-
-
 };
 
 #endif

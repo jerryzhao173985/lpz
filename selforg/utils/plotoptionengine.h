@@ -35,8 +35,7 @@ class Inspectable;
 /*
  *
  */
-class PlotOptionEngine
-{
+class PlotOptionEngine {
 public:
   explicit PlotOptionEngine(const PlotOption& plotOption);
   explicit PlotOptionEngine(const std::list<PlotOption>& plotOptions);
@@ -46,7 +45,7 @@ public:
   /** initializes PlotOptionEngine and opens all pipes and stuff.
       The optional controller is used to print structure information
    */
-  virtual bool init(AbstractController* maybe_controller =0);
+  virtual bool init(AbstractController* maybe_controller = 0);
 
   /**
    * Reinitialises the PlotOptionEngine.
@@ -88,7 +87,6 @@ public:
    */
   virtual bool removePlotOption(PlotMode mode);
 
-
   /** adds an inspectable object for logging. Must be called before init!
    */
   virtual void addInspectable(const Inspectable* inspectable, bool front = false);
@@ -101,21 +99,19 @@ public:
      write comment to output streams (PlotOptions). For instance changes in parameters.
      If addSpace then "# CMT" is output otherwise "#CMT".
   */
-  virtual void writePlotComment(const char* cmt, bool addSpace=true );
+  virtual void writePlotComment(const char* cmt, bool addSpace = true);
 
   virtual void plot(double time);
 
 protected:
-
   bool initPlotOption(PlotOption& po);
 
   std::list<PlotOption> plotOptions;
-  std::list<const Inspectable* > inspectables;
-  std::list< const Configurable* > configureables;
+  std::list<const Inspectable*> inspectables;
+  std::list<const Configurable*> configureables;
   long int t;
 
   bool initialised;
-
 
   // old artefact, should be removed in future releases
   AbstractController* maybe_controller;

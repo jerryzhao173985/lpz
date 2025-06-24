@@ -30,20 +30,20 @@
 #include "invertablemodel.h"
 #include "layer.h"
 
-
 /// multi layer neural network with configurable activation functions
 class MultiLayerFFNN : public FeedForwardNN {
 public:
-
   /**
      @param eps learning rate
      @param layers Layer description (the input layer is not specified (always linear))
      @param useBypass if true, then a connection from input to output layer is included
      @param someInternalParams if true then only a few parameters are send to plotting
   */
-  MultiLayerFFNN(double eps, const std::vector<Layer>& layers, bool useBypass=false,
-                 bool someInternalParams=true);
-  virtual ~MultiLayerFFNN() override{ }
+  MultiLayerFFNN(double eps,
+                 const std::vector<Layer>& layers,
+                 bool useBypass = false,
+                 bool someInternalParams = true);
+  virtual ~MultiLayerFFNN() override {}
 
   /** initialisation of the network with the given number of input and output units.
       The dimensionality of the ouputlayer is automatically adjusted.
@@ -51,17 +51,19 @@ public:
        after initialisation (if unit_map=1 the weights are unit matrices).
       @param randGen pointer to random generator, if 0 an new one is used
    */
-  virtual void init(unsigned int inputDim, unsigned  int outputDim,
-                    double unit_map = 0.0, RandGen* randGen = nullptr) override;
+  virtual void init(unsigned int inputDim,
+                    unsigned int outputDim,
+                    double unit_map = 0.0,
+                    RandGen* randGen = nullptr) override;
 
   /// passive processing of the input
-  virtual const matrix::Matrix process (const matrix::Matrix& input) override;
+  virtual const matrix::Matrix process(const matrix::Matrix& input) override;
 
   /** performs learning and returns the network output before learning
       (process should be called before) */
-  virtual const matrix::Matrix learn (const matrix::Matrix& input,
-                                      const matrix::Matrix& nom_output,
-                                      double learnRateFactor = 1) override;
+  virtual const matrix::Matrix learn(const matrix::Matrix& input,
+                                     const matrix::Matrix& nom_output,
+                                     double learnRateFactor = 1) override;
 
   /** response matrix of neural network at given input
 
@@ -80,8 +82,8 @@ public:
       The result is a vector of dimension inputdim.
       ATTENTION: input is ignored! use process before!
    */
-  virtual const matrix::Matrix inversion(const matrix::Matrix& input, const matrix::Matrix& xsi) const override;
-
+  virtual const matrix::Matrix inversion(const matrix::Matrix& input,
+                                         const matrix::Matrix& xsi) const override;
 
   /// returns the number of input neurons
   virtual unsigned int getInputDim() const override {
@@ -148,7 +150,6 @@ public:
   /// restores the layer binary from file stream
   bool restore(FILE* f) override;
 
-
   /// writes the layer ASCII into file stream (not in the storable interface)
   bool write(FILE* f) const;
 
@@ -158,29 +159,28 @@ public:
   virtual ilayerlist getStructuralLayers() const override;
   virtual iconnectionlist getStructuralConnections() const override;
 
-
-  virtual void setSomeInternalParams(bool someInternalParams){
-    assert(!initialised); this->someInternalParams = someInternalParams;
+  virtual void setSomeInternalParams(bool someInternalParams) {
+    assert(!initialised);
+    this->someInternalParams = someInternalParams;
   }
 
 public:
   double eps; ///< learning rate
 
   /**
-  * sets the activation function (and derivative and inversion too) for ALL layers!
-  * @param actfun the activation function to be used
-  * @return the activation functions which where used until now
-  */
+   * sets the activation function (and derivative and inversion too) for ALL layers!
+   * @param actfun the activation function to be used
+   * @return the activation functions which where used until now
+   */
   virtual std::vector<ActivationFunction> setActivationFunction(ActivationFunction actfun);
 
-/**
-  * sets the activation functions (and derivative and inversion too) for all layers.
-  * @note: normally you call setActivationFunction() first and get a list of the used
-  * activation functions, which are set back with this function
-  * @param actfunList the list of actfuns to be used
-  */
+  /**
+   * sets the activation functions (and derivative and inversion too) for all layers.
+   * @note: normally you call setActivationFunction() first and get a list of the used
+   * activation functions, which are set back with this function
+   * @param actfunList the list of actfuns to be used
+   */
   virtual void setActivationFunctions(std::vector<ActivationFunction> actfunList);
-
 
 protected:
   std::vector<Layer> layers;
@@ -195,7 +195,7 @@ protected:
   std::vector<matrix::Matrix> ys; // activations
   std::vector<matrix::Matrix> zs; // potentials
 
-  double lambda;   // regularisation value for pseudoinverse
+  double lambda; // regularisation value for pseudoinverse
   bool initialised;
 };
 

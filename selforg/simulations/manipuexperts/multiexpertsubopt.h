@@ -28,7 +28,7 @@
 #include <selforg/noisegenerator.h>
 #include <selforg/invertablemodel.h>
 
-typedef struct MultiExpertSuboptConf {
+struct MultiExpertSuboptConf {
   int numHidden;        ///< number of hidden units in the satelite networks
   double eps0;          ///< learning rate for satelite networks
   double tauE1;         ///< time horizont for short averaging error
@@ -40,7 +40,7 @@ typedef struct MultiExpertSuboptConf {
   int    satMemory;    ///< number of memory cells for past patterns
   int    satTrainPast; ///< number of past patterns that are trained each timestep
   int    version;      ///< type of learning schema, see MultiExpertSubopt::Version
-} MultiExpertSuboptConf;
+};
 
 
 /**
@@ -59,12 +59,12 @@ public:
   typedef enum Version {A, B, C};
 
   /// Satelite network struct
-  typedef struct Sat {
+  struct Sat {
     Sat(InvertableModel* _net, double _eps);
     InvertableModel* net;
     double eps;
     double lifetime;
-  } Sat;
+  };
 public:
   explicit MultiExpertSubopt(const MultiExpertSuboptConf& conf = getDefaultConf());
 

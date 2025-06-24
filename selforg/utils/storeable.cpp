@@ -24,17 +24,21 @@
 
 #include "storeable.h"
 
-bool Storeable::storeToFile(const char* filename) const {
-  FILE* f = fopen(filename,"wb");
-  if(!f) return false;
-  bool rv =store(f);
+bool
+Storeable::storeToFile(const char* filename) const {
+  FILE* f = fopen(filename, "wb");
+  if (!f)
+    return false;
+  bool rv = store(f);
   fclose(f);
   return rv;
 }
 
-bool Storeable::restoreFromFile(const char* filename) {
-  FILE* f = fopen(filename,"rb");
-  if(!f) return false;
+bool
+Storeable::restoreFromFile(const char* filename) {
+  FILE* f = fopen(filename, "rb");
+  if (!f)
+    return false;
   bool rv = restore(f);
   fclose(f);
   return rv;

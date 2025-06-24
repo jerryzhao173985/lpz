@@ -24,23 +24,22 @@
 #ifndef __UNIVERSALCONTROLLER_H
 #define __UNIVERSALCONTROLLER_H
 
-
-#include <stdio.h>
-#include <vector>
 #include "abstractcontroller.h"
 #include "elman.h"
 #include "matrix.h"
+#include <stdio.h>
+#include <vector>
 
-typedef struct _UniversalControllerConf {
-  unsigned int buffersize;  ///< buffersize size of the time-buffer for x,y,v
-  double init;    ///<  init size of the matrices of the network.
-  double squashsize; ///< update squashing
-  bool someInternalParams;  ///< someInternalParams if true only some internal parameters are exported, all otherwise
+struct UniversalControllerConf {
+  unsigned int buffersize; ///< buffersize size of the time-buffer for x,y,v
+  double init;             ///<  init size of the matrices of the network.
+  double squashsize;       ///< update squashing
+  bool someInternalParams; ///< someInternalParams if true only some internal parameters are
+                           ///< exported, all otherwise
 
-  Elman* net; ///< entire contoller network (should have at least 2 layers)
+  Elman* net;     ///< entire contoller network (should have at least 2 layers)
   int motorlayer; ///< index of motor layer in the network (if -1 then one but last layer)
-} UniversalControllerConf;
-
+};
 
 /**
  * class for robot control with sine and cosine
@@ -49,63 +48,69 @@ typedef struct _UniversalControllerConf {
  */
 class UniversalController : public AbstractController {
 public:
-
   explicit UniversalController(const UniversalControllerConf& conf = getDefaultConf());
-  virtual ~UniversalController();
+  virtual ~UniversalController() override;
 
-  static UniversalControllerConf getDefaultConf(){
+  static UniversalControllerConf getDefaultConf() {
     UniversalControllerConf c;
     c.buffersize = 50;
-    c.init       = 1;
+    c.init = 1;
     c.squashsize = 0.05;
     c.someInternalParams = true;
-    c.net        = 0;
+    c.net = 0;
     c.motorlayer = -1;
     return c;
   }
 
-  static UniversalControllerConf getDefaultNetConf(){
+  static UniversalControllerConf getDefaultNetConf() {
     UniversalControllerConf c = getDefaultConf();
     std::vector<Layer> layers;
     //   layers.push_back(Layer(20,0.5,FeedForwardNN::tanh)); // hidden layer
-    layers.push_back(Layer(0,1,FeedForwardNN::tanhr)); // motor layer
+    layers.push_back(Layer(0, 1, FeedForwardNN::tanhr)); // motor layer
     // size of output layer is automatically set
-    layers.push_back(Layer(1,0,FeedForwardNN::linear));
+    layers.push_back(Layer(1, 0, FeedForwardNN::linear));
 
-    Elman* e = new Elman(1,layers,false, false, false);
+    Elman* e = new Elman(1, layers, false, false, false);
     c.net = e;
     return c;
   }
 
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
 
-  virtual int getSensorNumber() const  override{return number_sensors;}
+  virtual int getSensorNumber() const override {
+    return number_sensors;
+  }
 
-  virtual int getMotorNumber() const  override{return number_motors;}
+  virtual int getMotorNumber() const override {
+    return number_motors;
+  }
 
-  virtual void step(const sensor* sensors, int sensornumber,
-                    motor* motors, int motornumber) override;
+  virtual void step(const sensor* sensors,
+                    int sensornumber,
+                    motor* motors,
+                    int motornumber) override;
 
-  virtual void stepNoLearning(const sensor* , int number_sensors,
-                              motor* , int number_motors) override;
+  virtual void stepNoLearning(const sensor*,
+                              int number_sensors,
+                              motor*,
+                              int number_motors) override;
 
 protected:
   /** puts the sensors in the ringbuffer,
       generate controller values (by activating the network) and put them in the
       ringbuffer as well */
-  void fillBuffersAndControl(const sensor* x_, int number_sensors,
-                                     motor* y_, int number_motors);
+  void fillBuffersAndControl(const sensor* x_, int number_sensors, motor* y_, int number_motors);
 
   /// calculate time-smoothed values
   matrix::Matrix calculateSmoothValues(const matrix::Matrix* buffer,
-                                               int number_steps_for_averaging_);
+                                       int number_steps_for_averaging_);
 
   /// calculate controller outputs (and activates inputs)
   matrix::Matrix calculateControllerValues(const matrix::Matrix& x);
 
   // put new value in ring buffer
-  void putInBuffer(matrix::Matrix* buffer, const matrix::Matrix& vec, int delay=0){
-    buffer[(t-delay)%conf.buffersize] = vec;
+  void putInBuffer(matrix::Matrix* buffer, const matrix::Matrix& vec, int delay = 0) {
+    buffer[(t - delay) % conf.buffersize] = vec;
   }
 
   /** calculates the error_factor for
@@ -113,7 +118,6 @@ protected:
       2: logarithmic (E=ln(e^T*e)) or 0 for normal
    */
   static double calcErrorFactor(const matrix::Matrix& e, int Enorm);
-
 
 public:
   /********* INSPECTABLE INTERFACE ******/
@@ -127,7 +131,6 @@ public:
   virtual bool restore(FILE* f) override;
 
 protected:
-
   unsigned int t;
   unsigned int number_sensors;
   unsigned int number_motors;

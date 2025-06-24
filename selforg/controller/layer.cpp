@@ -28,82 +28,89 @@
 using namespace matrix;
 using namespace std;
 
-const char* actFun2String(ActivationFunction actfun) {
-  if(actfun == FeedForwardNN::linear) {
+const char*
+actFun2String(const ActivationFunction actfun) {
+  if (actfun == FeedForwardNN::linear) {
     return "linear";
   } else if (actfun == FeedForwardNN::sigmoid) {
     return "sigmoid";
-  }else if (actfun == FeedForwardNN::tanh) {
+  } else if (actfun == FeedForwardNN::tanh) {
     return "tanh";
-  }else if (actfun == FeedForwardNN::tanhc) {
+  } else if (actfun == FeedForwardNN::tanhc) {
     return "tanhc";
-  }else if (actfun == FeedForwardNN::tanhr) {
+  } else if (actfun == FeedForwardNN::tanhr) {
     return "tanhr";
-  }else {
+  } else {
     fprintf(stderr, "unknown activation function! Expand the cases in layer.cpp:actFun2String");
     return "unknown";
   }
 }
 
-Layer::Layer(int size, double factor_bias,
-             ActivationFunction actfun)
-  : size(size), factor_bias(factor_bias), actfun(actfun) {
+Layer::Layer(int size, double factor_bias, ActivationFunction actfun)
+  : size(size)
+  , factor_bias(factor_bias)
+  , actfun(actfun) {
   setActFun(actfun);
 }
 
-void Layer::setActFun(ActivationFunction actfun){
-  this->actfun=actfun;
-  if(actfun == FeedForwardNN::linear) {
-    dactfun=FeedForwardNN::dlinear;
-    invactfun=FeedForwardNN::invlinear;
+void
+Layer::setActFun(ActivationFunction actfun) {
+  this->actfun = actfun;
+  if (actfun == FeedForwardNN::linear) {
+    dactfun = FeedForwardNN::dlinear;
+    invactfun = FeedForwardNN::invlinear;
   } else if (actfun == FeedForwardNN::sigmoid) {
-    dactfun=FeedForwardNN::dsigmoid;
-    invactfun=FeedForwardNN::invsigmoid;
-  }else if (actfun == FeedForwardNN::tanh) {
-    dactfun=FeedForwardNN::dtanh;
-    invactfun=FeedForwardNN::invtanh;
-  }else if (actfun == FeedForwardNN::tanhc) {
-    dactfun=FeedForwardNN::dtanhc;
-    invactfun=FeedForwardNN::invtanh;
-  }else if (actfun == FeedForwardNN::tanhr) {
-    dactfun=FeedForwardNN::dtanhr;
-    invactfun=FeedForwardNN::invtanh;
-  }else {
+    dactfun = FeedForwardNN::dsigmoid;
+    invactfun = FeedForwardNN::invsigmoid;
+  } else if (actfun == FeedForwardNN::tanh) {
+    dactfun = FeedForwardNN::dtanh;
+    invactfun = FeedForwardNN::invtanh;
+  } else if (actfun == FeedForwardNN::tanhc) {
+    dactfun = FeedForwardNN::dtanhc;
+    invactfun = FeedForwardNN::invtanh;
+  } else if (actfun == FeedForwardNN::tanhr) {
+    dactfun = FeedForwardNN::dtanhr;
+    invactfun = FeedForwardNN::invtanh;
+  } else {
     fprintf(stderr, "unknown activation function! expand cases in Layer::setActFun and restore()!");
     exit(1);
   }
 }
 
-bool Layer::store(FILE* f) const {
-        fprintf(f,"%i %g %s\n", size, factor_bias, actFun2String(actfun));
-        return true;
+bool
+Layer::store(FILE* f) const {
+  fprintf(f, "%i %g %s\n", size, factor_bias, actFun2String(actfun));
+  return true;
 }
 
-bool Layer::restore(FILE* f){
-        char buffer[128];
-        if((fgets(buffer,128, f))==nullptr) return false; // we need to use fgets in order to avoid spurious effects with following matrix (binary)
-        char actfun_name[128];
-        if(sscanf(buffer,"%i %lf %127s", &size, &factor_bias, actfun_name) != 3) return false;
-        if(strcmp(actfun_name, "linear") == 0) {
-          actfun    = FeedForwardNN::linear;
-        } else if (strcmp(actfun_name, "sigmoid") == 0) {
-          actfun  = FeedForwardNN::sigmoid;
-        }else if (strcmp(actfun_name, "tanh") == 0) {
-          actfun  = FeedForwardNN::tanh;
-        }else if (strcmp(actfun_name, "tanhc") == 0) {
-          actfun  = FeedForwardNN::tanhc;
-        }else if (strcmp(actfun_name, "tanhr") == 0) {
-          actfun  = FeedForwardNN::tanhr;
-        }else {
-          fprintf(stderr, "unknown activation function \"%s\"!", actfun_name);
-          return false;
-        }
-        setActFun(actfun);
-        return true;
+bool
+Layer::restore(FILE* f) {
+  char buffer[128];
+  if ((fgets(buffer, 128, f)) == nullptr)
+    return false; // we need to use fgets in order to avoid spurious effects with following matrix
+                  // (binary)
+  char actfun_name[128];
+  if (sscanf(buffer, "%i %lf %127s", &size, &factor_bias, actfun_name) != 3)
+    return false;
+  if (strcmp(actfun_name, "linear") == 0) {
+    actfun = FeedForwardNN::linear;
+  } else if (strcmp(actfun_name, "sigmoid") == 0) {
+    actfun = FeedForwardNN::sigmoid;
+  } else if (strcmp(actfun_name, "tanh") == 0) {
+    actfun = FeedForwardNN::tanh;
+  } else if (strcmp(actfun_name, "tanhc") == 0) {
+    actfun = FeedForwardNN::tanhc;
+  } else if (strcmp(actfun_name, "tanhr") == 0) {
+    actfun = FeedForwardNN::tanhr;
+  } else {
+    fprintf(stderr, "unknown activation function \"%s\"!", actfun_name);
+    return false;
+  }
+  setActFun(actfun);
+  return true;
 }
 
-
-ostream& operator<<(std::ostream& str, const Layer& l){
-  return str << "Layer(" << l.size  << "," << l.factor_bias << "," << actFun2String(l.actfun) << ")";
+ostream&
+operator<<(std::ostream& str, const Layer& l) {
+  return str << "Layer(" << l.size << "," << l.factor_bias << "," << actFun2String(l.actfun) << ")";
 }
-

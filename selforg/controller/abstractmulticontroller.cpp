@@ -25,15 +25,17 @@
 
 using namespace std;
 
-AbstractMultiController::AbstractMultiController(AbstractController* controller, const std::string& name, const std::string& revision) :
-  AbstractControllerAdapter(controller, name, revision) {
+AbstractMultiController::AbstractMultiController(AbstractController* controller,
+                                                 const std::string& name,
+                                                 const std::string& revision)
+  : AbstractControllerAdapter(controller, name, revision) {
   this->controllerNameList.push_back(controller->getName());
 }
 
-AbstractMultiController::~AbstractMultiController() {
-}
+AbstractMultiController::~AbstractMultiController() {}
 
-void AbstractMultiController::addPassiveController(AbstractController* passiveController) {
+void
+AbstractMultiController::addPassiveController(AbstractController* passiveController) {
   if (passiveController != nullptr) {
     controllerList.push_back(passiveController);
     addConfigurable(passiveController);
@@ -42,7 +44,8 @@ void AbstractMultiController::addPassiveController(AbstractController* passiveCo
   } // otherwise return
 }
 
-void AbstractMultiController::init(int sensornumber, int motornumber, RandGen* randGen /* = 0 */) {
+void
+AbstractMultiController::init(int sensornumber, int motornumber, RandGen* randGen /* = 0 */) {
   AbstractControllerAdapter::init(sensornumber, motornumber);
   // init the other controllers
   for (auto* ctrl : controllerList) {

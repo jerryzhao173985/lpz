@@ -15,15 +15,15 @@ class VectorPlotVisualisation: public AbstractVisualisation {
 public:
   VectorPlotVisualisation(MatrixPlotChannel *channel, ColorPalette *colorPalette, QWidget *parent = 0);
 //  VectorPlotVisualisation(VectorPlotChannel *channel, ColorPalette *colorPalette, QWidget *parent = 0);
-  virtual ~VectorPlotVisualisation();
+  virtual ~VectorPlotVisualisation() override;
   //void updateView();
 
 
 protected:
-  void initializeGL();
-  void resizeGL(int w, int h);
-  void paintGL();
-  void mouseMoveEvent ( QMouseEvent *event );
+  void initializeGL() override;
+  void resizeGL(int w, int h) override;
+  void paintGL() override;
+  void mouseMoveEvent ( QMouseEvent *event ) override;
 
 
 private:

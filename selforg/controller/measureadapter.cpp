@@ -24,11 +24,13 @@
 #include "measureadapter.h"
 #include <sstream>
 
-MeasureAdapter::MeasureAdapter(AbstractController* controller, const std::string& name, const std::string& revision ) :
-  AbstractControllerAdapter(controller, name, revision),
-  initialized(false),
-  motorValues(nullptr),
-  sensorValues(nullptr) {
+MeasureAdapter::MeasureAdapter(AbstractController* controller,
+                               const std::string& name,
+                               const std::string& revision)
+  : AbstractControllerAdapter(controller, name, revision)
+  , initialized(false)
+  , motorValues(nullptr)
+  , sensorValues(nullptr) {
   st = new StatisticTools("MeasureAdapter's ST");
   addCallbackable(st);
   addInspectable(st);
@@ -39,8 +41,11 @@ MeasureAdapter::~MeasureAdapter() {
     free(st);
 }
 
-std::list<ComplexMeasure*> MeasureAdapter::addSensorComplexMeasure(char* measureName, ComplexMeasureMode mode,
-    int numberBins, int stepSize) {
+std::list<ComplexMeasure*>
+MeasureAdapter::addSensorComplexMeasure(char* measureName,
+                                        ComplexMeasureMode mode,
+                                        int numberBins,
+                                        int stepSize) {
   std::list<ComplexMeasure*> cmlist;
   if (initialized) {
     for (int i = 0; i < controller->getSensorNumber(); i++) {
@@ -63,8 +68,10 @@ std::list<ComplexMeasure*> MeasureAdapter::addSensorComplexMeasure(char* measure
     }
   } else {
     std::cerr << "ERROR: The method" << std::endl
-        << "       addSensorComplexMeasure(char* measureName, ComplexMeasureMode mode,int numberBins, int stepSize)"
-        << std::endl << "must be called before the initialization of the Agent!" << std::endl;
+              << "       addSensorComplexMeasure(char* measureName, ComplexMeasureMode mode,int "
+                 "numberBins, int stepSize)"
+              << std::endl
+              << "must be called before the initialization of the Agent!" << std::endl;
     exit(1);
   }
   return cmlist;
@@ -74,7 +81,8 @@ std::list<ComplexMeasure*> MeasureAdapter::addSensorComplexMeasure(char* measure
 /*        BEGIN methods of AbstractController                                 */
 /****************************************************************************/
 
-void MeasureAdapter::init(const int sensornumber, const int motornumber, RandGen* randGen) {
+void
+MeasureAdapter::init(const int sensornumber, const int motornumber, RandGen* randGen) {
   // call the same method of super class
   AbstractControllerAdapter::init(sensornumber, motornumber, randGen);
   // allocate memory for controlled Motors and sensors
@@ -82,7 +90,8 @@ void MeasureAdapter::init(const int sensornumber, const int motornumber, RandGen
   this->sensorValues = static_cast<sensor*>(malloc(sizeof(sensor) * sensornumber));
 }
 
-void MeasureAdapter::step(const sensor* sensors, int sensornumber, motor* motors, int motornumber) {
+void
+MeasureAdapter::step(const sensor* sensors, int sensornumber, motor* motors, int motornumber) {
   AbstractControllerAdapter::step(sensors, sensornumber, motors, motornumber);
   // store motor and sensor values in motorValues and sensorValues
   for (int i = 0; i < motornumber; i++)
@@ -92,7 +101,11 @@ void MeasureAdapter::step(const sensor* sensors, int sensornumber, motor* motors
   callBack();
 }
 
-void MeasureAdapter::stepNoLearning(const sensor* sensors, int sensornumber, motor* motors, int motornumber) {
+void
+MeasureAdapter::stepNoLearning(const sensor* sensors,
+                               int sensornumber,
+                               motor* motors,
+                               int motornumber) {
   AbstractControllerAdapter::stepNoLearning(sensors, sensornumber, motors, motornumber);
   // store motor and sensor values in motorValues and sensorValues
   for (int i = 0; i < motornumber; i++)

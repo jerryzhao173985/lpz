@@ -21,12 +21,12 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  *                                                                         *
  ***************************************************************************/
-#ifndef __BACKCALLER_H_
-#define __BACKCALLER_H_
+#ifndef BACKCALLER_H_
+#define BACKCALLER_H_
 
-#include <vector>
-#include <cstddef>
 #include "stl_map.h"
+#include <cstddef>
+#include <vector>
 
 class Callbackable;
 
@@ -39,72 +39,75 @@ class Callbackable;
  * addCallbackable(CallbackableType, Callbackable* cb) and
  * removeCallbackable(CallbackableType, Callbackable* cb).
  */
-class BackCaller
-{
-  public:
-    typedef unsigned long CallbackableType;
+class BackCaller {
+public:
+  using CallbackableType = unsigned long;
 
-    /**
-     * This is the default Callbackable type.
-     * If you derive from BackCaller, just define your own CallbackableTypes.
-     */
-    static const CallbackableType DEFAULT_CALLBACKABLE_TYPE = 0;
+  /**
+   * This is the default Callbackable type.
+   * If you derive from BackCaller, just define your own CallbackableTypes.
+   */
+  static constexpr CallbackableType DEFAULT_CALLBACKABLE_TYPE = 0;
 
-    BackCaller();
-    virtual ~BackCaller();
+  BackCaller();
+  virtual ~BackCaller();
 
-    /**
-     * Adds a Callbackable instance to this caller instance.
-     * @param type the desired CallbackableType of the Callbackable class.
-     * @param callbackableInstance the instance to add
-     */
-    virtual void addCallbackable(Callbackable* callbackableInstance, CallbackableType type = BackCaller::DEFAULT_CALLBACKABLE_TYPE);
+  /**
+   * Adds a Callbackable instance to this caller instance.
+   * @param type the desired CallbackableType of the Callbackable class.
+   * @param callbackableInstance the instance to add
+   */
+  virtual void addCallbackable(Callbackable* callbackableInstance,
+                               CallbackableType type = BackCaller::DEFAULT_CALLBACKABLE_TYPE);
 
-    /**
-     * Removes a Callbackable instance from this caller instance.
-     * @param type the CallbackableType of the Callbackable class.
-     * @param callbackableInstance
-     */
-    virtual void removeCallbackable(Callbackable* callbackableInstance, CallbackableType type = BackCaller::DEFAULT_CALLBACKABLE_TYPE);
+  /**
+   * Removes a Callbackable instance from this caller instance.
+   * @param type the CallbackableType of the Callbackable class.
+   * @param callbackableInstance
+   */
+  virtual void removeCallbackable(Callbackable* callbackableInstance,
+                                  CallbackableType type = BackCaller::DEFAULT_CALLBACKABLE_TYPE);
 
-    /**
-     * Removes all Callbackable instances from this caller instance
-     * @param type the CallbackableType of the Callbackable class to be removed.
-     */
-    virtual void removeAllCallbackables(CallbackableType type /* = BackCaller::DEFAULT_CALLBACKABLE_TYPE */);
+  /**
+   * Removes all Callbackable instances from this caller instance
+   * @param type the CallbackableType of the Callbackable class to be removed.
+   */
+  virtual void removeAllCallbackables(
+    CallbackableType type /* = BackCaller::DEFAULT_CALLBACKABLE_TYPE */);
 
+  /**
+   * Calls all registered callbackable classes of the determined type.
+   * This is done by Callbackable::doOnCallback(CallbackableType type).
+   * You can make this function private/protected if you like.
+   * @param type the CallbackableType of the Callbackable classes.
+   */
+  virtual void callBack(CallbackableType type = BackCaller::DEFAULT_CALLBACKABLE_TYPE);
 
-    /**
-     * Calls all registered callbackable classes of the determined type.
-     * This is done by Callbackable::doOnCallback(CallbackableType type).
-     * You can make this function private/protected if you like.
-     * @param type the CallbackableType of the Callbackable classes.
-     */
-    virtual void callBack(CallbackableType type = BackCaller::DEFAULT_CALLBACKABLE_TYPE);
+  /**
+   * Calls all registered callbackable classes of the determined type.
+   * This is done by Callbackable::doOnCallback(CallbackableType type).
+   * This function uses QUICKMP in order to parallelise the callbacks.
+   * Remember that there is only shared the used CallbackableList. So if you
+   * have other variables/objects to share, implement your own version.
+   * You can make this function private/protected if you like.
+   * @param type the CallbackableType of the Callbackable classes.
+   */
+  virtual void callBackQMP(CallbackableType type = BackCaller::DEFAULT_CALLBACKABLE_TYPE);
 
-    /**
-     * Calls all registered callbackable classes of the determined type.
-     * This is done by Callbackable::doOnCallback(CallbackableType type).
-     * This function uses QUICKMP in order to parallelise the callbacks.
-     * Remember that there is only shared the used CallbackableList. So if you
-     * have other variables/objects to share, implement your own version.
-     * You can make this function private/protected if you like.
-     * @param type the CallbackableType of the Callbackable classes.
-     */
-    virtual void callBackQMP(CallbackableType type = BackCaller::DEFAULT_CALLBACKABLE_TYPE);
+private:
+  struct CallbackableTypeHash {
+    size_t operator()(const CallbackableType& type) const {
+      return type;
+    }
+  };
 
-  private:
-    struct CallbackableTypeHash
-    {
-      size_t operator() (const CallbackableType& type) const { return type; }
-    };
-
-    typedef std::vector<Callbackable*> callbackableListType;
-    typedef HashMap<CallbackableType, callbackableListType*, CallbackableTypeHash> callbackableMapType;
-    /**
-     * This hashmap holds every list of Callbackables for each CallbackableType.
-     */
-    callbackableMapType callbackableMap;
+  using callbackableListType = std::vector<Callbackable*>;
+  using callbackableMapType =
+    HashMap<CallbackableType, callbackableListType*, CallbackableTypeHash>;
+  /**
+   * This hashmap holds every list of Callbackables for each CallbackableType.
+   */
+  callbackableMapType callbackableMap;
 };
 
-#endif /* __BACKCALLER_H_ */
+#endif /* BACKCALLER_H_ */

@@ -32,8 +32,10 @@ using namespace std;
 #define CTEST  0x10  /* 00001010 Test i2c communication.  */
 
 
-typedef struct Xbee {
-  Xbee(short addr) : addr(addr), initialised(false), failurecounter(0){}
+struct Xbee {
+  Xbee(short addr) : addr(addr), numsensors(0), sensoroffset(0), 
+                     nummotors(0), motoroffset(0), 
+                     initialised(false), failurecounter(0){}
   short addr;
   int numsensors;
   int sensoroffset;
@@ -41,7 +43,7 @@ typedef struct Xbee {
   int motoroffset;
   bool initialised;
   int failurecounter;
-}Xbee;
+};
 
 class Communicator;
 Communicator* communication;
@@ -115,19 +117,19 @@ public:
     //    flush input buffer
     flushInputBuffer(cycletime/2);
 
-    /*if (sendData(xbees[currentXbee].addr, CBEEP, NULL, 0) < 0){
+    /*if (sendData(xbees[currentXbee].addr, CBEEP, nullptr, 0) < 0){
       cerr << "Error while sending beep.\n";
       return false;
     }*/
 
    /* Send 'CTEST' command to current slave, which causes the xbee to test if i2c communication is ok! */
-    if (sendData(xbees[currentXbee].addr, CTEST, NULL, 0) < 0){
+    if (sendData(xbees[currentXbee].addr, CTEST, nullptr, 0) < 0){
       cerr << "Error while sending test command.\n";
       return false;
     }
 
     /* Send 'reset' command to current slave. */
-    if (sendData(xbees[currentXbee].addr, CRES, NULL, 0) < 0){
+    if (sendData(xbees[currentXbee].addr, CRES, nullptr, 0) < 0){
       cerr << "Error while sending reset.\n";
       return false;
     }

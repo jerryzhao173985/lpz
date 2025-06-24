@@ -31,7 +31,9 @@
 using namespace std;
 
 LandscapeVisualisation::LandscapeVisualisation(MatrixPlotChannel *channel, ColorPalette *colorPalette, QWidget *parent)
-: AbstractVisualisation(channel, colorPalette, parent){
+: AbstractVisualisation(channel, colorPalette, parent),
+  mouseX(0),
+  mouseY(0) {
 
   if(debug) cout << "TextureVisualisation Konstruktor" << endl;
   object = 0;
@@ -252,7 +254,7 @@ void LandscapeVisualisation::drawTriangle(VERTEX& v1, VERTEX& v2, VERTEX& v3, VE
   glEnd();
 }
 
-VERTEX LandscapeVisualisation::getNormal(VERTEX& v1, VERTEX& v2, VERTEX& v3){
+VERTEX LandscapeVisualisation::getNormal(const VERTEX& v1, const VERTEX& v2, const VERTEX& v3){
   GLfloat a1 = v2.x - v1.x,
       a2 = v2.y - v1.y,
       a3 = v2.z - v1.z,
@@ -273,7 +275,7 @@ VERTEX LandscapeVisualisation::getNormal(VERTEX& v1, VERTEX& v2, VERTEX& v3){
   return VERTEX(x,y,z);
 }
 
-VERTEX LandscapeVisualisation::getVertexBetween(VERTEX& v1, VERTEX& v2, double pos){
+VERTEX LandscapeVisualisation::getVertexBetween(const VERTEX& v1, const VERTEX& v2, double pos){
   if(debug) cout << "LandscapeVisualisation::getVertexBetween" << endl;
   //schnittpunkt mit ebene y = pos
   GLfloat alpha = (pos - v1.y) / (v2.y -v1.y);

@@ -26,7 +26,7 @@
 #include "inifile.h"
 #include <iostream>
 using namespace std;
-#include <QRegExp>
+#include <QRegularExpression>
 
 
 IniFile::IniFile(){
@@ -126,41 +126,44 @@ bool IniFile::Load(){
 
 
 int IniFile::getLineType( QString _line, QString &str1, QString &str2, QString &str3){
-  QRegExp regexp;
+  QRegularExpression regexp;
   int start,len;
 
   if (_line.isEmpty()|| _line=="\n") return EMPTY;
 
-  if (_line.indexOf(QRegExp("^[;#]"),0)!=-1){
+  if (_line.indexOf(QRegularExpression("^[;#]"),0)!=-1){
     str1=_line;
     return COMMENT;
   }
 
   regexp.setPattern("^\\[.+\\]");
-  if ( (start=regexp.indexIn(_line,0))>=0){
-    len=regexp.matchedLength();
+  QRegularExpressionMatch match = regexp.match(_line);
+  if (match.hasMatch()){
+    start = match.capturedStart();
+    len = match.capturedLength();
     str1=_line.mid(start+1,len-2);
     return SECTION;
   }
 
   regexp.setPattern(".+=.+");
-  if ( (start=regexp.indexIn(_line,0))>=0 ){
-    len=regexp.matchedLength();
+  match = regexp.match(_line);
+  if (match.hasMatch()){
     regexp.setPattern(".+=");
-    start=regexp.indexIn(_line,0);
-    len=regexp.matchedLength();
-    str1=_line.left(len-1);
-    int start2=len;
+    match = regexp.match(_line);
+    if (match.hasMatch()) {
+      len = match.capturedLength();
+      str1=_line.left(len-1);
+      int start2=len;
 
-    
-    regexp.setPattern(".+[;#]");
-    start=regexp.indexIn( _line, start2);
-    len=regexp.matchedLength();
-    if (start>=0){ // is there a comment at the end of the line?
-      str2=_line.mid(start2,len-1);
-      str3=_line.mid(start2+len-1);
-    }else{  // no comment
-      str2=_line.mid(start2, _line.length()-start2-1);
+      regexp.setPattern(".+[;#]");
+      match = regexp.match(_line.mid(start2));
+      if (match.hasMatch()){ // is there a comment at the end of the line?
+        len = match.capturedLength();
+        str2=_line.mid(start2,len-1);
+        str3=_line.mid(start2+len-1);
+      }else{  // no comment
+        str2=_line.mid(start2, _line.length()-start2-1);
+      }
     }
     return VAR;
   }

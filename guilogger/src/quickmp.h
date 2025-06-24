@@ -581,7 +581,7 @@ namespace qmp_internal
                         for (unsigned int threadIndex = 1; threadIndex <= numWorkerThreads; ++threadIndex)
                         {
                                 returnCode = pthread_create(&mPlatform->threads[threadIndex],
-                                        &threadAttributes, threadRoutine, (void*)threadIndex);
+                                        &threadAttributes, threadRoutine, (void*)(uintptr_t)threadIndex);
                                 QMP_ASSERT(0 == returnCode);
                         }
 

@@ -1,0 +1,21 @@
+@PACKAGE_INIT@
+
+include(CMakeFindDependencyMacro)
+
+# Find required dependencies
+find_dependency(Threads)
+
+# Optional dependencies
+find_package(PkgConfig QUIET)
+if(PkgConfig_FOUND)
+    pkg_check_modules(GSL gsl QUIET)
+endif()
+
+# Include the exported targets
+include("${CMAKE_CURRENT_LIST_DIR}/LPZRobotsTargets.cmake")
+
+# Provide variables for compatibility
+set(LPZROBOTS_INCLUDE_DIRS "@PACKAGE_CMAKE_INSTALL_INCLUDEDIR@")
+set(LPZROBOTS_LIBRARIES LPZRobots::selforg)
+
+check_required_components(LPZRobots)

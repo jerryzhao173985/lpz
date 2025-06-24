@@ -21,11 +21,10 @@
 #ifndef __INVERTMOTORCONTROLLER_H
 #define __INVERTMOTORCONTROLLER_H
 
-#include "homeokinbase.h"
 #include "controller_misc.h"
+#include "homeokinbase.h"
 #include <stdlib.h>
 #include <string.h>
-
 
 /**
  * Extended HomeokinBase class (still abstract) for robot controller work in motorspace
@@ -35,19 +34,20 @@
  */
 class InvertMotorController : public HomeokinBase {
 public:
-  InvertMotorController( unsigned short buffersize ,
-                         const std::string& name, const std::string& revision)
-    : HomeokinBase(buffersize,name, revision){
-    addParameterDef("dampA",&dampA,0 );
-    addParameterDef("adaptrate",&adaptRate,0.000);
-    addParameterDef("nomupdate",&nomUpdate,0.005);
-    addParameterDef("desens",&desens,0);
-    addParameterDef("steps",&steps,1);
-    addParameterDef("zetaupdate",&zetaupdate,0);
-    addParameterDef("noiseY",&noiseY,0);
-    addParameterDef("noiseB",&noiseB,0.001);
-    addParameterDef("teacher",&teacher,5);
-    addParameterDef("relativeE",&relativeE,0);
+  InvertMotorController(unsigned short buffersize,
+                        const std::string& name,
+                        const std::string& revision)
+    : HomeokinBase(buffersize, name, revision) {
+    addParameterDef("dampA", &dampA, 0);
+    addParameterDef("adaptrate", &adaptRate, 0.000);
+    addParameterDef("nomupdate", &nomUpdate, 0.005);
+    addParameterDef("desens", &desens, 0);
+    addParameterDef("steps", &steps, 1);
+    addParameterDef("zetaupdate", &zetaupdate, 0);
+    addParameterDef("noiseY", &noiseY, 0);
+    addParameterDef("noiseB", &noiseB, 0.001);
+    addParameterDef("teacher", &teacher, 5);
+    addParameterDef("relativeE", &relativeE, 0);
   }
 
 protected:
@@ -55,14 +55,14 @@ protected:
   paramval steps; ///< number of timesteps is used for controller learning
   paramval zetaupdate;
   paramval dampA; ///< damping term for model (0: no damping, 0.1 high damping)
-  parambool relativeE; ///< if not 0: a relative error signal is used (xsi is normalised in respect to |y|)
+  parambool
+    relativeE; ///< if not 0: a relative error signal is used (xsi is normalised in respect to |y|)
 
-  paramval adaptRate;  ///< adaptation rate for learning rate adaptation
-  paramval nomUpdate;  ///< nominal update of controller in respect to matrix norm
-  paramval noiseB;     ///< size of the additional noise for model bias B
-  paramval noiseY;     ///< size of the additional noise for motor values
-  paramval teacher;    ///< factor for teaching signal
-
+  paramval adaptRate; ///< adaptation rate for learning rate adaptation
+  paramval nomUpdate; ///< nominal update of controller in respect to matrix norm
+  paramval noiseB;    ///< size of the additional noise for model bias B
+  paramval noiseY;    ///< size of the additional noise for motor values
+  paramval teacher;   ///< factor for teaching signal
 };
 
 #endif

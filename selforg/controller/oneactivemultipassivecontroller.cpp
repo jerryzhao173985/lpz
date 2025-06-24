@@ -25,10 +25,11 @@
 
 #include <assert.h>
 
-
-OneActiveMultiPassiveController::OneActiveMultiPassiveController(AbstractController* controller, const std::string& name, const std::string& revision)
-                : AbstractMultiController(controller, name, revision),
-                  passiveMotors(nullptr) {}
+OneActiveMultiPassiveController::OneActiveMultiPassiveController(AbstractController* controller,
+                                                                 const std::string& name,
+                                                                 const std::string& revision)
+  : AbstractMultiController(controller, name, revision)
+  , passiveMotors(nullptr) {}
 
 OneActiveMultiPassiveController::~OneActiveMultiPassiveController() {}
 
@@ -37,45 +38,52 @@ OneActiveMultiPassiveController::~OneActiveMultiPassiveController() {}
 /*        AbstractController, Configurable, Inspectable, Storeable                    */
 /****************************************************************************/
 
-
 /****************************************************************************/
 /*        BEGIN methods of AbstractController                                         */
 /****************************************************************************/
 
-void OneActiveMultiPassiveController::init(const int sensornumber, const int motornumber,
-                                           RandGen* randGen) {
-        // call the same method of super class
-        AbstractMultiController::init( sensornumber,motornumber, randGen);
-        // allocate memory for passiveMotors
-        this->passiveMotors = static_cast<motor*>(malloc(sizeof(motor) * motornumber));
+void
+OneActiveMultiPassiveController::init(const int sensornumber,
+                                      const int motornumber,
+                                      RandGen* randGen) {
+  // call the same method of super class
+  AbstractMultiController::init(sensornumber, motornumber, randGen);
+  // allocate memory for passiveMotors
+  this->passiveMotors = static_cast<motor*>(malloc(sizeof(motor) * motornumber));
 }
 
-void OneActiveMultiPassiveController::step(const sensor* sensors, int sensornumber, motor* motors, int motornumber) {
-        assert(controller);
-        // make normal step of the active controller
-        // then make step of all passive controllers
-        controller->step(sensors,sensornumber,motors,motornumber);
+void
+OneActiveMultiPassiveController::step(const sensor* sensors,
+                                      int sensornumber,
+                                      motor* motors,
+                                      int motornumber) {
+  assert(controller);
+  // make normal step of the active controller
+  // then make step of all passive controllers
+  controller->step(sensors, sensornumber, motors, motornumber);
 
-        for(auto* ctrl : controllerList){
-                ctrl->step(sensors,sensornumber,passiveMotors,motornumber);
-        }
+  for (auto* ctrl : controllerList) {
+    ctrl->step(sensors, sensornumber, passiveMotors, motornumber);
+  }
 }
 
-void OneActiveMultiPassiveController::stepNoLearning(const sensor* sensors , int sensornumber, motor* motors, int motornumber){
-        assert(controller);
-        // make normal step of the active controller
-        // then make step of all passive controllers
-        controller->stepNoLearning(sensors,sensornumber,motors,motornumber);
-        for(auto* ctrl : controllerList){
-                ctrl->stepNoLearning(sensors,sensornumber,passiveMotors,motornumber);
-        }
+void
+OneActiveMultiPassiveController::stepNoLearning(const sensor* sensors,
+                                                int sensornumber,
+                                                motor* motors,
+                                                int motornumber) {
+  assert(controller);
+  // make normal step of the active controller
+  // then make step of all passive controllers
+  controller->stepNoLearning(sensors, sensornumber, motors, motornumber);
+  for (auto* ctrl : controllerList) {
+    ctrl->stepNoLearning(sensors, sensornumber, passiveMotors, motornumber);
+  }
 }
 
 /****************************************************************************/
 /*        END methods of AbstractController                                             */
 /****************************************************************************/
-
-
 
 /****************************************************************************/
 /*        BEGIN methods of Configurable                                               */
@@ -85,8 +93,6 @@ void OneActiveMultiPassiveController::stepNoLearning(const sensor* sensors , int
 /*        END methods of Configurable                                                  */
 /****************************************************************************/
 
-
-
 /****************************************************************************/
 /*        BEGIN methods of Inspectable                                                  */
 /****************************************************************************/
@@ -95,8 +101,6 @@ void OneActiveMultiPassiveController::stepNoLearning(const sensor* sensors , int
 /*        END methods of Inspectable                                                   */
 /****************************************************************************/
 
-
-
 /****************************************************************************/
 /*        BEGIN methods of Storeable                                                   */
 /****************************************************************************/
@@ -104,4 +108,3 @@ void OneActiveMultiPassiveController::stepNoLearning(const sensor* sensors , int
 /****************************************************************************/
 /*        END methods of Storeable                                                      */
 /****************************************************************************/
-
