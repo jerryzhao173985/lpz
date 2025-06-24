@@ -45,7 +45,7 @@ public:
   // FeedForwardNN() {}
   FeedForwardNN(const std::string& name, const std::string& revision)
     : InvertableModel(name, revision) {};
-  virtual ~FeedForwardNN() {};
+  virtual ~FeedForwardNN() override {};
 
   /// damps the weights and the biases by multiplying (1-damping)
   virtual void damp(double damping) override = 0;

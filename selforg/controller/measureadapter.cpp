@@ -32,7 +32,8 @@ MeasureAdapter::MeasureAdapter(AbstractController* controller,
   , motorValues(nullptr)
   , sensorValues(nullptr) {
   st = new StatisticTools("MeasureAdapter's ST");
-  addCallbackable(st);
+  // Note: StatisticTools does not inherit from Callbackable
+  // addCallbackable(st);
   addInspectable(st);
 }
 
@@ -83,7 +84,16 @@ MeasureAdapter::addSensorComplexMeasure(char* measureName,
 
 void
 MeasureAdapter::init(const int sensornumber, const int motornumber, RandGen* randGen) {
-  // call the same method of super class AbstractControllerAdapter{
+  // call the same method of super class AbstractControllerAdapter
+  AbstractControllerAdapter::init(sensornumber, motornumber, randGen);
+  // Initialize sensor and motor value arrays
+  sensorValues = new sensor[sensornumber];
+  motorValues = new motor[motornumber];
+}
+
+void
+MeasureAdapter::step(const sensor* sensors, int sensornumber, motor* motors, int motornumber) {
+  // call the same method of super class AbstractControllerAdapter
   AbstractControllerAdapter::step(sensors, sensornumber, motors, motornumber);
   // store motor and sensor values in motorValues and sensorValues
   for (int i = 0; i < motornumber; ++i)

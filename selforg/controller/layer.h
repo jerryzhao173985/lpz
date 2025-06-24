@@ -36,7 +36,7 @@ public:
       @param factor_bias size of bias neuron , if 0 no bias is used
       @param actfun activation function. see also FeedForwardNN
   */
-  Layer(int size,
+  explicit Layer(int size,
                  double factor_bias = 0.1,
                  ActivationFunction actfun = FeedForwardNN::linear);
 

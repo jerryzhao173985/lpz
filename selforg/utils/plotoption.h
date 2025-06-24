@@ -82,7 +82,7 @@ public:
 
      Note: the argument whichSensor is removed. You can adjust this in the wirings now.
    */
-  PlotOption(PlotMode mode,
+  explicit PlotOption(PlotMode mode,
                       int interval = 1,
                       const std::string& parameter = std::string(),
                       const std::string& filter = std::string())
@@ -116,7 +116,7 @@ public:
     using argument_type = const PlotOption&;
     using result_type = bool;
 
-    matchMode(PlotMode mode)
+    explicit matchMode(PlotMode mode)
       : mode(static_cast<int>(mode)) {}
     int mode = 0;
     bool operator()(const PlotOption& m) {

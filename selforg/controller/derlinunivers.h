@@ -62,7 +62,9 @@ struct DerLinUniversConf {
   int motorlayer = -1;};
 
 /**
- * class for{
+ * class for universal linear controller with neural network
+ */
+class DerLinUnivers : public AbstractController, public Storeable {
 public:
   DerLinUnivers(const DerLinUniversConf& conf = getDefaultConf());
   virtual ~DerLinUnivers() override;
@@ -139,8 +141,8 @@ public:
   /********* INSPECTABLE INTERFACE ******/
   virtual std::list<iparamkey> getInternalParamNames() const override;
   virtual std::list<iparamval> getInternalParams() const override;
-  virtual ilayerlist getStructuralLayers() const override;
-  virtual iconnectionlist getStructuralConnections() const override;
+  virtual std::list<ILayer> getStructuralLayers() const override;
+  virtual std::list<IConnection> getStructuralConnections() const override;
 
   /********* STORABLE INTERFACE ******/
   virtual bool store(FILE* f) const override;

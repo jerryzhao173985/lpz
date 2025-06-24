@@ -27,7 +27,9 @@
 #include <selforg/noisegenerator.h>
 
 /**
- * class for{
+ * class for motor space inversion
+ */
+class InvertMotorSpace : public InvertMotorController {
 
 public:
   InvertMotorSpace(int buffersize, double cInit = 0.1, bool someInternalParams = true);
@@ -56,9 +58,9 @@ public:
 
   /**** STOREABLE ****/
   /** stores the controller values to a given file (binary).  */
-  virtual bool store(FILE* f) const override;
+  virtual bool store(FILE* f) const;
   /** loads the controller values from a given file (binary). */
-  virtual bool restore(FILE* f) override;
+  virtual bool restore(FILE* f);
 
   // inspectable interface
   virtual std::list<ILayer> getStructuralLayers() const override;

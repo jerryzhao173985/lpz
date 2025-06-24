@@ -29,7 +29,10 @@
 #include <memory>
 
 /**
- * class for{
+ * Sine controller class that generates sine, sawtooth or impulse patterns on motor outputs.
+ * Does NOT use the sensors.
+ */
+class SineController : public AbstractController {
 public:
   enum class function { Sine, SawTooth, Impulse };
 
@@ -42,7 +45,7 @@ public:
   /** initialisation of the controller with the given sensor/ motornumber
       Must be called before use.
   */
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr);
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override;
 
   /** @return Number of sensors the controller was initialised
       with or 0 if not initialised */
@@ -66,24 +69,24 @@ public:
   virtual void step(const sensor* sensors,
                     int sensornumber,
                     motor* motors,
-                    int motornumber);
+                    int motornumber) override;
   /** performs one step.
       @see step
   */
   virtual void stepNoLearning(const sensor*,
                               int number_sensors,
                               motor*,
-                              int number_motors);
+                              int number_motors) override;
 
   /********* STORABLE INTERFACE ******/
   /// @see Storable
-  virtual bool store(FILE* f) const override {
+  virtual bool store(FILE* f) const {
     Configurable::print(f, "");
     return true;
   }
 
   /// @see Storable
-  virtual bool restore(FILE* f) override {
+  virtual bool restore(FILE* f) {
     Configurable::parse(f);
     return true;
   }
@@ -102,25 +105,25 @@ protected:
   unsigned long int controlmask; // bitmask to select channels. (the others are set to 0)
   bool individual = false;
 
-  paramval period;
-  paramval phaseShift;
-  paramval impulsWidth;
+  AbstractController::paramval period;
+  AbstractController::paramval phaseShift;
+  AbstractController::paramval impulsWidth;
   double phase = 0; // phase of oscillator
-  paramval amplitude;
+  AbstractController::paramval amplitude;
 
   double (*osci)(double x, double param); // oscillator function
 };
 
-class MultiSineController{
+class MultiSineController : public SineController {
 public:
   MultiSineController(unsigned long int controlmask = (~0),
                                function func = function::Sine);
   virtual ~MultiSineController() override;
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr);
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override;
   virtual void stepNoLearning(const sensor*,
                               int number_sensors,
                               motor*,
-                              int number_motors);
+                              int number_motors) override;
 
 protected:
   std::unique_ptr<double[]> periods;

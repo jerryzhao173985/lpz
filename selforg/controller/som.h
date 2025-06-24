@@ -33,7 +33,7 @@
  scheme.
 The output of the network is  \f$exp(- |x-w_i|^2/rdfsize)\f$ for each neuron.
 */
-class SOM{
+class SOM : public AbstractModel {
 public:
   using Neighbours = std::list<std::pair<int, double>>;
   using Neighbourhood = std::vector<std::pair<matrix::Matrix, double>>;
@@ -61,9 +61,9 @@ public:
   virtual void init(unsigned int inputDim,
                     unsigned int outputDim,
                     double unit_map = 0.0,
-                    RandGen* randGen = nullptr);
+                    RandGen* randGen = nullptr) override;
 
-  virtual const matrix::Matrix process(const matrix::Matrix& input);
+  virtual const matrix::Matrix process(const matrix::Matrix& input) override;
 
   /*  performs training. Nominal output is ignored.
       A zero-Matrix is returned.
@@ -72,7 +72,7 @@ public:
   */
   virtual const matrix::Matrix learn(const matrix::Matrix& input,
                                      const matrix::Matrix& nom_output,
-                                     double learnRateFactor = 1);
+                                     double learnRateFactor = 1) override;
 
   virtual void damp(double damping) override {
     return;
@@ -86,7 +86,7 @@ public:
   }
 
   virtual bool store(FILE* f) const override;
-  virtual bool explicit explicit restore(FILE* f);
+  virtual bool restore(FILE* f) override;
 
   virtual void printWeights(FILE* f) const;
 
@@ -95,7 +95,8 @@ public:
   }
 
 protected:
-  /// activation function static_cast<rbf>(static) double activationfunction(void* rdfsize, double d);
+  /// activation function (rbf)
+  static double activationfunction(void* rdfsize, double d);
 
   /// checks whether the given coordinate is within the lattice
   static bool validCoord(const matrix::Matrix& m, int size);
@@ -105,11 +106,11 @@ protected:
   static matrix::Matrix indexToCoord(int index, int size, int dimensions);
 
   /// initialised neighbourhood
-  void explicit explicit initNeighbourhood(double sigma);
+  void initNeighbourhood(double sigma);
 
   /** returns neighbourhood as a list of indices with weights
    */
-  Neighbours explicit explicit getNeighbours(int winner);
+  Neighbours getNeighbours(int winner);
 
 public:
   double eps = 0; ///< learning rate for weight update

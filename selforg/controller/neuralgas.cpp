@@ -58,7 +58,7 @@ NeuralGas::init(unsigned int inputDim, unsigned int outputDim, double unit_map, 
     randGen = new RandGen(); // this gives a small memory leak
   weights.resize(outputDim);
   diffvectors.resize(outputDim);
-  double factor = (unit_map == nullptr) ? 1 : unit_map;
+  double factor = (unit_map == 0) ? 1 : unit_map;
   // pure random initialised in the interval (-factor, factor) in all dimensions
   for (unsigned int i = 0; i < outputDim; ++i) {
     weights[i].set(inputDim, 1);
@@ -124,9 +124,9 @@ NeuralGas::learn(const Matrix& input, const Matrix& nom_output, double learnRate
   std::sort(ranking.begin(), ranking.end());
 
   int k = 0;
-  double e = (maxTime == nullptr) ? eps * learnRateFactor
+  double e = (maxTime == 0) ? eps * learnRateFactor
                             : eps * exp(-3.0 * t / static_cast<double>(maxTime)) * learnRateFactor;
-  double l = (maxTime == nullptr) ? lambda : lambda * exp(-3.0 * t / static_cast<double>(maxTime));
+  double l = (maxTime == 0) ? lambda : lambda * exp(-3.0 * t / static_cast<double>(maxTime));
   FOREACHC(rankingvector, ranking, i) {
     double e_l = exp(-k / l) * e;
     if (e_l < e - 9)
@@ -134,7 +134,7 @@ NeuralGas::learn(const Matrix& input, const Matrix& nom_output, double learnRate
     weights[i->second] = weights[i->second] + diffvectors[i->second] * e_l;
     ++k;
   }
-  if (t % 100 == nullptr)
+  if (t % 100 == 0)
     updateCellSizes();
   ++t;
   return Matrix();

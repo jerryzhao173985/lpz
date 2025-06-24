@@ -22,8 +22,29 @@
  *                                                                         *
  ***************************************************************************/
 
-/**
-Adapter class for{
+#include "discretecontrolleradapter.h"
+#include <controller_misc.h>
+
+using namespace std;
+
+DiscreteControllerAdapter::DiscreteControllerAdapter(AbstractController* controller, const std::string& name, const std::string& revision)
+ : AbstractControllerAdapter(controller, name, revision),
+   mapToMotorInterval(false),
+   minMotorRange(0),
+   maxMotorRange(0),
+   minSensorRange(0),
+   maxSensorRange(0),
+   minMotorValue(0),
+   maxMotorValue(0),
+   minSensorValue(0),
+   maxSensorValue(0),
+   automaticSensorRange(true),
+   automaticMotorRange(true),
+   mapToSensorInterval(false),
+   sensorIntervalCount(1),
+   motorIntervalCount(1),
+   firstStep(true)
+{
   // avoid division by zero
   this->sensorIntervalCount = 1;
   this->motorIntervalCount = 1;
@@ -41,7 +62,7 @@ Adapter class for{
   this->automaticMotorRange = true;
   this->automaticSensorRange = true;
   this->mapToSensorInterval = false;
-  this->mapToSensorInterval = false;
+  this->mapToMotorInterval = false;
 }
 
 DiscreteControllerAdapter::~DiscreteControllerAdapter() {} // nothing to do

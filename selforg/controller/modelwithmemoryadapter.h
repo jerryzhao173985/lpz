@@ -29,7 +29,7 @@
 #include "invertablemodel.h"
 
 /// multi layer neural network with configurable activation functions
-class ModelWithMemoryAdapter{
+class ModelWithMemoryAdapter : public InvertableModel {
 public:
   /**
      @param model pointer to model to accomplish by memory
@@ -78,9 +78,6 @@ public:
 
   /* ************** Accessors **********************************/
 
-  Inspectable* getModel() const {
-    return model;
-  }
   const Inspectable* getModel() const {
     return model;
   }

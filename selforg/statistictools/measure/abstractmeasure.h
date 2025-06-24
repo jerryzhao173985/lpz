@@ -45,19 +45,19 @@ public:
   virtual ~AbstractMeasure() {}
 
 
-  virtual std::string getName() const  override{ return name; }
+  virtual std::string getName() const { return name; }
 
-  virtual double getValue() const  override{ return value; }
+  virtual double getValue() const { return value; }
 
-  virtual double& getValueAddress() override { return value; }
+  virtual double& getValueAddress() { return value; }
 
-  virtual void setStepSize(int newStepSize) override { stepSize=newStepSize; }
+  virtual void setStepSize(int newStepSize) { stepSize=newStepSize; }
 
-  virtual int getStepSize() const  override{ return stepSize; }
+  virtual int getStepSize() const { return stepSize; }
 
-  virtual long getActualStep() const  override{ return actualStep; }
+  virtual long getActualStep() const { return actualStep; }
 
-  virtual void explicit explicit setDisplayPrecision(int digits) { displayPrecision=digits; }
+  virtual void setDisplayPrecision(int digits) { displayPrecision=digits; }
 
   virtual int getDisplayPrecision() const { return displayPrecision; }
 

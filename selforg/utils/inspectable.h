@@ -98,7 +98,7 @@ public:
     using argument_type = ILayer;
     using result_type = bool;
 
-    matchName(const std::string& name_) : name(name_) {}
+    explicit matchName(const std::string& name_) : name(name_) {}
     std::string name;
     bool operator()(const ILayer& l) {
       return l.vectorname == name;
@@ -109,7 +109,7 @@ public:
 
   /// TYPEDEFS END
 
-  Inspectable(const iparamkey& name = "");
+  explicit Inspectable(const iparamkey& name = "");
 
   virtual ~Inspectable();
 

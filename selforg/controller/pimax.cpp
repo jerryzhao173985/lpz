@@ -161,7 +161,7 @@ PiMax::step(const sensor* s_, int number_sensors, motor* a_, int number_motors) 
   --t; // stepNoLearning increases the time by one - undo here
 
   // learn controller and model
-  if (epsC != 0 || epsA != nullptr)
+  if (epsC != 0 || epsA != 0)
     learn();
 
   // update step counter
@@ -248,7 +248,7 @@ PiMax::learn() {
   const Matrix& g_prime = z.map(g_s);
   gs_buffer[(t - 1) % buffersize] = g_prime;
 
-  L = A * (const C& g_prime) + S;
+  L = A * g_prime.multrowwise(C) + S;
   L_buffer[(t - 1) % buffersize] = L;
 
   if (tau < 2)
@@ -260,7 +260,7 @@ PiMax::learn() {
   // semantic: ds[l] == \delta s_{t-l}
   //  this means the array of ds is expands backwards in time
   ds[tau].set(number_sensors, 1); // vector of zeros;
-  for(...; --l) {
+  for(int l = tau - 1; l >= 0; --l) {
     ds[l] = (L_buffer[(t - (l + 1)) % buffersize] * ds[l + 1] + xi_buffer[(t - l) % buffersize]);
   }
   ds[0] = ds[0].mapP(0.1, clip);
@@ -299,8 +299,8 @@ PiMax::learn() {
 
       const Matrix& metric = useMetric ? gs.map(one_over).map(sqr) : gs.mapP(1, constant);
 
-      C += (((dmu * (ds[l] ^ T) - (const epsrel& al) * (sl ^ T)) & metric) * epsCN).mapP(.015, clip);
-      h += ((((const epsrel& al)) & metric) * (-epsCN * factorH)).mapP(.05, clip);
+      C += (((dmu * (ds[l] ^ T) - epsrel * (sl ^ T)) & metric) * epsCN).mapP(.015, clip);
+      h += (((epsrel) & metric) * (-epsCN * factorH)).mapP(.05, clip);
     }
     if (damping)
       C += (((C_native - C).map(power3)) * damping).mapP(.05, clip);

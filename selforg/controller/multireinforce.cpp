@@ -127,15 +127,15 @@ MultiReinforce::putInBuffer(matrix::Matrix* buffer, const matrix::Matrix& vec, i
 /// performs one step (includes learning). Calculates motor commands from sensor inputs.
 void
 MultiReinforce::step(const sensor* x_, int number_sensors, motor* y_, int number_motors) {
-  double slidingtime = min(4.0, static_cast<double>(conf).reinforce_interval / 2);
+  double slidingtime = min(4.0, static_cast<double>(conf.reinforce_interval) / 2);
   fillSensorBuffer(x_, number_sensors);
   if (t > buffersize) {
-    if (t % managementInterval == nullptr) {
+    if (t % managementInterval == 0) {
       management();
     }
 
-    reward += calcReinforcement() / static_cast<double>(conf).reinforce_interval;
-    if ((t % conf.reinforce_interval) == nullptr) {
+    reward += calcReinforcement() / static_cast<double>(conf.reinforce_interval);
+    if ((t % conf.reinforce_interval) == 0) {
       conf.qlearning->learn(state, action, reward, 1); // qlearning with old state
       state = calcState();
       oldreward = reward;

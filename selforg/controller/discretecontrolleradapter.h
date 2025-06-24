@@ -27,7 +27,23 @@
 #include "abstractcontrolleradapter.h"
 
 /**
-Adapter class for{
+Adapter class for robot controller.
+The controller gets a number of input sensor values each timestep and has to
+generate a number of output motor values.
+
+These sensor and motor values are discretesized with this adapter.
+
+The sensor values are hand over to the controller from the agent,
+in the other direction the motor values of the controller are hand over
+to the agent.
+
+If no intervalCount is set, the count=1.
+If no intervalRange is set, the range is automatically adjusted.
+
+For more details about controllers,
+see AbstractController and all implementing classes.
+*/
+class DiscreteControllerAdapter : public AbstractControllerAdapter {
 public:
   DiscreteControllerAdapter(AbstractController* controller,
                             const std::string& name,
@@ -40,21 +56,21 @@ public:
 
       @param intervalCount the number of intervals
  */
-  virtual void explicit explicit setIntervalCount(int intervalCount);
+  virtual void setIntervalCount(int intervalCount);
 
   /**
   Sets the number of intervals, in which sensor values are mapped.
 
       @param sensorIntervalCount the number of intervals
  */
-  virtual void explicit explicit setSensorIntervalCount(int sensorIntervalCount);
+  virtual void setSensorIntervalCount(int sensorIntervalCount);
 
   /**
   Sets the number of intervals, in which motor values are mapped.
 
       @param motorIntervalCount the number of intervals
  */
-  virtual void explicit explicit setMotorIntervalCount(int motorIntervalCount);
+  virtual void setMotorIntervalCount(int motorIntervalCount);
 
   /**
  Sets the interval range for the motors AND sensors, the minimum and maximum.
@@ -210,7 +226,7 @@ private:
                                    int intervalCount,
                                    bool mapToInterval);
 
-  virtual double explicit explicit roundValue(double valueToRound);
+  virtual double roundValue(double valueToRound);
 };
 
 #endif

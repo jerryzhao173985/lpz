@@ -33,7 +33,7 @@
  * from one to the next time step. Note that many steps are necessary for a good
  * prediction of the mutual information.
  */
-class MutualInformationController{
+class MutualInformationController : public AbstractController {
 
 public:
   static const int numberSensorsPreInitialized = 10;
@@ -56,28 +56,28 @@ public:
                                        bool showXsiF = false);
   virtual ~MutualInformationController() {};
 
-  virtual double& explicit explicit getMI(int index) {
+  virtual double& getMI(int index) {
     if (!initialized)
       init(numberSensorsPreInitialized, numberMotorsPreInitialized);
     assert(index < sensorNumber);
     return MI[index];
   }
 
-  virtual double& explicit explicit getH_x(int index) {
+  virtual double& getH_x(int index) {
     if (!initialized)
       init(numberSensorsPreInitialized, numberMotorsPreInitialized);
     assert(index < sensorNumber);
     return H_x[index];
   }
 
-  virtual double& explicit explicit getH_yx(int index) {
+  virtual double& getH_yx(int index) {
     if (!initialized)
       init(numberSensorsPreInitialized, numberMotorsPreInitialized);
     assert(index < sensorNumber);
     return H_yx[index];
   }
 
-  virtual double& explicit explicit getH_Xsi(int index) {
+  virtual double& getH_Xsi(int index) {
     if (!initialized)
       init(numberSensorsPreInitialized, numberMotorsPreInitialized);
     assert(index < sensorNumber);
@@ -99,7 +99,7 @@ public:
    * call first AbstractControllerAdapter::init(sensornumber,motornumber)
    * if you overwrite this method
    */
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
 
   /** @return Number of sensors the controller
       was initialised with or 0 if not initialised */
@@ -123,7 +123,7 @@ public:
   virtual void step(const sensor* sensors,
                     int sensornumber,
                     motor* motors,
-                    int motornumber);
+                    int motornumber) override;
 
   /** performs one step without learning.
   @see step
@@ -131,7 +131,7 @@ public:
   virtual void stepNoLearning(const sensor* sensors,
                               int sensornumber,
                               motor* motors,
-                              int motornumber);
+                              int motornumber) override;
 
   /****************************************************************************/
   /*        END methods of AbstractController                                   */
@@ -162,13 +162,13 @@ public:
 
   /** stores the object to the given file stream (binary).
    */
-  virtual bool store(FILE* f) const override {
+  virtual bool store(FILE* f) const {
     return true;
   }
 
   /** loads the object from the given file stream (binary).
    */
-  virtual bool restore(FILE* f) override {
+  virtual bool restore(FILE* f) {
     return true;
   }
 
@@ -191,9 +191,9 @@ public:
   /****************************************************************************/
 
 protected:
-  parambool showF;
-  parambool showP;
-  parambool showXsiF;
+  AbstractController::parambool showF;
+  AbstractController::parambool showP;
+  AbstractController::parambool showXsiF;
   bool initialized = false; // tells wether the controller is already initialized by the agent
   bool useXsiCalculation = false;
 
@@ -224,33 +224,33 @@ protected:
    * This is made by normal formula, which
    * needs O(n^2) costs.
    */
-  virtual void explicit explicit calculateMIs(double* MI);
+  virtual void calculateMIs(double* MI);
 
   /**
    * Calculates the entropy of x
    * This is made by normal formula, which
    * needs Ostatic_cast<n>(costs).
    */
-  virtual void explicit explicit calculateH_x(double* H);
+  virtual void calculateH_x(double* H);
 
   /**
    * Calculates the conditional entropy of y|x
    * This is made by normal formula, which
    * needs Ostatic_cast<n²>(costs).
    */
-  virtual void explicit explicit calculateH_yx(double* H_yx);
+  virtual void calculateH_yx(double* H_yx);
 
   /**
    * Updates the xsi frequency matrix list
    */
-  virtual void explicit explicit updateXsiFreqMatrixList(const sensor* sensors);
+  virtual void updateXsiFreqMatrixList(const sensor* sensors);
 
   /**
    * Calculates the entropy of H(Xsi)
    * This is made by normal formula, which
    * needs Ostatic_cast<n>(costs).
    */
-  virtual void explicit explicit calculateH_Xsi(double* H_Xsi);
+  virtual void calculateH_Xsi(double* H_Xsi);
 
   /**
    * Updates the mutual information
@@ -261,12 +261,12 @@ protected:
    * function first before updating the F matrix!
    * calculation costs: O(1)
    */
-  virtual void explicit explicit updateMIs(const sensor* sensors);
+  virtual void updateMIs(const sensor* sensors);
 
   /**
    * Returns the appropiate state which belongs to the given sensorValue.
    */
-  virtual int explicit explicit getState(double sensorValue);
+  virtual int getState(double sensorValue);
 
   /**
    * Does the pre-initialization functionality.

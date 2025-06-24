@@ -57,7 +57,7 @@ Example of 2 hidden layer network with both, elman and jordan context units.
 +-^-^-^         ^-^-^--<--+
 }
  */
-class Elman{
+class Elman : public MultiLayerFFNN {
 public:
   /**
      @param eps learning rate
@@ -111,7 +111,7 @@ public:
 
   /** applies the weight increments to the weight (and bias) matrices
       with the learningrate and the learnRateFactor */
-  virtual void explicit explicit updateWeights(const NetUpdate& updates);
+  virtual void updateWeights(const NetUpdate& updates);
 
   /* Is implemented in multilayerfnn
      virtual const matrix::Matrix response(const matrix::Matrix& input) const;
@@ -126,15 +126,15 @@ public:
   bool restore(FILE* f) override;
 
   /************** CONFIGURABLE INTERFACE ************************/
-  virtual paramkey getName() const noexcept override {
+  virtual std::string getName() const noexcept override {
     return std::string("elmanNN");
   }
 
   /************** Inspectable INTERFACE ************************/
-  virtual iparamkeylist getInternalParamNames() const override;
-  virtual iparamvallist getInternalParams() const override;
-  virtual ilayerlist getStructuralLayers() const override;
-  virtual iconnectionlist getStructuralConnections() const override;
+  virtual std::list<iparamkey> getInternalParamNames() const override;
+  virtual std::list<iparamval> getInternalParams() const override;
+  virtual std::list<ILayer> getStructuralLayers() const override;
+  virtual std::list<IConnection> getStructuralConnections() const override;
 
 protected:
   matrix::Matrix elmanWeights;

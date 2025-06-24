@@ -28,23 +28,23 @@
 using namespace matrix;
 using namespace std;
 
-const char*
-explicit actFun2String(const ActivationFunction actfun) {
-  if (actfun == FeedForwardNN::linear) {
+const char* actFun2String(ActivationFunction actfun) {
+  if(actfun == FeedForwardNN::linear) {
     return "linear";
   } else if (actfun == FeedForwardNN::sigmoid) {
     return "sigmoid";
-  } else if (actfun == FeedForwardNN::tanh) {
+  }else if (actfun == FeedForwardNN::tanh) {
     return "tanh";
-  } else if (actfun == FeedForwardNN::tanhc) {
+  }else if (actfun == FeedForwardNN::tanhc) {
     return "tanhc";
-  } else if (actfun == FeedForwardNN::tanhr) {
+  }else if (actfun == FeedForwardNN::tanhr) {
     return "tanhr";
-  } else {
+  }else {
     fprintf(stderr, "unknown activation function! Expand the cases in layer.cpp:actFun2String");
     return "unknown";
   }
 }
+
 
 Layer::Layer(int size, double factor_bias, ActivationFunction actfun)
   : size(size)
@@ -91,15 +91,15 @@ Layer::restore(FILE* f) {
   char actfun_name[128];
   if (sscanf(buffer, "%i %lf %127s", &size, &factor_bias, actfun_name) != 3)
     return false;
-  if (strcmp(actfun_name, "linear") == nullptr) {
+  if (strcmp(actfun_name, "linear") == 0) {
     actfun = FeedForwardNN::linear;
-  } else if (strcmp(actfun_name, "sigmoid") == nullptr) {
+  } else if (strcmp(actfun_name, "sigmoid") == 0) {
     actfun = FeedForwardNN::sigmoid;
-  } else if (strcmp(actfun_name, "tanh") == nullptr) {
+  } else if (strcmp(actfun_name, "tanh") == 0) {
     actfun = FeedForwardNN::tanh;
-  } else if (strcmp(actfun_name, "tanhc") == nullptr) {
+  } else if (strcmp(actfun_name, "tanhc") == 0) {
     actfun = FeedForwardNN::tanhc;
-  } else if (strcmp(actfun_name, "tanhr") == nullptr) {
+  } else if (strcmp(actfun_name, "tanhr") == 0) {
     actfun = FeedForwardNN::tanhr;
   } else {
     fprintf(stderr, "unknown activation function \"%s\"!", actfun_name);

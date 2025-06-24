@@ -283,7 +283,7 @@ DerPseudoSensor::learnController(int delay) {
   Matrix C_update(C.getM(), C.getN());
   Matrix H_update(H.getM(), H.getN());
 
-  bool teaching = (conf.modelCompliant != nullptr) || useTeaching;
+  bool teaching = (conf.modelCompliant != 0) || useTeaching;
   Matrix C_updateTeaching;
   Matrix H_updateTeaching;
 
@@ -384,7 +384,7 @@ DerPseudoSensor::learnController(int delay) {
 
   //**********End * Experiments 11.03.08*****************
 
-  if (conf.modelCompliant != nullptr) { // learning of the forward task
+  if (conf.modelCompliant != 0) { // learning of the forward task
     // eta is difference between last y and reconstructed one -> used as forward error signal
     // The question is wether to use eta (linearised), zeta (neuron inverse) or eta*g' (Backprop) !
     const Matrix g_p = z.map(g_derivative);

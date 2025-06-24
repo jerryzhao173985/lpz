@@ -25,7 +25,18 @@
 #define _STATISTIC_TOOLS_H
 
 // begin forward declarations
-class AbstractMeasure{
+class AbstractMeasure;
+// end forward declarations
+
+#include <selforg/inspectable.h>
+#include "measure/abstractmeasure.h"
+#include <selforg/measuremodes.h>
+#include <selforg/statisticmeasure.h>
+#include "analysationmodes.h"
+#include <string>
+#include <vector>
+
+class StatisticTools : public Inspectable {
 
 public:
   StatisticTools(const std::string& name = "StatisticTools") : Inspectable(name), beginMeasureCounter(0) { }
@@ -62,7 +73,7 @@ public:
    * @param measure the measure to add
    * @return the address value of the measure
    */
-  virtual double& explicit explicit addMeasure(AbstractMeasure* measure);
+  virtual double& addMeasure(AbstractMeasure* measure);
 
   /**
    * You can add another abstract measure you like. in some cases (e.g. complex
@@ -100,7 +111,7 @@ public:
          * values that have to be ignored at simulation start.
          * @param step number of steps (normally simsteps) to wait for beginning the measures
          */
-        virtual void explicit explicit beginMeasureAt(long step);
+        virtual void beginMeasureAt(long step);
 
   /**
    * Tells you wether the measures have already been started.
@@ -108,16 +119,22 @@ public:
    */
   virtual bool measureStarted() { return (beginMeasureCounter==0?true:false); }
 
+protected:
+  int beginMeasureCounter;
+  std::vector<AbstractMeasure*> values;
+  
+}; // end of class StatisticTools
 
-        /**
-         * CALLBACKABLE INTERFACE
-         *
-         *        this method is invoked when a callback is done from the class where{
-        return new ANALYSATION_CONTEXT(values);
-}
+// Template functions that use analysation contexts
 
 /**
- * class type{
+ * Get the result of the analysation in a chosen analysation mode
+ * @param mode the AnalysationMode  
+ * @param feature for AM_EXT
+ * @return the result
+ */
+template<typename type, typename ANALYSATION_CONTEXT>
+type getAnalysation(const ANALYSATION_CONTEXT* tvAnalysation, AnalysationMode mode, double feature = 0) {
         switch (mode){
         case AM_AVG:
                 return tvAnalysation->getAvg();
@@ -148,16 +165,20 @@ public:
         case AM_BEST:
                 return tvAnalysation->getBest();
         default:
-                return zero();
+                return type();  // return default value
         }
 }
 
-/**
- * class type{
+// Note: The following function template is commented out as it uses undefined types
+// ANALYSATION_CONTEXT and GET_TYPE_ANALYSATION macro
+/*
+template<typename type>
+static type getAnalysation(const std::vector<type>& values, AnalysationMode mode, double feature = 0) {
         ANALYSATION_CONTEXT* context = GET_TYPE_ANALYSATION(type)(values);
         type result = GET_TYPE_ANALYSATION(type)(context,mode,feature);
         delete context;
         return result;
 }
+*/
 
 #endif

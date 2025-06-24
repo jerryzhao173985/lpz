@@ -40,7 +40,9 @@ struct DerInfConf {
                            ///< exported, otherwise all
 };
 /**
- * class for{
+ * class for robot controller based on information theoretic principles (Der & Martius)
+ */
+class DerInf : public InvertMotorController, public Storeable {
 
 public:
   DerInf(const DerInfConf& conf = getDefaultConf());
@@ -74,10 +76,10 @@ public:
   virtual bool restore(FILE* f) override;
 
   /************** INSPECTABLE ********************************/
-  virtual iparamkeylist getInternalParamNames() const override;
-  virtual iparamvallist getInternalParams() const override;
-  virtual ilayerlist getStructuralLayers() const override;
-  virtual iconnectionlist getStructuralConnections() const override;
+  virtual std::list<iparamkey> getInternalParamNames() const override;
+  virtual std::list<iparamval> getInternalParams() const override;
+  virtual std::list<ILayer> getStructuralLayers() const override;
+  virtual std::list<IConnection> getStructuralConnections() const override;
 
   static DerInfConf getDefaultConf() {
     DerInfConf c;
@@ -208,7 +210,7 @@ protected:
       This is the implementation uses a better formula for g^-1 using Mittelwertsatz
       @param delay 0 for no delay and n>0 for n timesteps delay in the SML (s4delay)
   */
-  virtual void explicit explicit learnController(int delay);
+  virtual void learnController(int delay);
 
   /// handles inhibition damping etc.
   virtual void management();

@@ -31,7 +31,11 @@ OneActiveMultiPassiveController::OneActiveMultiPassiveController(AbstractControl
   : AbstractMultiController(controller, name, revision)
   , passiveMotors(nullptr) {}
 
-OneActiveMultiPassiveController::~OneActiveMultiPassiveController() {}
+OneActiveMultiPassiveController::~OneActiveMultiPassiveController() {
+  if (passiveMotors) {
+    delete[] passiveMotors;
+  }
+}
 
 /****************************************************************************/
 /*        AbstractMultiController should implement the following classes:                */
@@ -46,12 +50,21 @@ void
 OneActiveMultiPassiveController::init(const int sensornumber,
                                       const int motornumber,
                                       RandGen* randGen) {
-  // call the same method of super class AbstractMultiController{
+  // call the same method of super class AbstractMultiController
+  AbstractMultiController::init(sensornumber, motornumber, randGen);
+  passiveMotors = new motor[motornumber];
+}
+
+void
+OneActiveMultiPassiveController::step(const sensor* sensors,
+                                     int sensornumber,
+                                     motor* motors,
+                                     int motornumber) {
   assert(controller);
   // make normal step of the active controller
-  // then make step of all passive controllers
   controller->step(sensors, sensornumber, motors, motornumber);
-
+  
+  // then make step of all passive controllers
   for (auto* ctrl : controllerList) {
     ctrl->step(sensors, sensornumber, passiveMotors, motornumber);
   }

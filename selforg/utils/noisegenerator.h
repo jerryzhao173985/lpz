@@ -115,7 +115,7 @@ protected:
 class NoNoise : public NoiseGenerator {
 public:
   NoNoise() {}
-  virtual ~NoNoise() {}
+  virtual ~NoNoise() override {}
   virtual double generate() override {
     return 0;
   };
@@ -125,7 +125,7 @@ public:
 class WhiteUniformNoise : public NoiseGenerator {
 public:
   WhiteUniformNoise() {}
-  virtual ~WhiteUniformNoise() {}
+  virtual ~WhiteUniformNoise() override {}
   virtual double generate() override {
     return uniform(-1, 1);
   };
@@ -137,7 +137,7 @@ public:
 class WhiteNormalNoise : public NoiseGenerator {
 public:
   WhiteNormalNoise() {}
-  virtual ~WhiteNormalNoise() {}
+  virtual ~WhiteNormalNoise() override {}
   virtual double generate() override {
     double x1 = uniform01();
     double x2 = uniform01();
@@ -157,13 +157,13 @@ public:
   /** @param tau time averaging factor (1/window)
       (1: smoothing (white) 0.1: strong color, 0 no noise anymore
   */
-  ColorUniformNoise(double tau = 0.05)
+  explicit ColorUniformNoise(double tau = 0.05)
     : tau(tau) {
     sqrttau = sqrt(tau);
     mean1channel = 0.0;
     mean = 0;
   }
-  virtual ~ColorUniformNoise() {
+  virtual ~ColorUniformNoise() override {
     if (mean)
       free(mean);
   }
@@ -216,14 +216,14 @@ protected:
 /// like ColorUniformNoise but averaging over normal distributed noise instead.
 class ColorNormalNoise : public WhiteNormalNoise {
 public:
-  ColorNormalNoise(double tau = 0.05)
+  explicit ColorNormalNoise(double tau = 0.05)
     : tau(tau)
     , sqrttau(sqrt(tau))
     , mean(0)
     , mean1channel(0.0)
     , factor(0.0) {}
 
-  virtual ~ColorNormalNoise() {
+  virtual ~ColorNormalNoise() override {
     if (mean)
       free(mean);
   }
@@ -289,7 +289,7 @@ public:
     t = 0;
   }
 
-  virtual ~SineWhiteNoise() {}
+  virtual ~SineWhiteNoise() override {}
 
   virtual double generate() override {
     ++t;

@@ -27,7 +27,12 @@
 #include "abstractmulticontroller.h"
 
 /**
- * class static_cast{
+ * Controller that has one active controller and several passive controller.
+ * The active controller is used to generate the motor values.
+ * The passive controllers are fed with the same sensor values and the 
+ * generated motor values from the active controller.
+ */
+class OneActiveMultiPassiveController : public AbstractMultiController {
 public:
   /// contructor (hint: use $ID$ for revision)
   OneActiveMultiPassiveController(AbstractController* controller,
@@ -50,7 +55,7 @@ public:
    * call first AbstractMultiController::init(sensornumber,motornumber)
    * if you overwrite this method
    */
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
 
   /** performs one step (includes learning).
 Calculates motor commands from sensor inputs.
@@ -62,7 +67,7 @@ Calculates motor commands from sensor inputs.
   virtual void step(const sensor* sensors,
                     int sensornumber,
                     motor* motors,
-                    int motornumber);
+                    int motornumber) override;
 
   /** performs one step without learning.
         @see step
@@ -70,7 +75,7 @@ Calculates motor commands from sensor inputs.
   virtual void stepNoLearning(const sensor* sensors,
                               int sensornumber,
                               motor* motors,
-                              int motornumber);
+                              int motornumber) override;
 
   /****************************************************************************/
   /*        END methods of AbstractController                                             */

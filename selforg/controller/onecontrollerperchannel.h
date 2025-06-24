@@ -59,7 +59,10 @@ struct ControllerGenerator {
 };
 
 /**
- * class for{
+ * This controller creates one controller for each sensor channel. 
+ * Each controller only controls one motor channel.
+ */
+class OneControllerPerChannel : public AbstractController {
 public:
   /** @param controllerGenerator generator object for controller
       @param controllerName name
@@ -75,14 +78,14 @@ public:
 
   virtual ~OneControllerPerChannel() override;
 
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
 
-  virtual void step(const sensor* sensors, int sensornumber, motor* motors, int motornumber);
+  virtual void step(const sensor* sensors, int sensornumber, motor* motors, int motornumber) override;
 
   virtual void stepNoLearning(const sensor* sensors,
                               int sensornumber,
                               motor* motors,
-                              int motornumber);
+                              int motornumber) override;
 
   virtual int getSensorNumber() const override {
     return sensornumber;
@@ -93,11 +96,11 @@ public:
 
   /*********** STORABLE **************/
 
-  virtual bool store(FILE* f) const override;
+  virtual bool store(FILE* f) const;
 
-  virtual bool explicit explicit restore(FILE* f);
+  virtual bool restore(FILE* f);
 
-  virtual std::vector<AbstractController*> getControllers() const  override {
+  virtual std::vector<AbstractController*> getControllers() const {
     return ctrl;
   }
 
@@ -108,7 +111,7 @@ protected:
   int numContextSensors = 0;
   int motornumber = 0;
   int sensornumber = 0;
-  double* sensorbuffer;
+  double* sensorbuffer = nullptr;
 };
 
 #endif

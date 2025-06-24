@@ -29,7 +29,9 @@
 #include <selforg/matrix.h>
 
 /**
- * class for{
+ * class for N-channel invert controller
+ */
+class InvertNChannelController : public InvertController {
 
 public:
   InvertNChannelController(int _buffersize, bool _update_only_1 = false);
@@ -62,9 +64,9 @@ public:
 
   /***** STOREABLE ****/
   /** stores the controller values to a given file. */
-  virtual bool store(FILE* f) const override;
+  virtual bool store(FILE* f) const;
   /** loads the controller values from a given file. */
-  virtual bool restore(FILE* f) override;
+  virtual bool restore(FILE* f);
 
   // inspectable interface
   virtual std::list<ILayer> getStructuralLayers() const override;
@@ -107,19 +109,19 @@ protected:
   void putInBuffer(matrix::Matrix* buffer, const matrix::Matrix& vec);
 
   /// neuron transfer function
-  static double explicit explicit g(double z) {
+  static double g(double z) {
     return tanh(z);
   };
 
   ///
-  static double explicit explicit g_s(double z) {
+  static double g_s(double z) {
     double k = tanh(z);
     return 1.0 - k * k;
     //    return 1.0 - tanh(z)*tanh(z);
   };
 
   /// squashing function, to protect against to large weight updates
-  static double explicit explicit squash(double z) {
+  static double squash(double z) {
     return clip(z, -0.1, 0.1);
     //    return z < -0.1 ? -0.1 : ( z > 0.1 ? 0.1 : z );
     // return 0.1 * tanh(10.0 * z);

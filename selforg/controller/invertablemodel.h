@@ -35,7 +35,7 @@ public:
   // InvertableModel() {};
   InvertableModel(const std::string& name, const std::string& revision)
     : AbstractModel(name, revision) {}
-  virtual ~InvertableModel() {};
+  virtual ~InvertableModel() override {};
 
   /** calculates the partial derivative of the of the output with repect to the input(const Jacobi& matrix).
 

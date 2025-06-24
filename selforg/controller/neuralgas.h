@@ -33,7 +33,7 @@
     The output of the network is  \f$exp(- |x-w_i|^2/cellsize)\f$ for each neuron,
     where cellsize is distance to the second closest neigbour.
 */
-class NeuralGas{
+class NeuralGas : public AbstractModel {
 public:
   NeuralGas(const std::string& name = "NeuralGas", const std::string& revision = "$Id$");
   /** create a som
@@ -57,9 +57,9 @@ public:
   virtual void init(unsigned int inputDim,
                     unsigned int outputDim,
                     double unit_map = 0.0,
-                    RandGen* randGen = nullptr);
+                    RandGen* randGen = nullptr) override;
 
-  virtual const matrix::Matrix process(const matrix::Matrix& input);
+  virtual const matrix::Matrix process(const matrix::Matrix& input) override;
 
   /*  performs training. Nominal output is ignored.
       A zero matrix is returned.
@@ -68,7 +68,7 @@ public:
   */
   virtual const matrix::Matrix learn(const matrix::Matrix& input,
                                      const matrix::Matrix& nom_output,
-                                     double learnRateFactor = 1);
+                                     double learnRateFactor = 1) override;
 
   virtual void damp(double damping) override {
     return;
@@ -82,7 +82,7 @@ public:
   }
 
   virtual bool store(FILE* f) const override;
-  virtual bool explicit explicit restore(FILE* f);
+  virtual bool restore(FILE* f) override;
 
   virtual void printWeights(FILE* f) const;
   virtual void printCellsizes(FILE* f) const;
@@ -91,19 +91,19 @@ protected:
   /// updates the cell sizes
   void updateCellSizes();
 
-  /// activation function static_cast<rbf>(static) double activationfunction(double rdfsize, double d);
+  /// activation function
+  static double activationfunction(double rdfsize, double d);
 
 public:
   double eps = 0; ///< initial learning rate for weight update
+  double lambda = 3; ///< initial competitive constant for neighborhood learning
+  int maxTime = 100; ///< maximal time for annealing
 private:
   std::vector<matrix::Matrix> weights;
   std::vector<matrix::Matrix> diffvectors; ///< temporary difference vectors
-  matrix::Matrix distances;                ///< vector of distances
-  matrix::Matrix cellsizes;                ///< vector of cell sizes
-  double lambda = 0;                           ///< initial neighbourhood size
-  int maxTime = 0;                             ///< maximal time for annealing
-  int t = 0;                                   ///< time used for annealing
-
+  matrix::Matrix distances; ///< distances to all neurons
+  matrix::Matrix cellsizes; ///< cell sizes
+  int t = 0; ///< time used for annealing
   bool initialised = false;
 };
 

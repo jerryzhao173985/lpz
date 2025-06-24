@@ -38,8 +38,8 @@ public:
      @param layers Layer description (the input layer is not specified (always linear))
      @param useBypass if true, then a connection from input to output layer is included
   */
-  ControllerNet(const std::vector<Layer>& layers, bool useBypass = false);
-  virtual ~ControllerNet() {}
+  explicit ControllerNet(const std::vector<Layer>& layers, bool useBypass = false);
+  virtual ~ControllerNet() override {}
 
   /** initialisation of the network with the given number of input and output units.
       The dimensionality of the ouputlayer is automatically adjusted.
@@ -57,7 +57,7 @@ public:
       This has to be done before calling reponse, and the back/forward propagation/projection
      functions. The activations and the response matrix are stored internally.
    */
-  virtual const matrix::Matrix process(const matrix::Matrix& input);
+  virtual const matrix::Matrix process(const matrix::Matrix& input) override;
 
   /** like process just with the opportunity to overwrite the activation of
       a specific layer
@@ -69,7 +69,7 @@ public:
                                         unsigned int injectInLayer);
 
   /// damps the weights and the biases by multiplying (1-damping)
-  virtual void damp(double damping);
+  virtual void damp(double damping) override;
 
   /** response matrix of neural network (for current activation, see process)
   \f[  J_ij = \frac{\partial y_i}{\partial x_j} \f]
@@ -153,11 +153,11 @@ public:
                                                  matrix::Matrices* zetas = 0) const;
 
   /// returns the number of input neurons
-  virtual unsigned int getInputDim() const {
+  virtual unsigned int getInputDim() const override {
     return weights[0].getN();
   }
   /// returns the number of output neurons
-  virtual unsigned int getOutputDim() const {
+  virtual unsigned int getOutputDim() const override {
     return (weights.rbegin())->getM();
   }
 
@@ -240,9 +240,9 @@ public:
 
   /**************  STOREABLE **********************************/
   /// stores the layer binary into file stream
-  bool store(FILE* f) const;
+  bool store(FILE* f) const override;
   /// restores the layer binary from file stream
-  bool restore(FILE* f);
+  bool restore(FILE* f) override;
 
   /// writes the layer ASCII into file stream (not in the storable interface)
   bool write(FILE* f) const;

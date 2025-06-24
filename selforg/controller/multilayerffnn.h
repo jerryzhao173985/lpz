@@ -146,9 +146,9 @@ public:
 
   /**************  STOREABLE **********************************/
   /// stores the layer binary into file stream
-  bool store(FILE* f) const;
+  bool store(FILE* f) const override;
   /// restores the layer binary from file stream
-  bool restore(FILE* f);
+  bool restore(FILE* f) override;
 
   /// writes the layer ASCII into file stream (not in the storable interface)
   bool write(FILE* f) const;
@@ -172,7 +172,7 @@ public:
    * @param actfun the activation function to be used
    * @return the activation functions which where used until now
    */
-  virtual std::vector<ActivationFunction> explicit explicit setActivationFunction(ActivationFunction actfun);
+  virtual std::vector<ActivationFunction> setActivationFunction(ActivationFunction actfun);
 
   /**
    * sets the activation functions (and derivative and inversion too) for all layers.

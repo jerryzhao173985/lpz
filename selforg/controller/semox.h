@@ -27,15 +27,20 @@
 #include <selforg/teachable.h>
 
 struct SeMoXConf {
+  unsigned short buffersize = 50;     ///< size of the ringbuffers for sensors, motors,...
+  double cInit = 1.0;                 ///< init size of C (controller matrix)
+  double cNonDiag = 0;                ///< size of nondiagonal elements of C (controller matrix)
+  double aInit = 1.0;                 ///< init size of A (model matrix)
+  double sInit = 0.0;                 ///< init size of S (sensor to sensor matrix)
   matrix::Matrix
     initialC;   ///< initialC initial controller matrix (if null matrix then automatic, see cInit)
                    ///< not given)
   bool
-    modelExt; ///< modelExt if true then additional matrix S is used in forward model (sees sensors)
-  /** number of context sensors (considered at the end of the sensor
-      vector, which are only feed to the model extended model */
+    modelExt = true; ///< modelExt if true then additional matrix S is used in forward model (sees sensors)
+  int numContext = 0;  ///< number of context sensors (considered at the end of the sensor
+                       ///< vector, which are only feed to the model extended model)
   bool
-    someInternalParams; ///< someInternalParams if true only some internal parameters are exported
+    someInternalParams = true; ///< someInternalParams if true only some internal parameters are exported
 };
 
 /**
@@ -44,14 +49,19 @@ struct SeMoXConf {
  *  2009, University Goettingen:
  *  Goal-Oriented Control of Self-organizing Behavior in Autonomous Robots
  *
- * This class also{
+ * This class also learns the inverse model and learns bias transformation.
+ *
+ * Homekinetic controller using sensors and motors.
+ * 
+ */
+class SeMoX : public HomeokinBase, public Teachable, public Parametrizable {
   friend class ThisSim;
 
 public:
   SeMoX(const SeMoXConf& conf = getDefaultConf());
 
   /// returns the default configuration
-  static SeMoXConf getDefaultConf() const {
+  static SeMoXConf getDefaultConf() {
     SeMoXConf c;
     c.buffersize = 50;
     // c.initialC // remains 0x0
@@ -65,7 +75,7 @@ public:
     return c;
   }
 
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
 
   virtual ~SeMoX() override;
 
@@ -80,23 +90,23 @@ public:
 
   /// performs one step (includes learning).
   /// Calulates motor commands from sensor inputs.
-  virtual void step(const sensor*, int number_sensors, motor*, int number_motors);
+  virtual void step(const sensor*, int number_sensors, motor*, int number_motors) override;
 
   /// performs one step without learning. Calulates motor commands from sensor inputs.
   virtual void stepNoLearning(const sensor*,
                               int number_sensors,
                               motor*,
-                              int number_motors);
+                              int number_motors) override;
 
   /**** STOREABLE ****/
   /** stores the controller values to a given file. */
-  virtual bool store(FILE* f) const override;
+  virtual bool store(FILE* f) const;
   /** loads the controller values from a given file. */
-  virtual bool explicit explicit restore(FILE* f);
+  virtual bool restore(FILE* f);
 
   /**** INSPECTABLE ****/
-  virtual std::list<ILayer> getStructuralLayers() const;
-  virtual std::list<IConnection> getStructuralConnections() const;
+  virtual std::list<ILayer> getStructuralLayers() const override;
+  virtual std::list<IConnection> getStructuralConnections() const override;
 
   /**** TEACHABLE ****/
   /** The given motor teaching signal is used for this timestep.
@@ -105,22 +115,22 @@ public:
        for a continuous teaching process.
      @param teaching: matrix with dimensions (motornumber,1)
    */
-  virtual void setMotorTeaching(const matrix::Matrix& teaching);
+  virtual void setMotorTeaching(const matrix::Matrix& teaching) override;
 
   /** The given sensor teaching signal (distal learning) is used for this timestep.
       The belonging motor teachung signal is calculated by the inverse model.
       See setMotorTeaching
      @param teaching: matrix with dimensions (motorsensors,1)
    */
-  virtual void setSensorTeaching(const matrix::Matrix& teaching);
+  virtual void setSensorTeaching(const matrix::Matrix& teaching) override;
   /// returns the last motor values (useful for cross motor coupling)
-  virtual matrix::Matrix getLastMotorValues();
+  virtual matrix::Matrix getLastMotorValues() override;
   /// returns the last sensor values (useful for cross sensor coupling)
-  virtual matrix::Matrix getLastSensorValues();
+  virtual matrix::Matrix getLastSensorValues() override;
 
   /***** PARAMETRIZABLE ****/
-  virtual std::list<matrix::Matrix> getParameters() const;
-  virtual int setParameters(const std::list<matrix::Matrix>& params);
+  virtual std::list<matrix::Matrix> getParameters() const override;
+  virtual int setParameters(const std::list<matrix::Matrix>& params) override;
 
 protected:
   unsigned short number_sensors = 0;
@@ -174,14 +184,14 @@ protected:
   /// calculates xsi for the current time step using the delayed y values
   //  and x delayed by one
   //  @param delay 0 for no delay and n>0 for n timesteps delay in the time loop
-  virtual void explicit explicit calcXsi(int delay);
+  virtual void calcXsi(int delay);
 
   /// learn H,C with motors y and corresponding sensors x
   virtual void learnController();
 
   /// learn A, (and S) using motors y and corresponding sensors x
   //  @param delay 0 for no delay and n>0 for n timesteps delay in the time loop
-  virtual void explicit explicit learnModel(int delay);
+  virtual void learnModel(int delay);
 
   /// calculates the predicted sensor values
   virtual matrix::Matrix model(const matrix::Matrix* x_buffer, int delay, const matrix::Matrix& y);
@@ -193,7 +203,7 @@ protected:
   virtual matrix::Matrix calculateControllerValues(const matrix::Matrix& x_smooth);
 
 protected:
-  static double explicit explicit regularizedInverse(double v);
+  static double regularizedInverse(double v);
 };
 
 #endif

@@ -104,9 +104,9 @@ template<class T>
 struct join {
   using argument_type = T;
   using result_type = void;
-  join(const T& delimit_) : delimit(delimit_) {}
+  explicit join(const T& delimit_) : delimit(delimit_) {}
   void operator()(const T& s) {
-    if (count == nullptr) {
+    if (count == 0) {
       joined = s;
     } else {
       joined += delimit + s;

@@ -25,7 +25,9 @@
 #include <cstring>
 
 /**
- * Abstract class static_cast{
+ * Abstract class for invert controllers
+ */
+class InvertController : public AbstractController {
 public:
   InvertController(const std::string& name, const std::string& revision)
     : AbstractController(name, revision) {

@@ -5,7 +5,7 @@
 #include "randomgenerator.h"
 
 /// simple one layer neural network with configurable activation function
-class OneLayerFFNN{
+class OneLayerFFNN : public FeedForwardNN {
 public:
   /**
      Uses linear activation function
@@ -58,13 +58,13 @@ public:
   virtual void init(unsigned int inputDim,
                     unsigned int outputDim,
                     double unit_map = 0.0,
-                    RandGen* randGen = 0);
+                    RandGen* randGen = 0) override;
 
-  virtual const matrix::Matrix process(const matrix::Matrix& input);
+  virtual const matrix::Matrix process(const matrix::Matrix& input) override;
 
   virtual const matrix::Matrix learn(const matrix::Matrix& input,
                                      const matrix::Matrix& nom_output,
-                                     double learnRateFactor = 1);
+                                     double learnRateFactor = 1) override;
 
   /// returns the number of input neurons
   virtual unsigned int getInputDim() const override {
@@ -75,10 +75,10 @@ public:
     return weights.getM();
   }
 
-  virtual const matrix::Matrix& getWeights() const  override {
+  virtual const matrix::Matrix& getWeights() const {
     return weights;
   }
-  virtual const matrix::Matrix& getBias() const  override {
+  virtual const matrix::Matrix& getBias() const {
     return bias;
   }
 
@@ -90,9 +90,9 @@ public:
 
   /**************  STOREABLE **********************************/
   /// stores the layer binary into file stream
-  bool store(FILE* f) const override;
+  virtual bool store(FILE* f) const override;
   /// restores the layer binary from file stream
-  bool explicit explicit restore(FILE* f);
+  virtual bool restore(FILE* f) override;
 
 private:
   double eps = 0;

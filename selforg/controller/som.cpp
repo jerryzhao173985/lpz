@@ -68,7 +68,7 @@ SOM::init(unsigned int inputDim, unsigned int outputDim, double unit_map, RandGe
 
   for (unsigned int i = 0; i < outputDim; ++i) {
     weights[i].set(inputDim, 1);
-    if (unit_map == nullptr) { // random
+    if (unit_map == 0) { // random
       weights[i] = weights[i].mapP(randGen, random_minusone_to_one);
     } else { // uniform
       weights[i] =
@@ -128,7 +128,7 @@ SOM::initNeighbourhood(double sigma) {
   int r_sigma = static_cast<int>(round(sigma));
   int i_sigma = max(3, r_sigma % 2 == 1 ? r_sigma : r_sigma + 1); // round to next odd number
   int n_size = static_cast<int>(pow(static_cast<double>(i_sigma), static_cast<double>(dimensions)));
-  if (sigma == nullptr) {
+  if (sigma == 0) {
     i_sigma = 1;
     n_size = 1;
     sigma = 1;

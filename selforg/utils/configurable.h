@@ -86,7 +86,7 @@ public:
     using argument_type = Configurable*;
     using result_type = bool;
 
-    matchId(int id_) : id(id_) {}
+    explicit matchId(int id_) : id(id_) {}
     int id = 0;
     bool operator()(const Configurable* c) {
       return c->id == id;
@@ -109,7 +109,7 @@ public:
   //   {
   //   }
 
-  ~Configurable() {}
+  ~Configurable() override {}
 
   /**
      Is called when a parameter was changes via setParam(). Note that

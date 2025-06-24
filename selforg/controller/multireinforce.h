@@ -55,7 +55,9 @@ struct Sat {
 };
 
 /**
- * class for{
+ * class for multi-layer neural network reinforcement learning controller
+ */
+class MultiReinforce : public AbstractController {
 
 public:
   MultiReinforce(const MultiReinforceConf& conf = getDefaultConf());
@@ -98,9 +100,9 @@ public:
 
   /**** STOREABLE ****/
   /** stores the controller values to a given file. */
-  virtual bool store(FILE* f) const override;
+  virtual bool store(FILE* f) const;
   /** loads the controller values from a given file. */
-  virtual bool restore(FILE* f) override;
+  virtual bool restore(FILE* f);
 
   /**** INSPECTABLE ****/
   virtual std::list<iparamkey> getInternalParamNames() const override;

@@ -27,7 +27,9 @@
 #include <selforg/multilayerffnn.h>
 
 /**
- * class for{
+ * class for feedforward neural network controller
+ */
+class FFNNController : public AbstractController {
 
 public:
   /** @param networkfilename file to load the network
@@ -75,9 +77,9 @@ public:
 
   /**** STOREABLE ****/
   /** stores the controller values to a given file (binary).  */
-  virtual bool store(FILE* f) const override;
+  virtual bool store(FILE* f) const;
   /** loads the controller values from a given file (binary). */
-  virtual bool restore(FILE* f) override;
+  virtual bool restore(FILE* f);
 
   // inspectable interface
   virtual std::list<iparamkey> getInternalParamNames() const override {

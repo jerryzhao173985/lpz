@@ -37,7 +37,7 @@
  * Normally the sensor and/or motor values are measured.
  * @see AbstractControllerAdapter
  */
-class MeasureAdapter{
+class MeasureAdapter : public AbstractControllerAdapter {
 
 public:
   /**

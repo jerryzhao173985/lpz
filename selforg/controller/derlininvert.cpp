@@ -273,7 +273,7 @@ DerLinInvert::learnController(int delay) {
   Matrix H_update(H.getM(), H.getN());
   Matrix HY_update(HY.getM(), HY.getN());
 
-  bool teaching = (conf.modelCompliant != nullptr) || useTeaching;
+  bool teaching = (conf.modelCompliant != 0) || useTeaching;
   Matrix C_updateTeaching;
   Matrix H_updateTeaching;
 

@@ -96,7 +96,7 @@ QLearning::select(unsigned int state) {
   // exploration
   double r = randGen->rand();
   if (r < exploration) {
-    a = static_cast<int>(randGen->rand() * static_cast<double>(Q).getN());
+    a = static_cast<int>(randGen->rand() * static_cast<double>(Q.getN()));
   }
   return a;
 }
@@ -135,7 +135,7 @@ QLearning::select_keepold(unsigned int state) {
   double r = randGen->rand();
   if (r < exploration) {
     std::cout << "explore\n";
-    return int(randGen->rand() * static_cast<double>(Q).getN());
+    return int(randGen->rand() * static_cast<double>(Q.getN()));
   }
   matrix::Matrix vals = Q.row(state);
   vals += vals.mapP(randGen, random_minusone_to_one) * 0.001; // this is like random

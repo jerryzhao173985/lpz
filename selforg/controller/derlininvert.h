@@ -46,7 +46,9 @@ struct DerLinInvertConf {
   InvertableModel* sat;   ///< satellite network, that learns and teaches (can be 0)
 };
 /**
- * class for{
+ * class for robot controller using linear inversion and information theoretic principles
+ */
+class DerLinInvert : public InvertMotorController, public Storeable {
 
 public:
   DerLinInvert(const DerLinInvertConf& conf = getDefaultConf());
@@ -80,10 +82,10 @@ public:
   virtual bool restore(FILE* f) override;
 
   /************** INSPECTABLE ********************************/
-  virtual iparamkeylist getInternalParamNames() const override;
-  virtual iparamvallist getInternalParams() const override;
-  virtual ilayerlist getStructuralLayers() const override;
-  virtual iconnectionlist getStructuralConnections() const override;
+  virtual std::list<iparamkey> getInternalParamNames() const override;
+  virtual std::list<iparamval> getInternalParams() const override;
+  virtual std::list<ILayer> getStructuralLayers() const override;
+  virtual std::list<IConnection> getStructuralConnections() const override;
 
   /**** TEACHING ****/
   /** The given motor teaching signal is used for this timestep.
@@ -220,11 +222,11 @@ protected:
       This is the implementation uses a better formula for g^-1 using Mittelwertsatz
       @param delay 0 for no delay and n>0 for n timesteps delay in the SML (s4delay)
   */
-  virtual void explicit explicit learnController(int delay);
+  virtual void learnController(int delay);
 
   /// learn conf.model, (and S) using motors y and corresponding sensors x
   //  @param delay 0 for no delay and n>0 for n timesteps delay in the time loop
-  virtual void explicit explicit learnModel(int delay);
+  virtual void learnModel(int delay);
 
   /// handles inhibition damping etc.
   virtual void management();

@@ -146,7 +146,7 @@ SeMoX::stepNoLearning(const sensor* x, int number_sensors, motor* y, int number_
 
 void
 SeMoX::fillBuffersAndControl(const sensor* x_, int number_sensors, motor* y_, int number_motors) {
-  assert(static_cast<unsigned>(number_sensors) == (this->number_sensors + static_cast<unsigned>(conf).numContext) &&
+  assert(static_cast<unsigned>(number_sensors) == (this->number_sensors + conf.numContext) &&
          static_cast<unsigned>(number_motors) == this->number_motors);
 
   Matrix x(this->number_sensors, 1, x_);
@@ -163,7 +163,7 @@ SeMoX::fillBuffersAndControl(const sensor* x_, int number_sensors, motor* y_, in
   const Matrix& y = calculateControllerValues(x_smooth);
 
   // from time to time call management function. For example damping is done here.
-  if ((t + t_rand) % managementInterval == nullptr)
+  if ((t + t_rand) % managementInterval == 0)
     management();
 
   // put new output vector in ring buffer y_buffer
@@ -207,7 +207,7 @@ SeMoX::learnController() {
   Matrix H_update(H.getM(), H.getN());
   Matrix C_updateTeaching;
   Matrix H_updateTeaching;
-  bool teaching = intern_useTeaching || (gamma_cont != nullptr);
+  bool teaching = intern_useTeaching || (gamma_cont != 0);
   if (teaching) {
     C_updateTeaching.set(C.getM(), C.getN());
     H_updateTeaching.set(H.getM(), H.getN());
@@ -241,7 +241,7 @@ SeMoX::learnController() {
     // scale of the additional terms
     const Matrix& LLT_I = ((R & g_prime).multMT() + SmallID) ^ -1;
 
-    if (gamma_cont != nullptr) { // learning to keep motorcommands smooth
+    if (gamma_cont != 0) { // learning to keep motorcommands smooth
       // the teaching signal is the previous motor command
       const Matrix& y = y_buffer[(t) % buffersize];
       const Matrix& y_tm1 = y_buffer[(t - 1) % buffersize];
@@ -249,7 +249,7 @@ SeMoX::learnController() {
       C_updateTeaching += (LLT_I * delta * (x ^ T)) * (gamma_cont * epsC);
       H_updateTeaching += LLT_I * delta * (gamma_cont * epsC);
     }
-    if (intern_useTeaching && gamma_teach != nullptr) {
+    if (intern_useTeaching && gamma_teach != 0) {
       const Matrix& y = y_buffer[(t - 1) % buffersize];
       const Matrix& xsi_local = y_teaching - y;
       const Matrix& delta = xsi_local.multrowwise(g_prime);

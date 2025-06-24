@@ -178,7 +178,7 @@ InvertMotorSpace::learnController(const Matrix& x, const Matrix& x_smooth, int d
   Matrix H_update;
 
   // apply updates to H,C
-  if (zetaupdate == nullptr) {
+  if (zetaupdate == 0) {
     // delta C = eps * (zeta * alpha^T + beta x^T)
     C_update = (zeta * (alpha ^ T) + beta * (x_smooth ^ T)) * epsC;
     H_update = (beta * epsC); // delta H = beta

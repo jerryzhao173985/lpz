@@ -56,7 +56,7 @@ struct PiMaxConf {
    The code contains more functionality than is described in the paper
      e.g. the teaching and motor babbling is not used.
 */
-class PiMax{
+class PiMax : public AbstractController, public Teachable, public Parametrizable {
 
 public:
   PiMax(const PiMaxConf& conf = getDefaultConf());
@@ -65,7 +65,7 @@ public:
 
   virtual ~PiMax() override;
 
-  static PiMaxConf getDefaultConf() const {
+  static PiMaxConf getDefaultConf() {
     PiMaxConf conf;
     conf.initFeedbackStrength = 1.0;
     conf.useExtendedModel = false;
@@ -105,9 +105,9 @@ public:
 
   /***** STOREABLE ****/
   /** stores the controller values to a given file. */
-  virtual bool store(FILE* f) const override;
+  virtual bool store(FILE* f) const;
   /** loads the controller values from a given file. */
-  virtual bool restore(FILE* f) override;
+  virtual bool restore(FILE* f);
 
   /* some direct access functions (unsafe!) */
   virtual matrix::Matrix getA();
@@ -161,27 +161,27 @@ protected:
   matrix::Matrix a_teaching; // motor teaching  signal
 
   bool useMetric = false;
-  paramval causeaware;
-  paramval sense;
-  paramval epsC;
-  paramval epsA;
-  paramval epsSigma;
-  paramval factorH;
-  paramval damping;
-  paramval gamma; // teaching strength
+  AbstractController::paramval causeaware;
+  AbstractController::paramval sense;
+  AbstractController::paramval epsC;
+  AbstractController::paramval epsA;
+  AbstractController::paramval epsSigma;
+  AbstractController::paramval factorH;
+  AbstractController::paramval damping;
+  AbstractController::paramval gamma; // teaching strength
 
-  paramint tau; // length of time window
+  AbstractController::paramint tau; // length of time window
 
   /// learn values model and controller (A,b,C,h)
   virtual void learn();
 
   /// neuron transfer function
-  static double explicit explicit g(double z) {
+  static double g(double z) {
     return tanh(z);
   };
 
   /// derivative of g
-  static double explicit explicit g_s(double z) {
+  static double g_s(double z) {
     double k = tanh(z);
     return 1.05 - k * k; // regularized
   };
@@ -191,7 +191,7 @@ protected:
     return min(max(x, -r), r);
   }
   /// calculates the inverse the argument (useful for Matrix::map)
-  static double explicit explicit one_over(double x) {
+  static double one_over(double x) {
     return 1 / x;
   }
 };

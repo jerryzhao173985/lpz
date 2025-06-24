@@ -32,15 +32,20 @@
 /** measure modes of complex measures.
  */
 enum ComplexMeasureMode {
-  /// returns the entropy of the value, uses update formula, needs Ostatic_cast<1>(ENT),
-  /// returns the entropy of the value, uses normal formula, needs Ostatic_cast<n>(or) O(m*n)
+  /// returns the entropy of the value, uses update formula, needs O(1)
+  ENT,
+  /// returns the entropy of the value, uses normal formula, needs O(n) or O(m*n)
   ENTSLOW,
-  /// returns the mutual information of two values, uses update formula, needs Ostatic_cast<1>(MI),
+  /// returns the mutual information of two values, uses update formula, needs O(1)
+  MI,
   /// returns the predictive information of two or more values
   PINF
 };
 
-class Discretisizer{
+// forward declaration
+class Discretisizer;
+
+class ComplexMeasure : public AbstractMeasure {
 
   public:
 
@@ -93,7 +98,7 @@ ComplexMeasure( const char* measureName, ComplexMeasureMode mode, int numberBins
   int historyInterval = 0; // interval between two different histoy indexes
 
   // new: use SparseArray backed by HashMap instead of normal array
-  matrix::SparseArray<long, int> F;
+  SparseArray<long, int> F;
     // calculation methods
 
       /**
@@ -106,7 +111,7 @@ ComplexMeasure( const char* measureName, ComplexMeasureMode mode, int numberBins
      * updates the entropy. uses update rule with Ostatic_cast<1>(costs)
      * @param binNumber the bin number
      */
-    void explicit explicit updateEntropy( int binNumber);
+    void updateEntropy( int binNumber);
 
     /**
      * computes the entropy. uses the normal rule with O(m*n*o) costs

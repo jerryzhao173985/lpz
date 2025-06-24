@@ -178,7 +178,7 @@ InvertNChannelController::calculateE(const Matrix& x_delay, const Matrix& y_dela
 
   double E = ((v ^ T) * v).val(0, 0);
   double Es = 0.0;
-  if (desens != nullptr) {
+  if (desens != 0) {
     Matrix diff_x = x_buffer[t % buffersize] - A * ((C * x_buffer[t % buffersize] + h).map(g));
     Es = ((diff_x ^ T) * diff_x).val(0, 0);
   }

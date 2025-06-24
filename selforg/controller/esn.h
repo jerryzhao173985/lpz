@@ -40,7 +40,9 @@ struct ESNConf {
 };
 
 /**
- * class for{
+ * class for Echo State Networks (ESN)
+ */
+class ESN : public InvertableModel {
 public:
   /**
      @param controlmask bitmask to select channels to control (default all)
@@ -116,7 +118,7 @@ public:
 
   virtual bool restore(FILE* f) override;
 
-  static double explicit explicit tanh_prime(double z) {
+  static double tanh_prime(double z) {
     double k = tanh(z);
     return 1.0 - k * k;
   };
