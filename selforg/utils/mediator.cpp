@@ -22,9 +22,9 @@
  *                                                                         *
  ***************************************************************************/
 #include "mediator.h"
+#include "mediatorcollegue.h"
 #include "stl_adds.h"
 #include <cassert>
-// #include __PLACEHOLDER_2__
 
 Mediator::Mediator() {}
 
@@ -65,8 +65,8 @@ Mediator::getMediatorCollegueIndex(MediatorCollegue* collegue) {
 }
 
 unsigned int
-Mediator::getNumberOfMediatorCollegues() {
-  return static_cast<unsigned int>(collegueList).size();
+Mediator::getNumberOfMediatorCollegues() const {
+  return static_cast<unsigned int>(collegueList.size());
 }
 
 void

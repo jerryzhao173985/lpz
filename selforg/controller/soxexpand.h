@@ -42,15 +42,15 @@ struct SoxExpandConf {
  * This controller implements the standard algorihm described the Chapter 3 (Homeokinesis)
  * with body expansion via context sensors
  */
-class SoxExpand{
+class SoxExpand : public AbstractController {
 
 public:
   SoxExpand(const SoxExpandConf& conf = getDefaultConf());
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
 
-  virtual ~SoxExpand() override;
+  virtual ~SoxExpand();
 
-  static SoxExpandConf getDefaultConf() const {
+  static SoxExpandConf getDefaultConf() {
     SoxExpandConf c;
     c.initFeedbackStrength = 1.0;
     c.numberContextSensors = 0;
@@ -68,16 +68,16 @@ public:
 
   /// performs one step (includes learning).
   /// Calulates motor commands from sensor inputs.
-  virtual void step(const sensor*, int number_sensors, motor*, int number_motors);
+  virtual void step(const sensor*, int number_sensors, motor*, int number_motors) override;
 
   /// performs one step without learning. Calulates motor commands from sensor inputs.
-  virtual void stepNoLearning(const sensor*, int number_sensors, motor*, int number_motors);
+  virtual void stepNoLearning(const sensor*, int number_sensors, motor*, int number_motors) override;
 
   /***** STOREABLE ****/
   /** stores the controller values to a given file. */
-  virtual bool store(FILE* f) const override;
+  virtual bool store(FILE* f) const;
   /** loads the controller values from a given file. */
-  virtual bool explicit explicit restore(FILE* f);
+  virtual bool restore(FILE* f);
 
   /* some direct access functions (unsafe!) */
   virtual matrix::Matrix getA();
@@ -115,25 +115,25 @@ protected:
   bool TLE = false;
   bool loga = false;
 
-  paramval creativity;
-  paramval sense;
-  paramval harmony;
-  paramval causeaware;
-  paramval epsC;
-  paramval epsA;
-  paramint s4avg;   // # of steps the sensors are averaged (1 means no averaging)
-  paramint s4delay; // # of steps the motor values are delayed (1 means no delay)
+  AbstractController::paramval creativity;
+  AbstractController::paramval sense;
+  AbstractController::paramval harmony;
+  AbstractController::paramval causeaware;
+  AbstractController::paramval epsC;
+  AbstractController::paramval epsA;
+  AbstractController::paramint s4avg;   // # of steps the sensors are averaged (1 means no averaging)
+  AbstractController::paramint s4delay; // # of steps the motor values are delayed (1 means no delay)
 
   /// learn values model and controller (A,b,C,h)
   virtual void learn();
 
   /// neuron transfer function
-  static double explicit explicit g(double z) {
+  static double g(double z) {
     return tanh(z);
   };
 
   /// derivative of g
-  static double explicit explicit g_s(double z) {
+  static double g_s(double z) {
     double k = tanh(z);
     return 1.0 - k * k;
   };
@@ -143,7 +143,7 @@ protected:
     return min(max(x, -r), r);
   }
   /// calculates the inverse the argument (useful for Matrix::map)
-  static double explicit explicit one_over(double x) {
+  static double one_over(double x) {
     return 1 / x;
   }
 };

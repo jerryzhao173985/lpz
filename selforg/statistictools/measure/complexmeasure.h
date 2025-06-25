@@ -72,7 +72,7 @@ ComplexMeasure( const char* measureName, ComplexMeasureMode mode, int numberBins
      * @param minValue minimum value the observed value can become
      * @param maxValue maximum value the observed value can become
      */
-    virtual void addObservable( const double& observedValue, double minValue, double maxValue );
+    virtual void addObservable( double& observedValue, double minValue, double maxValue );
 
     virtual ~ComplexMeasure() override;
 

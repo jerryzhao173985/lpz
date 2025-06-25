@@ -5,12 +5,12 @@
 *                                                                       *
 * This library is free software; you can redistribute it and/or         *
 * modify it under the terms of EITHER:                                  *
-*   static_cast<1>(The) GNU Lesser General Public License as published by the Free  *
+*   1 GNU Lesser General Public License as published by the Free  *
 *       Software Foundation; either version 2.1 of the License, or (at  *
 *       your option) any later version. The text of the GNU Lesser      *
 *       General Public License is included with this library in the     *
 *       file LICENSE.TXT.                                               *
-*   static_cast<2>(The) BSD-style license that is included with this library in     *
+*   2 BSD-style license that is included with this library in     *
 *       the file LICENSE-BSD.TXT.                                       *
 *                                                                       *
 * This library is distributed in the hope that it will be useful,       *
@@ -84,15 +84,15 @@ enum dInitODEFlags {
  *
  * A call to @c dInitODE is equal to the following initialization sequence
  * @code
- *     dInitODE2(0) override;
- *     dAllocateODEDataForThread(dAllocateMaskAll) override;
+ *     dInitODE2(0);
+ *     dAllocateODEDataForThread(dAllocateMaskAll);
  * @endcode
  *
  * @see dInitODE2
  * @see dAllocateODEDataForThread
  * @ingroup init
  */
-ODE_API void dInitODEstatic_cast<void>(override);
+ODE_API void dInitODE(void);
 
 /**
  * @brief Initializes ODE library.
@@ -116,7 +116,7 @@ ODE_API void dInitODEstatic_cast<void>(override);
  * @see dSpaceSetManualCleanup
  * @ingroup init
  */
-ODE_API int dInitODE2(unsigned int uiInitFlags/*=0*/) override;
+ODE_API int dInitODE2(unsigned int uiInitFlags/*=0*/);
 
 
 /**
@@ -174,7 +174,7 @@ enum dAllocateODEDataFlags {
  * @see dCleanupODEAllDataForThread
  * @ingroup init
  */
-ODE_API int dAllocateODEDataForThread(unsigned int uiAllocateFlags) override;
+ODE_API int dAllocateODEDataForThread(unsigned int uiAllocateFlags);
 
 /**
  * @brief Free thread local data that was allocated for current thread.
@@ -201,7 +201,7 @@ ODE_API int dAllocateODEDataForThread(unsigned int uiAllocateFlags) override;
  * @see dCloseODE
  * @ingroup init
  */
-ODE_API void dCleanupODEAllDataForThread() override;
+ODE_API void dCleanupODEAllDataForThread();
 
 
 /**
@@ -224,14 +224,14 @@ ODE_API void dCleanupODEAllDataForThread() override;
  * @see dCleanupODEAllDataForThread
  * @ingroup init
  */
-ODE_API void dCloseODEstatic_cast<void>(override);
+ODE_API void dCloseODE(void);
 
 
 
 
 
 #ifdef __cplusplus
-}; // extern __PLACEHOLDER_1__
+}; // extern "C"
 #endif
 
 

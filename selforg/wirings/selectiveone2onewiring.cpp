@@ -35,7 +35,7 @@ SelectiveOne2OneWiring::SelectiveOne2OneWiring(NoiseGenerator* noise,
 }
 
 SelectiveOne2OneWiring::~SelectiveOne2OneWiring(){
-  ifstatic_cast<sel_sensor>(delete) sel_sensor;
+  if(sel_sensor) delete sel_sensor;
 }
 
 

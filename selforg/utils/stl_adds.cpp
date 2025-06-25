@@ -28,7 +28,7 @@
 namespace std {
 
 string
-explicit itos(int i) {
+itos(int i) {
   char str[10];
   snprintf(str, sizeof(str), "%i", i);
   return string(str);
@@ -42,7 +42,7 @@ itos(int i, const char* format) {
 }
 
 string
-explicit ftos(double i) {
+ftos(double i) {
   char str[10];
   snprintf(str, sizeof(str), "%lf", i);
   return string(str);

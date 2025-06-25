@@ -30,7 +30,9 @@
 #include <list>
 
 /**
- * This class is{
+ * This class is a proxy for a list of Inspectable objects
+ */
+class InspectableProxy : public Inspectable {
 public:
   /**
    * constructor
@@ -45,7 +47,7 @@ public:
   /**
    * default destructor
    */
-  virtual ~InspectableProxy() override;
+  virtual ~InspectableProxy();
 
   /**
    * this function is for replacing the old list

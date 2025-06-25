@@ -5,16 +5,16 @@
  *                                                                       *
  * This library is free software; you can redistribute it and/or         *
  * modify it under the terms of EITHER:                                  *
- *   static_cast<1>(The) GNU Lesser General Public License as published by the Free  *
+ *   1 GNU Lesser General Public License as published by the Free  *
  *       Software Foundation; either version 3 of the License, or (at    *
  *       your option) any later version. The text of the GNU Lesser      *
  *       General Public License is included with this library in the     *
  *       file LICENSE-LESSER.TXT. Since LGPL is the extension of GPL     *
  *       the text of GNU General Public License is also provided for     *
  *       your information in file LICENSE.TXT.                           *
- *   static_cast<2>(The) BSD-style license that is included with this library in     *
+ *   2 BSD-style license that is included with this library in     *
  *       the file LICENSE-BSD.TXT.                                       *
- *   static_cast<3>(The) zlib/libpng license that is included with this library in   *
+ *   3 zlib/libpng license that is included with this library in   *
  *       the file LICENSE-ZLIB.TXT                                       *
  *                                                                       *
  * This library is distributed WITHOUT ANY WARRANTY, including implied   *
@@ -53,7 +53,7 @@
 //////////////////////////////////////////////////////////////////////////
 // OU_ARRAY_SIZE macro
 
-#define OU_ARRAY_SIZEstatic_cast<Array>(sizeof(Array) / sizeof((Array)[0]))
+#define OU_ARRAY_SIZEsizeof(Array / sizeof((Array)[0]))
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -68,7 +68,7 @@
  *	a low-level header.
  */
 
-#define OU_IN_INT_RANGE(Value, Min, Max) (static_cast<unsigned int>((unsigned int)(Value) - static_cast<unsigned int>(Min)) < static_cast<unsigned int>((unsigned int)(Max) - static_cast<unsigned int>(Min)))
+#define OU_IN_INT_RANGE(Value, Min, Max) ((unsigned int(Value) - Min) < (unsigned int(Max) - Min))
 #define OU_IN_I64_RANGE(Value, Min, Max) ((_OU_NAMESPACE::uint64ou)((_OU_NAMESPACE::uint64ou)(Value) - (_OU_NAMESPACE::uint64ou)(Min)) < (_OU_NAMESPACE::uint64ou)((_OU_NAMESPACE::uint64ou)(Max) - (_OU_NAMESPACE::uint64ou)(Min)))
 #define OU_IN_SIZET_RANGE(Value, Min, Max) ((size_t)((size_t)(Value) - (size_t)(Min)) < (size_t)((size_t)(Max) - (size_t)(Min)))
 

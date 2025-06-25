@@ -5,12 +5,12 @@
  *                                                                       *
  * This library is free software; you can redistribute it and/or         *
  * modify it under the terms of EITHER:                                  *
- *   static_cast<1>(The) GNU Lesser General Public License as published by the Free  *
+ *   1 GNU Lesser General Public License as published by the Free  *
  *       Software Foundation; either version 2.1 of the License, or (at  *
  *       your option) any later version. The text of the GNU Lesser      *
  *       General Public License is included with this library in the     *
  *       file LICENSE.TXT.                                               *
- *   static_cast<2>(The) BSD-style license that is included with this library in     *
+ *   2 BSD-style license that is included with this library in     *
  *       the file LICENSE-BSD.TXT.                                       *
  *                                                                       *
  * This library is distributed in the hope that it will be useful,       *
@@ -69,12 +69,12 @@ typedef struct dSurfaceParameters {
  * @brief Describe the contact point between two geoms.
  *
  * If two bodies touch, or if a body touches a static feature in its 
- * environment, the contact is represented by one or more __PLACEHOLDER_1__, described by dContactGeom.
+ * environment, the contact is represented by one or more contact points, described by dContactGeom.
  *
  * The convention is that if body 1 is moved along the normal vector by 
  * a distance depth (or equivalently if body 2 is moved the same distance 
  * in the opposite direction) then the contact depth will be reduced to 
- * zero. This means that the normal vector points __PLACEHOLDER_2__ to body 1.
+ * zero. This means that the normal vector points out of to body 1.
  *
  * @ingroup collide
  */

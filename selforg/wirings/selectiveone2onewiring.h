@@ -45,7 +45,8 @@ struct select_firsthalf : public  select_predicate {
   virtual bool operator()( int index,  int len) { return index < len/2; }
 };
 
-/// select sensors in the range \f[ [from, to] \f] static_cast<inclusively>(struct) select_from_to : public  select_predicate {
+/// select sensors in the range [from, to] inclusively
+struct select_from_to : public  select_predicate {
   select_from_to( int from,  int to) : from(from), to(to) {}
   virtual bool operator()( int index,  int len) { return (index >= from) && (index <= to); }
   int from;
@@ -56,7 +57,7 @@ struct select_firsthalf : public  select_predicate {
  *   Implements a selective one to one wiring of robot sensors to inputs of the controller
  *   and controller outputs to robot motors.
  */
-class SelectiveOne2OneWiring{
+class SelectiveOne2OneWiring : public One2OneWiring {
 public:
   /** constructor
       @param noise NoiseGenerator that is used for adding noise to sensor values
@@ -64,14 +65,14 @@ public:
              and decides which sensor to select
   */
   SelectiveOne2OneWiring(NoiseGenerator* noise, select_predicate* sel_sensor, int plotMode = Controller, const std::string& name = "SelectiveOne2OneWiring");
-  virtual ~SelectiveOne2OneWiring() override;
+  virtual ~SelectiveOne2OneWiring();
 
 protected:
-  virtual bool initIntern();
+  virtual bool initIntern() override;
 
   virtual bool wireSensorsIntern(const sensor* rsensors, int rsensornumber,
                                  sensor* csensors, int csensornumber,
-                                 double noise);
+                                 double noise) override;
 
 protected:
   select_predicate* sel_sensor = nullptr;

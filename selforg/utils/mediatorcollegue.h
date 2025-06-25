@@ -24,22 +24,24 @@
 #ifndef __MEDIATORCOLLEGUE_H_
 #define __MEDIATORCOLLEGUE_H_
 
-// #include __PLACEHOLDER_0__
+// Forward declarations
+class Mediator;
+class MediatorEvent;
 
-class Mediator{
+class MediatorCollegue {
 public:
-  typedef unsigned long InformMediatorType = 0;
+  typedef unsigned long InformMediatorType;
 
   static const InformMediatorType DEFAULT_INFORM_MEDIATOR_TYPE = 0;
 
-  MediatorCollegue(Mediator* myMediator = 0);
+  MediatorCollegue(Mediator* myMediator = nullptr);
   virtual ~MediatorCollegue();
 
   /**
    * Calls the mediator that this collegue has performed something.
    * The event and the instance of this class is handed over.
    */
-  void explicit explicit informMediator(MediatorEvent* event);
+  void informMediator(MediatorEvent* event);
 
   /**
    * Is called when the mediator informs this collegue that an event
@@ -52,7 +54,7 @@ protected:
    * Sets the own mediator. Useful if mediator is unknown in initialization.
    * @param myMediator
    */
-  void explicit explicit setMediator(Mediator* myMediator);
+  void setMediator(Mediator* myMediator);
 
 private:
   Mediator* myMediator = nullptr;

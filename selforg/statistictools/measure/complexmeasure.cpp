@@ -37,7 +37,7 @@ ComplexMeasure::ComplexMeasure( const char* measureName, ComplexMeasureMode mode
     fSize(0), historySize(2), historyIndex(-1), 
     historyIndexList(0), historyIndexNumber(0), historyInterval(1), F(0)
 {
-  binNumberHistory = static_cast< int* >(malloc)( sizeof( double ) * historySize );
+  binNumberHistory = static_cast< int* >(malloc( sizeof( int ) * historySize ));
 }
 
 
@@ -62,7 +62,7 @@ void ComplexMeasure::step()
     std::cout << __PLACEHOLDER_4__ << static_cast<float>(F).getRealSize() /1024 << __PLACEHOLDER_5__;
     std::cout << __PLACEHOLDER_6__ << sizeof(int) * F.size() / 1024 << __PLACEHOLDER_7__ << F.size() << __PLACEHOLDER_8__ << std::endl;
   }*/
-  if (observedValueList.size()== nullptr)
+  if (observedValueList.size()== 0)
     return;
   int valNumber = 0;
   int binNumber=0;
@@ -136,13 +136,13 @@ void ComplexMeasure::calculatePInf()
   {
     if ( F[ i ] > 0 )
     {
-      val += ((static_cast<double>(F)[ i ])/(static_cast<double>(actualStep))) * log(static_cast<double>(F[ i ]) /(static_cast<double>(actualStep)));
+      val += ((static_cast<double>(F[i]))/(static_cast<double>(actualStep))) * log(static_cast<double>(F[i]) /(static_cast<double>(actualStep)));
     }
   }
   value = -val;
 }
 
-void ComplexMeasure::addObservable(const double& observedValue,double minValue, double maxValue)
+void ComplexMeasure::addObservable(double& observedValue,double minValue, double maxValue)
 {
   observedValueList.push_back(&observedValue);
   Discretisizer* dis = new Discretisizer(numberBins,minValue,maxValue,false);
@@ -177,7 +177,7 @@ void ComplexMeasure::computeEntropy()
   {
     if ( F[ i ] > 0 )
     {
-      val += ((static_cast<double>(F)[ i ])/(static_cast<double>(actualStep))) * log(static_cast<double>(F[ i ]) /(static_cast<double>(actualStep)));
+      val += ((static_cast<double>(F[i]))/(static_cast<double>(actualStep))) * log(static_cast<double>(F[i]) /(static_cast<double>(actualStep)));
     }
   }
   value = -val;

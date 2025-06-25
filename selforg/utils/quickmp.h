@@ -59,7 +59,9 @@
 // inline within the class definition (i.e. we can't define the function
 // at the end of a macro and let the user code write the {} brackets).  This
 // requires the use of two separate begin/end macros.  The instances of each
-// parallel section class should{                                                                                                \
+// parallel section class should be created within the current scope.
+#define QMP_PARALLEL_FOR(indexName, loopFirstIndex, ...)                                           \
+  {                                                                                                \
     qmp_internal::ParallelTaskManager::instance().setLoopIndices(loopFirstIndex, __VA_ARGS__);     \
     static class QMP_UNIQUE_SYMBOL(ParallelTaskSubclass)                                           \
       : public qmp_internal::ParallelTask {                                                        \
@@ -136,7 +138,10 @@
 /// given as pointers; for example, int myData[50] requires a pointer
 /// int* myDataPtr = myData, then QMP_SHARE(myDataPtr), not QMP_SHARE(myData).
 // Design notes: Within the parallel tasks later we can access variables
-// outside the class definition{
+// outside the class definition.
+
+namespace quickmp {
+
 /// Types of loop scheduling methods.
 enum ScheduleHint {
   /// This is the default.  It distributes loop iterations among threads
@@ -158,7 +163,8 @@ namespace qmp_internal {
 // Forward declaration.
 struct PlatformThreadObjects;
 
-/// A base class for{
+/// A base class for parallel tasks
+class ParallelTask {
 public:
   virtual ~ParallelTask() {}
   /// The function which is executed by each thread with different
@@ -169,7 +175,8 @@ public:
                    int indexIncrement) = 0;
 };
 
-/// A singleton class to{
+/// A singleton class to manage parallel tasks
+class ParallelTaskManager {
 public:
   /// Provides access to the singleton instance.
   inline static ParallelTaskManager& instance();
@@ -208,7 +215,7 @@ public:
   inline void setLoopIndices(int loopFirstIndex, unsigned int numIterations);
 
   /// Unleashes the threads on the new task/loop.
-  inline void explicit explicit process(ParallelTask* task);
+  inline void process(ParallelTask* task);
 
   /// Called by individual threads to process a subset of the loop
   /// iterations.
@@ -522,7 +529,7 @@ ParallelTaskManager::setNumThreads(unsigned int numThreads) {
     mPlatform->threads[0] = pthread_self();
     for (uintptr_t threadIndex = 1; threadIndex <= numWorkerThreads; ++threadIndex) {
       returnCode = pthread_create(
-        &mPlatform->threads[threadIndex], &threadAttributes, threadRoutine, static_cast<void*>(threadIndex));
+        &mPlatform->threads[threadIndex], &threadAttributes, threadRoutine, reinterpret_cast<void*>(threadIndex));
       QMP_ASSERT(0 == returnCode);
     }
 
@@ -827,8 +834,8 @@ ParallelTaskManager::barrier() {
   }
 }
 
-PlatformThreadObjects*
-ParallelTaskManager::getPlatformThreadObjects() {
+const PlatformThreadObjects*
+ParallelTaskManager::getPlatformThreadObjects() const {
   return mPlatform;
 }
 
@@ -837,20 +844,20 @@ ParallelTaskManager::shouldWorkerThreadsExit() const {
   return mShouldWorkerThreadsExit;
 }
 
-ParallelTaskManager::ParallelTaskManager() :  : mTaskIndexIncrement(0), mInitialized(false), mInParallelSection(false), mShouldWorkerThreadsExit(false), \2(nullptr), \2(nullptr), \2(nullptr), \2(nullptr), mPlatform(nullptr), mCurrentTask(nullptr), mTaskFirstIndices(nullptr), mTaskLastIndices(nullptr) {
-  mPlatform = new PlatformThreadObjects();
-  mInitialized = false;
-  mInParallelSection = false;
-  mShouldWorkerThreadsExit = false;
-  mCurrentTask = nullptr;
-  mNumThreads = 0;
-  mBarrierCount = 0;
-  mTaskFirstIndices = nullptr;
-  mTaskLastIndices = nullptr;
-  mTaskIndexIncrement = 0;
+ParallelTaskManager::ParallelTaskManager() : 
+  mTaskIndexIncrement(0), 
+  mInitialized(false), 
+  mInParallelSection(false), 
+  mShouldWorkerThreadsExit(false), 
+  mPlatform(new PlatformThreadObjects()), 
+  mCurrentTask(nullptr), 
+  mTaskFirstIndices(nullptr), 
+  mTaskLastIndices(nullptr),
+  mNumThreads(0),
+  mBarrierCount(0) {
 }
 
-ParallelTaskManager::~ParallelTaskManager : mPlatform(nullptr), mInitialized(false), mInParallelSection(false), mShouldWorkerThreadsExit(false), mCurrentTask(nullptr), mTaskFirstIndices(nullptr), mTaskLastIndices(nullptr), mTaskIndexIncrement(0) {
+ParallelTaskManager::~ParallelTaskManager() {
   // This is called when the program exits because the singleton
   // instance is static.
 

@@ -47,11 +47,19 @@ public:
        after initialisation (if unit_map=1 the weights are unit matrices).
       @param randGen pointer to random generator, if 0 an new one is used
    */
-  virtual void init(unsigned int inputDim,
+  void init(unsigned int inputDim,
                     unsigned int outputDim,
                     double unit_map = 0.0,
                     double rand = 0.2,
                     RandGen* randGen = 0);
+
+  // Implement the pure virtual from AbstractModel
+  virtual void init(unsigned int inputDim,
+                    unsigned int outputDim,
+                    double unit_map = 0.0,
+                    RandGen* randGen = nullptr) override {
+    init(inputDim, outputDim, unit_map, 0.2, randGen);
+  }
 
   /** passive processing of the input.
       This has to be done before calling reponse, and the back/forward propagation/projection
@@ -71,6 +79,14 @@ public:
   /// damps the weights and the biases by multiplying (1-damping)
   virtual void damp(double damping) override;
 
+  // Implement the pure virtual from AbstractModel
+  virtual const matrix::Matrix learn(const matrix::Matrix& input,
+                                     const matrix::Matrix& nom_output,
+                                     double learnRateFactor = 1) override {
+    // ControllerNet doesn't do learning, just return the output
+    return process(input);
+  }
+
   /** response matrix of neural network (for current activation, see process)
   \f[  J_ij = \frac{\partial y_i}{\partial x_j} \f]
   \f[  J = G_n' W_n G_{n-1}' W_{n-1} ... G_1' W_1 \f]
@@ -78,6 +94,21 @@ public:
   \f$ G'\f$ is a diagonal matrix with \f$ G'_ii = g'_i \f$ as values on the diagonal.
   */
   virtual const matrix::Matrix& response() const;
+
+  // Implement the pure virtual from InvertableModel
+  virtual const matrix::Matrix response(const matrix::Matrix& input) const override {
+    // Process first, then return response
+    const_cast<ControllerNet*>(this)->process(input);
+    return response();
+  }
+
+  // Implement the pure virtual from InvertableModel
+  virtual const matrix::Matrix inversion(const matrix::Matrix& input,
+                                        const matrix::Matrix& xsi) const override {
+    // Simple pseudo-inverse implementation
+    matrix::Matrix R = response(input);
+    return (R^matrix::T) * xsi;
+  }
 
   /** like response, just that only a range of layers is considered
       The Bypass is not considered here.

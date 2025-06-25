@@ -5,12 +5,12 @@
  *                                                                       *
  * This library is free software; you can redistribute it and/or         *
  * modify it under the terms of EITHER:                                  *
- *   static_cast<1>(The) GNU Lesser General Public License as published by the Free  *
+ *   1 GNU Lesser General Public License as published by the Free  *
  *       Software Foundation; either version 2.1 of the License, or (at  *
  *       your option) any later version. The text of the GNU Lesser      *
  *       General Public License is included with this library in the     *
  *       file LICENSE.TXT.                                               *
- *   static_cast<2>(The) BSD-style license that is included with this library in     *
+ *   2 BSD-style license that is included with this library in     *
  *       the file LICENSE-BSD.TXT.                                       *
  *                                                                       *
  * This library is distributed in the hope that it will be useful,       *
@@ -35,15 +35,15 @@ extern "C" {
 
 /* set a vector/matrix of size n to all zeros, or to a specific value. */
 
-ODE_API void dSetZero (dReal *a, int n) override;
-ODE_API void dSetValue (dReal *a, int n, dReal value) override;
+ODE_API void dSetZero (dReal *a, int n);
+ODE_API void dSetValue (dReal *a, int n, dReal value);
 
 
 /* get the dot product of two n*1 vectors. if n <= 0 then
  * zero will be returned (in which case a and b need not be valid).
  */
 
-ODE_API dReal dDot (const dReal *a, const dReal *b, int n) override;
+ODE_API dReal dDot (const dReal *a, const dReal *b, int n);
 
 
 /* get the dot products of (a0,b), (a1,b), etc and return them in outsum.
@@ -67,9 +67,9 @@ void dMultidot2 (const dReal *a0, const dReal *a1,
  * B or C are stored in standard column format.
  */
 
-ODE_API void dMultiply0 (dReal *A, const dReal *B, const dReal *C, int p,int q,int r) override;
-ODE_API void dMultiply1 (dReal *A, const dReal *B, const dReal *C, int p,int q,int r) override;
-ODE_API void dMultiply2 (dReal *A, const dReal *B, const dReal *C, int p,int q,int r) override;
+ODE_API void dMultiply0 (dReal *A, const dReal *B, const dReal *C, int p,int q,int r);
+ODE_API void dMultiply1 (dReal *A, const dReal *B, const dReal *C, int p,int q,int r);
+ODE_API void dMultiply2 (dReal *A, const dReal *B, const dReal *C, int p,int q,int r);
 
 
 /* do an in-place cholesky decomposition on the lower triangle of the n*n
@@ -78,14 +78,14 @@ ODE_API void dMultiply2 (dReal *A, const dReal *B, const dReal *C, int p,int q,i
  * the matrix is not positive definite).
  */
 
-ODE_API int dFactorCholesky (dReal *A, int n) override;
+ODE_API int dFactorCholesky (dReal *A, int n);
 
 
 /* solve for x: L*L'*x = b, and put the result back into x.
  * L is size n*n, b is size n*1. only the lower triangle of L is considered.
  */
 
-ODE_API void dSolveCholesky (const dReal *L, dReal *b, int n) override;
+ODE_API void dSolveCholesky (const dReal *L, dReal *b, int n);
 
 
 /* compute the inverse of the n*n positive definite matrix A and put it in
@@ -93,7 +93,7 @@ ODE_API void dSolveCholesky (const dReal *L, dReal *b, int n) override;
  * positive definite) or 0 on failure (not PD).
  */
 
-ODE_API int dInvertPDMatrix (const dReal *A, dReal *Ainv, int n) override;
+ODE_API int dInvertPDMatrix (const dReal *A, dReal *Ainv, int n);
 
 
 /* check whether an n*n matrix A is positive definite, return 1/0 (yes/no).
@@ -102,7 +102,7 @@ ODE_API int dInvertPDMatrix (const dReal *A, dReal *Ainv, int n) override;
  * is not positive definite. A is stored by rows. A is not altered.
  */
 
-ODE_API int dIsPositiveDefinite (const dReal *A, int n) override;
+ODE_API int dIsPositiveDefinite (const dReal *A, int n);
 
 
 /* factorize a matrix A into L*D*L', where L is lower triangular with ones on
@@ -112,26 +112,26 @@ ODE_API int dIsPositiveDefinite (const dReal *A, int n) override;
  * written) and the reciprocal of the diagonal elements of D are written into
  * d.
  */
-ODE_API void dFactorLDLT (dReal *A, dReal *d, int n, int nskip) override;
+ODE_API void dFactorLDLT (dReal *A, dReal *d, int n, int nskip);
 
 
 /* solve L*x=b, where L is n*n lower triangular with ones on the diagonal,
  * and x,b are n*1. b is overwritten with x.
  * the leading dimension of L is `nskip'.
  */
-ODE_API void dSolveL1 (const dReal *L, dReal *b, int n, int nskip) override;
+ODE_API void dSolveL1 (const dReal *L, dReal *b, int n, int nskip);
 
 
 /* solve L'*x=b, where L is n*n lower triangular with ones on the diagonal,
  * and x,b are n*1. b is overwritten with x.
  * the leading dimension of L is `nskip'.
  */
-ODE_API void dSolveL1T (const dReal *L, dReal *b, int n, int nskip) override;
+ODE_API void dSolveL1T (const dReal *L, dReal *b, int n, int nskip);
 
 
 /* in matlab syntax: a(1:n) = a(1:n) .* d(1:n) */
 
-ODE_API void dVectorScale (dReal *a, const dReal *d, int n) override;
+ODE_API void dVectorScale (dReal *a, const dReal *d, int n);
 
 
 /* given `L', a n*n lower triangular matrix with ones on the diagonal,
@@ -140,11 +140,11 @@ ODE_API void dVectorScale (dReal *a, const dReal *d, int n) override;
  * the leading dimension of L is `nskip'.
  */
 
-ODE_API void dSolveLDLT (const dReal *L, const dReal *d, dReal *b, int n, int nskip) override;
+ODE_API void dSolveLDLT (const dReal *L, const dReal *d, dReal *b, int n, int nskip);
 
 
 /* given an L*D*L' factorization of an n*n matrix A, return the updated
- * factorization L2*D2*L2' of A plus the following __PLACEHOLDER_1__ matrix:
+ * factorization L2*D2*L2' of A plus the following contact points matrix:
  *
  *    [ b a' ]     <-- b is a[0]
  *    [ a 0  ]     <-- a is a[1..n-1]
@@ -156,7 +156,7 @@ ODE_API void dSolveLDLT (const dReal *L, const dReal *d, dReal *b, int n, int ns
  * the result is written into L, except that the left column of L and d[0]
  * are not actually modified. see ldltaddTL.m for further comments. 
  */
-ODE_API void dLDLTAddTL (dReal *L, dReal *d, const dReal *a, int n, int nskip) override;
+ODE_API void dLDLTAddTL (dReal *L, dReal *d, const dReal *a, int n, int nskip);
 
 
 /* given an L*D*L' factorization of a permuted matrix A, produce a new
@@ -184,7 +184,7 @@ ODE_API void dLDLTRemove (dReal **A, const int *p, dReal *L, dReal *d,
  * and column by moving elements. the new matrix will have the same leading
  * dimension. the last row and column of A are untouched on exit.
  */
-ODE_API void dRemoveRowCol (dReal *A, int n, int nskip, int r) override;
+ODE_API void dRemoveRowCol (dReal *A, int n, int nskip, int r);
 
 
 #ifdef __cplusplus

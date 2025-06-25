@@ -33,7 +33,7 @@
     sensor values and adds them to the controller output
     If more sensors than motors are used it uses just the first m sensors.
  */
-class ForceBoostWiring{
+class ForceBoostWiring : public AbstractWiring, public Configurable {
 public:
   /** constructor
       @param noise NoiseGenerator that is used for adding noise to sensor values
@@ -47,7 +47,7 @@ public:
 
   /** destructor
    */
-  virtual ~ForceBoostWiring() override;
+  virtual ~ForceBoostWiring();
 
   virtual void reset();
 protected:

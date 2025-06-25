@@ -27,10 +27,16 @@
 
 #include "agent.h"
 #include "configurablelist.h"
+#include <list>
 
-#ifndef NOCONFIGURATOR
 namespace lpzrobots {
-class ConfiguratorProxy{
+  class ConfiguratorProxy;
+}
+
+class Agent;
+typedef std::list<Agent*> AgentList;
+
+class GlobalDataBase {
 public:
   GlobalDataBase();
 

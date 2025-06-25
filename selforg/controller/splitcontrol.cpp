@@ -104,7 +104,7 @@ SplitControl::step(const sensor* sensors, int sensornumber, motor* motors, int m
       sensorbuffer[i] = sensors[*s];
       ++i;
     }
-    if (numContextSensors != nullptr) {
+    if (numContextSensors != 0) {
       memcpy(sensorbuffer + i,
              sensors + sensornumber - numContextSensors,
              sizeof(sensor) * numContextSensors);
@@ -131,7 +131,7 @@ SplitControl::stepNoLearning(const sensor* sensors,
       sensorbuffer[i] = sensors[*s];
       ++i;
     }
-    if (numContextSensors != nullptr) {
+    if (numContextSensors != 0) {
       memcpy(sensorbuffer + i,
              sensors + sensornumber - numContextSensors,
              sizeof(sensor) * numContextSensors);

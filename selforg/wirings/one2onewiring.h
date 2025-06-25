@@ -29,7 +29,7 @@
 /** Implements one to one wiring of robot sensors to inputs of the controller
     and controller outputs to robot motors.
  */
-class One2OneWiring{
+class One2OneWiring : public AbstractWiring {
 public:
   /** constructor
       @param noise NoiseGenerator that is used for adding noise to sensor values

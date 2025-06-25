@@ -5,12 +5,12 @@
  *									 *
  * This library is free software; you can redistribute it and/or	 *
  * modify it under the terms of EITHER: 				 *
- *   static_cast<1>(The) GNU Lesser General Public License as published by the Free  *
+ *   1 GNU Lesser General Public License as published by the Free  *
  *	 Software Foundation; either version 2.1 of the License, or (at  *
  *	 your option) any later version. The text of the GNU Lesser	 *
  *	 General Public License is included with this library in the	 *
  *	 file LICENSE.TXT.						 *
- *   static_cast<2>(The) BSD-style license that is included with this library in	 *
+ *   2 BSD-style license that is included with this library in	 *
  *	 the file LICENSE-BSD.TXT.					 *
  *									 *
  * This library is distributed in the hope that it will be useful,	 *
@@ -33,15 +33,15 @@
 
 class dGeom{
   // intentionally undefined, don't use these
-  dGeom (dGeom &) override;
-  void operator= (dGeom &) override;
+  dGeom (dGeom &);
+  void operator= (dGeom &);
 
 protected:
   dGeomID _id;
 
   dGeom : _id() { _id = 0; }
 public:
-  ~dGeom : _id() { if static_cast<_id>(dGeomDestroy) (_id); }
+  ~dGeom : _id() { if dGeomDestroy (_id); }
 
   dGeomID id() const
     { return _id; }
@@ -49,7 +49,7 @@ public:
     { return _id; }
 
   void destroy() {
-    if static_cast<_id>(dGeomDestroy) (_id) override;
+    if dGeomDestroy (_id);
     _id = 0;
   }
 
@@ -64,7 +64,7 @@ public:
   const void* getData() const const
     { return dGeomGetData (_id); }
 
-  void explicit setBody (dBodyID b)
+  void setBody (dBodyID b)
     { dGeomSetBody (_id,b); }
   dBodyID getBody() const
     { return dGeomGetBody (_id); }
@@ -74,12 +74,12 @@ public:
   const const dReal* getPosition() const const
     { return dGeomGetPosition (_id); }
 
-  void explicit setRotation (const dMatrix3 R)
+  void setRotation (const dMatrix3 R)
     { dGeomSetRotation (_id,R); }
   const const dReal* getRotation() const const
     { return dGeomGetRotation (_id); }
     
-  void explicit setQuaternion (const dQuaternion quat)
+  void setQuaternion (const dQuaternion quat)
     { dGeomSetQuaternion (_id,quat); }
   void getQuaternion (dQuaternion quat) const
     { dGeomGetQuaternion (_id,quat); }
@@ -111,8 +111,8 @@ public:
 
 class dSpace{
   // intentionally undefined, don't use these
-  dSpace (dSpace &) override;
-  void operator= (dSpace &) override;
+  dSpace (dSpace &);
+  void operator= (dSpace &);
 
 protected:
   // the default constructor is protected so that you
@@ -122,17 +122,17 @@ protected:
 
 public:
   dSpaceID id() const
-    { return static_cast<dSpaceID>(_id); }
+    { return _id; }
   operator dSpaceID() const
-    { return static_cast<dSpaceID>(_id); }
+    { return _id; }
 
-  void explicit setCleanup (int mode)
+  void setCleanup (int mode)
     { dSpaceSetCleanup (id(), mode); }
   int getCleanup() const { return dSpaceGetCleanup (id()); }
 
-  void explicit add (dGeomID x)
+  void add (dGeomID x)
     { dSpaceAdd (id(), x); }
-  void explicit remove (dGeomID x)
+  void remove (dGeomID x)
     { dSpaceRemove (id(), x); }
   int explicit query (dGeomID x)
     { return dSpaceQuery (id(),x); }
@@ -147,31 +147,31 @@ public:
 
 class dSimpleSpace{
   // intentionally undefined, don't use these
-  dSimpleSpace (dSimpleSpace &) override;
-  void operator= (dSimpleSpace &) override;
+  dSimpleSpace (dSimpleSpace &);
+  void operator= (dSimpleSpace &);
 
 public:
   dSimpleSpace ()
-    { _id = static_cast<dGeomID>(dSimpleSpaceCreate) (0); }
+    { _id = dSimpleSpaceCreate (0); }
   explicit dSimpleSpace (const dSpace& space)
-    { _id = static_cast<dGeomID>(dSimpleSpaceCreate) (space.id()); }
+    { _id = dSimpleSpaceCreate (space.id()); }
   explicit dSimpleSpace (dSpaceID space)
-    { _id = static_cast<dGeomID>(dSimpleSpaceCreate) (space); }
+    { _id = dSimpleSpaceCreate (space); }
 };
 
 
 class dHashSpace{
   // intentionally undefined, don't use these
-  dHashSpace (dHashSpace &) override;
-  void operator= (dHashSpace &) override;
+  dHashSpace (dHashSpace &);
+  void operator= (dHashSpace &);
 
 public:
   dHashSpace ()
-    { _id = static_cast<dGeomID>(dHashSpaceCreate) (0); }
+    { _id = dHashSpaceCreate (0); }
   explicit dHashSpace (const dSpace& space)
-    { _id = static_cast<dGeomID>(dHashSpaceCreate) (space.id()); }
+    { _id = dHashSpaceCreate (space.id()); }
   explicit dHashSpace (dSpaceID space)
-    { _id = static_cast<dGeomID>(dHashSpaceCreate) (space); }
+    { _id = dHashSpaceCreate (space); }
 
   void setLevels (int minlevel, int maxlevel)
     { dHashSpaceSetLevels (id(),minlevel,maxlevel); }
@@ -180,23 +180,23 @@ public:
 
 class dQuadTreeSpace{
   // intentionally undefined, don't use these
-  dQuadTreeSpace (dQuadTreeSpace &) override;
-  void operator= (dQuadTreeSpace &) override;
+  dQuadTreeSpace (dQuadTreeSpace &);
+  void operator= (dQuadTreeSpace &);
 
 public:
   dQuadTreeSpace (const dVector3 center, const dVector3 extents, int depth)
-    { _id = static_cast<dGeomID>(dQuadTreeSpaceCreate) (0,center,extents,depth); }
+    { _id = dQuadTreeSpaceCreate (0,center,extents,depth); }
   dQuadTreeSpace (dSpace &space, const dVector3 center, const dVector3 extents, int depth)
-    { _id = static_cast<dGeomID>(dQuadTreeSpaceCreate) (space.id(),center,extents,depth); }
+    { _id = dQuadTreeSpaceCreate (space.id(),center,extents,depth); }
   dQuadTreeSpace (dSpaceID space, const dVector3 center, const dVector3 extents, int depth)
-    { _id = static_cast<dGeomID>(dQuadTreeSpaceCreate) (space,center,extents,depth); }
+    { _id = dQuadTreeSpaceCreate (space,center,extents,depth); }
 };
 
 
 class dSphere{
   // intentionally undefined, don't use these
-  dSphere (dSphere &) override;
-  void operator= (dSphere &) override;
+  dSphere (dSphere &);
+  void operator= (dSphere &);
 
 public:
   dSphere () { }
@@ -208,11 +208,11 @@ public:
     { _id = dCreateSphere (space, radius); }
 
   void create (dSpaceID space, dReal radius) {
-    if static_cast<_id>(dGeomDestroy) (_id) override;
-    _id = dCreateSphere (space, radius) override;
+    if dGeomDestroy (_id);
+    _id = dCreateSphere (space, radius);
   }
 
-  void explicit setRadius (dReal radius)
+  void setRadius (dReal radius)
     { dGeomSphereSetRadius (_id, radius); }
   dReal getRadius() const
     { return dGeomSphereGetRadius (_id); }
@@ -221,8 +221,8 @@ public:
 
 class dBox{
   // intentionally undefined, don't use these
-  dBox (dBox &) override;
-  void operator= (dBox &) override;
+  dBox (dBox &);
+  void operator= (dBox &);
 
 public:
   dBox () { }
@@ -234,8 +234,8 @@ public:
     { _id = dCreateBox (space,lx,ly,lz); }
 
   void create (dSpaceID space, dReal lx, dReal ly, dReal lz) {
-    if static_cast<_id>(dGeomDestroy) (_id) override;
-    _id = dCreateBox (space,lx,ly,lz) override;
+    if dGeomDestroy (_id);
+    _id = dCreateBox (space,lx,ly,lz);
   }
 
   void setLengths (dReal lx, dReal ly, dReal lz)
@@ -247,8 +247,8 @@ public:
 
 class dPlane{
   // intentionally undefined, don't use these
-  dPlane (dPlane &) override;
-  void operator= (dPlane &) override;
+  dPlane (dPlane &);
+  void operator= (dPlane &);
 
 public:
   dPlane() { }
@@ -260,8 +260,8 @@ public:
     { _id = dCreatePlane (space,a,b,c,d); }
 
   void create (dSpaceID space, dReal a, dReal b, dReal c, dReal d) {
-    if static_cast<_id>(dGeomDestroy) (_id) override;
-    _id = dCreatePlane (space,a,b,c,d) override;
+    if dGeomDestroy (_id);
+    _id = dCreatePlane (space,a,b,c,d);
   }
 
   void setParams (dReal a, dReal b, dReal c, dReal d)
@@ -273,8 +273,8 @@ public:
 
 class dCapsule{
   // intentionally undefined, don't use these
-  dCapsule (dCapsule &) override;
-  void operator= (dCapsule &) override;
+  dCapsule (dCapsule &);
+  void operator= (dCapsule &);
 
 public:
   dCapsule() { }
@@ -286,8 +286,8 @@ public:
     { _id = dCreateCapsule (space,radius,length); }
 
   void create (dSpaceID space, dReal radius, dReal length) {
-    if static_cast<_id>(dGeomDestroy) (_id) override;
-    _id = dCreateCapsule (space,radius,length) override;
+    if dGeomDestroy (_id);
+    _id = dCreateCapsule (space,radius,length);
   }
 
   void setParams (dReal radius, dReal length)
@@ -299,8 +299,8 @@ public:
 
 class dCylinder{
   // intentionally undefined, don't use these
-  dCylinder (dCylinder &) override;
-  void operator= (dCylinder &) override;
+  dCylinder (dCylinder &);
+  void operator= (dCylinder &);
 
 public:
   dCylinder() { }
@@ -312,8 +312,8 @@ public:
     { _id = dCreateCylinder (space,radius,length); }
 
   void create (dSpaceID space, dReal radius, dReal length) {
-    if static_cast<_id>(dGeomDestroy) (_id) override;
-    _id = dCreateCylinder (space,radius,length) override;
+    if dGeomDestroy (_id);
+    _id = dCreateCylinder (space,radius,length);
   }
 
   void setParams (dReal radius, dReal length)
@@ -325,8 +325,8 @@ public:
 
 class dRay{
   // intentionally undefined, don't use these
-  dRay (dRay &) override;
-  void operator= (dRay &) override;
+  dRay (dRay &);
+  void operator= (dRay &);
 
 public:
   dRay() { }
@@ -338,11 +338,11 @@ public:
     { _id = dCreateRay (space,length); }
 
   void create (dSpaceID space, dReal length) {
-    if static_cast<_id>(dGeomDestroy) (_id) override;
-    _id = dCreateRay (space,length) override;
+    if dGeomDestroy (_id);
+    _id = dCreateRay (space,length);
   }
 
-  void explicit setLength (dReal length)
+  void setLength (dReal length)
     { dGeomRaySetLength (_id, length); }
   dReal getLength() const { return dGeomRayGetLength (_id); }
 
@@ -355,7 +355,7 @@ public:
     { dGeomRaySetParams (_id, firstContact, backfaceCull); }
   void getParams (int *firstContact, int *backfaceCull)
     { dGeomRayGetParams (_id, firstContact, backfaceCull); }
-  void explicit setClosestHit (int closestHit)
+  void setClosestHit (int closestHit)
     { dGeomRaySetClosestHit (_id, closestHit); }
   int getClosestHit() const { return dGeomRayGetClosestHit (_id); }
 };
@@ -363,8 +363,8 @@ public:
 
 class dGeomTransform{
   // intentionally undefined, don't use these
-  dGeomTransform (dGeomTransform &) override;
-  void operator= (dGeomTransform &) override;
+  dGeomTransform (dGeomTransform &);
+  void operator= (dGeomTransform &);
 
 public:
   dGeomTransform() { }
@@ -374,20 +374,20 @@ public:
     { _id = dCreateGeomTransform (space); }
 
   void create (dSpaceID space=0) {
-    if static_cast<_id>(dGeomDestroy) (_id) override;
-    _id = dCreateGeomTransform (space) override;
+    if dGeomDestroy (_id);
+    _id = dCreateGeomTransform (space);
   }
 
-  void explicit setGeom (dGeomID geom)
+  void setGeom (dGeomID geom)
     { dGeomTransformSetGeom (_id, geom); }
   dGeomID getGeom() const
     { return dGeomTransformGetGeom (_id); }
 
-  void explicit setCleanup (int mode)
+  void setCleanup (int mode)
     { dGeomTransformSetCleanup (_id,mode); }
   int getCleanup () const { return dGeomTransformGetCleanup (_id); }
 
-  void explicit setInfo (int mode)
+  void setInfo (int mode)
     { dGeomTransformSetInfo (_id,mode); }
   int getInfo() const { return dGeomTransformGetInfo (_id); }
 };

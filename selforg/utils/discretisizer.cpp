@@ -55,18 +55,18 @@ Discretisizer::getBinNumber(double value) {
 
 double
 Discretisizer::get(double value) {
-  double binValue = static_cast<double>(this)->getBinNumber(value);
+  double binValue = static_cast<double>(this->getBinNumber(value));
   // we know now the interval
   return -binValue / (static_cast<double>(numberBins)) * (maxRange - minRange) + minRange;
 }
 
 double
-Discretisizer::getMinRange() {
+Discretisizer::getMinRange() const {
   return this->minRange;
 }
 
 double
-Discretisizer::getMaxRange() {
+Discretisizer::getMaxRange() const {
   return this->maxRange;
 }
 

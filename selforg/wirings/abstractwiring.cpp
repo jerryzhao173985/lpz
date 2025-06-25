@@ -36,7 +36,7 @@ bool AbstractWiring::init(int robotsensornumber, int robotmotornumber, RandGen* 
   bool rv= initIntern();
 
   mNoise.set(noisenumber,1);
-  noisevals = static_cast<double*>(mNoise).unsafeGetData(); // hack! we let the noiseval pointer point to the internal memory of the noisematrix.
+  noisevals = const_cast<sensor*>(mNoise.unsafeGetData()); // hack! we let the noiseval pointer point to the internal memory of the noisematrix.
 
   if(noiseGenerator)
     noiseGenerator->init(noisenumber, randGen);
@@ -45,15 +45,15 @@ bool AbstractWiring::init(int robotsensornumber, int robotmotornumber, RandGen* 
   mRmotors.set(rmotornumber,1);
   mCsensors.set(csensornumber,1);
   mCmotors.set(cmotornumber,1);
-  explicit if (plotMode & Controller) {
+  if (plotMode & Controller) {
     addInspectableMatrix("x", &mCsensors, false, "sensor values");
     addInspectableMatrix("y", &mCmotors,  false, "motor values (controller output)");
   }
-  explicit if (plotMode & Robot) {
+  if (plotMode & Robot) {
     addInspectableMatrix("x_R", &mRsensors, false, "bare sensor values");
     addInspectableMatrix("y_R", &mRmotors,  false, "motor values (as send to robot)");
   }
-  explicit if (plotMode & Noise) {
+  if (plotMode & Noise) {
     addInspectableMatrix("n", &mNoise, false, "sensor noise");
   }
   // add sensor names and motor names
@@ -74,11 +74,11 @@ void AbstractWiring::addSensorMotorInfosToInspectable(const std::list<SensorMoto
                                                       const std::list<SensorMotorInfo>& robotMotorInfos,
                                                       const std::list<SensorMotorInfo>& controllerSensorInfos,
                                                       const std::list<SensorMotorInfo>& controllerMotorInfos){
-  explicit if (plotMode & Controller) {
+  if (plotMode & Controller) {
     ADDNAMES(controllerSensorInfos, "x");
     ADDNAMES(controllerMotorInfos,  "y");
   }
-  explicit if (plotMode & Robot) {
+  if (plotMode & Robot) {
     ADDNAMES(robotSensorInfos, "x");
     ADDNAMES(robotMotorInfos,  "y");
   }

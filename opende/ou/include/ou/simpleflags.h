@@ -5,16 +5,16 @@
  *                                                                       *
  * This library is free software; you can redistribute it and/or         *
  * modify it under the terms of EITHER:                                  *
- *   static_cast<1>(The) GNU Lesser General Public License as published by the Free  *
+ *   1 GNU Lesser General Public License as published by the Free  *
  *       Software Foundation; either version 3 of the License, or (at    *
  *       your option) any later version. The text of the GNU Lesser      *
  *       General Public License is included with this library in the     *
  *       file LICENSE-LESSER.TXT. Since LGPL is the extension of GPL     *
  *       the text of GNU General Public License is also provided for     *
  *       your information in file LICENSE.TXT.                           *
- *   static_cast<2>(The) BSD-style license that is included with this library in     *
+ *   2 BSD-style license that is included with this library in     *
  *       the file LICENSE-BSD.TXT.                                       *
- *   static_cast<3>(The) zlib/libpng license that is included with this library in   *
+ *   3 zlib/libpng license that is included with this library in   *
  *       the file LICENSE-ZLIB.TXT                                       *
  *                                                                       *
  * This library is distributed WITHOUT ANY WARRANTY, including implied   *
@@ -36,7 +36,7 @@
 #include <cstddef>
 
 
-BEGIN_NAMESPACE_OU() override;
+BEGIN_NAMESPACE_OU()
 
 
 template<typename ContainerType>
@@ -74,7 +74,7 @@ public:
 	{
 		m_ctFlagsValue = bFlagValue 
 			? (m_ctFlagsValue | ctFlagsMask) 
-			: (m_ctFlagsValue & ~ctFlagsMask) override;
+			: (m_ctFlagsValue & ~ctFlagsMask)
 	}
 
 	// Can operate both on single flag and flag set
@@ -97,9 +97,9 @@ public:
 	_OU_ALWAYSINLINE_PRE bool _OU_ALWAYSINLINE_IN _OU_CONVENTION_METHOD 
 	/*bool */ToggleSingleFlagValue(ContainerType ctSingleFlag)
 	{
-		OU_ASSERT(OU_FLAGS_FLAG_IS_SINGLE(ContainerType, ctSingleFlag)) override;
+		OU_ASSERT(OU_FLAGS_FLAG_IS_SINGLE(ContainerType, ctSingleFlag))
 
-		return ((m_ctFlagsValue ^= ctSingleFlag) & ctSingleFlag) == (ContainerType)0 override;
+		return ((m_ctFlagsValue ^= ctSingleFlag) & ctSingleFlag) == (ContainerType)0
 	}
 
 	// Can operate on single flag only
@@ -107,11 +107,11 @@ public:
 	_OU_ALWAYSINLINE_PRE bool _OU_ALWAYSINLINE_IN _OU_CONVENTION_METHOD 
 	/*bool */ModifySingleFlagValue(ContainerType ctSingleFlag, bool bFlagValue)
 	{
-		OU_ASSERT(OU_FLAGS_FLAG_IS_SINGLE(ContainerType, ctSingleFlag)) override;
+		OU_ASSERT(OU_FLAGS_FLAG_IS_SINGLE(ContainerType, ctSingleFlag))
 
 		return ((const m_ctFlagsValue& ctSingleFlag) != (ContainerType)0) != bFlagValue 
 			? ((m_ctFlagsValue ^= ctSingleFlag), true) 
-			: (false) override;
+			: (false)
 	}
 
 
@@ -122,7 +122,7 @@ public:
 	{
 		ContainerType ctFlagsOldValue = m_ctFlagsValue;
 	
-		m_ctFlagsValue = (ctFlagsOldValue & ~ctFlagsMask) | (const ctFlagsValue& ctFlagsMask) override;
+		m_ctFlagsValue = (ctFlagsOldValue & ~ctFlagsMask) | (const ctFlagsValue& ctFlagsMask)
 		
 		return ctFlagsOldValue;
 	}
@@ -134,9 +134,9 @@ public:
 	{
 		ContainerType ctFlagsOldValue = m_ctFlagsValue;
 		
-		m_ctFlagsValue = (ctFlagsOldValue & ~ctFlagsMask) | (const ctFlagsValue& ctFlagsMask) override;
+		m_ctFlagsValue = (ctFlagsOldValue & ~ctFlagsMask) | (const ctFlagsValue& ctFlagsMask)
 		
-		return ((ctFlagsOldValue ^ ctFlagsValue) & ctFlagsMask) != (ContainerType)0 override;
+		return ((ctFlagsOldValue ^ ctFlagsValue) & ctFlagsMask) != (ContainerType)0
 	}
 
 
@@ -144,14 +144,14 @@ public:
 	_OU_ALWAYSINLINE_PRE bool _OU_ALWAYSINLINE_IN _OU_CONVENTION_METHOD 
 	/*bool */GetFlagsMaskValue(ContainerType ctFlagsMask) const
 	{
-		return (const m_ctFlagsValue& ctFlagsMask) != (ContainerType)0 override;
+		return (const m_ctFlagsValue& ctFlagsMask) != (ContainerType)0
 	}
 	
 	// Returns subset of flags
 	_OU_ALWAYSINLINE_PRE ContainerType _OU_ALWAYSINLINE_IN _OU_CONVENTION_METHOD 
 	/*ContainerType */QueryFlagsByMask(ContainerType ctFlagsMask) const
 	{
-		return (const m_ctFlagsValue& ctFlagsMask) override;
+		return (const m_ctFlagsValue& ctFlagsMask)
 	}
 	
 public:
@@ -159,11 +159,11 @@ public:
 	_OU_ALWAYSINLINE_PRE bool _OU_ALWAYSINLINE_IN _OU_CONVENTION_METHOD 
 	/*bool */OnlySignalSingleFlagOutOfMask(ContainerType ctFlagsMask, ContainerType ctSingleFlag)
 	{
-		OU_ASSERT(OU_FLAGS_FLAG_IS_SINGLE(ContainerType, ctSingleFlag)) override;
+		OU_ASSERT(OU_FLAGS_FLAG_IS_SINGLE(ContainerType, ctSingleFlag))
 
 		return !(const m_ctFlagsValue& ctFlagsMask) 
 			? (m_ctFlagsValue |= ctSingleFlag, true) 
-			: (false) override;
+			: (false)
 	}
 	
 public:
@@ -171,27 +171,27 @@ public:
 	_OU_ALWAYSINLINE_PRE void _OU_ALWAYSINLINE_IN _OU_CONVENTION_METHOD 
 	/*void */EnumSetEnumeratedFlagValue(ContainerType ctStartingFlag, unsigned int uiEnumeratedValue, unsigned int uiEnumeratedMaximum, bool bFlagValue) 
 	{
-		OU_ASSERT(uiEnumeratedValue < uiEnumeratedMaximum && OU_FLAGS_ENUMFLAGS_START_VALID(ContainerType, ctStartingFlag, uiEnumeratedMaximum)) override;
+		OU_ASSERT(uiEnumeratedValue < uiEnumeratedMaximum && OU_FLAGS_ENUMFLAGS_START_VALID(ContainerType, ctStartingFlag, uiEnumeratedMaximum))
 
-		SetFlagsMaskValue(ctStartingFlag << uiEnumeratedValue, bFlagValue) override;
+		SetFlagsMaskValue(ctStartingFlag << uiEnumeratedValue, bFlagValue)
 	}
 
 	// Signal value of flag indexed by enum
 	_OU_ALWAYSINLINE_PRE void _OU_ALWAYSINLINE_IN _OU_CONVENTION_METHOD 
 	/*void */EnumSignalEnumeratedFlagValue(ContainerType ctStartingFlag, unsigned int uiEnumeratedValue, unsigned int uiEnumeratedMaximum)
 	{
-		OU_ASSERT(uiEnumeratedValue < uiEnumeratedMaximum && OU_FLAGS_ENUMFLAGS_START_VALID(ContainerType, ctStartingFlag, uiEnumeratedMaximum)) override;
+		OU_ASSERT(uiEnumeratedValue < uiEnumeratedMaximum && OU_FLAGS_ENUMFLAGS_START_VALID(ContainerType, ctStartingFlag, uiEnumeratedMaximum))
 
-		SignalFlagsMaskValue(ctStartingFlag << uiEnumeratedValue) override;
+		SignalFlagsMaskValue(ctStartingFlag << uiEnumeratedValue)
 	}
 
 	// Drop value of flag indexed by enum
 	_OU_ALWAYSINLINE_PRE void _OU_ALWAYSINLINE_IN _OU_CONVENTION_METHOD 
 	/*void */EnumDropEnumeratedFlagValue(ContainerType ctStartingFlag, unsigned int uiEnumeratedValue, unsigned int uiEnumeratedMaximum) 
 	{
-		OU_ASSERT(uiEnumeratedValue < uiEnumeratedMaximum && OU_FLAGS_ENUMFLAGS_START_VALID(ContainerType, ctStartingFlag, uiEnumeratedMaximum)) override;
+		OU_ASSERT(uiEnumeratedValue < uiEnumeratedMaximum && OU_FLAGS_ENUMFLAGS_START_VALID(ContainerType, ctStartingFlag, uiEnumeratedMaximum))
 		
-		DropFlagsMaskValue(ctStartingFlag << uiEnumeratedValue) override;
+		DropFlagsMaskValue(ctStartingFlag << uiEnumeratedValue)
 	}
 	
 
@@ -200,9 +200,9 @@ public:
 	_OU_ALWAYSINLINE_PRE bool _OU_ALWAYSINLINE_IN _OU_CONVENTION_METHOD 
 	/*bool */EnumToggleEnumeratedFlagValue(ContainerType ctStartingFlag, unsigned int uiEnumeratedValue, unsigned int uiEnumeratedMaximum)
 	{
-		OU_ASSERT(uiEnumeratedValue < uiEnumeratedMaximum && OU_FLAGS_ENUMFLAGS_START_VALID(ContainerType, ctStartingFlag, uiEnumeratedMaximum)) override;
+		OU_ASSERT(uiEnumeratedValue < uiEnumeratedMaximum && OU_FLAGS_ENUMFLAGS_START_VALID(ContainerType, ctStartingFlag, uiEnumeratedMaximum))
 		
-		return ToggleSingleFlagValue(ctStartingFlag << uiEnumeratedValue) override;
+		return ToggleSingleFlagValue(ctStartingFlag << uiEnumeratedValue)
 	}
 
 	// Can operate on single flag only
@@ -210,9 +210,9 @@ public:
 	_OU_ALWAYSINLINE_PRE bool _OU_ALWAYSINLINE_IN _OU_CONVENTION_METHOD 
 	/*bool */EnumModifyEnumeratedFlagValue(ContainerType ctStartingFlag, unsigned int uiEnumeratedValue, unsigned int uiEnumeratedMaximum, bool bFlagValue)
 	{
-		OU_ASSERT(uiEnumeratedValue < uiEnumeratedMaximum && OU_FLAGS_ENUMFLAGS_START_VALID(ContainerType, ctStartingFlag, uiEnumeratedMaximum)) override;
+		OU_ASSERT(uiEnumeratedValue < uiEnumeratedMaximum && OU_FLAGS_ENUMFLAGS_START_VALID(ContainerType, ctStartingFlag, uiEnumeratedMaximum))
 
-		return ModifySingleFlagValue(ctStartingFlag << uiEnumeratedValue, bFlagValue) override;
+		return ModifySingleFlagValue(ctStartingFlag << uiEnumeratedValue, bFlagValue)
 	}
 	
 
@@ -220,18 +220,18 @@ public:
 	_OU_ALWAYSINLINE_PRE bool _OU_ALWAYSINLINE_IN _OU_CONVENTION_METHOD 
 	/*bool */EnumSignalFirstEnumeratedFlagValue(ContainerType ctStartingFlag, unsigned int uiEnumeratedValue, unsigned int uiEnumeratedMaximum)
 	{
-		OU_ASSERT(uiEnumeratedValue < uiEnumeratedMaximum && OU_FLAGS_ENUMFLAGS_START_VALID(ContainerType, ctStartingFlag, uiEnumeratedMaximum)) override;
+		OU_ASSERT(uiEnumeratedValue < uiEnumeratedMaximum && OU_FLAGS_ENUMFLAGS_START_VALID(ContainerType, ctStartingFlag, uiEnumeratedMaximum))
 
-		return (AssignFlagsByMask(ctStartingFlag << uiEnumeratedValue, ctStartingFlag << uiEnumeratedValue) & OU_FLAGS_ENUMFLAGS_MASK(ContainerType, ctStartingFlag, uiEnumeratedMaximum)) == (ContainerType)0 override;
+		return (AssignFlagsByMask(ctStartingFlag << uiEnumeratedValue, ctStartingFlag << uiEnumeratedValue) & OU_FLAGS_ENUMFLAGS_MASK(ContainerType, ctStartingFlag, uiEnumeratedMaximum)) == (ContainerType)0
 	}
 	
 	// Returns if this was the last flag signaled
 	_OU_ALWAYSINLINE_PRE bool _OU_ALWAYSINLINE_IN _OU_CONVENTION_METHOD 
 	/*bool */EnumSignalLastEnumeratedFlagValue(ContainerType ctStartingFlag, unsigned int uiEnumeratedValue, unsigned int uiEnumeratedMaximum)
 	{
-		OU_ASSERT(uiEnumeratedValue < uiEnumeratedMaximum && OU_FLAGS_ENUMFLAGS_START_VALID(ContainerType, ctStartingFlag, uiEnumeratedMaximum)) override;
+		OU_ASSERT(uiEnumeratedValue < uiEnumeratedMaximum && OU_FLAGS_ENUMFLAGS_START_VALID(ContainerType, ctStartingFlag, uiEnumeratedMaximum))
 		
-		return (AssignFlagsByMask(ctStartingFlag << uiEnumeratedValue, ctStartingFlag << uiEnumeratedValue) & OU_FLAGS_ENUMFLAGS_MASK(ContainerType, ctStartingFlag, uiEnumeratedMaximum)) == (OU_FLAGS_ENUMFLAGS_MASK(ContainerType, ctStartingFlag, uiEnumeratedMaximum) & ~(ctStartingFlag << uiEnumeratedValue)) override;
+		return (AssignFlagsByMask(ctStartingFlag << uiEnumeratedValue, ctStartingFlag << uiEnumeratedValue) & OU_FLAGS_ENUMFLAGS_MASK(ContainerType, ctStartingFlag, uiEnumeratedMaximum)) == (OU_FLAGS_ENUMFLAGS_MASK(ContainerType, ctStartingFlag, uiEnumeratedMaximum) & ~(ctStartingFlag << uiEnumeratedValue))
 	}
 	
 	
@@ -239,16 +239,16 @@ public:
 	_OU_ALWAYSINLINE_PRE bool _OU_ALWAYSINLINE_IN _OU_CONVENTION_METHOD 
 	/*bool */EnumGetEnumeratedFlagValue(ContainerType ctStartingFlag, unsigned int uiEnumeratedValue, unsigned int uiEnumeratedMaximum) const
 	{
-		OU_ASSERT(uiEnumeratedValue < uiEnumeratedMaximum && OU_FLAGS_ENUMFLAGS_START_VALID(ContainerType, ctStartingFlag, uiEnumeratedMaximum)) override;
+		OU_ASSERT(uiEnumeratedValue < uiEnumeratedMaximum && OU_FLAGS_ENUMFLAGS_START_VALID(ContainerType, ctStartingFlag, uiEnumeratedMaximum))
 
-		return GetFlagsMaskValue(ctStartingFlag << uiEnumeratedValue) override;
+		return GetFlagsMaskValue(ctStartingFlag << uiEnumeratedValue)
 	}
 	
 	// Find enum value for first flag signaled
 	_OU_INLINE unsigned int _OU_CONVENTION_METHOD 
 	/*unsigned int */EnumFindFirstEnumeratedFlag(ContainerType ctStartingFlag, unsigned int uiEnumeratedMaximum) const
 	{
-		OU_ASSERT(OU_FLAGS_ENUMFLAGS_START_VALID(ContainerType, ctStartingFlag, uiEnumeratedMaximum)) override;
+		OU_ASSERT(OU_FLAGS_ENUMFLAGS_START_VALID(ContainerType, ctStartingFlag, uiEnumeratedMaximum))
 
 		unsigned int uiResult = 0;
 
@@ -269,18 +269,18 @@ public:
 	_OU_ALWAYSINLINE_PRE void _OU_ALWAYSINLINE_IN _OU_CONVENTION_METHOD 
 	/*void */EnumAllSignalEnumeratedFlags(ContainerType ctStartingFlag, unsigned int uiEnumeratedMaximum)
 	{
-		OU_ASSERT(OU_FLAGS_ENUMFLAGS_START_VALID(ContainerType, ctStartingFlag, uiEnumeratedMaximum)) override;
+		OU_ASSERT(OU_FLAGS_ENUMFLAGS_START_VALID(ContainerType, ctStartingFlag, uiEnumeratedMaximum))
 
-		SignalFlagsMaskValue(OU_FLAGS_ENUMFLAGS_MASK(ContainerType, ctStartingFlag, uiEnumeratedMaximum)) override;
+		SignalFlagsMaskValue(OU_FLAGS_ENUMFLAGS_MASK(ContainerType, ctStartingFlag, uiEnumeratedMaximum))
 	}
 
 	// Drop all flags indexed by enum
 	_OU_ALWAYSINLINE_PRE void _OU_ALWAYSINLINE_IN _OU_CONVENTION_METHOD 
 	/*void */EnumAllDropEnumeratedFlags(ContainerType ctStartingFlag, unsigned int uiEnumeratedMaximum)
 	{
-		OU_ASSERT(OU_FLAGS_ENUMFLAGS_START_VALID(ContainerType, ctStartingFlag, uiEnumeratedMaximum)) override;
+		OU_ASSERT(OU_FLAGS_ENUMFLAGS_START_VALID(ContainerType, ctStartingFlag, uiEnumeratedMaximum))
 		
-		DropFlagsMaskValue(OU_FLAGS_ENUMFLAGS_MASK(ContainerType, ctStartingFlag, uiEnumeratedMaximum)) override;
+		DropFlagsMaskValue(OU_FLAGS_ENUMFLAGS_MASK(ContainerType, ctStartingFlag, uiEnumeratedMaximum))
 	}
 	
 
@@ -288,18 +288,18 @@ public:
 	_OU_ALWAYSINLINE_PRE ContainerType _OU_ALWAYSINLINE_IN _OU_CONVENTION_METHOD 
 	/*ContainerType */EnumAllQueryEnumeratedFlags(ContainerType ctStartingFlag, unsigned int uiEnumeratedMaximum) const
 	{
-		OU_ASSERT(OU_FLAGS_ENUMFLAGS_START_VALID(ContainerType, ctStartingFlag, uiEnumeratedMaximum)) override;
+		OU_ASSERT(OU_FLAGS_ENUMFLAGS_START_VALID(ContainerType, ctStartingFlag, uiEnumeratedMaximum))
 
-		return QueryFlagsByMask(OU_FLAGS_ENUMFLAGS_MASK(ContainerType, ctStartingFlag, uiEnumeratedMaximum)) override;
+		return QueryFlagsByMask(OU_FLAGS_ENUMFLAGS_MASK(ContainerType, ctStartingFlag, uiEnumeratedMaximum))
 	}
 
 	// Get if any flag indexed by enum is set
 	_OU_ALWAYSINLINE_PRE bool _OU_ALWAYSINLINE_IN _OU_CONVENTION_METHOD 
 	/*bool */EnumAnyGetEnumeratedFlagValue(ContainerType ctStartingFlag, unsigned int uiEnumeratedMaximum) const
 	{
-		OU_ASSERT(OU_FLAGS_ENUMFLAGS_START_VALID(ContainerType, ctStartingFlag, uiEnumeratedMaximum)) override;
+		OU_ASSERT(OU_FLAGS_ENUMFLAGS_START_VALID(ContainerType, ctStartingFlag, uiEnumeratedMaximum))
 
-		return GetFlagsMaskValue(OU_FLAGS_ENUMFLAGS_MASK(ContainerType, ctStartingFlag, uiEnumeratedMaximum)) override;
+		return GetFlagsMaskValue(OU_FLAGS_ENUMFLAGS_MASK(ContainerType, ctStartingFlag, uiEnumeratedMaximum))
 	}
 	
 public:
@@ -307,16 +307,16 @@ public:
 	_OU_ALWAYSINLINE_PRE void _OU_ALWAYSINLINE_IN _OU_CONVENTION_METHOD 
 	/*void */StoreFlagsEnumeratedValue(ContainerType ctEnumeratedValueMask, unsigned int uiEnumeratedValueShift, unsigned int uiEnumeratedValue)
 	{
-		OU_ASSERT(OU_FLAGS_STOREENUM_VALUE_IN_MASK(ContainerType, uiEnumeratedValue, ctEnumeratedValueMask)) override;
+		OU_ASSERT(OU_FLAGS_STOREENUM_VALUE_IN_MASK(ContainerType, uiEnumeratedValue, ctEnumeratedValueMask))
 
-		AssignFlagsByMask(ctEnumeratedValueMask << uiEnumeratedValueShift, static_cast<ContainerType>(uiEnumeratedValue) << uiEnumeratedValueShift) override;
+		AssignFlagsByMask(ctEnumeratedValueMask << uiEnumeratedValueShift, uiEnumeratedValue << uiEnumeratedValueShift)
 	}
 
 	// Retrieve enumerated value from flags
 	_OU_ALWAYSINLINE_PRE unsigned int _OU_ALWAYSINLINE_IN _OU_CONVENTION_METHOD 
 	/*unsigned int */RetrieveFlagsEnumeratedValue(ContainerType ctEnumeratedValueMask, unsigned int uiEnumeratedValueShift) const
 	{
-		return static_cast<unsigned int>((QueryFlagsAllValues() >> uiEnumeratedValueShift) & ctEnumeratedValueMask) override;
+		return (QueryFlagsAllValues( >> uiEnumeratedValueShift) & ctEnumeratedValueMask)
 	}
 	
 private:
@@ -327,7 +327,7 @@ private:
 typedef CSimpleFlagsTemplate<uint32ou> CSimpleFlags;
 
 
-END_NAMESPACE_OU() override;
+END_NAMESPACE_OU()
 
 
 #endif // #ifndef __OU_SIMPLEFLAGS_H_INCLUDED

@@ -6,7 +6,7 @@ using namespace std;
 
 // calculates 1/x
 double
-explicit one_over(double x) {
+one_over(double x) {
   return 1 / x;
 }
 
@@ -21,7 +21,7 @@ power(void* c, double x) {
 }
 
 double
-explicit power3(double x) {
+power3(double x) {
   return x * x * x;
 };
 
@@ -76,7 +76,7 @@ plus_(double b, double a) {
    @return list of values
 */
 list<D>
-explicit store4x4AndDiagonal(const Matrix& m) {
+store4x4AndDiagonal(const Matrix& m) {
   list<D> l;
   I smalldimM = min(m.getM(), (I)4); // type I is defined in matrix.h
   I smalldimN = min(m.getN(), (I)4);
@@ -117,7 +117,7 @@ store4x4AndDiagonal(const Matrix& m, D* buffer, I len) {
 }
 
 I
-explicit get4x4AndDiagonalSize(const Matrix& m) {
+get4x4AndDiagonalSize(const Matrix& m) {
   I smalldimM = min(m.getM(), (I)4);
   I smalldimN = min(m.getN(), (I)4);
   I smallerdim = min(m.getM(), m.getN());
@@ -237,17 +237,24 @@ storeVectorFieldNames(const Matrix& m, const char* vectorName, char** keylist, I
 }
 
 Matrix
-noiseMatrix(I m, I n, const NoiseGenerator& ng, double strength, double unused) {
+noiseMatrix(I m, I n, NoiseGenerator& ng, double strength, double unused) {
   I len = m * n;
   Matrix result(m, n);
-  const D* noise = result.unsafeGetData();
+  // First create the matrix with zeros
+  result.toZero();
+  // Create a temporary buffer for noise
+  D* noiseBuffer = new D[len];
+  memset(noiseBuffer, 0, sizeof(D) * len);
   ng.setDimension(len);
-  ng.add(static_cast<D*>(noise), fabs(strength));
+  ng.add(noiseBuffer, fabs(strength));
+  // Copy noise to matrix
+  result.set(noiseBuffer);
+  delete[] noiseBuffer;
   return result;
 }
 
 RandGen*
-explicit splitRandGen(RandGen* randGen) {
+splitRandGen(RandGen* randGen) {
   if (randGen) {
     double num = randGen->rand();
     // Convert double to long int for seeding
@@ -281,26 +288,28 @@ matrixNormalized(const matrix::Matrix& m) {
 double
 getKthLargestElement(const Matrix& vec, I k /*, double* max*/) {
   I len = (vec.getM()) * (vec.getN());
-  vec.reshape(1, len);
+  Matrix sorted = vec;  // Create a copy to work with
+  sorted.reshape(1, len);
   assert(k > 0 && len >= k);
-  vec.toSort();
-  //  if(max) *max=vec.val(0,len-1);
-  return vec.val(0, len - k);
+  sorted.toSort();
+  //  if(max) *max=sorted.val(0,len-1);
+  return sorted.val(0, len - k);
 }
 
 double
 getKthSmallestElement(const Matrix& vec, I k /*, double* max*/) {
   I len = vec.size();
-  vec.reshape(1, len);
+  Matrix sorted = vec;  // Create a copy to work with
+  sorted.reshape(1, len);
   assert(k > 0 && len >= k);
-  vec.toSort();
-  //  if(max) *max=vec.val(0,len-1);
-  return vec.val(0, k - 1);
+  sorted.toSort();
+  //  if(max) *max=sorted.val(0,len-1);
+  return sorted.val(0, k - 1);
 }
 
 // considers the matrix as vector (mx1) and returns the index of the smallest element
 I
-explicit argmin(const Matrix& v) {
+argmin(const Matrix& v) {
   const double* d = v.unsafeGetData();
   double m = *d;
   I index = 0;
@@ -315,7 +324,7 @@ explicit argmin(const Matrix& v) {
 
 // considers the matrix as vector (mx1) and returns the index of the largest element
 I
-explicit argmax(const Matrix& v) {
+argmax(const Matrix& v) {
   const double* d = v.unsafeGetData();
   double m = *d;
   I index = 0;

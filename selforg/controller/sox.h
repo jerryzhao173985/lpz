@@ -64,7 +64,7 @@ public:
 
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override;
 
-  virtual ~Sox() override;
+  virtual ~Sox();
 
   static SoxConf getDefaultConf() {
     SoxConf conf;
@@ -109,9 +109,9 @@ public:
 
   /***** STOREABLE ****/
   /** stores the controller values to a given file. */
-  virtual bool store(FILE* f) const override;
+  virtual bool store(FILE* f) const;
   /** loads the controller values from a given file. */
-  virtual bool restore(FILE* f) override;
+  virtual bool restore(FILE* f);
 
   /* some direct access functions (unsafe!) */
   virtual matrix::Matrix getA();
@@ -128,8 +128,8 @@ public:
   virtual matrix::Matrix getLastSensorValues() override;
 
   /***** PARAMETRIZABLE ****/
-  virtual std::list<matrix::Matrix> getParameters() const override;
-  virtual int setParameters(const std::list<matrix::Matrix>& params) override;
+  virtual std::list<matrix::Matrix> getParameters() const;
+  virtual int setParameters(const std::list<matrix::Matrix>& params);
 
 protected:
   unsigned short number_sensors = 0;
@@ -180,12 +180,12 @@ protected:
   virtual void learn();
 
   /// neuron transfer function
-  static double explicit explicit g(double z) {
+  static double g(double z) {
     return tanh(z);
   };
 
   /// derivative of g
-  static double explicit explicit g_s(double z) {
+  static double g_s(double z) {
     double k = tanh(z);
     return 1.0 - k * k;
   };
@@ -195,7 +195,7 @@ protected:
     return x < -r ? -r : (x > r ? r : x);
   }
   /// calculates the inverse the argument (useful for Matrix::map)
-  static constexpr double explicit explicit one_over(double x) {
+  static constexpr double one_over(double x) {
     return 1 / x;
   }
 };

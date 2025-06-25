@@ -41,7 +41,7 @@
     wiring->setFeedbackRatio(rs);
     \endcode
  */
-class FeedbackWiring{
+class FeedbackWiring : public AbstractWiring {
 public:
   typedef enum {Motor=1, Context=2, All=3} Mode;
 

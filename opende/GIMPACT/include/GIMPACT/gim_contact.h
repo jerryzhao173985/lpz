@@ -15,12 +15,12 @@ email: projectileman@yahoo.com
 
  This library is free software; you can redistribute it and/or
  modify it under the terms of EITHER:
-   static_cast<1>(The) GNU Lesser General Public License as published by the Free
+   1 GNU Lesser General Public License as published by the Free
        Software Foundation; either version 2.1 of the License, or (at
        your option) any later version. The text of the GNU Lesser
        General Public License is included with this library in the
        file GIMPACT-LICENSE-LGPL.TXT.
-   static_cast<2>(The) BSD-style license that is included with this library in
+   2 BSD-style license that is included with this library in
        the file GIMPACT-LICENSE-BSD.TXT.
 
  This library is distributed in the hope that it will be useful,
@@ -63,9 +63,9 @@ struct GIM_CONTACT
 
 #define GIM_CALC_KEY_CONTACT(pos,hash)\
 {\
-	GINT32 _coords[] = {static_cast<GINT32>(pos[0]*1000.0f+1.0f),static_cast<GINT32>(pos[1]*1333.0f),static_cast<GINT32>(pos[2]*2133.0f+3.0f)};\
+	GINT32 _coords[] = {pos[0]*1000.0f+1.0f,pos[1]*1333.0f,pos[2]*2133.0f+3.0f};\
 	GUINT32 _hash=0;\
-	GUINT32 *_uitmp = static_cast<GUINT32 *>(&_coords[0]);\
+	GUINT32 *_uitmp = &_coords[0];\
 	_hash = *_uitmp;\
 	++_uitmp;\
 	_hash += (*_uitmp)<<4;\
@@ -75,7 +75,7 @@ struct GIM_CONTACT
 }\
 
 ///Creates a contact list for queries
-#define GIM_CREATE_CONTACT_LISTstatic_cast<contact_array>static_cast<GIM_DYNARRAY_CREATE>(GIM_CONTACT,contact_array,100)
+#define GIM_CREATE_CONTACT_LISTstatic_cast<contact_array>GIM_CONTACT,contact_array,100
 
 #define GIM_PUSH_CONTACT(contact_array, point, normal, deep,handle1, handle2, feat1, feat2)\
 {\

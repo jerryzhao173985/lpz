@@ -5,12 +5,12 @@
  *                                                                       *
  * This library is free software; you can redistribute it and/or         *
  * modify it under the terms of EITHER:                                  *
- *   static_cast<1>(The) GNU Lesser General Public License as published by the Free  *
+ *   1 GNU Lesser General Public License as published by the Free  *
  *       Software Foundation; either version 2.1 of the License, or (at  *
  *       your option) any later version. The text of the GNU Lesser      *
  *       General Public License is included with this library in the     *
  *       file LICENSE.TXT.                                               *
- *   static_cast<2>(The) BSD-style license that is included with this library in     *
+ *   2 BSD-style license that is included with this library in     *
  *       the file LICENSE-BSD.TXT.                                       *
  *                                                                       *
  * This library is distributed in the hope that it will be useful,       *
@@ -65,7 +65,7 @@ extern "C" {
  * @param geom the geom to be destroyed.
  * @ingroup collide
  */
-ODE_API void dGeomDestroy (dGeomID geom) override;
+ODE_API void dGeomDestroy (dGeomID geom);
 
 
 /**
@@ -75,7 +75,7 @@ ODE_API void dGeomDestroy (dGeomID geom) override;
  * @param data the data pointer to be stored
  * @ingroup collide
  */
-ODE_API void dGeomSetData (dGeomID geom, void* data) override;
+ODE_API void dGeomSetData (dGeomID geom, void* data);
 
 
 /**
@@ -84,7 +84,7 @@ ODE_API void dGeomSetData (dGeomID geom, void* data) override;
  * @param geom the geom containing the data
  * @ingroup collide
  */
-ODE_API void *dGeomGetData (dGeomID geom) override;
+ODE_API void *dGeomGetData (dGeomID geom);
 
 
 /**
@@ -105,7 +105,7 @@ ODE_API void *dGeomGetData (dGeomID geom) override;
  * @param body the body to attach to the geom
  * @ingroup collide
  */
-ODE_API void dGeomSetBody (dGeomID geom, dBodyID body) override;
+ODE_API void dGeomSetBody (dGeomID geom, dBodyID body);
 
 
 /**
@@ -114,7 +114,7 @@ ODE_API void dGeomSetBody (dGeomID geom, dBodyID body) override;
  * @sa dGeomSetBody
  * @ingroup collide
  */
-ODE_API dBodyID dGeomGetBody (dGeomID geom) override;
+ODE_API dBodyID dGeomGetBody (dGeomID geom);
 
 
 /**
@@ -131,7 +131,7 @@ ODE_API dBodyID dGeomGetBody (dGeomID geom) override;
  * @sa dBodySetPosition
  * @ingroup collide
  */
-ODE_API void dGeomSetPosition (dGeomID geom, dReal x, dReal y, dReal z) override;
+ODE_API void dGeomSetPosition (dGeomID geom, dReal x, dReal y, dReal z);
 
 
 /**
@@ -146,7 +146,7 @@ ODE_API void dGeomSetPosition (dGeomID geom, dReal x, dReal y, dReal z) override
  * @sa dBodySetRotation
  * @ingroup collide
  */
-ODE_API void dGeomSetRotation (dGeomID geom, const dMatrix3 R) override;
+ODE_API void dGeomSetRotation (dGeomID geom, const dMatrix3 R);
 
 
 /**
@@ -162,7 +162,7 @@ ODE_API void dGeomSetRotation (dGeomID geom, const dMatrix3 R) override;
  * @sa dBodySetQuaternion
  * @ingroup collide
  */
-ODE_API void dGeomSetQuaternion (dGeomID geom, const dQuaternion Q) override;
+ODE_API void dGeomSetQuaternion (dGeomID geom, const dQuaternion Q);
 
 
 /**
@@ -181,7 +181,7 @@ ODE_API void dGeomSetQuaternion (dGeomID geom, const dQuaternion Q) override;
  * @sa dBodyGetPosition
  * @ingroup collide
  */
-ODE_API const dReal * dGeomGetPosition (dGeomID geom) override;
+ODE_API const dReal * dGeomGetPosition (dGeomID geom);
 
 
 /**
@@ -191,7 +191,7 @@ ODE_API const dReal * dGeomGetPosition (dGeomID geom) override;
  * @param pos   a copy of the geom position
  * @sa dGeomGetPosition
  */
-ODE_API void dGeomCopyPosition (dGeomID geom, dVector3 pos) override;
+ODE_API void dGeomCopyPosition (dGeomID geom, dVector3 pos);
 
 
 /**
@@ -210,7 +210,7 @@ ODE_API void dGeomCopyPosition (dGeomID geom, dVector3 pos) override;
  * @sa dBodyGetRotation
  * @ingroup collide
  */
-ODE_API const dReal * dGeomGetRotation (dGeomID geom) override;
+ODE_API const dReal * dGeomGetRotation (dGeomID geom);
 
 
 /**
@@ -226,7 +226,7 @@ ODE_API const dReal * dGeomGetRotation (dGeomID geom) override;
  * @sa dGeomGetRotation
  * @ingroup collide
  */
-ODE_API void dGeomCopyRotation(dGeomID geom, dMatrix3 R) override;
+ODE_API void dGeomCopyRotation(dGeomID geom, dMatrix3 R);
 
 
 /**
@@ -242,7 +242,7 @@ ODE_API void dGeomCopyRotation(dGeomID geom, dMatrix3 R) override;
  * @sa dBodyGetQuaternion
  * @ingroup collide
  */
-ODE_API void dGeomGetQuaternion (dGeomID geom, dQuaternion result) override;
+ODE_API void dGeomGetQuaternion (dGeomID geom, dQuaternion result);
 
 
 /**
@@ -261,7 +261,7 @@ ODE_API void dGeomGetQuaternion (dGeomID geom, dQuaternion result) override;
  * @param aabb the returned bounding box
  * @ingroup collide
  */
-ODE_API void dGeomGetAABB (dGeomID geom, dReal aabb[6]) override;
+ODE_API void dGeomGetAABB (dGeomID geom, dReal aabb[6]);
 
 
 /**
@@ -270,7 +270,7 @@ ODE_API void dGeomGetAABB (dGeomID geom, dReal aabb[6]) override;
  * @returns Non-zero if the geom is a space, zero otherwise.
  * @ingroup collide
  */
-ODE_API int dGeomIsSpace (dGeomID geom) override;
+ODE_API int dGeomIsSpace (dGeomID geom);
 
 
 /**
@@ -280,7 +280,7 @@ ODE_API int dGeomIsSpace (dGeomID geom) override;
  *          not contained by a space.
  * @ingroup collide
  */
-ODE_API dSpaceID dGeomGetSpace (dGeomID) override;
+ODE_API dSpaceID dGeomGetSpace (dGeomID);
 
 
 /**
@@ -349,7 +349,7 @@ ODE_API dSpaceID dGeomGetSpace (dGeomID) override;
  * @sa dGeomSphereSetRadius
  * @ingroup collide_sphere
  */
-ODE_API dGeomID dCreateSphere (dSpaceID space, dReal radius) override;
+ODE_API dGeomID dCreateSphere (dSpaceID space, dReal radius);
 
 
 /**
@@ -361,7 +361,7 @@ ODE_API dGeomID dCreateSphere (dSpaceID space, dReal radius) override;
  * @sa dGeomSphereGetRadius
  * @ingroup collide_sphere
  */
-ODE_API void dGeomSphereSetRadius (dGeomID sphere, dReal radius) override;
+ODE_API void dGeomSphereSetRadius (dGeomID sphere, dReal radius);
 
 
 /**
@@ -372,7 +372,7 @@ ODE_API void dGeomSphereSetRadius (dGeomID sphere, dReal radius) override;
  * @sa dGeomSphereSetRadius
  * @ingroup collide_sphere
  */
-ODE_API dReal dGeomSphereGetRadius (dGeomID sphere) override;
+ODE_API dReal dGeomSphereGetRadius (dGeomID sphere);
 
 
 /**
@@ -389,7 +389,7 @@ ODE_API dReal dGeomSphereGetRadius (dGeomID sphere) override;
  *
  * @ingroup collide_sphere
  */
-ODE_API dReal dGeomSpherePointDepth (dGeomID sphere, dReal x, dReal y, dReal z) override;
+ODE_API dReal dGeomSpherePointDepth (dGeomID sphere, dReal x, dReal y, dReal z);
 
 
 //--> Convex Functions
@@ -427,7 +427,7 @@ ODE_API void dGeomSetConvex (dGeomID g,
  * @sa dGeomBoxSetLengths
  * @ingroup collide_box
  */
-ODE_API dGeomID dCreateBox (dSpaceID space, dReal lx, dReal ly, dReal lz) override;
+ODE_API dGeomID dCreateBox (dSpaceID space, dReal lx, dReal ly, dReal lz);
 
 
 /**
@@ -441,7 +441,7 @@ ODE_API dGeomID dCreateBox (dSpaceID space, dReal lx, dReal ly, dReal lz) overri
  * @sa dGeomBoxGetLengths
  * @ingroup collide_box
  */
-ODE_API void dGeomBoxSetLengths (dGeomID box, dReal lx, dReal ly, dReal lz) override;
+ODE_API void dGeomBoxSetLengths (dGeomID box, dReal lx, dReal ly, dReal lz);
 
 
 /**
@@ -453,7 +453,7 @@ ODE_API void dGeomBoxSetLengths (dGeomID box, dReal lx, dReal ly, dReal lz) over
  * @sa dGeomBoxSetLengths
  * @ingroup collide_box
  */
-ODE_API void dGeomBoxGetLengths (dGeomID box, dVector3 result) override;
+ODE_API void dGeomBoxGetLengths (dGeomID box, dVector3 result);
 
 
 /**
@@ -468,18 +468,18 @@ ODE_API void dGeomBoxGetLengths (dGeomID box, dVector3 result) override;
  * positive depth, points outside it will have a negative depth, and points
  * on the surface will have a depth of zero.
  */
-ODE_API dReal dGeomBoxPointDepth (dGeomID box, dReal x, dReal y, dReal z) override;
+ODE_API dReal dGeomBoxPointDepth (dGeomID box, dReal x, dReal y, dReal z);
 
 
-ODE_API dGeomID dCreatePlane (dSpaceID space, dReal a, dReal b, dReal c, dReal d) override;
-ODE_API void dGeomPlaneSetParams (dGeomID plane, dReal a, dReal b, dReal c, dReal d) override;
-ODE_API void dGeomPlaneGetParams (dGeomID plane, dVector4 result) override;
-ODE_API dReal dGeomPlanePointDepth (dGeomID plane, dReal x, dReal y, dReal z) override;
+ODE_API dGeomID dCreatePlane (dSpaceID space, dReal a, dReal b, dReal c, dReal d);
+ODE_API void dGeomPlaneSetParams (dGeomID plane, dReal a, dReal b, dReal c, dReal d);
+ODE_API void dGeomPlaneGetParams (dGeomID plane, dVector4 result);
+ODE_API dReal dGeomPlanePointDepth (dGeomID plane, dReal x, dReal y, dReal z);
 
-ODE_API dGeomID dCreateCapsule (dSpaceID space, dReal radius, dReal length) override;
-ODE_API void dGeomCapsuleSetParams (dGeomID ccylinder, dReal radius, dReal length) override;
-ODE_API void dGeomCapsuleGetParams (dGeomID ccylinder, dReal *radius, dReal *length) override;
-ODE_API dReal dGeomCapsulePointDepth (dGeomID ccylinder, dReal x, dReal y, dReal z) override;
+ODE_API dGeomID dCreateCapsule (dSpaceID space, dReal radius, dReal length);
+ODE_API void dGeomCapsuleSetParams (dGeomID ccylinder, dReal radius, dReal length);
+ODE_API void dGeomCapsuleGetParams (dGeomID ccylinder, dReal *radius, dReal *length);
+ODE_API dReal dGeomCapsulePointDepth (dGeomID ccylinder, dReal x, dReal y, dReal z);
 
 // For now we want to have a backwards compatible C-API, note: C++ API is not.
 #define dCreateCCylinder dCreateCapsule
@@ -488,36 +488,36 @@ ODE_API dReal dGeomCapsulePointDepth (dGeomID ccylinder, dReal x, dReal y, dReal
 #define dGeomCCylinderPointDepth dGeomCapsulePointDepth
 #define dCCylinderClass dCapsuleClass
 
-ODE_API dGeomID dCreateCylinder (dSpaceID space, dReal radius, dReal length) override;
-ODE_API void dGeomCylinderSetParams (dGeomID cylinder, dReal radius, dReal length) override;
-ODE_API void dGeomCylinderGetParams (dGeomID cylinder, dReal *radius, dReal *length) override;
+ODE_API dGeomID dCreateCylinder (dSpaceID space, dReal radius, dReal length);
+ODE_API void dGeomCylinderSetParams (dGeomID cylinder, dReal radius, dReal length);
+ODE_API void dGeomCylinderGetParams (dGeomID cylinder, dReal *radius, dReal *length);
 
-ODE_API dGeomID dCreateRay (dSpaceID space, dReal length) override;
-ODE_API void dGeomRaySetLength (dGeomID ray, dReal length) override;
-ODE_API dReal dGeomRayGetLength (dGeomID ray) override;
+ODE_API dGeomID dCreateRay (dSpaceID space, dReal length);
+ODE_API void dGeomRaySetLength (dGeomID ray, dReal length);
+ODE_API dReal dGeomRayGetLength (dGeomID ray);
 ODE_API void dGeomRaySet (dGeomID ray, dReal px, dReal py, dReal pz,
 		  dReal dx, dReal dy, dReal dz);
-ODE_API void dGeomRayGet (dGeomID ray, dVector3 start, dVector3 dir) override;
+ODE_API void dGeomRayGet (dGeomID ray, dVector3 start, dVector3 dir);
 
 /*
  * Set/get ray flags that influence ray collision detection.
  * These flags are currently only noticed by the trimesh collider, because
  * they can make a major differences there.
  */
-ODE_API void dGeomRaySetParams (dGeomID g, int FirstContact, int BackfaceCull) override;
-ODE_API void dGeomRayGetParams (dGeomID g, int *FirstContact, int *BackfaceCull) override;
-ODE_API void dGeomRaySetClosestHit (dGeomID g, int closestHit) override;
-ODE_API int dGeomRayGetClosestHit (dGeomID g) override;
+ODE_API void dGeomRaySetParams (dGeomID g, int FirstContact, int BackfaceCull);
+ODE_API void dGeomRayGetParams (dGeomID g, int *FirstContact, int *BackfaceCull);
+ODE_API void dGeomRaySetClosestHit (dGeomID g, int closestHit);
+ODE_API int dGeomRayGetClosestHit (dGeomID g);
 
 #include "collision_trimesh.h"
 
-ODE_API dGeomID dCreateGeomTransform (dSpaceID space) override;
-ODE_API void dGeomTransformSetGeom (dGeomID g, dGeomID obj) override;
-ODE_API dGeomID dGeomTransformGetGeom (dGeomID g) override;
-ODE_API void dGeomTransformSetCleanup (dGeomID g, int mode) override;
-ODE_API int dGeomTransformGetCleanup (dGeomID g) override;
-ODE_API void dGeomTransformSetInfo (dGeomID g, int mode) override;
-ODE_API int dGeomTransformGetInfo (dGeomID g) override;
+ODE_API dGeomID dCreateGeomTransform (dSpaceID space);
+ODE_API void dGeomTransformSetGeom (dGeomID g, dGeomID obj);
+ODE_API dGeomID dGeomTransformGetGeom (dGeomID g);
+ODE_API void dGeomTransformSetCleanup (dGeomID g, int mode);
+ODE_API int dGeomTransformGetCleanup (dGeomID g);
+ODE_API void dGeomTransformSetInfo (dGeomID g, int mode);
+ODE_API int dGeomTransformGetInfo (dGeomID g);
 
 
 /* ************************************************************************ */
@@ -546,7 +546,7 @@ typedef struct dxHeightfieldData* dHeightfieldDataID;
  *
  * @ingroup collide
  */
-typedef dReal dHeightfieldGetHeight( void* p_user_data, int x, int z ) override;
+typedef dReal dHeightfieldGetHeight( void* p_user_data, int x, int z );
 
 
 
@@ -585,7 +585,7 @@ ODE_API dGeomID dCreateHeightfield( dSpaceID space,
  * dGeomHeightfieldDataBuildFloat.
  * @ingroup collide
  */
-ODE_API dHeightfieldDataID dGeomHeightfieldDataCreatestatic_cast<void>(override);
+ODE_API dHeightfieldDataID dGeomHeightfieldDataCreatevoid);
 
 
 /**
@@ -596,7 +596,7 @@ ODE_API dHeightfieldDataID dGeomHeightfieldDataCreatestatic_cast<void>(override)
  * @param d A dHeightfieldDataID created by dGeomHeightfieldDataCreate
  * @ingroup collide
  */
-ODE_API void dGeomHeightfieldDataDestroy( dHeightfieldDataID d ) override;
+ODE_API void dGeomHeightfieldDataDestroy( dHeightfieldDataID d );
 
 
 
@@ -872,7 +872,7 @@ ODE_API void dGeomHeightfieldDataSetBounds( dHeightfieldDataID d,
  * @param d A dHeightfieldDataID created by dGeomHeightfieldDataCreate
  * @ingroup collide
  */
-ODE_API void dGeomHeightfieldSetHeightfieldData( dGeomID g, dHeightfieldDataID d ) override;
+ODE_API void dGeomHeightfieldSetHeightfieldData( dGeomID g, dHeightfieldDataID d );
 
 
 /**
@@ -884,7 +884,7 @@ ODE_API void dGeomHeightfieldSetHeightfieldData( dGeomID g, dHeightfieldDataID d
  * @return The dHeightfieldDataID which may be nullptr if none was assigned.
  * @ingroup collide
  */
-ODE_API dHeightfieldDataID dGeomHeightfieldGetHeightfieldData( dGeomID g ) override;
+ODE_API dHeightfieldDataID dGeomHeightfieldGetHeightfieldData( dGeomID g );
 
 
 
@@ -906,18 +906,18 @@ ODE_API int dBoxBox (const dVector3 p1, const dMatrix3 R1,
 	     dVector3 normal, dReal *depth, int *return_code,
 	     int flags, dContactGeom *contact, int skip);
 
-ODE_API void dInfiniteAABB (dGeomID geom, dReal aabb[6]) override;
+ODE_API void dInfiniteAABB (dGeomID geom, dReal aabb[6]);
 
 
 /* ************************************************************************ */
 /* custom classes */
 
-typedef void dGetAABBFn (dGeomID, dReal aabb[6]) override;
+typedef void dGetAABBFn (dGeomID, dReal aabb[6]);
 typedef int dColliderFn (dGeomID o1, dGeomID o2,
 			 int flags, dContactGeom *contact, int skip);
-typedef dColliderFn * dGetColliderFnFn (int num) override;
-typedef void dGeomDtorFn (dGeomID o) override;
-typedef int dAABBTestFn (dGeomID o1, dGeomID o2, dReal aabb[6]) override;
+typedef dColliderFn * dGetColliderFnFn (int num);
+typedef void dGeomDtorFn (dGeomID o);
+typedef int dAABBTestFn (dGeomID o1, dGeomID o2, dReal aabb[6]);
 
 typedef struct dGeomClass {
   int bytes = 0;
@@ -927,9 +927,9 @@ typedef struct dGeomClass {
   dGeomDtorFn *dtor;
 } dGeomClass;
 
-ODE_API int dCreateGeomClass (const dGeomClass *classptr) override;
-ODE_API void * dGeomGetClassData (dGeomID) override;
-ODE_API dGeomID dCreateGeom (int classnum) override;
+ODE_API int dCreateGeomClass (const dGeomClass *classptr);
+ODE_API void * dGeomGetClassData (dGeomID);
+ODE_API dGeomID dCreateGeom (int classnum);
 
 /**
  * @brief Sets a custom collider function for two geom classes. 
@@ -939,7 +939,7 @@ ODE_API dGeomID dCreateGeom (int classnum) override;
  * @param fn The collider function to use to determine collisions.
  * @ingroup collide
  */
-ODE_API void dSetColliderOverride (int i, int j, dColliderFn *fn) override;
+ODE_API void dSetColliderOverride (int i, int j, dColliderFn *fn);
 
 
 /* ************************************************************************ */

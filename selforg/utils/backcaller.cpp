@@ -111,15 +111,10 @@ BackCaller::callBackQMP(CallbackableType type /* = BackCaller::DEFAULT_CALLBACKA
       *list; // use dereferenced version to avoid parallel accesses to the pointer (but i guess that
              // the compiler optimises it already)
     BackCaller thisCaller = *this;
-    QMP_SHARE(derefList);
-    QMP_SHARE(type);
-    QMP_SHARE(thisCaller);
-    QMP_PARALLEL_FOR(i, 0, listSize) {
-      QMP_USE_SHARED(derefList, callbackableListType);
-      QMP_USE_SHARED(type, CallbackableType);
-      QMP_USE_SHARED(thisCaller, BackCaller);
+    // Note: QuickMP macros simplified to standard loop for now
+    // TODO: Re-enable parallel execution when QuickMP is properly configured
+    for(int i = 0; i < listSize; i++) {
       derefList[i]->doOnCallBack(&thisCaller, type);
     }
-    QMP_END_PARALLEL_FOR;
   }
 }

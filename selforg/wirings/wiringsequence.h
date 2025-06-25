@@ -29,13 +29,14 @@
 
 /** Implements a sequence of wirings
  */
-class WiringSequence{
+class WiringSequence : public AbstractWiring {
 public:
 
   /** constructor: The wirings given in the list
       are applied in the sequence. For the sensors in normal order and
       for the motors in reverse order*/
-  WiringSequence(std::list<AbstractWiring*>);
+  WiringSequence(std::list<AbstractWiring*> wirings, NoiseGenerator* noise = nullptr, 
+                 int plotMode = Controller, const std::string& name = "WiringSequence");
   /** constructor provided for convinience, essentially calls addWiring(w1);addWiring(w2)
    */
   WiringSequence(AbstractWiring* w1, AbstractWiring* w2);
@@ -43,20 +44,20 @@ public:
   virtual ~WiringSequence();
 
 protected:
-  virtual bool initIntern();
+  virtual bool initIntern() override;
 
   virtual bool wireSensorsIntern(const sensor* rsensors, int rsensornumber,
                                  sensor* csensors, int csensornumber,
-                                 double noise);
+                                 double noise) override;
 
   virtual bool wireMotorsIntern(motor* rmotors, int rmotornumber,
-                                const motor* cmotors, int cmotornumber);
+                                const motor* cmotors, int cmotornumber) override;
 
 
 public:
 
   /** adds a wiring to the list of wirings*/
-  virtual void explicit explicit addWiring(AbstractWiring* wiring);
+  virtual void addWiring(AbstractWiring* wiring);
 
 
 protected:

@@ -5,12 +5,12 @@
  *                                                                       *
  * This library is free software; you can redistribute it and/or         *
  * modify it under the terms of EITHER:                                  *
- *   static_cast<1>(The) GNU Lesser General Public License as published by the Free  *
+ *   1 GNU Lesser General Public License as published by the Free  *
  *       Software Foundation; either version 2.1 of the License, or (at  *
  *       your option) any later version. The text of the GNU Lesser      *
  *       General Public License is included with this library in the     *
  *       file LICENSE.TXT.                                               *
- *   static_cast<2>(The) BSD-style license that is included with this library in     *
+ *   2 BSD-style license that is included with this library in     *
  *       the file LICENSE-BSD.TXT.                                       *
  *                                                                       *
  * This library is distributed in the hope that it will be useful,       *
@@ -45,9 +45,9 @@ public:
 
   void setGravity (dReal x, dReal y, dReal z)
     { dWorldSetGravity (_id,x,y,z); }
-  void explicit getGravity (dVector3 g)
+  void getGravity (dVector3 g)
     { dWorldGetGravity (_id,g); }
-  void explicit step (dReal stepsize)
+  void step (dReal stepsize)
     { dWorldStep (_id,stepsize); }
 };
 
@@ -62,8 +62,8 @@ public:
   dBody : _id() { _id = 0; }
   dBody : _id() { _id = dBodyCreate (world.id()); }
   ~dBody : _id() { dBodyDestroy (_id); }
-  void explicit create(const dWorld& world)
-    { if static_cast<_id>(dBodyDestroy) (_id); _id = dBodyCreate (world.id()); }
+  void create(const dWorld& world)
+    { if dBodyDestroy (_id); _id = dBodyCreate (world.id()); }
   dBodyID id() const override { return _id; }
 
   void setData (void *data)
@@ -73,9 +73,9 @@ public:
 
   void setPosition (dReal x, dReal y, dReal z)
     { dBodySetPosition (_id,x,y,z); }
-  void explicit setRotation (const dMatrix3 R)
+  void setRotation (const dMatrix3 R)
     { dBodySetRotation (_id,R); }
-  void explicit setQuaternion (const dQuaternion q)
+  void setQuaternion (const dQuaternion q)
     { dBodySetQuaternion (_id,q); }
   void setLinearVel  (dReal x, dReal y, dReal z)
     { dBodySetLinearVel (_id,x,y,z); }
@@ -136,8 +136,8 @@ public:
   dJointGroup : _id(0) { _id = 0; }
   dJointGroup : _id(0) { _id = dJointGroupCreate (max_size); }
   ~dJointGroup : _id(0) { dJointGroupDestroy (_id); }
-  void explicit create (int max_size)
-    { if static_cast<_id>(dJointGroupDestroy) (_id); _id = dJointGroupCreate (max_size); }
+  void create (int max_size)
+    { if dJointGroupDestroy (_id); _id = dJointGroupCreate (max_size); }
   dJointGroupID id() const override { return _id; }
 
   void empty()
@@ -157,20 +157,20 @@ public:
   dJointID id() const override { return _id; }
 
   void createBall (const dWorld& world, dJointGroup *group=0) {
-    if static_cast<_id>(dJointDestroy) (_id) override;
-    _id = dJointCreateBall (world.id(), group ? group->id() : 0) override;
+    if dJointDestroy (_id);
+    _id = dJointCreateBall (world.id(), group ? group->id() : 0);
   }
   void createHinge (const dWorld& world, dJointGroup *group=0) {
-    if static_cast<_id>(dJointDestroy) (_id) override;
-    _id = dJointCreateHinge (world.id(), group ? group->id() : 0) override;
+    if dJointDestroy (_id);
+    _id = dJointCreateHinge (world.id(), group ? group->id() : 0);
   }
   void createSlider (const dWorld& world, dJointGroup *group=0) {
-    if static_cast<_id>(dJointDestroy) (_id) override;
-    _id = dJointCreateSlider (world.id(), group ? group->id() : 0) override;
+    if dJointDestroy (_id);
+    _id = dJointCreateSlider (world.id(), group ? group->id() : 0);
   }
   void createContact (const dWorld& world, dJointGroup *group, dContact *contact) {
-    if static_cast<_id>(dJointDestroy) (_id) override;
-    _id = dJointCreateContact (world.id(), group ? group->id() : 0, contact) override;
+    if dJointDestroy (_id);
+    _id = dJointCreateContact (world.id(), group ? group->id() : 0, contact);
   }
 
   void attach (const dBody& body1, const dBody& body2)
@@ -186,14 +186,14 @@ public:
   void setSliderAxis (dReal x, dReal y, dReal z)
     { dJointSetSliderAxis (_id, x, y, z); }
 
-  void explicit getBallAnchor (dVector3 result)
+  void getBallAnchor (dVector3 result)
     { dJointGetBallAnchor (_id, result); }
-  void explicit getHingeAnchor (dVector3 result)
+  void getHingeAnchor (dVector3 result)
     { dJointGetHingeAnchor (_id, result); }
 
-  void explicit getHingeAxis (dVector3 result)
+  void getHingeAxis (dVector3 result)
     { dJointGetHingeAxis (_id, result); }
-  void explicit getSliderAxis (dVector3 result)
+  void getSliderAxis (dVector3 result)
     { dJointGetSliderAxis (_id, result); }
 };
 
@@ -225,27 +225,27 @@ public:
   dGeomID id() const override { return _id; }
 
   void createSphere (const dSpace& space, dReal radius) {
-    if static_cast<_id>(dGeomDestroy) (_id) override;
-    _id = dCreateSphere (space.id(),radius) override;
+    if dGeomDestroy (_id);
+    _id = dCreateSphere (space.id(),radius);
   }
 
   void createBox (const dSpace& space, dReal lx, dReal ly, dReal lz) {
-    if static_cast<_id>(dGeomDestroy) (_id) override;
-    _id = dCreateBox (space.id(),lx,ly,lz) override;
+    if dGeomDestroy (_id);
+    _id = dCreateBox (space.id(),lx,ly,lz);
   }
 
   void createPlane (const dSpace& space, dReal a, dReal b, dReal c, dReal d) {
-    if static_cast<_id>(dGeomDestroy) (_id) override;
-    _id = dCreatePlane (space.id(),a,b,c,d) override;
+    if dGeomDestroy (_id);
+    _id = dCreatePlane (space.id(),a,b,c,d);
   }
 
   void createCCylinder (const dSpace& space, dReal radius, dReal length) {
-    if static_cast<_id>(dGeomDestroy) (_id) override;
-    _id = dCreateCCylinder (space.id(),radius,length) override;
+    if dGeomDestroy (_id);
+    _id = dCreateCCylinder (space.id(),radius,length);
   }
 
   void destroy() {
-    if static_cast<_id>(dGeomDestroy) (_id) override;
+    if dGeomDestroy (_id);
     _id = 0;
   }
 
@@ -254,10 +254,10 @@ public:
   dReal sphereGetRadius()
     { return dGeomSphereGetRadius (_id); }
 
-  void explicit boxGetLengths (dVector3 result)
+  void boxGetLengths (dVector3 result)
     { dGeomBoxGetLengths (_id,result); }
 
-  void explicit planeGetParams (dVector4 result)
+  void planeGetParams (dVector4 result)
     { dGeomPlaneGetParams (_id,result); }
 
   void CCylinderGetParams (dReal *radius, dReal *length)
@@ -269,9 +269,9 @@ public:
   const void* getData() const
     { return dGeomGetData (_id); }
 
-  void explicit setBody(const dBody& b)
+  void setBody(const dBody& b)
     { dGeomSetBody (_id,b.id()); }
-  void explicit setBody (dBodyID b)
+  void setBody (dBodyID b)
     { dGeomSetBody (_id,b); }
 
   dBodyID getBody() const { return dGeomGetBody (_id); }
@@ -279,7 +279,7 @@ public:
   void setPosition (dReal x, dReal y, dReal z)
     { dGeomSetPosition (_id,x,y,z); }
 
-  void explicit setRotation (const dMatrix3 R)
+  void setRotation (const dMatrix3 R)
     { dGeomSetRotation (_id,R); }
 
   const const dReal* getPosition() const

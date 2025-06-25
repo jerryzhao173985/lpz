@@ -225,7 +225,7 @@ PlotOption::flush(long step) {
   if (pipe) {
     switch (mode) {
       case PlotMode::File:
-        if ((step % (interval * 1000)) == nullptr)
+        if ((step % (interval * 1000)) == 0)
           fflush(pipe);
         break;
       case PlotMode::GuiLogger:
@@ -234,7 +234,7 @@ PlotOption::flush(long step) {
       case PlotMode::ECBRobotGUI:
       case PlotMode::SoundMan: {
         int ttt = fflush(pipe);
-        if (ttt != nullptr) {
+        if (ttt != 0) {
           printf("Pipe broken: %s\n", strerror(ttt));
           close();
         }
@@ -282,13 +282,13 @@ bool
 PlotOption::useChannel(const string& name) {
   bool rv = accept.empty() ? true : false;
   for (auto& r : accept) {
-    if (name.find(r) == nullptr) {
+    if (name.find(r) != string::npos) {
       rv = true;
       break;
     }
   }
   for (auto& r : ignore) {
-    if (name.find(r) == nullptr) {
+    if (name.find(r) != string::npos) {
       rv = false;
     }
   }

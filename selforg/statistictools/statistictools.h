@@ -26,20 +26,27 @@
 
 // begin forward declarations
 class AbstractMeasure;
+class ComplexMeasure;
 // end forward declarations
 
 #include <selforg/inspectable.h>
+#include <selforg/backcaller.h>
+#include <selforg/callbackable.h>
 #include "measure/abstractmeasure.h"
 #include <selforg/measuremodes.h>
 #include <selforg/statisticmeasure.h>
 #include "analysationmodes.h"
 #include <string>
 #include <vector>
+#include <list>
 
-class StatisticTools : public Inspectable {
+class StatisticTools : public Inspectable, public Callbackable {
 
 public:
   StatisticTools(const std::string& name = "StatisticTools") : Inspectable(name), beginMeasureCounter(0) { }
+  
+  // From Callbackable interface
+  virtual void doOnCallBack(BackCaller* source, BackCaller::CallbackableType type = BackCaller::DEFAULT_CALLBACKABLE_TYPE) override;
 
         /**
          * adds a variable to observe and measure the value
@@ -122,6 +129,7 @@ public:
 protected:
   int beginMeasureCounter;
   std::vector<AbstractMeasure*> values;
+  std::list<AbstractMeasure*> activeMeasures;
   
 }; // end of class StatisticTools
 

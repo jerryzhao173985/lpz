@@ -46,12 +46,13 @@ struct SoMLConf {
  * This controller implements the homeokinetic learning algorihm
  * in sensor space with extended controller network
  */
-class SoML{
+class SoML : public AbstractController {
 
 public:
   SoML(const SoMLConf& conf = getDefaultConf());
+  SoML() : AbstractController("SoML", "$Id$") {}
 
-  static SoMLConf getDefaultConf() const {
+  static SoMLConf getDefaultConf() {
     SoMLConf c;
     c.useHiddenContr = true;
     c.useHiddenModel = true;
@@ -63,9 +64,9 @@ public:
     return c;
   }
 
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr);
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override;
 
-  virtual ~SoML() override;
+  virtual ~SoML();
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
   virtual int getSensorNumber() const override {
@@ -78,25 +79,25 @@ public:
 
   /// performs one step (includes learning).
   /// Calulates motor commands from sensor inputs.
-  virtual void step(const sensor*, int number_sensors, motor*, int number_motors);
+  virtual void step(const sensor*, int number_sensors, motor*, int number_motors) override;
 
   /// performs one step without learning. Calulates motor commands from sensor inputs.
-  virtual void stepNoLearning(const sensor*, int number_sensors, motor*, int number_motors);
+  virtual void stepNoLearning(const sensor*, int number_sensors, motor*, int number_motors) override;
 
   // motor babbling: learn the basic relations from observed sensors/motors
   virtual void motorBabblingStep(const sensor*,
                                  int number_sensors,
                                  const motor*,
-                                 int number_motors);
+                                 int number_motors) override;
 
   /***** STOREABLE ****/
   /** stores the controller values to a given file. */
-  virtual bool store(FILE* f) const override;
+  virtual bool store(FILE* f) const;
   /** loads the controller values from a given file. */
-  virtual bool explicit explicit restore(FILE* f);
+  virtual bool restore(FILE* f);
 
   /// returns controller network (to be added to inspectables of agent)
-  virtual ControllerNet* getCNet() const;
+  ControllerNet* getCNet();
 
 protected:
   /// performs control step (activates network and stores results in buffer and y_)
@@ -109,7 +110,7 @@ protected:
 
   /* learns the model using backprop. It uses the current activation,
      the current x and x_tm1 from the buffer */
-  virtual void explicit explicit learnModelBP(double factor);
+  virtual void learnModelBP(double factor);
 
 protected:
   unsigned short number_sensors = 0;
@@ -129,16 +130,16 @@ protected:
   int t = 0;
   double E = 0;
 
-  paramval creativity;
-  paramval epsC;
-  paramval epsA;
-  paramval harmony; ///< harmony
-  paramval dampA;
-  paramval discountS; ///< discount for S part of the model
-  paramint s4avg;     ///< # of steps the sensors are averaged (1 means no averaging)
-  paramint s4delay;   ///< # of steps the motor values are delayed (1 means no delay)
-  paramval biasnoise;
-  parambool loga; ///< # use logarithmic error
+  AbstractController::paramval creativity;
+  AbstractController::paramval epsC;
+  AbstractController::paramval epsA;
+  AbstractController::paramval harmony; ///< harmony
+  AbstractController::paramval dampA;
+  AbstractController::paramval discountS; ///< discount for S part of the model
+  AbstractController::paramint s4avg;     ///< # of steps the sensors are averaged (1 means no averaging)
+  AbstractController::paramint s4delay;   ///< # of steps the motor values are delayed (1 means no delay)
+  AbstractController::paramval biasnoise;
+  AbstractController::parambool loga; ///< # use logarithmic error
 };
 
 #endif

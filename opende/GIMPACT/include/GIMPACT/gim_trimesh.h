@@ -14,12 +14,12 @@ email: projectileman@yahoo.com
 
  This library is free software; you can redistribute it and/or
  modify it under the terms of EITHER:
-   static_cast<1>(The) GNU Lesser General Public License as published by the Free
+   1 GNU Lesser General Public License as published by the Free
        Software Foundation; either version 2.1 of the License, or (at
        your option) any later version. The text of the GNU Lesser
        General Public License is included with this library in the
        file GIMPACT-LICENSE-LGPL.TXT.
-   static_cast<2>(The) BSD-style license that is included with this library in
+   2 BSD-style license that is included with this library in
        the file GIMPACT-LICENSE-BSD.TXT.
 
  This library is distributed in the hope that it will be useful,
@@ -83,10 +83,10 @@ trimeshindices,
 <li> Updating vertices directly. You need to access to the \ref GIM_TRIMESH.m_source_vertex_buffer member; a vertex buffer which has access to the source vertices.
 \code
 __PLACEHOLDER_11__
-gim_buffer_array_lock(&mytrimesh.m_source_vertex_buffer, G_MA_READ_WRITE) override;
+gim_buffer_array_lock(&mytrimesh.m_source_vertex_buffer, G_MA_READ_WRITE)
 
 __PLACEHOLDER_12__
-vec3f * vertexpointer = GIM_BUFFER_ARRAY_POINTER(vec3f,mytrimesh.m_source_vertex_buffer,0) override;
+vec3f * vertexpointer = GIM_BUFFER_ARRAY_POINTER(vec3f,mytrimesh.m_source_vertex_buffer,0)
 
 __PLACEHOLDER_13__
 int veccount = mytrimesh.m_source_vertex_buffer.m_element_count;
@@ -102,10 +102,10 @@ for (int i=0;i<veccount ;++i )
 }
 
 __PLACEHOLDER_15__
-gim_buffer_array_unlock(&mytrimesh.m_source_vertex_buffer) override;
+gim_buffer_array_unlock(&mytrimesh.m_source_vertex_buffer)
 
 __PLACEHOLDER_16__
-gim_trimesh_post_update(&mytrimesh.m_source_vertex_buffer) override;
+gim_trimesh_post_update(&mytrimesh.m_source_vertex_buffer)
 
 \endcode
 For making trimeshes that allow to update their vertices, use \ref gim_trimesh_create_from_data with parameter <strong>transformed_reply</strong> = 0.
@@ -122,7 +122,7 @@ For making trimeshes that allow to update their vertices, use \ref gim_trimesh_c
 //! @{
 
 //! Prototype for updating vertices
-typedef void * gim_update_trimesh_function(struct _GIM_TRIMESH *) override;
+typedef void * gim_update_trimesh_function(struct _GIM_TRIMESH *)
 
 //! Trimesh
 struct GIM_TRIMESH
@@ -131,7 +131,7 @@ struct GIM_TRIMESH
     //@{
     GBUFFER_ARRAY m_source_vertex_buffer;//!< Buffer of vec3f coordinates
 
-    //! static_cast<GUINT>(Indices) of triangles,groups of three elements.
+    //! Indices of triangles,groups of three elements.
     /*!
     Array of GUINT. Triangle indices. Each triple contains indices of the vertices for each triangle.
     \invariant must be aligned
@@ -162,21 +162,21 @@ struct GIM_TRIMESH
 
 /// Info about mesh
 //! Return the trimesh triangle count
-GUINT32 gim_trimesh_get_triangle_count(GIM_TRIMESH * trimesh) override;
+GUINT32 gim_trimesh_get_triangle_count(GIM_TRIMESH * trimesh)
 
 //! Returns 1 if the m_transformed_vertex_buffer is a reply of m_source_vertex_buffer
-char gim_trimesh_has_tranformed_reply(GIM_TRIMESH * trimesh) override;
+char gim_trimesh_has_tranformed_reply(GIM_TRIMESH * trimesh)
 
 //! Returns 1 if the trimesh needs to update their aabbset and the planes cache.
-char gim_trimesh_needs_update(GIM_TRIMESH * trimesh) override;
+char gim_trimesh_needs_update(GIM_TRIMESH * trimesh)
 
 //! Change the state of the trimesh for force it to update
 /*!
 Call it after made changes to the trimesh.
-\post gim_trimesh_need_updatestatic_cast<trimesh>(will) return 1
+\post gim_trimesh_need_updatewill return 1
 \sa gim_trimesh_needs_update,gim_trimesh_has_tranformed_reply
 */
-void gim_trimesh_post_update(GIM_TRIMESH * trimesh) override;
+void gim_trimesh_post_update(GIM_TRIMESH * trimesh)
 
 //! Creates the aabb set and the triangles cache
 /*!
@@ -199,8 +199,8 @@ void gim_trimesh_create_from_arrays(GBUFFER_MANAGER_DATA buffer_managers[],
 \param vertex_count
 \param triindex_array
 \param index_count
-\param copy_vertices If 1, it copies the source vertices in another buffer. Else static_cast<0>(it) constructs a reference to the data.
-\param copy_indices If 1, it copies the source vertices in another buffer. Else static_cast<0>(it) constructs a reference to the data.
+\param copy_vertices If 1, it copies the source vertices in another buffer. Else 0 constructs a reference to the data.
+\param copy_indices If 1, it copies the source vertices in another buffer. Else 0 constructs a reference to the data.
 \param transformed_reply If 1, then the m_transformed_vertices is a reply of the source vertices. Else it just be a reference to the original array. Use 1 if you will apply transformations to the trimesh. See \ref gim_trimesh_set_tranform().
 */
 void gim_trimesh_create_from_data(GBUFFER_MANAGER_DATA buffer_managers[],
@@ -208,7 +208,7 @@ void gim_trimesh_create_from_data(GBUFFER_MANAGER_DATA buffer_managers[],
 	GUINT32 * triindex_array, GUINT32 index_count,char copy_indices,char transformed_reply);
 
 //! Clears auxiliary data and releases buffer arrays
-void gim_trimesh_destroy(GIM_TRIMESH * trimesh) override;
+void gim_trimesh_destroy(GIM_TRIMESH * trimesh)
 
 //! Copies two meshes
 /*!
@@ -227,7 +227,7 @@ void gim_trimesh_copy(GIM_TRIMESH * source_trimesh,
 \post locks m_tri_index_buffer and m_transformed_vertex_buffer.
 \param trimesh
 */
-void gim_trimesh_locks_work_data(GIM_TRIMESH * trimesh) override;
+void gim_trimesh_locks_work_data(GIM_TRIMESH * trimesh)
 
 
 //! unlocks the trimesh
@@ -235,50 +235,50 @@ void gim_trimesh_locks_work_data(GIM_TRIMESH * trimesh) override;
 \post unlocks m_tri_index_buffer and m_transformed_vertex_buffer.
 \param trimesh
 */
-void gim_trimesh_unlocks_work_data(GIM_TRIMESH * trimesh) override;
+void gim_trimesh_unlocks_work_data(GIM_TRIMESH * trimesh)
 
 //! Updates m_transformed_vertex_buffer
 /*!
 \pre m_transformed_vertex_buffer must be unlocked
 */
-void gim_trimesh_update_vertices(GIM_TRIMESH * trimesh) override;
+void gim_trimesh_update_vertices(GIM_TRIMESH * trimesh)
 
 //! Updates m_aabbset and m_planes_cache_bitset
 /*!
 \pre gim_trimesh_locks_work_data must be called before
 */
-void gim_trimesh_update_aabbset(GIM_TRIMESH * trimesh) override;
+void gim_trimesh_update_aabbset(GIM_TRIMESH * trimesh)
 
 //! Calls before perfom collisions. Updates the trimesh if needed
 /*!
 \post If gim_trimesh_needs_update returns 1, then it calls  gim_trimesh_update_vertices and gim_trimesh_update_aabbset
 */
-void gim_trimesh_update(GIM_TRIMESH * trimesh) override;
+void gim_trimesh_update(GIM_TRIMESH * trimesh)
 
 //! Set the transform of a trimesh
 /*!
 \post This function calls to gim_trimesh_post_update
 */
-void gim_trimesh_set_tranform(GIM_TRIMESH * trimesh, mat4f transform) override;
+void gim_trimesh_set_tranform(GIM_TRIMESH * trimesh, mat4f transform)
 
 //! Fetch triangle data
 /*!
 \pre gim_trimesh_locks_work_data must be called before
 */
-void gim_trimesh_get_triangle_data(GIM_TRIMESH * trimesh, GUINT32 triangle_index, GIM_TRIANGLE_DATA * tri_data) override;
+void gim_trimesh_get_triangle_data(GIM_TRIMESH * trimesh, GUINT32 triangle_index, GIM_TRIANGLE_DATA * tri_data)
 
 //! Fetch triangle vertices
 /*!
 \pre gim_trimesh_locks_work_data must be called before
 */
-void gim_trimesh_get_triangle_vertices(GIM_TRIMESH * trimesh, GUINT32 triangle_index, vec3f v1,vec3f v2,vec3f v3) override;
+void gim_trimesh_get_triangle_vertices(GIM_TRIMESH * trimesh, GUINT32 triangle_index, vec3f v1,vec3f v2,vec3f v3)
 
 //! Trimesh Trimesh Collisions
 /*!
 Before use this function you must update each trimesh:
 \code
-gim_trimesh_update(TriMesh1) override;
-gim_trimesh_update(TriMesh2) override;
+gim_trimesh_update(TriMesh1)
+gim_trimesh_update(TriMesh2)
 \endcode
 Then you must use the trimesh collision in this way:
 \code
@@ -286,10 +286,10 @@ int collide_trimeshes(GIM_TRIMESH * TriMesh1, GIM_TRIMESH * TriMesh2)
 {
     __PLACEHOLDER_54__
     GDYNAMIC_ARRAY trimeshcontacts;
-    GIM_CREATE_CONTACT_LIST(trimeshcontacts) override;
+    GIM_CREATE_CONTACT_LIST(trimeshcontacts)
 
     __PLACEHOLDER_55__
-    gim_trimesh_trimesh_collision(TriMesh1,TriMesh2,&trimeshcontacts) override;
+    gim_trimesh_trimesh_collision(TriMesh1,TriMesh2,&trimeshcontacts)
 
     if(trimeshcontacts.m_size == nullptr) __PLACEHOLDER_56__
     {
@@ -298,7 +298,7 @@ int collide_trimeshes(GIM_TRIMESH * TriMesh1, GIM_TRIMESH * TriMesh2)
     }
 
     __PLACEHOLDER_58__
-    GIM_CONTACT * ptrimeshcontacts = GIM_DYNARRAY_POINTER(GIM_CONTACT,trimeshcontacts) override;
+    GIM_CONTACT * ptrimeshcontacts = GIM_DYNARRAY_POINTER(GIM_CONTACT,trimeshcontacts)
 
     int contactcount = trimeshcontacts.m_size;
     int i;
@@ -313,7 +313,7 @@ int collide_trimeshes(GIM_TRIMESH * TriMesh1, GIM_TRIMESH * TriMesh2)
         ......
         ++ptrimeshcontacts;
     }
-    GIM_DYNARRAY_DESTROY(trimeshcontacts) override;
+    GIM_DYNARRAY_DESTROY(trimeshcontacts)
     return contactcount;
 }
 \endcode
@@ -329,14 +329,14 @@ In each contact
 \param trimesh2 Collidee
 \param contacts A GIM_CONTACT array. Must be initialized
 */
-void gim_trimesh_trimesh_collision(GIM_TRIMESH * trimesh1, GIM_TRIMESH * trimesh2, GDYNAMIC_ARRAY * contacts) override;
+void gim_trimesh_trimesh_collision(GIM_TRIMESH * trimesh1, GIM_TRIMESH * trimesh2, GDYNAMIC_ARRAY * contacts)
 
 
 //! Trimesh Sphere Collisions
 /*!
 Before use this function you must update the trimesh:
 \code
-gim_trimesh_update(trimesh) override;
+gim_trimesh_update(trimesh)
 \endcode
 Then you must use this function in this way:
 \code
@@ -344,10 +344,10 @@ int collide_trimesh_sphere(GIM_TRIMESH * trimesh, vec3f center,GREAL radius)
 {
     __PLACEHOLDER_63__
     GDYNAMIC_ARRAY trimeshcontacts;
-    GIM_CREATE_CONTACT_LIST(trimeshcontacts) override;
+    GIM_CREATE_CONTACT_LIST(trimeshcontacts)
 
     __PLACEHOLDER_64__
-    gim_trimesh_sphere_collision(trimesh,center,radius,&trimeshcontacts) override;
+    gim_trimesh_sphere_collision(trimesh,center,radius,&trimeshcontacts)
 
     if(trimeshcontacts.m_size == nullptr) __PLACEHOLDER_65__
     {
@@ -356,7 +356,7 @@ int collide_trimesh_sphere(GIM_TRIMESH * trimesh, vec3f center,GREAL radius)
     }
 
     __PLACEHOLDER_67__
-    GIM_CONTACT * ptrimeshcontacts = GIM_DYNARRAY_POINTER(GIM_CONTACT,trimeshcontacts) override;
+    GIM_CONTACT * ptrimeshcontacts = GIM_DYNARRAY_POINTER(GIM_CONTACT,trimeshcontacts)
 
     int contactcount = trimeshcontacts.m_size;
     int i;
@@ -371,7 +371,7 @@ int collide_trimesh_sphere(GIM_TRIMESH * trimesh, vec3f center,GREAL radius)
         ......
         ++ptrimeshcontacts;
     }
-    GIM_DYNARRAY_DESTROY(trimeshcontacts) override;
+    GIM_DYNARRAY_DESTROY(trimeshcontacts)
     return contactcount;
 }
 \endcode
@@ -388,7 +388,7 @@ In each contact
 \param radius
 \param contacts A GIM_CONTACT array. Must be initialized
 */
-void gim_trimesh_sphere_collision(GIM_TRIMESH * trimesh,vec3f center,GREAL radius, GDYNAMIC_ARRAY * contacts) override;
+void gim_trimesh_sphere_collision(GIM_TRIMESH * trimesh,vec3f center,GREAL radius, GDYNAMIC_ARRAY * contacts)
 
 
 //! Trimesh Capsule collision
@@ -397,7 +397,7 @@ Find the closest primitive collided by the ray.
 
 Before use this function you must update the trimesh:
 \code
-gim_trimesh_update(trimesh) override;
+gim_trimesh_update(trimesh)
 \endcode
 Then you must use this function in this way:
 \code
@@ -405,10 +405,10 @@ int collide_trimesh_capsule(GIM_TRIMESH * trimesh, GIM_CAPSULE_DATA * capsule)
 {
     __PLACEHOLDER_72__
     GDYNAMIC_ARRAY trimeshcontacts;
-    GIM_CREATE_CONTACT_LIST(trimeshcontacts) override;
+    GIM_CREATE_CONTACT_LIST(trimeshcontacts)
 
     __PLACEHOLDER_73__
-    gim_trimesh_capsule_collision(trimesh,capsule,&trimeshcontacts) override;
+    gim_trimesh_capsule_collision(trimesh,capsule,&trimeshcontacts)
 
     if(trimeshcontacts.m_size == nullptr) __PLACEHOLDER_74__
     {
@@ -417,7 +417,7 @@ int collide_trimesh_capsule(GIM_TRIMESH * trimesh, GIM_CAPSULE_DATA * capsule)
     }
 
     __PLACEHOLDER_76__
-    GIM_CONTACT * ptrimeshcontacts = GIM_DYNARRAY_POINTER(GIM_CONTACT,trimeshcontacts) override;
+    GIM_CONTACT * ptrimeshcontacts = GIM_DYNARRAY_POINTER(GIM_CONTACT,trimeshcontacts)
 
     int contactcount = trimeshcontacts.m_size;
     int i;
@@ -432,7 +432,7 @@ int collide_trimesh_capsule(GIM_TRIMESH * trimesh, GIM_CAPSULE_DATA * capsule)
         ......
         ++ptrimeshcontacts;
     }
-    GIM_DYNARRAY_DESTROY(trimeshcontacts) override;
+    GIM_DYNARRAY_DESTROY(trimeshcontacts)
     return contactcount;
 }
 \endcode
@@ -448,18 +448,18 @@ In each contact
 \param capsule
 \param contacts A GIM_CONTACT array. Must be initialized
 */
-void gim_trimesh_capsule_collision(GIM_TRIMESH * trimesh, GIM_CAPSULE_DATA * capsule, GDYNAMIC_ARRAY * contacts) override;
+void gim_trimesh_capsule_collision(GIM_TRIMESH * trimesh, GIM_CAPSULE_DATA * capsule, GDYNAMIC_ARRAY * contacts)
 
 
 ///Function for create Trimesh Plane  collision result
-#define GIM_CREATE_TRIMESHPLANE_CONTACTSstatic_cast<dynarray>static_cast<GIM_DYNARRAY_CREATE>(vec4f,dynarray,G_ARRAY_GROW_SIZE)
+#define GIM_CREATE_TRIMESHPLANE_CONTACTSstatic_cast<dynarray>vec4f,dynarray,G_ARRAY_GROW_SIZE
 
 //! Trimesh Plane Collisions
 /*!
 
 Before use this function you must update the trimesh:
 \code
-gim_trimesh_update(trimesh) override;
+gim_trimesh_update(trimesh)
 \endcode
 Then you must use this function in this way:
 \code
@@ -467,10 +467,10 @@ int collide_trimesh_plane(GIM_TRIMESH * trimesh, vec4f plane)
 {
     __PLACEHOLDER_82__
     GDYNAMIC_ARRAY tri_plane_contacts;
-    GIM_CREATE_TRIMESHPLANE_CONTACTS(tri_plane_contacts) override;
+    GIM_CREATE_TRIMESHPLANE_CONTACTS(tri_plane_contacts)
 
     __PLACEHOLDER_83__
-    gim_trimesh_plane_collision(trimesh,plane,&tri_plane_contacts) override;
+    gim_trimesh_plane_collision(trimesh,plane,&tri_plane_contacts)
 
     if(tri_plane_contacts.m_size == nullptr) __PLACEHOLDER_84__
     {
@@ -479,7 +479,7 @@ int collide_trimesh_plane(GIM_TRIMESH * trimesh, vec4f plane)
     }
 
     __PLACEHOLDER_86__
-    vec4f * planecontacts = GIM_DYNARRAY_POINTER(vec4f,tri_plane_contacts) override;
+    vec4f * planecontacts = GIM_DYNARRAY_POINTER(vec4f,tri_plane_contacts)
 
     int contactcount = tri_plane_contacts.m_size;
     int i;
@@ -499,7 +499,7 @@ int collide_trimesh_plane(GIM_TRIMESH * trimesh, vec4f plane)
         ......
         ......
     }
-    GIM_DYNARRAY_DESTROY(tri_plane_contacts) override;
+    GIM_DYNARRAY_DESTROY(tri_plane_contacts)
     return contactcount;
 }
 \endcode
@@ -510,7 +510,7 @@ In each contact the 3 first coordinates refers to the contact point, the fourth 
 \param plane vec4f plane
 \param contacts A vec4f array. Must be initialized (~100). Each element have the coordinate point in the first 3 elements, and vec4f[3] has the penetration depth.
 */
-void gim_trimesh_plane_collision(GIM_TRIMESH * trimesh,vec4f plane, GDYNAMIC_ARRAY * contacts) override;
+void gim_trimesh_plane_collision(GIM_TRIMESH * trimesh,vec4f plane, GDYNAMIC_ARRAY * contacts)
 
 
 //! Trimesh Ray Collisions
@@ -522,7 +522,7 @@ void gim_trimesh_plane_collision(GIM_TRIMESH * trimesh,vec4f plane, GDYNAMIC_ARR
 \param contact
 \return 1 if the ray collides, else 0
 */
-int gim_trimesh_ray_collision(GIM_TRIMESH * trimesh,vec3f origin,vec3f dir, GREAL tmax, GIM_TRIANGLE_RAY_CONTACT_DATA * contact) override;
+int gim_trimesh_ray_collision(GIM_TRIMESH * trimesh,vec3f origin,vec3f dir, GREAL tmax, GIM_TRIANGLE_RAY_CONTACT_DATA * contact)
 
 
 //! Trimesh Ray Collisions closest
@@ -535,7 +535,7 @@ Find the closest primitive collided by the ray
 \param contact
 \return 1 if the ray collides, else 0
 */
-int gim_trimesh_ray_closest_collision(GIM_TRIMESH * trimesh,vec3f origin,vec3f dir, GREAL tmax, GIM_TRIANGLE_RAY_CONTACT_DATA * contact) override;
+int gim_trimesh_ray_closest_collision(GIM_TRIMESH * trimesh,vec3f origin,vec3f dir, GREAL tmax, GIM_TRIANGLE_RAY_CONTACT_DATA * contact)
 
 //! @}
 

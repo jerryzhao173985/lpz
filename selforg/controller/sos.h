@@ -31,13 +31,14 @@
  * This controller implements the standard algorihm described the Chapter 5 (Homeokinesis)
  *  of book __PLACEHOLDER_0__
  */
-class Sos{
+class Sos : public AbstractController {
 
 public:
   Sos(double init_feedback_strength = 1.0);
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
+  Sos() : AbstractController("Sos", "$Id$") {}
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
 
-  virtual ~Sos() override;
+  virtual ~Sos();
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
   virtual int getSensorNumber() const override {
@@ -50,16 +51,16 @@ public:
 
   /// performs one step (includes learning).
   /// Calulates motor commands from sensor inputs.
-  virtual void step(const sensor*, int number_sensors, motor*, int number_motors);
+  virtual void step(const sensor*, int number_sensors, motor*, int number_motors) override;
 
   /// performs one step without learning. Calulates motor commands from sensor inputs.
-  virtual void stepNoLearning(const sensor*, int number_sensors, motor*, int number_motors);
+  virtual void stepNoLearning(const sensor*, int number_sensors, motor*, int number_motors) override;
 
   /***** STOREABLE ****/
   /** stores the controller values to a given file. */
-  virtual bool store(FILE* f) const override;
+  virtual bool store(FILE* f) const;
   /** loads the controller values from a given file. */
-  virtual bool explicit explicit restore(FILE* f);
+  virtual bool restore(FILE* f);
 
   /* some direct access functions (unsafe!) */
   virtual matrix::Matrix getA();
@@ -90,22 +91,22 @@ protected:
 
   double init_feedback_strength = 0;
 
-  paramval creativity;
-  paramval epsC;
-  paramval epsA;
-  paramint s4avg;   // # of steps the sensors are averaged (1 means no averaging)
-  paramint s4delay; // # of steps the motor values are delayed (1 means no delay)
+  AbstractController::paramval creativity;
+  AbstractController::paramval epsC;
+  AbstractController::paramval epsA;
+  AbstractController::paramint s4avg;   // # of steps the sensors are averaged (1 means no averaging)
+  AbstractController::paramint s4delay; // # of steps the motor values are delayed (1 means no delay)
 
   /// learn values model and controller (A,b,C,h)
   virtual void learn();
 
   /// neuron transfer function
-  static double explicit explicit g(double z) {
+  static double g(double z) {
     return tanh(z);
   };
 
   /// derivative of g
-  static double explicit explicit g_s(double z) {
+  static double g_s(double z) {
     double k = tanh(z);
     return 1.0 - k * k;
   };
@@ -115,7 +116,7 @@ protected:
     return min(max(x, -r), r);
   }
   /// calculates the inverse the argument (useful for Matrix::map)
-  static double explicit explicit one_over(double x) {
+  static double one_over(double x) {
     return 1 / x;
   }
 };

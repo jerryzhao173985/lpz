@@ -63,16 +63,16 @@ bool DerivativeWiring::initIntern(){
   cmotornumber  = rmotornumber + conf.blindMotors;
 
   for (int i=0; i<buffersize; ++i) {
-    sensorbuffer[i]      = static_cast<sensor*>(malloc(sizeof(sensor)) * this->rsensornumber);
+    sensorbuffer[i]      = static_cast<sensor*>(malloc(sizeof(sensor) * this->rsensornumber));
     for (int k=0; k < rsensornumber; ++k) {
       sensorbuffer[i][k]=0;
     }
   }
   // if(conf.useId)     id           = static_cast<sensor*>(malloc(sizeof(sensor)) * rsensornumber);
-  if(conf.useFirstD)  first  = static_cast<sensor*>(malloc(sizeof(sensor)) * this->rsensornumber);
-  if(conf.useSecondD) second = static_cast<sensor*>(malloc(sizeof(sensor)) * this->rsensornumber);
+  if(conf.useFirstD)  first  = static_cast<sensor*>(malloc(sizeof(sensor) * this->rsensornumber));
+  if(conf.useSecondD) second = static_cast<sensor*>(malloc(sizeof(sensor) * this->rsensornumber));
   if (conf.blindMotors>0){
-    blindMotors       = static_cast<motor*>(malloc(sizeof(motor)) * conf.blindMotors);
+    blindMotors       = static_cast<motor*>(malloc(sizeof(motor) * conf.blindMotors));
     for (unsigned int k=0; k < conf.blindMotors; ++k) {
       blindMotors[k]=0;
     }

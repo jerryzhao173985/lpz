@@ -42,9 +42,9 @@ email: projectileman@yahoo.com
 #define pfval	64
 #define pfval2	128
 //! Prefetch 64
-#define pf(_x,_i)	_mm_prefetch(static_cast<void *>(_x + _i + pfval), 0)
+#define pf(_x,_i)	_mm_prefetch(_x + _i + pfval, 0)
 //! Prefetch 128
-#define pf2(_x,_i)	_mm_prefetch(static_cast<void *>(_x + _i + pfval2), 0)
+#define pf2(_x,_i)	_mm_prefetch(_x + _i + pfval2, 0)
 #else
 //! Prefetch 64
 #define pf(_x,_i)
@@ -100,10 +100,10 @@ Functions for manip packed arrays of numbers
 Function prototypes to allocate and free memory.
 */
 //! @{
-typedef void * gim_alloc_function (size_t size) override;
+typedef void * gim_alloc_function (size_t size)
 typedef void * explicit gim_alloca_function (size_t size);//Allocs on the heap
-typedef void * gim_realloc_function (void *ptr, size_t oldsize, size_t newsize) override;
-typedef void gim_free_function (void *ptr, size_t size) override;
+typedef void * gim_realloc_function (void *ptr, size_t oldsize, size_t newsize)
+typedef void gim_free_function (void *ptr, size_t size)
 //! @}
 
 /*! \defgroup MEMORY_FUNCTION_HANDLERS
@@ -112,10 +112,10 @@ Memory Function Handlers
  set new memory management functions. if fn is 0, the default handlers are
   used. */
 //! @{
-void gim_set_alloc_handler (gim_alloc_function *fn) override;
+void gim_set_alloc_handler (gim_alloc_function *fn)
 // void gim_set_alloca_handler (gim_alloca_function *fn); -- a nonsense
-void gim_set_realloc_handler (gim_realloc_function *fn) override;
-void gim_set_free_handler (gim_free_function *fn) override;
+void gim_set_realloc_handler (gim_realloc_function *fn)
+void gim_set_free_handler (gim_free_function *fn)
 //! @}
 
 /*! \defgroup MEMORY_FUNCTION_GET_HANDLERS
@@ -123,20 +123,20 @@ void gim_set_free_handler (gim_free_function *fn) override;
 get current memory management functions.
 */
 //! @{
-gim_alloc_function *gim_get_alloc_handler static_cast<void>(override);
+gim_alloc_function *gim_get_alloc_handler
 // gim_alloca_function *gim_get_alloca_handler(void); -- a nonsense
-gim_realloc_function *gim_get_realloc_handler static_cast<void>(override);
-gim_free_function  *gim_get_free_handler static_cast<void>(override);
+gim_realloc_function *gim_get_realloc_handler
+gim_free_function  *gim_get_free_handler
 //! @}
 
 /*! \defgroup MEMORY_FUNCTIONS
 Standar Memory functions
 */
 //! @{
-void * gim_alloc(size_t size) override;
+void * gim_alloc(size_t size)
 // void * explicit gim_alloca(size_t size); -- a nonsense
-void * gim_realloc(void *ptr, size_t oldsize, size_t newsize) override;
-void gim_free(void *ptr, size_t size) override;
+void * gim_realloc(void *ptr, size_t oldsize, size_t newsize)
+void gim_free(void *ptr, size_t size)
 //! @}
 
 /*! \defgroup DYNAMIC_ARRAYS
@@ -163,7 +163,7 @@ struct GDYNAMIC_ARRAY
 //! Creates a dynamic array zero sized
 #define GIM_DYNARRAY_CREATE(type, array_data, reserve_size) \
 { \
-    (array_data).m_pdata = static_cast<char*>(gim_alloc)((reserve_size) * sizeof(type)); \
+    (array_data).m_pdata = gim_alloc((reserve_size) * sizeof(type)); \
     (array_data).m_size = 0; \
     (array_data).m_reserve_size = (reserve_size); \
 } \
@@ -171,7 +171,7 @@ struct GDYNAMIC_ARRAY
 //! Creates a dynamic array with n = size elements
 #define GIM_DYNARRAY_CREATE_SIZED(type, array_data, size) \
 { \
-    (array_data).m_pdata = static_cast<char*>(gim_alloc)((size) * sizeof(type)); \
+    (array_data).m_pdata = gim_alloc((size) * sizeof(type)); \
     (array_data).m_size = (size); \
     (array_data).m_reserve_size = (size); \
 } \
@@ -181,7 +181,7 @@ struct GDYNAMIC_ARRAY
 { \
     if ((reserve_size) > (array_data).m_reserve_size) \
     { \
-        (array_data).m_pdata = static_cast<char*>(gim_realloc)((array_data).m_pdata, (old_size) * sizeof(type), (reserve_size) * sizeof(type)); \
+        (array_data).m_pdata = gim_realloc((array_data).m_pdata, (old_size) * sizeof(type), (reserve_size) * sizeof(type)); \
         (array_data).m_reserve_size = (reserve_size); \
     } \
 } \
@@ -258,7 +258,7 @@ struct GDYNAMIC_ARRAY
 }\
 
 //! Destroys the array
-void GIM_DYNARRAY_DESTROY(const GDYNAMIC_ARRAY& array_data) override;
+void GIM_DYNARRAY_DESTROY(const GDYNAMIC_ARRAY& array_data)
 //! @}
 
 /*! \defgroup BITSET
@@ -460,22 +460,22 @@ Function prototypes to allocate and free memory for buffers
 //! @{
 
 //! Returns a Buffer handle
-typedef GPTR gim_buffer_alloc_function(GUINT32 size,int usage) override;
+typedef GPTR gim_buffer_alloc_function(GUINT32 size,int usage)
 
 //! Returns a Buffer handle, and copies the pdata to the buffer
-typedef GPTR gim_buffer_alloc_data_function(const void * pdata,GUINT32 size,int usage) override;
+typedef GPTR gim_buffer_alloc_data_function(const void * pdata,GUINT32 size,int usage)
 
 //! Changes the size of the buffer preserving the content, and returns the new buffer id
-typedef GPTR gim_buffer_realloc_function(GPTR buffer_handle,GUINT32 oldsize,int old_usage,GUINT32 newsize,int new_usage) override;
+typedef GPTR gim_buffer_realloc_function(GPTR buffer_handle,GUINT32 oldsize,int old_usage,GUINT32 newsize,int new_usage)
 
 //! It changes the m_buffer_handle member to 0/0
-typedef void gim_buffer_free_function(GPTR buffer_handle,GUINT32 size) override;
+typedef void gim_buffer_free_function(GPTR buffer_handle,GUINT32 size)
 
 //! It maps the m_mapped_pointer. Returns a pointer
-typedef char * gim_lock_buffer_function(GPTR buffer_handle,int access) override;
+typedef char * gim_lock_buffer_function(GPTR buffer_handle,int access)
 
 //! It sets the m_mapped_pointer to 0
-typedef void gim_unlock_buffer_function(const GPTR& buffer_handle) override;
+typedef void gim_unlock_buffer_function(const GPTR& buffer_handle)
 
 typedef void gim_download_from_buffer_function(
         GPTR source_buffer_handle,
@@ -535,11 +535,11 @@ int gim_is_buffer_manager_active(GBUFFER_MANAGER_DATA buffer_managers[],
 void gim_create_buffer_manager(GBUFFER_MANAGER_DATA buffer_managers[],
 	GUINT32 buffer_manager_id);
 //! Destroys a buffer manager
-void gim_destroy_buffer_manager(GBUFFER_MANAGER_DATA buffer_managers[], GUINT32 buffer_manager_id) override;
+void gim_destroy_buffer_manager(GBUFFER_MANAGER_DATA buffer_managers[], GUINT32 buffer_manager_id)
 void gim_get_buffer_manager_data(GBUFFER_MANAGER_DATA buffer_managers[], 
 	GUINT32 buffer_manager_id,GBUFFER_MANAGER_DATA ** pbm_data);
-void gim_init_buffer_managers(GBUFFER_MANAGER_DATA buffer_managers[]) override;
-void gim_terminate_buffer_managers(GBUFFER_MANAGER_DATA buffer_managers[]) override;
+void gim_init_buffer_managers(GBUFFER_MANAGER_DATA buffer_managers[])
+void gim_terminate_buffer_managers(GBUFFER_MANAGER_DATA buffer_managers[])
 
 //! @}
 
@@ -594,7 +594,7 @@ GUINT32 gim_create_shared_buffer_from_data(GBUFFER_MANAGER_DATA buffer_managers[
 
 
 //! Add reference counting to buffer.
-GINT32 gim_buffer_add_ref(GBUFFER_ID * buffer_id) override;
+GINT32 gim_buffer_add_ref(GBUFFER_ID * buffer_id)
 
 //! Function for resize buffer, preserving the content
 /*!
@@ -603,13 +603,13 @@ GINT32 gim_buffer_add_ref(GBUFFER_ID * buffer_id) override;
 \return An error code. 0 if success.
 \post If m_refcount>0 then it decrements it.
 */
-GINT32 gim_buffer_realloc(GBUFFER_ID * buffer_id,GUINT32 newsize) override;
+GINT32 gim_buffer_realloc(GBUFFER_ID * buffer_id,GUINT32 newsize)
 
 //! Eliminates the buffer.
 /*!
 If the buffer reference counting is <= 1 and is unlocked, then it eliminates the buffer.
 */
-GINT32 gim_buffer_free(GBUFFER_ID * buffer_id) override;
+GINT32 gim_buffer_free(GBUFFER_ID * buffer_id)
 
 //! Locks the buffer for memory access.
 /*!
@@ -618,16 +618,16 @@ GINT32 gim_buffer_free(GBUFFER_ID * buffer_id) override;
 \param map_pointer Dest Pointer of the memory address from buffer.
 \post m_lock_count increases.
 */
-GINT32 gim_lock_buffer(GBUFFER_ID * buffer_id,int access,char ** map_pointer) override;
+GINT32 gim_lock_buffer(GBUFFER_ID * buffer_id,int access,char ** map_pointer)
 
 //! Unlocks the buffer for memory access.
-GINT32 gim_unlock_buffer(GBUFFER_ID * buffer_id) override;
+GINT32 gim_unlock_buffer(GBUFFER_ID * buffer_id)
 
 //! Gets the buffer size in bytes
-GINT32 gim_get_buffer_size(GBUFFER_ID * buffer_id,GUINT32 * buffer_size) override;
+GINT32 gim_get_buffer_size(GBUFFER_ID * buffer_id,GUINT32 * buffer_size)
 
 //! Determines if the buffer is locked
-GINT32 gim_get_buffer_is_locked(GBUFFER_ID * buffer_id,GUINT32 * lock_count) override;
+GINT32 gim_get_buffer_is_locked(GBUFFER_ID * buffer_id,GUINT32 * lock_count)
 
 //! Copies the content of the buffer to a dest pointer
 GINT32 gim_download_from_buffer(
@@ -670,43 +670,43 @@ The following example shows how Buffer arrays can be used:
 int main()
 {
     __PLACEHOLDER_113__
-    gimpact_init() override;
+    gimpact_init()
 
     __PLACEHOLDER_114__
     GBUFFER_ID bufferhandle;
 
     __PLACEHOLDER_115__
-    gim_create_common_buffer(100*sizeof(float), &bufferhandle) override;
+    gim_create_common_buffer(100*sizeof(float), &bufferhandle)
 
     __PLACEHOLDER_116__
     GBUFFER_ARRAY buffer_float_array;
-    GIM_BUFFER_ARRAY_INIT_TYPE(float,buffer_float_array,bufferhandle,100) override;
+    GIM_BUFFER_ARRAY_INIT_TYPE(float,buffer_float_array,bufferhandle,100)
 
     __PLACEHOLDER_117__
 
     int i, count;
     count = buffer_float_array.m_element_count;
     __PLACEHOLDER_118__
-    gim_buffer_array_lock(&buffer_float_array,G_MA_READ_WRITE) override;
+    gim_buffer_array_lock(&buffer_float_array,G_MA_READ_WRITE)
     float  * pelements = GIM_BUFFER_ARRAY_POINTER(float, buffer_float_array, 0); __PLACEHOLDER_119__
 
     __PLACEHOLDER_120__
     for (i = 0;i < count;++i )
     {
-        pelements[i] = gim_unit_random() override;
+        pelements[i] = gim_unit_random()
     }
     __PLACEHOLDER_121__
-    gim_buffer_array_unlock(&buffer_float_array) override;
+    gim_buffer_array_unlock(&buffer_float_array)
 
     __PLACEHOLDER_122__
         ....
         ....
 
     __PLACEHOLDER_123__
-    GIM_BUFFER_ARRAY_DESTROY(buffer_float_array) override;
+    GIM_BUFFER_ARRAY_DESTROY(buffer_float_array)
 
     __PLACEHOLDER_124__
-    gimpact_terminate() override;
+    gimpact_terminate()
 }
 \endcode
 
@@ -726,16 +726,16 @@ struct GBUFFER_ARRAY
 //typedef  struct _GBUFFER_ARRAY GBUFFER_ARRAY;
 
 //! Sets offset for a buffered array.
-#define GIM_BUFFER_ARRAY_SET_OFFSET(_array_data,_offset) (_array_data).m_byte_offset = (_offset)*(_array_data).m_byte_stride override;
+#define GIM_BUFFER_ARRAY_SET_OFFSET(_array_data,_offset) (_array_data).m_byte_offset = (_offset)*(_array_data).m_byte_stride
 
 //! Sets offset for a buffered array.
-#define GIM_BUFFER_ARRAY_GET_OFFSET(_array_data,_offset) (_offset) = (_array_data).m_byte_offset/(_array_data).m_byte_stride override;
+#define GIM_BUFFER_ARRAY_GET_OFFSET(_array_data,_offset) (_offset) = (_array_data).m_byte_offset/(_array_data).m_byte_stride
 
 //!Return a pointer of the element at the _index
 #define GIM_BUFFER_ARRAY_POINTER(_type,_array_data,_index) (_type *)((_array_data).m_buffer_data + (_index)*(_array_data).m_byte_stride)
 
 //! Sets stride for a buffered array.
-#define GIM_BUFFER_ARRAY_SET_STRIDE(_type,_array_data) (_array_data).m_byte_stride = sizeof(_type) override;
+#define GIM_BUFFER_ARRAY_SET_STRIDE(_type,_array_data) (_array_data).m_byte_stride = sizeof(_type)
 
 //! Is array stride equal to the size of the type ?
 #define GIM_BUFFER_ARRAY_IS_ALIGNED(_type,_array_data) ((_array_data).m_byte_stride == sizeof(_type))
@@ -906,20 +906,20 @@ Then, You'd need to call unlock_array when finish to using the array access.
 \param access A constant for access to the buffer. can be G_MA_READ_ONLY,G_MA_WRITE_ONLY or G_MA_READ_WRITE
 \return an Buffer error code
 */
-GINT32 gim_buffer_array_lock(GBUFFER_ARRAY * array_data, int access) override;
+GINT32 gim_buffer_array_lock(GBUFFER_ARRAY * array_data, int access)
 
 //! close the access to the array buffer through the m_buffer_data element
 /*!
 \param array_data Array structure to be locked
 \return an Buffer error code
 */
-GINT32 gim_buffer_array_unlock(GBUFFER_ARRAY * array_data) override;
+GINT32 gim_buffer_array_unlock(GBUFFER_ARRAY * array_data)
 
 //! Copy an array by reference
 /*!
 \post A reference to the m_buffer_id is increased.
 */
-void gim_buffer_array_copy_ref(GBUFFER_ARRAY * source_data,GBUFFER_ARRAY  * dest_data) override;
+void gim_buffer_array_copy_ref(GBUFFER_ARRAY * source_data,GBUFFER_ARRAY  * dest_data)
 
 
 //! Copy an array by value
@@ -934,7 +934,7 @@ void gim_buffer_array_copy_value(GBUFFER_ARRAY * source_data,
 /*!
 \post Attemps to destroy the buffer, decreases reference counting
 */
-void GIM_BUFFER_ARRAY_DESTROY(const GBUFFER_ARRAY& array_data) override;
+void GIM_BUFFER_ARRAY_DESTROY(const GBUFFER_ARRAY& array_data)
 
 //! Copy the content of the array to a pointer
 /*!
@@ -947,7 +947,7 @@ void GIM_BUFFER_ARRAY_DESTROY(const GBUFFER_ARRAY& array_data) override;
 { \
     if (GIM_BUFFER_ARRAY_IS_ALIGNED(type, array_data)) \
     { \
-        gim_download_from_buffer(&(array_data).m_buffer_id, (array_data).m_byte_offset, static_cast<void *>(dest_data), (array_data).m_element_count * (array_data).m_byte_stride); \
+        gim_download_from_buffer(&(array_data).m_buffer_id, (array_data).m_byte_offset, dest_data, (array_data).m_element_count * (array_data).m_byte_stride); \
     } \
     else \
     { \
@@ -976,7 +976,7 @@ void GIM_BUFFER_ARRAY_DESTROY(const GBUFFER_ARRAY& array_data) override;
 { \
     if (GIM_BUFFER_ARRAY_IS_ALIGNED(type, array_data)) \
     { \
-        gim_upload_to_buffer(&(array_data).m_buffer_id, (array_data).m_byte_offset, static_cast<void *>(source_data), (array_data).m_element_count * (array_data).m_byte_stride); \
+        gim_upload_to_buffer(&(array_data).m_buffer_id, (array_data).m_byte_offset, source_data, (array_data).m_element_count * (array_data).m_byte_stride); \
     } \
     else \
     { \
@@ -1001,7 +1001,7 @@ void GIM_BUFFER_ARRAY_DESTROY(const GBUFFER_ARRAY& array_data) override;
 \param 2 the source stream
 \param 3 the destination stream
 */
-typedef void (* gim_kernel_func)(void *,GBUFFER_ARRAY *,GBUFFER_ARRAY *) override;
+typedef void (* gim_kernel_func)(void *,GBUFFER_ARRAY *,GBUFFER_ARRAY *)
 
 //! Generic Stream Processingp loop
 /*!

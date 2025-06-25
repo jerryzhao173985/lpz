@@ -34,13 +34,13 @@
 #include <list>
 
 /**
- * default function for __PLACEHOLDER_0__ operation.
+ * default function for lower operation.
  * @param a operator a
  * @param b operator b
- * @return static_cast<bool>(true) if a lower than b
+ * @return true if a lower than b
  */
-template
-<class type{
+template<class type>
+bool lower(type a, type b) {
         if(a<b)
                 return true;
 
@@ -50,33 +50,33 @@ template
 /**
  * default function for divide by a double value.
  * @param a operator a
- * @param b static_cast<double>(the) double value
+ * @param b the double value
  * @return the result of the division
  */
-template
-<class type{
+template<class type>
+type doubleDiv(type a, double b) {
         return a/b;
 }
 
 /**
  * default function for mul. with a double value.
  * @param a operator a
- * @param b static_cast<double>(the) double value
+ * @param b the double value
  * @return the result of the mul.
  */
-template
-<class type{
+template<class type>
+type doubleMul(type a, double b) {
         return a*b;
 }
 
 /**
- * default function for __PLACEHOLDER_1__ operation.
+ * default function for higher operation.
  * @param a operator a
  * @param b operator b
- * @return static_cast<bool>(true) if a higher than b
+ * @return true if a higher than b
  */
-template
-<class type{
+template<class type>
+bool higher(type a, type b) {
         if(a>b)
                 return true;
 
@@ -89,8 +89,8 @@ template
  * @param b operator b
  * @return the result of the add.
  */
-template
-<class type{
+template<class type>
+type add(type a, type b) {
         return a+b;
 }
 
@@ -100,8 +100,8 @@ template
  * @param b operator b
  * @return the result of the sub.
  */
-template
-<class type{
+template<class type>
+type sub(type a, type b) {
         return a-b;
 }
 
@@ -111,8 +111,8 @@ template
  * @param b operator b
  * @return the result of the mul.
  */
-template
-<class type{
+template<class type>
+type mul(type a, type b) {
         return a*b;
 }
 
@@ -122,8 +122,8 @@ template
  * @param b operator b
  * @return the result of the div.
  */
-template
-<class type{
+template<class type>
+type div(type a, type b) {
         return a/b;
 }
 
@@ -131,10 +131,15 @@ template
  * default function for zero double value
  * @return (double) 0.0
  */
-double defaultZero();
+inline double defaultZero() {
+    return 0.0;
+}
 
 /**
- * This template class give{
+ * This template class gives statistical analysis of a vector
+ */
+template<class type, type zero(void), type add(type,type), type sub(type,type), type mul(type,type), type div(type,type), double doubleDiv(type,double)>
+class TemplateValueAnalysation {
 public:
         /**
          * constructor
@@ -163,7 +168,7 @@ public:
                                                                                                                                                                                                 //So we become the sum. of all elements in the set.
                 }
 
-                if(m_vector.size()!= nullptr)
+                if(m_vector.size()!= 0)
                         avg = doubleDiv(avg,m_vector.size());                                                                                                //now devide the sum by the count of elements in the set.
 
                 return avg;                                                                                                                                                                //return the result
@@ -211,7 +216,7 @@ public:
          * use sub
          * @return the range of the values in the set
          */
-        type getRange() const {
+        type getRange() {
                 type dMax = getMax();                        //become max
                 type dMin = getMin();                        //become min
 
@@ -233,9 +238,9 @@ public:
                         sort();                                                                //sort the set. to define the middle
 
                 iter = m_list.begin();                                        //go to the middle
-                for(x=0;x<num;++x) ++iter;
+                for(int x=0;x<num;++x) ++iter;
 
-                if(m_vector.size() % 2 == nullptr) {                        //if the real middle between two values add this values and calculate the arithmetical middle.
+                if(m_vector.size() % 2 == 0) {                        //if the real middle between two values add this values and calculate the arithmetical middle.
                         median = (*iter->pointer);
                         --iter;
                         median = add(median,(*iter->pointer));
@@ -264,9 +269,9 @@ public:
                         sort();                                                                //sort the set.
 
                 iter = m_list.begin();                                        //go to the under quartil
-                for(x=0;x<num;++x) ++iter;
+                for(int x=0;x<num;++x) ++iter;
 
-                if(m_vector.size() % 4 == nullptr) {                        //if the real under quartil between two values add this values and calculate the arithmetical middle.
+                if(m_vector.size() % 4 == 0) {                        //if the real under quartil between two values add this values and calculate the arithmetical middle.
                         q = (*iter->pointer);
                         --iter;
                         q = add(q,(*iter->pointer));
@@ -294,9 +299,9 @@ public:
                         sort();                                                                //sort the set.
 
                 iter = m_list.begin();
-                for(x=0;x<num;++x) ++iter;                                //go to the upper quartil
+                for(int x=0;x<num;++x) ++iter;                                //go to the upper quartil
 
-                if(m_vector.size() % 4 == nullptr) {                        //if the real upper quartil between two values add this values and calculate the arithmetical middle.
+                if(m_vector.size() % 4 == 0) {                        //if the real upper quartil between two values add this values and calculate the arithmetical middle.
                         q = (*iter->pointer);
                         --iter;
                         q = add(q,(*iter->pointer));
@@ -315,7 +320,7 @@ public:
          * use sub
          * @return the IQR
          */
-        type getIQR() const {
+        type getIQR() {
                 type q1 = getQuartil1();                        //calculate the under quartil
                 type q3 = getQuartil3();                        //calculate the upper quartil
 
@@ -329,7 +334,7 @@ public:
          * @param factor static_cast<double>(the) factor for this distance
          * @return the result
          */
-        type getWhisker(double factor) const {
+        type getWhisker(double factor) {
                 type dIqr = getIQR();                        //calculate the IQR
 
                 return doubleMul(dIqr,factor);        //WHISKER distance is factor*IQR
@@ -342,7 +347,7 @@ public:
          * @param factor static_cast<double>(this) factor is for calculating the whisker distance.
          * @return the lowest value inside
          */
-        type explicit explicit getWhisker1(double factor) {
+        type getWhisker1(double factor) {
                 type dW = getWhisker(factor);                                //calculate the whisker distance
                 type dQ1 = getQuartil1();                                        //calculate the under quartil
                                                                                                         //TODO for optimization: getWhisker use getIQR and this calculate Q1 so it will be calculate two times!!!
@@ -366,7 +371,7 @@ public:
          * @param factor static_cast<double>(this) factor is for calculating the whisker distance.
          * @return the highest value inside
          */
-        type explicit explicit getWhisker3(double factor) {
+        type getWhisker3(double factor) {
                 type dW = getWhisker(factor);                                //calculate the whisker distance
                 type dQ3 = getQuartil3();                                        //calculate the upper quartil
                                                                                                         //TODO for optimization: getWhisker use getIQR and this calculate Q3 so it will be calculate two times!!!
@@ -390,7 +395,7 @@ public:
          * @param factor static_cast<double>(this) factor is for calculating the whisker distance
          * @return static_cast<int>(the) number of extreme values in the set
          */
-        unsigned int explicit explicit getNumExtrems(double factor) {
+        unsigned int getNumExtrems(double factor) {
                 unsigned int result = 0;
                 type dW1 = getWhisker1(factor);                                                                //find W1
                 type dW3 = getWhisker3(factor);                                                                //find W3
@@ -421,7 +426,7 @@ public:
          * @param i static_cast<unsigned int>(the) index of the searched extreme value
          * @return the founded extreme value
          */
-        type getExtrem(double factor, unsigned int i) const {
+        type getExtrem(double factor, unsigned int i) {
                 type dW1 = getWhisker1(factor);                                                        //find W1
                 type dW3 = getWhisker3(factor);                                                        //find W3
                 typename std::list<TYPE_SAVE>::iterator iter = m_list.begin();
@@ -429,7 +434,7 @@ public:
                 while(iter!=m_list.end() && lower((*iter->pointer),dW1)) {                        //search in lower area
                         --i;
 
-                        if(i== nullptr)
+                        if(i== 0)
                                 return (*iter->pointer);
 
                         ++iter;
@@ -442,7 +447,7 @@ public:
                 while(iter!=m_list.end()) {                                                                                        //search in upper area
                         --i;
 
-                        if(i== nullptr)
+                        if(i== 0)
                                 return (*iter->pointer);
 
                         ++iter;
@@ -513,15 +518,16 @@ protected:
          * this vector save the giving set.
          */
         std::vector<type>& m_vector;
-
+        
         /**
          * this list saves the sorted set
          */
         std::list<TYPE_SAVE> m_list;
-
+        
         /**
          * this variable remember if the sorted list is created
          */
+        bool m_listCreated;
 
         /**
          * this function create the sorted list

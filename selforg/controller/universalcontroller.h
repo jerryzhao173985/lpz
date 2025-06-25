@@ -42,12 +42,14 @@ struct UniversalControllerConf {
 };
 
 /**
- * class for{
+ * Universal controller for robots with any number of sensors and motors
+ */
+class UniversalController : public AbstractController {
 public:
   UniversalController(const UniversalControllerConf& conf = getDefaultConf());
-  virtual ~UniversalController() override;
+  virtual ~UniversalController();
 
-  static UniversalControllerConf getDefaultConf() const {
+  static UniversalControllerConf getDefaultConf() {
     UniversalControllerConf c;
     c.buffersize = 50;
     c.init = 1;
@@ -58,7 +60,7 @@ public:
     return c;
   }
 
-  static UniversalControllerConf getDefaultNetConf() const {
+  static UniversalControllerConf getDefaultNetConf() {
     UniversalControllerConf c = getDefaultConf();
     std::vector<Layer> layers;
     //   layers.push_back(Layer(20,0.5,FeedForwardNN::tanh)); // hidden layer
@@ -71,7 +73,7 @@ public:
     return c;
   }
 
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
 
   virtual int getSensorNumber() const override {
     return number_sensors;
@@ -84,12 +86,12 @@ public:
   virtual void step(const sensor* sensors,
                     int sensornumber,
                     motor* motors,
-                    int motornumber);
+                    int motornumber) override;
 
   virtual void stepNoLearning(const sensor*,
                               int number_sensors,
                               motor*,
-                              int number_motors);
+                              int number_motors) override;
 
 protected:
   /** puts the sensors in the ringbuffer,
@@ -115,16 +117,15 @@ protected:
    */
   static double calcErrorFactor(const matrix::Matrix& e, int Enorm);
 
-public:
   /********* INSPECTABLE INTERFACE ******/
-  virtual std::list<iparamkey> getInternalParamNames() const override;
-  virtual std::list<iparamval> getInternalParams() const override;
-  virtual ilayerlist getStructuralLayers() const;
-  virtual iconnectionlist getStructuralConnections() const;
+  virtual std::list<AbstractController::iparamkey> getInternalParamNames() const override;
+  virtual std::list<AbstractController::iparamval> getInternalParams() const override;
+  virtual AbstractController::ilayerlist getStructuralLayers() const;
+  virtual AbstractController::iconnectionlist getStructuralConnections() const;
 
   /********* STORABLE INTERFACE ******/
-  virtual bool store(FILE* f) const override;
-  virtual bool explicit explicit restore(FILE* f);
+  virtual bool store(FILE* f) const;
+  virtual bool restore(FILE* f);
 
 protected:
   unsigned int t = 0;
@@ -141,14 +142,14 @@ protected:
   matrix::Matrix J;
   matrix::Matrix xsi_smooth;
 
-  paramval eps;
-  paramval epsM;
-  paramval epsV;
-  paramval lambda;
-  paramval s4avg;
-  paramval s4del;
-  paramval Enorm;
-  paramval epsDyn;
+  AbstractController::paramval eps;
+  AbstractController::paramval epsM;
+  AbstractController::paramval epsV;
+  AbstractController::paramval lambda;
+  AbstractController::paramval s4avg;
+  AbstractController::paramval s4del;
+  AbstractController::paramval Enorm;
+  AbstractController::paramval epsDyn;
 };
 
 #endif

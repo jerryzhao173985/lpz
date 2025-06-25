@@ -69,7 +69,8 @@ enum MeasureMode {
                 SUM,
         /// returns 1 if convergence is reached, otherwise 0
         /// convergence criteria static_cast<epsilon>(is) given by addMeasure, the convergence
-        /// is reached if value is falling below the criteria of the measure time static_cast<stepSpan>(CONV),
+        /// is reached if value is falling below the criteria of the measure time static_cast<stepSpan>
+        CONV,
     /// returns the difference between two successive steps
         STEPDIFF,
     /// returns the difference between two successive steps, normalized with number of steps

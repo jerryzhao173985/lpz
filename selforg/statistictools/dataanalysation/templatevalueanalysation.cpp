@@ -23,7 +23,3 @@
  ***************************************************************************/
 
 #include "templatevalueanalysation.h"
-
-double defaultZero() {
-        return 0.0;
-}

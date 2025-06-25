@@ -192,8 +192,8 @@ Sos::learn() {
     EE = .1 / (v.norm_sqr() + .001); // logarithmic error (E = log(v^T v))
   }
 
-  C_update = ((mue * (v ^ T)) + ((mue & const y_delayed& zeta) * (-2) * (x_delayed ^ T))) * (EE * epsC);
-  h_update = (mue & const y_delayed& zeta) * (-2 * EE * epsC);
+  C_update = ((mue * (v ^ T)) + ((mue & y_delayed & zeta) * (-2) * (x_delayed ^ T))) * (EE * epsC);
+  h_update = (mue & y_delayed & zeta) * (-2 * EE * epsC);
 
   // apply updates to h,C (clipped to [-.01,0.01])
   h += h_update.mapP(.1, clip);

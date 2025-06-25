@@ -30,23 +30,23 @@
  * meta controller for switching control between
  * different subcontrollers.
  */
-class SwitchController{
+class SwitchController : public AbstractController {
 public:
   SwitchController(const std::list<AbstractController*>& controllers,
                             const std::string& name = "SwitchController",
                             const std::string& revision = "1.0");
 
-  virtual ~SwitchController() override;
+  virtual ~SwitchController();
 
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
   virtual void step(const sensor* sensors,
                     int sensornumber,
                     motor* motors,
-                    int motornumber);
+                    int motornumber) override;
   virtual void stepNoLearning(const sensor* sensors,
                               int sensornumber,
                               motor* motors,
-                              int motornumber);
+                              int motornumber) override;
 
   virtual int getSensorNumber() const override {
     return controllers.front()->getSensorNumber();
@@ -56,11 +56,11 @@ public:
     return controllers.front()->getMotorNumber();
   };
 
-  virtual bool store(FILE* f) const override {
-    return controllers.front()->store(f);
+  virtual bool store(FILE* f) const {
+    return false; // not implemented
   };
-  virtual bool restore(FILE* f) override {
-    return controllers.front()->restore(f);
+  virtual bool restore(FILE* f) {
+    return false; // not implemented
   };
 
 protected:

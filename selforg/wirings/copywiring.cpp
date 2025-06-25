@@ -85,7 +85,7 @@ bool CopyWiring::wireSensorsIntern(const sensor* rsensors, int rsensornumber,
         csensors[k]+= rsensors[*s];
       }
     }
-    csensors[k]/=max(1.0, static_cast<double>(sa)->size());
+    csensors[k]/=max(1.0, static_cast<double>(sa->size()));
   }
 
   // the noisevals are set in abstractwiring
@@ -109,7 +109,7 @@ bool CopyWiring::wireMotorsIntern(motor* rmotors, int rmotornumber,
         rmotors[k]+= cmotors[*m];
       }
     }
-    rmotors[k]/=max(1.0, static_cast<double>(ma)->size());
+    rmotors[k]/=max(1.0, static_cast<double>(ma->size()));
   }
   return true;
 }

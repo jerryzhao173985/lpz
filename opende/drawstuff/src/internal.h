@@ -36,15 +36,15 @@ void dsPlatformSimLoop (int window_width, int window_height,
 
 // used by platform specific code
 
-void dsStartGraphics (int width, int height, dsFunctions *fn) override;
-void dsDrawFrame (int width, int height, dsFunctions *fn, int pause) override;
-void dsStopGraphics() override;
-void dsMotion (int mode, int deltax, int deltay) override;
+void dsStartGraphics (int width, int height, dsFunctions *fn);
+void dsDrawFrame (int width, int height, dsFunctions *fn, int pause);
+void dsStopGraphics();
+void dsMotion (int mode, int deltax, int deltay);
 
-int dsGetShadows() override;
-void dsSetShadows (int a) override;
+int dsGetShadows();
+void dsSetShadows (int a);
 
-int dsGetTextures() override;
-void dsSetTextures (int a) override;
+int dsGetTextures();
+void dsSetTextures (int a);
 
 #endif

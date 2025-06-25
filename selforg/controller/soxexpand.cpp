@@ -64,7 +64,7 @@ SoxExpand::init(int sensornumber, int motornumber, RandGen* randGen) {
   number_motors = motornumber;
 
   if (conf.numberContextSensors) {
-    assert(static_cast<signed>(conf).contextCoupling.getM() == number_motors);
+    assert(conf.contextCoupling.getM() == static_cast<unsigned int>(number_motors));
     assert(conf.contextCoupling.getN() == conf.numberContextSensors);
   }
 
@@ -144,7 +144,7 @@ SoxExpand::step(const sensor* x_, int number_sensors, motor* y_, int number_moto
   --t; // stepNoLearning increases the time by one - undo here
 
   // learn controller and model
-  if (epsC != 0 || epsA != nullptr)
+  if (epsC != 0 || epsA != 0)
     learn();
 
   // update step counter
@@ -154,7 +154,7 @@ SoxExpand::step(const sensor* x_, int number_sensors, motor* y_, int number_moto
 // performs one step without learning. Calulates motor commands from sensor inputs.
 void
 SoxExpand::stepNoLearning(const sensor* x_, int number_sensors, motor* y_, int number_motors) {
-  assert(number_sensors <= this->number_sensors + static_cast<signed>(conf).numberContextSensors &&
+  assert(number_sensors <= this->number_sensors + static_cast<int>(conf.numberContextSensors) &&
          number_motors <= this->number_motors);
 
   x.set(this->number_sensors, 1, x_); // store sensor values
@@ -203,7 +203,7 @@ SoxExpand::learn() {
   const Matrix& y = z.map(g);
   const Matrix& g_prime = z.map(g_s);
 
-  L = A * (const C& g_prime) + S;
+  L = A * (C & g_prime) + S;
   AC = A * (C);
   R = AC + S;
 
@@ -228,11 +228,11 @@ SoxExpand::learn() {
   S += (xi * (x ^ T) * epsA + (S * -0.001) * (epsA > 0 ? 1 : 0)).mapP(0.1, clip);
   b += (xi * epsA + (b * -0.0001) * (epsA > 0 ? 1 : 0)).mapP(0.1, clip);
 
-  C += ((mu * (v_hat ^ T) - (const epsrel& y) * (x ^ T)) * (EE * epsC)).mapP(.05, clip);
+  C += ((mu * (v_hat ^ T) - (g_prime & y) * (x ^ T)) * (EE * epsC)).mapP(.05, clip);
   // C += (( mu * (v_hat^T)
   //         - (const epsrel& z) * (x^T)) * (EE *epsC)
   //       + (C *  -0.0001) * ( epsC > 0 ? 1 : 0)).mapP(.05, clip);
-  h += ((const epsrel& y) * (-EE * epsC)).mapP(.05, clip);
+  h += ((g_prime & y) * (-EE * epsC)).mapP(.05, clip);
 };
 
 /* stores the controller values to a given file. */

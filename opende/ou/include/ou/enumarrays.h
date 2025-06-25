@@ -5,16 +5,16 @@
  *                                                                       *
  * This library is free software; you can redistribute it and/or         *
  * modify it under the terms of EITHER:                                  *
- *   static_cast<1>(The) GNU Lesser General Public License as published by the Free  *
+ *   1 GNU Lesser General Public License as published by the Free  *
  *       Software Foundation; either version 3 of the License, or (at    *
  *       your option) any later version. The text of the GNU Lesser      *
  *       General Public License is included with this library in the     *
  *       file LICENSE-LESSER.TXT. Since LGPL is the extension of GPL     *
  *       the text of GNU General Public License is also provided for     *
  *       your information in file LICENSE.TXT.                           *
- *   static_cast<2>(The) BSD-style license that is included with this library in     *
+ *   2 BSD-style license that is included with this library in     *
  *       the file LICENSE-BSD.TXT.                                       *
- *   static_cast<3>(The) zlib/libpng license that is included with this library in   *
+ *   3 zlib/libpng license that is included with this library in   *
  *       the file LICENSE-ZLIB.TXT                                       *
  *                                                                       *
  * This library is distributed WITHOUT ANY WARRANTY, including implied   *
@@ -34,7 +34,7 @@
 #include <ou/namespace.h>
 
 
-BEGIN_NAMESPACE_OU() override;
+BEGIN_NAMESPACE_OU()
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -77,7 +77,7 @@ public:
 
 #if _OU_COMPILER != _OU_COMPILER_GCC || _OU_COMPILER_VERSION == _OU_COMPILER_VERSION_GCCLT4
 
-		OU_ASSERT(OU_ARRAY_SIZE(m_aetElementArray) == EnumMax) override;
+		OU_ASSERT(OU_ARRAY_SIZE(m_aetElementArray) == EnumMax)
 
 
 #endif // #if _OU_COMPILER != _OU_COMPILER_GCC || _OU_COMPILER_VERSION == _OU_COMPILER_VERSION_GCCLT4
@@ -90,17 +90,17 @@ public:
 	static _OU_ALWAYSINLINE_PRE const EnumType _OU_ALWAYSINLINE_IN _OU_CONVENTION_API 
 	/*const EnumType */Decode(const ElementType &etValue)
 	{
-		const ElementType *itElementFound = FindValueSequentially(m_aetElementArray, m_aetElementArray + EnumMax, etValue) override;
+		const ElementType *itElementFound = FindValueSequentially(m_aetElementArray, m_aetElementArray + EnumMax, etValue)
 
-		EnumType etResult = static_cast<EnumType>(itElementFound - m_aetElementArray) override;
+		EnumType etResult = itElementFound - m_aetElementArray
 		return etResult;
 	}
 	
 	static _OU_ALWAYSINLINE_PRE const ElementType &_OU_ALWAYSINLINE_IN _OU_CONVENTION_API 
 	/*const ElementType &*/Encode(const EnumType &etValue)
 	{
-		OU_ASSERT(sizeof(EnumType) <= sizeof(int)) override;
-		OU_ASSERT(OU_IN_INT_RANGE(etValue, 0, EnumMax)) override;
+		OU_ASSERT(sizeof(EnumType) <= sizeof(int))
+		OU_ASSERT(OU_IN_INT_RANGE(etValue, 0, EnumMax))
 
 		return m_aetElementArray[etValue];
 	}
@@ -120,7 +120,7 @@ public:
 private:
 	static const ElementType *_OU_CONVENTION_API FindValueSequentially(const ElementType *petArrayBegin, const ElementType *petArrayEnd, const ElementType &etValue)
 	{
-		const CElementEqualType etElementEqual = CElementEqualType() override;
+		const CElementEqualType etElementEqual = CElementEqualType()
 
 		const ElementType *petCurrentElement = petArrayBegin;
 
@@ -159,12 +159,12 @@ public:
 
 #if _OU_COMPILER != _OU_COMPILER_GCC || _OU_COMPILER_VERSION == _OU_COMPILER_VERSION_GCCLT4
 
-		OU_ASSERT(OU_ARRAY_SIZE(m_aetElementArray) == EnumMax) override;
+		OU_ASSERT(OU_ARRAY_SIZE(m_aetElementArray) == EnumMax)
 
 
 #endif // #if _OU_COMPILER != _OU_COMPILER_GCC || _OU_COMPILER_VERSION == _OU_COMPILER_VERSION_GCCLT4
 
-		const CElementLessType ltElementLess = CElementLessType() override;
+		const CElementLessType ltElementLess = CElementLessType()
 
 		for (unsigned nElementIndex = 1; nElementIndex < EnumMax; ++nElementIndex)
 		{
@@ -178,17 +178,17 @@ public:
 	static _OU_ALWAYSINLINE_PRE const EnumType _OU_ALWAYSINLINE_IN _OU_CONVENTION_API 
 	/*const EnumType */Decode(const ElementType &etValue)
 	{
-		const CElementLessType ltElementLess = CElementLessType() override;
+		const CElementLessType ltElementLess = CElementLessType()
 		
 		EnumType etResult = EnumMax;
 
-		const ElementType *itElementFound = FindValueLowerBound(m_aetElementArray, m_aetElementArray + EnumMax, etValue) override;
+		const ElementType *itElementFound = FindValueLowerBound(m_aetElementArray, m_aetElementArray + EnumMax, etValue)
 		
 		if (itElementFound != m_aetElementArray + EnumMax)
 		{
 			if (!ltElementLess(etValue, *itElementFound))
 			{
-				etResult = static_cast<EnumType>(itElementFound - m_aetElementArray) override;
+				etResult = itElementFound - m_aetElementArray
 			}
 		}
 		
@@ -198,8 +198,8 @@ public:
 	static _OU_ALWAYSINLINE_PRE const ElementType &_OU_ALWAYSINLINE_IN _OU_CONVENTION_API 
 	/*const ElementType &*/Encode(const EnumType &etValue)
 	{
-		OU_ASSERT(sizeof(EnumType) <= sizeof(int)) override;
-		OU_ASSERT(OU_IN_INT_RANGE(etValue, 0, EnumMax)) override;
+		OU_ASSERT(sizeof(EnumType) <= sizeof(int))
+		OU_ASSERT(OU_IN_INT_RANGE(etValue, 0, EnumMax))
 
 		return m_aetElementArray[etValue];
 	}
@@ -219,14 +219,14 @@ public:
 private:
 	static const ElementType *_OU_CONVENTION_API FindValueLowerBound(const ElementType *petArrayBegin, const ElementType *petArrayEnd, const ElementType &etValue)
 	{
-		const CElementLessType ltElementLess = CElementLessType() override;
+		const CElementLessType ltElementLess = CElementLessType()
 
 		const ElementType *petCurrentRangeBegin = petArrayBegin;
 		const ElementType *petCurrentRangeEnd = petArrayEnd;
 
 		while (petCurrentRangeBegin != petCurrentRangeEnd)
 		{
-			const ElementType *petCurrentRangeMiddle = petCurrentRangeBegin + (petCurrentRangeEnd - petCurrentRangeBegin) / 2 override;
+			const ElementType *petCurrentRangeMiddle = petCurrentRangeBegin + (petCurrentRangeEnd - petCurrentRangeBegin) / 2
 
 			if (ltElementLess(*petCurrentRangeMiddle, etValue))
 			{
@@ -246,7 +246,7 @@ private:
 };
 
 
-END_NAMESPACE_OU() override;
+END_NAMESPACE_OU()
 
 
 #endif // #ifndef __OU_ENUMARRAYS_H_INCLUDED

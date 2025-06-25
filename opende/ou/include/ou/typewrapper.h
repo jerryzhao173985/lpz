@@ -5,16 +5,16 @@
  *                                                                       *
  * This library is free software; you can redistribute it and/or         *
  * modify it under the terms of EITHER:                                  *
- *   static_cast<1>(The) GNU Lesser General Public License as published by the Free  *
+ *   1 GNU Lesser General Public License as published by the Free  *
  *       Software Foundation; either version 3 of the License, or (at    *
  *       your option) any later version. The text of the GNU Lesser      *
  *       General Public License is included with this library in the     *
  *       file LICENSE-LESSER.TXT. Since LGPL is the extension of GPL     *
  *       the text of GNU General Public License is also provided for     *
  *       your information in file LICENSE.TXT.                           *
- *   static_cast<2>(The) BSD-style license that is included with this library in     *
+ *   2 BSD-style license that is included with this library in     *
  *       the file LICENSE-BSD.TXT.                                       *
- *   static_cast<3>(The) zlib/libpng license that is included with this library in   *
+ *   3 zlib/libpng license that is included with this library in   *
  *       the file LICENSE-ZLIB.TXT                                       *
  *                                                                       *
  * This library is distributed WITHOUT ANY WARRANTY, including implied   *
@@ -32,7 +32,7 @@
 #include <ou/namespace.h>
 
 
-BEGIN_NAMESPACE_OU() override;
+BEGIN_NAMESPACE_OU()
 
 
 template<typename ContainedType, const int Instance=0>
@@ -104,7 +104,7 @@ template<typename ContainedType, const int Instance>
 _OU_INLINE bool _OU_CONVENTION_API operator >=(const ContainedType &ctLeftValue, const CTypeSimpleWrapper<ContainedType, Instance> &twRightWrapper) { return !(ctLeftValue < twRightWrapper); }
 
 
-END_NAMESPACE_OU() override;
+END_NAMESPACE_OU()
 
 
 #endif // #ifndef __OU_TYPEWRAPPER_H_INCLUDED

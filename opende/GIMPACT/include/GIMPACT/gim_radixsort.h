@@ -47,7 +47,7 @@ struct GIM_RSORT_TOKEN
 //typedef struct _GIM_RSORT_TOKEN GIM_RSORT_TOKEN;
 
 //comparator for sorting
-#define RSORT_TOKEN_COMPARATOR(x, y) (static_cast<int>((x.m_key) - (y.m_key)))
+#define RSORT_TOKEN_COMPARATOR(x, y) ((x.m_key - (y.m_key)))
 
 // ---- utils for accessing 11-bit quantities
 #define D11_0(x)	(const x& 0x7FF)
@@ -59,11 +59,11 @@ struct GIM_RSORT_TOKEN
 
 
 //For the type of your array, you need to declare a macro for obtaining the key, like these:
-#define SIMPLE_GET_FLOAT32KEY(e,key) {key =static_cast<GREAL>(e);}
+#define SIMPLE_GET_FLOAT32KEY(e,key) {key =e;}
 
-#define SIMPLE_GET_INTKEY(e,key) {key =static_cast<GINT32>(e);}
+#define SIMPLE_GET_INTKEY(e,key) {key =e;}
 
-#define SIMPLE_GET_UINTKEY(e,key) {key =static_cast<GUINT32>(e);}
+#define SIMPLE_GET_UINTKEY(e,key) {key =e;}
 
 //For the type of your array, you need to declare a macro for copy elements, like this:
 
@@ -137,7 +137,7 @@ struct GIM_RSORT_TOKEN
 /// Get the sorted tokens from an array. For generic use. Tokens are GIM_RSORT_TOKEN
 #define GIM_RADIX_SORT_ARRAY_TOKENS(array, sorted_tokens, element_count, get_uintkey_macro)\
 {\
-    GIM_RSORT_TOKEN * _unsorted = static_cast<GIM_RSORT_TOKEN*>(gim_alloc)(sizeof(GIM_RSORT_TOKEN )*element_count);\
+    GIM_RSORT_TOKEN * _unsorted = gim_alloc(sizeof(GIM_RSORT_TOKEN )*element_count);\
     GUINT32 _i;\
     for (_i=0;_i<element_count;++_i)\
     {\
@@ -151,9 +151,9 @@ struct GIM_RSORT_TOKEN
 /// Sorts array in place. For generic use
 #define GIM_RADIX_SORT(type,array,element_count,get_uintkey_macro,copy_elements_macro)\
 {\
-    GIM_RSORT_TOKEN * _sorted = static_cast<GIM_RSORT_TOKEN*>(gim_alloc)(sizeof(GIM_RSORT_TOKEN )*element_count);\
+    GIM_RSORT_TOKEN * _sorted = gim_alloc(sizeof(GIM_RSORT_TOKEN )*element_count);\
     GIM_RADIX_SORT_ARRAY_TOKENS(array,_sorted,element_count,get_uintkey_macro);\
-    type * _original_array = static_cast<type*>(gim_alloc)(sizeof(type)*element_count); \
+    type * _original_array = gim_alloc(sizeof(type)*element_count); \
     memcpy(_original_array,array,sizeof(type)*element_count);\
     GUINT32 _i;\
     for (_i=0;_i<element_count;++_i)\
@@ -253,6 +253,6 @@ struct GIM_RSORT_TOKEN
     (_array)[(_j)]= _e_tmp_;\
 }\
 
-#define GIM_COMP_MACRO(x, y) (static_cast<GINT32>((x) - (y)))
+#define GIM_COMP_MACRO(x, y) ((x - (y)))
 //! @}
 #endif // GIM_RADIXSORT_H_INCLUDED

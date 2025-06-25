@@ -31,14 +31,16 @@
 #include <vector>
 
 /**
- * class for{
+ * class for robot controller that uses multiple controller
+ */
+class SplitControl : public AbstractController {
 public:
   struct Assoziation {
     Assoziation();
-    void explicit explicit addSensorIdx(int s) {
+    void addSensorIdx(int s) {
       sensors.push_back(s);
     }
-    void explicit explicit addMotorIdx(int m) {
+    void addMotorIdx(int m) {
       motors.push_back(m);
     }
 
@@ -61,16 +63,16 @@ public:
                int numCtrlCreateBeforeInit = 1,
                int numContextSensors = 0);
 
-  virtual ~SplitControl() override;
+  virtual ~SplitControl();
 
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
 
-  virtual void step(const sensor* sensors, int sensornumber, motor* motors, int motornumber);
+  virtual void step(const sensor* sensors, int sensornumber, motor* motors, int motornumber) override;
 
   virtual void stepNoLearning(const sensor* sensors,
                               int sensornumber,
                               motor* motors,
-                              int motornumber);
+                              int motornumber) override;
 
   virtual int getSensorNumber() const override {
     return sensornumber;
@@ -81,15 +83,15 @@ public:
 
   /*********** STORABLE **************/
 
-  virtual bool store(FILE* f) const override {
+  virtual bool store(FILE* f) const {
     return false;
   }
 
-  virtual bool restore(FILE* f) override {
+  virtual bool restore(FILE* f) {
     return false;
   }
 
-  virtual std::vector<AbstractController*> getControllers() const  override {
+  virtual std::vector<AbstractController*> getControllers() const {
     return ctrl;
   }
 

@@ -32,7 +32,7 @@
 /** Implements a wiring where the motors are copied to several motors
     and the sensors are fusioned.
  */
-class CopyWiring{
+class CopyWiring : public AbstractWiring {
 public:
   typedef std::vector < std::list<int> > Assignment;
 
@@ -47,18 +47,18 @@ public:
 
   /** destructor
    */
-  virtual ~CopyWiring() override;
+  virtual ~CopyWiring();
 
   virtual void reset();
 
-  static Assignment explicit explicit motorFromSensorAssignment(const Assignment& sensor_assignment);
+  static Assignment motorFromSensorAssignment(const Assignment& sensor_assignment);
 
 protected:
 
   /** initializes the number of sensors and motors on robot side, calculate
       number of sensors and motors on controller side
    */
-  virtual bool initIntern();
+  virtual bool initIntern() override;
 
   /** Realizes one to one wiring from robot sensors to controller sensors.
       @param rsensors pointer to array of sensorvalues from robot

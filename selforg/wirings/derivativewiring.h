@@ -43,7 +43,7 @@ struct DerivativeWiringConf {
     which includes the first and second derivative
     of the original robot sensor values
 */
-class DerivativeWiring{
+class DerivativeWiring : public AbstractWiring {
 public:
   /** constructor
       @param conf  for giving the wished configuration of DerivativeWiring
@@ -55,12 +55,12 @@ public:
 
   /** destructor
    */
-  virtual ~DerivativeWiring() override;
+  virtual ~DerivativeWiring();
 
   /** Providing default configuration for DerivativeWiring with first derivative.
       No smoothing and no scaling. ( as static method )
    */
-  static DerivativeWiringConf getDefaultConf() const {
+  static DerivativeWiringConf getDefaultConf() {
     DerivativeWiringConf c;
     c.useId = true;        // use id
     c.useFirstD = false;    // use first derivative
@@ -75,7 +75,7 @@ public:
       smoothing over 4 steps and scale of 5. Use smaller noise!
       ( as static method )
    */
-  static DerivativeWiringConf getDefaultConf1() const {
+  static DerivativeWiringConf getDefaultConf1() {
     DerivativeWiringConf c;
     c.useId = false;       // do not use id
     c.useFirstD = true;    // use first derivative

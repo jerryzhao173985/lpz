@@ -45,7 +45,7 @@ bool One2OneWiring::initIntern(){
   noisenumber   = csensornumber;
 
   if (blind){
-    blindmotors = static_cast<sensor*>(malloc)(sizeof(sensor)  * blind);
+    blindmotors = static_cast<sensor*>(malloc(sizeof(sensor)  * blind));
     if(blindmotors == nullptr) {
       fprintf(stderr, "One2OneWiring: memory allocation failed\n");
       exit(1);

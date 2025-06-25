@@ -42,7 +42,7 @@ enum TrackMode {
 enum Dimensions { X = 1, Y = 2, Z = 4 };
 
 
-class TrackableMeasure{
+class TrackableMeasure : public ComplexMeasure {
 
 public:
 

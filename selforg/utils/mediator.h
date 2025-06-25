@@ -24,8 +24,10 @@
 #ifndef __MEDIATOR_H_
 #define __MEDIATOR_H_
 
-#include "mediatorcollegue.h"
 #include <vector>
+
+// Forward declaration
+class MediatorCollegue;
 
 /**
  * The default MediatorEvent holds no information,
@@ -45,15 +47,15 @@ public:
 
   virtual void mediatorInformed(MediatorCollegue* source, MediatorEvent* event) = 0;
 
-  void explicit explicit addMediatorCollegue(MediatorCollegue* collegue);
+  void addMediatorCollegue(MediatorCollegue* collegue);
 
-  void explicit explicit removeMediatorCollegue(MediatorCollegue* collegue);
+  void removeMediatorCollegue(MediatorCollegue* collegue);
 
   void removeAllMediatorCollegues();
 
   MediatorCollegue* getMediatorCollegue(unsigned int index);
 
-  unsigned int explicit explicit getMediatorCollegueIndex(MediatorCollegue* collegue);
+  unsigned int getMediatorCollegueIndex(MediatorCollegue* collegue);
 
   unsigned int getNumberOfMediatorCollegues() const;
 
@@ -61,9 +63,9 @@ public:
 
   void mediate(MediatorCollegue* collegue, MediatorEvent* event);
 
-  void explicit explicit mediateToAll(MediatorEvent* event);
+  void mediateToAll(MediatorEvent* event);
 
-  void explicit explicit mediateToAllQMP(MediatorEvent* event);
+  void mediateToAllQMP(MediatorEvent* event);
 
 protected:
 private:

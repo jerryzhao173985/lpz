@@ -36,7 +36,7 @@ StatisticMeasure::StatisticMeasure(double& observedValue, const char* measureNam
   switch(mode)
   {
   case MeasureMode::CONV:
-    if (stepSpan== nullptr)
+    if (stepSpan== 0)
     {
       std::cout << "ERROR: The stepspan in addMeasure(observedValue,\"name\" ,CONV, stepSpan, epsilon)"
       << std::endl << "       must not be <1!" << std::endl;
@@ -55,7 +55,7 @@ void StatisticMeasure::internInit() {
   newestStepIndex=stepSpan-1;
   if (stepSpan>0)
   {
-    this->valueHistory = static_cast<double*>(malloc)(sizeof(double) * stepSpan);
+    this->valueHistory = static_cast<double*>(malloc(sizeof(double) * stepSpan));
     // set all values to 0
     for (int i=0;i<stepSpan;++i)
       this->valueHistory[i]=0;
@@ -137,7 +137,7 @@ double StatisticMeasure::testConvergence() {
 double StatisticMeasure::calculateSumValue()
 {
   double newsum=this->value;
-  if (stepSpan== nullptr)
+  if (stepSpan== 0)
   {
     value+=observedValue;
   }
@@ -155,7 +155,7 @@ double StatisticMeasure::calculateSumValue()
 double StatisticMeasure::calculateAverageValue()
 {
   double newavg=this->value;
-  if (stepSpan== nullptr) {
+  if (stepSpan== 0) {
     // use update rule
   }
   else
@@ -171,7 +171,7 @@ double StatisticMeasure::calculateAverageValue()
 double StatisticMeasure::calculateMovingAverageValue()
 {
   double newavg=this->value;
-  if (stepSpan== nullptr) {
+  if (stepSpan== 0) {
     //
   }
   else

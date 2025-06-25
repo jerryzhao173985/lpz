@@ -72,7 +72,7 @@ PlotOptionEngine::init(AbstractController* maybe_controller) {
 }
 
 bool
-PlotOptionEngine::initPlotOption(const PlotOption& po) {
+PlotOptionEngine::initPlotOption(PlotOption& po) {
   po.open();
   if (po.pipe) {
     // print start
@@ -160,7 +160,7 @@ PlotOptionEngine::addAndInitPlotOption(const PlotOption& plotOption, bool forceI
 }
 
 bool
-PlotOptionEngine::removePlotOption(PlotMode mode) {
+PlotOptionEngine::removePlotOption(const PlotMode& mode) {
   // if plotoption with the same mode exists -> delete it
   auto po = find_if(plotOptions.rbegin(), plotOptions.rend(), PlotOption::matchMode(mode));
   if (po != plotOptions.rend()) {
@@ -206,7 +206,7 @@ PlotOptionEngine::plot(double time) {
   assert(initialised);
 
   for (list<PlotOption>::iterator i = plotOptions.begin(); i != plotOptions.end(); ++i) {
-    if (((*i).pipe) && ((*i).interval > 0) && (t % (*i).interval == nullptr)) {
+    if (((*i).pipe) && ((*i).interval > 0) && (t % (*i).interval == 0)) {
       fprintf((*i).pipe, "%f", time);
       i->printInspectables(inspectables, 0);
       fprintf((*i).pipe, "\n"); // terminate line

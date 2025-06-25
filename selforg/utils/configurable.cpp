@@ -467,7 +467,7 @@ Configurable::parse(FILE* f, const char* prefix, bool traverseChildren) {
   while (fgets(buffer, 512, f) != nullptr) {
     char* bufNoPrefix = buffer;
     if (preLen > 0) {
-      if (strncmp(buffer, pre.c_str(), preLen) == nullptr)
+      if (strncmp(buffer, pre.c_str(), preLen) == 0)
         bufNoPrefix = buffer + preLen;
       else {
         fprintf(stderr, "could not detect prefix: %s in line: %s\n", pre.c_str(), buffer);
@@ -475,7 +475,7 @@ Configurable::parse(FILE* f, const char* prefix, bool traverseChildren) {
         break;
       }
     }
-    if (strcmp(bufNoPrefix, "######\n") == nullptr)
+    if (strcmp(bufNoPrefix, "######\n") == 0)
       break;
     char* p = strchr(bufNoPrefix, '=');
     if (p != nullptr) {

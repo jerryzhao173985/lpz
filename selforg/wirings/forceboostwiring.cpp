@@ -36,7 +36,8 @@ ForceBoostWiring::ForceBoostWiring(NoiseGenerator* noise, double boost, bool exp
   : AbstractWiring(noise, plotMode, name), Configurable(name,"1.1"), boost(boost){
 
   addParameter("booster",&this->boost, 0, 1, "force boosting rate");
-  ifstatic_cast<exportBoostError>(addInspectableMatrix)("errorForce",&error,false,"ForceBoosting error");
+  if(exportBoostError) 
+    addInspectableMatrix("errorForce",&error,false,"ForceBoosting error");
 }
 
 ForceBoostWiring::~ForceBoostWiring(){

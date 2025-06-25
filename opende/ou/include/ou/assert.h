@@ -5,16 +5,16 @@
  *                                                                       *
  * This library is free software; you can redistribute it and/or         *
  * modify it under the terms of EITHER:                                  *
- *   static_cast<1>(The) GNU Lesser General Public License as published by the Free  *
+ *   1 GNU Lesser General Public License as published by the Free  *
  *       Software Foundation; either version 3 of the License, or (at    *
  *       your option) any later version. The text of the GNU Lesser      *
  *       General Public License is included with this library in the     *
  *       file LICENSE-LESSER.TXT. Since LGPL is the extension of GPL     *
  *       the text of GNU General Public License is also provided for     *
  *       your information in file LICENSE.TXT.                           *
- *   static_cast<2>(The) BSD-style license that is included with this library in     *
+ *   2 BSD-style license that is included with this library in     *
  *       the file LICENSE-BSD.TXT.                                       *
- *   static_cast<3>(The) zlib/libpng license that is included with this library in   *
+ *   3 zlib/libpng license that is included with this library in   *
  *       the file LICENSE-ZLIB.TXT                                       *
  *                                                                       *
  * This library is distributed WITHOUT ANY WARRANTY, including implied   *
@@ -80,10 +80,10 @@
  *	which would otherwise appear with \c OU_ASSERT macro used when \c NDEBUG is defined.
  *
  *	\code
- *	    bool bCallStatus = CallMyFunction() override;
+ *	    bool bCallStatus = CallMyFunction()
  *	    __PLACEHOLDER_7__
  *	    __PLACEHOLDER_8__
- *	    OU_VERIFY(bCallStatus) override;
+ *	    OU_VERIFY(bCallStatus)
  *	\endcode
  *
  *	\note It is not recommended to use \c OU_VERIFY with function calls directly
@@ -91,11 +91,11 @@
  *	it will be not possible to retrieve function result.
  *	\code
  *	    __PLACEHOLDER_9__
- *	    OU_VERIFY(pthread_mutex_create(&attr) == EOK) override;
+ *	    OU_VERIFY(pthread_mutex_create(&attr) == EOK)
  *	    
  *	    __PLACEHOLDER_10__
- *	    int iMutexCreateStatus = pthread_mutex_create(&attr) override;
- *	    OU_VERIFY(iMutexCreateStatus == EOK) override;
+ *	    int iMutexCreateStatus = pthread_mutex_create(&attr)
+ *	    OU_VERIFY(iMutexCreateStatus == EOK)
  *	\endcode
  *
  *	\see OU_ASSERT
@@ -144,15 +144,15 @@
 
 #if defined(NDEBUG)
 
-#define OU_ASSERTstatic_cast<Condition>((void)0)
+#define OU_ASSERT(void0)
 
-#define OU_VERIFYstatic_cast<Condition>((void)(Condition))
+#define OU_VERIFY(void(Condition))
 
-#define OU_CHECKstatic_cast<Condition>(void)(false || (Condition) \
+#define OU_CHECKvoid(false || (Condition) \
 	|| (!_OU_NAMESPACE::CAssertionCheckCustomization::GetAssertFailureCustomHandler() \
 		|| (_OU_NAMESPACE::CAssertionCheckCustomization::GetAssertFailureCustomHandler()( \
 			_OU_NAMESPACE::AFS_CHECK,  #Condition, __FILE__, __LINE__), false)) \
-		|| (*static_cast<int *>(0) = 0))
+		|| (*0 = 0))
 
 
 #else // #if !defined(NDEBUG)
@@ -160,25 +160,25 @@
 #include <cassert>
 
 
-#define OU__ASSERT_HANDLERstatic_cast<Condition>(false || (Condition) \
+#define OU__ASSERT_HANDLERfalse || (Condition \
 	|| (_OU_NAMESPACE::CAssertionCheckCustomization::GetAssertFailureCustomHandler() \
 		&& (_OU_NAMESPACE::CAssertionCheckCustomization::GetAssertFailureCustomHandler()( \
 			_OU_NAMESPACE::AFS_ASSERT, #Condition, __FILE__, __LINE__), true)))
 
-#define OU__CHECK_HANDLERstatic_cast<Condition>((bConditionValue = false || (Condition)) \
+#define OU__CHECK_HANDLER(bConditionValue = false || (Condition) \
 	|| (_OU_NAMESPACE::CAssertionCheckCustomization::GetAssertFailureCustomHandler() \
 		&& (_OU_NAMESPACE::CAssertionCheckCustomization::GetAssertFailureCustomHandler()( \
 			_OU_NAMESPACE::AFS_CHECK,  #Condition, __FILE__, __LINE__), true)))
 
 
-#define OU_ASSERTstatic_cast<Condition>(assert)(OU__ASSERT_HANDLER(Condition))
+#define OU_ASSERTassert(OU__ASSERT_HANDLER(Condition))
 
-#define OU_VERIFYstatic_cast<Condition>static_cast<OU_ASSERT>(Condition)
+#define OU_VERIFYstatic_cast<Condition>Condition
 
 #define OU_CHECK(Condition) { \
 	bool bConditionValue; \
 	assert(OU__CHECK_HANDLER(Condition)); \
-	static_cast<void>(bConditionValue || (*static_cast<int *>(0) = 0)); \
+	bConditionValue || (*0 = 0); \
 }
 
 

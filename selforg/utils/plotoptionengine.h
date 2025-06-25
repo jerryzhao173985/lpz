@@ -99,7 +99,7 @@ public:
   virtual void plot(double time);
 
 protected:
-  bool initPlotOption(const PlotOption& po);
+  bool initPlotOption(PlotOption& po);
 
   std::list<PlotOption> plotOptions;
   std::list<const Inspectable*> inspectables;

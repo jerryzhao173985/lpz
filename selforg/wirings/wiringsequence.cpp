@@ -29,14 +29,13 @@
 using namespace std;
 
 /// constructor
-WiringSequence::WiringSequence(std::list<AbstractWiring*> ws)
-  : AbstractWiring(0), wirings(ws.begin(), ws.end()) {
-  initialised=false;
+WiringSequence::WiringSequence(std::list<AbstractWiring*> ws, NoiseGenerator* noise, 
+                               int plotMode, const std::string& name)
+  : AbstractWiring(noise, plotMode, name), wirings(ws.begin(), ws.end()) {
 }
 
 WiringSequence::WiringSequence(AbstractWiring* w1,AbstractWiring* w2)
-  : AbstractWiring(0) {
-  initialised=false;
+  : AbstractWiring(nullptr, Controller, "WiringSequence") {
   addWiring(w1);
   addWiring(w2);
 }
@@ -91,7 +90,7 @@ bool WiringSequence::wireSensorsIntern(const sensor* rsensors, int rsensornumber
       sensorbuf = new sensor[d];
     }
     wirings[i]->wireSensors(inp, inp_s, sensorbuf, d, noiseStrength);
-    if(i!= nullptr) delete[] inp; // delete buffer, but not in first round
+    if(i!= 0) delete[] inp; // delete buffer, but not in first round
     inp   = sensorbuf;
     inp_s = d;
   }
@@ -107,9 +106,9 @@ bool WiringSequence::wireMotorsIntern(motor* rmotors, int rmotornumber,
   int inp_s = cmotornumber;
   motor* motorbuf;
   int num = wirings.size();
-  for(...; --i) {
+  for(int i=num-1; i>=0; --i) {
     int d = wirings[i]->getRobotMotornumber();
-    if(i== nullptr){
+    if(i== 0){
       motorbuf = rmotors;
       assert(d == rmotornumber);
     }else{

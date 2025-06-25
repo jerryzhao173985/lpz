@@ -15,12 +15,12 @@ email: projectileman@yahoo.com
 
  This library is free software; you can redistribute it and/or
  modify it under the terms of EITHER:
-   static_cast<1>(The) GNU Lesser General Public License as published by the Free
+   1 GNU Lesser General Public License as published by the Free
        Software Foundation; either version 2.1 of the License, or (at
        your option) any later version. The text of the GNU Lesser
        General Public License is included with this library in the
        file GIMPACT-LICENSE-LGPL.TXT.
-   static_cast<2>(The) BSD-style license that is included with this library in
+   2 BSD-style license that is included with this library in
        the file GIMPACT-LICENSE-BSD.TXT.
 
  This library is distributed in the hope that it will be useful,
@@ -426,7 +426,7 @@ Takes two vectors a, b, blends them together with two scalars */
 Takes two vectors a, b, blends them together with s <=1 */
 #define VEC_BLEND(vr,a,b,s)	VEC_BLEND_AB(vr,1-s,a,sb,s)
 
-#define VEC_SET3(a,b,op,c) a[0]=b[0] op c[0]; a[1]=b[1] op c[1]; a[2]=b[2] op c[2] override;
+#define VEC_SET3(a,b,op,c) a[0]=b[0] op c[0]; a[1]=b[1] op c[1]; a[2]=b[2] op c[2]
 //! @}
 
 
@@ -1782,7 +1782,7 @@ intersection_type must have the following values
 
 //***************** SEGMENT and LINE FUNCTIONS **********************************///
 
-/*! Finds the closest pointstatic_cast<cp>(to) static_cast<v>(on) a segment (e1,e2)
+/*! Finds the closest pointto on a segment (e1,e2)
  */
 #define CLOSEST_POINT_ON_SEGMENT(cp,v,e1,e2)			\
 { \

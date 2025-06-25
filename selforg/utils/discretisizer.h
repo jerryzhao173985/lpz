@@ -25,7 +25,9 @@
 #define DISCRETISIZER_H
 
 /**
-Use this class to{
+ * Use this class to discretize values
+ */
+class Discretisizer {
 public:
   /**
    * call this constructor if you don't like to decide which range for
@@ -36,7 +38,7 @@ public:
    *
    * @param numberBins the number of bins __PLACEHOLDER_0__
    */
-  explicit explicit Discretisizer(int numberBins);
+  explicit Discretisizer(int numberBins);
 
   /**
    * call this constructor if you like to decide yourself which range for
@@ -63,7 +65,7 @@ public:
     @param value the value to discretisize
     @return the bin number
   */
-  virtual int explicit explicit getBinNumber(double value);
+  virtual int getBinNumber(double value);
 
   /**
     returns the given value as an discretisized double.
@@ -71,7 +73,7 @@ public:
     @param value the value to discretisize
     @return discretisized value between minRange and maxRange
   */
-  virtual double explicit explicit get(double value);
+  virtual double get(double value);
 
   virtual double getMinRange() const;
 
@@ -84,23 +86,25 @@ protected:
   double minValue = 0;
   double maxValue = 0;
   bool firstStep = false;
+  bool automaticRange = false;
+  bool mapToInterval = false;
 
   /**
   is used for automaticRange, sets min and max range.
   */
-  virtual void explicit explicit findMinAndMaxRange(double value);
+  virtual void findMinAndMaxRange(double value);
 
   /**
   is used for mapToInterval, sets min and max values.
   */
-  virtual void explicit explicit findMinAndMaxValues(double value);
+  virtual void findMinAndMaxValues(double value);
 
   /**
   is used for discretisizing values
   */
-  virtual int explicit explicit discretisizeValue(double valueToDiscretisize);
+  virtual int discretisizeValue(double valueToDiscretisize);
 
-  virtual int explicit explicit roundValue(double valueToRound);
+  virtual int roundValue(double valueToRound);
 };
 
 #endif

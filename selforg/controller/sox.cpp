@@ -180,7 +180,7 @@ Sox::step(const sensor* x_, int number_sensors, motor* y_, int number_motors) {
   --t; // stepNoLearning increases the time by one - undo here
 
   // learn controller and model
-  if (epsC != 0 || epsA != nullptr)
+  if (epsC != 0 || epsA != 0)
     learn();
 
   // update step counter
@@ -255,7 +255,7 @@ Sox::motorBabblingStep(const sensor* x_, int number_sensors, const motor* y_, in
 
 Matrix
 Sox::pseudoInvL(const Matrix& L, const Matrix& A, const Matrix& C) {
-  if (pseudo == nullptr) {
+  if (pseudo == 0) {
     return L.pseudoInverse();
   } else {
     const Matrix& P = pseudo == 1 || pseudo == 2 ? A ^ T : C;

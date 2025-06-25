@@ -56,6 +56,8 @@ public:
   virtual int getStepSize() const { return stepSize; }
 
   virtual long getActualStep() const { return actualStep; }
+  
+  virtual void step() = 0;
 
   virtual void setDisplayPrecision(int digits) { displayPrecision=digits; }
 

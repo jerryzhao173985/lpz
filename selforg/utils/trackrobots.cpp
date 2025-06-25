@@ -91,7 +91,7 @@ TrackRobot::track(const Trackable* robot, double time) {
   if (!file || !robot)
     return;
 
-  if (cnt % conf.interval == nullptr) {
+  if (cnt % conf.interval == 0) {
     //   fprintf(file, __PLACEHOLDER_15__, cnt);
     fprintf(file, "%f", time);
     if (conf.trackPos) {

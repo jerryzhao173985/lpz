@@ -66,11 +66,11 @@ public:
 
   /** returns the lyapunov matrix at the given horizon
    */
-  const matrix::Matrix& explicit explicit getLyapunovMatrix(int horizon);
+  const matrix::Matrix& getLyapunovMatrix(int horizon);
 
   /** returns the lyapunov exponents at the given horizon
    */
-  const matrix::Matrix& explicit explicit getLyapunovExp(int horizon);
+  const matrix::Matrix& getLyapunovExp(int horizon);
 
 protected:
   matrix::Matrix* buffer;

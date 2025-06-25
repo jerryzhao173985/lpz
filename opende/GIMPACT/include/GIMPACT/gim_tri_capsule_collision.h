@@ -15,12 +15,12 @@ email: projectileman@yahoo.com
 
  This library is free software; you can redistribute it and/or
  modify it under the terms of EITHER:
-   static_cast<1>(The) GNU Lesser General Public License as published by the Free
+   1 GNU Lesser General Public License as published by the Free
        Software Foundation; either version 2.1 of the License, or (at
        your option) any later version. The text of the GNU Lesser
        General Public License is included with this library in the
        file GIMPACT-LICENSE-LGPL.TXT.
-   static_cast<2>(The) BSD-style license that is included with this library in
+   2 BSD-style license that is included with this library in
        the file GIMPACT-LICENSE-BSD.TXT.
 
  This library is distributed in the hope that it will be useful,
@@ -90,7 +90,7 @@ struct GIM_CAPSULE_DATA
 
 \post The contacts array is not set to 0. It adds aditional contacts
 */
-void gim_closest_point_triangle_segment(GIM_TRIANGLE_DATA * triangle, vec3f s1,vec3f s2, GDYNAMIC_ARRAY * contacts) override;
+void gim_closest_point_triangle_segment(GIM_TRIANGLE_DATA * triangle, vec3f s1,vec3f s2, GDYNAMIC_ARRAY * contacts)
 
 
 
@@ -105,7 +105,7 @@ void gim_closest_point_triangle_segment(GIM_TRIANGLE_DATA * triangle, vec3f s1,v
 \return 1 if the triangle collides the capsule
 \post The contacts array is not set to 0. It adds aditional contacts
 */
-int gim_triangle_capsule_collision(GIM_TRIANGLE_DATA * triangle, GIM_CAPSULE_DATA * capsule, GDYNAMIC_ARRAY * contacts) override;
+int gim_triangle_capsule_collision(GIM_TRIANGLE_DATA * triangle, GIM_CAPSULE_DATA * capsule, GDYNAMIC_ARRAY * contacts)
 //! @}
 
 #endif // GIM_TRI_CAPSULE_COLLISION_H_INCLUDED
