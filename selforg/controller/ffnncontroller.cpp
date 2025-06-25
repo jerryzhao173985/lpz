@@ -17,8 +17,8 @@ FFNNController::FFNNController(const std::string& networkfilename,
   , s4avg(1)
   , t(0)
   , init_wait(init_wait)
-  , x_buffer(nullptr)
-  , y_buffer(nullptr)
+  , x_buffer()
+  , y_buffer()
   , net(new MultiLayerFFNN(0.01, std::vector<Layer>()))
   , initialised(false) {
   FILE* f = fopen(networkfilename.c_str(), "r");
@@ -44,8 +44,8 @@ FFNNController::FFNNController(MultiLayerFFNN* net,
   , s4avg(1)
   , t(0)
   , init_wait(init_wait)
-  , x_buffer(nullptr)
-  , y_buffer(nullptr)
+  , x_buffer()
+  , y_buffer()
   , net(net)
   , initialised(false) {
   addParameterDef("s4avg", &s4avg, 1, 1, buffersize - 1, "input averaging time window");
@@ -61,8 +61,8 @@ FFNNController::init(int sensornumber, int motornumber, RandGen* randGen) {
   number_motors = motornumber;
   number_sensors = sensornumber;
 
-  x_buffer = new Matrix[buffersize];
-  y_buffer = new Matrix[buffersize];
+  x_buffer.resize(buffersize);
+  y_buffer.resize(buffersize);
   for (unsigned int k = 0; k < buffersize; ++k) {
     x_buffer[k].set(number_sensors, 1);
     y_buffer[k].set(number_motors, 1);
@@ -124,13 +124,13 @@ FFNNController::stepNoLearning(const sensor* x_, int number_sensors, motor* y_, 
 
 // put new value in ring buffer
 void
-FFNNController::putInBuffer(matrix::Matrix* buffer, const matrix::Matrix& vec, int delay) {
+FFNNController::putInBuffer(std::vector<matrix::Matrix>& buffer, const matrix::Matrix& vec, int delay) {
   buffer[(t - delay) % buffersize] = vec;
 }
 
 /// calculate time-smoothed values
 matrix::Matrix
-FFNNController::calculateSmoothValues(const matrix::Matrix* buffer,
+FFNNController::calculateSmoothValues(const std::vector<matrix::Matrix>& buffer,
                                       int number_steps_for_averaging_) const {
   // number_steps_for_averaging_ must not be larger than buffersize
   assert(static_cast<int>(number_steps_for_averaging_) <= buffersize);
@@ -144,7 +144,7 @@ FFNNController::calculateSmoothValues(const matrix::Matrix* buffer,
 };
 
 matrix::Matrix
-FFNNController::assembleNetworkInputXY(matrix::Matrix* xbuffer, matrix::Matrix* ybuffer) const {
+FFNNController::assembleNetworkInputXY(const std::vector<matrix::Matrix>& xbuffer, const std::vector<matrix::Matrix>& ybuffer) const {
   int tp = t + buffersize;
   Matrix m(xbuffer[tp % buffersize]);
   for (int i = 1; i <= history; ++i) {
@@ -154,7 +154,7 @@ FFNNController::assembleNetworkInputXY(matrix::Matrix* xbuffer, matrix::Matrix* 
 }
 
 matrix::Matrix
-FFNNController::assembleNetworkInputX(matrix::Matrix* xbuffer, matrix::Matrix* ybuffer) const {
+FFNNController::assembleNetworkInputX(const std::vector<matrix::Matrix>& xbuffer, const std::vector<matrix::Matrix>& ybuffer) const {
   int tp = t + buffersize;
   Matrix m(xbuffer[tp % buffersize]);
   for (int i = 1; i <= history; ++i) {

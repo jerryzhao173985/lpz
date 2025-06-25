@@ -33,10 +33,10 @@ MultiReinforce::MultiReinforce(const MultiReinforceConf& _conf)
   , number_sensors(0)
   , number_motors(0)
   , buffersize(_conf.buffersize)
-  , x_buffer(nullptr)
-  , xp_buffer(nullptr)
-  , y_buffer(nullptr)
-  , x_context_buffer(nullptr)
+  , x_buffer()
+  , xp_buffer()
+  , y_buffer()
+  , x_context_buffer()
   , manualControl(false)
   , action(0)
   , newaction(0)
@@ -60,12 +60,7 @@ MultiReinforce::MultiReinforce(const MultiReinforceConf& _conf)
 };
 
 MultiReinforce::~MultiReinforce() {
-  if (x_buffer && y_buffer && xp_buffer) {
-    delete[] x_buffer;
-    delete[] y_buffer;
-    delete[] xp_buffer;
-    delete[] x_context_buffer;
-  }
+  // Vectors automatically clean up
   FOREACH(vector<Sat>, sats, s) {
     if (s->net)
       delete s->net;
@@ -81,10 +76,10 @@ MultiReinforce::init(int sensornumber, int motornumber, RandGen* randGen) {
   number_sensors = sensornumber;
   int number_real_sensors = number_sensors - conf.numContext;
 
-  x_buffer = new Matrix[buffersize];
-  xp_buffer = new Matrix[buffersize];
-  y_buffer = new Matrix[buffersize];
-  x_context_buffer = new Matrix[buffersize];
+  x_buffer.resize(buffersize);
+  xp_buffer.resize(buffersize);
+  y_buffer.resize(buffersize);
+  x_context_buffer.resize(buffersize);
   for (unsigned int k = 0; k < buffersize; ++k) {
     x_buffer[k].set(number_real_sensors, 1);
     xp_buffer[k].set(2 * number_real_sensors, 1);
@@ -120,7 +115,7 @@ MultiReinforce::init(int sensornumber, int motornumber, RandGen* randGen) {
 
 // put new value in ring buffer
 void
-MultiReinforce::putInBuffer(matrix::Matrix* buffer, const matrix::Matrix& vec, int delay) {
+MultiReinforce::putInBuffer(std::vector<matrix::Matrix>& buffer, const matrix::Matrix& vec, int delay) {
   buffer[(t - delay) % buffersize] = vec;
 }
 
@@ -326,7 +321,7 @@ MultiReinforce::setManualControl(bool mControl, int action_) {
 }
 
 Matrix
-MultiReinforce::calcDerivatives(const matrix::Matrix* buffer, int delay) {
+MultiReinforce::calcDerivatives(const std::vector<matrix::Matrix>& buffer, int delay) {
   int t1 = t + buffersize;
   const Matrix& xt = buffer[(t1 - delay) % buffersize];
   const Matrix& xtm1 = buffer[(t1 - delay - 1) % buffersize];

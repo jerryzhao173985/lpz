@@ -23,27 +23,28 @@
  ***************************************************************************/
 #include "measureadapter.h"
 #include <sstream>
+#include <algorithm>
+#include <iostream>
 
 MeasureAdapter::MeasureAdapter(AbstractController* controller,
                                const std::string& name,
                                const std::string& revision)
   : AbstractControllerAdapter(controller, name, revision)
+  , st(std::make_unique<StatisticTools>("MeasureAdapter's ST"))
   , initialized(false)
-  , motorValues(nullptr)
-  , sensorValues(nullptr) {
-  st = new StatisticTools("MeasureAdapter's ST");
+  , motorValues()
+  , sensorValues() {
   // Note: StatisticTools does not inherit from Callbackable
-  // addCallbackable(st);
-  addInspectable(st);
+  // addCallbackable(st.get());
+  addInspectable(st.get());
 }
 
 MeasureAdapter::~MeasureAdapter() {
-  if (st)
-    free(st);
+  // Automatic cleanup by unique_ptr
 }
 
 std::list<ComplexMeasure*>
-MeasureAdapter::addSensorComplexMeasure(char* measureName,
+MeasureAdapter::addSensorComplexMeasure(const char* measureName,
                                         ComplexMeasureMode mode,
                                         int numberBins,
                                         int stepSize) {
@@ -55,11 +56,11 @@ MeasureAdapter::addSensorComplexMeasure(char* measureName,
       ComplexMeasure* cm = new ComplexMeasure(name.str().c_str(), mode, numberBins);
       switch (mode) {
         case ENT:
-          cm->addObservable(sensorValues[i], -1.0, 1.0);
+          cm->addObservable(sensorValues.data()[i], -1.0, 1.0);
           cm->setStepSize(stepSize);
           break;
         case ENTSLOW:
-          cm->addObservable(sensorValues[i], -1.0, 1.0);
+          cm->addObservable(sensorValues.data()[i], -1.0, 1.0);
           break;
         default:
           break;
@@ -69,11 +70,12 @@ MeasureAdapter::addSensorComplexMeasure(char* measureName,
     }
   } else {
     std::cerr << "ERROR: The method" << std::endl
-              << "       addSensorComplexMeasure(char* measureName, ComplexMeasureMode mode,int "
+              << "       addSensorComplexMeasure(const char* measureName, ComplexMeasureMode mode,int "
                  "numberBins, int stepSize)"
               << std::endl
-              << "must be called before the initialization of the Agent!" << std::endl;
-    exit(1);
+              << "must be called after the initialization of the Agent!" << std::endl;
+    // Return empty list instead of crashing
+    return cmlist;
   }
   return cmlist;
 }
@@ -87,8 +89,9 @@ MeasureAdapter::init(const int sensornumber, const int motornumber, RandGen* ran
   // call the same method of super class AbstractControllerAdapter
   AbstractControllerAdapter::init(sensornumber, motornumber, randGen);
   // Initialize sensor and motor value arrays
-  sensorValues = new sensor[sensornumber];
-  motorValues = new motor[motornumber];
+  sensorValues.resize(sensornumber);
+  motorValues.resize(motornumber);
+  initialized = true;
 }
 
 void
@@ -96,10 +99,8 @@ MeasureAdapter::step(const sensor* sensors, int sensornumber, motor* motors, int
   // call the same method of super class AbstractControllerAdapter
   AbstractControllerAdapter::step(sensors, sensornumber, motors, motornumber);
   // store motor and sensor values in motorValues and sensorValues
-  for (int i = 0; i < motornumber; ++i)
-    motorValues[i] = motors[i];
-  for (int i = 0; i < sensornumber; ++i)
-    sensorValues[i] = sensors[i];
+  std::copy(motors, motors + motornumber, motorValues.begin());
+  std::copy(sensors, sensors + sensornumber, sensorValues.begin());
   callBack();
 }
 
@@ -110,10 +111,8 @@ MeasureAdapter::stepNoLearning(const sensor* sensors,
                                int motornumber) {
   AbstractControllerAdapter::stepNoLearning(sensors, sensornumber, motors, motornumber);
   // store motor and sensor values in motorValues and sensorValues
-  for (int i = 0; i < motornumber; ++i)
-    motorValues[i] = motors[i];
-  for (int i = 0; i < sensornumber; ++i)
-    sensorValues[i] = sensors[i];
+  std::copy(motors, motors + motornumber, motorValues.begin());
+  std::copy(sensors, sensors + sensornumber, sensorValues.begin());
   callBack();
 }
 

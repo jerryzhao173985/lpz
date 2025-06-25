@@ -24,6 +24,8 @@
 
 #include <cassert>
 #include <cmath>
+#include <vector>
+#include <memory>
 
 #include <selforg/matrix.h>
 #include <selforg/multilayerffnn.h>
@@ -60,7 +62,7 @@ struct Sat {
 class MultiReinforce : public AbstractController {
 
 public:
-  MultiReinforce(const MultiReinforceConf& conf = getDefaultConf());
+  explicit MultiReinforce(const MultiReinforceConf& conf = getDefaultConf());
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
 
   virtual ~MultiReinforce() override;
@@ -133,10 +135,10 @@ protected:
 
   // sensor, sensor-derivative and motor values storage
   unsigned short buffersize = 0;
-  matrix::Matrix* x_buffer;
-  matrix::Matrix* xp_buffer;
-  matrix::Matrix* y_buffer;
-  matrix::Matrix* x_context_buffer;
+  std::vector<matrix::Matrix> x_buffer;
+  std::vector<matrix::Matrix> xp_buffer;
+  std::vector<matrix::Matrix> y_buffer;
+  std::vector<matrix::Matrix> x_context_buffer;
 
   std::vector<Sat> sats;       ///< satelite networks
   bool manualControl;          ///< True if actions static_cast<sats>(are) selected manually
@@ -161,6 +163,12 @@ protected:
   int t = 0;
   int managementInterval = 0; ///< interval between subsequent management calls
 
+  // Rule of 5: Delete copy operations, allow move
+  MultiReinforce(const MultiReinforce&) = delete;
+  MultiReinforce& operator=(const MultiReinforce&) = delete;
+  MultiReinforce(MultiReinforce&&) = default;
+  MultiReinforce& operator=(MultiReinforce&&) = default;
+
   /// returns number of state, to be overwritten
   virtual int getStateNumber() = 0;
 
@@ -171,7 +179,7 @@ protected:
   virtual double calcReinforcement() = 0;
 
   // put new value in ring buffer
-  void putInBuffer(matrix::Matrix* buffer, const matrix::Matrix& vec, int delay = 0);
+  void putInBuffer(std::vector<matrix::Matrix>& buffer, const matrix::Matrix& vec, int delay = 0);
 
   /// puts the sensors in the ringbuffer
   virtual void fillSensorBuffer(const sensor* x_, int number_sensors);
@@ -187,7 +195,7 @@ protected:
       \f[ f''(x) = f(x) - 2f(x-1) + f(x-2) \f]
       where we have to go into the past because we do not have f(x+1). The scaling can be neglegted.
   */
-  matrix::Matrix calcDerivatives(const matrix::Matrix* buffer, int delay);
+  matrix::Matrix calcDerivatives(const std::vector<matrix::Matrix>& buffer, int delay);
 };
 
 #endif

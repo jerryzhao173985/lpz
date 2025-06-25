@@ -28,6 +28,8 @@
 #include "backcaller.h"
 #include "complexmeasure.h"
 #include "statistictools.h"
+#include <memory>
+#include <vector>
 
 // begin forward declaration
 // end forward declaration
@@ -44,7 +46,7 @@ public:
    * Constructs the MeasureAdapter.
    *
    */
-  MeasureAdapter(AbstractController* controller,
+  explicit MeasureAdapter(AbstractController* controller,
                           const std::string& name = "MeasureAdapter",
                           const std::string& revision = "$ID$");
 
@@ -54,7 +56,7 @@ public:
    * Adds a ComplexMeasure for measuring sensor values. For each
    * sensor a ComplexMeasure is created.
    */
-  virtual std::list<ComplexMeasure*> addSensorComplexMeasure(char* measureName,
+  virtual std::list<ComplexMeasure*> addSensorComplexMeasure(const char* measureName,
                                                              ComplexMeasureMode mode,
                                                              int numberBins,
                                                              int stepSize);
@@ -112,15 +114,21 @@ public:
   /*        END methods of Inspectable                                                   */
   /****************************************************************************/
 
-  virtual StatisticTools* getStatisticTools() {
-    return st;
+  [[nodiscard]] virtual StatisticTools* getStatisticTools() const {
+    return st.get();
   }
 
 protected:
-  StatisticTools* st;
+  std::unique_ptr<StatisticTools> st;
   bool initialized = false;
-  motor* motorValues;
-  sensor* sensorValues;
+  std::vector<motor> motorValues;
+  std::vector<sensor> sensorValues;
+
+  // Rule of 5: Delete copy operations, allow move
+  MeasureAdapter(const MeasureAdapter&) = delete;
+  MeasureAdapter& operator=(const MeasureAdapter&) = delete;
+  MeasureAdapter(MeasureAdapter&&) = default;
+  MeasureAdapter& operator=(MeasureAdapter&&) = default;
 };
 
 #endif

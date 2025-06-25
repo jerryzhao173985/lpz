@@ -22,6 +22,8 @@
 #include "abstractcontroller.h"
 #include <cassert>
 #include <cmath>
+#include <vector>
+#include <memory>
 
 #include <selforg/matrix.h>
 #include <selforg/multilayerffnn.h>
@@ -39,10 +41,10 @@ public:
      x_{t-1},y_{t-2},...,x_{t-history})^T \f]
       @param init_wait number of timesteps to wait before controlling
   */
-  FFNNController(const std::string& networkfilename,
-                 int history,
-                 bool input_only_x,
-                 unsigned int init_wait = 0);
+  explicit FFNNController(const std::string& networkfilename,
+                         int history,
+                         bool input_only_x,
+                         unsigned int init_wait = 0);
 
   /** @param net pointer to network (it must have the right dimensions)
       @param history  number of time steps the network gets input (in sense of dimension of input)
@@ -90,16 +92,16 @@ public:
   }
 
 protected:
-  void putInBuffer(matrix::Matrix* buffer, const matrix::Matrix& vec, int delay = 0);
+  void putInBuffer(std::vector<matrix::Matrix>& buffer, const matrix::Matrix& vec, int delay = 0);
 
-  matrix::Matrix calculateSmoothValues(const matrix::Matrix* buffer,
+  matrix::Matrix calculateSmoothValues(const std::vector<matrix::Matrix>& buffer,
                                        int number_steps_for_averaging_) const;
 
-  virtual matrix::Matrix assembleNetworkInputXY(matrix::Matrix* xbuffer,
-                                                matrix::Matrix* ybuffer) const;
+  virtual matrix::Matrix assembleNetworkInputXY(const std::vector<matrix::Matrix>& xbuffer,
+                                                const std::vector<matrix::Matrix>& ybuffer) const;
 
-  virtual matrix::Matrix assembleNetworkInputX(matrix::Matrix* xbuffer,
-                                               matrix::Matrix* ybuffer) const;
+  virtual matrix::Matrix assembleNetworkInputX(const std::vector<matrix::Matrix>& xbuffer,
+                                               const std::vector<matrix::Matrix>& ybuffer) const;
 
   virtual matrix::Matrix assembleNetworkOutput(const matrix::Matrix& output) const;
 
@@ -113,12 +115,18 @@ protected:
   unsigned int t = 0;
   unsigned int init_wait = 0;
 
-  matrix::Matrix* x_buffer;
-  matrix::Matrix* y_buffer;
+  std::vector<matrix::Matrix> x_buffer;
+  std::vector<matrix::Matrix> y_buffer;
   matrix::Matrix x_smooth;
 
   MultiLayerFFNN* net;
   bool initialised = false;
+
+  // Rule of 5: Delete copy operations, allow move
+  FFNNController(const FFNNController&) = delete;
+  FFNNController& operator=(const FFNNController&) = delete;
+  FFNNController(FFNNController&&) = default;
+  FFNNController& operator=(FFNNController&&) = default;
 };
 
 #endif
