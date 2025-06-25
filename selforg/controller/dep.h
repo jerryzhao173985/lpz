@@ -21,7 +21,7 @@
 #ifndef __DEP_H
 #define __DEP_H
 
-#include <selforg/abstractcontroller.h>
+#include "controllerbase.h"
 #include <selforg/controller_misc.h>
 
 #include <cassert>
@@ -69,7 +69,7 @@ struct DEPConf {
 /**
  * This controller implements a new very much simplified algorihm derived from TiPI maximization
  */
-class DEP : public AbstractController, public Storeable {
+class DEP : public lpzrobots::BufferedControllerBase<150>, public Storeable {
 
 public:
   DEP(const DEPConf& conf = getDefaultConf());
@@ -130,26 +130,16 @@ public:
   }
 
 protected:
-  unsigned short number_sensors = 0;
-  unsigned short number_motors = 0;
-  static constexpr unsigned short buffersize = 150;
-
+  // Base class provides: number_sensors, number_motors, buffersize,
+  // A, C, S, h, b, L, R, x, y, x_smooth, t
+  // x_buffer, y_buffer via BufferedControllerBase
+  
   DEPConf conf; // configuration object
 
-  matrix::Matrix A;        // Model Matrix
-  matrix::Matrix C;        // Slow Controller Matrix
   matrix::Matrix C_update; // fast controller matrix (function of immediate history)
-  matrix::Matrix S;        // Model Matrix (sensor branch)
-  matrix::Matrix h;        // Controller Bias
-  matrix::Matrix b;        // Model Bias
-  matrix::Matrix L;        // Jacobi Matrix
-  matrix::Matrix R;        //
-
-  RingBuffer<matrix::Matrix> x_buffer; // buffer needed for delay and derivatives
-  RingBuffer<matrix::Matrix> y_buffer; // buffer needed for delay and derivatives
-
-  matrix::Matrix x_smooth; // time average of x values
   matrix::Matrix normmot;  // factors for individual normalization
+  
+  // t is inherited from base class
 
   matrix::Matrix eigenvaluesLRe; // Eigenvalues of L matrix real part
   matrix::Matrix eigenvaluesLIm; // Eigenvalues of L matrix imaginary part
@@ -158,7 +148,6 @@ protected:
   double proj_ev2 = 0;               // projection of x into second eigenvector
   int calcEVInterval = 0;
 
-  int t = 0;
 
   paramval epsC;
   paramval epsh;
@@ -185,21 +174,8 @@ protected:
   /// learn controller (C,h, C_update)
   virtual void learnController();
 
-  /// neuron transfer function
-  static double g(double z) {
-    return tanh(z);
-  };
-
-  /// derivative of g
-  static double g_s(double z) {
-    double k = tanh(z);
-    return 1.0 - k * k;
-  };
-
-  /// function that clips the second argument to the interval [-first,first]
-  static double clip(double r, double x) {
-    return min(max(x, -r), r);
-  }
+  // Note: g(), g_s(), and clip() are inherited from ControllerBase
+  
   /// calculates the inverse the argument (useful for Matrix::map)
   static double one_over(double x) {
     return 1 / x;

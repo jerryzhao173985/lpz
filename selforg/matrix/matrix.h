@@ -287,23 +287,23 @@ public: // normal binary Operators
   /// deep copy move operator
   Matrix& operator=(Matrix&& c) noexcept;
   /// sum of two matrices
-  Matrix operator+(const Matrix& sum) const;
+  [[nodiscard]] Matrix operator+(const Matrix& sum) const;
   //    Matrix operator +  (const D& sum) const; /// new operator (guettler)
   /// difference of two matrices
-  Matrix operator-(const Matrix& sum) const;
+  [[nodiscard]] Matrix operator-(const Matrix& sum) const;
   /** matrix product*/
-  Matrix operator*(const Matrix& fac) const;
+  [[nodiscard]] Matrix operator*(const Matrix& fac) const;
   /** product with scalar (D) (only right side) */
-  Matrix operator*(const D& fac) const;
+  [[nodiscard]] Matrix operator*(const D& fac) const;
   /** special matrix potence:
       @param exponent -1 -> inverse;
                      0 -> Identity Matrix;
                   1 -> itself;
                   T -> Transpose
   */
-  Matrix operator^(int exponent) const;
+  [[nodiscard]] Matrix operator^(int exponent) const;
   /// row-wise multiplication
-  Matrix operator&(const Matrix& b) const;
+  [[nodiscard]] Matrix operator&(const Matrix& b) const;
   /// combined assigment operator (higher performance)
   Matrix& operator+=(const Matrix& c) {
     toSum(c);

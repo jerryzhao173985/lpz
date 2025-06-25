@@ -56,14 +56,18 @@ Matrix::Matrix(I _m, I _n, D def)
 
 Matrix&
 Matrix::operator=(Matrix&& c) noexcept {
-  if (data)
-    free(data);
-  m = c.m;
-  n = c.n;
-  buffersize = c.buffersize;
-  data = c.data;
-  c.data = 0;
-  c.buffersize = 0;
+  if (this != &c) {  // Self-assignment check
+    if (data)
+      free(data);
+    m = c.m;
+    n = c.n;
+    buffersize = c.buffersize;
+    data = c.data;
+    c.data = 0;
+    c.buffersize = 0;
+    c.m = 0;
+    c.n = 0;
+  }
   return *this;
 }
 

@@ -20,6 +20,7 @@
 #define __SOS_H
 
 #include <selforg/abstractcontroller.h>
+#include <selforg/circular_buffer.h>
 #include <selforg/controller_misc.h>
 
 #include <cassert>
@@ -34,8 +35,7 @@
 class Sos : public AbstractController {
 
 public:
-  Sos(double init_feedback_strength = 1.0);
-  Sos() : AbstractController("Sos", "$Id$") {}
+  explicit Sos(double init_feedback_strength = 1.0);
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
 
   virtual ~Sos();
@@ -80,8 +80,8 @@ protected:
   matrix::Matrix h;                    // Controller Bias
   matrix::Matrix b;                    // Model Bias
   matrix::Matrix L;                    // Jacobi Matrix
-  matrix::Matrix y_buffer[buffersize]; // buffer needed for delay
-  matrix::Matrix x_buffer[buffersize]; // buffer of sensor values
+  lpzrobots::MatrixBuffer<buffersize> y_buffer; // buffer needed for delay
+  lpzrobots::MatrixBuffer<buffersize> x_buffer; // buffer of sensor values
   matrix::Matrix v_avg;
   matrix::Matrix x;        // current sensor value vector
   matrix::Matrix x_smooth; // time average of x values

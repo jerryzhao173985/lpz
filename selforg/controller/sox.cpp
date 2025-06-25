@@ -133,8 +133,10 @@ Sox::init(int sensornumber, int motornumber, RandGen* randGen) {
   x.set(number_sensors, 1);
   x_smooth.set(number_sensors, 1);
   for (unsigned int k = 0; k < buffersize; ++k) {
-    x_buffer[k].set(number_sensors, 1);
-    y_buffer[k].set(number_motors, 1);
+    Matrix x_init(number_sensors, 1);
+    Matrix y_init(number_motors, 1);
+    x_buffer.push(x_init);
+    y_buffer.push(y_init);
   }
 }
 
@@ -202,13 +204,13 @@ Sox::stepNoLearning(const sensor* x_, int number_sensors, motor* y_, int number_
   else
     x_smooth = x;
 
-  x_buffer[t % buffersize] = x_smooth; // we store the smoothed sensor value
+  x_buffer.push(x_smooth); // we store the smoothed sensor value
 
   // calculate controller values based on current input values (smoothed)
   Matrix y = (C * (x_smooth + (v_avg * creativity)) + h).map(g);
 
   // Put new output vector in ring buffer y_buffer
-  y_buffer[t % buffersize] = y;
+  y_buffer.push(y);
 
   // convert y to motor*
   y.convertToBuffer(y_, number_motors);
@@ -222,14 +224,14 @@ Sox::motorBabblingStep(const sensor* x_, int number_sensors, const motor* y_, in
   assert(static_cast<unsigned>(number_sensors) <= this->number_sensors &&
          static_cast<unsigned>(number_motors) <= this->number_motors);
   x.set(number_sensors, 1, x_);
-  x_buffer[t % buffersize] = x;
+  x_buffer.push(x);
   Matrix y(number_motors, 1, y_);
-  y_buffer[t % buffersize] = y;
+  y_buffer.push(y);
 
   double factor = .1; // we learn slower here
   // learn model:
-  const Matrix& x_tm1 = x_buffer[(t - 1 + buffersize) % buffersize];
-  const Matrix& y_tm1 = y_buffer[(t - 1 + buffersize) % buffersize];
+  const Matrix& x_tm1 = x_buffer.get(-1);
+  const Matrix& y_tm1 = y_buffer.get(-1);
   const Matrix& xp = (A * y_tm1 + b + S * x_tm1);
   const Matrix& xi = x - xp;
 
@@ -270,9 +272,9 @@ Sox::learn() {
 
   // the effective x/y is (actual-steps4delay) element of buffer
   int s4delay = ::clip(conf.steps4Delay, 1, buffersize - 1);
-  const Matrix& x_delayed = x_buffer[(t - max(s4delay, 1) + buffersize) % buffersize];
-  const Matrix& y_creat = y_buffer[(t - max(s4delay, 1) + buffersize) % buffersize];
-  const Matrix& x_fut = x_buffer[t % buffersize]; // future sensor (with respect to x,y)
+  const Matrix& x_delayed = x_buffer.get(-max(s4delay, 1));
+  const Matrix& y_creat = y_buffer.get(-max(s4delay, 1));
+  const Matrix& x_fut = x_buffer.get(0); // future sensor (with respect to x,y)
 
   const Matrix& xi = x_fut - (A * y_creat + b + S * x_delayed); // here we use creativity
 
@@ -321,7 +323,7 @@ Sox::learn() {
       // scale of the additional terms
       const Matrix& metric = (A ^ T) * Lplus.multTM() * A;
 
-      const Matrix& y_prev = y_buffer[(t - 1) % buffersize];
+      const Matrix& y_prev = y_buffer.get(-1);
       const Matrix& xsi = y_teaching - y_prev;
       const Matrix& delta = xsi.multrowwise(g_prime);
       C += ((metric * delta * (x_delayed ^ T)) * (gamma * epsC)).mapP(.05, clip);
@@ -353,12 +355,12 @@ Sox::setSensorTeaching(const matrix::Matrix& teaching) {
 
 matrix::Matrix
 Sox::getLastMotorValues() {
-  return y_buffer[(t - 1 + buffersize) % buffersize];
+  return y_buffer.get(-1);
 }
 
 matrix::Matrix
 Sox::getLastSensorValues() {
-  return x_buffer[(t - 1 + buffersize) % buffersize];
+  return x_buffer.get(-1);
 }
 
 list<Matrix>

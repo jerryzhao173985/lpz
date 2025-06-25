@@ -67,10 +67,11 @@ Sos::init(int sensornumber, int motornumber, RandGen* randGen) {
 
   x.set(number_sensors, 1);
   x_smooth.set(number_sensors, 1);
-  for (unsigned int k = 0; k < buffersize; ++k) {
-    x_buffer[k].set(number_sensors, 1);
-    y_buffer[k].set(number_motors, 1);
-  }
+  // Initialize buffers with zero matrices
+  Matrix x_init(number_sensors, 1);
+  Matrix y_init(number_motors, 1);
+  x_buffer.fill(x_init);
+  y_buffer.fill(y_init);
 }
 
 matrix::Matrix
@@ -136,13 +137,13 @@ Sos::stepNoLearning(const sensor* x_, int number_sensors, motor* y_, int number_
   else
     x_smooth = x;
 
-  x_buffer[t % buffersize] = x_smooth; // we store the smoothed sensor value
+  x_buffer.push(x_smooth); // we store the smoothed sensor value
 
   // calculate controller values based on current input values (smoothed)
   Matrix y = (C * (x_smooth + (v_avg * creativity)) + h).map(g);
 
   // Put new output vector in ring buffer y_buffer
-  y_buffer[t % buffersize] = y;
+  y_buffer.push(y);
 
   // convert y to motor*
   y.convertToBuffer(y_, number_motors);
@@ -160,9 +161,9 @@ Sos::learn() {
 
   // the effective x/y is (actual-steps4delay) element of buffer
   s4delay = ::clip(s4delay, 1, buffersize - 1);
-  const Matrix& x_delayed = x_buffer[(t - max(s4delay, 1) + buffersize) % buffersize];
-  const Matrix& y_delayed = y_buffer[(t - max(s4delay, 1) + buffersize) % buffersize];
-  const Matrix& x_fut = x_buffer[t % buffersize]; // future sensor (with respect to x,y)
+  const Matrix& x_delayed = x_buffer.get(-max(s4delay, 1));
+  const Matrix& y_delayed = y_buffer.get(-max(s4delay, 1));
+  const Matrix& x_fut = x_buffer.get(0); // future sensor (with respect to x,y)
 
   const Matrix& z = (C * (x_delayed + v_avg * creativity) + h);
 

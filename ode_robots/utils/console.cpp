@@ -433,7 +433,7 @@ bool com_list (const GlobalData& globalData, char* line, char* arg) {
 bool com_show (const GlobalData& globalData, char* line, char* arg) {
   if (arg && *arg){
     int id = atoi(arg);
-    if(id>=1 && id <= (signed)globalData.configs.size()){
+    if(id>=1 && id <= static_cast<int>globalData.configs.size()){
       printConfig(globalData.configs[id-1]);
       return true;
     }
@@ -461,7 +461,7 @@ bool com_set (const GlobalData& globalData, char* line, char* arg) {
     case 3:// ObjectID param=val
       {
         int id = atoi(params[0].c_str());
-        if(id>=1 && id <= (signed)globalData.configs.size()){
+        if(id>=1 && id <= static_cast<int>globalData.configs.size()){
           const char* key = params[1].c_str();
           if (globalData.configs[id-1]->setParam(key,atof(params[2].c_str()))){
             printf(" %s=\t%f\t%s\n", key, globalData.configs[id-1]->getParam(key),
@@ -514,7 +514,7 @@ bool com_store (const GlobalData& globalData, char* line, char* arg) {
         sub=id%100;
         id=id/100;
       }
-      if(id>=1 && id <= (signed)globalData.agents.size()){
+      if(id>=1 && id <= static_cast<int>globalData.agents.size()){
         FILE* f = fopen(filename,"wb");
         if(f){
           explicit switch(sub){
@@ -559,7 +559,7 @@ bool com_load (const GlobalData& globalData, char* line, char* arg) {
         sub=id%100;
         id=id/100;
       }
-      if(id>=1 && id <= (signed)globalData.agents.size()){
+      if(id>=1 && id <= static_cast<int>globalData.agents.size()){
         FILE* f = fopen(filename,"rb");
         if(f){
           explicit switch(sub){
@@ -602,7 +602,7 @@ bool com_storecfg (const GlobalData& globalData, char* line, char* arg) {
       *filename='\0';
       ++filename;
       int id = atoi(arg);
-      if(id>=1 && id <= (signed)globalData.configs.size()){
+      if(id>=1 && id <= static_cast<int>globalData.configs.size()){
         if(globalData.configs[id-1]->storeCfg(filename)){
           printf("Configuration stored\n");
           success = true;
@@ -623,7 +623,7 @@ bool com_loadcfg (const GlobalData& globalData, char* line, char* arg) {
       *filename='\0';
       ++filename;
       int id = atoi(arg);
-      if(id>=1 && id <= (signed)globalData.configs.size()){
+      if(id>=1 && id <= static_cast<int>globalData.configs.size()){
         if(globalData.configs[id-1]->restoreCfg(filename)){
           printf("Configuration restored\n");
           success = true;

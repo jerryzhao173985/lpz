@@ -101,7 +101,7 @@ namespace lpzrobots {
       sensors[index]=*v;
       ++index;
     }
-    if(conf.useIR) { assert((signed)irvals.size() == getIRSensorNum());}
+    if(conf.useIR) { assert(static_cast<int>(irvals.size()) == getIRSensorNum());}
     return index;
   };
 

@@ -29,9 +29,8 @@ using namespace matrix;
 using namespace std;
 
 DEP::DEP(const DEPConf& conf)
-  : AbstractController("DEP", "1.0")
+  : lpzrobots::BufferedControllerBase<150>("DEP", "1.0")
   , conf(conf) {
-  t = 0;
 
   addParameterDef("epsC", &epsC, 0.1, 0, 5, "learning rate of the controller");
   addParameterDef("epsh", &epsh, 0.1, 0, 5, "learning rate of the controller bias");
@@ -95,29 +94,16 @@ DEP::~DEP() {}
 
 void
 DEP::init(int sensornumber, int motornumber, RandGen* randGen) {
-  RandGen* rg = randGen;
-  if (!rg) {
-    rg = new RandGen(); // this gives a small memory leak
-    // Note: we don't modify the parameter as it has no effect outside
-  }
+  // Call base class init first - this initializes number_sensors, number_motors,
+  // A, C, S, h, b, L, R, x, y, x_smooth, x_buffer, y_buffer
+  BufferedControllerBase<150>::init(sensornumber, motornumber, randGen);
 
-  number_sensors = sensornumber;
-  number_motors = motornumber;
-  A.set(number_sensors, number_motors);
-  if (rg && !randGen)
-    delete rg; // clean up if we allocated it
-  S.set(number_sensors, number_sensors);
-  C.set(number_motors, number_sensors);
+  // Initialize derived class specific matrices
   C_update.set(number_motors, number_sensors);
-  b.set(number_sensors, 1);
-  h.set(number_motors, 1);
-  L.set(number_sensors, number_sensors);
   eigenvectors.set(number_sensors, number_sensors);
   eigenvaluesLRe.set(number_sensors, 1);
   eigenvaluesLIm.set(number_sensors, 1);
   normmot.set(number_motors, 1);
-
-  R.set(number_sensors, number_sensors);
 
   // special Model initialization for delay sensor or direct perception of others
   if (conf.initModel) {
@@ -125,17 +111,20 @@ DEP::init(int sensornumber, int motornumber, RandGen* randGen) {
       Matrix A1(number_sensors / 2, number_motors);
       A1.toId();
       A = A1.above(A1);
-    } else
-      A.toId(); // set a to identity matrix;
+    } else {
+      // A is already initialized to identity by base class
+    }
+  }
+
+  // Initialize extended model if needed
+  if (conf.useExtendedModel) {
+    initExtendedModel(conf.factorS);
   }
 
   C_update.toId();
   C_update *= conf.initFeedbackStrength;
 
-  x_smooth.set(number_sensors, 1);
-
-  x_buffer.init(buffersize, Matrix(number_sensors, 1));
-  y_buffer.init(buffersize, Matrix(number_motors, 1));
+  // x_smooth and buffers are already initialized by base class
 }
 
 // performs one step (includes learning). Calculates motor commands from sensor inputs.
@@ -160,7 +149,7 @@ DEP::stepNoLearning(const sensor* x_, int number_sensors_robot, motor* y_, int n
   else
     x_smooth = xrobot;
 
-  x_buffer[t] = x_smooth;
+  x_buffer.push(x_smooth);
 
   // if(damping== nullptr) for (int i=18; i<36;++i) x_buffer[t].val(i,0) = x_buffer[t-20].val(i,0);
 
@@ -177,7 +166,7 @@ DEP::stepNoLearning(const sensor* x_, int number_sensors_robot, motor* y_, int n
   // Matrix dy = y - y_buffer[t-1];
   // y = y_buffer[t-1] + dy.mapP(maxDy,clip);
 
-  y_buffer[t] = y;
+  y_buffer.push(y);
 
   if (_internWithLearning && epsA != 0)
     learnModel(epsA);
@@ -193,11 +182,11 @@ DEP::learnController() {
 
   int offset = 0; // Shifting v forward in time by offset steps.
 
-  const Matrix& x = x_buffer[t];
-  const Matrix& xx = x_buffer[t - 1 + offset];
-  const Matrix& xxx = x_buffer[t - 2 + offset];
-  const Matrix& yy = y_buffer[t - 1];
-  const Matrix& yyy = y_buffer[t - 2];
+  const Matrix& x = x_buffer.get(0);
+  const Matrix& xx = x_buffer.get(-1 + offset);
+  const Matrix& xxx = x_buffer.get(-2 + offset);
+  const Matrix& yy = y_buffer.get(-1);
+  const Matrix& yyy = y_buffer.get(-2);
   // cout <<__PLACEHOLDER_57__<< x.val(0,0) - x.val(18,0)<<endl;
 
   Matrix mu;
@@ -211,7 +200,7 @@ DEP::learnController() {
         chi *= (1.0 / (sqrt(chi.norm_sqr()) + 0.001));
       }
       // v  =   xx-xxx; (except that we introduce a time distance between chi and v
-      v = x_buffer[t - timedist + offset] - x_buffer[t - timedist - 1 + offset];
+      v = x_buffer.get(-static_cast<int>(timedist) + offset) - x_buffer.get(-static_cast<int>(timedist) - 1 + offset);
       const Matrix& B = A ^ T;
       mu = (B * chi);
       break;
@@ -219,7 +208,7 @@ DEP::learnController() {
     case DEPConf::DHLRule: ////////////////////////////
       mu = yy - yyy;
       // v   = xx - xxx;
-      v = x_buffer[t - timedist + offset] - x_buffer[t - timedist - 1 + offset];
+      v = x_buffer.get(-static_cast<int>(timedist) + offset) - x_buffer.get(-static_cast<int>(timedist) - 1 + offset);
       break;
     case DEPConf::HLwFB: { ////////////////////////////
       const Matrix& chi = x - S * (xx);
@@ -279,7 +268,7 @@ DEP::learnController() {
     proj_ev2 = ((eigenvectors.column(1) ^ T) * x).val(0, 0);
   }
 
-  const Matrix& y_last = y_buffer[t - 1];
+  const Matrix& y_last = y_buffer.get(-1);
   if (epsh >= 0)
     h -= (y_last * epsh).mapP(.05, clip) + h * .001;
   else
@@ -292,13 +281,13 @@ void
 DEP::learnModel(double eps) {
   // learn inverse model y = F(x') = M x' where M=A^T
   // the effective x/y is (actual-steps4delay) element of buffer
-  s4delay = ::clip(s4delay, 1, buffersize - 1);
+  s4delay = ::clip(s4delay, 1, static_cast<int>(buffersize - 1));
   int t_delay = max(s4delay, 1) - 1;
   /// we learn here with the velocities.
   if (eps != 0) {
-    const Matrix& ydot = y_buffer[t - t_delay - timedist] - y_buffer[t - timedist - 1 - t_delay];
+    const Matrix& ydot = y_buffer.get(-t_delay - static_cast<int>(timedist)) - y_buffer.get(-static_cast<int>(timedist) - 1 - t_delay);
     // future sensor (with respect to x,y)
-    const Matrix& x_fut = x_buffer[t] - x_buffer[t - 1];
+    const Matrix& x_fut = x_buffer.get(0) - x_buffer.get(-1);
     // learn model
     const Matrix& xi = ydot - ((A ^ T) * x_fut);
     // M += eps xi x_fut^T -> A = eps x_fut xi^T
@@ -314,8 +303,8 @@ DEP::motorBabblingStep(const sensor* x_,
   assert(static_cast<unsigned>(number_motors) <= this->number_motors);
   Matrix x(number_sensors_robot, 1, x_); // convert to matrix
   Matrix y(number_motors, 1, y_);        // convert to matrix
-  x_buffer[t] = x;
-  y_buffer[t] = y;
+  x_buffer.push(x);
+  y_buffer.push(y);
 
   // model learning
   learnModel(1.0 / (sqrt(t + 1)));

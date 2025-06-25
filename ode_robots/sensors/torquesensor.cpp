@@ -54,13 +54,13 @@ namespace lpzrobots {
 
   bool TorqueSensor::sense(const GlobalData& globaldata) {
     int num = getSensorNumber();
-    if((signed)values.size()<num){
+    if(static_cast<int>(values.size())<num){
       values.resize(num,0);
     }
     Pos t1;
     Pos t2;
     joint->getTorqueFeedback(t1,t2);
-    for(int i=0; i<num; ++i) override {
+    for(int i=0; i<num; ++i) {
       const Pos& a = joint->getAxis(i);
       // scalar product of axis and force gives the resulting torque
       double p1 = t1 * a;
@@ -88,7 +88,7 @@ namespace lpzrobots {
     // we assume sense was called before.
     int num = getSensorNumber();
     assert(length >= num);
-    for(int i=0; i<num; ++i) override {
+    for(int i=0; i<num; ++i) {
       sensors[i]= values[i];
     }
     return num;

@@ -300,7 +300,7 @@ bool com_list (const GlobalData& globalData, char* line, char* arg) {
 bool com_show (const GlobalData& globalData, char* line, char* arg) {
   if (arg && *arg){
     int id = atoi(arg);
-    if(id>=0 && id < (signed)globalData.configs.size()){
+    if(id>=0 && id < static_cast<int>globalData.configs.size()){
       showParam(globalData.configs[id]);
       return true;
     }
@@ -323,7 +323,7 @@ bool com_set (const GlobalData& globalData, char* line, char* arg) {
     if(s_param && strchr(arg,'=')==nullptr){ // looks like two args (and no = in the first)
       ++s_param;
       int id = atoi(arg);
-      if(id>=0 && id < (signed)globalData.configs.size()){
+      if(id>=0 && id < static_cast<int>globalData.configs.size()){
         char* val;
         i=0;
         val = strchr(s_param,'=');
@@ -373,7 +373,7 @@ bool com_store (const GlobalData& globalData, char* line, char* arg) {
       *filename='\0';
       ++filename;
       int id = atoi(arg);
-      if(id>=0 && id < (signed)globalData.agents.size()){
+      if(id>=0 && id < static_cast<int>globalData.agents.size()){
         FILE* f = fopen(filename,"wb");
         if (f){
           if(globalData.agents[id]->getController()->store(f))
@@ -395,7 +395,7 @@ bool com_load (const GlobalData& globalData, char* line, char* arg) {
       *filename='\0';
       ++filename;
       int id = atoi(arg);
-      if(id>=0 && id < (signed)globalData.agents.size()){
+      if(id>=0 && id < static_cast<int>globalData.agents.size()){
         FILE* f = fopen(filename,"rb");
         if (f){
           if(globalData.agents[id]->getController()->restore(f))

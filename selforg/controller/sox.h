@@ -26,6 +26,7 @@
 #include <cmath>
 
 #include <selforg/matrix.h>
+#include <selforg/circular_buffer.h>
 #include <selforg/parametrizable.h>
 #include <selforg/teachable.h>
 
@@ -145,8 +146,8 @@ protected:
   matrix::Matrix R;                    //
   matrix::Matrix C_native;             // Controller Matrix obtained from motor babbling
   matrix::Matrix A_native;             // Model Matrix obtained from motor babbling
-  matrix::Matrix y_buffer[buffersize]; // buffer needed for delay
-  matrix::Matrix x_buffer[buffersize]; // buffer of sensor values
+  lpzrobots::MatrixBuffer<buffersize> y_buffer; // buffer needed for delay
+  lpzrobots::MatrixBuffer<buffersize> x_buffer; // buffer of sensor values
   matrix::Matrix v_avg;
   matrix::Matrix x;        // current sensor value vector
   matrix::Matrix x_smooth; // time average of x values

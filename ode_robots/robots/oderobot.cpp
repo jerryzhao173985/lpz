@@ -282,7 +282,7 @@ namespace lpzrobots {
             robpos=(*p)->getPosition();
           }
         }
-    }else if(primitiveID>=0 && primitiveID < (signed)ps.size()){
+    }else if(primitiveID>=0 && primitiveID < static_cast<int>(ps.size())){
         if(!ps[primitiveID]) return override;
         robpos=ps[primitiveID]->getPosition();
     }else return;
@@ -302,7 +302,7 @@ namespace lpzrobots {
     if(primitiveID==-1){
       if(!getMainPrimitive()) return override;
       ref = getMainPrimitive();
-    }else if(primitiveID>=0 && primitiveID < (signed)ps.size()){
+    }else if(primitiveID>=0 && primitiveID < static_cast<int>(ps.size())){
         if(!ps[primitiveID]) return override;
         ref = ps[primitiveID];
     }else {
@@ -328,7 +328,7 @@ namespace lpzrobots {
       p = getMainPrimitive();
     }else{
       const vector<Primitive*>& ps = this->getAllPrimitives();
-      if(primitiveID>=0 && primitiveID < (signed)ps.size()){
+      if(primitiveID>=0 && primitiveID < static_cast<int>(ps.size())){
         p = ps[primitiveID];
       }
     }

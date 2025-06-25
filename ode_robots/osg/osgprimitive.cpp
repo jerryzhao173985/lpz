@@ -107,7 +107,7 @@ namespace lpzrobots {
   }
 
   void OSGPrimitive::setTexture(int surface, const TextureDescr& texture){
-    if((signed)textures.size()<=surface){
+    if(static_cast<int>(textures.size())<=surface){
       textures.resize(surface+1);
     }
     if(!texture.filename.empty())
