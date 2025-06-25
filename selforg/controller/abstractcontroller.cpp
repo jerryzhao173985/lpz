@@ -30,7 +30,7 @@
 using namespace std;
 
 void
-AbstractController::sensorInfos(std::list<SensorMotorInfo> sensorInfos) {
+AbstractController::sensorInfos(const std::list<SensorMotorInfo>& sensorInfos) {
   FOREACHIa(sensorInfos, sensor, index) {
     sensorIndexMap[sensor->name] = index;
     sensorInfoMap[index] = *sensor;
@@ -38,7 +38,7 @@ AbstractController::sensorInfos(std::list<SensorMotorInfo> sensorInfos) {
 }
 
 void
-AbstractController::motorInfos(std::list<SensorMotorInfo> motorInfos) {
+AbstractController::motorInfos(const std::list<SensorMotorInfo>& motorInfos) {
   FOREACHIa(motorInfos, motor, index) {
     motorIndexMap[motor->name] = index;
     motorInfoMap[index] = *motor;
@@ -46,7 +46,7 @@ AbstractController::motorInfos(std::list<SensorMotorInfo> motorInfos) {
 }
 
 int
-AbstractController::SIdx(const std::string& name) {
+AbstractController::SIdx(const std::string& name) const {
   if (auto iter = sensorIndexMap.find(name); iter != sensorIndexMap.end()) {
     return iter->second;
   }
@@ -61,7 +61,7 @@ AbstractController::SIdx(const std::string& name) {
 }
 
 int
-AbstractController::MIdx(const std::string& name) {
+AbstractController::MIdx(const std::string& name) const {
   if (auto iter = motorIndexMap.find(name); iter != motorIndexMap.end()) {
     return iter->second;
   }
@@ -76,7 +76,7 @@ AbstractController::MIdx(const std::string& name) {
 }
 
 SensorMotorInfo
-AbstractController::SInfo(int index) {
+AbstractController::SInfo(int index) const {
   if (auto iter = sensorInfoMap.find(index); iter != sensorInfoMap.end()) {
     return iter->second;
   }
@@ -86,7 +86,7 @@ AbstractController::SInfo(int index) {
 }
 
 SensorMotorInfo
-AbstractController::MInfo(int index) {
+AbstractController::MInfo(int index) const {
   if (auto iter = motorInfoMap.find(index); iter != motorInfoMap.end()) {
     return iter->second;
   }

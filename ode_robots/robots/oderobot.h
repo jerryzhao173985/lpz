@@ -78,9 +78,9 @@ namespace lpzrobots {
     virtual int  getSensorNumber() final override;
     virtual int  getMotorNumber() final override;
 
-    virtual std::list<SensorMotorInfo> getSensorInfos();
+    virtual std::list<SensorMotorInfo> getSensorInfos() const;
 
-    virtual std::list<SensorMotorInfo> getMotorInfos();
+    virtual std::list<SensorMotorInfo> getMotorInfos() const;
 
   public: // should be protected, but too much refactoring work
     /** overload this function in a subclass to do specific sensor handling,

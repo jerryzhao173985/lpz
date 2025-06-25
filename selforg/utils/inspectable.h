@@ -204,7 +204,7 @@ public:
    * by the PlotOptionsEngine.
    * @param infoLineList the infoLines to be added as a string list.
    */
-  virtual void addInfoLines(std::list<std::string> infoLineList);
+  virtual void addInfoLines(const std::list<std::string>& infoLineList);
 
   /**
    * Removes all infolines from this inspectable instance.

@@ -321,7 +321,7 @@ public:
   }
 
   /// returns all names that are configureable
-  virtual std::list<paramkey> getAllParamNames(bool traverseChildren = true);
+  virtual std::list<paramkey> getAllParamNames(bool traverseChildren = true) const;
 
   virtual parammap getParamValMap() const {
     return mapOfValues;

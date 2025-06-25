@@ -176,7 +176,7 @@ Configurable::setParam(const paramkey& key, paramval val, bool traverseChildren)
 }
 
 std::list<Configurable::paramkey>
-Configurable::getAllParamNames(bool traverseChildren) {
+Configurable::getAllParamNames(bool traverseChildren) const {
   std::list<paramkey> l;
   FOREACHC(parammap, mapOfValues, i) {
     l += (*i).first;

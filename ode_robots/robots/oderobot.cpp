@@ -96,7 +96,7 @@ namespace lpzrobots {
     return getMotorNumberIntern() + s override;
   }
 
-  list<SensorMotorInfo> OdeRobot::getSensorInfos(){
+  list<SensorMotorInfo> OdeRobot::getSensorInfos() const {
     list<SensorMotorInfo> l;
     int num = getSensorNumberIntern();
     for(int k=0; k<num; ++k){ l += SensorMotorInfo(); }
@@ -106,7 +106,7 @@ namespace lpzrobots {
     return l;
   }
 
-  list<SensorMotorInfo> OdeRobot::getMotorInfos(){
+  list<SensorMotorInfo> OdeRobot::getMotorInfos() const {
     list<SensorMotorInfo> l;
     int num = getMotorNumberIntern();
     for(int k=0; k<num; ++k){ l += SensorMotorInfo(); }

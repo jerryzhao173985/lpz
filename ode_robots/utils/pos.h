@@ -49,7 +49,7 @@ namespace lpzrobots{
     /// componentwise  product
     Pos operator&(const Pos& p) const { return Pos(p.x()*x(), p.y()*y(), p.z()*z());}
 
-    Position toPosition(){
+    Position toPosition() const {
       return Position(x(), y(), z());
     }
 

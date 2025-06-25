@@ -139,7 +139,7 @@ Sox::init(int sensornumber, int motornumber, RandGen* randGen) {
 }
 
 matrix::Matrix
-Sox::getA() {
+Sox::getA() const {
   return A;
 }
 
@@ -150,7 +150,7 @@ Sox::setA(const matrix::Matrix& _A) {
 }
 
 matrix::Matrix
-Sox::getC() {
+Sox::getC() const {
   return C;
 }
 
@@ -161,7 +161,7 @@ Sox::setC(const matrix::Matrix& _C) {
 }
 
 matrix::Matrix
-Sox::geth() {
+Sox::geth() const {
   return h;
 }
 

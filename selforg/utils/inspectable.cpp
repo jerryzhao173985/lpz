@@ -115,7 +115,7 @@ Inspectable::addInfoLine(const std::string& infoLine) {
 }
 
 void
-Inspectable::addInfoLines(std::list<std::string> infoLineList) {
+Inspectable::addInfoLines(const std::list<std::string>& infoLineList) {
   FOREACHC(std::list<std::string>, infoLineList, line) {
     infoLineStringList.push_back(*line);
   }

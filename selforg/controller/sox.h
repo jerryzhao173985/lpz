@@ -114,11 +114,11 @@ public:
   virtual bool restore(FILE* f);
 
   /* some direct access functions (unsafe!) */
-  virtual matrix::Matrix getA();
+  virtual matrix::Matrix getA() const;
   virtual void setA(const matrix::Matrix& A);
-  virtual matrix::Matrix getC();
+  virtual matrix::Matrix getC() const;
   virtual void setC(const matrix::Matrix& C);
-  virtual matrix::Matrix geth();
+  virtual matrix::Matrix geth() const;
   virtual void seth(const matrix::Matrix& h);
 
   /***** TEACHABLE ****/

@@ -100,7 +100,7 @@ public:
       By default the sensorIndexMap and sensorInfoMap is updated and
       can be accessed by SIdx() and SInfo()
   */
-  virtual void sensorInfos(std::list<SensorMotorInfo> sensorInfos);
+  virtual void sensorInfos(const std::list<SensorMotorInfo>& sensorInfos);
 
   /** the controller is notified about the information on motors.
       This is called after init and before step
@@ -108,18 +108,18 @@ public:
       can be accessed by MIdx() and MInfo()
 
   */
-  virtual void motorInfos(std::list<SensorMotorInfo> motorInfos);
+  virtual void motorInfos(const std::list<SensorMotorInfo>& motorInfos);
 
   /** returns the index of the sensor with the given name
       (if not found then 0 and all sensor names are printed) */
-  virtual int SIdx(const std::string& name);
+  virtual int SIdx(const std::string& name) const;
   /** returns the index of the motor with the given name
       (if not found then 0 and all motor names are printed) */
-  virtual int MIdx(const std::string& name);
+  virtual int MIdx(const std::string& name) const;
   /** returns the Information for the sensor with given index */
-  virtual SensorMotorInfo SInfo(int index);
+  virtual SensorMotorInfo SInfo(int index) const;
   /** returns the Information for the motor with given index */
-  virtual SensorMotorInfo MInfo(int index);
+  virtual SensorMotorInfo MInfo(int index) const;
 
 protected:
   std::map<std::string, int> sensorIndexMap{};
