@@ -42,13 +42,13 @@ DerInf::DerInf(const DerInfConf& conf)
   , EE_mean(0)
   , EE_sqr(0)
   , xsistrength(0)
-  , x_buffer(nullptr)
-  , y_buffer(nullptr)
-  , ysat_buffer(nullptr)
-  , chi_buffer(nullptr)
-  , rho_buffer(nullptr)
-  , eta_buffer(nullptr)
-  , xsi_buffer(nullptr)
+  , x_buffer()
+  , y_buffer()
+  , ysat_buffer()
+  , chi_buffer()
+  , rho_buffer()
+  , eta_buffer()
+  , xsi_buffer()
   , t_rand(0)
   , t_delay(0)
   , conf(conf) {
@@ -84,12 +84,8 @@ DerInf::DerInf(const DerInfConf& conf)
 };
 
 DerInf::~DerInf() {
-  if (x_buffer && y_buffer && eta_buffer) {
-    delete[] x_buffer;
-    delete[] y_buffer;
-    delete[] eta_buffer;
-  }
-
+  // Vectors automatically clean up
+  // Note: xsi_buffer was allocated but never deleted in original - now fixed!
   if (BNoiseGen)
     delete BNoiseGen;
   if (YNoiseGen)
@@ -174,15 +170,21 @@ DerInf::init(int sensornumber, int motornumber, RandGen* randg) {
   BNoiseGen = new WhiteUniformNoise();
   BNoiseGen->init(number_sensors);
 
-  x_buffer = new Matrix[buffersize];
-  y_buffer = new Matrix[buffersize];
-  eta_buffer = new Matrix[buffersize];
-  xsi_buffer = new Matrix[buffersize];
+  x_buffer.resize(buffersize);
+  y_buffer.resize(buffersize);
+  eta_buffer.resize(buffersize);
+  xsi_buffer.resize(buffersize);
+  ysat_buffer.resize(buffersize);
+  chi_buffer.resize(buffersize);
+  rho_buffer.resize(buffersize);
   for (unsigned int k = 0; k < buffersize; ++k) {
     x_buffer[k].set(number_sensors, 1);
     xsi_buffer[k].set(number_sensors, 1);
     y_buffer[k].set(number_motors, 1);
     eta_buffer[k].set(number_motors, 1);
+    ysat_buffer[k].set(number_motors, 1);
+    chi_buffer[k].set(number_sensors, 1);
+    rho_buffer[k].set(number_sensors, 1);
   }
   y_teaching.set(number_motors, 1);
   x_smooth.set(number_sensors, 1);
@@ -421,7 +423,7 @@ DerInf::getLastMotors(motor* motors, int len) {
 }
 
 Matrix
-DerInf::calcDerivatives(const matrix::Matrix* buffer, int delay) {
+DerInf::calcDerivatives(const std::vector<matrix::Matrix>& buffer, int delay) {
   const Matrix& xt = buffer[(t - delay) % buffersize];
   const Matrix& xtm1 = buffer[(t - delay - 1) % buffersize];
   const Matrix& xtm2 = buffer[(t - delay - 2) % buffersize];

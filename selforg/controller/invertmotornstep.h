@@ -25,6 +25,7 @@
 
 #include <cassert>
 #include <cmath>
+#include <vector>
 
 #include <selforg/matrix.h>
 #include <selforg/noisegenerator.h>
@@ -56,7 +57,7 @@ struct InvertMotorNStepConf {
 class InvertMotorNStep : public InvertMotorController, public Teachable {
 
 public:
-  InvertMotorNStep(const InvertMotorNStepConf& conf = getDefaultConf());
+  explicit InvertMotorNStep(const InvertMotorNStepConf& conf = getDefaultConf());
 
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override;
 
@@ -187,9 +188,9 @@ protected:
   double xsi_norm;           ///< norm of matrix
   double xsi_norm_avg;       ///< average norm of xsi (used to define whether Modell learns)
   double pain;               ///< if the modelling error (xsi) is too high we have a pain signal
-  matrix::Matrix* x_buffer;
-  matrix::Matrix* y_buffer;
-  matrix::Matrix* eta_buffer;
+  std::vector<matrix::Matrix> x_buffer;
+  std::vector<matrix::Matrix> y_buffer;
+  std::vector<matrix::Matrix> eta_buffer;
   matrix::Matrix zero_eta; // zero initialised eta
   matrix::Matrix x_smooth;
   //   matrix::Matrix z; ///< membrane potential
@@ -255,13 +256,30 @@ protected:
   virtual void learnModel(int delay);
 
   /// calculates the predicted sensor values
-  virtual matrix::Matrix model(const matrix::Matrix* x_buffer, int delay, const matrix::Matrix& y);
+  virtual matrix::Matrix model(const std::vector<matrix::Matrix>& x_buffer, int delay, const matrix::Matrix& y);
 
   /// handles inhibition damping etc.
   virtual void management();
 
   /// returns controller output for given sensor values
   virtual matrix::Matrix calculateControllerValues(const matrix::Matrix& x_smooth);
+  
+  // Helper methods for vector-based buffers (overload base class methods)
+  void putInBuffer(std::vector<matrix::Matrix>& buffer, const matrix::Matrix& vec, int delay = 0) {
+    buffer[(t - delay) % buffersize] = vec;
+  }
+  
+  matrix::Matrix calculateSmoothValuesVec(const std::vector<matrix::Matrix>& buffer, int number_steps_for_averaging_) {
+    // number_steps_for_averaging_ must not be larger than buffersize
+    assert(static_cast<unsigned>(number_steps_for_averaging_) <= buffersize);
+    
+    matrix::Matrix result(buffer[t % buffersize]);
+    for (int k = 1; k < number_steps_for_averaging_; ++k) {
+      result += buffer[(t - k + buffersize) % buffersize];
+    }
+    result *= 1 / (static_cast<double>(number_steps_for_averaging_)); // scalar multiplication
+    return result;
+  }
 
   /** Calculates first and second derivative and returns both in on matrix (above).
       We use simple discrete approximations:
@@ -269,7 +287,7 @@ protected:
       \f[ f''(x) = f(x) - 2f(x-1) + f(x-2) \f]
       where we have to go into the past because we do not have f(x+1). The scaling can be neglegted.
   */
-  matrix::Matrix calcDerivatives(const matrix::Matrix* buffer, int delay);
+  matrix::Matrix calcDerivatives(const std::vector<matrix::Matrix>& buffer, int delay);
 
 public:
   /** k-winner take all inhibition for synapses. k largest synapses are strengthed and the rest are
@@ -292,6 +310,12 @@ public:
 
   static double clip095(double x);
   static double regularizedInverse(double v);
+  
+  // Rule of 5: Delete copy operations, allow move
+  InvertMotorNStep(const InvertMotorNStep&) = delete;
+  InvertMotorNStep& operator=(const InvertMotorNStep&) = delete;
+  InvertMotorNStep(InvertMotorNStep&&) = default;
+  InvertMotorNStep& operator=(InvertMotorNStep&&) = default;
 };
 
 #endif

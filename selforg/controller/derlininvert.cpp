@@ -28,6 +28,12 @@ using namespace std;
 
 DerLinInvert::DerLinInvert(const DerLinInvertConf& conf)
   : InvertMotorController(conf.buffersize, "DerLinInvert", "$Id$")
+  , x_buffer()
+  , y_buffer()
+  , ysat_buffer()
+  , chi_buffer()
+  , rho_buffer()
+  , eta_buffer()
   , conf(conf) {
 
   assert(conf.model != nullptr);
@@ -59,12 +65,7 @@ DerLinInvert::DerLinInvert(const DerLinInvertConf& conf)
 };
 
 DerLinInvert::~DerLinInvert() {
-  if (x_buffer && y_buffer && eta_buffer) {
-    delete[] x_buffer;
-    delete[] y_buffer;
-    delete[] eta_buffer;
-  }
-
+  // Vectors automatically clean up
   if (BNoiseGen)
     delete BNoiseGen;
   if (YNoiseGen)
@@ -146,13 +147,19 @@ DerLinInvert::init(int sensornumber, int motornumber, RandGen* randg) {
 
   t_delay = 1;
 
-  x_buffer = new Matrix[buffersize];
-  y_buffer = new Matrix[buffersize];
-  eta_buffer = new Matrix[buffersize];
+  x_buffer.resize(buffersize);
+  y_buffer.resize(buffersize);
+  eta_buffer.resize(buffersize);
+  ysat_buffer.resize(buffersize);
+  chi_buffer.resize(buffersize);
+  rho_buffer.resize(buffersize);
   for (unsigned int k = 0; k < buffersize; ++k) {
     x_buffer[k].set(number_sensors, 1);
     y_buffer[k].set(number_motors, 1);
     eta_buffer[k].set(number_motors, 1);
+    ysat_buffer[k].set(number_motors, 1);
+    chi_buffer[k].set(number_sensors, 1);
+    rho_buffer[k].set(number_sensors, 1);
   }
   y_teaching.set(number_motors, 1);
   x_intern.set(number_sensors, 1);
@@ -580,7 +587,7 @@ DerLinInvert::getLastMotors(motor* motors, int len) {
 }
 
 Matrix
-DerLinInvert::calcDerivatives(const matrix::Matrix* buffer, int delay) {
+DerLinInvert::calcDerivatives(const std::vector<matrix::Matrix>& buffer, int delay) {
   const Matrix& xt = buffer[(t - delay) % buffersize];
   const Matrix& xtm1 = buffer[(t - delay - 1) % buffersize];
   const Matrix& xtm2 = buffer[(t - delay - 2) % buffersize];

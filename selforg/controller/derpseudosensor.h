@@ -23,6 +23,7 @@
 
 #include <cassert>
 #include <cmath>
+#include <vector>
 
 #include "invertablemodel.h"
 #include "matrix.h"
@@ -54,7 +55,7 @@ struct DerPseudoSensorConf {
 class DerPseudoSensor : public InvertMotorController, public Storeable {
 
 public:
-  DerPseudoSensor(const DerPseudoSensorConf& conf = getDefaultConf());
+  explicit DerPseudoSensor(const DerPseudoSensorConf& conf = getDefaultConf());
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
 
   virtual ~DerPseudoSensor() override;
@@ -161,12 +162,12 @@ protected:
   double grang2 = 0;       // GrangerCausality
   double causal = 0;       // GrangerCausality
   double causalfactor = 0; // GrangerCausality
-  matrix::Matrix* x_buffer;
-  matrix::Matrix* y_buffer;
-  matrix::Matrix* ysat_buffer;
-  matrix::Matrix* chi_buffer;
-  matrix::Matrix* rho_buffer;
-  matrix::Matrix* eta_buffer;
+  std::vector<matrix::Matrix> x_buffer;
+  std::vector<matrix::Matrix> y_buffer;
+  std::vector<matrix::Matrix> ysat_buffer;
+  std::vector<matrix::Matrix> chi_buffer;
+  std::vector<matrix::Matrix> rho_buffer;
+  std::vector<matrix::Matrix> eta_buffer;
   matrix::Matrix eta;
   matrix::Matrix v_smooth;
   matrix::Matrix zero_eta; // zero initialised eta
@@ -228,7 +229,7 @@ protected:
       \f[ f''(x) = f(x) - 2f(x-1) + f(x-2) \f]
       where we have to go into the past because we do not have f(x+1). The scaling can be neglegted.
   */
-  matrix::Matrix calcDerivatives(const matrix::Matrix* buffer, int delay);
+  matrix::Matrix calcDerivatives(const std::vector<matrix::Matrix>& buffer, int delay);
 
 public:
   /// calculates the city block distance static_cast<abs>(norm) of the matrix. (abs sum of absolutes / size of
@@ -241,6 +242,29 @@ public:
   virtual void setTrunkPosition(const Position& pos) {
     trunkPosition = pos;
   }
+  
+  // Helper methods for vector-based buffers (overload base class methods)
+  void putInBuffer(std::vector<matrix::Matrix>& buffer, const matrix::Matrix& vec, int delay = 0) {
+    buffer[(t - delay) % buffersize] = vec;
+  }
+  
+  matrix::Matrix calculateSmoothValuesVec(const std::vector<matrix::Matrix>& buffer, int number_steps_for_averaging_) {
+    // number_steps_for_averaging_ must not be larger than buffersize
+    assert(static_cast<unsigned>(number_steps_for_averaging_) <= buffersize);
+    
+    matrix::Matrix result(buffer[t % buffersize]);
+    for (int k = 1; k < number_steps_for_averaging_; ++k) {
+      result += buffer[(t - k + buffersize) % buffersize];
+    }
+    result *= 1 / (static_cast<double>(number_steps_for_averaging_)); // scalar multiplication
+    return result;
+  }
+  
+  // Rule of 5: Delete copy operations, allow move
+  DerPseudoSensor(const DerPseudoSensor&) = delete;
+  DerPseudoSensor& operator=(const DerPseudoSensor&) = delete;
+  DerPseudoSensor(DerPseudoSensor&&) = default;
+  DerPseudoSensor& operator=(DerPseudoSensor&&) = default;
 };
 
 #endif

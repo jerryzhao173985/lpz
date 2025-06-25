@@ -33,9 +33,9 @@ InvertMotorNStep::InvertMotorNStep(const InvertMotorNStepConf& conf)
   , xsi_norm(0)
   , xsi_norm_avg(0)
   , pain(0)
-  , x_buffer(0)
-  , y_buffer(0)
-  , eta_buffer(0)
+  , x_buffer()
+  , y_buffer()
+  , eta_buffer()
   , useTeaching(false)
   , reinforcement(0)
   , reinforcefactor(0)
@@ -68,9 +68,7 @@ InvertMotorNStep::InvertMotorNStep(const InvertMotorNStepConf& conf)
   addParameterDef("cnondiagabs", &cnondiagabs, 0);
   addParameterDef("cdiagabs", &cdiagabs, 0);
 
-  x_buffer = 0;
-  y_buffer = 0;
-  eta_buffer = 0;
+  // Vector initialization happens in constructor initializer list
 
   addInspectableMatrix("A", &A, conf.someInternalParams, "model matrix");
   if (conf.useS)
@@ -97,11 +95,7 @@ InvertMotorNStep::InvertMotorNStep(const InvertMotorNStepConf& conf)
 };
 
 InvertMotorNStep::~InvertMotorNStep() {
-  if (x_buffer && y_buffer && eta_buffer) {
-    delete[] x_buffer;
-    delete[] y_buffer;
-    delete[] eta_buffer;
-  }
+  // Vectors automatically clean up
   if (BNoiseGen)
     delete BNoiseGen;
   if (YNoiseGen)
@@ -162,9 +156,9 @@ InvertMotorNStep::init(int sensornumber, int motornumber, RandGen* randGen) {
   }
   cnondiagabs = conf.cNonDiagAbs;
 
-  x_buffer = new Matrix[buffersize];
-  y_buffer = new Matrix[buffersize];
-  eta_buffer = new Matrix[buffersize];
+  x_buffer.resize(buffersize);
+  y_buffer.resize(buffersize);
+  eta_buffer.resize(buffersize);
   for (unsigned int k = 0; k < buffersize; ++k) {
     x_buffer[k].set(number_sensors, 1);
     y_buffer[k].set(number_motors, 1);
@@ -232,7 +226,7 @@ InvertMotorNStep::fillBuffersAndControl(const sensor* x_,
   putInBuffer(x_buffer, x);
 
   // averaging over the last s4avg values of x_buffer
-  x_smooth = calculateSmoothValues(x_buffer, t < s4avg ? 1 : int(max(1.0, s4avg)));
+  x_smooth = calculateSmoothValuesVec(x_buffer, t < s4avg ? 1 : int(max(1.0, s4avg)));
 
   // calculate controller values based on smoothed input values
   Matrix y = calculateControllerValues(x_smooth);
@@ -307,7 +301,7 @@ InvertMotorNStep::calcXsi(int delay) {
 
 /// calculates the predicted sensor values
 Matrix
-InvertMotorNStep::model(const Matrix* x_buffer, int delay, const matrix::Matrix& y) {
+InvertMotorNStep::model(const std::vector<Matrix>& x_buffer, int delay, const matrix::Matrix& y) {
   Matrix xp = A * y + B;
   if (conf.useS) {
     const Matrix& x_c = x_buffer[(t - delay) % buffersize].rows(number_sensors - conf.numberContext,
@@ -566,7 +560,7 @@ InvertMotorNStep::setSensorWeights(const Matrix& weights) {
 }
 
 Matrix
-InvertMotorNStep::calcDerivatives(const matrix::Matrix* buffer, int delay) {
+InvertMotorNStep::calcDerivatives(const std::vector<Matrix>& buffer, int delay) {
   const Matrix& xt = buffer[(t - delay) % buffersize];
   const Matrix& xtm1 = buffer[(t - delay - 1) % buffersize];
   const Matrix& xtm2 = buffer[(t - delay - 2) % buffersize];

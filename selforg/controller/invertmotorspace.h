@@ -22,6 +22,7 @@
 #include "invertmotorcontroller.h"
 #include <cassert>
 #include <cmath>
+#include <vector>
 
 #include <selforg/matrix.h>
 #include <selforg/noisegenerator.h>
@@ -32,7 +33,7 @@
 class InvertMotorSpace : public InvertMotorController {
 
 public:
-  InvertMotorSpace(int buffersize, double cInit = 0.1, bool someInternalParams = true);
+  explicit InvertMotorSpace(int buffersize, double cInit = 0.1, bool someInternalParams = true);
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override;
 
   virtual ~InvertMotorSpace() override;
@@ -76,8 +77,8 @@ protected:
   matrix::Matrix H;          // Controller Bias
   matrix::Matrix B;          // Model Bias
   NoiseGenerator* BNoiseGen; // Noisegenerator for noisy bias
-  matrix::Matrix* x_buffer;
-  matrix::Matrix* y_buffer;
+  std::vector<matrix::Matrix> x_buffer;
+  std::vector<matrix::Matrix> y_buffer;
   matrix::Matrix x_smooth;
 
   bool someInternalParams = false;
@@ -95,6 +96,29 @@ protected:
 
   /// returns controller output for given sensor values
   virtual matrix::Matrix calculateControllerValues(const matrix::Matrix& x_smooth);
+
+  // Helper methods for vector-based buffers
+  void putInBuffer(std::vector<matrix::Matrix>& buffer, const matrix::Matrix& vec, int delay = 0) {
+    buffer[(t - delay) % buffersize] = vec;
+  }
+  
+  matrix::Matrix calculateSmoothValuesVec(const std::vector<matrix::Matrix>& buffer, int number_steps_for_averaging_) {
+    // number_steps_for_averaging_ must not be larger than buffersize
+    assert(static_cast<unsigned>(number_steps_for_averaging_) <= buffersize);
+    
+    matrix::Matrix result(buffer[t % buffersize]);
+    for (int k = 1; k < number_steps_for_averaging_; ++k) {
+      result += buffer[(t - k + buffersize) % buffersize];
+    }
+    result *= 1 / (static_cast<double>(number_steps_for_averaging_)); // scalar multiplication
+    return result;
+  }
+
+  // Rule of 5: Delete copy operations, allow move
+  InvertMotorSpace(const InvertMotorSpace&) = delete;
+  InvertMotorSpace& operator=(const InvertMotorSpace&) = delete;
+  InvertMotorSpace(InvertMotorSpace&&) = default;
+  InvertMotorSpace& operator=(InvertMotorSpace&&) = default;
 };
 
 #endif

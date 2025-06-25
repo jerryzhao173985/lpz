@@ -172,7 +172,7 @@ som_print_double(void* f, double d) {
 void
 SOM::printWeights(FILE* f) const {
   FOREACHC(vector<Matrix>, weights, i) {
-    i->mapP(f, som_print_double);
+    (void)i->mapP(f, som_print_double);
     fprintf(f, "\n");
   }
 }

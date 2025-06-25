@@ -28,6 +28,7 @@
 
 #include <cassert>
 #include <cmath>
+#include <vector>
 
 #include "matrix.h"
 #include "noisegenerator.h"
@@ -50,7 +51,7 @@ struct DerControllerConf {
 class DerController : public InvertMotorController {
 
 public:
-  DerController(const DerControllerConf& conf = getDefaultConf());
+  explicit DerController(const DerControllerConf& conf = getDefaultConf());
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override;
 
   virtual ~DerController() override;
@@ -129,9 +130,9 @@ protected:
   double xsi_norm = 0;        ///< norm of matrix
   double xsi_norm_avg = 0;    ///< average norm of xsi (used to define whether Modell learns)
   double pain;            ///< if the modelling error (xsi is) too high we have a pain signal
-  matrix::Matrix* x_buffer;
-  matrix::Matrix* y_buffer;
-  matrix::Matrix* eta_buffer;
+  std::vector<matrix::Matrix> x_buffer;
+  std::vector<matrix::Matrix> y_buffer;
+  std::vector<matrix::Matrix> eta_buffer;
   matrix::Matrix zero_eta; // zero initialised eta
   matrix::Matrix x_smooth;
   //  matrix::Matrix v_smooth;
@@ -189,6 +190,29 @@ protected:
   /// calculates the error_factor for either logarithmic (E=ln(e^T*e)) or square (E=sqrt(e^t*e))
   /// error
   virtual double calcErrorFactor(const matrix::Matrix& e, bool loga, bool root) override;
+  
+  // Helper methods for vector-based buffers (overload base class methods)
+  void putInBuffer(std::vector<matrix::Matrix>& buffer, const matrix::Matrix& vec, int delay = 0) {
+    buffer[(t - delay) % buffersize] = vec;
+  }
+  
+  matrix::Matrix calculateSmoothValuesVec(const std::vector<matrix::Matrix>& buffer, int number_steps_for_averaging_) {
+    // number_steps_for_averaging_ must not be larger than buffersize
+    assert(static_cast<unsigned>(number_steps_for_averaging_) <= buffersize);
+    
+    matrix::Matrix result(buffer[t % buffersize]);
+    for (int k = 1; k < number_steps_for_averaging_; ++k) {
+      result += buffer[(t - k + buffersize) % buffersize];
+    }
+    result *= 1 / (static_cast<double>(number_steps_for_averaging_)); // scalar multiplication
+    return result;
+  }
+  
+  // Rule of 5: Delete copy operations, allow move
+  DerController(const DerController&) = delete;
+  DerController& operator=(const DerController&) = delete;
+  DerController(DerController&&) = default;
+  DerController& operator=(DerController&&) = default;
 };
 
 #endif

@@ -24,6 +24,7 @@
 
 #include <cassert>
 #include <cmath>
+#include <vector>
 
 #include <selforg/matrix.h>
 #include <selforg/parametrizable.h>
@@ -59,7 +60,7 @@ struct PiMaxConf {
 class PiMax : public AbstractController, public Teachable, public Parametrizable {
 
 public:
-  PiMax(const PiMaxConf& conf = getDefaultConf());
+  explicit PiMax(const PiMaxConf& conf = getDefaultConf());
 
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
 
@@ -145,11 +146,11 @@ protected:
   matrix::Matrix C_native; // Controller Matrix obtained from motor babbling
   matrix::Matrix A_native; // Model Matrix obtained from motor babbling
 
-  matrix::Matrix a_buffer[buffersize];  // buffer needed for delay
-  matrix::Matrix s_buffer[buffersize];  // buffer of sensor values
-  matrix::Matrix xi_buffer[buffersize]; // buffer of pred errors
-  matrix::Matrix gs_buffer[buffersize]; // buffer of g'
-  matrix::Matrix L_buffer[buffersize];  // buffer of Jacobians
+  std::vector<matrix::Matrix> a_buffer;  // buffer needed for delay
+  std::vector<matrix::Matrix> s_buffer;  // buffer of sensor values
+  std::vector<matrix::Matrix> xi_buffer; // buffer of pred errors
+  std::vector<matrix::Matrix> gs_buffer; // buffer of g'
+  std::vector<matrix::Matrix> L_buffer;  // buffer of Jacobians
 
   matrix::Matrix s;        // current sensor value vector
   matrix::Matrix s_smooth; // time average of s values
@@ -194,6 +195,12 @@ protected:
   static double one_over(double x) {
     return 1 / x;
   }
+
+  // Rule of 5: Delete copy operations, allow move
+  PiMax(const PiMax&) = delete;
+  PiMax& operator=(const PiMax&) = delete;
+  PiMax(PiMax&&) = default;
+  PiMax& operator=(PiMax&&) = default;
 };
 
 #endif

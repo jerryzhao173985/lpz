@@ -26,6 +26,9 @@ using namespace std;
 
 InvertMotorBigModel::InvertMotorBigModel(const InvertMotorBigModelConf& conf)
   : InvertMotorController(conf.buffersize, "InvertMotorBigModel", "$Id$")
+  , x_buffer()
+  , y_buffer()
+  , eta_buffer()
   , conf(conf) {
 
   assert(conf.model != nullptr);
@@ -42,12 +45,7 @@ InvertMotorBigModel::InvertMotorBigModel(const InvertMotorBigModelConf& conf)
 };
 
 InvertMotorBigModel::~InvertMotorBigModel() {
-  if (x_buffer && y_buffer && eta_buffer) {
-    delete[] x_buffer;
-    delete[] y_buffer;
-    delete[] eta_buffer;
-  }
-
+  // Vectors automatically clean up
   if (BNoiseGen)
     delete BNoiseGen;
 }
@@ -84,15 +82,15 @@ InvertMotorBigModel::init(int sensornumber, int motornumber, RandGen* randGen) {
 
   A.toId(); // set A to identity matrix;
   if (conf.useS)
-    S.mapP(randGen, random_minusone_to_one) * 0.01; // set S to small random matrix;
+    S = S.mapP(randGen, random_minusone_to_one) * 0.01; // set S to small random matrix;
 
   // initialise the C matrix with identity + noise (-conf.cNonDiag, conf.cNonDiag) scaled to cInit
   // value
   C = ((C ^ 0) + C.mapP(randGen, random_minusone_to_one) * conf.cNonDiag) * conf.cInit;
 
-  x_buffer = new Matrix[buffersize];
-  y_buffer = new Matrix[buffersize];
-  eta_buffer = new Matrix[buffersize];
+  x_buffer.resize(buffersize);
+  y_buffer.resize(buffersize);
+  eta_buffer.resize(buffersize);
   for (unsigned int k = 0; k < buffersize; ++k) {
     x_buffer[k].set(number_sensors, 1);
     y_buffer[k].set(number_motors, 1);
@@ -148,7 +146,7 @@ InvertMotorBigModel::fillBuffersAndControl(const sensor* x_,
   putInBuffer(x_buffer, x);
 
   // averaging over the last s4avg values of x_buffer
-  x_smooth = calculateSmoothValues(x_buffer, t < s4avg ? 1 : int(max(1.0, s4avg)));
+  x_smooth = calculateSmoothValuesVec(x_buffer, t < s4avg ? 1 : int(max(1.0, s4avg)));
 
   // calculate controller values based on smoothed input values
   Matrix y = calculateControllerValues(x_smooth);
@@ -320,7 +318,7 @@ InvertMotorBigModel::getLastMotors(motor* motors, int len) {
 }
 
 Matrix
-InvertMotorBigModel::calcDerivatives(const matrix::Matrix* buffer, int delay) {
+InvertMotorBigModel::calcDerivatives(const std::vector<Matrix>& buffer, int delay) {
   const Matrix& xt = buffer[(t - delay) % buffersize];
   const Matrix& xtm1 = buffer[(t - delay - 1) % buffersize];
   const Matrix& xtm2 = buffer[(t - delay - 2) % buffersize];

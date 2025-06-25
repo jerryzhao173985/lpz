@@ -23,8 +23,10 @@ using namespace std;
 
 SoxExpand::SoxExpand(const SoxExpandConf& conf)
   : AbstractController("SoxExpand", "0.6")
-  , conf(conf) {
-  t = 0;
+  , conf(conf)
+  , y_buffer()
+  , x_buffer()
+  , t(0) {
 
   addParameterDef("creativity", &creativity, 0, "creativity term (0: disabled) ");
 
@@ -86,6 +88,9 @@ SoxExpand::init(int sensornumber, int motornumber, RandGen* randGen) {
   x.set(number_sensors, 1);
   x_c.set(conf.numberContextSensors, 1);
   x_smooth.set(number_sensors, 1);
+  
+  x_buffer.resize(buffersize);
+  y_buffer.resize(buffersize);
   for (unsigned int k = 0; k < buffersize; ++k) {
     x_buffer[k].set(number_sensors, 1);
     y_buffer[k].set(number_motors, 1);

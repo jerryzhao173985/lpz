@@ -24,6 +24,7 @@
 
 #include <cassert>
 #include <cmath>
+#include <vector>
 
 #include <selforg/matrix.h>
 
@@ -45,10 +46,10 @@ struct SoxExpandConf {
 class SoxExpand : public AbstractController {
 
 public:
-  SoxExpand(const SoxExpandConf& conf = getDefaultConf());
+  explicit SoxExpand(const SoxExpandConf& conf = getDefaultConf());
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
 
-  virtual ~SoxExpand();
+  virtual ~SoxExpand() override;
 
   static SoxExpandConf getDefaultConf() {
     SoxExpandConf c;
@@ -105,8 +106,8 @@ protected:
 
   SoxExpandConf conf;
 
-  matrix::Matrix y_buffer[buffersize]; // buffer needed for delay
-  matrix::Matrix x_buffer[buffersize]; // buffer of sensor values
+  std::vector<matrix::Matrix> y_buffer; // buffer needed for delay
+  std::vector<matrix::Matrix> x_buffer; // buffer of sensor values
   matrix::Matrix v_avg;
   matrix::Matrix x;        // current sensor value vector
   matrix::Matrix x_c;      // current context sensor value vector
@@ -146,6 +147,12 @@ protected:
   static double one_over(double x) {
     return 1 / x;
   }
+  
+  // Rule of 5: Delete copy operations, allow move
+  SoxExpand(const SoxExpand&) = delete;
+  SoxExpand& operator=(const SoxExpand&) = delete;
+  SoxExpand(SoxExpand&&) = default;
+  SoxExpand& operator=(SoxExpand&&) = default;
 };
 
 #endif

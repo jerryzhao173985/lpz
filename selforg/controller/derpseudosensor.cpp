@@ -28,6 +28,12 @@ using namespace std;
 
 DerPseudoSensor::DerPseudoSensor(const DerPseudoSensorConf& conf)
   : InvertMotorController(conf.buffersize, "DerPseudoSensor", "$Id$")
+  , x_buffer()
+  , y_buffer()
+  , ysat_buffer()
+  , chi_buffer()
+  , rho_buffer()
+  , eta_buffer()
   , conf(conf) {
 
   assert(conf.model != nullptr);
@@ -53,12 +59,7 @@ DerPseudoSensor::DerPseudoSensor(const DerPseudoSensorConf& conf)
 };
 
 DerPseudoSensor::~DerPseudoSensor() {
-  if (x_buffer && y_buffer && eta_buffer) {
-    delete[] x_buffer;
-    delete[] y_buffer;
-    delete[] eta_buffer;
-  }
-
+  // Vectors automatically clean up
   if (BNoiseGen)
     delete BNoiseGen;
   if (YNoiseGen)
@@ -128,13 +129,19 @@ DerPseudoSensor::init(int sensornumber, int motornumber, RandGen* randGen) {
   BNoiseGen = new WhiteUniformNoise();
   BNoiseGen->init(number_sensors);
 
-  x_buffer = new Matrix[buffersize];
-  y_buffer = new Matrix[buffersize];
-  eta_buffer = new Matrix[buffersize];
+  x_buffer.resize(buffersize);
+  y_buffer.resize(buffersize);
+  eta_buffer.resize(buffersize);
+  ysat_buffer.resize(buffersize);
+  chi_buffer.resize(buffersize);
+  rho_buffer.resize(buffersize);
   for (unsigned int k = 0; k < buffersize; ++k) {
     x_buffer[k].set(number_sensors, 1);
     y_buffer[k].set(number_motors, 1);
     eta_buffer[k].set(number_motors, 1);
+    ysat_buffer[k].set(number_motors, 1);
+    chi_buffer[k].set(number_sensors, 1);
+    rho_buffer[k].set(number_sensors, 1);
   }
   y_teaching.set(number_motors, 1);
   x_intern.set(number_sensors, 1);
@@ -492,7 +499,7 @@ DerPseudoSensor::getLastMotors(motor* motors, int len) {
 }
 
 Matrix
-DerPseudoSensor::calcDerivatives(const matrix::Matrix* buffer, int delay) {
+DerPseudoSensor::calcDerivatives(const std::vector<matrix::Matrix>& buffer, int delay) {
   const Matrix& xt = buffer[(t - delay) % buffersize];
   const Matrix& xtm1 = buffer[(t - delay - 1) % buffersize];
   const Matrix& xtm2 = buffer[(t - delay - 2) % buffersize];

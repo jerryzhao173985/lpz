@@ -28,8 +28,8 @@ InvertNChannelController::InvertNChannelController(int _buffersize, bool _update
   , number_channels(0)
   , buffersize(_buffersize)
   , update_only_1(_update_only_1)
-  , x_buffer(0)
-  , y_buffer(0)
+  , x_buffer()
+  , y_buffer()
   , t(0) {
 
   addInspectableMatrix("A", &A, false, "model matrix");
@@ -38,10 +38,7 @@ InvertNChannelController::InvertNChannelController(int _buffersize, bool _update
 };
 
 InvertNChannelController::~InvertNChannelController() {
-  if (x_buffer)
-    delete[] x_buffer;
-  if (y_buffer)
-    delete[] y_buffer;
+  // Vectors automatically clean up
 }
 
 void
@@ -58,8 +55,8 @@ InvertNChannelController::init(int sensornumber, int motornumber, RandGen* randG
   A.toId(); // set a to identity matrix;
   C.toId(); // set a to identity matrix;
   // C*=0.1;
-  x_buffer = new Matrix[buffersize];
-  y_buffer = new Matrix[buffersize];
+  x_buffer.resize(buffersize);
+  y_buffer.resize(buffersize);
   for (unsigned int k = 0; k < buffersize; ++k) {
     x_buffer[k].set(number_channels, 1);
     y_buffer[k].set(number_channels, 1);
@@ -276,7 +273,7 @@ InvertNChannelController::learnmodel(const Matrix& y_delay) {
 
 /// calculate delayed values
 Matrix
-InvertNChannelController::calculateDelayedValues(const Matrix* buffer,
+InvertNChannelController::calculateDelayedValues(const std::vector<Matrix>& buffer,
                                                  unsigned int number_steps_of_delay_) {
   // number_steps_of_delay must not be smaller than buffersize
   assert(number_steps_of_delay_ < buffersize);
@@ -284,7 +281,7 @@ InvertNChannelController::calculateDelayedValues(const Matrix* buffer,
 };
 
 Matrix
-InvertNChannelController::calculateSmoothValues(const Matrix* buffer,
+InvertNChannelController::calculateSmoothValues(const std::vector<Matrix>& buffer,
                                                 unsigned int number_steps_for_averaging_) {
   // number_steps_for_averaging_ must not be larger than buffersize
   assert(number_steps_for_averaging_ <= buffersize);
@@ -306,7 +303,7 @@ InvertNChannelController::calculateControllerValues(const Matrix& x_smooth) {
 
 // put new value in ring buffer
 void
-InvertNChannelController::putInBuffer(Matrix* buffer, const Matrix& vec) {
+InvertNChannelController::putInBuffer(std::vector<Matrix>& buffer, const Matrix& vec) {
   buffer[t % buffersize] = vec;
 }
 

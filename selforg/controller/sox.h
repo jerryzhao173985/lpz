@@ -56,7 +56,7 @@ class Sox : public AbstractController, public Teachable {
 
 public:
   /// constructor
-  Sox(const SoxConf& conf = getDefaultConf());
+  explicit Sox(const SoxConf& conf = getDefaultConf());
 
   /// constructor provided for convenience, use conf object to customize more
   Sox(double init_feedback_strength,
@@ -65,7 +65,7 @@ public:
 
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override;
 
-  virtual ~Sox();
+  virtual ~Sox() override;
 
   static SoxConf getDefaultConf() {
     SoxConf conf;

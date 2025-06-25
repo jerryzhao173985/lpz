@@ -25,6 +25,7 @@
 #include <selforg/parametrizable.h>
 #include <selforg/randomgenerator.h>
 #include <selforg/teachable.h>
+#include <vector>
 
 struct SeMoXConf {
   unsigned short buffersize = 50;     ///< size of the ringbuffers for sensors, motors,...
@@ -58,7 +59,7 @@ class SeMoX : public HomeokinBase, public Teachable, public Parametrizable {
   friend class ThisSim;
 
 public:
-  SeMoX(const SeMoXConf& conf = getDefaultConf());
+  explicit SeMoX(const SeMoXConf& conf = getDefaultConf());
 
   /// returns the default configuration
   static SeMoXConf getDefaultConf() {
@@ -153,9 +154,9 @@ protected:
   double xsi_norm_avg = 0; ///< average norm of xsi (used to define whether Modell learns)
   double pain;         ///< if the modelling error static_cast<xsi>(is) too high we have a pain signal
 
-  matrix::Matrix* x_buffer;
-  matrix::Matrix* x_c_buffer; ///< buffer for sensors with context sensors
-  matrix::Matrix* y_buffer;
+  std::vector<matrix::Matrix> x_buffer;
+  std::vector<matrix::Matrix> x_c_buffer; ///< buffer for sensors with context sensors
+  std::vector<matrix::Matrix> y_buffer;
 
   matrix::Matrix y_teaching; ///< motor teaching  signal
 
@@ -194,7 +195,7 @@ protected:
   virtual void learnModel(int delay);
 
   /// calculates the predicted sensor values
-  virtual matrix::Matrix model(const matrix::Matrix* x_buffer, int delay, const matrix::Matrix& y);
+  virtual matrix::Matrix model(const std::vector<matrix::Matrix>& x_buffer, int delay, const matrix::Matrix& y);
 
   /// handles inhibition damping etc.
   virtual void management();
@@ -204,6 +205,29 @@ protected:
 
 protected:
   static double regularizedInverse(double v);
+  
+  // Helper methods for vector-based buffers (overload base class methods)
+  void putInBuffer(std::vector<matrix::Matrix>& buffer, const matrix::Matrix& vec, int delay = 0) {
+    buffer[(t - delay) % buffersize] = vec;
+  }
+  
+  matrix::Matrix calculateSmoothValuesVec(const std::vector<matrix::Matrix>& buffer, int number_steps_for_averaging_) {
+    // number_steps_for_averaging_ must not be larger than buffersize
+    assert(static_cast<unsigned>(number_steps_for_averaging_) <= buffersize);
+    
+    matrix::Matrix result(buffer[t % buffersize]);
+    for (int k = 1; k < number_steps_for_averaging_; ++k) {
+      result += buffer[(t - k + buffersize) % buffersize];
+    }
+    result *= 1 / (static_cast<double>(number_steps_for_averaging_)); // scalar multiplication
+    return result;
+  }
+  
+  // Rule of 5: Delete copy operations, allow move
+  SeMoX(const SeMoX&) = delete;
+  SeMoX& operator=(const SeMoX&) = delete;
+  SeMoX(SeMoX&&) = default;
+  SeMoX& operator=(SeMoX&&) = default;
 };
 
 #endif

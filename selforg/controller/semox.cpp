@@ -24,6 +24,9 @@ using namespace std;
 
 SeMoX::SeMoX(const SeMoXConf& conf)
   : HomeokinBase(conf.buffersize, "SeMoX", "$Id$")
+  , x_buffer()
+  , x_c_buffer()
+  , y_buffer()
   , conf(conf) {
 
   addParameterDef("dampModel", &dampModel, 0);
@@ -56,10 +59,7 @@ SeMoX::SeMoX(const SeMoXConf& conf)
 };
 
 SeMoX::~SeMoX() {
-  if (x_buffer && y_buffer) {
-    delete[] x_buffer;
-    delete[] y_buffer;
-  }
+  // Vectors automatically clean up
   if (BNoiseGen)
     delete BNoiseGen;
 }
@@ -105,9 +105,9 @@ SeMoX::init(int sensornumber, int motornumber, RandGen* randGen) {
 
   v.set(number_motors, 1); // (shift is in motor space)
 
-  x_buffer = new Matrix[buffersize];
-  x_c_buffer = new Matrix[buffersize];
-  y_buffer = new Matrix[buffersize];
+  x_buffer.resize(buffersize);
+  x_c_buffer.resize(buffersize);
+  y_buffer.resize(buffersize);
   for (unsigned int k = 0; k < buffersize; ++k) {
     x_buffer[k].set(number_sensors, 1);
     x_c_buffer[k].set(number_sensors + conf.numContext, 1);
@@ -157,7 +157,7 @@ SeMoX::fillBuffersAndControl(const sensor* x_, int number_sensors, motor* y_, in
   putInBuffer(x_c_buffer, x_c);
 
   // averaging over the last s4avg values of x_buffer
-  const Matrix& x_smooth = calculateSmoothValues(x_buffer, t < s4avg ? 1 : int(max(1.0, s4avg)));
+  const Matrix& x_smooth = calculateSmoothValuesVec(x_buffer, t < s4avg ? 1 : int(max(1.0, s4avg)));
 
   // calculate controller values based on smoothed input values
   const Matrix& y = calculateControllerValues(x_smooth);
@@ -189,7 +189,7 @@ SeMoX::calcXsi(int delay) {
 
 /// calculates the predicted sensor values
 Matrix
-SeMoX::model(const Matrix* x_buffer, int delay, const matrix::Matrix& y) {
+SeMoX::model(const std::vector<matrix::Matrix>& x_buffer, int delay, const matrix::Matrix& y) {
   if (conf.modelExt) {
     const Matrix& x_c_tm1 = x_c_buffer[(t - 1) % buffersize];
     return A * y + S * x_c_tm1 + B;

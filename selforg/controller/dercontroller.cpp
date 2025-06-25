@@ -37,9 +37,9 @@ DerController::DerController(const DerControllerConf& conf)
   , xsi_norm(0)
   , xsi_norm_avg(0)
   , pain(0)
-  , x_buffer(nullptr)
-  , y_buffer(nullptr)
-  , eta_buffer(nullptr)
+  , x_buffer()
+  , y_buffer()
+  , eta_buffer()
   , fantControl(50)
   , fantControlLen(0)
   , fantReset(5)
@@ -61,11 +61,7 @@ DerController::DerController(const DerControllerConf& conf)
 };
 
 DerController::~DerController() {
-  if (x_buffer && y_buffer && eta_buffer) {
-    delete[] x_buffer;
-    delete[] y_buffer;
-    delete[] eta_buffer;
-  }
+  // Vectors automatically clean up
   if (BNoiseGen)
     delete BNoiseGen;
   if (YNoiseGen)
@@ -118,9 +114,9 @@ DerController::init(int sensornumber, int motornumber, RandGen* randGen) {
   C = ((C ^ 0) * conf.cInit + C.mapP(randGen, random_minusone_to_one) * conf.cNonDiag) *
       0.0; //  conf.cInit;
 
-  x_buffer = new Matrix[buffersize];
-  y_buffer = new Matrix[buffersize];
-  eta_buffer = new Matrix[buffersize];
+  x_buffer.resize(buffersize);
+  y_buffer.resize(buffersize);
+  eta_buffer.resize(buffersize);
   for (unsigned int k = 0; k < buffersize; ++k) {
     x_buffer[k].set(number_sensors, 1);
     y_buffer[k].set(number_motors, 1);
@@ -174,7 +170,7 @@ DerController::fillBuffersAndControl(const sensor* x_,
   putInBuffer(x_buffer, x);
 
   // averaging over the last s4avg values of x_buffer
-  x_smooth = calculateSmoothValues(x_buffer, t < s4avg ? 1 : int(std::max(1, s4avg)));
+  x_smooth = calculateSmoothValuesVec(x_buffer, t < s4avg ? 1 : int(std::max(1, s4avg)));
 
   // calculate controller values based on smoothed input values
   Matrix y = calculateControllerValues(x_smooth);

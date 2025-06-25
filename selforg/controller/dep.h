@@ -72,7 +72,7 @@ struct DEPConf {
 class DEP : public lpzrobots::BufferedControllerBase<150>, public Storeable {
 
 public:
-  DEP(const DEPConf& conf = getDefaultConf());
+  explicit DEP(const DEPConf& conf = getDefaultConf());
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
 
   virtual ~DEP() override;

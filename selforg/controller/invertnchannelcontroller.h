@@ -25,6 +25,7 @@
 
 #include <cassert>
 #include <cmath>
+#include <vector>
 
 #include <selforg/matrix.h>
 
@@ -34,7 +35,7 @@
 class InvertNChannelController : public InvertController {
 
 public:
-  InvertNChannelController(int _buffersize, bool _update_only_1 = false);
+  explicit InvertNChannelController(int _buffersize, bool _update_only_1 = false);
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
 
   virtual ~InvertNChannelController() override;
@@ -81,8 +82,8 @@ protected:
   matrix::Matrix C; // Controller Matrix
   matrix::Matrix h; // Controller Bias
   matrix::Matrix L; // Jacobi Matrix
-  matrix::Matrix* x_buffer;
-  matrix::Matrix* y_buffer;
+  std::vector<matrix::Matrix> x_buffer;
+  std::vector<matrix::Matrix> y_buffer;
   int t = 0;
   paramkey name;
 
@@ -98,15 +99,15 @@ protected:
   virtual void learnmodel(const matrix::Matrix& y_delay);
 
   /// calculate delayed values
-  virtual matrix::Matrix calculateDelayedValues(const matrix::Matrix* buffer,
+  virtual matrix::Matrix calculateDelayedValues(const std::vector<matrix::Matrix>& buffer,
                                                 unsigned int number_steps_of_delay_);
-  virtual matrix::Matrix calculateSmoothValues(const matrix::Matrix* buffer,
+  virtual matrix::Matrix calculateSmoothValues(const std::vector<matrix::Matrix>& buffer,
                                                unsigned int number_steps_for_averaging_);
 
   matrix::Matrix calculateControllerValues(const matrix::Matrix& x_smooth);
 
   // put new value in ring buffer
-  void putInBuffer(matrix::Matrix* buffer, const matrix::Matrix& vec);
+  void putInBuffer(std::vector<matrix::Matrix>& buffer, const matrix::Matrix& vec);
 
   /// neuron transfer function
   static double g(double z) {
@@ -126,6 +127,12 @@ protected:
     //    return z < -0.1 ? -0.1 : ( z > 0.1 ? 0.1 : z );
     // return 0.1 * tanh(10.0 * z);
   };
+
+  // Rule of 5: Delete copy operations, allow move
+  InvertNChannelController(const InvertNChannelController&) = delete;
+  InvertNChannelController& operator=(const InvertNChannelController&) = delete;
+  InvertNChannelController(InvertNChannelController&&) = default;
+  InvertNChannelController& operator=(InvertNChannelController&&) = default;
 };
 
 #endif

@@ -50,7 +50,7 @@ struct ClassicReinforceConf {
 class ClassicReinforce : public AbstractController {
 
 public:
-  ClassicReinforce(ClassicReinforceConf conf = getDefaultConf());
+  explicit ClassicReinforce(ClassicReinforceConf conf = getDefaultConf());
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override;
 
   virtual ~ClassicReinforce() override;

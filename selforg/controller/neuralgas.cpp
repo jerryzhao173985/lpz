@@ -90,7 +90,7 @@ NeuralGas::printWeights(FILE* f) const {
   int k = 0;
   fprintf(f, "# weight elements, cellsize\n");
   FOREACHC(vector<Matrix>, weights, i) {
-    i->mapP(f, ng_print_double);
+    (void)i->mapP(f, ng_print_double);
     fprintf(f, "\t%f\n", cellsizes.val(k, 0));
     ++k;
   }
@@ -98,7 +98,7 @@ NeuralGas::printWeights(FILE* f) const {
 
 void
 NeuralGas::printCellsizes(FILE* f) const {
-  cellsizes.mapP(f, ng_print_double);
+  (void)cellsizes.mapP(f, ng_print_double);
 }
 
 const Matrix

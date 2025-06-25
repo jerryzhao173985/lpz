@@ -66,7 +66,7 @@ struct DerLinUniversConf {
  */
 class DerLinUnivers : public AbstractController, public Storeable {
 public:
-  DerLinUnivers(const DerLinUniversConf& conf = getDefaultConf());
+  explicit DerLinUnivers(const DerLinUniversConf& conf = getDefaultConf());
   virtual ~DerLinUnivers() override;
 
   static DerLinUniversConf getDefaultConf() {
@@ -120,14 +120,14 @@ protected:
   void fillBuffersAndControl(const sensor* x_, int number_sensors, motor* y_, int number_motors);
 
   /// calculate time-smoothed values
-  matrix::Matrix calculateSmoothValues(const matrix::Matrix* buffer,
+  matrix::Matrix calculateSmoothValues(const std::vector<matrix::Matrix>& buffer,
                                        int number_steps_for_averaging_);
 
   /// calculate controller outputs (and activates inputs)
   matrix::Matrix calculateControllerValues(const matrix::Matrix& x);
 
   // put new value in ring buffer
-  void putInBuffer(matrix::Matrix* buffer, const matrix::Matrix& vec, int delay = 0) {
+  void putInBuffer(std::vector<matrix::Matrix>& buffer, const matrix::Matrix& vec, int delay = 0) {
     buffer[(t - delay) % conf.buffersize] = vec;
   }
 
@@ -155,9 +155,9 @@ protected:
   bool initialised = false;
 
   DerLinUniversConf conf;
-  matrix::Matrix* x_buffer;
-  matrix::Matrix* y_buffer;
-  matrix::Matrix* v_buffer;
+  std::vector<matrix::Matrix> x_buffer;
+  std::vector<matrix::Matrix> y_buffer;
+  std::vector<matrix::Matrix> v_buffer;
 
   matrix::Matrix v;
   matrix::Matrix J;
@@ -171,6 +171,12 @@ protected:
   paramval s4del;
   paramval Enorm;
   paramval epsDyn;
+  
+  // Rule of 5: Delete copy operations, allow move
+  DerLinUnivers(const DerLinUnivers&) = delete;
+  DerLinUnivers& operator=(const DerLinUnivers&) = delete;
+  DerLinUnivers(DerLinUnivers&&) = default;
+  DerLinUnivers& operator=(DerLinUnivers&&) = default;
 };
 
 #endif

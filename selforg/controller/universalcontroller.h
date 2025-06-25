@@ -29,6 +29,8 @@
 #include "matrix.h"
 #include <cstdio>
 #include <vector>
+#include <memory>
+#include <vector>
 
 struct UniversalControllerConf {
   unsigned int buffersize = 0; ///< buffersize size of the time-buffer for x,y,v
@@ -46,8 +48,8 @@ struct UniversalControllerConf {
  */
 class UniversalController : public AbstractController {
 public:
-  UniversalController(const UniversalControllerConf& conf = getDefaultConf());
-  virtual ~UniversalController();
+  explicit UniversalController(const UniversalControllerConf& conf = getDefaultConf());
+  virtual ~UniversalController() override;
 
   static UniversalControllerConf getDefaultConf() {
     UniversalControllerConf c;
@@ -100,14 +102,14 @@ protected:
   void fillBuffersAndControl(const sensor* x_, int number_sensors, motor* y_, int number_motors);
 
   /// calculate time-smoothed values
-  matrix::Matrix calculateSmoothValues(const matrix::Matrix* buffer,
+  matrix::Matrix calculateSmoothValues(const std::vector<matrix::Matrix>& buffer,
                                        int number_steps_for_averaging_);
 
   /// calculate controller outputs (and activates inputs)
   matrix::Matrix calculateControllerValues(const matrix::Matrix& x);
 
   // put new value in ring buffer
-  void putInBuffer(matrix::Matrix* buffer, const matrix::Matrix& vec, int delay = 0) {
+  void putInBuffer(std::vector<matrix::Matrix>& buffer, const matrix::Matrix& vec, int delay = 0) {
     buffer[(t - delay) % conf.buffersize] = vec;
   }
 
@@ -134,9 +136,9 @@ protected:
   bool initialised = false;
 
   UniversalControllerConf conf;
-  matrix::Matrix* x_buffer;
-  matrix::Matrix* y_buffer;
-  matrix::Matrix* v_buffer;
+  std::vector<matrix::Matrix> x_buffer;
+  std::vector<matrix::Matrix> y_buffer;
+  std::vector<matrix::Matrix> v_buffer;
 
   matrix::Matrix v;
   matrix::Matrix J;
@@ -150,6 +152,12 @@ protected:
   AbstractController::paramval s4del;
   AbstractController::paramval Enorm;
   AbstractController::paramval epsDyn;
+
+  // Rule of 5: Delete copy operations, allow move
+  UniversalController(const UniversalController&) = delete;
+  UniversalController& operator=(const UniversalController&) = delete;
+  UniversalController(UniversalController&&) = default;
+  UniversalController& operator=(UniversalController&&) = default;
 };
 
 #endif

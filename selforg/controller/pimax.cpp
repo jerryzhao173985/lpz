@@ -25,6 +25,11 @@ PiMax::PiMax(const PiMaxConf& conf_)
   : AbstractController("PiMax", "1.0")
   , number_sensors(0)
   , number_motors(0)
+  , a_buffer()
+  , s_buffer()
+  , xi_buffer()
+  , gs_buffer()
+  , L_buffer()
   , conf(conf_)
   , t(0)
   , intern_isTeaching(false) {
@@ -109,6 +114,14 @@ PiMax::init(int sensornumber, int motornumber, RandGen* randGen) {
 
   s.set(number_sensors, 1);
   s_smooth.set(number_sensors, 1);
+  
+  // Initialize buffer vectors
+  a_buffer.resize(buffersize);
+  s_buffer.resize(buffersize);
+  xi_buffer.resize(buffersize);
+  gs_buffer.resize(buffersize);
+  L_buffer.resize(buffersize);
+  
   for (unsigned int k = 0; k < buffersize; ++k) {
     s_buffer[k].set(number_sensors, 1);
     a_buffer[k].set(number_motors, 1);

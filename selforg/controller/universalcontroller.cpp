@@ -33,9 +33,9 @@ using namespace matrix;
 UniversalController::UniversalController(const UniversalControllerConf& conf)
   : AbstractController("universalcontroller", "$Id$")
   , conf(conf)
-  , x_buffer(nullptr)
-  , y_buffer(nullptr)
-  , v_buffer(nullptr) {
+  , x_buffer()
+  , y_buffer()
+  , v_buffer() {
   t = 0;
   addParameterDef("eps", &eps, 1);
   addParameterDef("epsM", &epsM, 0.1);
@@ -52,11 +52,7 @@ UniversalController::UniversalController(const UniversalControllerConf& conf)
 };
 
 UniversalController::~UniversalController() {
-  if (x_buffer && y_buffer && v_buffer) {
-    delete[] x_buffer;
-    delete[] y_buffer;
-    delete[] v_buffer;
-  }
+  // Vectors automatically clean up
 }
 
 void
@@ -82,9 +78,9 @@ UniversalController::init(int sensornumber, int motornumber, RandGen* randGen) {
   xsi_smooth.set(number_sensors, 1);
   J.set(number_sensors, number_sensors);
 
-  x_buffer = new Matrix[conf.buffersize];
-  y_buffer = new Matrix[conf.buffersize];
-  v_buffer = new Matrix[conf.buffersize];
+  x_buffer.resize(conf.buffersize);
+  y_buffer.resize(conf.buffersize);
+  v_buffer.resize(conf.buffersize);
   for (unsigned int k = 0; k < conf.buffersize; ++k) {
     x_buffer[k].set(number_sensors, 1);
     y_buffer[k].set(number_motors, 1);
@@ -222,7 +218,7 @@ UniversalController::calculateControllerValues(const matrix::Matrix& x) {
 
 /// calculate time-smoothed values
 Matrix
-UniversalController::calculateSmoothValues(const Matrix* buffer, int number_steps_for_averaging_) {
+UniversalController::calculateSmoothValues(const std::vector<Matrix>& buffer, int number_steps_for_averaging_) {
   // number_steps_for_averaging_ must not be larger than buffersize
   assert(static_cast<unsigned>(number_steps_for_averaging_) <= conf.buffersize);
   matrix::Matrix result(buffer[t % conf.buffersize]);

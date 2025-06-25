@@ -25,6 +25,8 @@
 
 #include <cassert>
 #include <cmath>
+#include <vector>
+#include <memory>
 
 #include <selforg/matrix.h>
 
@@ -49,8 +51,8 @@ struct SoMLConf {
 class SoML : public AbstractController {
 
 public:
-  SoML(const SoMLConf& conf = getDefaultConf());
-  SoML() : AbstractController("SoML", "$Id$") {}
+  explicit SoML(const SoMLConf& conf = getDefaultConf());
+  SoML() : AbstractController("SoML", "$Id$"), cNet(nullptr) {}
 
   static SoMLConf getDefaultConf() {
     SoMLConf c;
@@ -66,7 +68,7 @@ public:
 
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override;
 
-  virtual ~SoML();
+  virtual ~SoML() override;
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
   virtual int getSensorNumber() const override {
@@ -117,8 +119,8 @@ protected:
   unsigned short number_motors = 0;
   static constexpr unsigned short buffersize = 10;
 
-  matrix::Matrix y_buffer[buffersize]; ///< buffer needed for delay
-  matrix::Matrix x_buffer[buffersize]; ///< buffer needed for delay
+  std::vector<matrix::Matrix> y_buffer; ///< buffer needed for delay
+  std::vector<matrix::Matrix> x_buffer; ///< buffer needed for delay
   ControllerNet* cNet;                 ///< Controller network
   unsigned int numControllerLayer = 0;     ///< number of controller layer
 
@@ -140,6 +142,12 @@ protected:
   AbstractController::paramint s4delay;   ///< # of steps the motor values are delayed (1 means no delay)
   AbstractController::paramval biasnoise;
   AbstractController::parambool loga; ///< # use logarithmic error
+
+  // Rule of 5: Delete copy operations, allow move
+  SoML(const SoML&) = delete;
+  SoML& operator=(const SoML&) = delete;
+  SoML(SoML&&) = default;
+  SoML& operator=(SoML&&) = default;
 };
 
 #endif

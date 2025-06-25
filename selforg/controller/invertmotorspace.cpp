@@ -28,9 +28,9 @@ InvertMotorSpace::InvertMotorSpace(int buffersize,
   : InvertMotorController(buffersize, "InvertMotorSpace", "$Id$")
   , number_sensors(0)
   , number_motors(0)
-  , BNoiseGen(0)
-  , x_buffer(0)
-  , y_buffer(0)
+  , BNoiseGen(nullptr)
+  , x_buffer()
+  , y_buffer()
   , someInternalParams(someInternalParams)
   , cInit(cInit) {
 
@@ -45,10 +45,7 @@ InvertMotorSpace::InvertMotorSpace(int buffersize,
 InvertMotorSpace::~InvertMotorSpace() {
   if (BNoiseGen)
     delete BNoiseGen;
-  if (x_buffer)
-    delete[] x_buffer;
-  if (y_buffer)
-    delete[] y_buffer;
+  // Vectors automatically clean up
 }
 
 // double somevalue(double){ return 0.3;}
@@ -76,8 +73,8 @@ InvertMotorSpace::init(int sensornumber, int motornumber, RandGen* randGen) {
 
   C.toId(); // set a to identity matrix;
   C *= cInit;
-  x_buffer = new Matrix[buffersize];
-  y_buffer = new Matrix[buffersize];
+  x_buffer.resize(buffersize);
+  y_buffer.resize(buffersize);
   for (unsigned int k = 0; k < buffersize; ++k) {
     x_buffer[k].set(number_sensors, 1);
     y_buffer[k].set(number_motors, 1);
@@ -127,7 +124,7 @@ InvertMotorSpace::fillBuffersAndControl(const sensor* x_,
   putInBuffer(x_buffer, x);
 
   // averaging over the last s4avg values of x_buffer
-  x_smooth = calculateSmoothValues(x_buffer, t < s4avg ? 1 : int(s4avg));
+  x_smooth = calculateSmoothValuesVec(x_buffer, t < s4avg ? 1 : int(s4avg));
 
   // calculate controller values based on smoothed input values
   Matrix y = calculateControllerValues(x_smooth);

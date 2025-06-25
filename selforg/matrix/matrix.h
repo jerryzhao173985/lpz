@@ -82,20 +82,20 @@ public:
 public:
   //  /////////////////// Accessors ///////////////////////////////
   /** @return number of rows */
-  I getM() const noexcept {
+  [[nodiscard]] I getM() const noexcept {
     return m;
   };
   /** @return number of columns */
-  I getN() const noexcept {
+  [[nodiscard]] I getN() const noexcept {
     return n;
   };
   /// @return number number elements in the matrix (getM()*getN())
-  I size() const noexcept {
+  [[nodiscard]] I size() const noexcept {
     return n * m;
   };
 
   /** @return element at position i,j (row, column index) */
-  inline D val(I i, I j) const {
+  [[nodiscard]] inline D val(I i, I j) const {
     assert(i < m && j < n);
     return data[i * n + j];
   };
@@ -107,7 +107,7 @@ public:
   };
 
   /** @return element at position i,j (row, column index) and 0 if out of bounds */
-  inline D valDef0(I i, I j) const {
+  [[nodiscard]] inline D valDef0(I i, I j) const {
     if (i < m && j < n)
       return data[i * n + j];
     else
@@ -125,19 +125,19 @@ public:
       otherwise the field MUST have the length should be getM()*getN()*/
   void set(const D* _data);
   /** @return row-vector(as 1xN matrix) containing the index'th row */
-  Matrix row(I index) const;
+  [[nodiscard]] Matrix row(I index) const;
   /** @returns submatrix (as KxN matrix)
       containing row from startindex to endindex inclusively (K=stopindex-endindex)
       indices can be out of bounds, they are clipped in any case
   */
-  Matrix rows(I startindex, I endindex) const;
+  [[nodiscard]] Matrix rows(I startindex, I endindex) const;
   /** @returns column-vector(as Mx1 matrix) containing the index'th column */
-  Matrix column(I index) const;
+  [[nodiscard]] Matrix column(I index) const;
   /** @returns submatrix (as MxK matrix)
       containing column from startindex to endindex inclusively (K=endindex-startindex)
       indices can be out of bounds, they are clipped in any case
   */
-  Matrix columns(I startindex, I endindex) const;
+  [[nodiscard]] Matrix columns(I startindex, I endindex) const;
 
   /** stores the content of the matrix (row-wise) in the given buffer
       @param buffer Buffer for storing the elements (should have the length given by len)
@@ -149,7 +149,7 @@ public:
 
   /** @return a list of the content of the matrix (row-wise)
    */
-  std::list<D> convertToList() const;
+  [[nodiscard]] std::list<D> convertToList() const;
 
   /// returns a pointer to the data. UNSAFE!!!
   const D* unsafeGetData() const {
@@ -194,10 +194,10 @@ public:
 
   /** bytewise comparison (compares data buffer bytewise, which implies that
       n1*m1 == n2*m2 but not necessarily n1==n2) */
-  bool equals(const Matrix& a) const;
+  [[nodiscard]] bool equals(const Matrix& a) const;
 
   /// @return true of a and this have the same size
-  bool hasSameSizeAs(const Matrix& a) const {
+  [[nodiscard]] bool hasSameSizeAs(const Matrix& a) const {
     return n == a.getN() && m == a.getM();
   };
 
@@ -208,26 +208,26 @@ public:
       otherwise
       \f[A^{+} = A^T(A A^T + \lambda \mathbb I)^{-1}\f]
    */
-  Matrix pseudoInverse(const D& lambda = 1e-8) const;
+  [[nodiscard]] Matrix pseudoInverse(const D& lambda = 1e-8) const;
 
   /** calculates the secure inverse of a square matrix.
       If singular then the pseudoinverse is used.
    */
-  Matrix secureInverse() const;
+  [[nodiscard]] Matrix secureInverse() const;
 
   /** returns true if all entries are normal floating point numbers,
       otherwise false (e.g. for nan and inf)*/
-  bool hasNormalEntries() const;
+  [[nodiscard]] bool hasNormalEntries() const;
 
   /**  maps the matrix to a new matrix
        with all elements mapped with the given function
   */
-  Matrix map(D (*fun)(D)) const;
+  [[nodiscard]] Matrix map(D (*fun)(D)) const;
   /**  like map but with additional double parameter for the mapping function
        (first argument of fun is parameter, the second is the value)*/
-  Matrix mapP(D param, D (*fun)(D, D)) const;
+  [[nodiscard]] Matrix mapP(D param, D (*fun)(D, D)) const;
   /**  like map but with additional arbitrary parameter for the mapping function */
-  Matrix mapP(void* param, D (*fun)(void*, D)) const;
+  [[nodiscard]] Matrix mapP(void* param, D (*fun)(void*, D)) const;
 
   // Exotic operations ///////////
   /** binary map operator for matrices.
@@ -249,31 +249,31 @@ public:
   /** row-wise multiplication
       @param factors column vector (Mx1) of factors, one for each row
   */
-  Matrix multrowwise(const Matrix& factors) const;
+  [[nodiscard]] Matrix multrowwise(const Matrix& factors) const;
   /** column-wise multiplication
       @param factors column vector (Mx1) of factors, one for each column
   */
-  Matrix multcolwise(const Matrix& factors) const;
+  [[nodiscard]] Matrix multcolwise(const Matrix& factors) const;
 
   /// optimised multiplication of Matrix with its transposed: M * M^T
-  Matrix multMT() const;
+  [[nodiscard]] Matrix multMT() const;
   /// optimised multiplication of transpsoed of Matrix with itself: M^T * M
-  Matrix multTM() const;
+  [[nodiscard]] Matrix multTM() const;
 
   /// returns the product of all elements (\f$ \Pi_{ij} m_{ij} \f$)
-  D elementProduct() const;
+  [[nodiscard]] D elementProduct() const;
   /// returns the sum of all elements (\f$ \sum_{ij} m_{ij} \f$)
-  D elementSum() const;
+  [[nodiscard]] D elementSum() const;
 
   /** returns the sum of all squares of all elements (\f$ \sum_{ij} m_{ij}^2 \f$)
       this is also known as the square of the Frobenius norm.
    */
-  D norm_sqr() const;
+  [[nodiscard]] D norm_sqr() const;
 
   /// returns a matrix that consists of this matrix above A (number of rows is getM + a.getM())
-  Matrix above(const Matrix& a) const;
+  [[nodiscard]] Matrix above(const Matrix& a) const;
   /// returns a matrix that consists of this left beside A  (number of columns is getN + a.getN())
-  Matrix beside(const Matrix& a) const;
+  [[nodiscard]] Matrix beside(const Matrix& a) const;
 
 public: // normal binary Operators
   // Friend declaration for NEON optimizations
