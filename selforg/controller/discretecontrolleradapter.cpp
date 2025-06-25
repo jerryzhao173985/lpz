@@ -29,6 +29,11 @@ using namespace std;
 
 DiscreteControllerAdapter::DiscreteControllerAdapter(AbstractController* controller, const std::string& name, const std::string& revision)
  : AbstractControllerAdapter(controller, name, revision),
+   sensorIntervalCount(1),
+   motorIntervalCount(1),
+   automaticMotorRange(true),
+   automaticSensorRange(true),
+   mapToSensorInterval(false),
    mapToMotorInterval(false),
    minMotorRange(0),
    maxMotorRange(0),
@@ -38,11 +43,6 @@ DiscreteControllerAdapter::DiscreteControllerAdapter(AbstractController* control
    maxMotorValue(0),
    minSensorValue(0),
    maxSensorValue(0),
-   automaticSensorRange(true),
-   automaticMotorRange(true),
-   mapToSensorInterval(false),
-   sensorIntervalCount(1),
-   motorIntervalCount(1),
    firstStep(true)
 {
   // avoid division by zero

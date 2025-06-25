@@ -33,7 +33,7 @@
 
 namespace lpzrobots{
 
-  class Pos{
+  class Pos : public osg::Vec3 {
   public:
     Pos () : osg::Vec3 () {};
     Pos (float x, float y, float z) : osg::Vec3(x, y, z) {}
@@ -54,7 +54,7 @@ namespace lpzrobots{
     }
 
     void print() const {
-      std::cout << '(' << x() << ',' << y() << ',' << z() << ')' << std::endl override;
+      std::cout << '(' << x() << ',' << y() << ',' << z() << ')' << std::endl;
     }
   };
   

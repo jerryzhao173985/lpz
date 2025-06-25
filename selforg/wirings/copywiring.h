@@ -49,7 +49,7 @@ public:
    */
   virtual ~CopyWiring();
 
-  virtual void reset();
+  virtual void reset() override;
 
   static Assignment motorFromSensorAssignment(const Assignment& sensor_assignment);
 
@@ -69,7 +69,7 @@ protected:
   */
   virtual bool wireSensorsIntern(const sensor* rsensors, int rsensornumber,
                            sensor* csensors, int csensornumber,
-                           double noise);
+                           double noise) override;
 
   /** Realizes one to one wiring from controller motor outputs to robot motors.
       @param rmotors pointer to array of motorvalues for robot
@@ -78,7 +78,7 @@ protected:
       @param cmotornumber number of motorvalues from controller
   */
   virtual bool wireMotorsIntern(motor* rmotors, int rmotornumber,
-                          const motor* cmotors, int cmotornumber);
+                          const motor* cmotors, int cmotornumber) override;
 
 
 protected:

@@ -845,16 +845,16 @@ ParallelTaskManager::shouldWorkerThreadsExit() const {
 }
 
 ParallelTaskManager::ParallelTaskManager() : 
-  mTaskIndexIncrement(0), 
+  mPlatform(new PlatformThreadObjects()), 
   mInitialized(false), 
   mInParallelSection(false), 
   mShouldWorkerThreadsExit(false), 
-  mPlatform(new PlatformThreadObjects()), 
   mCurrentTask(nullptr), 
+  mNumThreads(0),
+  mBarrierCount(0),
   mTaskFirstIndices(nullptr), 
   mTaskLastIndices(nullptr),
-  mNumThreads(0),
-  mBarrierCount(0) {
+  mTaskIndexIncrement(0) {
 }
 
 ParallelTaskManager::~ParallelTaskManager() {

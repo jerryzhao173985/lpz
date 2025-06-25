@@ -27,7 +27,7 @@
 #include <cassert>
 #include <cmath>
 #include <cstring>
-#include <locale.h> // need to set LC_NUMERIC to have a __PLACEHOLDER_28__ in the numbers written
+#include <clocale> // need to set LC_NUMERIC to have a __PLACEHOLDER_28__ in the numbers written
 #include <cstdio>
 
 using namespace std;

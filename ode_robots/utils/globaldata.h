@@ -35,20 +35,21 @@
 #include <selforg/globaldatabase.h>
 #include <selforg/backcallervector.h>
 
-class Configurable{
+namespace lpzrobots {
 
   class OdeAgent;
   class AbstractObstacle;
   class Primitive;
   class OSGPrimitive;
+  class Configurable;
 
-  typedef std::vector<AbstractObstacle*> ObstacleList;
-  typedef Configurable::configurableList ConfigList;
-  typedef BackCallerVector<OdeAgent*> OdeAgentList;
-  typedef std::list<Sound> SoundList;
-  typedef std::list<PlotOption> PlotOptionList;
-  typedef std::multimap<double, TmpObject* > TmpObjectMap;
-  typedef std::list< std::pair<double, TmpObject*> > TmpObjectList;
+  using ObstacleList = std::vector<AbstractObstacle*>;
+  using ConfigList = std::list<Configurable*>;
+  using OdeAgentList = BackCallerVector<OdeAgent*>;
+  using SoundList = std::list<Sound>;
+  using PlotOptionList = std::list<PlotOption>;
+  using TmpObjectMap = std::multimap<double, TmpObject*>;
+  using TmpObjectList = std::list<std::pair<double, TmpObject*>>;
 
   /**
    Data structure holding all essential global information.
@@ -85,7 +86,7 @@ class Configurable{
       virtual void initializeTmpObjects(const OdeHandle& odeHandle,
                                         const OsgHandle& osgHandle);
       /// called by Simulation to update tmp objects
-      virtual void explicit explicit updateTmpObjects(const OsgHandle& osgHandle);
+      virtual void updateTmpObjects(const OsgHandle& osgHandle);
 
       /** called by Simulation to removes all expired sounds and temporary objects.
           Optionally a time can be specified otherwise the internal time is used.
@@ -94,7 +95,7 @@ class Configurable{
 
       /** removes a particular temporary display item even if it is not yet expired
           @return true if it was deleted (found) */
-      virtual bool explicit explicit removeTmpObject(TmpObject* i);
+      virtual bool removeTmpObject(TmpObject* i);
 
 
     private:

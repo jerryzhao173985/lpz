@@ -102,8 +102,8 @@ MultiReinforce::init(int sensornumber, int motornumber, RandGen* randGen) {
   assert(conf.qlearning && "Please set qlearning in controller configuration");
   conf.qlearning->init(getStateNumber(), conf.numSats, randGen);
   if (conf.actioncorrel) {
-    assert((signed)conf.actioncorrel->getM() == conf.numSats &&
-           (signed)conf.actioncorrel->getN() == conf.numSats);
+    assert(static_cast<int>(conf.actioncorrel->getM()) == conf.numSats &&
+           static_cast<int>(conf.actioncorrel->getN()) == conf.numSats);
   }
 
   action = 0;
@@ -408,7 +408,7 @@ MultiReinforce::restore(FILE* f) {
 
 void
 MultiReinforce::restoreSats(const list<string>& files) {
-  assert(conf.numSats == (signed)files.size());
+  assert(conf.numSats == static_cast<int>(files.size()));
   assert(conf.numSats);
   sats.clear();
   vector<Layer> l;
@@ -428,7 +428,7 @@ MultiReinforce::restoreSats(const list<string>& files) {
 
 void
 MultiReinforce::storeSats(const list<string>& files) {
-  assert(conf.numSats == (signed)files.size());
+  assert(conf.numSats == static_cast<int>(files.size()));
   assert(conf.numSats);
   int i = 0;
   FOREACHC(list<string>, files, f) {

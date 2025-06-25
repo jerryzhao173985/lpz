@@ -29,13 +29,15 @@
 
 namespace lpzrobots {
 
-  class GlobalData{
+  class GlobalData;
+  
+  class Sound {
   public:
     Sound(double time, const Pos& pos, float intensity, float frequency, void* sender);
 
     ~Sound();
 
-    void createVisual(GlobalData& globalData, double visualSize, Pos visualOffset) const override;
+    void createVisual(GlobalData& globalData, double visualSize, Pos visualOffset) const;
 
     /// nice predicate function for finding old sound signals
     struct older_than {

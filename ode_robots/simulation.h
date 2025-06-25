@@ -24,8 +24,29 @@
 #ifndef __SIMULATION_H
 #define __SIMULATION_H
 
-// include base classes of class Simulation{
+#include <ode-dbl/ode.h>
+#include <osg/ApplicationUsage>
+#include <osg/Vec3>
+#include <osgGA/GUIEventAdapter>
+#include <osgGA/GUIActionAdapter>
+#include <list>
+#include <vector>
+#include <string>
+#include "utils/globaldata.h"
+
+// forward declarations
+namespace osgViewer {
+  class Viewer;
+}
+
+namespace lpzrobots {
+  class OdeHandle;
+  class OsgHandle;
+  class GlobalData;
   class LPZViewer;
+  class OdeAgent;
+  class PlotOption;
+  typedef std::list<class Configurable*> ConfigList;
 }
 /*** end of forward declarations ***/
 
@@ -39,7 +60,7 @@ namespace lpzrobots {
     enum CameraMode {Static=0, Follow, TV, Race};
 
     Simulation();
-    virtual ~Simulation() override;
+    virtual ~Simulation();
 
     /** starts the Simulation. Do not overload it.
         This function returns of the simulation is terminated.
@@ -65,17 +86,17 @@ namespace lpzrobots {
     virtual bool restart(const OdeHandle&, const OsgHandle&, GlobalData& globalData);
 
     /// end() is called at the end and should tidy up
-    virtual void explicit explicit end(const GlobalData& globalData);
+    virtual void end(const GlobalData& globalData);
     /** config() is called when the user presses Ctrl-C
         @return false to exit program, true otherwise
     */
-    virtual bool explicit explicit config(const GlobalData& globalData);
+    virtual bool config(const GlobalData& globalData);
     /** is called if a key was pressed.
         For keycodes see: osgGA::GUIEventAdapter
         @return true if the key was handled
     */
     virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData,
-                         int key, bool down) override { return false; };
+                         int key, bool down) { return false; }
 
     /** this can be used to describe the key bindings used by command()
      */
@@ -89,7 +110,7 @@ namespace lpzrobots {
         However it is called after the robots collision handling.
         @return true if collision is treated, false otherwise
     */
-    virtual bool collCallback(const OdeHandle&, void* data, dGeomID o1, dGeomID o2) override { return false;};
+    virtual bool collCallback(const OdeHandle&, void* data, dGeomID o1, dGeomID o2) { return false; }
 
     /** optional additional callback function which is called every simulation step.
         Called between physical simulation step and drawing.
@@ -97,7 +118,7 @@ namespace lpzrobots {
         @param pause always false (only called of simulation is running)
         @param control indicates that robots have been controlled this timestep
      */
-    virtual void addCallback(const GlobalData& globalData, bool draw, bool pause, bool control) override {};
+    virtual void addCallback(const GlobalData& globalData, bool draw, bool pause, bool control) {};
 
     /** adds a palette file to be loaded at initialization time
         Call this before run()!
@@ -117,7 +138,7 @@ namespace lpzrobots {
   protected:
     // GUIEventHandler
     virtual bool handle(const osgGA::GUIEventAdapter& ea,osgGA::GUIActionAdapter&);
-    virtual void getUsage (osg::ApplicationUsage & au) const override;
+    virtual void getUsage (osg::ApplicationUsage & au) const;
     virtual bool init(int argc, char** argv);
 
     virtual void updateGraphics(); ///< update the graphics objects
@@ -132,10 +153,10 @@ namespace lpzrobots {
      * Sets the mode of the camera, the numbers are the same like the keys
      * @param mode see CameraMode
      */
-    void explicit explicit setCameraMode(const CameraMode& mode);
+    void setCameraMode(const CameraMode& mode);
 
     /// start video recording (write frames to namestatic_cast<XXX>(folder))
-    bool explicit explicit startVideoRecording(const char* name);
+    bool startVideoRecording(const char* name);
     /// stop video recording
     bool stopVideoRecording();
 
@@ -143,10 +164,10 @@ namespace lpzrobots {
      * Sets the agent to be watched with the camera.
      * @param agent to set
      */
-    void explicit explicit setWatchedAgent(OdeAgent* agent);
+    void setWatchedAgent(OdeAgent* agent);
 
     /// returns the watched agent (or 0)
-    const OdeAgent* getWatchedAgent() const const override;
+    const OdeAgent* getWatchedAgent() const;
 
     static void nearCallback_TopLevel(void *data, dGeomID o1, dGeomID o2);
     static void nearCallback(void *data, dGeomID o1, dGeomID o2);
@@ -162,13 +183,13 @@ namespace lpzrobots {
      *  shows all parameters of all given configurable objects
      *  @deprecated this is handled by simulation itself, do not call this function anymore
      */
-    __attribute__ ((deprecated)) void explicit explicit showParams(const ConfigList& configs) {}
+    __attribute__ ((deprecated)) void showParams(const ConfigList& configs) {}
 
   private:
     void insertCmdLineOption(const int& argc,char**& argv);
     bool loop();
     /// clears obstacle and agents lists and delete entries
-    void explicit explicit tidyUp(const GlobalData& globalData);
+    void tidyUp(const GlobalData& globalData);
 
   protected:
     /// returns false if the program is to exit
@@ -192,7 +213,7 @@ namespace lpzrobots {
 
   protected:
     GlobalData globalData;
-    osg::ref_ptr<VideoStream> videostream;
+    class VideoStream* videostream;
 
     long realtimeoffset = 0;
     long simtimeoffset = 0;
@@ -200,10 +221,10 @@ namespace lpzrobots {
     bool justresettimes = false;      // true if we just reset sync times
     bool drawContacts = false;
 
-    paramint windowWidth;
-    paramint windowHeight;
+    int windowWidth;
+    int windowHeight;
 
-    paramint defaultFPS;      // default framerate
+    int defaultFPS;      // default framerate
 
     bool pause = false;
     bool simulation_time_reached = false;
@@ -229,10 +250,10 @@ namespace lpzrobots {
     /// the current cycle; the simulation restarts if restart() returns true
     int currentCycle = 0;
 
-    CameraHandle cameraHandle;
+    class CameraHandle* cameraHandle;
 
-    parambool useOdeThread;
-    parambool useOsgThread;
+    bool useOdeThread;
+    bool useOsgThread;
     parambool useQMPThreads; // decides if quick mp is used in this simulation
     parambool inTaskedMode;
 

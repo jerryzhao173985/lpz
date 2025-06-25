@@ -49,12 +49,12 @@ namespace lpzrobots{
         the default color is returned.
         Always the alias-set 0 is checked first
     */
-    Color color(const std::string& name_or_id_or_alias) const override;
+    Color color(const std::string& name_or_id_or_alias) const;
 
     /** retrieves a color with the given name/id/alias from given alias_set
         if not found then the default alias_set static_cast<0>(is) checked
      */
-    Color color(const std::string& name_or_id_or_alias, int alias_set) const override;
+    Color color(const std::string& name_or_id_or_alias, int alias_set) const;
 
     /** call by reference version      
         returns false if color not found
@@ -63,7 +63,7 @@ namespace lpzrobots{
                int alias_set = 0) const;
 
     /// checks whether color with the name exists (no aliases are checked)
-    bool existsColor(const std::string& name) const override;
+    bool existsColor(const std::string& name) const;
 
     /** loads a gpl (gimp pallette file) and returns the number loaded colors
         The name of the colors should not contain white spaces!
@@ -89,7 +89,7 @@ namespace lpzrobots{
     */
     bool addAlias(const std::string& alias, const std::string& name, int alias_set = 0);
 
-    void explicit explicit setDefaultColor(const Color& c);
+    void setDefaultColor(const Color& c);
     const Color& getDefaultColor() const;
 
     /// returns error string for value returned by loadPalette and loadAliases

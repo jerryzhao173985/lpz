@@ -120,8 +120,8 @@ protected:
   /********* INSPECTABLE INTERFACE ******/
   virtual std::list<AbstractController::iparamkey> getInternalParamNames() const override;
   virtual std::list<AbstractController::iparamval> getInternalParams() const override;
-  virtual AbstractController::ilayerlist getStructuralLayers() const;
-  virtual AbstractController::iconnectionlist getStructuralConnections() const;
+  virtual AbstractController::ilayerlist getStructuralLayers() const override;
+  virtual AbstractController::iconnectionlist getStructuralConnections() const override;
 
   /********* STORABLE INTERFACE ******/
   virtual bool store(FILE* f) const;

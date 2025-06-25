@@ -45,7 +45,9 @@
  *  and returns the motor values to be used
  *  - for special purposes you can use stepNoLearning()
  */
-class AbstractController : public Configurable, public Inspectable {
+class AbstractController
+  : public Configurable
+  , public Inspectable {
 public:
   using sensor = double;
   using motor = double;

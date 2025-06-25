@@ -31,7 +31,8 @@
 
 namespace lpzrobots{
 
-  // class for{
+  // class for 3D axis
+  class Axis : public osg::Vec4 {
   public:
     Axis () : osg::Vec4() {}
     Axis (float x, float y, float z) : osg::Vec4(x, y, z, 0) {}
@@ -49,8 +50,8 @@ namespace lpzrobots{
       return Axis(y()*a.z() - z()*a.y(), z()*a.x() - x()*a.z(), x()*a.y() - y()*a.x());
     }
     
-    void print(){
-      std::cout << '(' << x() << ',' << y() << ',' << z() << ')' << std::endl override;
+    void print() const {
+      std::cout << '(' << x() << ',' << y() << ',' << z() << ')' << std::endl;
     }
   };
   

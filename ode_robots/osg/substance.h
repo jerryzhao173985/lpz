@@ -47,25 +47,40 @@ In general:
 
 #include<ode-dbl/common.h>
 #include<ode-dbl/contact.h>
+#include<utils/axis.h>
 
 namespace lpzrobots {
 
   //      Todo: maybe add bounce
 
-  class GlobalData{(1-e_1)/kp_1 + (1-e_2)/kp_2}{1/kp_1 + 1/kp_2}
-     = \frac{(1-e_1)kp_2 + (1-e_2)kp_1}{kp_1+kp_2}\f].
+  class GlobalData;
+  
+  /** Callback for collision handling.
+     * Return 1 to handle the collision, 0 to ignore it.
+  */
+  typedef int (*CollisionCallback)(dSurfaceParameters& params, GlobalData& globaldata, void *userdata,
+                                   dContact* contacts, int numContacts,
+                                   dGeomID o1, dGeomID o2, const class Substance& s1, const class Substance& s2);
+
+  /** Physical substance definition, used for collision detection/handling.
+
+     The collision parameters are calculated as follows:
+     \f[ a = \frac{(1-e_1)/kp_1 + (1-e_2)/kp_2}{1/kp_1 + 1/kp_2}
+         = \frac{(1-e_1)kp_2 + (1-e_2)kp_1}{kp_1+kp_2}\f].
 
      Note that you cannot add any member variables to derived classes
       since they do not fit into the substance object in OdeHandle!
- */
+  */
   class Substance{
   public:
     Substance();
     Substance( float roughness, float slip, float hardness, float elasticity);
 
   public:
-
-    float elasticity = 0;
+    float roughness = 0.8f;
+    float slip = 0.01f;
+    float hardness = 40.0f;
+    float elasticity = 0.5f;
 
     void setCollisionCallback(CollisionCallback func, void* userdata);
 
@@ -76,43 +91,43 @@ namespace lpzrobots {
     /// Combination of two surfaces
     static void getSurfaceParams(dSurfaceParameters& sp, const Substance& s1, const Substance& s2, double stepsize);
 
-    static void explicit explicit printSurfaceParams(const dSurfaceParameters& surfParams);
+    static void printSurfaceParams(const dSurfaceParameters& surfParams);
 
     //// Factory methods
 
     /// default substance is plastic with roughness=0.8
-    static Substance getDefaultSubstance() const;
+    static Substance getDefaultSubstance();
     void toDefaultSubstance();
 
     /// very hard and elastic with slip roughness [0.1-1]
-    static Substance explicit explicit getMetal(float roughness);
+    static Substance getMetal(float roughness);
     /// very hard and elastic with slip roughness [0.1-1]
-    void explicit explicit toMetal(float roughness);
+    void toMetal(float roughness);
 
     /// high roughness, no slip, very elastic, hardness : [5-50]
-    static Substance explicit explicit getRubber(float hardness);
+    static Substance getRubber(float hardness);
     /// high roughness, no slip, very elastic, hardness : [5-50]
-    void explicit explicit toRubber(float hardness);
+    void toRubber(float hardness);
 
     /// medium slip, a bit elastic, medium hardness, roughness [0.5-2]
-    static Substance explicit explicit getPlastic(float roughness);
+    static Substance getPlastic(float roughness);
     /// medium slip, a bit elastic, medium hardness, roughness [0.5-2]
-    void explicit explicit toPlastic(float roughness);
+    void toPlastic(float roughness);
 
     /// large slip, not elastic, low hardness [1-30], high roughness
-    static Substance explicit explicit getFoam(float _hardness);
+    static Substance getFoam(float _hardness);
     /// large slip, not elastic, low hardness [1-30], high roughness
-    void explicit explicit toFoam(float _hardness);
+    void toFoam(float _hardness);
 
     /** variable slip and roughness [0-1], not elastic, high hardness for solid snow
         slip = 1 <--> roughness=0.0, slip = 0 <--> roughnes=1.0 */
-    static Substance explicit explicit getSnow(float _slip);
+    static Substance getSnow(float _slip);
     /** variable slip and roughness, not elastic, high hardness for solid snow
         slip = 1 <--> roughness=0.0, slip = 0 <--> roughnes=1.0 */
-    void explicit explicit toSnow(float _slip);
+    void toSnow(float _slip);
 
     /// @see toNoContact()
-    static Substance getNoContact() const;
+    static Substance getNoContact();
     /** set the collsion callback to ignores everything
         Usually it is better to use the __PLACEHOLDER_1__ from odeHandle but
         if this particular one substance should not collide with any other, this is easier.

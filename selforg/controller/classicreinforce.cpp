@@ -109,7 +109,7 @@ ClassicReinforce::step(const sensor* x_, int number_sensors, motor* y_, int numb
     }
 
     const Matrix& y = calcMotor(action);
-    assert(((signed)y.getM()) == number_motors);
+    assert((static_cast<int>(y.getM())) == number_motors);
     int ts = t % reinforce_interval;
     if (ts < slidingtime && action != oldaction) {
       // mixture of old and new actions

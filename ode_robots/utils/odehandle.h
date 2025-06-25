@@ -32,7 +32,9 @@
 
 namespace lpzrobots {
 
-class Primitive{
+class Primitive;
+
+struct geomPairHash {
   size_t operator() (const std::pair<long, long>& p) const {
     return  2*p.first + p.second;
   }
@@ -51,7 +53,7 @@ public:
   Substance substance;
 
   /// creates world at global space and so on and sets global time pointer.
-  void explicit explicit init(double* time);
+  void init(double* time);
 
   /// deletes the world and global data
   void close();
@@ -71,9 +73,9 @@ public:
   void deleteSpace();
 
   /** adds a space to the list of spaces for collision detection (ignored spaces do not need to be insered)*/
-  void explicit explicit addSpace(dSpaceID g);
+  void addSpace(dSpaceID g);
   /// removes a space from the list of ignored spaces for collision detection
-  void explicit explicit removeSpace(dSpaceID g);
+  void removeSpace(dSpaceID g);
 
   /** deletes all associated memory objects, handle with care - use only when program exits */
   void destroySpaces();

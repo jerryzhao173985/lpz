@@ -96,7 +96,7 @@ int
 SOM::coordToIndex(const Matrix& m, int size) {
   int index = 0;
   int d = 1;
-  for (int i = 0; i < ((signed)m.getM()); ++i) {
+  for (int i = 0; i < (static_cast<int>(m.getM())); ++i) {
     index += d * static_cast<int>(m.val(i, 0));
     d *= size;
   }
@@ -115,7 +115,7 @@ SOM::indexToCoord(int index, int size, int dimensions) {
 
 bool
 SOM::validCoord(const Matrix& m, int size) {
-  for (int i = 0; i < ((signed)m.getM()); ++i) {
+  for (int i = 0; i < (static_cast<int>(m.getM())); ++i) {
     const double& v = m.val(i, 0);
     if (v < 0 || v >= size)
       return false;

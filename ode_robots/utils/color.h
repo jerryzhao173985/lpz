@@ -29,9 +29,9 @@
 
 namespace lpzrobots{
 
-class Color{
+class Color : public osg::Vec4 {
 public:
-  Color() {};
+  Color() : osg::Vec4() {}
   Color(const osg::Vec4& color) 
     : osg::Vec4(color)  {};
   Color(float r, float g, float b)
@@ -45,7 +45,7 @@ public:
   }
 
   void print(std::ostream& out) const {
-    out << '(' << r() << ',' << g() << ',' << b() << ',' << a() << ')';
+    out << '(' << x() << ',' << y() << ',' << z() << ',' << w() << ')';
   }
 
   friend std::ostream& operator<<(std::ostream& out, const Color& col) {

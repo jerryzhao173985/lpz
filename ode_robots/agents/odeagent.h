@@ -51,9 +51,9 @@ namespace lpzrobots {
   };
 
 
-  typedef std::list<PlotOption> PlotOptionList;
-  typedef std::list<Operator*> OperatorList;
-  typedef std::list<TraceDrawer> TraceDrawerList;
+  using PlotOptionList = std::list<PlotOption>;
+  using OperatorList = std::list<Operator*>;
+  using TraceDrawerList = std::list<TraceDrawer>;
 
   /** Specialised agent for ode robots
    */

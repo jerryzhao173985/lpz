@@ -72,8 +72,8 @@ FFNNController::init(int sensornumber, int motornumber, RandGen* randGen) {
                            : assembleNetworkInputXY(x_buffer, y_buffer))
                .getM();
   // sensornumber*(history+1) + (input_only_x ? 0 : motornumber*(history));
-  int odim = assembleNetworkOutput(Matrix((signed)net->getOutputDim(), 1)).getM();
-  if (idim != (signed)net->getInputDim() || motornumber != odim) {
+  int odim = assembleNetworkOutput(Matrix(static_cast<int>(net->getOutputDim()), 1)).getM();
+  if (idim != static_cast<int>(net->getInputDim()) || motornumber != odim) {
     cerr << "input/output dimension of network does not fit! expect: " << idim << "," << motornumber
          << " but network has: " << net->getInputDim() << "," << odim << endl;
     exit(1);

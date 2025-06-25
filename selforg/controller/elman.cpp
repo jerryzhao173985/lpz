@@ -176,7 +176,7 @@ Elman::weightIncrementBlocked(const matrix::Matrix& xsi_,
     if (i == blockedlayer) {
       if (blockto == -1)
         blockto = delta.getM();
-      assert(blockfrom <= blockto && blockto <= ((signed)delta.getM()));
+      assert(blockfrom <= blockto && blockto <= (static_cast<int>(delta.getM())));
       for (int idx = blockfrom; idx < blockto; ++idx)
         delta.val(idx, 0) = 0;
     }

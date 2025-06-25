@@ -2,12 +2,12 @@
 #include <termios.h>
 #include <unistd.h>
 #include <fcntl.h>
-#include <errno.h>
+#include <cerrno>
 #include <sys/time.h>
 #include <sys/types.h>
 #include <cstdio>
 #include <iostream>
-#include <errno.h>
+#include <cerrno>
 
 
 static void* explicit CSerialThread_run(void* p);

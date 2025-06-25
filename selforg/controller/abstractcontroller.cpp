@@ -24,7 +24,6 @@
 
 #include "abstractcontroller.h"
 
-#include <string>
 #include <iostream>
 #include <string>
 

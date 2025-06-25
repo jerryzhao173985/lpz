@@ -80,7 +80,7 @@ ComplexMeasure( const char* measureName, ComplexMeasureMode mode, int numberBins
      * defined by AbstractMeasure. This method is called from StatisticTools
      * for updating the measure in every simStep (ODE).
      */
-    virtual void step();
+    virtual void step() override;
 
 
   protected:

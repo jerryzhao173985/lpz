@@ -67,7 +67,7 @@ bool FeedbackWiring::initIntern(){
     double c = defaultfeedbackratio;
     feedbackratio.toMapP(c, constant);
   }else{
-    assert(((signed)feedbackratio.getM())==feedbacknumber && feedbackratio.getN()==1);
+    assert((static_cast<int>(feedbackratio.getM()))==feedbacknumber && feedbackratio.getN()==1);
   }
 
   return true;

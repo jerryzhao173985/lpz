@@ -174,7 +174,7 @@ void DerivativeWiring::reset(){
 bool DerivativeWiring::wireMotorsIntern(motor* rmotors, int rmotornumber,
                                         const motor* cmotors, int cmotornumber){
 
-  assert( (this->cmotornumber==cmotornumber) && ((rmotornumber + (signed)conf.blindMotors) == cmotornumber));
+  assert( (this->cmotornumber==cmotornumber) && ((rmotornumber + static_cast<int>(conf.blindMotors)) == cmotornumber));
   memcpy(rmotors, cmotors, sizeof(motor)*rmotornumber);
   if (conf.blindMotors>0){
     memcpy(blindMotors, cmotors + rmotornumber, sizeof(motor)*conf.blindMotors);

@@ -30,19 +30,23 @@ using namespace std;
 using namespace matrix;
 
 /**
- * ESN class constructor{
-
-  addParameter("learningrate", &conf.learningrate, 0, 1, "learning rate");
-  // nothing
-  addInspectableMatrix("OutputWeights", &outputWeights, false, "output weights");
-  addInspectableMatrix(
-    "OutputDirectWeights", &outputDirectWeights, false, "direct input to output weights");
-  if (conf.inspectInternals) {
-    addInspectableMatrix("ESNState", &ESNState, false, "internal state");
-    addInspectableMatrix("ESNWeights", &ESNWeights, false, "internal weights");
-  }
-  addInspectableValue("error", &error, "Learning error");
-}
+ * ESN class implementation notes:
+ * The constructor appears to be defined in the header file or the
+ * initialization code below is orphaned from an old implementation.
+ */
+// Orphaned constructor body code - commented out:
+// ESN::ESN(const ESNConf& conf) : InvertableModel("ESN", "1.0"), conf(conf) {
+//   addParameter("learningrate", &conf.learningrate, 0, 1, "learning rate");
+//   // nothing
+//   addInspectableMatrix("OutputWeights", &outputWeights, false, "output weights");
+//   addInspectableMatrix(
+//     "OutputDirectWeights", &outputDirectWeights, false, "direct input to output weights");
+//   if (conf.inspectInternals) {
+//     addInspectableMatrix("ESNState", &ESNState, false, "internal state");
+//     addInspectableMatrix("ESNWeights", &ESNWeights, false, "internal weights");
+//   }
+//   addInspectableValue("error", &error, "Learning error");
+// }
 
 void
 ESN::init(unsigned int inputDim, unsigned int outputDim, double unit_map, RandGen* randGen) {
@@ -125,62 +129,61 @@ ESN::learn(const Matrix& input, const Matrix& nom_output, double learnRateFactor
   return output;
 }
 
-/*
-  online learning from matlab toolbox
-  case 'online'
-  nSampleInput = length(trainInput);
-  stateCollection = zeros(nSampleInput, trained_esn.nInternalUnits + trained_esn.nInputUnits);
-  SInverse = 1 / trained_esn.RLS_delta * eye(trained_esn.nInternalUnits + trained_esn.nInputUnits);
-  totalstate = zeros(trained_esn.nTotalUnits,1);
-  internalState = zeros(trained_esn.nInternalUnits,1);
-  error = zeros(nSampleInput , 1);
-  weights = zeros(nSampleInput , 1);
-  for iInput = 1 : nSampleInput
-  if trained_esn.nInputUnits > 0
-  in = [diag(trained_esn.inputScaling) * trainInput(iInput,:)' + esn.inputShift];  % in is column
-  vector else in = []; end
-
-  %write input into totalstate
-  if esn.nInputUnits > 0
-  totalstate(esn.nInternalUnits+1:esn.nInternalUnits+esn.nInputUnits) = in;
-  end
-
-  % update totalstate except at input positions
-
-  % the internal state is computed based on the type of the network
-  switch esn.type
-  case 'plain_esn'
-  typeSpecificArg = [];
-  case 'leaky_esn'
-  typeSpecificArg = [];
-  case 'twi_esn'
-  if  esn.nInputUnits == 0
-  error('twi_esn cannot be used without input to ESN');
-  end
-  typeSpecificArg = esn.avDist;
-  end
-  internalState = feval(trained_esn.type , totalstate, trained_esn, typeSpecificArg );
-  netOut = feval(trained_esn.outputActivationFunction,trained_esn.outputWeights*[internalState;in]);
-  totalstate = [internalState;in;netOut];
-  state = [internalState;in] ;
-  stateCollection(iInput, :) = state';
-  phi = state' * SInverse ;
-  %            u = SInverse * state ;
-  %            k = 1 / (lambda + state'*u)*u;
-  k = phi'/(trained_esn.RLS_lambda + phi * state );
-  e = trained_esn.teacherScaling * trainOutput(iInput,1) + trained_esn.teacherShift - netOut(1);
-  % collect the error that will be plotted
-  error(iInput , 1 ) = e*e;
-  % update the weights
-  trained_esn.outputWeights(1,:) = trained_esn.outputWeights(1,:) + (k*e)';
-  % collect the weights for plotting
-  weights(iInput , 1) = sum(abs(trained_esn.outputWeights(1,:)));
-  %            SInverse = 1 / lambda * (SInverse - k*(state' * SInverse));
-  SInverse = ( SInverse - k * phi ) / trained_esn.RLS_lambda;
-  end
-
-
-*/
+// online learning from matlab toolbox
+// Commented out code:
+//   case 'online'
+//   nSampleInput = length(trainInput);
+//   stateCollection = zeros(nSampleInput, trained_esn.nInternalUnits + trained_esn.nInputUnits);
+//   SInverse = 1.0 / trained_esn.RLS_delta * eye(trained_esn.nInternalUnits + trained_esn.nInputUnits);
+//   totalstate = zeros(trained_esn.nTotalUnits,1);
+//   internalState = zeros(trained_esn.nInternalUnits,1);
+//   error = zeros(nSampleInput , 1);
+//   weights = zeros(nSampleInput , 1);
+//   for iInput = 1 : nSampleInput
+//   if trained_esn.nInputUnits > 0
+//   in = [diag(trained_esn.inputScaling) * trainInput(iInput,:)' + esn.inputShift];  % in is column
+//   vector else in = []; end
+// 
+//   %write input into totalstate
+//   if esn.nInputUnits > 0
+//   totalstate(esn.nInternalUnits+1:esn.nInternalUnits+esn.nInputUnits) = in;
+//   end
+// 
+//   % update totalstate except at input positions
+// 
+//   % the internal state is computed based on the type of the network
+//   switch esn.type
+//   case 'plain_esn'
+//   typeSpecificArg = [];
+//   case 'leaky_esn'
+//   typeSpecificArg = [];
+//   case 'twi_esn'
+//   if  esn.nInputUnits == 0
+//   error('twi_esn cannot be used without input to ESN');
+//   end
+//   typeSpecificArg = esn.avDist;
+//   end
+//   internalState = feval(trained_esn.type , totalstate, trained_esn, typeSpecificArg );
+//   netOut = feval(trained_esn.outputActivationFunction,trained_esn.outputWeights*[internalState;in]);
+//   totalstate = [internalState;in;netOut];
+//   state = [internalState;in] ;
+//   stateCollection(iInput, :) = state';
+//   phi = state' * SInverse ;
+//   %            u = SInverse * state ;
+//   %            k = 1.0 / (lambda + state'*u)*u;
+//   k = phi' * (1.0 / (trained_esn.RLS_lambda + phi * state ));
+//   e = trained_esn.teacherScaling * trainOutput(iInput,1) + trained_esn.teacherShift - netOut(1);
+//   % collect the error that will be plotted
+//   error(iInput , 1 ) = e*e;
+//   % update the weights
+//   trained_esn.outputWeights(1,:) = trained_esn.outputWeights(1,:) + (k*e)';
+//   % collect the weights for plotting
+//   weights(iInput , 1) = sum(abs(trained_esn.outputWeights(1,:)));
+//   %            SInverse = 1.0 / lambda * (SInverse - k*(state' * SInverse));
+//   SInverse = ( SInverse - k * phi ) * (1.0 / trained_esn.RLS_lambda);
+//   end
+// 
+//
 
 const Matrix
 ESN::response(const matrix::Matrix& _ignored) const {

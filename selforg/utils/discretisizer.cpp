@@ -25,23 +25,23 @@
 #include <controller_misc.h>
 
 Discretisizer::Discretisizer(int numberBins_) : numberBins(numberBins_)
-  , automaticRange(true)
   , minRange(0)
   , maxRange(0)
   , minValue(0)
   , maxValue(0)
-  , mapToInterval(false)
-  , firstStep(true) {}
+  , firstStep(true)
+  , automaticRange(true)
+  , mapToInterval(false) {}
 
 Discretisizer::Discretisizer(int numberBins, double minRange, double maxRange, bool mapToInterval)
   : numberBins(numberBins)
-  , automaticRange(false)
   , minRange(minRange)
   , maxRange(maxRange)
   , minValue(0)
   , maxValue(0)
-  , mapToInterval(mapToInterval)
-  , firstStep(true) {}
+  , firstStep(true)
+  , automaticRange(false)
+  , mapToInterval(mapToInterval) {}
 
 Discretisizer::~Discretisizer() {}
 

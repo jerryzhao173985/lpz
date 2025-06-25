@@ -28,7 +28,7 @@
 #include "Socket.h"
 
 #include <arpa/inet.h>
-#include <errno.h>
+#include <cerrno>
 #include <netdb.h>
 #include <netinet/in.h>
 #include <netinet/tcp.h>

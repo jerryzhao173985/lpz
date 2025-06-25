@@ -42,13 +42,13 @@ class YarsException{
         m_what(what)
   {}
 
-    virtual ~YarsException() throw() {}
+    virtual ~YarsException() noexcept {}
 
-    virtual const char * what() const throw() {
+    virtual const char * what() const noexcept {
       return m_what.c_str();
     }
 
-    virtual void message() const th override row()
+    virtual void message() const noexcept
     {
       std::cerr << "YarsException: " << m_what << std::endl;
     }

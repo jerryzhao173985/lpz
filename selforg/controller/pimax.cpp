@@ -291,7 +291,6 @@ PiMax::learn() {
     // x,y, L and g' are to be taken at t-l
     for (int l = 1; l < tau; ++l) {
 
-      const Matrix& al = a_buffer[(t - l) % buffersize];
       const Matrix& sl = s_buffer[(t - l) % buffersize];
       const Matrix& gs = gs_buffer[(t - l) % buffersize];
       const Matrix& dmu = ((A ^ T) * du[l]) & gs;

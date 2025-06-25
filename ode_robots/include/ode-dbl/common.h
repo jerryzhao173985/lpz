@@ -559,7 +559,7 @@ ODE_API const char* dGetConfiguration (void);
  *
  * @return 1 if exact token is present, 0 if not present
  */
-ODE_API int explicit dCheckConfiguration( const char* token );
+ODE_API int dCheckConfiguration( const char* token );
 
 #ifdef __cplusplus
 }

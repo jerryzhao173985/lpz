@@ -117,7 +117,7 @@ NeuralGas::learn(const Matrix& input, const Matrix& nom_output, double learnRate
   // __PLACEHOLDER_5__ of network already done in process
   // rank by distance
   rankingvector ranking(distances.getM());
-  for (int i = 0; i < ((signed)distances.getM()); ++i) {
+  for (int i = 0; i < (static_cast<int>(distances.getM())); ++i) {
     ranking[i].first = distances.val(i, 0);
     ranking[i].second = i;
   }

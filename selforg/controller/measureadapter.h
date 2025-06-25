@@ -68,7 +68,7 @@ public:
    * call first AbstractControllerAdapter::init(sensornumber,motornumber)
    * if you overwrite this method
    */
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
 
   /** performs one step (includes learning).
       Calculates motor commands from sensor inputs.
@@ -80,7 +80,7 @@ public:
   virtual void step(const sensor* sensors,
                     int sensornumber,
                     motor* motors,
-                    int motornumber);
+                    int motornumber) override;
 
   /** performs one step without learning.
   @see step
@@ -88,7 +88,7 @@ public:
   virtual void stepNoLearning(const sensor* sensors,
                               int sensornumber,
                               motor* motors,
-                              int motornumber);
+                              int motornumber) override;
 
   /****************************************************************************/
   /*        END methods of AbstractController                                             */

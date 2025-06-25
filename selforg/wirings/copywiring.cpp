@@ -48,7 +48,7 @@ CopyWiring::Assignment CopyWiring::motorFromSensorAssignment(const Assignment& s
   Assignment ma;
   FOREACHCI(Assignment, sensor_assignment, sa, k){
     FOREACHC(std::list<int>, *sa, s){
-      if((signed)ma.size()<=*s) ma.resize(*s+1);
+      if(static_cast<int>(ma.size())<=*s) ma.resize(*s+1);
       ma[*s].push_back(k);
     }
   }

@@ -27,7 +27,7 @@
 #include "plotoption.h"
 #include <algorithm>
 #include <cassert>
-#include <locale.h> // need to set LC_NUMERIC to have a __PLACEHOLDER_22__ in the numbers written or piped to gnuplot
+#include <clocale> // need to set LC_NUMERIC to have a __PLACEHOLDER_22__ in the numbers written or piped to gnuplot
 #include <csignal>
 #include <cstring>
 #include <string>

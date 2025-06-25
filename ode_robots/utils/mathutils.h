@@ -31,14 +31,14 @@
 
 namespace lpzrobots {
 
-  class Axis{ return clampBelow(clampAbove(v,minimum),maximum); } */
+  /* moved clamp function to top level */
 
 /*template<typename T> */
 /*        inline T abs(T v) */
 /*{ return ((v>0)?v:-v); } */
 
   template<typename T>
-  inline T explicit explicit normalize360(T v)
+  inline T normalize360(T v)
     { while (v>360) v-=360; while (v<360) v+=360; return v; }
   /*******************************************************************************/
 
@@ -59,13 +59,13 @@ namespace lpzrobots {
      returns a Rotation matrix that rotates the x-axis along with the given axis.
      The other 2 axis (y,z) are ambiguous.
   */
-  osg::Matrix explicit explicit rotationMatrixFromAxisX(const Axis& axis);
+  osg::Matrix rotationMatrixFromAxisX(const Axis& axis);
 
   /**
      returns a Rotation matrix that rotates the z-axis along with the given axis.
      The other 2 axis (x,y) are ambiguous.
   */
-  osg::Matrix explicit explicit rotationMatrixFromAxisZ(const Axis& axis);
+  osg::Matrix rotationMatrixFromAxisZ(const Axis& axis);
 
   /**
    * returns the angle between two vectors (in rad)
@@ -86,13 +86,13 @@ namespace lpzrobots {
   /**
    * returns a rotation matrix with the given angle
    */
-  matrix::Matrix explicit explicit getRotationMatrix(const double& angle);
+  matrix::Matrix getRotationMatrix(const double& angle);
 
 
   /**
    * returns a translation matrix with the given Position
    */
-  matrix::Matrix explicit explicit getTranslationMatrix(const Position& p);
+  matrix::Matrix getTranslationMatrix(const Position& p);
 
 
   /**

@@ -56,18 +56,18 @@ public:
   virtual ~FeedbackWiring();
 
 protected:
-  virtual bool initIntern();
+  virtual bool initIntern() override;
 
   virtual bool wireSensorsIntern(const sensor* rsensors, int rsensornumber,
                                  sensor* csensors, int csensornumber,
-                                 double noise);
+                                 double noise) override;
 
   virtual bool wireMotorsIntern(motor* rmotors, int rmotornumber,
-                                const motor* cmotors, int cmotornumber);
+                                const motor* cmotors, int cmotornumber) override;
 
 public:
 
-  virtual std::list<iparamkey> getInternalParamNames() const;
+  virtual std::list<iparamkey> getInternalParamNames() const override;
   virtual std::list<iparamval> getInternalParams() const override;
 
   /// return the feedback ratio vector

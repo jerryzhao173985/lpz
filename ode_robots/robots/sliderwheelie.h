@@ -25,7 +25,7 @@
 #define __SLIDERWHEELIE_H
 
 #include<vector>
-#include<assert.h>
+#include <cassert>
 
 #include "oderobot.h"
 #include"primitive.h"

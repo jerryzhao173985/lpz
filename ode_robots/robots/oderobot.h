@@ -41,20 +41,25 @@
 
 namespace lpzrobots {
 
-  class Primitive{
+  class Primitive; // Forward declaration
+  class Joint;     // Forward declaration
+  
+  struct Attachment {
     Attachment(int pI = -1, int jI = -1) : primitiveIndex(pI), jointIndex(jI) {}
-    int primitiveIndex = 0;
-    int jointIndex = 0;
+    int primitiveIndex = -1;
+    int jointIndex = -1;
   };
 
-  typedef std::vector<Primitive*> Primitives;
-  typedef std::vector<Joint*> Joints;
-  typedef std::pair<std::shared_ptr<Sensor>, Attachment> SensorAttachment;
-  typedef std::pair<std::shared_ptr<Motor>, Attachment>  MotorAttachment;
+  using Primitives = std::vector<Primitive*>;
+  using Joints = std::vector<Joint*>;
+  using SensorAttachment = std::pair<std::shared_ptr<Sensor>, Attachment>;
+  using MotorAttachment = std::pair<std::shared_ptr<Motor>, Attachment>;
 
 
   /**
-   * Abstract class for{
+   * Abstract class for ODE robots
+   */
+  class OdeRobot : public AbstractRobot, public Storeable {
   public:
 
     friend class OdeAgent;
@@ -82,11 +87,15 @@ namespace lpzrobots {
         not needed for generic sensors @see getSensors() @see addSensor() */
     virtual int getSensorsIntern(double* sensors, int sensornumber) override { return 0; }
 
-    /** overload this function in a subclass to{ }
+    /** overload this function in a subclass to do specific motor handling,
+        not needed for generic motors @see setMotors() @see addMotor() */
+    virtual void setMotorsIntern(const double* motors, int motornumber) override { }
 
-    /** overload this function in a subclass to{ return 0; }
+    /** overload this function in a subclass to return the number of internal sensors */
+    virtual int getSensorNumberIntern() override { return 0; }
 
-    /** overload this function in a subclass to{ return 0; }
+    /** overload this function in a subclass to return the number of internal motors */
+    virtual int getMotorNumberIntern() override { return 0; }
 
   public:
     /** adds a sensor to the robot. Must be called before agents initializes, otherwise unknown effect.
@@ -142,7 +151,7 @@ namespace lpzrobots {
         If you overload this function, call the OdeRobot::sense() function.
         @param globalData structure that contains global data from the simulation environment
     */
-    virtual void explicit explicit sense(const GlobalData& globalData);
+    virtual void sense(const GlobalData& globalData);
 
     /** this function is called in each simulation timestep (always after control). It
         should perform robot-internal checks and actions
@@ -151,12 +160,12 @@ namespace lpzrobots {
         If you overload this function, call the OdeRobot::doInternalStuff() function.
         @param globalData structure that contains global data from the simulation environment
     */
-    virtual void explicit explicit doInternalStuff(const GlobalData& globalData);
+    virtual void doInternalStuff(const GlobalData& globalData);
 
     /** sets color of the robot
         @param col Color struct with desired Color
     */
-    virtual void explicit explicit setColor(const Color& col);
+    virtual void setColor(const Color& col);
 
 
     /*********** BEGIN TRACKABLE INTERFACE ****************/
@@ -184,25 +193,25 @@ namespace lpzrobots {
 
     /// return the primitive of the robot that is used for tracking and camera following
     virtual const Primitive* getMainPrimitive() const {
-      if (!objects.empty()) return objects[0]; else return 0;
-    };
+      if (!objects.empty()) return objects[0]; else return nullptr;
+    }
 
     /// returns a list of all primitives of the robot (used to store and restore the robot)
-    virtual Primitives getAllPrimitives() const { return objects; };
+    virtual Primitives getAllPrimitives() const { return objects; }
 
-    virtual Primitives& getAllPrimitives() const { return objects; };
-    /// returns a list of all primitives of the robot (const version) (used to store and restore the robot)
+    /// returns a list of all primitives of the robot (non-const version)
+    virtual Primitives& getAllPrimitives() { return objects; }
 
     /// returns a list of all joints of the robot
-    virtual Joints getAllJoints() const { return joints; };
+    virtual Joints getAllJoints() const { return joints; }
 
-    virtual Joints& getAllJoints() { return joints; };
-    /// returns a list of all joints of the robot (const version)
+    /// returns a list of all joints of the robot (non-const version)
+    virtual Joints& getAllJoints() { return joints; }
 
     /* ********** STORABLE INTERFACE **************** */
     virtual bool store(FILE* f) const override;
 
-    virtual bool explicit explicit restore(FILE* f);
+    virtual bool restore(FILE* f) override;
     /* ********** END STORABLE INTERFACE ************ */
 
     /** relocates robot such its primitive with the given ID
@@ -222,7 +231,7 @@ namespace lpzrobots {
     virtual Pose getInitialPose() override { return initialPose; }
     /** returns the initial relative pose of the main primitive
         (use it with moveToPose to further translate or rotate).
-        If initialized with placestatic_cast<p>(then) moveToPose(getRelativeInitialPose()*p) whould put
+        If initialized with place(p) then moveToPose(getRelativeInitialPose()*p) would put
         the main primitive at the same position and pose.
     */
     virtual Pose getRelativeInitialPose() override { return initialRelativePose; }
@@ -235,7 +244,7 @@ namespace lpzrobots {
      */
     virtual void fixate(const GlobalData& global, int primitiveID=-1, double duration = 0);
     /// release the robot in case it is fixated and return true in this case
-    virtual bool explicit explicit unFixate(const GlobalData& global);
+    virtual bool unFixate(const GlobalData& global);
 
 
   protected:
@@ -243,10 +252,10 @@ namespace lpzrobots {
     static bool isGeomInPrimitiveList(Primitive** ps, int len, dGeomID geom);
     static bool isGeomInPrimitiveList(std::list<Primitive*> ps, dGeomID geom);
 
-    void explicit explicit attachSensor(const SensorAttachment& sa);
-    void explicit explicit attachMotor(const MotorAttachment& ma);
+    void attachSensor(const SensorAttachment& sa);
+    void attachMotor(const MotorAttachment& ma);
 
-    /// deletes all objects static_cast<primitives>(and) joints (is called automatically in destructor)
+    /// deletes all objects (primitives) and joints (is called automatically in destructor)
     virtual void cleanup();
 
   protected:
