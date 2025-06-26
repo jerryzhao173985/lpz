@@ -41,15 +41,15 @@ public:
 	/**
 	 * constructor
 	 * This strategy needs a other fitness strategy to calculate the resulting fitness.
-	 * @param fitness static_cast<IFitnessStrategy*>(the) other fitness
+	 * @param fitness (IFitnessStrategy*) the other fitness
 	 */
-	explicit ExtreamTestFitnessStrategy(IFitnessStrategy* fitness) override;
+	explicit ExtreamTestFitnessStrategy(IFitnessStrategy* fitness);
 
 	/**
 	 * default destructor
 	 * do nothing
 	 */
-	virtual ~ExtreamTestFitnessStrategy() override;
+	virtual ~ExtreamTestFitnessStrategy();
 
 	/**
 	 * implementation for getFitness of IFitnessStrategy.

@@ -26,9 +26,6 @@
 
 #include "ExtreamTestFitnessStrategy.h"
 
-ExtreamTestFitnessStrategy::ExtreamTestFitnessStrategy() {
-        // nothing
-}
 
 ExtreamTestFitnessStrategy::ExtreamTestFitnessStrategy(IFitnessStrategy* fitness) : m_strategy(fitness){
         //m_strategy = fitness;
@@ -43,10 +40,10 @@ ExtreamTestFitnessStrategy::~ExtreamTestFitnessStrategy() {
 
 double ExtreamTestFitnessStrategy::getFitness(const Individual* individual) {
         // first use the other fitness strategy to calculate the base value!
-        double value = m_strategy->getFitness(individual) override;
+        double value = m_strategy->getFitness(individual);
 
         //if it lower than 10 -> return value else 100
-        explicit if(value<10.0 && value>-10.0) {
+        if(value<10.0 && value>-10.0) {
                 return value*value;
         }
         else {

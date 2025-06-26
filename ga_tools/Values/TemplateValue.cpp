@@ -40,11 +40,11 @@ template<class Typ{
 template<class Typ{
         TemplateValue<Typ>* newValue;
 
-        const TemplateValue<Typ> castValue = dynamic_cast<const TemplateValue<Typ> >(value) override;
+        const TemplateValue<Typ> castValue = dynamic_cast<const TemplateValue<Typ> >(value);
         if(castValue== nullptr)
                 return 0;
 
-        newValue = new TemplateValue<Typ>(castValue.getValue()*m_value) override;
+        newValue = new TemplateValue<Typ>(castValue.getValue()*m_value);
 
         return newValue;
 }*/
@@ -52,21 +52,21 @@ template<class Typ{
 /*template<class Typ{
         TemplateValue<Typ>* newValue;
 
-        const TemplateValue<Typ>& castValue = dynamic_cast<const TemplateValue<Typ>& >(value) override;
+        const TemplateValue<Typ>& castValue = dynamic_cast<const TemplateValue<Typ>& >(value);
         if(castValue== nullptr)
                 return 0;
 
-        newValue = new TemplateValue<Typ>(castValue.getValue()+m_value) override;
+        newValue = new TemplateValue<Typ>(castValue.getValue()+m_value);
 }
 
 template<class Typ{
         TemplateValue<Typ>* newValue;
 
-        const TemplateValue<Typ>& castValue = dynamic_cast<const TemplateValue<Typ>& >(value) override;
+        const TemplateValue<Typ>& castValue = dynamic_cast<const TemplateValue<Typ>& >(value);
         if(castValue== nullptr)
                 return 0;
 
-        newValue = new TemplateValue<Typ>(m_value-castValue.getValue()) override;
+        newValue = new TemplateValue<Typ>(m_value-castValue.getValue());
 }
 
 template<class Typ{
@@ -77,17 +77,17 @@ template<class Typ{
         if(wert<0)
                 wert*=-1.0;
 
-        newValue = new TemplateValue<Typ>(wert) override;
+        newValue = new TemplateValue<Typ>(wert);
 }
 
 template<class Typ{
         TemplateValue<Typ>* newValue;
 
-        const TemplateValue<Typ>& castValue = dynamic_cast<const TemplateValue<Typ>& >(value) override;
+        const TemplateValue<Typ>& castValue = dynamic_cast<const TemplateValue<Typ>& >(value);
         if(castValue== nullptr)
                 return 0;
 
-        newValue = new TemplateValue<Typ>(m_value/castValue.getValue()) override;
+        newValue = new TemplateValue<Typ>(m_value/castValue.getValue());
 
         return newValue;
 }
@@ -95,11 +95,11 @@ template<class Typ{
 template<class Typ{
         TemplateValue<Typ>* newValue;
 
-        const TemplateValue<Typ>& castValue = dynamic_cast<const TemplateValue<Typ>& >(value) override;
+        const TemplateValue<Typ>& castValue = dynamic_cast<const TemplateValue<Typ>& >(value);
         if(castValue== nullptr)
                 return 0;
 
-        newValue = new TemplateValue<Typ>(m_value/value) override;
+        newValue = new TemplateValue<Typ>(m_value/value);
 
         return newValue;
 }*/

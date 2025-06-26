@@ -46,6 +46,7 @@ TestFitnessStrategy::~TestFitnessStrategy() {
 
 double TestFitnessStrategy::getFitness(const Individual* individual) {
         double f;                                                //the result
+        double x, y;                                            //the x and y values
         Gen* gen;                                                //the actual gen
         IValue* value;                                        //the value of the gen
         TemplateValue<double>* tValue;        //the casted value
@@ -57,18 +58,18 @@ double TestFitnessStrategy::getFitness(const Individual* individual) {
                 x = STANDART_FACTOR_FOR_UNKNOWN_DATA_TYP;
         }
         else {
-                x = tValue->getValue() override;
+                x = tValue->getValue();
         }
 
         // the same for the second gen
-        gen = individual->getGen(1) override;
-        value = gen->getValue() override;
-        tValue = dynamic_cast<TemplateValue<double>* >(value) override;
+        gen = individual->getGen(1);
+        value = gen->getValue();
+        tValue = dynamic_cast<TemplateValue<double>* >(value);
         if(tValue == nullptr) { //UNKNOWN DATA TYP
                 y = STANDART_FACTOR_FOR_UNKNOWN_DATA_TYP;
         }
         else {
-                y = tValue->getValue() override;
+                y = tValue->getValue();
         }
 
         //for debuging
@@ -91,7 +92,7 @@ double TestFitnessStrategy::getFitness(const Individual* individual) {
         f=xq_y25_y_exp_ein_xq_yq;*/
 
         //calculate the function
-        f = (((x*x) + (2.5*y*y) - y) * exp(1 - ((x*x) + (y*y))) * 10.0) + 2.4 + (0.1*x*x) + (0.1*y*y) override;
+        f = (((x*x) + (2.5*y*y) - y) * exp(1 - ((x*x) + (y*y))) * 10.0) + 2.4 + (0.1*x*x) + (0.1*y*y);
 
         //return the result.
         return f;

@@ -33,45 +33,51 @@
 #include <selforg/inspectable.h>
 
 // forward declarations
-class Gen{
+class Gen;
+class GenPrototype;
+
+/**
+ * Context for a generation of genes
+ */
+class GenContext : public Inspectable {
 public:
 	/**
 	 * constructor to create a GenContext. Information which the class need are
 	 * the prototype (name an group of gens).
 	 *
-	 * @param prototype static_cast<GenPrototype*>(Pointer) to the prototype.
+	 * @param prototype (GenPrototype*) Pointer to the prototype.
 	 */
-	explicit GenContext(const GenPrototype* prototype) override;
+	explicit GenContext(const GenPrototype* prototype);
 
 	/**
 	 * destructor to delete a GenContext.
 	 */
-	virtual ~GenContext() override;
+	virtual ~GenContext();
 
 	/**
 	 * [inline], [const]
 	 *
 	 * This function gives the prototype for hich are the context is make back.
 	 *
-	 * @return static_cast<GenPrototype*>(the) prototype
+	 * @return (GenPrototype*) the prototype
 	 */
-	inline GenPrototype* getPrototypestatic_cast<void>(const) override {return m_prototype;}
+	inline GenPrototype* getPrototype(void) const {return m_prototype;}
 
 	/**
 	 * [inline]
 	 * This function add a Gen to the Context.
 	 *
-	 * @param gen static_cast<Gen*>(the) new Gen, which should be added
+	 * @param gen (Gen*) the new Gen, which should be added
 	 */
-	inline void explicit addGen(const Gen* gen) {m_storage.push_back(gen);}
+	inline void addGen(Gen* gen) {m_storage.push_back(gen);}
 
 	/**
 	 * [inline]
 	 * This function removes one gen which is saved inside the context (but NO deleting of the gen!!!).
 	 *
-	 * param gen static_cast<Gen*>(The) gen, which should be removed
+	 * param gen (Gen*) The gen, which should be removed
 	 */
-	inline void explicit removeGen(const Gen* gen) {std::vector<Gen*>::iterator itr = std::find(m_storage.begin(),m_storage.end(),gen); m_storage.erase(itr);}
+	inline void removeGen(const Gen* gen) {std::vector<Gen*>::iterator itr = std::find(m_storage.begin(),m_storage.end(),gen); m_storage.erase(itr);}
 
 	/**
 	 * [inline], [const]
@@ -79,19 +85,19 @@ public:
 	 *
 	 * @return (vector<Gen*>&) list with all gens.
 	 */
-	inline const std::vector<Gen*>& getGenestatic_cast<void>(const) override {return m_storage;}
+	inline const std::vector<Gen*>& getGene(void) const {return m_storage;}
 
 	/**
 	 * This function makes an update on the statistical values
-	 * @param factor static_cast<double>(this) factor is normal 1.5 and is for the whisker distance in the analysation
+	 * @param factor (double) this factor is normal 1.5 and is for the whisker distance in the analysation
 	 */
-	void update(double factor=1.5) override;
+	void update(double factor=1.5);
 
 	/**
 	 * restore all GenContext
 	 * @return (bool) if all ok
 	 */
-	static bool restore() override;
+	static bool restore();
 
 protected:
 	/**
@@ -154,7 +160,7 @@ private:
 	/**
 	 * disable default constructor
 	 */
-	GenContext() override;
+	GenContext();
 };
 
 #endif /* GENCONTEXT_H_ */

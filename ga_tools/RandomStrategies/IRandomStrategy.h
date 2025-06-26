@@ -28,12 +28,17 @@
 #define IRANDOMSTRATEGY_H_
 
 // forward declaration
-class IValue{
+class IValue;
+
+/**
+ * Interface for random value generation strategies
+ */
+class IRandomStrategy {
 public:
 	/**
 	 * default constructor
 	 */
-	IRandomStrategy() override;
+	IRandomStrategy();
 
 	/**
 	 * default destructor
@@ -42,7 +47,7 @@ public:
 
 	/**
 	 * gives a random IValue back.
-	 * @return static_cast<IValue*>(the) random value.
+	 * @return (IValue*) the random value.
 	 */
 	virtual IValue* getRandomValue(void) = 0;
 };

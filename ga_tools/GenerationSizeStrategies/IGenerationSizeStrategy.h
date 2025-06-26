@@ -28,13 +28,14 @@
 #define IGENERATIONSIZESTRATEGY_H_
 
 //forward declaration
-class Generation{
+class Generation;
+class IGenerationSizeStrategy {
 public:
 	/**
 	 * default constructor
 	 * do nothing
 	 */
-	IGenerationSizeStrategy() override;
+	IGenerationSizeStrategy();
 
 	/**
 	 * default destructor
@@ -44,8 +45,8 @@ public:
 
 	/**
 	 * declaration for a function which calculate the size of the next generation after oldGeneration
-	 * @param oldGeneration static_cast<Generation*>(the) old generation
-	 * @return static_cast<int>(the) new size
+	 * @param oldGeneration (Generation*) the old generation
+	 * @return (int) the new size
 	 */
 	virtual int calcGenerationSize(const Generation* oldGeneration) = 0;
 };

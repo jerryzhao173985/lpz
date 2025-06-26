@@ -52,7 +52,7 @@ public:
 	 * @param individual the Individual
 	 * @return the distance
 	 */
-	virtual double getFitness(const Individual* individual) override;
+	virtual double getFitness(const Individual* individual);
 };
 
 #endif /* EUCLIDICDISTANCEFITNESSSTRATEGY_H_ */

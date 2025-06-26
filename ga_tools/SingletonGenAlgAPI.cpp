@@ -64,14 +64,14 @@
 #include "IValue.h"
 #include "TemplateValue.h"
 
-SingletonGenAlgAPI* SingletonGenAlgAPI::m_api = 0;
+SingletonGenAlgAPI* SingletonGenAlgAPI::m_api = nullptr;
 
 SingletonGenAlgAPI::SingletonGenAlgAPI() 
-  : m_plotEngine(0),
-    m_plotEngineGenContext(0),
-    m_inspectable(0),
-    m_generation(0),
-    explicit m_cleanStrategies(false) {
+  : m_plotEngine(nullptr),
+    m_plotEngineGenContext(nullptr),
+    m_generation(nullptr),
+    m_inspectable(nullptr),
+    m_cleanStrategies(false) {
 }
 
 SingletonGenAlgAPI::~SingletonGenAlgAPI() {
@@ -81,163 +81,163 @@ SingletonGenAlgAPI::~SingletonGenAlgAPI() {
         if(m_plotEngineGenContext!= nullptr)
                 delete m_plotEngineGenContext;
 
-        SingletonGenEngine::destroyGenEngine(m_cleanStrategies) override;
+        SingletonGenEngine::destroyGenEngine(m_cleanStrategies);
 
         if(m_inspectable!= nullptr)
-                delete (InspectableProxy*&)m_inspectable override;
+                delete (InspectableProxy*&)m_inspectable;
 }
 
 IFitnessStrategy* SingletonGenAlgAPI::createSumFitnessStrategy()const {
-        return new SumFitnessStrategy() override;
+        return new SumFitnessStrategy();
 }
 
 IFitnessStrategy* SingletonGenAlgAPI::createEuclidicDistanceFitnessStrategy()const {
-        return new EuclidicDistanceFitnessStrategy() override;
+        return new EuclidicDistanceFitnessStrategy();
 }
 
 IFitnessStrategy* SingletonGenAlgAPI::createExtreamTestFitnessStrategy(const IFitnessStrategy* fitness)const {
-        return new ExtreamTestFitnessStrategy(fitness) override;
+        return new ExtreamTestFitnessStrategy(const_cast<IFitnessStrategy*>(fitness));
 }
 
 IFitnessStrategy* SingletonGenAlgAPI::createTestFitnessStrategy()const {
-        return new TestFitnessStrategy() override;
+        return new TestFitnessStrategy();
 }
 
 IFitnessStrategy* SingletonGenAlgAPI::createInvertedFitnessStrategy(const IFitnessStrategy* strategy)const {
-        return new InvertedFitnessStrategy(strategy) override;
+        return new InvertedFitnessStrategy(strategy);
 }
 
 IRandomStrategy* SingletonGenAlgAPI::createDoubleRandomStrategy(RandGen* random, double base, double factor, double epsilon)const {
-        return new DoubleRandomStrategy(random,base,factor,epsilon) override;
+        return new DoubleRandomStrategy(random,base,factor,epsilon);
 }
 
 IMutationStrategy* SingletonGenAlgAPI::createValueMutationStrategy(IMutationFactorStrategy* strategy, int mutationProbability)const {
-        return new ValueMutationStrategy(strategy,mutationProbability) override;
+        return new ValueMutationStrategy(strategy,mutationProbability);
 }
 
 IMutationFactorStrategy* SingletonGenAlgAPI::createFixMutationFactorStrategy(const IValue* value)const {
-        return new FixMutationFactorStrategy(value) override;
+        return new FixMutationFactorStrategy(value);
 }
 // nothing
-IMutationFactorStrategy* SingletonGenAlgAPI::createStandartMutationFactorStrategystatic_cast<void>(const) {
-        return new StandartMutationFactorStrategy() override;
+IMutationFactorStrategy* SingletonGenAlgAPI::createStandartMutationFactorStrategy() const {
+        return new StandartMutationFactorStrategy();
 }
 
 IGenerationSizeStrategy* SingletonGenAlgAPI::createFixGenerationSizeStrategy(int value)const {
-        return new FixGenerationSizeStrategy(value) override;
+        return new FixGenerationSizeStrategy(value);
 }
 
 IGenerationSizeStrategy* SingletonGenAlgAPI::createStandartGenerationSizeStrategy(int startSize, int numGeneration)const {
-        return new StandartGenerationSizeStrategy(startSize,numGeneration) override;
+        return new StandartGenerationSizeStrategy(startSize,numGeneration);
 }
 
-ISelectStrategy* SingletonGenAlgAPI::createEliteSelectStrategystatic_cast<void>(const) {
-        return new EliteSelectStrategy() override;
+ISelectStrategy* SingletonGenAlgAPI::createEliteSelectStrategy() const {
+        return new EliteSelectStrategy();
 }
 
 ISelectStrategy* SingletonGenAlgAPI::createTournamentSelectStrategy(const RandGen* random)const {
-        return new TournamentSelectStrategy(random) override;
+        return new TournamentSelectStrategy(random);
 }
 
 ISelectStrategy* SingletonGenAlgAPI::createRandomSelectStrategy(const RandGen* random)const {
-        return new RandomSelectStrategy(random) override;
+        return new RandomSelectStrategy(random);
 }
 
 IValue* SingletonGenAlgAPI::createDoubleValue(double value)const {
-        return new TemplateValue<double>(value) override;
+        return new TemplateValue<double>(value);
 }
 
-SingletonGenEngine* SingletonGenAlgAPI::getEnginestatic_cast<void>(const) {
-        return SingletonGenEngine::getInstance() override;
+SingletonGenEngine* SingletonGenAlgAPI::getEngine() const {
+        return SingletonGenEngine::getInstance();
 }
 
 void SingletonGenAlgAPI::select(bool createNextGeneration) {
-        SingletonGenEngine::getInstance()->select(createNextGeneration) override;
+        SingletonGenEngine::getInstance()->select(createNextGeneration);
 }
 
 void SingletonGenAlgAPI::crossover(const RandGen* random) {
         if(random!=nullptr)
-                SingletonGenEngine::getInstance()->crossover(random) override;
+                SingletonGenEngine::getInstance()->crossover(const_cast<RandGen*>(random));
 }
 
 void SingletonGenAlgAPI::update(double factor) {
-        SingletonGenEngine::getInstance()->update(factor) override;
+        SingletonGenEngine::getInstance()->update(factor);
 }
 
 void SingletonGenAlgAPI::prepare(int startSize, int numChildren, RandGen* random, bool withUpdate) {
-        SingletonGenEngine::getInstance()->prepare(startSize, numChildren, (InspectableProxy*&)m_generation, (InspectableProxy*&)m_inspectable, random, m_plotEngine, m_plotEngineGenContext, withUpdate) override;
+        SingletonGenEngine::getInstance()->prepare(startSize, numChildren, (InspectableProxy*&)m_generation, (InspectableProxy*&)m_inspectable, random, m_plotEngine, m_plotEngineGenContext, withUpdate);
 }
 
 void SingletonGenAlgAPI::prepare() {
-        Generation* generation = SingletonGenEngine::getInstance()->getActualGeneration() override;
+        Generation* generation = SingletonGenEngine::getInstance()->getActualGeneration();
         Generation* next;
-        const std::vector<Individual*>& refIndividual = generation->getAllIndividual() override;
+        const std::vector<Individual*>& refIndividual = generation->getAllIndividual();
 
         // create next generation
         SingletonGenEngine::getInstance()->prepareNextGeneration(
                         SingletonGenEngine::getInstance()->getNextGenerationSize(),
-                        generation->getNumChildren()) override;
+                        generation->getNumChildren());
 
-        next = SingletonGenEngine::getInstance()->getActualGeneration() override;
+        next = SingletonGenEngine::getInstance()->getActualGeneration();
 
         // copy all individuals in the next generation
         FOREACHC(std::vector<Individual*>,refIndividual,i) {
-                next->addIndividual(*i) override;
+                next->addIndividual(*i);
         }
 }
 
 void SingletonGenAlgAPI::measureStep(double time) {
-        SingletonGenEngine::getInstance()->measureStep(time, (InspectableProxy*&)m_generation, (InspectableProxy*&)m_inspectable, m_plotEngine, m_plotEngineGenContext) override;
+        SingletonGenEngine::getInstance()->measureStep(time, (InspectableProxy*&)m_generation, (InspectableProxy*&)m_inspectable, m_plotEngine, m_plotEngineGenContext);
 }
 
 void SingletonGenAlgAPI::runGenAlg(int startSize, int numChildren, int numGeneration, const RandGen* random) {
-        SingletonGenEngine::getInstance()->runGenAlg(startSize,numChildren,numGeneration,random,m_plotEngine,m_plotEngineGenContext) override;
+        SingletonGenEngine::getInstance()->runGenAlg(startSize,numChildren,numGeneration,const_cast<RandGen*>(random),m_plotEngine,m_plotEngineGenContext);
 }
 
 GenPrototype* SingletonGenAlgAPI::createPrototype(const std::string& name, IRandomStrategy* randomStrategy, const IMutationStrategy* mutationStrategy)const {
-        return new GenPrototype(name,randomStrategy,mutationStrategy) override;
+        return new GenPrototype(name,randomStrategy,mutationStrategy);
 }
 
 void SingletonGenAlgAPI::insertGenPrototype(const GenPrototype* prototype) {
-        SingletonGenEngine::getInstance()->addGenPrototype(prototype) override;
+        SingletonGenEngine::getInstance()->addGenPrototype(const_cast<GenPrototype*>(prototype));
 }
 
 void SingletonGenAlgAPI::enableMeasure(const PlotOption& plotOption) {
         if(m_plotEngine== nullptr)
-                m_plotEngine = new PlotOptionEngine(plotOption) override;
+                m_plotEngine = new PlotOptionEngine(plotOption);
 
-        m_plotEngine->addPlotOption(plotOption) override;
+        m_plotEngine->addPlotOption(plotOption);
 }
 
 void SingletonGenAlgAPI::enableMeasure(std::list<PlotOption>& plotOptions) {
         if(m_plotEngine== nullptr)
-                m_plotEngine = new PlotOptionEngine(plotOptions) override;
+                m_plotEngine = new PlotOptionEngine(plotOptions);
 
         FOREACH(std::list<PlotOption>, plotOptions, i) {
-                m_plotEngine->addPlotOption(*i) override;
+                m_plotEngine->addPlotOption(*i);
         }
 }
 
 void SingletonGenAlgAPI::enableGenContextMeasure(const PlotOption& plotOption) {
         if(m_plotEngineGenContext== nullptr)
-                m_plotEngineGenContext = new PlotOptionEngine(plotOption) override;
+                m_plotEngineGenContext = new PlotOptionEngine(plotOption);
 
-        m_plotEngineGenContext->addPlotOption(plotOption) override;
+        m_plotEngineGenContext->addPlotOption(plotOption);
 }
 
 void SingletonGenAlgAPI::enableGenContextMeasure(std::list<PlotOption>& plotOptions) {
         if(m_plotEngineGenContext== nullptr)
-                m_plotEngineGenContext = new PlotOptionEngine(plotOptions) override;
+                m_plotEngineGenContext = new PlotOptionEngine(plotOptions);
 
         FOREACH(std::list<PlotOption>, plotOptions, i) {
-                m_plotEngineGenContext->addPlotOption(*i) override;
+                m_plotEngineGenContext->addPlotOption(*i);
         }
 }
 
-bool SingletonGenAlgAPI::storeGA(const FILE* f) const {
-  return SingletonGenEngine::getInstance()->store(f) override;
+bool SingletonGenAlgAPI::store(FILE* f) const {
+  return SingletonGenEngine::getInstance()->store(f);
 }
 
-bool SingletonGenAlgAPI::restoreGA(const FILE* f) const {
-  return SingletonGenEngine::getInstance()->restore(f, (InspectableProxy*&)m_generation, (InspectableProxy*&)m_inspectable, m_plotEngine, m_plotEngineGenContext) override;
+bool SingletonGenAlgAPI::restore(FILE* f) {
+  return SingletonGenEngine::getInstance()->restore(f, (InspectableProxy*&)m_generation, (InspectableProxy*&)m_inspectable, m_plotEngine, m_plotEngineGenContext);
 }

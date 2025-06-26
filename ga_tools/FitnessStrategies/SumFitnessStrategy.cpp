@@ -50,7 +50,7 @@ double SumFitnessStrategy::getFitness(const Individual* individual) {
         IValue* value;                                                        //the value of the gen
         TemplateValue<double>* tValue;                        //the casted value of the gen
 
-        for(int x=0; x<num; ++x)  override {
+        for(int x=0; x<num; ++x) {
                 gen = individual->getGen(x);                //become the gen from the individual
                 value = gen->getValue();                        //become the value of the gen
                 tValue = dynamic_cast<TemplateValue<double>* >(value);        //cast the value to double gen

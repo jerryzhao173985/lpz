@@ -40,17 +40,19 @@
 struct RESTORE_GA_INDIVIDUAL;
 
 /**
- * This class represent{
+ * This class represents an individual in the genetic algorithm
+ */
+class Individual {
 public:
 	/**
 	 * constructor
-	 * Create the individual with the name __PLACEHOLDER_2__
+	 * Create the individual with the given name
 	 * @param name (sting) the name of the new individual
-	 * @param id static_cast<int>(an) unique ID
-	 * @param p1 static_cast<Individual*>(parent) 1 or zero if it random generate
-	 * @param p2 static_cast<Individual*>(parent) 2 or zero if it random generate
+	 * @param id (int) an unique ID
+	 * @param p1 (Individual*) parent 1 or zero if it random generate
+	 * @param p2 (Individual*) parent 2 or zero if it random generate
 	 */
-	Individual(const std::string& name, int id, Individual* p1=0, Individual* p2=0) override;
+	Individual(const std::string& name, int id, Individual* p1=nullptr, Individual* p2=nullptr);
 
 	/**
 	 * default destructor
@@ -59,64 +61,64 @@ public:
 
 	/**
 	 * return the ID of the individual
-	 * @return static_cast<int>(the) ID
+	 * @return (int) the ID
 	 */
-	inline int getIDstatic_cast<void>(const) override {return m_ID;}
+	inline int getID(void) const {return m_ID;}
 
 	/**
 	 * return the name of the individual
 	 * @return (string) the name
 	 */
-	inline const std::string& getNamestatic_cast<void>(const) override {return m_name;}
+	inline const std::string& getName(void) const {return m_name;}
 
 	/**
 	 * return the size of the individual. This mean the number of gens inside the individual.
-	 * @return static_cast<int>(number) of gens
+	 * @return (int) number of gens
 	 */
-	inline int getSizestatic_cast<void>(const) override {return m_gene.size();}
+	inline int getSize(void) const {return static_cast<int>(m_gene.size());}
 
 	/**
 	 * return a gen of the individual
 	 * @param x (the index of the gen
-	 * @return static_cast<Gen*>(the) searched gen. nullptr if the index isn't right
+	 * @return (Gen*) the searched gen. nullptr if the index isn't right
 	 */
-	inline Gen* getGen(int x)const override {if(x<getSize())return m_gene[x];return nullptr;}
+	inline Gen* getGen(int x)const {if(x<getSize())return m_gene[x];return nullptr;}
 
 	/**
 	 * add a gen to the individual.
-	 * @param gen static_cast<Gen*>(the) new gen
+	 * @param gen (Gen*) the new gen
 	 */
-	inline void explicit addGen(const Gen* gen) {m_gene.push_back(gen);}
+	inline void addGen(Gen* gen) {m_gene.push_back(gen);}
 
 	/**
 	 * returns all gens of the individual
 	 * @return (vector<Gen*>&) all gens
 	 */
-	inline const std::vector<Gen*>& getGenestatic_cast<void>(const) override {return m_gene;}
+	inline const std::vector<Gen*>& getGene(void) const {return m_gene;}
 
 	/**
 	 * remove a specified gen from the individual
-	 * @param gen static_cast<Gen*>(the) gen which should removed from the individual
+	 * @param gen (Gen*) the gen which should removed from the individual
 	 */
-	void removeGen(const Gen* gen) override;
+	void removeGen(const Gen* gen);
 
 	/**
 	 * remove a specified gen from the individual
 	 * @param x (the index of the gen, which should b removed.
 	 */
-	void removeGen(int x) override;
+	void removeGen(int x);
 
 	/**
 	 * this function calculate the fitness value of the individual
 	 * @return fitness value
 	 */
-	double getFitness() const override;
+	double getFitness() const;
 
   /**
    * this function calculate the fitness value of the individual (const)
    * @return fitness value
    */
-  double getFitnessC()const override;
+  double getFitnessC()const;
 
 	/**
 	 * this select the individual as a product of mutation.
@@ -125,65 +127,65 @@ public:
 
 	/**
 	 * returns parent 1 of the individual
-	 * @return static_cast<Individual*>(parent) 1 (could be zero if individual a random generation)
+	 * @return (Individual*) parent 1 (could be zero if individual a random generation)
 	 */
-	inline const Individual* getParent1static_cast<void>(const) override {return m_parent1;}
+	inline const Individual* getParent1(void) const {return m_parent1;}
 
 	/**
 	 * returns parent 2 of the individual
-	 * @return static_cast<Individual*>(parent) 2 (could be zero if individual a random generation)
+	 * @return (Individual*) parent 2 (could be zero if individual a random generation)
 	 */
-	inline const Individual* getParent2static_cast<void>(const) override {return m_parent2;}
+	inline const Individual* getParent2(void) const {return m_parent2;}
 
 	/**
 	 * test if the individual a product of mutation
 	 * @return (bool) true if it a product of mutation
 	 */
-	inline bool isMutatedstatic_cast<void>(const) override {return m_mutated;}
+	inline bool isMutated(void) const {return m_mutated;}
 
 	/**
 	 * returns a string, which repesent the individual (for logging)
 	 * @return (string) the string representation of the individual
 	 */
-	std::string IndividualToStringstatic_cast<void>(const) override;
+	std::string IndividualToString(void) const;
 
 	/**
 	 * returns a string with the parents and a mark for mutation
 	 * @param withMutation (bool) should mutation part of the string
 	 * @return (string) the result
 	 */
-	std::string RootToString(bool withMutation=true)const override;
+	std::string RootToString(bool withMutation=true)const;
 
 	/**
 	 * returns the m_fitnessCalculated flag, which represent, that the fitness value was calculated before.
 	 * @return (bool) the flag m_fitnessCalculated
 	 */
-	inline bool isFitnessCalculated()const override {return m_fitnessCalculated;}
+	inline bool isFitnessCalculated()const {return m_fitnessCalculated;}
 
 	/**
 	 * store the individual in a file
 	 * @param f (FILE) the file to store in
 	 * @return (bool) return true if ok
 	 */
-	bool store(const FILE* f)const override;
+	bool store(FILE* f) const;
 
 	/**
 	 * restore all individual from a restore structure
-	 * @param numberIndividuals static_cast<int>(number) of individuals which should be restored
+	 * @param numberIndividuals (int) number of individuals which should be restored
 	 * @param nameSet (map<int,string>) names of the individuals
 	 * @param individualSet (map<int,RESTORE_GA_INDIVIDUAL*> the structures which should be restored
 	 * @param linkSet (map<int,vector<int>>) the linkings between the individual and the genes
    * @return (bool) true if all ok
 	 */
-	static bool restore(int numberIndividuals,std::map<int,std::string>& nameSet,std::map<int,RESTORE_GA_INDIVIDUAL*>& individualSet, std::map<int,std::vector<int> >& linkSet, std::vector<Individual*>& storage) override;
+	static bool restore(int numberIndividuals,std::map<int,std::string>& nameSet,std::map<int,RESTORE_GA_INDIVIDUAL*>& individualSet, std::map<int,std::vector<int> >& linkSet, std::vector<Individual*>& storage);
 
 	/**
 	 * restore the parent links from a restore structure
-	 * @param numberIndividuals static_cast<int>(number) of individuals which should be restored
+	 * @param numberIndividuals (int) number of individuals which should be restored
    * @param individualSet (map<int,RESTORE_GA_INDIVIDUAL*> the structures which should be restored
    * @return (bool) true if all ok
 	 */
-	static bool restoreParent(int numberIndividuals,std::map<int,RESTORE_GA_INDIVIDUAL*>& individualSet) override;
+	static bool restoreParent(int numberIndividuals,std::map<int,RESTORE_GA_INDIVIDUAL*>& individualSet);
 
 protected:
 	/**
@@ -230,7 +232,7 @@ private:
 	/**
 	 * disable the default constructor
 	 */
-	Individual() override;
+	Individual();
 };
 
 #endif /* INDIVIDUAL_H_ */

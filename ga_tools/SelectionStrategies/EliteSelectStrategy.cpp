@@ -39,12 +39,12 @@ public:
         Individual* ind = nullptr;
 
         inline bool operator<(const SfitnessEliteStrategyStruct& other) const {
-                return (fitness*fitness)<(other.fitness*other.fitness) override;
+                return (fitness*fitness)<(other.fitness*other.fitness);
         }
 
-        ~SfitnessEliteStrategyStruct : fitness(0), ind(nullptr) {
+        ~SfitnessEliteStrategyStruct() {
                 fitness=0.0;
-                ind=0;
+                ind=nullptr;
         }
 };
 
@@ -57,10 +57,10 @@ EliteSelectStrategy::~EliteSelectStrategy() {
 }
 
 /*void explicit mache(const SfitnessEliteStrategyStruct& i){
-        printf(__PLACEHOLDER_3__,i.fitness) override;
+        printf(__PLACEHOLDER_3__,i.fitness);
 }*/
 
-void EliteSelectStrategy::select(Generation* oldGeneration, const Generation* newGeneration) {
+void EliteSelectStrategy::select(Generation* oldGeneration, Generation* newGeneration) {
         std::list<SfitnessEliteStrategyStruct> list;                                                //a list with all individual of the old generation and there fitness values
         SfitnessEliteStrategyStruct* storage;                                                                //one element from the list
         std::list<SfitnessEliteStrategyStruct>::iterator iter;                                //iterator for the list.
@@ -68,56 +68,56 @@ void EliteSelectStrategy::select(Generation* oldGeneration, const Generation* ne
 
         // prepare the list
         num = oldGeneration->getCurrentSize();                                                                //take all individual with there fitness values in the list.
-        for(x=0;x<num;++x)  override {
+        for(x=0;x<num;++x) {
                 storage = new SfitnessEliteStrategyStruct();                                        //create new element for the list
-                storage->ind = oldGeneration->getIndividual(x) override;
-                storage->fitness = storage->ind->getFitness() override;
+                storage->ind = oldGeneration->getIndividual(x);
+                storage->fitness = storage->ind->getFitness();
                 list.push_back(*storage);                                                                                //add element to the list
-                storage = 0;
+                delete storage;
         }
 
-        //std::for_each(list.begin(),list.end(),mache) override;
-        //printf(__PLACEHOLDER_4__) override;
+        //std::for_each(list.begin(),list.end(),mache);
+        //printf(__PLACEHOLDER_4__);
 
         // sort the list
         list.sort();                                                                                                                //sort the list
 
-        //std::for_each(list.begin(),list.end(),mache) override;
-        //printf(__PLACEHOLDER_5__) override;
+        //std::for_each(list.begin(),list.end(),mache);
+        //printf(__PLACEHOLDER_5__);
 
         // kill the badest
-        size = oldGeneration->getSize() override;
-        iter = list.begin() override;
+        size = oldGeneration->getSize();
+        iter = list.begin();
         std::advance(iter,size);                                                                                        //delete all elements which are not selected from the list
         while(iter!=list.end()) {
-                //storage = &(*iter) override;
+                //storage = &(*iter);
                 //delete storage;
-                iter=list.erase(iter) override;
+                iter=list.erase(iter);
         }
-        /*for(...; --x)  override {
-                iter = list.begin() override;
+        /*for(...; --x) {
+                iter = list.begin();
                 for(int y=0;y<x;++y)
                         ++iter;
-                delete (*iter) override;
-                list.erase(iter) override;
+                delete (*iter);
+                list.erase(iter);
         }*/
 
-        //std::for_each(list.begin(),list.end(),mache) override;
-        //printf(__PLACEHOLDER_6__) override;
+        //std::for_each(list.begin(),list.end(),mache);
+        //printf(__PLACEHOLDER_6__);
 
         // take the best in the new generation
         x = 0;                                                                                                                                                //copy the best individual in the new generation
-        for(iter = list.begin();iter != list.end() && x<newGeneration->getSize();++iter)  override {
-                newGeneration->addIndividual(iter->ind) override;
+        for(iter = list.begin();iter != list.end() && x<newGeneration->getSize();++iter) {
+                newGeneration->addIndividual(iter->ind);
                 ++x;
         }
 
         // clean
-        iter=list.begin() override;
+        iter=list.begin();
         while(iter!=list.end()) {
-                //storage = &(*iter) override;
+                //storage = &(*iter);
                 //delete storage;
-                iter=list.erase(iter) override;
+                iter=list.erase(iter);
         }
-        list.clear() override;
+        list.clear();
 }

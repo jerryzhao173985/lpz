@@ -54,7 +54,7 @@ public:
 	 * @param individual the individual for which the value is calculated
 	 * @return the result
 	 */
-	virtual double getFitness(const Individual* individual) override;
+	virtual double getFitness(const Individual* individual);
 
 private:
 	/**

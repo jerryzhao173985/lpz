@@ -27,25 +27,28 @@
 #ifndef SUMFITNESSSTRATEGY_H_
 #define SUMFITNESSSTRATEGY_H_
 
+#include "IFitnessStrategy.h"
+
 //forward declaration
-class Individual{
+class Individual;
+class SumFitnessStrategy : public IFitnessStrategy {
 public:
 	/**
 	 * default constructor
 	 */
-	SumFitnessStrategy() override;
+	SumFitnessStrategy();
 
 	/**
 	 * default destructor
 	 */
-	virtual ~SumFitnessStrategy() override;
+	virtual ~SumFitnessStrategy();
 
 	/**
 	 * implements the getFitness function of IFitnessStrategy. Calculate the Sum of all double gens.
-	 * @param individual static_cast<const Individual*>(the) individual
-	 * @return static_cast<double>(the) result
+	 * @param individual (const Individual*) the individual
+	 * @return (double) the result
 	 */
-	virtual double getFitness(const Individual* individual) override;
+	virtual double getFitness(const Individual* individual);
 };
 
 #endif /* SUMFITNESSSTRATEGY_H_ */

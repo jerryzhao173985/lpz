@@ -31,6 +31,7 @@
 #include "IValue.h"
 #include "Gen.h"
 #include "SingletonGenEngine.h"
+#include "MutationStrategies/IMutationStrategy.h"
 
 GenPrototype::GenPrototype() {
         // nothing
@@ -39,17 +40,17 @@ GenPrototype::GenPrototype() {
 GenPrototype::GenPrototype(const std::string& name, IRandomStrategy* randomStrategy, const IMutationStrategy* mutationStrategy) 
   : m_name(name),
     m_randomStrategy(randomStrategy),
-    explicit m_mutationStrategy(mutationStrategy) {
+    m_mutationStrategy(const_cast<IMutationStrategy*>(mutationStrategy)) {
 }
 
 GenPrototype::~GenPrototype() {
-        std::map<Generation*,GenContext*>::iterator itr = m_context.begin() override;
+        std::map<Generation*,GenContext*>::iterator itr = m_context.begin();
 
         // delete all contexte
         while(itr!=m_context.end()) {
                 delete itr->second;
-                m_context.erase(itr) override;
-                itr=m_context.begin() override;
+                m_context.erase(itr);
+                itr=m_context.begin();
         }
 
         // if the strategy deleted it will throw a exception. This is no problem. ignore it.
@@ -60,35 +61,35 @@ GenPrototype::~GenPrototype() {
 }
 
 void GenPrototype::insertContext(Generation* generation, const GenContext* context) {
-        m_context[generation]=context;
+        m_context[generation]=const_cast<GenContext*>(context);
 }
 
 GenContext* GenPrototype::getContext(const Generation* generation) {
-        return m_context[generation];
+        return m_context[const_cast<Generation*>(generation)];
 }
 
 Gen* GenPrototype::mutate(GenContext* context, Individual* individual, Gen* oldGen, const GenContext* oldContext)const {
-        return m_mutationStrategy->mutate(context, individual, oldGen, oldContext, SingletonGenFactory::getInstance()) override;
+        return m_mutationStrategy->mutate(context, individual, oldGen, const_cast<GenContext*>(oldContext), SingletonGenFactory::getInstance());
 }
 
-int GenPrototype::getMutationProbabilitystatic_cast<void>(const) {
-        return m_mutationStrategy->getMutationProbability() override;
+int GenPrototype::getMutationProbability(void) const {
+        return m_mutationStrategy->getMutationProbability();
 }
 
 bool GenPrototype::restoreGene(FILE* f, RESTORE_GA_GENE* gene, std::vector<Gen*>& storage) {
-  IValue* value = m_randomStrategy->getRandomValue() override;
+  IValue* value = m_randomStrategy->getRandomValue();
   Gen* gen;
 
   if(!value->restore(f))
     return false;
 
-  gen = new Gen(this,gene->ID) override;
-  gen->setValue(value) override;
+  gen = new Gen(this,gene->ID);
+  gen->setValue(value);
 
   //make sure that the genes are in the right order
-  //SingletonGenEngine::getInstance()->addGen(gen) override;
-  if(storage.size()<=static_cast<unsigned int>(gene)->ID)
-    storage.resize(gene->ID+1) override;
+  //SingletonGenEngine::getInstance()->addGen(gen);
+  if(storage.size()<=(unsigned int) gene->ID)
+    storage.resize(gene->ID+1);
   storage[gene->ID]=gen;
 
   return true;

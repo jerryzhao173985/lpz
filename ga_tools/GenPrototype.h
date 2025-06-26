@@ -30,9 +30,19 @@
 // standard includes
 #include <string>
 #include <map>
+#include <vector>
+#include <selforg/inspectable.h>
+#include "restore.h"
+#include "RandomStrategies/IRandomStrategy.h"
 
 // forward declarations
-class Generation{
+class Generation;
+class GenContext;
+class Gen;
+class Individual;
+class IMutationStrategy;
+
+class GenPrototype {
 public:
 	/**
 	 * constructor to create a GenPrototype. Information which the class need are
@@ -40,10 +50,10 @@ public:
 	 * created (for the IValue) and a strategy how can a Gen mutate.
 	 *
 	 * @param name (string) Name of the group
-	 * @param randomStrategy static_cast<IRandomStrategy*>(the) strategy for creating a gen
-	 * @param mutationStrategy static_cast<IMutationStrategy*>(the) strategy for mutating a gen
+	 * @param randomStrategy (IRandomStrategy*) the strategy for creating a gen
+	 * @param mutationStrategy (IMutationStrategy*) the strategy for mutating a gen
 	 */
-	GenPrototype(const std::string& name, IRandomStrategy* randomStrategy, const IMutationStrategy* mutationStrategy) override;
+	GenPrototype(const std::string& name, IRandomStrategy* randomStrategy, const IMutationStrategy* mutationStrategy);
 
 	/**
 	 * destructor to delete a GenContext.
@@ -56,59 +66,59 @@ public:
 	 *
 	 * @return (string) the name
 	 */
-	inline const std::string& getNamestatic_cast<void>(const) override {return m_name;}
+	inline const std::string& getName(void) const {return m_name;}
 
 	/**
 	 * [inline], [const]
 	 * This function gives a random value (IValue) which are with the randomStrategy is generated back.
 	 */
-	inline IValue* getRandomValuestatic_cast<void>(const) override {return m_randomStrategy->getRandomValue();}
+	inline IValue* getRandomValue(void) const {return m_randomStrategy->getRandomValue();}
 
 	/**
 	 * This function insert a GenContext in the GenPrototype.
 	 *
-	 * @param generation static_cast<Generation*>(to) which Generation is the Context related.
-	 * @param context static_cast<GenContext*>(the) context which should be insert
+	 * @param generation (Generation*) to which Generation is the Context related.
+	 * @param context (GenContext*) the context which should be insert
 	 */
-	void insertContext(Generation* generation, const GenContext* context) override;
+	void insertContext(Generation* generation, const GenContext* context);
 
 	/**
 	 * This function gives the context which is relatedto the Eneration __PLACEHOLDER_3__ back.
 	 *
-	 * @param generation static_cast<Generation*>(the) related generation
+	 * @param generation (Generation*) the related generation
 	 *
-	 * @return static_cast<GenContext*>(the) searched context
+	 * @return (GenContext*) the searched context
 	 */
-	GenContext* getContext(const Generation* generation) override;
+	GenContext* getContext(const Generation* generation);
 
 	/**
 	 * [const]
 	 * This function mutate the given gen.
 	 *
-	 * @param context static_cast<GenContext*>(param) is needed by the mutationStrategy
-	 * @param individual static_cast<Individual*>(param) is needed by the mutationStrategy
-	 * @param oldGen static_cast<Gen*>(the) gen which should be mutate
-	 * @param oldContext static_cast<GenContext*>(param) is needed by the mutationStrategy
+	 * @param context (GenContext*) param is needed by the mutationStrategy
+	 * @param individual (Individual*) param is needed by the mutationStrategy
+	 * @param oldGen (Gen*) the gen which should be mutate
+	 * @param oldContext (GenContext*) param is needed by the mutationStrategy
 	 *
-	 * @return static_cast<Gen*>(The) new mutated gen
+	 * @return (Gen*) The new mutated gen
 	 */
-	Gen* mutate(GenContext* context, Individual* individual, Gen* oldGen, const GenContext* oldContext)const override;
+	Gen* mutate(GenContext* context, Individual* individual, Gen* oldGen, const GenContext* oldContext) const;
 
 	/**
 	 * [const]
 	 * This function gives the mutation probability back (from the mutation strategy)
 	 *
-	 * @return static_cast<int>(The) mutation probability. Maybe the Typ int will be changed.
+	 * @return (int) The mutation probability. Maybe the Typ int will be changed.
 	 */
-	int getMutationProbabilitystatic_cast<void>(const) override;
+	int getMutationProbability(void) const;
 
 	/**
 	 * restore gene and the value
-	 * @param f static_cast<FILE*>(here) is the value inside
-	 * @param gene static_cast<RESTORE_GA_GENE*>(this) gene is to restore
+	 * @param f (FILE*) here is the value inside
+	 * @param gene (RESTORE_GA_GENE*) this gene is to restore
 	 * @return (bool) true if all ok
 	 */
-	bool restoreGene(FILE* f, RESTORE_GA_GENE* gene, std::vector<Gen*>& storage) override;
+	bool restoreGene(FILE* f, RESTORE_GA_GENE* gene, std::vector<Gen*>& storage);
 
 protected:
 	/**
@@ -139,7 +149,7 @@ private:
 	/**
 	 * disable the default constructor
 	 */
-	GenPrototype() override;
+	GenPrototype();
 };
 
 #endif /* GENPROTOTYPE_H_ */

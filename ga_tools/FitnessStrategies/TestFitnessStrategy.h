@@ -25,27 +25,30 @@
  ***************************************************************************/
 
 #ifndef TESTFITNESSSTRATEGY_H_
+
+#include "IFitnessStrategy.h"
 #define TESTFITNESSSTRATEGY_H_
 
 //forward declaration
-class Individual{
+class Individual;
+class TestFitnessStrategy : public IFitnessStrategy {
 public:
 	/**
 	 * default constructor
 	 */
-	TestFitnessStrategy() override;
+	TestFitnessStrategy();
 
 	/**
 	 * default destructor
 	 */
-	virtual ~TestFitnessStrategy() override;
+	virtual ~TestFitnessStrategy();
 
 	/**
 	 * calculate the test fitness value for a individual
-	 * @param individual static_cast<const Individual*>(the) individual
-	 * @return static_cast<double>(the) result
+	 * @param individual (const Individual*) the individual
+	 * @return (double) the result
 	 */
-	virtual double getFitness(const Individual* individual) override;
+	virtual double getFitness(const Individual* individual);
 };
 
 #endif /* TESTFITNESSSTRATEGY_H_ */

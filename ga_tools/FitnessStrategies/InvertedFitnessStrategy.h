@@ -25,30 +25,33 @@
  ***************************************************************************/
 
 #ifndef INVERTEDFITNESSSTRATEGY_H_
+
+#include "IFitnessStrategy.h"
 #define INVERTEDFITNESSSTRATEGY_H_
 
 //forward declaration
-class Individual{
+class Individual;
+class InvertedFitnessStrategy : public IFitnessStrategy {
 public:
 	/**
 	 * constructor
 	 * Needs a other fitness strategy, which should be inverted.
-	 * @param strategy static_cast<IFitnessStrategy*>(the) other fitness strategy
+	 * @param strategy (IFitnessStrategy*) the other fitness strategy
 	 */
-	explicit InvertedFitnessStrategy(const IFitnessStrategy* strategy) override;
+	explicit InvertedFitnessStrategy(const IFitnessStrategy* strategy);
 
 	/**
 	 * default destructor
 	 */
-	virtual ~InvertedFitnessStrategy() override;
+	virtual ~InvertedFitnessStrategy();
 
 	/**
 	 * returns the inverse fitness value what the other strategy returns for the individual __PLACEHOLDER_1__.
 	 *
-	 * @param individual static_cast<const Individual*>(calculate) the fitness for this individual
-	 * @return static_cast<double>(The) fitness value
+	 * @param individual (const Individual*) calculate the fitness for this individual
+	 * @return (double) The fitness value
 	 */
-	virtual double getFitness(const Individual* individual) override;
+	virtual double getFitness(const Individual* individual);
 
 protected:
 	/**
@@ -60,7 +63,7 @@ private:
 	/**
 	 * disable the default constructor
 	 */
-	InvertedFitnessStrategy() override;
+	InvertedFitnessStrategy();
 };
 
 #endif /* INVERTEDFITNESSSTRATEGY_H_ */

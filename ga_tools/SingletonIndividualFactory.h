@@ -28,17 +28,22 @@
 #define SINGLETONINDIVIDUALFACTORY_H_
 
 //includes
+#include <string>
+#include <cstdio>
 #include <selforg/randomgenerator.h>
 
 //forward declaration
-class Gen{
+class Gen;
+class Individual;
+
+class SingletonIndividualFactory {
 public:
 	/**
 	 * this method gives the one and only existing factory back.
-	 * @return static_cast<SingletonIndividualFactory*>(the) factory
+	 * @return (SingletonIndividualFactory*) the factory
 	 */
 	inline static SingletonIndividualFactory* getInstance(void) {
-		if(m_factory== nullptr)m_factory = new SingletonIndividualFactory override;
+		if(m_factory== nullptr)m_factory = new SingletonIndividualFactory();
 		return m_factory;
 	}
 
@@ -51,25 +56,25 @@ public:
 	/**
 	 * random creation by random creation of Gen for every GenPrototype.
 	 * @param name (string) the name of the new individual. Will be automaticly created
-	 * @return static_cast<Individual*>(the) new individual
+	 * @return (Individual*) the new individual
 	 */
-	Individual* createIndividual(const std::string& name=createName())const override;																		// random
+	Individual* createIndividual(const std::string& name=createName())const;																		// random
 	/**
 	 * create a new individual by recombination of the gens of there parents
-	 * @param individual1 static_cast<Individual*>(parent) 1
-	 * @param individual2 static_cast<Individual*>(parent) 2
-	 * @param random static_cast<RandGen*>(a) random generator
+	 * @param individual1 (Individual*) parent 1
+	 * @param individual2 (Individual*) parent 2
+	 * @param random (RandGen*) a random generator
 	 * @param name (string) the name of the new individual. Will be automaticly created
-	 * @return static_cast<Individual*>(the) new individual
+	 * @return (Individual*) the new individual
 	 */
-	Individual* createIndividual(Individual* individual1, Individual* individual2, RandGen* random, std::string name=createName())const override;	// recombinate
+	Individual* createIndividual(Individual* individual1, Individual* individual2, RandGen* random, std::string name=createName()) const;	// recombinate
 
 	//reset m_number inside restore
 	/**
 	 * set the member variable m_number to number
-	 * @param number static_cast<int>(the) new value
+	 * @param number (int) the new value
 	 */
-	inline void explicit setNumber(int number) {m_number=number;}
+	inline void setNumber(int number) {m_number=number;}
 
 private:
 	/**
@@ -86,7 +91,7 @@ private:
 	 * disable the default constructor
 	 * only usable for itself
 	 */
-	SingletonIndividualFactory() override;
+	SingletonIndividualFactory();
 
 	/**
 	 * disable the default destructor

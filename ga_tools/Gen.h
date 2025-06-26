@@ -39,22 +39,24 @@
 /**
  * The Gen class.
  *
- *   This class is{
+ * This class represents a gene in the genetic algorithm.
+ */
+class Gen {
 public:
 	/**
 	 * constructor to create a gen. Information which the class need are
 	 * the prototype (name an group of gens) and the id, which the gen
 	 * identified.
 	 *
-	 * @param prototype static_cast<GenPrototype*>(Pointer) to the prototype.
-	 * @param id static_cast<int>(ID) of the gen
+	 * @param prototype (GenPrototype*) Pointer to the prototype.
+	 * @param id (int) ID of the gen
 	 */
-	Gen(GenPrototype* prototype, int id) override;
+	Gen(const GenPrototype* prototype, int id);
 
 	/**
 	 * destructor to delete a gen.
 	 */
-	virtual ~Genstatic_cast<void>(override);
+	virtual ~Gen(void);
 
 	/**
 	 * [const]
@@ -62,39 +64,39 @@ public:
 	 *
 	 * @return (string) Name of the Gen.
 	 */
-	std::string getNamestatic_cast<void>(const) override;
+	std::string getName(void) const;
 
 	/**
 	 * [inline], [const]
 	 * This function gives the value which is saved in the Gen back.
 	 *
-	 * @return static_cast<IValue*>(The) value
+	 * @return (IValue*) The value
 	 */
-	inline IValue* getValuestatic_cast<void>(const) override {return m_value;}
+	inline IValue* getValue(void) const {return m_value;}
 
 	/**
 	 * [inline]
 	 * This function change the saved pointer to the IValue. So the Gen changed his value.
 	 *
-	 * @param value static_cast<IVaue*>(the) new Value
+	 * @param value (IVaue*) the new Value
 	 */
-	inline void explicit setValue(const IValue* value) {m_value=value;}
+	inline void setValue(IValue* value) {m_value=value;}
 
 	/**
 	 * [inline], [const]
 	 * This function gives the ID of the Gen back.
 	 *
-	 * @return static_cast<int>(The) ID
+	 * @return (int) The ID
 	 */
-	inline int getIDstatic_cast<void>(const) override {return m_ID;}
+	inline int getID(void) const {return m_ID;}
 
 	/**
 	 * [const]
 	 * This function gives the prototype of the Gen back.
 	 *
-	 * @return static_cast<GenPrototyp*>(The) prototype
+	 * @return (GenPrototyp*) The prototype
 	 */
-	GenPrototype* getPrototypestatic_cast<void>(const) override;
+	GenPrototype* getPrototype(void) const;
 
 	/**
 	 *  [const]
@@ -102,14 +104,14 @@ public:
 	 *
 	 *  @return (string) The Gen in string - Form
 	 */
-	std::string toString(bool onlyValue = true)const override;
+	std::string toString(bool onlyValue = true) const;
 
 	/**
 	 * store the gene in a file
-	 * @param f static_cast<FILE*>(the) file to store
+	 * @param f (FILE*) the file to store
 	 * @return (bool) true if all ok
 	 */
-	bool store(const FILE* f)const override;
+	bool store(FILE* f) const;
 
 protected:
 	/**
@@ -134,7 +136,7 @@ private:
 	/**
 	 * disable default constructor
 	 */
-	Genstatic_cast<void>(override);
+	Gen(void);
 };
 
 #endif /* GEN_H_ */

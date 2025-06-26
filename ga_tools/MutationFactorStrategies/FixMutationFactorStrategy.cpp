@@ -33,7 +33,7 @@ FixMutationFactorStrategy::FixMutationFactorStrategy() {
 }
 
 FixMutationFactorStrategy::FixMutationFactorStrategy(const IValue* value) {
-        m_value = value;
+        m_value = const_cast<IValue*>(value);
 }
 
 FixMutationFactorStrategy::~FixMutationFactorStrategy() {

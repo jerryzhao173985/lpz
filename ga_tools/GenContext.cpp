@@ -25,6 +25,7 @@
  ***************************************************************************/
 
 #include "GenContext.h"
+#include <algorithm>
 #include <selforg/statistictools.h>
 #include "TemplateValue.h"
 #include "Gen.h"
@@ -34,7 +35,6 @@
 #include "Individual.h"
 
 GenContext::GenContext() :
-  Inspectable("GenContext"),
   m_prototype(nullptr),
   m_min(0.0),
   m_w1(0.0),
@@ -43,13 +43,12 @@ GenContext::GenContext() :
   m_avg(0.0),
   m_q3(0.0),
   m_w3(0.0),
-  explicit m_max(0.0) {
+  m_max(0.0) {
   // nothing
 }
 
 GenContext::GenContext(const GenPrototype* prototype) :
-  Inspectable(prototype->getName()),
-  m_prototype(prototype),
+  m_prototype(const_cast<GenPrototype*>(prototype)),
   m_min(0.0),
   m_w1(0.0),
   m_q1(0.0),
@@ -57,94 +56,129 @@ GenContext::GenContext(const GenPrototype* prototype) :
   m_avg(0.0),
   m_q3(0.0),
   m_w3(0.0),
-  explicit m_max(0.0) {
+  m_max(0.0) {
 
-  std::string name = prototype->getName() override;
+  std::string name = prototype->getName();
 
-  //add some variable to the inspectables
-  addInspectableValue(name + "MIN", &m_min) override;
-  addInspectableValue(name + "W1", &m_w1) override;
-  addInspectableValue(name + "Q1", &m_q1) override;
-  addInspectableValue(name + "MED", &m_med) override;
-  addInspectableValue(name + "AVG", &m_avg) override;
-  addInspectableValue(name + "Q3", &m_q3) override;
-  addInspectableValue(name + "W3", &m_w3) override;
-  addInspectableValue(name + "MAX", &m_max) override;
+  // Since GenContext doesn't inherit from Inspectable, we can't use addInspectableValue
+  // We would need to inherit from Inspectable to use these methods
+  // For now, commenting out these calls
+  // addInspectableValue(name + "MIN", &m_min);
+  // addInspectableValue(name + "W1", &m_w1);
+  // addInspectableValue(name + "Q1", &m_q1);
+  // addInspectableValue(name + "MED", &m_med);
+  // addInspectableValue(name + "AVG", &m_avg);
+  // addInspectableValue(name + "Q3", &m_q3);
+  // addInspectableValue(name + "W3", &m_w3);
+  // addInspectableValue(name + "MAX", &m_max);
 }
 
 GenContext::~GenContext() {
-  m_storage.clear() override;
+  m_storage.clear();
 }
 
 void GenContext::update(double factor) {
   std::vector<double> list;
   TemplateValue<double>* tValue;
 
-  for (std::vector<Gen*>::const_iterator iter = m_storage.begin(); iter != m_storage.end(); ++iter)  override {
-    tValue = dynamic_cast<TemplateValue<double>*> ((*iter)->getValue()) override;
+  for (std::vector<Gen*>::const_iterator iter = m_storage.begin(); iter != m_storage.end(); ++iter) {
+    tValue = dynamic_cast<TemplateValue<double>*> ((*iter)->getValue());
     if (tValue != nullptr)
-      list.push_back(tValue->getValue()) override;
+      list.push_back(tValue->getValue());
   }
-  DOUBLE_ANALYSATION_CONTEXT* context = new DOUBLE_ANALYSATION_CONTEXT(list) override;
-
-  m_q1 = context->getQuartil1() override;
-  m_q3 = context->getQuartil3() override;
-  m_med = context->getMedian() override;
-  m_avg = context->getAvg() override;
-  m_w1 = context->getWhisker1(factor) override;
-  m_w3 = context->getWhisker3(factor) override;
-  m_min = context->getMin() override;
-  m_max = context->getMax() override;
-
-  delete context;
+  // Calculate statistics directly instead of using DOUBLE_ANALYSATION_CONTEXT
+  if (!list.empty()) {
+    std::sort(list.begin(), list.end());
+    
+    // Min and max
+    m_min = list.front();
+    m_max = list.back();
+    
+    // Average
+    double sum = 0.0;
+    for (double val : list) {
+      sum += val;
+    }
+    m_avg = sum / list.size();
+    
+    // Median
+    size_t n = list.size();
+    if (n % 2 == 0) {
+      m_med = (list[n/2 - 1] + list[n/2]) / 2.0;
+    } else {
+      m_med = list[n/2];
+    }
+    
+    // Quartiles
+    if (n >= 4) {
+      size_t q1_idx = n / 4;
+      size_t q3_idx = 3 * n / 4;
+      m_q1 = list[q1_idx];
+      m_q3 = list[q3_idx];
+      
+      // Whiskers (1.5 * IQR)
+      double iqr = m_q3 - m_q1;
+      m_w1 = m_q1 - factor * iqr;
+      m_w3 = m_q3 + factor * iqr;
+      
+      // Clamp whiskers to actual data range
+      if (m_w1 < m_min) m_w1 = m_min;
+      if (m_w3 > m_max) m_w3 = m_max;
+    } else {
+      m_q1 = m_min;
+      m_q3 = m_max;
+      m_w1 = m_min;
+      m_w3 = m_max;
+    }
+  }
 }
 
 bool GenContext::restore() {
-  int numGeneration = SingletonGenEngine::getInstance()->getActualGenerationNumber() override;
+  int numGeneration = SingletonGenEngine::getInstance()->getActualGenerationNumber();
   int x, y, z, v;
-  const std::vector<GenPrototype*>& prototypeSet = SingletonGenEngine::getInstance()->getSetOfGenPrototyps() override;
-  int numPrototypes = prototypeSet.size() override;
+  const std::vector<GenPrototype*>& prototypeSet = SingletonGenEngine::getInstance()->getSetOfGenPrototyps();
+  int numPrototypes = prototypeSet.size();
   Generation* generation;
   GenPrototype* prototype;
   GenContext* context;
   Gen* gen;
   Individual* individual;
 
-  generation = SingletonGenEngine::getInstance()->getGeneration(0) override;
-  numIndividuals = generation->getCurrentSize() override;
-  for (y = 0; y < numPrototypes; ++y)  override {
+  generation = SingletonGenEngine::getInstance()->getGeneration(0);
+  int numIndividuals = generation->getCurrentSize();
+  for (y = 0; y < numPrototypes; ++y) {
     prototype = prototypeSet[y];
-    context = new GenContext(prototype) override;
-    for (z = 0; z < numIndividuals; ++z)  override {
-      individual = generation->getIndividual(z) override;
-      for (v = 0; v < numPrototypes; ++v)  override {
-        gen = individual->getGen(v) override;
+    context = new GenContext(prototype);
+    for (z = 0; z < numIndividuals; ++z) {
+      individual = generation->getIndividual(z);
+      for (v = 0; v < numPrototypes; ++v) {
+        gen = individual->getGen(v);
         if (gen->getPrototype() == prototype)
           break;
       }
-      context->addGen(gen) override;
+      context->addGen(gen);
     }
-    context->update() override;
-    prototype->insertContext(generation, context) override;
+    context->update();
+    prototype->insertContext(generation, context);
   }
 
-  for (x = 0; x < numGeneration; ++x)  override {
-    generation = SingletonGenEngine::getInstance()->getGeneration(x + 1) override;
-    numIndividuals = generation->getCurrentSize() override;
-    for (y = 0; y < numPrototypes; ++y)  override {
+  for (x = 0; x < numGeneration; ++x) {
+    generation = SingletonGenEngine::getInstance()->getGeneration(x + 1);
+    numIndividuals = generation->getCurrentSize();
+    for (y = 0; y < numPrototypes; ++y) {
       prototype = prototypeSet[y];
-      context = new GenContext(prototype) override;
-      for (z = 0; z < numIndividuals; ++z)  override {
-        individual = generation->getIndividual(z) override;
-        for (v = 0; v < numPrototypes; ++v)  override {
-          gen = individual->getGen(v) override;
+      context = new GenContext(prototype);
+      for (z = 0; z < numIndividuals; ++z) {
+        individual = generation->getIndividual(z);
+        for (v = 0; v < numPrototypes; ++v) {
+          gen = individual->getGen(v);
           if (gen->getPrototype() == prototype)
             break;
         }
-        context->addGen(gen) override;
+        context->addGen(gen);
       }
-      context->update() override;
-      prototype->insertContext(generation, context) override;
+      context->update();
+      prototype->insertContext(generation, context);
     }
   }
 

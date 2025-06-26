@@ -11,79 +11,64 @@
 #include <string>
 #include <vector>
 
-class Prototype{
+struct Prototype{
   union {
     struct{
-      int generationNumber = 0;
-      bool cleanStrategies = false;
-      int numIndividuals = 0;
-      int numGeneration = 0;
-      int numGenes = 0;
+      int generationNumber;
+      bool cleanStrategies;
+      int numIndividuals;
+      int numGeneration;
+      int numGenes;
     };
-    char* buffer;
+    char buffer[sizeof(int)*4 + sizeof(bool)];
   };
 };
 
 struct RESTORE_GA_GENERATION {
   union {
     struct {
-      int number = 0;
-      int numberIndividuals = 0;
-      int size = 0;
-      int children = 0;
-      /*double q1;
-      double q3 = 0;
-      double w1 = 0;
-      double w3 = 0;
-      double min = 0;
-      double max = 0;
-      double avg = 0;
-      double med = 0;
-      double best = nullptr;*/
+      int number;
+      int numberIndividuals;
+      int size;
+      int children;
     };
-
-    char* buffer;
+    char buffer[sizeof(int)*4];
   };
 
   //std::vector<int> idsOfIndividual;
 };
 
 struct RESTORE_GA_INDIVIDUAL {
-  //std::string name;
-
   union {
     struct {
-      int ID = 0;
-      int numberGenes = 0;
-      int parent1 = 0;
-      int parent2 = 0;
-      bool mutated = false;
-      bool fitnessCalculated = false;
-      double fitness = 0;
+      int ID;
+      int numberGenes;
+      int parent1;
+      int parent2;
+      bool mutated;
+      bool fitnessCalculated;
+      double fitness;
     };
-
-    char* buffer;
+    char buffer[sizeof(int)*4 + sizeof(bool)*2 + sizeof(double)];
   };
 
   //std::vector<int> idsOfGenes;
 };
 
 struct RESTORE_GA_GENE {
-  //std::string prototype;
-
   union {
     struct {
-      int ID = 0;
+      int ID;
     };
-
-    char* buffer;
+    char buffer[sizeof(int)];
   };
 };
 
-template<class Typ{
+template<class Typ>
+struct RESTORE_GA_TEMPLATE {
   union {
     Typ value;
-    char* buffer = nullptr;
+    char buffer[sizeof(Typ)];
   };
 };
 

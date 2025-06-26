@@ -31,122 +31,180 @@
 #include <string>
 #include <list>
 #include <selforg/randomgenerator.h>
+#include <selforg/storeable.h>
+#include "SingletonGenEngine.h"
 
 //forward declaration
-class Gen{
+class Gen;
+class PlotOption;
+class PlotOptionEngine;
+class IGenerationSizeStrategy;
+class IFitnessStrategy;
+class ISelectStrategy;
+class Individual;
+// RandGen is defined in selforg/randomgenerator.h
+class SingletonGenEngine;
+class IRandomStrategy;
+class IMutationStrategy;
+class IMutationFactorStrategy;
+class IValue;
+class GenPrototype;
+
+class SingletonGenAlgAPI {
 public:
 	// Action
 	/**
 	 * starts the selection
 	 * @param createNextGeneration (bool) normal=true should be the next generation be prepare?
 	 */
-	void select(bool createNextGeneration=true) override;
+	void select(bool createNextGeneration=true);
 	/**
 	 * create the children from to fill up the next generation
-	 * @param random static_cast<RandGen*>(random) generator
+	 * @param random (RandGen*) random generator
 	 */
-	void crossover(const RandGen* random) override;
+	void crossover(const RandGen* random);
 	/**
 	 * update the internal statistical data
-	 * @param factor static_cast<double>(normal)=1.5 is needed for the whisker distance
+	 * @param factor (double) normal=1.5 is needed for the whisker distance
 	 */
-	void update(double factor = 1.5) override;
+	void update(double factor = 1.5);
 	/**
 	 * prepares the first generation and optional the enabled measure
-	 * @param startSize static_cast<int>(Number) of individual at begin of the gen. alg.
-	 * @param startChildren static_cast<int>(Number) of individual which will be created by crossover
-	 * @param random static_cast<RandGen*>(A) random generator
+	 * @param startSize (int) Number of individual at begin of the gen. alg.
+	 * @param startChildren (int) Number of individual which will be created by crossover
+	 * @param random (RandGen*) A random generator
 	 * @param withUpdate (bool) is needed for __PLACEHOLDER_1__
 	 */
-	void prepare(int startSize, int numChildren, RandGen* random, bool withUpdate = true) override;
+	void prepare(int startSize, int numChildren, RandGen* random, bool withUpdate = true);
 	/**
 	 * prepares the next generation and optional the enabled measure
 	 */
-	void prepare() override;
+	void prepare();
 	/**
 	 * makes a step in the measure
-	 * @param time static_cast<double>(time) stamp in the measure
+	 * @param time (double) time stamp in the measure
 	 */
-	void measureStep(double time) override;
+	void measureStep(double time);
 	/**
 	 * start the sequenz of select, crossover, update in a automatically loop
-	 * @param startSize static_cast<int>(Number) of individual at begin of the gen. alg.
-	 * @param numChildren static_cast<int>(Number) of individual which will be created by crossover
-	 * @param numGeneration static_cast<int>(Number) of generation which the alg. max. runs
-	 * @param random static_cast<RandGen*>(random) generator
+	 * @param startSize (int) Number of individual at begin of the gen. alg.
+	 * @param numChildren (int) Number of individual which will be created by crossover
+	 * @param numGeneration (int) Number of generation which the alg. max. runs
+	 * @param random (RandGen*) random generator
 	 */
-	void runGenAlg(int startSize, int numChildren, int numGeneration, const RandGen* random) override;
+	void runGenAlg(int startSize, int numChildren, int numGeneration, const RandGen* random);
 
 	//measure
 	/**
 	 * enables data measure with more than one plotOption.
 	 * @param plotOptions (list<P�otOption>&) the list
 	 */
-	void enableMeasure(std::list<PlotOption>& plotOptions) override;
+	void enableMeasure(std::list<PlotOption>& plotOptions);
 	/**
 	 * enables da : public Storableta measure.
 	 * @param plotOption (PlotOption&) the plot option
 	 */
-	void enableMeasure(const PlotOption& plotOption) override;
+	void enableMeasure(const PlotOption& plotOption);
 	/**
 	 * returns the active plotOptionEngine for data measure.
-	 * @return static_cast<PlotOptionEngine*>(the) plot option engine
+	 * @return (PlotOptionEngine*) the plot option engine
 	 */
-	inline PlotOptionEngine* getPlotOptionEnginestatic_cast<void>(const) override {return m_plotEngine;}
+	inline PlotOptionEngine* getPlotOptionEngine(void) const {return m_plotEngine;}
 	/**
 	 * enable data measure inside the GenContexts with more than one plotOption
 	 * @param plotOptions (list<PlotOption>&) the list
 	 */
-	void enableGenContextMeasure(std::list<PlotOption>& plotOptions) override;
+	void enableGenContextMeasure(std::list<PlotOption>& plotOptions);
 	/**
 	 * enable data measure inside the GenContexts.
 	 * @param plotOption (PlotOption&) the plot option
 	 */
-	void enableGenContextMeasure(const PlotOption& plotOption) override;
+	void enableGenContextMeasure(const PlotOption& plotOption);
 	/**
 	 * returns the active plotOptionEngine for data measure inside the GenContexts.
-	 * @return static_cast<PlotOptionEngine*>(the) plot option engine.
+	 * @return (PlotOptionEngine*) the plot option engine.
 	 */
-	inline PlotOptionEngine* getPlotOptionEngineForGenContextstatic_cast<void>(const) override {return m_plotEngineGenContext;}
+	inline PlotOptionEngine* getPlotOptionEngineForGenContext(void) const {return m_plotEngineGenContext;}
 
 	// set static strategies
 	/**
 	 * set the generation size strategy
-	 * @param strategy static_cast<IGenerationSizeStrategy*>(the) strategy
+	 * @param strategy (IGenerationSizeStrategy*) the strategy
 	 */
-	inline void explicit setGenerationSizeStrategy(const IGenerationSizeStrategy* strategy) {SingletonGenEngine::getInstance()->setGenerationSizeStrategy(strategy);}
+	inline void setGenerationSizeStrategy(IGenerationSizeStrategy* strategy) {SingletonGenEngine::getInstance()->setGenerationSizeStrategy(strategy);}
 	/**
 	 * set the fitness strategy
-	 * @param strategy static_cast<IFitnessStrategy*>(the) strategy
+	 * @param strategy (IFitnessStrategy*) the strategy
 	 */
-	inline void explicit setFitnessStrategy(const IFitnessStrategy* strategy) {SingletonGenEngine::getInstance()->setFitnessStrategy(strategy);}
+	inline void setFitnessStrategy(IFitnessStrategy* strategy) {SingletonGenEngine::getInstance()->setFitnessStrategy(strategy);}
 	/**
 	 * set the select strategy
-	 * @param strategy static_cast<ISelectStrategy*>(the) strategy
+	 * @param strategy (ISelectStrategy*) the strategy
 	 */
-	inline void explicit setSelectStrategy(const ISelectStrategy* strategy) {SingletonGenEngine::getInstance()->setSelectStrategy(strategy);}
+	inline void setSelectStrategy(ISelectStrategy* strategy) {SingletonGenEngine::getInstance()->setSelectStrategy(strategy);}
 
 	// gets
 	/**
 	 * returns the GenAlgEngine
-	 * @return static_cast<SingletonGenEngine*>(the) engine
+	 * @return (SingletonGenEngine*) the engine
 	 */
-	SingletonGenEngine* getEnginestatic_cast<void>(const) override;
+	SingletonGenEngine* getEngine(void) const;
 
 	// default interface creation
 	/**
 	 * creates a SumFitnessStrategy. This strategy make the sum of all gens with a double value.
-	 * @return static_cast<IFitnessStrategy*>(the) strategy
+	 * @return (IFitnessStrategy*) the strategy
 	 */
-	IFitnessStrategy* createSumFitnessStrategy()const override;
+	IFitnessStrategy* createSumFitnessStrategy()const;
 	/**
 	 * creates a EuclidicFitnessStrategy. This strategy calculate the euclidic distance of all gens with a double value.
-	 * @return static_cast<IFitnessStrategy*>(the) strategy
+	 * @return (IFitnessStrategy*) the strategy
 	 */
-	IFitnessStrategy* createEuclidicDistanceFitnessStrategy()const override;
+	IFitnessStrategy* createEuclidicDistanceFitnessStrategy()const;
 	/**
 	 * creates a TestFitnessStrategy which is the hardest test for a gen. alg. Only a smale area has a fitness. All other gives no information!
-	 * @param fitness static_cast<IFitnessStrategy*>(a) other fitness strat* Over this is the class as{if(m_api== nullptr)m_api = new SingletonGenAlgAPI();return m_api;}
+	 * @param fitness (IFitnessStrategy*) a other fitness strategy
+	 * @return (IFitnessStrategy*) the strategy
+	 */
+	IFitnessStrategy* createTestFitnessStrategy(IFitnessStrategy* fitness)const;
+	IFitnessStrategy* createExtreamTestFitnessStrategy(const IFitnessStrategy* fitness)const;
+	IFitnessStrategy* createTestFitnessStrategy()const;
+	IFitnessStrategy* createInvertedFitnessStrategy(const IFitnessStrategy* strategy)const;
+	
+	// Random strategies
+	IRandomStrategy* createDoubleRandomStrategy(RandGen* random, double base, double factor, double epsilon)const;
+	
+	// Mutation strategies
+	IMutationStrategy* createValueMutationStrategy(IMutationFactorStrategy* strategy, int mutationProbability)const;
+	IMutationFactorStrategy* createFixMutationFactorStrategy(const IValue* value)const;
+	IMutationFactorStrategy* createStandartMutationFactorStrategy() const;
+	
+	// Generation size strategies
+	IGenerationSizeStrategy* createFixGenerationSizeStrategy(int value)const;
+	IGenerationSizeStrategy* createStandartGenerationSizeStrategy(int startSize, int numGeneration)const;
+	
+	// Select strategies
+	ISelectStrategy* createEliteSelectStrategy() const;
+	ISelectStrategy* createTournamentSelectStrategy(const RandGen* random)const;
+	ISelectStrategy* createRandomSelectStrategy(const RandGen* random)const;
+	
+	// Value creation
+	IValue* createDoubleValue(double value)const;
+	
+	// Prototype creation
+	GenPrototype* createPrototype(const std::string& name, IRandomStrategy* randomStrategy, const IMutationStrategy* mutationStrategy)const;
+	void insertGenPrototype(const GenPrototype* prototype);
+	
+	// Store and restore
+	bool store(FILE* f) const;
+	bool restore(FILE* f);
+
+	// Singleton access
+	/**
+	 * returns the API. Only one API for a run is allowed!
+	 * @return (SingletonGenAlgAPI*) the api
+	 */
+	inline static SingletonGenAlgAPI* getInstance(void) {if(m_api== nullptr)m_api = new SingletonGenAlgAPI();return m_api;}
 	/**
 	 * destroy the api
 	 * @param cleanStrategies (bool) default = false set a flag to clean the strategies, which are seted.
@@ -156,9 +214,9 @@ public:
 	// data access
 	/**
 	 * returns the best individual which the alg. have found
-	 * @return static_cast<Individual*>(the) best
+	 * @return (Individual*) the best
 	 */
-	inline Individual* getBestIndividualstatic_cast<void>(const) override {return SingletonGenEngine::getInstance()->getBestIndividual();}
+	inline Individual* getBestIndividual(void) const {return SingletonGenEngine::getInstance()->getBestIndividual();}
 
 protected:
 	/**
@@ -180,11 +238,11 @@ private:
 	/**
 	 * disable the default contructor
 	 */
-	SingletonGenAlgAPI() override;
+	SingletonGenAlgAPI();
 	/**
 	 * disable the default destructor
 	 */
-	virtual ~SingletonGenAlgAPI() override;
+	virtual ~SingletonGenAlgAPI();
 
 	/**
 	 * help declaration for prepare

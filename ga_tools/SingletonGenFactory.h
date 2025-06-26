@@ -28,46 +28,52 @@
 #define SINGLETONGENFACTORY_H_
 
 //forward declaration
-class GenContext{
+class GenContext;
+class Gen;
+class Individual;
+class GenPrototype;
+class IValue;
+
+class SingletonGenFactory {
 public:
 	/**
 	 * this method is to become the only existing factory
-	 * @return static_cast<SingletonGenFactory*>(the) one and only factory
+	 * @return (SingletonGenFactory*) the one and only factory
 	 */
 	inline static SingletonGenFactory* getInstance(void) {if(m_factory== nullptr)m_factory = new SingletonGenFactory();return m_factory;}
 
 	/**
 	 * this method is to destroy the one and only factory.
 	 */
-	inline static void destroyGenFactory(void) {if(m_factory!= nullptr){delete m_factory;m_factory=0;}}
+	inline static void destroyGenFactory(void) {if(m_factory!= nullptr){delete m_factory;m_factory=nullptr;}}
 
 	// 3 methodes to create an Gen
 	/**
 	 * random generation of a new gen.
-	 * @param context static_cast<GenContext*>(the) context of the new Gen
-	 * @param individual static_cast<Individual*>(the) individual, where the gen is part of.
-	 * @param prototype static_cast<GenPrototype*>(the) prototype of the gen, which should be create.
-	 * @return static_cast<Gen*>(the) new Gen
+	 * @param context (GenContext*) the context of the new Gen
+	 * @param individual (Individual*) the individual, where the gen is part of.
+	 * @param prototype (GenPrototype*) the prototype of the gen, which should be create.
+	 * @return (Gen*) the new Gen
 	 */
-	Gen* createGen(GenContext* context, Individual* individual, const GenPrototype* prototype)const override;
+	Gen* createGen(GenContext* context, Individual* individual, const GenPrototype* prototype)const;
 	/**
 	 * this function generate a new Gen by mutate a old Gen
-	 * @param context static_cast<GenContext*>(the) context of the new Gen
-	 * @param individual static_cast<Individual*>(the) individual, where the gen is part of.
-	 * @param prototype static_cast<GenPrototype*>(the) prototype of the gen, which should be create.
-	 * @param oldContext static_cast<GenContext*>(the) Context of the old Gen
-	 * @param oldIndividual static_cast<Individual*>(the) individua, where the olg gen is part of.
-	 * @param oldGen static_cast<Gen*>(the) old Gen
+	 * @param context (GenContext*) the context of the new Gen
+	 * @param individual (Individual*) the individual, where the gen is part of.
+	 * @param prototype (GenPrototype*) the prototype of the gen, which should be create.
+	 * @param oldContext (GenContext*) the Context of the old Gen
+	 * @param oldIndividual (Individual*) the individua, where the olg gen is part of.
+	 * @param oldGen (Gen*) the old Gen
 	 * @param mutate (bool) should be mutate?
-	 * @return static_cast<Gen*>(the) new (or old gen)
+	 * @return (Gen*) the new (or old gen)
 	 */
-	Gen* createGen(GenContext* context, Individual* individual, GenPrototype* prototype, GenContext* oldContext, Individual* oldIndividual, Gen* oldGen, bool mutate=false)const override;		// copy + mutation
+	Gen* createGen(GenContext* context, Individual* individual, GenPrototype* prototype, GenContext* oldContext, Individual* oldIndividual, Gen* oldGen, bool mutate=false)const;		// copy + mutation
 	/**
 	 * create a new Gen by a giving value
-	 * @param context static_cast<GenContext*>(the) context of the new Gen
-	 * @param individual static_cast<Individual*>(the) individual, where the gen is part of.
-	 * @param prototype static_cast<GenPrototype*>(the) prototype of the gen, which should be create.
-	 * @param value static_cast<IValue*>(the) value of the new gen
+	 * @param context (GenContext*) the context of the new Gen
+	 * @param individual (Individual*) the individual, where the gen is part of.
+	 * @param prototype (GenPrototype*) the prototype of the gen, which should be create.
+	 * @param value (IValue*) the value of the new gen
 	 * @return
 	 */
 	Gen* createGen(GenContext* context, Individual* individual, GenPrototype* prototype, const IValue* value);																				// value
@@ -75,9 +81,9 @@ public:
 	//reset m_number inside restore
   /**
    * set the member variable m_number to number
-   * @param number static_cast<int>(the) new value
+   * @param number (int) the new value
    */
-  inline void explicit setNumber(int number) {m_number=number;}
+  inline void setNumber(int number) {m_number=number;}
 
 private:
 	/**
@@ -93,7 +99,7 @@ private:
 	/**
 	 * disable the default constructor
 	 */
-	SingletonGenFactory() override;
+	SingletonGenFactory();
 
 	/**
 	 * disable destructor

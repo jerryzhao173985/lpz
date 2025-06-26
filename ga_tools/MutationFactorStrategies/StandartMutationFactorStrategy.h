@@ -27,28 +27,31 @@
 #ifndef STANDARTMUTATIONFACTORSTRATEGY_H_
 #define STANDARTMUTATIONFACTORSTRATEGY_H_
 
+#include "IMutationFactorStrategy.h"
+
 //includes
 #include <vector>
 
 //forward declarations
-class Gen{
+class Gen;
+class StandartMutationFactorStrategy : public IMutationFactorStrategy {
 public:
 	/**
 	 * default constructor
 	 */
-	StandartMutationFactorStrategy() override;
+	StandartMutationFactorStrategy();
 
 	/**
 	 * default destructor
 	 */
-	virtual ~StandartMutationFactorStrategy() override;
+	virtual ~StandartMutationFactorStrategy();
 
 	/**
 	 * gives the varianz of the gens in the set as mutation factor back.
 	 * @param gene (vector<Gen*>) the set of gens
-	 * @return static_cast<IValue*>(the) mutation factor
+	 * @return (IValue*) the mutation factor
 	 */
-	virtual IValue* calcMutationFactor(const std::vector<Gen*>& gene) override;
+	virtual IValue* calcMutationFactor(const std::vector<Gen*>& gene);
 };
 
 #endif /* STANDARTMUTATIONFACTORSTRATEGY_H_ */

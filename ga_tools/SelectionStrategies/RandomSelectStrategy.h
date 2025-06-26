@@ -27,17 +27,20 @@
 #ifndef RANDOMSELECTSTRATEGY_H_
 #define RANDOMSELECTSTRATEGY_H_
 
+#include "ISelectStrategy.h"
+
 //includes
 #include <selforg/randomgenerator.h>
 
 //forward declaration
-class Generation{
+class Generation;
+class RandomSelectStrategy : public ISelectStrategy {
 public:
 	/**
 	 * constructor
-	 * @param random static_cast<RandGen*>(a) random generator. Is needed for the <<<randomized>>> comparison
+	 * @param random (RandGen*) a random generator. Is needed for the <<<randomized>>> comparison
 	 */
-	explicit RandomSelectStrategy(const RandGen* random) override;
+	explicit RandomSelectStrategy(const RandGen* random);
 
 	/**
 	 * default destructor
@@ -46,10 +49,10 @@ public:
 
 	/**
 	 * implementation for the interface ISelectStrategy
-	 * @param oldGeneration static_cast<Generation*>(the) old generation
-	 * @param newGeneration static_cast<Generation*>(the) next generation
+	 * @param oldGeneration (Generation*) the old generation
+	 * @param newGeneration (Generation*) the next generation
 	 */
-	virtual void select(Generation* oldGeneration, const Generation* newGeneration) override;
+	virtual void select(Generation* oldGeneration, Generation* newGeneration) override;
 
 protected:
 	/**
@@ -61,7 +64,7 @@ private:
 	/**
 	 * disable the default constructor.
 	 */
-	RandomSelectStrategy() override;
+	RandomSelectStrategy();
 };
 
 #endif /* RANDOMSELECTSTRATEGY_H_ */

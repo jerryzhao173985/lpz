@@ -55,7 +55,7 @@ Gen* ValueMutationStrategy::mutate(GenContext* context, Individual* individual, 
         value = oldGen->getValue()->operator+(*factor);                                                        //become the value of the gen and add the factor
         //delete factor;
 
-        return factory->createGen(context,individual,context->getPrototype(),value);        //create the new gen
+        return const_cast<SingletonGenFactory*>(factory)->createGen(context,individual,context->getPrototype(),value);        //create the new gen
 }
 
 int ValueMutationStrategy::getMutationProbability(void) {

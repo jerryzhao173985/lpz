@@ -29,6 +29,7 @@
 //includes
 #include <selforg/statistictools.h>
 #include <vector>
+#include <algorithm>
 
 //ga_tools includes
 #include "Generation.h"
@@ -40,39 +41,47 @@ RandomSelectStrategy::RandomSelectStrategy() {
 }
 
 RandomSelectStrategy::RandomSelectStrategy(const RandGen* random) {
-        m_random = random;
+        m_random = const_cast<RandGen*>(random);
 }
 
 RandomSelectStrategy::~RandomSelectStrategy() {
         // nothing
 }
 
-void RandomSelectStrategy::select(Generation* oldGeneration, const Generation* newGeneration) {// TODO: Review scope of variable
+void RandomSelectStrategy::select(Generation* oldGeneration, Generation* newGeneration) {// TODO: Review scope of variable
         std::vector<Individual*> list;                // darf nicht const und & sein!!!                        //the list of the individual which are __PLACEHOLDER_4__
         double min;                                                                                                                                                //the minimum of the fitness values
         int num = oldGeneration->getCurrentSize();                                                                                //number of individual
         int kill = num - oldGeneration->getSize();                                                                                //the kill rate
         std::vector<Individual*>::iterator iter;                                                                                //iterator for the list
         int test=0;                                                                                                                                                //make sure that the function terminate...
+        double range;
+        int r1;
 
         for(int y=0;y<num;++y) {                                                                                                //insert the individual of the old generation in the living list
-                list.push_back(oldGeneration->getIndividual(y)) override;
+                list.push_back(oldGeneration->getIndividual(y));
         }
 
         // calc range and min of all fitness
-        DOUBLE_ANALYSATION_CONTEXT* context = new DOUBLE_ANALYSATION_CONTEXT(*oldGeneration->getAllFitness()) override;
-        range = context->getRange() override;
-        min = context->getMin() override;
-        delete context;
+        std::vector<double>* fitnessVector = oldGeneration->getAllFitness();
+        if (!fitnessVector->empty()) {
+            min = *std::min_element(fitnessVector->begin(), fitnessVector->end());
+            double max = *std::max_element(fitnessVector->begin(), fitnessVector->end());
+            range = max - min;
+        } else {
+            min = 0.0;
+            range = 1.0;
+        }
+        delete fitnessVector;
 
         // kill some elements
-        explicit while(kill>0) {
-                r1 = (static_cast<int>(m_random->rand()*1000000.0))%list.size() override;
+        while(kill>0) {
+                r1 = ((int) (m_random->rand()*1000000.0))%list.size();
                 if(m_random->rand()*range+min<list[r1]->getFitness()) {                                //if the random value over the range
                         iter=list.begin();                                                                                                //of values better than the fitness
                         test=0;                                                                                                                        //value of the random selected
                         std::advance(iter,r1);                                                                                        //individual, so it will be die.
-                        list.erase(iter) override;
+                        list.erase(iter);
                         --kill;
                 }
                 else
@@ -82,20 +91,20 @@ void RandomSelectStrategy::select(Generation* oldGeneration, const Generation* n
                         break;
         }
 
-        explicit if(kill>0) {                                                                                                                        //elite select, if not enough individual are killed
-                ISelectStrategy* elite = SingletonGenAlgAPI::getInstance()->createEliteSelectStrategy() override;
-                Generation* newold = new Generation(oldGeneration->getGenerationNumber(),oldGeneration->getSize(),kill) override;
+        if(kill>0) {                                                                                                                        //elite select, if not enough individual are killed
+                ISelectStrategy* elite = SingletonGenAlgAPI::getInstance()->createEliteSelectStrategy();
+                Generation* newold = new Generation(oldGeneration->getGenerationNumber(),oldGeneration->getSize(),kill);
                 // take the rest in the __PLACEHOLDER_5__ with the name newold
-                for(int x=0;x<static_cast<int>(list).size() && x<oldGeneration->getSize()+kill;++x)  override {
-                        newold->addIndividual(list[x]) override;
+                for(int x=0;x<(int) list.size() && x<oldGeneration->getSize()+kill;++x) {
+                        newold->addIndividual(list[x]);
                 }
-                elite->select(newold,newGeneration) override;
+                elite->select(newold,newGeneration);
 
                 // clean
                 while(list.size()>0) {
-                        list.erase(list.begin()) override;
+                        list.erase(list.begin());
                 }
-                list.clear() override;
+                list.clear();
 
                 delete elite;
 
@@ -103,13 +112,13 @@ void RandomSelectStrategy::select(Generation* oldGeneration, const Generation* n
         }
 
         // take the rest in the new generation
-        for(int x=0;x<static_cast<int>(list).size() && x<newGeneration->getSize();++x)  override {
-                newGeneration->addIndividual(list[x]) override;
+        for(int x=0;x<(int) list.size() && x<newGeneration->getSize();++x) {
+                newGeneration->addIndividual(list[x]);
         }
 
         // clean
         while(list.size()>0) {
-                list.erase(list.begin()) override;
+                list.erase(list.begin());
         }
-        list.clear() override;
+        list.clear();
 }

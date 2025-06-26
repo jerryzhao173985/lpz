@@ -27,13 +27,16 @@
 #ifndef ELITESELECTSTRATEGY_H_
 #define ELITESELECTSTRATEGY_H_
 
+#include "ISelectStrategy.h"
+
 //forward declaration
-class Generation{
+class Generation;
+class EliteSelectStrategy : public ISelectStrategy {
 public:
 	/**
 	 * default constructor
 	 */
-	EliteSelectStrategy() override;
+	EliteSelectStrategy();
 
 	/**
 	 * default destructor
@@ -42,10 +45,10 @@ public:
 
 	/**
 	 * select the individual in the old generation which should be in the new generation (only the best).
-	 * @param oldGeneration static_cast<Generation*>(the) old generation
-	 * @param newGeneration static_cast<Generation*>(the) new generation
+	 * @param oldGeneration (Generation*) the old generation
+	 * @param newGeneration (Generation*) the new generation
 	 */
-	virtual void select(Generation* oldGeneration, const Generation* newGeneration) override;
+	virtual void select(Generation* oldGeneration, Generation* newGeneration);
 };
 
 #endif /* ELITESELECTSTRATEGY_H_ */

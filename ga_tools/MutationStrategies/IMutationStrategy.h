@@ -28,12 +28,19 @@
 #define IMUTATIONSTRATEGY_H_
 
 //forward declarations
-class Gen{
+class Gen;
+class GenContext;
+class Individual;
+class SingletonGenFactory;
+/**
+ * Interface for mutation strategies
+ */
+class IMutationStrategy {
 public:
 	/**
 	 * default constructor
 	 */
-	IMutationStrategy() override;
+	IMutationStrategy();
 
 	/**
 	 * default destructor
@@ -42,12 +49,12 @@ public:
 
 	/**
 	 * mutate a gen
-	 * @param context static_cast<GenContext*>(the) context in which the new gen comes (needed by the factory
-	 * @param individual static_cast<Individual*>(the) individual, which the new gen becomes
-	 * @param oldGen static_cast<Gen*>(the) old gen, which mutate
-	 * @param oldContext static_cast<GenContext*>(the) Context in which the old gen are.
-	 * @param factory static_cast<SingletonGenFactory*>(the) GenFactory which create the new gen.
-	 * @return static_cast<Gen*>(the) new mutated gen
+	 * @param context (GenContext*) the context in which the new gen comes (needed by the factory
+	 * @param individual (Individual*) the individual, which the new gen becomes
+	 * @param oldGen (Gen*) the old gen, which mutate
+	 * @param oldContext (GenContext*) the Context in which the old gen are.
+	 * @param factory (SingletonGenFactory*) the GenFactory which create the new gen.
+	 * @return (Gen*) the new mutated gen
 	 */
 	virtual Gen* mutate(GenContext* context, Individual* individual, Gen* oldGen, GenContext* oldContext, const SingletonGenFactory* factory) = 0;
 

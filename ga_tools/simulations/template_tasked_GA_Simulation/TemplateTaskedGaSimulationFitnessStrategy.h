@@ -33,17 +33,23 @@
 /**
  * the fitness strategy for this demonstration simulation
  */
-class TemplateTaskedGaSimulationFitnessStrategy{
+class TemplateTaskedGaSimulationFitnessStrategy;
+class TemplateTaskedGaSimulationFitnessStrategy : public IFitnessStrategy {
+class TemplateTaskedGaSimulationFitnessStrategy : public ISelectStrategy {
+class TemplateTaskedGaSimulationFitnessStrategy : public IGenerationSizeStrategy {
+class TemplateTaskedGaSimulationFitnessStrategy : public IMutationFactorStrategy {
+class TemplateTaskedGaSimulationFitnessStrategy : public IMutationStrategy {
+class TemplateTaskedGaSimulationFitnessStrategy : public IRandomStrategy {
 public:
 	/**
 	 * default constructor
 	 */
-	TemplateTaskedGaSimulationFitnessStrategy() override;
+	TemplateTaskedGaSimulationFitnessStrategy();
 
 	/**
 	 * default destructor
 	 */
-	virtual ~TemplateTaskedGaSimulationFitnessStrategy() override;
+	virtual ~TemplateTaskedGaSimulationFitnessStrategy();
 
 	/**
 	 * this return the saved fitness value (entropy)
@@ -53,7 +59,7 @@ public:
 	 * @param individual (for this we search the entropy)
 	 * @return the fitness
 	 */
-	virtual double getFitness(const Individual* individual) override;
+	virtual double getFitness(const Individual* individual);
 
 	/**
 	 * a storage for all Entropies!

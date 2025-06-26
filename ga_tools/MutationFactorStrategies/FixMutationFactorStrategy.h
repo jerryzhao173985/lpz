@@ -27,29 +27,32 @@
 #ifndef FIXMUTATIONFACTORSTRATEGY_H_
 #define FIXMUTATIONFACTORSTRATEGY_H_
 
+#include "IMutationFactorStrategy.h"
+
 //includes
 #include <vector>
 
 //forward declaration
-class IValue{
+class IValue;
+class FixMutationFactorStrategy : public IMutationFactorStrategy {
 public:
 	/**
 	 * constructor
-	 * @param value static_cast<IValue*>(the) fix Value
+	 * @param value (IValue*) the fix Value
 	 */
-	explicit FixMutationFactorStrategy(const IValue* value) override;
+	explicit FixMutationFactorStrategy(const IValue* value);
 
 	/**
 	 * default destructor
 	 */
-	virtual ~FixMutationFactorStrategy() override;
+	virtual ~FixMutationFactorStrategy();
 
 	/**
 	 * returns the fix value as mutation value
 	 * @param gene (vector<Gen*>) the set of gens -> here not used.
-	 * @return static_cast<IValue*>(the) mutation factor
+	 * @return (IValue*) the mutation factor
 	 */
-	virtual IValue* calcMutationFactor(const std::vector<Gen*>& gene) override;
+	virtual IValue* calcMutationFactor(const std::vector<Gen*>& gene);
 
 protected:
 	/**
@@ -61,7 +64,7 @@ private:
 	/**
 	 * disable default constructor
 	 */
-	FixMutationFactorStrategy() override;
+	FixMutationFactorStrategy();
 };
 
 #endif /* FIXMUTATIONFACTORSTRATEGY_H_ */

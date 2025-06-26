@@ -27,26 +27,29 @@
 #ifndef FIXGENERATIONSIZESTRATEGY_H_
 #define FIXGENERATIONSIZESTRATEGY_H_
 
+#include "IGenerationSizeStrategy.h"
+
 //forward declaration
-class Generation{
+class Generation;
+class FixGenerationSizeStrategy : public IGenerationSizeStrategy {
 public:
 	/**
 	 * constructor
-	 * @param value static_cast<int>(the) fix value which is every time give back by calcGenerationSize.
+	 * @param value (int) the fix value which is every time give back by calcGenerationSize.
 	 */
-	explicit FixGenerationSizeStrategy(int value) override;
+	explicit FixGenerationSizeStrategy(int value);
 
 	/**
 	 * default destructor
 	 */
-	virtual ~FixGenerationSizeStrategy() override;
+	virtual ~FixGenerationSizeStrategy();
 
 	/**
 	 * gives the fix value m_size as new generation size back.
-	 * @param oldGeneration static_cast<Generation*>(the) old Generation. dont needed
-	 * @return static_cast<int>(m_size)
+	 * @param oldGeneration (Generation*) the old Generation. dont needed
+	 * @return (int) m_size
 	 */
-	virtual int calcGenerationSize(const Generation* oldGeneration) override;
+	virtual int calcGenerationSize(const Generation* oldGeneration);
 
 protected:
 	/**
@@ -58,7 +61,7 @@ private:
 	/**
 	 * disable the default constructor
 	 */
-	FixGenerationSizeStrategy() override;
+	FixGenerationSizeStrategy();
 };
 
 #endif /* FIXGENERATIONSIZESTRATEGY_H_ */

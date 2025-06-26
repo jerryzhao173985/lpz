@@ -32,7 +32,9 @@
 #include <selforg/storeable.h>
 
 /**
- * This class is{
+ * This class is the interface for a gen.
+ */
+class IValue : public Storeable {
 public:
 
   /**
@@ -40,25 +42,25 @@ public:
    * Needs a string for the name of the value. In the normal way it is the Type of the Value. For example __PLACEHOLDER_0__.
    * @param name (string) the name
    */
-  explicit IValue(const std::string& name) override;
+  explicit IValue(const std::string& name);
 
 
   /**
    * default destructor
    */
-  virtual ~IValue() override;
+  virtual ~IValue();
 
   /**
    * the mul. operator. Dosn't change this class!!!
    * @param (const IValue&) the other part of the operation
-   * @return static_cast<IValue*>(the) result
+   * @return (IValue*) the result
    */
   virtual IValue* operator*(const IValue&)const = 0;
 
    /**
 	* the add operator. Dosn't change this class!!!
 	* @param (const IValue&) the other part of the operation
-	* @return static_cast<IValue*>(the) result
+	* @return (IValue*) the result
 	*/
   virtual IValue* operator+(const IValue&)const = 0;
 
@@ -66,21 +68,21 @@ public:
    * the cast operator for a cast in type string
    * @return (string) the value as string
    */
-  virtual operator std::stringstatic_cast<void>(const) override;
+  virtual operator std::string(void) const;
 
   /**
    * store the value in a file
-   * @param f static_cast<FILE*>(the) file to store
+   * @param f (FILE*) the file to store
    * @return (bool) true if all ok.
    */
-  virtual bool store(const FILE* f) const override;
+  virtual bool store(FILE* f) const override;
 
   /**
    * restore the value from a file
-   * @param f static_cast<FILE*>(the) file where the value inside
+   * @param f (FILE*) the file where the value inside
    * @return (bool) true if all ok.
    */
-  virtual bool restore(const FILE* f) override;
+  virtual bool restore(FILE* f) override;
 
 protected:
 	/**

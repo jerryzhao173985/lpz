@@ -27,27 +27,30 @@
 #ifndef STANDARTGENERATIONSIZESTRATEGY_H_
 #define STANDARTGENERATIONSIZESTRATEGY_H_
 
+#include "IGenerationSizeStrategy.h"
+
 //forward declaration
-class Generation{
+class Generation;
+class StandartGenerationSizeStrategy : public IGenerationSizeStrategy {
 public:
 	/**
 	 * constructor
-	 * @param startSize static_cast<int>(is) the size of the first generation. is needed as basic of the calculation
-	 * @param numGeneration static_cast<int>(is) the number of generation which the alg. will be create
+	 * @param startSize (int) is the size of the first generation. is needed as basic of the calculation
+	 * @param numGeneration (int) is the number of generation which the alg. will be create
 	 */
-	StandartGenerationSizeStrategy(int startSize, int numGeneration) override;
+	StandartGenerationSizeStrategy(int startSize, int numGeneration);
 
 	/**
 	 * default destructor
 	 */
-	virtual ~StandartGenerationSizeStrategy() override;
+	virtual ~StandartGenerationSizeStrategy();
 
 	/**
 	 * this function calculate the new generation size
-	 * @param oldGeneration static_cast<Generation*>(the) old generation
-	 * @return static_cast<int>(the) new generation size
+	 * @param oldGeneration (Generation*) the old generation
+	 * @return (int) the new generation size
 	 */
-	virtual int calcGenerationSize(const Generation* oldGeneration) override;
+	virtual int calcGenerationSize(const Generation* oldGeneration);
 
 protected:
 	/**
@@ -84,7 +87,7 @@ private:
 	/**
 	 * disable the default constructor
 	 */
-	StandartGenerationSizeStrategy() override;
+	StandartGenerationSizeStrategy();
 };
 
 #endif /* STANDARTGENERATIONSIZESTRATEGY_H_ */

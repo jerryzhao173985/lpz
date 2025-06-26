@@ -27,29 +27,32 @@
 #ifndef TOURNAMENTSELECTSTRATEGY_H_
 #define TOURNAMENTSELECTSTRATEGY_H_
 
+#include "ISelectStrategy.h"
+
 //includes
 #include <selforg/randomgenerator.h>
 
 //forward declaration
-class Generation{
+class Generation;
+class TournamentSelectStrategy : public ISelectStrategy {
 public:
 	/**
 	 * constructor
-	 * @param random static_cast<RandGen*>(a) random generator for the randomized select of two individual.
+	 * @param random (RandGen*) a random generator for the randomized select of two individual.
 	 */
-	explicit TournamentSelectStrategy(const RandGen* random) override;
+	explicit TournamentSelectStrategy(const RandGen* random);
 
 	/**
 	 * default destructor
 	 */
-	virtual ~TournamentSelectStrategy() override;
+	virtual ~TournamentSelectStrategy();
 
 	/**
 	 * implementation for the interface ISelectStrategy
-	 * @param oldGeneration static_cast<Generation*>(the) old generation
-	 * @param newGeneration static_cast<Generation*>(the) next generation
+	 * @param oldGeneration (Generation*) the old generation
+	 * @param newGeneration (Generation*) the next generation
 	 */
-	virtual void select(Generation* oldGeneration, const Generation* newGeneration) override;
+	virtual void select(Generation* oldGeneration, Generation* newGeneration) override;
 
 protected:
 	/**
@@ -61,7 +64,7 @@ private:
 	/**
 	 * disable the default constructor
 	 */
-	TournamentSelectStrategy() override;
+	TournamentSelectStrategy();
 };
 
 #endif /* TOURNAMENTSELECTSTRATEGY_H_ */

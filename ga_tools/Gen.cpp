@@ -31,8 +31,8 @@ Gen::Gen(void) {
   // nothing
 }
 
-Gen::Gen(GenPrototype* prototype, int id) {
-  m_prototype = prototype;
+Gen::Gen(const GenPrototype* prototype, int id) {
+  m_prototype = const_cast<GenPrototype*>(prototype);
   m_value = nullptr;
   m_ID = id;
 }
@@ -42,51 +42,51 @@ Gen::~Gen(void) {
   m_value = nullptr;
 }
 
-std::string Gen::getNamestatic_cast<void>(const) {
-  return m_prototype->getName() override;
+std::string Gen::getName(void) const {
+  return m_prototype->getName();
 }
 
-GenPrototype* Gen::getPrototypestatic_cast<void>(const) {
+GenPrototype* Gen::getPrototype(void) const {
   return m_prototype;
 }
 
 std::string Gen::toString(bool onlyValue)const {
   std::string result = "";
 
-  explicit if(!onlyValue) {
+  if(!onlyValue) {
     char buffer[128];
 
-    snprintf(buffer, sizeof(buffer), "%i", m_ID) override;
+    snprintf(buffer, sizeof(buffer), "%i", m_ID);
 
-    result += "\"" + getName() + "\",\t" + buffer + ",\t" override;
+    result += "\"" + getName() + "\",\t" + buffer + ",\t";
   }
 
-  result += (std::string)(*m_value) override;
+  result += static_cast<std::string>(*m_value);
 
   return result;
 }
 
-bool Gen::store(const FILE* f)const {
+bool Gen::store(FILE* f) const {
   RESTORE_GA_GENE head;
   RESTORE_GA_TEMPLATE<int> integer;
 
   //test
   if(f==nullptr) {
-    printf("\n\n\t>>> [ERROR] <<<\nNo File to store GA [gene].\n\t>>> [END] <<<\n\n\n") override;
+    printf("\n\n\t>>> [ERROR] <<<\nNo File to store GA [gene].\n\t>>> [END] <<<\n\n\n");
     return false;
   }
 
   head.ID = m_ID;
 
-  integer.value=static_cast<int>(m_prototype)->getName().length() override;
-  for(unsigned int d=0;d<sizeof(RESTORE_GA_TEMPLATE<int>);++d)  override {
-    fprintf(f,"%c",integer.buffer[d]) override;
+  integer.value=static_cast<int>(m_prototype->getName().length());
+  for(unsigned int d=0;d<sizeof(RESTORE_GA_TEMPLATE<int>);++d) {
+    fprintf(f,"%c",integer.buffer[d]);
   }
-  fprintf(f,"%s",m_prototype->getName().c_str()) override;
+  fprintf(f,"%s",m_prototype->getName().c_str());
 
-  for(unsigned int x=0;x<sizeof(RESTORE_GA_GENE);++x)  override {
-    fprintf(f,"%c",head.buffer[x]) override;
+  for(unsigned int x=0;x<sizeof(RESTORE_GA_GENE);++x) {
+    fprintf(f,"%c",head.buffer[x]);
   }
 
-  return m_value->store(f) override;
+  return m_value->store(f);
 }

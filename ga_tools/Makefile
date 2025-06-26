@@ -103,7 +103,11 @@ $(LIB): $(UTILS) Makefile.depend $(OFILES)
 	fi
 
 $(SHAREDLIB): Makefile.depend $(OFILES)
-	$(CXX) -shared -Wl,-soname,`basename $(SHAREDLIB)` -o $(SHAREDLIB) $(OFILES) 
+	@if [ `uname` = "Darwin" ]; then \
+		$(CXX) -dynamiclib -install_name `basename $(SHAREDLIB)` -o $(SHAREDLIB) $(OFILES) -L../selforg -lselforg $(shell $(SELFORGCFG) $(CFGOPTS) --libs | sed 's/-lselforg//'); \
+	else \
+		$(CXX) -shared -Wl,-soname,`basename $(SHAREDLIB)` -o $(SHAREDLIB) $(OFILES) -L../selforg -lselforg $(shell $(SELFORGCFG) $(CFGOPTS) --libs | sed 's/-lselforg//'); \
+	fi 
 
 ${BUILD_DIR}/%.o: %.cpp
 	@mkdir -p $(dir $@)
