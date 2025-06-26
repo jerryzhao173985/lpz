@@ -27,7 +27,7 @@
 
 using namespace std;
 
-MatrixElementPlotChannel::MatrixElementPlotChannel(string name) : AbstractPlotChannel(name) {
+MatrixElementPlotChannel::MatrixElementPlotChannel(const std::string& name) : AbstractPlotChannel(name) {
   // TODO Auto-generated constructor stub
 
 }

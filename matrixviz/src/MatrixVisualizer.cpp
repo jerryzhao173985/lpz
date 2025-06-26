@@ -39,11 +39,16 @@ MatrixVisualizer::MatrixVisualizer(QWidget *parent, bool noVideo)
   matrix_filter = new MatrixPipeFilter(pipe_reader);
 
   // if '#QUIT' matrixvis quits too
-  connect(pipe_reader, SIGNAL(finished()), this, SLOT(close()));
-  connect(pipe_reader, SIGNAL(sourceName(QString)), this, SLOT(sourceName(QString)));
-  connect( pipe_reader, SIGNAL(captureFrame(long,QString)), this, SLOT(captureFrame(long,QString)));
+  SimplePipeReader* simple_reader = dynamic_cast<SimplePipeReader*>(pipe_reader);
+  if (simple_reader) {
+    connect(simple_reader, SIGNAL(finished()), this, SLOT(close()));
+    connect(simple_reader, SIGNAL(sourceName(QString)), this, SLOT(sourceName(QString)));
+    connect(simple_reader, SIGNAL(captureFrame(long,QString)), this, SLOT(captureFrame(long,QString)));
+  }
   // let pipe reader start
-  pipe_reader->start();
+  if (simple_reader) {
+    simple_reader->start();
+  }
   if (debug) cout << "Here I AM!!!" << endl;
 
   channelList = matrix_filter->getChannelList();
@@ -72,7 +77,7 @@ void MatrixVisualizer::initGui() {
   show();
 }
 
-void MatrixVisualizer::sourceName(QString name){
+void MatrixVisualizer::sourceName(const QString& name){
   srcName=name;
   QList<VisualiserSubWidget*> openWindows=config->getOpenWindows();
   for (QList<VisualiserSubWidget*>::iterator it = openWindows.begin(); it != openWindows.end(); ++it) {
@@ -119,12 +124,13 @@ QHBoxLayout* MatrixVisualizer::makeButtons(){
 void MatrixVisualizer::visualize(QAbstractButton * button){
   // contains the button to a matrix or a vector
   QString name = button->text();
-  VectorPlotChannel *vectorPlotChannel = getVectorPlotChannel(name);
-  VisualiserSubWidget *vis;
-  if(vectorPlotChannel == nullptr){
-    vis = new VisualiserSubWidget(getMatrixPlotChannel(name));
-  }else
-    vis = new VisualiserSubWidget(vectorPlotChannel);
+  // Try to get as MatrixPlotChannel first, then VectorPlotChannel
+  MatrixPlotChannel *matrixPlotChannel = getMatrixPlotChannel(name);
+  if(matrixPlotChannel == nullptr){
+    // VectorPlotChannel cannot be used with VisualiserSubWidget directly
+    return; // Skip visualization for VectorPlotChannel
+  }
+  VisualiserSubWidget *vis = new VisualiserSubWidget(matrixPlotChannel);
   config->newOpenedWindow(vis);
   vis->show();
   connectWindowForUpdate(vis);
@@ -146,8 +152,11 @@ void MatrixVisualizer::captureFrame(long idx, QString directory){
 }
 
 void MatrixVisualizer::connectWindowForUpdate(VisualiserSubWidget *vis){
-  connect( pipe_reader, SIGNAL(newData()), vis, SLOT(updateViewableChannels())/*, Qt::DirectConnection*/);
-  connect( pipe_reader, SIGNAL(sourceName(QString)), vis, SLOT(sourceName(QString)));
+  SimplePipeReader* simple_reader2 = dynamic_cast<SimplePipeReader*>(pipe_reader);
+  if (simple_reader2) {
+    connect(simple_reader2, SIGNAL(newData()), vis, SLOT(updateViewableChannels())/*, Qt::DirectConnection*/);
+    connect(simple_reader2, SIGNAL(sourceName(QString)), vis, SLOT(sourceName(QString)));
+  }
   vis->sourceName(srcName);
 }
 

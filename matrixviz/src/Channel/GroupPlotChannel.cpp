@@ -29,7 +29,7 @@
 
 using namespace std;
 
-GroupPlotChannel::GroupPlotChannel(string name) : AbstractPlotChannel(name) {
+GroupPlotChannel::GroupPlotChannel(const std::string& name) : AbstractPlotChannel(name) {
   // TODO Auto-generated constructor stub
 
 }

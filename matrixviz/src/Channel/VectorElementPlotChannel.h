@@ -31,15 +31,15 @@
 #include "AbstractPlotChannel.h"
 #include <vector>
 
-class VectorElementPlotChannel{
+class VectorElementPlotChannel : public AbstractPlotChannel {
 public:
   explicit VectorElementPlotChannel(const std::string& name);
-  virtual ~VectorElementPlotChannel() override;
+  virtual ~VectorElementPlotChannel();
 
-  void explicit setValue(double v);
+  void setValue(double v);
   double getValue() const;
-  double explicit getValue(int time);
-  void explicit changeSize(int newSize);
+  double getValue(int time);
+  void changeSize(int newSize);
   int getSize() const;
   int getIndex() const;
 

@@ -11,7 +11,7 @@
 
 #include "sensortypes.h"
 
-// class AbstractPipeReader{
+class AbstractPipeFilter : public QObject {
 
     Q_OBJECT
 
@@ -35,7 +35,7 @@
       return this->apr;
     }
 
-    virtual void explicit setPipeReader(AbstractPipeReader* apr) {
+    virtual void setPipeReader(AbstractPipeReader* apr) {
       this->apr = apr;
       channelList.clear();
       channelIndexList.clear();
@@ -88,7 +88,7 @@
         if ( ((*i) <= 1.) && ((*i) >= -1.) ) {
           (*channel_it)->setValue((*i));
 
-          explicit if (printedIndex < 7) {
+          if (printedIndex < 7) {
             printf("[ %3d]",index);
             ++printedIndex;
           }

@@ -36,27 +36,27 @@
 /**
  * Beinhaltet zusätzliche Informationen und Methoden, um eine gesamte Matrix als einheitlichen Channel zu repräsentieren
  */
-class MatrixPlotChannel{
+class MatrixPlotChannel : public GroupPlotChannel {
 public:
         explicit MatrixPlotChannel(const std::string& name);
-        virtual ~MatrixPlotChannel() override;
+        virtual ~MatrixPlotChannel();
 
         /**
          * wieviele Spalten oder Zeilen
          * @param dim
          * @return
          */
-        virtual int explicit getDimension(int dim);
+        virtual int getDimension(int dim);
 
         virtual double getValue(int row, int column);
 
         MatrixElementPlotChannel* getChannel(int row, int column);
 
-        GroupPlotChannel* explicit getRow(int row);
+        GroupPlotChannel* getRow(int row);
 
   GroupPlotChannel* getLastRow() const;
 
-        virtual void explicit addRow(GroupPlotChannel* gc);
+        virtual void addRow(GroupPlotChannel* gc);
 
 
 protected:

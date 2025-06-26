@@ -4,11 +4,11 @@
 
 #include "AbstractPlotChannel.h"
 
-class TiltPlotChannel{
+class TiltPlotChannel : public AbstractPlotChannel {
   
 public:
   explicit TiltPlotChannel(const std::string& name);
-  virtual ~TiltPlotChannel() override;
+  virtual ~TiltPlotChannel();
   
 protected:
   

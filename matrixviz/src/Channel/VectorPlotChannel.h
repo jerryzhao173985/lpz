@@ -32,22 +32,22 @@
 /**
  * Beinhaltet zusätzliche Informationen und Methoden, um einen Vector auf Timestamp abgebildet als einheitlichen Channel zu repräsentieren
  */
-class VectorPlotChannel{
+class VectorPlotChannel : public GroupPlotChannel {
 public:
   explicit VectorPlotChannel(const std::string& name);
-  virtual ~VectorPlotChannel() override;
+  virtual ~VectorPlotChannel();
 
-  virtual int explicit getDimension(int dim);
-  virtual double explicit getValue(int num);
+  virtual int getDimension(int dim);
+  virtual double getValue(int num);
   virtual double getValue(int num, int t);
 
-  VectorElementPlotChannel* explicit getChannel(int num);
+  VectorElementPlotChannel* getChannel(int num);
 
-  virtual void explicit addElement(VectorElementPlotChannel* vc);
+  virtual void addElement(VectorElementPlotChannel* vc);
 
   virtual int getSize() const;
   virtual int getBufferSize() const;
-  virtual void explicit setBufferSize(int newSize);
+  virtual void setBufferSize(int newSize);
 
 
 protected:

@@ -27,6 +27,19 @@
 #define __VISUALISATIONSUBWIDGET_H_
 
 #include <QtGui>
+#include <QWidget>
+#include <QComboBox>
+#include <QHBoxLayout>
+#include <QMenuBar>
+#include <QVBoxLayout>
+#include <QSpinBox>
+#include "AbstractRobotSubWidget.h"
+
+// Forward declarations
+class MatrixPlotChannel;
+class AbstractVisualisation;
+class ColorPalette;
+
 //class AbstractPlotChannel{
 // public:
 //   CaptureFrameEvent(long idx, QString directory)
@@ -40,14 +53,14 @@
 // };
 
 
-class VisualiserSubWidget{
+class VisualiserSubWidget : public AbstractRobotSubWidget {
 
 Q_OBJECT
 
 public:
   VisualiserSubWidget(MatrixPlotChannel *channel, int x = 0, int y = 0, int width = 0, int heigt = 0,
       QString cPFilePath = "", QWidget *parent = 0);
-  virtual ~VisualiserSubWidget() override;
+  virtual ~VisualiserSubWidget();
   QString getChannelName() const;
   QString getColorPaletteFilepath() const;
   int getVisMode() const;
@@ -58,8 +71,8 @@ public:
 public slots:
   void updateViewableChannels();
   void captureFrame(long idx, QString directory);
-  void explicit sourceName(const QString& name);
-  void explicit switchVisMode(int index);
+  void sourceName(const QString& name);
+  void switchVisMode(int index);
   void switchVisMode(QAction *action);
   void toggleOptions(QAction *action = 0);
   void changeBufferSize();
@@ -67,8 +80,8 @@ public slots:
 protected:
 
   QComboBox *vizChoice;
-  virtual void explicit closeEvent(QCloseEvent * event);
-  //  virtual bool explicit event(QEvent* event);
+  virtual void closeEvent(QCloseEvent * event);
+  //  virtual bool event(QEvent* event);
 private:
 
   AbstractVisualisation *visualisation;
@@ -89,7 +102,7 @@ private:
   static const bool debug = false;
 
 signals:
-  void explicit windowClosed(VisualiserSubWidget* window);
+  void windowClosed(VisualiserSubWidget* window);
   void sendQuit();
 
 private:

@@ -14,7 +14,7 @@
 #include <QTimer>
 #include "VisualiserSubWidget.h"
 
-class Timer{
+class Timer : public QThread{
 
   Q_OBJECT
 

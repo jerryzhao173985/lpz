@@ -33,7 +33,7 @@
 #ifndef __LISTENTITY_H_
 #define __LISTENTITY_H_
 
-class ListEntity{
+class ListEntity : public QWidget {
 
   Q_OBJECT
 
@@ -51,12 +51,12 @@ class ListEntity{
     void addClicked();
     void remClicked();
     void changeColor();
-    void explicit changePos(double pos);
+    void changePos(double pos);
     void updateFromData();
 
   signals:
-    void explicit addClicked(int i);
-    void explicit remClicked(int i);
+    void addClicked(int i);
+    void remClicked(int i);
     void changeColor(int i, QColor color);
     void changePos(int i, double pos);
 

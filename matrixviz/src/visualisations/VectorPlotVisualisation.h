@@ -9,13 +9,13 @@
 #define VECTORPLOTVISUALISATION_H_
 #include "AbstractVisualisation.h"
 
-class VectorPlotVisualisation{
+class VectorPlotVisualisation : public AbstractVisualisation {
   Q_OBJECT
 
 public:
   VectorPlotVisualisation(MatrixPlotChannel *channel, ColorPalette *colorPalette, QWidget *parent = 0);
 //  VectorPlotVisualisation(VectorPlotChannel *channel, ColorPalette *colorPalette, QWidget *parent = 0);
-  virtual ~VectorPlotVisualisation() override;
+  virtual ~VectorPlotVisualisation();
   //void updateView();
 
 

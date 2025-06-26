@@ -35,19 +35,21 @@
 #include "AbstractPipeFilter.h"
 //#include "AbstractPipeReader.h"
 #include <vector>
+#include <QObject>
 
 /**
  * forward declaration, because not needed directly here
  */
+class AbstractPipeReader;
 
 
-class MatrixPipeFilter{
+class MatrixPipeFilter : public AbstractPipeFilter {
 
   Q_OBJECT
 
 public:
-        explicit explicit MatrixPipeFilter(AbstractPipeReader* apr);
-        virtual ~MatrixPipeFilter() override;
+        explicit MatrixPipeFilter(AbstractPipeReader* apr);
+        virtual ~MatrixPipeFilter();
 
         virtual AbstractPlotChannel* createChannel(const std::string& name);
 

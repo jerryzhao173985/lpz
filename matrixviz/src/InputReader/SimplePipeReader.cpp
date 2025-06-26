@@ -2,6 +2,7 @@
 #include "SimplePipeReader.h"
 #include <string>
 #include <csignal>
+#include <unistd.h>
 
 
 SimplePipeReader::SimplePipeReader(bool noVideo_) : noVideo(noVideo_)
@@ -24,7 +25,7 @@ void SimplePipeReader::run()
   bool closing=false;
   QByteArray charList;
 //   int counter = 0;
-  explicit while ( !closing ) {
+  while ( !closing ) {
     usleep(1000);
     QString line = input_line->readLine ();
     //       std::cout << "SimplePipeReader: read " << line.size() << " chars" << std::endl;
@@ -38,7 +39,7 @@ void SimplePipeReader::run()
 
 
     } else if ( line.startsWith ( "#V" ) ) { // video recording -> capture frames
-      explicit if(!noVideo){
+      if(!noVideo){
         QStringList pieces = line.split(" ");
         if(pieces.length()<3) { std::cout << "got" << line.toStdString()
                                           << ", but missing parameters expect \"#V idx directory\"" << std::endl;
@@ -64,7 +65,7 @@ void SimplePipeReader::run()
       continue;
     } else if ( (currentChannelLine.size() > 2)
                 && (line.section(' ', 0, 0) != currentDataLine.section(' ', 0, 0))) {
-      explicit while(waitForGui){ msleep(100); }
+      while(waitForGui){ msleep(100); }
       currentDataLine = line;
       emit newData(); //wenn timestamp geändert (erstes element)
     }
@@ -141,7 +142,7 @@ std::list< double > SimplePipeReader::getDataLine()
   QStringList string_list = currentDataLine.split ( ' ' );
   for ( int i = 0;i < string_list.size();++i ) {
     s = string_list.at ( i );
-    if (s.size() == nullptr) continue;
+    if (s.size() == 0) continue;
     double d = s.toDouble ( &success );
     if ( success ) tmp_list.push_back ( d );
     else {

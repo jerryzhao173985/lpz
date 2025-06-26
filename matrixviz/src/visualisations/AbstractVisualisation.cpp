@@ -24,6 +24,8 @@
  ***************************************************************************/
 
 #include "AbstractVisualisation.h"
+#include "MatrixPlotChannel.h"
+#include "ColorPalette.h"
 #include <QString>
 #include <iostream>
 

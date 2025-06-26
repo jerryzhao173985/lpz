@@ -24,6 +24,10 @@
  ***************************************************************************/
 
 #include "TextureVisualisation.h"
+#include "MatrixPlotChannel.h"
+#include "ColorPalette.h"
+#include "VectorPlotChannel.h"
+#include "VectorElementPlotChannel.h"
 #include "math.h"
 #include <iostream>
 #include <string>
@@ -46,7 +50,7 @@ TextureVisualisation::TextureVisualisation(MatrixPlotChannel *channel, ColorPale
 
 TextureVisualisation::~TextureVisualisation(){
   if(debug) cout << "TextureVisualisation Destruktor" << endl;
-  if(object != nullptr) {
+  if(object != 0) {
     makeCurrent();
     glDeleteLists( object, 1 );
   }
@@ -54,7 +58,7 @@ TextureVisualisation::~TextureVisualisation(){
 
 void TextureVisualisation::initializeGL(){
   if(debug) cout << "TextureVisualisation initializeGL" << endl;
-  initializeOpenGLFunctions();  // Qt5: Initialize OpenGL functions
+  // initializeOpenGLFunctions();  // Qt5: Initialize OpenGL functions - not needed for QOpenGLWidget
   glClearColor(0.0f, 0.0f, 0.0f, 1.0f);    // Let OpenGL clear to black
   object = makeObject();    // Generate an OpenGL display list
   glShadeModel( GL_FLAT );

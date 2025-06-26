@@ -28,6 +28,12 @@
 #include "LandscapeVisualisation.h"
 #include "BarVisualisation.h"
 #include "VectorPlotVisualisation.h"
+#include "AbstractRobotSubWidget.h"
+#include "MatrixPlotChannel.h"
+#include "MatrixElementPlotChannel.h"
+#include "VectorPlotChannel.h"
+#include "ColorPalette.h"
+#include <iostream>
 
 using namespace std;
 
@@ -59,7 +65,7 @@ VisualiserSubWidget::VisualiserSubWidget(MatrixPlotChannel *channel, int x, int 
   }
   this->visualisation = new TextureVisualisation(channel, colorPalette, this); //default visualisation
   initGui();
-  if( !(x == 0 && y == 0 && width == 0 && heigt == nullptr)){
+  if( !(x == 0 && y == 0 && width == 0 && heigt == 0)){
     resize(width,heigt);
       move(x, y);
   }
@@ -109,7 +115,7 @@ void VisualiserSubWidget::updateViewableChannels(){
   update();
 }
 
-void VisualiserSubWidget::sourceName(QString name){
+void VisualiserSubWidget::sourceName(const QString& name){
   srcName=name;
   setWindowTitle(QString(matrixChannel->getChannelName().c_str()) + " - " + srcName);
 }
@@ -169,7 +175,7 @@ void VisualiserSubWidget::switchVisMode(int index){
   /*
    * change visualisation
    */
-  explicit switch (index) {
+  switch (index) {
     case 0:
       this->visualisation = new TextureVisualisation(matrixChannel, colorPalette, this);
       break;
@@ -208,7 +214,7 @@ void VisualiserSubWidget::switchVisMode(QAction * action){
 }
 
 void VisualiserSubWidget::toggleOptions(QAction *){
-  explicit if(!optionsShown){
+  if(!optionsShown){
     resize(width() + optionWidget->width(), height());
     optionWidget->show();
     optionsShown = true;
@@ -270,18 +276,18 @@ void VisualiserSubWidget::changeBufferSize(){
   switchVisMode(visMode);
 }
 
-QString VisualiserSubWidget::getChannelName(){
+QString VisualiserSubWidget::getChannelName() const {
   return QString(matrixChannel->getChannelName().c_str());
 }
-QString VisualiserSubWidget::getColorPaletteFilepath(){
+QString VisualiserSubWidget::getColorPaletteFilepath() const {
   if(colorPalette != nullptr) return colorPalette->getPath();
   else return 0;
 }
-int VisualiserSubWidget::getVisMode(){
+int VisualiserSubWidget::getVisMode() const {
   return visMode;
 //  return vizChoice->currentIndex();
 }
-QString VisualiserSubWidget::getMode(){
+QString VisualiserSubWidget::getMode() const {
   if(dynamic_cast<VectorPlotChannel*> (matrixChannel) == nullptr) return (QString) "matrix";
   else return (QString) "vector";
 }
@@ -292,7 +298,7 @@ void VisualiserSubWidget::closeEvent(QCloseEvent * event){
   event->accept();
 }
 
-QSize VisualiserSubWidget::getSize(){
+QSize VisualiserSubWidget::getSize() const {
   if(optionsShown) return QSize( ( width() - optionWidget->width() ), height());
   else return size();
 }

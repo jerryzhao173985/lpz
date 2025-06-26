@@ -34,7 +34,7 @@
 #include <QCheckBox>
 #include <cmath>
 
-class ScaleFunction{
+class ScaleFunction : public QWidget {
 
   Q_OBJECT
 
@@ -42,10 +42,10 @@ public:
   ScaleFunction(QWidget *parent = nullptr);
   ~ScaleFunction();
 
-  double explicit getValue(double val);
+  double getValue(double val);
 
 public slots:
-  void explicit changeFunction(int i);
+  void changeFunction(int i);
   void changeBase(const QString &val);
   void changeMultiplier(const QString &val);
   void changeN(const QString &val);

@@ -35,13 +35,13 @@ struct VERTEX {
     VERTEX( GLfloat x, GLfloat y, GLfloat z): x(x), y(y), z(z) {};
 };
 
-class LandscapeVisualisation{
+class LandscapeVisualisation : public AbstractVisualisation {
   Q_OBJECT
 
 public:
   LandscapeVisualisation(MatrixPlotChannel *channel, ColorPalette *colorPalette, QWidget *parent = 0);
 //  LandscapeVisualisation(VectorPlotChannel *channel, ColorPalette *colorPalette, QWidget *parent = 0);
-   ~LandscapeVisualisation() override;
+   ~LandscapeVisualisation();
 
 protected:
 
@@ -65,7 +65,7 @@ private:
    const static bool debug = false;
    VERTEX getNormal(const VERTEX& v1, const VERTEX& v2, const VERTEX& v3);
 
-   double explicit clip(double val);
+   double clip(double val);
 
    inline void divideAndDrawTriangle(VERTEX& v1, VERTEX& v2, VERTEX& v3) {
      VERTEX n = getNormal(v1, v2, v3);

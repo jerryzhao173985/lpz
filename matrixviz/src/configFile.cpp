@@ -24,7 +24,17 @@
  ***************************************************************************/
 
 #include "configFile.h"
+#include "MatrixVisualizer.h"
+#include "VisualiserSubWidget.h"
+#include "MatrixPlotChannel.h"
+#include "VectorPlotChannel.h"
 #include <iostream>
+#include <QApplication>
+#include <QDomNode>
+#include <QtXml/QDomDocument>
+#include <QtXml/QDomElement>
+#include <QtXml/QDomNode>
+#include <QFileDialog>
 
 using namespace std;
 
@@ -73,22 +83,23 @@ void configFile::load(MatrixVisualizer* mv){
         VisualiserSubWidget* window = 0;
         if( e.attribute( "mode", "") == "matrix"){
           MatrixPlotChannel* c = mv->getMatrixPlotChannel(e.attribute("source", ""));
-          explicit if(c){
+          if(c){
             window = new VisualiserSubWidget(c, e.attribute("X", "").toInt(), e.attribute("Y", "").toInt(), 
                                              e.attribute("width", "").toInt(),
                                              e.attribute("height", "").toInt(), 
                                              e.attribute("colorPaletteFile", ""));
           }
         }else{
-          VectorPlotChannel* c = mv->getVectorPlotChannel(e.attribute("source", ""));
-          explicit if(c){
-            window = new VisualiserSubWidget(c, e.attribute("X", "").toInt(), e.attribute("Y", "").toInt(), 
-                                             e.attribute("width", "").toInt(),
-                                             e.attribute("height", "").toInt(), 
-                                             e.attribute("colorPaletteFile", ""));
-          }            
+          // VectorPlotChannel is not supported by VisualiserSubWidget
+          // VectorPlotChannel* c = mv->getVectorPlotChannel(e.attribute("source", ""));
+          // if(c){
+          //   window = new VisualiserSubWidget(c, e.attribute("X", "").toInt(), e.attribute("Y", "").toInt(), 
+          //                                    e.attribute("width", "").toInt(),
+          //                                    e.attribute("height", "").toInt(), 
+          //                                    e.attribute("colorPaletteFile", ""));
+          // }            
         }
-        explicit if(window){
+        if(window){
           window->switchVisMode(e.attribute("visMode", "").toInt());
           newOpenedWindow(window);
           matrixVis->connectWindowForUpdate(window);
@@ -156,7 +167,7 @@ void configFile::windowClosed(VisualiserSubWidget* window){
 
 void configFile::doQuit(){
   if (debug) cout << "emit sendquit" << endl;
-  explicit if(!saved){
+  if(!saved){
     saved = true;
     save();
     emit sendQuit();

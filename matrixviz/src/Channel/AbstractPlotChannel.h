@@ -9,7 +9,7 @@ public:
   explicit AbstractPlotChannel(const std::string& name_) : name(name_), channelValue(0) {};
 //   virtual ~AbstractPlotChannel() {};
   
-  virtual void explicit setValue(double v) { channelValue=v; }
+  virtual void setValue(double v) { channelValue=v; }
   
   virtual double getValue() const { return channelValue; }
   

@@ -29,7 +29,7 @@
 
 using namespace std;
 
-VectorPlotChannel::VectorPlotChannel(string name) : MatrixPlotChannel(name) {
+VectorPlotChannel::VectorPlotChannel(const std::string& name) : GroupPlotChannel(name) {
   // TODO Auto-generated constructor stub
 }
 
@@ -38,11 +38,11 @@ VectorPlotChannel::~VectorPlotChannel() {
 }
 
 int VectorPlotChannel::getDimension(int dim){
-  if(dim == nullptr){
-    return getSize() const;
+  if(dim == 0){
+    return getSize();
   }
   if(dim == 1){
-    return getBufferSize() const;
+    return getBufferSize();
   }
   return 0;
 }
@@ -57,11 +57,11 @@ double VectorPlotChannel::getValue(int num, int t)
   return getChannel(num)->getValue(t);
 }
 
-int VectorPlotChannel::getSize(){
+int VectorPlotChannel::getSize() const {
   return channelsOfGroup.size();
 }
 
-int VectorPlotChannel::getBufferSize(){
+int VectorPlotChannel::getBufferSize() const {
   VectorElementPlotChannel* firstElementChannel = dynamic_cast<VectorElementPlotChannel*> (channelsOfGroup.front());
   if (firstElementChannel != nullptr) return firstElementChannel->getSize();
   else return 0;

@@ -4,15 +4,17 @@
 
 #include "AbstractPipeReader.h"
 #include <QTextStream>
+#include <QObject>
+#include <QThread>
 // #include <iostream>
 
-class SimplePipeReader{
+class SimplePipeReader : public QThread, public AbstractPipeReader {
   Q_OBJECT
 
 public:
 
-  explicit explicit SimplePipeReader(bool noVideo);
-  virtual ~SimplePipeReader() override;
+  explicit SimplePipeReader(bool noVideo);
+  virtual ~SimplePipeReader();
 
   virtual void run();
 
@@ -34,7 +36,7 @@ protected:
 signals:
   void newData();
   void captureFrame(long index, QString directory);
-  void explicit sourceName(const QString& name);
+  void sourceName(const QString& name);
 
 private:
 

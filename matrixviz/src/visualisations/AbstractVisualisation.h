@@ -26,13 +26,20 @@
 #ifndef __ABSTRACTVISUALISATION_H_
 #define __ABSTRACTVISUALISATION_H_
 
-class AbstractPlotChannel{
+#include <QOpenGLWidget>
+#include <QObject>
+
+// Forward declarations
+class MatrixPlotChannel;
+class ColorPalette;
+
+class AbstractVisualisation : public QOpenGLWidget {
 
   Q_OBJECT
 
 public:
   AbstractVisualisation(MatrixPlotChannel *channel, ColorPalette *colorPalette, QWidget *parent = 0);
-  virtual ~AbstractVisualisation() override;
+  virtual ~AbstractVisualisation();
 
 protected:
 

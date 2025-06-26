@@ -29,13 +29,13 @@
 
 
 
-class BarVisualisation{
+class BarVisualisation : public AbstractVisualisation {
   Q_OBJECT
 
 public:
   BarVisualisation(MatrixPlotChannel *channel, ColorPalette *colorPalette, QWidget *parent = 0);
 //  BarVisualisation(VectorPlotChannel *channel, ColorPalette *colorPalette, QWidget *parent = 0);
-   ~BarVisualisation() override;
+   ~BarVisualisation();
 
 protected:
 
@@ -54,7 +54,7 @@ private:
    GLfloat zoom;
    int mouseX, mouseY;
    const static bool debug = false;
-   void explicit drawBar(double value);
+   void drawBar(double value);
 //   bool lightOn = false;
 };
 

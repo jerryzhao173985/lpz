@@ -4,11 +4,11 @@
 
 #include "AbstractPlotChannel.h"
 
-class MotorCurrentPlotChannel{
+class MotorCurrentPlotChannel : public AbstractPlotChannel {
   
 public:
   explicit MotorCurrentPlotChannel(const std::string& name);
-  virtual ~MotorCurrentPlotChannel() override;
+  virtual ~MotorCurrentPlotChannel();
   
 protected:
   

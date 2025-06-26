@@ -1,5 +1,6 @@
 
 #include "BufferedPipeReader.h"
+#include <unistd.h>
 
 #define BUFFERED_PIPE_READER_WAIT_TIME 1000
 
@@ -11,8 +12,11 @@
 BufferedPipeReader::BufferedPipeReader ( AbstractPipeReader *apr ) : apr ( apr )
 {
   std::cout << "new BufferedPipeReader()" << std::endl;
-  QObject::connect ( apr, SIGNAL ( newData() ), this, SLOT ( newIncomingData() ) );
-  QObject::connect ( apr, SIGNAL ( finished() ), this, SLOT ( terminate() ) );
+  // AbstractPipeReader is not a QObject, so we need to check if it's a QObject-derived class
+  if (QObject* qobj = dynamic_cast<QObject*>(apr)) {
+    QObject::connect ( qobj, SIGNAL ( newData() ), this, SLOT ( newIncomingData() ) );
+    QObject::connect ( qobj, SIGNAL ( finished() ), this, SLOT ( terminate() ) );
+  }
 }
 
 /**
@@ -23,7 +27,8 @@ BufferedPipeReader::BufferedPipeReader ( AbstractPipeReader *apr ) : apr ( apr )
 void BufferedPipeReader::run()
 {
   std::cout << "BufferedPipeReader: start()" << std::endl;
-  apr->start();
+  // AbstractPipeReader doesn't have start() method
+  // apr->start();
 
   while ( true )
   {

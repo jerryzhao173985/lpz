@@ -31,9 +31,12 @@
 using namespace std;
 
 MatrixPipeFilter::MatrixPipeFilter(AbstractPipeReader* apr) :
-  explicit AbstractPipeFilter(apr) {
+  AbstractPipeFilter(apr) {
   if (debug) cout << "new MatrixPipeFilter()" << endl;
-  QObject::connect(apr,SIGNAL(newData()),this,SLOT(updateChannels()), Qt::DirectConnection);
+  // AbstractPipeReader is not a QObject, so we need to check if it's a QObject-derived class
+  if (QObject* qobj = dynamic_cast<QObject*>(apr)) {
+    QObject::connect(qobj, SIGNAL(newData()), this, SLOT(updateChannels()), Qt::DirectConnection);
+  }
         // TODO Auto-generated constructor stub
 
 }
@@ -60,7 +63,7 @@ AbstractPlotChannel* MatrixPipeFilter::createChannel(const std::string& name)
         /*
          * Looking for new vector
          */
-        explicit if (hasBrace && !hasComma) {
+        if (hasBrace && !hasComma) {
     // empty vector or new vector (different name)
     if (vectors.size() == 0 || name.substr(0, bracePos) != vectors.back()->getChannelName().substr(0, bracePos)) {
       VectorPlotChannel* vePloChannel = new VectorPlotChannel(name.substr(0, bracePos));

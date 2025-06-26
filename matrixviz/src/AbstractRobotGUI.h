@@ -35,12 +35,13 @@
 
 
 // forward declarations
-class AbstractPipeReader{
+class AbstractPipeReader;
 
-Q_OBJECT
+class AbstractRobotGUI : public QWidget {
+  Q_OBJECT
 
 public:
-  AbstractRobotGUI(QWidget *parent = 0);
+  explicit AbstractRobotGUI(QWidget *parent = nullptr);
 
 protected:
   void resizeEvent(QResizeEvent *event);

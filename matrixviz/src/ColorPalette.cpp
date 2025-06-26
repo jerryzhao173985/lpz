@@ -86,7 +86,7 @@ QColor ColorPalette::pickColor(double val){
   pos2.pos = 1000.;//max
   // find the nearest stops surrounding for the gradient
   for ( int i = 0; i < stops.size(); ++i){
-    explicit if( stops[i].pos < val && stops[i].pos > pos1.pos){
+    if( stops[i].pos < val && stops[i].pos > pos1.pos){
       pos1 = stops[i];
     }else if( stops[i].pos > val && stops[i].pos < pos2.pos){
       pos2 = stops[i];
@@ -115,7 +115,7 @@ double ColorPalette::getScaledValue(double val){
 //goes in one direction and return the first stop on its way
 double ColorPalette::getNextStopPosition(double fromVal, double toVal){
   if (debug) cout << "from" << fromVal << "to" << toVal << endl;
-  explicit if(fromVal > toVal){
+  if(fromVal > toVal){
     double nextStop = toVal;
     for( int i = 0; i < stops.size(); ++i){
       double pos =  stops[i].pos;
@@ -267,7 +267,7 @@ void ColorPalette::updateList(){
       stopList->setItemWidget(item, w);
     }else{
       ListEntity *w = dynamic_cast<ListEntity*>(stopList->itemWidget(stopList->item(i)));
-      explicit if(w){
+      if(w){
         w->i = i;
         w->color = stops[i].color;
         w->pos = stops[i].pos;
@@ -368,7 +368,7 @@ void ColorPalette::loadStopList(){
   update();
 }
 
-void ColorPalette::loadStopListFromFile(QString filename) {
+void ColorPalette::loadStopListFromFile(const QString& filename) {
   if (debug)
     cout << "in ColorPalette::loadStopList" << endl;
   if (debug)
@@ -448,7 +448,7 @@ void ColorPalette::saveStopList(){
 }
 
 void ColorPalette::setMax(const QString &text){
-  explicit if(this->max < this->min){
+  if(this->max < this->min){
     QMessageBox msgBox;
     msgBox.setText("The maximum value has to be bigger than the minimum.");
     msgBox.setIcon(QMessageBox::Warning);
@@ -460,7 +460,7 @@ void ColorPalette::setMax(const QString &text){
 }
 
 void ColorPalette::setMin(const QString &text){
-  explicit if(this->max < this->min){
+  if(this->max < this->min){
     QMessageBox msgBox;
     msgBox.setText("The minimum value has to be smaller than the maximum.");
     msgBox.setIcon(QMessageBox::Warning);
@@ -478,7 +478,7 @@ void ColorPalette::autoSetMinMax(){
   update();
 }
 
-QString ColorPalette::getPath(){
+QString ColorPalette::getPath() const {
   return currentPath;
 }
 
@@ -488,5 +488,5 @@ void ColorPalette::closeEvent(QCloseEvent * event){
   event->accept();
 }
 
-double ColorPalette::getMax(){ return max;}
-double ColorPalette::getMin(){ return min;}
+double ColorPalette::getMax() const { return max;}
+double ColorPalette::getMin() const { return min;}

@@ -6,6 +6,9 @@
  */
 
 #include "VectorPlotVisualisation.h"
+#include "MatrixPlotChannel.h"
+#include "ColorPalette.h"
+#include "VectorPlotChannel.h"
 #include "math.h"
 #include <iostream>
 #include <string>
@@ -35,7 +38,7 @@ VectorPlotVisualisation::~VectorPlotVisualisation(){
 
 void VectorPlotVisualisation::initializeGL(){
   if(debug) cout << "VectorPlotVisualisation Konstruktor" << endl;
-  initializeOpenGLFunctions();
+  // initializeOpenGLFunctions(); // not needed for QOpenGLWidget
   glClearColor(0.0f, 0.0f, 0.0f, 1.0f);    // Let OpenGL clear to black
   glShadeModel( GL_SMOOTH );
 }
@@ -82,7 +85,7 @@ void VectorPlotVisualisation::paintGL(){
           y0 = (val - colorPalette->getMax()) / maxToMin;
           y1 = 1.;
         }else{
-          explicit if(val < 0.){
+          if(val < 0.){
            y0 = ((-1.)* colorPalette->getMax()) / maxToMin; //zero
            y1 = (val - colorPalette->getMax()) / maxToMin;
           }else{

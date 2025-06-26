@@ -41,16 +41,16 @@
 #include <list>
 #include <vector>
 
-class configFile{
+class MatrixVisualizer : public AbstractRobotGUI {
   Q_OBJECT
 
 
 public:
         MatrixVisualizer(QWidget *parent = 0, bool novideo = false);
-        virtual ~MatrixVisualizer() override;
+        virtual ~MatrixVisualizer();
 
-         VectorPlotChannel* explicit getVectorPlotChannel(QString name);
-         MatrixPlotChannel* explicit getMatrixPlotChannel(QString name);
+         VectorPlotChannel* getVectorPlotChannel(QString name);
+         MatrixPlotChannel* getMatrixPlotChannel(QString name);
          void connectWindowForUpdate(VisualiserSubWidget *vis);
 
 private:
@@ -77,11 +77,11 @@ private:
         static const bool debug = false;
 
 protected:
-        virtual void explicit closeEvent(QCloseEvent * event);
+        virtual void closeEvent(QCloseEvent * event);
 
 private slots:
-  void explicit visualize(QAbstractButton * button);
-  void explicit sourceName(const QString& name);
+  void visualize(QAbstractButton * button);
+  void sourceName(const QString& name);
   void captureFrame(long idx, QString directory);
 
 signals:

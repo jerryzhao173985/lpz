@@ -31,25 +31,28 @@
 #include <QFile>
 #include <QString>
 #include <QList>
-#include <MatrixVisualizer.h>
-#include <VisualiserSubWidget.h>
+#include <QObject>
 
-class MatrixVisualizer{
+// Forward declarations
+class MatrixVisualizer;
+class VisualiserSubWidget;
+
+class configFile : public QObject {
 
 Q_OBJECT
 
 public:
   configFile();
   ~configFile();
-  void explicit load( MatrixVisualizer* mv);
+  void load( MatrixVisualizer* mv);
   void save();
-  void explicit newOpenedWindow(VisualiserSubWidget* window);
+  void newOpenedWindow(VisualiserSubWidget* window);
   static const bool debug = false;
   QList<VisualiserSubWidget*> getOpenWindows() {return openWindows;}
 
 public slots:
   void doQuit();
-  void explicit windowClosed(VisualiserSubWidget* window);
+  void windowClosed(VisualiserSubWidget* window);
 
 private:
   QList<VisualiserSubWidget*> openWindows;

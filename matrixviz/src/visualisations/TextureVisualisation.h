@@ -31,13 +31,13 @@
 //#include "../ColorPalette.h"
 //#include "../Channel/VectorPlotChannel.h"
 
-class TextureVisualisation{
+class TextureVisualisation : public AbstractVisualisation {
   Q_OBJECT
 
 public:
   TextureVisualisation(MatrixPlotChannel *channel, ColorPalette *colorPalette, QWidget *parent = 0);
 //  TextureVisualisation(VectorPlotChannel *channel, ColorPalette *colorPalette, QWidget *parent = 0);
-  virtual ~TextureVisualisation() override;
+  virtual ~TextureVisualisation();
   //void updateView();
 
 
@@ -58,7 +58,7 @@ private:
   int maxX, maxY;
   const static bool debug = false;
 
-  double explicit clip(double val);
+  double clip(double val);
 };
 
 

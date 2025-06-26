@@ -4,11 +4,11 @@
 
 #include "AbstractPlotChannel.h"
 
-class AxesPlotChannel{
+class AxesPlotChannel : public AbstractPlotChannel {
   
 public:
   explicit AxesPlotChannel(const std::string& name);
-  virtual ~AxesPlotChannel() override;
+  virtual ~AxesPlotChannel();
   
 protected:
   

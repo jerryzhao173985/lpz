@@ -29,7 +29,7 @@
 
 using namespace std;
 
-MatrixPlotChannel::MatrixPlotChannel(string name) : GroupPlotChannel(name) {
+MatrixPlotChannel::MatrixPlotChannel(const std::string& name) : GroupPlotChannel(name) {
         // TODO Auto-generated constructor stub
 }
 
@@ -47,7 +47,7 @@ int MatrixPlotChannel::getDimension(int dim)
 {
         assert(dim < 2);
 
-        if( dim == nullptr) return channelsOfGroup.size();
+        if( dim == 0) return channelsOfGroup.size();
         else{
           MatrixPlotChannel* chan = dynamic_cast<MatrixPlotChannel*> (channelsOfGroup.front());
           if(chan == nullptr) { return 0; }else return chan->getDimension(0);
@@ -84,7 +84,7 @@ GroupPlotChannel* MatrixPlotChannel::getRow(int row){
   }else return gPlotCh;
 }
 
-GroupPlotChannel* MatrixPlotChannel::getLastRow(){
+GroupPlotChannel* MatrixPlotChannel::getLastRow() const {
   if(channelsOfGroup.back() == nullptr){
     return 0;
   }

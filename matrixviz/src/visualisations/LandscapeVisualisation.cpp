@@ -23,6 +23,8 @@
  *                                                                         *
  ***************************************************************************/
 #include "LandscapeVisualisation.h"
+#include "MatrixPlotChannel.h"
+#include "ColorPalette.h"
 #include "math.h"
 #include <iostream>
 #include <string>
@@ -33,7 +35,7 @@ using namespace std;
 LandscapeVisualisation::LandscapeVisualisation(MatrixPlotChannel *channel, ColorPalette *colorPalette, QWidget *parent)
 : AbstractVisualisation(channel, colorPalette, parent),
   mouseX(0),
-  explicit mouseY(0) {
+  mouseY(0) {
 
   if(debug) cout << "TextureVisualisation Konstruktor" << endl;
   object = 0;
@@ -52,7 +54,7 @@ LandscapeVisualisation::~LandscapeVisualisation(){
 
 void LandscapeVisualisation::initializeGL(){
   if(debug) cout << "LandscapeVisualisation Konstruktor" << endl;
-  initializeOpenGLFunctions();
+  // initializeOpenGLFunctions(); // not needed for QOpenGLWidget
   glClearColor(0.0f, 0.0f, 0.0f, 1.0f);    // Let OpenGL clear to black
   glClearDepth(1.0f);
   glEnable(GL_DEPTH_TEST);
@@ -114,7 +116,7 @@ void LandscapeVisualisation::paintGL(){
       drawTriangle(v1_00, v1_01, v1_11);
 
       //verbindung i richtung
-      explicit if (i < maxX - 1) {
+      if (i < maxX - 1) {
         p10 = clip(colorPalette->getScaledValue(channel->getValue(i + 1, j)));
         v2_00 = VERTEX((GLfloat) ((-1. * plateauRadius) + 1), (GLfloat) p10, (GLfloat) plateauRadius);
         v2_01 = VERTEX((GLfloat) ((-1. * plateauRadius) + 1), (GLfloat) p10, (GLfloat) (-1. * plateauRadius));
@@ -123,7 +125,7 @@ void LandscapeVisualisation::paintGL(){
       }
 
       //vebindung in j richtung
-      explicit if (j < maxY - 1) {
+      if (j < maxY - 1) {
         p01 = clip(colorPalette->getScaledValue(channel->getValue(i, j + 1)));
         v4_00 = VERTEX((GLfloat) (-1. * plateauRadius), (GLfloat) p01, (GLfloat) (plateauRadius - 1));
         v4_10 = VERTEX((GLfloat) plateauRadius, (GLfloat) p01, (GLfloat) (plateauRadius - 1));
@@ -131,7 +133,7 @@ void LandscapeVisualisation::paintGL(){
         divideAndDrawTriangle(v1_01, v4_10, v1_11);
       }
 
-      explicit if (i < maxX - 1 && j < maxY - 1) { //fläche zwischen 4stops
+      if (i < maxX - 1 && j < maxY - 1) { //fläche zwischen 4stops
         p11 = clip(colorPalette->getScaledValue(channel->getValue(i + 1, j + 1)));
         v3_00 = VERTEX((GLfloat) ((-1. * plateauRadius) + 1), (GLfloat) p11, (GLfloat) (plateauRadius - 1));
 
@@ -267,7 +269,7 @@ VERTEX LandscapeVisualisation::getNormal(const VERTEX& v1, const VERTEX& v2, con
   GLfloat x = (a2 * b3) - (a3 * b2),
       y = (a3 * b1) - (a1 * b3),
       z = (a1 * b2) - (a2 * b1);
-  explicit if(y < 0.f){
+  if(y < 0.f){
     x = -1.f * x;
     y = -1.f * y;
     z = -1.f * z;

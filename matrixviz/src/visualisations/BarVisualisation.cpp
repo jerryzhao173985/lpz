@@ -23,6 +23,8 @@
  *                                                                         *
  ***************************************************************************/
 #include "BarVisualisation.h"
+#include "MatrixPlotChannel.h"
+#include "ColorPalette.h"
 #include "math.h"
 #include <iostream>
 #include <string>
@@ -35,7 +37,7 @@ BarVisualisation::BarVisualisation(MatrixPlotChannel *channel, ColorPalette *col
   visMode(0),
   inputMode(0),
   mouseX(0),
-  explicit mouseY(0) {
+  mouseY(0) {
 
   if(debug) cout << "BarVisualisation Konstruktor" << endl;
   zoom = 1.;
@@ -52,7 +54,7 @@ BarVisualisation::~BarVisualisation(){
 
 void BarVisualisation::initializeGL(){
   if(debug) cout << "BarVisualisation Konstruktor" << endl;
-  initializeOpenGLFunctions();
+  // initializeOpenGLFunctions(); // not needed for QOpenGLWidget
   glClearColor(0.0f, 0.0f, 0.0f, 1.0f);    // Let OpenGL clear to black
   glClearDepth(1.0f);
   glEnable(GL_DEPTH_TEST);
@@ -117,7 +119,7 @@ void BarVisualisation::drawBar(double value){
   if( value > colorPalette->getMax()) value = colorPalette->getMax();
   if( value < colorPalette->getMin()) value = colorPalette->getMin();
   glBegin(GL_QUADS); //Y -> value
-  explicit if(value > 0){
+  if(value > 0){
      // Front Face
      glNormal3f(0.f,0.f,1.f);
      glVertex3f(.0f, .0f, 1.0f);
