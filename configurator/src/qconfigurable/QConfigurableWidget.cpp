@@ -122,7 +122,33 @@
  *   - bugfix
  *
  *   Revision 1.3  2010/11/30 17:07:06  wrabe
- *   - new class QConfigurableTileShowHideDialog{
+ *   - new class QConfigurableTileShowHideDialog
+ *
+ ***************************************************************************/
+
+#include "QConfigurableWidget.h"
+#include "QAbstractConfigurableTileWidget.h"
+#include "QGridPos.h"
+#include "QBoolConfigurableTileWidget.h"
+#include "QValConfigurableTileWidget.h"
+#include "QIntConfigurableTileWidget.h"
+#include "QDummyConfigurableTileWidget.h"
+#include "QConfigurableTileShowHideDialog.h"
+#include "QConfigurableSetBoundsDialog.h"
+#include "QConfigurableLoadSaveDialog.h"
+#include "QChangeNumberTileColumnsDialog.h"
+#include <QMenu>
+#include <QContextMenuEvent>
+#include <QFileDialog>
+#include <QDomDocument>
+#include <QFile>
+#include <QMessageBox>
+#include <QTextStream>
+#include <QPainter>
+#include <QDrag>
+#include <QMimeData>
+
+namespace lpzrobots {
   
   QConfigurableWidget::QConfigurableWidget(Configurable* config, int nameIndex) :
     config(config), dragging(false), isCollapsed(false), configurableTile_dragging(0), nameIndex(nameIndex),
@@ -259,7 +285,7 @@
   }
 
   void QConfigurableWidget::sl_execContextMenu(const QPoint & pos) {
-    explicit if (!isCollapsed) {
+    if (!isCollapsed) {
       contextMenuShowHideDialog.exec(this->mapToGlobal(pos));
     }
   }
@@ -279,7 +305,7 @@
     fileDialog->setWindowTitle("Select the XML file containing the ConfigurableState(s)");
     fileDialog->setAcceptMode(QFileDialog::AcceptOpen);
     fileDialog->setFileMode(QFileDialog::ExistingFile);
-    QString pathApplication = QCoreApplication::applicationDirPath() + "/*.xml";
+    QString pathApplication = QCoreApplication::applicationDirPath() + "/" + "*.xml";
     fileDialog->selectFile(pathApplication);
     fileDialog->setNameFilter(tr("Xml (*.xml)"));
     if (fileDialog->exec() == QDialog::Accepted) {
@@ -403,7 +429,7 @@
       QDomElement qde_paramval = qdn_paramvals.firstChild().toElement();
       while (!qde_paramval.isNull()) {
         QString key = qde_paramval.attribute("name", "???");
-        string stdKey = key.toStdString();
+        std::string stdKey = key.toStdString();
         if (config->getParamValMap().find(stdKey) != config->getParamValMap().end()
             && configTileWidgetMap.contains(key)) {
           if ((inAutoSaveMode && actionToggleAutoSave->isChecked()) || !inAutoSaveMode) {
@@ -426,7 +452,7 @@
       QDomElement qde_paramint = qdn_paramints.firstChild().toElement();
       while (!qde_paramint.isNull()) {
         QString key = qde_paramint.attribute("name", "???");
-        string stdKey = key.toStdString();
+        std::string stdKey = key.toStdString();
         if (config->getParamIntMap().find(stdKey) != config->getParamIntMap().end()
             && configTileWidgetMap.contains(key)) {
           if ((inAutoSaveMode && actionToggleAutoSave->isChecked()) || !inAutoSaveMode) {
@@ -449,7 +475,7 @@
       QDomElement qde_parambool = qdn_parambools.firstChild().toElement();
       while (!qde_parambool.isNull()) {
         QString key = qde_parambool.attribute("name", "???");
-        string stdKey = key.toStdString();
+        std::string stdKey = key.toStdString();
         if (config->getParamBoolMap().find(stdKey) != config->getParamBoolMap().end() && configTileWidgetMap.contains(
             key)) {
           if ((inAutoSaveMode && actionToggleAutoSave->isChecked()) || !inAutoSaveMode) {
@@ -523,7 +549,7 @@
     nodeConfigurable.setAttribute("id", config->getId());
     nodeConfigurable.setAttribute("autosaveFunction", actionToggleAutoSave->isChecked());
 
-    explicit if (inAutoSaveMode && !insertDefaultConfigurableValues) {
+    if (inAutoSaveMode && !insertDefaultConfigurableValues) {
       QDomComment nodeComment;
       if (actionToggleAutoSave->isChecked()) {
         nodeComment
@@ -644,7 +670,7 @@
   }
 
   void QConfigurableWidget::setFolding(bool folding) {
-    explicit if (folding) {
+    if (folding) {
       foreach(QAbstractConfigurableTileWidget* configurableTile, configTileWidgetMap)
         {
           if (configurableTile->isVisible()) {

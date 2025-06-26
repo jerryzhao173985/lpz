@@ -93,8 +93,19 @@
  *     storage implementet yet))
  *
  *   Revision 1.2  2010/11/30 17:07:06  wrabe
- *   - new class QConfigurableTileShowHideDialog{
-  
+ *   - new class QConfigurableTileShowHideDialog
+ *                                                                         *
+ ***************************************************************************/
+
+#include "QBoolConfigurableTileWidget.h"
+#include <selforg/configurable.h>
+#include <QCheckBox>
+#include <QLabel>
+#include <QGridLayout>
+#include <QMenu>
+
+namespace lpzrobots {
+
   QBoolConfigurableTileWidget::QBoolConfigurableTileWidget(Configurable* config, Configurable::paramkey& key, QMap<QGridPos, QAbstractConfigurableTileWidget*>& tileIndexConfigWidgetMap) :
     QAbstractConfigurableTileWidget(config, key, tileIndexConfigWidgetMap), origValue(config->getParam(key)) {
 
@@ -123,7 +134,7 @@
   QBoolConfigurableTileWidget::~QBoolConfigurableTileWidget() {
   }
 
-  void QBoolConfigurableTileWidget::setName(QString name) {
+  void QBoolConfigurableTileWidget::setName(const QString& name) {
     cbBool.setText(name);
   }
 
@@ -139,11 +150,11 @@
   }
 
   void QBoolConfigurableTileWidget::toDummy(bool set) {
-    explicit if(set) {
+    if(set) {
       setAutoFillBackground(false);
       cbBool.hide();
       repaint();
-    }else {
+    } else {
       setAutoFillBackground(true);
       cbBool.show();
       repaint();

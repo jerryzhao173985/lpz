@@ -51,11 +51,11 @@
 #ifndef __QGRIDPOS_H_
 #define __QGRIDPOS_H_
 
-#include <qpoint.h>
+#include <QPoint>
 
 namespace lpzrobots {
   
-  class QGridPos{
+  class QGridPos : public QPoint {
     public:
       inline QGridPos() : QPoint() {}
       inline QGridPos(int row, int column) : QPoint(column,row) {}

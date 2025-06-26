@@ -50,10 +50,13 @@
 
 namespace lpzrobots {
 
-  class QConfigurator{
+  // Forward declaration
+  class QConfigurator;
+
+  class ConfiguratorProxy : public Callbackable {
     public:
-      explicit explicit ConfiguratorProxy(ConfigurableList& configList);
-      virtual ~ConfiguratorProxy() override;
+      explicit ConfiguratorProxy(ConfigurableList& configList);
+      virtual ~ConfiguratorProxy();
 
       virtual void doOnCallBack(BackCaller* source, BackCaller::CallbackableType type = BackCaller::DEFAULT_CALLBACKABLE_TYPE);
 

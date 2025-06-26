@@ -58,12 +58,12 @@
 
 namespace lpzrobots {
   
-  class QChangeNumberTileColumnsDialog{
+  class QChangeNumberTileColumnsDialog : public QDialog {
 
     Q_OBJECT
 
     public:
-    explicit explicit QChangeNumberTileColumnsDialog(int* tileCount);
+    explicit QChangeNumberTileColumnsDialog(int* tileCount);
       virtual ~QChangeNumberTileColumnsDialog() override;
 
     private slots:

@@ -104,8 +104,22 @@
  *     storage implementet yet))
  *
  *   Revision 1.2  2010/11/30 17:07:06  wrabe
- *   - new class QConfigurableTileShowHideDialog{
-  
+ *   - new class QConfigurableTileShowHideDialog
+ *                                                                         *
+ ***************************************************************************/
+
+#include "QIntConfigurableTileWidget.h"
+#include <selforg/configurable.h>
+#include <QSpinBox>
+#include <QSlider>
+#include <QLabel>
+#include <QGridLayout>
+#include <QMenu>
+#include <QInputDialog>
+#include "QConfigurableSetBoundsDialog.h"
+
+namespace lpzrobots {
+
   QIntConfigurableTileWidget::QIntConfigurableTileWidget(Configurable* config, Configurable::paramkey& key, QMap<QGridPos, QAbstractConfigurableTileWidget*>& tileIndexConfigWidgetMap) :
     QAbstractConfigurableTileWidget(config, key, tileIndexConfigWidgetMap), origBounds(config->getParamintBounds(key)), origValue(config->getParam(key)), stopSignaling(false) {
 
@@ -156,12 +170,12 @@
   QIntConfigurableTileWidget::~QIntConfigurableTileWidget() {
   }
 
-  void QIntConfigurableTileWidget::setName(QString name) {
+  void QIntConfigurableTileWidget::setName(const QString& name) {
     lName.setText(name);
   }
 
   void QIntConfigurableTileWidget::sl_spinBoxValueChanged(int value) {
-    explicit if (!stopSignaling) {
+    if (!stopSignaling) {
       slider.setValue(value);
       config->setParam(key, value);
     }
@@ -169,7 +183,7 @@
   }
 
   void QIntConfigurableTileWidget::sl_sliderValueChanged(int value) {
-    explicit if (!stopSignaling) {
+    if (!stopSignaling) {
       spBox.setValue(value);
       config->setParam(key, value);
     }
@@ -193,7 +207,7 @@
   }
 
   void QIntConfigurableTileWidget::toDummy(bool set) {
-    explicit if (set) {
+    if (set) {
       setAutoFillBackground(false);
       lName.hide();
       slider.hide();
@@ -250,7 +264,7 @@
     updatePaletteChanged();
   }
 
-  void QIntConfigurableTileWidget::sl_resize(QSize newSize) {
+  void QIntConfigurableTileWidget::sl_resize(const QSize& newSize) {
     if (newSize.width()<130)
       lName.setMaximumWidth(30);
     else

@@ -64,29 +64,29 @@
 
 namespace lpzrobots {
   
-  class QDummyConfigurableTileWidget{
+  class QDummyConfigurableTileWidget : public QAbstractConfigurableTileWidget {
     public:
       QDummyConfigurableTileWidget(Configurable* config, QMap<QGridPos, QAbstractConfigurableTileWidget*>& tileIndexConfigWidgetMap);
       virtual ~QDummyConfigurableTileWidget() {
       }
 
-      void explicit setName(const QString& name) {
+      void setName(const QString& name) override {
         this->name = name;
       }
 
-      QString getName() const {
+      QString getName() const override {
         return name;
       }
 
-      void explicit toDummy(bool set) {}
+      void toDummy(bool set) override {}
 
-      void reloadConfigurableData() {}
-      inline bool valueChanged() { return false; }
-      inline bool boundsChanged() { return false; }
+      void reloadConfigurableData() override {}
+      inline bool valueChanged() override { return false; }
+      inline bool boundsChanged() override { return false; }
 
     public slots:
-      virtual void sl_resetToOriginalValues() {}
-      virtual void sl_resetToOriginalValuesAndBounds() {}
+      virtual void sl_resetToOriginalValues() override {}
+      virtual void sl_resetToOriginalValuesAndBounds() override {}
 
     private:
       QString name;

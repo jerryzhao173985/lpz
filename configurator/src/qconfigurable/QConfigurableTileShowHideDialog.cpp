@@ -64,8 +64,23 @@
  *     storage implementet yet))
  *
  *   Revision 1.1  2010/11/30 17:07:06  wrabe
- *   - new class QConfigurableTileShowHideDialog{
-  
+ *   - new class QConfigurableTileShowHideDialog
+ *                                                                         *
+ ***************************************************************************/
+
+#include "QConfigurableTileShowHideDialog.h"
+#include "QAbstractConfigurableTileWidget.h"
+#include <QCheckBox>
+#include <QDialogButtonBox>
+#include <QFrame>
+#include <QGridLayout>
+#include <QLabel>
+#include <QPushButton>
+#include <QScrollArea>
+#include <QVBoxLayout>
+
+namespace lpzrobots {
+
   QConfigurableTileShowHideDialog::QConfigurableTileShowHideDialog(QMap<QString, QAbstractConfigurableTileWidget*>& configLineWidgetMap, QMap<QGridPos,
       QAbstractConfigurableTileWidget*>& tileIndexConfigWidgetMap, int numberOfTilesPerRow) :
     configTileWidgetMap(configLineWidgetMap), tileIndexConfigWidgetMap(tileIndexConfigWidgetMap), numberOfTilesPerRow(numberOfTilesPerRow), numberOfVisibleTiles(0) {
@@ -144,7 +159,7 @@
                 == configurableTile)
               configurableTile->show(); // just show
             else { // set to next highest possible place (place behind all other visible tileWidgets)
-              if (++highestColumn % numberOfTilesPerRow == nullptr) {
+              if (++highestColumn % numberOfTilesPerRow == 0) {
                 highestColumn = 0;
                 ++highestRow;
               }

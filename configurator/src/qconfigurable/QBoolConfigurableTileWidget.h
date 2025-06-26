@@ -69,8 +69,21 @@
  *     storage implementet yet))
  *
  *   Revision 1.2  2010/11/30 17:07:06  wrabe
- *   - new class QConfigurableTileShowHideDialog{
-  
+ *   - new class QConfigurableTileShowHideDialog
+ *                                                                         *
+ ***************************************************************************/
+
+#ifndef __QBOOLCONFIGURABLETILEWIDGET_H_
+#define __QBOOLCONFIGURABLETILEWIDGET_H_
+
+#include "QAbstractConfigurableTileWidget.h"
+
+class QCheckBox;
+class QGridLayout;
+class QLabel;
+
+namespace lpzrobots {
+
   class QBoolConfigurableTileWidget : public lpzrobots::QAbstractConfigurableTileWidget {
 
     Q_OBJECT
@@ -79,19 +92,19 @@
       QBoolConfigurableTileWidget(Configurable* config, Configurable::paramkey& key, QMap<QGridPos,
           QAbstractConfigurableTileWidget*>& tileIndexConfigWidgetMap);
       virtual ~QBoolConfigurableTileWidget() override;
-      void explicit setName(const QString& name);
-      void explicit toDummy(bool set);
-      void reloadConfigurableData();
+      void setName(const QString& name) override;
+      void toDummy(bool set) override;
+      void reloadConfigurableData() override;
 
-      inline bool valueChanged() {
+      inline bool valueChanged() override {
         return (config->getParam(key) != origValue);
       }
-      inline bool boundsChanged() { return false; }
+      inline bool boundsChanged() override { return false; }
 
 
     public slots:
-      virtual void sl_resetToOriginalValues();
-      virtual void sl_resetToOriginalValuesAndBounds();
+      virtual void sl_resetToOriginalValues() override;
+      virtual void sl_resetToOriginalValuesAndBounds() override;
 
     protected:
 

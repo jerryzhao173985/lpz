@@ -58,8 +58,28 @@
  *     storage implementet yet))
  *
  *   Revision 1.1  2010/11/30 17:07:06  wrabe
- *   - new class QConfigurableTileShowHideDialog{
-  
+ *   - new class QConfigurableTileShowHideDialog
+ *                                                                         *
+ ***************************************************************************/
+
+#ifndef __QCONFIGURABLETILESHOWHDIALOG_H_
+#define __QCONFIGURABLETILESHOWHDIALOG_H_
+
+#include <QDialog>
+#include <QMap>
+#include <QString>
+#include "QGridPos.h"
+
+class QCheckBox;
+class QFrame;
+class QPushButton;
+class QScrollArea;
+class QDialogButtonBox;
+
+namespace lpzrobots {
+
+  class QAbstractConfigurableTileWidget;
+
   class QConfigurableTileShowHideDialog : public QDialog {
 
     Q_OBJECT
@@ -67,7 +87,7 @@
     public:
       QConfigurableTileShowHideDialog(QMap<QString, QAbstractConfigurableTileWidget*>& configLineWidgetMap, QMap<QGridPos, QAbstractConfigurableTileWidget*>& tileIndexConfigWidgetMap, int numberOfTilesPerRow);
       virtual ~QConfigurableTileShowHideDialog() override;
-      //void explicit setConfigurableTileNames(const QStringList& configurabelTileName);
+      //void setConfigurableTileNames(const QStringList& configurabelTileName);
 
       int getNumberOfVisibleTiles() const { return numberOfVisibleTiles; }
 

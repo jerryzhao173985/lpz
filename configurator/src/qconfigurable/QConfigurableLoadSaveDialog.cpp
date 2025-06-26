@@ -71,8 +71,24 @@
  *     storage implementet yet))
  *
  *   Revision 1.1  2010/11/30 17:07:06  wrabe
- *   - new class QConfigurableLoadSaveDialog{
-  
+ *   - new class QConfigurableLoadSaveDialog
+ *                                                                         *
+ ***************************************************************************/
+
+#include "QConfigurableLoadSaveDialog.h"
+#include "QConfigurableWidget.h"
+#include <QCheckBox>
+#include <QDialogButtonBox>
+#include <QFileDialog>
+#include <QFrame>
+#include <QGridLayout>
+#include <QLabel>
+#include <QPushButton>
+#include <QScrollArea>
+#include <QVBoxLayout>
+
+namespace lpzrobots {
+
   QConfigurableLoadSaveDialog::QConfigurableLoadSaveDialog(QMap<QString, QConfigurableWidget*> configurableWidgetMap_) : configurableWidgetMap(configurableWidgetMap_) {
     function = ConfigurableSave;
 
@@ -138,7 +154,7 @@
     foreach(QDomElement qde_configurableState, qde_configurableStateMap)
       {
         QString name = qde_configurableState.attribute("name");
-        explicit switch (function) {
+        switch (function) {
           case ConfigurableLoadSingle: {
             setWindowTitle("Select one ConfigurableState to load/use");
             QRadioButton* rb = new QRadioButton();
@@ -201,7 +217,7 @@
   }
 
   void QConfigurableLoadSaveDialog::sl_dialogAccept() {
-    explicit switch (function) {
+    switch (function) {
       case ConfigurableLoadSingle:
         onAcceptFunctionLoadSingle();
         break;

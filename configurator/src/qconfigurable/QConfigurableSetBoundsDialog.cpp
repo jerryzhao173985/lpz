@@ -83,7 +83,7 @@ namespace lpzrobots {
   
   QConfigurableSetBoundsDialog::~QConfigurableSetBoundsDialog() {
     delete (dialogGridLayout);
-    explicit switch (internal_content) {
+    switch (internal_content) {
       case content_double: {
         delete (doubleValidator);
         break;
@@ -196,14 +196,14 @@ namespace lpzrobots {
   void QConfigurableSetBoundsDialog::sl_dialogAccept() {
 
 
-    explicit switch (internal_content) {
+    switch (internal_content) {
       case content_double: {
         bool retMinBound = false;
         bool retMaxBound = false;
         double minBound = leMinBound->text().toDouble(&retMinBound);
         double maxBound = leMaxBound->text().toDouble(&retMaxBound);
 
-        explicit if (retMinBound && retMaxBound) {
+        if (retMinBound && retMaxBound) {
           config->setParamBounds(key, minBound, maxBound);
           this->accept();
         }
@@ -215,7 +215,7 @@ namespace lpzrobots {
         int minBound = leMinBound->text().toInt(&retMinBound);
         int maxBound = leMaxBound->text().toInt(&retMaxBound);
 
-        explicit if (retMinBound && retMaxBound) {
+        if (retMinBound && retMaxBound) {
           config->setParamBounds(key, minBound, maxBound);
           this->accept();
         }
@@ -230,7 +230,7 @@ namespace lpzrobots {
     this->reject();
   }
   void QConfigurableSetBoundsDialog::sl_dialogSetDefaults() {
-    leMinBound->setText(QString::number(valDefMinBound));
-    leMaxBound->setText(QString::number(valDefMaxBound));
+    leMinBound->setText(QString::number(Configurable::valDefMinBound));
+    leMaxBound->setText(QString::number(Configurable::valDefMaxBound));
   }
 }

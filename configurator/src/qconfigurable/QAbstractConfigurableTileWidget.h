@@ -103,7 +103,19 @@
  *     storage implementet yet))
  *
  *   Revision 1.3  2010/11/30 17:07:06  wrabe
- *   - new class QConfigurableTileShowHideDialog{
+ *   - new class QConfigurableTileShowHideDialog
+ *
+ ***************************************************************************/
+#ifndef __QABSTRACTCONFIGURABLETILEWIDGET_H_
+#define __QABSTRACTCONFIGURABLETILEWIDGET_H_
+
+#include <QtWidgets>
+#include <QFrame>
+#include <selforg/configurable.h>
+#include <QMap>
+#include "QGridPos.h"
+
+namespace lpzrobots {
   
   class QAbstractConfigurableTileWidget : public QFrame {
 
@@ -111,20 +123,20 @@
 
     public:
       QAbstractConfigurableTileWidget(Configurable* config, Configurable::paramkey key, QMap<QGridPos, QAbstractConfigurableTileWidget*>& tileIndexConfigWidgetMap);
-      virtual ~QAbstractConfigurableTileWidget() override;
+      virtual ~QAbstractConfigurableTileWidget();
       virtual void setName(const QString& name) = 0;
       virtual QString getName() const {
         return QString(key.c_str());
       }
       virtual void toDummy(bool set) = 0;
-      virtual bool explicit contains(const QPoint& pos);
+      virtual bool contains(const QPoint& pos);
       virtual void reloadConfigurableData() = 0;
 
       virtual void setGridPos(int row, int column) {
         setGridPos(QGridPos(row,column));
       }
 
-      virtual void explicit setGridPos(const QGridPos& newGridPos) {
+      virtual void setGridPos(const QGridPos& newGridPos) {
         if (tileIndexConfigWidgetMap.value(gridPos) == this)
           tileIndexConfigWidgetMap.remove(gridPos);
         gridPos = newGridPos;
@@ -137,9 +149,9 @@
 
       virtual QString getConfigurableName() const;
       static QSize defaultWidgetSize;
-      virtual void explicit setVisible(bool visible);
+      virtual void setVisible(bool visible);
       virtual bool isVisible();
-      virtual void explicit setInCollapseMode(bool inCollapseMode);
+      virtual void setInCollapseMode(bool inCollapseMode);
 
       inline bool descriptionChanged() {
         return (config->getParamDescr(key) != origDescription);
@@ -149,21 +161,21 @@
 
 
       signals:
-        void explicit sig_resize(const QSize& newSize);
-        void explicit sig_mousePressEvent(QMouseEvent* event);
+        void sig_resize(const QSize& newSize);
+        void sig_mousePressEvent(QMouseEvent* event);
 
       public slots:
-        virtual void explicit sl_resize(const QSize& newSize);
+        virtual void sl_resize(const QSize& newSize);
         virtual void sl_resetToOriginalValues() = 0;
         virtual void sl_resetToOriginalValuesAndBounds() = 0;
 
 
     protected:
-      virtual void explicit enterEvent(QEnterEvent * event);
-      virtual void explicit leaveEvent(QEvent * event);
-      virtual void explicit mouseMoveEvent(QMouseEvent * event);
-      virtual void explicit mousePressEvent(QMouseEvent * event);
-      virtual void explicit mouseReleaseEvent(QMouseEvent * event);
+      virtual void enterEvent(QEnterEvent * event);
+      virtual void leaveEvent(QEvent * event);
+      virtual void mouseMoveEvent(QMouseEvent * event);
+      virtual void mousePressEvent(QMouseEvent * event);
+      virtual void mouseReleaseEvent(QMouseEvent * event);
       virtual void updatePaletteChanged();
 
 

@@ -82,7 +82,21 @@
  *     storage implementet yet))
  *
  *   Revision 1.2  2010/11/30 17:07:06  wrabe
- *   - new class QConfigurableTileShowHideDialog{
+ *   - new class QConfigurableTileShowHideDialog
+ *                                                                         *
+ ***************************************************************************/
+
+#ifndef __QINTCONFIGURABLETILEWIDGET_H_
+#define __QINTCONFIGURABLETILEWIDGET_H_
+
+#include "QAbstractConfigurableTileWidget.h"
+
+class QSpinBox;
+class QSlider;
+class QLabel;
+class QGridLayout;
+
+namespace lpzrobots {
 
   class QIntConfigurableTileWidget : public lpzrobots::QAbstractConfigurableTileWidget {
 
@@ -91,23 +105,23 @@
     public:
       QIntConfigurableTileWidget(Configurable* config, Configurable::paramkey& key, QMap<QGridPos, QAbstractConfigurableTileWidget*>& tileIndexConfigWidgetMap);
       virtual ~QIntConfigurableTileWidget() override;
-      void explicit setName(const QString& name);
-      void explicit toDummy(bool set);
+      void setName(const QString& name) override;
+      void toDummy(bool set) override;
       void setBounds();
-      void reloadConfigurableData();
+      void reloadConfigurableData() override;
 
-      inline bool valueChanged() {
+      inline bool valueChanged() override {
         return (config->getParam(key) != origValue);
       }
 
-      inline bool boundsChanged() {
+      inline bool boundsChanged() override {
         return (config->getParamintBounds(key) != origBounds);
       }
 
     public slots:
-      virtual void explicit sl_resize(const QSize& newSize);
-      virtual void sl_resetToOriginalValues();
-      virtual void sl_resetToOriginalValuesAndBounds();
+      virtual void sl_resize(const QSize& newSize) override;
+      virtual void sl_resetToOriginalValues() override;
+      virtual void sl_resetToOriginalValuesAndBounds() override;
 
     private slots:
       void sl_spinBoxValueChanged(int);

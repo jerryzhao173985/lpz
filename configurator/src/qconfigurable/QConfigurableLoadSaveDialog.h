@@ -51,7 +51,22 @@
  *     storage implementet yet))
  *
  *   Revision 1.1  2010/11/30 17:07:06  wrabe
- *   - new class QConfigurableLoadSaveDialog{
+ *   - new class QConfigurableLoadSaveDialog
+ *
+ ***************************************************************************/
+#ifndef __QCONFIGURABLE_LOAD_SAVE_DIALOG_H_
+#define __QCONFIGURABLE_LOAD_SAVE_DIALOG_H_
+
+#include <QtWidgets>
+#include <QDialog>
+#include <QMap>
+#include <QHash>
+#include <QDomElement>
+
+namespace lpzrobots {
+  
+  // Forward declaration
+  class QConfigurableWidget;
   
   class QConfigurableLoadSaveDialog : public QDialog {
 
@@ -65,8 +80,8 @@
       QConfigurableLoadSaveDialog(QMap<QString, QConfigurableWidget*> configurableWidgetMap);
       QConfigurableLoadSaveDialog(QMap<QString, QConfigurableWidget*> configurableWidgetMap, QHash<QString, QDomElement> qde_configurableStateMap,
           DialogFunction function);
-      virtual ~QConfigurableLoadSaveDialog() override;
-      //void explicit setConfigurableTileNames(const QStringList& configurabelTileName);
+      virtual ~QConfigurableLoadSaveDialog();
+      //void setConfigurableTileNames(const QStringList& configurabelTileName);
 
     private slots:
       void sl_dialogAccept();

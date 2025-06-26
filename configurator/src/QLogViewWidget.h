@@ -49,15 +49,15 @@
 #include <QTextEdit>
 #include <QWidget>
 
-class QLogViewWidget{
+class QLogViewWidget : public QWidget {
   Q_OBJECT
 
 public:
   QLogViewWidget();
-  virtual ~QLogViewWidget() override;
+  virtual ~QLogViewWidget();
 
   void clearLogViewText();
-  void explicit appendLogViewText(const QString& text);
+  void appendLogViewText(const QString& text);
 
 
 private:

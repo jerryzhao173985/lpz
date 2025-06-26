@@ -107,8 +107,22 @@
  *     storage implementet yet))
  *
  *   Revision 1.3  2010/11/30 17:07:06  wrabe
- *   - new class QConfigurableTileShowHideDialog{
-  
+ *   - new class QConfigurableTileShowHideDialog
+ *                                                                         *
+ ***************************************************************************/
+
+#include "QValConfigurableTileWidget.h"
+#include <selforg/configurable.h>
+#include <QDoubleSpinBox>
+#include <QSlider>
+#include <QLabel>
+#include <QGridLayout>
+#include <QMenu>
+#include <QInputDialog>
+#include "QConfigurableSetBoundsDialog.h"
+
+namespace lpzrobots {
+
   QValConfigurableTileWidget::QValConfigurableTileWidget(Configurable* config, Configurable::paramkey& key, QMap<QGridPos, QAbstractConfigurableTileWidget*>& tileIndexConfigWidgetMap) :
     QAbstractConfigurableTileWidget(config, key, tileIndexConfigWidgetMap), origBounds(config->getParamvalBounds(key)), origValue(config->getParam(key)), stopSignaling(false) {
 
@@ -162,12 +176,12 @@
   QValConfigurableTileWidget::~QValConfigurableTileWidget() {
   }
 
-  void QValConfigurableTileWidget::setName(QString name) {
+  void QValConfigurableTileWidget::setName(const QString& name) {
     lName.setText(name);
   }
 
   void QValConfigurableTileWidget::sl_spinBoxValueChanged(double value) {
-    explicit if (!stopSignaling) {
+    if (!stopSignaling) {
       stopSignaling = true;
       slider.setValue(SCALE_FACTOR_SLIDER * value);
       config->setParam(key, value);
@@ -177,7 +191,7 @@
   }
 
   void QValConfigurableTileWidget::sl_sliderValueChanged(int int_value) {
-    explicit if (!stopSignaling) {
+    if (!stopSignaling) {
       stopSignaling = true;
       double value = int_value / static_cast<double>(SCALE_FACTOR_SLIDER);
       dsBox.setValue(value);
@@ -204,7 +218,7 @@
   }
 
   void QValConfigurableTileWidget::toDummy(bool set) {
-    explicit if (set) {
+    if (set) {
       setAutoFillBackground(false);
       lName.hide();
       slider.hide();
@@ -282,7 +296,7 @@
   }
 
 
-  void QValConfigurableTileWidget::sl_resize(QSize newSize) {
+  void QValConfigurableTileWidget::sl_resize(const QSize& newSize) {
      if (newSize.width()<130)
        lName.setMaximumWidth(30);
      else

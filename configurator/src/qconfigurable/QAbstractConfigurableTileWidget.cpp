@@ -106,8 +106,19 @@
  *     storage implementet yet))
  *
  *   Revision 1.3  2010/11/30 17:07:06  wrabe
- *   - new class QConfigurableTileShowHideDialog{
-  
+ *   - new class QConfigurableTileShowHideDialog
+ *                                                                         *
+ ***************************************************************************/
+
+#include "QAbstractConfigurableTileWidget.h"
+#include <QDrag>
+#include <QDragEnterEvent>
+#include <QMimeData>
+#include <QPainter>
+#include <QWidget>
+
+namespace lpzrobots {
+
   QSize QAbstractConfigurableTileWidget::defaultWidgetSize = QSize(210, 60);
 
   QAbstractConfigurableTileWidget::QAbstractConfigurableTileWidget(Configurable* config, Configurable::paramkey key, QMap<QGridPos, QAbstractConfigurableTileWidget*>& tileIndexConfigWidgetMap) :
@@ -118,7 +129,7 @@
     setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
     setAttribute(Qt::WA_DeleteOnClose);
     setMouseTracking(true);
-    if (config->getParamDescr(key).size() == nullptr)
+    if (config->getParamDescr(key).size() == 0)
       setToolTip(QString(key.c_str())+" (no description available)");
     else
       setToolTip(QString(config->getParamDescr(key).c_str()));
@@ -129,11 +140,11 @@
       tileIndexConfigWidgetMap.remove(gridPos);
   }
 
-  QString QAbstractConfigurableTileWidget::getConfigurableName() {
+  QString QAbstractConfigurableTileWidget::getConfigurableName() const {
     return QString(key.c_str());
   }
 
-  bool QAbstractConfigurableTileWidget::contains(QPoint pos) {
+  bool QAbstractConfigurableTileWidget::contains(const QPoint& pos) {
     if ((x() <= pos.x()) && (y() <= pos.y()) && (pos.x() < (x() + width())) && (pos.y() < (y() + height())))
       return true;
     return false;
@@ -159,7 +170,7 @@
 
   void QAbstractConfigurableTileWidget::mouseMoveEvent(QMouseEvent * event) {
     QPoint p = event->pos();
-    explicit if (isResizing) {
+    if (isResizing) {
       sl_resize(QSize(event->pos().x(), defaultWidgetSize.height()));
     } else if (width() - 3 <= p.x() && p.x() <= width() + 3) {
       grabMouse(Qt::SizeHorCursor);
@@ -178,14 +189,14 @@
   }
 
   void QAbstractConfigurableTileWidget::mouseReleaseEvent(QMouseEvent * event) {
-    explicit if (isResizing) {
+    if (isResizing) {
       sl_resize(QSize(event->pos().x(), defaultWidgetSize.height()));
       isResizing = false;
       emit sig_resize(QSize(event->pos().x(), defaultWidgetSize.height()));
     }
   }
 
-  void QAbstractConfigurableTileWidget::sl_resize(QSize newSize) {
+  void QAbstractConfigurableTileWidget::sl_resize(const QSize& newSize) {
     if (newSize.width() < 130)
       setFixedSize(130, newSize.height());
     else
@@ -218,7 +229,7 @@
     } else {
       actualPalette = QPalette(defaultPalette);
     }
-    explicit if (!entered) {
+    if (!entered) {
       setPalette(actualPalette);
       update();
     }

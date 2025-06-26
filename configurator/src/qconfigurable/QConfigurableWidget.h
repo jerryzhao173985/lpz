@@ -114,9 +114,24 @@
  *     storage implementet yet))
  *
  *   Revision 1.3  2010/11/30 17:07:06  wrabe
- *   - new class QConfigurableTileShowHideDialog{
+ *   - new class QConfigurableTileShowHideDialog
+ *
+ ***************************************************************************/
+#ifndef __QCONFIGURABLEWIDGET_H_
+#define __QCONFIGURABLEWIDGET_H_
 
+#include <QtWidgets>
+#include <QGroupBox>
+#include <QDomDocument>
+#include <selforg/configurable.h>
+#include <selforg/callbackable.h>
 
+namespace lpzrobots {
+
+  // Forward declarations
+  class QAbstractConfigurableTileWidget;
+  class QDummyConfigurableTileWidget;
+  class QGridPos;
 
   class QConfigurableWidget : public QGroupBox, public Callbackable {
 
@@ -124,7 +139,7 @@
 
     public:
       QConfigurableWidget(Configurable* config, int nameIndex);
-      virtual ~QConfigurableWidget() override;
+      virtual ~QConfigurableWidget();
       QDomElement toXml(bool insertDefaultConfigurableValues, bool inAutoSaveMode);
       int fromXml(const QDomElement &qde_configurableState, bool inAutoSaveMode);
       int getNameIndex() {return nameIndex; }
@@ -136,22 +151,22 @@
       void lampyris_noctiluca();
 
     public slots:
-      void explicit sl_mousePressEvent(QMouseEvent* event);
+      void sl_mousePressEvent(QMouseEvent* event);
       void sl_resetToOriginalValuesAndBounds();
 
 
 
 
     signals:
-      void explicit sig_tileWidgetResize(const QSize& newSize);
-      void explicit sig_configurableChanged(QConfigurableWidget* sourceWidget);
+      void sig_tileWidgetResize(const QSize& newSize);
+      void sig_configurableChanged(QConfigurableWidget* sourceWidget);
 
 
     protected:
-      virtual void explicit enterEvent(QEnterEvent * event);
-      virtual void explicit leaveEvent(QEvent * event);
-      virtual void explicit mousePressEvent(QMouseEvent * event);
-      virtual void explicit mouseDoubleClickEvent(QMouseEvent * event);
+      virtual void enterEvent(QEnterEvent * event);
+      virtual void leaveEvent(QEvent * event);
+      virtual void mousePressEvent(QMouseEvent * event);
+      virtual void mouseDoubleClickEvent(QMouseEvent * event);
       virtual void dragEnterEvent(QDragEnterEvent *event);
       virtual void dragMoveEvent(QDragMoveEvent *event);
       virtual void dropEvent(QDropEvent *event);
@@ -164,11 +179,11 @@
       void sl_loadConfigurableStateFromFile();
       void sl_saveConfigurableStateToFile();
       void sl_rearrangeConfigurableTiles();
-      void explicit sl_toggled(bool on);
+      void sl_toggled(bool on);
       void sl_resetToOriginalValues();
 
     private:
-      void explicit setFolding(bool folding);
+      void setFolding(bool folding);
       int loadConfigurableState(const QString &fileName);
       bool saveConfigurableState(const QString &fileName);
       void createConfigurableLines();

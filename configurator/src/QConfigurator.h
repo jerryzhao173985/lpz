@@ -158,7 +158,7 @@
 
 namespace lpzrobots {
 
-  class QConfigurator{
+  class QConfigurator : public QMainWindow {
 
     Q_OBJECT
 
@@ -172,9 +172,9 @@ namespace lpzrobots {
       void enterEvent(QEnterEvent *event);
 
     public slots:
-      void explicit sl_textLog(const QString& s);
-      void explicit sl_GUIEventHandler(int eventCode);
-      void explicit sl_configurableChanged(QConfigurableWidget* sourceWidget);
+      void sl_textLog(const QString& s);
+      void sl_GUIEventHandler(int eventCode);
+      void sl_configurableChanged(QConfigurableWidget* sourceWidget);
 
     private slots:
       void sl_Close();
@@ -196,7 +196,7 @@ namespace lpzrobots {
       void createMenus();
       void readSettings();
       void writeSettings();
-      void explicit sleep(ulong msecs);
+      void sleep(ulong msecs);
 
       /**
        * recursive method to add a list of configurables to the given grid.

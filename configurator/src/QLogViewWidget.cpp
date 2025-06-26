@@ -69,7 +69,7 @@ QLogViewWidget::~QLogViewWidget() {}
 //------------------------------------------------------------------------------------------------------
 void QLogViewWidget::clearLogViewText(){
         textEdit_LogView->clear();}
-void QLogViewWidget::appendLogViewText(QString text){
+void QLogViewWidget::appendLogViewText(const QString& text){
         textEdit_LogView->append(text);}
 //------------------------------------------------------------------------------------------------------
 

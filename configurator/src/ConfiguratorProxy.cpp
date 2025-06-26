@@ -62,7 +62,7 @@ using namespace std;
 
 namespace lpzrobots {
   
-  static void* explicit createConfiguratorThread(void* thread);
+  static void* createConfiguratorThread(void* thread);
 
   ConfiguratorProxy::ConfiguratorProxy(ConfigurableList& configList_) : configList(configList_) {
     pthread_create(&configuratorThread, nullptr, createConfiguratorThread, this);
@@ -90,7 +90,7 @@ namespace lpzrobots {
 
   void ConfiguratorProxy::createConfigurator() {
     int argc=1;
-    char* argv0 = static_cast<char*>"";
+    char* argv0 = const_cast<char*>("");
     char** argv = &argv0;
     QApplication app(argc, argv);
 
@@ -106,7 +106,7 @@ namespace lpzrobots {
     app.exec();
   }
 
-  static void* explicit createConfiguratorThread(void* thread) {
+  static void* createConfiguratorThread(void* thread) {
     ConfiguratorProxy* proxy = dynamic_cast<ConfiguratorProxy*> (static_cast<ConfiguratorProxy*>(thread));
     if (proxy)
       proxy->createConfigurator();

@@ -323,7 +323,7 @@ namespace lpzrobots {
     // Folge: fehler in der Autosave-Funktion
     // TODO: behebe es ...
 
-    explicit if (!isClosed) {
+    if (!isClosed) {
       //      QString text = "QConfigurator::closeEvent(";
       //      foreach(QConfigurableWidget* confWidget, configurableWidgetList)
       //        {
@@ -343,7 +343,7 @@ namespace lpzrobots {
     event->accept();
   }
 
-  void QConfigurator::sl_textLog(QString sText) {
+  void QConfigurator::sl_textLog(const QString& sText) {
     statusLabelTimer.stop();
     statusLabel->setText(sText);
     statusLabelTimer.start(5000);
@@ -370,7 +370,7 @@ namespace lpzrobots {
 
 
   void QConfigurator::sl_GUIEventHandler(int eventCode) {
-    explicit switch (eventCode) {
+    switch (eventCode) {
       case EVENT_SWITCH_WARNING:
         warningOutputEnabled = action_SwitchWarning->isChecked();
         sl_textLog("Set warning output to " + QString::number(warningOutputEnabled));
@@ -413,7 +413,7 @@ namespace lpzrobots {
       }
       configurableIndexMap[name] = index;
       QConfigurableWidget* confWidget = new QConfigurableWidget(*config, configurableIndexMap[name]);
-      for (int col= nullptr; col < embeddingDepth*2; ++col) {
+      for (int col= 0; col < embeddingDepth*2; ++col) {
         QFrame* placeHolder = new QFrame;
         if (col%2)
           placeHolder->setFixedSize(10,10);
@@ -523,7 +523,7 @@ namespace lpzrobots {
     foreach(QConfigurableWidget* confWidget, configurableWidgetMap)
       {
         QString configName = confWidget->getName();
-        if (!nodeConfigurableStateMap.contains(configName) && confWidget->getNameIndex() != nullptr) {
+        if (!nodeConfigurableStateMap.contains(configName) && confWidget->getNameIndex() != 0) {
           // try to load from another instance, the first one of a Configurable with the same name
           configName = QString(confWidget->getConfigurable()->getName().c_str()) + "_0";
         }
