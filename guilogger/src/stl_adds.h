@@ -14,16 +14,20 @@ namespace std {
 
   /// absolute function for all types
   template<typename T>
-  inline T explicit abs(T v)
+  inline T abs(T v)
   { return ((v>0)?v:-v); }
 
   /// += operators for list (list concat)
-  template <class T{ l1.insert(l1.end(), l2.begin(), l2.end()); return l1;}
+  template <class T>
+  inline list<T>& operator += (list<T>& l1, const list<T>& l2)
+  { l1.insert(l1.end(), l2.begin(), l2.end()); return l1;}
 
   /// += operators for list (append)
-  template <class T{ l1.push_back(v); return l1;}
+  template <class T>
+  inline list<T>& operator += (list<T>& l1, const T& v)
+  { l1.push_back(v); return l1;}
 
-  string explicit itos(int i);
+  string itos(int i);
 
 }
 
@@ -35,10 +39,10 @@ namespace std {
 
   /// absolute function for all types
   template<typename T>
-  inline T explicit abs(T v)
+  inline T abs(T v)
   { return ((v>0)?v:-v); }
 
-  charArray explicit itos(int i);
+  charArray itos(int i);
 
 }
 

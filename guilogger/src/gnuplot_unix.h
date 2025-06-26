@@ -18,7 +18,7 @@ static FILE* OpenGnuplot(int w=400,int h=300, int x=-1, int y=-1){
   snprintf(b, sizeof(b),"gnup%i",rand()%1000);
   return fopen(b,"w");*/
 }
-static void explicit CloseGnuplot(FILE* pipe){
+static void CloseGnuplot(FILE* pipe){
     pclose(pipe);
 }
 

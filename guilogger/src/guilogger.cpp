@@ -283,7 +283,7 @@ int GuiLogger::analyzeFile() {
       return 0;
     }
   bool channelline=false;
-  explicit while(!channelline){
+  while(!channelline){
     size=1;
     c=0;
     while(c!= 10 && c != 13)
@@ -294,7 +294,7 @@ int GuiLogger::analyzeFile() {
           ++size;
           if(size>=buffersize){
             buffersize=buffersize*2+1;
-            s=static_cast<char*>realloc(s, buffersize);
+            s=static_cast<char*>(realloc(s, buffersize));
           }
           s[size-2] = c;
         } else{
@@ -302,7 +302,7 @@ int GuiLogger::analyzeFile() {
           break;
         }
       }
-    explicit if(size>1){
+    if(size>1){
       s[size-1]='\0';
       channelData.receiveRawData(QString(s).trimmed());
       if (s[0] == '#' && s[1] == 'C') channelline=true;
@@ -390,7 +390,7 @@ void GuiLogger::save(bool blank){
     section->addValue("Command","set zeroaxis");
   }
 
-  explicit if(1){ // !blank
+  if(1){ // !blank
     for(int i=0; i<plotInfos.size(); ++i){
       nr = QString::number(i, 10);
       IniSection *sec = cfgFile.addSection("Window");
@@ -522,7 +522,7 @@ void GuiLogger::load() {
     int ypos   = ystart;
     for(int k=0; k<plotwindows; ++k) {
       QSize s = (windowsize.contains(k) ? windowsize[k] : QSize(400,300)) + QSize(10,50);
-      explicit if(hor){
+      if(hor){
         xpos = xstart+(k%windowsPerRowColumn)*xinc*s.width();
         ypos = ystart+(k/windowsPerRowColumn)*yinc*s.height();
       }else{
@@ -581,7 +581,7 @@ void GuiLogger::doQuit(){
   emit quit();
 }
 
-void GuiLogger::updateRootName(QString name) {
+void GuiLogger::updateRootName(const QString& name) {
   setWindowTitle("GUI Logger - " + name);
 }
 
@@ -609,14 +609,10 @@ void GuiLogger::plotUpdate(bool waitfordata, int window)
 //       for(int i=0; i<plotwindows; ++i) {
 //         plotWindows[i].plot();
 //       }
-    // Parallel Version
-      PlotWindows* pw = &plotWindows;
-      QMP_SHARE(pw);
-      QMP_PARALLEL_FOR(i,0,plotwindows){
-        QMP_USE_SHARED(pw, PlotWindows*);
-          (*pw)[i].plot();
+    // Serial version (parallel version has issues with macros)
+      for(int i=0; i<plotwindows; ++i) {
+        plotWindows[i].plot();
       }
-      QMP_END_PARALLEL_FOR;
 
     } else {
       if(window >=0 && window<plotwindows)

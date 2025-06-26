@@ -27,14 +27,15 @@
 #include <qobject.h>
 #include <qstring.h>
 
-/** \brief Short class for{
+/** \brief Short class for file logging */
+class FileLogger : public QObject {
     Q_OBJECT
 
 public:
     FileLogger(QString pf="");
     ~FileLogger();
-    void explicit setPrefix(const QString& pf) {prefix = pf;};
-    void explicit setLogging(bool log)  {this->log = log;}
+    void setPrefix(const QString& pf) {prefix = pf;};
+    void setLogging(bool log)  {this->log = log;}
     
 private:
     QString prefix;

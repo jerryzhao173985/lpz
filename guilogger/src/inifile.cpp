@@ -34,7 +34,7 @@ IniFile::IniFile(){
   bloaded=false;
 }
 
-IniFile::IniFile(QString _filename){
+IniFile::IniFile(const QString& _filename){
   // Qt5: No more setAutoDelete, we'll manage memory manually
   bloaded=false;
   setFilename(_filename);
@@ -47,11 +47,11 @@ IniFile::~IniFile(){
   sections.clear();
 }
 
-void IniFile::setFilename(QString _filename){
+void IniFile::setFilename(const QString& _filename){
   filename=_filename;
 }
 
-QString IniFile::getFilename(){
+QString IniFile::getFilename() const{
   return filename;
 }
 
@@ -90,11 +90,11 @@ bool IniFile::Load(){
     str2="";
     str3="";
     LineType=getLineType(line,str1,str2,str3);
-    explicit switch (LineType){
+    switch (LineType){
       case EMPTY:
       break;
       case COMMENT:
-        explicit if (beforeFirstSection){
+        if (beforeFirstSection){
           comment.append(str1);
         }else{
           momsection->addComment(str1);
@@ -106,10 +106,10 @@ bool IniFile::Load(){
         sections.append(momsection);
       break;
       case VAR:
-        explicit if (beforeFirstSection){ // wird als Kommentar gewertet
+        if (beforeFirstSection){ // wird als Kommentar gewertet
           comment.append(str1);
         }else{                    // Normale Variable
-          explicit if (momsection) {  // Ensure we have a valid section
+          if (momsection) {  // Ensure we have a valid section
             momvar=new IniVar(str1,str2,str3);
             momsection->vars.append(momvar);
           }
@@ -284,15 +284,15 @@ QString IniFile::getValueDef(QString _section, QString _var, QString _default){
 
 }
 
-void IniFile::setComment(QString _comment){
+void IniFile::setComment(const QString& _comment){
   comment=_comment;
 }
 
-void IniFile::addComment(QString _addcomment){
-  comment.append(_addcomment);
+void IniFile::addComment(const QString& _comment){
+  comment.append(_comment);
 }
 
-QString IniFile::getComment(){
+QString IniFile::getComment() const{
   return comment;
 }
 
@@ -304,7 +304,7 @@ IniSection::IniSection(){
   // Qt5: No more setAutoDelete, we'll manage memory manually
 }
 
-IniSection::IniSection(QString _name){
+IniSection::IniSection(const QString& _name){
   // Qt5: No more setAutoDelete, we'll manage memory manually
   setName(_name);
 }
@@ -315,23 +315,23 @@ IniSection::~IniSection(){
   vars.clear();
 }
 
-void IniSection::setName(QString _name){
+void IniSection::setName(const QString& _name){
   name=_name;
 }
 
-QString IniSection::getName(){
+QString IniSection::getName() const{
   return name;
 }
 
-void IniSection::setComment(QString _comment){
+void IniSection::setComment(const QString& _comment){
   comment=_comment;
 }
 
-void IniSection::addComment(QString _addcomment){
+void IniSection::addComment(const QString& _addcomment){
   comment.append(_addcomment);
 }
 
-QString IniSection::getComment(){
+QString IniSection::getComment() const{
   return comment;
 }
 
@@ -349,7 +349,7 @@ void IniSection::copy (IniSection& _section){
   _section.vars.clear();
   
   foreach(IniVar* var, vars) {
-    explicit if (var) {  // Check for null pointer
+    if (var) {  // Check for null pointer
       IniVar* newVar = new IniVar();
       var->copy(*newVar);
       _section.vars.append(newVar);
@@ -396,27 +396,27 @@ IniVar::IniVar( QString _name, QString _value, QString _comment){
 IniVar::~IniVar(){
 }
 
-void IniVar::setName(QString _name){
+void IniVar::setName(const QString& _name){
   name=_name;
 }
 
-QString IniVar::getName(){
+QString IniVar::getName() const{
   return name;
 }
 
-void IniVar::setValue(QString _value){
+void IniVar::setValue(const QString& _value){
   value=_value;
 }
 
-QString IniVar::getValue(){
+QString IniVar::getValue() const{
   return value;
 }
 
-void IniVar::setComment(QString _comment){
+void IniVar::setComment(const QString& _comment){
   comment=_comment;
 }
 
-QString IniVar::getComment(){
+QString IniVar::getComment() const{
   return comment;
 }
 

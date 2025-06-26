@@ -57,13 +57,17 @@
 #include <QTableView>
 
 #include <list>
+#include <vector>
 #include "gnuplot.h"
 //#include <queue.h>
 #include "inifile.h"
 #include "commlineparser.h"
 #include "plotchannelstablemodel.h"
+#include "channeldata.h"
 
-class ChannelRow{
+typedef std::vector<Gnuplot> PlotWindows;
+
+class GuiLogger : public QMainWindow {
   Q_OBJECT
 
   public:
@@ -74,7 +78,7 @@ class ChannelRow{
 
 private slots:
   // called to notify that the user changed the channels to plot.
-  void explicit plotChannelsChanged(int window);
+  void plotChannelsChanged(int window);
 
   void plotUpdate();
   /** updates plots: 
@@ -83,16 +87,16 @@ private slots:
    */
   void plotUpdate(bool waitfordata, int window = -1);
   void save();
-  void explicit save(bool blank);
+  void save(bool blank);
   void load();
   void editconfig();
-  void explicit dataSliderValueChanged(int value);
+  void dataSliderValueChanged(int value);
   void dataSliderReleased();
-  void explicit horizonSliderValueChanged(int value);
+  void horizonSliderValueChanged(int value);
   void horizonSliderReleased();
   void sendButtonPressed();
   void doQuit();
-  void explicit updateRootName(const QString& name);
+  void updateRootName(const QString& name);
 
 signals:
   void quit();

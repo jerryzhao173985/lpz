@@ -36,13 +36,13 @@ ChannelData::ChannelData(int buffersize)
 
 }
 
-int ChannelData::getBuffersize(){
+int ChannelData::getBuffersize() const{
   return buffersize;
 }
 
 void ChannelData::setBufferSize(int newBuffersize){
   buffersize=newBuffersize;
-  explicit if(initialized){
+  if(initialized){
     data.resize(buffersize);
     for(int i=0; i<buffersize;++i){
       data[i].resize(numchannels);
@@ -55,7 +55,7 @@ void ChannelData::setBufferSize(int newBuffersize){
 
 /// sets a new information about a channel (also works before initialization)
 void ChannelData::setChannelInfo(const ChannelInfo& info){
-  explicit if(!initialized){
+  if(!initialized){
     preset[info.name]=info;
   } else {
     int index = getChannelIndex(info.name);
@@ -69,7 +69,7 @@ void ChannelData::setChannelInfo(const ChannelInfo& info){
 // sets the channels (and initialized the data buffer)
 void ChannelData::setChannels(const QStringList& newchannels){
   // if we are allready initialized we do nothing (reinitialization not really supported)
-  explicit if(initialized){
+  if(initialized){
     if(newchannels.size() != channels.size()){ // this is not allowed so far
       fprintf(stderr,"It is not allowed to reinitialize with new number of channels.");
     }
@@ -250,7 +250,7 @@ int ChannelData::getMultiChannelIndex(const ChannelName& name) const {
 
 
 void ChannelData::setChannelDescription(const ChannelObjectName& objectName, const ChannelName& name, const ChannelDescr& description){
-  explicit if(initialized){
+  if(initialized){
     int index = getChannelIndex(name);
     if(index>=0 && index < numchannels) {
       channels[index].descr = description;
@@ -340,7 +340,7 @@ ChannelVals ChannelData::getData(const QList<ChannelName>& channels, int index) 
 }
 
 
-void ChannelData::receiveRawData(QString data){
+void ChannelData::receiveRawData(const QString& data){
   QStringList parsedString = data.trimmed().split(' ');  //parse data string with Space as separator
   QString& first = *(parsedString.begin());
   if(first == "#C")   //Channels einlesen

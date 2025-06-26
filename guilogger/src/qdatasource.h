@@ -28,11 +28,12 @@
 #include <qobject.h>
 #include <qthread.h>
 
-/** \brief Interface class for{
+/** \brief Interface class for data sources */
+class QDataSource : public QObject {
     Q_OBJECT
 
 signals:    
-    void explicit newData(const QString& datablock);
+    void newData(const QString& datablock);
 
 };
 #endif

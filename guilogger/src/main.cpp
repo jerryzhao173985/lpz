@@ -85,7 +85,7 @@ int main( int argc, char ** argv ) {
 
     QApplication a( argc, argv );
 
-    QDataSource *qsource=0;
+    QThread *qsource=0;
 
 
     if(params.getMode().isEmpty() && !params.getFile().isEmpty()) {

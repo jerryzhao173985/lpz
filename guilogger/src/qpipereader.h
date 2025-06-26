@@ -28,8 +28,11 @@
 /** \brief Class for reading blocks/lines from a pipe (e.g. stdin)
   * \author Dominic Schneider
   */
-class QPipeReader{
+class QPipeReader : public QThread {
     Q_OBJECT
+
+signals:    
+    void newData(const QString& datablock);
 
 private:
     int delay = 0;
@@ -38,6 +41,6 @@ private:
 public:
     explicit QPipeReader(int delay = 0, FILE* f=stdin);
     virtual void run();
-    void explicit setDelay(int delay) {this->delay = delay;}
+    void setDelay(int delay) {this->delay = delay;}
     int  getDelay()  {return delay;}
 };

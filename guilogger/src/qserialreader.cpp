@@ -48,7 +48,7 @@ void QSerialReader::run()
     int baud;
     struct termios newtio;
 
-    explicit switch(baudrate){
+    switch(baudrate){
         case 1200:baud=B1200;break;
         case 2400:baud=B2400;break;
         case 9600:baud=B9600;break;

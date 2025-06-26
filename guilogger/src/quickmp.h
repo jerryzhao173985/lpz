@@ -148,7 +148,10 @@
 /// given as pointers; for example, int myData[50] requires a pointer
 /// int* myDataPtr = myData, then QMP_SHARE(myDataPtr), not QMP_SHARE(myData).
 // Design notes: Within the parallel tasks later we can access variables
-// outside the class definition{
+// outside the class definition.
+
+/// The main quickmp namespace
+namespace quickmp {
         /// Types of loop scheduling methods.
         enum ScheduleHint
         {
@@ -172,7 +175,8 @@ namespace qmp_internal
         // Forward declaration.
         struct PlatformThreadObjects;
 
-        /// A base class for{
+        /// A base class for parallel tasks
+        class ParallelTask {
         public:
                 virtual ~ParallelTask(){}
                 /// The function which is executed by each thread with different
@@ -181,7 +185,8 @@ namespace qmp_internal
                         const unsigned int threadIndex, int indexIncrement) = 0;
         };
 
-        /// A singleton class to{
+        /// A singleton class to manage parallel tasks
+        class ParallelTaskManager {
         public:
                 /// Provides access to the singleton instance.
                 inline static ParallelTaskManager& instance();
@@ -219,7 +224,7 @@ namespace qmp_internal
                 inline void setLoopIndices(int loopFirstIndex, unsigned int numIterations);
 
                 /// Unleashes the threads on the new task/loop.
-                inline void explicit process(ParallelTask* task);
+                inline void process(ParallelTask* task);
 
                 /// Called by individual threads to process a subset of the loop
                 /// iterations.
@@ -887,7 +892,7 @@ namespace qmp_internal
                 }
         }
 
-        PlatformThreadObjects* ParallelTaskManager::getPlatformThreadObjects()
+        PlatformThreadObjects* ParallelTaskManager::getPlatformThreadObjects() const
         {
                 return mPlatform;
         }

@@ -4,7 +4,7 @@
 
 namespace std {
   
-  string explicit itos(int i){
+  string itos(int i){
     char str[10];
     snprintf(str, sizeof(str),"%i", i);
     return string(str);

@@ -31,8 +31,8 @@
 
 #include "plotinfo.h"
 
-class PlotChannelsTableModel{    
-  Q_OBJECT;
+class PlotChannelsTableModel : public QAbstractTableModel {    
+  Q_OBJECT
 public:
   
   
@@ -53,7 +53,7 @@ public:
                int role = Qt::EditRole);
                 
 signals:
-  void explicit updateWindow(int index);
+  void updateWindow(int index);
                        
 public slots:
   void update();

@@ -33,7 +33,7 @@ FileLogger::FileLogger(QString pf)
 }
 
 FileLogger::~FileLogger(){
-  explicit if(instream) {
+  if(instream) {
     fclose(instream);
   }  
 }
@@ -43,7 +43,7 @@ void FileLogger::openStream()
 {  
     filename = prefix + (QDateTime::currentDateTime()).toString("yyyy-MM-dd_hh-mm-ss") + ".log";
 
-    explicit if(instream) {
+    if(instream) {
       fclose(instream);
     }
     instream = fopen(filename.toLatin1().constData(),"w+");

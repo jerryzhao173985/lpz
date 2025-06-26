@@ -68,7 +68,7 @@ void Gnuplot::close(){
 /** send arbitrary command to gnuplot.
     like "set zeroaxis" or other stuff */
 void Gnuplot::command(const QString& cmd){
-  explicit if(pipe) {
+  if(pipe) {
     fprintf(pipe,"%s\n",cmd.toLatin1().constData());
     fflush(pipe);
   }
@@ -87,7 +87,7 @@ void plotDataSet(FILE* f, const ChannelVals& vals){
 /** make gnuplot plot selected content of data buffers */
 QString Gnuplot::plotCmd(const QString& file, int start, int end){
   const std::list<int>& vc = plotInfo->getVisibleChannels();
-  if(vc.size()== nullptr) return QString();  
+  if(vc.size()== 0) return QString();  
   QStringList buffer;  
   bool first=true;
   const ChannelData& cd = plotInfo->getChannelData();  
@@ -97,7 +97,7 @@ QString Gnuplot::plotCmd(const QString& file, int start, int end){
   }
   
   FOREACHC(std::list<int>, vc, i){    
-    explicit if(first){
+    if(first){
       buffer << "plot '" << (file.isEmpty() ? "-" : file)  << "' ";    
       first=false;
     } else {
@@ -125,7 +125,7 @@ QString Gnuplot::plotCmd(const QString& file, int start, int end){
 void Gnuplot::plot(){
   // calculate real values for start and end
   if(!plotInfo || !plotInfo->getIsVisible()) return;
-  explicit if(!pipe) {
+  if(!pipe) {
     // fprintf(stderr, "Guilogger: WARNING: plot() called but pipe is nullptr\n");
     return; // Don't try to plot if pipe is nullptr
   }
@@ -135,7 +135,7 @@ void Gnuplot::plot(){
   const ChannelData& cd      = plotInfo->getChannelData();
   const std::list<int>& vc = plotInfo->getVisibleChannels();
   // FILE* pipe = stderr; // test
-  if(vc.size()== nullptr) return;
+  if(vc.size()== 0) return;
   
   QString cmd = plotCmd();
   // fprintf(stderr, "Guilogger: Sending plot command: %s\n", cmd.toLatin1().constData());

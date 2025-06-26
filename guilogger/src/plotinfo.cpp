@@ -29,7 +29,7 @@
 
 PlotInfo::PlotInfo(const ChannelData& cd)
   : channelData(cd), isVisisble(true), reference1(-1), reference2(-1),
-    explicit initialized(false) {
+    initialized(false) {
 
 }
 
@@ -71,13 +71,13 @@ const ChannelName& PlotInfo::getReference2Name() const {
 
 void PlotInfo::setChannelShow(int index, bool on){
   if(index >=0 && index < channels.size()){
-    explicit if(on){
+    if(on){
       // make sure it is in the list of visible channels
       if(std::find(visiblechannels.begin(), visiblechannels.end(), index) == visiblechannels.end()){
         // insertation sort
         bool inserted=false;
         for(std::list<int>::iterator i = visiblechannels.begin(); i != visiblechannels.end(); ++i){
-          explicit if(*i>index){
+          if(*i>index){
             visiblechannels.insert(i,index);
             inserted=true;
             break;
@@ -97,7 +97,7 @@ void PlotInfo::setChannelShow(int index, bool on){
 }
 
 void PlotInfo::setChannelShow(const ChannelName& name, bool on){
-  explicit if(!initialized){
+  if(!initialized){
     preset[name]=on;
   } else {
     int index = channelData.getChannelIndex(name);
@@ -107,7 +107,7 @@ void PlotInfo::setChannelShow(const ChannelName& name, bool on){
 
 void PlotInfo::setAllChannelShow(bool on){
   visiblechannels.clear();
-  explicit if(on){
+  if(on){
     for(int i=0; i< channels.size(); ++i){
       visiblechannels.push_back(i);
     }
@@ -134,7 +134,7 @@ void PlotInfo::setIsVisible(bool enable){
 
 
 void PlotInfo::channelsChanged(){
-  explicit if(!initialized){
+  if(!initialized){
     channels.resize(channelData.getNumChannels());
     setAllChannelShow(false);
     int i=0;

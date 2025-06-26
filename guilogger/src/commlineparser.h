@@ -58,7 +58,7 @@ public:
 
 
   QString getMode() const  {return mode;}
-  void    explicit setMode(const QString& m)  {mode=m;}
+  void    setMode(const QString& m)  {mode=m;}
   QString getPort() const  {return port;}
   QString getFile() const  {return file;}
   bool    getLogg() const  {return logg;}
@@ -103,9 +103,9 @@ public:
 
   QString getParamValue(const QString& key) const {   if(!mpparse) {printf("getParamValue(): parseCommandLine2 not executed, please call it to use this function.\n"); return "";}
 
-    QMap<QString, QString>::iterator it;
+    QMap<QString, QString>::const_iterator it;
 
-    it = paramMap.find(key);
+    it = paramMap.constFind(key);
 
     if(it == paramMap.end()) return "";
     else return *it;

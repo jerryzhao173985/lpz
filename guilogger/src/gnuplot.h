@@ -36,7 +36,7 @@ public:
 
   /** send arbitrary command to gnuplot.
       like "set zeroaxis" or other stuff */
-  void explicit command(const QString& cmd);
+  void command(const QString& cmd);
 
 
   /** make gnuplot plot channels */
