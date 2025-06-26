@@ -38,7 +38,7 @@ namespace lpzrobots{
     Axis (float x, float y, float z) : osg::Vec4(x, y, z, 0) {}
     Axis (const osg::Vec4& v) : osg::Vec4(v) { w() =0; }
     explicit Axis (const osg::Vec3& v) : osg::Vec4(v,0) {}
-    explicit Axis (const dReal v[3]) : osg::Vec4(v[0], v[1], v[2], 0) {}
+    explicit Axis (const dReal v[3]) : osg::Vec4(static_cast<float>(v[0]), static_cast<float>(v[1]), static_cast<float>(v[2]), 0) {}
 
     osg::Vec3 vec3() const { return osg::Vec3( x(), y(), z()); }
 

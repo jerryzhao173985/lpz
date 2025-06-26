@@ -37,7 +37,7 @@
  * forward declarations
  */
 namespace lpzrobots {
-  class HingeJoint{
+  class HingeJoint;
 
   struct AmosIIConf {
       /**
@@ -70,6 +70,7 @@ namespace lpzrobots {
       /** scaling factor for robot (length of body) */
       double size = 0;
       /** trunk width */
+      double width = 0;
       /** trunk height */
       double height = 0;
       /** length of the front of the body (if back joint is used) */
@@ -287,10 +288,11 @@ namespace lpzrobots {
        * highFootContactsensoryFeedback=true ==> the threshold  of foot contact sensor signal is 4
        * otherwise is 1
        */
+      bool highFootContactsensoryFeedback = false;
 
   };
 
-  class AmosII{
+  class AmosII : public OdeRobot {
     public:
       enum LegPos {
         L0, L1, L2, R0, R1, R2, LEG_POS_MAX
@@ -342,18 +344,18 @@ namespace lpzrobots {
       AmosII(const OdeHandle& odeHandle, const OsgHandle& osgHandle, const AmosIIConf& conf = getDefaultConf(),
           const std::string& name = "AmosII robot");
 
-      virtual ~AmosII() override;
+      virtual ~AmosII();
 
       /**
        * updates the OSG nodes of the vehicle
        */
-      virtual void update();
+      virtual void update() override;
 
       /**
        * sets the pose of the vehicle
        * @param pose desired pose matrix
        */
-      virtual void placeIntern(const osg::Matrix& pose);
+      virtual void placeIntern(const osg::Matrix& pose) override;
 
       /**
        * returns actual sensorvalues
@@ -361,24 +363,24 @@ namespace lpzrobots {
        * @param sensornumber length of the sensor array
        * @return number of actually written sensors
        */
-      virtual int getSensorsIntern(sensor* sensors, int sensornumber);
+      virtual int getSensorsIntern(double* sensors, int sensornumber) override;
 
       /**
        * sets actual motorcommands
        * @param motors motors scaled to [-1,1]
        * @param motornumber length of the motor array
        */
-      virtual void setMotorsIntern(const double* motors, int motornumber);
+      virtual void setMotorsIntern(const double* motors, int motornumber) override;
 
       /**
        * returns number of sensors
        */
-      virtual int getSensorNumberIntern() const;
+      virtual int getSensorNumberIntern() override;
 
       /**
        * returns number of motors
        */
-      virtual int getMotorNumberIntern() const;
+      virtual int getMotorNumberIntern() override;
 
       /**
        * this function is called in each timestep. It should perform
@@ -387,16 +389,16 @@ namespace lpzrobots {
        * @param globalData structure that contains global data from the
        *                   simulation environment
        */
-      virtual void doInternalStuff(const GlobalData& globalData);
+      virtual void doInternalStuff(const GlobalData& globalData) override;
 
-      virtual void sense(const GlobalData& globalData);
+      virtual void sense(const GlobalData& globalData) override;
 
-      virtual double getMassOfRobot() const;
+      virtual double getMassOfRobot();
 
       void setLegPosUsage(LegPos leg, LegPosUsage usage);
 
       // Configurable Interface
-      virtual bool setParam(const paramkey& key, paramval val);
+      virtual bool setParam(const paramkey& key, paramval val, bool traverseChildren = true) override;
 
       /**
        * the main object of the robot, which is used for position and speed

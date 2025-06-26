@@ -33,8 +33,9 @@ using namespace std;
 
 namespace lpzrobots {
 
-  /**
-     class for{
+  BoundingShape::BoundingShape(const std::string& filename, Mesh* parent)
+    : active(false), filename(filename), parent(parent), parentSpace(0), attachedToParentBody(true)
+  {
     parent->setBoundingShape(this);
   }
 
@@ -44,7 +45,7 @@ namespace lpzrobots {
 
   void BoundingShape::setPose(const osg::Matrix& pose) {
     // update only if not attached to parent Body
-    if static_cast<attachedToParentBody>(return);
+    if (attachedToParentBody) return;
     vector<osg::Matrix>::const_iterator poseIt = boundingPrimitivePoseList.begin();
     FOREACH(vector<Primitive*>, boundingPrimitiveList, primIt) {
       if (*primIt && poseIt!=boundingPrimitivePoseList.end()) {
@@ -63,14 +64,14 @@ namespace lpzrobots {
     odeHandle.createNewSimpleSpace(parentSpace,true);
     std::string filenamepath = osgDB::findDataFile(filename);
     FILE* f = fopen(filenamepath.c_str(),"r");
-    if(!f) return false override;
+    if(!f) return false;
     char buffer[128];
     float r,h,x,y,z,l,w;
     double a,b,c;
     while(fgets(buffer,128,f)){
       if(strstr(buffer,"sphere")==buffer){
         if(sscanf(buffer+7, "%g (%g,%g,%g)", &r, &x, &y, &z)==4){
-          Sphere* s = new explicit Sphere(r * scale);
+          Sphere* s = new Sphere(r * scale);
           Primitive* Trans = new Transform(parent,s,osgRotate(a*M_PI/180.0f,b*M_PI/180.0f,c*M_PI/180.0f)
                                            *osg::Matrix::translate(scale*x,scale*y,scale*z));
           Trans->init(odeHandle, 0, osgHandle,mode);

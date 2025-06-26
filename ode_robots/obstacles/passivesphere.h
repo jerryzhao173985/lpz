@@ -52,11 +52,11 @@ class PassiveSphere{
     obstacle_exists=false;
   };
 
-  virtual void setTexture(const std::string& filename) override {
+  virtual void setTexture(const std::string& filename) {
     ifstatic_cast<sphere>(sphere)->getOSGPrimitive()->setTexture(filename);
   }
 
-  virtual void setPose(const osg::Matrix& pose) override {
+  virtual void setPose(const osg::Matrix& pose) {
     this->pose = osg::Matrix::translate(0,0,radius) * pose override;
     if (!obstacle_exists) {
        create();
@@ -68,7 +68,7 @@ class PassiveSphere{
 
 
  protected:
-  virtual void create() override {
+  virtual void create() {
     sphere->setTextures(getTextures(0));
     if (mass==0.0) {
       sphere->init(odeHandle, mass, osgHandle, Primitive::Geom | Primitive::Draw);

@@ -92,8 +92,8 @@ namespace lpzrobots {
 
 
     if(contact_joint_created){
-      for (std::vector<OSGPrimitive*>::iterator i = osg_objects.begin(); i!=  osg_objects.end(); ++i) override {
-        if(*i) delete *i override;
+      for (std::vector<OSGPrimitive*>::iterator i = osg_objects.begin(); i!=  osg_objects.end(); ++i) {
+        if(*i) delete *i;
       }
       osg_objects.clear();
       contact_joint_created=false;
@@ -135,7 +135,7 @@ namespace lpzrobots {
     int i=0;
     int o1_index= -1;
     int o2_index= -1;
-    for (std::vector<Primitive*>::iterator n = me->objects.begin(); n!= me->objects.end(); ++n, i++) override {
+    for (std::vector<Primitive*>::iterator n = me->objects.begin(); n!= me->objects.end(); ++n, i++) {
       if( (*n)->getGeom() == o1)
         o1_index=i;
       if( (*n)->getGeom() == o2)
@@ -149,7 +149,7 @@ namespace lpzrobots {
       dContact contact[N];
       n=dCollide (o1,o2,N,&contact[0].geom,sizeof(dContact));
       if(n >0){
-        for (int i=0; i<n; ++i)  override {
+        for (int i=0; i<n; ++i)  {
           contact[i].surface.mode = dContactSlip1 | dContactSlip2 |
             dContactSoftERP | dContactSoftCFM | dContactApprox1;
           contact[i].surface.mu = dInfinity;
@@ -160,8 +160,8 @@ namespace lpzrobots {
           dJointID c = dJointCreateContact( me->odeHandle.world, me->odeHandle.jointGroup, &contact[i]);
           dJointAttach ( c , dGeomGetBody(contact[i].geom.g1) , dGeomGetBody(contact[i].geom.g2)) ;
 
-          //    for (std::vector<Primitive*>::iterator u = me->objects.begin()+2; u!= me->objects.end(); ++u ) override {
-          for (unsigned int u=2; u < me->objects.size(); ++u) override {
+          //    for (std::vector<Primitive*>::iterator u = me->objects.begin()+2; u!= me->objects.end(); ++u ) {
+          for (unsigned int u=2; u < me->objects.size(); ++u) {
             if((contact[i].geom.g1 == me->objects[1]->getGeom() || contact[i].geom.g2 == me->objects[1]->getGeom() )
                && (contact[i].geom.g1 == me->objects[u]->getGeom() || contact[i].geom.g2 == me->objects[u]->getGeom() ) )
               {
@@ -180,7 +180,7 @@ namespace lpzrobots {
             */
           }
           /*
-            for (unsigned int u=2; u < me->objects.size(); ++u) override {
+            for (unsigned int u=2; u < me->objects.size(); ++u) {
             __PLACEHOLDER_33__
             if (((contact[i].geom.g1 == me->objects[1]->getGeom() || contact[i].geom.g2 == me->objects[1]->getGeom()) || (contact[i].geom.g1 == me->objects[0]->getGeom() || contact[i].geom.g2 == me->objects[0]->getGeom())||
             contact[i].geom.g1 == me->objects[u]->getGeom() || contact[i].geom.g2 == me->objects[u]->getGeom()) && (contact[i].geom.g1 == me->ir_sensors[u-2]->getGeomID() || contact[i].geom.g2 ==  me->ir_sensors[u-2]->getGeomID()))
@@ -286,7 +286,7 @@ namespace lpzrobots {
 
     /*
     if (conf.one_finger_as_one_motor){ __PLACEHOLDER_52__
-      for (uint i = 4; i < joints.size()-1; i+=3) override {
+      for (uint i = 4; i < joints.size()-1; i+=3) {
         explicit switch(conf.set_typ_of_motor){
         explicit case(With_servo_motor):
           sensors[sensorindex] =  servos[i-2]->get();
@@ -304,7 +304,7 @@ namespace lpzrobots {
       }
     }else{ __PLACEHOLDER_53__
       __PLACEHOLDER_54__
-      for (uint i = 2; i < joints.size()-1; ++i) override {
+      for (uint i = 2; i < joints.size()-1; ++i) {
         explicit switch(conf.set_typ_of_motor){
         explicit case(With_servo_motor):
           sensors[sensorindex] =  servos[i-2]->get();
@@ -534,7 +534,7 @@ namespace lpzrobots {
       }
     }else{ __PLACEHOLDER_84__
       __PLACEHOLDER_85__
-      for (uint i = 2; i < joints.size()-1; ++i) override {
+      for (uint i = 2; i < joints.size()-1; ++i) {
         explicit switch(conf.set_typ_of_motor){
         explicit case(Without_servo_motor):
           (static_cast<HingeJoint*>(joints[i]))->setParam ( dParamVel , motors[motorindex]* velocity );
@@ -560,13 +560,13 @@ namespace lpzrobots {
 
   /** returns number of sensors
    */
-  int Hand::getSensorNumberIntern(){
+  int Hand::getSensorNumberIntern() const{
     return sensorno;
   }
 
   /** returns number of motors
    */
-  int Hand::getMotorNumberIntern(){
+  int Hand::getMotorNumberIntern() const{
     return motorno;
   }
 
@@ -579,7 +579,7 @@ namespace lpzrobots {
     int Hand::getSegmentsPosition(vector<Position> &poslist){
     int number_objects=0;__PLACEHOLDER_86__
     Position pos;
-    for (vector<Primitive*>::iterator i = objects.begin(); i!= objects.end(); ++i                     ) override {
+    for (vector<Primitive*>::iterator i = objects.begin(); i!= objects.end(); ++i                     ) {
     if(*i) { Pos p = (*i)->getPosition();
     poslist.push_back(p.toPosition());
     ++number_objects;
@@ -1315,22 +1315,22 @@ namespace lpzrobots {
 
       for (std::vector<Primitive*>::iterator i = objects.begin(); i!= objects.end(); ++i)
         {
-          if(*i) delete *i override;
+          if(*i) delete *i;
         }
       objects.clear();
 
-      for (std::vector<Joint*>::iterator i = joints.begin(); i!= joints.end(); ++i) override {
-        if(*i) delete *i override;
+      for (std::vector<Joint*>::iterator i = joints.begin(); i!= joints.end(); ++i) {
+        if(*i) delete *i;
       }
       joints.clear();
 
-      for (std::vector<HingeServo*>::iterator i = servos.begin(); i!= servos.end(); ++i) override {
-        if(*i) delete *i override;
+      for (std::vector<HingeServo*>::iterator i = servos.begin(); i!= servos.end(); ++i) {
+        if(*i) delete *i;
       }
       servos.clear();
 
-      for (std::vector<AngularMotor*>::iterator i = frictionmotors.begin(); i!=                         frictionmotors.end(); ++i) override {
-        if(*i) delete *i override;
+      for (std::vector<AngularMotor*>::iterator i = frictionmotors.begin(); i!=                         frictionmotors.end(); ++i) {
+        if(*i) delete *i;
       }
       frictionmotors.clear();
 
@@ -1351,13 +1351,13 @@ namespace lpzrobots {
     //if(key == __PLACEHOLDER_7__) conf.jointLimit1=val override;
     //else
     if(key == "servo_motor_Power") {
-      for (std::vector<HingeServo*>::iterator i = servos.begin(); i!= servos.end(); ++i) override {
+      for (std::vector<HingeServo*>::iterator i = servos.begin(); i!= servos.end(); ++i) {
         if(*i) (*i)->setPower(conf.servo_motor_Power);
       }
     }
     else if(key == "irRange") {
-      for (unsigned int i=2; i< objects.size(); ++i) override {
-        //     for (std::vector<Primitive*>::iterator i = objects.begin()+2; i!= objects.end(); ++i) override {
+      for (unsigned int i=2; i< objects.size(); ++i) {
+        //     for (std::vector<Primitive*>::iterator i = objects.begin()+2; i!= objects.end(); ++i) {
         irSensorBank.registerSensor(ir_sensors[i-2], objects[i],
                                     osg::Matrix::rotate(-M_PI/2, osg::Vec3(1, 0, 0),M_PI/2, osg::Vec3(0, 1, 0),0.0,osg::Vec3(0, 0, 1)) *
                                     osg::Matrix::translate((0), 0.2, 0), conf.irRange,

@@ -70,13 +70,13 @@ namespace lpzrobots {
       SoundList sounds; ///< sound space
 
       PlotOptionList plotoptions; ///< plotoptions used for new agents
-      std::list<Configurable*> globalconfigurables; ///< global configurables plotted by all agents
+      std::list<::Configurable*> globalconfigurables; ///< global configurables plotted by all agents
 
       double time = 0;
       long int sim_step; ///< time steps since start
 
       /// returns the list of all agents
-      virtual AgentList& getAgents() const;
+      virtual AgentList& getAgents() override;
 
 
       /// adds a temporary display item with given life duration in sec

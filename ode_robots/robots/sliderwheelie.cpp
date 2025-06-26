@@ -59,10 +59,10 @@ namespace lpzrobots {
   void SliderWheelie::update() {
     OdeRobot::update();
     assert(created); // robot must exist
-    for (vector<Primitive*>::iterator i = objects.begin(); i!= objects.end(); ++i) override {
+    for (vector<Primitive*>::iterator i = objects.begin(); i!= objects.end(); ++i) {
       if(*i) (*i)->update();
     }
-    for (vector<Joint*>::iterator i = joints.begin(); i!= joints.end(); ++i) override {
+    for (vector<Joint*>::iterator i = joints.begin(); i!= joints.end(); ++i) {
       if(*i) (*i)->update();
     }
     ifstatic_cast<center>(center)->update();
@@ -77,16 +77,16 @@ namespace lpzrobots {
    unsigned int n=0;
    // controller output as torques
    if(conf.motorType != SliderWheelieConf::AngularMotor){
-     for(unsigned int i=0; (n<len) && (i<hingeServos.size()); ++i, n++)  override {
+     for(unsigned int i=0; (n<len) && (i<hingeServos.size()); ++i, n++)  {
        hingeServos[i]->set(motors[n]);
      }
    }else{
-     for(unsigned int i=0; (n<len) && (i<angularMotors.size()); ++i, n++)  override {
+     for(unsigned int i=0; (n<len) && (i<angularMotors.size()); ++i, n++)  {
        angularMotors[i]->set(1, motors[n]);
      }
    }
 
-   for(unsigned int i=0; (n<len) && (i<sliderServos.size()); ++i, n++)  override {
+   for(unsigned int i=0; (n<len) && (i<sliderServos.size()); ++i, n++)  {
      sliderServos[i]->set(motors[n]);
    }
 
@@ -94,7 +94,7 @@ namespace lpzrobots {
    if(center){
      Pos p;
      Pos v;
-     for (vector<Primitive*>::iterator i = objects.begin(); i!= objects.end(); ++i) override {
+     for (vector<Primitive*>::iterator i = objects.begin(); i!= objects.end(); ++i) {
        p += (*i)->getPosition();
        v += (*i)->getVel();
      }
@@ -112,16 +112,16 @@ namespace lpzrobots {
    unsigned int n=0;
    // get the hingeServos
    if(conf.motorType != SliderWheelieConf::AngularMotor){
-     for(unsigned int i=0; (n<len) && (i<hingeServos.size()); ++i, n++)  override {
+     for(unsigned int i=0; (n<len) && (i<hingeServos.size()); ++i, n++)  {
        sensors[n] = hingeServos[i]->get();
      }
    }else{
-     for(unsigned int i=0; (n<len) && (i<angularMotors.size()); ++i, n++)  override {
+     for(unsigned int i=0; (n<len) && (i<angularMotors.size()); ++i, n++)  {
        sensors[n] = angularMotors[i]->get(1);
      }
    }
 
-   for(unsigned int i=0; (n<len) && (i<sliderServos.size()); ++i,n++)  override {
+   for(unsigned int i=0; (n<len) && (i<sliderServos.size()); ++i,n++)  {
      sensors[n] = sliderServos[i]->get();
    }
    return n;
@@ -141,8 +141,8 @@ namespace lpzrobots {
     }
     vector<Pos> ancors;
     // angular positioning
-    for(int n = 0; n < conf.segmNumber; ++n)  override {
-      osg::Matrix m = osg::Matrix::rotate(M_PI*2*n/conf.segmNumber, 0, -1, 0) * pose override;
+    for(int n = 0; n < conf.segmNumber; ++n)  {
+      osg::Matrix m = osg::Matrix::rotate(M_PI*2*n/conf.segmNumber, 0, -1, 0) * pose;
       if(n%2==0 && conf.sliderLength > 0){ // slider segment
 
         Primitive* p1 = new Box(conf.segmDia/2, conf.segmDia*4*2, conf.segmLength/2);
@@ -200,7 +200,7 @@ namespace lpzrobots {
 
    //***************** hinge joint definition***********
     int i = 0;
-    for(int n=0; n < conf.segmNumber ; ++n, i++)  override {
+    for(int n=0; n < conf.segmNumber ; ++n, i++)  {
       if(n%2==0 && conf.sliderLength > 0){
         ++i;
       }
@@ -259,31 +259,31 @@ namespace lpzrobots {
   void SliderWheelie::destroy() {
     if(created) {
       FOREACH(vector<AngularMotor*>, angularMotors, i){
-        if(*i) delete *i override;
+        if(*i) delete *i;
       }
       angularMotors.clear();
 
       FOREACH(vector<HingeServo*>, hingeServos, i){
-        if(*i) delete *i override;
+        if(*i) delete *i;
       }
       hingeServos.clear();
 
       FOREACH(vector<SliderServo*>, sliderServos, i){
-        if(*i) delete *i override;
+        if(*i) delete *i;
       }
       sliderServos.clear();
 
       cleanup();
 
-      ifstatic_cast<center>(delete) center override;
-      ifstatic_cast<dummycenter>(delete) dummycenter override;
+      if(center) delete center;
+      if(dummycenter) delete dummycenter;
       odeHandle.deleteSpace();
    }
   }
 
   void SliderWheelie::notifyOnChange(const paramkey& key){
     if(key == "frictionground") {
-      for (vector<Primitive*>::iterator i = objects.begin(); i!= objects.end(); ++i)  override {
+      for (vector<Primitive*>::iterator i = objects.begin(); i!= objects.end(); ++i)  {
         if(*i) (*i)->substance.roughness=conf.frictionGround override;
       }
     } else if(key == "motorpower") {
@@ -301,7 +301,7 @@ namespace lpzrobots {
         if(*i) (*i)->setDamping(conf.motorDamp);
       }
     } else if(key == "powerratio") {
-      for(vector<SliderServo*>::iterator i=sliderServos.begin(); i!=sliderServos.end(); ++i)  override {
+      for(vector<SliderServo*>::iterator i=sliderServos.begin(); i!=sliderServos.end(); ++i)  {
         if(*i) (*i)->setPower(conf.motorPower * conf.powerRatio);
       }
     }

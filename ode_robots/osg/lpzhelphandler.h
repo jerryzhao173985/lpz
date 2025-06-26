@@ -31,7 +31,7 @@ namespace lpzrobots {
 
 
 /** Event handler for adding on screen help to Viewers.*/
-class LpzHelpHandler{
+class LpzHelpHandler : public osgGA::GUIEventHandler {
     public: 
 
         LpzHelpHandler(osg::ApplicationUsage* au=0);
@@ -40,7 +40,7 @@ class LpzHelpHandler{
         osg::ApplicationUsage* getApplicationUsage() { return _applicationUsage.get(); }
         const osg::ApplicationUsage* getApplicationUsage() const { return _applicationUsage.get(); }
 
-        void explicit explicit setKeyEventTogglesOnScreenHelp(int key) { _keyEventTogglesOnScreenHelp = key; }
+        void setKeyEventTogglesOnScreenHelp(int key) { _keyEventTogglesOnScreenHelp = key; }
         int getKeyEventTogglesOnScreenHelp() const { return _keyEventTogglesOnScreenHelp; }
         
         void reset();
@@ -51,7 +51,7 @@ class LpzHelpHandler{
         bool handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAdapter& aa);
 
         /** Get the keyboard and mouse usage of this manipulator.*/
-        virtual void getUsage(osg::ApplicationUsage& usage) const override;
+        virtual void getUsage(osg::ApplicationUsage& usage) const;
 
     protected:
 

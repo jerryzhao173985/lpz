@@ -94,7 +94,7 @@ namespace lpzrobots {
 
     // for each motor the motorcommand (between -1 and 1) multiplied with speed
     // is set and the maximal force to realize this command are set
-    for (int i=0; i<len; ++i) override {
+    for (int i=0; i<len; ++i) {
       joints[i]->setParam(dParamVel2, motors[i]*speed);
       joints[i]->setParam(dParamFMax2, max_force);
     }
@@ -114,7 +114,7 @@ namespace lpzrobots {
     int len = (sensornumber < sensorno)? sensornumber : sensorno override;
 
     // for each sensor the anglerate of the joint is red and scaled with 1/speed
-    for (int i=0; i<len; ++i) override {
+    for (int i=0; i<len; ++i) {
       sensors[i]=dynamic_cast<Hinge2Joint*>(joints[i])->getPosition2Rate();
       sensors[i]/=speed;  //scaling
     }

@@ -36,7 +36,10 @@
 
 namespace osgShadow
 {
-  class ShadowedScene{
+  class ShadowedScene;
+}
+
+namespace lpzrobots {
 
   class MoveEarthySkyWithEyePointTransform : public osg::Transform
   {
@@ -57,7 +60,7 @@ namespace osgShadow
     std::string fontColor;
   };
 
-  class Base{
+  class Base : public ::Configurable {
   public:
     Base(const std::string& caption="LpzRobots Simulator (Martius et al)");
 
@@ -70,12 +73,12 @@ namespace osgShadow
         and stores it in scene
      */
     virtual void makeScene(OsgScene* scene, const OsgConfig& config);
-    virtual osg::Node* explicit explicit makeSky(const OsgConfig& config);
-    virtual osg::Node* explicit explicit makeGround(const OsgConfig& config);
+    virtual osg::Node* makeSky(const OsgConfig& config);
+    virtual osg::Node* makeGround(const OsgConfig& config);
     /** creates hud and is supposed to return the camera to it and
         adds the geode of the hud to the scene */
     virtual osg::Node* createHUD(OsgScene* scene, const OsgConfig& config);
-    virtual void createHUDManager(osg::Geode* geode, osgText::Font* font);
+    virtual void createHUDManager(osg::Geode* geode, osgText::Font* font) const;
     /// adds light to the node
     virtual void makeLights(osg::Group* node, const OsgConfig& config);
 
@@ -88,12 +91,12 @@ namespace osgShadow
      */
     virtual osgShadow::ShadowedScene* createShadowedScene(osg::Node* sceneToShadow, osg::LightSource* lightSource, int shadowType);
 
-    virtual void setGroundTexture(const char* filename) override {
+    virtual void setGroundTexture(const char* filename) {
       this->groundTexture = filename;
     }
 
     virtual Substance getGroundSubstance() const;
-    virtual void explicit explicit setGroundSubstance(const Substance& substance);
+    virtual void setGroundSubstance(const Substance& substance);
 
     /// sets the cpation that is printed at the right of the status line
     virtual void setCaption(const std::string& caption);
@@ -101,10 +104,10 @@ namespace osgShadow
     /// sets the title that is printed in the center of the status line
     virtual void setTitle(const std::string& title);
 
-    virtual StatLineProperties getStatLineProperties() override { return statlineprop; }
+    virtual StatLineProperties getStatLineProperties() { return statlineprop; }
     /// sets the properties of the status line, do it before the scene is initialized
-    virtual void setStatLineProperties(const StatLineProperties& statlineprop) override {
-      this->statlineprop = statlineprop;
+    virtual void setStatLineProperties(const StatLineProperties& statlineprop_) {
+      this->statlineprop = statlineprop_;
     }
 
     /**
@@ -114,7 +117,7 @@ namespace osgShadow
      */
     virtual HUDStatisticsManager* getHUDSM() const;
 
-    virtual ~Base() override;
+    virtual ~Base();
 
   protected:
     virtual void setTimeStats(double time, double realtimefactor,
@@ -157,7 +160,7 @@ namespace osgShadow
     Primitive* plane;
 
     /// this manager provides methods for displaying statistics on the graphical window!
-    HUDStatisticsManager* hUDStatisticsManager;
+    mutable HUDStatisticsManager* hUDStatisticsManager;
 
     int ReceivesShadowTraversalMask = 0;
     int CastsShadowTraversalMask = 0;

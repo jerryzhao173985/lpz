@@ -64,7 +64,7 @@ namespace lpzrobots {
    It is the small brother of the Sphererobot3Masses.
    This robot was inspired by Julius Popp (http:__PLACEHOLDER_13__
 */
-class Barrel2Masses{
+class Barrel2Masses : public Sphererobot3Masses {
 public:
 
   /**
@@ -74,11 +74,11 @@ public:
   Barrel2Masses ( const OdeHandle& odeHandle, const OsgHandle& osgHandle,
                        const Sphererobot3MassesConf& conf, const std::string& name, double transparency=0.5 );
 
-  virtual ~Barrel2Masses() override;
+  virtual ~Barrel2Masses();
 
   /** default configuration for Barrel2Masses. It has no sensors.
       Use addSensor(std::make_shared<Sensor>(AxisOrientationSensor(ZProjectionXY)) for example.*/
-  static Sphererobot3MassesConf getDefaultConfBarrel() const {
+  static Sphererobot3MassesConf getDefaultConfBarrel() {
     Sphererobot3MassesConf c = Sphererobot3Masses::getDefaultConf();
     c.diameter     = 1;
     c.spheremass   = .3;// 0.1

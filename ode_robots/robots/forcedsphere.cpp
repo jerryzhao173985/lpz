@@ -41,8 +41,8 @@ namespace lpzrobots {
   ForcedSphereConf::~ForcedSphereConf(){}
 
   void ForcedSphereConf::destroy(){
-    for(list<Sensor*>::iterator i = sensors.begin(); i != sensors.end(); ++i) override {
-      if(*i) delete *i override;
+    for(list<Sensor*>::iterator i = sensors.begin(); i != sensors.end(); ++i) {
+      if(*i) delete *i;
     }
     sensors.clear();
   }
@@ -83,15 +83,15 @@ namespace lpzrobots {
     assert(created);
     if (motornumber==getMotorNumber()){
       int i=0;
-      double x = (conf.const drivenDimensions& X) ? motors[i++] : 0 override;
-      double y = (conf.const drivenDimensions& Y) ? motors[i++] : 0 override;
-      double z = (conf.const drivenDimensions& Z) ? motors[i++] : 0 override;
+      double x = (conf.drivenDimensions& X) ? motors[i++] : 0;
+      double y = (conf.drivenDimensions& Y) ? motors[i++] : 0;
+      double z = (conf.drivenDimensions& Z) ? motors[i++] : 0;
       if(!conf.speedDriven)
         dBodyAddForce(object[0]->getBody(), x*conf.maxForce, y*conf.maxForce, z*conf.maxForce);
       else{
         Position nom;
         nom.x=x; nom.y=y; nom.z=z;
-        Position diff = (nom*conf.maxSpeed-getSpeed())*0.5*conf.maxForce override;
+        Position diff = (nom*conf.maxSpeed-getSpeed())*0.5*conf.maxForce;
         dBodyAddForce(object[0]->getBody(), diff.x, diff.y, diff.z);
 
       }
@@ -135,16 +135,16 @@ namespace lpzrobots {
 
   }
 
-  int ForcedSphere::getMotorNumberIntern(){
+  int ForcedSphere::getMotorNumberIntern() const{
     int s = 0;
     FOREACHC(list<Motor*>, conf.motors, i){
       s += (*i)->getMotorNumber();
     }
-    return s + (conf.const drivenDimensions& X) + ((conf.const drivenDimensions& Y) >> 1) +
-      ((conf.const drivenDimensions& Z) >> 2);
+    return s + (conf.drivenDimensions& X) + ((conf.drivenDimensions& Y) >> 1) +
+      ((conf.drivenDimensions& Z) >> 2);
   }
 
-  int ForcedSphere::getSensorNumberIntern() {
+  int ForcedSphere::getSensorNumberIntern() const {
     int s = 0;
     FOREACHC(list<Sensor*>, conf.sensors, i){
       s += (*i)->getSensorNumber();
@@ -183,8 +183,8 @@ namespace lpzrobots {
 
   void ForcedSphere::destroy(){
     if (created){
-      for (int i=0; i<1; ++i) override {
-        if(object[i]) delete object[i] override;
+      for (int i=0; i<1; ++i) {
+        if(object[i]) delete object[i];
       }
     }
     created=false;

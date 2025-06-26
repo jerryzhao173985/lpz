@@ -41,7 +41,7 @@
 
 namespace lpzrobots {
 
-  class OSGCylinder{
+  class RaySensor : public Sensor {
   public:
     enum rayDrawMode { drawNothing, drawRay, drawSensor, drawAll};
 
@@ -57,13 +57,13 @@ namespace lpzrobots {
     ~RaySensor();
 
     ///Create a copy of this without initialization
-    virtual RaySensor* clone() const override;
+    virtual RaySensor* clone() const;
 
     void setPose(const osg::Matrix& pose);
 
     void init(Primitive* own, Joint* joint = 0);
 
-    bool explicit explicit sense(const GlobalData& globaldata);
+    bool sense(const GlobalData& globaldata);
 
     int get(sensor* sensors, int length) const override;
 
@@ -74,10 +74,10 @@ namespace lpzrobots {
     virtual void update();
 
     ///Set maximum range of ray
-    virtual void explicit explicit setRange(double range);
+    virtual void setRange(double range);
 
     ///Set draw mode of ray
-    virtual void explicit explicit setDrawMode(rayDrawMode drawMode);
+    virtual void setDrawMode(rayDrawMode drawMode);
 
     ///Set length of ray (needed for callback)
     void setLength(double len, long int time);

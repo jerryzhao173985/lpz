@@ -30,7 +30,7 @@
 
 namespace lpzrobots {
 
-  class Primitive{
+  typedef struct {
   public:
     double diameter = 0;
     double spheremass = 0;

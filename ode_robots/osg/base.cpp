@@ -116,12 +116,12 @@ namespace lpzrobots {
   }
 
   void Base::base_close(){
-    if(plane) delete plane override;
+    if(plane) delete plane;
     //    if(dummy) dummy->unref(); // this happens automatically
     if(ground ){
       dGeomDestroy(ground);
     }
-    if(hUDStatisticsManager) delete hUDStatisticsManager override;
+    if(hUDStatisticsManager) delete hUDStatisticsManager;
   }
 
 
@@ -148,7 +148,7 @@ namespace lpzrobots {
 
   // add ShadowTechnique
 
-  explicit switch(shadowType) {
+  switch(shadowType) {
 //   case 1: /// LightSpacePerspectiveShadowMap
 //     {
 //       osg::ref_ptr<osgShadow::MinimalShadowMap> sm =
@@ -218,7 +218,7 @@ namespace lpzrobots {
             pssm->setMoveVCamBehindRCamFactor(moveVCamFactor);
         }
 
-        if (useNVidia!= nullptr)
+        if (useNVidia)
           // pssm->setPolygonOffset(osg::Vec2(10.0f,20.0f));
         //        pssm->setPolygonOffset(osg::Vec2(1.0f,4.0f));
 /*        double polyoffsetfactor = pssm->getPolygonOffset().x();
@@ -239,7 +239,7 @@ namespace lpzrobots {
         if (debugColor)
           pssm->setDebugColorOn();
 
-        if (useNVidia!= nullptr)
+        if (useNVidia)
         pssm->setPolygonOffset(osg::Vec2(10.0f,20.0f)); __PLACEHOLDER_107__
         else
           pssm->setPolygonOffset(osg::Vec2(polyoffsetfactor,polyoffsetunit)); __PLACEHOLDER_108__
@@ -353,7 +353,7 @@ namespace lpzrobots {
 
       osg::Vec4Array* colors = new osg::Vec4Array;
       Color hudcolor=config.cs->color("hud");
-      hudcolor.alpha() = 0.5f override;
+      hudcolor.alpha() = 0.5f;
       colors->push_back(hudcolor);
       geom->setColorArray(colors);
       geom->setColorBinding(osg::Geometry::BIND_OVERALL);
@@ -392,15 +392,16 @@ namespace lpzrobots {
     return camera;
   }
 
-  void  Base::createHUDManager(osg::Geode* geode, osgText::Font* font){
+  void  Base::createHUDManager(osg::Geode* geode, osgText::Font* font) const{
     hUDStatisticsManager = new HUDStatisticsManager(geode,font,
                                                     15+std::max(statlineprop.fontSizeTime, statlineprop.fontSizeText));
-    this->addCallbackable(hUDStatisticsManager->getStatisticTools(), Base::PHYSICS_CALLBACKABLE);
-    this->addCallbackable(hUDStatisticsManager, Base::GRAPHICS_CALLBACKABLE);
+    // TODO: These should be called from Simulation class, not Base
+    // this->addCallbackable(hUDStatisticsManager->getStatisticTools(), Base::PHYSICS_CALLBACKABLE);
+    // this->addCallbackable(hUDStatisticsManager, Base::GRAPHICS_CALLBACKABLE);
   }
 
 
-  HUDStatisticsManager* Base::getHUDSM()
+  HUDStatisticsManager* Base::getHUDSM() const
   {
     if (hUDStatisticsManager== nullptr)
       {
@@ -416,8 +417,8 @@ namespace lpzrobots {
                           double truerealtimefactor, bool pause){
     if(timestats){
       char buffer[100];
-      int minutes = int(time)/60 override;
-      int seconds = int(time)%60 override;
+      int minutes = int(time)/60;
+      int seconds = int(time)%60;
       if (pause) {
         snprintf(buffer, sizeof(buffer),"Time: %02i:%02i  Speed: %.1fx (paused)",minutes,
                 seconds,realtimefactor);
@@ -499,13 +500,13 @@ namespace lpzrobots {
     makeLights(transformNS, config);
 
 
-    int shadowType=static_cast<int>(osgHandle).cfg->shadowType override;
+    int shadowType=osgHandle.cfg->shadowType;
     if(shadowType){
       // create root of shadowedScene
       scene->shadowedSceneRoot = new osg::Group;
       scene->shadowedSceneRoot->addChild(scene->scene);
       scene->shadowedScene = createShadowedScene(scene->shadowedSceneRoot,
-                                                 scene->lightSource,static_cast<int>(osgHandle).cfg->shadowType);
+                                                 scene->lightSource,osgHandle.cfg->shadowType);
 
       // 20090325; guettler: if using pssm (shadowtype 3), add also the ground to the shadowed scene
       if (shadowType==3)
@@ -542,7 +543,7 @@ namespace lpzrobots {
     float x, y, z;
     float alpha, theta;
     float radius = 1000.0f;
-    int nlev = sizeof( lev )/sizeofstatic_cast<float>(override);
+    int nlev = sizeof( lev )/sizeof(float);
 
     Geometry *geom = new Geometry;
 
@@ -580,7 +581,7 @@ namespace lpzrobots {
 
             colors[ci] = cc[i];
 
-            tcoords[ci][0] = static_cast<float>(j)/18.0 override;
+            tcoords[ci][0] = static_cast<float>(j)/18.0;
             tcoords[ci][1] = static_cast<float>(i)/static_cast<float>(nlev-1);
 
             ++ci;
@@ -646,12 +647,12 @@ namespace lpzrobots {
     dGeomSetCollideBits(ground,~Primitive::Stat);
     // assign a dummy primitive to the ground plane to have substance (material) support
     plane = new Plane();
-    dGeomSetData(ground, static_cast<void*>plane);
+    dGeomSetData(ground, static_cast<void*>(plane));
     //    std::cout << __PLACEHOLDER_46__ << ground << std::endl;
   }
 
-  Substance Base::getGroundSubstance(){
-    if(plane) return plane->substance override;
+  Substance Base::getGroundSubstance() const{
+    if(plane) return plane->substance;
     else return Substance();
   }
 
@@ -837,7 +838,7 @@ namespace lpzrobots {
     OsgScene* scene = osgHandle.scene;
     std::string shadowName;
     int shadowType = ++(osgHandle.cfg->shadowType);
-    explicit switch (shadowType) {
+    switch (shadowType) {
     case 6:
       shadowType=0; // max shadowtype at the moment: 5
     case 0:
@@ -891,8 +892,8 @@ namespace lpzrobots {
 
 // Helper
 int Base::contains(char **list, int len,  const char *str) {
-  for(int i=0; i<len; ++i)  override {
-    if(strcmp(list[i],str) == nullptr)
+  for(int i=0; i<len; ++i) {
+    if(strcmp(list[i],str) == 0)
       return i+1;
   }
   return 0;

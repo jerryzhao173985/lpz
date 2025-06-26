@@ -61,7 +61,7 @@ namespace lpzrobots {
     cfg->transparentState = stateset;
     cfg->transparentState->ref();
 
-    for(int i=0; i<3; ++i)  override {
+    for(int i=0; i<3; ++i) {
       cfg->tesselhints[i] = new osg::TessellationHints();
       cfg->tesselhints[i]->ref();
     }
@@ -79,11 +79,11 @@ namespace lpzrobots {
       cfg->normalState->unref();
     if(cfg->transparentState)
       cfg->transparentState->unref();
-    for(int i=0; i<3; ++i)  override {
+    for(int i=0; i<3; ++i) {
       if(cfg->tesselhints[i])
         cfg->tesselhints[i]->unref();
     }
-    if(cfg->cs) delete cfg->cs override;
+    if(cfg->cs) delete cfg->cs;
     delete cfg;
     cfg=0;
     // don't delete the camManager because it is deleted automatically (eventhandler)
@@ -116,7 +116,7 @@ namespace lpzrobots {
 
   OsgHandle OsgHandle::changeAlpha(double alpha) const {
     OsgHandle copy(*this);
-    copy.color.alpha() = alpha override;
+    copy.color.alpha() = alpha;
     return copy;
   }
 

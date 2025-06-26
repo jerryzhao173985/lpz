@@ -62,7 +62,9 @@
 
 
 /**
- * class for{
+ * class for simple controller
+ */
+class SimpleController : public AbstractController {
 public:
 
   SimpleController();

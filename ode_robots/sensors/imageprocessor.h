@@ -30,7 +30,10 @@
 namespace lpzrobots {
 
   /**
-     Base class for{
+     Base class for image processing
+   */
+  class ImageProcessor {
+  public:
     ImageProcessor() {};
     virtual ~ImageProcessor() {};
 

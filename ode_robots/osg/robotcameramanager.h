@@ -36,11 +36,11 @@ namespace lpzrobots {
      meaning independent of the normal graphical rendering.
      Additionally the view of the cameras is displayed as an overlay.
    */
-  class RobotCameraManager{
+  class RobotCameraManager : public osgGA::GUIEventHandler {
     struct Overlay {
-      explicit Overlay(const Camera::CameraImage& image);
+      explicit Overlay(const lpzrobots::Camera::CameraImage& image);
       ~Overlay();
-      Camera::CameraImage camImg;
+      lpzrobots::Camera::CameraImage camImg;
       osg::Texture2D* texture;
       int overlayW = 0;
       int overlayH = 0;
@@ -57,17 +57,17 @@ namespace lpzrobots {
 
   public:
     RobotCameraManager(int windowWidth, int windowHeight);
-    virtual void explicit explicit addCamera(Camera* cam);
-    virtual void explicit explicit removeCamera(Camera* cam);
+    virtual void addCamera(Camera* cam);
+    virtual void removeCamera(Camera* cam);
 
     virtual osg::Group* getDisplay() const { return display; }
-    virtual osg::Group* getOffScree override n() const { return offscreen; }
+    virtual osg::Group* getOffScreen() const { return offscreen; }
 
     /* ** GUIEventHandler interface **/
     virtual bool handle(const osgGA::GUIEventAdapter& ea,
                          osgGA::GUIActionAdapter& aa,
                          osg::Object* o, osg::NodeVisitor* nv);
-    virtual void getUsage(osg::ApplicationUsage &) const override;
+    virtual void getUsage(osg::ApplicationUsage &) const;
 
   protected:
 

@@ -42,9 +42,9 @@ namespace lpzrobots {
   public:
     Joint(Primitive* part1, Primitive* part2, const osg::Vec3& anchor)
       : joint(0), part1(part1), part2(part2), anchor(anchor), feedback(0) {
-      explicit assert(part1 && part2);
+      assert(part1 && part2);
     }
-    virtual ~Joint() override;
+    virtual ~Joint();
     /** initialises (and creates) the joint. If visual is true then the joints is
         also drawn. visualSize is the size of the visual representation.
         If ignoreColl is true then the pair of connected parts is ignored
@@ -65,9 +65,9 @@ namespace lpzrobots {
 
     dJointID getJoint() const { return joint; }
     const Primitive* getPart1() const { return part1; }
-    Primitive* getPart1() const { return part1; }
+    Primitive* getPart1() { return part1; }
     const Primitive* getPart2() const { return part2; }
-    Primitive* getPart2() const { return part2; }
+    Primitive* getPart2() { return part2; }
     const osg::Vec3 getAnchor() const { return anchor; }
 
     /// returns the number of Axes
@@ -87,11 +87,11 @@ namespace lpzrobots {
     virtual int getPositionRates(double* sensorarray) const { return 0; }
 
     /// enable or disable the feedback mode
-    virtual void explicit explicit setFeedBackMode(bool mode);
+    virtual void setFeedBackMode(bool mode);
     /// torque applied to body 1 and body 2
-    virtual bool getTorqueFeedback(Pos& t1, Pos& t2) const override;
+    virtual bool getTorqueFeedback(Pos& t1, Pos& t2) const;
     /// force applied to body 1 and body 2
-    virtual bool getForceFeedback(Pos& f1, Pos& f2) const override;
+    virtual bool getForceFeedback(Pos& f1, Pos& f2) const;
 
     static osg::Matrix anchorAxisPose(const osg::Vec3& anchor, const Axis& axis);
   protected:
@@ -105,18 +105,18 @@ namespace lpzrobots {
     OdeHandle odeHandle;
   };
 
-  class OneAxisJoint{
+  class OneAxisJoint : public Joint {
   public:
     OneAxisJoint(Primitive* part1, Primitive* part2, const osg::Vec3& anchor, const Axis axis1)
       : Joint(part1, part2, anchor), axis1(axis1) {}
-    virtual Axis getAxis(int n) const { return axis1;}
+    virtual Axis getAxis(int n) const override { return axis1;}
     virtual Axis getAxis1() const { return axis1; };
 
     virtual double getPosition1() const  = 0;
     virtual double getPosition1Rate() const  = 0;
     virtual void addForce1(double force)  = 0;
 
-    virtual int getNumberAxes() const { return 1;};
+    virtual int getNumberAxes() const override { return 1;};
     virtual std::list<double> getPositions() const override;
     virtual std::list<double> getPositionRates() const override;
     virtual int getPositions(double* sensorarray) const override;
@@ -125,12 +125,12 @@ namespace lpzrobots {
     Axis axis1;
   };
 
-  class TwoAxisJoint{
+  class TwoAxisJoint : public OneAxisJoint {
   public:
     TwoAxisJoint(Primitive* part1, Primitive* part2, const osg::Vec3& anchor, const Axis axis1,
                  const Axis axis2 )
       : OneAxisJoint(part1, part2, anchor, axis1), axis2(axis2) {}
-    virtual Axis getAxis(int n) const { if (n== nullptr) return axis1; else return axis2;}
+    virtual Axis getAxis(int n) const override { if (n==0) return axis1; else return axis2;}
     virtual Axis getAxis2() const { return axis2; };
 
     virtual double getPosition2() const  = 0;
@@ -140,7 +140,7 @@ namespace lpzrobots {
       addForce1(force1); addForce2(force2);
     }
 
-    virtual int getNumberAxes() const { return 2;};
+    virtual int getNumberAxes() const override { return 2;};
     virtual std::list<double> getPositions() const override;
     virtual std::list<double> getPositionRates() const override;
     virtual int getPositions(double* sensorarray) const override;
@@ -152,7 +152,7 @@ namespace lpzrobots {
 
   /***************************************************************************/
 
-  class FixedJoint{
+  class FixedJoint : public Joint {
   public:
     /** the anchor is only required for drawing.
         If not provided than part1 position is used
@@ -166,13 +166,13 @@ namespace lpzrobots {
     */
     virtual void init(const OdeHandle& odeHandle, const OsgHandle& osgHandle,
                       bool withVisual = true, double visualSize = 0.2,
-                      bool ignoreColl = true);
+                      bool ignoreColl = true) override;
 
-    virtual void update();
-    virtual void setParam(int parameter, double value);
-    virtual double getParam(int parameter) const;
+    virtual void update() override;
+    virtual void setParam(int parameter, double value) override;
+    virtual double getParam(int parameter) const override;
 
-    virtual int getNumberAxes() const { return 0; }
+    virtual int getNumberAxes() const override { return 0; }
   protected:
     OSGPrimitive* visual;
   };
@@ -180,7 +180,7 @@ namespace lpzrobots {
 
   /***************************************************************************/
 
-  class HingeJoint{
+  class HingeJoint : public OneAxisJoint {
   public:
     HingeJoint(Primitive* part1, Primitive* part2, const osg::Vec3& anchor,
                 const Axis& axis1);
@@ -192,15 +192,15 @@ namespace lpzrobots {
     */
     virtual void init(const OdeHandle& odeHandle, const OsgHandle& osgHandle,
                       bool withVisual = true, double visualSize = 0.2,
-                      bool ignoreColl = true);
+                      bool ignoreColl = true) override;
 
-    virtual void update();
+    virtual void update() override;
 
-    virtual void explicit explicit addForce1(double t);
+    virtual void addForce1(double t) override;
     virtual double getPosition1() const override;
     virtual double getPosition1Rate() const override;
-    virtual void setParam(int parameter, double value);
-    virtual double getParam(int parameter) const;
+    virtual void setParam(int parameter, double value) override;
+    virtual double getParam(int parameter) const override;
 
   protected:
     OSGPrimitive* visual = nullptr;
@@ -208,7 +208,7 @@ namespace lpzrobots {
 
   /***************************************************************************/
 
-  class Hinge2Joint{
+  class Hinge2Joint : public TwoAxisJoint {
   public:
     Hinge2Joint(Primitive* part1, Primitive* part2, const osg::Vec3& anchor,
                 const Axis& axis1, const Axis& axis2);
@@ -220,19 +220,19 @@ namespace lpzrobots {
     */
     virtual void init(const OdeHandle& odeHandle, const OsgHandle& osgHandle,
                       bool withVisual = true, double visualSize = 0.2,
-                      bool ignoreColl = true);
+                      bool ignoreColl = true) override;
 
-    virtual void update();
+    virtual void update() override;
 
     /// adds torques to axis 1 and 2
-    virtual void explicit explicit addForce1(double t1);
-    virtual void explicit explicit addForce2(double t2);
+    virtual void addForce1(double t1) override;
+    virtual void addForce2(double t2) override;
     virtual double getPosition1() const override;
     virtual double getPosition2() const override; /// This is not supported by the joint!
     virtual double getPosition1Rate() const override;
     virtual double getPosition2Rate() const override;
-    virtual void setParam(int parameter, double value);
-    virtual double getParam(int parameter) const;
+    virtual void setParam(int parameter, double value) override;
+    virtual double getParam(int parameter) const override;
 
   protected:
     OSGPrimitive* visual = nullptr;
@@ -240,7 +240,7 @@ namespace lpzrobots {
 
   /***************************************************************************/
 
-  class UniversalJoint{
+  class UniversalJoint : public TwoAxisJoint {
   public:
     UniversalJoint(Primitive* part1, Primitive* part2, const osg::Vec3& anchor,
                 const Axis& axis1, const Axis& axis2);
@@ -252,20 +252,20 @@ namespace lpzrobots {
     */
     virtual void init(const OdeHandle& odeHandle, const OsgHandle& osgHandle,
                       bool withVisual = true, double visualSize = 0.2,
-                      bool ignoreColl = true);
+                      bool ignoreColl = true) override;
 
-    virtual void update();
+    virtual void update() override;
 
     /// adds torques to axis 1 and 2
-    virtual void explicit explicit addForce1(double t1);
-    virtual void explicit explicit addForce2(double t2);
+    virtual void addForce1(double t1) override;
+    virtual void addForce2(double t2) override;
     virtual double getPosition1() const override;
     virtual double getPosition2() const override;
     virtual double getPosition1Rate() const override;
     virtual double getPosition2Rate() const override;
 
-    virtual void setParam(int parameter, double value);
-    virtual double getParam(int parameter) const;
+    virtual void setParam(int parameter, double value) override;
+    virtual double getParam(int parameter) const override;
 
   protected:
     OSGPrimitive* visual1 = nullptr;
@@ -274,7 +274,7 @@ namespace lpzrobots {
 
   /***************************************************************************/
 
-  class BallJoint{
+  class BallJoint : public Joint {
   public:
     BallJoint(Primitive* part1, Primitive* part2, const osg::Vec3& anchor);
 
@@ -285,14 +285,14 @@ namespace lpzrobots {
     */
     virtual void init(const OdeHandle& odeHandle, const OsgHandle& osgHandle,
                       bool withVisual = true, double visualSize = 0.2,
-                      bool ignoreColl = true);
+                      bool ignoreColl = true) override;
 
-    virtual void update();
+    virtual void update() override;
 
-    virtual int getNumberAxes() const { return 0; }
+    virtual int getNumberAxes() const override { return 0; }
     // Ball and Socket has no parameter
-    virtual void setParam(int parameter, double value);
-    virtual double getParam(int parameter) const;
+    virtual void setParam(int parameter, double value) override;
+    virtual double getParam(int parameter) const override;
 
   protected:
     OSGPrimitive* visual;
@@ -301,7 +301,7 @@ namespace lpzrobots {
 
   /***************************************************************************/
 
-  class SliderJoint{
+  class SliderJoint : public OneAxisJoint {
   public:
     SliderJoint(Primitive* part1, Primitive* part2, const osg::Vec3& anchor,
                 const Axis& axis1);
@@ -314,15 +314,15 @@ namespace lpzrobots {
     */
     virtual void init(const OdeHandle& odeHandle, const OsgHandle& osgHandle,
                       bool withVisual = true, double visualSize = 0.1,
-                      bool ignoreColl = true);
+                      bool ignoreColl = true) override;
 
-    virtual void update();
+    virtual void update() override;
 
-    virtual void explicit explicit addForce1(double t);
+    virtual void addForce1(double t) override;
     virtual double getPosition1() const override;
     virtual double getPosition1Rate() const override;
-    virtual void setParam(int parameter, double value);
-    virtual double getParam(int parameter) const;
+    virtual void setParam(int parameter, double value) override;
+    virtual double getParam(int parameter) const override;
 
   protected:
     OSGPrimitive* visual = nullptr;
@@ -349,8 +349,8 @@ namespace lpzrobots {
 
   //   virtual void update();
 
-  //   virtual void explicit explicit addForce1(double t);
-  //   virtual void explicit explicit addForce2(double t);
+  //   virtual void addForce1(double t);
+  //   virtual void addForce2(double t);
   //   virtual double getPosition1() const override;
   //   virtual double getPosition2() const override;
   //   virtual double getPosition1Rate() const override;

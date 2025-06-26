@@ -85,7 +85,8 @@ enum HexabotSensorNames{
   F6_ts=41,
 
   // Attitude sensor
-  POSE_r = 42, // roll static_cast<rad>(POSE_p) = 43, // pitch
+  POSE_r = 42, // roll
+  POSE_p = 43, // pitch
   POSE_y = 44, // yaw
 
   // angular Vel
@@ -183,6 +184,9 @@ enum HexabotMotorNames{
 typedef struct {
   //Unit m, kg
   double length;
+  double width;
+  double height;
+  double mass;
 
   double length_axis_to_center;// The length between the center of dynamixel and the axis.
   double length_from_axis_to_tip; // The length between the axis and the tip of joint material(bra for servo)
@@ -192,13 +196,20 @@ typedef struct {
 // The internal parameters of the Body
 typedef struct {
   //Unit m, kg
+  double mass;
+  double height;
+  double length;
+  double width;
 }BodyConf;
 
-// The internal parameters of Foot frame static_cast<Tibia>(typedef) struct {
+// The internal parameters of Foot frame
+typedef struct {
   //Unit m,kg
   double width;
   double height;
+  double length;
   double footRadius;
+  double mass;
 
 }FootFrameConf;
 

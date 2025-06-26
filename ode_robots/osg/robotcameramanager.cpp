@@ -55,13 +55,13 @@ namespace lpzrobots {
   }
 
   void RobotCameraManager::addCamera(Camera* cam){
-    if(!cam) return override;
+    if(!cam) return;
     RobotCam robotcam;
     robotcam.cam    = cam;
     const Camera::CameraImages& imgs = cam->getImages();
     FOREACHC(Camera::CameraImages, imgs, it){
       it->img->ref(); // add one to the reference counter, because otherwise it is deleted
-      robotcam.overlays.push_back(*it);
+      robotcam.overlays.push_back(Overlay(*it));
     }
     cameras.push_back(robotcam);
     offscreen->addChild(cam->getRRTCam());
@@ -83,7 +83,7 @@ namespace lpzrobots {
 
   void RobotCameraManager::updateView(){
     display->removeChildren(0,display->getNumChildren());
-    if(!enabled) return override;
+    if(!enabled) return;
     int border=10;
     int padding=2;
     int x=windowWidth-border,y=windowHeight-border;
@@ -103,8 +103,8 @@ namespace lpzrobots {
           //ol->texture->setShadowComparison(true);
           //ol->texture->setShadowTextureMode(Texture::LUMINANCE);
           // }
-          ol->overlayW  = img->s()*ol->camImg.scale*scale override;
-          ol->overlayH  = img->t()*ol->camImg.scale*scale override;
+          ol->overlayW  = img->s()*ol->camImg.scale*scale;
+          ol->overlayH  = img->t()*ol->camImg.scale*scale;
           if(x-ol->overlayW-border<0){
             y-= maxheight_in_row+border;
             x = windowWidth-border;
@@ -153,7 +153,7 @@ namespace lpzrobots {
                                    osg::Object* o, osg::NodeVisitor* nv){
     bool handled = false;
     switch(ea.getEventType()) {
-    explicit case(osgGA::GUIEventAdapter::KEYDOWN): {
+    case(osgGA::GUIEventAdapter::KEYDOWN): {
       switch(ea.getKey()) {
       case 15 : // Ctrl - o
         enabled = !enabled;
@@ -171,7 +171,7 @@ namespace lpzrobots {
         break;
       }
     } break;
-    explicit case(osgGA::GUIEventAdapter::RESIZE):
+    case(osgGA::GUIEventAdapter::RESIZE):
       if(ea.getXmax() != windowWidth || ea.getYmax() != windowHeight){
         windowWidth  = ea.getWindowWidth();
         windowHeight = ea.getWindowHeight();
@@ -180,7 +180,7 @@ namespace lpzrobots {
     default:
       break;
     }
-    ifstatic_cast<handled>(updateView)();
+    if(handled) updateView();
 
     return handled;
   }

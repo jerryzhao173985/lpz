@@ -34,7 +34,10 @@
 
 
 namespace osg {
-class Image{
+  class Image;
+}
+
+namespace lpzrobots {
 
   class OSGCylinder;
   class OSGBox;
@@ -95,14 +98,14 @@ class Image{
 
     Camera( const CameraConf& conf = getDefaultConf() );
 
-    static CameraConf getDefaultConf() const {
+    static CameraConf getDefaultConf() {
       CameraConf c;
       c.width     = 256;
       c.height    = 128;
       c.fov       = 90;
       c.anamorph  = 1;
-      c.behind    = 0.04; // since the nearplane is at 0.05
-      c.camSize   = 0.2;
+      c.behind    = 0.04f; // since the nearplane is at 0.05
+      c.camSize   = 0.2f;
       c.draw      = true;
       c.show      = true;
       c.scale     = 1.0;
@@ -110,7 +113,7 @@ class Image{
       return c;
     }
 
-    virtual ~Camera() override;
+    virtual ~Camera();
 
     /** initializes the camera. The OSG camera is created and the
         raw image and the imageprocessor is initialized.
@@ -126,7 +129,7 @@ class Image{
     /// relative pose of the camera
     virtual osg::Matrix getPose();
 
-    // virtual bool explicit explicit sense(const GlobalData& globaldata);
+    // virtual bool explicit sense(const GlobalData& globaldata);
 
     /// all images (raw and processed)
     virtual const CameraImages& getImages() const { return cameraImages;}

@@ -29,7 +29,13 @@
 
 namespace lpzrobots {
 
-  class Primitive{
+  // Forward declaration
+  class Primitive;
+  class Joint;
+
+  /** Temporary primitive that can be added to the simulation for a certain time
+   */
+  class TmpPrimitive : public TmpObject {
   public:
     /** creates a new item from the given primitives and initializes it.
         The lifetime is set when adding it to globalData
@@ -42,8 +48,8 @@ namespace lpzrobots {
                  const std::string& colorname, float alpha = 1.0);
 
     // Delete copy constructor and assignment operator
-    TmpPrimitive(const TmpPrimitive&) = delete override;
-    TmpPrimitive& operator=(const TmpPrimitive&) = delete override;
+    TmpPrimitive(const TmpPrimitive&) = delete;
+    TmpPrimitive& operator=(const TmpPrimitive&) = delete;
 
     virtual void init(const OdeHandle& odeHandle, const OsgHandle& osgHandle);
     virtual void deleteObject();
@@ -64,7 +70,7 @@ namespace lpzrobots {
   /**
    holding a temporary graphical item
    */
-  class TmpDisplayItem{
+  class TmpDisplayItem : public TmpObject {
   public:
     /** creates a new item from the given primitives and initializes it.
         The lifetime is set when adding it to globalData
@@ -78,12 +84,12 @@ namespace lpzrobots {
                    OSGPrimitive::Quality quality = OSGPrimitive::Middle);
 
     // Delete copy constructor and assignment operator
-    TmpDisplayItem(const TmpDisplayItem&) = delete override;
-    TmpDisplayItem& operator=(const TmpDisplayItem&) = delete override;
+    TmpDisplayItem(const TmpDisplayItem&) = delete;
+    TmpDisplayItem& operator=(const TmpDisplayItem&) = delete;
 
-    virtual void init(const OdeHandle& odeHandle, const OsgHandle& osgHandle);
+    virtual void init(const OdeHandle& odeHandle, const OsgHandle& osgHandle) override;
 
-    virtual void deleteObject();
+    virtual void deleteObject() override;
     virtual void update() override {} // nothing to be done here, because they do not move
 
   private:
@@ -100,7 +106,7 @@ namespace lpzrobots {
   /**
    holding a temporary joint
    */
-  class TmpJoint{
+  class TmpJoint : public TmpObject {
   public:
     /** creates a new tmporary object from the given joint and initializes it.
         The lifetime is set when adding it to globalData
@@ -112,10 +118,14 @@ namespace lpzrobots {
     TmpJoint(Joint* p, const std::string& colorname, float alpha = 1.0,
              bool withVisual = true, double visualSize = 0.2, bool ignoreColl = true);
 
-    virtual void init(const OdeHandle& odeHandle, const OsgHandle& osgHandle);
+    // Delete copy constructor and assignment operator
+    TmpJoint(const TmpJoint&) = delete;
+    TmpJoint& operator=(const TmpJoint&) = delete;
 
-    virtual void deleteObject();
-    virtual void update();
+    virtual void init(const OdeHandle& odeHandle, const OsgHandle& osgHandle) override;
+
+    virtual void deleteObject() override;
+    virtual void update() override;
 
   private:
     Joint* joint = nullptr;

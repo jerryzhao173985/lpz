@@ -79,8 +79,8 @@ namespace lpzrobots {
     }
   }
 
-  void OdeConfig::setOdeHandle(const OdeHandle& odeHandle){
-    this->odeHandle = odeHandle;
+  void OdeConfig::setOdeHandle(const OdeHandle& odeHandle_){
+    this->odeHandle = odeHandle_;
   }
 
   void OdeConfig::setVideoRecordingMode(bool mode) {

@@ -27,7 +27,7 @@ namespace lpzrobots {
 * parts. It now allows preloading of the spring and more control but also
 * more errors. Use carefully!
 */
-class Spring{
+class Spring : public OneAxisServo {
 public:
         Spring(OneAxisJoint* joint, double _min, double _max,
                          double power, double damp=0.2, double integration=0.0,
@@ -40,7 +40,7 @@ public:
         Position is relative to initial position of the two parts
         connected by the spring
     */
-    virtual void set(double pos) override {
+    virtual void set(double pos) {
         pid.setTargetPosition(pos);
 
         double force = pid.stepNoCutoff(joint->getPosition1(), joint->odeHandle.getTime());
@@ -53,13 +53,13 @@ public:
     }
 
     /** returns the position of the slider in ranges [-1, 1] (scaled by min, max)*/
-    virtual double get() override {
+    virtual double get() const override {
         double pos =  joint->getPosition1();
         return pos;
     }
 
     //want to allow all kinds of borders,
-    virtual void setMinMax(double _min, double _max) override {
+    virtual void setMinMax(double _min, double _max) {
           min=_min;
           max=_max;
           joint->setParam(dParamLoStop, min - fabs(min) * (jointLimit-1));

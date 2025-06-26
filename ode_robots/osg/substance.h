@@ -148,7 +148,7 @@ namespace lpzrobots {
   };
 
 
-  class DebugSubstance{
+  class DebugSubstance : public Substance {
   public:
     DebugSubstance();
     DebugSubstance( float roughness, float slip, float hardness, float elasticity);

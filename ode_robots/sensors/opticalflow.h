@@ -27,6 +27,8 @@
 
 #include "camerasensor.h"
 #include <selforg/controller_misc.h>
+#include <vector>
+#include <array>
 
 namespace lpzrobots {
 
@@ -41,46 +43,51 @@ namespace lpzrobots {
     /** maximum fraction of the image dimension to consider for 
         a possible flow. Larger values increase the computational demand and move the
         points more to the center (since we don't want edge effects)*/
-    /** size (edge length) of the measurement field static_cast<block>(in) pixel 
+    double maxFlow;
+    /** size (edge length) of the measurement field (block) in pixel 
         (if 0 then 1/12th of width) */
+    int fieldSize;
     /** verbosity level 
         (0: quite, 1: initialization values, 2: warnings, 3: info, 4: debug) */
+    int verbose;
   };
 
   /** This CameraSensor calculates the optical flow at few points of the image
       based on a box matching technique.       
       This can be applied directly to the camera image.
    */
-  class OpticalFlow{
+  class OpticalFlow : public CameraSensor {
   public:  
 
     struct Vec2i {
+      int x;
+      int y;
       Vec2i() : x(0), y(0) {}
       Vec2i(int x, int y) : x(x), y(y) {}
-      Vec2i operator + (const Vec2i& v) const override;
-      Vec2i operator * (int i) const override;
-      Vec2i operator / (int i) const override;
+      Vec2i operator + (const Vec2i& v) const;
+      Vec2i operator * (int i) const;
+      Vec2i operator / (int i) const;
     };
 
     typedef std::list< std::pair<Vec2i,int> > FlowDelList;
 
     /** @see CameraSensor for further parameter explanation.
      */
-    OpticalFlow(OpticalFlowConf conf = getDefaultConf());
+    explicit OpticalFlow(OpticalFlowConf conf = getDefaultConf());
 
-    virtual ~OpticalFlow() override;
+    virtual ~OpticalFlow();
 
     /** calculates default positions for optical flow detection.
         The points are in aranged horizontally in a line at the vertical center.
         For num 2 the points are at the border, 
         3 points there is additioanlly one is the center and so on.      
      */
-    static std::list<Pos> explicit explicit getDefaultPoints(int num);
+    static std::list<Pos> getDefaultPoints(int num);
 
     /// the default config has 2 points in and calculates the flow in X and Y
-    static OpticalFlowConf getDefaultConf() const {
+    static OpticalFlowConf getDefaultConf() {
       OpticalFlowConf c;
-      c.dims    = XY;
+      c.dims    = Sensor::XY;
       c.points  = getDefaultPoints(2);
       c.fieldSize = 24; 
       c.maxFlow = 0.15;
@@ -91,7 +98,7 @@ namespace lpzrobots {
     virtual void intern_init();
     
     /// Performs the calculations
-    virtual bool explicit explicit sense(const GlobalData& globaldata);
+    virtual bool sense(const GlobalData& globaldata);
     
     virtual int getSensorNumber() const {
       return num;
@@ -127,8 +134,8 @@ namespace lpzrobots {
     OpticalFlowConf conf;
     int num;
     std::list<Vec2i> fields; // fields in image coordinates
-    sensor* data;
-    osg::Image* lasts[4];
+    std::vector<sensor> data;
+    std::array<osg::Image*, 4> lasts;
     std::vector<Vec2i> oldFlows;
     int maxShiftX;
     int maxShiftY;

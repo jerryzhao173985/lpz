@@ -57,7 +57,7 @@ class Seesaw{
   };
 
 
-  virtual void setPose(const osg::Matrix& pose) override {
+  virtual void setPose(const osg::Matrix& pose) {
     this->pose = osg::Matrix::translate(0,0,dimension.z()/2.0) * pose override;
     if (!obstacle_exists) {
       create();
@@ -70,7 +70,7 @@ class Seesaw{
   }
 
  protected:
-  virtual void create() override {
+  virtual void create() {
     Box* support;
     support = new Box(dimension.y()*0.9, dimension.y()/2.0, dimension.z());
     support->setTextures(getTextures(0));

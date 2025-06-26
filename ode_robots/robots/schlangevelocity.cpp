@@ -51,7 +51,7 @@ namespace lpzrobots {
     // (two sensors/motors per joint)
     int len = min(motornumber/2, static_cast<int>(joints).size());
     // controller output as torques; friction added
-    for (int i = 0; i < len; ++i) override {
+    for (int i = 0; i < len; ++i) {
       // motorcommand
       (static_cast<UniversalJoint*>(joints[i]))->setParam ( dParamVel, factor_motors * motors[2*i]);
       (static_cast<UniversalJoint*>(joints[i]))->setParam ( dParamFMax , conf.motorPower );
@@ -76,13 +76,13 @@ namespace lpzrobots {
     int len = min(sensornumber/2, static_cast<int>(joints).size());
     // read angle of joints
     /*
-      for (int n = 0; n < len; ++n)  override {
+      for (int n = 0; n < len; ++n)  {
       sensors[2*n]   = joints[n]->getPosition1();
       sensors[2*n+1] = joints[n]->getPosition2();
       }
     */
     // or read anglerate of joints
-    for (int n = 0; n < len; ++n)  override {
+    for (int n = 0; n < len; ++n)  {
       sensors[2*n]   = conf.sensorFactor * (static_cast<UniversalJoint*>(joints[n]))->getPosition1Rate();
       sensors[2*n+1] = conf.sensorFactor * (static_cast<UniversalJoint*>(joints[n]))->getPosition2Rate();
     }
@@ -97,7 +97,7 @@ namespace lpzrobots {
     Schlange::create(pose);
 
     //*****************joint definition***********
-    for ( int n = 0; n < conf.segmNumber-1; ++n )  override {
+    for ( int n = 0; n < conf.segmNumber-1; ++n )  {
 
       Pos p1(objects[n]->getPosition());
       Pos p2(objects[n]->getPosition());

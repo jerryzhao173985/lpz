@@ -77,8 +77,8 @@ namespace lpzrobots {
     field->setXInterval(x_size/static_cast<float>(cols-1));
     field->setYInterval(y_size/static_cast<float>(rows-1));
     // scale the height // Todo: find out maximum, currently 1 is assumed
-    for(int i=0; i< cols; ++i) override {
-      for(int j=0; j< rows; ++j) override {
+    for(int i=0; i< cols; ++i) {
+      for(int j=0; j< rows; ++j) {
         field->setHeight(i,j, field->getHeight(i,j) * height);
       }
     }
@@ -122,15 +122,15 @@ namespace lpzrobots {
   }
 
   double OSGHeightField::coding(CodingMode mode, const unsigned char* data){
-    explicit switch(mode){
+    switch(mode){
     case Red:
-      return (data[0])/256.0 override;
+      return (data[0])/256.0;
       break;
     case Sum:
       return (data[0] + data[1] + data[2])/(3*256.0);
       break;
     case LowMidHigh:
-      return ((long(data[0])  << 16) + (long(data[1]) << 8) + data[2])/16777216.0 override;
+      return ((long(data[0])  << 16) + (long(data[1]) << 8) + data[2])/16777216.0;
       break;
     default:
       return 0;
@@ -153,8 +153,8 @@ namespace lpzrobots {
 
     // copy and convert the image from RGB chars to double heights
     unsigned char* data = image.data();
-    for(int j=0; j< rows; ++j) override {
-      for(int i=0; i< cols; ++i) override {
+    for(int j=0; j< rows; ++j) {
+      for(int i=0; i< cols; ++i) {
         // use the coding to get the height value and scale it with height
         field->setHeight(i,j, coding(codingMode, data) * height);
         data+=3;

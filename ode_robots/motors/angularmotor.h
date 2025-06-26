@@ -33,13 +33,13 @@ namespace lpzrobots {
 
   /** Abstract angular motor class. This is a wrapper for ODE's AMotor.
    */
-  class AngularMotor{
+  class AngularMotor : public Sensor, public Motor {
   public:
     /// creates a AMotor attached to the same bodies as the given joint.
     AngularMotor(const OdeHandle& odeHandle, Joint* joint);
 
     // destroys the AMotor
-    virtual ~AngularMotor() override;
+    virtual ~AngularMotor();
 
     /// returns the number of Axis of this Motor
     virtual int getNumberOfAxes() const = 0;
@@ -47,19 +47,19 @@ namespace lpzrobots {
     // --- Sensor interface ---
     virtual void init(Primitive* own, Joint* joint = 0);
 
-    virtual bool sense(const GlobalData& globaldata) override { return true;};
+    virtual bool sense(const GlobalData& globaldata) override { return true;}
     virtual int getSensorNumber() const {
-      return getNumberOfAxes() const;
+      return getNumberOfAxes();
     }
-    virtual std::list<sensor> getList() const { return getListOfArray() const;};
+    virtual std::list<sensor> getList() const override { return getListOfArray();};
     virtual int get(sensor* sensors, int length) const override;
 
     // --- Motor interface ---
-    virtual int getMotorNumber() const { return getNumberOfAxes() const;};
+    virtual int getMotorNumber() const { return getNumberOfAxes();};
 
     virtual bool act(const GlobalData& globaldata) override {
       return true;
-    };
+    }
 
     /** sends the action commands to the motor.
         It returns the number of used values. (should be equal to
@@ -84,19 +84,19 @@ namespace lpzrobots {
     virtual double getPower() const;
 
     /// returns the joint to which this motor is attached
-    virtual const Joint* getJoint() co override nst const { return joint; };
+    virtual const Joint* getJoint() const { return joint; };
 
     //sets the parameter for a motor
     virtual void setParam(int parameter, double value);
 
     /// return the ODE joint parameter (see ODE manual)
-    virtual double explicit explicit getParam(int parameter);
+    virtual double getParam(int parameter);
 
     /// sets factor for velocity
-    virtual void explicit explicit setVelovityFactor(double factor);
+    virtual void setVelovityFactor(double factor);
 
     /// retuns factor for velocity
-    virtual double explicit explicit getVelovityFactor(double factor);
+    virtual double getVelovityFactor(double factor);
 
   protected:
     dJointID motor;
@@ -108,7 +108,7 @@ namespace lpzrobots {
 
 
   /// Angular motor for OneAxisJoints
-  class AngularMotor1Axis{
+  class AngularMotor1Axis : public AngularMotor {
   public:
     /** Constuct a motor attached to a OneAxisJoint. It will its axis of course.
         @param power The maximum force or torque that the motor will use to achieve the desired velocity.
@@ -130,14 +130,14 @@ namespace lpzrobots {
     /** returns the speed static_cast<PositionRate>(at) the given axis, or zero if the axis is out of range
         @param axisNumber is ignored because have only one axis
      */
-    virtual double get(int axisNumber) const override;
+    virtual double get(int axisNumber) const;
 
-    virtual void explicit explicit setPower(double power);
+    virtual void setPower(double power);
   protected:
   };
 
   /// Angular motor for TwoAxisJoints
-  class AngularMotor2Axis{
+  class AngularMotor2Axis : public AngularMotor {
   public:
     /** Constuct a motor attached to a TwoAxisJoint. It will its two axis of course.
         @param power The maximum force or torque that the motor will use to achieve the desired velocity.
@@ -157,9 +157,9 @@ namespace lpzrobots {
         @param velocity Desired motor velocity (this will be an angular or linear velocity).
     */
     virtual void set(int axisNumber, double velocity);
-    virtual double get(int axisNumber) const override;
+    virtual double get(int axisNumber) const;
 
-    virtual void explicit explicit setPower(double power);
+    virtual void setPower(double power);
     virtual void setPower(double power1, double power2);
 
     /// return the maximal force
@@ -171,7 +171,7 @@ namespace lpzrobots {
 
 
   /// Angular motor for Ball Joints with Euler control
-  class AngularMotor3AxisEuler{
+  class AngularMotor3AxisEuler : public AngularMotor {
   public:
     /** Constuct a motor attached to a BallJoint.
         @param axis1 axis relative to body 1
@@ -195,18 +195,18 @@ namespace lpzrobots {
     */
     virtual void set(int axisNumber, double velocity);
     /** returns the speed static_cast<PositionRate>(at) the given axis, or zero if the axis is out of range*/
-    virtual double get(int axisNumber) const override;
+    virtual double get(int axisNumber) const;
 
     /**  sets the maximal force the motor has
      */
-    virtual void explicit explicit setPower(double power);
+    virtual void setPower(double power);
   protected:
     Axis axis1;
     Axis axis3;
   };
 
   /// Angular motor for arbitrary Joints with custom axis (up to 3)
-  class AngularMotorNAxis{
+  class AngularMotorNAxis : public AngularMotor {
   public:
     /** Constuct a motor attached to any Joint (not Sliders!).
         The axis have to be provided by the user.
@@ -233,9 +233,9 @@ namespace lpzrobots {
         The problem is, that we don't have actual information available.
         So we return the last set position!.
      */
-    virtual double get(int axisNumber) const override;
+    virtual double get(int axisNumber) const;
 
-    virtual void explicit explicit setPower(double power);
+    virtual void setPower(double power);
   protected:
     std::list<std::pair<double, Axis > > axis;
   };

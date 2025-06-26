@@ -48,47 +48,47 @@ using namespace matrix;
 
 namespace lpzrobots{
 
-  typedef struct
+  struct ArmConf
   {
-    double body_mass;
-    double body_height;
-    double body_width;
-    double body_depth;
+    double body_mass = 1.0;
+    double body_height = 5.0;
+    double body_width = 2.0;
+    double body_depth = 0.5;
 
-    double shoulder_mass;
-    double shoulder_radius;
-    double joint_offset; // distance of shoulder components from each other
+    double shoulder_mass = 0.005;
+    double shoulder_radius = 0.03;
+    double joint_offset = 0.005; // distance of shoulder components from each other
 
-    double upperarm_mass;
-    double upperarm_radius;
-    double upperarm_length;
+    double upperarm_mass = 0.1;
+    double upperarm_radius = 0.05;
+    double upperarm_length = 1.5;
 
-    double forearm_mass;
-    double forearm_radius;
-    double forearm_length;
+    double forearm_mass = 0.1;
+    double forearm_radius = 0.05;
+    double forearm_length = 1.2;
 
-    double elevation_min;
-    double elevation_max;
-    double humeral_min;
-    double humeral_max;
-    double azimuthal_min;
-    double azimuthal_max;
-    double elbow_min;
-    double elbow_max;
+    double elevation_min = -M_PI/3;
+    double elevation_max = M_PI/3;
+    double humeral_min = -M_PI/4;
+    double humeral_max = M_PI/4;
+    double azimuthal_min = -M_PI/4;
+    double azimuthal_max = M_PI/3;
+    double elbow_min = -M_PI/3.5;
+    double elbow_max = M_PI/3.5;
 
-    double motorPower;
-    double damping;    // motor damping
-    double servoFactor; // reduces servo angle constraints to servoFactor percent of hingeJoint angle constraints
-    double scaleMotorElbow;
+    double motorPower = 5;
+    double damping = 0.2;    // motor damping
+    double servoFactor = 1; // reduces servo angle constraints to servoFactor percent of hingeJoint angle constraints
+    double scaleMotorElbow = 0.6;
 
-    bool withContext; // if true context sensors are the effector positions
-    bool useJointSensors; // if true joint sensors otherwise effector positions
+    bool withContext = false; // if true context sensors are the effector positions
+    bool useJointSensors = true; // if true joint sensors otherwise effector positions
 
     std::list<Sensor*> sensors; // list of additional sensors
 
-  } ArmConf;
+  };
 
-  class Arm{
+  class Arm : public OdeRobot, public Inspectable {
   public:
 
     /* Enumeration of different parts and joints */
@@ -104,61 +104,24 @@ namespace lpzrobots{
 
     Arm(const OdeHandle& odeHandle, const OsgHandle& osgHandle, const ArmConf& conf, const std::string& name);
 
-    static ArmConf getDefaultConf() const {
-      ArmConf conf;
-
-      conf.motorPower=5;//2-15;
-      conf.damping=0.2;//1.0;
-
-      conf.upperarm_radius = 0.05;//0.15; <- not beautiful
-      conf.forearm_radius = 0.05;//0.1; <- not beautiful TODO universelle Anordnung!
-
-      // body
-      conf.body_mass = 1.0;
-      conf.body_height = 5.0;
-      conf.body_width = 2.0;
-      conf.body_depth = 0.5;
-      // shoulder
-      conf.shoulder_mass=0.005;
-      conf.shoulder_radius=0.03; // 0.1
-      conf.joint_offset=0.005;
-      // upper arm
-      conf.upperarm_mass = 0.1; // 0.01
-      conf.upperarm_length = 1.5;
-      // forearm
-      conf.forearm_mass = 0.1; // 0.01
-      conf.forearm_length = 1.2;
-      // stops at hinge joints
-      conf.elevation_min=-M_PI/3;
-      conf.elevation_max=M_PI/3;
-      conf.humeral_min=-M_PI/4;
-      conf.humeral_max=M_PI/4;
-      conf.azimuthal_min=-M_PI/4;
-      conf.azimuthal_max=M_PI/3;
-      conf.elbow_min=-M_PI/3.5; // 50Deg. the hard limit is at about 60
-      conf.elbow_max=M_PI/3.5; // 50Deg. the hard limit is at about 60
-      conf.servoFactor=1;
-      conf.scaleMotorElbow=0.6;
-      conf.useJointSensors=true;
-      conf.withContext=false;
-
-      return conf;
+    static ArmConf getDefaultConf() {
+      return ArmConf();
     }
 
-    virtual ~Arm() override {}
+    virtual ~Arm() {}
 
-    virtual paramkey getName() const {return "Arm";}
+    virtual paramkey getName() const noexcept override {return "Arm";}
 
     /**
      * sets the pose of the vehicle
      * @param pose desired 4x4 pose matrix
      */
-    virtual void placeIntern(const osg::Matrix& pose);
+    virtual void placeIntern(const osg::Matrix& pose) override;
 
     /**
      * update the subcomponents
      */
-    virtual void update();
+    virtual void update() override;
 
     /**
      * returns actual sensorvalues
@@ -166,14 +129,14 @@ namespace lpzrobots{
      * @param sensornumber length of the sensor array
      * @return number of actually written sensors
      */
-    virtual int getSensorsIntern(double* sensors, int sensornumber);
+    virtual int getSensorsIntern(double* sensors, int sensornumber) override;
 
     /**
      * sets actual motorcommands
      * @param motors motors scaled to [-1,1]
      * @param motornumber length of the motor array
      */
-    virtual void setMotorsIntern(const double* motors, int motornumber);
+    virtual void setMotorsIntern(const double* motors, int motornumber) override;
 
     /**
      * returns number of sensors
@@ -194,23 +157,23 @@ namespace lpzrobots{
      * @param poslist vector of positions (of all robot segments)
      * @return length of the list
      */
-    virtual int getSegmentsPosition(std::vector<Position> &poslist);
+    virtual int getSegmentsPosition(std::vector<Position> &poslist) const;
 
     /**
      * returns the position of the endeffector (hand)
      * @param position vector position vector
      */
-    void explicit explicit getEndeffectorPosition(double* position);
+    void getEndeffectorPosition(double* position) const;
 
     /**
      * this function is called in each timestep. It should perform robot-internal checks,
      * like space-internal collision detection, sensor resets/update etc.
      * @param globalData structure that contains global data from the simulation environment
      */
-    virtual void explicit explicit doInternalStuff(const GlobalData& globalData);
+    virtual void doInternalStuff(const GlobalData& globalData) override;
 
     /******** CONFIGURABLE ***********/
-    virtual void explicit explicit notifyOnChange(const paramkey& key);
+    virtual void notifyOnChange(const paramkey& key) override;
 
     virtual Primitive* getMainObject() const {
       return objects[base];
@@ -219,12 +182,12 @@ namespace lpzrobots{
     /**
      * the main object of the robot, which is used for position and speed tracking
      */
-    virtual Primitive* getMainPrimitive() const {
+    virtual Primitive* getMainPrimitive() const override {
       return objects[hand];
     }
 
-    void explicit explicit setDlearnTargetHack(double* post);
-    void explicit explicit setDmotorTargetHack(double* post);
+    void setDlearnTargetHack(double* post);
+    void setDmotorTargetHack(double* post);
 
   protected:
 
@@ -266,14 +229,14 @@ namespace lpzrobots{
 
     std::vector <HingeServo*> hingeServos;
 
-    int sensorno;      // number of sensors
-    int motorno;       // number of motors
+    int sensorno = 0;      // number of sensors
+    int motorno = 0;       // number of motors
 
-    bool created;      // true if robot was created
+    bool created = false;      // true if robot was created
 
     // dSpaceID parentspace; // already defined in OdeRobot parent class
 
-    int printed;
+    int printed = 0;
 
   };
 }

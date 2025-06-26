@@ -76,7 +76,7 @@ class RaceGround{
   /**
    * you set the number of segments of the track
    */
-  void explicit explicit setNumberOfSegments(int number) {
+  void setNumberOfSegments(int number) {
     numberOfBarcodes=number;
   }
 
@@ -84,13 +84,13 @@ class RaceGround{
    * returns the barcode number of the given point
    * returns (length,width) (-1,-1) if point is not on the track
    */
-   pair<double, double> explicit explicit getPositionOnTrack(const Position& p) {
+   pair<double, double> getPositionOnTrack(const Position& p) {
 
     double passedLength=0.0f;
     double segmentNumber=-1.0f;
     double width        =-1.0f;
     for(list<AbstractTrackSection*>::iterator it = SegmentList.begin();
-        it!= SegmentList.end(); ++it)  override {
+        it!= SegmentList.end(); ++it)  {
       if((*it)->isInside(p)){
         double sectionLength = (*it)->getSectionIdValue(p); // between 0..length
         width = (*it)->getWidthIdValue(p);
@@ -116,7 +116,7 @@ class RaceGround{
   /**
    * adds the segment to the SegmentList
    */
-  void explicit explicit addSegment(AbstractTrackSection* Segment) {
+  void addSegment(AbstractTrackSection* Segment) {
     SegmentList+=Segment;
   }
 
@@ -127,7 +127,7 @@ class RaceGround{
    * straightline: StraightLine
    * 90degree    : DegreeSegment
    */
-  void explicit explicit addSegment(const string& name) {
+  void addSegment(const string& name) {
     // get first pose from last stored segment
     Matrix newPose(pose); // this is the initial pose
     if (!SegmentList.empty()) {
@@ -166,7 +166,7 @@ class RaceGround{
    * 90degree    : 90DegreeSegment
    */
   void addSegments(list<string> names) {
-    for(list<string>::iterator it = names.begin(); it!=names.end(); ++it)  override {
+    for(list<string>::iterator it = names.begin(); it!=names.end(); ++it)  {
       addSegment(*it);
     }
   }
@@ -174,26 +174,26 @@ class RaceGround{
 /**
    * draws all the segments stored in SegmentList
    */
-  virtual void draw() override {
+  virtual void draw() {
     //    double box[3];
     dsSetTexture (DS_NONE);
     dsSetColor (color.r, color.g, color.b);
     for(list<AbstractTrackSection*>::iterator it = SegmentList.begin();
-                                                        it!= SegmentList.end(); ++it)  override {
+                                                        it!= SegmentList.end(); ++it)  {
       // call the create function of the segment
       (*it)->draw();
     }
  };
 
 
-  virtual void setPosition(double x, double y, double z) override {
+  virtual void setPosition(double x, double y, double z) {
     if (obstacle_exists){
       destroy();
     }
     create();
   };
 
-  virtual void getPosition(const double& x, const double& y, const double& z) override {
+  virtual void getPosition(const double& x, const double& y, const double& z) {
     x=0.0f;
     y=0.0f;
     z=0.0f;
@@ -201,13 +201,13 @@ class RaceGround{
 
 
   // normally we don't need this function
-  virtual void setGeometry(double length_, double width_, double height_) override {
+  virtual void setGeometry(double length_, double width_, double height_) {
     length=length_;
     width=width_;
     height =height_;
   };
 
-  virtual void setColor(double r, double g, double b) override {
+  virtual void setColor(double r, double g, double b) {
     color.r=r;
     color.g=g;
     color.b=b;
@@ -222,7 +222,7 @@ class RaceGround{
 
   dSpaceID raceground_space;
 
-  virtual void setParameters(const Matrix& initpose) override {
+  virtual void setParameters(const Matrix& initpose) {
     pose=initpose;
     obstacle_exists=false;
     setColor(226 / 255.0, 103 / 255.0, 66 / 255.0);
@@ -230,7 +230,7 @@ class RaceGround{
     trackLength=0.0;
   }
 
-  virtual void create() override {
+  virtual void create() {
     // create raceground space and add it to the top level space
     raceground_space = space;
         //raceground_space = dSimpleSpaceCreate (space);
@@ -238,15 +238,15 @@ class RaceGround{
     // todo:
     // go through all list elements
     // draw them all by there own draw function
-    for(list<AbstractTrackSection*>::iterator it = SegmentList.begin();it!= SegmentList.end(); ++it)  override {
+    for(list<AbstractTrackSection*>::iterator it = SegmentList.begin();it!= SegmentList.end(); ++it)  {
       // call the create function of the segment
       (*it)->create(raceground_space);
     }
   };
 
 
-  virtual void destroy() override {
-    for(list<AbstractTrackSection*>::iterator it = SegmentList.begin();it!= SegmentList.end(); ++it)  override {
+  virtual void destroy() {
+    for(list<AbstractTrackSection*>::iterator it = SegmentList.begin();it!= SegmentList.end(); ++it)  {
       // call the create function of the segment
       (*it)->destroy();
     }

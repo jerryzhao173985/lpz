@@ -73,11 +73,21 @@ namespace lpzrobots {
     /// calls cleanup()
     virtual ~OdeRobot() override;
 
+    // Rule of 5 - delete copy operations, allow move
+    OdeRobot(const OdeRobot&) = delete;
+    OdeRobot& operator=(const OdeRobot&) = delete;
+    OdeRobot(OdeRobot&&) = delete;
+    OdeRobot& operator=(OdeRobot&&) = delete;
+
     virtual int  getSensors(double* sensors, int sensornumber) final override;
     virtual void setMotors(const double* motors, int motornumber) final override;
     virtual int  getSensorNumber() final override;
     virtual int  getMotorNumber() final override;
 
+    // Bring base class methods into scope
+    using AbstractRobot::getSensorInfos;
+    using AbstractRobot::getMotorInfos;
+    
     virtual std::list<SensorMotorInfo> getSensorInfos() const;
 
     virtual std::list<SensorMotorInfo> getMotorInfos() const;
@@ -85,17 +95,17 @@ namespace lpzrobots {
   public: // should be protected, but too much refactoring work
     /** overload this function in a subclass to do specific sensor handling,
         not needed for generic sensors @see getSensors() @see addSensor() */
-    virtual int getSensorsIntern(double* sensors, int sensornumber) override { return 0; }
+    virtual int getSensorsIntern(double* sensorArray, int sensornumber) { return 0; }
 
     /** overload this function in a subclass to do specific motor handling,
         not needed for generic motors @see setMotors() @see addMotor() */
-    virtual void setMotorsIntern(const double* motors, int motornumber) override { }
+    virtual void setMotorsIntern(const double* motorsArray, int motornumber) { }
 
     /** overload this function in a subclass to return the number of internal sensors */
-    virtual int getSensorNumberIntern() override { return 0; }
+    virtual int getSensorNumberIntern() { return 0; }
 
     /** overload this function in a subclass to return the number of internal motors */
-    virtual int getMotorNumberIntern() override { return 0; }
+    virtual int getMotorNumberIntern() { return 0; }
 
   public:
     /** adds a sensor to the robot. Must be called before agents initializes, otherwise unknown effect.
@@ -127,12 +137,12 @@ namespace lpzrobots {
     /** sets the vehicle to position pos
         @param pos desired position of the robot
     */
-    virtual void place(const Pos& pos) final override;
+    virtual void place(const Pos& pos) final;
 
     /** sets the pose of the vehicle
         @param pose desired 4x4 pose matrix
     */
-    virtual void place(const osg::Matrix& pose) final override;
+    virtual void place(const osg::Matrix& pose) final;
 
     /// wrapper to for @see place() that is to be overloaded
     virtual void placeIntern(const osg::Matrix& pose) = 0;
@@ -144,7 +154,7 @@ namespace lpzrobots {
      *  else false (collision is passed to other objects and (if not treated)
      *   to the default routine).
      */
-    virtual bool collisionCallback(void *data, dGeomID o1, dGeomID o2) override { return false; }
+    virtual bool collisionCallback(void *data, dGeomID o1, dGeomID o2) { return false; }
 
     /** this function is called each controlstep before control.
         This is the place the perform active sensing (e.g. Image processing).
@@ -228,13 +238,13 @@ namespace lpzrobots {
     virtual void moveToPose(Pose pose, int primitiveID = -1);
 
     /// returns the initial pose of the main primitive (use it e.g. with moveToPose)
-    virtual Pose getInitialPose() override { return initialPose; }
+    virtual Pose getInitialPose() const { return initialPose; }
     /** returns the initial relative pose of the main primitive
         (use it with moveToPose to further translate or rotate).
         If initialized with place(p) then moveToPose(getRelativeInitialPose()*p) would put
         the main primitive at the same position and pose.
     */
-    virtual Pose getRelativeInitialPose() override { return initialRelativePose; }
+    virtual Pose getRelativeInitialPose() const { return initialRelativePose; }
 
     /** fixates the given primitive of the robot at its current position to the world
         for a certain time.

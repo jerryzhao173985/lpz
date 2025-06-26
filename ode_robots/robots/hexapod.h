@@ -32,10 +32,13 @@
 #include <ode_robots/oderobot.h>
 #include <ode_robots/raysensorbank.h>
 #include <ode_robots/contactsensor.h>
+#include <vector>
+#include <array>
+#include <memory>
 
 namespace lpzrobots {
 
-  class Primitive{
+  struct HexapodConf {
     double size = 0;       ///< scaling factor for robot (diameter of body)
     double legLength = 0;  ///< length of the legs in units of size
     int    legNumber = 0;  ///<  number of snake elements
@@ -70,7 +73,7 @@ namespace lpzrobots {
     double whiskerSpread = 0;   ///< angle by which the wiskers are spread
 
     double T = 0; ///< T is the for the time for calculating the cost of transport over time
-    double *v;
+    std::vector<double> v;
 
     bool ignoreInternalCollisions = false;
 
@@ -78,7 +81,7 @@ namespace lpzrobots {
 
     bool useContactSensors = false;
     matrix::Matrix m;
-    int *legContacts;
+    std::vector<int> legContacts;
     double irSensors = 0;
     bool irFront = false;
     bool irBack = false;
@@ -99,7 +102,7 @@ namespace lpzrobots {
   };
 
 
-  class Hexapod{
+  class Hexapod : public OdeRobot, public Inspectable {
   public:
 
     /**
@@ -111,9 +114,9 @@ namespace lpzrobots {
     Hexapod(const OdeHandle& odeHandle, const OsgHandle& osgHandle, const HexapodConf& conf,
                const std::string& name);
 
-    virtual ~Hexapod() override { destroy(); }
+    virtual ~Hexapod() { destroy(); }
 
-    static HexapodConf getDefaultConf() const {
+    static HexapodConf getDefaultConf() {
       HexapodConf c;
       c.size               = 1;
       c.width              = 1.0/3.0; //1.0/1.5
@@ -122,7 +125,7 @@ namespace lpzrobots {
       c.legLength          = 0.6;
       c.percentageBodyMass = 0.7;
       c.mass               = 1.0;
-      c.v                  = new double[1];
+      c.v.resize(1);
       c.coxaPower          = 1;
       c.coxaJointLimitV    = M_PI/8.0; ///< angle range for vertical direction of legs
       c.coxaJointLimitH    = M_PI/4.0;
@@ -154,7 +157,7 @@ namespace lpzrobots {
       c.calculateEnergy = false;
 
       c.useContactSensors  = false;
-      c.legContacts        = new int[6];
+      c.legContacts.resize(6);
       c.irSensors          = false;
       c.irFront            = false;
       c.irBack             = false;
@@ -172,14 +175,14 @@ namespace lpzrobots {
     /** sets the pose of the vehicle
         @param pose desired pose matrix
     */
-    virtual void placeIntern(const osg::Matrix& pose);
+    virtual void placeIntern(const osg::Matrix& pose) override;
 
 
     /** this function is called in each timestep. It should perform robot-internal checks,
         like space-internal collision detection, sensor resets/update etc.
         @param globalData structure that contains global data from the simulation environment
     */
-    virtual void explicit explicit doInternalStuff(const GlobalData& globalData);
+    virtual void doInternalStuff(const GlobalData& globalData) override;
 
 
     /**
@@ -195,16 +198,16 @@ namespace lpzrobots {
 
     virtual double costOfTransport(double E, double W, double V, double T);
 
-    virtual double getMassOfRobot() const;
+    virtual double getMassOfRobot();
 
-    virtual const double* getPosition() const {
-            return position;
+    [[nodiscard]] virtual Position getPosition() const override {
+            return Position(position[0], position[1], position[2]);
     }
 
     /******** CONFIGURABLE ***********/
-    virtual void explicit explicit notifyOnChange(const paramkey& key);
+    virtual void notifyOnChange(const paramkey& key) override;
 
-    virtual void explicit explicit resetMotorPower(double power);
+    virtual void resetMotorPower(double power);
 
     virtual double getPower() const;
 
@@ -228,25 +231,25 @@ public:
 
   public:
     double costOfTran = 0;
-    double* energyOneStep; ///< energy consumption for one time step
+    std::vector<double> energyOneStep; ///< energy consumption for one time step
     double E_t = 0;        ///< energy consumption over a period t;
     bool recordGait = false;
-    double *heights;
-    double *angles;
+    std::array<double, 6> heights;
+    std::array<double, 12> angles;
   private:
     double hcorrection = 0;
-    bool *dones;
+    std::array<bool, 6> dones;
     bool check = false;
     double t = 0;
     double timeCounter = 0;
-    double *position;
+    std::array<double, 3> position;
     std::vector<dReal*> pos_record;
-    dMass *massOfobject;
+    std::unique_ptr<dMass> massOfobject;
     bool getPos1 = false;
     double speed = 0;
 
     std::vector<Leg> legContact;
-    Leg* legContactArray;
+    std::array<Leg, 6> legContactArray;
     std::vector<dGeomID> footIDs;
   protected:
     // some objects explicitly needed for ignored collision pairs

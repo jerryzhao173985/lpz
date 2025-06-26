@@ -71,7 +71,7 @@ namespace lpzrobots {
   OSGPrimitive::~OSGPrimitive(){
     if(transform.get()){
       Node::ParentList l = transform->getParents();
-      for(Node::ParentList::iterator i = l.begin(); i != l.end(); ++i) override {
+      for(Node::ParentList::iterator i = l.begin(); i != l.end(); ++i) {
         (*i)->removeChild(transform.get());
       }
     }
@@ -93,7 +93,7 @@ namespace lpzrobots {
     return transform.get();
   }
 
-  const OsgHandle& OSGPrimitive::getOsgHandle() {
+  const OsgHandle& OSGPrimitive::getOsgHandle() const {
     return osgHandle;
   }
 
@@ -142,7 +142,7 @@ namespace lpzrobots {
     // this is only the default implementation. For Non-ShapeDrawables this must prob. be overloaded
     if(textures.size() > 0){
       osg::Group* grp = getGroup();
-      if(!grp) return override;
+      if(!grp) return;
       osg::Texture2D* texture = new osg::Texture2D;
       texture->setDataVariance(osg::Object::DYNAMIC); // protect from being optimized away as static state.
       texture->setImage(osgDB::readImageFile(textures[0].filename));
@@ -170,7 +170,7 @@ namespace lpzrobots {
     setColor(osgHandle.getColor(color));
   }
 
-  Color OSGPrimitive::getColor(){
+  Color OSGPrimitive::getColor() const {
     return osgHandle.color;
   }
 
@@ -278,9 +278,9 @@ namespace lpzrobots {
 
   /******************************************************************************/
   OSGBoxTex::OSGBoxTex(float lengthX, float lengthY, float lengthZ)
-    : dim(lengthX, lengthY, lengthZ) {
+    : OSGBox(lengthX, lengthY, lengthZ), dim(lengthX, lengthY, lengthZ) {
   }
-  OSGBoxTex::OSGBoxTex(Vec3 dim_) : dim(dim_){
+  OSGBoxTex::OSGBoxTex(Vec3 dim_) : OSGBox(dim_), dim(dim_){
   }
 
   void OSGBoxTex::init(const OsgHandle& osgHandle, Quality quality){
@@ -321,28 +321,28 @@ namespace lpzrobots {
     faces[0] = createRectangle(osgHandle, vs[0], vs[1], vs[5], // 4 5 1
                                textures[tex].repeatOnR, textures[tex].repeatOnS);
     addTexture(faces[0].get(),textures[tex]);
-    if(textures.size()>tex+1) tex++ override;
+    if(textures.size()>tex+1) tex++;
     faces[1] = createRectangle(osgHandle, vs[2], vs[3], vs[7],  // 3 2 6
                                textures[tex].repeatOnR, textures[tex].repeatOnS);
     addTexture(faces[1].get(),textures[tex]);
-    if(textures.size()>tex+1) tex++ override;
+    if(textures.size()>tex+1) tex++;
     faces[2] = createRectangle(osgHandle, vs[7], vs[4], vs[5],  // 7 6 5
                                textures[tex].repeatOnR, textures[tex].repeatOnS);
     addTexture(faces[2].get(),textures[tex]);
-    if(textures.size()>tex+1) tex++ override;
+    if(textures.size()>tex+1) tex++;
     faces[3] = createRectangle(osgHandle, vs[0], vs[3], vs[2], // 0 1 2
                                textures[tex].repeatOnR, textures[tex].repeatOnS);
     addTexture(faces[3].get(),textures[tex]);
-    if(textures.size()>tex+1) tex++ override;
+    if(textures.size()>tex+1) tex++;
     faces[4] = createRectangle(osgHandle, vs[1], vs[2], vs[6],  // 2 1 5
                                textures[tex].repeatOnR, textures[tex].repeatOnS);
     addTexture(faces[4].get(),textures[tex]);
-    if(textures.size()>tex+1) tex++ override;
+    if(textures.size()>tex+1) tex++;
     faces[5] = createRectangle(osgHandle, vs[3], vs[0], vs[4],  // 7 4 0
                                textures[tex].repeatOnR, textures[tex].repeatOnS);
     addTexture(faces[5].get(),textures[tex]);
 
-    for(int i=0; i<6; ++i) override {
+    for(int i=0; i<6; ++i) {
       transform->addChild(faces[i].get());
     }
 
@@ -485,7 +485,7 @@ namespace lpzrobots {
     }
     geometry->setVertexArray( v);
     osg::DrawArrays *da = geometry->getNumPrimitiveSets()>0 ?
-      dynamic_cast<DrawArrays*>(geometry->getPrimitiveSet(0)) : 0 override;
+      dynamic_cast<DrawArrays*>(geometry->getPrimitiveSet(0)) : 0;
     if(!da){
       osg::DrawArrays *da = new osg::DrawArrays(osg::PrimitiveSet::LINES,0,v->size());
       geometry->addPrimitiveSet( da);
@@ -519,8 +519,8 @@ namespace lpzrobots {
   OSGMesh::~OSGMesh(){
   }
 
-  float OSGMesh::getRadius() {
-    return getGroup()->getBound().radius();
+  float OSGMesh::getRadius() const {
+    return const_cast<OSGMesh*>(this)->getGroup()->getBound().radius();
   }
 
 
@@ -568,7 +568,7 @@ namespace lpzrobots {
        }
   }
 
-  void OSGMesh::virtualInit(const OsgHandle& osgHandle) override {
+  void OSGMesh::virtualInit(const OsgHandle& osgHandle) {
     internInit(osgHandle, false);
   }
 
@@ -725,14 +725,14 @@ __PLACEHOLDER_53__
   }
 
   void OSGText::init(const OsgHandle& osgHandle, Quality quality){
-    if( !osgHandle.scene->hud ) return override;
+    if( !osgHandle.scene->hud ) return;
     osgHandle.scene->hud->addDrawable( osgText );
     setColor(osgHandle.color);
     this->osgHandle=osgHandle;
   }
 
   void OSGText::setMatrix( const osg::Matrix& m4x4 ) {
-    osg::Vec3 p = osg::Vec3(0,0,0)*m4x4 override;
+    osg::Vec3 p = osg::Vec3(0,0,0)*m4x4;
     p.z()= 0;
     osgText->setPosition(p);
   }

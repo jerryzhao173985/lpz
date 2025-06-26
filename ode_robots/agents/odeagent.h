@@ -26,13 +26,17 @@
 
 #include <selforg/agent.h>
 #include <selforg/storeable.h>
+#include <selforg/trackrobots.h>
+#include <selforg/plotoption.h>
 #include "oderobot.h"
 #include "osgprimitive.h"
 #include "primitive.h"
 #include "operator.h"
 
 namespace lpzrobots {
-  class Joint{
+  class Joint;     // forward declaration
+  
+  class TraceDrawer{
   public:
     TraceDrawer() : obj(0), initialized(false) {}
     Position lastpos;
@@ -42,78 +46,84 @@ namespace lpzrobots {
     void init();
     void close();
     /// actually write the log files and stuff
-    void explicit explicit track(double time);
+    void track(double time);
     /// draw the trace
-    void explicit explicit drawTrace(const GlobalData& global);
+    void drawTrace(GlobalData& global);
   protected:
     bool initialized = false;
     std::list<osg::Vec3> pnts;
   };
 
 
-  using PlotOptionList = std::list<PlotOption>;
+  // PlotOptionList is already defined in globaldata.h
   using OperatorList = std::list<Operator*>;
   using TraceDrawerList = std::list<TraceDrawer>;
 
   /** Specialised agent for ode robots
    */
-  class OdeAgent{
+  class OdeAgent : public Agent, public Storeable {
   public:
 
     /** @deprecated obsolete provide globaldata, see the other constructors
      */
-    OdeAgent(const PlotOption& plotOption = PlotOption(NoPlot), double noisefactor = 1, const std::string& name = "OdeAgent", const std::string& revision = "$ID$") __attribute__ ((deprecated));
+    explicit OdeAgent(const ::PlotOption& plotOption = ::PlotOption(::PlotMode::NoPlot), double noisefactor = 1, const std::string& name = "OdeAgent", const std::string& revision = "$ID$") __attribute__ ((deprecated));
     /** @deprecated obsolete provide globaldata, see the other constructors
      */
-    OdeAgent(const std::list<PlotOption>& plotOptions, double noisefactor = 1, const std::string& name = "OdeAgent", const std::string& revision = "$ID$") __attribute__ ((deprecated));
+    OdeAgent(const std::list<::PlotOption>& plotOptions, double noisefactor = 1, const std::string& name = "OdeAgent", const std::string& revision = "$ID$") __attribute__ ((deprecated));
     /** The plotoptions are taken from globaldata
         @param noisefactor factor for sensor noise for this agent
      */
     OdeAgent(const GlobalData& globalData, double noisefactor = 1, const std::string& name = "OdeAgent", const std::string& revision = "");
     /** Provided for convinience. A single plotoption is used as given by plotOption */
-    OdeAgent(const GlobalData& globalData, const PlotOption& plotOption, double noisefactor = 1, const std::string& name = "OdeAgent", const std::string& revision = "");
+    OdeAgent(const GlobalData& globalData, const ::PlotOption& plotOption, double noisefactor = 1, const std::string& name = "OdeAgent", const std::string& revision = "");
     /** Provided for convinience. The plotoptions are taken from the given plotOptions
         (and not from globaldata, if you wish to overwrite them)
     */
     OdeAgent(const GlobalData& globalData, const PlotOptionList& plotOptions, double noisefactor = 1, const std::string& name = "OdeAgent", const std::string& revision = "");
-    virtual ~OdeAgent() override;
+    virtual ~OdeAgent();
 
+    // Bring base class init methods into scope
+    using Agent::init;
+    
     /** initializes the object with the given controller, robot and wiring
         and initializes plotoptionengine
     */
     virtual bool init(AbstractController* controller, OdeRobot* robot, AbstractWiring* wiring,
-                      long int seed = 0) override {
+                      long int seed = 0) {
       return Agent::init(controller, robot, wiring, seed);
     }
 
-    virtual void step(double noise, double time);
+    virtual void step(double noise, double time) override;
 
     /**
-     * Special function for the class Simulation{ return static_cast<OdeRobot*>(robot);}
+     * Returns a pointer to the robot.
+     */
+    virtual OdeRobot* getRobot() { return static_cast<OdeRobot*>(robot);}
+    
     /**
      * Returns a const pointer to the robot.
      */
-    virtual const const OdeRobot* getRobot() const const { return static_cast<OdeRobot*>(robot);}
+    virtual const OdeRobot* getRobot() const override { return static_cast<OdeRobot*>(robot);}
 
     /** @deprecated use TrackRobot parameters */
-    virtual int getTraceLength() override {return 0;}
+    virtual int getTraceLength() {return 0;}
 
     /** @deprecated use TrackRobot parameters */
-    virtual bool setTraceLength(int tracelength) override {return true;}
+    virtual bool setTraceLength(int tracelength) {return true;}
 
     /** @deprecated use TrackRobot parameters */
-    virtual void setTraceThickness(int tracethickness) override { }
+    virtual void setTraceThickness(int tracethickness) { }
 
     /// adds tracking for individual primitives
     virtual void addTracking(unsigned int primitiveIndex,const TrackRobot& trackrobot,
                              const Color& color);
-    virtual void explicit explicit setTrackOptions(const TrackRobot& trackrobot);
-    virtual bool stopTracking();
+    virtual void setTrackOptions(const TrackRobot& trackrobot) override;
+    virtual bool stopTracking() override;
 
 
     /****** STOREABLE **********/
     virtual bool store(FILE* f) const override;
-    virtual bool explicit explicit restore(FILE* f);
+    virtual bool restore(FILE* f) override;
 
 
     /****** OPERATORS *********/
@@ -123,9 +133,9 @@ namespace lpzrobots {
     /** removes the given operator: it is _not_ deleted (memory wise)
         @return true on success
      */
-    virtual bool explicit explicit removeOperator(Operator* o);
+    virtual bool removeOperator(Operator* o);
     /// removes (and deletes) all operators
-    virtual void removeOperators();
+    void removeOperators();
 
     /** fixates the given primitive of the robot at its current position to the world
         for a certain time.
@@ -135,17 +145,17 @@ namespace lpzrobots {
      */
     virtual void fixateRobot(const GlobalData& global, int primitiveID=-1, double time = 0);
     /// release the robot in case it is fixated and turns true in this case
-    virtual bool explicit explicit unfixateRobot(const GlobalData& global);
+    virtual bool unfixateRobot(const GlobalData& global);
 
   protected:
 
     /**
      * continues the trace by one segment
      */
-    virtual void explicit explicit trace(const GlobalData& global);
+    virtual void trace(GlobalData& global);
 
   private:
-    void explicit explicit constructor_helper(const GlobalData* globalData);
+    void constructor_helper(const GlobalData* globalData);
 
     TraceDrawer mainTrace;
 

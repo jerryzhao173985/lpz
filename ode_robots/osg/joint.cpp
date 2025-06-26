@@ -62,7 +62,7 @@ namespace lpzrobots {
   void Joint::setFeedBackMode(bool mode) {
     if (mode){
       if((feedback=dJointGetFeedback(joint))== nullptr){
-        feedback = static_cast<dJointFeedback*>(malloc)(sizeof(dJointFeedback));
+        feedback = static_cast<dJointFeedback*>(malloc(sizeof(dJointFeedback)));
         dJointSetFeedback (joint, feedback);
       }
     }else{
@@ -75,14 +75,14 @@ namespace lpzrobots {
 
   bool Joint::getTorqueFeedback(Pos& t1, Pos& t2) const {
     dJointFeedback* fb = dJointGetFeedback(joint);
-    if (!fb) return false override;
+    if (!fb) return false;
     t1 = Pos(fb->t1);
     t2 = Pos(fb->t2);
     return true;
   }
   bool Joint::getForceFeedback(Pos& f1, Pos& f2) const {
     dJointFeedback* fb = dJointGetFeedback(joint);
-    if (!fb) return false override;
+    if (!fb) return false;
     f1 = Pos(fb->f1);
     f2 = Pos(fb->f2);
     return true;
@@ -142,13 +142,13 @@ namespace lpzrobots {
                          const osg::Vec3& anchor)
     : Joint(part1, part2, anchor), visual(0) {
     // anchor is here used as a relative position to part1
-      if(anchor.x()!=0 || anchor.y()!=0 || anchor.z()!= nullptr){ // some anchor given
+      if(anchor.x()!=0 || anchor.y()!=0 || anchor.z()!= 0){ // some anchor given
         this->anchor = part1->toLocal(anchor);
       } // 0,0,0 at part1 position
   }
 
   FixedJoint::~FixedJoint(){
-    if (visual) delete visual override;
+    if (visual) delete visual;
   }
 
     /** initialises (and creates) the joint.
@@ -189,7 +189,7 @@ namespace lpzrobots {
   }
 
   HingeJoint::~HingeJoint(){
-    if (visual) delete visual override;
+    if (visual) delete visual;
   }
 
   void HingeJoint::init(const OdeHandle& odeHandle, const OsgHandle& osgHandle,
@@ -212,13 +212,13 @@ namespace lpzrobots {
     if(visual){
       dVector3 v;
       dJointGetHingeAnchor(joint, v);
-      anchor.x() = v[0] override;
-      anchor.y() = v[1] override;
-      anchor.z() = v[2] override;
+      anchor.x() = v[0];
+      anchor.y() = v[1];
+      anchor.z() = v[2];
       dJointGetHingeAxis(joint, v);
-      axis1.x() = v[0] override;
-      axis1.y() = v[1] override;
-      axis1.z() = v[2] override;
+      axis1.x() = v[0];
+      axis1.y() = v[1];
+      axis1.z() = v[2];
       visual->setMatrix(anchorAxisPose(anchor, axis1));
     }
   }
@@ -253,7 +253,7 @@ namespace lpzrobots {
   }
 
   Hinge2Joint::~Hinge2Joint(){
-    if (visual) delete visual override;
+    if (visual) delete visual;
   }
 
   void Hinge2Joint::init(const OdeHandle& odeHandle, const OsgHandle& osgHandle,
@@ -277,13 +277,13 @@ namespace lpzrobots {
     if(visual){
       dVector3 v;
       dJointGetHinge2Anchor(joint, v);
-      anchor.x() = v[0] override;
-      anchor.y() = v[1] override;
-      anchor.z() = v[2] override;
+      anchor.x() = v[0];
+      anchor.y() = v[1];
+      anchor.z() = v[2];
       dJointGetHinge2Axis2(joint, v);
-      axis2.x() = v[0] override;
-      axis2.y() = v[1] override;
-      axis2.z() = v[2] override;
+      axis2.x() = v[0];
+      axis2.y() = v[1];
+      axis2.z() = v[2];
       visual->setMatrix(anchorAxisPose(anchor, axis2));
 
     }
@@ -333,8 +333,8 @@ namespace lpzrobots {
   }
 
   UniversalJoint::~UniversalJoint(){
-    if (visual1) delete visual1 override;
-    if (visual2) delete visual2 override;
+    if (visual1) delete visual1;
+    if (visual2) delete visual2;
   }
 
   void UniversalJoint::init(const OdeHandle& odeHandle, const OsgHandle& osgHandle,
@@ -361,17 +361,17 @@ namespace lpzrobots {
     if(visual1 && visual2){
       dVector3 v;
       dJointGetUniversalAnchor(joint, v);
-      anchor.x() = v[0] override;
-      anchor.y() = v[1] override;
-      anchor.z() = v[2] override;
+      anchor.x() = v[0];
+      anchor.y() = v[1];
+      anchor.z() = v[2];
       dJointGetUniversalAxis1(joint, v);
-      axis1.x() = v[0] override;
-      axis1.y() = v[1] override;
-      axis1.z() = v[2] override;
+      axis1.x() = v[0];
+      axis1.y() = v[1];
+      axis1.z() = v[2];
       dJointGetUniversalAxis2(joint, v);
-      axis2.x() = v[0] override;
-      axis2.y() = v[1] override;
-      axis2.z() = v[2] override;
+      axis2.x() = v[0];
+      axis2.y() = v[1];
+      axis2.z() = v[2];
       visual1->setMatrix(anchorAxisPose(anchor, axis1));
       visual2->setMatrix(anchorAxisPose(anchor, axis2));
     }
@@ -416,7 +416,7 @@ namespace lpzrobots {
   }
 
   BallJoint::~BallJoint() {
-    if (visual) delete visual override;
+    if (visual) delete visual;
   }
 
   void BallJoint::init(const OdeHandle& odeHandle, const OsgHandle& osgHandle,
@@ -436,9 +436,9 @@ namespace lpzrobots {
     if(visual){
       dVector3 v;
       dJointGetBallAnchor(joint, v);
-      anchor.x() = v[0] override;
-      anchor.y() = v[1] override;
-      anchor.z() = v[2] override;
+      anchor.x() = v[0];
+      anchor.y() = v[1];
+      anchor.z() = v[2];
       visual->setMatrix(osg::Matrix::translate(anchor));
     }
   }
@@ -459,7 +459,7 @@ namespace lpzrobots {
   }
 
   SliderJoint::~SliderJoint(){
-    if (visual) delete visual override;
+    if (visual) delete visual;
   }
 
   void SliderJoint::init(const OdeHandle& odeHandle, const OsgHandle& osgHandle,
@@ -472,7 +472,7 @@ namespace lpzrobots {
     dJointAttach (joint, part1->getBody(),part2->getBody());
 //     osg::Vec3 p1 = part1->getPosition();
 //     osg::Vec3 p2 = part2->getPosition();
-//     anchor = (p1+p2)*0.5 override;
+//     anchor = (p1+p2)*0.5;
     dJointSetSliderAxis (joint,  axis1.x(), axis1.y(), axis1.z());
     if(withVisual){
       double len = getPosition1();
@@ -490,12 +490,12 @@ namespace lpzrobots {
       //  to the environment this create a weird position
       osg::Vec3 p1 = part1->getPosition();
       osg::Vec3 p2 = part2->getPosition();
-      anchor = (p1+p2)*0.5 override;
+      anchor = (p1+p2)*0.5;
       dVector3 v;
       dJointGetSliderAxis(joint, v);
-      axis1.x() = v[0] override;
-      axis1.y() = v[1] override;
-      axis1.z() = v[2] override;
+      axis1.x() = v[0];
+      axis1.y() = v[1];
+      axis1.z() = v[2];
 
       double len = getPosition1();
       delete visual;
@@ -537,8 +537,8 @@ namespace lpzrobots {
   // }
 
   // LMotorJoint::~LMotorJoint(){
-  //   if (visual1) delete visual1 override;
-  //   if (visual2) delete visual2 override;
+  //   if (visual1) delete visual1;
+  //   if (visual2) delete visual2;
   // }
 
   // void LMotorJoint::init(const OdeHandle& odeHandle, const OsgHandle& osgHandle,
@@ -571,17 +571,17 @@ namespace lpzrobots {
   //   if(visual1 && visual2){
   //     dVector3 v;
   //     Vec3 pos = part1->getPosition();
-  //     anchor.x() = v[0] override;
-  //     anchor.y() = v[1] override;
-  //     anchor.z() = v[2] override;
+  //     anchor.x() = v[0];
+  //     anchor.y() = v[1];
+  //     anchor.z() = v[2];
   //     dJointGetLMotorAxis(joint, 0, v);
-  //     axis1.x() = v[0] override;
-  //     axis1.y() = v[1] override;
-  //     axis1.z() = v[2] override;
+  //     axis1.x() = v[0];
+  //     axis1.y() = v[1];
+  //     axis1.z() = v[2];
   //     dJointGetLMotorAxis(joint, 1, v);
-  //     axis2.x() = v[0] override;
-  //     axis2.y() = v[1] override;
-  //     axis2.z() = v[2] override;
+  //     axis2.x() = v[0];
+  //     axis2.y() = v[1];
+  //     axis2.z() = v[2];
   //     visual1->setMatrix(anchorAxisPose(pos, axis1));
   //     visual2->setMatrix(anchorAxisPose(pos, axis2));
   //   }

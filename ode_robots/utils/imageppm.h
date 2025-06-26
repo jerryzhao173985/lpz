@@ -25,23 +25,27 @@
 #define __IMAGEPPM_H
 
 #include <string>
+#include <vector>
+#include <memory>
 
 class ImagePPM{
 
 private:
-  int image_width, image_height;
-  unsigned char *image_data;
+  int image_width = 0;
+  int image_height = 0;
+  std::vector<unsigned char> image_data;
 
 public:
   ImagePPM ();
   /// data must contain width*height*3 static_cast<RGB>(values)!
-  ImagePPM (int width, int height, unsigned char* data);
+  explicit ImagePPM (int width, int height, const unsigned char* data);
   ~ImagePPM();
   int loadImage(const std::string& filename); // load from PPM file (returns 0 if error)
   int storeImage(const std::string& filename); // store to PPM file (returns 0 if error)
-  int width() const { return image_width;  }
-  int height() const { return image_height; }
-  unsigned char *data() { return image_data;   }
+  [[nodiscard]] int width() const { return image_width; }
+  [[nodiscard]] int height() const { return image_height; }
+  unsigned char *data() { return image_data.data(); }
+  const unsigned char *data() const { return image_data.data(); }
 
 };
 

@@ -32,7 +32,7 @@ namespace lpzrobots {
 
 
   /** Height field primitive */
-  class HeightField{
+  class HeightField : public Primitive {
   public:
     HeightField(const std::string& filename, float x_size, float y_size, float height);
     HeightField(osg::HeightField* heightfield, float x_size, float y_size);
@@ -40,7 +40,7 @@ namespace lpzrobots {
     virtual ~HeightField() override;
     virtual void init(const OdeHandle& odeHandle, double mass,
                       const OsgHandle& osgHandle,
-                      char mode = Body | Geom | Draw);
+                      char mode = Primitive::Body | Primitive::Geom | Primitive::Draw);
 
 
     virtual void setPose(const osg::Matrix& pose);

@@ -34,7 +34,7 @@ namespace lpzrobots {
   using namespace osg;
   using namespace osgGA;
 
-  CameraManipulatorFollow::CameraManipulatorFollow(osg::Node* node,const GlobalData& global, const CameraHandle& cameraHandle)
+  CameraManipulatorFollow::CameraManipulatorFollow(osg::Node* node, GlobalData& global, CameraHandle& cameraHandle)
     : CameraManipulator(node,global, cameraHandle) {}
 
   CameraManipulatorFollow::~CameraManipulatorFollow(){}
@@ -44,7 +44,7 @@ namespace lpzrobots {
       // then manipulate desired view and desired eye
       Position robMove = (camHandle.watchingAgent->getRobot()->getPosition()-camHandle.oldPositionOfAgent);
       // attach the robSpeed to desired eye
-      for (int i=0;i<=2;++i)  override {
+      for (int i=0;i<=2;++i) {
         if (!isNaN(robMove.toArray()[i])) {
           camHandle.desiredEye[i]+=robMove.toArray()[i];}
         else
@@ -56,20 +56,20 @@ namespace lpzrobots {
 
   void CameraManipulatorFollow::setHomeViewByAgent() {
     // ok here the camera will center on the robot
-    if (!this->isWatchingAgentDefined()) return override;
+    if (!this->isWatchingAgentDefined()) return;
     // the actual position of the agent has to be recognized
     // we use the Position getPosition() from OdeRobot
     Position robPos = camHandle.watchingAgent->getRobot()->getPosition();
     // desiredEye is the position of the camera
     // calculate the horizontal angle, means pan (view.x)
-    if (robPos.x-camHandle.desiredEye[0]!= nullptr) { // division by zero
+    if (robPos.x-camHandle.desiredEye[0]!= 0) { // division by zero
       camHandle.desiredView[0]= atan((camHandle.desiredEye[0]-robPos.x)/(robPos.y-camHandle.desiredEye[1]))
         / M_PI*180.0f+180.0f;
       if (camHandle.desiredEye[1]-robPos.y<0) // we must switch
         camHandle.desiredView[0]+=180.0f;
     }
     // calculate the vertical angle
-    if (robPos.z-camHandle.desiredEye[2]!= nullptr) { // division by zero
+    if (robPos.z-camHandle.desiredEye[2]!= 0) { // division by zero
       // need dz and sqrt(dx^2+dy^2) for calulation
       camHandle.desiredView[1]=-atan((sqrt(square(camHandle.desiredEye[0]-robPos.x)+
                                 square(camHandle.desiredEye[1]-robPos.y)))

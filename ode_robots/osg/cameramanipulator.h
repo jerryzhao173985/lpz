@@ -41,20 +41,26 @@
 
 namespace lpzrobots {
   // forward declaration
-  class OSGPrimitive{
+  class OSGPrimitive;
+  class GlobalData;
+
+  /**
+   * Camera Manipulator for positioning the camera
+   */
+  class CameraManipulator : public osgGA::CameraManipulator, public Callbackable {
     public:
 
-      CameraManipulator(osg::Node* node, const GlobalData& global, const CameraHandle& cameraHandle);
+      CameraManipulator(osg::Node* node, GlobalData& global, CameraHandle& cameraHandle);
 
 
       /** returns the classname of the manipulator
           it's NECCESSARY to define this funtion, otherwise
           the new manipulator WON'T WORK! (but ask me not why)
       */
-      virtual const char* className() const { return "Default Camera"; }
+      virtual const char* className() const override { return "Default Camera"; }
 
       /** set the position of the matrix manipulator using a 4x4 Matrix.*/
-      virtual void setByMatrix(const osg::Matrixd& matrix);
+      virtual void setByMatrix(const osg::Matrixd& matrix) override;
 
       /** set the position of the matrix manipulator using a 4x4 Matrix.*/
       virtual void setByInverseMatrix(const osg::Matrixd& matrix) override {
@@ -77,21 +83,21 @@ namespace lpzrobots {
       /*
         virtual void computeMovement();*/
 
-      virtual void setNodestatic_cast<osg::Node*>(override);
+      virtual void setNode(osg::Node* node) override;
 
       virtual const osg::Node* getNode() const override;
 
-      virtual osg::Node* getNode();
+      virtual osg::Node* getNode() override;
 
       /// set the home position of the camera. (and place it there)
       virtual void setHome(const osg::Vec3& eye, const osg::Vec3& view);
 
       /// place the camera at its home position
-      virtual void home(const osgGA::GUIEventAdapter& ea,osgGA::GUIActionAdapter& us);
+      virtual void home(const osgGA::GUIEventAdapter& ea,osgGA::GUIActionAdapter& us) override;
 
-      virtual void init(const osgGA::GUIEventAdapter& ea,osgGA::GUIActionAdapter& us);
+      virtual void init(const osgGA::GUIEventAdapter& ea,osgGA::GUIActionAdapter& us) override;
 
-      virtual bool handle(const osgGA::GUIEventAdapter& ea,osgGA::GUIActionAdapter& us);
+      virtual bool handle(const osgGA::GUIEventAdapter& ea,osgGA::GUIActionAdapter& us) override;
 
       /** Get the keyboard and mouse usage of this manipulator.*/
       virtual void getUsage(osg::ApplicationUsage& usage) const override;
@@ -104,20 +110,20 @@ namespace lpzrobots {
       /** manipulate agent if Manipulation is active
           (should be called every simulation step)
       */
-      virtual void explicit explicit manipulateAgent( const OsgHandle& osgHandle);
+      virtual void manipulateAgent( const OsgHandle& osgHandle);
 
       /**
        * Sets the agent to be watched with the camera.
        * @param agent to set
        */
-      virtual void explicit explicit setWatchedAgent(OdeAgent* agent);
+      virtual void setWatchedAgent(OdeAgent* agent);
 
       /// returns watched agent
       virtual OdeAgent* getWatchedAgent() const;
 
       /// called if agents list changed
       virtual void doOnCallBack(BackCaller* source, BackCaller::CallbackableType type
-                                = BackCaller::DEFAULT_CALLBACKABLE_TYPE);
+                                = BackCaller::DEFAULT_CALLBACKABLE_TYPE) override;
 
     protected:
 
@@ -139,7 +145,7 @@ namespace lpzrobots {
        * This agent must be listed in the global agent list.
        * @return true if defined, otherwise false
        */
-      virtual bool isWatchingAgentDefined();
+      virtual bool isWatchingAgentDefined() const;
 
       // Internal event stack comprising last three mouse events.
       osg::ref_ptr<const osgGA::GUIEventAdapter> event_old;
@@ -164,7 +170,7 @@ namespace lpzrobots {
       /** This manages the robots, switching between them and so on
           Is normally called from handle(...)
       */
-      virtual void explicit explicit manageAgents(const int& fkey);
+      virtual void manageAgents(const int& fkey);
 
 
       /** This handles robot movements, so that the camera movemenent is right affected.

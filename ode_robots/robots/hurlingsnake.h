@@ -35,7 +35,7 @@ namespace lpzrobots {
    * Hurling snake is a string a beats.
    *
    */
-  class HurlingSnake{
+  class HurlingSnake : public OdeRobot {
   public:
     /**
      * Constructor
@@ -53,7 +53,7 @@ namespace lpzrobots {
         like sensor resets/update etc.
         @param globalData structure that contains global data from the simulation environment
     */
-    virtual void explicit explicit doInternalStuff(const GlobalData& globalData);
+    virtual void doInternalStuff(const GlobalData& globalData) override;
 
 
     /** returns actual sensorvalues
@@ -84,7 +84,7 @@ namespace lpzrobots {
     virtual int getSegmentsPosition(std::vector<Position> &poslist);
 
     /******** CONFIGURABLE ***********/
-    virtual void explicit explicit notifyOnChange(const paramkey& key);
+    virtual void notifyOnChange(const paramkey& key) override;
 
   protected:
     /** the main object of the robot, which is used for position and speed tracking */
@@ -108,9 +108,9 @@ namespace lpzrobots {
 
     Position initial_pos;    // initial position of robot
 
-    int NUM = nullptr;           /* number of beats */
-    double MASS = nullptr;           /* mass of a beats */
-    double RADIUS = nullptr;   /* sphere radius */
+    int NUM = 0;           /* number of beats */
+    double MASS = 0.0;           /* mass of a beats */
+    double RADIUS = 0.0;   /* sphere radius */
 
     //    std::list<AngularMotor*> frictionMotors;
 

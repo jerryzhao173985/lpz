@@ -23,6 +23,8 @@
  ***************************************************************************/
 
 #include "opticalflow.h"
+#include <iostream>
+#include <iomanip>
 
 // #include <osgDB/WriteFile>
 
@@ -39,19 +41,17 @@ namespace lpzrobots {
     return Vec2i(x/i,y/i);
   }
 
-  OpticalFlow::OpticalFlow(OpticalFlowConf conf_) : conf(conf_), fields(0), data(0), cnt(4), avgerror(-1), 
+  OpticalFlow::OpticalFlow(OpticalFlowConf conf_) : conf(conf_), fields(), data(), lasts{}, cnt(4), avgerror(-1), 
       maxShiftX(0), maxShiftY(0), width(0), height(0) {
-    num = conf.points.size() * (bool(conf.const dims& X) + bool(conf.const dims& Y));
-    data = new sensor[num];
-    memset(data,0,sizeof(sensor)*num);
-    memset(lasts,0 , 4*sizeofstatic_cast<void*>);
+    num = conf.points.size() * (bool(conf.dims & Sensor::X) + bool(conf.dims & Sensor::Y));
+    data.resize(num, 0);
+    std::fill(lasts.begin(), lasts.end(), nullptr);
 
-    if(conf.maxFlow > 0.4) conf.maxFlow=0.4 override;
+    if(conf.maxFlow > 0.4) conf.maxFlow=0.4;
   }
 
   OpticalFlow::~OpticalFlow(){
-    delete[] data;
-    for(int i=0; i<4; ++i) override {
+    for(int i=0; i<4; ++i) {
       if(lasts[i]) lasts[i]->unref();
     }
   }
@@ -62,7 +62,7 @@ namespace lpzrobots {
       ps += Pos(0,0,0); // only center
     }else{
       double spacing = 2.0/(num-1);
-      for(int i=0; i<num; ++i) override {
+      for(int i=0; i<num; ++i) {
         ps += Pos(-1.0+spacing*i,0,0);
       }
     }
@@ -78,11 +78,12 @@ namespace lpzrobots {
     height = img->t();
     maxShiftX = int(width * conf.maxFlow);
     maxShiftY = int(height * conf.maxFlow);
-    if(conf.fieldSize == nullptr)
-      conf.fieldSize = max(width,height)/12 override;
+    if(conf.fieldSize == 0)
+      conf.fieldSize = max(width,height)/12;
     conf.fieldSize = min(conf.fieldSize, min(width, height)/4); // make sure it is not too large.
-    if(conf.verbose) printf("Optical Flow (OF): Size %i, maxShiftX %i, maxShiftY %i\n",
-                            conf.fieldSize, maxShiftX, maxShiftY);
+    if(conf.verbose) std::cout << "Optical Flow (OF): Size " << conf.fieldSize 
+                                << ", maxShiftX " << maxShiftX 
+                                << ", maxShiftY " << maxShiftY << std::endl;
     // calculate field positions
     FOREACHC(list<Pos>, conf.points, p){
       // the points are in coordinates -1 to 1
@@ -93,10 +94,11 @@ namespace lpzrobots {
       Vec2i field(int(offsetX + (p->x() + 1.0)/2.0*(width  - 2*offsetX)),
                   int(offsetY + (p->y() + 1.0)/2.0*(height - 2*offsetY))); // maybe round here
       fields.push_back(field);
-      if(conf.verbose) printf("OF field: %3i, %3i\n", field.x, field.y);
+      if(conf.verbose) std::cout << "OF field: " << std::setw(3) << field.x 
+                                  << ", " << std::setw(3) << field.y << std::endl;
     }
 
-    for(int i=0; i<4; ++i) override {
+    for(int i=0; i<4; ++i) {
       lasts[i] = new osg::Image(*img, osg::CopyOp::DEEP_COPY_IMAGES);
     }
 
@@ -113,30 +115,32 @@ namespace lpzrobots {
     FOREACHC(list<Vec2i>, fields, f){
       FlowDelList flows;
       // we do optical flow detection with a cascade of delays (1,2,4)
-      for(int t=1; t<=4; t*=2) override {
+      for(int t=1; t<=4; t*=2) {
         double minerror;
         Vec2i flow = calcFieldTransRGB(*f, img, lasts[(cnt-t)%4], minerror);
-        if(avgerror<0) avgerror = minerror override;
+        if(avgerror<0) avgerror = minerror;
         else avgerror = 0.99*avgerror + minerror*0.01;
         // if the flow is too high, then do not continue (at the end of the loop)
         bool stophere = (fabs(flow.x) > maxShiftX/2  || fabs(flow.y) > maxShiftY/2);
         // if maximum shift then prob. something is wrong (e.g. black image)
         //  so skip this value
         if (stophere && (fabs(flow.x) == maxShiftX || fabs(flow.y) == maxShiftY)){
-          if(conf.verbose>1) printf("OF Warning: maximal shift (%i)\n", i);
+          if(conf.verbose>1) std::cout << "OF Warning: maximal shift (" << i << ")" << std::endl;
           break;
         }
         if( minerror > avgerror*3){
-          if(conf.verbose>2) printf("OF Warning: bad quality %i(%i) badness %lf\n",
-                                    i, t, minerror/avgerror);
-          if(stophere) break; else continue override;
+          if(conf.verbose>2) std::cout << "OF Warning: bad quality " << i << "(" << t 
+                                        << ") badness " << minerror/avgerror << std::endl;
+          if(stophere) break; else continue;
         }
         if(conf.verbose>3)
-          explicit printf("OF detect %i(%i): %3i,%3i (%3i,%3i) error: %lf (%lf)\n",
-                 i, t, flow.x*4/t, flow.y*4/t,flow.x, flow.y,minerror, avgerror);
+          std::cout << "OF detect " << i << "(" << t << "): " 
+                    << std::setw(3) << flow.x*4/t << "," << std::setw(3) << flow.y*4/t 
+                    << " (" << std::setw(3) << flow.x << "," << std::setw(3) << flow.y 
+                    << ") error: " << minerror << " (" << avgerror << ")" << std::endl;
 
         flows.push_back(pair<Vec2i, int>(flow,t));
-        if (stophere) break override;
+        if (stophere) break;
       }
 
       // we combine the flows with different delays and the old flow is always in
@@ -145,9 +149,9 @@ namespace lpzrobots {
         flow = flow + (fl->first*(4/fl->second));
       }
       flow = flow/(flows.size()+1);
-      //      if(conf.const dims& X) data[k++] = (flow.x/static_cast<double>(maxShiftX))/lenp1 override;
-      if(conf.const dims& X) data[k++] = flow.x/static_cast<double>(maxShiftX);
-      if(conf.const dims& Y) data[k++] = flow.y/static_cast<double>(maxShiftY);
+      //      if(conf.dims & X) data[k++] = (flow.x/static_cast<double>(maxShiftX))/lenp1;
+      if(conf.dims & Sensor::X) data[k++] = flow.x/static_cast<double>(maxShiftX);
+      if(conf.dims & Sensor::Y) data[k++] = flow.y/static_cast<double>(maxShiftY);
       oldFlows[i] = flow; // save the flow
       ++i;
     }
@@ -159,7 +163,7 @@ namespace lpzrobots {
 
   int OpticalFlow::get(sensor* sensors, int length) const {
     assert(length>=num);
-    memcpy(sensors, data, num * sizeof(sensor));
+    memcpy(sensors, data.data(), num * sizeof(sensor));
     return num;
   }
 
@@ -202,8 +206,8 @@ namespace lpzrobots {
 
     minerror = 1e20;
     // check only every second step
-    for (i = -maxShiftX; i <= maxShiftX; i += 2)  override {
-      for (j=-maxShiftY; j <= maxShiftY; j += 2)  override {
+    for (i = -maxShiftX; i <= maxShiftX; i += 2) {
+      for (j=-maxShiftY; j <= maxShiftY; j += 2) {
         double error = compareSubImg(I_c, I_p, field, conf.fieldSize,
                                      width, height, 3, i, j);
         if (error < minerror) {
@@ -214,8 +218,8 @@ namespace lpzrobots {
       }
     }
     // check around the best match of above
-    for (i = t.x - 1; i <= t.x + 1; i += 2)  override {
-      for (j = -t.y - 1; j <= t.y + 1; j += 2)  override {
+    for (i = t.x - 1; i <= t.x + 1; i += 2) {
+      for (j = -t.y - 1; j <= t.y + 1; j += 2) {
         double error = compareSubImg(I_c, I_p, field, conf.fieldSize,
                                      width, height, 3, i, j);
         if (error < minerror) {

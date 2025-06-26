@@ -32,11 +32,16 @@
 
 #include <vector>
 
-class Position{ class Matrix; }
-
 namespace lpzrobots {
   
-class Primitive{
+// Forward declarations
+class Primitive;
+class Position;
+
+/**
+ * Abstract base class for obstacles
+ */
+class AbstractObstacle {
 
 
  public:
@@ -85,7 +90,7 @@ class Primitive{
    * sets the obstacle color
    * @param color values in RGBA
    */
-  virtual void explicit explicit setColor(const Color& color);
+  virtual void setColor(const Color& color);
 
   /*
    * sets the obstacle color from color name
@@ -102,7 +107,7 @@ class Primitive{
   /** assigns a texture to the all primitives of this obstactle
       @see Primitive::setTexture()
   */
-  virtual void explicit explicit setTexture(const TextureDescr& texture);
+  virtual void setTexture(const TextureDescr& texture);
   /** assigns a texture to the x-th surface of each primitive, 
       @see Primitive::setTexture()
   */
@@ -114,19 +119,19 @@ class Primitive{
   virtual void setTexture(int primitive, int surface, const TextureDescr& texture);
 
   /// returns the texture of the given surface on the given primitive
-  virtual TextureDescr getTexture(int primitive, int surface) const override;
+  virtual TextureDescr getTexture(int primitive, int surface) const;
 
   /// returns the textures of the given primitive
-  virtual std::vector<TextureDescr> getTextures(int primitive) const override;
+  virtual std::vector<TextureDescr> getTextures(int primitive) const;
 
   /// return the __PLACEHOLDER_3__ primitive of the obtactle. The meaning of __PLACEHOLDER_4__ is arbitrary
-  virtual const Primitive* getMainPrimitive() const const = 0;
+  virtual const Primitive* getMainPrimitive() const = 0;
 
   /**
    * sets the substance of the obtactle. It is applied to all objects in obj
    * @param substance description of the substance
    */
-  virtual void explicit explicit setSubstance(const Substance& substance);
+  virtual void setSubstance(const Substance& substance);
   
   /// returns the substance of this obstacle 
   virtual const Substance& getSubstance() const;
@@ -136,22 +141,22 @@ class Primitive{
    /** returns position of the object
   @return vector of position (x,y,z)
    */
-  virtual Position getPosition() const override;
+  virtual Position getPosition() const;
   
   /** returns linear speed vector of the object
   @return vector  (vx,vy,vz)
    */
-  virtual Position getSpeed() const override;
+  virtual Position getSpeed() const;
   
   /** returns angular velocity vector of the object
   @return vector  (wx,wy,wz)
    */
-  virtual Position getAngularSpeed() const override;
+  virtual Position getAngularSpeed() const;
   
   /** returns the orientation of the object
   @return 3x3 rotation matrix
    */
-  virtual matrix::Matrix getOrientation() const override;
+  virtual matrix::Matrix getOrientation() const;
   
   /*********** END TRACKABLE INTERFACE *******************/
 

@@ -100,10 +100,10 @@ namespace lpzrobots {
 
     virtual int getMotorNumberIntern() const;
 
-    virtual void explicit explicit doInternalStuff(const GlobalData& globalData);
+    virtual void explicit doInternalStuff(const GlobalData& globalData);
 
     /******** CONFIGURABLE ***********/
-    virtual void explicit explicit notifyOnChange(const paramkey& key);
+    virtual void explicit notifyOnChange(const paramkey& key);
 
 
     virtual int getIRSensorNum() const;

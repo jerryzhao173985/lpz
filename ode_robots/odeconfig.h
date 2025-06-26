@@ -32,7 +32,7 @@ namespace lpzrobots {
   /**
      The class $name holds the configurable parameters of the simulation environment.
   */
-  class OdeConfig : public Configurable {
+  class OdeConfig : public ::Configurable {
   public:
 
     // creates new instance of OdeConfig with default values
@@ -42,9 +42,9 @@ namespace lpzrobots {
 
     virtual long int getRandomSeed() const { return randomSeed; }
 
-    virtual void setRandomSeed(long int randomSeed) {
-      this->randomSeed=randomSeed;
-      randomSeedCopy = randomSeed;
+    virtual void setRandomSeed(long int seed) {
+      this->randomSeed=seed;
+      randomSeedCopy = seed;
     }
 
     virtual void setOdeHandle(const OdeHandle& odeHandle);

@@ -292,7 +292,7 @@ void SeMoXIgnoreNull::learnController(){
     }
   }
 
-  double error_factor = calcErrorFactor(v, (const logaE& 1) !=0, (const rootE& 1) != nullptr);
+  double error_factor = calcErrorFactor(v, (logaE & 1) !=0, (rootE & 1) != 0);
   C_update *= error_factor;
   H_update *= error_factor;
   if(teaching){
@@ -308,10 +308,10 @@ void SeMoXIgnoreNull::learnController(){
 
 // normal delta rule (xsi is assumed to be already up to date via calcXsi())
 void SeMoXIgnoreNull::learnModel(int delay){
-  const Matrix& y_tm1 = y_buffer[(t - 1 - delay) % buffersize] override;
+  const Matrix& y_tm1 = y_buffer[(t - 1 - delay) % buffersize];
 
   if(!pain) {
-    double error_factor = calcErrorFactor(xsi, (const logaE& 2) != 0, (const rootE& 2) != nullptr);
+    double error_factor = calcErrorFactor(xsi, (logaE & 2) != 0, (rootE & 2) != 0);
     Matrix A_update;
     Matrix S_update;
     Matrix B_update;

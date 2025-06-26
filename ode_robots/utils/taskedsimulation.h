@@ -31,7 +31,7 @@
 
 namespace lpzrobots {
 
-  class TaskedSimulation{
+  class TaskedSimulation : public Simulation {
     public:
       TaskedSimulation() :
         Simulation(), taskId(0), simTaskHandle(0) {
@@ -46,7 +46,7 @@ namespace lpzrobots {
 
       /// start() is called at the first start of the cycles and should create all the object (obstacles, agents...).
       virtual void start(const OdeHandle&, const OsgHandle&, GlobalData& globalData,
-          SimulationTaskHandle& simTaskHandle, int taskId) override {
+          SimulationTaskHandle& simTaskHandle, int taskId) {
       }
 
       /**
@@ -58,7 +58,7 @@ namespace lpzrobots {
        * @return if the simulation should be restarted; this is false by default
        */
       virtual bool restart(const OdeHandle&, const OsgHandle&, GlobalData& globalData, SimulationTaskHandle&,
-          int taskId) override {
+          int taskId) {
         return false;
       }
 
@@ -69,7 +69,7 @@ namespace lpzrobots {
        @param control indicates that robots have been controlled this timestep
        */
       virtual void addCallback(GlobalData& globalData, bool draw, bool pause, bool control, SimulationTaskHandle&,
-          int taskId) override {
+          int taskId) {
       }
 
       /** is called if a key was pressed.
@@ -77,7 +77,7 @@ namespace lpzrobots {
        @return true if the key was handled
        */
       virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down,
-          SimulationTaskHandle&, int taskId) override {
+          SimulationTaskHandle&, int taskId) {
         return false;
       }
 
@@ -86,9 +86,9 @@ namespace lpzrobots {
        * This method is called by the associated SimulationTask.
        * @param taskId of the associated SimulationTask
        */
-      void explicit explicit setTaskId(int taskId) {
+      void setTaskId(int taskId) {
         this->taskId = taskId;
-        if (taskId == nullptr)
+        if (taskId == 0)
           noGraphics = false;
         else
           noGraphics = true;
@@ -105,8 +105,8 @@ namespace lpzrobots {
        * called by the associated SimulationTask.
        * @param simTaskHandle
        */
-      void explicit explicit setSimTaskHandle(const SimulationTaskHandle& simTaskHandle) {
-        this->simTaskHandle = &simTaskHandle;
+      void setSimTaskHandle(const SimulationTaskHandle& simTaskHandle) {
+        this->simTaskHandle = const_cast<SimulationTaskHandle*>(&simTaskHandle);
       }
 
     private:
@@ -120,7 +120,7 @@ namespace lpzrobots {
         useOsgThread = false;
         useQMPThreads = false;
         inTaskedMode = true;
-        if (taskId!= nullptr) {
+        if (taskId != 0) {
           noGraphics = true;
           // inform osg relevant stuff that no graphics is used
           osgHandle.cfg->noGraphics=noGraphics;
@@ -132,7 +132,7 @@ namespace lpzrobots {
        * Overwrite to avoid thread conflicts while
        * accessing the same file. Just disable it.
        */
-      virtual bool storeCfg(const char* filenamestem, const std::list<std::string>& comments = std::list<std::string>())  override {
+      virtual bool storeCfg(const char* filenamestem, const std::list<std::string>& comments = std::list<std::string>()) override {
         return true;
       }
 
@@ -140,13 +140,13 @@ namespace lpzrobots {
        * Overwrite the usage of threads for ODE and OSG.
        * @see Configurable::restoreCFG(int arg, char** argv)
        */
-      bool explicit explicit restoreCfg(const char* filenamestem) {
+      bool restoreCfg(const char* filenamestem) {
         bool result = Simulation::restoreCfg(filenamestem);
         useOdeThread = false;
         useOsgThread = false;
         useQMPThreads = false;
         inTaskedMode = true;
-        if (taskId!= nullptr) {
+        if (taskId != 0) {
           noGraphics = true;
           // inform osg relevant stuff that no graphics is used
           osgHandle.cfg->noGraphics=noGraphics;
@@ -174,12 +174,12 @@ namespace lpzrobots {
 
       virtual void addCallback(const GlobalData& globalData, bool draw, bool pause, bool control) override {
         QMP_CRITICAL(63);
-        addCallback(globalData, draw, pause, control, *simTaskHandle, taskId);
+        addCallback(const_cast<GlobalData&>(globalData), draw, pause, control, *simTaskHandle, taskId);
         QMP_END_CRITICAL(63);
       }
       ;
 
-      bool command(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& globalData, int key, bool down) override {
+      virtual bool command(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& globalData, int key, bool down) override {
         return command(odeHandle, osgHandle, globalData, key, down, *simTaskHandle, taskId);
       }
 

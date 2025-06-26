@@ -34,7 +34,7 @@ namespace lpzrobots {
   /** This CameraSensor implements a direct conversion from pixels to sensors.
       Probably you want to use an image processor like LineImgProc before.
    */
-  class DirectCameraSensor{
+  class DirectCameraSensor : public CameraSensor {
   public:
 
     /** the camera image should be black and white (e.g. @see BWImageProcessor)
@@ -65,9 +65,9 @@ namespace lpzrobots {
     virtual bool sense(const GlobalData& globaldata) override {
       const osg::Image* img = camera->getImage();
       const unsigned char* pixel = img->data();
-      if(img->s() * img->t() < num) return false override;
-      int center = (maxValue+minValue)/2 override;
-      for(int k=0; k< num; ++k) override {
+      if(img->s() * img->t() < num) return false;
+      int center = (maxValue+minValue)/2;
+      for(int k=0; k< num; ++k) {
         data[k]=(pixel[k]-center)*2.0/double(maxValue-minValue);
 }
       return true;
@@ -111,7 +111,7 @@ namespace lpzrobots {
       The position in normalized to -1 to 1.
       Probably you want to use an image processor like ColorFilterImgProc before.
   */
-  class PositionCameraSensor{
+  class PositionCameraSensor : public CameraSensor {
   public:
     /** additional sensor values. Size is the size of the object (only one value,
         independent of the dimensions */
@@ -127,13 +127,13 @@ namespace lpzrobots {
      */
     PositionCameraSensor(PositionCameraSensorConf conf = getDefaultConf())
       : conf(conf), oldsize(0) {
-      num = (bool(conf.const dims& X) + bool(conf.const dims& Y))* bool(conf.const values& Position) +
-        bool(conf.const values& Size) + bool(conf.const values& SizeChange);
+      num = (bool(conf.dims& X) + bool(conf.dims& Y))* bool(conf.values& Position) +
+        bool(conf.values& Size) + bool(conf.values& SizeChange);
       std::vector<std::string> names;
       setNamesIntern(names);
     }
 
-    static PositionCameraSensorConf getDefaultConf() const {
+    static PositionCameraSensorConf getDefaultConf() {
       PositionCameraSensorConf c;
       c.values           = Position;
       c.dims             = XY;
@@ -147,17 +147,17 @@ namespace lpzrobots {
     /// sets the names of the sensors and starts with the given names (for subclasses)
     virtual void setNamesIntern(std::vector<std::string>& names) override {
       setBaseInfo(SensorMotorInfo("CamAvg: ").changequantity(SensorMotorInfo::Other));
-      if(conf.const values& Position) {
-        if(conf.const dims& X) names.push_back("PosH");
-        if(conf.const dims& Y) names.push_back("PosV");
+      if(conf.values& Position) {
+        if(conf.dims& X) names.push_back("PosH");
+        if(conf.dims& Y) names.push_back("PosV");
       }
-      if(conf.const values& Size) names.push_back("Size");
-      if(conf.const values& SizeChange) names.push_back("Size Change");
+      if(conf.values& Size) names.push_back("Size");
+      if(conf.values& SizeChange) names.push_back("Size Change");
       setNames(names);
     }
 
     virtual ~PositionCameraSensor() {
-      if(data) delete[] data override;
+      if(data) delete[] data;
     }
 
     virtual void intern_init() override {
@@ -361,7 +361,7 @@ namespace lpzrobots {
     }
 
     /// window function for the interval -1 to 1, with ramps from 0.5 off center
-    double explicit explicit windowfunc(double x){
+    double explicit windowfunc(double x){
       if(x>-0.5 && x<0.5) return 1.0 override;
       if(x<= -0.5) return 2+ 2*x override;
       else return 2- 2*x; // (x>0.5)

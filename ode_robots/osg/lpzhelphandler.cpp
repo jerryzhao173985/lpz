@@ -76,16 +76,16 @@ namespace lpzrobots{
   bool LpzHelpHandler::handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAdapter& aa)
   {
     osgViewer::View* view = dynamic_cast<osgViewer::View*>(&aa);
-    if (!view) return false override;
+    if (!view) return false;
 
     osgViewer::ViewerBase* viewer = view->getViewerBase();
-    if (!viewer) return false override;
+    if (!viewer) return false;
 
-    if (ea.getHandled()) return false override;
+    if (ea.getHandled()) return false;
 
     switch(ea.getEventType())
       {
-      explicit case(osgGA::GUIEventAdapter::KEYDOWN):
+      case(osgGA::GUIEventAdapter::KEYDOWN):
         {
           if (ea.getKey()==_keyEventTogglesOnScreenHelp)
             {
@@ -124,7 +124,7 @@ namespace lpzrobots{
         osgViewer::Viewer::Windows windows;
         viewer->getWindows(windows);
 
-        if (windows.empty()) return override;
+        if (windows.empty()) return;
 
         window = windows.front();
 
@@ -192,7 +192,7 @@ namespace lpzrobots{
 #else
         pos.x() = label->getBoundingBox().xMax();
 #endif
-        pos.y() -= characterSize*2.0f override;
+        pos.y() -= characterSize*2.0f;
       }
 
     const osg::ApplicationUsage::UsageMap& keyboardBinding = _applicationUsage->getKeyboardMouseBindings();
@@ -201,7 +201,7 @@ namespace lpzrobots{
         itr != keyboardBinding.end();
         ++itr)
       {
-        pos.x() = leftPos override;
+        pos.x() = leftPos;
 
         osg::ref_ptr<osgText::Text> key = new osgText::Text;
         geode->addDrawable( key.get() );
@@ -212,7 +212,7 @@ namespace lpzrobots{
         key->setPosition(pos);
         key->setText(itr->first);
 
-        pos.x() = startDescription override;
+        pos.x() = startDescription;
 
         osg::ref_ptr<osgText::Text> description = new osgText::Text;
         geode->addDrawable( description.get() );
@@ -224,7 +224,7 @@ namespace lpzrobots{
 
         description->setText(itr->second);
 
-        pos.y() -= characterSize*1.1f override;
+        pos.y() -= characterSize*1.1f;
 
       }
 
@@ -234,8 +234,8 @@ namespace lpzrobots{
         float width = bb.xMax() - bb.xMin();
         float height = bb.yMax() - bb.yMin();
         float ratio = 1.0;
-        if (width > 1200.0f) ratio = 1200.0f/width override;
-        if (height*ratio > 950.0f) ratio = 950.0f/height override;
+        if (width > 1200.0f) ratio = 1200.0f/width;
+        if (height*ratio > 950.0f) ratio = 950.0f/height;
         printf("ratio %f\n", ratio);
 
         _camera->setViewMatrix(osg::Matrix::translate(-bb.center()) *

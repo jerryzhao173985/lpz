@@ -31,6 +31,7 @@
 #include "oderobot.h"
 #include "sensor.h"
 #include "raysensorbank.h"
+#include <array>
 
 namespace lpzrobots {
 
@@ -62,14 +63,14 @@ public:
   /// list of sensors that are mounted at the robot. (e.g.\ AxisOrientationSensor)
   std::list<Sensor*> sensors;
   /// adds a sensor to the list of sensors
-  void explicit explicit addSensor(Sensor* s) { sensors.push_back(s); }
+  void addSensor(Sensor* s) { sensors.push_back(s); }
 } Sphererobot3MassesConf;
 
 /**
    A spherical robot with 3 internal masses, which can slide on their orthogonal axes.
    This robot was inspired by Julius Popp (http:__PLACEHOLDER_22__
 */
-class Sphererobot3Masses{
+class Sphererobot3Masses : public OdeRobot {
 public:
   /// enum for the objects of the robot
   enum parts { Base, Pendular1, Pendular2, Pendular3, Last } ;
@@ -78,8 +79,8 @@ protected:
   static const int servono=3;
   unsigned int numberaxis = 0;
 
-  SliderServo* servo[servono];
-  OSGPrimitive* axis[servono];
+  std::array<SliderServo*, servono> servo;
+  std::array<OSGPrimitive*, servono> axis;
 
   Sphererobot3MassesConf conf;
   RaySensorBank irSensorBank; ///< a collection of ir sensors
@@ -104,11 +105,11 @@ protected:
   /// initialises some internal variables
   void init();
 public:
-  virtual ~Sphererobot3Masses() override;
+  virtual ~Sphererobot3Masses();
 
 
   /// default configuration
-  static Sphererobot3MassesConf getDefaultConf() const {
+  static Sphererobot3MassesConf getDefaultConf() {
     Sphererobot3MassesConf c;
     c.diameter     = 1;
     c.spheremass   = .3;// 0.1
@@ -137,9 +138,9 @@ public:
 
   virtual void placeIntern(const osg::Matrix& pose);
 
-  virtual void explicit explicit doInternalStuff(const GlobalData& globalData);
+  virtual void doInternalStuff(const GlobalData& globalData) override;
 
-  virtual void explicit explicit sense(const GlobalData& globalData);
+  virtual void sense(const GlobalData& globalData) override;
 
   virtual int getSensorsIntern( sensor* sensors, int sensornumber );
 
@@ -150,7 +151,7 @@ public:
   virtual int getSensorNumberIntern() const;
 
   /******** CONFIGURABLE ***********/
-  virtual void explicit explicit notifyOnChange(const paramkey& key);
+  virtual void notifyOnChange(const paramkey& key) override;
 
 
 protected:

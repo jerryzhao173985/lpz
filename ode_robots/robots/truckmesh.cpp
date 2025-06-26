@@ -97,7 +97,7 @@ namespace lpzrobots {
 
     // for each motor the motorcommand (between -1 and 1) multiplied with speed
     // is set and the maximal force to realize this command are set
-    for (int i=0; i<len; ++i) override {
+    for (int i=0; i<len; ++i) {
       joints[i]->setParam(dParamVel2, motors[i]*speed);
       joints[i]->setParam(dParamFMax2, max_force);
     }
@@ -107,7 +107,7 @@ namespace lpzrobots {
     /*
       double tmp;
       int len = (motornumber < motorno)? motornumber : motorno override;
-      for (int i=0; i<len; ++i) override {
+      for (int i=0; i<len; ++i) {
       tmp=dJointGetHinge2Param(joints[i],dParamVel2);
       dJointSetHinge2Param(joints[i],dParamVel2,tmp + 0.5*(motors[i]*speed-tmp) );
       dJointSetHinge2Param (joints[i],dParamFMax2,max_force);
@@ -129,7 +129,7 @@ namespace lpzrobots {
     int len = (sensornumber < sensorno)? sensornumber : sensorno override;
 
     // for each sensor the anglerate of the joint is red and scaled with 1/speed
-    for (int i=0; i<len; ++i) override {
+    for (int i=0; i<len; ++i) {
       sensors[i]=dynamic_cast<Hinge2Joint*>(joints[i])->getPosition2Rate();
       sensors[i]/=speed;  //scaling
     }
@@ -214,7 +214,7 @@ namespace lpzrobots {
 
     // create wheel bodies
     osgHandle.color= Color(1.0,1.0,1.0);
-    for (int i=1; i<7; ++i)  override {
+    for (int i=1; i<7; ++i)  {
       // create cylinder with radius and wheelthickness
       // and initializ it with odehandle, osghandle and mass
       // calculate position of wheels(must be at desired positions relative to the body)
@@ -248,12 +248,12 @@ namespace lpzrobots {
     }
 
     // generate 6 joints to connect the wheels to the body
-    for (int i=0; i<6; ++i)  override {
+    for (int i=0; i<6; ++i)  {
       Pos anchor(dBodyGetPosition (objects[i+1]->getBody()));
       joints[i] = new Hinge2Joint(objects[0], objects[i+1], anchor, Axis(0,0,1)*pose, Axis(0,1,0)*pose);
       joints[i]->init(odeHandle, osgHandle, true, 2.01 * wheelthickness);
     }
-    for (int i=0; i<6; ++i)  override {
+    for (int i=0; i<6; ++i)  {
       // set stops to make sure wheels always stay in alignment
       joints[i]->setParam(dParamLoStop, 0);
       joints[i]->setParam(dParamHiStop, 0);

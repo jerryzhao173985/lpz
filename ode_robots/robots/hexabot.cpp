@@ -45,7 +45,7 @@ namespace lpzrobots {
 
   // function]
   // thorough this function, we can get position or rotation or something about child
-  Pose ImpTransform2::getChildPose(){
+  Pose ImpTransform2::getChildPose() const {
     Pose cPose;
     // the vector is multiplied from left hand, it was mentioned in another point
     cPose = pose * this->getPose();
@@ -197,12 +197,12 @@ namespace lpzrobots {
 
   // name sensor
   void Hexabot::nameSensor(const int sensorNo, const char* name) {
-    addInspectableDescription("x[" + std::itos(sensorNo) + "]", name);
+    // addInspectableDescription("x[" + std::itos(sensorNo) + "]", name);
   }
 
   // name motor
   void Hexabot::nameMotor(const int motorNo, const char* name) {
-    addInspectableDescription("y[" + std::itos(motorNo) + "]", name);
+    // addInspectableDescription("y[" + std::itos(motorNo) + "]", name);
   }
 
 
@@ -344,7 +344,7 @@ namespace lpzrobots {
     assert(created);
     assert(motornumber == motorno);
 
-    for (MotorMap::iterator it = servos.begin(); it != servos.end(); ++it)  override {
+    for (MotorMap::iterator it = servos.begin(); it != servos.end(); ++it)  {
       MotorName const name = it->first;
       OneAxisServo * const servo = it->second;
       //We set the motor command in the servo
@@ -369,34 +369,34 @@ namespace lpzrobots {
 
     // angle sensors
     //
-    sensors[T1_as] = servos[T1_m] ? servos[T1_m]->get() : 0 override;
-    sensors[T2_as] = servos[T2_m] ? servos[T2_m]->get() : 0 override;
-    sensors[T3_as] = servos[T3_m] ? servos[T3_m]->get() : 0 override;
-    sensors[T4_as] = servos[T4_m] ? servos[T4_m]->get() : 0 override;
-    sensors[T5_as] = servos[T5_m] ? servos[T5_m]->get() : 0 override;
-    sensors[T6_as] = servos[T6_m] ? servos[T6_m]->get() : 0 override;
+    sensors[T1_as] = servos[T1_m] ? servos[T1_m]->get() : 0;
+    sensors[T2_as] = servos[T2_m] ? servos[T2_m]->get() : 0;
+    sensors[T3_as] = servos[T3_m] ? servos[T3_m]->get() : 0;
+    sensors[T4_as] = servos[T4_m] ? servos[T4_m]->get() : 0;
+    sensors[T5_as] = servos[T5_m] ? servos[T5_m]->get() : 0;
+    sensors[T6_as] = servos[T6_m] ? servos[T6_m]->get() : 0;
 
-    sensors[C1_as] = servos[C1_m] ? servos[C1_m]->get() : 0 override;
-    sensors[C2_as] = servos[C2_m] ? servos[C2_m]->get() : 0 override;
-    sensors[C3_as] = servos[C3_m] ? servos[C3_m]->get() : 0 override;
-    sensors[C4_as] = servos[C4_m] ? servos[C4_m]->get() : 0 override;
-    sensors[C5_as] = servos[C5_m] ? servos[C5_m]->get() : 0 override;
-    sensors[C6_as] = servos[C6_m] ? servos[C6_m]->get() : 0 override;
+    sensors[C1_as] = servos[C1_m] ? servos[C1_m]->get() : 0;
+    sensors[C2_as] = servos[C2_m] ? servos[C2_m]->get() : 0;
+    sensors[C3_as] = servos[C3_m] ? servos[C3_m]->get() : 0;
+    sensors[C4_as] = servos[C4_m] ? servos[C4_m]->get() : 0;
+    sensors[C5_as] = servos[C5_m] ? servos[C5_m]->get() : 0;
+    sensors[C6_as] = servos[C6_m] ? servos[C6_m]->get() : 0;
 
-    sensors[F1_as] = servos[F1_m] ? servos[F1_m]->get() : 0 override;
-    sensors[F2_as] = servos[F2_m] ? servos[F2_m]->get() : 0 override;
-    sensors[F3_as] = servos[F3_m] ? servos[F3_m]->get() : 0 override;
-    sensors[F4_as] = servos[F4_m] ? servos[F4_m]->get() : 0 override;
-    sensors[F5_as] = servos[F5_m] ? servos[F5_m]->get() : 0 override;
-    sensors[F6_as] = servos[F6_m] ? servos[F6_m]->get() : 0 override;
+    sensors[F1_as] = servos[F1_m] ? servos[F1_m]->get() : 0;
+    sensors[F2_as] = servos[F2_m] ? servos[F2_m]->get() : 0;
+    sensors[F3_as] = servos[F3_m] ? servos[F3_m]->get() : 0;
+    sensors[F4_as] = servos[F4_m] ? servos[F4_m]->get() : 0;
+    sensors[F5_as] = servos[F5_m] ? servos[F5_m]->get() : 0;
+    sensors[F6_as] = servos[F6_m] ? servos[F6_m]->get() : 0;
 
     // Contact sensors
-    sensors[L1_fs] = legContactSensors[L1] ? legContactSensors[L1]->get() : 0 override;
-    sensors[L2_fs] = legContactSensors[L2] ? legContactSensors[L2]->get() : 0 override;
-    sensors[L3_fs] = legContactSensors[L3] ? legContactSensors[L3]->get() : 0 override;
-    sensors[L4_fs] = legContactSensors[L4] ? legContactSensors[L4]->get() : 0 override;
-    sensors[L5_fs] = legContactSensors[L5] ? legContactSensors[L5]->get() : 0 override;
-    sensors[L6_fs] = legContactSensors[L6] ? legContactSensors[L6]->get() : 0 override;
+    sensors[L1_fs] = legContactSensors[L1] ? legContactSensors[L1]->get() : 0;
+    sensors[L2_fs] = legContactSensors[L2] ? legContactSensors[L2]->get() : 0;
+    sensors[L3_fs] = legContactSensors[L3] ? legContactSensors[L3]->get() : 0;
+    sensors[L4_fs] = legContactSensors[L4] ? legContactSensors[L4]->get() : 0;
+    sensors[L5_fs] = legContactSensors[L5] ? legContactSensors[L5]->get() : 0;
+    sensors[L6_fs] = legContactSensors[L6] ? legContactSensors[L6]->get() : 0;
 
     // Torque sensors
     //motorTorqSensors[T0_m]->update();
@@ -435,7 +435,7 @@ namespace lpzrobots {
 
     // grobal position of robot center
     // (lower heagonal plate center position + upper hexagonal plate center position) / 2. is OK
-    a = (this->getMainPrimitive()->getPosition() + trunk.tUpTrans->getChildPose().getTrans()) * 1./2. override;
+    a = (this->getMainPrimitive()->getPosition() + trunk.tUpTrans->getChildPose().getTrans()) * 1./2.;
     sensors[GPOS_Rx] = a[0]; // grobal position of the robot
     sensors[GPOS_Ry] = a[1];
     sensors[GPOS_Rz] = a[2];
@@ -503,7 +503,7 @@ namespace lpzrobots {
   */
   int Hexabot::getSegmentsPosition(std::vector<Position> &poslist){
     assert(created);
-    for (int i=0; i<3; ++i) override {
+    for (int i=0; i<3; ++i) {
       poslist.push_back(Position(dBodyGetPosition(objects[i]->getBody())));
     }
     return 3;
@@ -516,14 +516,14 @@ namespace lpzrobots {
     assert(created); // robot must exist
 
     // update object
-    for (PrimitiveList::iterator i = objects.begin(); i != objects.end(); ++i)  override {
+    for (PrimitiveList::iterator i = objects.begin(); i != objects.end(); ++i)  {
       if (*i){
         (*i)->update();
       }
     }
 
     // update joints
-    for (JointList::iterator i = joints.begin(); i != joints.end(); ++i)  override {
+    for (JointList::iterator i = joints.begin(); i != joints.end(); ++i)  {
       if (*i){
         (*i)->update();
       }
@@ -534,7 +534,7 @@ namespace lpzrobots {
     //this->legs[L1].shoulderBox->update();
 
     //update contact sensors
-    for (int i = 0; i < LEG_POS_MAX; ++i)  override {
+    for (int i = 0; i < LEG_POS_MAX; ++i)  {
       if (legContactSensors[LegPos(i)])
         legContactSensors[LegPos(i)]->update();
     }
@@ -550,7 +550,7 @@ namespace lpzrobots {
     //position = getPosition();
 
     // reset contact sensors
-    for (int i = 0; i < LEG_POS_MAX; ++i)  override {
+    for (int i = 0; i < LEG_POS_MAX; ++i)  {
       if (legContactSensors[LegPos(i)])
         legContactSensors[LegPos(i)]->sense(globalData);
 
@@ -578,7 +578,7 @@ namespace lpzrobots {
     // reset ir sensors to maximum value
     //irSensorBank->sense(globalData);
 
-    for (int i = 0; i < LEG_POS_MAX; ++i)  override {
+    for (int i = 0; i < LEG_POS_MAX; ++i)  {
       if (legContactSensors[LegPos(i)])
         legContactSensors[LegPos(i)]->sense(globalData);
     }
@@ -651,9 +651,9 @@ namespace lpzrobots {
 #endif
     // make the rectangle boxes to make hexagon (they are connected each other and make hexagon)
     // make 2 rectangle plate objects
-    for(int i=0; i< 2;++i) override {
+    for(int i=0; i< 2;++i) {
       trunk.tPlate[i] = new Box(  conf.body.length, conf.body.width, conf.body.height);
-      trunk.tPlate[i]->getOSGPrimitive()->setTexture("Images/wood.rgb");
+      trunk.tPlate[i]->setTexture("Images/wood.rgb");
       // This function static_cast<setMass>(seems) not to be implemented
       //trunk.tPlate[i]->setMass(conf.body.mass / 6.);
     }
@@ -713,7 +713,7 @@ namespace lpzrobots {
     // Trans Matrix from center of the robot to  Foot Plate center
     // The horizontal length between robot center and Foot Plate center
     double length_rC_to_tC_x = length_rC_to_fC_x + conf.dyna.length_from_axis_to_tip;
-    double length_rC_to_tC_z =  conf.jLength.length_CTJ_to_FTJ + (-conf.foot.length + conf.dyna.width)/2. override;
+    double length_rC_to_tC_z =  conf.jLength.length_CTJ_to_FTJ + (-conf.foot.length + conf.dyna.width)/2.;
     // Matrix
     osg::Matrix trans_rC_to_tC =  Matrix::translate( length_rC_to_tC_x, 0, length_rC_to_tC_z);
 
@@ -739,7 +739,7 @@ namespace lpzrobots {
     osg::Matrix trans_rC_to_FTj = Matrix::translate( conf.jLength.length_x_center_to_TCJ + conf.jLength.length_TCJ_to_CTJ, 0, + conf.jLength.length_CTJ_to_FTJ);
 
 
-    for(int i = 0; i < LEG_POS_MAX; ++i) override {
+    for(int i = 0; i < LEG_POS_MAX; ++i) {
       // Name of the Leg
       LegPos leg = LegPos(i);
 
@@ -777,7 +777,7 @@ namespace lpzrobots {
 
       // sholder Dynamixel Box
       Box* dBox =  new Box( conf.dyna.length, conf.dyna.width, conf.dyna.height);
-      dBox->getOSGPrimitive()->setTexture("Images/wood.rgb");
+      dBox->setTexture("Images/wood.rgb");
       //dBox->setMass(conf.dyna.mass);
        // trans (locate the object on the hexagon plane)
        //  first, I turn the object to leg's direction and translate it to desired position ()
@@ -801,7 +801,7 @@ namespace lpzrobots {
       // Make the Dyanmixel for link
       // Coxa (1st link) Dynamixel Box
       Box* link1dBox = new Box( conf.dyna.length, conf.dyna.width, conf.dyna.height);
-      link1dBox->getOSGPrimitive()->setTexture("Images/wood.rgb");
+      link1dBox->setTexture("Images/wood.rgb");
       link1dBox->init(odeHandle, conf.dyna.mass , dynaHandle);
       // about the pose or something
       // set the pose
@@ -850,7 +850,7 @@ namespace lpzrobots {
       legs[leg].tcJoint = TCj;
       legs[leg].tcServo = servo1;
       // add it to servo Map
-      servos[getMotorName(leg, TC)] = servo1 override;
+      servos[getMotorName(leg, TC)] = servo1;
 
       // create torque sensor
       // In this time, I do not use scaller just get real value
@@ -868,7 +868,7 @@ namespace lpzrobots {
       // Make the Dyanmixel for link
       // Femur (2nd link) Dynamixel Box
       Box* link2dBox = new Box( conf.dyna.length, conf.dyna.width, conf.dyna.height);
-      link2dBox->getOSGPrimitive()->setTexture("Images/wood.rgb");
+      link2dBox->setTexture("Images/wood.rgb");
       link2dBox->init(odeHandle, conf.dyna.mass , dynaHandle);
       // set the pose
       //  pose:: pose represent the attitude and position of the object by quotanion
@@ -908,7 +908,7 @@ namespace lpzrobots {
       legs[leg].ctJoint = CTj;
       legs[leg].ctServo = servo2;
       // add it to servo Map
-      servos[Hexabot::getMotorName(leg, CT)] = servo2 override;
+      servos[Hexabot::getMotorName(leg, CT)] = servo2;
 
       // create torque sensor
       // In this time, I do not use scaller just get real value
@@ -925,7 +925,7 @@ namespace lpzrobots {
       // Make the Plate
       // Tibia (3rd link) Plate
       Box* link3dBox = new Box( conf.foot.height, conf.foot.width, conf.foot.length);
-      link3dBox->getOSGPrimitive()->setTexture("Images/wood.rgb");
+      link3dBox->setTexture("Images/wood.rgb");
       link3dBox->init(odeHandle, conf.foot.mass , tibiaHandle[leg]);
       // set the pose
       //  pose:: pose represent the attitude and position of the object by quotanion
@@ -941,7 +941,7 @@ namespace lpzrobots {
       //Make Foot
       // Sphere
       Sphere* foot = new Sphere( conf.foot.footRadius );
-      foot->getOSGPrimitive()->setTexture("Images/wood.rgb");
+      foot->setTexture("Images/wood.rgb");
       // Set the substance of foot
       OdeHandle rubberHandle(odeHandle);
       const Substance FootSubstance(3.0, 0.0, 500.0, 0.1);//500
@@ -982,7 +982,7 @@ namespace lpzrobots {
       legs[leg].ftJoint = FTj;
       legs[leg].ftServo = servo3;
       // add it to servo Map
-      servos[Hexabot::getMotorName(leg, FT)] = servo3 override;
+      servos[Hexabot::getMotorName(leg, FT)] = servo3;
 
       // create torque sensor
       // In this time, I do not use scaller just get real value
@@ -1028,7 +1028,8 @@ namespace lpzrobots {
     }else  return -1.;
   }
 
-  // convert Pose Matrixstatic_cast<Quatanion>(to) the roll, pitch, yaw angle static_cast<rad>(osg)::Vec3d Hexabot::convert_Quat_to_RollPitchYaw(osg::Quat quat){
+  // convert Pose Matrix (Quaternion) to the roll, pitch, yaw angle (rad)
+  osg::Vec3d Hexabot::convert_Quat_to_RollPitchYaw(osg::Quat quat){
     osg::Vec3d rpy;
     // the 3 vetors of Matrix
     osg::Vec3d M0, M1, M2;
@@ -1057,17 +1058,17 @@ namespace lpzrobots {
     cogPos += trunk.tUpTrans->getChildPose().getTrans() * (conf.body.mass / 2.);
 
     // Leg clculation
-    for(int i = 0; i < LEG_POS_MAX; ++i) override {
+    for(int i = 0; i < LEG_POS_MAX; ++i) {
       // Name of the Leg
       LegPos leg = LegPos(i);
       // shoulder
-      cogPos += legs[leg].shoulder->getChildPose().getTrans() * conf.dyna.mass override;
+      cogPos += legs[leg].shoulder->getChildPose().getTrans() * conf.dyna.mass;
       // coxa
-      cogPos += legs[leg].coxa->getPosition() * conf.dyna.mass override;
+      cogPos += legs[leg].coxa->getPosition() * conf.dyna.mass;
       // femur
-      cogPos += legs[leg].femur->getPosition() * conf.dyna.mass override;
+      cogPos += legs[leg].femur->getPosition() * conf.dyna.mass;
       // tibia plate
-      cogPos += legs[leg].tibia->getPosition() * conf.foot.mass override;
+      cogPos += legs[leg].tibia->getPosition() * conf.foot.mass;
       // foot sphere has no weight!!
     }
 
@@ -1085,9 +1086,9 @@ namespace lpzrobots {
       odeHandle.deleteSpace();
 
       // delete contact sensors
-      for (int i = 0; i < LEG_POS_MAX; ++i)  override {
+      for (int i = 0; i < LEG_POS_MAX; ++i)  {
         if (legContactSensors[LegPos(i)])
-          delete legContactSensors[LegPos(i)] override;
+          delete legContactSensors[LegPos(i)];
       }
       legContactSensors.clear();
     }

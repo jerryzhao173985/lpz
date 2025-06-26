@@ -39,7 +39,7 @@ public:
   /**
    * Constructor
    */
-  explicit explicit StraightLine(const Matrix& pose);
+  explicit StraightLine(const Matrix& pose);
 
   virtual ~StraightLine() {}
 

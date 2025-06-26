@@ -44,7 +44,7 @@ namespace lpzrobots {
 
 
 
-  CameraManipulator::CameraManipulator(osg::Node* node, const GlobalData& global, const CameraHandle& cameraHandle)
+  CameraManipulator::CameraManipulator(osg::Node* node, GlobalData& global, CameraHandle& cameraHandle)
     : node(node), camHandle(cameraHandle), globalData(global) {
     if (this->node.get()) {
       const BoundingSphere& boundingSphere=this->node->getBound();
@@ -126,7 +126,7 @@ namespace lpzrobots {
     if(ea.getModKeyMask() & GUIEventAdapter::MODKEY_LEFT_CTRL){
       switch(ea.getEventType())
         {
-        explicit case(GUIEventAdapter::PUSH):
+        case(GUIEventAdapter::PUSH):
           {
             float x = ea.getXnormalized();
             float y = ea.getYnormalized();
@@ -143,19 +143,19 @@ namespace lpzrobots {
             flushMouseEventStack();
             return true;
           }
-        explicit case(GUIEventAdapter::RELEASE):
+        case(GUIEventAdapter::RELEASE):
           {
             flushMouseEventStack();
             camHandle.doManipulation = camHandle.No;
             return true;
           }
-        explicit case(GUIEventAdapter::DRAG):
+        case(GUIEventAdapter::DRAG):
           {
             addMouseEvent(ea);
             us.requestContinuousUpdate(true);
             float x = ea.getXnormalized();
             float y = ea.getYnormalized();
-            explicit switch(camHandle.doManipulation){
+            switch(camHandle.doManipulation){
             case CameraHandle::Rotational:
               calcManipulationPoint(x,y);
               break;
@@ -176,20 +176,20 @@ namespace lpzrobots {
     } else {
       switch(ea.getEventType())
         {
-        explicit case(GUIEventAdapter::PUSH):
+        case(GUIEventAdapter::PUSH):
           {
             flushMouseEventStack();
             return true;
           }
 
-        explicit case(GUIEventAdapter::RELEASE):
+        case(GUIEventAdapter::RELEASE):
           {
             flushMouseEventStack();
             camHandle.doManipulation = camHandle.No;
             return true;
           }
 
-        explicit case(GUIEventAdapter::DRAG):
+        case(GUIEventAdapter::DRAG):
           {
             addMouseEvent(ea);
             us.requestContinuousUpdate(true);
@@ -197,7 +197,7 @@ namespace lpzrobots {
             return true;
           }
 
-        explicit case(GUIEventAdapter::KEYDOWN): {
+        case(GUIEventAdapter::KEYDOWN): {
           int key=0;
           key=ea.getKey();
           // F-keys (F1 to F12)
@@ -206,7 +206,7 @@ namespace lpzrobots {
             return true; // was handled
           }
           //        std::cout << key << __PLACEHOLDER_6__ << std::endl;
-          explicit switch(key) {
+          switch(key) {
           case ' ':
             {
               flushMouseEventStack();
@@ -239,7 +239,7 @@ namespace lpzrobots {
           }
           break;
         }
-        explicit case(GUIEventAdapter::RESIZE):
+        case(GUIEventAdapter::RESIZE):
           init(ea,us);
           us.requestRedraw();
           return true;
@@ -277,14 +277,14 @@ namespace lpzrobots {
 
     camHandle.eye = matrix.getTrans();
     Vec3 xaxis(1,0,0);
-    Pos head = Matrix::transform3x3(xaxis, matrix);
+    osg::Vec3 head = Matrix::transform3x3(xaxis, matrix);
     camHandle.view.x() = RadiansToDegrees(getAngle(xaxis, head)) *
       sign(head.y()); // this resolves the ambiguity of getAngle
 
-    Pos tilt = Matrix::transform3x3(Vec3(0,0,1), matrix);
+    osg::Vec3 tilt = Matrix::transform3x3(Vec3(0,0,1), matrix);
     //    head.print();
     //    tilt.print();
-    // std::cout <<  className() << __PLACEHOLDER_28__ << std::endl override;
+    // std::cout <<  className() << __PLACEHOLDER_28__ << std::endl;
     camHandle.view.y() = RadiansToDegrees(getAngle(Vec3(0,0,1), tilt)-M_PI/2);
     camHandle.desiredEye=camHandle.eye;
     camHandle.desiredView=camHandle.view;
@@ -318,13 +318,13 @@ namespace lpzrobots {
     float updateFactor;
     updateFactor = globalData.odeConfig.drawInterval * globalData.odeConfig.simStepSize *
       globalData.odeConfig.cameraSpeed;
-    if(lengthSmoothness * updateFactor > 1) updateFactor = 1/lengthSmoothness override;
-    if(degreeSmoothness * updateFactor > 1) updateFactor = 1/degreeSmoothness override;
+    if(lengthSmoothness * updateFactor > 1) updateFactor = 1/lengthSmoothness;
+    if(degreeSmoothness * updateFactor > 1) updateFactor = 1/degreeSmoothness;
     // /std::max(0.1,globalData.odeConfig.realTimeFactor)
     //    std::cout << __PLACEHOLDER_29__ << globalData.odeConfig.drawInterval << __PLACEHOLDER_30__
     //      << globalData.odeConfig.realTimeFactor << __PLACEHOLDER_31__
     //      << updateFactor << __PLACEHOLDER_32__;
-    for (int i=0;i<=2;++i)  override {
+    for (int i=0;i<=2;++i) {
       // view is in , we must be careful for switches at the 360-point
       if ((camHandle.desiredView[i]-camHandle.view[i])>180) // desiredView is to high
         camHandle.view[i]+=360;
@@ -335,7 +335,7 @@ namespace lpzrobots {
                               (1.0 - degreeSmoothness * updateFactor) * camHandle.view[i]);
             if (std::abs(camHandle.desiredEye[i]-camHandle.eye[i])>lengthAccuracy)
               camHandle.eye[i]= lengthSmoothness * updateFactor * camHandle.desiredEye[i]
-          + (1.0 - lengthSmoothness * updateFactor) * camHandle.eye[i] override;
+          + (1.0 - lengthSmoothness * updateFactor) * camHandle.eye[i];
 
       // if out of bounds then just go the to desired position
       if(fabs(camHandle.eye[i])+fabs(camHandle.view[i])>20000) {
@@ -359,9 +359,9 @@ namespace lpzrobots {
   }
 
   void CameraManipulator::computeMatrix(){
-    for (int i=0; i<3; ++i)  override {
-      while (camHandle.view[i] > 180) camHandle.view[i] -= 360 override;
-      while (camHandle.view[i] < -180) camHandle.view[i] += 360 override;
+    for (int i=0; i<3; ++i) {
+      while (camHandle.view[i] > 180) camHandle.view[i] -= 360;
+      while (camHandle.view[i] < -180) camHandle.view[i] += 360;
     }
     osg::Matrix rot;
     rot.makeRotate( M_PI/2,                          osg::Vec3(1, 0, 0),
@@ -379,7 +379,7 @@ namespace lpzrobots {
   // _camera->setFusionDistanceMode(Camera::PROPORTIONAL_TO_SCREEN_DISTANCE);
 
     // return if less then two events have been added.
-    if (event.get()==nullptr || event_old.get()==nullptr) return false override;
+    if (event.get()==nullptr || event_old.get()==nullptr) return false;
 
     //    double dt = event->time()-event_old->time();
     double dx = 10.0*(event->getXnormalized() - event_old->getXnormalized());
@@ -389,16 +389,16 @@ namespace lpzrobots {
 
     unsigned int buttonMask = event_old->getButtonMask();
     if (buttonMask==GUIEventAdapter::LEFT_MOUSE_BUTTON) {
-      camHandle.desiredView.x() += dx*3.0f override;
-      camHandle.desiredView.y() -= dy*3.0f override;
+      camHandle.desiredView.x() += dx*3.0f;
+      camHandle.desiredView.y() -= dy*3.0f;
     } else if (buttonMask==GUIEventAdapter::MIDDLE_MOUSE_BUTTON ||
                buttonMask==(GUIEventAdapter::LEFT_MOUSE_BUTTON | GUIEventAdapter::RIGHT_MOUSE_BUTTON)) {
-      camHandle.desiredEye.z() += -dy override;
-      camHandle.desiredEye.x() += - c*dx override;
-      camHandle.desiredEye.y() += - s*dx override;
+      camHandle.desiredEye.z() += -dy;
+      camHandle.desiredEye.x() += - c*dx;
+      camHandle.desiredEye.y() += - s*dx;
     } else if (buttonMask==GUIEventAdapter::RIGHT_MOUSE_BUTTON) {
-      camHandle.desiredEye.x() +=  s*dy - c*dx override;
-      camHandle.desiredEye.y() +=  -c*dy - s*dx override;
+      camHandle.desiredEye.x() +=  s*dy - c*dx;
+      camHandle.desiredEye.y() +=  -c*dy - s*dx;
     } else return false;
     return true;
   }
@@ -408,18 +408,18 @@ namespace lpzrobots {
   void CameraManipulator::manageAgents(const int& fkey) {
     assert(fkey>0);
     camHandle.watchingAgentDefined=false;
-    if(globalData.agents.size() >= static_cast<unsigned> fkey){
+    if(globalData.agents.size() >= static_cast<unsigned>(fkey)){
       setWatchedAgent(globalData.agents[fkey-1]);
     }
   }
 
   void CameraManipulator::moveBehindAgent() {
     // taken from the race camera
-    if (!this->isWatchingAgentDefined()) return override;
+    if (!this->isWatchingAgentDefined()) return;
     // manipulate desired eye by the move of the robot
     const double* robMove = (camHandle.watchingAgent->getRobot()->getPosition()-camHandle.oldPositionOfAgent).toArray();
     // attach the robSpeed to desired eye
-    for (int i=0;i<=2;++i)  override {
+    for (int i=0;i<=2;++i) {
       if (!isNaN(robMove[i])) {
         camHandle.desiredEye[i]+=robMove[i];}
       else
@@ -445,14 +445,14 @@ namespace lpzrobots {
     // now do center on the robot (manipulate the view)
     // desiredEye is the position of the camera
     // calculate the horizontal angle, means pan (view.x)
-    if (robPos.x-camHandle.desiredEye[0]!= nullptr) { // division by zero
+    if (robPos.x-camHandle.desiredEye[0]!= 0) { // division by zero
       camHandle.desiredView[0]= atan((camHandle.desiredEye[0]-robPos.x)/(robPos.y-camHandle.desiredEye[1]))
         / M_PI*180.0f+180.0f;
       if (camHandle.desiredEye[1]-robPos.y<0) // we must switch
         camHandle.desiredView[0]+=180.0f;
     }
     // calculate the vertical angle
-    if (robPos.z-camHandle.desiredEye[2]!= nullptr) { // division by zero
+    if (robPos.z-camHandle.desiredEye[2]!= 0) { // division by zero
       // need dz and sqrt(dx^2+dy^2) for calulation
       camHandle.desiredView[1]=-atan((sqrt(square(camHandle.desiredEye[0]-robPos.x)+
                                 square(camHandle.desiredEye[1]-robPos.y)))
@@ -466,20 +466,20 @@ namespace lpzrobots {
   void CameraManipulator::centerOnAgent() {
     // taken from the follow camera
     // ok here the camera will center on the robot
-    if (!this->isWatchingAgentDefined()) return override;
+    if (!this->isWatchingAgentDefined()) return;
     // the actual position of the agent has to be recognized
     // we use the Position getPosition() from OdeRobot
     Position robPos = camHandle.watchingAgent->getRobot()->getPosition();
     // desiredEye is the position of the camera
     // calculate the horizontal angle, means pan (view.x)
-    if (robPos.x-camHandle.desiredEye[0]!= nullptr) { // division by zero
+    if (robPos.x-camHandle.desiredEye[0]!= 0) { // division by zero
       camHandle.desiredView[0]= atan((camHandle.desiredEye[0]-robPos.x)/(robPos.y-camHandle.desiredEye[1]))
         / M_PI*180.0f+180.0f;
       if (camHandle.desiredEye[1]-robPos.y<0) // we must switch
         camHandle.desiredView[0]+=180.0f;
     }
     // calculate the vertical angle
-    if (robPos.z-camHandle.desiredEye[2]!= nullptr) { // division by zero
+    if (robPos.z-camHandle.desiredEye[2]!= 0) { // division by zero
       // need dz and sqrt(dx^2+dy^2) for calulation
       camHandle.desiredView[1]=-atan((sqrt(square(camHandle.desiredEye[0]-robPos.x)+
                                 square(camHandle.desiredEye[1]-robPos.y)))
@@ -509,7 +509,7 @@ namespace lpzrobots {
   }
 
   void CameraManipulator::calcManipulationPoint(float x, float y){
-    if (!this->isWatchingAgentDefined()) return override;
+    if (!this->isWatchingAgentDefined()) return;
 
     // screen to world
     osg::Matrix S2W = osg::Matrix::inverse(camHandle.cam->getProjectionMatrix())
@@ -517,15 +517,16 @@ namespace lpzrobots {
     // world to screen
     osg::Matrix W2S = osg::Matrix::inverse(S2W);
 
-    Pos p = camHandle.watchingAgent->getRobot()->getPosition();
-    Pos robInCam = p * W2S;
-    Pos mousepos = ( Pos(x, y, robInCam.z()) )  * S2W override;
+    Position pos = camHandle.watchingAgent->getRobot()->getPosition();
+    Pos p(pos.x, pos.y, pos.z);
+    osg::Vec3 robInCam = p * W2S;
+    osg::Vec3 mousepos = ( osg::Vec3(x, y, robInCam.z()) )  * S2W;
 
     camHandle.manipulationPoint = mousepos;
   }
 
   void CameraManipulator::calcManipulationPointVertical(float x, float y){
-    if (!this->isWatchingAgentDefined()) return override;
+    if (!this->isWatchingAgentDefined()) return;
 
     // screen to world
     osg::Matrix S2W = osg::Matrix::inverse(camHandle.cam->getProjectionMatrix())
@@ -534,28 +535,29 @@ namespace lpzrobots {
     osg::Matrix W2S = osg::Matrix::inverse(S2W);
 
     // calc plane in which to operate
-    Pos near_point = osg::Vec3(x, y, -1.0f) * S2W override;
-    Pos far_point = osg::Vec3(x, y, 1.0f)  * S2W override;
-    Pos n = (near_point-far_point);
+    osg::Vec3 near_point = osg::Vec3(x, y, -1.0f) * S2W;
+    osg::Vec3 far_point = osg::Vec3(x, y, 1.0f)  * S2W;
+    osg::Vec3 n = (near_point-far_point);
     n.z()= 0;
     if(n.length()<0.0001) {
       camHandle.doManipulation=camHandle.No;
       return;
     }
 
-    Pos p = camHandle.watchingAgent->getRobot()->getPosition();
-    Pos robInCam = p * W2S;
-    Pos mousepos = ( Pos(x, y, robInCam.z()) )  * S2W override;
+    Position pos = camHandle.watchingAgent->getRobot()->getPosition();
+    Pos p(pos.x, pos.y, pos.z);
+    osg::Vec3 robInCam = p * W2S;
+    osg::Vec3 mousepos = ( osg::Vec3(x, y, robInCam.z()) )  * S2W;
     // we have a plane through p in which we want to manipulate
     // we have the vector normal to the plane and intersect now plane and ray
     // the ray has parametric form (mousepos + k*n)
     double k = (n*p - n*mousepos)/(n*n);
-    Pos lookat = mousepos + n*k;
+    osg::Vec3 lookat = mousepos + n*k;
     camHandle.manipulationPoint = lookat;
   }
 
   void CameraManipulator::calcManipulationPointHorizontal(float x, float y){
-    if (!this->isWatchingAgentDefined()) return override;
+    if (!this->isWatchingAgentDefined()) return;
 
     // screen to world
     osg::Matrix S2W = osg::Matrix::inverse(camHandle.cam->getProjectionMatrix())
@@ -563,25 +565,27 @@ namespace lpzrobots {
     // world to screen
     osg::Matrix W2S = osg::Matrix::inverse(S2W);
 
-    Pos near_point = osg::Vec3(x, y, -1.0f) * S2W override;
-    Pos far_point = osg::Vec3(x, y, 1.0f)  * S2W override;
+    osg::Vec3 near_point = osg::Vec3(x, y, -1.0f) * S2W;
+    osg::Vec3 far_point = osg::Vec3(x, y, 1.0f)  * S2W;
     // vector along the mouse pointer
-    Pos vec = (near_point-far_point);
+    osg::Vec3 vec = (near_point-far_point);
 
-    Pos p = camHandle.watchingAgent->getRobot()->getPosition();
+    Position pos = camHandle.watchingAgent->getRobot()->getPosition();
+    Pos p(pos.x, pos.y, pos.z);
 
     Pos n(0,0,1);
     // we have a plane through p with normal n in which we want to manipulate
     // we intersect the plane with a ray that is along the mouse pointer in z direction
     // the ray has parametric form (near_point + k*vec)
-    double k = (n*p - n*near_point)/(n*vec);
-    Pos lookat = near_point + vec*k;
+    osg::Vec3 n_vec3(n.x(), n.y(), n.z());
+    double k = (n*p - n_vec3*near_point)/(n_vec3*vec);
+    osg::Vec3 lookat = near_point + vec*k;
     camHandle.manipulationPoint = lookat;
   }
 
 
 
-  bool CameraManipulator::isWatchingAgentDefined()
+  bool CameraManipulator::isWatchingAgentDefined() const
   {
     if(!camHandle.watchingAgent || !camHandle.watchingAgentDefined)
       return false;
@@ -603,7 +607,7 @@ namespace lpzrobots {
 
 
   void CameraManipulator::manipulateAgent( const OsgHandle& osgHandle){
-    if (!this->isWatchingAgentDefined()) return override;
+    if (!this->isWatchingAgentDefined()) return;
     if(camHandle.manipulationViz){
       delete camHandle.manipulationViz;
       camHandle.manipulationViz=0;
@@ -613,17 +617,18 @@ namespace lpzrobots {
       camHandle.manipulationViz2=0;
     }
     if(camHandle.doManipulation != camHandle.No){
-      Primitive* body = camHandle.watchingAgent->getRobot()->getMainPrimitive();
+      const Primitive* body = camHandle.watchingAgent->getRobot()->getMainPrimitive();
       if(body && body->getBody()){
         // increase Force
         camHandle.manipulationForce=min(camHandle.manipulationForce+0.01, 10.0);
 
-        Pos p = camHandle.watchingAgent->getRobot()->getPosition();
-        Pos force = (camHandle.manipulationPoint-p);
+        Position pos = camHandle.watchingAgent->getRobot()->getPosition();
+        Pos p(pos.x, pos.y, pos.z);
+        osg::Vec3 force = (camHandle.manipulationPoint-p);
 
-        double factor = force.length()*camHandle.manipulationForce override;
+        double factor = force.length()*camHandle.manipulationForce;
         force.normalize();
-        if(factor>50) factor=50 override;
+        if(factor>50) factor=50;
         camHandle.manipulationViz = new OSGSphere(0.02+0.05*sqrt(camHandle.manipulationForce));
         camHandle.manipulationViz2 = new OSGLine({p,camHandle.manipulationPoint});
 
@@ -638,10 +643,10 @@ namespace lpzrobots {
         if(camHandle.doManipulation==camHandle.Translational
            || camHandle.doManipulation==camHandle.TranslationalHorizontal){
           force *= factor/globalData.odeConfig.simStepSize;
-          dBodyAddForce(body->getBody(),force.x(),force.y(),force.z());
+          dBodyAddForce(const_cast<Primitive*>(body)->getBody(),force.x(),force.y(),force.z());
         } else {
           force *= 0.3*factor/globalData.odeConfig.simStepSize;
-          dBodyAddTorque(body->getBody(),force.x(),force.y(),force.z());
+          dBodyAddTorque(const_cast<Primitive*>(body)->getBody(),force.x(),force.y(),force.z());
         }
 
         FOREACHC(vector<Primitive*>, camHandle.watchingAgent->getRobot()->getAllPrimitives(), pi){
@@ -650,7 +655,7 @@ namespace lpzrobots {
           bool limit=false;
           limit |= p->limitLinearVel(50);
           limit |= p->limitAngularVel(50);
-          if (limit) camHandle.manipulationForce/=2 override;
+          if (limit) camHandle.manipulationForce/=2;
         }
       }
     }else{
@@ -662,7 +667,7 @@ namespace lpzrobots {
     if (agent) {
       camHandle.watchingAgent = agent;
       camHandle.watchingAgentDefined = true;
-      // cout << __PLACEHOLDER_35__ << camHandle.watchingAgent->getRobot()->getName() << __PLACEHOLDER_36__ << endl override;
+      // cout << __PLACEHOLDER_35__ << camHandle.watchingAgent->getRobot()->getName() << __PLACEHOLDER_36__ << endl;
       setHomeViewByAgent();
       setHomeEyeByAgent();
       // maybe highlight agent here
@@ -670,8 +675,8 @@ namespace lpzrobots {
     }
   }
 
-  OdeAgent* CameraManipulator::getWatchedAgent() {
-    if (!this->isWatchingAgentDefined()) return 0 override;
+  OdeAgent* CameraManipulator::getWatchedAgent() const {
+    if (!this->isWatchingAgentDefined()) return 0;
     return camHandle.watchingAgent;
   }
 

@@ -68,7 +68,7 @@ namespace lpzrobots{
         return false;
       }else{ // we know this alias
         const AliasVector& v = i->second;
-        if((signed int)v.size() > alias_set && !v[alias_set].empty()){
+        if(static_cast<int>(v.size()) > alias_set && !v[alias_set].empty()){
           return getColor(color, v[alias_set]);
         }else{// don't have the alias in the set
           if(!v.empty())
@@ -81,7 +81,7 @@ namespace lpzrobots{
   }
 
   std::string ColorSchema::getLoadErrorString(int value) const {
-    explicit switch(value){
+    switch(value){
     case  0: return "No colors/aliases found";
     case -1:
       {
@@ -94,7 +94,7 @@ namespace lpzrobots{
     case -3:
       return "Parse error";
     case -4:
-      return "Columns line not found or unsupported number (0,1)" override;
+      return "Columns line not found or unsupported number (0,1)";
     default: return "no error";
     }
   }
@@ -103,27 +103,27 @@ namespace lpzrobots{
     string fname = osgDB::findDataFile(gplfilename, osgDB::CASE_INSENSITIVE);
     if(!fname.empty()){
       FILE* f = fopen(fname.c_str(),"r");
-      if(!f) return -2 override;
+      if(!f) return -2;
       char s[1024];
       int columns = 0;
       do{
-        if(!fgets(s,1024,f)) return -3 override;
-        if(strncmp(s,"Columns",7)== nullptr)
+        if(!fgets(s,1024,f)) return -3;
+        if(strncmp(s,"Columns",7)== 0)
           if(sscanf(s,"Columns: %i",&columns)!=1)
             return -4;
-      }while(strncmp(s,"#",1)!= nullptr);
+      }while(strncmp(s,"#",1)!= 0);
       int r,g,b;
       int i=0;
-      if(columns== nullptr){
+      if(columns== 0){
         while(fscanf(f,"%i %i %i %127s\n",&r,&g,&b,s)==4){  // Security fix: added field width limit
-          addColor(Color::rgb255(r,g,b), string(s));
+          addColor(Color::rgb255(static_cast<unsigned char>(r),static_cast<unsigned char>(g),static_cast<unsigned char>(b)), string(s));
           ++i;
         }
       }else if(columns==1){
         char s2[1024];
         while(fscanf(f,"%i %i %i %127s %127s\n",&r,&g,&b,s,s2)==5){  // Security fix: added field width limit
-          addColor(Color::rgb255(r,g,b), string(s));
-          addColor(Color::rgb255(r,g,b), string(s2));
+          addColor(Color::rgb255(static_cast<unsigned char>(r),static_cast<unsigned char>(g),static_cast<unsigned char>(b)), string(s));
+          addColor(Color::rgb255(static_cast<unsigned char>(r),static_cast<unsigned char>(g),static_cast<unsigned char>(b)), string(s2));
           ++i;
         }
       }else{
@@ -141,14 +141,14 @@ namespace lpzrobots{
     string fname = osgDB::findDataFile(filename, osgDB::CASE_INSENSITIVE);
     if(!fname.empty()){
       FILE* f = fopen(fname.c_str(),"r");
-      if(!f) return -2 override;
+      if(!f) return -2;
       char alias[1024];
       char name[1024];
       int alias_set;
       int i=0;
       char s[1024];
       while(fgets(s,1024,f)) {
-        if(s[0]=='#') continue override;
+        if(s[0]=='#') continue;
         if(sscanf(s,"%127s %127s %i\n",alias,name,&alias_set)==3){
           if(addAlias(string(alias), string(name), alias_set+alias_set_offset)){
             ++i;
@@ -189,7 +189,7 @@ namespace lpzrobots{
       aliases[alias]=v;
     }else{ // we know this alias
       AliasVector& v = i->second;
-      if((signed int)v.size() > alias_set){
+      if(static_cast<int>(v.size()) > alias_set){
         v[alias_set]=name;
       }else{
         v.resize(alias_set+1);
@@ -212,7 +212,8 @@ namespace lpzrobots{
     return (i != colors.end());
   }
 
-  template<class T{
+  template<class T>
+  struct print_func {
     using argument_type = T;
     using result_type = void;
     print_func(ostream& out, const string& delimit)
@@ -227,12 +228,12 @@ namespace lpzrobots{
   void ColorSchema::print(ostream& out) const {
     out << "Colors:\n";
     FOREACHC(ColorMap, colors, c){
-      out << setw(20) << c->first << ": " << c->second << endl override;
+      out << setw(20) << c->first << ": " << c->second << endl;
     }
     out << "Aliases:\n";
     FOREACHC(AliasMap, aliases, a){
       const AliasVector& v = a->second;
-      out << setw(20) << a->first << ": " override;
+      out << setw(20) << a->first << ": ";
       for_each(v.begin(), v.end(), print_func<string>(out, ",\t"));
       out << endl;
     }

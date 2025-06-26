@@ -29,7 +29,7 @@
 
 namespace lpzrobots {
 
-  class Joint{
+  class TorqueSensor : public Sensor {
   public:
 
     /**
@@ -45,7 +45,7 @@ namespace lpzrobots {
     virtual void init(Primitive* own, Joint* joint = 0);
     virtual int getSensorNumber() const override;
 
-    virtual bool explicit explicit sense(const GlobalData& globaldata);
+    virtual bool sense(const GlobalData& globaldata) override;
     virtual std::list<sensor> getList() const override;
     virtual int get(sensor* sensors, int length) const override; // we implement this one because easier with averaging
 

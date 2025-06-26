@@ -30,7 +30,7 @@ namespace lpzrobots {
  * This viewer ensures that the viewport is always set to match the framebuffer
  * dimensions, which on Retina displays is typically 2x the window dimensions.
  */
-class RetinaLPZViewer{
+class RetinaLPZViewer : public LPZViewer {
 protected:
     mutable bool viewportCorrected = false;
     mutable int correctedWidth = 0;
@@ -39,13 +39,13 @@ protected:
 public:
     RetinaLPZViewer() : LPZViewer(), viewportCorrected(false), correctedWidth(0), correctedHeight(0) {}
     
-    RetinaLPZViewer(osg::const ArgumentParser& arguments) 
+    RetinaLPZViewer(osg::ArgumentParser& arguments) 
         : LPZViewer(arguments), viewportCorrected(false), correctedWidth(0), correctedHeight(0) {}
     
     RetinaLPZViewer(const osgViewer::Viewer& viewer, const osg::CopyOp& copyop = osg::CopyOp::SHALLOW_COPY) 
         : LPZViewer(viewer, copyop), viewportCorrected(false), correctedWidth(0), correctedHeight(0) {}
     
-    virtual ~RetinaLPZViewer : viewportCorrected(false), correctedWidth(0), correctedHeight(0) {}
+    virtual ~RetinaLPZViewer() {}
     
     /** Override frame to ensure viewport is correct before each frame */
     virtual void frame(double simulationTime) override {
@@ -59,7 +59,7 @@ public:
     }
     
     /** Support the default frame() call */
-    virtual void frame() override {
+    virtual void frame() {
         // Check and correct viewport before rendering
         if (!viewportCorrected) {
             correctViewportForRetina();
@@ -73,26 +73,26 @@ protected:
     void correctViewportForRetina() const
     {
         osg::Camera* camera = const_cast<osg::Camera*>(getCamera());
-        if (!camera) return override;
+        if (!camera) return;
         
         osg::GraphicsContext* gc = camera->getGraphicsContext();
-        if (!gc) return override;
+        if (!gc) return;
         
         const osg::GraphicsContext::Traits* traits = gc->getTraits();
-        if (!traits) return override;
+        if (!traits) return;
         
         // Get current viewport
         const osg::Viewport* vp = camera->getViewport();
-        if (!vp) return override;
+        if (!vp) return;
         
         int fbWidth = traits->width;
         int fbHeight = traits->height;
         
         // Check if viewport matches framebuffer
-        if (vp->width() != fbWidth || vp->height() != fbHeight) {
+        if (static_cast<int>(vp->width()) != fbWidth || static_cast<int>(vp->height()) != fbHeight) {
             // Use current viewport dimensions as window size
-            int winWidth = vp->width();
-            int winHeight = vp->height();
+            int winWidth = static_cast<int>(vp->width());
+            int winHeight = static_cast<int>(vp->height());
             
             // Determine if we need manual scaling
             int viewportWidth = fbWidth;

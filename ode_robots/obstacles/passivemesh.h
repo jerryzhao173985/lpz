@@ -63,15 +63,15 @@ class PassiveMesh{
   /**
    * update position of mesh
    */
-  virtual void update() override {
+  virtual void update() {
     ifstatic_cast<mesh>(mesh)->update();
   };
 
-/*   virtual void setTexture(const std::string& filename) override { */
+/*   virtual void setTexture(const std::string& filename) { */
 /*     ifstatic_cast<mesh>(mesh)->getOSGPrimitive()->setTexture(filename); */
 /*   } */
 
-  virtual void setPose(const osg::Matrix& pose) override {
+  virtual void setPose(const osg::Matrix& pose) {
     this->pose = pose;
     if (obstacle_exists){
       destroy();
@@ -84,7 +84,7 @@ class PassiveMesh{
 
  protected:
 
-  virtual void create() override {
+  virtual void create() {
     mesh = new Mesh(filename,scale);
     mesh->init(odeHandle, mass, osgHandle);
 //     osg::Vec3 pos=pose.getTrans();
@@ -94,7 +94,7 @@ class PassiveMesh{
   };
 
 
-  virtual void destroy() override {
+  virtual void destroy() {
     ifstatic_cast<mesh>(delete) mesh override;
     obstacle_exists=false;
   };

@@ -29,10 +29,12 @@
 #include <osg/Vec3>
 #include <osgGA/GUIEventAdapter>
 #include <osgGA/GUIActionAdapter>
+#include <osgGA/KeySwitchMatrixManipulator>
 #include <list>
 #include <vector>
 #include <string>
 #include "utils/globaldata.h"
+#include "osg/base.h"
 
 // forward declarations
 namespace osgViewer {
@@ -42,7 +44,7 @@ namespace osgViewer {
 namespace lpzrobots {
   class OdeHandle;
   class OsgHandle;
-  class GlobalData;
+  // GlobalData is included from utils/globaldata.h
   class LPZViewer;
   class OdeAgent;
   class PlotOption;
@@ -53,7 +55,7 @@ namespace lpzrobots {
 
 namespace lpzrobots {
 
-  class Simulation{
+  class Simulation : public Base, public osgGA::GUIEventHandler, public Callbackable {
   public:
 
     enum SimulationState { none, initialised, running, closed };
@@ -95,7 +97,7 @@ namespace lpzrobots {
         For keycodes see: osgGA::GUIEventAdapter
         @return true if the key was handled
     */
-    virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData,
+    virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData_,
                          int key, bool down) { return false; }
 
     /** this can be used to describe the key bindings used by command()
@@ -118,7 +120,7 @@ namespace lpzrobots {
         @param pause always false (only called of simulation is running)
         @param control indicates that robots have been controlled this timestep
      */
-    virtual void addCallback(const GlobalData& globalData, bool draw, bool pause, bool control) {};
+    virtual void addCallback(const GlobalData& globalData_, bool draw_, bool pause_, bool ctrl) {};
 
     /** adds a palette file to be loaded at initialization time
         Call this before run()!
@@ -176,7 +178,7 @@ namespace lpzrobots {
     // plotoptions is a list of possible online output,
     // if the list is empty no online gnuplot windows and no logging to file occurs.
     // The list is modified with commandline options, see run() in simulation.cpp
-    std::list<PlotOption>& plotoptions; // points now to globaldata.plotoptions
+    std::list<::PlotOption>& plotoptions; // points now to globaldata.plotoptions
 
 
     /**
@@ -186,10 +188,10 @@ namespace lpzrobots {
     __attribute__ ((deprecated)) void showParams(const ConfigList& configs) {}
 
   private:
-    void insertCmdLineOption(const int& argc,char**& argv);
+    void insertCmdLineOption(int& argc,char**& argv);
     bool loop();
     /// clears obstacle and agents lists and delete entries
-    void tidyUp(const GlobalData& globalData);
+    void tidyUp(GlobalData& globalData);
 
   protected:
     /// returns false if the program is to exit
@@ -199,14 +201,14 @@ namespace lpzrobots {
 
     std::list<std::pair<std::string, double> > parseKeyValuePairs(const std::string& kv);
   private:
-    static void explicit explicit control_c(int i);
+    static void control_c(int i);
     static void cmd_handler_exit();
     static void cmd_handler_init();
     static void cmd_begin_input();
     static void cmd_end_input();
 
     // Commandline interface stuff
-    static void explicit explicit main_usage(const char* progname);
+    static void main_usage(const char* progname);
 
     bool storeOdeRobotsCFG();
 
@@ -254,8 +256,8 @@ namespace lpzrobots {
 
     bool useOdeThread;
     bool useOsgThread;
-    parambool useQMPThreads; // decides if quick mp is used in this simulation
-    parambool inTaskedMode;
+    bool useQMPThreads; // decides if quick mp is used in this simulation
+    bool inTaskedMode;
 
     std::string windowName;
 

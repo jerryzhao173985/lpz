@@ -34,56 +34,55 @@
 #include "angularmotor.h"
 namespace lpzrobots{
 
-  typedef struct {
+  struct Arm2SegmConf {
 
 
 
-  } Arm2SegmConf;
+    double max_force = 5;       // maximal force for motors
+    int segmentsno = 4;          // number of segments
+    double base_mass = 0.5;      // mass of base segment
+    double base_length = 0.4;    // length of base segment
+    double base_width = 0.1;     // width of base segment
+    double arm_mass = 0.1;       // mass of arm elements
+    double arm_width = 0.2;      // width static_cast<thickness>(of) arms
+    double arm_length = 1.2;     // length of arms
+    double arm_offset = 0.03;    // offset between arms (so that they do not touch)
+    double joint_offset = 0.2;   // overlapping of arms (to have area for joints)
+  };
 
 
 
-  class Arm2Segm{
+  class Arm2Segm : public OdeRobot {
   public:
 
-    Arm2Segm(const OdeHandle& odeHandle, const OsgHandle& osgHandle, const Arm2SegmConf);
+    Arm2Segm(const OdeHandle& odeHandle, const OsgHandle& osgHandle, const Arm2SegmConf& conf, const std::string& name);
 
     virtual ~Arm2Segm() {};
 
-    static Arm2SegmConf getDefaultConf() const {
-      Arm2SegmConf conf;
-      conf.max_force=5;       // maximal force for motors
-      conf.segmentsno=4;      // number of segments
-      conf.base_mass=0.5;     // mass of base segment
-      conf.base_length= 0.4;  // length of base segment
-      conf.base_width= 0.1;   // width of base segment
-      conf.arm_mass=0.1;      // mass of arm elements
-      conf.arm_width=0.2;     // width static_cast<thickness>(of) arms
-      conf.arm_length = 1.2;  // length of arms
-      conf.arm_offset= 0.03;  // offset between arms (so that they do not touch)
-      conf.joint_offset=0.2;  // overlapping of arms (to have area for joints)
-      return conf;
+    static Arm2SegmConf getDefaultConf() {
+      return Arm2SegmConf();
     }
 
     /// update the subcomponents
-    virtual void update();
+    virtual void update() override;
 
     /** sets the pose of the vehicle
         @param pose desired 4x4 pose matrix
     */
-    virtual void placeIntern(const osg::Matrix& pose);
+    virtual void placeIntern(const osg::Matrix& pose) override;
 
     /** returns actual sensorvalues
         @param sensors sensors scaled to [-1,1]
         @param sensornumber length of the sensor array
         @return number of actually written sensors
     */
-    virtual int getSensorsIntern(sensor* sensors, int sensornumber);
+    virtual int getSensorsIntern(double* sensors, int sensornumber) override;
 
     /** sets actual motorcommands
         @param motors motors scaled to [-1,1]
         @param motornumber length of the motor array
     */
-    virtual void setMotorsIntern(const double* motors, int motornumber);
+    virtual void setMotorsIntern(const double* motors, int motornumber) override;
 
     /** returns number of sensors
      */
@@ -127,10 +126,10 @@ namespace lpzrobots{
     paramval speed;
     paramval factorSensors;
 
-    int sensorno;      //number of sensors
-    int motorno;       // number of motors
+    int sensorno = 0;      //number of sensors
+    int motorno = 0;       // number of motors
 
-    bool created;      // true if robot was created
+    bool created = false;      // true if robot was created
   };
 };
 #endif

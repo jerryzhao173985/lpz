@@ -47,7 +47,7 @@ namespace lpzrobots {
 
   void AngularMotor::init(Primitive* own, Joint* joint){
     if(initialized) return; // cannot be called twice!
-    if(joint) this->joint=joint override;
+    if(joint) this->joint=joint;
     assert(this->joint!= nullptr);
 
     const Primitive* p1 = this->joint->getPart1();

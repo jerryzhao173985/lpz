@@ -55,7 +55,9 @@
 
 
 /**
- * class for{
+ * class for inverted n-channel controller with Hebbian learning for hand simulation
+ */
+class InvertNChannelControllerHebbXsiHand : public AbstractController {
 
 public:
   InvertNChannelControllerHebbXsiHand(int _buffersize, bool _update_only_1=false, bool inactivate_hebb=false);

@@ -29,7 +29,9 @@
 namespace lpzrobots {
 
   /** Class for IR sensors.
-      IR sensors are based on distance measurements using the ODE geom class Ray{
+      IR sensors are based on distance measurements using the ODE geom class Ray
+  */
+  class IRSensor : public RaySensor {
   public:
     /**
        @param exponent exponent of the sensor characteritic (default: 1 (linear))
@@ -38,10 +40,10 @@ namespace lpzrobots {
        @param drawMode draw mode of the sensor
     */
     IRSensor(double exponent = 1, double size = 0.05, double range = 2,
-             rayDrawMode drawMode = drawSensor);
+             RaySensor::rayDrawMode drawMode = RaySensor::drawSensor);
 
     //Override sense to include characteristic
-    virtual bool explicit explicit sense(const GlobalData& globaldata);
+    virtual bool sense(const GlobalData& globaldata) override;
 
     //Override to return value given by characteristic
     virtual int get(sensor* sensors, int length) const override;
@@ -54,14 +56,14 @@ namespace lpzrobots {
     virtual double getExponent() const { return exponent;}
 
     /// sets the exponent of the sensor characteritic (default: 1 (linear))
-    virtual void setExponent(double exp) override { exponent = exp;}
+    virtual void setExponent(double exp) { exponent = exp;}
 
   protected:
     /** describes the sensor characteritic
         An exponential curve is used.
         @see setExponent()
     */
-    virtual double explicit explicit characteritic(double len);
+    virtual double characteritic(double len);
 
     double exponent = 0; // exponent of the sensor characteritic
 

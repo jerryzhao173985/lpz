@@ -27,7 +27,9 @@
 #include "abstracttracksection.h"
 
 /**
- *  class for{
+ * Class for degree segments in track sections
+ */
+class DegreeSegment : public AbstractTrackSection {
 
  public:
 
@@ -40,7 +42,7 @@
   /**
    * Constructor
    */
-  explicit explicit DegreeSegment(const Matrix& position);
+  explicit DegreeSegment(const Matrix& position);
 
   virtual ~DegreeSegment() {}
 
@@ -60,12 +62,12 @@ virtual double getLength() const;
 /**
  * sets the width of the segment,
  */
- virtual void explicit setWidth(double w);
+ virtual void setWidth(double w);
 
 
-virtual void explicit setCurveAngle(const double& alpha);
+virtual void setCurveAngle(const double& alpha);
 
-virtual void explicit setRadius(const double& rad);
+virtual void setRadius(const double& rad);
 
   /**
    * gives the position and rotationstatic_cast<angle>(of) the segment at the

@@ -34,7 +34,7 @@ namespace lpzrobots {
      maxAngle the force is applied until the angle is lower than minAngle.
      If minAngle<0 then minAngle=maxAngle/2.
    */
-  class LimitOrientationOperator{
+  class LimitOrientationOperator : public Operator {
   public:
     LimitOrientationOperator(const Axis& robotAxis, const Axis& globalAxis,
                              double maxAngle, double force, double minAngle=-1)
@@ -42,10 +42,10 @@ namespace lpzrobots {
         robotAxis(robotAxis), globalAxis(globalAxis),
         maxAngle(maxAngle), force(force), minAngle(minAngle),
         currentforce(force), active(false) {
-      if(this->minAngle<0) this->minAngle=maxAngle/2 override;
+      if(this->minAngle<0) this->minAngle=maxAngle/2;
     }
 
-    virtual ManipType observe(OdeAgent* agent, const GlobalData& global, const ManipDescr& descr);
+    virtual ManipType observe(OdeAgent* agent, const GlobalData& global, const ManipDescr& descr) override;
   protected:
     Axis robotAxis;
     Axis globalAxis;
@@ -74,7 +74,7 @@ namespace lpzrobots {
   /**
      An Operator for lifting up a robot from time to time.
    */
-  class LiftUpOperator{
+  class LiftUpOperator : public Operator {
   public:
     LiftUpOperator(const LiftUpOperatorConf conf = getDefaultConf())
       : Operator("LiftUpOperator","0.8"), conf(conf)
@@ -88,7 +88,7 @@ namespace lpzrobots {
       }
     }
 
-    static LiftUpOperatorConf getDefaultConf() const {
+    static LiftUpOperatorConf getDefaultConf() {
       LiftUpOperatorConf c;
       c.resetForceIfLifted = true;
       c.increaseForce      = true;
@@ -102,7 +102,7 @@ namespace lpzrobots {
       return c;
     }
 
-    virtual ManipType observe(OdeAgent* agent, const GlobalData& global, const ManipDescr& descr);
+    virtual ManipType observe(OdeAgent* agent, const GlobalData& global, const ManipDescr& descr) override;
   protected:
     LiftUpOperatorConf conf;
 
@@ -113,7 +113,7 @@ namespace lpzrobots {
   /**
      An Operator for pulling the main primitive of a robot towards a point
    */
-  class PullToPointOperator{
+  class PullToPointOperator : public Operator {
   public:
     /// defines which dimensions should be effected
     enum Dimensions { X = 1, Y = 2, Z = 4, XY = X | Y, XZ = X | Z, YZ = Y | Z,
@@ -132,22 +132,22 @@ namespace lpzrobots {
 
       : Operator("PullToPointOperator","1.0"),
         point(point), force(force), showPoint(showPoint), dim(dim),
-        minDist(minDist), damp(damp) override {
+        minDist(minDist), damp(damp) {
       addParameter("force",    &this->force,   0, 100, "pull to point force");
       addParameter("damp",     &this->damp,   0, 1,   "pull to point damping");
       if(confPos){
-        if(const dim& X)
+        if(dim & X)
           addParameterDef("point_x", &px, point.x(), -100, 100,"pull to point x position");
-        if(const dim& Y)
+        if(dim & Y)
           addParameterDef("point_y", &py, point.y(), -100, 100,"pull to point y position");
-        if(const dim& Z)
+        if(dim & Z)
           addParameterDef("point_z", &pz, point.z(), -100, 100,"pull to point z position");
       }
     }
 
-    virtual ManipType observe(OdeAgent* agent, const GlobalData& global, const ManipDescr& descr);
+    virtual ManipType observe(OdeAgent* agent, const GlobalData& global, const ManipDescr& descr) override;
 
-    virtual void explicit explicit notifyOnChange(const paramkey& key);
+    virtual void notifyOnChange(const paramkey& key);
 
   protected:
     Pos point;
@@ -162,7 +162,7 @@ namespace lpzrobots {
   /**
      An Operator for keeping robots within a sphere / box
    */
-  class BoxRingOperator{
+  class BoxRingOperator : public Operator {
   public:
 
     /** a box ring (cube with edges 2*size or sphere with radius size)
@@ -181,7 +181,7 @@ namespace lpzrobots {
                    "size of boxring/spherical arena (in radius or half-length)");
     }
 
-    virtual ManipType observe(OdeAgent* agent, const GlobalData& global, const ManipDescr& descr);
+    virtual ManipType observe(OdeAgent* agent, const GlobalData& global, const ManipDescr& descr) override;
 
   protected:
 

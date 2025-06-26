@@ -1,10 +1,37 @@
-/************************************************************************/
-/* originally from:                                                     */
-/* schlange.h                                                                */
-/* Abstract class for{
+/***************************************************************************
+ *   Copyright (C) 2005-2011 LpzRobots development team                    *
+ *    Georg Martius  <georg dot martius at web dot de>                     *
+ *    Frank Guettler <guettler at informatik dot uni-leipzig dot de        *
+ *    Frank Hesse    <frank at nld dot ds dot mpg dot de>                  *
+ *    Ralf Der       <ralfder at mis dot mpg dot de>                       *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ *                                                                         *
+ ***************************************************************************/
+#ifndef __DEFAULTCATERPILLAR_H
+#define __DEFAULTCATERPILLAR_H
+
+#include <vector>
+#include <string>
+#include "oderobot.h"
+#include "angularmotor.h"
+
+namespace lpzrobots {
 
 typedef struct {
-public:
   int segmNumber = 0;  ///<  number of snake elements
   double segmLength = 0.0;  ///< length of one snake element
   double segmDia = 0.0;     ///<  diameter of a snake element
@@ -23,7 +50,7 @@ public:
  * It consists of a number of equal elements, each linked
  * by a joint
  **/
-class DefaultCaterPillar{
+class DefaultCaterPillar : public OdeRobot {
 protected:
 
   bool created = false;
@@ -35,7 +62,7 @@ public:
   DefaultCaterPillar ( const OdeHandle& odeHandle, const OsgHandle& osgHandle,
              const CaterPillarConf& conf, const std::string& name, const std::string& revision);
 
-  static CaterPillarConf getDefaultConf() const {
+  static CaterPillarConf getDefaultConf() {
     CaterPillarConf conf;
     conf.segmNumber = 6;    //  number of snake elements
     conf.segmLength = 0.4;   // length of one snake element
@@ -50,7 +77,7 @@ public:
     return conf;
   }
 
-  virtual ~DefaultCaterPillar() override;
+  virtual ~DefaultCaterPillar();
 
 
   /** sets the pose of the vehicle
@@ -93,7 +120,7 @@ public:
   virtual int getSegmentsPosition(std::vector<Position> &poslist);
 
     /******** CONFIGURABLE ***********/
-    virtual void explicit explicit notifyOnChange(const paramkey& key);
+    virtual void notifyOnChange(const paramkey& key) override;
 
   /** the main object of the robot, which is used for position and speed tracking */
   virtual Primitive* getMainPrimitive() const {

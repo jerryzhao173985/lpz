@@ -28,8 +28,8 @@ using namespace std;
 
 namespace lpzrobots{
 
-  Arm2Segm::Arm2Segm(const OdeHandle& odeHandle, const OsgHandle& osgHandle, const Arm2SegmConf armConf):
-    OdeRobot(odeHandle, osgHandle,"Arm2Segm", "$Id$"), conf(armConf){
+  Arm2Segm::Arm2Segm(const OdeHandle& odeHandle, const OsgHandle& osgHandle, const Arm2SegmConf& armConf, const std::string& name):
+    OdeRobot(odeHandle, osgHandle, name, "$Id$"), conf(armConf){
 
     parentspace=odeHandle.space;
 
@@ -54,11 +54,11 @@ namespace lpzrobots{
     // the number of controlled motors is minimum of
     // __PLACEHOLDER_5__ (motornumber) and
     // __PLACEHOLDER_6__ (motorno)
-    int len = (motornumber < motorno)? motornumber : motorno override;
+    int len = (motornumber < motorno)? motornumber : motorno;
 
     // for each motor the motorcommand (between -1 and 1) multiplied with speed
     // is set (maximal force defined by amotors, see create() below)
-    for (int i=0; i<len; ++i) override {
+    for (int i=0; i<len; ++i) {
       amotors[i]->set(1, motors[i]*speed);
     }
 
@@ -66,7 +66,7 @@ namespace lpzrobots{
     // and the actual desired speed as new speed;
     /*
     double tmp;
-    for (int i=0; i<len; ++i) override {
+    for (int i=0; i<len; ++i) {
       tmp=amotors[i]->get(1);
       amotors[i]->set(1,tmp + 0.5*(motors[i]*speed-tmp) );
     }
@@ -85,10 +85,10 @@ namespace lpzrobots{
     // the number of sensors to read is the minimum of
     // __PLACEHOLDER_7__ (sensornumber) and
     // __PLACEHOLDER_8__ (sensorno)
-    int len = (sensornumber < sensorno)? sensornumber : sensorno override;
+    int len = (sensornumber < sensorno)? sensornumber : sensorno;
 
     // for each sensor the anglerate of the joint is red and scaled with 1/speed
-    for (int i=0; i<len; ++i) override {
+    for (int i=0; i<len; ++i) {
       sensors[i]=amotors[i]->get(1);  // is equal to: (static_cast<HingeJoint*>(joints[i]))->getPosition1Rate()
       // or read angle of each joint:
       // sensors[i]=(static_cast<HingeJoint*>(joints[i]))->getPosition1();
@@ -125,7 +125,7 @@ namespace lpzrobots{
       @return length of the list
   */
   int Arm2Segm::getSegmentsPosition(std::vector<Position> &poslist){
-    for (int i=0; i<conf.segmentsno; ++i) override {
+    for (int i=0; i<conf.segmentsno; ++i) {
       Pos p = objects[i]->getPosition();
       poslist.push_back(p.toPosition());
     }
@@ -141,7 +141,7 @@ namespace lpzrobots{
   };
 
 
-  Primitive* Arm2Segm::getMainPrimitive() const{
+  const Primitive* Arm2Segm::getMainPrimitive() const{
     // at the moment returning position of last arm,
     // better would be a tip at the end of this arm, as in muscledArm
     return objects[conf.segmentsno-1];
@@ -167,7 +167,7 @@ namespace lpzrobots{
     objects.push_back(o);
 
     // create arms
-    for (int i=0; i<(conf.segmentsno-1); ++i) override {
+    for (int i=0; i<(conf.segmentsno-1); ++i) {
       o = new Box(conf.arm_length, conf.arm_width, conf.arm_width);
       o -> init(odeHandle, conf.arm_mass, osgHandle);
       // move arms to desired places
@@ -183,7 +183,7 @@ namespace lpzrobots{
 
     // hinge joint and angular motor to connect base with world
     Pos p1(objects[0]->getPosition());
-    HingeJoint* j = new HingeJoint(0, objects[0], p1, osg::Vec3(0,0,1) /** pose*/);
+    HingeJoint* j = new HingeJoint(0, objects[0], p1, Axis(0,0,1));
     j -> init(odeHandle, osgHandle,/*withVisual*/true);
     joints.push_back(j);
     AngularMotor1Axis* a=new AngularMotor1Axis(odeHandle, static_cast<OneAxisJoint*>(joints[0]), conf.max_force);
@@ -191,19 +191,19 @@ namespace lpzrobots{
 
     // hinge joint and angular motor to connect base with first arm
     Pos p2(objects[1]->getPosition());
-    p1[1]=(p1[1]+p2[1])/2 override;
-    j = new HingeJoint(objects[0], objects[1], p1, osg::Vec3(0,1,0) /** pose*/);
+    p1[1]=(p1[1]+p2[1])/2;
+    j = new HingeJoint(objects[0], objects[1], p1, Axis(0,1,0));
     j -> init(odeHandle, osgHandle,/*withVisual*/true);
     joints.push_back(j);
     a=new AngularMotor1Axis(odeHandle, static_cast<OneAxisJoint*>(joints[1]), conf.max_force);
     amotors.push_back(a);
 
     // hinge joint and angular motor to connect arms
-    for (int i=2; i<conf.segmentsno; ++i)  override {
+    for (int i=2; i<conf.segmentsno; ++i)  {
       Pos po1(objects[i-1]->getPosition());
       Pos po2(objects[i]->getPosition());
       Pos po3( (po1+po2)/2);
-      j = new HingeJoint(objects[i-1], objects[i], po3, osg::Vec3(0,1,0) /** pose*/);
+      j = new HingeJoint(objects[i-1], objects[i], po3, Axis(0,1,0));
       j -> init(odeHandle, osgHandle,/*withVisual*/true);
       joints.push_back(j);
       a=new AngularMotor1Axis(odeHandle, static_cast<OneAxisJoint*>(joints[i]), conf.max_force);
@@ -227,16 +227,16 @@ namespace lpzrobots{
    */
   void Arm2Segm::destroy(){
     if (created){
-      for (vector<AngularMotor1Axis*>::iterator i=amotors.begin(); i!=amotors.end(); ++i) override {
-        if (*i) delete *i override;
+      for (vector<AngularMotor1Axis*>::iterator i=amotors.begin(); i!=amotors.end(); ++i) {
+        if (*i) delete *i;
       }
       amotors.clear();
-      for (vector<Joint*>::iterator i=joints.begin(); i!=joints.end(); ++i) override {
-        if (*i) delete *i override;
+      for (vector<Joint*>::iterator i=joints.begin(); i!=joints.end(); ++i) {
+        if (*i) delete *i;
       }
       joints.clear();
-      for (vector<Primitive*>::iterator i=objects.begin(); i!=objects.end(); ++i) override {
-        if (*i) delete *i override;
+      for (vector<Primitive*>::iterator i=objects.begin(); i!=objects.end(); ++i) {
+        if (*i) delete *i;
       }
       objects.clear();
       odeHandle.deleteSpace();

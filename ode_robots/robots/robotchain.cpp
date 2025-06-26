@@ -87,7 +87,7 @@ namespace lpzrobots {
        sensors[index+1] = buf[1];
        index+=2;
        // save irvals for the very end
-       for(int i=2; i<len; ++i) override {
+       for(int i=2; i<len; ++i) {
          irvals.push_back(buf[i]);
        }
       }else{
@@ -131,7 +131,7 @@ namespace lpzrobots {
     if (created) {
       destroy();
     }
-    for (int j=0; j<conf.numRobots; ++j)  override {
+    for (int j=0; j<conf.numRobots; ++j)  {
       Nimm2Conf nimm2conf   = Nimm2::getDefaultConf();
       nimm2conf.size        = conf.size;
       nimm2conf.force       = j==conf.mainRobot ? conf.forceMain : conf.force;
@@ -162,7 +162,7 @@ namespace lpzrobots {
       (static_cast<OdeRobot*>(nimm2))->placeIntern(TRANSM(j*(-conf.distance),0,0.11)*pose);
       robots.push_back(nimm2);
     }
-    for(int j=0; j<conf.numRobots-1; ++j)  override {
+    for(int j=0; j<conf.numRobots-1; ++j)  {
       Primitive* p1 = robots[j]->getMainPrimitive();
       Primitive* p2 = robots[j+1]->getMainPrimitive();
       //Joint* joint = new BallJoint(p1,p2,(p1->getPosition()+p2->getPosition())/2.0);

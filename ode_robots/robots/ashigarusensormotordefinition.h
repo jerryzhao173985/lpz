@@ -66,7 +66,8 @@ enum AshigaruSensorNames{
   //    \ ___0__                   |
   ///                                  V x
   //
-  POSE_r = 21, // roll static_cast<rad>(POSE_p) = 22, // pitch
+  POSE_r = 21, // roll (rad)
+  POSE_p = 22, // pitch
   POSE_y = 23, // yaw
 
   // angular Vel
@@ -143,27 +144,35 @@ enum AshigaruMotorNames{
 typedef struct {
         //Unit m, kg
         double length;
+        double width;
+        double height;
+        double mass;
 
         double length_axis_to_center;// The length between the center of dynamixel and the axis.
         double length_from_axis_to_tip; // The length between the axis and the tip of joint material(bra for servo)
 
-}DynaAX12Conf;
+} DynaAX12Conf;
 
 // The internal parameters of the Hexagon Body
 typedef struct {
         //Unit m, kg
+        double mass;
+        double height;
+        double length;
 
-}HexagonBodyConf;
+} HexagonBodyConf;
 
-// The internal parameters of Foot frame static_cast<Tibia>(typedef) struct {
+// The internal parameters of Foot frame (Tibia)
+typedef struct {
         //Unit m,kg
         double width;
         double height;
+        double length;
 
         double footRadius;
 
         double mass;
-}FootFrameConf;
+} FootFrameConf;
 
 typedef struct {
         // Unit m
@@ -171,7 +180,7 @@ typedef struct {
         double length_TCJ_to_CTJ;
         double length_CTJ_to_FTJ;
         double length_FTJ_to_Toe;
-}JointLength;
+} JointLength;
 
 //The internal parameter of the servo
 typedef struct{
@@ -194,7 +203,7 @@ typedef struct{
          // Max vel which the servo can get
         double maxVel;
 
-}ServoParam;
+} ServoParam;
 
 //The special parameter
 //  this is not good parameter I think, I have to change it But, temporally I use it
@@ -207,7 +216,7 @@ typedef struct{
         //  By making this parameter too large to vibrate, we can treat it as rigid body
         double servoPower;
 
-}SpecialParam;
+} SpecialParam;
 
 //! >ASHIGARU Configuration struct
 typedef struct {

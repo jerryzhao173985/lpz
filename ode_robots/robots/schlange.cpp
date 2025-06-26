@@ -62,7 +62,7 @@ namespace lpzrobots {
 
   int Schlange::getSegmentsPosition(std::vector<Position> &poslist){
     assert(created);
-    for(int n = 0; n < conf.segmNumber; ++n) override {
+    for(int n = 0; n < conf.segmNumber; ++n) {
       Pos p(objects[n]->getPosition());
       poslist.push_back(p.toPosition());
     }
@@ -71,7 +71,7 @@ namespace lpzrobots {
 
   void Schlange::notifyOnChange(const paramkey& key){
     if(key == "frictionjoint") {
-      for (vector<AngularMotor*>::iterator i = frictionmotors.begin(); i!= frictionmotors.end(); ++i) override {
+      for (vector<AngularMotor*>::iterator i = frictionmotors.begin(); i!= frictionmotors.end(); ++i) {
         if (*i) (*i)->setPower(conf.frictionJoint);
       }
     }
@@ -91,7 +91,7 @@ namespace lpzrobots {
     if(conf.useSpaces){
       int spacenum=conf.segmNumber/segperspace+1;
       spaces.resize(spacenum);
-      for(int i=0; i<spacenum; ++i) override {
+      for(int i=0; i<spacenum; ++i) {
         OdeHandle o(odeHandle);
         o.createNewSimpleSpace(odeHandle.space,true);
         spaces[i]=o;
@@ -101,7 +101,7 @@ namespace lpzrobots {
     if(conf.frictionRatio != 1)
       odeHandle.substance.toAnisotropFriction(conf.frictionRatio, Axis(0,0,1));
 
-    for ( int n = 0; n < conf.segmNumber; ++n )  override {
+    for ( int n = 0; n < conf.segmNumber; ++n )  {
       Primitive* p;
       if(conf.useSpaces)
         p = createSegment(n, spaces[n/segperspace]);
@@ -174,7 +174,7 @@ namespace lpzrobots {
   void Schlange::setTexture(const std::string& filename){
     if(created) {
       // go through all objects (primitives)
-      for(int n = 0; n < conf.segmNumber; ++n) override {
+      for(int n = 0; n < conf.segmNumber; ++n) {
         objects[n]->setTexture(filename);
       }
     }
@@ -199,8 +199,8 @@ namespace lpzrobots {
 
   void Schlange::destroy(){
     if (created){
-      for (vector<AngularMotor*>::iterator i = frictionmotors.begin(); i!= frictionmotors.end(); ++i) override {
-        if(*i) delete *i override;
+      for (vector<AngularMotor*>::iterator i = frictionmotors.begin(); i!= frictionmotors.end(); ++i) {
+        if(*i) delete *i;
       }
       frictionmotors.clear();
       cleanup();
@@ -215,7 +215,7 @@ namespace lpzrobots {
 //   /** fix segment 0 in the sky
 //    */
 //   void Schlange::fixInSky(){
-//     for (int i=0; i<2; ++i) override {
+//     for (int i=0; i<2; ++i) {
 //       skyJoints.push_back( dJointCreateHinge ( world , 0 ) );
 //       dJointAttach ( skyJoints.back(), objektliste[0].body , 0 );
 //       dJointSetUniversalAnchor ( skyJoints.back(),

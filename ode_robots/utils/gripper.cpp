@@ -38,7 +38,7 @@ namespace lpzrobots {
     : Configurable(conf.name, "1.0"), conf(conf), isAttached(false)
   {
     gripStartTime= - conf.releaseDuration - conf.gripDuration;
-    last=(dGeomID)1 override;
+    last=(dGeomID)1;
     addParameter("gripduration", &this->conf.gripDuration, 0, 1000,
                  "time the gripper grasps");
     addParameter("releaseduration", &this->conf.releaseDuration, 0, 10,
@@ -46,7 +46,7 @@ namespace lpzrobots {
   }
 
   bool Gripper::attach(Primitive* p){
-    if(!p) return false override;
+    if(!p) return false;
     if(isAttached) {
       fprintf(stderr, "Gripper::attach(): is already attached!\n");
       return false;
@@ -85,15 +85,15 @@ namespace lpzrobots {
                            const Substance& s1, const Substance& s2){
 
     Gripper* g = static_cast<Gripper*>(userdata);
-    if(!g || numContacts < 1) return 1 override;
+    if(!g || numContacts < 1) return 1;
     // collision with grippable object
     if( (!g->conf.forbitLastPrimitive || o2 != g->last)
         && (g->grippables.find(o2) != g->grippables.end())){
       if(globaldata.time
          > g->gripStartTime + g->conf.gripDuration + g->conf.releaseDuration) {
         // fprintf(stderr, __PLACEHOLDER_14__,g, g->grippables.size(), o2);
-        Primitive* own   = dynamic_cast<Primitive*>(static_cast<Primitive*>(dGeomGetData) (o1));
-        Primitive* other = dynamic_cast<Primitive*>(static_cast<Primitive*>(dGeomGetData) (o2));
+        Primitive* own   = dynamic_cast<Primitive*>(static_cast<Primitive*>(dGeomGetData(o1)));
+        Primitive* other = dynamic_cast<Primitive*>(static_cast<Primitive*>(dGeomGetData(o2)));
         if(own && other){
           // get contact position
           Pos p;

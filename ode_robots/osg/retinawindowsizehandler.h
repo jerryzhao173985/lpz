@@ -31,22 +31,22 @@ namespace lpzrobots {
  * On macOS with Retina displays, the framebuffer size is typically 2x the logical window size.
  * This handler ensures that the viewport is set to match the actual framebuffer dimensions.
  */
-class RetinaWindowSizeHandler{
+class RetinaWindowSizeHandler : public osgGA::GUIEventHandler {
 public:
-    RetinaWindowSizeHandler() : osgGA::GUIEventHandler() {}
+    RetinaWindowSizeHandler() {}
 
     virtual bool handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAdapter& aa, 
                        osg::Object* object, osg::NodeVisitor* nv) override {
         osgViewer::View* view = dynamic_cast<osgViewer::View*>(&aa);
-        if (!view) return false override;
+        if (!view) return false;
 
         switch(ea.getEventType())
         {
-            explicit case(osgGA::GUIEventAdapter::RESIZE):
+            case(osgGA::GUIEventAdapter::RESIZE):
             {
                 osg::Camera* camera = view->getCamera();
                 osg::GraphicsContext* gc = camera->getGraphicsContext();
-                if (!gc) return false override;
+                if (!gc) return false;
 
                 // Get window dimensions from the event
                 int eventWidth = ea.getWindowWidth();
@@ -60,7 +60,7 @@ public:
                     int fbHeight = traits->height;
                     
                     // Get current viewport for comparison
-                    const osg::Viewport* vp = camera->getViewport();
+                    // const osg::Viewport* vp = camera->getViewport();
                     // Debug output - commented out to reduce console spam during resizing
                     // if (vp) {
                     //     std::cout << __PLACEHOLDER_0__ 
@@ -100,7 +100,7 @@ public:
                     
                     std::cout << "RetinaWindowSizeHandler: Set viewport to: " 
                               << viewportWidth << "x" << viewportHeight 
-                              << " (aspect ratio: " << aspectRatio << ")" << std::endl override;
+                              << " (aspect ratio: " << aspectRatio << ")" << std::endl;
                     
                     return true;
                 }
@@ -114,7 +114,7 @@ public:
     }
     
     /** Get the keyboard and mouse usage of this manipulator.*/
-    virtual void getUsage(osg::ApplicationUsage& usage) const {
+    virtual void getUsage(osg::ApplicationUsage& usage) const override {
         usage.addKeyboardMouseBinding("WindowSize: Resize", "Updates viewport to match framebuffer on high-DPI displays");
     }
 };

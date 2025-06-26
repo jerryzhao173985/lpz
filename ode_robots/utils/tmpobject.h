@@ -31,7 +31,9 @@
 namespace lpzrobots {
 
   /**
-     this is the base-class for{
+     this is the base-class for temporary objects
+   */
+  class TmpObject {
   public:
     TmpObject()
       : time(0) {};
@@ -43,8 +45,8 @@ namespace lpzrobots {
     /// update graphics here
     virtual void update();
 
-    void explicit explicit setExpireTime(double time) { this->time= time; }
-    bool explicit explicit expired(double time) { return this->time < time;}
+    void setExpireTime(double t) { this->time= t; }
+    bool expired(double t) { return this->time < t;}
 
   protected:
     double time = 0;

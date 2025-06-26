@@ -34,12 +34,14 @@ namespace lpzrobots {
   /**
       Wrapper for Motor to have a constant set value (resulting in getMotorNumber()=0)
   */
-  class ConstantMotor{
+  class ConstantMotor : public Motor {
   public:
     /// motor to wrap and constant values (for first and second motor value, all others = value1)
     ConstantMotor(std::shared_ptr<Motor> motor, double value1=0.0, double value2=0.0)
       : motor(motor), value1(value1), value2(value2)
     { }
+    
+    virtual ~ConstantMotor() = default;
 
     virtual void init(Primitive* own, Joint* joint = 0) override {
       motor->init(own, joint);
@@ -51,7 +53,7 @@ namespace lpzrobots {
       int len = motor->getMotorNumber();
       double* dat = new double[len];
       std::fill_n( dat, len, value1);
-      if(len>1) dat[1]=value2 override;
+      if(len>1) dat[1]=value2;
       motor->set(dat,len);
       return true;
     };

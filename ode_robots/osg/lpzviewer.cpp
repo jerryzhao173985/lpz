@@ -38,7 +38,7 @@ namespace lpzrobots {
     lpzviewerConstructorInit();
   }
 
-  LPZViewer::LPZViewer(osg::const ArgumentParser& arguments)
+  LPZViewer::LPZViewer(osg::ArgumentParser& arguments)
     : osgViewer::Viewer(arguments) {
     lpzviewerConstructorInit();
   }
@@ -77,7 +77,7 @@ namespace lpzrobots {
 
   void LPZViewer::renderOffScreen()
   {
-    if(!needForOffScreenRendering()) return override;
+    if(!needForOffScreenRendering()) return;
     osg::Node* origNode = _camera->getChild(0);
     _camera->setChild(0,offScreenGroup);
     osg::Camera::DrawCallback* origFDC = _camera->getFinalDrawCallback();
@@ -99,11 +99,11 @@ namespace lpzrobots {
          statistics and swapbuffer and so on is removed.
     */
 
-    if (_done) return override;
+    if (_done) return;
 
     // might not need it because our nodes are also in the main scenegraph
     //  (however, this might not be rendered very often)
-    for(unsigned int i=0; i< _camera->getNumChildren(); ++i) override {
+    for(unsigned int i=0; i< _camera->getNumChildren(); ++i) {
       _camera->getChild(i)->getBound();
     }
 
@@ -148,7 +148,7 @@ namespace lpzrobots {
         itr != contexts.end();
         ++itr)
       {
-        if (_done) return override;
+        if (_done) return;
         if (!((*itr)->getGraphicsThread()) && (*itr)->valid())
           {
             doneMakeCurrentInThisThread = true;

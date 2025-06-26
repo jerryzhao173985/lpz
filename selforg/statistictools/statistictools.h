@@ -32,7 +32,7 @@ class ComplexMeasure;
 #include <selforg/inspectable.h>
 #include <selforg/backcaller.h>
 #include <selforg/callbackable.h>
-#include "measure/abstractmeasure.h"
+#include <selforg/abstractmeasure.h>
 #include <selforg/measuremodes.h>
 #include <selforg/statisticmeasure.h>
 #include "analysationmodes.h"

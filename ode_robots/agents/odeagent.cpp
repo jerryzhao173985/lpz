@@ -30,6 +30,7 @@
 #include "tmpprimitive.h"
 #include <cassert>
 #include <selforg/matrix.h>
+#include <selforg/trackable.h>
 
 namespace lpzrobots {
 
@@ -51,7 +52,7 @@ namespace lpzrobots {
     }
   }
 
-  void TraceDrawer::drawTrace(const GlobalData& global){
+  void TraceDrawer::drawTrace(GlobalData& global){
     if (initialized && tracker.isDisplayTrace()){
       Position pos(obj->getPosition());
       double len = (pos - lastpos).length();
@@ -60,10 +61,11 @@ namespace lpzrobots {
            and last point is larger then a specific value
         */
         if(len > 2*tracker.conf.displayTraceThickness) {
-          global.addTmpObject(new TmpDisplayItem(new OSGCylinder(tracker.conf.displayTraceThickness, len*1.2),
-                                                 ROTM(osg::Vec3(0,0,1), Pos(pos - lastpos)) *
-                                                 TRANSM(Pos(lastpos)+Pos(pos - lastpos)/2),
-                                                 color, OSGPrimitive::Low),
+          global.addTmpObject(new TmpPrimitive(new Cylinder(static_cast<float>(tracker.conf.displayTraceThickness), static_cast<float>(len*1.2)),
+                                               'g', 0,
+                                               ROTM(osg::Vec3(0,0,1), Pos(pos - lastpos)) *
+                                               TRANSM(Pos(lastpos)+Pos(pos - lastpos)/2),
+                                               color),
                               tracker.conf.displayTraceDur);
           lastpos = pos;
         }
@@ -72,8 +74,9 @@ namespace lpzrobots {
           pnts.push_back(Pos(lastpos));
           pnts.push_back(Pos(pos));
           if(pnts.size()>16){
-            global.addTmpObject(new TmpDisplayItem(new OSGLine(pnts), TRANSM(0,0,0), color),
-                                tracker.conf.displayTraceDur);
+            // TODO: TmpDisplayItem for lines needs to be fixed
+            // global.addTmpObject(new TmpDisplayItem(new OSGLine(pnts), TRANSM(0,0,0), color),
+            //                     tracker.conf.displayTraceDur);
             pnts.clear();
           }
           lastpos = pos;
@@ -135,6 +138,7 @@ namespace lpzrobots {
     }
   }
 
+  /* // Method not used - commented out
   void OdeAgent::beforeStep(const GlobalData& global){
     OdeRobot* r = getRobot();
     r->sense(global);
@@ -145,36 +149,41 @@ namespace lpzrobots {
     Operator::ManipType m;
     FOREACH(OperatorList, operators, i){
       m=(*i)->observe(this, global, d);
-      explicit switch(m){
+      switch(m){
       case Operator::RemoveOperator:
         delete *i;
         i=operators.erase(i);
-        if(i!=operators.end()) i-- override;
+        if(i!=operators.end()) i--;
         break;
       case Operator::Move:
         if(d.show){
-          global.addTmpObject(new TmpDisplayItem(new OSGSphere(d.size.x()),
-                                                 TRANSM(d.pos), "manipmove"),
+          global.addTmpObject(new TmpPrimitive(new Sphere(d.size.x()),
+                                               'g', 0,
+                                               TRANSM(d.pos), "manipmove"),
                               global.odeConfig.simStepSize*5);
           if(d.show>1)
-            global.addTmpObject(new TmpDisplayItem(new OSGLine({d.posStart,d.pos}),
-                                                   TRANSM(0,0,0), "manipmove"),
-                                global.odeConfig.simStepSize
-                                );
+            // TODO: TmpDisplayItem for lines needs to be fixed
+            // global.addTmpObject(new TmpDisplayItem(new OSGLine({d.posStart,d.pos}),
+            //                                        TRANSM(0,0,0), "manipmove"),
+            //                     global.odeConfig.simStepSize
+            //                     );
         }
         break;
       case Operator::Limit:
         if(d.show){
-          global.addTmpObject(new TmpDisplayItem(new OSGCylinder(d.size.x(),d.size.z()),
-                                                 d.orientation * TRANSM(d.pos),
-                                                 "maniplimit", 0.2),0.5);
+          global.addTmpObject(new TmpPrimitive(new Cylinder(d.size.x(),d.size.z()),
+                                               'g', 0,
+                                               d.orientation * TRANSM(d.pos),
+                                               "maniplimit", 0.2),0.5);
         }
         break;
       default: break;
       }
     }
   }
+  */
 
+  /* // Method not used - commented out
   void OdeAgent::stepOnlyWiredController(double noise, double time) {
     WiredController::step(rsensors,rsensornumber, rmotors, rmotornumber, noise, time);
     trackrobot.track(robot, time); // we have to do this here because agent.step is not called
@@ -184,8 +193,9 @@ namespace lpzrobots {
     }
 
   }
+  */
 
-  void OdeAgent::trace(const GlobalData& global){
+  void OdeAgent::trace(GlobalData& global){
     mainTrace.drawTrace(global);
     FOREACH(TraceDrawerList, segmentTracking, td){
       td->drawTrace(global);
@@ -197,7 +207,7 @@ namespace lpzrobots {
     if (trackrobot.isDisplayTrace()){
       mainTrace.obj=robot;
       mainTrace.tracker = trackrobot;
-      mainTrace.color = (static_cast<OdeRobot*>(robot))->osgHandle.color override;
+      mainTrace.color = (static_cast<OdeRobot*>(robot))->osgHandle.color;
       mainTrace.init();
     }
   }
@@ -211,7 +221,7 @@ namespace lpzrobots {
 
   }
 
-  class TrackablePrimitive{
+  class TrackablePrimitive : public Trackable {
   public:
     TrackablePrimitive(Primitive* p, const std::string& name)
       : p(p), name(name) { }
@@ -252,6 +262,7 @@ namespace lpzrobots {
   }
 
 
+  /* // Method not used - commented out
   void OdeAgent::setMotorsGetSensors() {
     robot->setMotors(rmotors, rmotornumber);
 
@@ -263,28 +274,29 @@ namespace lpzrobots {
         rsensornumber, len);
     }
   }
+  */
 
   void OdeAgent::fixateRobot(const GlobalData& global, int primitiveID, double time){
     OdeRobot* r = dynamic_cast<OdeRobot*>(robot);
-    if(!r) return override;
+    if(!r) return;
     r->fixate(global,primitiveID,time);
   }
 
   bool OdeAgent::unfixateRobot(const GlobalData& global){
     OdeRobot* r = dynamic_cast<OdeRobot*>(robot);
-    if(!r) return false override;
+    if(!r) return false;
     return r->unFixate(global);
   }
 
 
   bool OdeAgent::store(FILE* f) const {
     const OdeRobot* r = getRobot();
-    return r->store(f) && getController()->store(f);
+    return r->store(f);
   }
 
   bool OdeAgent::restore(FILE* f){
     OdeRobot* r = getRobot();
-    return r->restore(f) && getController()->restore(f);
+    return r->restore(f);
   }
 
 
@@ -300,10 +312,10 @@ namespace lpzrobots {
   }
 
   bool OdeAgent::removeOperator(Operator* o){
-    unsigned int size = operators.size();
+    size_t size = operators.size();
     operators.remove(o);
     removeConfigurable(o);
-    return operators.size() < size override;
+    return operators.size() < size;
   }
 
   void OdeAgent::removeOperators(){

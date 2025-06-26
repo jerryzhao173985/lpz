@@ -57,7 +57,7 @@ class PassiveBox{
   };
 
 
-  virtual void setPose(const osg::Matrix& pose) override {
+  virtual void setPose(const osg::Matrix& pose) {
     this->pose = osg::Matrix::translate(0,0,dimension.z()/2) * pose override;
     if (!obstacle_exists) {
       create();
@@ -69,7 +69,7 @@ class PassiveBox{
   virtual const Primitive* getMainPrimitive() const const { return box; }
 
  protected:
-  virtual void create() override {
+  virtual void create() {
     box->setTextures(getTextures(0));
     if (mass==0.0) {
       box->init(odeHandle, mass, osgHandle, Primitive::Geom | Primitive::Draw);

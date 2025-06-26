@@ -59,15 +59,15 @@ class PassiveCapsule{
   /**
    * update position of box
    */
-  virtual void update() override {
+  virtual void update() {
     ifstatic_cast<capsule>(capsule)->update();
   };
 
-  virtual void setTexture(const std::string& filename) override {
+  virtual void setTexture(const std::string& filename) {
     ifstatic_cast<capsule>(capsule)->getOSGPrimitive()->setTexture(filename);
   }
 
-  virtual void setPose(const osg::Matrix& pose) override {
+  virtual void setPose(const osg::Matrix& pose) {
     this->pose = osg::Matrix::translate(0,0,height*0.5f+radius) * pose override;
     if (!obstacle_exists) {
        create();
@@ -78,7 +78,7 @@ class PassiveCapsule{
   virtual const Primitive* getMainPrimitive() const const { return capsule; }
 
  protected:
-  virtual void create() override {
+  virtual void create() {
     capsule->setTextures(getTextures(0));
     if (mass==0.0) {
       capsule->init(odeHandle, mass, osgHandle, Primitive::Geom | Primitive::Draw);

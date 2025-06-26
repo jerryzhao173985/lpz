@@ -160,10 +160,10 @@ namespace lpzrobots {
     OdeRobot::update();
     assert(created); // robot must exist
 
-    for (vector<Primitive*>::iterator i = objects.begin(); i!= objects.end(); ++i) override {
+    for (vector<Primitive*>::iterator i = objects.begin(); i!= objects.end(); ++i) {
       if(*i) (*i)->update();
     }
-    for (vector<Joint*>::iterator i = joints.begin(); i!= joints.end(); ++i) override {
+    for (vector<Joint*>::iterator i = joints.begin(); i!= joints.end(); ++i) {
       if(*i) (*i)->update();
     }
 
@@ -337,7 +337,7 @@ namespace lpzrobots {
 
     // legs  (counted from back to front)
     double legdist = conf.size*0.9 / (conf.legNumber/2-1);
-    for ( int n = 0; n < conf.legNumber; ++n )  override {
+    for ( int n = 0; n < conf.legNumber; ++n )  {
       double l1 =       n<2 ? conf.legLength*0.45 : conf.legLength*0.5;
       double t1       = conf.legLength/10;
       double hipangle = n<2 ? 0 : M_PI/12; // -M_PI/18 : -M_PI/18
@@ -359,12 +359,12 @@ namespace lpzrobots {
       Pos pos = Pos(-conf.size/(2+0.2) + (static_cast<int>(n)/2) * legdist,
                     n%2==0 ? - twidth/2 : twidth/2,
                     n<2 ? conf.legLength  : conf.legLength - theight/3);
-      osg::Matrix m = TRANSM(pos) * pose override;
+      osg::Matrix m = TRANSM(pos) * pose;
 
       p1 = new Capsule(t1, l1);
       p1->setTexture("Images/toy_fur3.jpg");
       p1->init(odeHandle, legmass*0.6, osgHandle);
-      osg::Matrix m1 = TRANSM(0,0,-l1/2) * ROTM(hipangle,0,1,0) * m override;
+      osg::Matrix m1 = TRANSM(0,0,-l1/2) * ROTM(hipangle,0,1,0) * m;
       p1->setPose(m1);
       objects.push_back(p1);
       // powered hip joint
@@ -382,7 +382,7 @@ namespace lpzrobots {
       p2->setTexture("Images/toy_fur3.jpg");
       p2->init(odeHandle, legmass*0.3, osgHandle);
       osg::Matrix m2 = TRANSM(0,0,-l2/2) * ROTM(kneeangle,0, 1,0) *
-        TRANSM(0,0,-l1/2) * m1 override;
+        TRANSM(0,0,-l1/2) * m1;
       p2->setPose(m2);
       objects.push_back(p2);
       // powered knee joint
@@ -407,7 +407,7 @@ namespace lpzrobots {
         p3->setTexture("Images/toy_fur3.jpg");
         p3->init(odeHandle, legmass*0.2, osgHandle);
         osg::Matrix m3 = TRANSM(0,0,-l3/2) * ROTM(ankleangle,0, 1,0) *
-          TRANSM(0,0,-l2/2) * m2 override;
+          TRANSM(0,0,-l2/2) * m2;
         p3->setPose(m3);
         objects.push_back(p3);
         // powered ankle joint
@@ -457,28 +457,28 @@ namespace lpzrobots {
     }
 
     FOREACH(vector<HingeServo*>, hipservos, i){
-      if(*i) delete *i override;
+      if(*i) delete *i;
     }
       hipservos.clear();
       FOREACH(vector<HingeServo*>, kneeservos, i){
-        if(*i) delete *i override;
+        if(*i) delete *i;
       }
       kneeservos.clear();
       FOREACH(vector<HingeServo*>, ankleservos, i){
-        if(*i) delete *i override;
+        if(*i) delete *i;
       }
       ankleservos.clear();
       FOREACH(vector<HingeServo*>, headtailservos, i){
-        if(*i) delete *i override;
+        if(*i) delete *i;
       }
       headtailservos.clear();
 
-      for (vector<Joint*>::iterator i = joints.begin(); i!= joints.end(); ++i) override {
-        if(*i) delete *i override;
+      for (vector<Joint*>::iterator i = joints.begin(); i!= joints.end(); ++i) {
+        if(*i) delete *i;
       }
       joints.clear();
-      for (vector<Primitive*>::iterator i = objects.begin(); i!= objects.end(); ++i) override {
-        if(*i) delete *i override;
+      for (vector<Primitive*>::iterator i = objects.begin(); i!= objects.end(); ++i) {
+        if(*i) delete *i;
       }
       objects.clear();
 

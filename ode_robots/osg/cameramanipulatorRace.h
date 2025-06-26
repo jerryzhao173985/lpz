@@ -37,11 +37,11 @@ namespace lpzrobots {
      Middle mouse button: up and sideways
   */
 
-  class CameraManipulatorRace{
+  class CameraManipulatorRace : public CameraManipulator {
 
   public:
 
-    CameraManipulatorRace(osg::Node* node,const GlobalData& global, const CameraHandle& cameraHandle);
+    CameraManipulatorRace(osg::Node* node, GlobalData& global, CameraHandle& cameraHandle);
 
     /** returns the classname of the manipulator
         it's NECCESSARY to define this funtion, otherwise
@@ -51,7 +51,7 @@ namespace lpzrobots {
 
   protected:
 
-    virtual ~CameraManipulatorRace() override;
+    virtual ~CameraManipulatorRace();
 
     /** This handles robot movements, so that the camera movemenent is right affected.
         should be overwritten by new cameramanipulator

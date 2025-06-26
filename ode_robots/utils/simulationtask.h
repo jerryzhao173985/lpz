@@ -40,9 +40,9 @@ namespace lpzrobots {
 
     virtual ~SimulationTask() { }
 
-    virtual int startTask(const SimulationTaskHandle& simTaskHandle, const TaskedSimulationCreator& simTaskCreator, int* argc, char** argv, std::string nameSuffix) override {
+    virtual int startTask(const SimulationTaskHandle& simTaskHandle, const TaskedSimulationCreator& simTaskCreator, int* argc, char** argv, std::string nameSuffix) {
       int returnValue=0;
-      sim = simTaskCreator.buildTaskedSimulationInstance();
+      sim = const_cast<TaskedSimulationCreator&>(simTaskCreator).buildTaskedSimulationInstance();
       if(sim!= nullptr)
       {
         char buffer[20];
@@ -50,7 +50,7 @@ namespace lpzrobots {
         sim->setTaskNameSuffix(std::string(" - ").append(nameSuffix).append(" - ").append(buffer));
         sim->setTaskId(taskId);
         sim->setSimTaskHandle(simTaskHandle);
-        returnValue = sim->run(*argc, argv)? 0 : 1 override;
+        returnValue = sim->run(*argc, argv)? 0 : 1;
         delete sim;
         return returnValue;
       } else

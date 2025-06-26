@@ -49,7 +49,7 @@ __PLACEHOLDER_10__
 */
 namespace lpzrobots {
 
-  class Primitive{
+  class Kuka : public OdeRobot {
   public:
 	friend class Kuka2;
     /**
@@ -94,7 +94,7 @@ namespace lpzrobots {
         the blocked joint will be set to its initial position
         @param jointNo the index of the only joint that is to be blocked
     */
-    virtual void explicit explicit blockJoints(int joint);
+    virtual void blockJoints(int joint);
 
     /** grasps an object by creating a fixed joint between the gripper (outermost primitive of the arm)
         and a desired object
@@ -133,7 +133,7 @@ namespace lpzrobots {
 
     /** enables the manual command mode an moves the arm to its initial upright position
     */
-    virtual void candle() override {
+    virtual void candle() {
         manualControl = true;
         for (int i=0; i<motorno; ++i) {manualCommands[i] = 0;}
     };
@@ -143,7 +143,7 @@ namespace lpzrobots {
 	 has already reached.
     	@param number of the joint
     	*/
-    	virtual double getJointTarget(int jointno) override {
+    	virtual double getJointTarget(int jointno) {
         	return manualCommands[jointno];
     	};
 
@@ -179,13 +179,13 @@ namespace lpzrobots {
 
  /** prints the pose of the endeffector
     */
-	virtual void printEndeffectorPose() override {
-		std::cout << "Pose des Endeffektors: "<< endeffector->getPose()<< "\n" override;
+	virtual void printEndeffectorPose() {
+		std::cout << "Pose des Endeffektors: "<< endeffector->getPose()<< "\n";
 	}
 
 /* sets the reference of the first relative-distance-sensor to the given object
 		--> afterwards sensors 15-17 will return the relative distances of the endeffector to the object*/
-	virtual void setReference(Primitive* target) override {
+	virtual void setReference(Primitive* target) {
 		relSensors[0]->setReference(target);
 	};
 
@@ -213,9 +213,9 @@ namespace lpzrobots {
 	/** moves the arm over an object
 	@param the Main primitive of the target object
 	*/
-	//virtual void explicit explicit moveOverObject(Primitive* targetObj);
+	//virtual void moveOverObject(Primitive* targetObj);
 
-	//virtual void explicit explicit moveTowardsObject(Primitive* targetObj);
+	//virtual void moveTowardsObject(Primitive* targetObj);
 
 	/** generate a random move using the IK Solver
 	*/
@@ -231,7 +231,7 @@ namespace lpzrobots {
 		 2/-2 move in positve/negative y direction
 		 3/-3 move in positve/negative z direction
 	*/
-	//virtual void explicit explicit moveAlongAxis(int axis);
+	//virtual void moveAlongAxis(int axis);
 
 	/** returns the orientation that minimizes the distance between the TCP and the center of the target object
 	@param pos the Position of the endeffector
@@ -260,11 +260,11 @@ namespace lpzrobots {
 
     /** returns the maximal power of a motor
     */
-    int explicit explicit getPower( int i);
+    int getPower( int i);
 
     /** returns the maximal velocity of a motor
     */
-    int explicit explicit getVelocity( int i);
+    int getVelocity( int i);
 
 
     /** additional things for collision handling can be done here

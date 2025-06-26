@@ -29,7 +29,7 @@
 
 namespace lpzrobots {
 
-  class Primitive{
+  struct SkeletonConf {
   public:
     double size = 0.0;       ///< scaling factor for robot static_cast<height>static_cast<double>(massfactor); ///< mass factor for all parts
     bool   useDensity = false; ///< massfactor is interpreted as a density
@@ -109,12 +109,12 @@ namespace lpzrobots {
     std::string trunkTexture; // texture of the trunk and thorax
 
 
-  } SkeletonConf;
+  };
 
 
   /** should look like a humanoid
    */
-  class Skeleton{
+  class Skeleton : public OdeRobot {
   public:
 
     enum SkelParts {Hip,Trunk_comp, Belly, Thorax, Neck,
@@ -137,7 +137,7 @@ namespace lpzrobots {
 
     virtual ~Skeleton() { destroy(); };
 
-    static SkeletonConf getDefaultConf() const {
+    static SkeletonConf getDefaultConf() {
       SkeletonConf c;
       c.size        = 1;
       c.massfactor  = 1;
@@ -224,7 +224,7 @@ namespace lpzrobots {
       return c;
     }
 
-    static SkeletonConf getDefaultConfVelServos() const {
+    static SkeletonConf getDefaultConfVelServos() {
       SkeletonConf c = getDefaultConf();
 
       c.useVelocityServos = true;
@@ -247,28 +247,28 @@ namespace lpzrobots {
     /** sets the pose of the vehicle
         @param pose desired pose matrix
     */
-    virtual void placeIntern(const osg::Matrix& pose);
+    virtual void placeIntern(const osg::Matrix& pose) override;
 
-    virtual int getSensorsIntern(sensor* sensors, int sensornumber);
-    virtual void setMotorsIntern(const motor* motors, int motornumber);
-    virtual int getSensorNumberIntern() const;
-    virtual int getMotorNumberIntern() const;
+    virtual int getSensorsIntern(double* sensors, int sensornumber) override;
+    virtual void setMotorsIntern(const double* motors, int motornumber) override;
+    virtual int getSensorNumberIntern() const override;
+    virtual int getMotorNumberIntern() const override;
 
 
     /******** CONFIGURABLE ***********/
-    virtual void notifyOnChange(const paramkey& key);
+    virtual void notifyOnChange(const paramkey& key) override;
 
     /** the main object of the robot, which is used for position and speed tracking */
     virtual const Primitive* getMainPrimitive() const { return objects[Thorax]; } // Trunk_comp
 
     /** returns the position of the head */
-    virtual Position getHeadPosition() const;
+    [[nodiscard]] virtual Position getHeadPosition() const;
 
     /** returns the position of the trunk */
-    virtual Position getTrunkPosition() const;
+    [[nodiscard]] virtual Position getTrunkPosition() const;
 
     /// returns a the gripper list
-    GripperList& getGrippers() const;
+    GripperList& getGrippers();
 
 
   protected:

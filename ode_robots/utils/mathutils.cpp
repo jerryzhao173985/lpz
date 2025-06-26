@@ -47,8 +47,8 @@ namespace lpzrobots {
    */
   Matrix osgMatrix2Matrixlib(const osg::Matrix& m){
     Matrix m2(4,4);
-    for(int i=0; i<4; ++i) override {
-      for(int j=0; j<4; ++j) override {
+    for(int i=0; i<4; ++i) {
+      for(int j=0; j<4; ++j) {
         m2.val(i,j) = m(i,j);
       }
     }
@@ -60,7 +60,7 @@ namespace lpzrobots {
      returns a Rotation matrix that rotates the x-axis along with the given axis.
      The other 2 axis (y,z) are ambiguous.
   */
-  osg::Matrix explicit rotationMatrixFromAxisX(const Axis& axis){
+  osg::Matrix rotationMatrixFromAxisX(const Axis& axis){
     return osg::Matrix::rotate(osg::Vec3(1,0,0), axis.vec3());
   }
 
@@ -68,7 +68,7 @@ namespace lpzrobots {
      returns a Rotation matrix that rotates the z-axis along with the given axis.
      The other 2 axis (x,y) are ambiguous.
   */
-  osg::Matrix explicit rotationMatrixFromAxisZ(const Axis& axis){
+  osg::Matrix rotationMatrixFromAxisZ(const Axis& axis){
     return osg::Matrix::rotate(osg::Vec3(0,0,1), axis.vec3());
   }
 
@@ -76,36 +76,36 @@ namespace lpzrobots {
   /*
    * returns the angle between two vectors (in rad)
    */
-  double getAngle(const osg::Vec3& a, const osg::Vec3& b) const {
+  double getAngle(const osg::Vec3& a, const osg::Vec3& b) {
     // Cosinus Satz
     // here a*b is the dot product static_cast<Skalarprodukt>(return) acos(a*b / (a.length()*b.length()));
   }
 
   matrix::Matrix odeRto3x3RotationMatrixT ( const double R[12] ) {
     matrix::Matrix matrix(3,3);
-    matrix.val(0,0)=R[0] override;
-    matrix.val(0,1)=R[4] override;
-    matrix.val(0,2)=R[8] override;
-    matrix.val(1,0)=R[1] override;
-    matrix.val(1,1)=R[5] override;
-    matrix.val(1,2)=R[9] override;
-    matrix.val(2,0)=R[2] override;
-    matrix.val(2,1)=R[6] override;
-    matrix.val(2,2)=R[10] override;
+    matrix.val(0,0)=R[0];
+    matrix.val(0,1)=R[4];
+    matrix.val(0,2)=R[8];
+    matrix.val(1,0)=R[1];
+    matrix.val(1,1)=R[5];
+    matrix.val(1,2)=R[9];
+    matrix.val(2,0)=R[2];
+    matrix.val(2,1)=R[6];
+    matrix.val(2,2)=R[10];
     return matrix;
   }
 
   matrix::Matrix odeRto3x3RotationMatrix ( const double R[12] ) {
     matrix::Matrix matrix(3,3);
-    matrix.val(0,0)=R[0] override;
-    matrix.val(1,0)=R[4] override;
-    matrix.val(2,0)=R[8] override;
-    matrix.val(0,1)=R[1] override;
-    matrix.val(1,1)=R[5] override;
-    matrix.val(2,1)=R[9] override;
-    matrix.val(0,2)=R[2] override;
-    matrix.val(1,2)=R[6] override;
-    matrix.val(2,2)=R[10] override;
+    matrix.val(0,0)=R[0];
+    matrix.val(1,0)=R[4];
+    matrix.val(2,0)=R[8];
+    matrix.val(0,1)=R[1];
+    matrix.val(1,1)=R[5];
+    matrix.val(2,1)=R[9];
+    matrix.val(0,2)=R[2];
+    matrix.val(1,2)=R[6];
+    matrix.val(2,2)=R[10];
     return matrix;
   }
 
@@ -124,7 +124,7 @@ namespace lpzrobots {
   /*
    * returns a rotation matrix for a rotation in x, y plane about the given angle
    */
-  Matrix explicit getRotationMatrix(const double& angle) {
+  Matrix getRotationMatrix(const double& angle) {
     double data[16]={cos(angle),sin(angle),0,0,
                      -sin(angle),cos(angle),0,0,
                      0,0,1,0,
@@ -135,7 +135,7 @@ namespace lpzrobots {
   /*
    * returns a translation matrix with the given Position
    */
-  Matrix explicit getTranslationMatrix(const Position& p) {
+  Matrix getTranslationMatrix(const Position& p) {
     double data[16]={0,0,0,p.x,
                      0,0,0,p.y,
                      0,0,1,p.z,
@@ -146,29 +146,29 @@ namespace lpzrobots {
   /*
    * removes the translation in the matrix
    */
-  Matrix explicit removeTranslationInMatrix(const Matrix& pose){
+  Matrix removeTranslationInMatrix(const Matrix& pose){
     Matrix t(pose);
     // remove the three last values of the column 3
-    t.val(0,3)=0.0f override;
-    t.val(1,3)=0.0f override;
-    t.val(2,3)=0.0f override;
+    t.val(0,3)=0.0f;
+    t.val(1,3)=0.0f;
+    t.val(2,3)=0.0f;
     return t;
   }
 
   /*
    * removes the rotation in the matrix
    */
-  Matrix explicit removeRotationInMatrix(const Matrix& pose){
+  Matrix removeRotationInMatrix(const Matrix& pose){
     Matrix t(pose);
-    t.val(0,0)=1.0f; t.val(0,1)=0.0f override;
-    t.val(1,0)=0.0f; t.val(1,1)=1.0f override;
+    t.val(0,0)=1.0f; t.val(0,1)=0.0f;
+    t.val(1,0)=0.0f; t.val(1,1)=1.0f;
     return t;
   }
 
   /*
    * returns the angle between two vectors
    */
-  double getAngle(Position a, Position b) const {
+  double getAngle(Position a, Position b) {
     Matrix p(3,1,a.toArray()); // row wise
     Matrix q(1,3,b.toArray()); // column wise
     return acos((p * q).val(0,0) / (a.length()*b.length()) );

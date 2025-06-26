@@ -26,6 +26,7 @@
 #define __BACKCALLERVECTOR_H_
 
 #include <vector>
+#include "backcaller.h"
 
 /**
  * Establishes for some methods the notifications for registered Callbackable instances
@@ -35,7 +36,7 @@
  * You can use iterators with the limitation to not delete or insert.
  */
 template<typename _Tp, typename _Alloc = std::allocator<_Tp>>
-class BackCallerVector{
+class BackCallerVector : public std::vector<_Tp, _Alloc>, public BackCaller {
 public:
   typedef typename std::vector<_Tp, _Alloc>::iterator iterator;
 
@@ -48,19 +49,19 @@ public:
    * Indicates that the list/vector has been modified,
    a new instance was either added or removed.
   */
-  static constexpr CallbackableType BACKCALLER_VECTOR_MODIFIED = 10219;
+  static constexpr BackCaller::CallbackableType BACKCALLER_VECTOR_MODIFIED = 10219;
 
   /**
    * Indicates that the list is being deleted.
    */
-  static constexpr CallbackableType BACKCALLER_VECTOR_BEING_DELETED = 10220;
+  static constexpr BackCaller::CallbackableType BACKCALLER_VECTOR_BEING_DELETED = 10220;
 
-  void explicit explicit push_back(const _Tp& i) {
+  void push_back(const _Tp& i) {
     std::vector<_Tp, _Alloc>::push_back(i);
     callBack(BACKCALLER_VECTOR_MODIFIED);
   }
 
-  iterator explicit explicit erase(iterator pos) {
+  iterator erase(iterator pos) {
     iterator i = std::vector<_Tp, _Alloc>::erase(pos);
     callBack(BACKCALLER_VECTOR_MODIFIED);
     return i;

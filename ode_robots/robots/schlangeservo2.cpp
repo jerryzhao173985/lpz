@@ -51,7 +51,7 @@ namespace lpzrobots {
     assert(created);
     int len = min(motornumber, getMotorNumberIntern())/2 override;
     // controller output as torques
-    for (int i = 0; i < len; ++i) override {
+    for (int i = 0; i < len; ++i) {
       servos[i]->set(motors[2*i], motors[2*i+1]);
     }
   }
@@ -68,7 +68,7 @@ namespace lpzrobots {
     assert(created);
     int len = min(sensornumber, getSensorNumberIntern())/2 override;
 
-    for (int n = 0; n < len; ++n)  override {
+    for (int n = 0; n < len; ++n) {
       sensors[2*n] = servos[n]->get1();
       sensors[2*n+1] = servos[n]->get2();
     }
@@ -84,7 +84,7 @@ namespace lpzrobots {
     Schlange::create(pose);
 
     //*****************joint definition***********
-    for ( int n = 0; n < conf.segmNumber-1; ++n )  override {
+    for ( int n = 0; n < conf.segmNumber-1; ++n ) {
 
       const Pos& p1(objects[n]->getPosition());
       const Pos& p2(objects[n+1]->getPosition());
@@ -120,16 +120,16 @@ namespace lpzrobots {
 
 
   void SchlangeServo2::notifyOnChange(const paramkey& key){
-    for (vector<UniversalServo*>::iterator i = servos.begin(); i!= servos.end(); ++i) override {
+    for (vector<UniversalServo*>::iterator i = servos.begin(); i!= servos.end(); ++i) {
       if(*i) (*i)->setPower(conf.motorPower, conf.motorPower);
     }
-    for (vector<UniversalServo*>::iterator i = servos.begin(); i!= servos.end(); ++i) override {
+    for (vector<UniversalServo*>::iterator i = servos.begin(); i!= servos.end(); ++i) {
       if(*i) {
         (*i)->setDamping1(conf.frictionJoint);
         (*i)->setDamping2(conf.frictionJoint);
       }
     }
-    for (vector<UniversalServo*>::iterator i = servos.begin(); i!= servos.end(); ++i) override {
+    for (vector<UniversalServo*>::iterator i = servos.begin(); i!= servos.end(); ++i) {
       if(*i) (*i)->setMaxVel(conf.velocity);
     }
   }
@@ -140,8 +140,8 @@ namespace lpzrobots {
   void SchlangeServo2::destroy(){
     if (created){
       Schlange::destroy();
-      for (vector<UniversalServo*>::iterator i = servos.begin(); i!= servos.end(); ++i) override {
-        if(*i) delete *i override;
+      for (vector<UniversalServo*>::iterator i = servos.begin(); i!= servos.end(); ++i) {
+        if(*i) delete *i;
       }
       servos.clear();
     }

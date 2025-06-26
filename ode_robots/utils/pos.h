@@ -39,11 +39,11 @@ namespace lpzrobots{
     Pos (float x, float y, float z) : osg::Vec3(x, y, z) {}
     explicit Pos (const osg::Vec3& v) : osg::Vec3(v) {}
     explicit Pos (const osg::Vec4& v) : osg::Vec3(v.x(),v.y(),v.z()) {}
-    explicit Pos (const Position& p) : osg::Vec3(p.x, p.y, p.z) {}
-    explicit Pos (const dReal v[3]) : osg::Vec3(v[0], v[1], v[2]) {}
+    explicit Pos (const Position& p) : osg::Vec3(static_cast<float>(p.x), static_cast<float>(p.y), static_cast<float>(p.z)) {}
+    explicit Pos (const dReal v[3]) : osg::Vec3(static_cast<float>(v[0]), static_cast<float>(v[1]), static_cast<float>(v[2])) {}
 
     /// scaling
-    Pos operator*(double f) const { return Pos(x()*f,y()*f,z()*f);}
+    Pos operator*(double f) const { return Pos(static_cast<float>(x()*f),static_cast<float>(y()*f),static_cast<float>(z()*f));}
     /// scalar product
     double operator*(const Pos& p) const { return p.x()*x() + p.y()*y() + p.z()*z();}
     /// componentwise  product

@@ -63,24 +63,24 @@ namespace lpzrobots {
       t(0), speed(0.0), stabaliserTransform(nullptr), bigboxtransform(nullptr), headtrans(nullptr)
   {
     // robot is not created till now
-    massOfobject = new dMass();
+    massOfobject = std::make_unique<dMass>();
     getPos1 = true;
     timeCounter = conf.T;
-    energyOneStep = new double[1];
+    energyOneStep.resize(1);
     energyOneStep[0] =  0.0;
     costOfTran = 0.0;
     created=false;
     check = false;
     recordGait=false;
-    dones = new bool[6];
+    dones.fill(false);
     conf.v[0] = 0;
-    position = new double[3];
+    position.fill(0.0);
 
-    angles = new double[12];
-    heights = new double[6];
+    angles.fill(0.0);
+    heights.fill(0.0);
     hcorrection = 0.20803;
 
-    legContactArray = new Leg[6];
+    // legContactArray is already initialized as std::array
     legmass= (1.0 - conf.percentageBodyMass)*conf.mass/(conf.legNumber*2.0);
 
     addParameter("coxaPower", &conf.coxaPower);
@@ -122,7 +122,7 @@ namespace lpzrobots {
 
     double mechanicalPower = 0.0;
 
-    for(int i = 0; i < 3; ++i) override {
+    for(int i = 0; i < 3; ++i) {
       mechanicalPower += torques[i]*angularV[i];
     }
 
@@ -146,7 +146,7 @@ namespace lpzrobots {
     double gamma = 0.005;
     double e = 0.0;
 
-    for(unsigned int i = 0; i < legs.size(); ++i) override {
+    for(unsigned int i = 0; i < legs.size(); ++i) {
       torques = dBodyGetTorque(legs[i]->getBody());
       angularV = dBodyGetAngularVel(legs[i]->getBody());
       e += outwardMechanicalPower(torques,angularV) + gamma*energyConsumpThroughtHeatLoss(torques);
@@ -158,8 +158,8 @@ namespace lpzrobots {
 
     double totalMass = 0.0;
 
-    for(unsigned int i = 0; i < objects.size(); ++i) override {
-      dBodyGetMass(objects[i]->getBody(),massOfobject);
+    for(unsigned int i = 0; i < objects.size(); ++i) {
+      dBodyGetMass(objects[i]->getBody(),massOfobject.get());
       totalMass += massOfobject->mass;
     }
     return totalMass;
@@ -230,18 +230,18 @@ namespace lpzrobots {
       }
 
 
-      for(unsigned int i = 0; i < 6; ++i) override {
+      for(unsigned int i = 0; i < 6; ++i) {
 
         const dReal *position = dBodyGetPosition(legContactArray[i].bodyID);
 
-        // cout<< dJointGetUniversalAngle1(joints[0]->getJoint()) * 180/M_PI  << endl override;
-        // cout<< dJointGetUniversalAngle2(joints[0]->getJoint())  * 180/M_PI<< endl override;
-        //  cout << dJointGetUniversalAngle1(legContactArray[i].joint) * 180/M_PI << endl override;
-        //  cout << dJointGetUniversalAngle2(legContactArray[i].joint) * 180/M_PI << endl override;
+        // cout<< dJointGetUniversalAngle1(joints[0]->getJoint()) * 180/M_PI  << endl;
+        // cout<< dJointGetUniversalAngle2(joints[0]->getJoint())  * 180/M_PI<< endl;
+        //  cout << dJointGetUniversalAngle1(legContactArray[i].joint) * 180/M_PI << endl;
+        //  cout << dJointGetUniversalAngle2(legContactArray[i].joint) * 180/M_PI << endl;
 
         heights[i] = abs(round(position[2] -  hcorrection,3));
-        angles[2*i]   = dJointGetUniversalAngle1(legContactArray[i].joint) * 180/M_PI  override;
-        angles[2*i+1] = dJointGetUniversalAngle2(legContactArray[i].joint) * 180/M_PI  override;
+        angles[2*i]   = dJointGetUniversalAngle1(legContactArray[i].joint) * 180/M_PI ;
+        angles[2*i+1] = dJointGetUniversalAngle2(legContactArray[i].joint) * 180/M_PI ;
       }
     }
 
@@ -273,7 +273,7 @@ namespace lpzrobots {
     // trunk = new Capsule(twidth,conf.size);
     trunk->setTexture(trunkTex);
     trunk->init(odeHandle, conf.mass*conf.percentageBodyMass, osgHandle);
-    osg::Matrix trunkPos = TRANSM(0,0,conf.legLength)*pose override;
+    osg::Matrix trunkPos = TRANSM(0,0,conf.legLength)*pose;
     trunk->setPose(trunkPos);
     objects.push_back(trunk);
 
@@ -293,7 +293,7 @@ namespace lpzrobots {
     osg::Matrix m0 = pose;
 
     if(conf.irSensors == true){
-      for(int i = -1; i < 2; i+=2) override {
+      for(int i = -1; i < 2; i+=2) {
 
         irbox = new Box(0.1,0.1,0.1);
         irbox->setTexture(trunkTex);
@@ -306,7 +306,7 @@ namespace lpzrobots {
 
       }
 
-      for(int i = -1; i < 2; i+=2) override {
+      for(int i = -1; i < 2; i+=2) {
 
         irbox = new Box(0.1,0.1,0.15);
         irbox->setTexture(trunkTex);
@@ -393,7 +393,7 @@ namespace lpzrobots {
 
     // legs  (counted from back to front)
     double legdist = conf.size*0.9 / (conf.legNumber/2-1);
-    for ( int n = 0; n < conf.legNumber; ++n )  override {
+    for ( int n = 0; n < conf.legNumber; ++n )  {
 
       double len= conf.legLength;
       if(n < 2)
@@ -411,7 +411,7 @@ namespace lpzrobots {
                     conf.legLength - theight/3);
 
       osg::Matrix m = ROTM(conf.legSpreading*(-n/2+1),0,1,0) // leg spreading to front or back
-        * ROTM(M_PI/2,n%2==0 ? -1 : 1,0,0) * TRANSM(pos) * pose override;
+        * ROTM(M_PI/2,n%2==0 ? -1 : 1,0,0) * TRANSM(pos) * pose;
       coxaThorax = new Capsule(rad1, len1);
       coxaThorax->setTexture(legTex);
       coxaThorax->init(odeHandle, legmass, osgHandle);
@@ -442,8 +442,8 @@ namespace lpzrobots {
       // values will be set in setParam later
       auto servo = std::make_shared<TwoAxisServoVel>(odeHandle, j,-1,1, 1, -1,1,1,0 );
 
-      servo->setBaseName("leg pair " + itos(n/2) + (n%2==0 ? " right " : " left "));
-      servo->setNamingFunc([](int i){ return i==0? "up/down" : "front/back";});
+      static_cast<Sensor*>(servo.get())->setBaseName("leg pair " + itos(n/2) + (n%2==0 ? " right " : " left "));
+      static_cast<Sensor*>(servo.get())->setNamingFunc([](int i){ return i==0? "up/down" : "front/back";});
       hipservos.push_back(servo);
       addSensor(servo);
       addMotor(servo);
@@ -454,10 +454,10 @@ namespace lpzrobots {
       tibia->setTexture(legTex);
       tibia->init(odeHandle, legmass, osgHLegs);
       osg::Matrix m2 =   TRANSM(0,0,-len2/2) * ROTM(1.5,n%2==0 ? -1 : 1,0,0)
-        * TRANSM(0,0,-len1/2) * m1 override;
+        * TRANSM(0,0,-len1/2) * m1;
       tibia->setPose(m2);
       objects.push_back(tibia);
-      int footIdx = objects.size()-1 override;
+      int footIdx = objects.size()-1;
 
       legs.push_back(tibia);
 
@@ -474,7 +474,7 @@ namespace lpzrobots {
         auto servo = std::make_shared<HingeServo>(k, -1, 1, 1, 0.01,0); // parameters are set later
         tebiaservos.push_back(servo);
         if(conf.useTebiaMotors){
-          servo->setBaseName("leg pair " + itos(n/2) + (n%2==0 ? " right " : " left ") + "tebia (knee)");
+          static_cast<Sensor*>(servo.get())->setBaseName("leg pair " + itos(n/2) + (n%2==0 ? " right " : " left ") + "tebia (knee)");
           addSensor(servo);
           addMotor(servo);
         }else {
@@ -511,18 +511,18 @@ namespace lpzrobots {
           m2;
 
         if(n < 2){
-          m4 = ROTM(n%2==0 ? angle : -angle,0,n%2==0 ? -1 : 1,0) * m3 override;
+          m4 = ROTM(n%2==0 ? angle : -angle,0,n%2==0 ? -1 : 1,0) * m3;
         }else if( n > 3){
-          m4 = ROTM(n%2==0 ? -angle : angle,0,n%2==0 ? -1 : 1,0) * m3 override;
+          m4 = ROTM(n%2==0 ? -angle : angle,0,n%2==0 ? -1 : 1,0) * m3;
         }else{
           m4 = m3;
         }
-        m4 =    TRANSM(0,0,-length/2) * m4 override;
+        m4 =    TRANSM(0,0,-length/2) * m4;
 
         tarsus->setPose(m4);
         tarsusParts.push_back(tarsus);
         objects.push_back(tarsus);
-        footIdx = objects.size()-1 override;
+        footIdx = objects.size()-1;
 
         if(conf.useTarsusJoints){
           // springy joint
@@ -544,7 +544,7 @@ namespace lpzrobots {
 
 
         Primitive *section = tarsus;
-        for(int i = 1; i < conf.numTarsusSections; ++i) override {
+        for(int i = 1; i < conf.numTarsusSections; ++i) {
 
           double lengthS = length/1.5;
           double radiusS = radius/1.5;
@@ -606,7 +606,7 @@ namespace lpzrobots {
 
     // New: wiskers
     if(conf.useWhiskers){
-      for ( int n = -1; n < 2; n+=2 )  override {
+      for ( int n = -1; n < 2; n+=2 )  {
         double l1 = conf.legLength*0.5;
         double t1 = conf.legLength/30;
 
@@ -615,10 +615,10 @@ namespace lpzrobots {
                       n*twidth/4,
                       conf.legLength + theight/5);
 
-        osg::Matrix m = ROTM(conf.whiskerSpread, n,0,0) * ROTM(M_PI/2+M_PI/10, 0,-1,0) * TRANSM(pos) * pose override;
+        osg::Matrix m = ROTM(conf.whiskerSpread, n,0,0) * ROTM(M_PI/2+M_PI/10, 0,-1,0) * TRANSM(pos) * pose;
         whisker = new Capsule(t1, l1);
         whisker->init(odeHandle, legmass/10, osgHTarsus);
-        osg::Matrix m1 = TRANSM(0,0,-l1/2) * m override;
+        osg::Matrix m1 = TRANSM(0,0,-l1/2) * m;
         whisker->setPose(m1);
         objects.push_back(whisker);
 
@@ -639,7 +639,7 @@ namespace lpzrobots {
         whisker2->init(odeHandle, legmass/10, osgHTarsus);
         osg::Matrix m2 = TRANSM(0,0,-l1/2)
           * ROTM(M_PI/10, n,0,0)
-          * ROTM(M_PI/10, 0,1,0) * TRANSM(0,0,-l1/2) * m1 override;
+          * ROTM(M_PI/10, 0,1,0) * TRANSM(0,0,-l1/2) * m1;
         whisker2->setPose(m2);
         objects.push_back(whisker2);
 
@@ -675,12 +675,12 @@ namespace lpzrobots {
     created=false;
   }
 
-  double Hexapod::getPower(){
+  double Hexapod::getPower() const{
     return hipservos[0]->getPower1();
   }
   ///////////////
   void Hexapod::resetMotorPower(double power){
-    explicit for(auto& i : hipservos){
+    for(auto& i : hipservos){
       i->setPower1(power);
       i->setPower2(power);
     }
@@ -688,7 +688,7 @@ namespace lpzrobots {
   /////////
   void Hexapod::notifyOnChange(const paramkey& key){
     // we simply set all parameters here
-    explicit for(auto& i : hipservos){
+    for(auto& i : hipservos){
       i->setPower1(conf.coxaPower);
       i->setPower2(conf.coxaPower);
       i->setDamping1(conf.coxaDamping);
@@ -697,12 +697,12 @@ namespace lpzrobots {
       i->setMinMax2(-conf.coxaJointLimitH,+conf.coxaJointLimitH);
       i->setMaxVel(conf.coxaSpeed);
     }
-    explicit for(auto& i : tebiaservos){
+    for(auto& i : tebiaservos){
       i->setPower(conf.tebiaPower);
       i->setDamping(conf.tebiaDamping);
       i->setMinMax(-conf.tebiaJointLimit+conf.tebiaOffset,+conf.tebiaJointLimit+conf.tebiaOffset);
     }
-    explicit for(auto& i : tarsussprings){
+    for(auto& i : tarsussprings){
       i->setPower(conf.tebiaPower);
       i->setDamping(conf.tebiaDamping);
       i->setMinMax(-conf.tebiaJointLimit,+conf.tebiaJointLimit);

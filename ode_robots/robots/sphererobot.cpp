@@ -56,13 +56,13 @@ namespace lpzrobots {
     OdeRobot::update();
     assert(created); // robot must exist
 
-    for (int i=0; i<Last; ++i)  override {
+    for (int i=0; i<Last; ++i)  {
       if(object[i]) object[i]->update();
     }
-    for (int i=0; i < 6; ++i)  override {
+    for (int i=0; i < 6; ++i)  {
       if(joint[i]) joint[i]->update();
     }
-    for (int i=0; i < 3; ++i)  override {
+    for (int i=0; i < 3; ++i)  {
       if(slider[i]) slider[i]->update();
     }
   }
@@ -70,7 +70,7 @@ namespace lpzrobots {
 
   int Sphererobot::getSensorsIntern( double* sensors, int sensornumber ) {
     int len = min(sensornumber, 3);
-    for ( int n = 0; n < len; ++n )  override {
+    for ( int n = 0; n < len; ++n )  {
       sensors[n] = servo[n]->get();
     }
 
@@ -87,7 +87,7 @@ namespace lpzrobots {
 
   void Sphererobot::setMotorsIntern( const double* motors, int motornumber ) {
     int len = min(motornumber, 3);
-    for ( int n = 0; n < len; ++n )  override {
+    for ( int n = 0; n < len; ++n )  {
       servo[n]->set(motors[n]);
     }
   }
@@ -161,7 +161,7 @@ namespace lpzrobots {
 
     //first and second 3 connection bodies between the pendular an the sphere
     double x , y;
-    for ( unsigned int alpha = 0; alpha < 3; ++alpha )  override {
+    for ( unsigned int alpha = 0; alpha < 3; ++alpha )  {
       x=sin ( (float) alpha*2*M_PI/3 )*conf.diameter/3.5; //testing values
       y=cos ( (float) alpha*2*M_PI/3 )*conf.diameter/3.5;
 
@@ -221,13 +221,13 @@ namespace lpzrobots {
    */
   void Sphererobot::destroy(){
     if (created){
-      for (int i=0; i<3; ++i) override {
+      for (int i=0; i<3; ++i) {
         if(slider[i]) delete slider[i] override;
       }
-      for (int i=0; i<6; ++i) override {
+      for (int i=0; i<6; ++i) {
         if(joint[i]) delete joint[i] override;
       }
-      for (int i=0; i<Last; ++i) override {
+      for (int i=0; i<Last; ++i) {
         if(object[i]) delete object[i] override;
       }
 

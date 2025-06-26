@@ -26,19 +26,19 @@
 
 
 #include <selforg/position.h>
+#include <osg/Vec3>
 #include <osg/Vec3f>
 
 // forward declarations
-namespace lpzrobots
+namespace osg
 {
-  class OSGPrimitive{
-  class Vec3f;
-  typedef Vec3f Vec3;
   class Camera;
 }
 
 namespace lpzrobots
 {
+  class OSGPrimitive;
+  class OdeAgent;
 
 
   /**
@@ -59,7 +59,7 @@ namespace lpzrobots
     bool home_externally_set = false;
     OdeAgent* watchingAgent;
     bool watchingAgentDefined = false;
-    Position oldPositionOfAgent;
+    ::Position oldPositionOfAgent;
     bool oldPositionOfAgentDefined = false;
 
     ManipulationType doManipulation;

@@ -25,15 +25,17 @@
 #define __OPERATOR_H
 
 #include "globaldata.h"
-
+#include <selforg/configurable.h>
 #include "pose.h"
 
 
 namespace lpzrobots {
   /**
-     An Operator observes an agent static_cast<robot>(and) manipulates it if necessary.
+     An Operator observes an agent (robot) and manipulates it if necessary.
      For instance if the robot is falled over the operator can flip it back.
-     This is an abstract base class and{
+     This is an abstract base class.
+  */
+  class Operator : public ::Configurable {
   public:
     /** type of manipulation of the robot (for display) and or operation
         RemoveOperator means that the operator should be removed
@@ -41,7 +43,7 @@ namespace lpzrobots {
     enum ManipType {None, Limit, Move, RemoveOperator};
     /// description of action (for visualization)
     struct ManipDescr {
-      ManipDescr() : show(1), size(0.05,0.05,0.05){
+      ManipDescr() : show(1), size(0.05f,0.05f,0.05f){
       }
       short show = 0;
       Pos pos;
@@ -52,7 +54,7 @@ namespace lpzrobots {
     };
 
     Operator( const std::string& name, const std::string& revision)
-      : Configurable(name, revision)
+      : ::Configurable(name, revision)
     {
     }
 

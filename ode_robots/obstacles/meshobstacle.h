@@ -58,14 +58,14 @@ public:
   /**
    * updates the position of the geoms  ( not nessary for static objects)
    */
-  virtual void update() override {
+  virtual void update() {
 
   };
 
 
 
 
-  virtual void setPose(const osg::Matrix& pose) override {
+  virtual void setPose(const osg::Matrix& pose) {
     this->pose = pose;
     if (obstacle_exists){
       destroy();
@@ -76,7 +76,7 @@ public:
 
 
  protected:
-  virtual void create() override {
+  virtual void create() {
 
     mesh = new OSGMesh(filename, scale);
     mesh->init(osgHandle);
@@ -97,7 +97,7 @@ public:
   };
 
 
-  virtual void destroy() override {
+  virtual void destroy() {
     ifstatic_cast<mesh>(delete)(mesh);
     ifstatic_cast<bound>(delete)(bound);
     ifstatic_cast<boundshape>(delete)(boundshape);

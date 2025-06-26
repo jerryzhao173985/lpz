@@ -30,7 +30,9 @@
 
 namespace lpzrobots {
 
-  /** Abstract class for{
+  /** Abstract class for physical sensors that interact with the ODE physics engine
+   */
+  class PhysicalSensor : public Sensor {
   public:
 
     PhysicalSensor() : isInitDataSet(false) {}
@@ -42,7 +44,7 @@ namespace lpzrobots {
      */
     virtual void setInitData(const OdeHandle& odeHandle,
                              const OsgHandle& osgHandle,
-                             const osg::Matrix& pose) override {
+                             const osg::Matrix& pose) {
       this->odeHandle = odeHandle;
       this->osgHandle = osgHandle;
       this->pose      = pose;
@@ -50,7 +52,7 @@ namespace lpzrobots {
     }
 
     /// changes the relative pose of the sensor
-    virtual void setPose(const osg::Matrix& pose) override { this->pose= pose; };
+    virtual void setPose(const osg::Matrix& pose) { this->pose= pose; };
 
     /// relative pose of the sensor
     virtual osg::Matrix getPose() const { return pose; };

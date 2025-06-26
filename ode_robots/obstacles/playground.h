@@ -50,7 +50,7 @@ namespace lpzrobots {
       factorlength2=factorxy;
     };
 
-    virtual void changeGeometry(double length, double width, double height, double factorxy) override {
+    virtual void changeGeometry(double length, double width, double height, double factorxy) {
       AbstractGround::changeGeometry(length, width, height, factorxy);
       this->length = length;
       this->width  = width;
@@ -63,7 +63,7 @@ namespace lpzrobots {
     }
 
   protected:
-    virtual void create() override {
+    virtual void create() {
       createGround();
 
       Box* box;

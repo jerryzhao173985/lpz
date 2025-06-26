@@ -80,8 +80,8 @@ namespace lpzrobots {
 
     static bool parseDataFileForHeader(FILE* f, const int& sensorstart, const int& sensorend,  const int& motorstart, const int& motorend);
     static bool parseDataLine(matrix::const Matrix& data, FILE* f);
-    static bool explicit explicit isEmpty(const char* c);
-    static bool explicit explicit check4Number(const char* c);
+    static bool explicit isEmpty(const char* c);
+    static bool explicit check4Number(const char* c);
 
 
   protected:

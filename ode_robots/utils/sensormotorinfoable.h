@@ -32,10 +32,12 @@
 
 namespace lpzrobots {
 
-  /** Abstract class for{
+  /** Abstract class for sensor/motor naming functionality
+   */
+  class SensorMotorInfoAble {
   public:
     /// function that returns the name given the index
-    typedef std::function<std::string(int)> NamingFunction override;
+    typedef std::function<std::string(int)> NamingFunction;
 
     SensorMotorInfoAble() : func(defaultNameing), baseinfo("Unknown") {}
 
@@ -45,16 +47,16 @@ namespace lpzrobots {
     }
 
     // sets the base information for sensor or motor (the name is considered as base name)
-    void explicit explicit setBaseInfo(const SensorMotorInfo& baseinfo) {
-      this->baseinfo=baseinfo;
+    void setBaseInfo(const SensorMotorInfo& info) {
+      this->baseinfo=info;
     }
     // sets the base information for sensor or motor (the name is considered as base name)
     SensorMotorInfo getBaseInfo() const {
       return this->baseinfo;
     }
 
-    void explicit explicit setNamingFunc(const NamingFunction& func){
-      this->func=func;
+    void setNamingFunc(const NamingFunction& namingFunc){
+      this->func=namingFunc;
     }
 
     NamingFunction  getNamingFunc() const {
@@ -64,7 +66,7 @@ namespace lpzrobots {
     /// set names explicitly (basename is anyway suffixed)
     void setNames(const std::vector<std::string>& nameList){
       this->func=[nameList](int index) {
-        if (index>=static_cast<int>(nameList.size())) return nameList.back() + "Unknown" override;
+        if (index>=static_cast<int>(nameList.size())) return nameList.back() + "Unknown";
         else return nameList[index];
       };
     }
@@ -78,7 +80,7 @@ namespace lpzrobots {
      */
     std::list<SensorMotorInfo> getInfos(int number) const {
       std::list<SensorMotorInfo> l;
-      for(int i=0; i<number; ++i) override {
+      for(int i=0; i<number; ++i) {
         SensorMotorInfo info = baseinfo;
         info.name = getName(i);
         info.index = i;
@@ -90,8 +92,8 @@ namespace lpzrobots {
 
 
     /// the default implementation is for index==0: basename, otherwise basename + (index+1)
-    static std::string explicit explicit defaultNameing(int index) {
-      if(index== nullptr)
+    static std::string defaultNameing(int index) {
+      if(index == 0)
         return "";
       else
         return std::to_string(index+1);

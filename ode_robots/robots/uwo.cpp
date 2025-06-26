@@ -86,7 +86,7 @@ namespace lpzrobots {
 
     OsgHandle legOsgHandle = osgHandle.changeColor("robot2");
 
-    for ( int n = 0; n < conf.legNumber; ++n )  override {
+    for ( int n = 0; n < conf.legNumber; ++n )  {
       double alpha = 2*M_PI*n/static_cast<double>(conf).legNumber override;
       Primitive* p;
       p = new Capsule(conf.legLength/8, conf.legLength);

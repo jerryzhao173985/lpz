@@ -43,7 +43,7 @@ namespace lpzrobots {
 
   DefaultCaterPillar::~DefaultCaterPillar()
   {
-    ifstatic_cast<created>(destroy)();
+    if(created) destroy();
   }
 
 
@@ -64,7 +64,7 @@ namespace lpzrobots {
 
   void DefaultCaterPillar::notifyOnChange(const paramkey& key){
     if(key == "frictionjoint") {
-      for (vector<AngularMotor*>::iterator i = frictionmotors.begin(); i!= frictionmotors.end(); ++i) override {
+      for (vector<AngularMotor*>::iterator i = frictionmotors.begin(); i!= frictionmotors.end(); ++i) {
         if (*i) (*i)->setPower(conf.frictionJoint);
       }
     }
@@ -73,7 +73,7 @@ namespace lpzrobots {
 
   int DefaultCaterPillar::getSegmentsPosition(std::vector<Position> &poslist){
     assert(created);
-    for(int n = 0; n < conf.segmNumber; ++n) override {
+    for(int n = 0; n < conf.segmNumber; ++n) {
       Pos p(objects[n]->getPosition());
       poslist.push_back(p.toPosition());
     }
@@ -94,7 +94,7 @@ namespace lpzrobots {
     int half = conf.segmNumber/2;
 
     // linear positioning (snake-like)
-    for(int n = 0; n < conf.segmNumber; ++n)  override {
+    for(int n = 0; n < conf.segmNumber; ++n)  {
       Primitive* p = new Box(conf.segmDia/2, conf.segmDia*2, conf.segmLength);
       p->setTexture("Images/dusty.rgb");
       p->init(odeHandle, conf.segmMass, osgHandle);
@@ -111,8 +111,8 @@ namespace lpzrobots {
    */
   void DefaultCaterPillar::destroy(){
     if (created){
-      for (vector<AngularMotor*>::iterator i = frictionmotors.begin(); i!= frictionmotors.end(); ++i) override {
-        if(*i) delete *i override;
+      for (vector<AngularMotor*>::iterator i = frictionmotors.begin(); i!= frictionmotors.end(); ++i) {
+        if(*i) delete *i;
       }
       frictionmotors.clear();
       cleanup();
@@ -127,7 +127,7 @@ namespace lpzrobots {
 //   /** fix segment 0 in the sky
 //    */
 //   void Schlange::fixInSky(){
-//     for (int i=0; i<2; ++i) override {
+//     for (int i=0; i<2; ++i) {
 //       skyJoints.push_back( dJointCreateHinge ( world , 0 ) );
 //       dJointAttach ( skyJoints.back(), objektliste[0].body , 0 );
 //       dJointSetUniversalAnchor ( skyJoints.back(),

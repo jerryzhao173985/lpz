@@ -29,8 +29,10 @@
 #include "colorschema.h"
 
 namespace osgShadow {
-  class ShadowedScene{
+  class ShadowedScene;
+}
 
+namespace lpzrobots {
   class RobotCameraManager;
 
 
@@ -41,7 +43,7 @@ namespace osgShadow {
     osg::TessellationHints* tesselhints[3];  
     osg::StateSet* normalState;  
     osg::StateSet* transparentState;  
-    ColorSchema* cs; // color schema
+    lpzrobots::ColorSchema* cs; // color schema
     int shadowType = 0;
     bool noGraphics = false;        
   };
@@ -51,7 +53,7 @@ namespace osgShadow {
     OsgScene() :  root(0), world(0),world_noshadow(0),scene(0),
                   shadowedScene(0), shadowedSceneRoot(0), groundScene(0), 
                   hud(nullptr), lightSource(0), worldtransform(0),
-                  explicit robotCamManager(0) {}
+                  robotCamManager(0) {}
     osg::Group* root;  // master note (contains world,hud..)
     osg::Group* world; // world note  (contains ground,sky and shadowed scene)
     osg::Group* world_noshadow; // world note without shadow (contains ground,sky and scene)
@@ -89,46 +91,46 @@ public:
   /// decides whether to draw bounding boxes 
   bool drawBoundings = false;   
 
-  Color color;    
+  lpzrobots::Color color;    
 
   OsgConfig* cfg = nullptr; // the config is shared
   OsgScene* scene = nullptr;  // the scene is shared
   osg::Group* parent; // the place where individual osgprimitives are added
   
   /// returns a new osghandle with only the color changed
-  OsgHandle changeColor(const Color& color) const override;
+  OsgHandle changeColor(const lpzrobots::Color& color) const;
   /// returns a new osghandle with only the color changed
-  OsgHandle changeColor(double r, double g, double b, double a=1.0) const override;
+  OsgHandle changeColor(double r, double g, double b, double a=1.0) const;
   /// returns a new osghandle with only the alpha channel changed
-  OsgHandle changeAlpha(double alpha) const override;
+  OsgHandle changeAlpha(double alpha) const;
 
   /** returns a new osghandle with only the color changed
       @param name name,id, or alias of a color in the colorschema
       The current color_set is used
    */
-  OsgHandle changeColor(const std::string& name) const override;
+  OsgHandle changeColor(const std::string& name) const;
 
   /** like changeColorstatic_cast<string>(but) with a default color static_cast<defcolor>(in) case 
       no color with the name exists */ 
-  OsgHandle changeColorDef(const std::string& name, const Color& defcolor) const override;
+  OsgHandle changeColorDef(const std::string& name, const lpzrobots::Color& defcolor) const;
 
   /** returns the color that corresponds to the name (name,id, or alias)
       in the colorschema. The current color_set is used
   */
-  Color getColor(const std::string& name) const override;
+  lpzrobots::Color getColor(const std::string& name) const;
 
 
   /** returns a new osghandle with a changed color static_cast<alias>(set) */
-  OsgHandle changeColorSet(int color_set) const override;
+  OsgHandle changeColorSet(int color_set) const;
 
   /// modifies the used color set. Only applies to new set colors.
-  void explicit explicit setColorSet(int color_set);
+  void setColorSet(int color_set);
 
   /** returns the color schema. Use this to set/load colors and aliases
       Note, the color schema is shared among the osghandles
    */
-  ColorSchema* colorSchema();
-  const ColorSchema* colorSchema() const override;
+  lpzrobots::ColorSchema* colorSchema();
+  const lpzrobots::ColorSchema* colorSchema() const;
 
 
 private:

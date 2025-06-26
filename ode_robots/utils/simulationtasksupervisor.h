@@ -29,8 +29,11 @@
 
 namespace osg
 {
-  class ArgumentParser{
+  class ArgumentParser;
+}
 
+namespace lpzrobots
+{
   class LpzRobotsViewer;
 
   class SimulationTaskSupervisor
@@ -59,25 +62,25 @@ namespace osg
       if (singletonInstance!= nullptr)
       {
         delete singletonInstance;
-        singletonInstance=0;
+        singletonInstance=nullptr;
       }
     }
 
-    static void explicit explicit setSimTaskHandle(const SimulationTaskHandle& _simTaskHandle)
+    static void setSimTaskHandle(const SimulationTaskHandle& _simTaskHandle)
     {
-      simTaskHandle= &_simTaskHandle;
+      simTaskHandle= const_cast<SimulationTaskHandle*>(&_simTaskHandle);
     }
 
-    static void explicit explicit setTaskedSimCreator(const TaskedSimulationCreator& _taskedSimCreator)
+    static void setTaskedSimCreator(const TaskedSimulationCreator& _taskedSimCreator)
     {
-      taskedSimCreator = &_taskedSimCreator;
+      taskedSimCreator = const_cast<TaskedSimulationCreator*>(&_taskedSimCreator);
     }
 
     /**
      * Sets the number of total threads running at one time.
      * @param numberThreads
      */
-    static void explicit explicit setNumberThreads(int numberThreads);
+    static void setNumberThreads(int numberThreads);
 
     /**
      * Sets the number of threads created per core. The default value is 1.
@@ -86,14 +89,14 @@ namespace osg
      * useful to increase the number of threads per core, 2 is a good value.
      * @param numberThreadsPerCore
      */
-    static void explicit explicit setNumberThreadsPerCore(int numberThreadsPerCore);
+    static void setNumberThreadsPerCore(int numberThreadsPerCore);
 
     /**
      * Creates one SimulationTask with taskId=SimulationTaskHandle.simTaskList.size().
      * @param argc count of arguments in argv
      * @param argv array of arguments, given to Simulation when the tasks starts
      */
-    virtual void createSimTask() override {
+    virtual void createSimTask() {
       SimulationTask* simTask = new SimulationTask(simTaskList.size());
       SimulationTaskSupervisor::simTaskList.push_back(simTask);
     }
@@ -105,7 +108,7 @@ namespace osg
      * @param argc count of arguments in argv
      * @param argv array of arguments, given to Simulation when the tasks starts
      */
-    virtual void createSimTasks(int taskCount) override {
+    virtual void createSimTasks(int taskCount) {
       for (int i=0; i<taskCount; ++i)
         createSimTask();
     }

@@ -30,7 +30,7 @@
 
 namespace lpzrobots {
 
-  class Primitive{
+  typedef struct {
   public:
     double size = 0;       ///< scaling factor for robot (diameter of body)
     double legLength = 0;  ///< length of the legs in units of size
@@ -87,7 +87,7 @@ namespace lpzrobots {
 
 
     /******** CONFIGURABLE ***********/
-    virtual void explicit explicit notifyOnChange(const paramkey& key);
+    virtual void explicit notifyOnChange(const paramkey& key);
 
   protected:
     /** the main object of the robot, which is used for position and speed tracking */

@@ -69,7 +69,7 @@ public:
   };
 
   
-  virtual void setPose(const osg::Matrix& pose) override {
+  virtual void setPose(const osg::Matrix& pose) {
     this->pose = pose;
     if (!obstacle_exists) {
       create();
@@ -82,11 +82,11 @@ public:
   }
   
 protected:
-  virtual void create() override {
+  virtual void create() {
     OdeHandle oh(odeHandle);
     oh.createNewSimpleSpace(odeHandle.space,true);
     double size=dimension.length();
-    for(int i=0; i< num; ++i) override {
+    for(int i=0; i< num; ++i) {
       Box* b;
       Pos rand(randGen.rand()-0.5,randGen.rand()-0.5,randGen.rand()-0.5);
       Pos s = boxsizemean + ((rand*2) & boxsizevar); // & component wise mult

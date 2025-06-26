@@ -29,8 +29,14 @@
 
 namespace lpzrobots {
 
+  // Forward declarations
+  class Primitive;
+  class Joint;
+
   /**
-      Abstact base class for{
+   * Abstract base class for motors
+   */
+  class Motor : public SensorMotorInfoAble {
   public:
     Motor() {
     }
@@ -41,7 +47,7 @@ namespace lpzrobots {
     virtual void init(Primitive* own, Joint* joint = 0)= 0;
 
     /// return the dimensionality of this motor
-    virtual int getMotorNumber() const override;
+    virtual int getMotorNumber() const = 0;
 
     /** returns a list of motor names  (@see SensorMotorNaming how to change the names) */
     virtual std::list<SensorMotorInfo> getMotorInfos() const {

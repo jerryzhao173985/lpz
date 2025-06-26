@@ -57,9 +57,9 @@ namespace lpzrobots {
     /// KP is used as a general koefficient. KI and KD can be tuned without dependence of KP
     PID ( double KP = 100 , double KI = 2.0 , double KD = 0.3 );
 
-    void explicit explicit setKP(double KP);
+    void setKP(double KP);
 
-    void explicit explicit setTargetPosition ( double newpos );
+    void setTargetPosition ( double newpos );
 
     double getTargetPosition () const;
 

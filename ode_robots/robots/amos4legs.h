@@ -37,7 +37,7 @@
  * forward declarations
  */
 namespace lpzrobots {
-  class HingeJoint{
+  class HingeJoint;
 
   struct AmosFourConf {
       /**
@@ -283,7 +283,7 @@ namespace lpzrobots {
 
   };
 
-  class AmosFour{
+  class AmosFour : public OdeRobot {
     public:
 //      enum LegPos {
 //        L0, L1, L2, R0, R1, R2, LEG_POS_MAX
@@ -331,18 +331,18 @@ namespace lpzrobots {
       AmosFour(const OdeHandle& odeHandle, const OsgHandle& osgHandle, const AmosFourConf& conf = getDefaultConf(),
           const std::string& name = "AmosII robot");
 
-      virtual ~AmosFour() override;
+      virtual ~AmosFour();
 
       /**
        * updates the OSG nodes of the vehicle
        */
-      virtual void update();
+      virtual void update() override;
 
       /**
        * sets the pose of the vehicle
        * @param pose desired pose matrix
        */
-      virtual void placeIntern(const osg::Matrix& pose);
+      virtual void placeIntern(const osg::Matrix& pose) override;
 
       /**
        * returns actual sensorvalues
@@ -350,24 +350,24 @@ namespace lpzrobots {
        * @param sensornumber length of the sensor array
        * @return number of actually written sensors
        */
-      virtual int getSensorsIntern(sensor* sensors, int sensornumber);
+      virtual int getSensorsIntern(double* sensors, int sensornumber) override;
 
       /**
        * sets actual motorcommands
        * @param motors motors scaled to [-1,1]
        * @param motornumber length of the motor array
        */
-      virtual void setMotorsIntern(const double* motors, int motornumber);
+      virtual void setMotorsIntern(const double* motors, int motornumber) override;
 
       /**
        * returns number of sensors
        */
-      virtual int getSensorNumberIntern() const;
+      virtual int getSensorNumberIntern() override;
 
       /**
        * returns number of motors
        */
-      virtual int getMotorNumberIntern() const;
+      virtual int getMotorNumberIntern() override;
 
       /**
        * this function is called in each timestep. It should perform
@@ -376,16 +376,16 @@ namespace lpzrobots {
        * @param globalData structure that contains global data from the
        *                   simulation environment
        */
-      virtual void explicit explicit doInternalStuff(const GlobalData& globalData);
+      virtual void doInternalStuff(const GlobalData& globalData) override;
 
-      virtual void explicit explicit sense(const GlobalData& globalData);
+      virtual void sense(const GlobalData& globalData) override;
 
-      virtual double getMassOfRobot() const;
+      virtual double getMassOfRobot();
 
       void setLegPosUsage(LegPos leg, LegPosUsage usage);
 
       // Configurable Interface
-      virtual bool setParam(const paramkey& key, paramval val);
+      virtual bool setParam(const paramkey& key, paramval val, bool traverseChildren = true) override;
 
       /**
        * the main object of the robot, which is used for position and speed

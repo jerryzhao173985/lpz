@@ -28,6 +28,7 @@
 #include <selforg/position.h>
 #include "osgforwarddecl.h"
 #include <osg/Math>
+#include "axis.h"
 
 namespace lpzrobots {
 
@@ -72,9 +73,11 @@ namespace lpzrobots {
    */
   double getAngle(const osg::Vec3& a, const osg::Vec3& b);
 
-  /// converts an ode rotation matrix into a 3x3 rotation matrix static_cast<matrixlib>(matrix)::Matrix odeRto3x3RotationMatrixT ( const double R[12] );
+  /// converts an ode rotation matrix into a 3x3 rotation matrix
+  matrix::Matrix odeRto3x3RotationMatrixT ( const double R[12] );
 
-  /// converts an ode rotation matrix into a 3x3 rotation matrix static_cast<matrixlib>(matrix)::Matrix odeRto3x3RotationMatrix ( const double R[12] );
+  /// converts an ode rotation matrix into a 3x3 rotation matrix
+  matrix::Matrix odeRto3x3RotationMatrix ( const double R[12] );
 
   /*******************************************************************************/
 

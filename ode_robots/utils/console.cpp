@@ -28,6 +28,8 @@
 #include <sys/ioctl.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include <iostream>
+#include <iomanip>
 
 // Define whitespace macro if not provided by readline
 #ifndef whitespace
@@ -39,6 +41,7 @@
 #include <string>
 #include <selforg/stl_adds.h>
 #include <selforg/abstractcontroller.h>
+#include <selforg/configurable.h>
 #include "globaldata.h"
 #include "odeagent.h"
 #include "abstractground.h"
@@ -85,7 +88,7 @@ COMMAND commands[] = {
   { "show", com_show, "[OBJECTID]: Lists parameters of OBJECTID or of all objects (if no id given)" },
   { "view", com_show, "Synonym for `show'" },
   { "quit", com_quit, "Quit program" },
-  { static_cast<char*>nullptr, (commandfunc_t)nullptr, static_cast<char*>nullptr }
+  { static_cast<char*>(nullptr), static_cast<commandfunc_t>(nullptr), static_cast<char*>(nullptr) }
 };
 
 typedef std::list<std::string> ParameterList;
@@ -99,17 +102,17 @@ int valid_argument ( const char *caller, const char *arg);
 
 int _quit_request=false;
 
-void explicit printConfigs(const ConfigList& configs)
+void printConfigs(const std::list<::Configurable*>& configs)
 {
 
   struct winsize w;
   ioctl(0, TIOCGWINSZ, &w);
-  FOREACHC(ConfigList, configs, c){
+  for(auto c = configs.begin(); c != configs.end(); ++c){
     (*c)->print(stdout, 0, w.ws_col-2, true);
   }
 }
 
-void explicit printConfig(const Configurable* config)
+void printConfig(const ::Configurable* config)
 {
   struct winsize w;
   ioctl(0, TIOCGWINSZ, &w);
@@ -118,7 +121,7 @@ void explicit printConfig(const Configurable* config)
 
 
 
-char* explicit dupstr (const char* s){
+char* dupstr (const char* s){
   char *r;
 
   r = static_cast<char*>(malloc (strlen (s) + 1));
@@ -127,7 +130,7 @@ char* explicit dupstr (const char* s){
 }
 
 // duplicates string and adde an = sign
-char* explicit dupstrpluseq (const char* s){
+char* dupstrpluseq (const char* s){
   char *r;
   int len = strlen (s);
   r = static_cast<char*>(malloc (strlen (s) + 2));
@@ -137,18 +140,18 @@ char* explicit dupstrpluseq (const char* s){
   return (r);
 }
 
-vector<string> explicit splitstring(string s){
+vector<string> splitstring(string s){
   istringstream split(s); //splitting the lines
   string word;
   vector<string> rv;
-  explicit while(split >> word) {
-    if(word.compare(" ")!=0 && word.compare("  ")!= nullptr)
+  while(split >> word) {
+    if(word.compare(" ")!=0 && word.compare("  ")!= 0)
       rv.push_back(word);
   }
   return rv;
 }
 
-bool explicit handleConsole(const GlobalData& globalData){
+bool handleConsole(const GlobalData& globalData){
   char *line, *s;
 
   //  initialize_readline ();       /* Bind our completer. */
@@ -156,7 +159,7 @@ bool explicit handleConsole(const GlobalData& globalData){
   std::cout << "\033[1G" << "Type: ? for help or press TAB\n";
   // collect parameters for completion
   parameters.clear();
-  explicit for (const auto& i : globalData.configs){
+  for (const auto& i : globalData.globalconfigurables){
     if(i)
       parameters += i->getAllParamNames();
   }
@@ -174,7 +177,7 @@ bool explicit handleConsole(const GlobalData& globalData){
     add_history (s);
     bool success = execute_line (globalData,s);
     if(success){
-      FOREACH(OdeAgentList, globalData.agents, i){
+      for(OdeAgentList::const_iterator i = globalData.agents.begin(); i != globalData.agents.end(); ++i){
         (*i)->writePlotComment(s);
       }
     }
@@ -214,7 +217,7 @@ bool execute_line (const GlobalData& globalData, char *_line) {
 
   if (!command)
     {
-      fprintf (stderr, "%s: No such command\n", word);
+      std::cerr << word << ": No such command" << std::endl;
       return false;
     }
 
@@ -237,7 +240,7 @@ COMMAND *find_command (char *name){
   char *p = strchr(name,'=');
   if(p) return (&commands[0]); // set a parameter.
   for (i = 0; commands[i].name; ++i)
-    if (strcmp (name, commands[i].name) == nullptr)
+    if (strcmp (name, commands[i].name) == 0)
       return (&commands[i]);
 
   return (static_cast<COMMAND *>(nullptr));
@@ -251,10 +254,10 @@ char * stripwhite (char *string){
   for (s = string; whitespace (*s); ++s)
     ;
 
-  if (*s == nullptr)
+  if (*s == 0)
     return (s);
 
-  t = s + strlen (s) - 1 override;
+  t = s + strlen (s) - 1;
   while (t > s && whitespace (*t))
     --t;
   *++t = '\0';
@@ -292,10 +295,10 @@ void closeConsole(){
   write_history(".history");
 }
 
-int getListLen(char **strings) const {
+int getListLen(char **strings) {
   int i=0;
-  if(!strings) return 0 override;
-  explicit while ( strings[i] ){
+  if(!strings) return 0;
+  while ( strings[i] ){
     ++i;
   }
   return i;
@@ -318,10 +321,10 @@ char ** console_completion (const char *text, int start, int end) {
      if __PLACEHOLDER_40__ is at the start then it is also a parameter.
   */
   try{
-    if (start == nullptr){
+    if (start == 0){
       matchesCmd = rl_completion_matches (text, command_generator);
     }
-    if(start==0 || (strncmp(rl_line_buffer,"set",3)== nullptr)){
+    if(start==0 || (strncmp(rl_line_buffer,"set",3)== 0)){
       matchesParams = rl_completion_matches (text, params_generator);
     }
   }catch(...){}
@@ -329,9 +332,9 @@ char ** console_completion (const char *text, int start, int end) {
   int lCmd=getListLen(matchesCmd);
   int lPar=getListLen(matchesParams);
   if(lCmd+lPar > 0){
-    char **matches = static_cast<char **>(malloc((lCmd+lPar+1)*sizeofstatic_cast<char*>));
-    memcpy(matches,matchesCmd,sizeofstatic_cast<char*>*lCmd);
-    memcpy(matches+lCmd,matchesParams,sizeofstatic_cast<char*>*lPar);
+    char **matches = static_cast<char **>(malloc((lCmd+lPar+1)*sizeof(char*)));
+    memcpy(matches,matchesCmd,sizeof(char*)*lCmd);
+    memcpy(matches+lCmd,matchesParams,sizeof(char*)*lPar);
     matches[lCmd+lPar]=static_cast<char *>(nullptr);
     return matches;
   } else
@@ -362,12 +365,12 @@ char * command_generator (const char *text, int state) {
     {
       ++list_index;
 
-      if (strncmp (name, text, len) == nullptr)
+      if (strncmp (name, text, len) == 0)
         return (dupstr(name));
     }
 
   /* If no names matched, then return nullptr. */
-  return (static_cast<char*>nullptr);
+  return (static_cast<char*>(nullptr));
 }
 
 /* Generator function for parameter completion.  STATE lets us
@@ -390,7 +393,7 @@ char * params_generator (const char *text, int state) {
      parameter list. */
   while ( list_it != parameters.end())
     {
-      if (list_it->find(text, 0, len) == nullptr){
+      if (list_it->find(text, 0, len) == 0){
         char* name = dupstrpluseq(list_it->c_str());
         ++list_it;
         return name;
@@ -399,7 +402,7 @@ char * params_generator (const char *text, int state) {
     }
 
   /* If no names matched, then return nullptr. */
-  return (static_cast<char*>nullptr);
+  return (static_cast<char*>(nullptr));
 }
 
 
@@ -412,19 +415,19 @@ char * params_generator (const char *text, int state) {
 
 bool com_list (const GlobalData& globalData, char* line, char* arg) {
   int i=1;
-  printf("Agents -------------(for store and load)\nID: Name\n");
+  std::cout << "Agents -------------(for store and load)\nID: Name" << std::endl;
 
   FOREACHC(OdeAgentList, globalData.agents,a){
     if((*a)->getRobot())
-    printf(" %3i: %s (Controller and Robot)\n", i, (*a)->getRobot()->getName().c_str());
-    printf(" %3i:  |- only Controller\n", i*100+1);
-    printf(" %3i:  |- only Robot\n", i*100+2);
+    std::cout << " " << std::setw(3) << i << ": " << (*a)->getRobot()->getName() << " (Controller and Robot)" << std::endl;
+    std::cout << " " << std::setw(3) << (i*100+1) << ":  |- only Controller" << std::endl;
+    std::cout << " " << std::setw(3) << (i*100+2) << ":  |- only Robot" << std::endl;
     ++i;
   }
-  printf("Configurables ------(for set, show, storecfg and loadcfg )\nID: Name\n");
+  std::cout << "Configurables ------(for set, show, storecfg and loadcfg )\nID: Name" << std::endl;
   i=1;
-  FOREACHC(ConfigList, globalData.configs,c){
-    printf(" %2i: %s\n", i, (*c)->getName().c_str());
+  for(auto c = globalData.globalconfigurables.begin(); c != globalData.globalconfigurables.end(); ++c){
+    std::cout << " " << std::setw(2) << i << ": " << (*c)->getName() << std::endl;
     ++i;
   }
   return true;
@@ -433,12 +436,14 @@ bool com_list (const GlobalData& globalData, char* line, char* arg) {
 bool com_show (const GlobalData& globalData, char* line, char* arg) {
   if (arg && *arg){
     int id = atoi(arg);
-    if(id>=1 && id <= static_cast<int>globalData.configs.size()){
-      printConfig(globalData.configs[id-1]);
+    if(id>=1 && id <= static_cast<int>(globalData.globalconfigurables.size())){
+      auto it = globalData.globalconfigurables.begin();
+      std::advance(it, id-1);
+      printConfig(*it);
       return true;
     }
   }
-  printConfigs(globalData.configs);
+  printConfigs(globalData.globalconfigurables);
 
   return true;
 }
@@ -453,7 +458,7 @@ bool com_set (const GlobalData& globalData, char* line, char* arg) {
     if(equalpos) {
       *equalpos=' '; // replace by space for splitting
     }else{
-      printf("Syntax error! no '=' found, see help\n");
+      std::cout << "Syntax error! no '=' found, see help" << std::endl;
       return true;
     }
     vector<string> params = splitstring(string(arg));
@@ -461,33 +466,36 @@ bool com_set (const GlobalData& globalData, char* line, char* arg) {
     case 3:// ObjectID param=val
       {
         int id = atoi(params[0].c_str());
-        if(id>=1 && id <= static_cast<int>globalData.configs.size()){
+        if(id>=1 && id <= static_cast<int>(globalData.globalconfigurables.size())){
           const char* key = params[1].c_str();
-          if (globalData.configs[id-1]->setParam(key,atof(params[2].c_str()))){
-            printf(" %s=\t%f\t%s\n", key, globalData.configs[id-1]->getParam(key),
-                   globalData.configs[id-1]->getName().c_str());
+          auto it = globalData.globalconfigurables.begin();
+          std::advance(it, id-1);
+          if ((*it)->setParam(key,atof(params[2].c_str()))){
+            std::cout << " " << key << "=\t" << (*it)->getParam(key) 
+                      << "\t" << (*it)->getName() << std::endl;
             changed = true;
           }
-        }else printf("Object with ID: %i not found\n", id);
+        }else std::cout << "Object with ID: " << id << " not found" << std::endl;
       }
       break;
     case 2: // param=val
       {
         double v=atof(params[1].c_str());
         const char* key = params[0].c_str();
-         FOREACH(ConfigList, globalData.configs, i){
+         for(auto i = globalData.globalconfigurables.begin(); i != globalData.globalconfigurables.end(); ++i){
            if ((*i)->setParam(key,v)){
-             printf(" %s=\t%f\t%s\n", key, (*i)->getParam(key), (*i)->getName().c_str());
+             std::cout << " " << key << "=\t" << (*i)->getParam(key) 
+                       << "\t" << (*i)->getName() << std::endl;
              changed = true;
            }
          }
       }
       break;
     default: // something else
-      printf("Syntax Error! Expect 2 or 3 arguments: [ObjectID] param=val\n");
-      printf("Got %i params:", static_cast<int>(params).size());
-      FOREACHC(vector<string>, params, p) { printf("%s, ", p->c_str()); }
-      printf("\n");
+      std::cout << "Syntax Error! Expect 2 or 3 arguments: [ObjectID] param=val" << std::endl;
+      std::cout << "Got " << params.size() << " params:";
+      FOREACHC(vector<string>, params, p) { std::cout << *p << ", "; }
+      std::cout << std::endl;
       break;
     }
     // if(changed){ // now done for every command
@@ -514,33 +522,31 @@ bool com_store (const GlobalData& globalData, char* line, char* arg) {
         sub=id%100;
         id=id/100;
       }
-      if(id>=1 && id <= static_cast<int>globalData.agents.size()){
+      if(id>=1 && id <= static_cast<int>(globalData.agents.size())){
         FILE* f = fopen(filename,"wb");
         if(f){
-          explicit switch(sub){
+          switch(sub){
           case 0: // store agent
             if(globalData.agents[id-1]->store(f)){
-              printf("Agent stored\n");
+              std::cout << "Agent stored" << std::endl;
               success = true;
-            } else printf("Error occured while storing agent\n");
+            } else std::cout << "Error occured while storing agent" << std::endl;
             break;
           case 1: // store controller
-            if(globalData.agents[id-1]->getController()->store(f)){
-              printf("Controller stored\n");
-              success = true;
-            } else printf("Error occured while storing contoller\n");
+            // Controller doesn't have store method
+            std::cout << "Controller storage not implemented" << std::endl;
             break;
           case 2: // store robot
             if(globalData.agents[id-1]->getRobot()->store(f)){
-              printf("Robot stored\n");
+              std::cout << "Robot stored" << std::endl;
               success = true;
-            }else printf("Error occured while storing robot\n");
+            }else std::cout << "Error occured while storing robot" << std::endl;
             break;
           }
           fclose(f);
-        }else printf("Cannot open file %s for writing\n", filename);
-      } else printf("Agent with ID: %i not found\n", id);
-    }else printf("syntax error , see >help store\n");
+        }else std::cout << "Cannot open file " << filename << " for writing" << std::endl;
+      } else std::cout << "Agent with ID: " << id << " not found" << std::endl;
+    }else std::cout << "syntax error , see >help store" << std::endl;
   }
   return success;
 }
@@ -559,36 +565,33 @@ bool com_load (const GlobalData& globalData, char* line, char* arg) {
         sub=id%100;
         id=id/100;
       }
-      if(id>=1 && id <= static_cast<int>globalData.agents.size()){
+      if(id>=1 && id <= static_cast<int>(globalData.agents.size())){
         FILE* f = fopen(filename,"rb");
         if(f){
-          explicit switch(sub){
+          switch(sub){
           case 0: // store agent
             if(globalData.agents[id-1]->restore(f)){
-              printf("Agent restored\n");
+              std::cout << "Agent restored" << std::endl;
               success = true;
             }
-            else printf("Error occured while restoring agent\n");
+            else std::cout << "Error occured while restoring agent" << std::endl;
             break;
           case 1: // store controller
-            if(globalData.agents[id-1]->getController()->restore(f)){
-              printf("Controller restored\n");
-              success = true;
-            }
-            else printf("Error occured while restoring contoller\n");
+            // Controller doesn't have restore method
+            std::cout << "Controller restore not implemented" << std::endl;
             break;
           case 2: // store robot
             if(globalData.agents[id-1]->getRobot()->restore(f)){
-              printf("Robot restored\n");
+              std::cout << "Robot restored" << std::endl;
               success = true;
             }
-            else printf("Error occured while restoring robot\n");
+            else std::cout << "Error occured while restoring robot" << std::endl;
             break;
           }
           fclose(f);
-        }else printf("Cannot open file %s for reading\n", filename);
-      } else printf("Agent with ID: %i not found\n", id);
-    }else printf("syntax error , see >help load\n");
+        }else std::cout << "Cannot open file " << filename << " for reading" << std::endl;
+      } else std::cout << "Agent with ID: " << id << " not found" << std::endl;
+    }else std::cout << "syntax error , see >help load" << std::endl;
   }
   return success;
 }
@@ -602,14 +605,16 @@ bool com_storecfg (const GlobalData& globalData, char* line, char* arg) {
       *filename='\0';
       ++filename;
       int id = atoi(arg);
-      if(id>=1 && id <= static_cast<int>globalData.configs.size()){
-        if(globalData.configs[id-1]->storeCfg(filename)){
-          printf("Configuration stored\n");
+      if(id>=1 && id <= static_cast<int>(globalData.globalconfigurables.size())){
+        auto it = globalData.globalconfigurables.begin();
+        std::advance(it, id-1);
+        if((*it)->storeCfg(filename)){
+          std::cout << "Configuration stored" << std::endl;
           success = true;
         }else
-          printf("Error occured while storing configuration\n");
-      } else printf("Configurable with ID: %i not found\n", id);
-    }else printf("syntax error , see >help storecfg\n");
+          std::cout << "Error occured while storing configuration" << std::endl;
+      } else std::cout << "Configurable with ID: " << id << " not found" << std::endl;
+    }else std::cout << "syntax error , see >help storecfg" << std::endl;
   }
   return success;
 }
@@ -623,14 +628,16 @@ bool com_loadcfg (const GlobalData& globalData, char* line, char* arg) {
       *filename='\0';
       ++filename;
       int id = atoi(arg);
-      if(id>=1 && id <= static_cast<int>globalData.configs.size()){
-        if(globalData.configs[id-1]->restoreCfg(filename)){
-          printf("Configuration restored\n");
+      if(id>=1 && id <= static_cast<int>(globalData.globalconfigurables.size())){
+        auto it = globalData.globalconfigurables.begin();
+        std::advance(it, id-1);
+        if((*it)->restoreCfg(filename)){
+          std::cout << "Configuration restored" << std::endl;
           success = true;
         } else
-          printf("Error occured while restoring configuration\n");
-      } else printf("Configurable with ID: %i not found\n", id);
-    }else printf("syntax error , see >help loadcfg\n");
+          std::cout << "Error occured while restoring configuration" << std::endl;
+      } else std::cout << "Configurable with ID: " << id << " not found" << std::endl;
+    }else std::cout << "syntax error , see >help loadcfg" << std::endl;
   }
   return success;
 }
@@ -651,10 +658,10 @@ bool com_contrs (const GlobalData& globalData, char* line, char* arg) {
             ++i;
           }
         }
-        printf("%i playground contours saved to %s\n", i, filename);
+        std::cout << i << " playground contours saved to " << filename << std::endl;
         fclose(f);
-      }else printf("Cannot open file %s for writing\n", filename);
-    }else printf("syntax error , see >help store\n");
+      }else std::cout << "Cannot open file " << filename << " for writing" << std::endl;
+    }else std::cout << "syntax error , see >help store" << std::endl;
   }
   return true;
 }
@@ -673,16 +680,16 @@ bool com_help (const GlobalData& globalData, char* line, char* arg) {
 
   for (i = 0; commands[i].name; ++i)
     {
-      if (!*arg || (strcmp (arg, commands[i].name) == nullptr))
+      if (!*arg || (strcmp (arg, commands[i].name) == 0))
         {
-          printf (" %s\t\t%s.\n", commands[i].name, commands[i].doc);
+          std::cout << " " << commands[i].name << "\t\t" << commands[i].doc << "." << std::endl;
           ++printed;
         }
     }
 
   if (!printed)
     {
-      printf ("No commands match `%s'.  Possibilties are:\n", arg);
+      std::cout << "No commands match `" << arg << "'.  Possibilties are:" << std::endl;
 
       for (i = 0; commands[i].name; ++i)
         {
@@ -690,15 +697,15 @@ bool com_help (const GlobalData& globalData, char* line, char* arg) {
           if (printed == 6)
             {
               printed = 0;
-              printf ("\n");
+              std::cout << std::endl;
             }
 
-          printf (" %s\t", commands[i].name);
+          std::cout << " " << commands[i].name << "\t";
           ++printed;
         }
 
       if (printed)
-        printf ("\n");
+        std::cout << std::endl;
     }
   return true;
 }
@@ -712,7 +719,7 @@ valid_argument ( const char *caller, const char *arg)
 {
   if (!arg || !*arg)
     {
-      fprintf (stderr, "%s: Argument required.\n", caller);
+      std::cerr << caller << ": Argument required." << std::endl;
       return (0);
     }
 

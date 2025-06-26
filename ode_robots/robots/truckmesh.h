@@ -34,7 +34,7 @@
 
 namespace lpzrobots {
 
-  class Primitive{
+  class TruckMesh : public OdeRobot {
   public:
 
     /**
@@ -49,31 +49,31 @@ namespace lpzrobots {
               double size=1, double force=3, double speed=15, double mass=1);
 
 
-    virtual ~TruckMesh() { destroy(); };
+    virtual ~TruckMesh() { destroy(); }
 
     /**
      * updates the OSG nodes of the vehicle
      */
-    virtual void update();
+    virtual void update() override;
 
 
     /** sets the pose of the vehicle
         @param pose desired pose matrix
     */
-    virtual void placeIntern(const osg::Matrix& pose);
+    virtual void placeIntern(const osg::Matrix& pose) override;
 
     /** returns actual sensorvalues
         @param sensors sensors scaled to [-1,1]
         @param sensornumber length of the sensor array
         @return number of actually written sensors
     */
-    virtual int getSensorsIntern(sensor* sensors, int sensornumber);
+    virtual int getSensorsIntern(double* sensors, int sensornumber) override;
 
     /** sets actual motorcommands
         @param motors motors scaled to [-1,1]
         @param motornumber length of the motor array
     */
-    virtual void setMotorsIntern(const double* motors, int motornumber);
+    virtual void setMotorsIntern(const double* motors, int motornumber) override;
 
     /** returns number of sensors
      */
@@ -91,7 +91,7 @@ namespace lpzrobots {
         like space-internal collision detection, sensor resets/update etc.
         @param globalData structure that contains global data from the simulation environment
     */
-    virtual void explicit explicit doInternalStuff(const GlobalData& globalData);
+    virtual void doInternalStuff(const GlobalData& globalData) override;
 
 
   protected:
@@ -125,7 +125,7 @@ namespace lpzrobots {
     bool drawBoundings; // if bounding shapes of the body are drawed
     double max_force;  // maximal force for motors
 
-    bool created;      // true if robot was created
+    bool created = false;      // true if robot was created
 
   };
 

@@ -325,7 +325,7 @@ namespace quickprof
         @param format The desired time format to use for the result.
         @return The elapsed time.
         */
-        inline double explicit explicit getTimeSinceInit(const TimeFormat& format);
+        inline double getTimeSinceInit(const TimeFormat& format);
 
         /**
         Returns a summary of total times in each block.

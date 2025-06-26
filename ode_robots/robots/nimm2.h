@@ -30,6 +30,7 @@
 #include "primitive.h"
 #include "joint.h"
 #include <selforg/inspectable.h>
+#include <array>
 
 
 namespace lpzrobots {
@@ -76,7 +77,7 @@ public:
   Nimm2(const OdeHandle& odehandle, const OsgHandle& osgHandle,
         const Nimm2Conf& conf, const std::string& name);
 
-  static Nimm2Conf getDefaultConf() const {
+  static Nimm2Conf getDefaultConf() {
     Nimm2Conf conf;
     conf.size=1;
     conf.force=5;
@@ -149,7 +150,7 @@ public:
       like space-internal collision detection, sensor resets/update etc.
       @param globalData structure that contains global data from the simulation environment
    */
-  virtual void explicit explicit doInternalStuff(const GlobalData& globalData);
+  virtual void explicit doInternalStuff(const GlobalData& globalData);
 
         virtual double& getSumForce() override { return sumForce; }
 
@@ -202,7 +203,7 @@ protected:
 
   double  wheeloffset; // offset from center when in cigarMode
   int number_bumpers;  // number of bumpers (1 -> bumpers at one side, 2 -> bumpers at 2 sides)
-  Bumper bumper[2];
+  std::array<Bumper, 2> bumper;
 
   bool visForce; // decides if contact force is made visible in guilogger
   double sumForce; // stores the contact force made by collisions with external objects

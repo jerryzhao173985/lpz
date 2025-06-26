@@ -31,7 +31,12 @@ namespace lpzrobots
 
   /**
    * struct which holds all structural data for the simulations.
-   * A specialized class can{
+   * A specialized class can extend this.
+   */
+  class SimulationTaskHandle {
+  public:
+    SimulationTaskHandle() {}
+    virtual ~SimulationTaskHandle() {}
   };
 
 }

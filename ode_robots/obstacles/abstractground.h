@@ -30,9 +30,11 @@
 
 namespace lpzrobots {
 
-  class Primitive{
+  class Primitive; // Forward declaration
 
-public:
+  class AbstractGround : public AbstractObstacle {
+
+  public:
 
     AbstractGround(const OdeHandle& odeHandle, const OsgHandle& osgHandle,
                    bool createGround, double groundLength, double groundWidth, double wallThickness);
@@ -40,16 +42,16 @@ public:
     virtual ~AbstractGround() override;
 
 
-    virtual void setPose(const osg::Matrix& pose);
+    virtual void setPose(const osg::Matrix& pose) override;
 
-    virtual void explicit explicit createGround(bool create);
+    virtual void createGround(bool create);
 
     virtual Primitive* getMainPrimitive() const override;
 
     virtual void changeGeometry(double length, double width, double height, double factorxy);
 
     /// prints the contour of the boxes into the file
-    virtual void explicit explicit printContours(FILE* f);
+    virtual void printContours(FILE* f);
 
     /**
      * assigns the texture to the object
@@ -61,13 +63,13 @@ public:
      * should be called before setPosition()
      * @param color values in RGBA
      */
-    virtual void explicit explicit setGroundColor(const Color& color);
+    virtual void setGroundColor(const Color& color);
 
     /**
      * sets the substance of the ground.
      * @param substance description of the substance
      */
-    virtual void explicit explicit setGroundSubstance(const Substance& substance);
+    virtual void setGroundSubstance(const Substance& substance);
 
 
     /**
@@ -77,13 +79,13 @@ public:
     virtual std::list<Position> getCornerPointsXY();
 
     /// size in x dimension
-    virtual double getGroundLength() override { return groundLength; }
+    virtual double getGroundLength() { return groundLength; }
     /// size in y dimension
-    virtual double getGroundWidth() override { return groundWidth; }
+    virtual double getGroundWidth() { return groundWidth; }
 
-    virtual double getGroundThickness() override { return groundThickness; }
+    virtual double getGroundThickness() { return groundThickness; }
 
-    virtual void   explicit explicit setGroundThickness(double thickness);
+    virtual void setGroundThickness(double thickness);
 
   protected:
 

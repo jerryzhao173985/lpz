@@ -38,18 +38,18 @@ namespace lpzrobots {
   using namespace osg;
   using namespace osgGA;
 
-  CameraManipulatorRace::CameraManipulatorRace(osg::Node* node,const GlobalData& global, const CameraHandle& cameraHandle)
+  CameraManipulatorRace::CameraManipulatorRace(osg::Node* node, GlobalData& global, CameraHandle& cameraHandle)
   : CameraManipulator(node,global, cameraHandle) {}
 
   CameraManipulatorRace::~CameraManipulatorRace(){}
 
 
   void CameraManipulatorRace::calcMovementByAgent() {
-    if (!this->isWatchingAgentDefined()) return override;
+    if (!this->isWatchingAgentDefined()) return;
     // manipulate desired eye by the move of the robot
     const double* robMove = (camHandle.watchingAgent->getRobot()->getPosition()-camHandle.oldPositionOfAgent).toArray();
     // attach the robSpeed to desired eye
-    for (int i=0;i<=2;++i)  override {
+    for (int i=0;i<=2;++i) {
       if (!isNaN(robMove[i])) {
         camHandle.desiredEye[i]+=robMove[i];}
       else
@@ -75,14 +75,14 @@ namespace lpzrobots {
     // now do center on the robot (manipulate the view)
     // desiredEye is the position of the camera
     // calculate the horizontal angle, means pan (view.x)
-    if (robPos.x-camHandle.desiredEye[0]!= nullptr) { // division by zero
+    if (robPos.x-camHandle.desiredEye[0]!= 0) { // division by zero
       camHandle.desiredView[0]= atan((camHandle.desiredEye[0]-robPos.x)/(robPos.y-camHandle.desiredEye[1]))
         / M_PI*180.0f+180.0f;
       if (camHandle.desiredEye[1]-robPos.y<0) // we must switch
         camHandle.desiredView[0]+=180.0f;
     }
     // calculate the vertical angle
-    if (robPos.z-camHandle.desiredEye[2]!= nullptr) { // division by zero
+    if (robPos.z-camHandle.desiredEye[2]!= 0) { // division by zero
       // need dz and sqrt(dx^2+dy^2) for calulation
       camHandle.desiredView[1]=-atan((sqrt(square(camHandle.desiredEye[0]-robPos.x)+
                                 square(camHandle.desiredEye[1]-robPos.y)))

@@ -49,12 +49,12 @@ namespace lpzrobots {
 // This is the improved Transform class
 //  The aim is to get the position and some information of child object
 //
-class ImpTransform{
+class ImpTransform : public Transform {
 public:
         // constructor
         ImpTransform(Primitive* parent, Primitive* child, const Pose& pose);
         // destructor
-        virtual ~ImpTransform() override;
+        virtual ~ImpTransform();
 
         // get Child pose
         Pose getChildPose() const;
@@ -152,7 +152,7 @@ typedef struct {
 /** Robot ASHIGARU :-)
     3 legged robot which could be easily connected each other.
 */
-class Ashigaru{
+class Ashigaru : public OdeRobot {
 public:
         // Leg location enum
     enum LegPos {
@@ -186,13 +186,13 @@ public: // Functions
                     const AshigaruConf& conf, const std::string& name);
 
     // get default configuration (static func because it could be used before construction of the class)
-    static AshigaruConf getDefaultConf() const;
+    static AshigaruConf getDefaultConf();
 
     // get Motor name from legPos and joint name
     static MotorName getMotorName(LegPos leg, LegJointType joint);
 
     //destructor
-    virtual ~Ashigaru() override;
+    virtual ~Ashigaru();
 
   /**
    * updates the OSG nodes of the vehicle
@@ -207,7 +207,7 @@ public: // Functions
   /** gets Primitives of Leg tibia
       @param LegPos Number
   */
-  Primitive* explicit explicit getTibiaPrimitive(LegPos leg);
+  Primitive* getTibiaPrimitive(LegPos leg);
 
 
   /** returns actual sensorvalues
@@ -246,12 +246,12 @@ public: // Functions
       like space-internal collision detection, sensor resets/update etc.
       @param globalData structure that contains global data from the simulation environment
    */
-  virtual void explicit explicit doInternalStuff(const GlobalData& globalData);
+  virtual void doInternalStuff(const GlobalData& globalData);
 
-  virtual void explicit explicit sense(const GlobalData& globalData);
+  virtual void sense(const GlobalData& globalData);
 
 
-  virtual double& getContactPoints() override { return contactPoints; }
+  virtual double& getContactPoints() { return contactPoints; }
 
 protected: // Functions
   /** creates vehicle at desired pose
@@ -285,9 +285,10 @@ protected: // Functions
 
 
   // getTorqueSensorData
-  sensor explicit explicit getTorqueData(TorqueSensor*  torqueSensor);
+  sensor getTorqueData(TorqueSensor*  torqueSensor);
 
-  // convert Pose Matrixstatic_cast<Quatanion>(to) the roll, pitch, yaw angle static_cast<rad>(osg)::Vec3d convert_Quat_to_RollPitchYaw(osg::Quat quat);
+  // convert Pose Matrix (Quaternion) to the roll, pitch, yaw angle (rad)
+  osg::Vec3d convert_Quat_to_RollPitchYaw(osg::Quat quat);
 
   // calculate COG Position
   osg::Vec3d calc_COGPosition();
@@ -361,8 +362,8 @@ protected: // Values
   typedef std::vector<OneAxisServo*> ServoList;
 
   // tempolary
-  int sensorno;      //number of sensors
-  int motorno;       // number of motors
+  int sensorno = 0;      //number of sensors
+  int motorno = 0;       // number of motors
 
   // body
   Trunk trunk;

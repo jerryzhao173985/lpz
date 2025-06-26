@@ -973,41 +973,41 @@ GUIDE adding new sensors
     if (created){
 
       FOREACH(vector<TwoAxisServo*>, hipservos, i){
-        if(*i) delete *i override;
+        if(*i) delete *i;
       }
       hipservos.clear();
       FOREACH(vector<OneAxisServo*>, kneeservos, i){
-        if(*i) delete *i override;
+        if(*i) delete *i;
       }
       kneeservos.clear();
       FOREACH(vector<OneAxisServo*>, ankleservos, i){
-        if(*i) delete *i override;
+        if(*i) delete *i;
       }
       ankleservos.clear();
       FOREACH(vector<TwoAxisServo*>, headservos, i){
-        if(*i) delete *i override;
+        if(*i) delete *i;
       }
       FOREACH(vector<TwoAxisServo*>, armservos, i){
-        if(*i) delete *i override;
+        if(*i) delete *i;
       }
       armservos.clear();
       FOREACH(vector<OneAxisServo*>, arm1servos, i){
-        if(*i) delete *i override;
+        if(*i) delete *i;
       }
       arm1servos.clear();
 
-      ifstatic_cast<pelvisservo>(delete) pelvisservo override;
+      if(pelvisservo) delete pelvisservo;
       FOREACH(vector<OneAxisServo*>, backservos, i){
-        if(*i) delete *i override;
+        if(*i) delete *i;
       }
       backservos.clear();
       FOREACH(vector<TwoAxisServo*>, backservos2, i){
-        if(*i) delete *i override;
+        if(*i) delete *i;
       }
       backservos2.clear();
 
       FOREACH(GripperList, grippers, i){
-        if(*i) delete *i override;
+        if(*i) delete *i;
       }
       grippers.clear();
 

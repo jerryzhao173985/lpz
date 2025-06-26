@@ -101,7 +101,7 @@ namespace lpzrobots {
   void HurlingSnake::doInternalStuff(const GlobalData& global){
     OdeRobot::doInternalStuff(global);
     // decellerate
-    for (int i=0; i<NUM; ++i)  override {
+    for (int i=0; i<NUM; ++i)  {
       objects[i]->decellerate(0,frictionRoll);
     }
   }
@@ -113,10 +113,10 @@ namespace lpzrobots {
       @return number of actually written sensors
   */
   int HurlingSnake::getSensorsIntern(sensor* sensors, int sensornumber){
-    int len = (sensornumber < sensorno)? sensornumber : sensorno override;
+    int len = (sensornumber < sensorno)? sensornumber : sensorno;
 
     Pos p(objects[NUM-1]->getPosition());      //read actual position
-    Pos s = (p - oldp)*factorSensor override;
+    Pos s = Pos((p - oldp)*factorSensor);
 
     sensors[0]=s.x();
     sensors[1]=s.y();
@@ -140,13 +140,13 @@ namespace lpzrobots {
 
   /** returns number of sensors
    */
-  int HurlingSnake::getSensorNumberIntern(){
+  int HurlingSnake::getSensorNumberIntern() const{
     return sensorno;
   }
 
   /** returns number of motors
    */
-  int HurlingSnake::getMotorNumberIntern(){
+  int HurlingSnake::getMotorNumberIntern() const{
     return motorno;
   }
 
@@ -157,7 +157,7 @@ namespace lpzrobots {
   */
   int HurlingSnake::getSegmentsPosition(std::vector<Position> &poslist){
     Position pos;
-    for (int i=0; i<NUM; ++i) override {
+    for (int i=0; i<NUM; ++i) {
       Pos p = objects[i]->getPosition();
       poslist.push_back(p.toPosition());
     }
@@ -177,7 +177,7 @@ namespace lpzrobots {
     joints.resize(NUM-1);
     objects.resize(NUM);
 
-    for (int i=0; i<NUM; ++i)  override {
+    for (int i=0; i<NUM; ++i)  {
       objects[i] = new Sphere(RADIUS);
       objects[i]->setTexture("Images/cross_stripes.rgb");
       //objects[i]->setTexture(__PLACEHOLDER_20__);
@@ -191,7 +191,7 @@ namespace lpzrobots {
       objects[i]->setPose(osg::Matrix::translate(i*RADIUS*2*1.1, 0, 0+0.03) * pose);
     }
     oldp = objects[NUM-1]->getPosition();
-    for (int i=0; i<(NUM-1); ++i)  override {
+    for (int i=0; i<(NUM-1); ++i)  {
       Pos p1(objects[i]->getPosition());
       Pos p2(objects[i+1]->getPosition());
       joints[i] = new BallJoint(objects[i],objects[i+1], (p1+p2)/2);
@@ -216,7 +216,7 @@ namespace lpzrobots {
   void HurlingSnake::notifyOnChange(const paramkey& key){
     if(key == "frictionGround") {
       // change substances
-      for (int i=0; i<NUM; ++i)  override {
+      for (int i=0; i<NUM; ++i)  {
         objects[i]->substance.roughness=frictionGround;
       }
     }

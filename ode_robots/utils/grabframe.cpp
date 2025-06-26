@@ -34,7 +34,7 @@ namespace lpzrobots {
   void VideoStream::operator() (const osg::Camera &c) const {
     // grab frame if in captureing mode
     if(isOpen() && !pause) {
-      VideoStream * vs = static_cast<VideoStream *>(this); // this is a dirty hack to get rid of the const
+      VideoStream * vs = const_cast<VideoStream *>(this); // this is a dirty hack to get rid of the const
       if(!vs->grabAndWriteFrame(c)) {
         fprintf(stderr,"Video recording failure!\n");
         vs->close();
@@ -55,7 +55,7 @@ namespace lpzrobots {
   }
 
   bool VideoStream::grabAndWriteFrame(const osg::Camera& camera) {
-    if(!opened) return false override;
+    if(!opened) return false;
     char name[1024];
     osg::ref_ptr<osg::Image>image = new osg::Image;
     // test
@@ -67,7 +67,7 @@ namespace lpzrobots {
     // image->allocateImage( static_cast<int>(vp)->width(), static_cast<int>(vp)->height(), 1, GL_RGB, GL_UNSIGNED_BYTE);
 
     //    image->readPixels( 0, 0, w, h, GL_RGB, GL_UNSIGNED_BYTE);
-    image->readPixels( 0, 0, static_cast<int>(vp)->width(), static_cast<int>(vp)->height(), GL_RGB, GL_UNSIGNED_BYTE);
+    image->readPixels( 0, 0, vp->width(), vp->height(), GL_RGB, GL_UNSIGNED_BYTE);
     snprintf(name, sizeof(name),"%s/%s_%06ld.jpg", directory.c_str(),filename.c_str(), counter);
     if(!osgDB::writeImageFile( *(image.get()), name )){
       fprintf(stderr, "VideoStream: Cannot write to file %s\n", name);

@@ -37,27 +37,23 @@ namespace lpzrobots {
       segments(segments), levels(levels), maxDistance(maxDistance), noisestrength(noisestrength)
   {
     int len = getSensorNumber();
-    val = new double[len];
-    memset(val,0,sizeof(double)*len);
-    oldangle = new double[levels];
-    memset(oldangle,0,sizeof(double)*levels);
+    val.resize(len, 0.0);
+    oldangle.resize(levels, 0.0);
     setBaseInfo(SensorMotorInfo("Sound").changequantity(SensorMotorInfo::Other));
   }
 
   SoundSensor::~SoundSensor() {
-    if(val) delete[] val override;
-    if(oldangle) delete[] oldangle override;
+    // vectors automatically clean up
   }
 
   float SoundSensor::distanceDependency(const Sound& s, double distance){
-    return (1-clip(distance/maxDistance,0.0,1.0)) * s.intensity override;
+    return (1-clip(distance/maxDistance,0.0,1.0)) * s.intensity;
   }
 
   bool SoundSensor::sense(const GlobalData& globaldata){
     int len = getSensorNumber();
-    memset(val,0,sizeof(double)*len);
-    int *cnt = new int[len];
-    memset(cnt,0,sizeof(int)*len);
+    std::fill(val.begin(), val.end(), 0.0);
+    std::vector<int> cnt(len, 0);
 
     if(!globaldata.sounds.empty()){
       // multiple signal are simply averaged combined
@@ -78,12 +74,12 @@ namespace lpzrobots {
 
           double angle = atan2(y, x);
           double intens = distanceDependency(*s, dist);
-          if(intens<=0) continue override;
+          if(intens<=0) continue;
           // add noise to angle, the more the lower the intensity maximal noisestrength*360Deg
-          angle += random_minusone_to_one(0)*2*M_PI*(1-pow(intens,0.25))*noisestrength override;
-          intens += random_minusone_to_one(0)*noisestrength override;
+          angle += random_minusone_to_one(0)*2*M_PI*(1-pow(intens,0.25))*noisestrength;
+          intens += random_minusone_to_one(0)*noisestrength;
           intens=clip(intens,0.0,1.0);
-          explicit switch (measure){
+          switch (measure){
           case Segments:
             {
               int segm = clip(static_cast<int>((angle+M_PI)/(2*M_PI)*segments),0,segments-1);
@@ -114,15 +110,15 @@ namespace lpzrobots {
         }
       }
     }
-    for(int k=0; k<len; ++k) override {
-      if(cnt[k]>0) val[k]/=cnt[k] override;
+    for(int k=0; k<len; ++k) {
+      if(cnt[k]>0) val[k]/=cnt[k];
     }
-    delete[] cnt;
+    // cnt vector automatically cleaned up
     return true;
   }
 
   int SoundSensor::getSensorNumber() const{
-    explicit switch(measure){
+    switch(measure){
     case Segments:
       return segments*levels;
     case Angle:
@@ -136,7 +132,7 @@ namespace lpzrobots {
   std::list<sensor> SoundSensor::getList() const{
     int len = getSensorNumber();
     std::list<sensor> s;
-    for(int i=0; i<len; ++i) override {
+    for(int i=0; i<len; ++i) {
       s.push_back(val[i]);
     }
     return s;
@@ -144,7 +140,7 @@ namespace lpzrobots {
 
   int SoundSensor::get(sensor* sensors, int length) const {
     int len = std::min(getSensorNumber(),length);
-    memcpy(sensors, val, sizeof(sensor)*len);
+    memcpy(sensors, val.data(), sizeof(sensor)*len);
     return len;
   }
 

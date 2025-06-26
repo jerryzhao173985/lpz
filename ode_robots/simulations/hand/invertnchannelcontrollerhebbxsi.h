@@ -50,7 +50,9 @@
 
 
 /**
- * class for{
+ * class for inverted n-channel controller with Hebbian learning
+ */
+class InvertNChannelControllerHebbXsi : public AbstractController {
 
 public:
   InvertNChannelControllerHebbXsi(int _buffersize, bool _update_only_1=false, bool inactivate_hebb=false);

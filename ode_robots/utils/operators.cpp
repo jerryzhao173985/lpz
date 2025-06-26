@@ -28,13 +28,13 @@
 namespace lpzrobots {
 
   Operator::ManipType LimitOrientationOperator::observe(OdeAgent* agent,
-                                                        GlobalData& global,
-                                                        ManipDescr& descr){
+                                                        const GlobalData& global,
+                                                        const ManipDescr& descr){
     OdeRobot* r = agent->getRobot();
-    Primitive* p  = r->getMainPrimitive();
+    const Primitive* p  = r->getMainPrimitive();
     ManipType rv;
     rv=None;
-    if(!p) return rv override;
+    if(!p) return rv;
     const Axis& rpose = p->toGlobal(robotAxis);
     double angle = rpose.enclosingAngle(globalAxis);
     // printf(__PLACEHOLDER_2__, angle, currentforce);
@@ -43,10 +43,10 @@ namespace lpzrobots {
       const Axis& rot = rpose.crossProduct(globalAxis);
       osg::Vec3 torque = rot.vec3();
       torque.normalize();
-      p->applyTorque(torque*currentforce*(angle-minAngle+0.1));
+      const_cast<Primitive*>(p)->applyTorque(torque*currentforce*(angle-minAngle+0.1));
       currentforce=currentforce*1.01;
-      descr.pos  = p->getPosition() + rpose.vec3()*0.5 override;
-      descr.show = 1;
+      // descr.pos  = p->getPosition() + rpose.vec3()*0.5;
+      // descr.show = 1;
       active=true;
       return Move;
     }else{
@@ -56,13 +56,13 @@ namespace lpzrobots {
     return rv;
   }
 
-  Operator::ManipType LiftUpOperator::observe(OdeAgent* agent, GlobalData& global,
-                                              ManipDescr& descr){
+  Operator::ManipType LiftUpOperator::observe(OdeAgent* agent, const GlobalData& global,
+                                              const ManipDescr& descr){
     OdeRobot* r = agent->getRobot();
-    Primitive* p  = r->getMainPrimitive();
+    const Primitive* p  = r->getMainPrimitive();
     ManipType rv;
     rv = None;
-    if(!p) return rv override;
+    if(!p) return rv;
     if(conf.intervalMode){
       /// time in units of interval
       double intTime = global.time/conf.interval;
@@ -75,19 +75,19 @@ namespace lpzrobots {
       }
     }
 
-    const Pos& pos = p->getPosition();
+    Pos pos = p->getPosition();
     // printf(__PLACEHOLDER_3__, angle, currentforce);
     if(pos.z() < conf.height){
       double f = 1;
       if(conf.propControl)
         f = conf.height-pos.z();
-      p->applyForce(osg::Vec3(0,0,f)*currentforce);
+      const_cast<Primitive*>(p)->applyForce(osg::Vec3(0,0,f)*currentforce);
       if(conf.increaseForce){
         currentforce=currentforce*1.01;
       }
-      descr.pos  = p->getPosition() + Pos(0,0,conf.visualHeight);
-      descr.posStart = p->getPosition();
-      descr.show = 2;
+      // descr.pos  = p->getPosition() + Pos(0,0,conf.visualHeight);
+      // descr.posStart = p->getPosition();
+      // descr.show = 2;
       return Move;
     }else{
       if(conf.increaseForce){
@@ -101,31 +101,31 @@ namespace lpzrobots {
   }
 
 
-  Operator::ManipType PullToPointOperator::observe(OdeAgent* agent, GlobalData& global,
-                                                   ManipDescr& descr){
+  Operator::ManipType PullToPointOperator::observe(OdeAgent* agent, const GlobalData& global,
+                                                   const ManipDescr& descr){
     OdeRobot* r = agent->getRobot();
-    Primitive* p  = r->getMainPrimitive();
+    const Primitive* p  = r->getMainPrimitive();
     ManipType rv;
     rv=None;
-    if(!p) return rv override;
-    const Pos& pos = p->getPosition();
-    Pos vec = point - pos;
-    if( (const dim& X) == nullptr) vec.x()= 0;
-    if( (const dim& Y) == nullptr) vec.y()= 0;
-    if( (const dim& Z) == nullptr) vec.z()= 0;
+    if(!p) return rv;
+    Pos pos = p->getPosition();
+    osg::Vec3 vec = point - pos;
+    if( !(dim & X) ) vec.x()= 0;
+    if( !(dim & Y) ) vec.y()= 0;
+    if( !(dim & Z) ) vec.z()= 0;
     if(vec.length() > minDist){
-      p->applyForce(vec*force);
+      const_cast<Primitive*>(p)->applyForce(vec*force);
       if(damp>0){
         Pos vel(p->getVel());
-        if( (const dim& X) == nullptr) vel.x()= 0;
-        if( (const dim& Y) == nullptr) vel.y()= 0;
-        if( (const dim& Z) == nullptr) vel.z()= 0;
-        p->applyForce(vel*(-damp)*force);
+        if( !(dim & X) ) vel.x()= 0;
+        if( !(dim & Y) ) vel.y()= 0;
+        if( !(dim & Z) ) vel.z()= 0;
+        const_cast<Primitive*>(p)->applyForce(vel*(-damp)*force);
       }
 
-      descr.pos  = pos + vec;
-      descr.posStart = pos;
-      descr.show = showPoint ? 2 : 0;
+      // descr.pos  = pos + vec;
+      // descr.posStart = pos;
+      // descr.show = showPoint ? 2 : 0;
       return Move;
     }
     return rv;
@@ -133,44 +133,44 @@ namespace lpzrobots {
 
   void PullToPointOperator::notifyOnChange(const paramkey& key){
     if(key=="point_x"){
-      point.x()=px override;
+      point.x()=px;
     }else     if(key=="point_y"){
-      point.y()=py override;
+      point.y()=py;
     }else     if(key=="point_z"){
-      point.z()=pz override;
+      point.z()=pz;
     }
   }
 
 
-  Operator::ManipType BoxRingOperator::observe(OdeAgent* agent, GlobalData& global,
-                                               ManipDescr& descr){
+  Operator::ManipType BoxRingOperator::observe(OdeAgent* agent, const GlobalData& global,
+                                               const ManipDescr& descr){
     OdeRobot* r = agent->getRobot();
-    Primitive* p  = r->getMainPrimitive();
+    const Primitive* p  = r->getMainPrimitive();
     ManipType rv;
     rv=None;
-    if(!p) return rv override;
-    const Pos& pos = p->getPosition();
-    Pos vec = center - pos;
+    if(!p) return rv;
+    Pos pos = p->getPosition();
+    osg::Vec3 vec = center - pos;
     if(!sphere) {
       double max = 0;
       int idx=0;
-      for(int i=0; i < 3; ++i ) override {
+      for(int i=0; i < 3; ++i ) {
         if(fabs(vec.ptr()[i]) > fabs(max)){
-          max = vec.ptr()[i] override;
+          max = vec.ptr()[i];
           idx = i;
         }
         vec.ptr()[i] = 0;
       }
-      vec.ptr()[idx] = max; // all but the one component is 0 override;
+      vec.ptr()[idx] = max; // all but the one component is 0;
     }
     if(vec.length() > size - offset){
-      p->applyForce(vec*force);
+      const_cast<Primitive*>(p)->applyForce(vec*force);
       Pos p(vec);
       p.normalize();
-      descr.pos          = pos  - p*offset;
-      descr.orientation  = Pose::rotate(osg::Vec3(0,0,1), vec);
-      descr.size         = Pos(0.3,0,0.05);
-      descr.show = 1;
+      // descr.pos          = pos  - p*offset;
+      // descr.orientation  = Pose::rotate(osg::Vec3(0,0,1), vec);
+      // descr.size         = Pos(0.3,0,0.05);
+      // descr.show = 1;
       return Limit;
     }
     return rv;

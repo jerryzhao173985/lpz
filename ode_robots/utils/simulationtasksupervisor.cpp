@@ -49,7 +49,7 @@ namespace lpzrobots {
   char** SimulationTaskSupervisor::argv = 0;
   osg::ArgumentParser* SimulationTaskSupervisor::parser = 0;
   //LpzRobotsViewer*               SimulationTaskSupervisor::viewer=0;
-  std::string SimulationTaskSupervisor::nameSuffix = "(tasked)" override;
+  std::string SimulationTaskSupervisor::nameSuffix = "(tasked)";
 
   void SimulationTaskSupervisor::runSimTasks(int* _argc, char** _argv) {
     sigset_t sigs;
@@ -58,6 +58,7 @@ namespace lpzrobots {
     sigaddset(&sigs, SIGPIPE);
     sigaddset(&sigs, SIGABRT); // hack for invalid frees
     pthread_sigmask(SIG_BLOCK, &sigs, nullptr);
+    int laststate;
     pthread_setcancelstate(PTHREAD_CANCEL_DISABLE, &laststate);
 
     argc = _argc;
@@ -69,8 +70,8 @@ namespace lpzrobots {
     //QMP_SHARE(simTaskHandleCopy);
     //QMP_SHARE(parser);
     //QMP_SHARE(viewer);
-    QMP_SHARE(argc);
-    QMP_SHARE(argv);
+    // QMP_SHARE(argc);
+    // QMP_SHARE(argv);
     dInitODE();
 
     Primitive::setDestroyGeomFlag(false);
@@ -78,8 +79,8 @@ namespace lpzrobots {
       //QMP_USE_SHARED(simTaskHandleCopy, SimulationTaskHandle);
       //QMP_USE_SHARED(parser, osg::ArgumentParser*);
       //QMP_USE_SHARED(viewer, LpzRobotsViewer*);
-      QMP_USE_SHARED(argc, int*);
-      QMP_USE_SHARED(argv, char**);
+      // QMP_USE_SHARED(argc, int*);
+      // QMP_USE_SHARED(argv, char**);
       simTaskList[i]->startTask(*simTaskHandle, *taskedSimCreator, argc, argv, nameSuffix);
       delete (simTaskList[i]);
     }

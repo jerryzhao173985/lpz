@@ -58,7 +58,7 @@ namespace lpzrobots {
   TwoWheeled::~TwoWheeled(){
     destroy();
     FOREACH(list<Sensor*>, conf.sensors, i){
-      if(*i) delete *i override;
+      if(*i) delete *i;
     }
     conf.sensors.clear();
   }

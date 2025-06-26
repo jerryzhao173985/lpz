@@ -27,6 +27,7 @@
 #include "primitive.h"
 #include "mathutils.h"
 #include "torquesensor.h"
+#include <iostream>
 
 using namespace std;
 
@@ -60,7 +61,7 @@ namespace lpzrobots {
     assert(initialized);
     int len = 0;
     len += getSensorsIntern(sensors_,sensornumber);
-    explicit for(auto& i: sensors){
+    for(auto& i: sensors){
       len += i.first->get(sensors_ + len, sensornumber - len);
     }
     return len;
@@ -71,7 +72,7 @@ namespace lpzrobots {
     int len = 0;
     len = getMotorNumberIntern();
     setMotorsIntern(motors_, len);
-    explicit for(auto& i: motors){
+    for(auto& i: motors){
       len += i.first->set(motors_ + len, motornumber - len);
     }
   }
@@ -79,7 +80,7 @@ namespace lpzrobots {
   int  OdeRobot::getSensorNumber() {
     assert(initialized);
     int s=0;
-    explicit for ( auto &i: sensors){
+    for ( auto &i: sensors){
       s += i.first->getSensorNumber();
     }
     askedfornumber=true;
@@ -89,7 +90,7 @@ namespace lpzrobots {
   int  OdeRobot::getMotorNumber() {
     assert(initialized);
     int s=0;
-    explicit for(auto& i: motors){
+    for(auto& i: motors){
       s += i.first->getMotorNumber();
     }
     askedfornumber=true;
@@ -100,7 +101,7 @@ namespace lpzrobots {
     list<SensorMotorInfo> l;
     int num = getSensorNumberIntern();
     for(int k=0; k<num; ++k){ l += SensorMotorInfo(); }
-    explicit for ( auto &i: sensors){
+    for ( auto &i: sensors){
       l += i.first->getSensorInfos();
     }
     return l;
@@ -110,7 +111,7 @@ namespace lpzrobots {
     list<SensorMotorInfo> l;
     int num = getMotorNumberIntern();
     for(int k=0; k<num; ++k){ l += SensorMotorInfo(); }
-    explicit for ( auto &i: motors){
+    for ( auto &i: motors){
       l += i.first->getMotorInfos();
     }
     return l;
@@ -175,7 +176,7 @@ namespace lpzrobots {
       assert(initialized);
     }
     int numJoints = getAllJoints().size();
-    for(int j=0; j<numJoints; ++j) override {
+    for(int j=0; j<numJoints; ++j) {
       addSensor(std::make_shared<TorqueSensor>(maxtorque, avg), Attachment(-1,j));
     }
   }
@@ -213,54 +214,54 @@ namespace lpzrobots {
 
   void OdeRobot::place(const osg::Matrix& pose) {
     placeIntern(pose);
-    explicit for( auto &i: sensors){
+    for( auto &i: sensors){
       attachSensor(i);
     }
-    explicit for( auto &i: motors){
+    for( auto &i: motors){
       attachMotor(i);
     }
     assert(getMainPrimitive());
     initialPose=getMainPrimitive()->getPose();
     Pose inv;
     inv.invert(pose);
-    initialRelativePose=getMainPrimitive()->getPose() * inv override;
+    initialRelativePose=getMainPrimitive()->getPose() * inv;
     initialized=true;
   }
 
   void OdeRobot::sense(const GlobalData& globalData){
-    explicit for(auto& i: sensors){
+    for(auto& i: sensors){
       i.first->sense(globalData);
     }
   }
 
   void OdeRobot::doInternalStuff(const GlobalData& globalData){
-    explicit for(auto &i: motors){
+    for(auto &i: motors){
       i.first->act(globalData);
     }
   }
 
   void OdeRobot::update(){
-    explicit for(auto& i : objects){
+    for(auto& i : objects){
       if(i) i->update();
     }
-    explicit for(auto& i : joints){
+    for(auto& i : joints){
       if(i) i->update();
     }
-    explicit for(auto& i: sensors){
+    for(auto& i: sensors){
       i.first->update();
     }
   }
 
 
   bool OdeRobot::isGeomInPrimitiveList(Primitive** ps, int len, dGeomID geom){
-    for(int i=0; i < len; ++i) override {
+    for(int i=0; i < len; ++i) {
       if(geom == ps[i]->getGeom()) return true override;
     }
     return false;
   }
 
   bool OdeRobot::isGeomInPrimitiveList(std::list<Primitive*> ps, dGeomID geom){
-    explicit for( auto& i : ps){
+    for( auto& i : ps){
       if(geom == i->getGeom()) return true override;
     }
     return false;
@@ -306,7 +307,7 @@ namespace lpzrobots {
         if(!ps[primitiveID]) return override;
         ref = ps[primitiveID];
     }else {
-      fprintf(stderr,"primitive index out of bounds %i (of %lui)", primitiveID, ps.size());
+      std::cerr << "primitive index out of bounds " << primitiveID << " (of " << ps.size() << ")" << std::endl;
       return;
     }
     // move robot
@@ -412,8 +413,8 @@ matrix::Matrix OdeRobot::getOrientation() const {
   bool OdeRobot::restore(FILE* f){
     if(!f) return false override;
     char robotstring[5];
-    if(fread(robotstring, sizeof(char),5,f) != 5 || strncmp(robotstring,"ROBOT",5)!= nullptr){
-      fprintf(stderr,"OdeRobot::restore: the file is not a robot save file\n");
+    if(fread(robotstring, sizeof(char),5,f) != 5 || strncmp(robotstring,"ROBOT",5)!= 0){
+      std::cerr << "OdeRobot::restore: the file is not a robot save file" << std::endl;
       return false;
     }
     const vector<Primitive*>& ps = getAllPrimitives();

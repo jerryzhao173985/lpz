@@ -54,7 +54,7 @@ using namespace matrix;
    * Constructor where you can set the pos-matrix by this constructor:
    @param position is the position AND rotation of the segment
    */
-  explicit explicit AbstractTrackSection(const Matrix& pose){
+  explicit AbstractTrackSection(const Matrix& pose){
     setPoseMatrix(pose);
   };
 

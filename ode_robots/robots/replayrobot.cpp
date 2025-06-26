@@ -22,6 +22,7 @@
  *                                                                         *
  ***************************************************************************/
 #include <cassert>
+#include <iostream>
 
 #include "simulation.h"
 
@@ -46,7 +47,8 @@ namespace lpzrobots {
       cerr<< "ReplayRobot: error while seaching for header in file " << filename << endl;
       exit(1);
     }
-    printf("Test: %i, %i, %i, %i\n", sensorStart, sensorEnd, motorStart, motorEnd);
+    std::cout << "Test: " << sensorStart << ", " << sensorEnd << ", " 
+              << motorStart << ", " << motorEnd << std::endl;
 
   };
 

@@ -29,7 +29,7 @@
 
 namespace lpzrobots {
 
-  class Sphere{
+  class ContactSensor : public PhysicalSensor {
   public:
 
     /**
@@ -60,7 +60,7 @@ namespace lpzrobots {
 
     virtual int getSensorNumber() const { return 1; }
 
-    virtual bool explicit explicit sense(const GlobalData& globaldata);
+    virtual bool sense(const GlobalData& globaldata);
 
     virtual int get(sensor* sensors, int length) const override;
 

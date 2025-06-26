@@ -28,6 +28,7 @@
 #include <selforg/stl_adds.h>
 #include <selforg/matrix.h>
 #include <selforg/controller_misc.h>
+#include <iostream>
 
 namespace lpzrobots {
 
@@ -70,11 +71,11 @@ namespace lpzrobots {
   }
 
   void PolyLine::print(){
-    printf("%i %i %i %i\n\t", object_code, sub_type, line_style, thickness);
+    std::cout << object_code << " " << sub_type << " " << line_style << " " << thickness << "\n\t";
     FOREACH(list<Pos>, points, p){
-      printf("%f %f", p->x(), p->y() );
+      std::cout << p->x() << " " << p->y();
     }
-    printf("\n");
+    std::cout << std::endl;
   }
 
 
@@ -89,7 +90,7 @@ namespace lpzrobots {
 
     FILE* f=fopen(filename.c_str(),"r");
     if(!f){
-      fprintf(stderr,"Cannot open file: %s!\n",filename.c_str());
+      std::cerr << "Cannot open file: " << filename << "!" << std::endl;
       exit(1);
     }
     list<char*> lines;

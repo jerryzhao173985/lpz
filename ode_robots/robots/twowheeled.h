@@ -43,7 +43,7 @@ namespace lpzrobots {
     /// list of sensors that are mounted at the robot. (e.g.\ AxisOrientationSensor)
     std::list<Sensor*> sensors;
     /// adds a sensor to the list of sensors
-    void explicit explicit addSensor(Sensor* s) { sensors.push_back(s); }
+    void explicit addSensor(Sensor* s) { sensors.push_back(s); }
   } TwoWheeledConf;
 
   /** Robot is based on nimm2 with
@@ -91,7 +91,7 @@ namespace lpzrobots {
 
     virtual int getSensorsIntern(double* sensors, int sensornumber);
 
-    virtual void explicit explicit sense(const GlobalData& globalData);
+    virtual void explicit sense(const GlobalData& globalData);
 
 
   protected:

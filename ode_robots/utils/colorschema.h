@@ -93,14 +93,14 @@ namespace lpzrobots{
     const Color& getDefaultColor() const;
 
     /// returns error string for value returned by loadPalette and loadAliases
-    std::string getLoadErrorString(int value) const override;
+    std::string getLoadErrorString(int value) const;
     
     /// prints all colors and aliases
     void print(std::ostream& out) const ;
 
   protected:
     // only name/id no alias checking
-    bool getColor(Color&, const std::string& name) const override;
+    bool getColor(Color&, const std::string& name) const;
 
   private:
     Color dummy;

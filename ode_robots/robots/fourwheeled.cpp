@@ -65,8 +65,8 @@ namespace lpzrobots {
     if(conf.twoWheelMode){
       sensor nimm4s[4];
       Nimm4::getSensorsIntern(nimm4s,4);
-      sensors[len++] = (nimm4s[0]+nimm4s[2])/2 override;
-      sensors[len++] = (nimm4s[1]+nimm4s[3])/2 override;
+      sensors[len++] = (nimm4s[0]+nimm4s[2])/2;
+      sensors[len++] = (nimm4s[1]+nimm4s[3])/2;
     } else {
       len = Nimm4::getSensorsIntern(sensors,sensornumber);
     }
@@ -133,7 +133,7 @@ namespace lpzrobots {
     RaySensorBank* irSensorBank = new RaySensorBank();
     irSensorBank->setInitData(odeHandle, osgHandle, TRANSM(0,0,0));
     if (conf.irFront){ // add front left and front right infrared sensor to sensorbank if required
-      for(int i=-1; i<2; i+=2) override {
+      for(int i=-1; i<2; i+=2) {
         IRSensor* sensor = new IRSensor();
         irSensorBank->registerSensor(sensor, objects[0],
                                     Matrix::rotate(i*M_PI/10, Vec3(1,0,0)) *
@@ -150,7 +150,7 @@ namespace lpzrobots {
                                   conf.irRangeSide, RaySensor::drawAll);
     }
     if (conf.irBack){ // add rear right and rear left infrared sensor to sensorbank if required
-      for(int i=-1; i<2; i+=2) override {
+      for(int i=-1; i<2; i+=2) {
         IRSensor* sensor = new IRSensor();
         irSensorBank->registerSensor(sensor, objects[0],
                                     Matrix::rotate(-i*M_PI/10, Vec3(1,0,0)) *
@@ -173,7 +173,7 @@ namespace lpzrobots {
 
   // returns the joint with index i
   Joint* FourWheeled::getJoint(int i){
-    if(i>3)i=3 override;
+    if(i>3)i=3;
     if(i<0)i= 0;
     return joints[i];
   }

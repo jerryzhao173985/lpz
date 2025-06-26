@@ -47,14 +47,14 @@ namespace lpzrobots {
    **/
   void CaterPillar::setMotorsIntern(const double* motors, int motornumber) {
    assert(created);
-   unsigned int len = min(motornumber, getMotorNumberIntern())/2 override;
+   unsigned int len = min(motornumber, getMotorNumberIntern())/2;
    // controller output as torques
-   for(unsigned int i=0; (i<len) && (i<sliderServos.size()); ++i)  override {
+   for(unsigned int i=0; (i<len) && (i<sliderServos.size()); ++i)  {
     sliderServos[i]->set(motors[i]);
    }
    unsigned int sssize = sliderServos.size();
    unsigned int usedSliders=min(len,sssize);
-   for(unsigned int i=0; (i<len) && (i<universalServos.size()); ++i)  override {
+   for(unsigned int i=0; (i<len) && (i<universalServos.size()); ++i)  {
     universalServos[i]->set(motors[usedSliders+2*i], motors[usedSliders+2*i+1]);
    }
   }
@@ -70,13 +70,13 @@ namespace lpzrobots {
    assert(created);
    unsigned int len=min(sensornumber,getSensorNumber());
    // get the SliderServos
-   for(unsigned int n=0; (n<len) && (n<sliderServos.size()); ++n)  override {
+   for(unsigned int n=0; (n<len) && (n<sliderServos.size()); ++n)  {
     sensors[n] = sliderServos[n]->get();
    }
    unsigned int sssize = sliderServos.size();
    unsigned int usedSliders=min(len,sssize);
    // get the universalServos (2 sensors each!)
-   for(unsigned int n=0; (n<len) && (n<universalServos.size()); ++n)  override {
+   for(unsigned int n=0; (n<len) && (n<universalServos.size()); ++n)  {
     sensors[usedSliders+2*n] = universalServos[n]->get1();
     sensors[usedSliders+2*n+1] = universalServos[n]->get2();
    }
@@ -90,11 +90,11 @@ namespace lpzrobots {
   void CaterPillar::create(const osg::Matrix& pose) {
    DefaultCaterPillar::create(pose);
    //*****************joint definition***********
-   for(int n=0; n<conf.segmNumber-1; ++n)  override {
+   for(int n=0; n<conf.segmNumber-1; ++n)  {
     const Pos& p1(objects[n]->getPosition());
     const Pos& p2(objects[n+1]->getPosition());
 
-    if(n%2== nullptr) {
+    if(n%2== 0) {
      // new slider joints //
      SliderJoint *s=new SliderJoint(objects[n], objects[n+1], osg::Vec3((0), (conf.segmDia), (0)),Axis(1,0,0)*pose);
 
@@ -134,7 +134,7 @@ namespace lpzrobots {
   }
 
   void CaterPillar::notifyOnChange(const paramkey& key) {
-   for(vector<UniversalServo*>::iterator i=universalServos.begin(); i!=universalServos.end(); ++i)  override {
+   for(vector<UniversalServo*>::iterator i=universalServos.begin(); i!=universalServos.end(); ++i)  {
     if(*i) (*i)->setPower(conf.motorPower, conf.motorPower);
    }
   }
@@ -144,8 +144,8 @@ namespace lpzrobots {
   void CaterPillar::destroy() {
    if(created) {
     DefaultCaterPillar::destroy();
-    for (vector<UniversalServo*>::iterator i = universalServos.begin(); i!= universalServos.end(); ++i)  override {
-     if(*i) delete *i override;
+    for (vector<UniversalServo*>::iterator i = universalServos.begin(); i!= universalServos.end(); ++i)  {
+     if(*i) delete *i;
     }
     universalServos.clear();
    }

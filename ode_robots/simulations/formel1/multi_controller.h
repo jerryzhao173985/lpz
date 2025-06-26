@@ -11,7 +11,9 @@
 typedef std::vector<AbstractController*> ControllerContainer;
 
 /**
- * class for{
+ * class for multi controller
+ */
+class MultiController : public AbstractController {
 public:
 
   MultiController();

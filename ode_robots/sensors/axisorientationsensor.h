@@ -30,7 +30,7 @@ namespace lpzrobots {
 
   /** Class for sensing the axis orienation of a primitive (robot)
   */
-  class AxisOrientationSensor{
+  class AxisOrientationSensor : public Sensor {
   public:
     /// Sensor mode
     enum Mode { /** Z axis (of robot) in word coordinates (relative to body center)
@@ -46,13 +46,13 @@ namespace lpzrobots {
        @see Sensor::Dimensions
        @see Mode
      */
-    AxisOrientationSensor(Mode mode, short dimensions = X | Y | Z );
+    AxisOrientationSensor(Mode mode, short dimensions = Sensor::X | Sensor::Y | Sensor::Z );
     virtual ~AxisOrientationSensor() {}
 
     virtual void init(Primitive* own, Joint* joint = 0);
     virtual int getSensorNumber() const override;
 
-    virtual bool explicit explicit sense(const GlobalData& globaldata);
+    virtual bool sense(const GlobalData& globaldata) override;
     virtual std::list<sensor> getList() const override;
     virtual int get(sensor* sensors, int length) const override;
 

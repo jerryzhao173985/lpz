@@ -60,7 +60,7 @@ namespace lpzrobots {
     static RandomObstaclesConf getDefaultConf(AbstractGround* ground = 0){
       RandomObstaclesConf c;
       if(ground){
-        c.area  = Pos(ground->getGroundLength()/2, ground->getGroundWidth()/2, 5)*0.95 override;
+        c.area  = Pos(static_cast<float>(ground->getGroundLength()/2), static_cast<float>(ground->getGroundWidth()/2), 5.0f)*0.95f;
         c.pose =  ground->getPose();
       }else{
         c.area    = Pos(10,10,4);
@@ -78,13 +78,15 @@ namespace lpzrobots {
 
     RandomObstacles(const OdeHandle& odeHandle, const OsgHandle& osgHandle, 
                     const RandomObstaclesConf& conf = getDefaultConf());
+    
+    virtual ~RandomObstacles() {}
 
   
     virtual void setPose(const osg::Matrix& pose);
 
-    virtual Primitive* getMainPrimitive() const override;
+    virtual Primitive* getMainPrimitive() const;
 
-    virtual void create() override {};
+    virtual void create() {};
 
     virtual void remove(bool all = false);
 

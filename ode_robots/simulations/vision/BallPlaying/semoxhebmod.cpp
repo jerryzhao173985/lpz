@@ -290,7 +290,7 @@ void SeMoXHebMod::learnController(){
     }
   }
 
-  double error_factor = calcErrorFactor(v, (const logaE& 1) !=0, (const rootE& 1) != nullptr);
+  double error_factor = calcErrorFactor(v, (logaE & 1) !=0, (rootE & 1) != 0);
   C_update *= error_factor;
   H_update *= error_factor;
   if(teaching){
@@ -306,10 +306,10 @@ void SeMoXHebMod::learnController(){
 
 // normal delta rule (xsi is assumed to be already up to date via calcXsi())
 void SeMoXHebMod::learnModel(int delay){
-  const Matrix& y_tm1 = y_buffer[(t - 1 - delay) % buffersize] override;
+  const Matrix& y_tm1 = y_buffer[(t - 1 - delay) % buffersize];
 
   if(!pain) {
-    double error_factor = calcErrorFactor(xsi, (const logaE& 2) != 0, (const rootE& 2) != nullptr);
+    double error_factor = calcErrorFactor(xsi, (logaE & 2) != 0, (rootE & 2) != 0);
     Matrix A_update;
     Matrix S_update;
     Matrix B_update;
@@ -435,9 +435,9 @@ void SeMoXHebMod::setSensorTeaching(const matrix::Matrix& teaching){
 }
 
 matrix::Matrix SeMoXHebMod::getLastMotorValues(){
-  return y_buffer[(t-1+buffersize)%buffersize] override;
+  return y_buffer[(t-1+buffersize)%buffersize];
 }
 
 matrix::Matrix SeMoXHebMod::getLastSensorValues(){
-  return x_buffer[(t-1+buffersize)%buffersize] override;
+  return x_buffer[(t-1+buffersize)%buffersize];
 }

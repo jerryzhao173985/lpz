@@ -25,15 +25,18 @@
 #define __HUD_STATISTICS_H
 
 #include <selforg/statistictools.h>
+#include <selforg/callbackable.h>
 
 #include "color.h"
 
 /* forward declaration block */
 namespace osgText {
-class Text{
-class Geode;
+  class Text;
+  class Font;
 }
-
+namespace osg {
+  class Geode;
+}
 /* end of forward declaration */
 
 namespace lpzrobots {
@@ -43,7 +46,9 @@ namespace lpzrobots {
  * This is a experimental version, so do not to be afraid changing this crazy
  * code.
  *
- * This class uses{
+ * This class uses StatisticTools as the source for the measurements.
+ */
+class HUDStatisticsManager : public BackCaller, public Callbackable {
 
 public:
   /**
@@ -53,13 +58,13 @@ public:
   public:
 
     WindowStatistic(AbstractMeasure* measure, osgText::Text* text) : measure(measure),
-      explicit text(text) {}
+      text(text) {}
 
     virtual ~WindowStatistic() {}
 
     virtual AbstractMeasure* getMeasure() const { return measure; }
 
-    virtual osgText::Text* getTex override t() const { return text; }
+    virtual osgText::Text* getText() const { return text; }
 
   private:
     AbstractMeasure* measure;
@@ -68,18 +73,20 @@ public:
 
 public:
   /**
-   * creates the HUDStatisticsManager, normally done by class Base{ statTool->beginMeasureAt(step);}
+   * creates the HUDStatisticsManager, normally done by class Base
+   */
+  HUDStatisticsManager(osg::Geode* geode, StatisticTools* statTool, const Color& color, int ysize, int xsize);
+  HUDStatisticsManager(osg::Geode* geode, osgText::Font* font, int ypos);
 
   /**
    * Tells you wether the measures have already been started.
    */
-  virtual bool measureStarted() override { return statTool->measureStarted(); }
+  virtual bool measureStarted() { return statTool->measureStarted(); }
 
-
-        /**
-         * CALLBACKABLE INTERFACE
-         *
-         *        this method is invoked when a callback is done from the class where{ return statTool; }
+  /**
+   * Returns the StatisticTools 
+   */
+  virtual StatisticTools* getStatisticTools() { return statTool; }
 
   /** searches for the measure with the given name and returns it windowstatistics
       (measure and graphics together)
@@ -88,8 +95,19 @@ public:
   virtual WindowStatistic* getMeasureWS(const std::string& measureName);
 
 
-  virtual void setColor(const Color& color) override { textColor = color;}
-  virtual void setFontsize(int size) override {fontsize = size, yOffset = 1.2*size;}
+  virtual void setColor(const Color& color) { textColor = color;}
+  virtual void setFontsize(int size) {fontsize = size; yOffset = static_cast<float>(1.2*size);}
+
+  virtual ~HUDStatisticsManager();
+  
+  virtual StatisticMeasure* getMeasure(double& observedValue, const char* measureName, MeasureMode mode, long stepSpan, double additionalParam);
+  virtual double& addMeasure(double& observedValue, const char* measureName, MeasureMode mode, long stepSpan, double additionalParam);
+  virtual double& addMeasure(AbstractMeasure* measure);
+  virtual double& addMeasureList(std::list<AbstractMeasure*> measureList);
+  virtual double& addMeasureList(std::list<ComplexMeasure*> measureList);
+  virtual double& addMeasureList(std::list<StatisticMeasure*> measureList);
+  
+  virtual void doOnCallBack(BackCaller* source, BackCaller::CallbackableType type = BackCaller::DEFAULT_CALLBACKABLE_TYPE) override;
 
 protected:
 

@@ -28,7 +28,7 @@
 
 #include <vector>
 #include <ode-dbl/common.h>
-#include "substance.h"
+#include "../osg/substance.h"
 
 namespace lpzrobots {
 

@@ -62,7 +62,7 @@ namespace lpzrobots {
     /**
      * updates the position of the geoms  ( not nessary for static objects)
      */
-    virtual void update() override { };
+    virtual void update() { };
 
     virtual void setPose(const osg::Matrix& pose);
 

@@ -37,17 +37,17 @@ namespace lpzrobots {
      Middle mouse button: up and sideways
   */
 
-  class CameraManipulatorFollow{
+  class CameraManipulatorFollow : public CameraManipulator {
 
     /** returns the classname of the manipulator
         it's NECCESSARY to define this funtion, otherwise
         the new manipulator WON'T WORK! (but ask me not why)
      */
-    virtual const char* className() const { return "Following Camera"; }
+    virtual const char* className() const override { return "Following Camera"; }
 
   public:
 
-    CameraManipulatorFollow(osg::Node* node,const GlobalData& global, const CameraHandle& cameraHandle);
+    CameraManipulatorFollow(osg::Node* node, GlobalData& global, CameraHandle& cameraHandle);
 
   protected:
 
@@ -56,14 +56,14 @@ namespace lpzrobots {
     /** This handles robot movements, so that the camera movemenent is right affected.
         should be overwritten by new cameramanipulator
     */
-    virtual void calcMovementByAgent();
+    virtual void calcMovementByAgent() override;
 
 
     /** Sets the right view and eye if the robot has changed.
         Is called from manageRobots();
         should be overwritten by new cameramanipulator if needed
     */
-        virtual void setHomeViewByAgent();
+        virtual void setHomeViewByAgent() override;
 
 
 

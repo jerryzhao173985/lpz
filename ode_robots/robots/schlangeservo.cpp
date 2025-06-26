@@ -50,7 +50,7 @@ void SchlangeServo::setMotorsIntern( const double* motors, int motornumber )
   assert(created);
   int len = min(motornumber, static_cast<int>(servos).size());
   // controller output as torques
-  for (int i = 0; i < len; ++i) override {
+  for (int i = 0; i < len; ++i) {
     servos[i]->set(motors[i]);
   }
 }
@@ -67,7 +67,7 @@ int SchlangeServo::getSensorsIntern( sensor* sensors, int sensornumber )
   assert(created);
   int len = min(sensornumber, getSensorNumberIntern());
 
-  for (int n = 0; n < len; ++n)  override {
+  for (int n = 0; n < len; ++n)  {
     sensors[n] = servos[n]->get();
   }
 
@@ -82,7 +82,7 @@ void SchlangeServo::create(const osg::Matrix& pose){
   Schlange::create(pose);
 
   //*****************joint definition***********
-  for ( int n = 0; n < conf.segmNumber-1; ++n )  override {
+  for ( int n = 0; n < conf.segmNumber-1; ++n )  {
 
     HingeJoint* j = new HingeJoint(objects[n], objects[n+1],
                                    (objects[n]->getPosition() + objects[n+1]->getPosition())/2,
@@ -112,13 +112,13 @@ void SchlangeServo::create(const osg::Matrix& pose){
 
 void SchlangeServo::notifyOnChange(const paramkey& key){
 
-  for (vector<HingeServo*>::iterator i = servos.begin(); i!= servos.end(); ++i) override {
+  for (vector<HingeServo*>::iterator i = servos.begin(); i!= servos.end(); ++i) {
     if(*i) (*i)->setDamping(conf.frictionJoint);
   }
-  for (vector<HingeServo*>::iterator i = servos.begin(); i!= servos.end(); ++i) override {
+  for (vector<HingeServo*>::iterator i = servos.begin(); i!= servos.end(); ++i) {
     if(*i) (*i)->setPower(conf.motorPower);
   }
-  for (vector<HingeServo*>::iterator i = servos.begin(); i!= servos.end(); ++i) override {
+  for (vector<HingeServo*>::iterator i = servos.begin(); i!= servos.end(); ++i) {
     if(*i) (*i)->setMaxVel(conf.velocity);
   }
 }
@@ -129,8 +129,8 @@ void SchlangeServo::notifyOnChange(const paramkey& key){
 void SchlangeServo::destroy(){
   if (created){
     Schlange::destroy();
-    for (vector<HingeServo*>::iterator i = servos.begin(); i!= servos.end(); ++i) override {
-      if(*i) delete *i override;
+    for (vector<HingeServo*>::iterator i = servos.begin(); i!= servos.end(); ++i) {
+      if(*i) delete *i;
     }
     servos.clear();
   }

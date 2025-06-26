@@ -1,10 +1,48 @@
-/************************************************************************/
-/* schlange.h                                                                */
-/* Abstract class for{
+/***************************************************************************
+ *   Copyright (C) 2005-2011 LpzRobots development team                    *
+ *    Georg Martius  <georg dot martius at web dot de>                     *
+ *    Frank Guettler <guettler at informatik dot uni-leipzig dot de        *
+ *    Frank Hesse    <frank at nld dot ds dot mpg dot de>                  *
+ *    Ralf Der       <ralfder at mis dot mpg dot de>                       *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ *                                                                         *
+ ***************************************************************************/
+#ifndef __SCHLANGE_H
+#define __SCHLANGE_H
+
+#include "defaultCaterpillar.h"
+
+namespace lpzrobots {
 
 typedef struct {
-public:
-
+  int segmNumber = 0;  ///<  number of snake elements
+  double segmLength = 0.0;  ///< length of one snake element
+  double segmDia = 0.0;     ///<  diameter of a snake element
+  double segmMass = 0.0;    ///<  mass of one snake element
+  double motorPower = 0.0;  ///<  power of the motors / servos
+  double sensorFactor = 0.0;    ///<  scale for sensors
+  double frictionGround = 0.0;  ///< friction with ground
+  double frictionJoint = 0.0;   ///< friction within joint
+  double jointLimit = 0.0;      ///< maximal angle for the joints
+  double jointLimitFactor = 0.0; ///< factor for joint limit
+  bool useServoVel = false;  ///< if true servo motor velocities are used
+  double velocity = 0.0;     ///< maximal velocity of servo motors
+  bool useSpaces = false;    ///< if true spaces between segments are used
+  std::string headColor;
   std::string bodyColor;
 } SchlangeConf;
 
@@ -14,7 +52,7 @@ public:
  * It consists of a number of equal elements, each linked
  * by a joint
  **/
-class Schlange{
+class Schlange : public DefaultCaterPillar {
 protected:
 
   bool created = false;
@@ -26,7 +64,7 @@ public:
   Schlange ( const OdeHandle& odeHandle, const OsgHandle& osgHandle,
              const SchlangeConf& conf, const std::string& name, const std::string& revision);
 
-  static SchlangeConf getDefaultConf() const {
+  static SchlangeConf getDefaultConf() {
     SchlangeConf conf;
     conf.segmNumber = 10;    //  number of snake elements
     conf.segmLength = 0.8;   // length of one snake element
@@ -45,7 +83,7 @@ public:
     return conf;
   }
 
-  virtual ~Schlange() override;
+  virtual ~Schlange();
 
 
   /** sets the pose of the vehicle

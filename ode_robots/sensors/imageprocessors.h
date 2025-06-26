@@ -33,7 +33,10 @@
 
 namespace lpzrobots {
 
-  /** Standard image processor - convenience class for{
+  /** Standard image processor - convenience class for common image processing tasks
+   */
+  class StdImageProcessor : public ImageProcessor {
+  public:
     StdImageProcessor(bool show, float scale) {
       _dest.show  = show;
       _dest.scale = scale;
@@ -156,10 +159,10 @@ namespace lpzrobots {
       max = MAX3( r, g, b );
       v = max;                               // v
       delta = max - min;
-      if( max != nullptr){
+      if( max != 0){
         s = static_cast<unsigned char>(255.0*delta / max); // s
       }
-      if( max == 0 || delta == nullptr){
+      if( max == 0 || delta == 0){
         // r = g = b                             // s = 0, h is undefined
         s = 0;
         h = 255;

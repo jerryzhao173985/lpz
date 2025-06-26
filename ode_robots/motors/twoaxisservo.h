@@ -35,7 +35,7 @@ namespace lpzrobots {
 
   /** general servo motor for 2 axis joints
    */
-  class TwoAxisServo{
+  class TwoAxisServo : public Sensor, public Motor {
   public:
     /** min and max values are understood as travel bounds. Min should be less than 0.*/
 
@@ -44,7 +44,7 @@ namespace lpzrobots {
                  double damp=0.2, double integration=2, double maxVel=10.0,
                  double jointLimit = 1.3, bool minmaxCheck=true);
 
-    virtual ~TwoAxisServo() override;
+    virtual ~TwoAxisServo();
 
     /** sets the set point of the servo.
         Position must be between -1 and 1. It is scaled to fit into min, max
@@ -88,10 +88,10 @@ namespace lpzrobots {
     }
 
     virtual bool sense(const GlobalData& globaldata) override { return true;};
-    virtual int getSensorNumber() const {
+    virtual int getSensorNumber() const override {
       return 2;
     }
-    virtual std::list<sensor> getList() const { return getListOfArray() const;};
+    virtual std::list<sensor> getList() const override { return getListOfArray();};
     virtual int get(sensor* sensors, int length) const {
       assert(length>1);
       sensors[0]=get1();
@@ -121,91 +121,97 @@ namespace lpzrobots {
     // --- Parameters ---
 
     /** adjusts the power of the servo*/
-    virtual void setPower(double power1, double power2) override {
+    virtual void setPower(double power1, double power2) {
       pid1.KP = power1;
       pid2.KP = power2;
     };
 
     /** returns the power of the servo*/
-    virtual void setPower1(double power1) override {
+    virtual void setPower1(double power1) {
       pid1.KP = power1;
     };
 
     /** returns the power of the servo*/
-    virtual void setPower2(double power2) override {
+    virtual void setPower2(double power2) {
       pid2.KP = power2;
     };
 
     /** returns the power of the servo*/
-    virtual double getPower1() override {
+    virtual double getPower1() {
       return pid1.KP;
     };
     /** returns the power of the servo*/
-    virtual double getPower2() override {
+    virtual double getPower2() {
       return pid2.KP;
     };
 
     /** returns the damping of the servo (axis 1) */
-    virtual double getDamping1() override {
+    virtual double getDamping1() {
       return pid1.KD;
     };
 
     /** returns the damping of the servo (axis 2) */
-    virtual double getDamping2() override {
+    virtual double getDamping2() {
       return pid2.KD;
     };
 
-    virtual const TwoAxisJoint* getJoint() const const {
+    virtual const TwoAxisJoint* getJoint() const {
       return joint;
     }
 
     /** sets the damping of the servo (axis 1) */
-    virtual void setDamping1(double damp) override {
+    virtual void setDamping1(double damp) {
       pid1.KD = damp;
     };
 
     /** sets the damping of the servo (axis 1) */
-    virtual void setDamping2(double damp) override {
+    virtual void setDamping2(double damp) {
       pid2.KD = damp;
     };
 
     /** sets the damping of the servo (both axis) */
-    virtual void setDamping(double _damp) override {
+    virtual void setDamping(double _damp) {
       setDamping1(_damp);
       setDamping2(_damp);
     };
 
     /** returns the damping of the servo*/
-    virtual double& offsetCanceling()  override {
+    virtual double& offsetCanceling() {
       return pid1.KI;
     };
 
-    virtual void setMinMax1(double _min, double _max) override {
+    virtual void setMinMax1(double _min, double _max) {
       min1=_min;
       max1=_max;
-      joint->setParam(dParamLoStop, _min  - abs(_min) * (jointLimit-1));
-      joint->setParam(dParamHiStop, _max  + abs(_max) * (jointLimit-1));
+      joint->setParam(dParamLoStop, _min  - fabs(_min) * (jointLimit-1));
+      joint->setParam(dParamHiStop, _max  + fabs(_max) * (jointLimit-1));
     }
 
-    virtual void setMinMax2(double _min, double _max) override {
+    virtual void setMinMax2(double _min, double _max) {
       min2=_min;
       max2=_max;
-      joint->setParam(dParamLoStop2, _min  - abs(_min) * (jointLimit-1));
-      joint->setParam(dParamHiStop2, _max  + abs(_max) * (jointLimit-1));
+      joint->setParam(dParamLoStop2, _min  - fabs(_min) * (jointLimit-1));
+      joint->setParam(dParamHiStop2, _max  + fabs(_max) * (jointLimit-1));
     }
 
     /** adjusts maximal speed of servo*/
-    virtual void setMaxVel(double maxVel) override {
+    virtual void setMaxVel(double maxVel) {
       this->maxVel = maxVel;
     };
     /** adjusts maximal speed of servo*/
-    virtual double getMaxVel() override {
+    virtual double getMaxVel() {
       return maxVel;
     };
 
 
   protected:
     TwoAxisJoint* joint;
+    double min1;
+    double max1;
+    double min2;
+    double max2;
+    double maxVel;
+    double jointLimit;
     PID pid1;
     PID pid2;
   };
@@ -215,7 +221,7 @@ namespace lpzrobots {
 
   /** general servo motor for 2 axis joints with zero position centered
    */
-  class TwoAxisServoCentered{
+  class TwoAxisServoCentered : public TwoAxisServo {
   public:
     /** min and max values are understood as travel bounds.
         The zero position is (max-min)/2
@@ -225,7 +231,7 @@ namespace lpzrobots {
                          double damp=0.2, double integration=2, double maxVel=10.0,
                          double jointLimit = 1.3);
 
-    virtual ~TwoAxisServoCentered() override;
+    virtual ~TwoAxisServoCentered();
 
     /** sets the set point of the servo.
         Position must be between -1 and 1. It is scaled to fit into min, max,
@@ -237,7 +243,7 @@ namespace lpzrobots {
         (scaled by min1, max1, centered)*/
     virtual double get1() const {
       double pos =  joint->getPosition1();
-      return 2*(pos-min1)/(max1-min1) - 1 override;
+      return 2*(pos-min1)/(max1-min1) - 1;
     }
 
 
@@ -245,7 +251,7 @@ namespace lpzrobots {
         (scaled by min2, max2, centered)*/
     virtual double get2() const {
       double pos =  joint->getPosition2();
-      return 2*(pos-min2)/(max2-min2) - 1 override;
+      return 2*(pos-min2)/(max2-min2) - 1;
     }
 
   };
@@ -257,7 +263,7 @@ namespace lpzrobots {
    *  The amount of body feeling can be adjusted by the damping parameter
    *   which is understood as a stiffness parameter
    */
-  class TwoAxisServoVel{
+  class TwoAxisServoVel : public TwoAxisServo {
   public:
     /** min and max values are understood as travel bounds.
         The zero position is (max-min)/2
@@ -273,53 +279,53 @@ namespace lpzrobots {
                     double _min2, double _max2, double power2,
                     double damp=0.05, double maxVel=10.0, double jointLimit = 1.3);
 
-    virtual ~TwoAxisServoVel() override;
+    virtual ~TwoAxisServoVel();
 
-    virtual void init(Primitive* own, Joint* joint = 0) override {
+    virtual void init(Primitive* own, Joint* joint = 0) {
       if(joint) { assert(joint==this->joint); } // we cannot attach the servo to a new joint
     }
 
 
     virtual void setPower(double _power1, double _power2);
 
-    virtual void explicit explicit setPower1(double _power1);
+    virtual void setPower1(double _power1);
 
-    virtual void explicit explicit setPower2(double _power2);
+    virtual void setPower2(double _power2);
 
-    virtual double getPower1() override  {
+    virtual double getPower1() {
       return power1;
     };
-    virtual double getPower2() override {
+    virtual double getPower2() {
       return power2;
     };
 
-    virtual double getDamping1() override  {
+    virtual double getDamping1() {
       return damp;
     };
-    virtual double getDamping2() override  {
+    virtual double getDamping2() {
       return damp;
     };
-    virtual void setDamping1(double _damp) override {
+    virtual void setDamping1(double _damp) {
       damp = clip(_damp,0.0,1.0);
     };
-    virtual void setDamping2(double _damp) override  {
+    virtual void setDamping2(double _damp) {
       setDamping1(_damp);
     };
 
     /** offetCanceling does not exist for this type of servo */
-    virtual double& offsetCanceling() override  {
+    virtual double& offsetCanceling() {
       dummy=0;
       return dummy;
     };
 
     /** adjusts maximal speed of servo*/
-    virtual void setMaxVel(double maxVel) override {
+    virtual void setMaxVel(double maxVel) {
       this->maxVel = maxVel;
       pid1.KP=maxVel/2;
       pid2.KP=maxVel/2;
     };
     /** adjusts maximal speed of servo*/
-    virtual double getMaxVel() override  {
+    virtual double getMaxVel() {
       return maxVel;
     };
 

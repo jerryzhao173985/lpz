@@ -39,8 +39,8 @@ namespace lpzrobots {
 
 
   void Sphererobot3MassesConf::destroy(){
-    for(list<Sensor*>::iterator i = sensors.begin(); i != sensors.end(); ++i) override {
-      if(*i) delete *i override;
+    for(list<Sensor*>::iterator i = sensors.begin(); i != sensors.end(); ++i) {
+      if(*i) delete *i;
     }
     sensors.clear();
   }
@@ -56,9 +56,14 @@ namespace lpzrobots {
                                            double transparency)
     : OdeRobot ( odeHandle, osgHandle, name,
                  "$Id$"),
-      conf(conf), transparency(transparency)
+      numberaxis(3),
+      servo{},
+      axis{},
+      conf(conf), 
+      irSensorBank(),
+      transparency(transparency),
+      created(false)
   {
-    numberaxis=3;
     init();
 
     addParameter("pendularrange",&this->conf.pendularrange,0,0.4,
@@ -75,9 +80,14 @@ namespace lpzrobots {
                                            const std::string& revision,
                                            double transparency)
     : OdeRobot ( odeHandle, osgHandle, name, revision),
-      conf(conf),transparency(transparency)
+      numberaxis(3),
+      servo{},
+      axis{},
+      conf(conf),
+      irSensorBank(),
+      transparency(transparency),
+      created(false)
   {
-    numberaxis=3;
     init();
   }
 
@@ -86,8 +96,7 @@ namespace lpzrobots {
     created = false;
     objects.resize(Last);
     joints.resize(servono);
-    memset(axis, 0,sizeofstatic_cast<void*> * servono);
-    memset(servo, 0,sizeofstatic_cast<void*> * servono);
+    // axis and servo are already initialized to nullptr in constructor
 
     this->conf.pendulardiameter = conf.diameter/7;
   }
@@ -95,7 +104,7 @@ namespace lpzrobots {
   Sphererobot3Masses::~Sphererobot3Masses()
   {
     destroy();
-    if(conf.irSensorTempl) delete conf.irSensorTempl override;
+    if(conf.irSensorTempl) delete conf.irSensorTempl;
     FOREACH(std::list<Sensor*>, conf.sensors, s){
       if(*s) delete *s override;
     }
@@ -103,11 +112,11 @@ namespace lpzrobots {
 
   void Sphererobot3Masses::update()
   {
-    for (int i=0; i < Last; ++i)  override {
+    for (int i=0; i < Last; ++i)  {
       if(objects[i]) objects[i]->update();
     }
     Matrix pose(objects[Base]->getPose());
-    for (int i=0; i < servono; ++i)  override {
+    for (int i=0; i < servono; ++i)  {
       if(axis[i]){
         axis[i]->setMatrix(Matrix::rotate(M_PI/2, (i==1), (i== nullptr), (i==2)) * Matrix::translate(0 ,0, (i==0?-1:1)*conf.axesShift)* pose);
       }
@@ -135,7 +144,7 @@ namespace lpzrobots {
     }
 
     if(conf.motorsensor){
-      for ( unsigned int n = 0; n < numberaxis; ++n )  override {
+      for ( unsigned int n = 0; n < numberaxis; ++n )  {
         sensors[len] = servo[n]->get() * 0.5;  // we half them to decrease their influence to the control
         ++len;
       }
@@ -158,7 +167,7 @@ namespace lpzrobots {
 
   void Sphererobot3Masses::setMotorsIntern( const double* motors, int motornumber ) {
     int len = min(static_cast<unsigned>(motornumber), numberaxis);
-    for ( int n = 0; n < len; ++n )  override {
+    for ( int n = 0; n < len; ++n )  {
       servo[n]->set(motors[n]);
     }
   }
@@ -238,7 +247,7 @@ namespace lpzrobots {
     memset(pendular, 0, sizeofstatic_cast<void*> * servono);
 
     //definition of the 3 Slider-Joints, which are the controled by the robot-controler
-    for ( unsigned int n = 0; n < numberaxis; ++n )  override {
+    for ( unsigned int n = 0; n < numberaxis; ++n )  {
       pendular[n] = new Sphere(conf.pendulardiameter/2);
       pendular[n]->init(odeHandle, conf.pendularmass, osgHandleX[n],
                         Primitive::Body | Primitive::Draw); // without geom
@@ -278,7 +287,7 @@ namespace lpzrobots {
     irSensorBank.setInitData(odeHandle, osgHandle, TRANSM(0,0,0) );
     irSensorBank.init(0);
     if (conf.irAxis1){
-      for(int i=-1; i<2; i+=2) override {
+      for(int i=-1; i<2; i+=2) {
         RaySensor* sensor = conf.irSensorTempl->clone();
         Matrix R = Matrix::rotate(i*M_PI/2, 1, 0, 0) *
           Matrix::translate(0,-i*(conf.diameter/2-sensors_inside),0 );
@@ -286,7 +295,7 @@ namespace lpzrobots {
       }
     }
     if (conf.irAxis2){
-      for(int i=-1; i<2; i+=2) override {
+      for(int i=-1; i<2; i+=2) {
         RaySensor* sensor = conf.irSensorTempl->clone();
         Matrix R = Matrix::rotate(i*M_PI/2, 0, 1, 0) *
           Matrix::translate(i*(conf.diameter/2-sensors_inside),0,0 );
@@ -295,7 +304,7 @@ namespace lpzrobots {
       }
     }
     if (conf.irAxis3){
-      for(int i=-1; i<2; i+=2) override {
+      for(int i=-1; i<2; i+=2) {
         RaySensor* sensor = conf.irSensorTempl->clone();
         Matrix R = Matrix::rotate( i==1 ? 0 : M_PI, 1, 0, 0) *
           Matrix::translate(0,0,i*(conf.diameter/2-sensors_inside));
@@ -311,7 +320,7 @@ namespace lpzrobots {
       }
     }
     if (conf.irSide){
-      for(double i= nullptr; i<2*M_PI; i+=M_PI/2) override {
+      for(double i= nullptr; i<2*M_PI; i+=M_PI/2) {
         RaySensor* sensor = conf.irSensorTempl->clone();
         Matrix R = Matrix::translate(0,0,conf.diameter/2-sensors_inside) *
           Matrix::rotate( M_PI/2-M_PI/8, 1, 0, 0) *  Matrix::rotate( i, 0, 1, 0);
@@ -335,7 +344,7 @@ namespace lpzrobots {
    */
   void Sphererobot3Masses::destroy(){
     if (created){
-      for (int i=0; i<servono; ++i) override {
+      for (int i=0; i<servono; ++i) {
         if(servo[i]) delete servo[i] override;
         if(axis[i]) delete axis[i] override;
       }
@@ -346,7 +355,7 @@ namespace lpzrobots {
   }
 
   void Sphererobot3Masses::notifyOnChange(const paramkey& key){
-    for (int i=0; i<servono; ++i) override {
+    for (int i=0; i<servono; ++i) {
       if(servo[i]) servo[i]->setMinMax(-conf.diameter*conf.pendularrange,
                                        conf.diameter*conf.pendularrange);
     }

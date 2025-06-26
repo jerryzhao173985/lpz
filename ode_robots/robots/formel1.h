@@ -25,13 +25,14 @@
 #define __FORMEL1_H
 
 #include "oderobot.h"
+#include <array>
 
 namespace lpzrobots {
 
-  class Primitive{
+  class Formel1 : public OdeRobot {
   public:
 
-    Formel1(const OdeHandle& odeHandle, const OsgHandle& osgHandle,
+    explicit Formel1(const OdeHandle& odeHandle, const OsgHandle& osgHandle,
           double size=1, double force=3, double speed=15, bool sphereWheels=true);
 
     virtual ~Formel1() {};
@@ -39,38 +40,38 @@ namespace lpzrobots {
     /**
      * updates the OSG nodes of the vehicle
      */
-    virtual void update();
+    virtual void update() override;
 
 
     /** sets the pose of the vehicle
         @param pose desired pose matrix
     */
-    virtual void placeIntern(const osg::Matrix& pose);
+    virtual void placeIntern(const osg::Matrix& pose) override;
 
     /** returns actual sensorvalues
         @param sensors sensors scaled to [-1,1]
         @param sensornumber length of the sensor array
         @return number of actually written sensors
     */
-    virtual int getSensorsIntern(double* sensors, int sensornumber);
+    virtual int getSensorsIntern(double* sensors, int sensornumber) override;
 
     /** sets actual motorcommands
         @param motors motors scaled to [-1,1]
         @param motornumber length of the motor array
     */
-    virtual void setMotorsIntern(const double* motors, int motornumber);
+    virtual void setMotorsIntern(const double* motors, int motornumber) override;
 
     /** returns number of sensors
      */
     virtual int getSensorNumberIntern() override {
       return sensorno;
-    };
+    }
 
     /** returns number of motors
      */
     virtual int getMotorNumberIntern() override {
       return motorno;
-    };
+    }
 
 
   protected:
@@ -105,10 +106,10 @@ namespace lpzrobots {
 
     double max_force;        // maximal force for motors
 
-    bool created;      // true if robot was created
+    bool created = false;      // true if robot was created
 
-    Primitive* object[5];  // 1 capsule, 4 wheels
-    Hinge2Joint* joint[4]; // joints between cylinder and each wheel
+    std::array<Primitive*, 5> object;  // 1 capsule, 4 wheels
+    std::array<Hinge2Joint*, 4> joint; // joints between cylinder and each wheel
 
   };
 

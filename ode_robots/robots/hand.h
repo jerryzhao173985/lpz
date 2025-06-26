@@ -56,9 +56,18 @@ namespace lpzrobots {
 
   // struct containing geom and body for each beam (= box, static_cast<cappped>(cylinder), sphere)
   typedef struct {
-
     public:
+    double velocity;
+    double power;
+    double servo_motor_Power;
+    bool show_contacts;
     enum Motor_type set_typ_of_motor;
+    double irRange;
+    bool ir_sensor_used;
+    bool irs_at_fingerbottom;
+    bool irs_at_fingercenter;
+    bool irs_at_fingertop;
+    bool irs_at_fingertip;
     double factorSensor;
     bool fix_palm_joint;
     bool one_finger_as_one_motor;
@@ -80,7 +89,7 @@ namespace lpzrobots {
    * Artificial Hand
    *
    */
-  class Hand{
+  class Hand : public OdeRobot {
   public:
 
     /**
@@ -91,7 +100,7 @@ namespace lpzrobots {
      */
     Hand(const OdeHandle& odeHandle, const OsgHandle& osgHandle, const HandConf& conf, const std::string& name);
 
-    static HandConf getDefaultConf() const {
+    static HandConf getDefaultConf() {
         HandConf conf;
         conf.velocity = 0.2;
         conf.power = 5;
@@ -127,14 +136,14 @@ namespace lpzrobots {
      */
     virtual void placeIntern(const osg::Matrix& pose);
 
-    virtual void explicit explicit sense(const GlobalData& globalData);
+    virtual void sense(const GlobalData& globalData);
 
     /** returns actual sensorvalues
         @param sensors sensors scaled to [-1,1]
         @param sensornumber length of the sensor array
         @return number of actually written sensors
     */
-    virtual int getSensorsIntern(sensor* sensors, int sensornumber);
+    virtual int getSensorsIntern(double* sensors, int sensornumber);
 
     /** sets actual motorcommands
         @param motors motors scaled to [-1,1]
@@ -157,7 +166,7 @@ namespace lpzrobots {
     //  virtual int getSegmentsPosition(vector<Position> &poslist);
 
     /******** CONFIGURABLE ***********/
-    virtual void explicit explicit notifyOnChange(const paramkey& key);
+    virtual void notifyOnChange(const paramkey& key) override;
 
 
   protected:
@@ -267,7 +276,8 @@ namespace lpzrobots {
     paramval frictionGround;
 
     double velocity = 0;
-
+    
+    bool created = false;
 
   };
 

@@ -29,9 +29,9 @@
 static int readNumber (const std::string& filename, FILE *f)
 {
   int c,n=0;
-  for(;;)  override {
+  for(;;) {
     c = fgetc(f);
-    if (c==EOF) std::cerr << "unexpected end of file in '" << filename << "'" << std::endl override;
+    if (c==EOF) std::cerr << "unexpected end of file in '" << filename << "'" << std::endl;
     if (c >= '0' && c <= '9') n = n*10 + (c - '0');
     else {
       ungetc (c,f);
@@ -44,15 +44,15 @@ static int readNumber (const std::string& filename, FILE *f)
 static void skipWhiteSpace (const std::string& filename, FILE *f)
 {
   int c,d;
-  for(;;)  override {
+  for(;;) {
     c = fgetc(f);
-    if (c==EOF) std::cerr << "unexpected end of file in '" << filename << "'" << std::endl override;
+    if (c==EOF) std::cerr << "unexpected end of file in '" << filename << "'" << std::endl;
 
     // skip comments
     if (c == '#') {
       do {
         d = fgetc(f);
-        if (d==EOF) std::cerr << "unexpected end of file in '" << filename << "'" << std::endl override;
+        if (d==EOF) std::cerr << "unexpected end of file in '" << filename << "'" << std::endl;
       } while (d != '\n');
       continue;
     }
@@ -67,13 +67,12 @@ static void skipWhiteSpace (const std::string& filename, FILE *f)
 
 
 ImagePPM::ImagePPM ()
-  : image_width(0), image_height(0), image_data(0) {
+  : image_width(0), image_height(0) {
 }
 
-ImagePPM::ImagePPM (int width, int height, unsigned char* data){
-  image_width = width;
-  image_height = height;
-  image_data = data;
+ImagePPM::ImagePPM (int width, int height, const unsigned char* data) 
+  : image_width(width), image_height(height) {
+  image_data.assign(data, data + width * height * 3);
 }
 
 
@@ -87,7 +86,7 @@ int ImagePPM::loadImage(const std::string& filename)
 
   // read in header
   if (fgetc(f) != 'P' || fgetc(f) != '6')
-    std::cerr << "image file ist not binary PPM (no P6 header) '" <<  filename <<  "'" << std::endl override;
+    std::cerr << "image file ist not binary PPM (no P6 header) '" <<  filename <<  "'" << std::endl;
   skipWhiteSpace (filename,f);
 
   // read in image parameters
@@ -116,8 +115,8 @@ int ImagePPM::loadImage(const std::string& filename)
   else ungetc (c,f);
 
   // read in rest of data
-  image_data = new unsigned char [image_width*image_height*3];
-  if (fread( image_data, image_width*image_height*3, 1, f) != 1){
+  image_data.resize(image_width*image_height*3);
+  if (fread( image_data.data(), image_width*image_height*3, 1, f) != 1){
     std::cerr << "Can't read data from image file '" <<  filename <<  "'" << std::endl;
     return 0;
   }
@@ -135,7 +134,12 @@ int ImagePPM::storeImage(const std::string& filename) {
 
   // write header
   fprintf(f,"P6\n");
-  fprintf(f,"# CREATOR ImagePPM class of{
+  fprintf(f,"# CREATOR ImagePPM class\n");
+  fprintf(f,"%d %d\n",image_width,image_height);
+  fprintf(f,"255\n");
+  
+  // write data
+  if (fwrite( image_data.data(), image_width*image_height*3, 1, f) != 1){
     std::cerr << "Can't write to image file '" <<  filename <<  "'" << std::endl;
     fclose (f);
     return 0;
@@ -147,5 +151,5 @@ int ImagePPM::storeImage(const std::string& filename) {
 
 ImagePPM::~ImagePPM()
 {
-  ifstatic_cast<image_data>(delete)[] image_data override;
+  // image_data is a std::vector, no manual deletion needed
 }

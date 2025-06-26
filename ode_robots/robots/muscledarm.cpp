@@ -61,13 +61,13 @@ namespace lpzrobots{
     lowerArm_width(0.0),
     lowerArm_length(0.0),
     joint_offset(0.0),
-    explicit mainMuscle_width(0.0){
+    mainMuscle_width(0.0){
 
     // Initialize arrays
-    for(int i = 0; i < NUMParts; ++i)  override {
+    for(int i = 0; i < NUMParts; ++i)  {
       object[i] = nullptr;
     }
-    for(int i = 0; i < NUMJoints; ++i)  override {
+    for(int i = 0; i < NUMJoints; ++i)  {
       joint[i] = nullptr;
     }
 
@@ -98,13 +98,13 @@ namespace lpzrobots{
     min_l=10;
     min_r=10;
 
-    for (int i=0; i<NUMParts; ++i) override {
+    for (int i=0; i<NUMParts; ++i) {
       old_dist[i].x=0;
       old_dist[i].y=0;
       old_dist[i].z=0;
     }
 
-    for (int i=0; i<6; ++i) override {
+    for (int i=0; i<6; ++i) {
       force_[i]=0;
     }
 
@@ -130,7 +130,7 @@ namespace lpzrobots{
   */
   void MuscledArm::setMotorsIntern(const double* motors, int motornumber){
     if (!conf.jointActuator) {
-      for (int i=SJ_mM1; i<=SJ_sM4; ++i) override {
+      for (int i=SJ_mM1; i<=SJ_sM4; ++i) {
         // just adding force to slider joint
         //(static_cast<SliderJoint*>(joint[i]))->addForce(factorMotors * motors[i-SJ_mM1]);
 
@@ -172,13 +172,13 @@ namespace lpzrobots{
       --written;
       // add 4 sensors with 0 value to have number sensor equal number motors when
       // using muscle actuation (needed by InvertNChannelController)
-      for (int j=0; j<=4; ++j, written++) override {
+      for (int j=0; j<=4; ++j, written++) {
         sensors[written]=0.0;
       }
     }
 
     if ( (conf.muscleLengthSensors) && ((written+5)<sensornumber) ) {
-      for (int j=SJ_mM1; j<=SJ_sM4; ++j, written++) override {
+      for (int j=SJ_mM1; j<=SJ_sM4; ++j, written++) {
         sensors[written]=factorSensors * (static_cast<SliderJoint*>(joint[j]))->getPosition1();
       }
     }
@@ -194,7 +194,7 @@ namespace lpzrobots{
     // to set the arm on the ground when the z component of the position is 0
     // base_width/2 is added
     osg::Matrix p2;
-    p2 = pose * osg::Matrix::translate(osg::Vec3(0, 0, base_width/2));
+    p2 = pose * osg::Matrix::translate(osg::Vec3(0.0f, 0.0f, static_cast<float>(base_width/2)));
     create(p2);
   };
 
@@ -205,7 +205,7 @@ namespace lpzrobots{
   */
   int MuscledArm::getSegmentsPosition(std::vector<Position> &poslist){
     assert(created);
-    for (int i=0; i<NUMParts; ++i) override {
+    for (int i=0; i<NUMParts; ++i) {
       poslist.push_back(Position(dBodyGetPosition(object[i]->getBody())));
     }
     return NUMParts;
@@ -227,7 +227,7 @@ namespace lpzrobots{
     //          damping=0.1;
 
     //          double force;
-    //          for(int i=SJ_mM1; i<(SJ_sM4+1); ++i) override {
+    //          for(int i=SJ_mM1; i<(SJ_sM4+1); ++i) {
     //            //calculating force
     //            force=(static_cast<SliderJoint*>(joint[i]))->getPosition1()  * k[i] override;
     //            //damping
@@ -243,7 +243,7 @@ namespace lpzrobots{
     //         //smallMuscle42 = 15
     const dReal *p1;
     const dReal *p2;
-    for (int i=mainMuscle11; i<smallMuscle42; i+=2) override {
+    for (int i=mainMuscle11; i<smallMuscle42; i+=2) {
       p1 = dBodyGetPosition (object[i]->getBody());
       p2 = dBodyGetPosition (object[i+1]->getBody());
 
@@ -255,10 +255,10 @@ namespace lpzrobots{
 
       Position force;
       //calculating force
-      force=dist*k[static_cast<int>(i*0.5)-1] override;
+      force=dist*k[static_cast<int>(i*0.5)-1];
 
       //damping
-      force=force + (dist - old_dist[i] )*damping override;
+      force=force + (dist - old_dist[i] )*damping;
 
       dBodyAddForce (object[i]->getBody(), force.x, force.y, force.z);
       dBodyAddForce (object[i+1]->getBody(), -force.x, -force.y, -force.z);
@@ -286,7 +286,7 @@ namespace lpzrobots{
       dContact contact[N];
 
       n = dCollide (o1,o2,N,&contact[0].geom,sizeof(dContact));
-      for (i=0; i<n; ++i)  override {
+      for (i=0; i<n; ++i)  {
         contact[i].surface.mode = dContactSoftERP | dContactSoftCFM | dContactApprox1;
         contact[i].surface.mu = 0.01;
         contact[i].surface.soft_erp = 1;
@@ -308,7 +308,7 @@ namespace lpzrobots{
     odeHandle.createNewSimpleSpace(parentspace,false);
 
     // create base
-    object[base] = new Box(base_width, base_width, base_length);
+    object[base] = new Box(static_cast<float>(base_width), static_cast<float>(base_width), static_cast<float>(base_length));
     object[base] -> init(odeHandle, MASS, osgHandle,Primitive::Geom  | Primitive::Draw);
     //    if(conf.strained){
 
@@ -316,18 +316,18 @@ namespace lpzrobots{
     object[base] -> setPose(osg::Matrix::rotate(M_PI/2, 1, 0, 0)
                             * pose);
     // create and place upper arm
-    object[upperArm] = new Box(upperArm_width, upperArm_width, upperArm_length);
+    object[upperArm] = new Box(static_cast<float>(upperArm_width), static_cast<float>(upperArm_width), static_cast<float>(upperArm_length));
     this->osgHandle.color = Color(1, 0, 0, 1.0f);
     object[upperArm] -> init(odeHandle, MASS, osgHandle);
     object[upperArm] -> setPose(osg::Matrix::rotate(M_PI/2, 0, 1, 0) * osg::Matrix::translate
-                                (-(base_width/2+upperArm_length/2)-joint_offset,0,0) * pose);
+                                (static_cast<float>(-(base_width/2+upperArm_length/2)-joint_offset),0,0) * pose);
     // create and place lower arm
-    object[lowerArm] = new Box(lowerArm_width, lowerArm_width, lowerArm_length);
+    object[lowerArm] = new Box(static_cast<float>(lowerArm_width), static_cast<float>(lowerArm_width), static_cast<float>(lowerArm_length));
     this->osgHandle.color = Color(0,1,0);
     object[lowerArm] -> init(odeHandle, MASS, osgHandle);
     object[lowerArm] -> setPose(osg::Matrix::rotate(M_PI/2, 1, 0, 0) * osg::Matrix::translate
-                                (-(base_width/2+upperArm_length+lowerArm_width/2+2*joint_offset),
-                                 lowerArm_length/4,0) * pose);
+                                (static_cast<float>(-(base_width/2+upperArm_length+lowerArm_width/2+2*joint_offset)),
+                                 static_cast<float>(lowerArm_length/4),0) * pose);
 
 
     // create and place sphere at tip of lower arm
@@ -343,11 +343,11 @@ namespace lpzrobots{
     // hand with fixed joint connected to lowerArm to allow tracing
     // when sphere is transform object (-> only sphere) tracing does not work
     // => do this better
-    object[hand] = new Sphere(lowerArm_width);
+    object[hand] = new Sphere(static_cast<float>(lowerArm_width));
     object[hand] -> init(odeHandle, /*mass*/0.01, osgHandle);
     object[hand] -> setPose(osg::Matrix::rotate(M_PI/2, 1, 0, 0) * osg::Matrix::translate
-                                (-(base_width/2+upperArm_length+lowerArm_width/2+2*joint_offset),
-                                 lowerArm_length/4 + lowerArm_length/2,0) * pose);
+                                (static_cast<float>(-(base_width/2+upperArm_length+lowerArm_width/2+2*joint_offset)),
+                                 static_cast<float>(lowerArm_length/4 + lowerArm_length/2),0) * pose);
     joint[FJ_lAH] = new FixedJoint(object[lowerArm], object[hand]);
     joint[FJ_lAH]->init(odeHandle, osgHandle, false);
 
@@ -356,8 +356,8 @@ namespace lpzrobots{
     // hinge joint between upper arm and fixed body
     pos=object[base]->getPosition();
     joint[HJ_BuA] = new HingeJoint(object[base], object[upperArm],
-                                   osg::Vec3(pos[0]-base_width/2, pos[1], pos[2]),
-                                   osg::Vec3(0, 0, 1));
+                                   osg::Vec3(static_cast<float>(pos[0]-base_width/2), pos[1], pos[2]),
+                                   Axis(0, 0, 1));
     joint[HJ_BuA]->init(odeHandle, osgHandle, true);
     // set stops to make sure arm stays in useful range
     joint[HJ_BuA]->setParam(dParamLoStop,-M_PI/3);
@@ -366,9 +366,9 @@ namespace lpzrobots{
     // hinge joint between upperArm and lowerArm
     pos=object[upperArm]->getPosition();
     joint[HJ_uAlA] = new HingeJoint(object[upperArm], object[lowerArm],
-                                    osg::Vec3(pos[0]-upperArm_length/2-joint_offset,
+                                    osg::Vec3(static_cast<float>(pos[0]-upperArm_length/2-joint_offset),
                                               pos[1], pos[2]),
-                                    osg::Vec3(0, 0, 1));
+                                    Axis(0, 0, 1));
     joint[HJ_uAlA]->init(odeHandle, osgHandle, true);
     // set stops to make sure arm stays in useful range
     joint[HJ_uAlA]->setParam(dParamLoStop,-M_PI/3);
@@ -379,45 +379,45 @@ namespace lpzrobots{
     //       if (conf.includeMuscles) {
 
     // create and place boxes for mainMuscles
-    for (int i= mainMuscle11; i<smallMuscle11; ++i) override {
-      object[i] = new Box(mainMuscle_width, mainMuscle_width, mainMuscle_length);
+    for (int i= mainMuscle11; i<smallMuscle11; ++i) {
+      object[i] = new Box(static_cast<float>(mainMuscle_width), static_cast<float>(mainMuscle_width), static_cast<float>(mainMuscle_length));
       //object[i] = new Capsule(mainMuscle_width/2,mainMuscle_length);
       object[i] -> init(odeHandle, MASS, osgHandle);
-      if (i==mainMuscle11) this->osgHandle.color = Color(0.4,0.4,0);
-      if (i==mainMuscle12) this->osgHandle.color = Color(0,1,1);
-      if (i==mainMuscle21) this->osgHandle.color = Color(1,1,0);
+      if (i==mainMuscle11) this->osgHandle.color = Color(0.4f,0.4f,0.0f);
+      if (i==mainMuscle12) this->osgHandle.color = Color(0.0f,1.0f,1.0f);
+      if (i==mainMuscle21) this->osgHandle.color = Color(1.0f,1.0f,0.0f);
     }
     /* left main Muscle */
     /**************************************/
     pos=object[upperArm]->getPosition();
     object[mainMuscle11] -> setPose(osg::Matrix::rotate(M_PI/2, 0, 1, 0) * osg::Matrix::translate
                                     (// moved towards base, aligned with end of upperArm
-                                     pos[0]+(upperArm_length-mainMuscle_length)/2,
+                                     static_cast<float>(pos[0]+(upperArm_length-mainMuscle_length)/2),
                                      // moved to left of upper arm, aligned with end of base
-                                     pos[1]-(base_length/2-mainMuscle_width/2),
+                                     static_cast<float>(pos[1]-(base_length/2-mainMuscle_width/2)),
                                      0)  // height is ok
                                     * pose);
     object[mainMuscle12] -> setPose(osg::Matrix::rotate(M_PI/2, 0, 1, 0) * osg::Matrix::translate
                                     (// moved away from base, aligned with end of upperArm
-                                     pos[0]-(upperArm_length-mainMuscle_length)/2,
+                                     static_cast<float>(pos[0]-(upperArm_length-mainMuscle_length)/2),
                                      // moved to left of upper arm, aligned with end of base
-                                     pos[1]-(base_length/2-mainMuscle_width/2),
+                                     static_cast<float>(pos[1]-(base_length/2-mainMuscle_width/2)),
                                      0)  // height is ok
                                     * pose);
     /* right main Muscle */
     /**************************************/
     object[mainMuscle21] -> setPose(osg::Matrix::rotate(M_PI/2, 0, 1, 0) * osg::Matrix::translate
                                     (// moved towards base, aligned with end of upperArm
-                                     pos[0]+(upperArm_length-mainMuscle_length)/2,
+                                     static_cast<float>(pos[0]+(upperArm_length-mainMuscle_length)/2),
                                      // moved to right of upper arm, aligned with end of base
-                                     pos[1]+(base_length/2-mainMuscle_width/2),
+                                     static_cast<float>(pos[1]+(base_length/2-mainMuscle_width/2)),
                                      0)  // height is ok
                                     * pose);
     object[mainMuscle22] -> setPose(osg::Matrix::rotate(M_PI/2, 0, 1, 0) * osg::Matrix::translate
                                     (// moved away from base, aligned with end of upper
-                                     pos[0]-(upperArm_length-mainMuscle_length)/2,
+                                     static_cast<float>(pos[0]-(upperArm_length-mainMuscle_length)/2),
                                      // moved to right of upper arm, aligned with end of base
-                                     pos[1]+(base_length/2-mainMuscle_width/2),
+                                     static_cast<float>(pos[1]+(base_length/2-mainMuscle_width/2)),
                                      0)  // height is ok
                                     * pose);
     /* joints for left main Muscle */
@@ -425,15 +425,15 @@ namespace lpzrobots{
     // hinge joint between mainMuscle11 and fixed body */
     pos=object[mainMuscle11]->getPosition();
     joint[HJ_BmM11] = new HingeJoint(object[base], object[mainMuscle11],
-                                     osg::Vec3(pos[0]+mainMuscle_length/2+joint_offset,
-                                               pos[1], pos[2]), osg::Vec3(0, 0, 1));
+                                     osg::Vec3(static_cast<float>(pos[0]+mainMuscle_length/2+joint_offset),
+                                               pos[1], pos[2]), Axis(0, 0, 1));
     joint[HJ_BmM11]->init(odeHandle, osgHandle, true);
 
     // hinge joint between mainMuscle12 and lowerArm */
     pos=object[mainMuscle12]->getPosition();
     joint[HJ_lAmM12] = new HingeJoint(object[lowerArm], object[mainMuscle12],
-                                      osg::Vec3(pos[0]-mainMuscle_length/2-joint_offset,
-                                                pos[1], pos[2]), osg::Vec3(0, 0, 1));
+                                      osg::Vec3(static_cast<float>(pos[0]-mainMuscle_length/2-joint_offset),
+                                                pos[1], pos[2]), Axis(0, 0, 1));
     joint[HJ_lAmM12]->init(odeHandle, osgHandle, true);
     // slider joint between mainMuscle11 and mainMuscle12
     joint[SJ_mM1] = new SliderJoint(object[mainMuscle11], object[mainMuscle12],
@@ -447,15 +447,15 @@ namespace lpzrobots{
     // hinge joint between mainMuscle21 and fixed body */
     pos=object[mainMuscle21]->getPosition();
     joint[HJ_BmM21] = new HingeJoint(object[base], object[mainMuscle21],
-                                     osg::Vec3(pos[0]+mainMuscle_length/2+joint_offset,
-                                               pos[1], pos[2]), osg::Vec3(0, 0, 1));
+                                     osg::Vec3(static_cast<float>(pos[0]+mainMuscle_length/2+joint_offset),
+                                               pos[1], pos[2]), Axis(0, 0, 1));
     joint[HJ_BmM21]->init(odeHandle, osgHandle, true);
 
     // hinge joint between mainMuscle22 and lowerArm */
     pos=object[mainMuscle22]->getPosition();
     joint[HJ_lAmM22] = new HingeJoint(object[lowerArm], object[mainMuscle22],
-                                      osg::Vec3(pos[0]-mainMuscle_length/2-joint_offset,
-                                                pos[1], pos[2]), osg::Vec3(0, 0, 1));
+                                      osg::Vec3(static_cast<float>(pos[0]-mainMuscle_length/2-joint_offset),
+                                                pos[1], pos[2]), Axis(0, 0, 1));
     joint[HJ_lAmM22]->init(odeHandle, osgHandle, true);
     // slider joint between mainMuscle21 and mainMuscle22
     joint[SJ_mM2] = new SliderJoint(object[mainMuscle21], object[mainMuscle22],
@@ -467,8 +467,8 @@ namespace lpzrobots{
 
     // create and place boxes for smallMuscles
     /*****************************************************************/
-    for (int i= smallMuscle11; i<hand; ++i) override {
-      object[i] = new Box(smallMuscle_width, smallMuscle_width, smallMuscle_length);
+    for (int i= smallMuscle11; i<hand; ++i) {
+      object[i] = new Box(static_cast<float>(smallMuscle_width), static_cast<float>(smallMuscle_width), static_cast<float>(smallMuscle_length));
       object[i] -> init(odeHandle, MASS, osgHandle);
     }
     /* lower left small Muscle */
@@ -476,10 +476,10 @@ namespace lpzrobots{
     pos=object[mainMuscle11]->getPosition();
     object[smallMuscle11] -> setPose(osg::Matrix::rotate(M_PI*0.5, -1,-1, 0)* osg::Matrix::translate
                                      // move center of this box to lower end of mainMuscle11
-                                     (pos[0]+mainMuscle_length/2
+                                     (static_cast<float>(pos[0]+mainMuscle_length/2
                                       // move box away from base to align lower edges of
                                       // mainMuscle11 and this muscle
-                                      -smallMuscle_length/2,
+                                      -smallMuscle_length/2),
                                       -smallMuscle_length,  // moved to left
                                       0) // height is ok
                                      * pose);
@@ -488,7 +488,7 @@ namespace lpzrobots{
     object[smallMuscle12] -> setPose(osg::Matrix::rotate(M_PI*0.5, -1, -1, 0)* osg::Matrix::translate
                                      (//calculate upper shift using sideward offset from smallMuscle11
                                       //(to align smallMuscle11 and this muscle)
-                                      pos[0] -tan(M_PI/4)*(smallMuscle_length/2),
+                                      static_cast<float>(pos[0] -tan(M_PI/4)*(smallMuscle_length/2)),
                                       -smallMuscle_length/2, // moved to left
                                       0) * pose); // heigth is ok
     /* lower right small Muscle */
@@ -508,10 +508,10 @@ namespace lpzrobots{
     pos=object[mainMuscle12]->getPosition();
     object[smallMuscle31] -> setPose(osg::Matrix::rotate(M_PI*0.5, -1, 1, 0) * osg::Matrix::translate
                                      // move center of this box to lower end of mainMuscle12
-                                     (pos[0]-mainMuscle_length/2
+                                     (static_cast<float>(pos[0]-mainMuscle_length/2
                                       // move box in direction of base to align upper edges of
                                       // mainMuscle12 and this muscle
-                                      +smallMuscle_length/2,
+                                      +smallMuscle_length/2),
                                       -smallMuscle_length,  // move to left
                                       0) // height is ok
                                      * pose);
@@ -519,8 +519,8 @@ namespace lpzrobots{
     object[smallMuscle32] -> setPose(osg::Matrix::rotate(M_PI*0.5, -1, 1, 0)* osg::Matrix::translate
                                      //calculate shift toweards base using sideward offset from
                                      //smallMuscle31 (to align smallMuscle11 and this muscle)
-                                     (pos[0]+tan(M_PI/4)*(smallMuscle_length/2),
-                                      pos[1]+smallMuscle_length/2, // move to left
+                                     (static_cast<float>(pos[0]+tan(M_PI/4)*(smallMuscle_length/2)),
+                                      static_cast<float>(pos[1]+smallMuscle_length/2), // move to left
                                       0)
                                      * pose);  // height is ok
 
@@ -552,7 +552,7 @@ namespace lpzrobots{
     pos=joint[HJ_BuA]->getAnchor();
     joint[HJ_uAsM12] = new HingeJoint(object[upperArm], object[smallMuscle12],
                                       // above HJ between base and upperArm
-                                      osg::Vec3(pos[0]-upperArm_length/4-0.01, pos[1], pos[2]),
+                                      osg::Vec3(static_cast<float>(pos[0]-upperArm_length/4-0.01), pos[1], pos[2]),
                                       (static_cast<OneAxisJoint*>(joint[HJ_BuA]))->getAxis1());
     joint[HJ_uAsM12]->init(odeHandle, osgHandle, true);
     // slider joint between smallMuscle11 and smallMuscle12
@@ -600,7 +600,7 @@ namespace lpzrobots{
     pos=joint[HJ_uAlA]->getAnchor();
     joint[HJ_uAsM32] = new HingeJoint(object[upperArm], object[smallMuscle32],
                                       // below HJ between upperArm and lowerArm
-                                      osg::Vec3(pos[0]+upperArm_length/4+0.01, pos[1], pos[2]),
+                                      osg::Vec3(static_cast<float>(pos[0]+upperArm_length/4+0.01), pos[1], pos[2]),
                                       (static_cast<OneAxisJoint*>(joint[HJ_uAlA]))->getAxis1());
     joint[HJ_uAsM32]->init(odeHandle, osgHandle, true);
     // slider joint between smallMuscle31 and smallMuscle32
@@ -644,10 +644,10 @@ namespace lpzrobots{
    */
   void MuscledArm::destroy(){
     if (created){
-      for (int i=0; i<NUMJoints; ++i) override {
+      for (int i=0; i<NUMJoints; ++i) {
         if(joint[i]) delete joint[i] override;
       }
-      for (int i=0; i<NUMParts; ++i) override {
+      for (int i=0; i<NUMParts; ++i) {
         if(object[i]) delete object[i] override;
       }
       odeHandle.deleteSpace();

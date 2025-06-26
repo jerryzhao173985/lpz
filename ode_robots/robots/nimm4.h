@@ -28,7 +28,7 @@
 
 namespace lpzrobots {
 
-  class Primitive{
+  class Nimm4 : public OdeRobot {
   public:
 
     /**

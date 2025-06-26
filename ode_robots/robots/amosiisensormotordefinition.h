@@ -58,7 +58,8 @@ enum AmosIISensorNames{
         L1_irs=30,
         L2_irs=28,
 
-        // Ultrasonic reflex sensors at front, middle and rear legs static_cast<AMOSIIv1>(R0_us)= 33,
+        // Ultrasonic reflex sensors at front, middle and rear legs (AMOSIIv1)
+        R0_us= 33,
         R1_us= 34,
         L0_us= 35,
         L1_us= 36,
@@ -95,7 +96,7 @@ enum AmosIISensorNames{
         BY_acs= 57,
         BZ_acs= 58,
 
-        //photo static_cast<light>(sensors) Left, Middle and Right (AMOSIIv1 and v2)
+        //photo light sensors Left, Middle and Right (AMOSIIv1 and v2)
         L_ps = 59,
         M_ps = 60,
         R_ps = 61,

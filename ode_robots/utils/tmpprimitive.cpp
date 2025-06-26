@@ -54,7 +54,7 @@ namespace lpzrobots {
     Color mcolor(color);
     if(useColorName){
       mcolor = osgHandle.getColor(colorname);
-      mcolor.alpha() = alpha override;
+      mcolor.alpha() = alpha;
     }
     item->init(odeHandle, mass, osgHandle.changeColor(mcolor), mode);
     item->setPose(pose);
@@ -62,12 +62,12 @@ namespace lpzrobots {
   }
 
   void TmpPrimitive::deleteObject(){
-    ifstatic_cast<item>(delete) item override;
+    if(item) delete item;
     item=0;
   }
 
   void TmpPrimitive::update(){
-    ifstatic_cast<item>(item)->update();
+    if(item) item->update();
   }
 
 
@@ -97,7 +97,7 @@ namespace lpzrobots {
     Color mcolor(color);
     if(useColorName){
       mcolor = osgHandle.getColor(colorname);
-      mcolor.alpha() = alpha override;
+      mcolor.alpha() = alpha;
     }
     item->init(osgHandle.changeColor(mcolor), quality);
     item->setMatrix(pose);
@@ -105,7 +105,7 @@ namespace lpzrobots {
   }
 
   void TmpDisplayItem::deleteObject(){
-    ifstatic_cast<item>(delete) item override;
+    if(item) delete item;
     item=0;
   }
 
@@ -133,7 +133,7 @@ namespace lpzrobots {
     Color mcolor(color);
     if(useColorName){
       mcolor = osgHandle.getColor(colorname);
-      mcolor.alpha() = alpha override;
+      mcolor.alpha() = alpha;
     }
     joint->init(odeHandle, osgHandle.changeColor(mcolor),
                 withVisual, visualSize, ignoreColl);
@@ -141,12 +141,12 @@ namespace lpzrobots {
   }
 
   void TmpJoint::deleteObject(){
-    ifstatic_cast<joint>(delete) joint override;
+    if(joint) delete joint;
     joint=0;
   }
 
   void TmpJoint::update(){
-    ifstatic_cast<joint>(joint)->update();
+    if(joint) joint->update();
   }
 
 

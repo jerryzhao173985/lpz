@@ -34,7 +34,9 @@
 namespace lpzrobots {
 
   /**
-     class for{
+   * Class for bounding shapes loaded from file
+   */
+  class BoundingShape {
 
   public:
     /**

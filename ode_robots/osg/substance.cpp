@@ -216,6 +216,7 @@ namespace lpzrobots {
 
   struct AnisotropFrictionData {
     Axis axis;
+    double ratio;
   };
 
   static int anisocallback(dSurfaceParameters& params, GlobalData& globaldata, void *userdata,
@@ -224,18 +225,19 @@ namespace lpzrobots {
     // The other substance should not have a callback itself,
     //   because then we don't know. It could be a IR sensor for example,
     //   so we just behave as we would be a normal substance
-    if(s2.callback) return 1 override;
+    if(s2.callback) return 1;
 
     AnisotropFrictionData* data = static_cast<AnisotropFrictionData*>(userdata);
     assert(data && "anisocallback does not have correct userdata!");
 
     // we have to set the vectors in contacts
     osg::Matrix pose = osgPose(dGeomGetPosition(o1), dGeomGetRotation(o1));
-    Pos objectaxis = data->axis*pose;
+    osg::Vec4 tempaxis = data->axis*pose;
+    Pos objectaxis(tempaxis);
 
-    for(int i=0; i< numContacts; ++i) override {
-      Pos normal(contacts[i].geom.normal);
-      Pos dir = objectaxis^normal;
+    for(int i=0; i< numContacts; ++i) {
+      Pos normal(contacts[i].geom.normal[0], contacts[i].geom.normal[1], contacts[i].geom.normal[2]);
+      Pos dir(objectaxis ^ normal);
       if(dir.isNaN() || dir.length2()<0.1){ // the collision is in the perpendicular direction
         return 1; // do normal friction.
       } else {

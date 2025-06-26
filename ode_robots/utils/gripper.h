@@ -38,15 +38,13 @@ namespace lpzrobots {
    */
   struct GripperConf {
     std::string name; ///< name of gripper for configuration
-
-    /** releaseDuration time in seconds for how long the gripper
-        cannot grasp after release */
-    Color  color;
-    /** sphere is drawn at contact point static_cast<true>(or) at center of attached primitive (false)
-    */
-    /** if true the last grasped object cannot be directly grasped again
-     */
-    //     bool incOrExc; ///< include static_cast<false>(or) exclude static_cast<true>(grippables);
+    double gripDuration; ///< time in seconds for how long the gripper grasps
+    double releaseDuration; ///< time in seconds for how long the gripper cannot grasp after release
+    Color color; ///< color of the gripper visualization
+    double size; ///< diameter of the drawn sphere (if 0 nothing is drawn)
+    bool drawAtContactPoint; ///< sphere is drawn at contact point (true) or at center of attached primitive (false)
+    bool forbitLastPrimitive; ///< if true the last grasped object cannot be directly grasped again
+    bool fixedOrBallJoint; ///< use fixed (true) or ball (false) joint for gripping
   };
 
   /**
@@ -59,7 +57,7 @@ namespace lpzrobots {
       in order to set call the addGrippables from there
       (e.g. with otherrobot->getAllPrimitives()), see Skeleton.
    */
-  class Gripper{
+  class Gripper : public ::Configurable {
   public:
     /**
        @param gripDuration time in seconds for how long the gripper grasps
@@ -70,7 +68,7 @@ namespace lpzrobots {
     */
     Gripper(const GripperConf& conf = getDefaultConf());
 
-    static GripperConf getDefaultConf() const {
+    static GripperConf getDefaultConf() {
       GripperConf conf;
       conf.name                = "Gripper";
       conf.gripDuration        = 10;
@@ -84,7 +82,7 @@ namespace lpzrobots {
     }
 
     /// call this to attach the gripper to the given primitive
-    bool explicit explicit attach(Primitive* p);
+    bool attach(Primitive* p);
 
     virtual void addGrippables(const std::vector<Primitive*>& ps);
     virtual void removeGrippables(const std::vector<Primitive*>& ps);

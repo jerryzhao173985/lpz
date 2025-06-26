@@ -79,7 +79,7 @@ namespace lpzrobots {
     virtual int getMotorNumberIntern() override { assert(created); return servos.size(); }
 
     /******** CONFIGURABLE ***********/
-    virtual void explicit explicit notifyOnChange(const paramkey& key);
+    virtual void explicit notifyOnChange(const paramkey& key);
 
   private:
     virtual void create(const osg::Matrix& pose);
