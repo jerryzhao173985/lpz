@@ -50,7 +50,7 @@ IValue* StandartMutationFactorStrategy::calcMutationFactor(const std::vector<Gen
         IValue* iValue;                                                                        //the value from the actual gen
         TemplateValue<double>* tValue;                                        //the casted value from the actual gen
         RandGen random;                                                                        //a random generator
-        int rand = ((int) (random.rand()*10000))%2;                //a random value (zero or one)
+        int rand = (static_cast<int>(random.rand()*10000))%2;                //a random value (zero or one)
 
         static TemplateValue<double> storage(0.0);                //a storage for casted values.
 
@@ -61,7 +61,7 @@ IValue* StandartMutationFactorStrategy::calcMutationFactor(const std::vector<Gen
                         sum += tValue->getValue();
                 }
         }
-        double durch = sum / (double) num;                                                //the average is the sum divided by the number of gens.
+        double durch = sum / static_cast<double>(num);                                                //the average is the sum divided by the number of gens.
 
         sum = 0.0;                                                                                //reset sum
 
@@ -72,7 +72,7 @@ IValue* StandartMutationFactorStrategy::calcMutationFactor(const std::vector<Gen
                         sum += (tValue->getValue() - durch) * (tValue->getValue() - durch);
                 }
         }
-        double result = sqrt(sum / (double) (num-1));
+        double result = sqrt(sum / static_cast<double>(num-1));
 
         if(rand==0)                                                                                //if the random value zero than mult -1 to the result.
                 result*=-1.0;

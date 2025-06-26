@@ -92,7 +92,7 @@ namespace lpzrobots {
 
       explicit ECBRobot(QGlobalData& globalData);
 
-      virtual ~ECBRobot();
+      virtual ~ECBRobot() override;
 
       /// ABSTRACTROBOT INTERFACE
 
@@ -101,19 +101,19 @@ namespace lpzrobots {
        @param sensornumber length of the sensor array
        @return number of actually written sensors
        */
-      virtual int getSensors(sensor* sensors, int sensornumber);
+      virtual int getSensors(sensor* sensors, int sensornumber) override;
 
       /** sets actual motorcommands
        @param motors motors scaled to [-1,1]
        @param motornumber length of the motor array
        */
-      virtual void setMotors(const motor* motors, int motornumber);
+      virtual void setMotors(const motor* motors, int motornumber) override;
 
       /** returns number of sensors */
-      virtual int getSensorNumber();
+      virtual int getSensorNumber() override;
 
       /** returns number of motors */
-      virtual int getMotorNumber();
+      virtual int getMotorNumber() override;
 
       /** returns max number of sensors */
       virtual int getMaxSensorNumber();
@@ -132,10 +132,10 @@ namespace lpzrobots {
 
       /// TRACKABLE INTERFACE: all methods return dummy values
 
-      virtual Position getPosition() const;
-      virtual Position getSpeed() const;
-      virtual Position getAngularSpeed() const;
-      virtual matrix::Matrix getOrientation() const;
+      virtual Position getPosition() const override;
+      virtual Position getSpeed() const override;
+      virtual Position getAngularSpeed() const override;
+      virtual matrix::Matrix getOrientation() const override;
 
       /// new methods for the communicator
 

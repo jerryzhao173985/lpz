@@ -139,14 +139,14 @@ namespace lpzrobots {
 
     public:
       QConfigurableWidget(Configurable* config, int nameIndex);
-      virtual ~QConfigurableWidget();
+      virtual ~QConfigurableWidget() override;
       QDomElement toXml(bool insertDefaultConfigurableValues, bool inAutoSaveMode);
       int fromXml(const QDomElement &qde_configurableState, bool inAutoSaveMode);
       int getNameIndex() {return nameIndex; }
       Configurable* getConfigurable() const { return config; }
       QString getName() const { return configName; }
 
-      virtual void doOnCallBack(BackCaller* source, BackCaller::CallbackableType type = BackCaller::DEFAULT_CALLBACKABLE_TYPE);
+      virtual void doOnCallBack(BackCaller* source, BackCaller::CallbackableType type = BackCaller::DEFAULT_CALLBACKABLE_TYPE) override;
 
       void lampyris_noctiluca();
 
@@ -163,14 +163,14 @@ namespace lpzrobots {
 
 
     protected:
-      virtual void enterEvent(QEnterEvent * event);
-      virtual void leaveEvent(QEvent * event);
-      virtual void mousePressEvent(QMouseEvent * event);
-      virtual void mouseDoubleClickEvent(QMouseEvent * event);
-      virtual void dragEnterEvent(QDragEnterEvent *event);
-      virtual void dragMoveEvent(QDragMoveEvent *event);
-      virtual void dropEvent(QDropEvent *event);
-      virtual void dragLeaveEvent(QDragLeaveEvent *event);
+      virtual void enterEvent(QEnterEvent * event) override;
+      virtual void leaveEvent(QEvent * event) override;
+      virtual void mousePressEvent(QMouseEvent * event) override;
+      virtual void mouseDoubleClickEvent(QMouseEvent * event) override;
+      virtual void dragEnterEvent(QDragEnterEvent *event) override;
+      virtual void dragMoveEvent(QDragMoveEvent *event) override;
+      virtual void dropEvent(QDropEvent *event) override;
+      virtual void dragLeaveEvent(QDragLeaveEvent *event) override;
 
     private slots:
       void sl_execContextMenu(const QPoint &pos);

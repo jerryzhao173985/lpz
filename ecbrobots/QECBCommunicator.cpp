@@ -210,7 +210,7 @@ namespace lpzrobots {
       explicit if (globalData.benchmarkMode) {
         globalData.textLog("Elapsed time: " + QString::number(elapsed) + "ms");
         if (globalData.benchmarkMode && (globalData.controlStep % benchmarkSteps == 0)) {
-          globalData.textLog("Benchmark: " + QString::number(((double) benchmarkSteps) / ((double) (currentTime
+          globalData.textLog("Benchmark: " + QString::number(static_cast<double>(benchmarkSteps) / static_cast<double>(currentTime
               - lastBenchmarkTime)) * 1000.0) + " cycles/s");
           lastBenchmarkTime = currentTime;
         }
@@ -259,7 +259,7 @@ namespace lpzrobots {
       {
         QString message("Message received: ");
         for (int i = 0; i < commData.dataLength; ++i)
-          message += (char) commData.data[i];
+          message += static_cast<char>(commData.data[i]);
         globalData.textLog(message);
         delete event;
         break;
@@ -300,7 +300,7 @@ namespace lpzrobots {
 //      return;
 //    }
     //globalData.textLog("QECBCommunicator::sl_messageReceived(): "+printBuffer(msg.data));
-    if (msg.data[0] != (char) 0x01)
+    if (msg.data[0] != static_cast<char>(0x01))
       globalData.textLog("Message from MessageDispatchServer received, but not correct MsgGroup (" + toHexNumberString(
           msg.data[0], 1) + " instead of 0x01)", globalData.LOG_DEBUG);
     ECBCommunicationEvent* event = new ECBCommunicationEvent();

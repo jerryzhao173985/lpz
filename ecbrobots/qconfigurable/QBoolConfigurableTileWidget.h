@@ -91,20 +91,20 @@ namespace lpzrobots {
     public:
       QBoolConfigurableTileWidget(Configurable* config, Configurable::paramkey& key, QMap<QGridPos,
           QAbstractConfigurableTileWidget*>& tileIndexConfigWidgetMap);
-      virtual ~QBoolConfigurableTileWidget();
-      void setName(const QString& name);
-      void toDummy(bool set);
-      void reloadConfigurableData();
+      virtual ~QBoolConfigurableTileWidget() override;
+      void setName(const QString& name) override;
+      void toDummy(bool set) override;
+      void reloadConfigurableData() override;
 
-      inline bool valueChanged() {
+      inline bool valueChanged() override {
         return (config->getParam(key) != origValue);
       }
-      inline bool boundsChanged() { return false; }
+      inline bool boundsChanged() override { return false; }
 
 
     public slots:
-      virtual void sl_resetToOriginalValues();
-      virtual void sl_resetToOriginalValuesAndBounds();
+      virtual void sl_resetToOriginalValues() override;
+      virtual void sl_resetToOriginalValuesAndBounds() override;
 
     protected:
 

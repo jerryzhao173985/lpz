@@ -76,7 +76,7 @@ void RandomSelectStrategy::select(Generation* oldGeneration, Generation* newGene
 
         // kill some elements
         while(kill>0) {
-                r1 = ((int) (m_random->rand()*1000000.0))%list.size();
+                r1 = (static_cast<int>(m_random->rand()*1000000.0))%list.size();
                 if(m_random->rand()*range+min<list[r1]->getFitness()) {                                //if the random value over the range
                         iter=list.begin();                                                                                                //of values better than the fitness
                         test=0;                                                                                                                        //value of the random selected
@@ -95,7 +95,7 @@ void RandomSelectStrategy::select(Generation* oldGeneration, Generation* newGene
                 ISelectStrategy* elite = SingletonGenAlgAPI::getInstance()->createEliteSelectStrategy();
                 Generation* newold = new Generation(oldGeneration->getGenerationNumber(),oldGeneration->getSize(),kill);
                 // take the rest in the __PLACEHOLDER_5__ with the name newold
-                for(int x=0;x<(int) list.size() && x<oldGeneration->getSize()+kill;++x) {
+                for(int x=0;x<static_cast<int>(list.size()) && x<oldGeneration->getSize()+kill;++x) {
                         newold->addIndividual(list[x]);
                 }
                 elite->select(newold,newGeneration);
@@ -112,7 +112,7 @@ void RandomSelectStrategy::select(Generation* oldGeneration, Generation* newGene
         }
 
         // take the rest in the new generation
-        for(int x=0;x<(int) list.size() && x<newGeneration->getSize();++x) {
+        for(int x=0;x<static_cast<int>(list.size()) && x<newGeneration->getSize();++x) {
                 newGeneration->addIndividual(list[x]);
         }
 

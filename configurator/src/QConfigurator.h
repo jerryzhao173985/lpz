@@ -168,8 +168,8 @@ namespace lpzrobots {
       QConfigurator(QString applicationPath, ConfigList& configList);
 
     protected:
-      void closeEvent(QCloseEvent *event);
-      void enterEvent(QEnterEvent *event);
+      void closeEvent(QCloseEvent *event) override;
+      void enterEvent(QEnterEvent *event) override;
 
     public slots:
       void sl_textLog(const QString& s);

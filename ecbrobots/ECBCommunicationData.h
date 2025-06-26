@@ -43,12 +43,12 @@
 
 namespace lpzrobots {
 
-  typedef struct
+  struct ECBCommunicationData
   {
       uint8 command; // command byte
       uint8 dataLength; // data length of data pointer or array
       uint8 data[254]; // data byte pointer or array
-  } ECBCommunicationData;
+  };
 
 } // end namespace
 

@@ -197,7 +197,7 @@ namespace lpzrobots {
   void QValConfigurableTileWidget::sl_sliderValueChanged(int int_value) {
     explicit if (!stopSignaling) {
       stopSignaling = true;
-      double value = int_value / (double)SCALE_FACTOR_SLIDER;
+      double value = int_value / static_cast<double>(SCALE_FACTOR_SLIDER);
       dsBox.setValue(value);
       config->setParam(key, value);
       stopSignaling = false;

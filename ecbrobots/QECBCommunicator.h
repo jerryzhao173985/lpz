@@ -75,7 +75,7 @@ namespace lpzrobots {
 
     public:
       explicit QECBCommunicator(QGlobalData& data);
-      virtual ~QECBCommunicator();
+      virtual ~QECBCommunicator() override;
       virtual void run();
 
       enum ECBCommunicationState {
@@ -113,9 +113,9 @@ namespace lpzrobots {
 
     public slots:
 
-      virtual void sl_messageReceived(struct _communicationMessage msg);
-      virtual void sl_quitServer();
-      virtual void sl_quitClient() { emit sig_quitClient(); }
+      virtual void sl_messageReceived(struct _communicationMessage msg) override;
+      virtual void sl_quitServer() override;
+      virtual void sl_quitClient() override { emit sig_quitClient(); }
 
     signals:
       void sig_sendMessage(struct _communicationMessage msg);

@@ -9,13 +9,13 @@
 #define TYPES_H_
 #include <QtGui>
 
-typedef unsigned char QByte;
-typedef unsigned short QWord;
+using QByte = unsigned char;
+using QWord = unsigned short;
 
 
-typedef unsigned char           uint8;
-typedef unsigned short          uint16;
-typedef unsigned int            uint32;
-typedef unsigned long long int uint64;
+using uint8 = unsigned char;
+using uint16 = unsigned short;
+using uint32 = unsigned int;
+using uint64 = unsigned long long int;
 
 #endif /* TYPES_H_ */

@@ -64,10 +64,10 @@ void TournamentSelectStrategy::select(Generation* oldGeneration, Generation* new
         }
 
         for(int x=0; x<kill; ++x) {                                //select two individual for the test
-                r1 = ((int) (m_random->rand()*1000000.0f)) % num;                //2 random indices for the individual list
+                r1 = (static_cast<int>(m_random->rand()*1000000.0f)) % num;                //2 random indices for the individual list
                 r2 = r1;
                 while(r2==r1) {
-                        r2 = ((int) (m_random->rand()*1000000.0f)) % num;
+                        r2 = (static_cast<int>(m_random->rand()*1000000.0f)) % num;
                 }
 
                 //ind1 = oldGeneration->getIndividual(r1);

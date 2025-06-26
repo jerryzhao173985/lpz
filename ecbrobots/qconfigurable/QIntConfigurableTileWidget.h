@@ -106,24 +106,24 @@ namespace lpzrobots {
 
     public:
       QIntConfigurableTileWidget(Configurable* config, Configurable::paramkey& key, QMap<QGridPos, QAbstractConfigurableTileWidget*>& tileIndexConfigWidgetMap);
-      virtual ~QIntConfigurableTileWidget();
-      void setName(const QString& name);
-      void toDummy(bool set);
+      virtual ~QIntConfigurableTileWidget() override;
+      void setName(const QString& name) override;
+      void toDummy(bool set) override;
       void setBounds();
-      void reloadConfigurableData();
+      void reloadConfigurableData() override;
 
-      inline bool valueChanged() {
+      inline bool valueChanged() override {
         return (config->getParam(key) != origValue);
       }
 
-      inline bool boundsChanged() {
+      inline bool boundsChanged() override {
         return (config->getParamintBounds(key) != origBounds);
       }
 
     public slots:
-      virtual void sl_resize(const QSize& newSize);
-      virtual void sl_resetToOriginalValues();
-      virtual void sl_resetToOriginalValuesAndBounds();
+      virtual void sl_resize(const QSize& newSize) override;
+      virtual void sl_resetToOriginalValues() override;
+      virtual void sl_resetToOriginalValuesAndBounds() override;
 
     private slots:
       void sl_spinBoxValueChanged(int);

@@ -90,8 +90,8 @@ namespace lpzrobots {
 
   void ConfiguratorProxy::createConfigurator() {
     int argc=1;
-    char* argv0 = const_cast<char*>("");
-    char** argv = &argv0;
+    char appName[] = "configurator";
+    char* argv[] = {appName, nullptr};
     QApplication app(argc, argv);
 
     // TODO: the appPath variable is currently set to "", this works in most cases.
@@ -107,11 +107,11 @@ namespace lpzrobots {
   }
 
   static void* createConfiguratorThread(void* thread) {
-    ConfiguratorProxy* proxy = dynamic_cast<ConfiguratorProxy*> (static_cast<ConfiguratorProxy*>(thread));
+    ConfiguratorProxy* proxy = static_cast<ConfiguratorProxy*>(thread);
     if (proxy)
       proxy->createConfigurator();
     else {
-      cerr << "createConfiguratorProcess()::Shit happens" << endl;
+      cerr << "createConfiguratorProcess()::Error: Invalid thread parameter" << endl;
     }
     return nullptr;
   }

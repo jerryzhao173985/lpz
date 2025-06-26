@@ -89,7 +89,7 @@ namespace lpzrobots {
        */
       ECBAgent(const std::list<PlotOption>& plotOptions, double noisefactor = 1, const std::string& name = "ECBAgent", const std::string& revision = "$ID$");
 
-      virtual ~ECBAgent();
+      virtual ~ECBAgent() override;
 
       /**
        * Returns a pointer to the robot.
@@ -122,7 +122,7 @@ namespace lpzrobots {
           @param noise Noise strength.
           @param time (optional) current simulation time (used for logging)
       */
-      virtual void step(double noise, double time=-1);
+      virtual void step(double noise, double time=-1) override;
 
 
     protected:

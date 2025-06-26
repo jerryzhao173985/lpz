@@ -245,7 +245,7 @@ namespace lpzrobots {
       byteVal = 0;
 
     //globalData->textLog("Converted" + (unsigned int)byteVal + "to doubleval = " + (((double) (byteVal - 128)) / 128.));
-    return (((double) (byteVal - 128)) / 128.);
+    return (static_cast<double>(byteVal - 128) / 128.);
 
   }
 
@@ -257,7 +257,7 @@ namespace lpzrobots {
     if (doubleVal <= -1)
       doubleVal = -1;
 
-    int byteVal = (int) ((doubleVal + 1.) * 128.0);
+    int byteVal = static_cast<int>((doubleVal + 1.) * 128.0);
     if (byteVal > 255)
       byteVal = 255;
     if (byteVal < 0)
@@ -276,9 +276,9 @@ namespace lpzrobots {
     // shift zero point!
     shortVal += (maxBound + minBound)/2;
     explicit if (shortVal > 0) {
-      return (shortVal / (double)maxBound);
+      return (shortVal / static_cast<double>(maxBound));
     } else if (shortVal < 0) {
-      return -(shortVal / (double)minBound);
+      return -(shortVal / static_cast<double>(minBound));
     } else {
       return 0;
     }

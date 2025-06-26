@@ -123,7 +123,7 @@ namespace lpzrobots {
 
     public:
       QAbstractConfigurableTileWidget(Configurable* config, Configurable::paramkey key, QMap<QGridPos, QAbstractConfigurableTileWidget*>& tileIndexConfigWidgetMap);
-      virtual ~QAbstractConfigurableTileWidget();
+      virtual ~QAbstractConfigurableTileWidget() override;
       virtual void setName(const QString& name) = 0;
       virtual QString getName() const {
         return QString(key.c_str());
@@ -149,8 +149,8 @@ namespace lpzrobots {
 
       virtual QString getConfigurableName() const;
       static QSize defaultWidgetSize;
-      virtual void setVisible(bool visible);
-      virtual bool isVisible();
+      virtual void setVisible(bool visible) override;
+      virtual bool isVisible() override;
       virtual void setInCollapseMode(bool inCollapseMode);
 
       inline bool descriptionChanged() {
@@ -171,11 +171,11 @@ namespace lpzrobots {
 
 
     protected:
-      virtual void enterEvent(QEnterEvent * event);
-      virtual void leaveEvent(QEvent * event);
-      virtual void mouseMoveEvent(QMouseEvent * event);
-      virtual void mousePressEvent(QMouseEvent * event);
-      virtual void mouseReleaseEvent(QMouseEvent * event);
+      virtual void enterEvent(QEnterEvent * event) override;
+      virtual void leaveEvent(QEvent * event) override;
+      virtual void mouseMoveEvent(QMouseEvent * event) override;
+      virtual void mousePressEvent(QMouseEvent * event) override;
+      virtual void mouseReleaseEvent(QMouseEvent * event) override;
       virtual void updatePaletteChanged();
 
 

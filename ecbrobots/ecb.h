@@ -114,7 +114,7 @@ namespace lpzrobots
   // forward declaration end
 
 
-  typedef struct
+  struct ECBConfig
   {
 
       /// the max number, important for init of controller
@@ -124,7 +124,7 @@ namespace lpzrobots
       /// Sets the maximum current for the motorboards (from Wolfgang Rabe, Version 1.0).
       uint8 maxMotorCurrent;
 
-  } ECBConfig;
+  };
 
   class ECB : public Configurable, public Inspectable, public Storeable, public MediatorCollegue
   {
@@ -143,7 +143,7 @@ namespace lpzrobots
        */
       ECB(QString dnsName, QGlobalData& globalData, ECBConfig& ecbConfig);
 
-      virtual ~ECB();
+      virtual ~ECB() override;
 
       virtual QString getDNSName() const
       {
@@ -225,10 +225,10 @@ namespace lpzrobots
       /// STORABLE INTERFACE
 
       /** stores the object to the given file stream (binary). */
-      virtual bool store(FILE* f) const;
+      virtual bool store(FILE* f) const override;
 
       /** loads the object from the given file stream (binary). */
-      virtual bool restore(FILE* f);
+      virtual bool restore(FILE* f) override;
 
       /// noch verschiedene sensortypen und motortypen berücksichtigen
       /// bzw. hier bzw. in cpp-datei die cfg-datei berücksichtigen
@@ -258,7 +258,7 @@ namespace lpzrobots
        * Is called when the mediator informs this collegue that an event
        * has to be performed by this collegue instance.
        */
-      virtual void doOnMediatorCallBack(MediatorEvent* event);
+      virtual void doOnMediatorCallBack(MediatorEvent* event) override;
 
       virtual void commandDimensionReceived(ECBCommunicationEvent* event);
 

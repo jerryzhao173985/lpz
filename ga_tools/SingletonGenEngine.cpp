@@ -254,7 +254,7 @@ void SingletonGenEngine::runGenAlg(int startSize, int numChildren, int numGenera
 
     printf("Generaion %i:\tabgeschlossen.\n",x);
 
-    measureStep((double) x+2,actualGeneration,actualContext,plotEngine,plotEngineGenContext);
+    measureStep(static_cast<double>(x+2),actualGeneration,actualContext,plotEngine,plotEngineGenContext);
 
     // Abbruchkriterium fehlt noch!!!
     // TODO
@@ -439,7 +439,7 @@ bool SingletonGenEngine::restore(FILE* f, InspectableProxy*& proxyGeneration, In
     m_restoreGeneration[generation->number] = generation;
 
     for(x=0;x<(unsigned int) generation->numberIndividuals;++x) {
-      for(z=0;z<(int) sizeof(RESTORE_GA_TEMPLATE<int>);++z) {
+      for(z=0;z<static_cast<int>(sizeof(RESTORE_GA_TEMPLATE<int>));++z) {
         if(fscanf(f,"%c",&integer.buffer[z])!=1) return false;
       }
       z=integer.value;
@@ -471,7 +471,7 @@ bool SingletonGenEngine::restore(FILE* f, InspectableProxy*& proxyGeneration, In
     m_restoreNameOfIndividuals[individual->ID] = name;
 
     for(x=0;x<(unsigned int) individual->numberGenes;++x) {
-      for(z=0;z<(int) sizeof(RESTORE_GA_TEMPLATE<int>);++z) {
+      for(z=0;z<static_cast<int>(sizeof(RESTORE_GA_TEMPLATE<int>));++z) {
         if(fscanf(f,"%c",&integer.buffer[z])!=1) return false;
       }
       z=integer.value;

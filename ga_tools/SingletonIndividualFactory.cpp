@@ -76,8 +76,8 @@ Individual* SingletonIndividualFactory::createIndividual(Individual* individual1
         int num = storage.size();
         for(int x=0;x<num;++x) {                                                        //take randomized the gens from ind 1 or 2.
                 prototype = storage[x];
-                r1 = ((int) (random->rand()*10000.0))%2;
-                r2 = ((int) (random->rand()*10000.0))%1000;
+                r1 = (static_cast<int>(random->rand()*10000.0))%2;
+                r2 = (static_cast<int>(random->rand()*10000.0))%1000;
                 ind = r1==0?individual1:individual2;
 
                 gen = ind->getGen(x);
