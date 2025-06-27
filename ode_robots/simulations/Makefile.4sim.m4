@@ -35,17 +35,21 @@ OFILES = $(addsuffix .o, $(FILES))
 # the CFGOPTS are set by the opt and dbg target
 CFGOPTS=
 INC    += -I.
-BASELIBS = $(shell ode_robots-config $(CFGOPTS) --static --libs) $(shell selforg-config $(CFGOPTS) --static --libs)
-BASELIBSSHARED := $(shell ode_robots-config $(CFGOPTS) --libs) $(shell selforg-config $(CFGOPTS) --libs)
+# Find config scripts relative to simulation directory
+SELFORGCFG := $(shell if [ -x ../../../selforg/selforg-config ]; then echo "../../../selforg/selforg-config"; else echo "selforg-config"; fi)
+ODEROBOTSCFG := $(shell if [ -x ../../ode_robots-config ]; then echo "../../ode_robots-config"; else echo "ode_robots-config"; fi)
+
+BASELIBS = $(shell $(ODEROBOTSCFG) $(CFGOPTS) --static --libs) $(shell $(SELFORGCFG) $(CFGOPTS) --static --libs)
+BASELIBSSHARED := $(shell $(ODEROBOTSCFG) $(CFGOPTS) --libs) $(shell $(SELFORGCFG) $(CFGOPTS) --libs)
 
 
-DEV(LIBSELFORG=$(shell selforg-config $(CFGOPTS) --libfile))
-DEV(LIBSELFORGSHARED:=$(shell selforg-config $(CFGOPTS) --solibfile))
-DEV(SELFORGSRCPREFIX=$(shell selforg-config $(CFGOPTS) --srcprefix))
+DEV(LIBSELFORG=$(shell $(SELFORGCFG) $(CFGOPTS) --libfile))
+DEV(LIBSELFORGSHARED:=$(shell $(SELFORGCFG) $(CFGOPTS) --solibfile))
+DEV(SELFORGSRCPREFIX=$(shell $(SELFORGCFG) $(CFGOPTS) --srcprefix))
 
-DEV(LIBODEROBOTS=$(shell ode_robots-config $(CFGOPTS) --libfile))
-DEV(LIBODEROBOTSSHARED:=$(shell ode_robots-config $(CFGOPTS) --solibfile))
-DEV(ODEROBOTSSRCPREFIX=$(shell ode_robots-config $(CFGOPTS) --srcprefix))
+DEV(LIBODEROBOTS=$(shell $(ODEROBOTSCFG) $(CFGOPTS) --libfile))
+DEV(LIBODEROBOTSSHARED:=$(shell $(ODEROBOTSCFG) $(CFGOPTS) --solibfile))
+DEV(ODEROBOTSSRCPREFIX=$(shell $(ODEROBOTSCFG) $(CFGOPTS) --srcprefix))
 
 
 
@@ -55,8 +59,8 @@ LIBS  += $(BASELIBS) $(ADDITIONAL_LIBS)
 INC   += -I.
 
 CXX = g++
-CPPFLAGS = -Wall -pipe -Wno-deprecated $(INC) $(shell selforg-config $(CFGOPTS) --cflags) \
-  $(shell ode_robots-config $(CFGOPTS) --intern --cflags)
+CPPFLAGS = -Wall -pipe -Wno-deprecated $(INC) $(shell $(SELFORGCFG) $(CFGOPTS) --cflags) \
+  $(shell $(ODEROBOTSCFG) $(CFGOPTS) --intern --cflags)
 
 normal: DEV(libode_robots)
 	$(MAKE) $(EXEC)

@@ -137,7 +137,12 @@ utils/splitvideo: utils/splitvideo.c
 
 Makefile.depend:
 	for file in $(HFILES); do \
-		ln -sf $(REVINCLUDEDIR)/$$file $(INCLUDEDIR)/; \
+		dir=`dirname $$file`; \
+		if [ "$$dir" != "." ]; then \
+			mkdir -p $(INCLUDEDIR)/$$dir; \
+			ln -sf $(REVINCLUDEDIR)/$$file $(INCLUDEDIR)/$$file; \
+		fi; \
+		ln -sf $(REVINCLUDEDIR)/$$file $(INCLUDEDIR)/`basename $$file`; \
 	done
 	$(MAKEDEPEND) -- $(CPPFLAGS) -- $(CPPFILES) -p'$$(BUILD_DIR)/' -f- > Makefile.depend 2>/dev/null
 
@@ -191,6 +196,7 @@ clean:
 	rm -f $(shell ./ode_robots-config --opt --srcprefix="." --libfile)
 	rm -f $(shell ./ode_robots-config --dbg --srcprefix="." --libfile)
 	find $(INCLUDEDIR) -type l -exec rm \{\} \;
+	find $(INCLUDEDIR) -type d -empty -delete 2>/dev/null || true
 
 
 install_scripts:
