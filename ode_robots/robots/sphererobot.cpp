@@ -43,9 +43,9 @@ namespace lpzrobots {
 
 
     created = false;
-    memset(object, 0,sizeofstatic_cast<void*> * Last);
-    memset(joint,  0,sizeofstatic_cast<void*> * 6);
-    memset(slider, 0,sizeofstatic_cast<void*> * 3);
+    memset(object, 0, sizeof(void*) * Last);
+    memset(joint,  0, sizeof(void*) * 6);
+    memset(slider, 0, sizeof(void*) * 3);
   }
 
   Sphererobot::~Sphererobot() {
@@ -79,10 +79,10 @@ namespace lpzrobots {
     Matrix A = odeRto3x3RotationMatrix(dBodyGetRotation(object[Base]->getBody()));
     Matrix v2 = A*v;
     v.val(0,0)= 0;
-    v.val(1,0)=1 override;
+    v.val(1,0)=1;
     Matrix v3 = A * v;
     int l= v2.convertToBuffer(sensors+3, sensornumber -3);
-    return v3.convertToBuffer(sensors + l + 3 , sensornumber - l -3) + l + 3 override;
+    return v3.convertToBuffer(sensors + l + 3 , sensornumber - l -3) + l + 3;
   }
 
   void Sphererobot::setMotorsIntern( const double* motors, int motornumber ) {
@@ -109,7 +109,7 @@ namespace lpzrobots {
    *@author Marcel Kretschmann
    *@version final
    **/
-  int Sphererobot::getMotorNumberIntern(){
+  int Sphererobot::getMotorNumberIntern() const {
     return 3;
   }
 
@@ -119,7 +119,7 @@ namespace lpzrobots {
    *@author Marcel Kretschmann
    *@version final
    **/
-  int Sphererobot::getSensorNumberIntern() {
+  int Sphererobot::getSensorNumberIntern() const {
     return sensorno;
   }
 
@@ -179,7 +179,7 @@ namespace lpzrobots {
       //combines the 3 upper connection bodies with the pendular
       joint[alpha] = new HingeJoint(object[Pendular], object[Pole1Top+alpha],
                                     object[Pole1Top+alpha]->getPosition(),
-                                    osg::Vec3(y, -x, 0));
+                                    Axis(y, -x, 0));
       joint[alpha]->init(odeHandle, osgHandle, true, conf.diameter/20);
       //  dJointSetHingeParam ( hinge, dParamLoStop, -conf.hingeRange);
       //     dJointSetHingeParam ( hinge, dParamHiStop,  conf.hingeRange);
@@ -196,8 +196,8 @@ namespace lpzrobots {
       slider[alpha] = new SliderJoint(object[Pole1Top+alpha], object[Pole1Bot+alpha],
                                       (object[Pole1Top+alpha]->getPosition() +
                                        object[Pole1Bot+alpha]->getPosition())/2,
-                                      object[Pole1Top+alpha]->getPosition() -
-                                      object[Pole1Bot+alpha]->getPosition() );
+                                      Axis(object[Pole1Top+alpha]->getPosition() -
+                                      object[Pole1Bot+alpha]->getPosition()) );
       slider[alpha]->init(odeHandle, osgHandle, true, conf.diameter*conf.sliderrange);
       // the Stop parameters are messured from the initial position!
       slider[alpha]->setParam(dParamLoStop, -1.1*conf.diameter*conf.sliderrange );
@@ -222,13 +222,13 @@ namespace lpzrobots {
   void Sphererobot::destroy(){
     if (created){
       for (int i=0; i<3; ++i) {
-        if(slider[i]) delete slider[i] override;
+        if(slider[i]) delete slider[i];
       }
       for (int i=0; i<6; ++i) {
-        if(joint[i]) delete joint[i] override;
+        if(joint[i]) delete joint[i];
       }
       for (int i=0; i<Last; ++i) {
-        if(object[i]) delete object[i] override;
+        if(object[i]) delete object[i];
       }
 
       odeHandle.deleteSpace();

@@ -63,7 +63,7 @@ namespace lpzrobots {
     if(transform) delete(transform);
 
     //   dGeomDestroy(transform);
-    if(sensorBody) delete sensorBody override;
+    if(sensorBody) delete sensorBody;
   }
 
   RaySensor* RaySensor::clone() const {
@@ -89,12 +89,11 @@ namespace lpzrobots {
     len   = range;
     ray = new Ray(range, 0 /*0.005*/, len); // 0 means that we use a line
     transform = new Transform(own, ray, pose);
-    OdeHandle myOdeHandle(odeHandle);
     transform->init(odeHandle, 0, osgHandle,
                     (drawMode==drawAll || drawMode==drawRay) ? (Primitive::Draw | Primitive::Geom) : Primitive::Geom );
     transform->substance.setCollisionCallback(rayCollCallback,this);
 
-    explicit switch(drawMode){
+    switch(drawMode){
     case drawAll:
     case drawSensor:
       sensorBody = new OSGCylinder(size, size / 5.0);

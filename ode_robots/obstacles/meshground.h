@@ -32,7 +32,7 @@
 
 namespace lpzrobots {
 
-  class MeshGround{
+  class MeshGround : public AbstractObstacle {
   public:
 
 

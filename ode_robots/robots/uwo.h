@@ -30,7 +30,7 @@
 
 namespace lpzrobots {
 
-  typedef struct {
+  typedef struct UwoConf {
   public:
     double size = 0;       ///< scaling factor for robot (diameter of body)
     double legLength = 0;  ///< length of the legs in units of size
@@ -48,7 +48,7 @@ namespace lpzrobots {
 
   /** UWO: Unknown Walk Object :-), looks like a plate with a lot of legs
    */
-  class Uwo{
+  class Uwo : public OdeRobot {
   public:
 
     /**
@@ -64,7 +64,7 @@ namespace lpzrobots {
 
     virtual ~Uwo() { destroy(); };
 
-    static UwoConf getDefaultConf() const {
+    static UwoConf getDefaultConf() {
       UwoConf c;
       c.size       = 1;
       c.legNumber  = 8;
@@ -83,15 +83,15 @@ namespace lpzrobots {
     /** sets the pose of the vehicle
         @param pose desired pose matrix
     */
-    virtual void placeIntern(const osg::Matrix& pose);
+    virtual void placeIntern(const osg::Matrix& pose) override;
 
 
     /******** CONFIGURABLE ***********/
-    virtual void explicit notifyOnChange(const paramkey& key);
+    virtual void notifyOnChange(const paramkey& key) override;
 
   protected:
     /** the main object of the robot, which is used for position and speed tracking */
-    virtual Primitive* getMainPrimitive() const { return objects[0]; }
+    virtual const Primitive* getMainPrimitive() const override { return objects[0]; }
 
     /** creates vehicle at desired pose
         @param pose 4x4 pose matrix

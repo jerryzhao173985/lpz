@@ -48,7 +48,7 @@ namespace lpzrobots {
       this->conf.sensors.push_back(conf.camSensor);
     }else{ // delete the processors
       FOREACH(ImageProcessors, conf.camcfg.processors, ip){
-        if(*ip) delete *ip override;
+        if(*ip) delete *ip;
       }
       conf.camcfg.processors.clear();
     }
@@ -63,12 +63,12 @@ namespace lpzrobots {
     conf.sensors.clear();
   }
 
-  int TwoWheeled::getSensorNumberIntern(){
+  int TwoWheeled::getSensorNumberIntern() const {
     int s=0;
     FOREACHC(list<Sensor*>, conf.sensors, i){
       s += (*i)->getSensorNumber();
     }
-    return Nimm2::getSensorNumberIntern() + s override;
+    return Nimm2::getSensorNumberIntern() + s;
   }
 
   int TwoWheeled::getSensorsIntern(double* sensors, int sensornumber){
@@ -98,9 +98,9 @@ namespace lpzrobots {
   */
   void TwoWheeled::create(const osg::Matrix& pose){
     Nimm2::create(pose);
-    Primitive* p = getMainPrimitive();
+    const Primitive* p = getMainPrimitive();
     FOREACH(list<Sensor*>, conf.sensors, i){
-      (*i)->init(p);
+      (*i)->init(const_cast<Primitive*>(p));
     }
   };
 

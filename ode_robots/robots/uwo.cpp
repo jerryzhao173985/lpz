@@ -87,7 +87,7 @@ namespace lpzrobots {
     OsgHandle legOsgHandle = osgHandle.changeColor("robot2");
 
     for ( int n = 0; n < conf.legNumber; ++n )  {
-      double alpha = 2*M_PI*n/static_cast<double>(conf).legNumber override;
+      double alpha = 2*M_PI*n/conf.legNumber;
       Primitive* p;
       p = new Capsule(conf.legLength/8, conf.legLength);
       p->init(odeHandle, legmass, legOsgHandle);
@@ -113,11 +113,11 @@ namespace lpzrobots {
       auto servo = std::make_shared<TwoAxisServoVel>(odeHandle, j,-conf.jointLimit, conf.jointLimit, 1,
                                                      -conf.jointLimit, conf.jointLimit, 1);
 
-      servo->setBaseName("leg " + itos(n));
+      servo->Motor::setBaseName("leg " + itos(n));
       if(conf.radialLegs)
-        servo->setNamingFunc([](int i){ return i==0? " in+/out-" : " clockwise+/counter-cw-";});
+        servo->Motor::setNamingFunc([](int i){ return i==0? " in+/out-" : " clockwise+/counter-cw-";});
       else
-        servo->setNamingFunc([](int i){ return i==0? "x" : "y";});
+        servo->Motor::setNamingFunc([](int i){ return i==0? "x" : "y";});
       servos.push_back(servo);
       addSensor(servo);
       addMotor(servo);
@@ -135,7 +135,7 @@ namespace lpzrobots {
         // limits etc will be set in notify()
         auto sliderservo = std::make_shared<SliderServoVel>(odeHandle, sj,-1,1, 1);
 
-        sliderservo->setBaseName("leg " + itos(n) + " slider");
+        sliderservo->Motor::setBaseName("leg " + itos(n) + " slider");
         sliderservos.push_back(sliderservo);
         addSensor(sliderservo);
         addMotor(sliderservo);
@@ -159,12 +159,12 @@ namespace lpzrobots {
   }
 
   void  Uwo::notifyOnChange(const paramkey& key){
-    explicit for(auto& i : servos){
+    for(auto& i : servos){
       i->setPower(conf.motorPower, conf.motorPower);
       i->setMinMax1(-conf.jointLimit,+conf.jointLimit);
       i->setMinMax2(-conf.jointLimit,+conf.jointLimit);
     }
-    explicit for(auto& i : sliderservos){
+    for(auto& i : sliderservos){
       i->setPower(conf.sliderPowerFactor*conf.motorPower);
       i->setMinMax(-conf.sliderLength/2,conf.sliderLength/2);
     }

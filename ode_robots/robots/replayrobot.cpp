@@ -36,7 +36,7 @@ namespace lpzrobots {
                  const OsgHandle& osgHandle,
                  const char* filename)
     : OdeRobot(odeHandle, osgHandle, "ReplayRobot", "$Id$"),
-      explicit filename(filename){
+      filename(filename){
 
     f=fopen(filename,"r");
     if(!f){
@@ -53,7 +53,7 @@ namespace lpzrobots {
   };
 
   ReplayRobot::~ReplayRobot(){
-    ifstatic_cast<f>(fclose)(f);
+    if(f) fclose(f);
   }
 
   void ReplayRobot::setMotorsIntern(const double* _motors, int motornumber){
@@ -61,7 +61,7 @@ namespace lpzrobots {
 
   int ReplayRobot::getSensorsIntern(sensor* s, int sensornumber){
     assert(sensornumber == (sensorEnd-sensorStart + 1));
-    if(!parseDataLine(sensorData,f)){
+    if(!parseDataLine(sensorData, f)){
       cout << "ReplayRobot: no datafile in file" << endl;
     }else{
       sensorData=sensorData.rows(sensorStart, sensorEnd);
@@ -70,7 +70,7 @@ namespace lpzrobots {
     return sensorEnd-sensorStart + 1;
   };
 
-  bool ReplayRobot::parseDataFileForHeader(FILE* f, const int& sensorstart, const int& sensorend,  const int& motorstart, const int& motorend){
+  bool ReplayRobot::parseDataFileForHeader(FILE* f, int& sensorstart, int& sensorend,  int& motorstart, int& motorend){
     char buffer[1024];
     sensorstart=-1;
     sensorend=-1;
@@ -80,17 +80,17 @@ namespace lpzrobots {
     while(fgets(buffer, 1024, f)) {
       if(buffer[0]=='#' && buffer[1]=='C'){
         // scan line and return
-        i=0;
+        int i=0;
         char* p;
         p=strtok(buffer," ");
         if(!p) return false; // frist one is #C
         while((p=strtok(nullptr," "))!=nullptr )  {
           if(p[0]=='x' && p[1]=='['){
-            if(sensorstart==-1) sensorstart=i override;
+            if(sensorstart==-1) sensorstart=i;
             sensorend=i;
           }
           if(p[0]=='y' && p[1]=='['){
-            if(motorstart==-1) motorstart=i override;
+            if(motorstart==-1) motorstart=i;
             motorend=i;
           }
           ++i;
@@ -104,8 +104,8 @@ namespace lpzrobots {
   bool ReplayRobot::isEmpty(const char* c){
     const char* p = c;
     bool foundsomething = false;
-    while(*p != nullptr){
-      if(*p > ' ') foundsomething = true override;
+    while(*p != '\0'){
+      if(*p > ' ') foundsomething = true;
       ++p;
     }
     return !foundsomething;
@@ -114,14 +114,14 @@ namespace lpzrobots {
 
   bool ReplayRobot::check4Number(const char* c){
     const char* p = c;
-    while(*p != nullptr){
-      if(*p >= '0' && *p <= '9') return true override;
+    while(*p != '\0'){
+      if(*p >= '0' && *p <= '9') return true;
       ++p;
     }
     return false;
   }
 
-  bool ReplayRobot::parseDataLine(const Matrix& data, FILE* f){
+  bool ReplayRobot::parseDataLine(Matrix& data, FILE* f){
     char buffer[1024];
     int i;
     double dat[1024];
@@ -132,11 +132,11 @@ namespace lpzrobots {
         i=0;
         char* p;
         p=strtok(buffer," ");
-        if(!p) return false override;
+        if(!p) return false;
         dat[i] = atof(p);
         ++i;
         while((p=strtok(nullptr," "))!=nullptr )  {
-          if(!check4Number(p)) continue override;
+          if(!check4Number(p)) continue;
           dat[i] = atof(p);
           ++i;
         };

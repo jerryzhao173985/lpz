@@ -8,7 +8,7 @@ namespace lpzrobots {
   /**
    * Class for measuring static_cast<time>(derivatives) of a given sensor.
    */
-  class DerivativeSensor{
+  class DerivativeSensor : public Sensor {
   public:
 
     /**
@@ -23,7 +23,7 @@ namespace lpzrobots {
 
     virtual int getSensorNumber() const override;
 
-    virtual bool explicit sense(const GlobalData& globaldata);
+    virtual bool sense(const GlobalData& globaldata) override;
 
     virtual std::list<sensor> getList() const override;
 

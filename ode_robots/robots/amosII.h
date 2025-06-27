@@ -375,12 +375,12 @@ namespace lpzrobots {
       /**
        * returns number of sensors
        */
-      virtual int getSensorNumberIntern() override;
+      virtual int getSensorNumberIntern() const override;
 
       /**
        * returns number of motors
        */
-      virtual int getMotorNumberIntern() override;
+      virtual int getMotorNumberIntern() const override;
 
       /**
        * this function is called in each timestep. It should perform

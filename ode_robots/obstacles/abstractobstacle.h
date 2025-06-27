@@ -29,6 +29,9 @@
 #include "odehandle.h"
 #include "osghandle.h"
 #include <osg/Matrix>
+#include "osgprimitive.h"
+#include <selforg/matrix.h>
+#include <selforg/position.h>
 
 #include <vector>
 
@@ -36,7 +39,6 @@ namespace lpzrobots {
   
 // Forward declarations
 class Primitive;
-class Position;
 
 /**
  * Abstract base class for obstacles

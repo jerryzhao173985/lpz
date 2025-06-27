@@ -48,7 +48,7 @@ SchlangeServo::~SchlangeServo() { }
 void SchlangeServo::setMotorsIntern( const double* motors, int motornumber )
 {
   assert(created);
-  int len = min(motornumber, static_cast<int>(servos).size());
+  int len = min(motornumber, static_cast<int>(servos.size()));
   // controller output as torques
   for (int i = 0; i < len; ++i) {
     servos[i]->set(motors[i]);

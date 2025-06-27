@@ -64,14 +64,15 @@ namespace lpzrobots {
     // robot not created up to now
 
     // Nimm2 color ;-)
-    this->osgHandle.color = Color(2, 156/255.0, 0, 1.0f);
+    this->osgHandle.changeColor(Color(2, 156/255.0, 0, 1.0f));
     // can be overwritten in main.cpp of simulation with setColor
 
     // maximal used force is calculated from the force and size given in the configuration
     max_force   = conf.force*conf.size*conf.size;
 
-    addParameter("speed", &this->conf.speed);
-    addParameter("max_force", &max_force);
+    // Note: These would be added through Configurable interface if needed
+    // addInspectableValue("speed", &this->conf.speed);
+    // addInspectableValue("max_force", &max_force);
 
     height=conf.size;
 
@@ -238,14 +239,14 @@ namespace lpzrobots {
       double height = width/4*3 + dheight;
       // height, width and length
       Box* box = new Box(height,conf.boxWidth*width/3, length/4*3);
-      box->getOSGPrimitive()->setTexture("Images/wood.rgb");
+      box->setTexture("Images/wood.rgb");
       box->init(odeHandle, cmass*5, osgHandle);
       box->setPose(Matrix::rotate(M_PI/2, 0, 1, 0) * pose * Matrix::translate(0, 0, dheight/2));
       box->substance.toMetal(0);
       objects[0]=box;
     } else {
       Capsule* cap = new Capsule(width/2, length);
-      cap->getOSGPrimitive()->setTexture("Images/wood.rgb");
+      cap->setTexture("Images/wood.rgb");
       cap->init(odeHandle, cmass, osgHandle);
       cap->setPose(Matrix::rotate(M_PI/2, 0, 1, 0) * pose);
       objects[0]=cap;
@@ -283,7 +284,7 @@ namespace lpzrobots {
     for (int i=1; i<3; ++i)  {
       if(conf.sphereWheels) { // for spherical wheels
         Sphere* wheel = new Sphere(radius);      // create spheres
-        wheel->getOSGPrimitive()->setTexture(conf.wheelTexture); // set texture for wheels
+        wheel->setTexture(conf.wheelTexture); // set texture for wheels
         wheel->init(wheelHandle, wmass, osgHandleWheels); // init with odehandle, mass, and osghandle
 
         wheel->setPose(Matrix::rotate(M_PI/2.0, 1, 0, 0) *
@@ -297,7 +298,7 @@ namespace lpzrobots {
         }
       }else{ // for __PLACEHOLDER_9__ wheels
         Cylinder* wheel = new Cylinder(radius, wheelthickness);
-        wheel->getOSGPrimitive()->setTexture("Images/tire.rgb"); // set texture for wheels
+        wheel->setTexture("Images/tire.rgb"); // set texture for wheels
         wheel->init(wheelHandle, wmass, osgHandleWheels);
         wheel->setPose(Matrix::rotate(M_PI/2.0, Vec3(1,0,0)) *
                        Matrix::translate(wheeloffset,
@@ -409,7 +410,7 @@ namespace lpzrobots {
     if (created){
       for (int i=0; i<2; ++i) {
         //        if(bumper[i].bump) delete bumper[i].bump; is done by transform primitive
-        if(bumper[i].trans) delete bumper[i].trans override;
+        if(bumper[i].trans) delete bumper[i].trans;
       }
       cleanup();
       odeHandle.deleteSpace();

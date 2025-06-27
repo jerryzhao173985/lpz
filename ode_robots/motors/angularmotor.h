@@ -134,6 +134,7 @@ namespace lpzrobots {
 
     virtual void setPower(double power);
   protected:
+    double initialPower = 0;
   };
 
   /// Angular motor for TwoAxisJoints
@@ -203,6 +204,7 @@ namespace lpzrobots {
   protected:
     Axis axis1;
     Axis axis3;
+    double power = 0;
   };
 
   /// Angular motor for arbitrary Joints with custom axis (up to 3)

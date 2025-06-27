@@ -38,7 +38,7 @@ namespace lpzrobots {
    * It consists of a number of equal elements, each linked
    * by a joint powered by directly setting the angular velocities of the joints
    **/
-  class SchlangeVelocity{
+  class SchlangeVelocity : public Schlange {
     private:
       paramval factor_motors;
       paramval factor_sensors;
@@ -49,7 +49,7 @@ namespace lpzrobots {
       SchlangeVelocity ( const OdeHandle& odeHandle, const OsgHandle& osgHandle,
                       const SchlangeConf& conf, const std::string& name);
 
-      static SchlangeConf getDefaultConfVelocity() const {
+      static SchlangeConf getDefaultConfVelocity() {
         SchlangeConf conf;
         conf.segmNumber = 10;      //  number of snake elements
         conf.segmLength = 0.8;     // length of one snake element
@@ -58,7 +58,6 @@ namespace lpzrobots {
         conf.motorPower = 0.3;     //  power of motors
         conf.sensorFactor = 1.0;  //  scale for sensors
         conf.frictionJoint = 0.02; // friction within joint
-        conf.frictionRatio = 1.0;  // friction ratio
         conf.jointLimit =  M_PI/4;
         conf.useServoVel = false;
         conf.velocity = 20.0;      // maximal velocity of servos
@@ -77,7 +76,7 @@ namespace lpzrobots {
        *@param motors pointer to the array, motor values are scaled to [-1,1]
        *@param motornumber length of the motor array
        **/
-      virtual void setMotorsIntern( const double* motors, int motornumber );
+      virtual void setMotorsIntern( const double* motors, int motornumber ) override;
 
       /**
        *Writes the sensor values to an array in the memory.
@@ -85,19 +84,19 @@ namespace lpzrobots {
        *@param sensornumber length of the sensor array
        *@return number of actually written sensors
        **/
-      virtual int getSensorsIntern( sensor* sensors, int sensornumber );
+      virtual int getSensorsIntern( sensor* sensors, int sensornumber ) override;
 
       /** returns number of sensors
        */
-      virtual int getSensorNumberIntern() override { assert(created); return joints.size() * 2; }
+      virtual int getSensorNumberIntern() const override { assert(created); return joints.size() * 2; }
 
       /** returns number of motors
        */
-      virtual int getMotorNumberIntern() override { assert(created); return joints.size() * 2; }
+      virtual int getMotorNumberIntern() const override { assert(created); return joints.size() * 2; }
 
     private:
-      virtual void create(const osg::Matrix& pose);
-      virtual void destroy();
+      virtual void create(const osg::Matrix& pose) override;
+      virtual void destroy() override;
     };
 
 }

@@ -61,7 +61,7 @@ namespace lpzrobots {
     Pos t2;
     joint->getTorqueFeedback(t1,t2);
     for(int i=0; i<num; ++i) {
-      const Pos& a = joint->getAxis(i);
+      const Pos a = Pos(joint->getAxis(i));
       // scalar product of axis and force gives the resulting torque
       double p1 = t1 * a;
       double p2 = t2 * a;
@@ -96,7 +96,7 @@ namespace lpzrobots {
 
 
   std::list<sensor> TorqueSensor::getList() const {
-    return getListOfArray() const;
+    return getListOfArray();
   }
 
 }

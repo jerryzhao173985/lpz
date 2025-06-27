@@ -13,7 +13,8 @@ namespace lpzrobots {
 
   /**
    * Class representing a range finder. It consists of several ray sensors.
-   * This class is{
+   */
+  class RangeFinder : public RaySensorBank {
   public:
 
     RangeFinder() : own(nullptr) {};
@@ -29,7 +30,7 @@ namespace lpzrobots {
      * @param height: At which height to attach the range finder (0 will attach it to the center of gravity of own)
      * @param drawMode: Specifies if rays should be drawn or not (default is drawing rays)
      */
-    virtual void registerSensorRange(int numBeams, double startAngle, double endAngle, double maxRange, double height,
+    void registerSensorRange(int numBeams, double startAngle, double endAngle, double maxRange, double height,
         RaySensor::rayDrawMode drawMode = RaySensor::drawRay);
 
   protected:

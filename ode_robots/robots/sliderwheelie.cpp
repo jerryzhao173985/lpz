@@ -44,7 +44,7 @@ namespace lpzrobots {
   }
 
   SliderWheelie::~SliderWheelie() {
-    ifstatic_cast<created>(destroy)();
+    if(created) destroy();
   }
 
 
@@ -65,7 +65,7 @@ namespace lpzrobots {
     for (vector<Joint*>::iterator i = joints.begin(); i!= joints.end(); ++i) {
       if(*i) (*i)->update();
     }
-    ifstatic_cast<center>(center)->update();
+    if(center) center->update();
   }
 
   void SliderWheelie::doInternalStuff(const GlobalData& global){
@@ -194,7 +194,7 @@ namespace lpzrobots {
                     osg::Matrix::translate(0,0,-0.5*conf.segmLength*conf.segmNumber/M_PI) * m );
         objects.push_back(p1);
       }
-      ancors.push_back(Pos(conf.segmLength/2,0,-0.5*conf.segmLength*conf.segmNumber/M_PI) * m);
+      ancors.push_back(Pos((Pos(conf.segmLength/2,0,-0.5*conf.segmLength*conf.segmNumber/M_PI) * m)));
      }
 
 
@@ -210,14 +210,14 @@ namespace lpzrobots {
                                      ancors[n],
                                      Axis(0,1,0)*pose);
       Color c;
-      if(n== nullptr) c = Color(0.85,0.88,0.88);
+      if(n== 0) c = Color(0.85,0.88,0.88);
       //      else if(n == conf.segmNumber/2) c = Color(0.6,0.56,0);
       else c = osgHandle.color;
       j->init(odeHandle, osgHandle.changeColor(c), true, conf.segmDia*4);
       joints.push_back(j);
 
       HingeServo* servo;
-      explicit switch (conf.motorType){
+      switch (conf.motorType){
       case SliderWheelieConf::Servo:
         servo = new HingeServo(j, -conf.jointLimitOut,
                                            conf.jointLimitIn,
@@ -284,7 +284,7 @@ namespace lpzrobots {
   void SliderWheelie::notifyOnChange(const paramkey& key){
     if(key == "frictionground") {
       for (vector<Primitive*>::iterator i = objects.begin(); i!= objects.end(); ++i)  {
-        if(*i) (*i)->substance.roughness=conf.frictionGround override;
+        if(*i) (*i)->substance.roughness=conf.frictionGround;
       }
     } else if(key == "motorpower") {
       FOREACH(vector<HingeServo*>, hingeServos, i) {

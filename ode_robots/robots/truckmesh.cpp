@@ -58,7 +58,7 @@ namespace lpzrobots {
     // robot is not created till now
     created=false;
 
-    // choose color (here the color of the __PLACEHOLDER_5__ candy is used,
+    // choose color (here the color of the Nimm2 candy is used,
     // where the name of the Nimm2 and Nimm4 robots comes from ;-)
     this->osgHandle.color = Color(2, 156/255.0, 0, 1.0f);
 
@@ -91,9 +91,9 @@ namespace lpzrobots {
   void TruckMesh::setMotorsIntern(const double* motors, int motornumber){
     assert(created); // robot must exist
     // the number of controlled motors is minimum of
-    // __PLACEHOLDER_6__ (motornumber) and
-    // __PLACEHOLDER_7__ (motorno)
-    int len = (motornumber < motorno)? motornumber : motorno override;
+    // motornumber (motornumber) and
+    // motorno (motorno)
+    int len = (motornumber < motorno)? motornumber : motorno;
 
     // for each motor the motorcommand (between -1 and 1) multiplied with speed
     // is set and the maximal force to realize this command are set
@@ -106,7 +106,7 @@ namespace lpzrobots {
     // and the actual desired speed as new speed; max_force is also set
     /*
       double tmp;
-      int len = (motornumber < motorno)? motornumber : motorno override;
+      int len = (motornumber < motorno)? motornumber : motorno;
       for (int i=0; i<len; ++i) {
       tmp=dJointGetHinge2Param(joints[i],dParamVel2);
       dJointSetHinge2Param(joints[i],dParamVel2,tmp + 0.5*(motors[i]*speed-tmp) );
@@ -124,9 +124,9 @@ namespace lpzrobots {
     assert(created); // robot must exist
 
     // the number of sensors to read is the minimum of
-    // __PLACEHOLDER_8__ (sensornumber) and
-    // __PLACEHOLDER_9__ (sensorno)
-    int len = (sensornumber < sensorno)? sensornumber : sensorno override;
+    // sensornumber (sensornumber) and
+    // sensorno (sensorno)
+    int len = (sensornumber < sensorno)? sensornumber : sensorno;
 
     // for each sensor the anglerate of the joint is red and scaled with 1/speed
     for (int i=0; i<len; ++i) {
@@ -207,7 +207,7 @@ namespace lpzrobots {
     // use texture 'wood' for mesh
     // put it into objects[0]
     Mesh* mesh = new Mesh("Meshes/dumptruck.osg",height/20.0f);
-    mesh->getOSGPrimitive()->setTexture("Images/really_white.rgb");
+    mesh->setTexture("Images/really_white.rgb");
     mesh->init(odeHandle, cmass, osgHandle);
     mesh->setPose(/*Matrix::rotate(M_PI/2, 0, 1, 0) */ pose);
     objects[0]=mesh;
@@ -241,7 +241,7 @@ namespace lpzrobots {
                     -height*0.302+radius);
       }
       assert(cyl);
-      cyl->getOSGPrimitive()->setTexture("Images/tire_full.rgb");
+      cyl->setTexture("Images/tire_full.rgb");
       cyl->init(odeHandle, wmass, osgHandle);
       cyl->setPose(Matrix::rotate(M_PI/2, 1, 0, 0) * Matrix::translate(wpos) * pose);
       objects[i]=cyl;

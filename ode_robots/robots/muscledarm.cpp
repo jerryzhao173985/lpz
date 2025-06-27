@@ -438,7 +438,7 @@ namespace lpzrobots{
     // slider joint between mainMuscle11 and mainMuscle12
     joint[SJ_mM1] = new SliderJoint(object[mainMuscle11], object[mainMuscle12],
                                     /*anchor (not used)*/osg::Vec3(0, 0, 0),
-                                    osg::Vec3(1, 0, 0));
+                                    Axis(1, 0, 0));
     joint[SJ_mM1] -> init(odeHandle, osgHandle, /*withVisual*/ false);//true);
 
 
@@ -460,7 +460,7 @@ namespace lpzrobots{
     // slider joint between mainMuscle21 and mainMuscle22
     joint[SJ_mM2] = new SliderJoint(object[mainMuscle21], object[mainMuscle22],
                                     /*anchor (not used)*/osg::Vec3(0, 0, 0),
-                                    osg::Vec3(1, 0, 0));
+                                    Axis(1, 0, 0));
     joint[SJ_mM2] -> init(odeHandle, osgHandle, /*withVisual*/ false);//true);
 
 
@@ -558,7 +558,7 @@ namespace lpzrobots{
     // slider joint between smallMuscle11 and smallMuscle12
     joint[SJ_sM1] = new SliderJoint(object[smallMuscle11], object[smallMuscle12],
                                     /*anchor (not used)*/osg::Vec3(0, 0, 0),
-                                    osg::Vec3(1,-1, 0));
+                                    Axis(1,-1, 0));
     joint[SJ_sM1] -> init(odeHandle, osgHandle, /*withVisual*/ false, 0.05);
 
 
@@ -581,7 +581,7 @@ namespace lpzrobots{
     // slider joint between smallMuscle21 and smallMuscle22
     joint[SJ_sM2] = new SliderJoint(object[smallMuscle21], object[smallMuscle22],
                                     /*anchor (not used)*/osg::Vec3(0, 0, 0),
-                                    osg::Vec3(1,1, 0));
+                                    Axis(1,1, 0));
     joint[SJ_sM2] -> init(odeHandle, osgHandle, /*withVisual*/ false, 0.05);
 
 
@@ -606,7 +606,7 @@ namespace lpzrobots{
     // slider joint between smallMuscle31 and smallMuscle32
     joint[SJ_sM3] = new SliderJoint(object[smallMuscle31], object[smallMuscle32],
                                     /*anchor (not used)*/osg::Vec3(0, 0, 0),
-                                    osg::Vec3(-1,-1, 0));
+                                    Axis(-1,-1, 0));
     joint[SJ_sM3] -> init(odeHandle, osgHandle, /*withVisual*/ false, 0.05);
 
 
@@ -628,7 +628,7 @@ namespace lpzrobots{
     // slider joint between smallMuscle41 and smallMuscle42
     joint[SJ_sM4] = new SliderJoint(object[smallMuscle41], object[smallMuscle42],
                                     /*anchor (not used)*/osg::Vec3(0, 0, 0),
-                                    osg::Vec3(-1,1, 0));
+                                    Axis(-1,1, 0));
     joint[SJ_sM4] -> init(odeHandle, osgHandle, /*withVisual*/ false, 0.05);
 
 
@@ -645,10 +645,10 @@ namespace lpzrobots{
   void MuscledArm::destroy(){
     if (created){
       for (int i=0; i<NUMJoints; ++i) {
-        if(joint[i]) delete joint[i] override;
+        if(joint[i]) delete joint[i];
       }
       for (int i=0; i<NUMParts; ++i) {
-        if(object[i]) delete object[i] override;
+        if(object[i]) delete object[i];
       }
       odeHandle.deleteSpace();
     }

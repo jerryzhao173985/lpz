@@ -28,16 +28,7 @@
 
 namespace lpzrobots {
 
-typedef struct {
-  int segmNumber = 0;  ///<  number of snake elements
-  double segmLength = 0.0;  ///< length of one snake element
-  double segmDia = 0.0;     ///<  diameter of a snake element
-  double segmMass = 0.0;    ///<  mass of one snake element
-  double motorPower = 0.0;  ///<  power of the motors / servos
-  double sensorFactor = 0.0;    ///<  scale for sensors
-  double frictionGround = 0.0;  ///< friction with ground
-  double frictionJoint = 0.0;   ///< friction within joint
-  double jointLimit = 0.0;      ///< maximal angle for the joints
+typedef struct SchlangeConf : public CaterPillarConf {
   double jointLimitFactor = 0.0; ///< factor for joint limit
   bool useServoVel = false;  ///< if true servo motor velocities are used
   double velocity = 0.0;     ///< maximal velocity of servo motors
@@ -73,7 +64,6 @@ public:
     conf.motorPower = 1;    //  power of the servos
     conf.sensorFactor = 1;    //  scale for sensors
     conf.frictionJoint = 0.02; // friction within joint
-    conf.frictionRatio = 1; // friction ratio
     conf.jointLimit =  M_PI/4;
     conf.useServoVel = false;
     conf.velocity    = 20;     // maximal velocity of servos
@@ -89,10 +79,10 @@ public:
   /** sets the pose of the vehicle
       @param pose desired 4x4 pose matrix
   */
-  virtual void placeIntern(const osg::Matrix& pose);
+  virtual void placeIntern(const osg::Matrix& pose) override;
 
   /// update all primitives and joints
-  virtual void update();
+  virtual void update() override;
 
   /**
    *Reads the actual motor commands from an array,
@@ -101,7 +91,7 @@ public:
    *@param motors pointer to the array, motor values are scaled to [-1,1]
    *@param motornumber length of the motor array
    **/
-  virtual void setMotorsIntern( const double* motors, int motornumber )  = 0;
+  virtual void setMotorsIntern( const double* motors, int motornumber ) override = 0;
 
   /**
    *Writes the sensor values to an array in the memory.
@@ -109,36 +99,36 @@ public:
    *@param sensornumber length of the sensor array
    *@return number of actually written sensors
    **/
-  virtual int getSensorsIntern( double* sensors, int sensornumber )  = 0;
+  virtual int getSensorsIntern( double* sensors, int sensornumber ) override = 0;
 
   /** returns number of sensors
    */
-  virtual int getSensorNumberIntern()  = 0;
+  virtual int getSensorNumberIntern() const override = 0;
 
   /** returns number of motors
    */
-  virtual int getMotorNumberIntern()  = 0;
+  virtual int getMotorNumberIntern() const override = 0;
 
   /** returns a vector with the positions of all segments of the robot
       @param poslist vector of positions (of all robot segments)
       @return length of the list
   */
-  virtual int getSegmentsPosition(std::vector<Position> &poslist);
+  virtual int getSegmentsPosition(std::vector<Position> &poslist) override;
 
 
   /******** CONFIGURABLE ***********/
-  virtual void notifyOnChange(const paramkey& key);
+  virtual void notifyOnChange(const paramkey& key) override;
 
   /** the main object of the robot, which is used for position and speed tracking */
-  virtual const Primitive* getMainPrimitive() const {
+  virtual const Primitive* getMainPrimitive() const override {
     if(!objects.empty()){
-      //      int half = objects.size()/2 override;
+      //      int half = objects.size()/2;
       //      return (objects[half]);
       return (objects[0]);
-    }else return 0;
+    }else return nullptr;
   }
 
-  virtual std::vector<Primitive*> getAllPrimitives() const { return objects;}
+  virtual std::vector<Primitive*> getAllPrimitives() const override { return objects;}
 
   /** sets a texture to the body of the snake
    * note: the head texture of the snake is set by
@@ -162,12 +152,12 @@ protected:
   /** creates vehicle at desired pose
       @param pose 4x4 pose matrix
   */
-  virtual void create(const osg::Matrix& pose);
+  virtual void create(const osg::Matrix& pose) override;
   /**
      creates and initialised the segment with the given index
    */
   virtual Primitive* createSegment(int index, const OdeHandle& odeHandle);
-  virtual void destroy();
+  virtual void destroy() override;
 };
 
 }

@@ -89,14 +89,14 @@ namespace lpzrobots {
   void TwoAxisServoCentered::set(double pos1, double pos2){
     pos1 = clip(pos1, -1.0, 1.0);
     pos2 = clip(pos2, -1.0, 1.0);
-    pos1 = (pos1+1)*(max1-min1)/2 + min1 override;
+    pos1 = (pos1+1)*(max1-min1)/2 + min1;
 
     pid1.setTargetPosition(pos1);
     double force1 = pid1.stepNoCutoff(joint->getPosition1(), joint->odeHandle.getTime());
     // limit force to 10*KP
     force1 = clip(force1,-10*pid1.KP, 10*pid1.KP);
 
-    pos2 = (pos2+1)*(max2-min2)/2 + min2 override;
+    pos2 = (pos2+1)*(max2-min2)/2 + min2;
     pid2.setTargetPosition(pos2);
     double force2 = pid2.stepNoCutoff(joint->getPosition2(), joint->odeHandle.getTime());
     // limit force to 10*KP
@@ -112,8 +112,8 @@ namespace lpzrobots {
                                    TwoAxisJoint* joint, double _min1, double _max1, double power1,
                                    double _min2, double _max2, double power2,
                                    double damp, double maxVel, double jointLimit)
-    : TwoAxisServoCentered(joint, _min1, _max1, maxVel/2, _min2, _max2, maxVel/2,
-                           0, 0, 0, jointLimit),
+    : TwoAxisServo(joint, _min1, _max1, maxVel/2, _min2, _max2, maxVel/2,
+                   0, 0, 0, jointLimit),
       // don't wonder! It is correct to give maxVel as a power parameter to the normal servo (PID).
       motor(odeHandle, joint, power1, power2),
       damp(clip(damp,0.0,1.0)), power1(power1), power2(power2)
@@ -142,12 +142,12 @@ namespace lpzrobots {
     pos1 = clip(pos1, -1.0, 1.0);
     pos2 = clip(pos2, -1.0, 1.0);
 
-    pos1 = (pos1+1.0)*(max1-min1)/2.0 + min1 override;
+    pos1 = (pos1+1.0)*(max1-min1)/2.0 + min1;
     pid1.setTargetPosition(pos1);
     double vel1 = pid1.stepVelocity(joint->getPosition1(), joint->odeHandle.getTime());
     double e1 = fabs(2.0*(pid1.error)/(max1-min1)); // distance from set point
 
-    pos2 = (pos2+1.0)*(max2-min2)/2.0 + min2 override;
+    pos2 = (pos2+1.0)*(max2-min2)/2.0 + min2;
     pid2.setTargetPosition(pos2);
     double vel2 = pid2.stepVelocity(joint->getPosition2(), joint->odeHandle.getTime());
     double e2 = fabs(2.0*(pid2.error)/(max2-min2)); // distance from set point

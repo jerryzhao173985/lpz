@@ -36,7 +36,7 @@ namespace lpzrobots {
 
     sensorno = sensornumber;
     motorno  = motornumber;
-    motors = static_cast<double*>(malloc)(motorno * sizeof(motor));
+    motors = static_cast<double*>(malloc(motorno * sizeof(double)));
     for(int i=0; i < motorno; ++i) {
       motors[i]=0.0;
     }

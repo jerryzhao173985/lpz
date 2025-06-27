@@ -31,7 +31,7 @@
 
 namespace lpzrobots {
 
-typedef struct {
+typedef struct CaterPillarConf {
   int segmNumber = 0;  ///<  number of snake elements
   double segmLength = 0.0;  ///< length of one snake element
   double segmDia = 0.0;     ///<  diameter of a snake element
@@ -83,10 +83,10 @@ public:
   /** sets the pose of the vehicle
       @param pose desired 4x4 pose matrix
   */
-  virtual void placeIntern(const osg::Matrix& pose);
+  virtual void placeIntern(const osg::Matrix& pose) override;
 
   /// update all primitives and joints
-  virtual void update();
+  virtual void update() override;
 
   /**
    *Reads the actual motor commands from an array,
@@ -107,11 +107,11 @@ public:
 
   /** returns number of sensors
    */
-  virtual int getSensorNumberIntern()  override = 0;
+  virtual int getSensorNumberIntern() const override = 0;
 
   /** returns number of motors
    */
-  virtual int getMotorNumberIntern()  override = 0;
+  virtual int getMotorNumberIntern() const override = 0;
 
   /** returns a vector with the positions of all segments of the robot
       @param poslist vector of positions (of all robot segments)
@@ -123,12 +123,12 @@ public:
     virtual void notifyOnChange(const paramkey& key) override;
 
   /** the main object of the robot, which is used for position and speed tracking */
-  virtual Primitive* getMainPrimitive() const {
+  virtual const Primitive* getMainPrimitive() const override {
     if(!objects.empty()){
       //      int half = objects.size()/2;
       //      return (objects[half]);
       return (objects[0]);
-    }else return 0;
+    }else return nullptr;
   }
 protected:
 

@@ -139,7 +139,7 @@ void RobotFactory::registerBuiltinTypes() {
     // Register Nimm4 robot
     registerRobotType("Nimm4",
         [](const OdeHandle& ode, const OsgHandle& osg, const std::string& name) {
-            return std::make_unique<Nimm4>(ode, osg, Nimm4::getDefaultConf(), name);
+            return std::make_unique<Nimm4>(ode, osg, name);
         });
     
     // Register FourWheeled robot
@@ -159,7 +159,8 @@ void RobotFactory::registerBuiltinTypes() {
     // Register Barrel2Masses
     registerRobotType("Barrel2Masses",
         [](const OdeHandle& ode, const OsgHandle& osg, const std::string& name) {
-            return std::make_unique<Barrel2Masses>(ode, osg);
+            Sphererobot3MassesConf conf = Sphererobot3Masses::getDefaultConf();
+            return std::make_unique<Barrel2Masses>(ode, osg, conf, name);
         });
     
     // Register SchlangeServo
@@ -195,7 +196,8 @@ void RobotFactory::registerBuiltinTypes() {
     // Register Skeleton
     registerRobotType("Skeleton",
         [](const OdeHandle& ode, const OsgHandle& osg, const std::string& name) {
-            return std::make_unique<Skeleton>(ode, osg, name);
+            SkeletonConf conf = Skeleton::getDefaultConf();
+            return std::make_unique<Skeleton>(ode, osg, conf, name);
         });
     
     // Add more built-in robots as needed

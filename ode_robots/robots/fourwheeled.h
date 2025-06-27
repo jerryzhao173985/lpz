@@ -82,8 +82,8 @@ namespace lpzrobots {
 
     virtual ~FourWheeled();
 
-    virtual int getSensorNumberIntern() override;
-    virtual int getMotorNumberIntern() override;
+    virtual int getSensorNumberIntern() const override;
+    virtual int getMotorNumberIntern() const override;
 
     virtual int getSensorsIntern(sensor* sensors, int sensornumber);
 

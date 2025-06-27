@@ -143,9 +143,9 @@ namespace lpzrobots {
         @param primitiveID if -1 then the main primitive is used, otherwise the primitive with the given index
         @param time time to fixate in seconds (if ==0 then indefinite)
      */
-    virtual void fixateRobot(const GlobalData& global, int primitiveID=-1, double time = 0);
+    virtual void fixateRobot(GlobalData& global, int primitiveID=-1, double time = 0);
     /// release the robot in case it is fixated and turns true in this case
-    virtual bool unfixateRobot(const GlobalData& global);
+    virtual bool unfixateRobot(GlobalData& global);
 
   protected:
 

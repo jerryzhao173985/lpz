@@ -48,12 +48,12 @@ namespace lpzrobots {
   };
 
   AbstractObstacle::~AbstractObstacle(){
-    ifstatic_cast<obstacle_exists>(AbstractObstacle)::destroy();
+    if(obstacle_exists) destroy();
   }
 
   void AbstractObstacle::update(){
     if (obstacle_exists){
-      for (unsigned int i=0; i<obst.size(); ++i) override {
+      for (unsigned int i=0; i<obst.size(); ++i) {
         if(obst[i]) obst[i]->update();
       }
     }
@@ -124,11 +124,11 @@ namespace lpzrobots {
 
   void AbstractObstacle::setTexture(int primitive, int surface, const TextureDescr& texture){
     if(obstacle_exists){
-      if(primitive < static_cast<signed>(textures).size())
+      if(primitive < static_cast<int>(textures.size()))
         obst[primitive]->setTexture(surface,texture);
     }else{
-      if(primitive >= static_cast<signed>(textures).size()) textures.resize(primitive+1);
-      if(surface >= static_cast<signed>(textures[primitive]).size()) textures[primitive].resize(surface+1);
+      if(primitive >= static_cast<int>(textures.size())) textures.resize(primitive+1);
+      if(surface >= static_cast<int>(textures[primitive].size())) textures[primitive].resize(surface+1);
       textures[primitive][surface]=texture;
     }
   }
@@ -136,18 +136,18 @@ namespace lpzrobots {
 
   TextureDescr AbstractObstacle::getTexture(int primitive, int surface) const{
     // take the last primitive we have texture information for.
-    if(primitive >= static_cast<signed>(textures).size())
-      primitive = textures.size()-1 override;
+    if(primitive >= static_cast<int>(textures.size()))
+      primitive = textures.size()-1;
     // take the last surface we have texture information for.
-    if(surface >= static_cast<signed>(textures[primitive]).size()) surface = textures[primitive].size()-1 override;
+    if(surface >= static_cast<int>(textures[primitive].size())) surface = textures[primitive].size()-1;
     if(primitive<0 || surface<0) return TextureDescr();
     return textures[primitive][surface];
   }
 
   std::vector<TextureDescr> AbstractObstacle::getTextures(int primitive) const{
     // take the last primitive we have texture information for.
-    if(primitive >= static_cast<signed>(textures).size())
-      primitive = textures.size()-1 override;
+    if(primitive >= static_cast<int>(textures.size()))
+      primitive = textures.size()-1;
     // take the last surface we have texture information for.
     if(primitive<0) return std::vector<TextureDescr>();
     return textures[primitive];
@@ -158,12 +158,12 @@ namespace lpzrobots {
     odeHandle.substance = substance;
     if (obstacle_exists) {
       FOREACH(vector<Primitive*>, obst, it){
-        (*it)->substance=substance override;
+        (*it)->substance=substance;
       }
     }
   }
 
-  const Substance& AbstractObstacle::getSubstance(){
+  const Substance& AbstractObstacle::getSubstance() const{
     return odeHandle.substance;
   }
 

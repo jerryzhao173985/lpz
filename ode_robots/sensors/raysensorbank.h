@@ -25,6 +25,7 @@
 #define __RAYSENSORBANK_H
 
 #include <vector>
+#include "physicalsensor.h"
 #include "raysensor.h"
 
 namespace lpzrobots {
@@ -33,7 +34,7 @@ namespace lpzrobots {
     Ray sensors can be registered at the bank. Methods for sensing
     and reading the sensor values of all sensors are provided.
  */
-  class RaySensorBank : public Sensor {
+  class RaySensorBank : public PhysicalSensor {
   public:
     RaySensorBank();
 

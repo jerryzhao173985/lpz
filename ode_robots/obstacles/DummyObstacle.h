@@ -31,18 +31,18 @@ namespace lpzrobots {
   /**
    * DummyObstacle which holds a DummyPrimitive (so getMainPrimitive() works).
    */
-  class DummyObstacle{
+  class DummyObstacle : public AbstractObstacle {
     public:
       DummyObstacle(const OdeHandle& odeHandle, const OsgHandle& osgHandle);
-      virtual ~DummyObstacle() override;
+      virtual ~DummyObstacle();
 
       /**
        * sets position of the obstacle and creates/recreates obstacle if necessary
        */
-      virtual void setPose(const osg::Matrix& pose);
+      virtual void setPose(const osg::Matrix& pose) override;
 
       /// return the __PLACEHOLDER_1__ primitive of the obtactle. The meaning of __PLACEHOLDER_2__ is arbitrary
-      virtual Primitive* getMainPrimitive() const override;
+      virtual const Primitive* getMainPrimitive() const override;
 
     protected:
       /// overload this function to create the obstactle. All primitives should go into the list __PLACEHOLDER_3__

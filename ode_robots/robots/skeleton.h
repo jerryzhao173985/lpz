@@ -31,7 +31,8 @@ namespace lpzrobots {
 
   struct SkeletonConf {
   public:
-    double size = 0.0;       ///< scaling factor for robot static_cast<height>static_cast<double>(massfactor); ///< mass factor for all parts
+    double size = 0.0;       ///< scaling factor for robot height
+    double massfactor = 0.0; ///< mass factor for all parts
     bool   useDensity = false; ///< massfactor is interpreted as a density
 
     bool   useVelocityServos = false; ///< if true the more stable velocity controlling servos are used

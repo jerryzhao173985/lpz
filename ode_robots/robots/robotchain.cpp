@@ -43,9 +43,9 @@ namespace lpzrobots {
     created=false;
   };
 
-  int RobotChain::getMotorNumberIntern(){
+  int RobotChain::getMotorNumberIntern() const {
     int num=0;
-    FOREACH(vector<OdeRobot*>, robots, r){
+    FOREACHC(vector<OdeRobot*>, robots, r){
       if(*r) num+=(*r)->getMotorNumber();
     }
     return num;
@@ -57,15 +57,15 @@ namespace lpzrobots {
     FOREACH(vector<OdeRobot*>, robots, r){
       int len = (*r)->getMotorNumber();
       assert(index+len<=motornumber);
-      (*r)->setMotorsIntern(motors+index,len);
+      (*r)->setMotors(motors+index,len);
       index+=len;
     }
   };
 
 
-  int RobotChain::getSensorNumberIntern(){
+  int RobotChain::getSensorNumberIntern() const {
     int num=0;
-    FOREACH(vector<OdeRobot*>, robots, r){
+    FOREACHC(vector<OdeRobot*>, robots, r){
       if(*r) num+=(*r)->getSensorNumber();
     }
     return num;
@@ -146,7 +146,7 @@ namespace lpzrobots {
       nimm2conf.wheelSlip   = conf.wheelSlip;
       nimm2conf.wheelTexture="Images/tire_stripe.rgb";
       nimm2conf.irRange     = 3*conf.size;
-      if(conf.useIR && j== nullptr){
+      if(conf.useIR && j== 0){
         nimm2conf.irFront = true;
       }
       if(conf.useIR && j==conf.numRobots-1){
@@ -154,7 +154,7 @@ namespace lpzrobots {
       }
 
       OdeRobot* nimm2 = new Nimm2(odeHandle, osgHandle, nimm2conf, getName() + "_" + itos(j));
-      if(j== nullptr)
+      if(j== 0)
         nimm2->setColor(osgHandle.getColor("robot1"));
       else
         nimm2->setColor(osgHandle.getColor(conf.color));
@@ -163,10 +163,10 @@ namespace lpzrobots {
       robots.push_back(nimm2);
     }
     for(int j=0; j<conf.numRobots-1; ++j)  {
-      Primitive* p1 = robots[j]->getMainPrimitive();
-      Primitive* p2 = robots[j+1]->getMainPrimitive();
+      const Primitive* p1 = robots[j]->getMainPrimitive();
+      const Primitive* p2 = robots[j+1]->getMainPrimitive();
       //Joint* joint = new BallJoint(p1,p2,(p1->getPosition()+p2->getPosition())/2.0);
-      Joint* joint = new UniversalJoint(p1,p2,(p1->getPosition()+p2->getPosition())/2.0,
+      Joint* joint = new UniversalJoint(const_cast<Primitive*>(p1),const_cast<Primitive*>(p2),(p1->getPosition()+p2->getPosition())/2.0,
                                         Axis(0,0,1)*pose,Axis(0,1,0)*pose
                                         );
       joint->init(odeHandle,osgHandle,true,conf.size/6);
@@ -176,7 +176,7 @@ namespace lpzrobots {
     created=true;
   };
 
-  int RobotChain::getIRSensorNum(){
+  int RobotChain::getIRSensorNum() const {
     return conf.useIR ? 4 : 0;
   }
 
@@ -186,7 +186,7 @@ namespace lpzrobots {
   void RobotChain::destroy(){
     if (created){
       FOREACH(vector<OdeRobot*>, robots, r){
-        if(*r) delete *r override;
+        if(*r) delete *r;
       }
       robots.clear();
       cleanup();
@@ -194,13 +194,13 @@ namespace lpzrobots {
     created=false;
   }
 
-  Primitive* RobotChain::getMainPrimitive() const {
+  const Primitive* RobotChain::getMainPrimitive() const {
     int idx=conf.numRobots/2;
     if(conf.mainRobot>=0)
       idx=conf.mainRobot;
     if((signed int)robots.size()>idx){
       return robots[idx]->getMainPrimitive();
-    }else return 0;
+    }else return nullptr;
   }
 
   void  RobotChain::notifyOnChange(const paramkey& key){

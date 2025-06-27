@@ -34,7 +34,7 @@ namespace lpzrobots {
   /**
    *
    */
-  class ReplayRobot{
+  class ReplayRobot : public OdeRobot {
   public:
     ReplayRobot(const OdeHandle& odeHandle, const OsgHandle& osgHandle, const char* filename);
 
@@ -62,11 +62,11 @@ namespace lpzrobots {
 
     /** returns number of sensors
      */
-    virtual int getSensorNumberInternIntern() override {return sensorEnd - sensorStart + 1; }
+    virtual int getSensorNumberIntern() const override {return sensorEnd - sensorStart + 1; }
 
     /** returns number of motors
      */
-    virtual int getMotorNumberInternIntern() override {return motorEnd - motorStart + 1; }
+    virtual int getMotorNumberIntern() const override {return motorEnd - motorStart + 1; }
 
     /** this function is called in each timestep. It should perform robot-internal checks,
         like space-internal collision detection, sensor resets/update etc.
@@ -76,12 +76,12 @@ namespace lpzrobots {
 
   protected:
     /** the main object of the robot, which is used for position and speed tracking */
-    virtual Primitive* getMainPrimitive() const { return 0; }
+    virtual const Primitive* getMainPrimitive() const override { return nullptr; }
 
-    static bool parseDataFileForHeader(FILE* f, const int& sensorstart, const int& sensorend,  const int& motorstart, const int& motorend);
-    static bool parseDataLine(matrix::const Matrix& data, FILE* f);
-    static bool explicit isEmpty(const char* c);
-    static bool explicit check4Number(const char* c);
+    static bool parseDataFileForHeader(FILE* f, int& sensorstart, int& sensorend,  int& motorstart, int& motorend);
+    static bool parseDataLine(matrix::Matrix& data, FILE* f);
+    static bool isEmpty(const char* c);
+    static bool check4Number(const char* c);
 
 
   protected:

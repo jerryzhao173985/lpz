@@ -29,7 +29,7 @@
 
 namespace lpzrobots {
 
-  typedef struct {
+  typedef struct RobotChainConf {
   public:
     double      size;           ///< scaling factor for robot (size of one robot)
     double      distance;       ///< distance between robots
@@ -48,7 +48,7 @@ namespace lpzrobots {
 
   /** Chain of robots
    */
-  class RobotChain{
+  class RobotChain : public OdeRobot {
   public:
 
     /**
@@ -64,7 +64,7 @@ namespace lpzrobots {
 
     virtual ~RobotChain() { destroy(); };
 
-    static RobotChainConf getDefaultConf() const {
+    static RobotChainConf getDefaultConf() {
       RobotChainConf c;
       c.numRobots  = 5;
       c.size       = 0.6;
@@ -90,26 +90,26 @@ namespace lpzrobots {
     /** sets the pose of the vehicle
         @param pose desired pose matrix
     */
-    virtual void placeIntern(const osg::Matrix& pose);
+    virtual void placeIntern(const osg::Matrix& pose) override;
 
-    virtual int getSensorsIntern(sensor* sensors, int sensornumber);
+    virtual int getSensorsIntern(sensor* sensors, int sensornumber) override;
 
-    virtual void setMotorsIntern(const double* motors, int motornumber);
+    virtual void setMotorsIntern(const double* motors, int motornumber) override;
 
-    virtual int getSensorNumberIntern() const;
+    virtual int getSensorNumberIntern() const override;
 
-    virtual int getMotorNumberIntern() const;
+    virtual int getMotorNumberIntern() const override;
 
-    virtual void explicit doInternalStuff(const GlobalData& globalData);
+    virtual void doInternalStuff(const GlobalData& globalData) override;
 
     /******** CONFIGURABLE ***********/
-    virtual void explicit notifyOnChange(const paramkey& key);
+    virtual void notifyOnChange(const paramkey& key) override;
 
 
     virtual int getIRSensorNum() const;
 
   protected:
-    virtual Primitive* getMainPrimitive() const override;
+    virtual const Primitive* getMainPrimitive() const override;
 
     virtual void create(const osg::Matrix& pose);
 

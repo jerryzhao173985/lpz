@@ -150,6 +150,8 @@ namespace lpzrobots {
     int     object_code; //             (always 2)
     int     sub_type;    //             (we require 1: polyline)
     int     line_style;  //             (0: normal wall, 1: border, rest ignored)
+    int     thickness;   //             thickness value
+    int     depth;       //             depth value (multiple of height)
     std::list<Pos> points;
   };
 
@@ -160,7 +162,7 @@ namespace lpzrobots {
       depth is used as a height value and is multiplied with heightfactor.
       The entire size can be scaled with a global factor
   */
-  class ComplexPlayground{
+  class ComplexPlayground : public AbstractGround {
 
   protected:
 

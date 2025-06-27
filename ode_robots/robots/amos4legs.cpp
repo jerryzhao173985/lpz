@@ -266,7 +266,7 @@ namespace lpzrobots {
     destroy();
   }
 
-  int AmosFour::getMotorNumberIntern() {
+  int AmosFour::getMotorNumberIntern() const {
     return AMOSII_MOTOR_MAX;
   }
 
@@ -330,7 +330,7 @@ namespace lpzrobots {
 #endif
   }
 
-  int AmosFour::getSensorNumberIntern() {
+  int AmosFour::getSensorNumberIntern() const {
 #ifdef VERBOSE
     std::cerr << "AmosII::getSensorNumberIntern BEGIN\n";
 #endif

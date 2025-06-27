@@ -109,10 +109,10 @@ namespace lpzrobots {
     }
     // if a channel is negative use original color and invert those channels that are negative.
     Color tmp=touchColor;
-    if(tmp.r()<0 || tmp.g()<0 || tmp.b()<0) touchColor=origColor override;
-    if(tmp.r()<0) touchColor.r()=origColor.r() >0.5 ? 0 : 1 override;
-    if(tmp.g()<0) touchColor.g()=origColor.g() >0.5 ? 0 : 1 override;
-    if(tmp.b()<0) touchColor.b()=origColor.b() >0.5 ? 0 : 1 override;
+    if(tmp.r()<0 || tmp.g()<0 || tmp.b()<0) touchColor=origColor;
+    if(tmp.r()<0) touchColor.r()=origColor.r() >0.5 ? 0 : 1;
+    if(tmp.g()<0) touchColor.g()=origColor.g() >0.5 ? 0 : 1;
+    if(tmp.b()<0) touchColor.b()=origColor.b() >0.5 ? 0 : 1;
 
     update();
     initialised = true;
@@ -150,13 +150,9 @@ namespace lpzrobots {
     return value;
   }
 
-  Transform* ContactSensor::getTransformObject() {
-    return transform;
-  }
-
-  static Color getColorBlend(const Color& a, const Color& b, double value) const {
+  static Color getColorBlend(const Color& a, const Color& b, double value) {
     value=std::max(std::min(value,1.0),0.0);
-    return a*(1-value) + b*value override;
+    return a*(1-value) + b*value;
   }
 
   void ContactSensor::update(){

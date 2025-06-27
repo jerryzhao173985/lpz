@@ -39,7 +39,7 @@ namespace lpzrobots {
     : AbstractObstacle(odeHandle, osgHandle),
       creategroundPlane(createGround), groundLength(groundLength),
       groundWidth(groundWidth), wallThickness(wallThickness),
-      explicit groundSubstance(odeHandle.substance) {
+      groundSubstance(odeHandle.substance) {
     groundPlane=0;
     groundThickness = 0.1;
     setTexture(0,0,TextureDescr("Images/wall.jpg",-1.5,-3)); // was: wall.rgb
@@ -136,9 +136,10 @@ namespace lpzrobots {
 
 
   void printCornerPointsXY(Box* box, FILE* f){
-    OSGBox* obox = static_cast<OSGBox*>(box->getOSGPrimitive)();
+    OSGBox* obox = static_cast<OSGBox*>(const_cast<OSGPrimitive*>(box->getOSGPrimitive()));
     std::list<Pos> ps;
-    Pos dim = obox->getDim();
+    osg::Vec3 dimVec = obox->getDim();
+    Pos dim(dimVec.x(), dimVec.y(), dimVec.z());
     ps.push_back(Pos(dim.x()*  0.5, dim.y()*  0.5,0));
     ps.push_back(Pos(dim.x()*  0.5, dim.y()* -0.5,0));
     ps.push_back(Pos(dim.x()* -0.5, dim.y()* -0.5,0));
@@ -148,7 +149,7 @@ namespace lpzrobots {
 //     }
     // transform them into global coords
     FOREACH(std::list<Pos>, ps, p){
-      *p = (*p) * box->getPose();
+      *p = Pos((*p) * box->getPose());
     }
     FOREACHC(std::list<Pos>, ps, p){
       fprintf(f,"%f %f\n",p->x(),p->y());
@@ -169,16 +170,17 @@ namespace lpzrobots {
   }
 
   std::list<Position> AbstractGround::getCornerPointsXY() {
-    OSGBox* obox = static_cast<OSGBox*>(groundPlane->getOSGPrimitive)();
+    OSGBox* obox = static_cast<OSGBox*>(const_cast<OSGPrimitive*>(groundPlane->getOSGPrimitive()));
     std::list<Pos> ps;
-    Pos dim =obox->getDim();
+    osg::Vec3 dimVec = obox->getDim();
+    Pos dim(dimVec.x(), dimVec.y(), dimVec.z());
     ps.push_back(Pos(dim.x()*  0.5, dim.y()*  0.5,0));
     ps.push_back(Pos(dim.x()*  0.5, dim.y()* -0.5,0));
     ps.push_back(Pos(dim.x()* -0.5, dim.y()* -0.5,0));
     ps.push_back(Pos(dim.x()* -0.5, dim.y()*  0.5,0));
     // transform them into global coords
     FOREACH(std::list<Pos>, ps, p){
-      *p = (*p) * groundPlane->getPose();
+      *p = Pos((*p) * groundPlane->getPose());
     }
     std::list<Position> posList;
     FOREACH(std::list<Pos>, ps, p){

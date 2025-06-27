@@ -36,7 +36,8 @@ namespace lpzrobots {
       The initialization is a bit confusing: use the contructor (of a inherited class)
       to provide custom parameter; setInitData sets the handles and the camera
       which has to be called before the normal initialization of the Sensor (via init()).
-      A subclass has{
+  */
+  class CameraSensor : public Sensor {
   public:
 
     /** Creates a camera sensor. Use setInitData() to make it useable.

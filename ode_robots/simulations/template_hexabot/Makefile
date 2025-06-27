@@ -30,13 +30,13 @@ BASELIBS = $(shell ode_robots-config $(CFGOPTS) --static --libs) $(shell selforg
 BASELIBSSHARED := $(shell ode_robots-config $(CFGOPTS) --libs) $(shell selforg-config $(CFGOPTS) --libs)
 
 
+LIBSELFORG=$(shell selforg-config $(CFGOPTS) --libfile)
+LIBSELFORGSHARED:=$(shell selforg-config $(CFGOPTS) --solibfile)
+SELFORGSRCPREFIX=$(shell selforg-config $(CFGOPTS) --srcprefix)
 
-
-
-
-
-
-
+LIBODEROBOTS=$(shell ode_robots-config $(CFGOPTS) --libfile)
+LIBODEROBOTSSHARED:=$(shell ode_robots-config $(CFGOPTS) --solibfile)
+ODEROBOTSSRCPREFIX=$(shell ode_robots-config $(CFGOPTS) --srcprefix)
 
 
 
@@ -49,19 +49,30 @@ CXX = g++
 CPPFLAGS = -Wall -pipe -Wno-deprecated $(INC) $(shell selforg-config $(CFGOPTS) --cflags) \
   $(shell ode_robots-config $(CFGOPTS) --intern --cflags)
 
-normal: 
+normal: libode_robots
 	$(MAKE) $(EXEC)
-opt:    
+opt:    libode_robots_opt
 	$(MAKE) CFGOPTS=--opt EXEC=$(EXEC)_opt $(EXEC)_opt
-dbg:    
+dbg:    libode_robots_dbg
 	$(MAKE) CFGOPTS=--dbg EXEC=$(EXEC)_dbg $(EXEC)_dbg
-shared:  
+shared:  libode_robots_shared
 	$(MAKE) BASELIBS="$(BASELIBSSHARED)" LIBSELFORG="$(LIBSELFORGSHARED)" \
 		LIBODEROBOTS="$(LIBODEROBOTSSHARED)" $(EXEC)
 
-$(EXEC): Makefile Makefile.depend $(OFILES) 
+$(EXEC): Makefile Makefile.depend $(OFILES) $(LIBODEROBOTS) $(LIBSELFORG)
 	$(CXX) $(CPPFLAGS) $(OFILES) $(LIBS) -o $(EXEC)
 
+libode_robots:
+	cd $(ODEROBOTSSRCPREFIX) && $(MAKE) lib
+
+libode_robots_dbg:
+	cd $(ODEROBOTSSRCPREFIX) && $(MAKE) dbg
+
+libode_robots_opt:
+	cd $(ODEROBOTSSRCPREFIX) && $(MAKE) opt
+
+libode_robots_shared:
+	cd $(ODEROBOTSSRCPREFIX) && $(MAKE) shared
 
 
 Makefile.depend:
@@ -80,6 +91,10 @@ todo:
 tags:
 	etags $(find -name "*.[ch]")
 
+cleandist: clean-all
+clean-all: clean
+	cd $(ODEROBOTSSRCPREFIX) && make clean-all
+	cd $(SELFORGSRCPREFIX) && make clean-all
 
 
 clean:

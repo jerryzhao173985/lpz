@@ -102,10 +102,10 @@ namespace lpzrobots {
     virtual void setMotorsIntern(const double* motorsArray, int motornumber) { }
 
     /** overload this function in a subclass to return the number of internal sensors */
-    virtual int getSensorNumberIntern() { return 0; }
+    virtual int getSensorNumberIntern() const { return 0; }
 
     /** overload this function in a subclass to return the number of internal motors */
-    virtual int getMotorNumberIntern() { return 0; }
+    virtual int getMotorNumberIntern() const { return 0; }
 
   public:
     /** adds a sensor to the robot. Must be called before agents initializes, otherwise unknown effect.
@@ -252,9 +252,9 @@ namespace lpzrobots {
         @param primitiveID if -1 then the main primitive is used, otherwise the primitive with the given index
         @param duration time to fixate in seconds (if ==0 then indefinite)
      */
-    virtual void fixate(const GlobalData& global, int primitiveID=-1, double duration = 0);
+    virtual void fixate(GlobalData& global, int primitiveID=-1, double duration = 0);
     /// release the robot in case it is fixated and return true in this case
-    virtual bool unFixate(const GlobalData& global);
+    virtual bool unFixate(GlobalData& global);
 
 
   protected:

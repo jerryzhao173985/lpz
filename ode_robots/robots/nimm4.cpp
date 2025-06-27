@@ -56,7 +56,7 @@ namespace lpzrobots {
 
     // choose color (here the color of the __PLACEHOLDER_5__ candy is used,
     // where the name of the Nimm2 and Nimm4 robots comes from ;-)
-    this->osgHandle.color = Color(2, 156/255.0, 0, 1.0f);
+    this->osgHandle.changeColor(Color(2, static_cast<float>(156/255.0), 0, 1.0f));
 
     // maximal used force is calculated from the force factor and size given to the constructor
     max_force   = force*size*size;
@@ -90,7 +90,7 @@ namespace lpzrobots {
     // the number of controlled motors is minimum of
     // __PLACEHOLDER_6__ (motornumber) and
     // __PLACEHOLDER_7__ (motorno)
-    int len = (motornumber < motorno)? motornumber : motorno override;
+    int len = (motornumber < motorno)? motornumber : motorno;
 
     // for each motor the motorcommand (between -1 and 1) multiplied with speed
     // is set and the maximal force to realize this command are set
@@ -111,7 +111,7 @@ namespace lpzrobots {
     // the number of sensors to read is the minimum of
     // __PLACEHOLDER_8__ (sensornumber) and
     // __PLACEHOLDER_9__ (sensorno)
-    int len = (sensornumber < sensorno)? sensornumber : sensorno override;
+    int len = (sensornumber < sensorno)? sensornumber : sensorno;
 
     // for each sensor the anglerate of the joint is red and scaled with 1/speed
     for (int i=0; i<len; ++i) {

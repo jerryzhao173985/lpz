@@ -41,7 +41,7 @@ namespace lpzrobots {
    * It consists of a number of equal elements, each linked
    * by a joint hinge powered by 1 servos
    **/
-  class SchlangeServo{
+  class SchlangeServo : public Schlange {
   private:
     std::vector <HingeServo*> servos;
 
@@ -60,7 +60,7 @@ namespace lpzrobots {
      *@param motors pointer to the array, motor values are scaled to [-1,1]
      *@param motornumber length of the motor array
      **/
-    virtual void setMotorsIntern( const double* motors, int motornumber );
+    virtual void setMotorsIntern( const double* motors, int motornumber ) override;
 
     /**
      *Writes the sensor values to an array in the memory.
@@ -68,22 +68,22 @@ namespace lpzrobots {
      *@param sensornumber length of the sensor array
      *@return number of actually written sensors
      **/
-    virtual int getSensorsIntern( double* sensors, int sensornumber );
+    virtual int getSensorsIntern( double* sensors, int sensornumber ) override;
 
     /** returns number of sensors
      */
-    virtual int getSensorNumberIntern() override { assert(created); return servos.size(); }
+    virtual int getSensorNumberIntern() const override { assert(created); return servos.size(); }
 
     /** returns number of motors
      */
-    virtual int getMotorNumberIntern() override { assert(created); return servos.size(); }
+    virtual int getMotorNumberIntern() const override { assert(created); return servos.size(); }
 
     /******** CONFIGURABLE ***********/
-    virtual void explicit notifyOnChange(const paramkey& key);
+    virtual void notifyOnChange(const paramkey& key) override;
 
   private:
-    virtual void create(const osg::Matrix& pose);
-    virtual void destroy();
+    virtual void create(const osg::Matrix& pose) override;
+    virtual void destroy() override;
   };
 
 }

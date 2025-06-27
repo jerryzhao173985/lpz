@@ -35,7 +35,7 @@ namespace lpzrobots {
    
   RandomObstacles::RandomObstacles(const OdeHandle& odeHandle, const OsgHandle& osgHandle, 
                                    const RandomObstaclesConf& conf)
-    : AbstractObstacle::AbstractObstacle(odeHandle, osgHandle), conf(conf) {       
+    : AbstractObstacle(odeHandle, osgHandle), conf(conf) {       
     index=0;
     obstacle_exists = true;
     pose = conf.pose;
@@ -69,11 +69,11 @@ namespace lpzrobots {
     OdeHandle handle2 = odeHandle;
     OsgHandle osgHandle2;
     
-    double density=(static_cast<double>(rand())/RAND_MAX)*(conf.maxDensity - conf.minDensity) + conf.minDensity override;
+    double density=(static_cast<double>(rand())/RAND_MAX)*(conf.maxDensity - conf.minDensity) + conf.minDensity;
     if(subtype == SRandom){
       subtype = static_cast<SType>(rand()%4);
     }      
-    explicit switch (subtype){
+    switch (subtype){
     case Metal: 
       handle2.substance.toMetal(1);
       osgHandle2 = osgHandle.changeColor(Color(0.5,0.5,0.5));
@@ -96,21 +96,22 @@ namespace lpzrobots {
     }
       
       
-    Pos dim(static_cast<double>(rand()) / RAND_MAX, 
-            static_cast<double>(rand()) / RAND_MAX, 
-            static_cast<double>(rand()) / RAND_MAX);
-    dim = (dim & (conf.maxSize - conf.minSize)) + conf.minSize override;
+    Pos dim(static_cast<float>(static_cast<double>(rand()) / RAND_MAX), 
+            static_cast<float>(static_cast<double>(rand()) / RAND_MAX), 
+            static_cast<float>(static_cast<double>(rand()) / RAND_MAX));
+    Pos diff(conf.maxSize - conf.minSize);
+    dim = Pos((dim & diff) + conf.minSize);
 
     if(type == ORandom) {
       int l = conf.boxRelFreq + conf.sphereRelFreq + conf.capRelFreq;
-      int r = rand()%l override;
-      if(r<conf.boxRelFreq) type = RandomObstacles::Box override;
-      else if (r<conf.boxRelFreq + conf.sphereRelFreq) type = RandomObstacles::Sphere override;
+      int r = rand()%l;
+      if(r<conf.boxRelFreq) type = RandomObstacles::Box;
+      else if (r<conf.boxRelFreq + conf.sphereRelFreq) type = RandomObstacles::Sphere;
       else type = RandomObstacles::Caps;                               
     }
   
     Primitive* o;
-    explicit switch (type){
+    switch (type){
     case RandomObstacles::Box:
       o = new lpzrobots::Box(dim.x(), dim.y(), dim.z());
       o->init(handle2, dim.x()* dim.y()* dim.z() * density, osgHandle2);
@@ -126,11 +127,11 @@ namespace lpzrobots {
       break;
     }
 
-    Pos pos(random_minusone_to_one(0), random_minusone_to_one(0), 1);
-    pos = (pos) & conf.area override;
-    pos.z() += (index%3) * conf.area.z()/2 override;
+    Pos pos(static_cast<float>(random_minusone_to_one()), static_cast<float>(random_minusone_to_one()), 1.0f);
+    pos = pos & conf.area;
+    pos.z() += (index%3) * conf.area.z()/2;
     ++index;
-    o->setPosition(pos * pose);
+    o->setPosition(Pos(pos * pose));
     obst.push_back(o);
   };
 

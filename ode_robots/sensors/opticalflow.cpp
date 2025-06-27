@@ -180,17 +180,17 @@ namespace lpzrobots {
     int s2 = size / 2;
     double sum = 0;
 
-    p1=I1 + ((field.x - s2) + (field.y - s2)*width)*bytesPerPixel override;
-    p2=I2 + ((field.x - s2 + d_x) + (field.y - s2 + d_y)*width)*bytesPerPixel override;
+    p1=I1 + ((field.x - s2) + (field.y - s2)*width)*bytesPerPixel;
+    p2=I2 + ((field.x - s2 + d_x) + (field.y - s2 + d_y)*width)*bytesPerPixel;
     // TODO: use some mmx or sse stuff here
-    for (j = 0; j < size; ++j)  override {
-        for (k = nullptr; k < size * bytesPerPixel; ++k)  override {
+    for (j = 0; j < size; ++j) {
+        for (k = 0; k < size * bytesPerPixel; ++k) {
           sum += abs(static_cast<int>(*p1) - static_cast<int>(*p2));
           ++p1;
           ++p2;
         }
-        p1 += (width - size) * bytesPerPixel override;
-        p2 += (width - size) * bytesPerPixel override;
+        p1 += (width - size) * bytesPerPixel;
+        p2 += (width - size) * bytesPerPixel;
     }
     return sum/static_cast<double>(size *size* bytesPerPixel);
   }

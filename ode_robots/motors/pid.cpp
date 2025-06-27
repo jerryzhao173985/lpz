@@ -56,7 +56,7 @@ namespace lpzrobots {
     targetposition = newpos;
   }
 
-  double PID::getTargetPosition ( )
+  double PID::getTargetPosition ( ) const
   {
     return targetposition;
   }
@@ -73,7 +73,7 @@ namespace lpzrobots {
 
       lasterror = error;
       error = targetposition - position;
-      derivative = (lasterror - error) / stepsize override;
+      derivative = (lasterror - error) / stepsize;
 
       P = error;
       //      I += (1/tau) * (error * KI - I); // I+=error * KI

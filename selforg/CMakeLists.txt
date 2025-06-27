@@ -24,7 +24,7 @@ set(SELFORG_SOURCES
 
 # Create library
 add_library(selforg ${SELFORG_SOURCES})
-add_library(LPZRobots::selforg ALIAS selforg)
+add_library(lpzrobots::selforg ALIAS selforg)
 
 # Set include directories
 target_include_directories(selforg
@@ -50,6 +50,9 @@ target_link_libraries(selforg
         Threads::Threads
 )
 
+# Compiler features
+target_compile_features(selforg PUBLIC cxx_std_17)
+
 # GSL support (optional)
 if(GSL_FOUND)
     target_include_directories(selforg PRIVATE ${GSL_INCLUDE_DIRS})
@@ -65,6 +68,38 @@ if(APPLE)
 elseif(UNIX)
     target_compile_definitions(selforg PRIVATE LINUX)
 endif()
+
+# SIMD optimizations
+if(ENABLE_SIMD)
+    include(CheckCXXCompilerFlag)
+    
+    # Check for ARM NEON (Apple Silicon)
+    if(CMAKE_SYSTEM_PROCESSOR MATCHES "arm64|aarch64")
+        check_cxx_compiler_flag("-march=armv8-a+simd" HAS_ARM_NEON)
+        if(HAS_ARM_NEON)
+            target_compile_options(selforg PRIVATE -march=armv8-a+simd)
+            target_compile_definitions(selforg PRIVATE USE_ARM_NEON)
+            message(STATUS "Enabling ARM NEON SIMD optimizations for selforg")
+        endif()
+    # Check for x86 SIMD
+    elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64|i686")
+        check_cxx_compiler_flag("-mavx2" HAS_AVX2)
+        if(HAS_AVX2)
+            target_compile_options(selforg PRIVATE -mavx2)
+            target_compile_definitions(selforg PRIVATE USE_AVX2)
+            message(STATUS "Enabling AVX2 SIMD optimizations for selforg")
+        endif()
+    endif()
+endif()
+
+# Set library properties
+set_target_properties(selforg PROPERTIES
+    VERSION ${PROJECT_VERSION}
+    SOVERSION ${PROJECT_VERSION_MAJOR}
+    CXX_VISIBILITY_PRESET hidden
+    VISIBILITY_INLINES_HIDDEN ON
+    POSITION_INDEPENDENT_CODE ON
+)
 
 # Create symlinks for headers (mimics original build system)
 file(GLOB_RECURSE HEADER_FILES

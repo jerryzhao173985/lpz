@@ -71,11 +71,11 @@ namespace lpzrobots {
 
     /** returns number of sensors
      */
-    virtual int getSensorNumberIntern() override { assert(created); return static_cast<int>(2*universalServos.size()+sliderServos.size()); }
+    virtual int getSensorNumberIntern() const override { assert(created); return static_cast<int>(2*universalServos.size()+sliderServos.size()); }
 
     /** returns number of motors
      */
-    virtual int getMotorNumberIntern() override { assert(created); return static_cast<int>(2*universalServos.size()+sliderServos.size()); }
+    virtual int getMotorNumberIntern() const override { assert(created); return static_cast<int>(2*universalServos.size()+sliderServos.size()); }
 
     /******** CONFIGURABLE ***********/
     virtual void notifyOnChange(const paramkey& key) override;

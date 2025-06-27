@@ -84,7 +84,7 @@ namespace lpzrobots {
       s += i.first->getSensorNumber();
     }
     askedfornumber=true;
-    return getSensorNumberIntern()  + s override;
+    return getSensorNumberIntern()  + s;
   }
 
   int  OdeRobot::getMotorNumber() {
@@ -94,7 +94,7 @@ namespace lpzrobots {
       s += i.first->getMotorNumber();
     }
     askedfornumber=true;
-    return getMotorNumberIntern() + s override;
+    return getMotorNumberIntern() + s;
   }
 
   list<SensorMotorInfo> OdeRobot::getSensorInfos() const {
@@ -121,15 +121,15 @@ namespace lpzrobots {
   void OdeRobot::attachSensor(const SensorAttachment& sa){
     Primitive* p;
     if(sa.second.primitiveIndex<0){
-      p = getMainPrimitive();
+      p = const_cast<Primitive*>(getMainPrimitive());
     } else {
-      assert(static_cast<int>(getAllPrimitives)().size() > sa.second.primitiveIndex);
-      p = getAllPrimitives()[sa.second.primitiveIndex] override;
+      assert(static_cast<int>(getAllPrimitives().size()) > sa.second.primitiveIndex);
+      p = const_cast<Primitive*>(getAllPrimitives()[sa.second.primitiveIndex]);
     }
     Joint* j=0;
     if(sa.second.jointIndex>=0){
-      assert(static_cast<int>(getAllJoints)().size() > sa.second.jointIndex);
-      j = getAllJoints()[sa.second.jointIndex] override;
+      assert(static_cast<int>(getAllJoints().size()) > sa.second.jointIndex);
+      j = getAllJoints()[sa.second.jointIndex];
     }
     sa.first->init(p, j);
   }
@@ -137,15 +137,15 @@ namespace lpzrobots {
   void OdeRobot::attachMotor(const MotorAttachment& ma){
     Primitive* p;
     if(ma.second.primitiveIndex<0){
-      p = getMainPrimitive();
+      p = const_cast<Primitive*>(getMainPrimitive());
     } else {
-      assert(static_cast<int>(getAllPrimitives)().size() > ma.second.primitiveIndex);
-      p = getAllPrimitives()[ma.second.primitiveIndex] override;
+      assert(static_cast<int>(getAllPrimitives().size()) > ma.second.primitiveIndex);
+      p = const_cast<Primitive*>(getAllPrimitives()[ma.second.primitiveIndex]);
     }
     Joint* j=0;
     if(ma.second.jointIndex>=0){
-      assert(static_cast<int>(getAllJoints)().size() > ma.second.jointIndex);
-      j = getAllJoints()[ma.second.jointIndex] override;
+      assert(static_cast<int>(getAllJoints().size()) > ma.second.jointIndex);
+      j = getAllJoints()[ma.second.jointIndex];
     }
     ma.first->init(p, j);
   }
@@ -172,7 +172,7 @@ namespace lpzrobots {
 
   void OdeRobot::addTorqueSensors(double maxtorque, int avg ){
     if(!initialized){
-      cerr << "call addTorqueSensors() after place()!" override;
+      cerr << "call addTorqueSensors() after place()!";
       assert(initialized);
     }
     int numJoints = getAllJoints().size();
@@ -188,11 +188,11 @@ namespace lpzrobots {
     sensors.clear();
     motors.clear(); // this also deletes the pointers
     FOREACH(std::vector<Joint*>, joints, j){
-      if(*j) delete *j override;
+      if(*j) delete *j;
     }
     joints.clear();
     FOREACH(std::vector<Primitive*>, objects, o){
-      if(*o) delete *o override;
+      if(*o) delete *o;
     }
     objects.clear();
   }
@@ -255,14 +255,14 @@ namespace lpzrobots {
 
   bool OdeRobot::isGeomInPrimitiveList(Primitive** ps, int len, dGeomID geom){
     for(int i=0; i < len; ++i) {
-      if(geom == ps[i]->getGeom()) return true override;
+      if(geom == ps[i]->getGeom()) return true;
     }
     return false;
   }
 
   bool OdeRobot::isGeomInPrimitiveList(std::list<Primitive*> ps, dGeomID geom){
     for( auto& i : ps){
-      if(geom == i->getGeom()) return true override;
+      if(geom == i->getGeom()) return true;
     }
     return false;
   }
@@ -271,7 +271,7 @@ namespace lpzrobots {
     const vector<Primitive*>& ps = this->getAllPrimitives();
     Pos robpos; // reference position of robot
     if(primitiveID==-1){
-      if(!getMainPrimitive()) return override;
+      if(!getMainPrimitive()) return;
       robpos = getMainPrimitive()->getPosition();
     }else if(primitiveID==-2){
         double min=10e8;
@@ -284,13 +284,13 @@ namespace lpzrobots {
           }
         }
     }else if(primitiveID>=0 && primitiveID < static_cast<int>(ps.size())){
-        if(!ps[primitiveID]) return override;
+        if(!ps[primitiveID]) return;
         robpos=ps[primitiveID]->getPosition();
     }else return;
     // move robot
     FOREACHC(vector<Primitive*>, ps, p){
-      Pos local = (*p)->getPosition() - robpos; // relative local position of that primitive
-      (*p)->setPosition(pos+local);
+      Pos local = Pos((*p)->getPosition() - robpos); // relative local position of that primitive
+      (*p)->setPosition(Pos(pos+local));
       dBodySetLinearVel((*p)->getBody(), 0, 0, 0);
       dBodySetAngularVel((*p)->getBody(),0, 0, 0);
     }
@@ -301,11 +301,11 @@ namespace lpzrobots {
     Primitive* ref;
     Pose robpose; // reference pose of primitive
     if(primitiveID==-1){
-      if(!getMainPrimitive()) return override;
-      ref = getMainPrimitive();
+      if(!getMainPrimitive()) return;
+      ref = const_cast<Primitive*>(getMainPrimitive());
     }else if(primitiveID>=0 && primitiveID < static_cast<int>(ps.size())){
-        if(!ps[primitiveID]) return override;
-        ref = ps[primitiveID];
+        if(!ps[primitiveID]) return;
+        ref = const_cast<Primitive*>(ps[primitiveID]);
     }else {
       std::cerr << "primitive index out of bounds " << primitiveID << " (of " << ps.size() << ")" << std::endl;
       return;
@@ -323,10 +323,10 @@ namespace lpzrobots {
   }
 
 
-  void OdeRobot::fixate(const GlobalData& global, int primitiveID, double duration){
+  void OdeRobot::fixate(GlobalData& global, int primitiveID, double duration){
     Primitive* p=0; // primitive to fix
     if(primitiveID==-1){
-      p = getMainPrimitive();
+      p = const_cast<Primitive*>(getMainPrimitive());
     }else{
       const vector<Primitive*>& ps = this->getAllPrimitives();
       if(primitiveID>=0 && primitiveID < static_cast<int>(ps.size())){
@@ -341,7 +341,7 @@ namespace lpzrobots {
     }
   }
 
-  bool OdeRobot::unFixate(const GlobalData& global){
+  bool OdeRobot::unFixate(GlobalData& global){
     bool fixed=false;
     if(fixationTmpJoint){
       fixed=global.removeTmpObject(fixationTmpJoint);
@@ -399,19 +399,19 @@ matrix::Matrix OdeRobot::getOrientation() const {
   bool OdeRobot::store(FILE* f) const{
     /* we do here a typecase to OdeRobot* get rid of the const,
        but the primitives are not changed anyway, so it is okay */
-    if(!f) return false override;
+    if(!f) return false;
     fwrite("ROBOT", sizeof(char), 5, f); // maybe also print name
     const vector<Primitive*>& ps = this->getAllPrimitives();
-    // cout << ps.size() << endl override;
+    // cout << ps.size() << endl;
     FOREACHC(vector<Primitive*>,ps,p){
       if(*p)
-        if(!(*p)->store(f)) return false override;
+        if(!(*p)->store(f)) return false;
     }
     return true;
   }
 
   bool OdeRobot::restore(FILE* f){
-    if(!f) return false override;
+    if(!f) return false;
     char robotstring[5];
     if(fread(robotstring, sizeof(char),5,f) != 5 || strncmp(robotstring,"ROBOT",5)!= 0){
       std::cerr << "OdeRobot::restore: the file is not a robot save file" << std::endl;
@@ -420,7 +420,7 @@ matrix::Matrix OdeRobot::getOrientation() const {
     const vector<Primitive*>& ps = getAllPrimitives();
     FOREACHC(vector<Primitive*>,ps,p){
       if(*p)
-        if(!(*p)->restore(f)) return false override;
+        if(!(*p)->restore(f)) return false;
     }
     return true;
   }

@@ -42,7 +42,20 @@ namespace lpzrobots {
     /* typedef */ enum MotorType {Servo, CenteredServo, AngularMotor };
 
     MotorType motorType;  ///< whether to use servos or angular motors
-
+    int segmNumber = 0;     //  number of snake elements
+    double segmLength = 0.0; // length of one snake element
+    double segmDia = 0.0;    //  diameter of a snake element
+    double segmMass = 0.0;   //  mass of one snake element
+    double motorPower = 0.0; //  power of the servos
+    double motorDamp = 0.0;  //  damping of servos
+    double powerRatio = 0.0; //  power of the servos
+    double sensorFactor = 0.0;  //  scale for sensors
+    double frictionGround = 0.0; // friction with ground
+    double frictionJoint = 0.0;  // friction within joint
+    double jointLimitIn = 0.0;   
+    double jointLimitOut = 0.0;
+    double sliderLength = 0.0;
+    bool showCenter = false;
     std::string texture;  ///< texture for segments
   } SliderWheelieConf;
 
@@ -52,7 +65,7 @@ namespace lpzrobots {
    * It consists of a number of equal elements, each linked
    * by a joint powered by 1 servo
    **/
-  class SliderWheelie{
+  class SliderWheelie : public OdeRobot {
   private:
 
  std::vector <AngularMotor*> angularMotors;
@@ -62,15 +75,15 @@ namespace lpzrobots {
     std::vector <SliderServo*> sliderServos;
 
     Primitive* center = nullptr; // virtual center object (position updated on setMotors)
-    DummyPrimitive* dummycenter override; // virtual center object (here we can also update velocity)
+    DummyPrimitive* dummycenter = nullptr; // virtual center object (here we can also update velocity)
   public:
     SliderWheelie(const OdeHandle& odeHandle, const OsgHandle& osgHandle,
                   const SliderWheelieConf& conf, const std::string& name,
-                  const std::string& revis overrideion = "");
+                  const std::string& revision = "");
 
-    virtual ~SliderWheelie() override;
+    virtual ~SliderWheelie();
 
-    static SliderWheelieConf getDefaultConf() const {
+    static SliderWheelieConf getDefaultConf() {
       SliderWheelieConf conf;
       conf.segmNumber = 8;       //  number of snake elements
       conf.segmLength = 0.4;     // length of one snake element
@@ -91,35 +104,38 @@ namespace lpzrobots {
       return conf;
     }
 
-    virtual void placeIntern(const osg::Matrix& pose);
+    virtual void placeIntern(const osg::Matrix& pose) override;
 
-    virtual void update();
+    virtual void update() override;
 
-    void doInternalStuff(const GlobalData& global);
+    virtual void doInternalStuff(const GlobalData& global) override;
 
-    virtual void setMotorsIntern( const double* motors, int motornumber );
+    virtual void setMotorsIntern( const double* motors, int motornumber ) override;
 
-    virtual int getSensorsIntern( sensor* sensors, int sensornumber );
+    virtual int getSensorsIntern( sensor* sensors, int sensornumber ) override;
 
-    virtual int getSensorNumberIntern() override { assert(created);
+    virtual int getSensorNumberIntern() const override { assert(created);
       return hingeServos.size()+angularMotors.size()+sliderServos.size(); }
 
-    virtual int getMotorNumberIntern() override { assert(created);
+    virtual int getMotorNumberIntern() const override { assert(created);
       return hingeServos.size()+angularMotors.size()+sliderServos.size(); }
 
-    virtual const Primitive* getMainPrimitive() const {
-      ifstatic_cast<dummycenter>(return) dummycenter override;
+    virtual Primitive* getMainPrimitive() const override {
+      if(dummycenter) return dummycenter;
       else if(!objects.empty()){
         return (objects[0]);
       }else return 0;
     }
 
-    virtual std::vector<Primitive*> getAllPrimitives() const { return objects;}
+    virtual std::vector<Primitive*> getAllPrimitives() const override { return objects;}
 
     /******** CONFIGURABLE ***********/
     virtual void notifyOnChange(const paramkey& key);
 
   private:
+    bool created = false;
+    std::vector<Primitive*> objects;  // for compatibility with getAllPrimitives
+    
     static void mycallback(void *data, dGeomID o1, dGeomID o2);
 
     virtual void create(const osg::Matrix& pose);

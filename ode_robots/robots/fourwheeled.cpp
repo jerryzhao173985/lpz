@@ -52,7 +52,7 @@ namespace lpzrobots {
     destroy();
   }
 
-  int FourWheeled::getSensorNumberIntern(){
+  int FourWheeled::getSensorNumberIntern() const {
     if(conf.twoWheelMode){
       assert(Nimm4::getSensorNumberIntern() == 4);
       return 2;
@@ -74,7 +74,7 @@ namespace lpzrobots {
     return len;
   };
 
-  int FourWheeled::getMotorNumberIntern(){
+  int FourWheeled::getMotorNumberIntern() const {
     if(conf.twoWheelMode)
       return 2;
     else

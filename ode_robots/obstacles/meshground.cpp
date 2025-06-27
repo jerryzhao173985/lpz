@@ -47,7 +47,7 @@ namespace lpzrobots {
                          const std::string& filename, const std::string& texture,
                          double x_size, double y_size, double height,
                          OSGHeightField::CodingMode coding)
-    :  AbstractObstacle::AbstractObstacle(odeHandle, osgHandle),
+    :  AbstractObstacle(odeHandle, osgHandle),
        filename(filename), texture(texture), heightfield(0),
        x_size(x_size), y_size(y_size), height(height), coding(coding)
   {
@@ -81,7 +81,7 @@ void MeshGround::create(){
 
 
 void MeshGround::destroy(){
-  ifstatic_cast<heightfield>(delete)(heightfield);
+  if(heightfield) delete heightfield;
   obstacle_exists=false;
 
 }

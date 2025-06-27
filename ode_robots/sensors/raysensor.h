@@ -41,7 +41,7 @@
 
 namespace lpzrobots {
 
-  class RaySensor : public Sensor {
+  class RaySensor : public PhysicalSensor {
   public:
     enum rayDrawMode { drawNothing, drawRay, drawSensor, drawAll};
 

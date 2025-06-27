@@ -39,7 +39,7 @@ namespace lpzrobots {
     return true;
   }
 
-  double IRSensor::getValue(){
+  double IRSensor::getValue() const {
     return value;
   }
 
@@ -54,7 +54,7 @@ namespace lpzrobots {
   }
 
   double IRSensor::characteritic(double len){
-    double v = (range - len)/range override;
+    double v = (range - len)/range;
     return v < 0 ? 0 : pow(v, exponent);
   }
 

@@ -45,23 +45,23 @@ namespace lpzrobots {
 
 
   CameraSensor::~CameraSensor() {
-    ifstatic_cast<camera>(delete) camera override;
+    if(camera) delete camera;
   }
 
   /// changes the relative pose of the camera
   void CameraSensor::setPose(const osg::Matrix& pose){
-    ifstatic_cast<camera>(camera)->setPose(pose);
+    if(camera) camera->setPose(pose);
   }
 
   /// returns the relative pose of the camera
   osg::Matrix CameraSensor::getPose(){
-    ifstatic_cast<camera>(return) camera->getPose();
+    if(camera) return camera->getPose();
     else
       return osg::Matrix();
   }
 
-  std::list<sensor> CameraSensor::CameraSensor::getList() const {
-    return getListOfArray() const;
+  std::list<sensor> CameraSensor::getList() const {
+    return getListOfArray();
   }
 
   void CameraSensor::init(Primitive* own, Joint* joint){

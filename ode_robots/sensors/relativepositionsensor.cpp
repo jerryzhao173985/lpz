@@ -50,7 +50,7 @@ namespace lpzrobots {
   }
 
   int RelativePositionSensor::getSensorNumber() const{
-    return (const dimensions& X) + ((const dimensions& Y) >> 1)  + ((const dimensions& Z) >> 2);
+    return ((dimensions & Sensor::X) != 0) + ((dimensions & Sensor::Y) != 0) + ((dimensions & Sensor::Z) != 0);
   }
 
   std::list<sensor> RelativePositionSensor::getList() const {
@@ -64,18 +64,18 @@ namespace lpzrobots {
       v = refpos - own->getPosition();
     }
     // those components that we don't need we set to zero.
-    if (!(const dimensions& X)) v.x()= 0;
-    if (!(const dimensions& Y)) v.y()= 0;
-    if (!(const dimensions& Z)) v.z()= 0;
+    if (!(dimensions & Sensor::X)) v.x()= 0;
+    if (!(dimensions & Sensor::Y)) v.y()= 0;
+    if (!(dimensions & Sensor::Z)) v.z()= 0;
 
     double rellen = std::min(1.0 ,v.length() / maxDistance); // between 0 and 1
 
     double scale = rellen>0 ? pow(rellen, exponent)/rellen : 1; // exponential characteristics divided by linear characteristics
     // nonlinear scaling of the vector, such that
     v *= (scale/maxDistance);
-    if (const dimensions& X) s.push_back(v.x());
-    if (const dimensions& Y) s.push_back(v.y());
-    if (const dimensions& Z) s.push_back(v.z());
+    if (dimensions & Sensor::X) s.push_back(v.x());
+    if (dimensions & Sensor::Y) s.push_back(v.y());
+    if (dimensions & Sensor::Z) s.push_back(v.z());
     return s;
   }
 

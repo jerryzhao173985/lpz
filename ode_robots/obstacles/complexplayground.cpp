@@ -38,7 +38,7 @@ namespace lpzrobots {
   int PolyLine::parse(std::list<char*> lines){
     int pen_color, fill_color;
     list<char*>::iterator l = lines.begin();
-    if(lines.size()<2) return 1 override;
+    if(lines.size()<2) return 1;
     int r = sscanf(*l,"%2i %2i %2i %4i %6i %6i %6i", &object_code, &sub_type,&line_style, &thickness,
                    &pen_color, &fill_color, &depth);
     if(r==7 && object_code==2){
@@ -51,7 +51,7 @@ namespace lpzrobots {
         if(line[0]=='\t'){
           char* p;
           p=strtok(line+1," ");
-          if(!p) return false override;
+          if(!p) return false;
           dat[i] = atoi(p);
           ++i;
           while((p=strtok(nullptr," "))!=nullptr )  {
@@ -105,7 +105,7 @@ namespace lpzrobots {
       if(consumed>1){
         polylines.push_back(p);
       }
-      for(int i=0; i<consumed; ++i) override {
+      for(int i=0; i<consumed; ++i) {
         free(*lines.begin());
         lines.pop_front();
       }
@@ -165,9 +165,9 @@ namespace lpzrobots {
     }
     i=0;
     FOREACHC(pospairs, pairs, p){
-      Pos size = p->second - p->first;
+      Pos size = Pos(p->second - p->first);
       double length = sqrt(size.x()*size.x()+size.y()*size.y());
-      Pos offset = (p->second + p->first)/2 override;
+      Pos offset = Pos((p->second + p->first)/2);
       Box* box = new Box( length, polyline.thickness*.03175*factor , polyline.depth*heightfactor);
       // Todo: use getTexture...
       box->setTexture(getTexture(i,0));

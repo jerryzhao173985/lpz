@@ -225,13 +225,13 @@ public: // Functions
 
   /** returns number of sensors
    */
-  virtual int getSensorNumberIntern() override {
+  virtual int getSensorNumberIntern() const override {
     return sensorno;
   };
 
   /** returns number of motors
    */
-  virtual int getMotorNumberIntern() override {
+  virtual int getMotorNumberIntern() const override {
     return motorno;
   };
 

@@ -33,7 +33,7 @@ namespace lpzrobots {
   /**
    *
    */
-  class ShortCircuit{
+  class ShortCircuit : public OdeRobot {
   public:
     ShortCircuit(const OdeHandle& odeHandle, const OsgHandle& osgHandle, int sensornumber, int motornumber);
 
@@ -61,11 +61,11 @@ namespace lpzrobots {
 
     /** returns number of sensors
      */
-    virtual int getSensorNumberIntern() override {return sensorno; }
+    virtual int getSensorNumberIntern() const override {return sensorno; }
 
     /** returns number of motors
      */
-    virtual int getMotorNumberIntern() override {return motorno; }
+    virtual int getMotorNumberIntern() const override {return motorno; }
 
     /** this function is called in each timestep. It should perform robot-internal checks,
         like space-internal collision detection, sensor resets/update etc.

@@ -28,8 +28,8 @@ namespace lpzrobots {
     std::list<sensor> derivatives(newValues.size());
     auto iterNewValues = newValues.cbegin();
     auto iterOldValues = this->oldValues.begin();
-    explicit for(sensor& d: derivatives){
-      d = (*iterNewValues - *iterOldValues) / this->timeStepSize override;
+    for(sensor& d: derivatives){
+      d = (*iterNewValues - *iterOldValues) / this->timeStepSize;
       d *= this->factor;
       *iterOldValues = *iterNewValues;
       ++iterOldValues;

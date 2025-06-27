@@ -45,8 +45,9 @@ namespace lpzrobots {
 
 
   /**
-   *This is a class, which models a snake like robot. It consists of a number of equal elements, each linked
-   *by a joint. This class is{
+   * This is a class, which models a spherical robot with 3 internal sliders.
+   */
+  class Sphererobot : public OdeRobot {
   public:
     /* typedef */ enum objects { Base, Pendular, Pole1Bot, Pole2Bot, Pole3Bot,
                            Pole1Top , Pole2Top, Pole3Top, Last};
@@ -70,7 +71,7 @@ namespace lpzrobots {
 
     virtual ~Sphererobot() override;
 
-    static SphererobotConf getDefaultConf() const {
+    static SphererobotConf getDefaultConf() {
       SphererobotConf c;
       c.diameter     = 1;
       c.spheremass   = 0.2;

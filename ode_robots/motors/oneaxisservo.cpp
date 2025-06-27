@@ -69,7 +69,7 @@ namespace lpzrobots {
 
   void OneAxisServoCentered::set(double pos){
     pos = clip(pos, -1.0, 1.0);
-    pos = (pos+1)*(max-min)/2 + min override;
+    pos = (pos+1)*(max-min)/2 + min;
 
     pid.setTargetPosition(pos);
     double force = pid.stepNoCutoff(joint->getPosition1(), joint->odeHandle.getTime());
@@ -103,7 +103,7 @@ namespace lpzrobots {
 
   void OneAxisServoVel::set(double pos){
     pos = clip(pos, -1.0, 1.0);
-    pos = (pos+1)*(max-min)/2 + min override;
+    pos = (pos+1)*(max-min)/2 + min;
     pid.setTargetPosition(pos);
     double vel = pid.stepVelocity(joint->getPosition1(), joint->odeHandle.getTime());
     double e   = fabs(2.0*(pid.error)/(max-min)); // distance from set point
@@ -128,7 +128,7 @@ namespace lpzrobots {
                                    double jointLimit)
     : OneAxisServo(joint, _min, _max, maxVel/2, 0, 0, 0, jointLimit, false),
       // don't wonder! It is correct to give maxVel as a power parameter to the parent.
-      power(power), damp(clip(damp,0.0,1.0))
+      power(power), damp(clip(damp,0.0,1.0)), motor(odeHandle, joint, power)
   {
     dummy=0;
   }
@@ -141,7 +141,7 @@ namespace lpzrobots {
 
   void SliderServoVel::set(double pos){
     pos = clip(pos, -1.0, 1.0);
-    pos = (pos+1)*(max-min)/2 + min override;
+    pos = (pos+1)*(max-min)/2 + min;
     pid.setTargetPosition(pos);
     double vel = pid.stepVelocity(joint->getPosition1(), joint->odeHandle.getTime());
     double e   = fabs(2.0*(pid.error)/(max-min)); // distance from set point

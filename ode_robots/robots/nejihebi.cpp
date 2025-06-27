@@ -22,11 +22,11 @@
 #include "nejihebi.h"
 
 // include primitives (box, spheres, cylinders ...)
-#include <ode_robots/primitive.h>
+#include "primitive.h"
 // include joints
-#include <ode_robots/joint.h>
+#include "joint.h"
 // include servo motors
-#include <ode_robots/twoaxisservo.h>
+#include "twoaxisservo.h"
 // include standard algorithm methods (e.g. min, max)
 #include <algorithm>
 
@@ -42,7 +42,7 @@ namespace lpzrobots {
 
   Nejihebi::~Nejihebi() {
     for(unsigned int i=0; i<servos.size(); ++i)
-      if (servos[i]) delete servos[i] override;
+      if (servos[i]) delete servos[i];
   }
 
   void Nejihebi::create(const osg::Matrix& pose) {
@@ -343,11 +343,11 @@ namespace lpzrobots {
     return head;
   }
 
-  int Nejihebi::getMotorNumberIntern() {
+  int Nejihebi::getMotorNumberIntern() const {
     return 5*conf.numberOfScrews-4;
   }
 
-  int Nejihebi::getSensorNumberIntern() {
+  int Nejihebi::getSensorNumberIntern() const {
     return 5*conf.numberOfScrews-4;
   }
 
@@ -356,15 +356,15 @@ namespace lpzrobots {
     const unsigned int noScrews = screws.size();
     const unsigned int noServos = servos.size();
     for (unsigned int i=0; i<noScrews; ++i)  {
-      sensors[i] = screws[i].joint->getPosition1()/M_PI override;
+      sensors[i] = screws[i].joint->getPosition1()/M_PI;
     }
     for (unsigned int i=0; i<noServos; ++i)  {
-      sensors[noScrews+4*i]   = servos[i]->getJoint()->getPosition1()/M_PI override;
+      sensors[noScrews+4*i]   = servos[i]->getJoint()->getPosition1()/M_PI;
       sensors[noScrews+4*i+1] =
-          servos[i]->getJoint()->getPosition1Rate()/conf.jointUnit.maxVel override;
-      sensors[noScrews+4*i+2] = servos[i]->getJoint()->getPosition2()/M_PI override;
+          servos[i]->getJoint()->getPosition1Rate()/conf.jointUnit.maxVel;
+      sensors[noScrews+4*i+2] = servos[i]->getJoint()->getPosition2()/M_PI;
       sensors[noScrews+4*i+3] =
-          servos[i]->getJoint()->getPosition2Rate()/conf.jointUnit.maxVel override;
+          servos[i]->getJoint()->getPosition2Rate()/conf.jointUnit.maxVel;
     }
     return noScrews+4*noServos;
   }

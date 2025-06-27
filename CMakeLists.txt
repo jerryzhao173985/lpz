@@ -1,137 +1,164 @@
-cmake_minimum_required(VERSION 3.16)
-project(LPZRobots VERSION 0.8.0 LANGUAGES CXX)
+cmake_minimum_required(VERSION 3.20)
+project(lpzrobots VERSION 2.0.0 LANGUAGES CXX C)
 
-# Set C++ standard
+# Modern C++ standards
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 # Options
-option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
-option(BUILD_GUI_TOOLS "Build GUI tools (requires Qt6)" ON)
-option(ENABLE_ARM64_NEON "Enable ARM64 NEON optimizations" ON)
+option(BUILD_SHARED_LIBS "Build shared libraries" ON)
 option(BUILD_EXAMPLES "Build example simulations" ON)
+option(BUILD_TESTS "Build unit tests" OFF)
+option(BUILD_GUI_TOOLS "Build GUI tools (requires Qt6)" ON)
+option(ENABLE_SIMD "Enable SIMD optimizations" ON)
+option(ENABLE_OPENMP "Enable OpenMP parallelization" ON)
 
-# Detect platform
-if(APPLE)
-    if(CMAKE_SYSTEM_PROCESSOR MATCHES "arm64")
-        message(STATUS "Building for macOS ARM64")
-        if(ENABLE_ARM64_NEON)
-            add_compile_options(-march=armv8-a+simd -mtune=native)
-            add_compile_definitions(__ARM_NEON)
-        endif()
+# Set default build type
+if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+    set(CMAKE_BUILD_TYPE Release CACHE STRING "Build type" FORCE)
+    set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "RelWithDebInfo" "MinSizeRel")
+endif()
+
+# Compiler warnings
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang|AppleClang")
+    add_compile_options(
+        -Wall -Wextra -Wpedantic
+        -Wcast-align -Wcast-qual 
+        -Wconversion -Wsign-conversion
+        -Wformat=2 -Wuninitialized
+        -Wunused -Wunused-function
+        -Wunused-label -Wunused-value
+        -Wunused-variable -Wunused-parameter
+        -Wwrite-strings -Wpointer-arith
+        -Wredundant-decls -Woverloaded-virtual
+        -Wsign-promo -Wformat-security
+        -Wnon-virtual-dtor -Wold-style-cast
+        -Wzero-as-null-pointer-constant
+        -Wno-unused-parameter  # Too many false positives
+        -Wno-sign-conversion   # Too noisy for now
+    )
+    
+    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU")
+        add_compile_options(-Wlogical-op -Wnoexcept)
     endif()
+endif()
+
+# macOS specific settings
+if(APPLE)
+    set(CMAKE_MACOSX_RPATH ON)
+    set(CMAKE_INSTALL_RPATH "@loader_path/../lib")
 endif()
 
 # Find dependencies
 find_package(Threads REQUIRED)
 
-# GSL (optional but recommended)
-find_package(PkgConfig)
-if(PkgConfig_FOUND)
-    pkg_check_modules(GSL gsl)
-    if(GSL_FOUND)
-        message(STATUS "Found GSL: ${GSL_VERSION}")
-    else()
-        message(WARNING "GSL not found, some features will be disabled")
-        add_compile_definitions(NOGSL)
-    endif()
+# Optional dependencies
+find_package(OpenMP)
+if(OPENMP_FOUND AND ENABLE_OPENMP)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
 endif()
 
-# OpenSceneGraph for ode_robots
-find_package(OpenSceneGraph COMPONENTS osg osgDB osgGA osgViewer osgUtil osgShadow osgText)
-if(OpenSceneGraph_FOUND)
-    message(STATUS "Found OpenSceneGraph: ${OPENSCENEGRAPH_VERSION}")
-else()
-    message(WARNING "OpenSceneGraph not found, ode_robots will not be built")
+# GSL (GNU Scientific Library)
+find_package(PkgConfig)
+if(PKG_CONFIG_FOUND)
+    pkg_check_modules(GSL gsl)
 endif()
 
 # Qt6 for GUI tools
 if(BUILD_GUI_TOOLS)
-    find_package(Qt6 COMPONENTS Core Widgets OpenGL OpenGLWidgets Xml)
-    if(Qt6_FOUND)
-        message(STATUS "Found Qt6: ${Qt6_VERSION}")
-        set(CMAKE_AUTOMOC ON)
-    else()
-        message(WARNING "Qt6 not found, GUI tools will not be built")
+    find_package(Qt6 COMPONENTS Core Widgets OpenGL QUIET)
+    if(NOT Qt6_FOUND)
+        message(WARNING "Qt6 not found. GUI tools will not be built.")
         set(BUILD_GUI_TOOLS OFF)
     endif()
 endif()
 
-# Common compile options
-add_compile_options(
-    -Wall
-    -Wextra
-    -Wno-unused-parameter
-    -Wno-deprecated
-    $<$<CONFIG:Debug>:-g -O0>
-    $<$<CONFIG:Release>:-O3 -DNDEBUG>
-)
+# OpenSceneGraph
+find_package(OpenSceneGraph COMPONENTS osgDB osgUtil osgViewer osgGA)
+
+# Export compile commands for clang-tidy
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+# Installation directories
+include(GNUInstallDirs)
+set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
 
 # Add subdirectories
 add_subdirectory(selforg)
+add_subdirectory(ode_robots)
+add_subdirectory(opende)
 
-if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/opende/CMakeLists.txt")
-    add_subdirectory(opende)
-endif()
-
-if(OpenSceneGraph_FOUND AND TARGET selforg)
-    add_subdirectory(ode_robots)
-endif()
-
-if(BUILD_GUI_TOOLS AND Qt6_FOUND)
+if(BUILD_GUI_TOOLS)
     add_subdirectory(guilogger)
     add_subdirectory(matrixviz)
     add_subdirectory(configurator)
 endif()
 
-if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/ga_tools/CMakeLists.txt")
-    add_subdirectory(ga_tools)
+add_subdirectory(ga_tools)
+add_subdirectory(ecbrobots)
+
+if(BUILD_TESTS)
+    enable_testing()
+    add_subdirectory(tests)
 endif()
 
-# Installation
-include(GNUInstallDirs)
-
-# Export targets
-install(EXPORT LPZRobotsTargets
-    FILE LPZRobotsTargets.cmake
-    NAMESPACE LPZRobots::
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/LPZRobots
-)
-
-# Create config file
+# Package configuration
 include(CMakePackageConfigHelpers)
-configure_package_config_file(
-    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/LPZRobotsConfig.cmake.in"
-    "${CMAKE_CURRENT_BINARY_DIR}/LPZRobotsConfig.cmake"
-    INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/LPZRobots
-)
 
+# Create package version file
 write_basic_package_version_file(
-    "${CMAKE_CURRENT_BINARY_DIR}/LPZRobotsConfigVersion.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/lpzrobotsConfigVersion.cmake"
     VERSION ${PROJECT_VERSION}
-    COMPATIBILITY AnyNewerVersion
+    COMPATIBILITY SameMajorVersion
 )
 
-install(FILES
-    "${CMAKE_CURRENT_BINARY_DIR}/LPZRobotsConfig.cmake"
-    "${CMAKE_CURRENT_BINARY_DIR}/LPZRobotsConfigVersion.cmake"
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/LPZRobots
+# Install package configuration
+install(
+    FILES
+        "${CMAKE_CURRENT_BINARY_DIR}/lpzrobotsConfig.cmake"
+        "${CMAKE_CURRENT_BINARY_DIR}/lpzrobotsConfigVersion.cmake"
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/lpzrobots
 )
+
+# CPack configuration for creating packages
+set(CPACK_PACKAGE_NAME "lpzrobots")
+set(CPACK_PACKAGE_VERSION ${PROJECT_VERSION})
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "A versatile simulator for robotic research on self-organization of behavior")
+set(CPACK_PACKAGE_VENDOR "Leipzig Robot Group")
+set(CPACK_PACKAGE_CONTACT "martius@informatik.uni-leipzig.de")
+
+if(APPLE)
+    set(CPACK_GENERATOR "DragNDrop")
+    set(CPACK_DMG_VOLUME_NAME "LPZRobots ${PROJECT_VERSION}")
+elseif(UNIX)
+    set(CPACK_GENERATOR "TGZ;DEB")
+    set(CPACK_DEBIAN_PACKAGE_DEPENDS "libqt6-dev, libgsl-dev")
+endif()
+
+include(CPack)
 
 # Summary
 message(STATUS "")
-message(STATUS "LPZRobots configuration summary:")
-message(STATUS "  Version: ${PROJECT_VERSION}")
-message(STATUS "  C++ Standard: ${CMAKE_CXX_STANDARD}")
-message(STATUS "  Build type: ${CMAKE_BUILD_TYPE}")
-message(STATUS "  Compiler: ${CMAKE_CXX_COMPILER}")
-message(STATUS "  Platform: ${CMAKE_SYSTEM_NAME} ${CMAKE_SYSTEM_PROCESSOR}")
-message(STATUS "  GSL: ${GSL_FOUND}")
-message(STATUS "  OpenSceneGraph: ${OpenSceneGraph_FOUND}")
-message(STATUS "  Qt6: ${Qt6_FOUND}")
-message(STATUS "  ARM64 NEON: ${ENABLE_ARM64_NEON}")
-message(STATUS "  Build GUI tools: ${BUILD_GUI_TOOLS}")
-message(STATUS "  Build examples: ${BUILD_EXAMPLES}")
-message(STATUS "  Install prefix: ${CMAKE_INSTALL_PREFIX}")
+message(STATUS "LPZRobots ${PROJECT_VERSION} Configuration Summary")
+message(STATUS "=====================================")
+message(STATUS "Build type:        ${CMAKE_BUILD_TYPE}")
+message(STATUS "C++ Standard:      ${CMAKE_CXX_STANDARD}")
+message(STATUS "Compiler:          ${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION}")
 message(STATUS "")
+message(STATUS "Options:")
+message(STATUS "  Shared libs:     ${BUILD_SHARED_LIBS}")
+message(STATUS "  Examples:        ${BUILD_EXAMPLES}")
+message(STATUS "  Tests:           ${BUILD_TESTS}")
+message(STATUS "  GUI tools:       ${BUILD_GUI_TOOLS}")
+message(STATUS "  SIMD:            ${ENABLE_SIMD}")
+message(STATUS "  OpenMP:          ${ENABLE_OPENMP}")
+message(STATUS "")
+message(STATUS "Dependencies:")
+message(STATUS "  Qt6:             ${Qt6_FOUND}")
+message(STATUS "  GSL:             ${GSL_FOUND}")
+message(STATUS "  OpenSceneGraph:  ${OPENSCENEGRAPH_FOUND}")
+message(STATUS "  OpenMP:          ${OPENMP_FOUND}")
+message(STATUS "")
+message(STATUS "Install prefix:    ${CMAKE_INSTALL_PREFIX}")
+message(STATUS "=====================================")

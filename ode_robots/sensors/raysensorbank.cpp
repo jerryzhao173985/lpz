@@ -70,15 +70,15 @@ namespace lpzrobots {
   };
 
   bool RaySensorBank::sense(const GlobalData& global){
-    for (unsigned int i=0; i<bank.size(); ++i)  override {
+    for (unsigned int i=0; i<bank.size(); ++i) {
         bank[i]->sense(global);
     }
     return true;
   };
 
-  int RaySensorBank::get(double* sensorarray, int array_size) const {
+  int RaySensorBank::get(sensor* sensorarray, int array_size) const {
     int counter=0;
-    for(int i=0; (i<array_size) && (i<static_cast<int>(bank).size()); ++i) override {
+    for(int i=0; (i<array_size) && (i<static_cast<int>(bank.size())); ++i) {
       bank[i]->get(&sensorarray[i], 1);
       ++counter;
     }
@@ -86,7 +86,7 @@ namespace lpzrobots {
   };
 
   std::list<sensor> RaySensorBank::getList() const {
-    return getListOfArray() const;
+    return getListOfArray();
   }
 
   int RaySensorBank::getSensorNumber() const {
@@ -99,18 +99,18 @@ namespace lpzrobots {
   }
 
   void RaySensorBank::setRange(float range){
-    for(unsigned int i=0; i<bank.size(); ++i) override {
+    for(unsigned int i=0; i<bank.size(); ++i) {
       bank[i]->setRange(range);
     }
   }
 
 
-  dSpaceID RaySensorBank::getSpaceID(){
+  dSpaceID RaySensorBank::getSpaceID() const {
     return odeHandle.space;
   };
 
   void RaySensorBank::update(){
-    for (unsigned int i=0; i<bank.size(); ++i) override {
+    for (unsigned int i=0; i<bank.size(); ++i) {
       bank[i]->update();
     }
   };

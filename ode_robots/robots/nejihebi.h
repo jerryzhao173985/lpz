@@ -22,11 +22,14 @@
 #ifndef LPZROBOTS_ODE_ROBOTS_ROBOTS_NEJIHEBI_H_
 #define LPZROBOTS_ODE_ROBOTS_ROBOTS_NEJIHEBI_H_
 
-#include <ode_robots/oderobot.h>
+#include "oderobot.h"
 
 // forward declarations
 namespace lpzrobots {
-  class Box{
+  class Box;
+  class Cylinder;
+  class HingeJoint;
+  class TwoAxisServoVel;
   /**
    * Nejihebi Robot
    *
@@ -208,7 +211,7 @@ namespace lpzrobots {
        *
        * @return default configuration
        */
-      static Conf getDefaultConf() const;
+      static Conf getDefaultConf();
 
       Inspectable::iparamkeylist getInternalParamNames() const override;
 
@@ -318,7 +321,7 @@ namespace lpzrobots {
        * @param motors motors scaled to [-1,1]
        * @param motornumber length of the motor array
        */
-      virtual void setMotorsIntern(const double* motors, int motornumber);
+      virtual void setMotorsIntern(const double* motors, int motornumber) override;
 
     private:
 
@@ -356,7 +359,7 @@ namespace lpzrobots {
       /** configuration object of the robot */
       Conf conf;
   };
-}
+};
 
 
 #endif /* LPZROBOTS_ODE_ROBOTS_ROBOTS_SCREWDRIVESNAKE_H_ */

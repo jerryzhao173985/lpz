@@ -35,7 +35,7 @@ namespace lpzrobots {
   /** Class provides an terrain based on HeightFields.
       Can be loaded from image or from HeightFieldFiles
   */
-  class TerrainGround{
+  class TerrainGround : public AbstractObstacle {
   public:
 
 

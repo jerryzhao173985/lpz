@@ -44,7 +44,7 @@ namespace lpzrobots {
   
   void CameraConf::removeProcessors() {
     FOREACH(ImageProcessors, processors, p){
-      if(*p) delete *p override;
+      if(*p) delete *p;
     }
     processors.clear();
   }
@@ -64,8 +64,8 @@ namespace lpzrobots {
 
   Camera::~Camera(){
     if(ccd) ccd->unref();
-    if(sensorBody1) delete sensorBody1 override;
-    if(sensorBody2) delete sensorBody2 override;
+    if(sensorBody1) delete sensorBody1;
+    if(sensorBody2) delete sensorBody2;
     conf.removeProcessors();
   }
   

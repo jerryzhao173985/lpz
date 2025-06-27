@@ -38,7 +38,7 @@ namespace lpzrobots {
   }
 
   /// return the __PLACEHOLDER_2__ primitive of the obtactle. The meaning of __PLACEHOLDER_3__ is arbitrary
-  Primitive* DummyObstacle::getMainPrimitive() const {
+  const Primitive* DummyObstacle::getMainPrimitive() const {
     return obst[0];
   }
 

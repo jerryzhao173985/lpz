@@ -58,7 +58,7 @@ namespace lpzrobots {
     if(!globaldata.sounds.empty()){
       // multiple signal are simply averaged combined
       FOREACHC(SoundList, globaldata.sounds, s){
-        Pos relpos = own->toLocal(s->pos);
+        Pos relpos = Pos(own->toLocal(s->pos));
         // we have to look at the right dimension because sometimes the
         // robot's coordinate system has Z not looking to the sky
         double x = (dim == X) ? relpos.z() : relpos.x();
@@ -76,8 +76,8 @@ namespace lpzrobots {
           double intens = distanceDependency(*s, dist);
           if(intens<=0) continue;
           // add noise to angle, the more the lower the intensity maximal noisestrength*360Deg
-          angle += random_minusone_to_one(0)*2*M_PI*(1-pow(intens,0.25))*noisestrength;
-          intens += random_minusone_to_one(0)*noisestrength;
+          angle += random_minusone_to_one()*2*M_PI*(1-pow(intens,0.25))*noisestrength;
+          intens += random_minusone_to_one()*noisestrength;
           intens=clip(intens,0.0,1.0);
           switch (measure){
           case Segments:
@@ -97,8 +97,8 @@ namespace lpzrobots {
             {   // calc derivatives of angle values
               double d = angle - oldangle[l];
               double scale = 10;
-              if(d>M_PI)  d-=2*M_PI override;
-              if(d<-M_PI)  d+=2*M_PI override;
+              if(d>M_PI)  d-=2*M_PI;
+              if(d<-M_PI)  d+=2*M_PI;
 
               oldangle[l]= angle;
               val[2*l]   = intens;

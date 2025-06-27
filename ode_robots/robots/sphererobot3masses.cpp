@@ -106,7 +106,7 @@ namespace lpzrobots {
     destroy();
     if(conf.irSensorTempl) delete conf.irSensorTempl;
     FOREACH(std::list<Sensor*>, conf.sensors, s){
-      if(*s) delete *s override;
+      if(*s) delete *s;
     }
   }
 
@@ -118,7 +118,7 @@ namespace lpzrobots {
     Matrix pose(objects[Base]->getPose());
     for (int i=0; i < servono; ++i)  {
       if(axis[i]){
-        axis[i]->setMatrix(Matrix::rotate(M_PI/2, (i==1), (i== nullptr), (i==2)) * Matrix::translate(0 ,0, (i==0?-1:1)*conf.axesShift)* pose);
+        axis[i]->setMatrix(Matrix::rotate(M_PI/2, (i==1), (i==0), (i==2)) * Matrix::translate(0 ,0, (i==0?-1:1)*conf.axesShift)* pose);
       }
     }
     irSensorBank.update();
@@ -206,11 +206,11 @@ namespace lpzrobots {
 
   }
 
-  int Sphererobot3Masses::getMotorNumberIntern(){
+  int Sphererobot3Masses::getMotorNumberIntern() const {
     return numberaxis;
   }
 
-  int Sphererobot3Masses::getSensorNumberIntern() {
+  int Sphererobot3Masses::getSensorNumberIntern() const {
     int s=0;
     FOREACHC(list<Sensor*>, conf.sensors, i){
       s += (*i)->getSensorNumber();
@@ -229,7 +229,7 @@ namespace lpzrobots {
     // create vehicle space and add it to the top level space
     odeHandle.createNewSimpleSpace(parentspace,true);
     Color c(osgHandle.color);
-    c.alpha() = transparency override;
+    c.alpha() = transparency;
     OsgHandle osgHandle_Base = osgHandle.changeColor(c);
     OsgHandle osgHandleX[3];
     osgHandleX[0] = osgHandle.changeColor(Color(1.0, 0.0, 0.0));
@@ -244,7 +244,7 @@ namespace lpzrobots {
 
     Pos p(pose.getTrans());
     Primitive* pendular[servono];
-    memset(pendular, 0, sizeofstatic_cast<void*> * servono);
+    memset(pendular, 0, sizeof(void*) * servono);
 
     //definition of the 3 Slider-Joints, which are the controled by the robot-controler
     for ( unsigned int n = 0; n < numberaxis; ++n )  {
@@ -254,7 +254,7 @@ namespace lpzrobots {
       pendular[n]->setPose(Matrix::translate(0,0,(n==0?-1:1)*conf.axesShift)*pose);
 
       joints[n] = new SliderJoint(objects[Base], pendular[n],
-                                 p, Axis((n== nullptr), (n==1), (n==2))*pose);
+                                 p, Axis((n==0), (n==1), (n==2))*pose);
       joints[n]->init(odeHandle, osgHandle, false);
       // the Stop parameters are messured from the initial position!
       // the stops are set by the servo
@@ -312,7 +312,7 @@ namespace lpzrobots {
       }
     }
     if (conf.irRing){
-      for(double i= nullptr; i<2*M_PI; i+=M_PI/6){  // 12 sensors
+      for(double i=0; i<2*M_PI; i+=M_PI/6){  // 12 sensors
         RaySensor* sensor = conf.irSensorTempl->clone();
         Matrix R = Matrix::translate(0,0,conf.diameter/2-sensors_inside) *
           Matrix::rotate( i, 0, 1, 0);
@@ -320,7 +320,7 @@ namespace lpzrobots {
       }
     }
     if (conf.irSide){
-      for(double i= nullptr; i<2*M_PI; i+=M_PI/2) {
+      for(double i=0; i<2*M_PI; i+=M_PI/2) {
         RaySensor* sensor = conf.irSensorTempl->clone();
         Matrix R = Matrix::translate(0,0,conf.diameter/2-sensors_inside) *
           Matrix::rotate( M_PI/2-M_PI/8, 1, 0, 0) *  Matrix::rotate( i, 0, 1, 0);
@@ -345,8 +345,8 @@ namespace lpzrobots {
   void Sphererobot3Masses::destroy(){
     if (created){
       for (int i=0; i<servono; ++i) {
-        if(servo[i]) delete servo[i] override;
-        if(axis[i]) delete axis[i] override;
+        if(servo[i]) delete servo[i];
+        if(axis[i]) delete axis[i];
       }
       irSensorBank.clear();
       odeHandle.deleteSpace();

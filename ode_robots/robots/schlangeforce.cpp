@@ -49,7 +49,7 @@ namespace lpzrobots {
     assert(created);
     // there will always be an even number of motors
     // (two sensors/motors per joint)
-    int len = min(motornumber/2, static_cast<int>(joints).size());
+    int len = min(motornumber/2, static_cast<int>(joints.size()));
     // controller output as torques; friction added
     for (int i = 0; i < len; ++i) {
       // motorcommand
@@ -78,7 +78,7 @@ namespace lpzrobots {
     assert(created);
     // there will always be an even number of senors
     // (two sensors/motors per joint)
-    int len = min(sensornumber/2, static_cast<int>(joints).size());
+    int len = min(sensornumber/2, static_cast<int>(joints.size()));
     // reading angle of joints
     /*
       for (int n = 0; n < len; ++n)  {

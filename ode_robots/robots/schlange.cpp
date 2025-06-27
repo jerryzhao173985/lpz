@@ -31,7 +31,7 @@ namespace lpzrobots {
 
   Schlange::Schlange ( const OdeHandle& odeHandle, const OsgHandle& osgHandle,
                        const SchlangeConf& conf, const std::string& name, const std::string& revision)
-    : OdeRobot( odeHandle, osgHandle, name, revision), conf(conf) {
+    : DefaultCaterPillar( odeHandle, osgHandle, conf, name, revision), conf(conf) {
 
     addParameter("motorpower", &this->conf.motorPower,0,20);
     addParameter("sensorfactor", &this->conf.sensorFactor,0,5);
@@ -98,8 +98,6 @@ namespace lpzrobots {
       }
     }
 
-    if(conf.frictionRatio != 1)
-      odeHandle.substance.toAnisotropFriction(conf.frictionRatio, Axis(0,0,1));
 
     for ( int n = 0; n < conf.segmNumber; ++n )  {
       Primitive* p;
@@ -164,7 +162,7 @@ namespace lpzrobots {
     //   p = new Box(conf.segmLength*.1,conf.segmLength*.9, conf.segmLength*.6);
     p->setTexture("Images/whitemetal_farbig_small.rgb");
     p->init(odeHandle, conf.segmMass, osgHandle);
-    if(index== nullptr)
+    if(index== 0)
       p->setColor(conf.headColor);
     else
       p->setColor(conf.bodyColor);
@@ -183,13 +181,13 @@ namespace lpzrobots {
 
   void Schlange::setHeadTexture(const std::string& filename){
     if(created) {
-      objects[0]->getOSGPrimitive()->setTexture(filename);
+      const_cast<OSGPrimitive*>(objects[0]->getOSGPrimitive())->setTexture(filename);
     }
   }
 
   void Schlange::setHeadColor(const Color& color) {
     if (created) {
-      objects[0]->getOSGPrimitive()->setColor(color);
+      const_cast<OSGPrimitive*>(objects[0]->getOSGPrimitive())->setColor(color);
     }
   }
 

@@ -71,7 +71,7 @@ typedef struct {
     IR order: front left, front right, right, right rear,
               rear right, rear left, left rear, left
 */
-class Nimm2{
+class Nimm2 : public OdeRobot {
 public:
 
   Nimm2(const OdeHandle& odehandle, const OsgHandle& osgHandle,
@@ -107,35 +107,35 @@ public:
   /**
    * updates the OSG nodes of the vehicle
    */
-  virtual void update();
+  virtual void update() override;
 
   /** sets the pose of the vehicle
       @param pose desired 4x4 pose matrix
   */
-  virtual void placeIntern(const osg::Matrix& pose);
+  virtual void placeIntern(const osg::Matrix& pose) override;
 
   /** returns actual sensorvalues
       @param sensors sensors scaled to [-1,1]
       @param sensornumber length of the sensor array
       @return number of actually written sensors
   */
-  virtual int getSensorsIntern(sensor* sensors, int sensornumber);
+  virtual int getSensorsIntern(sensor* sensors, int sensornumber) override;
 
   /** sets actual motorcommands
       @param motors motors scaled to [-1,1]
       @param motornumber length of the motor array
   */
-  virtual void setMotorsIntern(const double* motors, int motornumber);
+  virtual void setMotorsIntern(const double* motors, int motornumber) override;
 
   /** returns number of sensors
    */
-  virtual int getSensorNumberIntern() override {
+  virtual int getSensorNumberIntern() const override {
     return sensorno;
   };
 
   /** returns number of motors
    */
-  virtual int getMotorNumberIntern() override {
+  virtual int getMotorNumberIntern() const override {
     return motorno;
   };
 
@@ -150,11 +150,11 @@ public:
       like space-internal collision detection, sensor resets/update etc.
       @param globalData structure that contains global data from the simulation environment
    */
-  virtual void explicit doInternalStuff(const GlobalData& globalData);
+  virtual void doInternalStuff(const GlobalData& globalData) override;
 
-        virtual double& getSumForce() override { return sumForce; }
+        virtual double& getSumForce() { return sumForce; }
 
-        virtual double& getContactPoints() override { return contactPoints; }
+        virtual double& getContactPoints() { return contactPoints; }
 
 protected:
 

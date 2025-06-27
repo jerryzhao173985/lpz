@@ -99,16 +99,30 @@ install_selforg: usage
 	cd selforg && make install
 
 .PHONY: ode
-##!ode		   compile open dynamics engine in double precession (custom version)
+##!ode		   uses system ODE with compatibility layer
 ode:
-	cd opende; sh autogen.sh && ./configure --disable-asserts --enable-shared --enable-double-precision --prefix=$(PREFIX) --disable-demos && $(MAKE) && echo "you probably want to run \"make install_ode\" now (possibly as root)"
+	@echo "*************** Using system ODE with compatibility layer ***************"
+	@if command -v brew &> /dev/null && brew list ode &> /dev/null; then \
+		echo "ODE is installed via Homebrew at: $$(brew --prefix ode)"; \
+		echo "Compatibility layer created in include/ode-dbl/"; \
+	else \
+		echo "ERROR: ODE not found. Please install it first:"; \
+		echo "  brew install ode"; \
+		exit 1; \
+	fi
 
 
 .PHONY: install_ode
-##!install_ode	   install the customized ode library (libode_dbl)
+##!install_ode	   install ODE compatibility layer
 install_ode:
-	@echo "*************** Install ode -double version**********"
-	cd opende && $(MAKE) install
+	@echo "*************** Installing ODE compatibility layer ***************"
+	@echo "Installing ode-dbl compatibility headers..."
+	@install -d $(PREFIX)/include/ode-dbl
+	@cp -r include/ode-dbl/* $(PREFIX)/include/ode-dbl/
+	@echo "Creating library symlinks for compatibility..."
+	@if [ -f "$$(brew --prefix ode)/lib/libode.dylib" ]; then \
+		ln -sf "$$(brew --prefix ode)/lib/libode.dylib" "$(PREFIX)/lib/libode_dbl.dylib" 2>/dev/null || true; \
+	fi
 
 .PHONY: ode_robots
 ##!ode_robots	   compile ode_robots libaries in optimized and debug version
@@ -176,10 +190,12 @@ distclean :  clean-all
 uninstall: uninstall_intern
 
 .PHONY: uninstall_ode
-##!uninstall_ode  uninstall the customized ode library
+##!uninstall_ode  uninstall ODE compatibility layer
 uninstall_ode:
-	@echo "*************** uninstall ode -double version********"
-	cd opende && make uninstall
+	@echo "*************** Uninstall ODE compatibility layer ***************"
+	@echo "Removing ode-dbl compatibility headers and symlinks..."
+	@rm -rf $(PREFIX)/include/ode-dbl
+	@rm -f $(PREFIX)/lib/libode_dbl.dylib
 
 ##!****** less common targets ***********
 

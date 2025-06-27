@@ -150,7 +150,7 @@ namespace lpzrobots {
       virtual QString getConfigurableName() const;
       static QSize defaultWidgetSize;
       virtual void setVisible(bool visible) override;
-      virtual bool isVisible() override;
+      virtual bool isVisible() const override;
       virtual void setInCollapseMode(bool inCollapseMode);
 
       inline bool descriptionChanged() {
@@ -171,7 +171,7 @@ namespace lpzrobots {
 
 
     protected:
-      virtual void enterEvent(QEnterEvent * event) override;
+      virtual void enterEvent(QEvent * event) override;
       virtual void leaveEvent(QEvent * event) override;
       virtual void mouseMoveEvent(QMouseEvent * event) override;
       virtual void mousePressEvent(QMouseEvent * event) override;

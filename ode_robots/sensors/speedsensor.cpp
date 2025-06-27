@@ -39,7 +39,7 @@ namespace lpzrobots {
     : maxSpeed(maxSpeed), mode(mode), dimensions (dimensions) {
     own=0;
     std::string name = "Speed";
-    explicit switch(mode){
+    switch(mode){
     case Translational:   name += "Translational"; break;
     case TranslationalRel:name += "TranslationalRel"; break;
     case Rotational:      name += "Rotational"; break;
@@ -47,7 +47,7 @@ namespace lpzrobots {
     }
     setBaseInfo(SensorMotorInfo(name).changequantity(SensorMotorInfo::Velocity));
 #if (__GNUC__ > 4 ) || (__GNUC__ == 4 && __GNUC_MINOR__ > 7)
-    explicit setNamingFunc([dimensions](int index) {return dimensions2String(dimensions).substr(index,1);});
+    setNamingFunc([dimensions](int index) {return dimensions2String(dimensions).substr(index,1);});
 #endif
   }
 
@@ -56,7 +56,7 @@ namespace lpzrobots {
   }
 
   int SpeedSensor::getSensorNumber() const{
-    return (const dimensions& X) + ((const dimensions& Y) >> 1)  + ((const dimensions& Z) >> 2);
+    return ((dimensions & Sensor::X) != 0) + ((dimensions & Sensor::Y) != 0) + ((dimensions & Sensor::Z) != 0);
   }
 
   bool SpeedSensor::sense(const GlobalData& globaldata) { return true; }
@@ -68,7 +68,7 @@ namespace lpzrobots {
 
   int SpeedSensor::get(sensor* sensors, int length) const{
     const Matrix& m = getSenseMatrix()*(1.0/maxSpeed);
-    if(dimensions == (X | Y | Z))
+    if(dimensions == (Sensor::X | Sensor::Y | Sensor::Z))
       return m.convertToBuffer(sensors, length);
     else{
       return selectrows(sensors, length, m, dimensions);
@@ -80,7 +80,7 @@ namespace lpzrobots {
     assert(own->getBody());
     Matrix local;
     Matrix m;
-    explicit switch(mode){
+    switch(mode){
     case Translational:
       m.set(3,1, dBodyGetLinearVel(own->getBody()));
       break;

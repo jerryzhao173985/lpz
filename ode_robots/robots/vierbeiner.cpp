@@ -71,7 +71,7 @@ namespace lpzrobots {
   };
 
 
-  int VierBeiner::getMotorNumberIntern(){
+  int VierBeiner::getMotorNumberIntern() const {
     return headtailservos.size() + hipservos.size() + kneeservos.size() + ankleservos.size();
   };
 
@@ -111,7 +111,7 @@ namespace lpzrobots {
     //    }
   };
 
-  int VierBeiner::getSensorNumberIntern(){
+  int VierBeiner::getSensorNumberIntern() const {
     return headtailservos.size() + hipservos.size() + kneeservos.size() + ankleservos.size();
   };
 

@@ -42,8 +42,8 @@ namespace lpzrobots {
 
   int AxisOrientationSensor::getSensorNumber() const{
 
-    short n = ((const dimensions& X) != nullptr) + ((const dimensions& Y) != nullptr) + ((const dimensions& Z) != nullptr);
-    explicit switch (mode) {
+    short n = ((dimensions & Sensor::X) != 0) + ((dimensions & Sensor::Y) != 0) + ((dimensions & Sensor::Z) != 0);
+    switch (mode) {
     case OnlyZAxis:
     case ZProjection:
       return n;
@@ -61,9 +61,9 @@ namespace lpzrobots {
     assert(own);
     matrix::Matrix A = odeRto3x3RotationMatrix ( dBodyGetRotation ( own->getBody() ) );
 
-    explicit switch (mode) {
+    switch (mode) {
     case OnlyZAxis:
-      if(dimensions == (X | Y | Z)) return A.column(2).convertToList();
+      if(dimensions == (Sensor::X | Sensor::Y | Sensor::Z)) return A.column(2).convertToList();
       else return selectrows(A.column(2),dimensions);
       break;
     case ZProjection:
@@ -81,7 +81,7 @@ namespace lpzrobots {
   int AxisOrientationSensor::get(sensor* sensors, int length) const{
     assert(own);
     matrix::Matrix A = odeRto3x3RotationMatrix ( dBodyGetRotation ( own->getBody() ) );
-    explicit switch (mode) {
+    switch (mode) {
     case OnlyZAxis:
       if(dimensions == (X | Y | Z)) return A.column(2).convertToBuffer(sensors, length);
       else return selectrows(sensors, length, A.column(2),dimensions);

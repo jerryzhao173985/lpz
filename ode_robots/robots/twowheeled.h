@@ -43,13 +43,13 @@ namespace lpzrobots {
     /// list of sensors that are mounted at the robot. (e.g.\ AxisOrientationSensor)
     std::list<Sensor*> sensors;
     /// adds a sensor to the list of sensors
-    void explicit addSensor(Sensor* s) { sensors.push_back(s); }
+    void addSensor(Sensor* s) { sensors.push_back(s); }
   } TwoWheeledConf;
 
   /** Robot is based on nimm2 with
       a camera installed
   */
-  class TwoWheeled{
+  class TwoWheeled : public Nimm2 {
   public:
 
     /**
@@ -62,7 +62,7 @@ namespace lpzrobots {
     TwoWheeled(const OdeHandle& odeHandle, const OsgHandle& osgHandle,
                TwoWheeledConf conf, const std::string& name);
 
-    static TwoWheeledConf getDefaultConf() const {
+    static TwoWheeledConf getDefaultConf() {
       TwoWheeledConf conf;
       conf.n2cfg = Nimm2::getDefaultConf();
       conf.camcfg = Camera::getDefaultConf();
@@ -83,7 +83,7 @@ namespace lpzrobots {
       return conf;
     }
 
-    virtual ~TwoWheeled() override;
+    virtual ~TwoWheeled();
 
     virtual void update();
 
@@ -91,7 +91,7 @@ namespace lpzrobots {
 
     virtual int getSensorsIntern(double* sensors, int sensornumber);
 
-    virtual void explicit sense(const GlobalData& globalData);
+    virtual void sense(const GlobalData& globalData) override;
 
 
   protected:

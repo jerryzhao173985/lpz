@@ -48,8 +48,11 @@ namespace lpzrobots {
    * Add an instance to global.obstacles to customize the creation
    *  otherwise a default version is used (though dependend on the playground)
    */
-  class RandomObstacles{
-    
+  class RandomObstacles : public AbstractObstacle {
+  protected:
+    std::vector<Primitive*> obst;
+    osg::Matrix pose;
+    bool obstacle_exists;
     int index = 0;
     RandomObstaclesConf conf;
   public:

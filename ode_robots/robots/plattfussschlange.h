@@ -34,7 +34,7 @@ namespace lpzrobots {
    * It consists of a number of equal elements, each linked
    * by a universal joint powered by 2 servos
    **/
-  class PlattfussSchlange{
+  class PlattfussSchlange : public SchlangeServo2 {
 
   public:
     PlattfussSchlange ( const OdeHandle& odeHandle, const OsgHandle& osgHandle,

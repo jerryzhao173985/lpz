@@ -59,7 +59,7 @@ namespace lpzrobots {
                      6,7,8,9 : knee: rh, lh, rf, lf
                      10,11   : ankle rh, lh
    */
-  class VierBeiner{
+  class VierBeiner : public OdeRobot {
   public:
 
     /**
@@ -73,7 +73,7 @@ namespace lpzrobots {
 
     virtual ~VierBeiner() {};
 
-    static VierBeinerConf getDefaultConf() const {
+    static VierBeinerConf getDefaultConf() {
       VierBeinerConf c;
       c.size               = 1;
       c.legNumber          = 4;
@@ -134,14 +134,14 @@ namespace lpzrobots {
         like space-internal collision detection, sensor resets/update etc.
         @param globalData structure that contains global data from the simulation environment
     */
-    virtual void explicit doInternalStuff(const GlobalData& globalData);
+    virtual void doInternalStuff(const GlobalData& globalData) override;
 
 
     /******** CONFIGURABLE ***********/
-    virtual void explicit notifyOnChange(const paramkey& key);
+    virtual void notifyOnChange(const paramkey& key) override;
 
     /** the main object of the robot, which is used for position and speed tracking */
-    virtual Primitive* getMainPrimitive() const { return objects[0]; }
+    virtual const Primitive* getMainPrimitive() const override { return objects[0]; }
   protected:
 
     /** creates vehicle at desired pose
