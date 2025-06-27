@@ -27,7 +27,7 @@ power3(double x) {
 
 // creates random number from -1 to 1
 double
-random_minusone_to_one(double) {
+random_minusone_to_one() {
   return ((static_cast<double>(rand()) / RAND_MAX) - 0.5) * 2.0;
 }
 

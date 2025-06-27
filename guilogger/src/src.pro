@@ -41,6 +41,15 @@ console \
 c++17 \
 sdk_no_version_check
 TARGET = bin/guilogger
+
 target.path = /usr/bin
-QT += core gui widgets
+QT += core gui widgets xml
+# Platform specific settings
+macx {
+    # macOS specific: Remove deprecated AGL framework
+    # AGL was deprecated in macOS 10.9 and removed in later versions
+    QMAKE_LFLAGS -= -framework AGL
+    QMAKE_LIBS_OPENGL -= -framework AGL
+    LIBS -= -framework AGL
+}
 INSTALLS += target

@@ -3,7 +3,7 @@
 #Date:     June 2005
 
 
-SELFORGCFG=`if type selforg-config >/dev/null 2>&1; then echo "selforg-config"; elif [ -x ../selforg/selforg-config ]; then echo "../selforg/selforg-config"; else echo "Cannot find selforg-config" 1>&2; fi`
+SELFORGCFG=`if [ -x ../selforg/selforg-config ]; then echo "../selforg/selforg-config"; elif type selforg-config >/dev/null 2>&1; then echo "selforg-config"; else echo "Cannot find selforg-config" 1>&2; fi`
 
 
 PACKAGE=ga_tools

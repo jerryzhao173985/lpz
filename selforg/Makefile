@@ -43,6 +43,14 @@ INC +=  -Iinclude -Iinclude/selforg
 # use -pg for profiling
 CPPFLAGS = -Wall -pipe -fpic $(INC) $(shell ./selforg-config --srcprefix="." $(CFGOPTS) --intern --cflags)
 
+# Platform detection for shared library building
+UNAME := $(shell uname)
+ifeq ($(UNAME), Darwin)
+    SHARED_LIB_FLAGS = -dynamiclib
+else
+    SHARED_LIB_FLAGS = -shared -Wl,-soname,$(notdir $(SHAREDLIB))
+endif
+
 # used for single file compilation
 CXX = g++
 
@@ -64,6 +72,9 @@ dbg: $(UTILS)
 	$(MAKE) BUILD_DIR=build_dbg CFGOPTS=--dbg lib
 
 shared: $(UTILS)
+	@echo "DEBUG: SHARED_LIB_FLAGS = $(SHARED_LIB_FLAGS)"
+	@echo "DEBUG: UNAME = $(UNAME)"
+	@echo "DEBUG: CXX = $(CXX)"
 	$(MAKE) $(SHAREDLIB)
 
 
@@ -77,11 +88,11 @@ ${BUILD_DIR}/%.o: %.cpp
 	$(CXX) -c $(CPPFLAGS) $(CFLAGS) -o "$@" "$<"
 
 $(SHAREDLIB): Makefile.depend $(OFILES)
-	@if [ `uname` = "Darwin" ]; then \
-		$(CXX) -dynamiclib -o $(SHAREDLIB) $(OFILES) -L/opt/homebrew/Cellar/gsl/2.8/lib -lgsl -lgslcblas -lm -lreadline -lncurses -lpthread; \
-	else \
-		$(CXX) -shared -Wl,-soname,`basename $(SHAREDLIB)` -o $(SHAREDLIB) $(OFILES) -L/opt/homebrew/Cellar/gsl/2.8/lib -lgsl -lgslcblas -lm -lreadline -lncurses -lpthread; \
-	fi
+	$(CXX) $(SHARED_LIB_FLAGS) -o $(SHAREDLIB) $(OFILES) $(shell gsl-config --libs) -lm -lreadline -lncurses -lpthread
+
+# Pattern rule for any .so file (in case of direct invocation)
+%.so: Makefile.depend $(OFILES)
+	$(CXX) $(SHARED_LIB_FLAGS) -o $@ $(OFILES) $(shell gsl-config --libs) -lm -lreadline -lncurses -lpthread
 
 
 install_scripts:

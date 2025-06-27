@@ -1,8 +1,29 @@
 #!/bin/sh
 
-SPEC=
-if [ `uname -s` = "Darwin" ]; then 
-    SPEC=-spec macx-g++
-fi
+# Generate Makefiles with Qt
+qmake -makefile guilogger.pro
 
-qmake -makefile $SPEC guilogger.pro
+# Fix macOS AGL framework issue
+# AGL was deprecated in macOS 10.9 and removed, but Qt6 still adds it
+if [ "$(uname)" = "Darwin" ]; then
+    echo "Fixing deprecated AGL framework references..."
+    # Wait a moment for all Makefiles to be generated
+    sleep 0.1
+    
+    # Find and fix all Makefiles
+    find . -name "Makefile*" -type f | while read -r makefile; do
+        if grep -q "framework AGL" "$makefile" 2>/dev/null; then
+            # Use a more robust sed command that handles multiple occurrences
+            sed -i '' 's/-framework AGL//g' "$makefile"
+            echo "  Fixed: $makefile"
+        fi
+    done
+    
+    # Also remove AGL from any INCPATH references
+    find . -name "Makefile*" -type f | while read -r makefile; do
+        if grep -q "AGL\.framework" "$makefile" 2>/dev/null; then
+            sed -i '' 's|-I[^ ]*AGL\.framework[^ ]*||g' "$makefile"
+            echo "  Fixed includes in: $makefile"
+        fi
+    done
+fi

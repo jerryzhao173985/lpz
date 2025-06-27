@@ -25,14 +25,7 @@ CONFIG += qt c++17 sdk_no_version_check
 # debug
 CONFIG -= app_bundle
 
-QT += core gui widgets opengl xml
-
-# Remove GLU dependency on macOS
-macx {
-    LIBS += -framework OpenGL
-} else {
-    LIBS += -lGLU
-}
+QT += core gui widgets xml
 
 # Input
 HEADERS += src/AbstractRobotGUI.h \
@@ -100,15 +93,26 @@ SOURCES += src/AbstractRobotGUI.cpp \
            src/visualisations/TextureVisualisation.cpp \
            src/visualisations/VectorPlotVisualisation.cpp \
            src/visualisations/BarVisualisation.cpp
-QT += core gui widgets opengl xml
+
 greaterThan(QT_MAJOR_VERSION, 4) {
     greaterThan(QT_MAJOR_VERSION, 5): QT += openglwidgets
 }
 
 # Remove deprecated AGL framework on macOS
+# macOS specific settings
 macx {
+    # Remove deprecated AGL framework completely
+    QMAKE_LFLAGS -= -framework AGL
     QMAKE_LIBS_OPENGL -= -framework AGL
     LIBS -= -framework AGL
+    
+    # Override any automatic OpenGL detection
+    QMAKE_LIBS_OPENGL = -framework OpenGL
+    
+    # Modern macOS uses Metal/OpenGL via NSOpenGLContext
+    LIBS += -framework OpenGL -framework Cocoa
+} else {
+    LIBS += -lGLU
 }
 
 # debug

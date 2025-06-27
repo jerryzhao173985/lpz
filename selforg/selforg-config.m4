@@ -124,18 +124,13 @@ while test $# -gt 0; do
       ;;
     --cflags)
       if [ -z "$intern" ]; then INTERNFLAGS=; fi
-      if type configurator-config >/dev/null 2>&1; then
-        CONFIGURATORCLAGS=`configurator-config $STATIC --cflags`;
-      else
-        CONFIGURATORCLAGS=-DNOCONFIGURATOR
-      fi
+      # Always use NOCONFIGURATOR for now
+      CONFIGURATORCLAGS=-DNOCONFIGURATOR
       echo $CPPFLAGS DEVORUSER(-I"$srcprefix/include",-I"$prefix/include") GSL(`gsl-config --cflags`, -DNO_GSL) $CONFIGURATORCLAGS $INTERNFLAGS
       ;;
     --libs)
-      if type configurator-config >/dev/null 2>&1; then
-        CONFIGURATORLIBS=`configurator-config $STATIC --libs`;
-      fi
-      echo $LIBS DEVORUSER(-L"$srcprefix/",-L"$prefix/lib") $rpath $STATICSTART -l$LIBBASE $STATICEND GSL(`gsl-config --libs`,) $CONFIGURATORLIBS
+      # Don't include configurator libs for now
+      echo $LIBS DEVORUSER(-L"$srcprefix/",-L"$prefix/lib") $rpath $STATICSTART -l$LIBBASE $STATICEND GSL(`gsl-config --libs`,)
       ;;
     --libfile)
       echo "$srcprefix/lib${LIBBASE}.a"

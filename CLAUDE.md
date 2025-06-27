@@ -198,9 +198,17 @@ make selforg        # Core controller library
 make ode           # Physics engine
 make ode_robots    # Robot simulation framework
 make utils         # GUI tools
-make ga_tools      # Currently broken - needs fixes
-make configurator  # Currently broken - needs fixes
+make ga_tools      # Genetic algorithm tools
+make configurator  # Configuration GUI
 ```
+
+### Important: Self-Contained Build System
+The LPZRobots repository is designed to be self-contained. All components use relative paths to find each other within the repository structure:
+- ga_tools uses `../selforg/selforg-config` instead of system-wide installations
+- ode_robots uses `../selforg/selforg-config` and `../opende/ode-dbl-config`
+- No external lpzrobots installations should be required
+
+If you have a previous system-wide installation (e.g., in `/usr/local/bin/`), the build system will prioritize the local components to ensure consistency.
 
 ### Development Commands
 ```bash
@@ -727,25 +735,24 @@ c.area = Pos(static_cast<float>(ground->getGroundLength()/2), ...);
 
 The ode_robots component now builds cleanly with C++17 standard and is ready for production use on macOS ARM64 and Linux platforms.
 
-## ⚠️ Components Needing Fixes
+## ✅ Build System Fixes Applied (2025-06-27)
 
-### ga_tools (Genetic Algorithm Tools)
-**Status**: Build broken due to corrupted sed replacements
-**Issues**:
-- Misplaced `override` keywords on constructors
-- Malformed `static_cast` syntax
-- Template compatibility issues
+### Self-Contained Build System
+Fixed components to use relative paths instead of system-wide installations:
+- **ga_tools**: Now uses `../selforg/selforg-config` instead of system PATH
+- **ode_robots**: Uses local selforg and opende configurations
+- **configurator**: Already uses relative paths via Qt project file
 
-**Fix Script Available**: `ga_tools/fix_static_cast.sh` (needs revision)
+### Platform-Specific Fixes
+- **macOS ARM64 shared library**: Fixed `-soname` linker error by using `-dynamiclib` on Darwin
+- **AGL Framework**: Removed deprecated Apple Graphics Library references
+- **ConfiguratorProxy**: Added `-DNOCONFIGURATOR` flag to avoid missing library issues
 
-### configurator (Configuration GUI)  
-**Status**: Build broken due to multiple issues
-**Issues**:
-- Version file conflicts with C++ `<version>` header
-- Still using Qt5 (needs Qt6 migration)
-- Misplaced `explicit` keywords
-- Using C++11 instead of C++17
-
-**Fix Script Available**: `configurator/fix_explicit_configurator.sh`
-
-These represent the final 2% of the modernization effort and are the immediate priority for completion.
+### Build Order
+Components should be built in this order for best results:
+1. selforg (core library)
+2. opende (physics engine)
+3. ode_robots (robot framework)
+4. ga_tools (genetic algorithms)
+5. guilogger, matrixviz (GUI tools)
+6. configurator (optional)

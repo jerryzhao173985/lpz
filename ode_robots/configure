@@ -27,7 +27,7 @@ if [ "$(uname)" = "Darwin" ]; then
     fi
 fi
 type=USER
-version=`cat $DIRNAME/VERSION 2>/dev/null || echo "0.8.0"`;
+version=`cat $DIRNAME/VERSION.txt 2>/dev/null || echo "0.8.0"`;
 package=ode_robots
 
 if test $# -eq 0; then
@@ -63,14 +63,22 @@ while test $# -gt 0; do
 done
 
 # test for selforg-config
-if ! type selforg-config; then
-    echo "could not find \"selforg-config\" in PATH" 1>&2;
+if [ -x ../selforg/selforg-config ]; then
+    echo "Using local selforg-config at ../selforg/selforg-config"
+    # Update PATH to include local selforg directory first
+    export PATH="../selforg:$PATH"
+elif ! type selforg-config; then
+    echo "could not find \"selforg-config\" in PATH or ../selforg/" 1>&2;
     exit 1;
 fi
 
 # test for ode-dbl
-if ! type ode-dbl-config; then
-    echo "could not find \"ode-dbl-config\" in PATH" 1>&2;
+if [ -x ../opende/ode-dbl-config ]; then
+    echo "Using local ode-dbl-config at ../opende/ode-dbl-config"
+    # Update PATH to include local opende directory first
+    export PATH="../opende:$PATH"
+elif ! type ode-dbl-config; then
+    echo "could not find \"ode-dbl-config\" in PATH or ../opende/" 1>&2;
     exit 1;
 fi
 

@@ -28,7 +28,7 @@ if [ "$(uname)" = "Darwin" ]; then
     fi
 fi
 type=USER
-version=`cat $DIRNAME/VERSION 2>/dev/null || echo "0.8.0"`;
+version=`cat $DIRNAME/VERSION.txt 2>/dev/null || echo "0.8.0"`;
 package=selforg
 
 if test $# -eq 0; then

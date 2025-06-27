@@ -17,7 +17,7 @@ CXX           = /Applications/Xcode-beta.app/Contents/Developer/Toolchains/Xcode
 DEFINES       = -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -O2 $(EXPORT_ARCH_ARGS) -isysroot /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk -mmacosx-version-min=14.0 -Wall -Wextra -fPIC $(DEFINES)
 CXXFLAGS      = -pipe -stdlib=libc++ -Wno-deprecated -Wno-unused-parameter -std=c++17 -O2 -std=gnu++1z $(EXPORT_ARCH_ARGS) -isysroot /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk -mmacosx-version-min=14.0 -Wall -Wextra -fPIC $(DEFINES)
-INCPATH       = -I. -I. -Isrc/qconfigurable -I../selforg/include -Iinclude/configurator -I/opt/homebrew/lib/QtWidgets.framework/Headers -I/opt/homebrew/lib/QtGui.framework/Headers -I/opt/homebrew/lib/QtXml.framework/Headers -I/opt/homebrew/lib/QtCore.framework/Headers -Imoc -I/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/System/Library/Frameworks/OpenGL.framework/Headers -I/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/System/Library/Frameworks/AGL.framework/Headers/ -I/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/System/Library/Frameworks/OpenGL.framework/Headers -I/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/System/Library/Frameworks/AGL.framework/Headers/ -I/opt/homebrew/share/qt/mkspecs/macx-clang -F/opt/homebrew/lib
+INCPATH       = -I. -I. -Isrc/qconfigurable -I../selforg/include -Iinclude/configurator -I/opt/homebrew/lib/QtWidgets.framework/Headers -I/opt/homebrew/lib/QtGui.framework/Headers -I/opt/homebrew/lib/QtXml.framework/Headers -I/opt/homebrew/lib/QtCore.framework/Headers -Imoc -I/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/System/Library/Frameworks/OpenGL.framework/Headers  -I/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/System/Library/Frameworks/OpenGL.framework/Headers  -I/opt/homebrew/share/qt/mkspecs/macx-clang -F/opt/homebrew/lib
 QMAKE         = /opt/homebrew/opt/qt@6/bin/qmake
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -40,7 +40,7 @@ DISTNAME      = configurator1.0.0
 DISTDIR = /Users/jerry/lpzrobot_mac/configurator/obj/configurator1.0.0
 LINK          = /Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++
 LFLAGS        = -stdlib=libc++ -headerpad_max_install_names $(EXPORT_ARCH_ARGS) -isysroot /Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk -mmacosx-version-min=14.0 -Wl,-rpath,@executable_path/../Frameworks -Wl,-rpath,/opt/homebrew/lib -single_module -dynamiclib -compatibility_version	1.0 -current_version	1.0.0 -install_name	libconfigurator.1.dylib
-LIBS          = $(SUBLIBS) -F/opt/homebrew/lib -lselforg -L../selforg -framework QtWidgets -framework QtGui -framework AppKit -framework ImageIO -framework Metal -framework QtXml -framework QtCore -framework IOKit -framework DiskArbitration -framework UniformTypeIdentifiers -framework AGL -framework OpenGL   
+LIBS          = $(SUBLIBS) -F/opt/homebrew/lib -lselforg -L../selforg -framework QtWidgets -framework QtGui -framework AppKit -framework ImageIO -framework Metal -framework QtXml -framework QtCore -framework IOKit -framework DiskArbitration -framework UniformTypeIdentifiers  -framework OpenGL   
 AR            = /Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar cq
 RANLIB        = /Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib -s
 SED           = sed
@@ -1322,7 +1322,7 @@ distclean: clean
 ####### Sub-libraries
 
 xcodeproj:
-	@$(QMAKE) -spec macx-xcode "$(EXPORT__PRO_FILE_)"
+	@$(QMAKE) -spec macx-clang "$(EXPORT__PRO_FILE_)"
 
 mocclean: compiler_moc_header_clean compiler_moc_objc_header_clean compiler_moc_source_clean
 

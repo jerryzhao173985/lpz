@@ -52,7 +52,9 @@ utils: usage
 	-$(MAKE) guilogger
 	-$(MAKE) matrixviz
 	-$(MAKE) soundman
-	-$(MAKE) javacontroller
+	-@if command -v javac >/dev/null 2>&1; then \
+		$(MAKE) javacontroller; \
+	fi
 	-$(MAKE) configurator
 	-$(MAKE) tags
 	@echo "********************************************************************************"
@@ -69,14 +71,16 @@ install_utils:
          elif [ -e matrixviz/bin/matrixviz ]; then \
 	   cp matrixviz/bin/matrixviz $(PREFIX)/bin/ && echo "===> copied matrixviz to $(PREFIX)/bin/"; \
 	 fi
-	-cd javacontroller/src && $(MAKE) PREFIX=$(PREFIX)/ install
+	-@if command -v javac >/dev/null 2>&1; then \
+		cd javacontroller/src && $(MAKE) PREFIX=$(PREFIX)/ install; \
+	fi
 	-@if [ -d guilogger/bin/guilogger.app ]; then \
           cp guilogger/bin/guilogger.app/Contents/MacOS/guilogger $(PREFIX)/bin/ && echo "===> copied guilogger to $(PREFIX)/bin/"; \
          elif [ -e guilogger/src/bin/guilogger ]; then \
 	   cp guilogger/src/bin/guilogger $(PREFIX)/bin/ && echo "===> copied guilogger to $(PREFIX)/bin/"; \
 	 else cp guilogger/bin/guilogger $(PREFIX)/bin/ && echo "===> copied guilogger to $(PREFIX)/bin/"; \
 	fi
-	-@if [ -e configurator/libconfigurator.a -o -e configurator/libconfigurator.so ]; then install --mode 644 configurator/libconfigurator.* $(PREFIX)/lib/ && install --mode 755 configurator/configurator-config $(PREFIX)/bin/ && echo "===> copied libconfigurator to $(PREFIX)/lib/"; fi
+	-@if [ -e configurator/libconfigurator.a -o -e configurator/libconfigurator.so ]; then install -m 644 configurator/libconfigurator.* $(PREFIX)/lib/ && install -m 755 configurator/configurator-config $(PREFIX)/bin/ && echo "===> copied libconfigurator to $(PREFIX)/lib/"; fi
 	-@cp -r configurator/include/configurator $(PREFIX)/include/ && echo "===> copied configurator bins, includes and libs $(PREFIX)"
 	-cp soundman/class/*.class $(PREFIX)/lib/soundMan/
 	-cp soundman/bin/soundMan $(PREFIX)/bin/soundMan
@@ -98,12 +102,21 @@ selforg: usage
 install_selforg: usage
 	cd selforg && make install
 
+# ─── helper variables ───────────────────────────────────────────────────────────
+ODE_PREFIX  := $(shell brew --prefix ode)
+ODE_INC_DIR := $(ODE_PREFIX)/include/ode
+
 .PHONY: ode
 ##!ode		   uses system ODE with compatibility layer
 ode:
 	@echo "*************** Using system ODE with compatibility layer ***************"
-	@if command -v brew &> /dev/null && brew list ode &> /dev/null; then \
+	@if command -v brew >/dev/null 2>&1 && brew list ode >/dev/null 2>&1; then \
 		echo "ODE is installed via Homebrew at: $$(brew --prefix ode)"; \
+                echo "Syncing headers into include/ode-dbl …"; \
+	        install -d include/ode-dbl; \
+	        for h in $(wildcard $(ODE_INC_DIR)/*.h); do \
+	            ln -sf $$h include/ode-dbl/$$(basename $$h); \
+	        done; \
 		echo "Compatibility layer created in include/ode-dbl/"; \
 	else \
 		echo "ERROR: ODE not found. Please install it first:"; \
@@ -118,7 +131,7 @@ install_ode:
 	@echo "*************** Installing ODE compatibility layer ***************"
 	@echo "Installing ode-dbl compatibility headers..."
 	@install -d $(PREFIX)/include/ode-dbl
-	@cp -r include/ode-dbl/* $(PREFIX)/include/ode-dbl/
+	@cp -R -P include/ode-dbl/. $(PREFIX)/include/ode-dbl/
 	@echo "Creating library symlinks for compatibility..."
 	@if [ -f "$$(brew --prefix ode)/lib/libode.dylib" ]; then \
 		ln -sf "$$(brew --prefix ode)/lib/libode.dylib" "$(PREFIX)/lib/libode_dbl.dylib" 2>/dev/null || true; \
@@ -220,12 +233,22 @@ configurator:
 .PHONY: javactrl
 ##!javactrl	  compile javacontroller (experimental)
 javactrl:
-	cd javacontroller/src && $(MAKE)
+	@if command -v javac >/dev/null 2>&1; then \
+		cd javacontroller/src && $(MAKE); \
+	else \
+		echo "Warning: Java compiler not found. Skipping javacontroller build."; \
+		echo "         To build javacontroller, install Java JDK."; \
+	fi
 
 .PHONY: soundman
 ##!soundman	  compile soundman (experimental)
 soundman:
-	cd soundman/src	&& javac -d ../class/ SoundMan.java SoundManipulation.java SoundManGUI.java
+	@if command -v javac >/dev/null 2>&1; then \
+		cd soundman/src && javac -d ../class/ SoundMan.java SoundManipulation.java SoundManGUI.java; \
+	else \
+		echo "Warning: Java compiler not found. Skipping soundman build."; \
+		echo "         To build soundman, install Java JDK."; \
+	fi
 
 
 .PHONY: confsubmodule

@@ -172,4 +172,8 @@ namespace lpzrobots {
     }
   }
 
+  Transform* ContactSensor::getTransformObject() const {
+    return transform;
+  }
+
 }

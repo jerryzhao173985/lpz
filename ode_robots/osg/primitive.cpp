@@ -93,6 +93,10 @@ namespace lpzrobots{
     QMP_END_CRITICAL(8);
   }
 
+  void Primitive::update() {
+    // Default implementation: do nothing
+    // This method should be overridden by derived classes
+  }
 
   void Primitive::attachGeomAndSetColliderFlags(){
     if(mode & Body){

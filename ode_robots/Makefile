@@ -3,9 +3,9 @@
 #Date:     June 2005
 
 # Ensure ode-dbl-config is in PATH
-export PATH := /Users/jerry/lpzrobot_mac/opende:$(PATH)
+export PATH := ../opende:$(PATH)
 
-SELFORGCFG="/Users/jerry/lpzrobot_mac/selforg/selforg-config"
+SELFORGCFG=`if [ -x ../selforg/selforg-config ]; then echo "../selforg/selforg-config"; elif type selforg-config >/dev/null 2>&1; then echo "selforg-config"; else echo "Cannot find selforg-config" 1>&2; fi`
 
 
 INCLUDEDIR=include/ode_robots

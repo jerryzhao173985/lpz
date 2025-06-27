@@ -217,5 +217,9 @@ matrix::Matrix AbstractObstacle::getOrientation() const {
   }
 }
 
+void AbstractObstacle::create() {
+  // Default implementation: do nothing
+  // This method should be overridden by derived classes
+}
 
 }

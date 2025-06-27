@@ -1,9 +1,0 @@
-Makefile.depend
-*.a
-*.so
-install_prefix.conf
-build_dbg
-build
-build_opt
-ga_tools-config
-TAGS

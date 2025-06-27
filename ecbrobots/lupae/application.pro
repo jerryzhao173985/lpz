@@ -11,7 +11,7 @@ MOC_DIR = moc
 
 
 #Qt used libraries/functionalities
-QT = core gui xml
+QT = core gui widgets xml
 
 # Input - Header
 HEADERS 	+= src/mainwindow.h
@@ -38,4 +38,16 @@ SOURCES 	+= src/avrDeviceList.cpp
 
 RESOURCES 	+= application.qrc
 
-           
+# macOS specific settings
+macx {
+    # Remove deprecated AGL framework completely
+    QMAKE_LFLAGS -= -framework AGL
+    QMAKE_LIBS_OPENGL -= -framework AGL
+    LIBS -= -framework AGL
+    
+    # Override any automatic OpenGL detection
+    QMAKE_LIBS_OPENGL = -framework OpenGL
+    
+    # Modern macOS uses Metal/OpenGL via NSOpenGLContext
+    LIBS += -framework OpenGL -framework Cocoa
+}

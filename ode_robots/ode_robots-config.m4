@@ -73,8 +73,17 @@ ifdef(`MAC',
 )
 CPPFLAGS="$CBASEFLAGS"
 INTERNFLAGS="-g -O"
-LIBS="-lm -losgShadow -losgText -losgUtil -losgViewer -losgGA -losgDB -lOpenThreads -losg -lGL -lGLU -lglut -lpthread"
 
+# ---------- choose GLUT flags per platform ----------
+case `uname` in
+  Darwin)
+      GLUT_FLAGS="-framework GLUT -framework OpenGL" ;;
+  *)
+      GLUT_FLAGS="-lglut" ;;
+esac
+
+LIBS="-lm -losgShadow -losgText -losgUtil -losgViewer -losgGA -losgDB \
+      -lOpenThreads -losg -lGL -lGLU ${GLUT_FLAGS} -lpthread"
 
 usage="\
 Usage: ode_robots-config [--prefix[=DIR]] [--srcprefix[=DIR]] [--version] [--intern] [--static] [--opt|--dbg] [--cflags] [--libs] [--libfile] [--solibfile] [--type]"
