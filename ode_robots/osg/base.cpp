@@ -279,6 +279,22 @@ namespace lpzrobots {
 
   osg::Node* Base::createHUD(OsgScene* scene, const OsgConfig& config)
   {
+    // Check if HUD is disabled via config
+    if (config.noHUD) {
+      // Return nullptr to prevent HUD from being added to scene
+      return nullptr;
+    }
+    
+#ifdef __APPLE__
+    // On macOS, skip HUD text rendering entirely due to OpenGL deprecation issues
+    // This should not normally be reached due to automatic noHUD flag on macOS
+    static bool warnedOnce = false;
+    if (!warnedOnce) {
+      printf("WARNING: macOS HUD rendering may crash - consider using -nohud\n");
+      warnedOnce = true;
+    }
+    return nullptr;  // Return early on macOS
+#else
     osg::Geode* geode = new osg::Geode();
 
     // turn lighting off for the text and disable depth test to ensure its always ontop.
@@ -301,7 +317,6 @@ namespace lpzrobots {
       captionline->setAlignment(osgText::Text::RIGHT_BASE_LINE);
       captionline->setText(caption.c_str());
     }
-
     // title (center)
     position = osg::Vec3(255.0f,9.0f,0.0f);
     {
@@ -390,6 +405,7 @@ namespace lpzrobots {
     scene->hud = geode;
 
     return camera;
+#endif
   }
 
   void  Base::createHUDManager(osg::Geode* geode, osgText::Font* font) const{

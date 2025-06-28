@@ -28,7 +28,7 @@
 
 namespace lpzrobots {
 
-  class OctaPlayground{
+  class OctaPlayground : public AbstractGround {
 
 
   protected:
@@ -43,7 +43,7 @@ namespace lpzrobots {
 
     OctaPlayground(const OdeHandle& odeHandle, const OsgHandle& osgHandle,
                  const Pos& geometry = Pos(7,0.2,0.5), int numberCorners=8, bool createGround=true):
-    AbstractGround::AbstractGround(odeHandle, osgHandle,createGround,2*geometry.x(),2*geometry.x(), geometry.y()) {
+    AbstractGround(odeHandle, osgHandle,createGround,2*geometry.x(),2*geometry.x(), geometry.y()) {
     radius = geometry.x();
     width  = geometry.y();
     height = geometry.z();
@@ -62,7 +62,7 @@ protected:
 
     // radius for positioning is smaller than radius since we use secants.
     //  r is the smallest distance of the secant to the center of the circle.
-    double r = sqrt(pow((1+cos(angle))/2, 2) + pow( sin(angle)/2 ,2)) * radius override;
+    double r = sqrt(pow((1+cos(angle))/2, 2) + pow( sin(angle)/2 ,2)) * radius;
     for (int i=0; i<number_elements; ++i) {
       Box* box =  new Box(width , box_length , height);
       box->setTextures(getTextures(i));
@@ -81,7 +81,7 @@ protected:
   virtual void calcBoxLength() {
     double r = radius+width/2;
     //    box_length =1.4 * sqrt( 2 * pow(radius,2) * (1 - cos(angle)) );
-    box_length =  sqrt(pow( 1 - cos(angle), 2) + pow(sin(angle),2)) * r override;
+    box_length =  sqrt(pow( 1 - cos(angle), 2) + pow(sin(angle),2)) * r;
   }
 
 };

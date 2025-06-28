@@ -39,13 +39,14 @@ namespace lpzrobots {
   /** Data structure containing some configuration variables for OSG */
   struct OsgConfig {
     OsgConfig() : tesselhints{nullptr, nullptr, nullptr}, normalState(0), transparentState(0), 
-                  cs(nullptr), shadowType(0), noGraphics(false) {}
+                  cs(nullptr), shadowType(0), noGraphics(false), noHUD(false) {}
     osg::TessellationHints* tesselhints[3];  
     osg::StateSet* normalState;  
     osg::StateSet* transparentState;  
     lpzrobots::ColorSchema* cs; // color schema
     int shadowType = 0;
-    bool noGraphics = false;        
+    bool noGraphics = false;
+    bool noHUD = false;  // disable HUD rendering (useful for macOS compatibility)
   };
 
   /** Data structure containing the scene notes (e.g. with and without shadow)*/

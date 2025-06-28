@@ -46,23 +46,24 @@ LIBBASE=selforg
 ## use -pg for profiling
 COMMENT(`Use environment variable LPZROBOTS_INCLUDE_PATH if set, otherwise use common macOS paths')
 CBASEFLAGS="-std=c++17 -pthread ARM64FLAGS"
-ifdef(`MAC',
-  `EXTRA_INCLUDES=""
+ifdef([[MAC]],
+  [[EXTRA_INCLUDES=""
   if [ -n "$LPZROBOTS_INCLUDE_PATH" ]; then
     EXTRA_INCLUDES="-I$LPZROBOTS_INCLUDE_PATH"
   else
     # Check for common macOS package manager paths
+    # Use -isystem instead of -I to suppress warnings from external libraries
     if [ -d "/opt/homebrew/include" ]; then
-      EXTRA_INCLUDES="$EXTRA_INCLUDES -I/opt/homebrew/include"
+      EXTRA_INCLUDES="$EXTRA_INCLUDES -isystem /opt/homebrew/include"
     fi
     if [ -d "/opt/local/include" ]; then
-      EXTRA_INCLUDES="$EXTRA_INCLUDES -I/opt/local/include"
+      EXTRA_INCLUDES="$EXTRA_INCLUDES -isystem /opt/local/include"
     fi
     if [ -d "/usr/local/include" ]; then
-      EXTRA_INCLUDES="$EXTRA_INCLUDES -I/usr/local/include"
+      EXTRA_INCLUDES="$EXTRA_INCLUDES -isystem /usr/local/include"
     fi
   fi
-  CBASEFLAGS="$CBASEFLAGS $EXTRA_INCLUDES"'
+  CBASEFLAGS="$CBASEFLAGS $EXTRA_INCLUDES"]]
 )
 CPPFLAGS="$CBASEFLAGS"
 INTERNFLAGS="-g -O"
@@ -111,6 +112,7 @@ while test $# -gt 0; do
       LINUXORMAC([[STATICSTART=-Wl,-Bstatic]],[[STATICSTART=]])
       LINUXORMAC([[STATICEND=-Wl,-Bdynamic]],[[STATICEND=]])
       rpath=""
+      USE_STATIC_LIBS=1
     ;;
     --opt) ##Optimisation
       LIBBASE=${LIBBASE}_opt
@@ -130,7 +132,12 @@ while test $# -gt 0; do
       ;;
     --libs)
       # Don't include configurator libs for now
-      echo $LIBS DEVORUSER(-L"$srcprefix/",-L"$prefix/lib") $rpath $STATICSTART -l$LIBBASE $STATICEND GSL(`gsl-config --libs`,)
+      COMMENT(`On macOS with --static, use explicit .a file paths instead of -l flags')
+      if [ -n "$USE_STATIC_LIBS" ] && [ `uname` = "Darwin" ]; then
+        echo $LIBS DEVORUSER("$srcprefix/lib${LIBBASE}.a","$prefix/lib/lib${LIBBASE}.a") GSL(`gsl-config --libs`,)
+      else
+        echo $LIBS DEVORUSER(-L"$srcprefix/",-L"$prefix/lib") $rpath $STATICSTART -l$LIBBASE $STATICEND GSL(`gsl-config --libs`,)
+      fi
       ;;
     --libfile)
       echo "$srcprefix/lib${LIBBASE}.a"

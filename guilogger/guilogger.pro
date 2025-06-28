@@ -13,14 +13,15 @@ CONFIG -= app_bundle
 
 # macOS specific settings
 macx {
+    # Disable Qt's automatic OpenGL configuration to prevent AGL inclusion
+    CONFIG -= opengl
+    
     # Remove deprecated AGL framework completely
+    # AGL was deprecated in macOS 10.9 and removed in later versions
     QMAKE_LFLAGS -= -framework AGL
-    QMAKE_LIBS_OPENGL -= -framework AGL
+    QMAKE_LIBS_OPENGL = -framework OpenGL
     LIBS -= -framework AGL
     
-    # Override any automatic OpenGL detection
-    QMAKE_LIBS_OPENGL = -framework OpenGL
-    
-    # Modern macOS uses Metal/OpenGL via NSOpenGLContext
-    LIBS += -framework OpenGL -framework Cocoa
+    # Note: OpenGL headers are now provided by the SDK, not the framework
+    # Don't manually add frameworks - let Qt handle it properly
 }

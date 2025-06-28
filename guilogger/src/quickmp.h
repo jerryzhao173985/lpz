@@ -60,7 +60,9 @@
 // inline within the class definition (i.e. we can't define the function
 // at the end of a macro and let the user code write the {} brackets).  This
 // requires the use of two separate begin/end macros.  The instances of each
-// parallel section class should{ \
+// parallel section class should be stored statically.
+#define QMP_PARALLEL_FOR(indexName, loopFirstIndex, ...) \
+{ \
         qmp_internal::ParallelTaskManager::instance().setLoopIndices( \
                 loopFirstIndex, __VA_ARGS__); \
         static class QMP_UNIQUE_SYMBOL(ParallelTaskSubclass) : \

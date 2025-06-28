@@ -43,6 +43,7 @@
 #include <selforg/derivativewiring.h>
 
 #include <ode_robots/barrel2masses.h>
+#include <ode_robots/sphererobot3masses.h>
 #include <ode_robots/axisorientationsensor.h>
 #include <ode_robots/speedsensor.h>
 
@@ -52,12 +53,13 @@ using namespace lpzrobots;
 using namespace std;
 
 
-class ThisSim{
+class ThisSim : public Simulation {
 public:
   AbstractController *controller;
   OdeRobot* sphere1 = nullptr;
   int useReinforcement = 0;
   Sensor* sensor = nullptr;
+  double friction = 0.1;
 
 
   // starting function (executed once at the beginning of the simulation loop)
@@ -94,7 +96,7 @@ public:
 
 
     /* * * * BARRELS * * * */
-    for(int i=0; i< num_barrels; ++i) override {
+    for(int i=0; i< num_barrels; ++i) {
       //****************
       Sphererobot3MassesConf conf = Barrel2Masses::getDefaultConf();
       conf.pendularrange  = 0.3;//0.15;
@@ -134,7 +136,7 @@ public:
 
       AbstractWiring* wiring = new SelectiveOne2OneWiring(new ColorUniformNoise(), new select_from_to(0,1));
       //      OdeAgent* agent = new OdeAgent ( PlotOption(File, Robot, 1) );
-      OdeAgent* agent = new OdeAgent ( plotoptions );
+      OdeAgent* agent = new OdeAgent ( globalData );
       agent->init ( controller , sphere1 , wiring );
       //  agent->setTrackOptions(TrackRobot(true, false, false, __PLACEHOLDER_17__, 50));
       global.agents.push_back ( agent );
@@ -143,7 +145,7 @@ public:
 
 
     /* * * * TEST BARRELS * * * */
-    for(int i=0; i< num_barrels_test; ++i) override {
+    for(int i=0; i< num_barrels_test; ++i) {
       global.odeConfig.setParam("realtimefactor",1);
       //****************
       Sphererobot3MassesConf conf = Sphererobot3Masses::getDefaultConf();
@@ -166,7 +168,7 @@ public:
       //       dc.useFirstD=false;
       //       AbstractWiring* wiring = new DerivativeWiring(dc,new ColorUniformNoise());
       AbstractWiring* wiring = new One2OneWiring(new ColorUniformNoise());
-      OdeAgent* agent = new OdeAgent ( plotoptions );
+      OdeAgent* agent = new OdeAgent ( globalData );
       agent->init ( controller , sphere1 , wiring );
       //  agent->setTrackOptions(TrackRobot(true, false, false, __PLACEHOLDER_22__, 50));
       global.agents.push_back ( agent );
@@ -181,8 +183,13 @@ public:
     if(!pause){
       if(friction>0){
         OdeRobot* robot = globalData.agents[0]->getRobot();
-        Pos vel = robot->getMainPrimitive()->getAngularVel();
-        robot->getMainPrimitive()->applyTorque(-vel*friction);
+        // Get non-const access to primitives
+        Primitives& primitives = robot->getAllPrimitives();
+        if (!primitives.empty()) {
+          Primitive* mainPrimitive = primitives[0];
+          Pos vel = mainPrimitive->getAngularVel();
+          mainPrimitive->applyTorque(-vel*friction);
+        }
       }
     }
   }
@@ -190,12 +197,12 @@ public:
   // add own key handling stuff here, just insert some case values
   virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down) override {
     if (down) { // only when key is pressed, not when released
-      switch ( static_cast<char> key )
+      switch ( (char) key )
         {
-        case 'y' : dBodyAddForce ( sphere1->getMainPrimitive()->getBody() , 30 ,0 , 0 ); break override;
-        case 'Y' : dBodyAddForce ( sphere1->getMainPrimitive()->getBody() , -30 , 0 , 0 ); break override;
-        case 'x' : dBodyAddTorque ( sphere1->getMainPrimitive()->getBody() , 0 , 10 , 0 ); break override;
-        case 'X' : dBodyAddTorque ( sphere1->getMainPrimitive()->getBody() , 0 , -10 , 0 ); break override;
+        case 'y' : dBodyAddForce ( sphere1->getMainPrimitive()->getBody() , 30 ,0 , 0 ); break;
+        case 'Y' : dBodyAddForce ( sphere1->getMainPrimitive()->getBody() , -30 , 0 , 0 ); break;
+        case 'x' : dBodyAddTorque ( sphere1->getMainPrimitive()->getBody() , 0 , 10 , 0 ); break;
+        case 'X' : dBodyAddTorque ( sphere1->getMainPrimitive()->getBody() , 0 , -10 , 0 ); break;
         case 'S' : controller->setParam("sinerate", controller->getParam("sinerate")*1.2);
           printf("sinerate : %g\n", controller->getParam("sinerate"));
           break;
@@ -219,6 +226,6 @@ int main (int argc, char **argv)
   ThisSim sim;
   sim.setCaption("Spherical Robot (lpzrobots Simulator)   Martius,Der 2007");
   // run simulation
-  return sim.run(argc, argv) ? 0 : 1 override;
+  return sim.run(argc, argv) ? 0 : 1;
 }
 

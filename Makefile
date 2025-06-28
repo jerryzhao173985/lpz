@@ -29,6 +29,8 @@ all_intern:
 	$(SUDO) $(MAKE) install_utils
 	$(MAKE) selforg
 	$(SUDO) $(MAKE) install_selforg
+	$(MAKE) configurator
+	$(SUDO) $(MAKE) install_configurator
 	$(MAKE) ode
 	$(SUDO) $(MAKE) install_ode
 	$(MAKE) ode_robots
@@ -55,7 +57,6 @@ utils: usage
 	-@if command -v javac >/dev/null 2>&1; then \
 		$(MAKE) javacontroller; \
 	fi
-	-$(MAKE) configurator
 	-$(MAKE) tags
 	@echo "********************************************************************************"
 	@echo "Don't worry if you have seen a lot of errors above."
@@ -80,8 +81,6 @@ install_utils:
 	   cp guilogger/src/bin/guilogger $(PREFIX)/bin/ && echo "===> copied guilogger to $(PREFIX)/bin/"; \
 	 else cp guilogger/bin/guilogger $(PREFIX)/bin/ && echo "===> copied guilogger to $(PREFIX)/bin/"; \
 	fi
-	-@if [ -e configurator/libconfigurator.a -o -e configurator/libconfigurator.so ]; then install -m 644 configurator/libconfigurator.* $(PREFIX)/lib/ && install -m 755 configurator/configurator-config $(PREFIX)/bin/ && echo "===> copied libconfigurator to $(PREFIX)/lib/"; fi
-	-@cp -r configurator/include/configurator $(PREFIX)/include/ && echo "===> copied configurator bins, includes and libs $(PREFIX)"
 	-cp soundman/class/*.class $(PREFIX)/lib/soundMan/
 	-cp soundman/bin/soundMan $(PREFIX)/bin/soundMan
 	sed -i -e "s|PREFIX=.*|PREFIX=$(PREFIX)|" $(PREFIX)/bin/soundMan
@@ -101,6 +100,17 @@ selforg: usage
 ##!install_selforg install selforg
 install_selforg: usage
 	cd selforg && make install
+
+.PHONY: install_configurator
+##!install_configurator  installs the configurator library and headers
+install_configurator:
+	-@if [ -e configurator/libconfigurator.a -o -e configurator/libconfigurator.so ]; then \
+		install -m 644 configurator/libconfigurator.* $(PREFIX)/lib/ && \
+		install -m 755 configurator/configurator-config $(PREFIX)/bin/ && \
+		echo "===> copied libconfigurator to $(PREFIX)/lib/"; \
+	fi
+	-@cp -r configurator/include/configurator $(PREFIX)/include/ && \
+		echo "===> copied configurator bins, includes and libs $(PREFIX)"
 
 # ─── helper variables ───────────────────────────────────────────────────────────
 ODE_PREFIX  := $(shell brew --prefix ode)
@@ -223,8 +233,8 @@ matrixviz:
 	cd matrixviz && ./configure && $(MAKE)
 
 .PHONY: configurator
-##!configurator	  compile configurator
-configurator:
+##!configurator	  compile configurator (depends on selforg)
+configurator: selforg
 	configurator/configure --prefix=$(PREFIX) --system=$$System --type=$(TYPE) --static
 	$(MAKE) -C configurator
 	configurator/configure --prefix=$(PREFIX) --system=$$System --type=$(TYPE)

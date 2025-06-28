@@ -12,7 +12,7 @@ public class SoundManGUI extends JFrame {
  private boolean smoothing;
  private int note;
  private int toneLength;
- private JComboBox instruCB;
+ private JComboBox<String> instruCB;
  private JLabel l4;
  private JSlider noteSlide;
  private JSlider toneLSlide;
@@ -77,7 +77,7 @@ public class SoundManGUI extends JFrame {
   paramFTF.addActionListener(
    new ActionListener() {
     public void actionPerformed(ActionEvent e) {
-     float newParam=new Float(paramFTF.getText().replace(',','.')).floatValue();
+     float newParam=Float.parseFloat(paramFTF.getText().replace(',','.'));
      if(newParam<0.0f) {
       newParam=Math.abs(newParam);
       paramFTF.setText(NumberFormat.getInstance().format(newParam));
@@ -93,7 +93,7 @@ public class SoundManGUI extends JFrame {
   paramB.addActionListener(
    new ActionListener() {
     public void actionPerformed(ActionEvent e) {
-     float newParam=new Float(paramFTF.getText().replace(',','.')).floatValue();
+     float newParam=Float.parseFloat(paramFTF.getText().replace(',','.'));
      if(newParam<0.0f) {
       newParam=Math.abs(newParam);
       paramFTF.setText(NumberFormat.getInstance().format(newParam));
@@ -228,7 +228,7 @@ public class SoundManGUI extends JFrame {
   l3.setBounds(10, 170, 80, 20);
   getContentPane().add(l3);
 
-  instruCB=new JComboBox();
+  instruCB=new JComboBox<String>();
   instruCB.setBounds(90, 170, 140, 20);
   getContentPane().add(instruCB);
 

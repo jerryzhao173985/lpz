@@ -30,7 +30,7 @@
 
 namespace lpzrobots {
 
-  class Playground{
+  class Playground : public AbstractGround {
 
   protected:
 

@@ -116,8 +116,9 @@ make install → PREFIX/{bin,lib,include,share}
    - Fix approach: Revert and manually modernize
 
 2. **configurator** (Configuration GUI)
-   - Status: Build fails due to version file conflict and Qt5
-   - Issues: Conflicts with C++ <version> header, needs Qt6 migration
+   - Status: Build dependency fixed, but still needs Qt6 migration
+   - Issues: Version file conflicts with C++ <version> header, still using Qt5
+   - Build order issue: Fixed - now builds after selforg (2025-01-28)
    - Files affected: 27+ files with incorrect replacements
    - Fix approach: Remove version file, migrate to Qt6
 
@@ -756,3 +757,41 @@ Components should be built in this order for best results:
 4. ga_tools (genetic algorithms)
 5. guilogger, matrixviz (GUI tools)
 6. configurator (optional)
+
+## 🔧 Recent Build System Fixes (2025-01-28)
+
+### Fixed Issues
+
+#### 1. AGL Framework Error (guilogger) ✅
+**Problem**: Qt's global mkspecs at `/opt/homebrew/share/qt/mkspecs/common/mac.conf` hardcoded `-framework AGL` which no longer exists on modern macOS.
+
+**Solution Implemented**:
+- Updated `guilogger/src/src.pro` to disable Qt's automatic OpenGL configuration with `CONFIG -= opengl`
+- Enhanced `guilogger/configure` script to robustly remove all AGL references using improved sed patterns
+- Fixed both `-framework AGL` and include path references like `-I.../AGL.framework/Headers`
+- Created reusable build helper script at `build_helpers/fix_qt_macos.sh`
+
+#### 2. Java Deprecation Warnings (soundman) ✅
+**Problem**: Used deprecated `new Float(String).floatValue()` constructor
+
+**Solution**: Replaced with `Float.parseFloat(String)` in:
+- `soundman/src/SoundManipulation.java`
+- `soundman/src/SoundManGUI.java` (all occurrences)
+
+#### 3. Configurator Build Order ✅
+**Problem**: configurator was built before selforg but depends on selforg headers
+
+**Solution**: 
+- Modified main `Makefile` to build configurator after selforg
+- Added explicit dependency: `configurator: selforg`
+- Moved configurator out of utils target
+- Created separate `install_configurator` target
+
+### Build Helper Scripts
+Created reusable scripts in `build_helpers/`:
+- **fix_qt_macos.sh** - Handles Qt/macOS specific issues (AGL removal, OpenGL configuration)
+- **suppress_external_warnings.sh** - Converts `-I` to `-isystem` for external libraries
+
+### Component Status Update
+- **configurator**: Build dependency issue fixed, but still needs Qt6 migration and C++17 fixes
+- **ga_tools**: Still needs manual fixing of corrupted sed replacements

@@ -26,17 +26,21 @@ OFILES = $(addsuffix .o, $(FILES))
 # the CFGOPTS are set by the opt and dbg target
 CFGOPTS=
 INC    += -I.
-BASELIBS = $(shell ode_robots-config $(CFGOPTS) --static --libs) $(shell selforg-config $(CFGOPTS) --static --libs)
-BASELIBSSHARED := $(shell ode_robots-config $(CFGOPTS) --libs) $(shell selforg-config $(CFGOPTS) --libs)
+# Find config scripts relative to simulation directory
+SELFORGCFG := $(shell if [ -x ../../../selforg/selforg-config ]; then echo "../../../selforg/selforg-config"; else echo "selforg-config"; fi)
+ODEROBOTSCFG := $(shell if [ -x ../../ode_robots-config ]; then echo "../../ode_robots-config"; else echo "ode_robots-config"; fi)
+
+BASELIBS = $(shell $(ODEROBOTSCFG) $(CFGOPTS) --static --libs) $(shell $(SELFORGCFG) $(CFGOPTS) --static --libs)
+BASELIBSSHARED := $(shell $(ODEROBOTSCFG) $(CFGOPTS) --libs) $(shell $(SELFORGCFG) $(CFGOPTS) --libs)
 
 
-LIBSELFORG=$(shell selforg-config $(CFGOPTS) --libfile)
-LIBSELFORGSHARED:=$(shell selforg-config $(CFGOPTS) --solibfile)
-SELFORGSRCPREFIX=$(shell selforg-config $(CFGOPTS) --srcprefix)
+LIBSELFORG=$(shell $(SELFORGCFG) $(CFGOPTS) --libfile)
+LIBSELFORGSHARED:=$(shell $(SELFORGCFG) $(CFGOPTS) --solibfile)
+SELFORGSRCPREFIX=$(shell $(SELFORGCFG) $(CFGOPTS) --srcprefix)
 
-LIBODEROBOTS=$(shell ode_robots-config $(CFGOPTS) --libfile)
-LIBODEROBOTSSHARED:=$(shell ode_robots-config $(CFGOPTS) --solibfile)
-ODEROBOTSSRCPREFIX=$(shell ode_robots-config $(CFGOPTS) --srcprefix)
+LIBODEROBOTS=$(shell $(ODEROBOTSCFG) $(CFGOPTS) --libfile)
+LIBODEROBOTSSHARED:=$(shell $(ODEROBOTSCFG) $(CFGOPTS) --solibfile)
+ODEROBOTSSRCPREFIX=$(shell $(ODEROBOTSCFG) $(CFGOPTS) --srcprefix)
 
 
 
@@ -44,10 +48,24 @@ ODEROBOTSSRCPREFIX=$(shell ode_robots-config $(CFGOPTS) --srcprefix)
 LIBS  += $(BASELIBS) $(ADDITIONAL_LIBS)
 
 INC   += -I.
+# Add system include path for ode-dbl symlinks if they exist locally
+ifneq ($(wildcard ../../../include/ode-dbl),)
+  INC += -isystem ../../../include/ode-dbl
+endif
+ifneq ($(wildcard ../../include/ode-dbl),)
+  INC += -isystem ../../include/ode-dbl
+endif
 
 CXX = g++
-CPPFLAGS = -Wall -pipe -Wno-deprecated $(INC) $(shell selforg-config $(CFGOPTS) --cflags) \
-  $(shell ode_robots-config $(CFGOPTS) --intern --cflags)
+# Base flags including external library includes with -isystem
+CPPFLAGS_BASE = -Wall -pipe -Wno-deprecated $(INC) $(shell $(SELFORGCFG) $(CFGOPTS) --cflags) \
+  $(shell $(ODEROBOTSCFG) $(CFGOPTS) --intern --cflags)
+
+# Additional warnings for our own code only
+EXTRA_WARNINGS = -Wextra -Wpedantic -Wfloat-equal -Wold-style-cast -Wno-unused-parameter
+
+# Full flags for compilation
+CPPFLAGS = $(CPPFLAGS_BASE) $(EXTRA_WARNINGS)
 
 normal: libode_robots
 	$(MAKE) $(EXEC)
@@ -76,10 +94,10 @@ libode_robots_shared:
 
 
 Makefile.depend:
-	makedepend -- $(CPPFLAGS) -- $(CFILES) -f- > Makefile.depend 2>/dev/null
+	makedepend -- $(shell echo "$(CPPFLAGS_BASE)" | sed 's/-isystem/-I/g') -- $(CFILES) -f- > Makefile.depend 2>/dev/null
 
 depend:
-	makedepend -- $(CPPFLAGS) -- $(CFILES)  -f- > Makefile.depend 2>/dev/null
+	makedepend -- $(shell echo "$(CPPFLAGS_BASE)" | sed 's/-isystem/-I/g') -- $(CFILES)  -f- > Makefile.depend 2>/dev/null
 
 check-syntax:
 	$(CXX) $(CPPFLAGS) -Wextra -S -fsyntax-only $(CHK_SOURCES)

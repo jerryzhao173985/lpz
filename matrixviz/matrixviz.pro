@@ -27,6 +27,18 @@ CONFIG -= app_bundle
 
 QT += core gui widgets xml
 
+# Suppress warnings from system headers and Qt
+QMAKE_CXXFLAGS += -Wno-float-equal -Wno-old-style-cast
+
+# Platform specific settings
+macx {
+    # Suppress warnings from system frameworks and Qt headers
+    QMAKE_CXXFLAGS += -Wno-deprecated-declarations
+    # Add system include flags for external libraries
+    QMAKE_CXXFLAGS += -isystem /opt/homebrew/include
+    QMAKE_CXXFLAGS += -isystem /opt/homebrew/lib
+}
+
 # Input
 HEADERS += src/AbstractRobotGUI.h \
            src/AbstractRobotSubWidget.h \

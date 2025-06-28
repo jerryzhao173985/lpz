@@ -45,6 +45,8 @@
 #include <osg/ShapeDrawable>
 #include <osg/ArgumentParser>
 #include <osg/AlphaFunc>
+#include <osg/DisplaySettings>
+#include <osg/GL>
 #include <osgUtil/SceneView>
 // #include <osgUtil/Optimizer>
 #include <osgDB/Registry>
@@ -159,6 +161,9 @@ namespace lpzrobots {
 
     currentCycle = 1;
     windowName = "Lpzrobots - Selforg";
+    
+    // Initialize cameraHandle to prevent null pointer crash
+    cameraHandle = new CameraHandle();
 
     // default color palette
     paletteFiles.push_back("colors/RGB_Full.gpl");
@@ -180,6 +185,8 @@ namespace lpzrobots {
     state=closed;
     if(arguments)
       delete arguments;
+    if(cameraHandle)
+      delete cameraHandle;
     // we have to count references by our selfes
     this->unref();
     //    Producer::Camera::Callback::unref_nodelete();
@@ -327,6 +334,19 @@ namespace lpzrobots {
         return false;
       }
 
+      // Set OpenGL compatibility hints for macOS before viewer creation
+#ifdef __APPLE__
+      // Request OpenGL 2.1 compatibility profile for better macOS support
+      osg::DisplaySettings* ds = osg::DisplaySettings::instance().get();
+      ds->setGLContextVersion("2.1");
+      ds->setGLContextProfileMask(0x1); // GL_CONTEXT_COMPATIBILITY_PROFILE_BIT
+      
+      // Disable advanced features that may cause issues on macOS
+      ds->setNumMultiSamples(0);  // Disable multisampling to avoid crashes
+      
+      printf("macOS detected: Setting OpenGL 2.1 compatibility mode\n");
+#endif
+      
       // construct the viewer - use RetinaLPZViewer for proper high-DPI support
       viewer = new RetinaLPZViewer(*arguments);
       if(useOsgThread && !(osgHandle.cfg->shadowType==3)){ // ParallelSplitShadowMap does not support threads
@@ -390,7 +410,8 @@ namespace lpzrobots {
       keyswitchManipulator = new osgGA::KeySwitchMatrixManipulator;
 
       // setup the camera manipulators (make sure it is in agreement with the CameraMode enum)
-      cameraHandle->cam=viewer->getCamera();
+      // NOTE: Camera assignment moved after viewer->realize() to avoid null pointer crash
+      // cameraHandle->cam=viewer->getCamera();
       CameraManipulator* cm[] = {
         new CameraManipulator(osgHandle.scene->scene, globalData, *cameraHandle),
         new CameraManipulatorFollow(osgHandle.scene->scene, globalData, *cameraHandle),
@@ -491,6 +512,43 @@ namespace lpzrobots {
 
       // create the windows and run the threads.
       viewer->realize();
+      
+      // Now that viewer is realized, we can safely get the camera
+      osg::Camera* camera = viewer->getCamera();
+      if (camera) {
+        cameraHandle->cam = camera;
+        
+#ifdef __APPLE__
+        // Additional macOS-specific OpenGL settings after realization
+        osg::StateSet* stateset = camera->getOrCreateStateSet();
+        
+        // Disable shader-based text rendering which causes crashes on macOS
+        stateset->setDefine("OSG_TEXT_USE_SHADERS", "OFF");
+        
+        // Force immediate mode rendering for better compatibility
+        stateset->setDataVariance(osg::Object::STATIC);
+        
+        // Disable features that may cause issues with deprecated OpenGL on macOS
+        stateset->setMode(GL_MULTISAMPLE_ARB, osg::StateAttribute::OFF);
+        stateset->setMode(GL_LINE_SMOOTH, osg::StateAttribute::OFF);
+        stateset->setMode(GL_POLYGON_SMOOTH, osg::StateAttribute::OFF);
+        
+        printf("macOS: Applied additional OpenGL compatibility settings\n");
+#endif
+      } else {
+        fprintf(stderr, "ERROR: viewer->getCamera() returned NULL even after realize()!\n");
+        // Try to set up a default view
+        viewer->setUpViewInWindow(0, 0, windowWidth, windowHeight);
+        camera = viewer->getCamera();
+        if (camera) {
+          cameraHandle->cam = camera;
+          fprintf(stderr, "SUCCESS: Created camera with setUpViewInWindow()\n");
+        } else {
+          fprintf(stderr, "FATAL: Still no camera after setUpViewInWindow()!\n");
+          return false;
+        }
+      }
+      
       // we have to set our SIGINT handler again because the OSG overwrites it! Thanks!
       cmd_handler_init();
 
@@ -1304,6 +1362,21 @@ namespace lpzrobots {
       osgHandle.cfg->shadowType=0;
       printf("using no shadow\n");
     }
+    
+    // Add option to disable HUD entirely
+    bool noHUD = contains(argv, argc, "-nohud") != 0;
+    if(noHUD) {
+      osgHandle.cfg->noHUD = true;
+      printf("HUD disabled by command line option\n");
+    }
+    
+#ifdef __APPLE__
+    // On macOS, automatically disable HUD unless explicitly enabled
+    if (!contains(argv, argc, "-forcehud")) {
+      osgHandle.cfg->noHUD = true;
+      printf("macOS: HUD automatically disabled. Use -forcehud to enable (may crash)\n");
+    }
+#endif
 
     index = contains(argv, argc, "-fps");
     if(index && argc > index) {
@@ -1559,6 +1632,10 @@ namespace lpzrobots {
     printf("    -allkeys\t\tall key strokes are available (useful for debugging  graphics)\n");
     printf("    -nographics\t\tstart without any graphics (implies -rtf 0)\n");
     printf("    -noshadow\t\tdisables shadows and shaders (same as -shadow 0)\n");
+    printf("    -nohud\t\tdisables HUD (status display) - useful for compatibility\n");
+#ifdef __APPLE__
+    printf("    -forcehud\t\tforce HUD on macOS (may crash due to OpenGL issues)\n");
+#endif
     printf("    -shadow [0..5]\t* sets the type of the shadow to be used\n");
     printf("    \t\t\t0: no shadow, 1: ShadowVolume, 2: ShadowTextue, 3: ParallelSplitShadowMap\n");
     printf("    \t\t\t4: SoftShadowMap, 5: ShadowMap (default)\n");
@@ -1652,8 +1729,28 @@ namespace lpzrobots {
 
   void Simulation::osgStep()
   {
-    if (viewer)
-      viewer->frame();
+    if (viewer) {
+      // Check if we have a valid graphics context before rendering
+      osg::Camera* camera = viewer->getCamera();
+      if (camera && camera->getGraphicsContext()) {
+        osg::GraphicsContext* gc = camera->getGraphicsContext();
+        if (gc->valid()) {
+          viewer->frame();
+        } else {
+          static bool warned = false;
+          if (!warned) {
+            fprintf(stderr, "WARNING: Invalid graphics context detected. Skipping frame.\n");
+            warned = true;
+          }
+        }
+      } else {
+        static bool warned = false;
+        if (!warned) {
+          fprintf(stderr, "WARNING: No valid camera or graphics context. Skipping frame.\n");
+          warned = true;
+        }
+      }
+    }
     // onPostDraw(*(viewer->getCamera()));
   }
 

@@ -137,7 +137,7 @@ Makefile.depend:
 	for file in $(HFILES); do \
 		ln -sf $(REVINCLUDEDIR)/$$file $(INCLUDEDIR)/; \
 	done
-	makedepend -- $(CPPFLAGS) -- $(CPPFILES) -p'$$(BUILD_DIR)/' -f- > Makefile.depend 2>/dev/null
+	makedepend -- $(shell echo "$(CPPFLAGS)" | sed 's/-isystem/-I/g') -- $(CPPFILES) -p'$$(BUILD_DIR)/' -f- > Makefile.depend 2>/dev/null
 
 depend:
 	rm Makefile.depend

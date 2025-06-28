@@ -40,16 +40,32 @@ qt \
 console \
 c++17 \
 sdk_no_version_check
+
+# Suppress warnings from system headers and Qt
+QMAKE_CXXFLAGS += -Wno-float-equal -Wno-old-style-cast
 TARGET = bin/guilogger
 
 target.path = /usr/bin
 QT += core gui widgets xml
 # Platform specific settings
 macx {
-    # macOS specific: Remove deprecated AGL framework
-    # AGL was deprecated in macOS 10.9 and removed in later versions
+    # Disable Qt's automatic OpenGL configuration to prevent AGL inclusion
+    CONFIG -= opengl
+    
+    # Don't manually add frameworks - let Qt handle it properly
+    # Just ensure AGL is removed from any Qt defaults
+    QMAKE_LIBS_OPENGL = -framework OpenGL
     QMAKE_LFLAGS -= -framework AGL
-    QMAKE_LIBS_OPENGL -= -framework AGL
     LIBS -= -framework AGL
+    
+    # Remove any AGL paths that might be added
+    INCLUDEPATH -= /System/Library/Frameworks/AGL.framework/Headers
+    QMAKE_INCDIR_OPENGL -= /System/Library/Frameworks/AGL.framework/Headers
+    
+    # Suppress warnings from system frameworks and Qt headers
+    QMAKE_CXXFLAGS += -Wno-deprecated-declarations
+    # Add system include flags for external libraries
+    QMAKE_CXXFLAGS += -isystem /opt/homebrew/include
+    QMAKE_CXXFLAGS += -isystem /opt/homebrew/lib
 }
 INSTALLS += target

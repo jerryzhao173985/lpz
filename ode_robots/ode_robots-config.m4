@@ -44,7 +44,8 @@ rpath=DEVORUSER([[-Wl,-rpath,$srcprefix]],[[-Wl,-rpath,$prefix/lib]])
 LIBBASE=ode_robots
 
 if type ode-dbl-config >/dev/null 2>&1; then
-    ODEFLAGS=`ode-dbl-config --cflags`
+    # Convert -I flags to -isystem to suppress warnings from ODE headers
+    ODEFLAGS=`ode-dbl-config --cflags | sed -E 's/-I([^ ]*\/homebrew[^ ]*)/-isystem \1/g; s/-I([^ ]*\/Cellar[^ ]*)/-isystem \1/g'`
 else #Todo print error to stderr
     echo "Error: ode-dbl-config not found" 1>&2
     exit 1;
@@ -52,24 +53,30 @@ fi
 
 ## use -pg for profiling
 COMMENT(`Use environment variable LPZROBOTS_INCLUDE_PATH if set, otherwise use common macOS paths')
-CBASEFLAGS="-pthread -std=c++17 -Wno-write-strings ARM64FLAGS -DGL_SILENCE_DEPRECATION -I/usr/X11R6/include $ODEFLAGS"
-ifdef(`MAC',
-  `EXTRA_INCLUDES=""
+# Handle X11 includes with -isystem if it's under /opt
+X11_INCLUDES="-I/usr/X11R6/include"
+if [ -d "/opt/X11/include" ]; then
+    X11_INCLUDES="-isystem /opt/X11/include"
+fi
+CBASEFLAGS="-pthread -std=c++17 -Wno-write-strings ARM64FLAGS -DGL_SILENCE_DEPRECATION $X11_INCLUDES $ODEFLAGS"
+ifdef([[MAC]],
+  [[EXTRA_INCLUDES=""
   if [ -n "$LPZROBOTS_INCLUDE_PATH" ]; then
     EXTRA_INCLUDES="-I$LPZROBOTS_INCLUDE_PATH"
   else
     # Check for common macOS package manager paths
+    # Use -isystem instead of -I to suppress warnings from external libraries
     if [ -d "/opt/homebrew/include" ]; then
-      EXTRA_INCLUDES="$EXTRA_INCLUDES -I/opt/homebrew/include"
+      EXTRA_INCLUDES="$EXTRA_INCLUDES -isystem /opt/homebrew/include"
     fi
     if [ -d "/opt/local/include" ]; then
-      EXTRA_INCLUDES="$EXTRA_INCLUDES -I/opt/local/include"
+      EXTRA_INCLUDES="$EXTRA_INCLUDES -isystem /opt/local/include"
     fi
     if [ -d "/usr/local/include" ]; then
-      EXTRA_INCLUDES="$EXTRA_INCLUDES -I/usr/local/include"
+      EXTRA_INCLUDES="$EXTRA_INCLUDES -isystem /usr/local/include"
     fi
   fi
-  CBASEFLAGS="$CBASEFLAGS $EXTRA_INCLUDES"'
+  CBASEFLAGS="$CBASEFLAGS $EXTRA_INCLUDES"]]
 )
 CPPFLAGS="$CBASEFLAGS"
 INTERNFLAGS="-g -O"
@@ -123,9 +130,11 @@ while test $# -gt 0; do
       intern=1
       ;;
     --static) ##force use static linking of lib
-      STATICSTART=-Wl,-Bstatic
-      STATICEND=-Wl,-Bdynamic
+      LINUXORMAC([[STATICSTART=-Wl,-Bstatic
+      STATICEND=-Wl,-Bdynamic]],[[STATICSTART=
+      STATICEND=]])
       rpath=""
+      USE_STATIC_LIBS=1
     ;;
     --opt) ##Optimisation
       LIBBASE=${LIBBASE}_opt
@@ -139,10 +148,15 @@ while test $# -gt 0; do
       ;;
     --cflags)
       if [ -z "$intern" ]; then INTERNFLAGS=; fi
-      echo $CPPFLAGS DEVORUSER(-I"$srcprefix/include",-I"$prefix/include") $INTERNFLAGS
+      echo $CPPFLAGS DEVORUSER(-I"$srcprefix/include" -I"$srcprefix/include/ode_robots",-I"$prefix/include" -I"$prefix/include/ode_robots") $INTERNFLAGS
       ;;
     --libs)
-      echo DEVORUSER(-L"$srcprefix/",-L"$prefix/lib") $rpath $STATICSTART -l$LIBBASE $STATICEND $LIBS `ode-dbl-config --libs`
+      COMMENT(`On macOS with --static, use explicit .a file paths instead of -l flags')
+      if [ -n "$USE_STATIC_LIBS" ] && [ `uname` = "Darwin" ]; then
+        echo DEVORUSER("$srcprefix/lib${LIBBASE}.a","$prefix/lib/lib${LIBBASE}.a") $LIBS `ode-dbl-config --libs`
+      else
+        echo DEVORUSER(-L"$srcprefix/",-L"$prefix/lib") $rpath $STATICSTART -l$LIBBASE $STATICEND $LIBS `ode-dbl-config --libs`
+      fi
       ;;
     --libfile)
       echo "$srcprefix/lib${LIBBASE}.a"

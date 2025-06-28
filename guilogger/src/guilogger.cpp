@@ -419,7 +419,8 @@ void GuiLogger::save(bool blank){
       }else{
         sec->addValue("Position", "-1 -1"," # set to any coordinate to place a window by hand, (-1 -1) means automatic. If calcPositions then this is ignored");
       }
-      FOREACHC(std::list<int>, plotInfos[i]->getVisibleChannels(), c){
+      const std::list<int>& visibleChannels = plotInfos[i]->getVisibleChannels();
+      FOREACHC(std::list<int>, visibleChannels, c){
         QString channelName = channelData.getChannelName(*c);
         sec->addValue("Channel", channelName);
         // todo maybe add style as well

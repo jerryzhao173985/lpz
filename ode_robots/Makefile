@@ -7,6 +7,8 @@ export PATH := ../opende:$(PATH)
 
 SELFORGCFG=`if [ -x ../selforg/selforg-config ]; then echo "../selforg/selforg-config"; elif type selforg-config >/dev/null 2>&1; then echo "selforg-config"; else echo "Cannot find selforg-config" 1>&2; fi`
 
+# Define the root directory for ode_robots (current directory)
+ODE_ROBOTS_ROOT := $(shell pwd)
 
 INCLUDEDIR=include/ode_robots
 # this is the command to come from the include dir back to the base
@@ -14,8 +16,8 @@ REVINCLUDEDIR=../..
 
 # the CFGOPTS are set by the opt and dbg target
 CFGOPTS=
-LIB := $(shell ./ode_robots-config $(CFGOPTS) --srcprefix="." --libfile)
-SHAREDLIB=$(shell ./ode_robots-config $(CFGOPTS) --srcprefix="." --solibfile)
+LIB := libode_robots.a
+SHAREDLIB := libode_robots.so
 TYPE=$(shell ./ode_robots-config --type)
 
 STRIP=no
@@ -45,17 +47,24 @@ HFILES   := $(filter-out %flymake.h, $(foreach dir,$(dirs),$(find_h_files)))
 UTILS = install_prefix.conf ode_robots-config
 
 # additional inc paths
-INC +=  -I. -Iinclude -Iinclude/ode_robots -I/Users/jerry/lpzrobot_mac/selforg -I/Users/jerry/lpzrobot_mac/selforg/include
+# Use -isystem for ode-dbl symlinks to suppress warnings from ODE headers
+INC +=  -I. -Iinclude -Iinclude/ode_robots -isystem include/ode-dbl -I/Users/jerry/lpzrobot_mac/selforg -I/Users/jerry/lpzrobot_mac/selforg/include
 # INC += -include allincludes.h
 
 # use -pg for profiling
-CPPFLAGS = -Wall -pipe -fpic $(INC) $(shell $(SELFORGCFG) $(CFGOPTS) --cflags) \
+# Base flags for all compilation (including external headers)
+CPPFLAGS_BASE = -Wall -pipe -fpic $(INC) $(shell $(SELFORGCFG) $(CFGOPTS) --cflags) \
 	$(shell ./ode_robots-config --srcprefix="." $(CFGOPTS) --intern --cflags)
-# Maximum warning flags added by enable_max_warnings.sh
-EXTRA_WARNINGS = -Wall -Wextra -Wpedantic -Wconversion -Wsign-conversion -Wcast-align -Wformat=2 -Wuninitialized -Wunused-function -Wunused-label -Wunused-variable -Wunused-value -Wunused-parameter -Wfloat-equal -Wundef -Wshadow -Wpointer-arith -Wcast-qual -Wwrite-strings -Wmissing-declarations -Wredundant-decls -Woverloaded-virtual -Wsign-promo -Wformat-security -Wnon-virtual-dtor -Wold-style-cast -Wzero-as-null-pointer-constant -Wno-unused-parameter -Wno-sign-conversion
+
+# Maximum warning flags added by enable_max_warnings.sh - only for our code
+# Note: -Wundef removed because it still triggers on system headers with some compilers
+EXTRA_WARNINGS = -Wall -Wextra -Wpedantic -Wconversion -Wsign-conversion -Wcast-align -Wformat=2 -Wuninitialized -Wunused-function -Wunused-label -Wunused-variable -Wunused-value -Wunused-parameter -Wfloat-equal -Wshadow -Wpointer-arith -Wcast-qual -Wwrite-strings -Wmissing-declarations -Wredundant-decls -Woverloaded-virtual -Wsign-promo -Wformat-security -Wnon-virtual-dtor -Wold-style-cast -Wzero-as-null-pointer-constant -Wno-unused-parameter -Wno-sign-conversion
+
 # Disable OSG-specific warnings for C++17 compatibility
 OSG_WARNINGS = -Wno-zero-as-null-pointer-constant
-CPPFLAGS += $(EXTRA_WARNINGS) $(OSG_WARNINGS)
+
+# Full flags for compiling our own code
+CPPFLAGS = $(CPPFLAGS_BASE) $(EXTRA_WARNINGS) $(OSG_WARNINGS)
 
 # used for single file compilation
 CXX = g++
@@ -140,11 +149,11 @@ Makefile.depend:
 		dir=`dirname $$file`; \
 		if [ "$$dir" != "." ]; then \
 			mkdir -p $(INCLUDEDIR)/$$dir; \
-			ln -sf $(REVINCLUDEDIR)/$$file $(INCLUDEDIR)/$$file; \
+			ln -sf $(ODE_ROBOTS_ROOT)/$$file $(INCLUDEDIR)/$$file; \
 		fi; \
 		ln -sf $(REVINCLUDEDIR)/$$file $(INCLUDEDIR)/`basename $$file`; \
 	done
-	$(MAKEDEPEND) -- $(CPPFLAGS) -- $(CPPFILES) -p'$$(BUILD_DIR)/' -f- > Makefile.depend 2>/dev/null
+	$(MAKEDEPEND) -- $(shell echo "$(CPPFLAGS_BASE)" | sed 's/-isystem/-I/g') -- $(CPPFILES) -p'$$(BUILD_DIR)/' -f- > Makefile.depend 2>/dev/null
 
 depend:
 	rm Makefile.depend

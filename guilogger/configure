@@ -1,29 +1,57 @@
 #!/bin/sh
 
 # Generate Makefiles with Qt
+echo "Generating Makefiles with Qt6..."
 qmake -makefile guilogger.pro
 
-# Fix macOS AGL framework issue
-# AGL was deprecated in macOS 10.9 and removed, but Qt6 still adds it
+# Fix macOS AGL framework issue comprehensively
 if [ "$(uname)" = "Darwin" ]; then
     echo "Fixing deprecated AGL framework references..."
     # Wait a moment for all Makefiles to be generated
-    sleep 0.1
+    sleep 0.5
     
-    # Find and fix all Makefiles
-    find . -name "Makefile*" -type f | while read -r makefile; do
-        if grep -q "framework AGL" "$makefile" 2>/dev/null; then
-            # Use a more robust sed command that handles multiple occurrences
-            sed -i '' 's/-framework AGL//g' "$makefile"
+    # Find and fix all Makefiles, including subdirectories
+    find . -name "Makefile*" -type f ! -name "*.bak" | while read -r makefile; do
+        # Create backup
+        cp "$makefile" "${makefile}.bak"
+        
+        # Remove AGL framework references
+        sed -i '' 's/-framework AGL//g' "$makefile"
+        
+        # Remove AGL include/framework directories
+        sed -i '' -e 's|-F[^ ]*AGL\.framework[^ ]*||g' \
+                  -e 's|-I[^ ]*AGL\.framework[^ ]*||g' "$makefile"
+        
+        # Fix any multiple consecutive -framework entries (empty frameworks)
+        # This handles cases where removing AGL leaves "-framework -framework"
+        perl -i -pe 's/-framework\s+(-framework|$)/$1/g while /-framework\s+(-framework|$)/' "$makefile"
+        
+        # Clean up any remaining AGL references in include paths
+        sed -i '' '/AGL\.framework/d' "$makefile"
+        
+        # Clean up any double spaces
+        sed -i '' 's/  */ /g' "$makefile"
+        
+        if diff -q "$makefile" "${makefile}.bak" >/dev/null; then
+            # No changes made, remove backup
+            rm "${makefile}.bak"
+        else
             echo "  Fixed: $makefile"
+            # Verify no empty frameworks remain
+            if grep -E -- '-framework[[:space:]]+(-framework|$)' "$makefile" >/dev/null 2>&1; then
+                echo "  Warning: Empty framework entries may remain in $makefile"
+            fi
         fi
     done
     
-    # Also remove AGL from any INCPATH references
-    find . -name "Makefile*" -type f | while read -r makefile; do
-        if grep -q "AGL\.framework" "$makefile" 2>/dev/null; then
-            sed -i '' 's|-I[^ ]*AGL\.framework[^ ]*||g' "$makefile"
-            echo "  Fixed includes in: $makefile"
-        fi
-    done
+    # Double-check by searching for any remaining AGL references
+    remaining=$(find . -name "Makefile*" -type f ! -name "*.bak" -exec grep -l "AGL" {} \; 2>/dev/null)
+    if [ -n "$remaining" ]; then
+        echo "Warning: Some AGL references might remain in:"
+        echo "$remaining"
+    else
+        echo "All AGL references successfully removed."
+    fi
 fi
+
+echo "Configuration complete."

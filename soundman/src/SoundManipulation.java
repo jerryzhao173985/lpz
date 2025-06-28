@@ -114,7 +114,7 @@ public class SoundManipulation extends Thread {
        if(gui.isPlaybackActive()) {
         for(int i=0; i<numSensors; i++) {
          // smoothing the changes of sensor values
-         oldSensorValues[i][1]=new Float(values[i]).floatValue();
+         oldSensorValues[i][1]=Float.parseFloat(values[i]);
          sensorDiff=0.5f*(oldSensorValues[i][1]-oldSensorValues[i][0]);
          if(gui.isSmoothingEnabled()) {
           // smoothing enabled
