@@ -124,7 +124,12 @@ Makefile.depend:
 	for file in $(HFILES); do \
 		ln -sf $(REVINCLUDEDIR)/$$file $(INCLUDEDIR)/; \
 	done
-	$(MAKEDEPEND) -- $(CPPFLAGS) -- $(CPPFILES) -p'$$(BUILD_DIR)/' -f- > Makefile.depend 2>/dev/null
+	# Use g++ -MM for dependency generation (more reliable than makedepend)
+	@echo "Generating dependencies..."
+	@rm -f Makefile.depend
+	@for file in $(CPPFILES); do \
+	   $(CXX) -MM $(CPPFLAGS) $$file | sed 's|^\([^:]*\)\.o:|$$(BUILD_DIR)/\1.o:|' >> Makefile.depend; \
+	done
 
 depend: 
 	rm Makefile.depend
@@ -216,3 +221,8 @@ todo:
 
 
 -include Makefile.depend
+# DO NOT DELETE
+
+Gen.o: Gen.h GenPrototype.h ../selforg/include/selforg/inspectable.h
+Gen.o: ../selforg/include/selforg/stl_adds.h restore.h
+Gen.o: RandomStrategies/IRandomStrategy.h

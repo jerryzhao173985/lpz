@@ -194,6 +194,34 @@ private JComboBox<String> instruCB;
 instruCB = new JComboBox<String>();
 ```
 
+## 7. Dependency Generation Fix (ga_tools)
+
+### Problem
+The `makedepend` tool failed with `-isystem` flags and couldn't find standard C++ headers.
+
+### Solution
+Replaced `makedepend` with `g++ -MM` for more reliable dependency generation.
+
+**File: `ga_tools/Makefile`**
+```makefile
+Makefile.depend: 	
+	for file in $(HFILES); do \
+		ln -sf $(REVINCLUDEDIR)/$$file $(INCLUDEDIR)/; \
+	done
+	# Use g++ -MM for dependency generation (more reliable than makedepend)
+	@echo "Generating dependencies..."
+	@rm -f Makefile.depend
+	@for file in $(CPPFILES); do \
+	   $(CXX) -MM $(CPPFLAGS) $$file | sed 's|^\([^:]*\)\.o:|$$(BUILD_DIR)/\1.o:|' >> Makefile.depend; \
+	done
+```
+
+**Benefits:**
+- Properly handles `-isystem` flags
+- Understands C++ standard headers
+- Generates accurate dependencies
+- Works consistently across platforms
+
 ## Key Takeaways
 
 1. **Platform-Specific Handling**: Always detect platform and apply appropriate fixes
