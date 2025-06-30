@@ -2,7 +2,14 @@
 
 # Generate Makefiles with Qt
 echo "Generating Makefiles with Qt6..."
-qmake -makefile matrixviz.pro
+
+# On macOS, ensure QMAKE_LFLAGS includes the no_weak_imports flag if set
+if [ "$(uname)" = "Darwin" ] && [ -n "$QMAKE_LFLAGS" ]; then
+    echo "Using custom QMAKE_LFLAGS: $QMAKE_LFLAGS"
+    qmake -makefile matrixviz.pro "QMAKE_LFLAGS+=$QMAKE_LFLAGS"
+else
+    qmake -makefile matrixviz.pro
+fi
 
 # Fix macOS AGL framework issue comprehensively
 if [ "$(uname)" = "Darwin" ]; then

@@ -49,18 +49,29 @@ target.path = /usr/bin
 QT += core gui widgets xml
 # Platform specific settings
 macx {
-    # Disable Qt's automatic OpenGL configuration to prevent AGL inclusion
-    CONFIG -= opengl
+    # CRITICAL: Prevent AGL framework inclusion
+    # AGL is deprecated and causes build failures on modern macOS
     
-    # Don't manually add frameworks - let Qt handle it properly
-    # Just ensure AGL is removed from any Qt defaults
+    # Force Qt to not add OpenGL at all (we don't need it)
+    CONFIG -= opengl
+    CONFIG -= opengl_desktop
+    
+    # Override Qt's OpenGL library settings completely
     QMAKE_LIBS_OPENGL = -framework OpenGL
+    QMAKE_LIBS_OPENGL_QT =
+    QMAKE_LIBS_OPENGL_ES2 =
+    
+    # Explicitly remove AGL from all possible locations
     QMAKE_LFLAGS -= -framework AGL
     LIBS -= -framework AGL
+    QMAKE_LIBS -= -framework AGL
     
-    # Remove any AGL paths that might be added
+    # Remove any AGL include paths
     INCLUDEPATH -= /System/Library/Frameworks/AGL.framework/Headers
     QMAKE_INCDIR_OPENGL -= /System/Library/Frameworks/AGL.framework/Headers
+    QMAKE_INCDIR -= /System/Library/Frameworks/AGL.framework/Headers
+    
+    # Note: Post-link processing is handled by the configure script
     
     # Suppress warnings from system frameworks and Qt headers
     QMAKE_CXXFLAGS += -Wno-deprecated-declarations

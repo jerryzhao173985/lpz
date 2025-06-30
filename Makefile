@@ -51,8 +51,16 @@ conf: usage
 .PHONY: utils
 ##!utils	   build utilitytools and tags (do that first)
 utils: usage
-	-$(MAKE) guilogger
-	-$(MAKE) matrixviz
+	@# Pre-emptive AGL framework removal for Qt-based tools on macOS
+	@if [ "$(shell uname)" = "Darwin" ]; then \
+		echo "Ensuring AGL framework is not used in Qt-based tools..."; \
+		export QMAKE_LFLAGS="$$QMAKE_LFLAGS -Wl,-no_weak_imports"; \
+		$(MAKE) guilogger QMAKE_LFLAGS="$$QMAKE_LFLAGS"; \
+		$(MAKE) matrixviz QMAKE_LFLAGS="$$QMAKE_LFLAGS"; \
+	else \
+		$(MAKE) guilogger; \
+		$(MAKE) matrixviz; \
+	fi
 	-$(MAKE) soundman
 	-@if command -v javac >/dev/null 2>&1; then \
 		$(MAKE) javacontroller; \
@@ -75,8 +83,8 @@ install_utils:
 	-@if command -v javac >/dev/null 2>&1; then \
 		cd javacontroller/src && $(MAKE) PREFIX=$(PREFIX)/ install; \
 	fi
-	-@if [ -d guilogger/bin/guilogger.app ]; then \
-          cp guilogger/bin/guilogger.app/Contents/MacOS/guilogger $(PREFIX)/bin/ && echo "===> copied guilogger to $(PREFIX)/bin/"; \
+	-@if [ -d guilogger/src/bin/guilogger.app ]; then \
+          cp guilogger/src/bin/guilogger.app/Contents/MacOS/guilogger $(PREFIX)/bin/ && echo "===> copied guilogger to $(PREFIX)/bin/"; \
          elif [ -e guilogger/src/bin/guilogger ]; then \
 	   cp guilogger/src/bin/guilogger $(PREFIX)/bin/ && echo "===> copied guilogger to $(PREFIX)/bin/"; \
 	 else cp guilogger/bin/guilogger $(PREFIX)/bin/ && echo "===> copied guilogger to $(PREFIX)/bin/"; \
@@ -92,7 +100,6 @@ selforg: usage
 	@echo "*************** Configure selforg ***************"
 	$(MAKE) MODULE=selforg confsubmodule
 	@echo "*************** Compile selforg *****************"
-	cd selforg && $(MAKE) depend
 	cd selforg && $(MAKE)
 
 
@@ -153,7 +160,6 @@ ode_robots: usage
 	@echo "*************** Configure ode_robots ************"
 	$(MAKE) MODULE=ode_robots confsubmodule
 	@echo "*************** Compile ode_robots **************"
-	cd ode_robots && $(MAKE) depend
 	cd ode_robots && $(MAKE)
 
 .PHONY: install_ode_robots
@@ -167,7 +173,6 @@ ga_tools: usage
 	@echo "*************** Configure ga_tools ************"
 	$(MAKE) MODULE=ga_tools confsubmodule
 	@echo "*************** Compile ga_tools **************"
-	cd ga_tools && $(MAKE) depend
 	cd ga_tools && $(MAKE)
 
 .PHONY: install_ga_tools
@@ -226,6 +231,13 @@ uninstall_ode:
 ##!guilogger	  compile guilogger
 guilogger:
 	cd guilogger && ./configure && $(MAKE)
+	@# Extra safeguard: ensure no AGL references remain after build
+	@if [ "$(shell uname)" = "Darwin" ]; then \
+		if find guilogger -name "*.dylib" -o -name "guilogger" | xargs otool -L 2>/dev/null | grep -q "AGL.framework"; then \
+			echo "WARNING: AGL framework reference found in guilogger binaries!"; \
+			exit 1; \
+		fi \
+	fi
 
 .PHONY: matrixviz
 ##!matrixviz	  compile matrixviz
