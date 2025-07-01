@@ -49,73 +49,45 @@ list(FILTER ODE_SOURCES EXCLUDE REGEX ".*example.*")
 # TODO: Fix OPCODE build issues
 message(STATUS "Skipping OPCODE build due to compilation issues - trimesh support will be limited")
 
-# Create the library
-add_library(ode ${ODE_SOURCES})
-add_library(lpzrobots::ode ALIAS ode)
-
-# Set target properties
-set_target_properties(ode PROPERTIES
-    OUTPUT_NAME ode
-    CXX_STANDARD 17
-    CXX_STANDARD_REQUIRED ON
-    VERSION ${PROJECT_VERSION}
-    SOVERSION ${PROJECT_VERSION_MAJOR}
-    POSITION_INDEPENDENT_CODE ON
-)
-
-# Include directories
-target_include_directories(ode
-    PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-        $<INSTALL_INTERFACE:include>
-    PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}
-        ${CMAKE_CURRENT_SOURCE_DIR}/ode/src
-        ${CMAKE_CURRENT_SOURCE_DIR}/ou/include
-)
-
-# Compiler definitions
-target_compile_definitions(ode PRIVATE
-    dIDEDOUBLE
-    # Disable trimesh for now since OPCODE is problematic
-    # dTRIMESH_ENABLED
-    # dTRIMESH_OPCODE
-)
-
-# Platform-specific settings
-if(APPLE)
-    target_compile_definitions(ode PRIVATE MAC)
-elseif(UNIX)
-    target_compile_definitions(ode PRIVATE LINUX)
-    # Link math library on Linux
+# Create the library if we have sources
+if(ODE_SOURCES)
+    add_library(ode ${ODE_SOURCES})
+    add_library(lpzrobots::ode ALIAS ode)
+    
+    # Set target properties
+    set_target_properties(ode PROPERTIES
+        VERSION 0.16.0
+        SOVERSION 0
+        PUBLIC_HEADER "${CMAKE_CURRENT_SOURCE_DIR}/config.h"
+    )
+    
+    # Include directories
+    target_include_directories(ode
+        PUBLIC
+            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+            $<INSTALL_INTERFACE:include>
+    )
+    
+    # Link with math library
     target_link_libraries(ode PUBLIC m)
-endif()
-
-# Export the target for parent project
-if(NOT CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
-    # We're being built as part of LPZRobots
-    # The target will be exported by the parent project
-    set_target_properties(ode PROPERTIES EXPORT_NAME ode)
-endif()
-
-# Installation (only for standalone builds)
-if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
+    
+    # Platform-specific settings
+    if(WIN32)
+        target_compile_definitions(ode PRIVATE WIN32)
+    endif()
+    
+    # Install targets
     install(TARGETS ode
-        EXPORT OpenDETargets
+        EXPORT LPZRobotsTargets
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
     )
     
-    # Install headers
-    install(DIRECTORY include/ode
-        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-        FILES_MATCHING PATTERN "*.h"
-    )
-    
-    # Export targets
-    install(EXPORT OpenDETargets
-        FILE OpenDETargets.cmake
-        NAMESPACE OpenDE::
-        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/OpenDE
-    )
+    message(STATUS "Bundled ODE library configured successfully")
+    set(ODE_LIBRARIES ode PARENT_SCOPE)
+    set(ODE_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR} PARENT_SCOPE)
+else()
+    message(WARNING "ODE sources not found or incomplete")
 endif()

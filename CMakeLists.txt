@@ -49,60 +49,41 @@ if(NOT GSL_FOUND)
     find_package(GSL QUIET)
 endif()
 
-# ODE dependency handling
+# Find ODE (Open Dynamics Engine)
 if(USE_SYSTEM_ODE)
-    if(APPLE)
-        # On macOS, try to find ODE via Homebrew
-        execute_process(
-            COMMAND brew --prefix ode
-            OUTPUT_VARIABLE ODE_PREFIX
-            OUTPUT_STRIP_TRAILING_WHITESPACE
-            ERROR_QUIET
-        )
-        
-        if(ODE_PREFIX)
-            set(ODE_INCLUDE_DIRS "${ODE_PREFIX}/include")
-            set(ODE_LIBRARIES "${ODE_PREFIX}/lib/libode.dylib")
-            set(ODE_FOUND TRUE)
-            message(STATUS "Found ODE via Homebrew: ${ODE_PREFIX}")
-        else()
-            message(WARNING "ODE not found via Homebrew. Install with: brew install ode")
-        endif()
-    else()
-        # On Linux, try pkg-config first
+    pkg_check_modules(ODE ode)
+    if(NOT ODE_FOUND)
+        find_package(PkgConfig QUIET)
         if(PkgConfig_FOUND)
             pkg_check_modules(ODE ode)
         endif()
-        
-        if(NOT ODE_FOUND)
-            find_path(ODE_INCLUDE_DIRS NAMES ode/ode.h)
-            find_library(ODE_LIBRARIES NAMES ode)
-            if(ODE_INCLUDE_DIRS AND ODE_LIBRARIES)
-                set(ODE_FOUND TRUE)
-            endif()
-        endif()
     endif()
-    
-    if(NOT ODE_FOUND)
-        message(FATAL_ERROR "System ODE not found. Please install ODE development package or set USE_SYSTEM_ODE=OFF")
+    if(ODE_FOUND)
+        message(STATUS "Found system ODE: ${ODE_VERSION}")
+    else()
+        message(WARNING "System ODE not found. ODE-dependent components will be disabled.")
     endif()
 else()
-    message(STATUS "Using bundled OpenDE library")
-    add_subdirectory(opende)
-    set(ODE_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/opende/include")
-    set(ODE_LIBRARIES ode)
-    set(ODE_FOUND TRUE)
-    set(USING_BUNDLED_ODE TRUE)
+    # Check for bundled ODE
+    if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/opende/ode)
+        message(STATUS "Using bundled ODE")
+        set(ODE_FOUND TRUE)
+        add_subdirectory(opende)
+    else()
+        message(WARNING "Bundled ODE not found. ODE-dependent components will be disabled.")
+        set(ODE_FOUND FALSE)
+    endif()
 endif()
 
-# Qt dependency for GUI components
+# Find Qt5/Qt6 for GUI components (optional)
 if(BUILD_UTILS)
-    find_package(Qt6 QUIET COMPONENTS Core Widgets Xml OpenGL OpenGLWidgets)
-    if(NOT Qt6_FOUND)
-        find_package(Qt5 REQUIRED COMPONENTS Core Widgets Xml OpenGL)
-        set(QT_VERSION_MAJOR 5)
-    else()
-        set(QT_VERSION_MAJOR 6)
+    find_package(Qt5 QUIET COMPONENTS Core Widgets Gui OpenGL)
+    if(NOT Qt5_FOUND)
+        find_package(Qt6 QUIET COMPONENTS Core Widgets Gui OpenGL)
+        if(NOT Qt6_FOUND)
+            message(WARNING "Qt5/Qt6 not found. GUI utilities (guilogger, matrixviz) will be disabled.")
+            set(BUILD_UTILS OFF)
+        endif()
     endif()
 endif()
 
@@ -148,18 +129,26 @@ configure_file(
     COPYONLY
 )
 
-# Add subdirectories in dependency order
+# Add subdirectories for components
 add_subdirectory(selforg)
 
-if(BUILD_UTILS)
+# Add configurator (if building utils)
+if(BUILD_UTILS AND (Qt5_FOUND OR Qt6_FOUND))
     add_subdirectory(configurator)
 endif()
 
-add_subdirectory(ode_robots)
+# Add genetic algorithm tools
 add_subdirectory(ga_tools)
 
-# GUI utilities (optional)
-if(BUILD_UTILS AND Qt${QT_VERSION_MAJOR}_FOUND)
+# Add ode_robots only if ODE is available and properly configured
+if(ODE_FOUND OR (NOT USE_SYSTEM_ODE AND EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/opende/ode))
+    add_subdirectory(ode_robots)
+else()
+    message(WARNING "ODE not found. ode_robots component will be skipped.")
+endif()
+
+# Add utilities if requested and Qt is available
+if(BUILD_UTILS AND (Qt5_FOUND OR Qt6_FOUND))
     add_subdirectory(guilogger)
     add_subdirectory(matrixviz)
 endif()
