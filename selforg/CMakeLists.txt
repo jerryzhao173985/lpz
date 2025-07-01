@@ -55,11 +55,16 @@ set(SELFORG_SOURCES
 add_library(selforg ${SELFORG_SOURCES})
 add_library(lpzrobots::selforg ALIAS selforg)
 
+# Add compile definitions
+target_compile_definitions(selforg PUBLIC NOCONFIGURATOR)
+target_compile_definitions(selforg PUBLIC NO_GSL)
+
 # Set include directories
 target_include_directories(selforg
     PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
         $<INSTALL_INTERFACE:include>
         $<INSTALL_INTERFACE:include/selforg>
     PRIVATE
@@ -138,6 +143,7 @@ set_target_properties(selforg PROPERTIES
 
 # Create symlinks for headers (mimics original build system)
 file(GLOB_RECURSE HEADER_FILES
+    RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
     abstractrobot.h
     agent.h
     trackable.h
@@ -147,6 +153,8 @@ file(GLOB_RECURSE HEADER_FILES
     utils/*.h
     matrix/*.h
     statistictools/*.h
+    statistictools/measure/*.h
+    statistictools/dataanalysation/*.h
 )
 
 # Create include/selforg directory structure in build directory
@@ -155,27 +163,30 @@ file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/include/selforg)
 # Create symlinks for headers so they can be found during build
 foreach(header ${HEADER_FILES})
     get_filename_component(header_name ${header} NAME)
+    get_filename_component(header_dir ${header} DIRECTORY)
+    
+    # Create the source path (absolute)
+    set(source_path "${CMAKE_CURRENT_SOURCE_DIR}/${header}")
+    
+    # Create the destination path
+    set(dest_path "${CMAKE_CURRENT_BINARY_DIR}/include/selforg/${header_name}")
+    
+    # Create symlink with absolute paths to avoid double path issues
     if(CMAKE_VERSION VERSION_GREATER_EQUAL "3.14")
         file(CREATE_LINK
-            ${CMAKE_CURRENT_SOURCE_DIR}/${header}
-            ${CMAKE_CURRENT_BINARY_DIR}/include/selforg/${header_name}
+            ${source_path}
+            ${dest_path}
             SYMBOLIC
         )
     else()
         # Fallback for older CMake versions
         execute_process(
             COMMAND ${CMAKE_COMMAND} -E create_symlink
-            ${CMAKE_CURRENT_SOURCE_DIR}/${header}
-            ${CMAKE_CURRENT_BINARY_DIR}/include/selforg/${header_name}
+            ${source_path}
+            ${dest_path}
         )
     endif()
 endforeach()
-
-# Add the build directory to include path so symlinks are found
-target_include_directories(selforg
-    PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
-)
 
 # Installation
 install(TARGETS selforg

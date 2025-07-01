@@ -20,8 +20,9 @@
 #ifndef __MANAGEMENT_STRATEGY_H
 #define __MANAGEMENT_STRATEGY_H
 
-#include "matrix.h"
+#include <memory>  // for std::unique_ptr
 #include <vector>
+#include "matrix.h"
 
 namespace lpzrobots {
 
