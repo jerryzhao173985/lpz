@@ -1,5 +1,34 @@
 # Selforg library - Self-organizing controller framework
 
+# Set minimum CMake version if not already set by parent
+if(NOT CMAKE_VERSION)
+    cmake_minimum_required(VERSION 3.16)
+endif()
+
+# If this is a standalone build, set up project
+if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
+    project(Selforg VERSION 1.0.0 LANGUAGES CXX)
+    
+    # Set C++ standard
+    set(CMAKE_CXX_STANDARD 17)
+    set(CMAKE_CXX_STANDARD_REQUIRED ON)
+    set(CMAKE_CXX_EXTENSIONS OFF)
+    
+    # Find dependencies
+    find_package(Threads REQUIRED)
+    
+    # Optional GSL
+    find_package(PkgConfig QUIET)
+    if(PkgConfig_FOUND)
+        pkg_check_modules(GSL gsl)
+    endif()
+    if(NOT GSL_FOUND)
+        find_package(GSL QUIET)
+    endif()
+    
+    include(GNUInstallDirs)
+endif()
+
 # Collect source files
 file(GLOB CONTROLLER_SOURCES controller/*.cpp)
 file(GLOB WIRING_SOURCES wirings/*.cpp)
@@ -30,11 +59,10 @@ add_library(lpzrobots::selforg ALIAS selforg)
 target_include_directories(selforg
     PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/selforg>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
         $<INSTALL_INTERFACE:include>
         $<INSTALL_INTERFACE:include/selforg>
     PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}
         ${CMAKE_CURRENT_SOURCE_DIR}/controller
         ${CMAKE_CURRENT_SOURCE_DIR}/wirings
         ${CMAKE_CURRENT_SOURCE_DIR}/utils
@@ -55,9 +83,15 @@ target_compile_features(selforg PUBLIC cxx_std_17)
 
 # GSL support (optional)
 if(GSL_FOUND)
-    target_include_directories(selforg PRIVATE ${GSL_INCLUDE_DIRS})
-    target_link_libraries(selforg PUBLIC ${GSL_LIBRARIES})
-    target_compile_options(selforg PRIVATE ${GSL_CFLAGS_OTHER})
+    if(TARGET GSL::gsl)
+        target_link_libraries(selforg PUBLIC GSL::gsl)
+    else()
+        target_include_directories(selforg PRIVATE ${GSL_INCLUDE_DIRS})
+        target_link_libraries(selforg PUBLIC ${GSL_LIBRARIES})
+        if(GSL_CFLAGS_OTHER)
+            target_compile_options(selforg PRIVATE ${GSL_CFLAGS_OTHER})
+        endif()
+    endif()
 else()
     target_compile_definitions(selforg PRIVATE NOGSL)
 endif()
@@ -99,6 +133,7 @@ set_target_properties(selforg PROPERTIES
     CXX_VISIBILITY_PRESET hidden
     VISIBILITY_INLINES_HIDDEN ON
     POSITION_INDEPENDENT_CODE ON
+    OUTPUT_NAME selforg
 )
 
 # Create symlinks for headers (mimics original build system)
@@ -114,31 +149,51 @@ file(GLOB_RECURSE HEADER_FILES
     statistictools/*.h
 )
 
-# Create include/selforg directory structure
+# Create include/selforg directory structure in build directory
 file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/include/selforg)
 
+# Create symlinks for headers so they can be found during build
 foreach(header ${HEADER_FILES})
     get_filename_component(header_name ${header} NAME)
-    file(CREATE_LINK
-        ${CMAKE_CURRENT_SOURCE_DIR}/${header}
-        ${CMAKE_CURRENT_BINARY_DIR}/include/selforg/${header_name}
-        SYMBOLIC
-    )
+    if(CMAKE_VERSION VERSION_GREATER_EQUAL "3.14")
+        file(CREATE_LINK
+            ${CMAKE_CURRENT_SOURCE_DIR}/${header}
+            ${CMAKE_CURRENT_BINARY_DIR}/include/selforg/${header_name}
+            SYMBOLIC
+        )
+    else()
+        # Fallback for older CMake versions
+        execute_process(
+            COMMAND ${CMAKE_COMMAND} -E create_symlink
+            ${CMAKE_CURRENT_SOURCE_DIR}/${header}
+            ${CMAKE_CURRENT_BINARY_DIR}/include/selforg/${header_name}
+        )
+    endif()
 endforeach()
+
+# Add the build directory to include path so symlinks are found
+target_include_directories(selforg
+    PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
+)
 
 # Installation
 install(TARGETS selforg
     EXPORT LPZRobotsTargets
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/selforg
 )
 
-install(DIRECTORY include/selforg
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-    FILES_MATCHING PATTERN "*.h"
-)
+# Install headers from include directory
+if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/include/selforg)
+    install(DIRECTORY include/selforg
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+        FILES_MATCHING PATTERN "*.h"
+    )
+endif()
 
-# Also install headers from source directories
+# Install headers from source directories
 install(FILES
     abstractrobot.h
     agent.h
@@ -147,27 +202,51 @@ install(FILES
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/selforg
 )
 
-install(DIRECTORY controller/
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/selforg
-    FILES_MATCHING PATTERN "*.h"
-)
+# Install headers from subdirectories
+foreach(subdir controller wirings utils matrix statistictools)
+    if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${subdir})
+        install(DIRECTORY ${subdir}/
+            DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/selforg
+            FILES_MATCHING PATTERN "*.h"
+        )
+    endif()
+endforeach()
 
-install(DIRECTORY wirings/
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/selforg
-    FILES_MATCHING PATTERN "*.h"
-)
+# Install measure and dataanalysation subdirectories if they exist
+if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/statistictools/measure)
+    install(DIRECTORY statistictools/measure/
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/selforg/measure
+        FILES_MATCHING PATTERN "*.h"
+    )
+endif()
 
-install(DIRECTORY utils/
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/selforg
-    FILES_MATCHING PATTERN "*.h"
-)
+if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/statistictools/dataanalysation)
+    install(DIRECTORY statistictools/dataanalysation/
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/selforg/dataanalysation
+        FILES_MATCHING PATTERN "*.h"
+    )
+endif()
 
-install(DIRECTORY matrix/
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/selforg
-    FILES_MATCHING PATTERN "*.h"
-)
+# Install examples if requested
+if(BUILD_EXAMPLES AND EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/simulations)
+    install(DIRECTORY simulations/
+        DESTINATION ${CMAKE_INSTALL_DATADIR}/lpzrobots/selforg/simulations
+        PATTERN "*.o" EXCLUDE
+        PATTERN "build*" EXCLUDE
+        PATTERN ".git*" EXCLUDE
+    )
+endif()
 
-install(DIRECTORY statistictools/
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/selforg
-    FILES_MATCHING PATTERN "*.h"
-)
+# Create selforg-config script for compatibility
+if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
+    # Only create config script if building standalone
+    configure_file(
+        "${CMAKE_CURRENT_SOURCE_DIR}/selforg-config.m4"
+        "${CMAKE_CURRENT_BINARY_DIR}/selforg-config"
+        @ONLY
+    )
+    
+    install(PROGRAMS "${CMAKE_CURRENT_BINARY_DIR}/selforg-config"
+        DESTINATION ${CMAKE_INSTALL_BINDIR}
+    )
+endif()

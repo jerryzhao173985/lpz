@@ -1,21 +1,34 @@
+# LPZRobots Config
 @PACKAGE_INIT@
 
-include(CMakeFindDependencyMacro)
-
-# Find required dependencies
-find_dependency(Threads)
-
-# Optional dependencies
-find_package(PkgConfig QUIET)
-if(PkgConfig_FOUND)
-    pkg_check_modules(GSL gsl QUIET)
+# Check if we're in the build tree or install tree
+if(EXISTS "@CMAKE_CURRENT_BINARY_DIR@/LPZRobotsTargets.cmake")
+    # Build tree
+    include("@CMAKE_CURRENT_BINARY_DIR@/LPZRobotsTargets.cmake")
+else()
+    # Install tree
+    include("${CMAKE_CURRENT_LIST_DIR}/LPZRobotsTargets.cmake")
 endif()
 
-# Include the exported targets
-include("${CMAKE_CURRENT_LIST_DIR}/LPZRobotsTargets.cmake")
+# Set variables for backward compatibility
+set(LPZROBOTS_FOUND TRUE)
+set(LPZROBOTS_VERSION "@PROJECT_VERSION@")
 
-# Provide variables for compatibility
-set(LPZROBOTS_INCLUDE_DIRS "@PACKAGE_CMAKE_INSTALL_INCLUDEDIR@")
-set(LPZROBOTS_LIBRARIES LPZRobots::selforg)
+# Set include directories
+set_and_check(LPZROBOTS_INCLUDE_DIR "@PACKAGE_CMAKE_INSTALL_INCLUDEDIR@")
+set_and_check(LPZROBOTS_LIBRARY_DIR "@PACKAGE_CMAKE_INSTALL_LIBDIR@")
+
+# Create aliases if they don't exist
+if(NOT TARGET LPZRobots::selforg)
+    add_library(LPZRobots::selforg ALIAS lpzrobots::selforg)
+endif()
+
+if(NOT TARGET LPZRobots::ode_robots)
+    add_library(LPZRobots::ode_robots ALIAS lpzrobots::ode_robots)
+endif()
+
+if(NOT TARGET LPZRobots::ga_tools)
+    add_library(LPZRobots::ga_tools ALIAS lpzrobots::ga_tools)
+endif()
 
 check_required_components(LPZRobots)
