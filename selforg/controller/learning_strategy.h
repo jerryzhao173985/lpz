@@ -20,6 +20,7 @@
 #ifndef __LEARNING_STRATEGY_H
 #define __LEARNING_STRATEGY_H
 
+#include <cmath>  // for tanh function
 #include "matrix.h"
 #include <memory>
 

@@ -19,11 +19,11 @@
 #ifndef __DERBIGCONTROLLER_H
 #define __DERBIGCONTROLLER_H
 
-#include "invertmotorcontroller.h"
-
+#include <memory>  // for std::unique_ptr
 #include <cassert>
 #include <cmath>
 
+#include "invertmotorcontroller.h"
 #include "invertablemodel.h"
 #include "matrix.h"
 #include "noisegenerator.h"
