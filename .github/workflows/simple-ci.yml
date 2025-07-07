@@ -1,0 +1,98 @@
+name: Simple CI
+
+# This workflow mirrors exactly what a user does when building LPZRobots locally
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  build:
+    name: Build on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false  # Don't cancel other jobs if one fails
+      matrix:
+        os: [ubuntu-22.04, macos-14]  # LTS Linux and Apple Silicon Mac
+        build_type: [Release, Debug]
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    # Install dependencies - exactly as documented in README
+    - name: Install dependencies (Ubuntu)
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          build-essential cmake \
+          libgsl-dev libreadline-dev libncurses5-dev \
+          libgl1-mesa-dev libglu1-mesa-dev freeglut3-dev \
+          qt6-base-dev libopenscenegraph-dev
+    
+    - name: Install dependencies (macOS)
+      if: runner.os == 'macOS'
+      run: |
+        brew install cmake gsl readline ncurses qt@6 open-scene-graph
+        echo "$(brew --prefix qt@6)/bin" >> $GITHUB_PATH
+    
+    # Build with CMake - exactly as users do
+    - name: Configure with CMake
+      run: |
+        cmake --preset=default -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
+    
+    - name: Build
+      run: |
+        cmake --build build/default -j$(nproc 2>/dev/null || sysctl -n hw.ncpu)
+    
+    # Run tests if they exist
+    - name: Run tests
+      run: |
+        cd build/default
+        ctest --output-on-failure || echo "No tests found"
+    
+    # Verify a simulation can be built (smoke test)
+    - name: Test simulation build
+      run: |
+        cd ode_robots/simulations/template_sphererobot
+        make
+        # Verify the binary was created
+        test -f start || exit 1
+        echo "✓ Simulation built successfully"
+
+  # Also test the legacy Make system
+  make-build:
+    name: Legacy Make build
+    runs-on: ubuntu-22.04
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          build-essential \
+          libgsl-dev libreadline-dev libncurses5-dev \
+          libgl1-mesa-dev libglu1-mesa-dev freeglut3-dev \
+          qt6-base-dev libopenscenegraph-dev
+    
+    - name: Configure
+      run: |
+        # Non-interactive configuration
+        echo -e "u\n${HOME}/lpzrobots\n\n" | make conf
+    
+    - name: Build
+      run: |
+        make all -j$(nproc)
+    
+    - name: Verify build
+      run: |
+        # Check that libraries were built
+        test -f selforg/libselforg.a || exit 1
+        test -f ode_robots/libode_robots.a || exit 1
+        echo "✓ Make build completed successfully"

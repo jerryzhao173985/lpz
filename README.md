@@ -1,5 +1,7 @@
 # LPZRobots -- a simulator for robotic experiments for Self-Organization of Control
 
+[![Build Status](https://github.com/georgmartius/lpzrobots/actions/workflows/simple-ci.yml/badge.svg)](https://github.com/georgmartius/lpzrobots/actions/workflows/simple-ci.yml)
+
 This is a 3D physics simulator that comes with a collection of algorithms, simulations, and tools
 developed by the Robotics Group for Self-Organization of Control.
 
@@ -155,6 +157,37 @@ Check the `Dependencies` file for required packages.
 We recommend to install the ODE and OSG via macports ([http://www.macports.org](http://www.macports.org)). After installation of macports type on a console `sudo port install osg OpenSceneGraph` and see the `Dependencies` file. We will update the mac-related install procedures soon.
 
 **Instructions**
+
+### Modern CMake Build (Recommended)
+
+**Prerequisites:**
+- CMake 3.20 or higher
+- C++17 compatible compiler (clang++ 14+ or g++ 11+)
+
+**Build Steps:**
+
+```bash
+# Option 1: Using CMake presets (easiest)
+cmake --preset=default
+cmake --build build/default -j8
+
+# Option 2: Manual configuration
+mkdir build && cd build
+cmake .. -DCMAKE_BUILD_TYPE=Release
+make -j8
+
+# Install (optional)
+cmake --install build/default --prefix ~/lpzrobots
+```
+
+**Available CMake Presets:**
+- `default` - Standard debug build
+- `release` - Optimized release build
+- `macos-arm64` - Apple Silicon optimized build (macOS only)
+
+### Legacy Make Build
+
+If you prefer the traditional build system:
 
 1.  Download the source tar ball from [http://robot.informatik.uni-leipzig.de/software/current](http://robot.informatik.uni-leipzig.de/software/current).
 2.  Unpack file (`tar -xvzf lpzrobots*.tar`).

@@ -102,6 +102,7 @@ endif()
 
 add_subdirectory(ga_tools)
 add_subdirectory(ecbrobots)
+add_subdirectory(real_robots)
 
 if(BUILD_TESTS)
     enable_testing()

@@ -24,6 +24,13 @@ Thank you for your interest in contributing to LPZRobots! This document provides
    git remote add upstream https://github.com/georgmartius/lpzrobots.git
    ```
 
+4. **Set up pre-commit hooks** (recommended):
+   ```bash
+   pip install pre-commit
+   pre-commit install
+   ```
+   This will automatically check your code before each commit.
+
 ## Development Setup
 
 ### Prerequisites
