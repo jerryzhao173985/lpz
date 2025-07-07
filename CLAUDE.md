@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## CRITICAL: macOS ARM64 Migration with C++17 and Modern Build System
 
-**PROJECT STATE**: 98% modernized - Core libraries build successfully with C++17. Remaining work focuses on ga_tools and configurator components, plus comprehensive ecosystem improvements.
+**PROJECT STATE**: 98% modernized - All components build successfully with C++17. Both ga_tools and configurator have been fixed and now compile without errors. Minor modernization tasks remain (typedef migrations).
 
 **MIGRATION GOALS**:
 1. Complete C++17/20 modernization with zero warnings
@@ -99,35 +99,50 @@ make install → PREFIX/{bin,lib,include,share}
 - Target: Modern CMake with FetchContent
 - Goal: Replace M4 system entirely
 
-## Current Migration Status (2025-01-26)
+## Current Migration Status (2025-07-06)
 
-### ✅ Completed Components (98%)
+### ⚠️ Modernization Status (98% Complete)
+
+All core components now build successfully with C++17:
+
 - **selforg**: 0 warnings, fully modernized ✅
 - **ode_robots**: Builds with C++17, ~300 external warnings only ✅
 - **opende**: 57 minor warnings, builds successfully ✅
 - **guilogger**: Qt6 migration complete, 13 Qt warnings ✅
 - **matrixviz**: Qt6 migration complete, builds successfully ✅
 
-### ❌ Remaining Components (2%)
-1. **ga_tools** (Genetic Algorithm Tools)
-   - Status: Build fails due to corrupted sed replacements
-   - Issues: Misplaced override/explicit keywords, static_cast syntax errors
-   - Files affected: 22+ files with malformed modifications
-   - Fix approach: Revert and manually modernize
+Additional components also completed:
 
-2. **configurator** (Configuration GUI)
-   - Status: Build dependency fixed, but still needs Qt6 migration
-   - Issues: Version file conflicts with C++ <version> header, still using Qt5
-   - Build order issue: Fixed - now builds after selforg (2025-01-28)
-   - Files affected: 27+ files with incorrect replacements
-   - Fix approach: Remove version file, migrate to Qt6
+1. **ga_tools** (Genetic Algorithm Tools) - ✅ FIXED
+   - Successfully builds with minor warnings
+   - Corrupted sed replacements have been fixed
+   - Commit d92fa64 resolved all build issues
+   
+2. **configurator** (Configuration GUI) - ✅ FIXED  
+   - Successfully migrated to Qt6 (commit 06cae1b)
+   - Build order dependency resolved
+   - Now properly builds after selforg
+   
+### Known Issues Fixed in This Session
 
-### 🎯 Immediate Priorities
-1. Fix ga_tools compilation errors from bad sed replacements
-2. Resolve configurator version file conflict
-3. Migrate configurator from Qt5 to Qt6
-4. Complete typedef → using migration (67+ files)
-5. Enable sanitizers (ASAN, TSAN, UBSAN)
+1. **Matrix multiplication bug** - Fixed undefined variable `interdim` → `a.n` in matrix.cpp:387
+2. **InvertMotorBigModel** - Fixed null pointer issue by requiring model in test initialization
+3. **InvertMotorSpace** - Added regularization to prevent NaN from singular matrix inversion
+4. **SoxExpand** - Enhanced assertion messages for better debugging
+5. **test_matrix_optimizations.cpp** - Fixed compilation errors (getData() → unsafeGetData(), removed non-existent toMapTanh())
+6. **typedef → using migration** - Partial: 20 conversions completed, but 184 files still contain typedef declarations
+7. **Sanitizer support** - Added make targets for ASAN, TSAN, and UBSAN in Makefile.4sim.m4 template (requires regeneration of simulation Makefiles)
+
+### Remaining Minor Issues
+
+1. **InvertMotorNStep** - Model adaptation logic may need investigation (low priority)
+
+### 🎯 Future Enhancements  
+1. Complete typedef → using migration (184 files remaining)
+2. ~~Enable sanitizers (ASAN, TSAN, UBSAN)~~ ✅ COMPLETED (2025-07-06)
+3. Implement remaining performance optimizations from NEXT_STEPS_SUMMARY.md
+4. Add comprehensive CI/CD with the testing infrastructure
+5. Complete CMake migration for modern package management
 
 ## Performance Characteristics
 
@@ -238,8 +253,22 @@ make
 cd opende
 make test
 
+# Build and run with sanitizers (Requires Makefile regeneration from M4 template)
+cd ode_robots/simulations/template_sphererobot
+# First regenerate Makefile if needed:
+# m4 -I ../.. ../../Makefile.4sim.m4 > Makefile
+
+make asan    # Build with AddressSanitizer (memory errors)
+./start_asan -noshadow
+
+make tsan    # Build with ThreadSanitizer (race conditions)
+./start_tsan -noshadow
+
+make ubsan   # Build with UndefinedBehaviorSanitizer
+./start_ubsan -noshadow
+
 # Check for memory leaks
-ASAN_OPTIONS=detect_leaks=1 ./start
+ASAN_OPTIONS=detect_leaks=1 ./start_asan
 
 # Profile performance
 instruments -t "Time Profiler" ./start_opt
@@ -758,6 +787,53 @@ Components should be built in this order for best results:
 5. guilogger, matrixviz (GUI tools)
 6. configurator (optional)
 
+## 🎯 macOS Event Handling Fixes (2025-01-28)
+
+### Critical Issues Fixed
+
+#### 1. **Keyboard Events** ✅
+**Problem**: Only Ctrl+key combinations worked on macOS; regular keys (c, +, -, o, p) were non-functional
+
+**Solution**: 
+- Created `ode_robots/utils/macos_event_fix.h` for centralized macOS event handling
+- Added key code translation for macOS-specific codes
+- Fixed '+' key: macOS sends 61 (equals) with shift, now translated to 43
+- Fixed '-' key: macOS sends 45, now mapped to keypad code 65453
+
+#### 2. **Mouse Controls** ✅
+**Problem**: Camera manipulation was broken; Retina display scaling issues
+
+**Solution**:
+- Fixed coordinate normalization for Retina displays (2x scaling)
+- Added scroll wheel zoom with adaptive speed
+- Implemented industry-standard 3D app controls:
+  - Left Mouse: Orbit camera
+  - Right Mouse: Pan horizontally
+  - Middle Mouse: Zoom + vertical pan
+  - Scroll Wheel: Smooth zoom
+  - Alt+Mouse: Alternative controls
+- Reduced mouse sensitivity from 10.0 to 5.0 for smoother movement
+
+#### 3. **Camera Mode Cycling** ✅
+**Problem**: 'c' key wasn't cycling through camera modes properly
+
+**Solution**:
+- Uses setCameraMode() function with CameraMode enum
+- Tracks mode with static variable and cycles through available modes
+- Provides console feedback showing current camera mode
+
+### Files Created/Modified
+- **NEW**: `ode_robots/utils/macos_event_fix.h` - Central macOS event handling utilities
+- **MODIFIED**: `ode_robots/simulation.cpp` - Key translation and camera cycling
+- **MODIFIED**: `ode_robots/osg/cameramanipulator.cpp` - Mouse controls and zoom
+
+### Testing
+Enable debug mode to see event details:
+```bash
+export LPZROBOTS_DEBUG_EVENTS=1
+./start -nohud
+```
+
 ## 🔧 Recent Build System Fixes (2025-01-28)
 
 ### Fixed Issues
@@ -795,3 +871,65 @@ Created reusable scripts in `build_helpers/`:
 ### Component Status Update
 - **configurator**: Build dependency issue fixed, but still needs Qt6 migration and C++17 fixes
 - **ga_tools**: Still needs manual fixing of corrupted sed replacements
+
+## 🎮 Enhanced Camera Controls (2025-01-28)
+
+### WASD Movement System ✅
+Implemented FPS-style camera movement for better navigation:
+
+**Movement Keys**:
+- **w/s** - Move forward/backward along view direction
+- **a/d** - Strafe left/right perpendicular to view
+- **q/e** - Move up/down in world space
+
+**Speed Modifiers**:
+- **Normal**: 1.0x speed (no modifier)
+- **Shift**: 0.1x speed (high precision)
+- **Alt/Option**: 0.5x speed (medium precision)
+
+**Implementation Details**:
+```cpp
+// In simulation.cpp
+case 'w': cameraManipulator->moveForward(10.0); break;
+case 's': cameraManipulator->moveForward(-10.0); break;
+case 'a': cameraManipulator->moveSideways(-10.0); break;
+case 'd': cameraManipulator->moveSideways(10.0); break;
+case 'q': cameraManipulator->moveUp(10.0); break;
+case 'e': cameraManipulator->moveUp(-10.0); break;
+
+// In CameraManipulator class
+virtual void moveForward(double distance) {
+    osg::Vec3 forward = camHandle.view - camHandle.eye;
+    forward.normalize();
+    camHandle.desiredEye += forward * distance * 0.01;
+    camHandle.desiredView += forward * distance * 0.01;
+}
+```
+
+### Enhanced Camera Features ✅
+1. **Fixed Camera Mode Cycling**
+   - Synchronized static variable with actual TV mode default (index 2)
+   - Added visual feedback with mode names in console
+   - Smooth transitions between modes
+
+2. **Improved Mouse Controls**
+   - Reduced sensitivity for smoother control
+   - Added Alt+Mouse alternative controls
+   - Scroll wheel zoom with adaptive speed
+   - Proper Retina display support
+
+3. **Professional Control Scheme**
+   - Matches industry-standard 3D applications
+   - Consistent modifier key behavior
+   - Intuitive movement patterns
+
+### Documentation Created
+- **docs/CONTROLS_GUIDE.md** - Comprehensive control reference
+- **docs/MACOS_SIMULATION_FIXES_JOURNEY.md** - Technical journey log
+
+### Usage Tips
+1. Use WASD for quick camera positioning
+2. Hold Shift for precise adjustments
+3. Combine mouse and keyboard for efficient navigation
+4. Press 'c' to cycle through camera modes
+5. Use Space to reset camera to home position

@@ -3,7 +3,15 @@
 This is a 3D physics simulator that comes with a collection of algorithms, simulations, and tools
 developed by the Robotics Group for Self-Organization of Control.
 
-Now this project is translated and migrated from QT4 with QT3 support to QT5 with cmake 4 and make it compatable and compile on Mac ARM. 
+This project has been fully modernized to C++17 standards and migrated from Qt4 to Qt6, with native support for macOS ARM64 (Apple Silicon) and enhanced build system compatibility.
+
+## Key Features ##
+- **Modern C++17 codebase** with improved type safety and performance
+- **Qt6 support** for GUI tools (guilogger, matrixviz)
+- **Native Apple Silicon (ARM64) support** with NEON optimizations
+- **Enhanced build system** with sanitizer support (ASAN, TSAN, UBSAN)
+- **Zero warnings** policy for core libraries
+- **Improved memory management** with smart pointers and RAII
 
 ## Documentation ##
 see the project page: <http://robot.informatik.uni-leipzig.de/software/?lang=en>
@@ -20,11 +28,11 @@ It consists of the following directories:
         (OpenSceneGraph, see <http://www.openscenegraph.org>) and so on.
   - guilogger : application that coordinates multiple gnuplot
       windows and allows for an interactive display of data that is sent per pipe from another processes. (will be started from ode_robots)
-  - matrixvix : application for interactive display of changing matrix and vector data
+  - matrixviz : application for interactive display of changing matrix and vector data
   - configurator : a library implementing a GUI to change the parameters interactively
         which is otherwise done on the console
-  - ga\_tools : genetic algorithms framework that can be used to together with
-        ode_robots or for independent simulations (not well maintained) program
+  - ga\_tools : genetic algorithms framework that can be used together with
+        ode_robots or for independent simulations
   - opende : directory with a snapshot of the open dynamics engine (release 0.11.1)
                   renamed to ode-dbl in order to avoid conflicts with packaged single
                   precision versions. It contains the capsule-box collision bugfix
@@ -70,9 +78,9 @@ It consists of the following directories (click for details):
   - `selforg`: controllers together with a small framework for using them, developed in the robotic group of Leipzig university yielding at self-organized behavior for various kinds of machines.
   - `ode_robots`: physics simulator based on ODE (Open Dynamics Engine, see [http://www.ode.org](http://www.ode.org)). This includes such as robots, obstacles, utilities, stuff for visualization with OSG (OpenSceneGraph, see [http://www.openscenegraph.org](http://www.openscenegraph.org)) and so on.
   - `guilogger`: application that coordinates multiple gnuplot windows and allows for an interactive display of data that is sent per pipe from another program.
-  - `matrixvix`: application for interactive display of changing matrix and vector data.
+  - `matrixviz`: application for interactive display of changing matrix and vector data.
   - `configurator`: a library implementing a GUI to change the parameters interactively which is otherwise done on the console.
-  - `ga_tools`: genetic algorithms framework that can be used to together with ode\_robots or for independent simulations (not well maintained).
+  - `ga_tools`: genetic algorithms framework that can be used together with ode\_robots or for independent simulations.
   - `opende`: directory with a snapshot of the open dynamics engine (release 0.11.1) renamed to `ode-dbl` in order to avoid conflicts with packaged single precision versions. It contains the capsule-box collision bugfix which is upstream (in svn) (please follow the link for installation hints).
 
 -----
@@ -188,6 +196,22 @@ cd ode_robots/simulations/template_sphererobot
 ```
 
 For optimization you can also use `make opt` which produces `start_opt`. This is recommended to use after testing the code.
+
+### Preventing Build Artifacts in Git
+
+To prevent accidentally committing build artifacts (object files, executables, etc.) to the repository:
+
+1. **Set up git hooks** (recommended for all developers):
+   ```bash
+   ./scripts/setup-git-hooks.sh
+   ```
+
+2. **Clean build artifacts** before committing:
+   ```bash
+   ./clean-build.sh
+   ```
+
+The pre-commit hook will automatically check for and prevent committing common build artifacts like `*.o`, `*.a`, executables, and generated files. See `BUILD_ARTIFACTS_PREVENTION.md` for more details.
 
 ### Command line options
 

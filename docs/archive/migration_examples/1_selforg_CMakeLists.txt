@@ -1,0 +1,232 @@
+# CMakeLists.txt for selforg library
+# Production-ready CMake configuration for lpzrobots selforg library
+cmake_minimum_required(VERSION 3.16)
+project(selforg VERSION 1.0.0 LANGUAGES CXX)
+
+# Set C++ standard
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+# Options
+option(BUILD_SHARED_LIBS "Build shared libraries" ON)
+option(BUILD_EXAMPLES "Build example programs" ON)
+option(BUILD_TESTS "Build test programs" ON)
+option(ENABLE_OPTIMIZATION "Enable optimization build" ON)
+option(ENABLE_DEBUG "Enable debug build" ON)
+
+# Platform detection with ARM64 support
+if(APPLE)
+    execute_process(
+        COMMAND uname -m
+        OUTPUT_VARIABLE MACHINE_ARCH
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
+    if(MACHINE_ARCH STREQUAL "arm64")
+        set(PLATFORM "macOS_ARM64")
+        message(STATUS "Building for macOS ARM64 (Apple Silicon)")
+    else()
+        set(PLATFORM "macOS_x86_64")
+        message(STATUS "Building for macOS x86_64")
+    endif()
+elseif(UNIX)
+    set(PLATFORM "Linux")
+    message(STATUS "Building for Linux")
+elseif(WIN32)
+    set(PLATFORM "Windows")
+    message(STATUS "Building for Windows")
+else()
+    message(FATAL_ERROR "Unsupported platform")
+endif()
+
+# Global compile options
+add_compile_options(-Wall -pipe)
+if(BUILD_SHARED_LIBS)
+    set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+endif()
+
+# Find dependencies
+find_package(Threads REQUIRED)
+
+# Collect source files
+set(SELFORG_DIRS
+    .
+    controller
+    matrix
+    utils
+    wirings
+    statistictools
+)
+
+set(SELFORG_SOURCES)
+set(SELFORG_HEADERS)
+
+foreach(dir ${SELFORG_DIRS})
+    file(GLOB dir_sources "${dir}/*.cpp")
+    file(GLOB dir_headers "${dir}/*.h")
+    list(APPEND SELFORG_SOURCES ${dir_sources})
+    list(APPEND SELFORG_HEADERS ${dir_headers})
+endforeach()
+
+# Remove any flymake temporary files
+list(FILTER SELFORG_SOURCES EXCLUDE REGEX ".*flymake\\.cpp$")
+list(FILTER SELFORG_HEADERS EXCLUDE REGEX ".*flymake\\.h$")
+
+# Create library targets
+# Standard library
+add_library(selforg ${SELFORG_SOURCES})
+target_include_directories(selforg
+    PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/selforg>
+        $<INSTALL_INTERFACE:include>
+        $<INSTALL_INTERFACE:include/selforg>
+)
+target_link_libraries(selforg PUBLIC Threads::Threads)
+set_target_properties(selforg PROPERTIES
+    VERSION ${PROJECT_VERSION}
+    SOVERSION ${PROJECT_VERSION_MAJOR}
+    OUTPUT_NAME selforg
+)
+
+# Debug library
+if(ENABLE_DEBUG)
+    add_library(selforg_dbg ${SELFORG_SOURCES})
+    target_include_directories(selforg_dbg
+        PUBLIC
+            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/selforg>
+            $<INSTALL_INTERFACE:include>
+            $<INSTALL_INTERFACE:include/selforg>
+    )
+    target_link_libraries(selforg_dbg PUBLIC Threads::Threads)
+    target_compile_definitions(selforg_dbg PRIVATE DEBUG)
+    target_compile_options(selforg_dbg PRIVATE -g -O0)
+    set_target_properties(selforg_dbg PROPERTIES
+        VERSION ${PROJECT_VERSION}
+        SOVERSION ${PROJECT_VERSION_MAJOR}
+        OUTPUT_NAME selforg_dbg
+    )
+endif()
+
+# Optimized library
+if(ENABLE_OPTIMIZATION)
+    add_library(selforg_opt ${SELFORG_SOURCES})
+    target_include_directories(selforg_opt
+        PUBLIC
+            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/selforg>
+            $<INSTALL_INTERFACE:include>
+            $<INSTALL_INTERFACE:include/selforg>
+    )
+    target_link_libraries(selforg_opt PUBLIC Threads::Threads)
+    target_compile_options(selforg_opt PRIVATE -O3 -march=native -ffast-math)
+    set_target_properties(selforg_opt PROPERTIES
+        VERSION ${PROJECT_VERSION}
+        SOVERSION ${PROJECT_VERSION_MAJOR}
+        OUTPUT_NAME selforg_opt
+    )
+endif()
+
+# Installation rules
+include(GNUInstallDirs)
+
+# Install libraries
+install(TARGETS selforg
+    EXPORT selforgTargets
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+)
+
+if(TARGET selforg_dbg)
+    install(TARGETS selforg_dbg
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    )
+endif()
+
+if(TARGET selforg_opt)
+    install(TARGETS selforg_opt
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    )
+endif()
+
+# Install headers
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/selforg
+    FILES_MATCHING PATTERN "*.h"
+    PATTERN "build*" EXCLUDE
+    PATTERN "examples" EXCLUDE
+    PATTERN "tests" EXCLUDE
+    PATTERN "simulations" EXCLUDE
+    PATTERN ".git" EXCLUDE
+)
+
+# Create and install CMake package configuration
+install(EXPORT selforgTargets
+    FILE selforgTargets.cmake
+    NAMESPACE selforg::
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/selforg
+)
+
+# Create package configuration file
+include(CMakePackageConfigHelpers)
+write_basic_package_version_file(
+    "${CMAKE_CURRENT_BINARY_DIR}/selforgConfigVersion.cmake"
+    VERSION ${PROJECT_VERSION}
+    COMPATIBILITY AnyNewerVersion
+)
+
+configure_package_config_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/selforgConfig.cmake.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/selforgConfig.cmake"
+    INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/selforg
+)
+
+install(FILES
+    "${CMAKE_CURRENT_BINARY_DIR}/selforgConfig.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/selforgConfigVersion.cmake"
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/selforg
+)
+
+# Build examples if requested
+if(BUILD_EXAMPLES)
+    add_subdirectory(examples)
+endif()
+
+# Build tests if requested
+if(BUILD_TESTS)
+    enable_testing()
+    add_subdirectory(tests)
+endif()
+
+# Create pkg-config file
+configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/selforg.pc.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/selforg.pc"
+    @ONLY
+)
+
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/selforg.pc"
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig
+)
+
+# Summary
+message(STATUS "")
+message(STATUS "selforg configuration summary:")
+message(STATUS "  Platform: ${PLATFORM}")
+message(STATUS "  Build type: ${CMAKE_BUILD_TYPE}")
+message(STATUS "  C++ Standard: ${CMAKE_CXX_STANDARD}")
+message(STATUS "  Build shared libs: ${BUILD_SHARED_LIBS}")
+message(STATUS "  Build examples: ${BUILD_EXAMPLES}")
+message(STATUS "  Build tests: ${BUILD_TESTS}")
+message(STATUS "  Install prefix: ${CMAKE_INSTALL_PREFIX}")
+message(STATUS "")

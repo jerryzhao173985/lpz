@@ -213,6 +213,36 @@ clean-all: usage
 ##!distclean	  see clean-all
 distclean :  clean-all
 
+.PHONY: check
+##!check	  check for build artifacts before committing (run before 'git commit')
+check:
+	@echo "Checking for build artifacts..."
+	@if git ls-files | grep -E '\.(o|d|a|so|dylib)$$|Makefile\.conf$$|^build/' | head -20; then \
+		echo "❌ ERROR: Found build artifacts in git!"; \
+		echo "Run 'make clean-git' to remove them"; \
+		exit 1; \
+	else \
+		echo "✅ No build artifacts tracked - safe to commit!"; \
+	fi
+
+.PHONY: clean-git
+##!clean-git	  remove all build artifacts from git tracking
+clean-git:
+	@echo "Removing build artifacts from git..."
+	@git rm --cached -r build/ build-*/ build_*/ 2>/dev/null || true
+	@git rm --cached '*.o' '*.d' '*.a' '*.so' '*.dylib' 2>/dev/null || true
+	@git rm --cached '**/Makefile.conf' 2>/dev/null || true
+	@git rm --cached '**/.qmake.stash' 2>/dev/null || true
+	@git rm --cached 'selforg/lib*' 'ode_robots/lib*' 'ga_tools/lib*' 2>/dev/null || true
+	@echo "✅ Build artifacts removed from git tracking"
+	@echo "Now run: git commit -m 'chore: remove build artifacts'"
+
+.PHONY: commit
+##!commit	  safe commit - checks for artifacts first, then opens commit dialog
+commit: check
+	@git add -p
+	@git commit
+
 .PHONY: uninstall
 ##!uninstall	  removes all the installed files again (except ode)
 uninstall: uninstall_intern
