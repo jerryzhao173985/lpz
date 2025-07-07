@@ -87,6 +87,48 @@ function(lpzrobots_find_dependencies)
         endif()
     endif()
     
+    # ODE (Open Dynamics Engine)
+    option(LPZROBOTS_USE_SYSTEM_ODE "Use system-installed ODE instead of bundled version" OFF)
+    
+    if(LPZROBOTS_USE_SYSTEM_ODE)
+        set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_LIST_DIR}")
+        find_package(ODE)
+        if(ODE_FOUND)
+            set(LPZROBOTS_HAS_ODE TRUE PARENT_SCOPE)
+            set(LPZROBOTS_ODE_INCLUDE_DIRS ${ODE_INCLUDE_DIRS} PARENT_SCOPE)
+            set(LPZROBOTS_ODE_LIBRARIES ${ODE_LIBRARIES} PARENT_SCOPE)
+            set(LPZROBOTS_ODE_IS_DOUBLE ${ODE_IS_DOUBLE} PARENT_SCOPE)
+            
+            # Create ode-dbl compatibility headers
+            file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/include/ode-dbl)
+            if(ODE_INCLUDE_DIRS)
+                file(GLOB ODE_HEADERS "${ODE_INCLUDE_DIRS}/ode/*.h")
+                foreach(header ${ODE_HEADERS})
+                    get_filename_component(header_name ${header} NAME)
+                    execute_process(
+                        COMMAND ${CMAKE_COMMAND} -E create_symlink 
+                            ${header} 
+                            ${CMAKE_BINARY_DIR}/include/ode-dbl/${header_name}
+                    )
+                endforeach()
+            endif()
+            
+            message(STATUS "Using system ODE (double precision: ${ODE_IS_DOUBLE})")
+        else()
+            message(WARNING "System ODE not found. Will use bundled version.")
+            set(LPZROBOTS_USE_SYSTEM_ODE OFF PARENT_SCOPE)
+        endif()
+    endif()
+    
+    if(NOT LPZROBOTS_USE_SYSTEM_ODE)
+        # Use bundled ODE
+        set(LPZROBOTS_HAS_ODE TRUE PARENT_SCOPE)
+        set(LPZROBOTS_ODE_INCLUDE_DIRS "${CMAKE_SOURCE_DIR}/include/ode-dbl" PARENT_SCOPE)
+        set(LPZROBOTS_ODE_LIBRARIES "ode_dbl" PARENT_SCOPE)
+        set(LPZROBOTS_ODE_IS_DOUBLE TRUE PARENT_SCOPE)
+        message(STATUS "Using bundled ODE (double precision)")
+    endif()
+    
     # Readline library
     find_library(READLINE_LIBRARY readline)
     find_path(READLINE_INCLUDE_DIR readline/readline.h)
@@ -364,7 +406,15 @@ function(lpzrobots_print_dependencies)
     message(STATUS "  OpenMP:          ${LPZROBOTS_HAS_OPENMP}")
     message(STATUS "  GSL:             ${LPZROBOTS_HAS_GSL}")
     message(STATUS "  OpenSceneGraph:  ${LPZROBOTS_HAS_OSG}")
-    message(STATUS "  ODE:             ${LPZROBOTS_HAS_ODE}")
+    if(LPZROBOTS_HAS_ODE)
+        if(LPZROBOTS_USE_SYSTEM_ODE)
+            message(STATUS "  ODE:             FOUND (system, double: ${LPZROBOTS_ODE_IS_DOUBLE})")
+        else()
+            message(STATUS "  ODE:             FOUND (bundled, double precision)")
+        endif()
+    else()
+        message(STATUS "  ODE:             NOT FOUND")
+    endif()
     message(STATUS "  Qt:              ${LPZROBOTS_HAS_QT}")
     if(LPZROBOTS_HAS_QT)
         message(STATUS "    Qt Version:    ${LPZROBOTS_QT_VERSION}")
