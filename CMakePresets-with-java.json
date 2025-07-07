@@ -1,0 +1,70 @@
+{
+    "version": 6,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 20,
+        "patch": 0
+    },
+    "configurePresets": [
+        {
+            "name": "default-java",
+            "displayName": "Default with Java",
+            "description": "Default build configuration with Java components enabled",
+            "generator": "Unix Makefiles",
+            "binaryDir": "${sourceDir}/build",
+            "installDir": "${sourceDir}/local",
+            "cacheVariables": {
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+                "BUILD_SHARED_LIBS": "OFF",
+                "BUILD_EXAMPLES": "ON",
+                "BUILD_GUI_TOOLS": "ON",
+                "BUILD_JAVA_TOOLS": "ON",
+                "BUILD_TESTS": "OFF",
+                "BUILD_OPT_LIBRARIES": "ON",
+                "BUILD_DBG_LIBRARIES": "ON",
+                "ENABLE_SIMD": "ON",
+                "ENABLE_OPENMP": "OFF",
+                "LPZROBOTS_INSTALL_TYPE": "DEVEL",
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_PREFIX_PATH": "/opt/homebrew",
+                "CMAKE_OSX_ARCHITECTURES": "arm64"
+            }
+        },
+        {
+            "name": "default-no-java",
+            "displayName": "Default without Java",
+            "description": "Default build configuration without Java components",
+            "generator": "Unix Makefiles",
+            "binaryDir": "${sourceDir}/build",
+            "installDir": "${sourceDir}/local",
+            "cacheVariables": {
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+                "BUILD_SHARED_LIBS": "OFF",
+                "BUILD_EXAMPLES": "ON",
+                "BUILD_GUI_TOOLS": "ON",
+                "BUILD_JAVA_TOOLS": "OFF",
+                "BUILD_TESTS": "OFF",
+                "BUILD_OPT_LIBRARIES": "ON",
+                "BUILD_DBG_LIBRARIES": "ON",
+                "ENABLE_SIMD": "ON",
+                "ENABLE_OPENMP": "OFF",
+                "LPZROBOTS_INSTALL_TYPE": "DEVEL",
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_PREFIX_PATH": "/opt/homebrew",
+                "CMAKE_OSX_ARCHITECTURES": "arm64"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "default-java",
+            "configurePreset": "default-java",
+            "jobs": 0
+        },
+        {
+            "name": "default-no-java",
+            "configurePreset": "default-no-java",
+            "jobs": 0
+        }
+    ]
+}

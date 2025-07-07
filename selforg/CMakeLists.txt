@@ -69,6 +69,9 @@ elseif(UNIX)
     target_compile_definitions(selforg PRIVATE LINUX)
 endif()
 
+# Configurator support (optional for now)
+target_compile_definitions(selforg PRIVATE NOCONFIGURATOR)
+
 # SIMD optimizations
 if(ENABLE_SIMD)
     include(CheckCXXCompilerFlag)

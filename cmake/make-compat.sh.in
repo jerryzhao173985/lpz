@@ -1,0 +1,90 @@
+#!/bin/bash
+#
+# Legacy Make compatibility wrapper
+# This script emulates the old make-based build system using CMake
+#
+
+# Configuration from CMake
+CMAKE_BINARY_DIR="@CMAKE_BINARY_DIR@"
+CMAKE_SOURCE_DIR="@CMAKE_SOURCE_DIR@"
+CMAKE_COMMAND="@CMAKE_COMMAND@"
+
+# Function to print usage
+usage() {
+    echo "Usage: $0 [target] [options]"
+    echo ""
+    echo "Targets:"
+    echo "  all          Build all components"
+    echo "  selforg      Build selforg library"
+    echo "  ode_robots   Build ode_robots library"
+    echo "  ga_tools     Build ga_tools library"
+    echo "  guilogger    Build guilogger"
+    echo "  matrixviz    Build matrixviz"
+    echo "  clean        Clean build artifacts"
+    echo "  install      Install to prefix"
+    echo ""
+    echo "Options:"
+    echo "  -j<N>        Use N parallel jobs"
+    echo "  opt          Build optimized version"
+    echo "  dbg          Build debug version"
+}
+
+# Parse arguments
+TARGET="all"
+JOBS=""
+BUILD_TYPE=""
+
+for arg in "$@"; do
+    case $arg in
+        -j*)
+            JOBS="--parallel ${arg#-j}"
+            ;;
+        opt)
+            BUILD_TYPE="Release"
+            ;;
+        dbg)
+            BUILD_TYPE="Debug"
+            ;;
+        -h|--help)
+            usage
+            exit 0
+            ;;
+        *)
+            TARGET="$arg"
+            ;;
+    esac
+done
+
+# Map legacy targets to CMake targets
+case $TARGET in
+    all)
+        CMAKE_TARGET="all"
+        ;;
+    selforg|ode_robots|ga_tools|guilogger|matrixviz)
+        CMAKE_TARGET="$TARGET"
+        ;;
+    clean)
+        CMAKE_TARGET="clean"
+        ;;
+    install)
+        CMAKE_TARGET="install"
+        ;;
+    *)
+        echo "Unknown target: $TARGET"
+        usage
+        exit 1
+        ;;
+esac
+
+# Build with CMake
+cd "$CMAKE_BINARY_DIR"
+
+# Reconfigure if build type changed
+if [ -n "$BUILD_TYPE" ]; then
+    "$CMAKE_COMMAND" "$CMAKE_SOURCE_DIR" -DCMAKE_BUILD_TYPE="$BUILD_TYPE"
+fi
+
+# Build target
+"$CMAKE_COMMAND" --build . --target "$CMAKE_TARGET" $JOBS
+
+exit $?

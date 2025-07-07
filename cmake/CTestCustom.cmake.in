@@ -1,0 +1,172 @@
+# CTestCustom.cmake.in
+# Enhanced CTest configuration for LPZRobots
+
+# Maximum test output size (in bytes)
+set(CTEST_CUSTOM_MAXIMUM_PASSED_TEST_OUTPUT_SIZE 1048576)  # 1MB
+set(CTEST_CUSTOM_MAXIMUM_FAILED_TEST_OUTPUT_SIZE 10485760) # 10MB
+
+# Test timeout defaults (in seconds)
+set(CTEST_TEST_TIMEOUT 300)  # 5 minutes default
+
+# Parallel testing configuration
+set(CTEST_PARALLEL_LEVEL @CMAKE_BUILD_PARALLEL_LEVEL@)
+
+# Test duration buckets for better reporting
+set(CTEST_CUSTOM_TESTS_DURATION_BUCKET_THRESHOLDS
+    1    # Very fast tests (< 1s)
+    5    # Fast tests (< 5s)
+    30   # Normal tests (< 30s)
+    300  # Slow tests (< 5min)
+)
+
+# Memory check suppressions
+set(CTEST_CUSTOM_MEMCHECK_IGNORE
+    "test_.*_benchmark"     # Ignore benchmarks in memory checks
+    ".*_performance_.*"     # Ignore performance tests
+    "test_stress_.*"        # Stress tests may intentionally leak
+)
+
+# Valgrind suppressions file
+if(EXISTS "@CMAKE_SOURCE_DIR@/tests/valgrind_suppressions.txt")
+    set(CTEST_MEMCHECK_SUPPRESSIONS_FILE "@CMAKE_SOURCE_DIR@/tests/valgrind_suppressions.txt")
+endif()
+
+# Coverage exclusions
+set(CTEST_CUSTOM_COVERAGE_EXCLUDE
+    ".*test.*"
+    ".*Test.*"
+    ".*benchmark.*"
+    ".*/external/.*"
+    ".*/build/.*"
+    ".*/tests/.*"
+    "@CMAKE_SOURCE_DIR@/opende/.*"      # External physics engine
+    "@CMAKE_SOURCE_DIR@/guilogger/.*"    # GUI tools
+    "@CMAKE_SOURCE_DIR@/matrixviz/.*"    # GUI tools
+    ".*/moc_.*"                          # Qt generated files
+    ".*/ui_.*"                           # Qt generated files
+)
+
+# Warning exceptions (known warnings to ignore)
+set(CTEST_CUSTOM_WARNING_EXCEPTION
+    ".*warning: command line option.*"
+    ".*warning: .*OpenSceneGraph.*"
+    ".*warning: .*Qt.*"
+    ".*warning: .*ode-dbl.*"
+    ".*clang-tidy.*"
+    ".*has no symbols"  # macOS ranlib warning
+)
+
+# Error exceptions (known issues to ignore)
+set(CTEST_CUSTOM_ERROR_EXCEPTION
+    ".*ERROR: AddressSanitizer:.*new-delete-type-mismatch.*Qt.*"  # Known Qt issue
+    ".*ERROR: LeakSanitizer:.*libfontconfig.*"                    # System library issue
+)
+
+# Tests to run first (quick smoke tests)
+set(CTEST_CUSTOM_TESTS_RUN_FIRST
+    "quick_smoke_test"
+    "basic_matrix_test"
+    "controller_factory_test"
+)
+
+# Maximum number of errors/warnings to display
+set(CTEST_CUSTOM_MAXIMUM_NUMBER_OF_ERRORS 50)
+set(CTEST_CUSTOM_MAXIMUM_NUMBER_OF_WARNINGS 100)
+
+# Test properties by label
+set_property(TEST APPEND PROPERTY LABELS_UNIT TIMEOUT 30)
+set_property(TEST APPEND PROPERTY LABELS_INTEGRATION TIMEOUT 120)
+set_property(TEST APPEND PROPERTY LABELS_PERFORMANCE TIMEOUT 300)
+set_property(TEST APPEND PROPERTY LABELS_STRESS TIMEOUT 600)
+set_property(TEST APPEND PROPERTY LABELS_BDD TIMEOUT 120)
+
+# Environment variables for all tests
+set(CTEST_ENVIRONMENT
+    "LPZROBOTS_TEST_DATA_DIR=@CMAKE_SOURCE_DIR@/tests/data"
+    "LPZROBOTS_TEST_OUTPUT_DIR=@CMAKE_BINARY_DIR@/test_output"
+    "LPZROBOTS_WARMUP_STEPS=20"
+    "LPZROBOTS_TEST_PARALLEL=1"
+    "GTEST_COLOR=1"
+    "CLICOLOR_FORCE=1"
+)
+
+# Performance regression configuration
+set(LPZROBOTS_PERFORMANCE_BASELINE_DIR "@CMAKE_SOURCE_DIR@/tests/performance/baselines")
+set(LPZROBOTS_PERFORMANCE_REGRESSION_THRESHOLD 1.1)  # 10% regression triggers alert
+
+# Test retry configuration for flaky tests
+set(CTEST_CUSTOM_MAXIMUM_RETRIES 3)
+set(CTEST_CUSTOM_TESTS_FLAKY
+    # List known flaky tests here
+    "test_simulation_.*"  # Simulations can be timing-dependent
+)
+
+# Test categorization for reporting
+set(CTEST_CUSTOM_TEST_CATEGORIES
+    "Critical:unit&core|unit&matrix"
+    "Important:unit&controller"
+    "Standard:integration"
+    "Extended:performance|stress"
+    "Optional:bdd|examples"
+)
+
+# Custom test measurements
+set(CTEST_CUSTOM_MEASUREMENTS
+    "WallTime"
+    "CPUTime"
+    "MemoryUsage"
+    "TestIterations"
+)
+
+# Post-test processing
+set(CTEST_CUSTOM_POST_TEST
+    "echo 'Test completed: ' && date"
+)
+
+# Pre-test setup
+set(CTEST_CUSTOM_PRE_TEST
+    "echo 'Starting test: ' && date"
+    "echo 'System: ' && uname -a"
+    "echo 'CPU: ' && nproc"
+    "echo 'Memory: ' && free -h | grep Mem"
+)
+
+# Test output processing
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+    # Use timing information on Linux
+    set(CTEST_TEST_TIMEOUT 300)
+    set(CTEST_CUSTOM_PRE_TEST ${CTEST_CUSTOM_PRE_TEST}
+        "echo 'CPU Governor: ' && cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor 2>/dev/null || true"
+    )
+endif()
+
+# Dashboard submission settings
+set(CTEST_CUSTOM_MAXIMUM_PASSED_TEST_OUTPUT_SIZE 1048576)
+set(CTEST_CUSTOM_MAXIMUM_FAILED_TEST_OUTPUT_SIZE 10485760)
+
+# Test grouping for better parallelization
+set(CTEST_CUSTOM_TESTS_PARALLEL_LEVEL_UNIT 4)
+set(CTEST_CUSTOM_TESTS_PARALLEL_LEVEL_INTEGRATION 2)
+set(CTEST_CUSTOM_TESTS_PARALLEL_LEVEL_PERFORMANCE 1)
+
+# Resource allocation for tests
+set_property(TEST APPEND PROPERTY LABELS_PERFORMANCE 
+    RESOURCE_LOCK "cpu_intensive")
+set_property(TEST APPEND PROPERTY LABELS_STRESS 
+    RESOURCE_LOCK "memory_intensive")
+
+# Test failure handling
+set(CTEST_CUSTOM_ERROR_POST_CONTEXT 50)  # Lines after error
+set(CTEST_CUSTOM_ERROR_PRE_CONTEXT 10)   # Lines before error
+
+# Sanitizer options
+if(@LPZROBOTS_ENABLE_SANITIZERS@)
+    set(CTEST_ENVIRONMENT ${CTEST_ENVIRONMENT}
+        "ASAN_OPTIONS=check_initialization_order=1:strict_init_order=1:detect_stack_use_after_return=1:print_stats=1:atexit=1"
+        "UBSAN_OPTIONS=print_stacktrace=1:halt_on_error=0"
+        "TSAN_OPTIONS=halt_on_error=0:history_size=7"
+    )
+endif()
+
+# Create test output directory
+file(MAKE_DIRECTORY "@CMAKE_BINARY_DIR@/test_output")

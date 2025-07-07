@@ -1,0 +1,334 @@
+{
+    "version": 6,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 20,
+        "patch": 0
+    },
+    "configurePresets": [
+        {
+            "name": "default-base",
+            "hidden": true,
+            "generator": "Unix Makefiles",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "installDir": "${sourceDir}/install/${presetName}",
+            "cacheVariables": {
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+                "BUILD_SHARED_LIBS": "OFF",
+                "BUILD_EXAMPLES": "ON",
+                "BUILD_GUI_TOOLS": "ON",
+                "BUILD_JAVA_TOOLS": "ON",
+                "BUILD_TESTS": "OFF",
+                "BUILD_OPT_LIBRARIES": "ON",
+                "BUILD_DBG_LIBRARIES": "ON",
+                "ENABLE_SIMD": "ON",
+                "ENABLE_OPENMP": "OFF",
+                "LPZROBOTS_INSTALL_TYPE": "DEVEL"
+            }
+        },
+        {
+            "name": "default",
+            "displayName": "Default Build",
+            "description": "Default development build",
+            "inherits": "default-base",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "name": "debug",
+            "displayName": "Debug Build",
+            "description": "Debug build with all features",
+            "inherits": "default-base",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install/debug"
+            }
+        },
+        {
+            "name": "release",
+            "displayName": "Release Build",
+            "description": "Optimized release build",
+            "inherits": "default-base",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install/release"
+            }
+        },
+        {
+            "name": "release-with-debug",
+            "displayName": "Release with Debug Info",
+            "description": "Optimized build with debug symbols",
+            "inherits": "default-base",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "RelWithDebInfo",
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install/relwithdebinfo"
+            }
+        },
+        {
+            "name": "macos",
+            "hidden": true,
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Darwin"
+            },
+            "cacheVariables": {
+                "CMAKE_OSX_DEPLOYMENT_TARGET": "11.0"
+            }
+        },
+        {
+            "name": "macos-arm64",
+            "displayName": "macOS ARM64 (Apple Silicon)",
+            "description": "Build for Apple Silicon Macs",
+            "inherits": ["default", "macos"],
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Darwin"
+            },
+            "architecture": {
+                "value": "arm64",
+                "strategy": "external"
+            },
+            "cacheVariables": {
+                "CMAKE_OSX_ARCHITECTURES": "arm64",
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_PREFIX_PATH": "/opt/homebrew",
+                "BUILD_JAVA_TOOLS": "ON",
+                "ENABLE_OPENMP": "OFF"
+            }
+        },
+        {
+            "name": "macos-x64",
+            "displayName": "macOS x64 (Intel)",
+            "description": "Build for Intel Macs",
+            "inherits": ["default", "macos"],
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Darwin"
+            },
+            "architecture": {
+                "value": "x64",
+                "strategy": "external"
+            },
+            "cacheVariables": {
+                "CMAKE_OSX_ARCHITECTURES": "x86_64",
+                "CMAKE_BUILD_TYPE": "Release"
+            }
+        },
+        {
+            "name": "macos-universal",
+            "displayName": "macOS Universal Binary",
+            "description": "Build universal binary for both Intel and Apple Silicon",
+            "inherits": ["default", "macos"],
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Darwin"
+            },
+            "cacheVariables": {
+                "CMAKE_OSX_ARCHITECTURES": "arm64;x86_64",
+                "CMAKE_BUILD_TYPE": "Release"
+            }
+        },
+        {
+            "name": "linux",
+            "displayName": "Linux",
+            "description": "Build for Linux",
+            "inherits": "default-base",
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Linux"
+            },
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "ENABLE_OPENMP": "ON"
+            }
+        },
+        {
+            "name": "dev",
+            "displayName": "Developer Build",
+            "description": "Development build with all warnings and tools",
+            "inherits": "debug",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "BUILD_TESTS": "ON",
+                "CMAKE_CXX_FLAGS": "-Wall -Wextra -Wpedantic -Werror",
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install/dev"
+            }
+        },
+        {
+            "name": "minimal",
+            "displayName": "Minimal Build",
+            "description": "Minimal build without GUI or optional features",
+            "inherits": "default-base",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "BUILD_GUI_TOOLS": "OFF",
+                "BUILD_JAVA_TOOLS": "OFF",
+                "BUILD_EXAMPLES": "OFF",
+                "BUILD_TESTS": "OFF",
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install/minimal"
+            }
+        },
+        {
+            "name": "ci",
+            "displayName": "CI Build",
+            "description": "Configuration for continuous integration",
+            "inherits": "default-base",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "BUILD_TESTS": "ON",
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/install/ci"
+            }
+        },
+        {
+            "name": "ninja",
+            "displayName": "Ninja Build",
+            "description": "Fast build using Ninja",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build-ninja",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+                "BUILD_SHARED_LIBS": "ON",
+                "BUILD_GUI_TOOLS": "ON"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "default",
+            "configurePreset": "default"
+        },
+        {
+            "name": "debug",
+            "configurePreset": "debug",
+            "configuration": "Debug"
+        },
+        {
+            "name": "release",
+            "configurePreset": "release",
+            "configuration": "Release"
+        },
+        {
+            "name": "release-with-debug",
+            "configurePreset": "release-with-debug",
+            "configuration": "RelWithDebInfo"
+        },
+        {
+            "name": "macos-arm64",
+            "configurePreset": "macos-arm64"
+        },
+        {
+            "name": "macos-x64",
+            "configurePreset": "macos-x64"
+        },
+        {
+            "name": "macos-universal",
+            "configurePreset": "macos-universal"
+        },
+        {
+            "name": "linux",
+            "configurePreset": "linux"
+        },
+        {
+            "name": "dev",
+            "configurePreset": "dev"
+        },
+        {
+            "name": "minimal",
+            "configurePreset": "minimal"
+        },
+        {
+            "name": "ci",
+            "configurePreset": "ci"
+        },
+        {
+            "name": "ninja",
+            "configurePreset": "ninja"
+        }
+    ],
+    "testPresets": [
+        {
+            "name": "default",
+            "configurePreset": "default",
+            "output": {
+                "outputOnFailure": true
+            }
+        },
+        {
+            "name": "ci",
+            "configurePreset": "ci",
+            "output": {
+                "outputOnFailure": true,
+                "verbosity": "verbose"
+            }
+        }
+    ],
+    "packagePresets": [
+        {
+            "name": "default",
+            "configurePreset": "release",
+            "generators": [
+                "TGZ"
+            ]
+        },
+        {
+            "name": "macos",
+            "configurePreset": "macos-universal",
+            "generators": [
+                "DragNDrop",
+                "TGZ"
+            ]
+        },
+        {
+            "name": "linux",
+            "configurePreset": "linux",
+            "generators": [
+                "TGZ",
+                "DEB",
+                "RPM"
+            ]
+        }
+    ],
+    "workflowPresets": [
+        {
+            "name": "default",
+            "steps": [
+                {
+                    "type": "configure",
+                    "name": "default"
+                },
+                {
+                    "type": "build",
+                    "name": "default"
+                },
+                {
+                    "type": "test",
+                    "name": "default"
+                }
+            ]
+        },
+        {
+            "name": "ci",
+            "steps": [
+                {
+                    "type": "configure",
+                    "name": "ci"
+                },
+                {
+                    "type": "build",
+                    "name": "ci"
+                },
+                {
+                    "type": "test",
+                    "name": "ci"
+                }
+            ]
+        }
+    ]
+}

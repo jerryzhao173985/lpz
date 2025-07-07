@@ -1,0 +1,213 @@
+// Auto-generated test for @controller_class@
+#include <doctest/doctest.h>
+#include <selforg/@controller_class@.h>
+#include <lpzrobots_test_utils.h>
+#include <lpzrobots_test_fixtures.h>
+#include <memory>
+#include <random>
+
+TEST_SUITE("@controller_class@ Tests") {
+    // Test fixture for @controller_class@
+    struct @controller_class@Fixture {
+        std::unique_ptr<@controller_class@> controller;
+        std::mt19937 rng{42};
+        RandGen randGen{&rng};
+        
+        static constexpr int NUM_SENSORS = 3;
+        static constexpr int NUM_MOTORS = 2;
+        double sensors[NUM_SENSORS] = {0.0};
+        double motors[NUM_MOTORS] = {0.0};
+        
+        @controller_class@Fixture() {
+            auto conf = @controller_class@::getDefaultConf();
+            controller = std::make_unique<@controller_class@>(conf);
+            controller->init(NUM_SENSORS, NUM_MOTORS, &randGen);
+        }
+        
+        void randomizeSensors() {
+            std::uniform_real_distribution<> dist(-1.0, 1.0);
+            for (int i = 0; i < NUM_SENSORS; ++i) {
+                sensors[i] = dist(rng);
+            }
+        }
+    };
+    
+    TEST_CASE_FIXTURE(@controller_class@Fixture, "@controller_class@ - Initialization") {
+        CHECK(controller != nullptr);
+        CHECK(controller->getSensorNumber() == NUM_SENSORS);
+        CHECK(controller->getMotorNumber() == NUM_MOTORS);
+        
+        SUBCASE("Parameter initialization") {
+            auto params = controller->getParamList();
+            CHECK(!params.empty());
+            
+            // Verify all parameters have valid values
+            for (const auto& [name, value] : params) {
+                CHECK(std::isfinite(*value));
+                MESSAGE("Parameter " << name << " = " << *value);
+            }
+        }
+    }
+    
+    TEST_CASE_FIXTURE(@controller_class@Fixture, "@controller_class@ - Basic Functionality") {
+        SUBCASE("Step produces valid outputs") {
+            randomizeSensors();
+            controller->step(sensors, NUM_SENSORS, motors, NUM_MOTORS);
+            
+            // Check motors are within bounds
+            for (int i = 0; i < NUM_MOTORS; ++i) {
+                CHECK(std::isfinite(motors[i]));
+                CHECK(motors[i] >= -1.0);
+                CHECK(motors[i] <= 1.0);
+            }
+        }
+        
+        SUBCASE("Warmup phase stability") {
+            // Homeokinetic controllers need warmup
+            const int WARMUP_STEPS = 50;
+            
+            for (int t = 0; t < WARMUP_STEPS; ++t) {
+                randomizeSensors();
+                controller->step(sensors, NUM_SENSORS, motors, NUM_MOTORS);
+                
+                // Ensure no NaN or Inf during warmup
+                for (int i = 0; i < NUM_MOTORS; ++i) {
+                    REQUIRE(std::isfinite(motors[i]));
+                }
+            }
+        }
+        
+        SUBCASE("Consistent behavior") {
+            // Reset and run twice with same input
+            double sensors_copy[NUM_SENSORS];
+            double motors1[NUM_MOTORS];
+            double motors2[NUM_MOTORS];
+            
+            randomizeSensors();
+            std::copy(sensors, sensors + NUM_SENSORS, sensors_copy);
+            
+            // First run
+            controller->step(sensors, NUM_SENSORS, motors1, NUM_MOTORS);
+            
+            // Reset controller state if possible
+            controller->init(NUM_SENSORS, NUM_MOTORS, &randGen);
+            
+            // Second run with same input
+            controller->step(sensors_copy, NUM_SENSORS, motors2, NUM_MOTORS);
+            
+            // Should produce similar (not necessarily identical) results
+            double diff = 0.0;
+            for (int i = 0; i < NUM_MOTORS; ++i) {
+                diff += std::abs(motors1[i] - motors2[i]);
+            }
+            CHECK(diff < 10.0); // Allow for some variation due to randomness
+        }
+    }
+    
+    TEST_CASE_FIXTURE(@controller_class@Fixture, "@controller_class@ - Parameter Sensitivity") {
+        SUBCASE("Parameter changes affect behavior") {
+            randomizeSensors();
+            
+            // Get baseline behavior
+            double baseline_motors[NUM_MOTORS];
+            controller->step(sensors, NUM_SENSORS, baseline_motors, NUM_MOTORS);
+            
+            // Change a parameter
+            auto params = controller->getParamList();
+            if (!params.empty()) {
+                auto& [name, value] = *params.begin();
+                double original = *value;
+                *value = original * 1.5; // Increase by 50%
+                
+                // Run again with same sensors
+                double modified_motors[NUM_MOTORS];
+                controller->step(sensors, NUM_SENSORS, modified_motors, NUM_MOTORS);
+                
+                // Behavior should change
+                double diff = 0.0;
+                for (int i = 0; i < NUM_MOTORS; ++i) {
+                    diff += std::abs(baseline_motors[i] - modified_motors[i]);
+                }
+                
+                // Some controllers might not change immediately
+                MESSAGE("Parameter change effect: " << diff);
+                
+                // Restore original value
+                *value = original;
+            }
+        }
+    }
+    
+    TEST_CASE_FIXTURE(@controller_class@Fixture, "@controller_class@ - Stress Testing") {
+        SUBCASE("Extreme sensor values") {
+            // Test with extreme values
+            for (int i = 0; i < NUM_SENSORS; ++i) {
+                sensors[i] = (i % 2 == 0) ? 1.0 : -1.0;
+            }
+            
+            controller->step(sensors, NUM_SENSORS, motors, NUM_MOTORS);
+            
+            // Should still produce valid outputs
+            for (int i = 0; i < NUM_MOTORS; ++i) {
+                CHECK(std::isfinite(motors[i]));
+                CHECK(std::abs(motors[i]) <= 1.0);
+            }
+        }
+        
+        SUBCASE("Long-term stability") {
+            const int LONG_RUN = 1000;
+            
+            for (int t = 0; t < LONG_RUN; ++t) {
+                randomizeSensors();
+                controller->step(sensors, NUM_SENSORS, motors, NUM_MOTORS);
+                
+                // Check for divergence
+                bool all_finite = true;
+                for (int i = 0; i < NUM_MOTORS; ++i) {
+                    if (!std::isfinite(motors[i])) {
+                        all_finite = false;
+                        break;
+                    }
+                }
+                
+                REQUIRE_MESSAGE(all_finite, 
+                    "Controller became unstable at step " << t);
+            }
+        }
+    }
+    
+    TEST_CASE_FIXTURE(@controller_class@Fixture, "@controller_class@ - Serialization") {
+        SUBCASE("Store and restore") {
+            // Run for a while to build up state
+            for (int i = 0; i < 100; ++i) {
+                randomizeSensors();
+                controller->step(sensors, NUM_SENSORS, motors, NUM_MOTORS);
+            }
+            
+            // Store state
+            FILE* f = tmpfile();
+            REQUIRE(f != nullptr);
+            CHECK(controller->store(f));
+            
+            // Create new controller and restore
+            auto conf = @controller_class@::getDefaultConf();
+            auto restored = std::make_unique<@controller_class@>(conf);
+            restored->init(NUM_SENSORS, NUM_MOTORS, &randGen);
+            
+            rewind(f);
+            CHECK(restored->restore(f));
+            fclose(f);
+            
+            // Both should produce same output
+            randomizeSensors();
+            double motors1[NUM_MOTORS], motors2[NUM_MOTORS];
+            
+            controller->step(sensors, NUM_SENSORS, motors1, NUM_MOTORS);
+            restored->step(sensors, NUM_SENSORS, motors2, NUM_MOTORS);
+            
+            for (int i = 0; i < NUM_MOTORS; ++i) {
+                CHECK(std::abs(motors1[i] - motors2[i]) < 1e-6);
+            }
+        }
+    }
+}

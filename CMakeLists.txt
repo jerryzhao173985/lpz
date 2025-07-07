@@ -6,6 +6,15 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+# Include custom cmake modules
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+include(LPZRobotsCore)
+include(LPZRobotsCompiler)
+include(LPZRobotsPlatform)
+include(LPZRobotsLibrary)
+include(LPZRobotsDependencies)
+include(LPZRobotsTargets)
+
 # Options
 option(BUILD_SHARED_LIBS "Build shared libraries" ON)
 option(BUILD_EXAMPLES "Build example simulations" ON)
@@ -50,32 +59,28 @@ if(APPLE)
     set(CMAKE_INSTALL_RPATH "@loader_path/../lib")
 endif()
 
-# Find dependencies
-find_package(Threads REQUIRED)
+# Find dependencies using unified function
+lpzrobots_find_dependencies()
 
-# Optional dependencies
-find_package(OpenMP)
-if(OPENMP_FOUND AND ENABLE_OPENMP)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
-endif()
-
-# GSL (GNU Scientific Library)
-find_package(PkgConfig)
-if(PKG_CONFIG_FOUND)
-    pkg_check_modules(GSL gsl)
-endif()
-
-# Qt6 for GUI tools
-if(BUILD_GUI_TOOLS)
-    find_package(Qt6 COMPONENTS Core Widgets OpenGL QUIET)
-    if(NOT Qt6_FOUND)
-        message(WARNING "Qt6 not found. GUI tools will not be built.")
-        set(BUILD_GUI_TOOLS OFF)
+# OpenGL (needed for macOS)
+if(APPLE)
+    find_library(OPENGL_LIBRARY OpenGL)
+    if(NOT OPENGL_LIBRARY)
+        message(FATAL_ERROR "OpenGL framework not found on macOS")
     endif()
+else()
+    find_package(OpenGL REQUIRED)
 endif()
 
-# OpenSceneGraph
-find_package(OpenSceneGraph COMPONENTS osgDB osgUtil osgViewer osgGA)
+# Print dependency summary
+lpzrobots_print_dependencies()
+
+# Export OSG libraries for use in subdirectories
+if(LPZROBOTS_HAS_OSG)
+    set(OPENSCENEGRAPH_FOUND TRUE CACHE INTERNAL "OSG found")
+    set(OPENSCENEGRAPH_INCLUDE_DIRS ${LPZROBOTS_OSG_INCLUDE_DIRS} CACHE INTERNAL "OSG includes")
+    set(OPENSCENEGRAPH_LIBRARIES ${LPZROBOTS_OSG_LIBRARIES} CACHE INTERNAL "OSG libraries")
+endif()
 
 # Export compile commands for clang-tidy
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)

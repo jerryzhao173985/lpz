@@ -1,0 +1,19 @@
+dnl ############################################################################
+dnl # DEPRECATION NOTICE - This M4 file will be removed in a future release    #
+dnl #                                                                          #
+dnl # The LPZRobots build system has migrated to CMake. This M4-based config  #
+dnl # generation is deprecated and will be removed.                           #
+dnl #                                                                          #
+dnl # Please use CMake instead:                                                #
+dnl #   cmake --preset default                                                 #
+dnl #   cmake --build --preset default                                         #
+dnl #                                                                          #
+dnl # The CMake system generates functionally identical config scripts and     #
+dnl # provides many additional features:                                       #
+dnl # - Better IDE integration                                                 #
+dnl # - Faster parallel builds                                                 #
+dnl # - Modern C++17 support                                                   #
+dnl # - Native ARM64 optimization                                              #
+dnl #                                                                          #
+dnl # For migration help, see cmake/README_IMPORTANT.md                       #
+dnl ############################################################################
