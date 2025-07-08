@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=MatrixViz
+Comment=Matrix visualization tool for LPZRobots
+Exec=@CMAKE_INSTALL_PREFIX@/bin/matrixviz
+Icon=@CMAKE_INSTALL_PREFIX@/share/icons/hicolor/48x48/apps/matrixviz.png
+Terminal=false
+Categories=Science;Education;
+Keywords=robotics;matrix;visualization;neural;

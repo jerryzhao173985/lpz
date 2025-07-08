@@ -83,6 +83,16 @@ set(EXAMPLE_SIMULATIONS
 # Add each simulation
 foreach(sim ${EXAMPLE_SIMULATIONS})
     if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${sim})
+        # Skip simulations with missing source files (novel controllers)
+        if(${sim} STREQUAL "sphererobot_novel_controllers" OR 
+           ${sim} STREQUAL "hexapod_novel_controllers" OR
+           ${sim} STREQUAL "apex_sox_demo" OR
+           ${sim} STREQUAL "demo_itsox" OR
+           ${sim} STREQUAL "homeokinetic_showcase")
+            message(STATUS "Skipping ${sim} (source files not yet implemented)")
+            continue()
+        endif()
+        
         # Check if the simulation has its own CMakeLists.txt
         if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${sim}/CMakeLists.txt)
             add_subdirectory(${sim})

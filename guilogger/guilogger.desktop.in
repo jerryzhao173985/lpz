@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=GuiLogger
+Comment=Real-time data plotting tool for LPZRobots
+Exec=@CMAKE_INSTALL_PREFIX@/bin/guilogger
+Icon=@CMAKE_INSTALL_PREFIX@/share/icons/hicolor/48x48/apps/guilogger.png
+Terminal=false
+Categories=Science;Education;
+Keywords=robotics;plotting;data;visualization;

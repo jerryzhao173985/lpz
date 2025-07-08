@@ -133,9 +133,22 @@ jobs:
     
     - name: Configure
       run: |
-        # Non-interactive configuration with correct parameters
-        # The format is: install type (u=user), install path, confirm
-        printf "u\n${HOME}/lpzrobots\ny\n" | make conf
+        # Create Makefile.conf directly to avoid interactive prompt issues
+        cat > Makefile.conf << EOF
+        # configuration file for lpzrobots make system
+        # created by CI
+        
+        TYPE=user
+        PREFIX=\${HOME}/lpzrobots
+        
+        # Installation type
+        ifeq (\$(TYPE),user)
+          PREFIX_INC=\$(PREFIX)/include
+          PREFIX_LIB=\$(PREFIX)/lib
+          PREFIX_BIN=\$(PREFIX)/bin  
+          PREFIX_SHARE=\$(PREFIX)/share
+        endif
+        EOF
     
     - name: Configure components
       run: |
