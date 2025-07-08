@@ -90,6 +90,9 @@ include(GNUInstallDirs)
 set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
 
 # Add subdirectories
+# Add the source root to include path so selforg headers can be found as <selforg/...>
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+
 add_subdirectory(selforg)
 
 # Build ODE before ode_robots as it depends on ODE
