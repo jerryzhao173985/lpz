@@ -27,14 +27,24 @@ configure_component() {
 # Configure selforg first
 configure_component "selforg"
 
-# Configure bundled ODE
-if [ -d "opende" ] && [ -x "opende/configure" ]; then
-    configure_component "opende"
-    # Create ode-dbl-config if it doesn't exist
-    if [ ! -x "opende/ode-dbl-config" ] && [ -f "opende/ode-config" ]; then
-        cp opende/ode-config opende/ode-dbl-config
-        chmod +x opende/ode-dbl-config
+# Configure bundled ODE if needed
+if [ -d "opende" ]; then
+    echo "Configuring opende..."
+    cd opende
+    
+    # The opende directory structure is pre-configured
+    # Just create the necessary symlinks
+    if [ ! -f "ode-dbl-config" ] && [ -f "ode-config" ]; then
+        ln -sf ode-config ode-dbl-config
     fi
+    
+    # Create include/ode-dbl symlinks if needed
+    if [ ! -d "include/ode-dbl" ] && [ -d "ode/src" ]; then
+        mkdir -p include/ode-dbl
+        ln -sf ../../ode/src/*.h include/ode-dbl/ 2>/dev/null || true
+    fi
+    
+    cd ..
 fi
 
 # Configure ode_robots (needs selforg configured first)

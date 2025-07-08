@@ -155,14 +155,8 @@ jobs:
         # Install m4 and autotools for config generation
         sudo apt-get install -y m4 autoconf automake libtool
         
-        # Build ODE first
-        cd opende
-        if [ ! -f configure ]; then
-            # Generate configure script if needed
-            ./bootstrap || true
-        fi
-        ./configure --prefix=${HOME}/lpzrobots --enable-double-precision
-        cd ..
+        # ODE configuration is handled differently in the Make system
+        # The opende directory contains pre-configured ODE
         
         # Use the CI path fix script for other components
         .github/scripts/fix-ci-paths.sh
