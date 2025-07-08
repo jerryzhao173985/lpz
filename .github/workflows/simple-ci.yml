@@ -152,10 +152,19 @@ jobs:
     
     - name: Configure components
       run: |
-        # Install m4 for config generation
-        sudo apt-get install -y m4
+        # Install m4 and autotools for config generation
+        sudo apt-get install -y m4 autoconf automake libtool
         
-        # Use the CI path fix script
+        # Build ODE first
+        cd opende
+        if [ ! -f configure ]; then
+            # Generate configure script if needed
+            ./bootstrap || true
+        fi
+        ./configure --prefix=${HOME}/lpzrobots --enable-double-precision
+        cd ..
+        
+        # Use the CI path fix script for other components
         .github/scripts/fix-ci-paths.sh
     
     - name: Build components in order

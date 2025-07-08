@@ -28,7 +28,14 @@ configure_component() {
 configure_component "selforg"
 
 # Configure bundled ODE
-configure_component "opende"
+if [ -d "opende" ] && [ -x "opende/configure" ]; then
+    configure_component "opende"
+    # Create ode-dbl-config if it doesn't exist
+    if [ ! -x "opende/ode-dbl-config" ] && [ -f "opende/ode-config" ]; then
+        cp opende/ode-config opende/ode-dbl-config
+        chmod +x opende/ode-dbl-config
+    fi
+fi
 
 # Configure ode_robots (needs selforg configured first)
 configure_component "ode_robots"

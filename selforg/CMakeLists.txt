@@ -22,6 +22,31 @@ set(SELFORG_SOURCES
     ${STATS_SOURCES}
 )
 
+# Create include/selforg symlinks for headers
+file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/include/selforg)
+
+# Create symlinks for all header files
+file(GLOB_RECURSE SELFORG_HEADERS
+    ${CMAKE_CURRENT_SOURCE_DIR}/*.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/controller/*.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/wirings/*.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/utils/*.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/matrix/*.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/statistictools/*.h
+)
+
+foreach(header ${SELFORG_HEADERS})
+    get_filename_component(header_name ${header} NAME)
+    # Skip creating links for files already in include directory
+    if(NOT header MATCHES "/include/")
+        execute_process(
+            COMMAND ${CMAKE_COMMAND} -E create_symlink
+                ${header}
+                ${CMAKE_CURRENT_BINARY_DIR}/include/selforg/${header_name}
+        )
+    endif()
+endforeach()
+
 # Create library
 add_library(selforg ${SELFORG_SOURCES})
 add_library(lpzrobots::selforg ALIAS selforg)
@@ -29,7 +54,9 @@ add_library(lpzrobots::selforg ALIAS selforg)
 # Set include directories
 target_include_directories(selforg
     PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/selforg>
         $<INSTALL_INTERFACE:include>
         $<INSTALL_INTERFACE:include/selforg>
