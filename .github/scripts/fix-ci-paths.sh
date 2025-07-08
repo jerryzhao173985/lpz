@@ -32,16 +32,33 @@ if [ -d "opende" ]; then
     echo "Configuring opende..."
     cd opende
     
-    # The opende directory structure is pre-configured
-    # Just create the necessary symlinks
-    if [ ! -f "ode-dbl-config" ] && [ -f "ode-config" ]; then
-        ln -sf ode-config ode-dbl-config
+    # First, check if we need to run configure to generate ode-dbl-config
+    if [ ! -f "ode-dbl-config" ]; then
+        if [ -f "configure" ]; then
+            echo "Running opende configure..."
+            ./configure --prefix="$PREFIX" --enable-double-precision || {
+                echo "Warning: opende configure failed"
+            }
+        elif [ -f "ode-config" ]; then
+            # Fallback: create symlink if ode-config exists
+            ln -sf ode-config ode-dbl-config
+        fi
     fi
     
     # Create include/ode-dbl symlinks if needed
-    if [ ! -d "include/ode-dbl" ] && [ -d "ode/src" ]; then
+    if [ ! -d "include/ode-dbl" ]; then
         mkdir -p include/ode-dbl
-        ln -sf ../../ode/src/*.h include/ode-dbl/ 2>/dev/null || true
+        if [ -d "ode/src" ]; then
+            # Link header files from ode/src
+            for header in ode/src/*.h; do
+                if [ -f "$header" ]; then
+                    ln -sf "../../$header" "include/ode-dbl/$(basename $header)"
+                fi
+            done
+        elif [ -d "include/ode" ]; then
+            # Alternative: link from include/ode
+            ln -sf ../ode/*.h include/ode-dbl/
+        fi
     fi
     
     cd ..
@@ -62,30 +79,27 @@ done
 
 echo "Component configuration complete"
 
-# Create ODE compatibility headers from bundled ODE
-echo "Setting up ODE compatibility headers..."
-cd opende
-if [ \! -d include/ode-dbl ]; then
-    mkdir -p include/ode-dbl
-    if [ -d ode/src ]; then
-        ln -sf ../ode/*.h include/ode-dbl/
-    fi
-fi
-cd ..
+# ODE compatibility headers are already set up above
 
 # Verify critical paths exist
 echo "Verifying build environment..."
 errors=0
 
 # Check selforg
-if [ \! -f "selforg/selforg-config" ]; then
+if [ ! -f "selforg/selforg-config" ]; then
     echo "ERROR: selforg/selforg-config not found after configuration"
     errors=$((errors + 1))
 fi
 
+# Check ODE config
+if [ ! -f "opende/ode-dbl-config" ]; then
+    echo "ERROR: opende/ode-dbl-config not found after configuration"
+    errors=$((errors + 1))
+fi
+
 # Check ODE headers
-if [ \! -d "opende/include/ode-dbl" ] && [ \! -d "include/ode-dbl" ]; then
-    echo "ERROR: ODE compatibility headers not found"
+if [ ! -d "opende/include/ode-dbl" ]; then
+    echo "ERROR: ODE compatibility headers not found at opende/include/ode-dbl"
     errors=$((errors + 1))
 fi
 
