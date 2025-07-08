@@ -3,7 +3,15 @@
 # Require Qt - Try Qt6 first, fall back to Qt5
 find_package(Qt6 COMPONENTS Core Widgets Network QUIET)
 if(Qt6_FOUND)
-    qt6_standard_project_setup()
+    # qt6_standard_project_setup() requires Qt 6.3+
+    # For older Qt6 versions, set the required properties manually
+    if(Qt6Core_VERSION VERSION_LESS 6.3.0)
+        set(CMAKE_AUTOMOC ON)
+        set(CMAKE_AUTOUIC ON)
+        set(CMAKE_AUTORCC ON)
+    else()
+        qt6_standard_project_setup()
+    endif()
     set(QT_VERSION_MAJOR 6)
 else()
     find_package(Qt5 REQUIRED COMPONENTS Core Widgets Network)

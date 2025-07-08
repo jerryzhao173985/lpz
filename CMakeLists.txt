@@ -91,8 +91,13 @@ set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
 
 # Add subdirectories
 add_subdirectory(selforg)
+
+# Build ODE before ode_robots as it depends on ODE
+if(NOT LPZROBOTS_USE_SYSTEM_ODE)
+    add_subdirectory(opende)
+endif()
+
 add_subdirectory(ode_robots)
-add_subdirectory(opende)
 
 if(BUILD_GUI_TOOLS)
     add_subdirectory(guilogger)
