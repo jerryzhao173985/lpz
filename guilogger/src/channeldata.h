@@ -33,39 +33,39 @@
 #include <QHash>
 #include <list>
 
-typedef QString ChannelObjectName;
-typedef QString ChannelName;
-typedef QString ChannelDescr;
+using ChannelObjectName = QString;
+using ChannelName = QString;
+using ChannelDescr = QString;
 
 enum ChannelType { AutoDetection, Single, Matrix, Vector,
                            VectorElement, MatrixElement };
 /// information of a channel
-typedef struct _ChannelInfo{
+struct ChannelInfo{
   ChannelName  name;
   ChannelDescr descr;
   ChannelObjectName objectName;
   ChannelType  type;
   int row;    // only valid for vectors and matrices
   int column; // only valid for vectors and matrices
-} ChannelInfo;
+};
 
 /** definition hierarchical representation for Vector and Matrix elements
     but also for normal elements (to support hierarchical representation)
  */
-typedef struct _MultiChannel{
+struct MultiChannel{
   ChannelInfo info;
   int startindex; // start index in the data buffer
   int rows;       // number rows in the multichannel entry
   int columns;    // number of columns  in the multichannel entry
   int size;       // number of channels that belong to this multichannel
-} MultiChannel;
+};
 
 
-typedef QVector<double> ChannelVals;
+using ChannelVals = QVector<double>;
 
-typedef std::list<int> IndexList;
+using IndexList = std::list<int>;
 
-typedef QVector<MultiChannel> MultiChannels;
+using MultiChannels = QVector<MultiChannel>;
 
 class ChannelData : public QObject {
   Q_OBJECT

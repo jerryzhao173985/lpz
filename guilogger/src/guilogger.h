@@ -65,7 +65,7 @@
 #include "plotchannelstablemodel.h"
 #include "channeldata.h"
 
-typedef std::vector<Gnuplot> PlotWindows;
+using PlotWindows = std::vector<Gnuplot>;
 
 class GuiLogger : public QMainWindow {
   Q_OBJECT

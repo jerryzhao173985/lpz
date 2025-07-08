@@ -71,7 +71,7 @@ protected:
   
 private:
   AbstractPipeReader* apr;
-  typedef std::list<double> buffer_t;
+  using buffer_t = std::list<double>;
   std::list<buffer_t> input_buffer;
   QMutex mutex;
 //   std::list<std::string> *channelList;
