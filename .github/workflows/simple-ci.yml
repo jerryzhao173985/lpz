@@ -104,12 +104,17 @@ jobs:
           make
           test -f start || exit 1
           echo "✓ Simulation built successfully with CMake"
-        else
+        elif [ -f Makefile ]; then
           # Fall back to Make build
           make clean
           make
           test -f start || exit 1
           echo "✓ Simulation built successfully with Make"
+        else
+          # Template simulations are built as part of the main build
+          # Just check if the binary exists
+          test -f ${{ github.workspace }}/build/default/ode_robots/simulations/template_sphererobot/start || exit 1
+          echo "✓ Simulation binary found from main build"
         fi
 
   # Also test the legacy Make system
