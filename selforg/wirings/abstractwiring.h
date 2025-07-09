@@ -77,7 +77,7 @@ public:
    *  @param randGen pointer to random generator, if not given then a new one is created
    *  @return returns false on error, otherwise true
    */
-  virtual bool init(int robotsensornumber, int robotmotornumber, RandGen* randGen=0);
+  virtual bool init(int robotsensornumber, int robotmotornumber, RandGen* randGen=nullptr);
 
   /** Realizes wiring from robot sensors to controller sensors.
    *   The internal version wireSensorsIntern() is called from here and
@@ -168,31 +168,31 @@ protected:
 
 
   /// using plotTypes this variables defines what is plotted
-  int plotMode = 0;
+  int plotMode = nullptr;
 
   /// for storing the noise values
   matrix::Matrix mNoise;
   sensor* noisevals; // pointer to the noisevalues stored in the matrix
   // size of the noise vector
-  int noisenumber = 0;
+  int noisenumber = nullptr;
 
   /// number of sensors at robot side
-  int rsensornumber = 0;
+  int rsensornumber = nullptr;
   /// copy of the last robot sensors
   matrix::Matrix mRsensors;
 
   /// number of motors at robot side
-  int rmotornumber = 0;
+  int rmotornumber = nullptr;
   /// copy of the last robot motors
   matrix::Matrix mRmotors;
 
   /// number of sensors at controller side
-  int csensornumber = 0;
+  int csensornumber = nullptr;
   /// copy of the last controller sensors
   matrix::Matrix mCsensors;
 
   /// number of motors at controller side
-  int cmotornumber = 0;
+  int cmotornumber = nullptr;
   /// copy of the last controller motors
   matrix::Matrix mCmotors;
 

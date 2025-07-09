@@ -59,9 +59,9 @@ public:
 
   /**** STOREABLE ****/
   /** stores the controller values to a given file (binary).  */
-  virtual bool store(FILE* f) const;
+  virtual bool store(FILE* f) const override;
   /** loads the controller values from a given file (binary). */
-  virtual bool restore(FILE* f);
+  virtual bool restore(FILE* f) override;
 
   // inspectable interface
   virtual std::list<ILayer> getStructuralLayers()  const override;
@@ -89,13 +89,13 @@ protected:
   void fillBuffersAndControl(const sensor* x_, int number_sensors, motor* y_, int number_motors);
 
   /// learn h,C, delayed motors y and corresponding sensors x
-  virtual void learnController(const matrix::Matrix& x, const matrix::Matrix& x_smooth, int delay);
+  virtual void learnController(const matrix::Matrix& x, const matrix::Matrix& x_smooth, int delay) override;
 
   /// learn A, using motors y and corresponding sensors x
-  virtual void learnModel(const matrix::Matrix& x, const matrix::Matrix& y);
+  virtual void learnModel(const matrix::Matrix& x, const matrix::Matrix& y) override;
 
   /// returns controller output for given sensor values
-  virtual matrix::Matrix calculateControllerValues(const matrix::Matrix& x_smooth);
+  virtual matrix::Matrix calculateControllerValues(const matrix::Matrix& x_smooth) override;
 
   // Helper methods for vector-based buffers
   void putInBuffer(std::vector<matrix::Matrix>& buffer, const matrix::Matrix& vec, int delay = 0) {

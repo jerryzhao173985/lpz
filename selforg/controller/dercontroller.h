@@ -76,8 +76,8 @@ public:
                               int number_motors) override;
 
   /**** STOREABLE ****/
-  virtual bool store(FILE* f) const;
-  virtual bool restore(FILE* f);
+  virtual bool store(FILE* f) const override;
+  virtual bool restore(FILE* f) override;
 
   /**** CONFIGURABLE ****/
   virtual std::list<iparamkey> getInternalParamNames()  const override;
@@ -86,9 +86,9 @@ public:
   virtual std::list<IConnection> getStructuralConnections()  const override;
 
   /**** TEACHING ****/
-  virtual void setTeachingMode(bool onOff);
-  virtual bool getTeachingMode() const;
-  virtual void setMotorTeachingSignal(const motor* teaching, int len);
+  virtual void setTeachingMode(bool onOff) override;
+  virtual bool getTeachingMode() const override;
+  virtual void setMotorTeachingSignal(const motor* teaching, int len) override;
   // void calcCandHUpdatesTeaching(const Matrix& C_update, const Matrix& H_update, int y_delay);
   // void calcCandHUpdates(const Matrix& C_update, const Matrix& H_update,const Matrix& A_update, int y_delay);//Test
   // A
@@ -156,17 +156,17 @@ protected:
 
   /// calculates the first shift into the motor space useing delayed motor values.
   //  @param delay 0 for no delay and n>0 for n timesteps delay in the time loop
-  virtual void calcEtaAndBufferIt(int delay);
+  virtual void calcEtaAndBufferIt(int delay) override;
   /// calculates xsi for the current time step using the delayed y values
   //  and x delayed by one
   //  @param delay 0 for no delay and n>0 for n timesteps delay in the time loop
-  virtual void calcXsi(int delay);
+  virtual void calcXsi(int delay) override;
 
   /// learn H,C with motors y and corresponding sensors x
-  virtual void learnController();
+  virtual void learnController() override;
 
   /// calculates the predicted sensor values
-  virtual matrix::Matrix model(const matrix::Matrix& x, const matrix::Matrix& y);
+  virtual matrix::Matrix model(const matrix::Matrix& x, const matrix::Matrix& y) override;
 
   /// calculates the Update for C, H and A
   // @param y_delay timesteps to delay the y-values.  (usually 0)
@@ -182,11 +182,11 @@ protected:
                                const matrix::Matrix& A_update,
                                double squashSize); // Test A
 
-  virtual matrix::Matrix calculateControllerValues(const matrix::Matrix& x_smooth);
+  virtual matrix::Matrix calculateControllerValues(const matrix::Matrix& x_smooth) override;
 
   /// calculates the city block distance (abs norm) of the matrix. (abs sum of absolutes / size of
   /// matrix)
-  virtual double calcMatrixNorm(const matrix::Matrix& m);
+  virtual double calcMatrixNorm(const matrix::Matrix& m) override;
   /// calculates the error_factor for either logarithmic (E=ln(e^T*e)) or square (E=sqrt(e^t*e))
   /// error
   virtual double calcErrorFactor(const matrix::Matrix& e, bool loga, bool root) override;

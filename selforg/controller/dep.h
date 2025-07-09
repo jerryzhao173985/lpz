@@ -169,10 +169,10 @@ protected:
   bool _internWithLearning = false;
 
   /// learn  model (M = A^T )
-  virtual void learnModel(double eps);
+  virtual void learnModel(double eps) override;
 
   /// learn controller (C,h, C_update)
-  virtual void learnController();
+  virtual void learnController() override;
 
   // Note: g(), g_s(), and clip() are inherited from ControllerBase
   

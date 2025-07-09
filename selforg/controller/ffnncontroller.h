@@ -79,9 +79,9 @@ public:
 
   /**** STOREABLE ****/
   /** stores the controller values to a given file (binary).  */
-  virtual bool store(FILE* f) const;
+  virtual bool store(FILE* f) const override;
   /** loads the controller values from a given file (binary). */
-  virtual bool restore(FILE* f);
+  virtual bool restore(FILE* f) override;
 
   // inspectable interface
   virtual std::list<iparamkey> getInternalParamNames() const override {
@@ -103,7 +103,7 @@ protected:
   virtual matrix::Matrix assembleNetworkInputX(const std::vector<matrix::Matrix>& xbuffer,
                                                const std::vector<matrix::Matrix>& ybuffer) const;
 
-  virtual matrix::Matrix assembleNetworkOutput(const matrix::Matrix& output) const;
+  virtual matrix::Matrix assembleNetworkOutput(const matrix::Matrix& output) const override;
 
 protected:
   unsigned short number_motors = 0;

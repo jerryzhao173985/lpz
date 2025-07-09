@@ -66,8 +66,8 @@ public:
                     motor* motors,
                     int motornumber) override;
 
-  virtual void setCMC(const CMC& cmc);
-  virtual CMC getCMC() const;
+  virtual void setCMC(const CMC& cmc) override;
+  virtual CMC getCMC() const override;
 
   /**** TEACHABLE Interface pass through ****/
 

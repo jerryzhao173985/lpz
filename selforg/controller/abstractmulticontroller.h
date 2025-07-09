@@ -56,7 +56,7 @@ public:
    * must be called after all passive controllers are added, otherwise you must
    * init the passive controller yourself (not recommended and can generate problems)
    */
-  virtual void addPassiveController(AbstractController* passiveController);
+  virtual void addPassiveController(AbstractController* passiveController) override;
 
   /****************************************************************************/
   /*        AbstractMultiController should implement the following classes:                */

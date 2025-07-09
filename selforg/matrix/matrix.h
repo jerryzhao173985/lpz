@@ -31,7 +31,7 @@ class Matrix;
 class MatrixNEON; // Forward declaration for NEON optimizations
 using Matrices = std::vector<Matrix>;
 
-constexpr D D_Zero = 0;
+constexpr D D_Zero = nullptr;
 constexpr D D_One = 1;
 /** Matrix type. Type D is datatype of matrix elements,
  * which is fixed to double.
@@ -57,10 +57,10 @@ class Matrix : public Storeable {
 public:
   /// default constructor: zero matrix (0x0)
   Matrix()
-    : m(0)
+    : m(nullptr)
     , n(0)
     , buffersize(0)
-    , data(0) {};
+    , data(nullptr) {};
   /** constucts a matrix with the given size.
       If _data is null then the matrix is filled with zeros.
       otherwise matrix will be filled with _data in a row-wise manner.
@@ -119,7 +119,7 @@ public:
       @see toZero()
       @see constructor Matrix(m,n,data)
   */
-  void set(I _m, I _n, const D* _data = 0);
+  void set(I _m, I _n, const D* _data = nullptr);
   /** sets the data (row-wise).
       @param _data if null then matrix elements are set to zero
       otherwise the field MUST have the length should be getM()*getN()*/
@@ -423,7 +423,7 @@ public:
    * @param _data data to add
    * @return the address of the matrix itself
    */
-  Matrix& addRows(I numberRows, const D* _data = 0);
+  Matrix& addRows(I numberRows, const D* _data = nullptr);
 
   /**
    * same as toAbove(dataMatrix)
@@ -440,7 +440,7 @@ public:
    * @param _data data to add
    * @return the address of the matrix itself
    */
-  Matrix& addColumns(I numberColumns, const D* _data = 0);
+  Matrix& addColumns(I numberColumns, const D* _data = nullptr);
 
   /**
    * same as toBeside(dataMatrix)

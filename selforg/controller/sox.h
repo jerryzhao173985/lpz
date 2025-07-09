@@ -110,17 +110,17 @@ public:
 
   /***** STOREABLE ****/
   /** stores the controller values to a given file. */
-  virtual bool store(FILE* f) const;
+  virtual bool store(FILE* f) const override;
   /** loads the controller values from a given file. */
-  virtual bool restore(FILE* f);
+  virtual bool restore(FILE* f) override;
 
   /* some direct access functions (unsafe!) */
-  virtual matrix::Matrix getA() const;
-  virtual void setA(const matrix::Matrix& A);
-  virtual matrix::Matrix getC() const;
-  virtual void setC(const matrix::Matrix& C);
-  virtual matrix::Matrix geth() const;
-  virtual void seth(const matrix::Matrix& h);
+  virtual matrix::Matrix getA() const override;
+  virtual void setA(const matrix::Matrix& A) override;
+  virtual matrix::Matrix getC() const override;
+  virtual void setC(const matrix::Matrix& C) override;
+  virtual matrix::Matrix geth() const override;
+  virtual void seth(const matrix::Matrix& h) override;
 
   /***** TEACHABLE ****/
   virtual void setMotorTeaching(const matrix::Matrix& teaching) override;
@@ -129,8 +129,8 @@ public:
   virtual matrix::Matrix getLastSensorValues() override;
 
   /***** PARAMETRIZABLE ****/
-  virtual std::list<matrix::Matrix> getParameters() const;
-  virtual int setParameters(const std::list<matrix::Matrix>& params);
+  virtual std::list<matrix::Matrix> getParameters() const override;
+  virtual int setParameters(const std::list<matrix::Matrix>& params) override;
 
 protected:
   unsigned short number_sensors = 0;
@@ -178,7 +178,7 @@ protected:
                             const matrix::Matrix& C);
 
   /// learn values model and controller (A,b,C,h)
-  virtual void learn();
+  virtual void learn() override;
 
   /// neuron transfer function
   static double g(double z) {

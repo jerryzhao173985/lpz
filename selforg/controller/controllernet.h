@@ -93,7 +93,7 @@ public:
   with \f$W_n\f$ is the weight matrix of layer n and
   \f$ G'\f$ is a diagonal matrix with \f$ G'_ii = g'_i \f$ as values on the diagonal.
   */
-  virtual const matrix::Matrix& response() const;
+  virtual const matrix::Matrix& response() const override;
 
   // Implement the pure virtual from InvertableModel
   virtual const matrix::Matrix response(const matrix::Matrix& input) const override {
@@ -115,13 +115,13 @@ public:
       @param from index of layer to start: -1 at input, 0 first hidden layer ...
       @param to index of layer to stop: -1: last layer, 0 first hidden layer ...
    */
-  virtual matrix::Matrix responsePart(int from, int to) const;
+  virtual matrix::Matrix responsePart(int from, int to) const override;
 
   /** linear response matrix of neural network
   \f[  R = W_n W_{n-1} ... W_1 \f]
     with \f$W_n\f$ is the weight matrix of layer n.
   */
-  virtual const matrix::Matrix& responseLinear() const;
+  virtual const matrix::Matrix& responseLinear() const override;
 
   /** backpropagation of vector error through network.
       The storage for the intermediate values (errors, zetas) do not need to be given.
@@ -280,7 +280,7 @@ public:
 
 protected:
   // actually calculate the jacobian and stores it in L, see response()
-  virtual void calcResponseIntern();
+  virtual void calcResponseIntern() override;
 
 protected:
   std::vector<Layer> layers;

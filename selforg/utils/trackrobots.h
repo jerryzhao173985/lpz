@@ -48,7 +48,7 @@ struct TrackRobotConf {
   bool autoFilename = true;          ///< generate filename automatically
 
   std::string scene; ///< used as part of the filename (used as is (+id), if autoFilename=false)
-  int id = 0;
+  int id = nullptr;
 };
 
 /**
@@ -108,7 +108,7 @@ public:
     conf.interval = interval;
     conf.scene = scene;
     conf.id = -1; // whole robot, not individual parts
-    file = 0;
+    file = nullptr;
     cnt = 1;
     enabledDuringVideo = false;
   }
@@ -126,7 +126,7 @@ public:
   };
 
   bool isEnabled() {
-    return file != 0 && isTrackingSomething();
+    return file != nullptr && isTrackingSomething();
   }
 
   TrackRobotConf conf;

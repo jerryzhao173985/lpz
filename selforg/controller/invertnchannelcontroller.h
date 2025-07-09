@@ -65,9 +65,9 @@ public:
 
   /***** STOREABLE ****/
   /** stores the controller values to a given file. */
-  virtual bool store(FILE* f) const;
+  virtual bool store(FILE* f) const override;
   /** loads the controller values from a given file. */
-  virtual bool restore(FILE* f);
+  virtual bool restore(FILE* f) override;
 
   // inspectable interface
   virtual std::list<ILayer> getStructuralLayers()  const override;
@@ -91,12 +91,12 @@ protected:
   /*                          double dommy[NUMBER_CHANNELS][NUMBER_CHANNELS], */
   /*                          double *improvment); */
 
-  virtual double calculateE(const matrix::Matrix& x_delay, const matrix::Matrix& y_delay);
+  virtual double calculateE(const matrix::Matrix& x_delay, const matrix::Matrix& y_delay) override;
 
   /// learn values h,C
-  virtual void learn(const matrix::Matrix& x_delay, const matrix::Matrix& y_delay);
+  virtual void learn(const matrix::Matrix& x_delay, const matrix::Matrix& y_delay) override;
 
-  virtual void learnmodel(const matrix::Matrix& y_delay);
+  virtual void learnmodel(const matrix::Matrix& y_delay) override;
 
   /// calculate delayed values
   virtual matrix::Matrix calculateDelayedValues(const std::vector<matrix::Matrix>& buffer,

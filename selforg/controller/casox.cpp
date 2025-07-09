@@ -113,7 +113,7 @@ void CASox::stepNoLearning(const sensor* x_, int number_sensors_robot,
     Matrix y;
     
     // Handle creativity properly
-    if (creativity > 0 && currentContext >= 0 && static_cast<int>(currentContext) < (int)contexts.size()) {
+    if (creativity > 0 && currentContext >= 0 && static_cast<int>(currentContext) < static_cast<int>(contexts.size())) {
         const ContextModel& context = contexts[static_cast<int>(currentContext)];
         
         // Use context-specific exploration level
@@ -196,7 +196,7 @@ int CASox::detectContext(const Matrix& x) {
     // Check if we need a new context
     if (conf.dynamicContexts && 
         minDistance > contextThreshold && 
-        (int)contexts.size() < maxContexts) {
+        static_cast<int>(contexts.size()) < maxContexts) {
         createNewContext(x);
         return contexts.size() - 1;
     }
@@ -328,9 +328,9 @@ void CASox::mergeContexts() {
                 contexts.erase(contexts.begin() + j);
                 
                 // Update current context if needed
-                if (static_cast<int>(currentContext) == (int)j) {
+                if (static_cast<int>(currentContext) == static_cast<int>(j)) {
                     currentContext = static_cast<double>(i);
-                } else if (static_cast<int>(currentContext) > (int)j) {
+                } else if (static_cast<int>(currentContext) > static_cast<int>(j)) {
                     currentContext = currentContext - 1.0;
                 }
                 
@@ -562,13 +562,13 @@ void CASox::updateContextStatistics() {
         }
         
         // Adapt learning rate based on use frequency
-        double useFreq = (double)context.useCount / (t + 1);
+        double useFreq = static_cast<double>(context.useCount) / (t + 1);
         context.learningRateFactor = 0.5 + 1.0 / (1.0 + 10.0 * useFreq);
     }
 }
 
 void CASox::adaptContextPrototypes() {
-    if (currentContext < 0 || static_cast<int>(currentContext) >= (int)contexts.size()) return;
+    if (currentContext < 0 || static_cast<int>(currentContext) >= static_cast<int>(contexts.size())) return;
     
     ContextModel& context = contexts[static_cast<int>(currentContext)];
     const Matrix& x_current = x_buffer.get(-1);

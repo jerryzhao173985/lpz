@@ -211,13 +211,13 @@ protected:
       This is the implementation uses a better formula for g^-1 using Mittelwertsatz
       @param delay 0 for no delay and n>0 for n timesteps delay in the SML (s4delay)
   */
-  virtual void learnController(int delay);
+  virtual void learnController(int delay) override;
 
   /// handles inhibition damping etc.
-  virtual void management();
+  virtual void management() override;
 
   /// returns controller output for given sensor values
-  virtual matrix::Matrix calculateControllerValues(const matrix::Matrix& x_smooth);
+  virtual matrix::Matrix calculateControllerValues(const matrix::Matrix& x_smooth) override;
 
   /** Calculates first and second derivative and returns both in on matrix (above).
       We use simple discrete approximations:
@@ -230,7 +230,7 @@ protected:
 public:
   /// calculates the city block distance static_cast<abs>(norm) of the matrix. (abs sum of absolutes / size of
   /// matrix)
-  virtual double calcMatrixNorm(const matrix::Matrix& m);
+  virtual double calcMatrixNorm(const matrix::Matrix& m) override;
   
   // Helper methods for vector-based buffers (overload base class methods)
   void putInBuffer(std::vector<matrix::Matrix>& buffer, const matrix::Matrix& vec, int delay = 0) {

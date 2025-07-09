@@ -84,9 +84,9 @@ public:
 
   /**** STOREABLE ****/
   /** stores the controller values to a given file. */
-  virtual bool store(FILE* f) const;
+  virtual bool store(FILE* f) const override;
   /** loads the controller values from a given file. */
-  virtual bool restore(FILE* f);
+  virtual bool restore(FILE* f) override;
 
   /**** INSPECTABLE ****/
   virtual std::list<ILayer> getStructuralLayers()  const override;
@@ -98,13 +98,13 @@ public:
       Please note, that the teaching signal has to be given each timestep
        for a continuous teaching process.
    */
-  virtual void setMotorTeachingSignal(const motor* teaching, int len);
+  virtual void setMotorTeachingSignal(const motor* teaching, int len) override;
 
   /** The given sensor teaching signal (distal learning) is used for this timestep.
       First the belonging motor teachung signal is calculated by the inverse model.
       See setMotorTeachingSignal
    */
-  virtual void setSensorTeachingSignal(const sensor* teaching, int len);
+  virtual void setSensorTeachingSignal(const sensor* teaching, int len) override;
   void getLastMotors(motor* motors, int len);
   void getLastSensors(sensor* sensors, int len);
 
@@ -137,7 +137,7 @@ public:
       Factor = 1-0.95*reinforcement.
       @param reinforcement value between -1 and 1 (-1 bad, 0 neutral, 1 good)
    */
-  virtual void setReinforcement(double reinforcement);
+  virtual void setReinforcement(double reinforcement) override;
 
   static InvertMotorNStepConf getDefaultConf() {
     InvertMotorNStepConf c;

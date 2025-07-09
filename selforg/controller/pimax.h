@@ -106,17 +106,17 @@ public:
 
   /***** STOREABLE ****/
   /** stores the controller values to a given file. */
-  virtual bool store(FILE* f) const;
+  virtual bool store(FILE* f) const override;
   /** loads the controller values from a given file. */
-  virtual bool restore(FILE* f);
+  virtual bool restore(FILE* f) override;
 
   /* some direct access functions (unsafe!) */
-  virtual matrix::Matrix getA();
-  virtual void setA(const matrix::Matrix& A);
-  virtual matrix::Matrix getC();
-  virtual void setC(const matrix::Matrix& C);
-  virtual matrix::Matrix geth();
-  virtual void seth(const matrix::Matrix& h);
+  virtual matrix::Matrix getA() override;
+  virtual void setA(const matrix::Matrix& A) override;
+  virtual matrix::Matrix getC() override;
+  virtual void setC(const matrix::Matrix& C) override;
+  virtual matrix::Matrix geth() override;
+  virtual void seth(const matrix::Matrix& h) override;
 
   /***** TEACHABLE ****/
   virtual void setMotorTeaching(const matrix::Matrix& teaching) override;
@@ -174,7 +174,7 @@ protected:
   AbstractController::paramint tau; // length of time window
 
   /// learn values model and controller (A,b,C,h)
-  virtual void learn();
+  virtual void learn() override;
 
   /// neuron transfer function
   static double g(double z) {

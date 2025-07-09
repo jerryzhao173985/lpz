@@ -94,9 +94,9 @@ public:
 
   /***** STOREABLE ****/
   /** stores the controller values to a given file. */
-  virtual bool store(FILE* f) const;
+  virtual bool store(FILE* f) const override;
   /** loads the controller values from a given file. */
-  virtual bool restore(FILE* f);
+  virtual bool restore(FILE* f) override;
 
   /// returns controller network (to be added to inspectables of agent)
   ControllerNet* getCNet();
@@ -108,11 +108,11 @@ protected:
   /** learn values model and controller network
       using the current sensors x, the commands y (from last step (or earlier in case of delay))
    */
-  virtual void learn(const matrix::Matrix& x, const matrix::Matrix& y);
+  virtual void learn(const matrix::Matrix& x, const matrix::Matrix& y) override;
 
   /* learns the model using backprop. It uses the current activation,
      the current x and x_tm1 from the buffer */
-  virtual void learnModelBP(double factor);
+  virtual void learnModelBP(double factor) override;
 
 protected:
   unsigned short number_sensors = 0;

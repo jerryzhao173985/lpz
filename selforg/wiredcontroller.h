@@ -94,12 +94,12 @@ public:
       given that is used for the babbling (default is MotorBabbler) (deleted automatically).
       During motor babbling the function motorbabbling of the normal controller is called instead of step.
    */
-  virtual void startMotorBabblingMode(int steps, AbstractController* babblecontroller = 0);
+  virtual void startMotorBabblingMode(int steps, AbstractController* babblecontroller = nullptr);
 
   virtual const AbstractController* getMotorBabbler() const { return motorBabbler; }
 
   /** stops the motor babbling mode. */
-  virtual void stopMotorBabblingMode() { motorBabblingSteps = 0; }
+  virtual void stopMotorBabblingMode() { motorBabblingSteps = nullptr; }
   /// returns true if in motorbabbling mode
   virtual bool getMotorBabblingMode() { return motorBabblingSteps > 0; }
 
@@ -145,16 +145,16 @@ protected:
   AbstractWiring* wiring;
 
   /// number of sensors of robot
-  int rsensornumber = 0;
+  int rsensornumber = nullptr;
   /// number of motors of robot
-  int rmotornumber = 0;
+  int rmotornumber = nullptr;
   /// number of sensors of comntroller
-  int csensornumber = 0;
+  int csensornumber = nullptr;
   /// number of motors of comntroller
-  int cmotornumber = 0;
+  int cmotornumber = nullptr;
 
   /// factor that is  muliplied with noise stength
-  double noisefactor = 0;
+  double noisefactor = nullptr;
 
   motor  *cmotors;
   sensor *csensors;
@@ -163,7 +163,7 @@ protected:
 
  protected:
   AbstractController* motorBabbler;
-  int motorBabblingSteps = 0;
+  int motorBabblingSteps = nullptr;
 
   PlotOptionEngine plotEngine;
 

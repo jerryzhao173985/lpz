@@ -56,21 +56,21 @@ public:
 
       @param intervalCount the number of intervals
  */
-  virtual void setIntervalCount(int intervalCount);
+  virtual void setIntervalCount(int intervalCount) override;
 
   /**
   Sets the number of intervals, in which sensor values are mapped.
 
       @param sensorIntervalCount the number of intervals
  */
-  virtual void setSensorIntervalCount(int sensorIntervalCount);
+  virtual void setSensorIntervalCount(int sensorIntervalCount) override;
 
   /**
   Sets the number of intervals, in which motor values are mapped.
 
       @param motorIntervalCount the number of intervals
  */
-  virtual void setMotorIntervalCount(int motorIntervalCount);
+  virtual void setMotorIntervalCount(int motorIntervalCount) override;
 
   /**
  Sets the interval range for the motors AND sensors, the minimum and maximum.
@@ -85,7 +85,7 @@ public:
  @param maxRange the maximum of the interval
  @param mapToInterval decides if all values are mapped to the given interval
  */
-  virtual void setIntervalRange(double minRange, double maxRange, bool mapToInterval = true);
+  virtual void setIntervalRange(double minRange, double maxRange, bool mapToInterval = true) override;
 
   /**
  Sets the interval range for the motors, the minimum and maximum.
@@ -187,32 +187,32 @@ private:
   /**
    * makes the discretisation of sensor values
    */
-  virtual void doDiscretisizeSensorValues(const sensor* sensors, int sensornumber);
+  virtual void doDiscretisizeSensorValues(const sensor* sensors, int sensornumber) override;
 
   /**
    * makes the discretisation of motor values
    */
-  virtual void doDiscretisizeMotorValues(motor* motors, int motornumber);
+  virtual void doDiscretisizeMotorValues(motor* motors, int motornumber) override;
 
   /**
   is used for automaticSensorRange, sets min and max Sensor range.
   */
-  virtual void findMinAndMaxSensorRange(const sensor* sensors, int sensornumber);
+  virtual void findMinAndMaxSensorRange(const sensor* sensors, int sensornumber) override;
 
   /**
   is used for automaticRange, sets min and max Motor range.
   */
-  virtual void findMinAndMaxMotorRange(motor* motors, int motornumber);
+  virtual void findMinAndMaxMotorRange(motor* motors, int motornumber) override;
 
   /**
   is used for mapToInterval, sets min and max Sensor values.
   */
-  virtual void findMinAndMaxSensorValues(const sensor* sensors, int sensornumber);
+  virtual void findMinAndMaxSensorValues(const sensor* sensors, int sensornumber) override;
 
   /**
   is used for mapToInterval, sets min and max Motor values.
   */
-  virtual void findMinAndMaxMotorValues(motor* motors, int motornumber);
+  virtual void findMinAndMaxMotorValues(motor* motors, int motornumber) override;
 
   /**
   is used for discretisizing values
@@ -226,7 +226,7 @@ private:
                                    int intervalCount,
                                    bool mapToInterval);
 
-  virtual double roundValue(double valueToRound);
+  virtual double roundValue(double valueToRound) override;
 };
 
 #endif

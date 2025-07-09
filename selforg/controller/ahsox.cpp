@@ -118,7 +118,7 @@ void AHSox::stepNoLearning(const sensor* x_, int number_sensors_robot,
     if (creativity > 0) {
         // Use prediction from current best model as creativity source
         int bestIdx = static_cast<int>(currentHorizon) - minHorizon;
-        if (bestIdx >= 0 && bestIdx < (int)models.size()) {
+        if (bestIdx >= 0 && bestIdx < static_cast<int>(models.size())) {
             const ForwardModel& model = models[bestIdx];
             // First compute what the output would be without creativity
             Matrix y_temp = (C * x_smooth + h).map(g);
@@ -183,7 +183,7 @@ Matrix AHSox::calculateTLE(int horizon) const {
     
     // Get the appropriate model
     int modelIdx = horizon - minHorizon;
-    if (modelIdx < 0 || modelIdx >= (int)models.size()) {
+    if (modelIdx < 0 || modelIdx >= static_cast<int>(models.size())) {
         return Matrix(number_sensors, 1);
     }
     
@@ -202,7 +202,7 @@ Matrix AHSox::calculateTLE(int horizon) const {
 void AHSox::updateUncertainties() {
     for (int horizon = minHorizon; horizon <= maxHorizon; horizon++) {
         int idx = horizon - minHorizon;
-        if (idx < 0 || idx >= (int)models.size()) continue;
+        if (idx < 0 || idx >= static_cast<int>(models.size())) continue;
         
         ForwardModel& model = models[idx];
         
@@ -294,7 +294,7 @@ int AHSox::selectBestHorizon() const {
     
     for (int horizon = minHorizon; horizon <= maxHorizon; horizon++) {
         int idx = horizon - minHorizon;
-        if (idx < 0 || idx >= (int)models.size()) continue;
+        if (idx < 0 || idx >= static_cast<int>(models.size())) continue;
         
         const ForwardModel& model = models[idx];
         if (model.uncertainty < minUncertainty) {
@@ -310,7 +310,7 @@ void AHSox::updateHorizonWeights() {
     // Calculate weights based on inverse uncertainty
     double totalWeight = 0;
     
-    for (int idx = 0; idx < (int)models.size(); idx++) {
+    for (int idx = 0; idx < static_cast<int>(models.size()); idx++) {
         ForwardModel& model = models[idx];
         
         // Weight is inverse of uncertainty
@@ -339,7 +339,7 @@ void AHSox::learnModels() {
         if (t < horizon + 1) continue;
         
         int idx = horizon - minHorizon;
-        if (idx < 0 || idx >= (int)models.size()) continue;
+        if (idx < 0 || idx >= static_cast<int>(models.size())) continue;
         
         ForwardModel& model = models[idx];
         
@@ -379,7 +379,7 @@ void AHSox::learnController() {
         
         for (int horizon = minHorizon; horizon <= maxHorizon; horizon++) {
             int idx = horizon - minHorizon;
-            if (idx < 0 || idx >= (int)models.size()) continue;
+            if (idx < 0 || idx >= static_cast<int>(models.size())) continue;
             
             const ForwardModel& model = models[idx];
             if (model.weight < 0.01) continue;  // Skip low-weight models
@@ -418,7 +418,7 @@ void AHSox::learnController() {
     } else {
         // Single horizon update
         int idx = static_cast<int>(currentHorizon) - minHorizon;
-        if (idx >= 0 && idx < (int)models.size()) {
+        if (idx >= 0 && idx < static_cast<int>(models.size())) {
             const ForwardModel& model = models[idx];
             
             Matrix xi = calculateTLE(static_cast<int>(currentHorizon));
@@ -447,7 +447,7 @@ void AHSox::learnController() {
 
 double AHSox::getUncertainty(int horizon) const {
     int idx = horizon - minHorizon;
-    if (idx >= 0 && idx < (int)models.size()) {
+    if (idx >= 0 && idx < static_cast<int>(models.size())) {
         return models[idx].uncertainty;
     }
     return -1;

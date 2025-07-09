@@ -64,15 +64,15 @@ public:
       The policy is to take the actions with the highest value,
       or a random action at the rate of exploration
   */
-  virtual unsigned int select(unsigned int state);
+  virtual unsigned int select(unsigned int state) override;
 
   /** selection of action given current state.
       The policy is to sample from the above average actions, with bias
       to the old action (also exploration included).
   */
-  virtual unsigned int select_sample(unsigned int state);
+  virtual unsigned int select_sample(unsigned int state) override;
   /// select with preference to old (90% if good) and 30% second best
-  virtual unsigned int select_keepold(unsigned int state);
+  virtual unsigned int select_keepold(unsigned int state) override;
 
   /* performs learning and returns current expected reward.
      \param state current state
@@ -95,15 +95,15 @@ public:
       one step later, so in case of a reward you should call learn one
       more time before reset.
   */
-  virtual void reset();
+  virtual void reset() override;
 
   /// returns the number of states
-  virtual unsigned int getStateDim() const;
+  virtual unsigned int getStateDim() const override;
   /// returns the number of actions
-  virtual unsigned int getActionDim() const;
+  virtual unsigned int getActionDim() const override;
 
   /// returns the collectedReward reward
-  virtual double getCollectedReward() const;
+  virtual double getCollectedReward() const override;
 
   /// expects a list of value,range and returns the associated state
   static int valInCrossProd(const std::list<std::pair<int, int>>& vals);

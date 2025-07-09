@@ -101,9 +101,9 @@ public:
 
   /**** STOREABLE ****/
   /** stores the controller values to a given file. */
-  virtual bool store(FILE* f) const;
+  virtual bool store(FILE* f) const override;
   /** loads the controller values from a given file. */
-  virtual bool restore(FILE* f);
+  virtual bool restore(FILE* f) override;
 
   /**** INSPECTABLE ****/
   virtual std::list<ILayer> getStructuralLayers()  const override;
@@ -185,23 +185,23 @@ protected:
   /// calculates xsi for the current time step using the delayed y values
   //  and x delayed by one
   //  @param delay 0 for no delay and n>0 for n timesteps delay in the time loop
-  virtual void calcXsi(int delay);
+  virtual void calcXsi(int delay) override;
 
   /// learn H,C with motors y and corresponding sensors x
-  virtual void learnController();
+  virtual void learnController() override;
 
   /// learn A, (and S) using motors y and corresponding sensors x
   //  @param delay 0 for no delay and n>0 for n timesteps delay in the time loop
-  virtual void learnModel(int delay);
+  virtual void learnModel(int delay) override;
 
   /// calculates the predicted sensor values
-  virtual matrix::Matrix model(const std::vector<matrix::Matrix>& x_buffer, int delay, const matrix::Matrix& y);
+  virtual matrix::Matrix model(const std::vector<matrix::Matrix>& x_buffer, int delay, const matrix::Matrix& y) override;
 
   /// handles inhibition damping etc.
-  virtual void management();
+  virtual void management() override;
 
   /// returns controller output for given sensor values
-  virtual matrix::Matrix calculateControllerValues(const matrix::Matrix& x_smooth);
+  virtual matrix::Matrix calculateControllerValues(const matrix::Matrix& x_smooth) override;
 
 protected:
   static double regularizedInverse(double v);

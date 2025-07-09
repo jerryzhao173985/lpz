@@ -88,7 +88,7 @@ public:
    * we like to calculate the entropy of the xsi, therefore we need for the (self calculated) update
    * rule x_t+1=-a * tanh(c * x_t) the a and c, which should be set in the main.cpp.
    */
-  virtual void setAandCandCalcH_xsi(double ainit, double cinit);
+  virtual void setAandCandCalcH_xsi(double ainit, double cinit) override;
 
   /****************************************************************************/
   /*        BEGIN methods of AbstractController                                 */
@@ -224,33 +224,33 @@ protected:
    * This is made by normal formula, which
    * needs O(n^2) costs.
    */
-  virtual void calculateMIs(double* MI);
+  virtual void calculateMIs(double* MI) override;
 
   /**
    * Calculates the entropy of x
    * This is made by normal formula, which
    * needs Ostatic_cast<n>(costs).
    */
-  virtual void calculateH_x(double* H);
+  virtual void calculateH_x(double* H) override;
 
   /**
    * Calculates the conditional entropy of y|x
    * This is made by normal formula, which
    * needs Ostatic_cast<n²>(costs).
    */
-  virtual void calculateH_yx(double* H_yx);
+  virtual void calculateH_yx(double* H_yx) override;
 
   /**
    * Updates the xsi frequency matrix list
    */
-  virtual void updateXsiFreqMatrixList(const sensor* sensors);
+  virtual void updateXsiFreqMatrixList(const sensor* sensors) override;
 
   /**
    * Calculates the entropy of H(Xsi)
    * This is made by normal formula, which
    * needs Ostatic_cast<n>(costs).
    */
-  virtual void calculateH_Xsi(double* H_Xsi);
+  virtual void calculateH_Xsi(double* H_Xsi) override;
 
   /**
    * Updates the mutual information
@@ -261,12 +261,12 @@ protected:
    * function first before updating the F matrix!
    * calculation costs: O(1)
    */
-  virtual void updateMIs(const sensor* sensors);
+  virtual void updateMIs(const sensor* sensors) override;
 
   /**
    * Returns the appropiate state which belongs to the given sensorValue.
    */
-  virtual int getState(double sensorValue);
+  virtual int getState(double sensorValue) override;
 
   /**
    * Does the pre-initialization functionality.

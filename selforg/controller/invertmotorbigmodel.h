@@ -79,9 +79,9 @@ public:
 
   /**************  STOREABLE **********************************/
   /** stores the controller values to a given file. */
-  virtual bool store(FILE* f) const;
+  virtual bool store(FILE* f) const override;
   /** loads the controller values from a given file. */
-  virtual bool restore(FILE* f);
+  virtual bool restore(FILE* f) override;
 
   /************** INSPECTABLE ********************************/
   virtual iparamkeylist getInternalParamNames()  const override;
@@ -95,13 +95,13 @@ public:
       Please note, that the teaching signal has to be given each timestep
        for a continuous teaching process.
    */
-  virtual void setMotorTeachingSignal(const motor* teaching, int len);
+  virtual void setMotorTeachingSignal(const motor* teaching, int len) override;
 
   /** The given sensor teaching signal (distal learning) is used for this timestep.
       First the belonging motor teachung signal is calculated by the inverse model.
       See setMotorTeachingSignal
    */
-  virtual void setSensorTeachingSignal(const sensor* teaching, int len);
+  virtual void setSensorTeachingSignal(const sensor* teaching, int len) override;
 
   static InvertMotorBigModelConf getDefaultConf() {
     InvertMotorBigModelConf c;
@@ -161,16 +161,16 @@ protected:
 
   /// calculates the first shift into the motor space useing delayed motor values.
   //  @param delay 0 for no delay and n>0 for n timesteps delay in the time loop
-  virtual void calcEtaAndBufferIt(int delay);
+  virtual void calcEtaAndBufferIt(int delay) override;
 
   /// learn H,C with motors y and corresponding sensors x
-  virtual void learnController();
+  virtual void learnController() override;
 
   /// calculates the Update for C and H
   // @param y_delay timesteps to delay the y-values.  (usually 0)
   //  Please note that the delayed values are NOT used for the error calculation
   //  (this is done in calcXsi())
-  virtual void calcCandHUpdates(matrix::Matrix& C_update, matrix::Matrix& H_update, int y_delay);
+  virtual void calcCandHUpdates(matrix::Matrix& C_update, matrix::Matrix& H_update, int y_delay) override;
 
   /// updates the matrix C and H
   virtual void updateCandH(const matrix::Matrix& C_update,
@@ -179,13 +179,13 @@ protected:
 
   /// learn A, (and S) using motors y and corresponding sensors x
   //  @param delay 0 for no delay and n>0 for n timesteps delay in the time loop
-  virtual void learnModel(int delay);
+  virtual void learnModel(int delay) override;
 
   /// handles inhibition damping etc.
-  virtual void management();
+  virtual void management() override;
 
   /// returns controller output for given sensor values
-  virtual matrix::Matrix calculateControllerValues(const matrix::Matrix& x_smooth);
+  virtual matrix::Matrix calculateControllerValues(const matrix::Matrix& x_smooth) override;
   
   // Helper methods for vector-based buffers (overload base class methods)
   void putInBuffer(std::vector<matrix::Matrix>& buffer, const matrix::Matrix& vec, int delay = 0) {

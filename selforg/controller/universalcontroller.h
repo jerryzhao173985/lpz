@@ -126,8 +126,8 @@ protected:
   virtual AbstractController::iconnectionlist getStructuralConnections()  const override;
 
   /********* STORABLE INTERFACE ******/
-  virtual bool store(FILE* f) const;
-  virtual bool restore(FILE* f);
+  virtual bool store(FILE* f) const override;
+  virtual bool restore(FILE* f) override;
 
 protected:
   unsigned int t = 0;

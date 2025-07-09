@@ -100,7 +100,8 @@ namespace lpzrobots {
 
   class Primitive{
   public:
-    double size = 0.0;       ///< scaling factor for robot static_cast<height>static_cast<double>(massfactor); ///< mass factor for all parts
+    double size = 0.0;       ///< scaling factor for robot (height)
+    double massfactor = 1.0; ///< mass factor for all parts
 
     bool   useVelocityServos = false; ///< if true the more stable velocity controlling servos are used
 
