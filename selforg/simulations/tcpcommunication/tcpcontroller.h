@@ -40,7 +40,7 @@ public:
      @param port Port number to listen for controller
      @param robotname name of robot to send to controller
    */
-  TcpController(const string& robotname, int port = 4000, AbstractController* teacher = 0);
+  TcpController(const string& robotname, int port = 4000, AbstractController* teacher = nullptr);
 
   virtual ~TcpController();
 

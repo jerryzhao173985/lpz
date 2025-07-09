@@ -145,7 +145,7 @@ public:
   virtual std::list<IConnection> getStructuralConnections()  const override;
 
   /********* STORABLE INTERFACE ******/
-  virtual bool store(FILE* f)  const override;
+  virtual bool store(FILE* f)  const;
   virtual bool restore(FILE* f);
 
 protected:

@@ -47,7 +47,7 @@ public:
     }
   }
 
-  virtual void init(Primitive* own, Joint* joint = 0) override {
+  virtual void init(Primitive* own, Joint* joint = nullptr) override {
     assert(childSensor.get());
     number = childSensor->getSensorNumber();
     buffer.init(buffersize,0);

@@ -44,7 +44,7 @@ namespace lpzrobots {
 
     /** initialises motor with body of robot
     */
-    virtual void init(Primitive* own, Joint* joint = 0)= 0;
+    virtual void init(Primitive* own, Joint* joint = nullptr)= 0;
 
     /// return the dimensionality of this motor
     virtual int getMotorNumber() const = 0;

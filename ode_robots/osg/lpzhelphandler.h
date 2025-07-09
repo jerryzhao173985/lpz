@@ -34,7 +34,7 @@ namespace lpzrobots {
 class LpzHelpHandler : public osgGA::GUIEventHandler {
     public: 
 
-        LpzHelpHandler(osg::ApplicationUsage* au=0);
+        LpzHelpHandler(osg::ApplicationUsage* au=nullptr);
         
         void setApplicationUsage(osg::ApplicationUsage* au) { _applicationUsage = au; }
         osg::ApplicationUsage* getApplicationUsage() { return _applicationUsage.get(); }

@@ -63,7 +63,7 @@ namespace lpzrobots {
     }
 
     // --- Sensor interface ---
-    virtual void init(Primitive* own, Joint* joint = 0) { // and Motor interface
+    virtual void init(Primitive* own, Joint* joint = nullptr) { // and Motor interface
       if(joint!= nullptr) {
         this->joint=dynamic_cast<OneAxisJoint*>(joint);
       }

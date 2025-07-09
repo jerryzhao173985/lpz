@@ -61,7 +61,7 @@ namespace lpzrobots {
     virtual osg::Matrix getPose();
 
     /// this function initialized the camera (no need to overload) (Sensor interface)
-    virtual void init(Primitive* own, Joint* joint = 0);
+    virtual void init(Primitive* own, Joint* joint = nullptr);
 
     /// overload this function an process the image (use camera->getImage())
     virtual bool sense(const GlobalData& globaldata)  = 0;

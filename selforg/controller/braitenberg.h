@@ -92,13 +92,13 @@ public:
 
   /********* STORABLE INTERFACE ******/
   /// @see Storable
-  virtual bool store(FILE* f) const override {
+  virtual bool store(FILE* f) const {
     Configurable::print(f, "");
     return true;
   }
 
   /// @see Storable
-  virtual bool restore(FILE* f) override {
+  virtual bool restore(FILE* f) {
     Configurable::parse(f);
     return true;
   }

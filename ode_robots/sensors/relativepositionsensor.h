@@ -43,7 +43,7 @@ namespace lpzrobots {
     RelativePositionSensor(double maxDistance, double exponent, short dimensions = Sensor::X | Sensor::Y | Sensor::Z , bool local_coordinates = false);
     virtual ~RelativePositionSensor() {}
 
-    virtual void init(Primitive* own, Joint* joint = 0);
+    virtual void init(Primitive* own, Joint* joint = nullptr);
     virtual int getSensorNumber()  const override;
 
     virtual bool sense(const GlobalData& globaldata) override;

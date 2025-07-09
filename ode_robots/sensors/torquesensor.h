@@ -42,7 +42,7 @@ namespace lpzrobots {
     /** the primitive is not required here, set it to nullptr
         @param joint the joint on which to measure the torques.
     */
-    virtual void init(Primitive* own, Joint* joint = 0);
+    virtual void init(Primitive* own, Joint* joint = nullptr);
     virtual int getSensorNumber()  const override;
 
     virtual bool sense(const GlobalData& globaldata) override;

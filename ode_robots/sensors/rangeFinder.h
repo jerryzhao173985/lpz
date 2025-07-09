@@ -19,7 +19,7 @@ namespace lpzrobots {
 
     RangeFinder() : own(nullptr) {};
 
-    virtual void init(Primitive* own, Joint* joint = 0);
+    virtual void init(Primitive* own, Joint* joint = nullptr);
 
     /**
      * Register equidistant IR sensor in a given angular range

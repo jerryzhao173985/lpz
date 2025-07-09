@@ -41,7 +41,7 @@ namespace lpzrobots {
     }
     virtual ~Speaker() {};
 
-    virtual void init(Primitive* own, Joint* joint = 0) override {
+    virtual void init(Primitive* own, Joint* joint = nullptr) override {
       this->own=own;
     }
 

@@ -281,7 +281,7 @@ namespace lpzrobots {
 
     virtual ~TwoAxisServoVel();
 
-    virtual void init(Primitive* own, Joint* joint = 0) {
+    virtual void init(Primitive* own, Joint* joint = nullptr) {
       if(joint) { assert(joint==this->joint); } // we cannot attach the servo to a new joint
     }
 

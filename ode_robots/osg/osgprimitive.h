@@ -260,7 +260,7 @@ namespace lpzrobots {
        @param scale scale factor used for scaling the model
        @param options for model reader
      */
-    OSGMesh(const std::string& filename, float scale = 1, const osgDB::ReaderWriter::Options* options = 0);
+    OSGMesh(const std::string& filename, float scale = 1, const osgDB::ReaderWriter::Options* options = nullptr);
     ~OSGMesh();
     virtual void init(const OsgHandle& osgHandle, Quality quality = Middle);
     /**

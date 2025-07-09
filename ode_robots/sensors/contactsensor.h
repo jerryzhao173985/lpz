@@ -56,7 +56,7 @@ namespace lpzrobots {
     virtual double get();
 
     // ---- Sensor interface -----
-    virtual void init(Primitive* own, Joint* joint = 0);
+    virtual void init(Primitive* own, Joint* joint = nullptr);
 
     virtual int getSensorNumber() const { return 1; }
 

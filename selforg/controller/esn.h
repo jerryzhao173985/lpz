@@ -114,7 +114,7 @@ public:
   /// returns the number of output neurons
   virtual unsigned int getOutputDim()  const override;
 
-  virtual bool store(FILE* f)  const override;
+  virtual bool store(FILE* f)  const;
 
   virtual bool restore(FILE* f);
 

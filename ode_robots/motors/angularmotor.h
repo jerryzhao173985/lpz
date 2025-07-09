@@ -45,7 +45,7 @@ namespace lpzrobots {
     virtual int getNumberOfAxes() const = 0;
 
     // --- Sensor interface ---
-    virtual void init(Primitive* own, Joint* joint = 0);
+    virtual void init(Primitive* own, Joint* joint = nullptr);
 
     virtual bool sense(const GlobalData& globaldata) { return true;}
     virtual int getSensorNumber() const {
@@ -118,7 +118,7 @@ namespace lpzrobots {
     AngularMotor1Axis(const OdeHandle& odeHandle, OneAxisJoint* joint, double power);
     virtual ~AngularMotor1Axis() {}
 
-    virtual void init(Primitive* own, Joint* joint = 0);
+    virtual void init(Primitive* own, Joint* joint = nullptr);
 
     virtual int getNumberOfAxes() const { return 1; };
 
@@ -148,7 +148,7 @@ namespace lpzrobots {
     AngularMotor2Axis(const OdeHandle& odeHandle, TwoAxisJoint* joint, double power1, double power2);
     virtual ~AngularMotor2Axis() {}
 
-    virtual void init(Primitive* own, Joint* joint = 0);
+    virtual void init(Primitive* own, Joint* joint = nullptr);
 
     /// returns the number of Axis of this Motor
     virtual int getNumberOfAxes() const { return 2; };
@@ -185,7 +185,7 @@ namespace lpzrobots {
     AngularMotor3AxisEuler(const OdeHandle& odeHandle, BallJoint* joint,
                            const Axis& axis1, const Axis& axis3, double power);
 
-    virtual void init(Primitive* own, Joint* joint = 0);
+    virtual void init(Primitive* own, Joint* joint = nullptr);
 
     /// returns the number of Axis of this Motor
     virtual int getNumberOfAxes() const { return 3; };
@@ -222,7 +222,7 @@ namespace lpzrobots {
 
     virtual ~AngularMotorNAxis() {}
 
-    virtual void init(Primitive* own, Joint* joint = 0);
+    virtual void init(Primitive* own, Joint* joint = nullptr);
 
     /// returns the number of Axis of this Motor
     virtual int getNumberOfAxes()  const override;

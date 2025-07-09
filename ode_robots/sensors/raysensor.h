@@ -61,7 +61,7 @@ namespace lpzrobots {
 
     void setPose(const osg::Matrix& pose);
 
-    void init(Primitive* own, Joint* joint = 0);
+    void init(Primitive* own, Joint* joint = nullptr);
 
     bool sense(const GlobalData& globaldata);
 

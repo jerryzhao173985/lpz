@@ -60,7 +60,7 @@ namespace lpzrobots {
     enum SType {Metal, Plastic, Rubber, Foam, SRandom};
     
     /// creates a default configuration, optionally with the size and position of the ground
-    static RandomObstaclesConf getDefaultConf(AbstractGround* ground = 0){
+    static RandomObstaclesConf getDefaultConf(AbstractGround* ground = nullptr){
       RandomObstaclesConf c;
       if(ground){
         c.area  = Pos(static_cast<float>(ground->getGroundLength()/2), static_cast<float>(ground->getGroundWidth()/2), 5.0f)*0.95f;

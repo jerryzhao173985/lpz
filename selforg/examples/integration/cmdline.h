@@ -11,7 +11,7 @@ std::vector<string> splitString(const std::string& str, char seperator);
 /// Shows the values of all parameters of the given configurable objects.
 // @param file print to file or stdout if nullptr
 // @param lineprefix is used as prefix for each line if not nullptr
-void showParams(const ConfigList& configs, FILE* file = 0, const char* lineprefix = 0);
+void showParams(const ConfigList& configs, FILE* file = nullptr, const char* lineprefix = nullptr);
 /// Asks the user for changing a parameter of the configurable objects.
 // ALL input and output goes to stdin and stdout. 
 // @param onTerminate() callback if user quits the program

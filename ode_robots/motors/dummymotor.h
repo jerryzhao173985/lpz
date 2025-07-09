@@ -35,7 +35,7 @@ namespace lpzrobots {
     }
     virtual ~DummyMotor() {};
 
-    virtual void init(Primitive* own, Joint* joint = 0 ) override {
+    virtual void init(Primitive* own, Joint* joint = nullptr ) override {
     }
 
     virtual int getMotorNumber() const {

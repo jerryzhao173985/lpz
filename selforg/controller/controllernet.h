@@ -93,7 +93,7 @@ public:
   with \f$W_n\f$ is the weight matrix of layer n and
   \f$ G'\f$ is a diagonal matrix with \f$ G'_ii = g'_i \f$ as values on the diagonal.
   */
-  virtual const matrix::Matrix& response() const override;
+  virtual const matrix::Matrix& response() const ;
 
   // Implement the pure virtual from InvertableModel
   virtual const matrix::Matrix response(const matrix::Matrix& input) const override {
@@ -132,8 +132,8 @@ public:
       @return errors[0] (result of backpropagation)
    */
   virtual const matrix::Matrix backpropagation(const matrix::Matrix& error,
-                                               matrix::Matrices* errors = 0,
-                                               matrix::Matrices* zetas = 0) const;
+                                               matrix::Matrices* errors = nullptr,
+                                               matrix::Matrices* zetas = nullptr) const;
 
   /** like backpropagation but with special features: we can start from any layer
       and the bypass-discounting can be used (see disseration Georg Martius)
@@ -143,8 +143,8 @@ public:
       @see backpropagation
    */
   virtual const matrix::Matrix backpropagationX(const matrix::Matrix& error,
-                                                matrix::Matrices* errors = 0,
-                                                matrix::Matrices* zetas = 0,
+                                                matrix::Matrices* errors = nullptr,
+                                                matrix::Matrices* zetas = nullptr,
                                                 int startWithLayer = -1) const;
 
   /** backprojection of vector error through network.
@@ -156,8 +156,8 @@ public:
       @return errors[0] (result of backprojecting)
    */
   virtual const matrix::Matrix backprojection(const matrix::Matrix& error,
-                                              matrix::Matrices* errors = 0,
-                                              matrix::Matrices* zetas = 0) const;
+                                              matrix::Matrices* errors = nullptr,
+                                              matrix::Matrices* zetas = nullptr) const;
 
   /** forwardpropagation of vector error through network.
       The storage for the intermediate values (errors, zetas) do not need to be given.
@@ -168,8 +168,8 @@ public:
       @return errors[layernum] (result of forwardpropagation)
    */
   virtual const matrix::Matrix forwardpropagation(const matrix::Matrix& error,
-                                                  matrix::Matrices* errors = 0,
-                                                  matrix::Matrices* zetas = 0) const;
+                                                  matrix::Matrices* errors = nullptr,
+                                                  matrix::Matrices* zetas = nullptr) const;
 
   /** forwardprojection of vector error through network.
       The storage for the intermediate values (errors, zetas) do not need to be given.
@@ -180,8 +180,8 @@ public:
       @return errors[layernum] (result of forwardprojection)
    */
   virtual const matrix::Matrix forwardprojection(const matrix::Matrix& error,
-                                                 matrix::Matrices* errors = 0,
-                                                 matrix::Matrices* zetas = 0) const;
+                                                 matrix::Matrices* errors = nullptr,
+                                                 matrix::Matrices* zetas = nullptr) const;
 
   /// returns the number of input neurons
   virtual unsigned int getInputDim() const override {

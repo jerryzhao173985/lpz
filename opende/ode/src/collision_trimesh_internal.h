@@ -548,16 +548,16 @@ template<class T{
 
 dReal SqrDistancePointTri( const dVector3 p, const dVector3 triOrigin, 
                            const dVector3 triEdge1, const dVector3 triEdge2,
-                           dReal* pfSParam = 0, dReal* pfTParam = 0 );
+                           dReal* pfSParam = nullptr, dReal* pfTParam = nullptr );
 
 dReal SqrDistanceSegments( const dVector3 seg1Origin, const dVector3 seg1Direction, 
                            const dVector3 seg2Origin, const dVector3 seg2Direction,
-                           dReal* pfSegP0 = 0, dReal* pfSegP1 = 0 );
+                           dReal* pfSegP0 = nullptr, dReal* pfSegP1 = nullptr );
 
 dReal SqrDistanceSegTri( const dVector3 segOrigin, const dVector3 segEnd, 
                          const dVector3 triOrigin, 
                          const dVector3 triEdge1, const dVector3 triEdge2,
-                         dReal* t = 0, dReal* u = 0, dReal* v = 0 );
+                         dReal* t = nullptr, dReal* u = nullptr, dReal* v = nullptr );
 
 inline
 void Vector3Subtract( const dVector3 left, const dVector3 right, dVector3 result )

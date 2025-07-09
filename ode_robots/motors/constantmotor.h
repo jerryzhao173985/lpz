@@ -43,7 +43,7 @@ namespace lpzrobots {
     
     virtual ~ConstantMotor() = default;
 
-    virtual void init(Primitive* own, Joint* joint = 0) override {
+    virtual void init(Primitive* own, Joint* joint = nullptr) override {
       motor->init(own, joint);
     }
 

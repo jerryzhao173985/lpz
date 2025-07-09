@@ -90,7 +90,7 @@ public:
 
   /**************  STOREABLE **********************************/
   /// stores the layer binary into file stream
-  virtual bool store(FILE* f)  const override;
+  virtual bool store(FILE* f)  const;
   /// restores the layer binary from file stream
   virtual bool restore(FILE* f);
 
