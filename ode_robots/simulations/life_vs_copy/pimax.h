@@ -57,7 +57,7 @@ public:
 
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
 
-  virtual ~PiMax() override;
+  virtual ~PiMax();
 
   static PiMaxConf getDefaultConf() const {
     PiMaxConf conf;
@@ -91,7 +91,7 @@ public:
 
   /***** STOREABLE ****/
   /** stores the controller values to a given file. */
-  virtual bool store(FILE* f) const override;
+  virtual bool store(FILE* f)  const override;
   /** loads the controller values from a given file. */
   virtual bool explicit restore(FILE* f);
 

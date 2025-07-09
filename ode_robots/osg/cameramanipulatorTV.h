@@ -51,7 +51,7 @@ namespace lpzrobots {
 
   protected:
 
-    virtual ~CameraManipulatorTV() override;
+    virtual ~CameraManipulatorTV();
 
     /** This handles robot movements, so that the camera movemenent is right affected.
         should be overwritten by new cameramanipulator

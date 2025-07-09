@@ -1,0 +1,79 @@
+MEMBER INITIALIZATION EXAMPLES
+==================================================
+
+
+File: a/ga_tools/simulations/template_cycled_GA_Simulation/TemplateCycledGaSimulationFitnessStrategy.cpp
+----------------------------------------
+@@ -37,9 +37,9 @@ TemplateCycledGaSimulationFitnessStrategy::~TemplateCycledGaSimulationFitnessStr
+-        double* temp = m_storage.at(individual->getID()) override;
+-        //double* temp = m_storage[individual->getID()] override;
++        double* temp = m_storage.at(individual->getID());
++        //double* temp = m_storage[individual->getID()];
+-        return *(m_storage[individual->getID()]) override;
++        return *(m_storage[individual->getID()]);
+
+
+File: a/ga_tools/simulations/template_cycled_GA_Simulation/main.cpp
+----------------------------------------
+@@ -161,7 +161,7 @@ public:
+-  restart(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global) override {
++  restart(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global){
+@@ -293,9 +293,9 @@ public:
+-  addCallback(const GlobalData& globalData, bool draw, bool pause, bool control) override {
++  addCallback(const GlobalData& globalData, bool draw, bool pause, bool control){
+-    if (globalData.sim_step % 100 == nullptr)
++    if (globalData.sim_step % 100 == 0)
+@@ -317,7 +317,7 @@ public:
+-      bool down) override {
++      bool down){
+
+
+File: a/ga_tools/simulations/template_cycled_GA_Simulation/main.cpp
+----------------------------------------
+@@ -293,9 +293,9 @@ public:
+-  addCallback(const GlobalData& globalData, bool draw, bool pause, bool control) override {
++  addCallback(const GlobalData& globalData, bool draw, bool pause, bool control){
+-    if (globalData.sim_step % 100 == nullptr)
++    if (globalData.sim_step % 100 == 0)
+@@ -317,7 +317,7 @@ public:
+-      bool down) override {
++      bool down){
+@@ -335,7 +335,7 @@ private:
+-  void explicit createBots(const GlobalData& global)
++  void createBots(const GlobalData& global)
+
+
+File: a/ga_tools/simulations/template_tasked_GA_Simulation/main.cpp
+----------------------------------------
+@@ -163,7 +163,7 @@ class ThisSim{
+-      explicit if(handle.isCalculation) {
++      if(handle.isCalculation) {
+@@ -187,7 +187,7 @@ class ThisSim{
+-    virtual void addCallback(const GlobalData& globalData, bool draw, bool pause, bool control) override {
++    virtual void addCallback(const GlobalData& globalData, bool draw, bool pause, bool control){
+@@ -201,9 +201,9 @@ class ThisSim{
+-        SimulationTaskHandle& sTHandle, int taskI) override {
+-      //ThisSimulationTaskHandle* simTaskHandle = static_cast<ThisSimulationTaskHandle*> (&sTHandle);
+-      explicit if (down) { // only when key is pressed, not when released
++        SimulationTaskHandle& sTHandle, int taskI){
++      //ThisSimulationTaskHandle* simTaskHandle = static_cast<ThisSimulationTaskHandle*>(&sTHandle);
++      if (down) { // only when key is pressed, not when released
+
+
+File: a/ga_tools/simulations/template_tasked_GA_Simulation/main.cpp
+----------------------------------------
+@@ -187,7 +187,7 @@ class ThisSim{
+-    virtual void addCallback(const GlobalData& globalData, bool draw, bool pause, bool control) override {
++    virtual void addCallback(const GlobalData& globalData, bool draw, bool pause, bool control){
+@@ -201,9 +201,9 @@ class ThisSim{
+-        SimulationTaskHandle& sTHandle, int taskI) override {
+-      //ThisSimulationTaskHandle* simTaskHandle = static_cast<ThisSimulationTaskHandle*> (&sTHandle);
+-      explicit if (down) { // only when key is pressed, not when released
++        SimulationTaskHandle& sTHandle, int taskI){
++      //ThisSimulationTaskHandle* simTaskHandle = static_cast<ThisSimulationTaskHandle*>(&sTHandle);
++      if (down) { // only when key is pressed, not when released
+@@ -263,15 +263,15 @@ class ThisSim{
+-      explicit if (!sTHandle.isArraySet && !sTHandle.isCalculation) {
++      if (!sTHandle.isArraySet && !sTHandle.isCalculation) {
+-        value != 0 ? v1 = value->getValue() : v1 = 0.0;
+

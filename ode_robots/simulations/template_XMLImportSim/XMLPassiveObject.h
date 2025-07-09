@@ -17,7 +17,7 @@
 class XMLPassiveObject{
 public:
         XMLPassiveObject(XERCESC::DOMNode* passiveObjectNode, const XMLParserEngine& xmlEngine);
-        virtual ~XMLPassiveObject() override;
+        virtual ~XMLPassiveObject();
 
           /**
            * sets position of the obstacle and creates/recreates obstacle if necessary
@@ -25,7 +25,7 @@ public:
           virtual void setPose(const osg::Matrix& pose);
 
           /// return the __PLACEHOLDER_1__ primitive of the obtactle. The meaning of __PLACEHOLDER_2__ is arbitrary
-          virtual lpzrobots::Primitive* getMainPrimitive() const override;
+          virtual lpzrobots::Primitive* getMainPrimitive()  const override;
 
           /// overload this function to create the obstactle. All primitives should go into the list __PLACEHOLDER_3__
           virtual void create();

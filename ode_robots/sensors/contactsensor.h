@@ -46,7 +46,7 @@ namespace lpzrobots {
                   bool createSphere = false, bool colorObject = true,
                   Color contactColor = Color(-1,-1,-1));
 
-    virtual ~ContactSensor() override;
+    virtual ~ContactSensor();
 
     /** returns the sensor value in the range >=0;
         0 means nothing no contact
@@ -62,9 +62,9 @@ namespace lpzrobots {
 
     virtual bool sense(const GlobalData& globaldata);
 
-    virtual int get(sensor* sensors, int length) const override;
+    virtual int get(sensor* sensors, int length)  const override;
 
-    virtual std::list<sensor> getList() const override;
+    virtual std::list<sensor> getList()  const override;
 
     virtual void update();
 

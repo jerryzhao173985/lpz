@@ -50,7 +50,7 @@ public:
                           const std::string& name = "MeasureAdapter",
                           const std::string& revision = "$ID$");
 
-  virtual ~MeasureAdapter() override;
+  virtual ~MeasureAdapter();
 
   /**
    * Adds a ComplexMeasure for measuring sensor values. For each

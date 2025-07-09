@@ -43,7 +43,7 @@ namespace lpzrobots{
     bool isOpen() const { return opened; }
 
     // DrawCallback interface
-    virtual void operator() (const osg::Camera &) const override;
+    virtual void operator() (const osg::Camera &)  const override;
 
     virtual long int getCounter() const { return counter; }
     virtual const std::string& getDirectory() const { return directory; }

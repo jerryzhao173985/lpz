@@ -180,7 +180,7 @@ public:
   /*        BEGIN methods of Configurable                                                      */
   /****************************************************************************/
 
-  //  Configurable::paramval getParam(const paramkey& key) const override;
+  //  Configurable::paramval getParam(const paramkey& key)  const override;
 
   //  bool setParam(const paramkey& key, paramval val);
 

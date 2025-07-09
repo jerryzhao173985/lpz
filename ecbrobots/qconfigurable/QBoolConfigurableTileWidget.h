@@ -91,7 +91,7 @@ namespace lpzrobots {
     public:
       QBoolConfigurableTileWidget(Configurable* config, Configurable::paramkey& key, QMap<QGridPos,
           QAbstractConfigurableTileWidget*>& tileIndexConfigWidgetMap);
-      virtual ~QBoolConfigurableTileWidget() override;
+      virtual ~QBoolConfigurableTileWidget();
       void setName(const QString& name) override;
       void toDummy(bool set) override;
       void reloadConfigurableData() override;

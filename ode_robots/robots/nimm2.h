@@ -102,7 +102,7 @@ public:
     return conf;
   }
 
-  virtual ~Nimm2() override;
+  virtual ~Nimm2();
 
   /**
    * updates the OSG nodes of the vehicle
@@ -181,9 +181,9 @@ protected:
 
         virtual std::list<iparamval> getInternalParams() const { return std::list<iparamval>(); }*/
         /*
-        virtual std::list<Inspectable::iparamkey> getInternalParamNames() const override;
+        virtual std::list<Inspectable::iparamkey> getInternalParamNames()  const override;
 
-        virtual std::list<Inspectable::iparamval> getInternalParams() const override;
+        virtual std::list<Inspectable::iparamval> getInternalParams()  const override;
         */
 
   Nimm2Conf conf;

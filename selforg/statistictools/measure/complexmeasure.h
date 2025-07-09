@@ -74,7 +74,7 @@ ComplexMeasure( const char* measureName, ComplexMeasureMode mode, int numberBins
      */
     virtual void addObservable( double& observedValue, double minValue, double maxValue );
 
-    virtual ~ComplexMeasure() override;
+    virtual ~ComplexMeasure();
 
     /**
      * defined by AbstractMeasure. This method is called from StatisticTools

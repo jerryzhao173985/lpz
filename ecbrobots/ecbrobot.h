@@ -92,7 +92,7 @@ namespace lpzrobots {
 
       explicit ECBRobot(QGlobalData& globalData);
 
-      virtual ~ECBRobot() override;
+      virtual ~ECBRobot();
 
       /// ABSTRACTROBOT INTERFACE
 
@@ -132,10 +132,10 @@ namespace lpzrobots {
 
       /// TRACKABLE INTERFACE: all methods return dummy values
 
-      virtual Position getPosition() const override;
-      virtual Position getSpeed() const override;
-      virtual Position getAngularSpeed() const override;
-      virtual matrix::Matrix getOrientation() const override;
+      virtual Position getPosition()  const override;
+      virtual Position getSpeed()  const override;
+      virtual Position getAngularSpeed()  const override;
+      virtual matrix::Matrix getOrientation()  const override;
 
       /// new methods for the communicator
 

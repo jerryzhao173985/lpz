@@ -67,7 +67,7 @@ public:
 
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
 
-  virtual ~SoML() override;
+  virtual ~SoML();
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
   virtual int getSensorNumber() const { return number_sensors; }
@@ -89,7 +89,7 @@ public:
 
   /***** STOREABLE ****/
   /** stores the controller values to a given file. */
-  virtual bool store(FILE* f) const override;
+  virtual bool store(FILE* f)  const override;
   /** loads the controller values from a given file. */
   virtual bool explicit restore(FILE* f);
 

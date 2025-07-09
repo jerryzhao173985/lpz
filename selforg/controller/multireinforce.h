@@ -65,7 +65,7 @@ public:
   explicit MultiReinforce(const MultiReinforceConf& conf = getDefaultConf());
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
 
-  virtual ~MultiReinforce() override;
+  virtual ~MultiReinforce();
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
   virtual int getSensorNumber() const override {
@@ -107,10 +107,10 @@ public:
   virtual bool restore(FILE* f);
 
   /**** INSPECTABLE ****/
-  virtual std::list<iparamkey> getInternalParamNames() const override;
-  virtual std::list<iparamval> getInternalParams() const override;
-  virtual std::list<ILayer> getStructuralLayers() const override;
-  virtual std::list<IConnection> getStructuralConnections() const override;
+  virtual std::list<iparamkey> getInternalParamNames()  const override;
+  virtual std::list<iparamval> getInternalParams()  const override;
+  virtual std::list<ILayer> getStructuralLayers()  const override;
+  virtual std::list<IConnection> getStructuralConnections()  const override;
 
   static MultiReinforceConf getDefaultConf() {
     MultiReinforceConf c;

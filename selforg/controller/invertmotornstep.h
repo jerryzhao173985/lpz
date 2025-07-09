@@ -61,7 +61,7 @@ public:
 
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override;
 
-  virtual ~InvertMotorNStep() override;
+  virtual ~InvertMotorNStep();
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
   virtual int getSensorNumber() const override {
@@ -89,8 +89,8 @@ public:
   virtual bool restore(FILE* f);
 
   /**** INSPECTABLE ****/
-  virtual std::list<ILayer> getStructuralLayers() const override;
-  virtual std::list<IConnection> getStructuralConnections() const override;
+  virtual std::list<ILayer> getStructuralLayers()  const override;
+  virtual std::list<IConnection> getStructuralConnections()  const override;
 
   /**** TEACHING ****/
   /** The given motor teaching signal is used for this timestep.

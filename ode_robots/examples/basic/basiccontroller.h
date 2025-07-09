@@ -38,11 +38,11 @@ class BasicController{
 
     /** @return Number of sensors the controller
       was initialised with or 0 if not initialised */
-    virtual int getSensorNumber() const override;
+    virtual int getSensorNumber()  const override;
 
     /** @return Number of motors the controller
       was initialised with or 0 if not initialised */
-    virtual int getMotorNumber() const override;
+    virtual int getMotorNumber()  const override;
 
     /** performs one step.
       Calculates motor commands from sensor inputs.
@@ -63,7 +63,7 @@ class BasicController{
 
     /** stores the object to the given file stream (binary).
     */
-    virtual bool store(FILE* f) const override;
+    virtual bool store(FILE* f)  const override;
 
     /** loads the object from the given file stream (binary).
     */

@@ -65,7 +65,7 @@ public:
 
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override;
 
-  virtual ~Sox() override;
+  virtual ~Sox();
 
   static SoxConf getDefaultConf() {
     SoxConf conf;

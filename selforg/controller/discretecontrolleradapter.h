@@ -49,7 +49,7 @@ public:
                             const std::string& name,
                             const std::string& revision);
 
-  virtual ~DiscreteControllerAdapter() override;
+  virtual ~DiscreteControllerAdapter();
 
   /**
   Sets the number of intervals, in which sensor AND motor values are mapped.

@@ -75,7 +75,7 @@ public:
   explicit DEP(const DEPConf& conf = getDefaultConf());
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
 
-  virtual ~DEP() override;
+  virtual ~DEP();
 
   static DEPConf getDefaultConf() {
     DEPConf conf;
@@ -116,7 +116,7 @@ public:
 
   /***** STOREABLE ****/
   /** stores the controller values to a given file. */
-  virtual bool store(FILE* f) const override;
+  virtual bool store(FILE* f)  const override;
   /** loads the controller values from a given file. */
   virtual bool restore(FILE* f) override;
 

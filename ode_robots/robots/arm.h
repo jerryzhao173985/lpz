@@ -213,10 +213,10 @@ namespace lpzrobots{
     void BodyCreate(int n, dMass m, dReal x, dReal y, dReal z, dReal qx, dReal qy, dReal qz, dReal qangle);
 
     // inspectable interface
-    //virtual std::list<Inspectable::iparamkey> getInternalParamNames() const override;
-    //virtual std::list<Inspectable::iparamval> getInternalParams() const override;
-    //                virtual std::list<ILayer> getStructuralLayers() const override;
-    //                virtual std::list<IConnection> getStructuralConnections() const override;
+    //virtual std::list<Inspectable::iparamkey> getInternalParamNames()  const override;
+    //virtual std::list<Inspectable::iparamval> getInternalParams()  const override;
+    //                virtual std::list<ILayer> getStructuralLayers()  const override;
+    //                virtual std::list<IConnection> getStructuralConnections()  const override;
 
 
     ArmConf conf;

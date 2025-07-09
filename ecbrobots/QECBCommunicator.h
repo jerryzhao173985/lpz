@@ -75,7 +75,7 @@ namespace lpzrobots {
 
     public:
       explicit QECBCommunicator(QGlobalData& data);
-      virtual ~QECBCommunicator() override;
+      virtual ~QECBCommunicator();
       virtual void run();
 
       enum ECBCommunicationState {

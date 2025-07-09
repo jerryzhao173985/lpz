@@ -49,7 +49,7 @@ struct UniversalControllerConf {
 class UniversalController : public AbstractController {
 public:
   explicit UniversalController(const UniversalControllerConf& conf = getDefaultConf());
-  virtual ~UniversalController() override;
+  virtual ~UniversalController();
 
   static UniversalControllerConf getDefaultConf() {
     UniversalControllerConf c;
@@ -120,10 +120,10 @@ protected:
   static double calcErrorFactor(const matrix::Matrix& e, int Enorm);
 
   /********* INSPECTABLE INTERFACE ******/
-  virtual std::list<AbstractController::iparamkey> getInternalParamNames() const override;
-  virtual std::list<AbstractController::iparamval> getInternalParams() const override;
-  virtual AbstractController::ilayerlist getStructuralLayers() const override;
-  virtual AbstractController::iconnectionlist getStructuralConnections() const override;
+  virtual std::list<AbstractController::iparamkey> getInternalParamNames()  const override;
+  virtual std::list<AbstractController::iparamval> getInternalParams()  const override;
+  virtual AbstractController::ilayerlist getStructuralLayers()  const override;
+  virtual AbstractController::iconnectionlist getStructuralConnections()  const override;
 
   /********* STORABLE INTERFACE ******/
   virtual bool store(FILE* f) const;

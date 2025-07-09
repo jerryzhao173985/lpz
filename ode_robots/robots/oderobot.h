@@ -71,7 +71,7 @@ namespace lpzrobots {
              const std::string& name, const std::string& revision);
 
     /// calls cleanup()
-    virtual ~OdeRobot() override;
+    virtual ~OdeRobot();
 
     // Rule of 5 - delete copy operations, allow move
     OdeRobot(const OdeRobot&) = delete;
@@ -183,22 +183,22 @@ namespace lpzrobots {
     /** returns position of the object
         @return vector of position (x,y,z)
     */
-    virtual Position getPosition() const override;
+    virtual Position getPosition()  const override;
 
     /** returns linear speed vector of the object
         @return vector  (vx,vy,vz)
     */
-    virtual Position getSpeed() const override;
+    virtual Position getSpeed()  const override;
 
     /** returns angular velocity vector of the object
         @return vector  (wx,wy,wz)
     */
-    virtual Position getAngularSpeed() const override;
+    virtual Position getAngularSpeed()  const override;
 
     /** returns the orientation of the object
         @return 3x3 rotation matrix
     */
-    virtual matrix::Matrix getOrientation() const override;
+    virtual matrix::Matrix getOrientation()  const override;
     /*********** END TRACKABLE INTERFACE ****************/
 
     /// return the primitive of the robot that is used for tracking and camera following
@@ -219,7 +219,7 @@ namespace lpzrobots {
     virtual Joints& getAllJoints() { return joints; }
 
     /* ********** STORABLE INTERFACE **************** */
-    virtual bool store(FILE* f) const override;
+    virtual bool store(FILE* f)  const override;
 
     virtual bool restore(FILE* f) override;
     /* ********** END STORABLE INTERFACE ************ */

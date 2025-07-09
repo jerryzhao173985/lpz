@@ -49,7 +49,7 @@ public:
   explicit DerInf(const DerInfConf& conf = getDefaultConf());
   virtual void init(int sensornumber, int motornumber, RandGen* randg) override;
 
-  virtual ~DerInf() override;
+  virtual ~DerInf();
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
   virtual int getSensorNumber() const override {
@@ -72,15 +72,15 @@ public:
 
   /**************  STOREABLE **********************************/
   /** stores the controller values to a given file. */
-  virtual bool store(FILE* f) const override;
+  virtual bool store(FILE* f)  const override;
   /** loads the controller values from a given file. */
   virtual bool restore(FILE* f) override;
 
   /************** INSPECTABLE ********************************/
-  virtual std::list<iparamkey> getInternalParamNames() const override;
-  virtual std::list<iparamval> getInternalParams() const override;
-  virtual std::list<ILayer> getStructuralLayers() const override;
-  virtual std::list<IConnection> getStructuralConnections() const override;
+  virtual std::list<iparamkey> getInternalParamNames()  const override;
+  virtual std::list<iparamval> getInternalParams()  const override;
+  virtual std::list<ILayer> getStructuralLayers()  const override;
+  virtual std::list<IConnection> getStructuralConnections()  const override;
 
   static DerInfConf getDefaultConf() {
     DerInfConf c;

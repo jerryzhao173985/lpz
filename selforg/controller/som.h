@@ -85,7 +85,7 @@ public:
     return weights.size();
   }
 
-  virtual bool store(FILE* f) const override;
+  virtual bool store(FILE* f)  const override;
   virtual bool restore(FILE* f) override;
 
   virtual void printWeights(FILE* f) const;

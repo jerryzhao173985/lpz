@@ -66,7 +66,7 @@ class XMLErrorHelper{
 
     static void printError(const std::string message);
 
-    bool getSawErrors() const override;
+    bool getSawErrors()  const override;
 
   private:
     bool errorsSeen = false;

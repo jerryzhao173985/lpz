@@ -79,7 +79,7 @@ namespace lpzrobots {
     ForcedSphere ( const OdeHandle& odeHandle, const OsgHandle& osgHandle,
                    const ForcedSphereConf& ForcedSphereConf, const std::string& name);
 
-    virtual ~ForcedSphere() override;
+    virtual ~ForcedSphere();
 
     static ForcedSphereConf getDefaultConf() {
       ForcedSphereConf c;

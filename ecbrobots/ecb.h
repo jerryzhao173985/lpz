@@ -143,7 +143,7 @@ namespace lpzrobots
        */
       ECB(QString dnsName, QGlobalData& globalData, ECBConfig& ecbConfig);
 
-      virtual ~ECB() override;
+      virtual ~ECB();
 
       virtual QString getDNSName() const
       {
@@ -225,7 +225,7 @@ namespace lpzrobots
       /// STORABLE INTERFACE
 
       /** stores the object to the given file stream (binary). */
-      virtual bool store(FILE* f) const override;
+      virtual bool store(FILE* f)  const override;
 
       /** loads the object from the given file stream (binary). */
       virtual bool restore(FILE* f) override;

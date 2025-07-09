@@ -118,7 +118,7 @@ class MultiSineController : public SineController {
 public:
   MultiSineController(unsigned long int controlmask = (~0),
                                function func = function::Sine);
-  virtual ~MultiSineController() override;
+  virtual ~MultiSineController();
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override;
   virtual void stepNoLearning(const sensor*,
                               int number_sensors,

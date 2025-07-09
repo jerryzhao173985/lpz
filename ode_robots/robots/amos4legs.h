@@ -362,12 +362,12 @@ namespace lpzrobots {
       /**
        * returns number of sensors
        */
-      virtual int getSensorNumberIntern() const override;
+      virtual int getSensorNumberIntern()  const override;
 
       /**
        * returns number of motors
        */
-      virtual int getMotorNumberIntern() const override;
+      virtual int getMotorNumberIntern()  const override;
 
       /**
        * this function is called in each timestep. It should perform
@@ -391,7 +391,7 @@ namespace lpzrobots {
        * the main object of the robot, which is used for position and speed
        * tracking
        */
-      virtual Primitive* getMainPrimitive() const override;
+      virtual Primitive* getMainPrimitive()  const override;
 
       /**
        * returns the MotorName enum value for the given joint at the given

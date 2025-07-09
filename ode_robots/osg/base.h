@@ -45,10 +45,10 @@ namespace lpzrobots {
   {
     public:
       /** Get the transformation matrix which moves from local coords to world coords.*/
-      virtual bool computeLocalToWorldMatrix(osg::Matrix& matrix, osg::NodeVisitor* nv) const override;
+      virtual bool computeLocalToWorldMatrix(osg::Matrix& matrix, osg::NodeVisitor* nv)  const override;
 
       /** Get the transformation matrix which moves from world coords to local coords.*/
-      virtual bool computeWorldToLocalMatrix(osg::Matrix& matrix, osg::NodeVisitor* nv) const override;
+      virtual bool computeWorldToLocalMatrix(osg::Matrix& matrix, osg::NodeVisitor* nv)  const override;
   };
 
   struct StatLineProperties {

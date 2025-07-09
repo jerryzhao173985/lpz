@@ -46,8 +46,8 @@ namespace lpzrobots {
     virtual bool sense(const GlobalData& globaldata) override;
 
     //Override to return value given by characteristic
-    virtual int get(sensor* sensors, int length) const override;
-    virtual std::list<sensor> getList() const override;
+    virtual int get(sensor* sensors, int length)  const override;
+    virtual std::list<sensor> getList()  const override;
 
     //Directly return value (needed for backward compatibility
     virtual double getValue() const;

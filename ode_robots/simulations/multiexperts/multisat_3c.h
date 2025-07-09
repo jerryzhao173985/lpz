@@ -117,7 +117,7 @@ public:
   MultiSat(const MultiSatConf& conf = getDefaultConf());
   virtual void init(int sensornumber, int motornumber);
 
-  virtual ~MultiSat() override;
+  virtual ~MultiSat();
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
   virtual int getSensorNumber() const { return number_sensors; }
@@ -146,15 +146,15 @@ public:
 
   /**** STOREABLE ****/
   /** stores the controller values to a given file. */
-  virtual bool store(FILE* f) const override;
+  virtual bool store(FILE* f)  const override;
   /** loads the controller values from a given file. */
   virtual bool explicit restore(FILE* f);
 
   /**** INSPECTABLE ****/
-  virtual std::list<iparamkey> getInternalParamNames() const override;
-  virtual std::list<iparamval> getInternalParams() const override;
-  virtual std::list<ILayer> getStructuralLayers() const override;
-  virtual std::list<IConnection> getStructuralConnections() const override;
+  virtual std::list<iparamkey> getInternalParamNames()  const override;
+  virtual std::list<iparamval> getInternalParams()  const override;
+  virtual std::list<ILayer> getStructuralLayers()  const override;
+  virtual std::list<IConnection> getStructuralConnections()  const override;
 
   static MultiSatConf getDefaultConf() const {
     MultiSatConf c;

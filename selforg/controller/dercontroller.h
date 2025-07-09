@@ -54,7 +54,7 @@ public:
   explicit DerController(const DerControllerConf& conf = getDefaultConf());
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override;
 
-  virtual ~DerController() override;
+  virtual ~DerController();
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
   virtual int getSensorNumber() const override {
@@ -80,10 +80,10 @@ public:
   virtual bool restore(FILE* f);
 
   /**** CONFIGURABLE ****/
-  virtual std::list<iparamkey> getInternalParamNames() const override;
-  virtual std::list<iparamval> getInternalParams() const override;
-  virtual std::list<ILayer> getStructuralLayers() const override;
-  virtual std::list<IConnection> getStructuralConnections() const override;
+  virtual std::list<iparamkey> getInternalParamNames()  const override;
+  virtual std::list<iparamval> getInternalParams()  const override;
+  virtual std::list<ILayer> getStructuralLayers()  const override;
+  virtual std::list<IConnection> getStructuralConnections()  const override;
 
   /**** TEACHING ****/
   virtual void setTeachingMode(bool onOff);

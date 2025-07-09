@@ -38,7 +38,7 @@ public:
   Sox(double init_feedback_strength = 1.0, bool useExtendedModel=true);
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
 
-  virtual ~Sox() override;
+  virtual ~Sox();
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
   virtual int getSensorNumber() const { return number_sensors; }
@@ -60,7 +60,7 @@ public:
 
   /***** STOREABLE ****/
   /** stores the controller values to a given file. */
-  virtual bool store(FILE* f) const override;
+  virtual bool store(FILE* f)  const override;
   /** loads the controller values from a given file. */
   virtual bool explicit restore(FILE* f);
 

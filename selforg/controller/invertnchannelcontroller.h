@@ -38,7 +38,7 @@ public:
   explicit InvertNChannelController(int _buffersize, bool _update_only_1 = false);
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
 
-  virtual ~InvertNChannelController() override;
+  virtual ~InvertNChannelController();
 
   /// returns the name of the object (with version number)
   virtual paramkey getName() const noexcept override {
@@ -70,8 +70,8 @@ public:
   virtual bool restore(FILE* f);
 
   // inspectable interface
-  virtual std::list<ILayer> getStructuralLayers() const override;
-  virtual std::list<IConnection> getStructuralConnections() const override;
+  virtual std::list<ILayer> getStructuralLayers()  const override;
+  virtual std::list<IConnection> getStructuralConnections()  const override;
 
 protected:
   unsigned short number_channels = 0;

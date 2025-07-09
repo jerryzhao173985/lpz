@@ -56,7 +56,7 @@ public:
   explicit InvertMotorBigModel(const InvertMotorBigModelConf& conf = getDefaultConf());
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override;
 
-  virtual ~InvertMotorBigModel() override;
+  virtual ~InvertMotorBigModel();
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
   virtual int getSensorNumber() const override {
@@ -84,10 +84,10 @@ public:
   virtual bool restore(FILE* f);
 
   /************** INSPECTABLE ********************************/
-  virtual iparamkeylist getInternalParamNames() const override;
-  virtual iparamvallist getInternalParams() const override;
-  virtual ilayerlist getStructuralLayers() const override;
-  virtual iconnectionlist getStructuralConnections() const override;
+  virtual iparamkeylist getInternalParamNames()  const override;
+  virtual iparamvallist getInternalParams()  const override;
+  virtual ilayerlist getStructuralLayers()  const override;
+  virtual iconnectionlist getStructuralConnections()  const override;
 
   /**** TEACHING ****/
   /** The given motor teaching signal is used for this timestep.

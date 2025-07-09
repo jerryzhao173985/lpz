@@ -271,7 +271,7 @@ public:
 
   /**************  STOREABLE **********************************/
   /// stores the layer binary into file stream
-  bool store(FILE* f) const override;
+  bool store(FILE* f)  const override;
   /// restores the layer binary from file stream
   bool restore(FILE* f) override;
 

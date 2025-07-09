@@ -44,7 +44,7 @@ namespace lpzrobots {
      */
     CameraSensor();
 
-    virtual ~CameraSensor() override;
+    virtual ~CameraSensor();
 
     /** sets the initial data structures like the camera.
         The camera will be initialized in init() (don't initialize it before).
@@ -76,7 +76,7 @@ namespace lpzrobots {
     virtual void update();
 
     /// this is implemented based on get(sensor*,int)
-    virtual std::list<sensor> getList() const override;
+    virtual std::list<sensor> getList()  const override;
 
   protected:
     /** overload this function to initialized you data structures.

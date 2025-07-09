@@ -69,7 +69,7 @@ namespace lpzrobots {
     Sphererobot ( const OdeHandle& odeHandle, const OsgHandle& osgHandle,
                   const SphererobotConf& conf, const std::string& name );
 
-    virtual ~Sphererobot() override;
+    virtual ~Sphererobot();
 
     static SphererobotConf getDefaultConf() {
       SphererobotConf c;

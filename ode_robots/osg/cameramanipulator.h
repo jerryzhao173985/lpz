@@ -68,11 +68,11 @@ namespace lpzrobots {
       }
 
       /** get the position of the manipulator as 4x4 Matrix.*/
-      virtual osg::Matrixd getMatrix() const override;
+      virtual osg::Matrixd getMatrix()  const override;
 
       /** get the position of the manipulator as a inverse matrix of the manipulator,
           typically used as a model view matrix.*/
-      virtual osg::Matrixd getInverseMatrix() const override;
+      virtual osg::Matrixd getInverseMatrix()  const override;
 
 
       /**
@@ -85,7 +85,7 @@ namespace lpzrobots {
 
       virtual void setNode(osg::Node* node) override;
 
-      virtual const osg::Node* getNode() const override;
+      virtual const osg::Node* getNode()  const override;
 
       virtual osg::Node* getNode() override;
 
@@ -100,7 +100,7 @@ namespace lpzrobots {
       virtual bool handle(const osgGA::GUIEventAdapter& ea,osgGA::GUIActionAdapter& us) override;
 
       /** Get the keyboard and mouse usage of this manipulator.*/
-      virtual void getUsage(osg::ApplicationUsage& usage) const override;
+      virtual void getUsage(osg::ApplicationUsage& usage)  const override;
 
       /** updates the camera module at every drawstep
           should be called from the simulation loop
@@ -127,7 +127,7 @@ namespace lpzrobots {
 
     protected:
 
-      virtual ~CameraManipulator() override;
+      virtual ~CameraManipulator();
 
       /** Reset the internal GUIEvent stack.*/
       virtual void flushMouseEventStack();

@@ -52,7 +52,7 @@ typedef struct TripodGait18DOFConf {
     TripodGait18DOF(const TripodGait18DOFConf& conf = getDefaultConf());
     virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
 
-    virtual ~TripodGait18DOF() override;
+    virtual ~TripodGait18DOF();
 
     /// returns the name of the object (with version number)
     virtual paramkey getName() const {
@@ -81,7 +81,7 @@ typedef struct TripodGait18DOFConf {
 
     /***** STOREABLE ****/
     /** stores the controller values to a given file. */
-    virtual bool store(FILE* f) const override;
+    virtual bool store(FILE* f)  const override;
     /** loads the controller values from a given file. */
     virtual bool explicit restore(FILE* f);
 

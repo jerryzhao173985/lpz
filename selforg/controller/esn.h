@@ -95,7 +95,7 @@ public:
 
       The input is ignored, the network must  be processed or learned before!
    */
-  virtual const matrix::Matrix response(const matrix::Matrix& _input) const override;
+  virtual const matrix::Matrix response(const matrix::Matrix& _input)  const override;
 
   /* calculates the input shift v to given output shift xsi via pseudo inversion.
 
@@ -104,17 +104,17 @@ public:
       The input is ignored, the network must  be processed or learned before!
    */
   virtual const matrix::Matrix inversion(const matrix::Matrix& input,
-                                         const matrix::Matrix& xsi) const override;
+                                         const matrix::Matrix& xsi)  const override;
 
   /// damps the weights and the biases by multiplying (1-damping)
   virtual void damp(double damping) override;
 
   /// returns the number of input neurons
-  virtual unsigned int getInputDim() const override;
+  virtual unsigned int getInputDim()  const override;
   /// returns the number of output neurons
-  virtual unsigned int getOutputDim() const override;
+  virtual unsigned int getOutputDim()  const override;
 
-  virtual bool store(FILE* f) const override;
+  virtual bool store(FILE* f)  const override;
 
   virtual bool restore(FILE* f) override;
 

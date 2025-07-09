@@ -76,7 +76,7 @@ public:
                           int numCtrlCreateBeforeInit = 1,
                           int numContextSensors = 0);
 
-  virtual ~OneControllerPerChannel() override;
+  virtual ~OneControllerPerChannel();
 
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
 

@@ -49,7 +49,7 @@ public:
   explicit SoxExpand(const SoxExpandConf& conf = getDefaultConf());
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
 
-  virtual ~SoxExpand() override;
+  virtual ~SoxExpand();
 
   static SoxExpandConf getDefaultConf() {
     SoxExpandConf c;

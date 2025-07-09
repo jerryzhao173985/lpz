@@ -350,7 +350,7 @@ namespace quickprof
 
         @param msg The string to print.
         */
-        inline void printError(const std::string& msg)const override;
+        inline void printError(const std::string& msg) const override;
 
         /**
         Returns a named profile block.
@@ -358,14 +358,14 @@ namespace quickprof
         @param name The name of the block to return.
         @return     The named ProfileBlock, or nullptr if it can't be found.
         */
-        inline ProfileBlock* getProfileBlock(const std::string& name)const override;
+        inline ProfileBlock* getProfileBlock(const std::string& name) const override;
 
         /**
         Returns the appropriate suffix string for the given time format.
 
         @return The suffix string.
         */
-        inline std::string getSuffixString(const TimeFormat& format)const override;
+        inline std::string getSuffixString(const TimeFormat& format) const override;
 
         /// Determines whether the profiler is enabled.
 

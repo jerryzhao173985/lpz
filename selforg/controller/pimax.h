@@ -64,7 +64,7 @@ public:
 
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
 
-  virtual ~PiMax() override;
+  virtual ~PiMax();
 
   static PiMaxConf getDefaultConf() {
     PiMaxConf conf;
@@ -125,7 +125,7 @@ public:
   virtual matrix::Matrix getLastSensorValues() override;
 
   /***** PARAMETRIZABLE ****/
-  virtual std::list<matrix::Matrix> getParameters() const override;
+  virtual std::list<matrix::Matrix> getParameters()  const override;
   virtual int setParameters(const std::list<matrix::Matrix>& params) override;
 
 protected:

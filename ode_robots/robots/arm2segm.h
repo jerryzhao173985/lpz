@@ -103,7 +103,7 @@ namespace lpzrobots{
     virtual int getSegmentsPosition(std::vector<Position> &poslist);
 
     /** the main object of the robot, which is used for position and speed tracking */
-    virtual const Primitive* getMainPrimitive() const override;
+    virtual const Primitive* getMainPrimitive()  const override;
 
   protected:
 

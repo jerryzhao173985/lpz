@@ -37,7 +37,7 @@ namespace lpzrobots {
     HeightField(const std::string& filename, float x_size, float y_size, float height);
     HeightField(osg::HeightField* heightfield, float x_size, float y_size);
 
-    virtual ~HeightField() override;
+    virtual ~HeightField();
     virtual void init(const OdeHandle& odeHandle, double mass,
                       const OsgHandle& osgHandle,
                       char mode = Primitive::Body | Primitive::Geom | Primitive::Draw);

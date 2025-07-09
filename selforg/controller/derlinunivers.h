@@ -67,7 +67,7 @@ struct DerLinUniversConf {
 class DerLinUnivers : public AbstractController, public Storeable {
 public:
   explicit DerLinUnivers(const DerLinUniversConf& conf = getDefaultConf());
-  virtual ~DerLinUnivers() override;
+  virtual ~DerLinUnivers();
 
   static DerLinUniversConf getDefaultConf() {
     DerLinUniversConf c;
@@ -139,13 +139,13 @@ protected:
 
 public:
   /********* INSPECTABLE INTERFACE ******/
-  virtual std::list<iparamkey> getInternalParamNames() const override;
-  virtual std::list<iparamval> getInternalParams() const override;
-  virtual std::list<ILayer> getStructuralLayers() const override;
-  virtual std::list<IConnection> getStructuralConnections() const override;
+  virtual std::list<iparamkey> getInternalParamNames()  const override;
+  virtual std::list<iparamval> getInternalParams()  const override;
+  virtual std::list<ILayer> getStructuralLayers()  const override;
+  virtual std::list<IConnection> getStructuralConnections()  const override;
 
   /********* STORABLE INTERFACE ******/
-  virtual bool store(FILE* f) const override;
+  virtual bool store(FILE* f)  const override;
   virtual bool restore(FILE* f) override;
 
 protected:

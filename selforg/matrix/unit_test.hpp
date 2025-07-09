@@ -139,7 +139,7 @@ unit_test_sub_SOURCES = sub_unit.cpp
 
 
 struct rusage ruse;
-extern int getrusage() const override;
+extern int getrusage()  const override;
 /** @brief Gets the current CPU time with microsecond accuracy.
  *  @returns microseconds since UNIX epoch
  */

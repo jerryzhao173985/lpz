@@ -45,7 +45,7 @@ namespace lpzrobots {
                       const std::string& name, const std::string& revision);
 
 
-      virtual ~SchlangeForce() override;
+      virtual ~SchlangeForce();
 
       /**
        *Reads the actual motor commands from an array,

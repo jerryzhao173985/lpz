@@ -104,7 +104,7 @@ namespace lpzrobots {
       return num;
     };
 
-    virtual int get(sensor* sensors, int length) const override;
+    virtual int get(sensor* sensors, int length)  const override;
 
 
   protected:

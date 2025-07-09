@@ -57,7 +57,7 @@ public:
 
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
 
-  virtual ~FFNNController() override;
+  virtual ~FFNNController();
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
   virtual int getSensorNumber() const override {

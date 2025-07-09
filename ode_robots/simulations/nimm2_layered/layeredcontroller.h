@@ -71,7 +71,7 @@ public:
   LayeredController(int _buffersize, bool _update_only_1=false);
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
 
-  virtual ~LayeredController() override;
+  virtual ~LayeredController();
 
   /// returns the name of the object (with version number)
   virtual paramkey getName() const {return name; }
@@ -92,15 +92,15 @@ public:
 
   /***** STOREABLE ****/
   /** stores the controller values to a given file. */
-  virtual bool store(FILE* f) const override;
+  virtual bool store(FILE* f)  const override;
   /** loads the controller values from a given file. */
   virtual bool explicit restore(FILE* f);
 
   // inspectable interface
-  virtual std::list<iparamkey> getInternalParamNames() const override;
-  virtual std::list<iparamval> getInternalParams() const override;
-  virtual std::list<ILayer> getStructuralLayers() const override;
-  virtual std::list<IConnection> getStructuralConnections() const override;
+  virtual std::list<iparamkey> getInternalParamNames()  const override;
+  virtual std::list<iparamval> getInternalParams()  const override;
+  virtual std::list<ILayer> getStructuralLayers()  const override;
+  virtual std::list<IConnection> getStructuralConnections()  const override;
 
 
   virtual paramval getParam(const paramkey& key, bool raverseChildren=true) const;

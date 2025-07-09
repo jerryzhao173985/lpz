@@ -122,7 +122,7 @@ namespace lpzrobots {
 
 
     /****** STOREABLE **********/
-    virtual bool store(FILE* f) const override;
+    virtual bool store(FILE* f)  const override;
     virtual bool restore(FILE* f) override;
 
 

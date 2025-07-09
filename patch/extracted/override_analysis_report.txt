@@ -1,0 +1,69 @@
+OVERRIDE KEYWORD ANALYSIS REPORT
+==================================================
+
+Statistics:
+------------------------------
+override_removed         :  24728
+override_added           :     93
+misplaced_override       :  22432
+override_after_semicolon :  18171
+override_in_expression   :   4261
+
+Total files with changes: 714
+
+
+Examples of Misplaced Override (after semicolon):
+--------------------------------------------------
+a/ecbrobots/QECBCommunicator.h:
+  -      virtual ~QECBCommunicator() override;
+
+a/ecbrobots/QECBCommunicator.h:
+  -      virtual void sl_messageReceived(struct _communicationMessage msg) override;
+
+a/ecbrobots/QECBCommunicator.h:
+  -      virtual void sl_quitServer() override;
+
+a/ecbrobots/ecb.h:
+  -      virtual ~ECB() override;
+
+a/ecbrobots/ecb.h:
+  -      virtual bool restore(FILE* f) override;
+
+
+
+Examples of Override in Expressions:
+--------------------------------------------------
+a/ecbrobots/ecb.h:
+  -      virtual bool store(FILE* f) const override;
+
+a/ecbrobots/ecbrobot.h:
+  -      virtual Position getPosition() const override;
+
+a/ecbrobots/ecbrobot.h:
+  -      virtual Position getSpeed() const override;
+
+a/ecbrobots/ecbrobot.h:
+  -      virtual Position getAngularSpeed() const override;
+
+a/ecbrobots/ecbrobot.h:
+  -      virtual matrix::Matrix getOrientation() const override;
+
+
+
+Examples of Correct Override Additions:
+--------------------------------------------------
+a/ode_robots/motors/angularmotor.h:
+  +    virtual int getSensorNumber() const override {
+
+a/ode_robots/motors/angularmotor.h:
+  +    virtual int getMotorNumber() const override { return getNumberOfAxes(); }
+
+a/ode_robots/motors/angularmotor.h:
+  +    virtual int getNumberOfAxes() const override { return 1; }
+
+a/ode_robots/motors/angularmotor.h:
+  +    virtual int getNumberOfAxes() const override { return 2; }
+
+a/ode_robots/motors/angularmotor.h:
+  +    virtual int getNumberOfAxes() const override { return 3; }
+

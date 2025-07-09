@@ -43,7 +43,7 @@ namespace lpzrobots {
 
     LPZViewer(const osgViewer::Viewer& viewer, const osg::CopyOp& copyop=osg::CopyOp::SHALLOW_COPY);
 
-    virtual ~LPZViewer() override;
+    virtual ~LPZViewer();
 
     ///overwritten to set cpu affinity back
     void setUpThreading() override;

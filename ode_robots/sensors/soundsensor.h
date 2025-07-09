@@ -60,11 +60,11 @@ namespace lpzrobots {
     /// default implementation is a linear decrease in intensity until it is 0 at maxDistance
     virtual float distanceDependency(const Sound& s, double distance);
 
-    virtual int getSensorNumber() const override;
+    virtual int getSensorNumber()  const override;
 
-    virtual std::list<sensor> getList() const override;
+    virtual std::list<sensor> getList()  const override;
 
-    virtual int get(sensor* sensors, int length) const override;
+    virtual int get(sensor* sensors, int length)  const override;
 
   private:
     short dim = 0; ///< the axis in which the sensor is selective around

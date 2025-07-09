@@ -68,7 +68,7 @@ public:
   InvertNChannelControllerHebbH(int _buffersize, bool _update_only_1=false, bool inactivate_hebb=false);
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
 
-  virtual ~InvertNChannelControllerHebbH() override;
+  virtual ~InvertNChannelControllerHebbH();
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
   virtual int getSensorNumber() const { return number_all_sensors; }
@@ -85,8 +85,8 @@ public:
 
 
   // inspectable interface
-  virtual std::list<iparamkey> getInternalParamNames() const override;
-  virtual std::list<iparamval> getInternalParams() const override;
+  virtual std::list<iparamkey> getInternalParamNames()  const override;
+  virtual std::list<iparamval> getInternalParams()  const override;
 
 
 

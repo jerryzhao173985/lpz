@@ -84,7 +84,7 @@ public:
   }
 
 
-    virtual ~NeuronWorld() override;
+    virtual ~NeuronWorld();
 
     virtual void update() override {}
 

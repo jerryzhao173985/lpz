@@ -61,7 +61,7 @@ public:
    */
   TrackableMeasure(const std::list<Trackable*>& trackableList,const char* measureName  ,ComplexMeasureMode cmode,const std::list<Position>& cornerPointList, short dimensions, int numberBins);
 
-  //virtual ~TrackableMeasure() override;
+  //virtual ~TrackableMeasure();
 
   /**
    * defined by AbstractMeasure. This method is called from StatisticTools

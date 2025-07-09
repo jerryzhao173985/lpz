@@ -252,8 +252,8 @@ namespace lpzrobots {
 
     virtual int getSensorsIntern(double* sensors, int sensornumber) override;
     virtual void setMotorsIntern(const double* motors, int motornumber) override;
-    virtual int getSensorNumberIntern() const override;
-    virtual int getMotorNumberIntern() const override;
+    virtual int getSensorNumberIntern()  const override;
+    virtual int getMotorNumberIntern()  const override;
 
 
     /******** CONFIGURABLE ***********/

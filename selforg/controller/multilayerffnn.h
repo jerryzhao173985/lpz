@@ -73,7 +73,7 @@ public:
   \f$ G'\f$ is a diagonal matrix with \f$ G'_ii = g'_i \f$ as values on the diagonal.
   ATTENTION: input is ignored! use process before!
   */
-  virtual const matrix::Matrix response(const matrix::Matrix& input) const override;
+  virtual const matrix::Matrix response(const matrix::Matrix& input)  const override;
 
   /** calculates the input shift v to a given output shift xsi via pseudo inversion.
 
@@ -83,7 +83,7 @@ public:
       ATTENTION: input is ignored! use process before!
    */
   virtual const matrix::Matrix inversion(const matrix::Matrix& input,
-                                         const matrix::Matrix& xsi) const override;
+                                         const matrix::Matrix& xsi)  const override;
 
   /// returns the number of input neurons
   virtual unsigned int getInputDim() const override {
@@ -146,7 +146,7 @@ public:
 
   /**************  STOREABLE **********************************/
   /// stores the layer binary into file stream
-  bool store(FILE* f) const override;
+  bool store(FILE* f)  const override;
   /// restores the layer binary from file stream
   bool restore(FILE* f) override;
 
@@ -154,10 +154,10 @@ public:
   bool write(FILE* f) const;
 
   /************** Inspectable **********************************/
-  virtual std::list<iparamkey> getInternalParamNames() const override;
-  virtual std::list<iparamval> getInternalParams() const override;
-  virtual std::list<ILayer> getStructuralLayers() const override;
-  virtual std::list<IConnection> getStructuralConnections() const override;
+  virtual std::list<iparamkey> getInternalParamNames()  const override;
+  virtual std::list<iparamval> getInternalParams()  const override;
+  virtual std::list<ILayer> getStructuralLayers()  const override;
+  virtual std::list<IConnection> getStructuralConnections()  const override;
 
   virtual void setSomeInternalParams(bool someInternalParams) {
     assert(!initialised);

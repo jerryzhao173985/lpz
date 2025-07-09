@@ -223,13 +223,13 @@ protected:
 class Plane : public Primitive {
 public:
   Plane();
-  virtual ~Plane() override;
+  virtual ~Plane();
   virtual void init(const OdeHandle& odeHandle, double mass,
                     const OsgHandle& osgHandle,
                     char mode = Body | Geom | Draw) override;
 
   virtual void update() override;
-  virtual const OSGPrimitive* getOSGPrimitive() const override;
+  virtual const OSGPrimitive* getOSGPrimitive()  const override;
 
   virtual void setMass(double mass, bool density = false) override;
 
@@ -245,14 +245,14 @@ public:
   Box(float lengthX, float lengthY, float lengthZ);
   explicit Box(const osg::Vec3& dim);
 
-  virtual ~Box() override;
+  virtual ~Box();
 
   virtual void init(const OdeHandle& odeHandle, double mass,
                     const OsgHandle& osgHandle,
                     char mode = Body | Geom | Draw) override;
 
   virtual void update() override;
-  virtual const OSGPrimitive* getOSGPrimitive() const override;
+  virtual const OSGPrimitive* getOSGPrimitive()  const override;
 
   virtual void setMass(double mass, bool density = false) override;
 protected:
@@ -264,14 +264,14 @@ protected:
 class Sphere : public Primitive {
 public:
   explicit Sphere(float radius);
-  virtual ~Sphere() override;
+  virtual ~Sphere();
 
   virtual void init(const OdeHandle& odeHandle, double mass,
                     const OsgHandle& osgHandle,
                     char mode = Body | Geom | Draw) override;
 
   virtual void update() override;
-  virtual const OSGPrimitive* getOSGPrimitive() const override;
+  virtual const OSGPrimitive* getOSGPrimitive()  const override;
 
   virtual void setMass(double mass, bool density = false) override;
 
@@ -283,13 +283,13 @@ protected:
 class Capsule : public Primitive {
 public:
   Capsule(float radius, float height);
-  virtual ~Capsule() override;
+  virtual ~Capsule();
   virtual void init(const OdeHandle& odeHandle, double mass,
                     const OsgHandle& osgHandle,
                     char mode = Body | Geom | Draw) override;
 
   virtual void update() override;
-  virtual const OSGPrimitive* getOSGPrimitive() const override;
+  virtual const OSGPrimitive* getOSGPrimitive()  const override;
 
   virtual void setMass(double mass, bool density = false) override;
 
@@ -301,13 +301,13 @@ protected:
 class Cylinder : public Primitive {
 public:
   Cylinder(float radius, float height);
-  virtual ~Cylinder() override;
+  virtual ~Cylinder();
   virtual void init(const OdeHandle& odeHandle, double mass,
                     const OsgHandle& osgHandle,
                     char mode = Body | Geom | Draw) override;
 
   virtual void update() override;
-  virtual const OSGPrimitive* getOSGPrimitive() const override;
+  virtual const OSGPrimitive* getOSGPrimitive()  const override;
 
   virtual void setMass(double mass, bool density = false) override;
 protected:
@@ -325,14 +325,14 @@ public:
      @param thickness if thickness == 0 then a line is used and not a box
    */
   Ray(double range, float thickness, float length);
-  virtual ~Ray() override;
+  virtual ~Ray();
   virtual void init(const OdeHandle& odeHandle, double mass,
       const OsgHandle& osgHandle,
       char mode = Geom | Draw) override;
 
   void setLength(float len);
   virtual void update() override;
-  virtual const OSGPrimitive* getOSGPrimitive() const override;
+  virtual const OSGPrimitive* getOSGPrimitive()  const override;
 
   virtual void setMass(double mass, bool density = false) override;
 protected:
@@ -349,12 +349,12 @@ protected:
 class Mesh : public Primitive {
 public:
   Mesh(const std::string& filename,float scale);
-  virtual ~Mesh() override;
+  virtual ~Mesh();
   virtual void init(const OdeHandle& odeHandle, double mass,
                     const OsgHandle& osgHandle,
                     char mode = Body | Geom | Draw) override;
   virtual void update() override;
-  virtual const OSGPrimitive* getOSGPrimitive() const override;
+  virtual const OSGPrimitive* getOSGPrimitive()  const override;
   virtual float getRadius() const;
 
   virtual void setMass(double mass, bool density = false) override;
@@ -392,7 +392,7 @@ public:
   Transform(Primitive* parent, Primitive* child, const Pose& pose, bool deleteChild = true);
 
   /// destructor deletes child object // it should be virtual by yuichi
-  virtual ~Transform() override;
+  virtual ~Transform();
 
   /** initialised the transform object. This automatically
       initialises the child geom.
@@ -404,7 +404,7 @@ public:
                     char mode = Body | Geom | Draw) override;
 
   virtual void update() override;
-  virtual const OSGPrimitive* getOSGPrimitive() const override;
+  virtual const OSGPrimitive* getOSGPrimitive()  const override;
 
   virtual void setMass(double mass, bool density = false) override;
 

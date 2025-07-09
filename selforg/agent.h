@@ -51,7 +51,7 @@ public:
 
   /** destructor
    */
-  virtual ~Agent() override;
+  virtual ~Agent();
 
   // Bring base class methods into scope to avoid hiding
   using WiredController::init;

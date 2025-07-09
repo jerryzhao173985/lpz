@@ -117,7 +117,7 @@ public:
       and view.
   */
 //   virtual void setCameraHandling(void (*handling)());
-//  virtual void setCameraHandling() const override;
+//  virtual void setCameraHandling()  const override;
 
 
 

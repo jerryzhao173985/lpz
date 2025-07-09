@@ -37,7 +37,7 @@ public:
    */
   explicit ROSController(const std::string& name);
 
-  virtual ~ROSController() override;
+  virtual ~ROSController();
 
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
 

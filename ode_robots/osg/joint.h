@@ -117,10 +117,10 @@ namespace lpzrobots {
     virtual void addForce1(double force)  = 0;
 
     virtual int getNumberAxes() const override { return 1;};
-    virtual std::list<double> getPositions() const override;
-    virtual std::list<double> getPositionRates() const override;
-    virtual int getPositions(double* sensorarray) const override;
-    virtual int getPositionRates(double* sensorarray) const override;
+    virtual std::list<double> getPositions()  const override;
+    virtual std::list<double> getPositionRates()  const override;
+    virtual int getPositions(double* sensorarray)  const override;
+    virtual int getPositionRates(double* sensorarray)  const override;
   protected:
     Axis axis1;
   };
@@ -141,10 +141,10 @@ namespace lpzrobots {
     }
 
     virtual int getNumberAxes() const override { return 2;};
-    virtual std::list<double> getPositions() const override;
-    virtual std::list<double> getPositionRates() const override;
-    virtual int getPositions(double* sensorarray) const override;
-    virtual int getPositionRates(double* sensorarray) const override;
+    virtual std::list<double> getPositions()  const override;
+    virtual std::list<double> getPositionRates()  const override;
+    virtual int getPositions(double* sensorarray)  const override;
+    virtual int getPositionRates(double* sensorarray)  const override;
 
   protected:
     Axis  axis2;
@@ -160,7 +160,7 @@ namespace lpzrobots {
     FixedJoint(Primitive* part1, Primitive* part2,
                const osg::Vec3& anchor = osg::Vec3(0,0,0));
 
-    virtual ~FixedJoint() override;
+    virtual ~FixedJoint();
 
     /** initialises (and creates) the joint.
     */
@@ -170,7 +170,7 @@ namespace lpzrobots {
 
     virtual void update() override;
     virtual void setParam(int parameter, double value) override;
-    virtual double getParam(int parameter) const override;
+    virtual double getParam(int parameter)  const override;
 
     virtual int getNumberAxes() const override { return 0; }
   protected:
@@ -185,7 +185,7 @@ namespace lpzrobots {
     HingeJoint(Primitive* part1, Primitive* part2, const osg::Vec3& anchor,
                 const Axis& axis1);
 
-    virtual ~HingeJoint() override;
+    virtual ~HingeJoint();
 
     /** initialises (and creates) the joint. If visual is true then the axis of the joints is
         also drawn as a slim cylinder. visualSize is the length of the cylinder.
@@ -197,10 +197,10 @@ namespace lpzrobots {
     virtual void update() override;
 
     virtual void addForce1(double t) override;
-    virtual double getPosition1() const override;
-    virtual double getPosition1Rate() const override;
+    virtual double getPosition1()  const override;
+    virtual double getPosition1Rate()  const override;
     virtual void setParam(int parameter, double value) override;
-    virtual double getParam(int parameter) const override;
+    virtual double getParam(int parameter)  const override;
 
   protected:
     OSGPrimitive* visual = nullptr;
@@ -213,7 +213,7 @@ namespace lpzrobots {
     Hinge2Joint(Primitive* part1, Primitive* part2, const osg::Vec3& anchor,
                 const Axis& axis1, const Axis& axis2);
 
-    virtual ~Hinge2Joint() override;
+    virtual ~Hinge2Joint();
 
     /** initialises (and creates) the joint. If visual is true then axis2 of the joints is
         also drawn as a slim cylinder. visualSize is the length of the cylinder.
@@ -227,12 +227,12 @@ namespace lpzrobots {
     /// adds torques to axis 1 and 2
     virtual void addForce1(double t1) override;
     virtual void addForce2(double t2) override;
-    virtual double getPosition1() const override;
-    virtual double getPosition2() const override; /// This is not supported by the joint!
-    virtual double getPosition1Rate() const override;
-    virtual double getPosition2Rate() const override;
+    virtual double getPosition1()  const override;
+    virtual double getPosition2()  const override; /// This is not supported by the joint!
+    virtual double getPosition1Rate()  const override;
+    virtual double getPosition2Rate()  const override;
     virtual void setParam(int parameter, double value) override;
-    virtual double getParam(int parameter) const override;
+    virtual double getParam(int parameter)  const override;
 
   protected:
     OSGPrimitive* visual = nullptr;
@@ -245,7 +245,7 @@ namespace lpzrobots {
     UniversalJoint(Primitive* part1, Primitive* part2, const osg::Vec3& anchor,
                 const Axis& axis1, const Axis& axis2);
 
-    virtual ~UniversalJoint() override;
+    virtual ~UniversalJoint();
 
     /** initialises (and creates) the joint. If visual is true then axix1 and axis2 of the joints is
         also drawn as a slim cylinder. visualSize is the length of the cylinder.
@@ -259,13 +259,13 @@ namespace lpzrobots {
     /// adds torques to axis 1 and 2
     virtual void addForce1(double t1) override;
     virtual void addForce2(double t2) override;
-    virtual double getPosition1() const override;
-    virtual double getPosition2() const override;
-    virtual double getPosition1Rate() const override;
-    virtual double getPosition2Rate() const override;
+    virtual double getPosition1()  const override;
+    virtual double getPosition2()  const override;
+    virtual double getPosition1Rate()  const override;
+    virtual double getPosition2Rate()  const override;
 
     virtual void setParam(int parameter, double value) override;
-    virtual double getParam(int parameter) const override;
+    virtual double getParam(int parameter)  const override;
 
   protected:
     OSGPrimitive* visual1 = nullptr;
@@ -278,7 +278,7 @@ namespace lpzrobots {
   public:
     BallJoint(Primitive* part1, Primitive* part2, const osg::Vec3& anchor);
 
-    virtual ~BallJoint() override;
+    virtual ~BallJoint();
 
     /** initialises (and creates) the joint.
         If visual is true then ball is drawn as a sphere with radius of visualSize.
@@ -292,7 +292,7 @@ namespace lpzrobots {
     virtual int getNumberAxes() const override { return 0; }
     // Ball and Socket has no parameter
     virtual void setParam(int parameter, double value) override;
-    virtual double getParam(int parameter) const override;
+    virtual double getParam(int parameter)  const override;
 
   protected:
     OSGPrimitive* visual;
@@ -306,7 +306,7 @@ namespace lpzrobots {
     SliderJoint(Primitive* part1, Primitive* part2, const osg::Vec3& anchor,
                 const Axis& axis1);
 
-    virtual ~SliderJoint() override;
+    virtual ~SliderJoint();
 
     /** initialises (and creates) the joint. If visual is true then the axis of the joints is
         also drawn as a slim cylinder. VisualSize is added to the lenght of the slider and is used
@@ -319,10 +319,10 @@ namespace lpzrobots {
     virtual void update() override;
 
     virtual void addForce1(double t) override;
-    virtual double getPosition1() const override;
-    virtual double getPosition1Rate() const override;
+    virtual double getPosition1()  const override;
+    virtual double getPosition1Rate()  const override;
     virtual void setParam(int parameter, double value) override;
-    virtual double getParam(int parameter) const override;
+    virtual double getParam(int parameter)  const override;
 
   protected:
     OSGPrimitive* visual = nullptr;
@@ -338,7 +338,7 @@ namespace lpzrobots {
   //   /// @param relative: how to anchor the axes: 0: global, 1: first 2: second body
   //   LMotorJoint(Primitive* part1, Primitive* part2, int relative, const Axis& axis1, const Axis& axis2);
 
-  //   virtual ~LMotorJoint() override;
+  //   virtual ~LMotorJoint();
 
   //   /** initialises (and creates) the joint. If visual is true then the axes of the joints are
   //       also drawn as slim cylinders.
@@ -351,10 +351,10 @@ namespace lpzrobots {
 
   //   virtual void addForce1(double t);
   //   virtual void addForce2(double t);
-  //   virtual double getPosition1() const override;
-  //   virtual double getPosition2() const override;
-  //   virtual double getPosition1Rate() const override;
-  //   virtual double getPosition2Rate() const override;
+  //   virtual double getPosition1()  const override;
+  //   virtual double getPosition2()  const override;
+  //   virtual double getPosition1Rate()  const override;
+  //   virtual double getPosition2Rate()  const override;
 
   //   virtual void setParam(int parameter, double value);
   //   virtual double getParam(int parameter) const;

@@ -89,7 +89,7 @@ namespace lpzrobots {
        */
       ECBAgent(const std::list<PlotOption>& plotOptions, double noisefactor = 1, const std::string& name = "ECBAgent", const std::string& revision = "$ID$");
 
-      virtual ~ECBAgent() override;
+      virtual ~ECBAgent();
 
       /**
        * Returns a pointer to the robot.

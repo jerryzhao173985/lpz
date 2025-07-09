@@ -99,7 +99,7 @@ public:
   DerLinInvertMPI(const DerLinInvertMPIConf& conf = getDefaultConf());
   virtual void init(int sensornumber, int motornumber, RandGen* randg);
 
-  virtual ~DerLinInvertMPI() override;
+  virtual ~DerLinInvertMPI();
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
   virtual int getSensorNumber() const { return number_sensors; }
@@ -117,15 +117,15 @@ public:
 
   /**************  STOREABLE **********************************/
   /** stores the controller values to a given file. */
-  virtual bool store(FILE* f) const override;
+  virtual bool store(FILE* f)  const override;
   /** loads the controller values from a given file. */
   virtual bool explicit restore(FILE* f);
 
   /************** INSPECTABLE ********************************/
-  virtual iparamkeylist getInternalParamNames() const override;
-  virtual iparamvallist getInternalParams() const override;
-  virtual ilayerlist getStructuralLayers() const override;
-  virtual iconnectionlist getStructuralConnections() const override;
+  virtual iparamkeylist getInternalParamNames()  const override;
+  virtual iparamvallist getInternalParams()  const override;
+  virtual ilayerlist getStructuralLayers()  const override;
+  virtual iconnectionlist getStructuralConnections()  const override;
 
   /**** TEACHING ****/
   /** The given motor teaching signal is used for this timestep.

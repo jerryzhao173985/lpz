@@ -59,7 +59,7 @@
 public:
   Layer2_INCC(int _buffersize, bool _update_only_1=false);
 
-  //  virtual ~InvertNChannelControllerHebbH() override;
+  //  virtual ~InvertNChannelControllerHebbH();
 
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
 

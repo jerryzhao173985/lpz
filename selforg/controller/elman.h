@@ -121,7 +121,7 @@ public:
 
   /**************  STOREABLE **********************************/
   /// stores the layer binary into file stream
-  bool store(FILE* f) const override;
+  bool store(FILE* f)  const override;
   /// restores the layer binary from file stream
   bool restore(FILE* f) override;
 
@@ -131,10 +131,10 @@ public:
   }
 
   /************** Inspectable INTERFACE ************************/
-  virtual std::list<iparamkey> getInternalParamNames() const override;
-  virtual std::list<iparamval> getInternalParams() const override;
-  virtual std::list<ILayer> getStructuralLayers() const override;
-  virtual std::list<IConnection> getStructuralConnections() const override;
+  virtual std::list<iparamkey> getInternalParamNames()  const override;
+  virtual std::list<iparamval> getInternalParams()  const override;
+  virtual std::list<ILayer> getStructuralLayers()  const override;
+  virtual std::list<IConnection> getStructuralConnections()  const override;
 
 protected:
   matrix::Matrix elmanWeights;

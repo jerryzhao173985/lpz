@@ -75,7 +75,7 @@ public:
   InvertNChannelController_NoBias(int _buffersize, bool _update_only_1=false);
   virtual void init(int sensornumber, int motornumber);
 
-  virtual ~InvertNChannelController_NoBias() override;
+  virtual ~InvertNChannelController_NoBias();
 
   /// returns the name of the object (with version number)
   virtual paramkey getName() const {return name; }
@@ -96,15 +96,15 @@ public:
 
   /***** STOREABLE ****/
   /** stores the controller values to a given file. */
-  virtual bool store(FILE* f) const override;
+  virtual bool store(FILE* f)  const override;
   /** loads the controller values from a given file. */
   virtual bool explicit restore(FILE* f);
 
   // inspectable interface
-  virtual std::list<iparamkey> getInternalParamNames() const override;
-  virtual std::list<iparamval> getInternalParams() const override;
-  virtual std::list<ILayer> getStructuralLayers() const override;
-  virtual std::list<IConnection> getStructuralConnections() const override;
+  virtual std::list<iparamkey> getInternalParamNames()  const override;
+  virtual std::list<iparamval> getInternalParams()  const override;
+  virtual std::list<ILayer> getStructuralLayers()  const override;
+  virtual std::list<IConnection> getStructuralConnections()  const override;
 
 
 protected:

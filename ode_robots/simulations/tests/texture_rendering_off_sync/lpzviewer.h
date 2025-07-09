@@ -16,7 +16,7 @@ public:
 
   LPZViewer(const osgViewer::Viewer& viewer, const osg::CopyOp& copyop=osg::CopyOp::SHALLOW_COPY);
 
-  virtual ~LPZViewer() override;
+  virtual ~LPZViewer();
 
   /** call this function to render the cameras off screen.
       If no off screen nodes are supplied than nothing is done      

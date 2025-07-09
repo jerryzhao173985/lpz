@@ -36,7 +36,7 @@ public:
   explicit InvertMotorSpace(int buffersize, double cInit = 0.1, bool someInternalParams = true);
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override;
 
-  virtual ~InvertMotorSpace() override;
+  virtual ~InvertMotorSpace();
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
   virtual int getSensorNumber() const override {
@@ -64,8 +64,8 @@ public:
   virtual bool restore(FILE* f);
 
   // inspectable interface
-  virtual std::list<ILayer> getStructuralLayers() const override;
-  virtual std::list<IConnection> getStructuralConnections() const override;
+  virtual std::list<ILayer> getStructuralLayers()  const override;
+  virtual std::list<IConnection> getStructuralConnections()  const override;
 
 protected:
   unsigned short number_sensors = 0;

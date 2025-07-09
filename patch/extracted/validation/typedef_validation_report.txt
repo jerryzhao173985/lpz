@@ -1,0 +1,445 @@
+TYPEDEF TO USING CONVERSION VALIDATION REPORT
+==================================================
+
+Total validations: 44
+Issues found: 412
+
+ISSUES:
+------------------------------
+✗ a/CLAUDE.md:7 - No corresponding using declaration found
+  Old: **PROJECT STATE**: 98% modernized - All components build successfully with C++17. Both ga_tools and configurator have been fixed and now compile without errors. Minor modernization tasks remain (typedef migrations).
+✗ a/CLAUDE.md:133 - No corresponding using declaration found
+  Old: 6. **typedef → using migration** - Partial: 20 conversions completed, but 184 files still contain typedef declarations
+✗ a/CLAUDE.md:141 - No corresponding using declaration found
+  Old: 1. Complete typedef → using migration (184 files remaining)
+✗ a/CLAUDE.md:369 - No corresponding using declaration found
+  Old: // Use 'using' instead of 'typedef'
+✗ a/CLAUDE.md:370 - No corresponding using declaration found
+  Old: using Matrix = matrix::Matrix;  // NOT: typedef matrix::Matrix Matrix;
+✗ a/CLAUDE.md:542 - No corresponding using declaration found
+  Old: - [ ] Replace typedef with using
+✗ a/docs/CODEBASE_ISSUES_TRACKER.md:8 - No corresponding using declaration found
+  Old: - **Initial count**: 111 files with typedef declarations
+✗ a/docs/CODEBASE_ISSUES_TRACKER.md:17 - No corresponding using declaration found
+  Old: typedef unsigned char uint8;
+✗ a/docs/CODEBASE_ISSUES_TRACKER.md:18 - No corresponding using declaration found
+  Old: typedef std::string CString;
+✗ a/docs/CODEBASE_ISSUES_TRACKER.md:19 - No corresponding using declaration found
+  Old: typedef double sensor;
+✗ a/docs/CODEBASE_ISSUES_TRACKER.md:30 - No corresponding using declaration found
+  Old: typedef std::vector<Configurable*> ConfigList;
+✗ a/docs/CODEBASE_ISSUES_TRACKER.md:31 - No corresponding using declaration found
+  Old: typedef std::list<PlotOption> PlotOptionList;
+✗ a/docs/CODEBASE_ISSUES_TRACKER.md:41 - No corresponding using declaration found
+  Old: typedef bool (*commandfunc_t)(const GlobalData& globalData, char *, char *);
+✗ a/docs/CODEBASE_ISSUES_TRACKER.md:42 - No corresponding using declaration found
+  Old: typedef int (*CollisionCallback)(dSurfaceParameters& params, ...);
+✗ a/docs/CODEBASE_ISSUES_TRACKER.md:52 - No corresponding using declaration found
+  Old: typedef struct {
+✗ a/docs/CODEBASE_ISSUES_TRACKER.md:69 - No corresponding using declaration found
+  Old: typedef Configurable::configurableList ConfigList;
+✗ a/docs/CODEBASE_ISSUES_TRACKER.md:78 - No corresponding using declaration found
+  Old: typedef ECBAgentList AgentList;  // for compatibility
+✗ a/docs/CODEBASE_ISSUES_TRACKER.md:87 - No corresponding using declaration found
+  Old: typedef struct Bumper{
+✗ a/docs/CODEBASE_ISSUES_TRACKER.md:104 - No corresponding using declaration found
+  Old: typedef int HeightFieldVertexCoords[2];
+✗ a/docs/CODEBASE_ISSUES_TRACKER.md:113 - No corresponding using declaration found
+  Old: - Enum typedefs (though we saw commented `/* typedef */ enum`)
+✗ a/docs/CODEBASE_ISSUES_TRACKER.md:232 - No corresponding using declaration found
+  Old: 3. Remaining typedef migrations
+✗ a/docs/CODEBASE_ISSUES_TRACKER.md:264 - No corresponding using declaration found
+  Old: - ✅ 20 files typedef migration
+✗ a/docs/CODEBASE_ISSUES_TRACKER.md:280 - No corresponding using declaration found
+  Old: 1. Each typedef migration should check for related issues
+✗ a/docs/archive/algorithms/NOVEL_CONTROLLERS_BUILD_FIXES.md:36 - No corresponding using declaration found
+  Old: - `-Wno-non-c-typedef-for-linkage`
+✗ a/docs/archive/journey/MODERNIZATION_PROGRESS.md:43 - No corresponding using declaration found
+  Old: - typedef → using conversions
+✗ a/docs/archive/logs/01_PROJECT_OVERVIEW/LPZROBOTS_COMPLETE_JOURNEY.md:20 - No corresponding using declaration found
+  Old: - `using` instead of typedef
+✗ a/docs/archive/logs/07_TECHNICAL_REFERENCE/cpp_modernization_patterns.md:40 - No corresponding using declaration found
+  Old: ### Pattern: typedef to using
+✗ a/docs/archive/logs/07_TECHNICAL_REFERENCE/cpp_modernization_patterns.md:43 - No corresponding using declaration found
+  Old: typedef matrix::Matrix Matrix;
+✗ a/docs/archive/logs/07_TECHNICAL_REFERENCE/cpp_modernization_patterns.md:44 - No corresponding using declaration found
+  Old: typedef std::vector<OdeRobot*> RobotList;
+✗ a/docs/archive/logs/07_TECHNICAL_REFERENCE/cpp_modernization_patterns.md:45 - No corresponding using declaration found
+  Old: typedef void (*CallbackFunction)(void*, GlobalData&);
+✗ a/docs/archive/logs/07_TECHNICAL_REFERENCE/cpp_modernization_patterns.md:246 - No corresponding using declaration found
+  Old: # Find typedef usage
+✗ a/docs/archive/logs/07_TECHNICAL_REFERENCE/cpp_modernization_patterns.md:247 - No corresponding using declaration found
+  Old: grep -r "^\s*typedef\s" --include="*.h" .
+✗ a/docs/archive/logs/archived/SELFORG_COMPREHENSIVE_ANALYSIS.md:23 - No corresponding using declaration found
+  Old: - typedef → using declarations
+✗ a/docs/archive/logs/archived/SELFORG_FINAL_REVIEW_COMPLETE.md:26 - No corresponding using declaration found
+  Old: - **typedef → using**: Updated all occurrences
+✗ a/docs/archive/logs/archived/SELFORG_FINAL_REVIEW_COMPLETE.md:29 - No corresponding using declaration found
+  Old: typedef double sensor;
+✗ a/docs/archive/logs/archived/SELFORG_FINAL_REVIEW_COMPLETE.md:30 - No corresponding using declaration found
+  Old: typedef std::vector<Configurable*> ConfigList;
+✗ a/docs/archive/logs/archived/SELFORG_MODERNIZATION_REVIEW.md:24 - No corresponding using declaration found
+  Old: - Modernized typedefs to using declarations:
+✗ a/docs/archive/logs/archived/SELFORG_MODERNIZATION_REVIEW.md:33 - No corresponding using declaration found
+  Old: - Modernized typedef to using declaration:
+✗ a/docs/archive/logs/archived/SELFORG_MODERNIZATION_REVIEW.md:59 - No corresponding using declaration found
+  Old: - `using` instead of `typedef`
+✗ a/docs/archive/migration/CPP_MODERNIZATION_GUIDE.md:16 - No corresponding using declaration found
+  Old: - **Old-style typedefs**: 476
+✗ a/docs/archive/migration/CPP_MODERNIZATION_GUIDE.md:34 - No corresponding using declaration found
+  Old: ### 2. Simple typedef to using (SAFE)
+✗ a/docs/archive/migration/CPP_MODERNIZATION_GUIDE.md:35 - No corresponding using declaration found
+  Old: Convert simple typedefs:
+✗ a/docs/archive/migration/CPP_MODERNIZATION_GUIDE.md:38 - No corresponding using declaration found
+  Old: typedef double paramval;
+✗ a/docs/archive/migration/CPP_MODERNIZATION_GUIDE.md:39 - No corresponding using declaration found
+  Old: typedef std::string paramkey;
+✗ a/docs/archive/migration/CPP_MODERNIZATION_GUIDE.md:46 - No corresponding using declaration found
+  Old: **Note**: Function pointer typedefs require manual review
+✗ a/docs/archive/migration/CPP_MODERNIZATION_GUIDE.md:158 - No corresponding using declaration found
+  Old: 2. Simple typedef → using
+✗ a/docs/archive/migration/MIGRATION_GUIDE.md:18 - No corresponding using declaration found
+  Old: - `typedef` → `using` declarations throughout the codebase
+✗ a/docs/archive/migration/MIGRATION_GUIDE.md:84 - No corresponding using declaration found
+  Old: - Some internal typedefs converted to using declarations (transparent to users)
+✗ a/docs/archive/migration_examples/README.md:26 - No corresponding using declaration found
+  Old: - `typedef` → `using` declarations
+✗ a/docs/components/ecbrobots/MODERNIZATION_ASSESSMENT.md:37 - No corresponding using declaration found
+  Old: - Replace typedef with using
+✗ a/docs/components/selforg/MODERNIZATION_COMPLETE_SUMMARY.md:42 - No corresponding using declaration found
+  Old: - **using vs typedef**: Modernized type aliases
+✗ a/docs/components/selforg/MODERNIZATION_SUMMARY.md:21 - No corresponding using declaration found
+  Old: - Converted some typedef to using declarations
+✗ a/docs/logs/CRITICAL_CHANGES_2025-07-06.md:46 - No corresponding using declaration found
+  Old: - **SOURCE_OF_TRUTH.md**: Added typedef remaining count (184 files)
+✗ a/docs/logs/CRITICAL_CHANGES_2025-07-06.md:71 - No corresponding using declaration found
+  Old: 1. **184 files** still contain typedef (not 20 as documented)
+✗ a/docs/migration/C++17_MODERNIZATION_REPORT.md:31 - No corresponding using declaration found
+  Old: // Changed from typedef to using
+✗ a/docs/migration/C++17_MODERNIZATION_REPORT.md:141 - No corresponding using declaration found
+  Old: typedef void (*CallbackFunction)(void*, const paramkey&);
+✗ a/docs/migration/CPP_MODERNIZATION_SUMMARY.md:17 - No corresponding using declaration found
+  Old: - **476** typedef declarations (should use `using`)
+✗ a/docs/migration/CPP_MODERNIZATION_SUMMARY.md:34 - No corresponding using declaration found
+  Old: 3. Basic typedef → using conversions
+✗ a/docs/migration/MIGRATION_SUMMARY.md:15 - No corresponding using declaration found
+  Old: - **Using declarations**: Replaced typedef with modern using syntax
+✗ a/docs/migration/MODERNIZATION_COMPLETE.md:41 - No corresponding using declaration found
+  Old: - **Modern Syntax**: typedef → using, NULL → nullptr
+✗ a/docs/migration/migration-history.md:18 - No corresponding using declaration found
+  Old: - 476 typedef declarations needing `using` conversion
+✗ a/docs/migration/migration-history.md:144 - No corresponding using declaration found
+  Old: - Complete typedef → using migration (184 files remaining)
+✗ a/ecbrobots/GUIs/SphericalRobotGUI/src/SRMotSpeed2TiltWidget.h:28 - No corresponding using declaration found
+  Old: typedef struct {
+✗ a/ecbrobots/GUIs/SphericalRobotGUI/src/SRMotorValueWidget.h:30 - No corresponding using declaration found
+  Old: typedef struct {
+✗ a/ecbrobots/QGlobalData.h:102 - Expected: using ECBAgentList = std::vector<ECBAgent*>; //!< list of ECBAgents, Got: using ConfigList = Configurable::configurableList; //!< list of Configurables
+  Old: typedef std::vector<ECBAgent*> ECBAgentList; //!< list of ECBAgents
+  New: using ConfigList = Configurable::configurableList; //!< list of Configurables
+✗ a/ecbrobots/QGlobalData.h:103 - Expected: using AgentList = ECBAgentList; //!< for compatibility reason: List of (ECB)Agents, Got: using ConfigList = Configurable::configurableList; //!< list of Configurables
+  Old: typedef ECBAgentList AgentList; //!< for compatibility reason: List of (ECB)Agents
+  New: using ConfigList = Configurable::configurableList; //!< list of Configurables
+✗ a/ecbrobots/lupae/src/types.h:13 - Expected: using QWord = unsigned short;, Got: using QByte = unsigned char;
+  Old: typedef unsigned short QWord;
+  New: using QByte = unsigned char;
+✗ a/ecbrobots/lupae/src/types.h:14 - Expected: using uint8_t = QByte;, Got: using QByte = unsigned char;
+  Old: typedef QByte uint8_t;
+  New: using QByte = unsigned char;
+✗ a/fix_uninit_members.py:37 - No corresponding using declaration found
+  Old: skip_keywords = ['static', 'const static', 'typedef', 'using', 'friend', 'public:', 'private:', 'protected:', 'virtual', 'explicit', 'operator']
+✗ a/migration_examples/README.md:26 - No corresponding using declaration found
+  Old: - `typedef` → `using` declarations
+✗ a/ode_robots/motors/oneaxisservo.h:156 - Expected: using HingeServo = OneAxisServo;, Got: using SliderServo = OneAxisServo;
+  Old: typedef OneAxisServo HingeServo;
+  New: using SliderServo = OneAxisServo;
+✗ a/ode_robots/motors/oneaxisservo.h:157 - Expected: using Hinge2Servo = OneAxisServo;, Got: using SliderServo = OneAxisServo;
+  Old: typedef OneAxisServo Hinge2Servo;
+  New: using SliderServo = OneAxisServo;
+✗ a/ode_robots/robots/ashigaru.h:352 - No corresponding using declaration found
+  Old: typedef std::map<LegPos, HingeJoint*> HingeJointMap;
+✗ a/ode_robots/robots/ashigaru.h:353 - No corresponding using declaration found
+  Old: typedef std::map<LegPos, Leg> LegMap;
+✗ a/ode_robots/robots/ashigaru.h:354 - Expected: using LegContactMap = std::map<LegPos, ContactSensor*>;, Got: using HingeJointMap = std::map<LegPos, HingeJoint*>;
+  Old: typedef std::map<LegPos, ContactSensor*> LegContactMap;
+  New: using HingeJointMap = std::map<LegPos, HingeJoint*>;
+✗ a/ode_robots/robots/ashigaru.h:355 - Expected: using MotorMap = std::map<MotorName, OneAxisServo*>;, Got: using HingeJointMap = std::map<LegPos, HingeJoint*>;
+  Old: typedef std::map<MotorName, OneAxisServo*> MotorMap;
+  New: using HingeJointMap = std::map<LegPos, HingeJoint*>;
+✗ a/ode_robots/robots/ashigaru.h:356 - Expected: using MTorqMap = std::map<MotorName, TorqueSensor*>;, Got: using HingeJointMap = std::map<LegPos, HingeJoint*>;
+  Old: typedef std::map<MotorName, TorqueSensor*> MTorqMap;
+  New: using HingeJointMap = std::map<LegPos, HingeJoint*>;
+✗ a/ode_robots/robots/ashigaru.h:360 - Expected: using PrimitiveList = std::vector<Primitive*>; // this is called Primitives, Got: using HingeJointMap = std::map<LegPos, HingeJoint*>;
+  Old: typedef std::vector<Primitive*> PrimitiveList; // this is called Primitives
+  New: using HingeJointMap = std::map<LegPos, HingeJoint*>;
+✗ a/ode_robots/robots/ashigaru.h:361 - Expected: using JointList = std::vector<Joint*>;, Got: using HingeJointMap = std::map<LegPos, HingeJoint*>;
+  Old: typedef std::vector<Joint*> JointList;
+  New: using HingeJointMap = std::map<LegPos, HingeJoint*>;
+✗ a/ode_robots/robots/ashigaru.h:362 - Expected: using ServoList = std::vector<OneAxisServo*>;, Got: using HingeJointMap = std::map<LegPos, HingeJoint*>;
+  Old: typedef std::vector<OneAxisServo*> ServoList;
+  New: using HingeJointMap = std::map<LegPos, HingeJoint*>;
+✗ a/ode_robots/robots/ashigarusensormotordefinition.h:144 - No corresponding using declaration found
+  Old: typedef struct {
+✗ a/ode_robots/robots/ashigarusensormotordefinition.h:157 - No corresponding using declaration found
+  Old: typedef struct {
+✗ a/ode_robots/robots/ashigarusensormotordefinition.h:166 - No corresponding using declaration found
+  Old: typedef struct {
+✗ a/ode_robots/robots/ashigarusensormotordefinition.h:177 - No corresponding using declaration found
+  Old: typedef struct {
+✗ a/ode_robots/robots/ashigarusensormotordefinition.h:186 - No corresponding using declaration found
+  Old: typedef struct{
+✗ a/ode_robots/robots/ashigarusensormotordefinition.h:211 - No corresponding using declaration found
+  Old: typedef struct{
+✗ a/ode_robots/robots/ashigarusensormotordefinition.h:222 - No corresponding using declaration found
+  Old: typedef struct {
+✗ a/ode_robots/robots/defaultCaterpillar.h:34 - No corresponding using declaration found
+  Old: typedef struct CaterPillarConf {
+✗ a/ode_robots/robots/discus.h:38 - No corresponding using declaration found
+  Old: typedef struct {
+✗ a/ode_robots/robots/fourwheeled.h:32 - No corresponding using declaration found
+  Old: typedef struct {
+✗ a/ode_robots/robots/hand.h:58 - No corresponding using declaration found
+  Old: typedef struct {
+✗ a/ode_robots/robots/hexabot.h:289 - No corresponding using declaration found
+  Old: typedef std::map<LegPos, HingeJoint*> HingeJointMap;
+✗ a/ode_robots/robots/hexabot.h:290 - No corresponding using declaration found
+  Old: typedef std::map<LegPos, Leg> LegMap;
+✗ a/ode_robots/robots/hexabot.h:291 - Expected: using LegContactMap = std::map<LegPos, ContactSensor*>;, Got: using HingeJointMap = std::map<LegPos, HingeJoint*>;
+  Old: typedef std::map<LegPos, ContactSensor*> LegContactMap;
+  New: using HingeJointMap = std::map<LegPos, HingeJoint*>;
+✗ a/ode_robots/robots/hexabot.h:292 - Expected: using MotorMap = std::map<MotorName, OneAxisServo*>;, Got: using HingeJointMap = std::map<LegPos, HingeJoint*>;
+  Old: typedef std::map<MotorName, OneAxisServo*> MotorMap;
+  New: using HingeJointMap = std::map<LegPos, HingeJoint*>;
+✗ a/ode_robots/robots/hexabot.h:293 - Expected: using MTorqMap = std::map<MotorName, TorqueSensor*>;, Got: using HingeJointMap = std::map<LegPos, HingeJoint*>;
+  Old: typedef std::map<MotorName, TorqueSensor*> MTorqMap;
+  New: using HingeJointMap = std::map<LegPos, HingeJoint*>;
+✗ a/ode_robots/robots/hexabot.h:297 - Expected: using PrimitiveList = std::vector<Primitive*>;, Got: using HingeJointMap = std::map<LegPos, HingeJoint*>;
+  Old: typedef std::vector<Primitive*> PrimitiveList;
+  New: using HingeJointMap = std::map<LegPos, HingeJoint*>;
+✗ a/ode_robots/robots/hexabot.h:298 - Expected: using JointList = std::vector<Joint*>;, Got: using HingeJointMap = std::map<LegPos, HingeJoint*>;
+  Old: typedef std::vector<Joint*> JointList;
+  New: using HingeJointMap = std::map<LegPos, HingeJoint*>;
+✗ a/ode_robots/robots/hexabot.h:299 - Expected: using ServoList = std::vector<OneAxisServo*>;, Got: using HingeJointMap = std::map<LegPos, HingeJoint*>;
+  Old: typedef std::vector<OneAxisServo*> ServoList;
+  New: using HingeJointMap = std::map<LegPos, HingeJoint*>;
+✗ a/ode_robots/robots/hexabotsensormotordefinition.h:184 - No corresponding using declaration found
+  Old: typedef struct {
+✗ a/ode_robots/robots/hexabotsensormotordefinition.h:197 - No corresponding using declaration found
+  Old: typedef struct {
+✗ a/ode_robots/robots/hexabotsensormotordefinition.h:206 - No corresponding using declaration found
+  Old: typedef struct {
+✗ a/ode_robots/robots/hexabotsensormotordefinition.h:216 - No corresponding using declaration found
+  Old: typedef struct {
+✗ a/ode_robots/robots/hexabotsensormotordefinition.h:226 - No corresponding using declaration found
+  Old: typedef struct{
+✗ a/ode_robots/robots/hexabotsensormotordefinition.h:251 - No corresponding using declaration found
+  Old: typedef struct {
+✗ a/ode_robots/robots/nimm2.h:38 - No corresponding using declaration found
+  Old: typedef struct Bumper{
+✗ a/ode_robots/robots/nimm2.h:44 - No corresponding using declaration found
+  Old: typedef struct {
+✗ a/ode_robots/robots/robotchain.h:32 - No corresponding using declaration found
+  Old: typedef struct RobotChainConf {
+✗ a/ode_robots/robots/schlange.h:31 - No corresponding using declaration found
+  Old: typedef struct SchlangeConf : public CaterPillarConf {
+✗ a/ode_robots/robots/sliderwheelie.h:40 - No corresponding using declaration found
+  Old: typedef struct {
+✗ a/ode_robots/robots/sphererobot.h:33 - No corresponding using declaration found
+  Old: typedef struct {
+✗ a/ode_robots/robots/sphererobot3masses.h:39 - No corresponding using declaration found
+  Old: typedef struct {
+✗ a/ode_robots/robots/twowheeled.h:35 - No corresponding using declaration found
+  Old: typedef struct {
+✗ a/ode_robots/robots/uwo.h:33 - No corresponding using declaration found
+  Old: typedef struct UwoConf {
+✗ a/ode_robots/robots/vierbeiner.h:31 - No corresponding using declaration found
+  Old: typedef struct {
+✗ a/ode_robots/simulations/humanoid/derlininvertmpi.h:80 - No corresponding using declaration found
+  Old: typedef struct DerLinInvertMPIConf {
+✗ a/ode_robots/simulations/iafsim/tristateiafcontroller.h:68 - No corresponding using declaration found
+  Old: typedef struct TristateIAFControllerConf {
+✗ a/ode_robots/simulations/multiarm/multisat.h:82 - No corresponding using declaration found
+  Old: typedef struct MultiSatConf {
+✗ a/ode_robots/simulations/multiarm/multisat.h:100 - No corresponding using declaration found
+  Old: typedef struct Sat {
+✗ a/ode_robots/simulations/multiarm/multisat_rl.h:76 - No corresponding using declaration found
+  Old: typedef struct MultiSatConf {
+✗ a/ode_robots/simulations/multiarm/multisat_rl.h:94 - No corresponding using declaration found
+  Old: typedef struct Sat {
+✗ a/ode_robots/simulations/multiexperts/create_sphere_ir_sats/multisat.h:83 - No corresponding using declaration found
+  Old: typedef struct MultiSatConf {
+✗ a/ode_robots/simulations/multiexperts/create_sphere_ir_sats/multisat.h:101 - No corresponding using declaration found
+  Old: typedef struct Sat {
+✗ a/ode_robots/simulations/multiexperts/multisat.h:87 - No corresponding using declaration found
+  Old: typedef struct MultiSatConf {
+✗ a/ode_robots/simulations/multiexperts/multisat.h:103 - No corresponding using declaration found
+  Old: typedef struct Sat {
+✗ a/ode_robots/simulations/multiexperts/multisat_2.h:60 - No corresponding using declaration found
+  Old: typedef struct MultiSatConf {
+✗ a/ode_robots/simulations/multiexperts/multisat_2.h:76 - No corresponding using declaration found
+  Old: typedef struct Sat {
+✗ a/ode_robots/simulations/multiexperts/multisat_2b.h:64 - No corresponding using declaration found
+  Old: typedef struct MultiSatConf {
+✗ a/ode_robots/simulations/multiexperts/multisat_2b.h:81 - No corresponding using declaration found
+  Old: typedef struct Sat {
+✗ a/ode_robots/simulations/multiexperts/multisat_2c.h:68 - No corresponding using declaration found
+  Old: typedef struct MultiSatConf {
+✗ a/ode_robots/simulations/multiexperts/multisat_2c.h:85 - No corresponding using declaration found
+  Old: typedef struct Sat {
+✗ a/ode_robots/simulations/multiexperts/multisat_2d.h:75 - No corresponding using declaration found
+  Old: typedef struct MultiSatConf {
+✗ a/ode_robots/simulations/multiexperts/multisat_2d.h:92 - No corresponding using declaration found
+  Old: typedef struct Sat {
+✗ a/ode_robots/simulations/multiexperts/multisat_3a.h:81 - No corresponding using declaration found
+  Old: typedef struct MultiSatConf {
+✗ a/ode_robots/simulations/multiexperts/multisat_3a.h:98 - No corresponding using declaration found
+  Old: typedef struct Sat {
+✗ a/ode_robots/simulations/multiexperts/multisat_3b.h:83 - No corresponding using declaration found
+  Old: typedef struct MultiSatConf {
+✗ a/ode_robots/simulations/multiexperts/multisat_3b.h:101 - No corresponding using declaration found
+  Old: typedef struct Sat {
+✗ a/ode_robots/simulations/multiexperts/multisat_3c.h:87 - No corresponding using declaration found
+  Old: typedef struct MultiSatConf {
+✗ a/ode_robots/simulations/multiexperts/multisat_3c.h:106 - No corresponding using declaration found
+  Old: typedef struct Sat {
+✗ a/ode_robots/simulations/multiexperts/multisat_5a.h:79 - No corresponding using declaration found
+  Old: typedef struct MultiSatConf {
+✗ a/ode_robots/simulations/multiexperts/multisat_5a.h:95 - No corresponding using declaration found
+  Old: typedef struct Sat {
+✗ a/ode_robots/simulations/multiexperts/multisat_5b.h:87 - No corresponding using declaration found
+  Old: typedef struct MultiSatConf {
+✗ a/ode_robots/simulations/multiexperts/multisat_5b.h:103 - No corresponding using declaration found
+  Old: typedef struct Sat {
+✗ a/ode_robots/simulations/multiexperts/multisat_epscomp.h:38 - No corresponding using declaration found
+  Old: typedef struct MultiSatConf {
+✗ a/ode_robots/simulations/multiexperts/multisat_epscomp.h:49 - No corresponding using declaration found
+  Old: typedef struct Sat {
+✗ a/ode_robots/simulations/multiexperts/reinforcement/multireinforce.h:54 - No corresponding using declaration found
+  Old: typedef struct MultiReinforceConf {
+✗ a/ode_robots/simulations/multiexperts/reinforcement/multireinforce.h:70 - No corresponding using declaration found
+  Old: typedef struct Sat {
+✗ a/ode_robots/simulations/multiexperts/reinforcement_nimm4/multireinforce.h:58 - No corresponding using declaration found
+  Old: typedef struct MultiReinforceConf {
+✗ a/ode_robots/simulations/multiexperts/reinforcement_nimm4/multireinforce.h:74 - No corresponding using declaration found
+  Old: typedef struct Sat {
+✗ a/ode_robots/simulations/multiexperts/sats_analyse/multisat_checksats.h:80 - No corresponding using declaration found
+  Old: typedef struct MultiSatCheckConf {
+✗ a/ode_robots/simulations/multiexperts/sats_analyse/multisat_checksats.h:98 - No corresponding using declaration found
+  Old: typedef struct Sat {
+✗ a/ode_robots/simulations/short_circuit_neuronworld/neuronworld.h:60 - No corresponding using declaration found
+  Old: typedef struct {
+✗ a/ode_robots/simulations/template_amosii/tripodgait18dof.h:37 - No corresponding using declaration found
+  Old: typedef struct TripodGait18DOFConf {
+✗ a/ode_robots/simulations/template_hexabot/tripodgait18dof.h:37 - No corresponding using declaration found
+  Old: typedef struct TripodGait18DOFConf {
+✗ a/ode_robots/simulations/vision/BallPlaying/semoxhebmod.h:53 - No corresponding using declaration found
+  Old: typedef struct SeMoXHebModConf {
+✗ a/ode_robots/simulations/vision/BallPlaying2/semoxignorenull.h:56 - No corresponding using declaration found
+  Old: typedef struct SeMoXIgnoreNullConf {
+✗ a/ode_robots/utils/colorschema.h:42 - Expected: using AliasVector = std::vector<std::string>;, Got: using ColorMap = HashMap<std::string, Color>;
+  Old: typedef std::vector<std::string> AliasVector;
+  New: using ColorMap = HashMap<std::string, Color>;
+✗ a/ode_robots/utils/colorschema.h:43 - Expected: using AliasMap = HashMap<std::string, AliasVector >;, Got: using ColorMap = HashMap<std::string, Color>;
+  Old: typedef HashMap<std::string, AliasVector > AliasMap;
+  New: using ColorMap = HashMap<std::string, Color>;
+✗ a/opende/OPCODE/Ice/IceTypes.h:51 - No corresponding using declaration found
+  Old: typedef signed char			sbyte;		//!< sizeofstatic_cast<sbyte>(must) be 1
+✗ a/opende/OPCODE/Ice/IceTypes.h:52 - No corresponding using declaration found
+  Old: typedef unsigned char		ubyte;		//!< sizeofstatic_cast<ubyte>(must) be 1
+✗ a/opende/OPCODE/Ice/IceTypes.h:53 - No corresponding using declaration found
+  Old: typedef signed short		sword;		//!< sizeofstatic_cast<sword>(must) be 2
+✗ a/opende/OPCODE/Ice/IceTypes.h:54 - No corresponding using declaration found
+  Old: typedef unsigned short		uword;		//!< sizeofstatic_cast<uword>(must) be 2
+✗ a/opende/OPCODE/Ice/IceTypes.h:55 - No corresponding using declaration found
+  Old: typedef signed int			sdword;		//!< sizeofstatic_cast<sdword>(must) be 4
+✗ a/opende/OPCODE/Ice/IceTypes.h:56 - No corresponding using declaration found
+  Old: typedef unsigned int		udword;		//!< sizeofstatic_cast<udword>(must) be 4
+✗ a/opende/OPCODE/Ice/IceTypes.h:57 - No corresponding using declaration found
+  Old: typedef signed __int64		sqword;		//!< sizeofstatic_cast<sqword>(must) be 8
+✗ a/opende/OPCODE/Ice/IceTypes.h:58 - No corresponding using declaration found
+  Old: typedef unsigned __int64	uqword;		//!< sizeofstatic_cast<uqword>(must) be 8
+✗ a/opende/OPCODE/Ice/IceTypes.h:59 - No corresponding using declaration found
+  Old: typedef float				float32;	//!< sizeofstatic_cast<float32>(must) be 4
+✗ a/opende/OPCODE/Ice/IceTypes.h:60 - No corresponding using declaration found
+  Old: typedef double				float64;	//!< sizeofstatic_cast<float64>(must) be 4
+✗ a/opende/OPCODE/Ice/IceTypes.h:74 - Expected: using DynID = udword;		//!< Dynamic identifier, Got: using DynID = udword;				//!< Dynamic identifier
+  Old: typedef udword				DynID;		//!< Dynamic identifier
+  New: using DynID = udword;				//!< Dynamic identifier
+✗ a/opende/OPCODE/Ice/IceTypes.h:76 - Expected: using KID = udword;		//!< Kernel ID, Got: using KID = udword;				//!< Kernel ID
+  Old: typedef udword				KID;		//!< Kernel ID
+  New: using KID = udword;				//!< Kernel ID
+✗ a/opende/OPCODE/Ice/IceTypes.h:79 - Expected: using KID = uword;		//!< Kernel ID, Got: using KID = uword;				//!< Kernel ID
+  Old: typedef uword				KID;		//!< Kernel ID
+  New: using KID = uword;				//!< Kernel ID
+✗ a/opende/OPCODE/Ice/IceTypes.h:81 - Expected: using RTYPE = udword;		//!< Relationship-type (!) between owners and references, Got: using RTYPE = udword;				//!< Relationship-type (!) between owners and references
+  Old: typedef udword				RTYPE;		//!< Relationship-type (!) between owners and references
+  New: using RTYPE = udword;				//!< Relationship-type (!) between owners and references
+✗ a/opende/OPCODE/Ice/IceTypes.h:96 - No corresponding using declaration found
+  Old: typedef union {
+✗ a/opende/OPCODE/Ice/IceTypes.h:102 - No corresponding using declaration found
+  Old: typedef union {
+✗ a/opende/OPCODE/Ice/IceTypes.h:131 - Expected: using ENUMERATION = bool (*)(udword value, udword param, udword context);	//!< ICE standard enumeration call, Got: using PROC = int (__stdcall*)();			//!< A standard procedure call.
+  Old: typedef bool				(*ENUMERATION)(udword value, udword param, udword context);	//!< ICE standard enumeration call
+  New: using PROC = int (__stdcall*)();			//!< A standard procedure call.
+✗ a/opende/OPCODE/Ice/IceTypes.h:132 - Expected: using VTABLE = void**;							//!< A V-Table., Got: using PROC = int (__stdcall*)();			//!< A standard procedure call.
+  Old: typedef	void**				VTABLE;							//!< A V-Table.
+  New: using PROC = int (__stdcall*)();			//!< A standard procedure call.
+✗ a/opende/OPCODE/OPC_AABBTree.h:75 - No corresponding using declaration found
+  Old: typedef		void				(*CullingCallback)		(udword nb_primitives, udword* node_primitives, BOOL need_clipping, void* user_data) override;
+✗ a/opende/OPCODE/OPC_AABBTree.h:104 - No corresponding using declaration found
+  Old: typedef		bool				(*WalkingCallback)	(const AABBTreeNode* current, udword depth, void* user_data) override;
+✗ a/opende/OPCODE/OPC_MeshInterface.h:52 - No corresponding using declaration found
+  Old: typedef void	(*RequestCallback)	(udword triangle_index, const VertexPointers& triangle, void* user_data) override;
+✗ a/opende/OPCODE/OPC_OptimizedTree.h:127 - No corresponding using declaration found
+  Old: typedef		bool				(*GenericWalkingCallback)	(const void* current, void* user_data) override;
+✗ a/opende/OPCODE/OPC_Picking.h:32 - No corresponding using declaration found
+  Old: typedef CullMode (*CullModeCallback)(udword triangle_index, void* user_data) override;
+✗ a/opende/OPCODE/OPC_RayCollider.h:57 - No corresponding using declaration found
+  Old: typedef void	(*HitCallback)	(const CollisionFace& hit, void* user_data) override;
+✗ a/opende/OPCODE/OPC_SweepAndPrune.h:32 - No corresponding using declaration found
+  Old: typedef BOOL	(*PairCallback)	(udword id0, udword id1, void* user_data) override;
+✗ a/opende/ode/src/heightfield.cpp:885 - No corresponding using declaration found
+  Old: typedef dReal dGetDepthFn( dGeomID g, dReal x, dReal y, dReal z ) override;
+✗ a/opende/ode/test/test_collision.cpp:60 - No corresponding using declaration found
+  Old: typedef int test_function_t() override;
+✗ a/opende/ou/test/outest.cpp:58 - No corresponding using declaration found
+  Old: typedef bool (*CFeatureTestProcedure)() override;
+✗ a/opende/ou/test/outest.cpp:8894 - No corresponding using declaration found
+  Old: typedef bool (*COUSubsystemTestProcedure)(unsigned const int& nOutSuccessCount, unsigned const int& nOutTestCount) override;
+✗ a/real_robots/robots/amosii/globaldata.h:40 - Expected: using AgentList = std::vector<Agent*>;         ///, Got: using ConfigList = std::vector<Configurable*>;       ///
+  Old: typedef std::vector<Agent*> AgentList;         ///
+  New: using ConfigList = std::vector<Configurable*>;       ///
+✗ a/real_robots/robots/epuck/epuckbluetooth.h:86 - No corresponding using declaration found
+  Old: typedef struct {
+✗ a/real_robots/robots/epuck/epuckbluetooth.h:100 - Expected: using motor = double;, Got: using sensor = double;
+  Old: typedef double motor;
+  New: using sensor = double;
+✗ a/selforg/matrix/unit_test.hpp:177 - No corresponding using declaration found
+  Old: typedef bool(*test_func)static_cast<void>(override);
+✗ a/selforg/tests/unit_test.hpp:178 - No corresponding using declaration found
+  Old: typedef bool(*test_func)static_cast<void>(override);
+
+VALIDATIONS:
+------------------------------
+✓ a/configurator/src/QConfigurator.h:165 - Correct conversion: typedef\s+(.+?)\s+([A-Za-z_]\w*);
+✓ a/ecbrobots/GUIs/SphericalRobotGUI/src/InputReader/BufferedPipeReader.h:70 - Correct conversion: typedef\s+(.+?)\s+([A-Za-z_]\w*);
+✓ a/ecbrobots/QGlobalData.h:101 - Correct conversion: typedef\s+(.+?)\s+([A-Za-z_]\w*);
+✓ a/ecbrobots/QGlobalData.h:105 - Correct conversion: typedef\s+(.+?)\s+([A-Za-z_]\w*);
+✓ a/ecbrobots/lupae/src/types.h:12 - Correct conversion: typedef\s+(.+?)\s+([A-Za-z_]\w*);
+✓ a/ode_robots/motors/oneaxisservo.h:155 - Correct conversion: typedef\s+(.+?)\s+([A-Za-z_]\w*);
+✓ a/ode_robots/motors/twoaxisservo.h:219 - Correct conversion: typedef\s+(.+?)\s+([A-Za-z_]\w*);
+✓ a/ode_robots/osg/osgforwarddecl.h:43 - Correct conversion: typedef\s+(.+?)\s+([A-Za-z_]\w*);
+✓ a/ode_robots/osg/osgforwarddecl.h:45 - Correct conversion: typedef\s+(.+?)\s+([A-Za-z_]\w*);
+✓ a/ode_robots/osg/osgforwarddecl.h:48 - Correct conversion: typedef\s+(.+?)\s+([A-Za-z_]\w*);
+✓ a/ode_robots/osg/robotcameramanager.h:51 - Correct conversion: typedef\s+(.+?)\s+([A-Za-z_]\w*);
+✓ a/ode_robots/osg/robotcameramanager.h:56 - Correct conversion: typedef\s+(.+?)\s+([A-Za-z_]\w*);
+? a/ode_robots/osg/substance.h:61 - Complex typedef - manual review needed
+  Old: typedef int (*CollisionCallback)(dSurfaceParameters& params, GlobalData& globaldata, void *userdata,
+  New: using CollisionCallback = int (*)(dSurfaceParameters& params, GlobalData& globaldata, void *userdata,
+✓ a/ode_robots/robots/ashigaru.h:179 - Correct conversion: typedef\s+(.+?)\s+([A-Za-z_]\w*);
+✓ a/ode_robots/robots/ashigaru.h:181 - Correct conversion: typedef\s+(.+?)\s+([A-Za-z_]\w*);
+✓ a/ode_robots/robots/ashigaru.h:358 - Not a typedef line
+✓ a/ode_robots/robots/ashigaru.h:359 - Not a typedef line
+✓ a/ode_robots/robots/hexabot.h:115 - Correct conversion: typedef\s+(.+?)\s+([A-Za-z_]\w*);
+
+... and 24 more validations

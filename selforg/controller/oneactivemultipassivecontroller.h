@@ -39,7 +39,7 @@ public:
                                            const std::string& name = "1ActXPassController",
                                            const std::string& revision = "$ID$");
 
-  virtual ~OneActiveMultiPassiveController() override;
+  virtual ~OneActiveMultiPassiveController();
 
   /****************************************************************************/
   /*        AbstractMultiController should implement the following classes:                */

@@ -54,7 +54,7 @@ struct Sat {
 public:
   MultiExpertPair(const MultiExpertPairConf& conf = getDefaultConf());
 
-  virtual ~MultiExpertPair() override;
+  virtual ~MultiExpertPair();
 
   virtual void init(unsigned int inputDim, unsigned  int outputDim,
                     double unit_map = 0.0, RandGen* randGen = 0);
@@ -85,13 +85,13 @@ public:
 
   /**** STOREABLE ****/
   /** stores the controller values to a given file. */
-  virtual bool store(FILE* f) const override;
+  virtual bool store(FILE* f)  const override;
   /** loads the controller values from a given file. */
   virtual bool explicit restore(FILE* f);
 
   /**** INSPECTABLE ****/
-  virtual std::list<iparamkey> getInternalParamNames() const override;
-  virtual std::list<iparamval> getInternalParams() const override;
+  virtual std::list<iparamkey> getInternalParamNames()  const override;
+  virtual std::list<iparamval> getInternalParams()  const override;
   virtual std::list<ILayer> getStructuralLayers() const;
   virtual std::list<IConnection> getStructuralConnections() const;
 

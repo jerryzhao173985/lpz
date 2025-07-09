@@ -67,7 +67,7 @@ namespace lpzrobots {
         return conf;
       }
 
-      virtual ~SchlangeVelocity() override;
+      virtual ~SchlangeVelocity();
 
       /**
        *Reads the actual motor commands from an array,

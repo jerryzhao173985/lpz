@@ -76,7 +76,7 @@
       /**
        * Destructor
        */
-      virtual ~Differential() override;
+      virtual ~Differential();
 
       /**
        * Place the robot in the desired pose

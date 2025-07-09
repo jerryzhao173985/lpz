@@ -1,0 +1,66 @@
+LPZRobots Patch Extraction Log
+==============================
+
+This log tracks what has been extracted from big.patch and the current state of the codebase.
+
+EXTRACTED FROM big.patch:
+-------------------------
+
+1. TYPEDEF → USING (patch_01_typedef_to_using.patch)
+   - Lines: Multiple ranges across the patch
+   - Files: 76 files identified with typedef changes
+   - Status: Extracted successfully
+   - Notes: 230 typedefs → 79 using declarations
+
+2. NULL → NULLPTR (patch_02_null_to_nullptr.patch)
+   - Attempted extraction: No actual code changes found
+   - Observation: Current codebase already uses nullptr throughout
+   - Evidence: grep shows nullptr usage in all controller headers
+   - Conclusion: nullptr migration was already completed in previous commits
+   - Status: SKIP - Already applied to codebase
+
+ANALYSIS OF CURRENT CODEBASE:
+----------------------------
+- nullptr: Already fully migrated (checked selforg/controller/*.h)
+- override: Appears to be already applied (seen in dep.h, etc.)
+- static_cast: Likely already modernized based on recent commits
+
+3. REMAINING TYPEDEF FIXES (patch_01b_remaining_typedef.patch)
+   - Files: selforg/tests/unit_test.hpp
+   - Critical fix: Corrupted typedef bool(*test_func)static_cast<void>(override)
+   - Corrected to: typedef bool(*test_func)(void)
+   - Also removes many misplaced "override" keywords
+   - Status: Ready to apply
+
+4. MEMBER INITIALIZATION FIXES (patch_04_member_initialization.patch)
+   - Files: 488 files with initialization improvements
+   - Changes: 2,383 initialization additions
+   - Status: NEEDS REVIEW - Contains many override removals mixed in
+   
+5. OVERRIDE KEYWORD FIXES (patch_05_override_fixes.patch) 
+   - CRITICAL: Fixes massive sed script error
+   - 22,432 misplaced overrides removed (18,171 after semicolons!)
+   - Only 93 correct override additions
+   - Files: 714 affected
+   - Example error: "virtual ~QECBCommunicator() override;" → "virtual ~QECBCommunicator();"
+   - Status: HIGH PRIORITY - Major syntax error fixes
+
+CURRENT USER ACTIVITY:
+---------------------
+- Successfully applied patch_01_typedef_to_using_clean.patch (commit 1f70674)
+- CI failed but due to pre-existing issues, not our changes
+
+NEXT STEPS:
+-----------
+1. Apply patch_01b for unit_test.hpp fix (critical corruption fix)
+2. URGENT: Apply patch_05_override_fixes.patch to fix 22,432 syntax errors
+3. Review patch_04 to separate actual member init from override removals
+4. Create const correctness patch
+5. Check for any throw() → noexcept conversions
+
+RECENT COMMITS SHOWING MODERNIZATION:
+------------------------------------
+- 67f6bd6 fix: Fix more static_cast syntax
+- fcbe4d1 fix: Fix static_cast syntax
+- 244a587 fix: Correct include paths and remove remaining misplaced explicit keywords
+- 902c77c fix: Remove misplaced explicit keyword

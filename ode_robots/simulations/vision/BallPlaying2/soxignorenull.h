@@ -61,7 +61,7 @@ public:
 
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
 
-  virtual ~SoxIgnoreNull() override;
+  virtual ~SoxIgnoreNull();
 
   static SoxIgnoreNullConf getDefaultConf() const {
     SoxIgnoreNullConf conf;
@@ -96,7 +96,7 @@ public:
 
   /***** STOREABLE ****/
   /** stores the controller values to a given file. */
-  virtual bool store(FILE* f) const override;
+  virtual bool store(FILE* f)  const override;
   /** loads the controller values from a given file. */
   virtual bool explicit restore(FILE* f);
 

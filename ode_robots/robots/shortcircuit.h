@@ -37,7 +37,7 @@ namespace lpzrobots {
   public:
     ShortCircuit(const OdeHandle& odeHandle, const OsgHandle& osgHandle, int sensornumber, int motornumber);
 
-    virtual ~ShortCircuit() override;
+    virtual ~ShortCircuit();
 
 
 

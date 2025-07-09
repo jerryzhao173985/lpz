@@ -194,7 +194,7 @@ namespace lpzrobots {
       /**
        * Destructor
        */
-      virtual ~Nejihebi() override;
+      virtual ~Nejihebi();
 
       /**
        * Returns the current configuration of the robot
@@ -213,9 +213,9 @@ namespace lpzrobots {
        */
       static Conf getDefaultConf();
 
-      Inspectable::iparamkeylist getInternalParamNames() const override;
+      Inspectable::iparamkeylist getInternalParamNames()  const override;
 
-      Inspectable::iparamvallist getInternalParams() const override;
+      Inspectable::iparamvallist getInternalParams()  const override;
 
       /**
        * Returns main primitive of the robot.
@@ -226,7 +226,7 @@ namespace lpzrobots {
        *
        * @return pointer to the robot head primitive
        */
-      virtual Primitive* getMainPrimitive() const override;
+      virtual Primitive* getMainPrimitive()  const override;
 
       /**
        * Returns number of motors.

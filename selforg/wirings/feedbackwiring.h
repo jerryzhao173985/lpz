@@ -67,8 +67,8 @@ protected:
 
 public:
 
-  virtual std::list<iparamkey> getInternalParamNames() const override;
-  virtual std::list<iparamval> getInternalParams() const override;
+  virtual std::list<iparamkey> getInternalParamNames()  const override;
+  virtual std::list<iparamval> getInternalParams()  const override;
 
   /// return the feedback ratio vector
   virtual matrix::Matrix getFeedbackRatio() const;

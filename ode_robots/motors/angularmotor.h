@@ -52,7 +52,7 @@ namespace lpzrobots {
       return getNumberOfAxes();
     }
     virtual std::list<sensor> getList() const override { return getListOfArray();};
-    virtual int get(sensor* sensors, int length) const override;
+    virtual int get(sensor* sensors, int length)  const override;
 
     // --- Motor interface ---
     virtual int getMotorNumber() const { return getNumberOfAxes();};
@@ -225,7 +225,7 @@ namespace lpzrobots {
     virtual void init(Primitive* own, Joint* joint = 0);
 
     /// returns the number of Axis of this Motor
-    virtual int getNumberOfAxes() const override;
+    virtual int getNumberOfAxes()  const override;
 
     /** sets the desired speed of the motor at the given axis.
         @param velocity Desired motor velocity (this will be an angular or linear velocity).

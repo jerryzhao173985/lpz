@@ -96,9 +96,9 @@ namespace lpzrobots {
 
     virtual void setMotorsIntern(const double* motors, int motornumber) override;
 
-    virtual int getSensorNumberIntern() const override;
+    virtual int getSensorNumberIntern()  const override;
 
-    virtual int getMotorNumberIntern() const override;
+    virtual int getMotorNumberIntern()  const override;
 
     virtual void doInternalStuff(const GlobalData& globalData) override;
 
@@ -109,7 +109,7 @@ namespace lpzrobots {
     virtual int getIRSensorNum() const;
 
   protected:
-    virtual const Primitive* getMainPrimitive() const override;
+    virtual const Primitive* getMainPrimitive()  const override;
 
     virtual void create(const osg::Matrix& pose);
 

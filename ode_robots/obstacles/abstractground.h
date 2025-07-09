@@ -39,14 +39,14 @@ namespace lpzrobots {
     AbstractGround(const OdeHandle& odeHandle, const OsgHandle& osgHandle,
                    bool createGround, double groundLength, double groundWidth, double wallThickness);
 
-    virtual ~AbstractGround() override;
+    virtual ~AbstractGround();
 
 
     virtual void setPose(const osg::Matrix& pose) override;
 
     virtual void createGround(bool create);
 
-    virtual Primitive* getMainPrimitive() const override;
+    virtual Primitive* getMainPrimitive()  const override;
 
     virtual void changeGeometry(double length, double width, double height, double factorxy);
 

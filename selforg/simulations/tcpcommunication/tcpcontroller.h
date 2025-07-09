@@ -42,7 +42,7 @@ public:
    */
   TcpController(const string& robotname, int port = 4000, AbstractController* teacher = 0);
 
-  virtual ~TcpController() override;
+  virtual ~TcpController();
 
   virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
 
