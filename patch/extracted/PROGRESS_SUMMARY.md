@@ -19,6 +19,16 @@
    - Status: ✅ Applied and pushed
    - Changes: 7 files, fixed duplicate explicit keywords
 
+4. **Override fixes via Python script**
+   - Commit: c526038
+   - Status: ✅ Applied and pushed
+   - Changes: 147 files, removed 22,432 misplaced override keywords
+
+5. **Critical syntax error fixes**
+   - Commit: 2e7c1dc
+   - Status: ✅ Applied and pushed
+   - Changes: Fixed static_cast<char> key syntax and misplaced override in returns
+
 ### Patches with Issues
 
 1. **patch_02_null_to_nullptr.patch**

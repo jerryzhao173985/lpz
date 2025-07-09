@@ -64,6 +64,7 @@
 #include <selforg/agent.h>
 #include <selforg/configurable.h>
 #include <selforg/abstractrobot.h>
+#include <selforg/storeable.h>
 
 using namespace std;
 
@@ -406,13 +407,22 @@ bool com_store (GlobalData& globalData, char* line, char* arg) {
       ++filename;
       int id = atoi(arg);
       if(id>=0 && id < (signed)globalData.agents.size()){
-	FILE* f = fopen(filename,"wb");
-	if(f){
-	  if(globalData.agents[id]->getController()->store(f))
-	    printf("Controller stored\n");
-	  else printf("Error occured while storing contoller\n");
-	  fclose(f);
-	}else printf("Cannot open file %s for writing\n", filename);
+	// Check if controller implements Storeable interface
+	Storeable* storeable = dynamic_cast<Storeable*>(globalData.agents[id]->getController());
+	if(storeable){
+	  FILE* f = fopen(filename,"wb");
+	  if(f){
+	    if(storeable->store(f))
+	      printf("Controller stored\n");
+	    else printf("Error occured while storing contoller\n");
+	    fclose(f);
+	  }else printf("Cannot open file %s for writing\n", filename);
+	} else {
+	  // Fall back to Configurable's storeCfg method
+	  if(globalData.agents[id]->getController()->storeCfg(filename))
+	    printf("Controller configuration stored\n");
+	  else printf("Error occured while storing controller configuration\n");
+	}
       } else printf("Agent with ID: %i not found\n", id);            
     }else printf("syntax error , see >help store\n");        
   }
@@ -428,13 +438,22 @@ bool com_load (GlobalData& globalData, char* line, char* arg) {
       ++filename;
       int id = atoi(arg);
       if(id>=0 && id < (signed)globalData.agents.size()){
-	FILE* f = fopen(filename,"rb");
-	if(f){
-	  if(globalData.agents[id]->getController()->restore(f))
-	    printf("Controller restored\n");
-	  else printf("Error occured while restoring contoller\n");
-	  fclose(f);
-	}else printf("Cannot open file %s for reading\n", filename);
+	// Check if controller implements Storeable interface
+	Storeable* storeable = dynamic_cast<Storeable*>(globalData.agents[id]->getController());
+	if(storeable){
+	  FILE* f = fopen(filename,"rb");
+	  if(f){
+	    if(storeable->restore(f))
+	      printf("Controller restored\n");
+	    else printf("Error occured while restoring contoller\n");
+	    fclose(f);
+	  }else printf("Cannot open file %s for reading\n", filename);
+	} else {
+	  // Fall back to Configurable's restoreCfg method
+	  if(globalData.agents[id]->getController()->restoreCfg(filename))
+	    printf("Controller configuration restored\n");
+	  else printf("Error occured while restoring controller configuration\n");
+	}
       } else printf("Agent with ID: %i not found\n", id);            
     }else printf("syntax error , see >help load\n");        
   }
