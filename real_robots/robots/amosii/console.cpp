@@ -406,9 +406,11 @@ bool com_store (GlobalData& globalData, char* line, char* arg) {
       *filename='\0';
       ++filename;
       int id = atoi(arg);
-      if(id>=0 && id < (signed)globalData.agents.size()){
+      if(id>=0 && id < static_cast<int>(globalData.agents.size())){
 	// Check if controller implements Storeable interface
-	Storeable* storeable = dynamic_cast<Storeable*>(globalData.agents[id]->getController());
+	const AbstractController* constController = globalData.agents[id]->getController();
+	AbstractController* controller = const_cast<AbstractController*>(constController);
+	Storeable* storeable = dynamic_cast<Storeable*>(controller);
 	if(storeable){
 	  FILE* f = fopen(filename,"wb");
 	  if(f){
@@ -419,7 +421,7 @@ bool com_store (GlobalData& globalData, char* line, char* arg) {
 	  }else printf("Cannot open file %s for writing\n", filename);
 	} else {
 	  // Fall back to Configurable's storeCfg method
-	  if(globalData.agents[id]->getController()->storeCfg(filename))
+	  if(controller->storeCfg(filename))
 	    printf("Controller configuration stored\n");
 	  else printf("Error occured while storing controller configuration\n");
 	}
@@ -437,9 +439,11 @@ bool com_load (GlobalData& globalData, char* line, char* arg) {
       *filename='\0';
       ++filename;
       int id = atoi(arg);
-      if(id>=0 && id < (signed)globalData.agents.size()){
+      if(id>=0 && id < static_cast<int>(globalData.agents.size())){
 	// Check if controller implements Storeable interface
-	Storeable* storeable = dynamic_cast<Storeable*>(globalData.agents[id]->getController());
+	const AbstractController* constController = globalData.agents[id]->getController();
+	AbstractController* controller = const_cast<AbstractController*>(constController);
+	Storeable* storeable = dynamic_cast<Storeable*>(controller);
 	if(storeable){
 	  FILE* f = fopen(filename,"rb");
 	  if(f){
@@ -450,7 +454,7 @@ bool com_load (GlobalData& globalData, char* line, char* arg) {
 	  }else printf("Cannot open file %s for reading\n", filename);
 	} else {
 	  // Fall back to Configurable's restoreCfg method
-	  if(globalData.agents[id]->getController()->restoreCfg(filename))
+	  if(controller->restoreCfg(filename))
 	    printf("Controller configuration restored\n");
 	  else printf("Error occured while restoring controller configuration\n");
 	}

@@ -47,6 +47,16 @@ This file tracks the extraction and application of smaller patches from the larg
   - Notes: Fixed 22,432 misplaced override keywords after semicolons
   - Example: 'virtual ~ECB() override;' → 'virtual ~ECB();'
 
+- **Critical syntax fixes**
+  - Commit: 2e7c1dc
+  - Files: Multiple simulation templates fixed
+  - Notes: Fixed static_cast<char> key syntax, misplaced override in returns
+  
+- **AbstractController store/restore fix**
+  - Commit: 1306328
+  - Files: real_robots/robots/amosii/console.cpp
+  - Notes: Fixed missing store/restore methods by using Storeable interface
+
 ## Status Summary
 
 ### Completed & Applied:

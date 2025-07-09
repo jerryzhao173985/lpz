@@ -83,8 +83,8 @@ def extract_noexcept_changes(input_file, output_file):
     return throw_count, noexcept_count, len(files_with_changes)
 
 if __name__ == "__main__":
-    input_file = 'patch/extracted/source_changes.patch'
-    output_file = 'patch/extracted/patch_07_throw_to_noexcept.patch'
+    input_file = 'source_changes.patch'
+    output_file = 'patch_07_throw_to_noexcept_clean.patch'
     
     print("Extracting throw() to noexcept conversions...")
     throw_count, noexcept_count, file_count = extract_noexcept_changes(input_file, output_file)
