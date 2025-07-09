@@ -141,6 +141,10 @@
 #include <selforg/invertmotorspace.h>
 #include <selforg/sinecontroller.h>
 
+// include playground
+#include <ode_robots/playground.h>
+#include <ode_robots/passivesphere.h>
+
 // fetch all the stuff of lpzrobots into scope
 using namespace lpzrobots;
 
@@ -183,7 +187,7 @@ public:
     // - set Pose(Position) of sphere
     // - set a texture for the sphere
     // - add sphere to list of obstacles
-    for (int i= nullptr; i < 0/*2*/; ++i) override {
+    for (int i= 0; i < 0/*2*/; ++i) {
       PassiveSphere* s1 = new PassiveSphere(odeHandle, osgHandle, 0.5);
       s1->setPosition(osg::Vec3(-4.5+i*4.5,0,0));
       s1->setTexture("Images/dusty.rgb");
