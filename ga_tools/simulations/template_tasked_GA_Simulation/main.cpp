@@ -110,7 +110,7 @@ class ThisSim{
     void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global,
         SimulationTaskHandle& sTHandle, int taskId) {
 
-      ThisSimulationTaskHandle& handle = static_cast<ThisSimulationTaskHandle&> (sTHandle);
+      ThisSimulationTaskHandle& handle = static_cast<ThisSimulationTaskHandle&>(sTHandle);
 
       if (handle.isBestAnimation || handle.isArraySet)
         global.odeConfig.setParam("realtimefactor", 1);
@@ -155,7 +155,7 @@ class ThisSim{
     virtual bool restart(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global,
         SimulationTaskHandle& sTHandle, int taskId) override {
 
-      ThisSimulationTaskHandle& handle = static_cast<ThisSimulationTaskHandle&> (sTHandle);
+      ThisSimulationTaskHandle& handle = static_cast<ThisSimulationTaskHandle&>(sTHandle);
 
       if (handle.isArraySet || handle.isBestAnimation)
         return false;
@@ -202,7 +202,7 @@ class ThisSim{
     // add own key handling stuff here, just insert some case values
     virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down,
         SimulationTaskHandle& sTHandle, int taskI) override {
-      //ThisSimulationTaskHandle* simTaskHandle = static_cast<ThisSimulationTaskHandle*> (&sTHandle);
+      //ThisSimulationTaskHandle* simTaskHandle = static_cast<ThisSimulationTaskHandle*>(&sTHandle);
       explicit if (down) { // only when key is pressed, not when released
         switch (static_cast<char>(key)) {
           default:

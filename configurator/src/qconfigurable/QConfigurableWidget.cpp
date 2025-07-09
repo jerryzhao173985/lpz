@@ -620,7 +620,7 @@ namespace lpzrobots {
     foreach(Configurable::paramboolpair pair, config->getParamBoolMap())
       {
         Configurable::paramkey key = pair.first;
-        QBoolConfigurableTileWidget* configTile = static_cast<QBoolConfigurableTileWidget*> (configTileWidgetMap.value(
+        QBoolConfigurableTileWidget* configTile = static_cast<QBoolConfigurableTileWidget*>(configTileWidgetMap.value(
             QString(key.c_str())));
         QDomElement nodeParambool = doc.createElement("parambool");
         nodeParambools.appendChild(nodeParambool);

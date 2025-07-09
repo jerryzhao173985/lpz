@@ -109,7 +109,7 @@ public:
    */
   void start(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global, SimulationTaskHandle& sTHandle, int taskId)
   {
-    ThisSimulationTaskHandle* simTaskHandle = static_cast<ThisSimulationTaskHandle*> (&sTHandle);
+    ThisSimulationTaskHandle* simTaskHandle = static_cast<ThisSimulationTaskHandle*>(&sTHandle);
 
     setCameraHomePos(Pos(5.2728, 7.2112, 3.31768), Pos(140.539, -13.1456, 0));
     // initialization
@@ -151,7 +151,7 @@ public:
    * @return if the simulation should be restarted; this is false by default
    */
   virtual bool restart(const OdeHandle& odeHandle, const OsgHandle& osgHandle, GlobalData& global, SimulationTaskHandle& sTHandle, int taskId) override {
-    //ThisSimulationTaskHandle* simTaskHandle = static_cast<ThisSimulationTaskHandle*> (&sTHandle);
+    //ThisSimulationTaskHandle* simTaskHandle = static_cast<ThisSimulationTaskHandle*>(&sTHandle);
 
     return false; // don't restart, just quit
     // see template_cycledSimulation for more info about usage
@@ -164,7 +164,7 @@ public:
       @param control indicates that robots have been controlled this timestep
    */
   virtual void addCallback(const GlobalData& globalData, bool draw, bool pause, bool control, const SimulationTaskHandle& sTHandle, int taskId) override {
-    //ThisSimulationTaskHandle* simTaskHandle = static_cast<ThisSimulationTaskHandle*> (&sTHandle);
+    //ThisSimulationTaskHandle* simTaskHandle = static_cast<ThisSimulationTaskHandle*>(&sTHandle);
     // for demonstration: set simsteps for one cycle to 60.000/currentCycle (10min/currentCycle)
     // if simulation_time_reached is set to true, the simulation cycle is finished
     if (globalData.sim_step>=(60000/this->currentCycle))
@@ -175,7 +175,7 @@ public:
 
   // add own key handling stuff here, just insert some case values
   virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down, SimulationTaskHandle& sTHandle, int taskI) override {
-    //ThisSimulationTaskHandle* simTaskHandle = static_cast<ThisSimulationTaskHandle*> (&sTHandle);
+    //ThisSimulationTaskHandle* simTaskHandle = static_cast<ThisSimulationTaskHandle*>(&sTHandle);
     if (down) { // only when key is pressed, not when released
       switch ( static_cast<char> key )
         {
