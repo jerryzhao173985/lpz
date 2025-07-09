@@ -2,7 +2,7 @@
 
 ## Date: 2025-07-09
 
-### Successfully Applied Patches (8 commits)
+### Successfully Applied Patches (10 commits)
 
 1. ✅ **typedef → using** conversions (167 changes)
 2. ✅ **Corrupted typedef** fixes
@@ -12,6 +12,8 @@
 6. ✅ **AbstractController** fixes (store/restore methods)
 7. ✅ **throw() → noexcept** conversions
 8. ✅ **C-style cast** fixes
+9. ✅ **Override brace** fixes (3 files)
+10. ✅ **nullptr numeric context** fixes (35 files)
 
 ### CI Build Status
 
