@@ -1,0 +1,249 @@
+/***************************************************************************
+ *   Copyright (C) 2025 LpzRobots development team                          *
+ *                                                                         *
+ *   Robust APEX-Sox: Enhanced for Complex Real-World Scenarios            *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+#ifndef __APEXSOX_ROBUST_H
+#define __APEXSOX_ROBUST_H
+
+#include <selforg/apexsox.h>
+#include <selforg/matrix.h>
+#include <selforg/circular_buffer.h>
+#include <memory>
+#include <unordered_map>
+#include <queue>
+
+/**
+ * Robust APEX-Sox Controller
+ * 
+ * Enhanced version designed for complex robots in real-world scenarios:
+ * - Handles high-dimensional sensory input through feature extraction
+ * - Predictive safety mechanisms for stable exploration
+ * - Information-theoretic exploration for efficient learning
+ * - Hierarchical behavior primitives for complex movements
+ * - Robust adaptation to changing body dynamics
+ * - Episodic memory for experience replay
+ */
+class RobustAPEXSox : public APEXSox {
+public:
+    struct RobustConf : public APEXConf {
+        // Feature extraction
+        bool useFeatureExtraction = true;
+        int featureDimension = 0;  // 0 = auto-determine
+        double featureLearningRate = 0.01;
+        
+        // Safety framework
+        bool usePredictiveSafety = true;
+        double safetyMargin = 0.1;
+        double maxStateDeviation = 2.0;
+        int safetyHorizon = 10;
+        
+        // Information-theoretic exploration
+        bool useInfoGainExploration = true;
+        double minInfoGain = 0.001;
+        double explorationTemperature = 1.0;
+        
+        // Behavior primitives
+        bool useBehaviorPrimitives = true;
+        int maxPrimitives = 10;
+        double primitiveThreshold = 0.1;
+        double primitiveDecay = 0.999;
+        
+        // Robust adaptation
+        bool useRobustAdaptation = true;
+        double uncertaintyThreshold = 0.5;
+        double adaptationRate = 0.1;
+        int modelHistorySize = 100;
+        
+        // Memory system
+        bool useMemoryReplay = true;
+        int memoryCapacity = 1000;
+        double replayProbability = 0.1;
+        double memoryConsolidationRate = 0.01;
+        
+        // Playful exploration
+        double playfulnessLevel = 0.3;  // How much to encourage playful exploration
+        double noveltyBonus = 0.2;      // Reward for novel states
+        bool allowTemporaryInstability = true;  // Allow brief instability for exploration
+    };
+    
+    static RobustConf getDefaultRobustConf() {
+        RobustConf conf;
+        // Copy base config
+        APEXConf base = APEXSox::getDefaultConf();
+        static_cast<APEXConf&>(conf) = base;
+        
+        // Enhanced settings for robustness
+        conf.useFeatureExtraction = true;
+        conf.usePredictiveSafety = true;
+        conf.useInfoGainExploration = true;
+        conf.useBehaviorPrimitives = true;
+        conf.useRobustAdaptation = true;
+        conf.useMemoryReplay = true;
+        
+        return conf;
+    }
+    
+    explicit RobustAPEXSox(const RobustConf& conf = getDefaultRobustConf());
+    virtual ~RobustAPEXSox();
+    
+    virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override;
+    
+    virtual void step(const sensor* sensors, int sensornumber,
+                     motor* motors, int motornumber) override;
+    
+    virtual void stepNoLearning(const sensor* sensors, int sensornumber,
+                               motor* motors, int motornumber) override;
+    
+    // Additional functionality
+    double getSafetyIndex() const { return currentSafetyIndex; }
+    double getNoveltyScore() const { return currentNoveltyScore; }
+    int getActivePrimitive() const { return activePrimitiveIndex; }
+    double getRobustnessScore() const { return robustnessScore; }
+    
+protected:
+    RobustConf robustConf;
+    
+    // Feature extraction
+    struct FeatureExtractor {
+        matrix::Matrix W_feat;     // Feature extraction weights
+        matrix::Matrix b_feat;     // Feature biases
+        matrix::Matrix features;   // Current extracted features
+        
+        // Adaptive receptive fields
+        std::vector<matrix::Matrix> receptive_fields;
+        std::vector<double> field_importance;
+        
+        void extract(const matrix::Matrix& input);
+        void adapt(const matrix::Matrix& error, double lr);
+    };
+    std::unique_ptr<FeatureExtractor> featureExtractor;
+    
+    // Safety framework
+    struct SafetyMonitor {
+        lpzrobots::CircularBuffer<matrix::Matrix, 50> state_history;
+        matrix::Matrix safe_region_center;
+        matrix::Matrix safe_region_radius;
+        double current_risk;
+        
+        // Control Barrier Function
+        double evaluateCBF(const matrix::Matrix& state, const matrix::Matrix& action);
+        matrix::Matrix projectToSafe(const matrix::Matrix& action);
+        void updateSafeRegion(const matrix::Matrix& state);
+    };
+    std::unique_ptr<SafetyMonitor> safetyMonitor;
+    
+    // Information-theoretic exploration
+    struct InfoExplorer {
+        std::unordered_map<size_t, double> state_visits;  // State visit counts
+        matrix::Matrix information_gradient;
+        double total_information;
+        
+        double calculateInfoGain(const matrix::Matrix& state, const matrix::Matrix& action);
+        matrix::Matrix getExplorationBonus(const matrix::Matrix& base_action);
+        size_t hashState(const matrix::Matrix& state);
+    };
+    std::unique_ptr<InfoExplorer> infoExplorer;
+    
+    // Behavior primitives
+    struct BehaviorPrimitive {
+        matrix::Matrix center;      // Center in sensory-motor space
+        matrix::Matrix covariance;  // Spread of the primitive
+        double activation;          // Current activation level
+        double success_rate;        // How successful this primitive is
+        int usage_count;
+        
+        double similarity(const matrix::Matrix& state);
+        void update(const matrix::Matrix& state, double reward);
+    };
+    std::vector<std::unique_ptr<BehaviorPrimitive>> primitives;
+    int activePrimitiveIndex;
+    
+    // Robust adaptation
+    struct AdaptationModule {
+        // Multiple models for different regimes
+        struct DynamicsModel {
+            matrix::Matrix A_dyn;   // Dynamics matrix
+            matrix::Matrix B_dyn;   // Control matrix
+            double confidence;      // Model confidence
+            int age;               // How long since last update
+            
+            double predict_error(const matrix::Matrix& x, const matrix::Matrix& u, 
+                               const matrix::Matrix& x_next);
+        };
+        std::vector<std::unique_ptr<DynamicsModel>> models;
+        int active_model;
+        
+        void identifyDynamics(const matrix::Matrix& x, const matrix::Matrix& u, 
+                            const matrix::Matrix& x_next);
+        int selectBestModel(const matrix::Matrix& x);
+    };
+    std::unique_ptr<AdaptationModule> adaptationModule;
+    
+    // Memory system
+    struct Experience {
+        matrix::Matrix state;
+        matrix::Matrix action;
+        matrix::Matrix next_state;
+        double reward;          // Intrinsic reward
+        double information;     // Information gain
+        int primitive_id;       // Associated behavior primitive
+        
+        double relevance(const matrix::Matrix& current_state);
+    };
+    
+    struct MemorySystem {
+        std::deque<Experience> episodes;
+        std::priority_queue<std::pair<double, Experience>> consolidated_memory;
+        
+        void store(const Experience& exp);
+        std::vector<Experience> recall(const matrix::Matrix& context, int k = 5);
+        void consolidate();
+    };
+    std::unique_ptr<MemorySystem> memory;
+    
+    // Playful exploration
+    struct PlayfulExplorer {
+        double current_playfulness;
+        matrix::Matrix play_direction;
+        int play_duration;
+        std::vector<matrix::Matrix> novel_states;
+        
+        matrix::Matrix generatePlayfulAction(const matrix::Matrix& base_action);
+        double calculateNovelty(const matrix::Matrix& state);
+        void updatePlayfulness(double stability, double learning_progress);
+    };
+    std::unique_ptr<PlayfulExplorer> playfulExplorer;
+    
+    // State variables
+    double currentSafetyIndex;
+    double currentNoveltyScore;
+    double robustnessScore;
+    matrix::Matrix last_features;
+    
+    // Override parent methods
+    virtual void learn() override;
+    
+    // New methods
+    void extractFeatures(const matrix::Matrix& sensors);
+    matrix::Matrix applySafetyConstraints(const matrix::Matrix& raw_action);
+    matrix::Matrix addExplorationBonus(const matrix::Matrix& action);
+    void updateBehaviorPrimitives(const matrix::Matrix& state, const matrix::Matrix& action);
+    void adaptToDynamics();
+    void replayExperiences();
+    double calculateIntrinsicReward(const matrix::Matrix& state, const matrix::Matrix& action);
+    
+    // Helper methods
+    matrix::Matrix combineActions(const std::vector<matrix::Matrix>& actions, 
+                                 const std::vector<double>& weights);
+    bool detectNovelty(const matrix::Matrix& state);
+    void emergeBehavior();
+};
+
+#endif // __APEXSOX_ROBUST_H

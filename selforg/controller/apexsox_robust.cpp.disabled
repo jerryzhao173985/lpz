@@ -1,0 +1,768 @@
+/***************************************************************************
+ *   Copyright (C) 2025 LpzRobots development team                          *
+ *                                                                         *
+ *   Robust APEX-Sox Implementation                                        *
+ *                                                                         *
+ ***************************************************************************/
+
+#include "apexsox_robust.h"
+#include <algorithm>
+#include <cmath>
+#include <numeric>
+#include <random>
+
+using namespace matrix;
+using namespace std;
+
+RobustAPEXSox::RobustAPEXSox(const RobustConf& conf)
+    : APEXSox(conf)
+    , robustConf(conf)
+    , activePrimitiveIndex(-1)
+    , currentSafetyIndex(1.0)
+    , currentNoveltyScore(0.0)
+    , robustnessScore(1.0) {
+    
+    // Initialize subsystems
+    if (conf.useFeatureExtraction) {
+        featureExtractor = make_unique<FeatureExtractor>();
+    }
+    
+    if (conf.usePredictiveSafety) {
+        safetyMonitor = make_unique<SafetyMonitor>();
+    }
+    
+    if (conf.useInfoGainExploration) {
+        infoExplorer = make_unique<InfoExplorer>();
+    }
+    
+    if (conf.useRobustAdaptation) {
+        adaptationModule = make_unique<AdaptationModule>();
+    }
+    
+    if (conf.useMemoryReplay) {
+        memory = make_unique<MemorySystem>();
+    }
+    
+    if (conf.playfulnessLevel > 0) {
+        playfulExplorer = make_unique<PlayfulExplorer>();
+        playfulExplorer->current_playfulness = conf.playfulnessLevel;
+    }
+}
+
+RobustAPEXSox::~RobustAPEXSox() {}
+
+void RobustAPEXSox::init(int sensornumber, int motornumber, RandGen* randGen) {
+    // Initialize base class
+    APEXSox::init(sensornumber, motornumber, randGen);
+    
+    // Initialize feature extractor
+    if (featureExtractor) {
+        int feat_dim = robustConf.featureDimension;
+        if (feat_dim == 0) {
+            // Auto-determine feature dimension
+            feat_dim = min(sensornumber, max(10, sensornumber / 2));
+        }
+        
+        featureExtractor->W_feat.set(feat_dim, sensornumber);
+        featureExtractor->b_feat.set(feat_dim, 1);
+        
+        // Initialize with small random values
+        for (int i = 0; i < feat_dim; i++) {
+            for (int j = 0; j < sensornumber; j++) {
+                featureExtractor->W_feat.val(i, j) = (randGen ? randGen->rand() : drand48()) * 0.1 - 0.05;
+            }
+            featureExtractor->b_feat.val(i, 0) = 0.0;
+        }
+        
+        // Initialize receptive fields for different sensor modalities
+        int num_fields = min(5, sensornumber / 3);
+        for (int i = 0; i < num_fields; i++) {
+            Matrix field(sensornumber, 1);
+            // Create gaussian receptive field
+            double center = i * sensornumber / (double)num_fields;
+            for (int j = 0; j < sensornumber; j++) {
+                double dist = abs(j - center);
+                field.val(j, 0) = exp(-dist * dist / (sensornumber * 0.1));
+            }
+            featureExtractor->receptive_fields.push_back(field);
+            featureExtractor->field_importance.push_back(1.0 / num_fields);
+        }
+    }
+    
+    // Initialize safety monitor
+    if (safetyMonitor) {
+        safetyMonitor->safe_region_center.set(sensornumber, 1);
+        safetyMonitor->safe_region_radius.set(sensornumber, 1);
+        safetyMonitor->safe_region_radius.toId();  // Start with unit radius
+        safetyMonitor->current_risk = 0.0;
+    }
+    
+    // Initialize information explorer
+    if (infoExplorer) {
+        infoExplorer->information_gradient.set(motornumber, 1);
+        infoExplorer->total_information = 0.0;
+    }
+    
+    // Initialize adaptation module with multiple models
+    if (adaptationModule) {
+        // Start with 3 models for different dynamic regimes
+        for (int i = 0; i < 3; i++) {
+            auto model = make_unique<AdaptationModule::DynamicsModel>();
+            model->A_dyn.set(sensornumber, sensornumber);
+            model->B_dyn.set(sensornumber, motornumber);
+            model->A_dyn.toId();
+            model->B_dyn.toId();
+            model->B_dyn *= 0.1;
+            model->confidence = 1.0 / 3.0;
+            model->age = 0;
+            adaptationModule->models.push_back(move(model));
+        }
+        adaptationModule->active_model = 0;
+    }
+    
+    // Initialize playful explorer
+    if (playfulExplorer) {
+        playfulExplorer->play_direction.set(motornumber, 1);
+        playfulExplorer->play_duration = 0;
+    }
+    
+    last_features.set(sensornumber, 1);
+}
+
+void RobustAPEXSox::step(const sensor* sensors, int sensornumber,
+                         motor* motors, int motornumber) {
+    stepNoLearning(sensors, sensornumber, motors, motornumber);
+    
+    if (t < 3) return;  // Need history for learning
+    
+    --t;  // stepNoLearning increases t
+    
+    // Enhanced learning with all robust features
+    learn();
+    
+    // Additional robust learning components
+    if (robustConf.useRobustAdaptation && adaptationModule) {
+        adaptToDynamics();
+    }
+    
+    if (robustConf.useMemoryReplay && memory && t % 10 == 0) {
+        replayExperiences();
+    }
+    
+    if (robustConf.useBehaviorPrimitives) {
+        Matrix x_curr = x_buffer.get(0);
+        Matrix y_curr = y_buffer.get(0);
+        updateBehaviorPrimitives(x_curr, y_curr);
+    }
+    
+    ++t;
+}
+
+void RobustAPEXSox::stepNoLearning(const sensor* sensors, int sensornumber,
+                                   motor* motors, int motornumber) {
+    assert(sensornumber == number_sensors);
+    assert(motornumber == number_motors);
+    
+    // Get sensor values
+    Matrix x_raw(number_sensors, 1, sensors);
+    x_buffer.push(x_raw);
+    
+    // Feature extraction for high-dimensional input
+    Matrix x;
+    if (robustConf.useFeatureExtraction && featureExtractor) {
+        extractFeatures(x_raw);
+        x = featureExtractor->features;
+    } else {
+        x = x_raw;
+    }
+    
+    // Smooth sensor values
+    if (t == 0) {
+        x_smooth = x;
+    } else {
+        x_smooth = x_smooth * 0.9 + x * 0.1;
+    }
+    
+    // Get base action from parent class ensemble
+    vector<Matrix> candidate_outputs;
+    vector<double> weights;
+    
+    // Generate outputs from each model (from parent)
+    for (size_t i = 0; i < models.size(); i++) {
+        const auto& model = models[i];
+        
+        // Add creativity/exploration
+        Matrix x_creative = x_smooth;
+        if (conf.useCuriosity && metaState.currentCuriosity > 0) {
+            Matrix noise(x.getM(), 1);
+            for (int j = 0; j < x.getM(); j++) {
+                noise.val(j, 0) = (2.0 * rand() / RAND_MAX - 1.0) * 
+                                 metaState.currentCuriosity * conf.curiosityBonus;
+            }
+            x_creative += noise;
+        }
+        
+        // Controller output
+        Matrix y = (model->C * x_creative + model->h).map(g);
+        candidate_outputs.push_back(y);
+        weights.push_back(model->scale_weight);
+    }
+    
+    // Blend outputs
+    Matrix y = blendOutputs(candidate_outputs);
+    
+    // Apply robust enhancements
+    
+    // 1. Information-theoretic exploration bonus
+    if (robustConf.useInfoGainExploration && infoExplorer) {
+        y = addExplorationBonus(y);
+    }
+    
+    // 2. Playful exploration
+    if (playfulExplorer && playfulExplorer->current_playfulness > 0) {
+        y = playfulExplorer->generatePlayfulAction(y);
+    }
+    
+    // 3. Behavior primitive influence
+    if (robustConf.useBehaviorPrimitives && !primitives.empty()) {
+        // Find most active primitive
+        double max_activation = 0;
+        int best_primitive = -1;
+        for (size_t i = 0; i < primitives.size(); i++) {
+            double act = primitives[i]->similarity(x);
+            if (act > max_activation) {
+                max_activation = act;
+                best_primitive = i;
+            }
+        }
+        
+        if (best_primitive >= 0 && max_activation > robustConf.primitiveThreshold) {
+            activePrimitiveIndex = best_primitive;
+            // Blend with primitive action
+            Matrix prim_action = primitives[best_primitive]->center.rows(
+                x.getM(), number_motors);  // Extract motor part
+            y = y * (1.0 - max_activation) + prim_action * max_activation;
+        }
+    }
+    
+    // 4. Safety constraints (last to ensure safety)
+    if (robustConf.usePredictiveSafety && safetyMonitor) {
+        y = applySafetyConstraints(y);
+    }
+    
+    // Calculate novelty for current state
+    if (playfulExplorer) {
+        currentNoveltyScore = playfulExplorer->calculateNovelty(x);
+    }
+    
+    // Store experience
+    if (memory && t > 0) {
+        Experience exp;
+        exp.state = x_buffer.get(-1);
+        exp.action = y_buffer.get(-1);
+        exp.next_state = x_raw;
+        exp.reward = calculateIntrinsicReward(x_raw, y);
+        exp.information = infoExplorer ? infoExplorer->total_information : 0;
+        exp.primitive_id = activePrimitiveIndex;
+        memory->store(exp);
+    }
+    
+    // Store motor values
+    y_buffer.push(y);
+    y.convertToBuffer(motors, motornumber);
+    
+    ++t;
+}
+
+void RobustAPEXSox::learn() {
+    // Call parent learning
+    APEXSox::learn();
+    
+    // Additional robust learning components
+    
+    // Adapt feature extraction
+    if (robustConf.useFeatureExtraction && featureExtractor) {
+        const Matrix& x_fut = x_buffer.get(0);
+        const Matrix& x = x_buffer.get(-1);
+        Matrix prediction_error = x_fut - x;  // Simplified
+        featureExtractor->adapt(prediction_error, robustConf.featureLearningRate);
+    }
+    
+    // Update safety regions
+    if (robustConf.usePredictiveSafety && safetyMonitor) {
+        safetyMonitor->updateSafeRegion(x_buffer.get(0));
+    }
+    
+    // Update information gradient
+    if (robustConf.useInfoGainExploration && infoExplorer) {
+        Matrix current_state = x_buffer.get(0);
+        Matrix current_action = y_buffer.get(0);
+        double info_gain = infoExplorer->calculateInfoGain(current_state, current_action);
+        infoExplorer->total_information += info_gain;
+    }
+    
+    // Update playfulness based on learning progress
+    if (playfulExplorer) {
+        double learning_progress = 0.0;
+        if (!models.empty()) {
+            learning_progress = 1.0 / (1.0 + models[activeModelIndex]->avg_error);
+        }
+        playfulExplorer->updatePlayfulness(stabilityIndex, learning_progress);
+    }
+    
+    // Create new behavior primitives if needed
+    if (robustConf.useBehaviorPrimitives && currentNoveltyScore > robustConf.noveltyBonus) {
+        emergeBehavior();
+    }
+}
+
+void RobustAPEXSox::extractFeatures(const Matrix& sensors) {
+    if (!featureExtractor) return;
+    
+    featureExtractor->extract(sensors);
+}
+
+Matrix RobustAPEXSox::applySafetyConstraints(const Matrix& raw_action) {
+    if (!safetyMonitor) return raw_action;
+    
+    return safetyMonitor->projectToSafe(raw_action);
+}
+
+Matrix RobustAPEXSox::addExplorationBonus(const Matrix& action) {
+    if (!infoExplorer) return action;
+    
+    return infoExplorer->getExplorationBonus(action);
+}
+
+void RobustAPEXSox::updateBehaviorPrimitives(const Matrix& state, const Matrix& action) {
+    // Update existing primitives
+    for (auto& prim : primitives) {
+        double similarity = prim->similarity(state);
+        if (similarity > robustConf.primitiveThreshold) {
+            double reward = calculateIntrinsicReward(state, action);
+            prim->update(state, reward);
+        }
+        
+        // Decay unused primitives
+        prim->activation *= robustConf.primitiveDecay;
+    }
+    
+    // Remove dead primitives
+    primitives.erase(
+        remove_if(primitives.begin(), primitives.end(),
+                  [](const unique_ptr<BehaviorPrimitive>& p) {
+                      return p->activation < 0.001;
+                  }),
+        primitives.end()
+    );
+}
+
+void RobustAPEXSox::adaptToDynamics() {
+    if (!adaptationModule || t < 2) return;
+    
+    Matrix x_prev = x_buffer.get(-2);
+    Matrix u_prev = y_buffer.get(-2);
+    Matrix x_curr = x_buffer.get(-1);
+    
+    // Identify dynamics
+    adaptationModule->identifyDynamics(x_prev, u_prev, x_curr);
+    
+    // Select best model
+    adaptationModule->active_model = adaptationModule->selectBestModel(x_curr);
+    
+    // Update robustness score
+    if (!adaptationModule->models.empty()) {
+        robustnessScore = adaptationModule->models[adaptationModule->active_model]->confidence;
+    }
+}
+
+void RobustAPEXSox::replayExperiences() {
+    if (!memory) return;
+    
+    // Recall relevant experiences
+    Matrix current_context = x_buffer.get(0);
+    auto experiences = memory->recall(current_context, 5);
+    
+    // Learn from recalled experiences
+    for (const auto& exp : experiences) {
+        // Simplified replay learning
+        // In full implementation, would replay through models
+        double relevance = exp.relevance(current_context);
+        if (relevance > 0.5) {
+            // Update models based on past experience
+            // This helps with transfer learning
+        }
+    }
+    
+    // Consolidate memory
+    if (t % 100 == 0) {
+        memory->consolidate();
+    }
+}
+
+double RobustAPEXSox::calculateIntrinsicReward(const Matrix& state, const Matrix& action) {
+    double reward = 0.0;
+    
+    // Novelty reward
+    if (playfulExplorer) {
+        reward += currentNoveltyScore * robustConf.noveltyBonus;
+    }
+    
+    // Information gain reward
+    if (infoExplorer) {
+        double info_gain = infoExplorer->calculateInfoGain(state, action);
+        reward += info_gain * robustConf.infoWeight;
+    }
+    
+    // Stability penalty (but allow temporary instability for exploration)
+    if (robustConf.allowTemporaryInstability) {
+        reward -= max(0.0, (1.0 - currentSafetyIndex) - 0.2) * 0.5;
+    } else {
+        reward -= (1.0 - currentSafetyIndex) * 1.0;
+    }
+    
+    return reward;
+}
+
+void RobustAPEXSox::emergeBehavior() {
+    if (primitives.size() >= static_cast<size_t>(robustConf.maxPrimitives)) {
+        // Replace least used primitive
+        auto min_it = min_element(primitives.begin(), primitives.end(),
+                                 [](const unique_ptr<BehaviorPrimitive>& a,
+                                    const unique_ptr<BehaviorPrimitive>& b) {
+                                     return a->usage_count < b->usage_count;
+                                 });
+        primitives.erase(min_it);
+    }
+    
+    // Create new primitive centered at current state
+    auto prim = make_unique<BehaviorPrimitive>();
+    Matrix current_state = x_buffer.get(0);
+    Matrix current_action = y_buffer.get(0);
+    
+    prim->center.set(current_state.getM() + current_action.getM(), 1);
+    prim->center.setRange(0, current_state.getM(), current_state);
+    prim->center.setRange(current_state.getM(), current_action.getM(), current_action);
+    
+    prim->covariance.set(prim->center.getM(), prim->center.getM());
+    prim->covariance.toId();
+    prim->covariance *= 0.1;  // Start with small variance
+    
+    prim->activation = 1.0;
+    prim->success_rate = 0.5;
+    prim->usage_count = 1;
+    
+    primitives.push_back(move(prim));
+}
+
+// Feature Extractor implementation
+void RobustAPEXSox::FeatureExtractor::extract(const Matrix& input) {
+    // Basic linear feature extraction with nonlinearity
+    features = (W_feat * input + b_feat).map(tanh);
+    
+    // Apply receptive fields if available
+    if (!receptive_fields.empty()) {
+        Matrix field_features(receptive_fields.size(), 1);
+        for (size_t i = 0; i < receptive_fields.size(); i++) {
+            // Weighted sum over receptive field
+            double sum = 0;
+            for (int j = 0; j < input.getM(); j++) {
+                sum += input.val(j, 0) * receptive_fields[i].val(j, 0);
+            }
+            field_features.val(i, 0) = tanh(sum);
+        }
+        
+        // Combine with linear features
+        Matrix combined(features.getM() + field_features.getM(), 1);
+        combined.setRange(0, features.getM(), features);
+        combined.setRange(features.getM(), field_features.getM(), field_features);
+        features = combined;
+    }
+}
+
+void RobustAPEXSox::FeatureExtractor::adapt(const Matrix& error, double lr) {
+    // Simple gradient descent on feature weights
+    Matrix grad_W = error * (features^T);
+    W_feat += grad_W * lr;
+    
+    // Adapt receptive field importance
+    for (size_t i = 0; i < field_importance.size(); i++) {
+        field_importance[i] *= 0.99;  // Decay
+        field_importance[i] += 0.01 * (1.0 / (1.0 + error.norm_sqr()));
+    }
+    
+    // Normalize importance
+    double sum = accumulate(field_importance.begin(), field_importance.end(), 0.0);
+    if (sum > 0) {
+        for (auto& imp : field_importance) imp /= sum;
+    }
+}
+
+// Safety Monitor implementation
+double RobustAPEXSox::SafetyMonitor::evaluateCBF(const Matrix& state, const Matrix& action) {
+    // Control Barrier Function: h(x) >= 0 is safe
+    Matrix deviation = state - safe_region_center;
+    double normalized_dist = 0;
+    
+    for (int i = 0; i < state.getM(); i++) {
+        double d = deviation.val(i, 0) / safe_region_radius.val(i, 0);
+        normalized_dist += d * d;
+    }
+    
+    // CBF value: positive is safe, negative is unsafe
+    return 1.0 - sqrt(normalized_dist);
+}
+
+Matrix RobustAPEXSox::SafetyMonitor::projectToSafe(const Matrix& action) {
+    double cbf_value = evaluateCBF(state_history.get(0), action);
+    
+    if (cbf_value < 0.1) {  // Getting close to unsafe region
+        // Project action to maintain safety
+        Matrix safe_action = action;
+        double scale = min(1.0, (cbf_value + 0.5) / 0.6);
+        safe_action *= scale;
+        
+        current_risk = 1.0 - scale;
+        return safe_action;
+    }
+    
+    current_risk = 0.0;
+    return action;
+}
+
+void RobustAPEXSox::SafetyMonitor::updateSafeRegion(const Matrix& state) {
+    state_history.push(state);
+    
+    // Update safe region based on observed states
+    if (state_history.size() >= 20) {
+        // Calculate mean and variance of recent states
+        Matrix mean(state.getM(), 1);
+        mean.toZero();
+        
+        for (int i = -20; i < 0; i++) {
+            mean += state_history.get(i);
+        }
+        mean *= (1.0 / 20.0);
+        
+        // Update center with momentum
+        safe_region_center = safe_region_center * 0.95 + mean * 0.05;
+        
+        // Update radius based on variance
+        for (int i = 0; i < state.getM(); i++) {
+            double var = 0;
+            for (int j = -20; j < 0; j++) {
+                double diff = state_history.get(j).val(i, 0) - mean.val(i, 0);
+                var += diff * diff;
+            }
+            var /= 20.0;
+            safe_region_radius.val(i, 0) = sqrt(var) * 3.0;  // 3-sigma rule
+        }
+    }
+}
+
+// Information Explorer implementation
+double RobustAPEXSox::InfoExplorer::calculateInfoGain(const Matrix& state, const Matrix& action) {
+    size_t state_hash = hashState(state);
+    
+    // Update visit count
+    state_visits[state_hash]++;
+    
+    // Information gain is inversely proportional to visit frequency
+    double visit_prob = state_visits[state_hash] / (double)(state_visits.size() + 1);
+    double info_gain = -log(visit_prob + 0.001);
+    
+    // Update gradient for exploration
+    information_gradient = action * (info_gain - total_information / state_visits.size());
+    
+    return info_gain;
+}
+
+Matrix RobustAPEXSox::InfoExplorer::getExplorationBonus(const Matrix& base_action) {
+    // Add exploration in direction of information gradient
+    Matrix bonus = information_gradient * 0.1;
+    return base_action + bonus;
+}
+
+size_t RobustAPEXSox::InfoExplorer::hashState(const Matrix& state) {
+    // Simple discretization-based hashing
+    size_t hash = 0;
+    for (int i = 0; i < state.getM(); i++) {
+        int discrete = static_cast<int>(state.val(i, 0) * 10);
+        hash ^= std::hash<int>()(discrete) << i;
+    }
+    return hash;
+}
+
+// Behavior Primitive implementation
+double RobustAPEXSox::BehaviorPrimitive::similarity(const Matrix& state) {
+    Matrix diff = state - center.rows(0, state.getM());
+    
+    // Mahalanobis distance
+    double dist_sq = 0;
+    for (int i = 0; i < state.getM(); i++) {
+        for (int j = 0; j < state.getM(); j++) {
+            dist_sq += diff.val(i, 0) * covariance.val(i, j) * diff.val(j, 0);
+        }
+    }
+    
+    return exp(-0.5 * dist_sq);
+}
+
+void RobustAPEXSox::BehaviorPrimitive::update(const Matrix& state, double reward) {
+    // Update success rate
+    success_rate = success_rate * 0.95 + reward * 0.05;
+    
+    // Update activation based on success
+    activation = activation * 0.9 + success_rate * 0.1;
+    
+    // Adapt center slightly toward successful states
+    if (reward > 0) {
+        Matrix state_part = center.rows(0, state.getM());
+        state_part = state_part * 0.95 + state * 0.05;
+        center.setRange(0, state.getM(), state_part);
+    }
+    
+    usage_count++;
+}
+
+// Dynamics Model implementation
+double RobustAPEXSox::AdaptationModule::DynamicsModel::predict_error(
+    const Matrix& x, const Matrix& u, const Matrix& x_next) {
+    Matrix prediction = A_dyn * x + B_dyn * u;
+    Matrix error = x_next - prediction;
+    return error.norm_sqr();
+}
+
+void RobustAPEXSox::AdaptationModule::identifyDynamics(
+    const Matrix& x, const Matrix& u, const Matrix& x_next) {
+    // Update each model and track performance
+    for (auto& model : models) {
+        double error = model->predict_error(x, u, x_next);
+        
+        // Update model using recursive least squares
+        Matrix prediction = model->A_dyn * x + model->B_dyn * u;
+        Matrix error_vec = x_next - prediction;
+        
+        // Simple gradient update (full RLS would be more complex)
+        model->A_dyn += (error_vec * (x^T)) * 0.01;
+        model->B_dyn += (error_vec * (u^T)) * 0.01;
+        
+        // Update confidence
+        model->confidence = model->confidence * 0.95 + (1.0 / (1.0 + error)) * 0.05;
+        model->age++;
+    }
+}
+
+int RobustAPEXSox::AdaptationModule::selectBestModel(const Matrix& x) {
+    double best_confidence = -1;
+    int best_idx = 0;
+    
+    for (size_t i = 0; i < models.size(); i++) {
+        // Prefer confident, recently updated models
+        double score = models[i]->confidence / (1.0 + models[i]->age * 0.01);
+        if (score > best_confidence) {
+            best_confidence = score;
+            best_idx = i;
+        }
+    }
+    
+    // Reset age of selected model
+    models[best_idx]->age = 0;
+    
+    return best_idx;
+}
+
+// Memory System implementation
+void RobustAPEXSox::MemorySystem::store(const Experience& exp) {
+    episodes.push_back(exp);
+    
+    if (episodes.size() > consolidated_memory.max_size()) {
+        episodes.pop_front();
+    }
+}
+
+vector<RobustAPEXSox::Experience> RobustAPEXSox::MemorySystem::recall(
+    const Matrix& context, int k) {
+    vector<pair<double, Experience>> scored_memories;
+    
+    // Score all memories by relevance
+    for (const auto& exp : episodes) {
+        double relevance = exp.relevance(context);
+        scored_memories.push_back({relevance, exp});
+    }
+    
+    // Sort by relevance
+    sort(scored_memories.begin(), scored_memories.end(),
+         [](const auto& a, const auto& b) { return a.first > b.first; });
+    
+    // Return top k
+    vector<Experience> result;
+    for (int i = 0; i < min(k, (int)scored_memories.size()); i++) {
+        result.push_back(scored_memories[i].second);
+    }
+    
+    return result;
+}
+
+void RobustAPEXSox::MemorySystem::consolidate() {
+    // Move important experiences to long-term memory
+    for (const auto& exp : episodes) {
+        if (exp.reward > 0.5 || exp.information > 1.0) {
+            consolidated_memory.push({exp.reward + exp.information, exp});
+        }
+    }
+}
+
+double RobustAPEXSox::Experience::relevance(const Matrix& current_state) {
+    Matrix diff = current_state - state;
+    return exp(-diff.norm_sqr());
+}
+
+// Playful Explorer implementation
+Matrix RobustAPEXSox::PlayfulExplorer::generatePlayfulAction(const Matrix& base_action) {
+    if (play_duration <= 0) {
+        // Start new play sequence
+        play_duration = 10 + rand() % 20;
+        
+        // Random play direction
+        for (int i = 0; i < play_direction.getM(); i++) {
+            play_direction.val(i, 0) = (2.0 * rand() / RAND_MAX - 1.0);
+        }
+        play_direction *= (1.0 / (play_direction.norm() + 0.001));
+    }
+    
+    // Blend base action with play direction
+    Matrix playful = base_action * (1.0 - current_playfulness) + 
+                    play_direction * current_playfulness * 0.5;
+    
+    play_duration--;
+    return playful;
+}
+
+double RobustAPEXSox::PlayfulExplorer::calculateNovelty(const Matrix& state) {
+    // Check if state is novel
+    for (const auto& known : novel_states) {
+        Matrix diff = state - known;
+        if (diff.norm_sqr() < 0.1) {
+            return 0.0;  // Not novel
+        }
+    }
+    
+    // Novel state found
+    novel_states.push_back(state);
+    if (novel_states.size() > 100) {
+        novel_states.erase(novel_states.begin());
+    }
+    
+    return 1.0;
+}
+
+void RobustAPEXSox::PlayfulExplorer::updatePlayfulness(double stability, double learning_progress) {
+    // Increase playfulness when stable and learning is slow
+    if (stability > 0.8 && learning_progress < 0.1) {
+        current_playfulness = min(1.0, current_playfulness + 0.01);
+    } else if (stability < 0.5) {
+        // Reduce playfulness when unstable
+        current_playfulness = max(0.0, current_playfulness - 0.02);
+    }
+}
