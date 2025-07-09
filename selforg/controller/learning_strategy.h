@@ -22,6 +22,7 @@
 
 #include "matrix.h"
 #include <memory>
+#include <cmath>
 
 namespace lpzrobots {
 

@@ -22,6 +22,7 @@
 
 #include "matrix.h"
 #include <vector>
+#include <memory>
 
 namespace lpzrobots {
 
@@ -72,7 +73,7 @@ public:
                matrix::Matrix& A,
                matrix::Matrix& h,
                matrix::Matrix& b,
-               int t);
+               int t) override;
     
     bool shouldManage(int t) const override {
         return (t % interval) == 0;
@@ -96,7 +97,7 @@ public:
                matrix::Matrix& A,
                matrix::Matrix& h,
                matrix::Matrix& b,
-               int t);
+               int t) override;
     
     bool shouldManage(int t) const override {
         return (t % interval) == 0;
@@ -123,7 +124,7 @@ public:
                matrix::Matrix& A,
                matrix::Matrix& h,
                matrix::Matrix& b,
-               int t);
+               int t) override;
     
     bool shouldManage(int t) const override {
         return (t % interval) == 0;
@@ -170,9 +171,6 @@ public:
         }
         return false;
     }
-    
-private:
-    std::vector<std::unique_ptr<ManagementStrategy>> strategies;
 };
 
 } // namespace lpzrobots
