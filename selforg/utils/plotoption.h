@@ -66,7 +66,7 @@ public:
   friend class PlotOptionEngine;
 
   PlotOption()
-    : pipe(0)
+    : pipe(nullptr)
     , interval(1)
     , mode(PlotMode::NoPlot)
     , parameter("") {
@@ -86,7 +86,7 @@ public:
                       int interval = 1,
                       const std::string& parameter = std::string(),
                       const std::string& filter = std::string())
-    : pipe(0)
+    : pipe(nullptr)
     , interval(interval)
     , mode(mode)
     , parameter(parameter) {

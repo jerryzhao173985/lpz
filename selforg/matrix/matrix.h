@@ -66,7 +66,7 @@ public:
       otherwise matrix will be filled with _data in a row-wise manner.
       In this case _data must be at least _m*_n elements long
   */
-  Matrix(I _m, I _n, const D* _data = 0);
+  Matrix(I _m, I _n, const D* _data = nullptr);
   /** constucts a matrix with the given size and fills it with the default value
    */
   Matrix(I _m, I _n, D def);

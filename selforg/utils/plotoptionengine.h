@@ -40,7 +40,7 @@ public:
   /** initializes PlotOptionEngine and opens all pipes and stuff.
       The optional controller is used to print structure information
    */
-  virtual bool init(AbstractController* maybe_controller = 0);
+  virtual bool init(AbstractController* maybe_controller = nullptr);
 
   /**
    * Reinitialises the PlotOptionEngine.
