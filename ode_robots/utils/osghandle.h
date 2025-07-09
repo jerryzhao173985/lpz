@@ -24,9 +24,9 @@
 #ifndef __OSGHANDLE_H
 #define __OSGHANDLE_H
 
-#include "osgforwarddecl.h"
-#include "color.h"
-#include "colorschema.h"
+#include <osg/osgforwarddecl.h>
+#include <utils/color.h>
+#include <utils/colorschema.h>
 
 namespace osgShadow {
   class ShadowedScene;
