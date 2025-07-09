@@ -34,6 +34,7 @@ add_dependencies(selforg selforg_headers)
 target_include_directories(selforg
     PUBLIC
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>  # Unified include directory
+        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include/selforg>  # For quoted includes in public headers
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}>  # For <selforg/...> includes
         $<INSTALL_INTERFACE:include>
         $<INSTALL_INTERFACE:include/selforg>

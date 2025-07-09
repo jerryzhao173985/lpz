@@ -71,12 +71,20 @@ function(lpzrobots_add_component_library name)
                 ${CMAKE_CURRENT_SOURCE_DIR}
         )
         
-        # Add subdirectories as private includes
+        # Add subdirectories as public includes for selforg since its public headers
+        # include files from subdirectories (e.g., wiredcontroller.h includes plotoptionengine.h)
+        # For other components, subdirectories can remain private
         if(ARG_SUBDIRS)
             foreach(dir ${ARG_SUBDIRS})
-                target_include_directories(${name} PRIVATE 
-                    ${CMAKE_CURRENT_SOURCE_DIR}/${dir}
-                )
+                if(${name} STREQUAL "selforg")
+                    target_include_directories(${name} PUBLIC 
+                        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/${dir}>
+                    )
+                else()
+                    target_include_directories(${name} PRIVATE 
+                        ${CMAKE_CURRENT_SOURCE_DIR}/${dir}
+                    )
+                endif()
             endforeach()
         endif()
     endif()
