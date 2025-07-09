@@ -27,6 +27,9 @@ set(SELFORG_SOURCES
 add_library(selforg ${SELFORG_SOURCES})
 add_library(lpzrobots::selforg ALIAS selforg)
 
+# Ensure headers are ready before building (moved up from line 144)
+add_dependencies(selforg selforg_headers)
+
 # Set include directories
 target_include_directories(selforg
     PUBLIC
@@ -123,8 +126,15 @@ file(GLOB_RECURSE HEADER_FILES
 # Create include/selforg directory structure
 file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/include/selforg)
 
-# Create a custom target for header symlinks
-add_custom_target(selforg_headers)
+# Create a stamp file to track symlink creation
+set(SYMLINK_STAMP ${CMAKE_CURRENT_BINARY_DIR}/symlinks.stamp)
+
+# Create all symlinks in a single custom command
+add_custom_command(
+    OUTPUT ${SYMLINK_STAMP}
+    COMMENT "Creating header symlinks..."
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/include/selforg
+)
 
 foreach(header ${HEADER_FILES})
     get_filename_component(header_name ${header} NAME)
@@ -132,16 +142,23 @@ foreach(header ${HEADER_FILES})
     set(link_header ${CMAKE_CURRENT_BINARY_DIR}/include/selforg/${header_name})
     
     add_custom_command(
-        TARGET selforg_headers PRE_BUILD
-        COMMAND ${CMAKE_COMMAND} -E create_symlink
-            ${source_header}
-            ${link_header}
-        COMMENT "Creating symlink for ${header_name}"
+        OUTPUT ${SYMLINK_STAMP}
+        APPEND
+        COMMAND ${CMAKE_COMMAND} -E create_symlink ${source_header} ${link_header}
     )
 endforeach()
 
-# Make selforg depend on the header symlinks
-add_dependencies(selforg selforg_headers)
+# Touch stamp file to mark completion
+add_custom_command(
+    OUTPUT ${SYMLINK_STAMP}
+    APPEND
+    COMMAND ${CMAKE_COMMAND} -E touch ${SYMLINK_STAMP}
+)
+
+# Create a custom target that depends on the stamp file
+add_custom_target(selforg_headers DEPENDS ${SYMLINK_STAMP})
+
+# Dependency already added above after add_library
 
 # Installation
 install(TARGETS selforg
