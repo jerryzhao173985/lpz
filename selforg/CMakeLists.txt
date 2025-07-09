@@ -110,7 +110,7 @@ set_target_properties(selforg PROPERTIES
     POSITION_INDEPENDENT_CODE ON
 )
 
-# Create symlinks for headers (mimics original build system)
+# Create flattened header structure for backward compatibility
 file(GLOB_RECURSE HEADER_FILES
     abstractrobot.h
     agent.h
@@ -126,23 +126,36 @@ file(GLOB_RECURSE HEADER_FILES
 # Create include/selforg directory structure
 file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/include/selforg)
 
-# Create symlinks at configure time to ensure they exist before build
+# Generate a header file that creates all the symlinks
+set(SYMLINK_SCRIPT ${CMAKE_CURRENT_BINARY_DIR}/create_symlinks.cmake)
+file(WRITE ${SYMLINK_SCRIPT} "# Auto-generated script to create header symlinks\n")
+file(APPEND ${SYMLINK_SCRIPT} "file(MAKE_DIRECTORY \"${CMAKE_CURRENT_BINARY_DIR}/include/selforg\")\n")
+
 foreach(header ${HEADER_FILES})
     get_filename_component(header_name ${header} NAME)
     set(source_header ${CMAKE_CURRENT_SOURCE_DIR}/${header})
     set(link_header ${CMAKE_CURRENT_BINARY_DIR}/include/selforg/${header_name})
     
-    # Remove existing symlink if it exists
-    if(EXISTS ${link_header})
-        file(REMOVE ${link_header})
-    endif()
-    
-    # Create the symlink
-    file(CREATE_LINK ${source_header} ${link_header} SYMBOLIC)
+    file(APPEND ${SYMLINK_SCRIPT} "if(NOT EXISTS \"${link_header}\")\n")
+    file(APPEND ${SYMLINK_SCRIPT} "  file(CREATE_LINK \"${source_header}\" \"${link_header}\" SYMBOLIC)\n")
+    file(APPEND ${SYMLINK_SCRIPT} "endif()\n")
 endforeach()
 
-# Create a dummy target for compatibility (no longer needed but kept for consistency)
-add_custom_target(selforg_headers)
+# Execute the script at configure time
+execute_process(COMMAND ${CMAKE_COMMAND} -P ${SYMLINK_SCRIPT})
+
+# Also create a custom command to ensure symlinks exist at build time
+add_custom_command(
+    OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/include/selforg/.symlinks_created
+    COMMAND ${CMAKE_COMMAND} -P ${SYMLINK_SCRIPT}
+    COMMAND ${CMAKE_COMMAND} -E touch ${CMAKE_CURRENT_BINARY_DIR}/include/selforg/.symlinks_created
+    COMMENT "Ensuring header symlinks exist..."
+    DEPENDS ${HEADER_FILES}
+)
+
+# Create a target that depends on the symlinks
+add_custom_target(selforg_headers 
+    DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/include/selforg/.symlinks_created)
 
 # Dependency already added above after add_library
 

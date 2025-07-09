@@ -22,7 +22,7 @@
 
 class Gnuplot{
 public: 
-  Gnuplot() : plotInfo(0), windowNumber(0) {} 
+  Gnuplot() : plotInfo(nullptr), windowNumber(0) {} 
   Gnuplot(const PlotInfo* plotinfo, int windowNumber = 0);
   
   ~Gnuplot();

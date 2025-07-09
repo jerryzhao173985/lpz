@@ -92,7 +92,7 @@ public:
           {   paramMap.insert(argv[i], argv[i+1]);
             ++i;
           }
-        else if(argv[i][0] == '-' && argv[i+1] != 0 && argv[i+1][0] == '-') paramMap.insert(argv[i], "1");
+        else if(argv[i][0] == '-' && argv[i+1] != nullptr && argv[i+1][0] == '-') paramMap.insert(argv[i], "1");
         else if(argv[i][0] == '-' && argv[i+1] == nullptr) paramMap.insert(argv[i], "1");
       }
 
