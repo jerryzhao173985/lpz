@@ -23,6 +23,7 @@
 
 #include <cassert>
 #include <cmath>
+#include <memory>
 
 #include "invertablemodel.h"
 #include "matrix.h"
@@ -51,9 +52,9 @@ class DerBigController : public InvertMotorController, public Storeable {
 
 public:
   DerBigController(const DerBigControllerConf& conf = getDefaultConf());
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
 
-  virtual ~DerBigController() override;
+  virtual ~DerBigController();
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
   virtual int getSensorNumber() const override {
@@ -66,28 +67,28 @@ public:
 
   /// performs one step (includes learning).
   /// Calulates motor commands from sensor inputs.
-  virtual void step(const sensor*, int number_sensors, motor*, int number_motors) override;
+  virtual void step(const sensor*, int number_sensors, motor*, int number_motors);
 
   /// performs one step without learning. Calulates motor commands from sensor inputs.
   virtual void stepNoLearning(const sensor*,
                               int number_sensors,
                               motor*,
-                              int number_motors) override;
+                              int number_motors);
 
   /**************  STOREABLE **********************************/
   /** stores the controller values to a given file. */
-  virtual bool store(FILE* f) const override;
+  virtual bool store(FILE* f) const;
   /** loads the controller values from a given file. */
-  virtual bool restore(FILE* f) override;
+  virtual bool restore(FILE* f);
 
   /************** INSPECTABLE ********************************/
-  virtual iparamkeylist getInternalParamNames() const override;
-  virtual iparamvallist getInternalParams() const override;
-  virtual ilayerlist getStructuralLayers() const override;
-  virtual iconnectionlist getStructuralConnections() const override;
+  virtual iparamkeylist getInternalParamNames() const;
+  virtual iparamvallist getInternalParams() const;
+  virtual ilayerlist getStructuralLayers() const;
+  virtual iconnectionlist getStructuralConnections() const;
 
   /************** CONFIGURABLE ********************************/
-  virtual void notifyOnChange(const paramkey& key) override;
+  virtual void notifyOnChange(const paramkey& key);
 
   /**** TEACHING ****/
   /** The given motor teaching signal is used for this timestep.
@@ -167,8 +168,8 @@ protected:
   int t_rand = 0;             ///< initial random time to avoid syncronous management of all controllers
   int managementInterval = 0; ///< interval between subsequent management function calls
   paramval inhibition;    ///< inhibition strength for sparce kwta strategy (is scaled with epsC)
-  paramval kwta;          ///< static_cast<int> number of synapses that get strengthend
-  paramval limitRF;   ///< static_cast<int> receptive field of motor neurons (number of offcenter sensors) if
+  paramval kwta;          ///< number of synapses that get strengthend (int)
+  paramval limitRF;   ///< receptive field of motor neurons (number of offcenter sensors, int) if
                       ///< null then no limitation. Mutual exclusive with inhibition
   paramval dampS;     ///< damping of S matrix
   paramval dampC;     ///< damping of C matrix
