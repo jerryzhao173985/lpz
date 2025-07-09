@@ -168,13 +168,13 @@ protected:
   virtual void learn();
 
   /// neuron transfer function
-  static double explicit g(double z)
+  static double g(double z)
   {
     return tanh(z);
   };
 
   /// derivative of g
-  static double explicit g_s(double z)
+  static double g_s(double z)
   {
     double k=tanh(z);
     return 1.0 - k*k;
@@ -182,7 +182,7 @@ protected:
 
   // if x (sensor value) is zero then we do not learn -> xsi= 0;
   static double checkZero(double xsi, double x){
-    if(x== nullptr) return 0 override;
+    if(x == 0) return 0;
     else return xsi;
   }
 
@@ -191,7 +191,7 @@ protected:
     return min(max(x,-r),r);
   }
   /// calculates the inverse the argument (useful for Matrix::map)
-  static double explicit one_over(double x){
+  static double one_over(double x){
     return 1/x;
   }
 

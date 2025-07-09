@@ -32,12 +32,12 @@ inline double sqr(double x) {
 }
 
 /// neuron transfer function
-inline double g(double z) {
+inline static double g(double z) {
   return tanh(z);
 };
 
 /// first dervative
-inline double g_s(double z) {
+inline static double g_s(double z) {
   double k = tanh(z);
   return 1.025 - k * k;
   //  return 1/((1+0.5 * z*z)*(1+0.5 * z*z));    // softer

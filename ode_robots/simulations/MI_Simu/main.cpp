@@ -148,7 +148,7 @@ public:
   /*
   virtual std::list<iparamkey> getInternalParamNames() const {
           std::list<iparamkey> list;
-          list+=std::string(__PLACEHOLDER_2__);
+          list+=std:: string(__PLACEHOLDER_2__);
           return list;
   }
 
@@ -172,7 +172,7 @@ public:
 
     stats = new StatisticTools();
 
-    setCameraHomePos(Pos(-19.15, 13.9, 6.9),  Pos(-126.1, -17.6, 0));
+    setCameraHomePos(Pos(-19.15, 13.9, 6.9), Pos(-126.1, -17.6, 0));
     // initialization
     // - set noise to 0.1
     // - register file chess.ppm as a texture called chessTexture (used for the wheels)
@@ -185,8 +185,8 @@ public:
     // initialization
 
     Playground* playground =
-      new Playground(odeHandle, osgHandle.changeColor(Color(0.88f,0.4f,0.26f,0.2f)),osg::Vec3(18, 0.2, 2.0));
-    playground->setPosition(osg::Vec3(0,0,0)); // playground positionieren und generieren
+      new Playground(odeHandle, osgHandle.changeColor(Color(0.88f,0.4f,0.26f,0.2f)),osg:: Vec3(18, 0.2, 2.0));
+    playground->setPosition(osg:: Vec3(0,0,0)); // playground positionieren und generieren
     Substance substance;
     substance.toRubber(40);
     playground->setGroundSubstance(substance);
@@ -208,7 +208,7 @@ public:
       {
         PassiveBox* b =
           new PassiveBox(odeHandle,
-                         osgHandle.changeColor(Color(1.0f,0.2f,0.2f,0.5f)), osg::Vec3(1.5+i*0.01,1.5+i*0.01,1.5+i*0.01),40.0);
+                         osgHandle.changeColor(Color(1.0f,0.2f,0.2f,0.5f)), osg:: Vec3(1.5+i*0.01,1.5+i*0.01,1.5+i*0.01),40.0);
         b->setTexture("Images/light_chess.rgb");
         b->setPosition(Pos(i*4-5, -5+j*4, 1.0));
         global.obstacles.push_back(b);
@@ -229,7 +229,7 @@ public:
     AbstractWiring* wiring;
     AbstractController *controller;
 
-    Nimm2Conf nimm2conf = Nimm2::getDefaultConf();
+    Nimm2Conf nimm2conf = Nimm2:: getDefaultConf();
     nimm2conf.size = 1.6;
     nimm2conf.force = 5;
     nimm2conf.speed=12;
@@ -239,10 +239,10 @@ public:
     nimm2conf.boxMode=true;
     for(int r=0; r < numNimm2; ++r)
     {
-      myNimm2 = new Nimm2(odeHandle, osgHandle, nimm2conf, "Nimm2_" + std::itos(r));
+      myNimm2 = new Nimm2(odeHandle, osgHandle, nimm2conf, "Nimm2_" + std:: itos(r));
       //robot = new ShortCircuit(odeHandle,osgHandle,1,1);
       (static_cast<OdeRobot*>(myNimm2))->place(Pos ((r-1)*5,5,0));
-      InvertMotorNStepConf invertnconf = InvertMotorNStep::getDefaultConf();
+      InvertMotorNStepConf invertnconf = InvertMotorNStep:: getDefaultConf();
       invertnconf.cInit = cInit;
       controller = new InvertMotorNStep(invertnconf);
       controller->setParam( "epsA",0);
@@ -360,13 +360,13 @@ int main (int argc, char **argv)
 
 
   // check for cinit value
-  int index = ThisSim::contains(argv, argc, "-cinit");
+  int index = ThisSim:: contains(argv, argc, "-cinit");
   if(index) {
     if(argc > index) {
       ThisSim sim(atof(argv[index]));
       sim.run(argc,argv);
     }
-  } else for (double cinit=0.0;cinit<=2.1;cinit+=0.05)   override {
+  } else for (double cinit=0.0;cinit<=2.1;cinit+=0.05) {
     ThisSim sim;
     sim.cInit=cinit;
     sim.run(argc,argv);

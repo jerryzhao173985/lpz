@@ -126,13 +126,13 @@ protected:
   virtual void dreamingStep();
 
   /// neuron transfer function
-  static double explicit g(double z)
+  static double g(double z)
   {
     return tanh(z);
   };
 
   /// derivative of g
-  static double explicit g_s(double z)
+  static double g_s(double z)
   {
     double k=tanh(z);
     return 1.2 - k*k;//TEST
@@ -143,7 +143,7 @@ protected:
     return min(max(x,-r),r);
   }
   /// calculates the inverse the argument (useful for Matrix::map)
-  static double explicit one_over(double x){
+  static double one_over(double x){
     return 1/x;
   }
 

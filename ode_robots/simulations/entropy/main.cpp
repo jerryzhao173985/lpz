@@ -228,14 +228,14 @@ public:
     connectRobots = true;
     double distance = 1.1;
 
-    setCameraHomePos(Pos(-76.7927, 49.4669, 42.7545),  Pos(-124.513, -28.5595, 0));
+    setCameraHomePos(Pos(-76.7927, 49.4669, 42.7545), Pos(-124.513, -28.5595, 0));
     setCameraMode(Follow);
 
     global.odeConfig.setParam("noise",0.05);
     global.odeConfig.setParam("realtimefactor",2);
     global.odeConfig.setParam("gravity",-9);
 
-    Playground* playground = new Playground(odeHandle, osgHandle,osg::Vec3(50, 0.2, 2.0));
+    Playground* playground = new Playground(odeHandle, osgHandle,osg:: Vec3(50, 0.2, 2.0));
     playground->setColor(Color(1.0f,0.4f,0.26f,1.0f));
     playground->setGroundTexture("Images/wood.rgb");
     playground->setGroundColor(Color(0.2f,0.7f,0.2f,1.0f));
@@ -243,7 +243,7 @@ public:
     Substance substance;
     //substance.toSnow(0.05);
     substance.toRubber(20);
-    playground->setPosition(osg::Vec3(0,0,1.00f));
+    playground->setPosition(osg:: Vec3(0,0,1.00f));
     playground->setGroundSubstance(substance);
     global.obstacles.push_back(playground);
     double xboxes=0.0;
@@ -259,7 +259,7 @@ public:
         double zsize=1.5;
         PassiveBox* b =
           new PassiveBox(odeHandle,
-                         osgHandle, osg::Vec3(xsize,ysize,zsize),0.0);
+                         osgHandle, osg:: Vec3(xsize,ysize,zsize),0.0);
         b->setPosition(Pos(boxdis*(i-(xboxes-1)/2.0),boxdis*(j-(yboxes-1)/2.0), 1.01));
         b->setColor(Color(1.0f,0.2f,0.2f,0.5f));
         b->setTexture("Images/light_chess.rgb");
@@ -282,7 +282,7 @@ public:
       for (int j=-0; j<number_x; ++j)
       {
         //      nimm2 = new Nimm2(odeHandle);
-        Nimm2Conf nimm2conf = Nimm2::getDefaultConf();
+        Nimm2Conf nimm2conf = Nimm2:: getDefaultConf();
         nimm2conf.size = 1.6;
         nimm2conf.force = 6;
         nimm2conf.speed=20;
@@ -292,18 +292,18 @@ public:
         nimm2conf.visForce =true;
         nimm2conf.bumper=true;
         wiring = new One2OneWiring(new WhiteNormalNoise());
-        InvertMotorNStepConf invertnconf = InvertMotorNStep::getDefaultConf();
+        InvertMotorNStepConf invertnconf = InvertMotorNStep:: getDefaultConf();
 //        invertnconf.cInit = cInit;///////////////////////// cInit;
 //        invertnconf.cNonDiagAbs=cNonDiag;
-        invertnconf.initialC = matrix::Matrix(2,2);
-        invertnconf.initialC.val(0,0)= cInit override;
-        invertnconf.initialC.val(0,1)= bInit override;
-        invertnconf.initialC.val(1,0)= bInit override;
-        invertnconf.initialC.val(1,1)= cInit override;
+        invertnconf.initialC = matrix:: Matrix(2,2);
+        invertnconf.initialC.val(0,0)= cInit;
+        invertnconf.initialC.val(0,1)= bInit;
+        invertnconf.initialC.val(1,0)= bInit;
+        invertnconf.initialC.val(1,1)= cInit;
         controller = new InvertMotorNStep(invertnconf);
         //if (j==2)
         //  nimm2conf.irFront = true;
-        if ((i== nullptr) && (j== nullptr))
+        if ((i==0) && (j==0))
         {
           //nimm2conf.irBack = true;
           agent = new OdeAgent(global);
@@ -332,13 +332,13 @@ public:
         else
         {
           agent = new OdeAgent(global, PlotOption(NoPlot));
-          nimm2 = new Nimm2(odeHandle, osgHandle, nimm2conf, "Nimm2_" + std::itos(i) + "_" + std::itos(j));
+          nimm2 = new Nimm2(odeHandle, osgHandle, nimm2conf, "Nimm2_" + std:: itos(i) + "_" + std:: itos(j));
           agent->init(controller, nimm2, wiring);
           controller->setParam("epsC", 0.00);
           controller->setParam("epsA", 0.00);
           global.configs.push_back(controller);
         }
-        if ((i== nullptr) && (j==1))
+        if ((i==0) && (j==1))
           setWatchingAgent(agent);
         nimm2->place(Pos(j*(1.5+distance),i*1.26,1.0f));
         global.agents.push_back(agent);
@@ -512,27 +512,27 @@ int main (int argc, char **argv)
   double stepSizey=0.2;
   int numberSteps = static_cast<int>(((endx-startx)/stepSizex+1)*((endy-starty)/stepSizey+1));
   // check for -first value
-  int index = Simulation::contains(argv, argc, "-first");
+  int index = Simulation:: contains(argv, argc, "-first");
   if(index &&  (argc > index))
   {
     int firstStep=atoi(argv[index]);
     int lastStep=0;
     int stepId = 0;
     int stepInterval=1;
-    index = Simulation::contains(argv, argc, "-last");
+    index = Simulation:: contains(argv, argc, "-last");
     if(index &&  (argc > index))
       lastStep=atoi(argv[index]);
-    index =  Simulation::contains(argv, argc, "-step");
+    index =  Simulation:: contains(argv, argc, "-step");
     if(index &&  (argc > index))
       stepInterval=atoi(argv[index]);
-    index =  Simulation::contains(argv, argc, "-id");
+    index =  Simulation:: contains(argv, argc, "-id");
     if(index &&  (argc > index))
       stepId=atoi(argv[index]);
     // -0.1 <= cnondiag <= 0.3
     // 0.9 <= cdiag <= 1.8 normally
     // cdiag=0.9 eq. id=90; cdiag=1.5 eq. id=150 etc.
     // cnondiag uses same stepsize, but is restricted to -0.1 to 0.3
-    int steps = (lastStep-firstStep)/stepInterval +1 override;
+    int steps = (lastStep-firstStep)/stepInterval +1;
     // now calculate the real stepSize for C
 
     // quadratic version, create landscape
@@ -574,12 +574,12 @@ int main (int argc, char **argv)
         runSim(x,3,argc,argv,y);
 
     }
-  } else if ( Simulation::contains(argv, argc, "-loop") && (argc >  Simulation::contains(argv, argc, "-last"))){
+  } else if ( Simulation:: contains(argv, argc, "-loop") && (argc >  Simulation:: contains(argv, argc, "-last"))){
     // then loop over all cinit and cnondiag values:
     std::cout << "Running now " << numberSteps << " steps, be patient :)" << std::endl;
-    for (int i=1;i<=numberSteps;++i)  override {
-        double x = startx + ((i-1) % (static_cast<int>((endx-startx)/stepSizex+1)))*stepSizex override;
-        double y = starty + ((i-1) / (static_cast<int>((endx-startx)/stepSizex+1)))*stepSizey override;
+    for (int i=1;i<=numberSteps;++i) {
+        double x = startx + ((i-1) % (static_cast<int>((endx-startx)/stepSizex+1)))*stepSizex;
+        double y = starty + ((i-1) / (static_cast<int>((endx-startx)/stepSizex+1)))*stepSizey;
       std::cout << "---cdiag = " << x << std::endl;
         std::cout << "bnondiag = " << y << std::endl;
         runSim(x,1,argc,argv,y);
@@ -589,22 +589,22 @@ int main (int argc, char **argv)
   {
     // check for runs value
     int runs=1;
-    int index =  Simulation::contains(argv, argc, "-runs");
+    int index =  Simulation:: contains(argv, argc, "-runs");
     if(index &&  (argc > index))
       runs = atoi(argv[index]);
     // check for cinit value
-    index =  Simulation::contains(argv, argc, "-cinit");
+    index =  Simulation:: contains(argv, argc, "-cinit");
     double cinit=1.0;
     if (index && (argc > index)) {
       cinit = atof(argv[index]);
       // check for cnondiag value
-      index =  Simulation::contains(argv, argc, "-bnondiag");
+      index =  Simulation:: contains(argv, argc, "-bnondiag");
       double cnondiag=0.2;
       if (index && (argc > index))
         cnondiag=atof(argv[index]);
       for (int i=0;i<runs;++i)
       {
-        std::cout << "run number " << (i+1) << "..." << std::endl override;
+        std::cout << "run number " << (i+1) << "..." << std::endl;
         runSim(cinit,runs,argc,argv,cnondiag);
       }
     } else
