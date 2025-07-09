@@ -123,14 +123,25 @@ file(GLOB_RECURSE HEADER_FILES
 # Create include/selforg directory structure
 file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/include/selforg)
 
+# Create a custom target for header symlinks
+add_custom_target(selforg_headers)
+
 foreach(header ${HEADER_FILES})
     get_filename_component(header_name ${header} NAME)
-    file(CREATE_LINK
-        ${CMAKE_CURRENT_SOURCE_DIR}/${header}
-        ${CMAKE_CURRENT_BINARY_DIR}/include/selforg/${header_name}
-        SYMBOLIC
+    set(source_header ${CMAKE_CURRENT_SOURCE_DIR}/${header})
+    set(link_header ${CMAKE_CURRENT_BINARY_DIR}/include/selforg/${header_name})
+    
+    add_custom_command(
+        TARGET selforg_headers PRE_BUILD
+        COMMAND ${CMAKE_COMMAND} -E create_symlink
+            ${source_header}
+            ${link_header}
+        COMMENT "Creating symlink for ${header_name}"
     )
 endforeach()
+
+# Make selforg depend on the header symlinks
+add_dependencies(selforg selforg_headers)
 
 # Installation
 install(TARGETS selforg
