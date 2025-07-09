@@ -301,7 +301,7 @@ char * command_generator (const char *text, int state) {
     }  
 
   /* If no names matched, then return NULL. */
-  return (static_cast<char*>NULL);
+  return (static_cast<char*>(NULL));
 }
 
 /* **************************************************************** */

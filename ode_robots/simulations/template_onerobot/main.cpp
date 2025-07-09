@@ -141,6 +141,9 @@
 #include <selforg/invertmotorspace.h>
 #include <selforg/sinecontroller.h>
 
+// include wiring
+#include <selforg/one2onewiring.h>
+
 // include playground
 #include <ode_robots/playground.h>
 #include <ode_robots/passivesphere.h>
