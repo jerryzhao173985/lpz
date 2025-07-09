@@ -28,7 +28,7 @@ namespace lpzrobots {
 
 AmosIISerialV1::AmosIISerialV1(const char *port)
 : AbstractRobot("AmosIISerialV1", "$Id: main.cpp,v 0.1 2011/14/07 18:00:00 fhesse $"),
-  explicit port(port) {
+  port(port) {
 
 	fd1=open(port, O_RDWR | O_NOCTTY | O_NDELAY);//make sure your account in PC can have access to serial port
 

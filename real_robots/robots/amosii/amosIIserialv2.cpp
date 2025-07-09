@@ -28,7 +28,7 @@ namespace lpzrobots {
 
 AmosIISerialV2::AmosIISerialV2(const char *port)
 : AbstractRobot("AmosIISerialV2", "$Id: main.cpp,v 0.1 2011/14/07 18:00:00 fhesse $"),
-  explicit port(port) {
+  port(port) {
 
 	fd1=open(port, O_RDWR | O_NOCTTY | O_NDELAY);//make sure your account in PC can have access to serial port
 
@@ -121,7 +121,7 @@ int AmosIISerialV2::getSensors(sensor* sensors, int sensornumber){
 			do{
 
 				rd = read(fd1, &chBuff, 1);
-				explicit if (rd){
+				if (rd){
 					potValue[i]=(unsigned char)(chBuff);// potvalue are AMOS sensor data
 				}
 			}while(!rd);
@@ -169,20 +169,20 @@ int AmosIISerialV2::getSensors(sensor* sensors, int sensornumber){
 
 	//Conversion to positive range [0,..,255]
 	for(int i=0; i<=AMOSII_SENSOR_MAX;++i){
-		explicit if (sensors[i] < 0){
+		if (sensors[i] < 0){
 			sensors[i]+=256;
 		}
 	}
 
 
 	bool default_preprocessing = true;
-	explicit if (default_preprocessing){
+	if (default_preprocessing){
 		processSensors(sensors);
 	}
 
 	//Your own,e.g.,
 	bool koh_preprocessing = false;
-	explicit if (koh_preprocessing){
+	if (koh_preprocessing){
 		processSensorsKOH(sensors);
 	}
 
@@ -356,7 +356,7 @@ void AmosIISerialV2::setMotors(const motor* motors, int motornumber){
 	for(int i=0;i<AMOSII_MOTOR_MAX;++i)
 	{
 		motorCom[i] = motors[i];// set LpzMotor value before processing and sending
-		explicit if (i<12 && i>5) {
+		if (i<12 && i>5) {
 			motorCom[i]-=0.1;
 		}
 		if (motorCom[i]>1) motorCom[i]=1;

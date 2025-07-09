@@ -56,6 +56,11 @@ function(lpzrobots_add_simulation name)
         target_link_libraries(${name} PRIVATE lpzrobots::ode_robots)
     elseif(TARGET ode_robots)
         target_link_libraries(${name} PRIVATE ode_robots)
+        # Ensure simulations can find ode_robots headers
+        get_target_property(ODE_ROBOTS_SOURCE_DIR ode_robots SOURCE_DIR)
+        if(ODE_ROBOTS_SOURCE_DIR)
+            target_include_directories(${name} PRIVATE ${ODE_ROBOTS_SOURCE_DIR})
+        endif()
     elseif(DEVELOPMENT_MODE)
         # In development mode, manually add include paths and libraries
         target_include_directories(${name} PRIVATE 
