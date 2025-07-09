@@ -47,7 +47,7 @@ class SoxExpand : public AbstractController {
 
 public:
   explicit SoxExpand(const SoxExpandConf& conf = getDefaultConf());
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override;
 
   virtual ~SoxExpand();
 
@@ -87,8 +87,8 @@ public:
   virtual void setC(const matrix::Matrix& C);
   virtual matrix::Matrix geth();
   virtual void seth(const matrix::Matrix& h);
-  virtual matrix::Matrix getContextC() override;
-  virtual void setContextC(const matrix::Matrix& CC) override;
+  virtual matrix::Matrix getContextC();
+  virtual void setContextC(const matrix::Matrix& CC);
 
 protected:
   unsigned short number_sensors = 0;
@@ -126,7 +126,7 @@ protected:
   AbstractController::paramint s4delay; // # of steps the motor values are delayed (1 means no delay)
 
   /// learn values model and controller (A,b,C,h)
-  virtual void learn() override;
+  virtual void learn();
 
   /// neuron transfer function
   static double g(double z) {

@@ -56,7 +56,7 @@ class DerPseudoSensor : public InvertMotorController, public Storeable {
 
 public:
   explicit DerPseudoSensor(const DerPseudoSensorConf& conf = getDefaultConf());
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override;
 
   virtual ~DerPseudoSensor();
 

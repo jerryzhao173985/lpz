@@ -36,7 +36,7 @@ class Sos : public AbstractController {
 
 public:
   explicit Sos(double init_feedback_strength = 1.0);
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override;
 
   virtual ~Sos();
 
@@ -98,7 +98,7 @@ protected:
   AbstractController::paramint s4delay; // # of steps the motor values are delayed (1 means no delay)
 
   /// learn values model and controller (A,b,C,h)
-  virtual void learn() override;
+  virtual void learn();
 
   /// neuron transfer function
   static double g(double z) {

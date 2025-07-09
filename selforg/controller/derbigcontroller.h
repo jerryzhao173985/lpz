@@ -52,7 +52,7 @@ class DerBigController : public InvertMotorController, public Storeable {
 
 public:
   DerBigController(const DerBigControllerConf& conf = getDefaultConf());
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr);
 
   virtual ~DerBigController();
 
