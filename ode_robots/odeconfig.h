@@ -25,7 +25,7 @@
 #define __ODECONFIG_H
 
 #include <selforg/configurable.h>
-#include "utils/odehandle.h"
+#include "odehandle.h"
 
 namespace lpzrobots {
 
