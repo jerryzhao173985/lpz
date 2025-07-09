@@ -89,7 +89,7 @@
 #include "odeconfig.h"
 
 /// read the installation PREFIX (to find data directory)
-#include "install_prefix.conf"
+// PREFIX is now defined as a macro in CMakeLists.txt
 
 /**
    Namespace for the 3D robot simulator ode_robots
