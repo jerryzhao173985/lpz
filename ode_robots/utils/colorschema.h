@@ -38,9 +38,9 @@ namespace lpzrobots{
    */
   class ColorSchema{
   public:
-    typedef HashMap<std::string, Color> ColorMap;
-    typedef std::vector<std::string> AliasVector;
-    typedef HashMap<std::string, AliasVector > AliasMap;    
+    using ColorMap = HashMap<std::string, Color>;
+    using AliasVector = std::vector<std::string>;
+    using AliasMap = HashMap<std::string, AliasVector >;    
 
     ColorSchema();
   

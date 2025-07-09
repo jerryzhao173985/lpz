@@ -152,9 +152,9 @@ namespace lpzrobots {
     PID pid;
   };
 
-  typedef OneAxisServo SliderServo;
-  typedef OneAxisServo HingeServo;
-  typedef OneAxisServo Hinge2Servo;
+  using SliderServo = OneAxisServo;
+  using HingeServo = OneAxisServo;
+  using Hinge2Servo = OneAxisServo;
 
 
 
@@ -178,7 +178,7 @@ namespace lpzrobots {
     virtual void set(double pos);
 
     /** returns the position of the slider in ranges [-1, 1] (scaled by min, max, centered)*/
-    virtual double get() const {
+    virtual double get() const override {
       double pos =  joint->getPosition1();
 
       return 2*(pos-min)/(max-min) - 1;
@@ -211,38 +211,38 @@ namespace lpzrobots {
 
     virtual ~OneAxisServoVel();
 
-    virtual void init(Primitive* own, Joint* joint = 0) override {
+    virtual void init(Primitive* own, Joint* joint = nullptr) override {
       if(joint) { assert(joint==this->joint); } // we cannot attach the servo to a new joint
     }
 
     /** adjusts the power of the servo*/
-    virtual void setPower(double _power) override;
+    virtual void setPower(double _power);
 
     /** returns the power of the servo*/
-    virtual double getPower() {
+    virtual double getPower() override {
       return power;
-    };
-    virtual double getDamping() {
+    }
+    virtual double getDamping() override {
       return damp;
-    };
-    virtual void setDamping(double _damp) {
+    }
+    virtual void setDamping(double _damp) override {
       damp = clip(_damp,0.0,1.0);
-    };
+    }
     /** offetCanceling does not exist for this type of servo */
-    virtual double& offsetCanceling() {
+    virtual double& offsetCanceling() override {
       dummy=0;
       return dummy;
-    };
+    }
 
     /** adjusts maximal speed of servo*/
-    virtual void setMaxVel(double maxVel) {
+    virtual void setMaxVel(double maxVel) override {
       this->maxVel = maxVel;
       pid.KP=maxVel/2;
-    };
+    }
     /** adjusts maximal speed of servo*/
-    virtual double getMaxVel() {
+    virtual double getMaxVel() override {
       return maxVel;
-    };
+    }
 
     /** sets the set point of the servo.
         Position must be between -1 and 1. It is scaled to fit into min, max,
@@ -287,33 +287,33 @@ namespace lpzrobots {
     virtual ~SliderServoVel();
 
     /** adjusts the power of the servo*/
-    virtual void setPower(double _power) override;
+    virtual void setPower(double _power);
 
     /** returns the power of the servo*/
-    virtual double getPower() {
+    virtual double getPower() override {
       return power;
-    };
-    virtual double getDamping() {
+    }
+    virtual double getDamping() override {
       return damp;
-    };
-    virtual void setDamping(double _damp) {
+    }
+    virtual void setDamping(double _damp) override {
       damp = clip(_damp,0.0,1.0);
-    };
+    }
     /** offetCanceling does not exist for this type of servo */
-    virtual double& offsetCanceling() {
+    virtual double& offsetCanceling() override {
       dummy=0;
       return dummy;
-    };
+    }
 
     /** adjusts maximal speed of servo*/
-    virtual void setMaxVel(double maxVel) {
+    virtual void setMaxVel(double maxVel) override {
       this->maxVel = maxVel;
       pid.KP=maxVel/2;
-    };
+    }
     /** adjusts maximal speed of servo*/
     virtual double getMaxVel() override {
       return maxVel;
-    };
+    }
 
     /** sets the set point of the servo.
         Position must be between -1 and 1. It is scaled to fit into min, max,

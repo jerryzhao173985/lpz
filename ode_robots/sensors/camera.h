@@ -44,7 +44,7 @@ namespace lpzrobots {
   class Transform;
 
   class ImageProcessor;
-  typedef std::vector<ImageProcessor* > ImageProcessors;
+  using ImageProcessors = std::vector<ImageProcessor* >;
 
 
   struct CameraConf {
@@ -70,7 +70,7 @@ namespace lpzrobots {
   public:
     struct PostDrawCallback : public osg::Camera::DrawCallback {
       explicit PostDrawCallback(Camera* cam_) : cam(cam_) { }
-      virtual void operator () (const osg::Camera& /*camera*/) const override;
+      virtual void operator () (const osg::Camera& /*camera*/) const;
       Camera* cam;
     };
 
@@ -87,7 +87,7 @@ namespace lpzrobots {
       std::string name; ///< name of the image
     };
 
-    typedef std::vector<CameraImage > CameraImages;
+    using CameraImages = std::vector<CameraImage >;
 
     /** Creates a camera.
         Note that the order in which the image processors are positioned
@@ -129,7 +129,7 @@ namespace lpzrobots {
     /// relative pose of the camera
     virtual osg::Matrix getPose();
 
-    // virtual bool explicit sense(const GlobalData& globaldata);
+    // virtual bool sense(const GlobalData& globaldata);
 
     /// all images (raw and processed)
     virtual const CameraImages& getImages() const { return cameraImages;}

@@ -37,7 +37,7 @@ namespace lpzrobots {
   class SensorMotorInfoAble {
   public:
     /// function that returns the name given the index
-    typedef std::function<std::string(int)> NamingFunction;
+    using NamingFunction = std::function<std::string(int)>;
 
     SensorMotorInfoAble() : func(defaultNameing), baseinfo("Unknown") {}
 

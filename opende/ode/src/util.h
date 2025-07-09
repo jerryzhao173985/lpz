@@ -58,13 +58,13 @@
 
 
 
-void dInternalHandleAutoDisabling (dxWorld *world, dReal stepsize) override;
-void dxStepBody (dxBody *b, dReal h) override;
+void dInternalHandleAutoDisabling (dxWorld *world, dReal stepsize);
+void dxStepBody (dxBody *b, dReal h);
 
-typedef void (*dstepper_fn_t) (dxWorld *world, dxBody * const *body, int nb,
+using dstepper_fn_t = void (*) (dxWorld *world, dxBody * const *body, int nb,
         dxJoint * const *_joint, int nj, dReal stepsize);
 
-void dxProcessIslands (dxWorld *world, dReal stepsize, dstepper_fn_t stepper) override;
+void dxProcessIslands (dxWorld *world, dReal stepsize, dstepper_fn_t stepper);
 
 
 

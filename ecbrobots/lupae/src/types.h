@@ -9,9 +9,9 @@
 #define TYPES_H_
 #include <QtGui>
 
-typedef unsigned char QByte;
-typedef unsigned short QWord;
-typedef QByte uint8_t;
+using QByte = unsigned char;
+using QWord = unsigned short;
+using uint8_t = QByte;
 
 struct MessageIsp_t{
   uint8_t startDelemiter;

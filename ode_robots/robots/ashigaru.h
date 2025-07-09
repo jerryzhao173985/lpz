@@ -176,9 +176,9 @@ public:
       LEG_JOINT_TYPE_MAX
     };
     // motor name of ashigaru
-    typedef AshigaruMotorNames MotorName;
+    using MotorName = AshigaruMotorNames;
     // sensor name of ashigaru
-    typedef AshigaruSensorNames SensorName;
+    using SensorName = AshigaruSensorNames;
 
 public: // Functions
     // Constructor
@@ -302,9 +302,9 @@ protected: // Functions
 
         virtual std::list<iparamval> getInternalParams() const { return std::list<iparamval>(); }*/
         /*
-        virtual std::list<Inspectable::iparamkey> getInternalParamNames() const override;
+        virtual std::list<Inspectable::iparamkey> getInternalParamNames() const;
 
-        virtual std::list<Inspectable::iparamval> getInternalParams() const override;
+        virtual std::list<Inspectable::iparamval> getInternalParams() const;
         */
 
 protected: // Values
@@ -349,17 +349,17 @@ protected: // Values
   bool created;      // true if robot was created
 
   /** typedefs */
-  typedef std::map<LegPos, HingeJoint*> HingeJointMap;
-  typedef std::map<LegPos, Leg> LegMap;
-  typedef std::map<LegPos, ContactSensor*> LegContactMap;
-  typedef std::map<MotorName, OneAxisServo*> MotorMap;
-  typedef std::map<MotorName, TorqueSensor*> MTorqMap;
+  using HingeJointMap = std::map<LegPos, HingeJoint*>;
+  using LegMap = std::map<LegPos, Leg>;
+  using LegContactMap = std::map<LegPos, ContactSensor*>;
+  using MotorMap = std::map<MotorName, OneAxisServo*>;
+  using MTorqMap = std::map<MotorName, TorqueSensor*>;
 
-  //typedef std::map<LegPos, LegPosUsage> LegPosUsageMap;
-  //typedef std::map<LegPos, IRSensor*> LegIRSensorMap;
-  typedef std::vector<Primitive*> PrimitiveList; // this is called Primitives
-  typedef std::vector<Joint*> JointList;
-  typedef std::vector<OneAxisServo*> ServoList;
+  //using LegPosUsageMap = std::map<LegPos, LegPosUsage>;
+  //using LegIRSensorMap = std::map<LegPos, IRSensor*>;
+  using PrimitiveList = std::vector<Primitive*>; // this is called Primitives
+  using JointList = std::vector<Joint*>;
+  using ServoList = std::vector<OneAxisServo*>;
 
   // tempolary
   int sensorno = 0;      //number of sensors

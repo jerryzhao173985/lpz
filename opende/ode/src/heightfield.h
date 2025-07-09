@@ -45,7 +45,7 @@ class HeightFieldVertex{
 
     dHeightfieldGetHeight* m_pGetHeightCallback = nullptr;		// Callback pointer.
 
-    dxHeightfieldData() override;
+    dxHeightfieldData();
     ~dxHeightfieldData();
 
     void SetData( int nWidthSamples, int nDepthSamples,
@@ -53,21 +53,21 @@ class HeightFieldVertex{
         dReal fScale, dReal fOffset,
         dReal fThickness, int bWrapMode );
 
-    void ComputeHeightBounds() override;
+    void ComputeHeightBounds();
 
     bool IsOnHeightfield2  ( const HeightFieldVertex * const CellCorner, 
         const dReal * const pos,  const bool isABC) const;
 
-    dReal GetHeight(int x, int z) override;
-    dReal GetHeight(dReal x, dReal z) override;
+    dReal GetHeight(int x, int z);
+    dReal GetHeight(dReal x, dReal z);
 
 };
 
-typedef int HeightFieldVertexCoords[2];
+using HeightFieldVertexCoords = int[2];
 
 class HeightFieldVertex{
 public:
-    HeightFieldVertex(){} override;
+    HeightFieldVertex(){};
 
     dVector3 vertex;
     HeightFieldVertexCoords coords;
@@ -76,14 +76,14 @@ public:
 
 class HeightFieldEdge{
 public:
-    HeightFieldEdge(){} override;
+    HeightFieldEdge(){};
 
     HeightFieldVertex   *vertices[2];
 };
 
 class HeightFieldTriangle{
 public:
-    HeightFieldTriangle(){} override;
+    HeightFieldTriangle(){};
 
     inline void setMinMax()
     {
@@ -127,7 +127,7 @@ public:
         }
     };
 
-    void explicit resetTriangleListSize(const size_t newSize)
+    void resetTriangleListSize(const size_t newSize)
     {
         if (trianglelistReservedSize < newSize)
         {
@@ -140,7 +140,7 @@ public:
 
     void addTriangle(HeightFieldTriangle *tri)
     {
-		dIASSERT(trianglelistCurrentSize < trianglelistReservedSize) override;
+		dIASSERT(trianglelistCurrentSize < trianglelistReservedSize);
 
         trianglelist[trianglelistCurrentSize++] = tri;
     }
@@ -162,10 +162,10 @@ struct dxHeightfield : public dxGeom
 {
     dxHeightfieldData* m_p_data;
 
-    dxHeightfield( dSpaceID space, dHeightfieldDataID data, int bPlaceable ) override;
+    dxHeightfield( dSpaceID space, dHeightfieldDataID data, int bPlaceable );
     ~dxHeightfield();
 
-    void computeAABB() override;
+    void computeAABB();
 
     int dCollideHeightfieldZone( const int minX, const int maxX, const int minZ, const int maxZ,  
         dxGeom *o2, const int numMaxContacts,
@@ -179,16 +179,16 @@ struct dxHeightfield : public dxGeom
 		TEMP_TRIANGLE_BUFFER_ELEMENT_COUNT_ALIGNMENT = 1, // Triangles are easy to reallocate and hard to predict
 	};
 
-	static inline size_t AlignBufferSize(size_t value, size_t alignment) { dIASSERT((alignment & (alignment - 1)) == nullptr); return (value + (alignment - 1)) & ~(alignment - 1); }
+	static inline size_t AlignBufferSize(size_t value, size_t alignment) { dIASSERT((alignment & (alignment - 1)) == 0); return (value + (alignment - 1)) & ~(alignment - 1); }
 
-	void  allocateTriangleBuffer(size_t numTri) override;
-	void  resetTriangleBuffer() override;
-	void  allocatePlaneBuffer(size_t numTri) override;
-	void  resetPlaneBuffer() override;
-	void  allocateHeightBuffer(size_t numX, size_t numZ) override;
-    void  resetHeightBuffer() override;
+	void  allocateTriangleBuffer(size_t numTri);
+	void  resetTriangleBuffer();
+	void  allocatePlaneBuffer(size_t numTri);
+	void  resetPlaneBuffer();
+	void  allocateHeightBuffer(size_t numX, size_t numZ);
+    void  resetHeightBuffer();
 
-    void  sortPlanes(const size_t numPlanes) override;
+    void  sortPlanes(const size_t numPlanes);
 
     HeightFieldPlane    **tempPlaneBuffer;
     HeightFieldPlane    *tempPlaneInstances;

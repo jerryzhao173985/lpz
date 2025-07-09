@@ -48,7 +48,7 @@ namespace lpzrobots {
   class LPZViewer;
   class OdeAgent;
   class PlotOption;
-  typedef std::list<class Configurable*> ConfigList;
+  using ConfigList = std::list<class Configurable*>;
 }
 /*** end of forward declarations ***/
 
@@ -157,7 +157,7 @@ namespace lpzrobots {
      */
     void setCameraMode(const CameraMode& mode);
 
-    /// start video recording (write frames to namestatic_cast<XXX>(folder))
+    /// start video recording (write frames to name static_cast<XXX>(folder))
     bool startVideoRecording(const char* name);
     /// stop video recording
     bool stopVideoRecording();

@@ -162,7 +162,7 @@ namespace lpzrobots {
 
     Q_OBJECT
 
-    typedef Configurable::configurableList ConfigList; //!< list of Configurables
+    using ConfigList = Configurable::configurableList; //!< list of Configurables
 
     public:
       QConfigurator(QString applicationPath, ConfigList& configList);

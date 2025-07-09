@@ -36,8 +36,8 @@
 class Agent;
 class Configurable;
 
-typedef std::vector<Configurable*> ConfigList;       ///
-typedef std::vector<Agent*> AgentList;         ///
+using ConfigList = std::vector<Configurable*>;       ///
+using AgentList = std::vector<Agent*>;         ///
 
 /**
   Data structure holding all essential global information.

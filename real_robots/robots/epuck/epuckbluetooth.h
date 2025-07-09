@@ -83,7 +83,7 @@ namespace lpzrobots{
     int SOUND;
   }; //end Struct MotorNumbers
   
-  typedef struct {
+  struct EPuckConf {
       std::string port;	//serial port address. In Linux per example /dev/rfcomm0
       
       bool SENSOR_STATE; //enables IR AMBIENT_LIGHT ACC and GROUND
@@ -94,10 +94,10 @@ namespace lpzrobots{
       int CAM_HEIGHT; 
       int CAM_WIDTH; //maximum of Pixels is 3200
       int CAM_ZOOM; //1 2 4 8 or 16
-  } EPuckConf;
+  };
       
-  typedef double sensor;
-  typedef double motor;
+  using sensor = double;
+  using motor = double;
   
   
   

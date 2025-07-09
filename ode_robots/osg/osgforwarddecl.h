@@ -40,12 +40,12 @@ namespace osg{
   
 
   class Vec3f;
-  typedef Vec3f Vec3;
+  using Vec3 = Vec3f;
   class Vec4f;
-  typedef Vec4f Vec4;
+  using Vec4 = Vec4f;
 
   class Matrixd;
-  typedef Matrixd Matrix;
+  using Matrix = Matrixd;
 
   class Transform;
   class MatrixTransform;

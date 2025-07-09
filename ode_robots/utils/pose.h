@@ -32,7 +32,7 @@
 
 namespace lpzrobots{
 
-  typedef osg::Matrix Pose;
+  using Pose = osg::Matrix;
   
 }
 

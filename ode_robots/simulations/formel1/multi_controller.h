@@ -8,7 +8,7 @@
 #include <vector>
 #include <list>
 
-typedef std::vector<AbstractController*> ControllerContainer;
+using ControllerContainer = std::vector<AbstractController*>;
 
 /**
  * class for multi controller
@@ -25,14 +25,14 @@ public:
 
   /// returns the name of the object (with version number)
   //  virtual constparamkey getName() const {return name; }
-  virtual paramkey getName() const override;
+  virtual paramkey getName() const;
 
   /// @return Number of sensors the controller was initialised with or 0 if not initialised
-  virtual int getSensorNumber() const override;
+  virtual int getSensorNumber() const;
 
 
   /// @return Number of motors the controller was initialised with or 0 if not initialised
-  virtual int getMotorNumber() const override;
+  virtual int getMotorNumber() const;
 
   /** performs one step (includes learning).
       Calculates motor commands from sensor inputs.
@@ -53,11 +53,11 @@ public:
       @param: keylist (do NOT free it! It is a pointer to an internal structure)
       @return: length of the lists
    */
-  virtual std::list<iparamkey> getInternalParamNames() const override;
+  virtual std::list<iparamkey> getInternalParamNames() const;
 
   /** The list of the names of all internal parameters given by getInternalParams().
    */
-  virtual list<iparamval> getInternalParams() const override;
+  virtual list<iparamval> getInternalParams() const;
 
   virtual paramval getParam(const paramkey& key, bool traverseChildren=true) const;
   virtual bool setParam(const paramkey& key, paramval val, bool traverseChildren=true);
@@ -68,7 +68,7 @@ public:
       and view.
   */
 //   virtual void setCameraHandling(void (*handling)());
-//  virtual void setCameraHandling() const override;
+//  virtual void setCameraHandling() const;
 
 
   ControllerContainer& get_controller_container() const;

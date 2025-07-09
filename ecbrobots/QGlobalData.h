@@ -98,11 +98,11 @@ namespace lpzrobots {
   class ECBRobot;
   class QECBRobotsWindow;
 
-  typedef Configurable::configurableList ConfigList; //!< list of Configurables
-  typedef std::vector<ECBAgent*> ECBAgentList; //!< list of ECBAgents
-  typedef ECBAgentList AgentList; //!< for compatibility reason: List of (ECB)Agents
+  using ConfigList = Configurable::configurableList; //!< list of Configurables
+  using ECBAgentList = std::vector<ECBAgent*>; //!< list of ECBAgents
+  using AgentList = ECBAgentList; //!< for compatibility reason: List of (ECB)Agents
   // 20090126; guettler: changed from vector to list for better method signature matching of WiredController
-  typedef std::list<PlotOption> PlotOptionList;
+  using PlotOptionList = std::list<PlotOption>;
 
   /**
    Data structure holding all essential global information.

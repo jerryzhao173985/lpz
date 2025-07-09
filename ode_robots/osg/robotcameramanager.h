@@ -48,12 +48,12 @@ namespace lpzrobots {
       int overlayY = 0;
       osg::Node* overlay;
     };
-    typedef std::vector<Overlay> Overlays;
+    using Overlays = std::vector<Overlay>;
     struct RobotCam {
       Camera* cam;
       Overlays overlays;
     };
-    typedef std::vector<RobotCam> RobotCams;
+    using RobotCams = std::vector<RobotCam>;
 
   public:
     RobotCameraManager(int windowWidth, int windowHeight);

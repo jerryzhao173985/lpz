@@ -112,9 +112,9 @@ public:
     LEG_JOINT_TYPE_MAX
   };
   // motor name of hexabot
-  typedef HexabotMotorNames MotorName;
+  using MotorName = HexabotMotorNames;
   // sensor name of hexabot
-  typedef HexabotSensorNames SensorName;
+  using SensorName = HexabotSensorNames;
 
 public: // Functions
   // Constructor
@@ -181,9 +181,9 @@ public: // Functions
     like space-internal collision detection, sensor resets/update etc.
     @param globalData structure that contains global data from the simulation environment
   */
-  virtual void doInternalStuff(const GlobalData& globalData) override;
+  virtual void doInternalStuff(const GlobalData& globalData);
 
-  virtual void sense(const GlobalData& globalData) override;
+  virtual void sense(const GlobalData& globalData);
 
   virtual double& getSumForce() { return sumForce; }
 
@@ -239,9 +239,9 @@ protected: // Functions
 
   virtual std::list<iparamval> getInternalParams() const { return std::list<iparamval>(); }*/
   /*
-  virtual std::list<Inspectable::iparamkey> getInternalParamNames() const override;
+  virtual std::list<Inspectable::iparamkey> getInternalParamNames() const;
 
-  virtual std::list<Inspectable::iparamval> getInternalParams() const override;
+  virtual std::list<Inspectable::iparamval> getInternalParams() const;
   */
 
 protected: // Values
@@ -286,17 +286,17 @@ protected: // Values
   bool created;      // true if robot was created
 
   /** typedefs */
-  typedef std::map<LegPos, HingeJoint*> HingeJointMap;
-  typedef std::map<LegPos, Leg> LegMap;
-  typedef std::map<LegPos, ContactSensor*> LegContactMap;
-  typedef std::map<MotorName, OneAxisServo*> MotorMap;
-  typedef std::map<MotorName, TorqueSensor*> MTorqMap;
+  using HingeJointMap = std::map<LegPos, HingeJoint*>;
+  using LegMap = std::map<LegPos, Leg>;
+  using LegContactMap = std::map<LegPos, ContactSensor*>;
+  using MotorMap = std::map<MotorName, OneAxisServo*>;
+  using MTorqMap = std::map<MotorName, TorqueSensor*>;
 
-  //typedef std::map<LegPos, LegPosUsage> LegPosUsageMap;
-  //typedef std::map<LegPos, IRSensor*> LegIRSensorMap;
-  typedef std::vector<Primitive*> PrimitiveList;
-  typedef std::vector<Joint*> JointList;
-  typedef std::vector<OneAxisServo*> ServoList;
+  //using LegPosUsageMap = std::map<LegPos, LegPosUsage>;
+  //using LegIRSensorMap = std::map<LegPos, IRSensor*>;
+  using PrimitiveList = std::vector<Primitive*>;
+  using JointList = std::vector<Joint*>;
+  using ServoList = std::vector<OneAxisServo*>;
 
   // tempolary
   int sensorno;      //number of sensors

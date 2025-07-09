@@ -80,7 +80,7 @@ namespace lpzrobots {
     }
 
     // --- Sensor interface ---
-    virtual void init(Primitive* own, Joint* joint = 0) override { // and Motor interface
+    virtual void init(Primitive* own, Joint* joint = nullptr) override { // and Motor interface
       if(joint!= nullptr) {
         this->joint=dynamic_cast<TwoAxisJoint*>(joint);
       }
@@ -92,7 +92,7 @@ namespace lpzrobots {
       return 2;
     }
     virtual std::list<sensor> getList() const override { return getListOfArray();};
-    virtual int get(sensor* sensors, int length) const {
+    virtual int get(sensor* sensors, int length) const override {
       assert(length>1);
       sensors[0]=get1();
       sensors[1]=get2();
@@ -100,7 +100,7 @@ namespace lpzrobots {
     }
 
     // --- Motor interface ---
-    virtual int getMotorNumber() const { return 2;};
+    virtual int getMotorNumber() const override { return 2; }
 
     virtual bool act(const GlobalData& globaldata) override {
       // here we should apply the forces etc, but due to backwards compatibility this remains in set()
@@ -216,7 +216,7 @@ namespace lpzrobots {
     PID pid2;
   };
 
-  typedef TwoAxisServo UniversalServo;
+  using UniversalServo = TwoAxisServo;
 
 
   /** general servo motor for 2 axis joints with zero position centered

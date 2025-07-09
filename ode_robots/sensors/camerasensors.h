@@ -94,7 +94,7 @@ namespace lpzrobots {
   };
 
   struct PositionCameraSensorConf {
-    typedef short Values; ///< combination of PositionCameraSensor::ValueTypes
+    using Values = short; ///< combination of PositionCameraSensor::ValueTypes
 
     /// values additional sensor values, @see PositionCameraSensor::Values
     Values     values        ;

@@ -53,7 +53,7 @@ namespace lpzrobots {
      specified objects.
      Usage: in your robot, create a Gripper object and attach
       it to the primitive that grips (e.g. hand). Then you
-      need make the gripperstatic_cast<s>(available) to you simulation
+      need make the gripper static_cast<s>(available) to you simulation
       in order to set call the addGrippables from there
       (e.g. with otherrobot->getAllPrimitives()), see Skeleton.
    */
@@ -103,7 +103,7 @@ namespace lpzrobots {
     double gripStartTime = 0;
   };
 
-  typedef std::vector<Gripper*> GripperList;
+  using GripperList = std::vector<Gripper*>;
 
 }
 
