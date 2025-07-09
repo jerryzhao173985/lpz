@@ -43,10 +43,10 @@ function(lpzrobots_add_simulation name)
         target_link_libraries(${name} PRIVATE selforg)
         
         # Add GSL if available
-        if(GSL_FOUND)
+        if(LPZROBOTS_HAS_GSL)
             target_compile_definitions(${name} PRIVATE HAVE_GSL)
-            target_include_directories(${name} PRIVATE ${GSL_INCLUDE_DIRS})
-            target_link_libraries(${name} PRIVATE ${GSL_LIBRARIES})
+            target_include_directories(${name} PRIVATE ${LPZROBOTS_GSL_INCLUDE_DIRS})
+            target_link_libraries(${name} PRIVATE ${LPZROBOTS_GSL_LIBRARIES})
         endif()
     else()
         message(FATAL_ERROR "Cannot find selforg library")

@@ -333,7 +333,7 @@ bool com_list (GlobalData& globalData, char* line, char* arg) {
 bool com_show (GlobalData& globalData, char* line, char* arg) {
   if (arg && *arg){
     int id = atoi(arg);
-    if(id>=0 && id < (signed)globalData.configs.size()){
+    if(id>=0 && id < static_cast<int>(globalData.configs.size())){
       showParam(globalData.configs[id]);
       return true;
     }
@@ -356,7 +356,7 @@ bool com_set (GlobalData& globalData, char* line, char* arg) {
     if(s_param && strchr(arg,'=')==NULL){ // looks like two args (and no = in the first)
       ++s_param;
       int id = atoi(arg);
-      if(id>=0 && id < (signed)globalData.configs.size()){
+      if(id>=0 && id < static_cast<int>(globalData.configs.size())){
 	char* val;
 	i=0;
 	val = strchr(s_param,'=');
