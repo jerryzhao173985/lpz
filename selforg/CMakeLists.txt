@@ -109,17 +109,20 @@ set_target_properties(selforg PROPERTIES
 )
 
 # Create flattened header structure - mimic the Makefile's create_header_links
-file(GLOB_RECURSE HEADER_FILES
+file(GLOB HEADER_FILES_ROOT
     abstractrobot.h
     agent.h
     trackable.h
     wiredcontroller.h
+)
+file(GLOB_RECURSE HEADER_FILES_SUBDIRS
     controller/*.h
     wirings/*.h
     utils/*.h
     matrix/*.h
     statistictools/*.h
 )
+set(HEADER_FILES ${HEADER_FILES_ROOT} ${HEADER_FILES_SUBDIRS})
 
 # Create unified include directory at project root (following best practices)
 file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/include/selforg)
@@ -128,7 +131,12 @@ file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/include/selforg)
 # This needs to happen at configure time so headers are available during compilation
 foreach(header ${HEADER_FILES})
     get_filename_component(header_name ${header} NAME)
-    set(source_header ${CMAKE_CURRENT_SOURCE_DIR}/${header})
+    # Check if header is already an absolute path
+    if(IS_ABSOLUTE ${header})
+        set(source_header ${header})
+    else()
+        set(source_header ${CMAKE_CURRENT_SOURCE_DIR}/${header})
+    endif()
     set(dest_header ${CMAKE_SOURCE_DIR}/include/selforg/${header_name})
     
     # Create symlink at configure time
