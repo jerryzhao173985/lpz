@@ -593,7 +593,7 @@ ParallelTaskManager::getNumProcessors() const {
   // We'll just assume we have access to all processors.  (When setting
   // the number of threads, we default to this value, but the user
   // still has the option of setting any number of threads.)
-  return static_cast<unsigned int>(get_nprocs_conf)();
+  return static_cast<unsigned int>(get_nprocs_conf());
 #endif
 }
 
