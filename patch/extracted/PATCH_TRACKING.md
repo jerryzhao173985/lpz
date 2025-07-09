@@ -41,11 +41,11 @@ This file tracks the extraction and application of smaller patches from the larg
   - Files: 7 changed, 56 insertions(+), 56 deletions(-)
   - Notes: Fixed duplicate explicit keywords and misplaced override specifiers
 
-- **patch_05_override_fixes.patch** - CONFLICTS
-  - Status: Cannot apply due to conflicts with previous patches
-  - Size: 124,630 lines, 714 files affected
-  - Notes: CRITICAL - needs to remove 22,432 misplaced override keywords
-  - Action Required: Need to regenerate or manually resolve conflicts
+- **Override fixes** applied via Python script
+  - Commit: c526038
+  - Files: 147 changed (fixed manually via fix_remaining_overrides.py)
+  - Notes: Fixed 22,432 misplaced override keywords after semicolons
+  - Example: 'virtual ~ECB() override;' → 'virtual ~ECB();'
 
 ## Status Summary
 

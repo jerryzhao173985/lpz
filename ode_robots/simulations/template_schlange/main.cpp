@@ -168,7 +168,7 @@ public:
   // add own key handling stuff here, just insert some case values
   virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down) override {
     if (down) { // only when key is pressed, not when released
-      switch ( static_cast<char> key )
+      switch ( static_cast<char>(key) )
         {
         default:
           return false;
@@ -185,7 +185,7 @@ public:
 int main (int argc, char **argv)
 {
   ThisSim sim;
-  return sim.run(argc, argv) ? 0 : 1 override;
+  return sim.run(argc, argv) ? 0 : 1;
 }
 
 
