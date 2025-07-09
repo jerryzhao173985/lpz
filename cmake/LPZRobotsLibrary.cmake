@@ -269,8 +269,14 @@ function(lpzrobots_apply_platform_settings target)
     endif()
 endfunction()
 
-# Function to create header symlinks (mimics original build)
+# Function to create header symlinks in unified include directory
+# This function creates both hierarchical and flattened symlinks to support
+# both include styles: <component/subdir/header.h> and <component/header.h>
 function(lpzrobots_create_header_symlinks component)
+    # Create component include directory in source tree's unified include dir
+    set(INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include/${component})
+    file(MAKE_DIRECTORY ${INCLUDE_DIR})
+    
     # Collect all header files
     file(GLOB_RECURSE HEADER_FILES
         ${CMAKE_CURRENT_SOURCE_DIR}/*.h
@@ -279,21 +285,48 @@ function(lpzrobots_create_header_symlinks component)
     
     # Filter out certain directories if needed
     list(FILTER HEADER_FILES EXCLUDE REGEX ".*/test/.*")
+    list(FILTER HEADER_FILES EXCLUDE REGEX ".*/tests/.*")
     list(FILTER HEADER_FILES EXCLUDE REGEX ".*/obj/.*")
     list(FILTER HEADER_FILES EXCLUDE REGEX ".*/build.*/.*")
+    list(FILTER HEADER_FILES EXCLUDE REGEX ".*/include/.*")  # Avoid recursion
     
-    # Create include directory
-    file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/include/${component})
-    
-    # Create symlinks
+    # Create symlinks at configure time
     foreach(header ${HEADER_FILES})
+        # Get relative path from component root
+        file(RELATIVE_PATH rel_path ${CMAKE_CURRENT_SOURCE_DIR} ${header})
         get_filename_component(header_name ${header} NAME)
-        file(CREATE_LINK
-            ${header}
-            ${CMAKE_CURRENT_BINARY_DIR}/include/${component}/${header_name}
-            SYMBOLIC
-        )
+        get_filename_component(header_dir ${rel_path} DIRECTORY)
+        
+        # Create hierarchical symlink (preserving subdirectory structure)
+        if(NOT "${header_dir}" STREQUAL "")
+            file(MAKE_DIRECTORY ${INCLUDE_DIR}/${header_dir})
+            set(hierarchical_link ${INCLUDE_DIR}/${rel_path})
+            if(NOT EXISTS ${hierarchical_link})
+                execute_process(
+                    COMMAND ${CMAKE_COMMAND} -E create_symlink ${header} ${hierarchical_link}
+                    RESULT_VARIABLE result
+                    ERROR_QUIET
+                )
+            endif()
+        endif()
+        
+        # Create flattened symlink (just the filename in component root)
+        set(flattened_link ${INCLUDE_DIR}/${header_name})
+        if(NOT EXISTS ${flattened_link})
+            execute_process(
+                COMMAND ${CMAKE_COMMAND} -E create_symlink ${header} ${flattened_link}
+                RESULT_VARIABLE result
+                ERROR_QUIET
+            )
+        endif()
     endforeach()
+    
+    # Add the unified include directory to this target's interface
+    if(TARGET ${component})
+        target_include_directories(${component} PUBLIC
+            $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
+        )
+    endif()
 endfunction()
 
 # Function to install component
