@@ -33,6 +33,21 @@ lpzrobots_add_component_library(ode_robots
         PREFIX="${CMAKE_INSTALL_PREFIX}"  # For finding data files
 )
 
+# Add ode_robots source directory to PUBLIC includes so that includes like <utils/axis.h> work
+target_include_directories(ode_robots PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+)
+if(TARGET ode_robots_opt)
+    target_include_directories(ode_robots_opt PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+    )
+endif()
+if(TARGET ode_robots_dbg)
+    target_include_directories(ode_robots_dbg PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+    )
+endif()
+
 # ODE include and library handling
 if(NOT LPZROBOTS_USE_SYSTEM_ODE AND EXISTS "${CMAKE_SOURCE_DIR}/include/ode-dbl")
     target_include_directories(ode_robots PUBLIC
