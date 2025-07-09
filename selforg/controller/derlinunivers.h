@@ -146,7 +146,7 @@ public:
 
   /********* STORABLE INTERFACE ******/
   virtual bool store(FILE* f)  const override;
-  virtual bool restore(FILE* f) override;
+  virtual bool restore(FILE* f);
 
 protected:
   unsigned int t = 0;

@@ -94,9 +94,9 @@ public:
 
   /***** STOREABLE ****/
   /** stores the controller values to a given file. */
-  virtual bool store(FILE* f) const override;
+  virtual bool store(FILE* f) const;
   /** loads the controller values from a given file. */
-  virtual bool restore(FILE* f) override;
+  virtual bool restore(FILE* f);
 
   /// returns controller network (to be added to inspectables of agent)
   ControllerNet* getCNet();

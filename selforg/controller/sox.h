@@ -110,17 +110,17 @@ public:
 
   /***** STOREABLE ****/
   /** stores the controller values to a given file. */
-  virtual bool store(FILE* f) const override;
+  virtual bool store(FILE* f) const;
   /** loads the controller values from a given file. */
-  virtual bool restore(FILE* f) override;
+  virtual bool restore(FILE* f);
 
   /* some direct access functions (unsafe!) */
-  virtual matrix::Matrix getA() const override;
-  virtual void setA(const matrix::Matrix& A) override;
-  virtual matrix::Matrix getC() const override;
-  virtual void setC(const matrix::Matrix& C) override;
-  virtual matrix::Matrix geth() const override;
-  virtual void seth(const matrix::Matrix& h) override;
+  virtual matrix::Matrix getA() const;
+  virtual void setA(const matrix::Matrix& A);
+  virtual matrix::Matrix getC() const;
+  virtual void setC(const matrix::Matrix& C);
+  virtual matrix::Matrix geth() const;
+  virtual void seth(const matrix::Matrix& h);
 
   /***** TEACHABLE ****/
   virtual void setMotorTeaching(const matrix::Matrix& teaching) override;

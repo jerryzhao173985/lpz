@@ -96,9 +96,9 @@ public:
 
   /*********** STORABLE **************/
 
-  virtual bool store(FILE* f) const override;
+  virtual bool store(FILE* f) const;
 
-  virtual bool restore(FILE* f) override;
+  virtual bool restore(FILE* f);
 
   virtual std::vector<AbstractController*> getControllers() const {
     return ctrl;

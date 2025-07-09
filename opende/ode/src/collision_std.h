@@ -99,43 +99,43 @@ int dCollideHeightfield( dxGeom *o1, dxGeom *o2,
 
 struct dxSphere : public dxGeom {
   dReal radius;		// sphere radius
-  dxSphere (dSpaceID space, dReal _radius) override;
-  void computeAABB() override;
+  dxSphere (dSpaceID space, dReal _radius);
+  void computeAABB();
 };
 
 
 struct dxBox : public dxGeom {
   dVector3 side;	// side lengths (x,y,z)
-  dxBox (dSpaceID space, dReal lx, dReal ly, dReal lz) override;
-  void computeAABB() override;
+  dxBox (dSpaceID space, dReal lx, dReal ly, dReal lz);
+  void computeAABB();
 };
 
 
 struct dxCapsule : public dxGeom {
   dReal radius,lz;	// radius, length along z axis
-  dxCapsule (dSpaceID space, dReal _radius, dReal _length) override;
-  void computeAABB() override;
+  dxCapsule (dSpaceID space, dReal _radius, dReal _length);
+  void computeAABB();
 };
 
 
 struct dxCylinder : public dxGeom {
         dReal radius,lz;        // radius, length along z axis
-        dxCylinder (dSpaceID space, dReal _radius, dReal _length) override;
-        void computeAABB() override;
+        dxCylinder (dSpaceID space, dReal _radius, dReal _length);
+        void computeAABB();
 };
 
 
 struct dxPlane : public dxGeom {
   dReal p[4];
-  dxPlane (dSpaceID space, dReal a, dReal b, dReal c, dReal d) override;
-  void computeAABB() override;
+  dxPlane (dSpaceID space, dReal a, dReal b, dReal c, dReal d);
+  void computeAABB();
 };
 
 
 struct dxRay : public dxGeom {
   dReal length;
-  dxRay (dSpaceID space, dReal _length) override;
-  void computeAABB() override;
+  dxRay (dSpaceID space, dReal _length);
+  void computeAABB();
 };
 
 struct dxConvex : public dxGeom 
@@ -155,10 +155,10 @@ struct dxConvex : public dxGeom
 	   dReal *points,
 	   unsigned int pointcount,
 	   unsigned int *polygons);
-  ~dxConvex : saabb() {
-	  if((edgecount!= nullptr)&&(edges!=nullptr)) delete[] edges override;
+  ~dxConvex() {
+	  if((edgecount!= nullptr)&&(edges!=nullptr)) delete[] edges;
   }
-  void computeAABB() override;
+  void computeAABB();
   struct edge
   {
 	unsigned int first = 0;
@@ -174,12 +174,12 @@ struct dxConvex : public dxGeom
 	{
 		dVector3 rdir;
 		unsigned int index=0;
-		dMULTIPLY1_331 (rdir,final_posr->R,dir) override;
-		dReal max = dDOT(points,rdir) override;
+		dMULTIPLY1_331 (rdir,final_posr->R,dir);
+		dReal max = dDOT(points,rdir);
 		dReal tmp;
 		for (unsigned int i = 1; i < pointcount; ++i) 
 		{
-			tmp = dDOT(points+(i*3),rdir) override;
+			tmp = dDOT(points+(i*3),rdir);
 			if (tmp > max) 
 			{
 				index=i;
@@ -193,7 +193,7 @@ struct dxConvex : public dxGeom
   // For Internal Use Only
 /*! \brief Fills the edges dynamic array based on points and polygons.
  */
-  void FillEdges() override;
+  void FillEdges();
 #if 0
   /*
   What this does is the same as the Support function by doing some preprocessing
@@ -223,11 +223,11 @@ struct dxConvex : public dxGeom
 	// if Dot (E,D)<0, D gets propagated to this child
 	BSPNode* left;
   };
-  void CreateTree() override;
-  BSPNode* CreateNode(std::vector<Arc> Arcs,std::vector<Polygon> Polygons) override;
-  void GetFacesSharedByVertex(int i, std::vector<int> f) override;
-  void GetFacesSharedByEdge(int i, int* f) override;
-  void GetFaceNormal(int i, dVector3 normal) override;
+  void CreateTree();
+  BSPNode* CreateNode(std::vector<Arc> Arcs,std::vector<Polygon> Polygons);
+  void GetFacesSharedByVertex(int i, std::vector<int> f);
+  void GetFacesSharedByEdge(int i, int* f);
+  void GetFaceNormal(int i, dVector3 normal);
   BSPNode* tree;
 #endif
 };

@@ -92,7 +92,7 @@ public:
   /// stores the layer binary into file stream
   virtual bool store(FILE* f)  const override;
   /// restores the layer binary from file stream
-  virtual bool restore(FILE* f) override;
+  virtual bool restore(FILE* f);
 
 private:
   double eps = 0;

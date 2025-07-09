@@ -86,7 +86,7 @@ public:
   }
 
   virtual bool store(FILE* f)  const override;
-  virtual bool restore(FILE* f) override;
+  virtual bool restore(FILE* f);
 
   virtual void printWeights(FILE* f) const override;
 

@@ -80,7 +80,7 @@ public:
   /** stores the controller values to a given file. */
   virtual bool store(FILE* f)  const override;
   /** loads the controller values from a given file. */
-  virtual bool restore(FILE* f) override;
+  virtual bool restore(FILE* f);
 
   /************** INSPECTABLE ********************************/
   virtual std::list<iparamkey> getInternalParamNames()  const override;

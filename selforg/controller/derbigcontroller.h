@@ -77,9 +77,9 @@ public:
 
   /**************  STOREABLE **********************************/
   /** stores the controller values to a given file. */
-  virtual bool store(FILE* f) const override;
+  virtual bool store(FILE* f) const;
   /** loads the controller values from a given file. */
-  virtual bool restore(FILE* f) override;
+  virtual bool restore(FILE* f);
 
   /************** INSPECTABLE ********************************/
   virtual iparamkeylist getInternalParamNames() const override;
@@ -96,13 +96,13 @@ public:
       Please note, that the teaching signal has to be given each timestep
        for a continuous teaching process.
    */
-  virtual void setMotorTeachingSignal(const motor* teaching, int len) override;
+  virtual void setMotorTeachingSignal(const motor* teaching, int len);
 
   /** The given sensor teaching signal (distal learning) is used for this timestep.
       First the belonging motor teachung signal is calculated by the inverse model.
       See setMotorTeachingSignal
    */
-  virtual void setSensorTeachingSignal(const sensor* teaching, int len) override;
+  virtual void setSensorTeachingSignal(const sensor* teaching, int len);
 
   static DerBigControllerConf getDefaultConf() {
     DerBigControllerConf c;

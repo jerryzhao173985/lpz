@@ -76,8 +76,8 @@ public:
                               int number_motors) override;
 
   /**** STOREABLE ****/
-  virtual bool store(FILE* f) const override;
-  virtual bool restore(FILE* f) override;
+  virtual bool store(FILE* f) const;
+  virtual bool restore(FILE* f);
 
   /**** CONFIGURABLE ****/
   virtual std::list<iparamkey> getInternalParamNames()  const override;

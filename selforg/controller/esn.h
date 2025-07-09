@@ -116,7 +116,7 @@ public:
 
   virtual bool store(FILE* f)  const override;
 
-  virtual bool restore(FILE* f) override;
+  virtual bool restore(FILE* f);
 
   static double tanh_prime(double z) {
     double k = tanh(z);

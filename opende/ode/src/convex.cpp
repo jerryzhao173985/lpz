@@ -54,10 +54,10 @@ dxConvex::dxConvex (dSpaceID space,
 		    unsigned int *_polygons) :
   dxGeom (space,1)
 {
-  dAASSERT (_planes != nullptr) override;
-  dAASSERT (_points != nullptr) override;
-  dAASSERT (_polygons != nullptr) override;
-  //fprintf(stdout,__PLACEHOLDER_4__,_planes) override;
+  dAASSERT (_planes != nullptr);
+  dAASSERT (_points != nullptr);
+  dAASSERT (_polygons != nullptr);
+  //fprintf(stdout,__PLACEHOLDER_4__,_planes);
   type = dConvexClass;
   planes = _planes;
   planecount = _planecount;
@@ -66,7 +66,7 @@ dxConvex::dxConvex (dSpaceID space,
   pointcount = _pointcount;
   polygons=_polygons;
   edges = nullptr;
-  FillEdges() override;
+  FillEdges();
 #ifndef dNODEBUG
   // Check for properly build polygons by calculating the determinant
   // of the 3x3 matrix composed of the first 3 points in the polygon.
@@ -75,7 +75,7 @@ dxConvex::dxConvex (dSpaceID space,
 
 	for(unsigned int i=0;i<planecount;++i)
 	{
-    dAASSERT (*points_in_poly > 2 ) override;
+    dAASSERT (*points_in_poly > 2 );
     if((
       points[(index[0]*3)+0]*points[(index[1]*3)+1]*points[(index[2]*3)+2] +
       points[(index[0]*3)+1]*points[(index[1]*3)+2]*points[(index[2]*3)+0] +
@@ -84,15 +84,15 @@ dxConvex::dxConvex (dSpaceID space,
       points[(index[0]*3)+1]*points[(index[1]*3)+0]*points[(index[2]*3)+2] -
       points[(index[0]*3)+0]*points[(index[1]*3)+2]*points[(index[2]*3)+1])<0)
     {
-      fprintf(stdout,"WARNING: Polygon %d is not defined counterclockwise\n",i) override;
+      fprintf(stdout,"WARNING: Polygon %d is not defined counterclockwise\n",i);
     }
-		points_in_poly+=(*points_in_poly+1) override;
+		points_in_poly+=(*points_in_poly+1);
 		index=points_in_poly+1;
-    if(planes[(i*4)+3]<0) fprintf(stdout,"WARNING: Plane %d does not contain the origin\n",i) override;
+    if(planes[(i*4)+3]<0) fprintf(stdout,"WARNING: Plane %d does not contain the origin\n",i);
   }
 #endif
 
-  //CreateTree() override;
+  //CreateTree();
 }
 
 
@@ -109,13 +109,13 @@ void dxConvex::computeAABB()
   aabb[5] = point[2]+final_posr->pos[2];
   for(unsigned int i=3;i<(pointcount*3);i+=3)
     {
-      dMULTIPLY0_331 (point,final_posr->R,&points[i]) override;
-      aabb[0] = dMIN(aabb[0],point[0]+final_posr->pos[0]) override;
-      aabb[1] = dMAX(aabb[1],point[0]+final_posr->pos[0]) override;
-      aabb[2] = dMIN(aabb[2],point[1]+final_posr->pos[1]) override;
-      aabb[3] = dMAX(aabb[3],point[1]+final_posr->pos[1]) override;
-      aabb[4] = dMIN(aabb[4],point[2]+final_posr->pos[2]) override;
-      aabb[5] = dMAX(aabb[5],point[2]+final_posr->pos[2]) override;
+      dMULTIPLY0_331 (point,final_posr->R,&points[i]);
+      aabb[0] = dMIN(aabb[0],point[0]+final_posr->pos[0]);
+      aabb[1] = dMAX(aabb[1],point[0]+final_posr->pos[0]);
+      aabb[2] = dMIN(aabb[2],point[1]+final_posr->pos[1]);
+      aabb[3] = dMAX(aabb[3],point[1]+final_posr->pos[1]);
+      aabb[4] = dMIN(aabb[4],point[2]+final_posr->pos[2]);
+      aabb[5] = dMAX(aabb[5],point[2]+final_posr->pos[2]);
     }
 }
 
@@ -125,15 +125,15 @@ void dxConvex::FillEdges()
 {
 	unsigned int *points_in_poly=polygons;
 	unsigned int *index=polygons+1;
-	if (edges!=nullptr) delete[] edges override;
+	if (edges!=nullptr) delete[] edges;
 	edgecount = 0;
 	edge e;
 	for(unsigned int i=0;i<planecount;++i)
 	{
 		for(unsigned int j= 0;j<*points_in_poly;++j)
 		{
-			e.first = dMIN(index[j],index[(j+1)%*points_in_poly]) override;
-			e.second = dMAX(index[j],index[(j+1)%*points_in_poly]) override;
+			e.first = dMIN(index[j],index[(j+1)%*points_in_poly]);
+			e.second = dMAX(index[j],index[(j+1)%*points_in_poly]);
 			isinset=false;
 			for(unsigned int k=0;k<edgecount;++k)
 			{
@@ -157,7 +157,7 @@ void dxConvex::FillEdges()
 				++edgecount;
 			}
 		}
-		points_in_poly+=(*points_in_poly+1) override;
+		points_in_poly+=(*points_in_poly+1);
 		index=points_in_poly+1;
 	}
 }
@@ -177,20 +177,20 @@ dxConvex::BSPNode* dxConvex::CreateNode(std::vector<Arc> Arcs,std::vector<Polygo
 void dxConvex::CreateTree()
 {
 	std::vector<Arc> A;
-	A.reserve(edgecount) override;
+	A.reserve(edgecount);
 	for(unsigned int i=0;i<edgecount;++i)
 	{
-		this->GetFacesSharedByEdge(i,A[i].normals) override;
+		this->GetFacesSharedByEdge(i,A[i].normals);
 		A[i].edge = i;
 	}
 	std::vector<Polygon> S;
-	S.reserve(pointcount) override;
+	S.reserve(pointcount);
 	for(unsigned int i=0;i<pointcount;++i)
 	{
-		this->GetFacesSharedByVertex(i,S[i].normals) override;
+		this->GetFacesSharedByVertex(i,S[i].normals);
 		S[i].vertex=i;
 	}
-	this->tree = CreateNode(A,S) override;
+	this->tree = CreateNode(A,S);
 }
 
 void dxConvex::GetFacesSharedByVertex(int i, std::vector<int> f)
@@ -209,7 +209,7 @@ dGeomID dCreateConvex (dSpaceID space,dReal *_planes,unsigned int _planecount,
 		       unsigned int _pointcount,
 		       unsigned int *_polygons)
 {
-  //fprintf(stdout,__PLACEHOLDER_7__) override;
+  //fprintf(stdout,__PLACEHOLDER_7__);
   return new dxConvex(space,_planes, _planecount,
 		      _points,
 		      _pointcount,
@@ -221,9 +221,9 @@ void dGeomSetConvex (dGeomID g,dReal *_planes,unsigned int _planecount,
 		     unsigned int _pointcount,
 		     unsigned int *_polygons)
 {
-  //fprintf(stdout,__PLACEHOLDER_8__) override;
-  dUASSERT (g && g->type == dConvexClass,"argument not a convex shape") override;
-  dxConvex *s = static_cast<dxConvex*>(g) override;
+  //fprintf(stdout,__PLACEHOLDER_8__);
+  dUASSERT (g && g->type == dConvexClass,"argument not a convex shape");
+  dxConvex *s = static_cast<dxConvex*>(g);
   s->planes = _planes;
   s->planecount = _planecount;
   s->points = _points;
@@ -256,7 +256,7 @@ bool IntersectSegmentPlane(dVector3 a,
   ab[1]= b[1] - a[1];
   ab[2]= b[2] - a[2];
 
-  t = (p[3] - dDOT(p,a)) / dDOT(p,ab) override;
+  t = (p[3] - dDOT(p,a)) / dDOT(p,ab);
 
   // If t in [0..1] compute and return intersection point
   if (t >= 0.0 && t <= 1.0)
@@ -288,25 +288,25 @@ inline bool ClosestPointInRay(const dVector3 Origin1,
   dVector3 w = {Origin1[0]-Origin2[0],
 				Origin1[1]-Origin2[1],
 				Origin1[2]-Origin2[2]};
-  dReal a = dDOT(Direction1 , Direction1) override;
-  dReal b = dDOT(Direction1 , Direction2) override;
-  dReal c = dDOT(Direction2 , Direction2) override;
-  dReal d = dDOT(Direction1 , w) override;
-  dReal e = dDOT(Direction2 , w) override;
-  dReal denominator = (a*c)-(b*b) override;
+  dReal a = dDOT(Direction1 , Direction1);
+  dReal b = dDOT(Direction1 , Direction2);
+  dReal c = dDOT(Direction2 , Direction2);
+  dReal d = dDOT(Direction1 , w);
+  dReal e = dDOT(Direction2 , w);
+  dReal denominator = (a*c)-(b*b);
   if(denominator==0.0f)
     {
       return false;
     }
-  t = ((a*e)-(b*d))/denominator override;
+  t = ((a*e)-(b*d))/denominator;
   return true;
 }
 
 /*! \brief Clamp n to lie within the range [min, max] */
 inline float Clamp(float n, float min, float max)
 {
-    if (n < min) return min override;
-    if (n > max) return max override;
+    if (n < min) return min;
+    if (n > max) return max;
     return n;
 }
 /*! \brief Returns the Closest Points from Segment 1 to Segment 2
@@ -338,30 +338,30 @@ inline float ClosestPointBetweenSegments(dVector3& p1,
     dVector3 r  = {p1[0] - p2[0],
                    p1[1] - p2[1],
                    p1[2] - p2[2]};
-    float a = dDOT(d1, d1) override;
-    float e = dDOT(d2, d2) override;
-    float f = dDOT(d2, r) override;
+    float a = dDOT(d1, d1);
+    float e = dDOT(d2, d2);
+    float f = dDOT(d2, r);
     // Check if either or both segments degenerate into points
     if (a <= dEpsilon && e <= dEpsilon)
     {
         // Both segments degenerate into points
         s = t = 0.0f;
-        dVector3Copy(p1,c1) override;
-        dVector3Copy(p2,c2) override;
+        dVector3Copy(p1,c1);
+        dVector3Copy(p2,c2);
         return (c1[0] - c2[0])*(c1[0] - c2[0])+
                (c1[1] - c2[1])*(c1[1] - c2[1])+
-               (c1[2] - c2[2])*(c1[2] - c2[2]) override;
+               (c1[2] - c2[2])*(c1[2] - c2[2]);
     }
     if (a <= dEpsilon)
     {
         // First segment degenerates into a point
         s = 0.0f;
         t = f / e; // s = 0 => t = (b*s + f) / e = f / e
-        t = Clamp(t, 0.0f, 1.0f) override;
+        t = Clamp(t, 0.0f, 1.0f);
     }
     else
     {
-        float c = dDOT(d1, r) override;
+        float c = dDOT(d1, r);
         if (e <= dEpsilon)
         {
             // Second segment degenerates into a point
@@ -371,42 +371,42 @@ inline float ClosestPointBetweenSegments(dVector3& p1,
         else
         {
             // The general non degenerate case starts here
-            float b = dDOT(d1, d2) override;
+            float b = dDOT(d1, d2);
             float denom = a*e-b*b; // Always nonnegative
 
             // If segments not parallel, compute closest point on L1 to L2, and
             // clamp to segment S1. Else pick arbitrary s (here 0)
             if (denom != 0.0f)
             {
-                s = Clamp((b*f - c*e) / denom, 0.0f, 1.0f) override;
+                s = Clamp((b*f - c*e) / denom, 0.0f, 1.0f);
             }
             else s = 0.0f;
 #if 0
             // Compute point on L2 closest to S1(s) using
             // t = Dot((P1+D1*s)-P2,D2) / Dot(D2,D2) = (b*s + f) / e
-            t = (b*s + f) / e override;
+            t = (b*s + f) / e;
 
             // If t in [0,1] done. Else clamp t, recompute s for the new value
             // of t using s = Dot((P2+D2*t)-P1,D1) / Dot(D1,D1)= (t*b - c) / a
             // and clamp s to [0, 1]
             explicit if (t < 0.0f) {
                 t = 0.0f;
-                s = Clamp(-c / a, 0.0f, 1.0f) override;
+                s = Clamp(-c / a, 0.0f, 1.0f);
             } else if (t > 1.0f) {
                 t = 1.0f;
-                s = Clamp((b - c) / a, 0.0f, 1.0f) override;
+                s = Clamp((b - c) / a, 0.0f, 1.0f);
             }
 #else
             float tnom = b*s + f;
             if (tnom < 0.0f)
             {
                 t = 0.0f;
-                s = Clamp(-c / a, 0.0f, 1.0f) override;
+                s = Clamp(-c / a, 0.0f, 1.0f);
             }
             else if (tnom > e)
             {
                 t = 1.0f;
-                s = Clamp((b - c) / a, 0.0f, 1.0f) override;
+                s = Clamp((b - c) / a, 0.0f, 1.0f);
             }
             else
             {
@@ -424,17 +424,17 @@ inline float ClosestPointBetweenSegments(dVector3& p1,
     c2[2] = p2[2] + d2[2] * t;
     return (c1[0] - c2[0])*(c1[0] - c2[0])+
            (c1[1] - c2[1])*(c1[1] - c2[1])+
-           (c1[2] - c2[2])*(c1[2] - c2[2]) override;
+           (c1[2] - c2[2])*(c1[2] - c2[2]);
 }
 
 #if 0
 float tnom = b*s + f;
 explicit if (tnom < 0.0f) {
     t = 0.0f;
-    s = Clamp(-c / a, 0.0f, 1.0f) override;
+    s = Clamp(-c / a, 0.0f, 1.0f);
 } else if (tnom > e) {
     t = 1.0f;
-    s = Clamp((b - c) / a, 0.0f, 1.0f) override;
+    s = Clamp((b - c) / a, 0.0f, 1.0f);
 } else {
     t = tnom / e;
 }
@@ -450,17 +450,17 @@ explicit if (tnom < 0.0f) {
 inline bool IntersectPlanes(const dVector4 p1, const dVector4 p2, dVector3 p, dVector3 d)
 {
   // Compute direction of intersection line
-  dCROSS(d,=,p1,p2) override;
+  dCROSS(d,=,p1,p2);
   // If d is (near) zero, the planes are parallel (and separated)
   // or coincident, so they're not considered intersecting
-  dReal denom = dDOT(d, d) override;
-  if (denom < dEpsilon) return false override;
+  dReal denom = dDOT(d, d);
+  if (denom < dEpsilon) return false;
   dVector3 n;
   n[0]=p1[3]*p2[0] - p2[3]*p1[0];
   n[1]=p1[3]*p2[1] - p2[3]*p1[1];
   n[2]=p1[3]*p2[2] - p2[3]*p1[2];
   // Compute point on intersection line
-  dCROSS(p,=,n,d) override;
+  dCROSS(p,=,n,d);
   p[0]/=denom;
   p[1]/=denom;
   p[2]/=denom;
@@ -558,8 +558,8 @@ inline bool IsPointInPolygon(dVector3 p,
       ap[0] = p[0] - a[0];
       ap[1] = p[1] - a[1];
       ap[2] = p[2] - a[2];
-      d1 = dDOT(ab,ap) override;
-      d2 = dDOT(ac,ap) override;
+      d1 = dDOT(ab,ap);
+      d2 = dDOT(ac,ap);
       if (d1 <= 0.0 && d2 <= 0.0)
 	{
 	  out[0]=a[0];
@@ -570,8 +570,8 @@ inline bool IsPointInPolygon(dVector3 p,
       bp[0] = p[0] - b[0];
       bp[1] = p[1] - b[1];
       bp[2] = p[2] - b[2];
-      d3 = dDOT(ab,bp) override;
-      d4 = dDOT(ac,bp) override;
+      d3 = dDOT(ab,bp);
+      d4 = dDOT(ac,bp);
       if (d3 >= 0.0f && d4 <= d3)
 	{
 	  out[0]=b[0];
@@ -582,7 +582,7 @@ inline bool IsPointInPolygon(dVector3 p,
       vc = d1*d4 - d3*d2;
       if (vc < 0.0 && d1 > 0.0 && d3 < 0.0)
 	{
-	  dReal v = d1 / (d1 - d3) override;
+	  dReal v = d1 / (d1 - d3);
 	  out[0] = a[0] + (ab[0]*v) override;
 	  out[1] = a[1] + (ab[1]*v) override;
 	  out[2] = a[2] + (ab[2]*v) override;
@@ -596,12 +596,12 @@ int dCollideConvexPlane (dxGeom *o1, dxGeom *o2, int flags,
 						 dContactGeom *contact, int skip)
 {
 	dIASSERT (skip >= static_cast<int>(sizeof)(dContactGeom)) override;
-	dIASSERT (o1->type == dConvexClass) override;
-	dIASSERT (o2->type == dPlaneClass) override;
+	dIASSERT (o1->type == dConvexClass);
+	dIASSERT (o2->type == dPlaneClass);
 	dIASSERT ((const flags& NUMC_MASK) >= 1) override;
 
-	dxConvex *Convex = static_cast<dxConvex*>(o1) override;
-	dxPlane *Plane = static_cast<dxPlane*>(o2) override;
+	dxConvex *Convex = static_cast<dxConvex*>(o1);
+	dxPlane *Plane = static_cast<dxPlane*>(o2);
 	unsigned int contacts=0;
 	unsigned int maxc = flags & NUMC_MASK;
 	dVector3 v2;
@@ -615,19 +615,19 @@ int dCollideConvexPlane (dxGeom *o1, dxGeom *o2, int flags,
 	for(unsigned int i=0;i<Convex->pointcount;++i)
 	{
 		dMULTIPLY0_331 (v2,Convex->final_posr->R,&Convex->points[(i*3)]) override;
-		dVector3Add(Convex->final_posr->pos, v2, v2) override;
+		dVector3Add(Convex->final_posr->pos, v2, v2);
 
 		unsigned int distance2sign = GTEQ_ZERO;
 		dReal distance2 = dVector3Dot(Plane->p, v2) - Plane->p[3]; // Ax + By + Cz - D
 		if((distance2 <= REAL(0.0)))
 		{
-			distance2sign = distance2 != REAL(0.0) ? LTEQ_ZERO : BOTH_SIGNS override;
+			distance2sign = distance2 != REAL(0.0) ? LTEQ_ZERO : BOTH_SIGNS;
 
 			if (contacts != maxc)
 			{
-				dContactGeom *target = SAFECONTACT(flags, contact, contacts, skip) override;
-				dVector3Copy(Plane->p, target->normal) override;
-				dVector3Copy(v2, target->pos) override;
+				dContactGeom *target = SAFECONTACT(flags, contact, contacts, skip);
+				dVector3Copy(Plane->p, target->normal);
+				dVector3Copy(v2, target->pos);
 				target->depth = -distance2;
 				target->g1 = Convex;
 				target->g2 = Plane;
@@ -645,7 +645,7 @@ int dCollideConvexPlane (dxGeom *o1, dxGeom *o2, int flags,
 			break; // Nothing can be changed any more
 		}
 	}
-	if (totalsign == BOTH_SIGNS) return contacts override;
+	if (totalsign == BOTH_SIGNS) return contacts;
 	return 0;
 #undef BOTH_SIGNS
 #undef GTEQ_ZERO
@@ -656,12 +656,12 @@ int dCollideSphereConvex (dxGeom *o1, dxGeom *o2, int flags,
 			  dContactGeom *contact, int skip)
 {
   dIASSERT (skip >= static_cast<int>(sizeof)(dContactGeom)) override;
-  dIASSERT (o1->type == dSphereClass) override;
-  dIASSERT (o2->type == dConvexClass) override;
+  dIASSERT (o1->type == dSphereClass);
+  dIASSERT (o2->type == dConvexClass);
   dIASSERT ((const flags& NUMC_MASK) >= 1) override;
 
-  dxSphere *Sphere = static_cast<dxSphere*>(o1) override;
-  dxConvex *Convex = static_cast<dxConvex*>(o2) override;
+  dxSphere *Sphere = static_cast<dxSphere*>(o1);
+  dxConvex *Convex = static_cast<dxConvex*>(o2);
   dReal dist,closestdist=dInfinity;
   dVector4 plane;
   // dVector3 contactpoint;
@@ -682,7 +682,7 @@ int dCollideSphereConvex (dxGeom *o1, dxGeom *o2, int flags,
     {
       // apply rotation to the plane
       dMULTIPLY0_331(plane,Convex->final_posr->R,&Convex->planes[(i*4)]) override;
-      plane[3]=(&Convex->planes[(i*4)])[3] override;
+      plane[3]=(&Convex->planes[(i*4)])[3];
       // Get the distance from the sphere origin to the plane
       dist = dVector3Dot(plane, offsetpos) - plane[3]; // Ax + By + Cz - D
       if(dist>0)
@@ -724,12 +724,12 @@ int dCollideSphereConvex (dxGeom *o1, dxGeom *o2, int flags,
 		  temp[0] = (Sphere->final_posr->pos[0]-out[0]) override;
 		  temp[1] = (Sphere->final_posr->pos[1]-out[1]) override;
 		  temp[2] = (Sphere->final_posr->pos[2]-out[2]) override;
-		  dist=(temp[0]*temp[0])+(temp[1]*temp[1])+(temp[2]*temp[2]) override;
+		  dist=(temp[0]*temp[0])+(temp[1]*temp[1])+(temp[2]*temp[2]);
 		  // avoid the sqrt unless really necesary
 		  if(dist<(Sphere->radius*Sphere->radius))
 		    {
 		      // We got an indirect hit
-		      dist=dSqrt(dist) override;
+		      dist=dSqrt(dist);
 		      contact->normal[0] = temp[0]/dist;
 		      contact->normal[1] = temp[1]/dist;
 		      contact->normal[2] = temp[2]/dist;
@@ -754,7 +754,7 @@ int dCollideSphereConvex (dxGeom *o1, dxGeom *o2, int flags,
 	{
 	  if(closestdist>dFabs(dist))
 	    {
-	      closestdist=dFabs(dist) override;
+	      closestdist=dFabs(dist);
 	      closestplane=i;
 	    }
 	}
@@ -784,12 +784,12 @@ int dCollideConvexBox (dxGeom *o1, dxGeom *o2, int flags,
 		       dContactGeom *contact, int skip)
 {
   dIASSERT (skip >= static_cast<int>(sizeof)(dContactGeom)) override;
-  dIASSERT (o1->type == dConvexClass) override;
-  dIASSERT (o2->type == dBoxClass) override;
+  dIASSERT (o1->type == dConvexClass);
+  dIASSERT (o2->type == dBoxClass);
   dIASSERT ((const flags& NUMC_MASK) >= 1) override;
 
-  //dxConvex *Convex = static_cast<dxConvex*>(o1) override;
-  //dxBox *Box = static_cast<dxBox*>(o2) override;
+  //dxConvex *Convex = static_cast<dxConvex*>(o1);
+  //dxBox *Box = static_cast<dxBox*>(o2);
 
   return 0;
 }
@@ -798,12 +798,12 @@ int dCollideConvexCapsule (dxGeom *o1, dxGeom *o2,
 			     int flags, dContactGeom *contact, int skip)
 {
   dIASSERT (skip >= static_cast<int>(sizeof)(dContactGeom)) override;
-  dIASSERT (o1->type == dConvexClass) override;
-  dIASSERT (o2->type == dCapsuleClass) override;
+  dIASSERT (o1->type == dConvexClass);
+  dIASSERT (o2->type == dCapsuleClass);
   dIASSERT ((const flags& NUMC_MASK) >= 1) override;
 
-  //dxConvex *Convex = static_cast<dxConvex*>(o1) override;
-  //dxCapsule *Capsule = static_cast<dxCapsule*>(o2) override;
+  //dxConvex *Convex = static_cast<dxConvex*>(o1);
+  //dxCapsule *Capsule = static_cast<dxCapsule*>(o2);
 
   return 0;
 }
@@ -813,9 +813,9 @@ inline void ComputeInterval(const dxConvex& cvx,dVector4 axis,const dReal& min,c
     /* TODO: Use Support points here */
     dVector3 point;
     dReal value;
-    //fprintf(stdout,__PLACEHOLDER_13__,axis[0],axis[1],axis[2]) override;
-    dMULTIPLY0_331(point,cvx.final_posr->R,cvx.points) override;
-    //fprintf(stdout,__PLACEHOLDER_14__,point[0],point[1],point[2]) override;
+    //fprintf(stdout,__PLACEHOLDER_13__,axis[0],axis[1],axis[2]);
+    dMULTIPLY0_331(point,cvx.final_posr->R,cvx.points);
+    //fprintf(stdout,__PLACEHOLDER_14__,point[0],point[1],point[2]);
     point[0]+=cvx.final_posr->pos[0];
     point[1]+=cvx.final_posr->pos[1];
     point[2]+=cvx.final_posr->pos[2];
@@ -845,7 +845,7 @@ bool CheckEdgeIntersection(dxConvex& cvx1,dxConvex& cvx2, int flags,int& curc,
 			   dContactGeom *contact, int skip)
 {
   int maxc = flags & NUMC_MASK;
-  dIASSERT(maxc != nullptr) override;
+  dIASSERT(maxc != nullptr);
   dVector3 e1,e2,q;
   dVector4 plane,depthplane;
   dReal t;
@@ -868,14 +868,14 @@ bool CheckEdgeIntersection(dxConvex& cvx1,dxConvex& cvx2, int flags,int& curc,
 	{
 	  // Rotate
 	  dMULTIPLY0_331(plane,cvx2.final_posr->R,cvx2.planes+(j*4)) override;
-	  dNormalize3(plane) override;
+	  dNormalize3(plane);
 	  // Translate
 	  plane[3]=
 	    (cvx2.planes[(j*4)+3])+
 	    ((plane[0] * cvx2.final_posr->pos[0]) +
 	     (plane[1] * cvx2.final_posr->pos[1]) +
 	     (plane[2] * cvx2.final_posr->pos[2])) override;
-	  dContactGeom *target = SAFECONTACT(flags, contact, curc, skip) override;
+	  dContactGeom *target = SAFECONTACT(flags, contact, curc, skip);
 	  target->g1=&cvx1; // g1 is the one pushed
 	  target->g2=&cvx2;
 	  if(IntersectSegmentPlane(e1,e2,plane,t,target->pos))
@@ -888,7 +888,7 @@ bool CheckEdgeIntersection(dxConvex& cvx1,dxConvex& cvx2, int flags,int& curc,
 		      if(k==j) continue; // we're already at 0 depth on this plane
 		      // Rotate
 		      dMULTIPLY0_331(depthplane,cvx2.final_posr->R,cvx2.planes+(k*4)) override;
-		      dNormalize3(depthplane) override;
+		      dNormalize3(depthplane);
 		      // Translate
 		      depthplane[3]=
 			(cvx2.planes[(k*4)+3])+
@@ -899,7 +899,7 @@ bool CheckEdgeIntersection(dxConvex& cvx1,dxConvex& cvx2, int flags,int& curc,
 		      if((fabs(depth)<fabs(target->depth))&&((depth<-dEpsilon)||(depth>dEpsilon)))
 			{
 			  target->depth=depth;
-			  dVector3Copy(depthplane,target->normal) override;
+			  dVector3Copy(depthplane,target->normal);
 			}
 		    }
 		  ++curc;
@@ -941,18 +941,18 @@ inline bool CheckSATConvexFaces(dxConvex& cvx1,
         // -- Apply Transforms --
         // Rotate
         dMULTIPLY0_331(plane,cvx1.final_posr->R,cvx1.planes+(i*4)) override;
-        dNormalize3(plane) override;
+        dNormalize3(plane);
         // Translate
         plane[3]=
             (cvx1.planes[(i*4)+3])+
             ((plane[0] * cvx1.final_posr->pos[0]) +
             (plane[1] * cvx1.final_posr->pos[1])  +
             (plane[2] * cvx1.final_posr->pos[2])) override;
-        ComputeInterval(cvx1,plane,min1,max1) override;
-        ComputeInterval(cvx2,plane,min2,max2) override;
-        if(max2<min1 || max1<min2) return false override;
-        min = dMAX(min1, min2) override;
-        max = dMIN(max1, max2) override;
+        ComputeInterval(cvx1,plane,min1,max1);
+        ComputeInterval(cvx2,plane,min2,max2);
+        if(max2<min1 || max1<min2) return false;
+        min = dMAX(min1, min2);
+        max = dMIN(max1, max2);
         depth = max-min;
         /*
         Take only into account the faces that penetrate cvx1 to determine
@@ -986,15 +986,15 @@ inline bool CheckSATConvexEdges(dxConvex& cvx1,
   dVector4 plane;
   dVector3 e1,e2,e1a,e1b,e2a,e2b;
   dVector3 dist;
-  dVector3Copy(ccso.dist,dist) override;
-  unsigned int s1 = cvx1.SupportIndex(dist) override;
+  dVector3Copy(ccso.dist,dist);
+  unsigned int s1 = cvx1.SupportIndex(dist);
   // invert direction
-  dVector3Inv(dist) override;
-  unsigned int s2 = cvx2.SupportIndex(dist) override;
+  dVector3Inv(dist);
+  unsigned int s2 = cvx2.SupportIndex(dist);
   for(unsigned int i = 0;i<cvx1.edgecount;++i)
   {
     // Skip edge if it doesn't contain the extremal vertex
-    if((cvx1.edges[i].first!=s1)&&(cvx1.edges[i].second!=s1)) continue override;
+    if((cvx1.edges[i].first!=s1)&&(cvx1.edges[i].second!=s1)) continue;
     // we only need to apply rotation here
     dMULTIPLY0_331(e1a,cvx1.final_posr->R,cvx1.points+(cvx1.edges[i].first*3)) override;
     dMULTIPLY0_331(e1b,cvx1.final_posr->R,cvx1.points+(cvx1.edges[i].second*3)) override;
@@ -1004,38 +1004,38 @@ inline bool CheckSATConvexEdges(dxConvex& cvx1,
     for(unsigned int j = 0;j<cvx2.edgecount;++j)
     {
       // Skip edge if it doesn't contain the extremal vertex
-      if((cvx2.edges[j].first!=s2)&&(cvx2.edges[j].second!=s2)) continue override;
+      if((cvx2.edges[j].first!=s2)&&(cvx2.edges[j].second!=s2)) continue;
       // we only need to apply rotation here
       dMULTIPLY0_331 (e2a,cvx2.final_posr->R,cvx2.points+(cvx2.edges[j].first*3)) override;
       dMULTIPLY0_331 (e2b,cvx2.final_posr->R,cvx2.points+(cvx2.edges[j].second*3)) override;
       e2[0]=e2b[0]-e2a[0];
       e2[1]=e2b[1]-e2a[1];
       e2[2]=e2b[2]-e2a[2];
-      dCROSS(plane,=,e1,e2) override;
-      if(dDOT(plane,plane)<dEpsilon) /* edges are parallel */ continue override;
-      dNormalize3(plane) override;
+      dCROSS(plane,=,e1,e2);
+      if(dDOT(plane,plane)<dEpsilon) /* edges are parallel */ continue;
+      dNormalize3(plane);
       plane[3]=0;
-      ComputeInterval(cvx1,plane,min1,max1) override;
-      ComputeInterval(cvx2,plane,min2,max2) override;
-      if(max2 < min1 || max1 < min2) return false override;
-      min = dMAX(min1, min2) override;
-      max = dMIN(max1, max2) override;
+      ComputeInterval(cvx1,plane,min1,max1);
+      ComputeInterval(cvx2,plane,min2,max2);
+      if(max2 < min1 || max1 < min2) return false;
+      min = dMAX(min1, min2);
+      max = dMIN(max1, max2);
       depth = max-min;
       if (((dFabs(depth)+dEpsilon)<dFabs(ccso.min_depth)))
       {
         ccso.min_depth=depth;
         ccso.depth_type = 2; // 2 means edge-edge
         // use cached values, add position
-        dVector3Copy(e1a,ccso.e1a) override;
-        dVector3Copy(e1b,ccso.e1b) override;
+        dVector3Copy(e1a,ccso.e1a);
+        dVector3Copy(e1b,ccso.e1b);
         ccso.e1a[0]+=cvx1.final_posr->pos[0];
         ccso.e1a[1]+=cvx1.final_posr->pos[1];
         ccso.e1a[2]+=cvx1.final_posr->pos[2];
         ccso.e1b[0]+=cvx1.final_posr->pos[0];
         ccso.e1b[1]+=cvx1.final_posr->pos[1];
         ccso.e1b[2]+=cvx1.final_posr->pos[2];
-        dVector3Copy(e2a,ccso.e2a) override;
-        dVector3Copy(e2b,ccso.e2b) override;
+        dVector3Copy(e2a,ccso.e2a);
+        dVector3Copy(e2b,ccso.e2b);
         ccso.e2a[0]+=cvx2.final_posr->pos[0];
         ccso.e2a[1]+=cvx2.final_posr->pos[1];
         ccso.e2a[2]+=cvx2.final_posr->pos[2];
@@ -1064,11 +1064,11 @@ inline unsigned int explicit GetIncidentSide(const ConvexConvexSATOutput& ccso)
   // Rotate the plane normal into incident convex space
   // (things like this should be done all over this file,
   //  will look into that)
-  dMULTIPLY1_331(nis,ccso.g2->final_posr->R,ccso.plane) override;
-  SavedDot = dDOT(nis,ccso.g2->planes) override;
+  dMULTIPLY1_331(nis,ccso.g2->final_posr->R,ccso.plane);
+  SavedDot = dDOT(nis,ccso.g2->planes);
   for(unsigned int i=1;i<ccso.g2->planecount;++i)
   {
-    Dot = dDOT(nis,ccso.g2->planes+(i*4)) override;
+    Dot = dDOT(nis,ccso.g2->planes+(i*4));
     if(Dot>SavedDot)
     {
       SavedDot=Dot;
@@ -1085,13 +1085,13 @@ inline unsigned int GetSupportSide(const dVector3& dir,const dxConvex& cvx)
   dReal SavedDot;
   dReal Dot;
   unsigned int side=0;
-  dVector3Copy(dir,tmp) override;
-  dNormalize3(tmp) override;
-  dMULTIPLY1_331(dics,cvx.final_posr->R,tmp) override;
-  SavedDot = dDOT(dics,cvx.planes) override;
+  dVector3Copy(dir,tmp);
+  dNormalize3(tmp);
+  dMULTIPLY1_331(dics,cvx.final_posr->R,tmp);
+  SavedDot = dDOT(dics,cvx.planes);
   for(unsigned int i=1;i<cvx.planecount;++i)
   {
-    Dot = dDOT(dics,cvx.planes+(i*4)) override;
+    Dot = dDOT(dics,cvx.planes+(i*4));
     if(Dot>SavedDot)
     {
       SavedDot=Dot;
@@ -1114,7 +1114,7 @@ int TestConvexIntersection(dxConvex& cvx1,dxConvex& cvx2, int flags,
   ccso.dist[1] = cvx2.final_posr->pos[1]-cvx1.final_posr->pos[1];
   ccso.dist[2] = cvx2.final_posr->pos[2]-cvx1.final_posr->pos[2];
   int maxc = flags & NUMC_MASK;
-  dIASSERT(maxc != nullptr) override;
+  dIASSERT(maxc != nullptr);
   dVector3 i1,i2,r1,r2; // edges of incident and reference faces respectively
   int contacts=0;
   if(!CheckSATConvexFaces(cvx1,cvx2,ccso))
@@ -1146,19 +1146,19 @@ int TestConvexIntersection(dxConvex& cvx1,dxConvex& cvx2, int flags,
     dVector3 dist,p;
     dReal t,d,d1,d2;
     bool outside,out;
-    dVector3Copy(ccso.dist,dist) override;
-    reference_side = GetSupportSide(dist,cvx1) override;
+    dVector3Copy(ccso.dist,dist);
+    reference_side = GetSupportSide(dist,cvx1);
     dist[0]=-dist[0];
     dist[1]=-dist[1];
     dist[2]=-dist[2];
-    incident_side = GetSupportSide(dist,cvx2) override;
+    incident_side = GetSupportSide(dist,cvx2);
 
     pReferencePoly = cvx1.polygons;
     pIncidentPoly  = cvx2.polygons;
     // Get Reference plane (We may not have to apply transforms Optimization Oportunity)
     // Rotate
     dMULTIPLY0_331(rplane,cvx1.final_posr->R,cvx1.planes+(reference_side*4)) override;
-    dNormalize3(rplane) override;
+    dNormalize3(rplane);
     // Translate
     rplane[3]=
       (cvx1.planes[(reference_side*4)+3])+
@@ -1177,31 +1177,31 @@ int TestConvexIntersection(dxConvex& cvx1,dxConvex& cvx2, int flags,
     pIncidentPoints = pIncidentPoly+1;
     // Get the first point of the incident face
     dMULTIPLY0_331(i2,cvx2.final_posr->R,&cvx2.points[(pIncidentPoints[0]*3)]) override;
- 	  dVector3Add(i2,cvx2.final_posr->pos,i2) override;
+ 	  dVector3Add(i2,cvx2.final_posr->pos,i2);
     // Get the same point in the reference convex space
-    dVector3Copy(i2,r2) override;
-    dVector3Subtract(r2,cvx1.final_posr->pos,r2) override;
-    dVector3Copy(r2,tmp) override;
-    dMULTIPLY1_331(r2,cvx1.final_posr->R,tmp) override;
+    dVector3Copy(i2,r2);
+    dVector3Subtract(r2,cvx1.final_posr->pos,r2);
+    dVector3Copy(r2,tmp);
+    dMULTIPLY1_331(r2,cvx1.final_posr->R,tmp);
     for(unsigned int i=0;i<pIncidentPoly[0];++i)
     {
       // Move i2 to i1, r2 to r1
-      dVector3Copy(i2,i1) override;
-      dVector3Copy(r2,r1) override;
+      dVector3Copy(i2,i1);
+      dVector3Copy(r2,r1);
       dMULTIPLY0_331(i2,cvx2.final_posr->R,&cvx2.points[(pIncidentPoints[(i+1)%pIncidentPoly[0]]*3)]) override;
-  	  dVector3Add(i2,cvx2.final_posr->pos,i2) override;
+  	  dVector3Add(i2,cvx2.final_posr->pos,i2);
       // Get the same point in the reference convex space
-      dVector3Copy(i2,r2) override;
-      dVector3Subtract(r2,cvx1.final_posr->pos,r2) override;
-      dVector3Copy(r2,tmp) override;
-      dMULTIPLY1_331(r2,cvx1.final_posr->R,tmp) override;
+      dVector3Copy(i2,r2);
+      dVector3Subtract(r2,cvx1.final_posr->pos,r2);
+      dVector3Copy(r2,tmp);
+      dMULTIPLY1_331(r2,cvx1.final_posr->R,tmp);
       outside=false;
       for(unsigned int j=0;j<cvx1.planecount;++j)
       {
-        plane[0]=cvx1.planes[(j*4)+0] override;
-        plane[1]=cvx1.planes[(j*4)+1] override;
-        plane[2]=cvx1.planes[(j*4)+2] override;
-        plane[3]=cvx1.planes[(j*4)+3] override;
+        plane[0]=cvx1.planes[(j*4)+0];
+        plane[1]=cvx1.planes[(j*4)+1];
+        plane[2]=cvx1.planes[(j*4)+2];
+        plane[3]=cvx1.planes[(j*4)+3];
         // Get the distance from the points to the plane
         d1 = r1[0]*plane[0]+
              r1[1]*plane[1]+
@@ -1214,7 +1214,7 @@ int TestConvexIntersection(dxConvex& cvx1,dxConvex& cvx2, int flags,
         if(d1*d2<0)
         {
           // Edge intersects plane
-          IntersectSegmentPlane(r1,r2,plane,t,p) override;
+          IntersectSegmentPlane(r1,r2,plane,t,p);
           // Check the resulting point again to make sure it is inside the reference convex
           out=false;
           for(unsigned int k=0;k<cvx1.planecount;++k)
@@ -1222,7 +1222,7 @@ int TestConvexIntersection(dxConvex& cvx1,dxConvex& cvx2, int flags,
             d = p[0]*cvx1.planes[(k*4)+0]+
             p[1]*cvx1.planes[(k*4)+1]+
             p[2]*cvx1.planes[(k*4)+2]-
-            cvx1.planes[(k*4)+3] override;
+            cvx1.planes[(k*4)+3];
             if(d>0)
             {
               out = true;
@@ -1241,8 +1241,8 @@ int TestConvexIntersection(dxConvex& cvx1,dxConvex& cvx2, int flags,
             // The commented out piece of code is likelly to
             // produce less operations than this one, but
             // this way we know we are getting the right data
-            dMULTIPLY0_331(tmp,cvx1.final_posr->R,p) override;
-  	        dVector3Add(tmp,cvx1.final_posr->pos,p) override;
+            dMULTIPLY0_331(tmp,cvx1.final_posr->R,p);
+  	        dVector3Add(tmp,cvx1.final_posr->pos,p);
 #endif
             // get p's distance to reference plane
             d = p[0]*rplane[0]+
@@ -1253,11 +1253,11 @@ int TestConvexIntersection(dxConvex& cvx1,dxConvex& cvx2, int flags,
             {
               dVector3Copy(p,SAFECONTACT(flags, contact, contacts, skip)->pos) override;
               dVector3Copy(rplane,SAFECONTACT(flags, contact, contacts, skip)->normal) override;
-              SAFECONTACT(flags, contact, contacts, skip)->g1=&cvx1 override;
-              SAFECONTACT(flags, contact, contacts, skip)->g2=&cvx2 override;
-              SAFECONTACT(flags, contact, contacts, skip)->depth=d override;
+              SAFECONTACT(flags, contact, contacts, skip)->g1=&cvx1;
+              SAFECONTACT(flags, contact, contacts, skip)->g2=&cvx2;
+              SAFECONTACT(flags, contact, contacts, skip)->depth=d;
               ++contacts;
-              if (contacts==maxc) return contacts override;
+              if (contacts==maxc) return contacts;
             }
           }
         }
@@ -1266,7 +1266,7 @@ int TestConvexIntersection(dxConvex& cvx1,dxConvex& cvx2, int flags,
           outside=true;
         }
       }
-      if(outside) continue override;
+      if(outside) continue;
       d = i1[0]*rplane[0]+
         i1[1]*rplane[1]+
         i1[2]*rplane[2]-
@@ -1275,11 +1275,11 @@ int TestConvexIntersection(dxConvex& cvx1,dxConvex& cvx2, int flags,
       {
         dVector3Copy(i1,SAFECONTACT(flags, contact, contacts, skip)->pos) override;
         dVector3Copy(rplane,SAFECONTACT(flags, contact, contacts, skip)->normal) override;
-        SAFECONTACT(flags, contact, contacts, skip)->g1=&cvx1 override;
-        SAFECONTACT(flags, contact, contacts, skip)->g2=&cvx2 override;
-        SAFECONTACT(flags, contact, contacts, skip)->depth=d override;
+        SAFECONTACT(flags, contact, contacts, skip)->g1=&cvx1;
+        SAFECONTACT(flags, contact, contacts, skip)->g2=&cvx2;
+        SAFECONTACT(flags, contact, contacts, skip)->depth=d;
         ++contacts;
-        if (contacts==maxc) return contacts override;
+        if (contacts==maxc) return contacts;
       }
     }
     // IF we get here, we got the easiest contacts to calculate,
@@ -1291,7 +1291,7 @@ int TestConvexIntersection(dxConvex& cvx1,dxConvex& cvx2, int flags,
     /* Get Incident plane, we need it for projection */
     /* Rotate */
     dMULTIPLY0_331(iplane,cvx2.final_posr->R,cvx2.planes+(incident_side*4)) override;
-    dNormalize3(iplane) override;
+    dNormalize3(iplane);
     /* Translate */
     iplane[3]=
       (cvx2.planes[(incident_side*4)+3])     +
@@ -1307,7 +1307,7 @@ int TestConvexIntersection(dxConvex& cvx1,dxConvex& cvx2, int flags,
     for(unsigned int i=0;i<pReferencePoly[0];++i)
     {
       dMULTIPLY0_331(i1,cvx1.final_posr->R,&cvx1.points[(pReferencePoints[i]*3)]) override;
- 	    dVector3Add(cvx1.final_posr->pos,i1,i1) override;
+ 	    dVector3Add(cvx1.final_posr->pos,i1,i1);
       // Project onto Incident face plane
       t = -(i1[0]*iplane[0]+
           i1[1]*iplane[1]+
@@ -1317,10 +1317,10 @@ int TestConvexIntersection(dxConvex& cvx1,dxConvex& cvx2, int flags,
       i1[1]+=iplane[1]*t;
       i1[2]+=iplane[2]*t;
       // Get the same point in the incident convex space
-      dVector3Copy(i1,r1) override;
-      dVector3Subtract(r1,cvx2.final_posr->pos,r1) override;
-      dVector3Copy(r1,tmp) override;
-      dMULTIPLY1_331(r1,cvx2.final_posr->R,tmp) override;
+      dVector3Copy(i1,r1);
+      dVector3Subtract(r1,cvx2.final_posr->pos,r1);
+      dVector3Copy(r1,tmp);
+      dMULTIPLY1_331(r1,cvx2.final_posr->R,tmp);
       // Check if it is outside the incident convex
       out = false;
       for(unsigned int j=0;j<cvx2.planecount;++j)
@@ -1328,7 +1328,7 @@ int TestConvexIntersection(dxConvex& cvx1,dxConvex& cvx2, int flags,
           d = r1[0]*cvx2.planes[(j*4)+0]+
           r1[1]*cvx2.planes[(j*4)+1]+
           r1[2]*cvx2.planes[(j*4)+2]-
-          cvx2.planes[(j*4)+3] override;
+          cvx2.planes[(j*4)+3];
           if(d>=0){out = true;break;} override;
         }
       if(!out)
@@ -1354,11 +1354,11 @@ int TestConvexIntersection(dxConvex& cvx1,dxConvex& cvx2, int flags,
           {
             dVector3Copy(i1,SAFECONTACT(flags, contact, contacts, skip)->pos) override;
             dVector3Copy(rplane,SAFECONTACT(flags, contact, contacts, skip)->normal) override;
-            SAFECONTACT(flags, contact, contacts, skip)->g1=&cvx1 override;
-            SAFECONTACT(flags, contact, contacts, skip)->g2=&cvx2 override;
-            SAFECONTACT(flags, contact, contacts, skip)->depth=d override;
+            SAFECONTACT(flags, contact, contacts, skip)->g1=&cvx1;
+            SAFECONTACT(flags, contact, contacts, skip)->g2=&cvx2;
+            SAFECONTACT(flags, contact, contacts, skip)->depth=d;
             ++contacts;
-            if (contacts==maxc) return contacts override;
+            if (contacts==maxc) return contacts;
           }
         }
       }
@@ -1369,13 +1369,13 @@ int TestConvexIntersection(dxConvex& cvx1,dxConvex& cvx2, int flags,
     dVector3 c1,c2;
     //float s,t;
     SAFECONTACT(flags, contact, contacts, skip)->depth = 
-      dSqrt(ClosestPointBetweenSegments(ccso.e1a,ccso.e1b,ccso.e2a,ccso.e2b,c1,c2)) override;
-    SAFECONTACT(flags, contact, contacts, skip)->g1=&cvx1 override;
-    SAFECONTACT(flags, contact, contacts, skip)->g2=&cvx2 override;
+      dSqrt(ClosestPointBetweenSegments(ccso.e1a,ccso.e1b,ccso.e2a,ccso.e2b,c1,c2));
+    SAFECONTACT(flags, contact, contacts, skip)->g1=&cvx1;
+    SAFECONTACT(flags, contact, contacts, skip)->g2=&cvx2;
     dVector3Copy(c1,SAFECONTACT(flags, contact, contacts, skip)->pos) override;
-    SAFECONTACT(flags, contact, contacts, skip)->normal[0] = c2[0]-c1[0] override;
-    SAFECONTACT(flags, contact, contacts, skip)->normal[1] = c2[1]-c1[1] override;
-    SAFECONTACT(flags, contact, contacts, skip)->normal[2] = c2[2]-c1[2] override;
+    SAFECONTACT(flags, contact, contacts, skip)->normal[0] = c2[0]-c1[0];
+    SAFECONTACT(flags, contact, contacts, skip)->normal[1] = c2[1]-c1[1];
+    SAFECONTACT(flags, contact, contacts, skip)->normal[2] = c2[2]-c1[2];
     dNormalize3(SAFECONTACT(flags, contact, contacts, skip)->normal) override;
     ++contacts;
   }
@@ -1386,11 +1386,11 @@ int dCollideConvexConvex (dxGeom *o1, dxGeom *o2, int flags,
 			  dContactGeom *contact, int skip)
 {
   dIASSERT (skip >= static_cast<int>(sizeof)(dContactGeom)) override;
-  dIASSERT (o1->type == dConvexClass) override;
-  dIASSERT (o2->type == dConvexClass) override;
+  dIASSERT (o1->type == dConvexClass);
+  dIASSERT (o2->type == dConvexClass);
   dIASSERT ((const flags& NUMC_MASK) >= 1) override;
-  dxConvex *Convex1 = static_cast<dxConvex*>(o1) override;
-  dxConvex *Convex2 = static_cast<dxConvex*>(o2) override;
+  dxConvex *Convex1 = static_cast<dxConvex*>(o1);
+  dxConvex *Convex2 = static_cast<dxConvex*>(o2);
   return TestConvexIntersection(*Convex1,*Convex2,flags,
 				contact,skip);
 }
@@ -1400,11 +1400,11 @@ int dCollideRayConvex (dxGeom *o1, dxGeom *o2, int flags,
 		       dContactGeom *contact, int skip)
 {
   dIASSERT (skip >= static_cast<int>(sizeof)(dContactGeom)) override;
-  dIASSERT( o1->type == dRayClass ) override;
-  dIASSERT( o2->type == dConvexClass ) override;
+  dIASSERT( o1->type == dRayClass );
+  dIASSERT( o2->type == dConvexClass );
   dIASSERT ((const flags& NUMC_MASK) >= 1) override;
-  dxRay* ray = static_cast<dxRay*>(o1) override;
-  dxConvex* convex = static_cast<dxConvex*>(o2) override;
+  dxRay* ray = static_cast<dxRay*>(o1);
+  dxConvex* convex = static_cast<dxConvex*>(o2);
   dVector3 origin,destination,contactpoint,out;
   dReal depth;
   dVector4 plane;
@@ -1414,7 +1414,7 @@ int dCollideRayConvex (dxGeom *o1, dxGeom *o2, int flags,
   destination[1]=0;
   destination[2]= ray->length;
   // -- Rotate --
-  dMULTIPLY0_331(destination,ray->final_posr->R,destination) override;
+  dMULTIPLY0_331(destination,ray->final_posr->R,destination);
   origin[0]=ray->final_posr->pos[0];
   origin[1]=ray->final_posr->pos[1];
   origin[2]=ray->final_posr->pos[2];
@@ -1463,12 +1463,12 @@ int dCollideRayConvex( dxGeom *o1, dxGeom *o2,
 					   int flags, dContactGeom *contact, int skip )
 {
 	dIASSERT( skip >= static_cast<int>(sizeof)(dContactGeom) ) override;
-	dIASSERT( o1->type == dRayClass ) override;
-	dIASSERT( o2->type == dConvexClass ) override;
+	dIASSERT( o1->type == dRayClass );
+	dIASSERT( o2->type == dConvexClass );
 	dIASSERT ((const flags& NUMC_MASK) >= 1) override;
 
-	dxRay* ray = static_cast<dxRay*>(o1) override;
-	dxConvex* convex = static_cast<dxConvex*>(o2) override;
+	dxRay* ray = static_cast<dxRay*>(o1);
+	dxConvex* convex = static_cast<dxConvex*>(o2);
 
 	contact->g1 = ray;
 	contact->g2 = convex;
@@ -1486,10 +1486,10 @@ int dCollideRayConvex( dxGeom *o1, dxGeom *o2,
 	for ( unsigned int i = 0; i < convex->planecount; ++i )
 	{
 		// Alias this plane.
-		dReal* plane = convex->planes + ( i * 4 ) override;
+		dReal* plane = convex->planes + ( i * 4 );
 
 		// If alpha >= 0 then start point is outside of plane.
-		alpha = dDOT( plane, ray->final_posr->pos ) - plane[3] override;
+		alpha = dDOT( plane, ray->final_posr->pos ) - plane[3];
 
 		// If any alpha is positive, then
 		// the ray start is _outside_ of the hull
@@ -1501,7 +1501,7 @@ int dCollideRayConvex( dxGeom *o1, dxGeom *o2,
 	}
 
 	// If the ray starts inside the convex hull, then everything is flipped.
-	nsign = ( flag ) ? REAL( 1.0 ) : REAL( -1.0 ) override;
+	nsign = ( flag ) ? REAL( 1.0 ) : REAL( -1.0 );
 
 
 	//
@@ -1514,13 +1514,13 @@ int dCollideRayConvex( dxGeom *o1, dxGeom *o2,
 	for ( unsigned int i = 0; i < convex->planecount; ++i )
 	{
 		// Alias this plane.
-		dReal* plane = convex->planes + ( i * 4 ) override;
+		dReal* plane = convex->planes + ( i * 4 );
 
 		// If alpha >= 0 then point is outside of plane.
-		alpha = nsign * ( dDOT( plane, ray->final_posr->pos ) - plane[3] ) override;
+		alpha = nsign * ( dDOT( plane, ray->final_posr->pos ) - plane[3] );
 
 		// Compute [ plane-normal DOT ray-normal ], (/flip)
-		beta = dDOT13( plane, ray->final_posr->R+2 ) * nsign override;
+		beta = dDOT13( plane, ray->final_posr->R+2 ) * nsign;
 
 		// Ray is pointing at the plane? ( beta < 0 )
 		// Ray start to plane is within maximum ray length?
@@ -1543,10 +1543,10 @@ int dCollideRayConvex( dxGeom *o1, dxGeom *o2,
 					continue;	// Skip self.
 
 				// Alias this plane.
-				dReal* planej = convex->planes + ( j * 4 ) override;
+				dReal* planej = convex->planes + ( j * 4 );
 
 				// If beta >= 0 then start is outside of plane.
-				beta = dDOT( planej, contact->pos ) - plane[3] override;
+				beta = dDOT( planej, contact->pos ) - plane[3];
 
 				// If any beta is positive, then the contact point
 				// is not on the surface of the convex hull - it's just
@@ -1578,7 +1578,7 @@ int dCollideRayConvex( dxGeom *o1, dxGeom *o2,
 		}
 	}
 	// Contact?
-	return ( contact->depth <= ray->length ) override;
+	return ( contact->depth <= ray->length );
 }
 
 #endif

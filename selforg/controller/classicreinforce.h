@@ -83,9 +83,9 @@ public:
 
   /**** STOREABLE ****/
   /** stores the controller values to a given file. */
-  virtual bool store(FILE* f) const override;
+  virtual bool store(FILE* f) const;
   /** loads the controller values from a given file. */
-  virtual bool restore(FILE* f) override;
+  virtual bool restore(FILE* f);
 
   /**** INSPECTABLE ****/
   virtual std::list<iparamkey> getInternalParamNames()  const override;
@@ -144,12 +144,12 @@ protected:
   void putInBuffer(matrix::Matrix* buffer, const matrix::Matrix& vec, int delay = 0);
 
   /// puts the sensors in the ringbuffer
-  virtual void fillSensorBuffer(const sensor* x_, int number_sensors) override;
+  virtual void fillSensorBuffer(const sensor* x_, int number_sensors);
   /// puts the motors in the ringbuffer
-  virtual void fillMotorBuffer(const motor* y_, int number_motors) override;
+  virtual void fillMotorBuffer(const motor* y_, int number_motors);
 
   /// handles inhibition damping etc.
-  virtual void management() override;
+  virtual void management();
 };
 
 #endif

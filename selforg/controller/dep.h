@@ -118,7 +118,7 @@ public:
   /** stores the controller values to a given file. */
   virtual bool store(FILE* f)  const override;
   /** loads the controller values from a given file. */
-  virtual bool restore(FILE* f) override;
+  virtual bool restore(FILE* f);
 
   // accessors to matrices
   virtual matrix::Matrix getA() {
