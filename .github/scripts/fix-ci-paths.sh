@@ -34,6 +34,19 @@ if [ -d "opende" ]; then
     
     # First, check if we need to run configure to generate ode-dbl-config
     if [ ! -f "ode-dbl-config" ]; then
+        # Generate configure script if it doesn't exist
+        if [ ! -f "configure" ] && [ -f "autogen.sh" ]; then
+            echo "Running autogen.sh to generate configure script..."
+            chmod +x autogen.sh
+            ./autogen.sh || {
+                echo "Warning: autogen.sh failed, trying manual approach"
+                # Manual fallback
+                if [ -f "configure.in" ]; then
+                    autoreconf -fvi || echo "autoreconf failed"
+                fi
+            }
+        fi
+        
         if [ -f "configure" ]; then
             echo "Running opende configure..."
             ./configure --prefix="$PREFIX" --enable-double-precision || {
@@ -42,6 +55,13 @@ if [ -d "opende" ]; then
         elif [ -f "ode-config" ]; then
             # Fallback: create symlink if ode-config exists
             ln -sf ode-config ode-dbl-config
+        else
+            # Last resort: generate minimal ode-dbl-config
+            echo "Warning: No configure script found, generating minimal ode-dbl-config"
+            if [ -f "generate-ode-dbl-config.sh" ]; then
+                chmod +x generate-ode-dbl-config.sh
+                ./generate-ode-dbl-config.sh
+            fi
         fi
     fi
     
