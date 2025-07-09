@@ -31,7 +31,7 @@ class Matrix;
 class MatrixNEON; // Forward declaration for NEON optimizations
 using Matrices = std::vector<Matrix>;
 
-constexpr D D_Zero = nullptr;
+constexpr D D_Zero = 0;
 constexpr D D_One = 1;
 /** Matrix type. Type D is datatype of matrix elements,
  * which is fixed to double.
