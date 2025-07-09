@@ -114,7 +114,7 @@ public:
     //   c.someInternalParams = false;
     c.useS = false;
     c.modelCompliant = 0;
-    c.model = 0;
+    c.model = nullptr;
     c.useFantasy = false;
     return c;
   }

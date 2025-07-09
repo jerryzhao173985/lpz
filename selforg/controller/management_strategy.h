@@ -72,7 +72,7 @@ public:
                matrix::Matrix& A,
                matrix::Matrix& h,
                matrix::Matrix& b,
-               int t) override;
+               int t);
     
     bool shouldManage(int t) const override {
         return (t % interval) == 0;
@@ -96,7 +96,7 @@ public:
                matrix::Matrix& A,
                matrix::Matrix& h,
                matrix::Matrix& b,
-               int t) override;
+               int t);
     
     bool shouldManage(int t) const override {
         return (t % interval) == 0;
@@ -123,7 +123,7 @@ public:
                matrix::Matrix& A,
                matrix::Matrix& h,
                matrix::Matrix& b,
-               int t) override;
+               int t);
     
     bool shouldManage(int t) const override {
         return (t % interval) == 0;
@@ -142,6 +142,9 @@ private:
  * Combines multiple management strategies
  */
 class CompositeManagement : public ManagementStrategy {
+private:
+    std::vector<std::unique_ptr<ManagementStrategy>> strategies;
+    
 public:
     void addStrategy(std::unique_ptr<ManagementStrategy> strategy) {
         strategies.push_back(std::move(strategy));
