@@ -60,7 +60,7 @@ public:
    * call first AbstractControllerAdapter::init(sensornumber,motornumber)
    * if you overwrite this method
    */
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override {
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override {
     controller->init(sensornumber, motornumber);
   }
 

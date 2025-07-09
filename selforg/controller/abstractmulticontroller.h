@@ -56,7 +56,7 @@ public:
    * must be called after all passive controllers are added, otherwise you must
    * init the passive controller yourself (not recommended and can generate problems)
    */
-  virtual void addPassiveController(AbstractController* passiveController) override;
+  virtual void addPassiveController(AbstractController* passiveController);
 
   /****************************************************************************/
   /*        AbstractMultiController should implement the following classes:                */
@@ -72,7 +72,7 @@ public:
    * call first AbstractMultiController::init(sensornumber,motornumber)
    * if you overwrite this method
    */
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override;
 
   /** performs one step (includes learning).
 Calculates motor commands from sensor inputs.
