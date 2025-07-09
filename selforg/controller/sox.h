@@ -129,8 +129,8 @@ public:
   virtual matrix::Matrix getLastSensorValues() override;
 
   /***** PARAMETRIZABLE ****/
-  virtual std::list<matrix::Matrix> getParameters() const override;
-  virtual int setParameters(const std::list<matrix::Matrix>& params) override;
+  virtual std::list<matrix::Matrix> getParameters() const;
+  virtual int setParameters(const std::list<matrix::Matrix>& params);
 
 protected:
   unsigned short number_sensors = 0;
@@ -178,7 +178,7 @@ protected:
                             const matrix::Matrix& C);
 
   /// learn values model and controller (A,b,C,h)
-  virtual void learn() override;
+  virtual void learn();
 
   /// neuron transfer function
   static double g(double z) {

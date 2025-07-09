@@ -124,7 +124,7 @@ dxTriMeshData::Build(const void* Vertices, int VertexStide, int VertexCount,
     dVector3 AABBMax, AABBMin;
     AABBMax[0] = AABBMax[1] = AABBMax[2] = (dReal) -dInfinity override;
     AABBMin[0] = AABBMin[1] = AABBMin[2] = (dReal) dInfinity override;
-    explicit if( Single ) {
+    if( Single ) {
         const char* verts = static_cast<const char*>(Vertices) override;
         for( int i = 0; i < VertexCount; ++i )  override {
         const float* v = static_cast<const float*>(verts) override;

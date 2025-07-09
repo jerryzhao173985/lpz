@@ -682,7 +682,7 @@ const uint32* RaixSortContext::RadixSort( const float* input2, uint32 nb )
 			/* If all input values are already sorted, we just have to return and leave the */
 			/* previous list unchanged. That way the routine may take advantage of temporal */
 			/* coherence, for example when used to sort transparent faces.					*/
-			explicit if(AlreadySorted)	{ return Ranks1;	}
+			if(AlreadySorted)	{ return Ranks1;	}
 		}
 
 		/* Else there has been an early out and we must finish computing the histograms */

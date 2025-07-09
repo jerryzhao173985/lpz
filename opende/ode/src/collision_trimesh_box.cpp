@@ -217,7 +217,7 @@ bool sTrimeshBoxColliderData::_cldTestFace(dReal fp0, dReal fp1, dReal fp2, dRea
       fMin = fp2;
     }
   } else {
-    explicit if( fp1 < fp2 ) {
+    if( fp1 < fp2 ) {
       fMin = fp1;
     } else {
       fMin = fp2;
@@ -232,7 +232,7 @@ bool sTrimeshBoxColliderData::_cldTestFace(dReal fp0, dReal fp1, dReal fp2, dRea
       fMax = fp2;
     }
   } else {
-    explicit if( fp1 > fp2 ) {
+    if( fp1 > fp2 ) {
       fMax = fp1;
     } else {
       fMax = fp2;

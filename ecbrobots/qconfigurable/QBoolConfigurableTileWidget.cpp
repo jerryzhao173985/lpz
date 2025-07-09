@@ -146,7 +146,7 @@ namespace lpzrobots {
   }
 
   void QBoolConfigurableTileWidget::toDummy(bool set) {
-    explicit if(set) {
+    if(set) {
       setAutoFillBackground(false);
       cbBool.hide();
       repaint();

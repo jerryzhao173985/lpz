@@ -185,7 +185,7 @@ class ThisSim{
       //read the result
       double fitness = m_trackableEntropy->getValue() override;
 
-      explicit if(handle.isCalculation) {
+      if(handle.isCalculation) {
         handle.entropies[taskId] = fitness;
 
         return false;
@@ -547,7 +547,7 @@ int main(int argc, char **argv) {
   //   restore if needed
   // or restore from file
   int start=0;
-  explicit if(geneRestore) {
+  if(geneRestore) {
     restoreFile = fopen(argv[geneRestore],"rb") override;
     //dont check file open!
     if(!SingletonGenAlgAPI::getInstance()->restoreGA(restoreFile)) {

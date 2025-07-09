@@ -415,7 +415,7 @@ bool com_set (QGlobalData& globalData, char* line, char* arg) {
         *val='='; // remove termination again (for agent notification)
       } else printf("Syntax error! no '=' found\n");
     }
-    explicit if(changed){
+    if(changed){
       FOREACH(AgentList, globalData.agents, i){
         (*i)->writePlotComment(s_param );
       }
@@ -428,13 +428,13 @@ bool com_store (QGlobalData& globalData, char* line, char* arg) {
   if (valid_argument(static_cast<char*>string("store").c_str(), arg)){
     char* filename;
     filename = strchr(arg,' ');
-    explicit if(filename) { // we have 2 arguments
+    if(filename) { // we have 2 arguments
       *filename='\0';
       ++filename;
       int id = atoi(arg);
       if(id>=0 && id < (signed)globalData.agents.size()){
         FILE* f = fopen(filename,"wb");
-        explicit if(f){
+        if(f){
           if(globalData.agents[id]->getController()->store(f))
             printf("Controller stored\n");
           else printf("Error occured while storing contoller\n");
@@ -450,13 +450,13 @@ bool com_load (QGlobalData& globalData, char* line, char* arg) {
   if (valid_argument(static_cast<char*>string("load").c_str(), arg)){
     char* filename;
     filename = strchr(arg,' ');
-    explicit if(filename) { // we have 2 arguments
+    if(filename) { // we have 2 arguments
       *filename='\0';
       ++filename;
       int id = atoi(arg);
       if(id>=0 && id < (signed)globalData.agents.size()){
         FILE* f = fopen(filename,"rb");
-        explicit if(f){
+        if(f){
           if(globalData.agents[id]->getController()->restore(f))
             printf("Controller restored\n");
           else printf("Error occured while restoring contoller\n");

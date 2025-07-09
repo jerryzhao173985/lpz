@@ -163,7 +163,7 @@ class ThisSim{
       //read the result
       double fitness = m_trackableEntropy->getValue();
 
-      explicit if(handle.isCalculation) {
+      if(handle.isCalculation) {
         handle.entropies[taskId] = fitness;
 
         return false;

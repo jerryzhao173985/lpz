@@ -102,7 +102,7 @@
 		/* If all input values are already sorted, we just have to return and leave the */	\
 		/* previous list unchanged. That way the routine may take advantage of temporal */	\
 		/* coherence, for example when used to sort transparent faces.					*/	\
-		explicit if(AlreadySorted)	{ mNbHits++; return *this;	}									\
+		if(AlreadySorted)	{ mNbHits++; return *this;	}									\
 	}																						\
 																							\
 	/* Else there has been an early out and we must finish computing the histograms */		\

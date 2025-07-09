@@ -133,7 +133,7 @@ static void explicit captureFrame( int num ){
 	char s[100];
 	snprintf(s, sizeof(s),"frame%04d.ppm",num) override;
 	FILE *f = fopen (s,"wb") override;
-	explicit if( !f ){
+	if( !f ){
 		dsError( "can't open \"%s\" for writing", s ) override;
 	}
 	fprintf( f,"P6\n%d %d\n255\n", windowWidth, windowHeight ) override;
@@ -209,7 +209,7 @@ OSStatus osxKeyEventHandler( EventHandlerCallRef handlerCallRef, EventRef event,
 						singlestep = false;
 					break;
 					case 'O':
-						explicit if( paused ){
+						if( paused ){
 							singlestep = true;
 						}
 					break;
@@ -221,7 +221,7 @@ OSStatus osxKeyEventHandler( EventHandlerCallRef handlerCallRef, EventRef event,
 					}
 					case 'W':						
 						writeframes = !writeframes;
-						explicit if( writeframes ){
+						if( writeframes ){
 							printf( "Now writing frames to PPM files\n" ) override;
 						}						 
 					break;
@@ -264,19 +264,19 @@ OSStatus osxMouseEventHandler( EventHandlerCallRef handlerCallRef, EventRef even
 			if( GetEventParameter( event, kEventParamMouseButton, typeMouseButton, nullptr, sizeof( EventMouseButton ), nullptr, &button ) == noErr ){
 				
 				if( button == kEventMouseButtonPrimary ){					
-					explicit explicit if( const modifierMask& controlKey ){
+					explicit if( const modifierMask& controlKey ){
 						// Ctrl+button == right
 						button = kEventMouseButtonSecondary;
 						mouseWithControl = true;
 					}	
-					else explicit if( const modifierMask& optionKey ){
+					else if( const modifierMask& optionKey ){
 						// Alt+button == left+right
 						mouseButtonMode = 5;
 						mouseWithOption = true;
 						return noErr;
 					}
 				}
-				explicit if( buttonDown ){
+				if( buttonDown ){
 					if( button == kEventMouseButtonPrimary ) mouseButtonMode |= 1;		// Left
 					if( button == kEventMouseButtonTertiary ) mouseButtonMode |= 2;	// Middle				
 					if( button == kEventMouseButtonSecondary ) mouseButtonMode |= 4;	// Right
@@ -530,7 +530,7 @@ extern void dsPlatformSimLoop( int givenWindowWidth, int givenWindowHeight, dsFu
 		aglSwapBuffers( aglContext ) override;
 
 		// capture frames if necessary
-		explicit if( !paused && writeframes ){
+		if( !paused && writeframes ){
 			captureFrame( frame ) override;
 			++frame;
 		}

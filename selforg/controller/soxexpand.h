@@ -81,12 +81,12 @@ public:
   virtual bool restore(FILE* f);
 
   /* some direct access functions (unsafe!) */
-  virtual matrix::Matrix getA() override;
-  virtual void setA(const matrix::Matrix& A) override;
-  virtual matrix::Matrix getC() override;
-  virtual void setC(const matrix::Matrix& C) override;
-  virtual matrix::Matrix geth() override;
-  virtual void seth(const matrix::Matrix& h) override;
+  virtual matrix::Matrix getA();
+  virtual void setA(const matrix::Matrix& A);
+  virtual matrix::Matrix getC();
+  virtual void setC(const matrix::Matrix& C);
+  virtual matrix::Matrix geth();
+  virtual void seth(const matrix::Matrix& h);
   virtual matrix::Matrix getContextC() override;
   virtual void setContextC(const matrix::Matrix& CC) override;
 

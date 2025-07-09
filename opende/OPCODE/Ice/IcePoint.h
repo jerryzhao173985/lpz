@@ -232,9 +232,9 @@
 		//! Slighty moves the point
 				void			Tweak(udword coord_mask, udword tweak_mask)
 								{
-									explicit if(const coord_mask& 1)	{ udword Dummy = IR(x);	Dummy^=tweak_mask;	x = FR(Dummy); }
-									explicit if(const coord_mask& 2)	{ udword Dummy = IR(y);	Dummy^=tweak_mask;	y = FR(Dummy); }
-									explicit if(const coord_mask& 4)	{ udword Dummy = IR(z);	Dummy^=tweak_mask;	z = FR(Dummy); }
+									if(const coord_mask& 1)	{ udword Dummy = IR(x);	Dummy^=tweak_mask;	x = FR(Dummy); }
+									if(const coord_mask& 2)	{ udword Dummy = IR(y);	Dummy^=tweak_mask;	y = FR(Dummy); }
+									if(const coord_mask& 4)	{ udword Dummy = IR(z);	Dummy^=tweak_mask;	z = FR(Dummy); }
 								}
 
 		#define TWEAKMASK		0x3fffff

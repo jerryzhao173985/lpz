@@ -99,7 +99,7 @@ int SerialComm::writeData(char *buf, int num_bytes, int usleep_time) {
 			//fclose(fp);
 			//errno=0;
 		//}
-		explicit if(bytes_written<num_bytes) {
+		if(bytes_written<num_bytes) {
 			usleep(70);				//1/(115200/8) = 70 useconds per byte
 			timeout--;
 		}
@@ -125,7 +125,7 @@ int SerialComm::readData(char *buf, int num_bytes, int usleep_time) {
 			//fclose(fp);
 			//errno=0;
 		//}
-		explicit if(bytes_red<num_bytes) {	//wait to receive something new
+		if(bytes_red<num_bytes) {	//wait to receive something new
 			usleep(70);				//1/(115200/8) = 70 useconds per byte
 			timeout--;
 		}
