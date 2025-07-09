@@ -160,8 +160,31 @@ jobs:
         # Install m4 and autotools for config generation
         sudo apt-get install -y m4 autoconf automake libtool
         
-        # ODE configuration is handled differently in the Make system
-        # The opende directory contains pre-configured ODE
+        # Debug: Check what's in opende directory
+        echo "=== Contents of opende directory ==="
+        ls -la opende/ | head -20
+        
+        # Ensure ode-dbl-config exists
+        if [ ! -f "opende/ode-dbl-config" ]; then
+          echo "=== Creating ode-dbl-config ==="
+          cd opende
+          if [ -f "generate-ode-dbl-config.sh" ]; then
+            chmod +x generate-ode-dbl-config.sh
+            ./generate-ode-dbl-config.sh
+          else
+            echo "ERROR: generate-ode-dbl-config.sh not found!"
+          fi
+          cd ..
+        fi
+        
+        # Verify it was created
+        if [ -f "opende/ode-dbl-config" ]; then
+          echo "=== ode-dbl-config created successfully ==="
+          chmod +x opende/ode-dbl-config
+        else
+          echo "ERROR: Failed to create ode-dbl-config"
+          exit 1
+        fi
         
         # Use the CI path fix script for other components
         .github/scripts/fix-ci-paths.sh
