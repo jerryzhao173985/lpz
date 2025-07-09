@@ -67,6 +67,9 @@
 
 using namespace std;
 
+/* A simple macro for checking whitespace characters */
+#define whitespace(c) ((c) == ' ' || (c) == '\t')
+
 typedef bool (*commandfunc_t)(GlobalData& globalData, char *, char *);          
 /* The names of functions that actually do the manipulation.  parameter: global data, entire line, arg */
 bool com_list (GlobalData& globalData, char *, char *);
@@ -98,7 +101,7 @@ COMMAND commands[] = {
   { "show", com_show, "[OBJECTID]: Lists paramters of OBJECTID or of all objects (if no id given)" },
   { "view", com_show, "Synonym for `show'" },
   { "quit", com_quit, "Quit program" },
-  { static_cast<char*>NULL, (commandfunc_t)NULL, static_cast<char*>NULL }
+  { static_cast<char*>(NULL), (commandfunc_t)NULL, static_cast<char*>(NULL) }
 };
 
 /* Forward declarations. */
@@ -124,7 +127,7 @@ void showParam(const Configurable* config)
 char* dupstr (const char* s){
   char *r;
 
-  r = static_cast<char*>malloc (strlen (s) + 1);
+  r = static_cast<char*>(malloc (strlen (s) + 1));
   strcpy (r, s);
   return (r);
 }
