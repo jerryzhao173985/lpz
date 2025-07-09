@@ -126,37 +126,23 @@ file(GLOB_RECURSE HEADER_FILES
 # Create include/selforg directory structure
 file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/include/selforg)
 
-# Create a stamp file to track symlink creation
-set(SYMLINK_STAMP ${CMAKE_CURRENT_BINARY_DIR}/symlinks.stamp)
-
-# Create all symlinks in a single custom command
-add_custom_command(
-    OUTPUT ${SYMLINK_STAMP}
-    COMMENT "Creating header symlinks..."
-    COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/include/selforg
-)
-
+# Create symlinks at configure time to ensure they exist before build
 foreach(header ${HEADER_FILES})
     get_filename_component(header_name ${header} NAME)
     set(source_header ${CMAKE_CURRENT_SOURCE_DIR}/${header})
     set(link_header ${CMAKE_CURRENT_BINARY_DIR}/include/selforg/${header_name})
     
-    add_custom_command(
-        OUTPUT ${SYMLINK_STAMP}
-        APPEND
-        COMMAND ${CMAKE_COMMAND} -E create_symlink ${source_header} ${link_header}
-    )
+    # Remove existing symlink if it exists
+    if(EXISTS ${link_header})
+        file(REMOVE ${link_header})
+    endif()
+    
+    # Create the symlink
+    file(CREATE_LINK ${source_header} ${link_header} SYMBOLIC)
 endforeach()
 
-# Touch stamp file to mark completion
-add_custom_command(
-    OUTPUT ${SYMLINK_STAMP}
-    APPEND
-    COMMAND ${CMAKE_COMMAND} -E touch ${SYMLINK_STAMP}
-)
-
-# Create a custom target that depends on the stamp file
-add_custom_target(selforg_headers DEPENDS ${SYMLINK_STAMP})
+# Create a dummy target for compatibility (no longer needed but kept for consistency)
+add_custom_target(selforg_headers)
 
 # Dependency already added above after add_library
 

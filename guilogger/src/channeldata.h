@@ -120,7 +120,7 @@ public:
   const QVector<ChannelVals>& getData() const { return data; }
   const QVector<ChannelInfo>& getInfos() const { return channels; }
   int getNumChannels() const { return numchannels; }
-  int getNumMultiChannels() const { return multichannels.size(); }
+  int getNumMultiChannels() const { return static_cast<int>(multichannels.size()); }
     const MultiChannels& getMultiChannels() const { return multichannels; }
   int getTime() const { return time; }
 
