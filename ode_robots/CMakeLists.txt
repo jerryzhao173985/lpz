@@ -30,6 +30,7 @@ lpzrobots_add_component_library(ode_robots
     DEFINES
         NOCONFIGURATOR  # Always defined as per original Makefile
         OSG_LIBRARY_STATIC
+        PREFIX="${CMAKE_INSTALL_PREFIX}"  # For finding data files
 )
 
 # ODE include and library handling
