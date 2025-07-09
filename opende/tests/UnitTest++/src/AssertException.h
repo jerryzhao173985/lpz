@@ -8,13 +8,13 @@ namespace UnitTest {
 
 class AssertException{
 public:
-    AssertException(char const* description, char const* filename, int lineNumber) override;
-    virtual ~AssertException() throw();
+    AssertException(char const* description, char const* filename, int lineNumber);
+    virtual ~AssertException() noexcept;
 
-    virtual char const* what() const throw() override;
+    virtual char const* what() const noexcept;
 
-    char const* Filename() const override;
-    int LineNumber() const override;
+    char const* Filename() const;
+    int LineNumber() const;
 
 private:
     char m_description[512];
