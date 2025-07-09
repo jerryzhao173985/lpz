@@ -33,9 +33,12 @@ add_dependencies(selforg selforg_headers)
 # Set include directories
 target_include_directories(selforg
     PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>  # Unified include directory
-        $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include>  # For generated headers
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/selforg>
+        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}>  # For <selforg/...> includes
         $<INSTALL_INTERFACE:include>
+        $<INSTALL_INTERFACE:include/selforg>
     PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}
         ${CMAKE_CURRENT_SOURCE_DIR}/controller
@@ -107,7 +110,7 @@ set_target_properties(selforg PROPERTIES
     POSITION_INDEPENDENT_CODE ON
 )
 
-# Create flattened header structure in unified include directory
+# Create flattened header structure - mimic the Makefile's create_header_links
 file(GLOB_RECURSE HEADER_FILES
     abstractrobot.h
     agent.h
@@ -120,47 +123,26 @@ file(GLOB_RECURSE HEADER_FILES
     statistictools/*.h
 )
 
-# Create selforg subdirectory in unified include directory
-file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/include/selforg)
-file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/include/selforg)
+# Create include/selforg directory in source tree (where Makefile expects it)
+file(MAKE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/selforg)
 
-# Generate a header file that creates all the symlinks
-set(SYMLINK_SCRIPT ${CMAKE_CURRENT_BINARY_DIR}/create_symlinks.cmake)
-file(WRITE ${SYMLINK_SCRIPT} "# Auto-generated script to create header symlinks\n")
-file(APPEND ${SYMLINK_SCRIPT} "file(MAKE_DIRECTORY \"${CMAKE_SOURCE_DIR}/include/selforg\")\n")
-file(APPEND ${SYMLINK_SCRIPT} "file(MAKE_DIRECTORY \"${CMAKE_BINARY_DIR}/include/selforg\")\n")
-
+# Create symlinks in the source tree's include directory (like Makefile does)
+# This needs to happen at configure time so headers are available during compilation
 foreach(header ${HEADER_FILES})
     get_filename_component(header_name ${header} NAME)
     set(source_header ${CMAKE_CURRENT_SOURCE_DIR}/${header})
-    # Create symlinks in unified include directory
-    set(link_header_src ${CMAKE_SOURCE_DIR}/include/selforg/${header_name})
-    # Also create in build directory for out-of-source builds
-    set(link_header_build ${CMAKE_BINARY_DIR}/include/selforg/${header_name})
+    set(dest_header ${CMAKE_CURRENT_SOURCE_DIR}/include/selforg/${header_name})
     
-    file(APPEND ${SYMLINK_SCRIPT} "if(NOT EXISTS \"${link_header_src}\")\n")
-    file(APPEND ${SYMLINK_SCRIPT} "  file(CREATE_LINK \"${source_header}\" \"${link_header_src}\" SYMBOLIC)\n")
-    file(APPEND ${SYMLINK_SCRIPT} "endif()\n")
-    file(APPEND ${SYMLINK_SCRIPT} "if(NOT EXISTS \"${link_header_build}\")\n")
-    file(APPEND ${SYMLINK_SCRIPT} "  file(CREATE_LINK \"${source_header}\" \"${link_header_build}\" SYMBOLIC)\n")
-    file(APPEND ${SYMLINK_SCRIPT} "endif()\n")
+    # Create symlink at configure time
+    if(NOT EXISTS ${dest_header})
+        execute_process(
+            COMMAND ${CMAKE_COMMAND} -E create_symlink ${source_header} ${dest_header}
+        )
+    endif()
 endforeach()
 
-# Execute the script at configure time
-execute_process(COMMAND ${CMAKE_COMMAND} -P ${SYMLINK_SCRIPT})
-
-# Also create a custom command to ensure symlinks exist at build time
-add_custom_command(
-    OUTPUT ${CMAKE_SOURCE_DIR}/include/selforg/.symlinks_created
-    COMMAND ${CMAKE_COMMAND} -P ${SYMLINK_SCRIPT}
-    COMMAND ${CMAKE_COMMAND} -E touch ${CMAKE_SOURCE_DIR}/include/selforg/.symlinks_created
-    COMMENT "Ensuring selforg header symlinks exist..."
-    DEPENDS ${HEADER_FILES}
-)
-
-# Create a target that depends on the symlinks
-add_custom_target(selforg_headers 
-    DEPENDS ${CMAKE_SOURCE_DIR}/include/selforg/.symlinks_created)
+# Create a dummy target for dependency tracking
+add_custom_target(selforg_headers)
 
 # Dependency already added above after add_library
 

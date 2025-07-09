@@ -90,16 +90,8 @@ include(GNUInstallDirs)
 set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
 
 # Add subdirectories
-# Create unified include directory structure
-file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/include)
-file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/include)
-
-# Add include directories
-include_directories(
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_SOURCE_DIR}/include        # Unified include directory
-    ${CMAKE_BINARY_DIR}/include        # For generated headers
-)
+# Add the source root to include path so selforg headers can be found as <selforg/...>
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 add_subdirectory(selforg)
 
