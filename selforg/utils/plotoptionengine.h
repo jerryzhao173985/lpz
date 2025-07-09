@@ -28,7 +28,7 @@
 #include <list>
 
 #include "plotoption.h"
-#include "controller/abstractcontroller.h"
+#include "abstractcontroller.h"
 
 class PlotOptionEngine {
 public:

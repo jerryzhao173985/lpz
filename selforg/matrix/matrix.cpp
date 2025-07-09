@@ -384,7 +384,7 @@ Matrix::mult(const Matrix& a, const Matrix& b) {
   for (I i = 0; i < m; ++i) {
     for (I j = 0; j < n; ++j) {
       d = 0;
-      for (I k = 0; k < interdim; ++k) {
+      for (I k = 0; k < a.n; ++k) {
         d += a.val(i, k) * b.val(k, j);
       }
       VAL(i, j) = d;
