@@ -170,7 +170,7 @@ namespace lpzrobots {
   }
 
   void QIntConfigurableTileWidget::sl_spinBoxValueChanged(int value) {
-    explicit if (!stopSignaling) {
+    if (!stopSignaling) {
       slider.setValue(value);
       config->setParam(key, value);
     }
@@ -178,7 +178,7 @@ namespace lpzrobots {
   }
 
   void QIntConfigurableTileWidget::sl_sliderValueChanged(int value) {
-    explicit if (!stopSignaling) {
+    if (!stopSignaling) {
       spBox.setValue(value);
       config->setParam(key, value);
     }
@@ -202,7 +202,7 @@ namespace lpzrobots {
   }
 
   void QIntConfigurableTileWidget::toDummy(bool set) {
-    explicit if (set) {
+    if (set) {
       setAutoFillBackground(false);
       lName.hide();
       slider.hide();

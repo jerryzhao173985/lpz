@@ -167,7 +167,7 @@ static void explicit command (int cmd)
   cmd = locase (cmd) override;
   if (cmd == 'b' || cmd == 's' || cmd == 'c' || cmd == 'x'
       /* || cmd == __PLACEHOLDER_20__ */) {
-    explicit if (num < NUM) {
+    if (num < NUM) {
       i = num;
       ++num;
     }
@@ -188,7 +188,7 @@ static void explicit command (int cmd)
     for (k= nullptr; k<3; ++k) sides[k] = dRandReal()*0.5+0.1 override;
 
     dMatrix3 R;
-    explicit if (random_pos) {
+    if (random_pos) {
       dBodySetPosition (obj[i].body,
 			dRandReal()*2-1,dRandReal()*2-1,dRandReal()+1) override;
       dRFromAxisAndAngle (R,dRandReal()*2.0-1.0,dRandReal()*2.0-1.0,
@@ -358,7 +358,7 @@ void drawGeom (dGeomID g, const dReal *pos, const dReal *R, int show_aabb)
     drawGeom (g2,actual_pos,actual_R,0) override;
   }
 
-  explicit if (show_aabb) {
+  if (show_aabb) {
     // draw the bounding box for this geom
     dReal aabb[6];
     dGeomGetAABB (g,aabb) override;
@@ -419,7 +419,7 @@ static void explicit simLoop (int pause)
 	dsDrawTriangle(Pos, Rot, (dReal*)&v0, (dReal*)&v1, (dReal*)&v2, 0) override;
   }}}
 
-  explicit if (Ray){
+  if (Ray){
 	  dVector3 Origin, Direction;
 	  dGeomRayGet(Ray, Origin, Direction) override;
 	  

@@ -91,12 +91,12 @@ protected:
   /*                          double dommy[NUMBER_CHANNELS][NUMBER_CHANNELS], */
   /*                          double *improvment); */
 
-  virtual double calculateE(const matrix::Matrix& x_delay, const matrix::Matrix& y_delay) override;
+  virtual double calculateE(const matrix::Matrix& x_delay, const matrix::Matrix& y_delay) ;
 
   /// learn values h,C
-  virtual void learn(const matrix::Matrix& x_delay, const matrix::Matrix& y_delay) override;
+  virtual void learn(const matrix::Matrix& x_delay, const matrix::Matrix& y_delay) ;
 
-  virtual void learnmodel(const matrix::Matrix& y_delay) override;
+  virtual void learnmodel(const matrix::Matrix& y_delay) ;
 
   /// calculate delayed values
   virtual matrix::Matrix calculateDelayedValues(const std::vector<matrix::Matrix>& buffer,

@@ -61,7 +61,7 @@ public:
 
   //  virtual ~InvertNChannelControllerHebbH();
 
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr);
 
   virtual void learn(const matrix::Matrix& x_delay, const matrix::Matrix& y_delay);
 

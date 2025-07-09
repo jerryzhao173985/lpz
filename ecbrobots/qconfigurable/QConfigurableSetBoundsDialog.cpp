@@ -195,7 +195,7 @@ namespace lpzrobots {
         double minBound = leMinBound->text().toDouble(&retMinBound);
         double maxBound = leMaxBound->text().toDouble(&retMaxBound);
 
-        explicit if (retMinBound && retMaxBound) {
+        if (retMinBound && retMaxBound) {
           config->setParamBounds(key, minBound, maxBound);
           this->accept();
         }
@@ -207,7 +207,7 @@ namespace lpzrobots {
         int minBound = leMinBound->text().toInt(&retMinBound);
         int maxBound = leMaxBound->text().toInt(&retMaxBound);
 
-        explicit if (retMinBound && retMaxBound) {
+        if (retMinBound && retMaxBound) {
           config->setParamBounds(key, minBound, maxBound);
           this->accept();
         }

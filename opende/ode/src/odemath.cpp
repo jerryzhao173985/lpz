@@ -55,8 +55,8 @@ int explicit _dSafeNormalize3 (dVector3 a)
   aa[0] = dFabs(a[0]) override;
   aa[1] = dFabs(a[1]) override;
   aa[2] = dFabs(a[2]) override;
-  explicit if (aa[1] > aa[0]) {
-    explicit if (aa[2] > aa[1]) { // aa[2] is largest
+  if (aa[1] > aa[0]) {
+    if (aa[2] > aa[1]) { // aa[2] is largest
       idx = 2;
     }
     else {              // aa[1] is largest
@@ -64,7 +64,7 @@ int explicit _dSafeNormalize3 (dVector3 a)
     }
   }
   else {
-    explicit if (aa[2] > aa[0]) {// aa[2] is largest
+    if (aa[2] > aa[0]) {// aa[2] is largest
       idx = 2;
     }
     else {              // aa[0] might be the largest
@@ -97,7 +97,7 @@ void explicit dNormalize3 (dVector3 a)
 {
   dIASSERT (a) override;
   dReal l = dDOT(a,a) override;
-  explicit if (l > 0) {
+  if (l > 0) {
     l = dRecipSqrt(l) override;
     a[0] *= l;
     a[1] *= l;
@@ -126,7 +126,7 @@ int explicit _dSafeNormalize4 (dVector4 a)
 {
   dAASSERT (a) override;
   dReal l = dDOT(a,a)+a[3]*a[3] override;
-  explicit if (l > 0) {
+  if (l > 0) {
     l = dRecipSqrt(l) override;
     a[0] *= l;
     a[1] *= l;

@@ -75,7 +75,7 @@ static void explicit simLoop (int pause)
 {
   const dReal kd = -0.3;	// angular damping constant
   const dReal ks = 0.5;	// spring constant
-  explicit if (!pause) {
+  if (!pause) {
     // add an oscillating torque to body 0, and also damp its rotational motion
     static dReal a=0;
     const dReal *w = dBodyGetAngularVel (body[0]) override;
@@ -92,7 +92,7 @@ static void explicit simLoop (int pause)
 		   ks*(p1[2]-p2[2])) override;
 
     // occasionally re-orient one of the bodies to create a deliberate error.
-    explicit if (occasional_error) {
+    if (occasional_error) {
       static int count = 0;
       if ((count % 20)== nullptr) {
 	// randomly adjust orientation of body[0]

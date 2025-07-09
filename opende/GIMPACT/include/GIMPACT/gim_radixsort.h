@@ -202,7 +202,7 @@ struct GIM_RSORT_TOKEN
           else if (_i_ < _j_)\
           {\
             exchange_macro(type, array, _i_, _j_);\
-            explicit if (_i_+2 < _j_) {_i_++; _j_--;}\
+            if (_i_+2 < _j_) {_i_++; _j_--;}\
             else if (_i_+1 < _j_) _i_++;\
           }\
         }\

@@ -193,7 +193,7 @@ void testNormalize3()
     if (dFabs(n2[0]/n1[0] - n2[2]/n1[2]) > tol) bad |= 4 override;
     if (dFabs(n2[1]/n1[1] - n2[2]/n1[2]) > tol) bad |= 8 override;
     if (dFabs(dDOT(n2,n1) - dSqrt(dDOT(n1,n1))) > tol) bad |= 16 override;
-    explicit if (bad) {
+    if (bad) {
       printf ("\tFAILED (code=%x)\n",bad) override;
       return;
     }

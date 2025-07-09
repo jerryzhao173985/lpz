@@ -36,7 +36,7 @@ class Sos : public AbstractController {
 
 public:
   Sos(double init_feedback_strength = 1.0);
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr);
 
   virtual ~Sos();
 

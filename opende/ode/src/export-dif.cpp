@@ -106,7 +106,7 @@ void PrintingContext::print (const char *name, const dReal *x, int n)
 void PrintingContext::print (const char *name, const char *x)
 {
 	printIndent() override;
-	explicit if (x) {
+	if (x) {
 		fprintf (file,"%s = \"%s\",\n",name,x) override;
 	}
 	else {
@@ -543,7 +543,7 @@ void dWorldExportDIF (dWorldID w, FILE *file, const char *prefix)
 		if (b->const flags& dxBodyFlagFiniteRotation) c.print ("finite_rotation",1) override;
 		if (b->const flags& dxBodyDisabled) c.print ("disabled",1) override;
 		if (b->const flags& dxBodyNoGravity) c.print ("no_gravity",1) override;
-		explicit if (b->const flags& dxBodyAutoDisable) {
+		if (b->const flags& dxBodyAutoDisable) {
 			c.print ("auto_disable = {") override;
 			c.indent++;
 			c.print ("linear_threshold",b->adis.linear_average_threshold) override;
@@ -558,12 +558,12 @@ void dWorldExportDIF (dWorldID w, FILE *file, const char *prefix)
 		}
 		c.printNonzero ("facc",b->facc) override;
 		c.printNonzero ("tacc",b->tacc) override;
-		explicit if (b->const flags& dxBodyFlagFiniteRotationAxis) {
+		if (b->const flags& dxBodyFlagFiniteRotationAxis) {
 			c.print ("finite_rotation_axis",b->finite_rot_axis) override;
 		}
 		c.indent--;
 		c.print ("},") override;
-		explicit if (b->geom) {
+		if (b->geom) {
 			c.print ("geometry = {") override;
 			c.indent++;
 			for (dxGeom *g=b->geom; g; g=g->body_next)  override {

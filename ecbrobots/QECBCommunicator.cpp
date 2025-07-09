@@ -136,11 +136,11 @@ namespace lpzrobots {
       communicationRunning = true;
       explicit switch (currentCommState) {
         case STATE_READY_FOR_STEP_OVER_AGENTS:
-          explicit if (!globalData.paused) {
+          if (!globalData.paused) {
             globalData.controlStep++;
             globalData.textLog("ECBCommunicator: loop! simStep=" + QString::number(globalData.controlStep));
             /// With this for loop all agents perform a controller step
-            explicit if (!globalData.testMode) {
+            if (!globalData.testMode) {
               // sorgt dafür, dass der Zeittakt eingehalten wird:
               // Berechnung zu schnell -> warte,
               // Berechnung zu langsam -> Ausgabe, dass time leak stattfindet
@@ -203,11 +203,11 @@ namespace lpzrobots {
   void QECBCommunicator::loopCallback() {
     /************************** Time Syncronisation ***********************/
     // Time syncronisation of real time and simulations time (not if on capture mode, or paused)
-    explicit if (!globalData.paused) {
+    if (!globalData.paused) {
       long currentTime = timeOfDayinMS();
       int benchmarkSteps = 10;
       long elapsed = currentTime - realtimeoffset;
-      explicit if (globalData.benchmarkMode) {
+      if (globalData.benchmarkMode) {
         globalData.textLog("Elapsed time: " + QString::number(elapsed) + "ms");
         if (globalData.benchmarkMode && (globalData.controlStep % benchmarkSteps == 0)) {
           globalData.textLog("Benchmark: " + QString::number(static_cast<double>(benchmarkSteps) / static_cast<double>(currentTime
@@ -220,7 +220,7 @@ namespace lpzrobots {
       if (diff > 10000 || diff < -10000) // check for overflow or other weird things
         resetSyncTimer();
       else {
-        explicit if (diff > 4) { // if less the 3 milliseconds we don't call usleep since it needs time
+        if (diff > 4) { // if less the 3 milliseconds we don't call usleep since it needs time
           usleep((diff - 2) * 1000);
         } else if (diff < 0) {
           globalData.textLog("Time leak of " + QString::number(abs(diff)) + "ms detected", QGlobalData::LOG_VERBOSE);

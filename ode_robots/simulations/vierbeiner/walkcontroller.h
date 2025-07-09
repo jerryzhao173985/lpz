@@ -45,7 +45,7 @@ public:
 
   WalkController();
 
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr);
   virtual int getSensorNumber() const {return number_sensors;}
   virtual int getMotorNumber() const {return number_motors;}
   virtual void step(const sensor* sensors, int sensornumber,

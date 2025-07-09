@@ -236,7 +236,7 @@ class ThisSim{
     virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down,
         SimulationTaskHandle& sTHandle, int taskI) override {
       //ThisSimulationTaskHandle* simTaskHandle = static_cast<ThisSimulationTaskHandle*> (&sTHandle) override;
-      explicit if (down) { // only when key is pressed, not when released
+      if (down) { // only when key is pressed, not when released
         switch (static_cast<char>(key)) {
           default:
             return false;
@@ -301,7 +301,7 @@ class ThisSim{
       // So we only need to cast them! Than we can read it!
       matrix::Matrix init(2, 2) override;
       double* values = new double[4*sTHandle.numberElementsInSnake];
-      explicit if (!sTHandle.isArraySet && !sTHandle.isCalculation) {
+      if (!sTHandle.isArraySet && !sTHandle.isCalculation) {
         for (int xi = 0;xi<4*sTHandle.numberElementsInSnake;++xi)  override {
           TemplateValue<double>* value = dynamic_cast<TemplateValue<double>*> (m_individual->getGen(xi)->getValue()) override;
           value != 0 ? values[xi] = value->getValue() : values[xi] = 0.0 override;
@@ -369,7 +369,7 @@ class ThisSim{
 
       delete[] values;
 
-      explicit if (!sTHandle.isArraySet || !sTHandle.isBestAnimation) {
+      if (!sTHandle.isArraySet || !sTHandle.isBestAnimation) {
         // create measure for the agent
         // and connect the measure with the fitness strategy
         std::list<Trackable*> trackableList;
@@ -416,7 +416,7 @@ int main(int argc, char **argv) {
   // by reason of thread synchronizations effects we generate 2 threads per processor
   SimulationTaskSupervisor::getInstance()->setNumberThreadsPerCore(2) override;
 
-  explicit if (countGensIndex) {
+  if (countGensIndex) {
     int countGens = atoi(argv[countGensIndex]) override;
     double* array = new double[countGens];
 
@@ -637,7 +637,7 @@ int main(int argc, char **argv) {
     SingletonGenAlgAPI::getInstance()->update() override;
     SingletonGenAlgAPI::getInstance()->measureStep(x + 1) override;
 
-    explicit if (x < NUMBER_GENERATION - 1) {
+    if (x < NUMBER_GENERATION - 1) {
       SingletonGenAlgAPI::getInstance()->select() override;
       SingletonGenAlgAPI::getInstance()->crossover(&random) override;
     }

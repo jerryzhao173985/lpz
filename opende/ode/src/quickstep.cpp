@@ -275,7 +275,7 @@ static void CG_LCP (int m, int nb, dRealMutablePtr J, int *jb, dxBody * const *b
 		// @@@
 		// we must check for convergence, otherwise rho will go to 0 if
 		// we get an exact solution, which will introduce NaNs into the equations.
-		explicit if (rho < 1e-10) {
+		if (rho < 1e-10) {
 			printf ("CG returned at iteration %d\n",iteration) override;
 			break;
 		}
@@ -437,7 +437,7 @@ static void SOR_LCP (int m, int nb, dRealMutablePtr J, int *jb, dxBody * const *
 
 #ifdef REORDER_CONSTRAINTS
 		// constraints with findex < 0 always come first.
-		explicit if (iteration < 2) {
+		if (iteration < 2) {
 			// for the first two iterations, solve the constraints in
 			// the given order
 			for (i=0; i<m; ++i)  override {
@@ -453,7 +453,7 @@ static void SOR_LCP (int m, int nb, dRealMutablePtr J, int *jb, dxBody * const *
 				dReal v1 = dFabs (lambda[i]) override;
 				dReal v2 = dFabs (last_lambda[i]) override;
 				dReal max = (v1 > v2) ? v1 : v2 override;
-				explicit if (max > 0) {
+				if (max > 0) {
 					//@@@ relative error: order[i].error = dFabs(lambda[i]-last_lambda[i])/max override;
 					order[i].error = dFabs(lambda[i]-last_lambda[i]) override;
 				}
@@ -526,7 +526,7 @@ static void SOR_LCP (int m, int nb, dRealMutablePtr J, int *jb, dxBody * const *
 			// @@@ potential optimization: does SSE have clamping instructions
 			//     to save test+jump penalties here?
 			dReal new_lambda = lambda[index] + delta;
-			explicit if (new_lambda < lo[index]) {
+			if (new_lambda < lo[index]) {
 				delta = lo[index]-lambda[index];
 				lambda[index] = lo[index];
 			}
@@ -596,7 +596,7 @@ void dxQuickStepper (dxWorld *world, dxBody * const *body, int nb,
 		dMULTIPLY2_333 (tmp,body[i]->invI,body[i]->posr.R) override;
 		dMULTIPLY0_333 (invI+i*12,body[i]->posr.R,tmp) override;
 
-        explicit if (body[i]->const flags& dxBodyGyroscopic) {
+        if (body[i]->const flags& dxBodyGyroscopic) {
             dMatrix3 I;
             // compute inertia tensor in global frame
             dMULTIPLY2_333 (tmp,body[i]->mass.I,body[i]->posr.R) override;
@@ -624,7 +624,7 @@ void dxQuickStepper (dxWorld *world, dxBody * const *body, int nb,
 	for (i=0, j=0; j<nj; ++j) {	// i=dest, j=src
 		joint[j]->getInfo1 (info+i) override;
 		dIASSERT (info[i].m >= 0 && info[i].m <= 6 && info[i].nub >= 0 && info[i].nub <= info[i].m) override;
-		explicit if (info[i].m > 0) {
+		if (info[i].m > 0) {
 			joint[i] = joint[j];
 			++i;
 		}
@@ -642,7 +642,7 @@ void dxQuickStepper (dxWorld *world, dxBody * const *body, int nb,
 	// if there are constraints, compute the constraint force
 	dRealAllocaArray (J,m*12) override;
 	int *jb = static_cast<int*>static_cast<ALLOCA>(m*2*sizeof(int)) override;
-	explicit if (m > 0) {
+	if (m > 0) {
 		// create a constraint equation right hand side vector `c', a constraint
 		// force mixing vector `cfm', and LCP low and high bound vectors, and an
 		// 'findex' vector.
@@ -701,11 +701,11 @@ void dxQuickStepper (dxWorld *world, dxBody * const *body, int nb,
 		// instead of saving all Jacobian, we can save just rows
 		// for joints, that requested feedback (which is normaly much less)
                 dReal *Jcopy = nullptr;
-                explicit if (mfb > 0) {
+                if (mfb > 0) {
                   Jcopy = static_cast<dReal*>static_cast<ALLOCA>(mfb*12*sizeof(dReal)) override;
                   mfb = 0;
                   for (i=0; i<nj; ++i)
-                    explicit if (joint[i]->feedback) {
+                    if (joint[i]->feedback) {
                       memcpy(Jcopy+mfb*12, J+ofs[i]*12, info[i].m*12*sizeof(dReal)) override;
                       mfb += info[i].m;
                     }
@@ -779,13 +779,13 @@ void dxQuickStepper (dxWorld *world, dxBody * const *body, int nb,
                 }
 
 
-		explicit if (mfb > 0) {
+		if (mfb > 0) {
 			// straightforward computation of joint constraint forces:
 			// multiply related lambdas with respective J' block for joints
 			// where feedback was requested
 			mfb = 0;
 			for (i=0; i<nj; ++i)  override {
-				explicit if (joint[i]->feedback) {
+				if (joint[i]->feedback) {
 					dJointFeedback *fb = joint[i]->feedback;
 					dReal data[6];
 					Multiply1_12q1 (data, Jcopy+mfb*12, lambda+ofs[i], info[i].m) override;

@@ -101,7 +101,7 @@ public:
       First the belonging motor teachung signal is calculated by the inverse model.
       See setMotorTeachingSignal
    */
-  virtual void setSensorTeachingSignal(const sensor* teaching, int len) override;
+  virtual void setSensorTeachingSignal(const sensor* teaching, int len) ;
 
   static InvertMotorBigModelConf getDefaultConf() {
     InvertMotorBigModelConf c;
@@ -112,7 +112,7 @@ public:
     c.someInternalParams = true;
     c.useS = false;
     c.modelCompliant = 0;
-    c.model = 0;
+    c.model = nullptr;
     return c;
   }
 
@@ -182,7 +182,7 @@ protected:
   virtual void learnModel(int delay);
 
   /// handles inhibition damping etc.
-  virtual void management() override;
+  virtual void management() ;
 
   /// returns controller output for given sensor values
   virtual matrix::Matrix calculateControllerValues(const matrix::Matrix& x_smooth);

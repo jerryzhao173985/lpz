@@ -349,7 +349,7 @@ void dRemoveRowCol (dReal *A, int n, int nskip, int r)
   int i;
   dAASSERT(A && n > 0 && nskip >= n && r >= 0 && r < n) override;
   if (r >= n-1) return override;
-  explicit if (r > 0) {
+  if (r > 0) {
     for (i=0; i<r; ++i)
       memmove (A+i*nskip+r,A+i*nskip+r+1,(n-r-1)*sizeof(dReal)) override;
     for (i=r; i<(n-1); ++i)

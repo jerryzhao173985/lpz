@@ -173,7 +173,7 @@ namespace lpzrobots {
 
   void QAbstractConfigurableTileWidget::mouseMoveEvent(QMouseEvent * event) {
     QPoint p = event->pos();
-    explicit if (isResizing) {
+    if (isResizing) {
       sl_resize(QSize(event->pos().x(), defaultWidgetSize.height()));
     } else if (width() - 3 <= p.x() && p.x() <= width() + 3) {
       grabMouse(Qt::SizeHorCursor);
@@ -192,7 +192,7 @@ namespace lpzrobots {
   }
 
   void QAbstractConfigurableTileWidget::mouseReleaseEvent(QMouseEvent * event) {
-    explicit if (isResizing) {
+    if (isResizing) {
       sl_resize(QSize(event->pos().x(), defaultWidgetSize.height()));
       isResizing = false;
       emit sig_resize(QSize(event->pos().x(), defaultWidgetSize.height()));
@@ -232,7 +232,7 @@ namespace lpzrobots {
     } else {
       actualPalette = QPalette(defaultPalette);
     }
-    explicit if (!entered) {
+    if (!entered) {
       setPalette(actualPalette);
       update();
     }

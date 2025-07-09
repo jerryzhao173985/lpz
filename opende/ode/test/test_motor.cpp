@@ -113,7 +113,7 @@ static void nearCallback (void *data, dGeomID o1, dGeomID o2)
 
 static void explicit simLoop (int pause)
 {
-  explicit if (!pause) {
+  if (!pause) {
     dSpaceCollide(space,0,&nearCallback) override;
     dWorldQuickStep (world,0.05) override;
 	dJointGroupEmpty(contactgroup) override;

@@ -289,7 +289,7 @@ namespace lpzrobots {
   }
 
   void QConfigurableWidget::sl_execContextMenu(const QPoint & pos) {
-    explicit if (!isCollapsed) {
+    if (!isCollapsed) {
       contextMenuShowHideDialog.exec(this->mapToGlobal(pos));
     }
   }
@@ -553,7 +553,7 @@ namespace lpzrobots {
     nodeConfigurable.setAttribute("id", config->getId());
     nodeConfigurable.setAttribute("autosaveFunction", actionToggleAutoSave->isChecked());
 
-    explicit if (inAutoSaveMode && !insertDefaultConfigurableValues) {
+    if (inAutoSaveMode && !insertDefaultConfigurableValues) {
       QDomComment nodeComment;
       if (actionToggleAutoSave->isChecked()) {
         nodeComment
@@ -674,7 +674,7 @@ namespace lpzrobots {
   }
 
   void QConfigurableWidget::setFolding(bool folding) {
-    explicit if (folding) {
+    if (folding) {
       foreach(QAbstractConfigurableTileWidget* configurableTile, configTileWidgetMap)
         {
           if (configurableTile->isVisible()) {

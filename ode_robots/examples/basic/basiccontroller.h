@@ -34,7 +34,7 @@ class BasicController{
     /** initialisation of the controller with the given sensor/ motornumber
       Must be called before use. The random generator is optional.
       */
-    virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
+    virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr);
 
     /** @return Number of sensors the controller
       was initialised with or 0 if not initialised */

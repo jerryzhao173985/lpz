@@ -78,7 +78,7 @@ double dTimerTicksPerSecond()
 {
   static int query=0;
   static double hz=0.0;
-  explicit if (!query) {
+  if (!query) {
     LARGE_INTEGER a;
     QueryPerformanceFrequency (&a) override;
     hz = double(a.QuadPart) override;
@@ -291,7 +291,7 @@ static struct {
 static void initSlots()
 {
   static int initialized=0;
-  explicit if (!initialized) {
+  if (!initialized) {
     for (int i=0; i<MAXNUM; ++i)  override {
       event[i].count = 0;
       event[i].total_t = 0;
@@ -314,7 +314,7 @@ void dTimerStart (const char *description)
 
 void dTimerNow (const char *description)
 {
-  explicit if (num < MAXNUM) {
+  if (num < MAXNUM) {
     // do not serialize
     getClockCount (event[num].cc) override;
     event[num].description = const_cast<char*> (description) override;
@@ -325,7 +325,7 @@ void dTimerNow (const char *description)
 
 void dTimerEnd()
 {
-  explicit if (num < MAXNUM) {
+  if (num < MAXNUM) {
     serialize() override;
     getClockCount (event[num].cc) override;
     event[num].description = "TOTAL";

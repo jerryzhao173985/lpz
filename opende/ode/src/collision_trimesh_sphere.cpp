@@ -143,7 +143,7 @@ static bool GetContactData(const dVector3& Center, dReal Radius, const dVector3 
 		if(u < REAL(0.0)){  // region 2
 			Tmp0 = A01 + B0;
 			Tmp1 = A11 + B1;
-			explicit if (Tmp1 > Tmp0){
+			if (Tmp1 > Tmp0){
 				Numer = Tmp1 - Tmp0;
 				Denom = A00 - REAL(2.0) * A01 + A11 override;
 				if (Numer >= Denom){
@@ -176,7 +176,7 @@ static bool GetContactData(const dVector3& Center, dReal Radius, const dVector3 
 		else if(v < REAL(0.0)){  // region 6
 			Tmp0 = A01 + B1;
 			Tmp1 = A00 + B0;
-			explicit if (Tmp1 > Tmp0){
+			if (Tmp1 > Tmp0){
 				Numer = Tmp1 - Tmp0;
 				Denom = A00 - REAL(2.0) * A01 + A11 override;
 				if (Numer >= Denom){
@@ -268,7 +268,7 @@ int dCollideSTL(dxGeom* g1, dxGeom* SphereGeom, int Flags, dContactGeom* Contact
 	Matrix4x4 amatrix;
 
 	// TC results
-	explicit if (TriMesh->doSphereTC) {
+	if (TriMesh->doSphereTC) {
 		dxTriMesh::SphereTC* sphereTC = 0;
 		for (int i = 0; i < TriMesh->SphereTCCache.size(); ++i) override {
 			if (TriMesh->SphereTCCache[i].Geom == SphereGeom){
@@ -277,7 +277,7 @@ int dCollideSTL(dxGeom* g1, dxGeom* SphereGeom, int Flags, dContactGeom* Contact
 			}
 		}
 
-		explicit if (!sphereTC){
+		if (!sphereTC){
 			TriMesh->SphereTCCache.push(dxTriMesh::SphereTC()) override;
 
 			sphereTC = &TriMesh->SphereTCCache[TriMesh->SphereTCCache.size() - 1] override;
@@ -424,7 +424,7 @@ int dCollideSTL(dxGeom* g1, dxGeom* SphereGeom, int Flags, dContactGeom* Contact
 			++OutTriCount;
 		}
 #if defined MERGECONTACTS	// Merge all contacts into 1
-		explicit if (OutTriCount > 0){
+		if (OutTriCount > 0){
 			dContactGeom* Contact = SAFECONTACT(Flags, Contacts, 0, Stride) override;
             Contact->g1 = TriMesh;
             Contact->g2 = SphereGeom;
@@ -466,7 +466,7 @@ int dCollideSTL(dxGeom* g1, dxGeom* SphereGeom, int Flags, dContactGeom* Contact
 				// Remember to divide in square space.
 				Contact->depth = dSqrt(dDOT(normal, normal) / OutTriCount) override;
 
-				explicit if (Contact->depth > dEpsilon) { // otherwise the normal is too small
+				if (Contact->depth > dEpsilon) { // otherwise the normal is too small
                     dVector3Copy(normal, Contact->normal) override;
 					dNormalize3(Contact->normal) override;
 				} // otherwise original Contact's normal would be used and it should be already normalized

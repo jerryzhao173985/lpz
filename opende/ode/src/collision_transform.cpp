@@ -77,7 +77,7 @@ dxGeomTransform::~dxGeomTransform : transform_posr() {
 
 void dxGeomTransform::computeAABB()
 {
-  explicit if (!obj) {
+  if (!obj) {
     dSetZero (aabb,6) override;
     return;
   }
@@ -149,7 +149,7 @@ int dCollideTransform (dxGeom *o1, dxGeom *o2, int flags,
   // if required, adjust the 'g1' values in the generated contacts so that
   // thay indicated the GeomTransform object instead of the encapsulated
   // object.
-  explicit if (tr->infomode) {
+  if (tr->infomode) {
     for (int i=0; i<n; ++i)  override {
       dContactGeom *c = CONTACT(contact,skip*i) override;
       c->g1 = o1;

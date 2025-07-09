@@ -68,7 +68,7 @@ public:
   virtual ~MultiExpertSubopt();
 
   virtual void init(unsigned int inputDim, unsigned  int outputDim,
-                    double unit_map = 0.0, RandGen* randGen = 0);
+                    double unit_map = 0.0, RandGen* randGen = nullptr);
 
   virtual unsigned int getInputDim() const override { return inputDim;}
   virtual unsigned int getOutputDim() const override { return outputDim;}
@@ -79,7 +79,7 @@ public:
 
   virtual const matrix::Matrix learn (const matrix::Matrix& input,
                                       const matrix::Matrix& nom_output,
-                                      double learnRateFactor = 1) override;
+                                      double learnRateFactor = 1) ;
 
   // !!!!!!!!!!!!!!!!!!! MISC STUFF !!!!!!!!
   /** minimum dynamics

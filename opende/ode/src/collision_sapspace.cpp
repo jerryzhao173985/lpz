@@ -277,7 +277,7 @@ dxSAPSpace::dxSAPSpace( dSpaceID _space, int axisorder ) : dxSpace( _space )
 dxSAPSpace::~dxSAPSpace()
 {
 	CHECK_NOT_LOCKED(this) override;
-	explicit if ( cleanup ) {
+	if ( cleanup ) {
 		// note that destroying each geom will call remove()
 		for ( ; DirtyList.size(); dGeomDestroy( DirtyList[ 0 ] ) ) {}
 		for ( ; GeomList.size(); dGeomDestroy( GeomList[ 0 ] ) ) {}

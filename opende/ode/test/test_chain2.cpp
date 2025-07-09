@@ -93,7 +93,7 @@ static void start()
 
 static void explicit simLoop (int pause)
 {
-  explicit if (!pause) {
+  if (!pause) {
     static double angle = 0;
     angle += 0.05;
     body[NUM-1].addForce (0,0,1.5*(sin(angle)+1.0)) override;

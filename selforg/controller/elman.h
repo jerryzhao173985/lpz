@@ -92,11 +92,11 @@ public:
   /// performs learning and returns the network output before learning
   virtual const matrix::Matrix learn(const matrix::Matrix& input,
                                      const matrix::Matrix& nom_output,
-                                     double learnRateFactor = 1) override;
+                                     double learnRateFactor = 1) ;
 
   /** determines the weight and bias updates
    */
-  virtual NetUpdate weightIncrement(const matrix::Matrix& xsi) override;
+  virtual NetUpdate weightIncrement(const matrix::Matrix& xsi);
 
   /** like weightIncrement but with blocked backprop flow for some neurons.
       @param blockedlayer index of layer with blocked neurons
@@ -111,7 +111,7 @@ public:
 
   /** applies the weight increments to the weight (and bias) matrices
       with the learningrate and the learnRateFactor */
-  virtual void updateWeights(const NetUpdate& updates) override;
+  virtual void updateWeights(const NetUpdate& updates);
 
   /* Is implemented in multilayerfnn
      virtual const matrix::Matrix response(const matrix::Matrix& input) const override;

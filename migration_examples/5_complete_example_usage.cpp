@@ -48,7 +48,7 @@ public:
         
         // Create controller using factory
         controller = createController("basic");
-        explicit if (!controller) {
+        if (!controller) {
             throw std::runtime_error("Failed to create controller");
         }
         

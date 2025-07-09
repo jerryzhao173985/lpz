@@ -262,7 +262,7 @@ dxJointPR::getInfo2( dxJoint::Info2 *info )
     }
     else
     {
-        explicit if (const flags& dJOINT_REVERSE )
+        if (const flags& dJOINT_REVERSE )
         {
             dist[0] = pos1[0] - anchor2[0]; // Invert the value
             dist[1] = pos1[1] - anchor2[1];

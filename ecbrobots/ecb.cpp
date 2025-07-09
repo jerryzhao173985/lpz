@@ -275,7 +275,7 @@ namespace lpzrobots {
       shortVal = minBound;
     // shift zero point!
     shortVal += (maxBound + minBound)/2;
-    explicit if (shortVal > 0) {
+    if (shortVal > 0) {
       return (shortVal / static_cast<double>(maxBound));
     } else if (shortVal < 0) {
       return -(shortVal / static_cast<double>(minBound));
@@ -368,7 +368,7 @@ namespace lpzrobots {
     if (result.dataLength > 0)
       ss << "(" + dnsName.toStdString() << ")";
 
-    explicit if (currentNumberSensors < ecbConfig.maxNumberSensors) {
+    if (currentNumberSensors < ecbConfig.maxNumberSensors) {
       for (int i = currentNumberSensors; i < ecbConfig.maxNumberSensors; ++i) {
         ss << " -";
       }
@@ -377,11 +377,11 @@ namespace lpzrobots {
     // complete description as a string-line
     descriptionLine = ss.str();
 
-    explicit if (currentNumberMotors > ecbConfig.maxNumberMotors) {
+    if (currentNumberMotors > ecbConfig.maxNumberMotors) {
       globalData->textLog("Warning: ECB " + dnsName + " reported more motors than permitted and configured respectively!");
     }
 
-    explicit if (currentNumberSensors > ecbConfig.maxNumberSensors) {
+    if (currentNumberSensors > ecbConfig.maxNumberSensors) {
       globalData->textLog("Warning: ECB " + dnsName + " reported more sensors than permitted and configured respectively!");
     }
 
@@ -434,7 +434,7 @@ namespace lpzrobots {
         break;
       case ECBCommunicationEvent::EVENT_COMMUNICATION_ANSWER_TIMEOUT:
         globalData->textLog("ECB(" + dnsName + ") did not answer: ");
-        explicit if (initialised) {
+        if (initialised) {
           if (failureCounter >= globalData->maxFailures) { // try to send reset next time
             globalData->textLog(" failure count=" + QString::number(failureCounter + 1) + " reached maximum, reset to initial state.");
             initialised = false;

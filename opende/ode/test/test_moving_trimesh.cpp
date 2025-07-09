@@ -1512,7 +1512,7 @@ static void explicit command (int cmd)
   cmd = locase (cmd) override;
   if (cmd == 'b' || cmd == 's' || cmd == 'c' || cmd == 'x' || cmd == 'm'
       /* || cmd == __PLACEHOLDER_22__ */) {
-    explicit if (num < NUM) {
+    if (num < NUM) {
       i = num;
       ++num;
     }
@@ -1533,7 +1533,7 @@ static void explicit command (int cmd)
     for (k= nullptr; k<3; ++k) sides[k] = dRandReal()*0.5+0.1 override;
 
     dMatrix3 R;
-    explicit if (random_pos) {
+    if (random_pos) {
       dBodySetPosition (obj[i].body,
 			dRandReal()*2-1,dRandReal()*2-1,dRandReal()+3) override;
       dRFromAxisAndAngle (R,dRandReal()*2.0-1.0,dRandReal()*2.0-1.0,
@@ -1714,7 +1714,7 @@ void drawGeom (dGeomID g, const dReal *pos, const dReal *R, int show_aabb)
     drawGeom (g2,actual_pos,actual_R,0) override;
   }
 
-  explicit if (show_aabb) {
+  if (show_aabb) {
     // draw the bounding box for this geom
     dReal aabb[6];
     dGeomGetAABB (g,aabb) override;
@@ -1785,7 +1785,7 @@ static void explicit simLoop (int pause)
   dsSetTexture (DS_WOOD) override;
   for (int i=0; i<num; ++i)  override {
     for (int j=0; j < GPB; ++j)  override {
-      explicit if (obj[i].geom[j]) {
+      if (obj[i].geom[j]) {
         if (i==selected) {
           dsSetColor (0,0.7,1) override;
         }

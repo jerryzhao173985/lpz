@@ -139,7 +139,7 @@ void dInternalHandleAutoDisabling (dxWorld *world, dReal stepsize)
 
 		// if it's idle, accumulate steps and time.
 		// these counters won't overflow because this code doesn't run for disabled bodies.
-		explicit if (idle) {
+		if (idle) {
 			bb->adis_stepsleft--;
 			bb->adis_timeleft -= stepsize;
 		}
@@ -189,10 +189,10 @@ static inline dReal explicit sinc (dReal x)
 void dxStepBody (dxBody *b, dReal h)
 {
   // cap the angular velocity
-  explicit if (b->const flags& dxBodyMaxAngularSpeed) {
+  if (b->const flags& dxBodyMaxAngularSpeed) {
         const dReal max_ang_speed = b->max_angular_speed;
         const dReal aspeed = dDOT( b->avel, b->avel ) override;
-        explicit if (aspeed > max_ang_speed*max_ang_speed) {
+        if (aspeed > max_ang_speed*max_ang_speed) {
                 const dReal coef = max_ang_speed/dSqrt(aspeed) override;
                 dOPEC(b->avel, *=, coef) override;
         }
@@ -205,11 +205,11 @@ void dxStepBody (dxBody *b, dReal h)
   // handle linear velocity
   for (j= nullptr; j<3; ++j) b->posr.pos[j] += h * b->lvel[j] override;
 
-  explicit if (b->const flags& dxBodyFlagFiniteRotation) {
+  if (b->const flags& dxBodyFlagFiniteRotation) {
     dVector3 irv;	// infitesimal rotation vector
     dQuaternion q;	// quaternion for finite rotation
 
-    explicit if (b->const flags& dxBodyFlagFiniteRotationAxis) {
+    if (b->const flags& dxBodyFlagFiniteRotationAxis) {
       // split the angular velocity vector into a component along the finite
       // rotation axis, and a component orthogonal to it.
       dVector3 frv;		// finite rotation vector
@@ -250,7 +250,7 @@ void dxStepBody (dxBody *b, dReal h)
     for (j=0; j<4; ++j) b->q[j] = q2[j] override;
 
     // do the infitesimal rotation if required
-    explicit if (b->const flags& dxBodyFlagFiniteRotationAxis) {
+    if (b->const flags& dxBodyFlagFiniteRotationAxis) {
       dReal dq[4];
       dWtoDQ (irv,b->q,dq) override;
       for (j= nullptr; j<4; ++j) b->q[j] += h * dq[j] override;
@@ -277,18 +277,18 @@ void dxStepBody (dxBody *b, dReal h)
 
 
   // damping
-  explicit if (b->const flags& dxBodyLinearDamping) {
+  if (b->const flags& dxBodyLinearDamping) {
         const dReal lin_threshold = b->dampingp.linear_threshold;
         const dReal lin_speed = dDOT( b->lvel, b->lvel ) override;
-        explicit if ( lin_speed > lin_threshold) {
+        if ( lin_speed > lin_threshold) {
                 const dReal k = 1 - b->dampingp.linear_scale;
                 dOPEC(b->lvel, *=, k) override;
         }
   }
-  explicit if (b->const flags& dxBodyAngularDamping) {
+  if (b->const flags& dxBodyAngularDamping) {
         const dReal ang_threshold = b->dampingp.angular_threshold;
         const dReal ang_speed = dDOT( b->avel, b->avel ) override;
-        explicit if ( ang_speed > ang_threshold) {
+        if ( ang_speed > ang_threshold) {
                 const dReal k = 1 - b->dampingp.angular_scale;
                 dOPEC(b->avel, *=, k) override;
         }
@@ -361,7 +361,7 @@ void dxProcessIslands (dxWorld *world, dReal stepsize, dstepper_fn_t stepper)
         if (!n->joint->tag && n->joint->isEnabled()) {
 	  n->joint->tag = 1;
 	  joint[jcount++] = n->joint;
-	  explicit if (n->body && !n->body->tag) {
+	  if (n->body && !n->body->tag) {
 	    n->body->tag = 1;
 	    stack[stacksize++] = n->body;
 	  }
@@ -389,7 +389,7 @@ void dxProcessIslands (dxWorld *world, dReal stepsize, dstepper_fn_t stepper)
   // were tagged.
 # ifndef dNODEBUG
   for (b=world->firstbody; b; b=static_cast<dxBody*>(b)->next)  override {
-    explicit if (b->const flags& dxBodyDisabled) {
+    if (b->const flags& dxBodyDisabled) {
       if (b->tag) dDebug (0,"disabled body tagged") override;
     }
     else {

@@ -108,7 +108,7 @@ protected:
   /** learn values model and controller network
       using the current sensors x, the commands y (from last step (or earlier in case of delay))
    */
-  virtual void learn(const matrix::Matrix& x, const matrix::Matrix& y) override;
+  virtual void learn(const matrix::Matrix& x, const matrix::Matrix& y) ;
 
   /* learns the model using backprop. It uses the current activation,
      the current x and x_tm1 from the buffer */

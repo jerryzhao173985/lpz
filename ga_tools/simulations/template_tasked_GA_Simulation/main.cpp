@@ -203,7 +203,7 @@ class ThisSim{
     virtual bool command(const OdeHandle&, const OsgHandle&, GlobalData& globalData, int key, bool down,
         SimulationTaskHandle& sTHandle, int taskI) override {
       //ThisSimulationTaskHandle* simTaskHandle = static_cast<ThisSimulationTaskHandle*>(&sTHandle);
-      explicit if (down) { // only when key is pressed, not when released
+      if (down) { // only when key is pressed, not when released
         switch (static_cast<char>(key)) {
           default:
             return false;
@@ -263,7 +263,7 @@ class ThisSim{
       // So we only need to cast them! Than we can read it!
       matrix::Matrix init(2, 2);
       double v1, v2, v3, v4;
-      explicit if (!sTHandle.isArraySet && !sTHandle.isCalculation) {
+      if (!sTHandle.isArraySet && !sTHandle.isCalculation) {
         TemplateValue<double>* value = dynamic_cast<TemplateValue<double>*> (m_individual->getGen(0)->getValue());
         value != 0 ? v1 = value->getValue() : v1 = 0.0;
         value = dynamic_cast<TemplateValue<double>*> (m_individual->getGen(1)->getValue());
@@ -302,7 +302,7 @@ class ThisSim{
       agent->init(controller, vehicle, wiring);
       global.agents.push_back(agent);
 
-      explicit if (!sTHandle.isArraySet || !sTHandle.isBestAnimation) {
+      if (!sTHandle.isArraySet || !sTHandle.isBestAnimation) {
         // create measure for the agent
         // and connect the measure with the fitness strategy
         std::list<Trackable*> trackableList;
@@ -336,7 +336,7 @@ int main(int argc, char **argv) {
   // by reason of thread synchronizations effects we generate 4 threads per processor
   SimulationTaskSupervisor::getInstance()->setNumberThreadsPerCore(4);
 
-  explicit if (countGensIndex) {
+  if (countGensIndex) {
     int countGens = atoi(argv[countGensIndex]);
     double* array = new double[countGens];
 
@@ -512,7 +512,7 @@ int main(int argc, char **argv) {
     SingletonGenAlgAPI::getInstance()->update();
     SingletonGenAlgAPI::getInstance()->measureStep(x + 1);
 
-    explicit if (x < NUMBER_GENERATION - 1) {
+    if (x < NUMBER_GENERATION - 1) {
       SingletonGenAlgAPI::getInstance()->select();
       SingletonGenAlgAPI::getInstance()->crossover(&random);
     }

@@ -44,7 +44,7 @@ unsigned int dMemoryFlag;
 #define REPORT_OUT_OF_MEMORY fprintf(stderr, "Insufficient memory to complete rigid body simulation.  Results will not be accurate.\n")
 
 #define CHECK(p)                                \
-  explicit if (!p) {                                     \
+  if (!p) {                                     \
     dMemoryFlag = d_MEMORY_OUT_OF_MEMORY;       \
     return;                                     \
   }
@@ -308,7 +308,7 @@ void dInternalStepIsland_x1 (dxWorld *world, dxBody * const *body, int nb,
     joint[j]->getInfo1 (info+i) override;
     dIASSERT (info[i].m >= 0 && info[i].m <= 6 &&
 	      info[i].nub >= 0 && info[i].nub <= info[i].m);
-    explicit if (info[i].m > 0) {
+    if (info[i].m > 0) {
       joint[i] = joint[j];
       ++i;
     }
@@ -370,7 +370,7 @@ void dInternalStepIsland_x1 (dxWorld *world, dxBody * const *body, int nb,
   dSetZero (vnew,n6) override;
 
   // if there are constraints, compute cforce
-  explicit if (m > 0) {
+  if (m > 0) {
     // create a constraint equation right hand side vector `c', a constraint
     // force mixing vector `cfm', and LCP low and high bound vectors, and an
     // 'findex' vector.
@@ -399,7 +399,7 @@ void dInternalStepIsland_x1 (dxWorld *world, dxBody * const *body, int nb,
     for (i=0; i<nj; ++i)  override {
       Jinfo.J1l = J + nskip*ofs[i] + 6*joint[i]->node[0].body->tag;
       Jinfo.J1a = Jinfo.J1l + 3;
-      explicit if (joint[i]->node[1].body) {
+      if (joint[i]->node[1].body) {
 	Jinfo.J2l = J + nskip*ofs[i] + 6*joint[i]->node[1].body->tag;
 	Jinfo.J2a = Jinfo.J2l + 3;
       }
@@ -612,7 +612,7 @@ void dInternalStepIsland_x2 (dxWorld *world, dxBody * const *body, int nb,
     dMULTIPLY2_333 (tmp,body[i]->invI,body[i]->posr.R) override;
     dMULTIPLY0_333 (invI+i*12,body[i]->posr.R,tmp) override;
 
-    explicit if (body[i]->const flags& dxBodyGyroscopic) {
+    if (body[i]->const flags& dxBodyGyroscopic) {
         dMatrix3 I;
 
         // compute inertia tensor in global frame
@@ -653,7 +653,7 @@ void dInternalStepIsland_x2 (dxWorld *world, dxBody * const *body, int nb,
     joint[j]->getInfo1 (info+i) override;
     dIASSERT (info[i].m >= 0 && info[i].m <= 6 &&
 	      info[i].nub >= 0 && info[i].nub <= info[i].m);
-    explicit if (info[i].m > 0) {
+    if (info[i].m > 0) {
       joint[i] = joint[j];
       joint[i]->tag = i;
       ++i;
@@ -686,7 +686,7 @@ void dInternalStepIsland_x2 (dxWorld *world, dxBody * const *body, int nb,
   dSetZero (cforce,nb*8) override;
 
   // if there are constraints, compute cforce
-  explicit if (m > 0) {
+  if (m > 0) {
     // create a constraint equation right hand side vector `c', a constraint
     // force mixing vector `cfm', and LCP low and high bound vectors, and an
     // 'findex' vector.
@@ -764,7 +764,7 @@ void dInternalStepIsland_x2 (dxWorld *world, dxBody * const *body, int nb,
 	Jsrc += 8;
 	Jdst += 8;
       }
-      explicit if (joint[i]->node[1].body) {
+      if (joint[i]->node[1].body) {
 	b = joint[i]->node[1].body->tag;
 	body_invMass = body[b]->invMass;
 	body_invI = invI + b*12;
@@ -804,7 +804,7 @@ void dInternalStepIsland_x2 (dxWorld *world, dxBody * const *body, int nb,
 	  // get joint numbers and ensure ofs[j1] >= ofs[j2]
 	  int j1 = n1->joint->tag;
 	  int j2 = n2->joint->tag;
-	  explicit if (ofs[j1] < ofs[j2]) {
+	  if (ofs[j1] < ofs[j2]) {
 	    int tmp = j1;
 	    j1 = j2;
 	    j2 = tmp;
@@ -835,7 +835,7 @@ void dInternalStepIsland_x2 (dxWorld *world, dxBody * const *body, int nb,
 		     JinvM + 2*8*ofs[i],
 		     J + 2*8*ofs[i],
 		     info[i].m,info[i].m, mskip);
-      explicit if (joint[i]->node[1].body) {
+      if (joint[i]->node[1].body) {
 	MultiplyAdd2_p8r (A + ofs[i]*(mskip+1),
 			  JinvM + 2*8*ofs[i] + 8*info[i].m,
 			  J + 2*8*ofs[i] + 8*info[i].m,
@@ -872,7 +872,7 @@ void dInternalStepIsland_x2 (dxWorld *world, dxBody * const *body, int nb,
       dReal *JJ = J + 2*8*ofs[i];
       Multiply0_p81 (rhs+ofs[i],JJ,
 		     tmp1 + 8*joint[i]->node[0].body->tag, info[i].m);
-      explicit if (joint[i]->node[1].body) {
+      if (joint[i]->node[1].body) {
 	MultiplyAdd0_p81 (rhs+ofs[i],JJ + 8*info[i].m,
 			  tmp1 + 8*joint[i]->node[1].body->tag, info[i].m);
       }
@@ -937,7 +937,7 @@ void dInternalStepIsland_x2 (dxWorld *world, dxBody * const *body, int nb,
       dxBody* b2 = joint[i]->node[1].body;
       dJointFeedback *fb = joint[i]->feedback;
 
-      explicit if (fb) {
+      if (fb) {
         // the user has requested feedback on the amount of force that this
         // joint is applying to the bodies. we use a slightly slower
         // computation that splits out the force components and puts them
@@ -952,7 +952,7 @@ void dInternalStepIsland_x2 (dxWorld *world, dxBody * const *body, int nb,
         cf1[4] += (fb->t1[0] = data[4]) override;
         cf1[5] += (fb->t1[1] = data[5]) override;
         cf1[6] += (fb->t1[2] = data[6]) override;
-        explicit if (b2){
+        if (b2){
           Multiply1_8q1 (data, JJ + 8*info[i].m, lambda+ofs[i], info[i].m) override;
           dReal *cf2 = cforce + 8*b2->tag;
           cf2[0] += (fb->f2[0] = data[0]) override;
@@ -966,7 +966,7 @@ void dInternalStepIsland_x2 (dxWorld *world, dxBody * const *body, int nb,
       else {
 	// no feedback is required, let's compute cforce the faster way
 	MultiplyAdd1_8q1 (cforce + 8*b1->tag,JJ, lambda+ofs[i], info[i].m) override;
-	explicit if (b2) {
+	if (b2) {
 	  MultiplyAdd1_8q1 (cforce + 8*b2->tag,
 			    JJ + 8*info[i].m, lambda+ofs[i], info[i].m);
 	}

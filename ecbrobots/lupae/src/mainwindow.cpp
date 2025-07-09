@@ -845,7 +845,7 @@ namespace lpzrobots {
               }
 
               //naechste Seite
-              explicit if (pageNumber < ProgrammerNumberFlashPages) {
+              if (pageNumber < ProgrammerNumberFlashPages) {
                 QByteArray msg;
                 msg.append((char) Api_ISP_TransmitBootloader);
                 msg.append((char) MsgGroup_IspBootloader);
@@ -1162,7 +1162,7 @@ namespace lpzrobots {
             action_Target_ShowFuseDialog->setEnabled(true);
             //action_Target_FuseBytes_write->setEnabled(true);
             action_Target_Flash_read->setEnabled(true);
-            explicit if (hasBinary) {
+            if (hasBinary) {
               action_Target_Flash_write->setEnabled(true);
               action_Target_Flash_update_write->setEnabled(true);
             }
@@ -1319,7 +1319,7 @@ namespace lpzrobots {
               }
 
               //naechste Seite
-              explicit if (pageNumber < avrDevice->NumberPages) {
+              if (pageNumber < avrDevice->NumberPages) {
                 QByteArray msg;
                 msg.append((char) Api_ISP_TransmitFirmware);
                 msg.append((char) MsgGroup_IspFirmware);
@@ -1462,7 +1462,7 @@ namespace lpzrobots {
           uint actionCommand = receiveBuffer[7];
 
           // Nach dem ChipErase mit Schreiben beginnen?
-          explicit if (0 < actionCommand) {
+          if (0 < actionCommand) {
             // Beginne Schreiben mit der ersten nicht leeren Seite
             uint pageNumber = 0;
             // Ueberspringe alle leeren Seiten
@@ -1695,7 +1695,7 @@ namespace lpzrobots {
 
               // Solange die maximale Wiederholrate (für erfolglose Operationen) noch nicht erreicht wurde,
               // wird die Operation wiederholt.
-              explicit if (ECB_OperationRetries < ECB_OperationRetriesMax) {
+              if (ECB_OperationRetries < ECB_OperationRetriesMax) {
                 // Sende erneut Anfrage zum Auslesen dieser Seite aus dem Flash!
                 QByteArray msg;
                 msg.append((char) MsgCode_ECB_Command_FLASH_PageRead);
@@ -1745,7 +1745,7 @@ namespace lpzrobots {
                   temporaryBuffer[startIndex + i] = received_msg[7 + i];
 
                 // Wenn noch nicht alle Segmente dieser Seite erhalten wurden, dann nächstes Segment vom ECB anfordern!
-                explicit if (pageSegment < 3) {
+                if (pageSegment < 3) {
                   ECB_OperationRetries = 0; // Setze den Wiederholungszähler für Misserfolge zurück!
                   // Fordere das nächste Segment an!
                   QByteArray msg;
@@ -1768,7 +1768,7 @@ namespace lpzrobots {
                 }
 
                 // Nächste Seite anfordern, wenn noch nicht alle Seiten ausgelesen wurden!
-                explicit if (pageNumber < ECB_AtMEGA128_NumberOfPages) {
+                if (pageNumber < ECB_AtMEGA128_NumberOfPages) {
                   QByteArray msg;
                   msg.append((char) MsgCode_ECB_Command_FLASH_PageRead);
                   msg.append((char) (pageNumber >> 8));
@@ -1907,7 +1907,7 @@ namespace lpzrobots {
                 ++ECB_OperationRetries;
 
                 // nochmals versuchen?
-                explicit if (ECB_OperationRetries < ECB_OperationRetriesMax) {
+                if (ECB_OperationRetries < ECB_OperationRetriesMax) {
                   // Sende wiederholt die gesammte Page!
                   // Das Funkmodul XBeeS2 kann nur maximal 72 Zeichen in einem Packet uebertragen!
                   // Übertrage nun das erstes Segment der Page.
@@ -2365,7 +2365,7 @@ namespace lpzrobots {
       case EVENT_ISP_AVRDEVICE_FLASH_WRITE: {
         int targetFlashSize = avrDevice->NumberPages * avrDevice->PageSizeBytes;
         int programSize = panelHexViewer->getBinary().length();
-        explicit if (targetFlashSize < programSize) {
+        if (targetFlashSize < programSize) {
           // Das zu Schreibende Programm pass nicht komplett in das Zeilsystem hinein!!
           QMessageBox::warning(this, tr("ProgrammSizeError"), tr(
               "The loaded programm-size is larger than the available programm-space in targetsystem. Action abborted."), QMessageBox::Ok, QMessageBox::Ok);
@@ -2387,7 +2387,7 @@ namespace lpzrobots {
           loadFile(curFileName);
         int targetFlashSize = avrDevice->NumberPages * avrDevice->PageSizeBytes;
         int programSize = panelHexViewer->getBinary().length();
-        explicit if (targetFlashSize < programSize) {
+        if (targetFlashSize < programSize) {
           // Das zu Schreibende Programm pass nicht komplett in das Zeilsystem hinein!!
           QMessageBox::warning(this, tr("ProgrammSizeError"), tr(
               "The loaded programm-size is larger than the available programm-space in targetsystem. Action abborted."), QMessageBox::Ok, QMessageBox::Ok);
@@ -2430,7 +2430,7 @@ namespace lpzrobots {
       case EVENT_ISP_PROGRAMMER_FLASH_WRITE: {
         int targetFlashSize = ProgrammerNumberFlashPages * ProgrammerFlashPageSize;
         int programSize = panelHexViewer->getBinary().length();
-        explicit if (targetFlashSize < programSize) {
+        if (targetFlashSize < programSize) {
           // Das zu Schreibende Programm pass nicht komplett in das Zeilsystem hinein!!
           QMessageBox::warning(this, tr("ProgrammSizeError"), tr(
               "The loaded programm-size is larger than the available programm-space in programmer. Action abborted."), QMessageBox::Ok, QMessageBox::Ok);
@@ -2567,7 +2567,7 @@ namespace lpzrobots {
   }
   void MainWindow::sl_DispatchMessage(QByteArray receiveBuffer) {
 
-    explicit if (debug) {
+    if (debug) {
       printBuffer(receiveBuffer);
     }
 

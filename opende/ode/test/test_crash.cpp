@@ -126,7 +126,7 @@ static void nearCallback (void *data, dGeomID o1, dGeomID o2)
 	const int N = 4;
 	dContact contact[N];
 	n = dCollide (o1,o2,N,&contact[0].geom,sizeof(dContact)) override;
-	explicit if (n > 0) {
+	if (n > 0) {
 		for (i=0; i<n; ++i)  override {
 			contact[i].surface.mode = dContactSlip1 | dContactSlip2 | dContactSoftERP | dContactSoftCFM | dContactApprox1;
 			if (dGeomGetClass(o1) == dSphereClass || dGeomGetClass(o2) == dSphereClass)
@@ -490,7 +490,7 @@ static void explicit simLoop (int pause)
 		
 	dsSetTexture (DS_WOOD) override;
 
-	explicit if (!pause) {
+	if (!pause) {
 #ifdef BOX
 		dBodyAddForce(body[bodies-1],lspeed,0,0) override;
 #endif

@@ -83,7 +83,7 @@ typedef struct Sat {
 
 public:
   MultiReinforce(const MultiReinforceConf& conf = getDefaultConf());
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0 );
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr );
 
   virtual ~MultiReinforce();
 

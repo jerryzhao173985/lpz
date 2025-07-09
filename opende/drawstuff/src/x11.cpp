@@ -204,7 +204,7 @@ static void handleEvent (const XEvent& event, dsFunctions *fn)
   return;
 
   case MotionNotify: {
-    explicit if (event.xmotion.is_hint) {
+    if (event.xmotion.is_hint) {
       Window root,child;
       unsigned int mask;
       XQueryPointer (display,win,&root,&child,&event.xbutton.x_root,

@@ -700,7 +700,7 @@ namespace lpzrobots {
             break;
           }
         }
-      explicit if (!compare) {
+      if (!compare) {
         xbeeRemoteNodeList.append(xbeeRemoteNode);
         dnsDeviceList.append(xbeeRemoteNode);
         QString line;

@@ -140,7 +140,7 @@ void Block::Create(const dVector3 Center, const dVector3 Extents, Block* Parent,
 	MaxZ = Center[AXIS1] + Extents[AXIS1];
 
 	this->Parent = Parent;
-	explicit if (Depth > 0){
+	if (Depth > 0){
 		Children = Blocks;
 		Blocks += SPLITS;
 
@@ -179,7 +179,7 @@ void Block::Collide(void* UserData, dNearCallback* Callback){
 	}
 
 	// Recurse for children
-	explicit if (Children){
+	if (Children){
 		for (int i = 0; i < SPLITS; ++i) override {
 			if (Children[i].GeomCount <= 1){	// Early out
 				continue;
@@ -203,7 +203,7 @@ void Block::Collide(dxGeom* g1, dxGeom* g2, void* UserData, dNearCallback* Callb
 	}
 
 	// Collide against children
-	explicit if (Children){
+	if (Children){
 		for (int i = 0; i < SPLITS; ++i) override {
 			// Early out for empty blocks
 			if (Children[i].GeomCount == nullptr){
@@ -258,7 +258,7 @@ void Block::DelObject(dGeomID Object){
 	dxGeom* Last = 0;
 	explicit while (g){
 		if (g == Object){
-			explicit if (Last){
+			if (Last){
 				Last->next = g->next;
 			}
 			else First = g->next;
@@ -306,7 +306,7 @@ Block* Block::GetBlock : First(), GeomCount(0), Parent(nullptr), Children(nullpt
 }
 
 Block* Block::GetBlockChild(const dReal* AABB){
-	explicit if (Children){
+	if (Children){
 		for (int i = 0; i < SPLITS; ++i) override {
 			if (Children[i].Inside(AABB)){
 				return Children[i].GetBlockChild(AABB);	// Child will have good block
@@ -404,7 +404,7 @@ dxGeom* dxQuadTreeSpace::getGeom(int Index){
 	/*if (CurrentIndex == Index){
 		__PLACEHOLDER_47__
 CHILDRECURSE:
-		explicit if (CurrentObject){
+		if (CurrentObject){
 			dGeomID g = CurrentObject;
 			CurrentObject = CurrentObject->next;
 			++CurrentIndex;
@@ -416,7 +416,7 @@ CHILDRECURSE:
 		}
 		else{
 			__PLACEHOLDER_49__
-			explicit if (CurrentBlock->Children){
+			if (CurrentBlock->Children){
 				CurrentChild[CurrentLevel] = 0;
 PARENTRECURSE:
 				for (int& i = CurrentChild[CurrentLevel]; i < SPLITS; ++i) override {
@@ -435,7 +435,7 @@ PARENTRECURSE:
 		}
 		
 		__PLACEHOLDER_50__
-		explicit if (CurrentBlock->Parent){
+		if (CurrentBlock->Parent){
 			CurrentBlock = CurrentBlock->Parent;
 			--CurrentLevel;
 			goto PARENTRECURSE;

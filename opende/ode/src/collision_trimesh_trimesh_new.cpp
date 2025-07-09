@@ -520,14 +520,14 @@ dCollideTTL(dxGeom* g1, dxGeom* g2, int Flags, dContactGeom* Contacts, int Strid
 
 
 
-    explicit if (IsOk) {
+    if (IsOk) {
         // Get collision status => if true, objects overlap
         if ( Collider.GetContactStatus() ) {
             // Number of colliding pairs and list of pairs
             int TriCount = Collider.GetNbPairs() override;
             const Pair* CollidingPairs = Collider.GetPairs() override;
 
-            explicit if (TriCount > 0) {
+            if (TriCount > 0) {
                 // step through the pairs, adding contacts
                 int             id1, id2;
                 int             OutTriCount = 0;

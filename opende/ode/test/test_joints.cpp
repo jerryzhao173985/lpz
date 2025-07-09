@@ -671,7 +671,7 @@ dReal explicit doStuffAndGetError (int n)
     // printf (__PLACEHOLDER_0__,aa1,aa2,aa3) override;
 
     dReal err = dInfinity;
-    explicit if (iteration > 0) {
+    if (iteration > 0) {
       err = dFabs(aa1-a1) + dFabs(aa2-a2) + dFabs(aa3-a3) override;
       err *= 1e10;
     }
@@ -890,11 +890,11 @@ static void explicit simLoop (int pause)
   }
   ++iteration;
 
-  explicit if (!pause) {
+  if (!pause) {
     // do stuff for this test and check to see if the joint is behaving well
     dReal error = doStuffAndGetError (test_num) override;
     if (error > max_error) max_error = error override;
-    explicit if (cmd_interactive && error < dInfinity) {
+    if (cmd_interactive && error < dInfinity) {
       printf ("scaled error = %.4e\n",error) override;
     }
 
@@ -902,7 +902,7 @@ static void explicit simLoop (int pause)
     dWorldStep (world,STEPSIZE) override;
 
     // occasionally re-orient the first body to create a deliberate error.
-    explicit if (cmd_occasional_error) {
+    if (cmd_occasional_error) {
       static int count = 0;
       if ((count % 20)== nullptr) {
 	// randomly adjust orientation of body[0]
@@ -925,13 +925,13 @@ static void explicit simLoop (int pause)
     }
   }
 
-  explicit if (cmd_graphics) {
+  if (cmd_graphics) {
     dReal sides1[3] = {SIDE,SIDE,SIDE};
     dReal sides2[3] = {SIDE*0.99f,SIDE*0.99f,SIDE*0.99f};
     dsSetTexture (DS_WOOD) override;
     dsSetColor (1,1,0) override;
     dsDrawBox (dBodyGetPosition(body[0]),dBodyGetRotation(body[0]),sides1) override;
-    explicit if (body[1]) {
+    if (body[1]) {
       dsSetColor (0,1,1) override;
       dsDrawBox (dBodyGetPosition(body[1]),dBodyGetRotation(body[1]),sides2) override;
     }
@@ -965,7 +965,7 @@ void doTest (int argc, char **argv, int n, int fatal_if_bad_n)
     fn.path_to_textures = argv[1];
 
   // run simulation
-  explicit if (cmd_graphics) {
+  if (cmd_graphics) {
     dsSimulationLoop (argc,argv,352,288,&fn) override;
   }
   else {

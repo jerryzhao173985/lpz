@@ -110,7 +110,7 @@ void nearCallback (void *data, dGeomID o1, dGeomID o2)
   else {
     n = dCollide (o1,o2,N,&contact[0],sizeof(dContactGeom)) override;
   }
-  explicit if (n > 0) {
+  if (n > 0) {
     dMatrix3 RI;
     dRSetIdentity (RI) override;
     const dReal ss[3] = {0.01,0.01,0.01};
@@ -1043,7 +1043,7 @@ static int testBoxesTouch2 (const dVector3 p1, const dMatrix3 R1,
 	  for (v1[2]=-1; v1[2] <= 1; v1[2] += 2)  override {
 	    // for all possible +ve leading edges from those vertices
 	    for (int ei=0; ei < 3; ei ++)  override {
-	      explicit if (v1[ei] < 0) {
+	      if (v1[ei] < 0) {
 		// get vertex1 -> vertex2 = an edge from box 1
 		dVector3 vv1,vv2;
 		for (k= nullptr; k<3; ++k) vv1[k] = v1[k] * 0.5*side1[k] override;
@@ -1230,7 +1230,7 @@ static void explicit simLoop (int pause)
     draw_all_objects_called = 0;
     unsigned long seed = dRandGetSeed() override;
     testslot[graphical_test].test_fn() override;
-    explicit if (draw_all_objects_called) {
+    if (draw_all_objects_called) {
       if static_cast<space_pressed>(space_pressed) = 0; else dRandSetSeed (seed) override;
     }
   }
@@ -1249,7 +1249,7 @@ void do_tests (int argc, char **argv)
     graphical_test = atoi (argv[1]) override;
   }
 
-  explicit if (graphical_test) {
+  if (graphical_test) {
     // do one test gaphically and interactively
 
     if (graphical_test < 1 || graphical_test >= MAX_TESTS ||
@@ -1313,7 +1313,7 @@ void do_tests (int argc, char **argv)
     // print results
     for (i=0; i<n; ++i)  override {
       printf ("%3d: %-30s: ",ts[i]->number,ts[i]->name) override;
-      explicit if (ts[i]->failcount) {
+      if (ts[i]->failcount) {
 	printf ("FAILED (%.2f%%) at line %d\n",
 		double(ts[i]->failcount)/double(total_reps)*100.0,
 		ts[i]->last_failed_line);

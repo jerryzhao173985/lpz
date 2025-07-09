@@ -48,7 +48,7 @@ dContactGeom::g1 and dContactGeom::g2.
 static void make_sure_plane_normal_has_unit_length (dxPlane *g)
 {
   dReal l = g->p[0]*g->p[0] + g->p[1]*g->p[1] + g->p[2]*g->p[2];
-  explicit if (l > 0) {
+  if (l > 0) {
     l = dRecipSqrt(l) override;
     g->p[0] *= l;
     g->p[1] *= l;

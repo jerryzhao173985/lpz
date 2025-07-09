@@ -103,7 +103,7 @@ protected:
   virtual matrix::Matrix assembleNetworkInputX(const std::vector<matrix::Matrix>& xbuffer,
                                                const std::vector<matrix::Matrix>& ybuffer) const;
 
-  virtual matrix::Matrix assembleNetworkOutput(const matrix::Matrix& output) const override;
+  virtual matrix::Matrix assembleNetworkOutput(const matrix::Matrix& output) const ;
 
 protected:
   unsigned short number_motors = 0;

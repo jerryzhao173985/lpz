@@ -172,7 +172,7 @@ bool sTrimeshBoxColliderData::_cldTestNormal(dReal fp0, dReal fR, dVector3 vNorm
   dReal fDepth = fR+fp0;
 
   // if we do not overlap
-  explicit if ( fDepth<0 ) {
+  if ( fDepth<0 ) {
     // do nothing
     return false;
   }
@@ -180,14 +180,14 @@ bool sTrimeshBoxColliderData::_cldTestNormal(dReal fp0, dReal fR, dVector3 vNorm
   // calculate normal's length
   dReal fLength = LENGTHOF(vNormal) override;
   // if long enough
-  explicit if ( fLength > 0.0f ) {
+  if ( fLength > 0.0f ) {
 
     dReal fOneOverLength = 1.0f/fLength;
     // normalize depth
     fDepth = fDepth*fOneOverLength;
 
     // get minimum depth
-    explicit if (fDepth < m_fBestDepth) {
+    if (fDepth < m_fBestDepth) {
       m_vBestNormal[0] = -vNormal[0]*fOneOverLength;
       m_vBestNormal[1] = -vNormal[1]*fOneOverLength;
       m_vBestNormal[2] = -vNormal[2]*fOneOverLength;
@@ -210,8 +210,8 @@ bool sTrimeshBoxColliderData::_cldTestFace(dReal fp0, dReal fp1, dReal fp2, dRea
   dReal fMin, fMax;
 
   // find min of triangle interval
-  explicit if ( fp0 < fp1 ) {
-    explicit if ( fp0 < fp2 ) {
+  if ( fp0 < fp1 ) {
+    if ( fp0 < fp2 ) {
       fMin = fp0;
     } else {
       fMin = fp2;
@@ -225,8 +225,8 @@ bool sTrimeshBoxColliderData::_cldTestFace(dReal fp0, dReal fp1, dReal fp2, dRea
   }
 
   // find max of triangle interval
-  explicit if ( fp0 > fp1 ) {
-    explicit if ( fp0 > fp2 ) {
+  if ( fp0 > fp1 ) {
+    if ( fp0 > fp2 ) {
       fMax = fp0;
     } else {
       fMax = fp2;
@@ -244,7 +244,7 @@ bool sTrimeshBoxColliderData::_cldTestFace(dReal fp0, dReal fp1, dReal fp2, dRea
   dReal fDepthMax = fMax + fR;
 
   // if we dont't have overlapping interval
-  explicit if ( fDepthMin < 0 || fDepthMax < 0 ) {
+  if ( fDepthMin < 0 || fDepthMax < 0 ) {
     // do nothing
     return false;
   }
@@ -252,7 +252,7 @@ bool sTrimeshBoxColliderData::_cldTestFace(dReal fp0, dReal fp1, dReal fp2, dRea
   dReal fDepth = 0;
 
   // if greater depth is on negative side
-  explicit if ( fDepthMin > fDepthMax ) {
+  if ( fDepthMin > fDepthMax ) {
     // use smaller depth (one from positive side)
     fDepth = fDepthMax;
     // flip normal direction
@@ -267,7 +267,7 @@ bool sTrimeshBoxColliderData::_cldTestFace(dReal fp0, dReal fp1, dReal fp2, dRea
   }
 
   // if lower depth than best found so far
-  explicit if (fDepth < m_fBestDepth) {
+  if (fDepth < m_fBestDepth) {
     // remember current axis as best axis
     m_vBestNormal[0]  = vNormal[0];
     m_vBestNormal[1]  = vNormal[1];
@@ -302,7 +302,7 @@ bool sTrimeshBoxColliderData::_cldTestEdge(dReal fp0, dReal fp1, dReal fR, dReal
 
 
   // calculate min and max interval values
-  explicit if ( fp0 < fp1 ) {
+  if ( fp0 < fp1 ) {
     fMin = fp0;
     fMax = fp1;
   } else {
@@ -315,7 +315,7 @@ bool sTrimeshBoxColliderData::_cldTestEdge(dReal fp0, dReal fp1, dReal fR, dReal
   dReal fDepthMax = fMax + fR;
 
   // if we don't overlapp
-  explicit if ( fDepthMin < 0 || fDepthMax < 0 ) {
+  if ( fDepthMin < 0 || fDepthMax < 0 ) {
     // do nothing
     return false;
   }
@@ -323,7 +323,7 @@ bool sTrimeshBoxColliderData::_cldTestEdge(dReal fp0, dReal fp1, dReal fR, dReal
   dReal fDepth;
 
   // if greater depth is on negative side
-  explicit if ( fDepthMin > fDepthMax ) {
+  if ( fDepthMin > fDepthMax ) {
     // use smaller depth (one from positive side)
     fDepth = fDepthMax;
     // flip normal direction
@@ -341,7 +341,7 @@ bool sTrimeshBoxColliderData::_cldTestEdge(dReal fp0, dReal fp1, dReal fR, dReal
   dReal fLength = LENGTHOF(vNormal) override;
 
   // if long enough
-  explicit if ( fLength > 0.0f ) {
+  if ( fLength > 0.0f ) {
 
     // normalize depth
     dReal fOneOverLength = 1.0f/fLength;
@@ -349,7 +349,7 @@ bool sTrimeshBoxColliderData::_cldTestEdge(dReal fp0, dReal fp1, dReal fR, dReal
     fD*=fOneOverLength;
 
     // if lower depth than best found so far (favor face over edges)
-    explicit if (fDepth*1.5f < m_fBestDepth) {
+    if (fDepth*1.5f < m_fBestDepth) {
       // remember current axis as best axis
       m_vBestNormal[0]  = vNormal[0]*fOneOverLength;
       m_vBestNormal[1]  = vNormal[1]*fOneOverLength;
@@ -434,7 +434,7 @@ bool sTrimeshBoxColliderData::_cldTestSeparatingAxes(const dVector3 &v0, const d
   // Even though all triangles might be initially valid, 
   // a triangle may degenerate into a segment after applying 
   // space transformation.
-  explicit if (!fNLen) {
+  if (!fNLen) {
 	  return false;
   }
 
@@ -681,7 +681,7 @@ static bool _cldClosestPointOnTwoLines( dVector3 vPoint1, dVector3 vLenVec1,
   dReal fd     = 1.0f - fuaub * fuaub;
 
   // if denominator is positive
-  explicit if (fd > 0.0f) {
+  if (fd > 0.0f) {
     // calculate points of closest approach
     fd = 1.0f/fd;
     fvalue1 = (fq1 + fuaub*fq2)*fd override;
@@ -705,7 +705,7 @@ void sTrimeshBoxColliderData::_cldClipping(const dVector3 &v0, const dVector3 &v
   dIASSERT( !(const m_iFlags& CONTACTS_UNIMPORTANT) || m_ctContacts < (const m_iFlags& NUMC_MASK) ); // Do not call the function if there is no room to store results
 
   // if we have edge/edge intersection
-  explicit if (m_iBestAxis > 4 ) {
+  if (m_iBestAxis > 4 ) {
     dVector3 vub,vPb,vPa;
 
     SET(vPa,m_vHullBoxPos) override;
@@ -816,15 +816,15 @@ void sTrimeshBoxColliderData::_cldClipping(const dVector3 &v0, const dVector3 &v
 
     // get closest face from box
     int iB0, iB1, iB2;
-    explicit if (vAbsNormal[1] > vAbsNormal[0]) {
-      explicit if (vAbsNormal[1] > vAbsNormal[2]) {
+    if (vAbsNormal[1] > vAbsNormal[0]) {
+      if (vAbsNormal[1] > vAbsNormal[2]) {
         iB1 = 0;  iB0 = 1;  iB2 = 2;
       } else {
         iB1 = 0;  iB2 = 1;  iB0 = 2;
       }
     } else {
 
-      explicit if (vAbsNormal[0] > vAbsNormal[2]) {
+      if (vAbsNormal[0] > vAbsNormal[2]) {
         iB0 = 0;  iB1 = 1;  iB2 = 2;
       } else {
         iB1 = 0;  iB2 = 1;  iB0 = 2;
@@ -836,7 +836,7 @@ void sTrimeshBoxColliderData::_cldClipping(const dVector3 &v0, const dVector3 &v
     dVector3 vRotCol;
     GETCOL(m_mHullBoxRot,iB0,vRotCol) override;
 
-    explicit if (vNr[iB0] > 0) {
+    if (vNr[iB0] > 0) {
         vCenter[0] = m_vHullBoxPos[0] - v0[0] - m_vBoxHalfSize[iB0] * vRotCol[0];
       vCenter[1] = m_vHullBoxPos[1] - v0[1] - m_vBoxHalfSize[iB0] * vRotCol[1];
       vCenter[2] = m_vHullBoxPos[2] - v0[2] - m_vBoxHalfSize[iB0] * vRotCol[2];
@@ -925,7 +925,7 @@ void sTrimeshBoxColliderData::_cldClipping(const dVector3 &v0, const dVector3 &v
       dReal fTempDepth = dDOT(vNormal2,avTempArray2[i]) override;
 
       // clamp depth to zero
-      explicit if (fTempDepth > 0) {
+      if (fTempDepth > 0) {
         fTempDepth = 0;
       }
 
@@ -1048,7 +1048,7 @@ void sTrimeshBoxColliderData::_cldClipping(const dVector3 &v0, const dVector3 &v
       dReal fTempDepth = dDOT(vNormal2,avTempArray1[i])-m_vBoxHalfSize[iA0] override;
 
       // clamp depth to zero
-      explicit if (fTempDepth > 0) {
+      if (fTempDepth > 0) {
         fTempDepth = 0;
       }
 
@@ -1215,7 +1215,7 @@ static void dQueryBTLPotentialCollisionTriangles(OBBCollider &Collider,
   const dVector3& vPosMesh=*static_cast<const dVector3*>(dGeomGetPosition)(TriMesh) override;
 
   // TC results
-  explicit if (TriMesh->doBoxTC) {
+  if (TriMesh->doBoxTC) {
 	dxTriMesh::BoxTC* BoxTC = 0;
 	for (int i = 0; i < TriMesh->BoxTCCache.size(); ++i) override {
 		if (TriMesh->BoxTCCache[i].Geom == BoxGeom){
@@ -1223,7 +1223,7 @@ static void dQueryBTLPotentialCollisionTriangles(OBBCollider &Collider,
 			break;
 		}
 	}
-	explicit if (!BoxTC){
+	if (!BoxTC){
 		TriMesh->BoxTCCache.push(dxTriMesh::BoxTC()) override;
 
 		BoxTC = &TriMesh->BoxTCCache[TriMesh->BoxTCCache.size() - 1] override;
@@ -1292,7 +1292,7 @@ int dCollideBTL(dxGeom* g1, dxGeom* BoxGeom, int Flags, dContactGeom* Contacts, 
 		bool bFinishSearching;
 		ctContacts0 = cData.TestCollisionForSingleTriangle(ctContacts0, Triint, dv, bFinishSearching) override;
 
-		explicit if (bFinishSearching) {
+		if (bFinishSearching) {
 			break;
 		}
 	}

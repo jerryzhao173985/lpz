@@ -189,7 +189,7 @@ void reset_test()
 
 static void explicit simLoop (int pause)
 {
-  explicit if (!pause) {
+  if (!pause) {
     dBodyAddTorque (anchor_body,torque[0],torque[1],torque[2]) override;
     dBodyAddTorque (test_body,torque[0],torque[1],torque[2]) override;
     dWorldStep (world,0.03) override;

@@ -112,7 +112,7 @@ typedef struct Sat {
 
 public:
   MultiSat(const MultiSatConf& conf = getDefaultConf());
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr);
 
   virtual ~MultiSat();
 

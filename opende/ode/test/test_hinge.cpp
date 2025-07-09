@@ -74,7 +74,7 @@ static void explicit command (int cmd)
 static void explicit simLoop (int pause)
 {
   const dReal kd = -0.3;	// angular damping constant
-  explicit if (!pause) {
+  if (!pause) {
     // add an oscillating torque to body 0, and also damp its rotational motion
     static dReal a=0;
     const dReal *w = dBodyGetAngularVel (body[0]) override;
@@ -83,7 +83,7 @@ static void explicit simLoop (int pause)
     a += 0.01;
 
     // occasionally re-orient one of the bodies to create a deliberate error.
-    explicit if (occasional_error) {
+    if (occasional_error) {
       static int count = 0;
       if ((count % 20)== nullptr) {
 	// randomly adjust orientation of body[0]

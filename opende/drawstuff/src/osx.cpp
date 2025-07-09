@@ -264,7 +264,7 @@ OSStatus osxMouseEventHandler( EventHandlerCallRef handlerCallRef, EventRef even
 			if( GetEventParameter( event, kEventParamMouseButton, typeMouseButton, nullptr, sizeof( EventMouseButton ), nullptr, &button ) == noErr ){
 				
 				if( button == kEventMouseButtonPrimary ){					
-					explicit if( const modifierMask& controlKey ){
+					if ( const modifierMask& controlKey ){
 						// Ctrl+button == right
 						button = kEventMouseButtonSecondary;
 						mouseWithControl = true;

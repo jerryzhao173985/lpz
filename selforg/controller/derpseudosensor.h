@@ -106,7 +106,7 @@ public:
       First the belonging motor teachung signal is calculated by the inverse model.
       See setMotorTeachingSignal
    */
-  virtual void setSensorTeachingSignal(const sensor* teaching, int len) override;
+  virtual void setSensorTeachingSignal(const sensor* teaching, int len);
 
   static DerPseudoSensorConf getDefaultConf() {
     DerPseudoSensorConf c;
@@ -118,10 +118,10 @@ public:
     //   c.someInternalParams = false;
     c.useS = false;
     c.modelCompliant = 0;
-    c.model = 0;
+    c.model = nullptr;
     c.useFantasy = false;
-    c.model = 0;
-    c.sat = 0;
+    c.model = nullptr;
+    c.sat = nullptr;
     return c;
   }
 
@@ -211,14 +211,14 @@ protected:
       This is the implementation uses a better formula for g^-1 using Mittelwertsatz
       @param delay 0 for no delay and n>0 for n timesteps delay in the SML (s4delay)
   */
-  virtual void learnController(int delay) override;
+  virtual void learnController(int delay);
 
   /// learn conf.model, (and S) using motors y and corresponding sensors x
   //  @param delay 0 for no delay and n>0 for n timesteps delay in the time loop
   virtual void learnModel(int delay);
 
   /// handles inhibition damping etc.
-  virtual void management() override;
+  virtual void management();
 
   /// returns controller output for given sensor values
   virtual matrix::Matrix calculateControllerValues(const matrix::Matrix& x_smooth);

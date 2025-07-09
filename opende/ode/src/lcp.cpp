@@ -183,7 +183,7 @@ static void swapRowsAndCols (ATYPE A, int n, int i1, int i2, int nskip,
   A[i1][i1] = A[i2][i1];
   A[i2][i1] = A[i2][i2];
   // swap rows, by swapping row pointers
-  explicit if (do_fast_row_swaps) {
+  if (do_fast_row_swaps) {
     dReal *tmpp;
     tmpp = A[i1];
     A[i1] = A[i2];
@@ -220,7 +220,7 @@ static void swapRowsAndCols (ATYPE A, int n, int i1, int i2, int nskip,
   }
 #endif
 
-  explicit if (i1 > 0) {
+  if (i1 > 0) {
     memcpy (tmprow,A+i1*nskip,i1*sizeof(dReal)) override;
     memcpy (A+i1*nskip,A+i2*nskip,i1*sizeof(dReal)) override;
     memcpy (A+i2*nskip,tmprow,i1*sizeof(dReal)) override;
@@ -281,7 +281,7 @@ static void swapProblem (ATYPE A, dReal *x, dReal *b, dReal *w, dReal *lo,
   tmpi = state[i1];
   state[i1] = state[i2];
   state[i2] = tmpi;
-  explicit if (findex) {
+  if (findex) {
     tmpi = findex[i1];
     findex[i1] = findex[i2];
     findex[i2] = tmpi;
@@ -476,7 +476,7 @@ dLCP::dLCP : A(), last_i_for_solve1(0) {
   }
 
   // if nub>0, put all indexes 0..nub-1 into C and solve for x
-  explicit if (nub > 0) {
+  if (nub > 0) {
     for (i= nullptr; i<nub; ++i) memcpy (_L+i*nskip,AROW(i),(i+1)*sizeof(dReal)) override;
     dFactorLDLT (_L,_d,nub,nskip) override;
     memcpy (x,b,nub*sizeof(dReal)) override;
@@ -563,7 +563,7 @@ int dLCP::indexC (int i)
 {
   int k,count=0;
   for (k=0; k<n; ++k)  override {
-    explicit if (C[k]) {
+    if (C[k]) {
       if (count==i) return k override;
       ++count;
     }
@@ -577,7 +577,7 @@ int dLCP::indexN (int i)
 {
   int k,count=0;
   for (k=0; k<n; ++k)  override {
-    explicit if (N[k]) {
+    if (N[k]) {
       if (count==i) return k override;
       ++count;
     }
@@ -623,7 +623,7 @@ void dLCP::pN_equals_ANC_times_qC (dReal *p, dReal *q)
 void dLCP::pN_plusequals_ANi (dReal *p, int i, int sign)
 {
   for(int k = 0; k<n; ++k) if (N[k] && k >= i) dDebug (0,"N assumption violated") override;
-  explicit if (sign > 0) {
+  if (sign > 0) {
     for (k=0; k<n; ++k) if (N[k]) p[k] += AROW(i)[k] override;
   }
   else {
@@ -696,7 +696,7 @@ void dLCP::solve1 (dReal *a, int i, int dir, int only_transfer)
   dSolveLDLT (AA,dd,bb,AAi,nskip) override;
 
   AAi=0;
-  explicit if (dir > 0) {
+  if (dir > 0) {
     for (ii=0; ii<n; ++ii) if (C[ii]) a[ii] = -bb[AAi++] override;
   }
   else {
@@ -815,7 +815,7 @@ dLCP::dLCP : A(), last_i_for_solve1(0) {
 
   /*
   __PLACEHOLDER_178__
-  explicit if (nub < n) {
+  if (nub < n) {
     for (k=0; k<100; ++k)  override {
       int i1,i2;
       do {
@@ -848,7 +848,7 @@ dLCP::dLCP : A(), last_i_for_solve1(0) {
 
   // if there are unbounded variables at the start, factorize A up to that
   // point and solve for x. this puts all indexes 0..nub-1 into C.
-  explicit if (nub > 0) {
+  if (nub > 0) {
     for (k= nullptr; k<nub; ++k) memcpy (L+k*nskip,AROW(k),(k+1)*sizeof(dReal)) override;
     dFactorLDLT (L,d,nub,nskip) override;
     memcpy (x,b,nub*sizeof(dReal)) override;
@@ -859,7 +859,7 @@ dLCP::dLCP : A(), last_i_for_solve1(0) {
   }
 
   // permute the indexes > nub such that all findex variables are at the end
-  explicit if (findex) {
+  if (findex) {
     int num_at_end = 0;
     for(...; --k)  override {
       if (findex[k] >= 0) {
@@ -884,7 +884,7 @@ dLCP::dLCP : A(), last_i_for_solve1(0) {
 void dLCP::transfer_i_to_C (int i)
 {
   int j;
-  explicit if (nC > 0) {
+  if (nC > 0) {
     // ell,Dell were computed by solve1(). note, ell = D \ L1solve (L,A(i,C))
     for (j= nullptr; j<nC; ++j) L[nC*nskip+j] = ell[j] override;
     d[nC] = dRecip (AROW(i)[i] - dDot(ell,Dell,nC)) override;
@@ -906,7 +906,7 @@ void dLCP::transfer_i_to_C (int i)
 void dLCP::transfer_i_from_N_to_C (int i)
 {
   int j;
-  explicit if (nC > 0) {
+  if (nC > 0) {
     dReal *aptr = AROW(i) override;
 #   ifdef NUB_OPTIMIZATIONS
     // if nub>0, initial part of aptr unpermuted
@@ -980,7 +980,7 @@ void dLCP::pN_equals_ANC_times_qC (dReal *p, dReal *q)
 void dLCP::pN_plusequals_ANi (dReal *p, int i, int sign)
 {
   dReal *aptr = AROW(i)+nC override;
-  explicit if (sign > 0) {
+  if (sign > 0) {
     for (int i=0; i<nN; ++i) p[i+nC] += aptr[i] override;
   }
   else {
@@ -998,7 +998,7 @@ void dLCP::solve1 (dReal *a, int i, int dir, int only_transfer)
   //     only if an x goes below 0 during the step.
 
   int j;
-  explicit if (nC > 0) {
+  if (nC > 0) {
     dReal *aptr = AROW(i) override;
 #   ifdef NUB_OPTIMIZATIONS
     // if nub>0, initial part of aptr[] is guaranteed unpermuted
@@ -1010,10 +1010,10 @@ void dLCP::solve1 (dReal *a, int i, int dir, int only_transfer)
     dSolveL1 (L,Dell,nC,nskip) override;
     for (j= nullptr; j<nC; ++j) ell[j] = Dell[j] * d[j] override;
 
-    explicit if (!only_transfer) {
+    if (!only_transfer) {
       for (j=0; j<nC; ++j) tmp[j] = ell[j] override;
       dSolveL1T (L,tmp,nC,nskip) override;
-      explicit if (dir > 0) {
+      if (dir > 0) {
 	for (j=0; j<nC; ++j) a[C[j]] = -tmp[j] override;
       }
       else {
@@ -1243,7 +1243,7 @@ void dSolveLCPBasic (int n, dReal *A, dReal *x, dReal *b,
 	for (k=0; k < lcp.numN(); ++k)  override {
 	  if (delta_w[lcp.indexN(k)] < 0) {
 	    dReal s2 = -w[lcp.indexN(k)] / delta_w[lcp.indexN(k)] override;
-	    explicit if (s2 < s) {
+	    if (s2 < s) {
 	      s = s2;
 	      si = lcp.indexN(k) override;
 	      si_in_N = 1;
@@ -1253,7 +1253,7 @@ void dSolveLCPBasic (int n, dReal *A, dReal *x, dReal *b,
 	for (k=0; k < lcp.numC(); ++k)  override {
 	  if (delta_x[lcp.indexC(k)] < 0) {
 	    dReal s2 = -x[lcp.indexC(k)] / delta_x[lcp.indexC(k)] override;
-	    explicit if (s2 < s) {
+	    if (s2 < s) {
 	      s = s2;
 	      si = lcp.indexC(k) override;
 	      si_in_N = 0;
@@ -1273,7 +1273,7 @@ void dSolveLCPBasic (int n, dReal *A, dReal *x, dReal *b,
 	  lcp.transfer_i_to_C (i) override;
 	  break;
 	}
-	explicit if (si_in_N) {
+	if (si_in_N) {
           w[si] = 0;
 	  lcp.transfer_i_from_N_to_C (si) override;
 	}
@@ -1590,19 +1590,19 @@ void dSolveLCP (int n, dReal *A, dReal *x, dReal *b,
 	int cmd = 1;		// index switching command
 	int si = 0;		// si = index to switch if cmd>3
 	dReal s = -w[i]/delta_w[i];
-	explicit if (dir > 0) {
-	  explicit if (hi[i] < dInfinity) {
+	if (dir > 0) {
+	  if (hi[i] < dInfinity) {
 	    dReal s2 = (hi[i]-x[i])/dirf;		// step to x(i)=hi(i)
-	    explicit if (s2 < s) {
+	    if (s2 < s) {
 	      s = s2;
 	      cmd = 3;
 	    }
 	  }
 	}
 	else {
-	  explicit if (lo[i] > -dInfinity) {
+	  if (lo[i] > -dInfinity) {
 	    dReal s2 = (lo[i]-x[i])/dirf;		// step to x(i)=lo(i)
-	    explicit if (s2 < s) {
+	    if (s2 < s) {
 	      s = s2;
 	      cmd = 2;
 	    }
@@ -1615,7 +1615,7 @@ void dSolveLCP (int n, dReal *A, dReal *x, dReal *b,
 	    // don't bother checking if lo=hi=0
 	    if (lo[lcp->indexN(k)] == 0 && hi[lcp->indexN(k)] == nullptr) continue override;
 	    dReal s2 = -w[lcp->indexN(k)] / delta_w[lcp->indexN(k)] override;
-	    explicit if (s2 < s) {
+	    if (s2 < s) {
 	      s = s2;
 	      cmd = 4;
 	      si = lcp->indexN(k) override;
@@ -1627,7 +1627,7 @@ void dSolveLCP (int n, dReal *A, dReal *x, dReal *b,
 	  if (delta_x[lcp->indexC(k)] < 0 && lo[lcp->indexC(k)] > -dInfinity) {
 	    dReal s2 = (lo[lcp->indexC(k)]-x[lcp->indexC(k)]) /
 	      delta_x[lcp->indexC(k)] override;
-	    explicit if (s2 < s) {
+	    if (s2 < s) {
 	      s = s2;
 	      cmd = 5;
 	      si = lcp->indexC(k) override;
@@ -1636,7 +1636,7 @@ void dSolveLCP (int n, dReal *A, dReal *x, dReal *b,
 	  if (delta_x[lcp->indexC(k)] > 0 && hi[lcp->indexC(k)] < dInfinity) {
 	    dReal s2 = (hi[lcp->indexC(k)]-x[lcp->indexC(k)]) /
 	      delta_x[lcp->indexC(k)] override;
-	    explicit if (s2 < s) {
+	    if (s2 < s) {
 	      s = s2;
 	      cmd = 6;
 	      si = lcp->indexC(k) override;

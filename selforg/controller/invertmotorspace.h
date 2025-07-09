@@ -89,7 +89,7 @@ protected:
   void fillBuffersAndControl(const sensor* x_, int number_sensors, motor* y_, int number_motors);
 
   /// learn h,C, delayed motors y and corresponding sensors x
-  virtual void learnController(const matrix::Matrix& x, const matrix::Matrix& x_smooth, int delay) override;
+  virtual void learnController(const matrix::Matrix& x, const matrix::Matrix& x_smooth, int delay) ;
 
   /// learn A, using motors y and corresponding sensors x
   virtual void learnModel(const matrix::Matrix& x, const matrix::Matrix& y);

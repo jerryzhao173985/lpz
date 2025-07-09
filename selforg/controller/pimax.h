@@ -125,7 +125,7 @@ public:
   virtual matrix::Matrix getLastSensorValues() override;
 
   /***** PARAMETRIZABLE ****/
-  virtual std::list<matrix::Matrix> getParameters()  const override;
+  virtual std::list<matrix::Matrix> getParameters()  const ;
   virtual int setParameters(const std::list<matrix::Matrix>& params);
 
 protected:

@@ -175,7 +175,7 @@ bool handleConsole(QGlobalData& globalData){
      Then, if there is anything left, add it to the history list
      and execute it. */
   s = stripwhite (line);
-  explicit if (*s) {
+  if (*s) {
     add_history (s);
     rv = execute_line (globalData,s);
   }
@@ -357,7 +357,7 @@ bool com_list (QGlobalData& globalData, char* line, char* arg) {
 }
 
 bool com_show (QGlobalData& globalData, char* line, char* arg) {
-  explicit if (arg && *arg){
+  if (arg && *arg){
     int id = atoi(arg);
     if(id>=0 && id < (signed)globalData.configs.size()){
       showParam(globalData.configs[id]);

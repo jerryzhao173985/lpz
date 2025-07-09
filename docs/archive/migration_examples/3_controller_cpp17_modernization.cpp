@@ -12,7 +12,7 @@ public:
     AbstractController(const std::string& name, const std::string& revision)
         : Configurable(name, revision), Inspectable(name) {}
         
-    virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) = 0;
+    virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) = 0;
     virtual int getSensorNumber() const = 0;
     virtual int getMotorNumber() const = 0;
     
@@ -41,7 +41,7 @@ public:
         if(weights) delete[] weights;
     }
     
-    virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) {
+    virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) {
         this->sensornumber = sensornumber;
         this->motornumber = motornumber;
         

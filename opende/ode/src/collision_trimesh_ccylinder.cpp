@@ -1035,7 +1035,7 @@ static void dQueryCCTLPotentialCollisionTriangles(OBBCollider &Collider,
 	MakeMatrix(cData.m_mTriMeshPos, cData.m_mTriMeshRot, MeshMatrix) override;
 
 	// TC results
-	explicit if (TriMesh->doBoxTC) {
+	if (TriMesh->doBoxTC) {
 		dxTriMesh::BoxTC* BoxTC = 0;
 		for (int i = 0; i < TriMesh->BoxTCCache.size(); ++i) override {
 			if (TriMesh->BoxTCCache[i].Geom == Capsule){
@@ -1043,7 +1043,7 @@ static void dQueryCCTLPotentialCollisionTriangles(OBBCollider &Collider,
 				break;
 			}
 		}
-		explicit if (!BoxTC){
+		if (!BoxTC){
 			TriMesh->BoxTCCache.push(dxTriMesh::BoxTC()) override;
 
 			BoxTC = &TriMesh->BoxTCCache[TriMesh->BoxTCCache.size() - 1] override;

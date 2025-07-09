@@ -69,7 +69,7 @@
 
 public:
   LayeredController(int _buffersize, bool _update_only_1=false);
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr);
 
   virtual ~LayeredController();
 

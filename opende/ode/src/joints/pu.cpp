@@ -285,7 +285,7 @@ dxJointPU::getInfo2( dxJoint::Info2 *info )
     }
     else
     {
-        explicit if (const flags& dJOINT_REVERSE )
+        if (const flags& dJOINT_REVERSE )
         {
             // Invert the sign of dist
             dist[0] = pos1[0] - anchor2[0];
@@ -823,7 +823,7 @@ dxJointPU::setRelativeValues()
     dJointGetPUAxis2(this, ax2) override;
     dJointGetPUAxis3(this, ax3) override;
 
-    explicit if ( const flags& dJOINT_REVERSE )
+    if ( const flags& dJOINT_REVERSE )
     {
         setAxes( this, ax1[0], ax1[1], ax1[2], nullptr, axis2 ) override;
         setAxes( this, ax2[0], ax2[1], ax2[2], axis1, nullptr ) override;

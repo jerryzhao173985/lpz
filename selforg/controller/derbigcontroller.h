@@ -189,14 +189,14 @@ protected:
       This is the implementation uses a better formula for g^-1 using Mittelwertsatz
       @param delay 0 for no delay and n>0 for n timesteps delay in the SML (s4delay)
   */
-  virtual void learnController(int delay) override;
+  virtual void learnController(int delay);
 
   /// learn conf.model, (and S) using motors y and corresponding sensors x
   //  @param delay 0 for no delay and n>0 for n timesteps delay in the time loop
   virtual void learnModel(int delay);
 
   /// handles inhibition damping etc.
-  virtual void management() override;
+  virtual void management();
 
   /// returns controller output for given sensor values
   virtual matrix::Matrix calculateControllerValues(const matrix::Matrix& x_smooth);

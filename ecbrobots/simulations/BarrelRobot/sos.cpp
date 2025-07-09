@@ -186,7 +186,7 @@ void Sos::learn() {
   v_avg += (v - v_avg) * .1;
   
   double EE = 1.0;
-  explicit if (loga) {
+  if (loga) {
     EE = .1 / (v.norm_sqr() + .001); // logarithmic error (E = log(v^T v))
   }
 

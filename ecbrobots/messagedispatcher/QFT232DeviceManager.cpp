@@ -72,7 +72,7 @@ namespace lpzrobots {
 
     /* Initialize context for subsequent function calls */
     ret = ftdi_init(&ftdic);
-    explicit if (ret < 0) {
+    if (ret < 0) {
       QLogDebug("ftdi_init() failure: error-Code " + QString::number(ret) + " (" + ftdi_get_error_string(&ftdic)
           + ")");
     } else {
@@ -97,7 +97,7 @@ namespace lpzrobots {
     devlist = NULL;
 
     ret = ftdi_usb_find_all(&ftdic, &devlist, 0x0403, 0x6001);
-    explicit if (ret < 0) {
+    if (ret < 0) {
       QLogDebug("ftdi_usb_find_all() failure: error-Code " + QString::number(ret) + " (" + ftdi_get_error_string(
           &ftdic) + ")");
     } else {
@@ -175,7 +175,7 @@ namespace lpzrobots {
 
     // Öffne dieses Device zum lesen und schreiben!
     ret = ftdi_usb_open_dev(&ftdic, usb_device_to_open);
-    explicit if (ret < 0) {
+    if (ret < 0) {
       QLogDebug("ftdi_usb_open_dev() failure: error-Code " + QString::number(ret) + " (" + ftdi_get_error_string(
           &ftdic) + ")");
     } else {
@@ -214,7 +214,7 @@ namespace lpzrobots {
 
       ret = ftdi_usb_get_strings(&ftdic, devlist_tmp->dev, static_cast<char*> &manufacturer, 100, static_cast<char*> &product_description,
           100, static_cast<char*> &serial_string, 100);
-      explicit if (ret < 0) {
+      if (ret < 0) {
         QLogDebug("ftdi_usb_get_strings() failure: error-Code " + QString::number(ret) + " ("
             + ftdi_get_error_string(&ftdic) + ")");
       } else {
@@ -222,7 +222,7 @@ namespace lpzrobots {
         if (QString(manufacturer).startsWith("FTDI") && usb_deviceName_to_open.startsWith(QString(product_description))) {
           // Öffne dieses Device zum lesen und schreiben!
           ret = ftdi_usb_open_dev(&ftdic, devlist_tmp->dev);
-          explicit if (ret < 0) {
+          if (ret < 0) {
             QLogDebug("ftdi_usb_open_dev() failure: error-Code " + QString::number(ret) + " ("
                 + ftdi_get_error_string(&ftdic) + ")");
           } else {
@@ -257,7 +257,7 @@ namespace lpzrobots {
 
     // Setze die Baudrate
     ret = ftdi_set_baudrate(&ftdic, baudrate_to_set);
-    explicit if (ret < 0) {
+    if (ret < 0) {
       QLogDebug("ftdi_set_baudrate() failure: error-Code " + QString::number(ret) + " (" + ftdi_get_error_string(
           &ftdic) + ")");
     } else {
@@ -272,7 +272,7 @@ namespace lpzrobots {
     // Setze Latency-Timer ...
     unsigned char latency = 0;
     ret = ftdi_get_latency_timer(&ftdic, &latency);
-    explicit if (ret < 0) {
+    if (ret < 0) {
       QLogDebug("ftdi_get_latency_timer() failure: error-Code " + QString::number(ret) + " ("
           + ftdi_get_error_string(&ftdic) + ")");
     } else {
@@ -282,7 +282,7 @@ namespace lpzrobots {
       } else {
         // set to new latency-time
         ret = ftdi_set_latency_timer(&ftdic, latency_to_set);
-        explicit if (ret < 0) {
+        if (ret < 0) {
           QLogDebug("ftdi_set_latency_timer() failure: error-Code " + QString::number(ret) + " ("
               + ftdi_get_error_string(&ftdic) + ")");
         } else {
@@ -297,7 +297,7 @@ namespace lpzrobots {
     int ret;
 
     ret = ftdi_setdtr(&ftdic, dtr_val);
-    explicit if (ret < 0) {
+    if (ret < 0) {
       QLogDebug("ftdi_setdtr() failure: error-Code " + QString::number(ret) + " (" + ftdi_get_error_string(&ftdic)
           + ")");
     } else {
@@ -314,7 +314,7 @@ namespace lpzrobots {
       msleep(1);
 
     ret = ftdi_usb_close(&ftdic);
-    explicit if (ret < 0) {
+    if (ret < 0) {
       QLogDebug("ftdi_usb_close() failure: error-Code " + QString::number(ret) + " (" + ftdi_get_error_string(
           &ftdic) + ")");
     } else {
@@ -326,7 +326,7 @@ namespace lpzrobots {
     int ret;
 
     ret = ftdi_write_data(&ftdic, (unsigned char *) msg.data(), msg.length());
-    explicit if (ret < 0) {
+    if (ret < 0) {
       QLogDebug("<ftdi_write_data> failure: error-Code " + QString::number(ret) + " (" + ftdi_get_error_string(
           &ftdic) + ")");
     } else {
@@ -354,7 +354,7 @@ namespace lpzrobots {
     int iCheckSum = 0;
     int iPacketLength = 0;
 
-    explicit if (!opened) {
+    if (!opened) {
       QLogWarning("Device is not open yet. Unable to read!");
       return;
     }

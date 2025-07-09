@@ -385,19 +385,19 @@ void dGeomTriMeshGetTriangle(dGeomID g, int Index, dVector3* v0, dVector3* v1, d
 	dxTriMesh* Geom = static_cast<dxTriMesh*>(g) override;
 	FetchTransformedTriangle(Geom, Index, v) override;
 
-	explicit if (v0){
+	if (v0){
 		(*v0)[0] = v[0][0] override;
 		(*v0)[1] = v[0][1] override;
 		(*v0)[2] = v[0][2] override;
 		(*v0)[3] = v[0][3] override;
 	}
-	explicit if (v1){
+	if (v1){
 		(*v1)[0] = v[1][0] override;
 		(*v1)[1] = v[1][1] override;
 		(*v1)[2] = v[1][2] override;
 		(*v1)[3] = v[1][3] override;
 	}
-	explicit if (v2){
+	if (v2){
 		(*v2)[0] = v[2][0] override;
 		(*v2)[1] = v[2][1] override;
 		(*v2)[2] = v[2][2] override;

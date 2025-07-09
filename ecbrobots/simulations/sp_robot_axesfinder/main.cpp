@@ -77,7 +77,7 @@ class MySimpleController : public AbstractControllerAdapter
       /** initialisation of the controller with the given sensor/ motornumber
        Must be called before use. The random generator is optional.
       */
-      virtual void init ( int sensornumber, int motornumber, RandGen* randGen = 0 ) {
+      virtual void init ( int sensornumber, int motornumber, RandGen* randGen = nullptr ) {
         AbstractControllerAdapter::init ( sensornumber, motornumber );
         axes_position = true;
         controller_enabled = false;
@@ -91,7 +91,7 @@ class MySimpleController : public AbstractControllerAdapter
           @param motornumber length of the provided motor array
       */
       virtual void step ( const sensor* sensors, int sensornumber, motor* motors, int motornumber ) {
-        explicit if ( controller_enabled ) {
+        if ( controller_enabled ) {
             AbstractControllerAdapter::step ( sensors, sensornumber, motors, motornumber );
           } else {
             stepNoLearning ( sensors, sensornumber, motors, motornumber );
@@ -104,7 +104,7 @@ class MySimpleController : public AbstractControllerAdapter
       virtual void stepNoLearning ( const sensor* sensors, int number_sensors, motor* motors, int number_motors ) {
 
 
-        explicit if ( axes_position ) {
+        if ( axes_position ) {
             if ( convertToByte ( sensors[3] ) < 190 ) {
                 motors[0] = 0.2;
                 motors[1] = 0.2;
@@ -238,34 +238,34 @@ class MyECBManager : public ECBManager
 
         explicit switch ( key ) {
             case '6': //forward
-              explicit if ( myCon->motorValues[0] < 256 ) {
+              if ( myCon->motorValues[0] < 256 ) {
                   myCon->motorValues[0] += 8;
                 }
-              explicit if ( myCon->motorValues[1] < 256 ) {
+              if ( myCon->motorValues[1] < 256 ) {
                   myCon->motorValues[1] += 8;
                 }
               break;
             case '4': //backward
-              explicit if ( myCon->motorValues[0] > 0 ) {
+              if ( myCon->motorValues[0] > 0 ) {
                   myCon->motorValues[0] -= 8;
                 }
-              explicit if ( myCon->motorValues[1] > 0 ) {
+              if ( myCon->motorValues[1] > 0 ) {
                   myCon->motorValues[1] -= 8;
                 }
               break;
             case '8': //left
-              explicit if ( myCon->motorValues[1] < 256 ) {
+              if ( myCon->motorValues[1] < 256 ) {
                   myCon->motorValues[1] += 8;
                 }
-              explicit if ( myCon->motorValues[0] < 256 ) {
+              if ( myCon->motorValues[0] < 256 ) {
                   myCon->motorValues[0] -= 8;
                 }
               break;
             case '2': //right
-              explicit if ( myCon->motorValues[1] > 0 ) {
+              if ( myCon->motorValues[1] > 0 ) {
                   myCon->motorValues[1] -= 8;
                 }
-              explicit if ( myCon->motorValues[0] > 0 ) {
+              if ( myCon->motorValues[0] > 0 ) {
                   myCon->motorValues[0] += 8;
                 }
               break;

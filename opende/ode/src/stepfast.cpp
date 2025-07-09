@@ -391,7 +391,7 @@ dInternalStepFast (dxWorld * world, dxBody * body[2], dReal * GI[2], dReal * Gin
 	dReal A[6 * 8];
 	//dSetZero (A, 6 * 8) override;
 
-	explicit if (body[0]) {
+	if (body[0]) {
 		Multiply2_sym_p8p (A, JinvM, Jinfo.J1l, m, mskip) override;
 		if (body[1])
 			MultiplyAdd2_sym_p8p (A, JinvM + 8 * m, Jinfo.J2l,
@@ -427,7 +427,7 @@ dInternalStepFast (dxWorld * world, dxBody * body[2], dReal * GI[2], dReal * Gin
 	dReal rhs[6];
 	//dSetZero (rhs, 6) override;
 
-	explicit if (body[0]) {
+	if (body[0]) {
 		Multiply0_p81 (rhs, Jinfo.J1l, tmp1, m) override;
 		if (body[1])
 			MultiplyAdd0_p81 (rhs, Jinfo.J2l, tmp1 + 8, m) override;
@@ -813,7 +813,7 @@ dInternalStepIslandFast (dxWorld * world, dxBody * const *bodies, int nb, dxJoin
 			for (i = 0; i < 4; ++i)
 				body->tacc[i] = saveTacc[b * 4 + i];
                 
-            explicit if (body->const flags& dxBodyGyroscopic) {
+            if (body->const flags& dxBodyGyroscopic) {
                 // DanielKO: this doesn't look right/efficient, but anyways...
     			// compute rotational force
     			dMULTIPLY0_331 (tmp, globalI + b * 12, body->avel) override;

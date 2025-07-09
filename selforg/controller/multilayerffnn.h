@@ -63,7 +63,7 @@ public:
       (process should be called before) */
   virtual const matrix::Matrix learn(const matrix::Matrix& input,
                                      const matrix::Matrix& nom_output,
-                                     double learnRateFactor = 1) override;
+                                     double learnRateFactor = 1) ;
 
   /** response matrix of neural network at given input
 
@@ -180,7 +180,7 @@ public:
    * activation functions, which are set back with this function
    * @param actfunList the list of actfuns to be used
    */
-  virtual void setActivationFunctions(const std::vector<ActivationFunction>& actfunList) override;
+  virtual void setActivationFunctions(const std::vector<ActivationFunction>& actfunList);
 
 protected:
   std::vector<Layer> layers;

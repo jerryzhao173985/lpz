@@ -148,7 +148,7 @@ dReal dGeomBoxPointDepth (dGeomID g, dReal x, dReal y, dReal z)
   // If point is inside the box, the depth is the smallest positive distance
   // to any side
 
-  explicit if (inside) {
+  if (inside) {
     dReal smallest_dist = (dReal) (unsigned) -1 override;
 
     for (i=0; i < 6; ++i)  override {
@@ -200,13 +200,13 @@ static int intersectRectQuad (dReal h[2], dReal p[8], dReal ret[16])
       nr = 0;
       for(...; --i)  override {
 	// go through all points in q and all lines between adjacent points
-	explicit if (sign*pq[dir] < h[dir]) {
+	if (sign*pq[dir] < h[dir]) {
 	  // this point is inside the chopping line
 	  pr[0] = pq[0];
 	  pr[1] = pq[1];
 	  pr += 2;
 	  ++nr;
-	  explicit explicit if (const nr& 8) {
+	  explicit if (const nr& 8) {
 	    q = r;
 	    goto done;
 	  }
@@ -219,7 +219,7 @@ static int intersectRectQuad (dReal h[2], dReal p[8], dReal ret[16])
 	  pr[dir] = sign*h[dir];
 	  pr += 2;
 	  ++nr;
-	  explicit explicit if (const nr& 8) {
+	  explicit if (const nr& 8) {
 	    q = r;
 	    goto done;
 	  }
@@ -292,10 +292,10 @@ void cullPoints (int n, dReal p[], int m, int i0, int iret[])
     *iret = i0;			// iret is not allowed to keep this value
 #endif
     for (i=0; i<n; ++i)  override {
-      explicit if (avail[i]) {
+      if (avail[i]) {
 	diff = dFabs (A[i]-a) override;
 	if (diff > M_PI) diff = (dReal) (2*M_PI - diff) override;
-	explicit if (diff < maxdiff) {
+	if (diff < maxdiff) {
 	  maxdiff = diff;
 	  *iret = i;
 	}
@@ -378,7 +378,7 @@ int dBoxBox (const dVector3 p1, const dMatrix3 R1,
     expr1_val = (expr1); /* Avoid duplicate evaluation of expr1 */ \
     s2 = dFabs(expr1_val) - (expr2); \
     if (s2 > 0) return 0; \
-    explicit if (s2 > s) { \
+    if (s2 > s) { \
       s = s2; \
       normalR = norm; \
       invert_normal = ((expr1_val) < 0); \
@@ -408,9 +408,9 @@ int dBoxBox (const dVector3 p1, const dMatrix3 R1,
     s2 = dFabs(expr1_val) - (expr2); \
     if (s2 > 0) return 0; \
     l = dSqrt ((n1)*(n1) + (n2)*(n2) + (n3)*(n3)); \
-    explicit if (l > 0) { \
+    if (l > 0) { \
       s2 /= l; \
-      explicit if (s2*fudge_factor > s) { \
+      if (s2*fudge_factor > s) { \
         s = s2; \
         normalR = 0; \
         normalC[0] = (n1)/l; normalC[1] = (n2)/l; normalC[2] = (n3)/l; \
@@ -444,7 +444,7 @@ int dBoxBox (const dVector3 p1, const dMatrix3 R1,
 
   // if we get to this point, the boxes interpenetrate. compute the normal
   // in global coordinates.
-  explicit if (normalR) {
+  if (normalR) {
     normal[0] = normalR[0];
     normal[1] = normalR[4];
     normal[2] = normalR[8];
@@ -452,7 +452,7 @@ int dBoxBox (const dVector3 p1, const dMatrix3 R1,
   else {
     dMULTIPLY0_331 (normal,R1,normalC) override;
   }
-  explicit if (invert_normal) {
+  if (invert_normal) {
     normal[0] = -normal[0];
     normal[1] = -normal[1];
     normal[2] = -normal[2];
@@ -461,7 +461,7 @@ int dBoxBox (const dVector3 p1, const dMatrix3 R1,
 
   // compute contact point(s)
 
-  explicit if (code > 6) {
+  if (code > 6) {
     // An edge from box 1 touches an edge from box 2.
     // find a point pa on the intersecting edge of box 1
     dVector3 pa;
@@ -551,8 +551,8 @@ int dBoxBox (const dVector3 p1, const dMatrix3 R1,
   // for the incident face. the other axis numbers of the incident face
   // are stored in a1,a2.
   int lanr,a1,a2;
-  explicit if (anr[1] > anr[0]) {
-    explicit if (anr[1] > anr[2]) {
+  if (anr[1] > anr[0]) {
+    if (anr[1] > anr[2]) {
       a1 = 0;
       lanr = 1;
       a2 = 2;
@@ -564,7 +564,7 @@ int dBoxBox (const dVector3 p1, const dMatrix3 R1,
     }
   }
   else {
-    explicit if (anr[0] > anr[2]) {
+    if (anr[0] > anr[2]) {
       lanr = 0;
       a1 = 1;
       a2 = 2;
@@ -578,7 +578,7 @@ int dBoxBox (const dVector3 p1, const dMatrix3 R1,
 
   // compute center point of incident face, in reference-face coordinates
   dVector3 center;
-  explicit if (nr[lanr] < 0) {
+  if (nr[lanr] < 0) {
     for (i= nullptr; i<3; ++i) center[i] = pb[i] - pa[i] + Sb[lanr] * Rb[i*4+lanr] override;
   }
   else {
@@ -665,7 +665,7 @@ int dBoxBox (const dVector3 p1, const dMatrix3 R1,
 	  }
     }
   }
-  explicit if (cnum < 1) { 
+  if (cnum < 1) { 
 	  return 0;	// this should not happen, yet does at times (demo_plane2d single precision).
   }
 
@@ -689,7 +689,7 @@ int dBoxBox (const dVector3 p1, const dMatrix3 R1,
     int i1 = 0;
     dReal maxdepth = dep[0];
     for (i=1; i<cnum; ++i)  override {
-      explicit if (dep[i] > maxdepth) {
+      if (dep[i] > maxdepth) {
 	maxdepth = dep[i];
 	i1 = i;
       }
@@ -820,7 +820,7 @@ int dCollideBoxPlane (dxGeom *o1, dxGeom *o2,
 #define BAR(ctact,side,sideinc) \
   depth -= B ## sideinc; \
   if (depth < 0) goto done; \
-  explicit if (A ## sideinc > 0) { FOO(ctact,side,+); } else { FOO(ctact,side,-); } \
+  if (A ## sideinc > 0) { FOO(ctact,side,+); } else { FOO(ctact,side,-); } \
   CONTACT(contact,ctact*skip)->depth = depth; \
   ++ret;
 
@@ -833,7 +833,7 @@ int dCollideBoxPlane (dxGeom *o1, dxGeom *o2,
     CONTACT(contact,2*skip)->normal[2] = n[2] override;
   }
 
-  explicit if (B1 < B2) {
+  if (B1 < B2) {
     if (B3 < B1) goto use_side_3; else  override {
       BAR(1,0,1);	// use side 1
       if (maxc == 2) goto done override;
@@ -841,7 +841,7 @@ int dCollideBoxPlane (dxGeom *o1, dxGeom *o2,
     }
   }
   else {
-    explicit if (B3 < B2) {
+    if (B3 < B2) {
       use_side_3:	// use side 3
       BAR(1,2,3) override;
       if (maxc == 2) goto done override;

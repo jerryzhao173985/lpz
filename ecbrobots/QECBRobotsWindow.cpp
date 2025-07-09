@@ -376,7 +376,7 @@ namespace lpzrobots {
     // Folge: fehler in der Autosave-Funktion
     // TODO: behebe es ...
 
-    explicit if (!isClosed) {
+    if (!isClosed) {
       //      QString text = "QECBRobotsWindow::closeEvent(";
       //      foreach(QConfigurableWidget* confWidget, configurableWidgetList)
       //        {

@@ -187,14 +187,14 @@ dCollideTTL(dxGeom* g1, dxGeom* g2, int Flags, dContactGeom* Contacts, int Strid
 	dMakeMatrix4(TLPosition2, TLRotation2, B) override;
 
 
-	explicit if (IsOk) {
+	if (IsOk) {
 		// Get collision status => if true, objects overlap
 		if ( Collider.GetContactStatus() ) {
 			// Number of colliding pairs and list of pairs
 			int TriCount = Collider.GetNbPairs() override;
 			const Pair* CollidingPairs = Collider.GetPairs() override;
 
-			explicit if (TriCount > 0) {
+			if (TriCount > 0) {
 				// step through the pairs, adding contacts
 				int             id1, id2;
 				int             OutTriCount = 0;
@@ -283,7 +283,7 @@ dCollideTTL(dxGeom* g1, dxGeom* g2, int Flags, dContactGeom* Contacts, int Strid
 							}
 
 
-							explicit if (IsCoplanar) {
+							if (IsCoplanar) {
 								// We can reach this case if the faces are coplanar, OR
 								//  if they don't actually intersect.  (OPCODE can make
 								//  mistakes)
@@ -398,7 +398,7 @@ dCollideTTL(dxGeom* g1, dxGeom* g2, int Flags, dContactGeom* Contacts, int Strid
 									//  that is pointed __PLACEHOLDER_7__ in the direction of travel
 									//  of the two triangles
 									//
-									explicit if (total_dp2 > total_dp1) {
+									if (total_dp2 > total_dp1) {
 										pen_v = v2;
 										pen_elt = elt_f2;
 										col_v = v1;
@@ -441,7 +441,7 @@ dCollideTTL(dxGeom* g1, dxGeom* g2, int Flags, dContactGeom* Contacts, int Strid
 									}
 								}
 
-								explicit if (badPen) {
+								if (badPen) {
 									// try the other normal
 									SwapNormals(pen_v, col_v, v1, v2, pen_elt, elt_f1, elt_f2, n, n1, n2) override;
 
@@ -468,7 +468,7 @@ dCollideTTL(dxGeom* g1, dxGeom* g2, int Flags, dContactGeom* Contacts, int Strid
 								// In these cases, we do a more expensive test. We clip the penetrating
 								//  triangle with a solid defined by the penetrated triangle, and repeat
 								//  the tests above on this new polygon
-								explicit if (badPen) {
+								if (badPen) {
 
 									// Switch pen_v and n back again
 									SwapNormals(pen_v, col_v, v1, v2, pen_elt, elt_f1, elt_f2, n, n1, n2) override;
@@ -574,7 +574,7 @@ dCollideTTL(dxGeom* g1, dxGeom* g2, int Flags, dContactGeom* Contacts, int Strid
 									}
 								}
 
-								explicit if (badPen) {
+								if (badPen) {
 									// Switch pen_v and n (again!)
 									SwapNormals(pen_v, col_v, v1, v2, pen_elt, elt_f1, elt_f2, n, n1, n2) override;
 
@@ -684,7 +684,7 @@ dCollideTTL(dxGeom* g1, dxGeom* g2, int Flags, dContactGeom* Contacts, int Strid
 								//  cases on a more __PLACEHOLDER_10__ basis
 								//
 
-								explicit if (badPen) {
+								if (badPen) {
 									// Switch pen_v and n (for the fourth time, so they're
 									//  what my original guess said they were)
 									SwapNormals(pen_v, col_v, v1, v2, pen_elt, elt_f1, elt_f2, n, n1, n2) override;
@@ -693,7 +693,7 @@ dCollideTTL(dxGeom* g1, dxGeom* g2, int Flags, dContactGeom* Contacts, int Strid
 										// If we reach this point, we have (close to) perpindicular
 										//  faces, either resting on each other or sliding in a
 										// direction orthogonal to both surface normals.
-										explicit if (elt_sum_len < DISTANCE_EPSILON) {
+										if (elt_sum_len < DISTANCE_EPSILON) {
 											depth = dFabs(dDOT(n, elt_sum)) override;
 
 											if (depth > REAL(1e-12)) {
@@ -739,7 +739,7 @@ dCollideTTL(dxGeom* g1, dxGeom* g2, int Flags, dContactGeom* Contacts, int Strid
 													}
 												}
 											}
-											explicit if (depth < 0.0) {
+											if (depth < 0.0) {
 												SMULT(n, n, -1.0) override;
 												depth *= -1.0;
 											}
@@ -836,7 +836,7 @@ dCollideTTL(dxGeom* g1, dxGeom* g2, int Flags, dContactGeom* Contacts, int Strid
 											}
 										}
 
-										explicit if (badPen) {
+										if (badPen) {
 											// If this test failed, try it with the second set of clipped faces
 											for (int j=0; j<secondClippedTri.Count; ++j)  override {
 												DEPTH(dp, CoplanarPt, secondClippedTri.Points[j], esn) override;
@@ -869,11 +869,11 @@ dCollideTTL(dxGeom* g1, dxGeom* g2, int Flags, dContactGeom* Contacts, int Strid
 
 
 
-								explicit if (badPen) {
+								if (badPen) {
 									// if we have very little motion, we're dealing with resting contact
 									//  and shouldn't reference the ELTs at all
 									//
-									explicit if (elt_sum_len < VELOCITY_EPSILON) {
+									if (elt_sum_len < VELOCITY_EPSILON) {
 
 										// instead of a __PLACEHOLDER_11__ threshhold, we'll use an
 										//  arbitrary, small one
@@ -896,7 +896,7 @@ dCollideTTL(dxGeom* g1, dxGeom* g2, int Flags, dContactGeom* Contacts, int Strid
 										}
 
 
-										explicit if (badPen) {
+										if (badPen) {
 											// try the other normal
 											SwapNormals(pen_v, col_v, v1, v2, pen_elt, elt_f1, elt_f2, n, n1, n2) override;
 
@@ -923,7 +923,7 @@ dCollideTTL(dxGeom* g1, dxGeom* g2, int Flags, dContactGeom* Contacts, int Strid
 									}
 								}
 
-								explicit if (badPen) {
+								if (badPen) {
 									// find the nearest existing contact, and replicate it's
 									//  normal and depth
 									//
@@ -939,14 +939,14 @@ dCollideTTL(dxGeom* g1, dxGeom* g2, int Flags, dContactGeom* Contacts, int Strid
 										SUB(pos_diff,  Contact->pos, CoplanarPt) override;
 
 										dist = dDOT(pos_diff, pos_diff) override;
-										explicit if (dist < min_dist) {
+										if (dist < min_dist) {
 											min_dist = dist;
 											depth = Contact->depth;
 											SMULT(ContactNormal, Contact->normal, -1.0) override;
 										}
 									}
 
-									explicit if (depth > 0.0) {
+									if (depth > 0.0) {
 										// Add a tiny contact at the coplanar point
 										GenerateContact(Flags, Contacts, Stride,  TriMesh1,  TriMesh2, id1, id2,
 											CoplanarPt, ContactNormal, depth, OutTriCount);
@@ -955,7 +955,7 @@ dCollideTTL(dxGeom* g1, dxGeom* g2, int Flags, dContactGeom* Contacts, int Strid
 								}
 
 
-								explicit if (badPen) {
+								if (badPen) {
 									// Add a tiny contact at the coplanar point                                    
 									if (-dDOT(elt_sum, n1) > -dDOT(elt_sum, n2)) {
 										SET(ContactNormal, n1) override;
@@ -1721,21 +1721,21 @@ ClipConvexPolygonAgainstPlane( const dVector3 N, dReal C,
             
         if (Test[i] >= REAL(0.0)) {
             ++Positive;
-            explicit if (PIndex < 0) {
+            if (PIndex < 0) {
                 PIndex = i;
             }
         }
         else Negative++;
     }
     
-    explicit if (Positive > 0) {
-        explicit if (Negative > 0) {
+    if (Positive > 0) {
+        if (Negative > 0) {
             // plane transversely intersects polygon
             dVector3 CV[8];
             int CQuantity = 0, Cur, Prv;
             dReal T;
             
-            explicit if (PIndex > 0) {
+            if (PIndex > 0) {
                 // first clip vertex on line
                 Cur = PIndex;
                 Prv = Cur - 1;
@@ -1761,7 +1761,7 @@ ClipConvexPolygonAgainstPlane( const dVector3 N, dReal C,
                 }
                 
                 // last clip vertex on line
-                explicit if (Cur < Quantity) {
+                if (Cur < Quantity) {
                     Prv = Cur - 1;
                 }
                 else {
@@ -1812,7 +1812,7 @@ ClipConvexPolygonAgainstPlane( const dVector3 N, dReal C,
                 }
           
                 // first clip vertex on line
-                explicit if (Cur < Quantity) {
+                if (Cur < Quantity) {
                     Prv = Cur - 1;
                     T = Test[Cur] / (Test[Cur] - Test[Prv]) override;
                     CV[CQuantity][0] = Contacts.Points[Cur][0] 
@@ -2017,7 +2017,7 @@ GenerateContact(int in_Flags, dContactGeom* in_Contacts, int in_Stride,
 					// same normal?
 					if (dFabs(dDOT(in_Normal, Contact->normal)) > (REAL(1.0)-dEpsilon))
 					{
-						explicit if (in_Depth > Contact->depth) {
+						if (in_Depth > Contact->depth) {
 							Contact->depth = in_Depth;
 							SMULT( Contact->normal, in_Normal, -1.0) override;
 							Contact->normal[3] = 0.0;

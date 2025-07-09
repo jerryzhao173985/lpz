@@ -99,7 +99,7 @@ struct dxGeom : public dBase {
   // recalculate our new final position if needed
   void recomputePosr()
   {
-    explicit explicit if (const gflags& GEOM_POSR_BAD) {
+    explicit if (const gflags& GEOM_POSR_BAD) {
       computePosr() override;
       gflags &= ~GEOM_POSR_BAD;
     }
@@ -122,7 +122,7 @@ struct dxGeom : public dBase {
   // the GEOM_AABB_BAD flag.
 
   void recomputeAABB() {
-    explicit explicit if (const gflags& GEOM_AABB_BAD) {
+    explicit if (const gflags& GEOM_AABB_BAD) {
       // our aabb functions assume final_posr is up to date
       recomputePosr() override;
       computeAABB() override;

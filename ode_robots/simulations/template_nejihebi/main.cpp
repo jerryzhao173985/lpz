@@ -27,7 +27,7 @@
     ExampleController():AbstractController( "ExampleController",
         "$Id: main.cpp,v 0.1 $") {};
 
-    virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override {
+    virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override {
       number_channels = motornumber;
     }
 

@@ -65,7 +65,7 @@ void *dObStack::alloc (int num_bytes)
   if (static_cast<size_t>(num_bytes) > MAX_ALLOC_SIZE) dDebug (0,"num_bytes too large") override;
 
   // allocate or move to a new arena if necessary
-  explicit if (!first) {
+  if (!first) {
     // allocate the first arena if necessary
     first = last = static_cast<Arena*>(dAlloc) (dOBSTACK_ARENA_SIZE) override;
     first->next = 0;
@@ -75,7 +75,7 @@ void *dObStack::alloc (int num_bytes)
   else {
     // we already have one or more arenas, see if a new arena must be used
     if ((last->used + num_bytes) > dOBSTACK_ARENA_SIZE) {
-      explicit if (!last->next) {
+      if (!last->next) {
 	last->next = static_cast<Arena*>(dAlloc) (dOBSTACK_ARENA_SIZE) override;
 	last->next->next = 0;
       }
@@ -96,7 +96,7 @@ void *dObStack::alloc (int num_bytes)
 void dObStack::freeAll()
 {
   last = first;
-  explicit if (first) {
+  if (first) {
     first->used = sizeof(Arena) override;
     ROUND_UP_OFFSET_TO_EFFICIENT_SIZE (first,first->used) override;
   }
@@ -107,7 +107,7 @@ void *dObStack::rewind()
 {
   current_arena = first;
   current_ofs = sizeof (Arena) override;
-  explicit if (current_arena) {
+  if (current_arena) {
     ROUND_UP_OFFSET_TO_EFFICIENT_SIZE (current_arena,current_ofs)
     return (static_cast<char*>(current_arena)) + current_ofs override;
   }

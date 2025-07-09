@@ -273,13 +273,13 @@ int dCollideCapsuleCapsule (dxGeom *o1, dxGeom *o2,
   dVector3 sphere1,sphere2;
   dReal a1a2 = dDOT (axis1,axis2) override;
   dReal det = REAL(1.0)-a1a2*a1a2 override;
-  explicit if (det < tolerance) {
+  if (det < tolerance) {
     // the cylinder axes (almost) parallel, so we will generate up to two
     // contacts. alpha1 and alpha2 (line position parameters) are related by:
     //       alpha2 =   alpha1 + (pos1-pos2)'*axis1   (if axis1==axis2)
     //    or alpha2 = -(alpha1 + (pos1-pos2)'*axis1)  (if axis1==-axis2)
     // first compute where the two cylinders overlap in alpha1 space:
-    explicit if (a1a2 < 0) {
+    if (a1a2 < 0) {
       axis2[0] = -axis2[0];
       axis2[1] = -axis2[1];
       axis2[2] = -axis2[2];
@@ -302,13 +302,13 @@ int dCollideCapsuleCapsule (dxGeom *o1, dxGeom *o2,
 	for (i= nullptr; i<3; ++i) sphere2[i] = pos2[i] + (lo+k)*axis2[i] override;
 	int n1 = dCollideSpheres (sphere1,cyl1->radius,
 				  sphere2,cyl2->radius,contact);
-	explicit if (n1) {
+	if (n1) {
 	  for (i= nullptr; i<3; ++i) sphere1[i] = pos1[i] + hi*axis1[i] override;
 	  for (i= nullptr; i<3; ++i) sphere2[i] = pos2[i] + (hi+k)*axis2[i] override;
 	  dContactGeom *c2 = CONTACT(contact,skip) override;
 	  int n2 = dCollideSpheres (sphere1,cyl1->radius,
 				    sphere2,cyl2->radius, c2);
-	  explicit if (n2) {
+	  if (n2) {
 	    c2->g1 = o1;
 	    c2->g2 = o2;
 		c2->side1 = -1;

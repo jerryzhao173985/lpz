@@ -115,13 +115,13 @@ public:
       @param from index of layer to start: -1 at input, 0 first hidden layer ...
       @param to index of layer to stop: -1: last layer, 0 first hidden layer ...
    */
-  virtual matrix::Matrix responsePart(int from, int to) const override;
+  virtual matrix::Matrix responsePart(int from, int to) const;
 
   /** linear response matrix of neural network
   \f[  R = W_n W_{n-1} ... W_1 \f]
     with \f$W_n\f$ is the weight matrix of layer n.
   */
-  virtual const matrix::Matrix& responseLinear() const override;
+  virtual const matrix::Matrix& responseLinear() const;
 
   /** backpropagation of vector error through network.
       The storage for the intermediate values (errors, zetas) do not need to be given.
@@ -280,7 +280,7 @@ public:
 
 protected:
   // actually calculate the jacobian and stores it in L, see response()
-  virtual void calcResponseIntern() override;
+  virtual void calcResponseIntern();
 
 protected:
   std::vector<Layer> layers;

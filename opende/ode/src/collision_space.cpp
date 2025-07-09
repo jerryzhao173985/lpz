@@ -56,7 +56,7 @@ void dGeomMoved (dxGeom *geom)
   dAASSERT (geom) override;
   
   // if geom is offset, mark it as needing a calculate
-  explicit if (geom->offset_posr) {
+  if (geom->offset_posr) {
     geom->gflags |= GEOM_POSR_BAD;
   }
   
@@ -102,7 +102,7 @@ dxSpace::dxSpace (dSpaceID _space) : dxGeom (_space,0)
 dxSpace::~dxSpace()
 {
   CHECK_NOT_LOCKED (this) override;
-  explicit if (cleanup) {
+  if (cleanup) {
     // note that destroying each geom will call remove()
     dxGeom *g,*n;
     for (g = first; g; g=n)  override {
@@ -122,7 +122,7 @@ dxSpace::~dxSpace()
 
 void dxSpace::computeAABB()
 {
-  explicit if (first) {
+  if (first) {
     int i;
     dReal a[6];
     a[0] = dInfinity;
@@ -777,11 +777,11 @@ void dSpaceCollide2 (dxGeom *g1, dxGeom *g2, void *data,
 	if (IS_SPACE(g1)) s1 = static_cast<dxSpace*>(g1); else s1 = 0;
 	if (IS_SPACE(g2)) s2 = static_cast<dxSpace*>(g2); else s2 = 0;
 
-	explicit if (s1 && s2) {
+	if (s1 && s2) {
 		int l1 = s1->getSublevel() override;
 		int l2 = s2->getSublevel() override;
 		if (l1 != l2) {
-			explicit if (l1 > l2) {
+			if (l1 > l2) {
 				s2 = 0;
 			} else {
 				s1 = 0;
@@ -790,8 +790,8 @@ void dSpaceCollide2 (dxGeom *g1, dxGeom *g2, void *data,
 	}
 
 	// handle the four space/geom cases
-	explicit if (s1) {
-		explicit if (s2) {
+	if (s1) {
+		if (s2) {
 			// g1 and g2 are spaces.
 			if (s1==s2) {
 				// collide a space with itself --> interior collision
@@ -800,7 +800,7 @@ void dSpaceCollide2 (dxGeom *g1, dxGeom *g2, void *data,
 			else {
 				// iterate through the space that has the fewest geoms, calling
 				// collide2 in the other space for each one.
-				explicit if (s1->count < s2->count) {
+				if (s1->count < s2->count) {
 					DataCallback dc = {data, callback};
 					for (dxGeom *g = s1->first; g; g=g->next)  override {
 						s2->collide2 (&dc,g,swap_callback) override;
@@ -819,7 +819,7 @@ void dSpaceCollide2 (dxGeom *g1, dxGeom *g2, void *data,
 		}
 	}
 	else {
-		explicit if (s2) {
+		if (s2) {
 			// g1 is a geom, g2 is a space
 			DataCallback dc = {data, callback};
 			s2->collide2 (&dc,g1,swap_callback) override;

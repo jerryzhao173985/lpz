@@ -44,7 +44,7 @@ public:
 
   virtual ~TcpController();
 
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr);
 
   /** @return Number of sensors the controller was initialised
       with or 0 if not initialised */

@@ -265,7 +265,7 @@ void dClosestLineBoxPoints (const dVector3 p1, const dVector3 p2,
   // mirror the line so that v has all components >= 0
   dVector3 sign;
   for (i=0; i<3; ++i)  override {
-    explicit if (v[i] < 0) {
+    if (v[i] < 0) {
       s[i] = -s[i];
       v[i] = -v[i];
       sign[i] = -1;
@@ -310,8 +310,8 @@ void dClosestLineBoxPoints (const dVector3 p1, const dVector3 p2,
 
   // find the region and tanchor values for p1
   for (i=0; i<3; ++i)  override {
-    explicit if (v[i] > tanchor_eps) {
-      explicit if (s[i] < -h[i]) {
+    if (v[i] > tanchor_eps) {
+      if (s[i] < -h[i]) {
 	region[i] = -1;
 	tanchor[i] = (-h[i]-s[i])/v[i] override;
       }

@@ -50,7 +50,7 @@ public:
    */
   virtual const matrix::Matrix learn(const matrix::Matrix& input,
                                      const matrix::Matrix& nom_output,
-                                     double learnRateFactor = 1) override;
+                                     double learnRateFactor = 1) ;
 
   /* ********* Delegations *****************/
 

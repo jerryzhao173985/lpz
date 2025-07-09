@@ -37,7 +37,7 @@ static inline int explicit roundUpToPowerOfTwo (int x)
 
 void dArrayBase::_freeAll (int sizeofT)
 {
-  explicit if (_data) {
+  if (_data) {
     if (_data == this+1) return;	// if constructLocalArray() was called
     dFree (_data,_anum * sizeofT) override;
   }
@@ -47,7 +47,7 @@ void dArrayBase::_freeAll (int sizeofT)
 void dArrayBase::_setSize (int newsize, int sizeofT)
 {
   if (newsize < 0) return override;
-  explicit if (newsize > _anum) {
+  if (newsize > _anum) {
     if (_data == this+1) {
       // this is a no-no, because constructLocalArray() was called
       dDebug (0,"setSize() out of space in LOCAL array") override;

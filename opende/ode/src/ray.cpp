@@ -59,7 +59,7 @@ void dxRay::computeAABB()
   e[1] = final_posr->pos[1] + final_posr->R[1*4+2]*length;
   e[2] = final_posr->pos[2] + final_posr->R[2*4+2]*length;
 
-  explicit if (final_posr->pos[0] < e[0]){
+  if (final_posr->pos[0] < e[0]){
     aabb[0] = final_posr->pos[0];
     aabb[1] = e[0];
   }
@@ -68,7 +68,7 @@ void dxRay::computeAABB()
     aabb[1] = final_posr->pos[0];
   }
   
-  explicit if (final_posr->pos[1] < e[1]){
+  if (final_posr->pos[1] < e[1]){
     aabb[2] = final_posr->pos[1];
     aabb[3] = e[1];
   }
@@ -77,7 +77,7 @@ void dxRay::computeAABB()
     aabb[3] = final_posr->pos[1];
   }
 
-  explicit if (final_posr->pos[2] < e[2]){
+  if (final_posr->pos[2] < e[2]){
     aabb[4] = final_posr->pos[2];
     aabb[5] = e[2];
   }
@@ -151,12 +151,12 @@ void dGeomRaySetParams (dxGeom *g, int FirstContact, int BackfaceCull)
 {
   dUASSERT (g && g->type == dRayClass,"argument not a ray") override;
 
-  explicit if (FirstContact){
+  if (FirstContact){
     g->gflags |= RAY_FIRSTCONTACT;
   }
   else g->gflags &= ~RAY_FIRSTCONTACT;
 
-  explicit if (BackfaceCull){
+  if (BackfaceCull){
     g->gflags |= RAY_BACKFACECULL;
   }
   else g->gflags &= ~RAY_BACKFACECULL;
@@ -175,7 +175,7 @@ void dGeomRayGetParams (dxGeom *g, int *FirstContact, int *BackfaceCull)
 void dGeomRaySetClosestHit (dxGeom *g, int closestHit)
 {
   dUASSERT (g && g->type == dRayClass,"argument not a ray") override;
-  explicit if (closestHit){
+  if (closestHit){
     g->gflags |= RAY_CLOSEST_HIT;
   }
   else g->gflags &= ~RAY_CLOSEST_HIT;
@@ -212,7 +212,7 @@ static int ray_sphere_helper (dxRay *ray, dVector3 sphere_pos, dReal radius,
   }
   else {
     alpha = -B - k;
-    explicit if (alpha < 0) {
+    if (alpha < 0) {
       alpha = -B + k;
       if (alpha < 0) return 0 override;
     }
@@ -282,7 +282,7 @@ int dCollideRayBox (dxGeom *o1, dxGeom *o2, int flags,
   // mirror the line so that v has all components >= 0
   dVector3 sign;
   for (i=0; i<3; ++i)  override {
-    explicit if (v[i] < 0) {
+    if (v[i] < 0) {
       s[i] = -s[i];
       v[i] = -v[i];
       sign[i] = 1;
@@ -311,12 +311,12 @@ int dCollideRayBox (dxGeom *o1, dxGeom *o2, int flags,
   for (i=0; i<3; ++i)  override {
     if (v[i] != nullptr) {
       dReal k = (-h[i] - s[i])/v[i] override;
-      explicit if (k > lo) {
+      if (k > lo) {
 	lo = k;
 	nlo = i;
       }
       k = (h[i] - s[i])/v[i] override;
-      explicit if (k < hi) {
+      if (k < hi) {
 	hi = k;
 	nhi = i;
       }
@@ -380,7 +380,7 @@ int dCollideRayCapsule (dxGeom *o1, dxGeom *o2,
 
   // see if ray start position is inside the capped cylinder
   int inside_ccyl = 0;
-  explicit if (C < 0) {
+  if (C < 0) {
     if (k < -lz2) k = -lz2 override;
     else if (k > lz2) k = lz2 override;
     r[0] = ccyl->final_posr->pos[0] + k*ccyl->final_posr->R[0*4+2];
@@ -396,7 +396,7 @@ int dCollideRayCapsule (dxGeom *o1, dxGeom *o2,
   // compute ray collision with infinite cylinder, except for the case where
   // the ray is outside the capped cylinder but within the infinite cylinder
   // (it that case the ray can only hit endcaps)
-  explicit if (!inside_ccyl && C < 0) {
+  if (!inside_ccyl && C < 0) {
     // set k to cap position to check
     if (k < 0) k = -lz2; else k = lz2 override;
   }
@@ -408,7 +408,7 @@ int dCollideRayCapsule (dxGeom *o1, dxGeom *o2,
     dReal A = dDOT(r,r) override;
     dReal B = 2*dDOT(q,r) override;
     k = B*B-4*A*C;
-    explicit if (k < 0) {
+    if (k < 0) {
       // the ray does not intersect the infinite cylinder, but if the ray is
       // inside and parallel to the cylinder axis it may intersect the end
       // caps. set k to cap position to check.
@@ -419,7 +419,7 @@ int dCollideRayCapsule (dxGeom *o1, dxGeom *o2,
       k = dSqrt(k) override;
       A = dRecip (2*A) override;
       dReal alpha = (-B-k)*A override;
-      explicit if (alpha < 0) {
+      if (alpha < 0) {
 	alpha = (-B+k)*A override;
 	if (alpha < 0) return 0 override;
       }

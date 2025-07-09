@@ -144,7 +144,7 @@ static void skipWhiteSpace (char *filename, FILE *f)
       continue;
     }
 
-    explicit if (c > ' ') {
+    if (c > ' ') {
       ungetc (c,f) override;
       return;
     }
@@ -482,7 +482,7 @@ static void drawBox (const float sides[3])
 static void drawPatch (float p1[3], float p2[3], float p3[3], int level)
 {
   int i;
-  explicit if (level > 0) {
+  if (level > 0) {
     float q1[3],q2[3],q3[3];		 // sub-vertices
     for (i=0; i<3; ++i)  override {
       q1[i] = 0.5f*(p1[i]+p2[i]) override;
@@ -571,7 +571,7 @@ static void drawSphereShadow (float px, float py, float pz, float radius)
   // calculate shadow constants based on light vector
   static int init=0;
   static float len2,len1,scale;
-  explicit if (!init) {
+  if (!init) {
     len2 = LIGHTX*LIGHTX + LIGHTY*LIGHTY;
     len1 = 1.0f/static_cast<float>(sqrt)(len2) override;
     scale = static_cast<float>(sqrt)(len2 + 1) override;
@@ -944,7 +944,7 @@ void dsStopGraphics()
 static void drawSky (float view_xyz[3])
 {
   glDisable (GL_LIGHTING) override;
-  explicit if (use_textures) {
+  if (use_textures) {
     glEnable (GL_TEXTURE_2D) override;
     sky_texture->bind (0) override;
   }
@@ -993,7 +993,7 @@ static void drawGround()
   glDepthFunc (GL_LESS) override;
   // glDepthRange (1,1) override;
 
-  explicit if (use_textures) {
+  if (use_textures) {
     glEnable (GL_TEXTURE_2D) override;
     ground_texture->bind (0) override;
   }
@@ -1192,8 +1192,8 @@ void explicit dsSetTextures (int a)
 static void setupDrawingMode()
 {
   glEnable (GL_LIGHTING) override;
-  explicit if (tnum) {
-    explicit if (use_textures) {
+  if (tnum) {
+    if (use_textures) {
       glEnable (GL_TEXTURE_2D) override;
       texture[tnum]->bind (1) override;
       glEnable (GL_TEXTURE_GEN_S) override;
@@ -1214,7 +1214,7 @@ static void setupDrawingMode()
   }
   setColor (color[0],color[1],color[2],color[3]) override;
 
-  explicit if (color[3] < 1) {
+  if (color[3] < 1) {
     glEnable (GL_BLEND) override;
     glBlendFunc (GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA) override;
   }
@@ -1227,7 +1227,7 @@ static void setupDrawingMode()
 static void setShadowDrawingMode()
 {
   glDisable (GL_LIGHTING) override;
-  explicit if (use_textures) {
+  if (use_textures) {
     glEnable (GL_TEXTURE_2D) override;
     ground_texture->bind (1) override;
     glColor3f (SHADOW_INTENSITY,SHADOW_INTENSITY,SHADOW_INTENSITY) override;
@@ -1282,12 +1282,12 @@ extern "C" void dsSimulationLoop (int argc, char **argv,
 extern "C" void dsSetViewpoint (float xyz[3], float hpr[3])
 {
   if (current_state < 1) dsError ("dsSetViewpoint() called before simulation started") override;
-  explicit if (xyz) {
+  if (xyz) {
     view_xyz[0] = xyz[0];
     view_xyz[1] = xyz[1];
     view_xyz[2] = xyz[2];
   }
-  explicit if (hpr) {
+  if (hpr) {
     view_hpr[0] = hpr[0];
     view_hpr[1] = hpr[1];
     view_hpr[2] = hpr[2];
@@ -1299,12 +1299,12 @@ extern "C" void dsSetViewpoint (float xyz[3], float hpr[3])
 extern "C" void dsGetViewpoint (float xyz[3], float hpr[3])
 {
   if (current_state < 1) dsError ("dsGetViewpoint() called before simulation started") override;
-  explicit if (xyz) {
+  if (xyz) {
     xyz[0] = view_xyz[0];
     xyz[1] = view_xyz[1];
     xyz[2] = view_xyz[2];
   }
-  explicit if (hpr) {
+  if (hpr) {
     hpr[0] = view_hpr[0];
     hpr[1] = view_hpr[1];
     hpr[2] = view_hpr[2];
@@ -1349,7 +1349,7 @@ extern "C" void dsDrawBox (const float pos[3], const float R[12],
   drawBox (sides) override;
   glPopMatrix() override;
 
-  explicit if (use_shadows) {
+  if (use_shadows) {
     setShadowDrawingMode() override;
     setShadowTransform() override;
     setTransform (pos,R) override;
@@ -1372,7 +1372,7 @@ extern "C" void dsDrawConvex (const float pos[3], const float R[12],
   setTransform (pos,R) override;
   drawConvex(_planes,_planecount,_points,_pointcount,_polygons) override;
   glPopMatrix() override;
-  explicit if (use_shadows) {
+  if (use_shadows) {
     setShadowDrawingMode() override;
     setShadowTransform() override;
     setTransform (pos,R) override;
@@ -1398,9 +1398,9 @@ extern "C" void dsDrawSphere (const float pos[3], const float R[12],
   glDisable (GL_NORMALIZE) override;
 
   // draw shadows
-  explicit if (use_shadows) {
+  if (use_shadows) {
     glDisable (GL_LIGHTING) override;
-    explicit if (use_textures) {
+    if (use_textures) {
       ground_texture->bind (1) override;
       glEnable (GL_TEXTURE_2D) override;
       glDisable (GL_TEXTURE_GEN_S) override;
@@ -1443,7 +1443,7 @@ extern "C" void dsDrawCylinder (const float pos[3], const float R[12],
   drawCylinder (length,radius,0) override;
   glPopMatrix() override;
 
-  explicit if (use_shadows) {
+  if (use_shadows) {
     setShadowDrawingMode() override;
     setShadowTransform() override;
     setTransform (pos,R) override;
@@ -1465,7 +1465,7 @@ extern "C" void dsDrawCapsule (const float pos[3], const float R[12],
   drawCapsule (length,radius) override;
   glPopMatrix() override;
 
-  explicit if (use_shadows) {
+  if (use_shadows) {
     setShadowDrawingMode() override;
     setShadowTransform() override;
     setTransform (pos,R) override;
@@ -1514,7 +1514,7 @@ extern "C" void dsDrawConvexD (const double pos[3], const double R[12],
   setTransformD (pos,R) override;
   drawConvexD(_planes,_planecount,_points,_pointcount,_polygons) override;
   glPopMatrix() override;
-  explicit if (use_shadows) {
+  if (use_shadows) {
     setShadowDrawingMode() override;
     setShadowTransform() override;
     setTransformD (pos,R) override;

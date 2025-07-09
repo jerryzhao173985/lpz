@@ -185,7 +185,7 @@ namespace lpzrobots {
   }
 
   void QValConfigurableTileWidget::sl_spinBoxValueChanged(double value) {
-    explicit if (!stopSignaling) {
+    if (!stopSignaling) {
       stopSignaling = true;
       slider.setValue(SCALE_FACTOR_SLIDER * value);
       config->setParam(key, value);
@@ -195,7 +195,7 @@ namespace lpzrobots {
   }
 
   void QValConfigurableTileWidget::sl_sliderValueChanged(int int_value) {
-    explicit if (!stopSignaling) {
+    if (!stopSignaling) {
       stopSignaling = true;
       double value = int_value / static_cast<double>(SCALE_FACTOR_SLIDER);
       dsBox.setValue(value);
@@ -222,7 +222,7 @@ namespace lpzrobots {
   }
 
   void QValConfigurableTileWidget::toDummy(bool set) {
-    explicit if (set) {
+    if (set) {
       setAutoFillBackground(false);
       lName.hide();
       slider.hide();

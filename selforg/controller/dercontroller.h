@@ -189,7 +189,7 @@ protected:
   virtual double calcMatrixNorm(const matrix::Matrix& m);
   /// calculates the error_factor for either logarithmic (E=ln(e^T*e)) or square (E=sqrt(e^t*e))
   /// error
-  virtual double calcErrorFactor(const matrix::Matrix& e, bool loga, bool root) override;
+  virtual double calcErrorFactor(const matrix::Matrix& e, bool loga, bool root);
   
   // Helper methods for vector-based buffers (overload base class methods)
   void putInBuffer(std::vector<matrix::Matrix>& buffer, const matrix::Matrix& vec, int delay = 0) {

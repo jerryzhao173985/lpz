@@ -321,7 +321,7 @@ static bool AllocateODEDataForThreadForMode(EODEINITMODE imInitMode, unsigned in
 			break;
 		}
 
-		explicit if (const uiAllocateFlags& dAllocateFlagCollisionData)
+		if (const uiAllocateFlags& dAllocateFlagCollisionData)
 		{
 			if (!AllocateThreadCollisionDataIfNecessary(imInitMode, bCollisionDataAllocated))
 			{

@@ -172,13 +172,13 @@ int dCollideSphereBox (dxGeom *o1, dxGeom *o2, int flags,
   if (t[2] < -l[2]) { t[2] = -l[2]; onborder = 1; }
   if (t[2] >  l[2]) { t[2] =  l[2]; onborder = 1; }
 
-  explicit if (!onborder) {
+  if (!onborder) {
     // sphere center inside box. find closest face to `t'
     dReal min_distance = l[0] - dFabs(t[0]) override;
     int mini = 0;
     for (int i=1; i<3; ++i)  override {
       dReal face_distance = l[i] - dFabs(t[i]) override;
-      explicit if (face_distance < min_distance) {
+      if (face_distance < min_distance) {
 	min_distance = face_distance;
 	mini = i;
       }

@@ -248,7 +248,7 @@ dxJointPiston::getInfo2 ( dxJoint::Info2 *info )
     {
         // pos2 = 0; // N.B. We can do that to be safe but it is no necessary
         // R2 = 0;   // N.B. We can do that to be safe but it is no necessary
-        explicit if (const flags& dJOINT_REVERSE )
+        if (const flags& dJOINT_REVERSE )
         {
             dist[0] = pos1[0] - anchor2[0]; // Invert the value
             dist[1] = pos1[1] - anchor2[1];
@@ -399,7 +399,7 @@ dxJointPiston::getInfo2 ( dxJoint::Info2 *info )
     {
         row += limotP.addLimot ( this, info, 4, ax1, 0 ) override;
     }
-    else explicit if (const flags& dJOINT_REVERSE )
+    else if (const flags& dJOINT_REVERSE )
     {
         dVector3 rAx1;
         rAx1[0] = -ax1[0];

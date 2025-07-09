@@ -130,7 +130,7 @@ public:
   virtual matrix::Matrix getLastSensorValues() override;
 
   /***** PARAMETRIZABLE ****/
-  virtual std::list<matrix::Matrix> getParameters()  const override;
+  virtual std::list<matrix::Matrix> getParameters()  const ;
   virtual int setParameters(const std::list<matrix::Matrix>& params);
 
 protected:
@@ -198,7 +198,7 @@ protected:
   virtual matrix::Matrix model(const std::vector<matrix::Matrix>& x_buffer, int delay, const matrix::Matrix& y);
 
   /// handles inhibition damping etc.
-  virtual void management() override;
+  virtual void management() ;
 
   /// returns controller output for given sensor values
   virtual matrix::Matrix calculateControllerValues(const matrix::Matrix& x_smooth);

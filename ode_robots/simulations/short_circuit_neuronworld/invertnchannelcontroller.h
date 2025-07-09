@@ -91,7 +91,7 @@ public:
   enum ModelNeuronProperties{nobias, bias};
 
   InvertNChannelController(int _buffersize, bool _update_only_1=false, ModelNeuronProperties _model_type=nobias);
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr);
 
   virtual ~InvertNChannelController();
 

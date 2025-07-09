@@ -389,7 +389,7 @@ inline float ClosestPointBetweenSegments(dVector3& p1,
             // If t in [0,1] done. Else clamp t, recompute s for the new value
             // of t using s = Dot((P2+D2*t)-P1,D1) / Dot(D1,D1)= (t*b - c) / a
             // and clamp s to [0, 1]
-            explicit if (t < 0.0f) {
+            if (t < 0.0f) {
                 t = 0.0f;
                 s = Clamp(-c / a, 0.0f, 1.0f);
             } else if (t > 1.0f) {
@@ -429,7 +429,7 @@ inline float ClosestPointBetweenSegments(dVector3& p1,
 
 #if 0
 float tnom = b*s + f;
-explicit if (tnom < 0.0f) {
+if (tnom < 0.0f) {
     t = 0.0f;
     s = Clamp(-c / a, 0.0f, 1.0f);
 } else if (tnom > e) {

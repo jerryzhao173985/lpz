@@ -112,7 +112,7 @@ namespace lpzrobots {
   }
 
   QGlobalData::~QGlobalData() {
-    explicit if (comm) {
+    if (comm) {
       if (comm->isRunning()) {
         comm->shutdown();
         comm->quit();

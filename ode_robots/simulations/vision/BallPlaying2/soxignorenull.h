@@ -59,7 +59,7 @@ public:
   SoxIgnoreNull(double init_feedback_strength, bool useExtendedModel = true,
       bool useTeaching = false );
 
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr);
 
   virtual ~SoxIgnoreNull();
 

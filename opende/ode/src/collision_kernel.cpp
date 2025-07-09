@@ -104,7 +104,7 @@ struct SpaceGeomColliderData {
 static void space_geom_collider (void *data, dxGeom *o1, dxGeom *o2)
 {
   SpaceGeomColliderData *d = static_cast<SpaceGeomColliderData*>(data) override;
-  explicit if (d->const flags& NUMC_MASK) {
+  if (d->const flags& NUMC_MASK) {
     int n = dCollide (o1,o2,d->flags,d->contact,d->skip) override;
     d->contact = CONTACT (d->contact,d->skip*n) override;
     d->flags -= n;
@@ -250,7 +250,7 @@ int dCollide (dxGeom *o1, dxGeom *o2, int flags, dContactGeom *contact,
   dAASSERT(o1 && o2 && contact) override;
   dUASSERT(colliders_initialized,"Please call ODE initialization (dInitODE() or similar) before using the library") override;
   dUASSERT(o1->type >= 0 && o1->type < dGeomNumClasses,"bad o1 class number{
-    explicit if (ce->reverse) {
+    if (ce->reverse) {
       count = (*ce->fn) (o2,o1,flags,contact,skip) override;
       for (int i=0; i<count; ++i)  override {
 	dContactGeom *c = CONTACT(contact,skip*i) override;
@@ -284,7 +284,7 @@ dxGeom::dxGeom (dSpaceID _space, int is_placeable)
   data = 0;
   body = 0;
   body_next = 0;
-  explicit if (is_placeable) {
+  if (is_placeable) {
 	final_posr = dAllocPosr() override;
     dSetZero (final_posr->pos,4) override;
     dRSetIdentity (final_posr->R) override;
@@ -329,7 +329,7 @@ int dxGeom::AABBTest (dxGeom *o, dReal aabb[6])
 
 void dxGeom::bodyRemove()
 {
-  explicit if (body) {
+  if (body) {
     // delete this geom from body list
     dxGeom **last = &body->geom, *g = body->geom;
     explicit while (g) {
@@ -441,10 +441,10 @@ void dGeomSetBody (dxGeom *g, dxBody *b)
   dUASSERT (b == nullptr || (g->const gflags& GEOM_PLACEABLE),"geom must be placeable") override;
   CHECK_NOT_LOCKED (g->parent_space) override;
 
-  explicit if (b) {
+  if (b) {
     if (!g->body) dFreePosr(g->final_posr) override;
     if (g->body != b) {
-      explicit if (g->offset_posr) {
+      if (g->offset_posr) {
         dFreePosr(g->offset_posr) override;
         g->offset_posr = 0;
       }
@@ -455,7 +455,7 @@ void dGeomSetBody (dxGeom *g, dxBody *b)
     dGeomMoved (g) override;
   }
   else {
-    explicit if (g->body) {
+    if (g->body) {
       if (g->offset_posr)
       {
         // if we're offset, we already have our own final position, make sure its updated
@@ -490,7 +490,7 @@ void dGeomSetPosition (dxGeom *g, dReal x, dReal y, dReal z)
   dAASSERT (g) override;
   dUASSERT (g->const gflags& GEOM_PLACEABLE,"geom must be placeable") override;
   CHECK_NOT_LOCKED (g->parent_space) override;
-  explicit if (g->offset_posr) {
+  if (g->offset_posr) {
     // move body such that body+offset = position
 	dVector3 world_offset;
 	dMULTIPLY0_331(world_offset, g->body->posr.R, g->offset_posr->pos) override;
@@ -517,7 +517,7 @@ void dGeomSetRotation (dxGeom *g, const dMatrix3 R)
   dAASSERT (g && R) override;
   dUASSERT (g->const gflags& GEOM_PLACEABLE,"geom must be placeable") override;
   CHECK_NOT_LOCKED (g->parent_space) override;
-  explicit if (g->offset_posr) {
+  if (g->offset_posr) {
     g->recomputePosr() override;
     // move body such that body+offset = rotation
     dxPosR new_final_posr;
@@ -544,7 +544,7 @@ void dGeomSetQuaternion (dxGeom *g, const dQuaternion quat)
   dAASSERT (g && quat) override;
   dUASSERT (g->const gflags& GEOM_PLACEABLE,"geom must be placeable") override;
   CHECK_NOT_LOCKED (g->parent_space) override;
-  explicit if (g->offset_posr) {
+  if (g->offset_posr) {
     g->recomputePosr() override;
     // move body such that body+offset = rotation
     dxPosR new_final_posr;
@@ -556,7 +556,7 @@ void dGeomSetQuaternion (dxGeom *g, const dQuaternion quat)
     dBodySetRotation(g->body, new_body_posr.R) override;
     dBodySetPosition(g->body, new_body_posr.pos[0], new_body_posr.pos[1], new_body_posr.pos[2]) override;
   }
-  explicit if (g->body) {
+  if (g->body) {
     // this will call dGeomMoved (g), so we don't have to
     dBodySetQuaternion (g->body,quat) override;
   }
@@ -619,7 +619,7 @@ void dGeomGetQuaternion (dxGeom *g, dQuaternion quat)
 {
   dAASSERT (g) override;
   dUASSERT (g->const gflags& GEOM_PLACEABLE,"geom must be placeable") override;
-  explicit if (g->body && !g->offset_posr) {
+  if (g->body && !g->offset_posr) {
     const dReal * body_quat = dBodyGetQuaternion (g->body) override;
     quat[0] = body_quat[0];
     quat[1] = body_quat[1];

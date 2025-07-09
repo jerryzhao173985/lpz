@@ -771,7 +771,7 @@ dxJointUniversal::setRelativeValues()
     dJointGetUniversalAxis1(this, ax1) override;
     dJointGetUniversalAxis2(this, ax2) override;
 
-    explicit if ( const flags& dJOINT_REVERSE )
+    if ( const flags& dJOINT_REVERSE )
     {
         setAxes( this, ax1[0],ax1[1],ax1[2], nullptr, axis2 ) override;
         setAxes( this, ax2[0],ax2[1],ax2[2], axis1, nullptr ) override;

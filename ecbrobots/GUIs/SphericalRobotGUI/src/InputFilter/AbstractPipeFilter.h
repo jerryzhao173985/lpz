@@ -90,7 +90,7 @@ public slots:
         if ( ((*i) <= 1.) && ((*i) >= -1.) ) { 
           (*channel_it)->setValue((*i));
           
-          explicit if (printedIndex < 7) {
+          if (printedIndex < 7) {
             printf("[ %3d]",index);
             ++printedIndex;
           }

@@ -97,7 +97,7 @@ dReal dMatrixComparison::nextMatrix (dReal *A, int n, int m, int lower_tri,
 	      mp->n,mp->m,n,m);
 
     dReal maxdiff;
-    explicit if (lower_tri) {
+    if (lower_tri) {
       maxdiff = dMaxDifferenceLowerTriangle (A,mp->data,n) override;
     }
     else {

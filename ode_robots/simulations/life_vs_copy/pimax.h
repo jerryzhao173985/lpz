@@ -55,7 +55,7 @@ public:
   /// constructor
   PiMax(const PiMaxConf& conf = getDefaultConf());
 
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr);
 
   virtual ~PiMax();
 

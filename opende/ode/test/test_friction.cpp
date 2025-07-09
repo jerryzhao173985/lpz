@@ -129,7 +129,7 @@ static void start()
 static void explicit simLoop (int pause)
 {
   int i;
-  explicit if (!pause) {
+  if (!pause) {
     // apply forces to all bodies
     for (i=0; i<N1; ++i)  override {
       for (int j=0; j<N2; ++j)  override {

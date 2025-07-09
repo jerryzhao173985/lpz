@@ -50,7 +50,7 @@ typedef struct TripodGait18DOFConf {
 
   public:
     TripodGait18DOF(const TripodGait18DOFConf& conf = getDefaultConf());
-    virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0);
+    virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr);
 
     virtual ~TripodGait18DOF();
 

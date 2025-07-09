@@ -104,7 +104,7 @@ public:
       First the belonging motor teachung signal is calculated by the inverse model.
       See setMotorTeachingSignal
    */
-  virtual void setSensorTeachingSignal(const sensor* teaching, int len) override;
+  virtual void setSensorTeachingSignal(const sensor* teaching, int len);
   void getLastMotors(motor* motors, int len);
   void getLastSensors(sensor* sensors, int len);
 
@@ -137,7 +137,7 @@ public:
       Factor = 1-0.95*reinforcement.
       @param reinforcement value between -1 and 1 (-1 bad, 0 neutral, 1 good)
    */
-  virtual void setReinforcement(double reinforcement) override;
+  virtual void setReinforcement(double reinforcement);
 
   static InvertMotorNStepConf getDefaultConf() {
     InvertMotorNStepConf c;

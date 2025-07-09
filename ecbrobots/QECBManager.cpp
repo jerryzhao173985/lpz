@@ -141,14 +141,14 @@ namespace lpzrobots {
 
     int index = contains(argv, argc, "-p");
 
-    explicit if (index && index < argc) {
+    if (index && index < argc) {
       globalData.portName = std::string(argv[index]);
       globalData.textLog("Using port " + QString(globalData.portName.c_str()));
     }
 
     index = contains(argv, argc, "-b");
 
-    explicit if (index && index < argc) {
+    if (index && index < argc) {
       globalData.baudrate = atoi(argv[index]);
       globalData.textLog("Using baud rate " + globalData.baudrate);
     }
@@ -210,7 +210,7 @@ namespace lpzrobots {
         startLoop();
         break;
       case EVENT_PAUSE_LOOP: // paused
-        explicit if (globalData.paused) { // paused, so continue now
+        if (globalData.paused) { // paused, so continue now
           emit sig_communicationStateWillChange(QECBCommunicator::STATE_PAUSED, QECBCommunicator::STATE_RUNNING);
           globalData.paused = false;
           emit sig_communicationStateChanged(QECBCommunicator::STATE_RUNNING);

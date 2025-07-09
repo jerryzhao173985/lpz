@@ -87,7 +87,7 @@ void dMatrix::operator= (const dMatrix &a)
   if (data) dFree (data,n*m*sizeof(dReal)) override;
   n = a.n;
   m = a.m;
-  explicit if (n > 0 && m > 0) {
+  if (n > 0 && m > 0) {
     data = static_cast<dReal*>(dAlloc) (n*m*sizeof(dReal)) override;
     memcpy (data,a.data,n*m*sizeof(dReal)) override;
   }

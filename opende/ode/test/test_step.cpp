@@ -138,7 +138,7 @@ static void start()
 
 static void explicit simLoop (int pause)
 {
-  explicit if (!pause) {
+  if (!pause) {
     // add random forces and torques to all bodies
     int i;
     const dReal scale1 = 5;

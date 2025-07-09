@@ -152,10 +152,10 @@ public:
      //   c.someInternalParams = false;
     c.useS = false;
     c.modelCompliant = 0.05;
-    c.model = 0;
+    c.model = nullptr;
     c.useFantasy = false;
-    c.model = 0;
-    c.sat   = 0;
+    c.model = nullptr;
+    c.sat   = nullptr;
     return c;
   }
 

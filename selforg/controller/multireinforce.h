@@ -187,7 +187,7 @@ protected:
   virtual void fillMotorBuffer(const motor* y_, int number_motors) override;
 
   /// handles inhibition damping etc.
-  virtual void management() override;
+  virtual void management() ;
 
   /** Calculates first and second derivative and returns both in on matrix (above).
       We use simple discrete approximations:

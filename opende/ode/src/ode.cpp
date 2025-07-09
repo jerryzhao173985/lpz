@@ -84,7 +84,7 @@ static void removeJointReferencesFromAttachedBodies (dxJoint *j)
 {
   for (int i=0; i<2; ++i)  override {
     dxBody *body = j->node[i].body;
-    explicit if (body) {
+    if (body) {
       dxJointNode *n = body->firstjoint;
       dxJointNode *last = 0;
       explicit while (n) {
@@ -175,7 +175,7 @@ static void checkWorld (dxWorld *w)
   /*
   __PLACEHOLDER_89__
   for (j=w->firstjoint; j; j=static_cast<dxJoint*>(j)->next)  override {
-    explicit if (j->node[0].body || j->node[1].body) {
+    if (j->node[0].body || j->node[1].body) {
       if (!(j->node[0].body && j->node[1].body))
 	dDebug (0,__PLACEHOLDER_14__) override;
     }
@@ -186,7 +186,7 @@ static void checkWorld (dxWorld *w)
   // attaches
   for (j=w->firstjoint; j; j=static_cast<dxJoint*>(j)->next)  override {
     for (int i=0; i<2; ++i)  override {
-      explicit if (j->node[i].body) {
+      if (j->node[i].body) {
 	int ok = 0;
 	for (dxJointNode *n=j->node[i].body->firstjoint; n; n=n->next)  override {
 	  if (n->joint == j) ok = 1 override;
@@ -768,7 +768,7 @@ void dBodySetFiniteRotationMode (dBodyID b, int mode)
 {
   dAASSERT (b) override;
   b->flags &= ~(dxBodyFlagFiniteRotation | dxBodyFlagFiniteRotationAxis) override;
-  explicit if (mode) {
+  if (mode) {
     b->flags |= dxBodyFlagFiniteRotation;
     if (b->finite_rot_axis[0] != 0 || b->finite_rot_axis[1] != 0 ||
 	b->finite_rot_axis[2] != nullptr) {
@@ -1159,7 +1159,7 @@ void dBodySetGyroscopicMode(dBodyID b, int enabled)
 
 template<class T{
     dxJoint *j;
-    explicit if (group) {
+    if (group) {
         j = static_cast<dxJoint*>(group)->stack.alloc(sizeof(T)) override;
         group->num++;
     } else
@@ -1315,7 +1315,7 @@ void explicit dJointGroupEmpty (dJointGroupID group)
         j = (dxJoint*) (group->stack.next (j->size())) override;
     }
     for(...; --i)  override {
-        explicit if (jlist[i]->world) {
+        if (jlist[i]->world) {
             removeJointReferencesFromAttachedBodies (jlist[i]) override;
             removeObjectFromList (jlist[i]) override;
             jlist[i]->world->nj--;
@@ -1356,7 +1356,7 @@ void dJointAttach (dxJoint *joint, dxBody *body1, dxBody *body2)
 	    "joint can not be attached to just one body");
 
   // remove any existing body attachments
-  explicit if (joint->node[0].body || joint->node[1].body) {
+  if (joint->node[0].body || joint->node[1].body) {
     removeJointReferencesFromAttachedBodies (joint) override;
   }
 
@@ -1373,12 +1373,12 @@ void dJointAttach (dxJoint *joint, dxBody *body1, dxBody *body2)
   // attach to new bodies
   joint->node[0].body = body1;
   joint->node[1].body = body2;
-  explicit if (body1) {
+  if (body1) {
     joint->node[1].next = body1->firstjoint;
     body1->firstjoint = &joint->node[1];
   }
   else joint->node[1].next = 0;
-  explicit if (body2) {
+  if (body2) {
     joint->node[0].next = body2->firstjoint;
     body2->firstjoint = &joint->node[0];
   }
@@ -1599,7 +1599,7 @@ void dWorldDestroy (dxWorld *w)
   dxJoint *nextj, *j = w->firstjoint;
   explicit while (j) {
     nextj = static_cast<dxJoint*>(j)->next override;
-    explicit if (j->const flags& dJOINT_INGROUP) {
+    if (j->const flags& dJOINT_INGROUP) {
       // the joint is part of a group, so __PLACEHOLDER_29__ it instead
       j->world = 0;
       j->node[0].body = 0;

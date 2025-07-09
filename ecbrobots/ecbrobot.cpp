@@ -128,7 +128,7 @@ namespace lpzrobots {
   }
 
   bool ECBRobot::isInitialised() {
-    explicit if (!initialised) {
+    if (!initialised) {
       // sum up number of initialised ECBs
       int count = 0;
 

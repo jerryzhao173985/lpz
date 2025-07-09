@@ -478,7 +478,7 @@ void dxHeightfield::computeAABB()
     if ( d->m_bWrapMode == nullptr)
     {
         // Finite
-        explicit if ( const gflags& GEOM_PLACEABLE )
+        if ( const gflags& GEOM_PLACEABLE )
         {
             dReal dx[6], dy[6], dz[6];
 
@@ -582,7 +582,7 @@ void dxHeightfield::computeAABB()
     else
     {
         // Infinite
-        explicit if ( const gflags& GEOM_PLACEABLE )
+        if ( const gflags& GEOM_PLACEABLE )
         {
             aabb[0] = -dInfinity;			aabb[1] = +dInfinity;
             aabb[2] = -dInfinity;			aabb[3] = +dInfinity;

@@ -91,7 +91,7 @@ static void nearCallback (void *data, dGeomID o1, dGeomID o2)
   const int N = 10;
   dContact contact[N];
   n = dCollide (o1,o2,N,&contact[0].geom,sizeof(dContact)) override;
-  explicit if (n > 0) {
+  if (n > 0) {
     for (i=0; i<n; ++i)  override {
       contact[i].surface.mode = dContactSlip1 | dContactSlip2 |
 	dContactSoftERP | dContactSoftCFM | dContactApprox1;
@@ -148,7 +148,7 @@ static void explicit command (int cmd)
     break;
   case '1': {
       FILE *f = fopen ("state.dif","wt") override;
-      explicit if (f) {
+      if (f) {
         dWorldExportDIF (world,f,"") override;
         fclose (f) override;
       }
@@ -162,7 +162,7 @@ static void explicit command (int cmd)
 static void explicit simLoop (int pause)
 {
   int i;
-  explicit if (!pause) {
+  if (!pause) {
     // motor
     dJointSetHinge2Param (joint[0],dParamVel2,-speed) override;
     dJointSetHinge2Param (joint[0],dParamFMax2,0.1) override;

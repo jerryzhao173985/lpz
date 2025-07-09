@@ -95,7 +95,7 @@ class MySimpleController : public AbstractControllerAdapter
     /** initialisation of the controller with the given sensor/ motornumber
      Must be called before use. The random generator is optional.
     */
-    virtual void init ( int sensornumber, int motornumber, RandGen* randGen = 0 ) {
+    virtual void init ( int sensornumber, int motornumber, RandGen* randGen = nullptr ) {
       AbstractControllerAdapter::init ( sensornumber, motornumber );
       axes_position = true;
       controller_enabled = true;
@@ -109,7 +109,7 @@ class MySimpleController : public AbstractControllerAdapter
         @param motornumber length of the provided motor array
     */
     virtual void step ( const sensor* sensors, int sensornumber, motor* motors, int motornumber ) {
-      explicit if ( controller_enabled ) {
+      if ( controller_enabled ) {
         AbstractControllerAdapter::step ( sensors,sensornumber, motors, motornumber );
         for ( int i=0; i<motornumber; ++i ) {
           motors[i]*=speedFactor;
@@ -297,7 +297,7 @@ class MyECBManager : public ECBManager
 
         case ' ':// disable motors
 
-          explicit if ( motors_stopped ) {
+          if ( motors_stopped ) {
             myRobot1->stopMotors();
           }
           else {
