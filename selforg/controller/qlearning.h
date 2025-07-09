@@ -58,7 +58,7 @@ public:
       @param unit_map if 0 the parametes are choosen randomly.
       Otherwise the model is initialised to represent a unit_map with the given response strength.
   */
-  virtual void init(unsigned int stateDim, unsigned int actionDim, RandGen* randGen = 0);
+  virtual void init(unsigned int stateDim, unsigned int actionDim, RandGen* randGen = nullptr);
 
   /** selection of action given current state.
       The policy is to take the actions with the highest value,

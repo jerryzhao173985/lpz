@@ -86,9 +86,9 @@ public:
   virtual std::list<IConnection> getStructuralConnections()  const override;
 
   /**** TEACHING ****/
-  virtual void setTeachingMode(bool onOff) override;
-  virtual bool getTeachingMode() const override;
-  virtual void setMotorTeachingSignal(const motor* teaching, int len) override;
+  virtual void setTeachingMode(bool onOff);
+  virtual bool getTeachingMode() const;
+  virtual void setMotorTeachingSignal(const motor* teaching, int len);
   // void calcCandHUpdatesTeaching(const Matrix& C_update, const Matrix& H_update, int y_delay);
   // void calcCandHUpdates(const Matrix& C_update, const Matrix& H_update,const Matrix& A_update, int y_delay);//Test
   // A
@@ -156,17 +156,17 @@ protected:
 
   /// calculates the first shift into the motor space useing delayed motor values.
   //  @param delay 0 for no delay and n>0 for n timesteps delay in the time loop
-  virtual void calcEtaAndBufferIt(int delay) override;
+  virtual void calcEtaAndBufferIt(int delay);
   /// calculates xsi for the current time step using the delayed y values
   //  and x delayed by one
   //  @param delay 0 for no delay and n>0 for n timesteps delay in the time loop
-  virtual void calcXsi(int delay) override;
+  virtual void calcXsi(int delay);
 
   /// learn H,C with motors y and corresponding sensors x
-  virtual void learnController() override;
+  virtual void learnController();
 
   /// calculates the predicted sensor values
-  virtual matrix::Matrix model(const matrix::Matrix& x, const matrix::Matrix& y) override;
+  virtual matrix::Matrix model(const matrix::Matrix& x, const matrix::Matrix& y);
 
   /// calculates the Update for C, H and A
   // @param y_delay timesteps to delay the y-values.  (usually 0)
@@ -182,11 +182,11 @@ protected:
                                const matrix::Matrix& A_update,
                                double squashSize); // Test A
 
-  virtual matrix::Matrix calculateControllerValues(const matrix::Matrix& x_smooth) override;
+  virtual matrix::Matrix calculateControllerValues(const matrix::Matrix& x_smooth);
 
   /// calculates the city block distance (abs norm) of the matrix. (abs sum of absolutes / size of
   /// matrix)
-  virtual double calcMatrixNorm(const matrix::Matrix& m) override;
+  virtual double calcMatrixNorm(const matrix::Matrix& m);
   /// calculates the error_factor for either logarithmic (E=ln(e^T*e)) or square (E=sqrt(e^t*e))
   /// error
   virtual double calcErrorFactor(const matrix::Matrix& e, bool loga, bool root) override;

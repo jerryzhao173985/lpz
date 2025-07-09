@@ -58,7 +58,7 @@ public:
   virtual void init(unsigned int inputDim,
                     unsigned int outputDim,
                     double unit_map = 0.0,
-                    RandGen* randGen = 0) override;
+                    RandGen* randGen = nullptr) override;
 
   virtual const matrix::Matrix process(const matrix::Matrix& input) override;
 

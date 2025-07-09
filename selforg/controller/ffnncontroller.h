@@ -55,7 +55,7 @@ public:
   */
   FFNNController(MultiLayerFFNN* net, int history, bool input_only_x, unsigned int init_wait = 0);
 
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override;
 
   virtual ~FFNNController();
 

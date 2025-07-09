@@ -76,7 +76,7 @@ public:
     return c;
   }
 
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override;
 
   virtual ~SeMoX();
 
@@ -131,7 +131,7 @@ public:
 
   /***** PARAMETRIZABLE ****/
   virtual std::list<matrix::Matrix> getParameters()  const override;
-  virtual int setParameters(const std::list<matrix::Matrix>& params) override;
+  virtual int setParameters(const std::list<matrix::Matrix>& params);
 
 protected:
   unsigned short number_sensors = 0;
@@ -185,23 +185,23 @@ protected:
   /// calculates xsi for the current time step using the delayed y values
   //  and x delayed by one
   //  @param delay 0 for no delay and n>0 for n timesteps delay in the time loop
-  virtual void calcXsi(int delay) override;
+  virtual void calcXsi(int delay);
 
   /// learn H,C with motors y and corresponding sensors x
-  virtual void learnController() override;
+  virtual void learnController();
 
   /// learn A, (and S) using motors y and corresponding sensors x
   //  @param delay 0 for no delay and n>0 for n timesteps delay in the time loop
-  virtual void learnModel(int delay) override;
+  virtual void learnModel(int delay);
 
   /// calculates the predicted sensor values
-  virtual matrix::Matrix model(const std::vector<matrix::Matrix>& x_buffer, int delay, const matrix::Matrix& y) override;
+  virtual matrix::Matrix model(const std::vector<matrix::Matrix>& x_buffer, int delay, const matrix::Matrix& y);
 
   /// handles inhibition damping etc.
   virtual void management() override;
 
   /// returns controller output for given sensor values
-  virtual matrix::Matrix calculateControllerValues(const matrix::Matrix& x_smooth) override;
+  virtual matrix::Matrix calculateControllerValues(const matrix::Matrix& x_smooth);
 
 protected:
   static double regularizedInverse(double v);

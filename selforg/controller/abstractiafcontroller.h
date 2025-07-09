@@ -91,7 +91,7 @@ public:
 
   /// ABSTRACTCONTROLLER INTERFACE
 
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override;
 
   virtual int getSensorNumber() const override {
     return sensorNumber;

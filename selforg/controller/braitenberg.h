@@ -55,7 +55,7 @@ public:
     addParameterDef("offset", &offset, 0.0);
   }
 
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override {
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override {
     number_sensors = sensornumber;
     number_motors = motornumber;
     assert(sensornumber >= 2 && sensornumber >= leftsensor && sensornumber >= rightsensor);

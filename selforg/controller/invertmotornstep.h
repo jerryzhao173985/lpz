@@ -98,7 +98,7 @@ public:
       Please note, that the teaching signal has to be given each timestep
        for a continuous teaching process.
    */
-  virtual void setMotorTeachingSignal(const motor* teaching, int len) override;
+  virtual void setMotorTeachingSignal(const motor* teaching, int len);
 
   /** The given sensor teaching signal (distal learning) is used for this timestep.
       First the belonging motor teachung signal is calculated by the inverse model.

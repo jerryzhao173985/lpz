@@ -55,7 +55,7 @@ public:
    * call first AbstractMultiController::init(sensornumber,motornumber)
    * if you overwrite this method
    */
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override;
 
   /** performs one step (includes learning).
 Calculates motor commands from sensor inputs.

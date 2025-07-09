@@ -95,7 +95,7 @@ public:
       Please note, that the teaching signal has to be given each timestep
        for a continuous teaching process.
    */
-  virtual void setMotorTeachingSignal(const motor* teaching, int len) override;
+  virtual void setMotorTeachingSignal(const motor* teaching, int len);
 
   /** The given sensor teaching signal (distal learning) is used for this timestep.
       First the belonging motor teachung signal is calculated by the inverse model.
@@ -161,10 +161,10 @@ protected:
 
   /// calculates the first shift into the motor space useing delayed motor values.
   //  @param delay 0 for no delay and n>0 for n timesteps delay in the time loop
-  virtual void calcEtaAndBufferIt(int delay) override;
+  virtual void calcEtaAndBufferIt(int delay);
 
   /// learn H,C with motors y and corresponding sensors x
-  virtual void learnController() override;
+  virtual void learnController();
 
   /// calculates the Update for C and H
   // @param y_delay timesteps to delay the y-values.  (usually 0)
@@ -179,13 +179,13 @@ protected:
 
   /// learn A, (and S) using motors y and corresponding sensors x
   //  @param delay 0 for no delay and n>0 for n timesteps delay in the time loop
-  virtual void learnModel(int delay) override;
+  virtual void learnModel(int delay);
 
   /// handles inhibition damping etc.
   virtual void management() override;
 
   /// returns controller output for given sensor values
-  virtual matrix::Matrix calculateControllerValues(const matrix::Matrix& x_smooth) override;
+  virtual matrix::Matrix calculateControllerValues(const matrix::Matrix& x_smooth);
   
   // Helper methods for vector-based buffers (overload base class methods)
   void putInBuffer(std::vector<matrix::Matrix>& buffer, const matrix::Matrix& vec, int delay = 0) {

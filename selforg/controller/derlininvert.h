@@ -94,7 +94,7 @@ public:
       Please note, that the teaching signal has to be given each timestep
        for a continuous teaching process.
    */
-  virtual void setMotorTeachingSignal(const motor* teaching, int len) override;
+  virtual void setMotorTeachingSignal(const motor* teaching, int len);
 
   /** The given sensor teaching signal (distal learning) is used for this timestep.
       First the belonging motor teachung signal is calculated by the inverse model.
@@ -227,13 +227,13 @@ protected:
 
   /// learn conf.model, (and S) using motors y and corresponding sensors x
   //  @param delay 0 for no delay and n>0 for n timesteps delay in the time loop
-  virtual void learnModel(int delay) override;
+  virtual void learnModel(int delay);
 
   /// handles inhibition damping etc.
   virtual void management() override;
 
   /// returns controller output for given sensor values
-  virtual matrix::Matrix calculateControllerValues(const matrix::Matrix& x_smooth) override;
+  virtual matrix::Matrix calculateControllerValues(const matrix::Matrix& x_smooth);
 
   /** Calculates first and second derivative and returns both in on matrix (above).
       We use simple discrete approximations:
@@ -246,7 +246,7 @@ protected:
 public:
   /// calculates the city block distance static_cast<abs>(norm) of the matrix. (abs sum of absolutes / size of
   /// matrix)
-  virtual double calcMatrixNorm(const matrix::Matrix& m) override;
+  virtual double calcMatrixNorm(const matrix::Matrix& m);
   
   // Helper methods for vector-based buffers (overload base class methods)
   void putInBuffer(std::vector<matrix::Matrix>& buffer, const matrix::Matrix& vec, int delay = 0) {

@@ -82,7 +82,7 @@ public:
   virtual void init(unsigned int inputDim,
                     unsigned int outputDim,
                     double unit_map = 0.0,
-                    RandGen* randGen = 0) override;
+                    RandGen* randGen = nullptr) override;
 
   /** passive processing of the input
       (this will be different for every input, since it is a recurrent network)

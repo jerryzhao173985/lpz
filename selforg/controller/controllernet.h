@@ -51,7 +51,7 @@ public:
                     unsigned int outputDim,
                     double unit_map = 0.0,
                     double rand = 0.2,
-                    RandGen* randGen = 0);
+                    RandGen* randGen = nullptr);
 
   // Implement the pure virtual from AbstractModel
   virtual void init(unsigned int inputDim,

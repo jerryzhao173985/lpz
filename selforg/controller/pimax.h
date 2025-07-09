@@ -62,7 +62,7 @@ class PiMax : public AbstractController, public Teachable, public Parametrizable
 public:
   explicit PiMax(const PiMaxConf& conf = getDefaultConf());
 
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override;
 
   virtual ~PiMax();
 
@@ -111,12 +111,12 @@ public:
   virtual bool restore(FILE* f);
 
   /* some direct access functions (unsafe!) */
-  virtual matrix::Matrix getA() override;
-  virtual void setA(const matrix::Matrix& A) override;
-  virtual matrix::Matrix getC() override;
-  virtual void setC(const matrix::Matrix& C) override;
-  virtual matrix::Matrix geth() override;
-  virtual void seth(const matrix::Matrix& h) override;
+  virtual matrix::Matrix getA();
+  virtual void setA(const matrix::Matrix& A);
+  virtual matrix::Matrix getC();
+  virtual void setC(const matrix::Matrix& C);
+  virtual matrix::Matrix geth();
+  virtual void seth(const matrix::Matrix& h);
 
   /***** TEACHABLE ****/
   virtual void setMotorTeaching(const matrix::Matrix& teaching) override;
@@ -126,7 +126,7 @@ public:
 
   /***** PARAMETRIZABLE ****/
   virtual std::list<matrix::Matrix> getParameters()  const override;
-  virtual int setParameters(const std::list<matrix::Matrix>& params) override;
+  virtual int setParameters(const std::list<matrix::Matrix>& params);
 
 protected:
   unsigned short number_sensors = 0;
@@ -174,7 +174,7 @@ protected:
   AbstractController::paramint tau; // length of time window
 
   /// learn values model and controller (A,b,C,h)
-  virtual void learn() override;
+  virtual void learn();
 
   /// neuron transfer function
   static double g(double z) {

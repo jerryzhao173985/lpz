@@ -193,13 +193,13 @@ protected:
 
   /// learn conf.model, (and S) using motors y and corresponding sensors x
   //  @param delay 0 for no delay and n>0 for n timesteps delay in the time loop
-  virtual void learnModel(int delay) override;
+  virtual void learnModel(int delay);
 
   /// handles inhibition damping etc.
   virtual void management() override;
 
   /// returns controller output for given sensor values
-  virtual matrix::Matrix calculateControllerValues(const matrix::Matrix& x_smooth) override;
+  virtual matrix::Matrix calculateControllerValues(const matrix::Matrix& x_smooth);
 
   /** Calculates first and second derivative and returns both in on matrix (above).
       We use simple discrete approximations:
@@ -229,7 +229,7 @@ public:
 
   /// calculates the city block distance (abs) norm of the matrix. (abs sum of absolutes / size of
   /// matrix)
-  virtual double calcMatrixNorm(const matrix::Matrix& m) override;
+  virtual double calcMatrixNorm(const matrix::Matrix& m);
 };
 
 #endif

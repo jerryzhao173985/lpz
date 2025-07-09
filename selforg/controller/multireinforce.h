@@ -63,7 +63,7 @@ class MultiReinforce : public AbstractController {
 
 public:
   explicit MultiReinforce(const MultiReinforceConf& conf = getDefaultConf());
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override;
 
   virtual ~MultiReinforce();
 

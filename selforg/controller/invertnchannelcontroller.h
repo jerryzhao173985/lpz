@@ -36,7 +36,7 @@ class InvertNChannelController : public InvertController {
 
 public:
   explicit InvertNChannelController(int _buffersize, bool _update_only_1 = false);
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override;
 
   virtual ~InvertNChannelController();
 

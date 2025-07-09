@@ -118,7 +118,7 @@ public:
   /** stores the controller values to a given file. */
   virtual bool store(FILE* f)  const override;
   /** loads the controller values from a given file. */
-  virtual bool restore(FILE* f);
+  virtual bool restore(FILE* f) override;
 
   // accessors to matrices
   virtual matrix::Matrix getA() {
@@ -169,10 +169,10 @@ protected:
   bool _internWithLearning = false;
 
   /// learn  model (M = A^T )
-  virtual void learnModel(double eps) override;
+  virtual void learnModel(double eps);
 
   /// learn controller (C,h, C_update)
-  virtual void learnController() override;
+  virtual void learnController();
 
   // Note: g(), g_s(), and clip() are inherited from ControllerBase
   

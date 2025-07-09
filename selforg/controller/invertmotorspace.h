@@ -92,10 +92,10 @@ protected:
   virtual void learnController(const matrix::Matrix& x, const matrix::Matrix& x_smooth, int delay) override;
 
   /// learn A, using motors y and corresponding sensors x
-  virtual void learnModel(const matrix::Matrix& x, const matrix::Matrix& y) override;
+  virtual void learnModel(const matrix::Matrix& x, const matrix::Matrix& y);
 
   /// returns controller output for given sensor values
-  virtual matrix::Matrix calculateControllerValues(const matrix::Matrix& x_smooth) override;
+  virtual matrix::Matrix calculateControllerValues(const matrix::Matrix& x_smooth);
 
   // Helper methods for vector-based buffers
   void putInBuffer(std::vector<matrix::Matrix>& buffer, const matrix::Matrix& vec, int delay = 0) {

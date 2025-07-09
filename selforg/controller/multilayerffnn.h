@@ -172,7 +172,7 @@ public:
    * @param actfun the activation function to be used
    * @return the activation functions which where used until now
    */
-  virtual std::vector<ActivationFunction> setActivationFunction(ActivationFunction actfun) override;
+  virtual std::vector<ActivationFunction> setActivationFunction(ActivationFunction actfun);
 
   /**
    * sets the activation functions (and derivative and inversion too) for all layers.

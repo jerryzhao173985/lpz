@@ -78,7 +78,7 @@ public:
 
   virtual ~OneControllerPerChannel();
 
-  virtual void init(int sensornumber, int motornumber, RandGen* randGen = 0) override;
+  virtual void init(int sensornumber, int motornumber, RandGen* randGen = nullptr) override;
 
   virtual void step(const sensor* sensors, int sensornumber, motor* motors, int motornumber) override;
 
