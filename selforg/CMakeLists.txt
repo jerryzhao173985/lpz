@@ -33,12 +33,9 @@ add_dependencies(selforg selforg_headers)
 # Set include directories
 target_include_directories(selforg
     PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>  # For flattened headers
-        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}>  # Add root so <selforg/...> works
+        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>  # Unified include directory
+        $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include>  # For generated headers
         $<INSTALL_INTERFACE:include>
-        $<INSTALL_INTERFACE:include/selforg>
     PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}
         ${CMAKE_CURRENT_SOURCE_DIR}/controller
@@ -110,7 +107,7 @@ set_target_properties(selforg PROPERTIES
     POSITION_INDEPENDENT_CODE ON
 )
 
-# Create flattened header structure for backward compatibility
+# Create flattened header structure in unified include directory
 file(GLOB_RECURSE HEADER_FILES
     abstractrobot.h
     agent.h
@@ -123,21 +120,29 @@ file(GLOB_RECURSE HEADER_FILES
     statistictools/*.h
 )
 
-# Create include/selforg directory structure
-file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/include/selforg)
+# Create selforg subdirectory in unified include directory
+file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/include/selforg)
+file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/include/selforg)
 
 # Generate a header file that creates all the symlinks
 set(SYMLINK_SCRIPT ${CMAKE_CURRENT_BINARY_DIR}/create_symlinks.cmake)
 file(WRITE ${SYMLINK_SCRIPT} "# Auto-generated script to create header symlinks\n")
-file(APPEND ${SYMLINK_SCRIPT} "file(MAKE_DIRECTORY \"${CMAKE_CURRENT_BINARY_DIR}/include/selforg\")\n")
+file(APPEND ${SYMLINK_SCRIPT} "file(MAKE_DIRECTORY \"${CMAKE_SOURCE_DIR}/include/selforg\")\n")
+file(APPEND ${SYMLINK_SCRIPT} "file(MAKE_DIRECTORY \"${CMAKE_BINARY_DIR}/include/selforg\")\n")
 
 foreach(header ${HEADER_FILES})
     get_filename_component(header_name ${header} NAME)
     set(source_header ${CMAKE_CURRENT_SOURCE_DIR}/${header})
-    set(link_header ${CMAKE_CURRENT_BINARY_DIR}/include/selforg/${header_name})
+    # Create symlinks in unified include directory
+    set(link_header_src ${CMAKE_SOURCE_DIR}/include/selforg/${header_name})
+    # Also create in build directory for out-of-source builds
+    set(link_header_build ${CMAKE_BINARY_DIR}/include/selforg/${header_name})
     
-    file(APPEND ${SYMLINK_SCRIPT} "if(NOT EXISTS \"${link_header}\")\n")
-    file(APPEND ${SYMLINK_SCRIPT} "  file(CREATE_LINK \"${source_header}\" \"${link_header}\" SYMBOLIC)\n")
+    file(APPEND ${SYMLINK_SCRIPT} "if(NOT EXISTS \"${link_header_src}\")\n")
+    file(APPEND ${SYMLINK_SCRIPT} "  file(CREATE_LINK \"${source_header}\" \"${link_header_src}\" SYMBOLIC)\n")
+    file(APPEND ${SYMLINK_SCRIPT} "endif()\n")
+    file(APPEND ${SYMLINK_SCRIPT} "if(NOT EXISTS \"${link_header_build}\")\n")
+    file(APPEND ${SYMLINK_SCRIPT} "  file(CREATE_LINK \"${source_header}\" \"${link_header_build}\" SYMBOLIC)\n")
     file(APPEND ${SYMLINK_SCRIPT} "endif()\n")
 endforeach()
 
@@ -146,16 +151,16 @@ execute_process(COMMAND ${CMAKE_COMMAND} -P ${SYMLINK_SCRIPT})
 
 # Also create a custom command to ensure symlinks exist at build time
 add_custom_command(
-    OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/include/selforg/.symlinks_created
+    OUTPUT ${CMAKE_SOURCE_DIR}/include/selforg/.symlinks_created
     COMMAND ${CMAKE_COMMAND} -P ${SYMLINK_SCRIPT}
-    COMMAND ${CMAKE_COMMAND} -E touch ${CMAKE_CURRENT_BINARY_DIR}/include/selforg/.symlinks_created
-    COMMENT "Ensuring header symlinks exist..."
+    COMMAND ${CMAKE_COMMAND} -E touch ${CMAKE_SOURCE_DIR}/include/selforg/.symlinks_created
+    COMMENT "Ensuring selforg header symlinks exist..."
     DEPENDS ${HEADER_FILES}
 )
 
 # Create a target that depends on the symlinks
 add_custom_target(selforg_headers 
-    DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/include/selforg/.symlinks_created)
+    DEPENDS ${CMAKE_SOURCE_DIR}/include/selforg/.symlinks_created)
 
 # Dependency already added above after add_library
 

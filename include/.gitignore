@@ -1,0 +1,6 @@
+# This directory contains generated symlinks to headers from various components
+# These symlinks are created during the build process and should NOT be tracked in git
+
+# Ignore all symlinks and generated files
+*
+!.gitignore
