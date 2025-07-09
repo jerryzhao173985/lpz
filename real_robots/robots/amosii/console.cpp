@@ -102,7 +102,7 @@ COMMAND commands[] = {
   { "show", com_show, "[OBJECTID]: Lists paramters of OBJECTID or of all objects (if no id given)" },
   { "view", com_show, "Synonym for `show'" },
   { "quit", com_quit, "Quit program" },
-  { static_cast<char*>(NULL), (commandfunc_t)NULL, static_cast<char*>(NULL) }
+  { static_cast<char*>(nullptr), static_cast<commandfunc_t>(nullptr), static_cast<char*>(nullptr) }
 };
 
 /* Forward declarations. */
@@ -302,7 +302,7 @@ char * command_generator (const char *text, int state) {
     }  
 
   /* If no names matched, then return NULL. */
-  return (static_cast<char*>(NULL));
+  return (static_cast<char*>(nullptr));
 }
 
 /* **************************************************************** */
