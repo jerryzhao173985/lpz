@@ -33,9 +33,7 @@ add_dependencies(selforg selforg_headers)
 # Set include directories
 target_include_directories(selforg
     PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/selforg>
+        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>  # Unified include directory
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}>  # For <selforg/...> includes
         $<INSTALL_INTERFACE:include>
         $<INSTALL_INTERFACE:include/selforg>
@@ -123,15 +121,15 @@ file(GLOB_RECURSE HEADER_FILES
     statistictools/*.h
 )
 
-# Create include/selforg directory in source tree (where Makefile expects it)
-file(MAKE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/selforg)
+# Create unified include directory at project root (following best practices)
+file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/include/selforg)
 
-# Create symlinks in the source tree's include directory (like Makefile does)
+# Create symlinks in the unified include directory (avoid duplication)
 # This needs to happen at configure time so headers are available during compilation
 foreach(header ${HEADER_FILES})
     get_filename_component(header_name ${header} NAME)
     set(source_header ${CMAKE_CURRENT_SOURCE_DIR}/${header})
-    set(dest_header ${CMAKE_CURRENT_SOURCE_DIR}/include/selforg/${header_name})
+    set(dest_header ${CMAKE_SOURCE_DIR}/include/selforg/${header_name})
     
     # Create symlink at configure time
     if(NOT EXISTS ${dest_header})
