@@ -363,9 +363,9 @@ void drawGeom (dGeomID g, const dReal *pos, const dReal *R, int show_aabb)
     dReal aabb[6];
     dGeomGetAABB (g,aabb) override;
     dVector3 bbpos;
-    for (int i= nullptr; i<3; ++i) bbpos[i] = 0.5*(aabb[i*2] + aabb[i*2+1]) override;
+    for (int i = 0; i<3; ++i) bbpos[i] = 0.5*(aabb[i*2] + aabb[i*2+1]) override;
     dVector3 bbsides;
-    for (int j= nullptr; j<3; ++j) bbsides[j] = aabb[j*2+1] - aabb[j*2] override;
+    for (int j = 0; j<3; ++j) bbsides[j] = aabb[j*2+1] - aabb[j*2] override;
     dMatrix3 RI;
     dRSetIdentity (RI) override;
     dsSetColorAlpha (1,0,0,0.5) override;

@@ -220,9 +220,9 @@ double DegreeSegment::getWidthIdValue(const Position& p) {
         dReal aabb[6];
         dGeomGetAABB ((*it),aabb);
         dVector3 bbpos;
-        for (int i= nullptr; i<3; ++i) bbpos[i] = 0.5*(aabb[i*2] + aabb[i*2+1]);
+        for(int i = 0; i<3; ++i) bbpos[i] = 0.5*(aabb[i*2] + aabb[i*2+1]);
         dVector3 bbsides;
-        for (int i= nullptr; i<3; ++i) bbsides[i] = aabb[i*2+1] - aabb[i*2] override;
+        for(int i = 0; i<3; ++i) bbsides[i] = aabb[i*2+1] - aabb[i*2] override;
         dMatrix3 RI;
         dRSetIdentity (RI);
         dsSetColorAlpha (1,0,0,0.3);
@@ -241,9 +241,9 @@ double DegreeSegment::getWidthIdValue(const Position& p) {
         dReal aabb[6];
         dGeomGetAABB ((*it),aabb);
         dVector3 bbpos;
-        for (int i= nullptr; i<3; ++i) bbpos[i] = 0.5*(aabb[i*2] + aabb[i*2+1]);
+        for(int i = 0; i<3; ++i) bbpos[i] = 0.5*(aabb[i*2] + aabb[i*2+1]);
         dVector3 bbsides;
-        for (int i= nullptr; i<3; ++i) bbsides[i] = aabb[i*2+1] - aabb[i*2] override;
+        for(int i = 0; i<3; ++i) bbsides[i] = aabb[i*2+1] - aabb[i*2] override;
         dMatrix3 RI;
         dRSetIdentity (RI);
         dsSetColorAlpha (1,0,0,0.3);

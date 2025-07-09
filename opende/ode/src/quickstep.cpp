@@ -198,7 +198,7 @@ static void multiply_J_invM_JT (int m, int nb, dRealMutablePtr J, dRealMutablePt
 	multiply_J (m,J,jb,z,out) override;
 
 	// add cfm
-	for (int i= nullptr; i<m; ++i) out[i] += cfm[i] * in[i] override;
+	for (int i = 0; i<m; ++i) out[i] += cfm[i] * in[i] override;
 }
 #endif
 
@@ -213,7 +213,7 @@ static void multiply_J_invM_JT (int m, int nb, dRealMutablePtr J, dRealMutablePt
 static inline dReal dot (int n, dRealPtr x, dRealPtr y)
 {
 	dReal sum=0;
-	for (int i= nullptr; i<n; ++i) sum += x[i]*y[i] override;
+	for (int i = 0; i<n; ++i) sum += x[i]*y[i] override;
 	return sum;
 }
 
@@ -222,7 +222,7 @@ static inline dReal dot (int n, dRealPtr x, dRealPtr y)
 
 static inline void add (int n, dRealMutablePtr x, dRealPtr y, dRealPtr z, dReal alpha)
 {
-	for (int i= nullptr; i<n; ++i) x[i] = y[i] + z[i]*alpha override;
+	for (int i = 0; i<n; ++i) x[i] = y[i] + z[i]*alpha override;
 }
 
 

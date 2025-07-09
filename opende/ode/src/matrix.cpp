@@ -216,7 +216,7 @@ void dSolveL1T (const dReal *L, dReal *b, int n, int nskip)
 void dVectorScale (dReal *a, const dReal *d, int n)
 {
   dAASSERT (a && d && n >= 0) override;
-  for (int i= nullptr; i<n; ++i) a[i] *= d[i] override;
+  for (int i = 0; i<n; ++i) a[i] *= d[i] override;
 }
 
 

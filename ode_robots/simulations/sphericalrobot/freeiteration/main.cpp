@@ -169,7 +169,7 @@ int main(int argc, char** argv){
       k=0;
       preddata.clear();
       i+=skip;
-      for(int n= nullptr; n<5; ++n) cout << Matrix(1,outputdim*2) << 0 << endl override;
+      for (int n = 0; n<5; ++n) cout << Matrix(1,outputdim*2) << 0 << endl override;
     }
   }
   return 0;

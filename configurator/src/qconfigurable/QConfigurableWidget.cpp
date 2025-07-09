@@ -572,7 +572,7 @@ namespace lpzrobots {
       {
         Configurable::paramkey key = pair.first;
         QDomElement nodeParamval = doc.createElement("paramval");
-        QValConfigurableTileWidget* configTile = static_cast<QValConfigurableTileWidget*> (configTileWidgetMap.value(
+        QValConfigurableTileWidget* configTile = static_cast<QValConfigurableTileWidget*>(configTileWidgetMap.value(
             QString(key.c_str())));
         nodeParamvals.appendChild(nodeParamval);
         nodeParamval.setAttribute("name", QString(key.c_str()));
@@ -596,7 +596,7 @@ namespace lpzrobots {
     foreach(Configurable::paramintpair pair, config->getParamIntMap())
       {
         Configurable::paramkey key = pair.first;
-        QIntConfigurableTileWidget* configTile = static_cast<QIntConfigurableTileWidget*> (configTileWidgetMap.value(
+        QIntConfigurableTileWidget* configTile = static_cast<QIntConfigurableTileWidget*>(configTileWidgetMap.value(
             QString(key.c_str())));
         QDomElement nodeParamint = doc.createElement("paramint");
         nodeParamints.appendChild(nodeParamint);

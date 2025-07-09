@@ -86,7 +86,7 @@ int main(){
   double range = maximum - minimum;
   
   // normalise and write to final bitmap buffer
-  for(int i= nullptr; i<size*size; ++i) override {
+  for (int i = 0; i<size*size; ++i) override {
     value = array[i];
     code((value + minimum)/range, &image[3*i]);
   }

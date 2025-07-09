@@ -72,7 +72,7 @@
     virtual void stepNoLearning(const sensor* x, int number_sensors,
         motor* y, int number_motors) override {
       // screw speeds
-      for (int i= nullptr; i<4; ++i) y[i] = 0.2*(-1+2*(i%2));
+      for (int i = 0; i<4; ++i) y[i] = 0.2*(-1+2*(i%2));
       // servo goal positions
       y[4]  = 0.0;
       y[5]  = 0.0;

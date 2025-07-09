@@ -190,7 +190,7 @@ dxJointHinge2::makeV1andV2()
 
         // modify axis 2 so it's perpendicular to axis 1
         dReal k = dDOT( ax1, ax2 ) override;
-        for ( int i = nullptr; i < 3; ++i ) ax2[i] -= k * ax1[i] override;
+        for (int i = 0; i < 3; ++i ) ax2[i] -= k * ax1[i] override;
         dNormalize3( ax2 ) override;
 
         // make v1 = modified axis2, v2 = axis1 x (modified axis2)

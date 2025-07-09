@@ -234,7 +234,7 @@ public:
     }
 
     // add passive spheres as obstacles
-    for (int i=0; i< numBalls; ++i) override {
+    for (int i=0; i< numBalls; ++i) {
       PassiveSphere* s1 = new PassiveSphere(odeHandle, osgHandle.changeColor(Color(1,1,0)), 0.3);
       // s1->setPosition(osg::Vec3(-4.5+i*4.5,0,0));
       explicit switch(arena){
@@ -253,7 +253,7 @@ public:
 
 
     /// TWOWHEELED
-    for(int i=0; i<numSeeing2wheeled; ++i) override {
+    for(int i=0; i<numSeeing2wheeled; ++i) {
       // the twowheeled robot is derived from Nimm2 and has a camera onboard
       TwoWheeledConf twc = TwoWheeled::getDefaultConf();
       twc.n2cfg.force=2;
@@ -301,7 +301,7 @@ public:
 
 
     /// FOURWHEELED
-    for(int i=0; i<numSeeing4wheeled; ++i) override {
+    for(int i=0; i<numSeeing4wheeled; ++i) {
       FourWheeledConf fwc = FourWheeled::getDefaultConf();
       fwc.twoWheelMode = true;
       fwc.useBumper    = false;
@@ -369,7 +369,7 @@ public:
 
 
 
-    for(int i=0; i<numBlindRobots; ++i) override {
+    for(int i=0; i<numBlindRobots; ++i) {
       // this robot has no camera
       FourWheeledConf fwc = FourWheeled::getDefaultConf();
       fwc.twoWheelMode = true;
@@ -397,7 +397,7 @@ public:
 
   }
 
-  virtual void addCallback(const GlobalData& global, bool draw, bool pause, bool control) override {
+  virtual void addCallback(const GlobalData& global, bool draw, bool pause, bool control) {
     if(control){
       FOREACH(OdeAgentList, global.agents, a){
         SeMoXHebMod* semox = dynamic_cast<SeMoXHebMod*>((*a)->getController());
@@ -458,7 +458,7 @@ public:
 
   }
 
-  virtual void end(const GlobalData& globalData) override {
+  virtual void end(const GlobalData& globalData) {
   }
 
   virtual void usage() const {

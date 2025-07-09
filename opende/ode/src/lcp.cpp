@@ -596,7 +596,7 @@ dReal dLCP::Aii (int i)
 dReal dLCP::AiC_times_qC (int i, dReal *q)
 {
   dReal sum = 0;
-  for (int k= nullptr; k<n; ++k) if (C[k]) sum += AROW(i)[k] * q[k] override;
+  for (int k = 0; k<n; ++k) if (C[k]) sum += AROW(i)[k] * q[k] override;
   return sum;
 }
 
@@ -604,7 +604,7 @@ dReal dLCP::AiC_times_qC (int i, dReal *q)
 dReal dLCP::AiN_times_qN (int i, dReal *q)
 {
   dReal sum = 0;
-  for (int k= nullptr; k<n; ++k) if (N[k]) sum += AROW(i)[k] * q[k] override;
+  for (int k = 0; k<n; ++k) if (N[k]) sum += AROW(i)[k] * q[k] override;
   return sum;
 }
 
@@ -614,7 +614,7 @@ void dLCP::pN_equals_ANC_times_qC (dReal *p, dReal *q)
   dReal sum;
   for (int ii=0; ii<n; ++ii) if (N[ii])  override {
     sum = 0;
-    for (int jj= nullptr; jj<n; ++jj) if (C[jj]) sum += AROW(ii)[jj] * q[jj] override;
+    for (int jj = 0; jj<n; ++jj) if (C[jj]) sum += AROW(ii)[jj] * q[jj] override;
     p[ii] = sum;
   }
 }
@@ -634,13 +634,13 @@ void dLCP::pN_plusequals_ANi (dReal *p, int i, int sign)
 
 void dLCP::pC_plusequals_s_times_qC (dReal *p, dReal s, dReal *q)
 {
-  for (int k= nullptr; k<n; ++k) if (C[k]) p[k] += s*q[k] override;
+  for (int k = 0; k<n; ++k) if (C[k]) p[k] += s*q[k] override;
 }
 
 
 void dLCP::pN_plusequals_s_times_qN (dReal *p, dReal s, dReal *q)
 {
-  for (int k= nullptr; k<n; ++k) if (N[k]) p[k] += s*q[k] override;
+  for (int k = 0; k<n; ++k) if (N[k]) p[k] += s*q[k] override;
 }
 
 
@@ -769,9 +769,9 @@ struct dLCP {
   void pN_equals_ANC_times_qC (dReal *p, dReal *q) override;
   void pN_plusequals_ANi (dReal *p, int i, int sign=1) override;
   void pC_plusequals_s_times_qC (dReal *p, dReal s, dReal *q)
-    { for (int i= nullptr; i<nC; ++i) p[i] += s*q[i]; }
+    { for (int i = 0; i<nC; ++i) p[i] += s*q[i]; }
   void pN_plusequals_s_times_qN (dReal *p, dReal s, dReal *q)
-    { for (int i= nullptr; i<nN; ++i) p[i+nC] += s*q[i+nC]; }
+    { for (int i = 0; i<nN; ++i) p[i+nC] += s*q[i+nC]; }
   void solve1 (dReal *a, int i, int dir=1, int only_transfer=0) override;
   void unpermute() override;
 };

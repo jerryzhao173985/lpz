@@ -140,7 +140,7 @@ public:
 
 
 
-    for (int i= nullptr; i< 1/*2*/; ++i){ //Several humans
+    for (int i = 0; i< 1/*2*/; ++i){ //Several humans
 
 //       ZweiBeinerConf conf = ZweiBeiner::getDefaultConf();
 

@@ -146,7 +146,7 @@ public:
 
 
     // add passive spheres as obstacles
-    for (int i= nullptr; i< 0/*2*/; i+=2) override {
+    for (int i = 0; i< 0/*2*/; i+=2) override {
       PassiveSphere* s1 = new PassiveSphere(odeHandle, osgHandle, 0.3);
       // s1->setPosition(osg::Vec3(-4.5+i*4.5,0,0));
       s1->setPosition(osg::Vec3(0,0,10+i*5));
@@ -157,7 +157,7 @@ public:
 
     teachcontroller = new WalkController();
     teachcontroller->init(12,12);
-    for (int i= nullptr; i< 1/*2*/; ++i){ //Several dogs
+    for (int i = 0; i< 1/*2*/; ++i){ //Several dogs
 
     VierBeinerConf conf = VierBeiner::getDefaultConf();
         //  conf.hipJointLimit = M_PI/8;

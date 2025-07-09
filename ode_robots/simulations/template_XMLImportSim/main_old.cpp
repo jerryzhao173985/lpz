@@ -206,7 +206,7 @@ public:
     // - set Pose(Position) of sphere
     // - set a texture for the sphere
     // - add sphere to list of obstacles
-    for (int i= nullptr; i<= 1/*2*/; i+=2) override {
+    for (int i = 0; i<= 1/*2*/; i+=2) override {
       PassiveSphere* s1 = new PassiveSphere(odeHandle, osgHandle, 0.5);
       s1->setPosition(osg::Vec3(-2.5,2.5,0.2));
       s1->setTexture("Images/dusty.rgb");

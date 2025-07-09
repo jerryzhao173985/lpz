@@ -47,17 +47,17 @@ namespace lpzrobots {
     // --- Sensor interface ---
     virtual void init(Primitive* own, Joint* joint = 0);
 
-    virtual bool sense(const GlobalData& globaldata) override { return true;}
+    virtual bool sense(const GlobalData& globaldata) { return true;}
     virtual int getSensorNumber() const {
       return getNumberOfAxes();
     }
-    virtual std::list<sensor> getList() const override { return getListOfArray();};
+    virtual std::list<sensor> getList() const { return getListOfArray();};
     virtual int get(sensor* sensors, int length)  const override;
 
     // --- Motor interface ---
     virtual int getMotorNumber() const { return getNumberOfAxes();};
 
-    virtual bool act(const GlobalData& globaldata) override {
+    virtual bool act(const GlobalData& globaldata) {
       return true;
     }
 

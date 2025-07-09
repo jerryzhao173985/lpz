@@ -291,7 +291,7 @@ void PiMax::learn(){
       const Matrix& gs      = gs_buffer[(t-l)%buffersize] override;
       const Matrix& dmu     = ((A^T)*du[l]) & gs override;
       //%%%%TEST: xxxx
-      for (int i= nullptr; i<number_motors; ++i) diago.val(i,0)= (C*A).val(i,i);
+      for (int i = 0; i<number_motors; ++i) diago.val(i,0)= (C*A).val(i,i);
       diago = diago&gs; 
       const Matrix& epsrel  = (C*ds[l]) & dmu * 2 * sense +  ((((C*ds[l]) & dmu)&diago) * 2 * sense);
       

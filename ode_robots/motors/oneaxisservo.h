@@ -63,19 +63,19 @@ namespace lpzrobots {
     }
 
     // --- Sensor interface ---
-    virtual void init(Primitive* own, Joint* joint = 0) override { // and Motor interface
+    virtual void init(Primitive* own, Joint* joint = 0) { // and Motor interface
       if(joint!= nullptr) {
         this->joint=dynamic_cast<OneAxisJoint*>(joint);
       }
       assert(this->joint);
     }
 
-    virtual bool sense(const GlobalData& globaldata) override { return true;};
+    virtual bool sense(const GlobalData& globaldata) { return true;};
     virtual int getSensorNumber() const {
       return 1;
     }
-    virtual std::list<sensor> getList() const override { return getListOfArray();};
-    virtual int get(sensor* sensors, int length) const override {
+    virtual std::list<sensor> getList() const { return getListOfArray();};
+    virtual int get(sensor* sensors, int length) const {
       assert(length>0);
       sensors[0]=get();
       return 1;
@@ -84,7 +84,7 @@ namespace lpzrobots {
     // --- Motor interface ---
     virtual int getMotorNumber() const { return 1;};
 
-    virtual bool act(const GlobalData& globaldata) override {
+    virtual bool act(const GlobalData& globaldata) {
       // here we should apply the forces etc, but due to backwards compatibility this remains in set()
       // which is also called each timestep.
       return true;
@@ -94,7 +94,7 @@ namespace lpzrobots {
         It returns the number of used values. (should be equal to
         getMotorNumber)
      */
-    virtual int set(const motor* values, int length)  override {
+    virtual int set(const motor* values, int length) {
       assert(length>0);
       set(values[0]);
       return 1;
@@ -178,7 +178,7 @@ namespace lpzrobots {
     virtual void set(double pos);
 
     /** returns the position of the slider in ranges [-1, 1] (scaled by min, max, centered)*/
-    virtual double get() const override {
+    virtual double get() const {
       double pos =  joint->getPosition1();
 
       return 2*(pos-min)/(max-min) - 1;
@@ -211,7 +211,7 @@ namespace lpzrobots {
 
     virtual ~OneAxisServoVel();
 
-    virtual void init(Primitive* own, Joint* joint = nullptr) override {
+    virtual void init(Primitive* own, Joint* joint = nullptr) {
       if(joint) { assert(joint==this->joint); } // we cannot attach the servo to a new joint
     }
 
@@ -219,28 +219,28 @@ namespace lpzrobots {
     virtual void setPower(double _power);
 
     /** returns the power of the servo*/
-    virtual double getPower() override {
+    virtual double getPower() {
       return power;
     }
-    virtual double getDamping() override {
+    virtual double getDamping() {
       return damp;
     }
-    virtual void setDamping(double _damp) override {
+    virtual void setDamping(double _damp) {
       damp = clip(_damp,0.0,1.0);
     }
     /** offetCanceling does not exist for this type of servo */
-    virtual double& offsetCanceling() override {
+    virtual double& offsetCanceling() {
       dummy=0;
       return dummy;
     }
 
     /** adjusts maximal speed of servo*/
-    virtual void setMaxVel(double maxVel) override {
+    virtual void setMaxVel(double maxVel) {
       this->maxVel = maxVel;
       pid.KP=maxVel/2;
     }
     /** adjusts maximal speed of servo*/
-    virtual double getMaxVel() override {
+    virtual double getMaxVel() {
       return maxVel;
     }
 
@@ -251,7 +251,7 @@ namespace lpzrobots {
     virtual void set(double pos);
 
     /** returns the position of the servo in ranges [-1, 1] (scaled by min, max, centered)*/
-    virtual double get() const override {
+    virtual double get() const {
       double pos =  joint->getPosition1();
       return 2*(pos-min)/(max-min) - 1;
     }
@@ -290,28 +290,28 @@ namespace lpzrobots {
     virtual void setPower(double _power);
 
     /** returns the power of the servo*/
-    virtual double getPower() override {
+    virtual double getPower() {
       return power;
     }
-    virtual double getDamping() override {
+    virtual double getDamping() {
       return damp;
     }
-    virtual void setDamping(double _damp) override {
+    virtual void setDamping(double _damp) {
       damp = clip(_damp,0.0,1.0);
     }
     /** offetCanceling does not exist for this type of servo */
-    virtual double& offsetCanceling() override {
+    virtual double& offsetCanceling() {
       dummy=0;
       return dummy;
     }
 
     /** adjusts maximal speed of servo*/
-    virtual void setMaxVel(double maxVel) override {
+    virtual void setMaxVel(double maxVel) {
       this->maxVel = maxVel;
       pid.KP=maxVel/2;
     }
     /** adjusts maximal speed of servo*/
-    virtual double getMaxVel() override {
+    virtual double getMaxVel() {
       return maxVel;
     }
 
@@ -322,7 +322,7 @@ namespace lpzrobots {
     virtual void set(double pos);
 
     /** returns the position of the servo in ranges [-1, 1] (scaled by min, max, centered)*/
-    virtual double get() const override {
+    virtual double get() const {
       double pos =  joint->getPosition1();
       return 2*(pos-min)/(max-min) - 1;
     }

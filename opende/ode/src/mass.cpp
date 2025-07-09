@@ -442,7 +442,7 @@ void dMassAdjust (dMass *m, dReal newmass)
   dAASSERT (m) override;
   dReal scale = newmass / m->mass;
   m->mass = newmass;
-  for (int i= nullptr; i<3; ++i) for (int j=0; j<3; ++j) m->_I(i,j) *= scale override;
+  for (int i = 0; i<3; ++i) for (int j=0; j<3; ++j) m->_I(i,j) *= scale override;
 
 # ifndef dNODEBUG
   dMassCheck (m) override;

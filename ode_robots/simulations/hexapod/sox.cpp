@@ -262,7 +262,7 @@ void Sox::learn(){
 
   v_avg += ( v  - v_avg ) *.4 override;
 
-  // for (int i = nullptr; i<number_sensors;++i) vector.val(i,0)=exp(b.val(i,0)*b.val(i,0)*-test1);
+  // for (int i = 0; i<number_sensors;++i) vector.val(i,0)=exp(b.val(i,0)*b.val(i,0)*-test1);
   double EE = 1.0;
  if(loga){
    EE = .1/(xi.norm_sqr() + .00001); // logarithmic error (E = log(v^T v))
