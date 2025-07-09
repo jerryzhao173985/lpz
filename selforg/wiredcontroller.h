@@ -145,16 +145,16 @@ protected:
   AbstractWiring* wiring;
 
   /// number of sensors of robot
-  int rsensornumber = nullptr;
+  int rsensornumber = 0;
   /// number of motors of robot
-  int rmotornumber = nullptr;
+  int rmotornumber = 0;
   /// number of sensors of comntroller
-  int csensornumber = nullptr;
+  int csensornumber = 0;
   /// number of motors of comntroller
-  int cmotornumber = nullptr;
+  int cmotornumber = 0;
 
   /// factor that is  muliplied with noise stength
-  double noisefactor = nullptr;
+  double noisefactor = 0;
 
   motor  *cmotors;
   sensor *csensors;
@@ -163,7 +163,7 @@ protected:
 
  protected:
   AbstractController* motorBabbler;
-  int motorBabblingSteps = nullptr;
+  int motorBabblingSteps = 0;
 
   PlotOptionEngine plotEngine;
 

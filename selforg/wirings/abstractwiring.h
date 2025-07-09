@@ -168,31 +168,31 @@ protected:
 
 
   /// using plotTypes this variables defines what is plotted
-  int plotMode = nullptr;
+  int plotMode = 0;
 
   /// for storing the noise values
   matrix::Matrix mNoise;
   sensor* noisevals; // pointer to the noisevalues stored in the matrix
   // size of the noise vector
-  int noisenumber = nullptr;
+  int noisenumber = 0;
 
   /// number of sensors at robot side
-  int rsensornumber = nullptr;
+  int rsensornumber = 0;
   /// copy of the last robot sensors
   matrix::Matrix mRsensors;
 
   /// number of motors at robot side
-  int rmotornumber = nullptr;
+  int rmotornumber = 0;
   /// copy of the last robot motors
   matrix::Matrix mRmotors;
 
   /// number of sensors at controller side
-  int csensornumber = nullptr;
+  int csensornumber = 0;
   /// copy of the last controller sensors
   matrix::Matrix mCsensors;
 
   /// number of motors at controller side
-  int cmotornumber = nullptr;
+  int cmotornumber = 0;
   /// copy of the last controller motors
   matrix::Matrix mCmotors;
 

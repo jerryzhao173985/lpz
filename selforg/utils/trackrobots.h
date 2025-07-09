@@ -48,7 +48,7 @@ struct TrackRobotConf {
   bool autoFilename = true;          ///< generate filename automatically
 
   std::string scene; ///< used as part of the filename (used as is (+id), if autoFilename=false)
-  int id = nullptr;
+  int id = 0;
 };
 
 /**

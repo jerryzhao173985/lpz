@@ -39,7 +39,7 @@
 class NoiseGenerator {
 public:
   NoiseGenerator() {
-    dimension = nullptr;
+    dimension = 0;
     randGen = nullptr;
     ownRandGen = false;
   };
@@ -81,7 +81,7 @@ public:
       @param value field where noise is added. Must have length dimension (\ref init())
    */
   virtual void add(double* value, double noiseStrength) {
-    for (unsigned int i = nullptr; i < dimension; ++i) {
+    for (unsigned int i = 0; i < dimension; ++i) {
       value[i] += generate() * noiseStrength;
     }
   }
@@ -175,7 +175,7 @@ public:
       std::cerr << "ColorUniformNoise: Memory allocation failed\n";
       exit(1);
     }
-    for (unsigned int i = nullptr; i < dimension; ++i) {
+    for (unsigned int i = 0; i < dimension; ++i) {
       mean[i] = 0.0;
     }
   }
@@ -191,7 +191,7 @@ public:
       @param max upper bound of interval
    */
   virtual void add(double* value, double noiseStrength) override {
-    for (unsigned int i = nullptr; i < dimension; ++i) {
+    for (unsigned int i = 0; i < dimension; ++i) {
       mean[i] += sqrttau * uniform(-1, +1) * noiseStrength - tau * mean[i];
       value[i] += mean[i];
     }
@@ -208,9 +208,9 @@ public:
   }
 
 protected:
-  double tau = nullptr;     // smoothing paramter
-  double sqrttau = nullptr; // square root of tau
-  double mean1channel = nullptr; // mean for single channel
+  double tau = 0;     // smoothing paramter
+  double sqrttau = 0; // square root of tau
+  double mean1channel = 0; // mean for single channel
   double* mean;
 };
 
@@ -236,7 +236,7 @@ public:
       std::cerr << "ColorNormalNoise: Memory allocation failed\n";
       exit(1);
     }
-    for (unsigned int i = nullptr; i < dimension; ++i) {
+    for (unsigned int i = 0; i < dimension; ++i) {
       mean[i] = 0.0;
     }
   }
@@ -247,7 +247,7 @@ public:
   }
 
   virtual void add(double* value, double noiseStrength) override {
-    for (unsigned int i = nullptr; i < dimension; ++i) {
+    for (unsigned int i = 0; i < dimension; ++i) {
       mean[i] += sqrttau * WhiteNormalNoise::generate() * noiseStrength - tau * mean[i];
       value[i] += mean[i];
     }
@@ -264,11 +264,11 @@ public:
   }
 
 protected:
-  double tau = nullptr;     // smoothing paramter
-  double sqrttau = nullptr; // square root of smoothing parameter
+  double tau = 0;     // smoothing paramter
+  double sqrttau = 0; // square root of smoothing parameter
   double* mean;
-  double mean1channel = nullptr;
-  double factor = nullptr;
+  double mean1channel = 0;
+  double factor = 0;
 };
 
 /// Sine wave noise. Produces a 90 degree phase shifted sine wave or white noise
@@ -287,7 +287,7 @@ public:
     , amplitude(amplitude)
     , channels(channels)
     , phaseShift(phaseShift) {
-    t = nullptr;
+    t = 0;
   }
 
   virtual ~SineWhiteNoise() override {}
@@ -302,7 +302,7 @@ public:
    */
   virtual void add(double* value, double noiseStrength) override { // min, double max){
 
-    for (unsigned int i = nullptr; i < dimension; ++i) {
+    for (unsigned int i = 0; i < dimension; ++i) {
       if (i < channels) {
         value[i] += sin(t * omega + i * phaseShift) * amplitude * noiseStrength;
         value[i] += (1 - amplitude) * uniform(-1, 1) * noiseStrength;
@@ -321,10 +321,10 @@ public:
 
 protected:
   long int t;            // time
-  double omega = nullptr;          // angle velocity
-  double amplitude = nullptr;      // factor for noise strength
-  unsigned int channels = nullptr; // number of channels with sine
-  double phaseShift = nullptr;     // phase shift
+  double omega = 0;          // angle velocity
+  double amplitude = 0;      // factor for noise strength
+  unsigned int channels = 0; // number of channels with sine
+  double phaseShift = 0;     // phase shift
 };
 
 #endif

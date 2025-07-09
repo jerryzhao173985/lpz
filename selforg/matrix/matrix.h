@@ -57,7 +57,7 @@ class Matrix : public Storeable {
 public:
   /// default constructor: zero matrix (0x0)
   Matrix()
-    : m(nullptr)
+    : m(0)
     , n(0)
     , buffersize(0)
     , data(nullptr) {};

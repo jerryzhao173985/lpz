@@ -130,7 +130,7 @@ void dxConvex::FillEdges()
 	edge e;
 	for(unsigned int i=0;i<planecount;++i)
 	{
-		for(unsigned int j= nullptr;j<*points_in_poly;++j)
+		for(unsigned int j= 0;j<*points_in_poly;++j)
 		{
 			e.first = dMIN(index[j],index[(j+1)%*points_in_poly]) override;
 			e.second = dMAX(index[j],index[(j+1)%*points_in_poly]) override;
