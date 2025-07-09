@@ -62,13 +62,13 @@ public :
 
     explicit XString(const std::string toTranscode);
 
-    explicit explicit XString(const XMLCh* toTranscode);
+    explicit XString(const XMLCh* toTranscode);
 
     ~XString();
 
-    const XMLCh* unicodeForm() const override;
+    const XMLCh* unicodeForm() const;
 
-    const char* charForm() const override;
+    const char* charForm() const;
 
 private :
     XMLCh* unicodeChars = nullptr;
@@ -184,15 +184,15 @@ class XMLHelper{
     static const osg::Vec3 getGeometry(const XERCESC::DOMNode* node);
 };
 
-#define Xstatic_cast<str>static_cast<XString>(str).unicodeForm()
-#define Cstatic_cast<str>static_cast<XString>(str).charForm()
+#define X(str) XString(str).unicodeForm()
+#define C(str) XString(str).charForm()
 
 #define VALOFNODE(node,value) XMLHelper::getNodeAtt(node,value)
 #define VALOFCHILD(node,childNodeName,childValue) XMLHelper::getChildNodeValue(node,childNodeName,childValue)
 #define CHILDOFNODE(node,childNodeName) XMLHelper::getChildNode(node,childNodeName)
 #define VALOFCHILDASSTRING(node,childNodeName,childValue) XMLHelper::getChildNodeValueAsString(node,childNodeName,childValue)
-#define GETPOSITIONstatic_cast<node>(XMLHELPER)::getPosition(node)
-#define GETVIEWPOSITIONstatic_cast<node>(XMLHELPER)::getViewPosition(node)
+#define GETPOSITION static_cast<node>(XMLHELPER)::getPosition(node)
+#define GETVIEWPOSITION static_cast<node>(XMLHELPER)::getViewPosition(node)
 
 /**
  * usage:

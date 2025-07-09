@@ -16,8 +16,8 @@ public:
     char const* GetText() const override;
 
 private:
-    MemoryOutStream(MemoryOutStream const&) override;
-    void operator =(MemoryOutStream const&) override;
+    MemoryOutStream(MemoryOutStream const&);
+    void operator =(MemoryOutStream const&);
 
     mutable std::string m_text;
 };
@@ -33,26 +33,26 @@ namespace UnitTest
 
 class MemoryOutStream{
 public:
-    explicit MemoryOutStream(int const size = 256) override;
+    explicit MemoryOutStream(int const size = 256);
     ~MemoryOutStream();
 
     char const* GetText() const override;
 
-    MemoryOutStream& operator << (char const* txt) override;
-    MemoryOutStream& operator << (int n) override;
-    MemoryOutStream& operator << (long n) override;
-    MemoryOutStream& operator << (unsigned long n) override;
-    MemoryOutStream& operator << (float f) override;
-    MemoryOutStream& operator << (double d) override;
-    MemoryOutStream& operator << (void const* p) override;
-    MemoryOutStream& operator << (unsigned int s) override;
+    MemoryOutStream& operator << (char const* txt);
+    MemoryOutStream& operator << (int n);
+    MemoryOutStream& operator << (long n);
+    MemoryOutStream& operator << (unsigned long n);
+    MemoryOutStream& operator << (float f);
+    MemoryOutStream& operator << (double d);
+    MemoryOutStream& operator << (void const* p);
+    MemoryOutStream& operator << (unsigned int s);
 
     enum { GROW_CHUNK_SIZE = 32 };
     int GetCapacity() const override;
 
 private:
-    void operator= (MemoryOutStream const&) override;
-    void GrowBuffer(int capacity) override;
+    void operator= (MemoryOutStream const&);
+    void GrowBuffer(int capacity);
 
     int m_capacity = 0;
     char* m_buffer;

@@ -12,7 +12,7 @@
        *  heavy motion blur is set by globalData.odeConfig.motionPersistance=0.25
        *  light motuib blur is set by globalData.odeConfig.motionPersistence=0.1
        */ 
-      explicit explicit MotionBlurDrawCallback(const GlobalData& global);
+      explicit MotionBlurDrawCallback(const GlobalData& global);
       
       virtual void operator()(osgProducer::const OsgSceneHandler& handler, Producer::const Camera& camera);
 

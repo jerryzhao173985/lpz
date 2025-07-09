@@ -8,10 +8,10 @@ namespace CppTestHarness
 
 class TestReporter{
 public:
-	explicit TestResults(const TestReporter& reporter) override;
+	explicit TestResults(const TestReporter& reporter);
 
-	void ReportFailure(char const* file, int line, std::string failure) override;
-	void ReportDone(const std::string& testName) override;
+	void ReportFailure(char const* file, int line, std::string failure);
+	void ReportDone(const std::string& testName);
 
 	bool Failed() const override;
 
@@ -20,8 +20,8 @@ private:
 	TestReporter& m_testReporter;
 
 	// revoked
-	TestResults(TestResults const&) override;
-	TestResults& operator =(TestResults const&) override;
+	TestResults(TestResults const&);
+	TestResults& operator =(TestResults const&);
 };
 
 }

@@ -5,11 +5,11 @@ namespace UnitTest {
 
 class TestReporter{
 public:
-    explicit TestResults(TestReporter* reporter = 0) override;
+    explicit TestResults(TestReporter* reporter = 0);
 
-    void OnTestStart(TestDetails const& test) override;
-    void OnTestFailure(TestDetails const& test, char const* failure) override;
-    void OnTestFinish(TestDetails const& test, float secondsElapsed) override;
+    void OnTestStart(TestDetails const& test);
+    void OnTestFailure(TestDetails const& test, char const* failure);
+    void OnTestFinish(TestDetails const& test, float secondsElapsed);
 
     int GetTotalTestCount() const override;
     int GetFailedTestCount() const override;
@@ -23,8 +23,8 @@ private:
 
     bool m_currentTestFailed = false;
 
-    TestResults(TestResults const&) override;
-    TestResults& operator =(TestResults const&) override;
+    TestResults(TestResults const&);
+    TestResults& operator =(TestResults const&);
 };
 
 }

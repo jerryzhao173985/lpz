@@ -73,7 +73,7 @@
 #include <selforg/som.h>
 #include <selforg/multilayerffnn.h>
 
-typedef struct MultiSatConf {
+struct MultiSatConf {
   AbstractController* controller;
   unsigned short buffersize; ///< size of the ringbuffers for sensors, motors,...
   int numHidden;        ///< number of hidden units in the satelite networks
@@ -88,15 +88,15 @@ typedef struct MultiSatConf {
   bool   useDerive;     ///< input to sat network includes derivatives
   double penalty;       ///< factor to multiply the square of the difference of error and optimal error
   double rlMode;        ///< Reinforment learning mode
-} MultiSatConf;
+};
 
 /// Satelite network struct
-typedef struct Sat {
+struct Sat {
   Sat(MultiLayerFFNN* _net, double _eps);
   MultiLayerFFNN* net;
   double eps;
   double lifetime;
-} Sat;
+};
 
 /**
  * class for{
@@ -105,7 +105,7 @@ public:
   MultiSat(const MultiSatConf& conf = getDefaultConf());
   virtual void init(int sensornumber, int motornumber);
 
-  virtual ~MultiSat() override;
+  virtual ~MultiSat();
 
   /// returns the number of sensors the controller was initialised with or 0 if not initialised
   virtual int getSensorNumber() const { return number_sensors; }
@@ -121,7 +121,7 @@ public:
                               motor* , int number_motors);
 
   /// stores the sat networks into seperate files
-  void explicit storeSats(const char* filestem);
+  void storeSats(const char* filestem);
 
 
   /************** CONFIGURABLE ********************************/
@@ -132,15 +132,15 @@ public:
 
   /**** STOREABLE ****/
   /** stores the controller values to a given file. */
-  virtual bool store(FILE* f) const override;
+  virtual bool store(FILE* f) const;
   /** loads the controller values from a given file. */
-  virtual bool explicit restore(FILE* f);
+  virtual bool restore(FILE* f);
 
   /**** INSPECTABLE ****/
-  virtual std::list<iparamkey> getInternalParamNames() const override;
-  virtual std::list<iparamval> getInternalParams() const override;
-  virtual std::list<ILayer> getStructuralLayers() const override;
-  virtual std::list<IConnection> getStructuralConnections() const override;
+  virtual std::list<iparamkey> getInternalParamNames() const;
+  virtual std::list<iparamval> getInternalParams() const;
+  virtual std::list<ILayer> getStructuralLayers() const;
+  virtual std::list<IConnection> getStructuralConnections() const;
 
   static MultiSatConf getDefaultConf() const {
     MultiSatConf c;
@@ -198,7 +198,7 @@ protected:
   matrix::Matrix compete();
 
   /// control of the robot through satelite network(s), and returns suggested control (or 0 matrix if none)
-  matrix::Matrix explicit controlBySat(int winner);
+  matrix::Matrix controlBySat(int winner);
 
   /// reinforcement learning function
   matrix::Matrix rl();
