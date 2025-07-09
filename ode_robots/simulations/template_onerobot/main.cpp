@@ -130,7 +130,23 @@
 // include simulation environment stuff
 #include <ode_robots/simulation.h>
 
-// include agent (class for{
+// include agent (class for handling robots and controllers)
+#include <ode_robots/odeagent.h>
+
+// include robots and components
+#include <ode_robots/robots/nimm2.h>
+#include <ode_robots/robots/nimm4.h>
+
+// include controller
+#include <selforg/invertmotorspace.h>
+#include <selforg/sinecontroller.h>
+
+// fetch all the stuff of lpzrobots into scope
+using namespace lpzrobots;
+
+// add own types here
+
+class ThisSim : public Simulation {
 public:
 
   // starting function (executed once at the beginning of the simulation loop)

@@ -37,17 +37,20 @@ lpzrobots_add_component_library(ode_robots
 target_include_directories(ode_robots PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
     $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include/ode_robots>  # For flattened includes like "osghandle.h"
+    $<INSTALL_INTERFACE:include/ode_robots>  # For both hierarchical and flattened includes after install
 )
 if(TARGET ode_robots_opt)
     target_include_directories(ode_robots_opt PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include/ode_robots>
+        $<INSTALL_INTERFACE:include/ode_robots>
     )
 endif()
 if(TARGET ode_robots_dbg)
     target_include_directories(ode_robots_dbg PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include/ode_robots>
+        $<INSTALL_INTERFACE:include/ode_robots>
     )
 endif()
 

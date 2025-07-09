@@ -72,7 +72,7 @@
 
 using namespace lpzrobots;
 
-class ThisSim{
+class ThisSim : public Simulation {
 public:
 
 
