@@ -9,6 +9,37 @@ on:
   workflow_dispatch:  # Allow manual trigger
 
 jobs:
+  # Quick test with our new build and test script
+  quick-test:
+    name: Quick Build Test
+    runs-on: ubuntu-24.04
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Install minimal dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential cmake
+    
+    - name: Run build and test script
+      run: |
+        chmod +x test_build_and_run.sh
+        ./test_build_and_run.sh
+    
+    - name: Upload test artifacts
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: quick-test-artifacts
+        path: |
+          build/selforg/libselforg.so
+          build/opende/libode.a
+          build/ode_robots/libode_robots.so
+          build/ode_robots/simulations/template_sphererobot/start
+          build/ode_robots/simulations/template_sphererobot/test_output.log
+  
   build:
     name: Build on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}

@@ -23,8 +23,8 @@ lpzrobots_add_component_library(ode_robots
         Threads::Threads
         ${OPENSCENEGRAPH_LIBRARIES}
         $<$<PLATFORM_ID:Darwin>:${OPENGL_LIBRARY}>
-        $<$<NOT:$<PLATFORM_ID:Darwin>>:OpenGL::GL>
-        $<$<NOT:$<PLATFORM_ID:Darwin>>:OpenGL::GLU>
+        $<$<AND:$<NOT:$<PLATFORM_ID:Darwin>>,$<TARGET_EXISTS:OpenGL::GL>>:OpenGL::GL>
+        $<$<AND:$<NOT:$<PLATFORM_ID:Darwin>>,$<TARGET_EXISTS:OpenGL::GLU>>:OpenGL::GLU>
     PRIVATE_DEPS
         $<$<BOOL:${READLINE_LIBRARY}>:${READLINE_LIBRARY}>
     DEFINES

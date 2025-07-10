@@ -32,6 +32,7 @@ function(lpzrobots_find_dependencies)
         else()
             message(WARNING "GSL not found. Some features will be disabled.")
             set(LPZROBOTS_HAS_GSL FALSE PARENT_SCOPE)
+            add_definitions(-DNO_GSL)  # Disable GSL-dependent code
         endif()
     else()
         # Try to find GSL without pkg-config
@@ -47,6 +48,7 @@ function(lpzrobots_find_dependencies)
         else()
             message(WARNING "GSL not found. Some features will be disabled.")
             set(LPZROBOTS_HAS_GSL FALSE PARENT_SCOPE)
+            add_definitions(-DNO_GSL)  # Disable GSL-dependent code
         endif()
     endif()
     
