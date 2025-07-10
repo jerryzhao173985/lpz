@@ -95,9 +95,18 @@ else()
         endif()
     endif()
     
-    # For bundled ODE, the library is built by the legacy Make system
-    # CMake builds will need to ensure the bundled ODE is pre-built
-    message(STATUS "Using bundled ODE headers (library must be pre-built)")
+    # Link to bundled ODE library (restored original working logic)
+    if(LPZROBOTS_ODE_LIBRARIES)
+        target_link_libraries(ode_robots PUBLIC ${LPZROBOTS_ODE_LIBRARIES})
+        if(TARGET ode_robots_opt)
+            target_link_libraries(ode_robots_opt PUBLIC ${LPZROBOTS_ODE_LIBRARIES})
+        endif()
+        if(TARGET ode_robots_dbg)
+            target_link_libraries(ode_robots_dbg PUBLIC ${LPZROBOTS_ODE_LIBRARIES})
+        endif()
+    endif()
+    
+    message(STATUS "Using bundled ODE with library linking")
 endif()
 
 # OpenSceneGraph include directories (use SYSTEM to suppress warnings)

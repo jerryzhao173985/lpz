@@ -298,14 +298,12 @@ function(lpzrobots_setup_bundled_ode)
     set(LPZROBOTS_HAS_ODE TRUE PARENT_SCOPE)
     set(LPZROBOTS_ODE_INCLUDE_DIRS "${CMAKE_SOURCE_DIR}/include/ode-dbl" PARENT_SCOPE)
     
-    # For bundled ODE, we don't link to a library target - it's handled by the legacy Make system
-    # The bundled ODE is built separately and included via headers only for CMake builds
-    set(LPZROBOTS_ODE_LIBRARIES "" PARENT_SCOPE)
+    # For bundled ODE, link to the ode library target (like it was working before)
+    set(LPZROBOTS_ODE_LIBRARIES "ode" PARENT_SCOPE)
     set(LPZROBOTS_ODE_IS_DOUBLE TRUE PARENT_SCOPE)
     set(LPZROBOTS_USE_BUNDLED_ODE TRUE PARENT_SCOPE)
     
-    message(STATUS "Using bundled ODE (double precision, headers only for CMake)")
-    message(WARNING "CMake builds with bundled ODE have limited functionality. Consider using system ODE or legacy Make builds for full features.")
+    message(STATUS "Using bundled ODE (double precision)")
 endfunction()
 
 # Function to setup ODE headers compatibility
