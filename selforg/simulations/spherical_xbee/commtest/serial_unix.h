@@ -75,27 +75,27 @@ public:
    * This method creates an address packet 0000xxxx with xxxx indicating the slave
    * address, i.e. only the 4 lower bits are taken from the 'adr'.
    */
-  virtual uint8 explicit makeAddrPacket(uint8 adr);
+  virtual uint8 makeAddrPacket(uint8 adr);
 
-  virtual uint8 explicit makeStopPacket(uint8 adr);
+  virtual uint8 makeStopPacket(uint8 adr);
 
   /**
    * This method creates an acknowledge packet 0001xxxx with xxxx indicating the
    * slave address.
    */
-  virtual uint8 explicit makeAckPacket(uint8 adr);
+  virtual uint8 makeAckPacket(uint8 adr);
 
   /**
    * This method creates an not-acknowledge packet 0010xxxx with xxxx indicating the
    * slave address.
    */
-  virtual uint8 explicit makeNackPacket(uint8 adr);
+  virtual uint8 makeNackPacket(uint8 adr);
 
   /**
    * This method creates a command packet 01xxxxxx with xxxxxx indicating the command,
    * i.e. only the 6 lower bits are taken from the paramter cmd.
    */
-  virtual uint8 explicit makeCmdPacket(uint8 cmd);
+  virtual uint8 makeCmdPacket(uint8 cmd);
 
   /**
    * This method creates a length packet 10xxxxxx with xxxxxx indicating the length,
@@ -104,7 +104,7 @@ public:
    * of data packets is twice the number of data bytes to be send. The length indicates
    * the number of data bytes, and not the number of data packets.
    */
-  virtual uint8 explicit makeLenPacket(uint8 len);
+  virtual uint8 makeLenPacket(uint8 len);
 
   /**
    * This method writes len bytes of 'raw' data to the slave with the address 'adr'.

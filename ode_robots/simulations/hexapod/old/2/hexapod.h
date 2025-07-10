@@ -172,7 +172,7 @@ namespace lpzrobots {
         like space-internal collision detection, sensor resets/update etc.
         @param globalData structure that contains global data from the simulation environment
     */
-    virtual void explicit doInternalStuff(const GlobalData& globalData);
+    virtual void doInternalStuff(const GlobalData& globalData);
 
 
    // virtual void Hexapod::updateLegTouchstatic_cast<int>(override);
@@ -193,7 +193,7 @@ namespace lpzrobots {
     virtual double getMassOfRobot() const;
 
     /******** CONFIGURABLE ***********/
-    virtual void explicit notifyOnChange(const paramkey& key);
+    virtual void notifyOnChange(const paramkey& key);
 
     /** the main object of the robot, which is used for position and speed tracking */
     virtual const Primitive* getMainPrimitive() const override { return objects[0]; }
