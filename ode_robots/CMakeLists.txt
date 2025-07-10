@@ -55,58 +55,62 @@ if(TARGET ode_robots_dbg)
 endif()
 
 # ODE include and library handling
-if(LPZROBOTS_USE_SYSTEM_ODE AND LPZROBOTS_ODE_INCLUDE_DIRS)
-    # Use system ODE 
-    target_include_directories(ode_robots PUBLIC ${LPZROBOTS_ODE_INCLUDE_DIRS})
+if(NOT LPZROBOTS_USE_SYSTEM_ODE AND EXISTS "${CMAKE_SOURCE_DIR}/include/ode-dbl")
+    target_include_directories(ode_robots PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include/ode-dbl>
+        $<INSTALL_INTERFACE:include/ode-dbl>
+    )
     if(TARGET ode_robots_opt)
-        target_include_directories(ode_robots_opt PUBLIC ${LPZROBOTS_ODE_INCLUDE_DIRS})
-    endif()
-    if(TARGET ode_robots_dbg)
-        target_include_directories(ode_robots_dbg PUBLIC ${LPZROBOTS_ODE_INCLUDE_DIRS})
-    endif()
-    
-    if(LPZROBOTS_ODE_LIBRARIES)
-        target_link_libraries(ode_robots PUBLIC ${LPZROBOTS_ODE_LIBRARIES})
-        if(TARGET ode_robots_opt)
-            target_link_libraries(ode_robots_opt PUBLIC ${LPZROBOTS_ODE_LIBRARIES})
-        endif()
-        if(TARGET ode_robots_dbg)
-            target_link_libraries(ode_robots_dbg PUBLIC ${LPZROBOTS_ODE_LIBRARIES})
-        endif()
-    endif()
-else()
-    # Use bundled ODE headers
-    if(EXISTS "${CMAKE_SOURCE_DIR}/include/ode-dbl")
-        target_include_directories(ode_robots PUBLIC
+        target_include_directories(ode_robots_opt PUBLIC
             $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include/ode-dbl>
             $<INSTALL_INTERFACE:include/ode-dbl>
         )
+    endif()
+    if(TARGET ode_robots_dbg)
+        target_include_directories(ode_robots_dbg PUBLIC
+            $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include/ode-dbl>
+            $<INSTALL_INTERFACE:include/ode-dbl>
+        )
+    endif()
+elseif(DEFINED ODE_INCLUDE_DIRS)
+    target_include_directories(ode_robots PUBLIC ${ODE_INCLUDE_DIRS})
+    if(TARGET ode_robots_opt)
+        target_include_directories(ode_robots_opt PUBLIC ${ODE_INCLUDE_DIRS})
+    endif()
+    if(TARGET ode_robots_dbg)
+        target_include_directories(ode_robots_dbg PUBLIC ${ODE_INCLUDE_DIRS})
+    endif()
+endif()
+
+# ODE library
+if(LPZROBOTS_USE_SYSTEM_ODE AND DEFINED ODE_LIBRARIES)
+    target_link_libraries(ode_robots PUBLIC ${ODE_LIBRARIES})
+    if(TARGET ode_robots_opt)
+        target_link_libraries(ode_robots_opt PUBLIC ${ODE_LIBRARIES})
+    endif()
+    if(TARGET ode_robots_dbg)
+        target_link_libraries(ode_robots_dbg PUBLIC ${ODE_LIBRARIES})
+    endif()
+elseif(APPLE)
+    # Find ODE via brew
+    find_library(ODE_LIBRARY NAMES ode)
+    if(ODE_LIBRARY)
+        target_link_libraries(ode_robots PUBLIC ${ODE_LIBRARY})
         if(TARGET ode_robots_opt)
-            target_include_directories(ode_robots_opt PUBLIC
-                $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include/ode-dbl>
-                $<INSTALL_INTERFACE:include/ode-dbl>
-            )
+            target_link_libraries(ode_robots_opt PUBLIC ${ODE_LIBRARY})
         endif()
         if(TARGET ode_robots_dbg)
-            target_include_directories(ode_robots_dbg PUBLIC
-                $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include/ode-dbl>
-                $<INSTALL_INTERFACE:include/ode-dbl>
-            )
+            target_link_libraries(ode_robots_dbg PUBLIC ${ODE_LIBRARY})
         endif()
     endif()
-    
-    # Link to bundled ODE library (restored original working logic)
-    if(LPZROBOTS_ODE_LIBRARIES)
-        target_link_libraries(ode_robots PUBLIC ${LPZROBOTS_ODE_LIBRARIES})
-        if(TARGET ode_robots_opt)
-            target_link_libraries(ode_robots_opt PUBLIC ${LPZROBOTS_ODE_LIBRARIES})
-        endif()
-        if(TARGET ode_robots_dbg)
-            target_link_libraries(ode_robots_dbg PUBLIC ${LPZROBOTS_ODE_LIBRARIES})
-        endif()
+else()
+    target_link_libraries(ode_robots PUBLIC ode)
+    if(TARGET ode_robots_opt)
+        target_link_libraries(ode_robots_opt PUBLIC ode)
     endif()
-    
-    message(STATUS "Using bundled ODE with library linking")
+    if(TARGET ode_robots_dbg)
+        target_link_libraries(ode_robots_dbg PUBLIC ode)
+    endif()
 endif()
 
 # OpenSceneGraph include directories (use SYSTEM to suppress warnings)
