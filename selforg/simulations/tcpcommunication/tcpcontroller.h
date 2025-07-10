@@ -33,7 +33,7 @@
 public:
   enum CommandID{MOTORS=1,SENSORS,STATUS,QUIT,OBSERVE,CONFIGURATION,RESET};
 
-  typedef std::map<std::string, CommandID> CommandList;
+  using CommandList = std::map<std::string, CommandID>;
 
 
   /**

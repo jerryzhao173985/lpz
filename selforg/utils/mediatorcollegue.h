@@ -30,7 +30,7 @@ class MediatorEvent;
 
 class MediatorCollegue {
 public:
-  typedef unsigned long InformMediatorType;
+  using InformMediatorType = unsigned long;
 
   static const InformMediatorType DEFAULT_INFORM_MEDIATOR_TYPE = 0;
 
