@@ -333,32 +333,16 @@ endfunction()
 
 # Function to setup ODE compatibility layer
 function(lpzrobots_setup_ode_compat)
-    if(APPLE)
-        # On macOS, find system ODE
-        find_library(ODE_LIBRARY NAMES ode PATHS /opt/homebrew/lib /usr/local/lib)
-        if(NOT ODE_LIBRARY)
-            message(FATAL_ERROR "ODE not found. Please install: brew install ode")
-        endif()
-        set(LPZROBOTS_ODE_LIBRARIES ${ODE_LIBRARY} PARENT_SCOPE)
-    else()
-        # On Linux, use system ODE
-        find_library(ODE_LIBRARY NAMES ode)
-        if(NOT ODE_LIBRARY)
-            message(FATAL_ERROR "ODE not found. Please install ODE development package")
-        endif()
-        set(LPZROBOTS_ODE_LIBRARIES ${ODE_LIBRARY} PARENT_SCOPE)
-    endif()
+    # This function is only called when NOT using system ODE
+    # It sets up paths for bundled ODE build
     
-    # Set include path for compatibility headers
-    if(EXISTS "${CMAKE_SOURCE_DIR}/include/ode-dbl")
-        set(LPZROBOTS_ODE_INCLUDE_DIRS "${CMAKE_SOURCE_DIR}/include/ode-dbl" PARENT_SCOPE)
-    else()
-        # Use system headers
-        find_path(ODE_INCLUDE_DIR ode/ode.h)
-        set(LPZROBOTS_ODE_INCLUDE_DIRS ${ODE_INCLUDE_DIR} PARENT_SCOPE)
-    endif()
-    
+    # Set paths for bundled ODE
     set(LPZROBOTS_HAS_ODE TRUE PARENT_SCOPE)
+    set(LPZROBOTS_ODE_INCLUDE_DIRS "${CMAKE_SOURCE_DIR}/include/ode-dbl" PARENT_SCOPE)
+    set(LPZROBOTS_ODE_LIBRARIES "ode_dbl" PARENT_SCOPE)
+    set(LPZROBOTS_ODE_IS_DOUBLE TRUE PARENT_SCOPE)
+    
+    message(STATUS "Using bundled ODE compatibility layer")
 endfunction()
 
 # Function to apply dependency settings to a target

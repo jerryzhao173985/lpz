@@ -48,8 +48,28 @@ jobs:
     - name: Install dependencies (macOS)
       if: runner.os == 'macOS'
       run: |
-        brew install cmake gsl readline ncurses qt@6 open-scene-graph ode
+        # Update Homebrew first
+        brew update
+        
+        # Install dependencies with retry mechanism for transient network issues
+        for pkg in cmake gsl readline ncurses qt@6 open-scene-graph ode; do
+          echo "Installing $pkg..."
+          brew install "$pkg" || brew install "$pkg" || { echo "Failed to install $pkg"; exit 1; }
+        done
+        
+        # Set up Qt6 paths
         echo "$(brew --prefix qt@6)/bin" >> $GITHUB_PATH
+        echo "CMAKE_PREFIX_PATH=$(brew --prefix qt@6):$CMAKE_PREFIX_PATH" >> $GITHUB_ENV
+        
+        # Set up pkg-config paths for better dependency discovery
+        echo "PKG_CONFIG_PATH=$(brew --prefix)/lib/pkgconfig:$PKG_CONFIG_PATH" >> $GITHUB_ENV
+        
+        # Show installed versions for debugging
+        echo "=== Installed versions ==="
+        echo "Qt6: $(brew --prefix qt@6)"
+        echo "OSG: $(brew --prefix open-scene-graph 2>/dev/null || echo 'Not found')"
+        echo "GSL: $(brew --prefix gsl)"
+        echo "ODE: $(brew --prefix ode)"
     
     # Set up ODE compatibility layer
     - name: Create ODE compatibility headers
@@ -71,36 +91,83 @@ jobs:
     # Build with CMake - exactly as users do
     - name: Configure with CMake
       run: |
-        # Don't use system ODE on Ubuntu as it's single precision
+        # Use platform-specific presets for better compatibility
         if [[ "${{ runner.os }}" == "Linux" ]]; then
           cmake --preset=default -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DLPZROBOTS_USE_SYSTEM_ODE=OFF
         else
-          cmake --preset=default -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DLPZROBOTS_USE_SYSTEM_ODE=ON
+          # macOS: Use ARM64 preset for Apple Silicon runners, with proper Qt6 paths
+          if [[ "$(uname -m)" == "arm64" ]]; then
+            cmake --preset=macos-arm64 -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DLPZROBOTS_USE_SYSTEM_ODE=ON
+          else
+            cmake --preset=macos-x64 -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DLPZROBOTS_USE_SYSTEM_ODE=ON
+          fi
         fi
     
     - name: Build
       run: |
-        cmake --build build/default -j$(nproc 2>/dev/null || sysctl -n hw.ncpu)
+        # Determine build directory based on platform
+        if [[ "${{ runner.os }}" == "Linux" ]]; then
+          BUILD_DIR="build/default"
+        else
+          # macOS uses preset-specific directories
+          if [[ "$(uname -m)" == "arm64" ]]; then
+            BUILD_DIR="build/macos-arm64"
+          else
+            BUILD_DIR="build/macos-x64"
+          fi
+        fi
+        echo "Building in: $BUILD_DIR"
+        cmake --build "$BUILD_DIR" -j$(nproc 2>/dev/null || sysctl -n hw.ncpu)
     
     # Run tests if they exist
     - name: Run tests
       run: |
-        cd build/default
+        # Determine build directory based on platform
+        if [[ "${{ runner.os }}" == "Linux" ]]; then
+          BUILD_DIR="build/default"
+        else
+          # macOS uses preset-specific directories
+          if [[ "$(uname -m)" == "arm64" ]]; then
+            BUILD_DIR="build/macos-arm64"
+          else
+            BUILD_DIR="build/macos-x64"
+          fi
+        fi
+        cd "$BUILD_DIR"
         ctest --output-on-failure || echo "No tests found"
     
     # Test that a simulation can be built with CMake
     - name: Test simulation build (CMake)
       run: |
+        # Determine build directory based on platform
+        if [[ "${{ runner.os }}" == "Linux" ]]; then
+          BUILD_DIR="build/default"
+        else
+          # macOS uses preset-specific directories
+          if [[ "$(uname -m)" == "arm64" ]]; then
+            BUILD_DIR="build/macos-arm64"
+          else
+            BUILD_DIR="build/macos-x64"
+          fi
+        fi
+        
         # Test that the installation works and simulations can find libraries
         cd ode_robots/simulations/template_sphererobot
         # Export paths so simulation can find our build
-        export CMAKE_PREFIX_PATH="${{ github.workspace }}/build/default:$CMAKE_PREFIX_PATH"
-        export LD_LIBRARY_PATH="${{ github.workspace }}/build/default/selforg:${{ github.workspace }}/build/default/ode_robots:$LD_LIBRARY_PATH"
+        export CMAKE_PREFIX_PATH="${{ github.workspace }}/$BUILD_DIR:$CMAKE_PREFIX_PATH"
+        
+        # Set library path based on platform
+        if [[ "${{ runner.os }}" == "Linux" ]]; then
+          export LD_LIBRARY_PATH="${{ github.workspace }}/$BUILD_DIR/selforg:${{ github.workspace }}/$BUILD_DIR/ode_robots:$LD_LIBRARY_PATH"
+        else
+          export DYLD_LIBRARY_PATH="${{ github.workspace }}/$BUILD_DIR/selforg:${{ github.workspace }}/$BUILD_DIR/ode_robots:$DYLD_LIBRARY_PATH"
+        fi
+        
         # Try to build with CMake if CMakeLists.txt exists
         if [ -f CMakeLists.txt ]; then
           mkdir -p build_test
           cd build_test
-          cmake .. -DCMAKE_PREFIX_PATH="${{ github.workspace }}/build/default"
+          cmake .. -DCMAKE_PREFIX_PATH="${{ github.workspace }}/$BUILD_DIR"
           make
           test -f start || exit 1
           echo "✓ Simulation built successfully with CMake"
@@ -113,7 +180,7 @@ jobs:
         else
           # Template simulations are built as part of the main build
           # Just check if the binary exists
-          test -f ${{ github.workspace }}/build/default/ode_robots/simulations/template_sphererobot/start || exit 1
+          test -f ${{ github.workspace }}/$BUILD_DIR/ode_robots/simulations/template_sphererobot/start || exit 1
           echo "✓ Simulation binary found from main build"
         fi
 

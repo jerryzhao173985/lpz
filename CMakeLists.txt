@@ -15,6 +15,11 @@ include(LPZRobotsLibrary)
 include(LPZRobotsDependencies)
 include(LPZRobotsTargets)
 
+# Include platform-specific fixes
+if(APPLE)
+    include(LPZRobotsMacOSFixes)
+endif()
+
 # Options
 option(BUILD_SHARED_LIBS "Build shared libraries" ON)
 option(BUILD_EXAMPLES "Build example simulations" ON)
