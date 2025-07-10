@@ -50,6 +50,28 @@ if(PKG_CONFIG_FOUND)
     endif()
 endif()
 
+# Determine Homebrew prefix based on architecture
+if(APPLE)
+    if(CMAKE_SYSTEM_PROCESSOR MATCHES "arm64")
+        set(HOMEBREW_PREFIX "/opt/homebrew")
+    else()
+        set(HOMEBREW_PREFIX "/usr/local")
+    endif()
+    
+    # Also try to get it from environment or brew command
+    if(NOT EXISTS "${HOMEBREW_PREFIX}")
+        execute_process(
+            COMMAND brew --prefix
+            OUTPUT_VARIABLE HOMEBREW_PREFIX_FROM_BREW
+            OUTPUT_STRIP_TRAILING_WHITESPACE
+            ERROR_QUIET
+        )
+        if(HOMEBREW_PREFIX_FROM_BREW)
+            set(HOMEBREW_PREFIX "${HOMEBREW_PREFIX_FROM_BREW}")
+        endif()
+    endif()
+endif()
+
 # Find include directory
 find_path(ODE_INCLUDE_DIR
     NAMES ode/ode.h
@@ -57,6 +79,7 @@ find_path(ODE_INCLUDE_DIR
         ${ODE_ROOT}/include
         ${PC_ODE_INCLUDEDIR}
         ${PC_ODE_INCLUDE_DIRS}
+        ${HOMEBREW_PREFIX}/include
     PATHS
         /usr/include
         /usr/local/include
@@ -73,6 +96,7 @@ if(ODE_USE_DOUBLE)
             ${ODE_ROOT}/lib
             ${PC_ODE_LIBDIR}
             ${PC_ODE_LIBRARY_DIRS}
+            ${HOMEBREW_PREFIX}/lib
         PATHS
             /usr/lib
             /usr/local/lib
@@ -93,6 +117,7 @@ if(NOT ODE_LIBRARY)
             ${ODE_ROOT}/lib
             ${PC_ODE_LIBDIR}
             ${PC_ODE_LIBRARY_DIRS}
+            ${HOMEBREW_PREFIX}/lib
         PATHS
             /usr/lib
             /usr/local/lib

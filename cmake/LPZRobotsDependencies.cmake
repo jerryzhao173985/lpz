@@ -71,13 +71,8 @@ function(lpzrobots_find_dependencies)
         set(LPZROBOTS_HAS_OSG FALSE PARENT_SCOPE)
     endif()
     
-    # ODE (Open Dynamics Engine)
-    if(LPZROBOTS_USE_SYSTEM_ODE)
-        lpzrobots_find_ode()
-    else()
-        # Use compatibility layer
-        lpzrobots_setup_ode_compat()
-    endif()
+    # ODE (Open Dynamics Engine) - Unified handling
+    lpzrobots_find_ode()
     
     # Java for Java tools
     if(BUILD_JAVA_TOOLS)
@@ -90,48 +85,6 @@ function(lpzrobots_find_dependencies)
             set(LPZROBOTS_HAS_JAVA FALSE PARENT_SCOPE)
             set(BUILD_JAVA_TOOLS OFF PARENT_SCOPE)
         endif()
-    endif()
-    
-    # ODE (Open Dynamics Engine)
-    option(LPZROBOTS_USE_SYSTEM_ODE "Use system-installed ODE instead of bundled version" OFF)
-    
-    if(LPZROBOTS_USE_SYSTEM_ODE)
-        set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_LIST_DIR}")
-        find_package(ODE)
-        if(ODE_FOUND)
-            set(LPZROBOTS_HAS_ODE TRUE PARENT_SCOPE)
-            set(LPZROBOTS_ODE_INCLUDE_DIRS ${ODE_INCLUDE_DIRS} PARENT_SCOPE)
-            set(LPZROBOTS_ODE_LIBRARIES ${ODE_LIBRARIES} PARENT_SCOPE)
-            set(LPZROBOTS_ODE_IS_DOUBLE ${ODE_IS_DOUBLE} PARENT_SCOPE)
-            
-            # Create ode-dbl compatibility headers
-            file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/include/ode-dbl)
-            if(ODE_INCLUDE_DIRS)
-                file(GLOB ODE_HEADERS "${ODE_INCLUDE_DIRS}/ode/*.h")
-                foreach(header ${ODE_HEADERS})
-                    get_filename_component(header_name ${header} NAME)
-                    execute_process(
-                        COMMAND ${CMAKE_COMMAND} -E create_symlink 
-                            ${header} 
-                            ${CMAKE_BINARY_DIR}/include/ode-dbl/${header_name}
-                    )
-                endforeach()
-            endif()
-            
-            message(STATUS "Using system ODE (double precision: ${ODE_IS_DOUBLE})")
-        else()
-            message(WARNING "System ODE not found. Will use bundled version.")
-            set(LPZROBOTS_USE_SYSTEM_ODE OFF PARENT_SCOPE)
-        endif()
-    endif()
-    
-    if(NOT LPZROBOTS_USE_SYSTEM_ODE)
-        # Use bundled ODE
-        set(LPZROBOTS_HAS_ODE TRUE PARENT_SCOPE)
-        set(LPZROBOTS_ODE_INCLUDE_DIRS "${CMAKE_SOURCE_DIR}/include/ode-dbl" PARENT_SCOPE)
-        set(LPZROBOTS_ODE_LIBRARIES "ode_dbl" PARENT_SCOPE)
-        set(LPZROBOTS_ODE_IS_DOUBLE TRUE PARENT_SCOPE)
-        message(STATUS "Using bundled ODE (double precision)")
     endif()
     
     # Readline library
@@ -306,43 +259,90 @@ function(lpzrobots_find_test_dependencies)
     endif()
 endfunction()
 
-# Function to find ODE
+# Function to find ODE - Unified logic for all platforms
 function(lpzrobots_find_ode)
-    if(PKG_CONFIG_FOUND)
-        pkg_check_modules(ODE ode)
+    option(LPZROBOTS_USE_SYSTEM_ODE "Use system-installed ODE instead of bundled version" ON)
+    
+    if(LPZROBOTS_USE_SYSTEM_ODE)
+        message(STATUS "Looking for system ODE...")
+        
+        # Use the FindODE.cmake module
+        set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_LIST_DIR}")
+        find_package(ODE)
+        
         if(ODE_FOUND)
             set(LPZROBOTS_HAS_ODE TRUE PARENT_SCOPE)
             set(LPZROBOTS_ODE_INCLUDE_DIRS ${ODE_INCLUDE_DIRS} PARENT_SCOPE)
             set(LPZROBOTS_ODE_LIBRARIES ${ODE_LIBRARIES} PARENT_SCOPE)
-            return()
+            set(LPZROBOTS_ODE_IS_DOUBLE ${ODE_IS_DOUBLE} PARENT_SCOPE)
+            
+            # Create ode-dbl compatibility headers if ODE was found
+            lpzrobots_setup_ode_headers("${ODE_INCLUDE_DIRS}")
+            
+            message(STATUS "Using system ODE (double precision: ${ODE_IS_DOUBLE})")
+        else()
+            message(WARNING "System ODE not found. Will use bundled version.")
+            set(LPZROBOTS_USE_SYSTEM_ODE OFF PARENT_SCOPE)
+            lpzrobots_setup_bundled_ode()
         endif()
-    endif()
-    
-    # Fallback: try to find ODE manually
-    find_library(ODE_LIBRARIES ode)
-    find_path(ODE_INCLUDE_DIRS ode/ode.h)
-    
-    if(ODE_LIBRARIES AND ODE_INCLUDE_DIRS)
-        set(LPZROBOTS_HAS_ODE TRUE PARENT_SCOPE)
-        set(LPZROBOTS_ODE_INCLUDE_DIRS ${ODE_INCLUDE_DIRS} PARENT_SCOPE)
-        set(LPZROBOTS_ODE_LIBRARIES ${ODE_LIBRARIES} PARENT_SCOPE)
     else()
-        message(FATAL_ERROR "System ODE requested but not found")
+        message(STATUS "Using bundled ODE as requested")
+        lpzrobots_setup_bundled_ode()
     endif()
 endfunction()
 
-# Function to setup ODE compatibility layer
-function(lpzrobots_setup_ode_compat)
-    # This function is only called when NOT using system ODE
-    # It sets up paths for bundled ODE build
-    
-    # Set paths for bundled ODE
+# Function to setup bundled ODE paths
+function(lpzrobots_setup_bundled_ode)
     set(LPZROBOTS_HAS_ODE TRUE PARENT_SCOPE)
     set(LPZROBOTS_ODE_INCLUDE_DIRS "${CMAKE_SOURCE_DIR}/include/ode-dbl" PARENT_SCOPE)
     set(LPZROBOTS_ODE_LIBRARIES "ode_dbl" PARENT_SCOPE)
     set(LPZROBOTS_ODE_IS_DOUBLE TRUE PARENT_SCOPE)
+    message(STATUS "Using bundled ODE (double precision)")
+endfunction()
+
+# Function to setup ODE headers compatibility
+function(lpzrobots_setup_ode_headers ode_include_path)
+    if(NOT ode_include_path)
+        return()
+    endif()
     
-    message(STATUS "Using bundled ODE compatibility layer")
+    # Create ode-dbl compatibility directory
+    set(ODE_DBL_DIR "${CMAKE_BINARY_DIR}/include/ode-dbl")
+    file(MAKE_DIRECTORY ${ODE_DBL_DIR})
+    
+    # Find ODE headers and create symlinks
+    if(EXISTS "${ode_include_path}/ode")
+        file(GLOB ODE_HEADERS "${ode_include_path}/ode/*.h")
+        foreach(header ${ODE_HEADERS})
+            get_filename_component(header_name ${header} NAME)
+            set(symlink_target "${ODE_DBL_DIR}/${header_name}")
+            
+            # Remove existing symlink/file if it exists
+            if(EXISTS ${symlink_target})
+                file(REMOVE ${symlink_target})
+            endif()
+            
+            # Create symlink
+            execute_process(
+                COMMAND ${CMAKE_COMMAND} -E create_symlink 
+                    ${header} 
+                    ${symlink_target}
+                RESULT_VARIABLE SYMLINK_RESULT
+            )
+            
+            if(NOT SYMLINK_RESULT EQUAL 0)
+                # Fall back to copying if symlink fails
+                file(COPY ${header} DESTINATION ${ODE_DBL_DIR})
+            endif()
+        endforeach()
+        
+        message(STATUS "Created ODE header compatibility layer at ${ODE_DBL_DIR}")
+        
+        # Also add this to the include path
+        set(LPZROBOTS_ODE_INCLUDE_DIRS "${CMAKE_BINARY_DIR}/include/ode-dbl" PARENT_SCOPE)
+    else()
+        message(WARNING "ODE headers not found at ${ode_include_path}/ode")
+    endif()
 endfunction()
 
 # Function to apply dependency settings to a target

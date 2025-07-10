@@ -74,19 +74,14 @@ jobs:
         echo "macOS Version: $(sw_vers -productVersion)"
         echo "Xcode Version: $(xcodebuild -version 2>/dev/null || echo 'Not found')"
     
-    # Set up ODE compatibility layer
+    # Set up ODE compatibility layer (Linux only - macOS handled by CMake)
     - name: Create ODE compatibility headers
+      if: runner.os == 'Linux'
       run: |
         mkdir -p include/ode-dbl
         if [ -d "/usr/include/ode" ]; then
-          # Linux
+          # Linux - create symlinks for compatibility
           ln -sf /usr/include/ode/*.h include/ode-dbl/
-        elif [ -d "$(brew --prefix ode 2>/dev/null)/include/ode" ]; then
-          # macOS with Homebrew
-          ln -sf $(brew --prefix ode)/include/ode/*.h include/ode-dbl/
-        elif [ -d "/opt/homebrew/include/ode" ]; then
-          # macOS ARM64 fallback
-          ln -sf /opt/homebrew/include/ode/*.h include/ode-dbl/
         else
           echo "Warning: ODE headers not found, will use bundled ODE"
         fi
