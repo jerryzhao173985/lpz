@@ -183,7 +183,7 @@ jobs:
           echo "=== Configuring for Linux ==="
           cmake --preset=ci \
             -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
-            -DLPZROBOTS_USE_SYSTEM_ODE=OFF \
+            -DLPZROBOTS_USE_SYSTEM_ODE=ON \
             -DBUILD_TESTS=ON \
             -DCMAKE_VERBOSE_MAKEFILE=ON
         else
