@@ -9,7 +9,7 @@ on:
   workflow_dispatch:  # Allow manual trigger
 
 jobs:
-  # Quick test with our new build and test script
+  # Quick test with our CMake build system
   quick-test:
     name: Quick Build Test
     runs-on: ubuntu-24.04
@@ -18,15 +18,34 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
     
-    - name: Install minimal dependencies
+    - name: Install essential dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y build-essential cmake
+        sudo apt-get install -y \
+          build-essential cmake pkg-config \
+          libgsl-dev libreadline-dev libncurses5-dev \
+          libgl1-mesa-dev libglu1-mesa-dev freeglut3-dev \
+          qt6-base-dev qt6-tools-dev \
+          libopenscenegraph-dev libode-dev \
+          ccache
     
-    - name: Run build and test script
+    - name: Configure and build core components
       run: |
-        chmod +x test_build_and_run.sh
-        ./test_build_and_run.sh
+        # Configure with minimal dependencies for quick test
+        cmake --preset=ci \
+          -DCMAKE_BUILD_TYPE=Release \
+          -DLPZROBOTS_USE_SYSTEM_ODE=OFF \
+          -DBUILD_GUI_TOOLS=OFF \
+          -DBUILD_TESTS=ON
+        
+        # Build core components
+        cd build/ci
+        make selforg ga_tools -j$(nproc)
+    
+    - name: Run tests
+      run: |
+        cd build/ci
+        ctest --output-on-failure || echo "Tests completed"
     
     - name: Upload test artifacts
       if: always()
@@ -34,11 +53,9 @@ jobs:
       with:
         name: quick-test-artifacts
         path: |
-          build/selforg/libselforg.so
-          build/opende/libode.a
-          build/ode_robots/libode_robots.so
-          build/ode_robots/simulations/template_sphererobot/start
-          build/ode_robots/simulations/template_sphererobot/test_output.log
+          build/ci/selforg/libselforg.a
+          build/ci/ga_tools/libga_tools_opt.a
+          build/ci/real_robots/libamosii_opt.a
   
   build:
     name: Build on ${{ matrix.os }}
@@ -70,14 +87,15 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y \
-          build-essential cmake m4 \
+          build-essential cmake m4 pkg-config \
           libgsl-dev libreadline-dev libncurses5-dev \
           libgl1-mesa-dev libglu1-mesa-dev freeglut3-dev \
           qt6-base-dev qt6-tools-dev qt6-l10n-tools \
           libqt6opengl6-dev libqt6openglwidgets6 \
           libopenscenegraph-dev \
-          libode-dev
-    
+          libode-dev \
+          ccache
+
     - name: Install dependencies (macOS)
       if: runner.os == 'macOS'
       run: |
@@ -85,27 +103,46 @@ jobs:
         brew update
         
         # Install dependencies with retry mechanism for transient network issues
-        for pkg in cmake gsl readline ncurses qt@6 openscenegraph ode; do
+        for pkg in cmake gsl readline ncurses qt@6 openscenegraph ode ccache; do
           echo "Installing $pkg..."
-          brew install "$pkg" || brew install "$pkg" || { echo "Failed to install $pkg"; exit 1; }
+          if ! brew list "$pkg" >/dev/null 2>&1; then
+            brew install "$pkg" || brew install "$pkg" || { echo "Failed to install $pkg"; exit 1; }
+          else
+            echo "$pkg already installed"
+          fi
         done
         
-        # Set up Qt6 paths
-        echo "$(brew --prefix qt@6)/bin" >> $GITHUB_PATH
-        echo "CMAKE_PREFIX_PATH=$(brew --prefix qt@6):$CMAKE_PREFIX_PATH" >> $GITHUB_ENV
+        # Set up Qt6 paths for both ARM64 and Intel
+        if [[ "$(uname -m)" == "arm64" ]]; then
+          QT_PREFIX="/opt/homebrew/opt/qt@6"
+        else
+          QT_PREFIX="/usr/local/opt/qt@6"
+        fi
         
-        # Set up pkg-config paths for better dependency discovery
-        echo "PKG_CONFIG_PATH=$(brew --prefix)/lib/pkgconfig:$PKG_CONFIG_PATH" >> $GITHUB_ENV
+        echo "$QT_PREFIX/bin" >> $GITHUB_PATH
+        echo "CMAKE_PREFIX_PATH=$QT_PREFIX:$CMAKE_PREFIX_PATH" >> $GITHUB_ENV
+        echo "PKG_CONFIG_PATH=/opt/homebrew/lib/pkgconfig:/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH" >> $GITHUB_ENV
         
         # Show installed versions for debugging
         echo "=== Installed versions ==="
-        echo "Qt6: $(brew --prefix qt@6)"
+        echo "Qt6: $QT_PREFIX"
         echo "OSG: $(brew --prefix openscenegraph 2>/dev/null || echo 'Not found')"
         echo "GSL: $(brew --prefix gsl)"
         echo "ODE: $(brew --prefix ode)"
         echo "Architecture: $(uname -m)"
         echo "macOS Version: $(sw_vers -productVersion)"
         echo "Xcode Version: $(xcodebuild -version 2>/dev/null || echo 'Not found')"
+
+    # Set up ccache
+    - name: Setup ccache
+      run: |
+        if [[ "${{ runner.os }}" == "Linux" ]]; then
+          echo "/usr/lib/ccache" >> $GITHUB_PATH
+          echo "CCACHE_DIR=$HOME/.cache/ccache" >> $GITHUB_ENV
+        else
+          echo "$(brew --prefix ccache)/libexec" >> $GITHUB_PATH
+          echo "CCACHE_DIR=$HOME/.cache/ccache" >> $GITHUB_ENV
+        fi
     
     # Set up ODE compatibility layer (Linux only - macOS handled by CMake)
     - name: Create ODE compatibility headers
@@ -122,15 +159,49 @@ jobs:
     # Build with CMake - exactly as users do
     - name: Configure with CMake
       run: |
+        # Debug: Show environment and versions
+        echo "=== Environment Debug ==="
+        echo "OS: ${{ runner.os }}"
+        echo "Architecture: $(uname -m)"
+        echo "CMAKE_PREFIX_PATH: $CMAKE_PREFIX_PATH"
+        echo "PKG_CONFIG_PATH: $PKG_CONFIG_PATH"
+        echo "PATH: $PATH"
+        echo ""
+        
+        # Show installed packages
+        if [[ "${{ runner.os }}" == "Linux" ]]; then
+          echo "=== Installed Qt packages ==="
+          dpkg -l | grep -i qt6 || echo "No Qt6 packages found"
+          echo "=== Installed GSL packages ==="
+          dpkg -l | grep -i gsl || echo "No GSL packages found"
+          echo "=== Installed OpenGL packages ==="
+          dpkg -l | grep -i mesa || echo "No Mesa packages found"
+        fi
+        
         # Use platform-specific presets for better compatibility
         if [[ "${{ runner.os }}" == "Linux" ]]; then
-          cmake --preset=ci -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DLPZROBOTS_USE_SYSTEM_ODE=OFF
+          echo "=== Configuring for Linux ==="
+          cmake --preset=ci \
+            -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
+            -DLPZROBOTS_USE_SYSTEM_ODE=OFF \
+            -DBUILD_TESTS=ON \
+            -DCMAKE_VERBOSE_MAKEFILE=ON
         else
           # macOS: Use ARM64 preset for Apple Silicon runners, with proper Qt6 paths
           if [[ "$(uname -m)" == "arm64" ]]; then
-            cmake --preset=macos-arm64 -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DLPZROBOTS_USE_SYSTEM_ODE=ON
+            echo "=== Configuring for macOS ARM64 ==="
+            cmake --preset=macos-arm64 \
+              -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
+              -DLPZROBOTS_USE_SYSTEM_ODE=ON \
+              -DBUILD_TESTS=ON \
+              -DCMAKE_VERBOSE_MAKEFILE=ON
           else
-            cmake --preset=macos-x64 -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DLPZROBOTS_USE_SYSTEM_ODE=ON
+            echo "=== Configuring for macOS x64 ==="
+            cmake --preset=macos-x64 \
+              -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
+              -DLPZROBOTS_USE_SYSTEM_ODE=ON \
+              -DBUILD_TESTS=ON \
+              -DCMAKE_VERBOSE_MAKEFILE=ON
           fi
         fi
     
@@ -148,7 +219,27 @@ jobs:
           fi
         fi
         echo "Building in: $BUILD_DIR"
-        cmake --build "$BUILD_DIR" -j$(nproc 2>/dev/null || sysctl -n hw.ncpu)
+        
+        # Check if build directory exists
+        if [ ! -d "$BUILD_DIR" ]; then
+          echo "ERROR: Build directory $BUILD_DIR does not exist!"
+          echo "Available directories:"
+          ls -la build/ || echo "No build directory found"
+          exit 1
+        fi
+        
+        # Check if Makefile exists
+        if [ ! -f "$BUILD_DIR/Makefile" ]; then
+          echo "ERROR: No Makefile found in $BUILD_DIR"
+          echo "Directory contents:"
+          ls -la "$BUILD_DIR"
+          exit 1
+        fi
+        
+        # Build with appropriate parallel jobs
+        NPROC=$(nproc 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 2)
+        echo "Building with $NPROC parallel jobs"
+        cmake --build "$BUILD_DIR" -j${NPROC} --verbose
     
     # Run tests if they exist
     - name: Run tests

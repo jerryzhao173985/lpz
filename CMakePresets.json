@@ -183,6 +183,8 @@
                 "CMAKE_BUILD_TYPE": "Release",
                 "BUILD_TESTS": "ON",
                 "BUILD_GUI_TOOLS": "ON",
+                "BUILD_JAVA_TOOLS": "ON",
+                "ENABLE_OPENMP": "OFF",
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install/ci"
             }
         },
