@@ -54,8 +54,10 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#ifdef HAVE_READLINE
 #include <readline/readline.h>
 #include <readline/history.h>
+#endif
 
 #include <vector>
 #include <selforg/stl_adds.h>
@@ -137,6 +139,7 @@ bool handleConsole(GlobalData& globalData){
   char *line, *s;
   bool rv = true;
 
+#ifdef HAVE_READLINE
   //  initialize_readline ();       /* Bind our completer. */
   fflush(stdout);
   std::cout << "\nType: ? for help or press TAB\n";
@@ -155,6 +158,23 @@ bool handleConsole(GlobalData& globalData){
   }
   
   free (line);
+#else
+  // Fallback implementation without readline
+  char buffer[256];
+  fflush(stdout);
+  std::cout << "\nType: ? for help\n";
+  std::cout << "> ";
+  fflush(stdout);
+  
+  if (fgets(buffer, sizeof(buffer), stdin) == nullptr)
+    return rv;
+    
+  line = buffer;
+  s = stripwhite (line);  
+  if (*s) {    
+    rv = execute_line (globalData,s);
+  }
+#endif
   return rv;
 }
 
@@ -232,15 +252,20 @@ char * stripwhite (char *string){
 /*                                                                  */
 /* **************************************************************** */
 
+#ifdef HAVE_READLINE
 char *command_generator (const char *, int);
+#endif
 //char **console_completion __P((const char *, int, int));
+#ifdef HAVE_READLINE
 char **console_completion (const char *, int, int);
+#endif
 
 /* Tell the GNU Readline library how to complete.  We want to try to
    complete on command names if this is the first word in the line, or
    on filenames if not. */
 void initializeConsole ()
 {
+#ifdef HAVE_READLINE
   /* Allow conditional parsing of the ~/.inputrc file. */
   rl_readline_name = "LPZRobots_Console";
 
@@ -248,13 +273,17 @@ void initializeConsole ()
   rl_attempted_completion_function = console_completion;
 
   read_history (".history");
+#endif
 }
 
 /// store the history
 void closeConsole(){
+#ifdef HAVE_READLINE
   write_history(".history");
+#endif
 }
 
+#ifdef HAVE_READLINE
 /* Attempt to complete on the contents of TEXT.  START and END
    bound the region of rl_line_buffer that contains the word to
    complete.  TEXT is the word to complete.  We can use the entire
@@ -304,6 +333,7 @@ char * command_generator (const char *text, int state) {
   /* If no names matched, then return NULL. */
   return (static_cast<char*>(nullptr));
 }
+#endif
 
 /* **************************************************************** */
 /*                                                                  */

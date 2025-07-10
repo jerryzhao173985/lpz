@@ -22,10 +22,17 @@ lpzrobots_add_component_library(amosii
     SOURCES ${AMOSII_SOURCES}
 )
 
+# Disable specific warnings for AMOSII (legacy hardware interface code)
+target_compile_options(amosii PRIVATE
+    -Wno-old-style-cast
+    -Wno-unused-private-field
+    -Wno-unused-variable
+)
+
 target_link_libraries(amosii
     PUBLIC
         lpzrobots::selforg
-        lpzrobots::ode_robots
+        $<$<TARGET_EXISTS:lpzrobots::ode_robots>:lpzrobots::ode_robots>
 )
 
 target_include_directories(amosii

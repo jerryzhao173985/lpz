@@ -14,7 +14,7 @@ lpzrobots_add_component_library(ode_robots
         agents
         motors
         obstacles
-        osg
+        $<$<BOOL:${LPZROBOTS_HAS_OSG}>:osg>
         robots
         sensors
         utils

@@ -119,7 +119,11 @@ if(LPZROBOTS_USE_SYSTEM_ODE)
     add_subdirectory(opende)
 endif()
 
-add_subdirectory(ode_robots)
+if(LPZROBOTS_HAS_OSG)
+    add_subdirectory(ode_robots)
+else()
+    message(STATUS "Skipping ode_robots (requires OpenSceneGraph)")
+endif()
 
 if(BUILD_GUI_TOOLS)
     add_subdirectory(guilogger)
