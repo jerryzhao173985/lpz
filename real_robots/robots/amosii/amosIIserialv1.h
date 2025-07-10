@@ -51,7 +51,7 @@
 #include<sys/time.h>
 
 //#include "sensor_motor_definition.h"
-#include <ode_robots/amosiisensormotordefinition.h>
+#include "amosiisensormotordefinition.h"
 
 // // // // // // // using namespace std; // Removed from header // Removed from header // Removed from header // Removed from header // Removed from header // Removed from header // Removed from header
 

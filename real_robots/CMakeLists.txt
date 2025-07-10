@@ -32,13 +32,11 @@ target_compile_options(amosii PRIVATE
 target_link_libraries(amosii
     PUBLIC
         lpzrobots::selforg
-        $<$<TARGET_EXISTS:lpzrobots::ode_robots>:lpzrobots::ode_robots>
 )
 
 target_include_directories(amosii
     PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/robots/amosii>
-        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/ode_robots/include>
         $<INSTALL_INTERFACE:include/real_robots/amosii>
 )
 
