@@ -73,7 +73,9 @@ jobs:
           build-essential cmake m4 \
           libgsl-dev libreadline-dev libncurses5-dev \
           libgl1-mesa-dev libglu1-mesa-dev freeglut3-dev \
-          qt6-base-dev libopenscenegraph-dev \
+          qt6-base-dev qt6-tools-dev qt6-l10n-tools \
+          libqt6opengl6-dev libqt6openglwidgets6 \
+          libopenscenegraph-dev \
           libode-dev
     
     - name: Install dependencies (macOS)

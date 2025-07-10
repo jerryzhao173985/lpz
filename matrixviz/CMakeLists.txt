@@ -14,7 +14,11 @@ if(Qt6_FOUND)
     endif()
     set(QT_VERSION_MAJOR 6)
 else()
-    find_package(Qt5 REQUIRED COMPONENTS Core Widgets OpenGL Xml)
+    find_package(Qt5 COMPONENTS Core Widgets OpenGL Xml)
+    if(NOT Qt5_FOUND)
+        message(WARNING "Qt5 not found. Skipping matrixviz.")
+        return()
+    endif()
     set(CMAKE_AUTOMOC ON)
     set(CMAKE_AUTOUIC ON)
     set(CMAKE_AUTORCC ON)
@@ -22,7 +26,11 @@ else()
 endif()
 
 
-find_package(OpenGL REQUIRED)
+find_package(OpenGL)
+if(NOT OpenGL_FOUND)
+    message(WARNING "OpenGL not found. Skipping matrixviz.")
+    return()
+endif()
 
 # Source files
 set(MATRIXVIZ_SOURCES
