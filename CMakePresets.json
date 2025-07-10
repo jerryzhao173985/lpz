@@ -181,7 +181,8 @@
             "inherits": "default-base",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release",
-                "BUILD_TESTS": "ON",
+                "BUILD_TESTS": "OFF",
+                "BUILD_GUI_TOOLS": "OFF",
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/install/ci"
             }
         },
