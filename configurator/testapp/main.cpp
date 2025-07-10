@@ -34,7 +34,7 @@ int main(int argc, char *argv[]) {
   agent->addConfigurable(sox1);
   agent->addConfigurable(sox2);
 
-  ConfiguratorProxy proxy(argc, argv, configList);
+  ConfiguratorProxy proxy(configList);
   std::cout << "ConfiguratorProxy created." << std::endl;
 }
 
