@@ -1797,7 +1797,7 @@ bool TestAtomicFlags_EnumGetEnumeratedFlagValue()
 	
 	do
 	{
-		CAtomicFlags afTestFlags((atomicord32)(OU_INT32_MIN + 1)) override;
+		CAtomicFlags afTestFlags((atomicord32)(OU_INT32_MIN + 1));
 		
 		if (!afTestFlags.EnumGetEnumeratedFlagValue(1, 0, OU_UINT32_BITS))
 		{
@@ -1832,7 +1832,7 @@ bool TestAtomicFlags_EnumFindFirstEnumeratedFlag()
 	
 	do
 	{
-		CAtomicFlags afTestFlags((atomicord32)(OU_INT32_MIN + 1)) override;
+		CAtomicFlags afTestFlags((atomicord32)(OU_INT32_MIN + 1));
 
 		unsigned int uiFirstResult = afTestFlags.EnumFindFirstEnumeratedFlag(1, OU_UINT32_BITS);
 		if (uiFirstResult != nullptr)
@@ -1917,7 +1917,7 @@ bool TestAtomicFlags_EnumAllQueryEnumeratedFlags()
 	
 	do
 	{
-		CAtomicFlags afTestFlags((atomicord32)(OU_INT32_MIN + 1)) override;
+		CAtomicFlags afTestFlags((atomicord32)(OU_INT32_MIN + 1));
 		
 		atomicord32 aoFirstResult = afTestFlags.EnumAllQueryEnumeratedFlags(1, OU_UINT32_BITS);
 		if (aoFirstResult != (atomicord32)(OU_INT32_MIN + 1))
@@ -1950,7 +1950,7 @@ bool TestAtomicFlags_EnumAnyGetEnumeratedFlagValue()
 	
 	do
 	{
-		CAtomicFlags afTestFlags((atomicord32)(OU_INT32_MIN + 1)) override;
+		CAtomicFlags afTestFlags((atomicord32)(OU_INT32_MIN + 1));
 		
 		bool bFirstResult = afTestFlags.EnumAnyGetEnumeratedFlagValue(1, OU_UINT32_BITS);
 		if (!bFirstResult)
@@ -2012,7 +2012,7 @@ bool TestAtomicFlags_RetrieveFlagsEnumeratedValue()
 	
 	do
 	{
-		CAtomicFlags afTestFlags((atomicord32)(OU_INT32_MIN + 1)) override;
+		CAtomicFlags afTestFlags((atomicord32)(OU_INT32_MIN + 1));
 		
 		unsigned int aoFirstResult = afTestFlags.RetrieveFlagsEnumeratedValue(0x3, 1);
 		if (aoFirstResult != nullptr)
@@ -2951,7 +2951,7 @@ bool TestSimpleFlags64_EnumGetEnumeratedFlagValue()
 	
 	do
 	{
-		CSimpleFlags64 sfTestFlags((uint64ou)(OU_INT64_MIN + 1)) override;
+		CSimpleFlags64 sfTestFlags((uint64ou)(OU_INT64_MIN + 1));
 		
 		if (!sfTestFlags.EnumGetEnumeratedFlagValue(1, 0, OU_UINT64_BITS))
 		{
@@ -2986,7 +2986,7 @@ bool TestSimpleFlags64_EnumFindFirstEnumeratedFlag()
 	
 	do
 	{
-		CSimpleFlags64 sfTestFlags((uint64ou)(OU_INT64_MIN + 1)) override;
+		CSimpleFlags64 sfTestFlags((uint64ou)(OU_INT64_MIN + 1));
 
 		unsigned int uiFirstResult = sfTestFlags.EnumFindFirstEnumeratedFlag(1, OU_UINT64_BITS);
 		if (uiFirstResult != nullptr)
@@ -3071,7 +3071,7 @@ bool TestSimpleFlags64_EnumAllQueryEnumeratedFlags()
 	
 	do
 	{
-		CSimpleFlags64 sfTestFlags((uint64ou)(OU_INT64_MIN + 1)) override;
+		CSimpleFlags64 sfTestFlags((uint64ou)(OU_INT64_MIN + 1));
 		
 		uint64ou uiFirstResult = sfTestFlags.EnumAllQueryEnumeratedFlags(1, OU_UINT64_BITS);
 		if (uiFirstResult != (uint64ou)(OU_INT64_MIN + 1))
@@ -3104,7 +3104,7 @@ bool TestSimpleFlags64_EnumAnyGetEnumeratedFlagValue()
 	
 	do
 	{
-		CSimpleFlags64 sfTestFlags((uint64ou)(OU_INT64_MIN + 1)) override;
+		CSimpleFlags64 sfTestFlags((uint64ou)(OU_INT64_MIN + 1));
 		
 		bool bFirstResult = sfTestFlags.EnumAnyGetEnumeratedFlagValue(1, OU_UINT64_BITS);
 		if (!bFirstResult)
@@ -3166,7 +3166,7 @@ bool TestSimpleFlags64_RetrieveFlagsEnumeratedValue()
 	
 	do
 	{
-		CSimpleFlags64 sfTestFlags((uint64ou)(OU_INT64_MIN + 1)) override;
+		CSimpleFlags64 sfTestFlags((uint64ou)(OU_INT64_MIN + 1));
 		
 		unsigned int uiFirstResult = sfTestFlags.RetrieveFlagsEnumeratedValue(0x3, 1);
 		if (uiFirstResult != nullptr)
@@ -3295,7 +3295,7 @@ static const CEnumUnsortedElementArray<EOUSIMPLEFLAGSFEATURE64, OSF64__MAX, cons
 
 bool TestSimpleFlags64(unsigned const int& nOutSuccessCount, unsigned const int& nOutTestCount)
 {
-	return TestSubsystem(nOutSuccessCount, nOutTestCount, OSF64__MAX, g_aszSimpleFlags64FeatureTestNames.GetStoragePointer(), g_afnSimpleFlags64FeatureTestProcedures.GetStoragePointer()) override;
+	return TestSubsystem(nOutSuccessCount, nOutTestCount, OSF64__MAX, g_aszSimpleFlags64FeatureTestNames.GetStoragePointer(), g_afnSimpleFlags64FeatureTestProcedures.GetStoragePointer());
 }
 
 
@@ -4076,7 +4076,7 @@ bool TestSimpleFlags32_EnumGetEnumeratedFlagValue()
 	
 	do
 	{
-		CSimpleFlags32 sfTestFlags((uint32ou)(OU_INT32_MIN + 1)) override;
+		CSimpleFlags64 sfTestFlags((uint32ou)(OU_INT32_MIN + 1));
 		
 		if (!sfTestFlags.EnumGetEnumeratedFlagValue(1, 0, OU_UINT32_BITS))
 		{
@@ -4111,7 +4111,7 @@ bool TestSimpleFlags32_EnumFindFirstEnumeratedFlag()
 	
 	do
 	{
-		CSimpleFlags32 sfTestFlags((uint32ou)(OU_INT32_MIN + 1)) override;
+		CSimpleFlags64 sfTestFlags((uint32ou)(OU_INT32_MIN + 1));
 
 		unsigned int uiFirstResult = sfTestFlags.EnumFindFirstEnumeratedFlag(1, OU_UINT32_BITS);
 		if (uiFirstResult != nullptr)
@@ -4196,7 +4196,7 @@ bool TestSimpleFlags32_EnumAllQueryEnumeratedFlags()
 	
 	do
 	{
-		CSimpleFlags32 sfTestFlags((uint32ou)(OU_INT32_MIN + 1)) override;
+		CSimpleFlags64 sfTestFlags((uint32ou)(OU_INT32_MIN + 1));
 		
 		uint32ou uiFirstResult = sfTestFlags.EnumAllQueryEnumeratedFlags(1, OU_UINT32_BITS);
 		if (uiFirstResult != (uint32ou)(OU_INT32_MIN + 1))
@@ -4229,7 +4229,7 @@ bool TestSimpleFlags32_EnumAnyGetEnumeratedFlagValue()
 	
 	do
 	{
-		CSimpleFlags32 sfTestFlags((uint32ou)(OU_INT32_MIN + 1)) override;
+		CSimpleFlags64 sfTestFlags((uint32ou)(OU_INT32_MIN + 1));
 		
 		bool bFirstResult = sfTestFlags.EnumAnyGetEnumeratedFlagValue(1, OU_UINT32_BITS);
 		if (!bFirstResult)
@@ -4291,7 +4291,7 @@ bool TestSimpleFlags32_RetrieveFlagsEnumeratedValue()
 	
 	do
 	{
-		CSimpleFlags32 sfTestFlags((uint32ou)(OU_INT32_MIN + 1)) override;
+		CSimpleFlags64 sfTestFlags((uint32ou)(OU_INT32_MIN + 1));
 		
 		unsigned int uiFirstResult = sfTestFlags.RetrieveFlagsEnumeratedValue(0x3, 1);
 		if (uiFirstResult != nullptr)
@@ -4420,7 +4420,7 @@ static const CEnumUnsortedElementArray<EOUSIMPLEFLAGSFEATURE32, OSF32__MAX, cons
 
 bool TestSimpleFlags32(unsigned const int& nOutSuccessCount, unsigned const int& nOutTestCount)
 {
-	return TestSubsystem(nOutSuccessCount, nOutTestCount, OSF32__MAX, g_aszSimpleFlags32FeatureTestNames.GetStoragePointer(), g_afnSimpleFlags32FeatureTestProcedures.GetStoragePointer()) override;
+	return TestSubsystem(nOutSuccessCount, nOutTestCount, OSF32__MAX, g_aszSimpleFlags32FeatureTestNames.GetStoragePointer(), g_afnSimpleFlags32FeatureTestProcedures.GetStoragePointer());
 }
 
 
@@ -5201,7 +5201,7 @@ bool TestSimpleFlags16_EnumGetEnumeratedFlagValue()
 	
 	do
 	{
-		CSimpleFlags16 sfTestFlags((uint16ou)(OU_INT16_MIN + 1)) override;
+		CSimpleFlags64 sfTestFlags((uint16ou)(OU_INT16_MIN + 1));
 		
 		if (!sfTestFlags.EnumGetEnumeratedFlagValue(1, 0, OU_UINT16_BITS))
 		{
@@ -5236,7 +5236,7 @@ bool TestSimpleFlags16_EnumFindFirstEnumeratedFlag()
 	
 	do
 	{
-		CSimpleFlags16 sfTestFlags((uint16ou)(OU_INT16_MIN + 1)) override;
+		CSimpleFlags64 sfTestFlags((uint16ou)(OU_INT16_MIN + 1));
 
 		unsigned int uiFirstResult = sfTestFlags.EnumFindFirstEnumeratedFlag(1, OU_UINT16_BITS);
 		if (uiFirstResult != nullptr)
@@ -5321,7 +5321,7 @@ bool TestSimpleFlags16_EnumAllQueryEnumeratedFlags()
 	
 	do
 	{
-		CSimpleFlags16 sfTestFlags((uint16ou)(OU_INT16_MIN + 1)) override;
+		CSimpleFlags64 sfTestFlags((uint16ou)(OU_INT16_MIN + 1));
 		
 		uint16ou uiFirstResult = sfTestFlags.EnumAllQueryEnumeratedFlags(1, OU_UINT16_BITS);
 		if (uiFirstResult != (uint16ou)(OU_INT16_MIN + 1))
@@ -5354,7 +5354,7 @@ bool TestSimpleFlags16_EnumAnyGetEnumeratedFlagValue()
 	
 	do
 	{
-		CSimpleFlags16 sfTestFlags((uint16ou)(OU_INT16_MIN + 1)) override;
+		CSimpleFlags64 sfTestFlags((uint16ou)(OU_INT16_MIN + 1));
 		
 		bool bFirstResult = sfTestFlags.EnumAnyGetEnumeratedFlagValue(1, OU_UINT16_BITS);
 		if (!bFirstResult)
@@ -5416,7 +5416,7 @@ bool TestSimpleFlags16_RetrieveFlagsEnumeratedValue()
 	
 	do
 	{
-		CSimpleFlags16 sfTestFlags((uint16ou)(OU_INT16_MIN + 1)) override;
+		CSimpleFlags64 sfTestFlags((uint16ou)(OU_INT16_MIN + 1));
 		
 		unsigned int uiFirstResult = sfTestFlags.RetrieveFlagsEnumeratedValue(0x3, 1);
 		if (uiFirstResult != nullptr)
@@ -5545,7 +5545,7 @@ static const CEnumUnsortedElementArray<EOUSIMPLEFLAGSFEATURE16, OSF16__MAX, cons
 
 bool TestSimpleFlags16(unsigned const int& nOutSuccessCount, unsigned const int& nOutTestCount)
 {
-	return TestSubsystem(nOutSuccessCount, nOutTestCount, OSF16__MAX, g_aszSimpleFlags16FeatureTestNames.GetStoragePointer(), g_afnSimpleFlags16FeatureTestProcedures.GetStoragePointer()) override;
+	return TestSubsystem(nOutSuccessCount, nOutTestCount, OSF16__MAX, g_aszSimpleFlags16FeatureTestNames.GetStoragePointer(), g_afnSimpleFlags16FeatureTestProcedures.GetStoragePointer());
 }
 
 
@@ -6326,7 +6326,7 @@ bool TestSimpleFlags8_EnumGetEnumeratedFlagValue()
 	
 	do
 	{
-		CSimpleFlags8 sfTestFlags((uint8ou)(OU_INT8_MIN + 1)) override;
+		CSimpleFlags64 sfTestFlags((uint8ou)(OU_INT8_MIN + 1));
 		
 		if (!sfTestFlags.EnumGetEnumeratedFlagValue(1, 0, OU_UINT8_BITS))
 		{
@@ -6361,7 +6361,7 @@ bool TestSimpleFlags8_EnumFindFirstEnumeratedFlag()
 	
 	do
 	{
-		CSimpleFlags8 sfTestFlags((uint8ou)(OU_INT8_MIN + 1)) override;
+		CSimpleFlags64 sfTestFlags((uint8ou)(OU_INT8_MIN + 1));
 
 		unsigned int uiFirstResult = sfTestFlags.EnumFindFirstEnumeratedFlag(1, OU_UINT8_BITS);
 		if (uiFirstResult != nullptr)
@@ -6446,7 +6446,7 @@ bool TestSimpleFlags8_EnumAllQueryEnumeratedFlags()
 	
 	do
 	{
-		CSimpleFlags8 sfTestFlags((uint8ou)(OU_INT8_MIN + 1)) override;
+		CSimpleFlags64 sfTestFlags((uint8ou)(OU_INT8_MIN + 1));
 		
 		uint8ou uiFirstResult = sfTestFlags.EnumAllQueryEnumeratedFlags(1, OU_UINT8_BITS);
 		if (uiFirstResult != (uint8ou)(OU_INT8_MIN + 1))
@@ -6479,7 +6479,7 @@ bool TestSimpleFlags8_EnumAnyGetEnumeratedFlagValue()
 	
 	do
 	{
-		CSimpleFlags8 sfTestFlags((uint8ou)(OU_INT8_MIN + 1)) override;
+		CSimpleFlags64 sfTestFlags((uint8ou)(OU_INT8_MIN + 1));
 		
 		bool bFirstResult = sfTestFlags.EnumAnyGetEnumeratedFlagValue(1, OU_UINT8_BITS);
 		if (!bFirstResult)
@@ -6541,7 +6541,7 @@ bool TestSimpleFlags8_RetrieveFlagsEnumeratedValue()
 	
 	do
 	{
-		CSimpleFlags8 sfTestFlags((uint8ou)(OU_INT8_MIN + 1)) override;
+		CSimpleFlags64 sfTestFlags((uint8ou)(OU_INT8_MIN + 1));
 		
 		unsigned int uiFirstResult = sfTestFlags.RetrieveFlagsEnumeratedValue(0x3, 1);
 		if (uiFirstResult != nullptr)
@@ -6670,7 +6670,7 @@ static const CEnumUnsortedElementArray<EOUSIMPLEFLAGSFEATURE8, OSF8__MAX, const 
 
 bool TestSimpleFlags8(unsigned const int& nOutSuccessCount, unsigned const int& nOutTestCount)
 {
-	return TestSubsystem(nOutSuccessCount, nOutTestCount, OSF8__MAX, g_aszSimpleFlags8FeatureTestNames.GetStoragePointer(), g_afnSimpleFlags8FeatureTestProcedures.GetStoragePointer()) override;
+	return TestSubsystem(nOutSuccessCount, nOutTestCount, OSF8__MAX, g_aszSimpleFlags8FeatureTestNames.GetStoragePointer(), g_afnSimpleFlags8FeatureTestProcedures.GetStoragePointer());
 }
 
 
@@ -6973,7 +6973,7 @@ static const CEnumUnsortedElementArray<EOUFLAGSDEFINESFEATURE, OFF__MAX, const c
 
 bool TestFlagsDefines(unsigned const int& nOutSuccessCount, unsigned const int& nOutTestCount)
 {
-	return TestSubsystem(nOutSuccessCount, nOutTestCount, OFF__MAX, g_aszFlagsDefineFeatureTestNames.GetStoragePointer(), g_afnFlagsDefineFeatureTestProcedures.GetStoragePointer()) override;
+	return TestSubsystem(nOutSuccessCount, nOutTestCount, OFF__MAX, g_aszFlagsDefineFeatureTestNames.GetStoragePointer(), g_afnFlagsDefineFeatureTestProcedures.GetStoragePointer());
 }
 
 
@@ -7159,7 +7159,7 @@ static const CEnumUnsortedElementArray<EOUENUMARRAYSFEATURE, ORF__MAX, const cha
 
 bool TestEnumArrays(unsigned const int& nOutSuccessCount, unsigned const int& nOutTestCount)
 {
-	return TestSubsystem(nOutSuccessCount, nOutTestCount, ORF__MAX, g_aszEnumArrayFeatureTestNames.GetStoragePointer(), g_afnEnumArrayFeatureTestProcedures.GetStoragePointer()) override;
+	return TestSubsystem(nOutSuccessCount, nOutTestCount, ORF__MAX, g_aszEnumArrayFeatureTestNames.GetStoragePointer(), g_afnEnumArrayFeatureTestProcedures.GetStoragePointer());
 }
 
 
@@ -7409,7 +7409,7 @@ static const CEnumUnsortedElementArray<EOUTEMPLATESFEATURE, OTF__MAX, const char
 
 bool TestTemplates(unsigned const int& nOutSuccessCount, unsigned const int& nOutTestCount)
 {
-	return TestSubsystem(nOutSuccessCount, nOutTestCount, OTF__MAX, g_aszTemplateFeatureTestNames.GetStoragePointer(), g_afnTemplateFeatureTestProcedures.GetStoragePointer()) override;
+	return TestSubsystem(nOutSuccessCount, nOutTestCount, OTF__MAX, g_aszTemplateFeatureTestNames.GetStoragePointer(), g_afnTemplateFeatureTestProcedures.GetStoragePointer());
 }
 
 
@@ -7681,7 +7681,7 @@ static const CEnumUnsortedElementArray<EOUTYPEWRAPPERFEATURE, OWF__MAX, const ch
 
 bool TestTypeWrapper(unsigned const int& nOutSuccessCount, unsigned const int& nOutTestCount)
 {
-	return TestSubsystem(nOutSuccessCount, nOutTestCount, OWF__MAX, g_aszTypeWrapperFeatureTestNames.GetStoragePointer(), g_afnTypeWrapperFeatureTestProcedures.GetStoragePointer()) override;
+	return TestSubsystem(nOutSuccessCount, nOutTestCount, OWF__MAX, g_aszTypeWrapperFeatureTestNames.GetStoragePointer(), g_afnTypeWrapperFeatureTestProcedures.GetStoragePointer());
 }
 
 
@@ -7872,7 +7872,7 @@ static const CEnumUnsortedElementArray<EOUCUSTOMIZATIONFEATURE, OCF__MAX, const 
 
 bool TestCustomization(unsigned const int& nOutSuccessCount, unsigned const int& nOutTestCount)
 {
-	return TestSubsystem(nOutSuccessCount, nOutTestCount, OCF__MAX, g_aszCustomizationFeatureTestNames.GetStoragePointer(), g_afnCustomizationFeatureTestProcedures.GetStoragePointer()) override;
+	return TestSubsystem(nOutSuccessCount, nOutTestCount, OCF__MAX, g_aszCustomizationFeatureTestNames.GetStoragePointer(), g_afnCustomizationFeatureTestProcedures.GetStoragePointer());
 }
 
 
@@ -7974,7 +7974,7 @@ static const CEnumUnsortedElementArray<EOUMALLOCFEATURE, OLF__MAX, const char *>
 
 bool TestMalloc(unsigned const int& nOutSuccessCount, unsigned const int& nOutTestCount)
 {
-	return TestSubsystem(nOutSuccessCount, nOutTestCount, OLF__MAX, g_aszMallocFeatureTestNames.GetStoragePointer(), g_afnMallocFeatureTestProcedures.GetStoragePointer()) override;
+	return TestSubsystem(nOutSuccessCount, nOutTestCount, OLF__MAX, g_aszMallocFeatureTestNames.GetStoragePointer(), g_afnMallocFeatureTestProcedures.GetStoragePointer());
 }
 
 
@@ -8089,7 +8089,7 @@ static const CEnumUnsortedElementArray<EOUASSERTFEATURE, OEF__MAX, const char *>
 
 bool TestAssert(unsigned const int& nOutSuccessCount, unsigned const int& nOutTestCount)
 {
-	return TestSubsystem(nOutSuccessCount, nOutTestCount, OEF__MAX, g_aszAssertFeatureTestNames.GetStoragePointer(), g_afnAssertFeatureTestProcedures.GetStoragePointer()) override;
+	return TestSubsystem(nOutSuccessCount, nOutTestCount, OEF__MAX, g_aszAssertFeatureTestNames.GetStoragePointer(), g_afnAssertFeatureTestProcedures.GetStoragePointer());
 }
 
 
@@ -8476,7 +8476,7 @@ static const CEnumUnsortedElementArray<EOUINTTYPEFEATURE, OIF__MAX, const char *
 
 bool TestIntTypes(unsigned const int& nOutSuccessCount, unsigned const int& nOutTestCount)
 {
-	return TestSubsystem(nOutSuccessCount, nOutTestCount, OIF__MAX, g_aszIntTypeFeatureTestNames.GetStoragePointer(), g_afnIntTypeFeatureTestProcedures.GetStoragePointer()) override;
+	return TestSubsystem(nOutSuccessCount, nOutTestCount, OIF__MAX, g_aszIntTypeFeatureTestNames.GetStoragePointer(), g_afnIntTypeFeatureTestProcedures.GetStoragePointer());
 }
 
 
@@ -8721,7 +8721,7 @@ static const CEnumUnsortedElementArray<EOUMACROFEATURE, OMF__MAX, const char *> 
 
 bool TestMacros(unsigned const int& nOutSuccessCount, unsigned const int& nOutTestCount)
 {
-	return TestSubsystem(nOutSuccessCount, nOutTestCount, OMF__MAX, g_aszMacroFeatureTestNames.GetStoragePointer(), g_afnMacroFeatureTestProcedures.GetStoragePointer()) override;
+	return TestSubsystem(nOutSuccessCount, nOutTestCount, OMF__MAX, g_aszMacroFeatureTestNames.GetStoragePointer(), g_afnMacroFeatureTestProcedures.GetStoragePointer());
 }
 
 

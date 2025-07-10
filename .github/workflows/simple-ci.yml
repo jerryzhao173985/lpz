@@ -52,7 +52,7 @@ jobs:
         brew update
         
         # Install dependencies with retry mechanism for transient network issues
-        for pkg in cmake gsl readline ncurses qt@6 open-scene-graph ode; do
+        for pkg in cmake gsl readline ncurses qt@6 openscenegraph ode; do
           echo "Installing $pkg..."
           brew install "$pkg" || brew install "$pkg" || { echo "Failed to install $pkg"; exit 1; }
         done
@@ -67,9 +67,12 @@ jobs:
         # Show installed versions for debugging
         echo "=== Installed versions ==="
         echo "Qt6: $(brew --prefix qt@6)"
-        echo "OSG: $(brew --prefix open-scene-graph 2>/dev/null || echo 'Not found')"
+        echo "OSG: $(brew --prefix openscenegraph 2>/dev/null || echo 'Not found')"
         echo "GSL: $(brew --prefix gsl)"
         echo "ODE: $(brew --prefix ode)"
+        echo "Architecture: $(uname -m)"
+        echo "macOS Version: $(sw_vers -productVersion)"
+        echo "Xcode Version: $(xcodebuild -version 2>/dev/null || echo 'Not found')"
     
     # Set up ODE compatibility layer
     - name: Create ODE compatibility headers

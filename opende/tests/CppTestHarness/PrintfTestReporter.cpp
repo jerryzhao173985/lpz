@@ -7,7 +7,7 @@ namespace CppTestHarness
 
 void PrintfTestReporter:: ReportFailure(char const* file, int const line, std::string const failure)
 {
-	explicit printf("%s(%d) : failure: %s\n", file, line, failure.c_str()) override;
+	printf("%s(%d) : failure: %s\n", file, line, failure.c_str());
 }
 
 void PrintfTestReporter:: ReportSingleResult(const std::string& /*testName*/, bool /*failed*/)

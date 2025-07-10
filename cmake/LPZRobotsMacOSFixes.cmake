@@ -35,14 +35,12 @@ function(lpzrobots_apply_macos_fixes)
     endif()
     
     # Fix 2: Handle Qt6 compatibility issues
-    if(LPZROBOTS_HAS_QT AND LPZROBOTS_QT_VERSION EQUAL 6)
-        lpzrobots_fix_qt6_macos()
-    endif()
+    # Apply Qt6 fixes unconditionally on macOS since Qt6 is commonly used
+    lpzrobots_fix_qt6_macos()
     
     # Fix 3: Handle OpenSceneGraph Homebrew issues
-    if(LPZROBOTS_HAS_OSG)
-        lpzrobots_fix_osg_macos()
-    endif()
+    # Apply OSG fixes unconditionally on macOS since OSG is commonly used
+    lpzrobots_fix_osg_macos()
     
     # Fix 4: Handle Homebrew vs system library conflicts
     lpzrobots_fix_homebrew_conflicts()
@@ -89,15 +87,30 @@ endfunction()
 function(lpzrobots_fix_qt6_macos)
     message(STATUS "Applying Qt6 macOS fixes...")
     
-    # Find Qt6 installation path
-    get_target_property(QT6_QMAKE_EXECUTABLE Qt6::qmake IMPORTED_LOCATION)
-    if(QT6_QMAKE_EXECUTABLE)
-        get_filename_component(QT6_BINARY_DIR ${QT6_QMAKE_EXECUTABLE} DIRECTORY)
-        get_filename_component(QT6_PREFIX ${QT6_BINARY_DIR} DIRECTORY)
-        message(STATUS "Qt6 prefix: ${QT6_PREFIX}")
-        
-        # Add Qt6 library directories to CMAKE_PREFIX_PATH
-        list(APPEND CMAKE_PREFIX_PATH "${QT6_PREFIX}")
+    # Try to find Qt6 via environment variable first (set by CI)
+    if(DEFINED ENV{CMAKE_PREFIX_PATH})
+        set(ENV_PREFIX_PATH $ENV{CMAKE_PREFIX_PATH})
+        string(REPLACE ":" ";" ENV_PREFIX_PATHS "${ENV_PREFIX_PATH}")
+        foreach(path ${ENV_PREFIX_PATHS})
+            if(path MATCHES "qt@6" OR path MATCHES "Qt6")
+                message(STATUS "Found Qt6 in environment: ${path}")
+                list(APPEND CMAKE_PREFIX_PATH "${path}")
+                set(CMAKE_PREFIX_PATH "${CMAKE_PREFIX_PATH}" PARENT_SCOPE)
+                break()
+            endif()
+        endforeach()
+    endif()
+    
+    # Try common Homebrew Qt6 locations
+    if(CMAKE_SYSTEM_PROCESSOR MATCHES "arm64")
+        set(HOMEBREW_QT_PATH "/opt/homebrew/opt/qt@6")
+    else()
+        set(HOMEBREW_QT_PATH "/usr/local/opt/qt@6")
+    endif()
+    
+    if(EXISTS "${HOMEBREW_QT_PATH}")
+        message(STATUS "Found Qt6 at: ${HOMEBREW_QT_PATH}")
+        list(APPEND CMAKE_PREFIX_PATH "${HOMEBREW_QT_PATH}")
         set(CMAKE_PREFIX_PATH "${CMAKE_PREFIX_PATH}" PARENT_SCOPE)
         
         # Set Qt6-specific flags
@@ -113,22 +126,28 @@ endfunction()
 function(lpzrobots_fix_osg_macos)
     message(STATUS "Applying OpenSceneGraph macOS fixes...")
     
-    # Check if OSG is from Homebrew
-    if(LPZROBOTS_OSG_INCLUDE_DIRS MATCHES "/opt/homebrew" OR LPZROBOTS_OSG_INCLUDE_DIRS MATCHES "/usr/local")
-        message(STATUS "Detected Homebrew OpenSceneGraph installation")
-        
-        # Add Homebrew OpenGL framework path explicitly
-        find_library(OPENGL_LIBRARY OpenGL REQUIRED)
-        if(OPENGL_LIBRARY)
-            message(STATUS "Found OpenGL framework: ${OPENGL_LIBRARY}")
-        endif()
-        
-        # Set OSG-specific compiler flags
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DOSG_GL_SILENCE_DEPRECATION" PARENT_SCOPE)
-        
-        # Handle OSG viewer threading issues on macOS
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DOSG_VIEWER_SINGLE_THREADED" PARENT_SCOPE)
+    # Apply OSG-specific fixes for common Homebrew installation paths
+    if(CMAKE_SYSTEM_PROCESSOR MATCHES "arm64")
+        set(HOMEBREW_OSG_PATH "/opt/homebrew/include/osg")
+    else()
+        set(HOMEBREW_OSG_PATH "/usr/local/include/osg")
     endif()
+    
+    if(EXISTS "${HOMEBREW_OSG_PATH}")
+        message(STATUS "Detected Homebrew OpenSceneGraph installation at: ${HOMEBREW_OSG_PATH}")
+    endif()
+    
+    # Add Homebrew OpenGL framework path explicitly
+    find_library(OPENGL_LIBRARY OpenGL REQUIRED)
+    if(OPENGL_LIBRARY)
+        message(STATUS "Found OpenGL framework: ${OPENGL_LIBRARY}")
+    endif()
+    
+    # Set OSG-specific compiler flags unconditionally for macOS
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DOSG_GL_SILENCE_DEPRECATION" PARENT_SCOPE)
+    
+    # Handle OSG viewer threading issues on macOS
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DOSG_VIEWER_SINGLE_THREADED" PARENT_SCOPE)
     
 endfunction()
 
@@ -229,5 +248,35 @@ function(lpzrobots_configure_target_macos target)
     
 endfunction()
 
-# Apply fixes automatically when this file is included
-lpzrobots_apply_macos_fixes()
+# Apply fixes automatically when this file is included, but only core system fixes
+# Target-specific fixes will be applied later
+if(APPLE)
+    # Get macOS version for conditional fixes
+    execute_process(
+        COMMAND sw_vers -productVersion
+        OUTPUT_VARIABLE MACOS_VERSION
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+        ERROR_QUIET
+    )
+    
+    message(STATUS "Applying macOS build fixes for version: ${MACOS_VERSION}")
+    
+    # Apply basic system fixes immediately
+    if(MACOS_VERSION VERSION_GREATER_EQUAL "15.0")
+        lpzrobots_fix_macos_15_sdk()
+    else()
+        # Apply basic macOS compatibility for older versions
+        set(CMAKE_OSX_DEPLOYMENT_TARGET "11.0" PARENT_SCOPE)
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++" PARENT_SCOPE)
+    endif()
+    
+    lpzrobots_fix_homebrew_conflicts()
+    lpzrobots_fix_xcode_15_linking()
+    lpzrobots_fix_cpp_stdlib_macos()
+    
+    # Apply Qt6 and OSG fixes (safe to apply early now)
+    lpzrobots_fix_qt6_macos()
+    lpzrobots_fix_osg_macos()
+    
+    message(STATUS "Applied macOS build fixes")
+endif()

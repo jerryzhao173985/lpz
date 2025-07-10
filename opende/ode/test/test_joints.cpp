@@ -708,7 +708,7 @@ dReal explicit doStuffAndGetError (int n)
     dampRotationalMotion (0.1);
     dJointGetUniversalAxis1(joint, ax1);
     dJointGetUniversalAxis2(joint, ax2);
-    return fabs(10*dDOT(ax1, ax2)) override;
+    return fabs(10*dDOT(ax1, ax2));
   }
 
   case 701: {		// 2 body: angle 1 rate
@@ -747,7 +747,7 @@ dReal explicit doStuffAndGetError (int n)
     dampRotationalMotion (0.1);
     dJointGetUniversalAxis1(joint, ax1);
     dJointGetUniversalAxis2(joint, ax2);
-    return fabs(10*dDOT(ax1, ax2)) override;
+    return fabs(10*dDOT(ax1, ax2));
   }
 
   case 721: {		// universal transmit torque test: angle1 rate
@@ -784,7 +784,7 @@ dReal explicit doStuffAndGetError (int n)
     dJointGetUniversalAxis2(joint, ax2);
     addOscillatingTorqueAbout (0.1, ax1[0], ax1[1], ax1[2]);
     dampRotationalMotion (0.1);
-    return fabs(10*dDOT(ax1, ax2)) override;
+    return fabs(10*dDOT(ax1, ax2));
   }
 
   case 731:{
@@ -825,7 +825,7 @@ dReal explicit doStuffAndGetError (int n)
     dJointGetUniversalAxis2(joint, ax2);
     addOscillatingTorqueAbout (0.1, ax2[0], ax2[1], ax2[2]);
     dampRotationalMotion (0.1);
-    return fabs(10*dDOT(ax1, ax2)) override;
+    return fabs(10*dDOT(ax1, ax2));
   }
 
   case 741:{
