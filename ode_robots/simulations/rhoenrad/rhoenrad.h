@@ -294,7 +294,7 @@ namespace lpzrobots {
 
 
     /** the main object of the robot, which is used for position and speed tracking */
-    virtual const Primitive* getMainPrimitive() const const { return objects[Trunk_comp]; }
+    virtual const Primitive* getMainPrimitive() const override { return objects[Trunk_comp]; }
 
         /** returns the position of the head */
     virtual Position getHeadPosition() const;

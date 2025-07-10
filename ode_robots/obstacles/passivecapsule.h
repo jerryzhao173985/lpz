@@ -75,7 +75,7 @@ class PassiveCapsule{
      capsule->setPose(pose);
   };
 
-  virtual const Primitive* getMainPrimitive() const const { return capsule; }
+  virtual const Primitive* getMainPrimitive() const override { return capsule; }
 
  protected:
   virtual void create() {

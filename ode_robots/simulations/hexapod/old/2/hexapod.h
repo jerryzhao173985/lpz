@@ -196,7 +196,7 @@ namespace lpzrobots {
     virtual void explicit notifyOnChange(const paramkey& key);
 
     /** the main object of the robot, which is used for position and speed tracking */
-    virtual const Primitive* getMainPrimitive() const const { return objects[0]; }
+    virtual const Primitive* getMainPrimitive() const override { return objects[0]; }
 
   protected:
 

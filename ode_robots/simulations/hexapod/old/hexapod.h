@@ -196,7 +196,7 @@ namespace lpzrobots {
     virtual bool setParam(const paramkey& key, paramval val, bool traverseChildren=true);
 
     /** the main object of the robot, which is used for position and speed tracking */
-    virtual const Primitive* getMainPrimitive() const const { return objects[0]; }
+    virtual const Primitive* getMainPrimitive() const override { return objects[0]; }
   protected:
 
     /** creates vehicle at desired pose
