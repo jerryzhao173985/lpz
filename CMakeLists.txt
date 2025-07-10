@@ -72,7 +72,7 @@ lpzrobots_find_dependencies()
 if(APPLE)
     find_library(OPENGL_LIBRARY OpenGL)
     if(NOT OPENGL_LIBRARY)
-        message(WARNING "OpenGL framework not found on macOS - graphics will be disabled")
+        message(WARNING "OpenGL framework not found on macOS - graphics disabled")
         set(LPZROBOTS_HAS_OPENGL FALSE)
     else()
         set(LPZROBOTS_HAS_OPENGL TRUE)
@@ -82,7 +82,7 @@ else()
     if(OpenGL_FOUND)
         set(LPZROBOTS_HAS_OPENGL TRUE)
     else()
-        message(WARNING "OpenGL not found - graphics will be disabled")
+        message(WARNING "OpenGL not found - graphics disabled")
         set(LPZROBOTS_HAS_OPENGL FALSE)
     endif()
 endif()
@@ -113,8 +113,9 @@ include_directories(
 
 add_subdirectory(selforg)
 
-# Build ODE before ode_robots as it depends on ODE
-if(NOT LPZROBOTS_USE_SYSTEM_ODE)
+# Build ODE compatibility layer for system ODE only
+# Bundled ODE is headers-only and doesn't need to be built via CMake
+if(LPZROBOTS_USE_SYSTEM_ODE)
     add_subdirectory(opende)
 endif()
 

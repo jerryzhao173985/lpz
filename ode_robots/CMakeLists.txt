@@ -22,9 +22,9 @@ lpzrobots_add_component_library(ode_robots
         lpzrobots::selforg
         Threads::Threads
         ${OPENSCENEGRAPH_LIBRARIES}
-        $<$<PLATFORM_ID:Darwin>:${OPENGL_LIBRARY}>
-        $<$<AND:$<NOT:$<PLATFORM_ID:Darwin>>,$<TARGET_EXISTS:OpenGL::GL>>:OpenGL::GL>
-        $<$<AND:$<NOT:$<PLATFORM_ID:Darwin>>,$<TARGET_EXISTS:OpenGL::GLU>>:OpenGL::GLU>
+        $<$<AND:$<PLATFORM_ID:Darwin>,$<BOOL:${OPENGL_LIBRARY}>>:${OPENGL_LIBRARY}>
+        $<$<AND:$<NOT:$<PLATFORM_ID:Darwin>>,$<BOOL:${LPZROBOTS_HAS_OPENGL}>>:OpenGL::GL>
+        $<$<AND:$<NOT:$<PLATFORM_ID:Darwin>>,$<BOOL:${LPZROBOTS_HAS_OPENGL}>>:OpenGL::GLU>
     PRIVATE_DEPS
         $<$<BOOL:${READLINE_LIBRARY}>:${READLINE_LIBRARY}>
     DEFINES
@@ -55,62 +55,49 @@ if(TARGET ode_robots_dbg)
 endif()
 
 # ODE include and library handling
-if(NOT LPZROBOTS_USE_SYSTEM_ODE AND EXISTS "${CMAKE_SOURCE_DIR}/include/ode-dbl")
-    target_include_directories(ode_robots PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include/ode-dbl>
-        $<INSTALL_INTERFACE:include/ode-dbl>
-    )
+if(LPZROBOTS_USE_SYSTEM_ODE AND LPZROBOTS_ODE_INCLUDE_DIRS)
+    # Use system ODE 
+    target_include_directories(ode_robots PUBLIC ${LPZROBOTS_ODE_INCLUDE_DIRS})
     if(TARGET ode_robots_opt)
-        target_include_directories(ode_robots_opt PUBLIC
-            $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include/ode-dbl>
-            $<INSTALL_INTERFACE:include/ode-dbl>
-        )
+        target_include_directories(ode_robots_opt PUBLIC ${LPZROBOTS_ODE_INCLUDE_DIRS})
     endif()
     if(TARGET ode_robots_dbg)
-        target_include_directories(ode_robots_dbg PUBLIC
-            $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include/ode-dbl>
-            $<INSTALL_INTERFACE:include/ode-dbl>
-        )
+        target_include_directories(ode_robots_dbg PUBLIC ${LPZROBOTS_ODE_INCLUDE_DIRS})
     endif()
-elseif(DEFINED ODE_INCLUDE_DIRS)
-    target_include_directories(ode_robots PUBLIC ${ODE_INCLUDE_DIRS})
-    if(TARGET ode_robots_opt)
-        target_include_directories(ode_robots_opt PUBLIC ${ODE_INCLUDE_DIRS})
-    endif()
-    if(TARGET ode_robots_dbg)
-        target_include_directories(ode_robots_dbg PUBLIC ${ODE_INCLUDE_DIRS})
-    endif()
-endif()
-
-# ODE library
-if(LPZROBOTS_USE_SYSTEM_ODE AND DEFINED ODE_LIBRARIES)
-    target_link_libraries(ode_robots PUBLIC ${ODE_LIBRARIES})
-    if(TARGET ode_robots_opt)
-        target_link_libraries(ode_robots_opt PUBLIC ${ODE_LIBRARIES})
-    endif()
-    if(TARGET ode_robots_dbg)
-        target_link_libraries(ode_robots_dbg PUBLIC ${ODE_LIBRARIES})
-    endif()
-elseif(APPLE)
-    # Find ODE via brew
-    find_library(ODE_LIBRARY NAMES ode)
-    if(ODE_LIBRARY)
-        target_link_libraries(ode_robots PUBLIC ${ODE_LIBRARY})
+    
+    if(LPZROBOTS_ODE_LIBRARIES)
+        target_link_libraries(ode_robots PUBLIC ${LPZROBOTS_ODE_LIBRARIES})
         if(TARGET ode_robots_opt)
-            target_link_libraries(ode_robots_opt PUBLIC ${ODE_LIBRARY})
+            target_link_libraries(ode_robots_opt PUBLIC ${LPZROBOTS_ODE_LIBRARIES})
         endif()
         if(TARGET ode_robots_dbg)
-            target_link_libraries(ode_robots_dbg PUBLIC ${ODE_LIBRARY})
+            target_link_libraries(ode_robots_dbg PUBLIC ${LPZROBOTS_ODE_LIBRARIES})
         endif()
     endif()
 else()
-    target_link_libraries(ode_robots PUBLIC ode)
-    if(TARGET ode_robots_opt)
-        target_link_libraries(ode_robots_opt PUBLIC ode)
+    # Use bundled ODE headers
+    if(EXISTS "${CMAKE_SOURCE_DIR}/include/ode-dbl")
+        target_include_directories(ode_robots PUBLIC
+            $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include/ode-dbl>
+            $<INSTALL_INTERFACE:include/ode-dbl>
+        )
+        if(TARGET ode_robots_opt)
+            target_include_directories(ode_robots_opt PUBLIC
+                $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include/ode-dbl>
+                $<INSTALL_INTERFACE:include/ode-dbl>
+            )
+        endif()
+        if(TARGET ode_robots_dbg)
+            target_include_directories(ode_robots_dbg PUBLIC
+                $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include/ode-dbl>
+                $<INSTALL_INTERFACE:include/ode-dbl>
+            )
+        endif()
     endif()
-    if(TARGET ode_robots_dbg)
-        target_link_libraries(ode_robots_dbg PUBLIC ode)
-    endif()
+    
+    # For bundled ODE, the library is built by the legacy Make system
+    # CMake builds will need to ensure the bundled ODE is pre-built
+    message(STATUS "Using bundled ODE headers (library must be pre-built)")
 endif()
 
 # OpenSceneGraph include directories (use SYSTEM to suppress warnings)

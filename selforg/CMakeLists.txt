@@ -69,7 +69,7 @@ if(LPZROBOTS_HAS_GSL)
         target_compile_options(selforg PRIVATE ${LPZROBOTS_GSL_CFLAGS})
     endif()
 else()
-    target_compile_definitions(selforg PRIVATE NOGSL)
+    target_compile_definitions(selforg PRIVATE NO_GSL)
 endif()
 
 # Platform-specific settings
