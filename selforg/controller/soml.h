@@ -112,7 +112,7 @@ protected:
 
   /* learns the model using backprop. It uses the current activation,
      the current x and x_tm1 from the buffer */
-  virtual void learnModelBP(double factor) override;
+  virtual void learnModelBP(double factor);
 
 protected:
   unsigned short number_sensors = 0;

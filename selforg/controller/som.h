@@ -88,7 +88,7 @@ public:
   virtual bool store(FILE* f)  const;
   virtual bool restore(FILE* f);
 
-  virtual void printWeights(FILE* f) const override;
+  virtual void printWeights(FILE* f) const;
 
   const Neighbourhood& getNeighbourhood() const {
     return neighbourhood;
